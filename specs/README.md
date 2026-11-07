@@ -11,3 +11,5 @@ The vision (`vision/PSys2-vision-v1.md`) defines the target architecture. These 
 | [05-translation.md](05-translation.md) | Translation to English at the system boundary (draft) |
 | [06-dialog-server-webchat.md](06-dialog-server-webchat.md) | C2 dialog pipeline, loaders, HTTP API, CLI, browser webchat |
 | [decisions/ADR-001](decisions/ADR-001-rule-formalizer-and-fixture-worlds.md) | Rule-based formalizer and fixture worlds |
+| [decisions/ADR-002](decisions/ADR-002-translation-strategies-and-speech.md) | Translation strategies (rules, small CPU models, browser API) and speech in the webchat |
+| [decisions/ADR-003](decisions/ADR-003-rules-profile-simplifications.md) | Deliberate simplifications of the first implementation |

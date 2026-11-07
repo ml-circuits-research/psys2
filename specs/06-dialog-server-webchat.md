@@ -43,3 +43,10 @@ Sessions are kept in memory with an idle timeout (30 min). No LLM is reachable f
 
 ## Webchat (`docs/webchat/`)
 A static page that runs C2 entirely in the browser, with no server: the same `src/` modules copied by `scripts/build-webchat.mjs` into `docs/webchat/lib/` and the worlds bundled into `docs/webchat/worlds/`. It shows the chat, and on demand the trace (wires, patterns, operations) so the demo makes the reasoning visible. It must work when opened from GitHub Pages (`/docs` folder) or any static server; ES modules require HTTP, so `file://` is not a supported way to open it.
+
+### Webchat features (ADR-002)
+- Language selector: interface, speech recognition and speech synthesis language (English and Romanian at least).
+- Translation: `browser-api` strategy when the browser offers an on-device translator (feature-detected), otherwise the `rules` translator; the trace shows which one was used and whether the checker fell back.
+- Microphone button: dictation with the Web Speech recognition API in the selected language; the recognized text is sent as a message.
+- Speaker toggle: when on, every answer is read aloud with the speech-synthesis API in the selected language.
+- Missing browser APIs disable the corresponding control with a tooltip; nothing else depends on them.

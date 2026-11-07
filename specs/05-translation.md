@@ -1,4 +1,4 @@
-# 05 — Translation at the boundary (draft for discussion)
+# 05 — Translation at the boundary
 
 Everything stored by PSys2 is English (AGENTS.md). Input in another language is translated to English before formalization; answers can be translated back for display. The goal is **meaning preservation for formalization**, not literary quality: an English sentence that the rule patterns (and later the encoder) read correctly, with every meaning-bearing element kept and traceable to the source.
 
@@ -26,6 +26,9 @@ translate(text, { from: 'ro', to: 'en' }) -> {
 4. **Word-by-word fallback** with a bilingual lexicon (`src/translate/lexicon.ro-en.mjs`) and English re-inflection (plural nouns after numbers > 1, third-person -s, `does … have` frames for questions).
 5. **Back translation (en → ro)** for answers uses the same lexicon in reverse plus answer templates per world, so displayed answers are grammatical enough to be understood.
 
-## Open questions (to discuss)
+## Strategies (ADR-002)
+The rule translator above is the `rules` strategy. `mt-small` (a small CPU machine-translation model) and `browser-api` (the browser's on-device translator, demo only) implement the same interface and are wrapped by a checker that falls back to `rules` when numbers, names, negation or question form are not preserved.
+
+## Open questions
 - Whether to keep this as a boundary step, or train language-specific encoder profiles later (vision §5 asks for an explicit profile per language).
 - How to evaluate meaning preservation: round-trip formalization equality (the Romanian test produces the same wires as its English twin) is the proposed metric.
