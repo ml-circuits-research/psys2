@@ -1,0 +1,76 @@
+@t.games.guess.n01 core.test
+    input="Yes"
+    expectStatus=missing
+    session=a
+
+@t.games.guess.n02 core.test
+    input="I am thinking of an animal."
+    expect="Question 1"
+    expectState="phase=asking"
+    expectState="count=0"
+    session=a
+
+@t.games.guess.n03 core.test
+    input="Why did you ask that?"
+    expect="splits"
+    session=a
+
+@t.games.guess.n04 core.test
+    input="Which animals are left?"
+    expect="still"
+    session=a
+
+@t.games.guess.n05 core.test
+    input="Yes"
+    expectState="asked.0.answer=yes"
+    session=a
+
+@t.games.guess.n06 core.test
+    input="I don't know"
+    expectState="asked.1.answer=dontknow"
+    session=a
+
+@t.games.guess.n07 core.test
+    input="Maybe"
+    expectState="asked.2.answer=maybe"
+    session=a
+
+@t.games.guess.n08 core.test
+    input="How many questions have you asked?"
+    expect="3"
+    session=a
+
+@t.games.guess.n09 core.test
+    input="Guess my animal"
+    expectState="phase=asking"
+    expectState="count=0"
+    session=b
+
+@t.games.guess.n10 core.test
+    input="No"
+    expectState="asked.0.answer=no"
+    session=b
+
+@t.games.guess.n11 core.test
+    input="I give up"
+    expect="What was it"
+    expectState="phase=learning"
+    session=b
+
+@t.games.guess.n12 core.test
+    input="It was a quokka"
+    expect="quokka"
+    expectState="phase=done"
+    expectState="solved=quokka"
+    expectState="learned.0.name=quokka"
+    session=b
+
+@t.games.guess.n13 core.test
+    input="I am thinking of an animal"
+    expectState="phase=asking"
+    session=b
+
+@t.games.guess.n14 core.test
+    input="Give me a hint"
+    expect="guessing"
+    session=b

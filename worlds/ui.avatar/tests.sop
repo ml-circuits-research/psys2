@@ -1,0 +1,249 @@
+@t.ui.avatar.n01 core.test
+    input="Make your eyes bigger."
+    expect="My eyes are big now."
+    expectState="eyes.size=large"
+    session=a
+
+@t.ui.avatar.n02 core.test
+    input="Make your eyes smaller"
+    expect="medium sized now"
+    expectState="eyes.size=medium"
+    session=a
+
+@t.ui.avatar.n03 core.test
+    input="Make your eyes huge"
+    expectState="eyes.size=large"
+    session=a
+
+@t.ui.avatar.n04 core.test
+    input="Make your eyes bigger"
+    expect="as big as they can be"
+    session=a
+
+@t.ui.avatar.n05 core.test
+    input="Make your eyes tiny"
+    expectState="eyes.size=small"
+    session=a
+
+@t.ui.avatar.n06 core.test
+    input="Turn your face blue."
+    expect="My face is blue now."
+    expectState="faceColor=blue"
+    session=a
+
+@t.ui.avatar.n07 core.test
+    input="Make your eyes green"
+    expectState="eyes.color=green"
+    session=a
+
+@t.ui.avatar.n08 core.test
+    input="Make your antenna pink"
+    expectState="antenna.color=pink"
+    expectState="antenna.on=true"
+    session=a
+
+@t.ui.avatar.n09 core.test
+    input="What color are your eyes?"
+    expect="My eyes are green."
+    session=a
+
+@t.ui.avatar.n10 core.test
+    input="What color is your face?"
+    expect="My face is blue."
+    session=a
+
+@t.ui.avatar.n11 core.test
+    input="How big are your eyes?"
+    expect="small"
+    session=a
+
+@t.ui.avatar.n12 core.test
+    input="Can you smile?"
+    expect="smiling"
+    expectState="mouth=smile"
+    session=a
+
+@t.ui.avatar.n13 core.test
+    input="Make a sad face"
+    expectState="mouth=sad"
+    session=a
+
+@t.ui.avatar.n14 core.test
+    input="Look surprised"
+    expectState="mouth=surprised"
+    session=a
+
+@t.ui.avatar.n15 core.test
+    input="Open your mouth"
+    expectState="mouth=open"
+    session=a
+
+@t.ui.avatar.n16 core.test
+    input="Give me a grin"
+    expectState="mouth=grin"
+    session=a
+
+@t.ui.avatar.n17 core.test
+    input="Are you smiling?"
+    expect="No"
+    session=a
+
+@t.ui.avatar.n18 core.test
+    input="Look to the left"
+    expect="left"
+    expectState="look=left"
+    session=a
+
+@t.ui.avatar.n19 core.test
+    input="Look up"
+    expectState="look=up"
+    session=a
+
+@t.ui.avatar.n20 core.test
+    input="Look at me"
+    expectState="look=center"
+    session=a
+
+@t.ui.avatar.n21 core.test
+    input="Wink at me"
+    expect="Wink"
+    expectEffect=avatar.animate
+    session=a
+
+@t.ui.avatar.n22 core.test
+    input="Put on a party hat"
+    expect="party hat"
+    expectState="hat=party"
+    session=a
+
+@t.ui.avatar.n23 core.test
+    input="Put on a crown"
+    expectState="hat=crown"
+    session=a
+
+@t.ui.avatar.n24 core.test
+    input="Wear glasses"
+    expectState="accessory=glasses"
+    session=a
+
+@t.ui.avatar.n25 core.test
+    input="What are you wearing?"
+    expect="crown"
+    expect="glasses"
+    session=a
+
+@t.ui.avatar.n26 core.test
+    input="Are you wearing a hat?"
+    expect="Yes"
+    session=a
+
+@t.ui.avatar.n27 core.test
+    input="Take off the glasses"
+    expectState="accessory=none"
+    session=a
+
+@t.ui.avatar.n28 core.test
+    input="Take off your hat"
+    expectState="hat=none"
+    session=a
+
+@t.ui.avatar.n29 core.test
+    input="Give yourself a mustache"
+    expectState="accessory=mustache"
+    session=a
+
+@t.ui.avatar.n30 core.test
+    input="Give yourself ears"
+    expectState="ears=true"
+    session=a
+
+@t.ui.avatar.n31 core.test
+    input="Turn off your antenna"
+    expectState="antenna.on=false"
+    session=a
+
+@t.ui.avatar.n32 core.test
+    input="Make your eyes stars"
+    expectState="eyes.shape=star"
+    session=a
+
+@t.ui.avatar.n33 core.test
+    input="Make your face square"
+    expectState="faceShape=square"
+    session=a
+
+@t.ui.avatar.n34 core.test
+    input="Stop blinking"
+    expectState="blink=false"
+    session=a
+
+@t.ui.avatar.n35 core.test
+    input="Call yourself Robi"
+    expect="Robi"
+    expectState="name=Robi"
+    session=a
+
+@t.ui.avatar.n36 core.test
+    input="What is your name?"
+    expect="My name is Robi."
+    session=a
+
+@t.ui.avatar.n37 core.test
+    input="Describe yourself"
+    expect="Robi"
+    session=a
+
+@t.ui.avatar.n38 core.test
+    input="Reset your face"
+    expectState="faceColor=turquoise"
+    expectState="hat=none"
+    expectState="eyes.size=medium"
+    expectState="name=Robi"
+    session=a
+
+@t.ui.avatar.n39 core.test
+    input="Take off everything"
+    expect="anything"
+    session=a
+
+@t.ui.avatar.n40 core.test
+    input="Make your face green"
+    expectState="ui.shell:activeTab=robot"
+    session=b
+
+@t.ui.avatar.n41 core.test
+    input="Open the editor"
+    expectState="ui.shell:activeTab=editor"
+    session=b
+
+@t.ui.avatar.n42 core.test
+    input="Make your face red"
+    expectState="ui.shell:activeTab=robot"
+    expectState="faceColor=red"
+    session=b
+
+@t.ui.avatar.n43 core.test
+    input="Open the editor"
+    expectState="ui.shell:activeTab=editor"
+    session=b
+
+@t.ui.avatar.n44 core.test
+    input="What color is your face?"
+    expect="red"
+    expectState="ui.shell:activeTab=editor"
+    session=b
+
+@t.ui.avatar.n45 core.test
+    input="Turn your face to light blue"
+    expectStatus=unparsed
+    session=c
+
+@t.ui.avatar.n46 core.test
+    input="Make your face a star"
+    expectStatus=unsupported
+    session=c
+
+@t.ui.avatar.n47 core.test
+    input="Make your face bigger"
+    expectStatus=unsupported
+    session=c

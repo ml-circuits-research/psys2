@@ -1,0 +1,17 @@
+@legend.games.hangman core.legend
+    namespace=games.hangman
+    version=0.1.0
+    imports=core
+    imports=kids.common
+    imports=kids.animals
+    doc="Hangman game state"
+
+@games.hangman.game core.type
+    extends=core.state
+    doc="A game of hangman. The world state holds word (hidden from rendering until the end), masked, guessed, wrong, wrongLeft and status."
+    example="Is there an E?"
+
+@games.hangman.game.status core.key
+    value=atom
+    card=one
+    ask="Is the game idle, playing, won or lost?"

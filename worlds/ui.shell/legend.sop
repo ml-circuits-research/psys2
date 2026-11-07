@@ -1,0 +1,16 @@
+@legend.ui.shell core.legend
+    namespace=ui.shell
+    version=0.1.0
+    imports=core
+    imports=kids.common
+    doc="App shell state: the active tab and the voice settings"
+
+@ui.shell.tab core.type
+    extends=core.state
+    doc="One tab of the app: robot, editor, tictactoe, guess or hangman. The world state holds activeTab, previousTab, speaker, listening, handsFree, rate and language."
+    example="Open the editor."
+
+@ui.shell.tab.id core.key
+    value=atom
+    card=one
+    ask="Which tab is it?"

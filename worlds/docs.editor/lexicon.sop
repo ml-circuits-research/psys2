@@ -1,0 +1,42 @@
+@lex.docs.editor.kinds core.lexicon
+    class=noun
+    word=paragraph
+    word=heading
+    word=list
+    word=block
+    word=title
+    word=item
+    word=word
+    word=sentence
+
+@lex.docs.editor.ordinals core.lexicon
+    class=noun
+    word=first
+    word=second
+    word=third
+    word=fourth
+    word=fifth
+    word=sixth
+    word=seventh
+    word=eighth
+    word=ninth
+    word=tenth
+    word=last
+
+@lex.docs.editor.formats core.lexicon
+    class=noun
+    word=text
+    word=markdown
+    word=txt
+    word=md
+    word=plain_text
+
+@lex.docs.editor.triggers core.lexicon
+    class=trigger
+    word=document
+    word=paragraph
+    word=heading
+    word=dictation
+    word=dictate
+    word=undo
+    word=redo

@@ -1,0 +1,131 @@
+@op.ui.avatar.setColor core.operation
+    impl=setColor
+    semantics=action
+    action=avatar.setColor
+    doc="Sets the color of the face, the eyes or the antenna. Every changing command also brings the robot tab forward: ctx.request(\"ui.openTab\")."
+
+@op.ui.avatar.setSize core.operation
+    impl=setSize
+    semantics=action
+    action=avatar.setSize
+    doc="Sets or steps the size of the eyes."
+
+@op.ui.avatar.setShape core.operation
+    impl=setShape
+    semantics=action
+    action=avatar.setShape
+    doc="Sets the shape of the face or the eyes."
+
+@op.ui.avatar.setMood core.operation
+    impl=setMood
+    semantics=action
+    action=avatar.setMood
+    doc="Sets the mouth (smile, grin, sad, surprised, open, neutral)."
+
+@op.ui.avatar.look core.operation
+    impl=look
+    semantics=action
+    action=avatar.look
+    doc="Sets the gaze direction."
+
+@op.ui.avatar.animate core.operation
+    impl=animate
+    semantics=action
+    action=avatar.animate
+    doc="Queues the effect avatar.animate (wink, nod, dance, wave, shake, blink): a moment, not stored state."
+
+@op.ui.avatar.blink core.operation
+    impl=blink
+    semantics=action
+    action=avatar.blink
+    doc="Turns the blinking of the eyes on or off."
+
+@op.ui.avatar.wear core.operation
+    impl=wear
+    semantics=action
+    action=avatar.wear
+    doc="Puts on a hat, an accessory, ears or the antenna."
+
+@op.ui.avatar.remove core.operation
+    impl=remove
+    semantics=action
+    action=avatar.remove
+    doc="Takes off a hat, an accessory, ears or the antenna."
+
+@op.ui.avatar.removeAll core.operation
+    impl=removeAll
+    semantics=action
+    action=avatar.removeAll
+    doc="Takes off the hat and the accessory."
+
+@op.ui.avatar.setName core.operation
+    impl=setName
+    semantics=action
+    action=avatar.setName
+    doc="Gives the robot a name."
+
+@op.ui.avatar.reset core.operation
+    impl=reset
+    semantics=action
+    action=avatar.reset
+    doc="Back to the default face (the name is kept)."
+
+@op.ui.avatar.askColor core.operation
+    impl=askColor
+    semantics=action
+    action=avatar.askColor
+    doc="Tells a color of the face."
+
+@op.ui.avatar.askSize core.operation
+    impl=askSize
+    semantics=action
+    action=avatar.askSize
+    doc="Tells the size of the eyes."
+
+@op.ui.avatar.askShape core.operation
+    impl=askShape
+    semantics=action
+    action=avatar.askShape
+    doc="Tells a shape."
+
+@op.ui.avatar.askMood core.operation
+    impl=askMood
+    semantics=action
+    action=avatar.askMood
+    doc="Tells the mouth."
+
+@op.ui.avatar.checkMood core.operation
+    impl=checkMood
+    semantics=action
+    action=avatar.checkMood
+    doc="Yes or no: is the mouth like that?"
+
+@op.ui.avatar.askLook core.operation
+    impl=askLook
+    semantics=action
+    action=avatar.askLook
+    doc="Tells where the robot looks."
+
+@op.ui.avatar.askWearing core.operation
+    impl=askWearing
+    semantics=action
+    action=avatar.askWearing
+    doc="Tells what the robot wears."
+
+@op.ui.avatar.hasThing core.operation
+    impl=hasThing
+    semantics=action
+    action=avatar.hasThing
+    doc="Yes or no: is the robot wearing or showing something?"
+
+@op.ui.avatar.askName core.operation
+    impl=askName
+    semantics=action
+    action=avatar.askName
+    doc="Tells the robot name."
+
+@op.ui.avatar.describe core.operation
+    impl=describe
+    semantics=action
+    action=avatar.describe
+    doc="Describes the whole face."

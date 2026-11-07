@@ -1,0 +1,34 @@
+@lex.ui.shell.tabs core.lexicon
+    class=noun
+    word=robot
+    word=face
+    word=avatar
+    word=editor
+    word=document
+    word=doc
+    word=tic_tac_toe
+    word=tictactoe
+    word=noughts_and_cross
+    word=guess
+    word=guess_the_animal
+    word=guessing_game
+    word=twenty_question
+    word=20_question
+    word=animal_game
+    word=hangman
+
+@lex.ui.shell.langs core.lexicon
+    class=noun
+    word=english
+    word=romanian
+
+@lex.ui.shell.triggers core.lexicon
+    class=trigger
+    word=tab
+    word=speaker
+    word=listening
+    word=hands-free
+    word=slower
+    word=faster
+    word=microphone
+    word=mute

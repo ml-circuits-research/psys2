@@ -1,0 +1,232 @@
+@t.docs.editor.n01 core.test
+    input="Add a heading Shopping"
+    expectState="blocks.0.kind=heading"
+    expectState="blocks.0.text=Shopping"
+    expectState="ui.shell:activeTab=editor"
+    session=e
+
+@t.docs.editor.n02 core.test
+    input="Add a paragraph We need food for the party tonight."
+    expectState="blocks.1.kind=paragraph"
+    expectState="blocks.1.text=We need food for the party tonight."
+    session=e
+
+@t.docs.editor.n03 core.test
+    input="Add a list with milk, eggs and bread"
+    expectState="blocks.2.items.length=3"
+    expectState="blocks.2.items.1=eggs"
+    session=e
+
+@t.docs.editor.n04 core.test
+    input="Make the title Party Plans"
+    expectState="title=Party Plans"
+    session=e
+
+@t.docs.editor.n05 core.test
+    input="What is the title?"
+    expect="Party Plans"
+    session=e
+
+@t.docs.editor.n06 core.test
+    input="How many paragraphs are there?"
+    expect="1"
+    session=e
+
+@t.docs.editor.n07 core.test
+    input="How many lists are there?"
+    expect="1 list"
+    session=e
+
+@t.docs.editor.n08 core.test
+    input="Does the document mention milk?"
+    expect="Yes"
+    session=e
+
+@t.docs.editor.n09 core.test
+    input="Does the document mention cheese?"
+    expect="No"
+    session=e
+
+@t.docs.editor.n10 core.test
+    input="What does the first paragraph say?"
+    expect="We need food"
+    session=e
+
+@t.docs.editor.n11 core.test
+    input="Replace party with picnic"
+    expect="2"
+    expectState="blocks.1.text=We need food for the picnic tonight."
+    session=e
+
+@t.docs.editor.n12 core.test
+    input="Move the last list to the top"
+    expectState="blocks.0.kind=list"
+    expectState="blocks.1.kind=heading"
+    session=e
+
+@t.docs.editor.n13 core.test
+    input="Move the first list to the end"
+    expectState="blocks.2.kind=list"
+    session=e
+
+@t.docs.editor.n14 core.test
+    input="Read the document"
+    expectEffect=speech.say
+    session=e
+
+@t.docs.editor.n15 core.test
+    input="Read paragraph 1"
+    expectEffect=speech.say
+    session=e
+
+@t.docs.editor.n16 core.test
+    input="Copy the document"
+    expect="clipboard"
+    expectEffect=clipboard.copy
+    session=e
+
+@t.docs.editor.n17 core.test
+    input="Download the document as markdown"
+    expectEffect=file.download
+    session=e
+
+@t.docs.editor.n18 core.test
+    input="Delete the second paragraph"
+    expectStatus=missing
+    session=e
+
+@t.docs.editor.n19 core.test
+    input="Delete the last list"
+    expectState="blocks.length=2"
+    session=e
+
+@t.docs.editor.n20 core.test
+    input="Undo"
+    expectState="blocks.length=3"
+    session=e
+
+@t.docs.editor.n21 core.test
+    input="Redo"
+    expectState="blocks.length=2"
+    session=e
+
+@t.docs.editor.n22 core.test
+    input="Undo that"
+    expectState="blocks.length=3"
+    session=e
+
+@t.docs.editor.n23 core.test
+    input="Clear the document"
+    expectState="blocks.length=0"
+    session=e
+
+@t.docs.editor.n24 core.test
+    input="Is the document empty?"
+    expect="Yes"
+    session=e
+
+@t.docs.editor.n25 core.test
+    input="Undo"
+    expectState="blocks.length=3"
+    session=e
+
+@t.docs.editor.n26 core.test
+    input="Start dictation"
+    expectState="inputMode=dictation"
+    session=e
+
+@t.docs.editor.n27 core.test
+    input="this is my first note comma and it is short period"
+    expectState="blocks.3.text=This is my first note, and it is short."
+    expectState="inputMode=dictation"
+    session=e
+
+@t.docs.editor.n28 core.test
+    input="what a nice day question mark"
+    expectState="blocks.3.text=This is my first note, and it is short. What a nice day?"
+    session=e
+
+@t.docs.editor.n29 core.test
+    input="new paragraph"
+    expectState="blocks.length=4"
+    session=e
+
+@t.docs.editor.n30 core.test
+    input="second paragraph here exclamation mark"
+    expectState="blocks.4.text=Second paragraph here!"
+    expectState="blocks.length=5"
+    session=e
+
+@t.docs.editor.n31 core.test
+    input="delete the last sentence"
+    expectState="blocks.length=4"
+    session=e
+
+@t.docs.editor.n32 core.test
+    input="undo that"
+    expectState="blocks.4.text=Second paragraph here!"
+    session=e
+
+@t.docs.editor.n33 core.test
+    input="stop dictation"
+    expectState="inputMode=null"
+    session=e
+
+@t.docs.editor.n34 core.test
+    input="Add a heading Done"
+    expectState="blocks.length=6"
+    session=e
+
+@t.docs.editor.n35 core.test
+    input="Make a document from my shopping list"
+    expectStatus=missing
+    session=f
+
+@t.docs.editor.n36 core.test
+    input="Add milk, eggs and bread to my shopping list"
+    expect="shopping"
+    session=g
+
+@t.docs.editor.n37 core.test
+    input="Make a document from my shopping list"
+    expect="Shopping list"
+    expectState="blocks.0.items.0=milk"
+    expectState="blocks.0.from.length=3"
+    expectState="ui.shell:activeTab=editor"
+    expectEffect=speech.say
+    session=g
+
+@t.docs.editor.n38 core.test
+    input="Write a report about sea animals"
+    expect="sea animals"
+    expectState="blocks.0.kind=paragraph"
+    expectState="ui.shell:activeTab=editor"
+    expectEffect=speech.say
+    session=h
+
+@t.docs.editor.n39 core.test
+    input="Write a report about unicorns"
+    expectStatus=missing
+    session=h2
+
+@t.docs.editor.n40 core.test
+    input="Tom has 5 apples. Ana gives him 3 apples. Mia has 2 pears."
+    expect="OK"
+    session=i
+
+@t.docs.editor.n41 core.test
+    input="Write down what everyone has"
+    expectState="blocks.0.text=Tom has 8 apples."
+    expectState="blocks.1.text=Mia has 2 pears."
+    expectEffect=speech.say
+    session=i
+
+@t.docs.editor.n42 core.test
+    input="Write down what Mia has"
+    expectState="blocks.length=1"
+    session=i
+
+@t.docs.editor.n43 core.test
+    input="Write down what everyone has"
+    expectStatus=missing
+    session=j

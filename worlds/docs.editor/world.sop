@@ -1,0 +1,14 @@
+@world.docs.editor core.world
+    namespace=docs.editor
+    version=0.1.0
+    legend=$legend.docs.editor
+    imports=world.core
+    imports=world.kids.common
+    imports=world.kids.tasks
+    imports=world.kids.animals
+    imports=world.kids.arith
+    formalization=rules
+    language=en
+    status=fixture
+    title="Document editor"
+    doc="Talk with a document: add headings, paragraphs and lists, edit, undo, read aloud, ask about it, copy and download, dictate, and create documents from the conversation (a task list, a report about animals, what people have). Every created sentence comes from wires; created blocks keep the source wire ids. State lives in ctx.state. Hand-built platform fixture, not produced by the C1 workflow."

@@ -71,7 +71,7 @@ export function createServer({ engine, idleMs = 30 * 60 * 1000 } = {}) {
       if (req.method === 'POST' && a === 'sessions' && !b) {
         const body = await readJson(req);
         const id = randomUUID();
-        sessions.set(id, { session: engine.createSession({ language: body.language ?? 'auto' }), last: Date.now() });
+        sessions.set(id, { session: engine.createSession({ language: body.language ?? 'auto', formalizer: body.formalizer }), last: Date.now() });
         return send(res, 201, { sessionId: id });
       }
       if (a === 'sessions' && b && c) {

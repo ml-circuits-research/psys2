@@ -11,7 +11,7 @@ export const UNIT_TABLE = new Map(Object.entries({
   s: 's', sec: 's', min: 'min', h: 'h', n: 'N', j: 'J', w: 'W', pa: 'Pa', hz: 'Hz', k: 'K',
 }));
 
-export const BUILTIN_CLASSES = new Set(['number', 'word', 'words', 'noun', 'agent', 'unit']);
+export const BUILTIN_CLASSES = new Set(['number', 'word', 'words', 'rest', 'noun', 'agent', 'unit']);
 
 export class PatternError extends Error {}
 
@@ -64,6 +64,11 @@ function candidates(cls, tokens, i, env) {
         out.push({ len, value: text(len), text: text(len), span: span(len), loose: true });
       }
       return out;
+    }
+    case 'rest': {
+      // everything up to the end of the sentence (1 or more tokens): free text for tools such as dictation
+      const len = tokens.length - i;
+      return len >= 1 && tokens.slice(i).every(isWordish) ? [{ len, value: text(len), text: text(len), span: span(len), loose: true }] : [];
     }
     case 'noun': {
       const out = [];

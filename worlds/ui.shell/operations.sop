@@ -1,0 +1,83 @@
+@op.ui.shell.openTab core.operation
+    impl=openTab
+    semantics=action
+    action=ui.openTab
+    doc="Makes a tab the active tab (remembers the previous one). Also the documented cross-world request other tool worlds use to bring their tab forward: ctx.request(\"ui.openTab\", { tab })."
+
+@op.ui.shell.playGame core.operation
+    impl=playGame
+    semantics=action
+    action=ui.playGame
+    doc="Opens a game tab and starts a game there through the game world (ctx.request)."
+
+@op.ui.shell.chooseGame core.operation
+    impl=chooseGame
+    semantics=action
+    action=ui.chooseGame
+    doc="Lists the games that can be played."
+
+@op.ui.shell.back core.operation
+    impl=back
+    semantics=action
+    action=ui.back
+    doc="Returns to the previous tab."
+
+@op.ui.shell.whichTab core.operation
+    impl=whichTab
+    semantics=action
+    action=ui.whichTab
+    doc="Says which tab is open."
+
+@op.ui.shell.help core.operation
+    impl=help
+    semantics=action
+    action=ui.help
+    doc="Lists 4-6 example commands for the active tab, taken from the pattern examples of the world that owns the tab (ctx.patterns)."
+
+@op.ui.shell.speaker core.operation
+    impl=speaker
+    semantics=action
+    action=ui.speaker
+    doc="Turns the speaker on or off (effect speech.cancel when turned off)."
+
+@op.ui.shell.listening core.operation
+    impl=listening
+    semantics=action
+    action=ui.listening
+    doc="Turns the microphone listening on or off."
+
+@op.ui.shell.handsFree core.operation
+    impl=handsFree
+    semantics=action
+    action=ui.handsFree
+    doc="Turns hands-free mode on (which also starts listening) or off (which also stops listening)."
+
+@op.ui.shell.rate core.operation
+    impl=rate
+    semantics=action
+    action=ui.rate
+    doc="Makes the speech slower or faster by 0.25 (range 0.5 to 2) or sets it to a value."
+
+@op.ui.shell.language core.operation
+    impl=language
+    semantics=action
+    action=ui.language
+    doc="Sets the interface, recognition and speech language (en or ro)."
+
+@op.ui.shell.newGame core.operation
+    impl=newGame
+    semantics=action
+    action=ui.newGame
+    doc="Starts a new game in the game of the active tab (ctx.request)."
+
+@op.ui.shell.giveUp core.operation
+    impl=giveUp
+    semantics=action
+    action=ui.giveUp
+    doc="Gives up the game of the active tab (ctx.request)."
+
+@op.ui.shell.hint core.operation
+    impl=hint
+    semantics=action
+    action=ui.hint
+    doc="Asks the game of the active tab for a hint (ctx.request)."

@@ -35,6 +35,11 @@ State: `{ title, blocks: [{ id, kind: 'heading'|'paragraph'|'list', text?, items
 - `games.guess` — twenty questions where **PSys2 guesses the user's animal** by asking yes/no questions chosen from the kids.animals knowledge base (split the remaining candidates as evenly as possible); answers "yes", "no", "I don't know"; at the end it names the animal or admits defeat and asks the user to teach it ("it was a zebra" → a session fact). Shows the knowledge base and planning at work.
 - `games.hangman` — a word from the kids.animals or kids.shapes lexicon; "is there an E?", "the letter R", "is it elephant?", "give me a hint" (a fact about the animal from the KB).
 
+### Implementation notes (fixtures in `worlds/`)
+- Cross-world calls: `ctx.request('ui.openTab', { tab })` brings a tab forward (every changing command of the avatar, editor and games does it); games are started by `ui.playGame` / `ui.newGame` through `ctx.request('ttt.new' | 'guess.start' | 'hm.new')`. Worlds export `initialState()` so the host can read every state before the first message.
+- `ui.shell` adds `previousTab` to its state (for "go back"). `ui.avatar` effect: `avatar.animate { name, eye? }`. `docs.editor` adds `future`, `nextId`, `dictBlock`; blocks carry `from` (source wire ids); effects `speech.say`, `clipboard.copy`, `file.download { filename, mime, content }`. `games.hangman` keeps `word` in the state: render `masked` and show `word` only when `status` is `won` or `lost`.
+- The tests of these worlds assert state and effects with `expectState` and `expectEffect` (spec 02).
+
 ## 4. The demo page (`docs/webchat/`)
 - Layout: chat on the left (30% of the width, WhatsApp-like bubbles, timestamps, a status line showing listening/speaking), tabs on the right (Robot — default, Editor, Tic-tac-toe, Guess the animal, Hangman). On narrow screens the tabs stack under the chat.
 - Hands-free: a hands-free toggle (also by voice) keeps speech recognition running continuously; recognition pauses while the speaker is talking, to avoid hearing itself; push-to-talk with the space bar when the chat input is not focused; the microphone and speaker buttons of ADR-002 remain.

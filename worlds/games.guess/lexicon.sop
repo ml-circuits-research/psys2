@@ -1,0 +1,5 @@
+@lex.games.guess.triggers core.lexicon
+    class=trigger
+    word=guess
+    word=animal
+    word=questions

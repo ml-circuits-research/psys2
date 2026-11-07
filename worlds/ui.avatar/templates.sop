@@ -1,0 +1,307 @@
+@tpl.ui.avatar.avatar_setColor core.template
+    for=action.avatar.setColor
+    text="{value}"
+
+@tpl.ui.avatar.avatar_setColor.unsupported core.template
+    for=action.avatar.setColor
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.avatar.avatar_setColor.missing core.template
+    for=action.avatar.setColor
+    status=missing
+    text="{note}"
+
+@tpl.ui.avatar.avatar_setSize core.template
+    for=action.avatar.setSize
+    text="{value}"
+
+@tpl.ui.avatar.avatar_setSize.unsupported core.template
+    for=action.avatar.setSize
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.avatar.avatar_setSize.missing core.template
+    for=action.avatar.setSize
+    status=missing
+    text="{note}"
+
+@tpl.ui.avatar.avatar_setShape core.template
+    for=action.avatar.setShape
+    text="{value}"
+
+@tpl.ui.avatar.avatar_setShape.unsupported core.template
+    for=action.avatar.setShape
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.avatar.avatar_setShape.missing core.template
+    for=action.avatar.setShape
+    status=missing
+    text="{note}"
+
+@tpl.ui.avatar.avatar_setMood core.template
+    for=action.avatar.setMood
+    text="{value}"
+
+@tpl.ui.avatar.avatar_setMood.unsupported core.template
+    for=action.avatar.setMood
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.avatar.avatar_setMood.missing core.template
+    for=action.avatar.setMood
+    status=missing
+    text="{note}"
+
+@tpl.ui.avatar.avatar_look core.template
+    for=action.avatar.look
+    text="{value}"
+
+@tpl.ui.avatar.avatar_look.unsupported core.template
+    for=action.avatar.look
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.avatar.avatar_look.missing core.template
+    for=action.avatar.look
+    status=missing
+    text="{note}"
+
+@tpl.ui.avatar.avatar_animate core.template
+    for=action.avatar.animate
+    text="{value}"
+
+@tpl.ui.avatar.avatar_animate.unsupported core.template
+    for=action.avatar.animate
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.avatar.avatar_animate.missing core.template
+    for=action.avatar.animate
+    status=missing
+    text="{note}"
+
+@tpl.ui.avatar.avatar_blink core.template
+    for=action.avatar.blink
+    text="{value}"
+
+@tpl.ui.avatar.avatar_blink.unsupported core.template
+    for=action.avatar.blink
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.avatar.avatar_blink.missing core.template
+    for=action.avatar.blink
+    status=missing
+    text="{note}"
+
+@tpl.ui.avatar.avatar_wear core.template
+    for=action.avatar.wear
+    text="{value}"
+
+@tpl.ui.avatar.avatar_wear.unsupported core.template
+    for=action.avatar.wear
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.avatar.avatar_wear.missing core.template
+    for=action.avatar.wear
+    status=missing
+    text="{note}"
+
+@tpl.ui.avatar.avatar_remove core.template
+    for=action.avatar.remove
+    text="{value}"
+
+@tpl.ui.avatar.avatar_remove.unsupported core.template
+    for=action.avatar.remove
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.avatar.avatar_remove.missing core.template
+    for=action.avatar.remove
+    status=missing
+    text="{note}"
+
+@tpl.ui.avatar.avatar_removeAll core.template
+    for=action.avatar.removeAll
+    text="{value}"
+
+@tpl.ui.avatar.avatar_removeAll.unsupported core.template
+    for=action.avatar.removeAll
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.avatar.avatar_removeAll.missing core.template
+    for=action.avatar.removeAll
+    status=missing
+    text="{note}"
+
+@tpl.ui.avatar.avatar_setName core.template
+    for=action.avatar.setName
+    text="{value}"
+
+@tpl.ui.avatar.avatar_setName.unsupported core.template
+    for=action.avatar.setName
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.avatar.avatar_setName.missing core.template
+    for=action.avatar.setName
+    status=missing
+    text="{note}"
+
+@tpl.ui.avatar.avatar_reset core.template
+    for=action.avatar.reset
+    text="{value}"
+
+@tpl.ui.avatar.avatar_reset.unsupported core.template
+    for=action.avatar.reset
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.avatar.avatar_reset.missing core.template
+    for=action.avatar.reset
+    status=missing
+    text="{note}"
+
+@tpl.ui.avatar.avatar_askColor core.template
+    for=action.avatar.askColor
+    text="{value}"
+
+@tpl.ui.avatar.avatar_askColor.unsupported core.template
+    for=action.avatar.askColor
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.avatar.avatar_askColor.missing core.template
+    for=action.avatar.askColor
+    status=missing
+    text="{note}"
+
+@tpl.ui.avatar.avatar_askSize core.template
+    for=action.avatar.askSize
+    text="{value}"
+
+@tpl.ui.avatar.avatar_askSize.unsupported core.template
+    for=action.avatar.askSize
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.avatar.avatar_askSize.missing core.template
+    for=action.avatar.askSize
+    status=missing
+    text="{note}"
+
+@tpl.ui.avatar.avatar_askShape core.template
+    for=action.avatar.askShape
+    text="{value}"
+
+@tpl.ui.avatar.avatar_askShape.unsupported core.template
+    for=action.avatar.askShape
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.avatar.avatar_askShape.missing core.template
+    for=action.avatar.askShape
+    status=missing
+    text="{note}"
+
+@tpl.ui.avatar.avatar_askMood core.template
+    for=action.avatar.askMood
+    text="{value}"
+
+@tpl.ui.avatar.avatar_askMood.unsupported core.template
+    for=action.avatar.askMood
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.avatar.avatar_askMood.missing core.template
+    for=action.avatar.askMood
+    status=missing
+    text="{note}"
+
+@tpl.ui.avatar.avatar_checkMood core.template
+    for=action.avatar.checkMood
+    text="{value}"
+
+@tpl.ui.avatar.avatar_checkMood.unsupported core.template
+    for=action.avatar.checkMood
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.avatar.avatar_checkMood.missing core.template
+    for=action.avatar.checkMood
+    status=missing
+    text="{note}"
+
+@tpl.ui.avatar.avatar_askLook core.template
+    for=action.avatar.askLook
+    text="{value}"
+
+@tpl.ui.avatar.avatar_askLook.unsupported core.template
+    for=action.avatar.askLook
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.avatar.avatar_askLook.missing core.template
+    for=action.avatar.askLook
+    status=missing
+    text="{note}"
+
+@tpl.ui.avatar.avatar_askWearing core.template
+    for=action.avatar.askWearing
+    text="{value}"
+
+@tpl.ui.avatar.avatar_askWearing.unsupported core.template
+    for=action.avatar.askWearing
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.avatar.avatar_askWearing.missing core.template
+    for=action.avatar.askWearing
+    status=missing
+    text="{note}"
+
+@tpl.ui.avatar.avatar_hasThing core.template
+    for=action.avatar.hasThing
+    text="{value}"
+
+@tpl.ui.avatar.avatar_hasThing.unsupported core.template
+    for=action.avatar.hasThing
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.avatar.avatar_hasThing.missing core.template
+    for=action.avatar.hasThing
+    status=missing
+    text="{note}"
+
+@tpl.ui.avatar.avatar_askName core.template
+    for=action.avatar.askName
+    text="{value}"
+
+@tpl.ui.avatar.avatar_askName.unsupported core.template
+    for=action.avatar.askName
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.avatar.avatar_askName.missing core.template
+    for=action.avatar.askName
+    status=missing
+    text="{note}"
+
+@tpl.ui.avatar.avatar_describe core.template
+    for=action.avatar.describe
+    text="{value}"
+
+@tpl.ui.avatar.avatar_describe.unsupported core.template
+    for=action.avatar.describe
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.avatar.avatar_describe.missing core.template
+    for=action.avatar.describe
+    status=missing
+    text="{note}"

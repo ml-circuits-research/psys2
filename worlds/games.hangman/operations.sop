@@ -1,0 +1,35 @@
+@op.games.hangman.newGame core.operation
+    impl=newGame
+    semantics=action
+    action=hm.new
+    doc="Starts a game with a seeded pseudo-random animal word (or the word given in arg word); arg keep=true keeps a game in progress. Brings the hangman tab forward."
+
+@op.games.hangman.letter core.operation
+    impl=letter
+    semantics=action
+    action=hm.letter
+    doc="Guesses one letter; a wrong letter costs one of the six guesses."
+
+@op.games.hangman.word core.operation
+    impl=word
+    semantics=action
+    action=hm.word
+    doc="Guesses the whole word; a wrong guess costs one of the six guesses."
+
+@op.games.hangman.hint core.operation
+    impl=hint
+    semantics=action
+    action=hm.hint
+    doc="A fact about the animal from the kids.animals knowledge base (no guess is lost)."
+
+@op.games.hangman.giveUp core.operation
+    impl=giveUp
+    semantics=action
+    action=hm.giveup
+    doc="Gives up and tells the word."
+
+@op.games.hangman.status core.operation
+    impl=status
+    semantics=action
+    action=hm.status
+    doc="Shows the masked word, the guessed letters and the guesses left."

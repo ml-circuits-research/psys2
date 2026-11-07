@@ -1,0 +1,12 @@
+@world.games.guess core.world
+    namespace=games.guess
+    version=0.1.0
+    legend=$legend.games.guess
+    imports=world.core
+    imports=world.kids.common
+    imports=world.kids.animals
+    formalization=rules
+    language=en
+    status=fixture
+    title="Guess the animal (twenty questions)"
+    doc="Twenty questions where the system guesses the animal the user thinks of. The yes/no question that splits the remaining candidates most evenly is chosen from the kids.animals knowledge base (class, legs, can fly, can swim, habitat, diet, covering). Learns a new animal from \"it was a zebra\". Hand-built platform fixture, not produced by the C1 workflow."

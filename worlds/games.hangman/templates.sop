@@ -1,0 +1,83 @@
+@tpl.games.hangman.hm_new core.template
+    for=action.hm.new
+    text="{value}"
+
+@tpl.games.hangman.hm_new.unsupported core.template
+    for=action.hm.new
+    status=unsupported
+    text="{note}"
+
+@tpl.games.hangman.hm_new.missing core.template
+    for=action.hm.new
+    status=missing
+    text="{note}"
+
+@tpl.games.hangman.hm_letter core.template
+    for=action.hm.letter
+    text="{value}"
+
+@tpl.games.hangman.hm_letter.unsupported core.template
+    for=action.hm.letter
+    status=unsupported
+    text="{note}"
+
+@tpl.games.hangman.hm_letter.missing core.template
+    for=action.hm.letter
+    status=missing
+    text="{note}"
+
+@tpl.games.hangman.hm_word core.template
+    for=action.hm.word
+    text="{value}"
+
+@tpl.games.hangman.hm_word.unsupported core.template
+    for=action.hm.word
+    status=unsupported
+    text="{note}"
+
+@tpl.games.hangman.hm_word.missing core.template
+    for=action.hm.word
+    status=missing
+    text="{note}"
+
+@tpl.games.hangman.hm_hint core.template
+    for=action.hm.hint
+    text="{value}"
+
+@tpl.games.hangman.hm_hint.unsupported core.template
+    for=action.hm.hint
+    status=unsupported
+    text="{note}"
+
+@tpl.games.hangman.hm_hint.missing core.template
+    for=action.hm.hint
+    status=missing
+    text="{note}"
+
+@tpl.games.hangman.hm_giveup core.template
+    for=action.hm.giveup
+    text="{value}"
+
+@tpl.games.hangman.hm_giveup.unsupported core.template
+    for=action.hm.giveup
+    status=unsupported
+    text="{note}"
+
+@tpl.games.hangman.hm_giveup.missing core.template
+    for=action.hm.giveup
+    status=missing
+    text="{note}"
+
+@tpl.games.hangman.hm_status core.template
+    for=action.hm.status
+    text="{value}"
+
+@tpl.games.hangman.hm_status.unsupported core.template
+    for=action.hm.status
+    status=unsupported
+    text="{note}"
+
+@tpl.games.hangman.hm_status.missing core.template
+    for=action.hm.status
+    status=missing
+    text="{note}"

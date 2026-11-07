@@ -1,0 +1,82 @@
+/**
+ * Per-session state of the rule formalizer: counters, agent entities and mention recency
+ * (spec 03 section 3). Browser-safe.
+ */
+import { makeWire, str, atom } from '../../soplang/index.mjs';
+
+const PRONOUNS = {
+  he: 'm', him: 'm', his: 'm', she: 'f', her: 'f', they: 'any', them: 'any', their: 'any',
+  i: 'user', me: 'user', my: 'user', you: 'assistant', your: 'assistant',
+};
+
+/** Words that are capitalized at sentence start but are never names. */
+export const STOP_WORDS = new Set(`a an the and or but then if so how what who whom whose where when which why is are was were be
+does do did can could will would shall should may might must has have had get got give gives gave this that these those there here
+it its not no yes please hello hi hey thanks thank goodbye bye ok okay well monday tuesday wednesday thursday friday saturday sunday
+january february march april may june july august september october november december of in on at to for with from by about`.split(/\s+/));
+
+export class FormSession {
+  constructor() {
+    this._seq = 0;
+    this._ids = 0;
+    this.agents = new Map(); // id -> { id, name, gender, special }
+    this.recent = [];        // agent ids, most recent last
+  }
+
+  nextSeq() { return ++this._seq; }
+  freshId(prefix = 'w') { return prefix + (++this._ids); }
+
+  /** Register the built-in agents e.user and e.assistant; returns their wires. */
+  initDefaults({ userName = 'User', assistantName = 'PSys2' } = {}) {
+    const wires = [];
+    for (const [id, name] of [['e.user', userName], ['e.assistant', assistantName]]) {
+      this.agents.set(id, { id, name, gender: undefined, special: true });
+      wires.push(makeWire(id, 'core.agent', [['core.agent.name', str(name)]]));
+    }
+    return wires;
+  }
+
+  /** Candidate for a name token (no mutation). */
+  candidateForName(raw, gender) {
+    const id = 'e.' + raw.toLowerCase();
+    const known = this.agents.get(id);
+    return known ? { id, name: known.name, gender: known.gender, isNew: false }
+      : { id, name: raw, gender, isNew: true };
+  }
+
+  /** Resolve a pronoun to an existing agent (no mutation); null when it cannot be resolved. */
+  resolvePronoun(lower) {
+    const kind = PRONOUNS[lower];
+    if (!kind) return null;
+    if (kind === 'user' || kind === 'assistant') {
+      const a = this.agents.get('e.' + kind);
+      return a ? { id: a.id, name: a.name, gender: a.gender, isNew: false, pronoun: true } : null;
+    }
+    for (let k = this.recent.length - 1; k >= 0; k--) {
+      const a = this.agents.get(this.recent[k]);
+      if (!a || a.special) continue;
+      if (kind === 'any' || !a.gender || a.gender === kind) return { id: a.id, name: a.name, gender: a.gender, isNew: false, pronoun: true };
+    }
+    return null;
+  }
+
+  /** Commit a candidate: register if new (returns the entity wire) and mark it most recent. */
+  commit(c) {
+    let wire = null;
+    if (!this.agents.has(c.id)) {
+      this.agents.set(c.id, { id: c.id, name: c.name, gender: c.gender, special: false });
+      const pairs = [['core.agent.name', str(c.name)]];
+      if (c.gender) pairs.push(['core.agent.gender', atom(c.gender)]);
+      wire = makeWire(c.id, 'core.agent', pairs);
+    }
+    const a = this.agents.get(c.id);
+    if (!a.special) {
+      this.recent = this.recent.filter((x) => x !== c.id);
+      this.recent.push(c.id);
+    }
+    return wire;
+  }
+}
+
+/** True when the lowercase word is a pronoun the resolver knows. */
+export const isPronoun = (lower) => lower in PRONOUNS;

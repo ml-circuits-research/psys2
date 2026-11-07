@@ -1,0 +1,127 @@
+@pat.games.tictactoe.move core.pattern
+    match="[i|i_will|i_would|let_me|can_i|may_i|could_i|i_want|i_choose|i_take|i_play|i_pick|i_go|i_put]? [play|go|put|place|take|mark|choose|pick|move|put_x|play_x|x|put_an_x|place_an_x|draw_an_x|want_to_go|want_to_play|want_to_take|will_take|will_play|will_go|put_my_x]? [at|in|on|to]? [the]? {pos:lex.games.tictactoe.positions} [square|cell|corner|spot|box|one|position]?"
+    emit="@{_} core.request action=ttt.move arg.pos={pos}"
+    kind=request
+    priority=12
+    example="Center."
+    example="Top left."
+    example="Play the bottom right corner."
+    example="Middle row left."
+
+@pat.games.tictactoe.coord core.pattern
+    match="[i|i_will|i_would|let_me|can_i|may_i|could_i|i_want|i_choose|i_take|i_play|i_pick|i_go|i_put]? [play|go|put|place|take|mark|choose|pick|move|put_x|play_x|x|put_an_x|place_an_x|draw_an_x|want_to_go|want_to_play|want_to_take|will_take|will_play|will_go|put_my_x]? [at|in|on|to]? [the]? [square|cell|spot|position]? {c:lex.games.tictactoe.cols} {r:number}"
+    emit="@{_} core.request action=ttt.move arg.col={c} arg.row={r}"
+    kind=request
+    priority=12
+    example="B2."
+    example="I play A1."
+
+@pat.games.tictactoe.rowcol core.pattern
+    match="[i|i_will|i_would|let_me|can_i|may_i|could_i|i_want|i_choose|i_take|i_play|i_pick|i_go|i_put]? [play|go|put|place|take|mark|choose|pick|move|put_x|play_x|x|put_an_x|place_an_x|draw_an_x|want_to_go|want_to_play|want_to_take|will_take|will_play|will_go|put_my_x]? [at|in|on|the]? row {r:number} [column|col] {c:number}"
+    emit="@{_} core.request action=ttt.move arg.col={c} arg.row={r} arg.numeric=true"
+    kind=request
+    priority=12
+    example="Row 2 column 3."
+
+@pat.games.tictactoe.new core.pattern
+    match="[start|begin|play|have]? [a|another]? new tic_tac_toe [game]?"
+    emit="@{_} core.request action=ttt.new"
+    kind=request
+    priority=12
+    example="Start a new tic tac toe game."
+
+@pat.games.tictactoe.clear core.pattern
+    match="[can_you|could_you|will_you|would_you]? [clear|reset|empty|wipe|restart] [the]? [board|grid]"
+    emit="@{_} core.request action=ttt.new"
+    kind=request
+    priority=12
+    example="Clear the board."
+
+@pat.games.tictactoe.second core.pattern
+    match="[can_you|could_you|will_you|would_you]? [let_me_go_second|i_want_to_go_second|i_will_go_second|i_go_second|i_want_to_be_second|you_go_first|you_start|you_can_start|you_can_go_first|you_first|can_you_start|you_should_go_first|you_begin|start_first|let_me_be_second]"
+    emit="@{_} core.request action=ttt.first arg.who=system"
+    kind=request
+    priority=12
+    example="Let me go second."
+    example="You go first."
+
+@pat.games.tictactoe.first core.pattern
+    match="[can_you|could_you|will_you|would_you]? [let_me_go_first|i_want_to_go_first|i_will_go_first|i_go_first|i_want_to_start|i_start|let_me_start|you_go_second|i_will_start|me_first|let_me_be_first]"
+    emit="@{_} core.request action=ttt.first arg.who=user"
+    kind=request
+    priority=12
+    example="Let me go first."
+    example="I want to start."
+
+@pat.games.tictactoe.whofirst core.pattern
+    match="[who_goes_first|who_starts|who_starts_first|who_goes_second|who_plays_first|who_moves_first|am_i_x|am_i_o|am_i_going_first|do_i_go_first|do_i_start|which_one_am_i|which_mark_am_i]"
+    emit="@{_} core.request action=ttt.whoFirst"
+    kind=request
+    priority=12
+    example="Who goes first?"
+    example="Am I X?"
+
+@pat.games.tictactoe.status core.pattern
+    match="[who_is_winning|who_is_ahead|who_is_going_to_win|who_will_win|am_i_winning|are_you_winning|who_is_leading|how_am_i_doing|who_has_won|who_won|did_i_win|did_you_win|is_it_a_draw|who_is_winning_the_game|who_is_winning_now]"
+    emit="@{_} core.request action=ttt.status"
+    kind=request
+    priority=12
+    example="Who is winning?"
+    example="Am I winning?"
+
+@pat.games.tictactoe.describe core.pattern
+    match="[can_you|could_you|will_you|would_you]? [describe_the_board|read_the_board|show_me_the_board|show_the_board|tell_me_the_board|what_is_on_the_board|what_does_the_board_look_like|how_does_the_board_look|what_is_the_board_like|read_me_the_board|say_the_board|what_is_the_position|describe_the_game|what_is_on_the_board_now]"
+    emit="@{_} core.request action=ttt.describe"
+    kind=request
+    priority=12
+    example="Describe the board."
+    example="What is on the board?"
+
+@pat.games.tictactoe.level core.pattern
+    match="[set|change|switch] [the]? [level|difficulty|mode] [to|at]? {l:lex.games.tictactoe.levels}"
+    emit="@{_} core.request action=ttt.level arg.level={l}"
+    kind=request
+    priority=12
+    example="Set the level to perfect."
+
+@pat.games.tictactoe.level2 core.pattern
+    match="[can_you|could_you|will_you|would_you]? [play|be|go] [on|at]? {l:lex.games.tictactoe.levels} [level|mode]?"
+    emit="@{_} core.request action=ttt.level arg.level={l}"
+    kind=request
+    priority=12
+    example="Play perfectly."
+
+@pat.games.tictactoe.level3 core.pattern
+    match="[make|set] [it|the_game|the_game_to]? {l:lex.games.tictactoe.levels}"
+    emit="@{_} core.request action=ttt.level arg.level={l}"
+    kind=request
+    priority=12
+    example="Make it hard."
+
+@pat.games.tictactoe.level4 core.pattern
+    match="[i_want|i_would_like|give_me] [a|an]? {l:lex.games.tictactoe.levels} [game|level|opponent]"
+    emit="@{_} core.request action=ttt.level arg.level={l}"
+    kind=request
+    priority=12
+    example="Give me an easy game."
+
+@pat.games.tictactoe.level.q core.pattern
+    match="[what_level|which_level|how_hard] [are_you|is_it|are_we_playing|is_the_game|is_this]?"
+    emit="@{_} core.request action=ttt.level"
+    kind=request
+    priority=12
+    example="What level is it?"
+
+@pat.games.tictactoe.hint core.pattern
+    match="[what_should_i_play|where_should_i_play|where_should_i_go|what_is_my_best_move|what_is_a_good_move|what_move_should_i_make|suggest_a_move|what_should_i_do|which_move_is_best|where_should_i_move]"
+    emit="@{_} core.request action=ttt.hint"
+    kind=request
+    priority=12
+    example="Where should I play?"
+
+@pat.games.tictactoe.last core.pattern
+    match="[where_did_you_play|where_did_you_go|what_was_your_move|what_was_your_last_move|which_square_did_you_take|what_did_you_play|where_was_your_move]"
+    emit="@{_} core.request action=ttt.last"
+    kind=request
+    priority=12
+    example="Where did you play?"

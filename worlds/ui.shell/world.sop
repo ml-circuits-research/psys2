@@ -1,0 +1,11 @@
+@world.ui.shell core.world
+    namespace=ui.shell
+    version=0.1.0
+    legend=$legend.ui.shell
+    imports=world.core
+    imports=world.kids.common
+    formalization=rules
+    language=en
+    status=fixture
+    title="App shell and voice settings"
+    doc="Tab navigation, speaker, microphone, hands-free mode, speech rate and interface language of the demo app. State lives in ctx.state; the host renders it. Hand-built platform fixture, not produced by the C1 workflow."

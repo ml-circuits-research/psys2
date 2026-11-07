@@ -1,0 +1,16 @@
+@legend.ui.avatar core.legend
+    namespace=ui.avatar
+    version=0.1.0
+    imports=core
+    imports=kids.common
+    doc="The robot face state"
+
+@ui.avatar.face core.type
+    extends=core.state
+    doc="How the robot face looks. The world state holds name, faceColor, faceShape, eyes {size, shape, color}, mouth, look, antenna {on, color}, hat, accessory, ears and blink."
+    example="Make your eyes bigger."
+
+@ui.avatar.face.part core.key
+    value=atom
+    card=one
+    ask="Which part of the face (face, eye, antenna)?"

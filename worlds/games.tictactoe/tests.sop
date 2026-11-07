@@ -1,0 +1,106 @@
+@t.games.tictactoe.n01 core.test
+    input="Center."
+    expect="You took the center"
+    expectState="board.4=X"
+    expectState="turn=X"
+    expectState="user=X"
+    session=a
+
+@t.games.tictactoe.n02 core.test
+    input="Top left"
+    expect="You took top left"
+    session=a
+
+@t.games.tictactoe.n03 core.test
+    input="Describe the board"
+    expect="Top row"
+    expect="Bottom row"
+    session=a
+
+@t.games.tictactoe.n04 core.test
+    input="Where did you play?"
+    expect="My last move"
+    session=a
+
+@t.games.tictactoe.n05 core.test
+    input="Who is winning?"
+    expect="draw"
+    session=a
+
+@t.games.tictactoe.n06 core.test
+    input="Top left"
+    expect="taken"
+    expectStatus=unsupported
+    session=a
+
+@t.games.tictactoe.n07 core.test
+    input="New game"
+    expectState="board.4="
+    expectState="winner=null"
+    expectState="board.0="
+    session=a
+
+@t.games.tictactoe.n08 core.test
+    input="Play B2"
+    expectState="board.4=X"
+    session=b
+
+@t.games.tictactoe.n09 core.test
+    input="Put an X in the bottom right corner"
+    expectState="board.8=X"
+    session=b
+
+@t.games.tictactoe.n10 core.test
+    input="Row 3 column 3"
+    expect="Bottom right is already taken"
+    expectStatus=unsupported
+    session=b
+
+@t.games.tictactoe.n11 core.test
+    input="Let me go second"
+    expect="I go first"
+    expectState="user=O"
+    expectState="turn=O"
+    session=c
+
+@t.games.tictactoe.n12 core.test
+    input="Who goes first?"
+    expect="X goes first"
+    session=c
+
+@t.games.tictactoe.n13 core.test
+    input="Let me go first"
+    expectState="user=X"
+    expectState="board.4="
+    session=c
+
+@t.games.tictactoe.n14 core.test
+    input="Set the level to perfect"
+    expectState="level=perfect"
+    session=c
+
+@t.games.tictactoe.n15 core.test
+    input="Make it easy"
+    expectState="level=easy"
+    session=c
+
+@t.games.tictactoe.n16 core.test
+    input="Make your face blue"
+    expect="blue"
+    session=d
+
+@t.games.tictactoe.n17 core.test
+    input="Top right"
+    expect="You took top right"
+    expectState="ui.shell:activeTab=tictactoe"
+    session=d
+
+@t.games.tictactoe.n18 core.test
+    input="Where should I play?"
+    expect="How about"
+    session=e
+
+@t.games.tictactoe.n19 core.test
+    input="I give up"
+    expectStatus=missing
+    session=e2

@@ -1,0 +1,158 @@
+@t.ui.shell.n01 core.test
+    input="Which tab am I on?"
+    expect="Robot"
+    expectState="activeTab=robot"
+    session=s
+
+@t.ui.shell.n02 core.test
+    input="Open the editor."
+    expect="Editor"
+    expectState="activeTab=editor"
+    expectState="previousTab=robot"
+    session=s
+
+@t.ui.shell.n03 core.test
+    input="Go back."
+    expect="Robot"
+    expectState="activeTab=robot"
+    expectState="previousTab=editor"
+    session=s
+
+@t.ui.shell.n04 core.test
+    input="Show me the document"
+    expectState="activeTab=editor"
+    session=s
+
+@t.ui.shell.n05 core.test
+    input="Let's play tic tac toe."
+    expect="tic-tac-toe"
+    expectState="activeTab=tictactoe"
+    session=s
+
+@t.ui.shell.n06 core.test
+    input="Can we play twenty questions?"
+    expect="Think of an animal"
+    expectState="activeTab=guess"
+    expectState="games.guess:phase=asking"
+    session=s
+
+@t.ui.shell.n07 core.test
+    input="I want to play hangman"
+    expect="letters"
+    expectState="activeTab=hangman"
+    expectState="games.hangman:status=playing"
+    session=s
+
+@t.ui.shell.n08 core.test
+    input="Turn on the speaker."
+    expect="speaker is on"
+    expectState="speaker=true"
+    session=s2
+
+@t.ui.shell.n09 core.test
+    input="Be quiet."
+    expectState="speaker=false"
+    expectEffect=speech.cancel
+    session=s2
+
+@t.ui.shell.n10 core.test
+    input="Speak slower."
+    expect="0.75"
+    expectState="rate=0.75"
+    session=s2
+
+@t.ui.shell.n11 core.test
+    input="Talk a bit faster"
+    expectState="rate=1"
+    session=s2
+
+@t.ui.shell.n12 core.test
+    input="Speak faster"
+    expectState="rate=1.25"
+    session=s2
+
+@t.ui.shell.n13 core.test
+    input="Set the speech rate to 1.5."
+    expectState="rate=1.5"
+    session=s2
+
+@t.ui.shell.n14 core.test
+    input="Speak at normal speed"
+    expectState="rate=1"
+    session=s2
+
+@t.ui.shell.n15 core.test
+    input="Hands-free mode on"
+    expect="hands-free"
+    expectState="handsFree=true"
+    expectState="listening=true"
+    session=s2
+
+@t.ui.shell.n16 core.test
+    input="Stop listening."
+    expectState="listening=false"
+    expectState="handsFree=false"
+    session=s2
+
+@t.ui.shell.n17 core.test
+    input="Start listening"
+    expectState="listening=true"
+    session=s2
+
+@t.ui.shell.n18 core.test
+    input="Switch to Romanian."
+    expect="Romanian"
+    expectState="language=ro"
+    session=s2
+
+@t.ui.shell.n19 core.test
+    input="Speak English"
+    expectState="language=en"
+    session=s2
+
+@t.ui.shell.n20 core.test
+    input="What can I say here?"
+    expect="On the Robot tab"
+    expect="you can say"
+    session=s3
+
+@t.ui.shell.n21 core.test
+    input="Open the editor"
+    expectState="activeTab=editor"
+    session=s3
+
+@t.ui.shell.n22 core.test
+    input="What can I say here?"
+    expect="On the Editor tab"
+    session=s3
+
+@t.ui.shell.n23 core.test
+    input="Open the hangman tab"
+    expectState="activeTab=hangman"
+    session=s3
+
+@t.ui.shell.n24 core.test
+    input="What commands are there?"
+    expect="On the Hangman tab"
+    session=s3
+
+@t.ui.shell.n25 core.test
+    input="New game"
+    expect="Hangman"
+    expectState="games.hangman:status=playing"
+    session=s3
+
+@t.ui.shell.n26 core.test
+    input="Open the robot"
+    expectState="activeTab=robot"
+    session=s4
+
+@t.ui.shell.n27 core.test
+    input="New game"
+    expectStatus=missing
+    session=s4
+
+@t.ui.shell.n28 core.test
+    input="Let's play a game"
+    expect="tic-tac-toe"
+    session=s5

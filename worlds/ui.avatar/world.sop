@@ -1,0 +1,11 @@
+@world.ui.avatar core.world
+    namespace=ui.avatar
+    version=0.1.0
+    legend=$legend.ui.avatar
+    imports=world.core
+    imports=world.kids.common
+    formalization=rules
+    language=en
+    status=fixture
+    title="Robot face (avatar)"
+    doc="The robot face of the demo: colors, eyes, mouth, gaze, hat, accessories and a name, changed by voice or text. State lives in ctx.state; the host draws it. Hand-built platform fixture, not produced by the C1 workflow."

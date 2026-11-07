@@ -17,6 +17,8 @@ Steps for every user message:
 
 `engine.worlds()` lists loaded worlds; `session.memory()` returns the session wires as SOP Lang.
 
+Tool-world additions (spec 07): `reply` also has `state` (snapshot of each world state that changed during the message, by world id), `effects` (`[{ name, args, world }]` in order) and `trace.intercepted` / `trace.effects` / `trace.formalizer`. `session.state(worldId?)` returns the current state; `session.setWorldState(worldId, patch)` is the host's way to change state (a click on a tab): shallow merge, no reply, no effects; `session.observe({ effect, ok, detail })` records a `core.observation` wire. Modal input: before formalization the engine offers the (translated) text to `interceptInput(ctx, text)` of every world whose state has a truthy `inputMode`; the first `{ handled: true, reply? }` consumes the message. `engine.formalizers` is `{ rules, encoder }`; `session.formalizer` (writable), `createSession({ formalizer })` and `send(text, { formalizer })` choose the preference.
+
 ## Loaders
 - Node: `src/loaders/fs-loader.mjs` reads `worlds/*/` and imports `ops.mjs` with dynamic `import()`.
 - Browser: `src/loaders/bundle-loader.mjs` reads a bundle produced by `scripts/build-webchat.mjs` (`worlds/index.json` with file texts) and imports each world's `ops.mjs` from its copied path.
@@ -28,7 +30,7 @@ Steps for every user message:
 | `GET /v1/health` | `{ ok, version, worlds }` |
 | `GET /v1/worlds` | world manifests |
 | `GET /v1/worlds/{id}` | manifest, legend summary, tests summary |
-| `POST /v1/sessions` | `{ language? }` → `{ sessionId }` |
+| `POST /v1/sessions` | `{ language?, formalizer? }` → `{ sessionId }` |
 | `POST /v1/sessions/{id}/messages` | `{ text }` → reply object |
 | `GET /v1/sessions/{id}/memory` | session wires as SOP Lang (`text/plain`) |
 | `POST /v1/learn/*`, `POST /v1/worlds/{id}/improvements` | `501` with a pointer to the vision (C1/C3 not implemented) |

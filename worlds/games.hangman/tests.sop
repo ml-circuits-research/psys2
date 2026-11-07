@@ -1,0 +1,125 @@
+@t.games.hangman.n01 core.test
+    input="Is there an E?"
+    expectStatus=missing
+    session=a
+
+@t.games.hangman.n02 core.test
+    input="Play hangman with the word zebra"
+    expect="Hangman"
+    expectState="word=zebra"
+    expectState="status=playing"
+    expectState="wrongLeft=6"
+    expectState="masked=_ _ _ _ _"
+    session=a
+
+@t.games.hangman.n03 core.test
+    input="Is there an E?"
+    expect="Yes"
+    expectState="masked=_ e _ _ _"
+    expectState="guessed.0=e"
+    session=a
+
+@t.games.hangman.n04 core.test
+    input="The letter Q"
+    expect="no Q"
+    expectState="wrongLeft=5"
+    session=a
+
+@t.games.hangman.n05 core.test
+    input="E"
+    expect="already"
+    expectState="wrongLeft=5"
+    session=a
+
+@t.games.hangman.n06 core.test
+    input="Does it have a Z?"
+    expectState="masked=z e _ _ _"
+    session=a
+
+@t.games.hangman.n07 core.test
+    input="Give me a hint"
+    expect="It "
+    expectState="wrongLeft=5"
+    session=a
+
+@t.games.hangman.n08 core.test
+    input="How many guesses are left?"
+    expect="5"
+    session=a
+
+@t.games.hangman.n09 core.test
+    input="Is it a horse?"
+    expectState="wrongLeft=4"
+    session=a
+
+@t.games.hangman.n10 core.test
+    input="Is it zebra?"
+    expect="zebra"
+    expectState="status=won"
+    expectState="masked=z e b r a"
+    session=a
+
+@t.games.hangman.n11 core.test
+    input="B"
+    expectStatus=missing
+    session=a
+
+@t.games.hangman.n12 core.test
+    input="Play hangman with the word cat"
+    expectState="wrongLeft=6"
+    session=b
+
+@t.games.hangman.n13 core.test
+    input="X"
+    expectState="wrongLeft=5"
+    session=b
+
+@t.games.hangman.n14 core.test
+    input="Q"
+    expectState="wrongLeft=4"
+    session=b
+
+@t.games.hangman.n15 core.test
+    input="J"
+    expectState="wrongLeft=3"
+    session=b
+
+@t.games.hangman.n16 core.test
+    input="K"
+    expectState="wrongLeft=2"
+    session=b
+
+@t.games.hangman.n17 core.test
+    input="V"
+    expectState="wrongLeft=1"
+    session=b
+
+@t.games.hangman.n18 core.test
+    input="W"
+    expect="cat"
+    expectState="status=lost"
+    expectState="wrongLeft=0"
+    session=b
+
+@t.games.hangman.n19 core.test
+    input="New game"
+    expect="Hangman"
+    expectState="status=playing"
+    expectState="wrongLeft=6"
+    session=b
+
+@t.games.hangman.n20 core.test
+    input="I give up"
+    expect="The word was"
+    expectState="status=lost"
+    session=b
+
+@t.games.hangman.n21 core.test
+    input="Make your face blue"
+    expect="blue"
+    session=c
+
+@t.games.hangman.n22 core.test
+    input="Try S"
+    expectStatus=missing
+    session=c

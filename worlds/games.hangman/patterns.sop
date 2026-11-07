@@ -1,0 +1,73 @@
+@pat.games.hangman.letter core.pattern
+    match="[is_there|was_there] [a|an]? [letter]? {l:lex.games.hangman.letters} [in_it|in_the_word|in_there|in_that]?"
+    emit="@{_} core.request action=hm.letter arg.letter={l}"
+    kind=request
+    priority=12
+    example="Is there an E?"
+    example="Is there a letter R?"
+
+@pat.games.hangman.letter2 core.pattern
+    match="[the_letter|letter|guess|try|i_guess|i_try|how_about|what_about|guess_the_letter|try_the_letter|i_guess_the_letter|let_me_try|let_us_try|how_about_the_letter|what_about_the_letter|is_it_the_letter|pick] [the_letter|letter]? [a|an]? {l:lex.games.hangman.letters}"
+    emit="@{_} core.request action=hm.letter arg.letter={l}"
+    kind=request
+    priority=12
+    example="The letter R."
+    example="Try S."
+
+@pat.games.hangman.letter3 core.pattern
+    match="[does|do] it [have|contain|include] [a|an|the_letter|the]? [letter]? {l:lex.games.hangman.letters} [in_it|in_there|in_the_word]?"
+    emit="@{_} core.request action=hm.letter arg.letter={l}"
+    kind=request
+    priority=12
+    example="Does it have an A?"
+
+@pat.games.hangman.letter4 core.pattern
+    match="{l:lex.games.hangman.letters}"
+    emit="@{_} core.request action=hm.letter arg.letter={l}"
+    kind=request
+    priority=9
+    example="E."
+
+@pat.games.hangman.word core.pattern
+    match="is [it|the_word] [a|an]? {w:word}"
+    emit="@{_} core.request action=hm.word arg.word={w}"
+    kind=request
+    priority=11
+    example="Is it elephant?"
+    example="Is it an owl?"
+
+@pat.games.hangman.word2 core.pattern
+    match="[the_word_is|my_guess_is|i_guess_it_is|i_think_it_is|i_think_the_word_is|it_might_be|maybe_it_is|the_word_might_be] [a|an]? {w:word}"
+    emit="@{_} core.request action=hm.word arg.word={w}"
+    kind=request
+    priority=11
+    example="I think it is a zebra."
+
+@pat.games.hangman.new core.pattern
+    match="[start|play|begin|have]? [a|another]? new hangman [game]?"
+    emit="@{_} core.request action=hm.new"
+    kind=request
+    priority=12
+    example="Start a new hangman game."
+
+@pat.games.hangman.newword core.pattern
+    match="[start|play|begin] hangman with [the]? [word]? {w:word}"
+    emit="@{_} core.request action=hm.new arg.word={w}"
+    kind=request
+    priority=12
+    example="Play hangman with the word zebra."
+
+@pat.games.hangman.hint core.pattern
+    match="[tell_me_something_about_it|what_kind_of_animal_is_it|give_me_a_clue|what_is_it_like|tell_me_more|tell_me_more_about_it]"
+    emit="@{_} core.request action=hm.hint"
+    kind=request
+    priority=12
+    example="Tell me something about it."
+
+@pat.games.hangman.status core.pattern
+    match="[how_many_guesses_are_left|how_many_guesses_do_i_have_left|how_many_lives_do_i_have|what_letters_have_i_tried|which_letters_have_i_guessed|what_does_the_word_look_like|show_me_the_word|show_the_word|what_is_the_word_so_far|how_many_letters_does_it_have|how_many_letters_are_there|how_long_is_the_word|how_many_wrong_guesses_are_left|how_many_tries_are_left]"
+    emit="@{_} core.request action=hm.status"
+    kind=request
+    priority=12
+    example="How many guesses are left?"
+    example="Show me the word."

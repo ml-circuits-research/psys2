@@ -1,0 +1,155 @@
+@op.docs.editor.addHeading core.operation
+    impl=addHeading
+    semantics=action
+    action=doc.addHeading
+    doc="Adds a heading block. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.addParagraph core.operation
+    impl=addParagraph
+    semantics=action
+    action=doc.addParagraph
+    doc="Adds a paragraph block. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.addList core.operation
+    impl=addList
+    semantics=action
+    action=doc.addList
+    doc="Adds a list block (items split at commas and \"and\"). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.delete core.operation
+    impl=delete
+    semantics=action
+    action=doc.delete
+    doc="Deletes a block by kind and position. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.deleteSentence core.operation
+    impl=deleteSentence
+    semantics=action
+    action=doc.deleteSentence
+    doc="Deletes the last sentence of the last paragraph. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.clear core.operation
+    impl=clear
+    semantics=action
+    action=doc.clear
+    doc="Clears the whole document. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.replace core.operation
+    impl=replace
+    semantics=action
+    action=doc.replace
+    doc="Replaces a text everywhere in the document. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.move core.operation
+    impl=move
+    semantics=action
+    action=doc.move
+    doc="Moves a block to the top, to the end, or one step up or down. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.setTitle core.operation
+    impl=setTitle
+    semantics=action
+    action=doc.setTitle
+    doc="Sets the title. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.newDoc core.operation
+    impl=newDoc
+    semantics=action
+    action=doc.newDoc
+    doc="Starts a new empty document. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.undo core.operation
+    impl=undo
+    semantics=action
+    action=doc.undo
+    doc="Undoes the last change (history of at most 50). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.redo core.operation
+    impl=redo
+    semantics=action
+    action=doc.redo
+    doc="Redoes an undone change. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.read core.operation
+    impl=read
+    semantics=action
+    action=doc.read
+    doc="Reads the document, a block or the title aloud (effect speech.say). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.copy core.operation
+    impl=copy
+    semantics=action
+    action=doc.copy
+    doc="Copies the document or a block (effect clipboard.copy). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.download core.operation
+    impl=download
+    semantics=action
+    action=doc.download
+    doc="Downloads the document as text or markdown (effect file.download). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.count core.operation
+    impl=count
+    semantics=action
+    action=doc.count
+    doc="Counts paragraphs, headings, lists, items, words or sentences. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.askTitle core.operation
+    impl=askTitle
+    semantics=action
+    action=doc.askTitle
+    doc="Tells the title. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.whatIs core.operation
+    impl=whatIs
+    semantics=action
+    action=doc.whatIs
+    doc="Tells the text of one block. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.say core.operation
+    impl=say
+    semantics=action
+    action=doc.say
+    doc="Tells the text of the document. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.mentions core.operation
+    impl=mentions
+    semantics=action
+    action=doc.mentions
+    doc="Yes or no: does the document mention a word? Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.isEmpty core.operation
+    impl=isEmpty
+    semantics=action
+    action=doc.isEmpty
+    doc="Yes or no: is the document empty? Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.dictate core.operation
+    impl=dictate
+    semantics=action
+    action=doc.dictate
+    doc="Starts dictation: the next messages go into the document (modal input, interceptInput). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.dictateStop core.operation
+    impl=dictateStop
+    semantics=action
+    action=doc.dictateStop
+    doc="Stops dictation. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.fromList core.operation
+    impl=fromList
+    semantics=action
+    action=doc.fromList
+    doc="Creates a document from a kids.tasks list (reads the kids.tasks.entry wires; blocks keep the wire ids). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.report core.operation
+    impl=report
+    semantics=action
+    action=doc.report
+    doc="Creates a report about animals: asks kids.animals which animals match the topic (ctx.ask matching) and what each one is like (ctx.ask summary). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.holdings core.operation
+    impl=holdings
+    semantics=action
+    action=doc.holdings
+    doc="Creates a document of what people have: reads kids.arith holdings and asks the computed counts (ctx.ask count). Brings the editor tab forward: ctx.request(\"ui.openTab\")."

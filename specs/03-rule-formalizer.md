@@ -48,6 +48,7 @@ formalize(text, { worlds, session, source }) -> {
 | `<lexicon id>` (e.g. `lex.kids.animals.names`) | a word (or multi-word entry) whose singular lemma is in that lexicon | atom: the lexicon entry |
 | `agent` | a person: a capitalized token that is not a known lowercase word, or a name from any `class=name` lexicon, or a pronoun | reference to an agent entity (`$e.tom`) |
 | `unit` | a token in any `class=unit` lexicon or the quantity unit table | atom |
+| `rest` | all remaining tokens up to the end of the sentence (1 or more), commas kept in the text; use it last, for free text (dictation, titles) | string (original text) |
 
 Singular lemma: irregular plurals from `plural=` lexicon entries first; then `ies`→`y`, `ves`→`f`, `(ch\|sh\|x\|ss)es`→drop `es`, `s`→drop (not after `ss`). The lemma is used for matching lexicons and in emitted atoms.
 

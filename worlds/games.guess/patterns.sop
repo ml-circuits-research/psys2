@@ -1,0 +1,81 @@
+@pat.games.guess.yes core.pattern
+    match="[yes|yeah|yep|yup|sure|correct|right|definitely|absolutely|of_course|exactly|it_does|it_can|it_is|it_has|i_think_so|that_is_right|that_is_correct|you_are_right|you_got_it|yes_it_is|yes_it_does|yes_it_can|yes_it_has|yes_please|certainly]"
+    emit="@{_} core.request action=guess.answer arg.answer=yes"
+    kind=request
+    priority=11
+    example="Yes."
+    example="It does."
+
+@pat.games.guess.no core.pattern
+    match="[no|nope|nah|not_really|it_does_not|it_can_not|it_is_not|it_has_not|wrong|no_it_is_not|no_it_does_not|no_it_can_not|no_it_has_not|i_do_not_think_so|that_is_wrong|negative|not_at_all|no_way|no_thanks]"
+    emit="@{_} core.request action=guess.answer arg.answer=no"
+    kind=request
+    priority=11
+    example="No."
+    example="It is not."
+
+@pat.games.guess.dontknow core.pattern
+    match="[i_do_not_know|do_not_know|not_sure|i_am_not_sure|no_idea|i_have_no_idea|i_am_not_certain|dunno|i_can_not_say|who_knows|skip|pass|next_question|i_am_not_sure_about_that]"
+    emit="@{_} core.request action=guess.answer arg.answer=dontknow"
+    kind=request
+    priority=11
+    example="I don't know."
+    example="Not sure."
+
+@pat.games.guess.maybe core.pattern
+    match="[maybe|sometimes|perhaps|kind_of|sort_of|it_depends|a_little|a_bit|possibly|probably|probably_not|partly]"
+    emit="@{_} core.request action=guess.answer arg.answer=maybe"
+    kind=request
+    priority=11
+    example="Maybe."
+    example="Sometimes."
+
+@pat.games.guess.start core.pattern
+    match="[i_am_thinking_of|i_am_thinking_about|i_thought_of|i_have_thought_of|i_have_picked|i_have_chosen|i_picked|i_chose] [an|a|my]? [animal|secret_animal]"
+    emit="@{_} core.request action=guess.start"
+    kind=request
+    priority=12
+    example="I am thinking of an animal."
+
+@pat.games.guess.start2 core.pattern
+    match="[can_you|could_you|will_you|would_you|please_can_you]? [guess|try_to_guess|find_out|figure_out|work_out] [my|the|which|what]? [animal|secret_animal|animal_i_am_thinking_of]"
+    emit="@{_} core.request action=guess.start"
+    kind=request
+    priority=12
+    example="Guess my animal."
+
+@pat.games.guess.learn core.pattern
+    match="[it_was|the_animal_was|the_answer_was|the_answer_is|my_animal_was|i_was_thinking_of|i_was_thinking_about|i_thought_of|the_animal_is|it_was_actually] [a|an|the]? {x:words}"
+    emit="@{_} core.request action=guess.reveal arg.animal=\"{x}\""
+    kind=request
+    priority=10
+    example="It was a zebra."
+    example="I was thinking of a giraffe."
+
+@pat.games.guess.why core.pattern
+    match="[why_did_you_ask_that|why_are_you_asking_that|why_that_question|why_do_you_ask|why_did_you_ask|why_do_you_ask_that|why_this_question|why_are_you_asking_this|why_are_you_asking]"
+    emit="@{_} core.request action=guess.why"
+    kind=request
+    priority=11
+    example="Why did you ask that?"
+
+@pat.games.guess.left core.pattern
+    match="[which_animals_are_left|what_animals_are_left|which_animals_remain|which_animals_do_you_still_consider|what_are_you_considering|which_animals_are_you_thinking_of|which_animals_are_still_possible|what_animals_are_still_possible]"
+    emit="@{_} core.request action=guess.remaining"
+    kind=request
+    priority=11
+    example="Which animals are left?"
+
+@pat.games.guess.count core.pattern
+    match="[how_many_questions_have_you_asked|how_many_questions_are_left|how_many_questions_do_you_have_left|how_many_questions_have_you_used|how_many_questions_so_far|how_many_questions_left|how_many_questions_did_you_ask]"
+    emit="@{_} core.request action=guess.count"
+    kind=request
+    priority=11
+    example="How many questions have you asked?"
+
+@pat.games.guess.repeat core.pattern
+    match="[repeat_the_question|say_that_again|what_was_the_question|ask_again|repeat_that|what_was_your_question|what_did_you_ask|ask_that_again|can_you_repeat_the_question|what_is_the_question]"
+    emit="@{_} core.request action=guess.repeat"
+    kind=request
+    priority=11
+    example="Repeat the question."

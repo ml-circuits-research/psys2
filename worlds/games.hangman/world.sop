@@ -1,0 +1,12 @@
+@world.games.hangman core.world
+    namespace=games.hangman
+    version=0.1.0
+    legend=$legend.games.hangman
+    imports=world.core
+    imports=world.kids.common
+    imports=world.kids.animals
+    formalization=rules
+    language=en
+    status=fixture
+    title="Hangman"
+    doc="Hangman with animal names from the kids.animals lexicon (fallback list inside the world): letter guesses, whole-word guesses, hints from knowledge-base facts, six wrong guesses allowed. State lives in ctx.state. Hand-built platform fixture, not produced by the C1 workflow."

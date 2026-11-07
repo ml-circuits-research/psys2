@@ -32,8 +32,13 @@ export class Session {
     this.interp = interp;
     this.memory = new Memory(interp.legends, interp.base);
     this.state = {};
+    this.effects = [];   // effects queued by ctx.effect during the current message (spec 07)
     this.form = new FormSession();
     this._answers = 0;
+    // Tool worlds export initialState() from ops.mjs; the engine seeds their state at session start.
+    for (const w of interp.set.list()) {
+      if (typeof w.ops?.initialState === 'function') this.state[w.id] = structuredClone(w.ops.initialState());
+    }
   }
   /** Add wires (full keys) to working memory. */
   add(wires) { for (const w of wires) this.memory.add(w); }
@@ -259,12 +264,55 @@ export class Interpreter {
         return this._emit(session, op, sopText);
       },
       state: (session.state[op.worldId] ??= {}),
+      /** Queue a client-side effect (spec 07). Actions only. Returned by session.send() as `effects`. */
+      effect: (name, args = {}) => {
+        if (op.semantics !== 'action') throw new Error(`operation ${op.id} is not an action and may not queue effects`);
+        session.effects.push({ name: String(name), args: structuredClone(args), world: op.worldId });
+      },
+      /** Call another world's action operation (by action name or operation id). Actions only. Returns its envelope. */
+      request: (action, args = {}) => {
+        if (op.semantics !== 'action') throw new Error(`operation ${op.id} is not an action and may not call requests`);
+        check();
+        if (st.depth > this.maxDepth) return { status: 'budget', note: 'recursion depth limit reached' };
+        const target = this._actionOp(action);
+        if (!target) return { status: 'unsupported', note: `no operation for action '${action}'` };
+        st.depth++;
+        try { return this._runOp(session, target, { wire: null, action, args, where: {}, mode: 'value' }, {}, st, { ...args }); }
+        finally { st.depth--; }
+      },
+      /** Pattern examples of a loaded world: [{ id, kind, priority, examples }] (read-only). */
+      patterns: (worldId) => (this.set.get(worldId)?.patterns ?? []).map((p) => ({ id: p.id, kind: p.kind, priority: p.priority, examples: [...p.examples] })),
+      /** Words of a lexicon (by lexicon id, e.g. 'lex.kids.animals.names'); [] when unknown. */
+      lexicon: (id) => { const l = this.set.list().flatMap((w) => w.lexicons).find((x) => x.id === id); return l ? [...l.words] : []; },
       ask_text: (key) => L.keyInfo(key)?.ask,
       name: (id) => this.renderer.nameOf(mem, String(id).replace(/^\$/, '')),
       /** List the loaded worlds: [{ id, title, status, doc }]. Browser-safe, read-only. */
       worlds: () => this.set.list().map((w) => ({ id: w.id, title: w.title, status: w.status, doc: w.doc })),
     };
     return ctx;
+  }
+
+  /** The action operation (semantics=action) whose id or action name is `action`. */
+  _actionOp(action) {
+    return this.set.list().flatMap((w) => w.operations).find((o) => o.semantics === 'action' && (o.id === action || o.action === action));
+  }
+
+  /**
+   * Modal input (spec 07 section 2): offer `text` to the `interceptInput(ctx, text)` export of every
+   * world whose state has a truthy `inputMode`. The first `{ handled: true, reply? }` wins.
+   * @returns {{ worldId, reply?: string } | null}
+   */
+  intercept(session, text) {
+    for (const w of this.set.list()) {
+      if (typeof w.ops?.interceptInput !== 'function' || !session.state[w.id]?.inputMode) continue;
+      const op = { id: `op.${w.id}.interceptInput`, worldId: w.id, semantics: 'action' };
+      const st = { depth: 0, visited: 0, ops: [] };
+      const ctx = this._makeCtx(session, op, st, { deadline: performance.now() + this.opTimeoutMs * 5 });
+      let res;
+      try { res = w.ops.interceptInput(ctx, text); } catch (e) { res = { handled: true, reply: `Something went wrong while I handled that (${e?.message ?? e}).` }; }
+      if (res?.handled) return { worldId: w.id, reply: res.reply, ops: st.ops };
+    }
+    return null;
   }
 
   _emit(session, op, sopText) {

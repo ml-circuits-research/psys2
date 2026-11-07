@@ -91,3 +91,4 @@ One directory per world under `worlds/`, named by namespace. Only `world.sop` an
     expectStatus=missing
 ```
 `expect` is a substring that must occur in the rendered answer of the last question in `input`; `expectStatus` is the answer status (spec 04). A test may give `language=ro` to exercise translation. `session=` groups tests that share one dialog session, run in id order.
+`expectState="<dot.path>=<value>"` (repeatable) checks the state after the input, relative to the state of the world that owns the tests (`blocks.0.kind=heading`, `board.4=X`, `length` works on arrays), or of another world as `<worldId>:<dot.path>=<value>`; `expectEffect=<name>` (repeatable) requires that the input queued that effect (spec 07).

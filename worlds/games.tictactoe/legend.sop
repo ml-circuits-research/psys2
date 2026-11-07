@@ -1,0 +1,16 @@
+@legend.games.tictactoe core.legend
+    namespace=games.tictactoe
+    version=0.1.0
+    imports=core
+    imports=kids.common
+    doc="Tic-tac-toe game state"
+
+@games.tictactoe.game core.type
+    extends=core.state
+    doc="A game of tic-tac-toe. The world state holds board (9 cells X, O or empty), user, turn, winner, level and the last moves."
+    example="Play the center."
+
+@games.tictactoe.game.level core.key
+    value=atom
+    card=one
+    ask="Which level (easy or perfect)?"

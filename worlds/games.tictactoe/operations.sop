@@ -1,0 +1,59 @@
+@op.games.tictactoe.move core.operation
+    impl=move
+    semantics=action
+    action=ttt.move
+    doc="Places the user mark on a named place or coordinate and answers with the system move; brings the tic-tac-toe tab forward."
+
+@op.games.tictactoe.newGame core.operation
+    impl=newGame
+    semantics=action
+    action=ttt.new
+    doc="Starts a new game (arg keep=true keeps a game in progress); the system opens when the user is O."
+
+@op.games.tictactoe.first core.operation
+    impl=first
+    semantics=action
+    action=ttt.first
+    doc="Starts a new game with the user first (X) or second (O)."
+
+@op.games.tictactoe.whoFirst core.operation
+    impl=whoFirst
+    semantics=action
+    action=ttt.whoFirst
+    doc="Tells who goes first and which mark the user has."
+
+@op.games.tictactoe.status core.operation
+    impl=status
+    semantics=action
+    action=ttt.status
+    doc="Tells who is winning, by the result or by minimax from the current position."
+
+@op.games.tictactoe.describe core.operation
+    impl=describe
+    semantics=action
+    action=ttt.describe
+    doc="Describes the board row by row in text."
+
+@op.games.tictactoe.level core.operation
+    impl=level
+    semantics=action
+    action=ttt.level
+    doc="Sets or tells the level: easy (win, block, center, seeded random) or perfect (minimax)."
+
+@op.games.tictactoe.hint core.operation
+    impl=hint
+    semantics=action
+    action=ttt.hint
+    doc="Suggests the best move for the user (minimax)."
+
+@op.games.tictactoe.giveUp core.operation
+    impl=giveUp
+    semantics=action
+    action=ttt.giveup
+    doc="The user resigns; the system wins."
+
+@op.games.tictactoe.last core.operation
+    impl=last
+    semantics=action
+    action=ttt.last
+    doc="Tells the last move of the system."

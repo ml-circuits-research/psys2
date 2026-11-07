@@ -124,7 +124,8 @@ function buildWorld(id, files, ops) {
   }));
   w.tests = wires['tests.sop'].filter((x) => x.type === 'core.test').map((x) => ({
     id: x.id, wire: x, worldId: id, input: txt(x, 'input'), expect: getAll(x, 'expect').map((v) => v.v),
-    expectStatus: txt(x, 'expectStatus'), language: txt(x, 'language') ?? 'en', session: txt(x, 'session'),
+    expectStatus: txt(x, 'expectStatus'),
+    expectState: getAll(x, 'expectState').map((v) => v.v), expectEffect: getAll(x, 'expectEffect').map((v) => v.v), language: txt(x, 'language') ?? 'en', session: txt(x, 'session'),
   }));
   return w;
 }

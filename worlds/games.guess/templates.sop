@@ -1,0 +1,125 @@
+@tpl.games.guess.guess_start core.template
+    for=action.guess.start
+    text="{value}"
+
+@tpl.games.guess.guess_start.unsupported core.template
+    for=action.guess.start
+    status=unsupported
+    text="{note}"
+
+@tpl.games.guess.guess_start.missing core.template
+    for=action.guess.start
+    status=missing
+    text="{note}"
+
+@tpl.games.guess.guess_answer core.template
+    for=action.guess.answer
+    text="{value}"
+
+@tpl.games.guess.guess_answer.unsupported core.template
+    for=action.guess.answer
+    status=unsupported
+    text="{note}"
+
+@tpl.games.guess.guess_answer.missing core.template
+    for=action.guess.answer
+    status=missing
+    text="{note}"
+
+@tpl.games.guess.guess_reveal core.template
+    for=action.guess.reveal
+    text="{value}"
+
+@tpl.games.guess.guess_reveal.unsupported core.template
+    for=action.guess.reveal
+    status=unsupported
+    text="{note}"
+
+@tpl.games.guess.guess_reveal.missing core.template
+    for=action.guess.reveal
+    status=missing
+    text="{note}"
+
+@tpl.games.guess.guess_giveup core.template
+    for=action.guess.giveup
+    text="{value}"
+
+@tpl.games.guess.guess_giveup.unsupported core.template
+    for=action.guess.giveup
+    status=unsupported
+    text="{note}"
+
+@tpl.games.guess.guess_giveup.missing core.template
+    for=action.guess.giveup
+    status=missing
+    text="{note}"
+
+@tpl.games.guess.guess_hint core.template
+    for=action.guess.hint
+    text="{value}"
+
+@tpl.games.guess.guess_hint.unsupported core.template
+    for=action.guess.hint
+    status=unsupported
+    text="{note}"
+
+@tpl.games.guess.guess_hint.missing core.template
+    for=action.guess.hint
+    status=missing
+    text="{note}"
+
+@tpl.games.guess.guess_why core.template
+    for=action.guess.why
+    text="{value}"
+
+@tpl.games.guess.guess_why.unsupported core.template
+    for=action.guess.why
+    status=unsupported
+    text="{note}"
+
+@tpl.games.guess.guess_why.missing core.template
+    for=action.guess.why
+    status=missing
+    text="{note}"
+
+@tpl.games.guess.guess_remaining core.template
+    for=action.guess.remaining
+    text="{value}"
+
+@tpl.games.guess.guess_remaining.unsupported core.template
+    for=action.guess.remaining
+    status=unsupported
+    text="{note}"
+
+@tpl.games.guess.guess_remaining.missing core.template
+    for=action.guess.remaining
+    status=missing
+    text="{note}"
+
+@tpl.games.guess.guess_count core.template
+    for=action.guess.count
+    text="{value}"
+
+@tpl.games.guess.guess_count.unsupported core.template
+    for=action.guess.count
+    status=unsupported
+    text="{note}"
+
+@tpl.games.guess.guess_count.missing core.template
+    for=action.guess.count
+    status=missing
+    text="{note}"
+
+@tpl.games.guess.guess_repeat core.template
+    for=action.guess.repeat
+    text="{value}"
+
+@tpl.games.guess.guess_repeat.unsupported core.template
+    for=action.guess.repeat
+    status=unsupported
+    text="{note}"
+
+@tpl.games.guess.guess_repeat.missing core.template
+    for=action.guess.repeat
+    status=missing
+    text="{note}"
