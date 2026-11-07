@@ -107,7 +107,7 @@ test('singular lemma rules', () => {
   assert.equal(singularLemma('glasses'), 'glass');
   assert.equal(singularLemma('apples'), 'apple');
   assert.equal(singularLemma('glass'), 'glass');
-  assert.equal(singularLemma('bus'), 'bu'); // documented limitation of the plain rule
+  assert.equal(singularLemma('bus'), 'bus');
   assert.equal(pluralize('apple'), 'apples');
   assert.equal(pluralize('berry'), 'berries');
   assert.equal(pluralize('box'), 'boxes');
@@ -172,7 +172,10 @@ test('slot class word and words', () => {
   const r = slots('say {t:words} now', 'say Some Mixed Case text now');
   assert.equal(r.t, 'Some Mixed Case text'); // original text kept
   assert.equal(slots('say {t:words}', 'say a b c d e f').t, 'a b c d e f');
-  assert.equal(slots('say {t:words}', 'say a b c d e f g'), null); // more than 6 tokens
+  assert.equal(slots('say {t:words}', 'say a b c d e f g h i j k l').t, 'a b c d e f g h i j k l'); // default maximum: 12 tokens
+  assert.equal(slots('say {t:words}', 'say a b c d e f g h i j k l m'), null);
+  assert.equal(slots('say {t:words(3)}', 'say a b c').t, 'a b c');
+  assert.equal(slots('say {t:words(3)}', 'say a b c d'), null);
   assert.equal(slots('say {t:words} and {u:words}', 'say x y and z').t, 'x y'); // lazy + backtracking
 });
 

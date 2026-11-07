@@ -56,7 +56,7 @@ test('chat requests: greeting, name, who, thanks, goodbye, what can you do', asy
   assert.match((await s.send('thanks')).text, /welcome/);
   assert.match((await s.send('bye')).text, /^Goodbye!/);
   const can = await s.send('What can you do?');
-  assert.match(can.text, /Common kids vocabulary and chat/);
+  assert.match(can.text, /^I can chat/);
   assert.match(can.text, /Counting \(test fixture\)/);
   assert.doesNotMatch(can.text, /Core types/);
   assert.equal(can.answers[0].kind, 'request');

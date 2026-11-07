@@ -8,4 +8,5 @@
     language=en
     status=fixture
     title="To-do lists and reminders (primary school)"
+    summary="keep your lists"
     doc="A personal to-do list, shopping list and any other named list, plus simple reminders. Everything is kept in the session state by action operations; adding twice, removing twice and finishing twice are harmless. There are no real timers: a reminder is an item on the reminders list. Hand-built platform fixture, not produced by the C1 workflow."

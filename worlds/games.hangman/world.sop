@@ -9,4 +9,5 @@
     language=en
     status=fixture
     title="Hangman"
+    summary="play hangman"
     doc="Hangman with animal names from the kids.animals lexicon (fallback list inside the world): letter guesses, whole-word guesses, hints from knowledge-base facts, six wrong guesses allowed. State lives in ctx.state. Hand-built platform fixture, not produced by the C1 workflow."

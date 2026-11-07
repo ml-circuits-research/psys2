@@ -263,6 +263,11 @@ export class Interpreter {
         if (op.semantics !== 'action') throw new Error(`operation ${op.id} is not an action and may not emit wires`);
         return this._emit(session, op, sopText);
       },
+      /** Retract a session wire (actions only): core.status=retracted; excluded from find/lookup, kept for the trace. */
+      retract: (wireId, reason = '') => {
+        if (op.semantics !== 'action') throw new Error(`operation ${op.id} is not an action and may not retract wires`);
+        return mem.retract(String(wireId).replace(/^\$/, ''), reason);
+      },
       state: (session.state[op.worldId] ??= {}),
       /** Queue a client-side effect (spec 07). Actions only. Returned by session.send() as `effects`. */
       effect: (name, args = {}) => {
@@ -286,8 +291,8 @@ export class Interpreter {
       lexicon: (id) => { const l = this.set.list().flatMap((w) => w.lexicons).find((x) => x.id === id); return l ? [...l.words] : []; },
       ask_text: (key) => L.keyInfo(key)?.ask,
       name: (id) => this.renderer.nameOf(mem, String(id).replace(/^\$/, '')),
-      /** List the loaded worlds: [{ id, title, status, doc }]. Browser-safe, read-only. */
-      worlds: () => this.set.list().map((w) => ({ id: w.id, title: w.title, status: w.status, doc: w.doc })),
+      /** List the loaded worlds: [{ id, title, summary, status, doc }]. Browser-safe, read-only. */
+      worlds: () => this.set.list().map((w) => ({ id: w.id, title: w.title, summary: w.summaryPhrase, status: w.status, doc: w.doc })),
     };
     return ctx;
   }
@@ -411,7 +416,7 @@ export class Interpreter {
       ? [spec.op?.id, action && 'action.' + action, spec.action && 'action.' + spec.action]
       : [env.via && env.via !== 'core.lookup' ? env.via : null, spec.seek];
     const mode = result.kind === 'question' ? spec.mode : 'value';
-    for (const t of R.pick(fors, env.status, mode)) {
+    for (const t of R.pick(fors, env.status, mode, vars)) {
       const text = R.fill(t.text, vars, mem);
       if (text !== null) return text;
     }
@@ -433,7 +438,7 @@ export class Interpreter {
       }
       let text = null;
       for (const t of L.chain(w.type)) {
-        for (const tpl of R.pick(['ack.' + t], 'supported', 'value')) { text = R.fill(tpl.text, vars, session.memory); if (text !== null) break; }
+        for (const tpl of R.pick(['ack.' + t], 'supported', 'value', vars)) { text = R.fill(tpl.text, vars, session.memory); if (text !== null) break; }
         if (text !== null) break;
       }
       out.push(text ?? 'OK.');

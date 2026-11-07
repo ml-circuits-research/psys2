@@ -9,4 +9,5 @@
     language=en
     status=fixture
     title="Guess the animal (twenty questions)"
+    summary="play guess the animal"
     doc="Twenty questions where the system guesses the animal the user thinks of. The yes/no question that splits the remaining candidates most evenly is chosen from the kids.animals knowledge base (class, legs, can fly, can swim, habitat, diet, covering). Learns a new animal from \"it was a zebra\". Hand-built platform fixture, not produced by the C1 workflow."

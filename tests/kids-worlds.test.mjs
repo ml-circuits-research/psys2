@@ -32,7 +32,10 @@ for (const id of ['kids.arith', 'kids.shop', 'kids.time']) {
     const bad = [];
     for (const p of engine.set.get(id).patterns) {
       assert.ok(p.examples.length >= 1, `${p.id} has no example`);
-      const r = await engine.createSession({ language: 'en' }).send(p.examples[0]);
+      const session = engine.createSession({ language: 'en' });
+      // elliptic patterns (slot class recent) need an item mentioned before
+      if (p.match.includes('recent(')) await session.send('Tom has 5 apples.');
+      const r = await session.send(p.examples[0]);
       if (!r.trace.patterns.includes(p.id) || /another way/.test(r.text)) {
         // a more specific pattern of the same world may legitimately win; it must still be understood
         if (r.statuses.includes('unparsed')) bad.push(p.id);

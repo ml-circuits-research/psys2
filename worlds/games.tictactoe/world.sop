@@ -8,4 +8,5 @@
     language=en
     status=fixture
     title="Tic-tac-toe"
+    summary="play tic-tac-toe"
     doc="Tic-tac-toe against the system: moves by place name or coordinate (A-C columns, 1-3 rows), a reply move (win, block, center, seeded random; minimax at level perfect), new game, who goes first, who is winning. State lives in ctx.state. Hand-built platform fixture, not produced by the C1 workflow."

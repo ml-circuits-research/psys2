@@ -13,6 +13,15 @@ import { pluralize } from '../formalizer/rules/lemma.mjs';
 
 const PLACEHOLDER = /\{([A-Za-z_][\w.]*)((?::[a-z]+)*)\}/g;
 
+// Article exceptions for `:a`. Vowel-initial words that start with a consonant sound take "a"
+// (a unicorn, a university, a European, a one-eyed pirate); silent-h words take "an" (an hour, an honest man, an heir).
+const A_EXCEPTIONS = /^(uni(?:c|f|l|o|p|q|t|v|s)|use[ds]?\b|usu|uti|eu|one\b|once\b|ubiq|ura[ln])/i;
+const AN_EXCEPTIONS = /^(hour|honest|honou?r|heir)/i;
+export function withArticle(x) {
+  const an = AN_EXCEPTIONS.test(x) || (/^[aeiou]/i.test(x) && !A_EXCEPTIONS.test(x));
+  return (an ? 'an ' : 'a ') + x;
+}
+
 const words = (s) => String(s).replace(/_/g, ' ');
 
 /** "a, b and c" */
@@ -44,11 +53,32 @@ export class Renderer {
     return n ? n.value.v : words(id);
   }
 
-  /** Select the first template for any of `fors` with the status and mode. */
-  pick(fors, status, mode) {
+  /**
+   * Does every `when` condition of template `t` hold for `vars`? A condition is `<name><op><value>` with op one of
+   * `= != > >= < <=` (`value=true`, `value=0`, `value>1`); numbers compare numerically, anything else as text.
+   * A condition on a placeholder that has no value does not hold.
+   */
+  holds(t, vars) {
+    for (const c of t.when ?? []) {
+      const m = String(c).match(/^\s*([A-Za-z_][\w.]*)\s*(!=|>=|<=|=|>|<)\s*(.*?)\s*$/);
+      if (!m) return false;
+      const v = vars[m[1]];
+      const left = v ? (v.raw !== undefined ? v.raw : v.text) : undefined;
+      if (left === undefined) return false;
+      const a = String(left), b = m[3];
+      const numeric = a.trim() !== '' && b !== '' && Number.isFinite(Number(a)) && Number.isFinite(Number(b));
+      const cmp = numeric ? Number(a) - Number(b) : (a < b ? -1 : a > b ? 1 : 0);
+      const ok = { '=': cmp === 0, '!=': cmp !== 0, '>': cmp > 0, '>=': cmp >= 0, '<': cmp < 0, '<=': cmp <= 0 }[m[2]];
+      if (!ok) return false;
+    }
+    return true;
+  }
+
+  /** Select the first templates for any of `fors` with the status and mode (and, given `vars`, whose `when` holds). */
+  pick(fors, status, mode, vars = null) {
     for (const f of fors) {
       if (!f) continue;
-      const t = this.templates.filter((x) => x.for === f && x.status === status && x.mode === mode);
+      const t = this.templates.filter((x) => x.for === f && x.status === status && x.mode === mode && (!vars || this.holds(x, vars)));
       if (t.length) return t;
     }
     return [];
@@ -93,7 +123,7 @@ export class Renderer {
         case 'plural': return num && Number(num.raw) === 1 ? x : pluralize(x, this.lex.plurals);
         case 'singular': return this.lex.lemma(x.replace(/ /g, '_')).replace(/_/g, ' ');
         case 'cap': return x.charAt(0).toUpperCase() + x.slice(1);
-        case 'a': return (/^[aeiou]/i.test(x) ? 'an ' : 'a ') + x;
+        case 'a': return withArticle(x);
         case 'number': return formatNumber(x);
         // verb agreement with a rendered subject: "you have", "Tom has", "you are", "Tom is"
         case 'has': return x.toLowerCase() === 'you' ? 'have' : 'has';

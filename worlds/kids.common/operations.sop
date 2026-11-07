@@ -32,4 +32,4 @@
     impl=capabilities
     semantics=action
     action=chat.capabilities
-    doc="Lists the titles of the loaded worlds (uses ctx.worlds())."
+    doc="A short spoken answer built from the summary= phrase of every loaded world (the title when a world has none), grouped by leading verb (uses ctx.worlds())."

@@ -5,14 +5,14 @@
 const engine = await createEngine({ loader })   // loads all worlds via the loader
 const session = engine.createSession({ language: 'auto' })
 const reply = await session.send(text)
-// reply = { text, lang, translation, segments, wires, answers, statuses, trace }
+// reply = { text, parts, lang, translation, segments, wires, answers, statuses, trace }
 ```
 Steps for every user message:
 1. **Language**: detect; if not English, translate to English (spec 05). Keep the original as the source record.
 2. **Formalize** with the rule formalizer over all loaded worlds (spec 03). Emitted wires go to session memory.
 3. **Solve**: every `core.question` and `core.request` is resolved by the interpreter (spec 04).
-4. **Render** each result with world templates; statements get acknowledgements; unparsed sentences get: `I did not understand "<sentence>".` plus up to two example sentences from the closest world (router score).
-5. **Back-translate** the reply if the user wrote in another language.
+4. **Render** each result with world templates; statements get acknowledgements; unparsed sentences get: `I did not understand "<sentence>".` plus up to two example sentences from the closest world (router score). The `capabilities` answer ("What can you do?") is one short sentence built from the `summary=` of every world manifest (spec 02).
+5. **Back-translate** the reply if the user wrote in another language. The reply is built as **parts** `[{ text, translate, quote?, example? }]`: `translate: true` parts are back-translated (consecutive ones together), `translate: false` parts are kept verbatim. Text quoting the user (`I did not understand "<sentence>"`, the unknown words) is a `translate: false`, `quote: true` part holding the user's ORIGINAL sentence (found through the translation alignment), never the English translation. Each example sentence is translated separately by the translator and quoted as a `translate: false`, `quote: true`, `example: true` part; an example whose translation reports unknown words is omitted, and the whole lead-in is omitted when none is left. `reply.parts` exposes the final parts (already in the reply language; `reply.text` is their concatenation) so the webchat can style quotes.
 6. Return the reply and a `trace` (segments, router scores, matched patterns, wires, operations called, statuses), which is the episode record (vision §7).
 
 `engine.worlds()` lists loaded worlds; `session.memory()` returns the session wires as SOP Lang.

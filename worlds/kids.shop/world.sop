@@ -8,4 +8,5 @@
     language=en
     status=fixture
     title="Little shop: prices and pocket money (lei)"
+    summary="talk about shopping"
     doc="A price list of about 25 things in lei, what baskets cost, buying with the user's own money, money left, can I afford it, and change. A price stated in the dialog overrides the price list for the session. Hand-built platform fixture and demo, not produced by the C1 workflow."

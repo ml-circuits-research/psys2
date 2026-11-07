@@ -8,4 +8,5 @@
     language=en
     status=fixture
     title="Robot face (avatar)"
+    summary="change my face"
     doc="The robot face of the demo: colors, eyes, mouth, gaze, hat, accessories and a name, changed by voice or text. State lives in ctx.state; the host draws it. Hand-built platform fixture, not produced by the C1 workflow."

@@ -339,3 +339,19 @@
     input="Which animals have no legs?"
     expect="snakes"
     expect="whales"
+
+@t.animals.n73 core.test
+    input="How many legs does an octopus have?"
+    expect="An octopus has 8 legs."
+
+@t.animals.n74 core.test
+    input="How many legs do octopuses have?"
+    expect="An octopus has 8 legs."
+
+@t.animals.n75 core.test
+    input="What does a walrus eat?"
+    expect="Walruses eat clams and fish."
+
+@t.animals.n76 core.test
+    input="Can a walrus swim?"
+    expect="Yes, a walrus can swim."

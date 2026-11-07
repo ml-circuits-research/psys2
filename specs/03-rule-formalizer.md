@@ -14,7 +14,7 @@ formalize(text, { worlds, session, source }) -> {
 
 ## 1. Normalization and segmentation
 1. Split into sentences on `.`, `!`, `?` (not inside numbers like `3.5`), keeping offsets; `?` marks a question. A sentence that starts with a question word (`how`, `what`, `who`, `where`, `when`, `which`, `why`, `is`, `are`, `does`, `do`, `can`, `did`) is also a question.
-2. Tokenize: words, numbers, `'s`. Keep the original casing of each token (needed for names) and a lowercase form for matching.
+2. Tokenize: words, numbers, `'s`, and the arithmetic symbols `+ - * / × ÷ =` (`×` and `÷` become `*` and `/`) when they stand between two numbers (`7+5`, `12 - 4`, `3 × 4`) or `=` right after a number (`7 + 5 =`); anywhere else they are dropped. A `-` directly before a digit and not after a word or digit is a negative number (`-3`). Keep the original casing of each token (needed for names) and a lowercase form for matching.
 3. Expand contractions (`doesn't` → `does not`, `isn't` → `is not`, `I'm` → `I am`, `what's` → `what is`, `don't` → `do not`, `can't` → `can not`).
 4. Number words to digits: `zero`…`twenty`, tens, `hundred`, `thousand`, combinations (`twenty-one`, `one hundred and five`), `half` → `0.5`, `a dozen` → `12`.
 5. Drop filler tokens anywhere: `please`, `ok`, `okay`, `well`, `so` (sentence-initial), `um`; drop sentence-initial `and`, `then`, `after that`.
@@ -36,6 +36,7 @@ formalize(text, { worlds, session, source }) -> {
 | `[a\|b]?` | optional alternative |
 | `{name:class}` | capture one item of the given class |
 | `{name:class?}` | optional capture |
+| `{name:class(args)}` | class with arguments: `words(20)`, `recent(<lexicon>,<agent slot>)` |
 | `...` | skip 0–4 arbitrary tokens (lazy) |
 
 ### Slot classes
@@ -43,20 +44,22 @@ formalize(text, { worlds, session, source }) -> {
 | --- | --- | --- |
 | `number` | one numeric token | atom (`5`, `2.5`, `-3`) |
 | `word` | any single token | atom (lowercase) |
-| `words` | 1–6 tokens, lazy | string (original text) |
+| `words` | 1–12 tokens, lazy; `words(N)` sets the maximum to N | string (original text) |
+| `recent(<lexicon id>,<agent slot>)` | zero tokens: ellipsis. The item of that lexicon most recently mentioned together with the agent captured by `<agent slot>` (an earlier slot of the pattern), else the one most recently mentioned in the session. No such item: the pattern does not match (no guessing) | atom: the lexicon entry |
 | `noun` | a single word, or a multi-word lexicon noun | atom: singular lemma, `_` joins multi-word (`ice_cream`) |
 | `<lexicon id>` (e.g. `lex.kids.animals.names`) | a word (or multi-word entry) whose singular lemma is in that lexicon | atom: the lexicon entry |
 | `agent` | a person: a capitalized token that is not a known lowercase word, or a name from any `class=name` lexicon, or a pronoun | reference to an agent entity (`$e.tom`) |
 | `unit` | a token in any `class=unit` lexicon or the quantity unit table | atom |
 | `rest` | all remaining tokens up to the end of the sentence (1 or more), commas kept in the text; use it last, for free text (dictation, titles) | string (original text) |
 
-Singular lemma: irregular plurals from `plural=` lexicon entries first; then `ies`→`y`, `ves`→`f`, `(ch\|sh\|x\|ss)es`→drop `es`, `s`→drop (not after `ss`). The lemma is used for matching lexicons and in emitted atoms.
+Singular lemma: irregular plurals from `plural=` lexicon entries first; (and a few built-in Latin plurals: `cacti`, `octopi`, `fungi`); then `ies`→`y`, `ves`→`f`, `(ch\|sh\|x\|ss)es`→drop `es`, `-us` plurals (`octopuses`, `buses`, `viruses`, `walruses`, `cactuses`)→drop `es`, `s`→drop. Singular nouns ending in `ss`, `us` or `is` (`glass`, `octopus`, `iris`) keep their `s`; a short list of `-is` plurals (`kiwis`, `taxis`) still loses it. The lemma is used for matching lexicons and in emitted atoms.
 
 Optional elements and lazy skips are tried in a backtracking matcher; the first full match in left-to-right, prefer-consume order wins for one pattern.
 
 ### Emit templates
 `emit` is SOP Lang with placeholders:
 - `{slot}` → the slot value (atom, or `$id` for agents); inside a string (`"{slot}"`) the original text, JSON-escaped.
+- Ellipsis: the formalizer remembers, per session, the item (value of a lexicon slot) mentioned with each agent; `recent(...)` slots read it. Example: `Tom has 5 apples. He gives 2 to Ana.` reads the second sentence as `give who=Tom to=Ana count=2 item=apple`.
 - `{_}`, `{_1}`, `{_2}`, … → fresh wire ids, unique per session (`w17`, `w18`).
 - An optional slot that was not captured removes the whole `key={slot}` entry.
 

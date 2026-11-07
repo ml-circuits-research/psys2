@@ -20,4 +20,4 @@
 
 @tpl.kids.common.capabilities core.template
     for=action.chat.capabilities
-    text="I can chat with you. The worlds I know are: {values:list}."
+    text="I can {value}. Ask me \"what can I say here?\" for examples."

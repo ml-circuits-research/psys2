@@ -64,8 +64,10 @@ One directory per world under `worlds/`, named by namespace. Only `world.sop` an
     language=en
     status=fixture
     title="Counting and arithmetic (primary school)"
+    summary="do sums"
     doc="Who has how many things; giving, getting, buying; adding and taking away."
 ```
+- `summary` (optional) is a short verb phrase of what the world lets the assistant do (`do sums`, `talk about animals`, `play hangman`). The capabilities answer of `kids.common` (spec 06) is built from it: phrases are merged by their leading words, a world without `summary` is listed by its title, and `summary=""` leaves the world out.
 - `imports` lists world ids; importing a world makes its legend, lexicon, patterns, operations, templates and knowledge available (vision §4: available for consideration, not automatically applicable).
 - `formalization`: `rules` (spec 03) or `encoder` (vision §5; not implemented yet).
 - `status`: `fixture` (hand-built platform fixture or demo), `candidate`, `accepted`.

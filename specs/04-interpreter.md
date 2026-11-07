@@ -66,6 +66,7 @@ export function currentCount(ctx, args) {
 | `ctx.vals(wire, key)` | all values of a repeatable key |
 | `ctx.ask(spec)` | ask the main interpreter a sub-question `{type, seek, where, mode}`; returns an envelope; depth-limited |
 | `ctx.emit(sopText)` | add wires to the session (actions only) |
+| `ctx.retract(wireId, reason)` | retract a session wire (actions only): it gets `core.status=retracted` and `core.reason`, is excluded from `ctx.find`, `ctx.ordered`, questions and lookups, but stays in session memory (and in `session.memory()`) for the trace; `ctx.get` still returns it. Returns `false` for an unknown or knowledge-base wire |
 | `ctx.state` | a plain JSON object persisted with the session, namespaced per world |
 | `ctx.ask_text(key)` | the legend question of a key |
 | `ctx.name(id)` | display name of an entity |
@@ -91,7 +92,8 @@ Templates (`templates.sop`) turn envelopes into English:
     for=ack.kids.arith.holding
     text="OK, {owner} has {count} {item:plural}."
 ```
+- `when` (optional, repeatable, quoted: `when="value=true"`) is a condition on a placeholder, `<name><op><value>` with op one of `=`, `!=`, `>`, `>=`, `<`, `<=`; numbers compare numerically, other values as text; every `when` of a template must hold (a placeholder without a value fails it). Templates are tried in file order, so one operation can render yes/no or zero/one/many with `when="value=true"`, `when="value=0"`, `when="value>1"` and a last template without `when`.
 - `for` is a sought full key, an operation id, `action.<name>`, or `ack.<type>` (acknowledging a statement). `status` defaults to `supported`.
-- Placeholders: `{value}`, any `where`/argument/wire key in short form, `{x.name}` drills into a referenced wire, entity references render as their names. Filters: `:plural`, `:singular`, `:cap`, `:a` (a/an), `:list` (comma list with "and"), `:number` (number formatting).
+- Placeholders: `{value}`, any `where`/argument/wire key in short form, `{x.name}` drills into a referenced wire, entity references render as their names. Filters: `:plural`, `:singular`, `:cap`, `:a` (a/an: `an` before a vowel letter except for words that start with a consonant sound such as `unicorn`, `university`, `European`, `one-eyed`; `an` also before silent h: `hour`, `honest`, `heir`), `:list` (comma list with "and"), `:number` (number formatting).
 - Fallbacks when no template matches: supported → the value (with unit); missing → `I don't know yet. <ask of the key>`; conflicting → `I have conflicting information: <alternatives>.`; unsupported → `I can't do that yet.`; statement ack → `OK.`
 - The renderer never adds facts absent from the envelope (vision §7).

@@ -8,4 +8,5 @@
     language=en
     status=fixture
     title="Animals (primary school)"
+    summary="talk about animals"
     doc="About 65 common animals: class, legs, diet and foods, habitat, flying and swimming, sound, covering and baby names. Children can teach new facts and pets. Explicit no (refuted) is kept apart from unknown. Hand-built platform fixture, not produced by the C1 workflow."

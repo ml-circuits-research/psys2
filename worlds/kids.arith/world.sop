@@ -8,4 +8,5 @@
     language=en
     status=fixture
     title="Counting and arithmetic (primary school)"
+    summary="do sums"
     doc="Who has how many things; giving, getting, eating, losing, buying and breaking; totals and comparisons; and bare arithmetic (plus, minus, times, divided by, half, double). Hand-built platform fixture and demo, not produced by the C1 workflow."

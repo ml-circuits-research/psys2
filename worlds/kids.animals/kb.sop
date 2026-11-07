@@ -695,6 +695,35 @@
     can_swim=true
     core.source="fixture:kids.animals/sea"
 
+@kb.animals.octopus kids.animals.animal
+    name=octopus
+    class=mollusc
+    legs=8
+    diet=carnivore
+    food=crabs
+    food=fish
+    habitat=sea
+    covering=skin
+    can_fly=false
+    can_swim=true
+    core.source="fixture:kids.animals/sea"
+
+@kb.animals.walrus kids.animals.animal
+    name=walrus
+    class=mammal
+    legs=0
+    diet=carnivore
+    food=clams
+    food=fish
+    habitat=polar
+    habitat=sea
+    covering=skin
+    sound=bellow
+    baby=calf
+    can_fly=false
+    can_swim=true
+    core.source="fixture:kids.animals/polar"
+
 @kb.animals.crab kids.animals.animal
     name=crab
     class=crustacean

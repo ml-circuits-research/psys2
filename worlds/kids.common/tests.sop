@@ -20,7 +20,8 @@
 
 @t.kids.common.n6 core.test
     input="What can you do?"
-    expect="Common kids vocabulary and chat"
+    expect="I can chat"
+    expect="what can I say here?"
 
 @t.kids.common.n7 core.test
     input="Please, hi there"

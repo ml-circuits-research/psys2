@@ -8,4 +8,5 @@
     language=en
     status=fixture
     title="App shell and voice settings"
+    summary=""
     doc="Tab navigation, speaker, microphone, hands-free mode, speech rate and interface language of the demo app. State lives in ctx.state; the host renders it. Hand-built platform fixture, not produced by the C1 workflow."

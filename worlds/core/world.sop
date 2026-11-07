@@ -6,4 +6,5 @@
     language=en
     status=fixture
     title="Core types and keys"
+    summary=""
     doc="Bootstrap world: the types and keys every other world builds on. Hand-built platform fixture."

@@ -21,6 +21,17 @@ export class FormSession {
     this._ids = 0;
     this.agents = new Map(); // id -> { id, name, gender, special }
     this.recent = [];        // agent ids, most recent last
+    this.items = new Map();  // `${lexiconId}\u0000${agentId | '*'}` -> most recently mentioned item (ellipsis, spec 03)
+  }
+
+  /** Remember that `item` (a lexicon entry of `lexId`) was just mentioned together with these agents. */
+  noteItem(lexId, item, agentIds = []) {
+    for (const id of [...agentIds, '*']) this.items.set(lexId + '\u0000' + id, item);
+  }
+
+  /** Item most recently mentioned for the agent, else in the session; undefined when none (no guessing). */
+  recentItem(lexId, agentId) {
+    return (agentId && this.items.get(lexId + '\u0000' + agentId)) || this.items.get(lexId + '\u0000*');
   }
 
   nextSeq() { return ++this._seq; }

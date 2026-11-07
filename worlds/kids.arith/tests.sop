@@ -180,3 +180,77 @@
     session=s2
     input="How many apples do I have?"
     expect="You have 5 apples."
+
+@t.arith.ell1 core.test
+    session=ellipsis
+    input="Tom has 5 apples. He gives 2 to Ana. How many apples does Tom have?"
+    expect="Tom has 3 apples."
+
+@t.arith.ell2 core.test
+    session=ellipsis
+    input="How many apples does Ana have?"
+    expectStatus=missing
+
+@t.arith.ell3 core.test
+    session=ellipsis
+    input="Ana has 1 apple. Ana eats 1. How many apples does Ana have?"
+    expect="Ana has 0 apples."
+
+@t.arith.ell4 core.test
+    session=ellipsis
+    input="Tom gets 4 more. How many apples does Tom have?"
+    expect="Tom has 7 apples."
+
+@t.arith.ell5 core.test
+    session=ellipsis
+    input="Ana got 3 from Tom. How many apples does Ana have?"
+    expect="Ana has 3 apples."
+
+@t.arith.ell6 core.test
+    session=ellipsis2
+    input="Ana gives 2 to Tom."
+    expectStatus=unparsed
+    doc="no item was mentioned yet, so the elliptic sentence is not guessed"
+
+@t.arith.ell7 core.test
+    session=ellipsis3
+    input="Ben has 2 pears. Ben buys 4 more. How many pears does Ben have?"
+    expect="Ben has 6 pears."
+
+@t.arith.ell8 core.test
+    session=ellipsis3
+    input="Tom has 3 apples. Ana loses 1."
+    expect="Ana lost 1 apple"
+    doc="the item is the one most recently mentioned in the session when the agent has none of its own"
+
+@t.arith.sym1 core.test
+    input="What is 7+5?"
+    expect="7 plus 5 is 12."
+
+@t.arith.sym2 core.test
+    input="7 + 5 ="
+    expect="7 plus 5 is 12."
+
+@t.arith.sym3 core.test
+    input="calculate 3*4"
+    expect="3 times 4 is 12."
+
+@t.arith.sym4 core.test
+    input="12 - 4"
+    expect="12 minus 4 is 8."
+
+@t.arith.sym5 core.test
+    input="3 × 4"
+    expect="3 times 4 is 12."
+
+@t.arith.sym6 core.test
+    input="20 / 4 ="
+    expect="20 divided by 4 is 5."
+
+@t.arith.sym7 core.test
+    input="What is -3 + 5?"
+    expect="-3 plus 5 is 2."
+
+@t.arith.sym8 core.test
+    input="What is 20 ÷ 4?"
+    expect="20 divided by 4 is 5."

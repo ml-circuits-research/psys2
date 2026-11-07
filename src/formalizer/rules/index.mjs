@@ -39,6 +39,7 @@ export function checkPattern(p, set) {
   try { c = compilePattern(p.match); } catch (e) { return [`${p.id}: ${e.message}`]; }
   for (const [name, def] of c.slots) {
     if (!BUILTIN_CLASSES.has(def.cls) && !lex.lexicons.has(def.cls)) problems.push(`${p.id}: slot '${name}' has unknown class '${def.cls}'`);
+    if (def.cls === 'recent' && !lex.lexicons.has(def.args[0])) problems.push(`${p.id}: slot '${name}' refers to unknown lexicon '${def.args[0]}'`);
   }
   for (const [, name] of p.emit.matchAll(/\{([A-Za-z_]\w*)\}/g)) {
     if (!c.slots.has(name) && !/^_\d*$/.test(name)) problems.push(`${p.id}: emit uses '{${name}}' but the match has no such slot`);
@@ -87,7 +88,7 @@ export function makeEnv(text, set, form, lex) {
     }
     return form.candidateForName(t.raw, undefined);
   };
-  return { text, lex, resolveAgent };
+  return { text, lex, resolveAgent, recentItem: (lexId, agentId) => form.recentItem(lexId, agentId) };
 }
 
 /** Ranked full matches of every pattern against `tokens` (commas removed). */
@@ -160,6 +161,12 @@ export function formalize(text, { worlds, session, source = 'input' } = {}) {
         // commit: entities first, in order of appearance
         const entityWires = [];
         const via = m.pattern.id;
+        // remember the mentioned items per agent, for elliptic sentences ("Ana eats 1.")
+        const agentIds = agents.map((a) => a.agent.id);
+        for (const it of Object.values(m.slots)) {
+          if (it.class === 'recent') form.noteItem(it.args[0], it.value, agentIds);
+          else if (it.class.startsWith('lex.')) form.noteItem(it.class, it.value, agentIds);
+        }
         for (const a of agents) {
           const w = form.commit(a.agent);
           if (w) {

@@ -107,6 +107,12 @@
     ask="What is the status?"
     scope=global
 
+@core.reason core.key
+    value=string
+    card=one
+    ask="Why was it retracted?"
+    scope=global
+
 @core.agent.name core.key
     value=string
     card=one
@@ -323,6 +329,11 @@
     card=one
     ask="What is the title?"
 
+@core.world.summary core.key
+    value=string
+    card=one
+    ask="What short phrase says what the world lets the assistant do (for example \"do sums\"; empty to leave it out of the capabilities answer)?"
+
 @core.world.doc core.key
     value=string
     card=one
@@ -406,6 +417,11 @@
     value=atom
     card=one
     ask="Which question mode does it render (default value)?"
+
+@core.template.when core.key
+    value=string
+    card=many
+    ask="Which condition on a placeholder must hold (<name><op><value>, op one of = != > >= < <=, for example \"value=true\")? All conditions must hold."
 
 @core.template.text core.key
     value=string

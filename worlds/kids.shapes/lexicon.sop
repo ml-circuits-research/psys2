@@ -1,7 +1,6 @@
 @lex.kids.shapes.shapes core.lexicon
     class=noun
     doc="Flat shapes"
-    plural=rhombus:rhombus
     word=triangle
     word=square
     word=rectangle
