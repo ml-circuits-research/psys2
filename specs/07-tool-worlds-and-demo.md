@@ -41,3 +41,6 @@ State: `{ title, blocks: [{ id, kind: 'heading'|'paragraph'|'list', text?, items
 - Every voice or text command goes through the same `session.send()`; tab switching, avatar changes, edits and game moves all come from world state, so the whole demo is controllable without mouse or keyboard.
 - A collapsible trace panel shows, per message, the matched pattern, the wires, the operations and the effects: the visible proof that no LLM is involved.
 - Embedding: the same engine and host code can be mounted in another page as a chat widget (`mountPsys2(element, { worlds, tabs })`), which is the website-chatbot use case.
+
+## 5. Third-party code
+The host UI may use open-source libraries (for example for the avatar or games), vendored as single bundled files under `docs/webchat/vendor/` per AGENTS.md. Worlds and the engine never depend on them: game rules, avatar state and document model live in the worlds; libraries only draw.

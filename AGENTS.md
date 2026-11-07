@@ -18,6 +18,7 @@
 
 ## Engineering rules
 - Node.js ≥ 20, ES modules only, `.mjs` extension. Core modules use only the Node standard library; modules that must also run in the browser (`src/soplang`, `src/legends`, `src/formalizer`, `src/interpreter`, `src/translate`, `src/dialog`) must not import `node:*` — file access goes through a loader passed in by the caller.
+- Open-source libraries are allowed for the **browser host UI** (avatar, games, editor widgets, speech helpers), never in the core. They are vendored as **one bundled file per library** under `docs/webchat/vendor/` (built with a bundler in a temporary directory, not added to `package.json`), each with a header comment naming the library, version, source URL and licence, and listed in `docs/webchat/vendor/README.md`. Licences must be compatible with GPL-3.0 (MIT, BSD, Apache-2.0, ISC, MPL-2.0). Prefer no library when a few dozen lines of our own code do the job.
 - Python lives under `training/` with pinned requirements; it is never imported by the Node core, only run as a separate process.
 - Every behaviour is specified in `specs/` before or together with its implementation. If code and spec disagree, fix one of them in the same commit.
 - No generative LLM is used in C2 (operation). LLMs may only be used by coding agents during C1/C3 authoring.
