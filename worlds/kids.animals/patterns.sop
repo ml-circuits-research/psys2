@@ -1,0 +1,531 @@
+@pat.kids.animals.legs1 core.pattern
+    match="how_many legs [does|do] [a|an|the]? {a:noun} have"
+    emit="@{_} core.question type=kids.animals.animal seek=legs where.name={a}"
+    kind=question
+    priority=10
+    example="How many legs does a spider have?"
+
+@pat.kids.animals.legs2 core.pattern
+    match="how_many legs [has|have] [a|an|the]? {a:noun}"
+    emit="@{_} core.question type=kids.animals.animal seek=legs where.name={a}"
+    kind=question
+    priority=10
+    example="How many legs has a dog?"
+
+@pat.kids.animals.legs3 core.pattern
+    match="tell_me how_many legs [a|an|the]? {a:noun} [has|have]"
+    emit="@{_} core.question type=kids.animals.animal seek=legs where.name={a}"
+    kind=question
+    priority=10
+    example="Tell me how many legs a spider has."
+
+@pat.kids.animals.legs4 core.pattern
+    match="[does|do] [a|an|the]? {a:noun} have {n:number} legs"
+    emit="@{_} core.question type=kids.animals.animal seek=legs mode=exists where.name={a} where.legs={n}"
+    kind=question
+    priority=10
+    example="Does a dog have 4 legs?"
+
+@pat.kids.animals.food1 core.pattern
+    match="what [does|do] [a|an|the]? {a:noun} [eat|like_to_eat]"
+    emit="@{_} core.question type=kids.animals.animal seek=food mode=list where.name={a}"
+    kind=question
+    priority=10
+    example="What does a rabbit eat?"
+
+@pat.kids.animals.food2 core.pattern
+    match="what food [does|do] [a|an|the]? {a:noun} [eat|like|need]"
+    emit="@{_} core.question type=kids.animals.animal seek=food mode=list where.name={a}"
+    kind=question
+    priority=10
+    example="What food does a rabbit eat?"
+
+@pat.kids.animals.food3 core.pattern
+    match="tell_me what [a|an|the]? {a:noun} [eats|eat]"
+    emit="@{_} core.question type=kids.animals.animal seek=food mode=list where.name={a}"
+    kind=question
+    priority=10
+    example="Tell me what a rabbit eats."
+
+@pat.kids.animals.food4 core.pattern
+    match="[does|do] [a|an|the]? {a:noun} eat {f:word}"
+    emit="@{_} core.question type=kids.animals.animal seek=food mode=exists where.name={a} where.food={f}"
+    kind=question
+    priority=10
+    example="Does a rabbit eat carrots?"
+
+@pat.kids.animals.isa1 core.pattern
+    match="[is|are] [a|an|the]? {a:noun} [a|an]? {k:lex.kids.animals.kinds}"
+    emit="@{_} core.question type=kids.animals.animal seek=is_a where.name={a} where.is_a={k}"
+    kind=question
+    priority=12
+    example="Is a whale a fish?"
+
+@pat.kids.animals.isa2 core.pattern
+    match="[is|are] [a|an|the]? {a:noun} [a|an]? kind_of {k:lex.kids.animals.kinds}"
+    emit="@{_} core.question type=kids.animals.animal seek=is_a where.name={a} where.is_a={k}"
+    kind=question
+    priority=12
+    example="Is a spider a kind of insect?"
+
+@pat.kids.animals.kind1 core.pattern
+    match="what [kind_of|type_of|sort_of|class_of] animal [is|are] [a|an|the]? {a:noun}"
+    emit="@{_} core.question type=kids.animals.animal seek=class where.name={a}"
+    kind=question
+    priority=10
+    example="What kind of animal is a shark?"
+
+@pat.kids.animals.ab1 core.pattern
+    match="can [a|an|the]? {a:noun} {ab:lex.kids.animals.abilities}"
+    emit="@{_} core.question type=kids.animals.animal seek=can_{ab} where.name={a}"
+    kind=question
+    priority=10
+    example="Can a penguin fly?"
+
+@pat.kids.animals.ab2 core.pattern
+    match="[do|does] [a|an|the]? {a:noun} {ab:lex.kids.animals.abilities}"
+    emit="@{_} core.question type=kids.animals.animal seek=can_{ab} where.name={a}"
+    kind=question
+    priority=10
+    example="Do penguins swim?"
+
+@pat.kids.animals.ab3 core.pattern
+    match="[is|are] [a|an|the]? {a:noun} able_to {ab:lex.kids.animals.abilities}"
+    emit="@{_} core.question type=kids.animals.animal seek=can_{ab} where.name={a}"
+    kind=question
+    priority=10
+    example="Is a penguin able to fly?"
+
+@pat.kids.animals.desc1 core.pattern
+    match="what [is|are] [a|an|the]? {a:lex.kids.animals.names}"
+    emit="@{_} core.question type=kids.animals.animal seek=summary where.name={a}"
+    kind=question
+    priority=10
+    example="What is a dolphin?"
+
+@pat.kids.animals.desc2 core.pattern
+    match="[tell_me_about|describe] [a|an|the]? {a:lex.kids.animals.names}"
+    emit="@{_} core.question type=kids.animals.animal seek=summary where.name={a}"
+    kind=question
+    priority=10
+    example="Tell me about a dolphin."
+
+@pat.kids.animals.desc3 core.pattern
+    match="what can you tell me about [a|an|the]? {a:lex.kids.animals.names}"
+    emit="@{_} core.question type=kids.animals.animal seek=summary where.name={a}"
+    kind=question
+    priority=10
+    example="What can you tell me about an owl?"
+
+@pat.kids.animals.desc4 core.pattern
+    match="what [is|are] [a|an|the]? {a:lex.kids.animals.names} like"
+    emit="@{_} core.question type=kids.animals.animal seek=summary where.name={a}"
+    kind=question
+    priority=10
+    example="What are dolphins like?"
+
+@pat.kids.animals.cov1 core.pattern
+    match="what [is|are] [a|an|the]? {a:noun} covered_in"
+    emit="@{_} core.question type=kids.animals.animal seek=covered where.name={a}"
+    kind=question
+    priority=10
+    example="What is a cow covered in?"
+
+@pat.kids.animals.cov2 core.pattern
+    match="what covering [does|do] [a|an|the]? {a:noun} have"
+    emit="@{_} core.question type=kids.animals.animal seek=covered where.name={a}"
+    kind=question
+    priority=10
+    example="What covering does a duck have?"
+
+@pat.kids.animals.live1 core.pattern
+    match="where [does|do] [a|an|the]? {a:noun} live"
+    emit="@{_} core.question type=kids.animals.animal seek=lives where.name={a}"
+    kind=question
+    priority=10
+    example="Where does a camel live?"
+
+@pat.kids.animals.live2 core.pattern
+    match="where [can|could] [i|we|you] [find|see|meet] [a|an|the]? {a:noun}"
+    emit="@{_} core.question type=kids.animals.animal seek=lives where.name={a}"
+    kind=question
+    priority=10
+    example="Where can I find a camel?"
+
+@pat.kids.animals.live3 core.pattern
+    match="where [is|are] [a|an|the]? {a:noun} found"
+    emit="@{_} core.question type=kids.animals.animal seek=lives where.name={a}"
+    kind=question
+    priority=10
+    example="Where is a camel found?"
+
+@pat.kids.animals.sound1 core.pattern
+    match="what sound [does|do] [a|an|the]? {a:noun} make"
+    emit="@{_} core.question type=kids.animals.animal seek=sound where.name={a}"
+    kind=question
+    priority=10
+    example="What sound does a cow make?"
+
+@pat.kids.animals.sound2 core.pattern
+    match="what [does|do] [a|an|the]? {a:noun} say"
+    emit="@{_} core.question type=kids.animals.animal seek=sound where.name={a}"
+    kind=question
+    priority=10
+    example="What does a cow say?"
+
+@pat.kids.animals.sound3 core.pattern
+    match="what noise [does|do] [a|an|the]? {a:noun} make"
+    emit="@{_} core.question type=kids.animals.animal seek=sound where.name={a}"
+    kind=question
+    priority=10
+    example="What noise does a duck make?"
+
+@pat.kids.animals.sound4 core.pattern
+    match="how [does|do] [a|an|the]? {a:noun} sound"
+    emit="@{_} core.question type=kids.animals.animal seek=sound where.name={a}"
+    kind=question
+    priority=10
+    example="How does a lion sound?"
+
+@pat.kids.animals.baby1 core.pattern
+    match="what [is|are] [a|an|the]? baby [of]? [a|an|the]? {a:noun} called"
+    emit="@{_} core.question type=kids.animals.animal seek=baby where.name={a}"
+    kind=question
+    priority=10
+    example="What is a baby cat called?"
+
+@pat.kids.animals.baby2 core.pattern
+    match="what [do|does] you call [a|an|the]? baby [of]? [a|an|the]? {a:noun}"
+    emit="@{_} core.question type=kids.animals.animal seek=baby where.name={a}"
+    kind=question
+    priority=10
+    example="What do you call a baby cow?"
+
+@pat.kids.animals.baby3 core.pattern
+    match="what [is|are] [the]? name_of [a|an|the]? baby {a:noun}"
+    emit="@{_} core.question type=kids.animals.animal seek=baby where.name={a}"
+    kind=question
+    priority=10
+    example="What is the name of a baby sheep?"
+
+@pat.kids.animals.baby4 core.pattern
+    match="what [is|are] [a|an|the]? {b:lex.kids.animals.babies}"
+    emit="@{_} core.question type=kids.animals.animal seek=name mode=list where.baby={b}"
+    kind=question
+    priority=10
+    example="What is a calf?"
+
+@pat.kids.animals.baby5 core.pattern
+    match="[which|what] [animal|animals] [has|have] [a|an|the]? baby called [a|an|the]? {b:lex.kids.animals.babies}"
+    emit="@{_} core.question type=kids.animals.animal seek=name mode=list where.baby={b}"
+    kind=question
+    priority=10
+    example="Which animals have a baby called a cub?"
+
+@pat.kids.animals.sh1 core.pattern
+    match="[which|what] [animal|animals] [live|lives] [in|on|at|near] [the|a]? {h:word}"
+    emit="@{_} core.question type=kids.animals.animal seek=matching where.habitat={h}"
+    kind=question
+    priority=10
+    example="Which animals live in the sea?"
+
+@pat.kids.animals.sh2 core.pattern
+    match="name [a|an|some]? [animal|animals] that [live|lives] [in|on|at|near] [the|a]? {h:word}"
+    emit="@{_} core.question type=kids.animals.animal seek=matching where.habitat={h}"
+    kind=question
+    priority=10
+    example="Name an animal that lives in the jungle."
+
+@pat.kids.animals.sh3 core.pattern
+    match="[which|what] [animal|animals] can be found [in|on|at|near] [the|a]? {h:word}"
+    emit="@{_} core.question type=kids.animals.animal seek=matching where.habitat={h}"
+    kind=question
+    priority=10
+    example="Which animals can be found in the desert?"
+
+@pat.kids.animals.sh4 core.pattern
+    match="[which|what] {c:lex.kids.animals.classes} [live|lives] [in|on|at|near] [the|a]? {h:word}"
+    emit="@{_} core.question type=kids.animals.animal seek=matching where.class={c} where.habitat={h}"
+    kind=question
+    priority=10
+    example="Which birds live on a farm?"
+
+@pat.kids.animals.sl1 core.pattern
+    match="[which|what] [animal|animals] [has|have] {n:number} legs"
+    emit="@{_} core.question type=kids.animals.animal seek=matching where.legs={n}"
+    kind=question
+    priority=10
+    example="Which animals have 6 legs?"
+
+@pat.kids.animals.sl2 core.pattern
+    match="name [a|an|some]? [animal|animals] [with|that_has|that_have] {n:number} legs"
+    emit="@{_} core.question type=kids.animals.animal seek=matching where.legs={n}"
+    kind=question
+    priority=10
+    example="Name an animal with 8 legs."
+
+@pat.kids.animals.sl3 core.pattern
+    match="[which|what] [animal|animals] [has|have] no legs"
+    emit="@{_} core.question type=kids.animals.animal seek=matching where.legs=0"
+    kind=question
+    priority=10
+    example="Which animals have no legs?"
+
+@pat.kids.animals.sc1 core.pattern
+    match="[which|what] [animal|animals] [is|are] [a|an]? {c:lex.kids.animals.classes}"
+    emit="@{_} core.question type=kids.animals.animal seek=matching where.class={c}"
+    kind=question
+    priority=10
+    example="Which animals are mammals?"
+
+@pat.kids.animals.sc2 core.pattern
+    match="name [a|an|some]? {c:lex.kids.animals.classes}"
+    emit="@{_} core.question type=kids.animals.animal seek=matching where.class={c}"
+    kind=question
+    priority=10
+    example="Name a bird."
+
+@pat.kids.animals.sd1 core.pattern
+    match="[which|what] [animal|animals] [is|are] [a|an]? {d:lex.kids.animals.diets}"
+    emit="@{_} core.question type=kids.animals.animal seek=matching where.diet={d}"
+    kind=question
+    priority=10
+    example="Which animals are carnivores?"
+
+@pat.kids.animals.sd2 core.pattern
+    match="name [a|an|some]? {d:lex.kids.animals.diets}"
+    emit="@{_} core.question type=kids.animals.animal seek=matching where.diet={d}"
+    kind=question
+    priority=10
+    example="Name a herbivore."
+
+@pat.kids.animals.sa1 core.pattern
+    match="[which|what] [animal|animals] can {ab:lex.kids.animals.abilities}"
+    emit="@{_} core.question type=kids.animals.animal seek=matching where.can_{ab}=true"
+    kind=question
+    priority=10
+    example="Which animals can fly?"
+
+@pat.kids.animals.sa2 core.pattern
+    match="[which|what] [animal|animals] [cannot|can_not] {ab:lex.kids.animals.abilities}"
+    emit="@{_} core.question type=kids.animals.animal seek=matching where.can_{ab}=false"
+    kind=question
+    priority=10
+    example="Which animals cannot swim?"
+
+@pat.kids.animals.sa3 core.pattern
+    match="[which|what] {c:lex.kids.animals.classes} can {ab:lex.kids.animals.abilities}"
+    emit="@{_} core.question type=kids.animals.animal seek=matching where.class={c} where.can_{ab}=true"
+    kind=question
+    priority=10
+    example="Which birds can fly?"
+
+@pat.kids.animals.sa4 core.pattern
+    match="[which|what] {c:lex.kids.animals.classes} [cannot|can_not] {ab:lex.kids.animals.abilities}"
+    emit="@{_} core.question type=kids.animals.animal seek=matching where.class={c} where.can_{ab}=false"
+    kind=question
+    priority=10
+    example="Which birds cannot fly?"
+
+@pat.kids.animals.sa5 core.pattern
+    match="name [a|an|some]? {c:lex.kids.animals.classes} that can {ab:lex.kids.animals.abilities}"
+    emit="@{_} core.question type=kids.animals.animal seek=matching where.class={c} where.can_{ab}=true"
+    kind=question
+    priority=10
+    example="Name a bird that can swim."
+
+@pat.kids.animals.sa6 core.pattern
+    match="name [a|an|some]? {c:lex.kids.animals.classes} that [cannot|can_not] {ab:lex.kids.animals.abilities}"
+    emit="@{_} core.question type=kids.animals.animal seek=matching where.class={c} where.can_{ab}=false"
+    kind=question
+    priority=10
+    example="Name a bird that cannot fly."
+
+@pat.kids.animals.sa7 core.pattern
+    match="name [a|an|some]? [animal|animals] that can {ab:lex.kids.animals.abilities}"
+    emit="@{_} core.question type=kids.animals.animal seek=matching where.can_{ab}=true"
+    kind=question
+    priority=10
+    example="Name an animal that can swim."
+
+@pat.kids.animals.sa8 core.pattern
+    match="name [a|an|some]? [animal|animals] that [cannot|can_not] {ab:lex.kids.animals.abilities}"
+    emit="@{_} core.question type=kids.animals.animal seek=matching where.can_{ab}=false"
+    kind=question
+    priority=10
+    example="Name an animal that cannot fly."
+
+@pat.kids.animals.sf1 core.pattern
+    match="[which|what] [animal|animals] [eat|eats] {f:word}"
+    emit="@{_} core.question type=kids.animals.animal seek=matching where.food={f}"
+    kind=question
+    priority=10
+    example="Which animals eat grass?"
+
+@pat.kids.animals.ss1 core.pattern
+    match="[which|what] [animal|animals] [says|say|goes|go|makes|make] {s:word}"
+    emit="@{_} core.question type=kids.animals.animal seek=matching where.sound={s}"
+    kind=question
+    priority=10
+    example="Which animal says moo?"
+
+@pat.kids.animals.sv1 core.pattern
+    match="[which|what] [animal|animals] [has|have] {c:lex.kids.animals.coverings}"
+    emit="@{_} core.question type=kids.animals.animal seek=matching where.covering={c}"
+    kind=question
+    priority=10
+    example="Which animals have feathers?"
+
+@pat.kids.animals.tl core.pattern
+    match="[a|an|the]? {a:noun} [has|have] {n:number} legs"
+    emit="@{_} kids.animals.animal name={a} legs={n}"
+    kind=statement
+    priority=12
+    example="A zebra has 4 legs."
+
+@pat.kids.animals.te core.pattern
+    match="[a|an|the]? {a:noun} [eats|eat] {f:word}"
+    emit="@{_} kids.animals.animal name={a} food={f}"
+    kind=statement
+    priority=12
+    example="Zebras eat grass."
+
+@pat.kids.animals.te2 core.pattern
+    match="[a|an|the]? {a:noun} [eats|eat] {f:word} and {g:word}"
+    emit="@{_} kids.animals.animal name={a} food={f}\n@{_1} kids.animals.animal name={a} food={g}"
+    kind=statement
+    priority=13
+    example="Zebras eat grass and leaves."
+
+@pat.kids.animals.tc core.pattern
+    match="[a|an|the]? {a:noun} [is|are] [a|an]? {c:lex.kids.animals.classes}"
+    emit="@{_} kids.animals.animal name={a} class={c}"
+    kind=statement
+    priority=12
+    example="A zebra is a mammal."
+
+@pat.kids.animals.td core.pattern
+    match="[a|an|the]? {a:noun} [is|are] [a|an]? {d:lex.kids.animals.diets}"
+    emit="@{_} kids.animals.animal name={a} diet={d}"
+    kind=statement
+    priority=12
+    example="A zebra is a herbivore."
+
+@pat.kids.animals.th core.pattern
+    match="[a|an|the]? {a:noun} [lives|live] [in|on|at|near] [the|a]? {h:word}"
+    emit="@{_} kids.animals.animal name={a} habitat={h}"
+    kind=statement
+    priority=12
+    example="A zebra lives on the savanna."
+
+@pat.kids.animals.tab core.pattern
+    match="[a|an|the]? {a:noun} can {ab:lex.kids.animals.abilities}"
+    emit="@{_} kids.animals.animal name={a} can_{ab}=true"
+    kind=statement
+    priority=12
+    example="A zebra can swim."
+
+@pat.kids.animals.tabn core.pattern
+    match="[a|an|the]? {a:noun} [cannot|can_not] {ab:lex.kids.animals.abilities}"
+    emit="@{_} kids.animals.animal name={a} can_{ab}=false"
+    kind=statement
+    priority=12
+    example="A zebra cannot fly."
+
+@pat.kids.animals.ts core.pattern
+    match="[a|an|the]? {a:noun} [says|say|goes|go|makes|make] {s:word}"
+    emit="@{_} kids.animals.animal name={a} sound={s}"
+    kind=statement
+    priority=12
+    example="Ducks say quack."
+
+@pat.kids.animals.tb core.pattern
+    match="[a|an|the]? baby {a:noun} [is|are] called [a|an]? {b:word}"
+    emit="@{_} kids.animals.animal name={a} baby={b}"
+    kind=statement
+    priority=12
+    example="A baby zebra is called a foal."
+
+@pat.kids.animals.tv1 core.pattern
+    match="[a|an|the]? {a:noun} [has|have] {c:lex.kids.animals.coverings}"
+    emit="@{_} kids.animals.animal name={a} covering={c}"
+    kind=statement
+    priority=12
+    example="Penguins have feathers."
+
+@pat.kids.animals.tv2 core.pattern
+    match="[a|an|the]? {a:noun} [is|are] covered_in {c:lex.kids.animals.coverings}"
+    emit="@{_} kids.animals.animal name={a} covering={c}"
+    kind=statement
+    priority=12
+    example="A zebra is covered in fur."
+
+@pat.kids.animals.pet1 core.pattern
+    match="my {k:noun} is [called|named] {n:agent}"
+    emit="@{_} kids.animals.pet owner=$e.user kind={k} called={n}"
+    kind=statement
+    priority=12
+    example="My dog is called Rex."
+
+@pat.kids.animals.pet2 core.pattern
+    match="i [have|got] [a|an]? {k:noun} [called|named] {n:agent}"
+    emit="@{_} kids.animals.pet owner=$e.user kind={k} called={n}"
+    kind=statement
+    priority=12
+    example="I have a cat called Tom."
+
+@pat.kids.animals.pet3 core.pattern
+    match="my {k:noun} 's name is {n:agent}"
+    emit="@{_} kids.animals.pet owner=$e.user kind={k} called={n}"
+    kind=statement
+    priority=12
+    example="My dog's name is Rex."
+
+@pat.kids.animals.petq1 core.pattern
+    match="what [is|are] my {k:noun} called"
+    emit="@{_} core.question type=kids.animals.pet seek=called where.owner=$e.user where.kind={k}"
+    kind=question
+    priority=12
+    example="What is my dog called?"
+
+@pat.kids.animals.petq2 core.pattern
+    match="what [is|are] [the]? name_of my {k:noun}"
+    emit="@{_} core.question type=kids.animals.pet seek=called where.owner=$e.user where.kind={k}"
+    kind=question
+    priority=12
+    example="What is the name of my dog?"
+
+@pat.kids.animals.petq3 core.pattern
+    match="what [is|are] my {k:noun} 's name"
+    emit="@{_} core.question type=kids.animals.pet seek=called where.owner=$e.user where.kind={k}"
+    kind=question
+    priority=12
+    example="What is my dog's name?"
+
+@pat.kids.animals.petq4 core.pattern
+    match="what [is|are] my pet called"
+    emit="@{_} core.question type=kids.animals.pet seek=called where.owner=$e.user"
+    kind=question
+    priority=12
+    example="What is my pet called?"
+
+@pat.kids.animals.petq5 core.pattern
+    match="[what|which] pets [do|did] i have"
+    emit="@{_} core.question type=kids.animals.pet seek=kind mode=list where.owner=$e.user"
+    kind=question
+    priority=12
+    example="What pets do I have?"
+
+@pat.kids.animals.petq6 core.pattern
+    match="who is {n:agent}"
+    emit="@{_} core.question type=kids.animals.pet seek=kind where.called={n}"
+    kind=question
+    priority=10
+    example="Who is Rex?"
+
+@pat.kids.animals.petq7 core.pattern
+    match="[do|did] i have [a|an|any]? {k:noun}"
+    emit="@{_} core.question type=kids.animals.pet seek=kind mode=exists where.owner=$e.user where.kind={k}"
+    kind=question
+    priority=12
+    example="Do I have a dog?"

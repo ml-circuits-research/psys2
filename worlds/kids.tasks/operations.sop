@@ -1,0 +1,71 @@
+@op.kids.tasks.add core.operation
+    impl=addItems
+    semantics=action
+    action=tasks.add
+    doc="Adds one or more items (split at commas and \"and\") to a list; items already there are reported, not added twice."
+
+@op.kids.tasks.remind core.operation
+    impl=remindMe
+    semantics=action
+    action=tasks.remind
+    doc="Adds an item to the reminders list (no real timer)."
+
+@op.kids.tasks.remove core.operation
+    impl=removeItem
+    semantics=action
+    action=tasks.remove
+    doc="Removes items from one list or from whichever list has them; says when an item is not there."
+
+@op.kids.tasks.done core.operation
+    impl=finishItem
+    semantics=action
+    action=tasks.done
+    doc="Marks an item as done; asks which one when several match; says when it is already done."
+
+@op.kids.tasks.check core.operation
+    impl=checkItem
+    semantics=action
+    action=tasks.check
+    doc="Tells whether an item is done (yes) or still to do or unknown (missing)."
+
+@op.kids.tasks.show core.operation
+    impl=showList
+    semantics=action
+    action=tasks.show
+    doc="Lists the items still to do on a list and the items that are done."
+
+@op.kids.tasks.pending core.operation
+    impl=pendingItems
+    semantics=action
+    action=tasks.pending
+    doc="Lists the items of a list that are not done yet."
+
+@op.kids.tasks.count core.operation
+    impl=countItems
+    semantics=action
+    action=tasks.count
+    doc="Counts the items on a list."
+
+@op.kids.tasks.countPending core.operation
+    impl=countPending
+    semantics=action
+    action=tasks.countPending
+    doc="Counts the items of a list that are not done yet."
+
+@op.kids.tasks.has core.operation
+    impl=hasItem
+    semantics=action
+    action=tasks.has
+    doc="Tells whether an item is on a list."
+
+@op.kids.tasks.clear core.operation
+    impl=clearList
+    semantics=action
+    action=tasks.clear
+    doc="Removes every item of a list."
+
+@op.kids.tasks.lists core.operation
+    impl=showLists
+    semantics=action
+    action=tasks.lists
+    doc="Lists the lists that have items, with their sizes."

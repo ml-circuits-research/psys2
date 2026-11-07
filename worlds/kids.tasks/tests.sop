@@ -1,0 +1,320 @@
+@t.tasks.n1 core.test
+    session=shop
+    input="add milk to my shopping list"
+    expect="Done! I added milk to your shopping list."
+
+@t.tasks.n2 core.test
+    session=shop
+    input="add milk to my shopping list"
+    expect="Milk is already on your shopping list."
+    doc="adding twice is idempotent"
+
+@t.tasks.n3 core.test
+    session=shop
+    input="What is on my shopping list?"
+    expect="On your shopping list: milk."
+
+@t.tasks.n4 core.test
+    session=shop
+    input="Put bread on my shopping list."
+    expect="I added bread to your shopping list."
+
+@t.tasks.n5 core.test
+    session=shop
+    input="Is bread on my shopping list?"
+    expect="Yes, bread is on your shopping list."
+
+@t.tasks.n6 core.test
+    session=shop
+    input="Is cheese on my shopping list?"
+    expect="No, cheese is not on your shopping list."
+    expectStatus=missing
+
+@t.tasks.n7 core.test
+    session=shop
+    input="remove milk from my list"
+    expect="OK, I removed milk from your shopping list."
+    doc="no list given: found on whichever list has it"
+
+@t.tasks.n8 core.test
+    session=shop
+    input="remove milk from my shopping list"
+    expect="I can't find milk on your shopping list"
+    expectStatus=missing
+    doc="removing twice is harmless"
+
+@t.tasks.n9 core.test
+    session=shop
+    input="How many things are on my shopping list?"
+    expect="You have 1 thing on your shopping list."
+
+@t.tasks.n10 core.test
+    session=shop
+    input="clear my shopping list"
+    expect="I removed 1 thing."
+
+@t.tasks.n11 core.test
+    session=shop
+    input="clear my shopping list"
+    expect="Your shopping list is already empty."
+
+@t.tasks.n12 core.test
+    session=shop
+    input="What is on my shopping list?"
+    expect="Your shopping list is empty."
+    expectStatus=missing
+
+@t.tasks.n13 core.test
+    session=todo
+    input="add do my homework to my to-do list"
+    expect="Done! I added do my homework to your to-do list."
+
+@t.tasks.n14 core.test
+    session=todo
+    input="add feed the cat to my list"
+    expect="I added feed the cat to your to-do list."
+    doc="the list name is optional and defaults to to-do"
+
+@t.tasks.n15 core.test
+    session=todo
+    input="What is on my list?"
+    expect="On your to-do list: do my homework and feed the cat."
+
+@t.tasks.n16 core.test
+    session=todo
+    input="I finished my homework"
+    expect="Well done! I ticked off do my homework on your to-do list."
+
+@t.tasks.n17 core.test
+    session=todo
+    input="I finished my homework"
+    expect="is already marked as done"
+    doc="finishing twice is harmless"
+
+@t.tasks.n18 core.test
+    session=todo
+    input="mark homework as done"
+    expect="is already marked as done"
+
+@t.tasks.n19 core.test
+    session=todo
+    input="What do I still have to do?"
+    expect="Still to do on your to-do list: feed the cat."
+
+@t.tasks.n20 core.test
+    session=todo
+    input="How many things do I still have to do?"
+    expect="You still have 1 thing left on your to-do list."
+
+@t.tasks.n21 core.test
+    session=todo
+    input="How many things are on my list?"
+    expect="You have 2 things on your to-do list. 1 is done."
+
+@t.tasks.n22 core.test
+    session=todo
+    input="Did I finish my homework?"
+    expect="Yes, you finished do my homework."
+
+@t.tasks.n23 core.test
+    session=todo
+    input="Did I finish feed the cat?"
+    expect="Not yet. Feed the cat is still on your to-do list."
+    expectStatus=missing
+
+@t.tasks.n24 core.test
+    session=todo
+    input="Did I finish my dragon?"
+    expect="I can't find my dragon on any of your lists."
+    expectStatus=missing
+
+@t.tasks.n25 core.test
+    session=todo
+    input="I finished feeding the dragon"
+    expect="I can't find"
+    expectStatus=missing
+
+@t.tasks.n26 core.test
+    session=todo
+    input="I finished the cat"
+    expect="Well done! I ticked off feed the cat on your to-do list."
+    doc="a word of the item is enough when it is unique"
+
+@t.tasks.n27 core.test
+    session=todo
+    input="What do I still have to do?"
+    expect="Everything on your to-do list is done. Well done!"
+
+@t.tasks.n28 core.test
+    session=todo
+    input="Show me my to-do list."
+    expect="Everything on your to-do list is done."
+
+@t.tasks.n29 core.test
+    session=rem
+    input="remind me to feed the cat"
+    expect="OK, I will keep feed the cat in your reminders."
+
+@t.tasks.n30 core.test
+    session=rem
+    input="remind me to feed the cat"
+    expect="Feed the cat is already on your reminders list."
+
+@t.tasks.n31 core.test
+    session=rem
+    input="Set a reminder to water the plants."
+    expect="water the plants"
+
+@t.tasks.n32 core.test
+    session=rem
+    input="What are my reminders?"
+    expect="On your reminders list: feed the cat and water the plants."
+
+@t.tasks.n33 core.test
+    session=rem
+    input="What lists do I have?"
+    expect="You have these lists: reminders (2)."
+
+@t.tasks.n34 core.test
+    session=rem
+    input="Mark the plants as done."
+    expect="ticked off water the plants on your reminders list"
+
+@t.tasks.n35 core.test
+    session=multi
+    input="add bread, eggs and milk to my shopping list"
+    expect="Done! I added bread, eggs and milk to your shopping list."
+
+@t.tasks.n36 core.test
+    session=multi
+    input="add eggs and butter to my shopping list"
+    expect="I added butter to your shopping list."
+    expect="Eggs was already there."
+
+@t.tasks.n37 core.test
+    session=multi
+    input="I bought eggs"
+    expect="ticked off eggs on your shopping list"
+
+@t.tasks.n38 core.test
+    session=multi
+    input="What do I still need to buy?"
+    expect="Still to do on your shopping list: bread, milk and butter."
+
+@t.tasks.n39 core.test
+    session=multi
+    input="Show me my shopping list."
+    expect="On your shopping list: bread, milk and butter."
+    expect="Done: eggs."
+
+@t.tasks.n40 core.test
+    session=multi
+    input="remove bread and milk from my shopping list"
+    expect="OK, I removed bread and milk from your shopping list."
+
+@t.tasks.n41 core.test
+    session=multi
+    input="How many things are left on my shopping list?"
+    expect="You still have 1 thing left on your shopping list."
+
+@t.tasks.n42 core.test
+    session=count
+    input="add a pencil to my school list"
+    expect="I added pencil to your school list."
+    doc="any list name works"
+
+@t.tasks.n43 core.test
+    session=count
+    input="add a ruler to my school list"
+    expect="Done!"
+
+@t.tasks.n44 core.test
+    session=count
+    input="How many things are on my school list?"
+    expect="You have 2 things on your school list."
+
+@t.tasks.n45 core.test
+    session=count
+    input="Take the ruler off my school list."
+    expect="OK, I removed ruler from your school list."
+
+@t.tasks.n46 core.test
+    session=count
+    input="How many things are on my shopping list?"
+    expect="Your shopping list is empty."
+    expectStatus=missing
+    doc="a list that was never used is empty"
+
+@t.tasks.n47 core.test
+    session=count
+    input="I need to buy apples"
+    expect="Done! I added apples to your shopping list."
+
+@t.tasks.n48 core.test
+    session=count
+    input="I have to tidy my room"
+    expect="Done! I added tidy my room to your to-do list."
+
+@t.tasks.n49 core.test
+    session=count
+    input="Cross apples off my shopping list."
+    expect="Well done! I ticked off apples on your shopping list."
+
+@t.tasks.n50 core.test
+    session=count
+    input="Hello"
+    expect="Hello"
+
+@t.tasks.n51 core.test
+    session=amb
+    input="add read a book to my to-do list"
+    expect="Done!"
+
+@t.tasks.n52 core.test
+    session=amb
+    input="add read a map to my to-do list"
+    expect="Done!"
+
+@t.tasks.n53 core.test
+    session=amb
+    input="I finished read"
+    expect="Which one do you mean:"
+    expectStatus=ambiguous
+
+@t.tasks.n54 core.test
+    session=amb
+    input="I finished read a map"
+    expect="ticked off read a map"
+
+@t.tasks.n55 core.test
+    input="remove milk from my list"
+    expect="I can't find milk on any of your lists"
+    expectStatus=missing
+
+@t.tasks.n56 core.test
+    input="What is on my list?"
+    expect="Your to-do list is empty."
+    expectStatus=missing
+
+@t.tasks.n57 core.test
+    input="What lists do I have?"
+    expect="You do not have any lists yet."
+    expectStatus=missing
+
+@t.tasks.n58 core.test
+    input="Mark homework as done"
+    expectStatus=missing
+
+@t.tasks.n59 core.test
+    input="How many things do I still have to do?"
+    expectStatus=missing
+
+@t.tasks.n60 core.test
+    input="What do I still have to do?"
+    expect="nothing left to do"
+    expectStatus=missing
+
+@t.tasks.n61 core.test
+    input="Add please"
+    expectStatus=unparsed
+    doc="no item and no list: not understood"

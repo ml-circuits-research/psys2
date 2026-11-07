@@ -1,0 +1,335 @@
+@pat.kids.shapes.sides1 core.pattern
+    match="how_many {p:lex.kids.shapes.parts} [does|do] [a|an|the]? {s:lex.kids.shapes.shapes} have"
+    emit="@{_} core.question type=kids.shapes.shape seek={p}s where.name={s}"
+    kind=question
+    priority=10
+    example="How many sides does a hexagon have?"
+
+@pat.kids.shapes.sides2 core.pattern
+    match="how_many {p:lex.kids.shapes.parts} [has|have] [a|an|the]? {s:lex.kids.shapes.shapes}"
+    emit="@{_} core.question type=kids.shapes.shape seek={p}s where.name={s}"
+    kind=question
+    priority=10
+    example="How many corners has a square?"
+
+@pat.kids.shapes.sides3 core.pattern
+    match="tell_me how_many {p:lex.kids.shapes.parts} [a|an|the]? {s:lex.kids.shapes.shapes} [has|have]"
+    emit="@{_} core.question type=kids.shapes.shape seek={p}s where.name={s}"
+    kind=question
+    priority=10
+    example="Tell me how many sides a triangle has."
+
+@pat.kids.shapes.sides5 core.pattern
+    match="how_many {p:lex.kids.shapes.parts} [does|do] [a|an|the]? {s:noun} have"
+    emit="@{_} core.question type=kids.shapes.shape seek={p}s where.name={s}"
+    kind=question
+    priority=8
+    example="How many corners does a trapezium have?"
+
+@pat.kids.shapes.sides4 core.pattern
+    match="[does|do] [a|an|the]? {s:lex.kids.shapes.shapes} have {n:number} {p:lex.kids.shapes.parts}"
+    emit="@{_} core.question type=kids.shapes.shape seek={p}s mode=exists where.name={s} where.{p}s={n}"
+    kind=question
+    priority=10
+    example="Does a pentagon have 5 sides?"
+
+@pat.kids.shapes.which1 core.pattern
+    match="[which|what] [shape|shapes] [has|have] {n:number} {p:lex.kids.shapes.parts}"
+    emit="@{_} core.question type=kids.shapes.shape seek=name mode=list where.{p}s={n}"
+    kind=question
+    priority=10
+    example="Which shape has 3 sides?"
+
+@pat.kids.shapes.which2 core.pattern
+    match="name [a|an|some]? [shape|shapes] [with|that_has|that_have] {n:number} {p:lex.kids.shapes.parts}"
+    emit="@{_} core.question type=kids.shapes.shape seek=name mode=list where.{p}s={n}"
+    kind=question
+    priority=10
+    example="Name a shape with 4 corners."
+
+@pat.kids.shapes.which3 core.pattern
+    match="[which|what] [shape|shapes] [has|have] no {p:lex.kids.shapes.parts}"
+    emit="@{_} core.question type=kids.shapes.shape seek=name mode=list where.{p}s=0"
+    kind=question
+    priority=10
+    example="Which shapes have no corners?"
+
+@pat.kids.shapes.desc1 core.pattern
+    match="what [is|are] [a|an|the]? {s:lex.kids.shapes.shapes}"
+    emit="@{_} core.question type=kids.shapes.shape seek=summary where.name={s}"
+    kind=question
+    priority=10
+    example="What is a hexagon?"
+
+@pat.kids.shapes.desc2 core.pattern
+    match="[tell_me_about|describe] [a|an|the]? {s:lex.kids.shapes.shapes}"
+    emit="@{_} core.question type=kids.shapes.shape seek=summary where.name={s}"
+    kind=question
+    priority=10
+    example="Tell me about a circle."
+
+@pat.kids.shapes.desc3 core.pattern
+    match="what [is|are] [a|an|the]? {s:lex.kids.shapes.shapes} like"
+    emit="@{_} core.question type=kids.shapes.shape seek=summary where.name={s}"
+    kind=question
+    priority=10
+    example="What is an octagon like?"
+
+@pat.kids.shapes.fam1 core.pattern
+    match="[is|are] [a|an|the]? {s:noun} [a|an]? {k:lex.kids.shapes.kinds}"
+    emit="@{_} core.question type=kids.shapes.family seek=holds where.shape={s} where.kind={k}"
+    kind=question
+    priority=12
+    example="Is a square a rectangle?"
+
+@pat.kids.shapes.fam2 core.pattern
+    match="[is|are] [a|an|the]? {s:noun} [a|an]? kind_of {k:lex.kids.shapes.kinds}"
+    emit="@{_} core.question type=kids.shapes.family seek=holds where.shape={s} where.kind={k}"
+    kind=question
+    priority=12
+    example="Is a square a kind of rhombus?"
+
+@pat.kids.shapes.fam3 core.pattern
+    match="[is|are] [a|an|the]? {s:noun} round"
+    emit="@{_} core.question type=kids.shapes.family seek=holds where.shape={s} where.kind=round_shape"
+    kind=question
+    priority=12
+    example="Is a circle round?"
+
+@pat.kids.shapes.fam4 core.pattern
+    match="[is|are] [a|an|the]? {s:noun} [a|an]? round shape"
+    emit="@{_} core.question type=kids.shapes.family seek=holds where.shape={s} where.kind=round_shape"
+    kind=question
+    priority=12
+    example="Is a circle a round shape?"
+
+@pat.kids.shapes.fam5 core.pattern
+    match="[does|do] [a|an|the]? {s:noun} count_as [a|an|the]? {k:lex.kids.shapes.kinds}"
+    emit="@{_} core.question type=kids.shapes.family seek=holds where.shape={s} where.kind={k}"
+    kind=question
+    priority=12
+    example="Does a square count as a rectangle?"
+
+@pat.kids.shapes.look1 core.pattern
+    match="what shape [is|are] [a|an|the]? {t:noun}"
+    emit="@{_} core.question type=kids.shapes.thing seek=shape where.name={t}"
+    kind=question
+    priority=10
+    example="What shape is a stop sign?"
+
+@pat.kids.shapes.look2 core.pattern
+    match="what [is|are] shaped_like [a|an|the]? {s:lex.kids.shapes.shapes}"
+    emit="@{_} core.question type=kids.shapes.thing seek=name mode=list where.shape={s}"
+    kind=question
+    priority=10
+    example="What is shaped like a circle?"
+
+@pat.kids.shapes.look3 core.pattern
+    match="[where|what] [do|can] [we|i|you] [see|find] [a|an|the]? {s:lex.kids.shapes.shapes}"
+    emit="@{_} core.question type=kids.shapes.thing seek=name mode=list where.shape={s}"
+    kind=question
+    priority=10
+    example="Where do we see a circle?"
+
+@pat.kids.shapes.col1 core.pattern
+    match="what [color|colour] [is|are] [a|an|the]? {t:noun}"
+    emit="@{_} core.question type=kids.shapes.thing seek=color where.name={t}"
+    kind=question
+    priority=10
+    example="What color is the sky?"
+
+@pat.kids.shapes.col2 core.pattern
+    match="what [is|are] the [color|colour] of [a|an|the]? {t:noun}"
+    emit="@{_} core.question type=kids.shapes.thing seek=color where.name={t}"
+    kind=question
+    priority=10
+    example="What is the color of a banana?"
+
+@pat.kids.shapes.col3 core.pattern
+    match="[is|are] [a|an|the]? {t:noun} {c:lex.kids.shapes.colors}"
+    emit="@{_} core.question type=kids.shapes.thing seek=is_color where.name={t} where.is_color={c}"
+    kind=question
+    priority=12
+    example="Is the sky blue?"
+
+@pat.kids.shapes.col4 core.pattern
+    match="[which|what] [thing|things] [is|are] {c:lex.kids.shapes.colors}"
+    emit="@{_} core.question type=kids.shapes.thing seek=name mode=list where.color={c}"
+    kind=question
+    priority=10
+    example="What things are red?"
+
+@pat.kids.shapes.col5 core.pattern
+    match="[name|tell_me] [something|a_thing|some_things] {c:lex.kids.shapes.colors}"
+    emit="@{_} core.question type=kids.shapes.thing seek=name mode=list where.color={c}"
+    kind=question
+    priority=10
+    example="Name something yellow."
+
+@pat.kids.shapes.col6 core.pattern
+    match="[which|what] [thing|things] [has|have] the [color|colour] {c:lex.kids.shapes.colors}"
+    emit="@{_} core.question type=kids.shapes.thing seek=name mode=list where.color={c}"
+    kind=question
+    priority=10
+    example="Which things have the color green?"
+
+@pat.kids.shapes.ck1 core.pattern
+    match="[is|are] {c:lex.kids.shapes.colors} [a|an] {k:lex.kids.shapes.colorkinds} [color|colour]"
+    emit="@{_} core.question type=kids.shapes.color seek=is_kind where.name={c} where.is_kind={k}"
+    kind=question
+    priority=12
+    example="Is red a primary color?"
+
+@pat.kids.shapes.ck2 core.pattern
+    match="what [kind_of|type_of|sort_of] [color|colour] [is|are] {c:lex.kids.shapes.colors}"
+    emit="@{_} core.question type=kids.shapes.color seek=kind where.name={c}"
+    kind=question
+    priority=10
+    example="What kind of color is orange?"
+
+@pat.kids.shapes.ck3 core.pattern
+    match="[which|what] [color|colour|colors|colours] [is|are] [a|an|the]? {k:lex.kids.shapes.colorkinds} [color|colour|colors|colours]?"
+    emit="@{_} core.question type=kids.shapes.color seek=name mode=list where.kind={k}"
+    kind=question
+    priority=10
+    example="Which colors are primary?"
+
+@pat.kids.shapes.ck4 core.pattern
+    match="what [is|are] the {k:lex.kids.shapes.colorkinds} [colors|colours]"
+    emit="@{_} core.question type=kids.shapes.color seek=name mode=list where.kind={k}"
+    kind=question
+    priority=10
+    example="What are the primary colors?"
+
+@pat.kids.shapes.ck5 core.pattern
+    match="name the {k:lex.kids.shapes.colorkinds} [colors|colours]"
+    emit="@{_} core.question type=kids.shapes.color seek=name mode=list where.kind={k}"
+    kind=question
+    priority=10
+    example="Name the secondary colors."
+
+@pat.kids.shapes.ck6 core.pattern
+    match="how_many {k:lex.kids.shapes.colorkinds} [colors|colours] [are_there|do_we_have|do_you_know]"
+    emit="@{_} core.question type=kids.shapes.color seek=name mode=count where.kind={k}"
+    kind=question
+    priority=10
+    example="How many primary colors are there?"
+
+@pat.kids.shapes.mix1 core.pattern
+    match="what [do|does] {a:lex.kids.shapes.colors} and {b:lex.kids.shapes.colors} make"
+    emit="@{_} core.question type=kids.shapes.mix seek=result where.first={a} where.second={b}"
+    kind=question
+    priority=10
+    example="What do red and yellow make?"
+
+@pat.kids.shapes.mix2 core.pattern
+    match="what [color|colour] [do|does] {a:lex.kids.shapes.colors} and {b:lex.kids.shapes.colors} make"
+    emit="@{_} core.question type=kids.shapes.mix seek=result where.first={a} where.second={b}"
+    kind=question
+    priority=10
+    example="What color do blue and yellow make?"
+
+@pat.kids.shapes.mix3 core.pattern
+    match="what [do|does] [you|i|we] get [if|when] [you|i|we] mix {a:lex.kids.shapes.colors} and {b:lex.kids.shapes.colors}"
+    emit="@{_} core.question type=kids.shapes.mix seek=result where.first={a} where.second={b}"
+    kind=question
+    priority=10
+    example="What do you get if you mix red and blue?"
+
+@pat.kids.shapes.mix4 core.pattern
+    match="what [color|colour] [do|does] [you|i|we] get [if|when] [you|i|we] mix {a:lex.kids.shapes.colors} and {b:lex.kids.shapes.colors}"
+    emit="@{_} core.question type=kids.shapes.mix seek=result where.first={a} where.second={b}"
+    kind=question
+    priority=10
+    example="What color do I get when I mix red and white?"
+
+@pat.kids.shapes.mix5 core.pattern
+    match="what happens [if|when] [you|i|we] mix {a:lex.kids.shapes.colors} and {b:lex.kids.shapes.colors}"
+    emit="@{_} core.question type=kids.shapes.mix seek=result where.first={a} where.second={b}"
+    kind=question
+    priority=10
+    example="What happens if I mix black and white?"
+
+@pat.kids.shapes.mix6 core.pattern
+    match="what is {a:lex.kids.shapes.colors} mixed_with {b:lex.kids.shapes.colors}"
+    emit="@{_} core.question type=kids.shapes.mix seek=result where.first={a} where.second={b}"
+    kind=question
+    priority=10
+    example="What is red mixed with yellow?"
+
+@pat.kids.shapes.mix7 core.pattern
+    match="mix {a:lex.kids.shapes.colors} and {b:lex.kids.shapes.colors}"
+    emit="@{_} core.question type=kids.shapes.mix seek=result where.first={a} where.second={b}"
+    kind=question
+    priority=10
+    example="Mix blue and white."
+
+@pat.kids.shapes.mix8 core.pattern
+    match="what [color|colour] is made_by mixing {a:lex.kids.shapes.colors} and {b:lex.kids.shapes.colors}"
+    emit="@{_} core.question type=kids.shapes.mix seek=result where.first={a} where.second={b}"
+    kind=question
+    priority=10
+    example="What color is made by mixing red and green?"
+
+@pat.kids.shapes.rec1 core.pattern
+    match="how [do|can|could] [i|you|we] make {c:lex.kids.shapes.colors}"
+    emit="@{_} core.question type=kids.shapes.mix seek=recipe where.result={c}"
+    kind=question
+    priority=10
+    example="How do I make green?"
+
+@pat.kids.shapes.rec2 core.pattern
+    match="which colors make {c:lex.kids.shapes.colors}"
+    emit="@{_} core.question type=kids.shapes.mix seek=recipe where.result={c}"
+    kind=question
+    priority=10
+    example="Which colors make purple?"
+
+@pat.kids.shapes.rec3 core.pattern
+    match="what do i mix to get {c:lex.kids.shapes.colors}"
+    emit="@{_} core.question type=kids.shapes.mix seek=recipe where.result={c}"
+    kind=question
+    priority=10
+    example="What do I mix to get orange?"
+
+@pat.kids.shapes.rec4 core.pattern
+    match="what [do|should] i mix to make {c:lex.kids.shapes.colors}"
+    emit="@{_} core.question type=kids.shapes.mix seek=recipe where.result={c}"
+    kind=question
+    priority=10
+    example="What should I mix to make pink?"
+
+@pat.kids.shapes.tsides core.pattern
+    match="[a|an|the]? {s:noun} [has|have] {n:number} {p:lex.kids.shapes.parts}"
+    emit="@{_} kids.shapes.shape name={s} {p}s={n}"
+    kind=statement
+    priority=12
+    example="A rhombus has 4 sides."
+
+@pat.kids.shapes.tcol core.pattern
+    match="[a|an|the]? {t:noun} [is|are] {c:lex.kids.shapes.colors}"
+    emit="@{_} kids.shapes.thing name={t} color={c}"
+    kind=statement
+    priority=12
+    example="A strawberry is red."
+
+@pat.kids.shapes.tcol2 core.pattern
+    match="[a|an|the]? {t:noun} [is|are] {c:lex.kids.shapes.colors} and {d:lex.kids.shapes.colors}"
+    emit="@{_} kids.shapes.thing name={t} color={c}\n@{_1} kids.shapes.thing name={t} color={d}"
+    kind=statement
+    priority=13
+    example="Zebras are black and white."
+
+@pat.kids.shapes.tshape core.pattern
+    match="[a|an|the]? {t:noun} [is|are] [a|an|the]? {s:lex.kids.shapes.shapes}"
+    emit="@{_} kids.shapes.thing name={t} shape={s}"
+    kind=statement
+    priority=12
+    example="A ruler is a rectangle."
+
+@pat.kids.shapes.tmix core.pattern
+    match="{a:lex.kids.shapes.colors} and {b:lex.kids.shapes.colors} make {r:lex.kids.shapes.colors}"
+    emit="@{_} kids.shapes.mix first={a} second={b} result={r}"
+    kind=statement
+    priority=12
+    example="Black and red make brown."

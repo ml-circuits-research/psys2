@@ -1,0 +1,183 @@
+@tpl.kids.tasks.t1 core.template
+    for=action.tasks.add
+    text="Done! I added {values:list} to your {value} list. {note}"
+
+@tpl.kids.tasks.t2 core.template
+    for=action.tasks.add
+    text="Done! I added {values:list} to your {value} list."
+
+@tpl.kids.tasks.t3 core.template
+    for=action.tasks.add
+    text="{note}"
+
+@tpl.kids.tasks.t4 core.template
+    for=action.tasks.add
+    status=missing
+    text="I did not catch what to add. Try: Add milk to my shopping list."
+
+@tpl.kids.tasks.t5 core.template
+    for=action.tasks.remind
+    text="OK, I will keep {values:list} in your reminders. I cannot ring a bell, but you can ask me: What are my reminders? {note}"
+
+@tpl.kids.tasks.t6 core.template
+    for=action.tasks.remind
+    text="OK, I will keep {values:list} in your reminders. I cannot ring a bell, but you can ask me: What are my reminders?"
+
+@tpl.kids.tasks.t7 core.template
+    for=action.tasks.remind
+    text="{note}"
+
+@tpl.kids.tasks.t8 core.template
+    for=action.tasks.remind
+    status=missing
+    text="I did not catch what to remind you about. Try: Remind me to feed the cat."
+
+@tpl.kids.tasks.t9 core.template
+    for=action.tasks.remove
+    text="OK, I removed {values:list} from your {value} list. {note}"
+
+@tpl.kids.tasks.t10 core.template
+    for=action.tasks.remove
+    text="OK, I removed {values:list} from your {value} list."
+
+@tpl.kids.tasks.t11 core.template
+    for=action.tasks.remove
+    status=missing
+    text="I can't find {item} on your {value} list, so there is nothing to remove."
+
+@tpl.kids.tasks.t12 core.template
+    for=action.tasks.remove
+    status=missing
+    text="I can't find {item} on any of your lists, so there is nothing to remove."
+
+@tpl.kids.tasks.t13 core.template
+    for=action.tasks.remove
+    status=ambiguous
+    text="Which one do you mean: {alternatives:list}?"
+
+@tpl.kids.tasks.t14 core.template
+    for=action.tasks.done
+    text="Well done! I ticked off {values:list} on your {value} list."
+
+@tpl.kids.tasks.t15 core.template
+    for=action.tasks.done
+    text="{note}"
+
+@tpl.kids.tasks.t16 core.template
+    for=action.tasks.done
+    status=missing
+    text="I can't find {item} on your {value} list, so I cannot mark it as done."
+
+@tpl.kids.tasks.t17 core.template
+    for=action.tasks.done
+    status=missing
+    text="I can't find {item} on any of your lists, so I cannot mark it as done."
+
+@tpl.kids.tasks.t18 core.template
+    for=action.tasks.done
+    status=ambiguous
+    text="Which one do you mean: {alternatives:list}?"
+
+@tpl.kids.tasks.t19 core.template
+    for=action.tasks.check
+    text="Yes, you finished {values:list}."
+
+@tpl.kids.tasks.t20 core.template
+    for=action.tasks.check
+    status=missing
+    text="Not yet. {values:cap:list} is still on your {value} list."
+
+@tpl.kids.tasks.t21 core.template
+    for=action.tasks.check
+    status=missing
+    text="I can't find {item} on any of your lists."
+
+@tpl.kids.tasks.t22 core.template
+    for=action.tasks.show
+    text="On your {value} list: {values:list}. {note}"
+
+@tpl.kids.tasks.t23 core.template
+    for=action.tasks.show
+    text="On your {value} list: {values:list}."
+
+@tpl.kids.tasks.t24 core.template
+    for=action.tasks.show
+    text="{note}"
+
+@tpl.kids.tasks.t25 core.template
+    for=action.tasks.show
+    status=missing
+    text="Your {value} list is empty. You can say: Add milk to my shopping list."
+
+@tpl.kids.tasks.t26 core.template
+    for=action.tasks.pending
+    text="Still to do on your {value} list: {values:list}."
+
+@tpl.kids.tasks.t27 core.template
+    for=action.tasks.pending
+    text="{note}"
+
+@tpl.kids.tasks.t28 core.template
+    for=action.tasks.pending
+    status=missing
+    text="Your {value} list is empty, so there is nothing left to do."
+
+@tpl.kids.tasks.t29 core.template
+    for=action.tasks.count
+    text="You have {value} {unit:plural} on your {list} list. {note}"
+
+@tpl.kids.tasks.t30 core.template
+    for=action.tasks.count
+    text="You have {value} {unit:plural} on your {list} list."
+
+@tpl.kids.tasks.t31 core.template
+    for=action.tasks.count
+    status=missing
+    text="Your {list} list is empty."
+
+@tpl.kids.tasks.t32 core.template
+    for=action.tasks.countPending
+    text="{note}"
+
+@tpl.kids.tasks.t33 core.template
+    for=action.tasks.countPending
+    text="You still have {value} {unit:plural} left on your {list} list."
+
+@tpl.kids.tasks.t34 core.template
+    for=action.tasks.countPending
+    status=missing
+    text="Your {list} list is empty."
+
+@tpl.kids.tasks.t35 core.template
+    for=action.tasks.has
+    text="Yes, {values:list} is on your {value} list. {note}"
+
+@tpl.kids.tasks.t36 core.template
+    for=action.tasks.has
+    text="Yes, {values:list} is on your {value} list."
+
+@tpl.kids.tasks.t37 core.template
+    for=action.tasks.has
+    status=missing
+    text="No, {item} is not on your {value} list."
+
+@tpl.kids.tasks.t38 core.template
+    for=action.tasks.clear
+    text="OK, I cleared your {list} list. I removed {value} {unit:plural}."
+
+@tpl.kids.tasks.t39 core.template
+    for=action.tasks.clear
+    text="{note}"
+
+@tpl.kids.tasks.t40 core.template
+    for=action.tasks.lists
+    text="You have these lists: {values:list}."
+
+@tpl.kids.tasks.t41 core.template
+    for=action.tasks.lists
+    status=missing
+    text="You do not have any lists yet. You can say: Add milk to my shopping list."
+
+@tpl.kids.tasks.t42 core.template
+    for=ack.kids.tasks.entry
+    text="OK, {text} is on your {list} list."

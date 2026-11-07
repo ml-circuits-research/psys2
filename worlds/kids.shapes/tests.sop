@@ -1,0 +1,284 @@
+@t.shapes.n1 core.test
+    input="How many sides does a hexagon have?"
+    expect="A hexagon has 6 sides."
+
+@t.shapes.n2 core.test
+    input="How many corners does a pentagon have?"
+    expect="A pentagon has 5 corners."
+
+@t.shapes.n3 core.test
+    input="How many sides do triangles have?"
+    expect="A triangle has 3 sides."
+
+@t.shapes.n4 core.test
+    input="How many sides does an octagon have?"
+    expect="An octagon has 8 sides."
+
+@t.shapes.n5 core.test
+    input="Which shape has 3 sides?"
+    expect="These shapes have 3 sides: triangle."
+
+@t.shapes.n6 core.test
+    input="Name a shape with 4 corners."
+    expect="square"
+    expect="rectangle"
+
+@t.shapes.n7 core.test
+    input="Which shapes have no corners?"
+    expect="circle"
+    expect="oval"
+
+@t.shapes.n8 core.test
+    input="Does a pentagon have 5 sides?"
+    expect="Yes, a pentagon has 5 sides."
+
+@t.shapes.n9 core.test
+    input="Does a pentagon have 6 sides?"
+    expect="I don't know whether a pentagon has 6 sides."
+    expectStatus=missing
+    doc="a different number is not refuted by an explicit statement, so it is unknown"
+
+@t.shapes.n10 core.test
+    input="What is a hexagon?"
+    expect="A hexagon is a flat shape with 6 sides and 6 corners."
+
+@t.shapes.n11 core.test
+    input="What is a circle?"
+    expect="A circle is a round shape with no sides and no corners."
+
+@t.shapes.n12 core.test
+    input="Is a square a rectangle?"
+    expect="Yes, a square is a rectangle."
+
+@t.shapes.n13 core.test
+    input="Is a rectangle a square?"
+    expect="No, a rectangle is not a square."
+    expect="only when all four sides are equal"
+
+@t.shapes.n14 core.test
+    input="Is a triangle a polygon?"
+    expect="Yes, a triangle is a polygon."
+
+@t.shapes.n15 core.test
+    input="Is a circle a polygon?"
+    expect="No, a circle is not a polygon."
+
+@t.shapes.n16 core.test
+    input="Is a circle round?"
+    expect="Yes, a circle is a round shape."
+
+@t.shapes.n17 core.test
+    input="Is a square round?"
+    expect="No, a square is not a round shape."
+
+@t.shapes.n18 core.test
+    input="Is an oval a circle?"
+    expectStatus=missing
+    doc="oval has no relation facts: unknown"
+
+@t.shapes.n19 core.test
+    input="Is a unicorn a polygon?"
+    expectStatus=missing
+
+@t.shapes.n20 core.test
+    input="What do red and yellow make?"
+    expect="Red and yellow make orange."
+
+@t.shapes.n21 core.test
+    input="What color do you get if you mix blue and yellow?"
+    expect="Blue and yellow make green."
+
+@t.shapes.n22 core.test
+    input="What do yellow and red make?"
+    expect="Yellow and red make orange."
+    doc="order does not matter"
+
+@t.shapes.n23 core.test
+    input="What do red and black make?"
+    expectStatus=missing
+
+@t.shapes.n24 core.test
+    input="How do I make purple?"
+    expect="Purple is made by mixing red and blue."
+
+@t.shapes.n25 core.test
+    input="Is red a primary color?"
+    expect="Yes, red is a primary color."
+
+@t.shapes.n26 core.test
+    input="Is orange a primary color?"
+    expect="No, orange is not a primary color. It is a secondary color."
+
+@t.shapes.n27 core.test
+    input="Is pink a primary color?"
+    expectStatus=missing
+    doc="pink has no kind in the knowledge base"
+
+@t.shapes.n28 core.test
+    input="What kind of color is green?"
+    expect="Green is a secondary color."
+
+@t.shapes.n29 core.test
+    input="Which colors are primary?"
+    expect="The primary colors are red, yellow and blue."
+
+@t.shapes.n30 core.test
+    input="How many secondary colors are there?"
+    expect="There are 3 secondary colors."
+
+@t.shapes.n31 core.test
+    input="What color is the sky?"
+    expect="The sky is usually blue."
+
+@t.shapes.n32 core.test
+    input="What color is grass?"
+    expect="Grass is usually green."
+
+@t.shapes.n33 core.test
+    input="What color is a banana?"
+    expect="A banana is usually yellow."
+
+@t.shapes.n34 core.test
+    input="What color are apples?"
+    expect="An apple is usually red and green."
+
+@t.shapes.n35 core.test
+    input="Is a banana yellow?"
+    expect="Yes, a banana is usually yellow."
+
+@t.shapes.n36 core.test
+    input="Is a banana red?"
+    expect="No, a banana is not red. It is usually yellow."
+
+@t.shapes.n37 core.test
+    input="What color is a dragon?"
+    expectStatus=missing
+
+@t.shapes.n38 core.test
+    input="What things are yellow?"
+    expect="banana"
+    expect="lemon"
+    expect="sun"
+
+@t.shapes.n39 core.test
+    input="What shape is a stop sign?"
+    expect="A stop sign is an octagon."
+
+@t.shapes.n40 core.test
+    input="What is shaped like a circle?"
+    expect="clock"
+    expect="pizza"
+    expect="coin"
+
+@t.shapes.n41 core.test
+    input="What shape is a cloud?"
+    expectStatus=missing
+
+@t.shapes.n42 core.test
+    session=teach
+    input="How many sides does a trapezium have?"
+    expectStatus=missing
+
+@t.shapes.n43 core.test
+    session=teach
+    input="A trapezium has 4 sides."
+    expect="OK, a trapezium has 4 sides."
+
+@t.shapes.n44 core.test
+    session=teach
+    input="How many sides does a trapezium have?"
+    expect="A trapezium has 4 sides."
+
+@t.shapes.n45 core.test
+    session=teach
+    input="Which shape has 4 sides?"
+    expect="square"
+    expect="trapezium"
+
+@t.shapes.n46 core.test
+    session=teach
+    input="How many corners does a trapezium have?"
+    expectStatus=missing
+    doc="only the sides were taught"
+
+@t.shapes.n47 core.test
+    session=conflict
+    input="A square has 5 sides."
+    expect="OK, a square has 5 sides."
+
+@t.shapes.n48 core.test
+    session=conflict
+    input="How many sides does a square have?"
+    expect="4"
+    expect="5"
+    expectStatus=conflicting
+
+@t.shapes.n49 core.test
+    session=colors
+    input="What color is a strawberry?"
+    expect="A strawberry is usually red."
+
+@t.shapes.n50 core.test
+    session=colors
+    input="Is a strawberry blue?"
+    expect="No, a strawberry is not blue."
+
+@t.shapes.n51 core.test
+    session=colors
+    input="Zebras are black and white."
+    expect="OK, a zebra is black."
+
+@t.shapes.n52 core.test
+    session=colors
+    input="What color is a zebra?"
+    expect="A zebra is usually black and white."
+
+@t.shapes.n53 core.test
+    session=colors
+    input="Is a zebra white?"
+    expect="Yes, a zebra is usually white."
+
+@t.shapes.n54 core.test
+    session=colors
+    input="Is a zebra green?"
+    expect="No, a zebra is not green."
+
+@t.shapes.n55 core.test
+    session=mixing
+    input="What do black and red make?"
+    expectStatus=missing
+
+@t.shapes.n56 core.test
+    session=mixing
+    input="Black and red make brown."
+    expect="OK, black and red make brown."
+
+@t.shapes.n57 core.test
+    session=mixing
+    input="What do red and black make?"
+    expect="Red and black make brown."
+
+@t.shapes.n58 core.test
+    session=mixing
+    input="How do I make brown?"
+    expect="red and green"
+    expect="black and red"
+
+@t.shapes.n59 core.test
+    session=shapeof
+    input="What shape is a ruler?"
+    expectStatus=missing
+
+@t.shapes.n60 core.test
+    session=shapeof
+    input="A ruler is a rectangle."
+    expect="OK, a ruler looks like a rectangle."
+
+@t.shapes.n61 core.test
+    session=shapeof
+    input="What shape is a ruler?"
+    expect="A ruler is a rectangle."
+
+@t.shapes.n62 core.test
+    input="Hello! Is a square a rectangle?"
+    expect="Yes, a square is a rectangle."

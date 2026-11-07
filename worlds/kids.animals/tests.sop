@@ -1,0 +1,341 @@
+@t.animals.n1 core.test
+    input="How many legs does a spider have?"
+    expect="A spider has 8 legs."
+
+@t.animals.n2 core.test
+    input="How many legs do ants have?"
+    expect="An ant has 6 legs."
+
+@t.animals.n3 core.test
+    input="What does a rabbit eat?"
+    expect="Rabbits eat carrots, grass and lettuce."
+
+@t.animals.n4 core.test
+    input="What do cows eat?"
+    expect="Cows eat grass and hay."
+
+@t.animals.n5 core.test
+    input="Can a penguin fly?"
+    expect="No, a penguin cannot fly."
+
+@t.animals.n6 core.test
+    input="Can a bat fly?"
+    expect="Yes, a bat can fly."
+
+@t.animals.n7 core.test
+    input="Can a snail fly?"
+    expect="I don't know whether a snail can fly."
+    expectStatus=missing
+
+@t.animals.n8 core.test
+    input="Do penguins swim?"
+    expect="Yes, a penguin can swim."
+
+@t.animals.n9 core.test
+    input="Is a whale a fish?"
+    expect="No, a whale is not a fish. It is a mammal."
+
+@t.animals.n10 core.test
+    input="Is a dolphin a mammal?"
+    expect="Yes, a dolphin is a mammal."
+
+@t.animals.n11 core.test
+    input="Is a spider an insect?"
+    expect="It is an arachnid."
+
+@t.animals.n12 core.test
+    input="Is a cow a carnivore?"
+    expect="No, a cow is not a carnivore. It is a herbivore."
+
+@t.animals.n13 core.test
+    input="What is a dolphin?"
+    expect="A dolphin is a mammal that lives in the sea."
+
+@t.animals.n14 core.test
+    input="Tell me about an owl."
+    expect="An owl is a bird that lives in the forest."
+
+@t.animals.n15 core.test
+    input="Where does a camel live?"
+    expect="Camels live in the desert."
+
+@t.animals.n16 core.test
+    input="Where does a dog live?"
+    expect="Dogs live at home and on a farm."
+
+@t.animals.n17 core.test
+    input="Which animals live in the sea?"
+    expect="whales"
+    expect="dolphins"
+    expect="sharks"
+
+@t.animals.n18 core.test
+    input="Which birds live on a farm?"
+    expect="Birds that live on a farm: chickens, ducks and geese."
+
+@t.animals.n19 core.test
+    input="What sound does a cow make?"
+    expect="A cow goes moo."
+
+@t.animals.n20 core.test
+    input="What is a baby cat called?"
+    expect="A baby cat is called a kitten."
+
+@t.animals.n21 core.test
+    input="What do you call a baby sheep?"
+    expect="a lamb"
+
+@t.animals.n22 core.test
+    input="What is a calf?"
+    expect="A calf is a baby"
+    expect="cow"
+
+@t.animals.n23 core.test
+    input="Which animals have 6 legs?"
+    expect="bees"
+    expect="ants"
+    expect="butterflies"
+
+@t.animals.n24 core.test
+    input="Name a bird that cannot fly."
+    expect="Birds that cannot fly: penguins and ostriches."
+
+@t.animals.n25 core.test
+    input="Which birds can fly?"
+    expect="eagles"
+    expect="owls"
+
+@t.animals.n26 core.test
+    input="What kind of animal is a shark?"
+    expect="A shark is a fish."
+
+@t.animals.n27 core.test
+    input="What is a cow covered in?"
+    expect="A cow is covered in fur."
+
+@t.animals.n28 core.test
+    input="Does a cow eat grass?"
+    expect="Yes, cows eat grass."
+
+@t.animals.n29 core.test
+    input="Does a cow eat meat?"
+    expect="I don't know whether cows eat meat."
+    expectStatus=missing
+    doc="The typical foods are not a complete list, so a food that is not listed is unknown, not refuted."
+
+@t.animals.n30 core.test
+    input="Which animals say moo?"
+    expect="Animals that say moo: cows."
+
+@t.animals.n31 core.test
+    input="How many legs does a dragon have?"
+    expect="I don't know how many legs a dragon has yet."
+    expectStatus=missing
+
+@t.animals.n32 core.test
+    input="What does a dragon eat?"
+    expectStatus=missing
+
+@t.animals.n33 core.test
+    input="Can a dragon fly?"
+    expectStatus=missing
+
+@t.animals.n34 core.test
+    input="Is a dragon a reptile?"
+    expectStatus=missing
+
+@t.animals.n35 core.test
+    input="What sound does a zebra make?"
+    expectStatus=missing
+    doc="zebra is known but has no sound in the knowledge base"
+
+@t.animals.n36 core.test
+    input="Which animals cannot swim?"
+    expectStatus=missing
+    doc="no animal is stated as unable to swim"
+
+@t.animals.n37 core.test
+    session=zebra
+    input="How many legs does a zebra have?"
+    expectStatus=missing
+
+@t.animals.n38 core.test
+    session=zebra
+    input="A zebra has 4 legs."
+    expect="OK, a zebra has 4 legs."
+
+@t.animals.n39 core.test
+    session=zebra
+    input="How many legs does a zebra have?"
+    expect="A zebra has 4 legs."
+
+@t.animals.n40 core.test
+    session=zebra
+    input="Zebras eat grass."
+    expect="OK, zebras eat grass."
+
+@t.animals.n41 core.test
+    session=zebra
+    input="What do zebras eat?"
+    expect="Zebras eat grass."
+
+@t.animals.n42 core.test
+    session=zebra
+    input="Which animals eat grass?"
+    expect="zebras"
+
+@t.animals.n43 core.test
+    session=zebra
+    input="What is a zebra?"
+    expect="A zebra is a mammal that lives on the savanna."
+    expect="It has 4 legs"
+
+@t.animals.n44 core.test
+    session=refute
+    input="Can a zebra swim?"
+    expectStatus=missing
+
+@t.animals.n45 core.test
+    session=refute
+    input="A zebra cannot swim."
+    expect="OK, I will remember that about zebras."
+
+@t.animals.n46 core.test
+    session=refute
+    input="Can a zebra swim?"
+    expect="No, a zebra cannot swim."
+    doc="explicit no is refuted, different from unknown"
+
+@t.animals.n47 core.test
+    session=refute
+    input="Can a zebra fly?"
+    expectStatus=missing
+    doc="still unknown"
+
+@t.animals.n48 core.test
+    session=refute
+    input="A zebra can swim."
+    expect="OK"
+
+@t.animals.n49 core.test
+    session=refute
+    input="Can a zebra swim?"
+    expectStatus=conflicting
+
+@t.animals.n50 core.test
+    session=conflict
+    input="A spider has 6 legs."
+    expect="OK, a spider has 6 legs."
+
+@t.animals.n51 core.test
+    session=conflict
+    input="How many legs does a spider have?"
+    expect="8"
+    expect="6"
+    expectStatus=conflicting
+
+@t.animals.n52 core.test
+    session=wrongclass
+    input="A whale is a fish."
+    expect="OK, a whale is a fish."
+
+@t.animals.n53 core.test
+    session=wrongclass
+    input="Is a whale a fish?"
+    expectStatus=conflicting
+
+@t.animals.n54 core.test
+    session=newanimal
+    input="A numbat is a mammal."
+    expect="OK, a numbat is a mammal."
+
+@t.animals.n55 core.test
+    session=newanimal
+    input="Numbats eat insects."
+    expect="OK, numbats eat insects."
+
+@t.animals.n56 core.test
+    session=newanimal
+    input="What does a numbat eat?"
+    expect="Numbats eat insects."
+
+@t.animals.n57 core.test
+    session=newanimal
+    input="Is a numbat a mammal?"
+    expect="Yes, a numbat is a mammal."
+
+@t.animals.n58 core.test
+    session=newanimal
+    input="A baby numbat is called a pup."
+    expect="OK, a baby numbat is called a pup."
+
+@t.animals.n59 core.test
+    session=newanimal
+    input="What is a baby numbat called?"
+    expect="A baby numbat is called a pup."
+
+@t.animals.n60 core.test
+    session=pets
+    input="What is my dog called?"
+    expectStatus=missing
+
+@t.animals.n61 core.test
+    session=pets
+    input="My dog is called Rex."
+    expect="Nice! Your dog is called Rex."
+
+@t.animals.n62 core.test
+    session=pets
+    input="What is my dog called?"
+    expect="Your dog is called Rex."
+
+@t.animals.n63 core.test
+    session=pets
+    input="Who is Rex?"
+    expect="Rex is your dog."
+
+@t.animals.n64 core.test
+    session=pets
+    input="I have a cat called Tom."
+    expect="Your cat is called Tom."
+
+@t.animals.n65 core.test
+    session=pets
+    input="What pets do I have?"
+    expect="You have a dog and a cat."
+
+@t.animals.n66 core.test
+    session=pets
+    input="Do I have a hamster?"
+    expectStatus=missing
+
+@t.animals.n67 core.test
+    session=pets
+    input="Do I have a cat?"
+    expect="Yes, you have a cat."
+
+@t.animals.n68 core.test
+    session=pets
+    input="What is my pet called?"
+    expectStatus=conflicting
+    doc="two pets, so the question about my pet is ambiguous"
+
+@t.animals.n69 core.test
+    session=pets
+    input="What is my cat called?"
+    expect="Your cat is called Tom."
+
+@t.animals.n70 core.test
+    session=chat
+    input="Hello!"
+    expect="Hello"
+
+@t.animals.n71 core.test
+    session=chat
+    input="Hi, can a duck swim?"
+    expect="Yes, a duck can swim."
+
+@t.animals.n72 core.test
+    input="Which animals have no legs?"
+    expect="snakes"
+    expect="whales"

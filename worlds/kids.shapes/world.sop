@@ -1,0 +1,11 @@
+@world.kids.shapes core.world
+    namespace=kids.shapes
+    version=0.1.0
+    legend=$legend.kids.shapes
+    imports=world.core
+    imports=world.kids.common
+    formalization=rules
+    language=en
+    status=fixture
+    title="Shapes and colors (primary school)"
+    doc="Sides and corners of flat shapes, which shape is a kind of which, what common things look like, colors of everyday things, primary and secondary colors and color mixing. Explicit no is kept apart from unknown. Hand-built platform fixture, not produced by the C1 workflow."

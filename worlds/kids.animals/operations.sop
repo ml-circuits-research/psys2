@@ -1,0 +1,79 @@
+@op.kids.animals.canFlyYes core.operation
+    outputs=kids.animals.animal.can_fly
+    inputs=kids.animals.animal.name
+    impl=canFlyYes
+    semantics=query
+    doc="Yes when some statement says the animal can fly; conflicting when statements disagree; missing when nothing is stated."
+
+@op.kids.animals.canFlyNo core.operation
+    outputs=kids.animals.animal.can_fly
+    inputs=kids.animals.animal.name
+    impl=canFlyNo
+    semantics=query
+    doc="No only when a statement explicitly says the animal cannot fly (refuted); otherwise missing (unknown)."
+
+@op.kids.animals.canSwimYes core.operation
+    outputs=kids.animals.animal.can_swim
+    inputs=kids.animals.animal.name
+    impl=canSwimYes
+    semantics=query
+    doc="Yes when some statement says the animal can swim."
+
+@op.kids.animals.canSwimNo core.operation
+    outputs=kids.animals.animal.can_swim
+    inputs=kids.animals.animal.name
+    impl=canSwimNo
+    semantics=query
+    doc="No only when a statement explicitly says the animal cannot swim."
+
+@op.kids.animals.isAYes core.operation
+    outputs=kids.animals.animal.is_a
+    inputs=kids.animals.animal.name
+    inputs=kids.animals.animal.is_a
+    impl=isAYes
+    semantics=query
+    doc="Yes when the animal has the asked class or diet; conflicting when several classes are stated."
+
+@op.kids.animals.isANo core.operation
+    outputs=kids.animals.animal.is_a
+    inputs=kids.animals.animal.name
+    inputs=kids.animals.animal.is_a
+    impl=isANo
+    semantics=query
+    doc="No, with the actual class or diet, when the animal is known to have another one."
+
+@op.kids.animals.livesWhere core.operation
+    outputs=kids.animals.animal.lives
+    inputs=kids.animals.animal.name
+    impl=livesWhere
+    semantics=query
+    doc="A phrase telling where the animal lives, from all its habitats."
+
+@op.kids.animals.coveredIn core.operation
+    outputs=kids.animals.animal.covered
+    inputs=kids.animals.animal.name
+    impl=coveredIn
+    semantics=query
+    doc="A phrase telling what covers the animal body."
+
+@op.kids.animals.describeAnimal core.operation
+    outputs=kids.animals.animal.summary
+    inputs=kids.animals.animal.name
+    impl=describeAnimal
+    semantics=query
+    doc="A short description from class, habitat, legs, covering, food and abilities."
+
+@op.kids.animals.searchAnimals core.operation
+    outputs=kids.animals.animal.matching
+    inputs=kids.animals.animal.class
+    inputs=kids.animals.animal.legs
+    inputs=kids.animals.animal.diet
+    inputs=kids.animals.animal.food
+    inputs=kids.animals.animal.habitat
+    inputs=kids.animals.animal.covering
+    inputs=kids.animals.animal.sound
+    inputs=kids.animals.animal.can_fly
+    inputs=kids.animals.animal.can_swim
+    impl=searchAnimals
+    semantics=query
+    doc="The animals that match every given property (class, legs, diet, food, habitat, covering, sound, can fly, can swim)."

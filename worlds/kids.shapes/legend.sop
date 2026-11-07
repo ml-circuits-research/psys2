@@ -1,0 +1,125 @@
+@legend.kids.shapes core.legend
+    namespace=kids.shapes
+    version=0.1.0
+    imports=core
+    imports=kids.common
+    doc="Flat shapes, colors and the colors of everyday things"
+
+@kids.shapes.shape core.type
+    extends=core.state
+    doc="A flat shape and how many sides and corners it has."
+    example="A hexagon has 6 sides."
+    negative="A banana is yellow."
+
+@kids.shapes.shape.name core.key
+    value=atom
+    ask="Which shape is it?"
+
+@kids.shapes.shape.sides core.key
+    value=integer
+    ask="How many sides does it have?"
+
+@kids.shapes.shape.corners core.key
+    value=integer
+    ask="How many corners does it have?"
+
+@kids.shapes.shape.summary core.key
+    value=string
+    ask="What is it like?"
+    compute=true
+    observe=false
+
+@kids.shapes.family core.type
+    extends=core.state
+    doc="A shape is, or is not, a kind of shape (a square is a rectangle) or a round shape. holds=false is an explicit no."
+    example="A square is a rectangle."
+
+@kids.shapes.family.shape core.key
+    value=atom
+    ask="Which shape is asked about?"
+
+@kids.shapes.family.kind core.key
+    value=atom
+    ask="Which kind of shape is asked about?"
+
+@kids.shapes.family.holds core.key
+    value=boolean
+    ask="Is the shape of that kind?"
+    compute=true
+
+@kids.shapes.family.because core.key
+    value=string
+    ask="Why is it not so?"
+
+@kids.shapes.color core.type
+    extends=core.state
+    doc="A color and whether it is a primary or secondary color."
+    example="Red is a primary color."
+
+@kids.shapes.color.name core.key
+    value=atom
+    ask="Which color is it?"
+
+@kids.shapes.color.kind core.key
+    value=atom
+    ask="Is it a primary, secondary or neutral color?"
+
+@kids.shapes.color.is_kind core.key
+    value=atom
+    ask="Which kind of color is asked about?"
+    compute=true
+    observe=false
+
+@kids.shapes.mix core.type
+    extends=core.state
+    doc="Mixing two colors gives a third color."
+    example="Red and yellow make orange."
+
+@kids.shapes.mix.first core.key
+    value=atom
+    ask="Which is the first color?"
+
+@kids.shapes.mix.second core.key
+    value=atom
+    ask="Which is the second color?"
+
+@kids.shapes.mix.result core.key
+    value=atom
+    ask="Which color do they make?"
+    compute=true
+
+@kids.shapes.mix.recipe core.key
+    value=string
+    ask="Which colors make it?"
+    compute=true
+    observe=false
+
+@kids.shapes.thing core.type
+    extends=core.state
+    doc="An everyday thing: its typical colors and the flat shape it looks like. Several wires may describe the same thing."
+    example="A banana is yellow."
+    example="A clock is a circle."
+
+@kids.shapes.thing.name core.key
+    value=atom
+    ask="Which thing is it?"
+
+@kids.shapes.thing.color core.key
+    value=atom
+    ask="What color is it usually?"
+    card=many
+    compute=true
+
+@kids.shapes.thing.shape core.key
+    value=atom
+    ask="Which shape does it look like?"
+
+@kids.shapes.thing.article core.key
+    value=atom
+    ask="Which article goes with the name (a, an, the or none)?"
+
+@kids.shapes.thing.is_color core.key
+    value=atom
+    ask="Which color is asked about?"
+    compute=true
+    observe=false

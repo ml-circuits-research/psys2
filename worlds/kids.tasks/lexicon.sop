@@ -1,0 +1,10 @@
+@lex.kids.tasks.triggers core.lexicon
+    class=trigger
+    doc="Words that signal list requests"
+    word=add word=remove word=delete word=clear word=empty word=remind word=reminder word=reminders word=list word=lists word=finished
+    word=completed word=done word=tick word=cross word=shopping word=todo word=homework word=left
+
+@lex.kids.tasks.things core.lexicon
+    class=unit
+    doc="What the lists hold (used in counts)"
+    word=thing word=item word=task

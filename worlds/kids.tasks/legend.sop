@@ -1,0 +1,24 @@
+@legend.kids.tasks core.legend
+    namespace=kids.tasks
+    version=0.1.0
+    imports=core
+    imports=kids.common
+    doc="Items on personal lists. The lists themselves live in the session state; every change is mirrored as an entry wire."
+
+@kids.tasks.entry core.type
+    extends=core.state
+    doc="One item on a named list and whether it is still to do, done or removed. Written by the list operations, one wire per item."
+    example="milk on the shopping list"
+    negative="A banana is yellow."
+
+@kids.tasks.entry.list core.key
+    value=string
+    ask="Which list is the item on?"
+
+@kids.tasks.entry.text core.key
+    value=string
+    ask="What is the item?"
+
+@kids.tasks.entry.progress core.key
+    value=atom
+    ask="Is it todo, done or removed?"

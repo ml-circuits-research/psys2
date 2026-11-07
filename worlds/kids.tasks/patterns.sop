@@ -1,0 +1,356 @@
+@pat.kids.tasks.add1 core.pattern
+    match="[can_you|could_you|will_you]? add {item:words} to [my|the|our]? list"
+    emit="@{_} core.request action=tasks.add arg.item=\"{item}\" arg.list=to-do"
+    kind=request
+    priority=10
+    example="Add milk to my list."
+
+@pat.kids.tasks.add2 core.pattern
+    match="[can_you|could_you|will_you]? add {item:words} to [my|the|our]? {list:words} list"
+    emit="@{_} core.request action=tasks.add arg.item=\"{item}\" arg.list=\"{list}\""
+    kind=request
+    priority=10
+    example="Add milk to my shopping list."
+
+@pat.kids.tasks.add3 core.pattern
+    match="put {item:words} on [my|the|our]? list"
+    emit="@{_} core.request action=tasks.add arg.item=\"{item}\" arg.list=to-do"
+    kind=request
+    priority=10
+    example="Put bread on my list."
+
+@pat.kids.tasks.add4 core.pattern
+    match="put {item:words} on [my|the|our]? {list:words} list"
+    emit="@{_} core.request action=tasks.add arg.item=\"{item}\" arg.list=\"{list}\""
+    kind=request
+    priority=10
+    example="Put bread on my shopping list."
+
+@pat.kids.tasks.add5 core.pattern
+    match="i [need_to|have_to|must|want_to] buy {item:words}"
+    emit="@{_} core.request action=tasks.add arg.item=\"{item}\" arg.list=shopping"
+    kind=request
+    priority=11
+    example="I need to buy milk."
+
+@pat.kids.tasks.add6 core.pattern
+    match="i [need_to|have_to|must|should] {item:words}"
+    emit="@{_} core.request action=tasks.add arg.item=\"{item}\" arg.list=to-do"
+    kind=request
+    priority=10
+    example="I have to do my homework."
+
+@pat.kids.tasks.add7 core.pattern
+    match="write {item:words} on [my|the|our]? {list:words} list"
+    emit="@{_} core.request action=tasks.add arg.item=\"{item}\" arg.list=\"{list}\""
+    kind=request
+    priority=10
+    example="Write call grandma on my to-do list."
+
+@pat.kids.tasks.add8 core.pattern
+    match="i want to add {item:words} to [my|the|our]? {list:words} list"
+    emit="@{_} core.request action=tasks.add arg.item=\"{item}\" arg.list=\"{list}\""
+    kind=request
+    priority=10
+    example="I want to add eggs to my shopping list."
+
+@pat.kids.tasks.rem1 core.pattern
+    match="[can_you|could_you|will_you]? remind me to {item:words}"
+    emit="@{_} core.request action=tasks.remind arg.item=\"{item}\""
+    kind=request
+    priority=10
+    example="Remind me to feed the cat."
+
+@pat.kids.tasks.rem2 core.pattern
+    match="[can_you|could_you|will_you]? remind me [about|of] {item:words}"
+    emit="@{_} core.request action=tasks.remind arg.item=\"{item}\""
+    kind=request
+    priority=10
+    example="Remind me about my swimming bag."
+
+@pat.kids.tasks.rem3 core.pattern
+    match="[set|make] a reminder [to|for|about] {item:words}"
+    emit="@{_} core.request action=tasks.remind arg.item=\"{item}\""
+    kind=request
+    priority=10
+    example="Set a reminder to water the plants."
+
+@pat.kids.tasks.rem4 core.pattern
+    match="do_not_let_me_forget_to {item:words}"
+    emit="@{_} core.request action=tasks.remind arg.item=\"{item}\""
+    kind=request
+    priority=10
+    example="Don't let me forget to call grandma."
+
+@pat.kids.tasks.rem5 core.pattern
+    match="i must remember_to {item:words}"
+    emit="@{_} core.request action=tasks.remind arg.item=\"{item}\""
+    kind=request
+    priority=10
+    example="I must remember to bring my book."
+
+@pat.kids.tasks.del1 core.pattern
+    match="[remove|delete] {item:words} from [my|the|our]? list"
+    emit="@{_} core.request action=tasks.remove arg.item=\"{item}\""
+    kind=request
+    priority=10
+    example="Remove milk from my list."
+
+@pat.kids.tasks.del2 core.pattern
+    match="[remove|delete] {item:words} from [my|the|our]? {list:words} list"
+    emit="@{_} core.request action=tasks.remove arg.item=\"{item}\" arg.list=\"{list}\""
+    kind=request
+    priority=10
+    example="Delete milk from my shopping list."
+
+@pat.kids.tasks.del3 core.pattern
+    match="take {item:words} off [my|the|our]? list"
+    emit="@{_} core.request action=tasks.remove arg.item=\"{item}\""
+    kind=request
+    priority=10
+    example="Take milk off my list."
+
+@pat.kids.tasks.del4 core.pattern
+    match="take {item:words} off [my|the|our]? {list:words} list"
+    emit="@{_} core.request action=tasks.remove arg.item=\"{item}\" arg.list=\"{list}\""
+    kind=request
+    priority=10
+    example="Take milk off my shopping list."
+
+@pat.kids.tasks.fin1 core.pattern
+    match="i [finished|completed|have_finished|have_completed|did|have_done] {item:words}"
+    emit="@{_} core.request action=tasks.done arg.item=\"{item}\""
+    kind=request
+    priority=10
+    example="I finished my homework."
+
+@pat.kids.tasks.fin2 core.pattern
+    match="mark {item:words} as [done|finished|completed|complete]"
+    emit="@{_} core.request action=tasks.done arg.item=\"{item}\""
+    kind=request
+    priority=10
+    example="Mark homework as done."
+
+@pat.kids.tasks.fin3 core.pattern
+    match="i am done with {item:words}"
+    emit="@{_} core.request action=tasks.done arg.item=\"{item}\""
+    kind=request
+    priority=10
+    example="I'm done with my homework."
+
+@pat.kids.tasks.fin4 core.pattern
+    match="[tick|check] off {item:words}"
+    emit="@{_} core.request action=tasks.done arg.item=\"{item}\""
+    kind=request
+    priority=10
+    example="Tick off homework."
+
+@pat.kids.tasks.fin5 core.pattern
+    match="i bought {item:words}"
+    emit="@{_} core.request action=tasks.done arg.item=\"{item}\""
+    kind=request
+    priority=10
+    example="I bought milk."
+
+@pat.kids.tasks.fin6 core.pattern
+    match="[tick|check|cross] {item:words} off [my|the|our]? list"
+    emit="@{_} core.request action=tasks.done arg.item=\"{item}\""
+    kind=request
+    priority=10
+    example="Cross milk off my list."
+
+@pat.kids.tasks.fin7 core.pattern
+    match="[tick|check|cross] {item:words} off [my|the|our]? {list:words} list"
+    emit="@{_} core.request action=tasks.done arg.item=\"{item}\" arg.list=\"{list}\""
+    kind=request
+    priority=10
+    example="Cross milk off my shopping list."
+
+@pat.kids.tasks.fin8 core.pattern
+    match="mark {item:words} as [done|finished|completed|complete] on [my|the|our]? {list:words} list"
+    emit="@{_} core.request action=tasks.done arg.item=\"{item}\" arg.list=\"{list}\""
+    kind=request
+    priority=11
+    example="Mark milk as done on my shopping list."
+
+@pat.kids.tasks.show1 core.pattern
+    match="what [is|are] on [my|the|our]? list"
+    emit="@{_} core.request action=tasks.show arg.list=to-do"
+    kind=request
+    priority=10
+    example="What is on my list?"
+
+@pat.kids.tasks.show2 core.pattern
+    match="what [is|are] on [my|the|our]? {list:words} list"
+    emit="@{_} core.request action=tasks.show arg.list=\"{list}\""
+    kind=request
+    priority=10
+    example="What is on my shopping list?"
+
+@pat.kids.tasks.show3 core.pattern
+    match="[show|read|open|list] [me]? [my|the|our]? {list:words} list"
+    emit="@{_} core.request action=tasks.show arg.list=\"{list}\""
+    kind=request
+    priority=10
+    example="Show me my shopping list."
+
+@pat.kids.tasks.show4 core.pattern
+    match="[show|read|open|list] [me]? [my|the|our]? list"
+    emit="@{_} core.request action=tasks.show arg.list=to-do"
+    kind=request
+    priority=10
+    example="Show my list."
+
+@pat.kids.tasks.show5 core.pattern
+    match="what [are|is] my reminders"
+    emit="@{_} core.request action=tasks.show arg.list=reminders"
+    kind=request
+    priority=10
+    example="What are my reminders?"
+
+@pat.kids.tasks.show6 core.pattern
+    match="[show|read|open|list] [me]? my reminders"
+    emit="@{_} core.request action=tasks.show arg.list=reminders"
+    kind=request
+    priority=10
+    example="Show me my reminders."
+
+@pat.kids.tasks.show7 core.pattern
+    match="[what|which] lists do i have"
+    emit="@{_} core.request action=tasks.lists "
+    kind=request
+    priority=10
+    example="What lists do I have?"
+
+@pat.kids.tasks.pend1 core.pattern
+    match="what do i [still]? [have|need] to do"
+    emit="@{_} core.request action=tasks.pending arg.list=to-do"
+    kind=request
+    priority=10
+    example="What do I still have to do?"
+
+@pat.kids.tasks.pend2 core.pattern
+    match="what do i [still]? [have|need] to buy"
+    emit="@{_} core.request action=tasks.pending arg.list=shopping"
+    kind=request
+    priority=10
+    example="What do I still need to buy?"
+
+@pat.kids.tasks.pend3 core.pattern
+    match="what is [still]? left on [my|the|our]? {list:words} list"
+    emit="@{_} core.request action=tasks.pending arg.list=\"{list}\""
+    kind=request
+    priority=10
+    example="What is still left on my shopping list?"
+
+@pat.kids.tasks.pend4 core.pattern
+    match="what is [still]? left to do"
+    emit="@{_} core.request action=tasks.pending arg.list=to-do"
+    kind=request
+    priority=10
+    example="What is left to do?"
+
+@pat.kids.tasks.pend5 core.pattern
+    match="what do i [still]? [have|need] to do on [my|the|our]? {list:words} list"
+    emit="@{_} core.request action=tasks.pending arg.list=\"{list}\""
+    kind=request
+    priority=10
+    example="What do I still have to do on my homework list?"
+
+@pat.kids.tasks.cnt1 core.pattern
+    match="how_many [things|items|tasks] are on [my|the|our]? list"
+    emit="@{_} core.request action=tasks.count arg.list=to-do"
+    kind=request
+    priority=10
+    example="How many things are on my list?"
+
+@pat.kids.tasks.cnt2 core.pattern
+    match="how_many [things|items|tasks] are on [my|the|our]? {list:words} list"
+    emit="@{_} core.request action=tasks.count arg.list=\"{list}\""
+    kind=request
+    priority=10
+    example="How many things are on my shopping list?"
+
+@pat.kids.tasks.cnt3 core.pattern
+    match="how_many [things|items|tasks] do i [still]? [have|need] to do"
+    emit="@{_} core.request action=tasks.countPending arg.list=to-do"
+    kind=request
+    priority=10
+    example="How many things do I still have to do?"
+
+@pat.kids.tasks.cnt4 core.pattern
+    match="how_many [things|items|tasks] [are|is] [still]? left on [my|the|our]? {list:words} list"
+    emit="@{_} core.request action=tasks.countPending arg.list=\"{list}\""
+    kind=request
+    priority=10
+    example="How many things are left on my shopping list?"
+
+@pat.kids.tasks.cnt5 core.pattern
+    match="how_many [things|items|tasks] do i [still]? [have|need] to buy"
+    emit="@{_} core.request action=tasks.countPending arg.list=shopping"
+    kind=request
+    priority=10
+    example="How many things do I still need to buy?"
+
+@pat.kids.tasks.clr1 core.pattern
+    match="[clear|empty] [my|the|our]? list"
+    emit="@{_} core.request action=tasks.clear arg.list=to-do"
+    kind=request
+    priority=10
+    example="Clear my list."
+
+@pat.kids.tasks.clr2 core.pattern
+    match="[clear|empty] [my|the|our]? {list:words} list"
+    emit="@{_} core.request action=tasks.clear arg.list=\"{list}\""
+    kind=request
+    priority=10
+    example="Clear my shopping list."
+
+@pat.kids.tasks.clr3 core.pattern
+    match="[delete|remove|throw_away] [my|the|our]? {list:words} list"
+    emit="@{_} core.request action=tasks.clear arg.list=\"{list}\""
+    kind=request
+    priority=10
+    example="Delete my shopping list."
+
+@pat.kids.tasks.has1 core.pattern
+    match="[is|are] {item:words} on [my|the|our]? list"
+    emit="@{_} core.request action=tasks.has arg.item=\"{item}\" arg.list=to-do"
+    kind=request
+    priority=10
+    example="Is homework on my list?"
+
+@pat.kids.tasks.has2 core.pattern
+    match="[is|are] {item:words} on [my|the|our]? {list:words} list"
+    emit="@{_} core.request action=tasks.has arg.item=\"{item}\" arg.list=\"{list}\""
+    kind=request
+    priority=10
+    example="Is milk on my shopping list?"
+
+@pat.kids.tasks.has3 core.pattern
+    match="[do|did] i [have|put] {item:words} on [my|the|our]? {list:words} list"
+    emit="@{_} core.request action=tasks.has arg.item=\"{item}\" arg.list=\"{list}\""
+    kind=request
+    priority=10
+    example="Do I have milk on my shopping list?"
+
+@pat.kids.tasks.chk1 core.pattern
+    match="did i [finish|complete|do] {item:words}"
+    emit="@{_} core.request action=tasks.check arg.item=\"{item}\""
+    kind=request
+    priority=10
+    example="Did I finish my homework?"
+
+@pat.kids.tasks.chk2 core.pattern
+    match="have i [finished|completed|done] {item:words}"
+    emit="@{_} core.request action=tasks.check arg.item=\"{item}\""
+    kind=request
+    priority=10
+    example="Have I finished my homework?"
+
+@pat.kids.tasks.chk3 core.pattern
+    match="is {item:words} [done|finished|completed]"
+    emit="@{_} core.request action=tasks.check arg.item=\"{item}\""
+    kind=request
+    priority=10
+    example="Is homework done?"

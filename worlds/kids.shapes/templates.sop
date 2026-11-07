@@ -1,0 +1,255 @@
+@tpl.kids.shapes.t1 core.template
+    for=kids.shapes.shape.sides
+    text="{name:a:cap} has {value} sides."
+
+@tpl.kids.shapes.t2 core.template
+    for=kids.shapes.shape.sides
+    status=missing
+    text="I don't know how many sides {name:a} has yet. You can teach me: A {name} has 4 sides."
+
+@tpl.kids.shapes.t3 core.template
+    for=kids.shapes.shape.sides
+    status=conflicting
+    text="I have conflicting information about the sides of {name:a}: {alternatives:list}."
+
+@tpl.kids.shapes.t4 core.template
+    for=kids.shapes.shape.sides
+    mode=exists
+    text="Yes, {name:a} has {sides} sides."
+
+@tpl.kids.shapes.t5 core.template
+    for=kids.shapes.shape.sides
+    status=missing
+    mode=exists
+    text="I don't know whether {name:a} has {sides} sides."
+
+@tpl.kids.shapes.t6 core.template
+    for=kids.shapes.shape.corners
+    text="{name:a:cap} has {value} corners."
+
+@tpl.kids.shapes.t7 core.template
+    for=kids.shapes.shape.corners
+    status=missing
+    text="I don't know how many corners {name:a} has yet. You can teach me: A {name} has 4 corners."
+
+@tpl.kids.shapes.t8 core.template
+    for=kids.shapes.shape.corners
+    status=conflicting
+    text="I have conflicting information about the corners of {name:a}: {alternatives:list}."
+
+@tpl.kids.shapes.t9 core.template
+    for=kids.shapes.shape.corners
+    mode=exists
+    text="Yes, {name:a} has {corners} corners."
+
+@tpl.kids.shapes.t10 core.template
+    for=kids.shapes.shape.corners
+    status=missing
+    mode=exists
+    text="I don't know whether {name:a} has {corners} corners."
+
+@tpl.kids.shapes.t11 core.template
+    for=kids.shapes.shape.name
+    mode=list
+    text="These shapes have {sides} sides: {values:list}."
+
+@tpl.kids.shapes.t12 core.template
+    for=kids.shapes.shape.name
+    mode=list
+    text="These shapes have {corners} corners: {values:list}."
+
+@tpl.kids.shapes.t13 core.template
+    for=kids.shapes.shape.name
+    status=missing
+    mode=list
+    text="I don't know any shape with {sides} sides."
+
+@tpl.kids.shapes.t14 core.template
+    for=kids.shapes.shape.name
+    status=missing
+    mode=list
+    text="I don't know any shape with {corners} corners."
+
+@tpl.kids.shapes.t15 core.template
+    for=op.kids.shapes.describeShape
+    text="{name:a:cap} is {value}"
+
+@tpl.kids.shapes.t16 core.template
+    for=kids.shapes.shape.summary
+    status=missing
+    text="I don't know that shape yet. You can teach me: A {name} has 4 sides."
+
+@tpl.kids.shapes.t17 core.template
+    for=op.kids.shapes.holdsYes
+    text="Yes, {shape:a} is {kind:a}."
+
+@tpl.kids.shapes.t18 core.template
+    for=op.kids.shapes.holdsNo
+    text="No, {shape:a} is not {kind:a}. {note}"
+
+@tpl.kids.shapes.t19 core.template
+    for=op.kids.shapes.holdsNo
+    text="No, {shape:a} is not {kind:a}."
+
+@tpl.kids.shapes.t20 core.template
+    for=kids.shapes.family.holds
+    status=missing
+    text="I don't know whether {shape:a} is {kind:a}."
+
+@tpl.kids.shapes.t21 core.template
+    for=kids.shapes.family.holds
+    status=conflicting
+    text="I have conflicting information about {shape:a} and {kind:a}."
+
+@tpl.kids.shapes.t22 core.template
+    for=kids.shapes.thing.shape
+    text="{name:a:cap} is {value:a}."
+
+@tpl.kids.shapes.t23 core.template
+    for=kids.shapes.thing.shape
+    status=missing
+    text="I don't know which shape {name:a} looks like. You can teach me: {name:a:cap} is a circle."
+
+@tpl.kids.shapes.t24 core.template
+    for=kids.shapes.thing.name
+    mode=list
+    text="Things shaped like {shape:a}: {values:list}."
+
+@tpl.kids.shapes.t25 core.template
+    for=kids.shapes.thing.name
+    mode=list
+    text="{color:cap} things I know: {values:list}."
+
+@tpl.kids.shapes.t26 core.template
+    for=kids.shapes.thing.name
+    status=missing
+    mode=list
+    text="I don't know anything shaped like {shape:a}."
+
+@tpl.kids.shapes.t27 core.template
+    for=kids.shapes.thing.name
+    status=missing
+    mode=list
+    text="I don't know anything that is {color}."
+
+@tpl.kids.shapes.t28 core.template
+    for=op.kids.shapes.colorOf
+    text="{note:cap} is usually {values:list}."
+
+@tpl.kids.shapes.t29 core.template
+    for=kids.shapes.thing.color
+    status=missing
+    text="I don't know what color {name:a} is. You can teach me: {name:a:cap} is red."
+
+@tpl.kids.shapes.t30 core.template
+    for=op.kids.shapes.colorYes
+    text="Yes, {note} is usually {is_color}."
+
+@tpl.kids.shapes.t31 core.template
+    for=op.kids.shapes.colorNo
+    text="No, {note} is not {is_color}. It is usually {value}."
+
+@tpl.kids.shapes.t32 core.template
+    for=kids.shapes.thing.is_color
+    status=missing
+    text="I don't know what color {name:a} is, so I can't say whether it is {is_color}."
+
+@tpl.kids.shapes.t33 core.template
+    for=op.kids.shapes.kindYes
+    text="Yes, {name} is a {is_kind} color."
+
+@tpl.kids.shapes.t34 core.template
+    for=op.kids.shapes.kindNo
+    text="No, {name} is not a {is_kind} color. It is {value:a} color."
+
+@tpl.kids.shapes.t35 core.template
+    for=kids.shapes.color.is_kind
+    status=missing
+    text="I don't know whether {name} is a {is_kind} color."
+
+@tpl.kids.shapes.t36 core.template
+    for=kids.shapes.color.is_kind
+    status=conflicting
+    text="I have conflicting information about the kind of {name}: {alternatives:list}."
+
+@tpl.kids.shapes.t37 core.template
+    for=kids.shapes.color.kind
+    text="{name:cap} is {value:a} color."
+
+@tpl.kids.shapes.t38 core.template
+    for=kids.shapes.color.kind
+    status=missing
+    text="I don't know what kind of color {name} is."
+
+@tpl.kids.shapes.t39 core.template
+    for=kids.shapes.color.name
+    mode=list
+    text="The {kind} colors are {values:list}."
+
+@tpl.kids.shapes.t40 core.template
+    for=kids.shapes.color.name
+    status=missing
+    mode=list
+    text="I don't know any {kind} colors."
+
+@tpl.kids.shapes.t41 core.template
+    for=kids.shapes.color.name
+    mode=count
+    text="There are {value} {kind} colors."
+
+@tpl.kids.shapes.t42 core.template
+    for=kids.shapes.color.name
+    status=missing
+    mode=count
+    text="I don't know any {kind} colors."
+
+@tpl.kids.shapes.t43 core.template
+    for=kids.shapes.mix.result
+    text="{first:cap} and {second} make {value}."
+
+@tpl.kids.shapes.t44 core.template
+    for=kids.shapes.mix.result
+    status=missing
+    text="I don't know what {first} and {second} make yet. You can teach me: {first:cap} and {second} make brown."
+
+@tpl.kids.shapes.t45 core.template
+    for=kids.shapes.mix.result
+    status=conflicting
+    text="I have conflicting information about {first} and {second}: {alternatives:list}."
+
+@tpl.kids.shapes.t46 core.template
+    for=kids.shapes.mix.recipe
+    text="{result:cap} is made by mixing {value}."
+
+@tpl.kids.shapes.t47 core.template
+    for=kids.shapes.mix.recipe
+    status=missing
+    text="I don't know how to make {result}. You can teach me: Red and yellow make {result}."
+
+@tpl.kids.shapes.t48 core.template
+    for=ack.kids.shapes.shape
+    text="OK, {name:a} has {sides} sides."
+
+@tpl.kids.shapes.t49 core.template
+    for=ack.kids.shapes.shape
+    text="OK, {name:a} has {corners} corners."
+
+@tpl.kids.shapes.t50 core.template
+    for=ack.kids.shapes.thing
+    text="OK, {name:a} is {color}."
+
+@tpl.kids.shapes.t51 core.template
+    for=ack.kids.shapes.thing
+    text="OK, {name:a} looks like {shape:a}."
+
+@tpl.kids.shapes.t52 core.template
+    for=ack.kids.shapes.mix
+    text="OK, {first} and {second} make {result}."
+
+@tpl.kids.shapes.t53 core.template
+    for=ack.kids.shapes.color
+    text="OK, {name} is a {kind} color."
+
+@tpl.kids.shapes.t54 core.template
+    for=ack.kids.shapes.family
+    text="OK, I will remember that about {shape:plural}."
