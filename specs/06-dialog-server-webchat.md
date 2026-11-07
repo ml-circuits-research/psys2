@@ -50,3 +50,16 @@ A static page that runs C2 entirely in the browser, with no server: the same `sr
 - Microphone button: dictation with the Web Speech recognition API in the selected language; the recognized text is sent as a message.
 - Speaker toggle: when on, every answer is read aloud with the speech-synthesis API in the selected language.
 - Missing browser APIs disable the corresponding control with a tooltip; nothing else depends on them.
+
+## Formalizer strategies (one interface)
+The rule formalizer (spec 03) and the encoder formalizer (vision §5, ModernBERT + per-world LoRA) implement one interface, so everything after formalization (interpreter, operations, tools, effects, rendering) is identical whichever formalizer produced the wires; only the quality of the SOP Lang differs.
+
+```js
+// src/formalizer/strategy.mjs
+{ id: 'rules' | 'encoder', available(): boolean | Promise<boolean>, supports(world): boolean,
+  formalize(text, { worlds, session, source }) -> same result shape as spec 03 }
+```
+- `createRulesFormalizer()` — always available; supports every world that has `patterns.sop`.
+- `createEncoderFormalizer({ endpoint })` — talks to an inference worker (vision §13); until one exists it reports `available() === false`.
+- Selection: the session setting `formalizer` (`'rules'` default, or `'encoder'`) is a preference. For each world, the preferred strategy is used if it is available and `supports(world)`; otherwise the rule formalizer is used. The trace records, per segment, which strategy produced the wires.
+- The webchat settings panel exposes the choice; the server accepts `{ formalizer }` when creating a session.
