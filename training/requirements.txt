@@ -1,0 +1,9 @@
+# Pinned at first install on the training host; update deliberately and record the change.
+torch>=2.5
+transformers>=4.48   # ModernBERT support
+peft>=0.14           # LoRA adapters
+datasets>=3.2
+accelerate>=1.2
+safetensors>=0.4
+numpy>=1.26
+scikit-learn>=1.5
