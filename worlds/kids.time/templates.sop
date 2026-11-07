@@ -1,0 +1,116 @@
+@tpl.kids.time.shift core.template
+    for=kids.time.shift.result
+    text="{note} {value:cap}."
+
+@tpl.kids.time.shift.missing core.template
+    for=kids.time.shift.result
+    status=missing
+    text="{note}"
+
+@tpl.kids.time.shift.unsupported core.template
+    for=kids.time.shift.result
+    status=unsupported
+    text="Sorry, I can't do that. {note}"
+
+@tpl.kids.time.gap core.template
+    for=kids.time.gap.count
+    text="{note} {value} {unit:plural}."
+
+@tpl.kids.time.gap.missing core.template
+    for=kids.time.gap.count
+    status=missing
+    text="{note}"
+
+@tpl.kids.time.hoursgap core.template
+    for=kids.time.hoursgap.count
+    text="It is {value} {unit:plural} from {from} o'clock to {to} o'clock."
+
+@tpl.kids.time.length core.template
+    for=kids.time.length.count
+    text="There are {value} {part:plural} in {note}."
+
+@tpl.kids.time.length.ambiguous core.template
+    for=kids.time.length.count
+    status=ambiguous
+    text="It depends on the month: {alternatives:list} days."
+
+@tpl.kids.time.length.missing core.template
+    for=kids.time.length.count
+    status=missing
+    text="I don't know how many {part:plural} are in {note}."
+
+@tpl.kids.time.monthdays.feb core.template
+    for=kids.time.monthinfo.days
+    text="{note}"
+
+@tpl.kids.time.monthdays core.template
+    for=kids.time.monthinfo.days
+    text="There are {value} days in {name:cap}."
+
+@tpl.kids.time.season core.template
+    for=kids.time.monthinfo.season
+    text="{name:cap} is in {value}."
+
+@tpl.kids.time.season.missing core.template
+    for=kids.time.monthinfo.season
+    status=missing
+    text="I don't know which season {name} is in."
+
+@tpl.kids.time.monthlist.season core.template
+    for=kids.time.monthinfo.name
+    mode=list
+    text="The {season} months are {values:list:cap}."
+
+@tpl.kids.time.monthlist core.template
+    for=kids.time.monthinfo.name
+    mode=list
+    text="The months of the year are {values:list:cap}."
+
+@tpl.kids.time.daylist.kind core.template
+    for=kids.time.dayinfo.name
+    mode=list
+    text="The {kind} days are {values:list:cap}."
+
+@tpl.kids.time.daylist core.template
+    for=kids.time.dayinfo.name
+    mode=list
+    text="The days of the week are {values:list:cap}."
+
+@tpl.kids.time.seasonlist core.template
+    for=kids.time.seasoninfo.name
+    mode=list
+    text="The seasons are {values:list:cap}."
+
+@tpl.kids.time.clock core.template
+    for=kids.time.clock.result
+    text="It {note} {value}."
+
+@tpl.kids.time.clock.missing core.template
+    for=kids.time.clock.result
+    status=missing
+    text="{note}"
+
+@tpl.kids.time.clock.unsupported core.template
+    for=kids.time.clock.result
+    status=unsupported
+    text="Sorry, I can't do that. {note}"
+
+@tpl.kids.time.reading core.template
+    for=kids.time.reading.time
+    text="It is {value}."
+
+@tpl.kids.time.ack.today core.template
+    for=ack.kids.time.today
+    text="OK, today is {day:cap}."
+
+@tpl.kids.time.ack.thismonth core.template
+    for=ack.kids.time.thismonth
+    text="OK, this month is {month:cap}."
+
+@tpl.kids.time.ack.clockset core.template
+    for=ack.kids.time.clockset
+    text="OK, it is {hour} o'clock."
+
+@tpl.kids.time.seasonshift core.template
+    for=kids.time.seasonshift.result
+    text="{note} {value}."

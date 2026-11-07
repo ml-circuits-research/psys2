@@ -37,6 +37,7 @@ export class Renderer {
 
   /** Display name of an entity or id. */
   nameOf(memory, id) {
+    if (id === 'e.user') return 'you';
     const w = memory.get(id);
     if (!w) return words(id);
     const n = w.entries.find((e) => e.key.endsWith('.name') || e.key === 'name');
@@ -94,6 +95,9 @@ export class Renderer {
         case 'cap': return x.charAt(0).toUpperCase() + x.slice(1);
         case 'a': return (/^[aeiou]/i.test(x) ? 'an ' : 'a ') + x;
         case 'number': return formatNumber(x);
+        // verb agreement with a rendered subject: "you have", "Tom has", "you are", "Tom is"
+        case 'has': return x.toLowerCase() === 'you' ? 'have' : 'has';
+        case 'is': return x.toLowerCase() === 'you' ? 'are' : 'is';
         default: return x;
       }
     };

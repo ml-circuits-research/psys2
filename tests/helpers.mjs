@@ -8,8 +8,14 @@ import { loadWorlds } from '../src/worlds/index.mjs';
 export const FIXTURES = fileURLToPath(new URL('./fixtures/worlds', import.meta.url));
 
 /** Engine over the real worlds plus the test-only fixture worlds. */
-export const fixtureEngine = (extra = {}) =>
-  createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT, FIXTURES] }), ...extra });
+export const fixtureEngine = (extra = {}) => {
+  // Only the platform worlds plus the fixtures: the demo worlds (kids.arith, kids.shop, ...) overlap with
+  // test.counting on purpose and have their own tests (tests/kids-worlds.test.mjs, `test-world`).
+  const loader = createFsLoader({ roots: [DEFAULT_ROOT, FIXTURES] });
+  const listWorlds = loader.listWorlds.bind(loader);
+  loader.listWorlds = async () => (await listWorlds()).filter((id) => id === 'core' || id === 'kids.common' || id.startsWith('test.'));
+  return createEngine({ loader, ...extra });
+};
 
 /** `data:` URL of an ES module, so inline worlds can have operations without touching disk. */
 export const moduleUrl = (src) => 'data:text/javascript;base64,' + Buffer.from(src).toString('base64');

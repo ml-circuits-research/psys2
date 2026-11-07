@@ -1,0 +1,777 @@
+@pat.kids.time.today core.pattern
+    match="[today|it|this_day] [is|was]? {d:lex.kids.time.days} [today|now]?"
+    emit="@{_} kids.time.today day={d}"
+    kind=statement
+    priority=10
+    example="Today is Friday."
+
+@pat.kids.time.today.b core.pattern
+    match="today it is {d:lex.kids.time.days}"
+    emit="@{_} kids.time.today day={d}"
+    kind=statement
+    priority=10
+    example="Today it is Monday."
+
+@pat.kids.time.today.c core.pattern
+    match="we are on [a|an]? {d:lex.kids.time.days}"
+    emit="@{_} kids.time.today day={d}"
+    kind=statement
+    priority=10
+    example="We are on Tuesday."
+
+@pat.kids.time.month.now core.pattern
+    match="[this_month|it|now|the_month] is {m:lex.kids.time.months}"
+    emit="@{_} kids.time.thismonth month={m}"
+    kind=statement
+    priority=10
+    example="This month is May."
+
+@pat.kids.time.month.now.b core.pattern
+    match="we are in {m:lex.kids.time.months}"
+    emit="@{_} kids.time.thismonth month={m}"
+    kind=statement
+    priority=10
+    example="We are in March."
+
+@pat.kids.time.clockset core.pattern
+    match="[it|the_time] is {h:number} o'clock [now]?"
+    emit="@{_} kids.time.clockset hour={h}"
+    kind=statement
+    priority=10
+    example="It is 3 o'clock."
+
+@pat.kids.time.clockset.b core.pattern
+    match="the clock [shows|says|reads] {h:number} o'clock"
+    emit="@{_} kids.time.clockset hour={h}"
+    kind=statement
+    priority=10
+    example="The clock says 4 o'clock."
+
+@pat.kids.time.q.day.after core.pattern
+    match="what day [comes|is|follows|is_it|will_it_be]? after {d:lex.kids.time.days}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from={d} where.by=1"
+    kind=question
+    priority=10
+    example="What day comes after Monday?"
+
+@pat.kids.time.q.day.before core.pattern
+    match="what day [comes|is|was|is_it]? before {d:lex.kids.time.days}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from={d} where.by=-1"
+    kind=question
+    priority=10
+    example="What day comes before Monday?"
+
+@pat.kids.time.q.day.after.b core.pattern
+    match="which day [comes|is|follows]? after {d:lex.kids.time.days}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from={d} where.by=1"
+    kind=question
+    priority=10
+    example="Which day is after Sunday?"
+
+@pat.kids.time.q.day.before.b core.pattern
+    match="which day [comes|is|was]? before {d:lex.kids.time.days}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from={d} where.by=-1"
+    kind=question
+    priority=10
+    example="Which day is before Monday?"
+
+@pat.kids.time.q.day.after.c core.pattern
+    match="the day after {d:lex.kids.time.days}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from={d} where.by=1"
+    kind=question
+    priority=10
+    example="The day after Monday?"
+
+@pat.kids.time.q.day.after.d core.pattern
+    match="what is the day after {d:lex.kids.time.days}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from={d} where.by=1"
+    kind=question
+    priority=10
+    example="What is the day after Wednesday?"
+
+@pat.kids.time.q.day.before.d core.pattern
+    match="what is the day before {d:lex.kids.time.days}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from={d} where.by=-1"
+    kind=question
+    priority=10
+    example="What is the day before Wednesday?"
+
+@pat.kids.time.q.day.n.after core.pattern
+    match="what day [is|comes|will_it_be]? {k:number} [day|days] after {d:lex.kids.time.days}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from={d} where.by={k}"
+    kind=question
+    priority=10
+    example="What day is 3 days after Friday?"
+
+@pat.kids.time.q.day.n.before core.pattern
+    match="what day [is|comes|was]? {k:number} [day|days] before {d:lex.kids.time.days}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from={d} where.by=-{k}"
+    kind=question
+    priority=10
+    example="What day is 2 days before Monday?"
+
+@pat.kids.time.q.day.tomorrow.if core.pattern
+    match="what day is [it]? tomorrow [if|when] today is {d:lex.kids.time.days}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from={d} where.by=1"
+    kind=question
+    priority=11
+    example="What day is it tomorrow if today is Friday?"
+
+@pat.kids.time.q.day.tomorrow.if.b core.pattern
+    match="what day will it be tomorrow [if|when] today is {d:lex.kids.time.days}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from={d} where.by=1"
+    kind=question
+    priority=11
+    example="What day will it be tomorrow if today is Friday?"
+
+@pat.kids.time.q.day.yesterday.if core.pattern
+    match="what day [was|is]? [it]? yesterday [if|when] today is {d:lex.kids.time.days}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from={d} where.by=-1"
+    kind=question
+    priority=11
+    example="What day was yesterday if today is Friday?"
+
+@pat.kids.time.q.day.if.tomorrow core.pattern
+    match="[if|when] today is {d:lex.kids.time.days} what day [is|will_it_be] [it]? tomorrow"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from={d} where.by=1"
+    kind=question
+    priority=11
+    example="If today is Friday, what day is tomorrow?"
+
+@pat.kids.time.q.day.if.yesterday core.pattern
+    match="[if|when] today is {d:lex.kids.time.days} what day [was|is] [it]? yesterday"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from={d} where.by=-1"
+    kind=question
+    priority=11
+    example="If today is Friday, what day was yesterday?"
+
+@pat.kids.time.q.day.tomorrow core.pattern
+    match="what day [is|will_it_be|is_it] [it]? tomorrow"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from=today where.by=1"
+    kind=question
+    priority=10
+    example="What day is tomorrow?"
+
+@pat.kids.time.q.day.yesterday core.pattern
+    match="what day [was|is|was_it] [it]? yesterday"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from=today where.by=-1"
+    kind=question
+    priority=10
+    example="What day was yesterday?"
+
+@pat.kids.time.q.day.today core.pattern
+    match="what day is [it]? today"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from=today where.by=0"
+    kind=question
+    priority=10
+    example="What day is it today?"
+
+@pat.kids.time.q.day.today.b core.pattern
+    match="what is today"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from=today where.by=0"
+    kind=question
+    priority=10
+    example="What is today?"
+
+@pat.kids.time.q.day.aftertomorrow core.pattern
+    match="what day [is|will_it_be] [it]? the_day_after_tomorrow"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from=today where.by=2"
+    kind=question
+    priority=10
+    example="What day is the day after tomorrow?"
+
+@pat.kids.time.q.day.beforeyesterday core.pattern
+    match="what day [was|is] [it]? the_day_before_yesterday"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from=today where.by=-2"
+    kind=question
+    priority=10
+    example="What day was the day before yesterday?"
+
+@pat.kids.time.q.day.in core.pattern
+    match="what day [is|will_it_be] [it]? in {k:number} [day|days]"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from=today where.by={k}"
+    kind=question
+    priority=10
+    example="What day will it be in 3 days?"
+
+@pat.kids.time.q.day.ago core.pattern
+    match="what day was [it]? {k:number} [day|days] ago"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from=today where.by=-{k}"
+    kind=question
+    priority=10
+    example="What day was it 2 days ago?"
+
+@pat.kids.time.q.month.after core.pattern
+    match="what month [comes|is|follows|is_it|will_it_be]? after {m:lex.kids.time.months}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=month where.from={m} where.by=1"
+    kind=question
+    priority=10
+    example="What month comes after May?"
+
+@pat.kids.time.q.month.before core.pattern
+    match="what month [comes|is|was|is_it]? before {m:lex.kids.time.months}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=month where.from={m} where.by=-1"
+    kind=question
+    priority=10
+    example="What month comes before May?"
+
+@pat.kids.time.q.month.after.b core.pattern
+    match="which month [comes|is|follows]? after {m:lex.kids.time.months}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=month where.from={m} where.by=1"
+    kind=question
+    priority=10
+    example="Which month comes after June?"
+
+@pat.kids.time.q.month.before.b core.pattern
+    match="which month [comes|is|was]? before {m:lex.kids.time.months}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=month where.from={m} where.by=-1"
+    kind=question
+    priority=10
+    example="Which month comes before June?"
+
+@pat.kids.time.q.month.after.c core.pattern
+    match="what is the month [after|following] {m:lex.kids.time.months}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=month where.from={m} where.by=1"
+    kind=question
+    priority=10
+    example="What is the month after March?"
+
+@pat.kids.time.q.month.before.c core.pattern
+    match="what is the month before {m:lex.kids.time.months}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=month where.from={m} where.by=-1"
+    kind=question
+    priority=10
+    example="What is the month before March?"
+
+@pat.kids.time.q.month.n.after core.pattern
+    match="what month [is|comes|will_it_be]? {k:number} [month|months] after {m:lex.kids.time.months}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=month where.from={m} where.by={k}"
+    kind=question
+    priority=10
+    example="What month is 3 months after May?"
+
+@pat.kids.time.q.month.n.before core.pattern
+    match="what month [is|comes|was]? {k:number} [month|months] before {m:lex.kids.time.months}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=month where.from={m} where.by=-{k}"
+    kind=question
+    priority=10
+    example="What month is 2 months before May?"
+
+@pat.kids.time.q.month.next.if core.pattern
+    match="what month is [it]? next_month [if|when] [it_is|this_month_is|now_is] {m:lex.kids.time.months}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=month where.from={m} where.by=1"
+    kind=question
+    priority=11
+    example="What month is next month if this month is May?"
+
+@pat.kids.time.q.month.next core.pattern
+    match="what month is [it]? next_month"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=month where.from=this_month where.by=1"
+    kind=question
+    priority=10
+    example="What month is next month?"
+
+@pat.kids.time.q.month.last core.pattern
+    match="what month was [it]? last_month"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=month where.from=this_month where.by=-1"
+    kind=question
+    priority=10
+    example="What month was last month?"
+
+@pat.kids.time.q.month.this core.pattern
+    match="what month is it [now]?"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=month where.from=this_month where.by=0"
+    kind=question
+    priority=10
+    example="What month is it?"
+
+@pat.kids.time.q.season.of core.pattern
+    match="[which|what] season [is|comes|does]? {m:lex.kids.time.months} [in|belong_to|fall_in]?"
+    emit="@{_} core.question type=kids.time.monthinfo seek=season where.name={m}"
+    kind=question
+    priority=10
+    example="Which season is July in?"
+
+@pat.kids.time.q.season.of.b core.pattern
+    match="in [which|what] season is {m:lex.kids.time.months}"
+    emit="@{_} core.question type=kids.time.monthinfo seek=season where.name={m}"
+    kind=question
+    priority=10
+    example="In which season is July?"
+
+@pat.kids.time.q.season.of.c core.pattern
+    match="[which|what] season is it in {m:lex.kids.time.months}"
+    emit="@{_} core.question type=kids.time.monthinfo seek=season where.name={m}"
+    kind=question
+    priority=10
+    example="What season is it in December?"
+
+@pat.kids.time.q.season.after core.pattern
+    match="[which|what] season [comes|is|follows]? after {s:lex.kids.time.seasons}"
+    emit="@{_} core.question type=kids.time.seasonshift seek=result where.unit=season where.from={s} where.by=1"
+    kind=question
+    priority=10
+    example="Which season comes after winter?"
+
+@pat.kids.time.q.season.before core.pattern
+    match="[which|what] season [comes|is|was]? before {s:lex.kids.time.seasons}"
+    emit="@{_} core.question type=kids.time.seasonshift seek=result where.unit=season where.from={s} where.by=-1"
+    kind=question
+    priority=10
+    example="What season comes before summer?"
+
+@pat.kids.time.q.season.months core.pattern
+    match="[which|what] months are [in|part_of|the]? {s:lex.kids.time.seasons} [months]?"
+    emit="@{_} core.question type=kids.time.monthinfo seek=name mode=list where.season={s}"
+    kind=question
+    priority=10
+    example="Which months are in summer?"
+
+@pat.kids.time.q.season.months.b core.pattern
+    match="[which|what] months [belong_to|are_in|make_up] {s:lex.kids.time.seasons}"
+    emit="@{_} core.question type=kids.time.monthinfo seek=name mode=list where.season={s}"
+    kind=question
+    priority=10
+    example="Which months belong to winter?"
+
+@pat.kids.time.q.season.months.c core.pattern
+    match="name the months of {s:lex.kids.time.seasons}"
+    emit="@{_} core.question type=kids.time.monthinfo seek=name mode=list where.season={s}"
+    kind=question
+    priority=10
+    example="Name the months of spring."
+
+@pat.kids.time.q.season.after.c core.pattern
+    match="what is the season [after|following] {s:lex.kids.time.seasons}"
+    emit="@{_} core.question type=kids.time.seasonshift seek=result where.unit=season where.from={s} where.by=1"
+    kind=question
+    priority=10
+    example="What is the season after summer?"
+
+@pat.kids.time.q.season.before.c core.pattern
+    match="what is the season before {s:lex.kids.time.seasons}"
+    emit="@{_} core.question type=kids.time.seasonshift seek=result where.unit=season where.from={s} where.by=-1"
+    kind=question
+    priority=10
+    example="What is the season before summer?"
+
+@pat.kids.time.q.comes.day.after core.pattern
+    match="what comes after {d:lex.kids.time.days}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from={d} where.by=1"
+    kind=question
+    priority=10
+    example="What comes after Tuesday?"
+
+@pat.kids.time.q.comes.day.before core.pattern
+    match="what comes before {d:lex.kids.time.days}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from={d} where.by=-1"
+    kind=question
+    priority=10
+    example="What comes before Tuesday?"
+
+@pat.kids.time.q.comes.month.after core.pattern
+    match="what comes after {m:lex.kids.time.months}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=month where.from={m} where.by=1"
+    kind=question
+    priority=10
+    example="What comes after August?"
+
+@pat.kids.time.q.comes.month.before core.pattern
+    match="what comes before {m:lex.kids.time.months}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=month where.from={m} where.by=-1"
+    kind=question
+    priority=10
+    example="What comes before August?"
+
+@pat.kids.time.q.comes.season.after core.pattern
+    match="what comes after {s:lex.kids.time.seasons}"
+    emit="@{_} core.question type=kids.time.seasonshift seek=result where.unit=season where.from={s} where.by=1"
+    kind=question
+    priority=10
+    example="What comes after autumn?"
+
+@pat.kids.time.q.comes.season.before core.pattern
+    match="what comes before {s:lex.kids.time.seasons}"
+    emit="@{_} core.question type=kids.time.seasonshift seek=result where.unit=season where.from={s} where.by=-1"
+    kind=question
+    priority=10
+    example="What comes before autumn?"
+
+@pat.kids.time.q.list.days core.pattern
+    match="[what|which] are the days of the week"
+    emit="@{_} core.question type=kids.time.dayinfo seek=name mode=list"
+    kind=question
+    priority=10
+    example="What are the days of the week?"
+
+@pat.kids.time.q.list.weekend core.pattern
+    match="[what|which] days are [the]? [weekend|weekend_days|in_the_weekend]"
+    emit="@{_} core.question type=kids.time.dayinfo seek=name mode=list where.kind=weekend"
+    kind=question
+    priority=10
+    example="Which days are the weekend?"
+
+@pat.kids.time.q.list.weekend.b core.pattern
+    match="[what|which] are the weekend days"
+    emit="@{_} core.question type=kids.time.dayinfo seek=name mode=list where.kind=weekend"
+    kind=question
+    priority=10
+    example="What are the weekend days?"
+
+@pat.kids.time.q.list.school core.pattern
+    match="[what|which] are the school days"
+    emit="@{_} core.question type=kids.time.dayinfo seek=name mode=list where.kind=school"
+    kind=question
+    priority=10
+    example="What are the school days?"
+
+@pat.kids.time.q.list.months core.pattern
+    match="[what|which] are the months of the year"
+    emit="@{_} core.question type=kids.time.monthinfo seek=name mode=list"
+    kind=question
+    priority=10
+    example="What are the months of the year?"
+
+@pat.kids.time.q.list.seasons core.pattern
+    match="[what|which] are the seasons [of_the_year]?"
+    emit="@{_} core.question type=kids.time.seasoninfo seek=name mode=list"
+    kind=question
+    priority=10
+    example="What are the seasons?"
+
+@pat.kids.time.q.len.are core.pattern
+    match="how_many {part:lex.kids.time.parts} [are|is]? [there]? in [a|an|one|the]? {whole:lex.kids.time.wholes}"
+    emit="@{_} core.question type=kids.time.length seek=count where.whole={whole} where.part={part}"
+    kind=question
+    priority=10
+    example="How many days are in a week?"
+
+@pat.kids.time.q.len.have core.pattern
+    match="how_many {part:lex.kids.time.parts} [does|do|has|have] [a|an|one|the]? {whole:lex.kids.time.wholes} have"
+    emit="@{_} core.question type=kids.time.length seek=count where.whole={whole} where.part={part}"
+    kind=question
+    priority=10
+    example="How many hours does a day have?"
+
+@pat.kids.time.q.len.make core.pattern
+    match="how_many {part:lex.kids.time.parts} [make_up|make] [a|an|one|the]? {whole:lex.kids.time.wholes}"
+    emit="@{_} core.question type=kids.time.length seek=count where.whole={whole} where.part={part}"
+    kind=question
+    priority=10
+    example="How many minutes make an hour?"
+
+@pat.kids.time.q.len.times core.pattern
+    match="how_many {part:lex.kids.time.parts} [are|is]? [there]? in {k:number} {whole:lex.kids.time.wholes}"
+    emit="@{_} core.question type=kids.time.length seek=count where.whole={whole} where.part={part} where.times={k}"
+    kind=question
+    priority=11
+    example="How many days are in 2 weeks?"
+
+@pat.kids.time.q.len.month core.pattern
+    match="how_many days [are|is]? [there]? in {m:lex.kids.time.months}"
+    emit="@{_} core.question type=kids.time.monthinfo seek=days where.name={m}"
+    kind=question
+    priority=10
+    example="How many days are in March?"
+
+@pat.kids.time.q.len.month.b core.pattern
+    match="how_many days [does|do|has|have] {m:lex.kids.time.months} have"
+    emit="@{_} core.question type=kids.time.monthinfo seek=days where.name={m}"
+    kind=question
+    priority=10
+    example="How many days does February have?"
+
+@pat.kids.time.q.len.month.c core.pattern
+    match="how_many days [has|have]? {m:lex.kids.time.months}"
+    emit="@{_} core.question type=kids.time.monthinfo seek=days where.name={m}"
+    kind=question
+    priority=10
+    example="How many days has April?"
+
+@pat.kids.time.q.gap.until core.pattern
+    match="how_many days [are_there|is_it|are|is]? [until|till|to|before] {to:lex.kids.time.days} [if|when] today is {from:lex.kids.time.days}"
+    emit="@{_} core.question type=kids.time.gap seek=count where.from={from} where.to={to}"
+    kind=question
+    priority=11
+    example="How many days until Friday if today is Monday?"
+
+@pat.kids.time.q.gap.from core.pattern
+    match="how_many days [are_there|is_it|are|is]? [from|between] {from:lex.kids.time.days} [to|and] {to:lex.kids.time.days}"
+    emit="@{_} core.question type=kids.time.gap seek=count where.from={from} where.to={to}"
+    kind=question
+    priority=11
+    example="How many days from Monday to Friday?"
+
+@pat.kids.time.q.gap.today core.pattern
+    match="how_many days [are_there|is_it|are|is]? [until|till|to|before] {to:lex.kids.time.days}"
+    emit="@{_} core.question type=kids.time.gap seek=count where.from=today where.to={to}"
+    kind=question
+    priority=10
+    example="How many days until Saturday?"
+
+@pat.kids.time.q.gap.if core.pattern
+    match="[if|when] today is {from:lex.kids.time.days} how_many days [are_there|is_it|are|is]? [until|till|to|before] {to:lex.kids.time.days}"
+    emit="@{_} core.question type=kids.time.gap seek=count where.from={from} where.to={to}"
+    kind=question
+    priority=11
+    example="If today is Monday, how many days until Friday?"
+
+@pat.kids.time.q.hours.gap core.pattern
+    match="how_many hours [are_there|is_it|are|is]? [from|between] {a:number} o'clock [to|and] {b:number} o'clock"
+    emit="@{_} core.question type=kids.time.hoursgap seek=count where.from={a} where.to={b}"
+    kind=question
+    priority=11
+    example="How many hours from 3 o'clock to 7 o'clock?"
+
+@pat.kids.time.q.hours.gap.b core.pattern
+    match="how_many hours [are_there|is_it|are|is]? [until|till|to] {b:number} o'clock [if|when] it_is {a:number} o'clock"
+    emit="@{_} core.question type=kids.time.hoursgap seek=count where.from={a} where.to={b}"
+    kind=question
+    priority=11
+    example="How many hours until 7 o'clock if it is 3 o'clock?"
+
+@pat.kids.time.q.clock.if.a core.pattern
+    match="if it is {h:number} o'clock what time will it be in {k:number} [hour|hours]"
+    emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.shift={k}"
+    kind=question
+    priority=11
+    example="If it is 3 o'clock, what time will it be in 2 hours?"
+
+@pat.kids.time.q.clock.after.a core.pattern
+    match="what time will it be in {k:number} [hour|hours] if it is {h:number} o'clock"
+    emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.shift={k}"
+    kind=question
+    priority=11
+    example="What time will it be in 2 hours if it is 3 o'clock?"
+
+@pat.kids.time.q.clock.from.a core.pattern
+    match="what time [is|is_it|will_it_be] {k:number} [hour|hours] after {h:number} o'clock"
+    emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.shift={k}"
+    kind=question
+    priority=11
+    example="What time is 2 hours after 3 o'clock?"
+
+@pat.kids.time.q.clock.stored.a core.pattern
+    match="what time [will_it_be|is_it_going_to_be|is_it] in {k:number} [hour|hours]"
+    emit="@{_} core.question type=kids.time.clock seek=result where.shift={k}"
+    kind=question
+    priority=10
+    example="What time will it be in 2 hours?"
+
+@pat.kids.time.q.clock.ago.if.a core.pattern
+    match="if it is {h:number} o'clock what time was it {k:number} [hour|hours] ago"
+    emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.shift=-{k}"
+    kind=question
+    priority=11
+    example="If it is 5 o'clock, what time was it 2 hours ago?"
+
+@pat.kids.time.q.clock.ago.after.a core.pattern
+    match="what time was it {k:number} [hour|hours] ago if it is {h:number} o'clock"
+    emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.shift=-{k}"
+    kind=question
+    priority=11
+    example="What time was it 2 hours ago if it is 5 o'clock?"
+
+@pat.kids.time.q.clock.before.a core.pattern
+    match="what time [is|was|is_it] {k:number} [hour|hours] before {h:number} o'clock"
+    emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.shift=-{k}"
+    kind=question
+    priority=11
+    example="What time is 2 hours before 5 o'clock?"
+
+@pat.kids.time.q.clock.ago.stored.a core.pattern
+    match="what time was it {k:number} [hour|hours] ago"
+    emit="@{_} core.question type=kids.time.clock seek=result where.shift=-{k}"
+    kind=question
+    priority=10
+    example="What time was it 2 hours ago?"
+
+@pat.kids.time.q.clock.if.b core.pattern
+    match="if it is {h:number} o'clock what time will it be in {k:number} [minute|minutes]"
+    emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.minutes={k}"
+    kind=question
+    priority=11
+    example="If it is 3 o'clock, what time will it be in 30 minutes?"
+
+@pat.kids.time.q.clock.after.b core.pattern
+    match="what time will it be in {k:number} [minute|minutes] if it is {h:number} o'clock"
+    emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.minutes={k}"
+    kind=question
+    priority=11
+    example="What time will it be in 30 minutes if it is 3 o'clock?"
+
+@pat.kids.time.q.clock.from.b core.pattern
+    match="what time [is|is_it|will_it_be] {k:number} [minute|minutes] after {h:number} o'clock"
+    emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.minutes={k}"
+    kind=question
+    priority=11
+    example="What time is 30 minutes after 3 o'clock?"
+
+@pat.kids.time.q.clock.stored.b core.pattern
+    match="what time [will_it_be|is_it_going_to_be|is_it] in {k:number} [minute|minutes]"
+    emit="@{_} core.question type=kids.time.clock seek=result where.minutes={k}"
+    kind=question
+    priority=10
+    example="What time will it be in 30 minutes?"
+
+@pat.kids.time.q.clock.ago.if.b core.pattern
+    match="if it is {h:number} o'clock what time was it {k:number} [minute|minutes] ago"
+    emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.minutes=-{k}"
+    kind=question
+    priority=11
+    example="If it is 5 o'clock, what time was it 30 minutes ago?"
+
+@pat.kids.time.q.clock.ago.after.b core.pattern
+    match="what time was it {k:number} [minute|minutes] ago if it is {h:number} o'clock"
+    emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.minutes=-{k}"
+    kind=question
+    priority=11
+    example="What time was it 30 minutes ago if it is 5 o'clock?"
+
+@pat.kids.time.q.clock.before.b core.pattern
+    match="what time [is|was|is_it] {k:number} [minute|minutes] before {h:number} o'clock"
+    emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.minutes=-{k}"
+    kind=question
+    priority=11
+    example="What time is 30 minutes before 5 o'clock?"
+
+@pat.kids.time.q.clock.ago.stored.b core.pattern
+    match="what time was it {k:number} [minute|minutes] ago"
+    emit="@{_} core.question type=kids.time.clock seek=result where.minutes=-{k}"
+    kind=question
+    priority=10
+    example="What time was it 30 minutes ago?"
+
+@pat.kids.time.q.clock.if.c core.pattern
+    match="if it is {h:number} o'clock what time will it be in 0.5 an hour"
+    emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.minutes=30"
+    kind=question
+    priority=11
+    example="If it is 3 o'clock, what time will it be in half an hour?"
+
+@pat.kids.time.q.clock.after.c core.pattern
+    match="what time will it be in 0.5 an hour if it is {h:number} o'clock"
+    emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.minutes=30"
+    kind=question
+    priority=11
+    example="What time will it be in half an hour if it is 3 o'clock?"
+
+@pat.kids.time.q.clock.from.c core.pattern
+    match="what time [is|is_it|will_it_be] 0.5 an hour after {h:number} o'clock"
+    emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.minutes=30"
+    kind=question
+    priority=11
+    example="What time is half an hour after 3 o'clock?"
+
+@pat.kids.time.q.clock.stored.c core.pattern
+    match="what time [will_it_be|is_it_going_to_be|is_it] in 0.5 an hour"
+    emit="@{_} core.question type=kids.time.clock seek=result where.minutes=30"
+    kind=question
+    priority=10
+    example="What time will it be in half an hour?"
+
+@pat.kids.time.q.clock.ago.if.c core.pattern
+    match="if it is {h:number} o'clock what time was it 0.5 an hour ago"
+    emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.minutes=-30"
+    kind=question
+    priority=11
+    example="If it is 5 o'clock, what time was it half an hour ago?"
+
+@pat.kids.time.q.clock.ago.after.c core.pattern
+    match="what time was it 0.5 an hour ago if it is {h:number} o'clock"
+    emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.minutes=-30"
+    kind=question
+    priority=11
+    example="What time was it half an hour ago if it is 5 o'clock?"
+
+@pat.kids.time.q.clock.before.c core.pattern
+    match="what time [is|was|is_it] 0.5 an hour before {h:number} o'clock"
+    emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.minutes=-30"
+    kind=question
+    priority=11
+    example="What time is half an hour before 5 o'clock?"
+
+@pat.kids.time.q.clock.ago.stored.c core.pattern
+    match="what time was it 0.5 an hour ago"
+    emit="@{_} core.question type=kids.time.clock seek=result where.minutes=-30"
+    kind=question
+    priority=10
+    example="What time was it half an hour ago?"
+
+@pat.kids.time.q.clock.if.d core.pattern
+    match="if it is {h:number} o'clock what time will it be in [a]? quarter of an hour"
+    emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.minutes=15"
+    kind=question
+    priority=11
+    example="If it is 3 o'clock, what time will it be in a quarter of an hour?"
+
+@pat.kids.time.q.clock.after.d core.pattern
+    match="what time will it be in [a]? quarter of an hour if it is {h:number} o'clock"
+    emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.minutes=15"
+    kind=question
+    priority=11
+    example="What time will it be in a quarter of an hour if it is 3 o'clock?"
+
+@pat.kids.time.q.clock.from.d core.pattern
+    match="what time [is|is_it|will_it_be] [a]? quarter of an hour after {h:number} o'clock"
+    emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.minutes=15"
+    kind=question
+    priority=11
+    example="What time is a quarter of an hour after 3 o'clock?"
+
+@pat.kids.time.q.clock.stored.d core.pattern
+    match="what time [will_it_be|is_it_going_to_be|is_it] in [a]? quarter of an hour"
+    emit="@{_} core.question type=kids.time.clock seek=result where.minutes=15"
+    kind=question
+    priority=10
+    example="What time will it be in a quarter of an hour?"
+
+@pat.kids.time.q.clock.ago.if.d core.pattern
+    match="if it is {h:number} o'clock what time was it [a]? quarter of an hour ago"
+    emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.minutes=-15"
+    kind=question
+    priority=11
+    example="If it is 5 o'clock, what time was it a quarter of an hour ago?"
+
+@pat.kids.time.q.clock.ago.after.d core.pattern
+    match="what time was it [a]? quarter of an hour ago if it is {h:number} o'clock"
+    emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.minutes=-15"
+    kind=question
+    priority=11
+    example="What time was it a quarter of an hour ago if it is 5 o'clock?"
+
+@pat.kids.time.q.clock.before.d core.pattern
+    match="what time [is|was|is_it] [a]? quarter of an hour before {h:number} o'clock"
+    emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.minutes=-15"
+    kind=question
+    priority=11
+    example="What time is a quarter of an hour before 5 o'clock?"
+
+@pat.kids.time.q.clock.ago.stored.d core.pattern
+    match="what time was it [a]? quarter of an hour ago"
+    emit="@{_} core.question type=kids.time.clock seek=result where.minutes=-15"
+    kind=question
+    priority=10
+    example="What time was it a quarter of an hour ago?"
+
+@pat.kids.time.q.time.now core.pattern
+    match="what time is it [now|right_now]?"
+    emit="@{_} core.question type=kids.time.reading seek=time"
+    kind=question
+    priority=10
+    example="What time is it?"
+
+@pat.kids.time.q.time.now.b core.pattern
+    match="what is the time [now|right_now]?"
+    emit="@{_} core.question type=kids.time.reading seek=time"
+    kind=question
+    priority=10
+    example="What is the time?"
+
+@pat.kids.time.q.time.now.c core.pattern
+    match="[do_you_know|can_you_tell_me|tell_me] [what_time_it_is|the_time]"
+    emit="@{_} core.question type=kids.time.reading seek=time"
+    kind=question
+    priority=10
+    example="Can you tell me the time?"
+

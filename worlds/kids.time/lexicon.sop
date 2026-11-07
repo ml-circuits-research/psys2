@@ -1,0 +1,48 @@
+@lex.kids.time.days core.lexicon
+    class=noun
+    doc="Days of the week"
+    word=monday
+    word=tuesday
+    word=wednesday
+    word=thursday
+    word=friday
+    word=saturday
+    word=sunday
+
+@lex.kids.time.months core.lexicon
+    class=noun
+    doc="Months of the year"
+    word=january
+    word=february
+    word=march
+    word=april
+    word=may
+    word=june
+    word=july
+    word=august
+    word=september
+    word=october
+    word=november
+    word=december
+
+@lex.kids.time.seasons core.lexicon
+    class=noun
+    doc="Seasons"
+    word=spring
+    word=summer
+    word=autumn
+    word=winter
+
+@lex.kids.time.wholes core.lexicon
+    class=noun
+    doc="Time spans that contain smaller ones"
+    word=week word=year word=day word=hour word=minute word=month word=leap_year word=weekend
+
+@lex.kids.time.parts core.lexicon
+    class=noun
+    doc="Time spans that are counted"
+    word=day word=week word=month word=hour word=minute word=second
+
+@lex.kids.time.triggers core.lexicon
+    class=trigger
+    word=tomorrow word=yesterday word=today word=o'clock word=season word=weekend word=week word=month word=year word=hour word=minute

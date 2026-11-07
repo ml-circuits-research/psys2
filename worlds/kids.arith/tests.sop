@@ -1,0 +1,182 @@
+@t.arith.n1 core.test
+    session=s1
+    input="Tom has 5 apples. Ana gives him 3 apples. How many apples does Tom have?"
+    expect="Tom has 8 apples."
+
+@t.arith.n2 core.test
+    session=s1
+    input="How many apples does Ana have?"
+    expectStatus=missing
+
+@t.arith.n3 core.test
+    session=s1
+    input="Ana has 4 apples. How many apples does Ana have now?"
+    expect="Ana has 4 apples."
+
+@t.arith.n4 core.test
+    session=s1
+    input="How many apples are there altogether?"
+    expect="There are 12 apples altogether."
+
+@t.arith.n5 core.test
+    session=s1
+    input="Who has more apples?"
+    expectStatus=unparsed
+
+@t.arith.n6 core.test
+    session=s1
+    input="Who has the most apples?"
+    expect="Tom has the most apples: 8."
+
+@t.arith.n7 core.test
+    session=s1
+    input="Who has more apples, Tom or Ana?"
+    expect="Between Tom and Ana, Tom has more apples: 8 against 4."
+
+@t.arith.n8 core.test
+    session=s1
+    input="How many more apples does Tom have than Ana?"
+    expect="Tom has 4 more apples than Ana."
+
+@t.arith.n9 core.test
+    session=s1
+    input="Does Ana have more apples than Tom?"
+    expect="No. Ana has 4 and Tom has 8."
+
+@t.arith.n10 core.test
+    session=s1
+    input="How many fewer apples does Ana have than Tom?"
+    expect="Ana has 4 fewer apples than Tom."
+
+@t.arith.n11 core.test
+    session=s1
+    input="Tom ate 2 apples. How many apples does he have?"
+    expect="Tom has 6 apples."
+
+@t.arith.n12 core.test
+    session=s1
+    input="How many apples do Tom and Ana have together?"
+    expect="Tom and Ana have 10 apples altogether."
+
+@t.arith.n13 core.test
+    input="Mia has five marbles. She lost two marbles. How many marbles does Mia have left?"
+    expect="Mia has 3 marbles."
+
+@t.arith.n14 core.test
+    input="Ben has a dozen eggs, Ana gives him two eggs. How many eggs does Ben have?"
+    expect="Ben has 14 eggs."
+
+@t.arith.n15 core.test
+    input="I have 6 stickers. I buy 4 stickers. How many stickers do I have?"
+    expect="You have 10 stickers."
+
+@t.arith.n16 core.test
+    input="Sam has 2 pencils. Sam breaks a pencil. How many pencils does Sam have?"
+    expect="Sam has 1 pencil."
+
+@t.arith.n17 core.test
+    input="Tom has 2 apples. Tom gives Ana 3 apples. How many apples does Tom have?"
+    expectStatus=conflicting
+
+@t.arith.n18 core.test
+    input="Lily has 3 cards. Lily gives 5 cards to Max. How many cards does Max have?"
+    expect="Lily only had 3 cards, so Lily cannot give away 5."
+
+@t.arith.n19 core.test
+    input="Zoe has 3 marbles. Zoe ate 4 marbles. How many marbles does Zoe have?"
+    expectStatus=conflicting
+
+@t.arith.n20 core.test
+    input="Jack has 7 coins. Jack loses 2 of his coins. Jack finds 4 coins. How many coins does Jack have?"
+    expect="Jack has 9 coins."
+
+@t.arith.n21 core.test
+    input="Emma has 4 apples and 3 pears. How many pears does Emma have?"
+    expect="Emma has 3 pears."
+
+@t.arith.n22 core.test
+    input="Dan has no sweets. Does Dan have any sweets?"
+    expect="No, Dan has no sweets."
+
+@t.arith.n23 core.test
+    input="Kate has 3 books. Does Kate have any books?"
+    expect="Yes, Kate has 3 books."
+
+@t.arith.n24 core.test
+    input="Tom gets 3 apples from Ana. How many apples does Tom have?"
+    expectStatus=missing
+
+@t.arith.n25 core.test
+    input="What is 7 plus 5?"
+    expect="7 plus 5 is 12."
+
+@t.arith.n26 core.test
+    input="How much is 3 times 4?"
+    expect="3 times 4 is 12."
+
+@t.arith.n27 core.test
+    input="12 minus 5"
+    expect="12 minus 5 is 7."
+
+@t.arith.n28 core.test
+    input="What is 20 divided by 4?"
+    expect="20 divided by 4 is 5."
+
+@t.arith.n29 core.test
+    input="What is half of 10?"
+    expect="Half of 10 is 5."
+
+@t.arith.n30 core.test
+    input="Double 6"
+    expect="Double 6 is 12."
+
+@t.arith.n31 core.test
+    input="What is 5 divided by 0?"
+    expect="Dividing by zero has no answer"
+
+@t.arith.n32 core.test
+    input="What is 0.1 plus 0.2?"
+    expect="0.1 plus 0.2 is 0.3."
+
+@t.arith.n33 core.test
+    input="What is 10 divided by 4?"
+    expect="10 divided by 4 is 2.5."
+
+@t.arith.n34 core.test
+    input="What is 10 divided by 3?"
+    expect="about 3.33"
+
+@t.arith.n35 core.test
+    input="What is twenty minus seven?"
+    expect="20 minus 7 is 13."
+
+@t.arith.n36 core.test
+    input="Half of seven"
+    expect="Half of 7 is 3.5."
+
+@t.arith.n37 core.test
+    input="Tom has 3 apples. Mia has 3 apples. Who has the most apples?"
+    expectStatus=ambiguous
+
+@t.arith.n38 core.test
+    input="Max has 3 balls. He found 2 balls. Then he gave 4 balls to Eva. How many balls does Max have?"
+    expect="Max has 1 ball."
+
+@t.arith.n39 core.test
+    input="What is 3 minus 8?"
+    expect="3 minus 8 is -5."
+
+@t.arith.n40 core.test
+    session=s2
+    input="I have 5 apples. Tom has 2 apples. Who has more apples, Tom or me?"
+    expect="Between Tom and you, you have more apples: 2 against 5."
+
+@t.arith.n41 core.test
+    session=s2
+    input="Who has more apples, Tom or Ana?"
+    expectStatus=missing
+
+@t.arith.n42 core.test
+    session=s2
+    input="How many apples do I have?"
+    expect="You have 5 apples."

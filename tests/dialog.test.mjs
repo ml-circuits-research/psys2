@@ -197,7 +197,7 @@ test('bundle loader and fs loader produce the same world set', async () => {
     bundle.worlds[id] = { files, opsUrl: (await fsl.loadOps(id)) ? new URL(`../worlds/${id}/ops.mjs`, import.meta.url).href : undefined };
   }
   const e = await (await import('../src/dialog/index.mjs')).createEngine({ loader: createBundleLoader(bundle) });
-  assert.deepEqual(e.worlds().map((w) => w.id), ['core', 'kids.common']);
+  assert.deepEqual(e.worlds().map((w) => w.id).sort(), (await fsl.listWorlds()).sort());
   assert.match((await e.createSession().send('Hello')).text, /^Hello/);
   assert.deepEqual(e.problems(), []);
   assert.equal(await createBundleLoader(bundle).readFile('nope', 'world.sop'), null);

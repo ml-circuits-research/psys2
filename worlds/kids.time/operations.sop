@@ -1,0 +1,64 @@
+@op.kids.time.monthDays core.operation
+    outputs=kids.time.monthinfo.days
+    inputs=kids.time.monthinfo.name
+    impl=monthDays
+    semantics=query
+    doc="The number of days of a month from the calendar knowledge, with a note for February."
+
+@op.kids.time.shift core.operation
+    outputs=kids.time.shift.result
+    inputs=kids.time.shift.unit
+    inputs=kids.time.shift.from
+    inputs=kids.time.shift.by
+    impl=shift
+    semantics=query
+    doc="The day, month or season some steps after or before another one, wrapping around; today and this month come from the dialog."
+
+@op.kids.time.daysBetween core.operation
+    outputs=kids.time.gap.count
+    inputs=kids.time.gap.from
+    inputs=kids.time.gap.to
+    impl=daysBetween
+    semantics=query
+    doc="How many days until a day of the week comes, counting forward."
+
+@op.kids.time.hoursBetween core.operation
+    outputs=kids.time.hoursgap.count
+    inputs=kids.time.hoursgap.from
+    inputs=kids.time.hoursgap.to
+    impl=hoursBetween
+    semantics=compute
+    doc="How many hours from one o'clock to another on a 12-hour clock."
+
+@op.kids.time.length core.operation
+    outputs=kids.time.length.count
+    inputs=kids.time.length.whole
+    inputs=kids.time.length.part
+    inputs=kids.time.length.times
+    impl=lengthOf
+    semantics=query
+    doc="How many smaller spans fit in a bigger one: a fact from the knowledge base or a product along a chain of facts."
+
+@op.kids.time.clock core.operation
+    outputs=kids.time.clock.result
+    inputs=kids.time.clock.at
+    inputs=kids.time.clock.shift
+    inputs=kids.time.clock.minutes
+    impl=clockShift
+    semantics=query
+    doc="The 12-hour clock reading some hours or minutes after or before a given hour (or the hour told in the dialog)."
+
+@op.kids.time.reading core.operation
+    outputs=kids.time.reading.time
+    impl=currentTime
+    semantics=query
+    doc="The time told in the dialog, else the real clock of the machine (the only operation that reads the real clock)."
+
+@op.kids.time.seasonshift core.operation
+    outputs=kids.time.seasonshift.result
+    inputs=kids.time.seasonshift.unit
+    inputs=kids.time.seasonshift.from
+    inputs=kids.time.seasonshift.by
+    impl=shift
+    semantics=query
+    doc="The season some steps after or before another one, wrapping around."

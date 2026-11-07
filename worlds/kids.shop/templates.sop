@@ -1,0 +1,79 @@
+@tpl.kids.shop.price core.template
+    for=kids.shop.price.cost
+    text="{note} {value} {unit:plural}."
+
+@tpl.kids.shop.price.missing core.template
+    for=kids.shop.price.cost
+    status=missing
+    text="{note}"
+
+@tpl.kids.shop.total core.template
+    for=kids.shop.total.total
+    text="{note} {value} {unit:plural}."
+
+@tpl.kids.shop.total.missing core.template
+    for=kids.shop.total.total
+    status=missing
+    text="{note}"
+
+@tpl.kids.shop.balance core.template
+    for=kids.shop.balance.amount
+    text="You have {value} {unit:plural} {note}."
+
+@tpl.kids.shop.balance.missing core.template
+    for=kids.shop.balance.amount
+    status=missing
+    text="{note}"
+
+@tpl.kids.shop.balance.conflicting core.template
+    for=kids.shop.balance.amount
+    status=conflicting
+    text="That does not add up. {note}"
+
+@tpl.kids.shop.afford core.template
+    for=kids.shop.affordability.answer
+    text="{value:cap}. {note}."
+
+@tpl.kids.shop.afford.missing core.template
+    for=kids.shop.affordability.answer
+    status=missing
+    text="{note}"
+
+@tpl.kids.shop.afford.conflicting core.template
+    for=kids.shop.affordability.answer
+    status=conflicting
+    text="That does not add up. {note}"
+
+@tpl.kids.shop.change core.template
+    for=kids.shop.change.amount
+    text="Your change from {paid} lei is {value} {unit:plural}."
+
+@tpl.kids.shop.change.missing core.template
+    for=kids.shop.change.amount
+    status=missing
+    text="{note}"
+
+@tpl.kids.shop.change.conflicting core.template
+    for=kids.shop.change.amount
+    status=conflicting
+    text="{note}"
+
+@tpl.kids.shop.ack.money core.template
+    for=ack.kids.shop.money
+    text="OK, you have {count} {unit:plural}."
+
+@tpl.kids.shop.ack.income core.template
+    for=ack.kids.shop.income
+    text="OK, you got {count} {unit:plural}."
+
+@tpl.kids.shop.ack.expense core.template
+    for=ack.kids.shop.expense
+    text="OK, you spent {count} {unit:plural}."
+
+@tpl.kids.shop.ack.purchase core.template
+    for=ack.kids.shop.purchase
+    text="OK, you bought {count} {item:plural}."
+
+@tpl.kids.shop.ack.price core.template
+    for=ack.kids.shop.price
+    text="OK, one {item} costs {cost} lei."

@@ -1,0 +1,267 @@
+@legend.kids.arith core.legend
+    namespace=kids.arith
+    version=0.1.0
+    imports=core
+    imports=kids.common
+    doc="Counting things people have, events that change the counts, totals, comparisons and bare arithmetic"
+
+@kids.arith.holding core.type
+    extends=core.state
+    doc="Someone has a number of items of one kind. A statement sets the count; later events change it."
+    example="Tom has 5 apples."
+    negative="Tom likes apples."
+
+@kids.arith.holding.owner core.key
+    value=$core.agent
+    card=one
+    ask="Who has them?"
+
+@kids.arith.holding.item core.key
+    value=atom
+    card=one
+    ask="What kind of thing is it?"
+
+@kids.arith.holding.count core.key
+    value=number
+    card=one
+    ask="How many are there?"
+    observe=true
+    compute=true
+
+@kids.arith.change core.type
+    extends=core.event
+    doc="Something happens to the number of items someone has. Events are applied in dialog order (core.seq)."
+    example="Ana gives Tom 3 apples."
+
+@kids.arith.change.who core.key
+    value=$core.agent
+    card=one
+    ask="Who is it about (who gives, gets, eats, loses, buys or breaks)?"
+
+@kids.arith.change.to core.key
+    value=$core.agent
+    card=one
+    ask="Who receives the items?"
+
+@kids.arith.change.item core.key
+    value=atom
+    card=one
+    ask="What kind of thing is it?"
+
+@kids.arith.change.count core.key
+    value=number
+    card=one
+    ask="How many items are involved?"
+
+@kids.arith.give core.type
+    extends=kids.arith.change
+    doc="One person gives some items to another person: who gives, to receives."
+    example="Ana gives Tom 3 apples."
+
+@kids.arith.receive core.type
+    extends=kids.arith.change
+    doc="Someone gets, receives or finds some items."
+    example="Tom finds 2 marbles."
+
+@kids.arith.eat core.type
+    extends=kids.arith.change
+    doc="Someone eats some items."
+    example="Tom ate 2 apples."
+
+@kids.arith.lose core.type
+    extends=kids.arith.change
+    doc="Someone loses some items."
+    example="Mia lost 3 marbles."
+
+@kids.arith.buy core.type
+    extends=kids.arith.change
+    doc="Someone buys some items (only the counts are tracked here, not the money)."
+    example="Ben buys 4 pencils."
+
+@kids.arith.break core.type
+    extends=kids.arith.change
+    doc="Someone breaks some items."
+    example="Sam broke 2 pencils."
+
+@kids.arith.total core.type
+    extends=core.state
+    doc="How many items of one kind there are altogether, over everybody or over two named people."
+    example="How many apples are there altogether?"
+
+@kids.arith.total.item core.key
+    value=atom
+    card=one
+    ask="What kind of thing is it?"
+
+@kids.arith.total.who1 core.key
+    value=$core.agent
+    card=one
+    ask="Who is the first person to count?"
+
+@kids.arith.total.who2 core.key
+    value=$core.agent
+    card=one
+    ask="Who is the second person to count?"
+
+@kids.arith.total.count core.key
+    value=number
+    card=one
+    ask="How many are there altogether?"
+    compute=true
+
+@kids.arith.leader core.type
+    extends=core.state
+    doc="Who has the most items of one kind, or who of two named people has more."
+    example="Who has more apples, Tom or Ana?"
+
+@kids.arith.leader.item core.key
+    value=atom
+    card=one
+    ask="What kind of thing is it?"
+
+@kids.arith.leader.who1 core.key
+    value=$core.agent
+    card=one
+    ask="Who is the first person to compare?"
+
+@kids.arith.leader.who2 core.key
+    value=$core.agent
+    card=one
+    ask="Who is the second person to compare?"
+
+@kids.arith.leader.winner core.key
+    value=$core.agent
+    card=one
+    ask="Who has more?"
+    compute=true
+
+@kids.arith.gap core.type
+    extends=core.state
+    doc="How many more (or fewer) items of one kind the first person has than the second."
+    example="How many more apples does Tom have than Ana?"
+
+@kids.arith.gap.item core.key
+    value=atom
+    card=one
+    ask="What kind of thing is it?"
+
+@kids.arith.gap.who1 core.key
+    value=$core.agent
+    card=one
+    ask="Who is the first person?"
+
+@kids.arith.gap.who2 core.key
+    value=$core.agent
+    card=one
+    ask="Who is the second person?"
+
+@kids.arith.gap.diff core.key
+    value=number
+    card=one
+    ask="What is the difference between the two counts?"
+    compute=true
+
+@kids.arith.verdict core.type
+    extends=core.state
+    doc="Yes or no: does the first person have more items than the second?"
+    example="Does Tom have more apples than Ana?"
+
+@kids.arith.verdict.item core.key
+    value=atom
+    card=one
+    ask="What kind of thing is it?"
+
+@kids.arith.verdict.who1 core.key
+    value=$core.agent
+    card=one
+    ask="Who is the first person?"
+
+@kids.arith.verdict.who2 core.key
+    value=$core.agent
+    card=one
+    ask="Who is the second person?"
+
+@kids.arith.verdict.answer core.key
+    value=atom
+    card=one
+    ask="Is it yes or no?"
+    compute=true
+
+@kids.arith.has core.type
+    extends=core.state
+    doc="Yes or no: does someone have any items of one kind?"
+    example="Does Tom have any apples?"
+
+@kids.arith.has.owner core.key
+    value=$core.agent
+    card=one
+    ask="Who might have them?"
+
+@kids.arith.has.item core.key
+    value=atom
+    card=one
+    ask="What kind of thing is it?"
+
+@kids.arith.has.answer core.key
+    value=atom
+    card=one
+    ask="Is it yes or no?"
+    compute=true
+
+@kids.arith.calc core.type
+    extends=core.state
+    doc="A bare calculation of two numbers: plus, minus, times, divided_by."
+    example="What is 7 plus 5?"
+
+@kids.arith.calc.op core.key
+    value=atom
+    card=one
+    ask="Which operation (plus, minus, times, divided_by)?"
+
+@kids.arith.calc.a core.key
+    value=number
+    card=one
+    ask="What is the first number?"
+
+@kids.arith.calc.b core.key
+    value=number
+    card=one
+    ask="What is the second number?"
+
+@kids.arith.calc.result core.key
+    value=number
+    card=one
+    ask="What is the result?"
+    compute=true
+
+@kids.arith.half core.type
+    extends=core.state
+    doc="Half of a number."
+    example="What is half of 10?"
+
+@kids.arith.half.n core.key
+    value=number
+    card=one
+    ask="Which number?"
+
+@kids.arith.half.result core.key
+    value=number
+    card=one
+    ask="What is half of it?"
+    compute=true
+
+@kids.arith.double core.type
+    extends=core.state
+    doc="Double a number."
+    example="What is double 6?"
+
+@kids.arith.double.n core.key
+    value=number
+    card=one
+    ask="Which number?"
+
+@kids.arith.double.result core.key
+    value=number
+    card=one
+    ask="What is double it?"
+    compute=true

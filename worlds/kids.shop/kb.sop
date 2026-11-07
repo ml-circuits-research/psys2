@@ -1,0 +1,181 @@
+@kb.shop.price.ball kids.shop.price
+    item=ball
+    cost=5
+    phrase="a ball"
+    plural="balls"
+    core.source="fixture:kids.shop/prices"
+
+@kb.shop.price.pencil kids.shop.price
+    item=pencil
+    cost=2
+    phrase="a pencil"
+    plural="pencils"
+    core.source="fixture:kids.shop/prices"
+
+@kb.shop.price.pen kids.shop.price
+    item=pen
+    cost=3
+    phrase="a pen"
+    plural="pens"
+    core.source="fixture:kids.shop/prices"
+
+@kb.shop.price.eraser kids.shop.price
+    item=eraser
+    cost=1
+    phrase="an eraser"
+    plural="erasers"
+    core.source="fixture:kids.shop/prices"
+
+@kb.shop.price.ruler kids.shop.price
+    item=ruler
+    cost=3
+    phrase="a ruler"
+    plural="rulers"
+    core.source="fixture:kids.shop/prices"
+
+@kb.shop.price.notebook kids.shop.price
+    item=notebook
+    cost=6
+    phrase="a notebook"
+    plural="notebooks"
+    core.source="fixture:kids.shop/prices"
+
+@kb.shop.price.sticker kids.shop.price
+    item=sticker
+    cost=1
+    phrase="a sticker"
+    plural="stickers"
+    core.source="fixture:kids.shop/prices"
+
+@kb.shop.price.book kids.shop.price
+    item=book
+    cost=12
+    phrase="a book"
+    plural="books"
+    core.source="fixture:kids.shop/prices"
+
+@kb.shop.price.backpack kids.shop.price
+    item=backpack
+    cost=45
+    phrase="a backpack"
+    plural="backpacks"
+    core.source="fixture:kids.shop/prices"
+
+@kb.shop.price.apple kids.shop.price
+    item=apple
+    cost=2
+    phrase="an apple"
+    plural="apples"
+    core.source="fixture:kids.shop/prices"
+
+@kb.shop.price.banana kids.shop.price
+    item=banana
+    cost=3
+    phrase="a banana"
+    plural="bananas"
+    core.source="fixture:kids.shop/prices"
+
+@kb.shop.price.orange kids.shop.price
+    item=orange
+    cost=3
+    phrase="an orange"
+    plural="oranges"
+    core.source="fixture:kids.shop/prices"
+
+@kb.shop.price.pear kids.shop.price
+    item=pear
+    cost=2
+    phrase="a pear"
+    plural="pears"
+    core.source="fixture:kids.shop/prices"
+
+@kb.shop.price.bread kids.shop.price
+    item=bread
+    cost=4
+    phrase="a loaf of bread"
+    plural="loaves of bread"
+    core.source="fixture:kids.shop/prices"
+
+@kb.shop.price.milk kids.shop.price
+    item=milk
+    cost=6
+    phrase="a bottle of milk"
+    plural="bottles of milk"
+    core.source="fixture:kids.shop/prices"
+
+@kb.shop.price.juice kids.shop.price
+    item=juice
+    cost=5
+    phrase="a bottle of juice"
+    plural="bottles of juice"
+    core.source="fixture:kids.shop/prices"
+
+@kb.shop.price.water kids.shop.price
+    item=water
+    cost=3
+    phrase="a bottle of water"
+    plural="bottles of water"
+    core.source="fixture:kids.shop/prices"
+
+@kb.shop.price.biscuit kids.shop.price
+    item=biscuit
+    cost=2
+    phrase="a biscuit"
+    plural="biscuits"
+    core.source="fixture:kids.shop/prices"
+
+@kb.shop.price.chocolate kids.shop.price
+    item=chocolate
+    cost=4
+    phrase="a chocolate bar"
+    plural="chocolate bars"
+    core.source="fixture:kids.shop/prices"
+
+@kb.shop.price.ice_cream kids.shop.price
+    item=ice_cream
+    cost=5
+    phrase="an ice cream"
+    plural="ice creams"
+    core.source="fixture:kids.shop/prices"
+
+@kb.shop.price.sandwich kids.shop.price
+    item=sandwich
+    cost=8
+    phrase="a sandwich"
+    plural="sandwiches"
+    core.source="fixture:kids.shop/prices"
+
+@kb.shop.price.toy_car kids.shop.price
+    item=toy_car
+    cost=12
+    phrase="a toy car"
+    plural="toy cars"
+    core.source="fixture:kids.shop/prices"
+
+@kb.shop.price.doll kids.shop.price
+    item=doll
+    cost=15
+    phrase="a doll"
+    plural="dolls"
+    core.source="fixture:kids.shop/prices"
+
+@kb.shop.price.kite kids.shop.price
+    item=kite
+    cost=10
+    phrase="a kite"
+    plural="kites"
+    core.source="fixture:kids.shop/prices"
+
+@kb.shop.price.puzzle kids.shop.price
+    item=puzzle
+    cost=18
+    phrase="a puzzle"
+    plural="puzzles"
+    core.source="fixture:kids.shop/prices"
+
+@kb.shop.price.balloon kids.shop.price
+    item=balloon
+    cost=1
+    phrase="a balloon"
+    plural="balloons"
+    core.source="fixture:kids.shop/prices"

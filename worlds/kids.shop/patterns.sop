@@ -1,0 +1,700 @@
+@pat.kids.shop.money core.pattern
+    match="i [only]? have [got]? {n:number} [lei|leu] [now|left|today|in_my_wallet|in_my_piggy_bank|with_me|to_spend]?"
+    emit="@{_} kids.shop.money count={n} unit=leu"
+    kind=statement
+    priority=10
+    example="I have 20 lei."
+
+@pat.kids.shop.money.start core.pattern
+    match="i [start|started|begin|began] with {n:number} [lei|leu]"
+    emit="@{_} kids.shop.money count={n} unit=leu"
+    kind=statement
+    priority=10
+    example="I start with 30 lei."
+
+@pat.kids.shop.money.wallet core.pattern
+    match="my [wallet|piggy_bank|purse|money_box] [has|had|holds|contains] {n:number} [lei|leu]"
+    emit="@{_} kids.shop.money count={n} unit=leu"
+    kind=statement
+    priority=10
+    example="My wallet has 15 lei."
+
+@pat.kids.shop.income core.pattern
+    match="i [get|got|find|found|receive|received|earn|earned|win|won|save|saved] {n:number} [more]? [lei|leu]"
+    emit="@{_} kids.shop.income count={n} unit=leu"
+    kind=statement
+    priority=10
+    example="I found 5 lei."
+
+@pat.kids.shop.income.from core.pattern
+    match="[my]? [mom|mum|dad|mother|father|grandma|grandpa|grandmother|grandfather|aunt|uncle|friend|teacher|sister|brother]? {g:agent?} [gives|gave|give] me {n:number} [more]? [lei|leu]"
+    emit="@{_} kids.shop.income count={n} unit=leu"
+    kind=statement
+    priority=10
+    example="Ana gives me 10 lei."
+
+@pat.kids.shop.expense core.pattern
+    match="i [spend|spent|lose|lost|pay|paid|give_away|gave_away] {n:number} [lei|leu]"
+    emit="@{_} kids.shop.expense count={n} unit=leu"
+    kind=statement
+    priority=10
+    example="I spent 5 lei."
+
+@pat.kids.shop.buy.a core.pattern
+    match="i [buy|bought|purchase|purchased|will_buy|am_buying|am_going_to_buy] {n1:number} {i1:lex.kids.shop.items}"
+    emit="@{_} kids.shop.purchase item={i1} count={n1}"
+    kind=statement
+    priority=12
+    example="I buy 3 pencils."
+
+@pat.kids.shop.buy.b core.pattern
+    match="i [buy|bought|purchase|purchased|will_buy|am_buying|am_going_to_buy] [a|an] {i1:lex.kids.shop.items}"
+    emit="@{_} kids.shop.purchase item={i1} count=1"
+    kind=statement
+    priority=12
+    example="I buy a ball."
+
+@pat.kids.shop.buy.c core.pattern
+    match="i [buy|bought|purchase|purchased|will_buy|am_buying|am_going_to_buy] {n1:number} {i1:lex.kids.shop.items} and {n2:number} {i2:lex.kids.shop.items}"
+    emit="@{_} kids.shop.purchase item={i1} count={n1}\n@{_1} kids.shop.purchase item={i2} count={n2}"
+    kind=statement
+    priority=12
+    example="I buy 2 balls and 3 pencils."
+
+@pat.kids.shop.buy.d core.pattern
+    match="i [buy|bought|purchase|purchased|will_buy|am_buying|am_going_to_buy] [a|an] {i1:lex.kids.shop.items} and {n2:number} {i2:lex.kids.shop.items}"
+    emit="@{_} kids.shop.purchase item={i1} count=1\n@{_1} kids.shop.purchase item={i2} count={n2}"
+    kind=statement
+    priority=12
+    example="I buy a ball and 2 pencils."
+
+@pat.kids.shop.buy.e core.pattern
+    match="i [buy|bought|purchase|purchased|will_buy|am_buying|am_going_to_buy] {n1:number} {i1:lex.kids.shop.items} and [a|an] {i2:lex.kids.shop.items}"
+    emit="@{_} kids.shop.purchase item={i1} count={n1}\n@{_1} kids.shop.purchase item={i2} count=1"
+    kind=statement
+    priority=12
+    example="I buy 3 pencils and a ball."
+
+@pat.kids.shop.buy.f core.pattern
+    match="i [buy|bought|purchase|purchased|will_buy|am_buying|am_going_to_buy] [a|an] {i1:lex.kids.shop.items} and [a|an] {i2:lex.kids.shop.items}"
+    emit="@{_} kids.shop.purchase item={i1} count=1\n@{_1} kids.shop.purchase item={i2} count=1"
+    kind=statement
+    priority=12
+    example="I buy a ball and a pencil."
+
+@pat.kids.shop.price.costs core.pattern
+    match="[a|an|the|one]? {item:noun} [costs|cost] {n:number} [lei|leu] [each|now|today]?"
+    emit="@{_} kids.shop.price item={item} cost={n}"
+    kind=statement
+    priority=10
+    example="A ball costs 7 lei."
+
+@pat.kids.shop.price.is core.pattern
+    match="[a|an|the|one]? {item:lex.kids.shop.items} [is|are] {n:number} [lei|leu] [each|now|today]?"
+    emit="@{_} kids.shop.price item={item} cost={n}"
+    kind=statement
+    priority=10
+    example="The pencil is 3 lei."
+
+@pat.kids.shop.price.of core.pattern
+    match="the [price|cost] of [a|an|the|one]? {item:noun} is {n:number} [lei|leu]"
+    emit="@{_} kids.shop.price item={item} cost={n}"
+    kind=statement
+    priority=10
+    example="The price of a kite is 9 lei."
+
+@pat.kids.shop.q.price.cost core.pattern
+    match="how_much [does|do|did|will]? [a|an|the|one]? {item:noun} cost [each|now|today]?"
+    emit="@{_} core.question type=kids.shop.price seek=cost where.item={item}"
+    kind=question
+    priority=9
+    example="How much does a ball cost?"
+
+@pat.kids.shop.q.price.is core.pattern
+    match="how_much [is|are|was] [a|an|the|one]? {item:noun} [each|now|today]?"
+    emit="@{_} core.question type=kids.shop.price seek=cost where.item={item}"
+    kind=question
+    priority=9
+    example="How much is the notebook?"
+
+@pat.kids.shop.q.price.what core.pattern
+    match="what [does|do|will]? [a|an|the|one]? {item:noun} cost"
+    emit="@{_} core.question type=kids.shop.price seek=cost where.item={item}"
+    kind=question
+    priority=9
+    example="What does a book cost?"
+
+@pat.kids.shop.q.price.of core.pattern
+    match="what_is the [price|cost] of [a|an|the|one]? {item:noun}"
+    emit="@{_} core.question type=kids.shop.price seek=cost where.item={item}"
+    kind=question
+    priority=9
+    example="What is the price of a doll?"
+
+@pat.kids.shop.q.price.much core.pattern
+    match="how_much money [does|do] [a|an|the|one]? {item:noun} cost"
+    emit="@{_} core.question type=kids.shop.price seek=cost where.item={item}"
+    kind=question
+    priority=9
+    example="How much money does a kite cost?"
+
+@pat.kids.shop.q.total.cost.a core.pattern
+    match="how_much [do|does|will|would] {n1:number} {i1:lex.kids.shop.items} cost [together|altogether|in_total]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="How much do 3 pencils cost?"
+
+@pat.kids.shop.q.total.cost.c core.pattern
+    match="how_much [do|does|will|would] {n1:number} {i1:lex.kids.shop.items} and {n2:number} {i2:lex.kids.shop.items} cost [together|altogether|in_total]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="How much do 2 balls and 3 pencils cost?"
+
+@pat.kids.shop.q.total.cost.d core.pattern
+    match="how_much [do|does|will|would] [a|an] {i1:lex.kids.shop.items} and {n2:number} {i2:lex.kids.shop.items} cost [together|altogether|in_total]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="How much do a ball and 2 pencils cost?"
+
+@pat.kids.shop.q.total.cost.e core.pattern
+    match="how_much [do|does|will|would] {n1:number} {i1:lex.kids.shop.items} and [a|an] {i2:lex.kids.shop.items} cost [together|altogether|in_total]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="How much do 3 pencils and a ball cost?"
+
+@pat.kids.shop.q.total.cost.f core.pattern
+    match="how_much [do|does|will|would] [a|an] {i1:lex.kids.shop.items} and [a|an] {i2:lex.kids.shop.items} cost [together|altogether|in_total]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="How much do a ball and a pencil cost?"
+
+@pat.kids.shop.q.total.is.a core.pattern
+    match="how_much [is|are] {n1:number} {i1:lex.kids.shop.items} [together|altogether|in_total]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="How much are 3 pencils altogether?"
+
+@pat.kids.shop.q.total.is.c core.pattern
+    match="how_much [is|are] {n1:number} {i1:lex.kids.shop.items} and {n2:number} {i2:lex.kids.shop.items} [together|altogether|in_total]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="How much are 2 balls and 3 pencils altogether?"
+
+@pat.kids.shop.q.total.is.d core.pattern
+    match="how_much [is|are] [a|an] {i1:lex.kids.shop.items} and {n2:number} {i2:lex.kids.shop.items} [together|altogether|in_total]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="How much are a ball and 2 pencils altogether?"
+
+@pat.kids.shop.q.total.is.e core.pattern
+    match="how_much [is|are] {n1:number} {i1:lex.kids.shop.items} and [a|an] {i2:lex.kids.shop.items} [together|altogether|in_total]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="How much are 3 pencils and a ball altogether?"
+
+@pat.kids.shop.q.total.is.f core.pattern
+    match="how_much [is|are] [a|an] {i1:lex.kids.shop.items} and [a|an] {i2:lex.kids.shop.items} [together|altogether|in_total]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="How much are a ball and a pencil altogether?"
+
+@pat.kids.shop.q.total.what.a core.pattern
+    match="what [do|does|will|would] {n1:number} {i1:lex.kids.shop.items} cost [together|altogether|in_total]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="What do 3 pencils cost?"
+
+@pat.kids.shop.q.total.what.c core.pattern
+    match="what [do|does|will|would] {n1:number} {i1:lex.kids.shop.items} and {n2:number} {i2:lex.kids.shop.items} cost [together|altogether|in_total]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="What do 2 balls and 3 pencils cost?"
+
+@pat.kids.shop.q.total.what.d core.pattern
+    match="what [do|does|will|would] [a|an] {i1:lex.kids.shop.items} and {n2:number} {i2:lex.kids.shop.items} cost [together|altogether|in_total]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="What do a ball and 2 pencils cost?"
+
+@pat.kids.shop.q.total.what.e core.pattern
+    match="what [do|does|will|would] {n1:number} {i1:lex.kids.shop.items} and [a|an] {i2:lex.kids.shop.items} cost [together|altogether|in_total]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="What do 3 pencils and a ball cost?"
+
+@pat.kids.shop.q.total.what.f core.pattern
+    match="what [do|does|will|would] [a|an] {i1:lex.kids.shop.items} and [a|an] {i2:lex.kids.shop.items} cost [together|altogether|in_total]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="What do a ball and a pencil cost?"
+
+@pat.kids.shop.q.total.price.a core.pattern
+    match="what_is the [price|cost|total] [of|for] {n1:number} {i1:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="What is the price of 3 pencils?"
+
+@pat.kids.shop.q.total.price.c core.pattern
+    match="what_is the [price|cost|total] [of|for] {n1:number} {i1:lex.kids.shop.items} and {n2:number} {i2:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="What is the price of 2 balls and 3 pencils?"
+
+@pat.kids.shop.q.total.price.d core.pattern
+    match="what_is the [price|cost|total] [of|for] [a|an] {i1:lex.kids.shop.items} and {n2:number} {i2:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="What is the price of a ball and 2 pencils?"
+
+@pat.kids.shop.q.total.price.e core.pattern
+    match="what_is the [price|cost|total] [of|for] {n1:number} {i1:lex.kids.shop.items} and [a|an] {i2:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="What is the price of 3 pencils and a ball?"
+
+@pat.kids.shop.q.total.price.f core.pattern
+    match="what_is the [price|cost|total] [of|for] [a|an] {i1:lex.kids.shop.items} and [a|an] {i2:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="What is the price of a ball and a pencil?"
+
+@pat.kids.shop.q.total.pay.a core.pattern
+    match="how_much [do|will|would|must|should] i [pay|need|spend] for {n1:number} {i1:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="How much will I pay for 3 pencils?"
+
+@pat.kids.shop.q.total.pay.b core.pattern
+    match="how_much [do|will|would|must|should] i [pay|need|spend] for [a|an] {i1:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="How much will I pay for a ball?"
+
+@pat.kids.shop.q.total.pay.c core.pattern
+    match="how_much [do|will|would|must|should] i [pay|need|spend] for {n1:number} {i1:lex.kids.shop.items} and {n2:number} {i2:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="How much will I pay for 2 balls and 3 pencils?"
+
+@pat.kids.shop.q.total.pay.d core.pattern
+    match="how_much [do|will|would|must|should] i [pay|need|spend] for [a|an] {i1:lex.kids.shop.items} and {n2:number} {i2:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="How much will I pay for a ball and 2 pencils?"
+
+@pat.kids.shop.q.total.pay.e core.pattern
+    match="how_much [do|will|would|must|should] i [pay|need|spend] for {n1:number} {i1:lex.kids.shop.items} and [a|an] {i2:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="How much will I pay for 3 pencils and a ball?"
+
+@pat.kids.shop.q.total.pay.f core.pattern
+    match="how_much [do|will|would|must|should] i [pay|need|spend] for [a|an] {i1:lex.kids.shop.items} and [a|an] {i2:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="How much will I pay for a ball and a pencil?"
+
+@pat.kids.shop.q.balance core.pattern
+    match="how_much money [do|will|would] i have [left|now|left_over|then|in_total]?"
+    emit="@{_} core.question type=kids.shop.balance seek=amount"
+    kind=question
+    priority=10
+    example="How much money do I have left?"
+
+@pat.kids.shop.q.balance.b core.pattern
+    match="how_much [do|will|would] i have [left|now|left_over|then]"
+    emit="@{_} core.question type=kids.shop.balance seek=amount"
+    kind=question
+    priority=10
+    example="How much do I have left?"
+
+@pat.kids.shop.q.balance.c core.pattern
+    match="how_many [lei|leu] [do|will|would] i have [left|now|left_over|then]?"
+    emit="@{_} core.question type=kids.shop.balance seek=amount"
+    kind=question
+    priority=10
+    example="How many lei do I have now?"
+
+@pat.kids.shop.q.balance.d core.pattern
+    match="how_much money [is|are] left [for_me]?"
+    emit="@{_} core.question type=kids.shop.balance seek=amount"
+    kind=question
+    priority=10
+    example="How much money is left?"
+
+@pat.kids.shop.q.balance.e core.pattern
+    match="what_is my [money|balance]"
+    emit="@{_} core.question type=kids.shop.balance seek=amount"
+    kind=question
+    priority=10
+    example="What is my money?"
+
+@pat.kids.shop.q.balance.f core.pattern
+    match="how_much is left"
+    emit="@{_} core.question type=kids.shop.balance seek=amount"
+    kind=question
+    priority=11
+    example="How much is left?"
+
+@pat.kids.shop.q.can.buy.a core.pattern
+    match="[can|could|may] i [buy|get|have|afford] {n1:number} {i1:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="Can I buy 3 pencils?"
+
+@pat.kids.shop.q.can.buy.b core.pattern
+    match="[can|could|may] i [buy|get|have|afford] [a|an] {i1:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="Can I buy a ball?"
+
+@pat.kids.shop.q.can.buy.c core.pattern
+    match="[can|could|may] i [buy|get|have|afford] {n1:number} {i1:lex.kids.shop.items} and {n2:number} {i2:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="Can I buy 2 balls and 3 pencils?"
+
+@pat.kids.shop.q.can.buy.d core.pattern
+    match="[can|could|may] i [buy|get|have|afford] [a|an] {i1:lex.kids.shop.items} and {n2:number} {i2:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="Can I buy a ball and 2 pencils?"
+
+@pat.kids.shop.q.can.buy.e core.pattern
+    match="[can|could|may] i [buy|get|have|afford] {n1:number} {i1:lex.kids.shop.items} and [a|an] {i2:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="Can I buy 3 pencils and a ball?"
+
+@pat.kids.shop.q.can.buy.f core.pattern
+    match="[can|could|may] i [buy|get|have|afford] [a|an] {i1:lex.kids.shop.items} and [a|an] {i2:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="Can I buy a ball and a pencil?"
+
+@pat.kids.shop.q.can.enough.a core.pattern
+    match="do i have enough [money|lei]? [for|to_buy] {n1:number} {i1:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="Do I have enough money for 3 pencils?"
+
+@pat.kids.shop.q.can.enough.b core.pattern
+    match="do i have enough [money|lei]? [for|to_buy] [a|an] {i1:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="Do I have enough money for a ball?"
+
+@pat.kids.shop.q.can.enough.c core.pattern
+    match="do i have enough [money|lei]? [for|to_buy] {n1:number} {i1:lex.kids.shop.items} and {n2:number} {i2:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="Do I have enough money for 2 balls and 3 pencils?"
+
+@pat.kids.shop.q.can.enough.d core.pattern
+    match="do i have enough [money|lei]? [for|to_buy] [a|an] {i1:lex.kids.shop.items} and {n2:number} {i2:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="Do I have enough money for a ball and 2 pencils?"
+
+@pat.kids.shop.q.can.enough.e core.pattern
+    match="do i have enough [money|lei]? [for|to_buy] {n1:number} {i1:lex.kids.shop.items} and [a|an] {i2:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="Do I have enough money for 3 pencils and a ball?"
+
+@pat.kids.shop.q.can.enough.f core.pattern
+    match="do i have enough [money|lei]? [for|to_buy] [a|an] {i1:lex.kids.shop.items} and [a|an] {i2:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="Do I have enough money for a ball and a pencil?"
+
+@pat.kids.shop.q.can.enough2.a core.pattern
+    match="is my money enough [for|to_buy] {n1:number} {i1:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="Is my money enough for 3 pencils?"
+
+@pat.kids.shop.q.can.enough2.b core.pattern
+    match="is my money enough [for|to_buy] [a|an] {i1:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="Is my money enough for a ball?"
+
+@pat.kids.shop.q.can.enough2.c core.pattern
+    match="is my money enough [for|to_buy] {n1:number} {i1:lex.kids.shop.items} and {n2:number} {i2:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="Is my money enough for 2 balls and 3 pencils?"
+
+@pat.kids.shop.q.can.enough2.d core.pattern
+    match="is my money enough [for|to_buy] [a|an] {i1:lex.kids.shop.items} and {n2:number} {i2:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="Is my money enough for a ball and 2 pencils?"
+
+@pat.kids.shop.q.can.enough2.e core.pattern
+    match="is my money enough [for|to_buy] {n1:number} {i1:lex.kids.shop.items} and [a|an] {i2:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="Is my money enough for 3 pencils and a ball?"
+
+@pat.kids.shop.q.can.enough2.f core.pattern
+    match="is my money enough [for|to_buy] [a|an] {i1:lex.kids.shop.items} and [a|an] {i2:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="Is my money enough for a ball and a pencil?"
+
+@pat.kids.shop.q.change.what.a core.pattern
+    match="what_is the change from {m:number} [lei|leu]? [if|when|after] i buy {n1:number} {i1:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="What is the change from 50 lei if I buy 3 pencils?"
+
+@pat.kids.shop.q.change.what.b core.pattern
+    match="what_is the change from {m:number} [lei|leu]? [if|when|after] i buy [a|an] {i1:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="What is the change from 50 lei if I buy a ball?"
+
+@pat.kids.shop.q.change.what.c core.pattern
+    match="what_is the change from {m:number} [lei|leu]? [if|when|after] i buy {n1:number} {i1:lex.kids.shop.items} and {n2:number} {i2:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="What is the change from 50 lei if I buy 2 balls and 3 pencils?"
+
+@pat.kids.shop.q.change.what.d core.pattern
+    match="what_is the change from {m:number} [lei|leu]? [if|when|after] i buy [a|an] {i1:lex.kids.shop.items} and {n2:number} {i2:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="What is the change from 50 lei if I buy a ball and 2 pencils?"
+
+@pat.kids.shop.q.change.what.e core.pattern
+    match="what_is the change from {m:number} [lei|leu]? [if|when|after] i buy {n1:number} {i1:lex.kids.shop.items} and [a|an] {i2:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="What is the change from 50 lei if I buy 3 pencils and a ball?"
+
+@pat.kids.shop.q.change.what.f core.pattern
+    match="what_is the change from {m:number} [lei|leu]? [if|when|after] i buy [a|an] {i1:lex.kids.shop.items} and [a|an] {i2:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="What is the change from 50 lei if I buy a ball and a pencil?"
+
+@pat.kids.shop.q.change.much.a core.pattern
+    match="how_much change [do|will|would|can] i [get|have|receive|expect] from {m:number} [lei|leu]? [if|when|after] i buy {n1:number} {i1:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="How much change do I get from 50 lei if I buy 3 pencils?"
+
+@pat.kids.shop.q.change.much.b core.pattern
+    match="how_much change [do|will|would|can] i [get|have|receive|expect] from {m:number} [lei|leu]? [if|when|after] i buy [a|an] {i1:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="How much change do I get from 50 lei if I buy a ball?"
+
+@pat.kids.shop.q.change.much.c core.pattern
+    match="how_much change [do|will|would|can] i [get|have|receive|expect] from {m:number} [lei|leu]? [if|when|after] i buy {n1:number} {i1:lex.kids.shop.items} and {n2:number} {i2:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="How much change do I get from 50 lei if I buy 2 balls and 3 pencils?"
+
+@pat.kids.shop.q.change.much.d core.pattern
+    match="how_much change [do|will|would|can] i [get|have|receive|expect] from {m:number} [lei|leu]? [if|when|after] i buy [a|an] {i1:lex.kids.shop.items} and {n2:number} {i2:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="How much change do I get from 50 lei if I buy a ball and 2 pencils?"
+
+@pat.kids.shop.q.change.much.e core.pattern
+    match="how_much change [do|will|would|can] i [get|have|receive|expect] from {m:number} [lei|leu]? [if|when|after] i buy {n1:number} {i1:lex.kids.shop.items} and [a|an] {i2:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="How much change do I get from 50 lei if I buy 3 pencils and a ball?"
+
+@pat.kids.shop.q.change.much.f core.pattern
+    match="how_much change [do|will|would|can] i [get|have|receive|expect] from {m:number} [lei|leu]? [if|when|after] i buy [a|an] {i1:lex.kids.shop.items} and [a|an] {i2:lex.kids.shop.items}"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="How much change do I get from 50 lei if I buy a ball and a pencil?"
+
+@pat.kids.shop.q.change.pay.a core.pattern
+    match="if i pay [with]? {m:number} [lei|leu]? for {n1:number} {i1:lex.kids.shop.items} what_is [my|the] change"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="If I pay 50 lei for 3 pencils, what is my change?"
+
+@pat.kids.shop.q.change.pay.b core.pattern
+    match="if i pay [with]? {m:number} [lei|leu]? for [a|an] {i1:lex.kids.shop.items} what_is [my|the] change"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="If I pay 50 lei for a ball, what is my change?"
+
+@pat.kids.shop.q.change.pay.c core.pattern
+    match="if i pay [with]? {m:number} [lei|leu]? for {n1:number} {i1:lex.kids.shop.items} and {n2:number} {i2:lex.kids.shop.items} what_is [my|the] change"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="If I pay 50 lei for 2 balls and 3 pencils, what is my change?"
+
+@pat.kids.shop.q.change.pay.d core.pattern
+    match="if i pay [with]? {m:number} [lei|leu]? for [a|an] {i1:lex.kids.shop.items} and {n2:number} {i2:lex.kids.shop.items} what_is [my|the] change"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="If I pay 50 lei for a ball and 2 pencils, what is my change?"
+
+@pat.kids.shop.q.change.pay.e core.pattern
+    match="if i pay [with]? {m:number} [lei|leu]? for {n1:number} {i1:lex.kids.shop.items} and [a|an] {i2:lex.kids.shop.items} what_is [my|the] change"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="If I pay 50 lei for 3 pencils and a ball, what is my change?"
+
+@pat.kids.shop.q.change.pay.f core.pattern
+    match="if i pay [with]? {m:number} [lei|leu]? for [a|an] {i1:lex.kids.shop.items} and [a|an] {i2:lex.kids.shop.items} what_is [my|the] change"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="If I pay 50 lei for a ball and a pencil, what is my change?"
+
+@pat.kids.shop.q.change.with.a core.pattern
+    match="i buy {n1:number} {i1:lex.kids.shop.items} with {m:number} [lei|leu]? how_much change [do|will] i [get|receive]"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="I buy 3 pencils with 50 lei, how much change do I get?"
+
+@pat.kids.shop.q.change.with.b core.pattern
+    match="i buy [a|an] {i1:lex.kids.shop.items} with {m:number} [lei|leu]? how_much change [do|will] i [get|receive]"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="I buy a ball with 50 lei, how much change do I get?"
+
+@pat.kids.shop.q.change.with.c core.pattern
+    match="i buy {n1:number} {i1:lex.kids.shop.items} and {n2:number} {i2:lex.kids.shop.items} with {m:number} [lei|leu]? how_much change [do|will] i [get|receive]"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="I buy 2 balls and 3 pencils with 50 lei, how much change do I get?"
+
+@pat.kids.shop.q.change.with.d core.pattern
+    match="i buy [a|an] {i1:lex.kids.shop.items} and {n2:number} {i2:lex.kids.shop.items} with {m:number} [lei|leu]? how_much change [do|will] i [get|receive]"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="I buy a ball and 2 pencils with 50 lei, how much change do I get?"
+
+@pat.kids.shop.q.change.with.e core.pattern
+    match="i buy {n1:number} {i1:lex.kids.shop.items} and [a|an] {i2:lex.kids.shop.items} with {m:number} [lei|leu]? how_much change [do|will] i [get|receive]"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="I buy 3 pencils and a ball with 50 lei, how much change do I get?"
+
+@pat.kids.shop.q.change.with.f core.pattern
+    match="i buy [a|an] {i1:lex.kids.shop.items} and [a|an] {i2:lex.kids.shop.items} with {m:number} [lei|leu]? how_much change [do|will] i [get|receive]"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="I buy a ball and a pencil with 50 lei, how much change do I get?"
+
+@pat.kids.shop.q.change.give.a core.pattern
+    match="i give [the_shopkeeper|the_cashier|the_seller]? {m:number} [lei|leu]? for {n1:number} {i1:lex.kids.shop.items} how_much change [do|will] i [get|receive]"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="I give the cashier 50 lei for 3 pencils, how much change do I get?"
+
+@pat.kids.shop.q.change.give.b core.pattern
+    match="i give [the_shopkeeper|the_cashier|the_seller]? {m:number} [lei|leu]? for [a|an] {i1:lex.kids.shop.items} how_much change [do|will] i [get|receive]"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="I give the cashier 50 lei for a ball, how much change do I get?"
+
+@pat.kids.shop.q.change.give.c core.pattern
+    match="i give [the_shopkeeper|the_cashier|the_seller]? {m:number} [lei|leu]? for {n1:number} {i1:lex.kids.shop.items} and {n2:number} {i2:lex.kids.shop.items} how_much change [do|will] i [get|receive]"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="I give the cashier 50 lei for 2 balls and 3 pencils, how much change do I get?"
+
+@pat.kids.shop.q.change.give.d core.pattern
+    match="i give [the_shopkeeper|the_cashier|the_seller]? {m:number} [lei|leu]? for [a|an] {i1:lex.kids.shop.items} and {n2:number} {i2:lex.kids.shop.items} how_much change [do|will] i [get|receive]"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="I give the cashier 50 lei for a ball and 2 pencils, how much change do I get?"
+
+@pat.kids.shop.q.change.give.e core.pattern
+    match="i give [the_shopkeeper|the_cashier|the_seller]? {m:number} [lei|leu]? for {n1:number} {i1:lex.kids.shop.items} and [a|an] {i2:lex.kids.shop.items} how_much change [do|will] i [get|receive]"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="I give the cashier 50 lei for 3 pencils and a ball, how much change do I get?"
+
+@pat.kids.shop.q.change.give.f core.pattern
+    match="i give [the_shopkeeper|the_cashier|the_seller]? {m:number} [lei|leu]? for [a|an] {i1:lex.kids.shop.items} and [a|an] {i2:lex.kids.shop.items} how_much change [do|will] i [get|receive]"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="I give the cashier 50 lei for a ball and a pencil, how much change do I get?"
+

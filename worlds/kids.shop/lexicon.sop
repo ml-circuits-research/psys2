@@ -1,0 +1,40 @@
+@lex.kids.shop.items core.lexicon
+    class=noun
+    doc="Things on the price list of the little shop"
+    word=ball
+    word=pencil
+    word=pen
+    word=eraser
+    word=ruler
+    word=notebook
+    word=sticker
+    word=book
+    word=backpack
+    word=apple
+    word=banana
+    word=orange
+    word=pear
+    word=bread
+    word=milk
+    word=juice
+    word=water
+    word=biscuit
+    word=chocolate
+    word=ice_cream
+    word=sandwich
+    word=toy_car
+    word=doll
+    word=kite
+    word=puzzle
+    word=balloon
+
+@lex.kids.shop.units core.lexicon
+    class=unit
+    doc="The money unit: one leu, many lei"
+    word=leu
+    word=lei
+    plural=leu:lei
+
+@lex.kids.shop.triggers core.lexicon
+    class=trigger
+    word=cost word=costs word=price word=lei word=leu word=buy word=bought word=change word=afford word=money word=how_much word=enough

@@ -1,0 +1,150 @@
+@t.shop.n1 core.test
+    input="How much does a ball cost?"
+    expect="A ball costs 5 lei."
+
+@t.shop.n2 core.test
+    input="How much do 3 pencils cost?"
+    expect="3 pencils cost 6 lei."
+
+@t.shop.n3 core.test
+    input="How much is the notebook?"
+    expect="A notebook costs 6 lei."
+
+@t.shop.n4 core.test
+    input="What is the price of a doll?"
+    expect="A doll costs 15 lei."
+
+@t.shop.n5 core.test
+    input="How much does milk cost?"
+    expect="A bottle of milk costs 6 lei."
+
+@t.shop.n6 core.test
+    input="I buy a rocket."
+    expectStatus=unparsed
+
+@t.shop.n7 core.test
+    input="How much do five breads cost?"
+    expect="5 loaves of bread cost 20 lei."
+
+@t.shop.n8 core.test
+    input="How much does an eraser cost?"
+    expect="An eraser costs 1 leu."
+
+@t.shop.n9 core.test
+    input="How much does a ball and 2 pencils cost?"
+    expect="A ball and 2 pencils cost 9 lei."
+
+@t.shop.n10 core.test
+    input="How much does a rocket cost?"
+    expectStatus=missing
+
+@t.shop.n11 core.test
+    input="How much does a rocket cost?"
+    expect="I don't know the price of rocket."
+
+@t.shop.n12 core.test
+    input="A rocket costs 50 lei. How much does a rocket cost?"
+    expect="A rocket costs 50 lei."
+
+@t.shop.n13 core.test
+    input="A ball costs 7 lei. How much do 2 balls cost?"
+    expect="2 balls cost 14 lei."
+
+@t.shop.n14 core.test
+    session=s1
+    input="I have 20 lei."
+    expect="OK, you have 20 lei."
+
+@t.shop.n15 core.test
+    session=s1
+    input="I buy a ball and 2 pencils."
+    expect="OK, you bought 1 ball. OK, you bought 2 pencils."
+
+@t.shop.n16 core.test
+    session=s1
+    input="How much money do I have left?"
+    expect="You have 11 lei left."
+
+@t.shop.n17 core.test
+    session=s1
+    input="Can I buy a book?"
+    expect="No. A book costs 12 lei, but you have only 11 lei."
+
+@t.shop.n18 core.test
+    session=s1
+    input="Can I buy a notebook?"
+    expect="Yes. A notebook costs 6 lei and you have 11 lei."
+
+@t.shop.n19 core.test
+    session=s1
+    input="A book costs 10 lei. Can I buy a book?"
+    expect="Yes. A book costs 10 lei and you have 11 lei."
+
+@t.shop.n20 core.test
+    session=s1
+    input="I found five lei. How many lei do I have now?"
+    expect="You have 16 lei left."
+
+@t.shop.n21 core.test
+    session=s1
+    input="Do I have enough money for 3 balls?"
+    expect="Yes. 3 balls cost 15 lei and you have 16 lei."
+
+@t.shop.n22 core.test
+    input="What is the change from 50 lei if I buy a book?"
+    expect="Your change from 50 lei is 38 lei."
+
+@t.shop.n23 core.test
+    input="How much change do I get from 20 lei if I buy 2 ice creams and a ball?"
+    expect="Your change from 20 lei is 5 lei."
+
+@t.shop.n24 core.test
+    input="If I pay 10 lei for a puzzle, what is my change?"
+    expect="10 lei is not enough. A puzzle costs 18 lei."
+
+@t.shop.n25 core.test
+    input="I give the cashier 10 lei for a kite, how much change do I get?"
+    expect="Your change from 10 lei is 0 lei."
+
+@t.shop.n26 core.test
+    input="How much money do I have left?"
+    expectStatus=missing
+
+@t.shop.n27 core.test
+    input="Can I buy a ball?"
+    expectStatus=missing
+
+@t.shop.n28 core.test
+    input="I have 4 lei. I buy a book. How much money do I have left?"
+    expectStatus=conflicting
+
+@t.shop.n29 core.test
+    input="My mom gives me 10 lei. I have 3 lei. How much money do I have?"
+    expect="You have 3 lei now."
+
+@t.shop.n30 core.test
+    input="I have 3 lei. My mom gives me 10 lei. How much money do I have?"
+    expect="You have 13 lei now."
+
+@t.shop.n31 core.test
+    session=s2
+    input="I have 30 lei. I spent 5 lei. I buy 2 sandwiches. How much money do I have left?"
+    expect="You have 9 lei left."
+
+@t.shop.n32 core.test
+    session=s2
+    input="I have 10 lei. The sandwich is 10 lei. I buy a sandwich. How much do I have left?"
+    expect="You have 0 lei left."
+
+@t.shop.n33 core.test
+    session=s2
+    input="How much do 2 sandwiches cost?"
+    expect="2 sandwiches cost 20 lei."
+
+@t.shop.n34 core.test
+    input="I have 2.5 lei. I buy a pencil. How much money do I have left?"
+    expect="You have 0.5 lei left."
+
+@t.shop.n35 core.test
+    input="I have 1 leu. How much money do I have?"
+    expect="You have 1 leu now."

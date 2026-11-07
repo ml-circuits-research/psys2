@@ -1,0 +1,150 @@
+@tpl.kids.arith.count core.template
+    for=kids.arith.holding.count
+    text="{owner:cap} {owner:has} {value} {item:plural}."
+
+@tpl.kids.arith.count.missing core.template
+    for=kids.arith.holding.count
+    status=missing
+    text="I don't know how many {item:plural} {owner} had at the start. Please tell me the starting number."
+
+@tpl.kids.arith.count.conflicting core.template
+    for=kids.arith.holding.count
+    status=conflicting
+    text="That does not add up. {note}"
+
+@tpl.kids.arith.has core.template
+    for=kids.arith.has.answer
+    text="{value:cap}, {note}."
+
+@tpl.kids.arith.has.missing core.template
+    for=kids.arith.has.answer
+    status=missing
+    text="I don't know yet whether {owner} has {item:plural}. Please tell me how many {owner} had at the start."
+
+@tpl.kids.arith.has.conflicting core.template
+    for=kids.arith.has.answer
+    status=conflicting
+    text="That does not add up. {note}"
+
+@tpl.kids.arith.total.pair core.template
+    for=kids.arith.total.count
+    text="{who1:cap} and {who2} have {value} {item:plural} altogether."
+
+@tpl.kids.arith.total core.template
+    for=kids.arith.total.count
+    text="There are {value} {item:plural} altogether."
+
+@tpl.kids.arith.total.missing core.template
+    for=kids.arith.total.count
+    status=missing
+    text="I can't count the {item:plural} yet, because I don't know how many everyone has. Please tell me, for example: Tom has 3 {item:plural}."
+
+@tpl.kids.arith.total.conflicting core.template
+    for=kids.arith.total.count
+    status=conflicting
+    text="That does not add up. {note}"
+
+@tpl.kids.arith.leader.pair core.template
+    for=kids.arith.leader.winner
+    text="Between {who1} and {who2}, {value} {value:has} more {item:plural}: {note}."
+
+@tpl.kids.arith.leader core.template
+    for=kids.arith.leader.winner
+    text="{value:cap} {value:has} the most {item:plural}: {note}."
+
+@tpl.kids.arith.leader.missing core.template
+    for=kids.arith.leader.winner
+    status=missing
+    text="I can't tell who has more {item:plural} yet, because I don't know the numbers. Please tell me how many each person has."
+
+@tpl.kids.arith.leader.tie core.template
+    for=kids.arith.leader.winner
+    status=ambiguous
+    text="{alternatives:list} are tied: {note} {item:plural} each."
+
+@tpl.kids.arith.leader.conflicting core.template
+    for=kids.arith.leader.winner
+    status=conflicting
+    text="That does not add up. {note}"
+
+@tpl.kids.arith.gap core.template
+    for=kids.arith.gap.diff
+    text="{who1:cap} {who1:has} {value} {unit} {item:plural} than {who2}."
+
+@tpl.kids.arith.gap.missing core.template
+    for=kids.arith.gap.diff
+    status=missing
+    text="I can't compare yet, because I don't know how many {item:plural} {who1} and {who2} have. Please tell me both numbers."
+
+@tpl.kids.arith.gap.conflicting core.template
+    for=kids.arith.gap.diff
+    status=conflicting
+    text="That does not add up. {note}"
+
+@tpl.kids.arith.verdict core.template
+    for=kids.arith.verdict.answer
+    text="{value:cap}. {note}."
+
+@tpl.kids.arith.verdict.missing core.template
+    for=kids.arith.verdict.answer
+    status=missing
+    text="I can't compare yet, because I don't know how many {item:plural} {who1} and {who2} have. Please tell me both numbers."
+
+@tpl.kids.arith.verdict.conflicting core.template
+    for=kids.arith.verdict.answer
+    status=conflicting
+    text="That does not add up. {note}"
+
+@tpl.kids.arith.calc.about core.template
+    for=kids.arith.calc.result
+    text="{a} {op} {b} is {note}{value}."
+
+@tpl.kids.arith.calc core.template
+    for=kids.arith.calc.result
+    text="{a} {op} {b} is {value}."
+
+@tpl.kids.arith.calc.unsupported core.template
+    for=kids.arith.calc.result
+    status=unsupported
+    text="Sorry, I can't do that. {note}"
+
+@tpl.kids.arith.calc.missing core.template
+    for=kids.arith.calc.result
+    status=missing
+    text="I need two numbers to calculate, for example: What is 7 plus 5?"
+
+@tpl.kids.arith.half core.template
+    for=kids.arith.half.result
+    text="Half of {n} is {value}."
+
+@tpl.kids.arith.double core.template
+    for=kids.arith.double.result
+    text="Double {n} is {value}."
+
+@tpl.kids.arith.ack.holding core.template
+    for=ack.kids.arith.holding
+    text="OK, {owner} {owner:has} {count} {item:plural}."
+
+@tpl.kids.arith.ack.give core.template
+    for=ack.kids.arith.give
+    text="OK, {who} gave {to} {count} {item:plural}."
+
+@tpl.kids.arith.ack.receive core.template
+    for=ack.kids.arith.receive
+    text="OK, {who} got {count} {item:plural}."
+
+@tpl.kids.arith.ack.eat core.template
+    for=ack.kids.arith.eat
+    text="OK, {who} ate {count} {item:plural}."
+
+@tpl.kids.arith.ack.lose core.template
+    for=ack.kids.arith.lose
+    text="OK, {who} lost {count} {item:plural}."
+
+@tpl.kids.arith.ack.buy core.template
+    for=ack.kids.arith.buy
+    text="OK, {who} bought {count} {item:plural}."
+
+@tpl.kids.arith.ack.break core.template
+    for=ack.kids.arith.break
+    text="OK, {who} broke {count} {item:plural}."

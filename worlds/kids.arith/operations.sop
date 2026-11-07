@@ -1,0 +1,74 @@
+@op.kids.arith.currentCount core.operation
+    outputs=kids.arith.holding.count
+    inputs=kids.arith.holding.owner
+    inputs=kids.arith.holding.item
+    impl=currentCount
+    semantics=query
+    doc="The number someone has after applying, in dialog order, every statement of having and every giving, getting, eating, losing, buying and breaking. A person whose starting count is unknown stays unknown; an impossible event gives a conflict."
+
+@op.kids.arith.totalCount core.operation
+    outputs=kids.arith.total.count
+    inputs=kids.arith.total.item
+    inputs=kids.arith.total.who1
+    inputs=kids.arith.total.who2
+    impl=totalCount
+    semantics=query
+    doc="The sum of the counts of everybody whose count is known (or of two named people)."
+
+@op.kids.arith.leader core.operation
+    outputs=kids.arith.leader.winner
+    inputs=kids.arith.leader.item
+    inputs=kids.arith.leader.who1
+    inputs=kids.arith.leader.who2
+    impl=leader
+    semantics=query
+    doc="Who has the most (or more, between two people). A tie is ambiguous."
+
+@op.kids.arith.gap core.operation
+    outputs=kids.arith.gap.diff
+    inputs=kids.arith.gap.item
+    inputs=kids.arith.gap.who1
+    inputs=kids.arith.gap.who2
+    impl=gap
+    semantics=query
+    doc="How many more or fewer items the first person has than the second."
+
+@op.kids.arith.verdict core.operation
+    outputs=kids.arith.verdict.answer
+    inputs=kids.arith.verdict.item
+    inputs=kids.arith.verdict.who1
+    inputs=kids.arith.verdict.who2
+    impl=verdict
+    semantics=query
+    doc="Yes or no: does the first person have more than the second?"
+
+@op.kids.arith.hasAny core.operation
+    outputs=kids.arith.has.answer
+    inputs=kids.arith.has.owner
+    inputs=kids.arith.has.item
+    impl=hasAny
+    semantics=query
+    doc="Yes or no: does the person have at least one item of the kind?"
+
+@op.kids.arith.calc core.operation
+    outputs=kids.arith.calc.result
+    inputs=kids.arith.calc.op
+    inputs=kids.arith.calc.a
+    inputs=kids.arith.calc.b
+    impl=calc
+    semantics=compute
+    doc="plus, minus, times and divided_by with exact integer or decimal results; division by zero is refused politely."
+
+@op.kids.arith.half core.operation
+    outputs=kids.arith.half.result
+    inputs=kids.arith.half.n
+    impl=half
+    semantics=compute
+    doc="Half of a number."
+
+@op.kids.arith.double core.operation
+    outputs=kids.arith.double.result
+    inputs=kids.arith.double.n
+    impl=double
+    semantics=compute
+    doc="Double a number."

@@ -1,0 +1,11 @@
+@world.kids.time core.world
+    namespace=kids.time
+    version=0.1.0
+    legend=$legend.kids.time
+    imports=world.core
+    imports=world.kids.common
+    formalization=rules
+    language=en
+    status=fixture
+    title="Days, months, seasons and the clock"
+    doc="Days of the week, months, seasons, how long things are (days in a week, minutes in an hour) and the 12-hour clock. The knowledge base holds the calendar facts; today and the time of day can be told in the dialog; what time is it uses the real clock when nothing was told. Hand-built platform fixture and demo, not produced by the C1 workflow."

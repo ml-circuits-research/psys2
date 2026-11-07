@@ -1,0 +1,197 @@
+@legend.kids.shop core.legend
+    namespace=kids.shop
+    version=0.1.0
+    imports=core
+    imports=kids.common
+    doc="Prices in lei, pocket money, baskets, buying, change"
+
+@kids.shop.price core.type
+    extends=core.state
+    doc="One item of a kind costs some number of lei. The knowledge base holds the price list; a price stated in the dialog overrides it."
+    example="A ball costs 5 lei."
+
+@kids.shop.price.item core.key
+    value=atom
+    card=one
+    ask="Which item?"
+
+@kids.shop.price.cost core.key
+    value=number
+    card=one
+    ask="How many lei does one of them cost?"
+    compute=true
+@kids.shop.price.phrase core.key
+    value=string
+    card=one
+    ask="How do we say one of them (for example a loaf of bread)?"
+
+@kids.shop.price.plural core.key
+    value=string
+    card=one
+    ask="How do we say several of them (for example loaves of bread)?"
+
+@kids.shop.money core.type
+    extends=core.state
+    doc="The user has some lei now (this sets the amount of money)."
+    example="I have 20 lei."
+
+@kids.shop.money.count core.key
+    value=number
+    card=one
+    ask="How many lei does the user have?"
+
+@kids.shop.money.unit core.key
+    value=atom
+    card=one
+    ask="Which money unit is it?"
+
+@kids.shop.income core.type
+    extends=core.event
+    doc="The user gets some lei."
+    example="I found 5 lei."
+
+@kids.shop.income.count core.key
+    value=number
+    card=one
+    ask="How many lei does the user get?"
+
+@kids.shop.income.unit core.key
+    value=atom
+    card=one
+    ask="Which money unit is it?"
+
+@kids.shop.expense core.type
+    extends=core.event
+    doc="The user spends or loses some lei."
+    example="I spent 5 lei."
+
+@kids.shop.expense.count core.key
+    value=number
+    card=one
+    ask="How many lei does the user spend?"
+
+@kids.shop.expense.unit core.key
+    value=atom
+    card=one
+    ask="Which money unit is it?"
+
+@kids.shop.purchase core.type
+    extends=core.event
+    doc="The user buys some items; the money is taken from the amount of money the user has."
+    example="I buy 2 pencils."
+
+@kids.shop.purchase.item core.key
+    value=atom
+    card=one
+    ask="What does the user buy?"
+
+@kids.shop.purchase.count core.key
+    value=number
+    card=one
+    ask="How many of them does the user buy?"
+
+@kids.shop.balance core.type
+    extends=core.state
+    doc="How much money the user has now, after every income, expense and purchase."
+    example="How much money do I have left?"
+
+@kids.shop.balance.amount core.key
+    value=number
+    card=one
+    ask="How many lei does the user have now?"
+    compute=true
+@kids.shop.total core.type
+    extends=core.state
+    doc="What a basket of one or two kinds of items costs."
+    example="How much do 3 pencils cost?"
+
+@kids.shop.total.item core.key
+    value=atom
+    card=one
+    ask="What is the first kind of item in the basket?"
+
+@kids.shop.total.count core.key
+    value=number
+    card=one
+    ask="How many of the first kind?"
+
+@kids.shop.total.item2 core.key
+    value=atom
+    card=one
+    ask="What is the second kind of item in the basket?"
+
+@kids.shop.total.count2 core.key
+    value=number
+    card=one
+    ask="How many of the second kind?"
+
+@kids.shop.total.total core.key
+    value=number
+    card=one
+    ask="How many lei does the basket cost?"
+    compute=true
+@kids.shop.affordability core.type
+    extends=core.state
+    doc="Yes or no: does the user have enough money for a basket?"
+    example="Can I buy a book?"
+
+@kids.shop.affordability.item core.key
+    value=atom
+    card=one
+    ask="What is the first kind of item in the basket?"
+
+@kids.shop.affordability.count core.key
+    value=number
+    card=one
+    ask="How many of the first kind?"
+
+@kids.shop.affordability.item2 core.key
+    value=atom
+    card=one
+    ask="What is the second kind of item in the basket?"
+
+@kids.shop.affordability.count2 core.key
+    value=number
+    card=one
+    ask="How many of the second kind?"
+
+@kids.shop.affordability.answer core.key
+    value=atom
+    card=one
+    ask="Is it yes or no?"
+    compute=true
+@kids.shop.change core.type
+    extends=core.state
+    doc="How much change the user gets when paying a given amount for a basket."
+    example="What is the change from 50 lei if I buy a book?"
+
+@kids.shop.change.paid core.key
+    value=number
+    card=one
+    ask="How many lei does the user pay?"
+
+@kids.shop.change.item core.key
+    value=atom
+    card=one
+    ask="What is the first kind of item in the basket?"
+
+@kids.shop.change.count core.key
+    value=number
+    card=one
+    ask="How many of the first kind?"
+
+@kids.shop.change.item2 core.key
+    value=atom
+    card=one
+    ask="What is the second kind of item in the basket?"
+
+@kids.shop.change.count2 core.key
+    value=number
+    card=one
+    ask="How many of the second kind?"
+
+@kids.shop.change.amount core.key
+    value=number
+    card=one
+    ask="How many lei of change does the user get?"
+    compute=true

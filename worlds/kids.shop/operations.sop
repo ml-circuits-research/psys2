@@ -1,0 +1,43 @@
+@op.kids.shop.priceOf core.operation
+    outputs=kids.shop.price.cost
+    inputs=kids.shop.price.item
+    impl=priceOf
+    semantics=query
+    doc="The price of one item: the latest price stated in the dialog, else the price list."
+
+@op.kids.shop.basketTotal core.operation
+    outputs=kids.shop.total.total
+    inputs=kids.shop.total.item
+    inputs=kids.shop.total.count
+    inputs=kids.shop.total.item2
+    inputs=kids.shop.total.count2
+    impl=basketTotal
+    semantics=query
+    doc="The cost of one or two kinds of items."
+
+@op.kids.shop.balance core.operation
+    outputs=kids.shop.balance.amount
+    impl=balance
+    semantics=query
+    doc="The user's money after replaying, in dialog order, every statement of money, income, expense and purchase (a purchase costs the price in force when it was made)."
+
+@op.kids.shop.affordable core.operation
+    outputs=kids.shop.affordability.answer
+    inputs=kids.shop.affordability.item
+    inputs=kids.shop.affordability.count
+    inputs=kids.shop.affordability.item2
+    inputs=kids.shop.affordability.count2
+    impl=affordable
+    semantics=query
+    doc="Yes or no: the current money against the cost of the basket."
+
+@op.kids.shop.change core.operation
+    outputs=kids.shop.change.amount
+    inputs=kids.shop.change.paid
+    inputs=kids.shop.change.item
+    inputs=kids.shop.change.count
+    inputs=kids.shop.change.item2
+    inputs=kids.shop.change.count2
+    impl=changeFor
+    semantics=query
+    doc="The amount paid minus the cost of the basket."

@@ -1,0 +1,462 @@
+@pat.kids.arith.has core.pattern
+    match="{who:agent} [now]? [has|have|had] [got|now]? {n:number} {item:lex.kids.arith.items} [now|left|today|at_first|at_the_start]?"
+    emit="@{_} kids.arith.holding owner={who} count={n} item={item}"
+    kind=statement
+    priority=9
+    example="Tom has 5 apples."
+
+@pat.kids.arith.has.a core.pattern
+    match="{who:agent} [now]? [has|have|had] [got]? [a|an] {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.holding owner={who} count=1 item={item}"
+    kind=statement
+    priority=10
+    example="Mia has a pear."
+
+@pat.kids.arith.has.no core.pattern
+    match="{who:agent} [has|have|had] [got]? no {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.holding owner={who} count=0 item={item}"
+    kind=statement
+    priority=10
+    example="Ben has no marbles."
+
+@pat.kids.arith.has.start core.pattern
+    match="{who:agent} [starts|started|begins|began] with {n:number} {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.holding owner={who} count={n} item={item}"
+    kind=statement
+    priority=10
+    example="Lily starts with 8 stickers."
+
+@pat.kids.arith.has.two core.pattern
+    match="{who:agent} [has|have|had] [got]? {n:number} {item:lex.kids.arith.items} and {m:number} {item2:lex.kids.arith.items}"
+    emit="@{_} kids.arith.holding owner={who} count={n} item={item}\n@{_1} kids.arith.holding owner={who} count={m} item={item2}"
+    kind=statement
+    priority=11
+    example="Tom has 4 apples and 3 pears."
+
+@pat.kids.arith.give.direct core.pattern
+    match="{who:agent} [gives|gave|give] {to:agent} {n:number} [more]? {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.give who={who} to={to} count={n} item={item}"
+    kind=statement
+    priority=9
+    example="Ana gives Tom 3 apples."
+
+@pat.kids.arith.give.direct.a core.pattern
+    match="{who:agent} [gives|gave|give] {to:agent} [a|an] {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.give who={who} to={to} count=1 item={item}"
+    kind=statement
+    priority=10
+    example="Ana gave Tom an apple."
+
+@pat.kids.arith.give.to core.pattern
+    match="{who:agent} [gives|gave|give] {n:number} {item:lex.kids.arith.items} to {to:agent}"
+    emit="@{_} kids.arith.give who={who} to={to} count={n} item={item}"
+    kind=statement
+    priority=9
+    example="Ana gives 3 apples to Tom."
+
+@pat.kids.arith.give.to.a core.pattern
+    match="{who:agent} [gives|gave|give] [a|an] {item:lex.kids.arith.items} to {to:agent}"
+    emit="@{_} kids.arith.give who={who} to={to} count=1 item={item}"
+    kind=statement
+    priority=10
+    example="Ana gave an apple to Tom."
+
+@pat.kids.arith.give.of core.pattern
+    match="{who:agent} [gives|gave|give] {n:number} of [his|her|their|my|the]? {item:lex.kids.arith.items} to {to:agent}"
+    emit="@{_} kids.arith.give who={who} to={to} count={n} item={item}"
+    kind=statement
+    priority=10
+    example="Ana gave 2 of her apples to Tom."
+
+@pat.kids.arith.give.of.direct core.pattern
+    match="{who:agent} [gives|gave|give] {to:agent} {n:number} of [his|her|their|my|the]? {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.give who={who} to={to} count={n} item={item}"
+    kind=statement
+    priority=10
+    example="Ana gave Tom 2 of her apples."
+
+@pat.kids.arith.give.from core.pattern
+    match="{to:agent} [gets|got|receives|received|take|takes|took] {n:number} [more]? {item:lex.kids.arith.items} from {who:agent}"
+    emit="@{_} kids.arith.give who={who} to={to} count={n} item={item}"
+    kind=statement
+    priority=11
+    example="Tom gets 3 apples from Ana."
+
+@pat.kids.arith.give.from.a core.pattern
+    match="{to:agent} [gets|got|receives|received|takes|took] [a|an] {item:lex.kids.arith.items} from {who:agent}"
+    emit="@{_} kids.arith.give who={who} to={to} count=1 item={item}"
+    kind=statement
+    priority=11
+    example="Tom got an apple from Ana."
+
+@pat.kids.arith.get core.pattern
+    match="{who:agent} [gets|got|get|receives|received|finds|found|find|collects|collected|wins|won] {n:number} [more|new]? {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.receive who={who} count={n} item={item}"
+    kind=statement
+    priority=10
+    example="Tom finds 2 marbles."
+
+@pat.kids.arith.get.a core.pattern
+    match="{who:agent} [gets|got|get|receives|received|finds|found|find|wins|won] [a|an] [new]? {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.receive who={who} count=1 item={item}"
+    kind=statement
+    priority=10
+    example="Mia found a coin."
+
+@pat.kids.arith.eat core.pattern
+    match="{who:agent} [eats|ate|eat] {n:number} [more]? {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.eat who={who} count={n} item={item}"
+    kind=statement
+    priority=10
+    example="Tom ate 2 apples."
+
+@pat.kids.arith.eat.a core.pattern
+    match="{who:agent} [eats|ate|eat] [a|an] {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.eat who={who} count=1 item={item}"
+    kind=statement
+    priority=10
+    example="Tom ate an apple."
+
+@pat.kids.arith.eat.of core.pattern
+    match="{who:agent} [eats|ate|eat] {n:number} of [his|her|their|my|the]? {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.eat who={who} count={n} item={item}"
+    kind=statement
+    priority=10
+    example="Tom ate 2 of his apples."
+
+@pat.kids.arith.lose core.pattern
+    match="{who:agent} [loses|lost|lose|drops|dropped] {n:number} [more]? {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.lose who={who} count={n} item={item}"
+    kind=statement
+    priority=10
+    example="Mia lost 3 marbles."
+
+@pat.kids.arith.lose.a core.pattern
+    match="{who:agent} [loses|lost|lose|drops|dropped] [a|an] {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.lose who={who} count=1 item={item}"
+    kind=statement
+    priority=10
+    example="Mia lost a marble."
+
+@pat.kids.arith.lose.of core.pattern
+    match="{who:agent} [loses|lost|lose|drops|dropped] {n:number} of [his|her|their|my|the]? {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.lose who={who} count={n} item={item}"
+    kind=statement
+    priority=10
+    example="Mia lost 3 of his marbles."
+
+@pat.kids.arith.buy core.pattern
+    match="{who:agent} [buys|bought|buy|purchases|purchased] {n:number} [more]? {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.buy who={who} count={n} item={item}"
+    kind=statement
+    priority=10
+    example="Ben buys 4 pencils."
+
+@pat.kids.arith.buy.a core.pattern
+    match="{who:agent} [buys|bought|buy|purchases|purchased] [a|an] {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.buy who={who} count=1 item={item}"
+    kind=statement
+    priority=10
+    example="Ben bought a pencil."
+
+@pat.kids.arith.break core.pattern
+    match="{who:agent} [breaks|broke|break] {n:number} [more]? {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.break who={who} count={n} item={item}"
+    kind=statement
+    priority=10
+    example="Sam broke 2 pencils."
+
+@pat.kids.arith.break.a core.pattern
+    match="{who:agent} [breaks|broke|break] [a|an] {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.break who={who} count=1 item={item}"
+    kind=statement
+    priority=10
+    example="Sam broke a pencil."
+
+@pat.kids.arith.break.of core.pattern
+    match="{who:agent} [breaks|broke|break] {n:number} of [his|her|their|my|the]? {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.break who={who} count={n} item={item}"
+    kind=statement
+    priority=10
+    example="Sam broke 2 of his pencils."
+
+@pat.kids.arith.q.count core.pattern
+    match="how_many {item:lex.kids.arith.items} [does|do|did|will] {who:agent} have [now|left|left_over|today|at_the_end|then]?"
+    emit="@{_} core.question type=kids.arith.holding seek=count where.owner={who} where.item={item}"
+    kind=question
+    priority=9
+    example="How many apples does Tom have?"
+
+@pat.kids.arith.q.count.got core.pattern
+    match="how_many {item:lex.kids.arith.items} [has|have] {who:agent} got [now|left]?"
+    emit="@{_} core.question type=kids.arith.holding seek=count where.owner={who} where.item={item}"
+    kind=question
+    priority=10
+    example="How many apples has Tom got?"
+
+@pat.kids.arith.q.count.own core.pattern
+    match="how_many {item:lex.kids.arith.items} [does|do] {who:agent} own"
+    emit="@{_} core.question type=kids.arith.holding seek=count where.owner={who} where.item={item}"
+    kind=question
+    priority=10
+    example="How many marbles does Ben own?"
+
+@pat.kids.arith.q.count.left core.pattern
+    match="how_many {item:lex.kids.arith.items} [are|is] left [for|with]? {who:agent}"
+    emit="@{_} core.question type=kids.arith.holding seek=count where.owner={who} where.item={item}"
+    kind=question
+    priority=10
+    example="How many apples are left for Tom?"
+
+@pat.kids.arith.q.count.num core.pattern
+    match="what_is the number of {item:lex.kids.arith.items} {who:agent} [has|have]"
+    emit="@{_} core.question type=kids.arith.holding seek=count where.owner={who} where.item={item}"
+    kind=question
+    priority=10
+    example="What is the number of apples Tom has?"
+
+@pat.kids.arith.q.has core.pattern
+    match="[does|do|did] {who:agent} have [any|a|an|some]? {item:lex.kids.arith.items}"
+    emit="@{_} core.question type=kids.arith.has seek=answer where.owner={who} where.item={item}"
+    kind=question
+    priority=9
+    example="Does Tom have any apples?"
+
+@pat.kids.arith.q.has.got core.pattern
+    match="[has|have] {who:agent} got [any|a|an|some]? {item:lex.kids.arith.items}"
+    emit="@{_} core.question type=kids.arith.has seek=answer where.owner={who} where.item={item}"
+    kind=question
+    priority=10
+    example="Has Tom got any apples?"
+
+@pat.kids.arith.q.total core.pattern
+    match="how_many {item:lex.kids.arith.items} [are|is|were]? there [altogether|in_total|in_all|all_together|together|all]?"
+    emit="@{_} core.question type=kids.arith.total seek=count where.item={item}"
+    kind=question
+    priority=10
+    example="How many apples are there altogether?"
+
+@pat.kids.arith.q.total.pair core.pattern
+    match="how_many {item:lex.kids.arith.items} [do|does|did] {who1:agent} and {who2:agent} have [altogether|together|in_total|in_all|all_together]"
+    emit="@{_} core.question type=kids.arith.total seek=count where.item={item} where.who1={who1} where.who2={who2}"
+    kind=question
+    priority=10
+    example="How many apples do Tom and Ana have together?"
+
+@pat.kids.arith.q.total.pair.got core.pattern
+    match="how_many {item:lex.kids.arith.items} [have|has] {who1:agent} and {who2:agent} got [altogether|together|in_total|in_all]"
+    emit="@{_} core.question type=kids.arith.total seek=count where.item={item} where.who1={who1} where.who2={who2}"
+    kind=question
+    priority=10
+    example="How many apples have Tom and Ana got in total?"
+
+@pat.kids.arith.q.total.all core.pattern
+    match="how_many {item:lex.kids.arith.items} [do|did|does] [we|they|everyone|everybody] have [altogether|together|in_total|in_all]"
+    emit="@{_} core.question type=kids.arith.total seek=count where.item={item}"
+    kind=question
+    priority=10
+    example="How many apples do they have altogether?"
+
+@pat.kids.arith.q.total.num core.pattern
+    match="what_is the total number of {item:lex.kids.arith.items}"
+    emit="@{_} core.question type=kids.arith.total seek=count where.item={item}"
+    kind=question
+    priority=10
+    example="What is the total number of apples?"
+
+@pat.kids.arith.q.total.altog core.pattern
+    match="how_many {item:lex.kids.arith.items} [altogether|in_total|in_all] [are_there]?"
+    emit="@{_} core.question type=kids.arith.total seek=count where.item={item}"
+    kind=question
+    priority=10
+    example="How many apples in total?"
+
+@pat.kids.arith.q.most core.pattern
+    match="who [has|have|had|owns] the [most|largest_number_of|biggest_number_of] {item:lex.kids.arith.items}"
+    emit="@{_} core.question type=kids.arith.leader seek=winner where.item={item}"
+    kind=question
+    priority=10
+    example="Who has the most apples?"
+
+@pat.kids.arith.q.more.pair core.pattern
+    match="who [has|have|had] more {item:lex.kids.arith.items} {who1:agent} or {who2:agent}"
+    emit="@{_} core.question type=kids.arith.leader seek=winner where.item={item} where.who1={who1} where.who2={who2}"
+    kind=question
+    priority=10
+    example="Who has more apples, Tom or Ana?"
+
+@pat.kids.arith.q.more.pair.b core.pattern
+    match="who [has|have|had] more {item:lex.kids.arith.items} [out_of|of|between]? {who1:agent} and {who2:agent}"
+    emit="@{_} core.question type=kids.arith.leader seek=winner where.item={item} where.who1={who1} where.who2={who2}"
+    kind=question
+    priority=10
+    example="Who has more apples out of Tom and Ana?"
+
+@pat.kids.arith.q.more.pair.c core.pattern
+    match="[of|between]? {who1:agent} and {who2:agent} who [has|have|had] more {item:lex.kids.arith.items}"
+    emit="@{_} core.question type=kids.arith.leader seek=winner where.item={item} where.who1={who1} where.who2={who2}"
+    kind=question
+    priority=10
+    example="Between Tom and Ana, who has more apples?"
+
+@pat.kids.arith.q.more.pair.d core.pattern
+    match="which_of {who1:agent} and {who2:agent} has more {item:lex.kids.arith.items}"
+    emit="@{_} core.question type=kids.arith.leader seek=winner where.item={item} where.who1={who1} where.who2={who2}"
+    kind=question
+    priority=10
+    example="Which of Tom and Ana has more apples?"
+
+@pat.kids.arith.q.gap core.pattern
+    match="how_many more {item:lex.kids.arith.items} [does|do|did] {who1:agent} have than {who2:agent}"
+    emit="@{_} core.question type=kids.arith.gap seek=diff where.item={item} where.who1={who1} where.who2={who2}"
+    kind=question
+    priority=10
+    example="How many more apples does Tom have than Ana?"
+
+@pat.kids.arith.q.gap.b core.pattern
+    match="how_many {item:lex.kids.arith.items} [does|do|did] {who1:agent} have more than {who2:agent}"
+    emit="@{_} core.question type=kids.arith.gap seek=diff where.item={item} where.who1={who1} where.who2={who2}"
+    kind=question
+    priority=10
+    example="How many apples does Tom have more than Ana?"
+
+@pat.kids.arith.q.gap.fewer core.pattern
+    match="how_many [fewer|less] {item:lex.kids.arith.items} [does|do|did] {who1:agent} have than {who2:agent}"
+    emit="@{_} core.question type=kids.arith.gap seek=diff where.item={item} where.who1={who1} where.who2={who2}"
+    kind=question
+    priority=10
+    example="How many fewer apples does Ana have than Tom?"
+
+@pat.kids.arith.q.gap.diff core.pattern
+    match="what_is the difference in {item:lex.kids.arith.items} between {who1:agent} and {who2:agent}"
+    emit="@{_} core.question type=kids.arith.gap seek=diff where.item={item} where.who1={who1} where.who2={who2}"
+    kind=question
+    priority=10
+    example="What is the difference in apples between Tom and Ana?"
+
+@pat.kids.arith.q.gap.diff.b core.pattern
+    match="how_many {item:lex.kids.arith.items} [more|extra] [does|do] {who1:agent} have [than|compared_to] {who2:agent}"
+    emit="@{_} core.question type=kids.arith.gap seek=diff where.item={item} where.who1={who1} where.who2={who2}"
+    kind=question
+    priority=10
+    example="How many apples extra does Tom have than Ana?"
+
+@pat.kids.arith.q.verdict core.pattern
+    match="[does|do|did] {who1:agent} have more {item:lex.kids.arith.items} than {who2:agent}"
+    emit="@{_} core.question type=kids.arith.verdict seek=answer where.item={item} where.who1={who1} where.who2={who2}"
+    kind=question
+    priority=10
+    example="Does Tom have more apples than Ana?"
+
+@pat.kids.arith.q.verdict.fewer core.pattern
+    match="[does|do|did] {who1:agent} have [fewer|less] {item:lex.kids.arith.items} than {who2:agent}"
+    emit="@{_} core.question type=kids.arith.verdict seek=answer where.item={item} where.who1={who2} where.who2={who1}"
+    kind=question
+    priority=10
+    example="Does Ana have fewer apples than Tom?"
+
+@pat.kids.arith.q.verdict.got core.pattern
+    match="[has|have] {who1:agent} got more {item:lex.kids.arith.items} than {who2:agent}"
+    emit="@{_} core.question type=kids.arith.verdict seek=answer where.item={item} where.who1={who1} where.who2={who2}"
+    kind=question
+    priority=10
+    example="Has Tom got more apples than Ana?"
+
+@pat.kids.arith.calc.plus core.pattern
+    match="[what_is|how_much_is|how_many_is|calculate|tell_me|what_are]? {a:number} [plus|added_to|add] {b:number}"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=plus where.a={a} where.b={b}"
+    kind=question
+    priority=12
+    example="What is 7 plus 5?"
+
+@pat.kids.arith.calc.plus.sum core.pattern
+    match="[what_is|how_much_is|how_many_is|calculate|tell_me|what_are]? the sum of {a:number} and {b:number}"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=plus where.a={a} where.b={b}"
+    kind=question
+    priority=12
+    example="What is the sum of 3 and 4?"
+
+@pat.kids.arith.calc.plus.add core.pattern
+    match="[add|sum] {a:number} [and|to|plus] {b:number}"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=plus where.a={a} where.b={b}"
+    kind=question
+    priority=12
+    example="Add 3 and 4."
+
+@pat.kids.arith.calc.minus core.pattern
+    match="[what_is|how_much_is|how_many_is|calculate|tell_me|what_are]? {a:number} [minus|take_away|less|subtract|subtracted_by|without] {b:number}"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=minus where.a={a} where.b={b}"
+    kind=question
+    priority=12
+    example="What is 12 minus 5?"
+
+@pat.kids.arith.calc.minus.from core.pattern
+    match="[subtract|take|take_away|remove] {b:number} from {a:number}"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=minus where.a={a} where.b={b}"
+    kind=question
+    priority=12
+    example="Subtract 5 from 12."
+
+@pat.kids.arith.calc.times core.pattern
+    match="[what_is|how_much_is|how_many_is|calculate|tell_me|what_are]? {a:number} [times|x|multiplied_by|multiply_by|lots_of|groups_of] {b:number}"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=times where.a={a} where.b={b}"
+    kind=question
+    priority=12
+    example="How much is 3 times 4?"
+
+@pat.kids.arith.calc.times.prod core.pattern
+    match="[what_is|how_much_is|how_many_is|calculate|tell_me|what_are]? the product of {a:number} and {b:number}"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=times where.a={a} where.b={b}"
+    kind=question
+    priority=12
+    example="What is the product of 3 and 4?"
+
+@pat.kids.arith.calc.times.mult core.pattern
+    match="multiply {a:number} [by|and|with] {b:number}"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=times where.a={a} where.b={b}"
+    kind=question
+    priority=12
+    example="Multiply 3 by 4."
+
+@pat.kids.arith.calc.div core.pattern
+    match="[what_is|how_much_is|how_many_is|calculate|tell_me|what_are]? {a:number} [divided_by|over|shared_by|split_by|divided_into|shared_between|split_between] {b:number}"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=divided_by where.a={a} where.b={b}"
+    kind=question
+    priority=12
+    example="What is 20 divided by 4?"
+
+@pat.kids.arith.calc.div.v core.pattern
+    match="divide {a:number} [by|into|between] {b:number}"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=divided_by where.a={a} where.b={b}"
+    kind=question
+    priority=12
+    example="Divide 20 by 4."
+
+@pat.kids.arith.calc.half core.pattern
+    match="[what_is|how_much_is|how_many_is|calculate|tell_me|what_are]? [the]? 0.5 [of]? {n:number}"
+    emit="@{_} core.question type=kids.arith.half seek=result where.n={n}"
+    kind=question
+    priority=12
+    example="What is half of 10?"
+
+@pat.kids.arith.calc.double core.pattern
+    match="[what_is|how_much_is|how_many_is|calculate|tell_me|what_are]? [the]? [double|twice|doubled] [of]? {n:number}"
+    emit="@{_} core.question type=kids.arith.double seek=result where.n={n}"
+    kind=question
+    priority=12
+    example="What is double 6?"
+
+@pat.kids.arith.calc.double.b core.pattern
+    match="[what_is|how_much_is|how_many_is|calculate|tell_me|what_are]? {n:number} [doubled|twice|times_two|times_2]"
+    emit="@{_} core.question type=kids.arith.double seek=result where.n={n}"
+    kind=question
+    priority=12
+    example="What is 6 doubled?"
+
+@pat.kids.arith.calc.half.c core.pattern
+    match="[what_is|how_much_is|how_many_is|calculate|tell_me|what_are]? {n:number} halved"
+    emit="@{_} core.question type=kids.arith.half seek=result where.n={n}"
+    kind=question
+    priority=12
+    example="What is 10 halved?"
+

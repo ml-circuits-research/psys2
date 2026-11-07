@@ -1,0 +1,209 @@
+@t.time.n1 core.test
+    input="What day comes after Monday?"
+    expect="The day after Monday is Tuesday."
+
+@t.time.n2 core.test
+    input="What day comes before Monday?"
+    expect="The day before Monday is Sunday."
+
+@t.time.n3 core.test
+    input="What day comes after Sunday?"
+    expect="Monday."
+
+@t.time.n4 core.test
+    input="What day is it tomorrow if today is Friday?"
+    expect="The day after Friday is Saturday."
+
+@t.time.n5 core.test
+    session=s1
+    input="Today is Friday."
+    expect="OK, today is Friday."
+
+@t.time.n6 core.test
+    session=s1
+    input="What day is tomorrow?"
+    expect="Tomorrow is Saturday."
+
+@t.time.n7 core.test
+    session=s1
+    input="What day was yesterday?"
+    expect="Yesterday was Thursday."
+
+@t.time.n8 core.test
+    session=s1
+    input="What day will it be in 3 days?"
+    expect="In 3 days it will be Monday."
+
+@t.time.n9 core.test
+    session=s1
+    input="What day is the day after tomorrow?"
+    expect="The day after tomorrow is Sunday."
+
+@t.time.n10 core.test
+    session=s1
+    input="How many days until Tuesday?"
+    expect="From today to Tuesday is 4 days."
+
+@t.time.n11 core.test
+    input="What day is tomorrow?"
+    expectStatus=missing
+
+@t.time.n12 core.test
+    input="What day is tomorrow?"
+    expect="Today is Friday"
+
+@t.time.n13 core.test
+    input="What day is 3 days after Friday?"
+    expect="3 days after Friday is Monday."
+
+@t.time.n14 core.test
+    input="How many days are in a week?"
+    expect="There are 7 days in a week."
+
+@t.time.n15 core.test
+    input="How many days are in March?"
+    expect="There are 31 days in March."
+
+@t.time.n16 core.test
+    input="How many days are in February?"
+    expect="There are 28 days in February, or 29 in a leap year."
+
+@t.time.n17 core.test
+    input="How many days are in a year?"
+    expect="There are 365 days in a year."
+
+@t.time.n18 core.test
+    input="How many months are in a year?"
+    expect="There are 12 months in a year."
+
+@t.time.n19 core.test
+    input="How many minutes are in an hour?"
+    expect="There are 60 minutes in an hour."
+
+@t.time.n20 core.test
+    input="How many hours are in two days?"
+    expect="There are 48 hours in 2 days."
+
+@t.time.n21 core.test
+    input="How many seconds are there in a minute?"
+    expect="There are 60 seconds in a minute."
+
+@t.time.n22 core.test
+    input="How many minutes are in a day?"
+    expect="There are 1440 minutes in a day."
+
+@t.time.n23 core.test
+    input="How many days are in a month?"
+    expectStatus=ambiguous
+
+@t.time.n24 core.test
+    input="How many weeks are in a month?"
+    expectStatus=missing
+
+@t.time.n25 core.test
+    input="Which season is July in?"
+    expect="July is in summer."
+
+@t.time.n26 core.test
+    input="What season is it in December?"
+    expect="December is in winter."
+
+@t.time.n27 core.test
+    input="Which months are in summer?"
+    expect="The summer months are June, July and August."
+
+@t.time.n28 core.test
+    input="What season comes after winter?"
+    expect="The season after winter is spring."
+
+@t.time.n29 core.test
+    input="What month comes after May?"
+    expect="The month after May is June."
+
+@t.time.n30 core.test
+    input="What month comes before January?"
+    expect="The month before January is December."
+
+@t.time.n31 core.test
+    input="What month is 3 months after November?"
+    expect="3 months after November is February."
+
+@t.time.n32 core.test
+    input="What month is next month if this month is May?"
+    expect="The month after May is June."
+
+@t.time.n33 core.test
+    input="If it is 3 o'clock, what time will it be in 2 hours?"
+    expect="It will be 5 o'clock."
+
+@t.time.n34 core.test
+    input="If it is 11 o'clock, what time will it be in 3 hours?"
+    expect="It will be 2 o'clock."
+
+@t.time.n35 core.test
+    input="If it is 5 o'clock, what time was it 2 hours ago?"
+    expect="It was 3 o'clock."
+
+@t.time.n36 core.test
+    input="What time will it be in 30 minutes if it is 3 o'clock?"
+    expect="It will be half past 3."
+
+@t.time.n37 core.test
+    session=s2
+    input="It is 8 o'clock."
+    expect="OK, it is 8 o'clock."
+
+@t.time.n38 core.test
+    session=s2
+    input="What time will it be in four hours?"
+    expect="It will be 12 o'clock."
+
+@t.time.n39 core.test
+    session=s2
+    input="What time will it be in a quarter of an hour?"
+    expect="It will be quarter past 8."
+
+@t.time.n40 core.test
+    session=s2
+    input="What time is it?"
+    expect="It is 8 o'clock."
+
+@t.time.n41 core.test
+    input="What time will it be in 2 hours?"
+    expectStatus=missing
+
+@t.time.n42 core.test
+    input="What time is it?"
+    expectStatus=supported
+
+@t.time.n43 core.test
+    input="Which days are the weekend?"
+    expect="The weekend days are Saturday and Sunday."
+
+@t.time.n44 core.test
+    input="How many days from Monday to Friday?"
+    expect="From Monday to Friday is 4 days."
+
+@t.time.n45 core.test
+    input="How many hours from 3 o'clock to 7 o'clock?"
+    expect="It is 4 hours from 3 o'clock to 7 o'clock."
+
+@t.time.n46 core.test
+    input="Today is Friday, what day is tomorrow?"
+    expect="Tomorrow is Saturday."
+
+@t.time.n47 core.test
+    input="How many days are in 2 weeks?"
+    expect="There are 14 days in 2 weeks."
+
+@t.time.n48 core.test
+    input="What are the months of the year?"
+    expect="The months of the year are January, February, March"
+
+@t.time.n49 core.test
+    input="What is the season after summer?"
+    expect="The season after summer is autumn."
+
+@t.time.n50 core.test
+    input="What comes after August?"
+    expect="The month after August is September."

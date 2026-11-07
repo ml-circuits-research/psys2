@@ -1,0 +1,11 @@
+@world.kids.arith core.world
+    namespace=kids.arith
+    version=0.1.0
+    legend=$legend.kids.arith
+    imports=world.core
+    imports=world.kids.common
+    formalization=rules
+    language=en
+    status=fixture
+    title="Counting and arithmetic (primary school)"
+    doc="Who has how many things; giving, getting, eating, losing, buying and breaking; totals and comparisons; and bare arithmetic (plus, minus, times, divided by, half, double). Hand-built platform fixture and demo, not produced by the C1 workflow."
