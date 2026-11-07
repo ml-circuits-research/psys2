@@ -91,7 +91,7 @@ const DOMAINS = {
     ['Ce oră este?', 'What time is it?'],
     ['Este ora 3.', 'It is 3 o\'clock.'],
     ['Ce zi este azi?', 'What day is it today?'],
-    ['Azi este luni.', 'Today it is Monday.'],
+    ['Azi este luni.', 'Today is Monday.'],
     ['Luni merg la școală.', 'On Monday I go to school.'],
     ['Seara citesc o carte.', 'In the evening I read a book.'],
     ['Dimineața Ion mănâncă un măr.', 'In the morning Ion eats an apple.'],
@@ -431,7 +431,7 @@ test('negation is never lost', () => {
 
 test('negated and affirmative sentences differ only by negation', () => {
   assert.equal(ro('Ion are mere.').text, 'Ion has apples.');
-  assert.equal(ro('Ion nu are mere.').text, 'Ion does not have apples.');
+  assert.equal(ro('Ion nu are mere.').text, 'Ion has no apples.');
   assert.equal(ro('Ion a mâncat mere.').text, 'Ion ate apples.');
   assert.equal(ro('Ion nu a mâncat mere.').text, 'Ion did not eat apples.');
   assert.equal(ro('Ion va mânca mere.').text, 'Ion will eat apples.');

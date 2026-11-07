@@ -5,6 +5,9 @@
 
 const SEP = '\u0000';
 
+/** True for a wire marked `core.status=retracted` (Memory.retract). */
+export const isRetracted = (w) => w.entries.some((e) => e.key === 'core.status' && e.value.v === 'retracted');
+
 /** A set of wires with indexes. */
 export class WireStore {
   constructor() {
@@ -44,6 +47,19 @@ export class Memory {
     this.own = new WireStore();
   }
   add(wire) { this.own.add(wire); }
+  /**
+   * Retract a session wire: it gets `core.status=retracted` (and `core.reason`) but stays in memory for the trace.
+   * Retracted wires are excluded from `find`; `get` still returns them. Returns false for unknown or KB wires.
+   */
+  retract(id, reason) {
+    const w = this.own.byId.get(id);
+    if (!w) return false;
+    const entries = w.entries.filter((e) => e.key !== 'core.status' && e.key !== 'core.reason');
+    entries.push({ key: 'core.status', value: { kind: 'atom', v: 'retracted' } });
+    if (reason) entries.push({ key: 'core.reason', value: { kind: 'string', v: String(reason) } });
+    this.own.add({ ...w, entries });
+    return true;
+  }
   get(id) { return this.own.byId.get(id) ?? this.base?.byId.get(id); }
   /** Session wires in insertion order. */
   sessionWires() { return this.own.all(); }
@@ -64,6 +80,7 @@ export class Memory {
       }
       cands = [...new Set(cands)].sort((a, b) => store.order(a) - store.order(b));
       for (const w of cands) {
+        if (isRetracted(w)) continue;
         if (pairs.every(([k, v]) => w.entries.some((e) => e.key === k && e.value.v === v))) out.push(w);
       }
     }

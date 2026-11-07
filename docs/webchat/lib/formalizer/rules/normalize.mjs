@@ -54,7 +54,9 @@ export function splitSentences(text) {
   return out;
 }
 
-const TOKEN_RE = /(?<![\w)])-\d+(?:\.\d+)?|\d+(?:\.\d+)?|[A-Za-zÀ-ɏ]+(?:['’-][A-Za-zÀ-ɏ]+)*|,/g;
+// Letters exclude the multiplication and division signs (U+00D7, U+00F7), which are operators here.
+const TOKEN_RE = /(?<![\w)])-\d+(?:\.\d+)?|\d+(?:\.\d+)?|[A-Za-zÀ-ÖØ-öø-ɏ]+(?:['’-][A-Za-zÀ-ÖØ-öø-ɏ]+)*|,|[+\-*\/×÷=]/g;
+const OP_NORMAL = { '×': '*', '÷': '/' };
 
 /**
  * Tokenize a sentence: words, numbers, `'s` and commas; contractions expanded, number words
@@ -66,6 +68,7 @@ export function tokenize(sentence, base = 0) {
     const raw = m[0].replace(/’/g, "'");
     const start = base + m.index, end = start + m[0].length;
     if (raw === ',') { toks.push({ raw, lower: ',', start, end, kind: 'punct' }); continue; }
+    if (raw.length === 1 && '+-*/×÷='.includes(raw)) { toks.push({ raw, lower: OP_NORMAL[raw] ?? raw, start, end, kind: 'op' }); continue; }
     if (/^-?\d/.test(raw)) { toks.push({ raw, lower: raw, start, end, kind: 'number' }); continue; }
     const lower = raw.toLowerCase();
     const parts = expand(lower);
@@ -82,6 +85,7 @@ export function tokenize(sentence, base = 0) {
     toks.push({ raw, lower, start, end, kind: 'word' });
   }
   toks = convertNumbers(toks, sentence, base);
+  toks = keepOperators(toks);
   toks = toks.filter((t) => !FILLERS.has(t.lower));
   // sentence-initial fillers
   for (;;) {
@@ -91,6 +95,22 @@ export function tokenize(sentence, base = 0) {
     break;
   }
   return toks;
+}
+
+/**
+ * Arithmetic symbols (+ - * / × ÷ =) are kept only where they mean arithmetic: between two numbers,
+ * or `=` right after a number ("7 + 5 ="). Anywhere else they are dropped, as before.
+ */
+function keepOperators(toks) {
+  const out = [];
+  for (let i = 0; i < toks.length; i++) {
+    const t = toks[i];
+    if (t.kind !== 'op') { out.push(t); continue; }
+    const prev = out[out.length - 1];
+    if (prev?.kind !== 'number') continue;
+    if (t.lower === '=' || toks[i + 1]?.kind === 'number') out.push(t);
+  }
+  return out;
 }
 
 /** Replace number-word runs, `half` and `a dozen` by number tokens. */

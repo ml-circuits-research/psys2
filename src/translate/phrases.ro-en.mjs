@@ -8,7 +8,9 @@
 // (multi-word units that must still take part in the clause grammar: "de ce" -> wh why).
 //   full:true   must cover the whole sentence       start:true   must begin the sentence
 
-export const FRAMES = [
+import { COMMAND_FRAMES } from './phrases.commands.ro-en.mjs';
+
+const BASE_FRAMES = [
   // ---- greetings and chat
   { p: 'bună ziua', out: 'hello' },
   { p: 'bună dimineața', out: 'good morning' },
@@ -99,6 +101,16 @@ export const FRAMES = [
   { p: 'ziua de naștere', token: { fpos: 'noun', en: 'birthday', def: true } },
   { p: 'gumă de mestecat', token: { fpos: 'noun', en: 'chewing gum', mass: true } },
   { p: 'broască țestoasă', token: { fpos: 'noun', en: 'turtle', anim: true } },
+  { p: 'x și 0', token: { fpos: 'noun', en: 'tic tac toe', mass: true } },
+  { p: '20 de întrebări', token: { fpos: 'noun', en: 'twenty questions', mass: true } },
+  { p: 'modul fără mâini', token: { fpos: 'noun', en: 'hands-free mode', mass: true } },
+  { p: 'pălărie de petrecere', token: { fpos: 'noun', en: 'party hat' } },
+  { p: 'animale marine', token: { fpos: 'noun', en: 'sea animals', mass: true } },
+  { p: 'animalele marine', token: { fpos: 'noun', en: 'sea animals', mass: true, def: true } },
+  { p: 'animale de la fermă', token: { fpos: 'noun', en: 'farm animals', mass: true } },
+  { p: 'animalele de la fermă', token: { fpos: 'noun', en: 'farm animals', mass: true, def: true } },
 ];
+
+export const FRAMES = [...BASE_FRAMES, ...COMMAND_FRAMES];
 
 export default FRAMES;

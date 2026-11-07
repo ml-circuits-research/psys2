@@ -34,6 +34,7 @@ export function validateWorldSet(set) {
     }
     for (const t of w.templates) {
       if (!STATUS.has(t.status)) out.push(`${w.id}: template ${t.id}: unknown status '${t.status}'`);
+      for (const c of t.when ?? []) if (!/^[A-Za-z_][\w.]*\s*(?:!=|>=|<=|=|>|<)\s*\S/.test(c)) out.push(`${w.id}: template ${t.id}: bad when '${c}'`);
       if (!MODES.has(t.mode)) out.push(`${w.id}: template ${t.id}: unknown mode '${t.mode}'`);
       const f = t.for ?? '';
       const known = f.startsWith('ack.') ? L.hasType(f.slice(4)) : f.startsWith('action.') ? actions.has(f.slice(7)) || ops.has(f.slice(7)) : !!L.keyInfo(f) || ops.has(f);

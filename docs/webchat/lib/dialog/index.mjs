@@ -13,6 +13,7 @@ import { validateWorldSet } from '../worlds/validate.mjs';
 import { createInterpreter } from '../interpreter/index.mjs';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs';
+import { splitSentences } from '../formalizer/rules/normalize.mjs';
 
 export { runWorldTests } from './test-runner.mjs';
 
@@ -39,6 +40,55 @@ export function examplesFor(set, worldIds) {
   }
   for (const w of set.list()) { const ex = pick(w.patterns); if (ex.length) return ex; }
   return [];
+}
+
+/** The user's own words for the English segment `seg`: found through the translation alignment, else the original text. */
+function originalSentence(original, seg, alignment) {
+  const sentences = splitSentences(original);
+  if (sentences.length <= 1) return (sentences[0]?.text ?? original).trim();
+  const hits = (alignment ?? []).filter((a) => a.tgt[0] < seg.span[1] && a.tgt[1] > seg.span[0]);
+  if (hits.length) {
+    const lo = Math.min(...hits.map((a) => a.src[0])), hi = Math.max(...hits.map((a) => a.src[1]));
+    const inside = sentences.filter((x) => x.start < hi && x.end > lo);
+    if (inside.length) return original.slice(inside[0].start, inside.at(-1).end);
+  }
+  return original.trim();
+}
+
+/** Keep the surrounding whitespace of `src` and the initial letter case when translating a fragment. */
+function fitFragment(src, out) {
+  const lead = src.match(/^\s*/)[0], trail = src.match(/\s*$/)[0];
+  let core = out.trim();
+  if (/^[a-z]/.test(src.trim()) && core) core = core[0].toLowerCase() + core.slice(1);
+  return lead + core + trail;
+}
+
+/**
+ * Translate a reply given as parts [{ text, translate, quote? }] (spec 06): consecutive `translate: true` parts are
+ * translated together, `translate: false` parts (quoted user text, already translated examples) are kept verbatim.
+ * A part with `fallback` is replaced by the translation of the fallback text when the translator reports unknown words.
+ */
+export async function translateParts(parts, translator, lang) {
+  const flat = parts.map((p) => ({ ...p }));
+  for (let i = 0; i < flat.length; i++) if (flat[i].join) flat[i].translate = !!(flat[i - 1]?.translate && flat[i + 1]?.translate);
+  const out = [];
+  for (let i = 0; i < flat.length;) {
+    if (!flat[i].translate) { const { join, fallback, ...rest } = flat[i]; out.push(rest); i++; continue; }
+    let j = i;
+    while (j < flat.length && flat[j].translate) j++;
+    const run = flat.slice(i, j);
+    i = j;
+    const src = run.map((p) => p.text).join('');
+    if (!src.trim()) { out.push({ text: src, translate: false }); continue; }
+    let res = null;
+    try { res = await translator.translate(src, { from: 'en', to: lang }); } catch { res = null; }
+    if (res?.unknown?.length && run.length === 1 && run[0].fallback) {
+      try { res = await translator.translate(run[0].fallback, { from: 'en', to: lang }); } catch { res = null; }
+    }
+    const t = textOf(res);
+    out.push({ text: t ? fitFragment(src, t) : src, translate: true });
+  }
+  return out;
 }
 
 const langOf = (r) => (typeof r === 'string' ? r : r?.lang) ?? 'en';
@@ -136,15 +186,37 @@ export class DialogSession {
     this.isession.effects = [];
     const icpt = interp.intercept(this.isession, english);   // modal input (spec 07 section 2)
     const { segments, wires } = icpt ? { segments: [], wires: [] } : await this._formalize(english, sid, formalizer ?? this.formalizer);
-    const lines = icpt?.reply ? [icpt.reply] : [];
+    const T = (text, extra = {}) => ({ text, translate: true, ...extra });
+    const lines = icpt?.reply ? [[T(icpt.reply)]] : [];   // each line is an array of parts [{ text, translate, quote? }]
     const answers = [];
     const statuses = icpt ? ['supported'] : [];
     const ops = [];
     const answerWires = [];
     for (const seg of segments) {
       if (seg.unparsed) {
-        const ex = examplesFor(set, seg.worlds.map((w) => w.id));
-        lines.push(`I did not understand "${seg.text}".` + (ex.length ? ` For example: ${ex.map((e) => `"${e}"`).join(' or ')}` : ''));
+        let ex = examplesFor(set, seg.worlds.map((w) => w.id));
+        // the user's own words are quoted verbatim and never back-translated
+        const quoted = lang === 'en' ? seg.text : originalSentence(text, seg, translation?.alignment);
+        const line = [T('I did not understand '), { text: `"${quoted}"`, translate: false, quote: true }, { text: '.', translate: false }];
+        if (lang !== 'en' && translator) {
+          // every example is a simple English sentence: translate each one separately, drop those with unknown words
+          const done = [];
+          for (const e of ex) {
+            try {
+              const r = await translator.translate(e, { from: 'en', to: lang });
+              if (textOf(r) && !r.unknown?.length && !r.untranslatable?.length) done.push(textOf(r).trim());
+            } catch { /* omit this example */ }
+          }
+          ex = done;
+        }
+        if (ex.length) {
+          line.push(T(' For example: ', { fallback: ' You can say: ' }));
+          ex.forEach((e, k) => {
+            if (k) line.push(T(' or '));
+            line.push({ text: `"${e}"`, translate: false, quote: true, example: true });
+          });
+        }
+        lines.push(line);
         statuses.push('unparsed');
         continue;
       }
@@ -154,7 +226,7 @@ export class DialogSession {
         const r = interp.resolve(this.isession, w);
         if (!r) { statements.push(w); continue; }
         const rendered = interp.render(this.isession, r);
-        lines.push(rendered);
+        lines.push([T(rendered)]);
         statuses.push(r.status);
         ops.push(...r.ops);
         answerWires.push(r.answer);
@@ -164,26 +236,33 @@ export class DialogSession {
         });
       }
       const facts = statements.filter((w) => !w.type.startsWith('core.'));
-      if (facts.length) lines.push(interp.renderAck(this.isession, facts));
+      if (facts.length) lines.push([T(interp.renderAck(this.isession, facts))]);
       if (seg.alternatives.length) {
         const titles = seg.alternatives.map((a) => set.get(a.worldId)?.title ?? a.worldId);
-        lines.push(`This could also be read in another way (${titles.join(', ')}); I used the "${set.get(seg.match.worldId)?.title ?? seg.match.worldId}" reading.`);
+        const used = set.get(seg.match.worldId)?.title ?? seg.match.worldId;
+        lines.push([T(`This could also be read in another way (${titles.join(', ')}); I used the `), { text: `"${used}"`, translate: false, quote: true }, T(' reading.')]);
       }
     }
     if (translation?.unknown?.length && segments.some((s) => s.unparsed)) {
-      lines.push(`I did not know the word${translation.unknown.length > 1 ? 's' : ''}: ${translation.unknown.map((u) => u.word).join(', ')}.`);
+      lines.push([T(`I did not know the word${translation.unknown.length > 1 ? 's' : ''}: `), { text: translation.unknown.map((u) => u.word).join(', '), translate: false, quote: true }, { text: '.', translate: false }]);
     }
-    let reply = lines.join(' ');
-    const englishReply = reply;
+    let englishParts = [];
+    lines.forEach((ln, i) => { if (i) englishParts.push({ text: ' ', translate: true, join: true }); englishParts.push(...ln); });
+    const englishReply = englishParts.map((p) => p.text).join('');
+    let parts = englishParts.map(({ join, fallback, ...p }) => (join ? { text: p.text, translate: false } : p));
+    let reply = englishReply;
     if (lang !== 'en' && translator) {
-      try { reply = textOf(await translator.translate(englishReply, { from: 'en', to: lang })) ?? englishReply; } catch { reply = englishReply; }
+      try {
+        parts = await translateParts(englishParts, translator, lang);
+        reply = parts.map((p) => p.text).join('');
+      } catch { parts = englishParts.map(({ join, fallback, ...p }) => p); reply = englishReply; }
     }
     const state = {};
     for (const [k, v] of Object.entries(this.isession.state)) if (JSON.stringify(v) !== stateBefore[k]) state[k] = structuredClone(v);
     const effects = this.isession.effects;
     this.isession.effects = [];
     return {
-      text: reply, lang, translation, segments, wires: [...wires, ...answerWires], answers, statuses, state, effects,
+      text: reply, parts, lang, translation, segments, wires: [...wires, ...answerWires], answers, statuses, state, effects,
       trace: {
         intercepted: icpt?.worldId ?? null, effects, formalizer: { preferred: formalizer ?? this.formalizer, used: [...new Set(segments.map((s) => s.strategy))] },
         source: sid, language: lang, original: text, english, replyEnglish: englishReply,

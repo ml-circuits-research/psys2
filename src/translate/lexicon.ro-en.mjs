@@ -106,7 +106,7 @@ camion,camioane|truck|n
 joc,jocuri|game|n
 carte,cărți|book|f||cărții
 umbrelă,umbrele|umbrella|f
-pălărie,pălării|hat|f
+pălărie,pălării|hat|f||pălăria,pălăriile
 haină,haine|coat|f
 geantă,genți|handbag|f
 pungă,pungi|bag|f
@@ -142,7 +142,7 @@ radieră,radiere|eraser|f
 ascuțitoare,ascuțitori|sharpener|f
 foaie,foi|sheet|f
 hârtie,hârtii|paper|f mass
-tablă,table|blackboard|f
+tablă,table|board|f
 cretă,cretă|chalk|f mass
 bancă,bănci|desk|f
 clasă,clase|class|f
@@ -377,7 +377,7 @@ cerc,cercuri|circle|n
 pătrat,pătrate|square|n
 triunghi,triunghiuri|triangle|n
 dreptunghi,dreptunghiuri|rectangle|n
-romb,romburi|diamond|n
+romb,romburi|rhombus|n
 oval,ovaluri|oval|n
 linie,linii|line|f
 lucru,lucruri|thing|n
@@ -433,6 +433,40 @@ scrisoare,scrisori|letter|f
 bilet,bilete|ticket|n
 card,carduri|card|n
 punct,puncte|point|n
+plantă,plante|plant|f
+bilă,bile|marble|f
+abțibild,abțibilduri|sticker|n
+raport,rapoarte|report|n
+document,documente|document|n
+paragraf,paragrafe|paragraph|n
+titlu,titluri|title|n
+propoziție,propoziții|sentence|f
+editor,editoare|editor|m
+difuzor,difuzoare|speaker|n
+microfon,microfoane|microphone|n
+ochelari|glasses|m pl
+coroană,coroane|crown|f
+filă,file|tab|f
+spânzurătoare,spânzurători|hangman|f mass
+limbă,limbi|language|f
+română|Romanian|f mass
+engleză|English|f mass
+exemplu,exemple|example|n
+indiciu,indicii|hint|n
+colț,colțuri|corner|n
+memento,memento-uri|reminder|n||memento-urile
+dans,dansuri|dance|n
+zâmbet,zâmbete|smile|n
+zgomot,zgomote|noise|n
+deșert,deșerturi|desert|n
+erbivor,erbivore|herbivore|n anim
+carnivor,carnivore|carnivore|n anim
+antenă,antene|antenna|f
+voce,voci|voice|f
+semn,semne|sign|n
+jungla|jungle|f
+savană,savane|savanna|f
+muu|moo|n mass
 `;
 
 const VERB_ROWS = `
@@ -555,6 +589,13 @@ suna|call|a:sun|sunat|t imp
 căuta|look for|caut cauți caută căutăm căutați caută|căutat|t imp
 vizita|visit|az:vizit|vizitat|t
 însemna|mean|înseamnă înseamnă înseamnă înseamnă înseamnă înseamnă|însemnat|i
+hrăni|feed/fed/fed|is:hrăn|hrănit|t imp
+cheltui|spend/spent/spent|is:cheltu|cheltuit|t imp
+uda|water|a:ud|udat|t imp
+zice|say/said/said|zic zici zice zicem ziceți zic|zis|d imp
+clipi|blink|clipesc clipești clipește clipim clipiți clipesc|clipit|i imp
+dansa|dance|az:dans|dansat|i imp
+zâmbi|smile|is:zâmb|zâmbit|i imp
 `;
 
 const ADJ_ROWS = `
@@ -648,6 +689,14 @@ uscat,uscată,uscați,uscate|dry
 inteligent,inteligentă,inteligenți,inteligente|smart
 leneș,leneșă,leneși,leneșe|lazy
 același,aceeași,aceiași,aceleași|same
+pătrat,pătrată,pătrați,pătrate|square
+surprins,surprinsă,surprinși,surprinse|surprised
+primar,primară,primari,primare|primary
+secundar,secundară,secundari,secundare|secondary
+anterior,anterioară,anteriori,anterioare|previous
+suficient,suficientă,suficienți,suficiente|enough
+acoperit,acoperită,acoperiți,acoperite|covered
+perfect,perfectă,perfecți,perfecte|perfect
 `;
 
 // Function words. flags: neg, freq, time, lead, drop, op

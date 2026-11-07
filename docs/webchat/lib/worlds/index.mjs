@@ -34,11 +34,13 @@ export class World {
   get title() { return txt(this.manifest ?? { entries: [] }, 'title') ?? this.id; }
   get status() { return txt(this.manifest ?? { entries: [] }, 'status'); }
   get version() { return txt(this.manifest ?? { entries: [] }, 'version'); }
+  /** Short phrase of what the world lets the assistant do ("do sums"); undefined when not declared, '' to stay out of the capabilities answer. */
+  get summaryPhrase() { return txt(this.manifest ?? { entries: [] }, 'summary'); }
   get doc() { return txt(this.manifest ?? { entries: [] }, 'doc'); }
   get language() { return txt(this.manifest ?? { entries: [] }, 'language') ?? 'en'; }
   /** Plain summary for listings. */
   summary() {
-    return { id: this.id, title: this.title, status: this.status, version: this.version, doc: this.doc,
+    return { id: this.id, title: this.title, summary: this.summaryPhrase, status: this.status, version: this.version, doc: this.doc,
       language: this.language, imports: this.imports, formalization: txt(this.manifest ?? { entries: [] }, 'formalization') ?? 'rules' };
   }
 }
@@ -120,7 +122,7 @@ function buildWorld(id, files, ops) {
   w.kbRaw = wires['kb.sop'];
   w.templates = wires['templates.sop'].filter((x) => x.type === 'core.template').map((x) => ({
     id: x.id, wire: x, worldId: id, for: txt(x, 'for'), status: txt(x, 'status') ?? 'supported',
-    mode: txt(x, 'mode') ?? 'value', text: txt(x, 'text'),
+    mode: txt(x, 'mode') ?? 'value', text: txt(x, 'text'), when: getAll(x, 'when').map((v) => v.v),
   }));
   w.tests = wires['tests.sop'].filter((x) => x.type === 'core.test').map((x) => ({
     id: x.id, wire: x, worldId: id, input: txt(x, 'input'), expect: getAll(x, 'expect').map((v) => v.v),

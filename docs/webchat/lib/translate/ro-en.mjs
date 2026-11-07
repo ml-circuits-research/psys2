@@ -113,74 +113,114 @@ function prepareTokens(toksIn) {
 const COMPILED = FRAMES.map((f) => ({
   ...f,
   els: f.p.split(' ').map((el) => {
-    const m = /^\{(\w+)\}$/.exec(el);
-    return m ? { slot: m[1] } : { alts: el.split('|').map((a) => foldKey(a)) };
+    const m = /^\{(\w+)(?::(\w+))?(?:#(\w+))?\}$/.exec(el);
+    return m ? { slot: m[1], mod: m[2] || null, tag: m[1] + (m[3] || '') } : { alts: el.split('|').map((a) => foldKey(a)) };
   }),
 })).sort((a, b) => b.els.length - a.els.length);
 
 function matchFrame(f, toks, p, info) {
-  let pos = p;
   const slots = {};
   let alt0 = null;
-  for (let k = 0; k < f.els.length; k++) {
+  const rec = (k, pos) => {
+    if (k === f.els.length) return pos;
     const el = f.els[k];
     const t = toks[pos];
     if (el.alts) {
-      if (!t || t.kind !== 'word' || t.synth || !el.alts.includes(t.key)) return null;
+      if (!t || (t.kind !== 'word' && t.kind !== 'num') || t.synth || !el.alts.includes(t.key)) return -1;
       if (k === 0) alt0 = t.key;
-      pos++;
-    } else if (el.slot === 'np') {
-      const r = parseNP(toks, pos, info, null);
-      if (!r) return null;
-      slots.np = { pieces: renderNP(r.np, {}), tok0: toks[pos] };
-      pos = r.next;
-    } else if (el.slot === 'num') {
-      if (!t || t.kind !== 'num') return null;
-      slots.num = { value: t.value, tok: t };
-      pos++;
-    } else if (el.slot === 'name') {
-      if (!t || t.kind !== 'word' || !(t.isCap || M.isKnownName(t.key)) || t.synth) return null;
-      slots.name = { tok: t };
-      pos++;
-    } else if (el.slot === 'w') {
-      if (!t || t.kind !== 'word') return null;
-      slots.w = { tok: t };
-      pos++;
-    } else if (el.slot === 'rest') {
-      if (pos >= toks.length) return null;
-      let end = pos;
-      while (end < toks.length && !(toks[end].kind === 'punct' && toks[end].raw === ',')) end++;
-      if (end !== toks.length) return null;
-      slots.rest = { toks: toks.slice(pos, end) };
-      pos = end;
+      return rec(k + 1, pos + 1);
     }
-  }
+    if (el.slot === 'np') {
+      if (!t) return -1;
+      let r = null;
+      if (el.mod === 'short') {
+        for (let e = pos + 1; e <= toks.length && !r; e++) {
+          const c = parseNP(toks.slice(0, e), pos, info, null);
+          if (c && c.next === e && c.np.head) r = c;
+        }
+      } else r = parseNP(toks, pos, info, null);
+      if (!r) return -1;
+      slots[el.tag] = { pieces: renderNP(r.np, el.mod === 'bare' ? { noArticle: true } : {}), tok0: toks[pos] };
+      return rec(k + 1, r.next);
+    }
+    if (el.slot === 'num') {
+      if (!t || t.kind !== 'num') return -1;
+      slots[el.tag] = { value: t.value, tok: t };
+      return rec(k + 1, pos + 1);
+    }
+    if (el.slot === 'name') {
+      if (!t || t.kind !== 'word' || !(t.isCap || M.isKnownName(t.key)) || t.synth) return -1;
+      slots[el.tag] = { tok: t };
+      return rec(k + 1, pos + 1);
+    }
+    if (el.slot === 'fw') {
+      if (!t || t.kind !== 'word' || t.synth) return -1;
+      const a = analysesOf(t).find((x) => x.pos === 'func' && /^(day|month|season)$/.test(x.fpos));
+      if (!a) return -1;
+      slots[el.tag] = { tok: t, en: a.entry.en };
+      return rec(k + 1, pos + 1);
+    }
+    if (el.slot === 'v' || el.slot === 'adj') {
+      if (!t || t.kind !== 'word' || t.synth) return -1;
+      const a = M.analyzeRaw(t.raw, !!t.diaFree).find((x) => x.pos === (el.slot === 'v' ? 'verb' : 'adj'));
+      if (!a) return -1;
+      slots[el.tag] = { tok: t, en: a.entry.en.split('/')[0] };
+      return rec(k + 1, pos + 1);
+    }
+    if (el.slot === 'w') {
+      if (!t || t.kind !== 'word') return -1;
+      slots[el.tag] = { tok: t };
+      return rec(k + 1, pos + 1);
+    }
+    if (el.slot === 'rest') {
+      if (pos >= toks.length) return -1;
+      const last = k === f.els.length - 1;
+      for (let end = last ? toks.length : pos + 1; end <= toks.length; end++) {
+        if (last) {
+          let hasComma = false;
+          for (let i = pos; i < end; i++) if (toks[i].kind === 'punct' && toks[i].raw === ',') hasComma = true;
+          if (hasComma) return -1;
+        }
+        slots[el.tag] = { toks: toks.slice(pos, end) };
+        const r = rec(k + 1, end);
+        if (r >= 0) return r;
+        if (last) break;
+      }
+      return -1;
+    }
+    return -1;
+  };
+  const pos = rec(0, p);
+  if (pos < 0) return null;
   if (f.full && (p !== 0 || pos !== toks.length)) return null;
   if (f.start && p !== 0) return null;
+  if (f.q !== undefined && !!info.q !== f.q) return null;
   return { end: pos, slots, alt0 };
 }
 
 function applyFrames(toks, info) {
+  // token frames (multi-word lexical units) first, then sentence frames
+  return applyFramePass(applyFramePass(toks, info, 'nounTokens'), info, 'rest');
+}
+
+function applyFramePass(toks, info, tokenPass) {
   let out = toks.slice();
   let p = 0;
   while (p < out.length) {
-    let done = false;
-    if (out[p].kind === 'word' && !out[p].synth) {
+    if ((out[p].kind === 'word' || out[p].kind === 'num') && !out[p].synth) {
       for (const f of COMPILED) {
+        const early = !!f.token && f.token.fpos === 'noun';
+        if ((tokenPass === 'nounTokens') !== early) continue;
         const m = matchFrame(f, out, p, info);
         if (!m) continue;
         const first = out[p];
         const last = out[m.end - 1];
-        let repl;
-        if (f.token) repl = makeTokenFrame(f, out.slice(p, m.end));
-        else repl = makeFixed(f, m, first, last, info);
+        const repl = f.token ? makeTokenFrame(f, out.slice(p, m.end)) : makeFixed(f, m, first, last, info);
         out.splice(p, m.end - p, repl);
-        done = true;
         break;
       }
     }
     p++;
-    if (done) continue;
   }
   return out;
 }
@@ -203,29 +243,42 @@ function makeTokenFrame(f, covered) {
 
 function makeFixed(f, m, first, last, info) {
   let out = f.out;
-  if (f.sub && m.alt0 && f.sub[m.alt0]) out = f.sub[m.alt0];
+  if (f.sub && m.alt0) { const sk = Object.keys(f.sub).find((k) => foldKey(k) === m.alt0); if (sk) out = f.sub[sk]; }
+  if (f.full) info.fullFrame = true;
   const pieces = [];
   const span = [first.start, last.end];
   let lit = [];
   const flush = () => { if (lit.length) { pieces.push(pspan(lit.join(' '), span[0], span[1])); lit = []; } };
   for (const w of out.split(' ')) {
-    const sm = /^\{(\w+)(?::(\w+))?\}$/.exec(w);
+    const sm = /^\{(\w+)(?::(\w+))?(?:#(\w+))?\}$/.exec(w);
     if (!sm) { lit.push(w); continue; }
-    const [, name, mod] = sm;
+    const [, name, mod, idx] = sm;
+    const tag = name + (idx || '');
+    const sl = m.slots[tag];
     if (name === 'num') {
       flush();
-      const v = m.slots.num.value;
+      const v = sl.value;
       let txt = v;
       if (mod === 'times') txt = v === '2' ? 'twice' : `${v} times`;
-      pieces.push(pc(txt, m.slots.num.tok));
+      pieces.push(pc(txt, sl.tok));
     } else if (name === 'name') {
       flush();
-      pieces.push(pc(m.slots.name.tok.raw, m.slots.name.tok));
-    } else if (name === 'np') { flush(); pieces.push(...m.slots.np.pieces); }
+      pieces.push(pc(sl.tok.raw, sl.tok));
+    } else if (name === 'np') { flush(); pieces.push(...sl.pieces); }
     else if (name === 'rest') {
       flush();
-      pieces.push(...processTokens(m.slots.rest.toks, { ...info, frag: true, q: false, excl: false }));
-    } else if (name === 'w') { flush(); pieces.push(pc(m.slots.w.tok.raw, m.slots.w.tok)); }
+      if (mod === 'raw') pieces.push(...sl.toks.map((t) => pc(t.raw, t)));
+      else if (mod === 'inf') {
+        // "să ud plantele" -> "to water the plants": translate as "vreau să ..." and drop the main clause
+        const s0 = sl.toks[0];
+        const fake = { kind: 'word', raw: 'vreau', key: 'vreau', start: s0.start, end: s0.start, isCap: false };
+        const out = processTokens([fake, ...sl.toks], { ...info, frag: true, q: false, excl: false });
+        const wi = out.findIndex((x) => /\bwant\b/.test(x.en));
+        pieces.push(...(wi >= 0 ? out.slice(wi + 1) : out));
+      }
+      else pieces.push(...processTokens(sl.toks, { ...info, frag: true, q: false, excl: false }));
+    } else if (name === 'w') { flush(); pieces.push(pc(sl.tok.raw, sl.tok)); }
+    else if (name === 'v' || name === 'adj' || name === 'fw') { flush(); pieces.push(pc(sl.en, sl.tok)); }
   }
   flush();
   if (/\bas (many|much)\b/.test(out)) info.useAs = true;
@@ -1383,7 +1436,8 @@ export function translateRoEn(original) {
     const hasNegSrc = keys.some((k) => NEG_KEYS.has(k)) && !(keys.length === 1);
     const hasWhSrc = keys.some((k) => ['cine', 'ce', 'care', 'unde', 'cat', 'cate', 'cati', 'cata'].includes(k)) || (keys[0] === 'cum') || (keys[0] === 'cand' && info.q);
     let bad = null;
-    if (hasNegSrc && !NEG_EN.test(outText) && !/n't/.test(outText)) bad = 'negation could not be mapped';
+    if (info.fullFrame) bad = null;
+    else if (hasNegSrc && !NEG_EN.test(outText) && !/n't/.test(outText)) bad = 'negation could not be mapped';
     else if (hasWhSrc && info.q && !WH_EN.test(outText) && !pieces.some((p) => /^(who|what|which|where|when|how|why)/i.test(p.en))) bad = 'question word could not be mapped';
     if (bad) {
       untranslatable.push({ span: [core[0].start, core[core.length - 1].end], reason: bad });
