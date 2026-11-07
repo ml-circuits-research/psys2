@@ -1,0 +1,9 @@
+@world.core core.world
+    namespace=core
+    version=0.1.0
+    legend=$legend.core
+    formalization=rules
+    language=en
+    status=fixture
+    title="Core types and keys"
+    doc="Bootstrap world: the types and keys every other world builds on. Hand-built platform fixture."

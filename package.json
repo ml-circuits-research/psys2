@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "description": "PragmaticSystem2: explicit computational worlds, SOP Lang, deterministic C2 operation",
   "type": "module",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "GPL-3.0-only",
   "engines": { "node": ">=20" },
   "scripts": {
-    "test": "node --test tests/",
+    "test": "node --test tests/*.test.mjs",
     "test:worlds": "node src/cli.mjs test-world all",
     "chat": "node src/cli.mjs chat",
     "serve": "node src/server/index.mjs",

@@ -1,0 +1,7 @@
+@lex.test.counting.items core.lexicon
+    class=noun
+    word=apple word=pear word=plum word=egg word=marble
+
+@lex.test.counting.triggers core.lexicon
+    class=trigger
+    word=has word=have word=gives word=gave word=cost word=costs word=how_many word=how_much word=fruit

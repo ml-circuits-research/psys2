@@ -1,0 +1,23 @@
+@tpl.kids.common.greet core.template
+    for=action.chat.greet
+    text="{value}! What would you like to talk about?"
+
+@tpl.kids.common.name core.template
+    for=action.chat.name
+    text="My name is {value}."
+
+@tpl.kids.common.who core.template
+    for=action.chat.who
+    text="I am {value}. I read what you tell me, remember it and answer only from what I know."
+
+@tpl.kids.common.thanks core.template
+    for=action.chat.thanks
+    text="{value}."
+
+@tpl.kids.common.bye core.template
+    for=action.chat.bye
+    text="{value}!"
+
+@tpl.kids.common.capabilities core.template
+    for=action.chat.capabilities
+    text="I can chat with you. The worlds I know are: {values:list}."

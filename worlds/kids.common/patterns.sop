@@ -1,0 +1,41 @@
+@pat.kids.common.hello core.pattern
+    match="[hello|hi|hey] [there]?"
+    emit="@{_} core.request action=chat.greet"
+    kind=chat
+    priority=10
+    example="Hello!"
+
+@pat.kids.common.name core.pattern
+    match="[what_is|what_are] [your_name|you_called]"
+    emit="@{_} core.request action=chat.name"
+    kind=chat
+    priority=10
+    example="What is your name?"
+
+@pat.kids.common.who core.pattern
+    match="who are you"
+    emit="@{_} core.request action=chat.who"
+    kind=chat
+    priority=10
+    example="Who are you?"
+
+@pat.kids.common.thanks core.pattern
+    match="[thanks|thank_you] [very_much|a_lot]?"
+    emit="@{_} core.request action=chat.thanks"
+    kind=chat
+    priority=10
+    example="Thank you!"
+
+@pat.kids.common.bye core.pattern
+    match="[goodbye|bye|see_you]"
+    emit="@{_} core.request action=chat.bye"
+    kind=chat
+    priority=10
+    example="Goodbye!"
+
+@pat.kids.common.can core.pattern
+    match="[what_can_you_do|help]"
+    emit="@{_} core.request action=chat.capabilities"
+    kind=chat
+    priority=10
+    example="What can you do?"

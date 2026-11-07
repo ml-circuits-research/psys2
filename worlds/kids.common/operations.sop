@@ -1,0 +1,35 @@
+@op.kids.common.greet core.operation
+    impl=greet
+    semantics=action
+    action=chat.greet
+    doc="Greets back."
+
+@op.kids.common.name core.operation
+    impl=assistantName
+    semantics=action
+    action=chat.name
+    doc="Tells the assistant's name (the name of e.assistant)."
+
+@op.kids.common.who core.operation
+    impl=assistantName
+    semantics=action
+    action=chat.who
+    doc="Says who the assistant is."
+
+@op.kids.common.thanks core.operation
+    impl=thanks
+    semantics=action
+    action=chat.thanks
+    doc="Answers thanks."
+
+@op.kids.common.bye core.operation
+    impl=bye
+    semantics=action
+    action=chat.bye
+    doc="Says goodbye."
+
+@op.kids.common.capabilities core.operation
+    impl=capabilities
+    semantics=action
+    action=chat.capabilities
+    doc="Lists the titles of the loaded worlds (uses ctx.worlds())."

@@ -1,0 +1,42 @@
+@t.test.counting.n1 core.test
+    session=s1
+    input="Tom has 5 apples. Ana gives him 3 apples. How many apples does Tom have?"
+    expect="Tom has 8 apples."
+
+@t.test.counting.n2 core.test
+    session=s1
+    input="How many apples does Ana have?"
+    expectStatus=missing
+
+@t.test.counting.n3 core.test
+    session=s1
+    input="Does Tom have any apples?"
+    expect="Yes, Tom has apples."
+
+@t.test.counting.n4 core.test
+    input="How much does a pear cost?"
+    expect="A pear costs 3."
+
+@t.test.counting.n5 core.test
+    input="A pear costs 4. How much does a pear cost?"
+    expectStatus=conflicting
+
+@t.test.counting.n6 core.test
+    input="Is a pear a fruit?"
+    expect="Yes."
+
+@t.test.counting.n7 core.test
+    input="Is a rock a fruit?"
+    expect="No."
+
+@t.test.counting.n8 core.test
+    input="Mia has one apple. How many apples does she have?"
+    expect="Mia has 1 apple."
+
+@t.test.counting.n9 core.test
+    input="Mia has a dozen eggs, Ben gives her two eggs. How many eggs does Mia have?"
+    expect="Mia has 14 eggs."
+
+@t.test.counting.n10 core.test
+    input="How many pears does Zoe have?"
+    expectStatus=missing

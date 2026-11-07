@@ -1,0 +1,31 @@
+@t.kids.common.n1 core.test
+    input="Hello!"
+    expect="Hello"
+
+@t.kids.common.n2 core.test
+    input="What is your name?"
+    expect="My name is PSys2."
+
+@t.kids.common.n3 core.test
+    input="Who are you?"
+    expect="I am PSys2"
+
+@t.kids.common.n4 core.test
+    input="Thank you!"
+    expect="You are welcome"
+
+@t.kids.common.n5 core.test
+    input="Goodbye"
+    expect="Goodbye"
+
+@t.kids.common.n6 core.test
+    input="What can you do?"
+    expect="Common kids vocabulary and chat"
+
+@t.kids.common.n7 core.test
+    input="Please, hi there"
+    expect="Hello"
+
+@t.kids.common.n8 core.test
+    input="Zorb flimbles quickly"
+    expectStatus=unparsed

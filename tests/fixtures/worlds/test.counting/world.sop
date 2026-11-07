@@ -1,0 +1,11 @@
+@world.test.counting core.world
+    namespace=test.counting
+    version=0.1.0
+    legend=$legend.test.counting
+    imports=world.core
+    imports=world.kids.common
+    formalization=rules
+    language=en
+    status=fixture
+    title="Counting (test fixture)"
+    doc="Test-only fixture: who has how many things, giving, prices and a closed type. Shows the pattern the real kids worlds follow: legend, patterns, one operation applying events in core.seq order, templates, tests. Hand-built; not produced by the C1 workflow."

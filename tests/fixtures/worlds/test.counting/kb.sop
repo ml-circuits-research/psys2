@@ -1,0 +1,12 @@
+@kb.fruit.apple test.counting.fruit
+    name=apple
+    core.source="fixture:test.counting/kb.sop#fruit-apple"
+
+@kb.fruit.pear test.counting.fruit
+    name=pear
+    core.source="fixture:test.counting/kb.sop#fruit-pear"
+
+@kb.price.pear test.counting.price
+    item=pear
+    cost=3
+    core.source="fixture:test.counting/kb.sop#price-pear"

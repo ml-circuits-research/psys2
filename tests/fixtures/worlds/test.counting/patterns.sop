@@ -1,0 +1,55 @@
+@pat.test.counting.has core.pattern
+    match="{who:agent} [has|have|had|got] {n:number} {item:noun}"
+    emit="@{_} test.counting.holding owner={who} count={n} item={item}"
+    kind=statement
+    priority=10
+    example="Tom has 5 apples."
+
+@pat.test.counting.give core.pattern
+    match="{giver:agent} [gives|gave|give] {receiver:agent} {n:number} {item:noun}"
+    emit="@{_} test.counting.give giver={giver} receiver={receiver} count={n} item={item}"
+    kind=statement
+    priority=10
+    example="Ana gives Tom 3 apples."
+
+@pat.test.counting.give.to core.pattern
+    match="{giver:agent} [gives|gave] {n:number} {item:noun} to {receiver:agent}"
+    emit="@{_} test.counting.give giver={giver} receiver={receiver} count={n} item={item}"
+    kind=statement
+    priority=10
+    example="Ana gives 3 apples to Tom."
+
+@pat.test.counting.price core.pattern
+    match="[a|an|the]? {item:noun} [costs|cost] {n:number}"
+    emit="@{_} test.counting.price item={item} cost={n}"
+    kind=statement
+    priority=10
+    example="An apple costs 2."
+
+@pat.test.counting.howmany core.pattern
+    match="how_many {item:noun} [does|do] {who:agent} have"
+    emit="@{_} core.question type=test.counting.holding seek=count where.owner={who} where.item={item}"
+    kind=question
+    priority=10
+    example="How many apples does Tom have?"
+
+@pat.test.counting.havesome core.pattern
+    match="[does|do] {who:agent} have [any|a|an]? {item:noun}"
+    emit="@{_} core.question type=test.counting.holding seek=count mode=exists where.owner={who} where.item={item}"
+    kind=question
+    priority=10
+    example="Does Tom have any apples?"
+
+@pat.test.counting.howmuch core.pattern
+    match="how_much [does|do] [a|an|the]? {item:noun} cost"
+    emit="@{_} core.question type=test.counting.price seek=cost where.item={item}"
+    kind=question
+    priority=10
+    example="How much does an apple cost?"
+
+@pat.test.counting.isfruit core.pattern
+    match="[is|are] [a|an]? {name:noun} [a|an] fruit"
+    emit="@{_} core.question type=test.counting.fruit seek=name mode=exists where.name={name}"
+    kind=question
+    priority=10
+    example="Is a pear a fruit?"

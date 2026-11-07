@@ -1,0 +1,5 @@
+@legend.kids.common core.legend
+    namespace=kids.common
+    version=0.1.0
+    imports=core
+    doc="Shared vocabulary for the kids worlds: names and small talk. Chat acts are core.request wires, so this legend declares no types of its own."

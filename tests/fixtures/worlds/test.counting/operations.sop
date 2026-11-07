@@ -1,0 +1,7 @@
+@op.test.counting.currentCount core.operation
+    outputs=test.counting.holding.count
+    inputs=test.counting.holding.owner
+    inputs=test.counting.holding.item
+    impl=currentCount
+    semantics=query
+    doc="The number someone has after applying, in dialog order, every statement of having and every giving."

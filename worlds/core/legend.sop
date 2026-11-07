@@ -1,0 +1,481 @@
+@legend.core core.legend
+    namespace=core
+    version=0.1.0
+    doc="Bootstrap legend: the types and keys every other legend builds on. Dynamic keys: a core.key with dynamic=true declares a key prefix; a wire may use any key of the form <prefix>.<anything> (for example where.owner or arg.count on core.question and core.request). The part after the prefix is resolved against the wire type named by the question, and the value kind is any."
+
+@core.thing core.type
+    doc="Root of the type hierarchy; any wire without an explicit parent extends it."
+
+@core.state core.type
+    extends=core.thing
+    doc="A fact that holds at some time: something has a property or relation."
+
+@core.event core.type
+    extends=core.thing
+    doc="Something that happens; events are ordered by core.seq in dialog order."
+
+@core.agent core.type
+    extends=core.thing
+    doc="A person or participant that can be mentioned in dialog."
+    example="Tom"
+
+@core.question core.type
+    extends=core.thing
+    doc="A question about a wire type: type, seek, optional where.<key> constraints (see the legend doc), mode."
+
+@core.answer core.type
+    extends=core.thing
+    doc="The result of resolving a question or request, written by the interpreter."
+
+@core.request core.type
+    extends=core.thing
+    doc="A request to run an action operation: action and optional arg.<name> arguments (see the legend doc)."
+
+@core.legend core.type
+    extends=core.thing
+    doc="A legend: namespace, version, imports."
+
+@core.type core.type
+    extends=core.thing
+    doc="A type declaration."
+
+@core.key core.type
+    extends=core.thing
+    doc="A key declaration."
+
+@core.world core.type
+    extends=core.thing
+    doc="A world manifest."
+
+@core.pattern core.type
+    extends=core.thing
+    doc="A rule-formalizer pattern."
+
+@core.operation core.type
+    extends=core.thing
+    doc="An operation declaration."
+
+@core.template core.type
+    extends=core.thing
+    doc="An answer rendering template."
+
+@core.test core.type
+    extends=core.thing
+    doc="A competency test."
+
+@core.lexicon core.type
+    extends=core.thing
+    doc="A word list."
+
+@core.note core.type
+    extends=core.thing
+    doc="A free-text note (SOP Lang v1 has no comments)."
+
+@core.source core.key
+    value=string
+    card=one
+    ask="Where does this come from?"
+    scope=global
+
+@core.in core.key
+    value=any
+    card=one
+    ask="In which context?"
+    scope=global
+
+@core.from core.key
+    value=any
+    card=many
+    ask="Which wires support this?"
+    scope=global
+
+@core.via core.key
+    value=any
+    card=one
+    ask="Which operation or pattern produced this?"
+    scope=global
+
+@core.seq core.key
+    value=integer
+    card=one
+    ask="In which order did this happen?"
+    scope=global
+
+@core.status core.key
+    value=atom
+    card=one
+    ask="What is the status?"
+    scope=global
+
+@core.agent.name core.key
+    value=string
+    card=one
+    ask="What is the name?"
+    required=true
+
+@core.agent.gender core.key
+    value=atom
+    card=one
+    ask="Is the agent male (m) or female (f)?"
+
+@core.question.type core.key
+    value=atom
+    card=one
+    ask="Which wire type is asked about?"
+    required=true
+
+@core.question.seek core.key
+    value=atom
+    card=one
+    ask="Which key is sought?"
+
+@core.question.where core.key
+    value=any
+    card=many
+    ask="Which constraints apply?"
+    dynamic=true
+
+@core.question.about core.key
+    value=any
+    card=one
+    ask="Which wire is asked about?"
+
+@core.question.mode core.key
+    value=atom
+    card=one
+    ask="value, exists, list or count?"
+
+@core.answer.to core.key
+    value=any
+    card=one
+    ask="Which question or request is answered?"
+    required=true
+
+@core.answer.value core.key
+    value=any
+    card=many
+    ask="What is the value?"
+
+@core.answer.unit core.key
+    value=atom
+    card=one
+    ask="What is the unit?"
+
+@core.answer.alternative core.key
+    value=any
+    card=many
+    ask="Which alternative values exist?"
+
+@core.answer.missing core.key
+    value=atom
+    card=many
+    ask="Which keys are missing?"
+
+@core.answer.note core.key
+    value=string
+    card=one
+    ask="Is there a note?"
+
+@core.request.action core.key
+    value=atom
+    card=one
+    ask="Which action is requested?"
+    required=true
+
+@core.request.arg core.key
+    value=any
+    card=many
+    ask="Which arguments are given?"
+    dynamic=true
+
+@core.legend.namespace core.key
+    value=atom
+    card=one
+    ask="Which namespace does the legend define?"
+    required=true
+
+@core.legend.version core.key
+    value=atom
+    card=one
+    ask="Which version?"
+
+@core.legend.imports core.key
+    value=atom
+    card=many
+    ask="Which namespaces are imported?"
+
+@core.legend.doc core.key
+    value=string
+    card=one
+    ask="What is it about?"
+
+@core.type.extends core.key
+    value=atom
+    card=one
+    ask="Which type does it extend?"
+
+@core.type.doc core.key
+    value=string
+    card=one
+    ask="What is it?"
+
+@core.type.example core.key
+    value=string
+    card=many
+    ask="Which sentence is an example?"
+
+@core.type.negative core.key
+    value=string
+    card=many
+    ask="Which sentence is not an example?"
+
+@core.type.closed core.key
+    value=boolean
+    card=one
+    ask="Are the facts of this type complete (closed world)?"
+
+@core.key.value core.key
+    value=any
+    card=one
+    ask="Which kind of value or type does the key hold?"
+    required=true
+
+@core.key.card core.key
+    value=atom
+    card=one
+    ask="one or many?"
+
+@core.key.ask core.key
+    value=string
+    card=one
+    ask="Which English question asks for this key?"
+    required=true
+
+@core.key.observe core.key
+    value=boolean
+    card=one
+    ask="Can it be observed in input?"
+
+@core.key.compute core.key
+    value=boolean
+    card=one
+    ask="Can it be computed by an operation?"
+
+@core.key.required core.key
+    value=boolean
+    card=one
+    ask="Must it be present?"
+
+@core.key.dynamic core.key
+    value=boolean
+    card=one
+    ask="Does the key declare a dynamic prefix?"
+
+@core.key.scope core.key
+    value=atom
+    card=one
+    ask="Is the key global (available on every wire)?"
+
+@core.key.doc core.key
+    value=string
+    card=one
+    ask="What is it?"
+
+@core.world.namespace core.key
+    value=atom
+    card=one
+    ask="Which namespace?"
+    required=true
+
+@core.world.version core.key
+    value=atom
+    card=one
+    ask="Which version?"
+
+@core.world.legend core.key
+    value=any
+    card=one
+    ask="Which legend?"
+    required=true
+
+@core.world.imports core.key
+    value=atom
+    card=many
+    ask="Which worlds are imported?"
+
+@core.world.formalization core.key
+    value=atom
+    card=one
+    ask="rules or encoder?"
+
+@core.world.language core.key
+    value=atom
+    card=one
+    ask="Which language?"
+
+@core.world.status core.key
+    value=atom
+    card=one
+    ask="fixture, candidate or accepted?"
+
+@core.world.title core.key
+    value=string
+    card=one
+    ask="What is the title?"
+
+@core.world.doc core.key
+    value=string
+    card=one
+    ask="What is it about?"
+
+@core.pattern.match core.key
+    value=string
+    card=one
+    ask="Which token pattern matches?"
+    required=true
+
+@core.pattern.emit core.key
+    value=string
+    card=one
+    ask="Which wires are emitted?"
+    required=true
+
+@core.pattern.kind core.key
+    value=atom
+    card=one
+    ask="statement, question, request or chat?"
+
+@core.pattern.priority core.key
+    value=integer
+    card=one
+    ask="Which priority?"
+
+@core.pattern.example core.key
+    value=string
+    card=many
+    ask="Which sentence is an example?"
+
+@core.pattern.doc core.key
+    value=string
+    card=one
+    ask="What is it?"
+
+@core.operation.outputs core.key
+    value=atom
+    card=many
+    ask="Which keys does it compute?"
+
+@core.operation.inputs core.key
+    value=atom
+    card=many
+    ask="Which keys does it read?"
+
+@core.operation.impl core.key
+    value=atom
+    card=one
+    ask="Which export of ops.mjs implements it?"
+    required=true
+
+@core.operation.semantics core.key
+    value=atom
+    card=one
+    ask="query, compute or action?"
+
+@core.operation.action core.key
+    value=atom
+    card=one
+    ask="Which action name does it serve?"
+
+@core.operation.doc core.key
+    value=string
+    card=one
+    ask="What does it do?"
+
+@core.template.for core.key
+    value=atom
+    card=one
+    ask="Which key, operation, action or ack type does it render?"
+    required=true
+
+@core.template.status core.key
+    value=atom
+    card=one
+    ask="Which answer status does it render?"
+
+@core.template.mode core.key
+    value=atom
+    card=one
+    ask="Which question mode does it render (default value)?"
+
+@core.template.text core.key
+    value=string
+    card=one
+    ask="Which text?"
+    required=true
+
+@core.template.doc core.key
+    value=string
+    card=one
+    ask="What is it?"
+
+@core.test.input core.key
+    value=string
+    card=one
+    ask="Which input is sent?"
+    required=true
+
+@core.test.expect core.key
+    value=string
+    card=many
+    ask="Which substring must the answer contain?"
+
+@core.test.expectStatus core.key
+    value=atom
+    card=one
+    ask="Which answer status is expected?"
+
+@core.test.language core.key
+    value=atom
+    card=one
+    ask="Which language is the input in?"
+
+@core.test.session core.key
+    value=atom
+    card=one
+    ask="Which tests share a session?"
+
+@core.test.doc core.key
+    value=string
+    card=one
+    ask="What is tested?"
+
+@core.lexicon.class core.key
+    value=atom
+    card=one
+    ask="Which class of words?"
+    required=true
+
+@core.lexicon.word core.key
+    value=atom
+    card=many
+    ask="Which words?"
+
+@core.lexicon.plural core.key
+    value=atom
+    card=many
+    ask="Which irregular plurals (singular:plural)?"
+
+@core.lexicon.gender core.key
+    value=atom
+    card=one
+    ask="Which gender do the names have (m or f)?"
+
+@core.lexicon.doc core.key
+    value=string
+    card=one
+    ask="What is it?"
+
+@core.note.text core.key
+    value=string
+    card=one
+    ask="What does the note say?"

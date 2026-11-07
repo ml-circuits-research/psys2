@@ -1,0 +1,69 @@
+@legend.test.counting core.legend
+    namespace=test.counting
+    version=0.1.0
+    imports=core
+    imports=kids.common
+    doc="Things people have, giving and prices"
+
+@test.counting.holding core.type
+    extends=core.state
+    doc="Someone has a number of items of one kind."
+    example="Tom has 5 apples."
+    negative="Tom likes apples."
+
+@test.counting.holding.owner core.key
+    value=$core.agent
+    ask="Who has them?"
+
+@test.counting.holding.item core.key
+    value=atom
+    ask="What kind of thing is it?"
+
+@test.counting.holding.count core.key
+    value=integer
+    ask="How many are there?"
+    compute=true
+
+@test.counting.give core.type
+    extends=core.event
+    doc="One person gives some items to another person."
+    example="Ana gives Tom 3 apples."
+
+@test.counting.give.giver core.key
+    value=$core.agent
+    ask="Who gives?"
+
+@test.counting.give.receiver core.key
+    value=$core.agent
+    ask="Who receives?"
+
+@test.counting.give.item core.key
+    value=atom
+    ask="What is given?"
+
+@test.counting.give.count core.key
+    value=integer
+    ask="How many are given?"
+
+@test.counting.price core.type
+    extends=core.state
+    doc="One item of a kind costs some amount."
+    example="An apple costs 2."
+
+@test.counting.price.item core.key
+    value=atom
+    ask="Which item?"
+
+@test.counting.price.cost core.key
+    value=integer
+    ask="How much does it cost?"
+
+@test.counting.fruit core.type
+    extends=core.state
+    closed=true
+    doc="A kind of thing is a fruit. Closed: the knowledge base lists every fruit this world knows."
+    example="An apple is a fruit."
+
+@test.counting.fruit.name core.key
+    value=atom
+    ask="Which kind of thing is a fruit?"

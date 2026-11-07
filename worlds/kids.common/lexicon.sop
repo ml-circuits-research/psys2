@@ -1,0 +1,73 @@
+@lex.kids.common.names.en.m core.lexicon
+    class=name
+    gender=m
+    doc="Common English boy names"
+    word=tom
+    word=ben
+    word=jack
+    word=sam
+    word=max
+    word=leo
+    word=dan
+    word=joe
+    word=nick
+    word=paul
+    word=mark
+    word=luke
+    word=adam
+    word=peter
+    word=john
+
+@lex.kids.common.names.en.f core.lexicon
+    class=name
+    gender=f
+    doc="Common English girl names"
+    word=mia
+    word=emma
+    word=lily
+    word=zoe
+    word=eva
+    word=amy
+    word=kate
+    word=sara
+    word=lucy
+    word=jane
+    word=anne
+    word=ella
+    word=alice
+    word=susan
+    word=mary
+
+@lex.kids.common.names.ro.m core.lexicon
+    class=name
+    gender=m
+    doc="Common Romanian male names"
+    word=ion
+    word=mihai
+    word=andrei
+    word=vlad
+    word=radu
+    word=stefan
+    word=gabriel
+    word=bogdan
+    word=florin
+    word=matei
+
+@lex.kids.common.names.ro.f core.lexicon
+    class=name
+    gender=f
+    doc="Common Romanian female names"
+    word=ana
+    word=maria
+    word=elena
+    word=ioana
+    word=cristina
+    word=laura
+    word=irina
+    word=daria
+    word=alina
+    word=diana
+
+@lex.kids.common.triggers core.lexicon
+    class=trigger
+    word=hello word=hi word=hey word=thanks word=thank word=goodbye word=bye word=help

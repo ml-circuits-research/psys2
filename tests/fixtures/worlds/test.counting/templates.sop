@@ -1,0 +1,50 @@
+@tpl.test.counting.count core.template
+    for=test.counting.holding.count
+    text="{owner} has {value} {item:plural}."
+
+@tpl.test.counting.count.missing core.template
+    for=test.counting.holding.count
+    status=missing
+    text="I don't know how many {item:plural} {owner} has."
+
+@tpl.test.counting.count.conflicting core.template
+    for=test.counting.holding.count
+    status=conflicting
+    text="The facts about the {item:plural} of {owner} do not add up."
+
+@tpl.test.counting.exists core.template
+    for=test.counting.holding.count
+    mode=exists
+    text="Yes, {owner} has {item:plural}."
+
+@tpl.test.counting.exists.missing core.template
+    for=test.counting.holding.count
+    mode=exists
+    status=missing
+    text="I don't know whether {owner} has {item:plural}."
+
+@tpl.test.counting.cost core.template
+    for=test.counting.price.cost
+    text="{item:a:cap} costs {value}."
+
+@tpl.test.counting.cost.conflicting core.template
+    for=test.counting.price.cost
+    status=conflicting
+    text="I have conflicting prices for {item:plural}: {alternatives:list}."
+
+@tpl.test.counting.cost.missing core.template
+    for=test.counting.price.cost
+    status=missing
+    text="I don't know how much {item:a} costs."
+
+@tpl.test.counting.ack.holding core.template
+    for=ack.test.counting.holding
+    text="OK, {owner} has {count} {item:plural}."
+
+@tpl.test.counting.ack.give core.template
+    for=ack.test.counting.give
+    text="OK, {giver} gave {receiver} {count} {item:plural}."
+
+@tpl.test.counting.ack.price core.template
+    for=ack.test.counting.price
+    text="OK, {item:a} costs {cost}."

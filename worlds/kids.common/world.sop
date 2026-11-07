@@ -1,0 +1,10 @@
+@world.kids.common core.world
+    namespace=kids.common
+    version=0.1.0
+    legend=$legend.kids.common
+    imports=world.core
+    formalization=rules
+    language=en
+    status=fixture
+    title="Common kids vocabulary and chat"
+    doc="First names (English and Romanian) with gender, and small talk: greetings, thanks, goodbye, who and what the assistant is. Hand-built platform fixture, not produced by the C1 workflow. The dialog engine creates the entities e.user and e.assistant at session start, so patterns here and in other worlds can refer to I, me, you."
