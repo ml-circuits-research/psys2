@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Legends - PSys2 docs</title><link rel="stylesheet" href="assets/style.css"></head>
+<body><nav id="side"><button id="menu-toggle" type="button">Menu</button><a class="brand" href="index.html">PSys2 docs</a><h2>Start</h2><ul><li><a href="index.html">Overview</a></li></ul><h2>Language and data</h2><ul><li><a href="soplang.html">SOP Lang v1</a></li><li><a href="legends.html">Legends</a></li><li><a href="worlds.html">Worlds</a></li><li><a href="context-consistency.html">Context and consistency</a></li></ul><h2>Formalization</h2><ul><li><a href="formalizer-rules.html">Rule formalizer</a></li><li><a href="formalizer-encoder.html">Encoder formalizer</a></li><li><a href="router.html">Router</a></li></ul><h2>Execution</h2><ul><li><a href="interpreter.html">Interpreter</a></li></ul><h2>The three modes</h2><ul><li><a href="c1-construction.html">C1 construction</a></li><li><a href="c2-operation.html">C2 operation</a></li><li><a href="c3-improvement.html">C3 improvement</a></li></ul><h2>Platform</h2><ul><li><a href="releases-journal.html">Releases and journal</a></li><li><a href="runtime-isolation.html">Runtime isolation</a></li><li><a href="translation.html">Translation</a></li><li><a href="api.html">API, CLI, sessions</a></li></ul><h2>Project</h2><ul><li><a href="evaluation.html">Evaluation</a></li><li><a href="roadmap.html">Roadmap</a></li></ul><h2>Demo</h2><ul><li><a href="webchat/index.html">Webchat (C2 in the browser)</a></li></ul></nav>
+<main><article><h1>Legends</h1><div class="meta"><p><strong>Status:</strong> <span class="badge implemented">implemented</span> </p><p><strong>Specs:</strong> <a href="../specs/02-legends-and-worlds.md">spec 02 Legends and worlds</a>, <a href="../specs/01-soplang.md">spec 01 SOP Lang v1</a></p><p><strong>Vision:</strong> <a href="../vision/PSys2-vision-v1.md#3-legends-worlds-and-operation-declarations">vision &sect;3</a>, <a href="../vision/PSys2-vision-v1.md#2-sop-lang-and-the-core-data-contract">vision &sect;2</a></p></div>
+<h2>Purpose</h2><p>A legend is a versioned vocabulary of wire types and keys. Each key declares its natural-language question, value type, cardinality, and whether it can be observed, computed or both. Questions guide encoder training and query mapping; they are not inference rules by themselves (vision &sect;3). A legend is itself SOP Lang.</p><h2>Format</h2><pre><code>@legend.kids.arith core.legend
+    namespace=kids.arith
+    version=0.1.0
+    imports=core
+    imports=kids.common
+    doc="Counting and simple arithmetic about things people have"
+
+@kids.arith.holding core.type
+    extends=core.state
+    doc="Someone has a number of items of one kind"
+    example="Tom has 5 apples."
+
+@kids.arith.holding.owner core.key
+    value=$kids.common.agent
+    card=one
+    ask="Who has them?"
+
+@kids.arith.holding.count core.key
+    value=integer
+    card=one
+    ask="How many are there?"
+    observe=true
+    compute=true</code></pre>
+<table><thead><tr><th>Wire type</th><th>Entries</th></tr></thead><tbody><tr><td><code>core.legend</code></td><td><code>namespace</code> (required), <code>version</code> (semver), <code>imports</code> (repeatable namespaces), <code>doc</code></td></tr><tr><td><code>core.type</code></td><td>id is the full type name; <code>extends</code> (default <code>core.thing</code>), <code>doc</code>, <code>example</code> (repeatable), <code>negative</code> (repeatable example that is <em>not</em> this type); <code>closed=true</code> declares a predicate closed-world (spec 04)</td></tr><tr><td><code>core.key</code></td><td>id is <code>&lt;type&gt;.&lt;key&gt;</code>; <code>value</code> is a literal kind (<code>integer</code>, <code>number</code>, <code>string</code>, <code>atom</code>, <code>boolean</code>, <code>quantity.&lt;kind&gt;</code>, <code>time.&lt;kind&gt;</code>) or a type reference (<code>$kids.common.agent</code>); <code>card</code> = <code>one</code> (default) or <code>many</code>; <code>ask</code> (required English question); <code>observe</code> / <code>compute</code> (default <code>observe=true compute=false</code>); <code>required</code> (default false)</td></tr></tbody></table>
+<p>The bootstrap legends <code>core</code> (<code>worlds/core/legend.sop</code>) and <code>quantity</code> live in <code>worlds/</code> like any other namespace.</p><h2>Key resolution, step by step</h2><ol><li>Take the wire type <code>T</code> and the written key <code>k</code>.</li><li>If <code>k</code> contains a dot and resolves as a full key, use it. <code>core.*</code> keys are always available in full form.</li><li>Otherwise try <code>T.k</code>, then <code>A.k</code> for each ancestor <code>A</code> of <code>T</code>, nearest first.</li><li>Exactly one resolution is required. Ambiguity or failure is a validation error.</li></ol><pre data-label="Short keys (illustrative; v1 has no comments, the lines after the wire are explanation)"><code>@w1 kids.arith.holding owner=$e.tom count=5 item=apple
+# "count" resolves to kids.arith.holding.count
+# the legend, not the parser, decides this</code></pre>
+<h2>Validation of a wire against legends</h2><ul><li>the type is known;</li><li>every key resolves;</li><li>cardinality is respected (<code>card=one</code> forbids repetition);</li><li>literal kinds parse (integer, number, boolean);</li><li>references point to a wire whose type is the declared type or a descendant (checked when the target is available).</li></ul><p>The vision adds that fully qualified keys are canonical and that legend imports resolve through a lockfile to exact release hashes (&sect;2, &sect;3). Type extension is allowed only if parent invariants and operation preconditions stay valid, and a changed meaning gets a new identifier or a declared migration.</p><div class="diff"><p><strong class="t">Vision and specs differ</strong></p><p>The vision wants a normalization rule per key and context rules and entity bridges in the legend (C1.02). Spec 02 keys have no normalization entry, and lockfile pinning is not specified; imports are plain namespace names.</p></div>
+<h2>Namespaces</h2><p>A legend owns one namespace, the world directory is named by it (<code>worlds/kids.arith/</code>), and ids differ by prefix: <code>@legend.kids.arith</code> for the legend and <code>@world.kids.arith</code> for the world (vision &sect;2). Namespace reuse is measured for usefulness, not rewarded by a percentage target (vision &sect;3).</p><h2>Failure modes</h2><table><thead><tr><th>Condition</th><th>Result</th></tr></thead><tbody><tr><td>Unknown type or key</td><td>Validation error naming the wire and key</td></tr><tr><td>Ambiguous short key (matches in two ancestors at equal distance or twice)</td><td>Validation error; the author must write the full key</td></tr><tr><td>Repeated key with <code>card=one</code></td><td>Validation error</td></tr><tr><td>Reference to a wire of the wrong type</td><td>Validation error (when the target is available)</td></tr><tr><td>Value does not parse as the declared literal kind</td><td>Validation error</td></tr></tbody></table>
+
+</article><footer>PSys2 documentation. Normative sources: the <a href="../vision/PSys2-vision-v1.md">vision</a> and the <a href="../specs/README.md">specs</a>; where this page and a spec disagree, the spec wins.</footer></main>
+<script src="assets/nav.js"></script></body></html>
