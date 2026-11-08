@@ -18,7 +18,7 @@
  * | not_understood. Headline = right / all messages, per world and per world group (scripts/lib/world-groups.mjs); latency per message.
  * Writes training/results/operational-<name>.json (summary + one row per case).
  */
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
@@ -55,7 +55,7 @@ async function makeEngine({ rulesOnly, ortPath, modelDir, editTau }) {
       const session = await ort.InferenceSession.create(join(dir, 'model.int8.onnx'), { graphOptimizationLevel: 'all' });
       let editTags = null;
       if (meta.onnx?.outputs?.includes('edit_logits')) editTags = JSON.parse(readFileSync(join(dir, 'edit-vocab.json'), 'utf8')).tags;
-      return { ort, session, tokenizer: createWordPieceTokenizer(readFileSync(join(dir, 'vocab.txt'), 'utf8')), worlds: meta.worlds, editTags, editTau: editTau ?? meta.edit_threshold ?? 0.5, useContext: meta.context !== false };
+      return { ort, session, tokenizer: createWordPieceTokenizer(readFileSync(existsSync(join(dir, 'vocab.txt')) ? join(dir, 'vocab.txt') : join(dir, 'tokenizer', 'vocab.txt'), 'utf8')), worlds: meta.worlds, editTags, editTau: editTau ?? meta.edit_threshold ?? 0.5, useContext: meta.context !== false };
     },
   });
   enc.attach(engine);
