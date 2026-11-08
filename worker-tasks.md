@@ -132,13 +132,13 @@ The review's claims were checked: the music labels (`a key with 4 sharps?` label
 - Apply noise only to eligible zones: politeness, casing, final punctuation, abbreviations, controlled typos.
 - Record the transformation and the protected spans. Test that the payload is preserved.
 
-**F4 (P1) — compositional multi-command data.** Today it is concatenation only, with the context dropped (`session: []`) and the target recovered via `source_id`.
+**F4 (P1) — compositional multi-command data. The training side is done (3424ec2). STILL OPEN on the rules side:** `Become a robot` + `Make your eyes and body blue` still answers "I do not know eyes like 'and body blue'" at 16:45. Implement the conservative expansion in the rule formalizer, with tests, for the shared argument, verb ellipsis and self-correction ("blue, no, green"). Today it is concatenation only, with the context dropped (`session: []`) and the target recovered via `source_id`.
 - Generate a small program (operations, values, references, initial context), then verbalize it in several ways.
 - Add explicit families: shared argument ("eyes and body blue"), verb ellipsis ("eyes blue and body red"), self-correction ("blue, no, green"), reference to a created object ("draw a circle and put it above the square"), repetition and undo ("move left twice, then undo"), switching world.
 - Keep or construct the needed context. Report full-request success per family.
 - **Rules side (R2):** coordination with a shared argument and self-correction belong in the rules, through a conservative expansion before parsing ("eyes and body blue" → "eyes blue; body blue", provenance kept). The segmenter must not be asked to copy arguments.
 
-**F5 (P1) — explicit reasons instead of "refused".** Add a shared `reason` field, set by the interpreter and read by the validator:
+**F5 (P1) — explicit reasons instead of "refused" — DONE and validated (6ddc7c1).** Add a shared `reason` field, set by the interpreter and read by the validator:
 - `precondition_failed`: keep the reading and explain the refusal;
 - `unknown_argument`: try other readings, the spell-corrected text, the normalizer;
 - `unsupported_operation`: report the limit, never confirm false success;
@@ -384,3 +384,6 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
 - D4b — Model published in the repo (32fd79d). Reviewer check in headless Chrome with Encoder selected: multi-command, typo and tab-routing messages answered correctly, no console errors. Still add the D4b log entry, including the check on the public Pages URL.
 - D3 — End-to-end evaluation (746d847): headline 68.5% right with dispatcher + validation, against 43.0% rules only; multi-command 80.8% against 36.0%. Rule gaps are 69% of the failures. Sample rerun: runs and reproduces; the numbers moved slightly with later rule commits, as expected.
 - D1b — Simplification head (19afdbe), partial: +1 to +3.5 points; the JS/ONNX runtime works. Policy and publication are decided in §2 / R1.
+- F2, F3, F6 iterator — reviewer (a40da8d): tests pass.
+- F5 — Refusal reasons (6ddc7c1): 591 tests and all world tests pass.
+- F4 (training side), F6 budgets/sampling, F7 selection hook, F8 windows (3424ec2): 20 Python tests pass. F4 still needs its rules part.
