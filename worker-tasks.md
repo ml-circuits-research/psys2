@@ -80,6 +80,32 @@ The goal is a system that is **as fast and as complete as possible, with as litt
 - Do not stop to ask about baselines, freezes, contamination or purity. Ask only when a decision really belongs to the user (UI behaviour, publishing, deleting things).
 - Use parallel subagents (Sonnet for rules, Haiku for new paraphrase batches) whenever work splits by world.
 
+### Architecture, final for this stage (user, 12:55)
+
+- **The rules formalize everything.** Every way of asking that we can think of, for every operation of every world, must be supported by the rules.
+- **DistilBERT only splits.** The dispatcher cuts large or multi-command messages into small pieces and proposes candidate worlds. It does not formalize. The rules then formalize each piece and validate the candidates.
+- The simplification head is low priority: keep it as is, do not invest more in it. The effort goes into the rules.
+
+### R2 — exhaustive rule coverage on all worlds (main task; finishes this stage)
+
+For **every world** (all 21), do this in parallel with subagents, one per world or per small group:
+1. **Request-shape catalogue.** Write `worlds/<world>/coverage.md`. For every operation, list every shape a user may use, and add the world's own ones:
+   - imperative ("make it red"), question ("can you make it red?", "is it red?"), wish ("I want it red", "I'd like…");
+   - indirect ("it should be red", "red would be nicer"), statement-as-command ("the body is red now");
+   - very short and elliptic forms ("red", "bigger", "again", "no, the other one");
+   - voice style with fillers and run-ons, typos and abbreviations (u, ur, pls, thx, whats, hrs);
+   - word-order variants (noun-first "eyes: blue"), synonyms and paraphrases of verbs and nouns;
+   - pronouns and references ("it", "that one", "the same but bigger", "the last one");
+   - quantities, units, number words; negation and undo ("don't", "not that", "undo", "go back");
+   - coordination ("X and Y", "X then Y", "X, Y and Z"); politeness and chit-chat around the command ("hey could you maybe…");
+   - questions about the state ("what colour is it?", "how many…?") and about the options ("what can I…?").
+2. **Implement every line** with general patterns and lexicon entries, and add at least one test per line in `tests.sop`. A line that cannot be supported (a missing operation, say) is marked as such in `coverage.md`, with the reason.
+3. **Measure per world** the rules-only share of all paraphrase records (training paraphrases, held-out, new batches) that formalize correctly. **Target: ≥ 90% per world, rules only, on single-sentence messages.** Generate new Haiku batches per world to probe the gaps until the target holds on a fresh batch the rules were not written from (≥ 80% there).
+4. Keep `npm test` and `test-world all` green. Keep the generator agreement (`export-training`) from dropping.
+5. Then retrain the dispatcher once on all data (segmentation + worlds), publish the model, rebuild the webchat, and report the headline (rules only and pipeline) per world group.
+
+Log as `R2 <world>` entries plus one `R2 summary` table: world · catalogue lines · supported · tests · rules-only coverage before → after · fresh-batch coverage.
+
 ### R1 — continuous rule widening (main task from now on, run in loops)
 
 Loop until the session ends:
@@ -94,7 +120,7 @@ Loop until the session ends:
 
 **The goal of this session is to avoid training per-world models.** We validate one idea first: a single small shared model, the **dispatcher**, proposes candidates, and the existing rule formalizers validate them. No per-world LoRA in this session.
 
-Order: R1 loops (main) and D5 in between. T9 is updated at the end of the session. D1, D2, D3, D4 are done; D1b is accepted as partial, with its policy below.
+Order: **R2 (main, finishes this stage)**, with R1 loops as its engine, then D5. T9 is updated at the end of the session. D1, D2, D3, D4 are done; D1b is accepted as partial, with its policy below.
 
 2. **D1 — dispatcher model:** done and validated (segmentation + world heads; DistilBERT kept as the main model).
    **D1b — simplification head (still open, do after D3).** It is the third head of Round 1: KEEP / DELETE / REPLACE edit tags, learned from aligning the paraphrase variants with their canonical phrasings. D3 will show how many failures are rule gaps on messy wording; this head targets exactly those. Add it to the DistilBERT dispatcher, export it in the same ONNX model, and use it in the validation layer: try the simplified text when the original does not validate. Report the headline metric before and after.
