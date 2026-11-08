@@ -1,24 +1,24 @@
 {
  "generated_by": "scripts/relabel-training.mjs",
  "data_root": "/home/salboaie/work/psys2/training",
- "seconds": 79,
+ "seconds": 70,
  "before": {
   "records": 57515,
   "by_cause": {
-   "label_says_rules_differ": 106,
+   "label_says_rules_differ": 108,
    "gold_value_not_in_text": 5,
    "gold_target_from_another_world": 661,
    "needs_review_readable": 6
   },
   "by_cause_in_dataset_train": {
-   "label_says_rules_differ": 68,
+   "label_says_rules_differ": 70,
    "gold_value_not_in_text": 5,
    "gold_target_from_another_world": 531
   },
   "by_cause_x_label_status": {
    "label_says_rules_differ": {
-    "generator-disagrees": 92,
-    "rules-differ": 14
+    "generator-disagrees": 95,
+    "rules-differ": 13
    },
    "gold_value_not_in_text": {
     "rule-derived": 5
@@ -41,26 +41,26 @@
  },
  "fixes": {
   "relabelled": {
-   "label_says_rules_differ": 59,
+   "label_says_rules_differ": 62,
    "gold_value_not_in_text": 4,
-   "gold_target_from_another_world": 192
+   "gold_target_from_another_world": 187
   },
   "needs_review": {
    "gold_value_not_in_text": 1,
    "gold_target_from_another_world": 123
   },
   "kept": {
-   "label_says_rules_differ": 47
+   "label_says_rules_differ": 46
   },
   "promoted": 6,
   "inherited_from_canonical": {
-   "gold_target_from_another_world": 346
+   "gold_target_from_another_world": 351
   }
  },
  "after": {
   "records": 57515,
   "by_cause": {
-   "label_says_rules_differ": 47,
+   "label_says_rules_differ": 46,
    "gold_target_from_another_world": 4
   },
   "needs_review_total": 344,
@@ -175,8 +175,8 @@
  "conflicting_duplicates": {
   "texts": 165,
   "records": 545,
-  "true_ambiguity": 149,
-  "generator_or_label_bug": 16,
+  "true_ambiguity": 147,
+  "generator_or_label_bug": 18,
   "examples_ambiguous": [
    {
     "text": "Color from mixing red and yellow",
@@ -311,6 +311,16 @@
     ]
    },
    {
+    "text": "No more highlights",
+    "worlds": [
+     "data.charts",
+     "docs.reader"
+    ],
+    "bad_worlds": [
+     "data.charts"
+    ]
+   },
+   {
     "text": "Give me a hint",
     "worlds": [
      "games.chess",
@@ -353,6 +363,16 @@
     "bad_worlds": [
      "games.hangman",
      "games.tictactoe"
+    ]
+   },
+   {
+    "text": "Add Shopping as a heading",
+    "worlds": [
+     "media.music",
+     "docs.editor"
+    ],
+    "bad_worlds": [
+     "media.music"
     ]
    },
    {
@@ -477,10 +497,12 @@
   ],
   "bug_by_world_pair": {
    "ui.avatar": 1,
+   "data.charts": 1,
    "games.guess": 6,
    "ui.shell": 2,
    "games.hangman": 7,
-   "games.tictactoe": 4
+   "games.tictactoe": 4,
+   "media.music": 1
   }
  },
  "casing": {
@@ -526,6 +548,33 @@
     "old": "action=draw.clearAll",
     "fix": "relabel",
     "new": "core.request.action=draw.new",
+    "detail": null
+   },
+   {
+    "world": "data.charts",
+    "status": "generator-disagrees",
+    "text": "No more dogs.",
+    "old": "action=chart.removePoint arg.l=\"dogs\"",
+    "fix": "relabel",
+    "new": "core.request.action=tasks.done core.request.arg.item=\"dogs\"",
+    "detail": null
+   },
+   {
+    "world": "data.charts",
+    "status": "generator-disagrees",
+    "text": "No more cats.",
+    "old": "action=chart.removePoint arg.l=\"cats\"",
+    "fix": "relabel",
+    "new": "core.request.action=tasks.done core.request.arg.item=\"cats\"",
+    "detail": null
+   },
+   {
+    "world": "data.charts",
+    "status": "generator-disagrees",
+    "text": "No more fish.",
+    "old": "action=chart.removePoint arg.l=\"fish\"",
+    "fix": "relabel",
+    "new": "core.request.action=tasks.done core.request.arg.item=\"fish\"",
     "detail": null
    },
    {
@@ -598,33 +647,6 @@
     "old": "action=hm.hint",
     "fix": "relabel",
     "new": "core.request.action=chat.who",
-    "detail": null
-   },
-   {
-    "world": "games.hangman",
-    "status": "generator-disagrees",
-    "text": "Please, what kind of animal is it?",
-    "old": "action=hm.hint",
-    "fix": "relabel",
-    "new": "core.request.action=chat.who",
-    "detail": null
-   },
-   {
-    "world": "games.hangman",
-    "status": "generator-disagrees",
-    "text": "Um, what kind of animal is it?",
-    "old": "action=hm.hint",
-    "fix": "relabel",
-    "new": "core.request.action=chat.who",
-    "detail": null
-   },
-   {
-    "world": "games.tictactoe",
-    "status": "generator-disagrees",
-    "text": "Middle row right",
-    "old": "action=ttt.move arg.pos=middle_row_right",
-    "fix": "keep",
-    "new": "",
     "detail": null
    }
   ],
