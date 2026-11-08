@@ -120,3 +120,27 @@ Commit: (filled by coordinator)
 Deviations / choices:
 - check_splits.py (training/psys2_train/check_splits.py) treats group leaks as errors and routing text overlap as a warning by default, since routing rows have no group; `--strict-routing` makes it an error. Reviewer: decide whether routing needs a split by text (or group) before T4.
 - No training/tests/ directory exists, so no test was added.
+
+## T2 — Rule baseline — done (2026-11-08 11:10)
+Commands:
+```
+node scripts/eval-rules.mjs            # writes training/results/rules.json and training/runs/rules-failures.jsonl (gitignored); about 10 s, 20 workers
+node scripts/eval-rules.mjs --world ui.help --out <file>
+npm test
+```
+Run twice: `rules.json` and the failures file are byte-identical. Wall time 9.7 to 10.1 s (20 worker threads, one per core, engine loaded once per thread).
+Results (`training/results/rules.json`, tables in `training/RESULTS.md`; exact SOP, test splits at baseline 055fbeb):
+- Positives (4242): restricted (rule ceiling) 88.7 %, routed (rules plus current rule router) 88.3 %. Negatives (412, all generator): 98.1 % in both modes (routed: 289 of them are parsed by no world at all).
+- By source, restricted / routed: generator 100 / 100 (3244), rule-derived 100 / 94.0 (314), paraphrase 30.1 / 30.4 (684).
+- By group, restricted / routed: kids 93.3 / 93.3, avatar/shell/editor 84.3 / 84.3, music/draw/map/charts 84.9 / 83.5, games 83.6 / 83.8, documents 100 / 98.7.
+- Weak worlds (routed): kids.common 16.7 (paraphrases such as "see you later", "cya"), games.guess 60.0, games.tictactoe 60.9, art.draw 64.2, media.music 67.9, docs.editor 67.8, ui.avatar 67.1.
+- Routing (rule router, 4241 test rows): all 89.7 % (3804), text not in routing train 89.7 % (3636 of 4052). 94 kids, 63 shell, 82 media, 110 games and 4 documents rows are not parsed at all; the rest are wrong-world (84 rows). Rows with real context (paraphrases, 684): 42.7 %.
+- Failure classes in the failures file: not parsed 389 / 353 (restricted / routed), differs 89 / 87, wrong world 55 (routed), negative claimed 8 / 8, routing wrong world 84 and not parsed 353.
+Commit: (filled by coordinator)
+Deviations / choices:
+- Added `scripts/lib/world-groups.mjs` (group mapping, also re-exported from `eval-rules.mjs`). `collect-paraphrases.mjs` untouched: `normalizedSop` was already exported.
+- Only worlds listed in `training/dataset/stats.json` are evaluated: `training/dataset/multicmd/` (new, from `training/psys2_train/multicmd.py`, not part of this task) is skipped.
+- Correct positive requires zero unparsed segments (stricter than `labelVariant`, which only compares the SOP of parsed segments) and compares the SOP only, not state or effects.
+- Negative correct = the record's world (or its imports) does not claim the text; restricted = nothing parsed. Routing row correct = world of the first parsed segment is `world` or in `alt_worlds`; unparsed rows are wrong. The row's `recent_worlds` are set before its session messages, the tab as `ui.shell` activeTab.
+- Restricted mode uses a view of the world set with only the world and its imports (own memo cache), through `formalize()` with a FormSession, no interpreter. Routed mode uses `DialogSession.send` (the dialog server path).
+- Generator and rule-derived records have no tab, so routed mode runs them without a tab (the dialog default); the near-equal routed and restricted numbers show these texts are rarely ambiguous.
