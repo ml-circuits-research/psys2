@@ -309,7 +309,7 @@
     example="What is your mood?"
 
 @pat.ui.avatar.name.set core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [call_yourself|rename_yourself|name_yourself|rename_yourself_to|name_yourself_as|rename_yourself_as] {name:rest}"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [call_yourself|rename_yourself|name_yourself|rename_yourself_to|name_yourself_as|rename_yourself_as] {name:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=avatar.setName arg.name=\"{name}\""
     kind=request
     priority=12
@@ -317,14 +317,14 @@
     example="Rename yourself to Pixel."
 
 @pat.ui.avatar.name.set2 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [i_will_call_you|i_am_calling_you|i_call_you|we_will_call_you|i_am_going_to_call_you|from_now_on_i_will_call_you|call_you] {name:rest}"
+    match="[$lang.lead.filler|pls|plz]? [i_will_call_you|i_am_calling_you|i_call_you|we_will_call_you|i_am_going_to_call_you|from_now_on_i_will_call_you|call_you] {name:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=avatar.setName arg.name=\"{name}\""
     kind=request
     priority=12
     example="I will call you Robi."
 
 @pat.ui.avatar.name.set3 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [from_now_on]? [your|ur] name [is|will_be|shall_be] {name:rest}"
+    match="[$lang.lead.filler|pls|plz]? [from_now_on]? [your|ur] name [is|will_be|shall_be] {name:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=avatar.setName arg.name=\"{name}\""
     kind=request
     priority=12
@@ -332,7 +332,7 @@
     example="From now on your name is Pixel."
 
 @pat.ui.avatar.name.set4 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [from_now_on]? [you|u] [are|r] [called|named] {name:rest}"
+    match="[$lang.lead.filler|pls|plz]? [from_now_on]? [you|u] [are|r] [called|named] {name:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=avatar.setName arg.name=\"{name}\""
     kind=request
     priority=12
@@ -841,7 +841,7 @@
     example="Show surprise."
 
 @pat.ui.avatar.x.name.set core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [name|call|rename|dub|label|christen] [yourself|urself|you|u|it|the_avatar|the_robot|this_avatar|this_one]? [as|to|by|the_name]? {name:rest} [$lang.tail.filler]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [name|call|rename|dub|label|christen] [yourself|urself|you|u|it|the_avatar|the_robot|this_avatar|this_one] [as|to|by|the_name]? {name:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=avatar.setName arg.name=\"{name}\""
     kind=request
     priority=9
@@ -849,8 +849,15 @@
     example="Call urself Bolt."
     example="Name u Bolt."
 
+@pat.ui.avatar.x.name.setb core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [name|call|rename|dub|label|christen] [yourself|urself|you|u|it|the_avatar|the_robot|this_avatar|this_one]? [as|to|by|the_name] {name:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=avatar.setName arg.name=\"{name}\""
+    kind=request
+    priority=9
+    example="Rename to Bolt."
+
 @pat.ui.avatar.x.name.set2 core.pattern
-    match="[$lang.lead.filler|pls|plz]? [from_now_on|from_today|starting_now|let_s|lets|let_us|new_name_for_you|new_name_for_u|your_new_name|ur_new_name|you_will_be_called|you_are_now_called|i_will_call_you|i_ll_call_you|i_d_like_to_call_you|i_would_like_to_call_you|i_wanna_call_you|i_want_to_call_you|you_re_named|you_are_named|you_are_now|you_will_be] [call_you|name_you|call|name|named|called|is|are|be|is_your_name|will_be_your_name]? {name:rest}"
+    match="[$lang.lead.filler|pls|plz]? [new_name_for_you|new_name_for_u|your_new_name|ur_new_name|you_will_be_called|you_are_now_called|i_will_call_you|i_ll_call_you|i_d_like_to_call_you|i_would_like_to_call_you|i_wanna_call_you|i_want_to_call_you|you_re_named|you_are_named] [call_you|name_you|call|name|named|called|is|are|be|is_your_name|will_be_your_name]? {name:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
     emit="@{_} core.request action=avatar.setName arg.name=\"{name}\""
     kind=request
     priority=8
@@ -858,12 +865,20 @@
     example="From now on, Bolt is your name."
     example="New name for you, Bolt."
 
+@pat.ui.avatar.x.name.set2b core.pattern
+    match="[$lang.lead.filler|pls|plz]? [from_now_on|from_today|starting_now|let_s|lets|let_us|you_are_now|you_will_be] [call_yourself|name_yourself|call_urself|name_urself|call_you|name_you|call|name|named|called|is_your_name|will_be_your_name] {name:rest} [$lang.tail.filler|from_now_on|from_now|from_today|from_here_on|please]?"
+    emit="@{_} core.request action=avatar.setName arg.name=\"{name}\""
+    kind=request
+    priority=8
+    example="From now on call you Bolt."
+
 @pat.ui.avatar.x.name.set3 core.pattern
-    match="[$lang.lead.filler|pls|plz]? {name:word} [is|will_be|shall_be|be] [now]? [your|ur] [new]? [name|nickname] [$lang.tail.filler]?"
+    match="[$lang.lead.filler|pls|plz]? [from_now_on|from_today]? {name:word} [is|will_be|shall_be|be] [now]? [your|ur] [new]? [name|nickname] [$lang.tail.filler]?"
     emit="@{_} core.request action=avatar.setName arg.name=\"{name}\""
     kind=statement
     priority=6
     example="Bolt is ur name."
+    example="From now on, Bolt is your name."
 
 @pat.ui.avatar.x.name.ask core.pattern
     match="[$lang.lead.filler|pls|plz]? [what|wat|whats|what_is|what_are|tell_me|remind_me|remind_me_what|may_i_know|can_i_know|do_you_have|do_u_have|got|have_you_got|how_do_i_call|how_should_i_call|how_do_i_address|how_should_i_address|how_do_people_call|what_do_people_call|so_what_do_people_call|and]? [a|an|the|your|ur|you|u|me]? [name|names|nickname|called|go_by|you_go_by|you_called|are_you_called|r_u_called|people_call_you|address_you|call_you] [again|you|u|go_by|you_go_by|do_you_go_by|is_it|have|you_have|you_got]? [$lang.tail.filler]?"

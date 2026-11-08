@@ -94,6 +94,16 @@ export function vocabularyOf(set) {
   });
 }
 
+/** Every word of every lexicon of `set` (entries split into words, plurals included): the content nouns that spelling must not turn into another world's word. Memoized. */
+export function lexiconWordsOf(set) {
+  return set.memo('lexicon-words', () => {
+    const out = new Set(), lex = lexIndex(set);
+    for (const l of lex.lexicons.values()) for (const w of l.words) for (const part of w.split('_')) out.add(part.toLowerCase());
+    for (const [sg, pl] of lex.plurals) { out.add(sg); out.add(pl); }
+    return out;
+  });
+}
+
 /** Vocabulary of one world with its imports (memoized): the preferred typo targets of a context that already has an active world. */
 export function worldVocabularyOf(set, id) {
   return set.memo(`rules-vocabulary:${id}`, () => {
@@ -486,7 +496,18 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
   };
 
   const vocab = () => vocabularyOf(set);
-  const known = (w) => vocab().has(w) || vocab().has(lex.lemma(w)) || lex.names.has(w);
+  // Context anchoring (spec 03 section 1b): a word known in the open tab / game / modal world is never changed, and a content word (4+ letters)
+  // that some other world's lexicon knows is not "fixed" into a word of this (restricted) world: that changes both the world and the noun ("boat" -> "coat").
+  const whole = set.parent ?? set;
+  const anchored = () => {
+    const ids = [ctx.tabWorld, ctx.gameWorld, ctx.modalWorld].filter(Boolean);
+    const out = new Set();
+    for (const id of ids) for (const w of worldVocabularyOf(whole, id)) out.add(w);
+    return out;
+  };
+  let anchor = null;
+  const known = (w) => vocab().has(w) || vocab().has(lex.lemma(w)) || lex.names.has(w)
+    || (anchor ??= anchored()).has(w) || (w.length >= 4 && whole !== set && lexiconWordsOf(whole).has(w));
   const preferredVocab = () => {
     const ids = [ctx.tabWorld, ctx.gameWorld, ctx.modalWorld, ...(ctx.recentWorlds ?? []).slice(0, 2)].filter(Boolean);
     const out = new Set();

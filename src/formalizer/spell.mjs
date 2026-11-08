@@ -8,7 +8,7 @@
  *   const { text, corrections } = spellCorrect('make bigger yes and red lips', { vocab: worldVocabulary(set, 'ui.avatar') });
  *   // text = 'make bigger eyes and red lips', corrections = [{ from: 'yes', to: 'eyes', span: [12, 15], kind: 'spell' }]
  */
-import { vocabularyOf, editDistance } from './rules/index.mjs';
+import { vocabularyOf, lexiconWordsOf, editDistance } from './rules/index.mjs';
 import { isNumberWord } from './rules/numbers.mjs';
 
 /** Common English function words: never corrected, and valid correction targets (typos of "the", "and", "with" ...). */
@@ -66,6 +66,7 @@ export function spellVocabulary(set) {
     const rv = vocabularyOf(set);
     const vocab = new Set(rv);
     vocab.freq = rv.freq;
+    vocab.nouns = lexiconWordsOf(set);   // content nouns of all worlds
     for (const w of set.list()) {
       for (const lw of w.legendWires ?? []) for (const part of String(lw.id ?? '').split(/[.\s]/)) for (const x of wordsOf(part.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/_/g, ' '))) vocab.add(x);
       for (const kw of w.kb ?? []) {
@@ -84,6 +85,8 @@ export function worldVocabulary(set, worldId) {
     const own = vocabularyOf(restrictedSet(set, [worldId]));
     const vocab = new Set(own);
     vocab.freq = own.freq;
+    vocab.nouns = all.nouns;   // content nouns of every world: one known only elsewhere is not "fixed" into this world
+    vocab.world = true;
     // legend and kb words of this world only: keep the ones that are also in the global vocabulary and appear in this world's files
     for (const id of set.available(worldId)) {
       const w = set.get(id);
@@ -102,6 +105,7 @@ export function restrictedSet(set, ids) {
   const all = [...new Set(ids.flatMap((w) => (set.get(w) ? set.available(w) : [])))];
   const sub = Object.create(set);
   sub._cache = new Map();
+  sub.parent = set.parent ?? set;   // the full set, for context-anchored spelling (a word another world knows is not corrected)
   sub.list = () => all.map((i) => set.get(i));
   return sub;
 }
@@ -114,12 +118,16 @@ const matchCase = (src, out) => (/^[A-Z]/.test(src) ? out[0].toUpperCase() + out
  * known (in `vocab`, `FUNCTION_WORDS`, or an inflection of one) and ambiguous words (two candidates at the same distance and rank).
  * Candidates: words of `vocab` (the candidate world's) rank before function words; smaller distance first.
  * @param {string} text
- * @param {{ vocab: Set<string>, maxCorrections?: number, abbreviations?: boolean, spelling?: boolean }} opts
+ * `protect`: optional set of words of the active world (tab) that are never changed.
+ * @param {{ vocab: Set<string>, maxCorrections?: number, abbreviations?: boolean, spelling?: boolean, protect?: Set<string> }} opts
  * @returns {{ text: string, corrections: { from: string, to: string, span: [number, number], kind: 'abbreviation'|'spell' }[] }}
  */
-export function spellCorrect(text, { vocab, maxCorrections = 6, abbreviations = true, spelling = true } = {}) {
+export function spellCorrect(text, { vocab, maxCorrections = 6, abbreviations = true, spelling = true, protect = null } = {}) {
   const quoted = [...text.matchAll(QUOTE_RE)].map((m) => [m.index, m.index + m[0].length]);
   const keep = new Set([...FUNCTION_WORDS, ...vocab]);
+  // Context anchoring: a word the active world (`protect`, the open tab's vocabulary) knows is never changed, and a content word (4+ letters)
+  // that another world knows is not "corrected" into a word of this world: that would change both the world and the noun ("boat" -> "coat").
+  const known = (w) => !!protect?.has(w) || (w.length >= 4 && !!vocab.world && !vocab.has(w) && !!vocab.nouns?.has(w));
   const cands = [...vocab].filter((w) => w.length >= 2 && /^[a-z]+$/.test(w) && !Object.hasOwn(ABBREVIATIONS, w));
   for (const w of FUNCTION_WORDS) if (w.length >= 2 && !vocab.has(w)) cands.push(w);
   const corrections = [];
@@ -130,7 +138,7 @@ export function spellCorrect(text, { vocab, maxCorrections = 6, abbreviations = 
     if (corrections.length >= maxCorrections || quoted.some(([a, b]) => start >= a && end <= b)) continue;
     let to = null, kind = null;
     if (abbreviations && Object.hasOwn(ABBREVIATIONS, lower)) { to = ABBREVIATIONS[lower]; kind = 'abbreviation'; }
-    else if (spelling && /^[a-z]+$/.test(lower) && (isFirst || !/^[A-Z]/.test(raw)) && !isKnown(lower, keep)) {
+    else if (spelling && /^[a-z]+$/.test(lower) && (isFirst || !/^[A-Z]/.test(raw)) && !isKnown(lower, keep) && !known(lower)) {
       const budget = spellBudget(lower);
       if (budget) {
         // rank: smaller distance, then a word of the world's own vocabulary, then the same letters (a swap such as "eyse")
@@ -167,7 +175,7 @@ export function spellCorrect(text, { vocab, maxCorrections = 6, abbreviations = 
  * texts, each with its single correction; the caller keeps only those the rules parse. Numbers, names, quoted text and function words stay.
  * @returns {{ text: string, corrections: { from: string, to: string, span: [number, number], kind: 'spell' }[] }[]}
  */
-export function spellAlternates(text, { vocab, maxPerWord = 4, maxTexts = 12 } = {}) {
+export function spellAlternates(text, { vocab, maxPerWord = 4, maxTexts = 12, protect = null } = {}) {
   const quoted = [...text.matchAll(QUOTE_RE)].map((m) => [m.index, m.index + m[0].length]);
   const cands = [...vocab].filter((w) => w.length >= 3 && /^[a-z]+$/.test(w) && !FUNCTION_WORDS.has(w) && !Object.hasOwn(ABBREVIATIONS, w));
   const out = [];
@@ -175,6 +183,7 @@ export function spellAlternates(text, { vocab, maxPerWord = 4, maxTexts = 12 } =
   for (const m of text.matchAll(WORD_RE)) {
     const raw = m[0], start = m.index, end = start + raw.length, lower = raw.toLowerCase();
     const isFirst = first; first = false;
+    if (protect?.has(lower) || (lower.length >= 4 && vocab.nouns?.has(lower) && (!vocab.world || !vocab.has(lower)))) continue;   // known in the active tab / a content noun of another world
     if (!/^[a-z]{3,}$/.test(lower) || FUNCTION_WORDS.has(lower) || isNumberWord(lower) || (!isFirst && /^[A-Z]/.test(raw)) || quoted.some(([a, b]) => start >= a && end <= b)) continue;
     let n = 0;
     for (const w of cands) {

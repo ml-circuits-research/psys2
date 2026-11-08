@@ -1113,3 +1113,37 @@
     input="Give yourself round glasses and a beard."
     expect="no beard"
     session=disc_avatar
+
+@t.ui.avatar.g3a1 core.test
+    input="Call yourself Zed from now on."
+    expectState="name=Zed"
+    doc="G3: the suffix 'from now on' stays out of the free name capture"
+
+@t.ui.avatar.g3a2 core.test
+    input="Rename yourself to Bolt please."
+    expectState="name=Bolt"
+    doc="G3: 'to' (longer frame alternative) and 'please' stay out of the name"
+
+@t.ui.avatar.g3a3 core.test
+    input="Call yourself \"Mr Bolt\""
+    expectState="name=Mr Bolt"
+    doc="G3: quoted multi-word names still work"
+
+@t.ui.avatar.g3a4 core.test
+    input="Call yourself Bolt the Great."
+    expectState="name=Bolt the Great"
+    doc="G3: unquoted multi-word names still work"
+
+@t.ui.avatar.g3a5 core.test
+    input="From now on call yourself Rex."
+    expectState="name=Rex"
+
+@t.ui.avatar.g3n1 core.test
+    input="lets play hangmn"
+    expectState="name=PSys2"
+    doc="G3 contrast (play/rename): no naming cue, so the avatar keeps its name"
+
+@t.ui.avatar.g3n2 core.test
+    input="try a grill for the mouth"
+    expectState="name=PSys2"
+    doc="G3 contrast (mouth/name): no naming cue"

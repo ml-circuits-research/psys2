@@ -3701,3 +3701,15 @@
     input="A dog."
     expectState="objects.length=1"
     session=dm3
+
+@t.art.draw.g3b1 core.test
+    input="Draw a red circle."
+    expectState="objects.length=1"
+    session=g3boat
+
+@t.art.draw.g3b2 core.test
+    input="a purple boat please"
+    expect="boat"
+    expectState="objects.length=2"
+    session=g3boat
+    doc="G3 contrast (boat/coat): on the drawing tab a word the tab knows is never spell-corrected into another world's word"
