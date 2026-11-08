@@ -1,0 +1,15 @@
+{
+  "plain": [
+    ["Go to coordinates 45.5 25.3.", "go to coordinates 45.5 25.3"],
+    ["Set speed to 1.5", "set speed to 1.5"],
+    ["Wake me at 7:30, please!", "wake me at 7:30 please"],
+    ["Play C# and Bb.", "play c# and bb"],
+    ["It is -3 degrees.", "it is -3 degrees"],
+    ["Hello. How are you?", "hello how are you"],
+    ["Move from -45.5, 25.3.", "move from -45.5 25.3"],
+    ["Add 1,5 and 2.", "add 1,5 and 2"]
+  ],
+  "plain_spans": [
+    ["Type \"Hello, world!\" now.", "type \"Hello, world!\" now", [[5, 20]]]
+  ]
+}

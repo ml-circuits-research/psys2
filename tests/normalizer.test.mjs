@@ -125,7 +125,7 @@ test('value checker: operand order, source/destination, property bindings, units
   assert.equal(checkValues('subtract 3 from 10', '10 minus 3', { polarity: false }).ok, true);
   assert.equal(checkValues('3 - 10', '3 minus 10', { polarity: false }).ok, true);
   assert.equal(checkValues('divide 20 by 4', '20 divided by 4', { polarity: false }).ok, true);
-  no('from Paris to Rome', 'from Rome to Paris', /bound to a different value/);
+  no('from Paris to Rome', 'from Rome to Paris', /swapped|bound to a different value/);
   no('move the piece from e2 to e4', 'move the piece from e4 to e2');
   no('from 3 to 10', 'from 10 to 3');
   assert.equal(checkValues('to Rome from Paris', 'from Paris to Rome', strict).ok, true);
@@ -136,6 +136,7 @@ test('value checker: operand order, source/destination, property bindings, units
   assert.equal(checkValues('the eyes are red and the body is blue', 'make the eyes red and the body blue', { polarity: false }).ok, true);
   assert.equal(checkValues('eyes red and body blue', 'blue body and red eyes', { polarity: false }).ok, true);
   no('wait 5 minutes', 'wait 5 seconds', /units differ/);
-  no('3, 5', '5, 3', /adjacent numbers/);
+  no('3, 5', '5, 3', /order of/);
+  no('put x 10 and y 20', 'put y 20 and x 10');
   assert.equal(checkValues('wait 5 mins', 'wait 5 minutes', { polarity: false }).ok, true);
 });

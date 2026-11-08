@@ -53,7 +53,7 @@ export function streamOf(text) {
   const t = symbolsToWords(stripQuotes(text));
   const raw = [];   // { k, v, start, end }
   let last = 0;
-  const words = (from, to) => { for (const m of t.slice(from, to).matchAll(WORD_RE)) raw.push({ k: 'w', w: lc(m[0]), start: from + m.index, end: from + m.index + m[0].length }); };
+  const words = (from, to) => { for (const m of t.slice(from, to).matchAll(WORD_RE)) raw.push({ k: 'w', w: lc(m[0]), cap: from + m.index > 0 && /^\p{Lu}/u.test(m[0]), start: from + m.index, end: from + m.index + m[0].length }); };
   for (const m of t.matchAll(TYPED)) {
     words(last, m.index);
     last = m.index + m[0].length;
@@ -141,6 +141,16 @@ function opFacts(st) {
   return facts.sort();
 }
 
+/** True when the filler of `cue` in the stream is an entity (a typed value, a mixed token such as e2, or a capitalized name), not a verb of an infinitive. */
+function entityBound(st, cue, h) {
+  for (let i = 0; i < st.length; i++) {
+    if (st[i].k !== 'w' || st[i].w !== cue) continue;
+    let j = i + 1;
+    while (st[j]?.k === 'w' && (ARTICLES.has(st[j].w) || FILLERS.has(st[j].w) || st[j].w === 'please')) j++;
+    if (st[j] && entity(st[j]) === h && (st[j].k !== 'w' || st[j].cap)) return true;
+  }
+  return false;
+}
 const ROLE_CUES = new Set(['from', 'to', 'into', 'onto', 'towards', 'toward']);
 /** Role bindings of source/destination: cue -> the entity right after it (articles skipped). */
 function cueBindings(st) {
@@ -149,7 +159,7 @@ function cueBindings(st) {
     const x = st[i];
     if (x.k !== 'w' || !ROLE_CUES.has(x.w)) continue;
     let j = i + 1;
-    while (st[j]?.k === 'w' && ARTICLES.has(st[j].w)) j++;
+    while (st[j]?.k === 'w' && (ARTICLES.has(st[j].w) || FILLERS.has(st[j].w) || st[j].w === 'please')) j++;
     if (st[j]) out.push([x.w === 'toward' || x.w === 'towards' || x.w === 'into' || x.w === 'onto' ? 'to' : x.w, entity(st[j])]);
   }
   return out;
@@ -193,18 +203,20 @@ function roleConflict(src, cand) {
   const ss = streamOf(src), sc = streamOf(cand);
   const fs = opFacts(ss), fc = opFacts(sc);
   if (fs.length !== fc.length || fs.some((x, i) => x !== fc[i])) return `operation or operand order differs (${fs.join(' ') || 'none'} vs ${fc.join(' ') || 'none'})`;
-  const us = unitBindings(ss), uc = unitBindings(sc);
-  if (!sameBag(us, uc)) return `units differ (${us.join(', ') || 'none'} vs ${uc.join(', ') || 'none'})`;
+  const us = unitBindings(ss), uc = unitBindings(sc);   // a dropped or misspelled unit is not a conflict; the same value with another unit is
+  for (const x of us) { const [v] = x.split(' '); const other = uc.filter((y) => y.split(' ')[0] === v); if (other.length && !other.includes(x) && !us.some((y) => other.includes(y))) return `units differ (${us.join(', ')} vs ${uc.join(', ')})`; }
   const rs = numberRuns(src, ss), rc = numberRuns(cand, sc);
-  if (!sameBag(rs, rc)) return `order of adjacent numbers differs (${rs.join(' | ')} vs ${rc.join(' | ')})`;
+  if (!fs.length) {   // without an operation the order of the numbers is the order of the roles (coordinates, "x 10 y 20")
+    const seq = (st) => st.filter((x) => x.k === 'n' || x.k === 't').map((x) => x.v).join(' ');
+    if (seq(ss) !== seq(sc)) return `order of numbers differs (${seq(ss)} vs ${seq(sc)})`;
+  } else if (!sameBag(rs, rc)) return `order of adjacent numbers differs (${rs.join(' | ')} vs ${rc.join(' | ')})`;
   const anyS = new Set(ss.map(entity)), anyC = new Set(sc.map(entity));
   const cs = cueBindings(ss), cc = cueBindings(sc);
-  for (const cue of ['from', 'to']) {
-    const a = cs.filter((x) => x[0] === cue), b = cc.filter((x) => x[0] === cue);
-    if (!a.length || !b.length) continue;   // the cue was dropped or added: nothing to compare
-    const A = new Set(a.map((x) => x[1])), B = new Set(b.map((x) => x[1]));
-    const bad = [...new Set([...A, ...B])].find((h) => anyS.has(h) && anyC.has(h) && A.has(h) !== B.has(h));
-    if (bad) return `"${cue}" is bound to a different value (${bad})`;
+  // source/destination: a value bound to "from" must not become bound to "to" (or the reverse); an entity (typed value, capitalized name) bound to a cue stays bound to it
+  for (const [cue, h] of cs) {
+    const other = cue === 'from' ? 'to' : 'from';
+    if (cc.some((x) => x[0] === other && x[1] === h) && !cc.some((x) => x[0] === cue && x[1] === h)) return `"${cue}" and "${other}" are swapped (${h})`;
+    if (entityBound(ss, cue, h) && cc.some((x) => x[0] === cue) && anyC.has(h) && !cc.some((x) => x[0] === cue && x[1] === h)) return `"${cue}" is bound to a different value (${h})`;
   }
   const conflict = bindingConflict(colourBindings(ss), colourBindings(sc), anyS, anyC);
   if (conflict) return `colour bound to a different part (${conflict})`;

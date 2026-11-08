@@ -33,6 +33,8 @@ import { createEngine } from '../src/dialog/index.mjs';
 import { parse } from '../src/soplang/index.mjs';
 import { normalizedSop } from './collect-paraphrases.mjs';
 import { makeRunner, sopKey, isOk } from './build-edit-tags.mjs';
+import { dropPunctuation } from './lib/safe-noise.mjs';
+import { checkValues } from '../src/dialog/value-check.mjs';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const readJsonl = (f) => (existsSync(f) ? readFileSync(f, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l)) : []);
@@ -40,15 +42,19 @@ const args = process.argv.slice(2);
 const opt = (n, d) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] : d; };
 
 // ---- noise ------------------------------------------------------------------------------------------------------------------
-function rng32(seed) { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+export function rng32(seed) { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 const KEYS = { q: 'wa', w: 'qes', e: 'wrd', r: 'etf', t: 'ryg', y: 'tuh', u: 'yij', i: 'uok', o: 'ipl', p: 'ol', a: 'qsz', s: 'awdx', d: 'serf', f: 'drgc', g: 'fthv', h: 'gyjb', j: 'hukn', k: 'jilm', l: 'kop', z: 'asx', x: 'zsdc', c: 'xdfv', v: 'cfgb', b: 'vghn', n: 'bhjm', m: 'njk' };
-const ABBREV = { you: ['u'], your: ['ur'], are: ['r'], please: ['pls', 'plz'], thanks: ['thx'], because: ['bc', 'cuz'], people: ['ppl'], though: ['tho'], want: ['wanna'], going: ['gonna'], what: ['wat', 'wht'], the: ['da'], with: ['w/'], and: ['n', '&'], how: ['hw'], want_to: ['wanna'], tell: ['tel'], give: ['giv'], show: ['shw'], make: ['mke'], draw: ['drw'], number: ['num', 'no.'], picture: ['pic'], message: ['msg'], minutes: ['mins'], seconds: ['secs'], okay: ['ok', 'k'] };
+const ABBREV = { you: ['u'], your: ['ur'], are: ['r'], please: ['pls', 'plz'], thanks: ['thx'], because: ['bc', 'cuz'], people: ['ppl'], though: ['tho'], want: ['wanna'], going: ['gonna'], what: ['wat', 'wht'], the: ['da'], with: ['w/'], and: ['n', '&'], how: ['hw'], want_to: ['wanna'], tell: ['tel'], give: ['giv'], show: ['shw'], make: ['mke'], draw: ['drw'], number: ['num'], picture: ['pic'], message: ['msg'], minutes: ['mins'], seconds: ['secs'], okay: ['ok', 'k'] };
 const PRE = ['please', 'pls', 'hey', 'hey,', 'hi', 'yo', 'ok', 'ok so', 'okay so', 'um', 'uh', 'so', 'well', 'hmm', 'like', 'could you', 'can you', 'could you please', 'can you please', 'would you', 'will you', 'i want you to', 'i would like you to', "i'd like to", 'i want to', 'go ahead and', 'let us', "let's", 'you should', 'now', 'ok now', 'and then', 'then', 'quick,', 'hey could you', 'hey can you', 'hey, can you', 'um, can you', 'please could you', 'i need you to', 'just', 'now please', 'kindly', 'listen,', 'oh and', 'also', 'and', 'ah', 'right,', 'alright,'];
 const SUF = ['please', 'pls', 'plz', 'thanks', 'thx', 'thank you', 'lol', 'now', 'for me', 'if you can', 'ok', 'okay', 'right now', 'quickly', 'real quick', 'asap', 'again', 'too', 'for us', ':)', 'haha', 'ok?', 'thanks!', 'right', 'then', 'ok thanks', 'for now', 'if possible', 'when you can', 'would you', 'will you', 'alright'];
 const MID = ['actually', 'just', 'really', 'kind of', 'basically', 'like', 'um', 'uh', 'maybe', 'please', 'simply'];
-const PROTECT = /\d|["“”]/;
+const PROTECT = /\d|["“”\uE000\uE001#♯♭]/;   // digits, quotes, quote placeholders, accidentals: never touched by typos
+const QUOTED = /"[^"]*"|“[^”]*”/g;
 
-function makeNoiser(rnd) {
+/** Audit of a synthetic pair (review F3): the noisy source must keep every typed value of the clean sentence (signs, decimals, times, notes, quoted payloads, numbers, negation, colours, roles). */
+export const auditPair = (clean, noisy) => checkValues(clean, noisy);
+
+export function makeNoiser(rnd) {
   const pick = (a) => a[Math.floor(rnd() * a.length)];
   const typo = (w) => {
     if (w.length < 4 || PROTECT.test(w) || !/^[a-z']+$/i.test(w)) return w;
@@ -61,7 +67,8 @@ function makeNoiser(rnd) {
     return k ? w.slice(0, i) + pick(k.split('')) + w.slice(i + 1) : w;                    // neighbour key
   };
   return (clean) => {
-    let t = clean.trim();
+    const quotes = [];
+    let t = clean.trim().replace(QUOTED, (q) => `\uE000${quotes.push(q) - 1}\uE001`);   // quoted payloads are copied unchanged
     const ops = 1 + Math.floor(rnd() * 3);
     for (let o = 0; o < ops; o++) {
       const r = rnd();
@@ -83,11 +90,11 @@ function makeNoiser(rnd) {
       } else if (r < 0.86) {                                                               // mid filler
         const ws = t.split(' '); if (ws.length > 2) { ws.splice(1 + Math.floor(rnd() * (ws.length - 1)), 0, pick(MID)); t = ws.join(' '); }
       } else if (r < 0.91) t = t.toLowerCase();
-      else if (r < 0.95) t = t.replace(/[.!?,]/g, '');
+      else if (r < 0.95) t = dropPunctuation(t);                                          // boundary punctuation only: 45.5, 7:30, -3, C# survive
       else if (r < 0.97) { const ws = t.split(' '); const i = Math.floor(rnd() * ws.length); ws.splice(i, 0, ws[i]); t = ws.join(' '); }    // repetition
       else t = t.toUpperCase().slice(0, 1) + t.slice(1);
     }
-    return t.replace(/\s+/g, ' ').trim();
+    return t.replace(/\s+/g, ' ').trim().replace(/\uE000(\d+)\uE001/g, (_, i) => quotes[Number(i)]);
   };
 }
 
@@ -234,11 +241,14 @@ async function main() {
   const noiser = makeNoiser(rnd);
   const pool = cleanWithTarget.filter((c) => c.split === 'train' && c.text.split(' ').length <= 14);
   // weight canonicals and examples like generator rows (uniform over the pool; each class contributes up to its size)
-  let made = 0, tries = 0;
+  let made = 0, tries = 0, auditRejected = 0;
+  const auditReasons = {};
   while (made < synthCount && tries++ < synthCount * 5) {
     const c = pool[Math.floor(rnd() * pool.length)];
     const noisy = noiser(c.text);
     if (!noisy || noisy === c.text || noisy.length > 160) continue;
+    const audit = auditPair(c.text, noisy);
+    if (!audit.ok) { auditRejected++; auditReasons[audit.reason.replace(/\(.*$/, '').replace(/"[^"]*"/g, '"_"').trim()] = (auditReasons[audit.reason.replace(/\(.*$/, '').replace(/"[^"]*"/g, '"_"').trim()] ?? 0) + 1; continue; }
     const before = counts['train/synthetic'] ?? 0;
     add('train', { id: `syn-${made}`, world: c.world, tab: c.tab, src: noisy, tgt: c.tgt, source: 'synthetic' });
     if ((counts['train/synthetic'] ?? 0) > before) made++;
@@ -254,7 +264,8 @@ async function main() {
   if (extraDir) writeFileSync(join(outDir, 'eval-fresh.jsonl'), freshRows.map((x) => JSON.stringify(x)).join('\n') + '\n');
 
   for (const [s, rows] of Object.entries(pairs)) writeFileSync(join(outDir, `${s}.jsonl`), rows.map((x) => JSON.stringify(x)).join('\n') + '\n');
-  const report = { generated_by: `node scripts/build-normalizer-pairs.mjs ${args.join(' ')}`, pairs: counts, totals: Object.fromEntries(Object.entries(pairs).map(([s, r]) => [s, r.length])), pattern_examples: nEx, clean_sentences: clean.length, equivalence_classes: classes.size, fresh_eval_records: fresh };
+  const report = { generated_by: `node scripts/build-normalizer-pairs.mjs ${args.join(' ')}`, pairs: counts, totals: Object.fromEntries(Object.entries(pairs).map(([s, r]) => [s, r.length])), synthetic_audit: { checked: 'every synthetic candidate is checked with checkValues(clean, noisy) before it is kept', rejected: auditRejected, reasons: auditReasons },
+    pattern_examples: nEx, clean_sentences: clean.length, equivalence_classes: classes.size, fresh_eval_records: fresh };
   writeFileSync(join(outDir, 'report.json'), JSON.stringify(report, null, 1));
   console.log(JSON.stringify(report, null, 1));
 }
