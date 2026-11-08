@@ -67,7 +67,7 @@ Real messages often omit or repeat words: "make your eyes and body blue", "eyes 
 | `[a\|b]?` | optional alternative |
 | `{name:class}` | capture one item of the given class |
 | `{name:class?}` | optional capture |
-| `{name:class(args)}` | class with arguments: `words(20)`, `recent(<lexicon>,<agent slot>)` |
+| `{name:class(args)}` | class with arguments: `words(20)`, `words(3,label)`, `rest(notes)`, `recent(<lexicon>,<agent slot>)` |
 | `...` | skip 0–4 arbitrary tokens (lazy) |
 
 | `[$id]` `[$id]?` `[$id\|lit]?` | phrase macro: one of the alternatives of the `core.phrase` `phrase.<id>` (see "Phrase macros"), optionally mixed with literal alternatives |
@@ -84,12 +84,21 @@ Real messages often omit or repeat words: "make your eyes and body blue", "eyes 
 | `agent` | a person: a capitalized token that is not a known lowercase word, or a name from any `class=name` lexicon, or a pronoun | reference to an agent entity (`$e.tom`) |
 | `unit` | a token in any `class=unit` lexicon or the quantity unit table | atom |
 | `rest` | all remaining tokens up to the end of the sentence (1 or more), commas kept in the text; use it last, for free text (dictation, titles) | string (original text) |
+| `rest(notes)` | `rest` restricted to music words: every token must be a note letter (a to g, with an octave number or sharp / flat), a number, or one of a fixed list (`rest`, `sharp`, `flat`, `natural`, durations such as `half`, `quarter`, `twice`, `beats`, `octave`, `up`, `down`, `then`, `and`, `for`, `melody`, `middle`). Anything else makes the slot fail, so a bare "add <anything>" pattern cannot take "add vents to your chest" | string (original text) |
+| `words(N,label)` | `words(N)` that stops at the first personal or possessive pronoun (you, your, my, me, i, our, we, his, her, its, their, it, them): a data label or place name is never "your body" or "my list" | string (original text) |
 
 **Bounded free captures (G3).** A `words` / `rest` capture never swallows frame words. (a) A group of alternatives directly before a `rest` slot tries its **longer alternatives first** (`rename yourself to` before `rename yourself`), so `to` is part of the frame, not of the name. (b) When an optional alternative group follows the `rest` slot (a suffix such as `from now on`, `please`, a tail filler), a shorter capture that lets the suffix match to the end of the sentence is tried **before** the full-length capture (`Call yourself Zed from now on` names `Zed`). Quoted and multi-word names still work (`Bolt the Great`). Renaming patterns (`ui.avatar`) need an explicit naming cue (`call yourself`, `your name is`, `name you`, `rename`, `I will call you`, `from now on call you`); a bare lead-in such as `lets` or `try` followed by free text never renames.
 
 Singular lemma: irregular plurals from `plural=` lexicon entries first; (and a few built-in Latin plurals: `cacti`, `octopi`, `fungi`); then `ies`→`y`, `ves`→`f`, `(ch\|sh\|x\|ss)es`→drop `es`, `-us` plurals (`octopuses`, `buses`, `viruses`, `walruses`, `cactuses`)→drop `es`, `s`→drop. Singular nouns ending in `ss`, `us` or `is` (`glass`, `octopus`, `iris`) keep their `s`; a short list of `-is` plurals (`kiwis`, `taxis`) still loses it. The lemma is used for matching lexicons and in emitted atoms.
 
 Optional elements and lazy skips are tried in a backtracking matcher; the first full match in left-to-right, prefer-consume order wins for one pattern.
+
+### Slot guards
+A free-text slot may carry one guard as a second argument. Guards narrow a catch-all pattern without a new slot class, so the code that treats `words` and `rest` as free text (clause splitting, swallowed-separator checks) is unchanged. Only `words(N,label)` and `rest(notes)` exist; any other argument is a pattern error. A catch-all pattern of a world should use a guard whenever another world has a more specific reading of the same words (charts rename: `{a:words(3,label)} should be {b:words(3)}`; geo: `where is {x:words(4,label)}`; music: `add {notes:rest(notes)}`).
+
+### Spoken lead-ins and chat typos (1.5a)
+- **Lead phrases.** Besides the single-word fillers, `markFillers` drops a spoken announcement at the start of a sentence when something else follows it: "quick one", "just a quick one", "a quick question", "one quick thing", "real quick", "a simple one", "an easy one", "a trick question", "one sec", "just checking" and similar (list `LEAD_PHRASES` in `normalize.mjs`, longest first). They are marked `filler` and `lead` like a leading "so" (dropped for matching, kept for patterns that list them). A phrase that is the whole message is left alone ("quick one" stays a message); a phrase inside a sentence ("draw a quick one") is never touched. "real quick", "really quick", "super quick", "very quick" are also dropped at the end of a sentence ("what day is it real quick"). Words are compared on the raw token, because "one" is read as the number 1.
+- **Short typos.** Below 4 letters the edit-distance corrector does nothing, so `SHORT_TYPOS` (`normalize.mjs`, exported, merged into the spell abbreviations of `spell.mjs`) lists frequent chat misspellings of short words: `wat`, `wht`, `wot` to what, `hw` to how, `mak`, `mke` to make, `ther` to there, `wher` to where, `hve`, `hav` to have, and so on. Like every spell candidate, the corrected text is accepted only when the rules then parse it. "pluss" is not read as the plural of "plus" (a word ending in `ss` plus `s` is not a plural), so it is corrected to "plus".
 
 ### Phrase macros (2.5)
 A `core.phrase` wire (spec 02, `lexicon.sop`) names a list of literal alternatives. In a match string `[$lang.lead.polite]` stands for `[a|b|c...]` of that phrase, `[$id]?` for the optional form, and `[$id|extra_word]` or `[$a|$b]?` for a union of macros and literals. Rules:
