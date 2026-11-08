@@ -2153,3 +2153,34 @@
     expect="Zoomed in to zoom"
     session=r2_geo_show
 
+
+@t.geo.map.d01 core.test
+    input="How far is Paris from Rome?"
+    expect="Paris and Rome"
+    session=disc_geo
+
+@t.geo.map.d02 core.test
+    input="And from Berlin?"
+    expect="Paris and Berlin"
+    session=disc_geo
+
+@t.geo.map.d03 core.test
+    input="What about Madrid?"
+    expect="Paris and Madrid"
+    session=disc_geo
+
+@t.geo.map.d04 core.test
+    input="Open the map tab."
+    expectStatus=supported
+    session=disc_geo2
+
+@t.geo.map.d05 core.test
+    input="Show me."
+    expect="Which place should I show?"
+    expectStatus=missing
+    session=disc_geo2
+
+@t.geo.map.d06 core.test
+    input="Paris."
+    expect="Here is Paris"
+    session=disc_geo2

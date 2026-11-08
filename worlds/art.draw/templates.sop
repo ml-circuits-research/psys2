@@ -587,3 +587,8 @@
     status=error
     text="{note}"
 
+
+@tpl.art.draw.askKind.missing core.template
+    for=action.draw.askKind
+    status=missing
+    text="{note}"

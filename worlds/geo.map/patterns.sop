@@ -2517,3 +2517,11 @@
     priority=14
     example="Slide the view 100 km east."
 
+
+@pat.geo.map.show.bare core.pattern
+    match="[please|pls|can_you|could_you|can_you_please|could_you_please]? [show_me|show|display|find|locate|take_me_to|go_to|fly_to|zoom_to] [please|pls]?"
+    emit="@{_} core.request action=geo.askPlace"
+    kind=request
+    priority=11
+    example="Show me."
+    doc="A map command without a place: asks which place and expects the answer as the next utterance (discourse pending, spec 11)."

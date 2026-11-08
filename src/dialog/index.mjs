@@ -17,12 +17,13 @@ import { serialize, makeWire, atom, str } from '../soplang/index.mjs';
 import { splitSentences } from '../formalizer/rules/normalize.mjs';
 import { spellCorrect, spellAlternates, worldVocabulary, spellVocabulary, restrictedSet, ignorable, FUNCTION_WORDS } from '../formalizer/spell.mjs';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs';
+import { Discourse } from './discourse.mjs';
 
 export { runWorldTests } from './test-runner.mjs';
 
 const plainSegment = (s) => ({
   text: s.text, span: s.span, isQuestion: s.isQuestion, worlds: s.worlds, routing: s.routing, match: s.match,
-  unparsed: s.unparsed, alternatives: s.alternatives, errors: s.errors, strategy: s.strategy, corrections: s.corrections ?? [], ignored: s.ignored ?? [], dispatch: s.dispatch ?? null,
+  unparsed: s.unparsed, discourse: s.discourse ?? null, alternatives: s.alternatives, errors: s.errors, strategy: s.strategy, corrections: s.corrections ?? [], ignored: s.ignored ?? [], dispatch: s.dispatch ?? null,
   wires: s.wires.map((w) => w.id),
 });
 
@@ -110,6 +111,8 @@ export class DialogSession {
     /** Preferred formalizer strategy: 'rules' (default) or 'encoder'; per world it falls back to rules (spec 06). */
     this.formalizer = formalizer === 'encoder' ? 'encoder' : 'rules';
     this.isession = engine.interp.createSession();
+    /** Discourse memory (spec 11, ADR-006): recent frames and the pending expectation. */
+    this.discourse = new Discourse(this);
     this.sources = new Map();
     this._msg = 0;
     this.isession.add(this.isession.form.initDefaults());
@@ -329,8 +332,20 @@ export class DialogSession {
 
     const stateBefore = Object.fromEntries(Object.entries(this.isession.state).map(([k, v]) => [k, JSON.stringify(v)]));
     this.isession.effects = [];
+    const disc = this.discourse;
+    const pend = disc.takePending();   // an expectation lives for one turn (spec 11)
     const icpt = interp.intercept(this.isession, english);   // modal input (spec 07 section 2)
-    const { segments, wires, dispatch, encoderError } = icpt ? { segments: [], wires: [] } : await this._formalize(english, sid, formalizer ?? this.formalizer, { spell: spell ?? this.spell, partial: partial ?? this.partial });
+    let pre = null;   // discourse resolution (spec 11): the reply fills a pending argument, or a fragment is an ellipsis of an earlier frame
+    if (!icpt) {
+      if (pend?.type === 'fill') pre = await disc.fill(pend, english, sid);
+      if (!pre) pre = await disc.ellipsis(english, sid);
+    }
+    let formal = icpt ? { segments: [], wires: [] } : pre ? { ...pre.res, dispatch: null } : await this._formalize(english, sid, formalizer ?? this.formalizer, { spell: spell ?? this.spell, partial: partial ?? this.partial });
+    if (!icpt && !pre && formal.segments.length === 1 && formal.segments[0].unparsed) {
+      pre = await disc.ellipsis(english, sid, { bare: true });
+      if (pre) formal = { ...pre.res, dispatch: null };
+    }
+    const { segments, wires, dispatch, encoderError } = formal;
     this._noteWorlds(segments);
     const T = (text, extra = {}) => ({ text, translate: true, ...extra });
     const lines = icpt?.reply ? [[T(icpt.reply)]] : [];   // each line is an array of parts [{ text, translate, quote? }]
@@ -388,6 +403,8 @@ export class DialogSession {
         statuses.push(r.status);
         if (r.status === 'supported') { const wid = seg.match?.worldId; const t = set.get(wid)?.tab?.id ?? BUILTIN_TAB[wid]; if (t) followTab = t; }
         ops.push(...r.ops);
+        if (r.status === 'supported') disc.recordFrame(seg, this._msg);
+        else if (r.status === 'missing' && r.envelope?.pending) disc.openFill(seg, r.envelope, rendered, this._msg);
         answerWires.push(r.answer);
         answers.push({
           id: r.answer.id, to: w.id, kind: r.kind, status: r.status, value: r.envelope.value, values: r.envelope.values,
@@ -438,6 +455,7 @@ export class DialogSession {
         reply = parts.map((p) => p.text).join('');
       } catch { parts = englishParts.map(({ join, fallback, ...p }) => p); reply = englishReply; }
     }
+    if (!disc.pending) disc.openConfirm(englishReply, this._msg);
     const state = {};
     for (const [k, v] of Object.entries(this.isession.state)) if (JSON.stringify(v) !== stateBefore[k]) state[k] = structuredClone(v);
     const effects = this.isession.effects;
@@ -447,6 +465,7 @@ export class DialogSession {
       trace: {
         intercepted: icpt?.worldId ?? null, effects, formalizer: { preferred: formalizer ?? this.formalizer, used: [...new Set(segments.map((s) => s.strategy))], ...(encoderError ? { error: encoderError } : {}) },
         dispatch: dispatch ?? null,
+        discourse: { resolved: pre?.info ?? null, pending: disc.pending ? { type: disc.pending.type, world: disc.pending.world, key: disc.pending.key, expected: disc.pending.expected, question: disc.pending.question } : null, consumed: pend ? { type: pend.type, world: pend.world, question: pend.question } : null, frames: disc.frames.length },
         source: sid, language: lang, original: text, english, replyEnglish: englishReply,
         segments: segments.map(plainSegment), router: segments.map((s) => s.worlds),
         routing: icpt ? [{ router: 'policy', tier: 1, tierName: 'modal', reason: `modal input of ${icpt.worldId}`, contested: false, winner: { worldId: icpt.worldId }, runnerUp: null }] : segments.map((s) => s.routing ?? null),

@@ -16,3 +16,5 @@ The vision (`vision/PSys2-vision-v1.md`) defines the target architecture. These 
 | [07-tool-worlds-and-demo.md](07-tool-worlds-and-demo.md) | Tool-use worlds (app shell, robot avatar, document editor, games), state and effects contract, hands-free demo page |
 | [decisions/ADR-005](decisions/ADR-005-dispatcher-and-rule-validation.md) | Dispatcher proposes, rule formalizers validate (spec 03 section 7) |
 | [08-training-data.md](08-training-data.md) | Training data from worlds: generators (datagen.mjs), rule-derived records, export and reports |
+| [11-discourse.md](11-discourse.md) | Discourse layer: frames, ellipsis, pending clarifications, coordination |
+| [decisions/ADR-006](decisions/ADR-006-discourse-layer.md) | Rule-based discourse layer |

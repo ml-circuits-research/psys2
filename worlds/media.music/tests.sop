@@ -1907,3 +1907,19 @@
     input="Tell me about Frere Jacques."
     expect="Frère Jacques"
     session=zq
+
+@t.media.music.d01 core.test
+    input="Open the music tab."
+    expectStatus=supported
+    session=disc_music
+
+@t.media.music.d02 core.test
+    input="Play."
+    expect="What should I play?"
+    expectStatus=missing
+    session=disc_music
+
+@t.media.music.d03 core.test
+    input="A C major chord."
+    expect="C major chord"
+    session=disc_music

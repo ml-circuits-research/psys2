@@ -1377,3 +1377,11 @@
     kind=request
     priority=14
     example="What colour is the house?"
+
+@pat.art.draw.bare core.pattern
+    match="[please|pls|can_you|could_you|can_you_please|could_you_please|let_us]? [draw|sketch|paint] [please|pls]?"
+    emit="@{_} core.request action=draw.askKind"
+    kind=request
+    priority=11
+    example="Draw."
+    doc="A drawing command without the thing to draw: asks what to draw and expects the answer as the next utterance (discourse pending, spec 11). Priority 11 keeps the chess draw offer on other tabs; on the drawing tab the tab bias selects this pattern."

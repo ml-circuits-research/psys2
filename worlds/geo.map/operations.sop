@@ -268,3 +268,9 @@
     action=geo.unknown
     doc="Map action geo.unknown: see ops.mjs"
 
+
+@op.geo.map.askPlace core.operation
+    impl=askPlace
+    semantics=action
+    action=geo.askPlace
+    doc="Clarification for a map command without a place: asks which place and opens a pending expectation (spec 11)."

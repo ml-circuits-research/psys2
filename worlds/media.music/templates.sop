@@ -543,3 +543,8 @@
     for=action.music.songInfo
     status=missing
     text="{note}"
+
+@tpl.media.music.askWhat.missing core.template
+    for=action.music.askWhat
+    status=missing
+    text="{note}"

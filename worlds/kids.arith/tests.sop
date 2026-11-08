@@ -884,3 +884,13 @@
     input="half 12"
     expect="Half of 12 is 6."
     doc="calc: half"
+
+@t.kids.arith.d01 core.test
+    input="Tom has 5 apples. He gives 2 to Ana. How many does he have now?"
+    expect="Tom has 3 apples"
+    session=disc_arith
+
+@t.kids.arith.d02 core.test
+    input="And Ana?"
+    expect="Ana"
+    session=disc_arith

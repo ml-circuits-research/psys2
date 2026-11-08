@@ -184,3 +184,9 @@
     action=draw.open
     doc="Brings the Drawing tab forward."
 
+
+@op.art.draw.askKind core.operation
+    impl=askKind
+    semantics=action
+    action=draw.askKind
+    doc="Clarification for \"Draw\" without an object: asks what to draw and opens a pending expectation for the missing kind (spec 11)."

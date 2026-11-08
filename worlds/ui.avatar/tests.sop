@@ -1103,3 +1103,13 @@
     input="Make your eyes and body blue, no, red."
     expectState="robot.colors.body=ff9d9d"
     session=f4r
+
+@t.ui.avatar.d01 core.test
+    input="Open the robot tab."
+    expectStatus=supported
+    session=disc_avatar
+
+@t.ui.avatar.d02 core.test
+    input="Give yourself round glasses and a beard."
+    expect="no beard"
+    session=disc_avatar

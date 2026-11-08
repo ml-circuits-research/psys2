@@ -321,7 +321,8 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     const after = form.snapshot();
     const whole = base.done?.length === 1 && base.done[0].span === s.span ? base.done[0] : null;
     const weak = !!whole && isWeak(whole);
-    const clean = base.done && base.done.every((p) => !p.unparsed && !isWeak(p)) && !weak;
+    const cl = base.done && base.done.length > 1 ? splitClauses(tokens) : null;
+    const clean = base.done && base.done.every((p) => !p.unparsed && !isWeak(p)) && !weak && !(cl && base.done.some((_, i) => isStray(base.done, cl, i)));
     if (clean) return base;
     // 1. self-correction ("blue, no, green")
     form.restore(before);
@@ -392,6 +393,15 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     return null;
   };
 
+  /** Clause `i` is a verbless noun phrase that another world read as a command of its own, after a clause of a different world. */
+  const isStray = (parts, clauses, i) => {
+    const part = parts[i], ct = clauses[i];
+    if (!part || part.unparsed || isWeak(part) || !ct || parts.length !== clauses.length) return false;
+    const firstOk = parts.findIndex((p) => !p.unparsed && !isWeak(p));
+    return firstOk >= 0 && firstOk < i && part.match.worldId !== parts[firstOk].match.worldId
+      && (ct[0].kind === 'number' || ['a', 'an', 'the', 'some', 'another', 'more'].includes(ct[0].lower));
+  };
+
   const expandClauses = (s, tokens, base, whole = null, bar = null) => {
     const clauses = splitClauses(tokens);
     const parts = base?.done ?? (base?.fallback && clauses.length === 1 ? [base.fallback] : clauses.map((c, idx) => readGroup(c, QUESTION_WORDS.has(c[0].lower) || (s.isQuestion && idx === clauses.length - 1 && /\?/.test(text.slice(s.span[1], s.span[1] + 3))))));
@@ -399,8 +409,11 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     const out = [];
     let changed = false;
     parts.forEach((part, i) => {
-      if (!part.unparsed && !isWeak(part)) { out.push(part); return; }
       const ct = clauses[i];
+      // distribution of the verb (spec 03 section 1c): a verbless noun phrase clause ("... and a beard") that another world read as a
+      // command of its own ("a beard" as a hangman guess) is still tried as an elliptic clause of the first clause's world
+      const stray = isStray(parts, clauses, i);
+      if (!part.unparsed && !isWeak(part) && !stray) { out.push(part); return; }
       const rep = repetition(ct);
       if (rep) {
         const sp = [ct[0].start, ct[ct.length - 1].end];
@@ -411,7 +424,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
         form.restore(snap);
       }
       const anchorIdx = parts.findIndex((p) => !p.unparsed && !isWeak(p));
-      if (part.unparsed && anchorIdx >= 0 && anchorIdx < i) {
+      if ((part.unparsed || stray) && anchorIdx >= 0 && anchorIdx < i) {
         for (const pre of ellipsisPrefixes(clauses[anchorIdx])) {
           const sp = [ct[0].start, ct[ct.length - 1].end];
           const segs = tryClauses([{ tokens: [...pre, ...ct.filter((t) => t.kind !== 'punct')], span: sp, guard: true, info: { kind: 'verb-ellipsis', source: sp, copied: [[pre[0].start, pre[pre.length - 1].end]] } }], parts[anchorIdx].match.worldId, bar);

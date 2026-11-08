@@ -628,3 +628,8 @@
     status=missing
     text="{note}"
 
+
+@tpl.geo.map.askPlace.missing core.template
+    for=action.geo.askPlace
+    status=missing
+    text="{note}"

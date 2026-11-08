@@ -717,3 +717,8 @@ export function onObservation(ctx, obs) {
 
 export { scaleNotesOp as scaleNotes, chordNotesOp as chordNotes, frequencyOp as frequency, enharmonicOp as enharmonic };
 export { LETTERS, keyField };
+
+/** "Play" alone: ask what to play; the dialog layer keeps the question pending for the next utterance (spec 11). */
+export function askWhat() {
+  return { status: 'missing', note: 'What should I play? For example a note, a chord or a song.', pending: { key: 'what', type: 'music' } };
+}

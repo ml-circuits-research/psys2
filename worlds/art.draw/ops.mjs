@@ -1459,3 +1459,6 @@ export const openTab = guard((ctx) => {
   const r = ctx.request('ui.openTab', { tab: TAB });
   return r?.status === 'supported' ? ok('OK, here is the drawing board.') : ok('The drawing board is right here. What shall we draw?');
 });
+
+/** "Draw" alone: ask what to draw; the dialog layer keeps the question pending for the next utterance (spec 11). */
+export const askKind = guard((ctx, args, s) => ({ status: 'missing', note: 'What should I draw?', pending: { key: 'kind', type: 'lex.art.draw.things' } }));

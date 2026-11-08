@@ -855,3 +855,8 @@ export function highlights(ctx) {
 export function unknown(ctx, { x }) {
   return no('unsupported', `I do not know a place called ${x}. I know every country and capital, cities with 500,000 people or more, and Romanian and Moldovan towns with 30,000 or more.`);
 }
+
+/** "Show me" alone: ask which place; the dialog layer keeps the question pending for the next utterance (spec 11). */
+export function askPlace() {
+  return { status: 'missing', note: 'Which place should I show?', pending: { key: 'p', type: 'lex.geo.map.places' } };
+}

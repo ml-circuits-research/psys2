@@ -231,3 +231,9 @@
     semantics=action
     action=music.songInfo
     doc="Tells composer, key, tempo, length or a short note about a song."
+
+@op.media.music.askWhat core.operation
+    impl=askWhat
+    semantics=action
+    action=music.askWhat
+    doc="Clarification for a play command with nothing to play: asks what to play and opens a pending expectation (spec 11)."

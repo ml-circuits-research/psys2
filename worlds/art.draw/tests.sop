@@ -3441,3 +3441,72 @@
     expectState="objects.4.kind=circle"
     expectState="objects.5.kind=circle"
     session=f4r
+
+@t.art.draw.d01 core.test
+    input="Open the drawing tab."
+    expect="Drawing tab"
+    session=disc1
+
+@t.art.draw.d02 core.test
+    input="Draw a house."
+    expectState="objects.0.kind=house"
+    session=disc1
+
+@t.art.draw.d03 core.test
+    input="Draw a tree."
+    expectState="objects.1.kind=tree"
+    session=disc1
+
+@t.art.draw.d04 core.test
+    input="Make the house red."
+    expectState="objects.0.color=red"
+    session=disc1
+
+@t.art.draw.d05 core.test
+    input="The same for the tree."
+    expect="The tree is red"
+    expectState="objects.1.color=red"
+    session=disc1
+
+@t.art.draw.d06 core.test
+    input="Now bigger."
+    expect="bigger"
+    expectState="objects.1.size=221"
+    session=disc1
+
+@t.art.draw.d07 core.test
+    input="Again."
+    expect="bigger"
+    session=disc1
+
+@t.art.draw.d08 core.test
+    input="And the house too."
+    expect="house bigger"
+    expectState="objects.0.size=312"
+    session=disc1
+
+@t.art.draw.d09 core.test
+    input="Open the drawing tab."
+    expectStatus=supported
+    session=disc2
+
+@t.art.draw.d10 core.test
+    input="Draw."
+    expect="What should I draw?"
+    expectStatus=missing
+    session=disc2
+
+@t.art.draw.d11 core.test
+    input="A cat."
+    expectState="objects.0.kind=cat"
+    session=disc2
+
+@t.art.draw.d12 core.test
+    input="Draw."
+    expect="What should I draw?"
+    session=disc2
+
+@t.art.draw.d13 core.test
+    input="Draw a dog."
+    expectState="objects.1.kind=dog"
+    session=disc2
