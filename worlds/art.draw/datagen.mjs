@@ -110,6 +110,69 @@ add('draw.near', 'near-miss', (r, x) => { const k = pick(r, kinds(x));
 add('draw.ood', 'out-of-domain', (r, x) => { const p = x.person(r);
   return { text: pick(r, [`${p.name} has 5 apples.`, 'How much does a ball cost?', 'What day is tomorrow?', 'What is 7 plus 5?', 'Add milk to my shopping list.', 'Is a whale a fish?', 'Hello!', 'Yes.', 'What does a rabbit eat?']), negative: true }; });
 
+// ---- R2 families: chat style, wishes, elliptic and reordered forms, undo/redo, questions about the picture
+const PLS_FB = ['pls', 'plz', 'thx'];
+add('draw.add.elliptic', 'elliptic', (r, x) => { const k = pick(r, kinds(x)), c = pick(r, colors(x)), n = 2 + Math.floor(r() * 8);
+  return pick(r, [
+    { text: `${n} ${plural(k)}`, expect: E(R('add', { n, kind: k, kt: q(plural(k)) })) },
+    { text: `${c} ${sp(k)} ${pick(r, PLS_FB)}`, expect: E(R('add', { m1: c, kind: k, kt: q(k) })) },
+    { text: `Gimme ${art(c)} ${c} ${sp(k)}`, expect: E(R('add', { m1: c, kind: k, kt: q(k) })) },
+    { text: `I want ${art(c)} ${c} ${sp(k)} added`, expect: E(R('add', { m1: c, kind: k, kt: q(k) })) },
+  ]); }, { noise: false });
+add('draw.add.chat', 'voice', (r, x) => { const k = pick(r, kinds(x)), c = pick(r, colors(x));
+  return pick(r, [
+    { text: `um so like draw ${art(c)} ${c} ${sp(k)} yeah`, expect: E(R('add', { m1: c, kind: k, kt: q(k) })) },
+    { text: `can u draw ${art(k)} ${sp(k)} ${pick(r, PLS_FB)}`, expect: E(R('add', { kind: k, kt: q(k) })) },
+    { text: `draw ${art(k)} ${sp(k)} in ${c}`, expect: E(R('add', { m1: c, kind: k, kt: q(k) })) },
+  ]); }, { noise: false });
+add('draw.ground.chat', 'elliptic', (r) => { const g = pick(r, ['grass', 'sand', 'snow']);
+  return pick(r, [
+    { text: `${g} ${pick(r, PLS_FB)}`, expect: E(R('ground', { g })) },
+    { text: `The ground should be ${g}`, expect: E(R('ground', { g })) },
+    { text: `It needs ${g}`, expect: E(R('ground', { g })) },
+    { text: `${g} on the ground`, expect: E(R('ground', { g })) },
+  ]); }, { noise: false });
+add('draw.mood', 'request', (r) => { const w = pick(r, ['night', 'sunset', 'dawn', 'day']);
+  return pick(r, [
+    { text: `I want it to be ${w}`, expect: E(R('mood', { w })) },
+    { text: `It should look like ${w}`, expect: E(R('mood', { w })) },
+    { text: `Set the mood to ${w}`, expect: E(R('mood', { w })) },
+    { text: `Can you make it ${w}`, expect: E(R('mood', { w })) },
+  ]); }, { noise: false });
+add('draw.recolor', 'request', (r, x) => { const k = pick(r, kinds(x)), c = pick(r, colors(x));
+  return pick(r, [
+    { text: `The ${sp(k)} should be ${c}`, expect: E(R('recolor', { t: q(`the ${sp(k)}`), color: c })) },
+    { text: `${sp(k)} in ${c} ${pick(r, PLS_FB)}`, expect: E(R('recolor', { t: q(`the ${sp(k)}`), color: c })) },
+    { text: `Can u paint the ${sp(k)} ${c}`, expect: E(R('recolor', { t: q(`the ${sp(k)}`), color: c })) },
+  ]); }, { noise: false });
+add('draw.resize', 'request', (r, x) => { const k = pick(r, kinds(x)), d = pick(r, ['bigger', 'smaller']);
+  return pick(r, [
+    { text: `${sp(k)} ${d} ${pick(r, PLS_FB)}`, expect: E(R('resize', { t: q(`the ${sp(k)}`), d })) },
+    { text: `The ${sp(k)} needs to be ${d}`, expect: E(R('resize', { t: q(`the ${sp(k)}`), d })) },
+    { text: `${d} ${sp(k)}`, expect: E(R('resize', { t: q(`the ${sp(k)}`), d })) },
+  ]); }, { noise: false });
+add('draw.undo.chat', 'request', (r) => pick(r, [
+  { text: 'oops take that back', expect: E(R('undo')) }, { text: 'ctrl z', expect: E(R('undo')) }, { text: 'go back one step', expect: E(R('undo')) },
+  { text: 'revert the last change', expect: E(R('undo')) }, { text: 'wait undo', expect: E(R('undo')) },
+  { text: 'redo', expect: E(R('redo')) }, { text: 'undo the undo', expect: E(R('redo')) },
+]), { noise: false });
+add('draw.where', 'question', (r, x) => { const k = pick(r, kinds(x));
+  return pick(r, [
+    { text: `Where is the ${sp(k)}?`, expect: E(R('where', { kind: k, kt: q(sp(k)) })) },
+    { text: `where did you put the ${sp(k)}`, expect: E(R('where', { kind: k, kt: q(sp(k)) })) },
+    { text: `${sp(k)} where?`, expect: E(R('where', { kind: k, kt: q(sp(k)) })) },
+    { text: `find the ${sp(k)}`, expect: E(R('where', { kind: k, kt: q(sp(k)) })) },
+  ]); }, { noise: false });
+add('draw.exists', 'question', (r, x) => { const k = pick(r, kinds(x).filter((v) => !['square', 'triangle', 'circle', 'oval', 'rectangle', 'line', 'arrow'].includes(v)));
+  return pick(r, [
+    { text: `Is there ${art(k)} ${sp(k)}?`, expect: E(R('exists', { kind: k, kt: q(sp(k)) })) },
+    { text: `does my picture have ${art(k)} ${sp(k)}`, expect: E(R('exists', { kind: k, kt: q(sp(k)) })) },
+  ]); }, { noise: false });
+add('draw.help', 'question', (r) => pick(r, [
+  { text: 'what can u draw', expect: E(R('help')) }, { text: 'list the things i can draw', expect: E(R('help')) },
+  { text: 'which colors are available', expect: E(R('colors')) }, { text: 'colour list pls', expect: E(R('colors')) },
+]), { noise: false });
+
 export function generate({ rng, count = 2000, context } = {}) {
   return run(T, rng, count, mk(context));
 }

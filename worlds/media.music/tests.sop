@@ -616,3 +616,1293 @@
     input="Play the note C."
     expect="middle C"
     session=i
+
+@t.media.music.r001 core.test
+    input="Play Ode to Joy."
+    expect="Ode to Joy"
+    session=zp
+
+@t.media.music.r002 core.test
+    input="Play middle C."
+    expect="Playing middle C (C4)"
+    session=zp
+
+@t.media.music.r003 core.test
+    input="Can you play an E?"
+    expect="Playing E 4, 329.6"
+    session=zp
+
+@t.media.music.r004 core.test
+    input="I want to hear a high C on the bells."
+    expect="Playing C 5, 523.3"
+    session=zp
+
+@t.media.music.r005 core.test
+    input="How does middle C sound?"
+    expect="Playing middle C (C4)"
+    session=zp
+
+@t.media.music.r006 core.test
+    input="E note pls"
+    expect="Playing E 4, 329.6"
+    session=zp
+
+@t.media.music.r007 core.test
+    input="um so like could you maybe play an F for me"
+    expect="Playing F 4, 349.2"
+    session=zp
+
+@t.media.music.r008 core.test
+    input="Note E."
+    expect="Playing E 4, 329.6"
+    session=zp
+
+@t.media.music.r009 core.test
+    input="Ding a C on the bells."
+    expect="Playing middle C (C4)"
+    session=zp
+
+@t.media.music.r010 core.test
+    input="Play F sharp 4."
+    expect="Playing F sharp 4"
+    session=zp
+
+@t.media.music.r011 core.test
+    input="Play just one E note."
+    expect="Playing E 4, 329.6"
+    session=zp
+
+@t.media.music.r012 core.test
+    input="Play C and then play G."
+    expect="Playing G 4, 392"
+    session=zp
+
+@t.media.music.r013 core.test
+    input="Play a C major chord."
+    expect="Playing a C major"
+    session=zp
+
+@t.media.music.r014 core.test
+    input="Could you play an F major chord on the organ please?"
+    expect="Playing an F major"
+    session=zp
+
+@t.media.music.r015 core.test
+    input="I want to hear a D minor chord."
+    expect="Playing a D minor"
+    session=zp
+
+@t.media.music.r016 core.test
+    input="A g minor chord would be nice."
+    expect="Playing a G minor"
+    session=zp
+
+@t.media.music.r017 core.test
+    input="c major chord pls"
+    expect="Playing a C major"
+    session=zp
+
+@t.media.music.r018 core.test
+    input="hit a G7"
+    expect="Playing a G dominant"
+    session=zp
+
+@t.media.music.r019 core.test
+    input="Play a chord, A minor, on the organ."
+    expect="Playing an A minor"
+    session=zp
+
+@t.media.music.r020 core.test
+    input="Strum an A minor 7 on the strings."
+    expect="Playing an A minor"
+    session=zp
+
+@t.media.music.r021 core.test
+    input="Play a dominant seventh chord in C."
+    expect="Playing a C dominant"
+    session=zp
+
+@t.media.music.r022 core.test
+    input="What does a G major chord sound like?"
+    expect="Playing a G major"
+    session=zp
+
+@t.media.music.r023 core.test
+    input="Play a diminished B chord."
+    expect="Playing a B diminished"
+    session=zp
+
+@t.media.music.r024 core.test
+    input="Arpeggiate G minor."
+    expect="Playing the G minor"
+    session=zp
+
+@t.media.music.r025 core.test
+    input="G major chord but one note after another."
+    expect="Playing the G major"
+    session=zp
+
+@t.media.music.r026 core.test
+    input="an a minor arpeggio pls"
+    expect="Playing the A minor"
+    session=zp
+
+@t.media.music.r027 core.test
+    input="Spread the G chord out."
+    expect="Playing the G major"
+    session=zp
+
+@t.media.music.r028 core.test
+    input="Play C E G together."
+    expect="Playing a C major"
+    session=zp
+
+@t.media.music.r029 core.test
+    input="make the g chord into single notes"
+    expect="Playing the G major"
+    session=zp
+
+@t.media.music.r030 core.test
+    input="Play the D major scale."
+    expect="Playing the D major"
+    session=zp
+
+@t.media.music.r031 core.test
+    input="Can you play a blues scale?"
+    expect="Playing the C blues"
+    session=zp
+
+@t.media.music.r032 core.test
+    input="I wanna hear the mixolydian scale in G."
+    expect="Playing the G mixolydian"
+    session=zp
+
+@t.media.music.r033 core.test
+    input="d major scale pls"
+    expect="Playing the D major"
+    session=zp
+
+@t.media.music.r034 core.test
+    input="Scale of F major please."
+    expect="Playing the F major"
+    session=zp
+
+@t.media.music.r035 core.test
+    input="Run up the C major scale."
+    expect="Playing the C major"
+    session=zp
+
+@t.media.music.r036 core.test
+    input="e min pentatonic"
+    expect="Playing the E minor"
+    session=zp
+
+@t.media.music.r037 core.test
+    input="Play the C major scale at 100 bpm."
+    expect="Playing the C major"
+    session=zp
+
+@t.media.music.r038 core.test
+    input="What does the d major scale sound like?"
+    expect="Playing the D major"
+    session=zp
+
+@t.media.music.r039 core.test
+    input="Could you go through the scale of G major?"
+    expect="Playing the G major"
+    session=zp
+
+@t.media.music.r040 core.test
+    input="Play the whole tone scale."
+    expect="Playing the C whole"
+    session=zp
+
+@t.media.music.r041 core.test
+    input="Scale please."
+    expect="Playing the C major"
+    session=zp
+
+@t.media.music.r042 core.test
+    input="Play Twinkle Twinkle."
+    expect="Twinkle, Twinkle, Little Star"
+    session=zp
+
+@t.media.music.r043 core.test
+    input="Can you sing Ode to Joy?"
+    expect="Ode to Joy"
+    session=zp
+
+@t.media.music.r044 core.test
+    input="I wanna hear jingle bells."
+    expect="Jingle Bells"
+    session=zp
+
+@t.media.music.r045 core.test
+    input="happy birthday pls"
+    expect="Happy Birthday to You"
+    session=zp
+
+@t.media.music.r046 core.test
+    input="Bells version of Happy Birthday."
+    expect="Happy Birthday to You"
+    session=zp
+
+@t.media.music.r047 core.test
+    input="Put on Frere Jacques."
+    expect="Frère Jacques"
+    session=zp
+
+@t.media.music.r048 core.test
+    input="how about some jingle bells"
+    expect="Jingle Bells"
+    session=zp
+
+@t.media.music.r049 core.test
+    input="Play Twinkle Twinkle at 80 bpm."
+    expect="Twinkle, Twinkle, Little Star"
+    session=zp
+
+@t.media.music.r050 core.test
+    input="Play twinkle twinkle little star on the flute."
+    expect="Twinkle, Twinkle, Little Star"
+    session=zp
+
+@t.media.music.r051 core.test
+    input="Play something."
+    expectEffect=music.play
+    session=zp
+
+@t.media.music.r052 core.test
+    input="Can you play a random song?"
+    expectEffect=music.play
+    session=zp
+
+@t.media.music.r053 core.test
+    input="I want to hear some music."
+    expectEffect=music.play
+    session=zp
+
+@t.media.music.r054 core.test
+    input="Surprise me."
+    expectEffect=music.play
+    session=zp
+
+@t.media.music.r055 core.test
+    input="i dont care, play something"
+    expectEffect=music.play
+    session=zp
+
+@t.media.music.r056 core.test
+    input="Pick a song for me."
+    expectEffect=music.play
+    session=zp
+
+@t.media.music.r057 core.test
+    input="Play another tune."
+    expectEffect=music.play
+    session=zp
+
+@t.media.music.r058 core.test
+    input="Which songs do you know?"
+    expect="play"
+    session=zp
+
+@t.media.music.r059 core.test
+    input="songs?"
+    expect="play"
+    session=zp
+
+@t.media.music.r060 core.test
+    input="Do you know any songs?"
+    expect="play"
+    session=zp
+
+@t.media.music.r061 core.test
+    input="Whats in your song library?"
+    expect="play"
+    session=zp
+
+@t.media.music.r062 core.test
+    input="List the songs."
+    expect="play"
+    session=zp
+
+@t.media.music.r063 core.test
+    input="Which instruments do you have?"
+    expect="change the instrument to flute"
+    session=zp
+
+@t.media.music.r064 core.test
+    input="instruments?"
+    expect="change the instrument to flute"
+    session=zp
+
+@t.media.music.r065 core.test
+    input="List the instruments."
+    expect="change the instrument to flute"
+    session=zp
+
+@t.media.music.r066 core.test
+    input="What instruments can i use?"
+    expect="change the instrument to flute"
+    session=zp
+
+@t.media.music.r067 core.test
+    input="Which scale types exist?"
+    expect="play the D dorian scale"
+    session=zp
+
+@t.media.music.r068 core.test
+    input="List the chord types."
+    expect="play an A minor seventh chord"
+    session=zp
+
+@t.media.music.r069 core.test
+    input="chord kinds pls"
+    expect="play an A minor seventh chord"
+    session=zp
+
+@t.media.music.r070 core.test
+    input="What kinds of chords can you play?"
+    expect="play an A minor seventh chord"
+    session=zp
+
+@t.media.music.r071 core.test
+    input="Show me the list of scale types."
+    expect="play the D dorian scale"
+    session=zp
+
+@t.media.music.r072 core.test
+    input="Play Twinkle Twinkle."
+    expect="Twinkle, Twinkle, Little Star"
+    session=zt
+
+@t.media.music.r073 core.test
+    input="Play it again."
+    expect="Twinkle, Twinkle, Little Star"
+    session=zt
+
+@t.media.music.r074 core.test
+    input="again"
+    expect="Twinkle, Twinkle, Little Star"
+    session=zt
+
+@t.media.music.r075 core.test
+    input="Can you run that once more?"
+    expect="Twinkle, Twinkle, Little Star"
+    session=zt
+
+@t.media.music.r076 core.test
+    input="I want to hear it again."
+    expect="Twinkle, Twinkle, Little Star"
+    session=zt
+
+@t.media.music.r077 core.test
+    input="one more go"
+    expect="Twinkle, Twinkle, Little Star"
+    session=zt
+
+@t.media.music.r078 core.test
+    input="Encore."
+    expect="Twinkle, Twinkle, Little Star"
+    session=zt
+
+@t.media.music.r079 core.test
+    input="Say it again."
+    expect="Twinkle, Twinkle, Little Star"
+    session=zt
+
+@t.media.music.r080 core.test
+    input="Stop the music."
+    expect="Stopped"
+    session=zt
+
+@t.media.music.r081 core.test
+    input="stop"
+    expect="Nothing is playing right"
+    session=zt
+
+@t.media.music.r082 core.test
+    input="Can you stop?"
+    expect="Nothing is playing right"
+    session=zt
+
+@t.media.music.r083 core.test
+    input="I want it to stop."
+    expect="Nothing is playing right"
+    session=zt
+
+@t.media.music.r084 core.test
+    input="okay stop the noise"
+    expect="Nothing is playing right"
+    session=zt
+
+@t.media.music.r085 core.test
+    input="Cut it out."
+    expect="Nothing is playing right"
+    session=zt
+
+@t.media.music.r086 core.test
+    input="Stop that noise."
+    expect="Nothing is playing right"
+    session=zt
+
+@t.media.music.r087 core.test
+    input="Turn the music off."
+    expect="Nothing is playing right"
+    session=zt
+
+@t.media.music.r088 core.test
+    input="Play Twinkle Twinkle."
+    expect="Twinkle, Twinkle, Little Star"
+    session=zt
+
+@t.media.music.r089 core.test
+    input="Loop it."
+    expect="Twinkle, Twinkle, Little Star"
+    session=zt
+
+@t.media.music.r090 core.test
+    input="Can you put it on repeat?"
+    expect="Twinkle, Twinkle, Little Star"
+    session=zt
+
+@t.media.music.r091 core.test
+    input="I want it to loop."
+    expect="Twinkle, Twinkle, Little Star"
+    session=zt
+
+@t.media.music.r092 core.test
+    input="keep looping that"
+    expect="Twinkle, Twinkle, Little Star"
+    session=zt
+
+@t.media.music.r093 core.test
+    input="Play it over and over."
+    expect="Twinkle, Twinkle, Little Star"
+    session=zt
+
+@t.media.music.r094 core.test
+    input="turn on looping"
+    expect="Twinkle, Twinkle, Little Star"
+    session=zt
+
+@t.media.music.r095 core.test
+    input="Dont loop it."
+    expect="I will play it"
+    session=zt
+
+@t.media.music.r096 core.test
+    input="Stop looping."
+    expect="I will play it"
+    session=zt
+
+@t.media.music.r097 core.test
+    input="Play it just once."
+    expect="I will play it"
+    session=zt
+
+@t.media.music.r098 core.test
+    input="Is it looping?"
+    expect="No, the loop is"
+    session=zt
+
+@t.media.music.r099 core.test
+    input="Speed it up."
+    expect="Playing again at 125"
+    session=zt
+
+@t.media.music.r100 core.test
+    input="Can you slow it down a bit?"
+    expect="Playing again at 113"
+    session=zt
+
+@t.media.music.r101 core.test
+    input="I want it faster."
+    expect="Playing again at 141"
+    session=zt
+
+@t.media.music.r102 core.test
+    input="The tempo is too slow."
+    expect="Playing again at 176"
+    session=zt
+
+@t.media.music.r103 core.test
+    input="Quicker."
+    expect="my speech rate is"
+    session=zt
+
+@t.media.music.r104 core.test
+    input="a bit quicker plz"
+    expect="Playing again at 220"
+    session=zt
+
+@t.media.music.r105 core.test
+    input="tempo 90"
+    expect="Playing again at 90"
+    session=zt
+
+@t.media.music.r106 core.test
+    input="Hurry up."
+    expect="Playing again at 113"
+    session=zt
+
+@t.media.music.r107 core.test
+    input="Set the speed to 90 bpm."
+    expect="Playing again at 90"
+    session=zt
+
+@t.media.music.r108 core.test
+    input="Make it 90 beats per minute."
+    expect="Playing again at 90"
+    session=zt
+
+@t.media.music.r109 core.test
+    input="Play it at half speed."
+    expect="Playing again at 45"
+    session=zt
+
+@t.media.music.r110 core.test
+    input="Double speed."
+    expect="Playing again at 90"
+    session=zt
+
+@t.media.music.r111 core.test
+    input="Not so fast."
+    expect="Playing again at 72"
+    session=zt
+
+@t.media.music.r112 core.test
+    input="Make it louder and then stop."
+    expect="Stopped"
+    session=zt
+
+@t.media.music.r113 core.test
+    input="Back to normal speed."
+    expect="the tempo is back"
+    session=zt
+
+@t.media.music.r114 core.test
+    input="Its too fast."
+    expect="the tempo is now"
+    session=zt
+
+@t.media.music.r115 core.test
+    input="Turn it up."
+    expect="the volume is 90"
+    session=zt
+
+@t.media.music.r116 core.test
+    input="Can you make it a bit louder?"
+    expect="the volume is 95"
+    session=zt
+
+@t.media.music.r117 core.test
+    input="I want it quieter."
+    expect="the volume is 85"
+    session=zt
+
+@t.media.music.r118 core.test
+    input="The volume is too low."
+    expect="the volume is 95"
+    session=zt
+
+@t.media.music.r119 core.test
+    input="Quieter."
+    expect="the volume is 85"
+    session=zt
+
+@t.media.music.r120 core.test
+    input="i cant hear anything"
+    expect="the volume is 95"
+    session=zt
+
+@t.media.music.r121 core.test
+    input="volume max pls"
+    expect="the volume is 100"
+    session=zt
+
+@t.media.music.r122 core.test
+    input="Crank it up a little."
+    expect="The volume is already"
+    session=zt
+
+@t.media.music.r123 core.test
+    input="Set the volume to 30."
+    expect="the volume is 30"
+    session=zt
+
+@t.media.music.r124 core.test
+    input="Volume at 80 percent."
+    expect="the volume is 80"
+    session=zt
+
+@t.media.music.r125 core.test
+    input="Full volume."
+    expect="the volume is 100"
+    session=zt
+
+@t.media.music.r126 core.test
+    input="Not so loud."
+    expect="the volume is 90"
+    session=zt
+
+@t.media.music.r127 core.test
+    input="Too loud."
+    expect="the volume is 80"
+    session=zt
+
+@t.media.music.r128 core.test
+    input="Mute the volume."
+    expect="the volume is 0"
+    session=zt
+
+@t.media.music.r129 core.test
+    input="Use the flute."
+    expect="I will play on"
+    session=zt
+
+@t.media.music.r130 core.test
+    input="Can it be the organ instead?"
+    expect="I will play on"
+    session=zt
+
+@t.media.music.r131 core.test
+    input="I want a violin sound."
+    expect="I will play on"
+    session=zt
+
+@t.media.music.r132 core.test
+    input="The sound should be piano."
+    expect="I will play on"
+    session=zt
+
+@t.media.music.r133 core.test
+    input="piano"
+    expect="I will play on"
+    session=zt
+
+@t.media.music.r134 core.test
+    input="Instrument flute pls."
+    expect="I will play on"
+    session=zt
+
+@t.media.music.r135 core.test
+    input="Make it sound like a marimba."
+    expect="I will play on"
+    session=zt
+
+@t.media.music.r136 core.test
+    input="Go back to piano."
+    expect="I will play on"
+    session=zt
+
+@t.media.music.r137 core.test
+    input="what about the cello"
+    expect="I will play on"
+    session=zt
+
+@t.media.music.r138 core.test
+    input="Play Twinkle Twinkle."
+    expect="Twinkle, Twinkle, Little Star"
+    session=zt
+
+@t.media.music.r139 core.test
+    input="Play it an octave higher."
+    expect="Moved up an octave"
+    session=zt
+
+@t.media.music.r140 core.test
+    input="Could you play it an octave lower?"
+    expect="Moved down an octave"
+    session=zt
+
+@t.media.music.r141 core.test
+    input="octave up"
+    expect="Moved up an octave"
+    session=zt
+
+@t.media.music.r142 core.test
+    input="Down 2 octaves pls."
+    expect="Moved down 2 octaves"
+    session=zt
+
+@t.media.music.r143 core.test
+    input="Two octaves down."
+    expect="Moved down 2 octaves"
+    session=zt
+
+@t.media.music.r144 core.test
+    input="Too high."
+    expect="Moved down an octave"
+    session=zt
+
+@t.media.music.r145 core.test
+    input="an octave lower twice"
+    expect="Moved down an octave"
+    session=zt
+
+@t.media.music.r146 core.test
+    input="Transpose it up a fifth."
+    expect="Transposed up fifth (7"
+    session=zt
+
+@t.media.music.r147 core.test
+    input="Can you move it up a semitone?"
+    expect="Transposed up semitone (1"
+    session=zt
+
+@t.media.music.r148 core.test
+    input="up a whole tone pls"
+    expect="Transposed up whole tone"
+    session=zt
+
+@t.media.music.r149 core.test
+    input="Transpose down 3 semitones."
+    expect="Transposed down 3 semitones"
+    session=zt
+
+@t.media.music.r150 core.test
+    input="Raise it by a minor third."
+    expect="Transposed up minor third"
+    session=zt
+
+@t.media.music.r151 core.test
+    input="A half step lower."
+    expect="Transposed down semitone (1"
+    session=zt
+
+@t.media.music.r152 core.test
+    input="Transpose it to G major."
+    expect="Transposed from A major"
+    session=zt
+
+@t.media.music.r153 core.test
+    input="Can you put it in the key of E?"
+    expect="Transposed from G major"
+    session=zt
+
+@t.media.music.r154 core.test
+    input="in G please"
+    expect="Transposed from E major"
+    session=zt
+
+@t.media.music.r155 core.test
+    input="Shift the whole thing to D major."
+    expect="Transposed from G major"
+    session=zt
+
+@t.media.music.r156 core.test
+    input="Set the key to A minor."
+    expect="Transposed from D major"
+    session=zt
+
+@t.media.music.r157 core.test
+    input="The key is G major."
+    expect="Transposed from A minor"
+    session=zt
+
+@t.media.music.r158 core.test
+    input="I want the key of C."
+    expect="Transposed from G major"
+    session=zt
+
+@t.media.music.r159 core.test
+    input="Key of D."
+    expect="Transposed from C major"
+    session=zt
+
+@t.media.music.r160 core.test
+    input="What key are we in?"
+    expect="The key is D"
+    session=zt
+
+@t.media.music.r161 core.test
+    input="What tempo is it?"
+    expect="The tempo is 80"
+    session=zt
+
+@t.media.music.r162 core.test
+    input="What is the volume?"
+    expect="The volume is 0"
+    session=zt
+
+@t.media.music.r163 core.test
+    input="Which instrument are you using?"
+    expect="I am playing the"
+    session=zt
+
+@t.media.music.r164 core.test
+    input="What is playing?"
+    expect="Twinkle, Twinkle, Little Star"
+    session=zt
+
+@t.media.music.r165 core.test
+    input="Is the music playing?"
+    expect="Yes, I am playing"
+    session=zt
+
+@t.media.music.r166 core.test
+    input="Whats playing now?"
+    expect="Twinkle, Twinkle, Little Star"
+    session=zt
+
+@t.media.music.r167 core.test
+    input="Write a melody C D E F G."
+    expect="play my melody"
+    session=zm
+
+@t.media.music.r168 core.test
+    input="What is my melody?"
+    expect="Your melody has 5"
+    session=zm
+
+@t.media.music.r169 core.test
+    input="I want to write a melody: A B C"
+    expect="play my melody"
+    session=zm
+
+@t.media.music.r170 core.test
+    input="melody: A A B A"
+    expect="play my melody"
+    session=zm
+
+@t.media.music.r171 core.test
+    input="Here is my tune: E E E"
+    expect="play my melody"
+    session=zm
+
+@t.media.music.r172 core.test
+    input="start a new melody with E E F G"
+    expect="play my melody"
+    session=zm
+
+@t.media.music.r173 core.test
+    input="Compose C D E C."
+    expect="play my melody"
+    session=zm
+
+@t.media.music.r174 core.test
+    input="C D E F G as my melody."
+    expect="play my melody"
+    session=zm
+
+@t.media.music.r175 core.test
+    input="Add the notes E D C."
+    expect="Added E D C"
+    session=zm
+
+@t.media.music.r176 core.test
+    input="add C"
+    expect="Added C. Your melody"
+    session=zm
+
+@t.media.music.r177 core.test
+    input="Next note G."
+    expect="Added G. Your melody"
+    session=zm
+
+@t.media.music.r178 core.test
+    input="Keep going with D C."
+    expect="Added D C. Your"
+    session=zm
+
+@t.media.music.r179 core.test
+    input="More notes: C D."
+    expect="Added C D. Your"
+    session=zm
+
+@t.media.music.r180 core.test
+    input="Add a rest."
+    expect="Added rest. Your melody"
+    session=zm
+
+@t.media.music.r181 core.test
+    input="Put a rest at the end."
+    expect="Added rest. Your melody"
+    session=zm
+
+@t.media.music.r182 core.test
+    input="Remove the last note."
+    expect="Removed the rest. Your"
+    session=zm
+
+@t.media.music.r183 core.test
+    input="oops undo that note"
+    expect="Removed the rest. Your"
+    session=zm
+
+@t.media.music.r184 core.test
+    input="Take the last note away."
+    expect="Removed D. Your melody"
+    session=zm
+
+@t.media.music.r185 core.test
+    input="Delete the last note please."
+    expect="Removed C. Your melody"
+    session=zm
+
+@t.media.music.r186 core.test
+    input="Show my melody."
+    expect="Your melody has 12"
+    session=zm
+
+@t.media.music.r187 core.test
+    input="What have i written so far?"
+    expect="Your melody has 12"
+    session=zm
+
+@t.media.music.r188 core.test
+    input="How many notes are in my melody?"
+    expect="Your melody has 12"
+    session=zm
+
+@t.media.music.r189 core.test
+    input="List the notes of my melody."
+    expect="Your melody has 12"
+    session=zm
+
+@t.media.music.r190 core.test
+    input="Play my melody."
+    expect="Playing your melody of"
+    session=zm
+
+@t.media.music.r191 core.test
+    input="Play my tune i made."
+    expect="Playing your melody of"
+    session=zm
+
+@t.media.music.r192 core.test
+    input="hear my notes back"
+    expect="Playing your melody of"
+    session=zm
+
+@t.media.music.r193 core.test
+    input="Play back my notes on the flute."
+    expect="Playing your melody of"
+    session=zm
+
+@t.media.music.r194 core.test
+    input="Show the sheet music."
+    expect="You are already on"
+    session=zm
+
+@t.media.music.r195 core.test
+    input="Can i see the score?"
+    expect="Here is the sheet"
+    session=zm
+
+@t.media.music.r196 core.test
+    input="I want to read the music of this tune."
+    expect="Here is the sheet"
+    session=zm
+
+@t.media.music.r197 core.test
+    input="Where is the sheet music for this?"
+    expect="Here is the sheet"
+    session=zm
+
+@t.media.music.r198 core.test
+    input="score please"
+    expect="Here is the sheet"
+    session=zm
+
+@t.media.music.r199 core.test
+    input="Write it out as notation."
+    expect="Here is the sheet"
+    session=zm
+
+@t.media.music.r200 core.test
+    input="Show the notes."
+    expect="My melody has 5"
+    session=zm
+
+@t.media.music.r201 core.test
+    input="What notes is this?"
+    expect="My melody has 5"
+    session=zm
+
+@t.media.music.r202 core.test
+    input="notes pls"
+    expect="My melody has 5"
+    session=zm
+
+@t.media.music.r203 core.test
+    input="Tell me what notes it plays."
+    expect="My melody has 5"
+    session=zm
+
+@t.media.music.r204 core.test
+    input="Clear my melody."
+    expect="write a melody: C D E F G"
+    session=zm
+
+@t.media.music.r205 core.test
+    input="Erase the tune."
+    expect="write a melody: C D E F G"
+    session=zm
+
+@t.media.music.r206 core.test
+    input="New melody."
+    expect="write a melody: C D E F G"
+    session=zm
+
+@t.media.music.r207 core.test
+    input="Start the melody over."
+    expect="write a melody: C D E F G"
+    session=zm
+
+@t.media.music.r208 core.test
+    input="Spell the D major scale."
+    expect="The D major scale"
+    session=zq
+
+@t.media.music.r209 core.test
+    input="What notes are in G major?"
+    expect="The G major scale"
+    session=zq
+
+@t.media.music.r210 core.test
+    input="G major scale notes."
+    expect="The G major scale"
+    session=zq
+
+@t.media.music.r211 core.test
+    input="List the notes of a minor scale starting on A."
+    expect="The A natural minor"
+    session=zq
+
+@t.media.music.r212 core.test
+    input="whats in the pentatonic scale of G"
+    expect="The G major pentatonic"
+    session=zq
+
+@t.media.music.r213 core.test
+    input="Which tones does the A harmonic minor scale have?"
+    expect="The A harmonic minor"
+    session=zq
+
+@t.media.music.r214 core.test
+    input="What notes are in a D minor chord?"
+    expect="The D minor chord"
+    session=zq
+
+@t.media.music.r215 core.test
+    input="C major chord notes."
+    expect="The C major chord"
+    session=zq
+
+@t.media.music.r216 core.test
+    input="what pitches are in an Am"
+    expect="The A minor chord"
+    session=zq
+
+@t.media.music.r217 core.test
+    input="Which notes make a C major chord?"
+    expect="The C major chord"
+    session=zq
+
+@t.media.music.r218 core.test
+    input="What chord is C E G?"
+    expect="C E G is"
+    session=zq
+
+@t.media.music.r219 core.test
+    input="C E G is what chord?"
+    expect="C E G is"
+    session=zq
+
+@t.media.music.r220 core.test
+    input="is C E G a chord, which one"
+    expect="C E G is"
+    session=zq
+
+@t.media.music.r221 core.test
+    input="Name this chord: C Eb G Bb."
+    expect="C Eb G Bb"
+    session=zq
+
+@t.media.music.r222 core.test
+    input="What chord has notes G B D?"
+    expect="G B D is"
+    session=zq
+
+@t.media.music.r223 core.test
+    input="How many sharps are in D major?"
+    expect="D major has 2"
+    session=zq
+
+@t.media.music.r224 core.test
+    input="Which sharps are in D major?"
+    expect="D major has 2"
+    session=zq
+
+@t.media.music.r225 core.test
+    input="D major key signature."
+    expect="D major has 2"
+    session=zq
+
+@t.media.music.r226 core.test
+    input="sharps count for E major?"
+    expect="E major has 4"
+    session=zq
+
+@t.media.music.r227 core.test
+    input="Which key has 2 sharps?"
+    expect="The major key with"
+    session=zq
+
+@t.media.music.r228 core.test
+    input="What major key has no sharps or flats?"
+    expect="The major key with"
+    session=zq
+
+@t.media.music.r229 core.test
+    input="Key with 5 sharps pls."
+    expect="The major key with"
+    session=zq
+
+@t.media.music.r230 core.test
+    input="What is the interval between C and G?"
+    expect="From C up to"
+    session=zq
+
+@t.media.music.r231 core.test
+    input="How far apart are C and G?"
+    expect="From C up to"
+    session=zq
+
+@t.media.music.r232 core.test
+    input="How many half steps from A to C?"
+    expect="A to C is"
+    session=zq
+
+@t.media.music.r233 core.test
+    input="Interval C to E pls."
+    expect="From C up to"
+    session=zq
+
+@t.media.music.r234 core.test
+    input="What note is a fifth above C?"
+    expect="A perfect fifth above"
+    session=zq
+
+@t.media.music.r235 core.test
+    input="E flat plus a major third?"
+    expect="A major third above"
+    session=zq
+
+@t.media.music.r236 core.test
+    input="Whats 2 semitones above B?"
+    expect="A minor second above"
+    session=zq
+
+@t.media.music.r237 core.test
+    input="Down a fourth from G, what note?"
+    expect="A perfect fourth below"
+    session=zq
+
+@t.media.music.r238 core.test
+    input="What is the relative minor of C major?"
+    expect="The relative minor of"
+    session=zq
+
+@t.media.music.r239 core.test
+    input="Which minor goes with C major?"
+    expect="The relative minor of"
+    session=zq
+
+@t.media.music.r240 core.test
+    input="C major's relative minor is what?"
+    expect="The relative minor of"
+    session=zq
+
+@t.media.music.r241 core.test
+    input="whats the relative of G major, minor?"
+    expect="The relative minor of"
+    session=zq
+
+@t.media.music.r242 core.test
+    input="What chords are in G major?"
+    expect="In G major the"
+    session=zq
+
+@t.media.music.r243 core.test
+    input="What can i play in G major, chords?"
+    expect="In G major the"
+    session=zq
+
+@t.media.music.r244 core.test
+    input="chords of A minor"
+    expect="In A minor the"
+    session=zq
+
+@t.media.music.r245 core.test
+    input="What is the frequency of A4?"
+    expect="A4 is 440 Hz"
+    session=zq
+
+@t.media.music.r246 core.test
+    input="tell me the frequency of concert A"
+    expect="A4 is 440 Hz"
+    session=zq
+
+@t.media.music.r247 core.test
+    input="Middle C hertz?"
+    expect="Middle C (C4) is"
+    session=zq
+
+@t.media.music.r248 core.test
+    input="Could u tell me the freq of A 4"
+    expect="A4 is 440 Hz"
+    session=zq
+
+@t.media.music.r249 core.test
+    input="What is the enharmonic of F sharp?"
+    expect="F sharp is also"
+    session=zq
+
+@t.media.music.r250 core.test
+    input="Is C sharp the same as D flat?"
+    expect="C sharp is also"
+    session=zq
+
+@t.media.music.r251 core.test
+    input="C# is also what?"
+    expect="C sharp is also"
+    session=zq
+
+@t.media.music.r252 core.test
+    input="Whats C sharp called in flats?"
+    expect="C sharp is also"
+    session=zq
+
+@t.media.music.r253 core.test
+    input="Who wrote Jingle Bells?"
+    expect="Jingle Bells"
+    session=zq
+
+@t.media.music.r254 core.test
+    input="whos the composer of Ode to Joy?"
+    expect="Ode to Joy"
+    session=zq
+
+@t.media.music.r255 core.test
+    input="Tell me who wrote Ode to Joy."
+    expect="Ode to Joy"
+    session=zq
+
+@t.media.music.r256 core.test
+    input="What key is Ode to Joy in?"
+    expect="Ode to Joy"
+    session=zq
+
+@t.media.music.r257 core.test
+    input="How fast is Twinkle Twinkle?"
+    expect="Twinkle, Twinkle, Little Star"
+    session=zq
+
+@t.media.music.r258 core.test
+    input="Tell me about Frere Jacques."
+    expect="Frère Jacques"
+    session=zq

@@ -22,7 +22,7 @@ const INST_OF = {
   marimba: 'marimba', xylophone: 'marimba', vibraphone: 'marimba',
 };
 const UP = new Set(['up', 'upward', 'upwards', 'higher', 'above', 'over', 'up_from', 'higher_than', 'louder', 'faster']);
-const MODE_OF_SCALE = { major: 'major', ionian: 'major', minor: 'minor', natural_minor: 'minor', aeolian: 'minor', dorian: 'dorian', phrygian: 'phrygian', lydian: 'lydian', mixolydian: 'mixolydian', locrian: 'locrian' };
+const MODE_OF_SCALE = { min: 'minor', maj: 'major', major: 'major', ionian: 'major', minor: 'minor', natural_minor: 'minor', aeolian: 'minor', dorian: 'dorian', phrygian: 'phrygian', lydian: 'lydian', mixolydian: 'mixolydian', locrian: 'locrian' };
 
 export function initialState() {
   return {
@@ -222,7 +222,7 @@ export function playChord(ctx, { root, q, n, sym, inst, mode, seq }) {
     name = det ? det.name : list(notes);
   } else {
     let rootPc, key;
-    if (sym !== undefined) { rootPc = pcFromLex(sym[0]); key = 'minor'; } else { rootPc = pcFromLex(root); key = qualityKey(q, n); }
+    if (sym !== undefined) { rootPc = pcFromLex(sym[0]); key = qualityKey('minor', n); } else { rootPc = pcFromLex(root); key = qualityKey(q, n); }
     if (!rootPc) return no('unsupported', 'Which chord should I play? For example "play a C major chord".');
     if (!CHORD_TYPES[key]) return no('unsupported', `I do not know the chord quality "${String(key).replace(/_/g, ' ')}".`);
     const c = tChord(rootPc, key, 4);
@@ -340,8 +340,8 @@ export function loop(ctx, { on }) {
 }
 
 // ---- tempo, volume, instrument ------------------------------------------------------------------
-const SMALL = new Set(['a_bit', 'a_little', 'a_tad', 'just_a_bit', 'just_a_little', 'bit', 'little', 'slightly', 'somewhat']);
-const BIG = new Set(['a_lot', 'lot', 'much', 'way', 'much_more']);
+const SMALL = new Set(['a_bit', 'a_little', 'a_tad', 'just_a_bit', 'just_a_little', 'bit', 'little', 'slightly', 'somewhat', 'a_notch', 'a_touch', 'a_smidge', 'a_hair', 'a_tiny_bit', 'a_wee_bit', 'a_bit_more', 'a_little_more']);
+const BIG = new Set(['a_lot', 'lot', 'much', 'way', 'much_more', 'way_more', 'a_lot_more', 'loads', 'heaps', 'tons', 'significantly', 'considerably', 'hugely', 'massively']);
 const degree = (d) => (SMALL.has(d) ? 'small' : BIG.has(d) ? 'big' : 'normal');
 function again(ctx, replayFlag) {
   const s = ctx.state;
@@ -535,7 +535,8 @@ export function listTypes(ctx, { what }) {
 
 // ---- theory questions -----------------------------------------------------------------------------
 const sigText = (info) => (info.count === 0 ? 'It has no sharps or flats.' : `It has ${plural(info.count, info.kind)}: ${info.accidentals.join(' ')}.`);
-export function scaleNotesOp(ctx, { root, st }) {
+export function scaleNotesOp(ctx, { root, st: st1, st2 }) {
+  const st = st2 ?? st1;
   const pc = pcFromLex(root);
   if (!pc) return no('unsupported', 'Which scale? For example "what notes are in C major?".');
   const type = st ?? 'major';
@@ -549,9 +550,9 @@ export function scaleNotesOp(ctx, { root, st }) {
   const info = MODE_OF_SCALE[type] === 'major' || MODE_OF_SCALE[type] === 'minor' ? keyInfo(pc, MODE_OF_SCALE[type]) : null;
   return ok(`The ${sc.name} scale has ${plural(pcs.length, 'note')}: ${pcs.join(' ')}.${info ? ' ' + sigText(info) : ''}`);
 }
-export function chordNotesOp(ctx, { root, q, n }) {
-  const pc = pcFromLex(root);
-  const key = qualityKey(q, n);
+export function chordNotesOp(ctx, { root, q, n, sym }) {
+  const pc = pcFromLex(sym !== undefined ? sym[0] : root);
+  const key = sym !== undefined ? qualityKey('minor', n) : qualityKey(q, n);
   if (!pc) return no('unsupported', 'Which chord? For example "what notes are in a C minor chord?".');
   if (!CHORD_TYPES[key]) return no('unsupported', `I do not know the chord quality "${String(key).replace(/_/g, ' ')}".`);
   const c = tChord(pc, key, 4);

@@ -33,6 +33,11 @@ export const SCALE_TYPES = {
   pentatonic: ['major pentatonic', 'major pentatonic'], major_pentatonic: ['major pentatonic', 'major pentatonic'], minor_pentatonic: ['minor pentatonic', 'minor pentatonic'],
   blues: ['minor blues', 'blues'], blue: ['minor blues', 'blues'], chromatic: ['chromatic', 'chromatic'], whole_tone: ['whole tone', 'whole tone'],
 };
+// spoken aliases: abbreviations and word-order variants (E min pentatonic, pentatonic minor, harmonic) map to the same scale types
+Object.assign(SCALE_TYPES, {
+  min: SCALE_TYPES.minor, maj: SCALE_TYPES.major, pentatonic_minor: SCALE_TYPES.minor_pentatonic, pentatonic_major: SCALE_TYPES.major_pentatonic,
+  min_pentatonic: SCALE_TYPES.minor_pentatonic, maj_pentatonic: SCALE_TYPES.major_pentatonic, harmonic: SCALE_TYPES.harmonic_minor, melodic: SCALE_TYPES.melodic_minor,
+});
 /** Notes of a scale with octaves, ascending from `root` in `oct` and ending on the octave. */
 export function scaleNotes(root, type = 'major', oct = 4) {
   const [tonal] = SCALE_TYPES[type] ?? [type];

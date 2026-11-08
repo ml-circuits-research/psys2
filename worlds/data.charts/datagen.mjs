@@ -163,6 +163,45 @@ export function generate({ rng: r, count = 300, context } = {}) {
   add('chart.toDocument', 'request', () => ({ text: pick(r, ['Put the chart in the document.', 'Insert the graph into the document.']), expect: E('toDocument') }));
   add('chart.toDocumentData', 'request', () => ({ text: pick(r, ['Put the chart data in the document.', 'Add the numbers to the document.']), expect: E('toDocumentData') }));
 
+  // ---- R2 sweep: casual, elliptic and reordered phrasings (generic patterns r2.* in patterns.sop) ----
+  add('chart.fromText.new', 'request', () => { const rows = data(3); const text = dtext(rows);
+    return { text: `New chart: ${text}.`, expect: E('fromText', { text: q(text) }) }; });
+  add('chart.new.give', 'request', () => ({ text: pick(r, ['Give me a blank chart.', 'Give me a fresh graph.', 'Get me an empty chart.']), expect: E('new') }));
+  add('chart.new.scratch', 'request', () => ({ text: pick(r, ['Create a chart from scratch.', 'Start a graph from scratch.']), expect: E('new') }));
+  add('chart.holdings.pie', 'request', () => { const who = pick(r, ['everyone', 'everybody']); const [w, t] = pick(r, [['Pie chart', 'pie'], ['Bar chart', 'bar'], ['Line graph', 'line']]); return { text: `${w} of what ${who} has.`, expect: E('fromHoldings', { who: q(who), type: t }) }; });
+  add('chart.holdings.item', 'request', () => { const it = pick(r, items); return { text: `Graph the ${plural(it)} everyone has.`, expect: E('fromHoldings', { who: q('everyone'), item: it }) }; });
+  add('chart.setPoint.should', 'request', () => { const [l, v, t] = data(1)[0]; return { text: `${l} should be ${t}.`, expect: E('setPoint', { l: q(l), n: v }) }; });
+  add('chart.adjustPoint.plus', 'request', () => { const l = label(), n = 1 + Math.floor(r() * 9); return { text: `The ${l} plus ${n}.`, expect: E('adjustPoint', { l: q(l), by: n, dir: 'up' }) }; });
+  add('chart.adjustPoint.minus', 'request', () => { const l = label(), n = 1 + Math.floor(r() * 9); return { text: `The ${l} minus ${n}.`, expect: E('adjustPoint', { l: q(l), by: n, dir: 'down' }) }; });
+  add('chart.adjustPoint.more', 'request', () => { const l = label(), n = 2 + Math.floor(r() * 8); return { text: `${n} more ${l}.`, expect: E('adjustPoint', { l: q(l), by: n, dir: 'up' }) }; });
+  add('chart.adjustPoint.double', 'request', () => { const l = label(); return { text: `Double ${l}.`, expect: E('adjustPoint', { l: q(l), factor: 2 }) }; });
+  add('chart.removePoint.out', 'request', () => { const l = label(); return { text: `Take the ${l} out.`, expect: E('removePoint', { l: q(l) }) }; });
+  add('chart.removePoint.nomore', 'negation', () => { const l = label(); return { text: `No more ${l}.`, expect: E('removePoint', { l: q(l) }) }; });
+  add('chart.clearData.all', 'request', () => ({ text: pick(r, ['Remove all the bars.', 'Delete all the data.', 'Take all the values out.']), expect: E('clearData') }));
+  add('chart.setType.please', 'ellipsis', () => { const t = type(); return { text: `${cap(tword(t))} please.`, expect: E('setType', { type: t }) }; });
+  add('chart.setType.prefer', 'request', () => { const t = type(); return { text: `I prefer ${art(tword(t))} ${tword(t)} chart.`, expect: E('setType', { type: t }) }; });
+  add('chart.setTitle.use', 'request', () => { const n = cap(label()); return { text: `Use ${n} as the title.`, expect: E('setTitle', { t: q(n) }) }; });
+  add('chart.setTitle.should', 'request', () => { const n = cap(label()); return { text: `The chart title should be ${n}.`, expect: E('setTitle', { t: q(n) }) }; });
+  add('chart.removeTitle.drop', 'request', () => ({ text: pick(r, ['Drop the chart title.', 'Take the chart title off.', 'Chart without a title.']), expect: E('removeTitle') }));
+  add('chart.setPalette.like', 'request', () => ({ text: pick(r, ['Colour it like a rainbow.', 'Put rainbow on the chart.', 'Rainbow theme for the chart.']), expect: E('setPalette', { p: 'rainbow' }) }));
+  add('chart.setSort.first', 'request', () => { const a = pick(r, big); return { text: `${cap(a)} first.`, expect: E('setSort', { from: a }) }; });
+  add('chart.setOrientation.sideways', 'ellipsis', () => ({ text: pick(r, ['Horizontal bars please.', 'Horizontal bars.']), expect: E('setOrientation', { o: 'horizontal' }) }));
+  add('chart.setValues.on', 'request', () => ({ text: pick(r, ['Numbers on please.', 'Show the numbers on the bars.']), expect: E('setValues', { mode: 'on' }) }));
+  add('chart.setLegend.away', 'request', () => ({ text: pick(r, ['Legend away pls.', 'Take the legend off.', 'Legend off.']), expect: E('setLegend', { on: 'false' }) }));
+  add('chart.total.casual', 'question', () => ({ text: pick(r, ['Whats the sum?', 'All together how many?', 'What do they add up to?', 'Grand total?']), expect: E('total') }));
+  add('chart.average.casual', 'question', () => ({ text: pick(r, ['Average please.', 'Whats the typical value?', 'The mean of the bars.']), expect: E('average') }));
+  add('chart.difference.minus', 'multi-entity', () => { const [a, b] = labels2(); return { text: `The ${a} minus ${b}?`, expect: E('difference', { a: q(a), b: q(b) }) }; });
+  add('chart.difference.gap', 'multi-entity', () => { const [a, b] = labels2(); return { text: `Gap between ${a} and ${b}.`, expect: E('difference', { a: q(a), b: q(b) }) }; });
+  add('chart.compare.is', 'multi-entity', () => { const [a, b] = labels2(); const w = pick(r, ['bigger', 'larger', 'higher']); return { text: `Is ${a} ${w} than ${b}?`, expect: E('compare', { w, a: q(a), b: q(b) }) }; });
+  add('chart.percent.as', 'question', () => { const l = label(); return { text: `The ${l} as a percent.`, expect: E('percent', { l: q(l) }) }; });
+  add('chart.describe.about', 'question', () => ({ text: pick(r, ['Whats this chart about?', 'What does this graph show me?', 'Give me a description of the chart.']), expect: E('describe') }));
+  add('chart.read.out', 'request', () => ({ text: pick(r, ['Read it out.', 'Say the numbers out loud.', 'Read me the values.']), expect: E('read') }));
+  add('chart.switchChart.2nd', 'request', () => { const n = 2 + Math.floor(r() * 7); const sfx = { 2: 'nd', 3: 'rd' }[n] ?? 'th'; return { text: `Go to the ${n}${sfx} chart.`, expect: E('switchChart', { n }) }; });
+  add('chart.listCharts.casual', 'question', () => ({ text: pick(r, ['My charts?', 'Give me the list of graphs.', 'Show the chart list.']), expect: E('listCharts') }));
+  add('chart.download.png', 'request', () => ({ text: pick(r, ['PNG please.', 'Give me a picture of the chart.', 'Take a screenshot of the chart.']), expect: E('download') }));
+  add('chart.copyData.clipboard', 'request', () => ({ text: pick(r, ['Put the numbers on my clipboard.', 'Clipboard the figures.', 'Copy the data from the chart.']), expect: E('copyData') }));
+  add('chart.options', 'question', () => ({ text: pick(r, ['What chart types can I use?', 'What can you do with charts?', 'List the chart types.']), expect: E('options') }));
+
   // ---- negatives: other worlds and near misses ----
   const NEG = ['Tom has 5 apples.', 'Ana gives Tom 2 pears.', 'How many legs does a spider have?', 'What is the price of a ball?', 'Add milk to my shopping list.', 'Make a document from my shopping list.', 'Add a heading Shopping.',
     'Draw a red house.', 'Zoom in.', 'What is the capital of France?', 'Play tic tac toe.', 'Give yourself visor eyes.', 'Play C D E F G.', 'What time is it?', 'Say hello.', 'I need to buy bread.', 'What is half of 10?', 'Make me a sandwich.', 'Stop dictation.'];

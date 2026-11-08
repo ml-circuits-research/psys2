@@ -201,6 +201,8 @@
     word=a_lot word=a_lot_more word=much word=way word=far word=hugely word=a_great_deal word=all_the_way word=completely word=fully
     word=a_bit word=a_little word=a_little_bit word=slightly word=just_a_little word=just_a_bit word=somewhat word=a_touch
     word=more word=further word=farther word=even_more word=some_more word=twice word=once
+    word=alot word=a_whole_lot word=big_time word=lots word=heaps word=tons word=massively word=loads word=a_ton word=quite_a_bit word=a_good_bit word=a_fair_bit
+    word=a_tiny_bit word=a_wee_bit word=a_smidge word=a_tad word=just_a_tad word=barely word=marginally
 
 @lex.geo.map.layers core.lexicon
     class=noun
@@ -224,3 +226,71 @@
     class=noun
     doc="Kinds of place that can be ranked (singular lemma; plural forms reduce to these)"
     word=city word=town word=country word=nation
+
+@lex.geo.map.demonyms core.lexicon
+    class=noun
+    doc="Demonyms (adjective of a country); ops.mjs maps each to its country key"
+    word=japanese
+    word=brazilian
+    word=romanian
+    word=german
+    word=french
+    word=spanish
+    word=italian
+    word=portuguese
+    word=polish
+    word=hungarian
+    word=austrian
+    word=swiss
+    word=dutch
+    word=belgian
+    word=british
+    word=american
+    word=canadian
+    word=mexican
+    word=argentinian
+    word=argentine
+    word=chilean
+    word=peruvian
+    word=colombian
+    word=bolivian
+    word=chinese
+    word=indian
+    word=russian
+    word=ukrainian
+    word=turkish
+    word=egyptian
+    word=nigerian
+    word=kenyan
+    word=ethiopian
+    word=moroccan
+    word=australian
+    word=greek
+    word=swedish
+    word=norwegian
+    word=danish
+    word=finnish
+    word=irish
+    word=czech
+    word=serbian
+    word=bulgarian
+    word=croatian
+    word=slovak
+    word=vietnamese
+    word=thai
+    word=indonesian
+    word=korean
+    word=iranian
+    word=iraqi
+    word=israeli
+    word=saudi
+    word=pakistani
+    word=bangladeshi
+    word=filipino
+    word=cuban
+    word=venezuelan
+
+@lex.geo.map.compass core.lexicon
+    class=noun
+    doc="The compass points as bare commands (north, north-east ...); ops.mjs pan maps them"
+    word=north word=south word=east word=west word=northeast word=northwest word=southeast word=southwest

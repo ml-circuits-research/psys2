@@ -18,9 +18,9 @@ export const BASE_COLORS = {
   beige: '#e8d5b0', peach: '#ffb88c', skin: '#f3c69b', tan: '#d8a468', navy: '#1b2f6b', lime: '#a4d94a', magenta: '#e0338f',
   violet: '#8a5cf5', indigo: '#4b3fbf', cyan: '#2ec4e6', maroon: '#8a1c2b', cream: '#fff4d6', lilac: '#c9a7ee', coral: '#ff6f61', mint: '#8de3c0',
 };
-export const COLOR_ALIASES = { gray: 'grey', golden: 'gold', rose: 'pink', scarlet: 'red', aqua: 'turquoise', teal: 'turquoise', ginger: 'orange', lemon: 'yellow', 'light-blue': 'light blue' };
+export const COLOR_ALIASES = { gray: 'grey', golden: 'gold', rose: 'pink', scarlet: 'red', aqua: 'turquoise', teal: 'turquoise', ginger: 'orange', lemon: 'yellow', 'light-blue': 'light blue', grn: 'green', blu: 'blue', bloo: 'blue', blk: 'black', org: 'orange', pnk: 'pink', gry: 'grey', prp: 'purple', ylw: 'yellow', wht: 'white', brn: 'brown' };
 export const SHADES = {
-  light: [0.2, -0.05], pale: [0.3, -0.25], soft: [0.14, -0.12], bright: [0.05, 0.25], dark: [-0.2, 0], deep: [-0.12, 0.1],
+  light: [0.2, -0.05], pale: [0.3, -0.25], soft: [0.14, -0.12], bright: [0.05, 0.25], dark: [-0.2, 0], deep: [-0.12, 0.1], dk: [-0.2, 0], lt: [0.2, -0.05],
 };
 const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
 

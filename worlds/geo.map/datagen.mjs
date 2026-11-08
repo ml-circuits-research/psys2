@@ -2,7 +2,7 @@
 // Place names, keys and facts come from the world's own knowledge base (`context.kb`) and lexicons (`context.lexicons`);
 // small embedded lists are the fallback. The expected circuit of every text is known independently of the formalizer:
 // one core.request with the action and arguments the matching pattern family emits.
-export const version = '1';
+export const version = '2';
 
 const pick = (r, a) => a[Math.floor(r() * a.length)];
 const chance = (r, p) => r() < p;
@@ -84,6 +84,40 @@ export function generate({ rng: r, count = 300, context } = {}) {
     { group: 'geo.info', ph: 'question', make: () => { const [n, k] = any(); return { text: pick(r, [`Tell me about ${n}.`, `What do you know about ${n}?`]), expect: E('geo.info', { p: k }) }; } },
     { group: 'geo.distance', ph: 'multi-entity', make: () => { const p = two(city); return p && { text: pick(r, [`How far is ${p[0][0]} from ${p[1][0]}?`, `What is the distance between ${p[0][0]} and ${p[1][0]}?`, `Draw a line from ${p[0][0]} to ${p[1][0]}.`]), expect: E('geo.distance', { a: p[0][1], b: p[1][1] }) }; } },
     { group: 'geo.locate', ph: 'request', make: () => ({ text: pick(r, ['Where am I?', 'Locate me.']), expect: E('geo.locate') }) },
+    // ---- R2 wide families: chat style, fillers, word orders, synonyms (patterns pat.geo.map.w.*) ----
+    { group: 'geo.show.wide', ph: 'chat-style', make: () => { const [n, k] = any(); return { text: pick(r, [`Pull up ${n} for me.`, `Lemme see ${n}.`, `I wanna see ${n}.`, `${n} on the map pls.`, `Zoom me over to ${n}.`, `Uh show me ${n} lol.`, `Hey could you bring up ${n}?`]), expect: E('geo.show', { a: k }) }; } },
+    { group: 'geo.where.wide', ph: 'question', make: () => { const [n, k] = any(); return { text: pick(r, [`Do you know where ${n} is?`, `${n} location?`, `Where can I find ${n}?`, `I need to know where ${n} is on the map.`, `Could you tell me where ${n} is situated?`, `Yo where is ${n}.`]), expect: E('geo.where', { p: k }) }; } },
+    { group: 'geo.zoom.wide', ph: 'chat-style', make: () => pick(r, [
+      { text: 'Zoom in a whole lot.', expect: E('geo.zoom', { dir: 'in', amt: 'a_whole_lot' }) }, { text: 'Get closer.', expect: E('geo.zoom', { dir: 'in' }) },
+      { text: 'Pull back a bit.', expect: E('geo.zoom', { dir: 'out', amt: 'a_bit' }) }, { text: 'Zoom in 3 clicks.', expect: E('geo.zoom', { dir: 'in', n: 3 }) },
+      { text: 'Can you zoom out a lot please?', expect: E('geo.zoom', { dir: 'out', amt: 'a_lot' }) },
+    ]) },
+    { group: 'geo.zoomTo.wide', ph: 'chat-style', make: () => { const n = 2 + Math.floor(r() * 12); return { text: pick(r, [`Set zoom level ${n}.`, `Zoom lvl ${n}.`, `Level ${n} zoom pls.`, `Go to zoom ${n}.`, `Change the zoom to ${n}.`]), expect: E('geo.zoomTo', { n }) }; } },
+    { group: 'geo.pan.wide', ph: 'chat-style', make: () => { const d = pick(r, ['north', 'south', 'east', 'west']); return pick(r, [{ text: `Slide the view ${d}.`, expect: E('geo.pan', { d }) }, { text: `Head ${d} for a bit.`, expect: E('geo.pan', { d }) }, { text: `Map ${d}.`, expect: E('geo.pan', { d }) }, { text: `${d.charAt(0).toUpperCase() + d.slice(1)} a little.`, expect: E('geo.pan', { d, amt2: 'a_little' }) }, { text: `Go up ${d} a bit.`, expect: E('geo.pan', { d, amt2: 'a_bit' }) }]); } },
+    { group: 'geo.mark.wide', ph: 'chat-style', make: () => { const [n, k] = any(); return { text: pick(r, [`Marker on ${n} please.`, `${n} marker.`, `Pin ${n}.`, `Put ${n} on the map with a marker.`]), expect: E('geo.mark', { a: k }) }; } },
+    { group: 'geo.markSet.wide', ph: 'word-order', make: () => { const [n, k] = region(); return { text: pick(r, [`Pin every capital in ${n}.`, `I want the capitals of ${n} marked.`, `Show the capital cities of ${n} with pins.`]), expect: E('geo.markSet', { what: 'capitals', r: k }) }; } },
+    { group: 'geo.clearMarkers.wide', ph: 'synonym', make: () => pick(r, [{ text: 'Remove the most recent pin.', expect: E('geo.clearMarkers', { last: 'true' }) }, { text: 'Take the last pin away.', expect: E('geo.clearMarkers', { last: 'true' }) }, { text: 'Take all the pins off the map.', expect: E('geo.clearMarkers') }]) },
+    { group: 'geo.highlight.wide', ph: 'multi-entity', make: () => { const p = two(ctry); return p && { text: pick(r, [`Make ${p[0][0]} and ${p[1][0]} stand out.`, `${p[0][0]} and ${p[1][0]} highlighted.`, `Show ${p[0][0]} and ${p[1][0]} in color.`]), expect: E('geo.highlight', { a: p[0][1], b: p[1][1] }) }; } },
+    { group: 'geo.clearHighlight.wide', ph: 'synonym', make: () => ({ text: pick(r, ['Get rid of the coloured countries.', 'Take the highlights off.', 'Turn off all the highlighting on the map.']), expect: E('geo.clearHighlight') }) },
+    { group: 'geo.capital.wide', ph: 'chat-style', make: () => { const [n, k] = ctry(); return { text: pick(r, [`Capital of ${n}?`, `Whats the capital of ${n}?`, `Can u tell me the capital of ${n}?`, `${n} capital city?`]), expect: E('geo.capital', { c: k }) }; } },
+    { group: 'geo.population.wide', ph: 'chat-style', make: () => { const [n, k] = any(); return { text: pick(r, [`How many ppl live in ${n}?`, `${n} population?`, `${n} has how many people?`, `Roughly how many people are in ${n}?`]), expect: E('geo.population', { p: k }) }; } },
+    { group: 'geo.area.wide', ph: 'chat-style', make: () => { const [n, k] = ctry(); return { text: pick(r, [`${n} size?`, `How much land does ${n} cover?`, `How large is ${n} in size?`]), expect: E('geo.area', { p: k }) }; } },
+    { group: 'geo.compare.wide', ph: 'multi-entity', make: () => { const p = two(ctry); return p && { text: pick(r, [`${p[0][0]} vs ${p[1][0]}.`, `Compare ${p[0][0]} and ${p[1][0]}.`, `${p[0][0]} ${p[1][0]} comparison.`, `How do ${p[0][0]} and ${p[1][0]} stack up?`]), expect: E('geo.compare', { a: p[0][1], b: p[1][1] }) }; } },
+    { group: 'geo.compare.or', ph: 'multi-entity', make: () => { const p = two(ctry); const m = pick(r, ['bigger', 'larger', 'smaller']); return p && { text: pick(r, [`${p[0][0]} or ${p[1][0]}, which is ${m}?`, `Is ${p[0][0]} or ${p[1][0]} ${m}?`]), expect: E('geo.compare', { a: p[0][1], b: p[1][1], m }) }; } },
+    { group: 'geo.borders.wide', ph: 'synonym', make: () => { const [n, k] = ctry(); return { text: pick(r, [`What borders ${n}?`, `Countries next to ${n}?`, `List countries touching ${n}.`, `${n} neighbours.`]), expect: E('geo.borders', { p: k }) }; } },
+    { group: 'geo.neighbourCount.wide', ph: 'chat-style', make: () => { const [n, k] = ctry(); return { text: pick(r, [`How many countries border ${n}?`, `${n} neighbour count.`, `Count the neighbours of ${n}.`, `${n} borders how many?`]), expect: E('geo.neighbourCount', { p: k }) }; } },
+    { group: 'geo.borderYN.wide', ph: 'multi-entity', make: () => { const p = two(ctry); return p && { text: pick(r, [`Do ${p[0][0]} and ${p[1][0]} touch?`, `${p[0][0]} and ${p[1][0]} share a border?`, `Is ${p[0][0]} next door to ${p[1][0]}?`]), expect: E('geo.borderYN', { a: p[0][1], b: p[1][1] }) }; } },
+    { group: 'geo.landlocked.wide', ph: 'chat-style', make: () => { const [n, k] = ctry(); return { text: pick(r, [`${n} landlocked?`, `Does ${n} touch the sea?`, `${n} no coast?`, `${n} landlocked or not?`]), expect: E('geo.landlocked', { p: k }) }; } },
+    { group: 'geo.continent.wide', ph: 'word-order', make: () => { const [n, k] = ctry(); return { text: pick(r, [`${n} continent?`, `Which continent has ${n}?`, `${n} is in which continent?`, `Continent of ${n}?`]), expect: E('geo.continent', { p: k }) }; } },
+    { group: 'geo.country.wide', ph: 'word-order', make: () => { const [n, k] = city(); return { text: pick(r, [`${n} country?`, `${n} is in what country?`, `Country of ${n}?`]), expect: E('geo.country', { p: k }) }; } },
+    { group: 'geo.currency.wide', ph: 'chat-style', make: () => { const [n, k] = ctry(); return { text: pick(r, [`${n} currency?`, `What do they pay with in ${n}?`]), expect: E('geo.currency', { p: k }) }; } },
+    { group: 'geo.languages.wide', ph: 'chat-style', make: () => { const [n, k] = ctry(); return { text: pick(r, [`${n} language?`, `What do people speak in ${n}?`]), expect: E('geo.languages', { p: k }) }; } },
+    { group: 'geo.info.wide', ph: 'chat-style', make: () => { const [n, k] = ctry(); return { text: pick(r, [`${n} facts pls.`, `Give me info about ${n}.`, `${n} overview.`, `Brief me on ${n}.`]), expect: E('geo.info', { p: k }) }; } },
+    { group: 'geo.distance.wide', ph: 'multi-entity', make: () => { const p = two(city); return p && { text: pick(r, [`${p[0][0]} to ${p[1][0]} distance.`, `Km between ${p[0][0]} and ${p[1][0]}?`, `How far apart r ${p[0][0]} and ${p[1][0]}?`, `Can you tell me how far ${p[0][0]} is from ${p[1][0]}?`]), expect: E('geo.distance', { a: p[0][1], b: p[1][1] }) }; } },
+    { group: 'geo.locate.wide', ph: 'chat-style', make: () => ({ text: pick(r, ['Where r we?', 'My location please.', 'Can u find where i am?', 'Where am I on the map?']), expect: E('geo.locate') }) },
+    { group: 'geo.here.wide', ph: 'chat-style', make: () => ({ text: pick(r, ['Whats here?', "What's at this spot?", 'What am I looking at right now?']), expect: E('geo.here') }) },
+    { group: 'geo.markers.wide', ph: 'state', make: () => ({ text: pick(r, ['How many markers r there?', 'Markers count pls.', 'Count the pins on the map.']), expect: E('geo.markers') }) },
+    { group: 'geo.highlights.wide', ph: 'state', make: () => ({ text: pick(r, ['Which ones are lit up on the map?', 'What is highlighted right now?', 'List the highlighted countries.']), expect: E('geo.highlights') }) },
     // negatives: sentences of other worlds that must not become map requests
     { group: 'geo.neg', ph: 'out-of-domain', make: () => ({ text: pick(r, ['Tom has 5 apples.', 'How many legs does a spider have?', 'Make your body blue.', 'Play the center.', 'Add a heading Shopping.', 'How many apples does Tom have?', 'Hello!', 'Open the editor.', 'What is your name?']), negative: true }) },
   ];

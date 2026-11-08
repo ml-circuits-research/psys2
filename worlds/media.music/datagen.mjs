@@ -64,12 +64,31 @@ export function generate({ rng: r, count = 300, context } = {}) {
   add('music.replay', 'request', () => ({ text: pick(r, ['Play it again.', 'Again.', 'Once more.', 'Play that again.']), expect: E('replay') }), { tolerant: true });
 
   // ---- tempo / volume / instrument ----
-  add('music.tempo.slower', 'request', () => ({ text: pick(r, ['Slower.', 'Play it slower.', 'Slow down.']), expect: E('tempo', { dir: 'slower' }) }), { tolerant: true });
-  add('music.tempo.faster', 'request', () => ({ text: pick(r, ['Faster.', 'Play it faster.', 'Speed up.']), expect: E('tempo', { dir: 'faster' }) }), { tolerant: true });
+  add('music.tempo.slower', 'request', () => { const t = pick(r, ['Slower.', 'Play it slower.', 'Slow down.']); return { text: t, expect: E('tempo', /^play/i.test(t) ? { dir: 'slower', replay: 'true' } : { dir: 'slower' }) }; }, { tolerant: true });
+  add('music.tempo.faster', 'request', () => { const t = pick(r, ['Faster.', 'Play it faster.', 'Speed up.']); return { text: t, expect: E('tempo', /^play/i.test(t) ? { dir: 'faster', replay: 'true' } : { dir: 'faster' }) }; }, { tolerant: true });
   add('music.tempo.bpm', 'request', () => { const b = 60 + 10 * Math.floor(r() * 12); return { text: `Set the tempo to ${b} bpm.`, expect: E('tempo', { bpm: b }) }; }, { tolerant: true });
   add('music.volume.louder', 'request', () => ({ text: pick(r, ['Louder.', 'Turn it up.', 'Make it louder.']), expect: E('volume', { dir: 'louder' }) }), { tolerant: true });
   add('music.volume.quieter', 'request', () => ({ text: pick(r, ['Quieter.', 'Turn it down.', 'Make it quieter.']), expect: E('volume', { dir: 'quieter' }) }), { tolerant: true });
   add('music.instrument', 'request', () => { const i = inst(); return { text: pick(r, [`Use the ${i}.`, `Switch to the ${i}.`, `Change the instrument to ${i}.`]), expect: E('instrument', { inst: i }) }; }, { tolerant: true });
+
+  // ---- R2 families: the shapes of coverage.md (fillers, abbreviations, word order, indirect, wishes, units) ----
+  add('music.note.single', 'request', () => { const n = note(); return { text: pick(r, [`Just one ${cap(nw(n))} note.`, `${cap(nw(n))} note pls.`, `Play a single ${cap(nw(n))}.`, `Note ${cap(nw(n))}.`]), expect: E('playNote', { note: n, explicit: 'true' }) }; });
+  add('music.chord.arp', 'request', () => { const n = pick(r, ['c', 'd', 'e', 'f', 'g', 'a']); return { text: pick(r, [`Spread the ${cap(nw(n))} chord out.`, `Play the ${cap(nw(n))} chord one note at a time.`]), expect: E('playChord', { root: n, mode: 'arpeggio' }) }; });
+  add('music.scale.bare', 'ellipsis', () => { const n = pick(r, ['c', 'd', 'e', 'f', 'g']); return { text: `${cap(nw(n))} major scale pls.`, expect: E('playScale', { root: n, st: 'major' }) }; });
+  add('music.loop.wish', 'request', () => ({ text: pick(r, ['I want it to loop.', 'Keep looping that.', 'Turn on looping.', 'Put it on repeat.']), expect: E('loop', { on: 'true' }) }), { tolerant: true });
+  add('music.loop.off', 'request', () => ({ text: pick(r, ['Dont loop it.', 'Play it just once.', 'Stop looping.', 'Turn off the loop.']), expect: E('loop', { on: 'false' }) }), { tolerant: true });
+  add('music.stop.voice', 'request', () => ({ text: pick(r, ['Cut it out.', 'Stop that noise.', 'I want it to stop.', 'Enough.']), expect: E('stop') }));
+  add('music.replay.voice', 'request', () => ({ text: pick(r, ['One more go.', 'Run it back.', 'Can you run that once more?']), expect: E('replay') }), { tolerant: true });
+  add('music.tempo.indirect', 'indirect', () => { const slow = chance(r, 0.5); return { text: slow ? pick(r, ['Not so fast.', 'Its too fast.', 'Take it easy.']) : pick(r, ['Too slow.', 'More speed.', 'The tempo is too slow.']), expect: E('tempo', { dir: slow ? 'slower' : 'faster' }) }; }, { tolerant: true });
+  add('music.tempo.bpm2', 'request', () => { const b = 60 + 10 * Math.floor(r() * 12); return { text: pick(r, [`${b} bpm please.`, `Tempo ${b}.`, `Make it ${b} beats per minute.`]), expect: E('tempo', { bpm: b }) }; }, { tolerant: true });
+  add('music.volume.indirect', 'indirect', () => { const lo = chance(r, 0.5); return { text: lo ? pick(r, ['Too loud.', 'Not so loud.', 'The volume is too high.']) : pick(r, ['Too quiet.', 'I cant hear anything.', 'The volume is too low.']), expect: E('volume', { dir: lo ? 'quieter' : 'louder' }) }; }, { tolerant: true });
+  add('music.volume.num', 'request', () => { const v = 10 * (1 + Math.floor(r() * 9)); return { text: pick(r, [`Volume ${v}.`, `Set the volume to ${v}.`, `Volume at ${v} percent.`]), expect: E('volume', { v }) }; }, { tolerant: true });
+  add('music.volume.max', 'request', () => ({ text: pick(r, ['Volume to max.', 'Full volume.', 'All the way up please.', 'Turn it all the way up.']), expect: E('volume', { v: 100 }) }), { tolerant: true });
+  add('music.instrument.wish', 'request', () => { const i = inst(); return { text: pick(r, [`I prefer the ${i}.`, `I want the ${i}.`, `Go back to the ${i}.`]), expect: E('instrument', { inst: i }) }; }, { tolerant: true });
+  add('music.status.playing', 'question', () => ({ text: pick(r, ['Whats playing now?', 'Which song is on?', 'What is this tune called?']), expect: E('status', { what: 'playing' }) }));
+  add('music.songinfo.who', 'question', () => { const s = pick(r, FB.songs); return { text: pick(r, [`Whos behind ${s}?`, `Tell me who wrote ${s}.`, `Whos the composer of ${s}?`]), expect: E('songInfo', { title: q(s), what: 'composer' }) }; }, { tolerant: true });
+  add('music.melody.bare', 'ellipsis', () => { const ns = [0, 1, 2, 3].map(() => cap(nw(pick(r, ['c', 'd', 'e', 'f', 'g', 'a'])))); return { text: pick(r, [`Melody: ${ns.join(' ')}.`, `Here is my tune: ${ns.join(' ')}.`]), expect: E('melodySet', { notes: q(ns.join(' ')) }) }; });
+  add('music.keysig.which', 'question', () => { const n = pick(r, ['d', 'e', 'a', 'g']); return { text: `Which sharps are in ${cap(nw(n))} major?`, expect: E('keySig', { acc: 'sharp', root: n, m: 'major' }) }; });
 
   // ---- negatives ----
   add('music.negative', 'out-of-domain', () => ({ text: pick(r, NEG), expect: null, negative: true }), { noise: false });

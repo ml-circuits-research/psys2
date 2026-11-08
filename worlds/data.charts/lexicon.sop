@@ -134,6 +134,13 @@
     word=worst
     word=smaller
     word=lower
+    word=more
+    word=less
+    word=fewer
+    word=tiniest
+    word=littlest
+    word=desc
+    word=asc
 
 @lex.data.charts.orient core.lexicon
     class=noun
@@ -141,6 +148,7 @@
     word=horizontal
     word=horizontally
     word=sideways
+    word=sideway
     word=vertical
     word=vertically
     word=upright
@@ -222,3 +230,78 @@
     word=horizontal
     word=vertical
 
+
+@lex.data.charts.listnames core.lexicon
+    class=noun
+    doc="Names of the task lists a chart can be made from"
+    word=shopping
+    word=grocery
+    word=groceries
+    word=to_do
+    word=todo
+    word=tasks
+    word=task
+    word=reminders
+    word=reminder
+    word=chores
+    word=chore
+    word=errands
+    word=wishlist
+    word=wish
+
+@lex.data.charts.superl core.lexicon
+    class=noun
+    doc="Superlative words that can stand alone as a question about the chart"
+    word=biggest
+    word=largest
+    word=highest
+    word=greatest
+    word=smallest
+    word=lowest
+    word=least
+    word=most
+    word=tallest
+    word=longest
+    word=shortest
+    word=fewest
+    word=maximum
+    word=minimum
+    word=max
+    word=min
+    word=best
+    word=worst
+    word=tiniest
+    word=littlest
+
+@lex.data.charts.everyone core.lexicon
+    class=noun
+    doc="Words for all the people whose things are charted"
+    word=everyone
+    word=everybody
+    word=each_person
+    word=each_kid
+    word=each_child
+    word=the_kids
+    word=the_children
+    word=the_kid
+    word=the_child
+    word=kid
+    word=child
+    word=all_the_kid
+    word=all_the_child
+    word=kids
+    word=children
+    word=people
+    word=all_of_them
+    word=all_the_kids
+    word=each
+    word=all_of_us
+    word=they
+    word=all
+    word=every_kid
+    word=every_child
+    word=every_person
+    word=each_of_them
+    word=the_people
+    word=everyones
+    word=everybodys

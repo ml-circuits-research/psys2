@@ -517,3 +517,2886 @@
     expectState="ground=null"
     session=err
 
+@t.art.draw.r2add01 core.test
+    input="Draw a red house."
+    expect="I drew a red house."
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="objects.0.kind=house"
+    expectState="objects.0.size=240"
+    expectState="objects.0.color=red"
+    session=r2add
+
+@t.art.draw.r2add02 core.test
+    input="Sketch a small blue fish."
+    expect="I drew a small blue fish."
+    expectStatus=supported
+    expectState="objects.length=2"
+    expectState="objects.1.kind=fish"
+    expectState="objects.1.size=78"
+    expectState="objects.1.color=blue"
+    session=r2add
+
+@t.art.draw.r2add03 core.test
+    input="Add a cloud next to the house."
+    expect="I drew a cloud next to the r"
+    expectStatus=supported
+    expectState="objects.length=3"
+    expectState="objects.2.kind=cloud"
+    expectState="objects.2.size=210"
+    expectState="objects.2.color=null"
+    session=r2add
+
+@t.art.draw.r2add04 core.test
+    input="Put a big yellow sun in the top right corner."
+    expect="I drew a big yellow sun in t"
+    expectStatus=supported
+    expectState="objects.length=4"
+    expectState="objects.3.kind=sun"
+    expectState="objects.3.size=210"
+    expectState="objects.3.color=yellow"
+    session=r2add
+
+@t.art.draw.r2add05 core.test
+    input="Draw three trees."
+    expect="I drew 3 green trees."
+    expectStatus=supported
+    expectState="objects.length=7"
+    expectState="objects.4.kind=tree"
+    expectState="objects.4.size=170"
+    expectState="objects.4.color=null"
+    session=r2add
+
+@t.art.draw.r2add06 core.test
+    input="Can you draw a cat?"
+    expect="I drew an orange cat."
+    expectStatus=supported
+    expectState="objects.length=8"
+    expectState="objects.7.kind=cat"
+    expectState="objects.7.size=130"
+    expectState="objects.7.color=null"
+    session=r2add
+
+@t.art.draw.r2add07 core.test
+    input="Could you please draw me a dog?"
+    expect="I drew a brown dog."
+    expectStatus=supported
+    expectState="objects.length=9"
+    expectState="objects.8.kind=dog"
+    expectState="objects.8.size=160"
+    expectState="objects.8.color=null"
+    session=r2add
+
+@t.art.draw.r2add08 core.test
+    input="I want a yellow balloon."
+    expect="I drew a yellow balloon."
+    expectStatus=supported
+    expectState="objects.length=10"
+    expectState="objects.9.kind=balloon"
+    expectState="objects.9.size=80"
+    expectState="objects.9.color=yellow"
+    session=r2add
+
+@t.art.draw.r2add09 core.test
+    input="I'd like a rocket."
+    expect="I drew a light grey rocket."
+    expectStatus=supported
+    expectState="objects.length=11"
+    expectState="objects.10.kind=rocket"
+    expectState="objects.10.size=110"
+    expectState="objects.10.color=null"
+    session=r2add
+
+@t.art.draw.r2add10 core.test
+    input="I want 2 stars added."
+    expect="I drew 2 yellow stars."
+    expectStatus=supported
+    expectState="objects.length=13"
+    expectState="objects.11.kind=star"
+    expectState="objects.11.size=110"
+    expectState="objects.11.color=null"
+    session=r2add
+
+@t.art.draw.r2add11 core.test
+    input="It needs a rainbow."
+    expect="I drew a rainbow."
+    expectStatus=supported
+    expectState="objects.length=14"
+    expectState="objects.13.kind=rainbow"
+    expectState="objects.13.size=440"
+    expectState="objects.13.color=null"
+    session=r2add
+
+@t.art.draw.r2add12 core.test
+    input="How about a boat?"
+    expect="I drew a red boat."
+    expectStatus=supported
+    expectState="objects.length=15"
+    expectState="objects.14.kind=boat"
+    expectState="objects.14.size=230"
+    expectState="objects.14.color=null"
+    session=r2add
+
+@t.art.draw.r2add13 core.test
+    input="There should be a moon."
+    expect="I drew a moon."
+    expectStatus=supported
+    expectState="objects.length=16"
+    expectState="objects.15.kind=moon"
+    expectState="objects.15.size=110"
+    expectState="objects.15.color=null"
+    session=r2add
+
+@t.art.draw.r2add14 core.test
+    input="5 stars"
+    expect="I drew 5 yellow stars."
+    expectStatus=supported
+    expectState="objects.length=21"
+    expectState="objects.16.kind=star"
+    expectState="objects.16.size=110"
+    expectState="objects.16.color=null"
+    session=r2add
+
+@t.art.draw.r2add15 core.test
+    input="red car pls"
+    expect="I drew a red car."
+    expectStatus=supported
+    expectState="objects.length=22"
+    expectState="objects.21.kind=car"
+    expectState="objects.21.size=230"
+    expectState="objects.21.color=red"
+    session=r2add
+
+@t.art.draw.r2add16 core.test
+    input="a tree pls"
+    expect="I drew a green tree."
+    expectStatus=supported
+    expectState="objects.length=23"
+    expectState="objects.22.kind=tree"
+    expectState="objects.22.size=170"
+    expectState="objects.22.color=null"
+    session=r2add
+
+@t.art.draw.r2add17 core.test
+    input="2 red balloons please"
+    expect="I drew 2 red balloons."
+    expectStatus=supported
+    expectState="objects.length=25"
+    expectState="objects.23.kind=balloon"
+    expectState="objects.23.size=80"
+    expectState="objects.23.color=red"
+    session=r2add
+
+@t.art.draw.r2add18 core.test
+    input="um so like draw a blue car yeah"
+    expect="I drew a blue car."
+    expectStatus=supported
+    expectState="objects.length=26"
+    expectState="objects.25.kind=car"
+    expectState="objects.25.size=230"
+    expectState="objects.25.color=blue"
+    session=r2add
+
+@t.art.draw.r2add19 core.test
+    input="hey yo could you sketch a purple flower for me"
+    expect="I drew a purple flower."
+    expectStatus=supported
+    expectState="objects.length=27"
+    expectState="objects.26.kind=flower"
+    expectState="objects.26.size=100"
+    expectState="objects.26.color=purple"
+    session=r2add
+
+@t.art.draw.r2add20 core.test
+    input="gimme a green dog thx"
+    expect="I drew a green dog."
+    expectStatus=supported
+    expectState="objects.length=28"
+    expectState="objects.27.kind=dog"
+    expectState="objects.27.size=160"
+    expectState="objects.27.color=green"
+    session=r2add
+
+@t.art.draw.r2add21 core.test
+    input="draw a hosue"
+    expect="I drew a yellow house."
+    expectStatus=supported
+    expectState="objects.length=29"
+    expectState="objects.28.kind=house"
+    expectState="objects.28.size=240"
+    expectState="objects.28.color=null"
+    session=r2add
+
+@t.art.draw.r2add22 core.test
+    input="can u draw a pink cat pls"
+    expect="I drew a pink cat."
+    expectStatus=supported
+    expectState="objects.length=30"
+    expectState="objects.29.kind=cat"
+    expectState="objects.29.size=130"
+    expectState="objects.29.color=pink"
+    session=r2add
+
+@t.art.draw.r2add23 core.test
+    input="i wanna draw a boat"
+    expect="I drew a red boat."
+    expectStatus=supported
+    expectState="objects.length=31"
+    expectState="objects.30.kind=boat"
+    expectState="objects.30.size=230"
+    expectState="objects.30.color=null"
+    session=r2add
+
+@t.art.draw.r2add24 core.test
+    input="draw a car in blue"
+    expect="I drew a blue car."
+    expectStatus=supported
+    expectState="objects.length=32"
+    expectState="objects.31.kind=car"
+    expectState="objects.31.size=230"
+    expectState="objects.31.color=blue"
+    session=r2add
+
+@t.art.draw.r2add25 core.test
+    input="i want you to draw a car in blue"
+    expect="I drew a blue car."
+    expectStatus=supported
+    expectState="objects.length=33"
+    expectState="objects.32.kind=car"
+    expectState="objects.32.size=230"
+    expectState="objects.32.color=blue"
+    session=r2add
+
+@t.art.draw.r2add26 core.test
+    input="draw a big fish in green"
+    expect="I drew a big green fish."
+    expectStatus=supported
+    expectState="objects.length=34"
+    expectState="objects.33.kind=fish"
+    expectState="objects.33.size=180"
+    expectState="objects.33.color=green"
+    session=r2add
+
+@t.art.draw.r2add27 core.test
+    input="Whip up a cottage."
+    expect="I drew a yellow house."
+    expectStatus=supported
+    expectState="objects.length=35"
+    expectState="objects.34.kind=house"
+    expectState="objects.34.size=240"
+    expectState="objects.34.color=null"
+    session=r2add
+
+@t.art.draw.r2add28 core.test
+    input="Doodle a kitten."
+    expect="I drew an orange cat."
+    expectStatus=supported
+    expectState="objects.length=36"
+    expectState="objects.35.kind=cat"
+    expectState="objects.35.size=130"
+    expectState="objects.35.color=null"
+    session=r2add
+
+@t.art.draw.r2add29 core.test
+    input="Draw a couple of stars."
+    expect="I drew 2 yellow stars."
+    expectStatus=supported
+    expectState="objects.length=38"
+    expectState="objects.36.kind=star"
+    expectState="objects.36.size=110"
+    expectState="objects.36.color=null"
+    session=r2add
+
+@t.art.draw.r2add30 core.test
+    input="Draw 7 clouds."
+    expect="I drew 7 clouds."
+    expectStatus=supported
+    expectState="objects.length=45"
+    expectState="objects.38.kind=cloud"
+    expectState="objects.38.size=210"
+    expectState="objects.38.color=null"
+    session=r2add
+
+@t.art.draw.r2add31 core.test
+    input="Add a few flowers."
+    expect="I drew 3 pink flowers."
+    expectStatus=supported
+    expectState="objects.length=48"
+    expectState="objects.45.kind=flower"
+    expectState="objects.45.size=100"
+    expectState="objects.45.color=null"
+    session=r2add
+
+@t.art.draw.r2add32 core.test
+    input="more stars, like 4"
+    expect="I drew 4 yellow stars."
+    expectStatus=supported
+    expectState="objects.length=52"
+    expectState="objects.48.kind=star"
+    expectState="objects.48.size=110"
+    expectState="objects.48.color=null"
+    session=r2add
+
+@t.art.draw.r2add33 core.test
+    input="Draw a house and a tree."
+    expect="I drew a yellow house and a"
+    expectStatus=supported
+    expectState="objects.length=54"
+    expectState="objects.52.kind=house"
+    expectState="objects.52.size=240"
+    expectState="objects.52.color=null"
+    session=r2add
+
+@t.art.draw.r2add34 core.test
+    input="would you mind drawing a heart"
+    expect="I drew a red heart."
+    expectStatus=supported
+    expectState="objects.length=55"
+    expectState="objects.54.kind=heart"
+    expectState="objects.54.size=120"
+    expectState="objects.54.color=null"
+    session=r2add
+
+@t.art.draw.r2ground01 core.test
+    input="Add grass."
+    expect="I added grass to the ground."
+    expectStatus=supported
+    expectState="ground=grass"
+    session=r2ground
+
+@t.art.draw.r2ground02 core.test
+    input="Put some sand on the ground."
+    expect="I added sand to the ground."
+    expectStatus=supported
+    expectState="ground=sand"
+    session=r2ground
+
+@t.art.draw.r2ground03 core.test
+    input="Add some snow to the ground."
+    expect="I added snow to the ground."
+    expectStatus=supported
+    expectState="ground=snow"
+    session=r2ground
+
+@t.art.draw.r2ground04 core.test
+    input="I want sand under everything."
+    expect="I added sand to the ground."
+    expectStatus=supported
+    expectState="ground=sand"
+    session=r2ground
+
+@t.art.draw.r2ground05 core.test
+    input="I need water on the floor."
+    expect="I added water to the ground."
+    expectStatus=supported
+    expectState="ground=sea"
+    session=r2ground
+
+@t.art.draw.r2ground06 core.test
+    input="It needs grass."
+    expect="I added grass to the ground."
+    expectStatus=supported
+    expectState="ground=grass"
+    session=r2ground
+
+@t.art.draw.r2ground07 core.test
+    input="A bit of snow would be nice."
+    expect="I added snow to the ground."
+    expectStatus=supported
+    expectState="ground=snow"
+    session=r2ground
+
+@t.art.draw.r2ground08 core.test
+    input="The ground should be sand."
+    expect="I added sand to the ground."
+    expectStatus=supported
+    expectState="ground=sand"
+    session=r2ground
+
+@t.art.draw.r2ground09 core.test
+    input="grass pls"
+    expect="I added grass to the ground."
+    expectStatus=supported
+    expectState="ground=grass"
+    session=r2ground
+
+@t.art.draw.r2ground10 core.test
+    input="some sand"
+    expect="I added sand to the ground."
+    expectStatus=supported
+    expectState="ground=sand"
+    session=r2ground
+
+@t.art.draw.r2ground11 core.test
+    input="sand on the ground"
+    expect="I added sand to the ground."
+    expectStatus=supported
+    session=r2ground
+
+@t.art.draw.r2ground12 core.test
+    input="Can you make the floor sandy?"
+    expect="I added sand to the ground."
+    expectStatus=supported
+    session=r2ground
+
+@t.art.draw.r2ground13 core.test
+    input="um add sum snow to the bottom of the picture"
+    expect="I added snow to the ground."
+    expectStatus=supported
+    expectState="ground=snow"
+    session=r2ground
+
+@t.art.draw.r2ground14 core.test
+    input="sand for the ground"
+    expect="I added sand to the ground."
+    expectStatus=supported
+    expectState="ground=sand"
+    session=r2ground
+
+@t.art.draw.r2ground15 core.test
+    input="Cover the ground with snow."
+    expect="I added snow to the ground."
+    expectStatus=supported
+    expectState="ground=snow"
+    session=r2ground
+
+@t.art.draw.r2ground16 core.test
+    input="Make the ground grassy."
+    expect="I added grass to the ground."
+    expectStatus=supported
+    expectState="ground=grass"
+    session=r2ground
+
+@t.art.draw.r2scene01 core.test
+    input="Draw me a nice picture."
+    expect="I drew a sunny scene for you"
+    expectStatus=supported
+    expectState="objects.length=11"
+    expectState="objects.0.kind=sun"
+    expectState="objects.0.size=140"
+    expectState="objects.0.color=null"
+    session=r2scene
+
+@t.art.draw.r2scene02 core.test
+    input="Paint a landscape."
+    expect="I drew a sunny scene for you"
+    expectStatus=supported
+    expectState="objects.length=21"
+    expectState="objects.11.kind=cloud"
+    expectState="objects.11.size=210"
+    expectState="objects.11.color=null"
+    session=r2scene
+
+@t.art.draw.r2scene03 core.test
+    input="Draw something."
+    expect="I drew a sunny scene for you"
+    expectStatus=supported
+    expectState="objects.length=31"
+    expectState="objects.21.kind=cloud"
+    expectState="objects.21.size=210"
+    expectState="objects.21.color=null"
+    session=r2scene
+
+@t.art.draw.r2scene04 core.test
+    input="surprise me"
+    expect="I drew a sunny scene for you"
+    expectStatus=supported
+    expectState="objects.length=40"
+    expectState="objects.31.kind=cloud"
+    expectState="objects.31.size=210"
+    expectState="objects.31.color=null"
+    session=r2scene
+
+@t.art.draw.r2scene05 core.test
+    input="surprise me with a picture pls"
+    expect="I drew a sunny scene for you"
+    expectStatus=supported
+    expectState="objects.length=50"
+    expectState="objects.40.kind=cloud"
+    expectState="objects.40.size=210"
+    expectState="objects.40.color=null"
+    session=r2scene
+
+@t.art.draw.r2scene06 core.test
+    input="sketch anything you like"
+    expect="I drew a sunny scene for you"
+    expectStatus=supported
+    expectState="objects.length=59"
+    expectState="objects.50.kind=cloud"
+    expectState="objects.50.size=210"
+    expectState="objects.50.color=null"
+    session=r2scene
+
+@t.art.draw.r2scene07 core.test
+    input="I want you to draw whatever you like"
+    expect="I drew a sunny scene for you"
+    expectStatus=supported
+    expectState="objects.length=69"
+    expectState="objects.59.kind=cloud"
+    expectState="objects.59.size=210"
+    expectState="objects.59.color=null"
+    session=r2scene
+
+@t.art.draw.r2mood01 core.test
+    input="Make it night."
+    expect="It is night now: a dark sky,"
+    expectStatus=supported
+    expectState="objects.length=15"
+    expectState="objects.0.kind=moon"
+    expectState="objects.0.size=110"
+    expectState="objects.0.color=null"
+    session=r2mood
+
+@t.art.draw.r2mood02 core.test
+    input="Turn it into sunset."
+    expect="The sun is going down and th"
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="objects.0.kind=sun"
+    expectState="objects.0.size=252"
+    expectState="objects.0.color=orange"
+    session=r2mood
+
+@t.art.draw.r2mood03 core.test
+    input="Make it day."
+    expect="It is a bright sunny day!"
+    expectStatus=supported
+    expectState="objects.0.size=140"
+    expectState="objects.0.color=null"
+    expectState="sky=light blue"
+    expectState="mood=day"
+    session=r2mood
+
+@t.art.draw.r2mood04 core.test
+    input="Make it a sunny day."
+    expect="It is already day."
+    expectStatus=supported
+    session=r2mood
+
+@t.art.draw.r2mood05 core.test
+    input="Change the scene to dawn."
+    expect="The sun is going down and th"
+    expectStatus=supported
+    expectState="objects.0.size=252"
+    expectState="objects.0.color=orange"
+    expectState="sky=orange"
+    expectState="mood=sunset"
+    session=r2mood
+
+@t.art.draw.r2mood06 core.test
+    input="Set the mood to sunset."
+    expect="It is already sunset."
+    expectStatus=supported
+    session=r2mood
+
+@t.art.draw.r2mood07 core.test
+    input="I want it to be night."
+    expect="It is night now: a dark sky,"
+    expectStatus=supported
+    expectState="objects.length=15"
+    expectState="objects.0.kind=moon"
+    expectState="objects.0.size=110"
+    expectState="objects.0.color=null"
+    session=r2mood
+
+@t.art.draw.r2mood08 core.test
+    input="I'd like sunset."
+    expect="The sun is going down and th"
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="objects.0.kind=sun"
+    expectState="objects.0.size=252"
+    expectState="objects.0.color=orange"
+    session=r2mood
+
+@t.art.draw.r2mood09 core.test
+    input="It should look like sunset."
+    expect="It is already sunset."
+    expectStatus=supported
+    session=r2mood
+
+@t.art.draw.r2mood10 core.test
+    input="It is night."
+    expect="It is night now: a dark sky,"
+    expectStatus=supported
+    expectState="objects.length=15"
+    expectState="objects.0.kind=moon"
+    expectState="objects.0.size=110"
+    expectState="objects.0.color=null"
+    session=r2mood
+
+@t.art.draw.r2mood11 core.test
+    input="Change it so its day."
+    expect="It is a bright sunny day!"
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="objects.0.kind=sun"
+    expectState="objects.0.size=140"
+    expectState="sky=light blue"
+    session=r2mood
+
+@t.art.draw.r2mood12 core.test
+    input="sunset mode"
+    expect="The sun is going down and th"
+    expectStatus=supported
+    expectState="objects.0.size=252"
+    expectState="objects.0.color=orange"
+    expectState="sky=orange"
+    expectState="mood=sunset"
+    session=r2mood
+
+@t.art.draw.r2mood13 core.test
+    input="night time pls"
+    expect="It is night now: a dark sky,"
+    expectStatus=supported
+    expectState="objects.length=15"
+    expectState="objects.0.kind=moon"
+    expectState="objects.0.size=110"
+    expectState="objects.0.color=null"
+    session=r2mood
+
+@t.art.draw.r2mood14 core.test
+    input="sunset"
+    expect="The sun is going down and th"
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="objects.0.kind=sun"
+    expectState="objects.0.size=252"
+    expectState="objects.0.color=orange"
+    session=r2mood
+
+@t.art.draw.r2mood15 core.test
+    input="Can you make it a sunset?"
+    expect="It is already sunset."
+    expectStatus=supported
+    session=r2mood
+
+@t.art.draw.r2mood16 core.test
+    input="um let it be night already"
+    expect="It is night now: a dark sky,"
+    expectStatus=supported
+    expectState="objects.length=15"
+    expectState="objects.0.kind=moon"
+    expectState="objects.0.size=110"
+    expectState="objects.0.color=null"
+    session=r2mood
+
+@t.art.draw.r2recolor01 core.test
+    input="Draw a house."
+    expect="I drew a yellow house."
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="objects.0.kind=house"
+    expectState="objects.0.size=240"
+    expectState="objects.0.color=null"
+    session=r2recolor
+
+@t.art.draw.r2recolor02 core.test
+    input="Draw a sun."
+    expect="I drew a yellow sun."
+    expectStatus=supported
+    expectState="objects.length=2"
+    expectState="objects.1.kind=sun"
+    expectState="objects.1.size=140"
+    expectState="objects.1.color=null"
+    session=r2recolor
+
+@t.art.draw.r2recolor03 core.test
+    input="Color the sun orange."
+    expect="The sun is orange now."
+    expectStatus=supported
+    expectState="objects.1.color=orange"
+    session=r2recolor
+
+@t.art.draw.r2recolor04 core.test
+    input="Make the sky dark blue."
+    expect="The sky is dark blue now."
+    expectStatus=supported
+    expectState="sky=dark blue"
+    session=r2recolor
+
+@t.art.draw.r2recolor05 core.test
+    input="Paint the house green."
+    expect="The house is green now."
+    expectStatus=supported
+    expectState="objects.0.color=green"
+    session=r2recolor
+
+@t.art.draw.r2recolor06 core.test
+    input="Change the sun to red."
+    expect="The sun is red now."
+    expectStatus=supported
+    expectState="objects.1.color=red"
+    session=r2recolor
+
+@t.art.draw.r2recolor07 core.test
+    input="Can you make the roof green?"
+    expect="The roof of the house is gre"
+    expectStatus=supported
+    session=r2recolor
+
+@t.art.draw.r2recolor08 core.test
+    input="I want the house blue."
+    expect="The house is blue now."
+    expectStatus=supported
+    expectState="objects.0.color=blue"
+    session=r2recolor
+
+@t.art.draw.r2recolor09 core.test
+    input="I'd like the sky to be pink."
+    expect="The sky is pink now."
+    expectStatus=supported
+    expectState="sky=pink"
+    session=r2recolor
+
+@t.art.draw.r2recolor10 core.test
+    input="The sun should be orange."
+    expect="The sun is orange now."
+    expectStatus=supported
+    expectState="objects.1.color=orange"
+    session=r2recolor
+
+@t.art.draw.r2recolor11 core.test
+    input="A purple sky would be nicer."
+    expect="The sky is purple now."
+    expectStatus=supported
+    expectState="sky=purple"
+    session=r2recolor
+
+@t.art.draw.r2recolor12 core.test
+    input="Make it so the sun is gold."
+    expect="The sun is gold now."
+    expectStatus=supported
+    expectState="objects.1.color=gold"
+    session=r2recolor
+
+@t.art.draw.r2recolor13 core.test
+    input="house in teal pls"
+    expect="The house is turquoise now."
+    expectStatus=supported
+    expectState="objects.0.color=turquoise"
+    session=r2recolor
+
+@t.art.draw.r2recolor14 core.test
+    input="sky dark blue"
+    expect="The sky is dark blue now."
+    expectStatus=supported
+    expectState="sky=dark blue"
+    session=r2recolor
+
+@t.art.draw.r2recolor15 core.test
+    input="green roof"
+    expect="The roof of the house is gre"
+    expectStatus=supported
+    session=r2recolor
+
+@t.art.draw.r2recolor16 core.test
+    input="Make it red."
+    expect="The house is red now."
+    expectStatus=supported
+    expectState="objects.0.color=red"
+    session=r2recolor
+
+@t.art.draw.r2recolor17 core.test
+    input="green the roof pls"
+    expect="The roof of the house is gre"
+    expectStatus=supported
+    session=r2recolor
+
+@t.art.draw.r2recolor18 core.test
+    input="dark blue for the sky"
+    expect="The sky is dark blue now."
+    expectStatus=supported
+    session=r2recolor
+
+@t.art.draw.r2recolor19 core.test
+    input="turn the sky dk blue"
+    expect="The sky is dk blue now."
+    expectStatus=supported
+    expectState="sky=dk blue"
+    session=r2recolor
+
+@t.art.draw.r2recolor20 core.test
+    input="make the sun org"
+    expect="The sun is orange now."
+    expectStatus=supported
+    expectState="objects.1.color=orange"
+    session=r2recolor
+
+@t.art.draw.r2recolor21 core.test
+    input="Fill the sun with yellow."
+    expect="The sun is yellow now."
+    expectStatus=supported
+    expectState="objects.1.color=yellow"
+    session=r2recolor
+
+@t.art.draw.r2recolor22 core.test
+    input="Dye the house purple."
+    expect="The house is purple now."
+    expectStatus=supported
+    expectState="objects.0.color=purple"
+    session=r2recolor
+
+@t.art.draw.r2givePart01 core.test
+    input="Draw a house."
+    expect="I drew a yellow house."
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="objects.0.kind=house"
+    expectState="objects.0.size=240"
+    expectState="objects.0.color=null"
+    session=r2givePart
+
+@t.art.draw.r2givePart02 core.test
+    input="Draw a car."
+    expect="I drew a red car."
+    expectStatus=supported
+    expectState="objects.length=2"
+    expectState="objects.1.kind=car"
+    expectState="objects.1.size=230"
+    expectState="objects.1.color=null"
+    session=r2givePart
+
+@t.art.draw.r2givePart03 core.test
+    input="Give the house a blue door."
+    expect="The door of the house is blu"
+    expectStatus=supported
+    session=r2givePart
+
+@t.art.draw.r2givePart04 core.test
+    input="Give the car black wheels."
+    expect="The wheels of the car are bl"
+    expectStatus=supported
+    session=r2givePart
+
+@t.art.draw.r2givePart05 core.test
+    input="Add a black door to the house."
+    expect="The door of the house is bla"
+    expectStatus=supported
+    session=r2givePart
+
+@t.art.draw.r2givePart06 core.test
+    input="Paint the door brown on the house."
+    expect="The door of the house is bro"
+    expectStatus=supported
+    session=r2givePart
+
+@t.art.draw.r2givePart07 core.test
+    input="Could the house have a yellow door?"
+    expect="The door of the house is yel"
+    expectStatus=supported
+    session=r2givePart
+
+@t.art.draw.r2givePart08 core.test
+    input="The house needs a pink door."
+    expect="The door of the house is pin"
+    expectStatus=supported
+    session=r2givePart
+
+@t.art.draw.r2givePart09 core.test
+    input="blue door on the house pls"
+    expect="The door of the house is blu"
+    expectStatus=supported
+    session=r2givePart
+
+@t.art.draw.r2givePart10 core.test
+    input="house door green"
+    expect="The door of the house is gre"
+    expectStatus=supported
+    session=r2givePart
+
+@t.art.draw.r2givePart11 core.test
+    input="make the house door red"
+    expect="The door of the house is red"
+    expectStatus=supported
+    session=r2givePart
+
+@t.art.draw.r2resize01 core.test
+    input="Draw a house."
+    expect="I drew a yellow house."
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="objects.0.kind=house"
+    expectState="objects.0.size=240"
+    expectState="objects.0.color=null"
+    session=r2resize
+
+@t.art.draw.r2resize02 core.test
+    input="Draw a sun."
+    expect="I drew a yellow sun."
+    expectStatus=supported
+    expectState="objects.length=2"
+    expectState="objects.1.kind=sun"
+    expectState="objects.1.size=140"
+    expectState="objects.1.color=null"
+    session=r2resize
+
+@t.art.draw.r2resize03 core.test
+    input="Draw a tree."
+    expect="I drew a green tree."
+    expectStatus=supported
+    expectState="objects.length=3"
+    expectState="objects.2.kind=tree"
+    expectState="objects.2.size=170"
+    expectState="objects.2.color=null"
+    session=r2resize
+
+@t.art.draw.r2resize04 core.test
+    input="Make the house bigger."
+    expect="I made the house bigger."
+    expectStatus=supported
+    expectState="objects.0.size=312"
+    session=r2resize
+
+@t.art.draw.r2resize05 core.test
+    input="Make the sun a bit smaller."
+    expect="I made the sun smaller."
+    expectStatus=supported
+    expectState="objects.1.size=122"
+    session=r2resize
+
+@t.art.draw.r2resize06 core.test
+    input="Make the tree much bigger."
+    expect="I made the tree bigger."
+    expectStatus=supported
+    expectState="objects.2.size=289"
+    session=r2resize
+
+@t.art.draw.r2resize07 core.test
+    input="Shrink the house."
+    expect="I made the house smaller."
+    expectStatus=supported
+    expectState="objects.0.size=240"
+    session=r2resize
+
+@t.art.draw.r2resize08 core.test
+    input="Enlarge the sun a lot."
+    expect="I made the sun bigger."
+    expectStatus=supported
+    expectState="objects.1.size=232"
+    session=r2resize
+
+@t.art.draw.r2resize09 core.test
+    input="Make the sun twice as big."
+    expect="I made the sun bigger."
+    expectStatus=supported
+    expectState="objects.1.size=464"
+    session=r2resize
+
+@t.art.draw.r2resize10 core.test
+    input="Can u make the house larger?"
+    expect="I made the house bigger."
+    expectStatus=supported
+    expectState="objects.0.size=312"
+    session=r2resize
+
+@t.art.draw.r2resize11 core.test
+    input="The sun needs to be a lot bigger."
+    expect="I made the sun bigger (that"
+    expectStatus=supported
+    expectState="objects.1.size=840"
+    session=r2resize
+
+@t.art.draw.r2resize12 core.test
+    input="house a little bigger"
+    expect="I made the house bigger."
+    expectStatus=supported
+    expectState="objects.0.size=359"
+    session=r2resize
+
+@t.art.draw.r2resize13 core.test
+    input="smaller tree"
+    expect="I made the tree smaller."
+    expectStatus=supported
+    expectState="objects.2.size=222"
+    session=r2resize
+
+@t.art.draw.r2resize14 core.test
+    input="tree smaller pls"
+    expect="I made the tree smaller."
+    expectStatus=supported
+    expectState="objects.2.size=171"
+    session=r2resize
+
+@t.art.draw.r2resize15 core.test
+    input="make the sun bigger a lot"
+    expect="I made the sun bigger (that"
+    expectStatus=supported
+    session=r2resize
+
+@t.art.draw.r2resize16 core.test
+    input="Blow up the house a lot."
+    expect="I made the house bigger."
+    expectStatus=supported
+    expectState="objects.0.size=682"
+    session=r2resize
+
+@t.art.draw.r2setSize01 core.test
+    input="Draw a sun."
+    expect="I drew a yellow sun."
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="objects.0.kind=sun"
+    expectState="objects.0.size=140"
+    expectState="objects.0.color=null"
+    session=r2setSize
+
+@t.art.draw.r2setSize02 core.test
+    input="Draw a tree."
+    expect="I drew a green tree."
+    expectStatus=supported
+    expectState="objects.length=2"
+    expectState="objects.1.kind=tree"
+    expectState="objects.1.size=170"
+    expectState="objects.1.color=null"
+    session=r2setSize
+
+@t.art.draw.r2setSize03 core.test
+    input="Draw a house."
+    expect="I drew a yellow house."
+    expectStatus=supported
+    expectState="objects.length=3"
+    expectState="objects.2.kind=house"
+    expectState="objects.2.size=240"
+    expectState="objects.2.color=null"
+    session=r2setSize
+
+@t.art.draw.r2setSize04 core.test
+    input="Draw a cat."
+    expect="I drew an orange cat."
+    expectStatus=supported
+    expectState="objects.length=4"
+    expectState="objects.3.kind=cat"
+    expectState="objects.3.size=130"
+    expectState="objects.3.color=null"
+    session=r2setSize
+
+@t.art.draw.r2setSize05 core.test
+    input="Make the sun huge."
+    expect="The sun is huge now."
+    expectStatus=supported
+    expectState="objects.0.size=294"
+    session=r2setSize
+
+@t.art.draw.r2setSize06 core.test
+    input="Make the tree tiny."
+    expect="The tree is tiny now."
+    expectStatus=supported
+    expectState="objects.1.size=77"
+    session=r2setSize
+
+@t.art.draw.r2setSize07 core.test
+    input="Make the house small."
+    expect="The house is small now."
+    expectStatus=supported
+    expectState="objects.2.size=156"
+    session=r2setSize
+
+@t.art.draw.r2setSize08 core.test
+    input="I want the cat to be huge."
+    expect="The cat is huge now."
+    expectStatus=supported
+    expectState="objects.3.size=273"
+    session=r2setSize
+
+@t.art.draw.r2setSize09 core.test
+    input="I want the house massive."
+    expect="The house is massive now."
+    expectStatus=supported
+    expectState="objects.2.size=552"
+    session=r2setSize
+
+@t.art.draw.r2setSize10 core.test
+    input="Make it so the cat is tiny."
+    expect="The cat is tiny now."
+    expectStatus=supported
+    expectState="objects.3.size=59"
+    session=r2setSize
+
+@t.art.draw.r2setSize11 core.test
+    input="house huge"
+    expect="The house is huge now."
+    expectStatus=supported
+    expectState="objects.2.size=504"
+    session=r2setSize
+
+@t.art.draw.r2setSize12 core.test
+    input="house should be medium size"
+    expect="The house is medium now."
+    expectStatus=supported
+    expectState="objects.2.size=240"
+    session=r2setSize
+
+@t.art.draw.r2setSize13 core.test
+    input="turn the house into a tiny one"
+    expect="The house is tiny now."
+    expectStatus=supported
+    expectState="objects.2.size=108"
+    session=r2setSize
+
+@t.art.draw.r2setSize14 core.test
+    input="blow the cat up to huge size"
+    expect="The cat is huge now."
+    expectStatus=supported
+    expectState="objects.3.size=273"
+    session=r2setSize
+
+@t.art.draw.r2move01 core.test
+    input="Draw a tree."
+    expect="I drew a green tree."
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="objects.0.kind=tree"
+    expectState="objects.0.size=170"
+    expectState="objects.0.color=null"
+    session=r2move
+
+@t.art.draw.r2move02 core.test
+    input="Draw a cat."
+    expect="I drew an orange cat."
+    expectStatus=supported
+    expectState="objects.length=2"
+    expectState="objects.1.kind=cat"
+    expectState="objects.1.size=130"
+    expectState="objects.1.color=null"
+    session=r2move
+
+@t.art.draw.r2move03 core.test
+    input="Draw a house."
+    expect="I drew a yellow house."
+    expectStatus=supported
+    expectState="objects.length=3"
+    expectState="objects.2.kind=house"
+    expectState="objects.2.size=240"
+    expectState="objects.2.color=null"
+    session=r2move
+
+@t.art.draw.r2move04 core.test
+    input="Draw a sun."
+    expect="I drew a yellow sun."
+    expectStatus=supported
+    expectState="objects.length=4"
+    expectState="objects.3.kind=sun"
+    expectState="objects.3.size=140"
+    expectState="objects.3.color=null"
+    session=r2move
+
+@t.art.draw.r2move05 core.test
+    input="Draw a cloud."
+    expect="I drew a cloud."
+    expectStatus=supported
+    expectState="objects.length=5"
+    expectState="objects.4.kind=cloud"
+    expectState="objects.4.size=210"
+    expectState="objects.4.color=null"
+    session=r2move
+
+@t.art.draw.r2move06 core.test
+    input="Move the tree to the left."
+    expect="I moved the tree left."
+    expectStatus=supported
+    session=r2move
+
+@t.art.draw.r2move07 core.test
+    input="Put the cat next to the house."
+    expect="I moved the cat next to the"
+    expectStatus=supported
+    session=r2move
+
+@t.art.draw.r2move08 core.test
+    input="Move the sun to the top right corner."
+    expect="I moved the sun in the top r"
+    expectStatus=supported
+    session=r2move
+
+@t.art.draw.r2move09 core.test
+    input="Send the cloud behind the house."
+    expect="I moved the cloud behind the"
+    expectStatus=supported
+    session=r2move
+
+@t.art.draw.r2move10 core.test
+    input="Slide the tree over to the right."
+    expect="I moved the tree above the g"
+    expectStatus=supported
+    session=r2move
+
+@t.art.draw.r2move11 core.test
+    input="Can you move the tree a bit to the right?"
+    expect="I moved the tree right."
+    expectStatus=supported
+    session=r2move
+
+@t.art.draw.r2move12 core.test
+    input="I want the cat under the tree."
+    expect="I moved the cat under the gr"
+    expectStatus=supported
+    session=r2move
+
+@t.art.draw.r2move13 core.test
+    input="The house needs to be on the left."
+    expect="I moved the house on the lef"
+    expectStatus=supported
+    session=r2move
+
+@t.art.draw.r2move14 core.test
+    input="Move the cat so its under the tree."
+    expect="I moved the cat under the gr"
+    expectStatus=supported
+    session=r2move
+
+@t.art.draw.r2move15 core.test
+    input="tree to the left pls"
+    expect="I moved the tree left."
+    expectStatus=supported
+    session=r2move
+
+@t.art.draw.r2move16 core.test
+    input="cat between the two trees"
+    expect="I moved the cat between the"
+    expectStatus=supported
+    session=r2move
+
+@t.art.draw.r2move17 core.test
+    input="cat goes under the tree"
+    expect="I moved the cat under the gr"
+    expectStatus=supported
+    session=r2move
+
+@t.art.draw.r2move18 core.test
+    input="left side for the house please"
+    expect="I moved the house on the lef"
+    expectStatus=supported
+    session=r2move
+
+@t.art.draw.r2move19 core.test
+    input="top right corner for it"
+    expect="I moved the house right."
+    expectStatus=supported
+    session=r2move
+
+@t.art.draw.r2move20 core.test
+    input="Move it to the bottom left."
+    expect="You took bottom left. I took"
+    expectStatus=supported
+    session=r2move
+
+@t.art.draw.r2move21 core.test
+    input="put it in the top right corner"
+    expect="You took top right. I took m"
+    expectStatus=supported
+    session=r2move
+
+@t.art.draw.r2move22 core.test
+    input="it to the top right"
+    expect="I moved the house in the top"
+    expectStatus=supported
+    session=r2move
+
+@t.art.draw.r2move23 core.test
+    input="shove it to the top right corner"
+    expect="I moved the house in the top"
+    expectStatus=supported
+    session=r2move
+
+@t.art.draw.r2nudge01 core.test
+    input="Draw a sun."
+    expect="I drew a yellow sun."
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="objects.0.kind=sun"
+    expectState="objects.0.size=140"
+    expectState="objects.0.color=null"
+    session=r2nudge
+
+@t.art.draw.r2nudge02 core.test
+    input="Draw a cat."
+    expect="I drew an orange cat."
+    expectStatus=supported
+    expectState="objects.length=2"
+    expectState="objects.1.kind=cat"
+    expectState="objects.1.size=130"
+    expectState="objects.1.color=null"
+    session=r2nudge
+
+@t.art.draw.r2nudge03 core.test
+    input="Make the sun higher."
+    expect="I moved the sun higher."
+    expectStatus=supported
+    session=r2nudge
+
+@t.art.draw.r2nudge04 core.test
+    input="Make the cat a bit lower."
+    expect="I moved the cat lower."
+    expectStatus=supported
+    session=r2nudge
+
+@t.art.draw.r2nudge05 core.test
+    input="sun up a bit"
+    expect="I moved the sun up."
+    expectStatus=supported
+    session=r2nudge
+
+@t.art.draw.r2nudge06 core.test
+    input="sun a tiny bit to the left"
+    expect="I moved the sun left."
+    expectStatus=supported
+    session=r2nudge
+
+@t.art.draw.r2nudge07 core.test
+    input="the sun needs to go up a bit"
+    expect="I moved the sun up."
+    expectStatus=supported
+    session=r2nudge
+
+@t.art.draw.r2nudge08 core.test
+    input="the cat should go down"
+    expect="I moved the cat down."
+    expectStatus=supported
+    session=r2nudge
+
+@t.art.draw.r2turn01 core.test
+    input="Draw a car."
+    expect="I drew a red car."
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="objects.0.kind=car"
+    expectState="objects.0.size=230"
+    expectState="objects.0.color=null"
+    session=r2turn
+
+@t.art.draw.r2turn02 core.test
+    input="Draw a dog."
+    expect="I drew a brown dog."
+    expectStatus=supported
+    expectState="objects.length=2"
+    expectState="objects.1.kind=dog"
+    expectState="objects.1.size=160"
+    expectState="objects.1.color=null"
+    session=r2turn
+
+@t.art.draw.r2turn03 core.test
+    input="Draw a house."
+    expect="I drew a yellow house."
+    expectStatus=supported
+    expectState="objects.length=3"
+    expectState="objects.2.kind=house"
+    expectState="objects.2.size=240"
+    expectState="objects.2.color=null"
+    session=r2turn
+
+@t.art.draw.r2turn04 core.test
+    input="Draw a cat."
+    expect="I drew an orange cat."
+    expectStatus=supported
+    expectState="objects.length=4"
+    expectState="objects.3.kind=cat"
+    expectState="objects.3.size=130"
+    expectState="objects.3.color=null"
+    session=r2turn
+
+@t.art.draw.r2turn05 core.test
+    input="Turn the car around."
+    expect="I turned the car around."
+    expectStatus=supported
+    expectState="objects.0.flip=true"
+    session=r2turn
+
+@t.art.draw.r2turn06 core.test
+    input="Flip the dog."
+    expect="I turned the dog around."
+    expectStatus=supported
+    expectState="objects.1.flip=true"
+    session=r2turn
+
+@t.art.draw.r2turn07 core.test
+    input="Rotate the house 45 degrees."
+    expect="I turned the house 45 degree"
+    expectStatus=supported
+    expectState="objects.2.rotation=45"
+    session=r2turn
+
+@t.art.draw.r2turn08 core.test
+    input="Turn it upside down."
+    expect="I turned the house upside do"
+    expectStatus=supported
+    expectState="objects.2.rotation=180"
+    session=r2turn
+
+@t.art.draw.r2turn09 core.test
+    input="Make the dog look to the right."
+    expect="I turned the dog to face rig"
+    expectStatus=supported
+    expectState="objects.1.flip=false"
+    session=r2turn
+
+@t.art.draw.r2turn10 core.test
+    input="Can you turn the car upside down?"
+    expect="I turned the car upside down"
+    expectStatus=supported
+    expectState="objects.0.rotation=180"
+    session=r2turn
+
+@t.art.draw.r2turn11 core.test
+    input="The car should look the other way."
+    expect="I turned the car around."
+    expectStatus=supported
+    expectState="objects.0.flip=false"
+    session=r2turn
+
+@t.art.draw.r2turn12 core.test
+    input="I want the cat turned around."
+    expect="I turned the cat around."
+    expectStatus=supported
+    expectState="objects.3.flip=true"
+    session=r2turn
+
+@t.art.draw.r2turn13 core.test
+    input="dog the other way"
+    expect="I turned the dog around."
+    expectStatus=supported
+    expectState="objects.1.flip=true"
+    session=r2turn
+
+@t.art.draw.r2turn14 core.test
+    input="car around pls"
+    expect="I turned the car around."
+    expectStatus=supported
+    expectState="objects.0.flip=true"
+    session=r2turn
+
+@t.art.draw.r2turn15 core.test
+    input="cat turn around thx"
+    expect="I turned the cat around."
+    expectStatus=supported
+    expectState="objects.3.flip=false"
+    session=r2turn
+
+@t.art.draw.r2turn16 core.test
+    input="turn around the cat"
+    expect="I turned the cat around."
+    expectStatus=supported
+    expectState="objects.3.flip=true"
+    session=r2turn
+
+@t.art.draw.r2turn17 core.test
+    input="can u flip him"
+    expect="I turned the cat around."
+    expectStatus=supported
+    expectState="objects.3.flip=false"
+    session=r2turn
+
+@t.art.draw.r2remove01 core.test
+    input="Draw 2 trees."
+    expect="I drew 2 green trees."
+    expectStatus=supported
+    expectState="objects.length=2"
+    expectState="objects.0.kind=tree"
+    expectState="objects.0.size=170"
+    expectState="objects.0.color=null"
+    session=r2remove
+
+@t.art.draw.r2remove02 core.test
+    input="Add grass."
+    expect="I added grass to the ground."
+    expectStatus=supported
+    expectState="ground=grass"
+    session=r2remove
+
+@t.art.draw.r2remove03 core.test
+    input="Draw 2 clouds."
+    expect="I drew 2 clouds."
+    expectStatus=supported
+    expectState="objects.length=4"
+    expectState="objects.2.kind=cloud"
+    expectState="objects.2.size=210"
+    expectState="objects.2.color=null"
+    session=r2remove
+
+@t.art.draw.r2remove04 core.test
+    input="Draw a sun."
+    expect="I drew a yellow sun."
+    expectStatus=supported
+    expectState="objects.length=5"
+    expectState="objects.4.kind=sun"
+    expectState="objects.4.size=140"
+    expectState="objects.4.color=null"
+    session=r2remove
+
+@t.art.draw.r2remove05 core.test
+    input="Draw a house."
+    expect="I drew a yellow house."
+    expectStatus=supported
+    expectState="objects.length=6"
+    expectState="objects.5.kind=house"
+    expectState="objects.5.size=240"
+    expectState="objects.5.color=null"
+    session=r2remove
+
+@t.art.draw.r2remove06 core.test
+    input="Draw a star."
+    expect="I drew a yellow star."
+    expectStatus=supported
+    expectState="objects.length=7"
+    expectState="objects.6.kind=star"
+    expectState="objects.6.size=110"
+    expectState="objects.6.color=null"
+    session=r2remove
+
+@t.art.draw.r2remove07 core.test
+    input="Draw a flower."
+    expect="I drew a pink flower."
+    expectStatus=supported
+    expectState="objects.length=8"
+    expectState="objects.7.kind=flower"
+    expectState="objects.7.size=100"
+    expectState="objects.7.color=null"
+    session=r2remove
+
+@t.art.draw.r2remove08 core.test
+    input="Draw a boat."
+    expect="I drew a red boat."
+    expectStatus=supported
+    expectState="objects.length=9"
+    expectState="objects.8.kind=boat"
+    expectState="objects.8.size=230"
+    expectState="objects.8.color=null"
+    session=r2remove
+
+@t.art.draw.r2remove09 core.test
+    input="Delete the tree."
+    expect="I took away the green tree."
+    expectStatus=supported
+    expectState="objects.length=8"
+    expectState="objects.1.kind=cloud"
+    expectState="objects.1.size=210"
+    expectState="objects.1.fill=solid"
+    session=r2remove
+
+@t.art.draw.r2remove10 core.test
+    input="Remove the grass."
+    expect="I took away the grass."
+    expectStatus=supported
+    expectState="ground=null"
+    session=r2remove
+
+@t.art.draw.r2remove11 core.test
+    input="Get rid of the clouds."
+    expect="I took away 2 clouds."
+    expectStatus=supported
+    expectState="objects.length=6"
+    expectState="objects.1.kind=sun"
+    expectState="objects.1.size=140"
+    expectState="objects.1.fill=crayon"
+    session=r2remove
+
+@t.art.draw.r2remove12 core.test
+    input="Take out the sun."
+    expect="I took away the yellow sun."
+    expectStatus=supported
+    expectState="objects.length=5"
+    expectState="objects.1.kind=house"
+    expectState="objects.1.size=240"
+    expectState="objects.2.kind=star"
+    session=r2remove
+
+@t.art.draw.r2remove13 core.test
+    input="Draw a sun."
+    expect="I drew a yellow sun."
+    expectStatus=supported
+    expectState="objects.length=6"
+    expectState="objects.5.kind=sun"
+    expectState="objects.5.size=140"
+    expectState="objects.5.color=null"
+    session=r2remove
+
+@t.art.draw.r2remove14 core.test
+    input="Delete it."
+    expect="I took away the yellow sun."
+    expectStatus=supported
+    expectState="objects.length=5"
+    expectState="last.length=0"
+    session=r2remove
+
+@t.art.draw.r2remove15 core.test
+    input="Draw a house."
+    expect="I drew a yellow house."
+    expectStatus=supported
+    expectState="objects.length=6"
+    expectState="objects.5.kind=house"
+    expectState="objects.5.size=240"
+    expectState="objects.5.color=null"
+    session=r2remove
+
+@t.art.draw.r2remove16 core.test
+    input="throw it away"
+    expect="I took away the yellow house"
+    expectStatus=supported
+    expectState="objects.length=5"
+    expectState="last.length=0"
+    session=r2remove
+
+@t.art.draw.r2remove17 core.test
+    input="Draw a house."
+    expect="I drew a yellow house."
+    expectStatus=supported
+    expectState="objects.length=6"
+    expectState="objects.5.kind=house"
+    expectState="objects.5.size=240"
+    expectState="objects.5.color=null"
+    session=r2remove
+
+@t.art.draw.r2remove18 core.test
+    input="Remove it pls"
+    expect="I took away the yellow house"
+    expectStatus=supported
+    expectState="objects.length=5"
+    expectState="last.length=0"
+    session=r2remove
+
+@t.art.draw.r2remove19 core.test
+    input="Add grass."
+    expect="I added grass to the ground."
+    expectStatus=supported
+    expectState="ground=grass"
+    session=r2remove
+
+@t.art.draw.r2remove20 core.test
+    input="no more grass pls"
+    expect="I took away the grass."
+    expectStatus=supported
+    expectState="ground=null"
+    session=r2remove
+
+@t.art.draw.r2remove21 core.test
+    input="Add grass."
+    expect="I added grass to the ground."
+    expectStatus=supported
+    expectState="ground=grass"
+    session=r2remove
+
+@t.art.draw.r2remove22 core.test
+    input="i don't want grass anymore"
+    expect="I took away the grass."
+    expectStatus=supported
+    expectState="ground=null"
+    session=r2remove
+
+@t.art.draw.r2remove23 core.test
+    input="Draw a sun."
+    expect="I drew a yellow sun."
+    expectStatus=supported
+    expectState="objects.length=6"
+    expectState="objects.5.kind=sun"
+    expectState="objects.5.size=140"
+    expectState="objects.5.color=null"
+    session=r2remove
+
+@t.art.draw.r2remove24 core.test
+    input="i do not need the sun"
+    expect="I took away the yellow sun."
+    expectStatus=supported
+    expectState="objects.length=5"
+    expectState="last.length=0"
+    session=r2remove
+
+@t.art.draw.r2remove25 core.test
+    input="Draw 2 clouds."
+    expect="I drew 2 clouds."
+    expectStatus=supported
+    expectState="objects.length=7"
+    expectState="objects.5.kind=cloud"
+    expectState="objects.5.size=210"
+    expectState="objects.5.color=null"
+    session=r2remove
+
+@t.art.draw.r2remove26 core.test
+    input="clear the clouds away"
+    expect="I took away 2 clouds."
+    expectStatus=supported
+    expectState="objects.length=5"
+    expectState="last.length=0"
+    session=r2remove
+
+@t.art.draw.r2remove27 core.test
+    input="Draw a house."
+    expect="I drew a yellow house."
+    expectStatus=supported
+    expectState="objects.length=6"
+    expectState="objects.5.kind=house"
+    expectState="objects.5.size=240"
+    expectState="objects.5.color=null"
+    session=r2remove
+
+@t.art.draw.r2remove28 core.test
+    input="Can u delete the house for me?"
+    expect="I took away the yellow house"
+    expectStatus=supported
+    expectState="objects.length=5"
+    expectState="last.length=0"
+    session=r2remove
+
+@t.art.draw.r2remove29 core.test
+    input="Draw a house."
+    expect="I drew a yellow house."
+    expectStatus=supported
+    expectState="objects.length=6"
+    expectState="objects.5.kind=house"
+    expectState="objects.5.size=240"
+    expectState="objects.5.color=null"
+    session=r2remove
+
+@t.art.draw.r2remove30 core.test
+    input="wipe it all off"
+    expect="OK, I cleared the picture (6"
+    expectStatus=supported
+    expectState="objects.length=0"
+    expectState="last.length=0"
+    session=r2remove
+
+@t.art.draw.r2remove31 core.test
+    input="Draw a house."
+    expect="I drew a yellow house."
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="objects.0.kind=house"
+    expectState="objects.0.size=240"
+    expectState="objects.0.color=null"
+    session=r2remove
+
+@t.art.draw.r2remove32 core.test
+    input="clear all"
+    expect="OK, I cleared the picture (1"
+    expectStatus=supported
+    expectState="objects.length=0"
+    expectState="last.length=0"
+    session=r2remove
+
+@t.art.draw.r2remove33 core.test
+    input="Draw a house."
+    expect="I drew a yellow house."
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="objects.0.kind=house"
+    expectState="objects.0.size=240"
+    expectState="objects.0.color=null"
+    session=r2remove
+
+@t.art.draw.r2remove34 core.test
+    input="Clear the picture."
+    expect="OK, I cleared the picture (1"
+    expectStatus=supported
+    expectState="objects.length=0"
+    expectState="last.length=0"
+    session=r2remove
+
+@t.art.draw.r2remove35 core.test
+    input="Draw a house."
+    expect="I drew a yellow house."
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="objects.0.kind=house"
+    expectState="objects.0.size=240"
+    expectState="objects.0.color=null"
+    session=r2remove
+
+@t.art.draw.r2remove36 core.test
+    input="um so like erase everything ok"
+    expect="OK, I cleared the picture (1"
+    expectStatus=supported
+    expectState="objects.length=0"
+    expectState="last.length=0"
+    session=r2remove
+
+@t.art.draw.r2new01 core.test
+    input="Start a new drawing."
+    expect="Here is a fresh sheet of pap"
+    expectStatus=supported
+    session=r2new
+
+@t.art.draw.r2new02 core.test
+    input="Give me a fresh sheet of paper."
+    expect="Here is a fresh sheet of pap"
+    expectStatus=supported
+    session=r2new
+
+@t.art.draw.r2new03 core.test
+    input="new picture"
+    expect="Here is a fresh sheet of pap"
+    expectStatus=supported
+    session=r2new
+
+@t.art.draw.r2undo01 core.test
+    input="Draw a red house."
+    expect="I drew a red house."
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="objects.0.kind=house"
+    expectState="objects.0.size=240"
+    expectState="objects.0.color=red"
+    session=r2undo
+
+@t.art.draw.r2undo02 core.test
+    input="Make it night."
+    expect="It is night now: a dark sky,"
+    expectStatus=supported
+    expectState="objects.length=16"
+    expectState="objects.1.kind=moon"
+    expectState="objects.1.size=110"
+    expectState="objects.1.color=null"
+    session=r2undo
+
+@t.art.draw.r2undo03 core.test
+    input="Undo."
+    expect="OK, I undid it (made it nigh"
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="sky=null"
+    expectState="mood=null"
+    session=r2undo
+
+@t.art.draw.r2undo04 core.test
+    input="Redo."
+    expect="OK, I did it again."
+    expectStatus=supported
+    expectState="objects.length=16"
+    expectState="objects.1.kind=moon"
+    expectState="objects.1.size=110"
+    expectState="objects.1.color=null"
+    session=r2undo
+
+@t.art.draw.r2undo05 core.test
+    input="Make it night."
+    expect="It is already night."
+    expectStatus=supported
+    session=r2undo
+
+@t.art.draw.r2undo06 core.test
+    input="Take that back."
+    expect="OK, I undid it (made it nigh"
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="sky=null"
+    expectState="mood=null"
+    session=r2undo
+
+@t.art.draw.r2undo07 core.test
+    input="Make it night."
+    expect="It is night now: a dark sky,"
+    expectStatus=supported
+    expectState="objects.length=16"
+    expectState="objects.1.kind=moon"
+    expectState="objects.1.size=110"
+    expectState="objects.1.color=null"
+    session=r2undo
+
+@t.art.draw.r2undo08 core.test
+    input="oops take that back"
+    expect="OK, I undid it (made it nigh"
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="sky=null"
+    expectState="mood=null"
+    session=r2undo
+
+@t.art.draw.r2undo09 core.test
+    input="Make it night."
+    expect="It is night now: a dark sky,"
+    expectStatus=supported
+    expectState="objects.length=16"
+    expectState="objects.1.kind=moon"
+    expectState="objects.1.size=110"
+    expectState="objects.1.color=null"
+    session=r2undo
+
+@t.art.draw.r2undo10 core.test
+    input="wait undo"
+    expect="OK, I undid it (made it nigh"
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="sky=null"
+    expectState="mood=null"
+    session=r2undo
+
+@t.art.draw.r2undo11 core.test
+    input="Make it night."
+    expect="It is night now: a dark sky,"
+    expectStatus=supported
+    expectState="objects.length=16"
+    expectState="objects.1.kind=moon"
+    expectState="objects.1.size=110"
+    expectState="objects.1.color=null"
+    session=r2undo
+
+@t.art.draw.r2undo12 core.test
+    input="ctrl z"
+    expect="OK, I undid it (made it nigh"
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="sky=null"
+    expectState="mood=null"
+    session=r2undo
+
+@t.art.draw.r2undo13 core.test
+    input="Make it night."
+    expect="It is night now: a dark sky,"
+    expectStatus=supported
+    expectState="objects.length=16"
+    expectState="objects.1.kind=moon"
+    expectState="objects.1.size=110"
+    expectState="objects.1.color=null"
+    session=r2undo
+
+@t.art.draw.r2undo14 core.test
+    input="go back one step"
+    expect="OK, I undid it (made it nigh"
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="sky=null"
+    expectState="mood=null"
+    session=r2undo
+
+@t.art.draw.r2undo15 core.test
+    input="Make it night."
+    expect="It is night now: a dark sky,"
+    expectStatus=supported
+    expectState="objects.length=16"
+    expectState="objects.1.kind=moon"
+    expectState="objects.1.size=110"
+    expectState="objects.1.color=null"
+    session=r2undo
+
+@t.art.draw.r2undo16 core.test
+    input="back to how it was"
+    expect="OK, I undid it (made it nigh"
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="sky=null"
+    expectState="mood=null"
+    session=r2undo
+
+@t.art.draw.r2undo17 core.test
+    input="Make it night."
+    expect="It is night now: a dark sky,"
+    expectStatus=supported
+    expectState="objects.length=16"
+    expectState="objects.1.kind=moon"
+    expectState="objects.1.size=110"
+    expectState="objects.1.color=null"
+    session=r2undo
+
+@t.art.draw.r2undo18 core.test
+    input="revert the last change"
+    expect="OK, I undid it (made it nigh"
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="sky=null"
+    expectState="mood=null"
+    session=r2undo
+
+@t.art.draw.r2undo19 core.test
+    input="Make it night."
+    expect="It is night now: a dark sky,"
+    expectStatus=supported
+    expectState="objects.length=16"
+    expectState="objects.1.kind=moon"
+    expectState="objects.1.size=110"
+    expectState="objects.1.color=null"
+    session=r2undo
+
+@t.art.draw.r2undo20 core.test
+    input="undo that change"
+    expect="OK, I undid it (made it nigh"
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="sky=null"
+    expectState="mood=null"
+    session=r2undo
+
+@t.art.draw.r2undo21 core.test
+    input="undo the undo"
+    expect="OK, I did it again."
+    expectStatus=supported
+    expectState="objects.length=16"
+    expectState="objects.1.kind=moon"
+    expectState="objects.1.size=110"
+    expectState="objects.1.color=null"
+    session=r2undo
+
+@t.art.draw.r2undo22 core.test
+    input="Make it night."
+    expect="It is already night."
+    expectStatus=supported
+    session=r2undo
+
+@t.art.draw.r2undo23 core.test
+    input="Undo."
+    expect="OK, I undid it (made it nigh"
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="sky=null"
+    expectState="mood=null"
+    session=r2undo
+
+@t.art.draw.r2undo24 core.test
+    input="get that back please"
+    expect="OK, I did it again."
+    expectStatus=supported
+    expectState="objects.length=16"
+    expectState="objects.1.kind=moon"
+    expectState="objects.1.size=110"
+    expectState="objects.1.color=null"
+    session=r2undo
+
+@t.art.draw.r2undo25 core.test
+    input="Undo."
+    expect="OK, I undid it (made it nigh"
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="sky=null"
+    expectState="mood=null"
+    session=r2undo
+
+@t.art.draw.r2undo26 core.test
+    input="bring it back"
+    expect="OK, I did it again."
+    expectStatus=supported
+    expectState="objects.length=16"
+    expectState="objects.1.kind=moon"
+    expectState="objects.1.size=110"
+    expectState="objects.1.color=null"
+    session=r2undo
+
+@t.art.draw.r2select01 core.test
+    input="Draw a house."
+    expect="I drew a yellow house."
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="objects.0.kind=house"
+    expectState="objects.0.size=240"
+    expectState="objects.0.color=null"
+    session=r2select
+
+@t.art.draw.r2select02 core.test
+    input="Draw a tree."
+    expect="I drew a green tree."
+    expectStatus=supported
+    expectState="objects.length=2"
+    expectState="objects.1.kind=tree"
+    expectState="objects.1.size=170"
+    expectState="objects.1.color=null"
+    session=r2select
+
+@t.art.draw.r2select03 core.test
+    input="Select the house."
+    expect="OK, I selected the house. No"
+    expectStatus=supported
+    expectState="selected=o1"
+    session=r2select
+
+@t.art.draw.r2select04 core.test
+    input="Pick the tree."
+    expect="OK, I selected the tree. Now"
+    expectStatus=supported
+    expectState="selected=o2"
+    session=r2select
+
+@t.art.draw.r2select05 core.test
+    input="Deselect everything."
+    expect="OK, nothing is selected now."
+    expectStatus=supported
+    expectState="selected=null"
+    session=r2select
+
+@t.art.draw.r2select06 core.test
+    input="nothing selected please"
+    expect="Nothing is selected."
+    expectStatus=supported
+    session=r2select
+
+@t.art.draw.r2select07 core.test
+    input="Draw 2 trees."
+    expect="I drew 2 green trees."
+    expectStatus=supported
+    expectState="objects.length=4"
+    expectState="objects.2.kind=tree"
+    expectState="objects.2.size=170"
+    expectState="objects.2.color=null"
+    session=r2select
+
+@t.art.draw.r2select08 core.test
+    input="Click the second tree."
+    expect="OK, I selected the tree. Now"
+    expectStatus=supported
+    expectState="selected=o3"
+    expectState="last.length=1"
+    session=r2select
+
+@t.art.draw.r2fill01 core.test
+    input="Draw a star."
+    expect="I drew a yellow star."
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="objects.0.kind=star"
+    expectState="objects.0.size=110"
+    expectState="objects.0.color=null"
+    session=r2fill
+
+@t.art.draw.r2fill02 core.test
+    input="Make the star hollow."
+    expect="The star is just an outline"
+    expectStatus=supported
+    expectState="objects.0.fill=outline"
+    session=r2fill
+
+@t.art.draw.r2fill03 core.test
+    input="Make the star solid."
+    expect="The star is filled in now."
+    expectStatus=supported
+    expectState="objects.0.fill=solid"
+    session=r2fill
+
+@t.art.draw.r2fill04 core.test
+    input="Fill in the star."
+    expect="The star is colored in with"
+    expectStatus=supported
+    expectState="objects.0.fill=crayon"
+    session=r2fill
+
+@t.art.draw.r2fill05 core.test
+    input="star outline only"
+    expect="The star is just an outline"
+    expectStatus=supported
+    expectState="objects.0.fill=outline"
+    session=r2fill
+
+@t.art.draw.r2fill06 core.test
+    input="solid star"
+    expect="The star is filled in now."
+    expectStatus=supported
+    expectState="objects.0.fill=solid"
+    session=r2fill
+
+@t.art.draw.r2fill07 core.test
+    input="the star should be just an outline"
+    expect="The star is colored in with"
+    expectStatus=supported
+    expectState="objects.0.fill=crayon"
+    session=r2fill
+
+@t.art.draw.r2duplicate01 core.test
+    input="Draw a tree."
+    expect="I drew a green tree."
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="objects.0.kind=tree"
+    expectState="objects.0.size=170"
+    expectState="objects.0.color=null"
+    session=r2duplicate
+
+@t.art.draw.r2duplicate02 core.test
+    input="Copy the tree."
+    expect="I made a copy of the tree."
+    expectStatus=supported
+    expectState="objects.length=2"
+    expectState="objects.1.kind=tree"
+    expectState="objects.1.size=170"
+    expectState="objects.1.color=null"
+    session=r2duplicate
+
+@t.art.draw.r2duplicate03 core.test
+    input="Duplicate the tree."
+    expect="I made a copy of the tree. T"
+    expectStatus=supported
+    expectState="objects.length=3"
+    expectState="objects.2.kind=tree"
+    expectState="objects.2.size=170"
+    expectState="objects.2.color=null"
+    session=r2duplicate
+
+@t.art.draw.r2duplicate04 core.test
+    input="Make another one."
+    expect="I made a copy of the tree."
+    expectStatus=supported
+    expectState="objects.length=4"
+    expectState="objects.3.kind=tree"
+    expectState="objects.3.size=170"
+    expectState="objects.3.color=null"
+    session=r2duplicate
+
+@t.art.draw.r2duplicate05 core.test
+    input="one more tree"
+    expect="I made a copy of the tree. T"
+    expectStatus=supported
+    expectState="objects.length=5"
+    expectState="objects.4.kind=tree"
+    expectState="objects.4.size=170"
+    expectState="objects.4.color=null"
+    session=r2duplicate
+
+@t.art.draw.r2duplicate06 core.test
+    input="another tree"
+    expect="I made a copy of the tree. T"
+    expectStatus=supported
+    expectState="objects.length=6"
+    expectState="objects.5.kind=tree"
+    expectState="objects.5.size=170"
+    expectState="objects.5.color=null"
+    session=r2duplicate
+
+@t.art.draw.r2duplicate07 core.test
+    input="tree copy please"
+    expect="I made a copy of the tree. T"
+    expectStatus=supported
+    expectState="objects.length=7"
+    expectState="objects.6.kind=tree"
+    expectState="objects.6.size=170"
+    expectState="objects.6.color=null"
+    session=r2duplicate
+
+@t.art.draw.r2duplicate08 core.test
+    input="Get me a second copy of the tree."
+    expect="I made a copy of the tree. T"
+    expectStatus=supported
+    expectState="objects.length=8"
+    expectState="objects.7.kind=tree"
+    expectState="objects.7.size=170"
+    expectState="objects.7.color=null"
+    session=r2duplicate
+
+@t.art.draw.r2duplicate09 core.test
+    input="Can you make a twin of the tree?"
+    expect="I made a copy of the tree. T"
+    expectStatus=supported
+    expectState="objects.length=9"
+    expectState="objects.8.kind=tree"
+    expectState="objects.8.size=170"
+    expectState="objects.8.color=null"
+    session=r2duplicate
+
+@t.art.draw.r2duplicate10 core.test
+    input="make 2 more"
+    expect="I made 2 copies of the tree."
+    expectStatus=supported
+    expectState="objects.length=11"
+    expectState="objects.9.kind=tree"
+    expectState="objects.9.size=170"
+    expectState="objects.9.color=null"
+    session=r2duplicate
+
+@t.art.draw.r2describe01 core.test
+    input="Draw a house."
+    expect="I drew a yellow house."
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="objects.0.kind=house"
+    expectState="objects.0.size=240"
+    expectState="objects.0.color=null"
+    session=r2describe
+
+@t.art.draw.r2describe02 core.test
+    input="Draw a sun."
+    expect="I drew a yellow sun."
+    expectStatus=supported
+    expectState="objects.length=2"
+    expectState="objects.1.kind=sun"
+    expectState="objects.1.size=140"
+    expectState="objects.1.color=null"
+    session=r2describe
+
+@t.art.draw.r2describe03 core.test
+    input="Describe my picture."
+    expect="In your picture I can see a"
+    expectStatus=supported
+    session=r2describe
+
+@t.art.draw.r2describe04 core.test
+    input="What is in my drawing?"
+    expect="In your picture I can see a"
+    expectStatus=supported
+    session=r2describe
+
+@t.art.draw.r2describe05 core.test
+    input="What can you see in my picture?"
+    expect="In your picture I can see a"
+    expectStatus=supported
+    session=r2describe
+
+@t.art.draw.r2describe06 core.test
+    input="What did I draw?"
+    expect="In your picture I can see a"
+    expectStatus=supported
+    session=r2describe
+
+@t.art.draw.r2describe07 core.test
+    input="whats in the picture right now"
+    expect="In your picture I can see a"
+    expectStatus=supported
+    session=r2describe
+
+@t.art.draw.r2describe08 core.test
+    input="explain whats on the page"
+    expect="In your picture I can see a"
+    expectStatus=supported
+    session=r2describe
+
+@t.art.draw.r2describe09 core.test
+    input="tell me what i made"
+    expect="In your picture I can see a"
+    expectStatus=supported
+    session=r2describe
+
+@t.art.draw.r2describe10 core.test
+    input="describe my art"
+    expect="In your picture I can see a"
+    expectStatus=supported
+    session=r2describe
+
+@t.art.draw.r2count01 core.test
+    input="Draw 3 trees."
+    expect="I drew 3 green trees."
+    expectStatus=supported
+    expectState="objects.length=3"
+    expectState="objects.0.kind=tree"
+    expectState="objects.0.size=170"
+    expectState="objects.0.color=null"
+    session=r2count
+
+@t.art.draw.r2count02 core.test
+    input="Draw 2 clouds."
+    expect="I drew 2 clouds."
+    expectStatus=supported
+    expectState="objects.length=5"
+    expectState="objects.3.kind=cloud"
+    expectState="objects.3.size=210"
+    expectState="objects.3.color=null"
+    session=r2count
+
+@t.art.draw.r2count03 core.test
+    input="Draw 2 balloons."
+    expect="I drew 2 red balloons."
+    expectStatus=supported
+    expectState="objects.length=7"
+    expectState="objects.5.kind=balloon"
+    expectState="objects.5.size=80"
+    expectState="objects.5.color=null"
+    session=r2count
+
+@t.art.draw.r2count04 core.test
+    input="How many trees are there?"
+    expect="There are 3 trees in your pi"
+    expectStatus=supported
+    session=r2count
+
+@t.art.draw.r2count05 core.test
+    input="How many things are in my picture?"
+    expect="There are 7 things in your p"
+    expectStatus=supported
+    session=r2count
+
+@t.art.draw.r2count06 core.test
+    input="how many balloons are on there"
+    expect="There are 2 balloons in your"
+    expectStatus=supported
+    session=r2count
+
+@t.art.draw.r2count07 core.test
+    input="how many items are on the page"
+    expect="There are 7 things in your p"
+    expectStatus=supported
+    session=r2count
+
+@t.art.draw.r2count08 core.test
+    input="Count the clouds."
+    expect="There are 2 clouds in your p"
+    expectStatus=supported
+    session=r2count
+
+@t.art.draw.r2count09 core.test
+    input="count everything"
+    expect="There are 7 things in your p"
+    expectStatus=supported
+    session=r2count
+
+@t.art.draw.r2count10 core.test
+    input="tree count?"
+    expect="There are 3 trees in your pi"
+    expectStatus=supported
+    session=r2count
+
+@t.art.draw.r2count11 core.test
+    input="trees how many?"
+    expect="There are 3 trees in your pi"
+    expectStatus=supported
+    session=r2count
+
+@t.art.draw.r2count12 core.test
+    input="number of trees in the picture"
+    expect="There are 3 trees in your pi"
+    expectStatus=supported
+    session=r2count
+
+@t.art.draw.r2count13 core.test
+    input="tell me how many trees there are"
+    expect="There are 3 trees in your pi"
+    expectStatus=supported
+    session=r2count
+
+@t.art.draw.r2count14 core.test
+    input="can u count my trees"
+    expect="There are 3 trees in your pi"
+    expectStatus=supported
+    session=r2count
+
+@t.art.draw.r2where01 core.test
+    input="Draw a cat."
+    expect="I drew an orange cat."
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="objects.0.kind=cat"
+    expectState="objects.0.size=130"
+    expectState="objects.0.color=null"
+    session=r2where
+
+@t.art.draw.r2where02 core.test
+    input="Draw 2 trees."
+    expect="I drew 2 green trees."
+    expectStatus=supported
+    expectState="objects.length=3"
+    expectState="objects.1.kind=tree"
+    expectState="objects.1.size=170"
+    expectState="objects.1.color=null"
+    session=r2where
+
+@t.art.draw.r2where03 core.test
+    input="Where is the cat?"
+    expect="The cat is on the ground in"
+    expectStatus=supported
+    session=r2where
+
+@t.art.draw.r2where04 core.test
+    input="Where are the trees?"
+    expect="There are 2 trees: on the gr"
+    expectStatus=supported
+    session=r2where
+
+@t.art.draw.r2where05 core.test
+    input="where did you put the trees"
+    expect="There are 2 trees: on the gr"
+    expectStatus=supported
+    session=r2where
+
+@t.art.draw.r2where06 core.test
+    input="where can i see the tree"
+    expect="The tree is on the ground on"
+    expectStatus=supported
+    session=r2where
+
+@t.art.draw.r2where07 core.test
+    input="where did the cat go"
+    expect="The cat is on the ground in"
+    expectStatus=supported
+    session=r2where
+
+@t.art.draw.r2where08 core.test
+    input="which spot is the cat in"
+    expect="The cat is on the ground in"
+    expectStatus=supported
+    session=r2where
+
+@t.art.draw.r2where09 core.test
+    input="where r the trees"
+    expect="There are 2 trees: on the gr"
+    expectStatus=supported
+    session=r2where
+
+@t.art.draw.r2where10 core.test
+    input="tell me where the trees are"
+    expect="There are 2 trees: on the gr"
+    expectStatus=supported
+    session=r2where
+
+@t.art.draw.r2where11 core.test
+    input="find the cat"
+    expect="The cat is on the ground in"
+    expectStatus=supported
+    session=r2where
+
+@t.art.draw.r2where12 core.test
+    input="cat where?"
+    expect="The cat is on the ground in"
+    expectStatus=supported
+    session=r2where
+
+@t.art.draw.r2where13 core.test
+    input="location of the cat?"
+    expect="The cat is on the ground in"
+    expectStatus=supported
+    session=r2where
+
+@t.art.draw.r2where14 core.test
+    input="trees, where exactly"
+    expect="There are 2 trees: on the gr"
+    expectStatus=supported
+    session=r2where
+
+@t.art.draw.r2exists01 core.test
+    input="Draw a house."
+    expect="I drew a yellow house."
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="objects.0.kind=house"
+    expectState="objects.0.size=240"
+    expectState="objects.0.color=null"
+    session=r2exists
+
+@t.art.draw.r2exists02 core.test
+    input="Draw 2 flowers."
+    expect="I drew 2 pink flowers."
+    expectStatus=supported
+    expectState="objects.length=3"
+    expectState="objects.1.kind=flower"
+    expectState="objects.1.size=100"
+    expectState="objects.1.color=null"
+    session=r2exists
+
+@t.art.draw.r2exists03 core.test
+    input="Draw a boat."
+    expect="I drew a red boat."
+    expectStatus=supported
+    expectState="objects.length=4"
+    expectState="objects.3.kind=boat"
+    expectState="objects.3.size=230"
+    expectState="objects.3.color=null"
+    session=r2exists
+
+@t.art.draw.r2exists04 core.test
+    input="Is there a house in my picture?"
+    expect="Yes! There is a house on the"
+    expectStatus=supported
+    session=r2exists
+
+@t.art.draw.r2exists05 core.test
+    input="Are there any clouds in my drawing?"
+    expect="No, there is no cloud in you"
+    expectStatus=supported
+    session=r2exists
+
+@t.art.draw.r2exists06 core.test
+    input="Do I have a sun in my picture?"
+    expect="No, there is no sun in your"
+    expectStatus=supported
+    session=r2exists
+
+@t.art.draw.r2exists07 core.test
+    input="is there a tree"
+    expect="No, there is no tree in your"
+    expectStatus=supported
+    session=r2exists
+
+@t.art.draw.r2exists08 core.test
+    input="any flowers in there?"
+    expect="Yes! There are 2 flowers in"
+    expectStatus=supported
+    session=r2exists
+
+@t.art.draw.r2exists09 core.test
+    input="does my picture have a house"
+    expect="Yes! There is a house on the"
+    expectStatus=supported
+    session=r2exists
+
+@t.art.draw.r2exists10 core.test
+    input="is a boat in there"
+    expect="Yes! There is a boat on the"
+    expectStatus=supported
+    session=r2exists
+
+@t.art.draw.r2colorOf01 core.test
+    input="Draw a red house."
+    expect="I drew a red house."
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="objects.0.kind=house"
+    expectState="objects.0.size=240"
+    expectState="objects.0.color=red"
+    session=r2colorOf
+
+@t.art.draw.r2colorOf02 core.test
+    input="Draw a car."
+    expect="I drew a red car."
+    expectStatus=supported
+    expectState="objects.length=2"
+    expectState="objects.1.kind=car"
+    expectState="objects.1.size=230"
+    expectState="objects.1.color=null"
+    session=r2colorOf
+
+@t.art.draw.r2colorOf03 core.test
+    input="Make it night."
+    expect="It is night now: a dark sky,"
+    expectStatus=supported
+    expectState="objects.length=17"
+    expectState="objects.2.kind=moon"
+    expectState="objects.2.size=110"
+    expectState="objects.2.color=null"
+    session=r2colorOf
+
+@t.art.draw.r2colorOf04 core.test
+    input="What color is my house?"
+    expect="The house is red."
+    expectStatus=supported
+    session=r2colorOf
+
+@t.art.draw.r2colorOf05 core.test
+    input="What color is the sky in my picture?"
+    expect="The sky is navy."
+    expectStatus=supported
+    session=r2colorOf
+
+@t.art.draw.r2colorOf06 core.test
+    input="What is the color of my car?"
+    expect="The car is red."
+    expectStatus=supported
+    session=r2colorOf
+
+@t.art.draw.r2colorOf07 core.test
+    input="which colour is my house"
+    expect="The house is red."
+    expectStatus=supported
+    session=r2colorOf
+
+@t.art.draw.r2colorOf08 core.test
+    input="what colour is the house"
+    expect="The house is red."
+    expectStatus=supported
+    session=r2colorOf
+
+@t.art.draw.r2colorOf09 core.test
+    input="color of my house?"
+    expect="The house is red."
+    expectStatus=supported
+    session=r2colorOf
+
+@t.art.draw.r2colorOf10 core.test
+    input="house color?"
+    expect="The house is red."
+    expectStatus=supported
+    session=r2colorOf
+
+@t.art.draw.r2colorOf11 core.test
+    input="tell me the color of the house"
+    expect="The house is red."
+    expectStatus=supported
+    session=r2colorOf
+
+@t.art.draw.r2colorOf12 core.test
+    input="whats the house painted"
+    expect="The house is red."
+    expectStatus=supported
+    session=r2colorOf
+
+@t.art.draw.r2colorOf13 core.test
+    input="is the house red"
+    expect="The house is red."
+    expectStatus=supported
+    session=r2colorOf
+
+@t.art.draw.r2near01 core.test
+    input="Draw a sun."
+    expect="I drew a yellow sun."
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="objects.0.kind=sun"
+    expectState="objects.0.size=140"
+    expectState="objects.0.color=null"
+    session=r2near
+
+@t.art.draw.r2near02 core.test
+    input="Add a cloud next to the sun."
+    expect="I drew a cloud next to the y"
+    expectStatus=supported
+    expectState="objects.length=2"
+    expectState="objects.1.kind=cloud"
+    expectState="objects.1.size=210"
+    expectState="objects.1.color=null"
+    session=r2near
+
+@t.art.draw.r2near03 core.test
+    input="What is next to the sun?"
+    expect="Near the sun I can see a clo"
+    expectStatus=supported
+    session=r2near
+
+@t.art.draw.r2near04 core.test
+    input="whats near the sun"
+    expect="Near the sun I can see a clo"
+    expectStatus=supported
+    session=r2near
+
+@t.art.draw.r2near05 core.test
+    input="anything next to the cloud?"
+    expect="Near the cloud I can see a y"
+    expectStatus=supported
+    session=r2near
+
+@t.art.draw.r2near06 core.test
+    input="is anything beside the cloud"
+    expect="Near the cloud I can see a y"
+    expectStatus=supported
+    session=r2near
+
+@t.art.draw.r2near07 core.test
+    input="what's right by the sun"
+    expect="Near the sun I can see a clo"
+    expectStatus=supported
+    session=r2near
+
+@t.art.draw.r2help01 core.test
+    input="What can I draw?"
+    expect="I can draw a house, a tree,"
+    expectStatus=supported
+    session=r2help
+
+@t.art.draw.r2help02 core.test
+    input="what can u draw"
+    expect="I can draw a house, a tree,"
+    expectStatus=supported
+    session=r2help
+
+@t.art.draw.r2help03 core.test
+    input="what can i add to my picture"
+    expect="I can draw a house, a tree,"
+    expectStatus=supported
+    session=r2help
+
+@t.art.draw.r2help04 core.test
+    input="list the things i can draw"
+    expect="I can draw a house, a tree,"
+    expectStatus=supported
+    session=r2help
+
+@t.art.draw.r2help05 core.test
+    input="show me what i can draw"
+    expect="I can draw a house, a tree,"
+    expectStatus=supported
+    session=r2help
+
+@t.art.draw.r2help06 core.test
+    input="What colors can I use?"
+    expect="I know red, orange, yellow,"
+    expectStatus=supported
+    session=r2help
+
+@t.art.draw.r2help07 core.test
+    input="which colors are available"
+    expect="I know red, orange, yellow,"
+    expectStatus=supported
+    session=r2help
+
+@t.art.draw.r2help08 core.test
+    input="what color options do i have"
+    expect="I know red, orange, yellow,"
+    expectStatus=supported
+    session=r2help
+
+@t.art.draw.r2help09 core.test
+    input="list the colors"
+    expect="I know red, orange, yellow,"
+    expectStatus=supported
+    session=r2help
+
+@t.art.draw.r2help10 core.test
+    input="colour list pls"
+    expect="I know red, orange, yellow,"
+    expectStatus=supported
+    session=r2help
+
+@t.art.draw.r2help11 core.test
+    input="colors?"
+    expect="I know red, orange, yellow,"
+    expectStatus=supported
+    session=r2help
+
+@t.art.draw.r2help12 core.test
+    input="u got which colors"
+    expect="I know red, orange, yellow,"
+    expectStatus=supported
+    session=r2help
+
+@t.art.draw.r2save01 core.test
+    input="Draw a sun."
+    expect="I drew a yellow sun."
+    expectStatus=supported
+    expectState="objects.length=1"
+    expectState="objects.0.kind=sun"
+    expectState="objects.0.size=140"
+    expectState="objects.0.color=null"
+    session=r2save
+
+@t.art.draw.r2save02 core.test
+    input="Save my drawing."
+    expect="OK, I am saving your drawing"
+    expectStatus=supported
+    session=r2save
+
+@t.art.draw.r2save03 core.test
+    input="Save my picture as SVG."
+    expect="OK, I am saving your drawing"
+    expectStatus=supported
+    session=r2save
+
+@t.art.draw.r2save04 core.test
+    input="Download the drawing as a PNG."
+    expect="OK, I am saving your drawing"
+    expectStatus=supported
+    session=r2save
+
+@t.art.draw.r2save05 core.test
+    input="i want to keep my drawing"
+    expect="OK, I am saving your drawing"
+    expectStatus=supported
+    session=r2save
+
+@t.art.draw.r2save06 core.test
+    input="save my art as an image"
+    expect="OK, I am saving your drawing"
+    expectStatus=supported
+    session=r2save
+
+@t.art.draw.r2save07 core.test
+    input="i want to save it as a png file"
+    expect="OK, I am saving your drawing"
+    expectStatus=supported
+    session=r2save
+
+@t.art.draw.r2save08 core.test
+    input="save it"
+    expect="OK, I am saving your drawing"
+    expectStatus=supported
+    session=r2save
+
+@t.art.draw.r2save09 core.test
+    input="PNG of my picture, save pls"
+    expect="OK, I am saving your drawing"
+    expectStatus=supported
+    session=r2save
+
+@t.art.draw.r2open01 core.test
+    input="Open the drawing board."
+    expect="OK, here is the Drawing tab."
+    expectStatus=supported
+    session=r2open
+
+@t.art.draw.r2open02 core.test
+    input="Go to the paint tab."
+    expect="You are already on the Drawi"
+    expectStatus=supported
+    session=r2open
+
+@t.art.draw.r2open03 core.test
+    input="Take me to the canvas."
+    expect="OK, here is the drawing boar"
+    expectStatus=supported
+    session=r2open
+

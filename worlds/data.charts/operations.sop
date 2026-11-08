@@ -250,3 +250,9 @@
     action=chart.toDocumentData
     doc="Puts the title and the numbers of the chart into the document with the documented requests doc.addHeading and doc.addList."
 
+
+@op.data.charts.options core.operation
+    impl=options
+    semantics=action
+    action=chart.options
+    doc="Tells what the Charts tab can do: the chart types, colors and palettes, the settings and the questions it answers."
