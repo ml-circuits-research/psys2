@@ -33,3 +33,4 @@
 
 ## Worker sessions (training on the DGX Spark)
 - A worker agent starts from `worker-tasks.md` and follows its protocol: `worker-tasks.md` is written and managed only by the reviewer (validated tasks move to "Validated", failed ones are rewritten); the worker appends questions to `questions.md` (never deletes) and progress to `worker-log.md`.
+- Do not spend compute on results that pending work will invalidate. Before starting a long training run or a full evaluation (operational set, checkpoint sweeps, dataset rebuilds), check the open and running tasks: if changes to rules, labels, data, checkers or the runtime are about to land, finish and merge those first, then run one combined rebuild/retrain/evaluation. If such a change lands while a run is in progress, cancel the run instead of finishing it. While changes are in flight, use quick targeted checks (unit tests, `test-world`, small smoke runs) only.
