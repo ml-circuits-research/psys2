@@ -167,6 +167,25 @@ export function answer(ctx, { answer: a }) {
   return ok(`${lead} ${next(ctx)}`);
 }
 
+/** "wait, I meant yes": the player changes the answer of the question before the current one (modal answer scope: only while asking). */
+export function correct(ctx, { answer: a }) {
+  const s = ctx.state;
+  if (s.phase !== 'asking' || !s.asked.length) return answer(ctx, { answer: a });   // nothing to correct: it is an ordinary answer
+  const last = s.asked.at(-1);
+  const was = last.answer;
+  last.answer = a;
+  // the candidates are recomputed from every answer given so far, with the corrected one
+  let cur = readAnimals(ctx, s.learned).filter((p) => !s.rejected.includes(p.name));
+  for (const e of s.asked) {
+    const keeps = (p) => truth(p, e.feature, e.feature === 'fly' || e.feature === 'swim' ? 'yes' : e.value);
+    if (e.answer === 'yes') cur = cur.filter((p) => keeps(p) === true);
+    else if (e.answer === 'no') cur = cur.filter((p) => keeps(p) !== true);
+  }
+  s.candidates = cur.map((p) => p.name);
+  const said = { yes: 'yes', no: 'no', maybe: 'maybe', dontknow: "I don't know" };
+  return ok(`OK, I changed my note of "${last.text}" from ${said[was] ?? was} to ${said[a] ?? a}. ${next(ctx)}`);
+}
+
 const slug = (t) => {
   let n = String(t).toLowerCase().trim().replace(/[^a-z ]/g, '').replace(/\s+/g, '_');
   if (n.length > 3 && n.endsWith('ies')) n = n.slice(0, -3) + 'y';

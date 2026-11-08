@@ -10,6 +10,12 @@
     action=guess.answer
     doc="Applies yes, no, dontknow or maybe to the current question or to the final guess and plans the next step."
 
+@op.games.guess.correct core.operation
+    impl=correct
+    semantics=action
+    action=guess.correct
+    doc="The player corrects the previous answer (\"wait, I meant yes\"): the note of the last answered question changes, the candidates are recomputed and the next question is asked."
+
 @op.games.guess.reveal core.operation
     impl=reveal
     semantics=action

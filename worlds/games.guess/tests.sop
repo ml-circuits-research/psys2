@@ -539,3 +539,45 @@
     input="I give up."
     expectStatus=supported
     session=sw049
+
+@t.games.guess.cor1a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=cor1
+
+@t.games.guess.cor1b core.test
+    input="yes"
+    expectState="asked.0.answer=yes"
+    session=cor1
+
+@t.games.guess.cor1c core.test
+    input="no"
+    expectState="asked.1.answer=no"
+    session=cor1
+
+@t.games.guess.cor1d core.test
+    input="wait, I meant yes"
+    expect="changed my note"
+    expectState="asked.1.answer=yes"
+    expectState="count=2"
+    session=cor1
+
+@t.games.guess.cor2a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=cor2
+
+@t.games.guess.cor2b core.test
+    input="yes"
+    expectState="asked.0.answer=yes"
+    session=cor2
+
+@t.games.guess.cor2c core.test
+    input="sorry, I meant no"
+    expectState="asked.0.answer=no"
+    session=cor2
+
+@t.games.guess.cor3a core.test
+    input="wait, I meant yes"
+    expect="We are not playing"
+    session=cor3

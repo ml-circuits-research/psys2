@@ -476,3 +476,31 @@
     priority=11
     example="Ask me questions."
     example="Time to guess, start."
+
+@pat.games.guess.correct.yes core.pattern
+    match="[wait|sorry|oops|actually|hmm|uh|um|er|oh|ah|hold_on|wait_a_second|wait_a_sec|my_bad|my_mistake|sorry_wait|oh_wait|wait_wait|ok_wait|um_wait|uh_wait|oops_sorry|sorry_my_bad]? [wait|sorry|oops|actually|hold_on|my_bad]? [i_meant|i_mean|i_said|i_wanted_to_say|i_wanted_to_answer|make_that|change_that_to|change_it_to|change_my_answer_to|my_answer_is|my_answer_was|it_should_be|that_should_be|should_be|let_me_say|i_should_have_said|i_meant_to_say|i_meant_to_answer|i_ment|i_meant_to_say_it_was|correction|rather|make_it|change_it|change_that|make_that_a|i_meant_it_is|i_meant_it_does|i_meant_it_can|i_meant_it_has] [yes|yeah|yep|yup|sure|correct|right|true|it_does|it_is|it_can|it_has|yes_it_does|yes_it_is|yes_it_can|yes_it_has]"
+    emit="@{_} core.request action=guess.correct arg.answer=yes"
+    kind=request
+    priority=15
+    example="Wait, I meant yes."
+
+@pat.games.guess.correct.no core.pattern
+    match="[wait|sorry|oops|actually|hmm|uh|um|er|oh|ah|hold_on|wait_a_second|wait_a_sec|my_bad|my_mistake|sorry_wait|oh_wait|wait_wait|ok_wait|um_wait|uh_wait|oops_sorry|sorry_my_bad]? [wait|sorry|oops|actually|hold_on|my_bad]? [i_meant|i_mean|i_said|i_wanted_to_say|i_wanted_to_answer|make_that|change_that_to|change_it_to|change_my_answer_to|my_answer_is|my_answer_was|it_should_be|that_should_be|should_be|let_me_say|i_should_have_said|i_meant_to_say|i_meant_to_answer|i_ment|i_meant_to_say_it_was|correction|rather|make_it|change_it|change_that|make_that_a|i_meant_it_is|i_meant_it_does|i_meant_it_can|i_meant_it_has] [no|nope|nah|not|false|incorrect|it_doesnt|it_does_not|it_isnt|it_is_not|it_cant|it_can_not|it_hasnt|it_has_not|no_it_doesnt|no_it_isnt|no_it_cant]"
+    emit="@{_} core.request action=guess.correct arg.answer=no"
+    kind=request
+    priority=15
+    example="Sorry, I meant no."
+
+@pat.games.guess.correct.maybe core.pattern
+    match="[wait|sorry|oops|actually|hmm|uh|um|er|oh|ah|hold_on|wait_a_second|wait_a_sec|my_bad|my_mistake|sorry_wait|oh_wait|wait_wait|ok_wait|um_wait|uh_wait|oops_sorry|sorry_my_bad]? [wait|sorry|oops|actually|hold_on|my_bad]? [i_meant|i_mean|i_said|i_wanted_to_say|i_wanted_to_answer|make_that|change_that_to|change_it_to|change_my_answer_to|my_answer_is|my_answer_was|it_should_be|that_should_be|should_be|let_me_say|i_should_have_said|i_meant_to_say|i_meant_to_answer|i_ment|i_meant_to_say_it_was|correction|rather|make_it|change_it|change_that|make_that_a|i_meant_it_is|i_meant_it_does|i_meant_it_can|i_meant_it_has] [maybe|perhaps|possibly|sort_of|kind_of|sometimes]"
+    emit="@{_} core.request action=guess.correct arg.answer=maybe"
+    kind=request
+    priority=15
+    example="Oops, I meant maybe."
+
+@pat.games.guess.correct.dontknow core.pattern
+    match="[wait|sorry|oops|actually|hmm|uh|um|er|oh|ah|hold_on|wait_a_second|wait_a_sec|my_bad|my_mistake|sorry_wait|oh_wait|wait_wait|ok_wait|um_wait|uh_wait|oops_sorry|sorry_my_bad]? [wait|sorry|oops|actually|hold_on|my_bad]? [i_meant|i_mean|i_said|i_wanted_to_say|i_wanted_to_answer|make_that|change_that_to|change_it_to|change_my_answer_to|my_answer_is|my_answer_was|it_should_be|that_should_be|should_be|let_me_say|i_should_have_said|i_meant_to_say|i_meant_to_answer|i_ment|i_meant_to_say_it_was|correction|rather|make_it|change_it|change_that|make_that_a|i_meant_it_is|i_meant_it_does|i_meant_it_can|i_meant_it_has] [dont_know|do_not_know|dunno|idk|not_sure|unsure|no_idea|skip|pass]"
+    emit="@{_} core.request action=guess.correct arg.answer=dontknow"
+    kind=request
+    priority=15
+    example="Actually I meant dont know."
