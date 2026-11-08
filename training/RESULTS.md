@@ -85,6 +85,26 @@ All numbers trace to `training/results/*.json`. Two rule baselines are kept side
 
 **Contamination.** The c989cd1 rules were widened by reading all paraphrase records, including the test split, so the c989cd1 paraphrase test numbers are optimistic. The clean paraphrase measure is the held-out set (below).
 
+## Dialogue headline (second headline, next to the operational set)
+
+`training/eval/dialogues.jsonl`: 365 multi-turn dialogues (3-8 turns, 1709 turns), each with an initial state and the expected state / answer after EVERY turn in the operational check format. Families and worlds: `training/eval/dialogue-phenomena.md`. Includes the G7 cases (tag `g7`: 27 user.profile dialogues; 20 `long-return` dialogues with a return after more than 6 messages, checked against full state snapshots). The turns were written by Haiku subagents, the expectations validated mechanically (`node scripts/eval-dialogues.mjs --validate`: schema, turn count, every state item names a real world and state field). Worlds that create their state lazily (kids.tasks lists) are only checked for existence of the world, not the field path.
+
+Run: `node scripts/eval-dialogues.mjs --mode rules|encoder|encoder+n1` (one session per dialogue, sharded by dialogue; options `--family --group --tag --world --verbose`). Reports turns right, dialogues right (every turn right), per family, group, world and tag; writes `training/results/dialogues/<mode>-<sha8>-<date>.json`.
+
+Rules-mode baseline (2026-11-08, the Haiku authors had the rules probe available to learn state paths and phrasing, so rule-friendly phrasings are over-represented; expectations were written as the correct outcome):
+
+| group | dialogues right | turns right |
+|---|---|---|
+| kids | 49/90 (54.4%) | 349/419 (83.3%) |
+| avatar/shell/editor | 23/46 (50%) | 158/196 (80.6%) |
+| music/draw/map/charts | 100/124 (80.6%) | 557/585 (95.2%) |
+| games | 47/56 (83.9%) | 272/282 (96.5%) |
+| documents | 11/22 (50%) | 91/110 (82.7%) |
+| other (user.profile) | 27/27 (100%) | 117/117 (100%) |
+| **all** | **257/365 (70.4%)** | **1544/1709 (90.3%)** |
+
+Worst families by dialogues right: clarification 43.6%, noise 54.3%, ellipsis 58.1%, correction 60%, explain 63.5%. Encoder modes: pending (models are being retrained).
+
 ## T2 - Rule baseline on the test splits
 
 Command: `node scripts/eval-rules.mjs` (about 30 s on 20 cores, deterministic: two runs give identical rules.json; failures go to `training/runs/rules-failures.jsonl`, gitignored). One run now produces the test splits, the routing rows and the held-out set.
