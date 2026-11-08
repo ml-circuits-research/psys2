@@ -1,5 +1,5 @@
 /**
- * Value checker of the seq2seq normalizer (spec 03 section 7.11, ADR-002 idea: a translation must not change the values of the text).
+ * Value checker of the seq2seq normalizer (spec 03 section 7.12, ADR-002 idea: a translation must not change the values of the text).
  * Browser-safe, no dependencies beyond the formalizer helpers.
  *
  * A normalized phrasing `cand` of the piece `src` is accepted only when it keeps what the user said:

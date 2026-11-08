@@ -1,4 +1,4 @@
-// Host side of the phrasing normalizer (spec 03 section 7.11): a small seq2seq model (FLAN-T5-small, int8, two ONNX graphs) that proposes a simpler phrasing
+// Host side of the phrasing normalizer (spec 03 section 7.12): a small seq2seq model (FLAN-T5-small, int8, two ONNX graphs) that proposes a simpler phrasing
 // of a piece the rules did not read. It is only a fallback: the validation layer asks it when no original or spell-corrected reading validates,
 // and accepts a rewrite only if the rules read it and the value checker passes. The core never imports onnxruntime; this module loads it lazily
 // (same vendored onnxruntime-web WASM build as the dispatcher), caches every file by sha256 in the Cache API and hands the validator a provider.

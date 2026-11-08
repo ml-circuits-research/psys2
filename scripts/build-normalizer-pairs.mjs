@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Training pairs of the seq2seq normalizer (worker-tasks N1, spec 03 section 7.11).
+ * Training pairs of the seq2seq normalizer (worker-tasks N1, spec 03 section 7.12).
  *
  * The normalizer rewrites one piece of a message into the SIMPLEST phrasing the world's rules understand. A pair (src -> tgt) is kept only
  * when the rules VERIFY it: tgt formalizes completely, in the record's world / tab / setup, to the SOP that src is labelled with (variants:

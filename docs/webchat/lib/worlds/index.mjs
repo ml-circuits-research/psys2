@@ -44,8 +44,20 @@ export class World {
       language: this.language, imports: this.imports, formalization: txt(this.manifest ?? { entries: [] }, 'formalization') ?? 'rules', tab: this.tab };
   }
   /**
+   * The game's own actions for the shell's game controls (spec 03 section 4): gameNew, gameHint, gameGiveUp, gameUndo in the
+   * manifest, falling back to tabNew, tabHint, tabGiveUp, tabUndo. null when the world declares none.
+   */
+  get gameControls() {
+    const m = this.manifest ?? { entries: [] };
+    const t = this.tab;
+    const out = { new: txt(m, 'gameNew') ?? t?.new ?? null, hint: txt(m, 'gameHint') ?? t?.hint ?? null,
+      giveUp: txt(m, 'gameGiveUp') ?? t?.giveUp ?? null, undo: txt(m, 'gameUndo') ?? t?.undo ?? null };
+    return Object.values(out).some(Boolean) ? out : null;
+  }
+
+  /**
    * Tab declared by a tool world in its manifest (spec 07 §6): tab, tabTitle, tabAlias (repeatable), tabOrder,
-   * tabKind (tool|game), tabNew, tabHint, tabGiveUp (action names). null when the world has no tab.
+   * tabKind (tool|game), tabNew, tabHint, tabGiveUp, tabUndo (action names). null when the world has no tab.
    */
   get tab() {
     const m = this.manifest ?? { entries: [] };
@@ -54,7 +66,7 @@ export class World {
     const all = (k) => m.entries.filter((e) => e.key === k || e.key.endsWith('.' + k)).map((e) => String(e.value.v));
     return { id, title: txt(m, 'tabTitle') ?? this.title, aliases: all('tabAlias').map((a) => a.replace(/_/g, ' ')),
       order: Number(txt(m, 'tabOrder') ?? 100), kind: txt(m, 'tabKind') ?? 'tool',
-      new: txt(m, 'tabNew') ?? null, hint: txt(m, 'tabHint') ?? null, giveUp: txt(m, 'tabGiveUp') ?? null };
+      new: txt(m, 'tabNew') ?? null, hint: txt(m, 'tabHint') ?? null, giveUp: txt(m, 'tabGiveUp') ?? null, undo: txt(m, 'tabUndo') ?? null };
   }
 }
 
@@ -125,6 +137,10 @@ function buildWorld(id, files, ops) {
   w.patterns = wires['patterns.sop'].filter((x) => x.type === 'core.pattern').map((x) => ({
     id: x.id, wire: x, worldId: id, match: txt(x, 'match'), emit: txt(x, 'emit'),
     kind: txt(x, 'kind') ?? 'statement', priority: Number(txt(x, 'priority') ?? 0),
+    // routing hints (spec 03 section 4): tabOnly=true (only while the world's own tab is active), tabPriority=<n> (priority
+    // while the world's tab is active), yieldsTo=<world> (a tier 2b setting that gives way to that world when it is the tab or recent)
+    tabOnly: txt(x, 'tabOnly') === 'true', tabPriority: txt(x, 'tabPriority') == null ? null : Number(txt(x, 'tabPriority')),
+    yieldsTo: getAll(x, 'yieldsTo').map((v) => v.v),
     examples: getAll(x, 'example').map((v) => v.v),
   }));
   w.operations = wires['operations.sop'].filter((x) => x.type === 'core.operation').map((x) => ({

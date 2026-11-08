@@ -41,12 +41,12 @@ export const DEFAULT_POLICY = {
   partialPenalty: 1.5,        // log-units subtracted for any partial parse (always better than unparsedPenalty, so a full parse of any candidate wins)
   partialUncoveredPenalty: 3.0, // plus this times the fraction of the text that was not understood
   minCoverage: 0.25,          // a partial parse must understand at least this fraction of the characters
-  tryNormalizer: true,        // when a normalizer provider is injected and no candidate of the piece validates, try its rewrites (spec 03 section 7.11)
+  tryNormalizer: true,        // when a normalizer provider is injected and no candidate of the piece validates, try its rewrites (spec 03 section 7.12)
   normalizerBeam: 3,          // rewrites asked from the provider per (world, piece)
   normalizerSegmentations: 1, // the normalizer is asked only for the pieces of the first N segmentations (latency: each call is about 75 ms in the browser)
   normalizerWorlds: 2,        // and only for the first N candidate worlds of a piece
   normalizerPenalty: 0.3,     // log-units subtracted when the winning reading came from a normalizer rewrite
-  valueStrictness: 'strict',  // 'strict' adds opposite-word, grounded-word and kept-known-word checks to the basic value check (spec 03 section 7.11)
+  valueStrictness: 'strict',  // 'strict' adds opposite-word, grounded-word and kept-known-word checks to the basic value check (spec 03 section 7.12)
   normalizerMinScore: -0.3,   // rewrites whose provider score (length-normalized log-probability) is lower are not tried; null = no threshold (tuned on dev and the fresh batches, N1)
   valueLost: 'unknown',        // which unknown source words must survive a rewrite: 'unknown' (all words the world does not know: names, junk) or 'capitalized' (only capitalized ones)
   checkValues: true,          // a rewrite must also keep numbers, colours, negation, quoted text and the value words of the piece (src/dialog/value-check.mjs)
@@ -237,7 +237,7 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
           attempts.push(at); refs.push([at, r, w]);
         }
       }
-      // simplified text of the edit-tag head (spec 03 sections 7.8 and 7.11): lexicographic preference, tried only when no original or spell-corrected reading validates in any candidate world, and only if the values survive
+      // simplified text of the edit-tag head (spec 03 sections 7.8 and 7.12): lexicographic preference, tried only when no original or spell-corrected reading validates in any candidate world, and only if the values survive
       if (o.trySimplified && piece.simplified && !attempts.some((a) => a.valid)) {
         for (const [rank, w] of worlds.entries()) {
           const vocab = worldVocabulary(engine.set, w.world);
@@ -252,7 +252,7 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
           attempts.push(at); refs.push([at, r, w]);
         }
       }
-      // normalizer (spec 03 section 7.11): only when nothing validates yet; the first rewrite that the rules read AND whose values are preserved wins
+      // normalizer (spec 03 section 7.12): only when nothing validates yet; the first rewrite that the rules read AND whose values are preserved wins
       if (normalizer && o.tryNormalizer && seg.index < o.normalizerSegmentations && !attempts.some((a) => a.valid)) {
         for (const [rank, w] of worlds.entries()) {
           if (rank >= o.normalizerWorlds) break;

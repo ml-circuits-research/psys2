@@ -34,6 +34,10 @@ export class FormSession {
     return (agentId && this.items.get(lexId + '\u0000' + agentId)) || this.items.get(lexId + '\u0000*');
   }
 
+  /** Copy of the mutable state, for trial readings (spec 03 section 1c). */
+  snapshot() { return { seq: this._seq, ids: this._ids, agents: new Map(this.agents), recent: [...this.recent], items: new Map(this.items) }; }
+  restore(s) { this._seq = s.seq; this._ids = s.ids; this.agents = new Map(s.agents); this.recent = [...s.recent]; this.items = new Map(s.items); }
+
   nextSeq() { return ++this._seq; }
   freshId(prefix = 'w') { return prefix + (++this._ids); }
 
@@ -52,7 +56,7 @@ export class FormSession {
     const id = 'e.' + raw.toLowerCase();
     const known = this.agents.get(id);
     return known ? { id, name: known.name, gender: known.gender, isNew: false }
-      : { id, name: raw, gender, isNew: true };
+      : { id, name: raw.replace(/^\p{Ll}/u, (c) => c.toUpperCase()), gender, isNew: true };
   }
 
   /** Resolve a pronoun to an existing agent (no mutation); null when it cannot be resolved. */

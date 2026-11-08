@@ -1,5 +1,5 @@
 /**
- * Browser/Node runtime of the T5 / FLAN-T5 normalizer (spec 03 section 7.11): sentencepiece unigram tokenizer, beam search over the two
+ * Browser/Node runtime of the T5 / FLAN-T5 normalizer (spec 03 section 7.12): sentencepiece unigram tokenizer, beam search over the two
  * ONNX graphs written by `python -m psys2_train.export_normalizer`. Browser-safe: no `node:*` imports; the host injects onnxruntime
  * (`ort`), the two inference sessions and the tokenizer data. Produces the `normalizer` provider of `createDispatchValidator`.
  *

@@ -5,12 +5,13 @@
  * `worlds` is a WorldSet; `session` is a FormSession or any object with a `.form` FormSession.
  */
 import { lexIndex } from '../../worlds/lexicon.mjs';
-import { analyze, QUESTION_WORDS, correctTokens } from './normalize.mjs';
+import { analyze, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs';
 import { compilePattern, matchTokens, BUILTIN_CLASSES, PatternError } from './matcher.mjs';
 import { buildWires, substituteEmit, dummySlots } from './emit.mjs';
 import { routeScores } from './router.mjs';
-import { createRouter, contextFromFocus, normalizeContext, defaultRouter } from '../routing.mjs';
+import { createRouter, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction } from '../routing.mjs';
 import { FormSession, STOP_WORDS, isPronoun } from './session.mjs';
+import { selfCorrect, sharedArgument, repetition, ellipsisPrefixes, joinText, MARKER_RE, SEP_RE } from './expand.mjs';
 import { parse, serialize } from '../../soplang/index.mjs';
 
 export { FormSession } from './session.mjs';
@@ -43,7 +44,7 @@ export function checkPattern(p, set) {
     if (!BUILTIN_CLASSES.has(def.cls) && !lex.lexicons.has(def.cls)) problems.push(`${p.id}: slot '${name}' has unknown class '${def.cls}'`);
     if (def.cls === 'recent' && !lex.lexicons.has(def.args[0])) problems.push(`${p.id}: slot '${name}' refers to unknown lexicon '${def.args[0]}'`);
   }
-  for (const [, name] of p.emit.matchAll(/\{([A-Za-z_]\w*)\}/g)) {
+  for (const [, name] of p.emit.matchAll(/\{([A-Za-z_]\w*)(?:\|\w+)?\}/g)) {
     if (!c.slots.has(name) && !/^_\d*$/.test(name)) problems.push(`${p.id}: emit uses '{${name}}' but the match has no such slot`);
   }
   if (!['statement', 'question', 'request', 'chat'].includes(p.kind)) problems.push(`${p.id}: unknown kind '${p.kind}'`);
@@ -57,6 +58,7 @@ export function checkPattern(p, set) {
   return problems;
 }
 
+const patternById = (set) => set.memo('patternById', () => new Map(allPatterns(set).map(({ p }) => [p.id, p])));
 function allPatterns(set) {
   return set.memo('patterns', () => set.list().flatMap((w) => w.patterns).map((p, order) => ({ p, order })));
 }
@@ -68,7 +70,9 @@ function allPatterns(set) {
 export function vocabularyOf(set) {
   return set.memo('vocabulary', () => {
     const vocab = new Set();
-    const add = (w) => { if (w) vocab.add(w.toLowerCase()); };
+    const freq = new Map();   // how often each word occurs in the patterns and lexicons: the last tie-break of typo correction
+    vocab.freq = freq;
+    const add = (w) => { if (w) { const l = w.toLowerCase(); vocab.add(l); freq.set(l, (freq.get(l) ?? 0) + 1); } };
     for (const { p } of allPatterns(set)) {
       const c = compiled(p).compiled;
       if (!c) continue;
@@ -84,7 +88,61 @@ export function vocabularyOf(set) {
   });
 }
 
-/** Split a token list into clauses at `,`, `and`, `then`, `but` (one level). */
+/** Vocabulary of one world with its imports (memoized): the preferred typo targets of a context that already has an active world. */
+export function worldVocabularyOf(set, id) {
+  return set.memo(`rules-vocabulary:${id}`, () => {
+    if (!set.get(id)) return new Set();
+    const ids = set.available(id);
+    const sub = Object.create(set);
+    sub._cache = new Map();
+    sub.list = () => ids.map((i) => set.get(i));
+    return vocabularyOf(sub);
+  });
+}
+
+/** Indirect-question lead-ins ("tell me", "I wonder", "do you know" ...), longest first; stripped before a wh or yes/no question. */
+const LEAD_INS = [
+  'can you tell me', 'could you tell me', 'would you tell me', 'will you tell me', 'can you let me know', 'could you let me know',
+  'i would like to know', 'i want to know', 'i need to know', 'i wanna know', 'id like to know', 'i am wondering', 'i was wondering',
+  'i wonder', 'do you know', 'let me know', 'tell me', 'you know',
+].map((x) => x.split(' ')).sort((a, b) => b.length - a.length);
+const WH_WORDS = ['how', 'what', 'who', 'where', 'when', 'which', 'why', 'whose', 'whom'];
+
+/**
+ * When `tokens` start with an indirect-question lead-in ("tell me", "can you tell me", "I want to know", "do you know" ...) followed by a
+ * wh-question or a yes/no question, the tokens of the bare question (an optional `if`/`whether` skipped), else null (spec 03 section 4.2a).
+ */
+export function stripLeadIn(tokens) {
+  const nf = tokens.filter((t) => !t.filler && t.kind !== 'punct');
+  const words = nf.map((t) => t.lower);
+  for (const lead of LEAD_INS) {
+    if (lead.some((w, i) => words[i] !== w)) continue;
+    let k = lead.length;
+    if (words[k] === 'if' || words[k] === 'whether') k++;
+    const rest = nf.slice(k);
+    const w = rest[0]?.lower;
+    if (!w || rest.filter((t) => t.kind !== 'qmark').length < 2) continue;
+    if (QUESTION_WORDS.has(w) || WH_WORDS.includes(w) || (w.length >= 4 && WH_WORDS.some((x) => editDistance(w, x, 1) <= 1))) return rest;
+  }
+  return null;
+}
+
+/** Split `leos marbles` into `leo 's marbles` when the stem is a known name and the word itself is not (possessive without apostrophe). */
+export function splitPossessives(tokens, lex) {
+  const out = [];
+  tokens.forEach((t, i) => {
+    const next = tokens[i + 1];
+    if (t.kind === 'word' && /^[a-z]{3,}s$/.test(t.lower) && next && (next.kind === 'word' || next.kind === 'number') && !next.filler
+      && !lex.names.has(t.lower) && lex.names.has(t.lower.slice(0, -1))) {
+      out.push({ ...t, raw: t.raw.slice(0, -1), lower: t.lower.slice(0, -1), end: t.end - 1 }, { raw: "'s", lower: "'s", start: t.end - 1, end: t.end, kind: 'word' });
+    } else out.push(t);
+  });
+  return out;
+}
+
+const isContent = (t) => t.kind !== 'punct' && t.kind !== 'qmark' && !t.filler;
+
+/** Split a token list into clauses at `,`, `and`, `then`, `but` (one level). Clauses with only fillers are dropped. */
 export function splitClauses(tokens) {
   const clauses = [[]];
   for (let i = 0; i < tokens.length; i++) {
@@ -95,7 +153,7 @@ export function splitClauses(tokens) {
     if (t.lower === ',' && ['and', 'but', 'then'].includes(tokens[i + 1]?.lower)) i++;
     clauses.push([]);
   }
-  return clauses.filter((c) => c.length);
+  return clauses.filter((c) => c.some(isContent));
 }
 
 /** Build the match environment for one text. */
@@ -118,20 +176,50 @@ export function makeEnv(text, set, form, lex) {
 
 /** Ranked full matches of every pattern against `tokens` (commas removed), ordered by the routing policy. */
 function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
-  const toks = tokens.filter((t) => t.kind !== 'punct');
+  // Views of the tokens, tried in order until one of them is matched by some pattern (spec 03 section 1.5):
+  //  1. compat: the original fillers (ok, please, well, um) and a leading so/and/then dropped, the newer ones (hey, pls, thx ...) kept as words;
+  //  2. every filler dropped;
+  //  3. every filler in place, for the patterns that list a filler themselves (`then E F`, `ok`).
+  // A sentence an older reading understood is therefore read exactly as before.
+  const all = tokens.filter((t) => t.kind !== 'punct');
+  // in the compat view the newer fillers are ordinary words again (a slot may capture them, as before)
+  const compat = all.filter((t) => !(t.filler && (t.lead || isOldFiller(t.lower)))).map((t) => (t.filler ? { ...t, filler: false } : t));
+  const noFill = all.filter((t) => !t.filler);
+  const hasContent = (v) => v.some((t) => t.kind !== 'qmark');
+  const views = [compat];
+  if (noFill.length !== compat.length && hasContent(noFill)) views.push(noFill);
   const matches = [];
-  for (const { p, order } of allPatterns(set)) {
-    if (isQuestion && p.kind === 'statement') continue;
-    const c = compiled(p);
-    if (!c.compiled) continue;
-    const m = matchTokens(c.compiled, toks, env);
-    if (m) matches.push({ pattern: p, order, ...m });
+  let toks = compat.filter((t) => t.kind !== 'qmark');
+  for (let v = 0; v <= views.length && !matches.length; v++) {
+    const last = v === views.length;
+    if (last && all.length === noFill.length) break;
+    const view = last ? all : views[v];
+    if (!hasContent(view)) continue;
+    const noPct = view.some((t) => t.pct) ? view.filter((t) => !t.pct) : null;
+    toks = view.filter((t) => t.kind !== 'qmark');
+    for (const { p, order } of allPatterns(set)) {
+      if (isQuestion && p.kind === 'statement') continue;
+      const c = compiled(p);
+      if (!c.compiled || (last && !c.compiled.usesFiller)) continue;
+      let m = matchTokens(c.compiled, view, env);
+      if (!m && noPct) m = matchTokens(c.compiled, noPct, env);
+      if (m) matches.push({ pattern: p, order, ...m });
+    }
   }
   const worlds = routeScores(toks, set, lex, new Set(matches.map((m) => m.pattern.worldId)));
   const score = (id) => worlds.find((w) => w.id === id)?.score ?? 0;
   for (const m of matches) { m.score = score(m.pattern.worldId); m.rank = m.pattern.priority; }
   // The router (src/formalizer/routing.mjs, spec 03 section 4) orders the candidates using the application context.
   const routed = router.route({ matches, context, scores: worlds, tokens: toks });
+  // Game controls of ui.shell on a game tab emit the active game's own action (spec 03 section 4, Q5): one meaning, one label.
+  const gameTab = context?.tabWorld && String(context.tabWorld).startsWith('games.') ? set.list().find((w) => w.id === context.tabWorld) : null;
+  if (gameTab?.gameControls) {
+    for (const m of routed.matches) {
+      if (!isGameControl(m)) continue;
+      const own = gameControlAction(m.pattern, gameTab.gameControls);
+      if (own) m.pattern = { ...m.pattern, emit: m.pattern.emit.replace(/action=[\w.]+/, `action=${own}`) };
+    }
+  }
   return { matches: routed.matches, worlds, decision: routed.decision };
 }
 
@@ -160,12 +248,15 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
   const wires = [];
 
   /** Try to turn one token group into a segment. */
-  const readGroup = (tokens, isQuestion) => {
-    const first = tokens[0], last = tokens[tokens.length - 1];
-    const span = [first.start, last.end];
-    const segText = text.slice(span[0], span[1]);
+  const readGroup = (tokens, isQuestion, expanded = null) => {
+    const body = tokens.filter(isContent);
+    const ends = body.length ? body : tokens.filter((t) => t.kind !== 'qmark');
+    const first = ends[0] ?? tokens[0], last = ends[ends.length - 1] ?? tokens[tokens.length - 1];
+    const span = expanded ? expanded.span : [first.start, last.end];
+    const segText = expanded ? joinText(tokens) : text.slice(span[0], span[1]);
     const { matches, worlds: scores, decision } = rankMatches(tokens, isQuestion, set, env, lex, ctx, router);
     const seg = { text: segText, span, isQuestion, worlds: scores, routing: decision, match: null, wires: [], unparsed: true, alternatives: [], errors: [] };
+    if (expanded) seg.expanded = expanded.info;
     const sourceRef = `${source}#${span[0]}-${span[1]}`;
     for (const m of matches) {
       try {
@@ -223,24 +314,147 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     return seg;
   };
 
-  /** Read a sentence as a whole, else clause by clause; returns the segments or null when nothing was understood. */
+  /** Read a sentence as a whole, else clause by clause; then try the conservative expansion (spec 03 section 1c). */
   const readSentence = (s, tokens) => {
+    const before = form.snapshot();
+    const base = readSentencePlain(s, tokens);
+    const after = form.snapshot();
+    const whole = base.done?.length === 1 && base.done[0].span === s.span ? base.done[0] : null;
+    const weak = !!whole && isWeak(whole);
+    const clean = base.done && base.done.every((p) => !p.unparsed && !isWeak(p)) && !weak;
+    if (clean) return base;
+    // 1. self-correction ("blue, no, green")
+    form.restore(before);
+    const bar = weak ? { priority: whole.match.priority, worldId: whole.match.worldId } : null;
+    const corrected = expandSentence(s, tokens, 'correct', bar);
+    if (corrected) return { done: corrected, fallback: null };
+    // 2. clause level: repetition, verb ellipsis (only the clauses that were not understood)
+    if (!weak) form.restore(after);
+    const clauseLevel = expandClauses(s, tokens, weak ? null : base, whole, bar);
+    if (clauseLevel) return clauseLevel;
+    // 3. shared argument ("eyes and body blue")
+    form.restore(before);
+    const shared = expandSentence(s, tokens, 'shared', bar);
+    if (shared) return { done: shared, fallback: null };
+    form.restore(after);
+    return base;
+  };
+
+  /** A parsed segment whose free-text slot swallowed a separator, a correction marker or a repetition. */
+  const isWeak = (seg) => {
+    if (seg.unparsed || !seg.match) return false;
+    const pat = patternById(set).get(seg.match.patternId);
+    const els = pat ? compiled(pat).compiled?.elements ?? [] : [];
+    // an explicit "unknown argument" catch-all (emit action ...Unknown) that swallowed a coordination is never a reading to keep
+    const unknownArg = !!pat && /action=\S*unknown/i.test(pat.emit);
+    return Object.entries(seg.match.slots).some(([name, sl]) => {
+      if (!(sl.class === 'words' || sl.class === 'rest')) return false;
+      const txt = sl.text ?? '';
+      if (MARKER_RE.test(txt)) return true;
+      if (!SEP_RE.test(txt)) return false;
+      if (unknownArg) return true;
+      const at = els.findIndex((e) => e.t === 'slot' && e.name === name);
+      return at >= 0 && els.slice(at + 1).some((e) => e.t === 'slot' && !e.optional && e.cls.startsWith('lex.'));
+    });
+  };
+
+  /**
+   * Trial: read the proposed clauses; keep them (and their effects) only when all are understood by one world (`world`
+   * when given) and no free-text slot reaches outside the clause's own words (`c.span`, set for coordination and ellipsis).
+   */
+  /** Against a swallowing whole reading `bar` ({ priority, worldId }): a reading in another world must be more specific, in the same world at least as specific. */
+  const beats = (g, bar) => !bar || g.match.priority > bar.priority || (g.match.worldId === bar.worldId && g.match.priority >= bar.priority);
+
+  const tryClauses = (clauses, world = null, bar = null) => {
+    const snap = form.snapshot();
+    const segs = [];
+    for (const c of clauses) segs.push(readGroup(c.tokens, QUESTION_WORDS.has(c.tokens[0].lower), c));
+    const inside = (g, c) => !c.guard || Object.values(g.match.slots).every((sl) => !(sl.class === 'words' || sl.class === 'rest') || (sl.span[0] >= c.span[0] && sl.span[1] <= c.span[1]));
+    if (segs.every((g, i) => !g.unparsed && !isWeak(g) && g.match.worldId === (world ?? segs[0].match.worldId) && inside(g, clauses[i]) && beats(g, bar))) return segs;
+    form.restore(snap);
+    return null;
+  };
+
+  const expandSentence = (s, tokens, phase, bar) => {
+    const src = [s.span[0], s.span[1]];
+    const sc = selfCorrect(tokens);
+    const toks = sc ? sc.tokens : tokens;
+    if (phase === 'correct') {
+      if (!sc) return null;
+      const one = tryClauses([{ tokens: toks.filter((t) => t.kind !== 'punct'), span: sc.region, info: { kind: 'self-correction', source: sc.region, dropped: sc.dropped, copied: [] } }], null, bar);
+      return one;
+    }
+    for (const cand of sharedArgument(toks)) {
+      const clauses = cand.clauses.map((c, i) => ({ tokens: c.tokens, span: c.own, guard: true, info: { kind: 'shared-argument', source: src, copied: c.copied, ...(sc ? { dropped: sc.dropped } : {}), index: i, of: cand.clauses.length } }));
+      const segs = tryClauses(clauses, null, bar);
+      if (segs) return segs;
+    }
+    return null;
+  };
+
+  const expandClauses = (s, tokens, base, whole = null, bar = null) => {
+    const clauses = splitClauses(tokens);
+    const parts = base?.done ?? (base?.fallback && clauses.length === 1 ? [base.fallback] : clauses.map((c, idx) => readGroup(c, QUESTION_WORDS.has(c[0].lower) || (s.isQuestion && idx === clauses.length - 1 && /\?/.test(text.slice(s.span[1], s.span[1] + 3))))));
+    if (parts.length !== clauses.length) return null;
+    const out = [];
+    let changed = false;
+    parts.forEach((part, i) => {
+      if (!part.unparsed && !isWeak(part)) { out.push(part); return; }
+      const ct = clauses[i];
+      const rep = repetition(ct);
+      if (rep) {
+        const sp = [ct[0].start, ct[ct.length - 1].end];
+        const snap = form.snapshot();
+        const segs = [];
+        for (let k = 0; k < rep.n; k++) segs.push(readGroup(rep.tokens, QUESTION_WORDS.has(rep.tokens[0].lower), { span: sp, info: { kind: 'repetition', source: sp, dropped: [rep.dropped], copied: [], index: k, of: rep.n } }));
+        if (segs.every((g) => !g.unparsed && beats(g, bar))) { out.push(...segs); changed = true; return; }
+        form.restore(snap);
+      }
+      const anchorIdx = parts.findIndex((p) => !p.unparsed && !isWeak(p));
+      if (part.unparsed && anchorIdx >= 0 && anchorIdx < i) {
+        for (const pre of ellipsisPrefixes(clauses[anchorIdx])) {
+          const sp = [ct[0].start, ct[ct.length - 1].end];
+          const segs = tryClauses([{ tokens: [...pre, ...ct.filter((t) => t.kind !== 'punct')], span: sp, guard: true, info: { kind: 'verb-ellipsis', source: sp, copied: [[pre[0].start, pre[pre.length - 1].end]] } }], parts[anchorIdx].match.worldId, bar);
+          if (segs) { out.push(...segs); changed = true; return; }
+        }
+      }
+      out.push(part);
+    });
+    if (changed) return out.some((p) => !p.unparsed) ? { done: out, fallback: null } : null;
+    // a catch-all whole reading that swallowed "then ..." while every clause is understood on its own (any worlds), each by a
+    // pattern at least as specific: "then" is an explicit sequence, so keep the clauses ("move left twice, then undo")
+    const swallowedThen = whole && clauses.length > 1 && Object.values(whole.match.slots).some((sl) => (sl.class === 'words' || sl.class === 'rest') && /(^|[\s,])then([\s,]|$)/i.test(sl.text ?? ''));
+    if (swallowedThen && parts.every((p) => !p.unparsed && !isWeak(p) && (p.match?.priority ?? 0) >= (whole.match?.priority ?? 0))) return { done: parts, fallback: null };
+    // the same, with and/comma, when all clauses are understood in one world whatever their priority (the clauses are complete sentences)
+    const swallowedSep = whole && clauses.length > 1 && Object.values(whole.match.slots).some((sl) => (sl.class === 'words' || sl.class === 'rest') && /(^|[\s,])(and|but)([\s,]|$)|,/i.test(sl.text ?? ''));
+    if (swallowedSep && parts.every((p) => !p.unparsed && !isWeak(p) && p.match.worldId === parts[0].match.worldId && (p.match.worldId === whole.match.worldId || beats(p, bar)))) return { done: parts, fallback: null };
+    return null;
+  };
+
+  const readSentencePlain = (s, tokens) => {
     const whole = readGroup(tokens, s.isQuestion);
     const clauses = splitClauses(tokens);
+    const firstWord = (c) => c.find(isContent)?.lower;
     if (!whole.unparsed) {
       // A free-text slot (words, rest) that swallowed a clause separator ("make eyes bigger AND lips red") means the whole-sentence
       // reading is a catch-all: prefer the clause-by-clause reading when every clause is understood on its own by a pattern
       // of at least the same priority, all of the same world (so a list "a, b and c" of one world is never split across worlds).
       const swallowed = clauses.length > 1 && Object.values(whole.match?.slots ?? {}).some((sl) => (sl.class === 'words' || sl.class === 'rest') && /(^|[\s,])(and|then|but)([\s,]|$)|,/i.test(sl.text ?? ''));
       if (swallowed) {
-        const parts = clauses.map((c, idx) => readGroup(c, QUESTION_WORDS.has(c[0].lower) || (s.isQuestion && idx === clauses.length - 1 && /\?/.test(text.slice(s.span[1], s.span[1] + 3)))));
+        const parts = clauses.map((c, idx) => readGroup(c, QUESTION_WORDS.has(firstWord(c)) || (s.isQuestion && idx === clauses.length - 1 && /\?/.test(text.slice(s.span[1], s.span[1] + 3)))));
         if (parts.every((p) => !p.unparsed && (p.match?.priority ?? 0) >= (whole.match?.priority ?? 0) && p.match?.worldId === parts[0].match?.worldId)) return { done: parts, fallback: null };
       }
       return { done: [{ ...whole, span: s.span, text: s.text }], fallback: null };
     }
+    // an indirect question ("tell me what is 3 plus 4"): read the bare question (the original was tried first)
+    const lead = stripLeadIn(tokens);
+    if (lead) {
+      const sub = readSentence({ ...s, isQuestion: true }, lead);
+      if (sub.done) return sub.done.length === 1 ? { done: [{ ...sub.done[0], span: s.span, text: s.text }], fallback: null } : sub;
+    }
     if (clauses.length > 1) {
       const parts = clauses.map((c, idx) => {
-        const q = QUESTION_WORDS.has(c[0].lower) || (s.isQuestion && idx === clauses.length - 1 && /\?/.test(text.slice(s.span[1], s.span[1] + 3)));
+        const q = QUESTION_WORDS.has(firstWord(c)) || (s.isQuestion && idx === clauses.length - 1 && /\?/.test(text.slice(s.span[1], s.span[1] + 3)));
         return readGroup(c, q);
       });
       if (parts.some((p) => !p.unparsed)) return { done: parts, fallback: null };
@@ -250,12 +464,22 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
 
   const vocab = () => vocabularyOf(set);
   const known = (w) => vocab().has(w) || vocab().has(lex.lemma(w)) || lex.names.has(w);
+  const preferredVocab = () => {
+    const ids = [ctx.tabWorld, ctx.gameWorld, ctx.modalWorld, ...(ctx.recentWorlds ?? []).slice(0, 2)].filter(Boolean);
+    const out = new Set();
+    for (const id of ids) for (const w of worldVocabularyOf(set, id)) out.add(w);
+    return out;
+  };
   for (const s of analyze(text)) {
+    s.tokens = splitPossessives(s.tokens, lex);
     const first = readSentence(s, s.tokens);
     if (first.done) { segments.push(...first.done); continue; }
     // nothing matched: retry once with unknown words corrected to the closest known word (typo tolerance)
-    const fix = correctTokens(s.tokens, text, vocab(), known);
-    if (fix.corrections.length) {
+    // chat spelling `u` is read as `you` in this retry only (a literal `u` of a pattern still matches through `alt`)
+    const retryTokens = s.tokens.map((t) => (t.kind === 'word' && t.lower === 'u' ? { ...t, lower: 'you', alt: 'u' } : t));
+    const fix = correctTokens(retryTokens, text, vocab(), known, { preferred: preferredVocab });
+    const swapped = retryTokens.some((t, i) => t !== s.tokens[i]);
+    if (fix.corrections.length || swapped) {
       const second = readSentence(s, fix.tokens);
       if (second.done) {
         for (const seg of second.done) {

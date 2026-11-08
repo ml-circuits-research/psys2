@@ -24,7 +24,7 @@
  * records). A negative record is correct when the result is `not_understood`. Records without a target (routing-only rows) are not scored end to end.
  * Segmentation match: same number of pieces and every piece overlaps its gold segment with character IoU >= --seg-iou (default 0.6).
  *
- * Normalizer (N1, spec 03 section 7.11): `--normalizer-record <requests.jsonl>` collects the pieces no candidate validates (run once, results discarded), `python -m psys2_train.normalizer predict` rewrites them, `--normalizer <outputs.jsonl> --name <n>-norm` reruns every mode with the rewrites as extra candidates (compare with the run without).
+ * Normalizer (N1, spec 03 section 7.12): `--normalizer-record <requests.jsonl>` collects the pieces no candidate validates (run once, results discarded), `python -m psys2_train.normalizer predict` rewrites them, `--normalizer <outputs.jsonl> --name <n>-norm` reruns every mode with the rewrites as extra candidates (compare with the run without).
  * Usage: node scripts/eval-dispatch.mjs [--pred <file>]... [--name <n>] [--jobs N] [--policy '<json>'] [--seg-iou 0.6] [--limit N] [--no-write]
  * Writes training/results/dispatch-<name>.json and training/runs/dispatch-<name>-traces.jsonl (per-record traces).
  */
@@ -188,7 +188,7 @@ function evalRecord(env, pred, gold, o) {
 
 if (!isMainThread) {
   const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
-  // optional seq2seq normalizer (N1, spec 03 section 7.11): precomputed outputs (--normalizer <jsonl from psys2_train.normalizer predict>), or a recording pass (--normalizer-record) that collects the requests
+  // optional seq2seq normalizer (N1, spec 03 section 7.12): precomputed outputs (--normalizer <jsonl from psys2_train.normalizer predict>), or a recording pass (--normalizer-record) that collects the requests
   const nz = workerData?.normalizer;
   const reqs = [];
   let provider = null;

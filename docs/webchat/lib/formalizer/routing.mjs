@@ -54,10 +54,25 @@ export function contextFromFocus(focus = {}) {
 export const TAB_ACTIONS = new Set(['ui.openTab', 'ui.playGame']);
 /** `ui.shell` actions that change an application setting or ask about the app (tier 2b). */
 /** `ui.shell` game controls: handled by whichever game the active tab shows. */
-export const GAME_CONTROL_ACTIONS = new Set(['ui.newGame', 'ui.giveUp', 'ui.hint']);
+export const GAME_CONTROL_KEYS = { 'ui.newGame': 'new', 'ui.giveUp': 'giveUp', 'ui.hint': 'hint', 'ui.undo': 'undo' };
+export const GAME_CONTROL_ACTIONS = new Set(Object.keys(GAME_CONTROL_KEYS));
+
+/** The active game's own action for a ui.shell game-control pattern, from the game's tab manifest (tabNew, tabGiveUp, tabHint, tabUndo); null when it has none. */
+export function gameControlAction(pattern, tab) {
+  const shellAction = /action=([\w.]+)/.exec(pattern.emit ?? '')?.[1];
+  return tab?.[GAME_CONTROL_KEYS[shellAction]] ?? null;
+}
 export const SETTING_ACTIONS = new Set([
   'ui.back', 'ui.whichTab', 'ui.help', 'ui.helpMe', 'ui.helpMore', 'ui.helpAbout', 'ui.helpGame', 'ui.helpWhy', 'ui.speaker', 'ui.listening', 'ui.handsFree', 'ui.rate', 'ui.language', 'ui.phraseLog',
 ]);
+
+/**
+ * Bare tempo/volume words ("faster", "slower", "slow down": at most BARE_MAX_LITERALS literal words) of a tier 2b setting give way
+ * to the music world when it owns the tab or answered recently and has a reading of its own; priorities stay as they are.
+ */
+export const BARE_SETTING_YIELDS = { 'ui.rate': ['media.music'] };
+export const BARE_MAX_LITERALS = 2;
+const actionOf = (m) => /action=([\w.]+)/.exec(m.pattern.emit ?? '')?.[1];
 
 /** Is this a `ui.shell` game-control match (new game, give up, hint)? */
 export function isGameControl(m) {
@@ -80,12 +95,32 @@ export function navigationKind(m) {
 
 const TIER_NAMES = { 2: 'navigation', 3: 'active-tab', 4: 'recent', 5: 'priority' };
 
-/** `a` is clearly more specific than the tab's match `t` (tier 3 exception). */
-export function clearlyMoreSpecific(a, t) {
-  return wildTokens(t) > t.literals && wildTokens(a) === 0 && a.literals >= t.literals + 2;
+/** Priority of a match in `ctx`: `tabPriority` replaces `priority` while the pattern's world owns the active tab. */
+export function effectivePriority(m, ctx) {
+  const tp = m.pattern.tabPriority;
+  return tp != null && ctx?.tabWorld && m.pattern.worldId === ctx.tabWorld ? tp : m.pattern.priority;
 }
 
-const brief = (m) => (m ? { patternId: m.pattern.id, worldId: m.pattern.worldId, priority: m.pattern.priority } : null);
+/** Specificity of a match: literal words minus wildcard span (a catch-all is negative). */
+export const specificity = (m) => m.literals - wildTokens(m);
+
+/** A catch-all that swallows at least this many tokens gives way to any specific higher-priority match of another world. */
+export const BIG_CATCH_ALL = 3;
+
+/**
+ * `a` (another world's match) is clearly more specific than the tab's match `t` (tier 3 exception): `t` is a catch-all
+ * (its wildcard tokens outnumber its literal words), `a` has no wildcard and is not of lower priority, and `a` has at
+ * least two more literal words, or a higher priority and two literal words when the catch-all swallows at least BIG_CATCH_ALL
+ * tokens (a name or free-text sink such as "let us {rest}"). A catch-all `a` never qualifies, so a catch-all of another world
+ * never beats a specific match of the tab, and a lower-priority literal match does not steal from the tab either.
+ */
+export function clearlyMoreSpecific(a, t, ctx = null) {
+  if (!(wildTokens(t) > t.literals && wildTokens(a) === 0)) return false;
+  const pa = effectivePriority(a, ctx), pt = effectivePriority(t, ctx);
+  return pa >= pt && (a.literals >= t.literals + 2 || (pa > pt && a.literals >= 2 && wildTokens(t) >= BIG_CATCH_ALL));
+}
+
+const brief = (m) => (m ? { patternId: m.pattern.id, worldId: m.pattern.worldId, priority: m.rank ?? m.pattern.priority } : null);
 
 /** Deterministic routing policy. `model(features) -> { worldId: number }` optionally orders tier 5 (learned head). */
 export function createRouter({ id = 'policy', model = null } = {}) {
@@ -93,19 +128,24 @@ export function createRouter({ id = 'policy', model = null } = {}) {
     id,
     route({ matches, context, scores = [], tokens = [] } = {}) {
       const ctx = normalizeContext(context);
-      const list = [...matches];
+      // tabOnly patterns apply only while their world's tab is active
+      const list = matches.filter((m) => !m.pattern.tabOnly || m.pattern.worldId === ctx.tabWorld);
+      for (const m of list) m.rank = effectivePriority(m, ctx);
+      const prio = (m) => m.rank;
       const wscore = (w) => scores.find((s) => s.id === w)?.score ?? 0;
       const learned = model ? (model({ text: tokens.map((t) => t.raw).join(' '), context: ctx, worlds: [...new Set(list.map((m) => m.pattern.worldId))] }) ?? {}) : {};
-      const maxOther = Math.max(-Infinity, ...list.filter((o) => !navigationKind(o)).map((o) => o.pattern.priority));
+      const maxOther = Math.max(-Infinity, ...list.filter((o) => !navigationKind(o)).map(prio));
+      // a bare setting word ("faster") yields to the world named in its `yieldsTo` when that world is the tab or a recent world
+      const yields = (m) => [...(m.pattern.yieldsTo ?? []), ...(m.literals <= BARE_MAX_LITERALS ? BARE_SETTING_YIELDS[actionOf(m)] ?? [] : [])].some((w) => (w === ctx.tabWorld || ctx.recentWorlds.includes(w)) && list.some((o) => o.pattern.worldId === w));
       const isNav = (m) => {
         const k = navigationKind(m);
-        return k === 'tab' || (k === 'setting' && m.pattern.priority >= maxOther);
+        return k === 'tab' || (k === 'setting' && prio(m) >= maxOther && !yields(m));
       };
       const gameTab = !!ctx.tabWorld && ctx.tabWorld.startsWith('games.');
       const ofTab = (m) => m.pattern.worldId === ctx.tabWorld || (gameTab && isGameControl(m));
       const tabMatches = ctx.tabWorld ? list.filter((m) => ofTab(m) && !isNav(m)) : [];
       const bestTab = [...tabMatches].sort(inTier(wscore))[0] ?? null;
-      const overriding = bestTab ? list.filter((m) => !isNav(m) && !ofTab(m) && clearlyMoreSpecific(m, bestTab)) : [];
+      const overriding = bestTab ? list.filter((m) => !isNav(m) && !ofTab(m) && clearlyMoreSpecific(m, bestTab, ctx)) : [];
       const reasons = new Map();
       for (const m of list) {
         const w = m.pattern.worldId;
@@ -132,7 +172,7 @@ export function createRouter({ id = 'policy', model = null } = {}) {
 
 /** Order inside a tier: priority, literal words, fewer wildcard tokens, word-overlap score, pattern order. */
 function inTier(wscore) {
-  return (a, b) => b.pattern.priority - a.pattern.priority || b.literals - a.literals || a.skips - b.skips
+  return (a, b) => (b.rank ?? b.pattern.priority) - (a.rank ?? a.pattern.priority) || b.literals - a.literals || a.skips - b.skips
     || wscore(b.pattern.worldId) - wscore(a.pattern.worldId) || a.order - b.order;
 }
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Offline evaluation of the seq2seq normalizer (worker-tasks N1, spec 03 section 7.11), same messages and same runner as scripts/eval-simplify.mjs.
+ * Offline evaluation of the seq2seq normalizer (worker-tasks N1, spec 03 section 7.12), same messages and same runner as scripts/eval-simplify.mjs.
  *
  *   node scripts/eval-normalizer.mjs list  --out <requests.jsonl> [--splits dev,test,heldout,fresh]
  *   (python -m psys2_train.normalizer predict --ckpt <run> --requests <requests.jsonl> --out <outputs.jsonl>)

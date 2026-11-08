@@ -30,6 +30,7 @@ export const DEFAULT_POLICY = {
   worldWeight: 1.0,           // weight of the log of the world score of a piece
   acceptRefused: true,        // a piece the rules parse completely but the interpreter refuses (unsupported/error: a state reason, Q3) counts as valid
   interpreterPenalty: 3.0,    // log-units subtracted for such a piece (it is still better than an unparsed one)
+  unknownArgPenalty: 4.5,     // F5: a reading whose argument the interpreter does not know ("unknown_argument") ranks below every reading with known arguments; used only when nothing else validates
   unparsedPenalty: 6.0,       // log-units subtracted for a piece that no candidate could validate (about x 0.0025)
   simplifiedPenalty: 0.05,    // log-units subtracted when the winning reading came from the simplified text
   scoreFloor: 1e-6,           // world scores are clamped to at least this probability before the log
@@ -40,12 +41,12 @@ export const DEFAULT_POLICY = {
   partialPenalty: 1.5,        // log-units subtracted for any partial parse (always better than unparsedPenalty, so a full parse of any candidate wins)
   partialUncoveredPenalty: 3.0, // plus this times the fraction of the text that was not understood
   minCoverage: 0.25,          // a partial parse must understand at least this fraction of the characters
-  tryNormalizer: true,        // when a normalizer provider is injected and no candidate of the piece validates, try its rewrites (spec 03 section 7.11)
+  tryNormalizer: true,        // when a normalizer provider is injected and no candidate of the piece validates, try its rewrites (spec 03 section 7.12)
   normalizerBeam: 3,          // rewrites asked from the provider per (world, piece)
   normalizerSegmentations: 1, // the normalizer is asked only for the pieces of the first N segmentations (latency: each call is about 75 ms in the browser)
   normalizerWorlds: 2,        // and only for the first N candidate worlds of a piece
   normalizerPenalty: 0.3,     // log-units subtracted when the winning reading came from a normalizer rewrite
-  valueStrictness: 'strict',  // 'strict' adds opposite-word, grounded-word and kept-known-word checks to the basic value check (spec 03 section 7.11)
+  valueStrictness: 'strict',  // 'strict' adds opposite-word, grounded-word and kept-known-word checks to the basic value check (spec 03 section 7.12)
   normalizerMinScore: -0.3,   // rewrites whose provider score (length-normalized log-probability) is lower are not tried; null = no threshold (tuned on dev and the fresh batches, N1)
   valueLost: 'unknown',        // which unknown source words must survive a rewrite: 'unknown' (all words the world does not know: names, junk) or 'capitalized' (only capitalized ones)
   checkValues: true,          // a rewrite must also keep numbers, colours, negation, quoted text and the value words of the piece (src/dialog/value-check.mjs)
@@ -146,7 +147,7 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
     const parsed = res.segments.filter((x) => !x.unparsed);
     const unparsed = res.segments.length - parsed.length;
     const wires = parsed.flatMap((x) => x.wires);
-    const rec = { unparsed, parsed: parsed.length, wires, matchedWorlds: [...new Set(parsed.map((x) => x.match?.worldId).filter(Boolean))], ids, statuses: [], notes: [] };
+    const rec = { unparsed, parsed: parsed.length, wires, matchedWorlds: [...new Set(parsed.map((x) => x.match?.worldId).filter(Boolean))], ids, statuses: [], notes: [], reasons: [] };
     if (parsed.length) {
       for (const seg of parsed) {
         session.isession.add(seg.wires);
@@ -154,13 +155,16 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
           if (!useInterpreter) continue;
           try {
             const r = engine.interp.resolve(session.isession, w);
-            if (r) { rec.statuses.push(r.status); if (r.status === 'unsupported' || r.status === 'error') rec.notes.push(`${r.status}: ${r.envelope?.note ?? ''}`.trim()); }
-          } catch (e) { rec.statuses.push('error'); rec.notes.push(`error: ${e.message}`); }
+            if (r) { rec.statuses.push(r.status); if (r.status === 'unsupported' || r.status === 'error') { rec.notes.push(`${r.status}: ${r.envelope?.note ?? ''}`.trim()); rec.reasons.push(r.envelope?.reason ?? (r.status === 'error' ? 'execution_error' : 'unsupported_operation')); } }
+          } catch (e) { rec.statuses.push('error'); rec.reasons.push('execution_error'); rec.notes.push(`error: ${e.message}`); }
         }
       }
     }
     rec.parsedOk = unparsed === 0 && parsed.length > 0;
-    const refusedAny = rec.statuses.some((s) => s === 'unsupported' || s === 'error');
+    // F5 reasons: execution_error is a bug (never a valid reading); unknown_argument is a weak reading (recovery first); the rest is a refusal of a right reading
+    rec.execError = rec.reasons.includes('execution_error');
+    rec.unknownArg = !rec.execError && rec.reasons.includes('unknown_argument');
+    const refusedAny = rec.reasons.length > 0 && !rec.execError && !rec.unknownArg;
     rec.refused = rec.parsedOk && refusedAny;
     rec.partialRefused = refusedAny;
     rec.kinds = parsed.map((x) => x.match?.kind).filter(Boolean);
@@ -168,11 +172,11 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
     const all = res.segments.reduce((n, x) => n + len(x), 0) || 1;
     rec.coverage = parsed.reduce((n, x) => n + len(x), 0) / all;
     rec.ignored = res.segments.filter((x) => x.unparsed).map((x) => ({ text: x.text, start: x.span[0], end: x.span[1] }));
-    rec.valid = rec.parsedOk && !rec.refused;
+    rec.valid = rec.parsedOk && !rec.refused && !rec.execError && !rec.unknownArg;
     rec.reason = rec.valid ? 'parsed completely, interpreter ok'
       : parsed.length === 0 ? 'no pattern of the world parses the text'
       : unparsed > 0 ? `${unparsed} of ${res.segments.length} segment(s) not parsed`
-      : `interpreter: ${rec.notes[0] ?? 'unsupported'}`;
+      : `interpreter (${rec.reasons[0] ?? 'unsupported'}): ${rec.notes[0] ?? 'unsupported'}`;
     return rec;
   };
 
@@ -185,7 +189,7 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
     let rec;
     try { rec = apply(s, [world], text, 'cand', opts.useInterpreter); }
     catch (e) { rec = { unparsed: 1, parsed: 0, wires: [], matchedWorlds: [], statuses: [], notes: [e.message], valid: false, reason: `exception: ${e.message}`, coverage: 0, ignored: [] }; }
-    const out = { valid: rec.valid, refused: !!rec.refused, reason: rec.reason, unparsed: rec.unparsed, parsed: rec.parsed, wires: rec.wires, matchedWorlds: rec.matchedWorlds, statuses: rec.statuses,
+    const out = { valid: rec.valid, refused: !!rec.refused, refusal: rec.reasons?.[0] ?? null, unknownArg: !!rec.unknownArg, execError: !!rec.execError, reason: rec.reason, unparsed: rec.unparsed, parsed: rec.parsed, wires: rec.wires, matchedWorlds: rec.matchedWorlds, statuses: rec.statuses,
       partialRefused: !!rec.partialRefused, coverage: rec.coverage ?? 0, ignored: rec.ignored ?? [], kinds: rec.kinds ?? [] };
     cache.set(key, out);
     return out;
@@ -212,7 +216,8 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
       const worlds = piece.worlds.slice(0, o.maxWorlds);
       const ctxPrefix = o.intersegmentContext ? prefix : [];
       const logpOf = (w) => Math.log(Math.max(w.score, o.scoreFloor));
-      const accepts = (r) => r.valid || (o.acceptRefused && r.refused);
+      const accepts = (r) => r.valid || (o.acceptRefused && r.refused);   // unknown_argument / execution_error readings never count here (F5)
+      const rpen = (r) => (r.valid ? 0 : r.unknownArg ? o.unknownArgPenalty : r.refused && o.acceptRefused ? o.interpreterPenalty : o.unparsedPenalty);
       const spelled = new Map();   // world -> { text, corrections } (spec 03 section 7.9)
       const refs = [];             // attempts with their check records, for the partial pass
       // full parses: per world, original -> spell-corrected -> simplified
@@ -227,12 +232,12 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
         for (const v of variants) {
           const r = await check(pred.context, ctxPrefix, w.world, v.text, o);
           const score = o.worldWeight * logpOf(w) - (v.kind === 'simplified' ? o.simplifiedPenalty : 0) - o.spellPenalty * v.corrections.length
-            - (r.valid ? 0 : r.refused && o.acceptRefused ? o.interpreterPenalty : o.unparsedPenalty);
-          const at = { world: w.world, rank: rank + 1, worldScore: w.score, variant: v.kind, text: v.text, valid: accepts(r), refused: r.refused, reason: r.reason, unparsed: r.unparsed, matchedWorlds: r.matchedWorlds, statuses: r.statuses, score, wires: r.wires, corrections: v.corrections, partial: null };
+            - rpen(r);
+          const at = { world: w.world, rank: rank + 1, worldScore: w.score, variant: v.kind, text: v.text, valid: accepts(r), refused: r.refused, refusal: r.refusal, unknownArg: r.unknownArg, reason: r.reason, unparsed: r.unparsed, matchedWorlds: r.matchedWorlds, statuses: r.statuses, score, wires: r.wires, corrections: v.corrections, partial: null };
           attempts.push(at); refs.push([at, r, w]);
         }
       }
-      // simplified text of the edit-tag head (spec 03 sections 7.8 and 7.11): lexicographic preference, tried only when no original or spell-corrected reading validates in any candidate world, and only if the values survive
+      // simplified text of the edit-tag head (spec 03 sections 7.8 and 7.12): lexicographic preference, tried only when no original or spell-corrected reading validates in any candidate world, and only if the values survive
       if (o.trySimplified && piece.simplified && !attempts.some((a) => a.valid)) {
         for (const [rank, w] of worlds.entries()) {
           const vocab = worldVocabulary(engine.set, w.world);
@@ -247,7 +252,7 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
           attempts.push(at); refs.push([at, r, w]);
         }
       }
-      // normalizer (spec 03 section 7.11): only when nothing validates yet; the first rewrite that the rules read AND whose values are preserved wins
+      // normalizer (spec 03 section 7.12): only when nothing validates yet; the first rewrite that the rules read AND whose values are preserved wins
       if (normalizer && o.tryNormalizer && seg.index < o.normalizerSegmentations && !attempts.some((a) => a.valid)) {
         for (const [rank, w] of worlds.entries()) {
           if (rank >= o.normalizerWorlds) break;
@@ -275,8 +280,8 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
           try { alts = spellAlternates(piece.text, { vocab: worldVocabulary(engine.set, w.world) }); } catch { alts = []; }
           for (const v of alts) {
             const r = await check(pred.context, ctxPrefix, w.world, v.text, o);
-            const score = o.worldWeight * logpOf(w) - o.spellPenalty * 2 - (r.valid ? 0 : r.refused && o.acceptRefused ? o.interpreterPenalty : o.unparsedPenalty);
-            const at = { world: w.world, rank: rank + 1, worldScore: w.score, variant: 'spell', text: v.text, valid: accepts(r), refused: r.refused, reason: r.reason, unparsed: r.unparsed, matchedWorlds: r.matchedWorlds, statuses: r.statuses, score, wires: r.wires, corrections: v.corrections, partial: null };
+            const score = o.worldWeight * logpOf(w) - o.spellPenalty * 2 - rpen(r);
+            const at = { world: w.world, rank: rank + 1, worldScore: w.score, variant: 'spell', text: v.text, valid: accepts(r), refused: r.refused, refusal: r.refusal, unknownArg: r.unknownArg, reason: r.reason, unparsed: r.unparsed, matchedWorlds: r.matchedWorlds, statuses: r.statuses, score, wires: r.wires, corrections: v.corrections, partial: null };
             if (at.valid || (o.acceptPartial && r.parsed && r.unparsed)) { attempts.push(at); refs.push([at, r, w]); }
           }
         }
@@ -302,6 +307,10 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
             }
           }
         }
+      }
+      // F5: nothing validated, so an unknown_argument reading (already penalised) is better than no reading; it never blocked the stages above
+      if (!attempts.some((a) => a.valid)) {
+        for (const a of attempts) if (a.unknownArg && a.unparsed === 0) { a.valid = true; a.fallback = true; }
       }
       // best attempt: highest score; ties (within tieEps) between different worlds go to the routing policy
       let best = null;

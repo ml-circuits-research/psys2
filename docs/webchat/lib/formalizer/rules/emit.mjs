@@ -1,10 +1,15 @@
 /** Emit templates (spec 03 section 2): placeholders, fresh ids, auto-added core keys. Browser-safe. */
 import { parse, atom, ref, str } from '../../soplang/index.mjs';
 
-const OPT_ENTRY = /(\s)([A-Za-z_][\w.-]*)=("?)\{([A-Za-z_]\w*)\}\3(?=\s|$|@)/g;
+const OPT_ENTRY = /(\s)([A-Za-z_][\w.-]*)=("?)\{([A-Za-z_]\w*)(?:\|\w+)?\}\3(?=\s|$|@)/g;
 const FRESH = /^_\d*$/;
 
 const jsonInner = (s) => JSON.stringify(s).slice(1, -1);
+
+/** Placeholder filters `{slot|filter}`: `cap` capitalizes the first letter of every word (stored names: "zed" -> "Zed"). */
+export const EMIT_FILTERS = {
+  cap: (s) => String(s).replace(/(^|[\s'-])(\p{L})/gu, (_, a, b) => a + b.toUpperCase()),
+};
 
 /**
  * Substitute placeholders in an emit template and return SOP text.
@@ -25,8 +30,9 @@ export function substituteEmit(template, slots, fresh) {
     if (c !== '{') { out += c; continue; }
     const end = t.indexOf('}', i);
     if (end < 0) throw new Error('unterminated placeholder in emit template');
-    const name = t.slice(i + 1, end);
+    const [name, filter] = t.slice(i + 1, end).split('|');
     i = end;
+    if (filter !== undefined && !EMIT_FILTERS[filter]) throw new Error(`unknown emit filter '${filter}'`);
     if (FRESH.test(name)) {
       if (!ids.has(name)) ids.set(name, fresh());
       out += ids.get(name);
@@ -34,7 +40,8 @@ export function substituteEmit(template, slots, fresh) {
     }
     const slot = slots[name];
     if (!slot) throw new Error(`emit uses slot '${name}' that was not captured`);
-    out += inStr ? jsonInner(slot.text) : slot.value;
+    const f = filter ? EMIT_FILTERS[filter] : (x) => x;
+    out += inStr ? jsonInner(f(slot.text)) : slot.value.startsWith('$') ? slot.value : f(slot.value);
   }
   return out;
 }
@@ -65,7 +72,7 @@ export function dummySlots(slotDefs) {
   const out = {};
   for (const [name, def] of slotDefs) {
     if (def.cls === 'agent') out[name] = { value: '$e.dummy', text: 'Dummy' };
-    else if (def.cls === 'number') out[name] = { value: '1', text: '1' };
+    else if ((def.cls === 'number' || def.cls === 'ordinal')) out[name] = { value: '1', text: '1' };
     else if (def.cls === 'words') out[name] = { value: 'some words', text: 'some words' };
     else out[name] = { value: 'x', text: 'x' };
   }
