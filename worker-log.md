@@ -399,3 +399,22 @@ Published (D4b rule met): `node scripts/build-webchat.mjs --models training/runs
 - Report: `training/results/operational-failures-v2.md` (fix list for class A, gold corrections for class D). The operational set was not changed. Note: `--json` suppresses the per-item lines of eval-operational; use `--verbose` for the failure list.
 ## G8 Romanian boundary (2026-11-08)
 Equivalence test (`tests/translate-equivalence.test.mjs`) 397/413 -> 408/413. Changes only in `src/translate` (ro-en.mjs, lexicon, morphology, frames), `tests/translate.test.mjs`, coverage report in ADR-002. Classes: indefinite genitive (unei/unui/unor -> "of a"), definite inanimate/season genitive with "of", -ii genitive forms, dublat/triplat/înjumătățit, vreun/vreo, comma skipping in frames, mai puține and "între X și Y, cine" frames. The 5 residuals are English avatar examples that the engine does not parse (world gap, not translation).
+## G6 long/medium messages: code ready, retrain DEFERRED (2026-11-08)
+Per the coordinator (no runs that pending G1-G3 / checker fixes would invalidate): only code, unit tests and a short smoke run were done. No full retrain, no operational evals, nothing published.
+Code:
+- `multicmd.py`: N_LONG train 0 -> 600 (14-40 commands in train, 14-24 in dev/test); new N_MID (4-8 commands, 4000/300/600) and N_CHAIN_LONG (9-40 train, 9-24 dev/test; 900/100/200) built by `build_chain` from routing sentences plus compositional units; later segments of ref_created / repeat_undo units carry `dep: true`; regenerated every epoch like the rest.
+- `windows.train_windows`: training windows = `window_spans(n, max_len-2)`, identical to `run_seg` and `dispatcher-runtime.mjs`; `encode_seg` no longer truncates at 192 (items carry `msg`).
+- `buckets.py`: buckets 1, 2-3, 4-5, 6-8, long; exact, final correct, omissions, duplicates, lost dependencies; `selection_guard`, `worst_bucket`.
+- `dispatcher.eval_seg` returns `by_bucket`; the dev score adds the worst bucket's final correctness; history logs `dev_seg_by_bucket`.
+- `eval_buckets.py` CLI: `--baseline` lists per-bucket regressions, exit code 2.
+- Tests: `training/tests/test_g6_long.py` (24 python tests pass).
+Data stats: `training/results/g6-multicmd-stats.json`. Train buckets: 1: 8270, 2-3: 16230, 4-5: 1631, 6-8: 2369, long: 1500 (30,000 messages). Test: 861 / 2139 / 244 / 356 / 400.
+Smoke: `python -m psys2_train.dispatcher ... --max-steps 30 --no-select --multicmd <regenerated>` runs end to end on the GPU (30,685 segmentation items for 30,000 messages after windowing).
+Baseline v2 (ckpt 2040) on the regenerated test (`training/results/g6-v2-test-buckets.json`): `python -m psys2_train.eval_buckets --ckpt training/runs/dispatcher-distilbert-v2 --weights ckpt-step2040.pt --multicmd <regenerated> --out ...` (the test set differs slightly from the committed shape only by the new families; sentences are test-split only).
+| bucket | n | exact | final | omitted | dup | deps lost |
+| 1 | 861 | .993 | .974 | 0 | 6 | - |
+| 2-3 | 2139 | .924 | .824 | 16 | 27 | - |
+| 4-5 | 244 | .824 | .557 | 23 | 5 | 8/95 |
+| 6-8 | 356 | .702 | .385 | 63 | 10 | 15/263 |
+| long | 400 | .205 | .083 | 668 | 13 | 59/366 |
+Next, after G1-G3 are merged (one combined rebuild): `python -m psys2_train.multicmd`, retrain as in "R2 retrain + publish", `eval_buckets --baseline training/results/g6-v2-test-buckets.json`, operational baseline vs candidate in parallel.

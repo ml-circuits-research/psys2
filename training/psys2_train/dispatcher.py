@@ -43,7 +43,8 @@ from .multicmd import load_multicmd, trim_segment, build_mix, MULTICMD
 from .sampling import EpochSampler, Budget, ShownLog
 from .selection import select, eval_stub, load_stub, run_script, script_available, export_ckpt, DEFAULT_CMD, TAUS
 from . import edit as ed
-from .windows import window_spans, merge_window_probs
+from .windows import window_spans, merge_window_probs, train_windows
+from .buckets import Buckets, worst_bucket
 
 RESULTS = Path(__file__).resolve().parents[1] / "results"
 RUNS = Path(__file__).resolve().parents[1] / "runs"
@@ -148,8 +149,13 @@ def seg_labels(msg, offsets):
 
 
 def encode_seg(tok, msgs, max_len):
-    enc = tok([m["text"] for m in msgs], truncation=True, max_length=max_len, return_offsets_mapping=True)
-    return [{"input_ids": i, "offsets": o, "labels": seg_labels(m, o), "weight": 1.0} for i, o, m in zip(enc["input_ids"], enc["offset_mapping"], msgs)]
+    # G6: an overlong message becomes the same overlapping windows the runtime uses (windows.train_windows), not a truncated prefix
+    enc = tok([m["text"] for m in msgs], truncation=False, return_offsets_mapping=True)
+    out = []
+    for mi, (ids, offs, m) in enumerate(zip(enc["input_ids"], enc["offset_mapping"], msgs)):
+        for wi, wl in train_windows(ids, seg_labels(m, offs), max_len, tok.cls_token_id, tok.sep_token_id):
+            out.append({"input_ids": wi, "offsets": None, "labels": wl, "weight": 1.0, "msg": mi})
+    return out
 
 
 def make_collate(pad_id):
@@ -391,6 +397,7 @@ def eval_world(model, tok, rows, use_context, dev, worlds, train_texts):
 def eval_seg(model, tok, msgs, use_context, dev, worlds, with_chain=True, edit_tags=None, edit_tau=0.5):
     outs = dispatch(model, tok, msgs, use_context, dev, worlds, n_beam=1, k_unc=0, edit_tags=edit_tags, edit_tau=edit_tau)
     gold_starts, pred_starts, exact, chain, by_var, by_n, by_fam, chain_fam = [], [], [], [], {}, {}, {}, {}
+    bk = Buckets()
     for m, o in zip(msgs, outs):
         top = o["candidates"][0]["segments"]
         gs = {s["start"] for s in m["segments"][1:]}; ps = {s["start"] for s in top[1:]}
@@ -399,14 +406,14 @@ def eval_seg(model, tok, msgs, use_context, dev, worlds, with_chain=True, edit_t
         ok = [(s["start"], s["end"]) for s in top] == gold_spans
         exact.append(ok)
         wok = ok and all(s["worlds"][0]["world"] == g["world"] or s["worlds"][0]["world"] in g.get("alt_worlds", []) for s, g in zip(top, m["segments"]))
-        chain.append(wok)
+        chain.append(wok); bk.add(m, top, wok)
         by_var.setdefault(m["variant"], []).append(ok); by_n.setdefault(m["n_segments"], []).append(ok)
         by_fam.setdefault(m.get("family", "?"), []).append(ok); chain_fam.setdefault(m.get("family", "?"), []).append(wok)
     res = {"n": len(msgs), "boundary": boundary_prf(gold_starts, pred_starts), "exact_segmentation": sum(exact) / len(exact),
            "end_to_end_exact": sum(chain) / len(chain),
            "exact_by_variant": {k: sum(v) / len(v) for k, v in by_var.items()}, "exact_by_n_segments": {str(k): sum(v) / len(v) for k, v in sorted(by_n.items())},
            "exact_by_family": {k: sum(v) / len(v) for k, v in sorted(by_fam.items())}, "end_to_end_by_family": {k: sum(v) / len(v) for k, v in sorted(chain_fam.items())},
-           "n_by_family": {k: len(v) for k, v in sorted(by_fam.items())}}
+           "n_by_family": {k: len(v) for k, v in sorted(by_fam.items())}, "by_bucket": bk.report()}
     return res
 
 
@@ -563,7 +570,7 @@ def main(argv=None):
             for k in range(0, len(order), a.batch_size):
                 ch = order[k:k + a.batch_size]
                 for x in ch:
-                    shown.add("seg", msgs[x].get("family", "?"), tags=[f"n_segments:{msgs[x]['n_segments']}"])
+                    shown.add("seg", msgs[items[x]["msg"]].get("family", "?"), tags=[f"n_segments:{msgs[items[x]['msg']]['n_segments']}"])
                 yield col([items[x] for x in ch])
 
     def log_edit(kinds):
@@ -595,7 +602,7 @@ def main(argv=None):
         wm = eval_world(model, tok, sp["dev"], use_ctx, dev, worlds, train_texts)
         sm = eval_seg(model, tok, mc["dev"], use_ctx, dev, worlds)
         em = eval_edit(model, tok, edev, tag_id, use_ctx, dev) if use_edit else None
-        return wm, sm, em, wm["top1"] + sm["boundary"]["f1"] + (0.5 * em["edit_f1"] if em else 0.0)
+        return wm, sm, em, wm["top1"] + sm["boundary"]["f1"] + (0.5 * em["edit_f1"] if em else 0.0) + worst_bucket(sm["by_bucket"])   # G6: the worst length bucket counts too
 
     step, history, done = 0, [], False
     ckpts = []   # [(score, step, path)] best dev-score checkpoints (kept for the operational selection)
@@ -630,7 +637,7 @@ def main(argv=None):
             wm, sm, em, score = dev_score()
             nfail, nsolved = probe()
             history.append({"epoch": len(history) + 1, "step": step, "world_loss": sum(lw[-eval_every:]) / max(len(lw[-eval_every:]), 1), "seg_loss": sum(ls[-eval_every:]) / max(len(ls[-eval_every:]), 1),
-                            "dev_top1": wm["top1"], "dev_top3": wm["top3"], "dev_seg_f1": sm["boundary"]["f1"], "dev_exact_seg": sm["exact_segmentation"], "dev_seg_by_family": sm["exact_by_family"],
+                            "dev_top1": wm["top1"], "dev_top3": wm["top3"], "dev_seg_f1": sm["boundary"]["f1"], "dev_exact_seg": sm["exact_segmentation"], "dev_seg_by_family": sm["exact_by_family"], "dev_seg_by_bucket": {k: {"final": v["final_correct"], "exact": v["exact_segmentation"], "n": v["n"]} for k, v in sm["by_bucket"].items()},
                             "probe_failures": nfail, "probe_solved": nsolved, "dev_score": score})
             if em:
                 history[-1].update({"edit_loss": sum(le[-eval_every:]) / max(len(le[-eval_every:]), 1), "dev_edit_f1": em["edit_f1"], "dev_tag_acc": em["tag_accuracy"], "dev_edit_exact": em["exact_sentences"], "dev_edit_rmb": em["recovered_misled_broken"]})

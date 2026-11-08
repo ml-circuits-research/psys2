@@ -1,0 +1,71 @@
+{
+ "train": {
+  "families": {
+   "chain_long": 900,
+   "concat": 9397,
+   "ellipsis": 1710,
+   "long": 600,
+   "mid": 4000,
+   "ref_created": 2563,
+   "repeat_undo": 1723,
+   "self_correct": 1755,
+   "shared_arg": 1702,
+   "single": 3103,
+   "world_switch": 2547
+  },
+  "buckets": {
+   "1": 8270,
+   "2-3": 16230,
+   "4-5": 1631,
+   "6-8": 2369,
+   "long": 1500
+  },
+  "dependency_segments": 4289
+ },
+ "dev": {
+  "families": {
+   "chain_long": 100,
+   "concat": 945,
+   "ellipsis": 135,
+   "long": 100,
+   "mid": 300,
+   "ref_created": 322,
+   "repeat_undo": 164,
+   "self_correct": 181,
+   "shared_arg": 101,
+   "single": 355,
+   "world_switch": 297
+  },
+  "buckets": {
+   "1": 772,
+   "2-3": 1728,
+   "4-5": 120,
+   "6-8": 180,
+   "long": 200
+  },
+  "dependency_segments": 338
+ },
+ "test": {
+  "families": {
+   "chain_long": 200,
+   "concat": 1081,
+   "ellipsis": 175,
+   "long": 200,
+   "mid": 600,
+   "ref_created": 408,
+   "repeat_undo": 225,
+   "self_correct": 262,
+   "shared_arg": 105,
+   "single": 319,
+   "world_switch": 425
+  },
+  "buckets": {
+   "1": 861,
+   "2-3": 2139,
+   "4-5": 244,
+   "6-8": 356,
+   "long": 400
+  },
+  "dependency_segments": 724
+ }
+}

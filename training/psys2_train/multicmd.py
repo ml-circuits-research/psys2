@@ -26,7 +26,10 @@ JOINER_W = [5, 1, 3, 3, 2, 3, 2, 4, 0.0]  # the bare " " joiner is only used by 
 END_PUNCT = ".!?"
 SIZES = {"train": 30000, "dev": 3000, "test": 4000}
 P_COMP = {"train": 0.40, "dev": 0.40, "test": 0.40}   # share of compositional programs (review F4, compositional.py)
-N_LONG = {"train": 0, "dev": 100, "test": 200}         # long concatenations (14-24 commands) that exceed the 192-token window (review F8)
+N_LONG = {"train": 600, "dev": 100, "test": 200}       # long concatenations (14-24 commands) that exceed the 192-token window (review F8; G6: now also in train)
+N_MID = {"train": 4000, "dev": 300, "test": 600}       # G6: 4-8 command programs (routing sentences + compositional units), family "mid"
+N_CHAIN_LONG = {"train": 900, "dev": 100, "test": 200} # G6: 9-24 command programs of the same kind, family "chain_long"
+DEP_FAMILIES = ("ref_created", "repeat_undo")           # units whose later segments depend on the earlier one (lost-dependency metric)
 P_SINGLE, P_THREE, P_SAME_WORLD, P_PLAIN, P_LOWER_NEXT = 0.25, 0.30, 0.40, 0.20, 0.4
 
 LEAD_RE = re.compile(r"^(?:[\s,;]+|(?:and|then)\b[\s,]*)+", re.I)
@@ -106,15 +109,92 @@ def build_split(rows, n, rng, k_range=None):
     return out
 
 
+def _strip_end(text, segs):
+    """Drop sentence-final punctuation of a unit (joiner kind "strip"); shrinks the last segment accordingly."""
+    t = text.rstrip(END_PUNCT + " ")
+    if len(t) < len(text) and segs and segs[-1]["end"] == len(text):
+        segs[-1]["end"] = len(t); segs[-1]["text"] = t[segs[-1]["start"]:]
+    return t
+
+
+def build_chain(rows, comp_pool, n, rng, k_range):
+    """G6: messages of k_range commands made of units (routing sentences, compositional programs incl. ref/undo dependencies).
+    Joiners and punctuation follow build_message; a segment that depends on the previous one (ref_created / repeat_undo units)
+    carries `dep: true`. Offsets are exact char offsets of the final text."""
+    import copy
+    by_world = {}
+    for r in rows:
+        by_world.setdefault(r["world"], []).append(r)
+    worlds = sorted(by_world)
+    out = []
+    for k in range(n):
+        kmax = rng.randint(*k_range)
+        w = rng.choice(worlds) if rng.random() < P_SAME_WORLD else None
+        plain = rng.random() < P_PLAIN
+        units, total = [], 0
+        while total < kmax:
+            if comp_pool and rng.random() < 0.35:
+                u = copy.deepcopy(rng.choice(comp_pool))
+                if total + u["n_segments"] > kmax and units:
+                    continue
+                segs = [dict(s) for s in u["segments"]]
+                if u["family"] in DEP_FAMILIES:
+                    for s in segs[1:]:
+                        s["dep"] = True
+                units.append({"text": u["text"], "segs": segs, "ctx": u["context"], "plain": u["variant"] == "plain"})
+            else:
+                r = rng.choice(by_world[w] if w else rows)
+                s = r["text"].strip()
+                units.append({"text": s, "segs": [{"start": 0, "end": len(s), "text": s, "world": r["world"], "alt_worlds": r.get("alt_worlds", []), "source_id": r["id"]}],
+                              "ctx": r["context"], "plain": False})
+            total += len(units[-1]["segs"])
+        text, segs = "", []
+        for i, u in enumerate(units):
+            t, us = u["text"], u["segs"]
+            last = i == len(units) - 1
+            j = None
+            if not last:
+                j, kind = rng.choices(JOINERS[:-1], weights=JOINER_W[:-1])[0]
+                if kind == "strip":
+                    t = _strip_end(t, us)
+                else:
+                    if t[-1] not in END_PUNCT:
+                        t += "."; us[-1]["end"] = len(t); us[-1]["text"] = t[us[-1]["start"]:]
+                    j = " "
+            if plain and not u["plain"] and len(us) == 1:
+                t = _plain(t); us[0].update(end=len(t), text=t)
+            elif i and not plain and not u["plain"] and len(us) == 1 and rng.random() < P_LOWER_NEXT and len(t) > 1 and t[0].isupper() and not t[1].isupper() and not t.startswith("I "):
+                t = t[0].lower() + t[1:]
+                us[0]["text"] = t[:us[0]["end"]]
+            if j is not None and plain:
+                j = " " + _plain(j) + " " if re.search(r"[a-z]", j) else " "
+            base = len(text); text += t
+            for s in us:
+                segs.append({**s, "start": s["start"] + base, "end": s["end"] + base})
+            if j is not None:
+                text += j
+        c = units[0]["ctx"]
+        out.append({"id": f"mc{k:06d}", "text": text, "context": {"tab": c.get("tab"), "recent_worlds": c.get("recent_worlds", []), "session": [], "synthetic": True},
+                    "variant": "plain" if plain else "clean", "n_segments": len(segs), "segments": segs,
+                    "family": "chain_long" if k_range[1] > 8 else "mid"})
+    return out
+
+
 def build_mix(rows, split, n, seed, epoch=0):
     """Messages of one split: concatenations of routing sentences + compositional programs (F4) + long messages (F8).
     `epoch` changes the seed, so training combinations are regenerated every epoch (review F6)."""
     from . import compositional
-    n_comp = int(n * P_COMP[split]); n_long = N_LONG[split]
+    n_comp = int(n * P_COMP[split]); n_long = N_LONG[split]; n_mid = N_MID[split]; n_cl = N_CHAIN_LONG[split]
     rng = random.Random(f"{seed}-{split}-{epoch}")
-    recs = build_split(rows, n - n_comp - n_long, rng)
+    recs = build_split(rows, n - n_comp - n_long - n_mid - n_cl, rng)
     if n_long:
-        recs += build_split(rows, n_long, rng, k_range=(14, 24))
+        recs += build_split(rows, n_long, rng, k_range=(14, 40 if split == "train" else 24))   # train goes past the window so the windowed examples are seen
+    if n_mid or n_cl:
+        pool = [r for r in compositional.generate(max(400, (n_mid * 4 + n_cl * 12) // 3), split, f"{seed}-{epoch}-chain") if r["n_segments"] <= 3]
+        if n_mid:
+            recs += build_chain(rows, pool, n_mid, rng, (4, 8))
+        if n_cl:
+            recs += build_chain(rows, pool, n_cl, rng, (9, 40 if split == "train" else 24))
     recs += compositional.generate(n_comp, split, f"{seed}-{epoch}")
     rng.shuffle(recs)
     for i, r in enumerate(recs):

@@ -19,6 +19,17 @@ def window_spans(n, size, stride=None):
     return out
 
 
+def train_windows(ids, labels, max_len, cls_id, sep_id):
+    """Training counterpart of the inference windowing (G6). `ids`/`labels` include the special tokens [CLS] ... [SEP]
+    (labels -100 on them). A sequence of at most `max_len` tokens is one example; a longer one is cut into the SAME windows
+    `window_spans(n_inner, max_len - 2)` that run_seg / dispatcher-runtime.mjs use at inference, each re-wrapped as [CLS] + inner + [SEP].
+    Returns [(ids, labels)]."""
+    if len(ids) <= max_len:
+        return [(ids, labels)]
+    n = len(ids) - 2
+    return [([cls_id] + ids[1 + a:1 + b] + [sep_id], [-100] + labels[1 + a:1 + b] + [-100]) for a, b in window_spans(n, max_len - 2)]
+
+
 def merge_window_probs(n, spans, window_probs):
     """window_probs[i][k] = P(B) of inner token a_i + k in window i. Returns n merged probabilities (edge-distance weighted mean)."""
     acc, wsum = [0.0] * n, [0.0] * n
