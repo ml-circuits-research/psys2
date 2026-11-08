@@ -2194,3 +2194,33 @@
     session=gm2
     input="where is Paris"
     expectState="center.lat=48.8534"
+
+@t.geo.map.x210 core.test
+    session=gx0
+    input="show me 45.5 north 25 east"
+    expectState="center.lat=45.5"
+    expectState="center.lon=25"
+
+@t.geo.map.x211 core.test
+    session=gx1
+    input="go to 45.5 N 25.3 E"
+    expectState="center.lat=45.5"
+    expectState="center.lon=25.3"
+
+@t.geo.map.x212 core.test
+    session=gx2
+    input="fly to 33.9 south 18.4 east"
+    expectState="center.lat=-33.9"
+    expectState="center.lon=18.4"
+
+@t.geo.map.x213 core.test
+    session=gx3
+    input="take me to 40.7 degrees north 74 degrees west please"
+    expectState="center.lat=40.7"
+    expectState="center.lon=-74"
+
+@t.geo.map.x214 core.test
+    session=gx4
+    input="34 south 58.4 west"
+    expectState="center.lat=-34"
+    expectState="center.lon=-58.4"

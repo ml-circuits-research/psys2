@@ -2525,3 +2525,31 @@
     priority=11
     example="Show me."
     doc="A map command without a place: asks which place and expects the answer as the next utterance (discourse pending, spec 11)."
+
+@pat.geo.map.x2.coords.north.east core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|plz|hey|ok|okay|i_want_to|i_would_like_to|let_us|let_me|you_can]? [go_to|show|show_me|center_on|centre_on|fly_to|jump_to|zoom_to|take_me_to|find|locate|where_is|point_to|navigate_to|look_at|move_to|pan_to]? [the]? [point|place|position|coordinates|location|spot]? {la:number} [degrees|deg]? [north|n|degrees_north|deg_north] [,|and|comma]? {lo:number} [degrees|deg]? [east|e|degrees_east|deg_east] [pls|plz|thanks|thank_you|for_me|please]?"
+    emit="@{_} core.request action=geo.coords arg.la={la} arg.lo={lo} arg.ns=north arg.ew=east"
+    kind=request
+    priority=14
+    example="Show me 45.5 north 25 east."
+
+@pat.geo.map.x2.coords.north.west core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|plz|hey|ok|okay|i_want_to|i_would_like_to|let_us|let_me|you_can]? [go_to|show|show_me|center_on|centre_on|fly_to|jump_to|zoom_to|take_me_to|find|locate|where_is|point_to|navigate_to|look_at|move_to|pan_to]? [the]? [point|place|position|coordinates|location|spot]? {la:number} [degrees|deg]? [north|n|degrees_north|deg_north] [,|and|comma]? {lo:number} [degrees|deg]? [west|w|degrees_west|deg_west] [pls|plz|thanks|thank_you|for_me|please]?"
+    emit="@{_} core.request action=geo.coords arg.la={la} arg.lo={lo} arg.ns=north arg.ew=west"
+    kind=request
+    priority=14
+    example="Show me 45.5 north 25 west."
+
+@pat.geo.map.x2.coords.south.east core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|plz|hey|ok|okay|i_want_to|i_would_like_to|let_us|let_me|you_can]? [go_to|show|show_me|center_on|centre_on|fly_to|jump_to|zoom_to|take_me_to|find|locate|where_is|point_to|navigate_to|look_at|move_to|pan_to]? [the]? [point|place|position|coordinates|location|spot]? {la:number} [degrees|deg]? [south|s|degrees_south|deg_south] [,|and|comma]? {lo:number} [degrees|deg]? [east|e|degrees_east|deg_east] [pls|plz|thanks|thank_you|for_me|please]?"
+    emit="@{_} core.request action=geo.coords arg.la={la} arg.lo={lo} arg.ns=south arg.ew=east"
+    kind=request
+    priority=14
+    example="Show me 45.5 south 25 east."
+
+@pat.geo.map.x2.coords.south.west core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|plz|hey|ok|okay|i_want_to|i_would_like_to|let_us|let_me|you_can]? [go_to|show|show_me|center_on|centre_on|fly_to|jump_to|zoom_to|take_me_to|find|locate|where_is|point_to|navigate_to|look_at|move_to|pan_to]? [the]? [point|place|position|coordinates|location|spot]? {la:number} [degrees|deg]? [south|s|degrees_south|deg_south] [,|and|comma]? {lo:number} [degrees|deg]? [west|w|degrees_west|deg_west] [pls|plz|thanks|thank_you|for_me|please]?"
+    emit="@{_} core.request action=geo.coords arg.la={la} arg.lo={lo} arg.ns=south arg.ew=west"
+    kind=request
+    priority=14
+    example="Show me 45.5 south 25 west."

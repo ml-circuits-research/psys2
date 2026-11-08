@@ -204,8 +204,9 @@ export function where(ctx, { p }) {
   return ok(describePlace(D, e));
 }
 
-export function coords(ctx, { la, lo }) {
-  const s = ctx.state, lat = Number(la), lon = Number(lo);
+export function coords(ctx, { la, lo, ns, ew }) {
+  // compass words: "45.5 north 25 east", "12 south 30 west" (south and west are negative)
+  const s = ctx.state, lat = (ns === 'south' ? -1 : 1) * Number(la), lon = (ew === 'west' ? -1 : 1) * Number(lo);
   if (!(Math.abs(lat) <= 90 && Math.abs(lon) <= 180)) return no('unsupported', 'Latitude must be between -90 and 90 and longitude between -180 and 180.');
   tab(ctx);
   viewPoint(s, lat, lon, 8);
