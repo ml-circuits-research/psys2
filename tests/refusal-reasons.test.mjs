@@ -30,7 +30,7 @@ test('reasonOf derives the reason', () => {
 });
 
 test('interpreter envelopes carry a reason', async () => {
-  const bad = await envOf('Make your eyes and body blue');
+  const bad = await envOf('Make your eyes wobbly');
   assert.equal(bad?.reason, 'unknown_argument');
   const s = engine.createSession({ language: 'en' });
   const env = engine.interp.runAction(s.isession, 'no.such.action', {});
@@ -61,7 +61,7 @@ test('execution_error is never a valid example', async () => {
 });
 
 test('unknown_argument is a penalised fallback and never blocks other candidates', async () => {
-  const t = 'Make your eyes and body blue';
+  const t = 'Make your eyes wobbly';
   const r = await validator.validate(one(t, W(['ui.avatar', 0.9], ['kids.arith', 0.05])));
   const att = r.trace.segmentations[0].pieces[0].attempts;
   const swallow = att.find((a) => a.world === 'ui.avatar' && a.variant === 'original');
@@ -70,13 +70,23 @@ test('unknown_argument is a penalised fallback and never blocks other candidates
   assert.ok(swallow.score < Math.log(0.9) - 4, 'carries the unknownArgPenalty');
 });
 
-test('probe: unknown eyes "and body blue" does not win when the simplified text or another reading recovers', async () => {
-  const t = 'Make your eyes and body blue';
-  const r = await validator.validate({ id: 't', text: t, context: {}, segmentations: [{ score: 0, segments: [{ start: 0, end: t.length, text: t, simplified: 'Make your eyes blue', worlds: W(['ui.avatar', 0.9]) }] }] });
+test('probe: unknown eyes "wobbly" does not win when the simplified text recovers', async () => {
+  const t = 'Make your eyes wobbly';
+  const r = await validator.validate({ id: 't', text: t, context: {}, segmentations: [{ score: 0, segments: [{ start: 0, end: t.length, text: t, simplified: 'Make your eyes round', worlds: W(['ui.avatar', 0.9]) }] }] });
   assert.equal(r.status, 'understood');
   assert.equal(r.produced[0].textUsed, 'simplified');
   for (const p of r.produced) assert.doesNotMatch(p.sop, /setPartUnknown/);
   // without any recovery the swallowed reading is only a last-resort fallback, flagged in the trace
   const r2 = await validator.validate(one(t, W(['ui.avatar', 0.9])));
   assert.equal(r2.trace.segmentations[0].pieces[0].attempts[0].unknownArg, true);
+});
+
+test('probe: F4 expansion makes "Make your eyes and body blue" two clean blue parts', async () => {
+  const s = engine.createSession({ language: 'en' });
+  const r = await s.send('Make your eyes and body blue');
+  assert.equal(r.answers.length, 2);
+  for (const a of r.answers) assert.equal(a.envelope.status, 'supported');
+  const t = 'Make your eyes and body blue';
+  const v = await validator.validate(one(t, W(['ui.avatar', 0.9])));
+  for (const p of v.produced) assert.doesNotMatch(p.sop, /setPartUnknown/);
 });
