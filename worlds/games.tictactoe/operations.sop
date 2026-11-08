@@ -63,3 +63,9 @@
     semantics=action
     action=ttt.count
     doc="Counts the moves on the board so far, split by player (how many moves or tries have we made)."
+
+@op.games.tictactoe.undo core.operation
+    impl=undo
+    semantics=action
+    action=ttt.undo
+    doc="Takes back the last move of the user and the answer of the system."

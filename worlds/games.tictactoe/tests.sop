@@ -745,3 +745,33 @@
     input="ugh I give up"
     expect="give up"
     session=sw062
+
+@t.games.tictactoe.x401 core.test
+    session=tu1
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+
+@t.games.tictactoe.x402 core.test
+    session=tu1
+    input="center"
+    expectState="board.4=X"
+
+@t.games.tictactoe.x403 core.test
+    session=tu1
+    input="undo"
+    expectState="board.4="
+
+@t.games.tictactoe.x404 core.test
+    session=tu1
+    input="top left"
+    expectState="board.0=X"
+
+@t.games.tictactoe.x405 core.test
+    session=tu1
+    input="oops, take that back"
+    expectState="board.0="
+
+@t.games.tictactoe.x406 core.test
+    session=tu2
+    input="undo"
+    expectStatus=missing

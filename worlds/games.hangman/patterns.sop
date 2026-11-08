@@ -692,3 +692,11 @@
     kind=request
     priority=8
     example="Zed."
+
+@pat.games.hangman.x2.length core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just|and]? [how_many_letters|how_many_letters_are_there|how_many_letters_in_it|how_long_is|how_long_is_the_word|how_long_is_it|how_long|what_is_the_length_of|whats_the_length_of|the_length_of|word_length|letter_count|number_of_letters|how_many_characters|how_many_characters_in] [does|do|is|in|has|are|of]? [the|this|my|your]? [word|secret_word|secret|answer|puzzle|it|there|hidden_word]? [have|has|contain|contains|include|in_it|in_total|long|there|hidden]? [please|pls|plz|thanks|now]?"
+    emit="@{_} core.request action=hm.status"
+    kind=request
+    priority=11
+    example="How many letters does the word have?"
+    example="How long is the word?"

@@ -97,7 +97,7 @@ function ending(s) {
 const mine = (s) => other(s.user);
 
 function startGame(s, user) {
-  s.board = Array(9).fill('');
+  s.board = Array(9).fill(''); s.history = [];
   s.user = user; s.turn = 'X'; s.winner = null; s.last = { user: null, system: null };
   if (user === 'O') return systemMove(s);
   return null;
@@ -135,7 +135,7 @@ const ORD = { first: 1, '1st': 1, second: 2, '2nd': 2, third: 3, '3rd': 3, last:
 const ROWW = { top: 0, upper: 0, up: 0, high: 0, highest: 0, first: 0, middle: 1, mid: 1, center: 1, centre: 1, second: 1, bottom: 2, lower: 2, down: 2, low: 2, lowest: 2, third: 2, last: 2 };
 const COLW = { left: 0, first: 0, middle: 1, mid: 1, center: 1, centre: 1, second: 1, right: 2, third: 2, last: 2 };
 
-export function move(ctx, { pos, col, row, numeric, rname, cname }) {
+function _move(ctx, { pos, col, row, numeric, rname, cname }) {
   const s = ctx.state;
   let idx;
   if (rname !== undefined && cname !== undefined) {
@@ -217,4 +217,26 @@ export function count(ctx) {
   const mine = s.board.filter((c) => c === s.user).length, theirs = total - mine;
   const plural = (n) => `${n} ${n === 1 ? 'move' : 'moves'}`;
   return ok(`${total === 1 ? 'There is 1 move' : `There are ${total} moves`} on the board so far: you made ${plural(mine)} and I made ${plural(theirs)}.${s.winner ? '' : ' There are ' + (9 - total) + ' places left.'}`.replace('There are 1 places left', 'There is 1 place left'));
+}
+
+// ---- undo of the last move (yours and my answer to it) ---------------------------------------------------------
+const snap = (st) => JSON.stringify({ board: st.board, turn: st.turn, winner: st.winner, last: st.last });
+/** A move is kept for "undo" only when it was played. */
+export function move(ctx, args) {
+  const s = ctx.state;
+  const before = snap(s);
+  const r = _move(ctx, args);
+  if (r?.status === 'supported' && snap(s) !== before) {
+    (s.history ??= []).push(before);
+    if (s.history.length > 10) s.history.shift();
+  }
+  return r;
+}
+export function undo(ctx) {
+  const s = ctx.state;
+  const prev = s.history?.pop();
+  if (!prev) return no('missing', 'There is nothing to undo yet: no move has been played.');
+  Object.assign(s, JSON.parse(prev));
+  show(ctx);
+  return ok('OK, I took back your last move and my answer. It is your move again.');
 }

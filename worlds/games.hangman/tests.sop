@@ -648,3 +648,23 @@
     input="end the game pls"
     expect="The word was lion"
     session=sw050
+
+@t.games.hangman.x401 core.test
+    session=hu1
+    input="Play hangman with the word lion."
+    expectStatus=supported
+
+@t.games.hangman.x402 core.test
+    session=hu1
+    input="how many letters does the word have"
+    expect="4 letters"
+
+@t.games.hangman.x403 core.test
+    session=hu1
+    input="how long is the word"
+    expect="4 letters"
+
+@t.games.hangman.x404 core.test
+    session=hu1
+    input="letter count"
+    expect="4 letters"

@@ -720,3 +720,19 @@
     example="Ugh, I give up."
     example="You win, I quit."
     example="I am done, you win."
+
+@pat.games.tictactoe.x2.undo core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just|oops|wait]? [undo|undo_that|undo_it|undo_my_move|undo_the_last_move|take_that_back|take_it_back|take_back_my_move|take_my_move_back|revert|revert_that|go_back|step_back|cancel_that|cancel_my_move|reverse_that|let_me_redo_that|i_want_to_undo|i_changed_my_mind|can_i_undo|can_i_take_that_back|let_me_take_that_back|i_take_it_back|back_up] [please|pls|plz|thanks|now|one_move|a_move|one_step]?"
+    emit="@{_} core.request action=ttt.undo"
+    kind=request
+    priority=9
+    example="Undo."
+    example="Take that back."
+    example="Oops, undo my move."
+
+@pat.games.tictactoe.x2.undo.two core.pattern
+    match="[please|pls|plz|hey|ok|okay]? [undo|take_back|revert] [the_last|my_last]? [move|turn|go|mark|play]"
+    emit="@{_} core.request action=ttt.undo"
+    kind=request
+    priority=9
+    example="Undo the last move."
