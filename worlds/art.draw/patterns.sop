@@ -1399,6 +1399,7 @@
     emit="@{_} core.request action=draw.add arg.n={n} arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
     kind=request
     priority=9
+    tabOnly=true
     example="A purple tree please."
     example="A big red house."
 
@@ -1424,3 +1425,11 @@
     priority=12
     example="I want a clean page."
     example="Give me a blank canvas."
+
+@pat.art.draw.x2.bare.plain core.pattern
+    match="[$lang.lead.filler|pls|plz]? [a|an|one|some|another] {n:number?} {m1:lex.art.draw.mods?} {k:lex.art.draw.things} [$lang.tail.filler|please|pls|plz|thanks]"
+    emit="@{_} core.request action=draw.add arg.n={n} arg.m1={m1} arg.kind={k} arg.kt=\"{k}\""
+    kind=request
+    priority=9
+    tabOnly=true
+    example="A boat please."

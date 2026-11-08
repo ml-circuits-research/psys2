@@ -3714,23 +3714,38 @@
     session=g3boat
     doc="G3 contrast (boat/coat): on the drawing tab a word the tab knows is never spell-corrected into another world's word"
 
+@t.art.draw.x200a core.test
+    session=xbare0
+    input="Draw a red house."
+    expectStatus=supported
+
 @t.art.draw.x210 core.test
-    session=dx0
+    session=xbare0
     input="a purple tree please"
-    expectState="objects.0.color=purple"
-    expectState="objects.length=1"
+    expectState="objects.1.color=purple"
+    expectState="objects.length=2"
+
+@t.art.draw.x200b core.test
+    session=xbare1
+    input="Draw a red house."
+    expectStatus=supported
 
 @t.art.draw.x211 core.test
-    session=dx1
+    session=xbare1
     input="a purple boat please"
-    expectState="objects.0.color=purple"
-    expectState="objects.length=1"
+    expectState="objects.1.color=purple"
+    expectState="objects.length=2"
+
+@t.art.draw.x200c core.test
+    session=xbare2
+    input="Draw a red house."
+    expectStatus=supported
 
 @t.art.draw.x212 core.test
-    session=dx2
+    session=xbare2
     input="a big red house"
-    expectState="objects.0.color=red"
-    expectState="objects.length=1"
+    expectState="objects.1.color=red"
+    expectState="objects.length=2"
 
 @t.art.draw.x213 core.test
     session=dx3
@@ -3825,3 +3840,9 @@
     input="move the house to x 600 y 150"
     expectState="objects.0.x=600"
     expectState="objects.0.y=150"
+
+@t.art.draw.x250 core.test
+    session=xbare3
+    input="a purple tree please"
+    expectStatus=unparsed
+    doc="a bare noun phrase is a drawing request only on the drawing tab"

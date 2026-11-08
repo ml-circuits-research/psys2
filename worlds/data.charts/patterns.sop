@@ -2647,3 +2647,18 @@
     kind=request
     priority=9
     example="Redo."
+
+@pat.data.charts.x2.create.of core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|plz|hey|ok|okay|i_want_you_to|i_need_you_to|let_us|lets|go_ahead_and]? [make|create|draw|show|give_me|build|plot|graph|i_want|i_need|can_i_have|how_about|show_me|chart]? [a|the|me_a]? {ty:lex.data.charts.types?} [chart|graph|plot|diagram] [of|showing|from|using|about] {t:rest}"
+    emit="@{_} core.request action=chart.fromText arg.text=\"{t}\" arg.type={ty}"
+    kind=request
+    priority=11
+    example="A chart of cats 2 and dogs 7 as a pie."
+
+@pat.data.charts.x2.wish.type core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|plz|hey|ok|okay|i_want_you_to|i_need_you_to|let_us|lets|go_ahead_and]? [i_would_rather|i_d_rather|id_rather|i_prefer|i_would_prefer|i_d_prefer|id_prefer|i_like|i_would_like|i_want|i_d_like|id_like|show_me|let_me_see|can_i_see|could_i_see|can_we_see|how_about|what_about|maybe]? [to]? [see|have|view|get|look_at|show]? [it|this|the_chart|the_graph|them|that|the_data|this_chart]? [as|in_a|like|as_a|in|to_be|to_look_like|to_be_a|shown_as|displayed_as|a|an|the]? {t:lex.data.charts.types} [chart|graph|plot|diagram|instead]?"
+    emit="@{_} core.request action=chart.setType arg.type={t}"
+    kind=request
+    priority=14
+    example="I would rather see it as a pie."
+    example="I prefer a line chart."

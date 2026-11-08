@@ -373,7 +373,22 @@ export const fromPrices = undoable((ctx, args) => createFrom(ctx, 'prices', args
 export const fromList = undoable((ctx, args) => createFrom(ctx, 'list', args));
 export const fromLegs = undoable((ctx, args) => createFrom(ctx, 'legs', args));
 
+/** Politeness and a chart type that end the data text: "plums 8 for me", "dogs 7 as a pie". Returns { text, type }. */
+function splitDataTail(text, type) {
+  let t = String(text ?? '').trim(), ty = type;
+  for (let again = true; again;) {
+    again = false;
+    const pol = t.match(/\s+(?:for me|for us|please|pls|plz|thanks|thank you|thx|now|asap|real quick|if you can|ok)$/i);
+    if (pol) { t = t.slice(0, pol.index).trim(); again = true; }
+    const ty2 = t.match(/\s+(?:as|in|into|like|on|with)\s+(?:a|an|the)?\s*(bar|column|line|pie|doughnut|donut|radar|scatter|polar(?: area)?)(?:\s+(?:chart|graph|plot|diagram))?$/i);
+    if (ty2) { ty ??= ty2[1].toLowerCase().replace(/\s+/g, '_'); t = t.slice(0, ty2.index).trim(); again = true; }
+  }
+  return { text: t, type: ty };
+}
+
 function _fromText(ctx, args) {
+  const tail = splitDataTail(args.text, args.type);
+  args = { ...args, text: tail.text, type: tail.type };
   const { items, bad } = parseData(args.text);
   if (!items.length) return no('missing', `I could not find numbers in "${String(args.text).trim()}". Say it like this: "make a chart: apples 5, pears 3, plums 8".`);
   const seen = new Map();
