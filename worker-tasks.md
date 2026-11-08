@@ -88,7 +88,7 @@ The goal is a system that is **as fast and as complete as possible, with as litt
 
 ### R2 — exhaustive rule coverage on all worlds (main task; finishes this stage)
 
-For **every world** (all 21), do this in parallel with subagents, one per world or per small group:
+For **every world with operations** (all 20; `core` holds only the shared legend), do this in parallel with subagents, one per world or per small group:
 1. **Request-shape catalogue.** Write `worlds/<world>/coverage.md`. For every operation, list every shape a user may use, and add the world's own ones:
    - imperative ("make it red"), question ("can you make it red?", "is it red?"), wish ("I want it red", "I'd like…");
    - indirect ("it should be red", "red would be nicer"), statement-as-command ("the body is red now");
