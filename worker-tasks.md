@@ -13,7 +13,7 @@ Three files coordinate the worker and the reviewer:
 | `questions.md` | worker appends, reviewer removes | The worker appends a question whenever it is blocked or a decision is not covered here, and **never deletes** anything. The reviewer removes a question after answering it in this file. |
 | `worker-log.md` | worker only | Append-only progress log: one entry per task with status (`done` / `partial` / `blocked`), commands run, key numbers, commit hash, deviations. Write the entry and push as soon as a task is done: the reviewer validates from it. |
 
-Baseline freeze: the current baseline commit is given in §2. The reviewer does not change `worlds/` or `src/` after it, except through a task in this file. So pulling before each task is always safe.
+**No freeze (user decision 12:52).** Rules and runtime are meant to keep changing. Widen the rules continuously, as much and as varied as possible. Every reported number carries the commit hash it was measured at; there is no baseline to confirm and nothing to ask about it. When `worlds/` or `src/` changes, rerun the evaluations that matter (rules eval, dispatcher eval) and report the new numbers next to the old ones. Do not ask permission for that.
 
 Working rules:
 
@@ -59,7 +59,10 @@ Write `scripts/learn-from-logs.mjs` plus a README section. It takes phrase-log e
 
 Simulate one loop with the held-out set as fake logs, and report the before/after headline metric.
 
-### Answers and notes (reviewer, 11:30)
+### Answers and notes (reviewer, 11:30, updated 12:55)
+
+- **Q4 (baseline after the avatar changes):** confirmed. There is no baseline to confirm from now on (see "No freeze" in §0). The user's decisions are accepted: Encoder as the webchat default, automatic spelling/abbreviation normalization, partial understanding ("do what it can"), and `acceptRefused` on by default.
+- **D1b policy:** in the validation layer, use the simplified text only when the original does not validate, and accept the simplified reading only if it validates and the interpreter does not refuse it (this limits the "misled" cases). Keep tau 0.5. Add mode C to the headline evaluation. Publish the simplification model in the next R1 loop if the headline (Br + C) is at least D1's.
 
 - **Q3 (`acceptRefused`): yes, make it the default.** A complete parse whose action the current state refuses is a correct understanding, and the refusal is the reply: an illegal chess move, drawing on an empty canvas. Make Br the default policy and keep strict as an option. Keep three cases apart where the status allows it:
   - a state refusal (an operation exists, the precondition fails) is **valid**, with a small penalty used only to break ties;
@@ -70,11 +73,28 @@ Simulate one loop with the held-out set as fake logs, and report the before/afte
 - **build-dataset wipes `training/dataset/multicmd/`:** change `scripts/build-dataset.mjs` so that it removes only the world directories it writes, or move multi-command data generation into build-dataset itself (preferred: one command builds everything). Note it in the D1 log entry.
 - **Use `--jobs` wisely:** evaluations reproduce exactly. The reviewer reruns subsets with `--limit`, so keep `--limit` deterministic: the first N records in a fixed order.
 
+### Direction from the user (12:52): read this before anything else
+
+The goal is a system that is **as fast and as complete as possible, with as little effort as possible**. Engineering, not research. Concretely:
+- **Rule gaps are 69% of the failures (D3), so widening the rules is the main lever.** Widen them aggressively and in many directions: synonyms, short forms, typos, word orders, politeness, voice fillers, partial commands, coordination. Tests must pass. That is the only gate.
+- Do not stop to ask about baselines, freezes, contamination or purity. Ask only when a decision really belongs to the user (UI behaviour, publishing, deleting things).
+- Use parallel subagents (Sonnet for rules, Haiku for new paraphrase batches) whenever work splits by world.
+
+### R1 — continuous rule widening (main task from now on, run in loops)
+
+Loop until the session ends:
+1. Take the rule gaps from the latest dispatcher evaluation (`rule_gaps` in `training/results/dispatch-*.json`, failure traces in `training/runs/`), worst worlds first: docs.editor, kids.common, art.draw, docs.reader, kids.arith, media.music, ui.shell, kids.animals, then the rest.
+2. Widen the patterns, lexicons and ops of those worlds, in parallel per world group. Write general patterns, never one per sentence. Add representative tests. `npm test` and `test-world all` must pass.
+3. Generate fresh Haiku paraphrase batches for the widened worlds: new goals, many variants. They go into training, and some become the next fresh held-out batch. Data is never too much.
+4. Rebuild the dataset, retrain the DistilBERT dispatcher (with the simplification head), and rerun the headline evaluation.
+5. If the headline metric improved, publish the new model (D4b procedure: same paths, one commit per model version, headline in the message) and rebuild the webchat.
+6. Log each loop in `worker-log.md` as `R1 loop N`: worlds touched, rules-only and pipeline headline before → after, model published yes/no.
+
 ## 3. Stage 1 tasks — the dispatcher (this session)
 
 **The goal of this session is to avoid training per-world models.** We validate one idea first: a single small shared model, the **dispatcher**, proposes candidates, and the existing rule formalizers validate them. No per-world LoRA in this session.
 
-Order: D3 → D1b → D5 → T9 (Stage 1 only). D1, D2 and D4 are done.
+Order: R1 loops (main) and D5 in between. T9 is updated at the end of the session. D1, D2, D3, D4 are done; D1b is accepted as partial, with its policy below.
 
 2. **D1 — dispatcher model:** done and validated (segmentation + world heads; DistilBERT kept as the main model).
    **D1b — simplification head (still open, do after D3).** It is the third head of Round 1: KEEP / DELETE / REPLACE edit tags, learned from aligning the paraphrase variants with their canonical phrasings. D3 will show how many failures are rule gaps on messy wording; this head targets exactly those. Add it to the DistilBERT dispatcher, export it in the same ONNX model, and use it in the validation layer: try the simplified text when the original does not validate. Report the headline metric before and after.
@@ -236,3 +256,5 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
 - D1 — Dispatcher (e43813c): DistilBERT top-1 0.971 / top-3 0.994 / seg F1 0.985 (test); held-out top-1 0.934. ModernBERT gives no gain, so DistilBERT stays. Tests pass; the result JSON matches the log. Training was not rerun (no GPU on the reviewer side).
 - D4 — Export and browser runtime (9a1e635): int8 63.9 MB, 4.2 ms per pass. JS and Python agree. 547 tests pass, the webchat scenario passes with rules. The int8/fp32 world agreement of 98.97% is accepted, because the top-3 candidate sets are unchanged.
 - D4b — Model published in the repo (32fd79d). Reviewer check in headless Chrome with Encoder selected: multi-command, typo and tab-routing messages answered correctly, no console errors. Still add the D4b log entry, including the check on the public Pages URL.
+- D3 — End-to-end evaluation (746d847): headline 68.5% right with dispatcher + validation, against 43.0% rules only; multi-command 80.8% against 36.0%. Rule gaps are 69% of the failures. Sample rerun: runs and reproduces; the numbers moved slightly with later rule commits, as expected.
+- D1b — Simplification head (19afdbe), partial: +1 to +3.5 points; the JS/ONNX runtime works. Policy and publication are decided in §2 / R1.
