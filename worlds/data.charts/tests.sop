@@ -1277,3 +1277,24 @@
     input="add the numbers to the document"
     expectStatus=supported
     session=r2d
+
+
+@t.data.charts.x202 core.test
+    session=ch2
+    input="i do not want the letter F"
+    expectStatus=unparsed
+
+@t.data.charts.x203 core.test
+    session=ch3
+    input="the house should be blue instead"
+    expect="no chart"
+
+@t.data.charts.x204 core.test
+    session=ch4
+    input="make a chart: apples 5, pears 3, plums 8"
+    expectState="charts.0.labels.length=3"
+
+@t.data.charts.x205 core.test
+    session=ch4
+    input="pears should be cherries"
+    expectState="charts.0.labels.1=Cherries"

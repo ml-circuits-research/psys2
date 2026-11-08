@@ -1147,3 +1147,88 @@
     input="try a grill for the mouth"
     expectState="name=PSys2"
     doc="G3 contrast (mouth/name): no naming cue"
+
+@t.ui.avatar.x201 core.test
+    session=av1
+    input="add vents to your chest"
+    expectState="robot.chest=vents"
+
+@t.ui.avatar.x202 core.test
+    session=av2
+    input="stick a heart on your chest"
+    expectState="robot.chest=heart"
+
+@t.ui.avatar.x203 core.test
+    session=av3
+    input="give me plus shaped eyes"
+    expectState="robot.eyes=plus"
+
+@t.ui.avatar.x204 core.test
+    session=av4
+    input="can you give yourself a pair of visor eyes"
+    expectState="robot.eyes=visor"
+
+@t.ui.avatar.x205 core.test
+    session=av5
+    input="remove the thing on your chest"
+    expectState="robot.chest=none"
+
+@t.ui.avatar.x206 core.test
+    session=av6
+    input="turn your whole body green"
+    expectState="robot.colors.body=69db7c"
+
+@t.ui.avatar.x207 core.test
+    session=av7
+    input="i prefer you in yellow"
+    expectState="robot.colors.body=ffd43b"
+
+@t.ui.avatar.x208 core.test
+    session=av8
+    input="your body should be a bit darker"
+    expect="body"
+
+@t.ui.avatar.x209 core.test
+    session=av9
+    input="put a dish on your head"
+    expectState="robot.top=dish"
+
+@t.ui.avatar.x210 core.test
+    session=av10
+    input="i would like you to wear a dish on top of your head"
+    expectState="robot.top=dish"
+
+@t.ui.avatar.x211 core.test
+    session=av11
+    input="what mouths are there"
+    expect="zigzag"
+
+@t.ui.avatar.x212 core.test
+    session=av12
+    input="swap your eyes for cyclops ones"
+    expectState="robot.eyes=cyclops"
+
+@t.ui.avatar.x213 core.test
+    session=av13
+    input="your mouth could be a zigzag"
+    expectState="robot.mouth=zigzag"
+
+@t.ui.avatar.x214 core.test
+    session=av14
+    input="i think you would look better with square eyes"
+    expectState="robot.eyes=square"
+
+@t.ui.avatar.x215 core.test
+    session=av15
+    input="Make my body colour blue please"
+    expectState="robot.colors.body=74c0fc"
+
+@t.ui.avatar.x216 core.test
+    session=av16
+    input="give yourself visor eyes"
+    expectState="robot.eyes=visor"
+
+@t.ui.avatar.x217 core.test
+    session=av16
+    input="go back to round eyes"
+    expectState="robot.eyes=round"

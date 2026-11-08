@@ -2651,21 +2651,21 @@
     example="Put a heading called Notes at the top."
 
 @pat.docs.editor.s2.heading.bare core.pattern
-    match="[and|then|also|plus|next]? [a|another|one_more|the]? [heading|header|subheading] [saying|called|named|that_says|reading|of]? {t:rest}"
+    match="[and|then|also|plus|next]? [a|another|one_more] [heading|header|subheading] [saying|called|named|that_says|reading|of]? {t:rest}"
     emit="@{_} core.request action=doc.addHeading arg.text=\"{t}\""
     kind=request
     priority=11
     example="A heading Shopping."
 
 @pat.docs.editor.s2.paragraph.bare core.pattern
-    match="[and|then|also|plus|next]? [a|another|one_more|the]? [paragraph|sentence] [saying|that_says|reading|with_the_text|with|of]? {t:rest}"
+    match="[and|then|also|plus|next]? [a|another|one_more] [paragraph|sentence] [saying|that_says|reading|with_the_text|with|of]? {t:rest}"
     emit="@{_} core.request action=doc.addParagraph arg.text=\"{t}\""
     kind=request
     priority=11
     example="A paragraph hello world."
 
 @pat.docs.editor.s2.list.bare core.pattern
-    match="[and|then|also|plus|next]? [a|another|one_more|the]? [list|bullet_list|bulleted_list] [with|of|containing|including]? {t:rest}"
+    match="[and|then|also|plus|next]? [a|another|one_more] [list|bullet_list|bulleted_list] [with|of|containing|including]? {t:rest}"
     emit="@{_} core.request action=doc.addList arg.text=\"{t}\""
     kind=request
     priority=11

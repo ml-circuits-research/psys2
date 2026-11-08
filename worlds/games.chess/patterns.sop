@@ -1817,3 +1817,116 @@
     example="Move list."
     example="History of moves."
     example="Moves played till now."
+
+@pat.games.chess.s2.pawn.etwo core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|um|well|ok|okay|alright|right]? [i|i_will|i_ll|i_would|i_want_to|i_wanna|let_me|lets|let_us|first|now|next|then]? [open|start|begin|play|move|push|advance|go|opening|starting|beginning]? [with|by_moving|by_pushing|by_playing|by_advancing]? [the|my|our]? [white]? [e|king|kings|king_s] pawn [forward|ahead|up]? [two|2] [forward|ahead|up]? [squares|steps|spaces|square|step|space|ranks|rank] [forward|ahead|up|please|pls|plz|thanks]?"
+    emit="@{_} core.request action=chess.move arg.piece=pawn arg.tf=e arg.tr=4"
+    kind=request
+    priority=13
+    example="I will open with the king pawn two squares."
+
+@pat.games.chess.s2.pawn.eone core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|um|well|ok|okay|alright|right]? [i|i_will|i_ll|i_would|i_want_to|i_wanna|let_me|lets|let_us|first|now|next|then]? [open|start|begin|play|move|push|advance|go|opening|starting|beginning]? [with|by_moving|by_pushing|by_playing|by_advancing]? [the|my|our]? [white]? [e|king|kings|king_s] pawn [forward|ahead|up]? [one|1] [forward|ahead|up]? [squares|steps|spaces|square|step|space|ranks|rank] [forward|ahead|up|please|pls|plz|thanks]?"
+    emit="@{_} core.request action=chess.move arg.piece=pawn arg.tf=e arg.tr=3"
+    kind=request
+    priority=13
+    example="I will open with the king pawn one squares."
+
+@pat.games.chess.s2.pawn.dtwo core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|um|well|ok|okay|alright|right]? [i|i_will|i_ll|i_would|i_want_to|i_wanna|let_me|lets|let_us|first|now|next|then]? [open|start|begin|play|move|push|advance|go|opening|starting|beginning]? [with|by_moving|by_pushing|by_playing|by_advancing]? [the|my|our]? [white]? [d|queen|queens|queen_s] pawn [forward|ahead|up]? [two|2] [forward|ahead|up]? [squares|steps|spaces|square|step|space|ranks|rank] [forward|ahead|up|please|pls|plz|thanks]?"
+    emit="@{_} core.request action=chess.move arg.piece=pawn arg.tf=d arg.tr=4"
+    kind=request
+    priority=13
+    example="d pawn two squares."
+
+@pat.games.chess.s2.pawn.done core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|um|well|ok|okay|alright|right]? [i|i_will|i_ll|i_would|i_want_to|i_wanna|let_me|lets|let_us|first|now|next|then]? [open|start|begin|play|move|push|advance|go|opening|starting|beginning]? [with|by_moving|by_pushing|by_playing|by_advancing]? [the|my|our]? [white]? [d|queen|queens|queen_s] pawn [forward|ahead|up]? [one|1] [forward|ahead|up]? [squares|steps|spaces|square|step|space|ranks|rank] [forward|ahead|up|please|pls|plz|thanks]?"
+    emit="@{_} core.request action=chess.move arg.piece=pawn arg.tf=d arg.tr=3"
+    kind=request
+    priority=13
+    example="d pawn one squares."
+
+@pat.games.chess.s2.pawn.ftwo core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|um|well|ok|okay|alright|right]? [i|i_will|i_ll|i_would|i_want_to|i_wanna|let_me|lets|let_us|first|now|next|then]? [open|start|begin|play|move|push|advance|go|opening|starting|beginning]? [with|by_moving|by_pushing|by_playing|by_advancing]? [the|my|our]? [white]? [f|king_bishop|king_bishops] pawn [forward|ahead|up]? [two|2] [forward|ahead|up]? [squares|steps|spaces|square|step|space|ranks|rank] [forward|ahead|up|please|pls|plz|thanks]?"
+    emit="@{_} core.request action=chess.move arg.piece=pawn arg.tf=f arg.tr=4"
+    kind=request
+    priority=13
+    example="f pawn two squares."
+
+@pat.games.chess.s2.pawn.fone core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|um|well|ok|okay|alright|right]? [i|i_will|i_ll|i_would|i_want_to|i_wanna|let_me|lets|let_us|first|now|next|then]? [open|start|begin|play|move|push|advance|go|opening|starting|beginning]? [with|by_moving|by_pushing|by_playing|by_advancing]? [the|my|our]? [white]? [f|king_bishop|king_bishops] pawn [forward|ahead|up]? [one|1] [forward|ahead|up]? [squares|steps|spaces|square|step|space|ranks|rank] [forward|ahead|up|please|pls|plz|thanks]?"
+    emit="@{_} core.request action=chess.move arg.piece=pawn arg.tf=f arg.tr=3"
+    kind=request
+    priority=13
+    example="f pawn one squares."
+
+@pat.games.chess.s2.pawn.ctwo core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|um|well|ok|okay|alright|right]? [i|i_will|i_ll|i_would|i_want_to|i_wanna|let_me|lets|let_us|first|now|next|then]? [open|start|begin|play|move|push|advance|go|opening|starting|beginning]? [with|by_moving|by_pushing|by_playing|by_advancing]? [the|my|our]? [white]? [c|queen_bishop|queen_bishops] pawn [forward|ahead|up]? [two|2] [forward|ahead|up]? [squares|steps|spaces|square|step|space|ranks|rank] [forward|ahead|up|please|pls|plz|thanks]?"
+    emit="@{_} core.request action=chess.move arg.piece=pawn arg.tf=c arg.tr=4"
+    kind=request
+    priority=13
+    example="c pawn two squares."
+
+@pat.games.chess.s2.pawn.cone core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|um|well|ok|okay|alright|right]? [i|i_will|i_ll|i_would|i_want_to|i_wanna|let_me|lets|let_us|first|now|next|then]? [open|start|begin|play|move|push|advance|go|opening|starting|beginning]? [with|by_moving|by_pushing|by_playing|by_advancing]? [the|my|our]? [white]? [c|queen_bishop|queen_bishops] pawn [forward|ahead|up]? [one|1] [forward|ahead|up]? [squares|steps|spaces|square|step|space|ranks|rank] [forward|ahead|up|please|pls|plz|thanks]?"
+    emit="@{_} core.request action=chess.move arg.piece=pawn arg.tf=c arg.tr=3"
+    kind=request
+    priority=13
+    example="c pawn one squares."
+
+@pat.games.chess.s2.pawn.gtwo core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|um|well|ok|okay|alright|right]? [i|i_will|i_ll|i_would|i_want_to|i_wanna|let_me|lets|let_us|first|now|next|then]? [open|start|begin|play|move|push|advance|go|opening|starting|beginning]? [with|by_moving|by_pushing|by_playing|by_advancing]? [the|my|our]? [white]? [g|king_knight|king_knights] pawn [forward|ahead|up]? [two|2] [forward|ahead|up]? [squares|steps|spaces|square|step|space|ranks|rank] [forward|ahead|up|please|pls|plz|thanks]?"
+    emit="@{_} core.request action=chess.move arg.piece=pawn arg.tf=g arg.tr=4"
+    kind=request
+    priority=13
+    example="g pawn two squares."
+
+@pat.games.chess.s2.pawn.gone core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|um|well|ok|okay|alright|right]? [i|i_will|i_ll|i_would|i_want_to|i_wanna|let_me|lets|let_us|first|now|next|then]? [open|start|begin|play|move|push|advance|go|opening|starting|beginning]? [with|by_moving|by_pushing|by_playing|by_advancing]? [the|my|our]? [white]? [g|king_knight|king_knights] pawn [forward|ahead|up]? [one|1] [forward|ahead|up]? [squares|steps|spaces|square|step|space|ranks|rank] [forward|ahead|up|please|pls|plz|thanks]?"
+    emit="@{_} core.request action=chess.move arg.piece=pawn arg.tf=g arg.tr=3"
+    kind=request
+    priority=13
+    example="g pawn one squares."
+
+@pat.games.chess.s2.pawn.btwo core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|um|well|ok|okay|alright|right]? [i|i_will|i_ll|i_would|i_want_to|i_wanna|let_me|lets|let_us|first|now|next|then]? [open|start|begin|play|move|push|advance|go|opening|starting|beginning]? [with|by_moving|by_pushing|by_playing|by_advancing]? [the|my|our]? [white]? [b|queen_knight|queen_knights] pawn [forward|ahead|up]? [two|2] [forward|ahead|up]? [squares|steps|spaces|square|step|space|ranks|rank] [forward|ahead|up|please|pls|plz|thanks]?"
+    emit="@{_} core.request action=chess.move arg.piece=pawn arg.tf=b arg.tr=4"
+    kind=request
+    priority=13
+    example="b pawn two squares."
+
+@pat.games.chess.s2.pawn.bone core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|um|well|ok|okay|alright|right]? [i|i_will|i_ll|i_would|i_want_to|i_wanna|let_me|lets|let_us|first|now|next|then]? [open|start|begin|play|move|push|advance|go|opening|starting|beginning]? [with|by_moving|by_pushing|by_playing|by_advancing]? [the|my|our]? [white]? [b|queen_knight|queen_knights] pawn [forward|ahead|up]? [one|1] [forward|ahead|up]? [squares|steps|spaces|square|step|space|ranks|rank] [forward|ahead|up|please|pls|plz|thanks]?"
+    emit="@{_} core.request action=chess.move arg.piece=pawn arg.tf=b arg.tr=3"
+    kind=request
+    priority=13
+    example="b pawn one squares."
+
+@pat.games.chess.s2.pawn.atwo core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|um|well|ok|okay|alright|right]? [i|i_will|i_ll|i_would|i_want_to|i_wanna|let_me|lets|let_us|first|now|next|then]? [open|start|begin|play|move|push|advance|go|opening|starting|beginning]? [with|by_moving|by_pushing|by_playing|by_advancing]? [the|my|our]? [white]? [a|queen_rook|queen_rooks] pawn [forward|ahead|up]? [two|2] [forward|ahead|up]? [squares|steps|spaces|square|step|space|ranks|rank] [forward|ahead|up|please|pls|plz|thanks]?"
+    emit="@{_} core.request action=chess.move arg.piece=pawn arg.tf=a arg.tr=4"
+    kind=request
+    priority=13
+    example="a pawn two squares."
+
+@pat.games.chess.s2.pawn.aone core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|um|well|ok|okay|alright|right]? [i|i_will|i_ll|i_would|i_want_to|i_wanna|let_me|lets|let_us|first|now|next|then]? [open|start|begin|play|move|push|advance|go|opening|starting|beginning]? [with|by_moving|by_pushing|by_playing|by_advancing]? [the|my|our]? [white]? [a|queen_rook|queen_rooks] pawn [forward|ahead|up]? [one|1] [forward|ahead|up]? [squares|steps|spaces|square|step|space|ranks|rank] [forward|ahead|up|please|pls|plz|thanks]?"
+    emit="@{_} core.request action=chess.move arg.piece=pawn arg.tf=a arg.tr=3"
+    kind=request
+    priority=13
+    example="a pawn one squares."
+
+@pat.games.chess.s2.pawn.htwo core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|um|well|ok|okay|alright|right]? [i|i_will|i_ll|i_would|i_want_to|i_wanna|let_me|lets|let_us|first|now|next|then]? [open|start|begin|play|move|push|advance|go|opening|starting|beginning]? [with|by_moving|by_pushing|by_playing|by_advancing]? [the|my|our]? [white]? [h|king_rook|king_rooks] pawn [forward|ahead|up]? [two|2] [forward|ahead|up]? [squares|steps|spaces|square|step|space|ranks|rank] [forward|ahead|up|please|pls|plz|thanks]?"
+    emit="@{_} core.request action=chess.move arg.piece=pawn arg.tf=h arg.tr=4"
+    kind=request
+    priority=13
+    example="h pawn two squares."
+
+@pat.games.chess.s2.pawn.hone core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|um|well|ok|okay|alright|right]? [i|i_will|i_ll|i_would|i_want_to|i_wanna|let_me|lets|let_us|first|now|next|then]? [open|start|begin|play|move|push|advance|go|opening|starting|beginning]? [with|by_moving|by_pushing|by_playing|by_advancing]? [the|my|our]? [white]? [h|king_rook|king_rooks] pawn [forward|ahead|up]? [one|1] [forward|ahead|up]? [squares|steps|spaces|square|step|space|ranks|rank] [forward|ahead|up|please|pls|plz|thanks]?"
+    emit="@{_} core.request action=chess.move arg.piece=pawn arg.tf=h arg.tr=3"
+    kind=request
+    priority=13
+    example="h pawn one squares."
+

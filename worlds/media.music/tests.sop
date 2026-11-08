@@ -1923,3 +1923,31 @@
     input="A C major chord."
     expect="C major chord"
     session=disc_music
+
+
+
+
+@t.media.music.x204 core.test
+    session=mu4
+    input="write a melody: C D E"
+    expectStatus=supported
+
+@t.media.music.x205 core.test
+    session=mu4
+    input="add G G A G"
+    expect="Added"
+
+@t.media.music.x206 core.test
+    session=mu4
+    input="add a rest"
+    expect="Added"
+
+@t.media.music.x207 core.test
+    session=mu5
+    input="give me ode to joy"
+    expect="Ode to Joy"
+
+@t.media.music.x208 core.test
+    session=mu6
+    input="give me twinkle twinkle little star"
+    expect="Twinkle"

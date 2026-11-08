@@ -2184,3 +2184,13 @@
     input="Paris."
     expect="Here is Paris"
     session=disc_geo2
+
+@t.geo.map.x201 core.test
+    session=gm1
+    input="where is my list"
+    expectStatus=unparsed
+
+@t.geo.map.x202 core.test
+    session=gm2
+    input="where is Paris"
+    expectState="center.lat=48.8534"

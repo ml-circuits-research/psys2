@@ -781,7 +781,7 @@
     example="Which countries are highlighted?"
 
 @pat.geo.map.unk1 core.pattern
-    match="[where_is|where_are|take_me_to|fly_to|zoom_to|show_me_where_is] [the]? {x:words(4)}"
+    match="[where_is|where_are|take_me_to|fly_to|zoom_to|show_me_where_is] [the]? {x:words(4,label)}"
     emit="@{_} core.request action=geo.unknown arg.x=\"{x}\""
     kind=question
     priority=2

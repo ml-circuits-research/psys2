@@ -1350,3 +1350,33 @@
     input="Where were we?"
     expect="Back to Chess"
     session=dm1
+
+@t.games.chess.x201 core.test
+    session=cx1
+    input="Let's play chess."
+    expectState="status=playing"
+
+@t.games.chess.x202 core.test
+    session=cx1
+    input="i will open with the king pawn two squares"
+    expectState="history.0=e4"
+
+@t.games.chess.x203 core.test
+    session=cx2
+    input="Let's play chess."
+    expectState="status=playing"
+
+@t.games.chess.x204 core.test
+    session=cx2
+    input="move my d pawn two squares"
+    expectState="history.0=d4"
+
+@t.games.chess.x205 core.test
+    session=cx3
+    input="Let's play chess."
+    expectState="status=playing"
+
+@t.games.chess.x206 core.test
+    session=cx3
+    input="open with the queen pawn one square"
+    expectState="history.0=d3"
