@@ -124,6 +124,8 @@ function matchFrame(f, toks, p, info) {
   const rec = (k, pos) => {
     if (k === f.els.length) return pos;
     const el = f.els[k];
+    // a comma between frame elements is skipped ("Da, are" ~ "da are"; "Între Tom și Ana, cine ...")
+    if (k > 0 && el.slot !== 'rest' && toks[pos] && toks[pos].kind === 'punct' && toks[pos].raw === ',') pos++;
     const t = toks[pos];
     if (el.alts) {
       if (!t || (t.kind !== 'word' && t.kind !== 'num') || t.synth || !el.alts.includes(t.key)) return -1;
@@ -349,7 +351,7 @@ function parseNP(toks, i, info, prev) {
       // "o" before a verb is a clitic, not an article
       if (t.key === 'o' && !(nxt && (nounsOf(nxt).length || adjOf(nxt) || nxt.kind === 'num' || nxt.isCap || funcOf(nxt, 'det')))) break;
       const e = f.entry;
-      if (e.flags.has('quant')) np.quant = { en: detEn(e, t.key), tok: t, kind: e.en };
+      if (e.flags.has('quant')) np.quant = { en: detEn(e, t.key), tok: t, kind: e.en, pl: /^vre/.test(t.key) };
       else np.det = { en: detEn(e, t.key), tok: t, ro: e.ro };
       j++; grow(t); sawPrefix = true;
       continue;
@@ -458,9 +460,22 @@ function parseNP(toks, i, info, prev) {
         const r = parseNP(toks, j + 1, info, null);
         if (r && (r.np.head?.kind === 'name' || r.np.def)) { np.possessor = r.np; j = r.next; grow(toks[j - 1]); continue; }
       }
+      // indefinite genitive: "prețul unei păpuși" -> "the price of a doll" (unei/unui + noun, unor + plural)
+      if (/^(unei|unui|unor)$/.test(x.key) && np.head.kind === 'noun' && nx && isWord(nx)) {
+        const gn = nounsOf(nx).find((c) => (x.key !== 'unor' || c.number === 'pl') && !c.def);
+        if (gn) {
+          np.ofNP = { t: 'np', det: x.key === 'unor' ? null : { en: 'a', tok: x, ro: 'un' }, num: null, quant: null, adjs: [],
+            head: { kind: 'noun', entry: gn.entry, tok: nx, number: gn.number, def: false, gen: false },
+            number: x.key === 'unor' ? 'pl' : 'sg', def: false, poss: null, possessor: null, dat: false, forceDef: false, ofTok: x };
+          j += 2; grow(nx); continue;
+        }
+      }
       const gx = nounsOf(x).find((a) => a.gen && a.def);
       if (gx && np.head.kind === 'noun' && np.head.def && !x.isCap) {
         const r = parseNP(toks, j, info, null);
+        const hn = r?.np.head?.kind === 'noun' ? r.np.head.entry : null;
+        const bareOf = hn && /^(spring|summer|autumn|winter)$/.test(hn.en);
+        if (hn && (bareOf || (!hn.flags.has('anim') && !hn.flags.has('time') && !hn.flags.has('kin')))) { r.np.dat = false; r.np.ofTok = r.np.head.tok; r.np.noArtForced = bareOf; np.ofNP = r.np; j = r.next; grow(toks[j - 1]); continue; }
         if (r && r.np.head && r.np.head.kind === 'noun') { r.np.dat = false; np.possessor = r.np; j = r.next; grow(toks[j - 1]); continue; }
       }
       if (x.isCap && np.head.kind === 'noun' && np.head.def && looksFeminineDative(x)) {
@@ -472,7 +487,7 @@ function parseNP(toks, i, info, prev) {
 
   // number / definiteness
   const q = np.quant;
-  const pluralQ = q && /^(many|few|some|both|all|more|fewer|other)$/.test(q.en);
+  const pluralQ = q && (q.pl || /^(many|few|some|both|all|more|fewer|other)$/.test(q.en));
   if (np.num) np.number = np.num.val === '1' ? 'sg' : 'pl';
   else if (pluralQ) np.number = 'pl';
   else if (np.head && np.head.kind === 'noun') np.number = np.head.number;
@@ -554,6 +569,7 @@ function renderNP(np, o = {}) {
       const e = head.entry;
       const txt = plural ? (e.enp || E.pluralEn(e.en)) : e.en;
       out.push(pc(txt, head.tok, { noun: true }));
+      if (np.ofNP) { out.push(pc('of', np.ofNP.ofTok)); out.push(...renderNP(np.ofNP, { noArticle: false })); }
     } else if (head.kind === 'text') out.push(pc(head.text, head.tok));
     else out.push(pc(head.text, head.tok, { name: head.kind === 'name' }));
   }

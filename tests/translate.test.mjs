@@ -562,3 +562,29 @@ test('round trip: Romanian -> English -> Romanian keeps the meaning of short sta
     assert.equal(en(e).text, s, `${s} -> ${e}`);
   }
 });
+
+test('ro->en indefinite genitive (unei/unui/unor) becomes "of a ..."', () => {
+  assert.equal(ro('Care este prețul unei păpuși?').text, 'What is the price of a doll?');
+  assert.equal(ro('Care este culoarea unei banane?').text, 'What is the color of a banana?');
+  assert.equal(ro('culoarea unui câine').text, 'The color of a dog');
+  assert.equal(ro('culoarea unor banane').text, 'The color of bananas');
+});
+
+test('ro->en definite genitive of seasons and things uses "of"', () => {
+  assert.equal(ro('lunile primăverii').text, 'The months of spring');
+  assert.equal(ro('Numește lunile iernii').text, 'Name the months of winter');
+  assert.equal(ro('prețul cărții').text, 'The price of the book');
+});
+
+test('ro->en imperative "Numește" is Name!, 3rd person stays "calls"', () => {
+  assert.equal(ro('Numește trei animale').text, 'Name 3 animals');
+  assert.equal(ro('El numește animalele').text, 'He calls the animals');
+});
+
+test('ro->en doubled/tripled, vreun, and commas inside frames', () => {
+  assert.equal(ro('Cât face 6 dublat?').text, 'What is 6 doubled?');
+  assert.equal(ro('Are Ana vreo carte?').text, 'Does Ana have any books?');
+  assert.equal(ro('Da, are.').text, 'Yes it does.');
+  assert.equal(ro('Între Tom și Ana, cine are mai multe mere?').text, 'Between Tom and Ana who has more apples?');
+  assert.equal(ro('Câte mere mai puține are Ana decât Tom?').text, 'How many fewer apples does Ana have than Tom?');
+});

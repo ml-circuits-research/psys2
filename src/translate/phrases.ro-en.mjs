@@ -104,6 +104,8 @@ const BASE_FRAMES = [
   { p: 'x și 0', token: { fpos: 'noun', en: 'tic tac toe', mass: true } },
   { p: '20 de întrebări', token: { fpos: 'noun', en: 'twenty questions', mass: true } },
   { p: 'modul fără mâini', token: { fpos: 'noun', en: 'hands-free mode', mass: true } },
+  { p: 'semn de stop', token: { fpos: 'noun', en: 'stop sign' } },
+  { p: 'semnul de stop', token: { fpos: 'noun', en: 'stop sign', def: true } },
   { p: 'pălărie de petrecere', token: { fpos: 'noun', en: 'party hat' } },
   { p: 'animale marine', token: { fpos: 'noun', en: 'sea animals', mass: true } },
   { p: 'animalele marine', token: { fpos: 'noun', en: 'sea animals', mass: true, def: true } },

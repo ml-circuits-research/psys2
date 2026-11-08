@@ -87,6 +87,9 @@ export const COMMAND_FRAMES = [
   Q('câte {np:bare} sunt în total', 'how many {np} are there altogether'),
   Q('cine are cele mai multe {np:bare}', 'who has the most {np}'),
   Q('câte {np:bare} mai multe are {name#1} decât {name#2}', 'how many more {np} does {name#1} have than {name#2}'),
+  Q('câte {np:bare} mai puține are {name#1} decât {name#2}', 'how many fewer {np} does {name#1} have than {name#2}'),
+  Q('între {name#1} și {name#2} cine are mai multe {np:bare}', 'between {name#1} and {name#2} who has more {np}'),
+  Q('între {name#1} și {name#2} cine are mai puține {np:bare}', 'between {name#1} and {name#2} who has fewer {np}'),
   Q('care este suma dintre {num#1} și {num#2}', 'what is the sum of {num#1} and {num#2}'),
   F('scade {num#1} din {num#2}', 'subtract {num#1} from {num#2}'),
   Q('care este produsul dintre {num#1} și {num#2}', 'what is the product of {num#1} and {num#2}'),
@@ -110,6 +113,7 @@ export const COMMAND_FRAMES = [
   F('citește paragraful {num}', 'read paragraph {num}'),
   F('anulează asta', 'undo that'),
   F('citește-mi înapoi', 'read it back to me'),
+  F('citește-mi-l|citește-mi-o înapoi', 'read it back to me'),
   Q('ce spune primul paragraf', 'what does the first paragraph say'),
   F('fă un document din lista mea de cumpărături', 'make a document from my shopping list'),
   F('mută ultimul paragraf sus', 'move the last paragraph to the top'),
@@ -137,6 +141,10 @@ export const COMMAND_FRAMES = [
 
   // ---- guess game
   S('mă gândesc la {np}', 'I am thinking of {np}'),
+  S('mă gândeam la {np}', 'I was thinking of {np}'),
+  S('da are', 'yes it does'),
+  S('da este|e', 'yes it is'),
+  S('da poate', 'yes it can'),
   F('ghicește {np}', 'guess {np}'),
   S('a fost {np}', 'it was {np}'),
   Q('de ce ai întrebat asta', 'why did you ask that'),
