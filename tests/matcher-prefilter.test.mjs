@@ -35,7 +35,7 @@ test('prefilter: operator symbols and their words are interchangeable', () => {
 test('prefilter never rejects a pattern that matchTokens matches (fuzz over all pattern examples)', async () => {
   const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT) });
   const set = engine.set, lex = lexIndex(set);
-  const pats = set.list().flatMap((w) => w.patterns.map((p) => ({ p, c: compilePattern(p.match) })));
+  const pats = set.list().flatMap((w) => w.patterns.map((p) => ({ p, c: compilePattern(p.match, lexIndex(set).phrases) })));
   const compiledOf = new Map(pats.map((x) => [x.p, x.c]));
   const own = [], sampled = [];
   let k = 0;

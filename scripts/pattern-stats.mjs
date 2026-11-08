@@ -17,6 +17,7 @@ import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { compilePattern } from '../src/formalizer/rules/matcher.mjs';
 import { isFillerWord } from '../src/formalizer/rules/normalize.mjs';
+import { lexIndex } from '../src/worlds/lexicon.mjs';
 
 const args = process.argv.slice(2);
 const kind = args.includes('--union') ? args[args.indexOf('--union') + 1] : null;
@@ -41,7 +42,7 @@ for (const w of worlds) {
   for (const p of w.patterns ?? []) {
     patterns++; bytes += p.match.length;
     let c;
-    try { c = compilePattern(p.match); } catch { badPatterns++; continue; }
+    try { c = compilePattern(p.match, lexIndex(engine.set).phrases); } catch { badPatterns++; continue; }
     const els = c.elements;
     const mandatory = (e) => (e.t === 'lit') || ((e.t === 'slot' || e.t === 'alt') && !e.optional);
     const first = els.findIndex(mandatory);
