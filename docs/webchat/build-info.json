@@ -40,7 +40,7 @@
     "lib/dialog/encoder-dispatch.mjs": "43ac27ef66b4706b",
     "lib/dialog/index.mjs": "17d82aecea82ed42",
     "lib/dialog/lang.mjs": "9521b53f37790854",
-    "lib/dialog/meta.mjs": "3e945f14395ea103",
+    "lib/dialog/meta.mjs": "2f5e55a5719a8e68",
     "lib/dialog/normalizer-runtime.mjs": "76d3ed03f9126aba",
     "lib/dialog/test-runner.mjs": "3338d6d08f4f428f",
     "lib/dialog/value-check.mjs": "39b3633d59299c9c",
@@ -136,5 +136,5 @@
     "worlds/user.profile/ops.mjs": "8582b435a848bb37",
     "worlds/user.profile/understand.mjs": "90e63ca1faba3615"
   },
-  "builtAt": "2026-11-08T18:19:18.706Z"
+  "builtAt": "2026-11-08T18:28:57.487Z"
 }

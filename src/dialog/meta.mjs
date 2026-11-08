@@ -26,9 +26,9 @@ const LIST_END = /^(?:thats all|that is all|thats it|that is it|thats everything
 const REPAIR_LEAD = '(?:no|nope|nah|not that|not that one|wait|hold on|oops|sorry|hmm|oh|uh|er|actually|no no|oh no)';
 const REPAIR_CORRECT = [
   // explicit correction phrases work with or without a lead word
-  new RegExp(`^(?:${REPAIR_LEAD}[ ,]+)*(?:i meant|i mean|i said|i wanted|rather|let it be|it should be|should be|it must be|make that|change that to)\\s+(.+)$`),
+  new RegExp(`^(?:${REPAIR_LEAD}[ ,]+)*(?:i meant|i mean|i said|i wanted|rather|let it be|it should be|should be|it must be)\\s+(.+)$`),
   // imperatives that are ordinary commands on their own count as a correction only after a lead word ("actually make it green")
-  new RegExp(`^(?:${REPAIR_LEAD}[ ,]+)+(?:make it|make them|change it to|change them to|instead|use|try|paint it|colour it|color it|put|give it|give me)\\s+(.+)$`),
+  new RegExp(`^(?:${REPAIR_LEAD}[ ,]+)+(?:make it|make that|make them|change that to|change it to|change them to|instead|use|try|paint it|colour it|color it|put|give it|give me)\\s+(.+)$`),
   /^(?:no|nope|nah|wait|oops|sorry|actually|hmm)(?:\s*,\s*|\s+(?=(?:the|a|an|that|this)\s))(?!more\b|less\b|thanks\b|thank\b)(?:the |a |an )?(.+)$/,
 ];
 const NOT_THAT = /^(?:no |nope |nah )?not (?:that|this|the same) one(?:[ ,]+(?:but |instead |use |i meant |the )?(.*))?$/;
