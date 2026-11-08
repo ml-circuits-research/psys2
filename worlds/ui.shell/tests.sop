@@ -281,3 +281,18 @@
     input="phrase log download pls"
     expectEffect=phraselog
     session=rs7
+
+@t.ui.shell.x201 core.test
+    session=sh1
+    input="open the documents tab"
+    expectState="activeTab=documents"
+
+@t.ui.shell.x202 core.test
+    session=sh1
+    input="show my docs"
+    expectState="activeTab=documents"
+
+@t.ui.shell.x203 core.test
+    session=sh2
+    input="open the document tab"
+    expectState="activeTab=editor"

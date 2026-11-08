@@ -711,3 +711,59 @@
     session=xu1
     input="take back the previous change"
     expectState="blocks.length=1"
+
+@t.docs.editor.x401 core.test
+    session=eu1
+    input="Add a heading Shopping"
+    expectState="blocks.length=1"
+
+@t.docs.editor.x402 core.test
+    session=eu1
+    input="Add a paragraph hello world"
+    expectState="blocks.length=2"
+
+@t.docs.editor.x403 core.test
+    session=eu1
+    input="Add a list: milk, eggs, bread"
+    expectState="blocks.length=3"
+
+@t.docs.editor.x404 core.test
+    session=eu1
+    input="undo twice"
+    expectState="blocks.length=1"
+
+@t.docs.editor.x405 core.test
+    session=eu2
+    input="Add a heading A"
+    expectState="blocks.length=1"
+
+@t.docs.editor.x406 core.test
+    session=eu2
+    input="Add a heading B"
+    expectState="blocks.length=2"
+
+@t.docs.editor.x407 core.test
+    session=eu2
+    input="Add a heading C"
+    expectState="blocks.length=3"
+
+@t.docs.editor.x408 core.test
+    session=eu2
+    input="undo the last 2 changes"
+    expectState="blocks.length=1"
+
+@t.docs.editor.x409 core.test
+    session=eu2
+    input="undo it 5 times"
+    expectState="blocks.length=0"
+
+@t.docs.editor.x420 core.test
+    session=eq1
+    input="add a heading Shopping and what is 2 plus 2"
+    expect="2 plus 2 is 4"
+    expectState="blocks.0.text=Shopping"
+
+@t.docs.editor.x421 core.test
+    session=eq2
+    input="add a heading Notes and how many headings do i have"
+    expectState="blocks.0.text=Notes"

@@ -1232,3 +1232,23 @@
     session=av16
     input="go back to round eyes"
     expectState="robot.eyes=round"
+
+@t.ui.avatar.x2b1 core.test
+    session=pb1
+    input="Give yourself visor eyes."
+    expectState="robot.eyes=visor"
+
+@t.ui.avatar.x2b2 core.test
+    session=pb1
+    input="put your eyes back like they were"
+    expectState="robot.eyes=round"
+
+@t.ui.avatar.x2b3 core.test
+    session=pb1
+    input="make your mouth a grill"
+    expectState="robot.mouth=grill"
+
+@t.ui.avatar.x2b4 core.test
+    session=pb1
+    input="change your mouth back to how it was"
+    expectState="robot.mouth=smile"

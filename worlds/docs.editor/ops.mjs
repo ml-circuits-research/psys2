@@ -89,13 +89,14 @@ function restore(s, sn) {
   s.title = sn.title; s.titleMarks = sn.titleMarks ?? []; s.titleAlign = sn.titleAlign ?? 'left'; s.titleSize = sn.titleSize ?? 0;
   s.blocks = sn.blocks; s.cursor = sn.cursor; s.nextId = sn.nextId; s.selection = sn.selection ?? null; s.dictBlock = null;
 }
-function _undo(ctx) {
+function _undo(ctx, { n } = {}) {
   const s = ctx.state;
   if (!s.history.length) return no('missing', 'There is nothing to undo.');
-  s.future.push(snap(s));
-  restore(s, s.history.pop());
+  // "undo twice": n steps, as many as there are
+  const steps = Math.min(Math.max(1, Math.floor(Number(n) || 1)), 20, s.history.length);
+  for (let i = 0; i < steps; i++) { s.future.push(snap(s)); restore(s, s.history.pop()); }
   show(ctx);
-  return ok('OK, I undid the last change.');
+  return ok(steps === 1 ? 'OK, I undid the last change.' : `OK, I undid the last ${steps} changes.`);
 }
 function _redo(ctx) {
   const s = ctx.state;

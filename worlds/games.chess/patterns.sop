@@ -479,6 +479,7 @@
     emit="@{_} core.request action=chess.hint"
     kind=request
     priority=13
+    tabOnly=true
     example="Any ideas?"
     example="Help me out."
     example="I am stuck."

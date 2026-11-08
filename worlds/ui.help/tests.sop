@@ -360,3 +360,8 @@
     input="what was wrong with what i said"
     expect="I did not understand"
     session=rh7
+
+@t.help.x201 core.test
+    session=hp1
+    input="help me"
+    expect="tab"

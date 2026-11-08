@@ -1287,3 +1287,11 @@
     kind=request
     priority=13
     example="I think you would look better with square eyes."
+
+@pat.ui.avatar.s2.putback core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [put|set|change|turn|switch|bring|get|make|restore|move] [your|the|ur|my]? {p:lex.ui.avatar.parts} [back|again]? [back_to|to|like|as|the_way|how|to_how|just_like|exactly_like]? [they_were|it_was|they_used_to_be|it_used_to_be|they_were_before|it_was_before|before|what_they_were|what_it_was|normal|how_they_were|how_it_was|the_way_they_were|the_way_it_was|like_they_were|like_it_was|originally|at_first|the_old_way] [please|pls|plz|thanks|now]?"
+    emit="@{_} core.request action=avatar.resetPart arg.part={p}"
+    kind=request
+    priority=14
+    example="Put your eyes back like they were."
+    example="Change your mouth back to how it was."

@@ -2729,3 +2729,31 @@
     kind=request
     priority=12
     example="Scratch that."
+
+@pat.docs.editor.s2.undo.twice core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you]? [undo|undo_that|undo_it|take_back|revert|go_back] [that|it|the_last]? [twice|two_times|2_times|two_steps|2_steps|two_changes|2_changes|two_edits|2_edits|two_things]"
+    emit="@{_} core.request action=doc.undo arg.n=2"
+    kind=request
+    priority=13
+    example="Undo twice."
+
+@pat.docs.editor.s2.undo.thrice core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you]? [undo|undo_that|undo_it|take_back|revert|go_back] [that|it|the_last]? [three_times|3_times|thrice|three_steps|3_steps|three_changes|3_changes|three_edits|3_edits|three_things]"
+    emit="@{_} core.request action=doc.undo arg.n=3"
+    kind=request
+    priority=13
+    example="Undo three times."
+
+@pat.docs.editor.s2.undo.n core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you]? [undo|take_back|revert|go_back] [the]? [last|previous|latest]? {n:number} [changes|edits|steps|things|actions|moves|times]"
+    emit="@{_} core.request action=doc.undo arg.n={n}"
+    kind=request
+    priority=13
+    example="Undo the last 4 changes."
+
+@pat.docs.editor.s2.undo.n.b core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you]? [undo|undo_that|undo_it|take_back|revert|go_back] [that|it]? {n:number} [times|steps|more_times]"
+    emit="@{_} core.request action=doc.undo arg.n={n}"
+    kind=request
+    priority=13
+    example="Undo it 4 times."

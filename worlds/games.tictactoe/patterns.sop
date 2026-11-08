@@ -320,6 +320,7 @@
     emit="@{_} core.request action=ttt.hint"
     kind=request
     priority=9
+    tabOnly=true
     example="Any hints?"
 
 @pat.games.tictactoe.last2 core.pattern
