@@ -921,3 +921,267 @@
     word=leu
     word=lei
     plural=leu:lei
+
+
+@phrase.lang.yes core.phrase
+    frame=false
+    doc="Affirmative replies. ctx.lang.yesNo answers yes for a whole message that is one of these; the guess patterns and the confirmations read them."
+    alt=that_is_right
+    alt=that_is_correct
+    alt=sure_thing
+    alt=yes_please
+    alt=of_course
+    alt=you_bet
+    alt=for_sure
+    alt=yes
+    alt=yeah
+    alt=yep
+    alt=yup
+    alt=yea
+    alt=yah
+    alt=ya
+    alt=sure
+    alt=ok
+    alt=okay
+    alt=please
+    alt=correct
+    alt=right
+    alt=absolutely
+    alt=definitely
+    alt=certainly
+    alt=affirmative
+    alt=exactly
+    alt=indeed
+
+@phrase.lang.assent core.phrase
+    frame=false
+    doc="Agreement to a proposal (do it, go ahead, why not): a yes for ctx.lang.yesNo that is not a yes/no answer of a game."
+    alt=yes_do_it
+    alt=yes_go_ahead
+    alt=lets_do_it
+    alt=do_it
+    alt=go_ahead
+    alt=why_not
+    alt=sounds_good
+    alt=alright
+
+@phrase.lang.no core.phrase
+    frame=false
+    doc="Negative replies (a plain refusal). ctx.lang.yesNo answers no for these, for lang.decline and for lang.cancel."
+    alt=no_thank_you
+    alt=of_course_not
+    alt=not_at_all
+    alt=nuh_uh
+    alt=no_thanks
+    alt=no_way
+    alt=not_really
+    alt=absolutely_not
+    alt=definitely_not
+    alt=certainly_not
+    alt=no
+    alt=nope
+    alt=nah
+    alt=nay
+    alt=naw
+    alt=negative
+
+@phrase.lang.decline core.phrase
+    frame=false
+    doc="Soft refusals and stay-as-you-are replies that answer a confirmation with no but are not a game answer."
+    alt=stay_as_you_are
+    alt=not_now
+    alt=do_not
+    alt=leave_it
+    alt=dont
+    alt=never
+    alt=stay
+
+@phrase.lang.unsure core.phrase
+    frame=false
+    doc="Replies that say the speaker does not know (ctx.lang.unsure)."
+    alt=i_do_not_know
+    alt=i_am_not_sure
+    alt=i_have_no_idea
+    alt=i_have_no_clue
+    alt=i_dont_know
+    alt=do_not_know
+    alt=im_not_sure
+    alt=i_am_unsure
+    alt=dont_know
+    alt=not_sure
+    alt=no_idea
+    alt=no_clue
+    alt=not_certain
+    alt=who_knows
+    alt=beats_me
+    alt=dunno
+    alt=idk
+    alt=unsure
+    alt=clueless
+
+@phrase.lang.cancel core.phrase
+    frame=false
+    doc="Cancellations (ctx.lang.cancel): never mind, forget it, cancel that."
+    alt=forget_about_it
+    alt=forget_about_that
+    alt=never_mind
+    alt=cancel_that
+    alt=cancel_it
+    alt=cancel_this
+    alt=cancel_everything
+    alt=forget_it
+    alt=forget_that
+    alt=drop_it
+    alt=drop_that
+    alt=skip_it
+    alt=skip_that
+    alt=scrap_that
+    alt=scratch_that
+    alt=leave_it
+    alt=ignore_that
+    alt=stop_it
+    alt=lets_not
+    alt=nevermind
+    alt=cancel
+
+@phrase.lang.degree.slight core.phrase
+    frame=false
+    doc="Degree adverbs of strength 1."
+    alt=a_little_bit
+    alt=a_tiny_bit
+    alt=just_a_bit
+    alt=a_bit
+    alt=a_little
+    alt=a_touch
+    alt=slightly
+    alt=somewhat
+
+@phrase.lang.degree.even core.phrase
+    frame=false
+    doc="Degree adverb of strength 2."
+    alt=even
+
+@phrase.lang.degree.strong core.phrase
+    frame=false
+    doc="Degree adverbs of strength 3."
+    alt=a_great_deal
+    alt=a_lot
+    alt=so_much
+    alt=very_much
+    alt=much
+    alt=way
+    alt=far
+    alt=hugely
+    alt=lots
+
+@phrase.lang.comparative core.phrase
+    frame=false
+    doc="Comparatives that can follow a degree adverb (much bigger)."
+    alt=bigger
+    alt=smaller
+    alt=larger
+    alt=taller
+    alt=shorter
+    alt=wider
+    alt=narrower
+    alt=longer
+    alt=higher
+    alt=lower
+    alt=brighter
+    alt=darker
+    alt=lighter
+    alt=faster
+    alt=slower
+    alt=louder
+    alt=quieter
+    alt=thicker
+    alt=thinner
+    alt=closer
+    alt=farther
+    alt=further
+    alt=tinier
+    alt=littler
+    alt=greater
+
+@phrase.lang.shade core.phrase
+    frame=false
+    doc="Colour shades (dark blue)."
+    alt=light
+    alt=dark
+    alt=pale
+    alt=bright
+
+@phrase.lang.size.big core.phrase
+    frame=false
+    doc="Words for big."
+    alt=big
+    alt=bigger
+    alt=biggest
+    alt=large
+    alt=larger
+    alt=largest
+    alt=huge
+    alt=giant
+    alt=tall
+    alt=taller
+    alt=tallest
+    alt=great
+
+@phrase.lang.size.small core.phrase
+    frame=false
+    doc="Words for small."
+    alt=small
+    alt=smaller
+    alt=smallest
+    alt=little
+    alt=tiny
+    alt=short
+    alt=shorter
+    alt=shortest
+    alt=mini
+    alt=teeny
+
+@phrase.lang.position.left core.phrase
+    frame=false
+    doc="Words for left."
+    alt=left
+    alt=leftmost
+
+@phrase.lang.position.right core.phrase
+    frame=false
+    doc="Words for right."
+    alt=right
+    alt=rightmost
+
+@phrase.lang.position.top core.phrase
+    frame=false
+    doc="Words for top."
+    alt=top
+    alt=upper
+    alt=highest
+
+@phrase.lang.position.bottom core.phrase
+    frame=false
+    doc="Words for bottom."
+    alt=bottom
+    alt=lower
+    alt=lowest
+
+@phrase.lang.ordinal.last core.phrase
+    frame=false
+    doc="Synonyms of last (value -1 in ctx.lang.ordinal); first to tenth are the order of lex.lang.ordinal."
+    alt=last
+    alt=final
+    alt=latest
+
+@phrase.lang.lead.ask core.phrase
+    frame=false
+    doc="Leading asking words stripped by ctx.lang.stripLead (please, can you, tell me)."
+    alt=i_would_like_to_know
+    alt=i_want_to_know
+    alt=can_you
+    alt=could_you
+    alt=would_you
+    alt=will_you
+    alt=tell_me
+    alt=please

@@ -12,7 +12,7 @@ import * as gen from '../worlds/docs.editor/datagen.mjs';
 
 const loader = createFsLoader({ roots: [DEFAULT_ROOT] });
 const list = loader.listWorlds.bind(loader);
-loader.listWorlds = async () => (await list()).filter((id) => ['core', 'docs.editor', 'ui.shell'].includes(id) || id.startsWith('kids.'));
+loader.listWorlds = async () => (await list()).filter((id) => ['core', 'lang.common', 'docs.editor', 'ui.shell'].includes(id) || id.startsWith('kids.'));
 const engine = await createEngine({ loader });
 const session = () => engine.createSession({ language: 'en' });
 const DOC = 'docs.editor';

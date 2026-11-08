@@ -1232,3 +1232,9 @@
 {"id":"ui.help#018","world":"ui.help","tab":"robot","setup":["Zorb flimbles quickly"],"message":"why not","expect":{"answer":["did not understand"]},"families":["probe","reference"]}
 {"id":"ui.help#019","world":"ui.help","tab":"robot","setup":[],"message":"help and what is 2 plus 2","expect":{"answer":["4"]},"families":["multi","world-switch"],"known_gap":true}
 {"id":"ui.help#020","world":"ui.help","tab":"robot","setup":[],"message":"asdf qwer zxcv","expect":{"none":true},"families":["negative"]}
+{"id":"ui.avatar#125","world":"ui.avatar","tab":"robot","setup":["give yourself a beard"],"message":"sure thing","expect":{"state":["character=person"]},"families":["confirmation"],"tags":["l8"]}
+{"id":"ui.avatar#126","world":"ui.avatar","tab":"robot","setup":["give yourself a beard"],"message":"nah","expect":{"state":["character=robot"],"answer":["stay a robot"]},"families":["confirmation"],"tags":["l8"]}
+{"id":"ui.avatar#127","world":"ui.avatar","tab":"robot","setup":["give yourself a beard"],"message":"never mind","expect":{"state":["character=robot"],"answer":["stay a robot"]},"families":["confirmation"],"tags":["l8"]}
+{"id":"games.guess#030","world":"games.guess","tab":"guess","setup":["I am thinking of an animal"],"message":"sure thing","expect":{"state":["asked.0.answer=yes"]},"families":["confirmation"],"tags":["l8"]}
+{"id":"games.guess#031","world":"games.guess","tab":"guess","setup":["I am thinking of an animal"],"message":"nah","expect":{"state":["asked.0.answer=no"]},"families":["confirmation"],"tags":["l8"]}
+{"id":"games.guess#032","world":"games.guess","tab":"guess","setup":["I am thinking of an animal"],"message":"never mind","expect":{"answer":["never mind"],"state":["phase=asking"]},"families":["confirmation"],"tags":["l8"]}

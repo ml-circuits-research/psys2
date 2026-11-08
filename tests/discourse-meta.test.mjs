@@ -4,16 +4,22 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
-import { classify, resolveReference, describeReferent, chooseOption } from '../src/dialog/meta.mjs';
-import { lang, yesNo, ordinal, colour, degree, splitAdverb } from '../src/dialog/lang.mjs';
+import * as meta from '../src/dialog/meta.mjs';
 import { buildRecord, toJSONL } from '../docs/webchat/ui/phrase-log.mjs';
 
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
+// the shared vocabulary is the one of lang.common, as ctx.lang of the interpreter (spec 04)
+const lang = engine.interp.lang;
+const { yesNo, ordinal, colour, degree, splitAdverb } = lang;
+const classify = (t, c = {}) => meta.classify(t, { lang, ...c });
+const resolveReference = (p, refs, o = {}) => meta.resolveReference(p, refs, { lang, ...o });
+const describeReferent = (r, refs) => meta.describeReferent(r, refs, lang);
+const chooseOption = (r, opts) => meta.chooseOption(r, opts, lang);
 const fresh = () => engine.createSession({ language: 'en' });
 const run = async (s, ...texts) => { let r; for (const t of texts) r = await s.send(t); return r; };
 const objects = (s) => s.state('art.draw').objects;
 
-test('shared vocabulary (lang.mjs): yes/no, ordinals, colours, degree', () => {
+test('shared vocabulary (ctx.lang, lang.common): yes/no, ordinals, colours, degree', () => {
   assert.equal(yesNo('Yes please!'), 'yes');
   assert.equal(yesNo("nope"), 'no');
   assert.equal(yesNo('maybe'), null);
@@ -29,6 +35,17 @@ test('shared vocabulary (lang.mjs): yes/no, ordinals, colours, degree', () => {
   assert.deepEqual([degree('the same size as the house').type, degree('the same size as the house').ref], ['same', 'house']);
   assert.equal(degree('hello there'), null);
   assert.equal(lang.yesNo('ok'), 'yes');
+  // L8: closed word classes come from the phrase groups of lang.common
+  assert.equal(yesNo('Sure thing!'), 'yes');
+  assert.equal(yesNo('nah'), 'no');
+  assert.equal(yesNo('never mind'), 'no');
+  assert.equal(yesNo("don't"), 'no');
+  assert.equal(lang.cancel('Never mind!'), true);
+  assert.equal(lang.cancel('nope'), false);
+  assert.equal(lang.unsure('no idea'), true);
+  assert.equal(lang.stripLead('please can you tell me who is x'), 'who is x');
+  assert.equal(ordinal('3rd'), 3);
+  assert.equal(ordinal('final'), -1);
 });
 
 test('classify names the conversational act and leaves ordinary sentences alone', () => {

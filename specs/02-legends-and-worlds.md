@@ -99,7 +99,7 @@ One directory per world under `worlds/`, named by namespace. Only `world.sop` an
 @phrase.lang.lead.polite core.phrase
     alt=could_you_please alt=can_you alt=please
 ```
-`frame=false` marks a phrase of content words (default `true` = frame vocabulary: lead-ins, suffixes, fillers; spec 03 section 2.5). The wire id must start with `phrase.`; the macro id is the rest (`lang.lead.polite`). Alternatives use `_` between words. The shared world `worlds/lang.common` (imported through `kids.common`) holds the common lead-in, suffix and filler phrases and the shared lexicons (`lex.lang.colour`, `ordinal`, `size`, `degree`, `direction`, `position`, `unit`). It is a `status=fixture` world with `summary=""` that claims nothing (no patterns): new common phrasing goes there, never inline in a world's patterns.
+`frame=false` marks a phrase of content words (default `true` = frame vocabulary: lead-ins, suffixes, fillers; spec 03 section 2.5). The wire id must start with `phrase.`; the macro id is the rest (`lang.lead.polite`). Alternatives use `_` between words. The shared world `worlds/lang.common` (imported through `kids.common`) holds the common lead-in, suffix and filler phrases and the shared lexicons (`lex.lang.colour`, `ordinal`, `size`, `degree`, `direction`, `position`, `unit`). The closed word classes behind `ctx.lang` (spec 04) are `frame=false` phrases there too (`lang.yes`, `lang.assent`, `lang.no`, `lang.decline`, `lang.unsure`, `lang.cancel`, `lang.degree.*`, `lang.comparative`, `lang.shade`, `lang.size.*`, `lang.position.*`, `lang.ordinal.last`, `lang.lead.ask`). It is a `status=fixture` world with `summary=""` that claims nothing (no patterns): new common phrasing goes there, never inline in a world's patterns.
 
 ### Tests
 ```

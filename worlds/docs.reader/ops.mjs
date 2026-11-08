@@ -861,7 +861,6 @@ export function ask(ctx, { q } = {}) {
 // off the Documents tab they would take sentences of other worlds. The tab sets `visible`/`inputMode` (any answer of this world sets
 // them too), and interceptInput (spec 07 section 2) handles a sentence only if it names a known entity or word of the open document.
 // Everything else (and every sentence while the tab is hidden) goes on to the formalizer untouched.
-const FILLER = /^(?:please |can you |could you |would you |will you |tell me |i want to know |i would like to know )+/;
 const KIN_RE = [...KIN].join('|');
 const VERBS_Q = 'help|helped|save|saved|rescue|rescued|free|freed|carry|carried|love|loved|hate|hated|kill|killed|eat|ate|lead|led|follow|followed|push|pushed|lock|locked|burn|burned|catch|caught|find|found|meet|met|hug|hugged|guide|guided|protect|protected|feed|fed|teach|taught|visit|visited|invite|invited|marry|married|thank|thanked|warn|warned|trap|trapped|chase|chased|attack|attacked|hit|bite|bit|beat|punish|punished|leave|left|take|took|bring|brought|send|sent|welcome|welcomed|blame|blamed|fear|feared|kiss|kissed';
 const SAY_RE = 'said|says|asked|replied|cried|whispered|shouted|exclaimed|answered|ordered|called';
@@ -877,7 +876,7 @@ export function interceptInput(ctx, text) {
   if (!d || !s.visible) { if (!s.visible) s.inputMode = null; return { handled: false }; }
   let t = norm(String(text).replace(/[“”]/g, '"')).replace(/\s+/g, ' ');
   const raw = String(text).trim().replace(/[?.!]+$/, '').replace(/^(?:please,? )/i, '');
-  t = t.replace(FILLER, '').trim();
+  t = ctx.lang.stripLead(t).trim();   // asking words (please, can you, tell me ...) from lang.common
   let m;
   if (/^(?:tell me more|more|go on|continue|keep going|what else|anything else|show more|and what else)$/.test(t) && s.last?.op) return reply(more(ctx));
   if ((m = t.match(/^who (?:is|was|are|were) (.+?)(?: in (?:the )?(?:story|file|text|document|book|tale))?$/))) {

@@ -15,7 +15,6 @@
  * Both return `{ res, info }`, where `res` has the shape of a formalizer result and `info` is the provenance for the trace.
  */
 import { restrictedSet } from '../formalizer/spell.mjs';
-import { yesNo, splitAdverb, COMPARATIVES } from './lang.mjs';
 import { classify, resolveReference, describeReferent, chooseOption, plain } from './meta.mjs';
 
 export const FRAME_LIMIT = 5;
@@ -63,9 +62,13 @@ export function splitFragment(text) {
   return { kind: all.length ? 'marker' : 'bare', content, marker: all.join(' ') || null };
 }
 
+// bare replies that, with nothing pending, get a neutral answer (a closed table on purpose: ok, sure, right ... are not answers to nothing)
 const BARE_YES_NO = { yes: 'yes', yeah: 'yes', yep: 'yes', yup: 'yes', no: 'no', nope: 'no', nah: 'no' };
 
 export class Discourse {
+  /** Shared vocabulary (yes/no, ordinals, degree ...) from lang.common, as `ctx.lang` of the interpreter. */
+  get lang() { return this.dialog.engine.interp.lang; }
+
   constructor(dialog) {
     this.dialog = dialog;
     this.frames = [];    // newest first
@@ -399,7 +402,7 @@ export class Discourse {
     // 1. the answer to a question this layer asked
     if (pend?.type === 'choice') { const r = this._answerChoice(pend, text); if (r) return r; }
     if (pend?.type === 'offer') {
-      const y = yesNo(text);
+      const y = this.lang.yesNo(text);
       if (y === 'yes' && pend.accept === 'undo') { const a = pend.action; const said = a?.frames[0]?.reply; return this.undoAction(a) ? { reply: `OK, I undid it${said ? `: ${said}` : ''}.`.replace(/\.+$/, '.'), info: { kind: 'offer', accept: 'undo', of: a.text } } : null; }
       if (y === 'yes' && pend.accept === 'rewrite') return { rewrite: pend.rewrite, info: { kind: 'offer', accept: 'rewrite', rewrite: pend.rewrite, world: pend.world } };
       if (y === 'no' || /^(?:no|nope|nah|not now|not really)(?: (?:thanks|thank you|leave it|keep it|its fine|never mind))?$/.test(t)) return { reply: 'OK, I will leave it as it is.', info: { kind: 'offer', declined: true } };
@@ -410,7 +413,7 @@ export class Discourse {
       const bare = BARE_YES_NO[t];
       if (bare && !this._gameAsksYesNo()) return { reply: `${bare === 'yes' ? 'Yes' : 'No'} to what? You can ask me a question, give me a command, or say "help" to see what I can do.`, info: { kind: 'bare', answer: bare } };
     }
-    const c = classify(text, { hasAction: !!this._repairable(), listMode: !!this.list });
+    const c = classify(text, { lang: this.lang, hasAction: !!this._repairable(), listMode: !!this.list });
     // a lone "lol" / "hmm" / "ok" is not a command and not a list item: nothing happens (no world gets to read it as a name, an item or a word)
     if (c?.intent === 'backchannel' && !pend && !this._gameAsksYesNo()) return { reply: 'Mm-hm. Tell me what you would like to do, or say "help".', status: 'unparsed', info: { kind: 'backchannel' } };
     // 2. list-entry mode: every plain item is added to the list until "that's all"
@@ -612,7 +615,7 @@ export class Discourse {
     if (!frame) return null;
     const cands = [];
     const ws = frame.text.replace(/[?!.]+$/, '').split(' ');
-    const isDegreeWord = (w) => COMPARATIVES.includes(w.toLowerCase()) || /^(left|right|up|down|higher|lower|more|less|forward|back|upward|downward|upwards|downwards)$/i.test(w);
+    const isDegreeWord = (w) => this.lang.COMPARATIVES.includes(w.toLowerCase()) || /^(left|right|up|down|higher|lower|more|less|forward|back|upward|downward|upwards|downwards)$/i.test(w);
     const slotT = frame.slots.find((x) => x.name === 't' || x.name === 'target') ?? null;
     const tText = slotT ? slotT.text : 'it';
     const verb = /^(?:make|let|turn|get)$/i.test(ws[0]) ? ws[0] : 'Make';
@@ -690,9 +693,9 @@ export class Discourse {
       if (!before.length || !target) return giveUp();
       let pick = null;
       if (/\b(?:other|another)\b/.test(content ?? '')) pick = before.filter((r) => r.kind === target.kind && r.id !== target.id).at(-1) ?? null;
-      else { const res = resolveReference(`the ${content}`, before, { prefer: target.kind }); pick = res?.matches.length === 1 ? res.matches[0] : null; }
+      else { const res = resolveReference(`the ${content}`, before, { prefer: target.kind, lang: this.lang }); pick = res?.matches.length === 1 ? res.matches[0] : null; }
       if (!pick) return giveUp();
-      np = describeReferent(pick, before);
+      np = describeReferent(pick, before, this.lang);
       words = np.split(' ');
     }
     if (!words.length) return giveUp();
@@ -718,7 +721,7 @@ export class Discourse {
   _question(labels) { return `Which one: ${labels.length > 1 ? `${labels.slice(0, -1).join(', ')} or ${labels.at(-1)}` : labels[0]}?`; }
 
   _answerChoice(pend, text) {
-    const hits = chooseOption(text, pend.options);
+    const hits = chooseOption(text, pend.options, this.lang);
     if (!hits) return null;
     let fill;
     if (hits.length === 1) fill = hits[0].fill;
@@ -736,11 +739,11 @@ export class Discourse {
     const t = text.trim().replace(/[?!.]+$/, '');
     const np = t.match(/\b((?:the|that|this)\s+(?:[a-z-]+\s+){0,2}?(?:one|ones))\b/i);
     if (np) {
-      const res = resolveReference(np[1], refs, { prefer: this._targetKind() });
+      const res = resolveReference(np[1], refs, { prefer: this._targetKind(), lang: this.lang });
       if (!res || res.type === 'quantifier' || res.matches.length !== 1) return null;   // several matches: the world's own reading stays
       const template = `${t.slice(0, np.index)}{ref}${t.slice(np.index + np[1].length)}`;
-      if (res.matches.length === 1) return { rewrite: template.replace('{ref}', describeReferent(res.matches[0], refs)), info: { kind: 'reference', phrase: np[1], type: res.type, resolved: res.matches[0].id, world } };
-      const options = res.matches.map((r) => ({ label: describeReferent(r, refs), fill: describeReferent(r, refs), kind: r.kind, noun: r.noun }));
+      if (res.matches.length === 1) return { rewrite: template.replace('{ref}', describeReferent(res.matches[0], refs, this.lang)), info: { kind: 'reference', phrase: np[1], type: res.type, resolved: res.matches[0].id, world } };
+      const options = res.matches.map((r) => ({ label: describeReferent(r, refs, this.lang), fill: describeReferent(r, refs, this.lang), kind: r.kind, noun: r.noun }));
       return this._ask(this._question(options.map((o) => o.label)), options, template, world);
     }
     const m = t.match(AMBIGUOUS_VERB);
@@ -750,7 +753,7 @@ export class Discourse {
       if (same.length < 2 || same.some((r) => r.salient)) return null;
       const at = m[0].length - `${m[1]} ${m[2]}`.length;   // the pattern ends with the noun phrase
       const template = `${t.slice(0, at)}{ref}${t.slice(m[0].length)}`;
-      const options = same.map((r) => ({ label: describeReferent(r, refs), fill: describeReferent(r, refs), kind: r.kind, noun: r.noun }));
+      const options = same.map((r) => ({ label: describeReferent(r, refs, this.lang), fill: describeReferent(r, refs, this.lang), kind: r.kind, noun: r.noun }));
       if (options.some((o) => !/^the [a-z]+ [a-z]+$/.test(o.label) || ORDINAL_RE.test(o.label))) return null;   // only when the colours tell them apart; "the first tree" questions stay with the world
       return this._ask(this._question(options.map((o) => o.label)), options, template, world);
     }

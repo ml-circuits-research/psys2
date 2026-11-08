@@ -6,12 +6,10 @@
  * ("the red one", "the second one", "both", "all the trees") against the referents a world lists through its `referents(ctx)` hook.
  * The Discourse class (discourse.mjs) acts on the results.
  */
-import { ordinal, ordinalWord, colour, size, position, degree, yesNo, COLOURS, SHADES } from './lang.mjs';
 
 const plain = (t) => String(t ?? '').toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9\- ]+/g, ' ').replace(/\s+/g, ' ').trim();
 export { plain };
 
-const CANCEL = /^(?:oh |ok |okay |no |well )?(?:never ?mind|nevermind|cancel(?: that| it| this| everything)?|forget (?:it|that|about it|about that)|drop it|drop that|skip it|skip that|scrap that|scratch that|leave it|ignore that|stop it|lets not)(?: please| pls| thanks)?$/;
 const REPEAT = /^(?:what|pardon|pardon me|huh|come again|what was that|what did you say|what did you just say|say (?:that|it) again|say again|repeat(?: that| it| please| that please)?|can you repeat(?: that| it)?|could you repeat(?: that| it)?|please repeat(?: that)?|i did not (?:hear|catch|get) (?:that|you|it)|i didnt (?:hear|catch|get) (?:that|you|it)|sorry what|sorry|one more time please)$/;
 const EXPLAIN = /^(?:what did you do|what have you done|what did you just do|what was that|what happened|why|why is that|why was that|why did you (?:do|say) (?:that|this|it)|why did you do that|how come|how did you (?:do|get) (?:that|this|it)|explain(?: that| it| yourself| please)?|how did you know|how do you know|why do you say that|what did you change)$/;
 const FEEDBACK = [
@@ -38,15 +36,17 @@ const BARE_OTHER = /^(?:the )?(other one|another one|the other|other|another)$/;
 
 const SENTENCE_STARTERS = new Set(['who', 'whom', 'whose', 'what', 'where', 'when', 'why', 'how', 'which', 'is', 'are', 'was', 'were', 'does', 'do', 'did', 'can', 'could', 'will', 'would', 'should', 'has', 'have', 'i', 'you', 'we', 'please', 'draw', 'add', 'show', 'open', 'play', 'tell', 'give', 'let']);
 
-/** Name the conversational intent of `text`: { intent, ... } or null. `ctx` may carry { hasAction, hasAnswer, listMode }. */
+/** Name the conversational intent of `text`: { intent, ... } or null. `ctx` carries `lang` (required, spec 04) and may carry { hasAction, hasAnswer, listMode }. */
 export function classify(text, ctx = {}) {
   const t = plain(text);
   if (!t) return null;
+  const { lang } = ctx;   // the shared vocabulary (ctx.lang of the interpreter): cancel and degree words come from lang.common
+  const degree = (x) => lang.degree(x);
   if (ctx.listMode) {
     if (LIST_END.test(t)) return { intent: 'list.end' };
-    if (CANCEL.test(t)) return { intent: 'cancel' };
+    if (lang.cancel(t)) return { intent: 'cancel' };
   }
-  if (CANCEL.test(t)) return { intent: 'cancel' };
+  if (lang.cancel(t)) return { intent: 'cancel' };
   for (const re of FEEDBACK) if (re.test(t)) return { intent: 'feedback' };
   if (BACKCHANNEL.test(t)) return { intent: 'backchannel' };
   if (REPEAT.test(t)) return { intent: 'repeat' };
@@ -92,7 +92,8 @@ const byCoord = (key) => (a, b) => (a.attrs?.[key] ?? 0) - (b.attrs?.[key] ?? 0)
  * Returns { type, matches, kind?, complete } or null when the phrase is not a reference. `matches` is the list of
  * referents it can denote; one match is a resolution, several mean the phrase is ambiguous.
  */
-export function resolveReference(phrase, refs, { prefer = null } = {}) {
+export function resolveReference(phrase, refs, { prefer = null, lang } = {}) {
+  const { ordinal, position, size, colour, COLOURS, SHADES } = lang;
   const t = plain(phrase).replace(/^(?:the|that|this|those|these)\s+/, '');
   if (!t || !refs?.length) return null;
   let m = t.match(QUANT);
@@ -162,22 +163,22 @@ export function resolveReference(phrase, refs, { prefer = null } = {}) {
 }
 
 /** A phrase that denotes exactly this referent among `refs`: "the red house", else "the second house" (by order within the kind). */
-export function describeReferent(ref, refs) {
+export function describeReferent(ref, refs, lang) {
   const same = refs.filter((r) => r.kind === ref.kind);
   if (same.length === 1) return `the ${ref.noun}`;
   const c = colourOf(ref);
   if (c && same.filter((r) => colourOf(r) === c).length === 1) return `the ${c} ${ref.noun}`;
   const i = same.findIndex((r) => r.id === ref.id) + 1;
-  const o = i === same.length ? 'last' : ordinalWord(i);
+  const o = i === same.length ? 'last' : lang.ordinalWord(i);
   return o ? `the ${o} ${ref.noun}` : `the ${ref.noun}`;
 }
 
 /** Match a reply to a "which one" question: option by reference words ("the red one", "the first", "blue", "the second house"). */
-export function chooseOption(reply, options) {
+export function chooseOption(reply, options, lang) {
   const t = plain(reply).replace(/^(?:the|that|this)\s+/, '').replace(/^(?:i mean |i meant |i want |i said |it is |its |um |uh )/, '').replace(/^(?:the|that|this)\s+/, '');
   if (!t) return null;
   const words = t.replace(/\b(?:one|ones|please|pls)\b/g, ' ').replace(/\s+/g, ' ').trim().split(' ').filter(Boolean);
-  const ord = words.map(ordinal).find((x) => x != null);
+  const ord = words.map(lang.ordinal).find((x) => x != null);
   if (ord != null) { const o = ord === -1 ? options.at(-1) : options[ord - 1]; return o ? [o] : null; }
   if (/^(?:both|all|each|every)/.test(t)) return options;
   let hits = options;
@@ -190,4 +191,3 @@ export function chooseOption(reply, options) {
   return hits.length ? hits : null;
 }
 
-export { yesNo };
