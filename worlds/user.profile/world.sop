@@ -1,0 +1,22 @@
+@world.user.profile core.world
+    namespace=user.profile
+    version=0.1.0
+    legend=$legend.user.profile
+    imports=world.core
+    imports=world.kids.common
+    formalization=rules
+    language=en
+    status=fixture
+    tab=profile
+    tabTitle="Profile"
+    tabAlias=profile
+    tabAlias=my_profile
+    tabAlias=about_me
+    tabAlias=cv
+    tabAlias=resume
+    tabAlias=my_cv
+    tabOrder=90
+    tabKind=tool
+    title="User profile"
+    summary="get to know you and keep your profile"
+    doc="Gets to know the user through a short, game-like interview (one question at a time, chosen by priority and by what is still unknown, with warm acknowledgements, skip and pause respected and remembered) and shows what it learned as a CV-like card. The plan (sections, fields, priorities, sensitivity, question phrasings) is in kb.sop; answers are read with patterns, lexicons and the rules of understand.mjs; nothing is sent anywhere and the Profile tab keeps the data in this browser only. Sensitive topics are never asked for and kept only when the user says remember. State lives in ctx.state; the tab renders it. Hand-built platform fixture, not produced by the C1 workflow."

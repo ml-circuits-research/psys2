@@ -1,0 +1,248 @@
+@legend.user.profile core.legend
+    namespace=user.profile
+    version=0.1.0
+    imports=core
+    imports=kids.common
+    doc="A profile of the user, built in a game-like conversation: the plan (sections and fields with priority, sensitivity and questions) and what is known. The keys of user.profile.person are the profile fields; their ask is the canonical question."
+
+@user.profile.person core.type
+    extends=core.state
+    doc="The user. Each key is a profile field; values are kept in the world state with their provenance (said or guessed)."
+    example="I am a nurse."
+
+@user.profile.person.name core.key
+    value=string
+    card=one
+    ask="What should I call you?"
+
+@user.profile.person.address core.key
+    value=string
+    card=one
+    ask="How should I address you?"
+
+@user.profile.person.location core.key
+    value=string
+    card=one
+    ask="Where are you based?"
+
+@user.profile.person.role core.key
+    value=string
+    card=one
+    ask="What is your current role?"
+
+@user.profile.person.field core.key
+    value=string
+    card=one
+    ask="Which field or industry do you work in?"
+
+@user.profile.person.org core.key
+    value=string
+    card=one
+    ask="Which organisation do you work for?"
+
+@user.profile.person.years core.key
+    value=string
+    card=one
+    ask="How many years of experience do you have?"
+
+@user.profile.person.previous core.key
+    value=string
+    card=many
+    ask="What did you do before?"
+
+@user.profile.person.education core.key
+    value=string
+    card=one
+    ask="What is your educational background?"
+
+@user.profile.person.skills core.key
+    value=string
+    card=many
+    ask="What are your main skills?"
+
+@user.profile.person.tools core.key
+    value=string
+    card=many
+    ask="Which tools or languages do you use?"
+
+@user.profile.person.hobbies core.key
+    value=string
+    card=many
+    ask="What are your hobbies?"
+
+@user.profile.person.topics core.key
+    value=string
+    card=many
+    ask="Which topics interest you?"
+
+@user.profile.person.media core.key
+    value=string
+    card=many
+    ask="Which books, music or films do you like?"
+
+@user.profile.person.sports core.key
+    value=string
+    card=many
+    ask="Which sports do you like?"
+
+@user.profile.person.learning core.key
+    value=string
+    card=many
+    ask="What would you like to learn?"
+
+@user.profile.person.career core.key
+    value=string
+    card=one
+    ask="What are your career goals?"
+
+@user.profile.person.year core.key
+    value=string
+    card=one
+    ask="What is your goal for this year?"
+
+@user.profile.person.length core.key
+    value=string
+    card=one
+    ask="Do you prefer short or detailed answers?"
+
+@user.profile.person.tone core.key
+    value=string
+    card=one
+    ask="Do you prefer a formal or a casual tone?"
+
+@user.profile.person.language core.key
+    value=string
+    card=one
+    ask="Which language do you prefer?"
+
+@user.profile.section core.type
+    extends=core.state
+    doc="A section of the profile (the sections of the CV card)."
+    example="Professional"
+
+@user.profile.section.label core.key
+    value=string
+    ask="What is the section called?"
+
+@user.profile.section.order core.key
+    value=integer
+    ask="Where does the section come in the CV?"
+
+@user.profile.field core.type
+    extends=core.state
+    doc="A planned profile field: where it belongs, how important it is, how sensitive, and how to ask for it."
+    example="Current role"
+
+@user.profile.field.label core.key
+    value=string
+    card=one
+    ask="What is the field called?"
+
+@user.profile.field.section core.key
+    value=atom
+    card=one
+    ask="Which section does the field belong to?"
+
+@user.profile.field.prio core.key
+    value=integer
+    card=one
+    ask="How important is it to learn (1 to 10)?"
+
+@user.profile.field.card core.key
+    value=atom
+    card=one
+    ask="Is there one value (one) or several (many)?"
+
+@user.profile.field.sens core.key
+    value=atom
+    card=one
+    ask="How sensitive is it (none, low, medium, high)?"
+
+@user.profile.field.want core.key
+    value=string
+    card=one
+    ask="What would we like to learn, in words?"
+
+@user.profile.field.example core.key
+    value=string
+    card=one
+    ask="What is an example answer?"
+
+@user.profile.field.q core.key
+    value=string
+    card=many
+    ask="How can the question be phrased?"
+
+@user.profile.field.follow core.key
+    value=string
+    card=one
+    ask="What is the follow-up question?"
+
+@user.profile.field.followKey core.key
+    value=atom
+    card=one
+    ask="Which field does the answer to the follow-up fill (empty: it is kept as a note)?"
+
+@user.profile.field.followMode core.key
+    value=atom
+    card=one
+    ask="When is the follow-up asked (always or unclear answers only)?"
+
+@user.profile.field.ack core.key
+    value=string
+    card=many
+    ask="How can the system acknowledge an answer ({v} the value, {V} capitalised, {A} with a or an)?"
+
+@user.profile.field.needs core.key
+    value=atom
+    card=one
+    ask="Which field must be known before this one is asked?"
+
+@user.profile.field.askable core.key
+    value=boolean
+    card=one
+    ask="May the system ask for it?"
+
+@user.profile.industry core.type
+    extends=core.state
+    doc="A field or industry, with the words that name it."
+    example="Healthcare"
+
+@user.profile.industry.label core.key
+    value=string
+    ask="What is the field called?"
+
+@user.profile.industry.word core.key
+    value=atom
+    card=many
+    ask="Which words name the field?"
+
+@user.profile.reaction core.type
+    extends=core.state
+    doc="A short warm reaction to a specific answer."
+    example="A nurse: that takes stamina!"
+
+@user.profile.reaction.kind core.key
+    value=atom
+    ask="What kind of answer does it react to (role, hobby, field)?"
+
+@user.profile.reaction.word core.key
+    value=atom
+    ask="Which answer (lexicon form) does it react to?"
+
+@user.profile.reaction.text core.key
+    value=string
+    ask="What does the system say?"
+
+@user.profile.activity core.type
+    extends=core.state
+    doc="An activity word that implies a role (teaching implies teacher)."
+    example="I have been teaching for 12 years."
+
+@user.profile.activity.word core.key
+    value=atom
+    ask="Which activity word?"
+
+@user.profile.activity.role core.key
+    value=atom
+    ask="Which role does it imply?"

@@ -1,0 +1,66 @@
+@op.user.profile.start core.operation
+    impl=start
+    semantics=action
+    action=prof.start
+    doc="Starts or resumes the interview (optionally at one field)."
+
+@op.user.profile.pause core.operation
+    impl=pause
+    semantics=action
+    action=prof.pause
+    doc="Pauses the interview."
+
+@op.user.profile.know core.operation
+    impl=know
+    semantics=action
+    action=prof.know
+    doc="Says what is known about the user."
+
+@op.user.profile.progress core.operation
+    impl=progress
+    semantics=action
+    action=prof.progress
+    doc="How much is known."
+
+@op.user.profile.tell core.operation
+    impl=tell
+    semantics=action
+    action=prof.tell
+    doc="The user states something about themselves outside a question."
+
+@op.user.profile.forget core.operation
+    impl=forget
+    semantics=action
+    action=prof.forget
+    doc="Forgets one field."
+
+@op.user.profile.confirm core.operation
+    impl=confirm
+    semantics=action
+    action=prof.confirm
+    doc="Confirms a guessed field."
+
+@op.user.profile.delete core.operation
+    impl=delete
+    semantics=action
+    action=prof.delete
+    doc="Deletes the whole profile (asks first unless forced)."
+
+@op.user.profile.export core.operation
+    impl=exportProfile
+    semantics=action
+    action=prof.export
+    doc="Exports the profile as JSON or a Markdown CV."
+
+@op.user.profile.sensitive core.operation
+    impl=sensitive
+    semantics=action
+    action=prof.sensitive
+    doc="Volunteered sensitive content: kept only on request."
+
+@op.user.profile.mention core.operation
+    impl=mention
+    semantics=action
+    action=prof.mention
+    doc="Asks about one field next."
+

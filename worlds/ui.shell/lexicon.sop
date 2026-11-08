@@ -43,6 +43,12 @@
     word=piano
     word=keyboard
     word=sheet_music
+    word=profile
+    word=my_profile
+    word=about_me
+    word=cv
+    word=resume
+    word=my_cv
 
 @lex.ui.shell.playtabs core.lexicon
     class=noun

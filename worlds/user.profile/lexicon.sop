@@ -1,0 +1,302 @@
+@gen.user.profile.lexicon core.note
+    text="Word lists for the profile world. The union lexicon of roles is the concatenation of the per-field role lexicons; keep them in step when editing (tests check it). Interests, tools and skills are used by patterns and by ops.mjs through ctx.lexicon."
+    core.source="specs/12-profile.md"
+
+@lex.user.profile.role.tech core.lexicon
+    class=noun
+    doc="Roles in Tech (used to guess the field from a role)"
+    word=software_engineer word=software_developer word=developer word=programmer word=web_developer word=frontend_developer word=backend_developer word=fullstack_developer
+    word=data_scientist word=data_analyst word=data_engineer word=devops_engineer word=sysadmin word=system_administrator word=qa_engineer word=tester
+    word=security_analyst word=machine_learning_engineer word=ml_engineer word=product_manager word=ux_researcher word=it_manager word=game_developer word=mobile_developer
+    word=cloud_architect word=software_architect
+
+@lex.user.profile.role.healthcare core.lexicon
+    class=noun
+    doc="Roles in Healthcare (used to guess the field from a role)"
+    word=nurse word=doctor word=physician word=surgeon word=dentist word=pharmacist word=paramedic word=midwife
+    word=therapist word=physiotherapist word=radiologist word=veterinarian word=vet word=caregiver word=medical_assistant word=psychologist
+    word=nutritionist word=pediatrician
+
+@lex.user.profile.role.education core.lexicon
+    class=noun
+    doc="Roles in Education (used to guess the field from a role)"
+    word=teacher word=professor word=lecturer word=tutor word=teaching_assistant word=principal word=headmaster word=librarian
+    word=instructor word=trainer word=educator word=student
+
+@lex.user.profile.role.finance core.lexicon
+    class=noun
+    doc="Roles in Finance (used to guess the field from a role)"
+    word=accountant word=auditor word=banker word=financial_analyst word=investment_banker word=trader word=bookkeeper word=actuary
+    word=insurance_agent word=loan_officer word=economist word=tax_advisor
+
+@lex.user.profile.role.legal core.lexicon
+    class=noun
+    doc="Roles in Law (used to guess the field from a role)"
+    word=lawyer word=attorney word=paralegal word=judge word=solicitor word=barrister word=legal_counsel word=notary
+
+@lex.user.profile.role.creative core.lexicon
+    class=noun
+    doc="Roles in Creative and media (used to guess the field from a role)"
+    word=designer word=graphic_designer word=ux_designer word=ui_designer word=illustrator word=photographer word=writer word=journalist
+    word=editor word=copywriter word=musician word=actor word=filmmaker word=animator word=artist word=video_editor
+    word=art_director word=translator
+
+@lex.user.profile.role.engineering core.lexicon
+    class=noun
+    doc="Roles in Engineering (used to guess the field from a role)"
+    word=mechanical_engineer word=civil_engineer word=electrical_engineer word=chemical_engineer word=engineer word=architect word=industrial_engineer word=technician
+    word=structural_engineer word=electronics_engineer word=surveyor
+
+@lex.user.profile.role.science core.lexicon
+    class=noun
+    doc="Roles in Science and research (used to guess the field from a role)"
+    word=scientist word=researcher word=physicist word=chemist word=biologist word=mathematician word=statistician word=lab_technician
+    word=geologist word=astronomer word=postdoc word=phd_student
+
+@lex.user.profile.role.trades core.lexicon
+    class=noun
+    doc="Roles in Trades and transport (used to guess the field from a role)"
+    word=electrician word=plumber word=carpenter word=welder word=mechanic word=builder word=painter word=roofer
+    word=bricklayer word=locksmith word=gardener word=farmer word=driver word=truck_driver word=pilot
+
+@lex.user.profile.role.hospitality core.lexicon
+    class=noun
+    doc="Roles in Hospitality (used to guess the field from a role)"
+    word=chef word=cook word=waiter word=waitress word=bartender word=barista word=hotel_manager word=receptionist
+    word=baker word=concierge word=flight_attendant word=tour_guide
+
+@lex.user.profile.role.public core.lexicon
+    class=noun
+    doc="Roles in Public service (used to guess the field from a role)"
+    word=civil_servant word=police_officer word=firefighter word=soldier word=social_worker word=diplomat word=city_planner
+
+@lex.user.profile.role.business core.lexicon
+    class=noun
+    doc="Roles in Business (used to guess the field from a role)"
+    word=manager word=consultant word=marketer word=marketing_manager word=sales_rep word=salesperson word=entrepreneur word=founder
+    word=ceo word=recruiter word=hr_manager word=project_manager word=business_analyst word=operations_manager word=product_owner word=shop_owner
+    word=store_manager word=cashier word=freelancer
+
+@lex.user.profile.roles core.lexicon
+    class=noun
+    doc="Every known role (union of the role.<field> lexicons)"
+    word=software_engineer word=software_developer word=developer word=programmer word=web_developer word=frontend_developer word=backend_developer word=fullstack_developer
+    word=data_scientist word=data_analyst word=data_engineer word=devops_engineer word=sysadmin word=system_administrator word=qa_engineer word=tester
+    word=security_analyst word=machine_learning_engineer word=ml_engineer word=product_manager word=ux_researcher word=it_manager word=game_developer word=mobile_developer
+    word=cloud_architect word=software_architect word=nurse word=doctor word=physician word=surgeon word=dentist word=pharmacist
+    word=paramedic word=midwife word=therapist word=physiotherapist word=radiologist word=veterinarian word=vet word=caregiver
+    word=medical_assistant word=psychologist word=nutritionist word=pediatrician word=teacher word=professor word=lecturer word=tutor
+    word=teaching_assistant word=principal word=headmaster word=librarian word=instructor word=trainer word=educator word=student
+    word=accountant word=auditor word=banker word=financial_analyst word=investment_banker word=trader word=bookkeeper word=actuary
+    word=insurance_agent word=loan_officer word=economist word=tax_advisor word=lawyer word=attorney word=paralegal word=judge
+    word=solicitor word=barrister word=legal_counsel word=notary word=designer word=graphic_designer word=ux_designer word=ui_designer
+    word=illustrator word=photographer word=writer word=journalist word=editor word=copywriter word=musician word=actor
+    word=filmmaker word=animator word=artist word=video_editor word=art_director word=translator word=mechanical_engineer word=civil_engineer
+    word=electrical_engineer word=chemical_engineer word=engineer word=architect word=industrial_engineer word=technician word=structural_engineer word=electronics_engineer
+    word=surveyor word=scientist word=researcher word=physicist word=chemist word=biologist word=mathematician word=statistician
+    word=lab_technician word=geologist word=astronomer word=postdoc word=phd_student word=electrician word=plumber word=carpenter
+    word=welder word=mechanic word=builder word=painter word=roofer word=bricklayer word=locksmith word=gardener
+    word=farmer word=driver word=truck_driver word=pilot word=chef word=cook word=waiter word=waitress
+    word=bartender word=barista word=hotel_manager word=receptionist word=baker word=concierge word=flight_attendant word=tour_guide
+    word=civil_servant word=police_officer word=firefighter word=soldier word=social_worker word=diplomat word=city_planner word=manager
+    word=consultant word=marketer word=marketing_manager word=sales_rep word=salesperson word=entrepreneur word=founder word=ceo
+    word=recruiter word=hr_manager word=project_manager word=business_analyst word=operations_manager word=product_owner word=shop_owner word=store_manager
+    word=cashier word=freelancer
+
+@lex.user.profile.fields core.lexicon
+    class=noun
+    doc="Words for fields and industries (the id of a field is in kb.sop)"
+    word=tech word=technology word=it word=software word=information_technology word=computing word=internet word=healthcare
+    word=health_care word=medicine word=medical word=nursing word=health word=pharma word=pharmaceutical word=education
+    word=teaching word=academia word=schools word=school word=university word=training word=finance word=banking
+    word=bank word=insurance word=accounting word=investment word=fintech word=law word=legal word=justice
+    word=design word=creative word=media word=arts word=art word=publishing word=journalism word=advertising
+    word=film word=music_industry word=entertainment word=engineering word=construction word=manufacturing word=automotive word=aerospace
+    word=energy word=industrial word=science word=research word=biotech word=biotechnology word=laboratory word=trades
+    word=trade word=transport word=logistics word=logistic word=transportation word=agriculture word=farming word=repair
+    word=hospitality word=restaurant word=restaurants word=tourism word=catering word=food_service word=travel word=government
+    word=public_service word=public_sector word=civil_service word=nonprofit word=military word=police word=business word=sales
+    word=sale word=marketing word=retail word=consulting word=management word=startups word=startup word=ecommerce
+    word=real_estate word=human_resources word=human_resource
+
+@lex.user.profile.hobbies core.lexicon
+    class=noun
+    doc="Hobbies"
+    word=hiking word=reading word=cooking word=gardening word=photography word=painting word=drawing word=knitting
+    word=chess word=gaming word=video_games word=video_game word=board_games word=board_game word=travelling word=traveling
+    word=camping word=fishing word=cycling word=running word=swimming word=yoga word=climbing word=dancing
+    word=singing word=guitar word=piano word=writing word=baking word=birdwatching word=woodworking word=sewing
+    word=pottery word=stargazing word=volunteering word=meditation word=coding word=collecting word=origami word=surfing
+    word=skiing word=kayaking word=sailing word=walking word=jogging word=skating word=crafts word=craft
+    word=blogging word=podcasts word=podcast word=theatre
+
+@lex.user.profile.music core.lexicon
+    class=noun
+    doc="Music genres (stored under books, music and films)"
+    word=jazz word=rock word=classical word=techno word=hip_hop word=blues word=blue word=folk
+    word=metal word=pop word=opera word=reggae word=country word=electronic word=soul word=punk
+    word=house_music word=k-pop word=indie
+
+@lex.user.profile.media core.lexicon
+    class=noun
+    doc="Kinds of books, films and music"
+    word=books word=book word=novels word=novel word=sci-fi word=science_fiction word=fantasy word=movies
+    word=movie word=films word=film word=cinema word=anime word=comics word=comic word=poetry
+    word=documentaries word=documentarie word=series word=serie word=music word=podcasts word=podcast
+
+@lex.user.profile.sports core.lexicon
+    class=noun
+    doc="Sports"
+    word=football word=soccer word=basketball word=tennis word=volleyball word=rugby word=cricket word=baseball
+    word=golf word=handball word=hockey word=badminton word=table_tennis word=boxing word=judo word=karate
+    word=martial_arts word=martial_art word=athletics word=athletic word=marathon word=rowing word=skiing word=snowboarding
+    word=cycling word=swimming word=running
+
+@lex.user.profile.topics core.lexicon
+    class=noun
+    doc="Topics of interest"
+    word=space word=history word=science word=philosophy word=psychology word=economics word=economic word=art
+    word=architecture word=technology word=ai word=artificial_intelligence word=machine_learning word=nature word=climate word=languages
+    word=language word=linguistics word=linguistic word=travel word=cars word=car word=fashion word=design
+    word=literature word=mathematics word=mathematic word=robotics word=robotic word=startups word=startup word=physics
+    word=physic word=biology word=chemistry word=astronomy word=geography word=politics_history word=cooking word=sustainability
+
+@lex.user.profile.interests core.lexicon
+    class=noun
+    doc="Everything a person may say they love (hobbies, music, sports, topics)"
+    word=hiking word=reading word=cooking word=gardening word=photography word=painting word=drawing word=knitting
+    word=chess word=gaming word=video_games word=video_game word=board_games word=board_game word=travelling word=traveling
+    word=camping word=fishing word=cycling word=running word=swimming word=yoga word=climbing word=dancing
+    word=singing word=guitar word=piano word=writing word=baking word=birdwatching word=woodworking word=sewing
+    word=pottery word=stargazing word=volunteering word=meditation word=coding word=collecting word=origami word=surfing
+    word=skiing word=kayaking word=sailing word=walking word=jogging word=skating word=crafts word=craft
+    word=blogging word=podcasts word=podcast word=theatre word=jazz word=rock word=classical word=techno
+    word=hip_hop word=blues word=blue word=folk word=metal word=pop word=opera word=reggae
+    word=country word=electronic word=soul word=punk word=house_music word=k-pop word=indie word=football
+    word=soccer word=basketball word=tennis word=volleyball word=rugby word=cricket word=baseball word=golf
+    word=handball word=hockey word=badminton word=table_tennis word=boxing word=judo word=karate word=martial_arts
+    word=martial_art word=athletics word=athletic word=marathon word=rowing word=snowboarding word=space word=history
+    word=science word=philosophy word=psychology word=economics word=economic word=art word=architecture word=technology
+    word=ai word=artificial_intelligence word=machine_learning word=nature word=climate word=languages word=language word=linguistics
+    word=linguistic word=travel word=cars word=car word=fashion word=design word=literature word=mathematics
+    word=mathematic word=robotics word=robotic word=startups word=startup word=physics word=physic word=biology
+    word=chemistry word=astronomy word=geography word=politics_history word=sustainability
+
+@lex.user.profile.skills core.lexicon
+    class=noun
+    doc="Skills"
+    word=leadership word=communication word=project_management word=public_speaking word=negotiation word=teaching word=writing word=design
+    word=analysis word=problem_solving word=teamwork word=mentoring word=sales word=sale word=marketing word=research
+    word=statistics word=statistic word=accounting word=translation word=copywriting word=data_analysis word=machine_learning word=cooking
+    word=organisation word=planning word=coaching
+
+@lex.user.profile.tools core.lexicon
+    class=noun
+    doc="Tools, software and programming languages"
+    word=python word=sql word=javascript word=typescript word=java word=rust word=ruby word=php
+    word=kotlin word=swift word=matlab word=excel word=powerpoint word=figma word=photoshop word=illustrator
+    word=jira word=git word=docker word=kubernetes word=kubernete word=linux word=aws word=azure
+    word=tableau word=power_bi word=sap word=salesforce word=autocad word=solidworks word=solidwork word=react
+    word=django word=pandas word=panda word=tensorflow word=pytorch word=notion word=slack word=bash
+    word=html word=css word=postgres word=postgre word=mysql word=mongodb
+
+@lex.user.profile.abilities core.lexicon
+    class=noun
+    doc="Tools and skills together"
+    word=python word=sql word=javascript word=typescript word=java word=rust word=ruby word=php
+    word=kotlin word=swift word=matlab word=excel word=powerpoint word=figma word=photoshop word=illustrator
+    word=jira word=git word=docker word=kubernetes word=kubernete word=linux word=aws word=azure
+    word=tableau word=power_bi word=sap word=salesforce word=autocad word=solidworks word=solidwork word=react
+    word=django word=pandas word=panda word=tensorflow word=pytorch word=notion word=slack word=bash
+    word=html word=css word=postgres word=postgre word=mysql word=mongodb word=leadership word=communication
+    word=project_management word=public_speaking word=negotiation word=teaching word=writing word=design word=analysis word=problem_solving
+    word=teamwork word=mentoring word=sales word=sale word=marketing word=research word=statistics word=statistic
+    word=accounting word=translation word=copywriting word=data_analysis word=machine_learning word=cooking word=organisation word=planning
+    word=coaching
+
+@lex.user.profile.subjects core.lexicon
+    class=noun
+    doc="Subjects one can study"
+    word=physics word=physic word=chemistry word=biology word=mathematics word=mathematic word=maths word=math
+    word=computer_science word=engineering word=medicine word=law word=economics word=economic word=history word=literature
+    word=philosophy word=psychology word=architecture word=design word=nursing word=business word=music word=art
+    word=linguistics word=linguistic word=informatics word=informatic word=geography word=sociology word=education word=languages
+    word=language word=finance word=accounting word=marketing word=statistics word=statistic word=pharmacy word=journalism
+    word=electronics word=electronic word=politics_science
+
+@lex.user.profile.langs core.lexicon
+    class=noun
+    doc="Languages"
+    word=english word=romanian word=french word=german word=spanish word=italian word=portuguese word=dutch
+    word=polish word=hungarian word=russian word=ukrainian word=turkish word=greek word=arabic word=hindi
+    word=chinese word=mandarin word=japanese word=korean word=swedish word=norwegian word=danish word=finnish
+    word=czech word=bulgarian word=serbian word=croatian
+
+@lex.user.profile.fieldwords core.lexicon
+    class=noun
+    doc="Words naming a field of the profile, for \"forget my job\" style commands"
+    word=previous word=learning word=year word=length word=media word=org word=job word=field
+    word=industry word=role word=position word=profession word=work word=career word=occupation word=name
+    word=nickname word=city word=country word=location word=hometown word=company word=employer word=organisation
+    word=organization word=years word=experience word=education word=degree word=studies word=studie word=study
+    word=skills word=skill word=tools word=tool word=languages word=language word=hobbies word=hobbie
+    word=hobby word=interests word=interest word=sports word=sport word=music word=books word=book
+    word=films word=film word=movies word=movie word=goals word=goal word=ambitions word=ambition
+    word=tone word=style word=answers word=answer word=address word=topics word=topic
+
+@lex.user.profile.styles core.lexicon
+    class=noun
+    doc="Style words for answer length and tone"
+    word=short word=brief word=concise word=detailed word=long word=thorough word=formal word=casual
+    word=informal word=relaxed word=professional word=friendly
+
+@lex.user.profile.sensitive.health core.lexicon
+    class=noun
+    doc="Sensitive words, category health: never asked for, stored only when the user says remember"
+    word=diabetes word=diabete word=diabetic word=cancer word=depression word=anxiety word=illness word=disease
+    word=disorder word=adhd word=autism word=pregnant word=diagnosed word=diagnosis word=medication word=disability
+    word=disabled word=asthma word=epilepsy word=hiv word=ill word=sick word=burnout
+
+@lex.user.profile.sensitive.religion core.lexicon
+    class=noun
+    doc="Sensitive words, category religion: never asked for, stored only when the user says remember"
+    word=christian word=muslim word=jewish word=buddhist word=hindu word=atheist word=catholic word=orthodox
+    word=religion word=religious word=church word=mosque word=synagogue word=faith
+
+@lex.user.profile.sensitive.politics core.lexicon
+    class=noun
+    doc="Sensitive words, category politics: never asked for, stored only when the user says remember"
+    word=republican word=democrat word=liberal word=conservative word=socialist word=communist word=libertarian word=leftist
+    word=rightist word=voted word=vote word=party
+
+@lex.user.profile.sensitive.sexuality core.lexicon
+    class=noun
+    doc="Sensitive words, category sexuality: never asked for, stored only when the user says remember"
+    word=gay word=lesbian word=bisexual word=straight word=transgender word=queer word=asexual word=heterosexual
+    word=homosexual
+
+@lex.user.profile.sensitive.money core.lexicon
+    class=noun
+    doc="Sensitive words, category money: never asked for, stored only when the user says remember"
+    word=salary word=income word=earn word=earns word=earning word=mortgage word=debt word=wage
+    word=paycheck
+
+@lex.user.profile.sensitive.address core.lexicon
+    class=noun
+    doc="Sensitive words, category address: never asked for, stored only when the user says remember"
+    word=street word=road word=avenue word=boulevard word=apartment word=flat word=zip word=postcode
+
+@lex.user.profile.sensitive core.lexicon
+    class=noun
+    doc="All sensitive words"
+    word=diabetes word=diabete word=diabetic word=cancer word=depression word=anxiety word=illness word=disease
+    word=disorder word=adhd word=autism word=pregnant word=diagnosed word=diagnosis word=medication word=disability
+    word=disabled word=asthma word=epilepsy word=hiv word=ill word=sick word=burnout word=christian
+    word=muslim word=jewish word=buddhist word=hindu word=atheist word=catholic word=orthodox word=religion
+    word=religious word=church word=mosque word=synagogue word=faith word=republican word=democrat word=liberal
+    word=conservative word=socialist word=communist word=libertarian word=leftist word=rightist word=voted word=vote
+    word=party word=gay word=lesbian word=bisexual word=straight word=transgender word=queer word=asexual
+    word=heterosexual word=homosexual word=salary word=income word=earn word=earns word=earning word=mortgage
+    word=debt word=wage word=paycheck word=street word=road word=avenue word=boulevard word=apartment
+    word=flat word=zip word=postcode
+

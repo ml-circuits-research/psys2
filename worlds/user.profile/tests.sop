@@ -1,0 +1,661 @@
+@t.user.profile.t001 core.test
+    input="I am a nurse."
+    expect="nurse"
+    expect="healthcare, right"
+    expectState="fields.role.v=nurse"
+    expectState="fields.field.src=guessed"
+    expectState="fields.field.v=Healthcare"
+    expectState="inputMode=confirm"
+
+@t.user.profile.t002 core.test
+    input="I'm a software engineer at Acme."
+    expect="software engineer"
+    expect="Acme"
+    expect="tech, right"
+    expectState="fields.role.v=software engineer"
+    expectState="fields.org.v=Acme"
+    expectState="fields.field.v=Tech"
+
+@t.user.profile.t003 core.test
+    input="I work in healthcare as a nurse."
+    expect="nurse"
+    expectState="fields.field.src=said"
+    expectState="fields.field.v=Healthcare"
+    expectState="fields.role.v=nurse"
+
+@t.user.profile.t004 core.test
+    input="I've been teaching for 12 years."
+    expect="teacher"
+    expectState="fields.years.v=12"
+    expectState="fields.role.v=teacher"
+    expectState="fields.role.src=guessed"
+
+@t.user.profile.t005 core.test
+    input="I studied physics at Cluj."
+    expect="Physics at Cluj"
+    expectState="fields.education.v=Physics at Cluj"
+
+@t.user.profile.t006 core.test
+    input="I love hiking and jazz."
+    expect="Hiking is a great way"
+    expectState="fields.hobbies.v.0=hiking"
+    expectState="fields.media.v.0=jazz"
+
+@t.user.profile.t007 core.test
+    input="Mostly Python and SQL."
+    expect="Python and SQL"
+    expectState="fields.tools.v.0=Python"
+    expectState="fields.tools.v.1=SQL"
+
+@t.user.profile.t008 core.test
+    input="Open the profile."
+    expect="Profile tab"
+    session=p1
+
+@t.user.profile.t009 core.test
+    input="Call me Andy."
+    expect="Andy"
+    expectState="fields.name.v=Andy"
+    expectState="fields.name.src=said"
+    session=p1
+
+@t.user.profile.t010 core.test
+    input="Open the profile."
+    expect="Profile tab"
+    session=p2
+
+@t.user.profile.t011 core.test
+    input="My name is Andy Lee."
+    expect="Andy"
+    expectState="fields.name.v=Andy"
+    session=p2
+
+@t.user.profile.t012 core.test
+    input="Open the profile."
+    expect="Profile tab"
+    session=p3
+
+@t.user.profile.t013 core.test
+    input="I live in Cluj."
+    expect="Cluj"
+    expectState="fields.location.v=Cluj"
+    session=p3
+
+@t.user.profile.t014 core.test
+    input="I want to learn Rust."
+    expect="Rust"
+    expectState="fields.learning.v.0=Rust"
+
+@t.user.profile.t015 core.test
+    input="Keep it short."
+    expect="Short"
+    expectState="fields.length.v=short"
+
+@t.user.profile.t016 core.test
+    input="I prefer detailed answers."
+    expect="etailed"
+    expectState="fields.length.v=detailed"
+
+@t.user.profile.t017 core.test
+    input="I like casual answers."
+    expect="asual"
+    expectState="fields.tone.v=casual"
+
+@t.user.profile.t018 core.test
+    input="Before that I was a teacher."
+    expect="teacher"
+    expectState="fields.previous.v.0=teacher"
+
+@t.user.profile.t019 core.test
+    input="I used to be a chef."
+    expect="chef"
+    expectState="fields.previous.v.0=chef"
+
+@t.user.profile.t020 core.test
+    input="I work for myself."
+    expect="Self-employed"
+    expectState="fields.org.v=Self-employed"
+
+@t.user.profile.t021 core.test
+    input="I have 12 years of experience."
+    expect="12 years"
+    expectState="fields.years.v=12"
+
+@t.user.profile.t022 core.test
+    input="I have a degree in biology."
+    expect="iology"
+    expectState="fields.education.v=Biology"
+
+@t.user.profile.t023 core.test
+    input="I work in finance."
+    expect="inance"
+    expectState="fields.field.v=Finance"
+    expectState="fields.field.src=said"
+
+@t.user.profile.t024 core.test
+    input="I am a designer."
+    expect="designer"
+    expectState="fields.field.v=Creative and media"
+    expectState="fields.field.src=guessed"
+
+@t.user.profile.t025 core.test
+    input="I prefer answers in Romanian."
+    expect="Romanian"
+    expectState="fields.language.v=Romanian"
+
+@t.user.profile.t026 core.test
+    input="I like hiking, jazz and chess."
+    expect="Hiking"
+    expectState="fields.hobbies.v.1=chess"
+    expectState="fields.media.v.0=jazz"
+
+@t.user.profile.t027 core.test
+    input="I use Python, SQL and Docker."
+    expect="Python"
+    expectState="fields.tools.v.2=Docker"
+
+@t.user.profile.t028 core.test
+    input="I work as a nurse for the city hospital."
+    expect="nurse"
+    expectState="fields.org.v=City Hospital"
+
+@t.user.profile.t029 core.test
+    input="I graduated in law from the University of Bucharest."
+    expect="Law"
+    expectState="fields.education.v=Law at the University of Bucharest"
+
+@t.user.profile.t030 core.test
+    input="I am 34 years old."
+    expect="do not keep"
+    expectState="sensitive.length=0"
+    expectState="counts.known=0"
+
+@t.user.profile.t031 core.test
+    input="Remember that I am 34 years old."
+    expect="remember that"
+    expectState="sensitive.length=1"
+
+@t.user.profile.t032 core.test
+    input="I have diabetes."
+    expect="do not keep"
+    expectState="sensitive.length=0"
+
+@t.user.profile.t033 core.test
+    input="Remember that I have diabetes."
+    expect="remember"
+    expectState="sensitive.length=1"
+    expectState="sensitive.0.cat=health"
+
+@t.user.profile.t034 core.test
+    input="I am Christian."
+    expect="do not keep"
+    expectState="sensitive.length=0"
+
+@t.user.profile.t035 core.test
+    input="What do you know about me?"
+    expect="do not know anything"
+
+@t.user.profile.t036 core.test
+    input="Open the profile."
+    expect="Profile tab"
+    session=p4
+
+@t.user.profile.t037 core.test
+    input="How well do you know me?"
+    expect="0 of 21"
+    session=p4
+
+@t.user.profile.t038 core.test
+    input="Open the profile."
+    expect="Profile tab"
+    session=p5
+
+@t.user.profile.t039 core.test
+    input="Who am I?"
+    expect="do not know anything"
+    session=p5
+
+@t.user.profile.t040 core.test
+    input="Export my profile."
+    expect="nothing to export"
+    expectStatus=missing
+
+@t.user.profile.t041 core.test
+    input="Delete my profile."
+    expect="Do you want me to delete"
+    expectState="pending.kind=delete"
+    expectState="inputMode=confirm"
+
+@t.user.profile.t042 core.test
+    input="Pause the interview."
+    expect="not in the middle"
+
+@t.user.profile.t043 core.test
+    input="Open the profile."
+    expect="Profile tab"
+
+@t.user.profile.t044 core.test
+    input="Interview me."
+    expect="get to know me"
+    expect="what name"
+    expectState="active=true"
+    expectState="inputMode=interview"
+    expectState="ui.shell:activeTab=profile"
+    expectState="pending.key=name"
+
+@t.user.profile.t045 core.test
+    input="Ask me something."
+    expect="get to know me"
+    expectState="active=true"
+
+@t.user.profile.t046 core.test
+    input="Let us play get to know me."
+    expect="get to know me"
+    expectState="active=true"
+
+@t.user.profile.t047 core.test
+    input="Ask me about my hobbies."
+    expect="free time"
+    expectState="active=true"
+    expectState="pending.key=hobbies"
+
+@t.user.profile.t048 core.test
+    input="Tom has 5 apples. How many apples does Tom have?"
+    expect="5"
+
+@t.user.profile.t049 core.test
+    input="How many legs does a spider have?"
+    expect="8"
+
+@t.user.profile.t050 core.test
+    input="What is the capital of France?"
+    expect="Paris"
+
+@t.user.profile.t051 core.test
+    input="Show me Paris."
+    expect="Paris"
+
+@t.user.profile.t052 core.test
+    input="Interview me."
+    expect="get to know me"
+    expectState="active=true"
+    session=a
+
+@t.user.profile.t053 core.test
+    input="Andy"
+    expect="(1 of 21 known)"
+    expectState="fields.name.v=Andy"
+    expectState="pending.key=role"
+    session=a
+
+@t.user.profile.t054 core.test
+    input="nurse"
+    expect="A nurse: that takes stamina!"
+    expect="healthcare, right"
+    expectState="fields.role.v=nurse"
+    expectState="fields.field.src=guessed"
+    expectState="pending.kind=confirm"
+    session=a
+
+@t.user.profile.t055 core.test
+    input="yes"
+    expect="(3 of 21 known)"
+    expectState="fields.field.src=said"
+    expectState="pending.key=hobbies"
+    session=a
+
+@t.user.profile.t056 core.test
+    input="skip"
+    expect="skipping"
+    expectState="skipped.hobbies=skip"
+    expectState="pending.key=years"
+    session=a
+
+@t.user.profile.t057 core.test
+    input="12 years"
+    expect="12 years"
+    expectState="fields.years.v=12"
+    expectState="pending.key=skills"
+    session=a
+
+@t.user.profile.t058 core.test
+    input="leadership and writing"
+    expect="(5 of 21 known)"
+    expectState="fields.skills.v.0=leadership"
+    expectState="fields.skills.v.1=writing"
+    expectState="pending.key=learning"
+    session=a
+
+@t.user.profile.t059 core.test
+    input="I'd rather not say"
+    expect="will not ask"
+    expectState="skipped.learning=declined"
+    expectState="counts.skipped=2"
+    session=a
+
+@t.user.profile.t060 core.test
+    input="stop"
+    expect="pick this up"
+    expect="(5 of 21 known)"
+    expectState="active=false"
+    expectState="inputMode=null"
+    session=a
+
+@t.user.profile.t061 core.test
+    input="Interview me."
+    expect="Welcome back, Andy"
+    expectState="active=true"
+    expectState="asks.hobbies=1"
+    session=a
+
+@t.user.profile.t062 core.test
+    input="What do you know about me?"
+    expect="Andy"
+    expect="nurse"
+    expect="12"
+    expect="leadership"
+    session=a
+
+@t.user.profile.t063 core.test
+    input="I am a nurse."
+    expect="nurse"
+    expectState="fields.role.v=nurse"
+    session=b
+
+@t.user.profile.t064 core.test
+    input="no, finance"
+    expect="inance"
+    expectState="fields.field.v=Finance"
+    expectState="fields.field.src=said"
+    session=b
+
+@t.user.profile.t065 core.test
+    input="No, I am a designer."
+    expect="designer, not nurse"
+    expectState="fields.role.v=designer"
+    session=b
+
+@t.user.profile.t066 core.test
+    input="Actually 10 years."
+    expect="10"
+    expectState="fields.years.v=10"
+    session=b
+
+@t.user.profile.t067 core.test
+    input="Forget my job."
+    expect="forgot your current role"
+    expectState="skipped.role=forgotten"
+    session=b
+
+@t.user.profile.t068 core.test
+    input="What do you know about me?"
+    expect="10"
+    expectState="counts.known=2"
+    session=b
+
+@t.user.profile.t069 core.test
+    input="I am a nurse."
+    expectState="fields.role.v=nurse"
+    session=c
+
+@t.user.profile.t070 core.test
+    input="yes"
+    expect="noted"
+    expectState="fields.field.src=said"
+    session=c
+
+@t.user.profile.t071 core.test
+    input="Delete my profile."
+    expect="delete your whole profile"
+    expectState="pending.kind=delete"
+    session=c
+
+@t.user.profile.t072 core.test
+    input="no"
+    expect="kept everything"
+    expectState="fields.role.v=nurse"
+    session=c
+
+@t.user.profile.t073 core.test
+    input="Delete my profile."
+    expect="delete your whole profile"
+    session=c
+
+@t.user.profile.t074 core.test
+    input="yes"
+    expect="deleted everything"
+    expectState="counts.known=0"
+    expectState="fields.role=undefined"
+    session=c
+
+@t.user.profile.t075 core.test
+    input="I love chess."
+    expect="Chess"
+    expectState="fields.hobbies.v.0=chess"
+    session=c2
+
+@t.user.profile.t076 core.test
+    input="Delete my profile for good."
+    expect="deleted everything"
+    expectState="counts.known=0"
+    session=c2
+
+@t.user.profile.t077 core.test
+    input="Interview me."
+    expectState="pending.key=name"
+    session=d
+
+@t.user.profile.t078 core.test
+    input="I would rather not say."
+    expect="will not ask"
+    expectState="skipped.name=declined"
+    expectState="pending.key=role"
+    session=d
+
+@t.user.profile.t079 core.test
+    input="software engineer"
+    expect="so you build things"
+    expectState="fields.role.v=software engineer"
+    expectState="fields.field.v=Tech"
+    session=d
+
+@t.user.profile.t080 core.test
+    input="no, healthcare"
+    expect="ealthcare"
+    expectState="fields.field.v=Healthcare"
+    expectState="fields.field.src=said"
+    session=d
+
+@t.user.profile.t081 core.test
+    input="Interview me."
+    expectState="pending.key=name"
+    session=e
+
+@t.user.profile.t082 core.test
+    input="I have diabetes."
+    expect="not stored"
+    expect="Back to my question"
+    expectState="sensitive.length=0"
+    expectState="pending.key=name"
+    session=e
+
+@t.user.profile.t083 core.test
+    input="Andy"
+    expectState="fields.name.v=Andy"
+    session=e
+
+@t.user.profile.t084 core.test
+    input="Interview me."
+    expectState="pending.key=name"
+    session=f
+
+@t.user.profile.t085 core.test
+    input="What is the capital of France?"
+    expect="Paris"
+    expectState="active=true"
+    expectState="pending.key=name"
+    session=f
+
+@t.user.profile.t086 core.test
+    input="Open the profile."
+    expect="Profile tab"
+    expectState="active=false"
+    session=f
+
+@t.user.profile.t087 core.test
+    input="Interview me."
+    expect="get to know me"
+    expectState="active=true"
+    session=f
+
+@t.user.profile.t088 core.test
+    input="Maria"
+    expect="Maria"
+    expectState="fields.name.v=Maria"
+    session=f
+
+@t.user.profile.t089 core.test
+    input="Ask me about my hobbies."
+    expect="free time"
+    expectState="pending.key=hobbies"
+    session=g
+
+@t.user.profile.t090 core.test
+    input="hiking"
+    expect="Hiking is a great way"
+    expect="How did you get into it"
+    expectState="fields.hobbies.v.0=hiking"
+    expectState="pending.kind=follow"
+    session=g
+
+@t.user.profile.t091 core.test
+    input="my dad took me when I was little"
+    expect="Thanks for sharing"
+    expectState="fields.hobbies.note=my dad took me when I was little"
+    session=g
+
+@t.user.profile.t092 core.test
+    input="Ask me about my skills."
+    expect="good at"
+    expectState="pending.key=skills"
+    session=h
+
+@t.user.profile.t093 core.test
+    input="leadership, public speaking"
+    expect="useful skills"
+    expectState="fields.skills.v.1=public speaking"
+    session=h
+
+@t.user.profile.t094 core.test
+    input="Interview me."
+    expectState="pending.key=name"
+    session=i
+
+@t.user.profile.t095 core.test
+    input="open the map"
+    expectState="active=true"
+    session=i
+
+@t.user.profile.t096 core.test
+    input="Andy"
+    expectState="active=false"
+    expectState="inputMode=null"
+    session=i
+
+@t.user.profile.t097 core.test
+    input="Interview me."
+    expectState="pending.key=name"
+    session=j
+
+@t.user.profile.t098 core.test
+    input="Andy"
+    expectState="fields.name.v=Andy"
+    session=j
+
+@t.user.profile.t099 core.test
+    input="I'm a nurse at the city hospital"
+    expect="nurse"
+    expectState="fields.org.v=City Hospital"
+    session=j
+
+@t.user.profile.t100 core.test
+    input="Export my profile as json"
+    expect="JSON"
+    expectEffect=file.download
+    session=j
+
+@t.user.profile.t101 core.test
+    input="Export my CV"
+    expect="Markdown CV"
+    expectEffect=file.download
+    session=j
+
+@t.user.profile.t102 core.test
+    input="Interview me."
+    expectState="pending.key=name"
+    session=k
+
+@t.user.profile.t103 core.test
+    input="It's Dr. Lee"
+    session=k
+    expectStatus=supported
+
+@t.user.profile.t104 core.test
+    input="I am a nurse."
+    expectState="fields.field.src=guessed"
+    session=l
+
+@t.user.profile.t105 core.test
+    input="Confirm my field."
+    expect="Thanks, I noted your field"
+    expectState="fields.field.src=said"
+    session=l
+
+@t.user.profile.t106 core.test
+    input="Forget my field."
+    expect="forgot your field"
+    expectState="fields.field=undefined"
+    expectState="skipped.field=forgotten"
+    session=l
+
+@t.user.profile.t107 core.test
+    input="Interview me."
+    expectState="pending.key=name"
+    session=m
+
+@t.user.profile.t108 core.test
+    input="skip"
+    expect="skipping"
+    expectState="skipped.name=skip"
+    expectState="pending.key=role"
+    session=m
+
+@t.user.profile.t109 core.test
+    input="next"
+    expect="skipping"
+    expectState="skipped.role=skip"
+    session=m
+
+@t.user.profile.t110 core.test
+    input="pause"
+    expect="pick this up"
+    expectState="active=false"
+    session=m
+
+@t.user.profile.t111 core.test
+    input="resume the interview"
+    expect="get to know me"
+    expectState="active=true"
+    expectState="asks.name=1"
+    expectState="asks.role=1"
+    session=m
+
+@t.user.profile.t112 core.test
+    input="Interview me."
+    session=n
+    expectStatus=supported
+
+@t.user.profile.t113 core.test
+    input="Andy"
+    session=n
+    expectStatus=supported

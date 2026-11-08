@@ -7,7 +7,7 @@ import { parse } from '../src/soplang/index.mjs';
 import { exportTraining, mulberry32, seedOf, splitOf, canonicalWires } from '../scripts/export-training.mjs';
 
 const ROOT = fileURLToPath(new URL('../worlds', import.meta.url));
-const WORLDS = ['kids.common', 'kids.arith', 'kids.shop', 'kids.time', 'kids.animals', 'kids.shapes', 'kids.tasks', 'games.tictactoe', 'games.guess', 'games.hangman', 'ui.shell', 'ui.help'];
+const WORLDS = ['kids.common', 'kids.arith', 'kids.shop', 'kids.time', 'kids.animals', 'kids.shapes', 'kids.tasks', 'games.tictactoe', 'games.guess', 'games.hangman', 'ui.shell', 'ui.help', 'user.profile'];
 const KIDS = WORLDS.filter((w) => w.startsWith('kids.'));
 const load = (id) => import(pathToFileURL(path.join(ROOT, id, 'datagen.mjs')).href);
 

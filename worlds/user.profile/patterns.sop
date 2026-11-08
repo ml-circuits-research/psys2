@@ -1,0 +1,454 @@
+@pat.user.profile.role.org core.pattern
+    match="[i_am|i_work_as|i_am_working_as|my_job_is|my_role_is|my_profession_is] [a|an]? {r:lex.user.profile.roles} [at|for|with] {o:words(4)}"
+    emit="@{_} core.request action=prof.tell arg.kind=role arg.role={r} arg.org=\"{o}\""
+    kind=request
+    priority=10
+    example="I am a software engineer at Acme."
+    example="I work as a nurse for the city hospital."
+
+@pat.user.profile.role core.pattern
+    match="[i_am|i_work_as|i_am_working_as|my_job_is|my_role_is|my_profession_is] [a|an]? {r:lex.user.profile.roles}"
+    emit="@{_} core.request action=prof.tell arg.kind=role arg.role={r}"
+    kind=request
+    priority=10
+    example="I am a nurse."
+    example="My job is teacher."
+    example="I work as a designer."
+
+@pat.user.profile.rolefield core.pattern
+    match="i work in [the]? {f:lex.user.profile.fields} [industry|field|sector]? as [a|an]? {r:lex.user.profile.roles}"
+    emit="@{_} core.request action=prof.tell arg.kind=rolefield arg.f={f} arg.role={r}"
+    kind=request
+    priority=10
+    example="I work in healthcare as a nurse."
+
+@pat.user.profile.field core.pattern
+    match="[i_work_in|i_am_in|my_field_is|my_industry_is] [the]? {f:lex.user.profile.fields} [industry|field|sector]?"
+    emit="@{_} core.request action=prof.tell arg.kind=field arg.f={f}"
+    kind=request
+    priority=10
+    example="I work in finance."
+    example="My field is education."
+
+@pat.user.profile.org core.pattern
+    match="i work [at|for] {o:words(4)}"
+    emit="@{_} core.request action=prof.tell arg.kind=org arg.org=\"{o}\""
+    kind=request
+    priority=10
+    example="I work at Acme."
+    example="I work for myself."
+
+@pat.user.profile.years.been core.pattern
+    match="i have been {v:word} for {n:number} [years|year]"
+    emit="@{_} core.request action=prof.tell arg.kind=years arg.v={v} arg.n={n}"
+    kind=request
+    priority=10
+    example="I have been teaching for 12 years."
+
+@pat.user.profile.years.have core.pattern
+    match="i have {n:number} [years|year] [of_experience|experience|in_the_field|in_the_industry]"
+    emit="@{_} core.request action=prof.tell arg.kind=years arg.n={n}"
+    kind=request
+    priority=10
+    example="I have 12 years of experience."
+
+@pat.user.profile.years.worked core.pattern
+    match="[i_have_worked|i_worked] for {n:number} [years|year]"
+    emit="@{_} core.request action=prof.tell arg.kind=years arg.n={n}"
+    kind=request
+    priority=10
+    example="I have worked for 8 years."
+
+@pat.user.profile.edu.at core.pattern
+    match="i [studied|study|majored_in|graduated_in] {s:lex.user.profile.subjects} [at|from] {u:words(5)}"
+    emit="@{_} core.request action=prof.tell arg.kind=edu arg.s={s} arg.u=\"{u}\""
+    kind=request
+    priority=10
+    example="I studied physics at Cluj."
+    example="I graduated in law from the University of Bucharest."
+
+@pat.user.profile.edu core.pattern
+    match="i [studied|study|majored_in|graduated_in] {s:lex.user.profile.subjects}"
+    emit="@{_} core.request action=prof.tell arg.kind=edu arg.s={s}"
+    kind=request
+    priority=10
+    example="I studied physics."
+
+@pat.user.profile.edu.degree core.pattern
+    match="[i_have_a|i_hold_a|i_got_a] [degree|master|phd|diploma] [in|of] {s:lex.user.profile.subjects}"
+    emit="@{_} core.request action=prof.tell arg.kind=edu arg.s={s}"
+    kind=request
+    priority=10
+    example="I have a degree in biology."
+
+@pat.user.profile.interests.one core.pattern
+    match="[i_love|i_like|i_enjoy|i_really_love|i_really_like|i_adore|i_am_into|i_am_a_fan_of|i_am_a_big_fan_of|my_hobbies_are|my_hobby_is|my_interests_are] {a:lex.user.profile.interests}"
+    emit="@{_} core.request action=prof.tell arg.kind=interests arg.a={a}"
+    kind=request
+    priority=10
+    example="I love hiking."
+    example="I enjoy chess."
+
+@pat.user.profile.interests.two core.pattern
+    match="[i_love|i_like|i_enjoy|i_really_love|i_really_like|i_adore|i_am_into|i_am_a_fan_of|i_am_a_big_fan_of|my_hobbies_are|my_hobby_is|my_interests_are] {a:lex.user.profile.interests} and {b:lex.user.profile.interests}"
+    emit="@{_} core.request action=prof.tell arg.kind=interests arg.a={a} arg.b={b}"
+    kind=request
+    priority=10
+    example="I love hiking and jazz."
+
+@pat.user.profile.interests.three core.pattern
+    match="[i_love|i_like|i_enjoy|i_really_love|i_really_like|i_adore|i_am_into|i_am_a_fan_of|i_am_a_big_fan_of|my_hobbies_are|my_hobby_is|my_interests_are] {a:lex.user.profile.interests} [and]? {b:lex.user.profile.interests} and {c:lex.user.profile.interests}"
+    emit="@{_} core.request action=prof.tell arg.kind=interests arg.a={a} arg.b={b} arg.c={c}"
+    kind=request
+    priority=10
+    example="I like hiking, jazz and chess."
+
+@pat.user.profile.tools.one core.pattern
+    match="[mostly|mainly|i_use|i_mostly_use|i_mainly_use|i_work_with|i_code_in|i_program_in|my_stack_is|i_know] {a:lex.user.profile.tools}"
+    emit="@{_} core.request action=prof.tell arg.kind=tools arg.a={a}"
+    kind=request
+    priority=10
+    example="I use Python."
+
+@pat.user.profile.tools.two core.pattern
+    match="[mostly|mainly|i_use|i_mostly_use|i_mainly_use|i_work_with|i_code_in|i_program_in|my_stack_is|i_know] {a:lex.user.profile.tools} and {b:lex.user.profile.tools}"
+    emit="@{_} core.request action=prof.tell arg.kind=tools arg.a={a} arg.b={b}"
+    kind=request
+    priority=10
+    example="Mostly Python and SQL."
+    example="I use Excel and Tableau."
+
+@pat.user.profile.tools.three core.pattern
+    match="[mostly|mainly|i_use|i_mostly_use|i_mainly_use|i_work_with|i_code_in|i_program_in|my_stack_is|i_know] {a:lex.user.profile.tools} [and]? {b:lex.user.profile.tools} and {c:lex.user.profile.tools}"
+    emit="@{_} core.request action=prof.tell arg.kind=tools arg.a={a} arg.b={b} arg.c={c}"
+    kind=request
+    priority=10
+    example="I use Python, SQL and Docker."
+
+@pat.user.profile.name core.pattern
+    match="[call_me|you_can_call_me|just_call_me|please_call_me|my_name_is|i_am_called|people_call_me|everyone_calls_me|i_go_by] {n:words(2)}"
+    emit="@{_} core.request action=prof.tell arg.kind=name arg.name=\"{n}\""
+    kind=request
+    priority=10
+    example="Call me Andy."
+    example="My name is Andy Lee."
+
+@pat.user.profile.location core.pattern
+    match="[i_live_in|i_am_based_in|i_am_from|i_come_from|i_am_living_in] {c:words(3)}"
+    emit="@{_} core.request action=prof.tell arg.kind=location arg.city=\"{c}\""
+    kind=request
+    priority=10
+    example="I live in Cluj."
+    example="I am based in Berlin."
+
+@pat.user.profile.learn core.pattern
+    match="[i_want_to_learn|i_would_like_to_learn|i_wanna_learn|i_am_learning|i_would_love_to_learn] {g:words(6)}"
+    emit="@{_} core.request action=prof.tell arg.kind=learn arg.g=\"{g}\""
+    kind=request
+    priority=10
+    example="I want to learn Rust."
+
+@pat.user.profile.pref core.pattern
+    match="[i_prefer|i_like|i_want] {p:lex.user.profile.styles} [answers|replies|responses|explanations]"
+    emit="@{_} core.request action=prof.tell arg.kind=pref arg.p={p}"
+    kind=request
+    priority=10
+    example="I prefer short answers."
+    example="I like detailed explanations."
+
+@pat.user.profile.pref.keep core.pattern
+    match="[keep_it|please_keep_it|keep_answers|keep_your_answers|keep_the_answers|be] {p:lex.user.profile.styles}"
+    emit="@{_} core.request action=prof.tell arg.kind=pref arg.p={p}"
+    kind=request
+    priority=10
+    example="Keep it short."
+    example="Be casual."
+
+@pat.user.profile.lang core.pattern
+    match="[i_prefer|i_like|i_want] [answers|replies|responses] in {l:lex.user.profile.langs}"
+    emit="@{_} core.request action=prof.tell arg.kind=lang arg.l={l}"
+    kind=request
+    priority=10
+    example="I prefer answers in Romanian."
+
+@pat.user.profile.previous core.pattern
+    match="[before_that_i_was|previously_i_was|i_used_to_be|i_used_to_work_as|formerly_i_was] [a|an]? {r:lex.user.profile.roles}"
+    emit="@{_} core.request action=prof.tell arg.kind=previous arg.role={r}"
+    kind=request
+    priority=10
+    example="Before that I was a teacher."
+    example="I used to be a chef."
+
+@pat.user.profile.fix.role core.pattern
+    match="[no|actually|sorry|wait|i_mean|oops|make_that|correction] [i_am|i_work_as|my_job_is]? [a|an]? {r:lex.user.profile.roles}"
+    emit="@{_} core.request action=prof.tell arg.kind=role arg.role={r} arg.fix=true"
+    kind=request
+    priority=12
+    example="No, I am a designer."
+    example="Actually I am a nurse."
+
+@pat.user.profile.fix.years core.pattern
+    match="[no|actually|sorry|wait|i_mean|oops|make_that|correction] [it_is|its|about|around|more_like]? {n:number} [years|year]"
+    emit="@{_} core.request action=prof.tell arg.kind=years arg.n={n} arg.fix=true"
+    kind=request
+    priority=12
+    example="Actually 10 years."
+    example="No, it is 5 years."
+
+@pat.user.profile.fix.name core.pattern
+    match="[no|actually|sorry|wait|i_mean|oops|make_that|correction] [call_me|my_name_is] {n:words(2)}"
+    emit="@{_} core.request action=prof.tell arg.kind=name arg.name=\"{n}\" arg.fix=true"
+    kind=request
+    priority=12
+    example="Actually call me Andrew."
+
+@pat.user.profile.fix.location core.pattern
+    match="[no|actually|sorry|wait|i_mean|oops|make_that|correction] i live in {c:words(3)}"
+    emit="@{_} core.request action=prof.tell arg.kind=location arg.city=\"{c}\" arg.fix=true"
+    kind=request
+    priority=12
+    example="No, I live in Berlin."
+
+@pat.user.profile.start core.pattern
+    match="[interview_me|ask_me_something|ask_me_a_question|ask_me_anything|ask_me_some_questions|ask_me_questions|get_to_know_me|let_us_get_to_know_me|lets_get_to_know_me|start_the_interview|begin_the_interview|resume_the_interview|continue_the_interview|quiz_me_about_myself|do_you_want_to_get_to_know_me|start_the_profile_interview|ask_me_more]"
+    emit="@{_} core.request action=prof.start"
+    kind=request
+    priority=14
+    example="Interview me."
+    example="Ask me something."
+    example="Let us get to know me."
+
+@pat.user.profile.start.play core.pattern
+    match="[lets_play|let_us_play|play] [the]? get to know me [game]?"
+    emit="@{_} core.request action=prof.start"
+    kind=request
+    priority=14
+    example="Let us play get to know me."
+
+@pat.user.profile.start.can core.pattern
+    match="[can_you|could_you|please_can_you]? [interview|quiz] me [about_myself]?"
+    emit="@{_} core.request action=prof.start"
+    kind=request
+    priority=14
+    example="Can you interview me?"
+
+@pat.user.profile.pause core.pattern
+    match="[pause|stop|end|finish] [the|this]? [interview|game|questions]"
+    emit="@{_} core.request action=prof.pause"
+    kind=request
+    priority=14
+    example="Pause the interview."
+    example="Stop the game."
+
+@pat.user.profile.pause.asking core.pattern
+    match="[stop_asking_me_questions|that_is_enough_questions|no_more_questions|stop_the_questions]"
+    emit="@{_} core.request action=prof.pause"
+    kind=request
+    priority=14
+    example="No more questions."
+
+@pat.user.profile.know core.pattern
+    match="what [do_you_know|have_you_learned|did_you_learn|have_you_found_out|did_i_tell_you] about me"
+    emit="@{_} core.request action=prof.know"
+    kind=question
+    priority=14
+    example="What do you know about me?"
+    example="What have you learned about me?"
+
+@pat.user.profile.know.show core.pattern
+    match="[tell_me|show_me|say] what you [know|learned] about me"
+    emit="@{_} core.request action=prof.know"
+    kind=request
+    priority=14
+    example="Tell me what you know about me."
+
+@pat.user.profile.know.profile core.pattern
+    match="what is in my profile"
+    emit="@{_} core.request action=prof.know"
+    kind=question
+    priority=14
+    example="What is in my profile?"
+
+@pat.user.profile.know.who core.pattern
+    match="[who_am_i|tell_me_about_myself]"
+    emit="@{_} core.request action=prof.know"
+    kind=question
+    priority=14
+    example="Who am I?"
+
+@pat.user.profile.progress core.pattern
+    match="how [much]? do you know [about]? me"
+    emit="@{_} core.request action=prof.progress"
+    kind=question
+    priority=14
+    example="How well do you know me?"
+
+@pat.user.profile.progress.left core.pattern
+    match="[how_far_are_we|how_many_questions_are_left|how_many_questions_left]"
+    emit="@{_} core.request action=prof.progress"
+    kind=question
+    priority=14
+    example="How far are we?"
+
+@pat.user.profile.forget core.pattern
+    match="[forget|delete|remove|erase|clear] [about]? [my|the] {w:lex.user.profile.fieldwords}"
+    emit="@{_} core.request action=prof.forget arg.w={w}"
+    kind=request
+    priority=14
+    example="Forget my job."
+    example="Delete my hobbies."
+
+@pat.user.profile.forget.said core.pattern
+    match="[forget|erase] what i [said|told_you] about my {w:lex.user.profile.fieldwords}"
+    emit="@{_} core.request action=prof.forget arg.w={w}"
+    kind=request
+    priority=14
+    example="Forget what I said about my job."
+
+@pat.user.profile.delete core.pattern
+    match="[delete|erase|wipe|clear|remove|reset] [all]? [of]? [my|the]? profile"
+    emit="@{_} core.request action=prof.delete"
+    kind=request
+    priority=14
+    example="Delete my profile."
+
+@pat.user.profile.delete.now core.pattern
+    match="[delete|erase|wipe|clear|remove|reset] [all]? [of]? [my|the]? profile [for_good|now|permanently|right_now|completely]"
+    emit="@{_} core.request action=prof.delete arg.now=true"
+    kind=request
+    priority=14
+    example="Delete my profile for good."
+
+@pat.user.profile.delete.all core.pattern
+    match="[forget_everything|forget_everything_about_me|forget_me|erase_everything_about_me]"
+    emit="@{_} core.request action=prof.delete"
+    kind=request
+    priority=14
+    example="Forget everything about me."
+
+@pat.user.profile.export.json core.pattern
+    match="[export|download|save|get] [my|the]? profile [as|in]? [a]? json [file]?"
+    emit="@{_} core.request action=prof.export arg.fmt=json"
+    kind=request
+    priority=14
+    example="Export my profile as JSON."
+
+@pat.user.profile.export.cv core.pattern
+    match="[export|download|save|get] [my|the]? [profile|cv|resume] [as|in]? [a|an]? [markdown|md|cv|resume|text]"
+    emit="@{_} core.request action=prof.export arg.fmt=md"
+    kind=request
+    priority=14
+    example="Export my profile as a CV."
+    example="Download my CV."
+
+@pat.user.profile.export.cv2 core.pattern
+    match="[export|download|save|get] [my|the]? [cv|resume]"
+    emit="@{_} core.request action=prof.export arg.fmt=md"
+    kind=request
+    priority=14
+    example="Download my CV."
+
+@pat.user.profile.export core.pattern
+    match="[export|download|save|get] [my|the]? profile"
+    emit="@{_} core.request action=prof.export arg.fmt=json"
+    kind=request
+    priority=13
+    example="Export my profile."
+
+@pat.user.profile.export.both core.pattern
+    match="[export|download|save|get] [my|the]? profile [as]? both"
+    emit="@{_} core.request action=prof.export arg.fmt=both"
+    kind=request
+    priority=14
+    example="Export my profile as both."
+
+@pat.user.profile.confirm core.pattern
+    match="[confirm|yes_that_is_right_about|that_is_right_about] my {w:lex.user.profile.fieldwords}"
+    emit="@{_} core.request action=prof.confirm arg.w={w}"
+    kind=request
+    priority=14
+    example="Confirm my field."
+
+@pat.user.profile.mention core.pattern
+    match="[ask_me_about|quiz_me_about|ask_me_about_my|let_me_tell_you_about_my] [my]? {w:lex.user.profile.fieldwords}"
+    emit="@{_} core.request action=prof.mention arg.w={w}"
+    kind=request
+    priority=14
+    example="Ask me about my hobbies."
+
+@pat.user.profile.sens.age core.pattern
+    match="[i_am|im] {n:number} [years_old|year_old]"
+    emit="@{_} core.request action=prof.sensitive arg.cat=age arg.text=\"{n}\""
+    kind=request
+    priority=10
+    example="I am 34 years old."
+
+@pat.user.profile.sens.age.remember core.pattern
+    match="remember [that]? [i_am|im] {n:number} [years_old|year_old]"
+    emit="@{_} core.request action=prof.sensitive arg.cat=age arg.text=\"age {n}\" arg.remember=true"
+    kind=request
+    priority=12
+    example="Remember that I am 34 years old."
+
+@pat.user.profile.sens.health core.pattern
+    match="[i_am|i_have|i_suffer_from|i_was_diagnosed_with] [a|an]? {s:lex.user.profile.sensitive.health}"
+    emit="@{_} core.request action=prof.sensitive arg.cat=health arg.text=\"{s}\""
+    kind=request
+    priority=10
+    example="I have diabetes."
+
+@pat.user.profile.sens.health.remember core.pattern
+    match="remember [that]? [i_am|i_have|i_suffer_from|i_was_diagnosed_with] [a|an]? {s:lex.user.profile.sensitive.health}"
+    emit="@{_} core.request action=prof.sensitive arg.cat=health arg.text=\"{s}\" arg.remember=true"
+    kind=request
+    priority=12
+    example="Remember that i have diabetes."
+
+@pat.user.profile.sens.religion core.pattern
+    match="[i_am|i_follow] [a|an]? {s:lex.user.profile.sensitive.religion}"
+    emit="@{_} core.request action=prof.sensitive arg.cat=religion arg.text=\"{s}\""
+    kind=request
+    priority=10
+    example="I am Christian."
+
+@pat.user.profile.sens.religion.remember core.pattern
+    match="remember [that]? [i_am|i_follow] [a|an]? {s:lex.user.profile.sensitive.religion}"
+    emit="@{_} core.request action=prof.sensitive arg.cat=religion arg.text=\"{s}\" arg.remember=true"
+    kind=request
+    priority=12
+    example="Remember that i am Christian."
+
+@pat.user.profile.sens.politics core.pattern
+    match="[i_am|i_vote|i_voted] [a|an]? {s:lex.user.profile.sensitive.politics}"
+    emit="@{_} core.request action=prof.sensitive arg.cat=politics arg.text=\"{s}\""
+    kind=request
+    priority=10
+    example="I am a democrat."
+
+@pat.user.profile.sens.politics.remember core.pattern
+    match="remember [that]? [i_am|i_vote|i_voted] [a|an]? {s:lex.user.profile.sensitive.politics}"
+    emit="@{_} core.request action=prof.sensitive arg.cat=politics arg.text=\"{s}\" arg.remember=true"
+    kind=request
+    priority=12
+    example="Remember that i am a democrat."
+
+@pat.user.profile.sens.sexuality core.pattern
+    match="[i_am|i_identify_as] [a|an]? {s:lex.user.profile.sensitive.sexuality}"
+    emit="@{_} core.request action=prof.sensitive arg.cat=sexuality arg.text=\"{s}\""
+    kind=request
+    priority=10
+    example="I am gay."
+
+@pat.user.profile.sens.sexuality.remember core.pattern
+    match="remember [that]? [i_am|i_identify_as] [a|an]? {s:lex.user.profile.sensitive.sexuality}"
+    emit="@{_} core.request action=prof.sensitive arg.cat=sexuality arg.text=\"{s}\" arg.remember=true"
+    kind=request
+    priority=12
+    example="Remember that i am gay."
+
+@pat.user.profile.sens.age.then core.pattern
+    match="[i_am|im] {n:number} [years_old|year_old] [remember_that|please_remember|remember_this|remember|so_remember]"
+    emit="@{_} core.request action=prof.sensitive arg.cat=age arg.text=\"age {n}\" arg.remember=true"
+    kind=request
+    priority=12
+    example="I am 34 years old, remember that."

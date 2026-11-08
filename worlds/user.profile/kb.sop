@@ -1,0 +1,860 @@
+@gen.user.profile.kb core.note
+    text="The interview plan: sections, fields (priority 1 to 10, sensitivity, question phrasings, follow-up, example), industries, reactions and activity words. Sensitive topics (health, religion, politics, sexuality, exact address, income, age) are deliberately absent: they are never asked for."
+    core.source="specs/12-profile.md"
+
+@sec.basics user.profile.section
+    label="Basics"
+    order=1
+    core.source="specs/12-profile.md"
+
+@sec.professional user.profile.section
+    label="Professional"
+    order=2
+    core.source="specs/12-profile.md"
+
+@sec.education user.profile.section
+    label="Education"
+    order=3
+    core.source="specs/12-profile.md"
+
+@sec.skills user.profile.section
+    label="Skills"
+    order=4
+    core.source="specs/12-profile.md"
+
+@sec.interests user.profile.section
+    label="Interests"
+    order=5
+    core.source="specs/12-profile.md"
+
+@sec.goals user.profile.section
+    label="Goals"
+    order=6
+    core.source="specs/12-profile.md"
+
+@sec.preferences user.profile.section
+    label="Preferences"
+    order=7
+    core.source="specs/12-profile.md"
+
+@f.name user.profile.field
+    label="Preferred name"
+    section=basics
+    prio=10
+    card=one
+    sens=none
+    want="what to call you"
+    example="Andy"
+    q="What should I call you?"
+    q="First things first: what name do you like to go by?"
+    q="How would you like me to address you? A first name or nickname is perfect."
+    q="Let us start with a name. What do I call you?"
+    follow="Is that your full first name, or a nickname?"
+    followMode=unclear
+    ack="Nice to meet you, {v}!"
+    ack="{v}, lovely to meet you."
+    ack="Great, {v} it is."
+    askable=true
+    core.source="specs/12-profile.md"
+
+@f.address user.profile.field
+    label="How to address you"
+    section=basics
+    prio=5
+    card=one
+    sens=none
+    want="how formal to be when I address you"
+    example="first name"
+    q="Should I stay on a first-name basis, or would you prefer something more formal?"
+    q="Do you like it casual with first names, or a bit more formal?"
+    q="When I talk to you, first name or something like Dr. or Ms.?"
+    follow="Any title you would like me to use?"
+    followMode=unclear
+    ack="Understood: {v}."
+    ack="Got it, I will keep it {v}."
+    ack="Noted, {v}."
+    needs=name
+    askable=true
+    core.source="specs/12-profile.md"
+
+@f.location user.profile.field
+    label="City or country"
+    section=basics
+    prio=3
+    card=one
+    sens=low
+    want="where you are based (city or country, never an address)"
+    example="Cluj, Romania"
+    q="Which city or country do you call home? Just the general area is fine."
+    q="Where in the world are you based, roughly?"
+    q="Which part of the world are you in? A city or a country is enough."
+    q="If you do not mind sharing, which city are you near?"
+    follow="Do you like it there?"
+    followMode=unclear
+    ack="{v}, a good place to be based!"
+    ack="Ah, {v}. Thanks!"
+    ack="{v}, nice."
+    askable=true
+    core.source="specs/12-profile.md"
+
+@f.role user.profile.field
+    label="Current role"
+    section=professional
+    prio=9
+    card=one
+    sens=none
+    want="what you do for work"
+    example="software engineer"
+    q="What do you do for a living?"
+    q="What is your job, or what do you spend most of your days doing?"
+    q="How do you earn your keep these days? What is your role?"
+    q="Tell me about your work: what is your title or role?"
+    follow="Do you work at a company or organisation, or on your own?"
+    followKey=org
+    followMode=always
+    ack="{A}, that sounds like interesting work."
+    ack="{A}: good to know."
+    ack="{A}, nice!"
+    askable=true
+    core.source="specs/12-profile.md"
+
+@f.field user.profile.field
+    label="Field or industry"
+    section=professional
+    prio=8
+    card=one
+    sens=none
+    want="which field or industry you work in"
+    example="healthcare"
+    q="Which field or industry is that in?"
+    q="What kind of industry do you work in?"
+    q="In which sector would you place your work?"
+    follow="Is that a field you chose, or one you fell into?"
+    followMode=unclear
+    ack="{V}, a field with a lot going on."
+    ack="Good, {v} it is."
+    ack="{V}: noted."
+    needs=role
+    askable=true
+    core.source="specs/12-profile.md"
+
+@f.org user.profile.field
+    label="Organisation"
+    section=professional
+    prio=4
+    card=one
+    sens=low
+    want="where you work (optional)"
+    example="Acme"
+    q="Where do you work, if you are happy to say?"
+    q="Is there a company or organisation behind that work?"
+    q="Who do you work for? Skip it if you would rather not say."
+    follow="What is it like to work there?"
+    followMode=unclear
+    ack="{v}, thanks."
+    ack="Got it: {v}."
+    ack="{v}, noted."
+    needs=role
+    askable=true
+    core.source="specs/12-profile.md"
+
+@f.years user.profile.field
+    label="Years of experience"
+    section=professional
+    prio=6
+    card=one
+    sens=none
+    want="how long you have been doing this"
+    example="12"
+    q="How many years have you been doing this kind of work?"
+    q="Roughly how long have you been at it?"
+    q="How long have you worked in this area? A rough number of years is fine."
+    follow="Roughly how many years would you say? A number is fine."
+    followMode=unclear
+    ack="{v} years, that is real experience."
+    ack="{v} years: solid."
+    ack="Good, {v} years."
+    needs=role
+    askable=true
+    core.source="specs/12-profile.md"
+
+@f.previous user.profile.field
+    label="Previous roles"
+    section=professional
+    prio=3
+    card=many
+    sens=none
+    want="what you did before"
+    example="teacher, barista"
+    q="What did you do before your current role?"
+    q="Did you have any earlier jobs that shaped you?"
+    q="Was there a different job or career before this one?"
+    follow="Which one taught you the most?"
+    followMode=unclear
+    ack="Interesting path: {v}."
+    ack="So before that: {v}. Good to know."
+    ack="{v}, that must have taught you something."
+    needs=role
+    askable=true
+    core.source="specs/12-profile.md"
+
+@f.education user.profile.field
+    label="Education"
+    section=education
+    prio=5
+    card=one
+    sens=none
+    want="what you studied and where"
+    example="Physics at Cluj"
+    q="What did you study?"
+    q="Did you go to university or follow some other training? What was it in?"
+    q="What is your educational background, in a few words?"
+    q="Which subject did you study, and where?"
+    follow="What did you enjoy most about it?"
+    followMode=always
+    ack="{v}: that gives a solid base."
+    ack="Studying {v}, I see."
+    ack="{v}, good to know."
+    askable=true
+    core.source="specs/12-profile.md"
+
+@f.skills user.profile.field
+    label="Skills"
+    section=skills
+    prio=6
+    card=many
+    sens=none
+    want="what you are good at"
+    example="leadership, writing"
+    q="What are you especially good at?"
+    q="Which skills would you put on your CV?"
+    q="If a friend had to describe your strongest skills, what would they say?"
+    follow="Which one would you like to use more?"
+    followMode=unclear
+    ack="{v}: useful skills."
+    ack="Noted: {v}."
+    ack="Good skills, {v}."
+    askable=true
+    core.source="specs/12-profile.md"
+
+@f.tools user.profile.field
+    label="Tools and languages"
+    section=skills
+    prio=5
+    card=many
+    sens=none
+    want="tools, software or programming languages you use"
+    example="Python, SQL"
+    q="Which tools or programming languages do you use most?"
+    q="What do you reach for every day, in terms of software or languages?"
+    q="Any tools or languages you swear by?"
+    follow="Which one is your favourite?"
+    followMode=unclear
+    ack="{v}: a solid toolbox."
+    ack="Nice, {v}."
+    ack="Noted: {v}."
+    askable=true
+    core.source="specs/12-profile.md"
+
+@f.hobbies user.profile.field
+    label="Hobbies"
+    section=interests
+    prio=7
+    card=many
+    sens=none
+    want="what you like doing in your free time"
+    example="hiking, chess"
+    q="What do you like to do in your free time?"
+    q="When you are not working, what do you enjoy?"
+    q="Do you have any hobbies?"
+    q="What do you do to unwind?"
+    follow="How did you get into it?"
+    followMode=always
+    ack="{v}: a great way to spend time."
+    ack="Nice, {v}!"
+    ack="{v}, I like that."
+    askable=true
+    core.source="specs/12-profile.md"
+
+@f.topics user.profile.field
+    label="Topics you like"
+    section=interests
+    prio=5
+    card=many
+    sens=none
+    want="topics you enjoy reading or talking about"
+    example="space, history"
+    q="Which topics could you talk about for hours?"
+    q="What subjects make you curious?"
+    q="What do you enjoy reading or learning about?"
+    follow="What got you curious about it?"
+    followMode=unclear
+    ack="{v}: a good rabbit hole."
+    ack="Curious about {v}, nice."
+    ack="{v}, noted."
+    askable=true
+    core.source="specs/12-profile.md"
+
+@f.media user.profile.field
+    label="Books, music and films"
+    section=interests
+    prio=4
+    card=many
+    sens=none
+    want="books, music or films you love"
+    example="Dune, jazz"
+    q="Any books, music or films you love?"
+    q="What is a book, album or film you keep coming back to?"
+    q="What are you reading, listening to or watching lately?"
+    follow="Would you recommend it to a friend?"
+    followMode=always
+    ack="{v}: good taste."
+    ack="Nice pick: {v}."
+    ack="{v}, noted."
+    askable=true
+    core.source="specs/12-profile.md"
+
+@f.sports user.profile.field
+    label="Sports"
+    section=interests
+    prio=3
+    card=many
+    sens=none
+    want="sports you play or follow"
+    example="football"
+    q="Do you play or follow any sport?"
+    q="Is there a sport you enjoy, playing or watching?"
+    q="Anything sporty in your life?"
+    follow="Do you play it or just watch?"
+    followMode=unclear
+    ack="{v}: good for the body and the mood."
+    ack="Nice, {v}!"
+    ack="{v}, noted."
+    askable=true
+    core.source="specs/12-profile.md"
+
+@f.learning user.profile.field
+    label="Learning goals"
+    section=goals
+    prio=6
+    card=many
+    sens=none
+    want="what you would like to learn"
+    example="Rust, public speaking"
+    q="What would you like to learn next?"
+    q="Is there something you have been wanting to learn?"
+    q="If you had a free month to learn anything, what would it be?"
+    follow="What draws you to it?"
+    followMode=always
+    ack="{v}: a good thing to aim for."
+    ack="Learning {v}, I like it."
+    ack="{v}, noted."
+    askable=true
+    core.source="specs/12-profile.md"
+
+@f.career user.profile.field
+    label="Career goals"
+    section=goals
+    prio=4
+    card=one
+    sens=none
+    want="where you want your work to go"
+    example="lead a team"
+    q="Where would you like your career to go?"
+    q="What is the next step you would like in your work?"
+    q="Where do you see your work in a few years?"
+    follow="What would make that a success for you?"
+    followMode=unclear
+    ack="{v}: a clear direction."
+    ack="Aiming for {v}, good."
+    ack="{v}, noted."
+    needs=role
+    askable=true
+    core.source="specs/12-profile.md"
+
+@f.year user.profile.field
+    label="Goal for this year"
+    section=goals
+    prio=5
+    card=one
+    sens=none
+    want="what you want to achieve this year"
+    example="run a half marathon"
+    q="What is one thing you would like to achieve this year?"
+    q="Is there a goal you are working toward this year?"
+    q="If this year went perfectly, what would you have done by December?"
+    follow="What is the first step?"
+    followMode=unclear
+    ack="{v}: ambitious, in a good way."
+    ack="This year: {v}. Good luck!"
+    ack="{v}, noted."
+    askable=true
+    core.source="specs/12-profile.md"
+
+@f.length user.profile.field
+    label="Answer length"
+    section=preferences
+    prio=6
+    card=one
+    sens=none
+    want="whether you like short or detailed answers"
+    example="short"
+    q="Do you like short answers, or more detail?"
+    q="When I answer, should I keep it brief or explain things fully?"
+    q="Short and sweet, or the full story?"
+    follow="Should that change for some topics?"
+    followMode=unclear
+    ack="{V} answers, understood."
+    ack="Got it: {v}."
+    ack="{V}: I will keep that in mind."
+    askable=true
+    core.source="specs/12-profile.md"
+
+@f.tone user.profile.field
+    label="Tone"
+    section=preferences
+    prio=5
+    card=one
+    sens=none
+    want="formal or casual"
+    example="casual"
+    q="Should I sound formal or casual?"
+    q="How should I talk to you: relaxed or professional?"
+    q="Do you prefer a casual chat or a more formal tone?"
+    follow="Any words you would rather I avoid?"
+    followMode=unclear
+    ack="{V} it is."
+    ack="I will keep it {v}."
+    ack="{V}, noted."
+    askable=true
+    core.source="specs/12-profile.md"
+
+@f.language user.profile.field
+    label="Preferred language"
+    section=preferences
+    prio=4
+    card=one
+    sens=none
+    want="which language you prefer for answers"
+    example="English"
+    q="Which language do you like me to use with you?"
+    q="What is your preferred language for answers?"
+    q="Which language are you most comfortable in?"
+    follow="Do you speak other languages too?"
+    followMode=unclear
+    ack="{V}, understood."
+    ack="I will keep {v} in mind."
+    ack="{V}: noted."
+    askable=true
+    core.source="specs/12-profile.md"
+
+@ind.tech user.profile.industry
+    label="Tech"
+    word=tech
+    word=technology
+    word=it
+    word=software
+    word=information_technology
+    word=computing
+    word=internet
+    core.source="specs/12-profile.md"
+
+@ind.healthcare user.profile.industry
+    label="Healthcare"
+    word=healthcare
+    word=health_care
+    word=medicine
+    word=medical
+    word=nursing
+    word=health
+    word=pharma
+    word=pharmaceutical
+    core.source="specs/12-profile.md"
+
+@ind.education user.profile.industry
+    label="Education"
+    word=education
+    word=teaching
+    word=academia
+    word=schools
+    word=school
+    word=university
+    word=training
+    core.source="specs/12-profile.md"
+
+@ind.finance user.profile.industry
+    label="Finance"
+    word=finance
+    word=banking
+    word=bank
+    word=insurance
+    word=accounting
+    word=investment
+    word=fintech
+    core.source="specs/12-profile.md"
+
+@ind.legal user.profile.industry
+    label="Law"
+    word=law
+    word=legal
+    word=justice
+    core.source="specs/12-profile.md"
+
+@ind.creative user.profile.industry
+    label="Creative and media"
+    word=design
+    word=creative
+    word=media
+    word=arts
+    word=art
+    word=publishing
+    word=journalism
+    word=advertising
+    word=film
+    word=music_industry
+    word=entertainment
+    core.source="specs/12-profile.md"
+
+@ind.engineering user.profile.industry
+    label="Engineering"
+    word=engineering
+    word=construction
+    word=manufacturing
+    word=automotive
+    word=aerospace
+    word=energy
+    word=industrial
+    core.source="specs/12-profile.md"
+
+@ind.science user.profile.industry
+    label="Science and research"
+    word=science
+    word=research
+    word=biotech
+    word=biotechnology
+    word=laboratory
+    core.source="specs/12-profile.md"
+
+@ind.trades user.profile.industry
+    label="Trades and transport"
+    word=trades
+    word=transport
+    word=logistics
+    word=transportation
+    word=agriculture
+    word=farming
+    word=repair
+    core.source="specs/12-profile.md"
+
+@ind.hospitality user.profile.industry
+    label="Hospitality"
+    word=hospitality
+    word=restaurant
+    word=restaurants
+    word=tourism
+    word=catering
+    word=food_service
+    word=travel
+    core.source="specs/12-profile.md"
+
+@ind.public user.profile.industry
+    label="Public service"
+    word=government
+    word=public_service
+    word=public_sector
+    word=civil_service
+    word=nonprofit
+    word=military
+    word=police
+    core.source="specs/12-profile.md"
+
+@ind.business user.profile.industry
+    label="Business"
+    word=business
+    word=sales
+    word=marketing
+    word=retail
+    word=consulting
+    word=management
+    word=startups
+    word=ecommerce
+    word=real_estate
+    word=human_resources
+    core.source="specs/12-profile.md"
+
+@act.teaching user.profile.activity
+    word=teaching
+    role=teacher
+    core.source="specs/12-profile.md"
+
+@act.nursing user.profile.activity
+    word=nursing
+    role=nurse
+    core.source="specs/12-profile.md"
+
+@act.coding user.profile.activity
+    word=coding
+    role=developer
+    core.source="specs/12-profile.md"
+
+@act.programming user.profile.activity
+    word=programming
+    role=programmer
+    core.source="specs/12-profile.md"
+
+@act.designing user.profile.activity
+    word=designing
+    role=designer
+    core.source="specs/12-profile.md"
+
+@act.accounting user.profile.activity
+    word=accounting
+    role=accountant
+    core.source="specs/12-profile.md"
+
+@act.cooking user.profile.activity
+    word=cooking
+    role=cook
+    core.source="specs/12-profile.md"
+
+@act.farming user.profile.activity
+    word=farming
+    role=farmer
+    core.source="specs/12-profile.md"
+
+@act.plumbing user.profile.activity
+    word=plumbing
+    role=plumber
+    core.source="specs/12-profile.md"
+
+@act.lecturing user.profile.activity
+    word=lecturing
+    role=lecturer
+    core.source="specs/12-profile.md"
+
+@act.tutoring user.profile.activity
+    word=tutoring
+    role=tutor
+    core.source="specs/12-profile.md"
+
+@act.consulting user.profile.activity
+    word=consulting
+    role=consultant
+    core.source="specs/12-profile.md"
+
+@act.managing user.profile.activity
+    word=managing
+    role=manager
+    core.source="specs/12-profile.md"
+
+@act.engineering user.profile.activity
+    word=engineering
+    role=engineer
+    core.source="specs/12-profile.md"
+
+@act.research user.profile.activity
+    word=research
+    role=researcher
+    core.source="specs/12-profile.md"
+
+@act.journalism user.profile.activity
+    word=journalism
+    role=journalist
+    core.source="specs/12-profile.md"
+
+@act.photography user.profile.activity
+    word=photography
+    role=photographer
+    core.source="specs/12-profile.md"
+
+@act.driving user.profile.activity
+    word=driving
+    role=driver
+    core.source="specs/12-profile.md"
+
+@re.role.nurse user.profile.reaction
+    kind=role
+    word=nurse
+    text="A nurse: that takes stamina!"
+    core.source="specs/12-profile.md"
+
+@re.role.doctor user.profile.reaction
+    kind=role
+    word=doctor
+    text="A doctor: long hours and big responsibility."
+    core.source="specs/12-profile.md"
+
+@re.role.teacher user.profile.reaction
+    kind=role
+    word=teacher
+    text="A teacher: you shape a lot of futures."
+    core.source="specs/12-profile.md"
+
+@re.role.software_engineer user.profile.reaction
+    kind=role
+    word=software_engineer
+    text="A software engineer: so you build things out of pure logic."
+    core.source="specs/12-profile.md"
+
+@re.role.developer user.profile.reaction
+    kind=role
+    word=developer
+    text="A developer: so you turn ideas into working things."
+    core.source="specs/12-profile.md"
+
+@re.role.designer user.profile.reaction
+    kind=role
+    word=designer
+    text="A designer: so you make things look and feel right."
+    core.source="specs/12-profile.md"
+
+@re.role.student user.profile.reaction
+    kind=role
+    word=student
+    text="A student: what a good time to be curious!"
+    core.source="specs/12-profile.md"
+
+@re.role.chef user.profile.reaction
+    kind=role
+    word=chef
+    text="A chef: I bet you never run out of recipes."
+    core.source="specs/12-profile.md"
+
+@re.role.lawyer user.profile.reaction
+    kind=role
+    word=lawyer
+    text="A lawyer: precision matters in that job."
+    core.source="specs/12-profile.md"
+
+@re.role.accountant user.profile.reaction
+    kind=role
+    word=accountant
+    text="An accountant: someone has to keep the numbers honest."
+    core.source="specs/12-profile.md"
+
+@re.role.researcher user.profile.reaction
+    kind=role
+    word=researcher
+    text="A researcher: so you ask the questions nobody has answered yet."
+    core.source="specs/12-profile.md"
+
+@re.role.electrician user.profile.reaction
+    kind=role
+    word=electrician
+    text="An electrician: a skill the whole world depends on."
+    core.source="specs/12-profile.md"
+
+@re.role.writer user.profile.reaction
+    kind=role
+    word=writer
+    text="A writer: words are your craft."
+    core.source="specs/12-profile.md"
+
+@re.role.farmer user.profile.reaction
+    kind=role
+    word=farmer
+    text="A farmer: that is real, essential work."
+    core.source="specs/12-profile.md"
+
+@re.role.engineer user.profile.reaction
+    kind=role
+    word=engineer
+    text="An engineer: so you solve real problems."
+    core.source="specs/12-profile.md"
+
+@re.role.manager user.profile.reaction
+    kind=role
+    word=manager
+    text="A manager: keeping a team moving is hard work."
+    core.source="specs/12-profile.md"
+
+@re.hobby.hiking user.profile.reaction
+    kind=hobby
+    word=hiking
+    text="Hiking is a great way to clear the head."
+    core.source="specs/12-profile.md"
+
+@re.hobby.chess user.profile.reaction
+    kind=hobby
+    word=chess
+    text="Chess: a game that rewards patience."
+    core.source="specs/12-profile.md"
+
+@re.hobby.reading user.profile.reaction
+    kind=hobby
+    word=reading
+    text="Reading: there is always another book waiting."
+    core.source="specs/12-profile.md"
+
+@re.hobby.cooking user.profile.reaction
+    kind=hobby
+    word=cooking
+    text="Cooking: the tastiest hobby there is."
+    core.source="specs/12-profile.md"
+
+@re.hobby.gardening user.profile.reaction
+    kind=hobby
+    word=gardening
+    text="Gardening: patience that pays off in tomatoes."
+    core.source="specs/12-profile.md"
+
+@re.hobby.photography user.profile.reaction
+    kind=hobby
+    word=photography
+    text="Photography: you see the world in frames."
+    core.source="specs/12-profile.md"
+
+@re.hobby.running user.profile.reaction
+    kind=hobby
+    word=running
+    text="Running: all that endurance!"
+    core.source="specs/12-profile.md"
+
+@re.hobby.jazz user.profile.reaction
+    kind=hobby
+    word=jazz
+    text="Jazz: improvisation at its best."
+    core.source="specs/12-profile.md"
+
+@re.hobby.cycling user.profile.reaction
+    kind=hobby
+    word=cycling
+    text="Cycling: the best way to see a place."
+    core.source="specs/12-profile.md"
+
+@re.hobby.painting user.profile.reaction
+    kind=hobby
+    word=painting
+    text="Painting: that takes a good eye."
+    core.source="specs/12-profile.md"
+
+@re.hobby.gaming user.profile.reaction
+    kind=hobby
+    word=gaming
+    text="Gaming: a good way to switch off."
+    core.source="specs/12-profile.md"
+
+@re.hobby.travelling user.profile.reaction
+    kind=hobby
+    word=travelling
+    text="Travelling: so many places, so many stories."
+    core.source="specs/12-profile.md"
+
+@re.field.healthcare user.profile.reaction
+    kind=field
+    word=healthcare
+    text="Healthcare is demanding but meaningful."
+    core.source="specs/12-profile.md"
+
+@re.field.tech user.profile.reaction
+    kind=field
+    word=tech
+    text="Tech: always something new to learn."
+    core.source="specs/12-profile.md"
+
+@re.field.education user.profile.reaction
+    kind=field
+    word=education
+    text="Education: work that pays off over decades."
+    core.source="specs/12-profile.md"
+
