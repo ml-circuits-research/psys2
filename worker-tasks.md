@@ -125,6 +125,20 @@ The operational set and the paraphrase batches are single messages. Real use is 
 - comparatives ("a bit more"), choice clarification, list-entry mode;
 - repeat/explain ("what did you do?"), negative feedback ("that's wrong"), topic returns ("back to chess"), world switches mid-dialogue.
 
+Use this phenomenon catalogue: one family per line, **every family covered in every world where it makes sense**, at least 5 dialogues per family. Write it to `training/eval/dialogue-phenomena.md` with per-family counts:
+- reference: pronouns (it/them/he), demonstratives (this/that one), attributes (the red one), ordinals (the second, the last), quantifiers (both, all, each), the object just created;
+- ellipsis: "and X?", "what about X", "X too", "now bigger", "again", "the same for X", "one more";
+- incomplete commands and the answer to the clarification question; choice clarification ("which one?" → "the first");
+- corrections ("no, I meant…", "actually…", "not that one"), cancellation ("never mind", "forget it"), undo/redo chains;
+- comparatives and degree ("a bit more", "much bigger", "twice as", "the same size as");
+- multi-step tasks over turns: list entry ("milk" … "that's all"), building a drawing or document step by step, a game played over many turns;
+- confirmations and refusals of system offers (yes/no/sure/maybe later), answers to yes/no questions;
+- questions about what happened ("what did you do?", "why?", "what's on the board?"), repeat ("what?", "say again");
+- feedback ("thanks", "great", "that's wrong", "not what I asked");
+- topic switches and returns ("let's draw", "back to chess", "where were we?"), cross-world references ("chart what Tom has", "put that song in the document");
+- user facts used later ("my name is Ana" … "what's my name?", "I like blue" … "use my favourite colour");
+- noise inside dialogue: typos, voice fillers, run-ons, two commands in one turn.
+
 Store them in `training/eval/dialogues.jsonl`, at least 30 per world group. Extend `scripts/eval-operational.mjs` to run them turn by turn and report the share of turns right and the share of whole dialogues right. Add this as a second headline next to the operational set. The reviewer's discourse agent implements the mechanisms, so expect the numbers to rise as it lands.
 
 ### Review fixes F1–F8 (from the external review of 6b0db7c, accepted by the reviewer 16:00)
