@@ -65,7 +65,7 @@ export function dummySlots(slotDefs) {
   const out = {};
   for (const [name, def] of slotDefs) {
     if (def.cls === 'agent') out[name] = { value: '$e.dummy', text: 'Dummy' };
-    else if (def.cls === 'number') out[name] = { value: '1', text: '1' };
+    else if ((def.cls === 'number' || def.cls === 'ordinal')) out[name] = { value: '1', text: '1' };
     else if (def.cls === 'words') out[name] = { value: 'some words', text: 'some words' };
     else out[name] = { value: 'x', text: 'x' };
   }

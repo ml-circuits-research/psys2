@@ -63,7 +63,9 @@ export const ignorable = (vocab, global = vocab) => (w) => !!w && !/\d/.test(w) 
  */
 export function spellVocabulary(set) {
   return set.memo('spell-vocabulary', () => {
-    const vocab = new Set(vocabularyOf(set));
+    const rv = vocabularyOf(set);
+    const vocab = new Set(rv);
+    vocab.freq = rv.freq;
     for (const w of set.list()) {
       for (const lw of w.legendWires ?? []) for (const part of String(lw.id ?? '').split(/[.\s]/)) for (const x of wordsOf(part.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/_/g, ' '))) vocab.add(x);
       for (const kw of w.kb ?? []) {
@@ -81,6 +83,7 @@ export function worldVocabulary(set, worldId) {
     const all = spellVocabulary(set);
     const own = vocabularyOf(restrictedSet(set, [worldId]));
     const vocab = new Set(own);
+    vocab.freq = own.freq;
     // legend and kb words of this world only: keep the ones that are also in the global vocabulary and appear in this world's files
     for (const id of set.available(worldId)) {
       const w = set.get(id);
@@ -132,16 +135,21 @@ export function spellCorrect(text, { vocab, maxCorrections = 6, abbreviations = 
       if (budget) {
         // rank: smaller distance, then a word of the world's own vocabulary, then the same letters (a swap such as "eyse")
         const letters = [...lower].sort().join('');
-        let best = null, bestRank = Infinity, tie = false;
+        let best = null, bestRank = Infinity, tied = [];
         for (const w of cands) {
           if (Math.abs(w.length - lower.length) > budget) continue;
           const d = editDistance(lower, w, budget);
           if (d > budget) continue;
           const rank = d * 4 + (vocab.has(w) ? 0 : 2) + ([...w].sort().join('') === letters ? 0 : 1);
-          if (rank < bestRank) { best = w; bestRank = rank; tie = false; }
-          else if (rank === bestRank && w !== best) tie = true;
+          if (rank < bestRank) { best = w; bestRank = rank; tied = [w]; }
+          else if (rank === bestRank && w !== best) tied.push(w);
         }
-        if (best && !tie) { to = best; kind = 'spell'; }
+        // equally ranked (distance, own vocabulary, same letters): the most frequent word in the patterns and lexicons; still tied: no guess
+        if (tied.length > 1 && vocab.freq) {
+          const top = Math.max(...tied.map((w) => vocab.freq.get(w) ?? 0));
+          tied = tied.filter((w) => (vocab.freq.get(w) ?? 0) === top);
+        }
+        if (best && tied.length === 1) { to = tied[0]; kind = 'spell'; }
       }
     }
     if (!to || to === lower) continue;

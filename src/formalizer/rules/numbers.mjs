@@ -1,8 +1,9 @@
 /** Number words to digits (spec 03 section 1.4). Browser-safe. */
 
 const UNITS = { zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9 };
-const TEENS = { ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16, seventeen: 17, eighteen: 18, nineteen: 19 };
-const TENS = { twenty: 20, thirty: 30, forty: 40, fifty: 50, sixty: 60, seventy: 70, eighty: 80, ninety: 90 };
+// common misspellings (fourty, ninty, fiveteen, ...) are read as the right number
+const TEENS = { fiveteen: 15, eightteen: 18, ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16, seventeen: 17, eighteen: 18, nineteen: 19 };
+const TENS = { fourty: 40, ninty: 90, twenty: 20, thirty: 30, forty: 40, fifty: 50, sixty: 60, seventy: 70, eighty: 80, ninety: 90 };
 
 /** True when the lowercase word is a number word (or a hyphenated combination like twenty-one). */
 export function isNumberWord(w) {
@@ -62,3 +63,23 @@ function valueOf(ws) {
   }
   return total + cur;
 }
+
+/** Ordinal words: first..twentieth, thirtieth..hundredth, and compounds such as `twenty-first`. */
+const ORD_UNITS = { first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6, seventh: 7, eighth: 8, ninth: 9, tenth: 10, eleventh: 11, twelfth: 12,
+  thirteenth: 13, fourteenth: 14, fifteenth: 15, sixteenth: 16, seventeenth: 17, eighteenth: 18, nineteenth: 19, twentieth: 20,
+  thirtieth: 30, fortieth: 40, fiftieth: 50, sixtieth: 60, seventieth: 70, eightieth: 80, ninetieth: 90, hundredth: 100 };
+const ORD_WORD = Object.fromEntries(Object.entries(ORD_UNITS).filter(([, n]) => n <= 20).map(([w, n]) => [n, w]));
+
+/** Value of an ordinal word (`third` -> 3, `twenty-first` -> 21) or null. */
+export function ordinalWordValue(w) {
+  if (Object.hasOwn(ORD_UNITS, w)) return ORD_UNITS[w];
+  const m = w.match(/^([a-z]+)-([a-z]+)$/);
+  if (m && Object.hasOwn(TENS, m[1]) && Object.hasOwn(ORD_UNITS, m[2]) && ORD_UNITS[m[2]] < 10) return TENS[m[1]] + ORD_UNITS[m[2]];
+  return null;
+}
+
+/** Word form of an ordinal number (2 -> `second`; above 20 the digit form `21st`). */
+export const ordinalWord = (n) => ORD_WORD[n] ?? null;
+
+/** Digit value of a single number word (`five` -> 5) when it is a unit (used after `point`), else null. */
+export const digitWordValue = (w) => (Object.hasOwn(UNITS, w) ? UNITS[w] : null);

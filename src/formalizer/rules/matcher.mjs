@@ -2,8 +2,9 @@
  * Backtracking pattern matcher (spec 03 section 2). Browser-safe.
  *
  * Syntax elements: word, [a|b|c], [a|b]?, {name:class}, {name:class?}, ...
- * Slot classes: number, word, words, noun, <lexicon id>, agent, unit.
+ * Slot classes: number, ordinal, word, words, noun, <lexicon id>, agent, unit.
  */
+import { isFillerWord } from './normalize.mjs';
 
 /** Quantity unit table: lowercase token -> canonical symbol. */
 export const UNIT_TABLE = new Map(Object.entries({
@@ -11,12 +12,27 @@ export const UNIT_TABLE = new Map(Object.entries({
   s: 's', sec: 's', min: 'min', h: 'h', n: 'N', j: 'J', w: 'W', pa: 'Pa', hz: 'Hz', k: 'K',
 }));
 
-export const BUILTIN_CLASSES = new Set(['number', 'word', 'words', 'rest', 'noun', 'agent', 'unit', 'recent']);
+export const BUILTIN_CLASSES = new Set(['number', 'ordinal', 'word', 'words', 'rest', 'noun', 'agent', 'unit', 'recent']);
 
 /** Default and maximum token count of a `words` slot (`{x:words}` = 12, `{x:words(20)}` = 20). */
 export const WORDS_DEFAULT_MAX = 12;
 
 export class PatternError extends Error {}
+
+/**
+ * Operator symbols and the words that mean the same: a literal `+` matches the token `plus` (and the reverse), `/` matches
+ * `divided by`, `>` matches `greater than`, `%` matches `percent` (spec 03 section 1.7).
+ */
+export const OP_WORDS = {
+  '+': [['plus']], '-': [['minus']], '*': [['times'], ['multiplied', 'by']], '/': [['divided', 'by'], ['divide', 'by']],
+  '>': [['greater', 'than'], ['more', 'than'], ['bigger', 'than']], '<': [['less', 'than'], ['fewer', 'than'], ['smaller', 'than']],
+  '=': [['equals'], ['equal', 'to']], '%': [['percent']],
+};
+
+/** True when the literal word list contains a filler (an old or new filler word, `for me`, `u know`, `like`) or a leading `then` / `so` / `and` / `after that`. */
+function listsFiller(words) {
+  return words.some((w, k) => isFillerWord(w) || w === 'like' || w === 'then' || w === 'so' || w === 'and' || (w === 'that' && words[k - 1] === 'after') || (w === 'me' && words[k - 1] === 'for') || (w === 'know' && ['u', 'you', 'ya'].includes(words[k - 1])));
+}
 
 /**
  * Compile a match string into elements.
@@ -28,6 +44,7 @@ export function compilePattern(match) {
   const slots = new Map();
   for (const part of match.trim().split(/\s+/)) {
     if (part === '...') { elements.push({ t: 'skip' }); continue; }
+    if (part === '?') { elements.push({ t: 'q' }); continue; }
     let m;
     if ((m = part.match(/^\{([A-Za-z_]\w*):([\w.-]+?)(?:\(([^()]*)\))?(\?)?\}$/))) {
       const [, name, cls, rawArgs, opt] = m;
@@ -52,10 +69,11 @@ export function compilePattern(match) {
     if (/[\[\]{}|]/.test(part)) throw new PatternError(`malformed element '${part}'`);
     elements.push({ t: 'lit', words: part.split('_').filter(Boolean).map((w) => w.toLowerCase()) });
   }
-  return { elements, slots };
+  const usesFiller = elements.some((e) => (e.t === 'lit' && listsFiller(e.words)) || (e.t === 'alt' && e.alts.some(listsFiller)));
+  return { elements, slots, hasQ: elements.some((e) => e.t === 'q'), usesFiller };
 }
 
-const isWordish = (t) => t && t.kind !== 'punct';
+const isWordish = (t) => t && t.kind !== 'punct' && t.kind !== 'qmark' && !t.filler;
 
 /** Candidate captures of slot class `cls` at tokens[i], in preference order. */
 function candidates(el, tokens, i, env, slotsSoFar) {
@@ -69,12 +87,24 @@ function candidates(el, tokens, i, env, slotsSoFar) {
     return item ? [{ len: 0, value: item, text: '', span: [pos, pos] }] : [];
   }
   const t = tokens[i];
-  if (!t) return [];
+  if (!t || (t.filler && cls !== 'recent')) return [];
   const text = (len) => env.text.slice(t.start, tokens[i + len - 1].end);
   const span = (len) => [t.start, tokens[i + len - 1].end];
   switch (cls) {
-    case 'number':
-      return t.kind === 'number' ? [{ len: 1, value: t.lower, text: t.raw, span: span(1) }] : [];
+    case 'number': {
+      if (t.kind === 'number') {
+        const out = [{ len: 1, value: t.lower, text: t.raw, span: span(1) }];
+        // "2nd", "21st": the number with its suffix is one ordinal (tried after the bare number)
+        if (t.ordinal != null && tokens[i + 1]?.suffix) out.push({ len: 2, value: t.lower, text: text(2), span: span(2) });
+        return out;
+      }
+      // "a half" (a, half) reads as 0.5
+      if (t.kind === 'word' && (t.lower === 'a' || t.lower === 'an') && tokens[i + 1]?.alt === 'half') return [{ len: 2, value: '0.5', text: text(2), span: span(2) }];
+      return [];
+    }
+    case 'ordinal':
+      if (t.kind === 'number' && t.ordinal != null && tokens[i + 1]?.suffix) return [{ len: 2, value: t.lower, text: text(2), span: span(2) }];
+      return t.kind === 'word' && t.ordinal != null ? [{ len: 1, value: String(t.ordinal), text: t.raw, span: span(1) }] : [];
     case 'word':
       return isWordish(t) ? [{ len: 1, value: t.lower, text: t.raw, span: span(1) }] : [];
     case 'words': {
@@ -87,8 +117,10 @@ function candidates(el, tokens, i, env, slotsSoFar) {
     }
     case 'rest': {
       // everything up to the end of the sentence (1 or more tokens): free text for tools such as dictation
-      const len = tokens.length - i;
-      return len >= 1 && tokens.slice(i).every(isWordish) ? [{ len, value: text(len), text: text(len), span: span(len), loose: true }] : [];
+      let end = tokens.findIndex((x, k) => k >= i && x.kind === 'qmark');
+      if (end < 0) end = tokens.length;
+      const len = end - i;
+      return len >= 1 && tokens.slice(i, end).every(isWordish) ? [{ len, value: text(len), text: text(len), span: span(len), loose: true }] : [];
     }
     case 'noun': {
       const out = [];
@@ -137,31 +169,55 @@ function candidates(el, tokens, i, env, slotsSoFar) {
  */
 export function matchTokens(compiled, tokens, env) {
   const els = compiled.elements;
-  const n = tokens.length;
+  // a trailing question mark is visible only to patterns that list `?`; the others behave as if it were not there
+  const n = tokens.length - (!compiled.hasQ && tokens[tokens.length - 1]?.kind === 'qmark' ? 1 : 0);
   const slots = {};
   let literals = 0, skips = 0;
 
+  /** Token index after matching the literal words at tokens[i], or -1. A token matches by `lower` or by `alt` (the original number word, `u`); operator symbols and their words are one literal. */
   const matchWords = (words, i) => {
-    if (i + words.length > n) return false;
-    for (let k = 0; k < words.length; k++) if (tokens[i + k].lower !== words[k]) return false;
-    return true;
+    let k = 0, p = i;
+    while (k < words.length) {
+      const w = words[k], t = p < n ? tokens[p] : null;
+      if (t && (t.lower === w || t.alt === w)) { k++; p++; continue; }
+      const phrases = OP_WORDS[w];
+      if (phrases) {
+        const ph = phrases.find((x) => p + x.length <= n && x.every((y, j) => tokens[p + j].lower === y));
+        if (ph) { k++; p += ph.length; continue; }
+      }
+      if (t && t.kind === 'op' && OP_WORDS[t.lower]) {
+        const ph = OP_WORDS[t.lower].find((x) => k + x.length <= words.length && x.every((y, j) => words[k + j] === y));
+        if (ph) { k += ph.length; p++; continue; }
+      }
+      return -1;
+    }
+    return p;
   };
 
   function run(k, i) {
     if (k === els.length) return i === n;
     const el = els[k];
     if (el.t === 'lit') {
-      if (!matchWords(el.words, i)) return false;
+      const e = matchWords(el.words, i);
+      if (e < 0) return false;
       literals += el.words.length;
-      if (run(k + 1, i + el.words.length)) return true;
+      if (run(k + 1, e)) return true;
       literals -= el.words.length;
+      return false;
+    }
+    if (el.t === 'q') {
+      if (tokens[i]?.kind !== 'qmark') return false;
+      literals += 1;
+      if (run(k + 1, i + 1)) return true;
+      literals -= 1;
       return false;
     }
     if (el.t === 'alt') {
       for (const alt of el.alts) {
-        if (!matchWords(alt, i)) continue;
+        const e = matchWords(alt, i);
+        if (e < 0) continue;
         literals += alt.length;
-        if (run(k + 1, i + alt.length)) return true;
+        if (run(k + 1, e)) return true;
         literals -= alt.length;
       }
       return el.optional ? run(k + 1, i) : false;

@@ -47,7 +47,9 @@ test('tokenizer keeps arithmetic symbols between numbers and drops them elsewher
   assert.deepEqual(t('seven + five'), ['7', '+', '5']);
   assert.deepEqual(t('7 + -3'), ['7', '+', '-3']);
   assert.deepEqual(t('-3 + 5'), ['-3', '+', '5']);
-  assert.deepEqual(t('apples + pears'), ['apples', 'pears']);   // not arithmetic: dropped as before
+  assert.deepEqual(t('apples + pears'), ['apples', '+', 'pears']);   // a spaced symbol between two tokens is kept (spec 03 section 1.7)
+  assert.deepEqual(t('apples+pears'), ['apples', 'pears']);          // glued between words: not an operator, dropped as before
+  assert.deepEqual(t('and/or'), ['or']);
   assert.deepEqual(t('well - done'), ['done']);
 });
 

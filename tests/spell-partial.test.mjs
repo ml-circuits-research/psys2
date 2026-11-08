@@ -98,6 +98,7 @@ test('dialog: partial understanding is off by default, on executes what was read
   assert.ok(off.statuses.includes('unparsed'));
   const on = await engine.createSession({ partial: true }).send(text);
   assert.match(on.text, /7 times 6 is 42/);
+  // "hey" is a filler and "could you tell me" an indirect-question lead-in (spec 03 sections 1.5, 4): both are read, only "sweetie" is ignored
   assert.match(on.text, /I understood only part of that: I did not use "sweetie"/);
   assert.deepEqual(on.segments[0].ignored, ['sweetie']);
 });

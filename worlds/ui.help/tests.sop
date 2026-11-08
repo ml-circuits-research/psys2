@@ -116,10 +116,10 @@
     session=a
 
 @t.ui.help.n22 core.test
-    input="Hangmxq"
+    input="Is there an"
     expect="Did you mean"
     expectStatus=unparsed
-    expectState="lastUnparsed.text=Hangmxq"
+    expectState="lastUnparsed.text=Is there an"
     expectEffect=chat.suggest
     session=a
 
