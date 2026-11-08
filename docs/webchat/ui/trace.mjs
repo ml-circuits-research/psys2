@@ -45,6 +45,22 @@ export function renderTrace(reply, extra = {}) {
       ['Errors', s.errors?.length ? json(s.errors) : undefined],
     ])))) : h('p', { class: 'p2-muted' }, 'No segments.')));
 
+
+  const d = t.dispatch;
+  if (d) {
+    const pct = (x) => `${Math.round(x * 100)}%`;
+    const clip = (x, n = 60) => (x.length > n ? `${x.slice(0, n - 1)}…` : x);
+    root.append(section('Dispatcher (encoder)', h('p', {}, h('span', { class: `p2-tag ${d.status === 'understood' ? 'is-supported' : 'is-warn'}` }, d.status === 'understood' ? 'validated' : 'not understood'),
+      ` model ${d.modelMs} ms, with validation ${d.totalMs} ms; context: tab ${d.context?.tab ?? 'none'}, recent ${(d.context?.recent_worlds ?? []).join(', ') || 'none'}`),
+    h('p', { class: 'p2-why' }, h('strong', {}, 'Why: '), d.why),
+    h('ol', { class: 'p2-segs' }, (d.segmentations ?? []).map((g) => h('li', { class: g.index === d.winnerIndex ? 'is-winner' : '' },
+      h('div', {}, `Segmentation ${g.index + 1}`, g.index === d.winnerIndex ? h('span', { class: 'p2-tag is-supported' }, 'winner') : null, g.valid ? null : h('span', { class: 'p2-tag is-warn' }, `${g.nInvalid} piece(s) not read`),
+        ` dispatcher log-prob ${g.dispatcherScore.toFixed(2)}, total ${g.score.toFixed(2)}`),
+      h('ul', { class: 'p2-list' }, g.pieces.map((p) => h('li', {}, h('q', {}, clip(p.text)), ' ',
+        p.valid && p.chosen ? h('span', { class: 'p2-ok' }, `→ ${p.chosen.world}${p.chosen.rank > 1 ? ` (candidate ${p.chosen.rank})` : ''}`) : h('span', { class: 'p2-bad' }, 'not validated'),
+        h('div', { class: 'p2-muted' }, p.attempts.filter((a) => a.variant === 'original').map((a) => `${a.world} ${pct(a.worldScore)} ${a.valid ? (a.refused ? 'accepted (refused by state)' : 'validated') : `rejected: ${a.reason}`}`).join(' | '))))))))));
+  }
+
   let sop = '';
   try { sop = extra.serializeWires ? extra.serializeWires(reply.wires ?? []) : ''; } catch (e) { sop = `(could not serialize wires: ${e.message})`; }
   root.append(section('Wires (SOP Lang)', sop ? code(sop.trim()) : h('p', { class: 'p2-muted' }, 'No wires.')));

@@ -31,9 +31,13 @@
     "map.mjs",
     "music.mjs"
   ],
+  "dispatcherModel": true,
   "files": {
-    "lib/dialog/index.mjs": "f967b4ee92ca8a0c",
+    "lib/dialog/dispatch-validate.mjs": "3cfb746db53636d3",
+    "lib/dialog/encoder-dispatch.mjs": "ae52b942b820890d",
+    "lib/dialog/index.mjs": "720f13d203fa1b0c",
     "lib/dialog/test-runner.mjs": "3338d6d08f4f428f",
+    "lib/formalizer/dispatcher-runtime.mjs": "9bd4f96310a78371",
     "lib/formalizer/index.mjs": "e440aae44ed286c7",
     "lib/formalizer/routing.mjs": "4bc7cfec3184105e",
     "lib/formalizer/rules/emit.mjs": "005ccd4894820cdc",
@@ -45,6 +49,7 @@
     "lib/formalizer/rules/router.mjs": "d9e1a4c0ecf3dd3e",
     "lib/formalizer/rules/session.mjs": "5dab30fdb8774a77",
     "lib/formalizer/strategy.mjs": "73f854e5a947df21",
+    "lib/formalizer/wordpiece.mjs": "89f9cecebbd44627",
     "lib/interpreter/index.mjs": "349e81e9a15b498c",
     "lib/interpreter/memory.mjs": "ef723c35de346fe9",
     "lib/interpreter/render.mjs": "d747472b60aa9f84",
@@ -115,5 +120,5 @@
     "worlds/ui.shell/datagen.mjs": "b2a3b5850a89ac60",
     "worlds/ui.shell/ops.mjs": "41fb8a42f31b821f"
   },
-  "builtAt": "2026-11-08T09:52:24.199Z"
+  "builtAt": "2026-11-08T11:07:07.011Z"
 }

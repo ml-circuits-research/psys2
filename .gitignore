@@ -8,3 +8,4 @@ training/data/*.jsonl
 training/dataset/*
 !training/dataset/stats.json
 training/phrase-logs/*.jsonl
+docs/webchat/models/**/*.onnx

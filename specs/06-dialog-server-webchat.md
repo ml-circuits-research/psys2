@@ -63,6 +63,7 @@ The rule formalizer (spec 03) and the encoder formalizer (vision §5, ModernBERT
 ```
 - `createRulesFormalizer()` — always available; supports every world that has `patterns.sop`.
 - `createEncoderFormalizer({ endpoint })` — talks to an inference worker (vision §13); until one exists it reports `available() === false`.
+- `createDispatcherFormalizer({ load, getPolicy })` (`src/dialog/encoder-dispatch.mjs`) — the in-browser encoder strategy: a small dispatcher model (DistilBERT int8 ONNX) proposes segmentations and the top-3 worlds per piece, the rule validation layer (spec 03 §7) picks the reading, the rules of the chosen world produce the wires. It is installed as `engine.formalizers.encoder` by the host and attached with `attach(engine)`; the model is loaded lazily (`prepare()` or the first message), `onStatus(fn)` reports `idle | loading | ready | error`. When validation fails or the model cannot load, the segments come back unparsed / the strategy is unavailable and the rule formalizer is used. `reply.trace.dispatch` carries the candidates and why the winner won (spec 03 §7.7).
 - Selection: the session setting `formalizer` (`'rules'` default, or `'encoder'`) is a preference. For each world, the preferred strategy is used if it is available and `supports(world)`; otherwise the rule formalizer is used. The trace records, per segment, which strategy produced the wires.
 - The webchat settings panel exposes the choice; the server accepts `{ formalizer }` when creating a session.
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Builds the static browser demo (spec 06 "Webchat", spec 07 §4).
 //
-//   node scripts/build-webchat.mjs [--out <dir>]      (default: docs/webchat)
+//   node scripts/build-webchat.mjs [--out <dir>] [--models [<export dir>]]      (default out: docs/webchat)
 //
 // Output (only these paths are written; everything else in the out dir is left alone):
 //   lib/                    browser-safe copies of src/{soplang,legends,worlds,formalizer,interpreter,dialog,translate}
@@ -9,6 +9,8 @@
 //   worlds/index.json       { worlds: { <id>: { files: { 'world.sop': text, ... }, opsUrl: 'worlds/<id>/ops.mjs' } } }
 //   worlds/<id>/*.mjs       the world's operation modules
 //   build-info.json         { worlds, files: { path: sha256 }, builtAt }  (no commit ids)
+//   models/dispatcher/      (only with --models [dir], default dir training/runs/export/dispatcher-distilbert) the Encoder formalizer's model:
+//                           model.int8.onnx, vocab.txt, meta.json. Copied, never removed; *.onnx is gitignored (see the vendor README).
 // Idempotent: lib/, worlds/ and build-info.json are removed and recreated on every run.
 import { readFile, writeFile, readdir, mkdir, rm, cp, stat } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
@@ -34,7 +36,23 @@ async function walk(dir, base = dir) {
 
 const sha = (buf) => createHash('sha256').update(buf).digest('hex').slice(0, 16);
 
-export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs/webchat'), log = () => {} } = {}) {
+export const DEFAULT_MODEL_EXPORT = 'training/runs/export/dispatcher-distilbert';
+
+/** Copy the exported dispatcher (python -m psys2_train.export_onnx) into <outDir>/models/dispatcher. Returns the file list or null when the export is missing. */
+export async function copyDispatcherModel({ root = REPO, outDir, exportDir = DEFAULT_MODEL_EXPORT, log = () => {} } = {}) {
+  const from = path.resolve(root, exportDir);
+  const files = { 'model.int8.onnx': 'model.int8.onnx', 'vocab.txt': 'tokenizer/vocab.txt' };
+  if (!(await exists(path.join(from, files['model.int8.onnx'])))) { log(`webchat: no dispatcher export in ${from} (run: cd training && python -m psys2_train.export_onnx --ckpt runs/dispatcher-distilbert); the Encoder option stays unavailable`); return null; }
+  const to = path.join(outDir, 'models/dispatcher');
+  await mkdir(to, { recursive: true });
+  for (const [dst, src] of Object.entries(files)) await cp(path.join(from, src), path.join(to, dst));
+  const meta = JSON.parse(await readFile(path.join(from, 'meta.json'), 'utf8'));
+  await writeFile(path.join(to, 'meta.json'), JSON.stringify({ model: meta.model, worlds: meta.worlds, context: meta.context, max_len: meta.max_len, onnx: meta.onnx }, null, 1) + '\n');
+  log(`webchat: dispatcher model (${meta.model}, int8) -> ${to}`);
+  return Object.keys(files).concat('meta.json');
+}
+
+export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs/webchat'), models = null, log = () => {} } = {}) {
   const src = path.join(root, 'src');
   const worldsRoot = path.join(root, 'worlds');
   await mkdir(outDir, { recursive: true });
@@ -77,12 +95,15 @@ export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs
   await mkdir(path.join(outDir, 'ui/tabs'), { recursive: true });
   await writeFile(path.join(outDir, 'ui/tabs/index.json'), JSON.stringify(tabFiles) + '\n');
 
+  // 3b. dispatcher model for the Encoder formalizer (optional)
+  const modelFiles = models ? await copyDispatcherModel({ root, outDir, exportDir: typeof models === 'string' ? models : DEFAULT_MODEL_EXPORT, log }) : null;
+
   // 4. build info
   const files = {};
   for (const sub of ['lib', 'worlds']) {
     for (const f of await walk(path.join(outDir, sub))) files[`${sub}/${f}`] = sha(await readFile(path.join(outDir, sub, f)));
   }
-  const info = { worlds: ids, tabs: tabFiles, files, builtAt: new Date().toISOString() };
+  const info = { worlds: ids, tabs: tabFiles, dispatcherModel: !!modelFiles, files, builtAt: new Date().toISOString() };
   await writeFile(path.join(outDir, 'build-info.json'), JSON.stringify(info, null, 2) + '\n');
   log(`webchat: ${ids.length} worlds, ${Object.keys(files).length} files -> ${outDir}`);
   return info;
@@ -91,5 +112,7 @@ export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const i = process.argv.indexOf('--out');
   const outDir = i > 0 ? path.resolve(process.argv[i + 1]) : undefined;
-  await buildWebchat({ outDir, log: console.log });
+  const m = process.argv.indexOf('--models');
+  const models = m > 0 ? (process.argv[m + 1] && !process.argv[m + 1].startsWith('--') ? process.argv[m + 1] : true) : null;
+  await buildWebchat({ outDir, models, log: console.log });
 }

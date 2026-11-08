@@ -1,0 +1,39 @@
+{
+ "model": "distilbert-base-uncased",
+ "worlds": [
+  "art.draw",
+  "data.charts",
+  "docs.editor",
+  "docs.reader",
+  "games.chess",
+  "games.guess",
+  "games.hangman",
+  "games.tictactoe",
+  "geo.map",
+  "kids.animals",
+  "kids.arith",
+  "kids.common",
+  "kids.shapes",
+  "kids.shop",
+  "kids.tasks",
+  "kids.time",
+  "media.music",
+  "ui.avatar",
+  "ui.help",
+  "ui.shell"
+ ],
+ "context": true,
+ "max_len": 128,
+ "onnx": {
+  "inputs": [
+   "input_ids",
+   "attention_mask"
+  ],
+  "outputs": [
+   "seg_logits",
+   "world_logits"
+  ],
+  "world_max_len": 128,
+  "seg_max_len": 192
+ }
+}

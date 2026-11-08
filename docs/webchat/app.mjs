@@ -11,6 +11,7 @@ import { createTicTacToe, createGuess, createHangman } from './ui/games.mjs';
 import { createSpeech, speechSupport, LANG_TAGS } from './ui/speech.mjs';
 import { createSwitchTranslator, browserTranslatorKind, browserTranslatorAvailability } from './ui/translation.mjs';
 import { renderTrace } from './ui/trace.mjs';
+import { findDispatcherModel, dispatcherLoader } from './ui/dispatcher-host.mjs';
 import { buildRecord, createStore, filterRecords, toJSONL, toText, exportFilename, summaryStatus, summaryWorlds } from './ui/phrase-log.mjs';
 
 const HERE = new URL('.', import.meta.url);
@@ -42,7 +43,7 @@ const EXAMPLES = [
   'Become a person', 'Let’s play tic tac toe', 'Open the editor and start dictation', 'How many legs does a spider have?',
   'Tom has 5 apples. He gives 2 to Ana. How many apples does Tom have?',
 ];
-const DEFAULT_SETTINGS = { language: 'en', formalizer: 'rules', translation: 'auto', speechLang: 'follow', voice: '', rate: 1, handsFree: false, speaker: false, showTrace: false, logPhrases: true };
+const DEFAULT_SETTINGS = { language: 'en', formalizer: 'rules', encoderAcceptRefused: true, translation: 'auto', speechLang: 'follow', voice: '', rate: 1, handsFree: false, speaker: false, showTrace: false, logPhrases: true };
 const SETTINGS_KEY = 'psys2.webchat.settings';
 const ICON = {
   mic: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V22h2v-3.08A7 7 0 0 0 19 12h-2Z"/></svg>',
@@ -147,9 +148,12 @@ export async function mountPsys2(element, options = {}) {
     log.append(msg); scrollDown();
     return { msg, bubble, meta };
   }
+  let dispatcherStatus = { state: 'idle', message: '' };   // Encoder formalizer (lazy model load)
+  let dispatcherEnc = null;
   function setStatus() {
     const parts = [];
     if (busy) parts.push('Thinking…');
+    if (dispatcherStatus.state === 'loading') parts.push(`Encoder: ${dispatcherStatus.message}`);
     if (mic.speaking) parts.push('Speaking…');
     else if (mic.listening) parts.push(interim ? `Listening: “${interim}”` : mic.mode === 'ptt' ? 'Listening (hold space)…' : 'Listening…');
     else if (settings.handsFree && speech) parts.push('Hands-free: waiting…');
@@ -426,8 +430,13 @@ export async function mountPsys2(element, options = {}) {
     rate.addEventListener('input', () => { settings.rate = Number(rate.value); rateVal.textContent = `${settings.rate.toFixed(1)}×`; save(); });
     settingsEl.replaceChildren(
       h('div', { class: 'p2-settings-head' }, h('strong', {}, 'Settings'), h('button', { class: 'p2-linkbtn', type: 'button', onclick: () => toggleSettings(false) }, 'Close')),
-      field('Formalizer', select([['rules', 'Rules (deterministic)'], ['encoder', encoderOk ? 'Encoder' : 'Encoder (not available)', !encoderOk]], settings.formalizer === 'encoder' && !encoderOk ? 'rules' : settings.formalizer,
-        (v) => { settings.formalizer = v; applyEngineSettings(); save(); }), 'Worlds the chosen formalizer cannot read fall back to the rules.'),
+      field('Formalizer', select([['rules', 'Rules (deterministic)'], ['encoder', encoderOk ? 'Encoder (dispatcher + rule validation)' : 'Encoder (not available)', !encoderOk]], settings.formalizer === 'encoder' && !encoderOk ? 'rules' : settings.formalizer,
+        (v) => { settings.formalizer = v; applyEngineSettings(); save(); renderSettings(); }),
+        settings.formalizer === 'encoder' && encoderOk
+          ? `A small neural dispatcher (DistilBERT, int8, in your browser) proposes how to cut the message and which worlds fit each piece; the rules check every proposal. Status: ${dispatcherStatus.state === 'idle' ? 'model not loaded yet' : dispatcherStatus.state === 'ready' ? `ready (loaded in ${Math.round((dispatcherStatus.ms ?? 0) / 100) / 10} s)` : dispatcherStatus.message}.`
+          : encoderOk ? 'Worlds the chosen formalizer cannot read fall back to the rules. The Encoder downloads a 64 MB model the first time you choose it.' : 'This build has no dispatcher model (see docs/webchat/README.md). Worlds the chosen formalizer cannot read fall back to the rules.'),
+      ...(settings.formalizer === 'encoder' && encoderOk
+        ? [check('Accept parses the interpreter refuses (for example “move the piece” when no game is on)', settings.encoderAcceptRefused, (v) => { settings.encoderAcceptRefused = v; save(); })] : []),
       field('Translation', select([['auto', 'Automatic'], ['browser-api', 'Browser API'], ['rules', 'Rules']], settings.translation, (v) => { settings.translation = v; save(); renderSettings(); }),
         `Used when the language is not English. Browser on-device translator: ${browserAvail}. Its output is checked and falls back to the rules translator.`),
       field('Speech language', select([['follow', 'Same as language'], ['en-US', 'English (US)'], ['en-GB', 'English (UK)'], ['ro-RO', 'Română']], settings.speechLang, (v) => { settings.speechLang = v; save(); renderSettings(); })),
@@ -491,6 +500,7 @@ export async function mountPsys2(element, options = {}) {
     session.formalizer = settings.formalizer;
     if (session.settings && typeof session.settings === 'object') session.settings.formalizer = settings.formalizer;
     session.setOption?.('formalizer', settings.formalizer);
+    if (settings.formalizer === 'encoder' && dispatcherEnc) dispatcherEnc.prepare().catch(() => {});   // lazy: only now is the model fetched
   }
   speech.onVoicesChanged(() => renderSettings());
 
@@ -517,6 +527,19 @@ export async function mountPsys2(element, options = {}) {
     lib = { serialize: soplang.serialize };
     translator = createSwitchTranslator({ rules: translate.createTranslator(), getStrategy: () => settings.translation });
     engine = await dialog.createEngine({ loader: loaders.createBundleLoader(bundle), translator });
+    try {   // Encoder formalizer: only when this build ships the dispatcher model; nothing is downloaded until it is selected
+      const meta = await findDispatcherModel(base);
+      if (meta) {
+        const [enc, wp] = await Promise.all([import(new URL('lib/dialog/encoder-dispatch.mjs', base).href), import(new URL('lib/formalizer/wordpiece.mjs', base).href)]);
+        dispatcherEnc = enc.createDispatcherFormalizer({
+          load: dispatcherLoader({ base, meta, lib: wp, onProgress: (m) => { dispatcherStatus = { ...dispatcherStatus, message: m }; setStatus(); } }),
+          getPolicy: () => ({ acceptRefused: settings.encoderAcceptRefused !== false }),
+        });
+        dispatcherEnc.attach(engine);
+        engine.formalizers.encoder = dispatcherEnc;
+        dispatcherEnc.onStatus((st) => { dispatcherStatus = { ...st, message: st.state === 'loading' ? dispatcherStatus.message || st.message : st.message }; setStatus(); if (!settingsEl.hidden) renderSettings(); });
+      }
+    } catch (e) { console.warn('Encoder formalizer unavailable', e); }
     const problems = engine.problems?.() ?? [];
     if (problems.length) console.warn('PSys2 world problems:', problems);
     session = engine.createSession({ language: settings.language });
@@ -550,7 +573,7 @@ export async function mountPsys2(element, options = {}) {
 
   // optional capabilities, checked once
   const probe = engine.formalizers?.encoder ?? engine.strategies?.encoder ?? engine.formalizerStrategies?.encoder;
-  Promise.resolve(probe?.available?.()).then((ok) => { encoderOk = !!ok; renderSettings(); }, () => {});
+  Promise.resolve(probe?.available?.()).then((ok) => { encoderOk = !!ok; renderSettings(); if (encoderOk && settings.formalizer === 'encoder') applyEngineSettings(); }, () => {});
   if (browserTranslatorKind()) browserTranslatorAvailability('ro', 'en').then((a) => { browserAvail = a; renderSettings(); });
   else browserAvail = 'not supported by this browser';
 

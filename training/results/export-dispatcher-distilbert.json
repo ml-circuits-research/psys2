@@ -1,0 +1,213 @@
+{
+ "checkpoint": "runs/dispatcher-distilbert",
+ "model": "distilbert-base-uncased",
+ "export_dir": "/home/salboaie/work/psys2/training/runs/export/dispatcher-distilbert",
+ "command": "python -m psys2_train.export_onnx --ckpt runs/dispatcher-distilbert",
+ "sizes_mb": {
+  "fp32": 253.3293571472168,
+  "int8": 63.88035011291504
+ },
+ "targets": {
+  "max_size_mb": 150,
+  "max_ms_per_message": 50,
+  "min_agreement": 0.995
+ },
+ "gold_top1_lenient_on_gold_segments_of_sample": {
+  "n": 291,
+  "torch": 0.9312714776632303,
+  "fp32": 0.9312714776632303,
+  "int8": 0.9415807560137457
+ },
+ "agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "reference": "PyTorch CUDA fp32",
+  "onnx_fp32": {
+   "items": 200,
+   "world_same": 291,
+   "world_n": 291,
+   "boundary_same": 1711,
+   "boundary_n": 1711,
+   "msgs_all_boundaries_same": 200,
+   "max_abs_prob_diff_world": 3.129243850708008e-06,
+   "max_abs_prob_diff_seg": 2.294778823852539e-06,
+   "top3_same": 291,
+   "world_agreement": 1.0,
+   "boundary_agreement": 1.0,
+   "message_boundary_agreement": 1.0
+  },
+  "onnx_int8": {
+   "items": 200,
+   "world_same": 288,
+   "world_n": 291,
+   "boundary_same": 1708,
+   "boundary_n": 1711,
+   "msgs_all_boundaries_same": 197,
+   "max_abs_prob_diff_world": 0.3125082850456238,
+   "max_abs_prob_diff_seg": 0.41079291701316833,
+   "top3_same": 200,
+   "world_agreement": 0.9896907216494846,
+   "boundary_agreement": 0.9982466393921683,
+   "message_boundary_agreement": 0.985
+  },
+  "int8_vs_fp32": {
+   "items": 200,
+   "world_same": 288,
+   "world_n": 291,
+   "boundary_same": 1708,
+   "boundary_n": 1711,
+   "msgs_all_boundaries_same": 197,
+   "max_abs_prob_diff_world": 0.31250786781311035,
+   "max_abs_prob_diff_seg": 0.4107906222343445,
+   "top3_same": 200,
+   "world_agreement": 0.9896907216494846,
+   "boundary_agreement": 0.9982466393921683,
+   "message_boundary_agreement": 0.985
+  },
+  "disagreements": [
+   {
+    "cmp": "onnx_int8",
+    "text": "Switch sides",
+    "world_a": "ui.avatar",
+    "world_b": "games.chess",
+    "p_a": 0.4627287685871124,
+    "p_b": 0.45187586545944214
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Switch sides",
+    "world_a": "ui.avatar",
+    "world_b": "games.chess",
+    "p_a": 0.4627293348312378,
+    "p_b": 0.45187586545944214
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "game time switch to my editor tab",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "game time switch to my editor tab",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Go to your avatar.",
+    "world_a": "ui.avatar",
+    "world_b": "ui.shell",
+    "p_a": 0.5818607807159424,
+    "p_b": 0.526229202747345
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Go to your avatar.",
+    "world_a": "ui.avatar",
+    "world_b": "ui.shell",
+    "p_a": 0.5818607807159424,
+    "p_b": 0.526229202747345
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "the mouth from before, please",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "the mouth from before, please",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "add a new notebook orange juice and cat food to my shopping list restart tic tac toe",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "add a new notebook orange juice and cat food to my shopping list restart tic tac toe",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "happy right now?",
+    "world_a": "kids.arith",
+    "world_b": "ui.avatar",
+    "p_a": 0.312470942735672,
+    "p_b": 0.2704545855522156
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "happy right now?",
+    "world_a": "kids.arith",
+    "world_b": "ui.avatar",
+    "p_a": 0.31247249245643616,
+    "p_b": 0.2704545855522156
+   }
+  ]
+ },
+ "latency_cpu_batch1": {
+  "fp32_threads1": {
+   "encoder_pass_ms": {
+    "p50": 31.900350000796607,
+    "p95": 49.507167999763624,
+    "mean": 33.83102816994324
+   },
+   "dispatch_message_ms": {
+    "p50": 320.31011799972475,
+    "p95": 404.2274160001398,
+    "mean": 312.60991816997375
+   },
+   "avg_distinct_segments_per_message": 6.95,
+   "n": 100
+  },
+  "int8_threads1": {
+   "encoder_pass_ms": {
+    "p50": 11.14642599986837,
+    "p95": 14.994653000030667,
+    "mean": 11.298378699939349
+   },
+   "dispatch_message_ms": {
+    "p50": 97.50621599960141,
+    "p95": 123.03481300023122,
+    "mean": 96.94282412998291
+   },
+   "avg_distinct_segments_per_message": 6.9,
+   "n": 100
+  },
+  "fp32_threads4": {
+   "encoder_pass_ms": {
+    "p50": 11.999227000160317,
+    "p95": 15.76436499999545,
+    "mean": 12.473921549972147
+   },
+   "dispatch_message_ms": {
+    "p50": 114.96322000039072,
+    "p95": 139.74662900000112,
+    "mean": 114.55161572998804
+   },
+   "avg_distinct_segments_per_message": 6.95,
+   "n": 100
+  },
+  "int8_threads4": {
+   "encoder_pass_ms": {
+    "p50": 4.222068000672152,
+    "p95": 5.36875699981465,
+    "mean": 4.230471690025297
+   },
+   "dispatch_message_ms": {
+    "p50": 38.684576000378,
+    "p95": 47.73655200006033,
+    "mean": 38.149523490010324
+   },
+   "avg_distinct_segments_per_message": 6.9,
+   "n": 100
+  }
+ },
+ "cpu": "Grace aarch64 (DGX Spark)",
+ "versions": {
+  "torch": "2.14.1+cu130",
+  "onnx": "1.23.2",
+  "onnxruntime": "1.31.1",
+  "opset": 17
+ }
+}

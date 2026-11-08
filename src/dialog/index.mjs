@@ -20,7 +20,7 @@ export { runWorldTests } from './test-runner.mjs';
 
 const plainSegment = (s) => ({
   text: s.text, span: s.span, isQuestion: s.isQuestion, worlds: s.worlds, routing: s.routing, match: s.match,
-  unparsed: s.unparsed, alternatives: s.alternatives, errors: s.errors, strategy: s.strategy, corrections: s.corrections ?? [],
+  unparsed: s.unparsed, alternatives: s.alternatives, errors: s.errors, strategy: s.strategy, corrections: s.corrections ?? [], dispatch: s.dispatch ?? null,
   wires: s.wires.map((w) => w.id),
 });
 
@@ -196,7 +196,7 @@ export class DialogSession {
     const opts = { worlds: set, session: this.isession, source: sid, context: this.context(), router: this.engine.router };
     const rules = formalizers.rules;
     const enc = preferred === 'encoder' ? formalizers.encoder : null;
-    let usable = false;
+    let usable = false, encoderError = null;
     try { usable = !!enc && !!(await enc.available()) && set.list().some((w) => enc.supports(w)); } catch { usable = false; }
     if (usable) {
       try {
@@ -208,11 +208,12 @@ export class DialogSession {
           const shift = seg.span[0];
           for (const s of sub.segments) segments.push({ ...s, span: [s.span[0] + shift, s.span[1] + shift], strategy: 'rules' });
         }
-        return { segments, wires: segments.flatMap((s) => s.wires) };
-      } catch { /* the worker failed: fall through to the rules */ }
+        return { segments, wires: segments.flatMap((s) => s.wires), dispatch: res.dispatch ?? null };
+      } catch (e) { encoderError = e?.message ?? String(e); /* the encoder failed: fall through to the rules */ }
     }
     const res = await rules.formalize(english, opts);
     for (const s of res.segments) s.strategy = 'rules';
+    if (encoderError) res.encoderError = encoderError;
     return res;
   }
 
@@ -234,7 +235,7 @@ export class DialogSession {
     const stateBefore = Object.fromEntries(Object.entries(this.isession.state).map(([k, v]) => [k, JSON.stringify(v)]));
     this.isession.effects = [];
     const icpt = interp.intercept(this.isession, english);   // modal input (spec 07 section 2)
-    const { segments, wires } = icpt ? { segments: [], wires: [] } : await this._formalize(english, sid, formalizer ?? this.formalizer);
+    const { segments, wires, dispatch, encoderError } = icpt ? { segments: [], wires: [] } : await this._formalize(english, sid, formalizer ?? this.formalizer);
     this._noteWorlds(segments);
     const T = (text, extra = {}) => ({ text, translate: true, ...extra });
     const lines = icpt?.reply ? [[T(icpt.reply)]] : [];   // each line is an array of parts [{ text, translate, quote? }]
@@ -339,7 +340,8 @@ export class DialogSession {
     return {
       text: reply, parts, lang, translation, segments, wires: [...wires, ...answerWires], answers, statuses, state, effects,
       trace: {
-        intercepted: icpt?.worldId ?? null, effects, formalizer: { preferred: formalizer ?? this.formalizer, used: [...new Set(segments.map((s) => s.strategy))] },
+        intercepted: icpt?.worldId ?? null, effects, formalizer: { preferred: formalizer ?? this.formalizer, used: [...new Set(segments.map((s) => s.strategy))], ...(encoderError ? { error: encoderError } : {}) },
+        dispatch: dispatch ?? null,
         source: sid, language: lang, original: text, english, replyEnglish: englishReply,
         segments: segments.map(plainSegment), router: segments.map((s) => s.worlds),
         routing: icpt ? [{ router: 'policy', tier: 1, tierName: 'modal', reason: `modal input of ${icpt.worldId}`, contested: false, winner: { worldId: icpt.worldId }, runnerUp: null }] : segments.map((s) => s.routing ?? null),

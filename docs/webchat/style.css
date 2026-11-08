@@ -190,3 +190,7 @@
 .p2-plog-actions .p2-btn-text { border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 8px; padding: 6px 10px; font-size: 13px; cursor: pointer; }
 .p2-plog-actions .p2-btn-text.is-danger { background: var(--bad); border-color: var(--bad); color: #fff; }
 .p2-plog-confirm { font-size: 13px; color: var(--bad); }
+
+/* Encoder formalizer trace: the winning segmentation of the dispatcher */
+.p2 .p2-segs li.is-winner { border-left: 3px solid var(--p2-accent, currentColor); padding-left: 6px; }
+.p2 .p2-why { margin: 4px 0 8px; }
