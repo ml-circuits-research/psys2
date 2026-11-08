@@ -10,6 +10,14 @@
  * Pure functions, no imports (browser-safe).
  */
 
+const NUMERIC = /^[-+]?\d+(?:\.\d+)?$/;
+/** Complete numbers of a text as values: "-7" is -7 (a sign counts when it is attached to the digits and not preceded by a word character: "3-5" is 3 and 5), "45.5" is one number, "1,500" is 1500. */
+export function numbersInText(text) {
+  const out = [];
+  for (const m of String(text).matchAll(/(?<![\w.])([-\u2212]?)(\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?)(?![\w]|\.\d)/g)) out.push(Number(`${m[1] ? '-' : ''}${m[2].replace(/,/g, '')}`));
+  return out;
+}
+
 const SEL = /^([^[\]]+)\[(?:([\w.]+)=([^\]]*)|(last|first))\]$/;
 
 /** Value at a dot path of `state`, with selectors; undefined when absent. */
@@ -43,10 +51,12 @@ export function checkState(states, item) {
   // a value starting with "@" is another path of the same world ("objects[kind=circle].y<@objects[kind=square].y")
   const want = item.value.startsWith('@') ? show(statePath(states[item.world] ?? {}, item.value.slice(1))) : item.value;
   let ok;
-  if (item.op === '=') ok = a === want;
+  const empty = (x) => x === 'null' || x === '';   // an empty cell is null or "" (the tic-tac-toe board stores "")
+  const same = a === want || (empty(a) && empty(want));
+  if (item.op === '=') ok = same;
   else if (item.op === '==') { const n = (x) => x.toLowerCase().replace(/[\s.!?]+$/g, '').trim(); ok = n(a) === n(want); }   // equal ignoring case and final punctuation
   else if (item.op === '~') ok = a.toLowerCase().includes(want.toLowerCase());   // contains, case-insensitive
-  else if (item.op === '!=') ok = a !== want;
+  else if (item.op === '!=') ok = !same;
   else {
     const x = Number(actual), y = Number(want);
     ok = actual !== undefined && !Number.isNaN(x) && !Number.isNaN(y) && (item.op === '<' ? x < y : item.op === '>' ? x > y : item.op === '<=' ? x <= y : x >= y);
@@ -55,7 +65,7 @@ export function checkState(states, item) {
 }
 
 /** Compare a state item with several path/value pairs at once: `before` and `after` are full state maps. */
-export function evaluateCase(c, { before, after, replyText, effects, statuses, unparsedAll }) {
+export function evaluateCase(c, { before, after, replyText, effects, statuses, unparsedAll, values = [] }) {
   const items = [];
   for (const spec of c.expect?.state ?? []) {
     const it = parseStateItem(spec, c.world);
@@ -69,10 +79,12 @@ export function evaluateCase(c, { before, after, replyText, effects, statuses, u
     items.push({ kind: 'forbid', spec, ok: !post.ok, actual: post.actual });
   }
   const low = (replyText ?? '').toLowerCase();
-  // a purely numeric expectation matches a whole number only ("5" is not found in "15" or "5.5"); anything else is a case-insensitive substring
+  // a purely numeric expectation is a VALUE: it matches a complete number of the reply (signed, decimal) or a typed result value of an answer, never a
+  // fragment ("7" is not found in "-7", "15" or "7.5"; "5" is not "0.5"); anything else is a case-insensitive substring
+  const nums = [...numbersInText(replyText ?? ''), ...values.filter((v) => typeof v === 'number' && Number.isFinite(v))];
   const has = (s) => {
-    const t = String(s).toLowerCase();
-    return /^-?\d+(\.\d+)?$/.test(t) ? new RegExp(`(?<![\\d.])${t.replace('.', '\\.')}(?![\\d]|\\.\\d)`).test(low) : low.includes(t);
+    const t = String(s).trim().toLowerCase();
+    return NUMERIC.test(t) ? nums.some((n) => n === Number(t)) : low.includes(t);
   };
   for (const sub of c.expect?.answer ?? []) items.push({ kind: 'answer', spec: sub, ok: has(sub) });
   for (const sub of c.expect?.answer_any ? [c.expect.answer_any] : []) items.push({ kind: 'answer', spec: sub.join(' | '), ok: sub.some(has) });

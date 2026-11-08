@@ -86,7 +86,7 @@ export async function runCase(engine, formalizer, c) {
   const last = reply.answers.at(-1);
   const replyText = reply.text;
   const unparsedAll = reply.segments.length === 0 || reply.segments.every((x) => x.unparsed);
-  const items = evaluateCase(c, { before, after, replyText, effects: reply.effects, statuses: reply.statuses, unparsedAll });
+  const items = evaluateCase(c, { before, after, replyText, effects: reply.effects, statuses: reply.statuses, unparsedAll, values: reply.answers.map((a) => a.value) });
   const outcome = classify(c, items, { statuses: reply.statuses, unparsedAll, stateChanged, effects: reply.effects.filter((e) => e.name !== 'chat.suggest') });
   return {
     id: c.id, world: c.world, outcome, ms,
