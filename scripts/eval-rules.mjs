@@ -18,12 +18,12 @@
  * Records flagged needs_review are excluded and counted. By default one run does the test splits, routing and the held-out set;
  * `--heldout` = held-out only (default output training/results/rules-heldout.json), `--no-heldout` = skip it. Never train on it.
  *
- * Usage: node scripts/eval-rules.mjs [--world <id>] [--heldout | --no-heldout] [--out <file>] [--failures <file>] [--jobs N] [--no-write]
+ * Usage: node scripts/eval-rules.mjs [--world <id>] [--heldout | --no-heldout] [--out <file>] [--failures <file>] [--jobs N (default: all cores, os.availableParallelism(); 1 = serial)] [--no-write]
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { cpus } from 'node:os';
+import { defaultJobs } from './lib/shard.mjs';
 import { Worker, isMainThread, parentPort, workerData } from 'node:worker_threads';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
@@ -200,7 +200,7 @@ async function main() {
   const doHeldout = hoOnly || (!args.includes('--no-heldout') && existsSync(HELDOUT));
   const out = resolve(opt('--out', join(REPO, hoOnly ? 'training/results/rules-heldout.json' : 'training/results/rules.json')));
   const failFile = resolve(opt('--failures', join(REPO, 'training/runs/rules-failures.jsonl')));
-  const jobs = Number(opt('--jobs', Math.min(cpus().length, 20)));
+  const jobs = Number(opt('--jobs', defaultJobs()));
   const t0 = Date.now();
 
   // worlds listed in stats.json only: other directories under training/dataset (e.g. multicmd) are not per-world datasets

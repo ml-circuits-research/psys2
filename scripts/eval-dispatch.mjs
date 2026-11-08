@@ -25,13 +25,13 @@
  * Segmentation match: same number of pieces and every piece overlaps its gold segment with character IoU >= --seg-iou (default 0.6).
  *
  * Normalizer (N1, spec 03 section 7.12): `--normalizer-record <requests.jsonl>` collects the pieces no candidate validates (run once, results discarded), `python -m psys2_train.normalizer predict` rewrites them, `--normalizer <outputs.jsonl> --name <n>-norm` reruns every mode with the rewrites as extra candidates (compare with the run without).
- * Usage: node scripts/eval-dispatch.mjs [--pred <file>]... [--name <n>] [--jobs N] [--policy '<json>'] [--seg-iou 0.6] [--limit N] [--no-write]
+ * Usage: node scripts/eval-dispatch.mjs [--pred <file>]... [--name <n>] [--jobs N (default: all cores; 1 = serial)] [--policy '<json>'] [--seg-iou 0.6] [--limit N] [--no-write]
  * Writes training/results/dispatch-<name>.json and training/runs/dispatch-<name>-traces.jsonl (per-record traces).
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from 'node:fs';
 import { resolve, dirname, join, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { cpus } from 'node:os';
+import { defaultJobs } from './lib/shard.mjs';
 import { Worker, isMainThread, parentPort, workerData } from 'node:worker_threads';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
@@ -299,7 +299,7 @@ async function main() {
   }
   if (!preds.length) { console.error('no prediction files (training/runs/dispatch-pred/*.jsonl or --pred <file>)'); process.exit(2); }
   const name = opt('--name', preds.length === 1 ? basename(preds[0]).replace(/\.jsonl$/, '') : 'all');
-  const jobs = Number(opt('--jobs', Math.min(cpus().length, 20)));
+  const jobs = Number(opt('--jobs', defaultJobs()));
   const policy = JSON.parse(opt('--policy', '{}'));
   const segIou = Number(opt('--seg-iou', 0.6));
   const limit = Number(opt('--limit', Infinity));

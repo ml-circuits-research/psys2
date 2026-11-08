@@ -39,7 +39,8 @@ Sessions are kept in memory with an idle timeout (30 min). No LLM is reachable f
 
 ## CLI (`src/cli.mjs`)
 - `node src/cli.mjs chat` — interactive C2 dialog in the terminal.
-- `node src/cli.mjs test-world <id|all>` — runs the world's `tests.sop`.
+- `node src/cli.mjs test-world <id|all> [--jobs N]` — runs the world's `tests.sop`. `all` runs the worlds in `min(N, worlds)` worker threads (default `os.availableParallelism()`, `--jobs 1` = in-process); lines are printed in world order and the exit code is the same as a serial run.
+- Parallel evaluation tools (`scripts/lib/shard.mjs`): `scripts/eval-operational.mjs`, `eval-rules.mjs`, `eval-dispatch.mjs` and `npm test` (`scripts/run-tests.mjs`) take `--jobs N` (default all cores). `eval-operational --jobs 1` is the single-thread CPU latency measurement; with N > 1 each worker loads the engine and the ONNX session once (intraOpNumThreads 1), results are merged in the original order and totals are identical, but per-message latency (measured inside the worker) includes CPU contention. The output states the mode (`single-thread` or `sharded xN`).
 - `node src/cli.mjs parse <file.sop>` — parse and report errors.
 - `node src/cli.mjs formalize "<text>"` — print the emitted wires.
 

@@ -10,6 +10,10 @@
  *
  *   node scripts/eval-operational.mjs --rules-only [--name rules]
  *   node scripts/eval-operational.mjs --ort <scratch>/node_modules/onnxruntime-node/dist/index.js [--model docs/webchat/models/dispatcher] [--name full]
+ *   parallelism: --jobs N (default os.availableParallelism(): the cases are sharded over N worker threads, each loads the engine and the ONNX
+ *     session once, onnxruntime intraOpNumThreads=1 per worker; results merged in the original order, totals identical to --jobs 1).
+ *     Latency is measured per message inside the worker, so with N > 1 it includes CPU contention: use `--jobs 1` for the single-thread
+ *     CPU latency measurement (the output says which mode was used: "mode single-thread" or "mode sharded xN").
  *   options: --model-dir <dir> (dispatcher export: model.int8.onnx, vocab.txt, meta.json) --edit-tau <float> (simplifier threshold) --json (last stdout line = one JSON object {n,right,partly_right,wrong,not_understood,latency_ms}; combine with --no-write)  --limit N  --world <id>  --family <name>  --set <file>  --no-write  --verbose (print non-right cases)  --replies (print every case's outcome and reply, for diffing runs)
  *
  * onnxruntime-node is NOT a dependency of the repository: install it in a scratch directory and pass the path (like verify-dispatcher-js.mjs).
@@ -27,7 +31,10 @@ import { createDispatcherFormalizer } from '../src/dialog/encoder-dispatch.mjs';
 import { createWordPieceTokenizer } from '../src/formalizer/wordpiece.mjs';
 import { groupOf, GROUP_ORDER } from './lib/world-groups.mjs';
 import { evaluateCase, classify } from './lib/operational-check.mjs';
+import { isMainThread } from 'node:worker_threads';
+import { parseJobs, runSharded, serveShard } from './lib/shard.mjs';
 
+const SELF = fileURLToPath(import.meta.url);
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 && !process.argv[i + 1]?.startsWith('--') ? process.argv[i + 1] : d; };
 const flag = (k) => process.argv.includes(`--${k}`);
@@ -40,7 +47,7 @@ export function loadCases(file) {
   return readFileSync(file, 'utf8').split('\n').filter((l) => l.trim()).map((l) => JSON.parse(l));
 }
 
-async function makeEngine({ rulesOnly, ortPath, modelDir, editTau }) {
+async function makeEngine({ rulesOnly, ortPath, modelDir, editTau, ortThreads }) {
   const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT) });
   if (rulesOnly) return { engine, formalizer: 'rules', modelInfo: null };
   if (!ortPath) throw new Error('--ort <path to onnxruntime-node entry> is required (or use --rules-only)');
@@ -52,7 +59,7 @@ async function makeEngine({ rulesOnly, ortPath, modelDir, editTau }) {
     waitForModel: true,
     getPolicy: () => ({ acceptRefused: WEBCHAT.encoderAcceptRefused, trySpell: WEBCHAT.spellcheck, acceptPartial: WEBCHAT.partialUnderstanding }),
     load: async () => {
-      const session = await ort.InferenceSession.create(join(dir, 'model.int8.onnx'), { graphOptimizationLevel: 'all' });
+      const session = await ort.InferenceSession.create(join(dir, 'model.int8.onnx'), { graphOptimizationLevel: 'all', ...(ortThreads ? { intraOpNumThreads: ortThreads, interOpNumThreads: 1 } : {}) });
       let editTags = null;
       if (meta.onnx?.outputs?.includes('edit_logits')) editTags = JSON.parse(readFileSync(join(dir, 'edit-vocab.json'), 'utf8')).tags;
       return { ort, session, tokenizer: createWordPieceTokenizer(readFileSync(existsSync(join(dir, 'vocab.txt')) ? join(dir, 'vocab.txt') : join(dir, 'tokenizer', 'vocab.txt'), 'utf8')), worlds: meta.worlds, editTags, editTau: editTau ?? meta.edit_threshold ?? 0.5, useContext: meta.context !== false };
@@ -136,17 +143,32 @@ async function main() {
   if (arg('limit')) cases = cases.slice(0, Number(arg('limit')));
   const rulesOnly = flag('rules-only');
   const name = arg('name', rulesOnly ? 'rules-only' : 'full');
-  const { engine, formalizer, modelInfo } = await makeEngine({ rulesOnly, ortPath: arg('ort'), modelDir: arg('model-dir', arg('model', join(REPO, 'docs/webchat/models/dispatcher'))), editTau: arg('edit-tau') !== undefined ? Number(arg('edit-tau')) : undefined });
-  const rows = [];
-  for (const c of cases) {
-    const r = await runCase(engine, formalizer, c);
-    rows.push(r);
+  const jobs = Math.max(1, Math.min(parseJobs(), cases.length || 1));
+  const mopts = { rulesOnly, ortPath: arg('ort'), modelDir: arg('model-dir', arg('model', join(REPO, 'docs/webchat/models/dispatcher'))), editTau: arg('edit-tau') !== undefined ? Number(arg('edit-tau')) : undefined };
+  const mode = jobs === 1 ? 'single-thread' : `sharded x${jobs}`;
+  const note = (c, r) => {
     if (flag('replies') && !flag('json')) console.log(`${c.id}\t${r.outcome}\t${JSON.stringify(r.reply ?? r.error ?? null)}`);
     if (flag('verbose') && !flag('json') && r.outcome !== 'right') console.log(`${r.outcome.padEnd(14)} ${c.world.padEnd(15)} ${c.id}  "${c.message}"  -> ${r.reply ?? r.error}  [${(r.failing ?? []).join('; ')}]`);
+  };
+  const t0 = Date.now();
+  let rows, formalizer, modelInfo;
+  if (jobs === 1) {
+    const env = await makeEngine(mopts);
+    ({ formalizer, modelInfo } = env);
+    rows = [];
+    for (const c of cases) { const r = await runCase(env.engine, formalizer, c); rows.push(r); note(c, r); }
+  } else {
+    rows = await runSharded({ file: SELF, items: cases, jobs, workerData: { ...mopts, ortThreads: rulesOnly ? 0 : 1 } });
+    formalizer = rulesOnly ? 'rules' : 'encoder';
+    if (rulesOnly) modelInfo = null;
+    else { const meta = JSON.parse(readFileSync(join(resolve(mopts.modelDir), 'meta.json'), 'utf8')); modelInfo = meta.version ?? { model: meta.model }; }
+    cases.forEach((c, i) => note(c, rows[i]));
   }
+  const wall = (Date.now() - t0) / 1000;
   const summary = summarize(cases, rows);
-  const out = { config: { name, formalizer, ...WEBCHAT, rulesOnly, set: file.replace(`${REPO}/`, ''), cases: cases.length, model: modelInfo }, ...summary, cases: rows.map(({ ms, ...r }) => ({ ...r, ms: Math.round(ms) })) };
+  const out = { run: { mode, jobs }, config: { name, formalizer, ...WEBCHAT, rulesOnly, set: file.replace(`${REPO}/`, ''), cases: cases.length, model: modelInfo }, ...summary, cases: rows.map(({ ms, ...r }) => ({ ...r, ms: Math.round(ms) })) };
   const h = summary.headline;
+  if (!flag('json')) console.log(`mode ${mode} (${jobs} job${jobs > 1 ? 's' : ''}), wall ${wall.toFixed(1)} s; latency measured per message inside the worker${jobs > 1 ? ' (includes CPU contention; use --jobs 1 for single-thread CPU latency)' : ''}`);
   if (!flag('json')) console.log(`config ${name}: ${h.n} messages  right ${h.right_pct}%  partly ${h.partly_pct}%  wrong ${h.wrong_pct}%  not understood ${h.not_understood_pct}%  latency p50 ${summary.latency_ms.p50} ms p95 ${summary.latency_ms.p95} ms`);
   if (!flag('json')) for (const [g, t] of Object.entries(summary.by_group)) console.log(`  ${g.padEnd(24)} n=${String(t.n).padStart(4)}  right ${String(t.right_pct).padStart(5)}%  partly ${String(t.partly_pct).padStart(5)}%  wrong ${String(t.wrong_pct).padStart(5)}%  nu ${String(t.not_understood_pct).padStart(5)}%`);
   if (!flag('no-write')) {
@@ -157,4 +179,9 @@ async function main() {
   if (flag('json')) console.log(JSON.stringify({ n: h.n, right: h.right, partly_right: h.partly, wrong: h.wrong, not_understood: h.not_understood, latency_ms: summary.latency_ms.mean }));
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) await main();
+if (!isMainThread) {
+  serveShard(async (wd) => {
+    const env = await makeEngine(wd);
+    return (c) => runCase(env.engine, env.formalizer, c);
+  });
+} else if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) await main();
