@@ -1,0 +1,74 @@
+{
+  "world": "kids.arith",
+  "tab": "arith",
+  "author": "claude-sonnet-example",
+  "batch": "example1",
+  "tasks": [
+    {
+      "id": "t01",
+      "goal": "Find out how many apples Tom has after receiving some",
+      "setup": ["Tom has 5 apples.", "Ana gives Tom 3 apples."],
+      "canonical": "How many apples does Tom have?",
+      "variants": ["how many apples does tom have", "tom's apples?", "how many apples has Tom got now", "can you tell me how many apples Tom has", "apples tom have how many", "I wanna know Tom's apple count", "what's Tom's total of apples", "Tom has how many apples?", "hey, how many apples does Tom have right now?", "count Tom's apples please"]
+    },
+    {
+      "id": "t02",
+      "goal": "Tell the system that Mia has marbles",
+      "canonical": "Mia has 7 marbles.",
+      "variants": ["mia has 7 marbles", "Mia got 7 marbles", "Mia owns seven marbles", "so Mia has 7 marbles now", "just so you know, Mia has 7 marbles", "mia hs 7 marbles", "remember that Mia has 7 marbles", "Mia has seven marbles", "FYI Mia has 7 marbles", "Mia's got 7 marbles"]
+    },
+    {
+      "id": "t03",
+      "goal": "Find out who has the most apples",
+      "setup": ["Tom has 8 apples.", "Ana has 4 apples."],
+      "canonical": "Who has the most apples?",
+      "variants": ["who has the most apples", "who has most apples?", "which kid has the most apples", "whose apples are the most", "who's got the most apples", "tell me who has the most apples", "who has the biggest number of apples?", "person with the most apples?", "who hass the most apples", "please tell me who has the most apples"]
+    },
+    {
+      "id": "t04",
+      "goal": "Find out how many apples there are in total",
+      "setup": ["Tom has 8 apples.", "Ana has 4 apples."],
+      "canonical": "How many apples are there altogether?",
+      "variants": ["how many apples are there altogether", "how many apples in total?", "total apples?", "how many apples are there all together", "what is the total number of apples", "add up all the apples", "how many apples do we have in all", "apples altogether?", "can you tell me how many apples there are in total", "how many apples are there overall"]
+    },
+    {
+      "id": "t05",
+      "goal": "Ask how many more apples Tom has than Ana",
+      "setup": ["Tom has 8 apples.", "Ana has 4 apples."],
+      "canonical": "How many more apples does Tom have than Ana?",
+      "variants": ["how many more apples does tom have than ana", "how many more apples has Tom than Ana?", "tom has how many more apples than ana", "what's the difference in apples between Tom and Ana", "how many extra apples does Tom have compared to Ana", "by how many apples does Tom beat Ana", "Tom vs Ana, how many more apples for Tom?", "how many more apples Tom has than Ana", "could you tell me how many more apples Tom has than Ana", "how much more apples does Tom have than Ana"]
+    },
+    {
+      "id": "t06",
+      "goal": "Record that Ana gives Tom some pears",
+      "canonical": "Ana gives Tom 3 pears.",
+      "variants": ["ana gives tom 3 pears", "Ana gave Tom 3 pears", "Ana handed Tom 3 pears", "Ana gives 3 pears to Tom", "Ana just gave 3 pears to Tom", "ana gve tom 3 pears", "Ana gave three pears to Tom", "Ana gives Tom three pears", "so Ana gave Tom 3 pears", "Tom got 3 pears from Ana"]
+    },
+    {
+      "id": "t07",
+      "goal": "Ask how many apples Tom has left after eating some",
+      "setup": ["Tom has 6 apples.", "Tom ate 2 apples."],
+      "canonical": "How many apples does Tom have?",
+      "variants": ["how many apples does Tom have left", "how many apples are left for Tom?", "Tom's apples left?", "how many apples remain with Tom", "what's left of Tom's apples", "tom apples left", "so how many apples does Tom have now", "how many apples does Tom still have", "can you say how many apples Tom has left", "how many apples does he have now, Tom I mean"]
+    },
+    {
+      "id": "t08",
+      "goal": "Calculate a plain addition sum",
+      "canonical": "What is 7 plus 5?",
+      "variants": ["what is 7 plus 5", "7 plus 5?", "7+5", "what's 7 + 5", "how much is 7 plus 5", "add 7 and 5", "seven plus five", "tell me 7 plus 5", "7 and 5 added together?", "whats 7 plus 5"]
+    },
+    {
+      "id": "t09",
+      "goal": "Calculate a plain multiplication sum",
+      "canonical": "What is 6 times 4?",
+      "variants": ["what is 6 times 4", "6 times 4?", "6x4", "what's 6 * 4", "how much is 6 times 4", "multiply 6 by 4", "six times four", "tell me 6 times 4", "6 multiplied by 4?", "whats 6 times 4"]
+    },
+    {
+      "id": "t10",
+      "goal": "Ask whether Ana has more apples than Tom",
+      "setup": ["Tom has 8 apples.", "Ana has 4 apples."],
+      "canonical": "Does Ana have more apples than Tom?",
+      "variants": ["does ana have more apples than tom", "does Ana have more apples than Tom?", "has Ana got more apples than Tom", "is it true that Ana has more apples than Tom", "Ana more apples than Tom?", "does ana hav more apples than tom", "who has more apples, Ana or Tom?", "does Ana have a bigger number of apples than Tom", "tell me if Ana has more apples than Tom", "Ana has more apples than Tom, right?"]
+    }
+  ]
+}

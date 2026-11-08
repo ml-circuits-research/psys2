@@ -1,0 +1,33 @@
+{
+  "worlds": {
+    "kids.arith": {
+      "tasks": 10,
+      "attempts": 110,
+      "canonical_success": 10,
+      "canonical_success_rate": 1,
+      "variants": 100,
+      "variant_labels": {
+        "rules-agree": 46,
+        "rules-fail": 27,
+        "rules-differ": 27
+      },
+      "variant_rules_coverage": 0.46,
+      "variants_needing_review": 0,
+      "trainable_records": 110,
+      "by_split": {
+        "dev": 11,
+        "train": 99
+      },
+      "retry": []
+    }
+  },
+  "totals": {
+    "tasks": 10,
+    "attempts": 110,
+    "canonical_success": 10,
+    "variants": 100,
+    "agree": 46,
+    "canonical_success_rate": 1,
+    "variant_rules_coverage": 0.46
+  }
+}
