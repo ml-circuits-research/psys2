@@ -167,3 +167,27 @@ The reviewer will:
 - check that RESULTS.md matches the JSON results.
 
 Then the reviewer appends a new round here with corrections and further tasks.
+
+## Round 1 — priority change: the front-end comes first (reviewer, before the session starts)
+
+This section overrides the priorities in §3. The main goal of this session is the **shared learned front-end**: one encoder shared by all worlds, with the rules still doing the formalization.
+
+New order: T0 → T1 → T2 → T3 (measurement only: unseen rate and oracle; the implementation can wait) → T4 (routing) → **T7 extended (below)** → T5 → T6 → T8 → T9.
+
+### T7 extended — a shared encoder with three heads
+
+Use one encoder (ModernBERT-base first, then DistilBERT for comparison) with three heads trained jointly or one after another. Report each head on its own and the whole chain end to end.
+
+1. **Segmentation head** — token tagging B/I. It splits a message into commands, using the joined multi-command messages built as in T7 step 3. Metric: segment boundary F1.
+2. **World head** — sequence classification. Each segment, plus its context, goes to a world (this is the T4 model; reuse it). Metric: accuracy.
+3. **Simplification head** — edit tagging, not generation. An encoder cannot write free text, so per token predict:
+   - `KEEP`, `DELETE` (fillers, politeness, hesitations: "um", "could you please", "for me");
+   - `REPLACE:<w>`, with `<w>` from a small replacement vocabulary built from the data ("hrs" → hours, "whats" → what is, number words, frequent synonyms that map onto the pattern vocabulary).
+   
+   This is the edit-tagging approach used in grammar correction. Build the training targets by aligning each paraphrase variant with its task's canonical phrasing (or with its rewrite into pattern vocabulary). Keep only alignments that the rules then parse into the target SOP; report how many survive.
+   - Metric: the share of rewritten variants that the rules formalize to the target SOP.
+   - Compare with retrieval + slot transfer (T7 step 1) and with rules alone.
+
+End-to-end table, per world group: rules only · world head + rules · segmentation + world + simplification + rules · full neural per-world (T5, if done).
+
+Also report the size and CPU latency of the shared encoder (int8 ONNX, T8 method). The whole front-end has to stay small enough for the browser.
