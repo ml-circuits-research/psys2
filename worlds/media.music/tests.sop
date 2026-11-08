@@ -1168,7 +1168,7 @@
     session=zt
 
 @t.media.music.r111 core.test
-    input="Not so fast."
+    input="A bit slower."
     expect="Playing again at 72"
     session=zt
 
@@ -1183,7 +1183,7 @@
     session=zt
 
 @t.media.music.r114 core.test
-    input="Its too fast."
+    input="The tempo is too fast."
     expect="the tempo is now"
     session=zt
 
@@ -1278,7 +1278,7 @@
     session=zt
 
 @t.media.music.r133 core.test
-    input="piano"
+    input="On piano."
     expect="I will play on"
     session=zt
 
@@ -1293,7 +1293,7 @@
     session=zt
 
 @t.media.music.r136 core.test
-    input="Go back to piano."
+    input="Go back to the piano sound."
     expect="I will play on"
     session=zt
 

@@ -114,10 +114,10 @@
     example="Make the tree small."
 
 @pat.art.draw.move core.pattern
-    match="[um|uh|hmm|so|like|ok|okay|yeah|well|er|ah|oh|alright|right|so_like|and|then|but|also|now|actually|basically|hey|yo|hi|pls|plz|just]? [um|uh|hmm|so|like|ok|okay|yeah|well|er|ah|oh|alright|right|so_like|and|then|but|also|now|actually|basically|hey|yo|hi|pls|plz|just]? [can_you|could_you|can_u|could_u|will_you|would_you|would_u|will_u|can_you_please|could_you_please|i_want_you_to|i_need_you_to|i_would_like_you_to|you_can|you_should|hey|yo|let_us|just|go_ahead_and|maybe|then|and|would_you_mind|do_you_mind|could_you_possibly|would_you_be_so_kind_as_to|i_was_wondering_if_you_could|is_it_possible_to|is_there_a_way_to|why_dont_you|you_could|please_try_to|feel_free_to|can_i_get|i_d_love_for_you_to|i_d_like_you_to|i_would_love_you_to|we_could|we_should|we_can|maybe_you_could|perhaps_you_could|would_it_be_possible_to|if_you_could|will_you_please|do_me_a_favor_and|be_a_dear_and|just_go_ahead_and|go_on_and|right_now|immediately]? [move|shift|push|drag|bring|put|place|set|slide|carry|send|take|lift|lower|raise|nudge|relocate|position|shove|scoot|haul|plonk|toss|stick|reposition|park|tuck|float|transfer] {p:words(10)} [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
+    match="[um|uh|hmm|so|like|ok|okay|yeah|well|er|ah|oh|alright|right|so_like|and|then|but|also|now|actually|basically|hey|yo|hi|pls|plz|just]? [um|uh|hmm|so|like|ok|okay|yeah|well|er|ah|oh|alright|right|so_like|and|then|but|also|now|actually|basically|hey|yo|hi|pls|plz|just]? [can_you|could_you|can_u|could_u|will_you|would_you|would_u|will_u|can_you_please|could_you_please|i_want_you_to|i_need_you_to|i_would_like_you_to|you_can|you_should|hey|yo|let_us|just|go_ahead_and|maybe|then|and|would_you_mind|do_you_mind|could_you_possibly|would_you_be_so_kind_as_to|i_was_wondering_if_you_could|is_it_possible_to|is_there_a_way_to|why_dont_you|you_could|please_try_to|feel_free_to|can_i_get|i_d_love_for_you_to|i_d_like_you_to|i_would_love_you_to|we_could|we_should|we_can|maybe_you_could|perhaps_you_could|would_it_be_possible_to|if_you_could|will_you_please|do_me_a_favor_and|be_a_dear_and|just_go_ahead_and|go_on_and|right_now|immediately]? [move|shift|push|drag|bring|put|place|set|slide|carry|send|take|lift|lower|raise|nudge|relocate|position|shove|scoot|haul|plonk|toss|stick|reposition|tuck|float|transfer] {p:words(10)} [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
     emit="@{_} core.request action=draw.move arg.phrase=\"{p}\""
     kind=request
-    priority=10
+    priority=9
     example="Move the tree to the left."
     example="Move the sun a bit higher."
     example="Put the cat next to the house."
@@ -187,7 +187,7 @@
     match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [delete|remove|erase|get_rid_of|take_away|rub_out|throw_away|take_out|destroy|wipe_out|trash|scrub_out|clear_away|clear_out|kill|zap|ditch|dump|bin|lose|chuck|sweep_away|rub_off] {p:words(10)} [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
     emit="@{_} core.request action=draw.remove arg.phrase=\"{p}\""
     kind=request
-    priority=9
+    priority=8
     example="Delete the car."
     example="Remove everything except the house."
     example="Remove the grass."
@@ -545,12 +545,19 @@
     example="Let it be night already."
 
 @pat.art.draw.x.recolor.should core.pattern
-    match="[the|my|that|this]? {t:lex.art.draw.targets} [should|must|needs_to|has_to|ought_to|to|goes|go|turns|becomes|in|gets|color|colour|colors|colours|should_be|must_be|needs_to_be|has_to_be|to_be|would_be|could_be|can_be|will_be]? [be|become|turn|look|go|get|like]? [a|an|more|the]? {sh:lex.art.draw.shades?} {c:lex.art.draw.colors} [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
+    match="[the|my|that|this]? {t:lex.art.draw.targets} [should|must|needs_to|has_to|ought_to|to|goes|go|turns|becomes|in|gets|color|colour|colors|colours|should_be|must_be|needs_to_be|has_to_be|to_be|would_be|could_be|can_be|will_be] [be|become|turn|look|go|get|like]? [a|an|more|the]? {sh:lex.art.draw.shades?} {c:lex.art.draw.colors} [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
     emit="@{_} core.request action=draw.recolor arg.t=\"the {t}\" arg.shade={sh} arg.color={c}"
     kind=request
     priority=14
     example="The roof should be green."
     example="House in teal please."
+
+@pat.art.draw.x.recolor.should.bare core.pattern
+    match="[the|my|that|this]? {t:lex.art.draw.targets} [be|become|turn|look|go|get|like]? [a|an|more|the]? {sh:lex.art.draw.shades?} {c:lex.art.draw.colors} [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
+    emit="@{_} core.request action=draw.recolor arg.t=\"the {t}\" arg.shade={sh} arg.color={c}"
+    kind=request
+    priority=9
+    example="The roof green."
 
 @pat.art.draw.x.recolor.verbfirst core.pattern
     match="{c:lex.art.draw.colors} [the|my] {t:lex.art.draw.targets} [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
@@ -563,7 +570,7 @@
     match="{sh:lex.art.draw.shades?} {c:lex.art.draw.colors} {t:lex.art.draw.parts} [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
     emit="@{_} core.request action=draw.recolor arg.t=\"the {t}\" arg.shade={sh} arg.color={c}"
     kind=request
-    priority=14
+    priority=9
     example="Green roof."
 
 @pat.art.draw.x.recolor.want core.pattern
@@ -751,7 +758,7 @@
     match="[the|my]? {k:lex.art.draw.things} {d:lex.art.draw.flipwords} [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
     emit="@{_} core.request action=draw.turn arg.verb=flip arg.phrase=\"the {k} {d}\""
     kind=request
-    priority=14
+    priority=5
     example="Dog the other way."
     example="Car around pls."
 
@@ -856,14 +863,14 @@
     example="Again, the same car."
 
 @pat.art.draw.x.dup.one core.pattern
-    match="[um|uh|hmm|so|like|ok|okay|yeah|well|er|ah|oh|alright|right|so_like|and|then|but|also|now|actually|basically|hey|yo|hi|pls|plz|just]? [um|uh|hmm|so|like|ok|okay|yeah|well|er|ah|oh|alright|right|so_like|and|then|but|also|now|actually|basically|hey|yo|hi|pls|plz|just]? [can_you|could_you|can_u|could_u|will_you|would_you|would_u|will_u|can_you_please|could_you_please|i_want_you_to|i_need_you_to|i_would_like_you_to|you_can|you_should|hey|yo|let_us|just|go_ahead_and|maybe|then|and|would_you_mind|do_you_mind|could_you_possibly|would_you_be_so_kind_as_to|i_was_wondering_if_you_could|is_it_possible_to|is_there_a_way_to|why_dont_you|you_could|please_try_to|feel_free_to|can_i_get|i_d_love_for_you_to|i_d_like_you_to|i_would_love_you_to|we_could|we_should|we_can|maybe_you_could|perhaps_you_could|would_it_be_possible_to|if_you_could|will_you_please|do_me_a_favor_and|be_a_dear_and|just_go_ahead_and|go_on_and|right_now|immediately]? [make|draw|add|give_me|get_me|do|put|gimme|i_want|i_need]? [me]? [one_more|1_more|another|a_second|again|one_again|1_again|1_other|one_other] [of_those|of_these|of_that|of_it|of_them|one|1|like_it|like_that|of_the_same|the_same]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
+    match="[um|uh|hmm|so|like|ok|okay|yeah|well|er|ah|oh|alright|right|so_like|and|then|but|also|now|actually|basically|hey|yo|hi|pls|plz|just]? [um|uh|hmm|so|like|ok|okay|yeah|well|er|ah|oh|alright|right|so_like|and|then|but|also|now|actually|basically|hey|yo|hi|pls|plz|just]? [can_you|could_you|can_u|could_u|will_you|would_you|would_u|will_u|can_you_please|could_you_please|i_want_you_to|i_need_you_to|i_would_like_you_to|you_can|you_should|hey|yo|let_us|just|go_ahead_and|maybe|then|and|would_you_mind|do_you_mind|could_you_possibly|would_you_be_so_kind_as_to|i_was_wondering_if_you_could|is_it_possible_to|is_there_a_way_to|why_dont_you|you_could|please_try_to|feel_free_to|can_i_get|i_d_love_for_you_to|i_d_like_you_to|i_would_love_you_to|we_could|we_should|we_can|maybe_you_could|perhaps_you_could|would_it_be_possible_to|if_you_could|will_you_please|do_me_a_favor_and|be_a_dear_and|just_go_ahead_and|go_on_and|right_now|immediately]? [make|draw|add|give_me|get_me|do|put|gimme|i_want|i_need]? [me]? [one_more|1_more|another|a_second|1_other|one_other] [of_those|of_these|of_that|of_it|of_them|one|1|like_it|like_that|of_the_same|the_same]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
     emit="@{_} core.request action=draw.duplicate arg.t=it"
     kind=request
     priority=13
     example="Make one more of those."
 
 @pat.art.draw.x.dup.copy core.pattern
-    match="[um|uh|hmm|so|like|ok|okay|yeah|well|er|ah|oh|alright|right|so_like|and|then|but|also|now|actually|basically|hey|yo|hi|pls|plz|just]? [um|uh|hmm|so|like|ok|okay|yeah|well|er|ah|oh|alright|right|so_like|and|then|but|also|now|actually|basically|hey|yo|hi|pls|plz|just]? [can_you|could_you|can_u|could_u|will_you|would_you|would_u|will_u|can_you_please|could_you_please|i_want_you_to|i_need_you_to|i_would_like_you_to|you_can|you_should|hey|yo|let_us|just|go_ahead_and|maybe|then|and|would_you_mind|do_you_mind|could_you_possibly|would_you_be_so_kind_as_to|i_was_wondering_if_you_could|is_it_possible_to|is_there_a_way_to|why_dont_you|you_could|please_try_to|feel_free_to|can_i_get|i_d_love_for_you_to|i_d_like_you_to|i_would_love_you_to|we_could|we_should|we_can|maybe_you_could|perhaps_you_could|would_it_be_possible_to|if_you_could|will_you_please|do_me_a_favor_and|be_a_dear_and|just_go_ahead_and|go_on_and|right_now|immediately]? [make|draw|add|give_me|get_me|i_want|i_need|create|do|put|gimme|can_i_have|i_d_like|show_me]? [me]? [a|an|another|1|one|the]? [second|2nd|extra|new|another|spare]? [copy|duplicate|clone|twin|replica|double|copy_of|duplicate_of|clone_of|twin_of|replica_of|double_of] [of|for]? {t:words(5)} [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
+    match="[um|uh|hmm|so|like|ok|okay|yeah|well|er|ah|oh|alright|right|so_like|and|then|but|also|now|actually|basically|hey|yo|hi|pls|plz|just]? [um|uh|hmm|so|like|ok|okay|yeah|well|er|ah|oh|alright|right|so_like|and|then|but|also|now|actually|basically|hey|yo|hi|pls|plz|just]? [can_you|could_you|can_u|could_u|will_you|would_you|would_u|will_u|can_you_please|could_you_please|i_want_you_to|i_need_you_to|i_would_like_you_to|you_can|you_should|hey|yo|let_us|just|go_ahead_and|maybe|then|and|would_you_mind|do_you_mind|could_you_possibly|would_you_be_so_kind_as_to|i_was_wondering_if_you_could|is_it_possible_to|is_there_a_way_to|why_dont_you|you_could|please_try_to|feel_free_to|can_i_get|i_d_love_for_you_to|i_d_like_you_to|i_would_love_you_to|we_could|we_should|we_can|maybe_you_could|perhaps_you_could|would_it_be_possible_to|if_you_could|will_you_please|do_me_a_favor_and|be_a_dear_and|just_go_ahead_and|go_on_and|right_now|immediately]? [make|draw|add|give_me|get_me|i_want|i_need|create|do|put|gimme|can_i_have|i_d_like|show_me]? [me]? [a|an|another|1|one|the]? [second|2nd|extra|new|another|spare]? [copy|duplicate|clone|twin|replica|copy_of|duplicate_of|clone_of|twin_of|replica_of|double_of] [of|for]? {t:words(5)} [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
     emit="@{_} core.request action=draw.duplicate arg.t=\"{t}\""
     kind=request
     priority=12
@@ -1091,15 +1098,22 @@
     match="[um|uh|hmm|so|like|ok|okay|yeah|well|er|ah|oh|alright|right|so_like|and|then|but|also|now|actually|basically|hey|yo|hi|pls|plz|just]? [um|uh|hmm|so|like|ok|okay|yeah|well|er|ah|oh|alright|right|so_like|and|then|but|also|now|actually|basically|hey|yo|hi|pls|plz|just]? [can_you|could_you|can_u|could_u|will_you|would_you|would_u|will_u|can_you_please|could_you_please|i_want_you_to|i_need_you_to|i_would_like_you_to|you_can|you_should|hey|yo|let_us|just|go_ahead_and|maybe|then|and|would_you_mind|do_you_mind|could_you_possibly|would_you_be_so_kind_as_to|i_was_wondering_if_you_could|is_it_possible_to|is_there_a_way_to|why_dont_you|you_could|please_try_to|feel_free_to|can_i_get|i_d_love_for_you_to|i_d_like_you_to|i_would_love_you_to|we_could|we_should|we_can|maybe_you_could|perhaps_you_could|would_it_be_possible_to|if_you_could|will_you_please|do_me_a_favor_and|be_a_dear_and|just_go_ahead_and|go_on_and|right_now|immediately]? [tell_me|say|show_me|give_me|what_is|whats|what|name]? [the]? [color|colour] [of|for] [the|my|that|this]? {t:words(5)} [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
     emit="@{_} core.request action=draw.colorOf arg.t=\"{t}\""
     kind=request
-    priority=14
+    priority=5
     example="Color of my house?"
     example="Tell me the color of the house."
+
+@pat.art.draw.x.colorof.oft core.pattern
+    match="[um|uh|hmm|so|like|ok|okay|yeah|well|er|ah|oh|alright|right|so_like|and|then|but|also|now|actually|basically|hey|yo|hi|pls|plz|just]? [um|uh|hmm|so|like|ok|okay|yeah|well|er|ah|oh|alright|right|so_like|and|then|but|also|now|actually|basically|hey|yo|hi|pls|plz|just]? [can_you|could_you|can_u|could_u|will_you|would_you|would_u|will_u|can_you_please|could_you_please|i_want_you_to|i_need_you_to|i_would_like_you_to|you_can|you_should|hey|yo|let_us|just|go_ahead_and|maybe|then|and|would_you_mind|do_you_mind|could_you_possibly|would_you_be_so_kind_as_to|i_was_wondering_if_you_could|is_it_possible_to|is_there_a_way_to|why_dont_you|you_could|please_try_to|feel_free_to|can_i_get|i_d_love_for_you_to|i_d_like_you_to|i_would_love_you_to|we_could|we_should|we_can|maybe_you_could|perhaps_you_could|would_it_be_possible_to|if_you_could|will_you_please|do_me_a_favor_and|be_a_dear_and|just_go_ahead_and|go_on_and|right_now|immediately]? [tell_me|say|show_me|give_me|what_is|whats|what|name]? [the]? [color|colour] [of|for] [the|my|that|this]? {t:lex.art.draw.targets} [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
+    emit="@{_} core.request action=draw.colorOf arg.t=\"{t}\""
+    kind=request
+    priority=14
+    example="Color of my house?"
 
 @pat.art.draw.x.colorof.noun core.pattern
     match="[the|my]? {t:lex.art.draw.targets} [color|colour|colors|colours] [is_it|now|please]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
     emit="@{_} core.request action=draw.colorOf arg.t=\"{t}\""
     kind=request
-    priority=14
+    priority=9
     example="House color?"
 
 @pat.art.draw.x.colorof.painted core.pattern
@@ -1111,6 +1125,13 @@
 
 @pat.art.draw.x.colorof.is core.pattern
     match="[is|are] [the|my] {t:words(4)} {c:lex.art.draw.colors} [now|right_now|at_the_moment]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
+    emit="@{_} core.request action=draw.colorOf arg.t=\"{t}\""
+    kind=request
+    priority=5
+    example="Is the house red?"
+
+@pat.art.draw.x.colorof.ist core.pattern
+    match="[is|are] [the|my] {t:lex.art.draw.targets} {c:lex.art.draw.colors} [now|right_now|at_the_moment]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
     emit="@{_} core.request action=draw.colorOf arg.t=\"{t}\""
     kind=request
     priority=12
