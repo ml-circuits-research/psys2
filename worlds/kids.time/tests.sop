@@ -942,3 +942,31 @@
     input="Seasons pls."
     expect="The seasons are Spring, Summer, Autumn and Winter."
     doc="list seasons"
+
+@t.time.x21 core.test
+    input="what is the day after tomorrow if today is Monday"
+    expect="Wednesday"
+
+@t.time.x22 core.test
+    input="If today is Friday what day is the day after tomorrow"
+    expect="Sunday"
+
+@t.time.x23 core.test
+    input="what day was the day before yesterday if today is Wednesday"
+    expect="Monday"
+
+@t.time.x24 core.test
+    input="if today is Sunday, what day is tomorrow"
+    expect="Monday"
+
+@t.time.x25 core.test
+    input="what day was yesterday if today is Monday"
+    expect="Sunday"
+
+@t.time.x26 core.test
+    input="what day is it in two days if today is Thursday"
+    expect="Saturday"
+
+@t.time.x27 core.test
+    input="today is Tuesday, what day is the day after tomorrow"
+    expect="Thursday"
