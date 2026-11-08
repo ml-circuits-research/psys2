@@ -15,12 +15,14 @@ import { createInterpreter } from '../interpreter/index.mjs';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs';
 import { splitSentences } from '../formalizer/rules/normalize.mjs';
+import { spellCorrect, spellAlternates, worldVocabulary, spellVocabulary, restrictedSet, ignorable, FUNCTION_WORDS } from '../formalizer/spell.mjs';
+import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs';
 
 export { runWorldTests } from './test-runner.mjs';
 
 const plainSegment = (s) => ({
   text: s.text, span: s.span, isQuestion: s.isQuestion, worlds: s.worlds, routing: s.routing, match: s.match,
-  unparsed: s.unparsed, alternatives: s.alternatives, errors: s.errors, strategy: s.strategy, corrections: s.corrections ?? [], dispatch: s.dispatch ?? null,
+  unparsed: s.unparsed, alternatives: s.alternatives, errors: s.errors, strategy: s.strategy, corrections: s.corrections ?? [], ignored: s.ignored ?? [], dispatch: s.dispatch ?? null,
   wires: s.wires.map((w) => w.id),
 });
 
@@ -99,8 +101,11 @@ const langOf = (r) => (typeof r === 'string' ? r : r?.lang) ?? 'en';
 const textOf = (r) => (typeof r === 'string' ? r : r?.text);
 
 export class DialogSession {
-  constructor(engine, { language = 'auto', formalizer = 'rules' } = {}) {
+  constructor(engine, { language = 'auto', formalizer = 'rules', spell = true, partial = false } = {}) {
     this.engine = engine;
+    /** Leniency (spec 03 sections 7.9 and 7.10): spell-correct unparsed text (on by default), accept the readable part of a message (off by default; the webchat turns it on). */
+    this.spell = spell;
+    this.partial = partial;
     this.language = language;
     /** Preferred formalizer strategy: 'rules' (default) or 'encoder'; per world it falls back to rules (spec 06). */
     this.formalizer = formalizer === 'encoder' ? 'encoder' : 'rules';
@@ -188,10 +193,96 @@ export class DialogSession {
   }
 
   /**
+   * Last resort for a segment nobody parsed (spec 03 sections 7.9 and 7.10): the candidate worlds (open tab, modal, game, recent, router top 3)
+   * are tried in turn with the text spell-corrected against the world's own vocabulary (abbreviations and typos, then one known word swapped
+   * for a close neighbour), and, when `partial` is on, with the longest run of words the rules read. Accepted only when the rules of the
+   * world parse the text completely. Returns the replacement segments, or null.
+   */
+  async _lenient(seg, opts, o, depth = 0) {
+    const { spell, partial } = o;
+    const { set, formalizers } = this.engine;
+    const rules = formalizers.rules;
+    const ctx = this.context();
+    const ids = [ctx.tabWorld, ctx.modalWorld, ctx.gameWorld, ...ctx.recentWorlds, ...(seg.worlds ?? []).slice(0, 3).map((w) => w.id)]
+      .filter((w, i, a) => w && a.indexOf(w) === i && set.get(w)?.patterns?.length).slice(0, 5);
+    ids.push('*');   // finally every world together (a clause of a longer message may belong to a world the whole message did not suggest)
+    const setOf = (world) => (world === '*' ? set : restrictedSet(set, [world]));
+    const vocabOf = (world) => (world === '*' ? spellVocabulary(set) : worldVocabulary(set, world));
+    const parse = async (world, text) => {
+      let res;
+      try { res = await rules.formalize(text, { ...opts, worlds: setOf(world) }); } catch { return null; }
+      return res.segments.length && res.segments.every((x) => !x.unparsed) ? res : null;
+    };
+    const wrap = (res, extra) => res.segments.map((x, k) => ({ ...x, span: seg.span, strategy: 'rules', ...extra, ...(extra.ignored && k > 0 ? { ignored: [] } : {}) }));
+    if (depth > 0) { const direct = await parse('*', seg.text); if (direct) return wrap(direct, { corrections: [] }); }   // a clause on its own
+    const spelled = new Map();
+    if (spell) {
+      for (const world of ids) {
+        const sp = spellCorrect(seg.text, { vocab: vocabOf(world) });
+        spelled.set(world, sp);
+        if (!sp.corrections.length) continue;
+        const res = await parse(world, sp.text);
+        if (res) return wrap(res, { corrections: sp.corrections });
+      }
+      for (const world of ids) {
+        for (const v of spellAlternates(seg.text, { vocab: vocabOf(world) })) {
+          const res = await parse(world, v.text);
+          if (res) return wrap(res, { corrections: v.corrections });
+        }
+      }
+    }
+    if (partial) {
+      // several clauses and none read: every clause on its own (spelling and partial), the unread ones stay "not understood"
+      if (depth === 0) {
+        const parts = [];
+        let from = 0, any = false;
+        const cuts = [...seg.text.matchAll(/,|\b(?:and then|and also|and|then|but|also)\b/gi)];
+        const pieces = [];
+        for (const m of [...cuts, { index: seg.text.length, 0: '' }]) {
+          const text = seg.text.slice(from, m.index);
+          if (/\p{L}/u.test(text)) pieces.push({ text: text.trim(), start: from + (text.length - text.trimStart().length) });
+          from = m.index + m[0].length;
+        }
+        if (pieces.length > 1) {
+          for (const pc of pieces) {
+            const sub = { ...seg, text: pc.text, span: [seg.span[0] + pc.start, seg.span[0] + pc.start + pc.text.length] };
+            const fixed = await this._lenient(sub, opts, o, 1);
+            if (fixed) { any = true; parts.push(...fixed); } else parts.push({ ...sub, unparsed: true, wires: [], match: null, alternatives: [], errors: seg.errors ?? [], corrections: [], ignored: [] });
+          }
+          if (any) return parts;
+        }
+      }
+      for (const world of ids) {
+        const sp = spelled.get(world);
+        const bases = sp?.corrections.length ? [sp, { text: seg.text, corrections: [] }] : [{ text: seg.text, corrections: [] }];
+        for (const base of bases) {
+          const win = await findPartialWindow(base.text, async (slice) => { const r = await parse(world, slice); return r && !changesIntoQuestion(base.text, slice, r.segments.map((x) => x.match?.kind)) ? r : null; },
+            { minCoverage: depth ? 0.5 : 0.25, canIgnore: ignorable(vocabOf(world), spellVocabulary(set)) });
+          if (win) {
+            const used = win.text.toLowerCase();
+            return wrap(win.result, { corrections: base.corrections.filter((c) => used.includes(c.to.toLowerCase())), ignored: win.ignored.map((x) => x.text) });
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  async _withLeniency(res, opts, o) {
+    if (!res.segments.some((x) => x.unparsed) || !(o.spell || o.partial)) return res;
+    const segments = [];
+    for (const seg of res.segments) {
+      const fixed = seg.unparsed ? await this._lenient(seg, opts, o) : null;
+      if (fixed) segments.push(...fixed); else segments.push(seg);
+    }
+    return { ...res, segments, wires: segments.flatMap((x) => x.wires) };
+  }
+
+  /**
    * Formalize with the preferred strategy, per world falling back to the rule formalizer (spec 06).
    * Each returned segment carries `strategy`. Unparsed encoder segments are retried with the rules.
    */
-  async _formalize(english, sid, preferred = this.formalizer) {
+  async _formalize(english, sid, preferred = this.formalizer, lenient = { spell: this.spell, partial: this.partial }) {
     const { set, formalizers } = this.engine;
     const opts = { worlds: set, session: this.isession, source: sid, context: this.context(), router: this.engine.router };
     const rules = formalizers.rules;
@@ -208,16 +299,20 @@ export class DialogSession {
           const shift = seg.span[0];
           for (const s of sub.segments) segments.push({ ...s, span: [s.span[0] + shift, s.span[1] + shift], strategy: 'rules' });
         }
-        return { segments, wires: segments.flatMap((s) => s.wires), dispatch: res.dispatch ?? null };
+        const done = await this._withLeniency({ segments, wires: [] }, opts, lenient);
+        return { segments: done.segments, wires: done.segments.flatMap((s) => s.wires), dispatch: res.dispatch ?? null };
       } catch (e) { encoderError = e?.message ?? String(e); /* the encoder failed: fall through to the rules */ }
     }
     const res = await rules.formalize(english, opts);
     for (const s of res.segments) s.strategy = 'rules';
     if (encoderError) res.encoderError = encoderError;
-    return res;
+    const done = await this._withLeniency(res, opts, lenient);
+    done.segments.forEach((s) => { s.strategy ??= 'rules'; });
+    if (encoderError) done.encoderError = encoderError;
+    return done;
   }
 
-  async send(text, { language, formalizer } = {}) {
+  async send(text, { language, formalizer, spell, partial } = {}) {
     const { engine } = this;
     const { set, interp, translator } = engine;
     const sid = `msg${++this._msg}`;
@@ -235,7 +330,7 @@ export class DialogSession {
     const stateBefore = Object.fromEntries(Object.entries(this.isession.state).map(([k, v]) => [k, JSON.stringify(v)]));
     this.isession.effects = [];
     const icpt = interp.intercept(this.isession, english);   // modal input (spec 07 section 2)
-    const { segments, wires, dispatch, encoderError } = icpt ? { segments: [], wires: [] } : await this._formalize(english, sid, formalizer ?? this.formalizer);
+    const { segments, wires, dispatch, encoderError } = icpt ? { segments: [], wires: [] } : await this._formalize(english, sid, formalizer ?? this.formalizer, { spell: spell ?? this.spell, partial: partial ?? this.partial });
     this._noteWorlds(segments);
     const T = (text, extra = {}) => ({ text, translate: true, ...extra });
     const lines = icpt?.reply ? [[T(icpt.reply)]] : [];   // each line is an array of parts [{ text, translate, quote? }]
@@ -244,7 +339,10 @@ export class DialogSession {
     const ops = [];
     const answerWires = [];
     let followTab = null;   // tab of the last world that gave a supported answer (tab follow, spec 07 section 6)
+    const fillerOnly = (t) => { const w = t.toLowerCase().match(/[\p{L}']+/gu) ?? []; return w.length > 0 && w.every((x) => FUNCTION_WORDS.has(x)); };
     for (const seg of segments) {
+      // a leftover made only of filler words ("also", "and", "please") next to something that was understood is not worth an error
+      if (seg.unparsed && (partial ?? this.partial) && fillerOnly(seg.text) && segments.some((x) => !x.unparsed)) continue;
       if (seg.unparsed) {
         // examples from the world of the open tab first: the router's word-overlap guess can point anywhere
         const routed = seg.worlds.map((w) => w.id), here = Object.entries(this.focus()).find(([, n]) => n >= 3)?.[0];
@@ -312,6 +410,13 @@ export class DialogSession {
         line.push({ text: `"${c.from.toLowerCase()}"`, translate: false, quote: true }, T(' as '), { text: `"${c.to}"`, translate: false, quote: true });
       });
       line.push(T(')'));
+      lines.push(line);
+    }
+    for (const seg of segments) {
+      if (!seg.ignored?.length || seg.unparsed) continue;
+      const line = [T('I understood only part of that: I did not use ')];
+      seg.ignored.forEach((x, k) => { if (k) line.push(T(' and ')); line.push({ text: `"${x}"`, translate: false, quote: true }); });
+      line.push({ text: '.', translate: false });
       lines.push(line);
     }
     // Tab follow: a world with a tab answered, but its tab is hidden: bring it forward (the existing ui.openTab action).

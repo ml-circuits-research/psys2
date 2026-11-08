@@ -33,12 +33,14 @@
   ],
   "dispatcherModel": false,
   "files": {
-    "lib/dialog/dispatch-validate.mjs": "3cfb746db53636d3",
-    "lib/dialog/encoder-dispatch.mjs": "ae52b942b820890d",
-    "lib/dialog/index.mjs": "720f13d203fa1b0c",
+    "lib/dialog/dispatch-validate.mjs": "6963e4598099243e",
+    "lib/dialog/encoder-dispatch.mjs": "3161f72d0d9aa028",
+    "lib/dialog/index.mjs": "30beb00e714064ba",
     "lib/dialog/test-runner.mjs": "3338d6d08f4f428f",
-    "lib/formalizer/dispatcher-runtime.mjs": "9bd4f96310a78371",
+    "lib/formalizer/dispatcher-runtime.mjs": "01710b9865222aa9",
+    "lib/formalizer/edit-tags.mjs": "14423e3fc078f85c",
     "lib/formalizer/index.mjs": "e440aae44ed286c7",
+    "lib/formalizer/partial.mjs": "56ffd2d421d7d508",
     "lib/formalizer/routing.mjs": "4bc7cfec3184105e",
     "lib/formalizer/rules/emit.mjs": "005ccd4894820cdc",
     "lib/formalizer/rules/index.mjs": "9fda149eb229a570",
@@ -48,6 +50,7 @@
     "lib/formalizer/rules/numbers.mjs": "31f3c14f269e71bb",
     "lib/formalizer/rules/router.mjs": "d9e1a4c0ecf3dd3e",
     "lib/formalizer/rules/session.mjs": "5dab30fdb8774a77",
+    "lib/formalizer/spell.mjs": "112d72daba6db094",
     "lib/formalizer/strategy.mjs": "73f854e5a947df21",
     "lib/formalizer/wordpiece.mjs": "89f9cecebbd44627",
     "lib/interpreter/index.mjs": "349e81e9a15b498c",
@@ -121,5 +124,5 @@
     "worlds/ui.shell/datagen.mjs": "b2a3b5850a89ac60",
     "worlds/ui.shell/ops.mjs": "41fb8a42f31b821f"
   },
-  "builtAt": "2026-11-08T11:48:18.633Z"
+  "builtAt": "2026-11-08T11:56:24.446Z"
 }

@@ -16,6 +16,8 @@
  */
 import { formalize, FormSession } from '../formalizer/index.mjs';
 import { serialize } from '../soplang/index.mjs';
+import { spellCorrect, spellAlternates, worldVocabulary, spellVocabulary, ignorable } from '../formalizer/spell.mjs';
+import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs';
 
 /** Default policy; every weight is an option. */
 export const DEFAULT_POLICY = {
@@ -25,12 +27,18 @@ export const DEFAULT_POLICY = {
   useInterpreter: true,       // a candidate must also not be unsupported/error in the interpreter
   segWeight: 1.0,             // weight of the dispatcher's segmentation log-prob
   worldWeight: 1.0,           // weight of the log of the world score of a piece
-  acceptRefused: false,       // a piece the rules parse completely but the interpreter refuses (unsupported/error) counts as valid
+  acceptRefused: true,        // a piece the rules parse completely but the interpreter refuses (unsupported/error: a state reason, Q3) counts as valid
   interpreterPenalty: 3.0,    // log-units subtracted for such a piece (it is still better than an unparsed one)
   unparsedPenalty: 6.0,       // log-units subtracted for a piece that no candidate could validate (about x 0.0025)
   simplifiedPenalty: 0.05,    // log-units subtracted when the winning reading came from the simplified text
   scoreFloor: 1e-6,           // world scores are clamped to at least this probability before the log
   tieEps: 1e-6,               // piece scores closer than this are a tie, broken by the routing policy tiers
+  trySpell: true,             // also try the spell-corrected text (per candidate world, spec 03 section 7.9); accepted only if the rules parse it
+  spellPenalty: 0.1,          // log-units subtracted per correction used
+  acceptPartial: false,       // when no candidate of a piece parses completely, accept the best partial parse (spec 03 section 7.10); the webchat turns it on
+  partialPenalty: 1.5,        // log-units subtracted for any partial parse (always better than unparsedPenalty, so a full parse of any candidate wins)
+  partialUncoveredPenalty: 3.0, // plus this times the fraction of the text that was not understood
+  minCoverage: 0.25,          // a partial parse must understand at least this fraction of the characters
   intersegmentContext: true,  // pieces after the first run in a session where the earlier chosen pieces were committed
 };
 
@@ -118,7 +126,7 @@ export function createDispatchValidator({ engine, policy = {} } = {}) {
     const unparsed = res.segments.length - parsed.length;
     const wires = parsed.flatMap((x) => x.wires);
     const rec = { unparsed, parsed: parsed.length, wires, matchedWorlds: [...new Set(parsed.map((x) => x.match?.worldId).filter(Boolean))], ids, statuses: [], notes: [] };
-    if (unparsed === 0 && parsed.length) {
+    if (parsed.length) {
       for (const seg of parsed) {
         session.isession.add(seg.wires);
         for (const w of seg.wires) {
@@ -131,7 +139,14 @@ export function createDispatchValidator({ engine, policy = {} } = {}) {
       }
     }
     rec.parsedOk = unparsed === 0 && parsed.length > 0;
-    rec.refused = rec.parsedOk && rec.statuses.some((s) => s === 'unsupported' || s === 'error');
+    const refusedAny = rec.statuses.some((s) => s === 'unsupported' || s === 'error');
+    rec.refused = rec.parsedOk && refusedAny;
+    rec.partialRefused = refusedAny;
+    rec.kinds = parsed.map((x) => x.match?.kind).filter(Boolean);
+    const len = (x) => Math.max(0, x.span[1] - x.span[0]);
+    const all = res.segments.reduce((n, x) => n + len(x), 0) || 1;
+    rec.coverage = parsed.reduce((n, x) => n + len(x), 0) / all;
+    rec.ignored = res.segments.filter((x) => x.unparsed).map((x) => ({ text: x.text, start: x.span[0], end: x.span[1] }));
     rec.valid = rec.parsedOk && !rec.refused;
     rec.reason = rec.valid ? 'parsed completely, interpreter ok'
       : parsed.length === 0 ? 'no pattern of the world parses the text'
@@ -148,8 +163,9 @@ export function createDispatchValidator({ engine, policy = {} } = {}) {
     prefix.forEach((p, i) => { try { apply(s, [p.world], p.text, `p${i}`, opts.useInterpreter); } catch { /* an earlier piece that threw is skipped */ } });
     let rec;
     try { rec = apply(s, [world], text, 'cand', opts.useInterpreter); }
-    catch (e) { rec = { unparsed: 1, parsed: 0, wires: [], matchedWorlds: [], statuses: [], notes: [e.message], valid: false, reason: `exception: ${e.message}` }; }
-    const out = { valid: rec.valid, refused: !!rec.refused, reason: rec.reason, unparsed: rec.unparsed, parsed: rec.parsed, wires: rec.wires, matchedWorlds: rec.matchedWorlds, statuses: rec.statuses };
+    catch (e) { rec = { unparsed: 1, parsed: 0, wires: [], matchedWorlds: [], statuses: [], notes: [e.message], valid: false, reason: `exception: ${e.message}`, coverage: 0, ignored: [] }; }
+    const out = { valid: rec.valid, refused: !!rec.refused, reason: rec.reason, unparsed: rec.unparsed, parsed: rec.parsed, wires: rec.wires, matchedWorlds: rec.matchedWorlds, statuses: rec.statuses,
+      partialRefused: !!rec.partialRefused, coverage: rec.coverage ?? 0, ignored: rec.ignored ?? [], kinds: rec.kinds ?? [] };
     cache.set(key, out);
     return out;
   };
@@ -173,16 +189,62 @@ export function createDispatchValidator({ engine, policy = {} } = {}) {
     for (const [pi, piece] of seg.segments.entries()) {
       const attempts = [];
       const worlds = piece.worlds.slice(0, o.maxWorlds);
-      const variants = [{ kind: 'original', text: piece.text }];
-      if (o.trySimplified && piece.simplified) variants.push({ kind: 'simplified', text: piece.simplified });
+      const ctxPrefix = o.intersegmentContext ? prefix : [];
+      const logpOf = (w) => Math.log(Math.max(w.score, o.scoreFloor));
+      const accepts = (r) => r.valid || (o.acceptRefused && r.refused);
+      const spelled = new Map();   // world -> { text, corrections } (spec 03 section 7.9)
+      const refs = [];             // attempts with their check records, for the partial pass
+      // full parses: per world, original -> spell-corrected -> simplified
       for (const [rank, w] of worlds.entries()) {
+        const variants = [{ kind: 'original', text: piece.text, corrections: [] }];
+        if (o.trySpell) {
+          let sp = null;
+          try { sp = spellCorrect(piece.text, { vocab: worldVocabulary(engine.set, w.world) }); } catch { sp = null; }
+          spelled.set(w.world, sp);
+          if (sp?.corrections.length) variants.push({ kind: 'spell', text: sp.text, corrections: sp.corrections });
+        }
+        if (o.trySimplified && piece.simplified) variants.push({ kind: 'simplified', text: piece.simplified, corrections: [] });
         for (const v of variants) {
-          const ctxPrefix = o.intersegmentContext ? prefix : [];
           const r = await check(pred.context, ctxPrefix, w.world, v.text, o);
-          const logp = Math.log(Math.max(w.score, o.scoreFloor));
-          const accepted = r.valid || (o.acceptRefused && r.refused);
-          const score = o.worldWeight * logp - (v.kind === 'simplified' ? o.simplifiedPenalty : 0) - (r.valid ? 0 : r.refused && o.acceptRefused ? o.interpreterPenalty : o.unparsedPenalty);
-          attempts.push({ world: w.world, rank: rank + 1, worldScore: w.score, variant: v.kind, text: v.text, valid: accepted, refused: r.refused, reason: r.reason, unparsed: r.unparsed, matchedWorlds: r.matchedWorlds, statuses: r.statuses, score, wires: r.wires });
+          const score = o.worldWeight * logpOf(w) - (v.kind === 'simplified' ? o.simplifiedPenalty : 0) - o.spellPenalty * v.corrections.length
+            - (r.valid ? 0 : r.refused && o.acceptRefused ? o.interpreterPenalty : o.unparsedPenalty);
+          const at = { world: w.world, rank: rank + 1, worldScore: w.score, variant: v.kind, text: v.text, valid: accepts(r), refused: r.refused, reason: r.reason, unparsed: r.unparsed, matchedWorlds: r.matchedWorlds, statuses: r.statuses, score, wires: r.wires, corrections: v.corrections, partial: null };
+          attempts.push(at); refs.push([at, r, w]);
+        }
+      }
+      // second chance: one known word changed to a close neighbour ("yes" -> "eyes"); only when nothing parses yet, kept only if the rules parse it
+      if (o.trySpell && !attempts.some((a) => a.valid)) {
+        for (const [rank, w] of worlds.entries()) {
+          let alts = [];
+          try { alts = spellAlternates(piece.text, { vocab: worldVocabulary(engine.set, w.world) }); } catch { alts = []; }
+          for (const v of alts) {
+            const r = await check(pred.context, ctxPrefix, w.world, v.text, o);
+            const score = o.worldWeight * logpOf(w) - o.spellPenalty * 2 - (r.valid ? 0 : r.refused && o.acceptRefused ? o.interpreterPenalty : o.unparsedPenalty);
+            const at = { world: w.world, rank: rank + 1, worldScore: w.score, variant: 'spell', text: v.text, valid: accepts(r), refused: r.refused, reason: r.reason, unparsed: r.unparsed, matchedWorlds: r.matchedWorlds, statuses: r.statuses, score, wires: r.wires, corrections: v.corrections, partial: null };
+            if (at.valid || (o.acceptPartial && r.parsed && r.unparsed)) { attempts.push(at); refs.push([at, r, w]); }
+          }
+        }
+      }
+      // partial parses (only when no candidate parses completely): first the clauses the rules read, then the longest run of words they read
+      if (o.acceptPartial && !attempts.some((a) => a.valid)) {
+        const partialScore = (w, corr, coverage) => o.worldWeight * logpOf(w) - o.spellPenalty * corr.length - o.partialPenalty - o.partialUncoveredPenalty * (1 - coverage);
+        for (const [at, r, w] of refs) {
+          if (at.variant === "simplified" || !r.parsed || !r.unparsed || r.coverage < o.minCoverage || (r.partialRefused && !o.acceptRefused)) continue;
+          attempts.push({ ...at, variant: 'partial', baseVariant: at.variant, valid: true, reason: `partial: ${Math.round(r.coverage * 100)}% understood`, score: partialScore(w, at.corrections, r.coverage), partial: { ignored: r.ignored, coverage: r.coverage, window: false } });
+        }
+        if (!attempts.some((a) => a.valid)) {
+          for (const [rank, w] of worlds.entries()) {
+            const sp = spelled.get(w.world);
+            const bases = sp?.corrections.length ? [{ text: sp.text, corrections: sp.corrections }, { text: piece.text, corrections: [] }] : [{ text: piece.text, corrections: [] }];
+            for (const base of bases) {
+              const win = await findPartialWindow(base.text, async (slice) => { const r = await check(pred.context, ctxPrefix, w.world, slice, o); return accepts(r) && !changesIntoQuestion(base.text, slice, r.kinds) ? r : null; }, { minCoverage: o.minCoverage, canIgnore: ignorable(worldVocabulary(engine.set, w.world), spellVocabulary(engine.set)) });
+              if (!win) continue;
+              const r = win.result;
+              attempts.push({ world: w.world, rank: rank + 1, worldScore: w.score, variant: 'partial', baseVariant: base.corrections.length ? 'spell' : 'original', text: win.text, valid: true, refused: r.refused, reason: `partial: ${Math.round(win.coverage * 100)}% understood`, unparsed: 0, matchedWorlds: r.matchedWorlds, statuses: r.statuses,
+                score: partialScore(w, base.corrections, win.coverage) - (r.valid ? 0 : o.interpreterPenalty), wires: r.wires, corrections: base.corrections, partial: { ignored: win.ignored, coverage: win.coverage, window: true } });
+              break;
+            }
+          }
         }
       }
       // best attempt: highest score; ties (within tieEps) between different worlds go to the routing policy
@@ -203,7 +265,7 @@ export function createDispatchValidator({ engine, policy = {} } = {}) {
       total += pieceScore;
       if (best?.valid) prefix.push({ world: best.world, text: best.text });
       pieces.push({ index: pi, start: piece.start, end: piece.end, text: piece.text, simplified: piece.simplified ?? null, attempts: attempts.map(({ wires, ...a }) => ({ ...a, wires: wires.length })),
-        chosen: best ? { world: best.world, rank: best.rank, variant: best.variant, text: best.text, valid: best.valid, score: best.score, wires: best.wires } : null, valid: !!best?.valid, tie });
+        chosen: best ? { world: best.world, rank: best.rank, variant: best.variant, text: best.text, valid: best.valid, score: best.score, wires: best.wires, corrections: best.corrections, partial: best.partial } : null, valid: !!best?.valid, tie });
     }
     return { index: seg.index, dispatcherScore: seg.score, score: total, valid: pieces.length > 0 && pieces.every((p) => p.valid), nInvalid: pieces.filter((p) => !p.valid).length, pieces };
   };
@@ -219,7 +281,7 @@ export function createDispatchValidator({ engine, policy = {} } = {}) {
     const ranked = [...evals].sort((a, b) => b.score - a.score || a.index - b.index);
     const winner = ranked[0] ?? null;
     const understood = !!winner?.valid;
-    const produced = winner ? winner.pieces.filter((p) => p.valid).map((p) => ({ start: p.start, end: p.end, text: p.text, world: p.chosen.world, textUsed: p.chosen.variant, usedText: p.chosen.text, wires: p.chosen.wires })) : [];
+    const produced = winner ? winner.pieces.filter((p) => p.valid).map((p) => ({ start: p.start, end: p.end, text: p.text, world: p.chosen.world, textUsed: p.chosen.variant, usedText: p.chosen.text, corrections: p.chosen.corrections ?? [], partial: p.chosen.partial ?? null, wires: p.chosen.wires })) : [];
     const top = evals[0];
     let why;
     if (!winner) why = 'no segmentation was proposed';
@@ -232,6 +294,8 @@ export function createDispatchValidator({ engine, policy = {} } = {}) {
         const c = p.chosen;
         if (c.rank > 1) parts.push(`piece "${clip(p.text, 40)}": candidate world ${c.rank} (${c.world}) recovered after ${p.attempts.filter((a) => a.rank < c.rank && !a.valid).map((a) => a.world).filter((x, i, arr) => arr.indexOf(x) === i).join(', ')} failed`);
         if (c.variant === 'simplified') parts.push(`piece "${clip(p.text, 40)}": only the simplified text validates`);
+        if (c.corrections?.length) parts.push(`piece "${clip(p.text, 40)}": read after correcting ${c.corrections.map((x) => `"${x.from}" to "${x.to}"`).join(', ')}`);
+        if (c.partial) parts.push(`piece "${clip(p.text, 40)}": partial understanding (${Math.round(c.partial.coverage * 100)}%), ignored ${c.partial.ignored.map((x) => `"${clip(x.text, 30)}"`).join(', ')}`);
         if (p.tie) parts.push(`piece "${clip(p.text, 40)}": tie between ${p.tie.worlds.join(', ')} broken by routing policy${p.tie.decision ? ` (tier ${p.tie.decision.tier} ${p.tie.decision.tierName}: ${p.tie.decision.reason})` : ''} -> ${p.tie.winner}`);
       }
       why = parts.join('; ');
@@ -247,7 +311,7 @@ export function createDispatchValidator({ engine, policy = {} } = {}) {
     }
     const sopOf = (wires) => serialize(wires.filter((w) => w.type !== 'core.agent'));
     return {
-      id: pred.id, text: pred.text, status: understood ? 'understood' : 'not_understood',
+      id: pred.id, text: pred.text, status: understood ? 'understood' : 'not_understood', partial: produced.some((p) => p.partial),
       winner: winner ? { index: winner.index, score: winner.score } : null,
       produced: produced.map((p) => ({ ...p, sop: sopOf(p.wires) })),
       notUnderstood, why,

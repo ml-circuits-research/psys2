@@ -11,6 +11,10 @@ function kv(rows) {
 }
 const code = (text) => h('pre', { class: 'p2-code' }, h('code', {}, text));
 
+const variantNote = (a) => (a.variant === 'spell' ? `spelling: ${(a.corrections ?? []).map((c) => `${c.to} ← ${c.from}`).join(', ')}`
+  : a.variant === 'partial' ? `partial ${Math.round((a.partial?.coverage ?? 0) * 100)}%, ignored ${(a.partial?.ignored ?? []).map((x) => `“${x.text}”`).join(', ') || 'nothing'}${a.corrections?.length ? `, spelling: ${a.corrections.map((c) => `${c.to} ← ${c.from}`).join(', ')}` : ''}`
+  : a.variant);
+
 /**
  * @param reply  the session.send() result
  * @param extra  { translation: usage[], effects: [{name,args,ok,detail}], serializeWires(wires) -> string, formalizer }
@@ -40,6 +44,8 @@ export function renderTrace(reply, extra = {}) {
       ['Matched pattern', s.match?.patternId],
       ['Slots', s.match?.slots ? Object.entries(s.match.slots).map(([k, v]) => `${k}=${v.text ?? v.value ?? ''}`).join(', ') : undefined],
       ['Formalizer', s.formalizer ?? extra.formalizer ?? 'rules'],
+      ['Corrections', s.corrections?.length ? s.corrections.map((c) => `${c.to} ← ${c.from}`).join(', ') : undefined],
+      ['Ignored (not understood)', s.ignored?.length ? s.ignored.map((x) => `“${x}”`).join(', ') : undefined],
       ['Alternatives', s.alternatives?.length ? s.alternatives.map((a) => a.worldId).join(', ') : undefined],
       ['Wires', s.wires?.join(', ') || undefined],
       ['Errors', s.errors?.length ? json(s.errors) : undefined],
@@ -50,7 +56,7 @@ export function renderTrace(reply, extra = {}) {
   if (d) {
     const pct = (x) => `${Math.round(x * 100)}%`;
     const clip = (x, n = 60) => (x.length > n ? `${x.slice(0, n - 1)}…` : x);
-    root.append(section('Dispatcher (encoder)', h('p', {}, h('span', { class: `p2-tag ${d.status === 'understood' ? 'is-supported' : 'is-warn'}` }, d.status === 'understood' ? 'validated' : 'not understood'),
+    root.append(section('Dispatcher (encoder)', h('p', {}, h('span', { class: `p2-tag ${d.status === 'understood' ? 'is-supported' : 'is-warn'}` }, d.status === 'understood' ? (d.partial ? 'partly understood' : 'validated') : 'not understood'),
       ` model ${d.modelMs} ms, with validation ${d.totalMs} ms; context: tab ${d.context?.tab ?? 'none'}, recent ${(d.context?.recent_worlds ?? []).join(', ') || 'none'}`),
     h('p', { class: 'p2-why' }, h('strong', {}, 'Why: '), d.why),
     h('ol', { class: 'p2-segs' }, (d.segmentations ?? []).map((g) => h('li', { class: g.index === d.winnerIndex ? 'is-winner' : '' },
@@ -59,7 +65,7 @@ export function renderTrace(reply, extra = {}) {
       h('ul', { class: 'p2-list' }, g.pieces.map((p) => h('li', {}, h('q', {}, clip(p.text)), ' ',
         p.simplified ? h('span', { class: 'p2-muted' }, 'rephrased: ', h('q', {}, clip(p.simplified)), p.chosen?.variant === 'simplified' ? h('span', { class: 'p2-tag is-supported' }, 'used') : ' (not used)', ' ') : null,
         p.valid && p.chosen ? h('span', { class: 'p2-ok' }, `→ ${p.chosen.world}${p.chosen.rank > 1 ? ` (candidate ${p.chosen.rank})` : ''}`) : h('span', { class: 'p2-bad' }, 'not validated'),
-        h('div', { class: 'p2-muted' }, p.attempts.filter((a) => a.variant === 'original' || a.variant === 'simplified').map((a) => `${a.variant === 'simplified' ? 'rephrased ' : ''}${a.world} ${pct(a.worldScore)} ${a.valid ? (a.refused ? 'accepted (refused by state)' : 'validated') : `rejected: ${a.reason}`}`).join(' | '))))))))));
+        h('div', { class: 'p2-muted' }, p.attempts.filter((a) => a.variant === 'original' || a.variant === 'simplified' || a.valid).map((a) => `${a.world} ${pct(a.worldScore)} ${a.variant === 'original' ? '' : `[${variantNote(a)}] `}${a.valid ? (a.refused ? 'accepted (refused by state)' : 'validated') : `rejected: ${a.reason}`}`).join(' | '))))))))));
   }
 
   let sop = '';

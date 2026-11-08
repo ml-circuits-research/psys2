@@ -12,6 +12,7 @@
  *   B  top3+validation     beam 4, top-3 worlds, original text, rules + interpreter
  *   C  top3+simplify+val   as B plus the simplified text of each piece (equals B when no piece has `simplified`)
  *   Bni                    as B without the interpreter check (shows what the interpreter check costs or gains)
+ *   Bs, Bp                 Br plus the spell-corrected candidate; plus partial understanding (the library defaults of acceptRefused and trySpell are on, A..Br pin them off)
  *   Br                     as B, but a piece the rules parse completely and the interpreter refuses (unsupported/error, e.g. an illegal chess move) still counts as understood, with a smaller penalty (policy acceptRefused)
  *   R  rules only          the current router: the whole message goes to a dialog session over all worlds (no dispatcher), same tab/context; the comparison column of the headline
  * Headline (user-perceived understanding): for every positive scored message, one of three outcomes per mode: `right` (exact SOP), `fallback` (the pipeline says
@@ -44,12 +45,16 @@ const DATASET = join(REPO, 'training/dataset');
 const CHUNK = 40;
 const REALISTIC = ['paraphrase', 'heldout', 'multi-command'];
 
+// The policy defaults are now lenient (acceptRefused on, spelling candidates on); A, B, C and Bni keep the strict, spelling-free definitions so earlier results stay comparable.
+const STRICT = { acceptRefused: false, trySpell: false };
 export const MODES = {
-  A: { maxSegmentations: 1, maxWorlds: 1, trySimplified: false, useInterpreter: false },
-  B: { trySimplified: false },
-  C: {},
-  Bni: { trySimplified: false, useInterpreter: false },
-  Br: { trySimplified: false, acceptRefused: true },
+  A: { ...STRICT, maxSegmentations: 1, maxWorlds: 1, trySimplified: false, useInterpreter: false },
+  B: { ...STRICT, trySimplified: false },
+  C: { ...STRICT },
+  Bni: { ...STRICT, trySimplified: false, useInterpreter: false },
+  Br: { ...STRICT, trySimplified: false, acceptRefused: true },
+  Bs: { trySimplified: false, acceptRefused: true, trySpell: true },                          // Br plus the spell-corrected candidate (spec 03 section 7.9)
+  Bp: { trySimplified: false, acceptRefused: true, trySpell: true, acceptPartial: true },    // Bs plus partial understanding (spec 03 section 7.10)
 };
 
 // ---- worker side ---------------------------------------------------------------------------------------------------
@@ -106,13 +111,13 @@ function evalRecord(env, pred, gold, o) {
         : out[m].status === 'understood' && JSON.stringify(circuits(out[m].produced, legends)) === JSON.stringify(target);
       cat[m] = ok[m] ? 'right' : out[m].status === 'understood' ? 'wrong' : 'fallback';
     }
-    if (!scored) { ok.R = null; cat.R = null; ok.Bf = ok.Brf = null; cat.Bf = cat.Brf = null; }
+    if (!scored) { ok.R = null; cat.R = null; for (const f of ['Bf', 'Brf', 'Bsf', 'Bpf']) { ok[f] = null; cat[f] = null; } }
     else {
       const understood = rules.unparsed === 0 && rules.parsed > 0;
       ok.R = gold.negative ? !understood : understood && JSON.stringify(rules.sop) === JSON.stringify(target);
       cat.R = ok.R ? 'right' : understood ? 'wrong' : 'fallback';
       // full pipeline: when the validator does not understand the message, the dialog engine retries with the rules over all worlds (spec 03 section 7.7); approximated on the whole message
-      for (const [f, m] of [['Bf', 'B'], ['Brf', 'Br']]) {
+      for (const [f, m] of [['Bf', 'B'], ['Brf', 'Br'], ['Bsf', 'Bs'], ['Bpf', 'Bp']]) {
         if (out[m].status === 'understood') { ok[f] = ok[m]; cat[f] = cat[m]; } else { ok[f] = ok.R; cat[f] = cat.R; }
       }
     }
@@ -220,7 +225,7 @@ async function runPool(tasks, jobs) {
 }
 
 const pct = (a, n) => (n ? Number((a / n).toFixed(4)) : null);
-const MODE_KEYS = [...Object.keys(MODES), 'R', 'Bf', 'Brf'];
+const MODE_KEYS = [...Object.keys(MODES), 'R', 'Bf', 'Brf', 'Bsf', 'Bpf'];
 const CATS = ['right', 'fallback', 'wrong'];
 
 function cellOf(rows) {
@@ -347,7 +352,7 @@ async function main() {
     status: f.status, produced: f.produced.map((p) => `${p.world} [${p.textUsed}]: ${p.text} => ${compact(p.sop)}`), rules_only: f.rules_only.cat, why: f.why,
   });
   // headline: user-perceived understanding of the realistic messages (right / fallback / wrong), rules only vs the pipeline
-  const hl = (rs) => { const c = cellOf(rs); return { n: c.scored_pos, ...Object.fromEntries(['R', 'B', 'Br', 'Bf', 'Brf'].map((m) => [m, c.understanding[m]])) }; };
+  const hl = (rs) => { const c = cellOf(rs); return { n: c.scored_pos, ...Object.fromEntries(['R', 'B', 'Br', 'Bs', 'Bp', 'Bf', 'Brf', 'Bsf', 'Bpf'].map((m) => [m, c.understanding[m]])) }; };
   const realRows = rows.filter((r) => REALISTIC.includes(r.source) && !r.negative);
   const headline = {
     definition: 'share of realistic positive messages (paraphrase test, held-out, multi-command) whose final result is: right = exact SOP, fallback = "not understood / Did you mean ...?", wrong = understood with another SOP. R = rules only (current router), B = dispatcher top-3 + validation (strict), Br = same with acceptRefused (lead policy); Bf / Brf = B / Br followed by the engine fallback (a not-understood message is retried with the rules over all worlds = R; whole-message approximation of the per-piece retry of spec 03 section 7.7)',
@@ -383,14 +388,14 @@ async function main() {
   }
   const f = (x) => (x == null ? '   -  ' : (100 * x).toFixed(1).padStart(5) + '%');
   console.log(`records ${items.length} (no gold ${noGold}, duplicates ${dup}, bad lines ${bad}, errors ${errors.length})`);
-  console.log(`${'group'.padEnd(24)} ${'n'.padStart(5)}  seg-beam w-top1 w-top3 |    A      B      C     Bni    Br     R     Bf    Brf | Br: recov rej recd`);
+  console.log(`${'group'.padEnd(24)} ${'n'.padStart(5)}  seg-beam w-top1 w-top3 |    A      B      C     Bni    Br     Bs     Bp     R     Bf    Brf    Bsf    Bpf | Br: recov rej recd`);
   const line = (k, c) => console.log(`${k.padEnd(24)} ${String(c.n).padStart(5)}  ${f(c.oracle.segmentation_in_beam)} ${f(c.oracle.world_top1)} ${f(c.oracle.world_top3)} | ${MODE_KEYS.map((m) => f(c.exact_sop[m])).join(' ')} | ${String(c.recovery.Br.recoverable).padStart(4)} ${String(c.recovery.Br.wrong_top1_rejected).padStart(3)} ${String(c.recovery.Br.recovered_exact).padStart(4)}`);
   line('ALL', report.totals);
   for (const [g, c] of Object.entries(byGroup)) line(g, c);
   console.log('by source:'); for (const [s, c] of Object.entries(bySource)) line(s, c);
   console.log('failure classes (Br):', JSON.stringify(report.failure_classes));
-  console.log('headline (realistic, right/fallback/wrong): ' + ['R', 'B', 'Br', 'Bf', 'Brf'].map((m) => `${m} ${['right', 'fallback', 'wrong'].map((k) => f(headline.realistic_all[m][k]).trim()).join('/')}`).join('  '));
-  for (const [g, c] of Object.entries(headline.by_group)) console.log(`  ${g.padEnd(24)} n=${String(c.n).padStart(5)} ` + ['R', 'B', 'Br', 'Bf', 'Brf'].map((m) => `${m} ${['right', 'fallback', 'wrong'].map((k) => f(c[m][k]).trim()).join('/')}`).join('  '));
+  console.log('headline (realistic, right/fallback/wrong): ' + ['R', 'B', 'Br', 'Bs', 'Bp', 'Bf', 'Brf', 'Bsf', 'Bpf'].map((m) => `${m} ${['right', 'fallback', 'wrong'].map((k) => f(headline.realistic_all[m][k]).trim()).join('/')}`).join('  '));
+  for (const [g, c] of Object.entries(headline.by_group)) console.log(`  ${g.padEnd(24)} n=${String(c.n).padStart(5)} ` + ['R', 'B', 'Br', 'Bs', 'Bp', 'Bf', 'Brf', 'Bsf', 'Bpf'].map((m) => `${m} ${['right', 'fallback', 'wrong'].map((k) => f(c[m][k]).trim()).join('/')}`).join('  '));
   for (const e of errors.slice(0, 3)) console.error(e);
   console.error(`wall time ${((Date.now() - t0) / 1000).toFixed(1)} s, ${jobs} workers`);
 }

@@ -80,15 +80,80 @@ test('a tie between worlds is broken by the routing policy tiers (active tab)', 
   assert.match(onMusic.why, /broken by routing policy/);
 });
 
-test('a piece the rules parse but the interpreter refuses is invalid unless acceptRefused', async () => {
+test('a piece the rules parse but the interpreter refuses is accepted by default and invalid with acceptRefused:false', async () => {
   const t = 'Move the pawn on d two to a3.';   // parsed by games.chess, refused as an illegal move
   const pred = msg(t, [{ score: -0.1, segments: [piece(t, W(['games.chess', 0.9]))] }]);
-  const strict = await validator.validate(pred);
-  assert.equal(strict.status, 'not_understood');
-  assert.equal(strict.trace.segmentations[0].pieces[0].attempts[0].refused, true);
-  const lenient = await validator.validate(pred, { acceptRefused: true });
+  assert.equal(DEFAULT_POLICY.acceptRefused, true);
+  const lenient = await validator.validate(pred);
   assert.equal(lenient.status, 'understood');
   assert.equal(lenient.produced[0].world, 'games.chess');
+  const strict = await validator.validate(pred, { acceptRefused: false });
+  assert.equal(strict.status, 'not_understood');
+  assert.equal(strict.trace.segmentations[0].pieces[0].attempts[0].refused, true);
+});
+
+test('candidate order per world: original, then spell-corrected, then simplified', async () => {
+  const t = 'whats seven times six pls';
+  const r = await validator.validate(msg(t, [{ score: -0.1, segments: [piece(t, W(['kids.arith', 0.9]), { simplified: 'what is seven times six' })] }]));
+  const att = r.trace.segmentations[0].pieces[0].attempts.map((a) => a.variant);
+  assert.deepEqual(att, ['original', 'spell', 'simplified']);
+});
+
+test('a spell-corrected text is accepted only when the rules parse it', async () => {
+  const good = 'whats seven times six';
+  const r = await validator.validate(msg(good, [{ score: -0.1, segments: [piece(good, W(['kids.arith', 0.9]))] }]));
+  assert.equal(r.status, 'understood');
+  const c = r.produced[0];
+  assert.equal(c.textUsed, 'spell');
+  assert.deepEqual(c.corrections.map((x) => [x.from, x.to]), [['whats', 'what is']]);
+  assert.match(r.why, /after correcting "whats" to "what is"/);
+  const bad = 'blorp frazzle wibble';
+  const r2 = await validator.validate(msg(bad, [{ score: -0.1, segments: [piece(bad, W(['kids.arith', 0.9]))] }]));
+  assert.equal(r2.status, 'not_understood');
+  const off = await validator.validate(msg(good, [{ score: -0.1, segments: [piece(good, W(['kids.arith', 0.9]))] }]), { trySpell: false });
+  assert.equal(off.status, 'not_understood');
+});
+
+test('the original text wins when it already parses (no spell candidate is needed)', async () => {
+  const t = 'What is 20 divided by 4';
+  const r = await validator.validate(msg(t, [{ score: -0.1, segments: [piece(t, W(['kids.arith', 0.9]))] }]));
+  assert.equal(r.produced[0].textUsed, 'original');
+  assert.deepEqual(r.produced[0].corrections, []);
+});
+
+test('partial understanding: off by default, on accepts the readable run and reports what was ignored', async () => {
+  const t = 'hey could you tell me what is seven times six sweetie';
+  const pred = msg(t, [{ score: -0.1, segments: [piece(t, W(['kids.arith', 0.9]))] }]);
+  const off = await validator.validate(pred);
+  assert.equal(off.status, 'not_understood');
+  const on = await validator.validate(pred, { acceptPartial: true });
+  assert.equal(on.status, 'understood');
+  assert.equal(on.partial, true);
+  const p = on.produced[0];
+  assert.equal(p.textUsed, 'partial');
+  assert.match(p.usedText, /seven times six/);
+  assert.ok(p.partial.ignored.length >= 1);
+  assert.match(on.why, /partial understanding/);
+});
+
+test('partial understanding never ignores a negation and never beats a full parse', async () => {
+  const t = 'hey do not tell me what is seven times six';
+  const r = await validator.validate(msg(t, [{ score: -0.1, segments: [piece(t, W(['kids.arith', 0.9]))] }]), { acceptPartial: true });
+  const used = r.produced[0]?.usedText ?? '';
+  assert.ok(!r.produced.length || /not/.test(used), used);
+  const full = 'What is 20 divided by 4';
+  const r2 = await validator.validate(msg(full, [{ score: -0.1, segments: [piece(full, W(['games.chess', 0.6], ['kids.arith', 0.1]))] }]), { acceptPartial: true });
+  assert.equal(r2.produced[0].world, 'kids.arith');
+  assert.equal(r2.produced[0].partial, null);
+});
+
+test('multi-command: the pieces that validate are produced, the others are reported', async () => {
+  const a = 'What is 20 divided by 4.', b = 'blorp frazzle wibble';
+  const t = `${a} ${b}`;
+  const r = await validator.validate(msg(t, [{ score: -0.1, segments: [piece(a, W(['kids.arith', 0.9])), piece(b, W(['kids.arith', 0.5]), {}, a.length + 1)] }]), { acceptPartial: true });
+  assert.equal(r.status, 'not_understood');
+  assert.deepEqual(winnerWorlds(r), ['kids.arith']);
+  assert.equal(r.notUnderstood.pieces[0].text, b);
 });
 
 test('scores follow the documented formula and the trace lists every candidate', async () => {

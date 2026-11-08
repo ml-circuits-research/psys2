@@ -32,7 +32,7 @@ function restrictedSet(set, ids) {
   return sub;
 }
 
-export function createDispatcherFormalizer({ load, getPolicy = () => ENCODER_DEFAULT_POLICY, historyLimit = 6, now = () => Date.now() } = {}) {
+export function createDispatcherFormalizer({ load, getPolicy = () => ENCODER_DEFAULT_POLICY, historyLimit = 6, now = () => Date.now(), waitForModel = true } = {}) {
   let engine = null;
   let validator = null;
   let runtime = null;
@@ -67,7 +67,9 @@ export function createDispatcherFormalizer({ load, getPolicy = () => ENCODER_DEF
     onStatus(f) { listeners.add(f); f(status); return () => listeners.delete(f); },
     prepare,
     retry() { if (status.state === 'error') { loading = null; setStatus({ state: 'idle', message: '' }); } },
-    available: () => typeof load === 'function' && status.state !== 'error',
+    ready: () => status.state === 'ready',
+    /** With `waitForModel: false` (the webchat loads the model in the background) the strategy is unavailable, so the rules answer, until the model is ready. */
+    available: () => typeof load === 'function' && status.state !== 'error' && (waitForModel || status.state === 'ready'),
     supports: (world) => (runtime ? runtime.worlds.includes(world?.id) : true),
 
     async formalize(text, { worlds: set, session, source = 'input', context } = {}) {
@@ -88,13 +90,16 @@ export function createDispatcherFormalizer({ load, getPolicy = () => ENCODER_DEF
       for (const piece of winner?.pieces ?? []) {
         const cands = piece.attempts.filter((a, i, arr) => arr.findIndex((b) => b.world === a.world) === i).map((a) => ({ id: a.world, score: Number(a.worldScore.toFixed(4)) }));
         const chosen = piece.valid ? piece.chosen : null;
-        const info = chosen ? { world: chosen.world, rank: chosen.rank, variant: chosen.variant, worldScore: piece.attempts.find((a) => a.world === chosen.world)?.worldScore ?? null } : null;
+        const info = chosen ? { world: chosen.world, rank: chosen.rank, variant: chosen.variant, corrections: chosen.corrections ?? [], partial: chosen.partial ?? null, worldScore: piece.attempts.find((a) => a.world === chosen.world)?.worldScore ?? null } : null;
         let parts = [];
         if (chosen) {
           const res = formalize(chosen.text, { worlds: restrictedSet(set, [chosen.world]), session, source, context, router: engine.router });
           const shift = chosen.text === piece.text ? piece.start : null;
-          parts = res.segments.map((s) => ({
+          const win = chosen.partial?.window ? chosen.partial.ignored : null;
+          parts = res.segments.map((s, k) => ({
             ...s,
+            corrections: chosen.corrections?.length ? chosen.corrections : (s.corrections ?? []),
+            ...(win && k === 0 ? { ignored: win.map((x) => x.text) } : {}),
             span: shift === null ? [piece.start, piece.end] : [s.span[0] + shift, s.span[1] + shift],
             worlds: cands,
             routing: { router: 'dispatcher', tier: null, tierName: 'dispatcher', reason: `dispatcher candidate ${chosen.rank} of ${cands.length}, validated by the rules`, contested: false,
@@ -110,14 +115,14 @@ export function createDispatcherFormalizer({ load, getPolicy = () => ENCODER_DEF
       const hist = history.get(session) ?? [];
       hist.push(text); history.set(session, hist.slice(-historyLimit * 2));
       const dispatch = {
-        text, context: ctx, status: out.status, why: out.why, policy: out.trace.policy, winnerIndex: out.trace.winnerIndex, formula: out.trace.formula,
+        text, context: ctx, status: out.status, partial: !!out.partial, why: out.why, policy: out.trace.policy, winnerIndex: out.trace.winnerIndex, formula: out.trace.formula,
         modelMs: Math.round(tModel), totalMs: Math.round(tTotal),
         boundaries: prediction.boundaries,
         segmentations: out.trace.segmentations.map((g) => ({
           index: g.index, dispatcherScore: g.dispatcherScore, score: g.score, valid: g.valid, nInvalid: g.nInvalid,
           pieces: g.pieces.map((p) => ({ start: p.start, end: p.end, text: p.text, simplified: p.simplified ?? null, valid: p.valid, tie: p.tie,
-            chosen: p.chosen ? { world: p.chosen.world, rank: p.chosen.rank, variant: p.chosen.variant, score: p.chosen.score, text: p.chosen.text } : null,
-            attempts: p.attempts.map((a) => ({ world: a.world, rank: a.rank, worldScore: a.worldScore, variant: a.variant, valid: a.valid, refused: a.refused, reason: a.reason, score: a.score })) })),
+            chosen: p.chosen ? { world: p.chosen.world, rank: p.chosen.rank, variant: p.chosen.variant, score: p.chosen.score, text: p.chosen.text, corrections: p.chosen.corrections ?? [], partial: p.chosen.partial ?? null } : null,
+            attempts: p.attempts.map((a) => ({ world: a.world, rank: a.rank, worldScore: a.worldScore, variant: a.variant, text: a.text, valid: a.valid, refused: a.refused, reason: a.reason, score: a.score, corrections: a.corrections ?? [], partial: a.partial ?? null })) })),
         })),
       };
       return { segments, wires: segments.flatMap((s) => s.wires ?? []), dispatch };

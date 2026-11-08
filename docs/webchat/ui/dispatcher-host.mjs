@@ -4,17 +4,39 @@
 
 export const MODEL_DIR = 'models/dispatcher/';
 
-/** The model's meta.json, or null when this build has no dispatcher model (the Encoder option then stays unavailable). */
+const CACHE_NAME = 'psys2-dispatcher-model';
+const keyOf = (base, name, sha) => new URL(`${MODEL_DIR}${name}?sha256=${sha}`, base).href;   // synthetic Cache API keys, one set per published sha256
+
+/** The model's meta.json fetched fresh (never from the HTTP cache), or the copy kept in the model cache when offline, or null when this build has no model. */
 export async function findDispatcherModel(base) {
   try {
     if (typeof WebAssembly !== 'object') return null;
-    const r = await fetch(new URL(`${MODEL_DIR}meta.json`, base));
-    return r.ok ? await r.json() : null;
+    const url = new URL(`${MODEL_DIR}meta.json`, base);
+    try {
+      const r = await fetch(url, { cache: 'no-cache' });
+      if (r.ok) {
+        const meta = await r.json();
+        try { (await caches.open(CACHE_NAME)).put(keyOf(base, 'meta.json', 'latest'), new Response(JSON.stringify(meta))); } catch { /* no Cache API */ }
+        return meta;
+      }
+      if (r.status === 404) return null;
+    } catch { /* offline: try the cached copy */ }
+    const hit = await caches.match(keyOf(base, 'meta.json', 'latest'), { cacheName: CACHE_NAME });
+    return hit ? await hit.json() : null;
   } catch { return null; }
 }
 
+/** Short label of the published version for the status line: "v<export date> <sha8>". */
+export const versionLabel = (meta) => (meta?.version ? `v${meta.version.export_date ?? '?'} ${String(meta.version.sha256 ?? '').slice(0, 8)}` : 'unversioned');
+
+async function sha256Hex(bytes) {
+  if (!globalThis.crypto?.subtle) return null;
+  const d = await crypto.subtle.digest('SHA-256', bytes);
+  return [...new Uint8Array(d)].map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
 async function fetchBytes(url, onProgress) {
-  const res = await fetch(url);
+  const res = await fetch(url, { cache: 'no-cache' });
   if (!res.ok) throw new Error(`${url.pathname.split('/').pop()}: HTTP ${res.status}`);
   const total = Number(res.headers.get('content-length')) || 0;
   if (!res.body?.getReader) return new Uint8Array(await res.arrayBuffer());
@@ -34,23 +56,55 @@ async function fetchBytes(url, onProgress) {
 }
 
 /**
- * Returns the `load` function for createDispatcherFormalizer. `lib` = { createWordPieceTokenizer } of lib/formalizer/wordpiece.mjs;
- * `onProgress(text)` receives short loading messages for the UI.
+ * The model files for `meta.version.sha256`: from the Cache API when that exact version is cached (instant), else downloaded, checked against
+ * the published sha256, cached under it, and every older version evicted. Without a published sha256 (or without the Cache API) it just downloads.
+ * Returns { bytes, vocab, source: 'cache' | 'network' }.
  */
-export function dispatcherLoader({ base, meta, lib, onProgress = () => {} }) {
+export async function getModelFiles({ base, meta, onProgress = () => {} }) {
+  const sha = meta?.version?.sha256 ?? null;
+  let cache = null;
+  try { cache = sha && typeof caches === 'object' ? await caches.open(CACHE_NAME) : null; } catch { cache = null; }
+  const mKey = sha && keyOf(base, 'model.int8.onnx', sha), vKey = sha && keyOf(base, 'vocab.txt', sha);
+  if (cache) {
+    try {
+      const [m, v] = await Promise.all([cache.match(mKey), cache.match(vKey)]);
+      if (m && v) { onProgress('loading the model from the cache…'); return { bytes: new Uint8Array(await m.arrayBuffer()), vocab: await v.text(), source: 'cache' }; }
+    } catch { /* unreadable cache entry: download again */ }
+  }
+  const vocab = await (await fetch(new URL(`${MODEL_DIR}vocab.txt`, base), { cache: 'no-cache' })).text();
+  const bytes = await fetchBytes(new URL(`${MODEL_DIR}model.int8.onnx`, base), (got, total) => {
+    const mb = (n) => (n / 1048576).toFixed(0);
+    onProgress(total ? `downloading the model ${mb(got)} / ${mb(total)} MB` : `downloading the model ${mb(got)} MB`);
+  });
+  if (sha) {
+    const got = await sha256Hex(bytes);
+    if (got && got !== sha) throw new Error(`the downloaded model does not match the published version (sha256 ${got.slice(0, 8)} instead of ${sha.slice(0, 8)}); try again in a few minutes`);
+  }
+  if (cache) {
+    try {
+      await cache.put(mKey, new Response(bytes, { headers: { 'content-type': 'application/octet-stream' } }));
+      await cache.put(vKey, new Response(vocab));
+      for (const req of await cache.keys()) if (req.url !== mKey && req.url !== vKey && !req.url.includes('meta.json')) await cache.delete(req);   // evict old versions
+    } catch { /* quota exceeded or private mode: the model still works, it is just downloaded next time */ }
+  }
+  return { bytes, vocab, source: 'network' };
+}
+
+/**
+ * Returns the `load` function for createDispatcherFormalizer. `lib` = { createWordPieceTokenizer } of lib/formalizer/wordpiece.mjs;
+ * `onProgress(text)` receives short loading messages for the UI; `onSource(source)` is told 'cache' or 'network'.
+ */
+export function dispatcherLoader({ base, meta, lib, onProgress = () => {}, onSource = () => {} }) {
   return async () => {
     onProgress('loading the runtime…');
     const ort = await import(new URL('vendor/onnxruntime/ort.wasm.bundle.min.mjs', base).href);
     ort.env.wasm.wasmPaths = new URL('vendor/onnxruntime/', base).href;
     ort.env.wasm.numThreads = 1;
     ort.env.wasm.proxy = false;
-    const vocab = await (await fetch(new URL(`${MODEL_DIR}vocab.txt`, base))).text();
-    const bytes = await fetchBytes(new URL(`${MODEL_DIR}model.int8.onnx`, base), (got, total) => {
-      const mb = (n) => (n / 1048576).toFixed(0);
-      onProgress(total ? `downloading the model ${mb(got)} / ${mb(total)} MB` : `downloading the model ${mb(got)} MB`);
-    });
+    const { bytes, vocab, source } = await getModelFiles({ base, meta, onProgress });
+    onSource(source);
     let editTags = null;   // rephraser (edit-tag head): its tag vocabulary sits next to the model
-    if (meta.onnx?.outputs?.includes('edit_logits')) editTags = (await (await fetch(new URL(`${MODEL_DIR}edit-vocab.json`, base))).json()).tags;
+    if (meta.onnx?.outputs?.includes('edit_logits')) editTags = (await (await fetch(new URL(`${MODEL_DIR}edit-vocab.json`, base), { cache: 'no-cache' })).json()).tags;
     onProgress('starting the model…');
     const session = await ort.InferenceSession.create(bytes, { executionProviders: ['wasm'], graphOptimizationLevel: 'all' });
     return { ort, session, tokenizer: lib.createWordPieceTokenizer(vocab), worlds: meta.worlds, editTags, editTau: meta.edit_threshold ?? 0.5, useContext: meta.context !== false };
