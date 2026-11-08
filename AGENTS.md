@@ -27,4 +27,4 @@
 - Commits go directly to `main` (no pull requests for now). Small, descriptive commits.
 
 ## Worker sessions (training on the DGX Spark)
-- A worker agent starts from `worker-tasks.md` and follows its protocol: `worker-tasks.md` is append-only and written by the reviewer; the worker appends questions to `questions.md` (never deletes) and progress to `worker-log.md`.
+- A worker agent starts from `worker-tasks.md` and follows its protocol: `worker-tasks.md` is written and managed only by the reviewer (validated tasks move to "Validated", failed ones are rewritten); the worker appends questions to `questions.md` (never deletes) and progress to `worker-log.md`.

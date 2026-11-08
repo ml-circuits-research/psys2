@@ -13,7 +13,7 @@ Three files coordinate the worker and the reviewer:
 | `questions.md` | worker appends, reviewer removes | The worker appends a question whenever it is blocked or a decision is not covered here, and **never deletes** anything. The reviewer removes a question after answering it in this file. |
 | `worker-log.md` | worker only | Append-only progress log: one entry per task with status (`done` / `partial` / `blocked`), commands run, key numbers, commit hash, deviations. Write the entry and push as soon as a task is done: the reviewer validates from it. |
 
-Baseline freeze: once the worker records the baseline commit in T1, the reviewer does not change `worlds/` or `src/` until the session ends, except through a task in this file. So pulling before each task is always safe.
+Baseline freeze: the current baseline commit is given in §2. The reviewer does not change `worlds/` or `src/` after it, except through a task in this file. So pulling before each task is always safe.
 
 Working rules:
 
@@ -32,43 +32,117 @@ PSys2 turns sentences into SOP Lang circuits per *world*; the rule formalizer is
 
 The working hypothesis: on small worlds, **rules plus a small learned front-end** (routing, sentence splitting, normalization towards canonical phrasings) can match a per-world neural formalizer. Today's results must say how far rules alone go, what each model adds, and at what size and latency.
 
-## 2. Tasks
+## 2. Current state, answers and corrections (reviewer, 11:00)
 
-Each task has: goal, steps, validation (what the reviewer will check), outputs.
+**T0, T1 and T2 passed review.** I reran `scripts/eval-rules.mjs` at c95e250: all 818 numbers were identical. See "Validated".
 
-### T0 — Environment
+**New baseline: c989cd1 (my error, sorry).** The reviewer pushed a rule-widening commit after you had recorded 055fbeb, breaking the freeze. The commit widens rules in 18 worlds, fixes dictation stop, the avatar apology and chess moves on the Music tab, and relabels the paraphrases. These rules are what the validation layer will use, so take c989cd1 as the baseline. `worlds/` and `src/` are frozen from now on.
 
-Goal: a working GPU Python environment and Node.js on the DGX Spark (aarch64, Grace Blackwell, unified memory).
+**Contamination.** The rules were widened by reading **all** paraphrase records, including the test split. From now on, rule numbers on paraphrase test records are optimistic. That makes the comparison unfair in favour of rules alone; it does not touch the dispatcher's training data.
 
-Steps:
-1. `git pull`. Check `node --version` (≥ 20) and `python3 --version` (≥ 3.10).
-2. Prefer NVIDIA's PyTorch container from NGC (aarch64 with CUDA) or an aarch64 CUDA wheel. In it run `pip install -r training/requirements.txt`, then `python training/check_env.py`.
-3. `npm test` and `node src/cli.mjs test-world all` must pass (they check the rule baseline you will compare against).
-4. `bash training/smoke_test.sh` (tiny random model, no download) must end with `smoke test OK`.
-5. Check that `answerdotai/ModernBERT-base` and `distilbert-base-uncased` download. Write the versions of torch, transformers and peft, the CUDA version and the GPU name to `worker-log.md`.
+The clean measure is a fresh **held-out paraphrase set** that nobody has used for rules: `training/paraphrases/heldout/`. The reviewer is generating it now. It lands as `heldout/inbox/*.json` plus `heldout/out/*.jsonl`, with 1 batch (10 tasks × 10 variants) per world. Never train on it.
 
-Validation: log lists the versions, the test counts, and smoke test OK.
+### B1 — Rebaseline (do this next, small)
 
-### T1 — Dataset rebuild and sanity
+1. `git pull`. Record c989cd1 (or later, if the reviewer says so here) as the baseline in `worker-log.md`.
+2. `node scripts/export-training.mjs && node scripts/build-dataset.mjs`; rerun `check_splits.py`.
+3. `node scripts/eval-rules.mjs`. Keep the 055fbeb numbers in RESULTS.md as "before widening" and add the c989cd1 numbers next to them.
+4. When `training/paraphrases/heldout/out/` exists, extend `eval-rules.mjs` with `--heldout`. It evaluates those records the same way, as a separate source `heldout`. This is the primary paraphrase metric from now on.
 
-Steps:
-1. `git pull` again first: rule improvements may land on `main` while T0 runs. Record the commit hash you build from in `worker-log.md`. It is the baseline commit for every later number: from then on `worlds/` and `src/` are frozen (see §0).
-2. `node scripts/export-training.mjs`, `node scripts/collect-paraphrases.mjs training/paraphrases/inbox --report`, then `node scripts/build-dataset.mjs`.
-3. Compare `training/dataset/stats.json` with the committed version and explain any large difference.
-4. Check that no group (`group` field) appears in two splits; write a short script `training/psys2_train/check_splits.py` for this.
+Validation: the reviewer reruns `eval-rules.mjs` at the logged commit.
 
-Validation: the split check passes, and stats are logged per world, split and source.
+### Answers
 
-### T2 — Rule baseline on the test splits
+- **Q1 (routing split by text):** your interim choice is fine; keep reporting both numbers. In addition, for D1 training, drop from routing *train* every row whose (normalized text, active tab) also occurs in dev or test. Report how many rows were dropped.
+- **Q2 (hangman coverage 0.565 → 0.285):** expected. The committed outputs were produced mid-edit by the reviewer, and your regenerated ones were correct for 055fbeb. This is superseded by B1: the outputs at c989cd1 are now committed.
 
-Goal: the number every model has to beat.
+## 3. Stage 1 tasks — the dispatcher (this session)
 
-Steps:
-1. Write `scripts/eval-rules.mjs` (Node). For each `training/dataset/<world>/test.jsonl` record, run the rule formalizer with the record's routing context: fresh session, active tab from the record, setup sentences if any. Compare the produced SOP with the target after id normalization; reuse the comparison in `scripts/collect-paraphrases.mjs`.
-2. Report exact-SOP accuracy per world and per source (generator / paraphrase). Also report world-routing accuracy on `routing.jsonl` test rows.
-3. Save the results to `training/results/rules.json` and a table in `training/RESULTS.md`.
+**The goal of this session is to avoid training per-world models.** We validate one idea first: a single small shared model, the **dispatcher**, proposes candidates, and the existing rule formalizers validate them. No per-world LoRA in this session.
 
-Validation: the reviewer reruns `node scripts/eval-rules.mjs` and gets the same numbers.
+Order: B1 → D1 → D2 → D3 → D4 → T9 (Stage 1 only).
+
+2. **D1 — dispatcher model.** One encoder with three heads. **Train DistilBERT first** (`distilbert-base-uncased`): it is the fast, robust baseline, about 67 MB as int8, with no special attention kernels needed on aarch64. **Then train ModernBERT-base** on exactly the same data, seeds and heads. If DistilBERT already meets the Stage 1 targets, ModernBERT must justify its size with a clear gain. The heads:
+   - **segmentation:** a boundary probability per token. It cuts messages into small pieces (commands, clauses);
+   - **world candidates:** for each piece, a ranked list of the **top-k worlds with scores** (k = 3), using the context (active tab, recent worlds);
+   - **simplification (optional head):** KEEP / DELETE / REPLACE edit tags as in Round 1. It produces a cleaner variant of each piece. The original piece is always kept as a candidate too.
+
+   Train with LoRA or full fine-tune, whichever is better for this single model. Training data: `routing.jsonl`, multi-command messages built from test-disjoint sentences (join 2–3 with "and", "then", commas, periods), and the edit-tag alignments of Round 1.
+3. **D2 — validation layer (JS, in `src/`).** It takes the dispatcher output (candidate segmentations, top-k worlds per piece, optional simplified text) and **checks the candidates with the rule formalizers**:
+   - Build candidate segmentations: the most likely one plus alternatives from uncertain boundaries (a small beam, ≤ 4).
+   - For each piece, try the candidate worlds in score order, on both the original and the simplified text. Restrict the rule formalizer to that world (and its `extends`).
+   - A candidate is **valid** when the world's rules parse it completely (no unparsed tokens left) and the interpreter does not return `unsupported` or `error`.
+   - Choose the segmentation with the best total score (dispatcher score × validity, with a penalty for unparsed pieces). Ties are broken by the routing policy tiers (ADR-004: modal, navigation, active tab, …).
+   - If nothing validates, return the best candidate as "not understood" together with the candidate worlds. `ui.help` can then say "Did you mean …?".
+   - Write the trace: candidates, which ones validated, why the winner won.
+   - Spec: new section in `specs/03` (or a new spec) plus ADR-005. Unit tests.
+
+   For the evaluation, the dispatcher can run offline: Python writes the predictions to JSONL, and Node (`scripts/eval-dispatch.mjs`) runs the validation layer over them. The reviewer must be able to rerun the Node part from the committed predictions file of one world group.
+4. **D3 — evaluation.** Per world group and source (generator / paraphrase / multi-command), on the test splits:
+   - **oracle coverage:** is the right world in the top-1 / top-3 candidates; is the right segmentation in the beam;
+   - **end-to-end exact SOP:** rules only (T2) · dispatcher top-1 + rules · dispatcher top-3 + validation · top-3 + simplification + validation;
+   - **segmentation F1** on multi-command messages;
+   - how often the validation layer **rejects a wrong top-1 and recovers** with candidate 2 or 3;
+   - error analysis: 30 failures, sorted into causes: the right world not among the candidates · segmentation wrong · the rules cannot parse even the simplified text (= a rule gap, which tells us where rules are missing) · other.
+5. **D4 — size and speed.** The dispatcher as int8 ONNX (T8 method): size, CPU latency per message, PyTorch/ONNX agreement on 200 sentences. If time remains, run it in Node (onnxruntime-node or transformers.js) behind `createEncoderFormalizer`, so the webchat build can use it later.
+6. **T9 — RESULTS.md**, limited to Stage 1, with a clear verdict: is dispatcher + rules good enough on its own? Per world group, say which groups are satisfied and which are not, and why (rule gaps vs dispatcher errors).
+
+
+Details for the simplification head (edit tagging):
+
+
+Use one encoder (ModernBERT-base first, then DistilBERT for comparison) with three heads trained jointly or one after another. Report each head on its own and the whole chain end to end.
+
+1. **Segmentation head** — token tagging B/I. It splits a message into commands, using the joined multi-command messages built as in T7 step 3. Metric: segment boundary F1.
+2. **World head** — sequence classification. Each segment, plus its context, goes to a world (this is the T4 model; reuse it). Metric: accuracy.
+3. **Simplification head** — edit tagging, not generation. An encoder cannot write free text, so per token predict:
+   - `KEEP`, `DELETE` (fillers, politeness, hesitations: "um", "could you please", "for me");
+   - `REPLACE:<w>`, with `<w>` from a small replacement vocabulary built from the data ("hrs" → hours, "whats" → what is, number words, frequent synonyms that map onto the pattern vocabulary).
+   
+   This is the edit-tagging approach used in grammar correction. Build the training targets by aligning each paraphrase variant with its task's canonical phrasing (or with its rewrite into pattern vocabulary). Keep only alignments that the rules then parse into the target SOP; report how many survive.
+   - Metric: the share of rewritten variants that the rules formalize to the target SOP.
+   - Compare with retrieval + slot transfer (T7 step 1) and with rules alone.
+
+End-to-end table, per world group: rules only · world head + rules · segmentation + world + simplification + rules · full neural per-world (T5, if done).
+
+Also report the size and CPU latency of the shared encoder (int8 ONNX, T8 method). The whole front-end has to stay small enough for the browser.
+
+### Acceptance targets for Stage 1 (what "good enough" means)
+
+The verdict is against these numbers:
+- world top-3 coverage ≥ 0.99 and top-1 ≥ 0.97 on test, with context;
+- segmentation F1 ≥ 0.95 on multi-command messages;
+- end-to-end exact SOP with dispatcher + validation clearly above rules only on paraphrase records. Report the gain per world group;
+- dispatcher int8 ONNX ≤ 150 MB and ≤ 50 ms per message on the Grace CPU.
+
+
+For D3, report every paraphrase metric on the **held-out set** first, then on the (contaminated) test split.
+
+### T9 — Results report (Stage 1 only)
+
+Write `training/RESULTS.md` with:
+- setup (hardware, versions, commands);
+- tables from T2 and T4–T8;
+- the hybrid vs neural conclusion (T7), with numbers;
+- error analysis: 20 typical model errors and 20 typical rule errors, with the sentence and the predicted vs expected SOP;
+- recommendations: which worlds need a learned formalizer and which do fine with rules plus the front-end;
+- next steps.
+
+Validation: every number in RESULTS.md traces back to a `training/results/*.json` file and a command in `worker-log.md`.
+
+
+## 4. Stage 2 — parked, NOT in this session
+
+Stage 2 runs only if Stage 1 is not satisfactory, and only for the world groups that fail:
+- T3 compositional targets;
+- T5 per-world or shared formalizers;
+- the T6 ablation beyond the dispatcher;
+- a seq2seq normalizer.
+
+Do not start them. If you finish Stage 1 early, write in `questions.md` which Stage 2 task you would run first, with the evidence from D3, and stop.
+
+
+Reference descriptions of the Stage 2 tasks:
 
 ### T3 — Fix the target design (compositional skeletons)
 
@@ -146,106 +220,13 @@ Steps:
 
 Validation: the files go to `training/runs/export/`, not git. Commit the numbers, the export code and any `src/` change with tests.
 
-### T9 — Results report
 
-Write `training/RESULTS.md` with:
-- setup (hardware, versions, commands);
-- tables from T2 and T4–T8;
-- the hybrid vs neural conclusion (T7), with numbers;
-- error analysis: 20 typical model errors and 20 typical rule errors, with the sentence and the predicted vs expected SOP;
-- recommendations: which worlds need a learned formalizer and which do fine with rules plus the front-end;
-- next steps.
+## 5. Reviewer validation
 
-Validation: every number in RESULTS.md traces back to a `training/results/*.json` file and a command in `worker-log.md`.
-
-## 3. Priorities if time runs short
-
-T0 → T1 → T2 → T3 → T4 → T5 (kids.arith, ui.avatar, games.chess, docs.editor first) → T7 → T6 → T8 → T9. Always write T9 at the end, even if partial.
-
-## 4. Reviewer validation (what happens after the session)
-
-The reviewer will:
-- rerun `npm test`, `node src/cli.mjs test-world all`, `node scripts/eval-rules.mjs`, the split check, and one training run picked at random with the logged command (on a smaller `--max-steps`);
-- check that RESULTS.md matches the JSON results.
-
-Then the reviewer appends a new round here with corrections and further tasks.
-
-## Round 1 — priority change: the front-end comes first (reviewer, before the session starts)
-
-This section overrides the priorities in §3. The main goal of this session is the **shared learned front-end**: one encoder shared by all worlds, with the rules still doing the formalization.
-
-New order: T0 → T1 → T2 → T3 (measurement only: unseen rate and oracle; the implementation can wait) → T4 (routing) → **T7 extended (below)** → T5 → T6 → T8 → T9.
-
-### T7 extended — a shared encoder with three heads
-
-Use one encoder (ModernBERT-base first, then DistilBERT for comparison) with three heads trained jointly or one after another. Report each head on its own and the whole chain end to end.
-
-1. **Segmentation head** — token tagging B/I. It splits a message into commands, using the joined multi-command messages built as in T7 step 3. Metric: segment boundary F1.
-2. **World head** — sequence classification. Each segment, plus its context, goes to a world (this is the T4 model; reuse it). Metric: accuracy.
-3. **Simplification head** — edit tagging, not generation. An encoder cannot write free text, so per token predict:
-   - `KEEP`, `DELETE` (fillers, politeness, hesitations: "um", "could you please", "for me");
-   - `REPLACE:<w>`, with `<w>` from a small replacement vocabulary built from the data ("hrs" → hours, "whats" → what is, number words, frequent synonyms that map onto the pattern vocabulary).
-   
-   This is the edit-tagging approach used in grammar correction. Build the training targets by aligning each paraphrase variant with its task's canonical phrasing (or with its rewrite into pattern vocabulary). Keep only alignments that the rules then parse into the target SOP; report how many survive.
-   - Metric: the share of rewritten variants that the rules formalize to the target SOP.
-   - Compare with retrieval + slot transfer (T7 step 1) and with rules alone.
-
-End-to-end table, per world group: rules only · world head + rules · segmentation + world + simplification + rules · full neural per-world (T5, if done).
-
-Also report the size and CPU latency of the shared encoder (int8 ONNX, T8 method). The whole front-end has to stay small enough for the browser.
-
-## Round 2 — session scope: Stage 1 = the dispatcher only (reviewer, overrides §2–§3 and Round 1)
-
-**The goal of this session is to avoid training per-world models.** We validate one idea first: a single small shared model, the **dispatcher**, proposes candidates, and the existing rule formalizers validate them. No per-world LoRA in this session.
-
-### Stage 1 (this session)
-
-Tasks, in order:
-
-1. **T0, T1, T2** as written. T2 is the baseline: rules only, with the current rule router.
-2. **D1 — dispatcher model.** One encoder with three heads. **Train DistilBERT first** (`distilbert-base-uncased`): it is the fast, robust baseline, about 67 MB as int8, with no special attention kernels needed on aarch64. **Then train ModernBERT-base** on exactly the same data, seeds and heads. If DistilBERT already meets the Stage 1 targets, ModernBERT must justify its size with a clear gain. The heads:
-   - **segmentation:** a boundary probability per token. It cuts messages into small pieces (commands, clauses);
-   - **world candidates:** for each piece, a ranked list of the **top-k worlds with scores** (k = 3), using the context (active tab, recent worlds);
-   - **simplification (optional head):** KEEP / DELETE / REPLACE edit tags as in Round 1. It produces a cleaner variant of each piece. The original piece is always kept as a candidate too.
-
-   Train with LoRA or full fine-tune, whichever is better for this single model. Training data: `routing.jsonl`, multi-command messages built from test-disjoint sentences (join 2–3 with "and", "then", commas, periods), and the edit-tag alignments of Round 1.
-3. **D2 — validation layer (JS, in `src/`).** It takes the dispatcher output (candidate segmentations, top-k worlds per piece, optional simplified text) and **checks the candidates with the rule formalizers**:
-   - Build candidate segmentations: the most likely one plus alternatives from uncertain boundaries (a small beam, ≤ 4).
-   - For each piece, try the candidate worlds in score order, on both the original and the simplified text. Restrict the rule formalizer to that world (and its `extends`).
-   - A candidate is **valid** when the world's rules parse it completely (no unparsed tokens left) and the interpreter does not return `unsupported` or `error`.
-   - Choose the segmentation with the best total score (dispatcher score × validity, with a penalty for unparsed pieces). Ties are broken by the routing policy tiers (ADR-004: modal, navigation, active tab, …).
-   - If nothing validates, return the best candidate as "not understood" together with the candidate worlds. `ui.help` can then say "Did you mean …?".
-   - Write the trace: candidates, which ones validated, why the winner won.
-   - Spec: new section in `specs/03` (or a new spec) plus ADR-005. Unit tests.
-
-   For the evaluation, the dispatcher can run offline: Python writes the predictions to JSONL, and Node (`scripts/eval-dispatch.mjs`) runs the validation layer over them. The reviewer must be able to rerun the Node part from the committed predictions file of one world group.
-4. **D3 — evaluation.** Per world group and source (generator / paraphrase / multi-command), on the test splits:
-   - **oracle coverage:** is the right world in the top-1 / top-3 candidates; is the right segmentation in the beam;
-   - **end-to-end exact SOP:** rules only (T2) · dispatcher top-1 + rules · dispatcher top-3 + validation · top-3 + simplification + validation;
-   - **segmentation F1** on multi-command messages;
-   - how often the validation layer **rejects a wrong top-1 and recovers** with candidate 2 or 3;
-   - error analysis: 30 failures, sorted into causes: the right world not among the candidates · segmentation wrong · the rules cannot parse even the simplified text (= a rule gap, which tells us where rules are missing) · other.
-5. **D4 — size and speed.** The dispatcher as int8 ONNX (T8 method): size, CPU latency per message, PyTorch/ONNX agreement on 200 sentences. If time remains, run it in Node (onnxruntime-node or transformers.js) behind `createEncoderFormalizer`, so the webchat build can use it later.
-6. **T9 — RESULTS.md**, limited to Stage 1, with a clear verdict: is dispatcher + rules good enough on its own? Per world group, say which groups are satisfied and which are not, and why (rule gaps vs dispatcher errors).
-
-### Acceptance targets for Stage 1 (what "good enough" means)
-
-The verdict is against these numbers:
-- world top-3 coverage ≥ 0.99 and top-1 ≥ 0.97 on test, with context;
-- segmentation F1 ≥ 0.95 on multi-command messages;
-- end-to-end exact SOP with dispatcher + validation clearly above rules only on paraphrase records. Report the gain per world group;
-- dispatcher int8 ONNX ≤ 150 MB and ≤ 50 ms per message on the Grace CPU.
-
-### Stage 2 (NOT in this session)
-
-Stage 2 runs only if Stage 1 is not satisfactory, and only for the world groups that fail:
-- T3 compositional targets;
-- T5 per-world or shared formalizers;
-- the T6 ablation beyond the dispatcher;
-- a seq2seq normalizer.
-
-Do not start them. If you finish Stage 1 early, write in `questions.md` which Stage 2 task you would run first, with the evidence from D3, and stop.
+After each task the reviewer reruns the logged commands, where feasible on a smaller `--max-steps`, and compares the numbers in RESULTS.md with the JSON results. Then the task is either moved to "Validated" or rewritten here with what must be fixed.
 
 ## Validated
 
-(the reviewer moves validated tasks here, one line each)
+- T0 — Environment: torch 2.14.1+cu130 on GB10, tests and smoke test pass (055fbeb).
+- T1 — Dataset rebuild and split check (6852ee8); routing text overlap answered in §2 Q1.
+- T2 — Rule baseline at 055fbeb (c95e250): 88.3% exact SOP routed, paraphrases 30.4%, routing 89.7%. The numbers reproduced exactly.
