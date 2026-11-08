@@ -10,7 +10,7 @@
 
 @docs.editor.document core.type
     extends=core.state
-    doc="The document being edited. The world state holds title, blocks (heading, paragraph, list; each with the ids of the wires it was made from), cursor, inputMode and the undo history."
+    doc="The document being edited. The world state holds title (with its formatting), blocks (heading, paragraph, quote, list with bullet, numbered or task style, table, rule; each with inline mark ranges, alignment and the ids of the wires it was made from), cursor, selection, a derived TipTap JSON (doc), statistics, inputMode and the undo history."
     example="Add a heading Shopping."
 
 @docs.editor.document.title core.key

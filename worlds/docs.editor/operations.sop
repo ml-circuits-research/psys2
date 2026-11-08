@@ -153,3 +153,153 @@
     semantics=action
     action=doc.holdings
     doc="Creates a document of what people have: reads kids.arith holdings and asks the computed counts (ctx.ask count). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.addQuote core.operation
+    impl=addQuote
+    semantics=action
+    action=doc.addQuote
+    doc="Adds a block quote. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.addRule core.operation
+    impl=addRule
+    semantics=action
+    action=doc.addRule
+    doc="Inserts a horizontal line. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.addTable core.operation
+    impl=addTable
+    semantics=action
+    action=doc.addTable
+    doc="Adds a table (columns from names or a count; rows optional). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.addRow core.operation
+    impl=addRow
+    semantics=action
+    action=doc.addRow
+    doc="Adds a row to the table (values split at commas and the word and). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.addColumn core.operation
+    impl=addColumn
+    semantics=action
+    action=doc.addColumn
+    doc="Adds a column to the table. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.deleteRow core.operation
+    impl=deleteRow
+    semantics=action
+    action=doc.deleteRow
+    doc="Deletes a table row by position or content. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.deleteColumn core.operation
+    impl=deleteColumn
+    semantics=action
+    action=doc.deleteColumn
+    doc="Deletes a table column by position or header. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.setCell core.operation
+    impl=setCell
+    semantics=action
+    action=doc.setCell
+    doc="Sets one table cell by row and column number. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.fillTable core.operation
+    impl=fillTable
+    semantics=action
+    action=doc.fillTable
+    doc="Fills the table with animals of a group: asks kids.animals (ctx.ask matching and one ask per column); the table keeps the source wire ids. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.addTask core.operation
+    impl=addTask
+    semantics=action
+    action=doc.addTask
+    doc="Adds a checkable task to the last task list (creating one when needed). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.checkTask core.operation
+    impl=checkTask
+    semantics=action
+    action=doc.checkTask
+    doc="Checks or unchecks tasks by position, text or all. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.countTasks core.operation
+    impl=countTasks
+    semantics=action
+    action=doc.countTasks
+    doc="Tells how many tasks are done or still open. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.listTasks core.operation
+    impl=listTasks
+    semantics=action
+    action=doc.listTasks
+    doc="Lists the tasks that are done or still open. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.format core.operation
+    impl=format
+    semantics=action
+    action=doc.format
+    doc="Applies or removes a mark (bold, italic, underline, strike, code, highlight with a color) on a reference: a block, a sentence, a word, the selection (it). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.clearFormat core.operation
+    impl=clearFormat
+    semantics=action
+    action=doc.clearFormat
+    doc="Removes all inline formatting from a reference. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.link core.operation
+    impl=link
+    semantics=action
+    action=doc.link
+    doc="Adds or removes a link on a reference. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.size core.operation
+    impl=size
+    semantics=action
+    action=doc.size
+    doc="Makes a title or heading bigger or smaller. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.align core.operation
+    impl=align
+    semantics=action
+    action=doc.align
+    doc="Aligns a block: left, center, right, justify. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.convert core.operation
+    impl=convert
+    semantics=action
+    action=doc.convert
+    doc="Turns a block into a paragraph, heading (level 1 to 3), quote, bullet list, numbered list or task list. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.select core.operation
+    impl=select
+    semantics=action
+    action=doc.select
+    doc="Selects a reference (block, sentence, word, item); later commands act on it. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.unselect core.operation
+    impl=unselect
+    semantics=action
+    action=doc.unselect
+    doc="Clears the selection. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.whatSelected core.operation
+    impl=whatSelected
+    semantics=action
+    action=doc.whatSelected
+    doc="Tells what is selected. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.goto core.operation
+    impl=goto
+    semantics=action
+    action=doc.goto
+    doc="Moves the cursor to the top, the end or a block. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.deleteTarget core.operation
+    impl=deleteTarget
+    semantics=action
+    action=doc.deleteTarget
+    doc="Deletes a reference (the selection, a word, a sentence, an item, a block). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.stats core.operation
+    impl=stats
+    semantics=action
+    action=doc.stats
+    doc="Tells words, characters, sentences, paragraphs, tasks and reading time. Brings the editor tab forward: ctx.request(\"ui.openTab\")."

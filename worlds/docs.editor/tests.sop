@@ -230,3 +230,158 @@
     input="Write down what everyone has"
     expectStatus=missing
     session=j
+
+@t.docs.editor.n44 core.test
+    input="Start a new document called Sea Notes"
+    expectState="title=Sea Notes"
+    session=g
+
+@t.docs.editor.n45 core.test
+    input="Add a heading Whales"
+    expectState="blocks.0.level=2"
+    session=g
+
+@t.docs.editor.n46 core.test
+    input="Add a paragraph Whales are big and they swim in the sea"
+    expectState="blocks.1.kind=paragraph"
+    session=g
+
+@t.docs.editor.n47 core.test
+    input="Add a list with krill, fish and squid"
+    expectState="blocks.2.style=bullet"
+    session=g
+
+@t.docs.editor.n48 core.test
+    input="Make the second paragraph bold"
+    expectStatus=missing
+    session=g
+
+@t.docs.editor.n49 core.test
+    input="Make the first paragraph bold"
+    expectState="blocks.1.marks.0.type=bold"
+    session=g
+
+@t.docs.editor.n50 core.test
+    input="Make the word fish italic"
+    expectState="blocks.2.marks.0.type=italic"
+    session=g
+
+@t.docs.editor.n51 core.test
+    input="Highlight the last sentence in green"
+    expectState="blocks.1.marks.1.type=highlight"
+    session=g
+
+@t.docs.editor.n52 core.test
+    input="Underline the heading"
+    expectState="blocks.0.marks.0.type=underline"
+    session=g
+
+@t.docs.editor.n53 core.test
+    input="Center the title"
+    expectState="titleAlign=center"
+    session=g
+
+@t.docs.editor.n54 core.test
+    input="Make the title bigger"
+    expectState="titleSize=1"
+    session=g
+
+@t.docs.editor.n55 core.test
+    input="Turn the list into a numbered list"
+    expectState="blocks.2.style=numbered"
+    session=g
+
+@t.docs.editor.n56 core.test
+    input="Turn the first paragraph into a quote"
+    expectState="blocks.1.kind=quote"
+    session=g
+
+@t.docs.editor.n57 core.test
+    input="Add a table with 3 columns: animal, legs, food"
+    expectState="blocks.3.rows.0.1=Legs"
+    session=g
+
+@t.docs.editor.n58 core.test
+    input="Add a row: whale, 0, krill"
+    expectState="blocks.3.rows.1.2=krill"
+    session=g
+
+@t.docs.editor.n59 core.test
+    input="Add a column size"
+    expectState="blocks.3.rows.0.3=Size"
+    session=g
+
+@t.docs.editor.n60 core.test
+    input="Add a task buy a book"
+    expectState="blocks.4.style=task"
+    session=g
+
+@t.docs.editor.n61 core.test
+    input="Check the first task"
+    expectState="blocks.4.checked.0=true"
+    session=g
+
+@t.docs.editor.n62 core.test
+    input="How many tasks are done?"
+    expect="1 of 1"
+    session=g
+
+@t.docs.editor.n63 core.test
+    input="Insert a line"
+    expectState="blocks.5.kind=rule"
+    session=g
+
+@t.docs.editor.n64 core.test
+    input="Add a link to example dot com on the word krill"
+    expectStatus=supported
+    session=g
+
+@t.docs.editor.n65 core.test
+    input="Select the word whale"
+    expectState="selection.type=range"
+    session=g
+
+@t.docs.editor.n66 core.test
+    input="Make it bold"
+    expectStatus=supported
+    session=g
+
+@t.docs.editor.n67 core.test
+    input="Clear the selection"
+    expectState="selection=null"
+    session=g
+
+@t.docs.editor.n68 core.test
+    input="Select the first quote"
+    expectState="selection.type=blocks"
+    session=g
+
+@t.docs.editor.n69 core.test
+    input="Delete the selection"
+    expectState="blocks.length=5"
+    session=g
+
+@t.docs.editor.n70 core.test
+    input="Go to the top"
+    expectState="focus.id=title"
+    session=g
+
+@t.docs.editor.n71 core.test
+    input="How many words?"
+    expect="words"
+    session=g
+
+@t.docs.editor.n72 core.test
+    input="Download the document as html"
+    expectEffect=file.download
+    session=g
+
+@t.docs.editor.n73 core.test
+    input="Download the document as json"
+    expectEffect=file.download
+    session=g
+
+@t.docs.editor.n74 core.test
+    input="Undo"
+    expectState="blocks.length=6"
+    session=g

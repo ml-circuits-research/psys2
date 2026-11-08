@@ -361,3 +361,353 @@
     for=action.doc.holdings
     status=missing
     text="{note}"
+
+@tpl.docs.editor.doc_addQuote core.template
+    for=action.doc.addQuote
+    text="{value}"
+
+@tpl.docs.editor.doc_addQuote.unsupported core.template
+    for=action.doc.addQuote
+    status=unsupported
+    text="{note}"
+
+@tpl.docs.editor.doc_addQuote.missing core.template
+    for=action.doc.addQuote
+    status=missing
+    text="{note}"
+
+@tpl.docs.editor.doc_addRule core.template
+    for=action.doc.addRule
+    text="{value}"
+
+@tpl.docs.editor.doc_addRule.unsupported core.template
+    for=action.doc.addRule
+    status=unsupported
+    text="{note}"
+
+@tpl.docs.editor.doc_addRule.missing core.template
+    for=action.doc.addRule
+    status=missing
+    text="{note}"
+
+@tpl.docs.editor.doc_addTable core.template
+    for=action.doc.addTable
+    text="{value}"
+
+@tpl.docs.editor.doc_addTable.unsupported core.template
+    for=action.doc.addTable
+    status=unsupported
+    text="{note}"
+
+@tpl.docs.editor.doc_addTable.missing core.template
+    for=action.doc.addTable
+    status=missing
+    text="{note}"
+
+@tpl.docs.editor.doc_addRow core.template
+    for=action.doc.addRow
+    text="{value}"
+
+@tpl.docs.editor.doc_addRow.unsupported core.template
+    for=action.doc.addRow
+    status=unsupported
+    text="{note}"
+
+@tpl.docs.editor.doc_addRow.missing core.template
+    for=action.doc.addRow
+    status=missing
+    text="{note}"
+
+@tpl.docs.editor.doc_addColumn core.template
+    for=action.doc.addColumn
+    text="{value}"
+
+@tpl.docs.editor.doc_addColumn.unsupported core.template
+    for=action.doc.addColumn
+    status=unsupported
+    text="{note}"
+
+@tpl.docs.editor.doc_addColumn.missing core.template
+    for=action.doc.addColumn
+    status=missing
+    text="{note}"
+
+@tpl.docs.editor.doc_deleteRow core.template
+    for=action.doc.deleteRow
+    text="{value}"
+
+@tpl.docs.editor.doc_deleteRow.unsupported core.template
+    for=action.doc.deleteRow
+    status=unsupported
+    text="{note}"
+
+@tpl.docs.editor.doc_deleteRow.missing core.template
+    for=action.doc.deleteRow
+    status=missing
+    text="{note}"
+
+@tpl.docs.editor.doc_deleteColumn core.template
+    for=action.doc.deleteColumn
+    text="{value}"
+
+@tpl.docs.editor.doc_deleteColumn.unsupported core.template
+    for=action.doc.deleteColumn
+    status=unsupported
+    text="{note}"
+
+@tpl.docs.editor.doc_deleteColumn.missing core.template
+    for=action.doc.deleteColumn
+    status=missing
+    text="{note}"
+
+@tpl.docs.editor.doc_setCell core.template
+    for=action.doc.setCell
+    text="{value}"
+
+@tpl.docs.editor.doc_setCell.unsupported core.template
+    for=action.doc.setCell
+    status=unsupported
+    text="{note}"
+
+@tpl.docs.editor.doc_setCell.missing core.template
+    for=action.doc.setCell
+    status=missing
+    text="{note}"
+
+@tpl.docs.editor.doc_fillTable core.template
+    for=action.doc.fillTable
+    text="{value}"
+
+@tpl.docs.editor.doc_fillTable.unsupported core.template
+    for=action.doc.fillTable
+    status=unsupported
+    text="{note}"
+
+@tpl.docs.editor.doc_fillTable.missing core.template
+    for=action.doc.fillTable
+    status=missing
+    text="{note}"
+
+@tpl.docs.editor.doc_addTask core.template
+    for=action.doc.addTask
+    text="{value}"
+
+@tpl.docs.editor.doc_addTask.unsupported core.template
+    for=action.doc.addTask
+    status=unsupported
+    text="{note}"
+
+@tpl.docs.editor.doc_addTask.missing core.template
+    for=action.doc.addTask
+    status=missing
+    text="{note}"
+
+@tpl.docs.editor.doc_checkTask core.template
+    for=action.doc.checkTask
+    text="{value}"
+
+@tpl.docs.editor.doc_checkTask.unsupported core.template
+    for=action.doc.checkTask
+    status=unsupported
+    text="{note}"
+
+@tpl.docs.editor.doc_checkTask.missing core.template
+    for=action.doc.checkTask
+    status=missing
+    text="{note}"
+
+@tpl.docs.editor.doc_countTasks core.template
+    for=action.doc.countTasks
+    text="{value}"
+
+@tpl.docs.editor.doc_countTasks.unsupported core.template
+    for=action.doc.countTasks
+    status=unsupported
+    text="{note}"
+
+@tpl.docs.editor.doc_countTasks.missing core.template
+    for=action.doc.countTasks
+    status=missing
+    text="{note}"
+
+@tpl.docs.editor.doc_listTasks core.template
+    for=action.doc.listTasks
+    text="{value}"
+
+@tpl.docs.editor.doc_listTasks.unsupported core.template
+    for=action.doc.listTasks
+    status=unsupported
+    text="{note}"
+
+@tpl.docs.editor.doc_listTasks.missing core.template
+    for=action.doc.listTasks
+    status=missing
+    text="{note}"
+
+@tpl.docs.editor.doc_format core.template
+    for=action.doc.format
+    text="{value}"
+
+@tpl.docs.editor.doc_format.unsupported core.template
+    for=action.doc.format
+    status=unsupported
+    text="{note}"
+
+@tpl.docs.editor.doc_format.missing core.template
+    for=action.doc.format
+    status=missing
+    text="{note}"
+
+@tpl.docs.editor.doc_clearFormat core.template
+    for=action.doc.clearFormat
+    text="{value}"
+
+@tpl.docs.editor.doc_clearFormat.unsupported core.template
+    for=action.doc.clearFormat
+    status=unsupported
+    text="{note}"
+
+@tpl.docs.editor.doc_clearFormat.missing core.template
+    for=action.doc.clearFormat
+    status=missing
+    text="{note}"
+
+@tpl.docs.editor.doc_link core.template
+    for=action.doc.link
+    text="{value}"
+
+@tpl.docs.editor.doc_link.unsupported core.template
+    for=action.doc.link
+    status=unsupported
+    text="{note}"
+
+@tpl.docs.editor.doc_link.missing core.template
+    for=action.doc.link
+    status=missing
+    text="{note}"
+
+@tpl.docs.editor.doc_size core.template
+    for=action.doc.size
+    text="{value}"
+
+@tpl.docs.editor.doc_size.unsupported core.template
+    for=action.doc.size
+    status=unsupported
+    text="{note}"
+
+@tpl.docs.editor.doc_size.missing core.template
+    for=action.doc.size
+    status=missing
+    text="{note}"
+
+@tpl.docs.editor.doc_align core.template
+    for=action.doc.align
+    text="{value}"
+
+@tpl.docs.editor.doc_align.unsupported core.template
+    for=action.doc.align
+    status=unsupported
+    text="{note}"
+
+@tpl.docs.editor.doc_align.missing core.template
+    for=action.doc.align
+    status=missing
+    text="{note}"
+
+@tpl.docs.editor.doc_convert core.template
+    for=action.doc.convert
+    text="{value}"
+
+@tpl.docs.editor.doc_convert.unsupported core.template
+    for=action.doc.convert
+    status=unsupported
+    text="{note}"
+
+@tpl.docs.editor.doc_convert.missing core.template
+    for=action.doc.convert
+    status=missing
+    text="{note}"
+
+@tpl.docs.editor.doc_select core.template
+    for=action.doc.select
+    text="{value}"
+
+@tpl.docs.editor.doc_select.unsupported core.template
+    for=action.doc.select
+    status=unsupported
+    text="{note}"
+
+@tpl.docs.editor.doc_select.missing core.template
+    for=action.doc.select
+    status=missing
+    text="{note}"
+
+@tpl.docs.editor.doc_unselect core.template
+    for=action.doc.unselect
+    text="{value}"
+
+@tpl.docs.editor.doc_unselect.unsupported core.template
+    for=action.doc.unselect
+    status=unsupported
+    text="{note}"
+
+@tpl.docs.editor.doc_unselect.missing core.template
+    for=action.doc.unselect
+    status=missing
+    text="{note}"
+
+@tpl.docs.editor.doc_whatSelected core.template
+    for=action.doc.whatSelected
+    text="{value}"
+
+@tpl.docs.editor.doc_whatSelected.unsupported core.template
+    for=action.doc.whatSelected
+    status=unsupported
+    text="{note}"
+
+@tpl.docs.editor.doc_whatSelected.missing core.template
+    for=action.doc.whatSelected
+    status=missing
+    text="{note}"
+
+@tpl.docs.editor.doc_goto core.template
+    for=action.doc.goto
+    text="{value}"
+
+@tpl.docs.editor.doc_goto.unsupported core.template
+    for=action.doc.goto
+    status=unsupported
+    text="{note}"
+
+@tpl.docs.editor.doc_goto.missing core.template
+    for=action.doc.goto
+    status=missing
+    text="{note}"
+
+@tpl.docs.editor.doc_deleteTarget core.template
+    for=action.doc.deleteTarget
+    text="{value}"
+
+@tpl.docs.editor.doc_deleteTarget.unsupported core.template
+    for=action.doc.deleteTarget
+    status=unsupported
+    text="{note}"
+
+@tpl.docs.editor.doc_deleteTarget.missing core.template
+    for=action.doc.deleteTarget
+    status=missing
+    text="{note}"
+
+@tpl.docs.editor.doc_stats core.template
+    for=action.doc.stats
+    text="{value}"
+
+@tpl.docs.editor.doc_stats.unsupported core.template
+    for=action.doc.stats
+    status=unsupported
+    text="{note}"
+
+@tpl.docs.editor.doc_stats.missing core.template
+    for=action.doc.stats
+    status=missing
+    text="{note}"

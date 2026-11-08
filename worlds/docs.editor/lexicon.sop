@@ -8,6 +8,13 @@
     word=item
     word=word
     word=sentence
+    word=quote
+    word=table
+    word=task
+    word=row
+    word=column
+    word=link
+    word=character
 
 @lex.docs.editor.ordinals core.lexicon
     class=noun
@@ -30,6 +37,9 @@
     word=txt
     word=md
     word=plain_text
+    word=html
+    word=json
+    word=web_page
 
 @lex.docs.editor.triggers core.lexicon
     class=trigger
@@ -40,3 +50,128 @@
     word=dictate
     word=undo
     word=redo
+
+@lex.docs.editor.marks core.lexicon
+    class=noun
+    word=bold
+    word=italic
+    word=italics
+    word=underlined
+    word=underline
+    word=strikethrough
+    word=struck_through
+    word=crossed_out
+    word=code
+    word=monospace
+    word=monospaced
+    word=highlight
+    word=highlighted
+    word=link
+
+@lex.docs.editor.markverbs core.lexicon
+    class=noun
+    word=bold
+    word=italicize
+    word=italicise
+    word=underline
+    word=emphasize
+    word=emphasise
+    word=strikethrough
+
+@lex.docs.editor.colors core.lexicon
+    class=noun
+    word=yellow
+    word=green
+    word=blue
+    word=pink
+    word=orange
+    word=red
+    word=purple
+    word=gray
+    word=grey
+    word=cyan
+    word=brown
+    word=violet
+
+@lex.docs.editor.aligns core.lexicon
+    class=noun
+    word=left
+    word=right
+    word=center
+    word=centre
+    word=centered
+    word=centred
+    word=justify
+    word=justified
+
+@lex.docs.editor.sizes core.lexicon
+    class=noun
+    word=bigger
+    word=larger
+    word=smaller
+    word=big
+    word=small
+    word=huge
+    word=tiny
+    word=giant
+
+@lex.docs.editor.convert core.lexicon
+    class=noun
+    word=paragraph
+    word=heading
+    word=quote
+    word=list
+    word=bullet_list
+    word=numbered_list
+    word=ordered_list
+    word=task_list
+    word=checklist
+    word=block_quote
+    word=bulleted_list
+
+@lex.docs.editor.unmarkverbs core.lexicon
+    class=noun
+    word=unbold
+    word=unitalicize
+    word=unitalicise
+    word=ununderline
+    word=unhighlight
+
+@lex.docs.editor.sizeverbs core.lexicon
+    class=noun
+    word=enlarge
+    word=shrink
+    word=increase
+    word=decrease
+
+@lex.docs.editor.positions core.lexicon
+    class=noun
+    word=end
+    word=bottom
+    word=top
+    word=beginning
+    word=start
+
+@lex.docs.editor.determiners core.lexicon
+    class=noun
+    word=the
+    word=this
+    word=that
+    word=my
+    word=all
+    word=every
+    word=each
+    word=these
+    word=those
+    word=first
+    word=second
+    word=third
+    word=fourth
+    word=fifth
+    word=last
+
+@lex.docs.editor.sizeables core.lexicon
+    class=noun
+    word=title
+    word=heading
+    word=header
