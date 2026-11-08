@@ -221,10 +221,19 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
   /**
    * Validity class of a segmentation (spec 03 section 7.13): 0 = every piece read completely from the original or spell-corrected text;
    * 1 = complete, but some piece needed generated text (simplified or normalizer); 2 = complete only through partial understanding or a
-   * weak fallback reading; 3 = some piece is not read at all. Selection is lexicographic: lower class first, scores only order within a class.
+   * weak fallback reading; 3 = some piece is not read at all, or two pieces are cut apart inside a clause (no punctuation or connective) and a neighbour is not a clean top-ranked original reading (weak cut). Selection is lexicographic: lower class first, scores only order within a class.
    */
-  const tierOf = (pieces) => {
-    if (!pieces.length || pieces.some((p) => !p.valid)) return 3;
+  const DELIMITED = /[.,;:!?\n]|\b(and|then|also|but|or|next)\b/i;
+  /** A cut inside a clause (no punctuation or connective between two pieces) is only believed when both neighbours are read cleanly: top-ranked world, original text. */
+  const weakCut = (pieces, text) => pieces.some((p, i) => {
+    if (i === 0) return false;
+    const q = pieces[i - 1];
+    if (DELIMITED.test(text.slice(q.end, p.start)) || DELIMITED.test(q.text.slice(-1)) || /^(and|then|also|but|or|next)\b/i.test(p.text)) return false;
+    const clean = (x) => x.chosen.rank === 1 && x.chosen.variant === 'original';
+    return !(clean(q) && clean(p));
+  });
+  const tierOf = (pieces, text = '') => {
+    if (!pieces.length || pieces.some((p) => !p.valid) || weakCut(pieces, text)) return 3;
     if (pieces.some((p) => p.chosen.partial || p.chosen.variant === 'partial' || p.chosen.fallback)) return 2;
     if (pieces.some((p) => p.chosen.variant === 'simplified' || p.chosen.variant === 'normalized')) return 1;
     return 0;
@@ -359,7 +368,7 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
       pieces.push({ index: pi, start: piece.start, end: piece.end, text: piece.text, simplified: piece.simplified ?? null, ...(normalizerStatus ? { normalizerStatus } : {}), attempts: attempts.map(({ wires, ...a }) => ({ ...a, wires: wires.length })),
         chosen: best ? { world: best.world, rank: best.rank, variant: best.variant, text: best.text, valid: best.valid, fallback: !!best.fallback, score: best.score, wires: best.wires, corrections: best.corrections, partial: best.partial } : null, valid: !!best?.valid, tie });
     }
-    return { index: seg.index, dispatcherScore: seg.score, score: total, tier: tierOf(pieces), valid: pieces.length > 0 && pieces.every((p) => p.valid), nInvalid: pieces.filter((p) => !p.valid).length, pieces };
+    return { index: seg.index, dispatcherScore: seg.score, score: total, tier: tierOf(pieces, pred.text), valid: pieces.length > 0 && pieces.every((p) => p.valid), nInvalid: pieces.filter((p) => !p.valid).length, pieces };
   };
 
   /** Validate one prediction. `override` replaces policy fields for this call only. */

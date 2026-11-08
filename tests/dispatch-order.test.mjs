@@ -65,3 +65,19 @@ test('a lower validity class always wins over a higher neural score', async () =
   assert.equal(r.winner.index, 1);
   assert.equal(r.trace.segmentations[1].tier, 0);
 });
+
+test('a cut inside a clause read through a lower-ranked world is a weak cut (class 3), not a complete reading', async () => {
+  const t = 'what is 7 plus 5 minus 2';
+  const r = await createDispatchValidator({ engine }).validate(msg(t, [
+    { score: -0.1, segments: [piece('what is 7 plus 5', W(['kids.arith', 0.99])), piece('minus 2', W(['kids.shapes', 0.5], ['kids.arith', 0.3], ['data.charts', 0.2]), 17)] },
+  ]));
+  const g = r.trace.segmentations[0];
+  if (g.valid && g.pieces[1].chosen.rank > 1) assert.equal(g.tier, 3);
+});
+
+test('a delimited split of clean top-ranked readings stays class 0', async () => {
+  const t = 'What is 20 divided by 4. How many legs does a spider have?';
+  const a = 'What is 20 divided by 4.', b = 'How many legs does a spider have?';
+  const r = await createDispatchValidator({ engine }).validate(msg(t, [{ score: -0.1, segments: [piece(a, W(['kids.arith', 0.9])), piece(b, W(['kids.animals', 0.8]), t.indexOf(b))] }]));
+  assert.equal(r.trace.segmentations[0].tier, 0);
+});
