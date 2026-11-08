@@ -300,204 +300,795 @@
     example="What should I mix to make pink?"
 
 @pat.kids.shapes.tsides core.pattern
-    match="[a|an|the]? {s:noun} [has|have] {n:number} {p:lex.kids.shapes.parts}"
+    match="[remember|fyi|note|note_that|btw|just_so_you_know|just_so_u_know|remember_that|did_you_know|you_should_know|learn_that|know_that|so|ok|okay|hey|please|listen|by_the_way|for_your_info|for_your_information|i_learned|i_heard|guess_what|oh_and|also|and|look|um|well|hmm|ah|oh|yo|dont_forget|dont_forget_that|keep_in_mind|keep_in_mind_that|make_a_note|note_this|write_this_down|save_this|save_that|store_this|store_that|memorize|memorize_this|please_remember|please_note|pls_remember|pls_note|u_should_know|you_need_to_know|heres_a_fact|here_is_a_fact|fun_fact|fact|true_fact|another_fact|one_more_thing|teach_you|let_me_teach_you|i_will_teach_you|i_can_tell_you|let_me_tell_you|lemme_tell_you]? [a|an|the]? {s:noun} [has|have] {n:number} {p:lex.kids.shapes.parts}"
     emit="@{_} kids.shapes.shape name={s} {p}s={n}"
     kind=statement
     priority=12
     example="A rhombus has 4 sides."
 
 @pat.kids.shapes.tcol core.pattern
-    match="[a|an|the]? {t:noun} [is|are] {c:lex.kids.shapes.colors}"
+    match="[remember|fyi|note|note_that|btw|just_so_you_know|just_so_u_know|remember_that|did_you_know|you_should_know|learn_that|know_that|so|ok|okay|hey|please|listen|by_the_way|for_your_info|for_your_information|i_learned|i_heard|guess_what|oh_and|also|and|look|um|well|hmm|ah|oh|yo|dont_forget|dont_forget_that|keep_in_mind|keep_in_mind_that|make_a_note|note_this|write_this_down|save_this|save_that|store_this|store_that|memorize|memorize_this|please_remember|please_note|pls_remember|pls_note|u_should_know|you_need_to_know|heres_a_fact|here_is_a_fact|fun_fact|fact|true_fact|another_fact|one_more_thing|teach_you|let_me_teach_you|i_will_teach_you|i_can_tell_you|let_me_tell_you|lemme_tell_you]? [a|an|the]? {t:noun} [is|are] {c:lex.kids.shapes.colors}"
     emit="@{_} kids.shapes.thing name={t} color={c}"
     kind=statement
     priority=12
     example="A strawberry is red."
 
 @pat.kids.shapes.tcol2 core.pattern
-    match="[a|an|the]? {t:noun} [is|are] {c:lex.kids.shapes.colors} and {d:lex.kids.shapes.colors}"
+    match="[remember|fyi|note|note_that|btw|just_so_you_know|just_so_u_know|remember_that|did_you_know|you_should_know|learn_that|know_that|so|ok|okay|hey|please|listen|by_the_way|for_your_info|for_your_information|i_learned|i_heard|guess_what|oh_and|also|and|look|um|well|hmm|ah|oh|yo|dont_forget|dont_forget_that|keep_in_mind|keep_in_mind_that|make_a_note|note_this|write_this_down|save_this|save_that|store_this|store_that|memorize|memorize_this|please_remember|please_note|pls_remember|pls_note|u_should_know|you_need_to_know|heres_a_fact|here_is_a_fact|fun_fact|fact|true_fact|another_fact|one_more_thing|teach_you|let_me_teach_you|i_will_teach_you|i_can_tell_you|let_me_tell_you|lemme_tell_you]? [a|an|the]? {t:noun} [is|are] {c:lex.kids.shapes.colors} and {d:lex.kids.shapes.colors}"
     emit="@{_} kids.shapes.thing name={t} color={c}\n@{_1} kids.shapes.thing name={t} color={d}"
     kind=statement
     priority=13
     example="Zebras are black and white."
 
 @pat.kids.shapes.tshape core.pattern
-    match="[a|an|the]? {t:noun} [is|are] [a|an|the]? {s:lex.kids.shapes.shapes}"
+    match="[remember|fyi|note|note_that|btw|just_so_you_know|just_so_u_know|remember_that|did_you_know|you_should_know|learn_that|know_that|so|ok|okay|hey|please|listen|by_the_way|for_your_info|for_your_information|i_learned|i_heard|guess_what|oh_and|also|and|look|um|well|hmm|ah|oh|yo|dont_forget|dont_forget_that|keep_in_mind|keep_in_mind_that|make_a_note|note_this|write_this_down|save_this|save_that|store_this|store_that|memorize|memorize_this|please_remember|please_note|pls_remember|pls_note|u_should_know|you_need_to_know|heres_a_fact|here_is_a_fact|fun_fact|fact|true_fact|another_fact|one_more_thing|teach_you|let_me_teach_you|i_will_teach_you|i_can_tell_you|let_me_tell_you|lemme_tell_you]? [a|an|the]? {t:noun} [is|are] [a|an|the]? {s:lex.kids.shapes.shapes}"
     emit="@{_} kids.shapes.thing name={t} shape={s}"
     kind=statement
     priority=12
     example="A ruler is a rectangle."
 
 @pat.kids.shapes.tmix core.pattern
-    match="{a:lex.kids.shapes.colors} and {b:lex.kids.shapes.colors} make {r:lex.kids.shapes.colors}"
+    match="[remember|fyi|note|note_that|btw|just_so_you_know|just_so_u_know|remember_that|did_you_know|you_should_know|learn_that|know_that|so|ok|okay|hey|please|listen|by_the_way|for_your_info|for_your_information|i_learned|i_heard|guess_what|oh_and|also|and|look|um|well|hmm|ah|oh|yo|dont_forget|dont_forget_that|keep_in_mind|keep_in_mind_that|make_a_note|note_this|write_this_down|save_this|save_that|store_this|store_that|memorize|memorize_this|please_remember|please_note|pls_remember|pls_note|u_should_know|you_need_to_know|heres_a_fact|here_is_a_fact|fun_fact|fact|true_fact|another_fact|one_more_thing|teach_you|let_me_teach_you|i_will_teach_you|i_can_tell_you|let_me_tell_you|lemme_tell_you]? {a:lex.kids.shapes.colors} and {b:lex.kids.shapes.colors} make {r:lex.kids.shapes.colors}"
     emit="@{_} kids.shapes.mix first={a} second={b} result={r}"
     kind=statement
     priority=12
     example="Black and red make brown."
 
 @pat.kids.shapes.w.fam.aux core.pattern
-    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|do_you_know|hey|quick_question]? [is|are|was|can|could|would|will|do|does|if|whether|tell_me_if|tell_me_whether|is_it_true_that|would_you_say|do_you_think|is_it_true] [a|an|the|every|any|all|each]? {s:noun} [be|is|are|counts|count|can_be|could_be|be_called|is_called|called|is_not|are_not|isnt|arent|counts_as|count_as|as|same_as|the_same_as|equal_to|also|always]? [as|called|same_as|the_same_as|a_kind_of|kind_of|1_of_the|a_type_of|a_form_of|a_special]? [a|an|the]? [type_of|kind_of]? {k:lex.kids.shapes.kinds} [shape|one]? [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no|true|true_or_false|y_n]? [pls|plz|please|thanks|anyway|quickly]?"
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [is|are|was|can|could|would|will|do|does|if|whether|tell_me_if|tell_me_whether|is_it_true_that|would_you_say|do_you_think|is_it_true] [a|an|the|every|any|all|each]? {s:noun} [be|is|are|counts|count|can_be|could_be|be_called|is_called|called|is_not|are_not|isnt|arent|counts_as|count_as|as|same_as|the_same_as|equal_to|also|always]? [as|called|same_as|the_same_as|a_kind_of|kind_of|1_of_the|a_type_of|a_form_of|a_special]? [a|an|the]? [type_of|kind_of]? {k:lex.kids.shapes.kinds} [shape|one]? [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no|true|true_or_false|y_n]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
     emit="@{_} core.question type=kids.shapes.family seek=holds where.shape={s} where.kind={k}"
     kind=question
     priority=10
     example="Could a rhombus be called a square, right?"
 
 @pat.kids.shapes.w.fam.tag core.pattern
-    match="{s:noun} [be|is|are|counts|count|can_be|is_not|are_not|isnt|arent|counts_as|count_as|same_as|the_same_as|equal_to]? [as|called|same_as|the_same_as|a_kind_of|kind_of|1_of_the]? [a|an|the]? {k:lex.kids.shapes.kinds} [shape|one]? [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no|true_or_false] [pls|plz|please|thanks|anyway|quickly]?"
+    match="{s:noun} [be|is|are|counts|count|can_be|is_not|are_not|isnt|arent|counts_as|count_as|same_as|the_same_as|equal_to]? [as|called|same_as|the_same_as|a_kind_of|kind_of|1_of_the]? [a|an|the]? {k:lex.kids.shapes.kinds} [shape|one]? [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no|true_or_false] [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
     emit="@{_} core.question type=kids.shapes.family seek=holds where.shape={s} where.kind={k}"
     kind=question
     priority=10
     example="A rhombus counts as a square yes or no"
 
 @pat.kids.shapes.w.fam.verb core.pattern
-    match="[a|an|the|every|any|all|each]? {s:noun} [counts|count|counts_as|count_as|can_be_called|could_be_called|be_called|is_called|can_count_as|could_count_as|is_also|is_always]  [as]? [a|an|the]? [type_of|kind_of]? {k:lex.kids.shapes.kinds} [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no|true|true_or_false|y_n]? [pls|plz|please|thanks|anyway|quickly]?"
+    match="[a|an|the|every|any|all|each]? {s:noun} [counts|count|counts_as|count_as|can_be_called|could_be_called|be_called|is_called|can_count_as|could_count_as|is_also|is_always]  [as]? [a|an|the]? [type_of|kind_of]? {k:lex.kids.shapes.kinds} [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no|true|true_or_false|y_n]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
     emit="@{_} core.question type=kids.shapes.family seek=holds where.shape={s} where.kind={k}"
     kind=question
     priority=10
     example="A rhombus counts as a square, right?"
 
 @pat.kids.shapes.w.round.aux core.pattern
-    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|do_you_know|hey|quick_question]? [is|are|was|can|could|would|will|do|does|if|whether|tell_me_if|tell_me_whether|is_it_true_that|would_you_say|do_you_think|is_it_true] [a|an|the|every|any|all|each]? {s:noun} [is|are|be]? [a|an]? [round|rounded] [shape|thing|one]? [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no|true|true_or_false|y_n]? [pls|plz|please|thanks|anyway|quickly]?"
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [is|are|was|can|could|would|will|do|does|if|whether|tell_me_if|tell_me_whether|is_it_true_that|would_you_say|do_you_think|is_it_true] [a|an|the|every|any|all|each]? {s:noun} [is|are|be]? [a|an]? [round|rounded] [shape|thing|one]? [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no|true|true_or_false|y_n]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
     emit="@{_} core.question type=kids.shapes.family seek=holds where.shape={s} where.kind=round_shape"
     kind=question
     priority=10
     example="Would you say a ball is round?"
 
 @pat.kids.shapes.w.round.tag core.pattern
-    match="[a|an|the|every|any|all|each]? {s:noun} [is|are]? [a|an]? [round|rounded] [shape|thing|one]? [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no|true_or_false] [pls|plz|please|thanks|anyway|quickly]?"
+    match="[a|an|the|every|any|all|each]? {s:noun} [is|are]? [a|an]? [round|rounded] [shape|thing|one]? [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no|true_or_false] [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
     emit="@{_} core.question type=kids.shapes.family seek=holds where.shape={s} where.kind=round_shape"
     kind=question
     priority=10
     example="A ball is round yes or no"
 
 @pat.kids.shapes.w.desc.f1 core.pattern
-    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|do_you_know|hey|quick_question]? [explain|describe|define|about|facts_about|info_on|info_about|what_do_you_know_about|tell_me_more_about|tell_me_something_about|tell_me_stuff_about|tell_me_all_about|tell_me_about|more_about|something_about|stuff_about|facts_on] [a|an|the|every|any|all|each]? {s:lex.kids.shapes.shapes} [pls|plz|please|thanks|anyway|quickly]?"
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [explain|describe|define|about|facts_about|info_on|info_about|what_do_you_know_about|tell_me_more_about|tell_me_something_about|tell_me_stuff_about|tell_me_all_about|tell_me_about|more_about|something_about|stuff_about|facts_on] [a|an|the|every|any|all|each]? {s:lex.kids.shapes.shapes} [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
     emit="@{_} core.question type=kids.shapes.shape seek=summary where.name={s}"
     kind=question
     priority=10
     example="Tell me something about an octagon."
 
 @pat.kids.shapes.w.desc.f2 core.pattern
-    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|do_you_know|hey|quick_question]? [tell_me|show_me|give_me] [the|some|a_few]? {s:lex.kids.shapes.shapes} [facts|info|stuff|details|trivia] [pls|plz|please|thanks|anyway|quickly]?"
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [tell_me|show_me|give_me] [the|some|a_few]? {s:lex.kids.shapes.shapes} [facts|info|stuff|details|trivia] [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
     emit="@{_} core.question type=kids.shapes.shape seek=summary where.name={s}"
     kind=question
     priority=10
     example="Give me some octagon facts."
 
 @pat.kids.shapes.w.desc.f3 core.pattern
-    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|do_you_know|hey|quick_question]? what [kind_of|type_of|sort_of]? shape [is|are] [a|an|the|every|any|all|each]? {s:lex.kids.shapes.shapes} [like]? [pls|plz|please|thanks|anyway|quickly]?"
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? what [kind_of|type_of|sort_of]? shape [is|are] [a|an|the|every|any|all|each]? {s:lex.kids.shapes.shapes} [like]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
     emit="@{_} core.question type=kids.shapes.shape seek=summary where.name={s}"
     kind=question
     priority=10
     example="What type of shape is an octagon?"
 
 @pat.kids.shapes.w.desc.f4 core.pattern
-    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|do_you_know|hey|quick_question]? what [is|are] [a|an|the|every|any|all|each]? {s:lex.kids.shapes.shapes} [like|exactly|really|actually]? [like|anyway|then|exactly]? [pls|plz|please|thanks|anyway|quickly]?"
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? what [is|are] [a|an|the|every|any|all|each]? {s:lex.kids.shapes.shapes} [like|exactly|really|actually]? [like|anyway|then|exactly]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
     emit="@{_} core.question type=kids.shapes.shape seek=summary where.name={s}"
     kind=question
     priority=10
     example="What is an octagon really like?"
 
 @pat.kids.shapes.w.thingcolor.f1 core.pattern
-    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|do_you_know|hey|quick_question]? [what|whats|which|what_is]? [is]? [the]? [usually|usual|normally|normal|typically|typical|generally|mostly]? [color|colour] [of|for|does|do|is|are|has|have]? [a|an|the|every|any|all|each]? {t:lex.kids.shapes.things} [usually|usual|normally|normal|typically|typical|generally|mostly]? [have|has|is|are|come_in|be]? [usually|usual|normally|normal|typically|typical|generally|mostly]? [pls|plz|please|thanks|anyway|quickly]?"
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [what|whats|which|what_is]? [is]? [the]? [usually|usual|normally|normal|typically|typical|generally|mostly]? [color|colour] [of|for|does|do|is|are|has|have]? [a|an|the|every|any|all|each]? {t:lex.kids.shapes.things} [usually|usual|normally|normal|typically|typical|generally|mostly]? [have|has|is|are|come_in|be]? [usually|usual|normally|normal|typically|typical|generally|mostly]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
     emit="@{_} core.question type=kids.shapes.thing seek=color where.name={t}"
     kind=question
     priority=10
     example="Whats the usual colour of a lemon?"
 
 @pat.kids.shapes.w.thingcolor.f2 core.pattern
-    match="[a|an|the|every|any|all|each]? {t:lex.kids.shapes.things} [is|are]? [what|which] [color|colour] [usually|usual|normally|normal|typically|typical|generally|mostly]? [pls|plz|please|thanks|anyway|quickly]?"
+    match="[a|an|the|every|any|all|each]? {t:lex.kids.shapes.things} [is|are]? [what|which] [color|colour] [usually|usual|normally|normal|typically|typical|generally|mostly]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
     emit="@{_} core.question type=kids.shapes.thing seek=color where.name={t}"
     kind=question
     priority=10
     example="A lemon is which colour?"
 
 @pat.kids.shapes.w.thingcolor.f3 core.pattern
-    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|do_you_know|hey|quick_question]? [what|which] [color|colour] [do|does|is|are|would|will|can]? [a|an|the|every|any|all|each]? {t:lex.kids.shapes.things} [usually|usual|normally|normal|typically|typical|generally|mostly]? [have|be|has|is|are]? [usually|usual|normally|normal|typically|typical|generally|mostly]? [pls|plz|please|thanks|anyway|quickly]?"
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [what|which] [color|colour] [do|does|is|are|would|will|can]? [a|an|the|every|any|all|each]? {t:lex.kids.shapes.things} [usually|usual|normally|normal|typically|typical|generally|mostly]? [have|be|has|is|are]? [usually|usual|normally|normal|typically|typical|generally|mostly]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
     emit="@{_} core.question type=kids.shapes.thing seek=color where.name={t}"
     kind=question
     priority=10
     example="What colour would a lemon usually be?"
 
 @pat.kids.shapes.w.iscol.aux core.pattern
-    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|do_you_know|hey|quick_question]? [is|are|was|could|would|can|will|does|do|if|whether|tell_me_if]? [a|an|the|every|any|all|each]? {t:lex.kids.shapes.things} [be|is|are|usually|normally|typically|always|generally|colored|coloured]? [usually|usual|normally|normal|typically|typical|generally|mostly]? [colour|color]? [a|an]? {c:lex.kids.shapes.colors} [color|colour]? [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no|true|true_or_false|y_n]? [pls|plz|please|thanks|anyway|quickly]?"
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [is|are|was|could|would|can|will|does|do|if|whether|tell_me_if]? [a|an|the|every|any|all|each]? {t:lex.kids.shapes.things} [be|is|are|usually|normally|typically|always|generally|colored|coloured]? [usually|usual|normally|normal|typically|typical|generally|mostly]? [colour|color]? [a|an]? {c:lex.kids.shapes.colors} [color|colour]? [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no|true|true_or_false|y_n]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
     emit="@{_} core.question type=kids.shapes.thing seek=is_color where.name={t} where.is_color={c}"
     kind=question
     priority=10
     example="Could the grass be red?"
 
 @pat.kids.shapes.w.iscol.tag core.pattern
-    match="[a|an|the|every|any|all|each]? {t:lex.kids.shapes.things} [be|is|are|usually|normally|typically|always|generally|colored|coloured]? [usually|usual|normally|normal|typically|typical|generally|mostly]? [colour|color]? [a|an]? {c:lex.kids.shapes.colors} [color|colour]? [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no|true_or_false] [pls|plz|please|thanks|anyway|quickly]?"
+    match="[a|an|the|every|any|all|each]? {t:lex.kids.shapes.things} [be|is|are|usually|normally|typically|always|generally|colored|coloured]? [usually|usual|normally|normal|typically|typical|generally|mostly]? [colour|color]? [a|an]? {c:lex.kids.shapes.colors} [color|colour]? [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no|true_or_false] [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
     emit="@{_} core.question type=kids.shapes.thing seek=is_color where.name={t} where.is_color={c}"
     kind=question
     priority=10
     example="The grass is green right?"
 
 @pat.kids.shapes.w.iscol.rev core.pattern
-    match="{c:lex.kids.shapes.colors} {t:lex.kids.shapes.things} [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no|true|true_or_false|y_n]? [pls|plz|please|thanks|anyway|quickly]?"
+    match="{c:lex.kids.shapes.colors} {t:lex.kids.shapes.things} [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no|true|true_or_false|y_n]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
     emit="@{_} core.question type=kids.shapes.thing seek=is_color where.name={t} where.is_color={c}"
     kind=question
     priority=10
     example="Green grass?"
 
 @pat.kids.shapes.w.iscol.rev2 core.pattern
-    match="{t:lex.kids.shapes.things} [color|colour] {c:lex.kids.shapes.colors} [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no|true|true_or_false|y_n]? [pls|plz|please|thanks|anyway|quickly]?"
+    match="{t:lex.kids.shapes.things} [color|colour] {c:lex.kids.shapes.colors} [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no|true|true_or_false|y_n]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
     emit="@{_} core.question type=kids.shapes.thing seek=is_color where.name={t} where.is_color={c}"
     kind=question
     priority=10
     example="Grass colour green yes or no"
 
 @pat.kids.shapes.w.ck.aux core.pattern
-    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|do_you_know|hey|quick_question]? [is|are|would|could|can|does|do|if|whether]? [the]? [color|colour]? {c:lex.kids.shapes.colors} [is|be|count|counts|count_as|counts_as|belong|belongs|belong_to|belongs_to|1_of|in|among|as]? [a|an|the|1_of_the|in_the|among_the|as|of_the]? [a|an|the]? {k:lex.kids.shapes.colorkinds} [color|colour|colors|colours|one]? [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no|true|true_or_false|y_n]? [pls|plz|please|thanks|anyway|quickly]?"
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [is|are|would|could|can|does|do|if|whether]? [the]? [color|colour]? {c:lex.kids.shapes.colors} [is|be|count|counts|count_as|counts_as|belong|belongs|belong_to|belongs_to|1_of|in|among|as]? [a|an|the|1_of_the|in_the|among_the|as|of_the]? [a|an|the]? {k:lex.kids.shapes.colorkinds} [color|colour|colors|colours|one]? [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no|true|true_or_false|y_n]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
     emit="@{_} core.question type=kids.shapes.color seek=is_kind where.name={c} where.is_kind={k}"
     kind=question
     priority=10
     example="Is the colour yellow one of the secondary colours?"
 
 @pat.kids.shapes.w.ck.tag core.pattern
-    match="{c:lex.kids.shapes.colors} [is|be|count|counts|count_as|counts_as|belong|belongs|belong_to|belongs_to|1_of|in|among|as]? [a|an|the|1_of_the|in_the|among_the|as|of_the]? [a|an|the]? {k:lex.kids.shapes.colorkinds} [color|colour|colors|colours|one]? [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no|true_or_false] [pls|plz|please|thanks|anyway|quickly]?"
+    match="{c:lex.kids.shapes.colors} [is|be|count|counts|count_as|counts_as|belong|belongs|belong_to|belongs_to|1_of|in|among|as]? [a|an|the|1_of_the|in_the|among_the|as|of_the]? [a|an|the]? {k:lex.kids.shapes.colorkinds} [color|colour|colors|colours|one]? [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no|true_or_false] [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
     emit="@{_} core.question type=kids.shapes.color seek=is_kind where.name={c} where.is_kind={k}"
     kind=question
     priority=10
     example="Yellow a secondary colour or not"
 
 @pat.kids.shapes.w.ck.bare core.pattern
-    match="{c:lex.kids.shapes.colors} {k:lex.kids.shapes.colorkinds} [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no|true|true_or_false|y_n]? [pls|plz|please|thanks|anyway|quickly]?"
+    match="{c:lex.kids.shapes.colors} {k:lex.kids.shapes.colorkinds} [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no|true|true_or_false|y_n]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
     emit="@{_} core.question type=kids.shapes.color seek=is_kind where.name={c} where.is_kind={k}"
     kind=question
     priority=10
     example="Yellow secondary?"
 
 @pat.kids.shapes.w.mix.f1 core.pattern
-    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|do_you_know|hey|quick_question]? [what|what_color|what_colour|which_color|which_colour]? [do|does|will|would|happens|is|if|when]? [if|when]? [i|you|we]? [mix|mixing|blend|combine|add|put|mixed|mix_up]? {a:lex.kids.shapes.colors} [and|with|plus|mixed_with|mixed_up_with|blended_with|together_with|combined_with|added_to|on_top_of|mixed|combined|blended]? {b:lex.kids.shapes.colors} [together|mixed|blended|combined|mixed_up]? [make|makes|gives|give|is|equals|become|becomes|turns_into|get|gets|results_in|do_i_get|will_be|go_together_to_make]? [what|what_happens|what_do_i_get|what_do_you_get|what_color|what_colour|what_do_we_get|which_color|which_colour]? [pls|plz|please|thanks|anyway|quickly]?"
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [what|what_color|what_colour|which_color|which_colour]? [do|does|will|would|happens|is|if|when]? [if|when]? [i|you|we]? [mix|mixing|blend|combine|add|put|mixed|mix_up]? {a:lex.kids.shapes.colors} [and|with|plus|mixed_with|mixed_up_with|blended_with|together_with|combined_with|added_to|on_top_of|mixed|combined|blended]? {b:lex.kids.shapes.colors} [together|mixed|blended|combined|mixed_up]? [make|makes|gives|give|is|equals|become|becomes|turns_into|get|gets|results_in|do_i_get|will_be|go_together_to_make]? [what|what_happens|what_do_i_get|what_do_you_get|what_color|what_colour|what_do_we_get|which_color|which_colour]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
     emit="@{_} core.question type=kids.shapes.mix seek=result where.first={a} where.second={b}"
     kind=question
     priority=8
     example="Blend red with blue, what do I get?"
 
 @pat.kids.shapes.w.rec.f1 core.pattern
-    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|do_you_know|hey|quick_question]? [what|which_colors|what_colors|which|what_colours|which_colours] [do_i_need_for|makes|make|do_i_mix_for|do_i_mix_to_get|should_i_mix_for|to_mix_for|do_i_mix_to_make|do_i_need_to_make|is_needed_for|is_needed_to_make|do_i_need_to_get] [the]? [color|colour]? {c:lex.kids.shapes.colors} [pls|plz|please|thanks|anyway|quickly]?"
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [what|which_colors|what_colors|which|what_colours|which_colours] [do_i_need_for|makes|make|do_i_mix_for|do_i_mix_to_get|should_i_mix_for|to_mix_for|do_i_mix_to_make|do_i_need_to_make|is_needed_for|is_needed_to_make|do_i_need_to_get] [the]? [color|colour]? {c:lex.kids.shapes.colors} [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
     emit="@{_} core.question type=kids.shapes.mix seek=recipe where.result={c}"
     kind=question
     priority=10
     example="Which colours do I mix to get orange?"
 
 @pat.kids.shapes.w.rec.f2 core.pattern
-    match="{c:lex.kids.shapes.colors} [is_made_from|comes_from|from|is_made_of|is_made_by|is_made_with|is_mixed_from] [what|which]? [colors|colours]? [pls|plz|please|thanks|anyway|quickly]?"
+    match="{c:lex.kids.shapes.colors} [is_made_from|comes_from|from|is_made_of|is_made_by|is_made_with|is_mixed_from] [what|which]? [colors|colours]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
     emit="@{_} core.question type=kids.shapes.mix seek=recipe where.result={c}"
     kind=question
     priority=10
     example="Orange comes from which colours?"
 
 @pat.kids.shapes.w.rec.f3 core.pattern
-    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|do_you_know|hey|quick_question]? [how_do_u|how_do_you|how_can_i|how_can_you|how_to|how_do_i|how_could_i|how_would_i|how_do_we|how_can_we] [get|make|create|mix|obtain|produce|do|mix_up] [the]? [color|colour]? {c:lex.kids.shapes.colors} [pls|plz|please|thanks|anyway|quickly]?"
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [how_do_u|how_do_you|how_can_i|how_can_you|how_to|how_do_i|how_could_i|how_would_i|how_do_we|how_can_we] [get|make|create|mix|obtain|produce|do|mix_up] [the]? [color|colour]? {c:lex.kids.shapes.colors} [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
     emit="@{_} core.question type=kids.shapes.mix seek=recipe where.result={c}"
     kind=question
     priority=10
     example="How do u create the colour orange?"
 
 @pat.kids.shapes.w.rec.f4 core.pattern
-    match="[i_need|i_want|need|want|making|im_making|i_am_making] [the]? [color|colour]? {c:lex.kids.shapes.colors} [what|how] [do_i|should_i|can_i|to]? [mix|make|do|get]? [pls|plz|please|thanks|anyway|quickly]?"
+    match="[i_need|i_want|need|want|making|im_making|i_am_making] [the]? [color|colour]? {c:lex.kids.shapes.colors} [what|how] [do_i|should_i|can_i|to]? [mix|make|do|get]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
     emit="@{_} core.question type=kids.shapes.mix seek=recipe where.result={c}"
     kind=question
     priority=10
     example="I need orange, what do i mix?"
+
+@pat.kids.shapes.x.sides.how core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [how_many|how_much|number_of|what_is_the_number_of|whats_the_number_of|count_the|count|tell_me_the_number_of|the_number_of|the_amount_of|amount_of|what_number_of] {p:lex.kids.shapes.parts} [does|do|has|have|on|in|of|are_there_on|are_there_in|is_there_on|is_there_in|did|can|will|would|are|is|for]? [like|um|uh|er|hmm|basically|actually|really|just|exactly]? [a|an|the|every|any|all|each|some]? {s:noun} [have|has|got|get|there|contain|contains|include|includes|own|owns|come_with|comes_with]? [even|actually|really|exactly|in_total|altogether]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.shape seek={p}s where.name={s}"
+    kind=question
+    priority=10
+    example="How many sides on a hexagon"
+    example="How many corners has a hexagon got"
+    example="Tell me the number of sides of a hexagon"
+
+@pat.kids.shapes.x.sides.rev core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [like|um|uh|er|hmm|basically|actually|really|just|exactly]? [a|an|the|every|any|all|each|some]? {s:noun} [have|has|got|get|does_it_have|do_they_have|it_has|they_have]? how_many {p:lex.kids.shapes.parts} [does_it_have|has|have|it_has|do_they_have|does|do|they_have|it_got|they_got|has_it|have_they|are_there|is_there|on_it|in_total|altogether]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.shape seek={p}s where.name={s}"
+    kind=question
+    priority=10
+    example="Hexagon how many sides"
+    example="a hexagon has how many corners"
+
+@pat.kids.shapes.x.sides.bare core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [count|number|list|say|give_me|show_me|what_is|what_are|whats|find|get|check|how_many]? [the]? [like|um|uh|er|hmm|basically|actually|really|just|exactly]? [a|an|the|every|any|all|each|some]? {s:noun} {p:lex.kids.shapes.parts} [count|number|total|amount|number_of|total_number|count_of|tally|quantity]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.shape seek={p}s where.name={s}"
+    kind=question
+    priority=7
+    example="Hexagon sides?"
+    example="Count hexagon sides"
+    example="Hexagon corner number"
+
+@pat.kids.shapes.x.sides.of core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [number_of_sides|number_of_corners|side_count|corner_count|sides_count|corners_count|side_number|corner_number|count_of_sides|count_of_corners|the_number_of_sides|the_number_of_corners|side_count_of|corner_count_of|number_of_sides_of|number_of_corners_of|number_of_sides_on|number_of_corners_on] [on|of|for|in|does|do|has|have|is|are]? [a|an|the|every|any|all|each|some]? {s:noun} [have|has|got]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.shape seek=sides where.name={s}"
+    kind=question
+    priority=7
+    example="Sides of a hexagon"
+
+@pat.kids.shapes.x.sides.yn core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [does|do|did|will|can|is|are|would|has|have] [like|um|uh|er|hmm|basically|actually|really|just|exactly]? [a|an|the|every|any|all|each|some]? {s:noun} [have|has|got|have_got|has_got|with|get|contain|consist_of|made_of]? {n:number} {p:lex.kids.shapes.parts} [right|yes|no|yeah|correct|or_no|or_not|or_nah|yes_or_no|right_or_not|yes_no|true|true_or_false|huh|eh|really|actually]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.shape seek={p}s mode=exists where.name={s} where.{p}s={n}"
+    kind=question
+    priority=9
+    example="Does a hexagon got 6 sides"
+    example="Is a hexagon with 6 sides"
+
+@pat.kids.shapes.x.sides.yn2 core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [like|um|uh|er|hmm|basically|actually|really|just|exactly]? [a|an|the|every|any|all|each|some]? {s:noun} [have|has|got|have_got|has_got|with] {n:number} {p:lex.kids.shapes.parts} [right|yes|no|yeah|correct|or_no|or_not|or_nah|yes_or_no|right_or_not|yes_no|true|huh|eh] [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.shape seek={p}s mode=exists where.name={s} where.{p}s={n}"
+    kind=question
+    priority=9
+    example="A hexagon has 6 sides right"
+
+@pat.kids.shapes.x.sides.which core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [which|what|name|list|show|find|give_me|tell_me|any|some|is_there|are_there|do_you_know|show_me|find_me|get] [all|some|the|any|a]? [shape|shapes|polygon|polygons|figure|figures|form|forms|thing|things] [has|have|with|that_has|that_have|having|got|that_got|which_has|which_have|made_of|that_is_made_of|that_have_exactly|with_exactly|having_exactly|has_exactly|have_exactly] [exactly]? {n:number} {p:lex.kids.shapes.parts} [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.shape seek=name mode=list where.{p}s={n}"
+    kind=question
+    priority=10
+    example="Show me shapes with 3 sides"
+    example="Which polygon has exactly 5 corners"
+
+@pat.kids.shapes.x.sides.which2 core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [which|what|name|list|show|find|give_me|tell_me|any|some|all|show_me|find_me]? [all|some|the|any]? [shape|shapes|polygon|polygons|figure|figures]? {n:number} [sided|cornered|angled] [shape|shapes|polygon|polygons|figure|figures|thing|things|one|ones] [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.shape seek=name mode=list where.sides={n}"
+    kind=question
+    priority=10
+    example="Three sided shapes?"
+    example="List 4 sided figures"
+
+@pat.kids.shapes.x.sides.which3 core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [which|what|name|list|show|find|give_me|tell_me|any|some|all|show_me|find_me]? [all|some|the|any]? [shape|shapes|polygon|polygons|figure|figures]? {n:number} {p:lex.kids.shapes.parts} [shape|shapes|polygon|polygons|figure|figures|thing|things] [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.shape seek=name mode=list where.{p}s={n}"
+    kind=question
+    priority=9
+    example="3 side shapes"
+
+@pat.kids.shapes.x.desc.a core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [what|whats|wat|wats|what_is|what_are|who_is|which|define|describe|explain|about|info_on|tell_me_about|tell_me_more_about|talk_about|more_about|facts_about|something_about|stuff_about|what_do_you_know_about|describe_to_me|explain_to_me|i_wanna_know_about|i_want_to_know_about|learn_about|teach_me_about] [is|are|do|does]? [a|an|the|every|any|all|each|some]? {s:lex.kids.shapes.shapes} [is|are|description|desc|info|facts|summary|details|definition|meaning|overview|intro|profile|stuff|basics|explained|explanation|fact|fun_facts|fun_fact|trivia|data|information|like|all_about|exactly|really|anyway|for_me|to_me|mean|means]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.shape seek=summary where.name={s}"
+    kind=question
+    priority=13
+    example="Whats a pentagon"
+    example="Give me a pentagon summary"
+    example="Can you describe a pentagon for me"
+    example="Teach me about pentagons"
+
+@pat.kids.shapes.x.desc.b core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [a|an|the|every|any|all|each|some]? {s:lex.kids.shapes.shapes} [description|desc|info|facts|summary|details|definition|meaning|overview|intro|profile|stuff|basics|explained|explanation|fact|fun_facts|fun_fact|trivia|about|data|information|infos|bio|story|lesson|notes] [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.shape seek=summary where.name={s}"
+    kind=question
+    priority=9
+    example="Pentagon description pls"
+    example="Pentagon info"
+
+@pat.kids.shapes.x.desc.bare core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [a|an|the|every|any|all|each|some]? {s:lex.kids.shapes.shapes} [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.shape seek=summary where.name={s}"
+    kind=question
+    priority=6
+    example="Pentagon?"
+
+@pat.kids.shapes.x.fam.bare core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [is|are|was|does|do|be]? [a|an|the|every|any|all|each|some]? {s:noun} [be|is|are|=|counts_as|count_as|equals|same_as|the_same_as|equal_to|vs|or|a_kind_of|kind_of|a_type_of|a_sort_of|also|always|still|just]? [a|an|the]? [kind_of|type_of|sort_of]? {k:lex.kids.shapes.kinds} [shape|one|thing|type|kind|figure|polygon]? [right|yes|no|yeah|correct|or_no|or_not|or_nah|yes_or_no|right_or_not|yes_no|true|true_or_false|huh|eh|really|actually]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.family seek=holds where.shape={s} where.kind={k}"
+    kind=question
+    priority=7
+    example="Triangle a polygon?"
+    example="Triangle polygon?"
+    example="Hexagon triangle?"
+    example="A hexagon is a triangle right"
+
+@pat.kids.shapes.x.fam.same core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [a|an|the|every|any|all|each|some]? {s:noun} [and|or|vs|versus|with|n|=]? [a|an|the|every|any|all|each|some]? {k:lex.kids.shapes.kinds} [the_same|same|alike|equal|identical|similar|the_same_thing|same_thing|same_shape|the_same_shape|one_and_the_same|a_match|the_same_kind|the_same_type|the_same_kind_of_shape|related|connected] [right|yes|no|yeah|correct|or_no|or_not|or_nah|yes_or_no|right_or_not|yes_no|true|true_or_false|huh|eh|really|actually]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.family seek=holds where.shape={s} where.kind={k}"
+    kind=question
+    priority=9
+    example="Hexagons triangles same?"
+    example="are a square and a rectangle the same"
+
+@pat.kids.shapes.x.fam.abbr core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [is|are|does|do]? [a|an|the|every|any|all|each|some]? {s:noun} [a|an]? [tri|triangle_shape] [right|yes|no|yeah|correct|or_no|or_not|or_nah|yes_or_no|right_or_not|yes_no|true|true_or_false|huh|eh|really|actually]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.family seek=holds where.shape={s} where.kind=triangle"
+    kind=question
+    priority=9
+    example="Is a hexagon a tri"
+
+@pat.kids.shapes.x.fam.abbr2 core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [is|are|does|do]? [a|an|the|every|any|all|each|some]? {s:noun} [a|an]? [rect|rectangle_shape] [right|yes|no|yeah|correct|or_no|or_not|or_nah|yes_or_no|right_or_not|yes_no|true|true_or_false|huh|eh|really|actually]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.family seek=holds where.shape={s} where.kind=rectangle"
+    kind=question
+    priority=9
+    example="Is a square a rect"
+
+@pat.kids.shapes.x.tcol.a core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [what|whats|wat|wats|what_is|tell_me|say|show_me|give_me|which]? [is|are]? [the]? [a|an|the|every|any|all|each|some]? {t:lex.kids.shapes.things} ['s]? [usual|usually|normal|typical|normally|typically|natural|real|actual|common|regular]? [color|colour|colors|colours|shade|hue|tint] [is|are|does|do|of_it|usually]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.thing seek=color where.name={t}"
+    kind=question
+    priority=9
+    example="Carrot color?"
+    example="Carrot colour pls"
+    example="Tell me the carrot color"
+
+@pat.kids.shapes.x.tcol.b core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [what|whats|wat|which|what_kind_of|what_sort_of] [color|colour|shade|hue|tint] [is|are|does|do|would|will|has|have|can]? [a|an|the|every|any|all|each|some]? {t:lex.kids.shapes.things} [is|are|have|has|be|usually|normally|typically|look|looks|come|comes|appear|appears|turn|turns|go|goes|get|gets|become|becomes|painted|coloured|colored|made]? [usually|normally|typically|normal|usual|often|mostly]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.thing seek=color where.name={t}"
+    kind=question
+    priority=10
+    example="Can you say what color a carrot is"
+    example="which colour is a carrot usually"
+
+@pat.kids.shapes.x.tcol.c core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [a|an|the|every|any|all|each|some]? {t:lex.kids.shapes.things} [is|are|looks|look|comes|come|appears|appear|turns|turn|goes|go|gets|get|becomes|become|is_painted|is_colored|is_coloured|are_colored|are_coloured|are_painted|is_usually|are_usually|is_normally|are_normally|is_typically|are_typically]? [what|which] [color|colour|shade|hue|colors|colours|like|looking|look_like|colored|coloured] [usually|normally|typically|normal|usual|often|mostly|really|actually|exactly]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.thing seek=color where.name={t}"
+    kind=question
+    priority=10
+    example="A carrot is what color"
+
+@pat.kids.shapes.x.icol.a core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [is|are|can|could|would|will|does|do|may|might] [a|an|the|every|any|all|each|some]? {t:lex.kids.shapes.things} [can|could|may|might|would|will|be|is|are|ever|sometimes|really|actually|also|possibly|maybe|ever_be|sometimes_be|really_be|actually_be|also_be|possibly_be|maybe_be|always_be|usually_be|normally_be]? [be]? [a|an]? {c:lex.kids.shapes.colors} [thing|one|color|colour|colored|coloured|possible|ok|okay|real|normal|right|true|allowed|a_thing|a_real_color|a_real_colour|a_normal_color|a_normal_colour|a_possible_color|a_possible_colour]? [right|yes|no|yeah|correct|or_no|or_not|or_nah|yes_or_no|right_or_not|yes_no|true|true_or_false|huh|eh|really|actually]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.thing seek=is_color where.name={t} where.is_color={c}"
+    kind=question
+    priority=10
+    example="Is grass a green thing"
+    example="Leaves can be blue?"
+
+@pat.kids.shapes.x.icol.b core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [a|an|the|every|any|all|each|some]? {t:lex.kids.shapes.things} [can|could|may|might|would|will] [be|ever_be|sometimes_be|also_be|possibly_be|maybe_be|really_be|actually_be] [a|an]? {c:lex.kids.shapes.colors} [thing|one|color|colour|colored|coloured|possible|ok|okay|real|normal|right|true|allowed]? [right|yes|no|yeah|correct|or_no|or_not|or_nah|yes_or_no|right_or_not|yes_no|true|true_or_false|huh|eh|really|actually]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.thing seek=is_color where.name={t} where.is_color={c}"
+    kind=question
+    priority=10
+    example="A leaf could be blue right"
+
+@pat.kids.shapes.x.icol.c core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [is|are|can|could|would|will|does|do|may|might]? [a|an|the|every|any|all|each|some]? {c:lex.kids.shapes.colors} {t:lex.kids.shapes.things} [possible|real|ok|okay|a_thing|normal|allowed|true|right|even_possible|a_real_thing|a_thing_ever|ever_possible|a_possibility|a_real_color|real_or_not|possible_or_not|a_normal_thing|a_real_one|a_possible_thing|even_real|a_color_it_can_be|a_color_it_has|ever_a_thing|a_real_thing_or_not|for_real|a_thing_in_real_life] [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.thing seek=is_color where.name={t} where.is_color={c}"
+    kind=question
+    priority=10
+    example="Is a blue leaf possible"
+
+@pat.kids.shapes.x.ck.a core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [is|are|does|do|would|could|can|will|be|was]? [a|an|the]? {k:lex.kids.shapes.colorkinds} [color|colour|colors|colours|one|kind|type|shade|hue]? [is|be|=|are|:]? [the]? [color|colour]? {c:lex.kids.shapes.colors} [right|yes|no|yeah|correct|or_no|or_not|or_nah|yes_or_no|right_or_not|yes_no|true|true_or_false|huh|eh|really|actually]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.color seek=is_kind where.name={c} where.is_kind={k}"
+    kind=question
+    priority=9
+    example="Secondary color green right?"
+    example="Secondary: green?"
+    example="Secondary orange?"
+    example="Primary black?"
+
+@pat.kids.shapes.x.ck.b core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [is|are|does|do|would|could|can|will|be|was]? [the]? [color|colour]? {c:lex.kids.shapes.colors} [is|be|are|a|an|the|counts_as|count_as|1_of_the|one_of_the|=]? [a|an|the]? {k:lex.kids.shapes.colorkinds} [color|colour|colors|colours|one|kind|type|shade|hue]? [or|and|and_not|not|vs|versus|or_is_it|or_is_it_a|or_a|or_an|or_the] [a|an|the]? {k2:lex.kids.shapes.colorkinds} [color|colour|colors|colours|one|kind|type|shade|hue]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.color seek=is_kind where.name={c} where.is_kind={k}"
+    kind=question
+    priority=10
+    example="Is green secondary or primary"
+
+@pat.kids.shapes.x.ck.c core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [is|are|does|do|would|could|can|will|be|was]? [the]? [color|colour]? {c:lex.kids.shapes.colors} [is|be|are|a|an|the|counts_as|count_as|1_of_the|one_of_the|=]? [a|an|the]? {k:lex.kids.shapes.colorkinds} [color|colour|colors|colours|kind|type|shade|hue|thing] [right|yes|no|yeah|correct|or_no|or_not|or_nah|yes_or_no|right_or_not|yes_no|true|true_or_false|huh|eh|really|actually]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.color seek=is_kind where.name={c} where.is_kind={k}"
+    kind=question
+    priority=10
+    example="Green a secondary one?"
+    example="Is orange a secondary one"
+
+@pat.kids.shapes.x.rec.a core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [which|what|whats|wat] [two|2|colors|colours|paints|paint|paint_colors|paint_colours|two_colors|two_colours|two_paints|2_colors|2_colours|colors_do|colours_do|colors_should|colours_should]? [colors|colours|paints|paint_colors|paint_colours|do_i|should_i|can_i|do_you|can_you|do_we|should_we|can_we|would_i|will_i|do_u|can_u|should_u]? [colors|colours|do_i|should_i|can_i|do_you|can_you|do_we|should_we|can_we|do_u|can_u|should_u]? [mix|mixes|combines|blends|goes|go|combine|blend|add|use|put|mix_up|put_together|stir|merge|join|need|have_to_mix|must_mix|should_mix|make|get|take|pick|choose|paint|squeeze|pour|buy]? [together|up|in]? [to_make|to_get|to_form|to_create|to_produce|to_obtain|make|makes|get|gets|give|gives|create|creates|produce|produces|form|forms|combine_to_make|combine_to_get|combine_to|combine_into|mix_to_make|mix_into|mix_to_get|mix_to|blend_into|blend_to_make|blend_to_get|turn_into|turns_into|become|becomes|result_in|results_in|add_up_to|are_needed_for|are_needed_to_make|are_needed_to_get|do_you_need_for|do_i_need_for|do_i_need_to_make|do_i_need_to_get|do_you_need_to_make|do_you_need_to_get|are_used_for|are_used_to_make|make_up|to|into|in_to|for|equal|equals|go_into|go_to_make|go_to_get|go_in|end_up_as|end_up_in|end_up_with|come_together_as|come_together_to_make|produce_a|give_you|gives_you|get_you|gets_you|make_you|makes_you|give_me|gives_me] [the]? [color|colour]? {c:lex.kids.shapes.colors} [paint|color|colour|again|from_them|out_of_them|pls]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.mix seek=recipe where.result={c}"
+    kind=question
+    priority=10
+    example="Which two colors make brown"
+    example="Which colours combine to brown"
+    example="what mixes into orange"
+
+@pat.kids.shapes.x.rec.b core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [how|what_way|which_way|in_what_way] [can|do|could|would|should|will|did|to|does|may|must|shall]? [i|you|we|u|one|people|kids|someone]? [make|get|create|mix|obtain|produce|form|mix_up|do|paint|prepare|cook|brew|whip_up|come_up_with|end_up_with|achieve|find|build|put_together|go_about_making|go_about_getting|go_about_mixing] [the|some|a|any]? [color|colour|paint|shade]? {c:lex.kids.shapes.colors} [paint|color|colour|from_scratch|by_mixing|by_mixing_what|from_what|using_what|with_what|out_of_what|by_combining|pls]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.mix seek=recipe where.result={c}"
+    kind=question
+    priority=10
+    example="How can i make brown paint"
+    example="How do i make orange paint"
+
+@pat.kids.shapes.x.rec.c core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [the]? [color|colour|paint]? {c:lex.kids.shapes.colors} [how|how_made|how_to_make|how_is_it_made|how_to_get|how_do_i_get|how_do_i_make|how_made_pls|made_how|from_what|from_which|from_which_colors|made_of|made_from|made_of_what|made_from_what|made_by_mixing_what|how_do_you_get|recipe|the_recipe|recipe_for|formula|mix|mix_what|mix_which|mix_which_colors|equals|equals_what|how_to_mix|how_to_create|how_to_produce|how_do_you_make|how_do_you_mix|how_do_we_make|how_do_we_get|how_do_we_mix|how_can_i_make|how_can_i_get|how_can_i_mix|made_by|created_by|mixed_from|mixed_by|formed_by|formed_from|created_from|come_from|comes_from|how_made_again|how_is_it_mixed|how_to_blend|blend|blend_what|made_with|made_with_what|made_out_of|made_out_of_what] [what|which|colors|colours|which_colors|which_colours|two_colors|two_colours|how|mix|mixing|made|pls]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.mix seek=recipe where.result={c}"
+    kind=question
+    priority=9
+    example="Orange how made?"
+    example="brown = mix what"
+    example="Orange recipe"
+
+@pat.kids.shapes.x.rec.d core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [get|getting|make|making|create|creating|obtain|obtaining|produce|producing|form|forming|mix|mixing|do|achieve|need|want|i_need|i_want|wanna_make|wanna_get|want_to_make|want_to_get|need_to_make|need_to_get|trying_to_make|trying_to_get|trying_to_mix] [the]? [color|colour|paint|shade]? {c:lex.kids.shapes.colors} [by_mixing|by_combining|through_mixing|using|with|from|by|via|by_blending|by_mixing_up|out_of|made_of|made_from]? [what|which|which_colors|which_colours|what_colors|what_colours|what_paints|which_paints|how|how_to|how_can_i|how_do_i|in_what_way|what_way|which_way|whats_the_recipe|what_recipe|what_colors_do_i_need|what_do_i_need|which_do_i_need|how_pls|how_exactly|what_exactly] [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.mix seek=recipe where.result={c}"
+    kind=question
+    priority=10
+    example="Get orange by mixing what"
+    example="Make orange how"
+
+@pat.kids.shapes.x.mix.a core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [what|whats|wat|wats|what_is|which|which_color|which_colour|what_color|what_colour|tell_me|say|show_me|give_me|find|guess|name|what_will_i_get|what_do_i_get|what_would_i_get|what_will_you_get|what_do_you_get|what_do_we_get|what_do_u_get|what_happens|what_happens_if|what_happens_when|how_does_it_look|how_will_it_look|what_comes_out|what_comes_out_if|what_comes_out_when|what_if|what_about] [color|colour|is|do|does|will|would|can|happens|if|when]? [is|do|does|will|would|can]? [you|i|we|u]? [get|make|do|have|see|obtain|produce|create|form|end_up_with|mix|mixing|blend|combine|add|put|mixed|merge|stir|join|combining|blending|adding|mixing_up|putting|putting_together|if_you_mix|if_i_mix|if_we_mix|when_you_mix|when_i_mix|when_we_mix|if_you_add|if_i_add|if_we_add|if_you_combine|if_i_combine|if_we_combine|if_you_blend|if_i_blend|if_we_blend|if_you_put|if_i_put|if_we_put]? [if|when|from|by]? [you|i|we|u]? [mix|mixing|blend|combine|add|put|mixed|merge|stir|join|combining|blending|adding|mixing_up|putting|putting_together|mixes|combines|blends|adds|puts]? {c:lex.kids.shapes.colors} [and|with|plus|mixed_with|mixed_up_with|combined_with|blended_with|added_to|added_with|put_with|together_with|merged_with|stirred_with|joined_with|on_top_of|over|into|to|x|n|or|mixed_together_with|mix_with|mixes_with|mixes_into|mix_into|combines_with|blends_with|plus_a_bit_of|and_a_bit_of|and_some|plus_some|and_then|then] {b:lex.kids.shapes.colors} [mix|mixed|together|make|makes|equal|equals|gives|give|get|gets|combine|combined|blend|blended|merge|merged|result|results|turn_into|turns_into|become|becomes|is_what|what|what_color|what_colour|which_color|which_colour|make_what|gives_what|equals_what|mixed_together|blended_together|combined_together|come_out|comes_out|looks_like|look_like|produce|produces|form|forms|create|creates|is_equal_to|is|are|will_make|will_give|would_make|would_give|gets_you|get_you|makes_you|make_you]? [what|which|what_color|what_colour|which_color|which_colour|color|colour|pls]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.mix seek=result where.first={c} where.second={b}"
+    kind=question
+    priority=10
+    example="Whats blue plus yellow"
+    example="what do you get if you mix blue with yellow"
+    example="what happens if i combine red and blue"
+
+@pat.kids.shapes.x.mix.b core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [what|whats|wat|wats|what_is|which|which_color|which_colour|what_color|what_colour|tell_me|say|show_me|give_me|find|guess|name|mix|mixing|blend|combine|add|put|mixed|merge|stir|join]? {c:lex.kids.shapes.colors} [and|with|plus|mixed_with|mixed_up_with|combined_with|blended_with|added_to|added_with|put_with|together_with|merged_with|stirred_with|joined_with|on_top_of|over|into|to|x|n|or|mixed_together_with|mix_with]? {b:lex.kids.shapes.colors} [mix|mixed|together|make|makes|equal|equals|gives|give|get|gets|combine|combined|blend|blended|merge|merged|result|results|turn_into|turns_into|become|becomes|is_what|what|what_color|what_colour|which_color|which_colour|make_what|gives_what|equals_what|mixed_together|blended_together|combined_together|come_out|comes_out|looks_like|look_like|produce|produces|form|forms|create|creates|is_equal_to|is|are|will_make|will_give|would_make|would_give|gets_you|get_you|makes_you|make_you] [what|which|what_color|what_colour|which_color|which_colour|color|colour|pls]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.mix seek=result where.first={c} where.second={b}"
+    kind=question
+    priority=9
+    example="Blue yellow mix?"
+    example="red and blue equals what"
+
+@pat.kids.shapes.x.lk.a core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [what|whats|wat|which|what_kind_of_shape|what_kind_of_form] [shape|form|kind_of_shape|type_of_shape|sort_of_shape] [is|are|does|do|has|have|would|will|can]? [a|an|the|every|any|all|each|some]? {t:noun} [have|has|look_like|looks_like|take|takes|make|makes|resemble|resembles|got|usually_have|normally_have|usually|normally|be|come_in|comes_in]? [like]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.thing seek=shape where.name={t}"
+    kind=question
+    priority=10
+    example="What shape does a ball have"
+    example="Which shape is a plate usually"
+
+@pat.kids.shapes.x.lk.b core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [what|whats|wat|which|tell_me|say]? [is]? [the]? [shape|form] [of|for|do|does|is|has]? [a|an|the|every|any|all|each|some]? {t:noun} [have|has|is|be|take|takes]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.thing seek=shape where.name={t}"
+    kind=question
+    priority=10
+    example="Whats the shape of a plate"
+
+@pat.kids.shapes.x.lk.c core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [a|an|the|every|any|all|each|some]? {t:noun} ['s]? [shape|form] [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.thing seek=shape where.name={t}"
+    kind=question
+    priority=5
+    example="Plate shape?"
+
+@pat.kids.shapes.x.lk.d core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [what|which|name|list|tell_me|show_me|give_me|find|any|some|things|something|stuff|objects|everyday_things|items|what_things|which_things|what_objects|what_items|name_some|list_some|tell_me_some|can_you_name|can_you_list|can_you_think_of|think_of] [thing|things|object|objects|item|items|stuff|everyday_things|something|anything]? [is|are|look|looks|has|have|come|comes|is_shaped|are_shaped|is_shaped_like|are_shaped_like|shaped_like|looks_like|look_like|resembles|resemble|has_the_shape_of|have_the_shape_of|in_the_shape_of|in_shape_of|like|that_looks_like|that_look_like|that_is_like|that_are_like|that_are_a|that_is_a|that_has_the_shape_of|that_have_the_shape_of|that_are_shaped_like|that_is_shaped_like|which_looks_like|which_is_shaped_like|which_have_the_shape_of|with_the_shape_of|with_shape_of|of_shape|with_a|with_the|that_are|that_is]? [a|an|the]? {s:lex.kids.shapes.shapes} [shape|shaped|like_shape]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.thing seek=name mode=list where.shape={s}"
+    kind=question
+    priority=9
+    example="What looks like a circle"
+    example="Name things shaped like a circle"
+
+@pat.kids.shapes.x.lk.e core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [where|what_things|which_things|what_places|where_exactly|where_else] [can|do|could|should|would|will|may]? [i|we|you|u|one|people|kids]? [see|find|spot|meet|notice|look_for|get|encounter|observe|discover|come_across|see_some|find_some|see_any|find_any] [a|an|the|some|any]? {s:lex.kids.shapes.shapes} [in_real_life|around_us|around_me|around|every_day|everyday|at_home|outside|in_the_world|in_daily_life|in_life|in_nature|nearby|near_me|here|there|in_the_house|in_the_room|in_a_house|at_school|in_class|in_my_house|in_my_room|in_a_room|in_the_classroom|in_a_classroom|around_the_house|in_everyday_life]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.thing seek=name mode=list where.shape={s}"
+    kind=question
+    priority=10
+    example="Where can i spot a circle"
+
+@pat.kids.shapes.x.col.a core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [what|which|name|list|show|tell_me|give_me|find|any|some|all|whats|what_are|which_are|what_are_some|which_are_some|name_some|list_some|show_me|show_me_some|tell_me_some|give_me_some|can_you_name|can_you_list|can_you_think_of|think_of|think_of_something|something|anything|stuff|things|find_me|show_me_all|list_all|name_all|get] [thing|things|stuff|object|objects|item|items|something|anything|food|foods|fruit|fruits|animal|animals|veggies|vegetables|toys|toy] [is|are|that_is|that_are|which_is|which_are|has|have|that_has|that_have|which_has|which_have|that_can_be|are_all|are_usually|is_usually|is_always|are_always|come_in|comes_in|in|of|with|colored|coloured|thats|looks|look|that_looks|that_look|looks_like|look_like|has_the_color|have_the_color|has_the_colour|have_the_colour|is_the_color|is_the_colour]? [the|a]? [color|colour]? {c:lex.kids.shapes.colors} [thing|things|stuff|one|ones|color|colour|colored|coloured|too|as_well]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.thing seek=name mode=list where.color={c}"
+    kind=question
+    priority=9
+    example="Which things are red"
+    example="Name some stuff that is blue"
+    example="List objects in red"
+
+@pat.kids.shapes.x.col.b core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? {c:lex.kids.shapes.colors} [things|stuff|objects|items|colored_things|coloured_things|things_list|stuff_list|things_pls|thing|object|item|foods|fruits|animals] [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.thing seek=name mode=list where.color={c}"
+    kind=question
+    priority=7
+    example="Red things?"
+
+@pat.kids.shapes.x.tcol.x core.pattern
+    match="[remember|fyi|note|note_that|btw|just_so_you_know|just_so_u_know|remember_that|did_you_know|you_should_know|learn_that|know_that|so|ok|okay|hey|please|listen|by_the_way|for_your_info|for_your_information|i_learned|i_heard|guess_what|oh_and|also|and|look|um|well|hmm|ah|oh|yo|dont_forget|dont_forget_that|keep_in_mind|keep_in_mind_that|make_a_note|note_this|write_this_down|save_this|save_that|store_this|store_that|memorize|memorize_this|please_remember|please_note|pls_remember|pls_note|u_should_know|you_need_to_know|heres_a_fact|here_is_a_fact|fun_fact|fact|true_fact|another_fact|one_more_thing|teach_you|let_me_teach_you|i_will_teach_you|i_can_tell_you|let_me_tell_you|lemme_tell_you]? [a|an|the]? {t:noun} [color|colour|colors|colours|is_colored|is_coloured|are_colored|are_coloured|is_painted|are_painted|is_usually|are_usually|turns|turn|looks|look|appears|appear|comes_in|come_in|gets|get|becomes|become|is_always|are_always|goes|go|is_normally|are_normally|is_typically|are_typically|is_really|are_really|is_actually|are_actually|=|:]? [is|are|be|was|were|=]? {c:lex.kids.shapes.colors}"
+    emit="@{_} kids.shapes.thing name={t} color={c}"
+    kind=statement
+    priority=6
+    example="Banana yellow"
+    example="Remember banana color is yellow"
+
+@pat.kids.shapes.x.tshape.x core.pattern
+    match="[remember|fyi|note|note_that|btw|just_so_you_know|just_so_u_know|remember_that|did_you_know|you_should_know|learn_that|know_that|so|ok|okay|hey|please|listen|by_the_way|for_your_info|for_your_information|i_learned|i_heard|guess_what|oh_and|also|and|look|um|well|hmm|ah|oh|yo|dont_forget|dont_forget_that|keep_in_mind|keep_in_mind_that|make_a_note|note_this|write_this_down|save_this|save_that|store_this|store_that|memorize|memorize_this|please_remember|please_note|pls_remember|pls_note|u_should_know|you_need_to_know|heres_a_fact|here_is_a_fact|fun_fact|fact|true_fact|another_fact|one_more_thing|teach_you|let_me_teach_you|i_will_teach_you|i_can_tell_you|let_me_tell_you|lemme_tell_you]? [a|an|the]? {t:noun} [is_shaped_like|are_shaped_like|looks_like|look_like|has_the_shape_of|have_the_shape_of|is_like|are_like|looks_like_a|resembles|resemble|is_in_the_shape_of|has_the_form_of|is_formed_like|is_a_kind_of|is_kind_of|shape_is|shape_is_a|is_in_shape_of|are_in_shape_of|has_a_shape_of|have_a_shape_of|has_a|have_a|is_the_shape_of|are_the_shape_of|is_formed_as|are_formed_as|is_made_like|are_made_like|is_built_like|are_built_like|has_shape|have_shape|is_round_like|are_round_like] [a|an|the]? {s:lex.kids.shapes.shapes}"
+    emit="@{_} kids.shapes.thing name={t} shape={s}"
+    kind=statement
+    priority=11
+    example="A ball looks like a circle"
+
+@pat.kids.shapes.x.tsides.x core.pattern
+    match="[remember|fyi|note|note_that|btw|just_so_you_know|just_so_u_know|remember_that|did_you_know|you_should_know|learn_that|know_that|so|ok|okay|hey|please|listen|by_the_way|for_your_info|for_your_information|i_learned|i_heard|guess_what|oh_and|also|and|look|um|well|hmm|ah|oh|yo|dont_forget|dont_forget_that|keep_in_mind|keep_in_mind_that|make_a_note|note_this|write_this_down|save_this|save_that|store_this|store_that|memorize|memorize_this|please_remember|please_note|pls_remember|pls_note|u_should_know|you_need_to_know|heres_a_fact|here_is_a_fact|fun_fact|fact|true_fact|another_fact|one_more_thing|teach_you|let_me_teach_you|i_will_teach_you|i_can_tell_you|let_me_tell_you|lemme_tell_you]? [a|an|the]? {s:noun} [has|have|got|has_got|have_got|had|get|gets|with|is_with|equals|contains|contain|includes|include|is_made_of|are_made_of|is_formed_by|are_formed_by|is_built_from|are_built_from|consists_of|consist_of|made_of|has_exactly|have_exactly]? {n:number} {p:lex.kids.shapes.parts}"
+    emit="@{_} kids.shapes.shape name={s} {p}s={n}"
+    kind=statement
+    priority=6
+    example="Remember a hexagon has six sides"
+    example="Hexagon 6 sides"
+
+@pat.kids.shapes.x.tmix.x core.pattern
+    match="[remember|fyi|note|note_that|btw|just_so_you_know|just_so_u_know|remember_that|did_you_know|you_should_know|learn_that|know_that|so|ok|okay|hey|please|listen|by_the_way|for_your_info|for_your_information|i_learned|i_heard|guess_what|oh_and|also|and|look|um|well|hmm|ah|oh|yo|dont_forget|dont_forget_that|keep_in_mind|keep_in_mind_that|make_a_note|note_this|write_this_down|save_this|save_that|store_this|store_that|memorize|memorize_this|please_remember|please_note|pls_remember|pls_note|u_should_know|you_need_to_know|heres_a_fact|here_is_a_fact|fun_fact|fact|true_fact|another_fact|one_more_thing|teach_you|let_me_teach_you|i_will_teach_you|i_can_tell_you|let_me_tell_you|lemme_tell_you]? [mix|mixing|combine|combining|blend|blending|add|adding|put|putting|mixed|combined|blended|if_you_mix|if_you_combine|if_you_blend|when_you_mix|when_you_combine|when_you_blend|if_i_mix|when_i_mix|if_we_mix|when_we_mix|mixing_up]? {c:lex.kids.shapes.colors} [and|with|plus|mixed_with|combined_with|blended_with|n|x|added_to|added_with|put_with|merged_with|stirred_with|joined_with|together_with|then] {b:lex.kids.shapes.colors} [make|makes|gives|give|is|equals|become|becomes|turn_into|turns_into|produce|produces|create|creates|result_in|results_in|get|gets|form|forms|yield|yields|are|should_be|will_be|would_be|gets_you|will_make|will_give|would_make|would_give|=|is_equal_to|come_out_as|comes_out_as|end_up_as|ends_up_as|make_a|makes_a|give_a|gives_a|get_a|gets_a]? [the]? [color|colour]? {r:lex.kids.shapes.colors}"
+    emit="@{_} kids.shapes.mix first={c} second={b} result={r}"
+    kind=statement
+    priority=11
+    example="Remember red plus blue is purple"
+    example="Mixing red and blue gives purple"
+
+@pat.kids.shapes.x.ck.d core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [is|are|does|do|would|could|can|will|be|was]? [the]? [color|colour]? {c:lex.kids.shapes.colors} [is|be|are|a|an|the|counts_as|count_as|1_of_the|one_of_the|=]? [a|an|the]? {k:lex.kids.shapes.colorkinds} {u:number} [right|yes|no|yeah|correct|or_no|or_not|or_nah|yes_or_no|right_or_not|yes_no|true|true_or_false|huh|eh|really|actually]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.color seek=is_kind where.name={c} where.is_kind={k}"
+    kind=question
+    priority=10
+    example="Green a secondary one?"
+    example="Is orange a secondary one"
+
+@pat.kids.shapes.x2.sides.rev2 core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [a|an|the|every|any|all|each|some]? {s:noun} {p:lex.kids.shapes.parts} [how_many|how_much|count|number|total|amount|tally]"
+    emit="@{_} core.question type=kids.shapes.shape seek={p}s where.name={s}"
+    kind=question
+    priority=9
+    example="Triangle corners how many"
+
+@pat.kids.shapes.x2.sides.which4 core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [all|some|the|any]? [shape|shapes|polygon|polygons|figure|figures] [with|that_has|that_have|having|got|that_got|which_has|which_have|that_have_exactly|with_exactly|having_exactly|has|have] [exactly]? {n:number} {p:lex.kids.shapes.parts} [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.shape seek=name mode=list where.{p}s={n}"
+    kind=question
+    priority=13
+    example="Shapes with 5 corners"
+
+@pat.kids.shapes.x2.rec.e core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [recipe|the_recipe|formula|the_formula|mixing_recipe|color_recipe|colour_recipe|paint_recipe|mix_recipe|how_to_make|how_to_mix|how_to_get|steps_for|steps_to_make|instructions_for|instructions_to_make|ingredients_for|ingredients_of|ingredients_to_make|what_makes|what_makes_up|what_goes_into|what_goes_in|what_is_in|whats_in|what_is_inside|whats_inside] [for|of|to_make|to_get|to_mix|the]? [the]? [color|colour|paint]? {c:lex.kids.shapes.colors} [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.mix seek=recipe where.result={c}"
+    kind=question
+    priority=10
+    example="Recipe for purple"
+
+@pat.kids.shapes.x2.desc.c core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [give_me|gimme|get_me|show_me|i_need|i_want|need|want|tell_me|teach_me|find_me|give_us|show_us] [a|an|the|some]? {s:lex.kids.shapes.shapes} [description|desc|info|facts|summary|details|definition|meaning|overview|intro|profile|stuff|basics|explanation|fact|fun_facts|fun_fact|trivia|data|information|bio|story|lesson|notes] [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.shape seek=summary where.name={s}"
+    kind=question
+    priority=13
+    example="Give me a pentagon summary"
+    example="Show me circle facts"
+
+@pat.kids.shapes.x2.sides.of2 core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [the]? {p:lex.kids.shapes.parts} [of|on|for|in|does|do|has|have|is|are] [a|an|the|every|any|all|each|some]? {s:noun} [have|has|got]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.shape seek={p}s where.name={s}"
+    kind=question
+    priority=7
+    example="Corners of a hexagon"
+    example="The sides of the oval"
+
+@pat.kids.shapes.x3.fam.lead core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [would_you_call|would_you_say|would_u_say|would_u_call|do_you_think|do_u_think|you_think|u_think|is_it_true_that|is_it_true|is_it_correct_that|can_you_say_if|can_u_say_if|say_if|tell_me_if|check_if|is_it_right_that|i_think|i_guess|i_heard|i_read_that|my_friend_said|my_teacher_said|someone_said|isnt_it_true_that|do_you_agree_that|do_you_know_if|do_you_know_whether|u_know_if|u_know_whether|so|wait|oh|and|also|pls_tell_me_if|pls_tell_me_is|pls_tell_me|tell_me_is|tell_me_does|tell_me_are|tell_me_do|is_it_possible_that|is_it_possible_for|can_it_be_that|could_it_be_that|could_it_be|might_it_be|is_it_fair_to_say|is_it_safe_to_say|can_we_say|can_i_say|may_i_say|should_i_say|am_i_right_that|am_i_right_in_saying] [is|are|does|do|would|can|could|will]? [a|an|the|every|any|all|each|some]? {s:noun} ['s]? [is|are|be|count_as|counts_as|as|like|a|an|can_be|could_be|would_be|called]? [a|an|the|like]? [kind_of|type_of|sort_of]? {k:lex.kids.shapes.kinds} [shape|one|too|also|thing|polygon|as_well|then]? [true|right|correct|yes|no|yeah|yep|ok|okay|huh|eh|isnt_it|arent_they|doesnt_it|rite|tru|true_or_not|true_or_false|is_that_right|is_that_true|is_that_correct|am_i_right|thats_right|right_or_wrong|yes_or_no|y_or_n|y_n|or_not|or_no|or_what|or_nah|or_nope|real|for_real|really|no_way|seriously|fr|hmm|idk|i_think|i_guess|i_believe|lol|too|also|as_well|then|or_nay|dont_you_think|wouldnt_you_say]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.family seek=holds where.shape={s} where.kind={k}"
+    kind=question
+    priority=10
+    example="Would you call a circle a polygon"
+    example="Pls tell me is a square a rectangle"
+    example="Is the circle a rectangle too"
+
+@pat.kids.shapes.x3.fam.it core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [a|an|the|every|any|all|each|some]? {s:noun} [is_it|are_they|is_that|is_this|are_those|is_it_a|are_they_a|does_it_count_as|is_it_a_kind_of|is_it_like] [a|an|the|like]? {k:lex.kids.shapes.kinds} [shape|one|too|also|thing|polygon|as_well|then]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.family seek=holds where.shape={s} where.kind={k}"
+    kind=question
+    priority=10
+    example="A circle, is it a polygon"
+
+@pat.kids.shapes.x3.fam.it2 core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [is_it|are_they|is_that|is_this|are_those] [a|an|the|like]? {k:lex.kids.shapes.kinds} [shape|one|too|also|thing|polygon|as_well|then|or_not]? [a|an|the|every|any|all|each|some]? {s:noun} [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.family seek=holds where.shape={s} where.kind={k}"
+    kind=question
+    priority=10
+    example="Is it a polygon, a circle"
+
+@pat.kids.shapes.x3.fam.or core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? {k:lex.kids.shapes.kinds} [or_not|or_no|or_what|yes_or_no] [a|an|the|every|any|all|each|some]? {s:noun} [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.family seek=holds where.shape={s} where.kind={k}"
+    kind=question
+    priority=10
+    example="Polygon or not, a circle?"
+
+@pat.kids.shapes.x3.round.a core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [would_you_call|would_you_say|would_u_say|would_u_call|do_you_think|do_u_think|you_think|u_think|is_it_true_that|is_it_true|is_it_correct_that|can_you_say_if|can_u_say_if|say_if|tell_me_if|check_if|is_it_right_that|i_think|i_guess|i_heard|i_read_that|my_friend_said|my_teacher_said|someone_said|isnt_it_true_that|do_you_agree_that|do_you_know_if|do_you_know_whether|u_know_if|u_know_whether|so|wait|oh|and|also|pls_tell_me_if|pls_tell_me_is|pls_tell_me|tell_me_is|tell_me_does|tell_me_are|tell_me_do|is_it_possible_that|is_it_possible_for|can_it_be_that|could_it_be_that|could_it_be|might_it_be|is_it_fair_to_say|is_it_safe_to_say|can_we_say|can_i_say|may_i_say|should_i_say|am_i_right_that|am_i_right_in_saying]? [is|are|does|do|would|can|could|will|is_it|are_they]? [a|an|the|every|any|all|each|some]? {s:noun} ['s]? [be|is|are|have|has|a|an|like|is_it]? [round|rounded|a_round_shape|round_shaped|a_round_thing|a_round_one|a_circle_shape|circular|circle_shaped] [shape|thing|one|too|also]? [true|right|correct|yes|no|yeah|yep|ok|okay|huh|eh|isnt_it|arent_they|doesnt_it|rite|tru|true_or_not|true_or_false|is_that_right|is_that_true|is_that_correct|am_i_right|thats_right|right_or_wrong|yes_or_no|y_or_n|y_n|or_not|or_no|or_what|or_nah|or_nope|real|for_real|really|no_way|seriously|fr|hmm|idk|i_think|i_guess|i_believe|lol|too|also|as_well|then|or_nay|dont_you_think|wouldnt_you_say]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.family seek=holds where.shape={s} where.kind=round_shape"
+    kind=question
+    priority=6
+    example="Circle round?"
+    example="Does a circle have a round shape"
+    example="Circle = round?"
+
+@pat.kids.shapes.x3.round.b core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [round|rounded|a_round_shape|round_shaped|a_round_thing|a_round_one|a_circle_shape|circular|circle_shaped] [is|are|is_it|are_they|does|do]? [a|an|the|every|any|all|each|some]? {s:noun} [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.family seek=holds where.shape={s} where.kind=round_shape"
+    kind=question
+    priority=7
+    example="Round, is a circle?"
+
+@pat.kids.shapes.x3.desc.k core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [a|an|the|every|any|all|each|some]? {s:lex.kids.shapes.shapes} [what_is_it|what_are_they|what_is_that|what_are_those|whats_that|whats_it|whats_it_like|what_is_it_like|what_are_they_like|whats_it_about|what_it_is|what_they_are|what_is_it_exactly|what_are_they_exactly|is_what|is_what_exactly|means_what|mean|means|is_a_what|is_like_what|like_what|explain|explained|describe|describe_it|describe_them|define|define_it|shape|shapes|figure|tell_me|tell_me_more|tell_me_about_it|tell_me_about_them] [what|exactly|pls|please]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.shape seek=summary where.name={s}"
+    kind=question
+    priority=9
+    example="Hexagon what is it"
+    example="Circles, what are they like"
+    example="A hexagon is what exactly"
+    example="Explain the circle shape"
+
+@pat.kids.shapes.x3.desc.l core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [tell_me|explain|describe|define|show_me|i_dont_get|i_dont_know|i_dont_understand|i_dont_understand_what|i_dont_get_what|i_dont_know_what|idk_what|i_wonder|i_wonder_what|dunno_what|not_sure_what|not_sure_what_a|confused_about|confused_by|help_me_with|help_with|help_me_understand|help_me_understand_what|what|whats|what_is|what_are|whats_a|what_is_a|what_are_the] [what]? [is|are]? [a|an|the|every|any|all|each|some]? {s:lex.kids.shapes.shapes} [is|are|like|is_like|are_like|looks_like|mean|means|shape|shapes|figure|polygon|explain|explanation|pls_explain|explain_it|explain_pls|please_explain|whats_one|what_is_one|what_are_they|what_is_it|whats_it] [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.shape seek=summary where.name={s}"
+    kind=question
+    priority=10
+    example="What's a hexagon, explain"
+    example="Explain what a hexagon is pls"
+    example="What is a hexagon shape"
+    example="I dont get what a hexagon is, whats one"
+
+@pat.kids.shapes.x3.tcol.d core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [what|whats|which|wat|wats] [color|colour|shade|hue|colors|colours] [is|are|does|do|would|will]? [a|an|the|every|any|all|each|some]? [ripe|unripe|fresh|raw|cooked|big|small|little|usual|normal|typical|real|actual|natural|common|regular|young|old|healthy|baby|adult|wild|tame|pet|fluffy|furry|dry|wet|hot|cold|juicy|sweet|sour]? {t:lex.kids.shapes.things} [usually|normally|typically|have|be|has|is|are]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.thing seek=color where.name={t}"
+    kind=question
+    priority=10
+    example="What colour is a ripe tomato"
+    example="U know what color a banana is"
+
+@pat.kids.shapes.x3.icol.lead core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [would_you_call|would_you_say|would_u_say|would_u_call|do_you_think|do_u_think|you_think|u_think|is_it_true_that|is_it_true|is_it_correct_that|can_you_say_if|can_u_say_if|say_if|tell_me_if|check_if|is_it_right_that|i_think|i_guess|i_heard|i_read_that|my_friend_said|my_teacher_said|someone_said|isnt_it_true_that|do_you_agree_that|do_you_know_if|do_you_know_whether|u_know_if|u_know_whether|so|wait|oh|and|also|pls_tell_me_if|pls_tell_me_is|pls_tell_me|tell_me_is|tell_me_does|tell_me_are|tell_me_do|is_it_possible_that|is_it_possible_for|can_it_be_that|could_it_be_that|could_it_be|might_it_be|is_it_fair_to_say|is_it_safe_to_say|can_we_say|can_i_say|may_i_say|should_i_say|am_i_right_that|am_i_right_in_saying] [is|are|does|do|would|can|could|will]? [a|an|the|every|any|all|each|some]? [ripe|unripe|fresh|raw|cooked|big|small|little|usual|normal|typical|real|actual|natural|common|regular|young|old|healthy|baby|adult|wild|tame|pet|fluffy|furry|dry|wet|hot|cold|juicy|sweet|sour]? {t:lex.kids.shapes.things} ['s]? [is|are|be|can_be|could_be|tend_to_be|tends_to_be|supposed_to_be|meant_to_be|made_to_be|going_to_be|gonna_be|expected_to_be|likely_to_be|allowed_to_be|able_to_be|usually_is|usually_are|usually|normally|typically|always|generally|colored|coloured|ever|really|actually|also|possibly|maybe|sometimes|to_be|turn|turns|look|looks|come|comes|appear|appears]? [is|are|be|can_be|could_be|tend_to_be|tends_to_be|supposed_to_be|meant_to_be|made_to_be|going_to_be|gonna_be|expected_to_be|likely_to_be|allowed_to_be|able_to_be|usually_is|usually_are|usually|normally|typically|always|generally|colored|coloured|ever|really|actually|also|possibly|maybe|sometimes|to_be|turn|turns|look|looks|come|comes|appear|appears]? [a|an]? {c:lex.kids.shapes.colors} [thing|one|color|colour|colored|coloured|possible|ok|okay|real|normal|right|true|allowed|a_thing]? [true|right|correct|yes|no|yeah|yep|ok|okay|huh|eh|isnt_it|arent_they|doesnt_it|rite|tru|true_or_not|true_or_false|is_that_right|is_that_true|is_that_correct|am_i_right|thats_right|right_or_wrong|yes_or_no|y_or_n|y_n|or_not|or_no|or_what|or_nah|or_nope|real|for_real|really|no_way|seriously|fr|hmm|idk|i_think|i_guess|i_believe|lol|too|also|as_well|then|or_nay|dont_you_think|wouldnt_you_say]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.thing seek=is_color where.name={t} where.is_color={c}"
+    kind=question
+    priority=10
+    example="Would you say a banana is yellow"
+    example="Is it true a banana is yellow"
+    example="Pls confirm a banana is yellow"
+    example="Would you say the sky is blue"
+
+@pat.kids.shapes.x3.icol.aux core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [is|are|does|do|would|can|could|will] [a|an|the|every|any|all|each|some]? [ripe|unripe|fresh|raw|cooked|big|small|little|usual|normal|typical|real|actual|natural|common|regular|young|old|healthy|baby|adult|wild|tame|pet|fluffy|furry|dry|wet|hot|cold|juicy|sweet|sour]? {t:lex.kids.shapes.things} ['s]? [is|are|be|can_be|could_be|tend_to_be|tends_to_be|supposed_to_be|meant_to_be|made_to_be|going_to_be|gonna_be|expected_to_be|likely_to_be|allowed_to_be|able_to_be|usually_is|usually_are|usually|normally|typically|always|generally|colored|coloured|ever|really|actually|also|possibly|maybe|sometimes|to_be|turn|turns|look|looks|come|comes|appear|appears]? [is|are|be|can_be|could_be|tend_to_be|tends_to_be|supposed_to_be|meant_to_be|made_to_be|going_to_be|gonna_be|expected_to_be|likely_to_be|allowed_to_be|able_to_be|usually_is|usually_are|usually|normally|typically|always|generally|colored|coloured|ever|really|actually|also|possibly|maybe|sometimes|to_be|turn|turns|look|looks|come|comes|appear|appears]? [a|an]? {c:lex.kids.shapes.colors} [thing|one|color|colour|colored|coloured|possible|ok|okay|real|normal|right|true|allowed|a_thing]? [true|right|correct|yes|no|yeah|yep|ok|okay|huh|eh|isnt_it|arent_they|doesnt_it|rite|tru|true_or_not|true_or_false|is_that_right|is_that_true|is_that_correct|am_i_right|thats_right|right_or_wrong|yes_or_no|y_or_n|y_n|or_not|or_no|or_what|or_nah|or_nope|real|for_real|really|no_way|seriously|fr|hmm|idk|i_think|i_guess|i_believe|lol|too|also|as_well|then|or_nay|dont_you_think|wouldnt_you_say]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.thing seek=is_color where.name={t} where.is_color={c}"
+    kind=question
+    priority=10
+    example="Is the sky supposed to be green"
+    example="Do bananas tend to be yellow"
+
+@pat.kids.shapes.x3.icol.tag core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [a|an|the|every|any|all|each|some]? [ripe|unripe|fresh|raw|cooked|big|small|little|usual|normal|typical|real|actual|natural|common|regular|young|old|healthy|baby|adult|wild|tame|pet|fluffy|furry|dry|wet|hot|cold|juicy|sweet|sour]? {t:lex.kids.shapes.things} ['s]? [is|are|be|can_be|could_be|tend_to_be|tends_to_be|supposed_to_be|meant_to_be|made_to_be|going_to_be|gonna_be|expected_to_be|likely_to_be|allowed_to_be|able_to_be|usually_is|usually_are|usually|normally|typically|always|generally|colored|coloured|ever|really|actually|also|possibly|maybe|sometimes|to_be|turn|turns|look|looks|come|comes|appear|appears]? [is|are|be|can_be|could_be|tend_to_be|tends_to_be|supposed_to_be|meant_to_be|made_to_be|going_to_be|gonna_be|expected_to_be|likely_to_be|allowed_to_be|able_to_be|usually_is|usually_are|usually|normally|typically|always|generally|colored|coloured|ever|really|actually|also|possibly|maybe|sometimes|to_be|turn|turns|look|looks|come|comes|appear|appears]? [a|an]? {c:lex.kids.shapes.colors} [thing|one|color|colour|colored|coloured|possible|ok|okay|real|normal|right|true|allowed|a_thing]? [true|right|correct|yes|no|yeah|yep|ok|okay|huh|eh|isnt_it|arent_they|doesnt_it|rite|tru|true_or_not|true_or_false|is_that_right|is_that_true|is_that_correct|am_i_right|thats_right|right_or_wrong|yes_or_no|y_or_n|y_n|or_not|or_no|or_what|or_nah|or_nope|real|for_real|really|no_way|seriously|fr|hmm|idk|i_think|i_guess|i_believe|lol|too|also|as_well|then|or_nay|dont_you_think|wouldnt_you_say] [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.thing seek=is_color where.name={t} where.is_color={c}"
+    kind=question
+    priority=10
+    example="A banana is yellow isnt it"
+
+@pat.kids.shapes.x3.icol.it core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [is_it|are_they|is_that|is_this|are_those] {c:lex.kids.shapes.colors} [thing|one|color|colour|colored|coloured|possible|ok|okay|real|normal|right|true|allowed|a_thing]? [a|an|the|every|any|all|each|some]? [ripe|unripe|fresh|raw|cooked|big|small|little|usual|normal|typical|real|actual|natural|common|regular|young|old|healthy|baby|adult|wild|tame|pet|fluffy|furry|dry|wet|hot|cold|juicy|sweet|sour]? {t:lex.kids.shapes.things} [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.thing seek=is_color where.name={t} where.is_color={c}"
+    kind=question
+    priority=10
+    example="Is it blue, the sky"
+    example="Is it yellow, a banana"
+
+@pat.kids.shapes.x3.ck.lead core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [would_you_call|would_you_say|would_u_say|would_u_call|do_you_think|do_u_think|you_think|u_think|is_it_true_that|is_it_true|is_it_correct_that|can_you_say_if|can_u_say_if|say_if|tell_me_if|check_if|is_it_right_that|i_think|i_guess|i_heard|i_read_that|my_friend_said|my_teacher_said|someone_said|isnt_it_true_that|do_you_agree_that|do_you_know_if|do_you_know_whether|u_know_if|u_know_whether|so|wait|oh|and|also|pls_tell_me_if|pls_tell_me_is|pls_tell_me|tell_me_is|tell_me_does|tell_me_are|tell_me_do|is_it_possible_that|is_it_possible_for|can_it_be_that|could_it_be_that|could_it_be|might_it_be|is_it_fair_to_say|is_it_safe_to_say|can_we_say|can_i_say|may_i_say|should_i_say|am_i_right_that|am_i_right_in_saying] [is|are|does|do|would|can|could|will]? [the]? [color|colour]? {c:lex.kids.shapes.colors} [is|be|are|a|an|the|counts_as|count_as|1_of_the|one_of_the|in|among|belongs_to|as]? [a|an|the]? {k:lex.kids.shapes.colorkinds} [color|colour|colors|colours|kind|type|shade|hue|one]? [true|right|correct|yes|no|yeah|yep|ok|okay|huh|eh|isnt_it|arent_they|doesnt_it|rite|tru|true_or_not|true_or_false|is_that_right|is_that_true|is_that_correct|am_i_right|thats_right|right_or_wrong|yes_or_no|y_or_n|y_n|or_not|or_no|or_what|or_nah|or_nope|real|for_real|really|no_way|seriously|fr|hmm|idk|i_think|i_guess|i_believe|lol|too|also|as_well|then|or_nay|dont_you_think|wouldnt_you_say]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.color seek=is_kind where.name={c} where.is_kind={k}"
+    kind=question
+    priority=10
+    example="Would you call red a primary color"
+    example="U think red is a primary color"
+    example="Do u think orange is primary"
+
+@pat.kids.shapes.x3.ck.incl core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? {k:lex.kids.shapes.colorkinds} [colors|colours|color|colour] [include|includes|contain|contains|have|has|are|means|is|cover|covers|list|lists|count|counts|feature|features|consist_of|consists_of|are_made_of] {c:lex.kids.shapes.colors} [true|right|correct|yes|no|yeah|yep|ok|okay|huh|eh|isnt_it|arent_they|doesnt_it|rite|tru|true_or_not|true_or_false|is_that_right|is_that_true|is_that_correct|am_i_right|thats_right|right_or_wrong|yes_or_no|y_or_n|y_n|or_not|or_no|or_what|or_nah|or_nope|real|for_real|really|no_way|seriously|fr|hmm|idk|i_think|i_guess|i_believe|lol|too|also|as_well|then|or_nay|dont_you_think|wouldnt_you_say]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.color seek=is_kind where.name={c} where.is_kind={k}"
+    kind=question
+    priority=10
+    example="Primary colors include orange?"
+
+@pat.kids.shapes.x3.ck.colon core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? {k:lex.kids.shapes.colorkinds} [color|colour|colors|colours]? [is|are]? {c:lex.kids.shapes.colors} [one|a_one|that_one|it|the_one|1|a_1]? [true|right|correct|yes|no|yeah|yep|ok|okay|huh|eh|isnt_it|arent_they|doesnt_it|rite|tru|true_or_not|true_or_false|is_that_right|is_that_true|is_that_correct|am_i_right|thats_right|right_or_wrong|yes_or_no|y_or_n|y_n|or_not|or_no|or_what|or_nah|or_nope|real|for_real|really|no_way|seriously|fr|hmm|idk|i_think|i_guess|i_believe|lol|too|also|as_well|then|or_nay|dont_you_think|wouldnt_you_say]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.color seek=is_kind where.name={c} where.is_kind={k}"
+    kind=question
+    priority=7
+    example="Primary color, is red"
+    example="Primary colour red?"
+
+@pat.kids.shapes.x3.mix.c core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [if|when|what_if|what_happens_if|what_happens_when|what_will_happen_if|what_would_happen_if|say|suppose|lets_say|imagine|assume|after|upon] [u|you|i|we|one|someone|kids|people]? [mix|mixing|blend|blending|combine|combining|add|adding|put|putting|mixed|blended|combined|mix_up] {c:lex.kids.shapes.colors} [and|with|plus|mixed_with|combined_with|blended_with|added_to|added_with|put_with|together_with|merged_with|stirred_with|joined_with|on_top_of|over|into|to|x|n|or|then]? {b:lex.kids.shapes.colors} [what_color_u_get|what_color_do_you_get|what_color_do_i_get|what_color_will_i_get|what_color_will_u_get|what_do_i_get|what_do_u_get|what_do_you_get|what_do_we_get|what_you_get|what_i_get|what_comes_out|what_happens|what_will_happen|what_would_happen|what_color_results|what_color_comes_out|what_color_is_it|what_color_is_that|what_color_do_we_get|what_colour_u_get|what_colour_do_i_get|what_colour_do_you_get|what_colour_do_we_get|what_colour_results|and_see|and_see_what_happens|then_what|and_then_what|what_color_is_made|what_color_do_they_make|what_colour_do_they_make|what_do_they_make|what_do_they_give|whats_the_result|what_is_the_result|whats_the_answer|what_is_the_answer|what_is_it|result|the_result|answer|the_answer|mix_result|mixing_result]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.mix seek=result where.first={c} where.second={b}"
+    kind=question
+    priority=10
+    example="If u mix red and yellow what color u get"
+    example="If i mix red and yellow, what color do i get"
+
+@pat.kids.shapes.x3.mix.d core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [color|colour|the_color|the_colour|what_color|what_colour|result|the_result|mix_result|the_mix|answer|the_answer|the_color_you_get|the_colour_you_get] [from|of|for|when|by|after|you_get_from|you_get_by|you_get_when|you_get_if|that_you_get_from|that_you_get_by|that_comes_from|that_comes_out_of|made_from|made_by|created_by|produced_by|results_from|result_of|you_get_after]? [mixing|blending|combining|adding|putting|mixing_up|mixing_together|blending_together|combining_together|adding_together|mixed|blended|combined] {c:lex.kids.shapes.colors} [and|with|plus|mixed_with|combined_with|blended_with|added_to|added_with|put_with|together_with|merged_with|stirred_with|joined_with|on_top_of|over|into|to|x|n|or|then]? {b:lex.kids.shapes.colors} [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.mix seek=result where.first={c} where.second={b}"
+    kind=question
+    priority=10
+    example="Color from mixing red and yellow?"
+
+@pat.kids.shapes.x3.mix.e core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [what|whats|wat|wats|what_is|what_does|what_do|what_will|what_would|what_can|which] [does|do|will|would|can|is]? {c:lex.kids.shapes.colors} [and|with|plus|mixed_with|combined_with|blended_with|added_to|added_with|put_with|together_with|merged_with|stirred_with|joined_with|on_top_of|over|into|to|x|n|or|then]? {b:lex.kids.shapes.colors} [mixing|mixed|blending|blended|combining|combined|mix|blend|combine|together|mixed_together|mixing_together|mix_result|mixing_result|result|results|answer] [give|gives|make|makes|produce|produces|create|creates|result_in|results_in|equal|equals|get|gets|do|does|turn_into|turns_into|become|becomes|is|are]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.mix seek=result where.first={c} where.second={b}"
+    kind=question
+    priority=10
+    example="What does red yellow mixing give"
+
+@pat.kids.shapes.x3.mix.f core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? {c:lex.kids.shapes.colors} [and|with|plus|mixed_with|combined_with|blended_with|added_to|added_with|put_with|together_with|merged_with|stirred_with|joined_with|on_top_of|over|into|to|x|n|or|then]? {b:lex.kids.shapes.colors} [mix|mixing|blend|blending|combine|combining|mixed|blended|combined|mix_up|mixing_together|mixed_together|together] [result|results|answer|the_result|the_answer|outcome|the_outcome|color|colour|the_color|the_colour|pls|please|what|which] [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.mix seek=result where.first={c} where.second={b}"
+    kind=question
+    priority=10
+    example="Red yellow mix result"
+    example="Blue white mix result"
+
+@pat.kids.shapes.x3.mix.g core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [what|whats|wat|wats|what_is] [is|does|do|will]? {c:lex.kids.shapes.colors} {b:lex.kids.shapes.colors} [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.mix seek=result where.first={c} where.second={b}"
+    kind=question
+    priority=7
+    example="Whats red yellow"
+
+@pat.kids.shapes.x3.rec.f core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [i_want|i_need|want|need|making|im_making|i_am_making|wanna_make|want_to_make|need_to_make|trying_to_make|i_wanna_make|i_wanna_get|im_trying_to_make]? [the]? [color|colour|paint]? {c:lex.kids.shapes.colors} [how_do_i_make_it|how_can_i_make_it|how_to_make_it|how_do_you_make_it|how_do_we_make_it|how_do_i_get_it|how_can_i_get_it|how_to_get_it|how_do_i_mix_it|how_to_mix_it|how_is_it_made|how_is_that_made|how_do_i_do_it|how_would_i_make_it|how_could_i_make_it|how_do_u_make_it|how_do_u_get_it|how_does_one_make_it|how_does_one_get_it|how_can_you_make_it|how_can_we_make_it|how_can_u_make_it|how_can_u_get_it|how_do_you_get_it|how_do_you_mix_it|how_do_u_mix_it|how_to_create_it|how_do_i_create_it|how_to_produce_it|what_do_i_mix|what_do_i_mix_for_it|what_should_i_mix|which_colors_do_i_mix|which_colours_do_i_mix|what_colors_do_i_mix|what_colours_do_i_mix|what_do_u_mix|what_do_you_mix|what_do_we_mix|what_mixes_into_it|what_makes_it|what_makes_that|what_goes_into_it|what_goes_in_it] [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.mix seek=recipe where.result={c}"
+    kind=question
+    priority=10
+    example="Purple - how do i make it"
+    example="I want purple, how do i make it"
+
+@pat.kids.shapes.x3.sides.of3 core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [the]? {p:lex.kids.shapes.parts} [of|on|in|for] [a|an|the|every|any|all|each|some]? {s:noun} [how_many|how_much|count|number|total|amount|how_many_are_there|how_many_in_total|how_many_of_them|tell_me|please|pls] [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.shape seek={p}s where.name={s}"
+    kind=question
+    priority=9
+    example="Sides of a hexagon: how many?"
+
+@pat.kids.shapes.x3.sides.which5 core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [a|the|any|some]? [shape|polygon|figure] [with|that_has|having|which_has|has|with_exactly|that_have|which_have] [exactly]? {n:number} {p:lex.kids.shapes.parts} [is_which_one|is_which|is_what|is_what_shape|is_which_shape|which|what|which_shape|what_shape|which_one|what_one|whats_the_shape|what_shape_is_that|which_shape_is_that|which_shape_is_it|what_shape_is_it|which_is_it|what_is_it|which_is_that|what_is_that|which_is_this|what_is_this|called|named|known_as|what_is_it_called|how_is_it_called|whats_it_called|whats_that|whats_it|name_it|name_them|name_one] [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.shape seek=name mode=list where.{p}s={n}"
+    kind=question
+    priority=13
+    example="A shape with 3 sides is which one?"
+
+@pat.kids.shapes.x3.sides.which6 core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? {n:number} {p:lex.kids.shapes.parts} [is_which_one|is_which|is_what|is_what_shape|is_which_shape|which|what|which_shape|what_shape|which_one|what_one|whats_the_shape|what_shape_is_that|which_shape_is_that|which_shape_is_it|what_shape_is_it|which_is_it|what_is_it|which_is_that|what_is_that|which_is_this|what_is_this|called|named|known_as|what_is_it_called|how_is_it_called|whats_it_called|whats_that|whats_it|name_it|name_them|name_one] [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.shape seek=name mode=list where.{p}s={n}"
+    kind=question
+    priority=12
+    example="3 sides, which shape is that"
+
+@pat.kids.shapes.x3.sides.which7 core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [i_need|i_want|need|want|looking_for|im_looking_for|find|give_me|show_me|get_me|tell_me] [the|a|any|some]? [shape|polygon|figure] [that_has|with|having|which_has|that_have|which_have|has|have] [exactly]? {n:number} {p:lex.kids.shapes.parts} [is_which_one|is_which|is_what|is_what_shape|is_which_shape|which|what|which_shape|what_shape|which_one|what_one|whats_the_shape|what_shape_is_that|which_shape_is_that|which_shape_is_it|what_shape_is_it|which_is_it|what_is_it|which_is_that|what_is_that|which_is_this|what_is_this|called|named|known_as|what_is_it_called|how_is_it_called|whats_it_called|whats_that|whats_it|name_it|name_them|name_one]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.shape seek=name mode=list where.{p}s={n}"
+    kind=question
+    priority=13
+    example="I need the shape that has 3 sides, which is it"
+
+@pat.kids.shapes.x4.fam.aux2 core.pattern
+    match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [a|an|the|every|any|all|each|some]? {s:noun} ['s]? [is|are|be|count_as|counts_as|as|like|a|an|can_be|could_be|would_be|called]? [a|an|the|like]? [kind_of|type_of|sort_of]? {k:lex.kids.shapes.kinds} [shape|one|too|also|thing|polygon|as_well|then]? [true|right|correct|yes|no|yeah|yep|ok|okay|huh|eh|isnt_it|arent_they|doesnt_it|rite|tru|true_or_not|true_or_false|is_that_right|is_that_true|is_that_correct|am_i_right|thats_right|right_or_wrong|yes_or_no|y_or_n|y_n|or_not|or_no|or_what|or_nah|or_nope|real|for_real|really|no_way|seriously|fr|hmm|idk|i_think|i_guess|i_believe|lol|too|also|as_well|then|or_nay|dont_you_think|wouldnt_you_say]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
+    emit="@{_} core.question type=kids.shapes.family seek=holds where.shape={s} where.kind={k}"
+    kind=question
+    priority=10
+    example="Is the circle a rectangle too"
+    example="Um is a circle like a polygon"

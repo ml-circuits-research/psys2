@@ -50,3 +50,1698 @@
     input="cya bot"
     expect="Goodbye"
     doc="wording variant (widened phrasing)"
+
+@t.kids.common.s001 core.test
+    input="hi"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: action=chat.greet"
+
+@t.kids.common.s002 core.test
+    input="hiya bot"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: action=chat.greet"
+
+@t.kids.common.s003 core.test
+    input="heyyy"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: action=chat.greet"
+
+@t.kids.common.s004 core.test
+    input="yo whats up"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: action=chat.greet"
+
+@t.kids.common.s005 core.test
+    input="good morning!"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: action=chat.greet"
+
+@t.kids.common.s006 core.test
+    input="good morning robot"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: action=chat.greet"
+
+@t.kids.common.s007 core.test
+    input="hello hello"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: action=chat.greet"
+
+@t.kids.common.s008 core.test
+    input="hey there buddy"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: action=chat.greet"
+
+@t.kids.common.s009 core.test
+    input="hi everyone"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: action=chat.greet"
+
+@t.kids.common.s010 core.test
+    input="helo"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: action=chat.greet"
+
+@t.kids.common.s011 core.test
+    input="hii bot how are you"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: action=chat.greet"
+
+@t.kids.common.s012 core.test
+    input="hello again"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: action=chat.greet"
+
+@t.kids.common.s013 core.test
+    input="hey, anybody there?"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: action=chat.greet"
+
+@t.kids.common.s014 core.test
+    input="are u there"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: action=chat.greet"
+
+@t.kids.common.s015 core.test
+    input="bye"
+    expect="Goodbye!"
+    doc="rule sweep probe: action=chat.bye"
+
+@t.kids.common.s016 core.test
+    input="byeee"
+    expect="Goodbye!"
+    doc="rule sweep probe: action=chat.bye"
+
+@t.kids.common.s017 core.test
+    input="cya"
+    expect="Goodbye!"
+    doc="rule sweep probe: action=chat.bye"
+
+@t.kids.common.s018 core.test
+    input="cya later"
+    expect="Goodbye!"
+    doc="rule sweep probe: action=chat.bye"
+
+@t.kids.common.s019 core.test
+    input="see ya"
+    expect="Goodbye!"
+    doc="rule sweep probe: action=chat.bye"
+
+@t.kids.common.s020 core.test
+    input="see you tomorrow"
+    expect="Goodbye!"
+    doc="rule sweep probe: action=chat.bye"
+
+@t.kids.common.s021 core.test
+    input="gotta go"
+    expect="Goodbye!"
+    doc="rule sweep probe: action=chat.bye"
+
+@t.kids.common.s022 core.test
+    input="gtg"
+    expect="Goodbye!"
+    doc="rule sweep probe: action=chat.bye"
+
+@t.kids.common.s023 core.test
+    input="i have to go now"
+    expect="Goodbye!"
+    doc="rule sweep probe: action=chat.bye"
+
+@t.kids.common.s024 core.test
+    input="i gotta go bye"
+    expect="Goodbye!"
+    doc="rule sweep probe: action=chat.bye"
+
+@t.kids.common.s025 core.test
+    input="good night"
+    expect="Goodbye!"
+    doc="rule sweep probe: action=chat.bye"
+
+@t.kids.common.s026 core.test
+    input="goodnight robot"
+    expect="Goodbye!"
+    doc="rule sweep probe: action=chat.bye"
+
+@t.kids.common.s027 core.test
+    input="nighty night"
+    expect="Goodbye!"
+    doc="rule sweep probe: action=chat.bye"
+
+@t.kids.common.s028 core.test
+    input="talk to you later"
+    expect="Goodbye!"
+    doc="rule sweep probe: action=chat.bye"
+
+@t.kids.common.s029 core.test
+    input="ttyl"
+    expect="Goodbye!"
+    doc="rule sweep probe: action=chat.bye"
+
+@t.kids.common.s030 core.test
+    input="ok bye bye"
+    expect="Goodbye!"
+    doc="rule sweep probe: action=chat.bye"
+
+@t.kids.common.s031 core.test
+    input="im off, bye"
+    expect="Goodbye!"
+    doc="rule sweep probe: action=chat.bye"
+
+@t.kids.common.s032 core.test
+    input="farewell"
+    expect="Goodbye!"
+    doc="rule sweep probe: action=chat.bye"
+
+@t.kids.common.s033 core.test
+    input="bye bot, have a nice day"
+    expect="Goodbye!"
+    doc="rule sweep probe: action=chat.bye"
+
+@t.kids.common.s034 core.test
+    input="alright i am leaving now"
+    expect="Goodbye!"
+    doc="rule sweep probe: action=chat.bye"
+
+@t.kids.common.s035 core.test
+    input="thanks"
+    expect="You are welcome."
+    doc="rule sweep probe: action=chat.thanks"
+
+@t.kids.common.s036 core.test
+    input="thx"
+    expect="You are welcome."
+    doc="rule sweep probe: action=chat.thanks"
+
+@t.kids.common.s037 core.test
+    input="thanks a lot"
+    expect="You are welcome."
+    doc="rule sweep probe: action=chat.thanks"
+
+@t.kids.common.s038 core.test
+    input="thank you so much"
+    expect="You are welcome."
+    doc="rule sweep probe: action=chat.thanks"
+
+@t.kids.common.s039 core.test
+    input="tysm"
+    expect="You are welcome."
+    doc="rule sweep probe: action=chat.thanks"
+
+@t.kids.common.s040 core.test
+    input="ty bot"
+    expect="You are welcome."
+    doc="rule sweep probe: action=chat.thanks"
+
+@t.kids.common.s041 core.test
+    input="cheers"
+    expect="You are welcome."
+    doc="rule sweep probe: action=chat.thanks"
+
+@t.kids.common.s042 core.test
+    input="many thanks"
+    expect="You are welcome."
+    doc="rule sweep probe: action=chat.thanks"
+
+@t.kids.common.s043 core.test
+    input="thanks for the help"
+    expect="You are welcome."
+    doc="rule sweep probe: action=chat.thanks"
+
+@t.kids.common.s044 core.test
+    input="thank you for helping me"
+    expect="You are welcome."
+    doc="rule sweep probe: action=chat.thanks"
+
+@t.kids.common.s045 core.test
+    input="ok thanks"
+    expect="You are welcome."
+    doc="rule sweep probe: action=chat.thanks"
+
+@t.kids.common.s046 core.test
+    input="awesome thanks"
+    expect="You are welcome."
+    doc="rule sweep probe: action=chat.thanks"
+
+@t.kids.common.s047 core.test
+    input="cool, thank you"
+    expect="You are welcome."
+    doc="rule sweep probe: action=chat.thanks"
+
+@t.kids.common.s048 core.test
+    input="i appreciate it"
+    expect="You are welcome."
+    doc="rule sweep probe: action=chat.thanks"
+
+@t.kids.common.s049 core.test
+    input="you helped a lot, thanks"
+    expect="You are welcome."
+    doc="rule sweep probe: action=chat.thanks"
+
+@t.kids.common.s050 core.test
+    input="what should i call you"
+    expect="My name is PSys2."
+    doc="rule sweep probe: action=chat.name"
+
+@t.kids.common.s051 core.test
+    input="how can i call you"
+    expect="My name is PSys2."
+    doc="rule sweep probe: action=chat.name"
+
+@t.kids.common.s052 core.test
+    input="what do they call you"
+    expect="My name is PSys2."
+    doc="rule sweep probe: action=chat.name"
+
+@t.kids.common.s053 core.test
+    input="may i ask your name"
+    expect="My name is PSys2."
+    doc="rule sweep probe: action=chat.name"
+
+@t.kids.common.s054 core.test
+    input="whats the name of this bot"
+    expect="My name is PSys2."
+    doc="rule sweep probe: action=chat.name"
+
+@t.kids.common.s055 core.test
+    input="who are you"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep probe: action=chat.who"
+
+@t.kids.common.s056 core.test
+    input="who r u"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep probe: action=chat.who"
+
+@t.kids.common.s057 core.test
+    input="introduce yourself"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep probe: action=chat.who"
+
+@t.kids.common.s058 core.test
+    input="who is this"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep probe: action=chat.who"
+
+@t.kids.common.s059 core.test
+    input="who am i talking to"
+    expect="My name is PSys2."
+    doc="rule sweep probe: action=chat.who"
+
+@t.kids.common.s060 core.test
+    input="my name is Ben"
+    expect="Nice to meet you, Ben!"
+    doc="rule sweep probe: action=chat.meet"
+
+@t.kids.common.s061 core.test
+    input="i am Ben"
+    expect="Nice to meet you, Ben!"
+    doc="rule sweep probe: action=chat.meet"
+
+@t.kids.common.s062 core.test
+    input="im Ben"
+    expect="Nice to meet you, Ben!"
+    doc="rule sweep probe: action=chat.meet"
+
+@t.kids.common.s063 core.test
+    input="you can call me Ben"
+    expect="Nice to meet you, Ben!"
+    doc="rule sweep probe: action=chat.meet"
+
+@t.kids.common.s064 core.test
+    input="hi im Ben"
+    expect="Nice to meet you, Ben!"
+    doc="rule sweep probe: action=chat.meet"
+
+@t.kids.common.s065 core.test
+    input="hello, my name is Mia"
+    expect="Nice to meet you, Mia!"
+    doc="rule sweep probe: action=chat.meet"
+
+@t.kids.common.s066 core.test
+    input="Ben is my name"
+    expect="Nice to meet you, Ben!"
+    doc="rule sweep probe: action=chat.meet"
+
+@t.kids.common.s067 core.test
+    input="the name is Ben"
+    expect="Nice to meet you, Ben!"
+    doc="rule sweep probe: action=chat.meet"
+
+@t.kids.common.s068 core.test
+    input="they call me Ben"
+    expect="Nice to meet you, Ben!"
+    doc="rule sweep probe: action=chat.meet"
+
+@t.kids.common.s069 core.test
+    input="everyone calls me Ben"
+    expect="Nice to meet you, Ben!"
+    doc="rule sweep probe: action=chat.meet"
+
+@t.kids.common.s070 core.test
+    input="i go by Ben"
+    expect="Nice to meet you, Ben!"
+    doc="rule sweep probe: action=chat.meet"
+
+@t.kids.common.s071 core.test
+    input="Ben here"
+    expect="Nice to meet you, Ben!"
+    doc="rule sweep probe: action=chat.meet"
+
+@t.kids.common.s072 core.test
+    input="this is Ben"
+    expect="Nice to meet you, Ben!"
+    doc="rule sweep probe: action=chat.meet"
+
+@t.kids.common.s073 core.test
+    input="what is my name"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: action=chat.myname"
+
+@t.kids.common.s074 core.test
+    input="whats my name"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: action=chat.myname"
+
+@t.kids.common.s075 core.test
+    input="do you remember my name"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: action=chat.myname"
+
+@t.kids.common.s076 core.test
+    input="do u know my name"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: action=chat.myname"
+
+@t.kids.common.s077 core.test
+    input="who am i"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: action=chat.myname"
+
+@t.kids.common.s078 core.test
+    input="do you know who i am"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: action=chat.myname"
+
+@t.kids.common.s079 core.test
+    input="what did i say my name was"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: action=chat.myname"
+
+@t.kids.common.s080 core.test
+    input="what was my name again"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: action=chat.myname"
+
+@t.kids.common.s081 core.test
+    input="can you remember my name"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: action=chat.myname"
+
+@t.kids.common.s082 core.test
+    input="do you recognize me"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: action=chat.myname"
+
+@t.kids.common.s083 core.test
+    input="remember me?"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: action=chat.myname"
+
+@t.kids.common.s084 core.test
+    input="my name?"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: action=chat.myname"
+
+@t.kids.common.s085 core.test
+    input="hello ben how are you. what is my name"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: action=chat.myname"
+
+@t.kids.common.s086 core.test
+    input="your identity?"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep: paraphrase wording that the rules did not read before"
+
+@t.kids.common.s087 core.test
+    input="great, thanks"
+    expect="You are welcome."
+    doc="rule sweep: paraphrase wording that the rules did not read before"
+
+@t.kids.common.s088 core.test
+    input="thanks, you helped"
+    expect="You are welcome."
+    doc="rule sweep: paraphrase wording that the rules did not read before"
+
+@t.kids.common.s089 core.test
+    input="thnks"
+    expect="You are welcome."
+    doc="rule sweep: paraphrase wording that the rules did not read before"
+
+@t.kids.common.s090 core.test
+    input="my name, do you remember it"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep: paraphrase wording that the rules did not read before"
+
+@t.kids.common.s091 core.test
+    input="remind me, what is my name"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep: paraphrase wording that the rules did not read before"
+
+@t.kids.common.s092 core.test
+    input="did u learn my name yet"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep: paraphrase wording that the rules did not read before"
+
+@t.kids.common.s093 core.test
+    input="guess my name lol, do u know it"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep: paraphrase wording that the rules did not read before"
+
+@t.kids.common.s094 core.test
+    input="name of mine you know?"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep: paraphrase wording that the rules did not read before"
+
+@t.kids.common.s095 core.test
+    input="what name do u have for me?"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep: paraphrase wording that the rules did not read before"
+
+@t.kids.common.s096 core.test
+    input="do you have my name saved?"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep: paraphrase wording that the rules did not read before"
+
+@t.kids.common.s097 core.test
+    input="what's the bot's name?"
+    expect="My name is PSys2."
+    doc="rule sweep: paraphrase wording that the rules did not read before"
+
+@t.kids.common.s098 core.test
+    input="tell me what you're called please"
+    expect="My name is PSys2."
+    doc="rule sweep: paraphrase wording that the rules did not read before"
+
+@t.kids.common.s099 core.test
+    input="who's the name behind this chat?"
+    expect="My name is PSys2."
+    doc="rule sweep: paraphrase wording that the rules did not read before"
+
+@t.kids.common.s100 core.test
+    input="could you say your name?"
+    expect="My name is PSys2."
+    doc="rule sweep: paraphrase wording that the rules did not read before"
+
+@t.kids.common.s101 core.test
+    input="what do i call the assistant?"
+    expect="My name is PSys2."
+    doc="rule sweep: paraphrase wording that the rules did not read before"
+
+@t.kids.common.s102 core.test
+    input="intro yourself pls"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s103 core.test
+    input="can u introduce urself?"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s104 core.test
+    input="tell me about you, who are u"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s105 core.test
+    input="introduce yourself to me please"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s106 core.test
+    input="who r u, intro?"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s107 core.test
+    input="could you introduce yourself to me?"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s108 core.test
+    input="introduce urself"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s109 core.test
+    input="zed is my name pls"
+    expect="Nice to meet you, Zed!"
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s110 core.test
+    input="just so you know, zed is my name"
+    expect="Nice to meet you, Zed!"
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s111 core.test
+    input="are you able to recognise me?"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s112 core.test
+    input="u recognise me or not"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s113 core.test
+    input="can you tell if you recognise me?"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s114 core.test
+    input="do you recognise me, pls say?"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s115 core.test
+    input="how do people call you?"
+    expect="My name is PSys2."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s116 core.test
+    input="what do ppl call u?"
+    expect="My name is PSys2."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s117 core.test
+    input="folks call u what"
+    expect="My name is PSys2."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s118 core.test
+    input="how do others know you?"
+    expect="My name is PSys2."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s119 core.test
+    input="helper name?"
+    expect="My name is PSys2."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s120 core.test
+    input="what is the helpers name?"
+    expect="My name is PSys2."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s121 core.test
+    input="whats the helper called"
+    expect="My name is PSys2."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s122 core.test
+    input="name of helper pls"
+    expect="My name is PSys2."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s123 core.test
+    input="helper name please"
+    expect="My name is PSys2."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s124 core.test
+    input="the helper is called what"
+    expect="My name is PSys2."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s125 core.test
+    input="what is the name of this helper?"
+    expect="My name is PSys2."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s126 core.test
+    input="helper's name?"
+    expect="My name is PSys2."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s127 core.test
+    input="tell me the helper name"
+    expect="My name is PSys2."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s128 core.test
+    input="hello my friend!"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s129 core.test
+    input="hello friend how are u"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s130 core.test
+    input="hello friend, nice to see you"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s131 core.test
+    input="bye for now pls"
+    expect="Goodbye!"
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s132 core.test
+    input="see u later, bye for now"
+    expect="Goodbye!"
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s133 core.test
+    input="Hi, my name is Ben. the name i told u what was it"
+    expect="Your name is Ben."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s134 core.test
+    input="Hi, my name is Ben. what name did i tell u earlier?"
+    expect="Your name is Ben."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s135 core.test
+    input="Hi, my name is Ben. remind me which name i told you"
+    expect="Your name is Ben."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s136 core.test
+    input="Hi, my name is Ben. what was the name i said?"
+    expect="Your name is Ben."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s137 core.test
+    input="Hi, my name is Ben. could you tell me which name i told you?"
+    expect="Your name is Ben."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s138 core.test
+    input="which bot are you?"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s139 core.test
+    input="bot type?"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s140 core.test
+    input="what kind of robot program are you?"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s141 core.test
+    input="what bot is this?"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s142 core.test
+    input="what kinda bot u r?"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s143 core.test
+    input="could you tell me what type of bot you are?"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s144 core.test
+    input="thanks buddy, you are great"
+    expect="You are welcome."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.kids.common.s145 core.test
+    input="hey there"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s146 core.test
+    input="hiya"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s147 core.test
+    input="hey, how are you"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s148 core.test
+    input="hi hi"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s149 core.test
+    input="yo"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s150 core.test
+    input="hello there, nice to see you"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s151 core.test
+    input="what do people call you"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s152 core.test
+    input="u got a name?"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s153 core.test
+    input="how are you called"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s154 core.test
+    input="who do i talk to, what name"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s155 core.test
+    input="my name's ben"
+    expect="Nice to meet you, Ben!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s156 core.test
+    input="ben here!"
+    expect="Nice to meet you, Ben!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s157 core.test
+    input="i'm called Ben"
+    expect="Nice to meet you, Ben!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s158 core.test
+    input="Ben, that's me"
+    expect="Nice to meet you, Ben!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s159 core.test
+    input="this is ben talking"
+    expect="Nice to meet you, Ben!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s160 core.test
+    input="do you know my name"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s161 core.test
+    input="remember my name?"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s162 core.test
+    input="who am i again"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s163 core.test
+    input="tell me my name"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s164 core.test
+    input="u know my name?"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s165 core.test
+    input="what did i tell u my name was"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s166 core.test
+    input="what name did i give you"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s167 core.test
+    input="can u say my name"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s168 core.test
+    input="tell me about you"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s169 core.test
+    input="wat r u"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s170 core.test
+    input="u r who?"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s171 core.test
+    input="who are u exactly"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s172 core.test
+    input="what kind of thing are you"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s173 core.test
+    input="so who is talking to me"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s174 core.test
+    input="thank u so much"
+    expect="You are welcome."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s175 core.test
+    input="ty"
+    expect="You are welcome."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s176 core.test
+    input="much appreciated"
+    expect="You are welcome."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s177 core.test
+    input="thanks a lot friend"
+    expect="You are welcome."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s178 core.test
+    input="thnx"
+    expect="You are welcome."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s179 core.test
+    input="that was helpful, thanks"
+    expect="You are welcome."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s180 core.test
+    input="bye bye"
+    expect="Goodbye!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s181 core.test
+    input="see you later"
+    expect="Goodbye!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s182 core.test
+    input="gotta go, bye"
+    expect="Goodbye!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s183 core.test
+    input="later!"
+    expect="Goodbye!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s184 core.test
+    input="ok bye now"
+    expect="Goodbye!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s185 core.test
+    input="goodbye for now"
+    expect="Goodbye!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s186 core.test
+    input="bye for now, have a nice day"
+    expect="Goodbye!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s187 core.test
+    input="you can call me sam"
+    expect="Nice to meet you, Sam!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s188 core.test
+    input="my nickname is sam"
+    expect="Nice to meet you, Sam!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s189 core.test
+    input="sam is fine for me"
+    expect="Nice to meet you, Sam!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s190 core.test
+    input="i go by sam"
+    expect="Nice to meet you, Sam!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s191 core.test
+    input="sam, call me that"
+    expect="Nice to meet you, Sam!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s192 core.test
+    input="do u remember who i am"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s193 core.test
+    input="you know my name right?"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s194 core.test
+    input="did i tell you my name"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s195 core.test
+    input="forgot my name lol, do you know it"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s196 core.test
+    input="u remember what i am called?"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s197 core.test
+    input="say your name"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s198 core.test
+    input="how do i address you"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s199 core.test
+    input="what are you named"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s200 core.test
+    input="name of the assistant?"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s201 core.test
+    input="tell me what you're called"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s202 core.test
+    input="hi again"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s203 core.test
+    input="hey!"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s204 core.test
+    input="hello again, it's me"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s205 core.test
+    input="good afternoon"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s206 core.test
+    input="heya"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s207 core.test
+    input="hi buddy"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s208 core.test
+    input="hey hey"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s209 core.test
+    input="morning!"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s210 core.test
+    input="hiii"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s211 core.test
+    input="oi, hello"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s212 core.test
+    input="what do i call u"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s213 core.test
+    input="your name is?"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s214 core.test
+    input="how should i name you"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s215 core.test
+    input="what do u go by"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s216 core.test
+    input="tell me ur name bot"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s217 core.test
+    input="what's your name, friend"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s218 core.test
+    input="name of yours?"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s219 core.test
+    input="how u called"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s220 core.test
+    input="im mia lee"
+    expect="Nice to meet you, Mia Lee!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s221 core.test
+    input="mia lee here"
+    expect="Nice to meet you, Mia Lee!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s222 core.test
+    input="the name's Mia Lee"
+    expect="Nice to meet you, Mia Lee!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s223 core.test
+    input="you can know me as mia lee"
+    expect="Nice to meet you, Mia Lee!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s224 core.test
+    input="mia lee is me"
+    expect="Nice to meet you, Mia Lee!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s225 core.test
+    input="hey im mia lee"
+    expect="Nice to meet you, Mia Lee!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s226 core.test
+    input="mia lee, nice to meet you"
+    expect="Nice to meet you, Mia Lee!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s227 core.test
+    input="do u know who i am"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s228 core.test
+    input="what's my name?"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s229 core.test
+    input="my name is what again"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s230 core.test
+    input="name i told u?"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s231 core.test
+    input="whats my name again"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s232 core.test
+    input="tell me my name pls"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s233 core.test
+    input="so who am i to you"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s234 core.test
+    input="you remember my name right"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s235 core.test
+    input="what was i called"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s236 core.test
+    input="what r u"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s237 core.test
+    input="explain who you are"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s238 core.test
+    input="so what are you exactly"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s239 core.test
+    input="who you be"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s240 core.test
+    input="tell me who you are please"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s241 core.test
+    input="who is talking to me"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s242 core.test
+    input="whos this"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s243 core.test
+    input="thank you very much"
+    expect="You are welcome."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s244 core.test
+    input="thx a ton"
+    expect="You are welcome."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s245 core.test
+    input="ty ty"
+    expect="You are welcome."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s246 core.test
+    input="appreciate it"
+    expect="You are welcome."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s247 core.test
+    input="tanks"
+    expect="You are welcome."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s248 core.test
+    input="thank ya"
+    expect="You are welcome."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s249 core.test
+    input="cheers mate"
+    expect="You are welcome."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s250 core.test
+    input="ok bye"
+    expect="Goodbye!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s251 core.test
+    input="bye!!"
+    expect="Goodbye!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s252 core.test
+    input="gotta go now bye"
+    expect="Goodbye!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s253 core.test
+    input="later"
+    expect="Goodbye!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s254 core.test
+    input="talk later"
+    expect="Goodbye!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s255 core.test
+    input="bye have a good day"
+    expect="Goodbye!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s256 core.test
+    input="i'm off, bye"
+    expect="Goodbye!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s257 core.test
+    input="goodnight bye"
+    expect="Goodbye!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s258 core.test
+    input="lee is fine"
+    expect="Nice to meet you, Lee!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s259 core.test
+    input="you may call me lee"
+    expect="Nice to meet you, Lee!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s260 core.test
+    input="lee, call me that"
+    expect="Nice to meet you, Lee!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s261 core.test
+    input="i'm known as lee"
+    expect="Nice to meet you, Lee!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s262 core.test
+    input="lee would be good"
+    expect="Nice to meet you, Lee!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s263 core.test
+    input="lee is my name"
+    expect="Nice to meet you, Lee!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s264 core.test
+    input="can u tell my name"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s265 core.test
+    input="what name do u have for me"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s266 core.test
+    input="do you have my name saved"
+    expect="I do not know your name yet. Tell me: \"my name is ...\"."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s267 core.test
+    input="say ur name"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s268 core.test
+    input="what's the bot's name"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s269 core.test
+    input="name of the helper?"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s270 core.test
+    input="who's the name behind this chat"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s271 core.test
+    input="so what do i call you"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s272 core.test
+    input="could you say your name"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s273 core.test
+    input="what do i call the assistant"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s274 core.test
+    input="Hello, how are you doing?"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s275 core.test
+    input="helloooo"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s276 core.test
+    input="hi there pls"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s277 core.test
+    input="hey hey hey"
+    expect="Hello! What would you like to talk about?"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s278 core.test
+    input="so what's your name bot"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s279 core.test
+    input="what do people call you?"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s280 core.test
+    input="Could you tell me what your name is?"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s281 core.test
+    input="hey, whats yr name"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s282 core.test
+    input="who are u"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s283 core.test
+    input="so who are you exactly"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s284 core.test
+    input="introduce yourself pls"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s285 core.test
+    input="wait who r u"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s286 core.test
+    input="Who is this?"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s287 core.test
+    input="um who are you"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s288 core.test
+    input="my name is ben pls"
+    expect="Nice to meet you, Ben!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s289 core.test
+    input="Hi, I'm Ben."
+    expect="Nice to meet you, Ben!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s290 core.test
+    input="u can call me ben"
+    expect="Nice to meet you, Ben!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s291 core.test
+    input="Ben is my name."
+    expect="Nice to meet you, Ben!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s292 core.test
+    input="my name is ben. whats my name"
+    expect="Your name is Ben."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s293 core.test
+    input="im ben. what's my name again?"
+    expect="Your name is Ben."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s294 core.test
+    input="ben here. do u remember my name"
+    expect="Your name is Ben."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s295 core.test
+    input="My name is Ben. Can you tell me what my name is?"
+    expect="Your name is Ben."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s296 core.test
+    input="i'm ben. what's my name?"
+    expect="Your name is Ben."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s297 core.test
+    input="my name's ben, so what is my name"
+    expect="Your name is Ben."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s298 core.test
+    input="pls: my name is ben. what is my name?"
+    expect="Your name is Ben."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s299 core.test
+    input="thank u"
+    expect="You are welcome."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s300 core.test
+    input="ty!"
+    expect="You are welcome."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s301 core.test
+    input="Thanks, that helped."
+    expect="You are welcome."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s302 core.test
+    input="much appreciated, thanks"
+    expect="You are welcome."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s303 core.test
+    input="Thank you very much!"
+    expect="You are welcome."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s304 core.test
+    input="ok thanks bot"
+    expect="You are welcome."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s305 core.test
+    input="Goodbye for now."
+    expect="Goodbye!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s306 core.test
+    input="ok bye!"
+    expect="Goodbye!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s307 core.test
+    input="catch you later"
+    expect="Goodbye!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s308 core.test
+    input="hi friend, whats ur name"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s309 core.test
+    input="Hi there, what is your name?"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s310 core.test
+    input="hello bot, what is your name"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s311 core.test
+    input="yo friend whats your name"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s312 core.test
+    input="hey there friend, what is your name?"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s313 core.test
+    input="ben is my name. do u know who i am"
+    expect="Your name is Ben."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s314 core.test
+    input="my name is ben, do you know who i am?"
+    expect="Your name is Ben."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s315 core.test
+    input="Ben's my name. Do you know who I am?"
+    expect="Your name is Ben."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s316 core.test
+    input="I'm Ben. Do you know who I am?"
+    expect="Your name is Ben."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s317 core.test
+    input="ben is my name, do you know me?"
+    expect="Your name is Ben."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s318 core.test
+    input="pls: ben is my name. do you know who i am"
+    expect="Your name is Ben."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s319 core.test
+    input="thx!"
+    expect="You are welcome."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s320 core.test
+    input="thank u!"
+    expect="You are welcome."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s321 core.test
+    input="thanks bot"
+    expect="You are welcome."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s322 core.test
+    input="thnx a lot"
+    expect="You are welcome."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s323 core.test
+    input="Thanks a bunch!"
+    expect="You are welcome."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s324 core.test
+    input="thank you"
+    expect="You are welcome."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s325 core.test
+    input="thx bot"
+    expect="You are welcome."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s326 core.test
+    input="bye bot!"
+    expect="Goodbye!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s327 core.test
+    input="see u bot"
+    expect="Goodbye!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s328 core.test
+    input="bot, bye"
+    expect="Goodbye!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s329 core.test
+    input="ok bye bot pls"
+    expect="Goodbye!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s330 core.test
+    input="Goodbye, bot."
+    expect="Goodbye!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s331 core.test
+    input="bye bye bot"
+    expect="Goodbye!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s332 core.test
+    input="later bot"
+    expect="Goodbye!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s333 core.test
+    input="cu bot"
+    expect="Goodbye!"
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s334 core.test
+    input="who r u and whats ur name"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s335 core.test
+    input="tell me who you are and your name"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s336 core.test
+    input="Who are you? And what is your name?"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s337 core.test
+    input="so who r u, what's ur name"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s338 core.test
+    input="u got a name? who are u?"
+    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.kids.common.s339 core.test
+    input="Who are you, and what's your name?"
+    expect="My name is PSys2."
+    doc="rule sweep probe: fresh-batch variant"

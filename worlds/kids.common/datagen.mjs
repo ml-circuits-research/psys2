@@ -122,7 +122,27 @@ add('common.ood', 'out-of-domain', (r, x) => {
   return { text: pick(r, [`${p.name} has 5 apples.`, 'How much does a ball cost?', 'What day is tomorrow?', 'What does a rabbit eat?', 'What is 7 plus 5?', 'Add milk to my list.', 'Open the editor.', 'Play hangman.', 'What color is the sky?', 'Center.', 'Is a whale a fish?', 'How many sides does a hexagon have?']), negative: true };
 });
 // first names are data of this world: a bare name or a name with a pronoun must not trigger any chat act
-add('common.names', 'near-miss', (r, x) => { const p = x.person(r); return { text: pick(r, [`${p.name}.`, `${p.name}!`, `I am ${p.name}.`, `My friend is ${p.name}.`]), negative: true }; });
+add('common.names', 'near-miss', (r, x) => { const p = x.person(r); return { text: pick(r, [`${p.name}.`, `${p.name}!`, `My friend is ${p.name}.`, `${p.name} is my friend.`]), negative: true }; });
+// ---- rule sweep: realistic phrasing families (chat abbreviations, fillers, word orders), see worlds/kids.common/coverage.md
+const FAM = {
+  greet: ['hey hey', 'yo whats up', 'hiya bot', 'good morning robot', 'hello again', 'hii', 'heyyy', 'hello my friend', 'hi everyone', 'hello friend, nice to see you'],
+  name: ['whats ur name', 'your name pls', 'tell me your name', 'what name do u go by', 'name you go by?', 'how do people call you', 'what is your nickname', 'what do ppl call u', "what's the bot's name", 'helper name please', 'whats the helper called', 'could you say your name', 'what do i call the assistant', 'can i get your name', 'do you even have a name', 'how should i address u'],
+  who: ['who r u', 'intro yourself pls', 'can u introduce urself', 'introduce yourself to me please', 'which bot are you', 'what bot is this', 'what kinda bot u r', 'bot type?', 'your identity?', 'tell me about yourself', 'what are you then', 'who is this'],
+  thanks: ['thx', 'thnks', 'tysm', 'ty bot', 'thanks a ton buddy', 'great, thanks', 'thanks, you helped', 'ok thanks', 'thank you for helping me', 'much appreciated', 'cheers mate', 'awesome thanks a lot'],
+  bye: ['cya', 'cya later', 'gtg', 'gotta go, bye', 'see u later', 'ttyl', 'good night', 'bye bye', 'im off, bye', 'talk to you later', 'ok i have to leave now', 'nighty night', 'bye for now'],
+  myname: ['whats my name again', 'do u know my name', 'did u learn my name yet', 'do you have my name saved', 'remind me, what is my name', 'my name, do you remember it', 'name of mine you know?', 'what name do u have for me', 'are you able to recognise me', 'u recognise me or not', 'can you tell if you recognise me', 'do you recognise me', 'who am i', 'what did i say my name was'],
+};
+for (const act of Object.keys(FAM)) add(`common.wording.${act}`, act === 'greet' || act === 'thanks' || act === 'bye' ? 'request' : 'question', (r) => ({ text: pick(r, FAM[act]), expect: req(act) }), { noise: false });
+add('common.wording.meet', 'statement', (r, x) => {
+  const n = x.person(r).name;
+  const text = pick(r, [`I am ${n}`, `Im ${n}`, `Hey im ${n}`, `${n} is my name pls`, `Name's ${n} by the way`, `They call me ${n}`, `just so you know, my name is ${n}`, `${n} here`, `Hello, you can call me ${n}`, `this is ${n}`, `Call me ${n} please`, `${n} is my name`]);
+  return { text, expect: E(['core.request', { action: 'chat.meet', 'arg.name': JSON.stringify(n) }]) };
+}, { noise: false });
+add('common.wording.myname.after-meet', 'coreference', (r, x) => {
+  const n = x.person(r).name;
+  return { context: [`I am ${n}.`], text: pick(r, ['what name did i tell u earlier', 'what was the name i said', 'remind me which name i told you', 'whats my name again']), expect: req('myname') };
+}, { noise: false });
+add('common.neg.chat-like', 'near-miss', (r) => ({ text: pick(r, ['I am hungry.', 'I am tired.', 'Im happy.', 'I am 7 years old.', 'What is the name of the dog?', 'Thanks for the apple.', 'My dog is called Rex.', 'Who is Rex?']), negative: true }));
 export function generate({ rng, count = 2000, context } = {}) {
   return run(T, rng, count, mk(context), { noisy: false });
 }

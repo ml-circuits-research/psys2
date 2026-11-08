@@ -380,3 +380,1998 @@
     input="Any birds that can swim?"
     expect="Birds that can swim: ducks, geese, penguins and swans."
     doc="wording variant (widened phrasing)"
+
+@t.animals.s001 core.test
+    input="how many legs does a spider have"
+    expect="A spider has 8 legs."
+    doc="rule sweep probe: seek=legs where.name=spider"
+
+@t.animals.s002 core.test
+    input="spider legs?"
+    expect="A spider has 8 legs."
+    doc="rule sweep probe: seek=legs where.name=spider"
+
+@t.animals.s003 core.test
+    input="legs on a spider"
+    expect="A spider has 8 legs."
+    doc="rule sweep probe: seek=legs where.name=spider"
+
+@t.animals.s004 core.test
+    input="how many legs do spiders have"
+    expect="A spider has 8 legs."
+    doc="rule sweep probe: seek=legs where.name=spider"
+
+@t.animals.s005 core.test
+    input="spiders have how many legs"
+    expect="A spider has 8 legs."
+    doc="rule sweep probe: seek=legs where.name=spider"
+
+@t.animals.s006 core.test
+    input="number of legs of a dog"
+    expect="A dog has 4 legs."
+    doc="rule sweep probe: seek=legs where.name=dog"
+
+@t.animals.s007 core.test
+    input="dog legs how many"
+    expect="A dog has 4 legs."
+    doc="rule sweep probe: seek=legs where.name=dog"
+
+@t.animals.s008 core.test
+    input="how many feet does a dog have"
+    expect="A dog has 4 legs."
+    doc="rule sweep probe: seek=legs where.name=dog"
+
+@t.animals.s009 core.test
+    input="hey how many legs has an ant"
+    expect="An ant has 6 legs."
+    doc="rule sweep probe: seek=legs where.name=ant"
+
+@t.animals.s010 core.test
+    input="ant legs pls"
+    expect="An ant has 6 legs."
+    doc="rule sweep probe: seek=legs where.name=ant"
+
+@t.animals.s011 core.test
+    input="does a dog have 4 legs"
+    expect="Yes, a dog has 4 legs."
+    doc="rule sweep probe: mode=exists where.legs=4"
+
+@t.animals.s012 core.test
+    input="is it true that a spider has eight legs"
+    expect="Yes, a spider has 8 legs."
+    doc="rule sweep probe: where.legs=8"
+
+@t.animals.s013 core.test
+    input="what does a rabbit eat"
+    expect="Rabbits eat carrots, grass and lettuce."
+    doc="rule sweep probe: seek=food where.name=rabbit"
+
+@t.animals.s014 core.test
+    input="what do rabbits eat"
+    expect="Rabbits eat carrots, grass and lettuce."
+    doc="rule sweep probe: seek=food where.name=rabbit"
+
+@t.animals.s015 core.test
+    input="rabbit food?"
+    expect="Rabbits eat carrots, grass and lettuce."
+    doc="rule sweep probe: seek=food where.name=rabbit"
+
+@t.animals.s016 core.test
+    input="rabbits eat what"
+    expect="Rabbits eat carrots, grass and lettuce."
+    doc="rule sweep probe: seek=food where.name=rabbit"
+
+@t.animals.s017 core.test
+    input="whats a lions favorite food"
+    expect="Lions eat meat, zebras and antelopes."
+    doc="rule sweep probe: seek=food where.name=lion"
+
+@t.animals.s018 core.test
+    input="what does a panda like to eat"
+    expect="Pandas eat bamboo."
+    doc="rule sweep probe: seek=food where.name=panda"
+
+@t.animals.s019 core.test
+    input="what do pandas munch on"
+    expect="Pandas eat bamboo."
+    doc="rule sweep probe: seek=food where.name=panda"
+
+@t.animals.s020 core.test
+    input="what is the diet of a cow"
+    expect="Cows eat grass and hay."
+    doc="rule sweep probe: seek=food where.name=cow"
+
+@t.animals.s021 core.test
+    input="does a rabbit eat carrots"
+    expect="Yes, rabbits eat carrots."
+    doc="rule sweep probe: mode=exists where.food=carrots"
+
+@t.animals.s022 core.test
+    input="does a cow eat meat"
+    expect="I don't know whether cows eat meat."
+    doc="rule sweep probe: where.food=meat"
+
+@t.animals.s023 core.test
+    input="is a lion a carnivore"
+    expect="Yes, a lion is a carnivore."
+    doc="rule sweep probe: seek=is_a where.is_a=carnivore"
+
+@t.animals.s024 core.test
+    input="is a lion a meat eater"
+    expect="Yes, a lion is a carnivore."
+    doc="rule sweep probe: where.is_a=carnivore"
+
+@t.animals.s025 core.test
+    input="is a cow a herbivore"
+    expect="Yes, a cow is a herbivore."
+    doc="rule sweep probe: where.is_a=herbivore"
+
+@t.animals.s026 core.test
+    input="is a bear an omnivore"
+    expect="Yes, a bear is an omnivore."
+    doc="rule sweep probe: where.is_a=omnivore"
+
+@t.animals.s027 core.test
+    input="is a shark a fish"
+    expect="Yes, a shark is a fish."
+    doc="rule sweep probe: seek=is_a where.is_a=fish"
+
+@t.animals.s028 core.test
+    input="whale a mammal?"
+    expect="Yes, a whale is a mammal."
+    doc="rule sweep probe: where.is_a=mammal"
+
+@t.animals.s029 core.test
+    input="is a whale a fish or a mammal"
+    expect="No, a whale is not a fish. It is a mammal."
+    doc="rule sweep probe: seek=is_a"
+
+@t.animals.s030 core.test
+    input="a bat is a bird right?"
+    expect="No, a bat is not a bird. It is a mammal."
+    doc="rule sweep probe: where.is_a=bird"
+
+@t.animals.s031 core.test
+    input="what kind of animal is a whale"
+    expect="A whale is a mammal."
+    doc="rule sweep probe: seek=class"
+
+@t.animals.s032 core.test
+    input="what type of animal is a frog"
+    expect="A frog is an amphibian."
+    doc="rule sweep probe: seek=class"
+
+@t.animals.s033 core.test
+    input="can a penguin fly"
+    expect="No, a penguin cannot fly."
+    doc="rule sweep probe: seek=can_fly where.name=penguin"
+
+@t.animals.s034 core.test
+    input="do penguins fly"
+    expect="No, a penguin cannot fly."
+    doc="rule sweep probe: seek=can_fly"
+
+@t.animals.s035 core.test
+    input="penguin fly?"
+    expect="No, a penguin cannot fly."
+    doc="rule sweep probe: seek=can_fly"
+
+@t.animals.s036 core.test
+    input="can fish swim"
+    expect="I don't know whether a fish can swim. You can teach me: A fish can swim."
+    doc="rule sweep probe: seek=can_swim"
+
+@t.animals.s037 core.test
+    input="is a whale able to swim"
+    expect="Yes, a whale can swim."
+    doc="rule sweep probe: seek=can_swim"
+
+@t.animals.s038 core.test
+    input="can an elephant swim"
+    expect="Yes, an elephant can swim."
+    doc="rule sweep probe: seek=can_swim where.name=elephant"
+
+@t.animals.s039 core.test
+    input="can u tell me if a cat can swim"
+    expect="I don't know whether a cat can swim. You can teach me: A cat can swim."
+    doc="rule sweep probe: seek=can_swim"
+
+@t.animals.s040 core.test
+    input="where does a camel live"
+    expect="Camels live in the desert."
+    doc="rule sweep probe: seek=lives where.name=camel"
+
+@t.animals.s041 core.test
+    input="where do camels live"
+    expect="Camels live in the desert."
+    doc="rule sweep probe: seek=lives where.name=camel"
+
+@t.animals.s042 core.test
+    input="camel home?"
+    expect="Camels live in the desert."
+    doc="rule sweep probe: seek=lives where.name=camel"
+
+@t.animals.s043 core.test
+    input="where can i find a penguin"
+    expect="Penguins live in the polar regions."
+    doc="rule sweep probe: seek=lives where.name=penguin"
+
+@t.animals.s044 core.test
+    input="where does a polar bear live"
+    expect="Polar bears live in the polar regions."
+    doc="rule sweep probe: seek=lives where.name=polar_bear"
+
+@t.animals.s045 core.test
+    input="whats a fox habitat"
+    expect="Foxes live in the forest."
+    doc="rule sweep probe: seek=lives where.name=fox"
+
+@t.animals.s046 core.test
+    input="what sound does a cow make"
+    expect="A cow goes moo."
+    doc="rule sweep probe: seek=sound where.name=cow"
+
+@t.animals.s047 core.test
+    input="what does a cow say"
+    expect="A cow goes moo."
+    doc="rule sweep probe: seek=sound where.name=cow"
+
+@t.animals.s048 core.test
+    input="how does a dog sound"
+    expect="A dog goes woof."
+    doc="rule sweep probe: seek=sound where.name=dog"
+
+@t.animals.s049 core.test
+    input="cow sound?"
+    expect="A cow goes moo."
+    doc="rule sweep probe: seek=sound where.name=cow"
+
+@t.animals.s050 core.test
+    input="what noise does a cat make"
+    expect="A cat goes meow."
+    doc="rule sweep probe: seek=sound where.name=cat"
+
+@t.animals.s051 core.test
+    input="dog goes what"
+    expect="A dog goes woof."
+    doc="rule sweep probe: seek=sound where.name=dog"
+
+@t.animals.s052 core.test
+    input="what is a baby cow called"
+    expect="A baby cow is called a calf."
+    doc="rule sweep probe: seek=baby where.name=cow"
+
+@t.animals.s053 core.test
+    input="whats a baby sheep called"
+    expect="A baby sheep is called a lamb."
+    doc="rule sweep probe: seek=baby where.name=sheep"
+
+@t.animals.s054 core.test
+    input="baby cat?"
+    expect="A baby cat is called a kitten."
+    doc="rule sweep probe: seek=baby where.name=cat"
+
+@t.animals.s055 core.test
+    input="what do you call a baby duck"
+    expect="A baby duck is called a duckling."
+    doc="rule sweep probe: seek=baby where.name=duck"
+
+@t.animals.s056 core.test
+    input="what is a calf"
+    expect="A calf is a baby cow, elephant, giraffe, camel, hippo, whale, dolphin and walrus."
+    doc="rule sweep probe: where.baby=calf"
+
+@t.animals.s057 core.test
+    input="what is a puppy"
+    expect="A puppy is a baby dog."
+    doc="rule sweep probe: where.baby=puppy"
+
+@t.animals.s058 core.test
+    input="what is a joey"
+    expect="A joey is a baby kangaroo and koala."
+    doc="rule sweep probe: where.baby=joey"
+
+@t.animals.s059 core.test
+    input="puppy is the baby of what"
+    expect="A puppy is a baby dog."
+    doc="rule sweep probe: where.baby=puppy"
+
+@t.animals.s060 core.test
+    input="which animal has a baby called a calf"
+    expect="A calf is a baby cow, elephant, giraffe, camel, hippo, whale, dolphin and walrus."
+    doc="rule sweep probe: where.baby=calf"
+
+@t.animals.s061 core.test
+    input="what is a duck covered in"
+    expect="A duck is covered in feathers."
+    doc="rule sweep probe: seek=covered where.name=duck"
+
+@t.animals.s062 core.test
+    input="what covers a fish"
+    expect="I don't know what covers a fish. You can teach me: A fish has fur."
+    doc="rule sweep probe: seek=covered where.name=fish"
+
+@t.animals.s063 core.test
+    input="what covering does a sheep have"
+    expect="A sheep is covered in wool."
+    doc="rule sweep probe: seek=covered where.name=sheep"
+
+@t.animals.s064 core.test
+    input="tell me about the lion"
+    expect="A lion is a mammal that lives on the savanna. It has 4 legs, is covered in fur and eats meat, zebras and antelopes."
+    doc="rule sweep probe: seek=summary where.name=lion"
+
+@t.animals.s065 core.test
+    input="what is a lion like"
+    expect="A lion is a mammal that lives on the savanna. It has 4 legs, is covered in fur and eats meat, zebras and antelopes."
+    doc="rule sweep probe: seek=summary where.name=lion"
+
+@t.animals.s066 core.test
+    input="describe a panda"
+    expect="A panda is a mammal that lives in the forest. It has 4 legs, is covered in fur and eats bamboo."
+    doc="rule sweep probe: seek=summary where.name=panda"
+
+@t.animals.s067 core.test
+    input="tell me about elephants"
+    expect="An elephant is a mammal that lives on the savanna and in the jungle. It has 4 legs, is covered in skin, eats grass, leaves and fruit and can swim."
+    doc="rule sweep probe: seek=summary where.name=elephant"
+
+@t.animals.s068 core.test
+    input="lion info"
+    expect="A lion is a mammal that lives on the savanna. It has 4 legs, is covered in fur and eats meat, zebras and antelopes."
+    doc="rule sweep probe: seek=summary where.name=lion"
+
+@t.animals.s069 core.test
+    input="what is a zebra"
+    expect="A zebra is a mammal that lives on the savanna. It is covered in fur."
+    doc="rule sweep probe: seek=summary where.name=zebra"
+
+@t.animals.s070 core.test
+    input="facts about owls"
+    expect="An owl is a bird that lives in the forest. It has 2 legs, is covered in feathers, eats mice and insects and can fly."
+    doc="rule sweep probe: seek=summary where.name=owl"
+
+@t.animals.s071 core.test
+    input="which animals live in the sea"
+    expect="Animals that live in the sea: seals, whales, dolphins, sharks, octopuses, walruses, crabs, jellyfish, starfish and turtles."
+    doc="rule sweep probe: seek=matching where.habitat=sea"
+
+@t.animals.s072 core.test
+    input="animals that live in the jungle"
+    expect="Animals that live in the jungle: parrots, tigers, elephants, monkeys and gorillas."
+    doc="rule sweep probe: where.habitat=jungle"
+
+@t.animals.s073 core.test
+    input="sea animals"
+    expect="Animals that live in the sea: seals, whales, dolphins, sharks, octopuses, walruses, crabs, jellyfish, starfish and turtles."
+    doc="rule sweep probe: where.habitat=sea"
+
+@t.animals.s074 core.test
+    input="which animals live on a farm"
+    expect="Animals that live on a farm: dogs, cows, pigs, sheep, horses, goats, chickens, ducks, geese and donkeys."
+    doc="rule sweep probe: where.habitat=farm"
+
+@t.animals.s075 core.test
+    input="which animals have 4 legs"
+    expect="Animals with 4 legs (showing 12 of 33): dogs, cats, rabbits, hamsters, guinea pigs, tortoises, cows, pigs, sheep, horses, goats and donkeys."
+    doc="rule sweep probe: where.legs=4"
+
+@t.animals.s076 core.test
+    input="animals with 2 legs"
+    expect="Animals with 2 legs (showing 12 of 13): parrots, chickens, ducks, geese, monkeys, gorillas, kangaroos, bats, penguins, eagles, owls and ostriches."
+    doc="rule sweep probe: where.legs=2"
+
+@t.animals.s077 core.test
+    input="animals with no legs"
+    expect="Animals with no legs: goldfish, snakes, seals, whales, dolphins, sharks, walruses, jellyfish, snails and worms."
+    doc="rule sweep probe: where.legs=0"
+
+@t.animals.s078 core.test
+    input="which animals are mammals"
+    expect="Mammals (showing 12 of 37): dogs, cats, rabbits, hamsters, guinea pigs, cows, pigs, sheep, horses, goats, donkeys and lions."
+    doc="rule sweep probe: where.class=mammal"
+
+@t.animals.s079 core.test
+    input="which animals are carnivores"
+    expect="Carnivores (showing 12 of 22): cats, lions, tigers, wolves, crocodiles, snakes, frogs, polar bears, penguins, seals, whales and dolphins."
+    doc="rule sweep probe: where.diet=carnivore"
+
+@t.animals.s080 core.test
+    input="which animals can fly"
+    expect="Animals that can fly: parrots, ducks, geese, bats, eagles, owls, swans, bees, butterflies, ladybirds, grasshoppers and mosquitoes."
+    doc="rule sweep probe: where.can_fly=true"
+
+@t.animals.s081 core.test
+    input="which animals cant swim"
+    expect="I don't know any animals that cannot swim."
+    doc="rule sweep probe: where.can_swim=false"
+
+@t.animals.s082 core.test
+    input="which birds can swim"
+    expect="Birds that can swim: ducks, geese, penguins and swans."
+    doc="rule sweep probe: where.class=bird"
+
+@t.animals.s083 core.test
+    input="which animals eat grass"
+    expect="Animals that eat grass (showing 12 of 16): rabbits, guinea pigs, tortoises, cows, sheep, horses, goats, geese, donkeys, elephants, deer and kangaroos."
+    doc="rule sweep probe: where.food=grass"
+
+@t.animals.s084 core.test
+    input="which animals say moo"
+    expect="Animals that say moo: cows."
+    doc="rule sweep probe: where.sound=moo"
+
+@t.animals.s085 core.test
+    input="which animals have feathers"
+    expect="Animals that have feathers: parrots, chickens, ducks, geese, penguins, eagles, owls, ostriches and swans."
+    doc="rule sweep probe: where.covering=feather"
+
+@t.animals.s086 core.test
+    input="list all reptiles"
+    expect="Reptiles: tortoises, crocodiles, snakes, lizards and turtles."
+    doc="rule sweep probe: where.class=reptile"
+
+@t.animals.s087 core.test
+    input="what animals are insects"
+    expect="Insects: bees, ants, butterflies, ladybirds, grasshoppers and mosquitoes."
+    doc="rule sweep probe: where.class=insect"
+
+@t.animals.s088 core.test
+    input="what is my dog called"
+    expect="I don't know what your dog is called. You can tell me: My dog is called Rex."
+    doc="rule sweep probe: seek=called"
+
+@t.animals.s089 core.test
+    input="what is my pets name"
+    expect="I don't know your pet's name yet. You can tell me: My dog is called Rex."
+    doc="rule sweep probe: seek=called"
+
+@t.animals.s090 core.test
+    input="my dogs name?"
+    expect="I don't know what your dog is called. You can tell me: My dog is called Rex."
+    doc="rule sweep probe: seek=called"
+
+@t.animals.s091 core.test
+    input="do i have a dog"
+    expect="I don't know whether you have a dog. You can tell me: I have a dog called Rex."
+    doc="rule sweep probe: seek=kind"
+
+@t.animals.s092 core.test
+    input="which pets do i have"
+    expect="You have not told me about any pets yet. You can say: I have a cat called Tom."
+    doc="rule sweep probe: seek=kind"
+
+@t.animals.s093 core.test
+    input="who is Rex"
+    expect="I don't know who Rex is yet. You can tell me: My dog is called Rex."
+    doc="rule sweep probe: seek=kind"
+
+@t.animals.s094 core.test
+    input="what pet is Rex"
+    expect="I don't know who Rex is yet. You can tell me: My dog is called Rex."
+    doc="rule sweep probe: seek=kind"
+
+@t.animals.s095 core.test
+    input="what's on a duck's skin?"
+    expect="A duck is covered in feathers."
+    doc="rule sweep: paraphrase wording that the rules did not read before"
+
+@t.animals.s096 core.test
+    input="is a duck covered in feathers?"
+    expect="A duck is covered in feathers."
+    doc="rule sweep: paraphrase wording that the rules did not read before"
+
+@t.animals.s097 core.test
+    input="covering of a duck?"
+    expect="A duck is covered in feathers."
+    doc="rule sweep: paraphrase wording that the rules did not read before"
+
+@t.animals.s098 core.test
+    input="count spider legs"
+    expect="A spider has 8 legs."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s099 core.test
+    input="spider leg number"
+    expect="A spider has 8 legs."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s100 core.test
+    input="how many legs has a spider got?"
+    expect="A spider has 8 legs."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s101 core.test
+    input="tell me the legs of a spider"
+    expect="A spider has 8 legs."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s102 core.test
+    input="spiders how many legs pls"
+    expect="A spider has 8 legs."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s103 core.test
+    input="can you say how many legs a spider has?"
+    expect="A spider has 8 legs."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s104 core.test
+    input="calf?"
+    expect="A calf is a baby cow, elephant, giraffe, camel, hippo, whale, dolphin and walrus."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s105 core.test
+    input="whats a calf"
+    expect="A calf is a baby cow, elephant, giraffe, camel, hippo, whale, dolphin and walrus."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s106 core.test
+    input="tell me about calves"
+    expect="A calf is a baby cow, elephant, giraffe, camel, hippo, whale, dolphin and walrus."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s107 core.test
+    input="calf meaning"
+    expect="A calf is a baby cow, elephant, giraffe, camel, hippo, whale, dolphin and walrus."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s108 core.test
+    input="what is a baby cow called and what is it?"
+    expect="You are white. You have king on e1, queen on d1, rooks on a1 and h1, bishops on c1 and f1, knights on b1 and g1, eight pawns on the second rank. I have king on e8, queen on d8, rooks on a8 and h8, bishops on c8 and f8, knights on b8 and g8, eight pawns on the seventh rank."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s109 core.test
+    input="who is a calf?"
+    expect="A calf is a baby cow, elephant, giraffe, camel, hippo, whale, dolphin and walrus."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s110 core.test
+    input="calves what are they"
+    expect="A calf is a baby cow, elephant, giraffe, camel, hippo, whale, dolphin and walrus."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s111 core.test
+    input="can you tell me what a calf is?"
+    expect="A calf is a baby cow, elephant, giraffe, camel, hippo, whale, dolphin and walrus."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s112 core.test
+    input="animals with six legs"
+    expect="Animals with 6 legs: bees, ants, butterflies, ladybirds, grasshoppers and mosquitoes."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s113 core.test
+    input="6 legs animals"
+    expect="Animals with 6 legs: bees, ants, butterflies, ladybirds, grasshoppers and mosquitoes."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s114 core.test
+    input="list animals that have six legs"
+    expect="Animals with 6 legs: bees, ants, butterflies, ladybirds, grasshoppers and mosquitoes."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s115 core.test
+    input="six legged animals?"
+    expect="Animals with 6 legs: bees, ants, butterflies, ladybirds, grasshoppers and mosquitoes."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s116 core.test
+    input="which animals got 6 legs?"
+    expect="Animals with 6 legs: bees, ants, butterflies, ladybirds, grasshoppers and mosquitoes."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s117 core.test
+    input="animals 6 legs pls"
+    expect="Animals with 6 legs: bees, ants, butterflies, ladybirds, grasshoppers and mosquitoes."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s118 core.test
+    input="show me animals with 6 legs"
+    expect="Animals with 6 legs: bees, ants, butterflies, ladybirds, grasshoppers and mosquitoes."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s119 core.test
+    input="can you find animals that have 6 legs?"
+    expect="Animals with 6 legs: bees, ants, butterflies, ladybirds, grasshoppers and mosquitoes."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s120 core.test
+    input="cows say what"
+    expect="A cow goes moo."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s121 core.test
+    input="cow say?"
+    expect="A cow goes moo."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s122 core.test
+    input="what's the cow sound?"
+    expect="A cow goes moo."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s123 core.test
+    input="tell me the sound a cow makes"
+    expect="A cow goes moo."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s124 core.test
+    input="can you tell me what a cow says?"
+    expect="A cow goes moo."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s125 core.test
+    input="can u tell me if an ostrich can fly?"
+    expect="No, an ostrich cannot fly."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s126 core.test
+    input="My dog is called Rex. whats my pets name"
+    expect="Your pet is called Rex."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s127 core.test
+    input="My dog is called Rex. my pet name?"
+    expect="Your pet is called Rex."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s128 core.test
+    input="My dog is called Rex. what did i call my pet?"
+    expect="Your pet is called Rex."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s129 core.test
+    input="My dog is called Rex. name of my pet?"
+    expect="Your pet is called Rex."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s130 core.test
+    input="My dog is called Rex. how is my pet called?"
+    expect="Your pet is called Rex."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s131 core.test
+    input="My dog is called Rex. what's my dogs name?"
+    expect="Your dog is called Rex."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s132 core.test
+    input="My dog is called Rex. remind me my pets name"
+    expect="Your pet is called Rex."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s133 core.test
+    input="My dog is called Rex. what is my pet named?"
+    expect="Your pet is called Rex."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s134 core.test
+    input="My dog is called Rex. can you tell me what my pet is called?"
+    expect="Your pet is called Rex."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s135 core.test
+    input="does a cow eat plants?"
+    expect="Yes, a cow is a herbivore."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s136 core.test
+    input="is a cow a plant eater?"
+    expect="Yes, a cow is a herbivore."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s137 core.test
+    input="is cow a veggie eater?"
+    expect="Yes, a cow is a herbivore."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s138 core.test
+    input="can you check if a shark is a mammal?"
+    expect="No, a shark is not a mammal. It is a fish."
+    doc="rule sweep: heldout wording that the rules did not read before"
+
+@t.animals.s139 core.test
+    input="owl fly?"
+    expect="Yes, an owl can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s140 core.test
+    input="can owls fly"
+    expect="Yes, an owl can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s141 core.test
+    input="do owls fly"
+    expect="Yes, an owl can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s142 core.test
+    input="is an owl able to fly"
+    expect="Yes, an owl can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s143 core.test
+    input="can a owl flyy"
+    expect="Yes, an owl can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s144 core.test
+    input="owls can fly right"
+    expect="Yes, an owl can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s145 core.test
+    input="tell me can an owl fly"
+    expect="Yes, an owl can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s146 core.test
+    input="flying owl yes or no?"
+    expect="Yes, an owl can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s147 core.test
+    input="can the owl fly pls"
+    expect="Yes, an owl can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s148 core.test
+    input="does an owl know how to fly"
+    expect="Yes, an owl can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s149 core.test
+    input="can penguins fly"
+    expect="No, a penguin cannot fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s150 core.test
+    input="can a penguin take off and fly"
+    expect="No, a penguin cannot fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s151 core.test
+    input="penguins fly or no"
+    expect="No, a penguin cannot fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s152 core.test
+    input="is a penguin able to fly"
+    expect="No, a penguin cannot fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s153 core.test
+    input="do penguins fly at all"
+    expect="No, a penguin cannot fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s154 core.test
+    input="can pengiun fly"
+    expect="No, a penguin cannot fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s155 core.test
+    input="penguin flying yes or no"
+    expect="No, a penguin cannot fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s156 core.test
+    input="can a penguin flap up into the air"
+    expect="No, a penguin cannot fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s157 core.test
+    input="fly penguin?"
+    expect="No, a penguin cannot fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s158 core.test
+    input="dolphin swim?"
+    expect="Yes, a dolphin can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s159 core.test
+    input="can dolphins swim"
+    expect="Yes, a dolphin can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s160 core.test
+    input="do dolphins swim"
+    expect="Yes, a dolphin can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s161 core.test
+    input="is a dolphin good at swimming"
+    expect="Yes, a dolphin can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s162 core.test
+    input="can a dolphin go swimming"
+    expect="Yes, a dolphin can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s163 core.test
+    input="dolphins swim yes?"
+    expect="Yes, a dolphin can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s164 core.test
+    input="can the dolphin swim pls"
+    expect="Yes, a dolphin can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s165 core.test
+    input="does a dolphin know how to swim"
+    expect="Yes, a dolphin can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s166 core.test
+    input="can a dolphin swim in the sea"
+    expect="Yes, a dolphin can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s167 core.test
+    input="rabbit swim?"
+    expect="I don't know whether a rabbit can swim. You can teach me: A rabbit can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s168 core.test
+    input="can rabbits swim"
+    expect="I don't know whether a rabbit can swim. You can teach me: A rabbit can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s169 core.test
+    input="do rabbits swim"
+    expect="I don't know whether a rabbit can swim. You can teach me: A rabbit can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s170 core.test
+    input="is a rabbit able to swim"
+    expect="I don't know whether a rabbit can swim. You can teach me: A rabbit can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s171 core.test
+    input="can rabit swim"
+    expect="I don't know whether a rabbit can swim. You can teach me: A rabbit can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s172 core.test
+    input="rabbits swimming, yes or no"
+    expect="I don't know whether a rabbit can swim. You can teach me: A rabbit can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s173 core.test
+    input="can a rabbit swim in a pool"
+    expect="I don't know whether a rabbit can swim. You can teach me: A rabbit can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s174 core.test
+    input="swim rabbit?"
+    expect="I don't know whether a rabbit can swim. You can teach me: A rabbit can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s175 core.test
+    input="spider an insect?"
+    expect="No, a spider is not an insect. It is an arachnid."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s176 core.test
+    input="is a spider an insect"
+    expect="No, a spider is not an insect. It is an arachnid."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s177 core.test
+    input="spiders are insects right"
+    expect="No, a spider is not an insect. It is an arachnid."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s178 core.test
+    input="is a spider classed as an insect"
+    expect="No, a spider is not an insect. It is an arachnid."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s179 core.test
+    input="spider insect yes or no"
+    expect="No, a spider is not an insect. It is an arachnid."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s180 core.test
+    input="would you call a spider an insect"
+    expect="No, a spider is not an insect. It is an arachnid."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s181 core.test
+    input="are spiders insects"
+    expect="No, a spider is not an insect. It is an arachnid."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s182 core.test
+    input="is a spider in the insect group"
+    expect="No, a spider is not an insect. It is an arachnid."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s183 core.test
+    input="spider = insect?"
+    expect="No, a spider is not an insect. It is an arachnid."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s184 core.test
+    input="whale a fish?"
+    expect="No, a whale is not a fish. It is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s185 core.test
+    input="is a whale a fish"
+    expect="No, a whale is not a fish. It is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s186 core.test
+    input="whales are fish right"
+    expect="No, a whale is not a fish. It is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s187 core.test
+    input="is a whale classed as a fish"
+    expect="No, a whale is not a fish. It is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s188 core.test
+    input="whale fish yes or no"
+    expect="No, a whale is not a fish. It is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s189 core.test
+    input="would you call a whale a fish"
+    expect="No, a whale is not a fish. It is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s190 core.test
+    input="are whales fish"
+    expect="No, a whale is not a fish. It is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s191 core.test
+    input="is whale a type of fish"
+    expect="No, a whale is not a fish. It is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s192 core.test
+    input="is a whale in the fish group"
+    expect="No, a whale is not a fish. It is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s193 core.test
+    input="whale = fish?"
+    expect="No, a whale is not a fish. It is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s194 core.test
+    input="where is a camel's home"
+    expect="Camels live in the desert."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s195 core.test
+    input="which place is a camel from"
+    expect="Camels live in the desert."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s196 core.test
+    input="where would i see a camel living"
+    expect="Camels live in the desert."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s197 core.test
+    input="camels live where"
+    expect="Camels live in the desert."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s198 core.test
+    input="where's the camel's habitat"
+    expect="Camels live in the desert."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s199 core.test
+    input="where do camels stay"
+    expect="Camels live in the desert."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s200 core.test
+    input="what's a camel's home place"
+    expect="Camels live in the desert."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s201 core.test
+    input="where does the camel live pls"
+    expect="Camels live in the desert."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s202 core.test
+    input="what's a cow covered in"
+    expect="A cow is covered in fur."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s203 core.test
+    input="cow covering?"
+    expect="A cow is covered in fur."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s204 core.test
+    input="what covers a cow"
+    expect="A cow is covered in fur."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s205 core.test
+    input="what is on a cows body"
+    expect="A cow is covered in fur."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s206 core.test
+    input="what does a cow have on its skin"
+    expect="A cow is covered in fur."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s207 core.test
+    input="cow skin is covered in what"
+    expect="A cow is covered in fur."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s208 core.test
+    input="is a cow covered in fur"
+    expect="A cow is covered in fur."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s209 core.test
+    input="what's the outside of a cow made of"
+    expect="A cow is covered in fur."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s210 core.test
+    input="cow covered with what"
+    expect="A cow is covered in fur."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s211 core.test
+    input="what covers the cow"
+    expect="A cow is covered in fur."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s212 core.test
+    input="dolphin info"
+    expect="A dolphin is a mammal that lives in the sea. It has no legs, is covered in skin, eats fish and squid and can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s213 core.test
+    input="what's a dolphin"
+    expect="A dolphin is a mammal that lives in the sea. It has no legs, is covered in skin, eats fish and squid and can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s214 core.test
+    input="info on dolphins pls"
+    expect="A dolphin is a mammal that lives in the sea. It has no legs, is covered in skin, eats fish and squid and can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s215 core.test
+    input="describe a dolphin"
+    expect="A dolphin is a mammal that lives in the sea. It has no legs, is covered in skin, eats fish and squid and can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s216 core.test
+    input="tell me stuff about dolphins"
+    expect="A dolphin is a mammal that lives in the sea. It has no legs, is covered in skin, eats fish and squid and can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s217 core.test
+    input="dolphins, tell me"
+    expect="A dolphin is a mammal that lives in the sea. It has no legs, is covered in skin, eats fish and squid and can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s218 core.test
+    input="what do you know about dolphins"
+    expect="A dolphin is a mammal that lives in the sea. It has no legs, is covered in skin, eats fish and squid and can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s219 core.test
+    input="give me facts about a dolphin"
+    expect="A dolphin is a mammal that lives in the sea. It has no legs, is covered in skin, eats fish and squid and can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s220 core.test
+    input="what is a dolphin like"
+    expect="A dolphin is a mammal that lives in the sea. It has no legs, is covered in skin, eats fish and squid and can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s221 core.test
+    input="explain dolphins to me"
+    expect="A dolphin is a mammal that lives in the sea. It has no legs, is covered in skin, eats fish and squid and can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s222 core.test
+    input="sea animals?"
+    expect="Animals that live in the sea: seals, whales, dolphins, sharks, octopuses, walruses, crabs, jellyfish, starfish and turtles."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s223 core.test
+    input="animals in the sea list"
+    expect="Animals that live in the sea: seals, whales, dolphins, sharks, octopuses, walruses, crabs, jellyfish, starfish and turtles."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s224 core.test
+    input="what lives in the ocean"
+    expect="Animals that live in the sea: seals, whales, dolphins, sharks, octopuses, walruses, crabs, jellyfish, starfish and turtles."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s225 core.test
+    input="which animals are found in the sea"
+    expect="Animals that live in the sea: seals, whales, dolphins, sharks, octopuses, walruses, crabs, jellyfish, starfish and turtles."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s226 core.test
+    input="name the sea animals"
+    expect="Animals that live in the sea: seals, whales, dolphins, sharks, octopuses, walruses, crabs, jellyfish, starfish and turtles."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s227 core.test
+    input="animals of the ocean pls"
+    expect="Animals that live in the sea: seals, whales, dolphins, sharks, octopuses, walruses, crabs, jellyfish, starfish and turtles."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s228 core.test
+    input="which creatures live in the sea"
+    expect="Animals that live in the sea: seals, whales, dolphins, sharks, octopuses, walruses, crabs, jellyfish, starfish and turtles."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s229 core.test
+    input="sea animals please"
+    expect="Animals that live in the sea: seals, whales, dolphins, sharks, octopuses, walruses, crabs, jellyfish, starfish and turtles."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s230 core.test
+    input="duck fly?"
+    expect="Yes, a duck can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s231 core.test
+    input="can ducks fly"
+    expect="Yes, a duck can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s232 core.test
+    input="do ducks fly"
+    expect="Yes, a duck can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s233 core.test
+    input="is a duck able to fly"
+    expect="Yes, a duck can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s234 core.test
+    input="ducks flying yes or no"
+    expect="Yes, a duck can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s235 core.test
+    input="can a duck take off"
+    expect="Yes, a duck can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s236 core.test
+    input="can duck fly pls"
+    expect="Yes, a duck can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s237 core.test
+    input="does a duck know how to fly"
+    expect="Yes, a duck can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s238 core.test
+    input="fly duck?"
+    expect="Yes, a duck can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s239 core.test
+    input="can a mallard fly"
+    expect="Yes, a duck can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s240 core.test
+    input="cow fly?"
+    expect="No, a cow cannot fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s241 core.test
+    input="can cows fly"
+    expect="No, a cow cannot fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s242 core.test
+    input="do cows fly"
+    expect="No, a cow cannot fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s243 core.test
+    input="is a cow able to fly"
+    expect="No, a cow cannot fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s244 core.test
+    input="cows flying yes or no"
+    expect="No, a cow cannot fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s245 core.test
+    input="can a cow take off"
+    expect="No, a cow cannot fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s246 core.test
+    input="can cow fly pls"
+    expect="No, a cow cannot fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s247 core.test
+    input="does a cow know how to fly"
+    expect="No, a cow cannot fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s248 core.test
+    input="fly cow?"
+    expect="No, a cow cannot fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s249 core.test
+    input="could a cow ever fly"
+    expect="No, a cow cannot fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s250 core.test
+    input="ducks swim?"
+    expect="Yes, a duck can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s251 core.test
+    input="can ducks swim"
+    expect="Yes, a duck can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s252 core.test
+    input="do ducks swim in water"
+    expect="Yes, a duck can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s253 core.test
+    input="are ducks good swimmers"
+    expect="Yes, a duck can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s254 core.test
+    input="duck swim yes or no"
+    expect="Yes, a duck can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s255 core.test
+    input="can a duck go swimming"
+    expect="Yes, a duck can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s256 core.test
+    input="ducks can swim right"
+    expect="Yes, a duck can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s257 core.test
+    input="do ducks like to swim"
+    expect="Yes, a duck can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s258 core.test
+    input="swim ducks?"
+    expect="Yes, a duck can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s259 core.test
+    input="giraffe swim?"
+    expect="I don't know whether a giraffe can swim. You can teach me: A giraffe can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s260 core.test
+    input="can giraffes swim"
+    expect="I don't know whether a giraffe can swim. You can teach me: A giraffe can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s261 core.test
+    input="do giraffes swim"
+    expect="I don't know whether a giraffe can swim. You can teach me: A giraffe can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s262 core.test
+    input="is a giraffe able to swim"
+    expect="I don't know whether a giraffe can swim. You can teach me: A giraffe can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s263 core.test
+    input="giraffe swimming yes or no"
+    expect="I don't know whether a giraffe can swim. You can teach me: A giraffe can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s264 core.test
+    input="can a giraffe go in water"
+    expect="I don't know whether a giraffe can swim. You can teach me: A giraffe can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s265 core.test
+    input="can giraffe swim pls"
+    expect="I don't know whether a giraffe can swim. You can teach me: A giraffe can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s266 core.test
+    input="could a giraffe swim in a lake"
+    expect="I don't know whether a giraffe can swim. You can teach me: A giraffe can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s267 core.test
+    input="swim giraffe?"
+    expect="I don't know whether a giraffe can swim. You can teach me: A giraffe can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s268 core.test
+    input="does a giraffe know how to swim"
+    expect="I don't know whether a giraffe can swim. You can teach me: A giraffe can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s269 core.test
+    input="dolphin a mammal?"
+    expect="Yes, a dolphin is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s270 core.test
+    input="is a dolphin mammal"
+    expect="Yes, a dolphin is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s271 core.test
+    input="dolphins are mammals right"
+    expect="Yes, a dolphin is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s272 core.test
+    input="is a dolphin classed as a mammal"
+    expect="Yes, a dolphin is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s273 core.test
+    input="dolphin mammal yes or no"
+    expect="Yes, a dolphin is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s274 core.test
+    input="would you call a dolphin a mammal"
+    expect="Yes, a dolphin is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s275 core.test
+    input="are dolphins mammals"
+    expect="Yes, a dolphin is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s276 core.test
+    input="is dolphin a type of mammal"
+    expect="Yes, a dolphin is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s277 core.test
+    input="dolphin in the mammal group?"
+    expect="Yes, a dolphin is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s278 core.test
+    input="dolphin = mammal?"
+    expect="Yes, a dolphin is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s279 core.test
+    input="bat a bird?"
+    expect="No, a bat is not a bird. It is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s280 core.test
+    input="is a bat a bird"
+    expect="No, a bat is not a bird. It is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s281 core.test
+    input="bats are birds right"
+    expect="No, a bat is not a bird. It is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s282 core.test
+    input="is a bat classed as a bird"
+    expect="No, a bat is not a bird. It is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s283 core.test
+    input="bat bird yes or no"
+    expect="No, a bat is not a bird. It is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s284 core.test
+    input="would you call a bat a bird"
+    expect="No, a bat is not a bird. It is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s285 core.test
+    input="are bats birds"
+    expect="No, a bat is not a bird. It is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s286 core.test
+    input="is bat a type of bird"
+    expect="No, a bat is not a bird. It is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s287 core.test
+    input="bat in the bird group?"
+    expect="No, a bat is not a bird. It is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s288 core.test
+    input="bat = bird?"
+    expect="No, a bat is not a bird. It is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s289 core.test
+    input="where to find a camel"
+    expect="Camels live in the desert."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s290 core.test
+    input="where do i see camels"
+    expect="Camels live in the desert."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s291 core.test
+    input="where can camels be found"
+    expect="Camels live in the desert."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s292 core.test
+    input="where would i meet a camel"
+    expect="Camels live in the desert."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s293 core.test
+    input="camel location?"
+    expect="Camels live in the desert."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s294 core.test
+    input="where are camels to be seen"
+    expect="Camels live in the desert."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s295 core.test
+    input="which place has camels"
+    expect="Camels live in the desert."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s296 core.test
+    input="where could i spot a camel"
+    expect="Camels live in the desert."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s297 core.test
+    input="where do camels hang out"
+    expect="Camels live in the desert."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s298 core.test
+    input="camels where pls"
+    expect="Camels live in the desert."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s299 core.test
+    input="duck covering?"
+    expect="A duck is covered in feathers."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s300 core.test
+    input="what covers a duck"
+    expect="A duck is covered in feathers."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s301 core.test
+    input="what does a duck have on its body"
+    expect="A duck is covered in feathers."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s302 core.test
+    input="duck is covered in what"
+    expect="A duck is covered in feathers."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s303 core.test
+    input="what is a duck's outer covering"
+    expect="A duck is covered in feathers."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s304 core.test
+    input="what's on a duck's skin"
+    expect="A duck is covered in feathers."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s305 core.test
+    input="is a duck covered in feathers"
+    expect="A duck is covered in feathers."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s306 core.test
+    input="duck body covered with what"
+    expect="A duck is covered in feathers."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s307 core.test
+    input="what covers the duck"
+    expect="A duck is covered in feathers."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s308 core.test
+    input="what's dolphins like"
+    expect="A dolphin is a mammal that lives in the sea. It has no legs, is covered in skin, eats fish and squid and can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s309 core.test
+    input="dolphin personality?"
+    expect="A dolphin is a mammal that lives in the sea. It has no legs, is covered in skin, eats fish and squid and can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s310 core.test
+    input="what kind of animal are dolphins like"
+    expect="A dolphin is a mammal that lives in the sea. It has no legs, is covered in skin, eats fish and squid and can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s311 core.test
+    input="dolphins what are they like"
+    expect="A dolphin is a mammal that lives in the sea. It has no legs, is covered in skin, eats fish and squid and can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s312 core.test
+    input="describe dolphins for me"
+    expect="A dolphin is a mammal that lives in the sea. It has no legs, is covered in skin, eats fish and squid and can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s313 core.test
+    input="bird that swims?"
+    expect="Birds that can swim: ducks, geese, penguins and swans."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s314 core.test
+    input="which bird can swim"
+    expect="Birds that can swim: ducks, geese, penguins and swans."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s315 core.test
+    input="give me a swimming bird"
+    expect="Birds that can swim: ducks, geese, penguins and swans."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s316 core.test
+    input="name a swimming bird"
+    expect="Birds that can swim: ducks, geese, penguins and swans."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s317 core.test
+    input="what bird swims"
+    expect="Birds that can swim: ducks, geese, penguins and swans."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s318 core.test
+    input="tell me a bird that is good at swimming"
+    expect="Birds that can swim: ducks, geese, penguins and swans."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s319 core.test
+    input="swimming bird please"
+    expect="Birds that can swim: ducks, geese, penguins and swans."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s320 core.test
+    input="name a bird which swims well"
+    expect="Birds that can swim: ducks, geese, penguins and swans."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s321 core.test
+    input="can bats fly?"
+    expect="Yes, a bat can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s322 core.test
+    input="is a bat able to fly"
+    expect="Yes, a bat can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s323 core.test
+    input="does a bat fly"
+    expect="Yes, a bat can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s324 core.test
+    input="can a bat fly pls"
+    expect="Yes, a bat can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s325 core.test
+    input="bat can fly right?"
+    expect="Yes, a bat can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s326 core.test
+    input="is it true a bat can fly"
+    expect="Yes, a bat can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s327 core.test
+    input="can u tell me if a bat flies"
+    expect="Yes, a bat can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s328 core.test
+    input="do bats fly"
+    expect="Yes, a bat can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s329 core.test
+    input="can a bat actually fly?"
+    expect="Yes, a bat can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s330 core.test
+    input="um can a bat fly"
+    expect="Yes, a bat can fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s331 core.test
+    input="can penguins fly?"
+    expect="No, a penguin cannot fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s332 core.test
+    input="can a penguin fly pls"
+    expect="No, a penguin cannot fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s333 core.test
+    input="can u tell me if penguins can fly"
+    expect="No, a penguin cannot fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s334 core.test
+    input="is it possible for a penguin to fly"
+    expect="No, a penguin cannot fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s335 core.test
+    input="can a penguins fly lol"
+    expect="No, a penguin cannot fly."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s336 core.test
+    input="can dolphins swim?"
+    expect="Yes, a dolphin can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s337 core.test
+    input="is a dolphin able to swim"
+    expect="Yes, a dolphin can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s338 core.test
+    input="can a dolphin swim pls"
+    expect="Yes, a dolphin can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s339 core.test
+    input="dolphins can swim right"
+    expect="Yes, a dolphin can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s340 core.test
+    input="can u tell me if a dolphin swims"
+    expect="Yes, a dolphin can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s341 core.test
+    input="does a dolphin swim"
+    expect="Yes, a dolphin can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s342 core.test
+    input="u think a dolphin can swim?"
+    expect="Yes, a dolphin can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s343 core.test
+    input="whale is a fish right?"
+    expect="No, a whale is not a fish. It is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s344 core.test
+    input="would you say a whale is a fish"
+    expect="No, a whale is not a fish. It is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s345 core.test
+    input="is a whale a kind of fish?"
+    expect="No, a whale is not a fish. It is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s346 core.test
+    input="whales are fish, true?"
+    expect="No, a whale is not a fish. It is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s347 core.test
+    input="um is a whale a fish"
+    expect="No, a whale is not a fish. It is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s348 core.test
+    input="so is a whale a fish or no"
+    expect="No, a whale is not a fish. It is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s349 core.test
+    input="is it true a whale is a fish"
+    expect="No, a whale is not a fish. It is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s350 core.test
+    input="is a dolphin a mammal"
+    expect="Yes, a dolphin is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s351 core.test
+    input="dolphins are mammals right?"
+    expect="Yes, a dolphin is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s352 core.test
+    input="is a dolphin a kind of mammal"
+    expect="Yes, a dolphin is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s353 core.test
+    input="can u tell me if a dolphin is a mammal"
+    expect="Yes, a dolphin is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s354 core.test
+    input="dolphin mammal?"
+    expect="Yes, a dolphin is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s355 core.test
+    input="is a dolphin a mammal pls"
+    expect="Yes, a dolphin is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s356 core.test
+    input="would a dolphin count as a mammal"
+    expect="Yes, a dolphin is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s357 core.test
+    input="u think a dolphin's a mammal?"
+    expect="Yes, a dolphin is a mammal."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s358 core.test
+    input="is a cow a carnivore"
+    expect="No, a cow is not a carnivore. It is a herbivore."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s359 core.test
+    input="are cows carnivores"
+    expect="No, a cow is not a carnivore. It is a herbivore."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s360 core.test
+    input="is a cow a meat eater"
+    expect="No, a cow is not a carnivore. It is a herbivore."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s361 core.test
+    input="is a cow carnivorous"
+    expect="No, a cow is not a carnivore. It is a herbivore."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s362 core.test
+    input="would u call a cow a carnivore"
+    expect="No, a cow is not a carnivore. It is a herbivore."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s363 core.test
+    input="cow = carnivore?"
+    expect="No, a cow is not a carnivore. It is a herbivore."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s364 core.test
+    input="is a cow a carnivore pls"
+    expect="No, a cow is not a carnivore. It is a herbivore."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s365 core.test
+    input="is cow a carnivore or not"
+    expect="No, a cow is not a carnivore. It is a herbivore."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s366 core.test
+    input="can u tell me if cows are carnivores"
+    expect="No, a cow is not a carnivore. It is a herbivore."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s367 core.test
+    input="wheres a camel's home"
+    expect="Camels live in the desert."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s368 core.test
+    input="where is a camel found"
+    expect="Camels live in the desert."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s369 core.test
+    input="whats a camel's habitat"
+    expect="Camels live in the desert."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s370 core.test
+    input="where does a camel live pls"
+    expect="Camels live in the desert."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s371 core.test
+    input="where can i find a camel"
+    expect="Camels live in the desert."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s372 core.test
+    input="where do camels live at"
+    expect="Camels live in the desert."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s373 core.test
+    input="wheres home for a camel"
+    expect="Camels live in the desert."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s374 core.test
+    input="tell me where camels live"
+    expect="Camels live in the desert."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s375 core.test
+    input="what covers a cow's body"
+    expect="A cow is covered in fur."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s376 core.test
+    input="whats a cow covered in"
+    expect="A cow is covered in fur."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s377 core.test
+    input="cow covered in what?"
+    expect="A cow is covered in fur."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s378 core.test
+    input="what kind of skin or fur does a cow have"
+    expect="A cow is covered in fur."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s379 core.test
+    input="whats on a cow's body"
+    expect="A cow is covered in fur."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s380 core.test
+    input="what does a cow have on its body"
+    expect="A cow is covered in fur."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s381 core.test
+    input="cows are covered in what"
+    expect="A cow is covered in fur."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s382 core.test
+    input="what is the covering of a cow"
+    expect="A cow is covered in fur."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s383 core.test
+    input="so whats a cow covered in"
+    expect="A cow is covered in fur."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s384 core.test
+    input="whats a cows body covered with"
+    expect="A cow is covered in fur."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s385 core.test
+    input="tell me about dolphins"
+    expect="A dolphin is a mammal that lives in the sea. It has no legs, is covered in skin, eats fish and squid and can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s386 core.test
+    input="what can u tell me about a dolphin"
+    expect="A dolphin is a mammal that lives in the sea. It has no legs, is covered in skin, eats fish and squid and can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s387 core.test
+    input="dolphin info pls"
+    expect="A dolphin is a mammal that lives in the sea. It has no legs, is covered in skin, eats fish and squid and can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s388 core.test
+    input="whats a dolphin like"
+    expect="A dolphin is a mammal that lives in the sea. It has no legs, is covered in skin, eats fish and squid and can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s389 core.test
+    input="give me the basics on dolphins"
+    expect="A dolphin is a mammal that lives in the sea. It has no legs, is covered in skin, eats fish and squid and can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s390 core.test
+    input="tell me something about a dolphin"
+    expect="A dolphin is a mammal that lives in the sea. It has no legs, is covered in skin, eats fish and squid and can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s391 core.test
+    input="i wanna know about dolphins"
+    expect="A dolphin is a mammal that lives in the sea. It has no legs, is covered in skin, eats fish and squid and can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s392 core.test
+    input="could u describe a dolphin"
+    expect="A dolphin is a mammal that lives in the sea. It has no legs, is covered in skin, eats fish and squid and can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s393 core.test
+    input="whats the deal with dolphins"
+    expect="A dolphin is a mammal that lives in the sea. It has no legs, is covered in skin, eats fish and squid and can swim."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s394 core.test
+    input="what animals live in the sea"
+    expect="Animals that live in the sea: seals, whales, dolphins, sharks, octopuses, walruses, crabs, jellyfish, starfish and turtles."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s395 core.test
+    input="animals that live in the ocean?"
+    expect="Animals that live in the sea: seals, whales, dolphins, sharks, octopuses, walruses, crabs, jellyfish, starfish and turtles."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s396 core.test
+    input="which animals live in the ocean"
+    expect="Animals that live in the sea: seals, whales, dolphins, sharks, octopuses, walruses, crabs, jellyfish, starfish and turtles."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s397 core.test
+    input="list animals that live in the sea"
+    expect="Animals that live in the sea: seals, whales, dolphins, sharks, octopuses, walruses, crabs, jellyfish, starfish and turtles."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s398 core.test
+    input="what creatures live in the sea"
+    expect="Animals that live in the sea: seals, whales, dolphins, sharks, octopuses, walruses, crabs, jellyfish, starfish and turtles."
+    doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.s399 core.test
+    input="can u tell me which animals live in the sea"
+    expect="Animals that live in the sea: seals, whales, dolphins, sharks, octopuses, walruses, crabs, jellyfish, starfish and turtles."
+    doc="rule sweep probe: fresh-batch variant"
