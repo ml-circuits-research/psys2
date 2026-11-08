@@ -15,6 +15,8 @@ Three files coordinate the worker and the reviewer:
 
 **No freeze (user decision 12:52).** Rules and runtime are meant to keep changing. Widen the rules continuously, as much and as varied as possible. Every reported number carries the commit hash it was measured at; there is no baseline to confirm and nothing to ask about it. When `worlds/` or `src/` changes, rerun the evaluations that matter (rules eval, dispatcher eval) and report the new numbers next to the old ones. Do not ask permission for that.
 
+**Role split (user decision 21:40): from now on the reviewer does not commit code.** The reviewer only reviews, writes and answers tasks, and validates. All code changes are the worker's. The last reviewer code commits (review-2 small fixes) are listed with merge instructions in §2 under "Merge from the reviewer".
+
 Working rules:
 
 1. Everything written to disk is in English (AGENTS.md). Read `AGENTS.md`, `training/README.md`, `specs/08-training-data.md` and `specs/10-paraphrase-data.md` before starting.
