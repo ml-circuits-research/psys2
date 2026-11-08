@@ -20,3 +20,6 @@ The rule formalizers are exact and cheap but brittle on paraphrases (T2 baseline
 - The interpreter check is state dependent, so in the strict mode it can reject correct readings (illegal moves, empty canvas). The evaluation reports it separately (modes B / Bni / Br) so the policy can be chosen on evidence.
 - Cost: up to 4 x pieces x 3 x 2 rule runs per message, each in a fresh seeded session (cached by context, committed prefix, world and text). Rule runs are cheap; the cache keeps the multi-segmentation beam near the cost of one.
 - No generative model is involved at C2; the dispatcher is a classifier / tagger. The validation layer has no `node:*` imports and can run in the webchat.
+
+## Amendment F5: explicit refusal reasons
+"Refused" was one bucket. The interpreter now sets `reason` (`precondition_failed`, `unknown_argument`, `unsupported_operation`, `execution_error`) and the validator reads it: preconditions keep the reading, unsupported operations keep it and report the limit, execution errors are never valid, and an `unknown_argument` reading (a catch-all swallowing text) is only a penalised last-resort fallback that never blocks recovery (other worlds, spell, simplified, partial). See specs/03 section 7.2 and specs/04.

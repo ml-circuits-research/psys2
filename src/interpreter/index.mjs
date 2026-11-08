@@ -21,6 +21,22 @@ export { Memory, WireStore } from './memory.mjs';
 export { Renderer } from './render.mjs';
 
 const STATUSES = new Set(['supported', 'missing', 'conflicting', 'ambiguous', 'unsupported', 'budget', 'error']);
+/**
+ * Why an envelope is `unsupported` or `error` (spec 04, ADR-005 amendment). An operation may set `reason` itself; otherwise
+ * it is derived: errors are `execution_error`; interpreter-level `unsupported` (no operation, unknown type or mode) is
+ * `unsupported_operation`; an operation's refusal is `unknown_argument` when its note says a named thing is not known
+ * and `precondition_failed` otherwise (the reading is right, the state or a limit refuses it).
+ */
+export const REASONS = ['precondition_failed', 'unknown_argument', 'unsupported_operation', 'execution_error'];
+const UNKNOWN_NOTE = /\b(i do not (know|have|speak)|unknown|does not look like|not hours|not an hour|i only know)\b/i;
+export function reasonOf(env, fromOp = false) {
+  if (!env) return null;
+  if (env.status === 'error') return 'execution_error';
+  if (env.status !== 'unsupported') return env.reason ?? null;
+  if (REASONS.includes(env.reason)) return env.reason;
+  if (!fromOp) return 'unsupported_operation';
+  return UNKNOWN_NOTE.test(env.note ?? '') ? 'unknown_argument' : 'precondition_failed';
+}
 const FINAL_SOFT = new Set(['conflicting', 'ambiguous', 'budget', 'error']);
 const SAFE_ATOM = /^[^\s"@$=\\]+$/;
 
@@ -99,17 +115,17 @@ export class Interpreter {
     const L = this.legends;
     if (st.depth > this.maxDepth) return { status: 'budget', note: 'recursion depth limit reached' };
     const type = rawSpec.type;
-    if (!type || !L.hasType(type)) return { status: 'unsupported', note: `unknown type '${type}'` };
+    if (!type || !L.hasType(type)) return { status: 'unsupported', reason: 'unsupported_operation', note: `unknown type '${type}'` };
     let seek = null;
     if (rawSpec.seek) {
       const r = L.tryResolveKey(type, rawSpec.seek);
-      if (r.error) return { status: 'unsupported', note: r.error };
+      if (r.error) return { status: 'unsupported', reason: 'unsupported_operation', note: r.error };
       seek = r.key;
     }
     const where = {};
     for (const [k, v] of Object.entries(rawSpec.where ?? {})) {
       const r = L.tryResolveKey(type, k);
-      if (r.error) return { status: 'unsupported', note: r.error };
+      if (r.error) return { status: 'unsupported', reason: 'unsupported_operation', note: r.error };
       where[r.key] = String(v).replace(/^\$/, '');
     }
     const spec = { ...rawSpec, seek, where, mode: rawSpec.mode ?? 'value' };
@@ -160,7 +176,7 @@ export class Interpreter {
       }
       case 'value':
       case 'list': {
-        if (!seek) return { status: 'unsupported', note: 'no key is sought' };
+        if (!seek) return { status: 'unsupported', reason: 'unsupported_operation', note: 'no key is sought' };
         if (info.compute && ops.length) { const r = runOps(); if (r) return r; }
         const ws = matches();
         const distinct = new Map();
@@ -182,7 +198,7 @@ export class Interpreter {
         return missing();
       }
       default:
-        return { status: 'unsupported', note: `unknown mode '${spec.mode}'` };
+        return { status: 'unsupported', reason: 'unsupported_operation', note: `unknown mode '${spec.mode}'` };
     }
   }
 
@@ -200,7 +216,13 @@ export class Interpreter {
     const t0 = performance.now();
     const rec = { op: op.id, status: 'error', ms: 0 };
     st.ops.push(rec);
-    const finish = (env) => { rec.status = env.status; rec.ms = Math.round((performance.now() - t0) * 100) / 100; return { ...env, via: op.id }; };
+    const finish = (env, opResult = false) => {
+      rec.status = env.status; rec.ms = Math.round((performance.now() - t0) * 100) / 100;
+      const out = { ...env, via: op.id };
+      const reason = reasonOf(env, opResult);
+      if (reason) { out.reason = reason; rec.reason = reason; }
+      return out;
+    };
     if (typeof fn !== 'function') return finish({ status: 'error', note: `operation ${op.id}: ops.mjs of '${op.worldId}' has no export '${op.impl}'` });
     const args = { ...extraArgs };
     const keyName = (k) => this.legends.keyInfo(k)?.name ?? k.split('.').pop();
@@ -220,7 +242,7 @@ export class Interpreter {
     if (!res || typeof res !== 'object' || !STATUSES.has(res.status)) {
       return finish({ status: 'error', note: `${op.id} returned an invalid result envelope` });
     }
-    return finish({ ...res, from: res.from ? [...res.from] : undefined });
+    return finish({ ...res, from: res.from ? [...res.from] : undefined }, true);
   }
 
   /** The ctx object handed to operations (spec 04 ctx API). */
@@ -280,7 +302,7 @@ export class Interpreter {
         check();
         if (st.depth > this.maxDepth) return { status: 'budget', note: 'recursion depth limit reached' };
         const target = this._actionOp(action);
-        if (!target) return { status: 'unsupported', note: `no operation for action '${action}'` };
+        if (!target) return { status: 'unsupported', reason: 'unsupported_operation', note: `no operation for action '${action}'` };
         st.depth++;
         try { return this._runOp(session, target, { wire: null, action, args, where: {}, mode: 'value' }, {}, st, { ...args }); }
         finally { st.depth--; }
@@ -361,7 +383,7 @@ export class Interpreter {
    */
   runAction(session, action, args = {}) {
     const op = this._actionOp(action);
-    if (!op) return { status: 'unsupported', note: `no operation for action '${action}'` };
+    if (!op) return { status: 'unsupported', reason: 'unsupported_operation', note: `no operation for action '${action}'` };
     const st = { depth: 0, visited: 0, ops: [] };
     return this._runOp(session, op, { wire: null, action, args, where: {}, mode: 'value' }, {}, st, { ...args });
   }
@@ -375,7 +397,7 @@ export class Interpreter {
     const op = this.set.list().flatMap((w) => w.operations).find((o) => o.semantics === 'action' && (o.id === action || o.action === action));
     const spec = { wire, action, args, where: {}, mode: 'value' };
     let envelope;
-    if (!op) envelope = { status: 'unsupported', note: `no operation for action '${action}'` };
+    if (!op) envelope = { status: 'unsupported', reason: 'unsupported_operation', note: `no operation for action '${action}'` };
     else envelope = this._runOp(session, op, spec, {}, st, { ...args, request: wire });
     spec.op = op;
     const answer = this._writeAnswer(session, wire, envelope, spec);
@@ -399,6 +421,7 @@ export class Interpreter {
     for (const v of env.alternatives ?? []) pairs.push(['core.answer.alternative', asValue(v)]);
     for (const m of env.missing ?? []) pairs.push(['core.answer.missing', atom(m)]);
     if (env.note) pairs.push(['core.answer.note', str(env.note)]);
+    if (env.reason) pairs.push(['core.answer.reason', atom(env.reason)]);
     pairs.push(['core.status', atom(env.status)]);
     if (env.via) pairs.push(['core.via', ref(env.via)]);
     for (const f of env.from ?? []) pairs.push(['core.from', ref(f)]);

@@ -182,6 +182,11 @@
     card=one
     ask="Is there a note?"
 
+@core.answer.reason core.key
+    value=atom
+    card=one
+    ask="Why was the request refused? (precondition_failed, unknown_argument, unsupported_operation, execution_error)"
+
 @core.request.action core.key
     value=atom
     card=one

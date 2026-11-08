@@ -56,6 +56,8 @@ export function currentCount(ctx, args) {
 **Result envelope** (vision §14): `{ status, value?, unit?, values?, from?: string[], assumptions?: string[], missing?: string[], alternatives?: any[], note?: string, data?: object }`.
 `status` ∈ `supported` · `missing` (evidence or input missing) · `conflicting` · `ambiguous` · `unsupported` (outside what the world can do) · `budget` (limit reached) · `error` (exception; never turned into `false`).
 
+**Refusal reasons.** Every `unsupported` or `error` envelope has `reason` (also written as `core.answer.reason`): `precondition_failed` (right reading, state or limit refuses), `unknown_argument` (an argument names something unknown), `unsupported_operation` (no operation or mode for it), `execution_error` (exception or invalid envelope; a bug). An operation may set `reason` itself; otherwise the interpreter derives it: `error` gives `execution_error`; interpreter-level `unsupported` gives `unsupported_operation`; an operation's `unsupported` gives `unknown_argument` when its note says something is not known ("I do not know ...") and `precondition_failed` otherwise (`reasonOf` in `src/interpreter/index.mjs`).
+
 **`ctx` API** (all that `ops.mjs` may use):
 | Member | Meaning |
 | --- | --- |

@@ -126,6 +126,13 @@ A candidate is **valid** when
 
 A candidate that parses completely but is refused by the interpreter is `refused` (typical: an illegal chess move, a drawing command with nothing drawn). With `acceptRefused` it counts as valid with a smaller penalty. **Default on** (D3: +3.8 points overall, games 68 to 83 %; a refusal is usually a state reason, questions.md Q3); `acceptRefused: false` is the strict variant and the evaluation reports both.
 
+**Refusal reasons (F5).** The interpreter sets `envelope.reason` on every `unsupported`/`error` envelope (spec 04, "Refusal reasons"); the validator reads it per wire:
+- `precondition_failed`: the reading is right, the state or a limit refuses it. The candidate is `refused` (valid with `acceptRefused`, penalty `interpreterPenalty`); the reading is kept and the refusal is explained to the user.
+- `unknown_argument`: the pattern matched but an argument names nothing the world knows (a catch-all that swallowed text, "eyes and body blue"). The candidate is **not valid**: it never stops the other candidates, the spell-corrected text, the simplified text, alternates or partial windows from being tried. Only when nothing else validates for the piece is it used as a last-resort fallback, penalised by `unknownArgPenalty` (default 4.5, between `interpreterPenalty` and `unparsedPenalty`), so any reading with known arguments outranks it.
+- `unsupported_operation`: the world cannot do it (no operation, unknown mode). The reading is kept like `precondition_failed`; the reply reports the limit and never confirms success.
+- `execution_error`: an exception or invalid envelope, a bug. Never valid, never a training example.
+Each trace attempt carries `refusal` (the reason) and `unknownArg`.
+
 ### 7.3 Scoring (log domain, all weights are policy options, defaults in `DEFAULT_POLICY`)
 For a piece, each candidate (world w, variant v) scores
 `s = worldWeight * ln(max(p_w, scoreFloor)) - simplifiedPenalty * [v is simplified] - spellPenalty * (corrections used) - penalty`, with `penalty = 0` when valid, `interpreterPenalty` when refused and `acceptRefused`, else `unparsedPenalty`.
