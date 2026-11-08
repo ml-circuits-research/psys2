@@ -32,3 +32,8 @@ A CV-style card: header (initials, name, "role · field", organisation · place 
 
 ## 6. Tests and data
 `tests.sop` (single statements, sensitive handling, commands, and multi-turn sessions: interview, correction, delete, skip, tab change, export), `tests/profile.test.mjs` (extraction rules, plan consistency, tab registration), and `datagen.mjs` (spec 08): every pattern family, corrections, coordination, other worlds' sentences as negatives.
+
+## 7. Hardening found by the dialogue set (user.profile dialogues of the audit)
+- A name can never be a pronoun contraction, an auxiliary, a discourse word or a mood ("I'm here", "never mind", "that's great", "I'm tired"): `kids.common` `meet` answers "What is your name?" and stores nothing; trailing "sorry", "lol", "please", "thanks", "now" ... are dropped from a name ("Actually my name is Ioana, sorry" is Ioana). "Thanks, that's great" and similar are thanks (`kids.common` pattern `x.thanks4`, priority 13), not an introduction.
+- Locations: "I moved to X", "I relocated to X", "I now live in X"; trailing "lol", "please", "thanks" are dropped ("soo i liv in Brasov lol" is Brasov). "Where do I live?" answers from the profile or says it is not known yet (`prof.fieldOf`); it never asks the browser for the position (that is "where am I"). "Delete everything" starts the delete confirmation when the profile has fields.
+- "never mind", "forget it", "cancel", "drop it" during the interview pause it like "stop" (the pending question is asked again on resume) instead of being stored as an answer.

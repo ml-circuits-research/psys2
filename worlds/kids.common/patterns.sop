@@ -727,3 +727,11 @@
     kind=chat
     priority=10
     example="Hello, how are you today?"
+
+@pat.kids.common.x.thanks4 core.pattern
+    match="[thanks|thank_you|thx|ty|cheers|ok|okay|great|cool|nice|perfect|awesome|oh|ah|wow]? [that_is|thats|that_s|this_is|it_is|its|it_s|that_was|that_has_been|that_helps|that_helped] [so|very|really|quite|pretty]? [great|good|helpful|perfect|awesome|nice|cool|fine|ok|okay|wonderful|amazing|brilliant|useful|right|correct|exactly_right|what_i_needed|exactly_what_i_needed|just_what_i_needed|a_great_help|a_big_help|a_help|helpful_thanks] [thanks|thank_you|thx|ty|a_lot|so_much]?"
+    emit="@{_} core.request action=chat.thanks"
+    kind=question
+    priority=13
+    example="Thanks, that is great."
+    example="That's helpful."

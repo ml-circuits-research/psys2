@@ -1775,3 +1775,13 @@
     input="how r u"
     expectStatus=supported
     doc="small talk: how are you"
+
+@t.kids.common.dlg01 core.test
+    input="thanks, that's great"
+    expect="welcome"
+    session=dlg01
+
+@t.kids.common.dlg02 core.test
+    input="what is my name?"
+    expect="I do not know your name yet"
+    session=dlg01

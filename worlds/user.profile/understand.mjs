@@ -73,7 +73,7 @@ const hasWord = (n, re) => re.test(` ${n} `);
 // ---- small recognisers -----------------------------------------------------------------------------------------------------
 export const YES = /^(?:yes|yeah|yep|yup|sure|right|correct|exactly|indeed|absolutely|of course|uh huh|mhm|ok|okay|that is right|that is correct|thats right|you got it|spot on)\b/;
 export const NO = /^(?:no|nope|nah|not really|wrong|incorrect|not quite|not exactly|that is wrong|thats wrong|not at all)\b/;
-export const STOPWORDS = /^(?:pause|stop|enough|that is enough|thats enough|lets stop|let us stop|not now|end|quit|exit|stop the interview|pause the interview|end the interview|stop asking|i am done|im done|that will do|later)\b/;
+export const STOPWORDS = /^(?:pause|stop|enough|that is enough|thats enough|lets stop|let us stop|not now|never mind|nevermind|forget it|cancel|drop it|end|quit|exit|stop the interview|pause the interview|end the interview|stop asking|i am done|im done|that will do|later)\b/;
 export const SKIPWORDS = /^(?:skip|next|pass|skip it|skip that|skip this|next one|next question|another one|something else|ask something else|i would rather not(?: say| answer)?|i would rather not talk about it|rather not|id rather not|prefer not(?: to say)?|i prefer not(?: to say)?|no comment|i do not want to say|i dont want to say|not telling|none of your business|private|i do not know|i dont know|dont know|not sure|no idea|do not know|n a|nothing|none|nope|no|nah|not really|i have none|i do not have any|i dont have any|i do not have one|i dont have one|nothing special)\b/;
 const DECLINE = /\b(?:rather not|prefer not|no comment|do not want to say|dont want to say|not telling|none of your business|private)\b/;
 export const isDecline = (n) => DECLINE.test(n);
@@ -329,9 +329,9 @@ export function extract(text, env) {
   // ---- location ----------------------------------------------------------------------------------------------------------
   {
     const rawFix = raw.replace(/[‘’]/g, "'");
-    const m = /\b(?:i live in|i am living in|i am based in|i am based near|i am from|i come from|i grew up in|born and raised in|i am located in|based in|living in|i stay in|i reside in)\s+((?:the\s+)?[\p{L}][\p{L}'.-]*(?:[\s,]+(?:of|de|and|[\p{L}][\p{L}'.-]*)){0,3})/iu.exec(rawFix.replace(/\bI'm\b/g, 'I am'));
+    const m = /\b(?:i live in|i now live in|now i live in|i moved to|i have moved to|i just moved to|i relocated to|we moved to|i am living in|i am based in|i am based near|i am from|i come from|i grew up in|born and raised in|i am located in|based in|living in|i stay in|i reside in)\s+((?:the\s+)?[\p{L}][\p{L}'.-]*(?:[\s,]+(?:of|de|and|[\p{L}][\p{L}'.-]*)){0,3})/iu.exec(rawFix.replace(/\bI'm\b/g, 'I am'));
     if (m) {
-      let loc = clean(m[1]).replace(/\s+(?:and|but|where|since|because|now|currently|at|for|with|so)\b.*$/i, '');
+      let loc = clean(m[1]).replace(/\s+(?:and|but|where|since|because|now|currently|at|for|with|so|lol|haha|please|pls|thanks|thx|anyway|though|tho|lmao)\b.*$/i, '');
       if (loc && !/\d/.test(loc) && loc.split(/[\s,]+/).length <= 4 && !/\b(?:house|home|flat|apartment|village|town|city|country|countryside|suburbs|place|world|dream|apartment)\b/i.test(loc.split(/\s+/)[0] ?? '')) put('location', loc.split(/(\s+|,\s*)/).map((w) => (/^[a-z]/.test(w) && !/^(?:of|de|and|the)$/.test(w) && w.trim() ? sentenceCase(w) : w)).join('').replace(/\s*,\s*/g, ', '), { how: 'location' });
     } else if (pending === 'location' && short && !out.items.length && !isSkip(n) && !YES.test(n) && !/\d/.test(n)) {
       const phrase = clean(rawFix.replace(/^(?:i live in|i am in|i am based in|i am from|i'm from|from|in|near|around|it is|just|somewhere in|outside)\s+/i, '').replace(/\bI'm\b/g, '')).replace(/\s*,\s*/g, ', ');

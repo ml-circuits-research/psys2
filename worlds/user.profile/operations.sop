@@ -76,3 +76,9 @@
     semantics=action
     action=prof.nameOf
     doc="The preferred name (empty when unknown): ctx.request(\"prof.nameOf\")."
+
+@op.user.profile.fieldOf core.operation
+    impl=fieldOf
+    semantics=action
+    action=prof.fieldOf
+    doc="Answers one stored field (\"where do I live?\"), or says it does not know it yet."

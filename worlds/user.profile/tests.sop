@@ -659,3 +659,58 @@
     input="Andy"
     session=n
     expectStatus=supported
+
+@t.user.profile.dlg01 core.test
+    input="I'm here."
+    expect="What is your name?"
+    session=dlg01
+
+@t.user.profile.dlg02 core.test
+    input="what is my name?"
+    expect="I do not know your name yet"
+    session=dlg01
+
+@t.user.profile.dlg03 core.test
+    input="Actually my name is Ioana, sorry."
+    expectState="fields.name.v=Ioana"
+    session=dlg03
+
+@t.user.profile.dlg04 core.test
+    input="soo i liv in Brasov lol"
+    expectState="fields.location.v=Brasov"
+    session=dlg04
+
+@t.user.profile.dlg05 core.test
+    input="Where do I live?"
+    expect="do not know where you live"
+    session=dlg05
+
+@t.user.profile.dlg06 core.test
+    input="I moved to Bucharest."
+    expectState="fields.location.v=Bucharest"
+    session=dlg05
+
+@t.user.profile.dlg07 core.test
+    input="Where do I live?"
+    expect="You live in Bucharest"
+    session=dlg05
+
+@t.user.profile.dlg08 core.test
+    input="Delete everything."
+    expectState="pending.kind=delete"
+    session=dlg05
+
+@t.user.profile.dlg09 core.test
+    input="Interview me."
+    expectState="active=true"
+    session=dlg09
+
+@t.user.profile.dlg10 core.test
+    input="Never mind."
+    expectState="active=false"
+    session=dlg09
+
+@t.user.profile.dlg11 core.test
+    input="what do you know about me?"
+    expect="know"
+    session=dlg09
