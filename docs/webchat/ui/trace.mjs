@@ -38,6 +38,14 @@ export function renderTrace(reply, extra = {}) {
     ['Notes', tr?.notes?.length ? tr.notes.join('; ') : undefined],
   ])));
 
+  if (reply.perf) {
+    const pf = reply.perf, st = Object.entries(pf.stages ?? {});
+    root.append(section('Timing', kv([
+      ['Total', pf.totalMs != null ? `${pf.totalMs} ms (engine ${pf.engineMs} ms, render ${pf.render} ms, host effects ${pf.effects} ms)` : `${pf.total} ms`],
+      ...st.map(([k, v]) => [k, `${v.n}×${v.ms ? `, ${v.ms} ms` : ''}`]),
+    ])));
+  }
+
   const segs = t.segments ?? [];
   root.append(section('Segments, router and patterns', segs.length ? h('ol', { class: 'p2-segs' }, segs.map((s, i) => h('li', {},
     h('div', {}, h('q', {}, s.text), s.unparsed ? h('span', { class: 'p2-tag is-warn' }, 'not understood') : null, s.isQuestion ? h('span', { class: 'p2-tag' }, 'question') : null),

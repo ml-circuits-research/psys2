@@ -4,6 +4,7 @@
  * formalize(text, { worlds, session, source }) -> { segments, wires }
  * `worlds` is a WorldSet; `session` is a FormSession or any object with a `.form` FormSession.
  */
+import { perf } from '../perf.mjs';
 import { lexIndex } from '../../worlds/lexicon.mjs';
 import { analyze, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs';
 import { compilePattern, matchTokens, wordBag, prefilterPasses, BUILTIN_CLASSES, PatternError } from './matcher.mjs';
@@ -24,7 +25,7 @@ const compiledCache = new WeakMap();
 /** Compile (memoized) a pattern object; returns { compiled } or { error }. */
 function compiled(p, set) {
   if (!compiledCache.has(p)) {
-    try { compiledCache.set(p, { compiled: compilePattern(p.match, lexIndex(set).phrases) }); } catch (e) { compiledCache.set(p, { error: e.message }); }
+    try { compiledCache.set(p, { compiled: perf.timeSync('init.compilePattern', () => compilePattern(p.match, lexIndex(set).phrases)) }); } catch (e) { compiledCache.set(p, { error: e.message }); }
   }
   return compiledCache.get(p);
 }

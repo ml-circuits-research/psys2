@@ -24,9 +24,14 @@ function writeName(ctx, name) {
   ctx.state.userName = name;
 }
 /** The user introduces themselves: remember the name ("What is my name?"). */
+/** Words that trail a name in speech ("Ioana, sorry", "Ben lol") and are no part of it. */
+const NAME_TAIL = /(?:[\s,]+(?:sorry|lol|haha|hehe|please|pls|plz|thanks|thx|anyway|though|tho|now|again|ok|okay|btw|my bad))+$/i;
+/** Words that make a "name" impossible: the pattern read a sentence ("I'm here", "never mind", "that's great") as an introduction. */
+const NOT_A_NAME = new Set(['i', 'im', "i'm", 'am', 'is', 'are', 'was', 'here', 'there', 'back', 'done', 'sorry', 'wait', 'never', 'mind', 'no', 'not', 'yes', 'thanks', 'thank', 'lol', 'hmm', 'ok', 'okay', 'what', 'why', 'how', 'that', "that's", 'thats', 'this', 'it', "it's", 'its', 'fine', 'good', 'great', 'sure', 'ready', 'tired', 'happy', 'sad', 'hungry', 'bored', 'confused', 'lost', 'new', 'late', 'early']);
 export function meet(ctx, args) {
-  const name = properName(args?.name);
-  if (!name) return { status: 'unsupported', note: 'What is your name?' };
+  const cleaned = String(args?.name ?? '').replace(NAME_TAIL, '');
+  const name = properName(cleaned);
+  if (!name || name.split(/\s+/).some((w) => NOT_A_NAME.has(w.toLowerCase().replace(/[^\p{L}']/gu, '')))) return { status: 'unsupported', note: 'What is your name?' };
   const before = readName(ctx);
   writeName(ctx, name);
   return { status: 'supported', value: before && before !== name ? `Okay, I will call you ${name} from now on.` : `Nice to meet you, ${name}!` };

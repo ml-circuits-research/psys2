@@ -148,9 +148,11 @@ function buildWorld(id, files, ops) {
     id: x.id, wire: x, worldId: id, match: txt(x, 'match'), emit: txt(x, 'emit'),
     kind: txt(x, 'kind') ?? 'statement', priority: Number(txt(x, 'priority') ?? 0),
     // routing hints (spec 03 section 4): tabOnly=true (only while the world's own tab is active), tabPriority=<n> (priority
-    // while the world's tab is active), yieldsTo=<world> (a tier 2b setting that gives way to that world when it is the tab or recent)
+    // while the world's tab is active), yieldsTo=<world> (a tier 2b setting that gives way to that world when it is the tab or recent),
+    // needsState=<path> (the pattern is considered only while that path of its world's state is non-empty, or its world owns the active tab)
     tabOnly: txt(x, 'tabOnly') === 'true', tabPriority: txt(x, 'tabPriority') == null ? null : Number(txt(x, 'tabPriority')),
     yieldsTo: getAll(x, 'yieldsTo').map((v) => v.v),
+    needsState: txt(x, 'needsState') ?? null,
     examples: getAll(x, 'example').map((v) => v.v),
   }));
   w.operations = wires['operations.sop'].filter((x) => x.type === 'core.operation').map((x) => ({

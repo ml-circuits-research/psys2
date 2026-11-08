@@ -56,6 +56,13 @@ export class Session {
       if (typeof w.ops?.initialState === 'function') this.state[w.id] = structuredClone(w.ops.initialState());
     }
   }
+  /** Independent copy of the whole session (memory overlay, world state, formalizer state); the shared base and the worlds are not copied. Throws when a world state cannot be cloned. */
+  clone() {
+    const s = Object.create(Session.prototype);
+    s.interp = this.interp; s.memory = this.memory.clone(); s.state = structuredClone(this.state);
+    s.effects = structuredClone(this.effects); s.form = this.form.clone(); s._answers = this._answers;
+    return s;
+  }
   /** Add wires (full keys) to working memory. */
   add(wires) { for (const w of wires) this.memory.add(w); }
   nextAnswerId() { return 'a' + (++this._answers); }

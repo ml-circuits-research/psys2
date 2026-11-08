@@ -16,6 +16,7 @@ import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/st
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs';
 import { splitSentences } from '../formalizer/rules/normalize.mjs';
 import { spellCorrect, spellAlternates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, FUNCTION_WORDS } from '../formalizer/spell.mjs';
+import { perf } from '../formalizer/perf.mjs';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs';
 import { Discourse } from './discourse.mjs';
 import { correctMessage } from '../formalizer/rules/expand.mjs';
@@ -121,6 +122,16 @@ export class DialogSession {
     this.isession.add(this.isession.form.initDefaults());
   }
 
+  /**
+   * A cheap stand-in for validation (spec 03 section 7): only what `context()`, the rule formalizer and the interpreter read
+   * (the interpreter session, the recent worlds). No discourse, no sources. Throws when the state cannot be cloned.
+   */
+  forkForValidation() {
+    const s = Object.create(DialogSession.prototype);
+    s.engine = this.engine; s.isession = this.isession.clone(); s._recentWorlds = [...(this._recentWorlds ?? [])];
+    return s;
+  }
+
   /** Session wires as SOP Lang (short keys where unambiguous). */
   memory() {
     const L = this.engine.set.legends;
@@ -204,7 +215,9 @@ export class DialogSession {
    * for a close neighbour), and, when `partial` is on, with the longest run of words the rules read. Accepted only when the rules of the
    * world parse the text completely. Returns the replacement segments, or null.
    */
-  async _lenient(seg, opts, o, depth = 0) {
+  _lenient(seg, opts, o, depth = 0) { return perf.time('lenient', () => this._lenientRun(seg, opts, o, depth)); }
+
+  async _lenientRun(seg, opts, o, depth = 0) {
     const { spell, partial } = o;
     const { set, formalizers } = this.engine;
     const rules = formalizers.rules;
@@ -295,14 +308,14 @@ export class DialogSession {
     const rules = formalizers.rules;
     const enc = preferred === 'encoder' ? formalizers.encoder : null;
     let usable = false, encoderError = null;
-    try { usable = !!enc && !!(await enc.available()) && set.list().some((w) => enc.supports(w)); } catch { usable = false; }
+    try { usable = !!enc && !!(await perf.time('encoder.available', () => enc.available())) && set.list().some((w) => enc.supports(w)); } catch { usable = false; }
     if (usable) {
       try {
-        const res = await enc.formalize(english, opts);
+        const res = await perf.time('encoder', () => enc.formalize(english, opts));
         const segments = [];
         for (const seg of res.segments) {
           if (!seg.unparsed) { segments.push({ ...seg, strategy: 'encoder' }); continue; }
-          const sub = await rules.formalize(seg.text, { ...opts, source: sid });
+          const sub = await perf.time('rules.retry', () => rules.formalize(seg.text, { ...opts, source: sid }));
           const shift = seg.span[0];
           for (const s of sub.segments) segments.push({ ...s, span: [s.span[0] + shift, s.span[1] + shift], strategy: 'rules' });
         }
@@ -310,7 +323,7 @@ export class DialogSession {
         return { segments: done.segments, wires: done.segments.flatMap((s) => s.wires), dispatch: res.dispatch ?? null };
       } catch (e) { encoderError = e?.message ?? String(e); /* the encoder failed: fall through to the rules */ }
     }
-    const res = await rules.formalize(english, opts);
+    const res = await perf.time('rules', () => rules.formalize(english, opts));
     for (const s of res.segments) s.strategy = 'rules';
     if (encoderError) res.encoderError = encoderError;
     const done = await this._withLeniency(res, opts, lenient);
@@ -331,20 +344,30 @@ export class DialogSession {
     return correctMessage(english, { probe });
   }
 
-  async send(text, { language, formalizer, spell, partial } = {}) {
+  /** One message in, one reply out. Opens the stage-timing record (`reply.perf`, see formalizer/perf.mjs) unless this is a nested replay. */
+  async send(text, opts = {}) {
+    const own = perf.start();
+    try {
+      const reply = await this._send(text, opts);
+      if (own && reply && typeof reply === 'object') reply.perf = perf.end();
+      return reply;
+    } finally { if (own) perf.end(); }
+  }
+
+  async _send(text, { language, formalizer, spell, partial } = {}) {
     const { engine } = this;
     const { set, interp, translator } = engine;
     const sid = `msg${++this._msg}`;
     const wanted = language ?? this.language;
     let lang = 'en', translation = null, english = text;
     if (translator) {
-      lang = wanted === 'auto' ? langOf(await translator.detectLanguage(text)) : wanted;
+      lang = wanted === 'auto' ? langOf(await perf.time('detect', () => translator.detectLanguage(text))) : wanted;
       if (wanted === 'auto') {   // a short or ambiguous input ("e", "ok") keeps the language of the session (default English); a confident detection becomes the session language
         if (lang === 'unknown') lang = this._sessionLang ?? 'en';
         else this._sessionLang = lang;
       }
       if (lang !== 'en' && lang !== 'unknown') {
-        translation = await translator.translate(text, { from: lang, to: 'en' });
+        translation = await perf.time('translate', () => translator.translate(text, { from: lang, to: 'en' }));
         english = textOf(translation) ?? text;
       } else lang = 'en';
     }
@@ -352,7 +375,7 @@ export class DialogSession {
     // Correction phase (spec 03 section 1c, review G2): "knight to f3, no, knight to c3" is resolved on the whole message, before the
     // modal interceptors, discourse, segmentation and routing, so the abandoned variant never has an effect.
     english = engine.interp.lang.stripFiller(english) || english;   // "lol ok and ...", "uhh and a pig?": leading hesitation never reaches a world
-    const selfCorrections = await this._correct(english);
+    const selfCorrections = await perf.time('correct', () => this._correct(english));
     if (selfCorrections.corrections.length) english = selfCorrections.text;
 
     const stateBefore = Object.fromEntries(Object.entries(this.isession.state).map(([k, v]) => [k, JSON.stringify(v)]));
@@ -365,12 +388,12 @@ export class DialogSession {
     let meta = null;  // meta-dialogue (spec 11 sections 6-14): cancel, repeat, explain, feedback, topic, list mode, repair, degree, references
     let formalText = english;
     if (!icpt) {
-      meta = await disc.meta(english, pend, sid);
+      meta = await perf.time('discourse', () => disc.meta(english, pend, sid));
       if (meta?.rewrite) formalText = meta.rewrite;
       if (meta?.pre) pre = meta.pre;
       if (!pre && !meta) {
         if (pend?.type === 'fill') pre = await disc.fill(pend, english, sid);
-        if (!pre) pre = await disc.ellipsis(english, sid);
+        if (!pre) pre = await perf.time('discourse', () => disc.ellipsis(english, sid));
         if (!pre) pre = await disc.pronoun(english, sid);
         // "and how many days are in a week?" with nothing to continue: the connective joins nothing, the question stands on its own
         // "and a heading Dairy too": a fragment nothing could continue loses its trailing "too" (it must not become part of the text)
@@ -378,7 +401,7 @@ export class DialogSession {
         if (!pre) { const bare = engine.interp.lang.stripConnective(english); if (bare !== english && QUESTION_WORD.test(bare)) formalText = bare; }
       }
     }
-    let formal = icpt || meta?.reply != null ? { segments: [], wires: [] } : pre ? { ...pre.res, dispatch: null } : await this._formalize(formalText, sid, formalizer ?? this.formalizer, { spell: spell ?? this.spell, partial: partial ?? this.partial });
+    let formal = icpt || meta?.reply != null ? { segments: [], wires: [] } : pre ? { ...pre.res, dispatch: null } : await perf.time('formalize', () => this._formalize(formalText, sid, formalizer ?? this.formalizer, { spell: spell ?? this.spell, partial: partial ?? this.partial }));
     if (meta?.rewrite && !pre) for (const sg of formal.segments) sg.discourse = meta.info;
     if (!icpt && !pre && !meta && formal.segments.length === 1 && formal.segments[0].unparsed) {
       pre = await disc.ellipsis(english, sid, { bare: true });
@@ -391,6 +414,7 @@ export class DialogSession {
     }
     const { segments, wires, dispatch, encoderError } = formal;
     this._noteWorlds(segments);
+    const tInterp = perf.active ? performance.now() : 0;
     const T = (text, extra = {}) => ({ text, translate: true, ...extra });
     const lines = icpt?.reply ? [[T(icpt.reply)]] : [];   // each line is an array of parts [{ text, translate, quote? }]
     if (meta?.reply != null) lines.push([T(meta.reply)]);
@@ -491,6 +515,7 @@ export class DialogSession {
     if (translation?.unknown?.length && segments.some((s) => s.unparsed)) {
       lines.push([T(`I did not know the word${translation.unknown.length > 1 ? 's' : ''}: `), { text: translation.unknown.map((u) => u.word).join(', '), translate: false, quote: true }, { text: '.', translate: false }]);
     }
+    if (tInterp) perf.add('interpret', performance.now() - tInterp);
     let englishParts = [];
     lines.forEach((ln, i) => { if (i) englishParts.push({ text: ' ', translate: true, join: true }); englishParts.push(...ln); });
     const englishReply = englishParts.map((p) => p.text).join('');

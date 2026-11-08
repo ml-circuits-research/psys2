@@ -132,6 +132,8 @@ export function windowSpans(n, size, stride = Math.max(1, size >> 1)) {
 
 const FULL = 1e9;   // maxLength meaning "do not truncate" for the tokenizer
 
+import { perf } from './perf.mjs';
+
 export function createDispatcherRuntime({ ort, session, tokenizer, worlds, editTags = null, editTau = 0.5, useContext = true, segMaxLen = 192, worldMaxLen = 128, beam = 4, uncertain = 6, topK = 3 } = {}) {
   if (!ort?.Tensor || !session?.run || !tokenizer?.encode || !worlds?.length) throw new Error('createDispatcherRuntime needs { ort, session, tokenizer, worlds }');
   const cache = new Map();
@@ -142,13 +144,13 @@ export function createDispatcherRuntime({ ort, session, tokenizer, worlds, editT
       input_ids: new ort.Tensor('int64', BigInt64Array.from(ids, (x) => BigInt(x)), [1, n]),
       attention_mask: new ort.Tensor('int64', BigInt64Array.from(ids, () => 1n), [1, n]),
     };
-    const out = await session.run(feeds);
+    const out = await perf.time('ort', () => session.run(feeds));
     return { seg: out.seg_logits.data, world: out.world_logits.data, edit: out.edit_logits?.data ?? null };
   };
 
   /** Per-token P(B) and token offsets of a raw message. */
   const segment = async (text) => {
-    const enc = tokenizer.encode(text, { maxLength: FULL });
+    const enc = perf.timeSync('tokenize', () => tokenizer.encode(text, { maxLength: FULL }));
     if (enc.ids.length <= segMaxLen) {
       const { seg } = await run(enc.ids);
       return { enc, probs: enc.ids.map((_, i) => softmax([seg[2 * i], seg[2 * i + 1]])[1]), windows: 1 };
@@ -173,7 +175,7 @@ export function createDispatcherRuntime({ ort, session, tokenizer, worlds, editT
   const rankFull = async (text, ctx) => {
     const input = useContext ? routingText(text, ctx) : text;
     if (cache.has(input)) return cache.get(input);
-    const enc = tokenizer.encode(input, { maxLength: FULL });
+    const enc = perf.timeSync('tokenize', () => tokenizer.encode(input, { maxLength: FULL }));
     let p, edit = null, windowed = 1;
     if (enc.ids.length <= worldMaxLen) {
       const r = await run(enc.ids);
@@ -207,7 +209,8 @@ export function createDispatcherRuntime({ ort, session, tokenizer, worlds, editT
   const rank = async (text, ctx) => (await rankFull(text, ctx)).worlds;
 
   /** Prediction object of spec 03 section 7.1 for one message. */
-  const predict = async (text, context = {}) => {
+  const predict = (text, context = {}) => perf.time('predict', () => predictRun(text, context));
+  const predictRun = async (text, context = {}) => {
     const ctx = { tab: context.tab ?? null, recent_worlds: [...(context.recent_worlds ?? [])], session: [...(context.session ?? [])] };
     const { enc, probs } = await segment(text);
     const cands = candidateSegmentations(text, enc.offsets, probs, beam, uncertain);

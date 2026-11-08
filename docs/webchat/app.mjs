@@ -300,22 +300,33 @@ export async function mountPsys2(element, options = {}) {
     const shaped = wires.map((w) => ({ ...w, entries: w.entries.map((e) => ({ key: L.shortKey?.(w.type, e.key) ?? e.key, value: e.value })) }));
     return lib.serialize(shaped);
   }
-  async function process(text, mode = 'typed') {
-    const user = addMessage('user', text);
+  const fmtDur = (ms) => (ms < 1000 ? `${Math.max(1, Math.round(ms))} ms` : `${(ms / 1000).toFixed(1)} s`);
+  /** Resolves after the browser painted the current DOM (so the typed message and the thinking bubble show before the heavy work blocks the thread). */
+  const afterPaint = () => new Promise((r) => { const t = setTimeout(r, 60); if (typeof requestAnimationFrame === 'function') requestAnimationFrame(() => setTimeout(() => { clearTimeout(t); r(); }, 0)); });
+  async function process(text, mode = 'typed', user = null) {
+    user ??= addMessage('user', text);
     busy++; setStatus();
-    const typing = addMessage('bot', h('span', { class: 'p2-dots', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')), { className: 'is-typing' });
+    const thinkingLabel = h('span', { class: 'p2-thinking-label' }, 'thinking… 0.0 s');
+    const typing = addMessage('bot', h('span', { class: 'p2-thinking' }, h('span', { class: 'p2-dots', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')), thinkingLabel), { className: 'is-typing' });
     typing.msg.removeAttribute('aria-live');
     translator.resetUsage();
+    const tStart = performance.now();
+    const ticker = setInterval(() => { thinkingLabel.textContent = `thinking… ${((performance.now() - tStart) / 1000).toFixed(1)} s`; }, 100);
+    await afterPaint();
     let reply;
     try {
       reply = await session.send(text, { language: settings.language, formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false });
     } catch (e) {
       console.error(e);
+      clearInterval(ticker);
       recordPhrase(text, mode, null);
       typing.msg.remove(); busy--; setStatus();
       addMessage('bot', `Something went wrong while processing that: ${e?.message ?? e}`, { className: 'is-error' });
       return;
     }
+    clearInterval(ticker);
+    const engineMs = performance.now() - tStart;
+    const tHost = performance.now();
     typing.msg.remove();
     recordPhrase(text, mode, reply);
     const usage = translator.usage.map((u) => ({ ...u }));
@@ -333,7 +344,9 @@ export async function mountPsys2(element, options = {}) {
       else if (expressions.includes('supported')) robotUI().express('smile');
     }
     if (settings.speaker && speech && speechSupport.synthesis) speech.speak(answer, { lang: speechLangTag() });
+    const tEffects = performance.now();
     const effects = await runEffects(reply.effects);
+    const effectsMs = performance.now() - tEffects;
 
     const traceBox = h('div', { class: 'p2-trace-slot', hidden: !settings.showTrace });
     let built = false;
@@ -344,6 +357,13 @@ export async function mountPsys2(element, options = {}) {
     botMsg.meta.append(toggle);
     botMsg.msg.append(traceBox);
     busy--; setStatus(); scrollDown();
+    // timing: engine stages come from the reply (formalizer/perf.mjs), the host adds render and effects
+    const totalMs = performance.now() - tStart;
+    reply.perf = { ...(reply.perf ?? { total: engineMs, stages: {} }), engineMs: Math.round(engineMs), render: Math.round((performance.now() - tHost - effectsMs) * 10) / 10, effects: Math.round(effectsMs * 10) / 10, totalMs: Math.round(totalMs) };
+    botMsg.meta.append(h('span', { class: 'p2-took', title: 'Time from sending to the answer on screen' }, `answered in ${fmtDur(totalMs)}`));
+    const rec = { text, ...reply.perf, formalizer: settings.formalizer };
+    (globalThis.__psys2Perf ??= []).push(rec);
+    showPerfOverlay(rec);
     options.onReply?.(reply);
     return reply;
   }
@@ -352,10 +372,21 @@ export async function mountPsys2(element, options = {}) {
     try { phrases.add(buildRecord({ text, mode, language: settings.language, tab: view, reply })); } catch (e) { console.warn('phrase log failed', e); }
     if (!settingsEl.hidden) renderPhraseLog();
   }
+  // dev overlay (add ?perf=1 to the page URL): stage timings of the last message
+  let perfEl = null;
+  const perfOn = (() => { try { return new URLSearchParams(globalThis.location?.search ?? '').has('perf'); } catch { return false; } })();
+  function showPerfOverlay(rec) {
+    if (!perfOn) return;
+    perfEl ??= h('pre', { class: 'p2-perf', 'aria-hidden': 'true' });
+    if (!perfEl.isConnected) document.body.append(perfEl);
+    const st = Object.entries(rec.stages ?? {}).map(([k, v]) => `${k.padEnd(18)} ${String(v.n).padStart(4)}x ${String(v.ms).padStart(8)} ms`);
+    perfEl.textContent = [`${rec.text}`, `total ${rec.totalMs} ms (engine ${rec.engineMs}, render ${rec.render}, effects ${rec.effects})`, ...st].join('\n');
+  }
   const send = (text, mode = 'typed') => {
     const t = String(text ?? '').trim();
     if (!t || !session) return Promise.resolve(null);
-    const run = chain.then(() => process(t, mode));
+    const user = addMessage('user', t);   // the message shows at once, even while an earlier one is still being answered
+    const run = chain.then(() => process(t, mode, user));
     chain = run.catch(() => {});
     return run;
   };
@@ -620,5 +651,6 @@ export async function mountPsys2(element, options = {}) {
     destroy() { destroyed = true; cleanups.forEach((f) => f()); robotUI()?.destroy?.(); speech.destroy(); element.replaceChildren(); element.classList.remove('p2-box'); },
   };
   if (settings.handsFree && speechSupport.recognition) setHandsFree(true, false);
+  element.dataset.ready = 'true';
   return handle;
 }

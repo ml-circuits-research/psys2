@@ -194,3 +194,8 @@
 /* Encoder formalizer trace: the winning segmentation of the dispatcher */
 .p2 .p2-segs li.is-winner { border-left: 3px solid var(--p2-accent, currentColor); padding-left: 6px; }
 .p2 .p2-why { margin: 4px 0 8px; }
+
+.p2-thinking { display: inline-flex; align-items: center; gap: 8px; }
+.p2-thinking-label { color: var(--muted); font-size: .85em; font-variant-numeric: tabular-nums; }
+.p2-took { color: var(--muted); font-size: .8em; margin-left: 8px; font-variant-numeric: tabular-nums; }
+.p2-perf { position: fixed; right: 4px; bottom: 4px; z-index: 50; margin: 0; padding: 6px 8px; max-width: 95vw; max-height: 45vh; overflow: auto; font: 11px/1.3 monospace; background: rgba(0,0,0,.82); color: #cfe; border-radius: 6px; pointer-events: none; }

@@ -101,6 +101,18 @@ export function effectivePriority(m, ctx) {
   return tp != null && ctx?.tabWorld && m.pattern.worldId === ctx.tabWorld ? tp : m.pattern.priority;
 }
 
+/**
+ * `needsState=<path>` routing key: a catch-all phrasing about the contents of a world ("how many legs?" for a chart) is considered only while
+ * that world has contents (the state path is non-empty) or owns the active tab. Without the session states in the context it always holds.
+ */
+export function populated(pattern, ctx) {
+  const p = pattern.needsState;
+  if (!p || !ctx?.states || pattern.worldId === ctx.tabWorld) return true;
+  let v = ctx.states[pattern.worldId];
+  for (const k of p.split('.')) v = v?.[k];
+  return Array.isArray(v) ? v.length > 0 : v && typeof v === 'object' ? Object.keys(v).length > 0 : !!v;
+}
+
 /** Specificity of a match: literal words minus wildcard span (a catch-all is negative). */
 export const specificity = (m) => m.literals - wildTokens(m);
 
@@ -129,7 +141,7 @@ export function createRouter({ id = 'policy', model = null } = {}) {
     route({ matches, context, scores = [], tokens = [] } = {}) {
       const ctx = normalizeContext(context);
       // tabOnly patterns apply only while their world's tab is active
-      const list = matches.filter((m) => !m.pattern.tabOnly || m.pattern.worldId === ctx.tabWorld);
+      const list = matches.filter((m) => (!m.pattern.tabOnly || m.pattern.worldId === ctx.tabWorld) && populated(m.pattern, ctx));
       for (const m of list) m.rank = effectivePriority(m, ctx);
       const prio = (m) => m.rank;
       const wscore = (w) => scores.find((s) => s.id === w)?.score ?? 0;

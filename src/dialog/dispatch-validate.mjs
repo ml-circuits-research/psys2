@@ -14,6 +14,7 @@
  *
  * Output: { id, text, status: 'understood' | 'not_understood', winner, produced, notUnderstood, why, trace }.
  */
+import { perf } from '../formalizer/perf.mjs';
 import { formalize, FormSession } from '../formalizer/index.mjs';
 import { serialize } from '../soplang/index.mjs';
 import { spellCorrect, spellAlternates, protectedWordsOf, worldVocabulary, spellVocabulary, ignorable } from '../formalizer/spell.mjs';
@@ -118,7 +119,7 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
     const key = JSON.stringify([world, tab, text, beam]);
     if (normCache.has(key)) return { status: 'ready', rewrites: normCache.get(key) };
     let out;
-    try { out = await (typeof normalizer === 'function' ? normalizer : normalizer.propose)({ world, tab, text, beam }); } catch { return { status: 'error', rewrites: [] }; }
+    try { out = await perf.time('normalizer', () => (typeof normalizer === 'function' ? normalizer : normalizer.propose)({ world, tab, text, beam })); } catch { return { status: 'error', rewrites: [] }; }
     const status = Array.isArray(out) || out == null ? 'ready' : out.status === 'not_ready' || out.status === 'error' ? out.status : 'ready';
     if (status !== 'ready') return { status, rewrites: [] };
     const rewrites = toRewrites(Array.isArray(out) ? out : out?.rewrites, beam);
@@ -141,11 +142,24 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
   };
 
   /** Fresh dialog session seeded as the dataset records are: tab, recent worlds, then the earlier messages. */
-  const seed = async (context) => {
-    const s = engine.createSession();
+  // The seeded session of a context is built once (replaying the earlier messages is the expensive part) and every check works on a copy.
+  let templates = new Map();
+  const seed = (context) => perf.time('seed', async () => {
+    const key = JSON.stringify(context);
+    let t = templates.get(key);
+    if (!t) {
+      t = { s: await seedRun(context), fork: true };
+      if (templates.size >= 8) templates.clear();
+      templates.set(key, t);
+    }
+    if (t.fork) { try { return t.s.forkForValidation(); } catch { t.fork = false; } }
+    return seedRun(context);   // the state cannot be cloned: replay as before
+  });
+  const seedRun = async (context) => {
+    const s = engine.createSession({ language: 'en' });   // replayed messages are English already: no language detection (the browser detector is async and slow)
     if (context.tab) s.setWorldState('ui.shell', { activeTab: context.tab });
     if (context.recent_worlds.length) s._recentWorlds = [...context.recent_worlds];
-    for (const m of context.session) await s.send(m);
+    for (const m of context.session) { perf.count('seed.replay'); await s.send(m); }
     return s;
   };
 
@@ -155,7 +169,7 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
    */
   const apply = (session, worlds, text, source, useInterpreter) => {
     const { set, ids } = view(worlds);
-    const res = formalize(text, { worlds: set, session: session.isession, source, context: session.context(), router: engine.router });
+    const res = perf.timeSync('check.formalize', () => formalize(text, { worlds: set, session: session.isession, source, context: session.context(), router: engine.router }));
     const parsed = res.segments.filter((x) => !x.unparsed);
     const unparsed = res.segments.length - parsed.length;
     const wires = parsed.flatMap((x) => x.wires);
@@ -196,6 +210,7 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
   const check = async (context, prefix, world, text, opts) => {
     const key = JSON.stringify([context, prefix, world, text, opts.useInterpreter]);
     if (cache.has(key)) return cache.get(key);
+    perf.count('check');
     const s = await seed(context);
     prefix.forEach((p, i) => { try { apply(s, [p.world], p.text, `p${i}`, opts.useInterpreter); } catch { /* an earlier piece that threw is skipped */ } });
     let rec;
@@ -426,7 +441,7 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
     };
   };
 
-  return { validate, clearCache: () => { cache = new Map(); normCache.clear(); normStamp = undefined; }, policy: base, engine };
+  return { validate, clearCache: () => { cache = new Map(); templates = new Map(); normCache.clear(); normStamp = undefined; }, policy: base, engine };
 }
 
 /** One-shot helper: `validateDispatch({ prediction, engine, policy })`. */

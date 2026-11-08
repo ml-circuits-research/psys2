@@ -18,6 +18,7 @@
  */
 import { formalize } from '../formalizer/rules/index.mjs';
 import { createDispatcherRuntime } from '../formalizer/dispatcher-runtime.mjs';
+import { perf } from '../formalizer/perf.mjs';
 import { createDispatchValidator } from './dispatch-validate.mjs';
 
 /** Demo policy: a parse the interpreter refuses for a state reason (spec 03 section 7, questions Q3) still counts as understood. */
@@ -76,7 +77,7 @@ export function createDispatcherFormalizer({ load, getPolicy = () => ENCODER_DEF
 
     async formalize(text, { worlds: set, session, source = 'input', context } = {}) {
       if (!engine) throw new Error('the dispatcher formalizer is not attached to an engine');
-      const rt = await prepare();
+      const rt = await perf.time('encoder.prepare', prepare);
       validator ??= createDispatchValidator({ engine, policy: getPolicy(), normalizer });
       const past = history.get(session) ?? [];
       const ctx = { tab: context?.activeTab ?? null, recent_worlds: context?.recentWorlds ?? [], session: past.slice(-historyLimit) };
@@ -84,7 +85,7 @@ export function createDispatcherFormalizer({ load, getPolicy = () => ENCODER_DEF
       const prediction = await rt.predict(text, ctx);
       const tModel = now() - t0;
       prediction.id = source;
-      const out = await validator.validate(prediction, getPolicy());
+      const out = await perf.time('validate', () => validator.validate(prediction, getPolicy()));
       const tTotal = now() - t0;
 
       const winner = out.trace.segmentations[out.trace.winnerIndex ?? 0];
@@ -95,7 +96,7 @@ export function createDispatcherFormalizer({ load, getPolicy = () => ENCODER_DEF
         const info = chosen ? { world: chosen.world, rank: chosen.rank, variant: chosen.variant, corrections: chosen.corrections ?? [], partial: chosen.partial ?? null, worldScore: piece.attempts.find((a) => a.world === chosen.world)?.worldScore ?? null } : null;
         let parts = [];
         if (chosen) {
-          const res = formalize(chosen.text, { worlds: restrictedSet(set, [chosen.world]), session, source, context, router: engine.router });
+          const res = perf.timeSync('rules.final', () => formalize(chosen.text, { worlds: restrictedSet(set, [chosen.world]), session, source, context, router: engine.router }));
           const shift = chosen.text === piece.text ? piece.start : null;
           const win = chosen.partial?.window ? chosen.partial.ignored : null;
           parts = res.segments.map((s, k) => ({

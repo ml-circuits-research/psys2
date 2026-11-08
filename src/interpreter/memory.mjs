@@ -33,6 +33,14 @@ export class WireStore {
     for (const e of wire.entries) drop(this._byKV.get(wire.type + SEP + e.key + SEP + e.value.v));
     this.byId.delete(wire.id);
   }
+  /** Independent copy (wires are immutable and shared; the indexes are copied). */
+  clone() {
+    const c = new WireStore();
+    c.byId = new Map(this.byId); c._ord = new Map(this._ord); c._n = this._n;
+    for (const [k, v] of this._byType) c._byType.set(k, v.slice());
+    for (const [k, v] of this._byKV) c._byKV.set(k, v.slice());
+    return c;
+  }
   ofType(type) { return this._byType.get(type) ?? []; }
   withKV(type, key, v) { return this._byKV.get(type + SEP + key + SEP + v) ?? []; }
   order(wire) { return this._ord.get(wire.id) ?? 0; }
@@ -47,6 +55,8 @@ export class Memory {
     this.own = new WireStore();
   }
   add(wire) { this.own.add(wire); }
+  /** Independent copy of the session overlay (the base store is shared). */
+  clone() { const m = new Memory(this.legends, this.base); m.own = this.own.clone(); return m; }
   /**
    * Retract a session wire: it gets `core.status=retracted` (and `core.reason`) but stays in memory for the trace.
    * Retracted wires are excluded from `find`; `get` still returns them. Returns false for unknown or KB wires.

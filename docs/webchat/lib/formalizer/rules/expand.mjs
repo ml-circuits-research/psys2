@@ -60,6 +60,8 @@ function align(A, B, whole) {
   return { from: n - k, to: n, scope: k > 1 ? 'object' : 'value', ambiguous: n <= 2 };
 }
 
+const LEAD_ONLY = new Set(['no', 'not', 'wait', 'sorry', 'oops', 'actually', 'hmm', 'hm', 'um', 'uh', 'er', 'oh', 'ah', 'hold', 'on', 'well', 'ok', 'okay', 'my', 'bad', 'mistake', 'a', 'second', 'sec', 'whoops', 'ugh']);
+
 /**
  * Self-correction: "blue, no, green" / "red, I mean blue" / "draw a cat, no wait, a dog" / "knight to f3, no, knight to c3": the
  * words after the marker replace the part of the abandoned clause they correct (see `align`); everything else is kept.
@@ -95,6 +97,9 @@ export function selfCorrect(tokens, { whole = false } = {}) {
     if (!A.length) return null;
     // "No, I meant the tree": a bare "no" before the marker answers the previous turn (discourse, spec 11), it is no abandoned clause
     if (A.length === 1 && (A[0].lower === 'no' || A[0].lower === 'not')) return null;
+    // "wait, I meant yes": an abandoned clause made only of lead words ("wait", "sorry", "oops", "actually", "hmm") is a correction of the
+    // previous turn (discourse repair, a game's answer correction), not of a clause of this message
+    if (A.every((t) => LEAD_ONLY.has(t.lower))) return null;
     const B = corr.filter(isWord);
     if (!B.length) return null;
     const al = align(A, B, whole);
