@@ -27,11 +27,11 @@
       "canonical_success_rate": 0.9833,
       "variants": 600,
       "variant_labels": {
-        "rules-agree": 128,
+        "rules-fail": 317,
         "rules-differ": 162,
-        "rules-fail": 310
+        "rules-agree": 121
       },
-      "variant_rules_coverage": 0.2133,
+      "variant_rules_coverage": 0.2017,
       "variants_needing_review": 10,
       "trainable_records": 649,
       "by_split": {
@@ -99,9 +99,9 @@
       "canonical_success_rate": 1,
       "variants": 400,
       "variant_labels": {
-        "rules-differ": 48,
-        "rules-agree": 63,
-        "rules-fail": 289
+        "rules-fail": 290,
+        "rules-differ": 47,
+        "rules-agree": 63
       },
       "variant_rules_coverage": 0.1575,
       "variants_needing_review": 0,
@@ -119,8 +119,8 @@
       "canonical_success_rate": 1,
       "variants": 300,
       "variant_labels": {
-        "rules-agree": 139,
         "rules-fail": 125,
+        "rules-agree": 139,
         "rules-differ": 36
       },
       "variant_rules_coverage": 0.4633,
@@ -217,11 +217,11 @@
       "canonical_success_rate": 1,
       "variants": 200,
       "variant_labels": {
-        "rules-fail": 77,
-        "rules-agree": 113,
-        "rules-differ": 10
+        "rules-agree": 57,
+        "rules-fail": 130,
+        "rules-differ": 13
       },
-      "variant_rules_coverage": 0.565,
+      "variant_rules_coverage": 0.285,
       "variants_needing_review": 0,
       "trainable_records": 220,
       "by_split": {
@@ -297,11 +297,11 @@
       "canonical_success_rate": 1,
       "variants": 200,
       "variant_labels": {
-        "rules-agree": 85,
-        "rules-fail": 96,
+        "rules-agree": 81,
+        "rules-fail": 100,
         "rules-differ": 19
       },
-      "variant_rules_coverage": 0.425,
+      "variant_rules_coverage": 0.405,
       "variants_needing_review": 0,
       "trainable_records": 220,
       "by_split": {
@@ -384,8 +384,8 @@
       "variants_needing_review": 0,
       "trainable_records": 220,
       "by_split": {
-        "train": 198,
-        "dev": 22
+        "dev": 22,
+        "train": 198
       },
       "retry": []
     }
@@ -395,8 +395,8 @@
     "attempts": 5622,
     "canonical_success": 509,
     "variants": 5100,
-    "agree": 1303,
+    "agree": 1236,
     "canonical_success_rate": 0.998,
-    "variant_rules_coverage": 0.2555
+    "variant_rules_coverage": 0.2424
   }
 }

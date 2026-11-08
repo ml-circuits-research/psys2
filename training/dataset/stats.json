@@ -7,7 +7,7 @@
   "source_records_read": 44873,
   "dedupe": {
     "duplicates": 4752,
-    "conflicting_targets": 857
+    "conflicting_targets": 853
   },
   "worlds": {
     "art.draw": {
@@ -164,9 +164,9 @@
         "generator-backed": 337,
         "canonical-ok": 59,
         "negative": 12,
-        "rules-agree": 119,
-        "rules-differ": 162,
         "rules-fail": 316,
+        "rules-differ": 162,
+        "rules-agree": 119,
         "canonical-failed": 4
       },
       "by_split_source": {
@@ -192,16 +192,16 @@
           "generator-backed": 248,
           "canonical-ok": 49,
           "negative": 12,
-          "rules-agree": 101,
+          "rules-fail": 251,
           "rules-differ": 136,
-          "rules-fail": 251
+          "rules-agree": 101
         },
         "test": {
           "rule-derived": 20,
           "generator-backed": 51,
           "canonical-ok": 4,
-          "rules-agree": 3,
           "rules-fail": 26,
+          "rules-agree": 3,
           "rules-differ": 11
         },
         "dev": {
@@ -284,8 +284,8 @@
         "negative": 20,
         "generator-disagrees": 30,
         "canonical-ok": 30,
-        "rules-agree": 137,
         "rules-fail": 125,
+        "rules-agree": 137,
         "rules-differ": 36
       },
       "by_split_source": {
@@ -312,8 +312,8 @@
           "generator-disagrees": 29,
           "canonical-ok": 6,
           "rules-agree": 35,
-          "rules-fail": 17,
-          "rules-differ": 8
+          "rules-differ": 8,
+          "rules-fail": 17
         },
         "train": {
           "rule-derived": 316,
@@ -321,16 +321,16 @@
           "negative": 20,
           "generator-disagrees": 1,
           "canonical-ok": 20,
-          "rules-agree": 88,
           "rules-fail": 89,
+          "rules-agree": 88,
           "rules-differ": 21
         },
         "test": {
           "rule-derived": 30,
           "generator-backed": 292,
           "canonical-ok": 4,
-          "rules-agree": 14,
           "rules-fail": 19,
+          "rules-agree": 14,
           "rules-differ": 7
         }
       },
@@ -409,8 +409,8 @@
     "games.hangman": {
       "total": 1973,
       "splits": {
-        "dev": 201,
-        "train": 1556,
+        "dev": 199,
+        "train": 1558,
         "test": 216
       },
       "by_source": {
@@ -423,21 +423,21 @@
         "generator-backed": 1497,
         "generator-disagrees": 38,
         "negative": 216,
-        "canonical-ok": 16,
-        "rules-fail": 74,
-        "rules-agree": 101,
-        "rules-differ": 10
+        "canonical-ok": 15,
+        "rules-agree": 46,
+        "rules-fail": 127,
+        "rules-differ": 13
       },
       "by_split_source": {
         "dev": {
           "rule-derived": 13,
           "generator": 115,
-          "paraphrase": 73
+          "paraphrase": 71
         },
         "train": {
           "rule-derived": 8,
           "generator": 1420,
-          "paraphrase": 128
+          "paraphrase": 130
         },
         "test": {
           "generator": 216
@@ -448,20 +448,20 @@
           "rule-derived": 13,
           "generator-backed": 96,
           "generator-disagrees": 19,
-          "canonical-ok": 6,
-          "rules-fail": 34,
-          "rules-agree": 27,
-          "rules-differ": 6
+          "canonical-ok": 4,
+          "rules-agree": 9,
+          "rules-fail": 51,
+          "rules-differ": 7
         },
         "train": {
           "rule-derived": 8,
           "generator-backed": 1213,
           "generator-disagrees": 19,
           "negative": 188,
-          "canonical-ok": 10,
-          "rules-fail": 40,
-          "rules-agree": 74,
-          "rules-differ": 4
+          "canonical-ok": 11,
+          "rules-agree": 37,
+          "rules-fail": 76,
+          "rules-differ": 6
         },
         "test": {
           "generator-backed": 188,
@@ -1148,9 +1148,9 @@
       "by_label": {
         "rule-derived": 261,
         "canonical-ok": 40,
+        "rules-fail": 288,
         "rules-differ": 47,
         "rules-agree": 57,
-        "rules-fail": 288,
         "canonical-failed": 1
       },
       "by_split_source": {
@@ -1184,9 +1184,9 @@
         "train": {
           "rule-derived": 154,
           "canonical-ok": 35,
+          "rules-fail": 247,
           "rules-differ": 45,
-          "rules-agree": 51,
-          "rules-fail": 247
+          "rules-agree": 51
         }
       },
       "negatives": 0,
@@ -1299,8 +1299,8 @@
           "canonical-ok": 4,
           "generator-backed": 114,
           "negative": 22,
-          "rules-differ": 2,
-          "rules-fail": 19
+          "rules-fail": 19,
+          "rules-differ": 2
         },
         "test": {
           "rule-derived": 5,
@@ -1319,8 +1319,8 @@
   "routing": {
     "by_split": {
       "test": 4241,
-      "train": 29547,
-      "dev": 4362
+      "train": 29549,
+      "dev": 4360
     },
     "by_world": {
       "art.draw": 2394,
@@ -1360,8 +1360,8 @@
   "totals": {
     "records": 39982,
     "test": 4654,
-    "train": 30747,
-    "dev": 4581,
+    "train": 30749,
+    "dev": 4579,
     "worlds": 20
   }
 }
