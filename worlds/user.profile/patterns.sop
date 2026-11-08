@@ -210,7 +210,7 @@
     example="No, I live in Berlin."
 
 @pat.user.profile.start core.pattern
-    match="[interview_me|ask_me_something|ask_me_a_question|ask_me_anything|ask_me_some_questions|ask_me_questions|get_to_know_me|let_us_get_to_know_me|lets_get_to_know_me|start_the_interview|begin_the_interview|resume_the_interview|continue_the_interview|quiz_me_about_myself|do_you_want_to_get_to_know_me|start_the_profile_interview|ask_me_more]"
+    match="[interview_me|ask_me_something|ask_me_a_question|ask_me_anything|ask_me_some_questions|get_to_know_me|let_us_get_to_know_me|lets_get_to_know_me|start_the_interview|begin_the_interview|resume_the_interview|continue_the_interview|quiz_me_about_myself|do_you_want_to_get_to_know_me|start_the_profile_interview|ask_me_more]"
     emit="@{_} core.request action=prof.start"
     kind=request
     priority=14
@@ -270,11 +270,11 @@
     example="What is in my profile?"
 
 @pat.user.profile.know.who core.pattern
-    match="[who_am_i|tell_me_about_myself]"
+    match="[tell_me_about_myself|what_do_you_think_i_am_like]"
     emit="@{_} core.request action=prof.know"
     kind=question
     priority=14
-    example="Who am I?"
+    example="Tell me about myself."
 
 @pat.user.profile.progress core.pattern
     match="how [much]? do you know [about]? me"

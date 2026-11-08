@@ -211,7 +211,7 @@
     session=p5
 
 @t.user.profile.t039 core.test
-    input="Who am I?"
+    input="Tell me about myself."
     expect="do not know anything"
     session=p5
 
