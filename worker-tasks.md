@@ -160,7 +160,11 @@ Catch-all patterns that swallow text (unknown argument) must not block recovery.
 - Handle inputs over the runtime limits (192 tokens segmentation, 128 routing) with overlapping windows, and test them.
 - D5: self-labelling from usage needs more than `supported`. Require no user correction afterwards and an observable successful effect. Keep user corrections as labels.
 
-Order: F1 → F2 (then rebuild data) → F5 → F3 → F6 → F4 → F7 → F8. R2 and N1 continue in parallel. Do S1 (below) together with F5.
+**Everything runs in parallel now (user, 16:00): nothing known is postponed.** Use parallel subagents.
+- **The reviewer does F2, F3 and the F6 iterator fix** in this session, small and isolated, and pushes them with tests. The worker does not touch `normalizedSop`, `_plain`/`plain_text` or the segmentation iterator. Pull and use them.
+- **The worker does F1, F4, F5 + S1, the rest of F6, F7, F8, R2 and N1,** in parallel.
+
+**The single measure of success (user): the result is correct.** Build `training/eval/operational.jsonl`, a fixed, committed set of realistic messages. Each has its initial state (setup), the expected final state and/or answer, and the expected effects. Include every F4 family, the review's probes and real phrase-log messages when available. The headline is the **share of messages whose final state/answer is right**, per world, through the full pipeline in the webchat configuration. Wrong actions are counted separately: they are worse than "not understood". Every task above reports its effect on this one number.
 
 ### S1 — make simplification safe (reviewer analysis 15:35; do before the next model publication)
 
@@ -216,7 +220,7 @@ Loop until the session ends:
 
 **The goal of this session is to avoid training per-world models.** We validate one idea first: a single small shared model, the **dispatcher**, proposes candidates, and the existing rule formalizers validate them. No per-world LoRA in this session.
 
-Order: **F1 and F2 first (P0: labels and comparison)**, then the other review fixes; **R2 continues in parallel** (rules); S1 together with F5; N1 in parallel on the GPU; then D5. T9 is updated at the end of the session. D1, D2, D3, D4 are done; D1b is accepted as partial, with its policy below.
+Order: everything in parallel (see the review fixes section). The headline is the operational set: a correct final result. T9 is updated at the end of the session. D1, D2, D3, D4 are done; D1b is accepted as partial, with its policy below.
 
 2. **D1 — dispatcher model:** done and validated (segmentation + world heads; DistilBERT kept as the main model).
    **D1b — simplification head (still open, do after D3).** It is the third head of Round 1: KEEP / DELETE / REPLACE edit tags, learned from aligning the paraphrase variants with their canonical phrasings. D3 will show how many failures are rule gaps on messy wording; this head targets exactly those. Add it to the DistilBERT dispatcher, export it in the same ONNX model, and use it in the validation layer: try the simplified text when the original does not validate. Report the headline metric before and after.
