@@ -1,0 +1,1987 @@
+{
+ "sets": {
+  "train": {
+   "variants": 7500,
+   "old_inherited_targets": 2298,
+   "labelling_errors": 801,
+   "labelling_errors_where_rules_own_reading_was_right": 577,
+   "labelling_errors_with_number_conflict": 88,
+   "parser_errors_unfaithful_reading": 430,
+   "parser_errors_number_dropped_or_changed": 33,
+   "parser_gaps": 357,
+   "new_label_reasons": {
+    "rules-own:own-values-in-text": 1370,
+    "needs_review:parser-error-other-values": 84,
+    "rules-differ:parser-error": 35,
+    "rules-fail:partial-parse": 105,
+    "rules-fail:canonical-failed": 25,
+    "rules-unverified:canonical-failed": 5,
+    "needs_review:unparsed-other-values": 87,
+    "rules-fail:unparsed": 378,
+    "needs_review:partial-parse-other-values": 38
+   },
+   "transition_matrix": {
+    "rules-agree -> needs_review": 5,
+    "rules-agree -> rules-agree": 2795,
+    "rules-agree -> rules-own": 12,
+    "rules-differ -> needs_review": 48,
+    "rules-differ -> rules-agree": 242,
+    "rules-differ -> rules-differ": 11,
+    "rules-differ -> rules-fail": 19,
+    "rules-differ -> rules-own": 734,
+    "rules-fail -> needs_review": 81,
+    "rules-fail -> rules-agree": 638,
+    "rules-fail -> rules-differ": 12,
+    "rules-fail -> rules-fail": 231,
+    "rules-fail -> rules-own": 292
+   },
+   "per_world": {
+    "art.draw": {
+     "variants": 520,
+     "old": {
+      "rules-differ": 134,
+      "rules-fail": 133,
+      "rules-agree": 133
+     },
+     "new": {
+      "rules-agree": 341,
+      "rules-own": 159,
+      "needs_review": 8,
+      "rules-differ": 1,
+      "rules-fail": 6,
+      "rules-unverified": 5
+     },
+     "old_inherited": 267,
+     "labelling_errors": 149,
+     "parser_errors": 17,
+     "parser_errors_number": 2,
+     "parser_gaps": 3,
+     "old_target_wrong_but_own_ok": 134,
+     "number_conflicts": 6
+    },
+    "data.charts": {
+     "variants": 520,
+     "old": {
+      "rules-differ": 122,
+      "rules-agree": 175,
+      "rules-fail": 103
+     },
+     "new": {
+      "rules-agree": 393,
+      "rules-own": 93,
+      "needs_review": 14,
+      "rules-fail": 20
+     },
+     "old_inherited": 225,
+     "labelling_errors": 65,
+     "parser_errors": 20,
+     "parser_errors_number": 2,
+     "parser_gaps": 13,
+     "old_target_wrong_but_own_ok": 48,
+     "number_conflicts": 12
+    },
+    "docs.editor": {
+     "variants": 720,
+     "old": {
+      "rules-fail": 253,
+      "rules-agree": 151,
+      "rules-differ": 196
+     },
+     "new": {
+      "rules-own": 306,
+      "rules-agree": 241,
+      "rules-fail": 118,
+      "needs_review": 44,
+      "rules-differ": 11
+     },
+     "old_inherited": 439,
+     "labelling_errors": 120,
+     "parser_errors": 37,
+     "parser_errors_number": 9,
+     "parser_gaps": 130,
+     "old_target_wrong_but_own_ok": 71,
+     "number_conflicts": 13
+    },
+    "docs.reader": {
+     "variants": 120,
+     "old": {},
+     "new": {
+      "rules-agree": 65,
+      "rules-fail": 37,
+      "rules-own": 18
+     },
+     "old_inherited": 0,
+     "labelling_errors": 0,
+     "parser_errors": 0,
+     "parser_errors_number": 0,
+     "parser_gaps": 0,
+     "old_target_wrong_but_own_ok": 0,
+     "number_conflicts": 0
+    },
+    "games.chess": {
+     "variants": 420,
+     "old": {
+      "rules-agree": 245,
+      "rules-fail": 19,
+      "rules-differ": 40
+     },
+     "new": {
+      "rules-agree": 322,
+      "rules-own": 57,
+      "needs_review": 12,
+      "rules-fail": 26,
+      "rules-differ": 3
+     },
+     "old_inherited": 59,
+     "labelling_errors": 14,
+     "parser_errors": 18,
+     "parser_errors_number": 0,
+     "parser_gaps": 14,
+     "old_target_wrong_but_own_ok": 10,
+     "number_conflicts": 0
+    },
+    "games.guess": {
+     "variants": 320,
+     "old": {
+      "rules-agree": 186,
+      "rules-fail": 3,
+      "rules-differ": 11
+     },
+     "new": {
+      "rules-agree": 264,
+      "rules-fail": 17,
+      "needs_review": 6,
+      "rules-own": 32,
+      "rules-differ": 1
+     },
+     "old_inherited": 14,
+     "labelling_errors": 3,
+     "parser_errors": 66,
+     "parser_errors_number": 0,
+     "parser_gaps": 3,
+     "old_target_wrong_but_own_ok": 1,
+     "number_conflicts": 0
+    },
+    "games.hangman": {
+     "variants": 320,
+     "old": {
+      "rules-agree": 182,
+      "rules-differ": 13,
+      "rules-fail": 5
+     },
+     "new": {
+      "rules-agree": 276,
+      "rules-own": 26,
+      "rules-differ": 2,
+      "rules-fail": 16
+     },
+     "old_inherited": 18,
+     "labelling_errors": 0,
+     "parser_errors": 1,
+     "parser_errors_number": 0,
+     "parser_gaps": 2,
+     "old_target_wrong_but_own_ok": 0,
+     "number_conflicts": 0
+    },
+    "games.tictactoe": {
+     "variants": 320,
+     "old": {
+      "rules-agree": 180,
+      "rules-fail": 7,
+      "rules-differ": 13
+     },
+     "new": {
+      "rules-agree": 283,
+      "rules-own": 25,
+      "needs_review": 2,
+      "rules-fail": 10
+     },
+     "old_inherited": 20,
+     "labelling_errors": 4,
+     "parser_errors": 24,
+     "parser_errors_number": 1,
+     "parser_gaps": 0,
+     "old_target_wrong_but_own_ok": 1,
+     "number_conflicts": 1
+    },
+    "geo.map": {
+     "variants": 520,
+     "old": {
+      "rules-agree": 114,
+      "rules-fail": 194,
+      "rules-differ": 92
+     },
+     "new": {
+      "rules-agree": 405,
+      "rules-own": 103,
+      "needs_review": 12
+     },
+     "old_inherited": 286,
+     "labelling_errors": 115,
+     "parser_errors": 16,
+     "parser_errors_number": 1,
+     "parser_gaps": 7,
+     "old_target_wrong_but_own_ok": 94,
+     "number_conflicts": 22
+    },
+    "kids.animals": {
+     "variants": 320,
+     "old": {
+      "rules-agree": 160,
+      "rules-fail": 36,
+      "rules-differ": 8
+     },
+     "new": {
+      "rules-agree": 305,
+      "needs_review": 3,
+      "rules-fail": 7,
+      "rules-own": 5
+     },
+     "old_inherited": 44,
+     "labelling_errors": 2,
+     "parser_errors": 5,
+     "parser_errors_number": 0,
+     "parser_gaps": 9,
+     "old_target_wrong_but_own_ok": 0,
+     "number_conflicts": 0
+    },
+    "kids.arith": {
+     "variants": 320,
+     "old": {
+      "rules-agree": 158,
+      "rules-fail": 37,
+      "rules-differ": 5
+     },
+     "new": {
+      "rules-agree": 238,
+      "rules-fail": 63,
+      "rules-own": 12,
+      "needs_review": 6,
+      "rules-differ": 1
+     },
+     "old_inherited": 42,
+     "labelling_errors": 6,
+     "parser_errors": 8,
+     "parser_errors_number": 5,
+     "parser_gaps": 32,
+     "old_target_wrong_but_own_ok": 1,
+     "number_conflicts": 2
+    },
+    "kids.common": {
+     "variants": 320,
+     "old": {
+      "rules-agree": 131,
+      "rules-fail": 25,
+      "rules-differ": 50
+     },
+     "new": {
+      "rules-agree": 248,
+      "rules-own": 67,
+      "rules-fail": 5
+     },
+     "old_inherited": 75,
+     "labelling_errors": 0,
+     "parser_errors": 0,
+     "parser_errors_number": 0,
+     "parser_gaps": 2,
+     "old_target_wrong_but_own_ok": 0,
+     "number_conflicts": 0
+    },
+    "kids.shapes": {
+     "variants": 320,
+     "old": {
+      "rules-agree": 141,
+      "rules-fail": 50,
+      "rules-differ": 9
+     },
+     "new": {
+      "rules-agree": 312,
+      "needs_review": 2,
+      "rules-fail": 5,
+      "rules-own": 1
+     },
+     "old_inherited": 59,
+     "labelling_errors": 5,
+     "parser_errors": 4,
+     "parser_errors_number": 2,
+     "parser_gaps": 4,
+     "old_target_wrong_but_own_ok": 0,
+     "number_conflicts": 3
+    },
+    "kids.shop": {
+     "variants": 320,
+     "old": {
+      "rules-agree": 150,
+      "rules-fail": 37,
+      "rules-differ": 13
+     },
+     "new": {
+      "rules-agree": 270,
+      "rules-fail": 20,
+      "rules-own": 6,
+      "needs_review": 24
+     },
+     "old_inherited": 50,
+     "labelling_errors": 1,
+     "parser_errors": 2,
+     "parser_errors_number": 1,
+     "parser_gaps": 11,
+     "old_target_wrong_but_own_ok": 0,
+     "number_conflicts": 1
+    },
+    "kids.tasks": {
+     "variants": 320,
+     "old": {
+      "rules-agree": 89,
+      "rules-differ": 56,
+      "rules-fail": 55
+     },
+     "new": {
+      "rules-agree": 206,
+      "needs_review": 18,
+      "rules-own": 75,
+      "rules-fail": 18,
+      "rules-differ": 3
+     },
+     "old_inherited": 111,
+     "labelling_errors": 47,
+     "parser_errors": 47,
+     "parser_errors_number": 1,
+     "parser_gaps": 7,
+     "old_target_wrong_but_own_ok": 23,
+     "number_conflicts": 0
+    },
+    "kids.time": {
+     "variants": 320,
+     "old": {
+      "rules-agree": 174,
+      "rules-fail": 24,
+      "rules-differ": 5
+     },
+     "new": {
+      "rules-agree": 302,
+      "needs_review": 6,
+      "rules-own": 4,
+      "rules-fail": 6,
+      "rules-differ": 2
+     },
+     "old_inherited": 29,
+     "labelling_errors": 14,
+     "parser_errors": 73,
+     "parser_errors_number": 2,
+     "parser_gaps": 9,
+     "old_target_wrong_but_own_ok": 1,
+     "number_conflicts": 4
+    },
+    "media.music": {
+     "variants": 520,
+     "old": {
+      "rules-agree": 169,
+      "rules-differ": 195,
+      "rules-fail": 36
+     },
+     "new": {
+      "rules-agree": 308,
+      "rules-own": 190,
+      "needs_review": 20,
+      "rules-differ": 2
+     },
+     "old_inherited": 231,
+     "labelling_errors": 170,
+     "parser_errors": 38,
+     "parser_errors_number": 1,
+     "parser_gaps": 0,
+     "old_target_wrong_but_own_ok": 153,
+     "number_conflicts": 21
+    },
+    "ui.avatar": {
+     "variants": 520,
+     "old": {
+      "rules-fail": 159,
+      "rules-differ": 62,
+      "rules-agree": 179
+     },
+     "new": {
+      "rules-agree": 291,
+      "rules-fail": 81,
+      "rules-own": 116,
+      "needs_review": 23,
+      "rules-differ": 9
+     },
+     "old_inherited": 221,
+     "labelling_errors": 66,
+     "parser_errors": 33,
+     "parser_errors_number": 4,
+     "parser_gaps": 83,
+     "old_target_wrong_but_own_ok": 37,
+     "number_conflicts": 1
+    },
+    "ui.help": {
+     "variants": 120,
+     "old": {},
+     "new": {
+      "rules-agree": 90,
+      "rules-fail": 13,
+      "rules-own": 17
+     },
+     "old_inherited": 0,
+     "labelling_errors": 0,
+     "parser_errors": 0,
+     "parser_errors_number": 0,
+     "parser_gaps": 0,
+     "old_target_wrong_but_own_ok": 0,
+     "number_conflicts": 0
+    },
+    "ui.shell": {
+     "variants": 320,
+     "old": {
+      "rules-agree": 95,
+      "rules-fail": 78,
+      "rules-differ": 30
+     },
+     "new": {
+      "rules-agree": 213,
+      "rules-fail": 40,
+      "rules-own": 58,
+      "needs_review": 9
+     },
+     "old_inherited": 108,
+     "labelling_errors": 20,
+     "parser_errors": 21,
+     "parser_errors_number": 2,
+     "parser_gaps": 28,
+     "old_target_wrong_but_own_ok": 3,
+     "number_conflicts": 2
+    }
+   },
+   "examples": {
+    "labelling_error": [
+     {
+      "world": "art.draw",
+      "text": "draw me 3 trees",
+      "old_target_from": "canonical",
+      "canonical": "Draw a red house.",
+      "old_status": "rules-differ",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "put a big yellow sun in the top right corner",
+      "old_target_from": "canonical",
+      "canonical": "Draw a red house.",
+      "old_status": "rules-differ",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "throw in a couple of stars",
+      "old_target_from": "canonical",
+      "canonical": "Draw a red house.",
+      "old_status": "rules-differ",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "make a tiny green tree",
+      "old_target_from": "canonical",
+      "canonical": "Draw a red house.",
+      "old_status": "rules-differ",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "i want a yellow balloon",
+      "old_target_from": "canonical",
+      "canonical": "Draw a red house.",
+      "old_status": "rules-differ",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "draw a fish in blue",
+      "old_target_from": "canonical",
+      "canonical": "Draw a red house.",
+      "old_status": "rules-differ",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "add 5 flowers",
+      "old_target_from": "canonical",
+      "canonical": "Draw a red house.",
+      "old_status": "rules-differ",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "sketch me a boat next to the house",
+      "old_target_from": "canonical",
+      "canonical": "Draw a red house.",
+      "old_status": "rules-differ",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "add sand to the bottom",
+      "old_target_from": "canonical",
+      "canonical": "Add grass.",
+      "old_status": "rules-differ",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "draw some snow",
+      "old_target_from": "canonical",
+      "canonical": "Add grass.",
+      "old_status": "rules-differ",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "put water on the ground",
+      "old_target_from": "canonical",
+      "canonical": "Add grass.",
+      "old_status": "rules-differ",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "make the ground snowy",
+      "old_target_from": "canonical",
+      "canonical": "Add grass.",
+      "old_status": "rules-fail",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "some sand please",
+      "old_target_from": "canonical",
+      "canonical": "Add grass.",
+      "old_status": "rules-fail",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "throw some water on the ground",
+      "old_target_from": "canonical",
+      "canonical": "Add grass.",
+      "old_status": "rules-differ",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "it's sunset now, make it a sunset",
+      "old_target_from": "canonical",
+      "canonical": "Make it night.",
+      "old_status": "rules-differ",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "change the scene to day",
+      "old_target_from": "canonical",
+      "canonical": "Make it night.",
+      "old_status": "rules-differ",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "switch to daytime",
+      "old_target_from": "canonical",
+      "canonical": "Make it night.",
+      "old_status": "rules-differ",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "can u make it a sunny day",
+      "old_target_from": "canonical",
+      "canonical": "Make it night.",
+      "old_status": "rules-fail",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "make it dawn",
+      "old_target_from": "canonical",
+      "canonical": "Make it night.",
+      "old_status": "rules-differ",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "color the house green",
+      "old_target_from": "canonical",
+      "canonical": "Paint the house blue.",
+      "old_status": "rules-differ",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "turn the house purple",
+      "old_target_from": "canonical",
+      "canonical": "Paint the house blue.",
+      "old_status": "rules-differ",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "can u paint the house pink",
+      "old_target_from": "canonical",
+      "canonical": "Paint the house blue.",
+      "old_status": "rules-fail",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "colour the house brown",
+      "old_target_from": "canonical",
+      "canonical": "Paint the house blue.",
+      "old_status": "rules-differ",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "change the house to navy",
+      "old_target_from": "canonical",
+      "canonical": "Paint the house blue.",
+      "old_status": "rules-differ",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "fill the house with yellow",
+      "old_target_from": "canonical",
+      "canonical": "Paint the house blue.",
+      "old_status": "rules-differ",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     }
+    ],
+    "parser_error": [
+     {
+      "world": "art.draw",
+      "text": "enlarge the house a bit",
+      "own_slots": [
+       "core.request.arg.t=the house",
+       "core.request.arg.amt=a_bit",
+       "core.request.arg.d=bigger"
+      ],
+      "reply": "Here you go! I made the house bigger.",
+      "new_status": "needs_review"
+     },
+     {
+      "world": "art.draw",
+      "text": "blow up the house a lot",
+      "own_slots": [
+       "core.request.arg.t=the house",
+       "core.request.arg.amt=a_lot",
+       "core.request.arg.d=bigger"
+      ],
+      "reply": "Here you go! I made the house bigger.",
+      "new_status": "needs_review"
+     },
+     {
+      "world": "art.draw",
+      "text": "make the house twice as big",
+      "own_slots": [
+       "core.request.arg.t=the house",
+       "core.request.arg.d=twice_as_big"
+      ],
+      "reply": "Here you go! I made the house bigger.",
+      "new_status": "needs_review"
+     },
+     {
+      "world": "art.draw",
+      "text": "grow the house",
+      "own_slots": [
+       "core.request.arg.t=the house",
+       "core.request.arg.d=bigger"
+      ],
+      "reply": "Here you go! I made the house bigger.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "art.draw",
+      "text": "increase the house size a bit",
+      "own_slots": [
+       "core.request.arg.t=the house size",
+       "core.request.arg.amt=a_bit",
+       "core.request.arg.d=bigger"
+      ],
+      "reply": "Here you go! I made the house bigger.",
+      "new_status": "needs_review"
+     },
+     {
+      "world": "art.draw",
+      "text": "shrink the house to tiny",
+      "own_slots": [
+       "core.request.arg.t=the house to tiny",
+       "core.request.arg.d=smaller"
+      ],
+      "reply": "Here you go! I made the house smaller.",
+      "new_status": "needs_review"
+     },
+     {
+      "world": "art.draw",
+      "text": "car around pls",
+      "own_slots": [
+       "core.request.arg.verb=flip",
+       "core.request.arg.phrase=the car around"
+      ],
+      "reply": "Here you go! I turned the car around.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "art.draw",
+      "text": "rotate the car 45 degrees",
+      "own_slots": [
+       "core.request.arg.verb=flip",
+       "core.request.arg.phrase=the car 45 degrees"
+      ],
+      "reply": "Here you go! I turned the car 45 degrees.",
+      "new_status": "needs_review"
+     },
+     {
+      "world": "art.draw",
+      "text": "spin the car round",
+      "own_slots": [
+       "core.request.arg.verb=flip",
+       "core.request.arg.phrase=the car round"
+      ],
+      "reply": "Here you go! I turned the car around.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "art.draw",
+      "text": "mirror the car",
+      "own_slots": [
+       "core.request.arg.verb=flip",
+       "core.request.arg.phrase=the car"
+      ],
+      "reply": "Here you go! I turned the car around.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "art.draw",
+      "text": "the car should look the other way",
+      "own_slots": [
+       "core.request.arg.verb=flip",
+       "core.request.arg.phrase=the car the other way"
+      ],
+      "reply": "Here you go! I turned the car around.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "art.draw",
+      "text": "tilt the car a little",
+      "own_slots": [
+       "core.request.arg.verb=flip",
+       "core.request.arg.phrase=the car a little"
+      ],
+      "reply": "Here you go! I turned the car around.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "art.draw",
+      "text": "sun twice the size pls",
+      "own_slots": [
+       "core.request.arg.t=the sun",
+       "core.request.arg.d=twice_the_size"
+      ],
+      "reply": "Here you go! I made the sun bigger.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "art.draw",
+      "text": "enlarge it a lot",
+      "own_slots": [
+       "core.request.arg.t=it",
+       "core.request.arg.amt=a_lot",
+       "core.request.arg.d=bigger"
+      ],
+      "reply": "Here you go! I made the sun bigger.",
+      "new_status": "needs_review"
+     },
+     {
+      "world": "art.draw",
+      "text": "grow the sun by a bit",
+      "own_slots": [
+       "core.request.arg.t=the sun by",
+       "core.request.arg.amt=a_bit",
+       "core.request.arg.d=bigger"
+      ],
+      "reply": "Here you go! I made the sun bigger.",
+      "new_status": "needs_review"
+     },
+     {
+      "world": "art.draw",
+      "text": "top right corner for it please",
+      "own_slots": [
+       "core.request.arg.phrase=it on the top right"
+      ],
+      "reply": "Here you go! I moved the sun right.",
+      "new_status": "rules-differ"
+     },
+     {
+      "world": "art.draw",
+      "text": "left side for the house please",
+      "own_slots": [
+       "core.request.arg.phrase=the house on the left"
+      ],
+      "reply": "Here you go! I moved the house on the left.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "data.charts",
+      "text": "chart apples five pears three plums eight",
+      "own_slots": [
+       "core.request.arg.text=apples five pears three plums eight"
+      ],
+      "reply": "OK, here is a bar chart with 3 items: apples 5, pears 3 and plums 8.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "data.charts",
+      "text": "two of this chart please",
+      "own_slots": [],
+      "reply": "OK, I made a copy called \"Chart 1 copy\". You can change it without touching the ",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "data.charts",
+      "text": "apples plus 2",
+      "own_slots": [
+       "core.request.arg.l=apples",
+       "core.request.arg.by=2",
+       "core.request.arg.dir=up"
+      ],
+      "reply": "OK, apples went from 5 to 7.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "data.charts",
+      "text": "add 2 to the apples",
+      "own_slots": [
+       "core.request.arg.l=apples",
+       "core.request.arg.by=2",
+       "core.request.arg.dir=up"
+      ],
+      "reply": "OK, apples went from 5 to 7.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "data.charts",
+      "text": "more apples, 2 more",
+      "own_slots": [
+       "core.request.arg.l=apples",
+       "core.request.arg.by=2",
+       "core.request.arg.dir=up"
+      ],
+      "reply": "OK, apples went from 5 to 7.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "data.charts",
+      "text": "raise apples by two",
+      "own_slots": [
+       "core.request.arg.l=apples",
+       "core.request.arg.by=2",
+       "core.request.arg.dir=up"
+      ],
+      "reply": "OK, apples went from 5 to 7.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "data.charts",
+      "text": "give apples 2 more",
+      "own_slots": [
+       "core.request.arg.l=apples",
+       "core.request.arg.by=2",
+       "core.request.arg.dir=up"
+      ],
+      "reply": "OK, apples went from 5 to 7.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "data.charts",
+      "text": "can you increase the apples by 2",
+      "own_slots": [
+       "core.request.arg.l=apples",
+       "core.request.arg.by=2",
+       "core.request.arg.dir=up"
+      ],
+      "reply": "OK, apples went from 5 to 7.",
+      "new_status": "rules-agree"
+     }
+    ],
+    "inherited_ok": [
+     {
+      "world": "art.draw",
+      "text": "red house pls",
+      "canonical": "Draw a red house.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "art.draw",
+      "text": "can u draw a little red house",
+      "canonical": "Draw a red house.",
+      "new_status": "rules-own"
+     },
+     {
+      "world": "art.draw",
+      "text": "grass pls",
+      "canonical": "Add grass.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "art.draw",
+      "text": "a bit of grass would be nice",
+      "canonical": "Add grass.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "art.draw",
+      "text": "surprise me with a picture",
+      "canonical": "Draw something.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "art.draw",
+      "text": "sketch anything you like",
+      "canonical": "Draw something.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "art.draw",
+      "text": "night time pls",
+      "canonical": "Make it night.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "art.draw",
+      "text": "let it be night already",
+      "canonical": "Make it night.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "art.draw",
+      "text": "house should be blue pls",
+      "canonical": "Paint the house blue.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "art.draw",
+      "text": "house gets a blue door",
+      "canonical": "Give the house a blue door.",
+      "new_status": "rules-agree"
+     }
+    ]
+   }
+  },
+  "heldout": {
+   "variants": 2100,
+   "old_inherited_targets": 1104,
+   "labelling_errors": 267,
+   "labelling_errors_where_rules_own_reading_was_right": 98,
+   "labelling_errors_with_number_conflict": 16,
+   "parser_errors_unfaithful_reading": 207,
+   "parser_errors_number_dropped_or_changed": 20,
+   "parser_gaps": 129,
+   "new_label_reasons": {
+    "rules-own:own-values-in-text": 115,
+    "rules-fail:unparsed": 28,
+    "needs_review:partial-parse-other-values": 7,
+    "needs_review:parser-error-other-values": 11,
+    "needs_review:unparsed-other-values": 12,
+    "rules-fail:canonical-failed": 16,
+    "rules-unverified:canonical-failed": 24,
+    "rules-fail:partial-parse": 2,
+    "rules-differ:parser-error": 2
+   },
+   "transition_matrix": {
+    "rules-agree -> needs_review": 2,
+    "rules-agree -> rules-agree": 932,
+    "rules-agree -> rules-own": 12,
+    "rules-differ -> needs_review": 10,
+    "rules-differ -> rules-agree": 218,
+    "rules-differ -> rules-differ": 2,
+    "rules-differ -> rules-fail": 2,
+    "rules-differ -> rules-own": 64,
+    "rules-fail -> needs_review": 18,
+    "rules-fail -> rules-agree": 733,
+    "rules-fail -> rules-fail": 44,
+    "rules-fail -> rules-own": 39,
+    "rules-fail -> rules-unverified": 20,
+    "rules-unverified -> rules-unverified": 4
+   },
+   "per_world": {
+    "art.draw": {
+     "variants": 100,
+     "old": {
+      "rules-agree": 32,
+      "rules-fail": 48,
+      "rules-differ": 20
+     },
+     "new": {
+      "rules-agree": 83,
+      "rules-own": 11,
+      "rules-fail": 1,
+      "needs_review": 5
+     },
+     "old_inherited": 68,
+     "labelling_errors": 21,
+     "parser_errors": 8,
+     "parser_errors_number": 1,
+     "parser_gaps": 6,
+     "old_target_wrong_but_own_ok": 11,
+     "number_conflicts": 1
+    },
+    "data.charts": {
+     "variants": 100,
+     "old": {
+      "rules-agree": 41,
+      "rules-differ": 31,
+      "rules-fail": 28
+     },
+     "new": {
+      "rules-agree": 87,
+      "rules-own": 13
+     },
+     "old_inherited": 59,
+     "labelling_errors": 24,
+     "parser_errors": 12,
+     "parser_errors_number": 2,
+     "parser_gaps": 0,
+     "old_target_wrong_but_own_ok": 14,
+     "number_conflicts": 1
+    },
+    "docs.editor": {
+     "variants": 100,
+     "old": {
+      "rules-agree": 29,
+      "rules-fail": 47,
+      "rules-differ": 24
+     },
+     "new": {
+      "rules-agree": 92,
+      "rules-own": 7,
+      "needs_review": 1
+     },
+     "old_inherited": 71,
+     "labelling_errors": 35,
+     "parser_errors": 28,
+     "parser_errors_number": 6,
+     "parser_gaps": 0,
+     "old_target_wrong_but_own_ok": 10,
+     "number_conflicts": 6
+    },
+    "docs.reader": {
+     "variants": 200,
+     "old": {
+      "rules-agree": 39,
+      "rules-fail": 136,
+      "rules-unverified": 4,
+      "rules-differ": 21
+     },
+     "new": {
+      "rules-agree": 141,
+      "rules-fail": 31,
+      "rules-unverified": 24,
+      "rules-own": 4
+     },
+     "old_inherited": 111,
+     "labelling_errors": 6,
+     "parser_errors": 8,
+     "parser_errors_number": 0,
+     "parser_gaps": 32,
+     "old_target_wrong_but_own_ok": 0,
+     "number_conflicts": 0
+    },
+    "games.chess": {
+     "variants": 100,
+     "old": {
+      "rules-agree": 50,
+      "rules-fail": 35,
+      "rules-differ": 15
+     },
+     "new": {
+      "rules-agree": 96,
+      "rules-own": 4
+     },
+     "old_inherited": 50,
+     "labelling_errors": 11,
+     "parser_errors": 16,
+     "parser_errors_number": 1,
+     "parser_gaps": 0,
+     "old_target_wrong_but_own_ok": 2,
+     "number_conflicts": 1
+    },
+    "games.guess": {
+     "variants": 100,
+     "old": {
+      "rules-agree": 77,
+      "rules-fail": 15,
+      "rules-differ": 8
+     },
+     "new": {
+      "rules-agree": 98,
+      "needs_review": 2
+     },
+     "old_inherited": 23,
+     "labelling_errors": 9,
+     "parser_errors": 28,
+     "parser_errors_number": 2,
+     "parser_gaps": 0,
+     "old_target_wrong_but_own_ok": 3,
+     "number_conflicts": 0
+    },
+    "games.hangman": {
+     "variants": 100,
+     "old": {
+      "rules-agree": 62,
+      "rules-fail": 26,
+      "rules-differ": 12
+     },
+     "new": {
+      "rules-agree": 99,
+      "rules-own": 1
+     },
+     "old_inherited": 38,
+     "labelling_errors": 2,
+     "parser_errors": 2,
+     "parser_errors_number": 1,
+     "parser_gaps": 1,
+     "old_target_wrong_but_own_ok": 0,
+     "number_conflicts": 1
+    },
+    "games.tictactoe": {
+     "variants": 100,
+     "old": {
+      "rules-agree": 53,
+      "rules-fail": 30,
+      "rules-differ": 17
+     },
+     "new": {
+      "rules-agree": 80,
+      "needs_review": 15,
+      "rules-own": 5
+     },
+     "old_inherited": 47,
+     "labelling_errors": 19,
+     "parser_errors": 6,
+     "parser_errors_number": 0,
+     "parser_gaps": 11,
+     "old_target_wrong_but_own_ok": 4,
+     "number_conflicts": 0
+    },
+    "geo.map": {
+     "variants": 100,
+     "old": {
+      "rules-agree": 42,
+      "rules-differ": 10,
+      "rules-fail": 48
+     },
+     "new": {
+      "rules-agree": 96,
+      "rules-own": 4
+     },
+     "old_inherited": 58,
+     "labelling_errors": 5,
+     "parser_errors": 3,
+     "parser_errors_number": 0,
+     "parser_gaps": 0,
+     "old_target_wrong_but_own_ok": 2,
+     "number_conflicts": 0
+    },
+    "kids.animals": {
+     "variants": 100,
+     "old": {
+      "rules-agree": 42,
+      "rules-fail": 46,
+      "rules-differ": 12
+     },
+     "new": {
+      "rules-agree": 98,
+      "rules-own": 1,
+      "needs_review": 1
+     },
+     "old_inherited": 58,
+     "labelling_errors": 24,
+     "parser_errors": 17,
+     "parser_errors_number": 0,
+     "parser_gaps": 20,
+     "old_target_wrong_but_own_ok": 1,
+     "number_conflicts": 0
+    },
+    "kids.arith": {
+     "variants": 100,
+     "old": {
+      "rules-agree": 50,
+      "rules-fail": 43,
+      "rules-differ": 7
+     },
+     "new": {
+      "rules-agree": 95,
+      "rules-own": 1,
+      "rules-fail": 3,
+      "needs_review": 1
+     },
+     "old_inherited": 50,
+     "labelling_errors": 5,
+     "parser_errors": 4,
+     "parser_errors_number": 1,
+     "parser_gaps": 14,
+     "old_target_wrong_but_own_ok": 2,
+     "number_conflicts": 0
+    },
+    "kids.common": {
+     "variants": 100,
+     "old": {
+      "rules-agree": 52,
+      "rules-fail": 40,
+      "rules-differ": 8
+     },
+     "new": {
+      "rules-agree": 92,
+      "rules-fail": 4,
+      "rules-own": 4
+     },
+     "old_inherited": 48,
+     "labelling_errors": 0,
+     "parser_errors": 0,
+     "parser_errors_number": 0,
+     "parser_gaps": 4,
+     "old_target_wrong_but_own_ok": 0,
+     "number_conflicts": 0
+    },
+    "kids.shapes": {
+     "variants": 100,
+     "old": {
+      "rules-agree": 69,
+      "rules-fail": 29,
+      "rules-differ": 2
+     },
+     "new": {
+      "rules-agree": 100
+     },
+     "old_inherited": 31,
+     "labelling_errors": 1,
+     "parser_errors": 3,
+     "parser_errors_number": 0,
+     "parser_gaps": 0,
+     "old_target_wrong_but_own_ok": 0,
+     "number_conflicts": 0
+    },
+    "kids.shop": {
+     "variants": 100,
+     "old": {
+      "rules-agree": 57,
+      "rules-fail": 36,
+      "rules-differ": 7
+     },
+     "new": {
+      "rules-agree": 97,
+      "needs_review": 2,
+      "rules-fail": 1
+     },
+     "old_inherited": 43,
+     "labelling_errors": 14,
+     "parser_errors": 1,
+     "parser_errors_number": 1,
+     "parser_gaps": 32,
+     "old_target_wrong_but_own_ok": 0,
+     "number_conflicts": 2
+    },
+    "kids.tasks": {
+     "variants": 100,
+     "old": {
+      "rules-agree": 40,
+      "rules-differ": 27,
+      "rules-fail": 33
+     },
+     "new": {
+      "rules-agree": 74,
+      "rules-own": 25,
+      "needs_review": 1
+     },
+     "old_inherited": 60,
+     "labelling_errors": 33,
+     "parser_errors": 8,
+     "parser_errors_number": 0,
+     "parser_gaps": 0,
+     "old_target_wrong_but_own_ok": 32,
+     "number_conflicts": 0
+    },
+    "kids.time": {
+     "variants": 100,
+     "old": {
+      "rules-agree": 69,
+      "rules-fail": 30,
+      "rules-differ": 1
+     },
+     "new": {
+      "rules-agree": 94,
+      "rules-fail": 3,
+      "rules-own": 1,
+      "rules-differ": 1,
+      "needs_review": 1
+     },
+     "old_inherited": 31,
+     "labelling_errors": 7,
+     "parser_errors": 15,
+     "parser_errors_number": 2,
+     "parser_gaps": 4,
+     "old_target_wrong_but_own_ok": 1,
+     "number_conflicts": 1
+    },
+    "media.music": {
+     "variants": 100,
+     "old": {
+      "rules-agree": 31,
+      "rules-fail": 42,
+      "rules-differ": 27
+     },
+     "new": {
+      "rules-agree": 89,
+      "rules-own": 9,
+      "needs_review": 1,
+      "rules-fail": 1
+     },
+     "old_inherited": 69,
+     "labelling_errors": 29,
+     "parser_errors": 19,
+     "parser_errors_number": 1,
+     "parser_gaps": 1,
+     "old_target_wrong_but_own_ok": 15,
+     "number_conflicts": 1
+    },
+    "ui.avatar": {
+     "variants": 100,
+     "old": {
+      "rules-agree": 41,
+      "rules-fail": 45,
+      "rules-differ": 14
+     },
+     "new": {
+      "rules-agree": 91,
+      "rules-own": 9
+     },
+     "old_inherited": 59,
+     "labelling_errors": 7,
+     "parser_errors": 7,
+     "parser_errors_number": 0,
+     "parser_gaps": 0,
+     "old_target_wrong_but_own_ok": 0,
+     "number_conflicts": 0
+    },
+    "ui.help": {
+     "variants": 100,
+     "old": {
+      "rules-agree": 24,
+      "rules-fail": 61,
+      "rules-differ": 15
+     },
+     "new": {
+      "rules-agree": 89,
+      "rules-own": 11
+     },
+     "old_inherited": 76,
+     "labelling_errors": 1,
+     "parser_errors": 0,
+     "parser_errors_number": 0,
+     "parser_gaps": 2,
+     "old_target_wrong_but_own_ok": 1,
+     "number_conflicts": 0
+    },
+    "ui.shell": {
+     "variants": 100,
+     "old": {
+      "rules-agree": 46,
+      "rules-fail": 36,
+      "rules-differ": 18
+     },
+     "new": {
+      "rules-agree": 92,
+      "rules-own": 5,
+      "rules-fail": 2,
+      "rules-differ": 1
+     },
+     "old_inherited": 54,
+     "labelling_errors": 14,
+     "parser_errors": 22,
+     "parser_errors_number": 2,
+     "parser_gaps": 2,
+     "old_target_wrong_but_own_ok": 0,
+     "number_conflicts": 2
+    }
+   },
+   "examples": {
+    "labelling_error": [
+     {
+      "world": "art.draw",
+      "text": "color the top of the house green",
+      "old_target_from": "canonical",
+      "canonical": "Make the roof green.",
+      "old_status": "rules-differ",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "tree too big, make it small",
+      "old_target_from": "canonical",
+      "canonical": "Make the tree smaller.",
+      "old_status": "rules-differ",
+      "new_status": "needs_review",
+      "own_reading_faithful": null
+     },
+     {
+      "world": "art.draw",
+      "text": "make it much smaller",
+      "old_target_from": "canonical",
+      "canonical": "Make the tree smaller.",
+      "old_status": "rules-differ",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "tiny tree please",
+      "old_target_from": "canonical",
+      "canonical": "Make the tree smaller.",
+      "old_status": "rules-fail",
+      "new_status": "needs_review",
+      "own_reading_faithful": false
+     },
+     {
+      "world": "art.draw",
+      "text": "the tree is huge, shrink it",
+      "old_target_from": "canonical",
+      "canonical": "Make the tree smaller.",
+      "old_status": "rules-differ",
+      "new_status": "needs_review",
+      "own_reading_faithful": null
+     },
+     {
+      "world": "art.draw",
+      "text": "can you make that tree littler",
+      "old_target_from": "canonical",
+      "canonical": "Make the tree smaller.",
+      "old_status": "rules-fail",
+      "new_status": "rules-agree",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "dog the other way",
+      "old_target_from": "canonical",
+      "canonical": "Flip the dog.",
+      "old_status": "rules-fail",
+      "new_status": "rules-agree",
+      "own_reading_faithful": false
+     },
+     {
+      "world": "art.draw",
+      "text": "dog facing backwards",
+      "old_target_from": "canonical",
+      "canonical": "Flip the dog.",
+      "old_status": "rules-fail",
+      "new_status": "rules-agree",
+      "own_reading_faithful": false
+     },
+     {
+      "world": "art.draw",
+      "text": "can u flip him",
+      "old_target_from": "canonical",
+      "canonical": "Flip the dog.",
+      "old_status": "rules-fail",
+      "new_status": "rules-agree",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "reverse the dog",
+      "old_target_from": "canonical",
+      "canonical": "Flip the dog.",
+      "old_status": "rules-fail",
+      "new_status": "rules-agree",
+      "own_reading_faithful": false
+     },
+     {
+      "world": "art.draw",
+      "text": "turn doggo over",
+      "old_target_from": "canonical",
+      "canonical": "Flip the dog.",
+      "old_status": "rules-differ",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "cat between the two trees",
+      "old_target_from": "canonical",
+      "canonical": "Put the cat between the trees.",
+      "old_status": "rules-fail",
+      "new_status": "rules-agree",
+      "own_reading_faithful": false
+     },
+     {
+      "world": "art.draw",
+      "text": "cat in the middle of the trees",
+      "old_target_from": "canonical",
+      "canonical": "Put the cat between the trees.",
+      "old_status": "rules-fail",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "put cat betwen the trees",
+      "old_target_from": "canonical",
+      "canonical": "Put the cat between the trees.",
+      "old_status": "rules-differ",
+      "new_status": "rules-own",
+      "own_reading_faithful": null
+     },
+     {
+      "world": "art.draw",
+      "text": "solid heart",
+      "old_target_from": "canonical",
+      "canonical": "Fill the heart with solid color.",
+      "old_status": "rules-fail",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "make the heart solid",
+      "old_target_from": "canonical",
+      "canonical": "Fill the heart with solid color.",
+      "old_status": "rules-differ",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "heart solid color pls",
+      "old_target_from": "canonical",
+      "canonical": "Fill the heart with solid color.",
+      "old_status": "rules-fail",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "fill heart solid",
+      "old_target_from": "canonical",
+      "canonical": "Fill the heart with solid color.",
+      "old_status": "rules-differ",
+      "new_status": "rules-own",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "art.draw",
+      "text": "no outline, solid heart",
+      "old_target_from": "canonical",
+      "canonical": "Fill the heart with solid color.",
+      "old_status": "rules-fail",
+      "new_status": "needs_review",
+      "own_reading_faithful": null
+     },
+     {
+      "world": "art.draw",
+      "text": "solid fill for the heart",
+      "old_target_from": "canonical",
+      "canonical": "Fill the heart with solid color.",
+      "old_status": "rules-fail",
+      "new_status": "needs_review",
+      "own_reading_faithful": null
+     },
+     {
+      "world": "art.draw",
+      "text": "can u fill the heart all the way",
+      "old_target_from": "canonical",
+      "canonical": "Fill the heart with solid color.",
+      "old_status": "rules-fail",
+      "new_status": "rules-agree",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "data.charts",
+      "text": "chart bikes 4 scooters 9 kites 2",
+      "old_target_from": "canonical",
+      "canonical": "Make a chart: bikes 4, scooters 9, kites 2.",
+      "old_status": "rules-differ",
+      "new_status": "rules-agree",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "data.charts",
+      "text": "bikes 4 scooters 9 kites 2 as a graph",
+      "old_target_from": "canonical",
+      "canonical": "Make a chart: bikes 4, scooters 9, kites 2.",
+      "old_status": "rules-differ",
+      "new_status": "rules-agree",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "data.charts",
+      "text": "can you chart bikes 4 scooters 9 and kites 2",
+      "old_target_from": "canonical",
+      "canonical": "Make a chart: bikes 4, scooters 9, kites 2.",
+      "old_status": "rules-differ",
+      "new_status": "rules-agree",
+      "own_reading_faithful": true
+     },
+     {
+      "world": "data.charts",
+      "text": "bikes four scooters nine kites two chart",
+      "old_target_from": "canonical",
+      "canonical": "Make a chart: bikes 4, scooters 9, kites 2.",
+      "old_status": "rules-differ",
+      "new_status": "rules-agree",
+      "own_reading_faithful": false
+     }
+    ],
+    "parser_error": [
+     {
+      "world": "art.draw",
+      "text": "shrink the tree",
+      "own_slots": [
+       "core.request.arg.t=the tree",
+       "core.request.arg.d=smaller"
+      ],
+      "reply": "Here you go! I made the tree smaller.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "art.draw",
+      "text": "tiny tree please",
+      "own_slots": [
+       "core.request.arg.text=tiny three"
+      ],
+      "reply": "There is no chart yet. Say, for example: \"make a chart: apples 5, pears 3, plums",
+      "new_status": "needs_review"
+     },
+     {
+      "world": "art.draw",
+      "text": "reduce the tree size",
+      "own_slots": [
+       "core.request.arg.t=the tree size",
+       "core.request.arg.d=smaller"
+      ],
+      "reply": "Here you go! I made the tree smaller.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "art.draw",
+      "text": "dog the other way",
+      "own_slots": [
+       "core.request.arg.verb=flip",
+       "core.request.arg.phrase=the dog the other way"
+      ],
+      "reply": "Here you go! I turned the dog around.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "art.draw",
+      "text": "mirror the dog",
+      "own_slots": [
+       "core.request.arg.verb=flip",
+       "core.request.arg.phrase=the dog"
+      ],
+      "reply": "Here you go! I turned the dog around.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "art.draw",
+      "text": "dog facing backwards",
+      "own_slots": [
+       "core.request.arg.verb=flip",
+       "core.request.arg.phrase=the dog facing backwards"
+      ],
+      "reply": "Here you go! I turned the dog around.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "art.draw",
+      "text": "reverse the dog",
+      "own_slots": [
+       "core.request.arg.verb=flip",
+       "core.request.arg.phrase=the dog"
+      ],
+      "reply": "Here you go! I turned the dog around.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "art.draw",
+      "text": "cat between the two trees",
+      "own_slots": [
+       "core.request.arg.phrase=the cat between the two trees"
+      ],
+      "reply": "There! I moved the cat between the green tree and the green tree.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "data.charts",
+      "text": "bikes four scooters nine kites two chart",
+      "own_slots": [
+       "core.request.arg.text=bikes four scooters nine kites two"
+      ],
+      "reply": "OK, here is a bar chart with 3 items: bikes 4, scooters 9 and kites 2.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "data.charts",
+      "text": "show each kids fruit as slices",
+      "own_slots": [
+       "core.request.arg.who=everyone"
+      ],
+      "reply": "OK, here is a pie chart of what everyone has with 2 items. It is open in the Cha",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "data.charts",
+      "text": "halve the plums",
+      "own_slots": [
+       "core.request.arg.l=plums",
+       "core.request.arg.factor=0.5"
+      ],
+      "reply": "OK, plums went from 8 to 4.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "data.charts",
+      "text": "plums in half",
+      "own_slots": [
+       "core.request.arg.l=plums",
+       "core.request.arg.factor=0.5"
+      ],
+      "reply": "OK, plums went from 8 to 4.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "data.charts",
+      "text": "cut the plums by half",
+      "own_slots": [
+       "core.request.arg.l=plums",
+       "core.request.arg.factor=0.5"
+      ],
+      "reply": "OK, plums went from 8 to 4.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "data.charts",
+      "text": "plums half",
+      "own_slots": [
+       "core.request.arg.l=plums",
+       "core.request.arg.factor=0.5"
+      ],
+      "reply": "OK, plums went from 8 to 4.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "data.charts",
+      "text": "make plums half of what it is",
+      "own_slots": [
+       "core.request.arg.l=plums",
+       "core.request.arg.factor=0.5"
+      ],
+      "reply": "OK, plums went from 8 to 4.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "data.charts",
+      "text": "divide plums by two",
+      "own_slots": [
+       "core.request.arg.l=plums",
+       "core.request.arg.factor=0.5"
+      ],
+      "reply": "OK, plums went from 8 to 4.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "data.charts",
+      "text": "halve plums pls",
+      "own_slots": [
+       "core.request.arg.l=plums",
+       "core.request.arg.factor=0.5"
+      ],
+      "reply": "OK, plums went from 8 to 4.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "data.charts",
+      "text": "plums to half",
+      "own_slots": [
+       "core.request.arg.l=plums",
+       "core.request.arg.factor=0.5"
+      ],
+      "reply": "OK, plums went from 8 to 4.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "data.charts",
+      "text": "can u halve the plums",
+      "own_slots": [
+       "core.request.arg.l=plums",
+       "core.request.arg.factor=0.5"
+      ],
+      "reply": "OK, plums went from 8 to 4.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "data.charts",
+      "text": "half the plums number",
+      "own_slots": [
+       "core.request.arg.l=plums",
+       "core.request.arg.factor=0.5"
+      ],
+      "reply": "OK, plums went from 8 to 4.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "docs.editor",
+      "text": "second para bold pls",
+      "own_slots": [
+       "core.request.arg.t=the second paragraph",
+       "core.request.arg.mark=bold"
+      ],
+      "reply": "OK, the second paragraph is now bold.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "docs.editor",
+      "text": "make para 2 bold please",
+      "own_slots": [
+       "core.request.arg.t=the second paragraph",
+       "core.request.arg.mark=bold"
+      ],
+      "reply": "OK, the second paragraph is now bold.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "docs.editor",
+      "text": "hey make the second one bold",
+      "own_slots": [
+       "core.request.arg.t=the second paragraph",
+       "core.request.arg.mark=bold"
+      ],
+      "reply": "OK, the second paragraph is now bold.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "docs.editor",
+      "text": "milk green highlight",
+      "own_slots": [
+       "core.request.arg.t=the word milk",
+       "core.request.arg.mark=highlight",
+       "core.request.arg.color=green"
+      ],
+      "reply": "OK, the word \"milk\" is now highlighted in green.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "docs.editor",
+      "text": "green highlight on milk",
+      "own_slots": [
+       "core.request.arg.t=the word milk",
+       "core.request.arg.mark=highlight",
+       "core.request.arg.color=green"
+      ],
+      "reply": "OK, the word \"milk\" is now highlighted in green.",
+      "new_status": "rules-agree"
+     }
+    ],
+    "inherited_ok": [
+     {
+      "world": "art.draw",
+      "text": "5 stars pls",
+      "canonical": "Add 5 stars.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "art.draw",
+      "text": "more stars, like 5",
+      "canonical": "Add 5 stars.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "art.draw",
+      "text": "stars x5",
+      "canonical": "Add 5 stars.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "art.draw",
+      "text": "i want 5 stars added",
+      "canonical": "Add 5 stars.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "art.draw",
+      "text": "put 5 stars in the sky",
+      "canonical": "Add 5 stars.",
+      "new_status": "rules-own"
+     },
+     {
+      "world": "art.draw",
+      "text": "5 stars",
+      "canonical": "Add 5 stars.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "art.draw",
+      "text": "sand on the ground",
+      "canonical": "Add some sand to the ground.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "art.draw",
+      "text": "put sand down",
+      "canonical": "Add some sand to the ground.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "art.draw",
+      "text": "ground should be sand",
+      "canonical": "Add some sand to the ground.",
+      "new_status": "rules-agree"
+     },
+     {
+      "world": "art.draw",
+      "text": "can you make the floor sandy",
+      "canonical": "Add some sand to the ground.",
+      "new_status": "rules-agree"
+     }
+    ]
+   }
+  }
+ },
+ "notes": "old = canonical target copied onto variants; new = F1 labelling (own reading when faithful, inherit only when values match)"
+}

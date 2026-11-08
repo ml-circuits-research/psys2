@@ -400,3 +400,69 @@ Same data, seeds, heads and validation. ModernBERT-base full fine-tune (149 M pa
 | DistilBERT | 92.4 / 98.3 | 94.1 / 98.9 | 0.9874 | 68.5 / 22.8 / 8.7 | 69.1 | 78.5 |
 | ModernBERT full | 91.8 / 98.0 | 94.1 / 98.3 | 0.9916 | 68.1 / 22.9 / 8.9 | 68.7 | 78.3 |
 
+
+## F1 - paraphrase labels keep each variant's own parameters (review F1)
+
+**Problem.** `labelVariant` copied the canonical's target onto every variant that the rules read differently or not at all, so a variant with other values got the canonical's values ("a key with 4 sharps?" was labelled `n=3, acc=flat`). **Fix** (spec 10 section 3): the operation family (goal, used for splits) is separated from the semantic instance (`instance_id`); a variant that the rules parse completely and whose slot values all occur in its text (and whose numbers are all used) is labelled with the rules' own SOP (`rules-own`); the canonical's target is inherited (`rules-differ` / `rules-fail`) only when the canonical's values match the variant's text; everything else is `needs_review` (no target, out of training, `label_reason` says why). Code: `scripts/collect-paraphrases.mjs` (`labelVariant`, `slotsOf`, `slotsFaithful`, `valuesMatch`). Audit: `scripts/audit-f1-labels.mjs` -> `training/results/f1-label-audit.json`. Tests: `tests/paraphrases.test.mjs` (the three music examples, minimal pairs with one changed argument for the time, shapes, shop, map, arithmetic and music families, and unit cases).
+
+**Audit of the committed labels (old policy), train / held-out.**
+
+| | train (7500 variants) | held-out (2100 variants) |
+| --- | ---: | ---: |
+| old targets copied from the canonical (`target_from=canonical`) | 2298 | 1104 |
+| of which the canonical's values do not match the variant's text (**labelling errors**: wrong or unverifiable) | 801 (35%) | 267 (24%) |
+| of those, the rules' current own reading is faithful to the text (**certainly wrong labels**) | 577 | 98 |
+| of those, a number of the variant is missing from the canonical's values | 88 | 16 |
+| variants the rules parse completely but read unfaithfully (**parser errors or lexicon normalizations**: "grow" -> `d=bigger` is counted too) | 430 | 207 |
+| of those, a number of the text is dropped or changed (**real parser errors**, e.g. "rotate the car 45 degrees" -> flip) | 33 | 20 |
+| variants the rules do not parse at all (**parser gaps**) | 357 | 129 |
+
+Labelling errors are mostly tasks whose variants change the parameters (canonical "Draw a red house." with variants "draw me 3 trees", "a tiny green tree"): they are different instances, now `rules-own`. Parser errors are a small share (33+20 real number errors; the rest are mostly normalizations the faithfulness check cannot see and go to `needs_review` only when the canonical does not match either). The "before" figures below are the committed outputs, produced with older rules, so the shift mixes the new labelling with rule progress since those outputs (the old `rules-fail` rows that now parse become `rules-agree`).
+
+**Counts per label status, before -> after (variants only; agree / own / differ / fail / unverified / needs_review; `trainable` = no review flag and a target).** T = `training/paraphrases/out`, H = `heldout/out` (both rerun, including the new `*.h5.json` and `docs.editor.h7.json` batches).
+
+| set world | variants | before agree/own/differ/fail/unverified/needs_review | after (same order) |
+| --- | ---: | --- | --- |
+| H art.draw | 100 | 32/0/20/48/0/0 (trainable 100) | 83/11/0/1/0/5 (trainable 95) |
+| H data.charts | 100 | 41/0/31/28/0/0 (trainable 100) | 87/13/0/0/0/0 (trainable 100) |
+| H docs.editor | 100 | 29/0/24/47/0/0 (trainable 100) | 92/7/0/0/0/1 (trainable 99) |
+| H docs.reader | 200 | 39/0/21/136/4/0 (trainable 150) | 141/4/0/31/24/0 (trainable 160) |
+| H games.chess | 100 | 50/0/15/35/0/0 (trainable 100) | 96/4/0/0/0/0 (trainable 100) |
+| H games.guess | 100 | 77/0/8/15/0/0 (trainable 100) | 98/0/0/0/0/2 (trainable 98) |
+| H games.hangman | 100 | 62/0/12/26/0/0 (trainable 100) | 99/1/0/0/0/0 (trainable 100) |
+| H games.tictactoe | 100 | 53/0/17/30/0/0 (trainable 100) | 80/5/0/0/0/15 (trainable 85) |
+| H geo.map | 100 | 42/0/10/48/0/0 (trainable 100) | 96/4/0/0/0/0 (trainable 100) |
+| H kids.animals | 100 | 42/0/12/46/0/0 (trainable 100) | 98/1/0/0/0/1 (trainable 99) |
+| H kids.arith | 100 | 50/0/7/43/0/0 (trainable 100) | 95/1/0/3/0/1 (trainable 99) |
+| H kids.common | 100 | 52/0/8/40/0/0 (trainable 100) | 92/4/0/4/0/0 (trainable 100) |
+| H kids.shapes | 100 | 69/0/2/29/0/0 (trainable 100) | 100/0/0/0/0/0 (trainable 100) |
+| H kids.shop | 100 | 57/0/7/36/0/0 (trainable 100) | 97/0/0/1/0/2 (trainable 98) |
+| H kids.tasks | 100 | 40/0/27/33/0/0 (trainable 100) | 74/25/0/0/0/1 (trainable 99) |
+| H kids.time | 100 | 69/0/1/30/0/0 (trainable 100) | 94/1/1/3/0/1 (trainable 99) |
+| H media.music | 100 | 31/0/27/42/0/0 (trainable 100) | 89/9/0/1/0/1 (trainable 99) |
+| H ui.avatar | 100 | 41/0/14/45/0/0 (trainable 100) | 91/9/0/0/0/0 (trainable 100) |
+| H ui.help | 100 | 24/0/15/61/0/0 (trainable 100) | 89/11/0/0/0/0 (trainable 100) |
+| H ui.shell | 100 | 46/0/18/36/0/0 (trainable 100) | 92/5/1/2/0/0 (trainable 100) |
+| T art.draw | 520 | 133/0/134/133/0/0 (trainable 400) | 341/159/1/6/5/8 (trainable 502) |
+| T data.charts | 520 | 175/0/122/103/0/0 (trainable 400) | 393/93/0/20/0/14 (trainable 506) |
+| T docs.editor | 720 | 151/0/196/253/0/0 (trainable 590) | 241/306/11/118/0/44 (trainable 666) |
+| T docs.reader | 120 | - | 65/18/0/37/0/0 (trainable 110) |
+| T games.chess | 420 | 241/0/40/19/0/0 (trainable 300) | 322/57/3/26/0/12 (trainable 408) |
+| T games.guess | 320 | 186/0/11/3/0/0 (trainable 200) | 264/32/1/17/0/6 (trainable 314) |
+| T games.hangman | 320 | 182/0/13/5/0/0 (trainable 200) | 276/26/2/16/0/0 (trainable 320) |
+| T games.tictactoe | 320 | 180/0/13/7/0/0 (trainable 200) | 283/25/0/10/0/2 (trainable 318) |
+| T geo.map | 520 | 114/0/92/194/0/0 (trainable 400) | 405/103/0/0/0/12 (trainable 508) |
+| T kids.animals | 320 | 156/0/8/36/0/0 (trainable 200) | 305/5/0/7/0/3 (trainable 317) |
+| T kids.arith | 320 | 158/0/5/37/0/0 (trainable 200) | 238/12/1/63/0/6 (trainable 314) |
+| T kids.common | 320 | 127/0/48/25/0/0 (trainable 200) | 248/67/0/5/0/0 (trainable 320) |
+| T kids.shapes | 320 | 141/0/9/50/0/0 (trainable 200) | 312/1/0/5/0/2 (trainable 318) |
+| T kids.shop | 320 | 150/0/13/37/0/0 (trainable 200) | 270/6/0/20/0/24 (trainable 296) |
+| T kids.tasks | 320 | 89/0/56/55/0/0 (trainable 200) | 206/75/3/18/0/18 (trainable 302) |
+| T kids.time | 320 | 171/0/5/24/0/0 (trainable 200) | 302/4/2/6/0/6 (trainable 314) |
+| T media.music | 520 | 169/0/195/36/0/0 (trainable 400) | 308/190/2/0/0/20 (trainable 500) |
+| T ui.avatar | 520 | 179/0/62/159/0/0 (trainable 400) | 291/116/9/81/0/23 (trainable 497) |
+| T ui.help | 120 | - | 90/17/0/13/0/0 (trainable 120) |
+| T ui.shell | 320 | 93/0/30/77/0/0 (trainable 200) | 213/58/0/40/0/9 (trainable 311) |
+| TOTAL | 9600 | 3741/0/1348/2107/4/0 (trainable 7140) | 7256/1485/37/554/29/239 (trainable 9291) |
+
+Commands to rebuild everything derived from these labels (not run here): `node scripts/export-training.mjs && node scripts/build-dataset.mjs`, then `node scripts/build-edit-tags.mjs` (usual options) and, once it exists (N1), `scripts/build-normalizer-pairs.mjs`, and re-run `node scripts/eval-rules.mjs --heldout` for the held-out rules metrics.

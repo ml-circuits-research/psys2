@@ -57,30 +57,121 @@ export function gradeOf(o) {
   return o.unparsed > 0 ? 'partial' : 'success';
 }
 
+// ---- review F1: a label must keep the variant's own parameters ---------------------------------------------------------
+const NUM_WORDS = Object.fromEntries('zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty'.split(' ').map((w, i) => [w, i]));
+Object.assign(NUM_WORDS, { thirty: 30, forty: 40, fifty: 50, sixty: 60, seventy: 70, eighty: 80, ninety: 90, hundred: 100, no: 0, none: 0, nothing: 0, once: 1, twice: 2, thrice: 3, first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6, seventh: 7, eighth: 8, ninth: 9, tenth: 10, dozen: 12 });
+const FUNCTION_WORDS = new Set(['the', 'a', 'an', 'of', 'to', 'it', 'its', 'this', 'that', 'them']);
+const STRUCTURAL =/(^|\.)(action|type|kind|op|via|source|seq|in|seek|mode)$/;
+// words that also have a non-numeric use ("no", "one of them", "second") count as numbers only when a slot needs them
+const WEAK_NUMBER_WORDS = new Set(['one', 'no', 'none', 'nothing', 'once', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth', 'dozen']);
+
+/** Numbers a text states firmly: digit tokens and cardinal number words other than the weak ones. */
+export function firmNumbersIn(text) {
+  const t = String(text).toLowerCase(), out = new Set();
+  for (const m of t.matchAll(/-?\d+(?:\.\d+)?/g)) out.add(Number(m[0]));
+  for (const m of t.matchAll(/[a-z]+/g)) if (Object.hasOwn(NUM_WORDS, m[0]) && !WEAK_NUMBER_WORDS.has(m[0])) out.add(NUM_WORDS[m[0]]);
+  return out;
+}
+const isNum = (v) => /^-?\d+(\.\d+)?$/.test(v);
+
+/** Numbers a text mentions: digit tokens and number words (no, none, zero, twice ... included). */
+export function numbersIn(text) {
+  const t = String(text).toLowerCase(), out = new Set();
+  for (const m of t.matchAll(/-?\d+(?:\.\d+)?/g)) out.add(Number(m[0]));
+  for (const m of t.matchAll(/[a-z]+/g)) if (Object.hasOwn(NUM_WORDS, m[0])) out.add(NUM_WORDS[m[0]]);
+  return out;
+}
+
+/** Slot values of a parsed outcome: [{key, value}] for the non-structural, non-reference entries of the (key-normalized) wires. */
+export function slotsOf(wires, legends) {
+  const slots = [];
+  for (const w of wires) {
+    if (w.type === 'core.agent') continue;
+    const n = legends ? legends.normalizeWire(w).wire : w;
+    for (const e of n.entries) {
+      if (IGNORED_KEYS.has(e.key) || STRUCTURAL.test(e.key)) continue;
+      if (e.value.kind === 'ref') { // entity references carry names ($e.tom); wire references are structure
+        if (String(e.value.v).startsWith('e.')) slots.push({ key: e.key, value: String(e.value.v).slice(2) });
+        continue;
+      }
+      slots.push({ key: e.key, value: String(e.value.v) });
+    }
+  }
+  return slots;
+}
+
+/** Does one slot value occur in the text (numbers as digits or words; words by substring or stem; multi-word values word by word)? */
+export function valueInText(value, text) {
+  const t = String(text).toLowerCase();
+  if (value === 'true' || value === 'false') return true; // flags are set by words the rules cannot be asked to echo
+  if (isNum(value)) return numbersIn(t).has(Number(value));
+  const v =value.replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase();
+  if (t.includes(v)) return true;
+  const words = v.split(/[\s_.\-:/]+/).filter((x) => x && !FUNCTION_WORDS.has(x));
+  const stem = (x) => x.replace(/ies$/, 'y').replace(/(es|s|ed|ing)$/, '');
+  return words.every((x) => (/^\d+$/.test(x) ? numbersIn(t).has(Number(x)) : t.includes(x) || (x.length > 3 && (t.includes(stem(x)) || (x.endsWith('y') && t.includes(x.slice(0, -1) + 'ies'))))));
+}
+
+/** { ok, missing[] }: every slot value occurs in the text (a missing "1" is the implicit quantity: "a ball"). */
+export function valuesInText(slots, text) {
+  const missing = (slots ?? []).filter((s) => s.value !== '1' && !valueInText(s.value, text)).map((s) => `${s.key}=${s.value}`);
+  return { ok: missing.length === 0, missing };
+}
+
+/** Every firm number of the text is held by some slot (in either direction of sign): a rewrite cannot drop or change a number. */
+export function numbersCovered(slots, text) {
+  const held = new Set();
+  for (const s of slots ?? []) for (const m of s.value.matchAll(/\d+(?:\.\d+)?/g)) held.add(Number(m[0]));
+  return [...firmNumbersIn(text)].every((n) => held.has(Math.abs(n)));
+}
+
+/** The slots are a faithful reading of the text: every value occurs in it and every number in it is used. */
+export const slotsFaithful = (slots, text) => valuesInText(slots, text).ok && numbersCovered(slots, text);
+
 /**
- * Label of a variant against its canonical outcome (spec 10 section 3). Outcomes: { matched, unparsed, sop: string[], state, effects }.
- * Returns { label_status, target_from, needs_review }.
+ * Does the canonical's instance carry the variant's values? Every canonical slot value occurs in the variant text and the variant
+ * mentions no number that the canonical's slots do not hold. Only then may a variant inherit the canonical's target.
+ */
+export function valuesMatch(canonical, variantText) {
+  if (!canonical?.slots || variantText == null) return false;
+  return slotsFaithful(canonical.slots, variantText);
+}
+
+/**
+ * Label of a variant against its canonical outcome (spec 10 section 3). Outcomes: { matched, unparsed, sop, state, effects, text, slots }.
+ * Returns { label_status, target_from, needs_review, label_reason }.
  *  - canonical failed: a parsed variant is `rules-unverified` (own reading, needs review); an unparsed one has no target.
- *  - variant unparsed: rules-fail, target = canonical (needs_review when the canonical is only partial).
- *  - same normalized SOP, or the same non-empty state diff or effects: rules-agree (target = own reading).
- *  - otherwise rules-differ, target = canonical.
+ *  - the rules parse the variant completely: same normalized SOP, or the same non-empty state diff or effects -> `rules-agree`
+ *    (own reading); otherwise, if every slot value occurs in the variant's text -> `rules-own` (own reading, review F1).
+ *  - the canonical's target is inherited (`rules-differ`, `rules-fail`) only when the canonical's values match the variant's text.
+ *  - anything else is `needs_review` (no target): the rules' own values are not in the text (parser error) and the canonical's
+ *    values do not match either, or the variant is unparsed and carries other values.
  */
 export function labelVariant(canonical, variant) {
   const grade = gradeOf(canonical);
   if (grade === 'fail') {
     return variant.matched
-      ? { label_status: 'rules-unverified', target_from: 'rules', needs_review: true }
-      : { label_status: 'rules-fail', target_from: null, needs_review: true };
+      ? { label_status: 'rules-unverified', target_from: 'rules', needs_review: true, label_reason: 'canonical-failed' }
+      : { label_status: 'rules-fail', target_from: null, needs_review: true, label_reason: 'canonical-failed' };
   }
   const partial = grade === 'partial';
-  if (!variant.matched) return { label_status: 'rules-fail', target_from: 'canonical', needs_review: partial };
-  const sameSop = JSON.stringify(variant.sop) === JSON.stringify(canonical.sop);
-  const sameState = Object.keys(canonical.state ?? {}).length > 0 && JSON.stringify(variant.state) === JSON.stringify(canonical.state);
-  const sameEffects = (canonical.effects ?? []).length > 0 && JSON.stringify(variant.effects) === JSON.stringify(canonical.effects);
-  if (sameSop || sameState || sameEffects) {
-    return { label_status: 'rules-agree', target_from: 'rules', needs_review: partial && !sameSop };
+  const full = variant.matched && !(variant.unparsed > 0);
+  if (variant.matched) {
+    const sameSop = JSON.stringify(variant.sop) === JSON.stringify(canonical.sop);
+    const sameState = Object.keys(canonical.state ?? {}).length > 0 && JSON.stringify(variant.state) === JSON.stringify(canonical.state);
+    const sameEffects = (canonical.effects ?? []).length > 0 && JSON.stringify(variant.effects) === JSON.stringify(canonical.effects);
+    if (sameSop || ((sameState || sameEffects) && full)) {
+      return { label_status: 'rules-agree', target_from: 'rules', needs_review: partial && !sameSop, label_reason: null };
+    }
+    if (full && variant.slots && slotsFaithful(variant.slots, variant.text)) {
+      return { label_status: 'rules-own', target_from: 'rules', needs_review: false, label_reason: 'own-values-in-text' };
+    }
   }
-  return { label_status: 'rules-differ', target_from: 'canonical', needs_review: partial };
+  const status = full ? 'rules-differ' : 'rules-fail';
+  if (valuesMatch(canonical, variant.text)) {
+    return { label_status: status, target_from: 'canonical', needs_review: partial, label_reason: !variant.matched ? 'unparsed' : full ? 'parser-error' : 'partial-parse' };
+  }
+  return { label_status: 'needs_review', target_from: null, needs_review: true, label_reason: !variant.matched ? 'unparsed-other-values' : full ? 'parser-error-other-values' : 'partial-parse-other-values' };
 }
 
 /** Run `text` in a fresh session (tab active, setup sentences first); returns the observed outcome. */
@@ -97,7 +188,7 @@ export async function runAttempt(engine, { tab, setup = [], text }) {
     matched: r.segments.some((x) => !x.unparsed && x.match),
     unparsed: r.segments.filter((x) => x.unparsed).length,
     worlds: [...new Set(r.segments.map((x) => x.match?.worldId).filter(Boolean))],
-    sop: normalizedSop(wires, legends),
+    sop: normalizedSop(wires, legends), slots: slotsOf(wires, legends), text,
     target: serialize(wires.filter((w) => w.type !== 'core.agent')),
     state: r.state, effects: r.effects,
   };
@@ -134,7 +225,8 @@ export async function collectBatch(engine, batch, { devShare = 0.1 } = {}) {
       text, message: text, context: setup, segment_span: [0, text.length],
       mentions: [], keys: [], references: [], kind: 'request',
       expected_circuit: lab.target_from === 'canonical' ? (extra.canonicalTarget ?? '') : (lab.target_from === 'rules' ? o.target : ''),
-      label_status: lab.label_status, phenomenon: role, split,
+      label_status: lab.label_status, label_reason: lab.label_reason ?? null, phenomenon: role, split,
+      family: group, // the operation family (goal); the semantic instance (operation + arguments + context) is `instance_id`
       goal: t.goal, mode: 'paraphrase', author: batch.author, attempt, target_from: lab.target_from, setup,
       needs_review: lab.needs_review, tab: batch.tab, world: batch.world, batch: batch.batch, task: t.id,
       reply: o.reply, status: o.statuses, wires: o.target, state_diff: o.state, effects: o.effects, routed_to: o.worlds,
@@ -156,6 +248,9 @@ export async function collectBatch(engine, batch, { devShare = 0.1 } = {}) {
       const o = await runAttempt(engine, { tab: batch.tab, setup, text: v });
       records.push(mk('variant', v, bestAttempt || phrasings.length, o, labelVariant(canon, o), { canonicalTarget }));
     }
+    // semantic instance = context + the canonical's own reading (operation and arguments); all records of the task share it
+    const inst = sha(`${group}\n${setup.join('\n')}\n${best ? best.sop.join('\n') : t.canonical}`);
+    for (const r of records) if (r.task === t.id && r.batch === batch.batch && !r.instance_id) r.instance_id = inst;
   }
   return records;
 }
@@ -187,6 +282,7 @@ export function summarize(records) {
     canonical_success: ok.length, canonical_success_rate: tasks.length ? Number((ok.length / tasks.length).toFixed(4)) : null,
     variants, variant_labels: labels,
     variant_rules_coverage: variants ? Number(((labels['rules-agree'] ?? 0) / variants).toFixed(4)) : null,
+    variant_rules_parsed: variants ? Number((((labels['rules-agree'] ?? 0) + (labels['rules-own'] ?? 0)) / variants).toFixed(4)) : null,
     variants_needing_review: review, trainable_records: trainable + tasks.reduce((n, t) => n + t.canon.filter((c) => c.target_from && c.expected_circuit).length, 0),
     by_split: splits, retry,
   };
