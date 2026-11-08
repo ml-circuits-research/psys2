@@ -1951,3 +1951,43 @@
     session=mu6
     input="give me twinkle twinkle little star"
     expect="Twinkle"
+
+@t.media.music.x210 core.test
+    session=mx0
+    input="what is middle C"
+    expect="261.6"
+
+@t.media.music.x211 core.test
+    session=mx1
+    input="whats middle c in hertz"
+    expect="261.6"
+
+@t.media.music.x212 core.test
+    session=mx2
+    input="tell me the low A"
+    expect="Hz"
+
+@t.media.music.x213 core.test
+    session=mx3
+    input="play A4 for 2 beats"
+    expect="for 2 beats"
+
+@t.media.music.x214 core.test
+    session=mx4
+    input="play A4 for 2 beats"
+    expectState="playing=true"
+
+@t.media.music.x215 core.test
+    session=mx5
+    input="hit middle C for 4 beats"
+    expect="for 4 beats"
+
+@t.media.music.x216 core.test
+    session=mx6
+    input="play G for 3 seconds"
+    expect="Hz"
+
+@t.media.music.x217 core.test
+    session=mx7
+    input="please play C sharp 5 for 1 beat"
+    expect="for 1 beat"

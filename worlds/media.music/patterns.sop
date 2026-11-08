@@ -3155,3 +3155,32 @@
     kind=request
     priority=10
     example="Put on Frere Jacques."
+
+@pat.media.music.x2.note.beats core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um]? [can_you|could_you|can_u|could_u|will_you|would_you|i_want_you_to|i_would_like_you_to|lets|let_us|i_want_to_hear|i_d_like_to_hear|id_like_to_hear]? [play|hit|sound|strum|play_me|hold|sustain|sing|hum] [a|the|an]? {reg:lex.media.music.registers?} [note]? {note:lex.media.music.notes} {oct:number?} {inst:lex.media.music.instruments?} [for|lasting|holding|for_about|for_around|held_for|hold_for] {n:number} [beats|beat|counts|count|bars_of_beats]"
+    emit="@{_} core.request action=music.playNote arg.reg={reg} arg.note={note} arg.oct={oct} arg.inst={inst} arg.beats={n} arg.explicit=true"
+    kind=request
+    priority=13
+    example="Play A4 for 2 beats."
+    example="Hit middle C for 4 beats."
+
+@pat.media.music.x2.note.secs core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um]? [can_you|could_you|can_u|could_u|will_you|would_you|i_want_you_to|i_would_like_you_to|lets|let_us|i_want_to_hear|i_d_like_to_hear|id_like_to_hear]? [play|hit|sound|strum|play_me|hold|sustain|sing|hum] [a|the|an]? {reg:lex.media.music.registers?} [note]? {note:lex.media.music.notes} {oct:number?} {inst:lex.media.music.instruments?} [for|lasting|holding|for_about|for_around|held_for|hold_for] {n:number} [seconds|second|secs|sec|s]"
+    emit="@{_} core.request action=music.playNote arg.reg={reg} arg.note={note} arg.oct={oct} arg.inst={inst} arg.secs={n} arg.explicit=true"
+    kind=request
+    priority=13
+    example="Play G for 3 seconds."
+
+@pat.media.music.x2.note.beats.first core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um]? [can_you|could_you|can_u|could_u|will_you|would_you|i_want_you_to|i_would_like_you_to|lets|let_us|i_want_to_hear|i_d_like_to_hear|id_like_to_hear]? {n:number} [beats|beat|counts] [of|on|for|with]? {reg:lex.media.music.registers?} [note]? {note:lex.media.music.notes} {oct:number?} {inst:lex.media.music.instruments?}"
+    emit="@{_} core.request action=music.playNote arg.reg={reg} arg.note={note} arg.oct={oct} arg.inst={inst} arg.beats={n} arg.explicit=true"
+    kind=request
+    priority=13
+
+@pat.media.music.x2.middle core.pattern
+    match="[what_is|whats|what_s|tell_me|what_pitch_is|how_high_is|how_high_is_the|what_hertz_is] [the]? {reg:lex.media.music.registers} [note]? {note:lex.media.music.notes} {oct:number?} [in_hertz|in_hz|in_frequency]? [pls|plz|please|thanks]?"
+    emit="@{_} core.request action=music.frequency arg.reg={reg} arg.note={note} arg.oct={oct}"
+    kind=request
+    priority=12
+    example="What is middle C?"
+    example="Whats a high G?"

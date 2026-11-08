@@ -176,7 +176,7 @@ const pitchTitle = (name) => {
   return n.oct === 4 && n.letter === 'C' && !n.acc ? 'middle C' : spoken(name);
 };
 
-export function playNote(ctx, { note, oct, reg, inst, explicit }) {
+export function playNote(ctx, { note, oct, reg, inst, explicit, beats, secs }) {
   const s = ctx.state;
   const pc = pcFromLex(note);
   if (!pc) return no('unsupported', 'Which note should I play? Say a letter from A to G, for example "play C sharp".');
@@ -194,10 +194,19 @@ export function playNote(ctx, { note, oct, reg, inst, explicit }) {
   if (!Number.isInteger(octave) || octave < 0 || octave > 8) return no('unsupported', 'I can play octaves 0 to 8.');
   const r1 = setInstrument(ctx, inst); if (r1?.status) return r1;
   const name = `${pc}${octave}`;
-  const abc = itemsToAbc([{ p: [name], beats: 2 }], { title: pitchTitle(name), key: 'C major', tempo: s.tempo });
+  // "play A4 for 2 beats" / "for 3 seconds": the length of the note (beats, or seconds at the current tempo)
+  let len = 2;
+  if (beats !== undefined || secs !== undefined) {
+    len = beats !== undefined ? Number(beats) : Number(secs) * (s.tempo ?? 100) / 60;
+    if (!Number.isFinite(len) || len <= 0) return no('unsupported', 'How long should the note last? For example "play A4 for 2 beats".');
+    if (len > 16) return no('unsupported', 'A single note can last up to 16 beats.');
+    len = Math.max(0.25, Math.round(len * 4) / 4);
+  }
+  const abc = itemsToAbc([{ p: [name], beats: len }], { title: pitchTitle(name), key: 'C major', tempo: s.tempo });
   startPlay(ctx, makeCurrent('note', pitchTitle(name), abc));
   const f = tFreq(name);
-  return ok(`Playing ${pitchTitle(name)}${pitchTitle(name) === 'middle C' ? ' (C4)' : ''}, ${Math.round(f * 10) / 10} Hz, ${onInst(s)}.`);
+  const lasting = beats !== undefined || secs !== undefined ? ` for ${len} ${len === 1 ? 'beat' : 'beats'}` : '';
+  return ok(`Playing ${pitchTitle(name)}${pitchTitle(name) === 'middle C' ? ' (C4)' : ''}${lasting}, ${Math.round(f * 10) / 10} Hz, ${onInst(s)}.`);
 }
 
 function stackUp(names) {
