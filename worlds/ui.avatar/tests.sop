@@ -1076,3 +1076,30 @@
     input="R u wearing glasses"
     expect="I do not have"
     session=ra3
+
+@t.ui.avatar.f4r01 core.test
+    input="Make your eyes and body red."
+    expectState="robot.colors.body=ff9d9d"
+    expectState="robot.colors.glow=ff6b6b"
+    session=f4r
+
+@t.ui.avatar.f4r02 core.test
+    input="Make your eyes green, no, blue."
+    expectState="robot.colors.glow=3bc9db"
+    session=f4r
+
+@t.ui.avatar.f4r03 core.test
+    input="Make the eyes yellow and the body blue."
+    expectState="robot.colors.body=74c0fc"
+    session=f4r
+
+@t.ui.avatar.f4r04 core.test
+    input="Eyes and body green."
+    expectState="robot.colors.body=63e6be"
+    expectState="robot.colors.glow=69db7c"
+    session=f4r
+
+@t.ui.avatar.f4r05 core.test
+    input="Make your eyes and body blue, no, red."
+    expectState="robot.colors.body=ff9d9d"
+    session=f4r

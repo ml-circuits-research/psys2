@@ -23,6 +23,23 @@ formalize(text, { worlds, session, source }) -> {
 
 When no pattern matches a sentence (and no clause of it), the formalizer retries **once** with the unknown words corrected to the closest known word. The vocabulary is every literal of every pattern plus every word of every lexicon of the loaded worlds (multi-word entries split into words, plural forms included). Distance is Damerau-Levenshtein (insert, delete, substitute, swap neighbours): 1 for words of 4 to 7 letters, 2 for words of 8 or more, none below 4. Never corrected: numbers, text in quotes, capitalized names (except the first word), words with digits, apostrophes or hyphens, words that are already known (also by lemma), and words with two equally close candidates. At most three words per sentence. The corrections are recorded as `segment.corrections = [{ from, to, span }]` (also in the trace) and the dialog appends `(I read "suprised" as "surprised")` to the reply. A sentence that matched without correction is never touched.
 
+### 1c. Conservative expansion of elliptic and corrected sentences (review F4, R2)
+
+Real messages often omit or repeat words: "make your eyes and body blue", "eyes blue and body red", "draw a cat, no wait, a dog", "move left three times". The formalizer expands such sentences **before parsing** into complete clauses, in the rules (the dispatcher and segmenter never copy arguments). Implementation: `src/formalizer/rules/expand.mjs` (proposals) and `readSentence` in `index.mjs` (acceptance).
+
+**Acceptance (conservative).** A sentence is expanded only when it is not already read cleanly, and only when the expansion is fully understood:
+1. *Already read* = the whole sentence (or its clause-by-clause reading) parses, and no free-text slot (`words`, `rest`) swallowed text that signals a catch-all. Such sentences are never changed. A free slot signals a catch-all when its text contains a correction marker, `then`, or a repetition (`twice`, `N times`); or a coordination (`and`, `but`, `,`) while a required lexicon slot follows it in the pattern (`make {t:words} {c:colour}`), or the pattern is an explicit unknown-argument catch-all (emit action `...Unknown`).
+2. Every expanded clause must parse completely, all in **one world** (for repetition: the repeated clause parses). A free-text slot of a coordinated or elliptic clause must lie inside that clause's own words, never over words copied from elsewhere.
+3. If any condition fails, the sentence is read exactly as without expansion. Trial readings leave no trace (the session state is restored).
+
+**Families**, tried in this order (self-correction, then clause level, then shared argument):
+- *Self-correction* — a marker (`no wait`, `I mean`, `I meant`, `no sorry`, `scratch that`, `or rather`; or `, no` / `, sorry` / `, actually` / `, wait` / `, make that` / `, oops` after a comma) followed by a correction: the correction replaces the same number of words before the marker, the rest of the sentence stays: "make your eyes blue, no, green" → "make your eyes green"; "draw a cat, no wait, a dog" → "draw a dog".
+- *Repetition* (clause level) — a clause ending in `twice` or `N times` (2 to 10) that does not parse as it stands: the clause without the repetition, read N times: "move left three times" → "move left" ×3. Other clauses are separate: "move left 3 times, then undo" → three moves and an undo. A clause that already parses with its own repetition slot ("move left twice") is untouched.
+- *Verb ellipsis* (clause level) — a clause that does not parse, after a clause that does: the leading verb (one word, else two) of the parsed clause is put in front, in the same world: "make the tree red and house green" → "make the tree red; make house green".
+- *Shared argument* — "A and B ARG", "A, B and C ARG" with a shared leading verb phrase and shared trailing argument (1 or 2 words): "make your eyes and body blue" → "make your eyes blue; make your body blue"; "eyes and body blue" → "eyes blue; body blue"; "make the tree and the house blue". Heads of up to three words; a determiner is never doubled.
+
+**Provenance.** Expanded tokens keep their original offsets. Each produced segment has `text` = the expanded clause and `span` = its own words in the input (the head for a shared argument, the clause for ellipsis and repetition, the corrected region for self-correction), and `segment.expanded = { kind: 'shared-argument' | 'verb-ellipsis' | 'self-correction' | 'repetition', source: [start, end], copied: [[s,e]...], dropped: [[s,e]...], index, of }`; wires carry `core.source` with that span.
+
 ## 2. Patterns
 ```
 @pat.arith.has core.pattern

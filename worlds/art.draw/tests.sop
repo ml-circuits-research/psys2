@@ -3400,3 +3400,44 @@
     expectStatus=supported
     session=r2open
 
+
+@t.art.draw.f4r01 core.test
+    input="Draw a tree."
+    expectState="objects.0.kind=tree"
+    session=f4r
+
+@t.art.draw.f4r02 core.test
+    input="Draw a house."
+    expectState="objects.1.kind=house"
+    session=f4r
+
+@t.art.draw.f4r03 core.test
+    input="Make the tree and the house blue."
+    expect="The house is blue now."
+    expectState="objects.0.color=blue"
+    expectState="objects.1.color=blue"
+    session=f4r
+
+@t.art.draw.f4r04 core.test
+    input="Make the tree red and house green."
+    expectState="objects.0.color=red"
+    expectState="objects.1.color=green"
+    session=f4r
+
+@t.art.draw.f4r05 core.test
+    input="Draw a cat, no wait, a dog."
+    expectState="objects.2.kind=dog"
+    expectState="objects.3.kind=undefined"
+    session=f4r
+
+@t.art.draw.f4r06 core.test
+    input="Make the house yellow, no, orange."
+    expectState="objects.1.color=orange"
+    session=f4r
+
+@t.art.draw.f4r07 core.test
+    input="Draw a circle three times."
+    expectState="objects.3.kind=circle"
+    expectState="objects.4.kind=circle"
+    expectState="objects.5.kind=circle"
+    session=f4r
