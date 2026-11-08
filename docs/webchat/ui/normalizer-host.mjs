@@ -4,7 +4,7 @@
 // (same vendored onnxruntime-web WASM build as the dispatcher), caches every file by sha256 in the Cache API and hands the validator a provider.
 //
 //   const nz = createNormalizerHost({ base, meta, lib: { createNormalizerRuntime }, onStatus });
-//   nz.provider        -> { propose({ world, tab, text, beam }) }   (returns [] while the model is not loaded, and starts loading)
+//   nz.provider        -> { propose({ world, tab, text, beam }) }   (answers { status: 'not_ready' } while the model is not loaded, and starts loading)
 
 export const MODEL_DIR = 'models/normalizer/';
 const CACHE_NAME = 'psys2-normalizer-model';
@@ -121,14 +121,16 @@ export function createNormalizerHost({ base, meta, lib, onStatus = () => {} }) {
     timings: [],
     prepare, meta, get status() { return status; }, label: versionLabel(meta),
     provider: {
-      /** Rewrites of a piece the rules did not read. Not loaded yet: starts loading and returns nothing (the rules answer meanwhile). */
+      /** Model version and state: the validator drops its memo of rewrites when this changes (loading -> ready, a new model version). */
+      stamp: () => `${versionLabel(meta)}|${status.state}`,
+      /** Rewrites of a piece the rules did not read, as { status: 'not_ready' | 'error' | 'ready', rewrites }. Not loaded yet: starts loading and answers not_ready (the rules answer meanwhile; the validator does not remember it). */
       async propose(req) {
-        if (!runtime) { if (status.state !== 'error') prepare().catch(() => {}); return []; }
+        if (!runtime) { if (status.state !== 'error') { prepare().catch(() => {}); return { status: 'not_ready', rewrites: [] }; } return { status: 'error', rewrites: [] }; }
         const t0 = performance.now();
         const out = await runtime.propose(req);
         host.timings.push(Math.round(performance.now() - t0));
         console.debug('normalizer propose ms', host.timings[host.timings.length - 1], JSON.stringify(req.text).slice(0, 60));
-        return out;
+        return { status: 'ready', rewrites: out };
       },
     },
   };

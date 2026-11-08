@@ -63,6 +63,8 @@ export function createDispatcherFormalizer({ load, getPolicy = () => ENCODER_DEF
   return {
     id: 'encoder',
     attach(e) { engine = e; validator = null; },
+    /** Drops every memo of the validator (candidate checks and normalizer rewrites). */
+    reset() { validator?.clearCache(); },
     get status() { return status; },
     onStatus(f) { listeners.add(f); f(status); return () => listeners.delete(f); },
     prepare,

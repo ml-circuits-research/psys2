@@ -103,15 +103,27 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
   const restricted = new Map();
   let cache = new Map();
   const normCache = new Map();
-  /** Rewrites of `text` for `world` from the injected provider (`{ propose({ world, tab, text, beam }) -> string[] | Promise<string[]> }` or a bare function), cached. */
+  let normStamp;
+  const toRewrites = (out, beam) => (Array.isArray(out) ? out : []).map((x) => (typeof x === 'string' ? { text: x.trim(), score: null } : { text: String(x?.text ?? '').trim(), score: Number.isFinite(x?.score) ? x.score : null })).filter((x) => x.text).slice(0, beam);
+  /**
+   * Rewrites of `text` for `world` from the injected provider (a bare function or `{ propose({ world, tab, text, beam }), stamp? }`).
+   * The provider answers either an array of rewrites (status ready) or `{ status: 'not_ready' | 'error' | 'ready', rewrites }`.
+   * Only `ready` answers are memoized: an empty list returned while the model loads, or after an error, must not stick. A provider may expose
+   * `stamp` (a string or a function: model version and state); when it changes the memo is dropped, so a rewrite computed by an older model is never reused.
+   * Returns { status, rewrites }.
+   */
   const proposeRewrites = async (world, tab, text, beam) => {
+    const stamp = typeof normalizer?.stamp === 'function' ? normalizer.stamp() : normalizer?.stamp;
+    if (stamp !== normStamp) { normCache.clear(); normStamp = stamp; }
     const key = JSON.stringify([world, tab, text, beam]);
-    if (!normCache.has(key)) {
-      let out = [];
-      try { out = await (typeof normalizer === 'function' ? normalizer : normalizer.propose)({ world, tab, text, beam }); } catch { out = []; }
-      normCache.set(key, (Array.isArray(out) ? out : []).map((x) => (typeof x === 'string' ? { text: x.trim(), score: null } : { text: String(x?.text ?? '').trim(), score: Number.isFinite(x?.score) ? x.score : null })).filter((x) => x.text).slice(0, beam));
-    }
-    return normCache.get(key);
+    if (normCache.has(key)) return { status: 'ready', rewrites: normCache.get(key) };
+    let out;
+    try { out = await (typeof normalizer === 'function' ? normalizer : normalizer.propose)({ world, tab, text, beam }); } catch { return { status: 'error', rewrites: [] }; }
+    const status = Array.isArray(out) || out == null ? 'ready' : out.status === 'not_ready' || out.status === 'error' ? out.status : 'ready';
+    if (status !== 'ready') return { status, rewrites: [] };
+    const rewrites = toRewrites(Array.isArray(out) ? out : out?.rewrites, beam);
+    normCache.set(key, rewrites);
+    return { status: 'ready', rewrites };
   };
 
   /** A view of the world set with only the given worlds and their imports (own memo cache; legends shared). */
@@ -213,6 +225,7 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
     let total = o.segWeight * seg.score;
     for (const [pi, piece] of seg.segments.entries()) {
       const attempts = [];
+      let normalizerStatus = null;   // not_ready | error when the normalizer could not answer for this piece (trace only)
       const worlds = piece.worlds.slice(0, o.maxWorlds);
       const ctxPrefix = o.intersegmentContext ? prefix : [];
       const logpOf = (w) => Math.log(Math.max(w.score, o.scoreFloor));
@@ -257,7 +270,9 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
         for (const [rank, w] of worlds.entries()) {
           if (rank >= o.normalizerWorlds) break;
           const vocab = worldVocabulary(engine.set, w.world);
-          for (const { text, score: nzScore } of await proposeRewrites(w.world, pred.context.tab, piece.text, o.normalizerBeam)) {
+          const proposed = await proposeRewrites(w.world, pred.context.tab, piece.text, o.normalizerBeam);
+          if (proposed.status !== 'ready') { normalizerStatus = proposed.status; break; }   // loading or failed: the rules answer, nothing is remembered
+          for (const { text, score: nzScore } of proposed.rewrites) {
             if (text === piece.text.trim()) continue;
             if (o.normalizerMinScore != null && nzScore != null && nzScore < o.normalizerMinScore) continue;
             const vc = o.checkValues ? checkValues(piece.text, text, { vocab, lost: o.valueLost, ...(o.valueStrictness === 'strict' ? { polarity: true, grounded: true, keepKnown: true } : {}) }) : { ok: true };
@@ -329,7 +344,7 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
       const pieceScore = best ? best.score : -o.unparsedPenalty + Math.log(o.scoreFloor);
       total += pieceScore;
       if (best?.valid) prefix.push({ world: best.world, text: best.text });
-      pieces.push({ index: pi, start: piece.start, end: piece.end, text: piece.text, simplified: piece.simplified ?? null, attempts: attempts.map(({ wires, ...a }) => ({ ...a, wires: wires.length })),
+      pieces.push({ index: pi, start: piece.start, end: piece.end, text: piece.text, simplified: piece.simplified ?? null, ...(normalizerStatus ? { normalizerStatus } : {}), attempts: attempts.map(({ wires, ...a }) => ({ ...a, wires: wires.length })),
         chosen: best ? { world: best.world, rank: best.rank, variant: best.variant, text: best.text, valid: best.valid, score: best.score, wires: best.wires, corrections: best.corrections, partial: best.partial } : null, valid: !!best?.valid, tie });
     }
     return { index: seg.index, dispatcherScore: seg.score, score: total, valid: pieces.length > 0 && pieces.every((p) => p.valid), nInvalid: pieces.filter((p) => !p.valid).length, pieces };
@@ -386,7 +401,7 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
     };
   };
 
-  return { validate, clearCache: () => { cache = new Map(); }, policy: base, engine };
+  return { validate, clearCache: () => { cache = new Map(); normCache.clear(); normStamp = undefined; }, policy: base, engine };
 }
 
 /** One-shot helper: `validateDispatch({ prediction, engine, policy })`. */

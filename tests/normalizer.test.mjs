@@ -140,3 +140,81 @@ test('value checker: operand order, source/destination, property bindings, units
   no('put x 10 and y 20', 'put y 20 and x 10');
   assert.equal(checkValues('wait 5 mins', 'wait 5 minutes', { polarity: false }).ok, true);
 });
+
+// ---- provider status: not_ready / error are never memoized (review: the loading phase must not poison the memo) ----
+const sleepy = () => { let state = 'not_ready', n = 0; return { get n() { return n; }, set: (s) => { state = s; }, stamp: () => state, propose: async ({ text }) => { n++; if (state !== 'ready') return { status: state, rewrites: [] }; return { status: 'ready', rewrites: text === NOISY ? [CLEAN] : [] }; } }; };
+
+test('normalizer not_ready or error is not memoized; the same text is understood once the model is ready', async () => {
+  const p = sleepy();
+  const v = createDispatchValidator({ engine, normalizer: p });
+  const first = await v.validate(msg(NOISY, 'kids.arith'));
+  assert.equal(first.status, 'not_understood');
+  assert.equal(first.trace.segmentations[0].pieces[0].normalizerStatus, 'not_ready');
+  p.set('error');
+  assert.equal((await v.validate(msg(NOISY, 'kids.arith'))).trace.segmentations[0].pieces[0].normalizerStatus, 'error');
+  p.set('ready');   // no clearCache(): the earlier answers were not remembered
+  const ready = await v.validate(msg(NOISY, 'kids.arith'));
+  assert.equal(ready.status, 'understood');
+  assert.equal(ready.produced[0].textUsed, 'normalized');
+  // ready answers are memoized (one provider call for the repeat)
+  const calls = p.n;
+  await v.validate(msg(NOISY, 'kids.arith'));
+  assert.equal(p.n, calls);
+});
+
+test('a thrown provider error is not memoized either', async () => {
+  let boom = true; let calls = 0;
+  const v = createDispatchValidator({ engine, normalizer: async ({ text }) => { calls++; if (boom) throw new Error('crash'); return text === NOISY ? [CLEAN] : []; } });
+  assert.equal((await v.validate(msg(NOISY, 'kids.arith'))).status, 'not_understood');
+  boom = false;
+  assert.equal((await v.validate(msg(NOISY, 'kids.arith'))).status, 'understood');
+  assert.ok(calls >= 2);
+});
+
+test('a changed provider stamp (model version) invalidates remembered rewrites; clearCache clears both caches', async () => {
+  let version = 'v1', answer = [CLEAN]; let calls = 0;
+  const p = { stamp: () => version, propose: async () => { calls++; return answer; } };
+  const v = createDispatchValidator({ engine, normalizer: p });
+  await v.validate(msg(NOISY, 'kids.arith')); const c1 = calls;
+  await v.validate(msg(NOISY, 'kids.arith')); assert.equal(calls, c1);          // memoized
+  version = 'v2';
+  await v.validate(msg(NOISY, 'kids.arith')); assert.ok(calls > c1);            // new model: asked again
+  const c2 = calls;
+  v.clearCache();
+  await v.validate(msg(NOISY, 'kids.arith')); assert.ok(calls > c2);            // reset: the rewrite memo is gone too
+  answer = ['What is 20 divided by 5'];
+  v.clearCache();
+  assert.equal((await v.validate(msg(NOISY, 'kids.arith'))).status, 'not_understood');
+});
+
+test('the real normalizer host: loading -> ready transition (stubbed onnxruntime and files)', async () => {
+  const { mkdtempSync, mkdirSync, writeFileSync } = await import('node:fs');
+  const { tmpdir } = await import('node:os');
+  const { join } = await import('node:path');
+  const { pathToFileURL } = await import('node:url');
+  const { createNormalizerHost } = await import('../docs/webchat/ui/normalizer-host.mjs');
+  const dir = mkdtempSync(join(tmpdir(), 'nzhost-'));
+  mkdirSync(join(dir, 'vendor', 'onnxruntime'), { recursive: true });
+  writeFileSync(join(dir, 'vendor', 'onnxruntime', 'ort.wasm.bundle.min.mjs'), 'export const env = { wasm: {} };\nexport const InferenceSession = { create: async () => ({}) };\n');
+  const base = pathToFileURL(`${dir}/`).href;
+  const realFetch = globalThis.fetch;
+  let release; const gate = new Promise((r) => { release = r; });
+  globalThis.fetch = async (u) => { await gate; return new Response(String(u).endsWith('tokenizer.json') ? '{}' : 'x'); };
+  try {
+    const meta = { files: ['encoder.int8.onnx', 'decoder.int8.onnx', 'tokenizer.json'], config: {}, version: { export_date: '2026-11-08', sha256: 'abcdef012345' } };
+    const states = [];
+    const host = createNormalizerHost({ base, meta, lib: { createNormalizerRuntime: () => ({ propose: async ({ text }) => (text === NOISY ? [CLEAN] : []) }) }, onStatus: (s) => states.push(s.state) });
+    const v = createDispatchValidator({ engine, normalizer: host.provider });
+    const early = await v.validate(msg(NOISY, 'kids.arith'));       // starts loading; the model is not there yet
+    assert.equal(early.status, 'not_understood');
+    assert.equal(host.status.state, 'loading');
+    assert.equal(early.trace.segmentations[0].pieces[0].normalizerStatus, 'not_ready');
+    release();
+    await host.prepare();
+    assert.equal(host.status.state, 'ready');
+    const later = await v.validate(msg(NOISY, 'kids.arith'));       // same text, same validator, no clearCache
+    assert.equal(later.status, 'understood');
+    assert.equal(later.produced[0].textUsed, 'normalized');
+    assert.ok(states.includes('loading') && states.at(-1) === 'ready');
+  } finally { globalThis.fetch = realFetch; }
+});
