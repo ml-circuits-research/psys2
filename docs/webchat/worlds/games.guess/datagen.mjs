@@ -105,13 +105,16 @@ for (const [a, d] of Object.entries(CMD)) {
 add('guess.start', 'request', (r) => ({ text: fin(r, `${pick(r, ['I am', "I'm"])} thinking ${pick(r, ['of', 'about'])} ${pick(r, ['an animal', 'my animal', 'a secret animal'])}`), expect: E(R('start')) }));
 add('guess.start.variants', 'request', (r) => ({ text: fin(r, `I ${pick(r, ['thought of', 'have thought of', 'have picked', 'have chosen', 'picked', 'chose'])} ${pick(r, ['an animal', 'my animal', 'a secret animal'])}`), expect: E(R('start')) }));
 add('guess.start.guess-my', 'request', (r) => ({ text: fin(r, `${pick(r, ['', '', 'Can you ', 'Could you ', 'Will you ', 'Would you '])}${pick(r, ['guess', 'try to guess', 'find out', 'figure out', 'work out'])} ${pick(r, ['my animal', 'the animal', 'which animal', 'what animal', 'my secret animal'])}`, true), expect: E(R('start')) }));
-add('guess.start.paraphrase', 'paraphrase', (r) => ({ text: fin(r, pick(r, ['Let us play twenty questions', 'I have an animal in mind', 'Try to read my mind', 'Can you guess which animal I picked'])), expect: E(R('start')) }));
+// "Let us play twenty questions" opens the game tab and starts it: that is ui.shell (action ui.playGame), not this world
+add('guess.start.paraphrase', 'paraphrase', (r) => ({ text: fin(r, pick(r, ['I have an animal in mind', 'Try to read my mind', 'Can you guess which animal I picked'])), expect: E(R('start')) }));
 add('guess.reveal', 'request', (r, x) => { const a = pick(r, x.lex('lex.kids.animals.names', ANIM_FB)), art_ = pick(r, ['a', 'an', 'the', '']).replace(/^a$/, art(sp(a)));
   const lead = pick(r, ['it was', 'the animal was', 'the answer was', 'the answer is', 'my animal was', 'I was thinking of', 'I was thinking about', 'I thought of', 'the animal is', 'it was actually']);
   return { text: fin(r, `${lead} ${art_ ? art_ + ' ' : ''}${sp(a)}`), expect: E(R('reveal', { animal: q(sp(a)) })) }; });
 // negation, near misses, out of domain
 add('guess.neg', 'negation', (r) => ({ text: pick(r, ["I won't say yes.", 'Do not say no.', 'It is not an animal.', "I'm not thinking of an animal.", "I don't want to guess."]), negative: true }));
-add('guess.near', 'near-miss', (r) => ({ text: pick(r, ['Yes, but only on Sundays.', 'No apples left.', 'Maybe tomorrow we can play.', 'I like animals.', 'Which animal is the biggest?', 'How many legs does it have?', 'Guess what, I won.']), negative: true }));
+// a qualified yes ("Yes, but only on Sundays") is a maybe
+add('guess.answer.qualified', 'paraphrase', (r) => ({ text: pick(r, ['Yes, but only on Sundays.', 'Yes, but not always.', 'It does, but only sometimes.', 'Yeah but not all of them.']), expect: E(R('answer', { answer: 'maybe' })) }));
+add('guess.near', 'near-miss', (r) => ({ text: pick(r, ['No apples left.', 'Maybe tomorrow we can play.', 'I like animals.', 'Which animal is the biggest?', 'How many legs does it have?', 'Guess what, I won.']), negative: true }));
 add('guess.ood', 'out-of-domain', (r, x) => { const p = x.person(r);
   return { text: pick(r, [`${p.name} has 5 apples.`, 'How much does a ball cost?', 'What day is tomorrow?', 'What does a rabbit eat?', 'What is 7 plus 5?', 'Add milk to my shopping list.', 'Open the editor.', 'Center.', 'Is it elephant?', 'Is a whale a fish?', 'Where does a camel live?', 'Play hangman.']), negative: true }; });
 

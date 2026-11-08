@@ -132,21 +132,21 @@
     example="Where do we see a circle?"
 
 @pat.kids.shapes.col1 core.pattern
-    match="what [color|colour] [is|are] [a|an|the]? {t:noun}"
+    match="what [color|colour] [is|are] [a|an|the]? {t:lex.kids.shapes.things}"
     emit="@{_} core.question type=kids.shapes.thing seek=color where.name={t}"
     kind=question
     priority=10
     example="What color is the sky?"
 
 @pat.kids.shapes.col2 core.pattern
-    match="what [is|are] the [color|colour] of [a|an|the]? {t:noun}"
+    match="what [is|are] the [color|colour] of [a|an|the]? {t:lex.kids.shapes.things}"
     emit="@{_} core.question type=kids.shapes.thing seek=color where.name={t}"
     kind=question
     priority=10
     example="What is the color of a banana?"
 
 @pat.kids.shapes.col3 core.pattern
-    match="[is|are] [a|an|the]? {t:noun} {c:lex.kids.shapes.colors}"
+    match="[is|are] [a|an|the]? {t:lex.kids.shapes.things} {c:lex.kids.shapes.colors}"
     emit="@{_} core.question type=kids.shapes.thing seek=is_color where.name={t} where.is_color={c}"
     kind=question
     priority=12

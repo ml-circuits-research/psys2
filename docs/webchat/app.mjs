@@ -128,8 +128,10 @@ export async function mountPsys2(element, options = {}) {
     if (!tabBtns[id]) return;
     view = id;
     for (const [k, { btn, panel }] of Object.entries(tabBtns)) {
-      const active = k === id;
+      const active = k === id, ui = panelUI[k]?.ui;
+      if (!active && !panel.hidden) ui?.hide?.(); // before hiding: lets a tab stop drawing into a zero-size box
       btn.setAttribute('aria-selected', String(active)); btn.tabIndex = active ? 0 : -1; panel.hidden = !active;
+      if (active) ui?.show?.();
     }
   }
 

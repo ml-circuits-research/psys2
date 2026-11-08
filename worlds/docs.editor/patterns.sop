@@ -6,7 +6,7 @@
     example="Add a heading Shopping."
 
 @pat.docs.editor.paragraph core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|type|write|put_in|append] [a|the|another|one_more]? [paragraph|line|sentence|note] [saying|that_says|reading|with_the_text|with]? {t:rest}"
+    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|type|write|put_in|append] [a|the|another|one_more|1_more]? [paragraph|line|sentence|note] [saying|that_says|reading|with_the_text|with]? {t:rest}"
     emit="@{_} core.request action=doc.addParagraph arg.text=\"{t}\""
     kind=request
     priority=11
@@ -153,7 +153,7 @@
     example="Create a new document called Holiday."
 
 @pat.docs.editor.undo core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [undo|undo_that|undo_it|undo_the_last_change|undo_the_last_edit|undo_my_last_change|go_back_one_step|revert|take_that_back]"
+    match="[can_you|could_you|will_you|would_you|please_can_you]? [undo|undo_that|undo_it|undo_the_last_change|undo_the_last_edit|undo_my_last_change|go_back_one_step|revert|take_that_back|go_back_1_step]"
     emit="@{_} core.request action=doc.undo"
     kind=request
     priority=11
@@ -619,7 +619,7 @@
     example="Go to the word milk."
 
 @pat.docs.editor.table.spec core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|create|make|put_in] [a|an|another|one_more]? [new]? table [with|of|containing|that_has|having]? {t:rest}"
+    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|create|make|put_in] [a|an|another|one_more|1_more]? [new]? table [with|of|containing|that_has|having]? {t:rest}"
     emit="@{_} core.request action=doc.addTable arg.spec=\"{t}\""
     kind=request
     priority=13
@@ -627,35 +627,35 @@
     example="Add a table with 4 columns and 3 rows."
 
 @pat.docs.editor.table.bare core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|create|make|put_in] [a|an|another|one_more]? [new]? table"
+    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|create|make|put_in] [a|an|another|one_more|1_more]? [new]? table"
     emit="@{_} core.request action=doc.addTable"
     kind=request
     priority=12
     example="Add a table."
 
 @pat.docs.editor.row.add core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|append|put_in] [a|another|one_more|a_new]? row [to_the_table|in_the_table|at_the_end]? [with|of|containing|saying]? {t:rest}"
+    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|append|put_in] [a|another|one_more|a_new|1_more]? row [to_the_table|in_the_table|at_the_end]? [with|of|containing|saying]? {t:rest}"
     emit="@{_} core.request action=doc.addRow arg.t=\"{t}\""
     kind=request
     priority=13
     example="Add a row: cat, 4, fish."
 
 @pat.docs.editor.row.bare core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|append|put_in] [a|another|one_more|a_new]? [empty]? row [to_the_table|in_the_table|at_the_end]?"
+    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|append|put_in] [a|another|one_more|a_new|1_more]? [empty]? row [to_the_table|in_the_table|at_the_end]?"
     emit="@{_} core.request action=doc.addRow"
     kind=request
     priority=12
     example="Add a row."
 
 @pat.docs.editor.col.add core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|append|put_in] [a|another|one_more|a_new]? column [called|named|titled|for|with_the_header]? {t:rest}"
+    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|append|put_in] [a|another|one_more|a_new|1_more]? column [called|named|titled|for|with_the_header]? {t:rest}"
     emit="@{_} core.request action=doc.addColumn arg.t=\"{t}\""
     kind=request
     priority=13
     example="Add a column weight."
 
 @pat.docs.editor.col.bare core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|append|put_in] [a|another|one_more|a_new]? [empty]? column [to_the_table|in_the_table|at_the_end]?"
+    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|append|put_in] [a|another|one_more|a_new|1_more]? [empty]? column [to_the_table|in_the_table|at_the_end]?"
     emit="@{_} core.request action=doc.addColumn"
     kind=request
     priority=12
@@ -676,7 +676,7 @@
     example="Set the cell in row 1 column 2 to 4 legs."
 
 @pat.docs.editor.task.add core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|create|put_in|write] [a|the|another|one_more|a_new]? [task|todo|checkbox|checklist_item] [saying|called|named|to]? {t:rest}"
+    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|create|put_in|write] [a|the|another|one_more|a_new|1_more]? [task|todo|checkbox|checklist_item] [saying|called|named|to]? {t:rest}"
     emit="@{_} core.request action=doc.addTask arg.t=\"{t}\""
     kind=request
     priority=12

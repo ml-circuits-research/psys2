@@ -15,6 +15,8 @@
     tabAlias=drawing
     tabAlias=paint
     tabAlias=picture
+    tabAlias=drawing_board
+    tabAlias=canvas
     tabOrder=80
     tabKind=tool
     tabNew=draw.new

@@ -120,6 +120,16 @@
     word=paler
     word=deeper
 
+@lex.ui.avatar.size core.lexicon
+    class=noun
+    doc="Size comparatives (ops.mjs: bigger, larger, wider = bigger; the rest = smaller)."
+    word=bigger
+    word=larger
+    word=wider
+    word=smaller
+    word=tinier
+    word=narrower
+
 @syn.eyes core.lexicon
     class=synonym
     word=goggles:visor
@@ -269,3 +279,162 @@
     word=smiley:emoji
     word=emoticon:emoji
     word=smiley_face:emoji
+
+@names.head core.lexicon
+    class=names
+    doc="Spoken names of the open-peeps hairstyles (chosen by looking at the drawings); word=<variant id>:<spoken name>. The numbered ids (short1, medium2) stay the atoms; the names are what the avatar says and what people can say back."
+    word=afro:afro
+    word=bangs:shoulder-length_hair_with_bangs
+    word=bangs2:bob_with_bangs
+    word=bantuKnots:bantu_knots
+    word=bear:thinning_hair_with_stubble
+    word=bun:bun_with_a_bandana
+    word=bun2:curly_bun_with_a_hair_tie
+    word=buns:twin_buns
+    word=cornrows:cornrows_in_a_ponytail
+    word=cornrows2:side_braids
+    word=dreads1:puffy_dreadlocks
+    word=dreads2:curly_dreadlocks
+    word=flatTop:flat_top
+    word=flatTopLong:tall_flat_top
+    word=grayBun:top_knot
+    word=grayMedium:rounded_bob
+    word=grayShort:short_side-swept_hair
+    word=hatBeanie:beanie
+    word=hatHip:wide-brimmed_hat
+    word=hijab:hijab
+    word=long:long_hair
+    word=longAfro:big_afro
+    word=longBangs:long_hair_with_bangs
+    word=longCurly:long_curly_hair
+    word=medium1:short_bob
+    word=medium2:medium_wavy_hair
+    word=medium3:medium_layered_hair
+    word=mediumBangs:medium_hair_with_bangs
+    word=mediumBangs2:wavy_hair_with_bangs
+    word=mediumBangs3:medium_hair_with_straight_bangs
+    word=mediumStraight:medium_straight_hair
+    word=mohawk:short_mohawk
+    word=mohawk2:spiky_mohawk
+    word=noHair1:bald_head
+    word=noHair2:almost_bald_head
+    word=noHair3:bald_head_with_a_tuft
+    word=pomp:quiff
+    word=shaved1:rounded_fade
+    word=shaved2:textured_fade
+    word=shaved3:messy_windswept_hair
+    word=short1:short_side-parted_hair
+    word=short2:short_neat_hair
+    word=short3:short_curly_hair
+    word=short4:short_wavy_hair
+    word=short5:short_spiky_hair
+    word=turban:turban
+    word=twists:short_twists
+    word=twists2:tall_twists
+
+@alias.head core.lexicon
+    class=alias
+    doc="Extra words for exactly one hairstyle; word=<alias>:<variant id>."
+    word=curly_hair:short3
+    word=wavy_hair:medium2
+    word=straight_hair:mediumStraight
+    word=afro_hair:afro
+    word=dreadlocks:dreads1
+    word=braids:cornrows2
+    word=bob:medium1
+    word=fade:shaved1
+    word=pompadour:pomp
+    word=ponytail:cornrows
+    word=topknot:grayBun
+    word=man_bun:grayBun
+    word=pigtails:buns
+    word=space_buns:buns
+    word=double_buns:buns
+    word=skinhead:noHair1
+    word=headscarf:hijab
+    word=fringe:bangs2
+    word=shoulder_length_bangs:bangs
+    word=shoulder_length_hair:bangs
+    word=bandana_bun:bun
+    word=curly_bun:bun2
+    word=cornrow_ponytail:cornrows
+    word=side_parted_hair:short1
+    word=side_part:short1
+    word=side-parted_hair:short1
+    word=side-swept_hair:grayShort
+    word=side_swept_hair:grayShort
+    word=wavy_bangs:mediumBangs2
+    word=straight_bangs:mediumBangs3
+    word=bald_tuft:noHair3
+    word=thinning_hair:bear
+    word=receding_hairline:bear
+
+@names.accessories core.lexicon
+    class=names
+    doc="Spoken names of the open-peeps accessories (chosen by looking at the drawings)."
+    word=eyepatch:eyepatch
+    word=glasses:thin_square_glasses
+    word=glasses2:thin_round_glasses
+    word=glasses3:browline_glasses
+    word=glasses4:white-framed_glasses
+    word=glasses5:thick_round_glasses
+    word=sunglasses:round_sunglasses
+    word=sunglasses2:browline_sunglasses
+
+@alias.accessories core.lexicon
+    class=alias
+    word=round_glasses:glasses2
+    word=wire_glasses:glasses2
+    word=square_glasses:glasses
+    word=reading_glasses:glasses
+    word=horn-rimmed_glasses:glasses3
+    word=white_glasses:glasses4
+    word=big_round_glasses:glasses5
+    word=black_sunglasses:sunglasses
+    word=big_sunglasses:sunglasses
+
+@names.facialHair core.lexicon
+    class=names
+    doc="Spoken names of the open-peeps facial hair (chosen by looking at the drawings)."
+    word=chin:chin_strap_beard
+    word=full:short_beard
+    word=full2:long_beard
+    word=full3:thick_beard
+    word=full4:hair-colored_beard
+    word=goatee1:moustache_and_goatee
+    word=goatee2:round_goatee
+    word=moustache1:thin_moustache
+    word=moustache2:walrus_moustache
+    word=moustache3:handlebar_moustache
+    word=moustache4:fine_curly_moustache
+    word=moustache5:bushy_moustache
+    word=moustache6:wide_moustache
+    word=moustache7:curved_moustache
+    word=moustache8:very_long_curly_moustache
+    word=moustache9:hair-colored_moustache
+
+@alias.facialHair core.lexicon
+    class=alias
+    word=big_beard:full3
+    word=bushy_beard:full3
+    word=full_beard:full2
+    word=chinstrap:chin
+    word=soul_patch:goatee2
+    word=mustache_and_goatee:goatee1
+    word=big_moustache:moustache3
+    word=big_mustache:moustache3
+    word=thick_mustache:moustache5
+    word=thin_mustache:moustache1
+    word=handlebar_mustache:moustache3
+    word=handlebar:moustache3
+    word=walrus_mustache:moustache2
+    word=long_curly_moustache:moustache8
+    word=swirly_moustache:moustache8
+    word=hair_colored_beard:full4
+    word=hair_colored_moustache:moustache9
+
+@names.expression core.lexicon
+    class=names
+    doc="Spoken names of the two numbered open-peeps expressions."
+    word=lovingGrin1:loving_grin
+    word=lovingGrin2:toothy_loving_grin

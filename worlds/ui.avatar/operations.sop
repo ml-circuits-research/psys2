@@ -16,6 +16,18 @@
     action=avatar.step
     doc="Next, previous or different variant of a component (dir=next|previous|different). Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
 
+@op.ui.avatar.resizePart core.operation
+    impl=resizePart
+    semantics=action
+    action=avatar.resizePart
+    doc="Bigger or smaller (dir=bigger|smaller) for a part. Emoji eyes step along the sizes that really differ (small, pupils, big pupils); the robot and the person cannot scale their eyes, so the answer offers the styles that look bigger or smaller. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+
+@op.ui.avatar.nameOf core.operation
+    impl=nameOf
+    semantics=action
+    action=avatar.nameOf
+    doc="The bare name of the avatar. kids.common speaks it as the assistant's name (the avatar and the assistant are one character): ctx.request(\"avatar.nameOf\"). Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+
 @op.ui.avatar.resetPart core.operation
     impl=resetPart
     semantics=action

@@ -57,3 +57,9 @@
     semantics=action
     action=ttt.last
     doc="Tells the last move of the system."
+
+@op.games.tictactoe.count core.operation
+    impl=count
+    semantics=action
+    action=ttt.count
+    doc="Counts the moves on the board so far, split by player (how many moves or tries have we made)."

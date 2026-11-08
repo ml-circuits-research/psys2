@@ -40,6 +40,20 @@
     status=missing
     text="{note}"
 
+@tpl.ui.avatar.resizePart core.template
+    for=action.avatar.resizePart
+    text="{value}"
+
+@tpl.ui.avatar.resizePart.unsupported core.template
+    for=action.avatar.resizePart
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.avatar.resizePart.missing core.template
+    for=action.avatar.resizePart
+    status=missing
+    text="{note}"
+
 @tpl.ui.avatar.resetPart core.template
     for=action.avatar.resetPart
     text="{value}"

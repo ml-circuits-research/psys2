@@ -196,3 +196,13 @@ export function last(ctx) {
   const i = ctx.state.last.system;
   return i === null ? ok('I have not played yet.') : ok(`My last move was ${NAMES[i]}.`);
 }
+
+/** How many moves (marks on the board) so far, and how many of them are the user's. */
+export function count(ctx) {
+  const s = ctx.state;
+  const total = moves(s.board);
+  if (total === 0) return ok('Nobody has played yet: the board is empty.');
+  const mine = s.board.filter((c) => c === s.user).length, theirs = total - mine;
+  const plural = (n) => `${n} ${n === 1 ? 'move' : 'moves'}`;
+  return ok(`${total === 1 ? 'There is 1 move' : `There are ${total} moves`} on the board so far: you made ${plural(mine)} and I made ${plural(theirs)}.${s.winner ? '' : ' There are ' + (9 - total) + ' places left.'}`.replace('There are 1 places left', 'There is 1 place left'));
+}

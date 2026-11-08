@@ -54,7 +54,9 @@ export function avatarOptions(state, override = {}) {
 
 /** Words listing the current parts, for the caption and the aria label. */
 export function partsCaption(state) {
-  const s = normalizeState(state), v = s[s.character];
+  const s = normalizeState(state), v = s[s.character], c = state?.caption;
+  // the world's own spoken names ("short side-parted hair") when they still describe the current parts
+  if (c && c.character === s.character && typeof c.text === 'string' && c.for === JSON.stringify(Object.entries(v).filter(([k]) => k !== 'colors').sort())) return c.text;
   const bits = Object.entries(v).filter(([k, x]) => k !== 'colors' && x !== 'none').map(([k, x]) => `${words(String(x))} ${LABEL[k] ?? k}`.trim());
   return bits.join(' · ');
 }
@@ -146,8 +148,8 @@ export function createAvatar(container) {
       svg = new lib.Avatar(lib.styles[s.character], avatarOptions({ character: s.character })).toString();
     }
     nameEl.textContent = s.name;
-    partsEl.textContent = partsCaption(s);
-    stage.setAttribute('aria-label', `${s.name}, ${s.character === 'emoji' ? 'an emoji' : `a ${s.character}`} with ${partsCaption(s).replace(/ · /g, ', ')}`);
+    partsEl.textContent = partsCaption(state);
+    stage.setAttribute('aria-label', `${s.name}, ${s.character === 'emoji' ? 'an emoji' : `a ${s.character}`} with ${partsCaption(state).replace(/ · /g, ', ')}`);
     if (svg === lastSvg) return;
     lastSvg = svg;
     const layer = document.createElement('div');

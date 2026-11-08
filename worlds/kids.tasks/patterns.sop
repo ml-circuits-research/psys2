@@ -2,28 +2,28 @@
     match="[can_you|could_you|will_you]? add {item:words} to [my|the|our]? list"
     emit="@{_} core.request action=tasks.add arg.item=\"{item}\" arg.list=to-do"
     kind=request
-    priority=10
+    priority=13
     example="Add milk to my list."
 
 @pat.kids.tasks.add2 core.pattern
     match="[can_you|could_you|will_you]? add {item:words} to [my|the|our]? {list:words} list"
     emit="@{_} core.request action=tasks.add arg.item=\"{item}\" arg.list=\"{list}\""
     kind=request
-    priority=10
+    priority=13
     example="Add milk to my shopping list."
 
 @pat.kids.tasks.add3 core.pattern
     match="put {item:words} on [my|the|our]? list"
     emit="@{_} core.request action=tasks.add arg.item=\"{item}\" arg.list=to-do"
     kind=request
-    priority=10
+    priority=13
     example="Put bread on my list."
 
 @pat.kids.tasks.add4 core.pattern
     match="put {item:words} on [my|the|our]? {list:words} list"
     emit="@{_} core.request action=tasks.add arg.item=\"{item}\" arg.list=\"{list}\""
     kind=request
-    priority=10
+    priority=13
     example="Put bread on my shopping list."
 
 @pat.kids.tasks.add5 core.pattern
@@ -44,15 +44,37 @@
     match="write {item:words} on [my|the|our]? {list:words} list"
     emit="@{_} core.request action=tasks.add arg.item=\"{item}\" arg.list=\"{list}\""
     kind=request
-    priority=10
+    priority=13
     example="Write call grandma on my to-do list."
 
 @pat.kids.tasks.add8 core.pattern
     match="i want to add {item:words} to [my|the|our]? {list:words} list"
     emit="@{_} core.request action=tasks.add arg.item=\"{item}\" arg.list=\"{list}\""
     kind=request
-    priority=10
+    priority=13
     example="I want to add eggs to my shopping list."
+
+@pat.kids.tasks.add.and core.pattern
+    match="[can_you|could_you|will_you]? add {a:words} to [my|the|our]? list and add {b:words} to [my|the|our]? list"
+    emit="@{_} core.request action=tasks.add arg.item=\"{a}\" arg.list=to-do\n@{_1} core.request action=tasks.add arg.item=\"{b}\" arg.list=to-do"
+    kind=request
+    priority=14
+    example="Add bread to my list and add milk to my list."
+
+@pat.kids.tasks.add.and.list core.pattern
+    match="[can_you|could_you|will_you]? add {a:words} to [my|the|our]? {la:words} list and add {b:words} to [my|the|our]? {lb:words} list"
+    emit="@{_} core.request action=tasks.add arg.item=\"{a}\" arg.list=\"{la}\"\n@{_1} core.request action=tasks.add arg.item=\"{b}\" arg.list=\"{lb}\""
+    kind=request
+    priority=14
+    example="Add bread to my shopping list and add a book to my homework list."
+
+@pat.kids.tasks.neg.done core.pattern
+    match="i [did_not|have_not|had_not|never] [finish|finished|complete|completed|buy|bought|do|done] {item:words}"
+    emit="@{_} core.request action=tasks.notDone arg.item=\"{item}\""
+    kind=request
+    priority=12
+    example="I didn't buy milk."
+    example="I have not finished my homework."
 
 @pat.kids.tasks.rem1 core.pattern
     match="[can_you|could_you|will_you]? remind me to {item:words}"

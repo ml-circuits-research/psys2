@@ -8,7 +8,19 @@
     impl=assistantName
     semantics=action
     action=chat.name
-    doc="Tells the assistant's name (the name of e.assistant)."
+    doc="Tells the assistant's name: the name of the avatar when ui.avatar is loaded (they are one character, ctx.request(\"avatar.nameOf\")), else the name of e.assistant."
+
+@op.kids.common.meet core.operation
+    impl=meet
+    semantics=action
+    action=chat.meet
+    doc="The user says their name (arg.name): remembers it in the session (ctx.state.userName) and greets them by it."
+
+@op.kids.common.myname core.operation
+    impl=myName
+    semantics=action
+    action=chat.myname
+    doc="Tells the user's name when they said it earlier in the session, else asks for it."
 
 @op.kids.common.who core.operation
     impl=assistantName

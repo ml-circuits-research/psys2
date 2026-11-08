@@ -181,3 +181,7 @@
 @tpl.kids.tasks.t42 core.template
     for=ack.kids.tasks.entry
     text="OK, {text} is on your {list} list."
+
+@tpl.kids.tasks.notDone core.template
+    for=action.tasks.notDone
+    text="{note}"

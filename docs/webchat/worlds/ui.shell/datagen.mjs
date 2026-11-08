@@ -95,13 +95,17 @@ const lists = (group, act, args, forms, para, ph = 'request', polite = false) =>
 
 add('shell.open', 'request', (r, x) => { const t = pick(r, tabs(x));
   return { text: fin(r, `${pick(r, CAN)}${pick(r, ['open', 'show', 'display', 'bring up', 'go to', 'switch to', 'take me to', 'jump to', 'select', 'view', 'show me', 'open up'])} ${pick(r, ['the ', 'my ', 'your ', ''])}${tname(t)}${pick(r, ['', '', ' tab', ' page', ' screen', ' panel', ' window'])}`), expect: E(R('openTab', { tab: t })) }; });
+// Names the shell knows (declared by the worlds) can be said bare; any other name needs the word tab, page, screen,
+// panel or window ("Open the photo album tab": refused politely, "Open your ears" is not a tab command).
+const KNOWN_DECLARED = new Set(['chess board', 'map', 'drawing board']);
 add('shell.open.declared', 'declared-tab', (r) => { const t = pick(r, DECLARED);
-  return { text: fin(r, `${pick(r, ['Open', 'Show', 'Go to', 'Switch to'])} the ${t}${pick(r, ['', ' tab'])}`), expect: E(R('openTab', { tab: q(t) })) }; });
+  return { text: fin(r, `${pick(r, ['Open', 'Show', 'Go to', 'Switch to'])} the ${t}${KNOWN_DECLARED.has(t) ? pick(r, ['', ' tab']) : pick(r, [' tab', ' page', ' screen'])}`), expect: E(R('openTab', { tab: q(t) })) }; });
 add('shell.play', 'request', (r, x) => { const t = pick(r, tabs(x)).replace(/^(robot|face|avatar|editor|document|doc)$/, 'hangman');
   return { text: fin(r, `${pick(r, LETS)}${pick(r, ['play', 'start', 'begin', 'launch', 'have'])} ${pick(r, ['', 'a ', 'the ', 'some ', 'a game of ', 'a round of ', 'the game of ', 'another game of '])}${tname(t)}${pick(r, ['', ' game', ' again'])}`), expect: E(R('playGame', { tab: t })) }; });
 add('shell.play.twenty', 'number-words', (r) => ({ text: fin(r, `${pick(r, LETS)}${pick(r, ['play', 'start', 'begin', 'have'])} ${pick(r, ['', 'a ', 'the ', 'a game of '])}twenty questions${pick(r, ['', ' game'])}`), expect: E(R('playGame', { tab: 'guess' })) }));
 add('shell.open.twenty', 'number-words', (r) => ({ text: fin(r, `${pick(r, CAN)}${pick(r, ['open', 'show', 'go to', 'switch to', 'show me'])} ${pick(r, ['the ', ''])}twenty questions${pick(r, ['', ' tab'])}`), expect: E(R('openTab', { tab: 'guess' })) }));
-add('shell.play.declared', 'declared-tab', (r) => { const t = pick(r, ['chess', 'music', 'drawing', 'maps']);
+add('shell.play.declared', 'declared-tab', (r) => { // ("play music" is the music world's, not a tab)
+  const t = pick(r, ['chess', 'drawing', 'maps']);
   return { text: fin(r, `${pick(r, LETS)}play ${t}`), expect: E(R('playGame', { tab: q(t) })) }; });
 add('shell.choose', 'request', (r) => ({ text: fin(r, `${pick(r, LETS.filter(Boolean))}${pick(r, ['play', 'play a game', 'play a game with you', 'play games'])}`), expect: E(R('chooseGame')) }));
 lists('shell.back', 'back', {}, ['go back', 'back', 'previous tab', 'go to the previous tab', 'take me back', 'switch back', 'go back to the previous tab'], ['return to the last tab', 'go to the tab before'], 'request', true);

@@ -48,9 +48,12 @@ const COLOR_SAY = { body: ['body', 'is'], accent: ['accent color', 'is'], screen
 /** A glow must not equal the body color (style definition: notEqualTo). */
 const NOT_EQUAL = { glow: 'body', body: 'glow' };
 const LABEL = { eyes: 'eyes', mouth: 'mouth', top: 'top piece', chest: 'chest', head: 'hairstyle', expression: 'expression', accessories: 'accessories', facialHair: 'facial hair', mask: 'mask', face: 'face shape', cheeks: 'cheeks' };
+/** Hairstyle names that read without an article ("short curly hair", "twin buns", "cornrows in a ponytail"). */
+const NO_ARTICLE_HAIR = /^(?:.*\bhair(?: with .*)?|.*\b(?:knots|buns|braids|dreadlocks|twists)|cornrows.*|shoulder-length.*)$/;
+const EYES_PHRASE = { pupils: 'round eyes with pupils', 'big pupils': 'big pupils', 'tall pupils': 'tall pupils', sparkle: 'sparkling eyes', 'look side': 'eyes looking sideways', 'look down': 'eyes looking down', 'look up': 'eyes looking up', wink: 'a winking eye' };
 const PHRASE = {
-  eyes: (d) => `${d} eyes`, mouth: (d) => `${a(d)} ${d} mouth`, top: (d) => `${a(d)} ${d} on top`, chest: (d) => `${a(d)} ${d} on my chest`,
-  head: (d) => `the ${d} hairstyle`, expression: (d) => `${a(d)} ${d} expression`, accessories: (d) => `${a(d)} ${d}`, facialHair: (d) => `${d} facial hair`,
+  eyes: (d) => EYES_PHRASE[d] ?? `${d} eyes`, mouth: (d) => `${a(d)} ${d} mouth`, top: (d) => `${a(d)} ${d} on top`, chest: (d) => `${a(d)} ${d} on my chest`,
+  head: (d) => (NO_ARTICLE_HAIR.test(d) ? d : `${/^[aeiou]/i.test(d) ? 'an' : 'a'} ${d}`), expression: (d) => `${a(d)} ${d} expression`, accessories: (d) => `${a(d)} ${d}`, facialHair: (d) => `${a(d)} ${d}`,
   mask: (d) => `${a(d)} ${d}`, face: (d) => `${a(d)} ${d} face`, cheeks: (d) => `${d} cheeks`,
 };
 const NONE_PHRASE = { top: 'nothing on top', chest: 'nothing on my chest', accessories: 'no accessories', facialHair: 'no facial hair', mask: 'no mask', cheeks: 'no cheeks' };
@@ -99,7 +102,13 @@ const a = (word) => ((w) => (/s$/.test(w) && !/ss$/.test(w) ? '' : /^[aeiou]/i.t
 const andList = (xs) => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs.at(-1)}`);
 const orList = (xs) => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} or ${xs.at(-1)}`);
 const idsOf = (list) => [...new Set(list.map((e) => e.id))];
-const done = (ctx, key, sentence) => { ctx.request('ui.openTab', { tab: 'robot' }); return ok(`${opener(key)} ${sentence}`); };
+// The host caption shows the spoken part names; `for` lets the host ignore it once the parts change elsewhere.
+const partsSig = (v) => JSON.stringify(Object.entries(v).filter(([k]) => k !== 'colors').sort());
+function caption(ctx) {
+  const s = ctx.state, ch = s.character, v = s[ch];
+  s.caption = { character: ch, for: partsSig(v), text: components(ctx, ch).filter((k) => v[k] !== 'none').map((k) => phraseOf(ctx, ch, k, v[k]).replace(/\bmy\b/g, 'its')).join(' · ') };
+}
+const done = (ctx, key, sentence) => { ensure(ctx); caption(ctx); ctx.request('ui.openTab', { tab: 'robot' }); return ok(`${opener(key)} ${sentence}`); };
 const clean = (s) => String(s ?? '').replace(/ {2,}/g, ' ').trim();
 const say = (key, display) => clean(PHRASE[key] ? PHRASE[key](display) : `${display} ${LABEL[key] ?? key}`);
 
@@ -274,6 +283,43 @@ export function step(ctx, { part, dir }) {
   }
   const note = apply(ctx, s, { ch: slot.ch, key: slot.key, id: next });
   return done(ctx, slot.key + next, `I have ${phraseOf(ctx, slot.ch, slot.key, next)} now.${note}`);
+}
+
+// ---- size words ("make your eyes bigger") -----------------------------------------------------------------------
+/** Emoji eyes that really differ in size (checked on the drawings): small < pupils (and sparkle) < bigPupils. */
+const BIGGER = new Set(['bigger', 'larger', 'wider', 'huger', 'rounder']);
+const EMOJI_EYE_SIZE = ['small', 'pupils', 'bigPupils'];
+/** Robot eyes: styles, not sizes. Square, visor and cyclops fill more of the screen than round and plus. */
+const ROBOT_EYES_BIGGER = ['square', 'visor', 'cyclops'], ROBOT_EYES_SMALLER = ['round', 'plus'];
+export function resizePart(ctx, { part, dir }) {
+  const s = ensure(ctx);
+  const grow = BIGGER.has(String(dir));
+  const word = grow ? 'bigger' : 'smaller';
+  const keys = PART_KEYS[part];
+  if (!keys) return no(`I do not know what my ${String(part).replace(/_/g, ' ')} is.`);
+  const ch = s.character;
+  if (keys.includes('eyes') && ch === 'emoji') {
+    const cur = s.emoji.eyes;
+    const rung = EMOJI_EYE_SIZE.includes(cur) ? EMOJI_EYE_SIZE.indexOf(cur) : cur === 'sparkle' ? 1 : -1;
+    if (rung === -1) { // another look (closed, wink, angry ...): go to the plain pair that is bigger or smaller than the usual one
+      s.emoji.eyes = grow ? 'bigPupils' : 'small';
+      return done(ctx, 'eyes' + word, `My eyes are ${word} now: ${phraseOf(ctx, ch, 'eyes', s.emoji.eyes)}.`);
+    }
+    const next = EMOJI_EYE_SIZE[rung + (grow ? 1 : -1)];
+    if (!next) return ok(`My eyes are already as ${grow ? 'big' : 'small'} as I can make them. I can change their style instead: say "what eyes can you have?"`);
+    s.emoji.eyes = next;
+    return done(ctx, 'eyes' + word, `My eyes are ${word} now: ${phraseOf(ctx, ch, 'eyes', next)}.`);
+  }
+  if (keys.includes('eyes') && ch === 'robot') {
+    const pick = (grow ? ROBOT_EYES_BIGGER : ROBOT_EYES_SMALLER).filter((x) => x !== s.robot.eyes);
+    return ok(`I cannot scale my eyes, but I can change their style. My eyes can be ${orList(listOptionsText(ctx, 'robot', 'eyes').split(', '))}. For ${word} eyes try ${orList(pick)}; say "make your eyes ${pick[0]}".`);
+  }
+  if (keys.includes('eyes') && ch === 'person') {
+    return ok(`My eyes come with my expression. For ${grow ? 'wider eyes try awe, hectic or fear' : 'narrower eyes try tired, contempt or eyes closed'}; say "make your expression ${grow ? 'awe' : 'tired'}".`);
+  }
+  const key = keys.find((k) => components(ctx, ch).includes(k));
+  if (!key) return no(`I am ${spoken(ch)}, so I have no ${String(part).replace(/_/g, ' ')} to resize.`);
+  return ok(`I cannot change the size of my ${LABEL[key]}, but I can change its style. My ${LABEL[key]} can be ${orList(listOptionsText(ctx, ch, key, 12).split(', '))}.`);
 }
 
 export function resetPart(ctx, { part }) {
@@ -496,6 +542,8 @@ export function setName(ctx, { name }) {
   return ok(`Nice! From now on my name is ${n}.`);
 }
 export function askName(ctx) { return ok(`My name is ${ensure(ctx).name}.`); }
+/** The bare name: the assistant and the avatar are one character, so kids.common reads it through ctx.request('avatar.nameOf'). */
+export function nameOf(ctx) { return ok(ensure(ctx).name); }
 export function reset(ctx, { scope }) {
   const s = ensure(ctx), keep = s.name, d = initialState();
   if (scope === 'all') {

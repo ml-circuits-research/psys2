@@ -83,59 +83,59 @@
     example="I buy a ball and a pencil."
 
 @pat.kids.shop.price.costs core.pattern
-    match="[a|an|the|one]? {item:noun} [costs|cost] {n:number} [lei|leu] [each|now|today]?"
+    match="[a|an|the|one|1]? {item:noun} [costs|cost] {n:number} [lei|leu] [each|now|today]?"
     emit="@{_} kids.shop.price item={item} cost={n}"
     kind=statement
     priority=10
     example="A ball costs 7 lei."
 
 @pat.kids.shop.price.is core.pattern
-    match="[a|an|the|one]? {item:lex.kids.shop.items} [is|are] {n:number} [lei|leu] [each|now|today]?"
+    match="[a|an|the|one|1]? {item:lex.kids.shop.items} [is|are] {n:number} [lei|leu] [each|now|today]?"
     emit="@{_} kids.shop.price item={item} cost={n}"
     kind=statement
     priority=10
     example="The pencil is 3 lei."
 
 @pat.kids.shop.price.of core.pattern
-    match="the [price|cost] of [a|an|the|one]? {item:noun} is {n:number} [lei|leu]"
+    match="the [price|cost] of [a|an|the|one|1]? {item:noun} is {n:number} [lei|leu]"
     emit="@{_} kids.shop.price item={item} cost={n}"
     kind=statement
     priority=10
     example="The price of a kite is 9 lei."
 
 @pat.kids.shop.q.price.cost core.pattern
-    match="how_much [does|do|did|will]? [a|an|the|one]? {item:noun} cost [each|now|today]?"
+    match="how_much [does|do|did|will]? [a|an|the|one|1]? {item:noun} cost [each|now|today]?"
     emit="@{_} core.question type=kids.shop.price seek=cost where.item={item}"
     kind=question
-    priority=9
+    priority=10
     example="How much does a ball cost?"
 
 @pat.kids.shop.q.price.is core.pattern
-    match="how_much [is|are|was] [a|an|the|one]? {item:noun} [each|now|today]?"
+    match="how_much [is|are|was] [a|an|the|one|1]? {item:noun} [each|now|today]?"
     emit="@{_} core.question type=kids.shop.price seek=cost where.item={item}"
     kind=question
-    priority=9
+    priority=10
     example="How much is the notebook?"
 
 @pat.kids.shop.q.price.what core.pattern
-    match="what [does|do|will]? [a|an|the|one]? {item:noun} cost"
+    match="what [does|do|will]? [a|an|the|one|1]? {item:noun} cost"
     emit="@{_} core.question type=kids.shop.price seek=cost where.item={item}"
     kind=question
-    priority=9
+    priority=10
     example="What does a book cost?"
 
 @pat.kids.shop.q.price.of core.pattern
-    match="what_is the [price|cost] of [a|an|the|one]? {item:noun}"
+    match="what_is the [price|cost] of [a|an|the|one|1]? {item:noun}"
     emit="@{_} core.question type=kids.shop.price seek=cost where.item={item}"
     kind=question
-    priority=9
+    priority=10
     example="What is the price of a doll?"
 
 @pat.kids.shop.q.price.much core.pattern
-    match="how_much money [does|do] [a|an|the|one]? {item:noun} cost"
+    match="how_much money [does|do] [a|an|the|one|1]? {item:noun} cost"
     emit="@{_} core.question type=kids.shop.price seek=cost where.item={item}"
     kind=question
-    priority=9
+    priority=10
     example="How much money does a kite cost?"
 
 @pat.kids.shop.q.total.cost.a core.pattern

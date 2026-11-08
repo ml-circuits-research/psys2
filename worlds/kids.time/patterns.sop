@@ -97,18 +97,74 @@
     example="What is the day before Wednesday?"
 
 @pat.kids.time.q.day.n.after core.pattern
-    match="what day [is|comes|will_it_be]? {k:number} [day|days] after {d:lex.kids.time.days}"
+    match="what day [is|comes|will_it_be|was]? {k:number} [day|days] after {d:lex.kids.time.days}"
     emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from={d} where.by={k}"
     kind=question
     priority=10
     example="What day is 3 days after Friday?"
 
 @pat.kids.time.q.day.n.before core.pattern
-    match="what day [is|comes|was]? {k:number} [day|days] before {d:lex.kids.time.days}"
+    match="what day [is|comes|was|will_it_be]? {k:number} [day|days] before {d:lex.kids.time.days}"
     emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from={d} where.by=-{k}"
     kind=question
     priority=10
     example="What day is 2 days before Monday?"
+
+@pat.kids.time.q.day.follows core.pattern
+    match="[what|which] day follows {d:lex.kids.time.days}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from={d} where.by=1"
+    kind=question
+    priority=10
+    example="What day follows Monday?"
+
+@pat.kids.time.q.day.the.before core.pattern
+    match="the day before {d:lex.kids.time.days}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=day where.from={d} where.by=-1"
+    kind=question
+    priority=10
+    example="The day before Tuesday?"
+
+@pat.kids.time.q.month.follows core.pattern
+    match="[what|which] month follows {m:lex.kids.time.months}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=month where.from={m} where.by=1"
+    kind=question
+    priority=10
+    example="What month follows January?"
+
+@pat.kids.time.q.month.the.after core.pattern
+    match="the month [after|following] {m:lex.kids.time.months}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=month where.from={m} where.by=1"
+    kind=question
+    priority=10
+    example="The month after May?"
+
+@pat.kids.time.q.month.the.before core.pattern
+    match="the month before {m:lex.kids.time.months}"
+    emit="@{_} core.question type=kids.time.shift seek=result where.unit=month where.from={m} where.by=-1"
+    kind=question
+    priority=10
+    example="The month before May?"
+
+@pat.kids.time.q.season.follows core.pattern
+    match="[which|what] season follows {s:lex.kids.time.seasons}"
+    emit="@{_} core.question type=kids.time.seasonshift seek=result where.unit=season where.from={s} where.by=1"
+    kind=question
+    priority=10
+    example="Which season follows Summer?"
+
+@pat.kids.time.q.season.the.after core.pattern
+    match="the season [after|following] {s:lex.kids.time.seasons}"
+    emit="@{_} core.question type=kids.time.seasonshift seek=result where.unit=season where.from={s} where.by=1"
+    kind=question
+    priority=10
+    example="The season after winter?"
+
+@pat.kids.time.q.season.the.before core.pattern
+    match="the season before {s:lex.kids.time.seasons}"
+    emit="@{_} core.question type=kids.time.seasonshift seek=result where.unit=season where.from={s} where.by=-1"
+    kind=question
+    priority=10
+    example="The season before winter?"
 
 @pat.kids.time.q.day.tomorrow.if core.pattern
     match="what day is [it]? tomorrow [if|when] today is {d:lex.kids.time.days}"
@@ -244,14 +300,14 @@
     example="What is the month before March?"
 
 @pat.kids.time.q.month.n.after core.pattern
-    match="what month [is|comes|will_it_be]? {k:number} [month|months] after {m:lex.kids.time.months}"
+    match="what month [is|comes|will_it_be|was]? {k:number} [month|months] after {m:lex.kids.time.months}"
     emit="@{_} core.question type=kids.time.shift seek=result where.unit=month where.from={m} where.by={k}"
     kind=question
     priority=10
     example="What month is 3 months after May?"
 
 @pat.kids.time.q.month.n.before core.pattern
-    match="what month [is|comes|was]? {k:number} [month|months] before {m:lex.kids.time.months}"
+    match="what month [is|comes|was|will_it_be]? {k:number} [month|months] before {m:lex.kids.time.months}"
     emit="@{_} core.question type=kids.time.shift seek=result where.unit=month where.from={m} where.by=-{k}"
     kind=question
     priority=10
@@ -440,24 +496,24 @@
     example="What are the seasons?"
 
 @pat.kids.time.q.len.are core.pattern
-    match="how_many {part:lex.kids.time.parts} [are|is]? [there]? in [a|an|one|the]? {whole:lex.kids.time.wholes}"
+    match="how_many {part:lex.kids.time.parts} [are|is]? [there]? in [a|an|one|the|1]? {whole:lex.kids.time.wholes}"
     emit="@{_} core.question type=kids.time.length seek=count where.whole={whole} where.part={part}"
     kind=question
-    priority=10
+    priority=12
     example="How many days are in a week?"
 
 @pat.kids.time.q.len.have core.pattern
-    match="how_many {part:lex.kids.time.parts} [does|do|has|have] [a|an|one|the]? {whole:lex.kids.time.wholes} have"
+    match="how_many {part:lex.kids.time.parts} [does|do|has|have] [a|an|one|the|1]? {whole:lex.kids.time.wholes} have"
     emit="@{_} core.question type=kids.time.length seek=count where.whole={whole} where.part={part}"
     kind=question
-    priority=10
+    priority=12
     example="How many hours does a day have?"
 
 @pat.kids.time.q.len.make core.pattern
-    match="how_many {part:lex.kids.time.parts} [make_up|make] [a|an|one|the]? {whole:lex.kids.time.wholes}"
+    match="how_many {part:lex.kids.time.parts} [make_up|make] [a|an|one|the|1]? {whole:lex.kids.time.wholes}"
     emit="@{_} core.question type=kids.time.length seek=count where.whole={whole} where.part={part}"
     kind=question
-    priority=10
+    priority=12
     example="How many minutes make an hour?"
 
 @pat.kids.time.q.len.times core.pattern

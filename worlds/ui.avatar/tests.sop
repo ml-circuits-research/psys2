@@ -301,7 +301,7 @@
 
 @t.ui.avatar.n58 core.test
     input="What kind of hair do you have?"
-    expect="short 1"
+    expect="short side-parted hair"
     session=d
 
 @t.ui.avatar.n59 core.test
@@ -490,6 +490,181 @@
 
 @t.ui.avatar.n94 core.test
     input="Make your eyes bigger."
-    expect="I do not know eyes like"
-    expectStatus=unsupported
+    expect="I cannot scale my eyes"
+    expect="For bigger eyes try square, visor or cyclops"
+    expectState="robot.eyes=round"
     session=g
+
+@t.ui.avatar.n95 core.test
+    input="Become a person."
+    expectState="character=person"
+    session=h
+
+@t.ui.avatar.n96 core.test
+    input="Give yourself glasses 3."
+    expect="browline glasses"
+    expectState="person.accessories=glasses3"
+    session=h
+
+@t.ui.avatar.n97 core.test
+    input="Wear thin round glasses."
+    expect="thin round glasses"
+    expectState="person.accessories=glasses2"
+    session=h
+
+@t.ui.avatar.n98 core.test
+    input="Wear glasses 5."
+    expect="thick round glasses"
+    expectState="person.accessories=glasses5"
+    session=h
+
+@t.ui.avatar.n99 core.test
+    input="Give yourself a thick beard."
+    expect="a thick beard"
+    expectState="person.facialHair=full3"
+    session=h
+
+@t.ui.avatar.n100 core.test
+    input="Give yourself a moustache 3."
+    expect="a handlebar moustache"
+    expectState="person.facialHair=moustache3"
+    session=h
+
+@t.ui.avatar.n101 core.test
+    input="Give yourself a walrus moustache."
+    expectState="person.facialHair=moustache2"
+    session=h
+
+@t.ui.avatar.n102 core.test
+    input="Give yourself short curly hair."
+    expect="I have short curly hair"
+    expectState="person.head=short3"
+    session=h
+
+@t.ui.avatar.n103 core.test
+    input="Give yourself short hair 4."
+    expect="short wavy hair"
+    expectState="person.head=short4"
+    session=h
+
+@t.ui.avatar.n104 core.test
+    input="Give yourself side-parted hair."
+    expectState="person.head=short1"
+    session=h
+
+@t.ui.avatar.n105 core.test
+    input="Give yourself a bob with bangs."
+    expect="a bob with bangs"
+    expectState="person.head=bangs2"
+    session=h
+
+@t.ui.avatar.n106 core.test
+    input="What are you wearing?"
+    expect="thick round glasses"
+    session=h
+
+@t.ui.avatar.n107 core.test
+    input="Describe yourself."
+    expect="thick round glasses"
+    expect="a walrus moustache"
+    expect="a bob with bangs"
+    session=h
+
+@t.ui.avatar.n108 core.test
+    input="What glasses can you have?"
+    expect="thin square glasses"
+    session=h
+
+@t.ui.avatar.n109 core.test
+    input="What facial hair can you have?"
+    expect="thick beard"
+    expect="handlebar moustache"
+    session=h
+
+@t.ui.avatar.n110 core.test
+    input="Make your eyes smaller."
+    expect="narrower eyes try tired"
+    session=h
+
+@t.ui.avatar.n111 core.test
+    input="Make your eyes bigger."
+    expect="wider eyes try awe"
+    session=h
+
+@t.ui.avatar.n112 core.test
+    input="Become an emoji."
+    expectState="character=emoji"
+    session=h
+
+@t.ui.avatar.n113 core.test
+    input="Make your eyes bigger."
+    expect="My eyes are bigger now"
+    expectState="emoji.eyes=bigPupils"
+    session=h
+
+@t.ui.avatar.n114 core.test
+    input="Make your eyes bigger."
+    expect="already as big as I can"
+    expectState="emoji.eyes=bigPupils"
+    session=h
+
+@t.ui.avatar.n115 core.test
+    input="Make your eyes smaller."
+    expectState="emoji.eyes=pupils"
+    session=h
+
+@t.ui.avatar.n116 core.test
+    input="Make your eyes smaller."
+    expectState="emoji.eyes=small"
+    session=h
+
+@t.ui.avatar.n117 core.test
+    input="Make your eyes smaller."
+    expect="already as small as I can"
+    session=h
+
+@t.ui.avatar.n118 core.test
+    input="Give yourself bigger eyes."
+    expectState="emoji.eyes=pupils"
+    session=h
+
+@t.ui.avatar.n119 core.test
+    input="Make your mouth bigger."
+    expect="cannot change the size of my mouth"
+    session=h
+
+@t.ui.avatar.n139 core.test
+    input="Become a person."
+    expectState="character=person"
+    session=i
+
+@t.ui.avatar.n140 core.test
+    input="Give yourself a thick beard and wear thin round glasses."
+    expectState="person.facialHair=full3"
+    expectState="person.accessories=glasses2"
+    session=i
+
+@t.ui.avatar.n141 core.test
+    input="What is your hairstyle?"
+    expect="short side-parted hair"
+    session=i
+
+@t.ui.avatar.n142 core.test
+    input="What is your name?"
+    expect="My name is PSys2."
+    session=i
+
+@t.ui.avatar.n143 core.test
+    input="Call yourself Ziggy."
+    expectState="name=Ziggy"
+    session=i
+
+@t.ui.avatar.n144 core.test
+    input="What are you called?"
+    expect="My name is Ziggy."
+    session=i
+
+@t.ui.avatar.n145 core.test
+    input="Who are you?"
+    expect="I am Ziggy"
+    session=i

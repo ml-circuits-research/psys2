@@ -4,7 +4,7 @@ Each library is bundled into one file (or one folder for multi-file assets) with
 
 | Folder / file | Library | Version | Licence | Used by |
 | --- | --- | --- | --- | --- |
-| `dicebear-core.mjs`, `dicebear-styles/` | DiceBear core; styles voxel-bot, open-peeps, moods | 10.7.0 / 10.6.0 | MIT / CC0 1.0 | Avatar tab |
+| `dicebear-core.mjs`, `dicebear-styles/` (`voxel-bot.json`, `open-peeps.json`, `moods.json`) | DiceBear core; styles voxel-bot, open-peeps, moods | 10.7.0 / 10.6.0 | MIT / CC0 1.0 | Avatar tab |
 | `editor/` | TipTap + ProseMirror (and linkifyjs, orderedmap, rope-sequence, w3c-keyname) | 3.33.0 | MIT | Editor tab |
 | `chess/` | chessground (cburnett pieces), Stockfish 19 lite single-threaded (JS + WASM) | see `chess/LICENSES.md` | GPL-3.0 | Chess tab |
 | `music/` | Tone.js, abcjs | 15.1.22 / 6.7.2 | MIT | Music tab |

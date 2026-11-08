@@ -216,3 +216,9 @@ export function showLists(ctx) {
   if (!names.length) return { status: 'missing', missing: ['lists'] };
   return { status: 'supported', values: names.map((n) => `${n} (${st.lists[n].length})`) };
 }
+
+/** "I didn't buy milk": a negated report must never tick anything off. Nothing changes; the answer says how to do it later. */
+export function notDone(ctx, { item } = {}) {
+  const what = clean(item);
+  return { status: 'supported', note: what ? `Okay, I did not tick off ${what}. Nothing changed on your lists. Tell me when you have done it.` : 'Okay, nothing changed on your lists.' };
+}

@@ -97,7 +97,7 @@
     example="Tom finds 2 marbles."
 
 @pat.kids.arith.get.a core.pattern
-    match="{who:agent} [gets|got|get|receives|received|finds|found|find|wins|won] [a|an] [new]? {item:lex.kids.arith.items}"
+    match="{who:agent} [gets|got|get|receives|received|finds|found|find|collects|collected|collect|wins|won] [a|an] [new]? {item:lex.kids.arith.items}"
     emit="@{_} kids.arith.receive who={who} count=1 item={item}"
     kind=statement
     priority=10
@@ -158,6 +158,13 @@
     kind=statement
     priority=10
     example="Ben bought a pencil."
+
+@pat.kids.arith.buy.of core.pattern
+    match="{who:agent} [buys|bought|buy|purchases|purchased] {n:number} of [his|her|their|my|the]? {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.buy who={who} count={n} item={item}"
+    kind=statement
+    priority=10
+    example="Ana bought 3 of her sandwiches."
 
 @pat.kids.arith.break core.pattern
     match="{who:agent} [breaks|broke|break] {n:number} [more]? {item:lex.kids.arith.items}"

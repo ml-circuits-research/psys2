@@ -171,7 +171,10 @@ function make(holder, host) {
     ground.then(() => render(st));
   }
 
-  return { update, engine, destroy() { destroyed = true; onResize?.disconnect(); cg?.destroy?.(); engine.destroy(); } };
+  // chessground redraws its arrows on its own resize; with the panel hidden that would compute NaN coordinates
+  const hide = () => cg?.set({ drawable: { autoShapes: [] } });
+  const show = () => requestAnimationFrame(() => { if (last && boardEl.offsetWidth) { cg?.redrawAll(); cg?.set({ drawable: { autoShapes: shapes(last) } }); } });
+  return { update, engine, hide, show, destroy() { destroyed = true; onResize?.disconnect(); cg?.destroy?.(); engine.destroy(); } };
 }
 
 /** Runs the engine for an effect; the world plays the move (or its built-in fallback when ok is false). */

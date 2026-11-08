@@ -22,6 +22,12 @@
     action=tasks.done
     doc="Marks an item as done; asks which one when several match; says when it is already done."
 
+@op.kids.tasks.notDone core.operation
+    impl=notDone
+    semantics=action
+    action=tasks.notDone
+    doc="The user says they did NOT do something (I didn't buy milk): nothing is ticked off, the answer says so and offers to tick it off later."
+
 @op.kids.tasks.check core.operation
     impl=checkItem
     semantics=action

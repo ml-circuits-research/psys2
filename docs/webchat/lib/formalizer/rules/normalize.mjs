@@ -10,7 +10,7 @@ const FILLERS = new Set(['please', 'ok', 'okay', 'well', 'um']);
 const INITIAL_DROP = new Set(['so', 'and', 'then']);
 
 const CONTRACTIONS = {
-  "can't": ['can', 'not'], "won't": ['will', 'not'], "i'm": ['I', 'am'], "let's": ['let', 'us'],
+  "can't": ['can', 'not'], cannot: ['can', 'not'], "won't": ['will', 'not'], "i'm": ['I', 'am'], "let's": ['let', 'us'],
   "what's": ['what', 'is'], "who's": ['who', 'is'], "where's": ['where', 'is'], "how's": ['how', 'is'],
   "when's": ['when', 'is'], "why's": ['why', 'is'], "that's": ['that', 'is'], "it's": ['it', 'is'],
   "there's": ['there', 'is'], "here's": ['here', 'is'], "he's": ['he', 'is'], "she's": ['she', 'is'],

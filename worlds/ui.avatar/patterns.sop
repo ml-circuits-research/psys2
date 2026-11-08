@@ -31,6 +31,36 @@
     example="Set your mouth to a grill."
     example="Switch your expression to calm."
 
+@pat.ui.avatar.resize core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [make|turn|get|have] [your|the]? {p:lex.ui.avatar.parts} [a_bit|a_little|a_lot|much|even|way|slightly]? {s:lex.ui.avatar.size}"
+    emit="@{_} core.request action=avatar.resizePart arg.part={p} arg.dir={s}"
+    kind=request
+    priority=13
+    example="Make your eyes bigger."
+    example="Make your eyes a bit smaller."
+
+@pat.ui.avatar.resize.give core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [give_yourself|give_me|get|have|i_want|i_would_like|i_want_you_to_have|you_should_have] [a_bit|a_little|a_lot|much]? {s:lex.ui.avatar.size} {p:lex.ui.avatar.parts}"
+    emit="@{_} core.request action=avatar.resizePart arg.part={p} arg.dir={s}"
+    kind=request
+    priority=13
+    example="Give yourself bigger eyes."
+    example="I want smaller eyes."
+
+@pat.ui.avatar.resize.grow core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [enlarge|widen|grow|expand|enlarge_your|widen_your] [your|the]? {p:lex.ui.avatar.parts}"
+    emit="@{_} core.request action=avatar.resizePart arg.part={p} arg.dir=bigger"
+    kind=request
+    priority=13
+    example="Enlarge your eyes."
+
+@pat.ui.avatar.resize.shrink core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [shrink|reduce|narrow] [your|the]? {p:lex.ui.avatar.parts}"
+    emit="@{_} core.request action=avatar.resizePart arg.part={p} arg.dir=smaller"
+    kind=request
+    priority=13
+    example="Shrink your eyes."
+
 @pat.ui.avatar.setpart.unknown core.pattern
     match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [change|make|set|switch|turn|swap] [your|the]? {p:lex.ui.avatar.parts} [to|into|be|like|with|as]? [a|an|the]? {w:words(4)}"
     emit="@{_} core.request action=avatar.setPartUnknown arg.part={p} arg.words=\"{w}\""
@@ -284,14 +314,6 @@
     priority=12
     example="You are called Ziggy."
 
-@pat.ui.avatar.name.q core.pattern
-    match="[what_is_your_name|what_are_you_called|what_do_i_call_you|what_should_i_call_you|what_is_your_name_again|tell_me_your_name]"
-    emit="@{_} core.request action=avatar.askName"
-    kind=request
-    priority=12
-    example="What is your name?"
-    example="What are you called?"
-
 @pat.ui.avatar.seed.set core.pattern
     match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [use|set|change|try|set_the|use_the|change_the|try_the] [the|your|a]? seed [to|as|from]? {s:rest}"
     emit="@{_} core.request action=avatar.setSeed arg.seed=\"{s}\""
@@ -450,6 +472,20 @@
     example="Which hair can you have?"
     example="What antennas can you use?"
 
+@pat.ui.avatar.q.options.glasses core.pattern
+    match="[what|which] [kind_of|kinds_of|types_of|sorts_of|styles_of]? [glasses|sunglasses|eyewear|specs|spectacles|shades|eyepatches] [can|could] [you|i] [have|wear|use|get|show|choose|pick|try]"
+    emit="@{_} core.request action=avatar.listOptions arg.part=accessory"
+    kind=request
+    priority=12
+    example="What glasses can you have?"
+
+@pat.ui.avatar.q.options.facial core.pattern
+    match="[what|which] [kind_of|kinds_of|types_of|sorts_of|styles_of]? [moustaches|mustaches|beards|goatees|moustache|mustache|beard] [can|could] [you|i] [have|wear|use|get|show|choose|pick|try|grow]"
+    emit="@{_} core.request action=avatar.listOptions arg.part=facial_hair"
+    kind=request
+    priority=12
+    example="What moustaches can you have?"
+
 @pat.ui.avatar.q.options2 core.pattern
     match="[what|which] [kind|kinds|type|types|sort|sorts|style|styles|variety|varieties] of {p:lex.ui.avatar.parts} [can_you_have|can_you_wear|can_you_use|can_you_get|are_there|can_i_choose|can_i_pick|can_i_give_you|are_available|exist|are_possible]"
     emit="@{_} core.request action=avatar.listOptions arg.part={p}"
@@ -481,6 +517,14 @@
     example="What eyes do you have?"
     example="What kind of hair do you have?"
     example="Which mouth do you have?"
+
+@pat.ui.avatar.q.part.is core.pattern
+    match="what [is|are] [your|the] {p:lex.ui.avatar.parts}"
+    emit="@{_} core.request action=avatar.askPart arg.part={p}"
+    kind=request
+    priority=11
+    example="What is your hairstyle?"
+    example="What are your eyes?"
 
 @pat.ui.avatar.q.part2 core.pattern
     match="[what|how] [is|are] [your|the] {p:lex.ui.avatar.parts} [like|looking]"

@@ -401,7 +401,7 @@
     example="What is the area of France?"
 
 @pat.geo.map.cmp1 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [which|what] [one|country|city|place|nation|town]? [is|has|was] [the|a]? {m:lex.geo.map.measures} [,|of|between|out_of]? [the]? {a:lex.geo.map.places} [or|and|vs|versus|compared_to] [the]? {b:lex.geo.map.places}"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [which|what] [one|country|city|place|nation|town|1]? [is|has|was] [the|a]? {m:lex.geo.map.measures} [,|of|between|out_of]? [the]? {a:lex.geo.map.places} [or|and|vs|versus|compared_to] [the]? {b:lex.geo.map.places}"
     emit="@{_} core.request action=geo.compare arg.a={a} arg.b={b} arg.m={m}"
     kind=question
     priority=12
@@ -552,7 +552,7 @@
     example="In which country is Lyon?"
 
 @pat.geo.map.sup1 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [which_is|what_is|what_s|which_one_is|which|what]? [the]? {m:lex.geo.map.superlatives} {k:lex.geo.map.kinds} [in|of|on|within|across|from|around]? [the]? {p:lex.geo.map.places?}"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [which_is|what_is|what_s|which_one_is|which|what|which_1_is]? [the]? {m:lex.geo.map.superlatives} {k:lex.geo.map.kinds} [in|of|on|within|across|from|around]? [the]? {p:lex.geo.map.places?}"
     emit="@{_} core.request action=geo.superlative arg.m={m} arg.k={k} arg.p={p}"
     kind=question
     priority=12

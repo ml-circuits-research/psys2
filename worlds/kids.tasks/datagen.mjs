@@ -164,7 +164,11 @@ add('tasks.context', 'context', (r) => { const l = L(r), item = pick(r, BUY);
   return { context: [`Add ${item} to my ${l.name} list.`], text: `What is on my ${l.name} list?`, expect: E(R('show', { list: q(l.name) })) }; });
 // negation, near misses, out of domain
 add('tasks.neg', 'negation', (r) => { const item = pick(r, ALL);
-  return { text: pick(r, [`Do not add ${item} to my list.`, `I did not finish ${item}.`, `I didn't buy ${pick(r, BUY)}.`, `Don't remind me about ${item}.`, `I don't need to ${pick(r, DO)}.`, `Never put ${item} on my list.`]), negative: true }; });
+  return { text: pick(r, [`Do not add ${item} to my list.`, `Don't remind me about ${item}.`, `I don't need to ${pick(r, DO)}.`, `Never put ${item} on my list.`]), negative: true }; });
+// a negated report must never tick anything off: the world answers that nothing changed (action tasks.notDone)
+add('tasks.neg.done', 'negation', (r) => { const item = pick(r, BUY);
+  const t = pick(r, [[`I didn't buy ${item}.`, item], [`I did not buy ${item}.`, item], [`I have not bought ${item}.`, item], [`I never bought ${item}.`, item]]);
+  return { text: t[0], expect: E(R('notDone', { item: q(t[1]) })) }; });
 add('tasks.near', 'near-miss', (r) => { const item = pick(r, ALL);
   return { text: pick(r, [`My list is long.`, `I like ${pick(r, BUY)}.`, `Where is my ${pick(r, ['list', 'homework'])}?`, `Add ${item}.`, `Show me the picture.`, `Remember me.`, `The list has ${pick(r, ['three', 'five'])} items.`]), negative: true }; });
 add('tasks.ood', 'out-of-domain', (r, x) => { const p = x.person(r);

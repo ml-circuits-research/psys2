@@ -6,11 +6,56 @@
     example="Hello!"
 
 @pat.kids.common.name core.pattern
-    match="[what_is|what_are] [your_name|you_called]"
+    match="[what_is|what_are|what_was] [your_name|you_called] [again|now]?"
     emit="@{_} core.request action=chat.name"
     kind=chat
-    priority=10
+    priority=12
     example="What is your name?"
+    example="What are you called?"
+
+@pat.kids.common.name.call core.pattern
+    match="[what_do_i_call_you|what_should_i_call_you|what_can_i_call_you|tell_me_your_name|may_i_ask_your_name|can_i_ask_your_name|can_you_tell_me_your_name]"
+    emit="@{_} core.request action=chat.name"
+    kind=chat
+    priority=12
+    example="What should I call you?"
+
+@pat.kids.common.meet core.pattern
+    match="[hello|hi|hey]? [there]? my name is {n:words(3)}"
+    emit="@{_} core.request action=chat.meet arg.name=\"{n}\""
+    kind=chat
+    priority=12
+    example="Hi, my name is Ben."
+    example="My name is Mia Lee."
+
+@pat.kids.common.meet.call core.pattern
+    match="[hello|hi|hey]? [there]? [call_me|you_can_call_me|please_call_me|everybody_calls_me|i_am_called|i_am_named] {n:words(3)}"
+    emit="@{_} core.request action=chat.meet arg.name=\"{n}\""
+    kind=chat
+    priority=12
+    example="Call me Sam."
+    example="You can call me Ana."
+
+@pat.kids.common.myname core.pattern
+    match="[what_is|what_was] [my_name|my_name_again]"
+    emit="@{_} core.request action=chat.myname"
+    kind=chat
+    priority=12
+    example="What is my name?"
+
+@pat.kids.common.myname2 core.pattern
+    match="[do_you_know|do_you_remember|can_you_tell_me] [what|who] [my_name_is|i_am|you_call_me|your_user_is]"
+    emit="@{_} core.request action=chat.myname"
+    kind=chat
+    priority=12
+    example="Do you remember what my name is?"
+
+@pat.kids.common.myname3 core.pattern
+    match="[who_am_i|do_you_know_my_name|do_you_remember_my_name|do_you_know_who_i_am|what_do_you_call_me|what_am_i_called]"
+    emit="@{_} core.request action=chat.myname"
+    kind=chat
+    priority=12
+    example="Who am I?"
 
 @pat.kids.common.who core.pattern
     match="who are you"

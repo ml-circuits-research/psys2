@@ -156,3 +156,13 @@
     input="Let's play a game"
     expect="tic-tac-toe"
     session=s5
+
+@t.ui.shell.n29 core.test
+    input="Play tic-tac-toe"
+    expect="let's play tic-tac-toe"
+    session=s6
+
+@t.ui.shell.n30 core.test
+    input="I cannot go on"
+    expectStatus=supported
+    session=s6

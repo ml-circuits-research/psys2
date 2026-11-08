@@ -1,13 +1,13 @@
 @pat.games.guess.yes core.pattern
-    match="[yes|yeah|yep|yup|sure|correct|right|definitely|absolutely|of_course|exactly|it_does|it_can|it_is|it_has|i_think_so|that_is_right|that_is_correct|you_are_right|you_got_it|yes_it_is|yes_it_does|yes_it_can|yes_it_has|yes_please|certainly]"
+    match="[yes|yeah|yep|yup|sure|correct|right|definitely|absolutely|of_course|exactly|it_does|it_can|it_is|it_has|i_think_so|that_is_right|that_is_correct|you_are_right|you_got_it|yes_it_is|yes_it_does|yes_it_can|yes_it_has|yes_please|certainly|affirmative|it_sure_is|yes_it_really_is|that_is_true|it_really_is|it_certainly_is|yes_indeed|indeed|you_are_correct]"
     emit="@{_} core.request action=guess.answer arg.answer=yes"
     kind=request
-    priority=11
+    priority=14
     example="Yes."
     example="It does."
 
 @pat.games.guess.no core.pattern
-    match="[no|nope|nah|not_really|it_does_not|it_can_not|it_is_not|it_has_not|wrong|no_it_is_not|no_it_does_not|no_it_can_not|no_it_has_not|i_do_not_think_so|that_is_wrong|negative|not_at_all|no_way|no_thanks]"
+    match="[no|nope|nah|not_really|it_does_not|it_can_not|it_is_not|it_has_not|wrong|no_it_is_not|no_it_does_not|no_it_can_not|no_it_has_not|i_do_not_think_so|that_is_wrong|negative|not_at_all|no_way|no_thanks|not_this_time|it_is_not_that|no_it_is_not_at_all|that_is_not_true|it_is_not_at_all|not_that_one|that_is_not_correct|negatory|not_that_1]"
     emit="@{_} core.request action=guess.answer arg.answer=no"
     kind=request
     priority=11
@@ -15,7 +15,7 @@
     example="It is not."
 
 @pat.games.guess.dontknow core.pattern
-    match="[i_do_not_know|do_not_know|not_sure|i_am_not_sure|no_idea|i_have_no_idea|i_am_not_certain|dunno|i_can_not_say|who_knows|skip|pass|next_question|i_am_not_sure_about_that]"
+    match="[i_do_not_know|do_not_know|not_sure|i_am_not_sure|no_idea|i_have_no_idea|i_am_not_certain|dunno|i_can_not_say|who_knows|skip|pass|next_question|i_am_not_sure_about_that|i_really_do_not_know|i_forgot|hard_to_say|no_clue|i_have_no_clue|i_can_not_remember|i_do_not_remember|i_really_am_not_sure]"
     emit="@{_} core.request action=guess.answer arg.answer=dontknow"
     kind=request
     priority=11
@@ -23,7 +23,7 @@
     example="Not sure."
 
 @pat.games.guess.maybe core.pattern
-    match="[maybe|sometimes|perhaps|kind_of|sort_of|it_depends|a_little|a_bit|possibly|probably|probably_not|partly]"
+    match="[maybe|sometimes|perhaps|kind_of|sort_of|it_depends|a_little|a_bit|possibly|probably|probably_not|partly|in_a_way|0.5_and_0.5|maybe_yes_maybe_no|it_depends_on_the_animal|more_or_less|yes_and_no|somewhat|it_depends]"
     emit="@{_} core.request action=guess.answer arg.answer=maybe"
     kind=request
     priority=11
@@ -44,8 +44,30 @@
     priority=12
     example="Guess my animal."
 
+@pat.games.guess.start4 core.pattern
+    match="[i_have_an_animal_in_mind|i_have_a_secret_animal|i_have_an_animal_in_my_mind|i_have_picked_an_animal|i_have_a_animal_in_mind]"
+    emit="@{_} core.request action=guess.start"
+    kind=request
+    priority=12
+    example="I have an animal in mind."
+
+@pat.games.guess.qualified core.pattern
+    match="[yes|yeah|yep|it_does|it_is|it_can|it_has|sure|right] but {x:rest}"
+    emit="@{_} core.request action=guess.answer arg.answer=maybe"
+    kind=request
+    priority=12
+    example="Yes, but only on Sundays."
+
+@pat.games.guess.start3 core.pattern
+    match="[can_you|could_you|will_you|would_you|please_can_you]? [try_to_read_my_mind|read_my_mind|guess_which_animal_i_picked|guess_which_animal_i_chose|guess_which_animal_i_am_thinking_of|guess_which_animal_i_have_in_mind|play_twenty_questions_with_me]"
+    emit="@{_} core.request action=guess.start"
+    kind=request
+    priority=12
+    example="Try to read my mind."
+    example="Can you guess which animal I picked?"
+
 @pat.games.guess.learn core.pattern
-    match="[it_was|the_animal_was|the_answer_was|the_answer_is|my_animal_was|i_was_thinking_of|i_was_thinking_about|i_thought_of|the_animal_is|it_was_actually] [a|an|the]? {x:words}"
+    match="[it_was|the_animal_was|the_answer_was|the_answer_is|my_animal_was|i_was_thinking_of|i_was_thinking_about|i_thought_of|the_animal_is|it_was_really|it_is_actually|it_was_just|it_really_was] [actually|really|just]? [a|an|the]? {x:words}"
     emit="@{_} core.request action=guess.reveal arg.animal=\"{x}\""
     kind=request
     priority=10
@@ -53,28 +75,28 @@
     example="I was thinking of a giraffe."
 
 @pat.games.guess.why core.pattern
-    match="[why_did_you_ask_that|why_are_you_asking_that|why_that_question|why_do_you_ask|why_did_you_ask|why_do_you_ask_that|why_this_question|why_are_you_asking_this|why_are_you_asking]"
+    match="[why_did_you_ask_that|why_are_you_asking_that|why_that_question|why_do_you_ask|why_did_you_ask|why_do_you_ask_that|why_this_question|why_are_you_asking_this|why_are_you_asking|what_is_that_question_for|why_do_you_want_to_know|what_for|why_are_you_asking_me_that|what_is_this_question_for|why_do_you_need_to_know]"
     emit="@{_} core.request action=guess.why"
     kind=request
     priority=11
     example="Why did you ask that?"
 
 @pat.games.guess.left core.pattern
-    match="[which_animals_are_left|what_animals_are_left|which_animals_remain|which_animals_do_you_still_consider|what_are_you_considering|which_animals_are_you_thinking_of|which_animals_are_still_possible|what_animals_are_still_possible]"
+    match="[which_animals_are_left|what_animals_are_left|which_animals_remain|which_animals_do_you_still_consider|what_are_you_considering|which_animals_are_you_thinking_of|which_animals_are_still_possible|what_animals_are_still_possible|which_animals_are_still_in_the_game|what_animals_could_it_be|which_animals_could_it_be|which_animals_are_still_in_play|what_animals_are_you_considering|which_animals_are_left_in_the_game]"
     emit="@{_} core.request action=guess.remaining"
     kind=request
     priority=11
     example="Which animals are left?"
 
 @pat.games.guess.count core.pattern
-    match="[how_many_questions_have_you_asked|how_many_questions_are_left|how_many_questions_do_you_have_left|how_many_questions_have_you_used|how_many_questions_so_far|how_many_questions_left|how_many_questions_did_you_ask]"
+    match="[how_many_questions_have_you_asked|how_many_questions_are_left|how_many_questions_do_you_have_left|how_many_questions_have_you_used|how_many_questions_so_far|how_many_questions_left|how_many_questions_did_you_ask|how_many_questions_remain|how_many_more_questions_do_you_have|how_many_more_questions_are_there|how_many_questions_remain_in_the_game|how_many_more_questions_do_you_need|how_many_questions_do_you_still_have]"
     emit="@{_} core.request action=guess.count"
     kind=request
     priority=11
     example="How many questions have you asked?"
 
 @pat.games.guess.repeat core.pattern
-    match="[repeat_the_question|say_that_again|what_was_the_question|ask_again|repeat_that|what_was_your_question|what_did_you_ask|ask_that_again|can_you_repeat_the_question|what_is_the_question]"
+    match="[repeat_the_question|say_that_again|what_was_the_question|ask_again|repeat_that|what_was_your_question|what_did_you_ask|ask_that_again|can_you_repeat_the_question|what_is_the_question|1_more_time|one_more_time|could_you_say_the_question_once_more|say_the_question_once_more|say_the_question_again|can_you_say_the_question_again|ask_the_question_once_more|once_more]"
     emit="@{_} core.request action=guess.repeat"
     kind=request
     priority=11

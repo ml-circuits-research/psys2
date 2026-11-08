@@ -8,6 +8,7 @@
     word=doc
     word=tic_tac_toe
     word=tictactoe
+    word=tic-tac-toe
     word=noughts_and_cross
     word=guess
     word=guess_the_animal
@@ -16,6 +17,46 @@
     word=20_question
     word=animal_game
     word=hangman
+
+@lex.ui.shell.declaredtabs core.lexicon
+    class=noun
+    doc="Names and aliases of the tabs that other worlds declare in their manifests (spec 07 section 6); the shell opens them by name. Unknown names are refused politely by ui.openTab."
+    word=chess
+    word=chess_board
+    word=chessboard
+    word=chess_game
+    word=drawing
+    word=drawing_board
+    word=paint
+    word=picture
+    word=canvas
+    word=chart
+    word=graph
+    word=map
+    word=world_map
+    word=atlas
+    word=music
+    word=piano
+    word=keyboard
+    word=sheet_music
+
+@lex.ui.shell.playtabs core.lexicon
+    class=noun
+    doc="Declared tabs that can be started with play: the chess game and the drawing, charts and map tabs (music and piano belong to the music world: play piano plays notes)."
+    word=chess
+    word=chess_board
+    word=chessboard
+    word=chess_game
+    word=drawing
+    word=drawing_board
+    word=paint
+    word=picture
+    word=canvas
+    word=chart
+    word=graph
+    word=map
+    word=world_map
+    word=atlas
 
 @lex.ui.shell.langs core.lexicon
     class=noun

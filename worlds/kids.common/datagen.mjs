@@ -78,7 +78,8 @@ export const version = '1';
 // surface forms; the expected circuit is always `core.request action=chat.<act>`.
 const ACTS = {
   greet: { forms: ['Hello', 'Hi', 'Hey', 'Hello there', 'Hi there', 'Hey there'], ends: ['!', '.', ''] },
-  name: { forms: ['What is your name', 'What are you called', "What's your name"], ends: ['?', ''] },
+  name: { forms: ['What is your name', 'What are you called', "What's your name", 'What should I call you', 'Tell me your name', 'What is your name again'], ends: ['?', ''] },
+  myname: { forms: ['What is my name', "What's my name", 'Who am I', 'Do you know my name', 'Do you remember my name'], ends: ['?', ''] },
   who: { forms: ['Who are you'], ends: ['?', ''] },
   thanks: { forms: ['Thanks', 'Thank you', 'Thank you very much', 'Thanks a lot', 'Thank you a lot', 'Thanks very much'], ends: ['!', '.', ''] },
   bye: { forms: ['Goodbye', 'Bye', 'See you'], ends: ['!', '.', ''] },
@@ -96,16 +97,25 @@ const say = (r, act) => {
 const T = [];
 const add = (group, ph, make, extra = {}) => T.push({ group, ph, make, ...extra });
 for (const act of Object.keys(ACTS)) add(`common.${act}`, act === 'greet' || act === 'thanks' || act === 'bye' ? 'request' : 'question', (r) => ({ text: say(r, act), expect: req(act) }), { noise: false });
+// the user says their name; the world remembers it for the session (answered later by chat.myname)
+add('common.meet', 'statement', (r, x) => {
+  const p = x.person(r), n = p.name;
+  const text = pick(r, [`Hi, my name is ${n}.`, `My name is ${n}.`, `Hello, my name is ${n}!`, `Hey there, my name is ${n}.`, `Call me ${n}.`, `You can call me ${n}.`, `Hello, call me ${n}.`]);
+  return { text, expect: E(['core.request', { action: 'chat.meet', 'arg.name': JSON.stringify(n) }]) };
+}, { noise: false });
+add('common.myname.after-meet', 'coreference', (r, x) => {
+  const p = x.person(r);
+  return { context: [`My name is ${p.name}.`], text: pick(r, ['What is my name?', 'Who am I?', "What's my name?"]), expect: req('myname') };
+}, { noise: false });
 add('common.sequence', 'multi-entity', (r) => {
-  // 'name' is left out here: ui.avatar also claims "What is your name?" (priority conflict, recorded in group common.name)
-  const acts = Object.keys(ACTS).filter((a) => a !== 'name'), k = 2 + Math.floor(r() * 2), seq = [];
+  const acts = Object.keys(ACTS), k = 2 + Math.floor(r() * 2), seq = [];
   for (let i = 0; i < k; i++) seq.push(pick(r, acts));
   const text = seq.map((a) => { let s = say(r, a); if (!/[.!?]$/.test(s)) s += a === 'name' || a === 'who' || a === 'capabilities' ? '?' : '.'; return s; }).join(' ');
   return { text, expect: E(...seq.map((a) => ['core.request', { action: 'chat.' + a }])) };
 }, { noise: false });
 add('common.neg.near-miss', 'near-miss', (r, x) => {
   const p = x.person(r);
-  return { text: pick(r, [`Hello ${p.name}, how are you?`, 'Thanks for the apple.', 'What is your favorite color?', 'Who are they?', 'What is your age?', 'Say goodbye to Tom.', 'Helpful hints for kids.', 'Hi, my name is ' + p.name + '.', 'Thank you for helping me with the sums.', 'See you at school tomorrow.']), negative: true };
+  return { text: pick(r, [`Hello ${p.name}, how are you?`, 'Thanks for the apple.', 'What is your favorite color?', 'Who are they?', 'What is your age?', 'Say goodbye to Tom.', 'Helpful hints for kids.', 'Thank you for helping me with the sums.', 'See you at school tomorrow.']), negative: true };
 });
 add('common.neg.negation', 'negation', (r) => ({ text: pick(r, ['Do not say hello.', "I don't need help.", "Don't say goodbye.", 'I do not thank you.', "I won't say bye."]), negative: true }));
 add('common.ood', 'out-of-domain', (r, x) => {

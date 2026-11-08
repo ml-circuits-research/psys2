@@ -30,7 +30,7 @@ const GAME_ACTIONS = {
  * Tabs declared by other worlds in their manifests (spec 07 §6: tab, tabTitle, tabAlias, tabNew, tabHint, tabGiveUp)
  * are merged into the tables above, so a new tool world gets voice navigation without editing this world.
  */
-const norm = (w) => String(w ?? '').toLowerCase().trim().replace(/^(the|a|an|my|your)\s+/, '').replace(/\s+/g, '_');
+const norm = (w) => String(w ?? '').toLowerCase().trim().replace(/^(the|a|an|my|your)\s+/, '').replace(/[\s-]+/g, '_');
 function refresh(ctx) {
   for (const w of ctx.worlds?.() ?? []) {
     const t = w.tab;

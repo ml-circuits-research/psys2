@@ -6,6 +6,14 @@
     for=action.chat.name
     text="My name is {value}."
 
+@tpl.kids.common.meet core.template
+    for=action.chat.meet
+    text="{value}"
+
+@tpl.kids.common.myname core.template
+    for=action.chat.myname
+    text="{value}"
+
 @tpl.kids.common.who core.template
     for=action.chat.who
     text="I am {value}. I read what you tell me, remember it and answer only from what I know."

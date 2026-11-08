@@ -137,3 +137,17 @@
     for=action.ttt.last
     status=missing
     text="{note}"
+
+@tpl.games.tictactoe.ttt_count core.template
+    for=action.ttt.count
+    text="{value}"
+
+@tpl.games.tictactoe.ttt_count.unsupported core.template
+    for=action.ttt.count
+    status=unsupported
+    text="{note}"
+
+@tpl.games.tictactoe.ttt_count.missing core.template
+    for=action.ttt.count
+    status=missing
+    text="{note}"
