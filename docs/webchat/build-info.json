@@ -20,7 +20,8 @@
     "media.music",
     "ui.avatar",
     "ui.help",
-    "ui.shell"
+    "ui.shell",
+    "user.profile"
   ],
   "tabs": [
     "charts.mjs",
@@ -29,7 +30,8 @@
     "draw.mjs",
     "editor.mjs",
     "map.mjs",
-    "music.mjs"
+    "music.mjs",
+    "profile.mjs"
   ],
   "dispatcherModel": false,
   "files": {
@@ -100,7 +102,7 @@
     "worlds/games.tictactoe/ops.mjs": "7e85fc09ef9be20a",
     "worlds/geo.map/datagen.mjs": "7bdabe28b74dfa9e",
     "worlds/geo.map/ops.mjs": "9d2167c0adb790b8",
-    "worlds/index.json": "688357f85a238615",
+    "worlds/index.json": "059ea4b565e3058a",
     "worlds/kids.animals/datagen.mjs": "6ad9f00ea4316ed7",
     "worlds/kids.animals/ops.mjs": "644e845de473918a",
     "worlds/kids.arith/datagen.mjs": "eaddc6e69e6c0b20",
@@ -125,7 +127,11 @@
     "worlds/ui.help/datagen.mjs": "2a566dd11e1a621a",
     "worlds/ui.help/ops.mjs": "55b1fc33043e09e4",
     "worlds/ui.shell/datagen.mjs": "ed03fcd2c4012de6",
-    "worlds/ui.shell/ops.mjs": "41fb8a42f31b821f"
+    "worlds/ui.shell/ops.mjs": "41fb8a42f31b821f",
+    "worlds/user.profile/cv.mjs": "a1aa32d0f33cffe1",
+    "worlds/user.profile/datagen.mjs": "48f9d55cb133605c",
+    "worlds/user.profile/ops.mjs": "8582b435a848bb37",
+    "worlds/user.profile/understand.mjs": "90e63ca1faba3615"
   },
-  "builtAt": "2026-11-08T16:14:08.901Z"
+  "builtAt": "2026-11-08T17:03:02.161Z"
 }
