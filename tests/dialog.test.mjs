@@ -280,3 +280,19 @@ test('browser-safe modules never import node:*', async () => {
     try { assert.doesNotMatch(await readFile(f, 'utf8'), /^\s*import\s/m, f); } catch (e) { if (e.code !== 'ENOENT') throw e; }
   }
 });
+
+test('language auto: a short or ambiguous reply keeps the session language and is not translated to Romanian', async () => {
+  const { createTranslator } = await import('../src/translate/index.mjs');
+  const e = await fixtureEngine({ translator: createTranslator() });
+  const s = e.createSession({ language: 'auto' });
+  for (const t of ['e', 'e, no, z', 'ok', 'a']) {
+    const r = await s.send(t);
+    assert.equal(r.lang, 'en', t);
+    assert.equal(r.translation, null, t);
+    assert.doesNotMatch(r.text, /[ăâîșț]/, t);
+  }
+  const ro = await s.send('Câte mere are Ion?');   // strong Romanian evidence (diacritics): the session becomes Romanian
+  assert.equal(ro.lang, 'ro');
+  assert.equal((await s.send('e')).lang, 'ro');     // and an ambiguous token now keeps Romanian
+  assert.equal((await s.send('Hello there')).lang, 'en');
+});

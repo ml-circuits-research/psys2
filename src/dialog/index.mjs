@@ -323,6 +323,10 @@ export class DialogSession {
     let lang = 'en', translation = null, english = text;
     if (translator) {
       lang = wanted === 'auto' ? langOf(await translator.detectLanguage(text)) : wanted;
+      if (wanted === 'auto') {   // a short or ambiguous input ("e", "ok") keeps the language of the session (default English); a confident detection becomes the session language
+        if (lang === 'unknown') lang = this._sessionLang ?? 'en';
+        else this._sessionLang = lang;
+      }
       if (lang !== 'en' && lang !== 'unknown') {
         translation = await translator.translate(text, { from: lang, to: 'en' });
         english = textOf(translation) ?? text;

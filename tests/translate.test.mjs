@@ -345,6 +345,12 @@ test('detectLanguage', () => {
   assert.ok(d.confidence > 0.5 && d.confidence <= 1);
 });
 
+test('detectLanguage: short or ambiguous inputs are unknown, strong Romanian evidence still wins', () => {
+  for (const s of ['e', 'e, no, z', 'e no', 'da', 'nu', 'no', 'ok', 'a', 'z', 'Plus', 'x']) assert.equal(detectLanguage(s).lang === 'ro', false, s);
+  for (const s of ['Mulțumesc', 'nu, mulțumesc', 'ce faci', 'unde este cercul', 'Bună ziua']) assert.equal(detectLanguage(s).lang, 'ro', s);
+  assert.equal(detectLanguage('yes').lang, 'en');
+});
+
 // ----------------------------------------------------------------- unknown words
 test('unknown words are passed through and reported with spans', () => {
   const src = 'Ion are 3 xyzs.';
