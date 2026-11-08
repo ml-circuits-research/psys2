@@ -1,6 +1,6 @@
 """Dataset loading (training/dataset/ written by scripts/build-dataset.mjs) and the BIO tag scheme."""
 from __future__ import annotations
-import json, hashlib
+import json, hashlib, re
 from pathlib import Path
 from .sop import align, canonical_text, NONE_INTENT
 
@@ -110,3 +110,16 @@ def routing_text(r, use_context=True):
     if not use_context:
         return r["text"]
     return f"tab: {c.get('tab') or 'none'} ; recent: {' '.join(c.get('recent_worlds') or []) or 'none'} ;; {r['text']}"
+
+
+def norm_text(t):
+    """Same normalization as scripts/build-dataset.mjs normText."""
+    return re.sub(r"\s+", " ", re.sub(r"[^a-z0-9 ]+", " ", str(t).lower())).strip()
+
+
+def leak_count(rows):
+    """Number of routing train rows whose (normalized text, tab) also occur in dev or test. Nothing is dropped
+    (all train data is kept); the count is reported with the results."""
+    key = lambda r: (norm_text(r["text"]), (r.get("context") or {}).get("tab") or "")
+    held = {key(r) for r in rows if r["split"] in ("dev", "test")}
+    return sum(key(r) in held for r in rows if r["split"] == "train")

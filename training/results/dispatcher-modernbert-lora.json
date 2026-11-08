@@ -1,0 +1,623 @@
+{
+ "model": "answerdotai/ModernBERT-base",
+ "name": "modernbert-lora",
+ "lora": true,
+ "context": true,
+ "lr": 0.0003,
+ "params": {
+  "trainable": 3396118,
+  "total": 152410390
+ },
+ "train_seconds": 842.3728337287903,
+ "steps": 1632,
+ "gpu": "NVIDIA GB10",
+ "gpu_peak_mem_gb": 8.940881252288818,
+ "command": "python -m psys2_train.dispatcher --model answerdotai/ModernBERT-base --lora --lora-r 16 --lr 3e-4 --epochs 6 --out runs/dispatcher-modernbert-lora",
+ "data_hash": "a541a99bf494dd4e",
+ "seed": 1,
+ "routing_train_overlap_with_dev_test": 338,
+ "routing_train_rows": 30229,
+ "versions": {
+  "python": "3.12.3",
+  "torch": "2.14.1+cu130"
+ },
+ "dev": {
+  "world": {
+   "n": 4370,
+   "top1": 0.9661327231121282,
+   "top3": 0.9967963386727688,
+   "top1_strict": 0.9654462242562929,
+   "top3_strict": 0.9967963386727688,
+   "macro_f1": 0.9614938495226397,
+   "macro_f1_strict": 0.960849840572401,
+   "by_group": {
+    "avatar/shell/editor": {
+     "n": 387,
+     "top1": 0.9328165374677002,
+     "top3": 0.9948320413436692
+    },
+    "documents": {
+     "n": 247,
+     "top1": 0.9959514170040485,
+     "top3": 1.0
+    },
+    "games": {
+     "n": 845,
+     "top1": 0.9431952662721893,
+     "top3": 0.9905325443786982
+    },
+    "kids": {
+     "n": 1644,
+     "top1": 0.9951338199513382,
+     "top3": 1.0
+    },
+    "music/draw/map/charts": {
+     "n": 1107,
+     "top1": 0.953026196928636,
+     "top3": 0.996386630532972
+    },
+    "other": {
+     "n": 140,
+     "top1": 0.9071428571428571,
+     "top3": 1.0
+    }
+   },
+   "by_source": {
+    "generator": {
+     "n": 3329,
+     "top1": 0.9651547011114449,
+     "top3": 0.9966957044157405
+    },
+    "paraphrase": {
+     "n": 732,
+     "top1": 0.976775956284153,
+     "top3": 1.0
+    },
+    "rule-derived": {
+     "n": 309,
+     "top1": 0.9514563106796117,
+     "top3": 0.9902912621359223
+    }
+   },
+   "by_world": {
+    "art.draw": {
+     "n": 311,
+     "top1": 0.9581993569131833,
+     "top3": 0.9967845659163987
+    },
+    "data.charts": {
+     "n": 249,
+     "top1": 0.8875502008032129,
+     "top3": 0.9919678714859438
+    },
+    "docs.editor": {
+     "n": 116,
+     "top1": 0.9655172413793104,
+     "top3": 1.0
+    },
+    "docs.reader": {
+     "n": 247,
+     "top1": 0.9959514170040485,
+     "top3": 1.0
+    },
+    "games.chess": {
+     "n": 284,
+     "top1": 0.9647887323943662,
+     "top3": 1.0
+    },
+    "games.guess": {
+     "n": 157,
+     "top1": 0.9681528662420382,
+     "top3": 0.9745222929936306
+    },
+    "games.hangman": {
+     "n": 206,
+     "top1": 0.8689320388349514,
+     "top3": 0.9854368932038835
+    },
+    "games.tictactoe": {
+     "n": 198,
+     "top1": 0.9696969696969697,
+     "top3": 0.9949494949494949
+    },
+    "geo.map": {
+     "n": 295,
+     "top1": 0.9864406779661017,
+     "top3": 0.9966101694915255
+    },
+    "kids.animals": {
+     "n": 221,
+     "top1": 0.9819004524886877,
+     "top3": 1.0
+    },
+    "kids.arith": {
+     "n": 250,
+     "top1": 0.996,
+     "top3": 1.0
+    },
+    "kids.common": {
+     "n": 327,
+     "top1": 0.9969418960244648,
+     "top3": 1.0
+    },
+    "kids.shapes": {
+     "n": 154,
+     "top1": 1.0,
+     "top3": 1.0
+    },
+    "kids.shop": {
+     "n": 241,
+     "top1": 0.991701244813278,
+     "top3": 1.0
+    },
+    "kids.tasks": {
+     "n": 272,
+     "top1": 1.0,
+     "top3": 1.0
+    },
+    "kids.time": {
+     "n": 179,
+     "top1": 1.0,
+     "top3": 1.0
+    },
+    "media.music": {
+     "n": 252,
+     "top1": 0.9722222222222222,
+     "top3": 1.0
+    },
+    "ui.avatar": {
+     "n": 100,
+     "top1": 0.9,
+     "top3": 0.98
+    },
+    "ui.help": {
+     "n": 140,
+     "top1": 0.9071428571428571,
+     "top3": 1.0
+    },
+    "ui.shell": {
+     "n": 171,
+     "top1": 0.9298245614035088,
+     "top3": 1.0
+    }
+   },
+   "unseen_text": {
+    "n": 4092,
+    "top1": 0.9665200391006843,
+    "top3": 0.9968230694037146
+   },
+   "top_confusions": [
+    {
+     "gold": "data.charts",
+     "pred": "kids.arith",
+     "count": 11
+    },
+    {
+     "gold": "data.charts",
+     "pred": "kids.shop",
+     "count": 10
+    },
+    {
+     "gold": "games.hangman",
+     "pred": "ui.help",
+     "count": 10
+    },
+    {
+     "gold": "games.hangman",
+     "pred": "ui.shell",
+     "count": 10
+    },
+    {
+     "gold": "ui.help",
+     "pred": "ui.shell",
+     "count": 7
+    },
+    {
+     "gold": "games.hangman",
+     "pred": "kids.animals",
+     "count": 6
+    },
+    {
+     "gold": "art.draw",
+     "pred": "kids.arith",
+     "count": 5
+    },
+    {
+     "gold": "art.draw",
+     "pred": "kids.shapes",
+     "count": 4
+    },
+    {
+     "gold": "data.charts",
+     "pred": "kids.animals",
+     "count": 4
+    },
+    {
+     "gold": "ui.help",
+     "pred": "docs.reader",
+     "count": 4
+    },
+    {
+     "gold": "games.chess",
+     "pred": "ui.shell",
+     "count": 3
+    },
+    {
+     "gold": "games.chess",
+     "pred": "games.tictactoe",
+     "count": 3
+    },
+    {
+     "gold": "kids.animals",
+     "pred": "kids.shapes",
+     "count": 3
+    },
+    {
+     "gold": "media.music",
+     "pred": "games.tictactoe",
+     "count": 3
+    },
+    {
+     "gold": "ui.avatar",
+     "pred": "ui.shell",
+     "count": 3
+    }
+   ]
+  },
+  "segmentation": {
+   "n": 3000,
+   "boundary": {
+    "precision": 0.9747492217225874,
+    "recall": 0.9842822214460356,
+    "f1": 0.9794925269377823,
+    "tp": 2818,
+    "fp": 73,
+    "fn": 45
+   },
+   "exact_segmentation": 0.9646666666666667,
+   "end_to_end_exact": 0.8256666666666667,
+   "exact_by_variant": {
+    "clean": 0.9715123586091328,
+    "plain": 0.9380097879282219
+   },
+   "exact_by_n_segments": {
+    "1": 0.9650436953807741,
+    "2": 0.9726384364820847,
+    "3": 0.9457831325301205
+   }
+  }
+ },
+ "test": {
+  "world": {
+   "n": 4300,
+   "top1": 0.9653488372093023,
+   "top3": 0.9953488372093023,
+   "top1_strict": 0.9653488372093023,
+   "top3_strict": 0.9953488372093023,
+   "macro_f1": 0.9498736477689596,
+   "macro_f1_strict": 0.9498736477689596,
+   "by_group": {
+    "avatar/shell/editor": {
+     "n": 406,
+     "top1": 0.8842364532019704,
+     "top3": 0.9827586206896551
+    },
+    "documents": {
+     "n": 306,
+     "top1": 0.9901960784313726,
+     "top3": 1.0
+    },
+    "games": {
+     "n": 837,
+     "top1": 0.973715651135006,
+     "top3": 0.998805256869773
+    },
+    "kids": {
+     "n": 1589,
+     "top1": 0.9886721208307111,
+     "top3": 1.0
+    },
+    "music/draw/map/charts": {
+     "n": 1067,
+     "top1": 0.9597000937207123,
+     "top3": 0.9943767572633552
+    },
+    "other": {
+     "n": 95,
+     "top1": 0.8315789473684211,
+     "top3": 0.9368421052631579
+    }
+   },
+   "by_source": {
+    "generator": {
+     "n": 3243,
+     "top1": 0.975331483194573,
+     "top3": 0.9966080789392537
+    },
+    "paraphrase": {
+     "n": 636,
+     "top1": 0.9654088050314465,
+     "top3": 0.9968553459119497
+    },
+    "rule-derived": {
+     "n": 421,
+     "top1": 0.8883610451306413,
+     "top3": 0.9833729216152018
+    }
+   },
+   "by_world": {
+    "art.draw": {
+     "n": 215,
+     "top1": 0.9255813953488372,
+     "top3": 0.9953488372093023
+    },
+    "data.charts": {
+     "n": 276,
+     "top1": 0.9637681159420289,
+     "top3": 0.9927536231884058
+    },
+    "docs.editor": {
+     "n": 116,
+     "top1": 0.9137931034482759,
+     "top3": 0.9913793103448276
+    },
+    "docs.reader": {
+     "n": 306,
+     "top1": 0.9901960784313726,
+     "top3": 1.0
+    },
+    "games.chess": {
+     "n": 375,
+     "top1": 0.9813333333333333,
+     "top3": 1.0
+    },
+    "games.guess": {
+     "n": 130,
+     "top1": 0.9692307692307692,
+     "top3": 1.0
+    },
+    "games.hangman": {
+     "n": 188,
+     "top1": 0.9627659574468085,
+     "top3": 1.0
+    },
+    "games.tictactoe": {
+     "n": 144,
+     "top1": 0.9722222222222222,
+     "top3": 0.9930555555555556
+    },
+    "geo.map": {
+     "n": 341,
+     "top1": 0.9912023460410557,
+     "top3": 0.9970674486803519
+    },
+    "kids.animals": {
+     "n": 260,
+     "top1": 0.9961538461538462,
+     "top3": 1.0
+    },
+    "kids.arith": {
+     "n": 240,
+     "top1": 0.9916666666666667,
+     "top3": 1.0
+    },
+    "kids.common": {
+     "n": 61,
+     "top1": 0.8688524590163934,
+     "top3": 1.0
+    },
+    "kids.shapes": {
+     "n": 203,
+     "top1": 1.0,
+     "top3": 1.0
+    },
+    "kids.shop": {
+     "n": 264,
+     "top1": 0.9810606060606061,
+     "top3": 1.0
+    },
+    "kids.tasks": {
+     "n": 294,
+     "top1": 0.9931972789115646,
+     "top3": 1.0
+    },
+    "kids.time": {
+     "n": 267,
+     "top1": 1.0,
+     "top3": 1.0
+    },
+    "media.music": {
+     "n": 235,
+     "top1": 0.9404255319148936,
+     "top3": 0.9914893617021276
+    },
+    "ui.avatar": {
+     "n": 71,
+     "top1": 0.8309859154929577,
+     "top3": 0.971830985915493
+    },
+    "ui.help": {
+     "n": 95,
+     "top1": 0.8315789473684211,
+     "top3": 0.9368421052631579
+    },
+    "ui.shell": {
+     "n": 219,
+     "top1": 0.8858447488584474,
+     "top3": 0.9817351598173516
+    }
+   },
+   "unseen_text": {
+    "n": 4054,
+    "top1": 0.9669462259496794,
+    "top3": 0.9960532807104094
+   },
+   "top_confusions": [
+    {
+     "gold": "ui.help",
+     "pred": "games.hangman",
+     "count": 14
+    },
+    {
+     "gold": "art.draw",
+     "pred": "ui.avatar",
+     "count": 12
+    },
+    {
+     "gold": "ui.shell",
+     "pred": "ui.avatar",
+     "count": 8
+    },
+    {
+     "gold": "docs.editor",
+     "pred": "kids.tasks",
+     "count": 7
+    },
+    {
+     "gold": "games.hangman",
+     "pred": "kids.animals",
+     "count": 6
+    },
+    {
+     "gold": "media.music",
+     "pred": "games.hangman",
+     "count": 6
+    },
+    {
+     "gold": "data.charts",
+     "pred": "art.draw",
+     "count": 5
+    },
+    {
+     "gold": "kids.shop",
+     "pred": "kids.tasks",
+     "count": 5
+    },
+    {
+     "gold": "ui.shell",
+     "pred": "games.hangman",
+     "count": 5
+    },
+    {
+     "gold": "ui.avatar",
+     "pred": "art.draw",
+     "count": 4
+    },
+    {
+     "gold": "ui.shell",
+     "pred": "games.tictactoe",
+     "count": 4
+    },
+    {
+     "gold": "data.charts",
+     "pred": "kids.animals",
+     "count": 3
+    },
+    {
+     "gold": "games.tictactoe",
+     "pred": "games.chess",
+     "count": 3
+    },
+    {
+     "gold": "ui.shell",
+     "pred": "ui.help",
+     "count": 3
+    },
+    {
+     "gold": "ui.shell",
+     "pred": "games.guess",
+     "count": 3
+    }
+   ]
+  },
+  "segmentation": {
+   "n": 4000,
+   "boundary": {
+    "precision": 0.9853051058530511,
+    "recall": 0.9848145382125965,
+    "f1": 0.9850597609561754,
+    "tp": 3956,
+    "fp": 59,
+    "fn": 61
+   },
+   "exact_segmentation": 0.97325,
+   "end_to_end_exact": 0.8425,
+   "exact_by_variant": {
+    "clean": 0.9831746031746031,
+    "plain": 0.9364705882352942
+   },
+   "exact_by_n_segments": {
+    "1": 0.9916839916839917,
+    "2": 0.9781447304516756,
+    "3": 0.9448416751787538
+   }
+  },
+  "world_inference_without_context": {
+   "top1": 0.8413953488372093,
+   "top3": 0.9493023255813954,
+   "macro_f1": 0.7951306110307177
+  }
+ },
+ "history": [
+  {
+   "epoch": 1,
+   "step": 272,
+   "world_loss": 0.7495001460192725,
+   "seg_loss": 0.11353745699093185,
+   "dev_top1": 0.9352402745995423,
+   "dev_top3": 0.9910755148741419,
+   "dev_seg_f1": 0.9683698296836983,
+   "dev_exact_seg": 0.9446666666666667
+  },
+  {
+   "epoch": 2,
+   "step": 544,
+   "world_loss": 0.044769536758608675,
+   "seg_loss": 0.0120278192745686,
+   "dev_top1": 0.9558352402745995,
+   "dev_top3": 0.994508009153318,
+   "dev_seg_f1": 0.9762028834462393,
+   "dev_exact_seg": 0.959
+  },
+  {
+   "epoch": 3,
+   "step": 816,
+   "world_loss": 0.014887701588604078,
+   "seg_loss": 0.006951005655162803,
+   "dev_top1": 0.9556064073226544,
+   "dev_top3": 0.9954233409610984,
+   "dev_seg_f1": 0.9766395570167848,
+   "dev_exact_seg": 0.959
+  },
+  {
+   "epoch": 4,
+   "step": 1088,
+   "world_loss": 0.006592471410733517,
+   "seg_loss": 0.00416108257644844,
+   "dev_top1": 0.9661327231121282,
+   "dev_top3": 0.9967963386727688,
+   "dev_seg_f1": 0.9794925269377823,
+   "dev_exact_seg": 0.9646666666666667
+  },
+  {
+   "epoch": 5,
+   "step": 1360,
+   "world_loss": 0.0035131105185642166,
+   "seg_loss": 0.0028985814022983985,
+   "dev_top1": 0.9627002288329519,
+   "dev_top3": 0.9965675057208238,
+   "dev_seg_f1": 0.9804878048780488,
+   "dev_exact_seg": 0.967
+  },
+  {
+   "epoch": 6,
+   "step": 1632,
+   "world_loss": 0.0025202304119803184,
+   "seg_loss": 0.001907958329491735,
+   "dev_top1": 0.9647597254004576,
+   "dev_top3": 0.9970251716247139,
+   "dev_seg_f1": 0.9768976897689768,
+   "dev_exact_seg": 0.9603333333333334
+  }
+ ]
+}

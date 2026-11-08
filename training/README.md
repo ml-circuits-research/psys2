@@ -88,3 +88,13 @@ python -m psys2_train.train --world kids.arith --model distilbert-base-uncased -
 # runs are written to training/runs/<name>-<time>/ (best.pt, labels.json, metrics.json with command, data hash, versions)
 python -m psys2_train.export_onnx <run dir> <model> out.onnx    # stub, untested
 ```
+
+## Dispatcher (`psys2_train/dispatcher.py`, `multicmd.py`, `dispatch_predict.py`)
+One shared encoder with a per-token segmentation head (B/I) and a world head (sequence classification over all worlds, input `tab: .. ; recent: .. ;; <segment>`, top-3 with softmax scores; alt_worlds = soft target 0.5/0.5, evaluated leniently and strictly). The simplification head is a TODO hook. Joint training: each step = one routing batch + one multi-command batch, bf16 on CUDA (asserted), best checkpoint on dev.
+```bash
+python -m psys2_train.multicmd            # -> training/runs/multicmd/{train,dev,test}.jsonl (+ mirror in training/dataset/multicmd/), seed 1337, same-split sentences only
+python -m psys2_train.dispatcher --model distilbert-base-uncased --no-lora --lr 5e-5 --epochs 6 --out runs/dispatcher-distilbert
+python -m psys2_train.dispatcher --model answerdotai/ModernBERT-base --lora --lora-r 16 --lr 3e-4 --epochs 6 --out runs/dispatcher-modernbert-lora
+python -m psys2_train.dispatch_predict --ckpt runs/dispatcher-distilbert --split test --out runs/dispatch-pred/test.jsonl   # also writes heldout.jsonl next to it
+```
+Prediction line (one per record; `id` is the dataset record id): `{id, kind, world?, text, context{tab,recent_worlds,session}, gold{segments}, boundaries:[{offset,p}], segmentations:[{score (log-prob <= 0, beam <= 4, best first), segments:[{start,end,text,worlds:[{world,score}] (top-3 probabilities)}]}]}`. Full description in the `dispatch_predict.py` docstring. Metrics go to `training/results/dispatcher-<name>.json`.
