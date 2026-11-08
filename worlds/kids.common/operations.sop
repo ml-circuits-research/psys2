@@ -39,3 +39,9 @@
     semantics=action
     action=chat.bye
     doc="Says goodbye."
+
+@op.kids.common.howru core.operation
+    impl=howAreYou
+    semantics=action
+    action=chat.howru
+    doc="Small talk: how the assistant is. A friendly fixed answer."

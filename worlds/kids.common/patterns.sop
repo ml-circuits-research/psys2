@@ -710,3 +710,20 @@
     kind=question
     priority=12
     example="Could you tell me what your name is"
+
+@pat.kids.common.howru core.pattern
+    match="[how_are_you|how_are_you_doing|how_are_you_today|how_are_u|how_r_u|how_do_you_do|how_is_it_going|how_s_it_going|hows_it_going|how_you_doing|how_have_you_been|how_are_things|how_are_you_feeling|are_you_ok|are_you_okay|are_you_well|are_you_fine|are_you_alright|how_is_your_day|how_was_your_day|what_s_up|whats_up|sup|wassup]"
+    emit="@{_} core.request action=chat.howru"
+    kind=chat
+    priority=10
+    example="How are you?"
+    example="How are you doing today?"
+    example="Are you okay?"
+    example="What's up?"
+
+@pat.kids.common.howru.lead core.pattern
+    match="[hi|hello|hey|hiya|yo|ok|okay|so|well|and|oh]? [how_are_you|how_are_you_doing|how_are_u|how_r_u|how_do_you_do|how_you_doing|how_is_it_going|hows_it_going] [today|now|then|my_friend|buddy|friend|pal|robot|there|right_now|these_days|lately]?"
+    emit="@{_} core.request action=chat.howru"
+    kind=chat
+    priority=10
+    example="Hello, how are you today?"

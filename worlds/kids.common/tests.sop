@@ -1745,3 +1745,33 @@
     input="Who are you, and what's your name?"
     expect="My name is PSys2."
     doc="rule sweep probe: fresh-batch variant"
+
+@t.common.x21 core.test
+    input="how are you"
+    expectStatus=supported
+    doc="small talk: how are you"
+
+@t.common.x22 core.test
+    input="How are you doing today?"
+    expectStatus=supported
+    doc="small talk: how are you"
+
+@t.common.x23 core.test
+    input="hey, how are you?"
+    expectStatus=supported
+    doc="small talk: how are you"
+
+@t.common.x24 core.test
+    input="whats up"
+    expectStatus=supported
+    doc="small talk: how are you"
+
+@t.common.x25 core.test
+    input="are you ok"
+    expectStatus=supported
+    doc="small talk: how are you"
+
+@t.common.x26 core.test
+    input="how r u"
+    expectStatus=supported
+    doc="small talk: how are you"

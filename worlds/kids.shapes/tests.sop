@@ -469,9 +469,9 @@
     doc="rule sweep probe: where.kind=round_shape"
 
 @t.shapes.s031 core.test
-    input="what shape is a ball"
-    expect="I don't know which shape a ball looks like. You can teach me: A ball is a circle."
-    doc="rule sweep probe: seek=shape where.name=ball"
+    input="what shape is a kite"
+    expect="I don't know which shape a kite looks like. You can teach me: A kite is a circle."
+    doc="rule sweep probe: seek=shape where.name=kite"
 
 @t.shapes.s032 core.test
     input="what shape is a plate"
@@ -2322,3 +2322,12 @@
     input="tell me how to make purple"
     expect="Purple is made by mixing red and blue."
     doc="rule sweep probe: fresh-batch variant"
+
+@t.shapes.x201 core.test
+    input="what shape is a ball"
+    expect="A ball is a sphere."
+
+@t.shapes.x202 core.test
+    input="which shape does a ball look like"
+    expect="sphere"
+

@@ -958,3 +958,8 @@
     name=chessboard
     shape=square
     core.source="fixture:kids.shapes/looks"
+
+@kb.looks.ball kids.shapes.thing
+    name=ball
+    shape=sphere
+    core.source="fixture:kids.shapes/looks"

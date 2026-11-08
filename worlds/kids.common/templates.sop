@@ -25,3 +25,7 @@
 @tpl.kids.common.bye core.template
     for=action.chat.bye
     text="{value}!"
+
+@tpl.kids.common.howru core.template
+    for=action.chat.howru
+    text="{value}"
