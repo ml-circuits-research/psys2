@@ -1514,3 +1514,252 @@
     priority=12
     example="Can u add 7 and 5 for me?"
 
+@pat.kids.arith.calc.minus.away core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.lead.question]? [what_is|whats|how_much_is|how_many_is|calculate|compute|tell_me|what_do_you_get_for|what_is_the_answer_to|whats_the_answer_to|solve|work_out|find|give_me]? [take|take_away|subtract|remove|knock|cut|get_rid_of|lose] {b:number} [away|off|out] [from|of|out_of] {a:number} [$lang.tail.filler]?"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=minus where.a={a} where.b={b}"
+    kind=question
+    priority=12
+    example="take 3 away from 7"
+    example="Take 2 off from 9?"
+
+@pat.kids.arith.calc.minus.away.b core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.lead.question]? [what_is|whats|how_much_is|how_many_is|calculate|compute|tell_me|what_do_you_get_for|what_is_the_answer_to|whats_the_answer_to|solve|work_out|find|give_me]? [take_away|take_off|subtract|remove|knock_off|cut_off] {b:number} from {a:number} [$lang.tail.filler]?"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=minus where.a={a} where.b={b}"
+    kind=question
+    priority=12
+    example="take away 3 from 7"
+
+@pat.kids.arith.calc.minus.away.c core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.lead.question]? [what_is|whats|how_much_is|how_many_is|calculate|compute|tell_me|what_do_you_get_for|what_is_the_answer_to|whats_the_answer_to|solve|work_out|find|give_me]? {a:number} [take_away|take_off|knock_off|less|minus|take] {b:number} [away|off]? [$lang.tail.filler]?"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=minus where.a={a} where.b={b}"
+    kind=question
+    priority=12
+    example="7 take away 3"
+    example="7 take 3 away"
+
+@pat.kids.arith.calc.minus.left core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.lead.question]? [what_is|whats|how_much_is|how_many_is|calculate|compute|tell_me|what_do_you_get_for|what_is_the_answer_to|whats_the_answer_to|solve|work_out|find|give_me]? [what_is_left|how_many_are_left|how_much_is_left|what_is_left_over|what_remains|whats_left] [of|if_you_take|when_you_take|after_taking|if_i_take]? {a:number} [take_away|take|minus|less|without|and_take_away|and_take|and_remove|and_subtract] {b:number} [away]? [$lang.tail.filler]?"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=minus where.a={a} where.b={b}"
+    kind=question
+    priority=12
+    example="whats left of 10 take away 4"
+
+@pat.kids.arith.calc.squared core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.lead.question]? [what_is|whats|how_much_is|how_many_is|calculate|compute|tell_me|what_do_you_get_for|what_is_the_answer_to|whats_the_answer_to|solve|work_out|find|give_me]? {a:number} [squared|times_itself|multiplied_by_itself|to_the_power_of_2|to_the_second_power]  [$lang.tail.filler]?"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=times where.a={a} where.b={a}"
+    kind=question
+    priority=12
+    example="what is 12 squared"
+    example="Whats 9 squared?"
+
+@pat.kids.arith.calc.squared.of core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.lead.question]? [what_is|whats|how_much_is|how_many_is|calculate|compute|tell_me|what_do_you_get_for|what_is_the_answer_to|whats_the_answer_to|solve|work_out|find|give_me]? [the_square_of|the_square|square|the_square_of_the_number] {a:number} [$lang.tail.filler]?"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=times where.a={a} where.b={a}"
+    kind=question
+    priority=12
+    example="the square of 7"
+
+@pat.kids.arith.calc.cubed core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.lead.question]? [what_is|whats|how_much_is|how_many_is|calculate|compute|tell_me|what_do_you_get_for|what_is_the_answer_to|whats_the_answer_to|solve|work_out|find|give_me]? {a:number} [cubed|to_the_power_of_3|to_the_third_power] [$lang.tail.filler]?"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=times where.a={a} where.b={a} where.op2=times where.c={a}"
+    kind=question
+    priority=12
+    example="what is 3 cubed"
+
+@pat.kids.arith.calc.chain.plus.plus core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.lead.question]? [what_is|whats|how_much_is|how_many_is|calculate|compute|tell_me|what_do_you_get_for|what_is_the_answer_to|whats_the_answer_to|solve|work_out|find|give_me]? {a:number} [plus|added_to|+] {b:number} [plus|added_to|+] {c:number} [equals|is|make|makes|=]? [$lang.tail.filler]?"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=plus where.a={a} where.b={b} where.op2=plus where.c={c}"
+    kind=question
+    priority=12
+    example="what is 7 plus 5 plus 2"
+
+@pat.kids.arith.calc.chain.plus.minus core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.lead.question]? [what_is|whats|how_much_is|how_many_is|calculate|compute|tell_me|what_do_you_get_for|what_is_the_answer_to|whats_the_answer_to|solve|work_out|find|give_me]? {a:number} [plus|added_to|+] {b:number} [minus|less|take_away|-|subtract] {c:number} [equals|is|make|makes|=]? [$lang.tail.filler]?"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=plus where.a={a} where.b={b} where.op2=minus where.c={c}"
+    kind=question
+    priority=12
+    example="what is 7 plus 5 minus 2"
+
+@pat.kids.arith.calc.chain.plus.times core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.lead.question]? [what_is|whats|how_much_is|how_many_is|calculate|compute|tell_me|what_do_you_get_for|what_is_the_answer_to|whats_the_answer_to|solve|work_out|find|give_me]? {a:number} [plus|added_to|+] {b:number} [times|multiplied_by|x|*|lots_of] {c:number} [equals|is|make|makes|=]? [$lang.tail.filler]?"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=plus where.a={a} where.b={b} where.op2=times where.c={c}"
+    kind=question
+    priority=12
+    example="what is 7 plus 5 times 2"
+
+@pat.kids.arith.calc.chain.plus.divided_by core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.lead.question]? [what_is|whats|how_much_is|how_many_is|calculate|compute|tell_me|what_do_you_get_for|what_is_the_answer_to|whats_the_answer_to|solve|work_out|find|give_me]? {a:number} [plus|added_to|+] {b:number} [divided_by|over|/|split_by|shared_by] {c:number} [equals|is|make|makes|=]? [$lang.tail.filler]?"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=plus where.a={a} where.b={b} where.op2=divided_by where.c={c}"
+    kind=question
+    priority=12
+    example="what is 7 plus 5 divided by 2"
+
+@pat.kids.arith.calc.chain.minus.plus core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.lead.question]? [what_is|whats|how_much_is|how_many_is|calculate|compute|tell_me|what_do_you_get_for|what_is_the_answer_to|whats_the_answer_to|solve|work_out|find|give_me]? {a:number} [minus|less|take_away|-|subtract] {b:number} [plus|added_to|+] {c:number} [equals|is|make|makes|=]? [$lang.tail.filler]?"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=minus where.a={a} where.b={b} where.op2=plus where.c={c}"
+    kind=question
+    priority=12
+    example="what is 7 minus 5 plus 2"
+
+@pat.kids.arith.calc.chain.minus.minus core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.lead.question]? [what_is|whats|how_much_is|how_many_is|calculate|compute|tell_me|what_do_you_get_for|what_is_the_answer_to|whats_the_answer_to|solve|work_out|find|give_me]? {a:number} [minus|less|take_away|-|subtract] {b:number} [minus|less|take_away|-|subtract] {c:number} [equals|is|make|makes|=]? [$lang.tail.filler]?"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=minus where.a={a} where.b={b} where.op2=minus where.c={c}"
+    kind=question
+    priority=12
+    example="what is 7 minus 5 minus 2"
+
+@pat.kids.arith.calc.chain.minus.times core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.lead.question]? [what_is|whats|how_much_is|how_many_is|calculate|compute|tell_me|what_do_you_get_for|what_is_the_answer_to|whats_the_answer_to|solve|work_out|find|give_me]? {a:number} [minus|less|take_away|-|subtract] {b:number} [times|multiplied_by|x|*|lots_of] {c:number} [equals|is|make|makes|=]? [$lang.tail.filler]?"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=minus where.a={a} where.b={b} where.op2=times where.c={c}"
+    kind=question
+    priority=12
+    example="what is 7 minus 5 times 2"
+
+@pat.kids.arith.calc.chain.minus.divided_by core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.lead.question]? [what_is|whats|how_much_is|how_many_is|calculate|compute|tell_me|what_do_you_get_for|what_is_the_answer_to|whats_the_answer_to|solve|work_out|find|give_me]? {a:number} [minus|less|take_away|-|subtract] {b:number} [divided_by|over|/|split_by|shared_by] {c:number} [equals|is|make|makes|=]? [$lang.tail.filler]?"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=minus where.a={a} where.b={b} where.op2=divided_by where.c={c}"
+    kind=question
+    priority=12
+    example="what is 7 minus 5 divided by 2"
+
+@pat.kids.arith.calc.chain.times.plus core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.lead.question]? [what_is|whats|how_much_is|how_many_is|calculate|compute|tell_me|what_do_you_get_for|what_is_the_answer_to|whats_the_answer_to|solve|work_out|find|give_me]? {a:number} [times|multiplied_by|x|*|lots_of] {b:number} [plus|added_to|+] {c:number} [equals|is|make|makes|=]? [$lang.tail.filler]?"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=times where.a={a} where.b={b} where.op2=plus where.c={c}"
+    kind=question
+    priority=12
+    example="what is 7 times 5 plus 2"
+
+@pat.kids.arith.calc.chain.times.minus core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.lead.question]? [what_is|whats|how_much_is|how_many_is|calculate|compute|tell_me|what_do_you_get_for|what_is_the_answer_to|whats_the_answer_to|solve|work_out|find|give_me]? {a:number} [times|multiplied_by|x|*|lots_of] {b:number} [minus|less|take_away|-|subtract] {c:number} [equals|is|make|makes|=]? [$lang.tail.filler]?"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=times where.a={a} where.b={b} where.op2=minus where.c={c}"
+    kind=question
+    priority=12
+    example="what is 7 times 5 minus 2"
+
+@pat.kids.arith.calc.chain.times.times core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.lead.question]? [what_is|whats|how_much_is|how_many_is|calculate|compute|tell_me|what_do_you_get_for|what_is_the_answer_to|whats_the_answer_to|solve|work_out|find|give_me]? {a:number} [times|multiplied_by|x|*|lots_of] {b:number} [times|multiplied_by|x|*|lots_of] {c:number} [equals|is|make|makes|=]? [$lang.tail.filler]?"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=times where.a={a} where.b={b} where.op2=times where.c={c}"
+    kind=question
+    priority=12
+    example="what is 7 times 5 times 2"
+
+@pat.kids.arith.calc.chain.times.divided_by core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.lead.question]? [what_is|whats|how_much_is|how_many_is|calculate|compute|tell_me|what_do_you_get_for|what_is_the_answer_to|whats_the_answer_to|solve|work_out|find|give_me]? {a:number} [times|multiplied_by|x|*|lots_of] {b:number} [divided_by|over|/|split_by|shared_by] {c:number} [equals|is|make|makes|=]? [$lang.tail.filler]?"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=times where.a={a} where.b={b} where.op2=divided_by where.c={c}"
+    kind=question
+    priority=12
+    example="what is 7 times 5 divided by 2"
+
+@pat.kids.arith.calc.chain.divided_by.plus core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.lead.question]? [what_is|whats|how_much_is|how_many_is|calculate|compute|tell_me|what_do_you_get_for|what_is_the_answer_to|whats_the_answer_to|solve|work_out|find|give_me]? {a:number} [divided_by|over|/|split_by|shared_by] {b:number} [plus|added_to|+] {c:number} [equals|is|make|makes|=]? [$lang.tail.filler]?"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=divided_by where.a={a} where.b={b} where.op2=plus where.c={c}"
+    kind=question
+    priority=12
+    example="what is 7 divided by 5 plus 2"
+
+@pat.kids.arith.calc.chain.divided_by.minus core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.lead.question]? [what_is|whats|how_much_is|how_many_is|calculate|compute|tell_me|what_do_you_get_for|what_is_the_answer_to|whats_the_answer_to|solve|work_out|find|give_me]? {a:number} [divided_by|over|/|split_by|shared_by] {b:number} [minus|less|take_away|-|subtract] {c:number} [equals|is|make|makes|=]? [$lang.tail.filler]?"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=divided_by where.a={a} where.b={b} where.op2=minus where.c={c}"
+    kind=question
+    priority=12
+    example="what is 7 divided by 5 minus 2"
+
+@pat.kids.arith.calc.chain.divided_by.times core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.lead.question]? [what_is|whats|how_much_is|how_many_is|calculate|compute|tell_me|what_do_you_get_for|what_is_the_answer_to|whats_the_answer_to|solve|work_out|find|give_me]? {a:number} [divided_by|over|/|split_by|shared_by] {b:number} [times|multiplied_by|x|*|lots_of] {c:number} [equals|is|make|makes|=]? [$lang.tail.filler]?"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=divided_by where.a={a} where.b={b} where.op2=times where.c={c}"
+    kind=question
+    priority=12
+    example="what is 7 divided by 5 times 2"
+
+@pat.kids.arith.calc.chain.divided_by.divided_by core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.lead.question]? [what_is|whats|how_much_is|how_many_is|calculate|compute|tell_me|what_do_you_get_for|what_is_the_answer_to|whats_the_answer_to|solve|work_out|find|give_me]? {a:number} [divided_by|over|/|split_by|shared_by] {b:number} [divided_by|over|/|split_by|shared_by] {c:number} [equals|is|make|makes|=]? [$lang.tail.filler]?"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=divided_by where.a={a} where.b={b} where.op2=divided_by where.c={c}"
+    kind=question
+    priority=12
+    example="what is 7 divided by 5 divided by 2"
+
+@pat.kids.arith.lose.away core.pattern
+    match="[just|then|also|already|now|later|again]? {who:agent} [just|then|also|already|now|later|again]? [gives_away|gave_away|give_away|giving_away|gives_out|gave_out|donates|donated|donate|hands_out|handed_out|gives_up|gave_up|throws_away|threw_away|throws_out|threw_out|sells|sold|sell|shares_out|shared_out|loses_to_a_friend] {n:number} [more]? {item:lex.kids.arith.items} [of_them|in_total]?"
+    emit="@{_} kids.arith.lose who={who} count={n} item={item}"
+    kind=statement
+    priority=13
+    example="Ben gives away 6 apples."
+
+@pat.kids.arith.lose.away.a core.pattern
+    match="[just|then|also|already|now|later|again]? {who:agent} [just|then|also|already|now|later|again]? [gives_away|gave_away|give_away|giving_away|gives_out|gave_out|donates|donated|donate|hands_out|handed_out|gives_up|gave_up|throws_away|threw_away|throws_out|threw_out|sells|sold|sell|shares_out|shared_out|loses_to_a_friend] [a|an|one] {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.lose who={who} count=1 item={item}"
+    kind=statement
+    priority=13
+    example="Ben gave away an apple."
+
+@pat.kids.arith.lose.away.omit core.pattern
+    match="[just|then|also|already|now|later|again]? {who:agent} [just|then|also|already|now|later|again]? [gives_away|gave_away|give_away|giving_away|gives_out|gave_out|donates|donated|donate|hands_out|handed_out|gives_up|gave_up|throws_away|threw_away|throws_out|threw_out|sells|sold|sell|shares_out|shared_out|loses_to_a_friend] {n:number} [more]? {item:recent(lex.kids.arith.items,who)} [of_them|of_his|of_her|of_the_ones|in_total]?"
+    emit="@{_} kids.arith.lose who={who} count={n} item={item}"
+    kind=statement
+    priority=13
+    example="Ben gives away 6."
+    example="Ben gave away 6 of them."
+
+@pat.kids.arith.lose.away.after core.pattern
+    match="[just|then|also|already|now|later|again]? {who:agent} [just|then|also|already|now|later|again]? [gives|gave|give|hands|handed|throws|threw] {n:number} {item:lex.kids.arith.items} [away|out]"
+    emit="@{_} kids.arith.lose who={who} count={n} item={item}"
+    kind=statement
+    priority=13
+    example="Ben gave 6 apples away."
+
+@pat.kids.arith.lose.away.after.omit core.pattern
+    match="[just|then|also|already|now|later|again]? {who:agent} [just|then|also|already|now|later|again]? [gives|gave|give|hands|handed|throws|threw] {n:number} {item:recent(lex.kids.arith.items,who)} [away|out]"
+    emit="@{_} kids.arith.lose who={who} count={n} item={item}"
+    kind=statement
+    priority=13
+    example="Ben gave 6 away."
+
+@pat.kids.arith.has.and.omit core.pattern
+    match="{who:agent} [has|have|had] [got]? {n:number} {item:lex.kids.arith.items} [and|while|but|whereas] {who2:agent} [has|have|had] [got]? {m:number} [too|also|as_well|more]?"
+    emit="@{_} kids.arith.holding owner={who} count={n} item={item}\n@{_1} kids.arith.holding owner={who2} count={m} item={item}"
+    kind=statement
+    priority=12
+    example="Tom has 2 apples and Ana has 3."
+
+@pat.kids.arith.has.and.omit.b core.pattern
+    match="{who:agent} [has|have|had] [got]? {n:number} {item:lex.kids.arith.items} [and|while|but|whereas] {who2:agent} [got]? {m:number}"
+    emit="@{_} kids.arith.holding owner={who} count={n} item={item}\n@{_1} kids.arith.holding owner={who2} count={m} item={item}"
+    kind=statement
+    priority=12
+    example="Tom has 2 apples and Ana 3."
+
+@pat.kids.arith.has.and.omit.c core.pattern
+    match="{who:agent} [has|have|had] [got]? {n:number} [and|while|but|whereas] {who2:agent} [has|have|had] [got]? {m:number} {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.holding owner={who} count={n} item={item}\n@{_1} kids.arith.holding owner={who2} count={m} item={item}"
+    kind=statement
+    priority=12
+    example="Tom has 2 and Ana has 3 apples."
+
+@pat.kids.arith.has.omit core.pattern
+    match="{who:agent} [now]? [has|have|had] [got|now]? {n:number} [more]? {item:recent(lex.kids.arith.items,who)} [now|left|today|too|also|as_well]?"
+    emit="@{_} kids.arith.holding owner={who} count={n} item={item}"
+    kind=statement
+    priority=13
+    example="Ana has 3."
+
+@pat.kids.arith.q.total.bare core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.lead.question]? how_many {item:lex.kids.arith.items} [altogether|in_total|in_all|all_together|together|all_together_now|combined]  [$lang.tail.filler]?"
+    emit="@{_} core.question type=kids.arith.total seek=count where.item={item}"
+    kind=question
+    priority=10
+    example="How many apples altogether?"
+
+@pat.kids.arith.q.left.name core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.lead.question]? [what|whats|what_is|how_much|how_many] [is|are]? [left|remaining|left_over] [for|with|over_for|of]? {who:agent} {item:recent(lex.kids.arith.items,who)} [$lang.tail.filler]?"
+    emit="@{_} core.question type=kids.arith.holding seek=count where.owner={who} where.item={item}"
+    kind=question
+    priority=10
+    example="whats left for Mia"
+
+@pat.kids.arith.q.count.omit core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$lang.lead.question]? how_many [does|do|did|will] {who:agent} have {item:recent(lex.kids.arith.items,who)} [now|left|left_over|today|at_the_end|then|altogether|in_total]? [$lang.tail.filler]?"
+    emit="@{_} core.question type=kids.arith.holding seek=count where.owner={who} where.item={item}"
+    kind=question
+    priority=10
+    example="How many does Mia have left?"
+

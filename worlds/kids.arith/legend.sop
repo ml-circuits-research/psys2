@@ -265,3 +265,13 @@
     card=one
     ask="What is double it?"
     compute=true
+
+@kids.arith.calc.op2 core.key
+    value=atom
+    card=one
+    ask="Which second operation (plus, minus, times, divided_by)?"
+
+@kids.arith.calc.c core.key
+    value=number
+    card=one
+    ask="What is the third number?"

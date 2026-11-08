@@ -55,6 +55,8 @@
     inputs=kids.arith.calc.op
     inputs=kids.arith.calc.a
     inputs=kids.arith.calc.b
+    inputs=kids.arith.calc.op2
+    inputs=kids.arith.calc.c
     impl=calc
     semantics=compute
     doc="plus, minus, times and divided_by with exact integer or decimal results; division by zero is refused politely."

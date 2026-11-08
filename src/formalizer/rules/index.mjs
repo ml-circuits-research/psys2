@@ -16,7 +16,7 @@ import { parse, serialize } from '../../soplang/index.mjs';
 
 export { FormSession } from './session.mjs';
 export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs';
-export { analyze, splitSentences, tokenize, editDistance, correctTokens } from './normalize.mjs';
+export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs';
 export { compilePattern, matchTokens } from './matcher.mjs';
 export { singularLemma, pluralize } from './lemma.mjs';
 

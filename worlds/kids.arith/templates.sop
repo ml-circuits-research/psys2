@@ -100,6 +100,11 @@
     status=conflicting
     text="That does not add up. {note}"
 
+@tpl.kids.arith.calc.chain core.template
+    for=kids.arith.calc.result
+    when="c!=none"
+    text="{a} {op} {b} {op2} {c} is {value}."
+
 @tpl.kids.arith.calc.about core.template
     for=kids.arith.calc.result
     text="{a} {op} {b} is {note}{value}."

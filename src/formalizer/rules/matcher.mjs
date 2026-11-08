@@ -58,12 +58,13 @@ export function compilePattern(match, phrases = null) {
       const [, name, cls, rawArgs, opt] = m;
       if (slots.has(name)) throw new PatternError(`duplicate slot name '${name}'`);
       const args = rawArgs === undefined ? [] : rawArgs.split(',').map((a) => a.trim());
-      if (cls === 'words' && args.length && !(args.length === 1 && /^[1-9]\d*$/.test(args[0]))) throw new PatternError(`words(...) needs one positive number in '${part}'`);
+      if (cls === 'words' && args.length && !(/^[1-9]\d*$/.test(args[0]) && (args.length === 1 || (args.length === 2 && args[1] === 'label')))) throw new PatternError(`words(...) needs a positive number, optionally followed by 'label', in '${part}'`);
+      if (cls === 'rest' && args.length && !(args.length === 1 && args[0] === 'notes')) throw new PatternError(`rest(...) takes only 'notes' in '${part}'`);
       if (cls === 'recent') {
         if (args.length !== 2) throw new PatternError(`recent(<lexicon>, <agent slot>) needs two arguments in '${part}'`);
         const ag = slots.get(args[1]);
         if (!ag || ag.cls !== 'agent') throw new PatternError(`recent(...) refers to '${args[1]}', which is not an earlier agent slot in '${part}'`);
-      } else if (args.length && cls !== 'words') throw new PatternError(`slot class '${cls}' takes no arguments in '${part}'`);
+      } else if (args.length && cls !== 'words' && cls !== 'rest') throw new PatternError(`slot class '${cls}' takes no arguments in '${part}'`);
       slots.set(name, { cls, args, optional: !!opt });
       elements.push({ t: 'slot', name, cls, args, optional: !!opt });
       continue;
@@ -98,6 +99,12 @@ export function compilePattern(match, phrases = null) {
 /** Indexes of `alts` by descending word count (stable). */
 const byLength = (alts) => alts.map((a, k) => k).sort((x, y) => alts[y].length - alts[x].length || x - y);
 
+/** Guards of free-text slots: `rest(notes)` only music words, `words(N,label)` no pronoun or possessive. */
+const NOTE_WORDS = new Set(('a b c d e f g sharp flat natural rest pause break half quarter eighth sixteenth whole dotted double triple twice thrice then and for beat beats '
+  + 'octave up down high low higher lower note notes sec second seconds time times x again once end the my melody middle').split(' '));
+const NOTE_RE = /^[a-g](?:#|b)?\d*$/;
+const isNoteToken = (t) => t.kind === 'number' || (t.kind === 'word' && (NOTE_WORDS.has(t.lower) || NOTE_RE.test(t.lower)));
+const SELF_WORDS = new Set(['you', 'your', 'yours', 'yourself', 'my', 'mine', 'me', 'myself', 'i', 'our', 'we', 'his', 'her', 'its', 'their', 'it', 'them']);
 const isWordish = (t) => t && t.kind !== 'punct' && t.kind !== 'qmark' && !t.filler;
 
 /** Candidate captures of slot class `cls` at tokens[i], in preference order. */
@@ -135,7 +142,9 @@ function candidates(el, tokens, i, env, slotsSoFar) {
     case 'words': {
       const out = [];
       const max = el.args?.[0] ? Number(el.args[0]) : WORDS_DEFAULT_MAX;
+      const label = el.args?.[1] === 'label';
       for (let len = 1; len <= max && i + len <= tokens.length && isWordish(tokens[i + len - 1]); len++) {
+        if (label && SELF_WORDS.has(tokens[i + len - 1].lower)) break;
         out.push({ len, value: text(len), text: text(len), span: span(len), loose: true });
       }
       return out;
@@ -145,6 +154,7 @@ function candidates(el, tokens, i, env, slotsSoFar) {
       let end = tokens.findIndex((x, k) => k >= i && x.kind === 'qmark');
       if (end < 0) end = tokens.length;
       const len = end - i;
+      if (el.args?.[0] === 'notes' && !tokens.slice(i, end).every(isNoteToken)) return [];
       return len >= 1 && tokens.slice(i, end).every(isWordish) ? [{ len, value: text(len), text: text(len), span: span(len), loose: true }] : [];
     }
     case 'noun': {

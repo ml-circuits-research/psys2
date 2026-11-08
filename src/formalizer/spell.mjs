@@ -8,7 +8,7 @@
  *   const { text, corrections } = spellCorrect('make bigger yes and red lips', { vocab: worldVocabulary(set, 'ui.avatar') });
  *   // text = 'make bigger eyes and red lips', corrections = [{ from: 'yes', to: 'eyes', span: [12, 15], kind: 'spell' }]
  */
-import { vocabularyOf, lexiconWordsOf, editDistance } from './rules/index.mjs';
+import { vocabularyOf, lexiconWordsOf, editDistance, SHORT_TYPOS } from './rules/index.mjs';
 import { isNumberWord } from './rules/numbers.mjs';
 
 /** Common English function words: never corrected, and valid correction targets (typos of "the", "and", "with" ...). */
@@ -28,6 +28,7 @@ export const ABBREVIATIONS = {
   lemme: 'let me', gimme: 'give me', dunno: 'do not know', cuz: 'because', coz: 'because', bc: 'because', abt: 'about', sth: 'something',
   '1st': 'first', '2nd': 'second', '3rd': 'third', '4th': 'fourth', '5th': 'fifth', '6th': 'sixth', '7th': 'seventh', '8th': 'eighth', '9th': 'ninth', '10th': 'tenth',
   colour: 'color', colours: 'colors', grey: 'gray',
+  ...SHORT_TYPOS,
 };
 
 /** Allowed edit distance for a word: none below 3 letters, 1 for 3 to 6 letters, 2 for 7 and more. */
@@ -43,6 +44,7 @@ function isKnown(w, keep) {
   for (const s of SUFFIXES) {
     if (!w.endsWith(s) || w.length - s.length < 3) continue;
     const stem = w.slice(0, -s.length);
+    if (s === 's' && stem.endsWith('s')) continue;   // "pluss" is not the plural of "plus"
     if (keep.has(stem) || keep.has(`${stem}e`) || (s === 'ies' && keep.has(`${stem}y`)) || keep.has(stem.slice(0, -1) /* doubled consonant */)) return true;
   }
   return false;

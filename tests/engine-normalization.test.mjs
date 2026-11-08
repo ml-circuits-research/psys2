@@ -256,3 +256,14 @@ test('spellCorrect breaks a tie by word frequency, and leaves a still-tied word 
   vocab.freq = new Map([['tame', 2], ['tale', 2]]);
   assert.equal(spellCorrect('tabe', { vocab }).text, 'tabe');
 });
+
+test('spoken lead-in phrases ("quick one:", "real quick") are fillers; the request after them is read', () => {
+  const words = (s) => tokenize(s, 0).filter((t) => t.kind !== 'punct').map((t) => t.lower);
+  assert.deepEqual(words('quick one: center'), ['center']);
+  assert.deepEqual(words('Just a quick one, what day is it'), ['what', 'day', 'is', 'it']);
+  assert.deepEqual(words('a quick question how many legs'), ['how', 'many', 'legs']);
+  assert.deepEqual(words('what day is it real quick'), ['what', 'day', 'is', 'it']);
+  // nothing after the phrase: it stays a message of its own; inside a sentence it is not touched
+  assert.deepEqual(words('quick one'), ['quick', '1']);
+  assert.deepEqual(words('draw a quick one'), ['draw', 'a', 'quick', '1']);
+});

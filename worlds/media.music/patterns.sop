@@ -501,7 +501,7 @@
     example="Continue with the notes E D C."
 
 @pat.media.music.melody.add.bare core.pattern
-    match="[like|you_know|i_mean|basically|actually|just|so|well|okay|ok|um|uh|hmm|hey|yo|oh|ah|alright|right|then|and|but|now|maybe|perhaps|honestly|seriously|anyway|sorry|kindly|oh_and|and_also|also|ugh|er|erm|ahem|hm|mm]? [can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you|hold_on|wait|hang_on|wait_a_sec|wait_a_second|one_sec|one_second|actually|oops|whoops|sorry|uh|um|hmm|oh|alright|right|kindly|maybe|perhaps|can_you_maybe|could_you_maybe|can_you_possibly|could_you_possibly|would_you_mind|do_you_mind|could_you_just|hey_please|hey_could_u|i_dont_care|i_do_not_care|dont_care|whatever|dunno|idk|i_do_not_know|i_dont_know|go_ahead|and_then|but_first|so_can_you|so_could_you|pls_can_u|plz_can_u|can_u_pls|can_you_pls|could_you_pls|could_u_pls|please_could_you|please_would_you|please_can_u|please_could_u|i_need|i_want|i_d_like|i_would_like|we_need|we_want_you_to|i_want_it_to|hey_computer|computer|hey_you|yo_can_you|no|nope|nah]? [like|you_know|i_mean|basically|actually|just|so|well|okay|ok|um|uh|hmm|hey|yo|oh|ah|alright|right|then|and|but|now|maybe|perhaps|honestly|seriously|anyway|sorry|kindly|oh_and|and_also|also|ugh|er|erm|ahem|hm|mm]? [add|append|continue_with|follow_with|extend_it_with|extend_my_melody_with|extend_the_melody_with|then_add] {notes:rest}"
+    match="[like|you_know|i_mean|basically|actually|just|so|well|okay|ok|um|uh|hmm|hey|yo|oh|ah|alright|right|then|and|but|now|maybe|perhaps|honestly|seriously|anyway|sorry|kindly|oh_and|and_also|also|ugh|er|erm|ahem|hm|mm]? [can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you|hold_on|wait|hang_on|wait_a_sec|wait_a_second|one_sec|one_second|actually|oops|whoops|sorry|uh|um|hmm|oh|alright|right|kindly|maybe|perhaps|can_you_maybe|could_you_maybe|can_you_possibly|could_you_possibly|would_you_mind|do_you_mind|could_you_just|hey_please|hey_could_u|i_dont_care|i_do_not_care|dont_care|whatever|dunno|idk|i_do_not_know|i_dont_know|go_ahead|and_then|but_first|so_can_you|so_could_you|pls_can_u|plz_can_u|can_u_pls|can_you_pls|could_you_pls|could_u_pls|please_could_you|please_would_you|please_can_u|please_could_u|i_need|i_want|i_d_like|i_would_like|we_need|we_want_you_to|i_want_it_to|hey_computer|computer|hey_you|yo_can_you|no|nope|nah]? [like|you_know|i_mean|basically|actually|just|so|well|okay|ok|um|uh|hmm|hey|yo|oh|ah|alright|right|then|and|but|now|maybe|perhaps|honestly|seriously|anyway|sorry|kindly|oh_and|and_also|also|ugh|er|erm|ahem|hm|mm]? [add|append|continue_with|follow_with|extend_it_with|extend_my_melody_with|extend_the_melody_with|then_add] {notes:rest(notes)}"
     emit="@{_} core.request action=music.melodyAdd arg.notes=\"{notes}\""
     kind=request
     priority=9
@@ -3133,3 +3133,25 @@
     priority=11
     example="Play."
     doc="A play command with nothing to play: asks what to play and expects the answer as the next utterance (discourse pending, spec 11). On other tabs a game may claim a bare play."
+
+@pat.media.music.song.weak core.pattern
+    match="{pre:lex.media.music.polite?} {v:lex.media.music.playverbs.weak} [a|an|the|some|that|this|my|your]? [song|tune|melody|piece|nursery_rhyme]? {title:lex.media.music.songtitles}"
+    emit="@{_} core.request action=music.playAny arg.title=\"{title}\""
+    kind=request
+    priority=10
+    example="Give me Ode to Joy."
+    example="Put on Happy Birthday."
+
+@pat.media.music.song.weak.long core.pattern
+    match="{pre:lex.media.music.polite?} {v:lex.media.music.playverbs.weak} [a|an|the|some|that|this|my|your]? [song|tune|melody|piece|nursery_rhyme]? {t1:lex.media.music.songstarts} {rest:words(5)}"
+    emit="@{_} core.request action=music.playAny arg.title=\"{t1} {rest}\""
+    kind=request
+    priority=10
+    example="Give me twinkle twinkle little star."
+
+@pat.media.music.song.weak.start core.pattern
+    match="{pre:lex.media.music.polite?} {v:lex.media.music.playverbs.weak} [a|an|the|some|that|this|my|your]? [song|tune|melody|piece|nursery_rhyme]? {t1:lex.media.music.songstarts}"
+    emit="@{_} core.request action=music.playAny arg.title=\"{t1}\""
+    kind=request
+    priority=10
+    example="Put on Frere Jacques."

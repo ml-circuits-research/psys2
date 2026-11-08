@@ -1191,3 +1191,99 @@
     example="Make ur face surprised"
     example="I want to see you surprised"
     example="Look surprised pls"
+
+@pat.ui.avatar.s2.add.to core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [add|put|stick|attach|place|install|fit|give|mount|pin|glue] [a|an|the|some|new|your|ur|my]? {v:lex.ui.avatar.options} {n:number?} [to|onto|on|on_to|in|at|for|into|on_top_of|to_the|on_the] [your|the|ur|my|ur_own]? {p:lex.ui.avatar.parts} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.setPart arg.part={p} arg.value={v} arg.n={n} arg.text=\"{v}\""
+    kind=request
+    priority=13
+    example="Add vents to your chest."
+    example="Stick a heart on your chest."
+    example="Put a dish on your head."
+
+@pat.ui.avatar.s2.shaped core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$ui.avatar.g7_give_yourself]? [a|an|the|some|new|your|ur|my|a_pair_of|pair_of]? {v:lex.ui.avatar.options} [shaped|style|type|looking|like]? [shaped|style|type|looking]? {p:lex.ui.avatar.parts} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.setPart arg.part={p} arg.value={v} arg.text=\"{v}\""
+    kind=request
+    priority=12
+    example="Give me plus shaped eyes."
+    example="Can you give yourself a pair of visor eyes?"
+
+@pat.ui.avatar.s2.remove.thing core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [take_off|remove|lose|drop|ditch|get_rid_of|take_away|hide|take_out|delete|clear|undo] [your|the|that|a|an|my|ur]? [thing|stuff|item|decoration|accessory|piece|part|gadget|gizmo|device|extra|ornament|bit|doodad]? [on|from|off|at|of|in|off_of|on_top_of] [your|the|ur|my]? {p:lex.ui.avatar.parts} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.removePart arg.part={p}"
+    kind=request
+    priority=13
+    example="Remove the thing on your chest."
+    example="Take the decoration off your chest."
+
+@pat.ui.avatar.s2.color.whole core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|turn|paint|color|colour|change|set|dye|tint] [your|the|ur|my]? [whole|entire|full|complete|all_of_your|all_of_the]? {p:lex.ui.avatar.colorparts} [color|colour]? [to|into|be|a|an]? {c:lex.ui.avatar.colors} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.setColor arg.part={p} arg.color={c}"
+    kind=request
+    priority=14
+    example="Turn your whole body green."
+    example="Make my body colour blue."
+
+@pat.ui.avatar.s2.color.prefer core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [i_prefer|i_like|i_would_prefer|i_would_like|i_d_like|id_like|i_want|i_wish|show_me|let_me_see|how_about|what_about|try|maybe|why_not] [you|yourself|u|urself] [to_be|in|as|being|looking|to_look|to_go|to_turn|to_become]? [a|an]? {c:lex.ui.avatar.colors} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.setColor arg.part=main arg.color={c}"
+    kind=request
+    priority=13
+    example="I prefer you in yellow."
+    example="How about you in purple?"
+
+@pat.ui.avatar.s2.tone.should core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [i_wish|i_think|i_prefer|make_sure]? [the|your|my|ur]? {p:lex.ui.avatar.colorparts} [color|colour]? [should_be|must_be|needs_to_be|could_be|can_be|should_look|should_get|should_become|will_be|to_be|be|is|looks|looked|would_be|would_look|could_look|could_get]? [a_bit|a_little|a_lot|much|even|way|slightly|somewhat|just_a_bit|just_a_little|a_touch|a_tad|bit|little]? {t:lex.ui.avatar.tone} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.shiftColor arg.part={p} arg.dir={t}"
+    kind=request
+    priority=14
+    example="Your body should be a bit darker."
+    example="The screen could be lighter."
+
+@pat.ui.avatar.s2.list.parts core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [what|which|list|show_me|tell_me|name] [all|all_the|the]? {p:lex.ui.avatar.parts} [are|can_you_have|exist|are_available|are_there|do_you_come_in|can_i_choose|can_i_pick|can_i_have|can_you_wear|can_you_use|can_you_get|there_are|is_there]? [there|available|possible|on_offer|to_choose_from|to_pick|to_choose|exist|can_you_have|can_i_pick]? [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.listOptions arg.part={p}"
+    kind=request
+    priority=14
+    example="What mouths are there?"
+    example="Which eyes can I pick?"
+
+@pat.ui.avatar.s2.back.to core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [go_back_to|back_to|return_to|revert_to|change_back_to|put_back|switch_back_to|set_back_to|go_back_to_the|get_back_to|bring_back|bring_back_the|restore_the|restore] [the|your|ur|my|a|an]? {v:lex.ui.avatar.options} {n:number?} [on|on_your|in|for_your]? {p:lex.ui.avatar.parts?} [again|please|pls]?"
+    emit="@{_} core.request action=avatar.setPart arg.part={p} arg.value={v} arg.n={n} arg.text=\"{v}\""
+    kind=request
+    priority=13
+    example="Go back to round eyes."
+    example="Switch back to the grill mouth."
+
+@pat.ui.avatar.s2.swap core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [swap|switch|trade|exchange|replace|change|swop] [your|the|ur|my]? {p:lex.ui.avatar.parts} [for|with|to|into|by|out_for] [a|an|the|some|your]? {v:lex.ui.avatar.options} {n:number?} [ones|one|ones_instead|instead|ones_please|ones_pls]? [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.setPart arg.part={p} arg.value={v} arg.n={n} arg.text=\"{v}\""
+    kind=request
+    priority=13
+    example="Swap your eyes for cyclops ones."
+    example="Trade your mouth for a zigzag."
+
+@pat.ui.avatar.s2.could.be core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [i_think|i_feel|maybe|i_believe|perhaps|i_guess|i_wish|i_would_like|i_d_like|id_like|i_want]? [the|your|ur|my]? {p:lex.ui.avatar.parts} [should_be|could_be|can_be|must_be|would_be|will_be|to_be|needs_to_be|is_best_as|might_be|should_look_like|could_look_like|would_look_like|should_have|could_have|would_have|should_become|could_become|should_get|could_get|is|has|looks_like] [a|an|the|some]? {v:lex.ui.avatar.options} {n:number?} [instead|please|pls|now]? [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.setPart arg.part={p} arg.value={v} arg.n={n} arg.text=\"{v}\""
+    kind=request
+    priority=12
+    example="Your mouth could be a zigzag."
+    example="Your eyes should be round."
+
+@pat.ui.avatar.s2.wishwear core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [i_would_like|i_want|i_d_like|id_like|i_wish|i_need|we_want|we_would_like|i_prefer] [you_to|u_to|you_to_be_able_to] [have|wear|use|try|put_on|get|show|grow|sport]? [a|an|the|some|your|new]? {v:lex.ui.avatar.options} {n:number?} [on_top_of|on|at|in|onto|over|on_the_top_of|up_on|for]? [the|your|ur|my]? {p:lex.ui.avatar.parts?} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.setPart arg.part={p} arg.value={v} arg.n={n} arg.text=\"{v}\""
+    kind=request
+    priority=13
+    example="I would like you to wear a dish on top of your head."
+    example="I want you to have visor eyes."
+
+@pat.ui.avatar.s2.lookbetter core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [i_think|i_feel|maybe|i_believe|perhaps|i_guess|i_bet|i_say]? [you|u] [would|will|could|might|d|should]? [look|be|seem] [better|nicer|cooler|good|great|best|cute|cuter|prettier|funnier|happier|neater]? [with|in|if_you_had|if_you_wore|as|having|wearing] [a|an|the|some|your|new]? {v:lex.ui.avatar.options} {n:number?} [shaped]? {p:lex.ui.avatar.parts?} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.setPart arg.part={p} arg.value={v} arg.n={n} arg.text=\"{v}\""
+    kind=request
+    priority=13
+    example="I think you would look better with square eyes."

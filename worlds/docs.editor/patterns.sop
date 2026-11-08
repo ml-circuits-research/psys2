@@ -2627,3 +2627,105 @@
     kind=request
     priority=8
     example="Add we went to the park as a paragraph"
+
+@pat.docs.editor.s2.title core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [add|insert|create|write|put_in|put|place|type] [a|another|one|new] [title|headline|big_heading|top_heading] [saying|called|named|that_says|reading|of]? {t:rest}"
+    emit="@{_} core.request action=doc.addHeading arg.text=\"{t}\" arg.level=1"
+    kind=request
+    priority=12
+    example="Add a title Trip plan."
+    example="Put a headline called Big news at the top."
+
+@pat.docs.editor.s2.start.title core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [start|begin|open|kick_off|lead] [the|my|a|this]? [document|doc|page|file|text|note]? with [a|the|my]? [title|headline|heading|header] [saying|called|named|that_says|reading|of]? {t:rest}"
+    emit="@{_} core.request action=doc.addHeading arg.text=\"{t}\" arg.level=1"
+    kind=request
+    priority=12
+    example="Start the document with a title: My trip."
+
+@pat.docs.editor.s2.heading.put core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [put|place|stick|insert|set_up|give_me] [a|another|one|new] [heading|header|subheading] [saying|called|named|that_says|reading|of]? {t:rest}"
+    emit="@{_} core.request action=doc.addHeading arg.text=\"{t}\""
+    kind=request
+    priority=11
+    example="Put a heading called Notes at the top."
+
+@pat.docs.editor.s2.heading.bare core.pattern
+    match="[and|then|also|plus|next]? [a|another|one_more|the]? [heading|header|subheading] [saying|called|named|that_says|reading|of]? {t:rest}"
+    emit="@{_} core.request action=doc.addHeading arg.text=\"{t}\""
+    kind=request
+    priority=11
+    example="A heading Shopping."
+
+@pat.docs.editor.s2.paragraph.bare core.pattern
+    match="[and|then|also|plus|next]? [a|another|one_more|the]? [paragraph|sentence] [saying|that_says|reading|with_the_text|with|of]? {t:rest}"
+    emit="@{_} core.request action=doc.addParagraph arg.text=\"{t}\""
+    kind=request
+    priority=11
+    example="A paragraph hello world."
+
+@pat.docs.editor.s2.list.bare core.pattern
+    match="[and|then|also|plus|next]? [a|another|one_more|the]? [list|bullet_list|bulleted_list] [with|of|containing|including]? {t:rest}"
+    emit="@{_} core.request action=doc.addList arg.text=\"{t}\""
+    kind=request
+    priority=11
+    example="A list with milk and eggs."
+
+@pat.docs.editor.s2.list.empty core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [add|insert|create|make|start|begin|put_in|put|new|want|need|i_want|i_need|i_would_like|i_d_like|id_like] [a|the|another|one|new]? [new]? [empty|blank]? [list|bullet_list|bulleted_list] [please|pls|plz|thanks|thank_you|now|for_me|right_now|here]?"
+    emit="@{_} core.request action=doc.addList arg.text=\"\" arg.empty=true"
+    kind=request
+    priority=11
+    example="Add a list."
+
+@pat.docs.editor.s2.list.empty.numbered core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [add|insert|create|make|start|begin|put_in|put|new|want|need|i_want|i_need|i_would_like|i_d_like|id_like] [a|the|another|one|new]? [new]? [empty|blank]? [numbered_list|ordered_list|numbered|ordered] [list]? [please|pls|plz|thanks|thank_you|now|for_me|right_now|here]?"
+    emit="@{_} core.request action=doc.addList arg.text=\"\" arg.style=numbered arg.empty=true"
+    kind=request
+    priority=11
+    example="Add a numbered list."
+
+@pat.docs.editor.s2.convert.adj core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|turn|change|convert|set|switch|have] [it|this|that|them|the_list|this_list|that_list|my_list|the_last_list|that_last_list|the_new_list|the_list_i_added|the_list_i_just_added|the_list_i_made|the_list_i_just_made] [into|to|be|as|so_it_is|so_that_it_is]? [a|an]? [numbered|ordered|numbered_list|ordered_list|with_numbers|numbers] [list|one]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
+    emit="@{_} core.request action=doc.convert arg.t=\"it\" arg.to=numbered_list"
+    kind=request
+    priority=13
+    example="Make it numbered."
+    example="Make that list numbered."
+
+@pat.docs.editor.s2.convert.adj.bullet core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|turn|change|convert|set|switch|have] [it|this|that|them|the_list|this_list|that_list|my_list|the_last_list|that_last_list|the_new_list] [into|to|be|as]? [a|an]? [bulleted|bullet|bullets|with_bullets|with_dots|unnumbered|plain|bulleted_list|bullet_list] [list|one]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
+    emit="@{_} core.request action=doc.convert arg.t=\"it\" arg.to=bullet_list"
+    kind=request
+    priority=13
+    example="Make it bulleted."
+
+@pat.docs.editor.s2.convert.adj.task core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|turn|change|convert|set|switch|have] [it|this|that|them|the_list|this_list|that_list|my_list|the_last_list|that_last_list|the_new_list] [into|to|be|as]? [a|an]? [checkable|tickable|checklist|check_list|task_list|todo_list|to-do_list|with_checkboxes|with_tick_boxes|with_checks] [list|one]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
+    emit="@{_} core.request action=doc.convert arg.t=\"it\" arg.to=task_list"
+    kind=request
+    priority=13
+    example="Make it checkable."
+
+@pat.docs.editor.s2.count.have core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [how_many|how_much] {kind:lex.docs.editor.kinds} [do_i_have|have_i_got|do_we_have|did_i_add|did_i_write|did_i_make|have_i_added|have_i_written|have_i_made|are_in_my_document|are_in_my_doc|are_on_the_page|are_in_the_page|are_in_this_document|are_in_the_doc] [in_the_document|in_it|in_the_text|in_total|in_my_document|in_my_doc|so_far|now|right_now|here|currently]? [please|pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=doc.count arg.kind={kind}"
+    kind=request
+    priority=12
+    example="How many headings do I have?"
+    example="How many paragraphs did I add?"
+
+@pat.docs.editor.s2.undo.scratch core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [scratch|scrap|take_back|cancel|revert|reverse|void|wipe|strike|erase|nix|trash|ditch|retract|withdraw|forget|remove|delete|get_rid_of] [the|my|that]? [last|previous|latest|most_recent|final] [thing|change|edit|addition|action|step|one|item|block|bit|piece|line] [that]? [i|you|we]? [added|did|made|wrote|typed|put|inserted|created|said|dictated]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
+    emit="@{_} core.request action=doc.undo"
+    kind=request
+    priority=13
+    example="Scratch the last thing I added."
+    example="Take back the previous change."
+
+@pat.docs.editor.s2.undo.scratchthat core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [scratch|scrap|nix|forget|take_back|cancel|wipe|ditch] [that|this|it|what_i_just_said|what_i_just_added|what_i_just_did|the_last_one] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
+    emit="@{_} core.request action=doc.undo"
+    kind=request
+    priority=12
+    example="Scratch that."

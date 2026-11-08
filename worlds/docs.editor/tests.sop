@@ -575,3 +575,139 @@
     input="Make the last one italic."
     expect="heading is now italic"
     session=dm
+
+@t.docs.editor.x201 core.test
+    session=xs1
+    input="add a title Trip plan"
+    expectState="blocks.0.kind=heading"
+    expectState="blocks.0.text=Trip plan"
+
+@t.docs.editor.x202 core.test
+    session=xs2
+    input="Add a headline called Big news"
+    expectState="blocks.0.text=Big news"
+
+@t.docs.editor.x203 core.test
+    session=xs3
+    input="start the document with a title: My trip"
+    expectState="blocks.0.text=My trip"
+
+@t.docs.editor.x204 core.test
+    session=xs4
+    input="begin the page with a heading Welcome"
+    expectState="blocks.0.text=Welcome"
+
+@t.docs.editor.x205 core.test
+    session=xs5
+    input="put a heading called Notes at the top"
+    expectState="blocks.0.text=Notes"
+
+@t.docs.editor.x206 core.test
+    session=xs6
+    input="hey add a heading Plans pls"
+    expectState="blocks.0.text=Plans"
+
+@t.docs.editor.x207 core.test
+    session=xs7
+    input="add a heading Shopping and a paragraph hello world"
+    expectState="blocks.length=2"
+    expectState="blocks.0.text=Shopping"
+    expectState="blocks.1.text=Hello world."
+
+@t.docs.editor.x208 core.test
+    session=xs8
+    input="add a heading A, a heading B and a heading C"
+    expectState="blocks.length=3"
+    expectState="blocks.2.text=C"
+
+@t.docs.editor.x209 core.test
+    session=xs9
+    input="add a list and make it numbered"
+    expectState="blocks.0.kind=list"
+    expectState="blocks.0.style=numbered"
+
+@t.docs.editor.x210 core.test
+    session=xs10
+    input="create a list then make it a numbered list"
+    expectState="blocks.0.style=numbered"
+
+@t.docs.editor.x211 core.test
+    session=xs11
+    input="Add a numbered list"
+    expectState="blocks.0.kind=list"
+    expectState="blocks.0.style=numbered"
+
+@t.docs.editor.x2s1 core.test
+    session=xl1
+    input="Add a list: milk, eggs"
+    expectState="blocks.0.style=bullet"
+
+@t.docs.editor.x2s2 core.test
+    session=xl1
+    input="make that list numbered"
+    expectState="blocks.0.style=numbered"
+
+@t.docs.editor.x2s3 core.test
+    session=xl1
+    input="make it bulleted"
+    expectState="blocks.0.style=bullet"
+
+@t.docs.editor.x2s4 core.test
+    session=xl1
+    input="turn it into a checklist"
+    expectState="blocks.0.style=task"
+
+@t.docs.editor.x2c1 core.test
+    session=xc1
+    input="Add a heading Shopping"
+    expectState="blocks.0.text=Shopping"
+
+@t.docs.editor.x2c2 core.test
+    session=xc1
+    input="Add a paragraph hello world"
+    expectState="blocks.1.text=Hello world."
+
+@t.docs.editor.x2c3 core.test
+    session=xc1
+    input="how many headings do i have"
+    expect="1 heading"
+
+@t.docs.editor.x2c4 core.test
+    session=xc1
+    input="how many paragraphs did i add"
+    expect="1 paragraph"
+
+@t.docs.editor.x2c5 core.test
+    session=xc1
+    input="read para 1"
+    expect="Hello world"
+
+@t.docs.editor.x2c6 core.test
+    session=xc1
+    input="read paragraph 1"
+    expect="Hello world"
+
+@t.docs.editor.x2u1 core.test
+    session=xu1
+    input="Add a heading Top"
+    expectState="blocks.length=1"
+
+@t.docs.editor.x2u2 core.test
+    session=xu1
+    input="Add a paragraph body"
+    expectState="blocks.length=2"
+
+@t.docs.editor.x2u3 core.test
+    session=xu1
+    input="scratch the last thing i added"
+    expectState="blocks.length=1"
+
+@t.docs.editor.x2u4 core.test
+    session=xu1
+    input="Add a paragraph again"
+    expectState="blocks.length=2"
+
+@t.docs.editor.x2u5 core.test
+    session=xu1
+    input="take back the previous change"
+    expectState="blocks.length=1"

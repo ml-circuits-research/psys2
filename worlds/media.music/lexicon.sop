@@ -381,27 +381,31 @@
     word=hear
     word=listen_to
     word=play_me
-    word=give_me
-    word=sound
-    word=strum
     word=try_playing
     word=start_playing
-    word=perform
     word=let_me_hear
     word=let_us_hear
     word=i_want_to_hear
     word=i_would_like_to_hear
     word=can_i_hear
     word=could_i_hear
+    word=sing
+    word=play_back
+    word=replay
+    word=put_on
+
+@lex.media.music.playverbs.weak core.lexicon
+    class=phrase
+    doc="Verbs that also mean other things (give me plus shaped eyes, put on glasses, hit the road): they start a song request only before a known song title, never before free text"
+    word=give_me
+    word=sound
+    word=strum
+    word=perform
     word=hit
     word=spin
-    word=sing
     word=sing_me
     word=run_through
     word=go_through
-    word=put_on
-    word=play_back
-    word=replay
 
 @lex.media.music.songtitles core.lexicon
     class=phrase

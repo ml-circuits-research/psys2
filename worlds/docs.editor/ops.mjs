@@ -58,7 +58,25 @@ function sync(s) {
   s.doc = toDoc(s);
   s.stats = computeStats(s);
 }
-const W = (fn) => (ctx, args) => { const r = fn(ctx, args ?? {}); sync(ctx.state); return r; };
+/** Chat abbreviations of block kinds ("read para 1"). */
+const KIND_ALIAS = { para: 'paragraph', paras: 'paragraph', graf: 'paragraph', hed: 'heading', head: 'heading', bullet: 'list' };
+const W = (fn) => (ctx, args) => {
+  args = args ?? {};
+  if (args.kind && Object.hasOwn(KIND_ALIAS, args.kind)) args = { ...args, kind: KIND_ALIAS[args.kind] };
+  const r = fn(ctx, args); sync(ctx.state); return r;
+};
+/** Politeness and position words that end a heading or paragraph text ("Plans pls", "Notes at the top"): { text, top }. */
+function trimTail(text, polite = true) {
+  let t = String(text).trim(), top = false;
+  for (let again = true; again;) {
+    again = false;
+    const pos = t.match(/\s+(?:at|on|to)\s+(?:the\s+)?(?:(top|start|beginning)|bottom|end)(?:\s+of\s+(?:the\s+)?(?:page|document|doc|text|file))?$/i);
+    if (pos) { if (pos[1]) top = true; t = t.slice(0, pos.index).trim(); again = true; }
+    const pol = t.match(polite ? /\s+(?:pls|plz|plss|thx|thanks|thank you|ty|please|for me|now|right now|asap)$/i : /\s+(?:pls|plz|plss|thx|ty)$/i);
+    if (pol && t.length > pol[0].length) { t = t.slice(0, pol.index).trim(); again = true; }
+  }
+  return { text: t, top };
+}
 
 // ---- history ---------------------------------------------------------------------------------------
 const snap = (s) => structuredClone({ title: s.title, titleMarks: s.titleMarks, titleAlign: s.titleAlign, titleSize: s.titleSize, blocks: s.blocks, cursor: s.cursor, nextId: s.nextId, selection: s.selection });
@@ -129,26 +147,27 @@ const quoteText = (t) => (t.length > 40 ? `${t.slice(0, 37)}...` : t);
 
 // ---- adding ----------------------------------------------------------------------------------------
 function _addHeading(ctx, { text, level }) {
-  const s = ctx.state, t = String(text).trim();
+  const s = ctx.state, { text: t, top } = trimTail(text);
   if (!t) return no('unsupported', 'What should the heading say?');
-  commit(s); addBlock(s, { kind: 'heading', level: Math.min(3, Math.max(1, Number(level) || 2)), text: cap(t) }); show(ctx);
+  commit(s); addBlock(s, { kind: 'heading', level: Math.min(3, Math.max(1, Number(level) || 2)), text: cap(t) }, top ? 0 : s.blocks.length); show(ctx);
   return ok(`OK, I added the heading "${cap(t)}".`);
 }
 function _addParagraph(ctx, { text }) {
-  const s = ctx.state, t = String(text).trim();
+  const s = ctx.state, { text: t, top } = trimTail(text, false);
   if (!t) return no('unsupported', 'What should the paragraph say?');
-  commit(s); addBlock(s, { kind: 'paragraph', text: /[.!?]$/.test(t) ? cap(t) : `${cap(t)}.` }); show(ctx);
+  commit(s); addBlock(s, { kind: 'paragraph', text: /[.!?]$/.test(t) ? cap(t) : `${cap(t)}.` }, top ? 0 : s.blocks.length); show(ctx);
   return ok(`OK, I added a paragraph (${words(t).length} words).`);
 }
 const splitItems = (text) => String(text).split(/\s*,\s*(?:and\s+)?|\s+and\s+/i).map((x) => x.trim()).filter(Boolean);
 const STYLE_OF = { bullet: 'bullet', bulleted: 'bullet', numbered: 'numbered', ordered: 'numbered', number: 'numbered', task: 'task', checklist: 'task', todo: 'task', 'to-do': 'task', checkbox: 'task' };
-function _addList(ctx, { text, style }) {
+function _addList(ctx, { text, style, empty }) {
   const s = ctx.state;
-  const items = splitItems(text);
-  if (!items.length) return no('unsupported', 'What should be on the list?');
+  const items = splitItems(trimTail(text ?? '', false).text);
+  if (!items.length && String(empty) !== 'true') return no('unsupported', 'What should be on the list?');
   const st = STYLE_OF[String(style ?? 'bullet').toLowerCase()] ?? 'bullet';
   commit(s); addBlock(s, { kind: 'list', style: st, items, ...(st === 'task' ? { checked: items.map(() => false) } : {}) }); show(ctx);
   const noun = st === 'task' ? 'task list' : st === 'numbered' ? 'numbered list' : 'list';
+  if (!items.length) return ok(`OK, I added an empty ${noun}. You can change its style or tell me what goes on it.`);
   return ok(`OK, I added a ${noun} with ${items.length} ${plural(items.length, 'item')}: ${joinAnd(items)}.`);
 }
 function _addQuote(ctx, { text }) {
@@ -798,7 +817,8 @@ function _read(ctx, args = {}) {
     const text = spokenOfRes(res);
     if (!text) return no('missing', 'There is nothing to read there.');
     ctx.effect('speech.say', { text });
-    return ok(args.t ? `OK, reading ${res.desc}.` : `OK, reading ${args.kind === 'block' ? `block ${res.pos ?? ''}`.trim() : res.desc.replace(/^the /, '')}.`);
+    const what = args.t ? res.desc : args.kind === 'block' ? `block ${res.pos ?? ''}`.trim() : res.desc.replace(/^the /, '');
+    return ok(text.length <= 160 ? `OK, reading ${what}: ${text}` : `OK, reading ${what}.`);
   }
   if (!s.blocks.length) return no('missing', 'The document is empty, so there is nothing to read.');
   ctx.effect('speech.say', { text: spoken(s) });

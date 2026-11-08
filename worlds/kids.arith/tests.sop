@@ -904,3 +904,113 @@
     input="And Ana?"
     expect="Ana got 2 apples from Tom. I don't know how many Ana had before."
     session=dm1
+
+@t.arith.xa01 core.test
+    input="take 3 away from 7"
+    expect="7 minus 3 is 4."
+    doc="calc: take N away from M"
+
+@t.arith.xa02 core.test
+    input="Take 7 away from 16 thanks"
+    expect="16 minus 7 is 9."
+    doc="calc: take N away from M"
+
+@t.arith.xa03 core.test
+    input="what is 10 take away 4"
+    expect="10 minus 4 is 6."
+    doc="calc: take N away from M"
+
+@t.arith.xa04 core.test
+    input="subtract 2 off from 9"
+    expect="9 minus 2 is 7."
+    doc="calc: take N away from M"
+
+@t.arith.xa05 core.test
+    input="what is 12 squared"
+    expect="12 times 12 is 144."
+    doc="calc: squared"
+
+@t.arith.xa06 core.test
+    input="whats 9 squared please"
+    expect="9 times 9 is 81."
+    doc="calc: squared"
+
+@t.arith.xa07 core.test
+    input="what is the square of 7"
+    expect="7 times 7 is 49."
+    doc="calc: squared"
+
+@t.arith.xa08 core.test
+    input="what is 3 cubed"
+    expect="3 times 3 times 3 is 27."
+    doc="calc: cubed"
+
+@t.arith.xa09 core.test
+    input="what is 7 plus 5 minus 2"
+    expect="7 plus 5 minus 2 is 10."
+    doc="calc: chained operations"
+
+@t.arith.xa10 core.test
+    input="whats 2 plus 3 times 4"
+    expect="2 plus 3 times 4 is 14."
+    doc="calc: chained operations, times first"
+
+@t.arith.xa11 core.test
+    input="calculate 20 divided by 4 plus 1"
+    expect="20 divided by 4 plus 1 is 6."
+    doc="calc: chained operations"
+
+@t.arith.xa12 core.test
+    input="what is 10 minus 3 minus 2"
+    expect="10 minus 3 minus 2 is 5."
+    doc="calc: chained operations"
+
+@t.arith.xa13 core.test
+    input="Ben has 8 apples. Ben gives away 6. How many apples does Ben have left?"
+    expect="Ben has 2 apples."
+    doc="statement: gives away"
+
+@t.arith.xa14 core.test
+    input="Ana has 9 stickers. She gave away 4 stickers. How many stickers does Ana have?"
+    expect="Ana has 5 stickers."
+    doc="statement: gives away"
+
+@t.arith.xa15 core.test
+    input="Leo has 10 marbles. Leo gave 3 marbles away. How many marbles does Leo have now?"
+    expect="Leo has 7 marbles."
+    doc="statement: gives away"
+
+@t.arith.xa16 core.test
+    input="Tom has 2 apples and Ana has 3. How many apples altogether?"
+    expect="There are 5 apples altogether."
+    doc="statement: unit elided in a coordinated clause"
+
+@t.arith.xa17 core.test
+    input="Tom has 4 pears and Mia has 5. How many pears do Tom and Mia have together?"
+    expect="Tom and Mia have 9 pears altogether."
+    doc="statement: unit elided in a coordinated clause"
+
+@t.arith.xa18 core.test
+    input="Tom has 4 apples, Ana has 3. How many apples altogether?"
+    expect="There are 7 apples altogether."
+    doc="statement: unit elided after a comma"
+
+@t.arith.xa19 core.test
+    input="Mia has five marbles. She lost two marbles. whats left for Mia"
+    expect="Mia has 3 marbles."
+    doc="question: whats left for a name, unit elided"
+
+@t.arith.xa20 core.test
+    input="Mia has five marbles. She lost two marbles. How many does Mia have left?"
+    expect="Mia has 3 marbles."
+    doc="question: how many does a name have, unit elided"
+
+@t.arith.xa21 core.test
+    input="wat is 7 pluss 5"
+    expect="7 plus 5 is 12."
+    doc="typos: short word and doubled letter"
+
+@t.arith.xa22 core.test
+    input="quick one: what is 6 plus 7"
+    expect="6 plus 7 is 13."
+    doc="filler: quick one"
