@@ -140,7 +140,7 @@ What this means for your tasks:
 
 The reviewer's agent is fixing, in parallel: the typed value checker (sign, decimals, roles), the operational evaluator (signed numbers), the N1 noiser (safe noise, value audit), the normalizer cache, language detection for short inputs, and the neutral answer to a bare yes/no. Pull those before G4/G5. Do the rest:
 
-**G1 (P0) — global preference for complete interpretations.** `wat do red and yelow mak` gets the right answer without FLAN and a wrong one with it: an incomplete segmentation ("wat do red" + an unparsed rest, rewritten as "What do red and red make?") scores −6.34 and beats the complete spell-corrected reading (−6.53). Make selection hierarchical over all segmentations:
+**G1 (P0) — global preference for complete interpretations — DONE and validated (eaef124, 85e2f4b).** `wat do red and yelow mak` gets the right answer without FLAN and a wrong one with it: an incomplete segmentation ("wat do red" + an unparsed rest, rewritten as "What do red and red make?") scores −6.34 and beats the complete spell-corrected reading (−6.53). Make selection hierarchical over all segmentations:
 - complete before partial;
 - original/spell readings before generated ones, whenever any complete one exists;
 - neural scores only order readings within the same validity class;
@@ -155,7 +155,7 @@ Accept: this message answers "orange" with and without N1. Add tests where "and"
 
 Add one correction phase on the whole message, before segmentation, routing and modal interceptors, shared by rules, encoder and games. Mark the replaced fragment and the scope (value / object / whole command / modal answer), then execute only the resulting program. Test that the abandoned variant leaves no effect: move history, tries used, object count, opponent state.
 
-**G3 (P1) — bounded free captures and context-anchored spelling.** Reproduced:
+**G3 (P1) — bounded free captures and context-anchored spelling — DONE and validated (3db5374).** One leftover: on the drawing tab a bare noun phrase ("a purple boat please") is now "not understood" instead of wrong. Make a bare object phrase on the drawing tab mean "draw it", as `Draw a boat` already works. Reproduced:
 - avatar names "to Bolt", "Zed from now on" and "try a grill for the mouth";
 - `lets play hangmn` renames the avatar to "play hangmn";
 - on the drawing tab `a purple boat please` → boat corrected to coat (kids.animals).
@@ -547,3 +547,4 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
 - L2–L4 — phrase macros, `lang.common`, `migrate-macros`, ui.avatar pilot (d6abc37, 0a28f0e, 780255c, 751f448): 717 tests pass. Operational unchanged (1068/18/37/111). The size target is reinterpreted: −60% of the whole file was unreachable (32 KB of ui.avatar is examples/emit/ids). Match text −43% is accepted. For L7, measure the **match text** and the number of repeated groups, not the file bytes.
 - R2 dispatcher v2 published (215677c), chosen by the full-pipeline result: operational **right 90.0 → 91.2%, wrong 4.0 → 2.8%**. Reviewer check in headless Chrome with the Encoder: multi-command, typo, tab-routing and abbreviation messages answered correctly, no console errors.
 - Review-2 small fixes by the reviewer (ac3785b, 8866230, a3f19d3, e139210, 10068d4, 2201691, f7e25b3) + worker G1/G6/G8: 747 tests pass at f7e25b3.
+- G1, G2 (in the CLI), G3 (eaef124, 85e2f4b, 3db5374) + parallel evaluation (a5c241b): 759 tests pass. Probes: "rename yourself to Bolt" → Bolt; "your name is Zed from now on" → Zed; "lets play hangmn" starts hangman; "knight to f3, no, knight to c3" plays only c3; "e, no, z" guesses only Z; "wat do red and yelow mak" → orange.
