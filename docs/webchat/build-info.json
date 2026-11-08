@@ -31,7 +31,7 @@
     "map.mjs",
     "music.mjs"
   ],
-  "dispatcherModel": true,
+  "dispatcherModel": false,
   "files": {
     "lib/dialog/dispatch-validate.mjs": "3cfb746db53636d3",
     "lib/dialog/encoder-dispatch.mjs": "ae52b942b820890d",
@@ -41,7 +41,7 @@
     "lib/formalizer/index.mjs": "e440aae44ed286c7",
     "lib/formalizer/routing.mjs": "4bc7cfec3184105e",
     "lib/formalizer/rules/emit.mjs": "005ccd4894820cdc",
-    "lib/formalizer/rules/index.mjs": "da666f6006c21eb3",
+    "lib/formalizer/rules/index.mjs": "9fda149eb229a570",
     "lib/formalizer/rules/lemma.mjs": "459e515e4394aead",
     "lib/formalizer/rules/matcher.mjs": "93e63df24338633c",
     "lib/formalizer/rules/normalize.mjs": "f9d78d3f484efe43",
@@ -94,7 +94,7 @@
     "worlds/games.tictactoe/ops.mjs": "63a36023354fa3f8",
     "worlds/geo.map/datagen.mjs": "be4ffa57e489d335",
     "worlds/geo.map/ops.mjs": "c4b7c109ce8d551e",
-    "worlds/index.json": "cc147ad06a7cca85",
+    "worlds/index.json": "aba4032f474616a5",
     "worlds/kids.animals/datagen.mjs": "918ec63d25d818eb",
     "worlds/kids.animals/ops.mjs": "644e845de473918a",
     "worlds/kids.arith/datagen.mjs": "3dafe0423306c210",
@@ -114,11 +114,12 @@
     "worlds/media.music/ops.mjs": "f3cfcc4e24b03544",
     "worlds/media.music/theory.mjs": "51681a12cb3df350",
     "worlds/media.music/vendor/tonal.mjs": "331490751dea871a",
-    "worlds/ui.avatar/ops.mjs": "2a22981a36ad2234",
+    "worlds/ui.avatar/datagen.mjs": "55896093ed377513",
+    "worlds/ui.avatar/ops.mjs": "9764e520e1b56eb2",
     "worlds/ui.help/datagen.mjs": "0860e5e83f13cf95",
     "worlds/ui.help/ops.mjs": "55b1fc33043e09e4",
     "worlds/ui.shell/datagen.mjs": "b2a3b5850a89ac60",
     "worlds/ui.shell/ops.mjs": "41fb8a42f31b821f"
   },
-  "builtAt": "2026-11-08T11:07:07.011Z"
+  "builtAt": "2026-11-08T11:48:18.633Z"
 }

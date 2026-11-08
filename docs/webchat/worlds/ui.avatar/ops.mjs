@@ -42,6 +42,7 @@ const COLOR_KEYS = {
   background: { robot: 'background', emoji: 'background' }, backdrop: { robot: 'background', emoji: 'background' },
   clothing: { person: 'clothing' }, clothe: { person: 'clothing' }, shirt: { person: 'clothing' }, sweater: { person: 'clothing' }, jacket: { person: 'clothing' },
   hair: { person: 'headContrast' },
+  lip: {}, mouth: {},   // no character has a lip or mouth color: the refusal says so (colorSlot)
   main: { robot: 'body', person: 'clothing', emoji: 'face' },
 };
 const COLOR_SAY = { body: ['body', 'is'], accent: ['accent color', 'is'], screen: ['screen', 'is'], glow: ['glow', 'is'], background: ['background', 'is'], skin: ['skin', 'is'], clothing: ['clothes', 'are'], headContrast: ['hair', 'is'], face: ['face', 'is'] };
@@ -300,7 +301,7 @@ function _step(ctx, { part, dir }) {
 
 // ---- size words ("make your eyes bigger") -----------------------------------------------------------------------
 /** Emoji eyes that really differ in size (checked on the drawings): small < pupils (and sparkle) < bigPupils. */
-const BIGGER = new Set(['bigger', 'larger', 'wider', 'huger', 'rounder']);
+const BIGGER = new Set(['bigger', 'larger', 'wider', 'huger', 'rounder', 'big', 'large', 'huge', 'giant']);
 const EMOJI_EYE_SIZE = ['small', 'pupils', 'bigPupils'];
 /** Robot eyes: styles, not sizes. Square, visor and cyclops fill more of the screen than round and plus. */
 const ROBOT_EYES_BIGGER = ['square', 'visor', 'cyclops'], ROBOT_EYES_SMALLER = ['round', 'plus'];
