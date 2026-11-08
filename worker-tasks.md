@@ -136,6 +136,21 @@ What this means for your tasks:
 - **Language detection (new task L-RO):** Romanian typed without diacritics now stays English ("cat face 3 plus 4"). Improve the evidence, for example Romanian function words and word endings, so diacritic-less Romanian is still detected, without breaking short English input. Test both directions.
 - From now on, new phrasing and shared vocabulary go into `lang.common` (L8 absorbs `src/dialog/lang.mjs`).
 
+### D-FIX — raise the dialogue headline (new, from the DLG baseline at a5b686d; reviewer reproduced it: 90.3% of turns, 70.4% of dialogues right)
+
+Whole dialogues are the weak spot: one wrong turn breaks the dialogue.
+- Worst group: avatar/shell/editor, with 50% of dialogues and 80.6% of turns right.
+- Worst families: clarification, noise, ellipsis, correction, explain.
+
+Fix the system gaps your log lists, plus whatever the failure file shows, and add every fixed case to the dialogue set:
+- "that's wrong" in chess, tic-tac-toe and guess answers "not playing twenty questions";
+- "back to the animal game" does not switch the tab;
+- docs.reader ellipsis ("and the last section?") and "section 3" are read as document names;
+- arithmetic ellipsis "and 9 minus 2?" after another frame is mangled into "6 times 9 minus 2";
+- repairs after a wrong turn.
+
+Target: ≥ 85% of dialogues right in every group without lowering the operational set. Then run the encoder and encoder+N1 modes once the models are retrained.
+
 ### G — review 2 fixes (external review of 215677c, checked by the reviewer at 21:15: every claim reproduced)
 
 The reviewer's agent is fixing, in parallel: the typed value checker (sign, decimals, roles), the operational evaluator (signed numbers), the N1 noiser (safe noise, value audit), the normalizer cache, language detection for short inputs, and the neutral answer to a bare yes/no. Pull those before G4/G5. Do the rest:
@@ -550,3 +565,4 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
 - G1, G2 (in the CLI), G3 (eaef124, 85e2f4b, 3db5374) + parallel evaluation (a5c241b): 759 tests pass. Probes: "rename yourself to Bolt" → Bolt; "your name is Zed from now on" → Zed; "lets play hangmn" starts hangman; "knight to f3, no, knight to c3" plays only c3; "e, no, z" guesses only Z; "wat do red and yelow mak" → orange.
 - Rule widening round after review 2 (eece65c, 44b0182, 0d2dc2a, b5e5d7e, b8e619c): 764 tests pass. **Operational, rules only: 91.7% right, 1.5% wrong, 5.0% not understood** (was 86.7 / 2.9 / 8.9). Part of the gain comes from the gold corrections of 'operational failures v2'. Weakest group: music/draw/map/charts, 86.1% right and 3% wrong.
 - Label repair (790c41b, b29a8a0) + rule round 2 (47f5697, c471cd4, 9d8420f, e162b65): 772 tests pass. **Operational, rules only: 94.2% right, 0.6% wrong, 3.4% not understood.**
+- DLG + G7 (a5b686d): 365 multi-turn dialogues (1,709 turns, 45 for user.profile and long returns), 12 families, evaluator with the three modes. Reviewer rerun in rules mode: 90.3% of turns, 70.4% of dialogues right (identical).
