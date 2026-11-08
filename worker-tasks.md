@@ -117,6 +117,54 @@ The reviewer is implementing dialogue continuity in a new `src/dialog/discourse.
 
 Avoid conflicting edits there. Pull and rebase often. Add messages of these kinds to the operational set once it lands.
 
+### G — review 2 fixes (external review of 215677c, checked by the reviewer at 21:15: every claim reproduced)
+
+The reviewer's agent is fixing, in parallel: the typed value checker (sign, decimals, roles), the operational evaluator (signed numbers), the N1 noiser (safe noise, value audit), the normalizer cache, language detection for short inputs, and the neutral answer to a bare yes/no. Pull those before G4/G5. Do the rest:
+
+**G1 (P0) — global preference for complete interpretations.** `wat do red and yelow mak` gets the right answer without FLAN and a wrong one with it: an incomplete segmentation ("wat do red" + an unparsed rest, rewritten as "What do red and red make?") scores −6.34 and beats the complete spell-corrected reading (−6.53). Make selection hierarchical over all segmentations:
+- complete before partial;
+- original/spell readings before generated ones, whenever any complete one exists;
+- neural scores only order readings within the same validity class;
+- run the normalizer only on residue that has no complete reading in the beam.
+
+Accept: this message answers "orange" with and without N1. Add tests where "and" joins objects, colours, operands or cities. Report `broken` at the level of the whole pipeline.
+
+**G2 (P1) — self-corrections resolved before any effect.** Reproduced at fe679ca:
+- `knight to f3, no, knight to c3` plays f3, then sends "no" to another game;
+- `top left, no, center`, `e, no, z` and `yes, no wait, no` execute the abandoned variant first;
+- `… what 3 pencils cost, no, 4 pencils` answers for 3.
+
+Add one correction phase on the whole message, before segmentation, routing and modal interceptors, shared by rules, encoder and games. Mark the replaced fragment and the scope (value / object / whole command / modal answer), then execute only the resulting program. Test that the abandoned variant leaves no effect: move history, tries used, object count, opponent state.
+
+**G3 (P1) — bounded free captures and context-anchored spelling.** Reproduced:
+- avatar names "to Bolt", "Zed from now on" and "try a grill for the mouth";
+- `lets play hangmn` renames the avatar to "play hangmn";
+- on the drawing tab `a purple boat please` → boat corrected to coat (kids.animals).
+
+Fixes:
+- longer frame alternatives win before a `rest` capture opens; delimit prefix/value/suffix (multi-word and quoted names still allowed);
+- renaming needs explicit naming cues;
+- spell correction never changes a word known in the active world, and is penalised when it changes both the world and a content noun;
+- add contrastive pairs across worlds (boat/coat, mouth/name, play/rename).
+
+**G4 — retrain N1 after the fixed noiser and checker.** Then evaluate it on the actual fallback distribution of the current dispatcher. Bind the published model to the hashes of dataset, rules and acceptance policy. Keep it off in games until misled ≤ ¼ of recovered there.
+
+**G5 (P1) — one runtime configuration factory for the webchat and the evaluator.** Today `eval-operational` builds the dispatcher without the normalizer, while the webchat enables it by default. Evaluate three modes, each report carrying model hashes and policy:
+- rules;
+- encoder without N1;
+- encoder with N1 (the shipped default).
+
+Version the result files and keep a manifest of the published version; `operational-full.json` is stale (89.0/4.3, old dispatcher). Report cold start, ready model and warm cache separately.
+
+**G6 (P1) — long and medium messages in training.** `N_LONG` train is 0, the logged exposure has only 1–3 segments, and the long test family is at 21% exact segmentation.
+- Add 4–8 command programs and long messages to train, built with the same windows as inference.
+- Report omissions, duplicates, lost dependencies and final correctness by length bucket.
+- Do not let the many short cases hide drops on long ones at checkpoint selection.
+
+**G7 — the operational set covers the new worlds and dialogue.** Add cases for `user.profile` (interview, correction, deletion, switching tab and back, no unrequested actions) and multi-turn scenarios with returns after more than 6 messages: the encoder validator rebuilds context from a limited history, so test against full state snapshots. This merges into DLG.
+
+**G8 (secondary) — Romanian boundary.** 16 residual failures in the equivalence test (397/413), e.g. "Cât face 6 dublat?" → "What is 6 dublat?", "prețul unei păpuși" → "price unei dolls", "Numește lunile primăverii" → "He calls the months…". Keep the residual list in the coverage report and turn the common cases into translation rules/data.
+
 ### DLG — multi-turn dialogue data and tests (new, parallel)
 
 The operational set and the paraphrase batches are single messages. Real use is dialogue. Generate **multi-turn dialogues** with Haiku subagents: 3–8 turns each, with an initial state and the expected state/answer after every turn. Cover:
