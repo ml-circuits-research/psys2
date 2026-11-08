@@ -108,6 +108,48 @@ A `core.phrase` wire (spec 02, `lexicon.sop`) names a list of literal alternativ
 - **Checks**: `checkPattern` reports an unknown phrase id (`unknown phrase '$x'`) and a phrase of a world that is not imported. `compiled` patterns with an unknown id never match. `vocabularyOf` includes the words of every macro alternative that some pattern uses, so typo correction is unchanged by the migration.
 - **Migration**: `scripts/migrate-macros.mjs <world> [--write]` replaces alternative groups that are subsets of a phrase by the macro (alternatives outside every macro stay inline next to it), turns identical remaining lists (3+ alternatives, used by 2+ groups) into world-local phrases `phrase.<world>.g<N>_<first alt>` in the world's lexicon.sop (`frame=false` unless every use is a lead-in or suffix), and drops alternatives that can never match because the tokenizer always removes their words (the old fillers please, ok, okay, well, um; the newer ones such as hey, pls, thx stay words in the compat reading, so alternatives with them are reachable).
 
+### Request shapes (2b)
+A `core.shape` wire in `patterns.sop` declares ONE operation; the loader expands it into the ordinary `core.pattern` objects of its request forms (`expandShape` in `src/formalizer/rules/shapes.mjs`, browser-safe and pure). Expansion runs in `loadWorlds` after the phrase macros and the lexicon `extends=` are resolved; the generated patterns are appended to the world's own patterns (hand-written first, so their order wins ties), carry `form` and `shape` fields, and every one goes through `checkPattern` (problems are load errors of the world: `world.errors`). `node scripts/expand-patterns.mjs <world> [--shape <id>] [--stats]` prints exactly what is generated, as SOP.
+
+**Shape keys.** `family` (below), `verb` (alternatives `a|b|c`, `_` joins words: imperative verbs for `set`, `do`, `list`; have-verbs for `ask.count`, `ask.exists`), `obj` (object slot `name:class`), `val` (value slot, `set` only), `noun` (property nouns, for example `color|colour`: optional in `set`, required by `ask.value`), `det` (determiners before the object, default `the|your|ur|my`), `link` (default `to|into|be|as`, then an optional `a|an|the`), `mod` and `objmod` (optional modifier groups before the value and the object; alternatives and `$macro` ids), `extra` (one more optional slot after the value or object, for example `n:number?`), `emit` (an emit template), `emitOpts` (the emit of the `opts` form; without it no `opts` form is generated), `forms` / `skip` (comma lists), `priority`, `kind` (default: `question` for `ask.*` and for the `q` and `opts` forms of `list`, else `request`), `sample` (example words per slot, `p=eyes;c=blue`), `example` (extra examples, put first on the first pattern).
+
+**Families and forms.** `set` (imp order wish ind q short state opts), `do` (imp wish ind q short), `ask.value` (q imp wish ind order short opts), `ask.count` (q imp wish ind short), `ask.exists` (q imp wish ind short), `list` (imp q wish ind short opts). A form the family does not have is an error; a template that needs a key the shape lacks is skipped. Notation: `L` = `[$lang.lead.filler|pls|plz]? [$lang.lead.polite]?`, `T` = `[$lang.tail.filler]?`, `V` verbs, `D` = optional determiner, `O` object slot (with `objmod`), `X` value slot (with `mod`), `N` noun, `K` = `[link]? [a|an|the]?`, `E` extra slot; `[$lang.shape.x]` are the phrase groups of `lang.common` named `lang.shape.*` (want, wishto, ind, can, be, cop, prefer, what, whatis, tellme, know, indask, howmany, numberof, now, seeall).
+
+| Family | Form | Generated template (one pattern each; `.2` marks a second variant) |
+| --- | --- | --- |
+| set | imp | `L [V] D O [N]? K X E T` ("make your eyes blue", "change the hair to a bob") |
+| set | order | `L [$lang.shape.want\|V] [a\|an]? D X O [N]? E T` ("give me blue eyes") |
+| set | wish | `L [$lang.shape.want] D O [N]? [$lang.shape.be]? [a\|an]? X E T` ("i want your eyes to be blue") |
+| set | ind | `[$lang.shape.ind] [V] D O [N]? K X E T` ("could you maybe make your eyes blue") |
+| set | q | `L [$lang.shape.can] D O [N]? [$lang.shape.be] [a\|an]? X E T` ("can your eyes be blue") |
+| set | short | `L [a\|an]? X O [N]? E T`; `.2`: `L D O [N]? X E T` ("blue eyes", "eyes blue"); priority - 2 |
+| set | state | `L [$lang.shape.prefer]? D O [N]? [$lang.shape.cop] [a\|an]? X E T` ("your eyes should be blue") |
+| set | opts | `L [what\|which\|wat] [nouns and plural nouns] [can\|could\|may\|might\|do\|does\|are\|is] D O [$lang.shape.be\|have\|take] T`, emits `emitOpts` |
+| do | imp / wish / ind / q | `L [V] D O E T`; `L [$lang.shape.wishto] [V] D O E T`; `[$lang.shape.ind] [V] D O E T`; `L [$lang.shape.can] [i\|we\|you\|u\|ya] [V] D O E T` |
+| do | short | `L D O E [V] T` ("mouth reset"); priority - 2 |
+| ask.value | q | `L [$lang.shape.what] N [are\|r\|is\|do\|does\|did]? D O [$lang.shape.now]? T`; `.2`: `L [$lang.shape.whatis] D N [of\|for\|on\|...] D O [$lang.shape.now]? T` |
+| ask.value | imp / wish / ind | `L [$lang.shape.tellme] [what\|which]? D N [of\|for\|on]? D O [is\|are]? T`; `know` (wish) and `[$lang.shape.indask]` (ind) in place of `tellme` |
+| ask.value | order | `L D N [of\|...] D O [$lang.shape.now]? T`; `.2`: `L D O [is\|are]? [what\|which\|wat] N T` |
+| ask.value | short | `L O N T` ("eyes colour"); priority - 2 |
+| ask.value | opts | as `set` opts, with `emitOpts` |
+| ask.count | q | `L [$lang.shape.howmany] O [do\|does\|are\|...]? [you\|u\|ya\|there\|i\|we\|they]? [V]? [$lang.shape.now]? T`; `.2`: `L [$lang.shape.whatis] [$lang.shape.numberof] D O ...` |
+| ask.count | imp / wish / ind | `L [$lang.shape.tellme] [$lang.shape.howmany\|$lang.shape.numberof] D O [you\|u\|ya\|there\|i\|we]? [V]? T` (imp `.2`: `L [V] D O T`); `know`, `indask` for wish, ind |
+| ask.count | short | `L D O [count\|total\|number\|amount] T`; priority - 2 |
+| ask.exists | q | `L [do\|does\|...] [you\|u\|...] [V] [a\|an\|any\|some\|the]? O [on\|too\|...]? T`; `.2`: `L [is\|are\|was\|were] there [a\|an\|any\|some\|the]? O ... T` |
+| ask.exists | imp / wish / ind | `L [tellme\|know] [if\|whether] [you\|u\|ya\|there\|we\|i] [V\|is\|are\|has\|have] [a\|an\|any\|some\|the]? O T`; ind: `[$lang.shape.indask] [if\|whether]? ...` |
+| ask.exists | short | `L [you\|u\|ya]? [V] [a\|an\|any\|some]? O [or_not] T`; priority - 2 |
+| list | imp | `L [V] [me\|us]? [all\|every\|each]? [of_the\|of_your\|of_ur]? D O T` |
+| list | q | `L [what\|which\|wat] O [do\|does\|are\|is\|can\|...] [you\|u\|ya\|there\|i\|we\|they]? [have\|got\|offer\|...]? [for_me\|here\|now\|available]? T` |
+| list | wish / ind | `L [$lang.shape.know\|$lang.shape.seeall] [all\|every\|each]? D O T`; `[$lang.shape.ind] [V] [me\|us]? [all\|every\|each]? D O T` |
+| list | short | `L [all\|every\|each] O T`; `.2`: `L O [list\|options\|choices\|available\|types\|kinds] T`; priority - 2 |
+| list | opts | `L [what\|which\|wat] [kinds_of\|types_of\|options_for\|choices_for\|...] D O [are_there\|do_you_have\|...]? T` |
+
+**Pattern ids and examples.** A generated pattern is `pat.<shape id>.<form>[.<n>]` (the shape wire is `shape.<id>`). Examples are derived from the template: the sentence with the determiner before the object ("Make your eyes blue."), or the shortest one, with `sample` words (else the first word of each slot's lexicon); they are real examples for the export (`export-training`), the hints and the per-world tests ("every pattern has an example"). The shape's own `example=` lines come first on the first pattern. A derived example always matches its own pattern (tested for every shape of every world).
+
+**Routing.** A `short` form is the shape's least specific reading ("blue eyes", "eyes colour"): its priority is the shape priority minus 2 and `createRouter` drops a `short` match when it falls in tier 5 (everything outside the active tab world, the game world and the recently used worlds). Inside the user's own world it reads as any pattern; elsewhere it would steal sentences from the long forms of other worlds. A hand-written pattern with an optional lead verb (`[make]? {c} {p}`) is not a shape form and keeps its tier-5 reach.
+
+**Rule of thumb for authors.** Write a shape for each operation that has several phrasings; keep hand-written patterns for what shapes cannot say (an optional object, a special lead such as "put it back like it was", a different slot order, chat phrasing of one world). New phrasing that every shape should understand goes into the `lang.shape.*` groups of `lang.common` (run the whole operational set), not into a world.
+
 ### Emit templates
 `emit` is SOP Lang with placeholders:
 - `{slot}` → the slot value (atom, or `$id` for agents); inside a string (`"{slot}"`) the original text, JSON-escaped.

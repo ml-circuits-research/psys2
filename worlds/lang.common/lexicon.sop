@@ -1224,3 +1224,318 @@
     alt=too
     alt=as_well
     alt=also
+
+@gen.lang.common.shapes core.note
+    text="Phrase groups lang.shape.* are used by the patterns generated from core.shape wires (L6, spec 03 section 2b). Add new shape phrasing here."
+
+@phrase.lang.shape.want core.phrase
+    frame=false
+    doc="Wish leads before a thing (\"i want\", \"give me\", \"how about\"): the object-first and value-first forms of request shapes."
+    alt=give_me
+    alt=i_want
+    alt=i_would_like
+    alt=i_would_love
+    alt=i_d_like
+    alt=i_d_love
+    alt=i_wanna
+    alt=i_wana
+    alt=i_need
+    alt=i_prefer
+    alt=give_yourself
+    alt=give_us
+    alt=get_me
+    alt=gimme
+    alt=let_me_have
+    alt=let_me_see
+    alt=show_me
+    alt=how_about
+    alt=what_about
+    alt=why_not
+    alt=have
+    alt=get
+    alt=try
+    alt=pick
+    alt=choose
+    alt=use
+
+@phrase.lang.shape.wishto core.phrase
+    frame=false
+    doc="Wish leads before a verb (\"i want to\", \"let me\", \"can i\"): the wish and question forms of request shapes."
+    alt=i_want_to
+    alt=i_would_like_to
+    alt=i_would_love_to
+    alt=i_d_like_to
+    alt=i_d_love_to
+    alt=i_need_to
+    alt=i_have_to
+    alt=i_wanna
+    alt=i_wana
+    alt=let_me
+    alt=let_us
+    alt=let_s
+    alt=lets
+    alt=we_should
+    alt=we_could
+    alt=can_i
+    alt=may_i
+    alt=could_i
+    alt=can_we
+    alt=shall_we
+    alt=should_i
+    alt=should_we
+
+@phrase.lang.shape.ind core.phrase
+    frame=false
+    doc="Indirect request leads (\"could you maybe\", \"is it possible to\", \"you could\") before an imperative verb."
+    alt=could_you_maybe
+    alt=can_you_maybe
+    alt=i_was_wondering_if_you_could
+    alt=i_wonder_if_you_could
+    alt=i_wonder_if_you_can
+    alt=do_you_think_you_could
+    alt=do_you_think_you_can
+    alt=would_it_be_possible_to
+    alt=is_it_possible_for_you_to
+    alt=would_you_be_able_to
+    alt=are_you_able_to
+    alt=any_chance_you_could
+    alt=can_you_possibly
+    alt=could_you_possibly
+    alt=can_u_possibly
+    alt=can_u_maybe
+    alt=could_u_maybe
+    alt=is_it_possible_to
+    alt=would_you_mind
+    alt=why_dont_you
+    alt=why_don_t_you
+    alt=you_could
+    alt=you_should
+    alt=you_would
+    alt=you_must
+
+@phrase.lang.shape.can core.phrase
+    frame=false
+    doc="Modal openers of a yes/no request question (\"can\", \"could\", \"would\")."
+    alt=can
+    alt=could
+    alt=would
+    alt=will
+    alt=may
+    alt=might
+    alt=should
+    alt=shall
+    alt=can_u
+    alt=could_u
+    alt=would_u
+
+@phrase.lang.shape.be core.phrase
+    frame=false
+    doc="Words that link a thing to a wished value (\"to be\", \"become\", \"turn\", \"look\")."
+    alt=be
+    alt=to_be
+    alt=to_become
+    alt=to_turn
+    alt=to_look
+    alt=to_get
+    alt=to_go
+    alt=be_in
+    alt=become
+    alt=turn
+    alt=look
+    alt=get
+    alt=go
+    alt=appear
+    alt=as
+
+@phrase.lang.shape.cop core.phrase
+    frame=false
+    doc="Copulas of a stated value (\"should be\", \"must be\", \"is\", \"turns\")."
+    alt=should_be
+    alt=must_be
+    alt=needs_to_be
+    alt=need_to_be
+    alt=has_to_be
+    alt=have_to_be
+    alt=should_become
+    alt=should_turn
+    alt=should_look
+    alt=should_get
+    alt=should_go
+    alt=will_be
+    alt=shall_be
+    alt=can_be
+    alt=could_be
+    alt=to_become
+    alt=to_turn
+    alt=to_get
+    alt=to_go
+    alt=to_be
+    alt=becomes
+    alt=turns
+    alt=looks
+    alt=gets
+    alt=goes
+    alt=is
+    alt=are
+    alt=be
+    alt=look
+    alt=get
+
+@phrase.lang.shape.prefer core.phrase
+    frame=false
+    doc="Soft leads of a stated wish (\"i prefer\", \"make sure\", \"how about\")."
+    alt=i_prefer
+    alt=i_wish
+    alt=make_sure
+    alt=ensure
+    alt=how_about
+    alt=what_about
+    alt=why_not
+    alt=i_think
+    alt=i_d_say
+    alt=maybe
+
+@phrase.lang.shape.what core.phrase
+    frame=false
+    doc="Question openers (\"what is the\", \"which\", \"wat\")."
+    alt=what
+    alt=which
+    alt=wat
+    alt=what_is
+    alt=what_are
+    alt=what_s
+    alt=whats
+    alt=wats
+    alt=wot
+
+@phrase.lang.shape.whatis core.phrase
+    frame=false
+    doc="Question openers before a noun phrase (\"what is\", \"what are\", \"which is\")."
+    alt=what_is
+    alt=what_are
+    alt=what_s
+    alt=whats
+    alt=which_is
+    alt=which_are
+
+@phrase.lang.shape.tellme core.phrase
+    frame=false
+    doc="Imperatives that ask for information (\"tell me\", \"show me\", \"let me know\")."
+    alt=tell_me
+    alt=let_me_know
+    alt=let_me_see
+    alt=show_me
+    alt=give_me
+    alt=find_out
+    alt=read_me
+    alt=check
+    alt=say
+    alt=can_you_tell_me
+    alt=could_you_tell_me
+    alt=can_u_tell_me
+    alt=could_u_tell_me
+    alt=would_you_tell_me
+
+@phrase.lang.shape.know core.phrase
+    frame=false
+    doc="Wishes to know (\"i want to know\", \"i wonder\", \"curious about\")."
+    alt=i_want_to_know
+    alt=i_would_like_to_know
+    alt=i_d_like_to_know
+    alt=i_need_to_know
+    alt=i_wanna_know
+    alt=i_am_curious_about
+    alt=i_m_curious_about
+    alt=i_wana_know
+    alt=i_am_wondering
+    alt=i_m_wondering
+    alt=curious_about
+    alt=i_wonder
+    alt=wondering
+
+@phrase.lang.shape.indask core.phrase
+    frame=false
+    doc="Indirect questions (\"do you know\", \"can you tell me\", \"any idea\")."
+    alt=can_you_tell_me
+    alt=could_you_tell_me
+    alt=do_you_know
+    alt=do_you_happen_to_know
+    alt=can_u_tell_me
+    alt=could_u_tell_me
+    alt=can_you_find_out
+    alt=can_you_check
+    alt=could_you_check
+    alt=can_you_say
+    alt=could_you_say
+    alt=can_u_say
+    alt=can_you_see
+    alt=do_you_remember
+    alt=do_you_know
+    alt=do_u_know
+    alt=would_you_know
+    alt=any_idea
+
+@phrase.lang.shape.howmany core.phrase
+    frame=false
+    doc="Count question openers (\"how many\", \"how much\")."
+    alt=how_many
+    alt=how_many_different
+    alt=how_many_total
+    alt=how_much
+    alt=hw_many
+    alt=how_mny
+
+@phrase.lang.shape.numberof core.phrase
+    frame=false
+    doc="Count nouns (\"the number of\", \"the total number of\")."
+    alt=the_number_of
+    alt=the_total_number_of
+    alt=the_count_of
+    alt=the_amount_of
+    alt=the_quantity_of
+    alt=the_total_of
+    alt=total_number_of
+    alt=number_of
+    alt=count_of
+    alt=amount_of
+
+@phrase.lang.shape.now core.phrase
+    frame=false
+    doc="Optional words after a question about the current state (\"currently\", \"right now\", \"do you have\")."
+    alt=at_the_moment
+    alt=right_now
+    alt=currently
+    alt=do_you_have
+    alt=you_have
+    alt=exactly
+    alt=really
+    alt=available
+    alt=altogether
+    alt=total
+    alt=today
+    alt=look
+    alt=looking
+    alt=have
+    alt=has
+    alt=are
+    alt=is
+    alt=be
+    alt=now
+    alt=rn
+
+@phrase.lang.shape.seeall core.phrase
+    frame=false
+    doc="Wishes to see everything (\"show me\", \"i want to see\", \"can i see\")."
+    alt=show_me
+    alt=i_want_to_see
+    alt=i_would_like_to_see
+    alt=i_d_like_to_see
+    alt=i_wanna_see
+    alt=i_need_to_see
+    alt=can_i_see
+    alt=can_you_show_me
+    alt=could_you_show_me
+    alt=let_me_see
+    alt=show_us
+    alt=display
+    alt=list

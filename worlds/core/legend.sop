@@ -71,6 +71,10 @@
     extends=core.thing
     doc="A phrase macro: a named group of literal alternatives that patterns use as [$id] (spec 03 section 2.5)."
 
+@core.shape core.type
+    extends=core.thing
+    doc="A request shape: one operation (family, verbs, object, value, emit) from which the request forms are generated as patterns at load (spec 03 section 2b)."
+
 @core.note core.type
     extends=core.thing
     doc="A free-text note (SOP Lang v1 has no comments)."
@@ -461,6 +465,101 @@
     ask="Which sentence is an example?"
 
 @core.pattern.doc core.key
+    value=string
+    card=one
+    ask="What is it?"
+
+@core.shape.family core.key
+    value=atom
+    card=one
+    ask="Which family: set, do, ask.value, ask.count, ask.exists or list?"
+
+@core.shape.verb core.key
+    value=string
+    card=one
+    ask="Which verbs (alternatives a|b|c; _ joins words)? Imperative verbs, or have-verbs for ask.count and ask.exists."
+
+@core.shape.obj core.key
+    value=string
+    card=one
+    ask="Which object slot (name:class)?"
+
+@core.shape.val core.key
+    value=string
+    card=one
+    ask="Which value slot (name:class; family set)?"
+
+@core.shape.noun core.key
+    value=string
+    card=one
+    ask="Which property nouns (alternatives, for example color|colour)?"
+
+@core.shape.det core.key
+    value=string
+    card=one
+    ask="Which determiners may precede the object (default the|your|ur|my)?"
+
+@core.shape.link core.key
+    value=string
+    card=one
+    ask="Which words may link object and value in the imperative of family set (default to|into|be|as|a|an)?"
+
+@core.shape.extra core.key
+    value=string
+    card=one
+    ask="Which extra optional slot (name:class?) follows the value or object?"
+
+@core.shape.emit core.key
+    value=string
+    card=one
+    ask="Which wires are emitted (an emit template as in core.pattern.emit)?"
+
+@core.shape.emitOpts core.key
+    value=string
+    card=one
+    ask="Which wires does the options form emit (without it no options form is generated)?"
+
+@core.shape.forms core.key
+    value=string
+    card=one
+    ask="Which forms to generate (comma list; default every form of the family)?"
+
+@core.shape.skip core.key
+    value=string
+    card=one
+    ask="Which forms to leave out (comma list)?"
+
+@core.shape.mod core.key
+    value=string
+    card=one
+    ask="Which optional modifier group (alternatives and $macro ids) may precede the value (a bit, much)?"
+
+@core.shape.objmod core.key
+    value=string
+    card=one
+    ask="Which optional modifier group may precede the object (whole, entire)?"
+
+@core.shape.sample core.key
+    value=string
+    card=one
+    ask="Which example word for each slot (p=eyes;c=blue)?"
+
+@core.shape.priority core.key
+    value=integer
+    card=one
+    ask="Which priority (short forms get priority minus 2)?"
+
+@core.shape.kind core.key
+    value=atom
+    card=one
+    ask="statement, question, request or chat (default by family and form)?"
+
+@core.shape.example core.key
+    value=string
+    card=many
+    ask="Which sentence is an extra example (put on the first generated pattern)?"
+
+@core.shape.doc core.key
     value=string
     card=one
     ask="What is it?"

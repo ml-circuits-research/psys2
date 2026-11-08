@@ -37,7 +37,7 @@ test('expand: shared argument (review probe "Make your eyes and body blue")', ()
   for (const [text, a, b] of [['Make your eyes and body blue', 'eyes', 'body'], ['make the eyes and mouth red', 'eyes', 'mouth']]) {
     const r = read(text);
     assert.equal(r.length, 2, text);
-    assert.ok(r.every((x) => x[1] === 'pat.ui.avatar.color.set' && x[3] === 'shared-argument'), text);
+    assert.ok(r.every((x) => x[1] === 'pat.ui.avatar.colour.imp' && x[3] === 'shared-argument'), text);
     assert.deepEqual(r.map((x) => x[2].p), [a, b]);
     assert.deepEqual(r.map((x) => x[2].c), [text.split(' ').pop(), text.split(' ').pop()]);
   }

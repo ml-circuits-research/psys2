@@ -2,7 +2,9 @@
 /**
  * Read-only statistics of the pattern match strings of all worlds (task L0 of worker-tasks.md).
  *
- *   node scripts/pattern-stats.mjs [--json] [--union lead|tail|filler]
+ *   node scripts/pattern-stats.mjs [--json] [--union lead|tail|filler] [--world <id>] [--hand]
+ * `--world` restricts to one world; `--hand` leaves out the patterns generated from `core.shape` wires (the file as written). The inline-group line counts
+ * groups of 3+ alternatives written in the match text itself (macro uses are not counted): L7 measures this, not file bytes.
  *
  * Default report: patterns, bytes of match text, alternative groups, distinct groups, groups copied verbatim in more than one
  * pattern (top 10), and unreachable alternatives (words the tokenizer drops or rewrites: fillers, contractions).
@@ -20,6 +22,8 @@ import { isFillerWord } from '../src/formalizer/rules/normalize.mjs';
 import { lexIndex } from '../src/worlds/lexicon.mjs';
 
 const args = process.argv.slice(2);
+const onlyWorld = args.includes('--world') ? args[args.indexOf('--world') + 1] : null;   // statistics of one world
+const handOnly = args.includes('--hand');                                                  // leave out the patterns generated from shapes (L6/L7 measure the file, not the expansion)
 const kind = args.includes('--union') ? args[args.indexOf('--union') + 1] : null;
 if (args.includes('--union') && !['lead', 'tail', 'filler'].includes(kind)) { console.error('--union takes lead|tail|filler'); process.exit(2); }
 
@@ -30,7 +34,9 @@ const unreachable = (alt) => alt.some(unreachableWord);
 const groupKey = (el) => el.alts.map(altText).sort().join('|');
 
 const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT) });
-const worlds = engine.set.list();
+const worlds = engine.set.list().filter((w) => !onlyWorld || w.id === onlyWorld);
+const rawGroups = new Map();        // inline (non-macro) groups of 3+ alternatives as written in the match text -> occurrences
+let shapeCount = 0;
 
 let patterns = 0, bytes = 0, groups = 0, alts = 0, unreach = 0, badPatterns = 0;
 const groupCount = new Map();       // group key -> occurrences
@@ -39,8 +45,14 @@ const union = { lead: new Map(), tail: new Map(), filler: new Map() };   // alt 
 const unreachWords = new Map();
 
 for (const w of worlds) {
+  shapeCount += w.shapes?.length ?? 0;
   for (const p of w.patterns ?? []) {
+    if (handOnly && p.shape) continue;
     patterns++; bytes += p.match.length;
+    for (const part of p.match.split(/\s+/)) {
+      const g = part.match(/^\[([^\[\]]*)\]\??$/);
+      if (g && !g[1].includes('$') && g[1].split('|').length >= 3) { const k = g[1].split('|').sort().join('|'); rawGroups.set(k, (rawGroups.get(k) ?? 0) + 1); }
+    }
     let c;
     try { c = compilePattern(p.match, lexIndex(engine.set).phrases); } catch { badPatterns++; continue; }
     const els = c.elements;
@@ -73,12 +85,14 @@ if (kind) {
   process.exit(0);
 }
 
+const rawRepeated = [...rawGroups].filter(([, n]) => n > 1);
 const repeated = [...groupCount].filter(([, n]) => n > 1);
 const copies = repeated.reduce((s, [, n]) => s + n, 0);
 const top = [...repeated].sort((a, b) => b[1] - a[1] || b[0].length - a[0].length).slice(0, 10);
 const unionSizes = Object.fromEntries(Object.entries(union).map(([k, m]) => [k, m.size]));
 const stats = {
   worlds: worlds.length, patterns, match_bytes: bytes, uncompilable: badPatterns,
+  shapes: shapeCount, inline_groups: rawGroups.size, inline_repeated_groups: rawRepeated.length, inline_repeated_occurrences: rawRepeated.reduce((n, [, c]) => n + c, 0),
   alt_groups: groups, alternatives: alts, distinct_groups: groupCount.size,
   repeated_groups: repeated.length, repeated_group_occurrences: copies,
   unreachable_alternatives: unreach, unreachable_pct: +(100 * unreach / (alts || 1)).toFixed(1),
@@ -88,6 +102,7 @@ const stats = {
 };
 if (args.includes('--json')) { console.log(JSON.stringify(stats, null, 2)); process.exit(0); }
 console.log(`worlds ${stats.worlds}  patterns ${patterns}  match text ${bytes} bytes  uncompilable ${badPatterns}`);
+console.log(`shapes ${shapeCount}  inline groups (3+ alternatives, written in the match text) ${rawGroups.size}, repeated ${rawRepeated.length} (${stats.inline_repeated_occurrences} occurrences)`);
 console.log(`alternative groups ${groups}  alternatives ${alts}  distinct groups ${groupCount.size}`);
 console.log(`groups occurring more than once ${repeated.length} (${copies} occurrences)`);
 console.log(`unreachable alternatives ${unreach} (${stats.unreachable_pct}% of alternatives)`);

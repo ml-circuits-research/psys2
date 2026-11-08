@@ -1252,3 +1252,68 @@
     session=pb1
     input="change your mouth back to how it was"
     expectState="robot.mouth=smile"
+
+@t.ui.avatar.sh01 core.test
+    input="dye your body blue"
+    expectState="robot.colors.body=74c0fc"
+    session=sh01
+
+@t.ui.avatar.sh02 core.test
+    input="i want your body to be green"
+    expectState="robot.colors.body=69db7c"
+    session=sh02
+
+@t.ui.avatar.sh03 core.test
+    input="could you maybe paint your body red"
+    expectState="robot.colors.body=ff9d9d"
+    session=sh03
+
+@t.ui.avatar.sh04 core.test
+    input="can your body be green"
+    expectState="robot.colors.body=69db7c"
+    session=sh04
+
+@t.ui.avatar.sh05 core.test
+    input="give me a blue body"
+    expectState="robot.colors.body=74c0fc"
+    session=sh05
+
+@t.ui.avatar.sh06 core.test
+    input="tell me the colour of your body"
+    expect="My body is"
+    session=sh06
+
+@t.ui.avatar.sh07 core.test
+    input="i wonder what colour your body is"
+    expect="My body is"
+    session=sh07
+
+@t.ui.avatar.sh08 core.test
+    input="do you know the shade of your body"
+    expect="My body is"
+    session=sh08
+
+@t.ui.avatar.sh09 core.test
+    input="the shade of your body"
+    expect="My body is"
+    session=sh09
+
+@t.ui.avatar.sh10 core.test
+    input="get your eyes a bit smaller"
+    expect="smaller eyes"
+    session=sh10
+
+@t.ui.avatar.sh11 core.test
+    input="swap your mouth to a grill"
+    expectState="robot.mouth=grill"
+    session=sh11
+
+@t.ui.avatar.sh12 core.test
+    input="i want your mouth as a grill"
+    expectState="robot.mouth=grill"
+    session=sh12
+
+@t.ui.avatar.sh13 core.test
+    input="is it possible to wear sunglasses on your face"
+    expect="glasses"
+    session=sh13

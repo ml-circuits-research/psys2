@@ -101,6 +101,9 @@ One directory per world under `worlds/`, named by namespace. Only `world.sop` an
 ```
 `frame=false` marks a phrase of content words (default `true` = frame vocabulary: lead-ins, suffixes, fillers; spec 03 section 2.5). The wire id must start with `phrase.`; the macro id is the rest (`lang.lead.polite`). Alternatives use `_` between words. The shared world `worlds/lang.common` (imported through `kids.common`) holds the common lead-in, suffix and filler phrases and the shared lexicons (`lex.lang.colour`, `ordinal`, `size`, `degree`, `direction`, `position`, `unit`). The closed word classes behind `ctx.lang` (spec 04) are `frame=false` phrases there too (`lang.yes`, `lang.assent`, `lang.no`, `lang.decline`, `lang.unsure`, `lang.cancel`, `lang.degree.*`, `lang.comparative`, `lang.shade`, `lang.size.*`, `lang.position.*`, `lang.ordinal.last`, `lang.lead.ask`). It is a `status=fixture` world with `summary=""` that claims nothing (no patterns): new common phrasing goes there, never inline in a world's patterns.
 
+#### Request shapes (`core.shape`)
+`patterns.sop` may also hold `core.shape` wires (`shape.<id>`): one declaration per operation (family `set|do|ask.value|ask.count|ask.exists|list`, `verb`, `obj`, `val`, `noun`, `emit`, ...) from which the loader generates the patterns of the request forms (imperative, question, wish, indirect, word order, short, state, options) after the lexicons are resolved. The generated patterns are `pat.<id>.<form>`, are checked like hand-written ones, and the phrase groups they use are the `lang.shape.*` macros of `lang.common`. Spec 03 section 2b has the keys and the exact templates; `node scripts/expand-patterns.mjs <world>` prints the result.
+
 ### Tests
 ```
 @t.arith.1 core.test

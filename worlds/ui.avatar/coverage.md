@@ -5,13 +5,13 @@ Noise handled by the new patterns (`gen`-style prefix and suffix): fillers (`pls
 
 | Operation | Request shape | Status | Example |
 | --- | --- | --- | --- |
-| `setPart` (wear an option) | imperative / wish | S | `wear sunglasses`, `give yourself glasses 3` |
+| `setPart` (wear an option) | imperative / wish | S | `wear sunglasses`, `give yourself glasses 3`. Shape `ui.avatar.part` (set family) covers the forms with an explicit part: `swap your mouth to a grill`, `i want your mouth as a grill`, `is it possible to change your mouth to a grill` |
 | | chat / statements | S (new) | `u should wear sunglasses lol`, `wear sunglasses right now thank you` |
 | | very short | S (new) | `sunglasses pls`, `shades on you please`, `put some sunnies on` (synonyms map to `sunglass`) |
 | | on a part | S (new) | `can i have a dish on top of u`, `would like a dish on the top`, `a dish on top would be nice`, `i wanna see a dish on top`, `put a dish up top` |
-| `setColor` / `setPartColored` | all earlier phrasings | S | see commit 861565b |
+| `setColor` / `setPartColored` | all earlier phrasings | S | see commit 861565b. Shape `ui.avatar.colour` (set family) generates imp, order, wish, ind, q, short, state: `dye your body blue`, `could you maybe paint your body red`, `i want your body to be green`, `can your body be green`, `give me a blue body` |
 | | misspelt colour (`bleu`) | U | a colour word the lexicon does not know; typo correction does not fix 2 edits in 4 letters |
-| `askColor` | question | S | `what colour are your eyes` |
+| `askColor` | question | S | `what colour are your eyes`. Shape `ui.avatar.colour.ask` (ask.value family): q, imp, wish, ind, order, short: `tell me the colour of your eyes`, `i wonder what colour your eyes are`, `do you know the shade of your body`, `the shade of your body` |
 | | chat / word order | S (new) | `wat colour r ur eyes`, `which color are your eyes`, `can you say what color your eyes are`, `tell me the color of your eyes please` |
 | `askPart` (kind of hair etc.) | question | S | `what kind of hair do you have` |
 | | chat / short (new) | S | `what hair u got`, `hair types?`, `hairstyle?`, `whats ur hair like`, `which hairstyle do you have now`, `tell me ur hair style`, `could u tell me what hair u have` (hair, hairstyle, hair style, haircut all give part `hair`) |
@@ -29,9 +29,11 @@ Noise handled by the new patterns (`gen`-style prefix and suffix): fillers (`pls
 | `step` next/previous | imperative | S | `next hairstyle`, `previous mouth` |
 | | previous (new) | S | `prev mouth`, `back one for the mouth`, `go to the mouth before this one`, `mouth previous one pls`, `can you go back to the last mouth`, `mouth one step back`, `the mouth from before, please` |
 | | next (new) | S | `next hair please`, `try the following hair`, `next hair style for me` (hair forms give part `hairstyle`) |
-| `resizePart` | comparatives | S | see commit 861565b |
+| `resizePart` | comparatives | S | see commit 861565b. Shape `ui.avatar.size` (set family, `mod=$ui.avatar.g11_a_bit`): `get your eyes a bit smaller`, `give me bigger eyes`, `can your eyes be bigger`; the hand-written `grow`/`shrink` verb patterns stay (they carry the direction in the verb) |
 | `explainSwitch` | `why did you change it` | S | the verbs `do`/`did` were removed from this pattern so that `how come you did not get it` reaches the help world |
 | characters, seed, name, animate, listOptions, describe, undo | earlier patterns | S | unchanged |
 | negation / undo | `do not change the colour`, `undo` | S | unchanged |
 
 Known gaps: the held-out labels of `show surprise`, `surprise face` and similar ask for `setPart value=surprise` while the world test suite and the person character use `setMood`; the rules keep `setMood` (tests `n47`, `u10`).
+
+**Request shapes (L6).** `ui.avatar` declares four shapes at the end of `patterns.sop` (`ui.avatar.colour`, `ui.avatar.colour.ask`, `ui.avatar.size`, `ui.avatar.part`; 32 generated patterns, `node scripts/expand-patterns.mjs ui.avatar`). Hand-written patterns whose examples a shape covers completely were deleted (`color.set`, `color.q`, `x.color.ask`, `x.color.ask2`, `x2.color.q`, `x2.color.q2`, `resize`, `resize.give`, `setpart.to`, `s2.color.whole`, `s2.could.be`, `x2.top2`). Kept because a shape cannot say them: optional lead verb or optional cop (`color.adj`, `color.should`, `resize.should`, `x.color.partfirst`, `x.color.ask3`, `setpart.noun_first`: they must keep their tier 5 reach, where the `short` forms of shapes are dropped), optional part (`setpart`, `x2.*`, `s2.*`), the verb-carries-direction verbs (`resize.grow`, `resize.shrink`) and whole-avatar colouring (`color.main*`, `color.who`).
