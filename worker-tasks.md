@@ -74,14 +74,10 @@ Simulate one loop with the held-out set as fake logs, and report the before/afte
 
 **The goal of this session is to avoid training per-world models.** We validate one idea first: a single small shared model, the **dispatcher**, proposes candidates, and the existing rule formalizers validate them. No per-world LoRA in this session.
 
-Order: D1 → D3 → D5 → D4 → T9 (Stage 1 only).
+Order: D3 → D1b → D5 → T9 (Stage 1 only). D1, D2 and D4 are done.
 
-2. **D1 — dispatcher model.** One encoder with three heads. **Train DistilBERT first** (`distilbert-base-uncased`): it is the fast, robust baseline, about 67 MB as int8, with no special attention kernels needed on aarch64. **Then train ModernBERT-base** on exactly the same data, seeds and heads. If DistilBERT already meets the Stage 1 targets, ModernBERT must justify its size with a clear gain. The heads:
-   - **segmentation:** a boundary probability per token. It cuts messages into small pieces (commands, clauses);
-   - **world candidates:** for each piece, a ranked list of the **top-k worlds with scores** (k = 3), using the context (active tab, recent worlds);
-   - **simplification (optional head):** KEEP / DELETE / REPLACE edit tags as in Round 1. It produces a cleaner variant of each piece. The original piece is always kept as a candidate too.
-
-   Train with LoRA or full fine-tune, whichever is better for this single model. Training data: `routing.jsonl`, multi-command messages built from test-disjoint sentences (join 2–3 with "and", "then", commas, periods), and the edit-tag alignments of Round 1.
+2. **D1 — dispatcher model:** done and validated (segmentation + world heads; DistilBERT kept as the main model).
+   **D1b — simplification head (still open, do after D3).** It is the third head of Round 1: KEEP / DELETE / REPLACE edit tags, learned from aligning the paraphrase variants with their canonical phrasings. D3 will show how many failures are rule gaps on messy wording; this head targets exactly those. Add it to the DistilBERT dispatcher, export it in the same ONNX model, and use it in the validation layer: try the simplified text when the original does not validate. Report the headline metric before and after.
 3. **D2 — validation layer:** done and validated. The default policy changes to accept state refusals (see the answer to Q3).
 4. **D3 — evaluation.** Per world group and source (generator / paraphrase / multi-command), on the test splits:
    - **oracle coverage:** is the right world in the top-1 / top-3 candidates; is the right segmentation in the beam;
@@ -89,7 +85,7 @@ Order: D1 → D3 → D5 → D4 → T9 (Stage 1 only).
    - **segmentation F1** on multi-command messages;
    - how often the validation layer **rejects a wrong top-1 and recovers** with candidate 2 or 3;
    - error analysis: 30 failures, sorted into causes: the right world not among the candidates · segmentation wrong · the rules cannot parse even the simplified text (= a rule gap, which tells us where rules are missing) · other.
-5. **D4 — size and speed.** The dispatcher as int8 ONNX (T8 method): size, CPU latency per message, PyTorch/ONNX agreement on 200 sentences. If time remains, run it in Node (onnxruntime-node or transformers.js) behind `createEncoderFormalizer`, so the webchat build can use it later.
+5. **D4 — size and speed:** done and validated (int8 63.9 MB, about 4 ms per pass, runs in the browser).
 6. **T9 — RESULTS.md**, limited to Stage 1, with a clear verdict: is dispatcher + rules good enough on its own? Per world group, say which groups are satisfied and which are not, and why (rule gaps vs dispatcher errors).
 
 
@@ -237,3 +233,5 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
 - T2 — Rule baseline at 055fbeb (c95e250): 88.3% exact SOP routed, paraphrases 30.4%, routing 89.7%. The numbers reproduced exactly.
 - B1 — Rebaseline at c989cd1 (b24ac56): rules 93.4% routed, held-out 50.4%, routing 95.3%. The rules.json numbers reproduced exactly.
 - D2 — Validation layer (68ec94d): tests pass. An oracle rerun on 1,500 records shows the same pattern (games 97.1% top-1 / 61.1% strict / 97.1% accepting refusals).
+- D1 — Dispatcher (e43813c): DistilBERT top-1 0.971 / top-3 0.994 / seg F1 0.985 (test); held-out top-1 0.934. ModernBERT gives no gain, so DistilBERT stays. Tests pass; the result JSON matches the log. Training was not rerun (no GPU on the reviewer side).
+- D4 — Export and browser runtime (9a1e635): int8 63.9 MB, 4.2 ms per pass. JS and Python agree. 547 tests pass, the webchat scenario passes with rules. The int8/fp32 world agreement of 98.97% is accepted, because the top-3 candidate sets are unchanged.
