@@ -72,7 +72,7 @@ function make(holder, host) {
       premovable: { enabled: false }, drawable: { enabled: true, visible: true, autoShapes: [] },
       movable: { free: false, showDests: true, events: { after: (from, to) => onUserMove(from, to) } },
     });
-    if (typeof ResizeObserver === 'function') { onResize = new ResizeObserver(() => cg?.redrawAll()); onResize.observe(boardEl); }
+    if (typeof ResizeObserver === 'function') { onResize = new ResizeObserver(() => { cg?.redrawAll(); if (last && boardEl.offsetWidth) cg?.set({ drawable: { autoShapes: shapes(last) } }); }); onResize.observe(boardEl); }
     if (last) render(last);
   }).catch((e) => { boardEl.replaceChildren(h('p', { class: 'cx-empty', style: 'padding:24px' }, `The board could not be loaded (${e?.message ?? e}). You can still play by typing moves.`)); });
   // Stockfish compiles in the background so the first reply is quick.
@@ -100,7 +100,8 @@ function make(holder, host) {
       fen: st.fen, orientation: st.orientation ?? 'white', turnColor: st.turn, check: st.check || false,
       lastMove: st.lastMove ? [st.lastMove.from, st.lastMove.to] : undefined,
       movable: { color: myTurn ? st.user : undefined, dests, free: false, showDests: true },
-      drawable: { autoShapes: shapes(st) },
+      // Arrows need the board's real size: while the tab is hidden draw none (the resize observer redraws on show).
+      drawable: { autoShapes: boardEl.offsetWidth ? shapes(st) : [] },
     });
   }
 
