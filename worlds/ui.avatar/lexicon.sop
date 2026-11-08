@@ -351,7 +351,7 @@
 
 @lex.ui.avatar.colors core.lexicon
     class=noun
-    doc="Color names; light_ and dark_ variants of the main hues"
+    doc="Color names; light_ and dark_ variants of the main hues; inherits the shared colour names of lang.common"
     word=red
     word=orange
     word=yellow
@@ -419,6 +419,7 @@
     word=dark_violet
     word=light_turquoise
     word=dark_turquoise
+    extends=$lex.lang.colour
 
 @lex.ui.avatar.data.colornames core.lexicon
     class=data
@@ -1331,3 +1332,298 @@
     word=large
     word=small
     word=tiny
+
+@phrase.ui.avatar.g1_u_should core.phrase
+    doc="World-local group used by 17 patterns (made by scripts/migrate-macros.mjs)."
+    alt=u_should
+    alt=u_can
+    alt=you_can
+    alt=you_could
+    alt=u_could
+    alt=try_to
+    alt=do_you_mind
+    alt=you_might_want_to
+    alt=maybe_you_should
+    alt=why_not
+
+@phrase.ui.avatar.g2_right_now_thank_you core.phrase
+    doc="World-local group used by 22 patterns (made by scripts/migrate-macros.mjs)."
+    alt=right_now_thank_you
+    alt=now_thank_you
+    alt=pls_thx
+    alt=plz_thx
+    alt=for_me_now
+    alt=immediately
+
+@phrase.ui.avatar.g3_normal core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=normal
+    alt=default
+    alt=original
+    alt=standard
+    alt=usual
+    alt=regular
+    alt=initial
+    alt=factory
+    alt=first
+    alt=starting
+    alt=base
+    alt=plain
+    alt=how_it_was
+    alt=what_it_was
+    alt=before
+    alt=the_way_it_was
+    alt=the_default
+    alt=the_original
+    alt=the_normal
+    alt=its_default
+    alt=its_original
+    alt=its_normal
+    alt=as_before
+    alt=as_it_was
+    alt=like_before
+    alt=like_it_was
+    alt=how_it_used_to_be
+    alt=the_old_one
+    alt=its_old_self
+    alt=the_standard
+    alt=the_usual
+    alt=the_regular
+    alt=the_initial
+    alt=the_factory_setting
+    alt=factory_settings
+    alt=default_settings
+    alt=normal_settings
+    alt=the_old_1
+
+@phrase.ui.avatar.g4_go_to core.phrase
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=go_to
+    alt=show_me
+    alt=try
+    alt=switch_to
+    alt=use
+    alt=get
+    alt=pick
+    alt=choose
+    alt=show
+    alt=go_back_to
+    alt=back_to
+    alt=return_to
+    alt=i_want
+    alt=i_want_the
+    alt=give_me
+    alt=give_me_the
+    alt=can_i_have
+    alt=let_me_see
+    alt=let_me_have
+    alt=take_me_to
+    alt=bring_back
+    alt=bring_me_back_to
+    alt=put_back
+    alt=switch_back_to
+    alt=change_back_to
+    alt=revert_to
+    alt=i_wanna_see
+    alt=i_want_to_see
+    alt=how_about
+    alt=what_about
+    alt=load
+    alt=cycle_to
+    alt=step_to
+    alt=move_to
+    alt=jump_to
+    alt=flip_to
+    alt=scroll_to
+    alt=rotate_to
+
+@phrase.ui.avatar.g5_of_you core.phrase
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=of_you
+    alt=of_u
+    alt=of_yourself
+    alt=of_urself
+    alt=of_ur_head
+    alt=of_your_head
+    alt=of_it
+    alt=would_be_nice
+    alt=would_be_cool
+    alt=would_be_great
+    alt=would_be_fun
+    alt=would_be_good
+    alt=would_be_awesome
+    alt=would_be_lovely
+    alt=would_be_neat
+    alt=is_nice
+    alt=is_cool
+    alt=pls
+    alt=plz
+    alt=lol
+    alt=thx
+    alt=thanks
+    alt=haha
+    alt=hehe
+    alt=rn
+    alt=now
+    alt=for_me
+    alt=too
+    alt=if_possible
+    alt=if_you_can
+    alt=right_now
+
+@phrase.ui.avatar.g6_give_yourself core.phrase
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=give_yourself
+    alt=give_urself
+    alt=give_me
+    alt=get
+    alt=have
+    alt=put
+    alt=place
+    alt=stick
+    alt=slap
+    alt=show
+    alt=show_me
+    alt=i_want
+    alt=i_would_like
+    alt=would_like
+    alt=i_need
+    alt=gimme
+    alt=i_wanna
+    alt=i_wana
+    alt=i_wanna_see
+    alt=i_want_to_see
+    alt=i_wanna_have
+    alt=can_i_have
+    alt=could_i_have
+    alt=may_i_have
+    alt=let_me_see
+    alt=let_me_have
+    alt=try
+    alt=add
+    alt=how_about
+    alt=what_about
+    alt=put_up
+    alt=add_on
+
+@phrase.ui.avatar.g7_give_yourself core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=give_yourself
+    alt=give_me
+    alt=get
+    alt=have
+    alt=wear
+    alt=use
+    alt=add
+    alt=put_on
+    alt=try
+    alt=try_on
+    alt=grow
+    alt=show
+    alt=show_me
+    alt=switch_to
+    alt=change_to
+    alt=i_want
+    alt=i_would_like
+    alt=i_want_you_to_have
+    alt=i_want_you_to_wear
+    alt=i_would_like_you_to_have
+    alt=i_want_you_to_wear
+    alt=you_should_have
+    alt=you_should_wear
+    alt=gimme
+    alt=i_wanna
+    alt=i_wana
+
+@phrase.ui.avatar.g8_do_you_have core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=do_you_have
+    alt=are_you_wearing
+    alt=do_you_wear
+    alt=have_you_got
+    alt=have_you_got_on
+    alt=are_you_using
+
+@phrase.ui.avatar.g9_previous core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=previous
+    alt=prev
+    alt=prior
+    alt=earlier
+    alt=last
+    alt=former
+    alt=preceding
+    alt=one_before
+    alt=old
+    alt=before
+    alt=1_before
+
+@phrase.ui.avatar.g10_a core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=a
+    alt=an
+    alt=the
+    alt=your
+    alt=ur
+    alt=my
+    alt=some
+    alt=new
+    alt=a_pair_of
+    alt=some_kind_of
+
+@phrase.ui.avatar.g11_a_bit core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=a_bit
+    alt=a_little
+    alt=a_lot
+    alt=much
+    alt=even
+    alt=way
+    alt=slightly
+
+@phrase.ui.avatar.g12_on core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=on
+    alt=on_your
+    alt=on_my
+    alt=on_the
+    alt=in
+    alt=in_your
+    alt=for_your
+    alt=with_your
+
+@phrase.ui.avatar.g13_kind_of core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=kind_of
+    alt=kinds_of
+    alt=types_of
+    alt=sorts_of
+    alt=styles_of
+
+@phrase.ui.avatar.g14_color core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=color
+    alt=colour
+    alt=colors
+    alt=colours
+    alt=shade
+    alt=hue
+    alt=tint
+
+@phrase.ui.avatar.g15_hair core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=hair
+    alt=hair_style
+    alt=hairdo
+    alt=haircut
+    alt=hairstyle

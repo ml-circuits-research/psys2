@@ -101,7 +101,8 @@ const spokenForms = (name) => {
 
 // ---- SOP output -------------------------------------------------------------------------------------------------
 const ATOM = /^[^\s"@$=\\]+$/;
-const val = (v) => (typeof v === 'number' || typeof v === 'boolean' || ATOM.test(String(v)) ? String(v) : JSON.stringify(String(v)));
+const REF = /^\$[A-Za-z_][\w.-]*$/;   // a reference such as $lex.lang.colour is written bare
+const val = (v) => (typeof v === 'number' || typeof v === 'boolean' || ATOM.test(String(v)) || REF.test(String(v)) ? String(v) : JSON.stringify(String(v)));
 const wire = (id, type, pairs) => `@${id} ${type}\n${pairs.map(([k, v]) => `    ${k}=${val(v)}`).join('\n')}\n`;
 const lexicon = (id, cls, doc, words, extra = []) => wire(id, 'core.lexicon', [['class', cls], ['doc', doc], ...words.map((w) => ['word', w]), ...extra]);
 
@@ -260,7 +261,7 @@ export async function generate() {
   X.push(wire('gen.ui.avatar.lexicon', 'core.note', [['text', note]]));
   X.push(lexicon('lex.ui.avatar.options', 'noun', 'Every variant of every component as the words people say (generated, singular), plus synonyms from lexicon.extra.sop', [...options]));
   X.push(lexicon('lex.ui.avatar.characters', 'noun', 'The characters (generated) and their synonyms', [...new Set(entries.get('characters').map((e) => e.word))]));
-  X.push(lexicon('lex.ui.avatar.colors', 'noun', 'Color names; light_ and dark_ variants of the main hues', Object.keys(names)));
+  X.push(lexicon('lex.ui.avatar.colors', 'noun', 'Color names; light_ and dark_ variants of the main hues; inherits the shared colour names of lang.common', Object.keys(names), [['extends', '$lex.lang.colour']]));
   X.push(lexicon('lex.ui.avatar.data.colornames', 'data', 'ops data: <color name>:<hex>', Object.entries(names).map(([n, h]) => `${n}:${h}`)));
   X.push(lexicon('lex.ui.avatar.data.characters', 'data', 'ops data: <word>:<character>:<display>', entries.get('characters').map((e) => `${e.word}:${e.id}:${e.display}`)));
   for (const c of model) {

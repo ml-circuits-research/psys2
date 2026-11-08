@@ -43,3 +43,14 @@ test('shared lexicons exist and unknown ids are reported', () => {
   assert.match(checkPattern(p, set)[0], /unknown phrase/);
   assert.deepEqual(checkPattern({ ...p, match: '[$lang.lead.polite]? hello' }, set), []);
 });
+
+test('ui.avatar pilot (L4): patterns use the macros, colours extend lang.common, phrases are imported', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const text = await readFile(new URL('../worlds/ui.avatar/patterns.sop', import.meta.url), 'utf8');
+  assert.ok((text.match(/\[\$lang\.(lead|tail)\./g) ?? []).length > 200);
+  assert.ok(text.length < 80000, `patterns.sop is ${text.length} bytes`);
+  for (const p of set.get('ui.avatar').patterns) assert.deepEqual(checkPattern(p, set), [], p.id);
+  const colours = lex.lexicons.get('lex.ui.avatar.colors').words;
+  for (const w of lex.lexicons.get('lex.lang.colour').words) assert.ok(colours.has(w), w);
+  assert.ok(colours.has('light_blue'));
+});
