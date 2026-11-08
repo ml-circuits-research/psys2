@@ -108,6 +108,15 @@ For **every world with operations** (all 20; `core` holds only the shared legend
 
 Log as `R2 <world>` entries plus one `R2 summary` table: world · catalogue lines · supported · tests · rules-only coverage before → after · fresh-batch coverage.
 
+### Discourse layer — being built by the reviewer's agent (17:30); do not edit these files
+
+The reviewer is implementing dialogue continuity in a new `src/dialog/discourse.mjs`, with small hooks in `src/dialog/index.mjs`, a spec and ADR-006:
+- ellipsis ("And from Berlin?", "And Ana?", "Now bigger", "the same for the tree");
+- pending clarifications ("Draw" → "What should I draw?" → "a cat");
+- verb distribution in coordination ("Give yourself round glasses and a beard").
+
+Avoid conflicting edits there. Pull and rebase often. Add messages of these kinds to the operational set once it lands.
+
 ### Review fixes F1–F8 (from the external review of 6b0db7c, accepted by the reviewer 16:00)
 
 The review's claims were checked: the music labels (`a key with 4 sharps?` labelled `n=3, acc=flat`), `Make your eyes and body blue` → unknown eyes "and body blue", and `itertools.cycle(sl)` in `dispatcher.py`. **F1 and F2 are P0:** they corrupt labels and metrics, so do them before the next dataset rebuild and retraining. Continue R2 in parallel: it touches the rules, not the labels.
