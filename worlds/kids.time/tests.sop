@@ -267,3 +267,678 @@
     input="what is 3 hours before 5 oclock"
     expect="It was 2 o'clock."
     doc="wording variant (widened phrasing)"
+
+@t.time.sw001 core.test
+    input="how many days in june right"
+    expect="There are 30 days in June."
+    doc="month length: word orders, fillers, abbreviations"
+
+@t.time.sw002 core.test
+    input="whats the length of june"
+    expect="There are 30 days in June."
+    doc="month length: word orders, fillers, abbreviations"
+
+@t.time.sw003 core.test
+    input="can u tell me how many days june has"
+    expect="There are 30 days in June."
+    doc="month length: word orders, fillers, abbreviations"
+
+@t.time.sw004 core.test
+    input="june days?"
+    expect="There are 30 days in June."
+    doc="month length: word orders, fillers, abbreviations"
+
+@t.time.sw005 core.test
+    input="days in june?"
+    expect="There are 30 days in June."
+    doc="month length: word orders, fillers, abbreviations"
+
+@t.time.sw006 core.test
+    input="u know how long june is in days"
+    expect="There are 30 days in June."
+    doc="month length: word orders, fillers, abbreviations"
+
+@t.time.sw007 core.test
+    input="wait how many days are in june"
+    expect="There are 30 days in June."
+    doc="month length: word orders, fillers, abbreviations"
+
+@t.time.sw008 core.test
+    input="june how many days has it got"
+    expect="There are 30 days in June."
+    doc="month length: word orders, fillers, abbreviations"
+
+@t.time.sw009 core.test
+    input="how many days does june have pls"
+    expect="There are 30 days in June."
+    doc="month length: word orders, fillers, abbreviations"
+
+@t.time.sw010 core.test
+    input="is june 30 days"
+    expect="There are 30 days in June."
+    doc="month length: word orders, fillers, abbreviations"
+
+@t.time.sw011 core.test
+    input="length of june in days"
+    expect="There are 30 days in June."
+    doc="month length: word orders, fillers, abbreviations"
+
+@t.time.sw012 core.test
+    input="how many days in feb"
+    expect="There are 28 days in February, or 29 in a leap year."
+    doc="month length: abbreviations"
+
+@t.time.sw013 core.test
+    input="feb days?"
+    expect="There are 28 days in February, or 29 in a leap year."
+    doc="month length: abbreviations"
+
+@t.time.sw014 core.test
+    input="is february 28 days"
+    expect="There are 28 days in February, or 29 in a leap year."
+    doc="month length: abbreviations"
+
+@t.time.sw015 core.test
+    input="how many days has feb got"
+    expect="There are 28 days in February, or 29 in a leap year."
+    doc="month length: abbreviations"
+
+@t.time.sw016 core.test
+    input="whats the length of feb"
+    expect="There are 28 days in February, or 29 in a leap year."
+    doc="month length: abbreviations"
+
+@t.time.sw017 core.test
+    input="whats the day 4 days after sunday"
+    expect="4 days after Sunday is Thursday."
+    doc="day shift: N days after"
+
+@t.time.sw018 core.test
+    input="day that is 4 days later than sunday"
+    expect="4 days after Sunday is Thursday."
+    doc="day shift: N days after"
+
+@t.time.sw019 core.test
+    input="if its sunday what day in 4 days"
+    expect="4 days after Sunday is Thursday."
+    doc="day shift: N days after"
+
+@t.time.sw021 core.test
+    input="sunday 4 days later is what day"
+    expect="4 days after Sunday is Thursday."
+    doc="day shift: N days after"
+
+@t.time.sw022 core.test
+    input="count forward 4 days from sunday"
+    expect="4 days after Sunday is Thursday."
+    doc="day shift: N days after"
+
+@t.time.sw023 core.test
+    input="skip 4 days from sunday"
+    expect="4 days after Sunday is Thursday."
+    doc="day shift: N days after"
+
+@t.time.sw024 core.test
+    input="if it is sunday what day will it be in 4 days"
+    expect="4 days after Sunday is Thursday."
+    doc="day shift: N days after"
+
+@t.time.sw025 core.test
+    input="count back 5 days from wednesday"
+    expect="5 days before Wednesday is Friday."
+    doc="day shift: N days before"
+
+@t.time.sw026 core.test
+    input="wednesday 5 days ago is what day"
+    expect="5 days before Wednesday is Friday."
+    doc="day shift: N days before"
+
+@t.time.sw027 core.test
+    input="day 5 days before weds"
+    expect="5 days before Wednesday is Friday."
+    doc="day shift: N days before"
+
+@t.time.sw028 core.test
+    input="5 days before wed what day"
+    expect="5 days before Wednesday is Friday."
+    doc="day shift: N days before"
+
+@t.time.sw029 core.test
+    input="go back 5 days from wednesday"
+    expect="5 days before Wednesday is Friday."
+    doc="day shift: N days before"
+
+@t.time.sw030 core.test
+    input="what day was it 5 days before wednesday"
+    expect="5 days before Wednesday is Friday."
+    doc="day shift: N days before"
+
+@t.time.sw031 core.test
+    input="next day after monday pls"
+    expect="The day after Monday is Tuesday."
+    doc="day shift: next and previous day"
+
+@t.time.sw032 core.test
+    input="after monday which day is it"
+    expect="The day after Monday is Tuesday."
+    doc="day shift: next and previous day"
+
+@t.time.sw033 core.test
+    input="the day after monday"
+    expect="The day after Monday is Tuesday."
+    doc="day shift: next and previous day"
+
+@t.time.sw034 core.test
+    input="what day is right after monday"
+    expect="The day after Monday is Tuesday."
+    doc="day shift: next and previous day"
+
+@t.time.sw035 core.test
+    input="u know what day is after monday"
+    expect="The day after Monday is Tuesday."
+    doc="day shift: next and previous day"
+
+@t.time.sw036 core.test
+    input="what comes after mon"
+    expect="The day after Monday is Tuesday."
+    doc="day shift: next and previous day"
+
+@t.time.sw037 core.test
+    input="the day before friday?"
+    expect="The day before Friday is Thursday."
+    doc="day shift: previous"
+
+@t.time.sw038 core.test
+    input="before friday what day is it"
+    expect="The day before Friday is Thursday."
+    doc="day shift: previous"
+
+@t.time.sw039 core.test
+    input="the day right before friday is what"
+    expect="The day before Friday is Thursday."
+    doc="day shift: previous"
+
+@t.time.sw040 core.test
+    input="u know what day is before friday"
+    expect="The day before Friday is Thursday."
+    doc="day shift: previous"
+
+@t.time.sw041 core.test
+    input="what day is the day before fri"
+    expect="The day before Friday is Thursday."
+    doc="day shift: previous"
+
+@t.time.sw042 core.test
+    input="what day is right before friday"
+    expect="The day before Friday is Thursday."
+    doc="day shift: previous"
+
+@t.time.sw043 core.test
+    input="if its march what month in 4 months"
+    expect="4 months after March is July."
+    doc="month shift"
+
+@t.time.sw044 core.test
+    input="4 months after march is what month"
+    expect="4 months after March is July."
+    doc="month shift"
+
+@t.time.sw045 core.test
+    input="if i go 4 months past march what month"
+    expect="4 months after March is July."
+    doc="month shift"
+
+@t.time.sw046 core.test
+    input="march 4 months later is what month"
+    expect="4 months after March is July."
+    doc="month shift"
+
+@t.time.sw047 core.test
+    input="whats the month 4 months after march"
+    expect="4 months after March is July."
+    doc="month shift"
+
+@t.time.sw048 core.test
+    input="whats the month before may"
+    expect="The month before May is April."
+    doc="month shift: before / next"
+
+@t.time.sw049 core.test
+    input="before may what month is it"
+    expect="The month before May is April."
+    doc="month shift: before / next"
+
+@t.time.sw050 core.test
+    input="previous month before may"
+    expect="The month before May is April."
+    doc="month shift: before / next"
+
+@t.time.sw051 core.test
+    input="u know what month is before may"
+    expect="The month before May is April."
+    doc="month shift: before / next"
+
+@t.time.sw052 core.test
+    input="what month is right before may"
+    expect="The month before May is April."
+    doc="month shift: before / next"
+
+@t.time.sw053 core.test
+    input="next season after winter pls"
+    expect="The season after winter is spring."
+    doc="season shift"
+
+@t.time.sw054 core.test
+    input="u know what season is after winter"
+    expect="The season after winter is spring."
+    doc="season shift"
+
+@t.time.sw055 core.test
+    input="after winter which season is it"
+    expect="The season after winter is spring."
+    doc="season shift"
+
+@t.time.sw056 core.test
+    input="what season is right after winter"
+    expect="The season after winter is spring."
+    doc="season shift"
+
+@t.time.sw057 core.test
+    input="which season follows winter"
+    expect="The season after winter is spring."
+    doc="season shift"
+
+@t.time.sw058 core.test
+    input="season 2 steps after spring"
+    expect="2 seasons after spring is autumn."
+    doc="season shift: N after"
+
+@t.time.sw059 core.test
+    input="which season is two after spring"
+    expect="2 seasons after spring is autumn."
+    doc="season shift: N after"
+
+@t.time.sw060 core.test
+    input="which season comes two after spring"
+    expect="2 seasons after spring is autumn."
+    doc="season shift: N after"
+
+@t.time.sw061 core.test
+    input="2 seasons after spring which season"
+    expect="2 seasons after spring is autumn."
+    doc="season shift: N after"
+
+@t.time.sw062 core.test
+    input="from thursday how many days until sunday"
+    expect="From Thursday to Sunday is 3 days."
+    doc="days between two days"
+
+@t.time.sw063 core.test
+    input="give me the day count from thursday to sunday"
+    expect="From Thursday to Sunday is 3 days."
+    doc="days between two days"
+
+@t.time.sw064 core.test
+    input="days between thursday and sunday?"
+    expect="From Thursday to Sunday is 3 days."
+    doc="days between two days"
+
+@t.time.sw066 core.test
+    input="how many more days to sunday when its thursday"
+    expect="From Thursday to Sunday is 3 days."
+    doc="days until, with today stated"
+
+@t.time.sw067 core.test
+    input="how long until sunday if its thursday"
+    expect="From Thursday to Sunday is 3 days."
+    doc="days until, with today stated"
+
+@t.time.sw068 core.test
+    input="thursday, how many days till sunday"
+    expect="From Thursday to Sunday is 3 days."
+    doc="days until, with today stated"
+
+@t.time.sw069 core.test
+    input="how many days till sunday if its thursday pls"
+    expect="From Thursday to Sunday is 3 days."
+    doc="days until, with today stated"
+
+@t.time.sw070 core.test
+    input="time from 3 oclock to 7 oclock in hours"
+    expect="It is 4 hours from 3 o'clock to 7 o'clock."
+    doc="hours between o'clock times"
+
+@t.time.sw071 core.test
+    input="from 3 oclock to 7 oclock how long in hours"
+    expect="It is 4 hours from 3 o'clock to 7 o'clock."
+    doc="hours between o'clock times"
+
+@t.time.sw072 core.test
+    input="whats the hour gap from 3 oclock to 7"
+    expect="It is 4 hours from 3 o'clock to 7 o'clock."
+    doc="hours between o'clock times"
+
+@t.time.sw073 core.test
+    input="3 to 7 hours to go?"
+    expect="It is 4 hours from 3 o'clock to 7 o'clock."
+    doc="hours between o'clock times"
+
+@t.time.sw074 core.test
+    input="countdown in hours from 3 to 7"
+    expect="It is 4 hours from 3 o'clock to 7 o'clock."
+    doc="hours between o'clock times"
+
+@t.time.sw075 core.test
+    input="count hours 3 to 7"
+    expect="It is 4 hours from 3 o'clock to 7 o'clock."
+    doc="hours between o'clock times"
+
+@t.time.sw076 core.test
+    input="3 oclock to 7 how many hours left"
+    expect="It is 4 hours from 3 o'clock to 7 o'clock."
+    doc="hours between o'clock times"
+
+@t.time.sw077 core.test
+    input="hours from now till 7 if its 3 oclock"
+    expect="It is 4 hours from 3 o'clock to 7 o'clock."
+    doc="hours until, with the clock stated"
+
+@t.time.sw078 core.test
+    input="how long until 7 oclock when its 3"
+    expect="It is 4 hours from 3 o'clock to 7 o'clock."
+    doc="hours until, with the clock stated"
+
+@t.time.sw079 core.test
+    input="how many hours until 7 oclock when it is 3 oclock"
+    expect="It is 4 hours from 3 o'clock to 7 o'clock."
+    doc="hours until, with the clock stated"
+
+@t.time.sw080 core.test
+    input="how many more hours to 7 oclock if its 3 oclock"
+    expect="It is 4 hours from 3 o'clock to 7 o'clock."
+    doc="hours until, with the clock stated"
+
+@t.time.sw081 core.test
+    input="at 3 oclock what time is it 2 hours later"
+    expect="It will be 5 o'clock."
+    doc="clock + hours"
+
+@t.time.sw082 core.test
+    input="in 2 hours from 3 oclock it will be what"
+    expect="It will be 5 o'clock."
+    doc="clock + hours"
+
+@t.time.sw083 core.test
+    input="if its 3 oclock whats the time in 2 hrs"
+    expect="It will be 5 o'clock."
+    doc="clock + hours"
+
+@t.time.sw084 core.test
+    input="what was the time 2 hours before 5 oclock"
+    expect="It was 3 o'clock."
+    doc="clock - hours / minutes"
+
+@t.time.sw085 core.test
+    input="if its 5 oclock what time was it 2 hours ago"
+    expect="It was 3 o'clock."
+    doc="clock - hours / minutes"
+
+@t.time.sw086 core.test
+    input="2 hours ago from 5 oclock what time"
+    expect="It was 3 o'clock."
+    doc="clock - hours / minutes"
+
+@t.time.sw087 core.test
+    input="what time is 2 hrs before 5 oclock"
+    expect="It was 3 o'clock."
+    doc="clock - hours / minutes"
+
+@t.time.sw088 core.test
+    input="what time was half an hour before 5 o clock"
+    expect="It was half past 4."
+    doc="clock +- half an hour"
+
+@t.time.sw089 core.test
+    input="half an hour before 5 oclock?"
+    expect="It was half past 4."
+    doc="clock +- half an hour"
+
+@t.time.sw090 core.test
+    input="what time is 30 mins before 5 oclock"
+    expect="It was half past 4."
+    doc="clock +- half an hour"
+
+@t.time.sw091 core.test
+    input="how many hrs in a day"
+    expect="There are 24 hours in a day."
+    doc="span lengths with abbreviations"
+
+@t.time.sw092 core.test
+    input="hw many hours in 1 day"
+    expect="There are 24 hours in a day."
+    doc="span lengths with abbreviations"
+
+@t.time.sw093 core.test
+    input="how many hours does a day have"
+    expect="There are 24 hours in a day."
+    doc="span lengths with abbreviations"
+
+@t.time.sw094 core.test
+    input="how many hrs does a day have pls"
+    expect="There are 24 hours in a day."
+    doc="span lengths with abbreviations"
+
+@t.time.sw095 core.test
+    input="how many mins in 1 hour"
+    expect="There are 60 minutes in an hour."
+    doc="span lengths: minutes / weeks"
+
+@t.time.sw096 core.test
+    input="in one hour how many minutes are there"
+    expect="There are 60 minutes in an hour."
+    doc="span lengths: minutes / weeks"
+
+@t.time.sw097 core.test
+    input="how many mins in an hr"
+    expect="There are 60 minutes in an hour."
+    doc="span lengths: minutes / weeks"
+
+@t.time.sw098 core.test
+    input="hw many minutes in an hour"
+    expect="There are 60 minutes in an hour."
+    doc="span lengths: minutes / weeks"
+
+@t.time.sw099 core.test
+    input="how many days in 2 wks"
+    expect="There are 14 days in 2 weeks."
+    doc="span lengths: N weeks"
+
+@t.time.sw100 core.test
+    input="2 wks = how many days"
+    expect="There are 14 days in 2 weeks."
+    doc="span lengths: N weeks"
+
+@t.time.sw101 core.test
+    input="2 weeks how many days in total"
+    expect="There are 14 days in 2 weeks."
+    doc="span lengths: N weeks"
+
+@t.time.sw102 core.test
+    input="how many days does 2 weeks have"
+    expect="There are 14 days in 2 weeks."
+    doc="span lengths: N weeks"
+
+@t.time.sw103 core.test
+    input="how many days in a fortnight"
+    expect="There are 14 days in 2 weeks."
+    doc="span lengths: N weeks"
+
+@t.time.sw104 core.test
+    input="weekend days?"
+    expect="The weekend days are Saturday and Sunday."
+    doc="weekend / weekday / lists"
+
+@t.time.sw105 core.test
+    input="which days is the weekend"
+    expect="The weekend days are Saturday and Sunday."
+    doc="weekend / weekday / lists"
+
+@t.time.sw106 core.test
+    input="name the weekend days pls"
+    expect="The weekend days are Saturday and Sunday."
+    doc="weekend / weekday / lists"
+
+@t.time.sw107 core.test
+    input="what are the days of the weekend"
+    expect="The weekend days are Saturday and Sunday."
+    doc="weekend / weekday / lists"
+
+@t.time.sw108 core.test
+    input="tell me which days are weekend"
+    expect="The weekend days are Saturday and Sunday."
+    doc="weekend / weekday / lists"
+
+@t.time.sw109 core.test
+    input="which days count as weekend?"
+    expect="The weekend days are Saturday and Sunday."
+    doc="weekend / weekday / lists"
+
+@t.time.sw110 core.test
+    input="hey which days are weekend days ty"
+    expect="The weekend days are Saturday and Sunday."
+    doc="weekend / weekday / lists"
+
+@t.time.sw111 core.test
+    input="name all the days of the week"
+    expect="The school days are Monday, Tuesday, Wednesday, Thursday and Friday."
+    doc="list days of the week"
+
+@t.time.sw112 core.test
+    input="list the days of the week pls"
+    expect="The school days are Monday, Tuesday, Wednesday, Thursday and Friday."
+    doc="list days of the week"
+
+@t.time.sw113 core.test
+    input="days of the week pls"
+    expect="The school days are Monday, Tuesday, Wednesday, Thursday and Friday."
+    doc="list days of the week"
+
+@t.time.sw114 core.test
+    input="tell me the days of the week"
+    expect="The school days are Monday, Tuesday, Wednesday, Thursday and Friday."
+    doc="list days of the week"
+
+@t.time.sw115 core.test
+    input="name all the months of the year"
+    expect="The months of the year are January, February, March, April, May, June, July, August, September, October, November and December."
+    doc="list months / seasons"
+
+@t.time.sw116 core.test
+    input="list the months of the year pls"
+    expect="The months of the year are January, February, March, April, May, June, July, August, September, October, November and December."
+    doc="list months / seasons"
+
+@t.time.sw117 core.test
+    input="It is 3 o'clock. what time r we at"
+    expect="It is 3 o'clock."
+    doc="reading the clock"
+
+@t.time.sw118 core.test
+    input="It is 3 o'clock. do u know what time it is"
+    expect="It is 3 o'clock."
+    doc="reading the clock"
+
+@t.time.sw119 core.test
+    input="It is 3 o'clock. can u tell me the time"
+    expect="It is 3 o'clock."
+    doc="reading the clock"
+
+@t.time.sw120 core.test
+    input="It is 3 o'clock. whats the time"
+    expect="It is 3 o'clock."
+    doc="reading the clock"
+
+@t.time.sw121 core.test
+    input="It is 3 o'clock. time pls"
+    expect="It is 3 o'clock."
+    doc="reading the clock"
+
+@t.time.sw122 core.test
+    input="It is 3 o'clock. what o'clock is it"
+    expect="It is 3 o'clock."
+    doc="reading the clock"
+
+@t.time.sw123 core.test
+    input="its friday today. What day is tomorrow?"
+    expect="Tomorrow is Saturday."
+    doc="statement: today is a day"
+
+@t.time.sw124 core.test
+    input="today's friday btw. What day is tomorrow?"
+    expect="Tomorrow is Saturday."
+    doc="statement: today is a day"
+
+@t.time.sw125 core.test
+    input="fyi its friday today. What day is tomorrow?"
+    expect="Tomorrow is Saturday."
+    doc="statement: today is a day"
+
+@t.time.sw126 core.test
+    input="todays friday ok. What day is tomorrow?"
+    expect="Tomorrow is Saturday."
+    doc="statement: today is a day"
+
+@t.time.sw127 core.test
+    input="hey today is friday. What day is tomorrow?"
+    expect="Tomorrow is Saturday."
+    doc="statement: today is a day"
+
+@t.time.sw128 core.test
+    input="we are on friday today. What day is tomorrow?"
+    expect="Tomorrow is Saturday."
+    doc="statement: today is a day"
+
+@t.time.sw129 core.test
+    input="ok its friday. What day is tomorrow?"
+    expect="Tomorrow is Saturday."
+    doc="statement: today is a day"
+
+@t.time.sw130 core.test
+    input="the clock says 3 oclock. What time will it be in 2 hours?"
+    expect="It will be 5 o'clock."
+    doc="statement: it is N o'clock"
+
+@t.time.sw131 core.test
+    input="its 3 oclock now. What time will it be in 2 hours?"
+    expect="It will be 5 o'clock."
+    doc="statement: it is N o'clock"
+
+@t.time.sw132 core.test
+    input="the time is 3 oclock. What time will it be in 2 hours?"
+    expect="It will be 5 o'clock."
+    doc="statement: it is N o'clock"
+
+@t.time.sw133 core.test
+    input="the clock shows 3 o clock. What time will it be in 2 hours?"
+    expect="It will be 5 o'clock."
+    doc="statement: it is N o'clock"
+
+@t.time.sw900 core.test
+    input="Which days are school days?"
+    expect="The school days are Monday, Tuesday, Wednesday, Thursday and Friday."
+    doc="list school days"
+
+@t.time.sw901 core.test
+    input="Name the weekdays please."
+    expect="The school days are Monday, Tuesday, Wednesday, Thursday and Friday."
+    doc="list school days"
+
+@t.time.sw902 core.test
+    input="The four seasons?"
+    expect="The seasons are Spring, Summer, Autumn and Winter."
+    doc="list seasons"
+
+@t.time.sw903 core.test
+    input="Seasons pls."
+    expect="The seasons are Spring, Summer, Autumn and Winter."
+    doc="list seasons"

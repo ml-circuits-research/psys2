@@ -9,6 +9,8 @@
     plural=thursday:thur
     plural=thursday:thurs
     plural=friday:fri
+    plural=wednesday:weds
+    plural=saturday:satur
     plural=saturday:sat
     word=monday
     word=tuesday
@@ -22,6 +24,7 @@
     class=noun
     doc="Months of the year (plural= lines are abbreviations: the lemma of an abbreviation is the full name)"
     plural=february:feb
+    plural=february:febr
     plural=april:apr
     plural=june:jun
     plural=july:jul

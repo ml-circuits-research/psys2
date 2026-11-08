@@ -231,6 +231,51 @@ add('arith.near.no-number', 'near-miss', (r, x) => { const p = x.person(r), it =
 add('arith.ood', 'out-of-domain', (r, x) => { const p = x.person(r);
   return { text: pick(r, ['How much does a ball cost?', 'What day is tomorrow?', 'What does a rabbit eat?', 'How many sides does a hexagon have?', 'Add milk to my shopping list.', 'Open the editor.', 'Play hangman.', 'What color is the sky?', `Who is ${p.name}?`, 'Where does a camel live?', 'Is a whale a fish?', 'Let me go first.']), negative: true }; });
 
+
+// ---- rule sweep: wider phrasing families (chat abbreviations, word orders, passives, comparisons) ----
+const lcn = (p) => p.name.toLowerCase();
+const PL = (it) => sp(plural(it));
+add('arith.sw.q.noun-first', 'question', (r, x) => { const p = x.person(r), it = pick(r, items(x));
+  return { text: pick(r, [`${lcn(p)} ${PL(it)} how many`, `uh ${lcn(p)} has how many ${PL(it)}`, `how many ${PL(it)} is ${lcn(p)} at now`, `${lcn(p)} ${PL(it)} now?`, `what is the number of ${PL(it)} ${lcn(p)} has`]), expect: E(Q('holding', 'count', { owner: p.ref, item: it })) }; });
+add('arith.sw.q.polite', 'question', (r, x) => { const p = x.person(r), it = pick(r, items(x));
+  return { text: pick(r, [`can u tell me how many ${PL(it)} ${lcn(p)} has`, `pls tell me how many ${PL(it)} ${lcn(p)} has`, `hey how many ${PL(it)} ${lcn(p)} got`, `do u know how many ${PL(it)} ${lcn(p)} has`]), expect: E(Q('holding', 'count', { owner: p.ref, item: it })) }; });
+add('arith.sw.q.has-any', 'question', (r, x) => { const p = x.person(r), it = pick(r, items(x));
+  return { text: pick(r, [`any ${PL(it)} for ${lcn(p)}?`, `is there ${a1(it)} with ${lcn(p)}`, `do u know if ${lcn(p)} has ${PL(it)}`, `does ${lcn(p)} still have ${PL(it)}`]), expect: E(Q('has', 'answer', { owner: p.ref, item: it })) }; });
+const BUYMOD = { buy: ['just bought', 'has bought', 'picked up', 'purchased'], eat: ['has just eaten', 'munched', 'devoured', 'gobbled'], lose: ['has lost', 'misplaced', 'dropped'], break: ['has broken', 'smashed', 'cracked'], get: ['has just found', 'collected', 'gathered', 'earned'] };
+for (const [verb, forms] of Object.entries(BUYMOD)) {
+  add(`arith.sw.${verb}.mod`, 'statement', (r, x) => { const p = x.person(r), it = pick(r, items(x)), n = N(r);
+    return { text: `${pick(r, ['', '', 'fyi ', 'btw '])}${pick(r, [lcn(p), p.name])} ${pick(r, forms)} ${nt(r, n)} ${sp(n === 1 ? it : plural(it))}${pick(r, ['', '', ' today', ' yesterday', ' now'])}.`, expect: E(change(TYPE[verb], p, n, it)) }; });
+  add(`arith.sw.${verb}.passive`, 'statement', (r, x) => { const p = x.person(r), it = pick(r, items(x)), n = 2 + Math.floor(r() * 9);
+    const pp = { buy: 'bought', eat: 'eaten', lose: 'lost', break: 'broken', get: 'found' }[verb];
+    return { text: `${n} ${PL(it)} were ${pp} by ${lcn(p)}.`, expect: E(change(TYPE[verb], p, n, it)) }; });
+}
+add('arith.sw.buy.shop', 'statement', (r, x) => { const p = x.person(r), it = pick(r, items(x)), n = 2 + Math.floor(r() * 9);
+  return { text: `${p.name} got ${n} ${PL(it)} from the shop.`, expect: E(change('buy', p, n, it)) }; });
+add('arith.sw.has.mod', 'statement', (r, x) => { const p = x.person(r), it = pick(r, items(x)), n = N(r, 20);
+  return { text: pick(r, [`${p.name} is holding ${n} ${PL(it)}.`, `${p.name}'s got ${n} ${PL(it)}.`, `${p.name} ended up with ${n} ${PL(it)}.`, `${n} ${PL(it)} belong to ${lcn(p)}.`, `fyi ${lcn(p)} has ${n} ${PL(it)} left.`]), expect: E(holding(p, n, it)) }; });
+add('arith.sw.has.none', 'negation', (r, x) => { const p = x.person(r), it = pick(r, items(x));
+  return { text: pick(r, [`${p.name} has zero ${PL(it)}.`, `${p.name} doesn't have any ${PL(it)}.`, `${p.name} ran out of ${PL(it)}.`]), expect: E(holding(p, 0, it)) }; });
+add('arith.sw.q.total.pair', 'multi-entity', (r, x) => { const [a, b] = diffPeople(r, x), it = pick(r, items(x)), pl = PL(it);
+  return { text: pick(r, [`total ${pl} for ${lcn(a)} and ${lcn(b)}`, `${pl} ${lcn(a)} + ${lcn(b)}?`, `how many ${pl} r there between ${lcn(a)} and ${lcn(b)}`, `sum of ${lcn(a)} and ${lcn(b)}'s ${pl} pls`, `together ${lcn(a)} ${lcn(b)} ${pl} how many`, `${pl} ${lcn(a)} and ${lcn(b)} together?`]), expect: E(Q('total', 'count', { item: it, who1: a.ref, who2: b.ref })) }; });
+add('arith.sw.q.total.all', 'question', (r, x) => { const it = pick(r, items(x)), pl = PL(it);
+  return { text: pick(r, [`total ${pl}?`, `all the ${pl} total?`, `${pl} all together how many`, `altogether how many ${pl}`, `how many ${pl} in the whole group`, `add all the ${pl} up for me`, `sum of everybody's ${pl}`]), expect: E(Q('total', 'count', { item: it })) }; });
+add('arith.sw.q.leader.pair', 'comparison', (r, x) => { const [a, b] = diffPeople(r, x), it = pick(r, items(x)), pl = PL(it);
+  return { text: pick(r, [`whos got more ${pl}, ${lcn(a)} or ${lcn(b)}`, `${lcn(a)} or ${lcn(b)} more ${pl}?`, `more ${pl}: ${lcn(a)} or ${lcn(b)}?`, `${lcn(a)} vs ${lcn(b)} ${pl} who wins`, `who is ahead on ${pl}, ${lcn(a)} or ${lcn(b)}`, `which 1 has more ${pl}, ${lcn(a)} or ${lcn(b)}`]), expect: E(Q('leader', 'winner', { item: it, who1: a.ref, who2: b.ref })) }; });
+add('arith.sw.q.leader.most', 'comparison', (r, x) => { const it = pick(r, items(x)), pl = PL(it);
+  return { text: pick(r, [`who has the highest number of ${pl}`, `person with the most ${pl}?`, `whose ${pl} are the most`, `who has more ${pl} than the other`]), expect: E(Q('leader', 'winner', { item: it })) }; });
+add('arith.sw.q.gap', 'comparison', (r, x) => { const [a, b] = diffPeople(r, x), it = pick(r, items(x)), pl = PL(it);
+  return { text: pick(r, [`how many ${pl} does ${lcn(a)} lack compared to ${lcn(b)}`, `${lcn(a)} is behind ${lcn(b)} by how many ${pl}`, `could u tell how many ${pl} ${lcn(a)} is missing vs ${lcn(b)}`, `how far behind ${lcn(b)} is ${lcn(a)} in ${pl}`]), expect: E(Q('gap', 'diff', { item: it, who1: a.ref, who2: b.ref })) }; });
+add('arith.sw.q.verdict', 'comparison', (r, x) => { const [a, b] = diffPeople(r, x), it = pick(r, items(x)), pl = PL(it);
+  return { text: pick(r, [`does ${lcn(a)} beat ${lcn(b)} in ${pl}`, `${lcn(a)} has more ${pl} than ${lcn(b)}, right?`, `is ${lcn(a)} ahead of ${lcn(b)} in ${pl}`]), expect: E(Q('verdict', 'answer', { item: it, who1: a.ref, who2: b.ref })) }; });
+add('arith.sw.calc.chat', 'arithmetic', (r) => { const k = pick(r, ['plus', 'minus', 'times', 'div']);
+  let a = N(r, 20), b = N(r, 12); if (k === 'minus' && b > a) [a, b] = [b, a]; if (k === 'div') { b = N(r, 9); a = b * N(r, 9); }
+  const op = { plus: 'plus', minus: 'minus', times: 'times', div: 'divided_by' }[k], w = { plus: 'plus', minus: 'minus', times: 'times', div: 'div' }[k];
+  return { text: pick(r, [`whats ${a} ${w} ${b}`, `can u do ${a} ${w} ${b} for me`, `${a} ${w} ${b} pls`, `${a} ${w} ${b} is?`, `${a} ${w} ${b} equals what`]), expect: E(Q('calc', 'result', { op, a, b })) }; });
+add('arith.sw.calc.share', 'arithmetic', (r) => { const b = 2 + Math.floor(r() * 8), a = b * N(r, 9);
+  return { text: pick(r, [`if i share ${a} among ${b} how many each`, `share ${a} between ${b} kids, how many does each get`]), expect: E(Q('calc', 'result', { op: 'divided_by', a, b })) }; });
+add('arith.sw.calc.double-half', 'arithmetic', (r) => { const n = 2 * N(r, 10), d = chance(r, 0.5);
+  return { text: d ? pick(r, [`give me double ${n}`, `what do i get doubling ${n}`, `could u double ${n} for me`, `${n} doubled?`]) : pick(r, [`could u halve ${n} for me`, `half of ${n} pls`, `${n} in half?`]), expect: E(Q(d ? 'double' : 'half', 'result', { n })) }; });
+
 export function generate({ rng, count = 2000, context } = {}) {
   return run(T, rng, count, mk(context));
 }

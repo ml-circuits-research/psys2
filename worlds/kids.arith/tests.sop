@@ -279,3 +279,608 @@
     input="Split 18 into 3 equal parts."
     expect="18 divided by 3 is 6."
     doc="wording variant (widened phrasing)"
+
+@t.arith.sw001 core.test
+    input="Leo has 9 stickers. leo stickers how many"
+    expect="Leo has 9 stickers."
+    doc="holding question: noun-first, ellipsis, fillers"
+
+@t.arith.sw002 core.test
+    input="Leo has 9 stickers. uh leo has how many stickers"
+    expect="Leo has 9 stickers."
+    doc="holding question: noun-first, ellipsis, fillers"
+
+@t.arith.sw003 core.test
+    input="Leo has 9 stickers. how many stickers is leo at now"
+    expect="Leo has 9 stickers."
+    doc="holding question: noun-first, ellipsis, fillers"
+
+@t.arith.sw004 core.test
+    input="Leo has 9 stickers. um how many stickers does leo have"
+    expect="Leo has 9 stickers."
+    doc="holding question: noun-first, ellipsis, fillers"
+
+@t.arith.sw005 core.test
+    input="Leo has 9 stickers. pls tell me how many stickers leo has"
+    expect="Leo has 9 stickers."
+    doc="holding question: noun-first, ellipsis, fillers"
+
+@t.arith.sw006 core.test
+    input="Leo has 9 stickers. can u tell me how many stickers leo has"
+    expect="Leo has 9 stickers."
+    doc="holding question: noun-first, ellipsis, fillers"
+
+@t.arith.sw007 core.test
+    input="Leo has 9 stickers. hey how many stickers leo got"
+    expect="Leo has 9 stickers."
+    doc="holding question: noun-first, ellipsis, fillers"
+
+@t.arith.sw008 core.test
+    input="Leo has 9 stickers. leo stickers now?"
+    expect="Leo has 9 stickers."
+    doc="holding question: noun-first, ellipsis, fillers"
+
+@t.arith.sw009 core.test
+    input="Leo has 9 stickers. what is the number of stickers leo has"
+    expect="Leo has 9 stickers."
+    doc="holding question: noun-first, ellipsis, fillers"
+
+@t.arith.sw010 core.test
+    input="Leo has 9 stickers. the count of stickers for leo"
+    expect="Leo has 9 stickers."
+    doc="holding question: noun-first, ellipsis, fillers"
+
+@t.arith.sw011 core.test
+    input="Leo has 9 stickers. what is leo's sticker number"
+    expect="Leo has 9 stickers."
+    doc="holding question: noun-first, ellipsis, fillers"
+
+@t.arith.sw012 core.test
+    input="Leo has 9 stickers. leo's sticker count?"
+    expect="Leo has 9 stickers."
+    doc="holding question: noun-first, ellipsis, fillers"
+
+@t.arith.sw013 core.test
+    input="Leo has 9 stickers. how many does leo have after losing some"
+    expect="Leo has 9 stickers."
+    doc="holding question: noun-first, ellipsis, fillers"
+
+@t.arith.sw014 core.test
+    input="Ben has 4 pears. any pears for ben?"
+    expect="Yes, Ben has 4 pears."
+    doc="has-any question"
+
+@t.arith.sw015 core.test
+    input="Ben has 4 pears. is there a pear with ben"
+    expect="Yes, Ben has 4 pears."
+    doc="has-any question"
+
+@t.arith.sw016 core.test
+    input="Ben has 4 pears. do u know if ben has pears"
+    expect="Yes, Ben has 4 pears."
+    doc="has-any question"
+
+@t.arith.sw017 core.test
+    input="Ben has 4 pears. check whether ben got pears"
+    expect="Yes, Ben has 4 pears."
+    doc="has-any question"
+
+@t.arith.sw018 core.test
+    input="Ben has 4 pears. does ben still have pears"
+    expect="Yes, Ben has 4 pears."
+    doc="has-any question"
+
+@t.arith.sw019 core.test
+    input="Ben has 4 pears. has ben got pears left"
+    expect="Yes, Ben has 4 pears."
+    doc="has-any question"
+
+@t.arith.sw020 core.test
+    input="Ben has 4 pears. tell me if ben has pears"
+    expect="Yes, Ben has 4 pears."
+    doc="has-any question"
+
+@t.arith.sw021 core.test
+    input="Zoe has 2 pencils. Zoe just bought 5 pencils. How many pencils does Zoe have?"
+    expect="Zoe has 7 pencils."
+    doc="statement: buy with fillers, passive, got-from-shop"
+
+@t.arith.sw022 core.test
+    input="Zoe has 2 pencils. 5 pencils were bought by zoe. How many pencils does Zoe have?"
+    expect="Zoe has 7 pencils."
+    doc="statement: buy with fillers, passive, got-from-shop"
+
+@t.arith.sw023 core.test
+    input="Zoe has 2 pencils. zoe got 5 pencils from the shop. How many pencils does Zoe have?"
+    expect="Zoe has 7 pencils."
+    doc="statement: buy with fillers, passive, got-from-shop"
+
+@t.arith.sw024 core.test
+    input="Zoe has 2 pencils. fyi zoe bought 5 pencils. How many pencils does Zoe have?"
+    expect="Zoe has 7 pencils."
+    doc="statement: buy with fillers, passive, got-from-shop"
+
+@t.arith.sw025 core.test
+    input="Zoe has 2 pencils. Zoe has bought 5 pencils now. How many pencils does Zoe have?"
+    expect="Zoe has 7 pencils."
+    doc="statement: buy with fillers, passive, got-from-shop"
+
+@t.arith.sw026 core.test
+    input="Zoe has 2 pencils. zoe purchased 5 pencils today. How many pencils does Zoe have?"
+    expect="Zoe has 7 pencils."
+    doc="statement: buy with fillers, passive, got-from-shop"
+
+@t.arith.sw027 core.test
+    input="Tom has 9 apples. tom has just eaten 3 apples. How many apples does Tom have?"
+    expect="Tom has 6 apples."
+    doc="statement: eat/lose/break/find with fillers and passive"
+
+@t.arith.sw028 core.test
+    input="Tom has 9 apples. Tom munched 3 apples yesterday. How many apples does Tom have?"
+    expect="Tom has 6 apples."
+    doc="statement: eat/lose/break/find with fillers and passive"
+
+@t.arith.sw029 core.test
+    input="Tom has 9 apples. 3 apples were eaten by tom. How many apples does Tom have?"
+    expect="Tom has 6 apples."
+    doc="statement: eat/lose/break/find with fillers and passive"
+
+@t.arith.sw030 core.test
+    input="Tom has 9 apples. fyi tom ate 3 apples. How many apples does Tom have?"
+    expect="Tom has 6 apples."
+    doc="statement: eat/lose/break/find with fillers and passive"
+
+@t.arith.sw031 core.test
+    input="Tom has 9 apples. tom devoured 3 apples. How many apples does Tom have?"
+    expect="Tom has 6 apples."
+    doc="statement: eat/lose/break/find with fillers and passive"
+
+@t.arith.sw032 core.test
+    input="Tom has 9 apples. tom has lost 3 apples. How many apples does Tom have?"
+    expect="Tom has 6 apples."
+    doc="statement: lose"
+
+@t.arith.sw033 core.test
+    input="Tom has 9 apples. 3 apples were lost by tom. How many apples does Tom have?"
+    expect="Tom has 6 apples."
+    doc="statement: lose"
+
+@t.arith.sw034 core.test
+    input="Tom has 9 apples. tom dropped 3 apples today. How many apples does Tom have?"
+    expect="Tom has 6 apples."
+    doc="statement: lose"
+
+@t.arith.sw035 core.test
+    input="Tom has 9 apples. fyi tom lost 3 apples. How many apples does Tom have?"
+    expect="Tom has 6 apples."
+    doc="statement: lose"
+
+@t.arith.sw036 core.test
+    input="Ana is holding 4 pears. How many pears does Ana have?"
+    expect="Ana has 4 pears."
+    doc="statement: have with modifiers"
+
+@t.arith.sw037 core.test
+    input="Ana's got 4 pears. How many pears does Ana have?"
+    expect="Ana has 4 pears."
+    doc="statement: have with modifiers"
+
+@t.arith.sw038 core.test
+    input="fyi ana has 4 pears left. How many pears does Ana have?"
+    expect="Ana has 4 pears."
+    doc="statement: have with modifiers"
+
+@t.arith.sw039 core.test
+    input="4 pears belong to ana. How many pears does Ana have?"
+    expect="Ana has 4 pears."
+    doc="statement: have with modifiers"
+
+@t.arith.sw040 core.test
+    input="ana ended up with 4 pears. How many pears does Ana have?"
+    expect="Ana has 4 pears."
+    doc="statement: have with modifiers"
+
+@t.arith.sw041 core.test
+    input="btw ana is carrying 4 pears. How many pears does Ana have?"
+    expect="Ana has 4 pears."
+    doc="statement: have with modifiers"
+
+@t.arith.sw042 core.test
+    input="Ben has zero pears. Does Ben have any pears?"
+    expect="No, Ben has no pears."
+    doc="statement: has none"
+
+@t.arith.sw043 core.test
+    input="Leo has 3 marbles. Zoe has 5 marbles. marbles leo and zoe together?"
+    expect="Leo and Zoe have 8 marbles altogether."
+    doc="total of two people"
+
+@t.arith.sw044 core.test
+    input="Leo has 3 marbles. Zoe has 5 marbles. total marbles for leo and zoe"
+    expect="Leo and Zoe have 8 marbles altogether."
+    doc="total of two people"
+
+@t.arith.sw045 core.test
+    input="Leo has 3 marbles. Zoe has 5 marbles. how many marbles r there between leo and zoe"
+    expect="Leo and Zoe have 8 marbles altogether."
+    doc="total of two people"
+
+@t.arith.sw046 core.test
+    input="Leo has 3 marbles. Zoe has 5 marbles. sum of leo and zoe's marbles pls"
+    expect="Leo and Zoe have 8 marbles altogether."
+    doc="total of two people"
+
+@t.arith.sw047 core.test
+    input="Leo has 3 marbles. Zoe has 5 marbles. together leo zoe marbles how many"
+    expect="Leo and Zoe have 8 marbles altogether."
+    doc="total of two people"
+
+@t.arith.sw048 core.test
+    input="Leo has 3 marbles. Zoe has 5 marbles. can u add leo's and zoe's marbles"
+    expect="Leo and Zoe have 8 marbles altogether."
+    doc="total of two people"
+
+@t.arith.sw049 core.test
+    input="Leo has 3 marbles. Zoe has 5 marbles. how many marbles do leo and zoe have?"
+    expect="Leo and Zoe have 8 marbles altogether."
+    doc="total of two people"
+
+@t.arith.sw050 core.test
+    input="Leo has 9 stickers. Zoe has 2 stickers. Ben has 6 stickers. all the stickers total?"
+    expect="There are 17 stickers altogether."
+    doc="total of everybody"
+
+@t.arith.sw051 core.test
+    input="Leo has 9 stickers. Zoe has 2 stickers. Ben has 6 stickers. stickers all together how many"
+    expect="There are 17 stickers altogether."
+    doc="total of everybody"
+
+@t.arith.sw052 core.test
+    input="Leo has 9 stickers. Zoe has 2 stickers. Ben has 6 stickers. sum of everybody's stickers"
+    expect="There are 17 stickers altogether."
+    doc="total of everybody"
+
+@t.arith.sw053 core.test
+    input="Leo has 9 stickers. Zoe has 2 stickers. Ben has 6 stickers. total stickers?"
+    expect="There are 17 stickers altogether."
+    doc="total of everybody"
+
+@t.arith.sw054 core.test
+    input="Leo has 9 stickers. Zoe has 2 stickers. Ben has 6 stickers. altogether how many stickers"
+    expect="There are 17 stickers altogether."
+    doc="total of everybody"
+
+@t.arith.sw055 core.test
+    input="Leo has 9 stickers. Zoe has 2 stickers. Ben has 6 stickers. how many stickers in the whole group"
+    expect="There are 17 stickers altogether."
+    doc="total of everybody"
+
+@t.arith.sw056 core.test
+    input="Leo has 9 stickers. Zoe has 2 stickers. Ben has 6 stickers. add all the stickers up for me"
+    expect="There are 17 stickers altogether."
+    doc="total of everybody"
+
+@t.arith.sw057 core.test
+    input="Leo has 9 stickers. Zoe has 2 stickers. Ben has 6 stickers. count up all the stickers"
+    expect="There are 17 stickers altogether."
+    doc="total of everybody"
+
+@t.arith.sw058 core.test
+    input="Leo has 3 marbles. Zoe has 5 marbles. leo or zoe more marbles?"
+    expect="Between Leo and Zoe, Zoe has more marbles: 3 against 5."
+    doc="who has more between two"
+
+@t.arith.sw059 core.test
+    input="Leo has 3 marbles. Zoe has 5 marbles. whos got more marbles, leo or zoe"
+    expect="Between Leo and Zoe, Zoe has more marbles: 3 against 5."
+    doc="who has more between two"
+
+@t.arith.sw060 core.test
+    input="Leo has 3 marbles. Zoe has 5 marbles. which 1 has more marbles, leo or zoe"
+    expect="Between Leo and Zoe, Zoe has more marbles: 3 against 5."
+    doc="who has more between two"
+
+@t.arith.sw061 core.test
+    input="Leo has 3 marbles. Zoe has 5 marbles. more marbles: leo or zoe?"
+    expect="Between Leo and Zoe, Zoe has more marbles: 3 against 5."
+    doc="who has more between two"
+
+@t.arith.sw062 core.test
+    input="Leo has 3 marbles. Zoe has 5 marbles. who is ahead on marbles, leo or zoe"
+    expect="Between Leo and Zoe, Zoe has more marbles: 3 against 5."
+    doc="who has more between two"
+
+@t.arith.sw063 core.test
+    input="Leo has 3 marbles. Zoe has 5 marbles. leo vs zoe marbles who wins"
+    expect="Between Leo and Zoe, Zoe has more marbles: 3 against 5."
+    doc="who has more between two"
+
+@t.arith.sw064 core.test
+    input="Leo has 3 marbles. Zoe has 5 marbles. between leo and zoe who has more"
+    expect="Between Leo and Zoe, Zoe has more marbles: 3 against 5."
+    doc="who has more between two"
+
+@t.arith.sw065 core.test
+    input="Leo has 9 stickers. Zoe has 2 stickers. Ben has 6 stickers. who has the highest number of stickers"
+    expect="Leo has the most stickers: 9."
+    doc="who has the most"
+
+@t.arith.sw066 core.test
+    input="Leo has 9 stickers. Zoe has 2 stickers. Ben has 6 stickers. whose stickers are the most"
+    expect="Leo has the most stickers: 9."
+    doc="who has the most"
+
+@t.arith.sw067 core.test
+    input="Leo has 9 stickers. Zoe has 2 stickers. Ben has 6 stickers. person with the most stickers?"
+    expect="Leo has the most stickers: 9."
+    doc="who has the most"
+
+@t.arith.sw068 core.test
+    input="Leo has 9 stickers. Zoe has 2 stickers. Ben has 6 stickers. which kid has the biggest pile of stickers"
+    expect="Leo has the most stickers: 9."
+    doc="who has the most"
+
+@t.arith.sw069 core.test
+    input="Leo has 9 stickers. Zoe has 2 stickers. Ben has 6 stickers. who has more stickers than the other"
+    expect="Leo has the most stickers: 9."
+    doc="who has the most"
+
+@t.arith.sw070 core.test
+    input="Leo has 3 marbles. Zoe has 5 marbles. leo is behind zoe by how many marbles"
+    expect="Leo has 2 fewer marbles than Zoe."
+    doc="gap / how many fewer"
+
+@t.arith.sw071 core.test
+    input="Leo has 3 marbles. Zoe has 5 marbles. how many marbles does leo lack compared to zoe"
+    expect="Leo has 2 fewer marbles than Zoe."
+    doc="gap / how many fewer"
+
+@t.arith.sw072 core.test
+    input="Leo has 3 marbles. Zoe has 5 marbles. could u tell how many marbles leo is missing vs zoe"
+    expect="Leo has 2 fewer marbles than Zoe."
+    doc="gap / how many fewer"
+
+@t.arith.sw073 core.test
+    input="Leo has 3 marbles. Zoe has 5 marbles. leo is short how many marbles vs zoe"
+    expect="Leo has 2 fewer marbles than Zoe."
+    doc="gap / how many fewer"
+
+@t.arith.sw074 core.test
+    input="Leo has 3 marbles. Zoe has 5 marbles. how far behind zoe is leo in marbles"
+    expect="Leo has 2 fewer marbles than Zoe."
+    doc="gap / how many fewer"
+
+@t.arith.sw075 core.test
+    input="Leo has 3 marbles. Zoe has 5 marbles. difference marbles leo and zoe?"
+    expect="Leo has 2 fewer marbles than Zoe."
+    doc="gap: difference noun forms"
+
+@t.arith.sw076 core.test
+    input="Leo has 3 marbles. Zoe has 5 marbles. the gap in marbles between leo and zoe?"
+    expect="Leo has 2 fewer marbles than Zoe."
+    doc="gap: difference noun forms"
+
+@t.arith.sw077 core.test
+    input="Leo has 3 marbles. Zoe has 5 marbles. whats the difference in marbles between leo and zoe"
+    expect="Leo has 2 fewer marbles than Zoe."
+    doc="gap: difference noun forms"
+
+@t.arith.sw078 core.test
+    input="Lily has 6 stickers. Sam has 4 stickers. does lily beat sam in stickers"
+    expect="Yes. Lily has 6 and Sam has 4."
+    doc="verdict: beat / tag question"
+
+@t.arith.sw079 core.test
+    input="Lily has 6 stickers. Sam has 4 stickers. lily has more stickers than sam, right?"
+    expect="Yes. Lily has 6 and Sam has 4."
+    doc="verdict: beat / tag question"
+
+@t.arith.sw080 core.test
+    input="Lily has 6 stickers. Sam has 4 stickers. is lily ahead of sam in stickers"
+    expect="Yes. Lily has 6 and Sam has 4."
+    doc="verdict: beat / tag question"
+
+@t.arith.sw081 core.test
+    input="Lily has 6 stickers. Sam has 4 stickers. does lily have more stickers than sam pls"
+    expect="Yes. Lily has 6 and Sam has 4."
+    doc="verdict: beat / tag question"
+
+@t.arith.sw082 core.test
+    input="whats 15 minus 8"
+    expect="15 minus 8 is 7."
+    doc="calc: whats / can u / for me / is?"
+
+@t.arith.sw083 core.test
+    input="can u do 15 minus 8 for me"
+    expect="15 minus 8 is 7."
+    doc="calc: whats / can u / for me / is?"
+
+@t.arith.sw084 core.test
+    input="15 less 8 is?"
+    expect="15 minus 8 is 7."
+    doc="calc: whats / can u / for me / is?"
+
+@t.arith.sw085 core.test
+    input="calc 15 minus 8"
+    expect="15 minus 8 is 7."
+    doc="calc: whats / can u / for me / is?"
+
+@t.arith.sw086 core.test
+    input="what do i get if i do 15 minus 8"
+    expect="15 minus 8 is 7."
+    doc="calc: whats / can u / for me / is?"
+
+@t.arith.sw087 core.test
+    input="hey whats 15 minus 8 pls"
+    expect="15 minus 8 is 7."
+    doc="calc: whats / can u / for me / is?"
+
+@t.arith.sw088 core.test
+    input="15 - 8 = ?"
+    expect="15 minus 8 is 7."
+    doc="calc: whats / can u / for me / is?"
+
+@t.arith.sw089 core.test
+    input="what is 8 from 15"
+    expect="15 minus 8 is 7."
+    doc="calc: whats / can u / for me / is?"
+
+@t.arith.sw090 core.test
+    input="tell me 15 minus 8"
+    expect="15 minus 8 is 7."
+    doc="calc: whats / can u / for me / is?"
+
+@t.arith.sw091 core.test
+    input="whats 7 plus 5"
+    expect="7 plus 5 is 12."
+    doc="calc: plus"
+
+@t.arith.sw092 core.test
+    input="can u add 7 and 5 for me"
+    expect="7 plus 5 is 12."
+    doc="calc: plus"
+
+@t.arith.sw093 core.test
+    input="7 plus 5 equals what"
+    expect="7 plus 5 is 12."
+    doc="calc: plus"
+
+@t.arith.sw094 core.test
+    input="what do u get if u add 7 and 5"
+    expect="7 plus 5 is 12."
+    doc="calc: plus"
+
+@t.arith.sw095 core.test
+    input="whats 7 + 5"
+    expect="7 plus 5 is 12."
+    doc="calc: plus"
+
+@t.arith.sw096 core.test
+    input="7 plus 5 pls"
+    expect="7 plus 5 is 12."
+    doc="calc: plus"
+
+@t.arith.sw097 core.test
+    input="what is 5 more than 7"
+    expect="7 plus 5 is 12."
+    doc="calc: plus"
+
+@t.arith.sw098 core.test
+    input="seven plus five, what is it"
+    expect="7 plus 5 is 12."
+    doc="calc: plus"
+
+@t.arith.sw099 core.test
+    input="whats 6 times 7"
+    expect="6 times 7 is 42."
+    doc="calc: times"
+
+@t.arith.sw100 core.test
+    input="6 x 7 pls"
+    expect="6 times 7 is 42."
+    doc="calc: times"
+
+@t.arith.sw101 core.test
+    input="can u do 6 times 7"
+    expect="6 times 7 is 42."
+    doc="calc: times"
+
+@t.arith.sw102 core.test
+    input="6 multiplied by 7 is what"
+    expect="6 times 7 is 42."
+    doc="calc: times"
+
+@t.arith.sw103 core.test
+    input="what is 6 x 7"
+    expect="6 times 7 is 42."
+    doc="calc: times"
+
+@t.arith.sw104 core.test
+    input="6 times 7 equals?"
+    expect="6 times 7 is 42."
+    doc="calc: times"
+
+@t.arith.sw105 core.test
+    input="20 div 4 pls"
+    expect="20 divided by 4 is 5."
+    doc="calc: divide"
+
+@t.arith.sw106 core.test
+    input="whats 20 divided by 4"
+    expect="20 divided by 4 is 5."
+    doc="calc: divide"
+
+@t.arith.sw107 core.test
+    input="if i share 20 among 4 how many each"
+    expect="20 divided by 4 is 5."
+    doc="calc: divide"
+
+@t.arith.sw108 core.test
+    input="share 20 between 4 kids, how many does each get"
+    expect="20 divided by 4 is 5."
+    doc="calc: divide"
+
+@t.arith.sw109 core.test
+    input="what is 20 / 4"
+    expect="20 divided by 4 is 5."
+    doc="calc: divide"
+
+@t.arith.sw110 core.test
+    input="can u do 20 divided by 4"
+    expect="20 divided by 4 is 5."
+    doc="calc: divide"
+
+@t.arith.sw111 core.test
+    input="what do i get doubling 13"
+    expect="Double 13 is 26."
+    doc="calc: double and half"
+
+@t.arith.sw112 core.test
+    input="could u double 13 for me"
+    expect="Double 13 is 26."
+    doc="calc: double and half"
+
+@t.arith.sw113 core.test
+    input="13 doubled?"
+    expect="Double 13 is 26."
+    doc="calc: double and half"
+
+@t.arith.sw114 core.test
+    input="whats double 13 pls"
+    expect="Double 13 is 26."
+    doc="calc: double and half"
+
+@t.arith.sw115 core.test
+    input="double the number 13"
+    expect="Double 13 is 26."
+    doc="calc: double and half"
+
+@t.arith.sw116 core.test
+    input="could u halve 12 for me"
+    expect="Half of 12 is 6."
+    doc="calc: half"
+
+@t.arith.sw117 core.test
+    input="half of 12 pls"
+    expect="Half of 12 is 6."
+    doc="calc: half"
+
+@t.arith.sw118 core.test
+    input="12 in half?"
+    expect="Half of 12 is 6."
+    doc="calc: half"
+
+@t.arith.sw119 core.test
+    input="ok what is half of 12 lol"
+    expect="Half of 12 is 6."
+    doc="calc: half"
+
+@t.arith.sw120 core.test
+    input="whats 12 halved"
+    expect="Half of 12 is 6."
+    doc="calc: half"
+
+@t.arith.sw121 core.test
+    input="half 12"
+    expect="Half of 12 is 6."
+    doc="calc: half"

@@ -173,3 +173,443 @@
     input="I have 20 lei. A ball costs 7 lei. The pencil is 3 lei. Can I get a ball plus 2 pencils?"
     expect="Yes."
     doc="wording variant (widened phrasing)"
+
+@t.shop.sw001 core.test
+    input="A ball costs 5 lei. cost of the ball pls"
+    expect="A ball costs 5 lei."
+    doc="price of one item: noun orders, abbreviations"
+
+@t.shop.sw002 core.test
+    input="A ball costs 5 lei. price of a ball?"
+    expect="A ball costs 5 lei."
+    doc="price of one item: noun orders, abbreviations"
+
+@t.shop.sw003 core.test
+    input="A ball costs 5 lei. tell me the cost of a ball"
+    expect="A ball costs 5 lei."
+    doc="price of one item: noun orders, abbreviations"
+
+@t.shop.sw004 core.test
+    input="A ball costs 5 lei. ball price?"
+    expect="A ball costs 5 lei."
+    doc="price of one item: noun orders, abbreviations"
+
+@t.shop.sw005 core.test
+    input="A ball costs 5 lei. how much r balls"
+    expect="A ball costs 5 lei."
+    doc="price of one item: noun orders, abbreviations"
+
+@t.shop.sw006 core.test
+    input="A ball costs 5 lei. how much for a ball"
+    expect="A ball costs 5 lei."
+    doc="price of one item: noun orders, abbreviations"
+
+@t.shop.sw007 core.test
+    input="A ball costs 5 lei. whats a ball cost"
+    expect="A ball costs 5 lei."
+    doc="price of one item: noun orders, abbreviations"
+
+@t.shop.sw008 core.test
+    input="A ball costs 5 lei. what is the price of a ball"
+    expect="A ball costs 5 lei."
+    doc="price of one item: noun orders, abbreviations"
+
+@t.shop.sw009 core.test
+    input="A ball costs 5 lei. ball how much"
+    expect="A ball costs 5 lei."
+    doc="price of one item: noun orders, abbreviations"
+
+@t.shop.sw010 core.test
+    input="A ball costs 5 lei. price for a ball pls"
+    expect="A ball costs 5 lei."
+    doc="price of one item: noun orders, abbreviations"
+
+@t.shop.sw011 core.test
+    input="A ball costs 5 lei. can u tell me the ball price"
+    expect="A ball costs 5 lei."
+    doc="price of one item: noun orders, abbreviations"
+
+@t.shop.sw012 core.test
+    input="A pencil costs 2 lei. whats the total for three pencils"
+    expect="3 pencils cost 6 lei."
+    doc="total for N items"
+
+@t.shop.sw013 core.test
+    input="A pencil costs 2 lei. pencils x3 how much"
+    expect="3 pencils cost 6 lei."
+    doc="total for N items"
+
+@t.shop.sw014 core.test
+    input="A pencil costs 2 lei. if i buy 3 pencils how much do they cost"
+    expect="3 pencils cost 6 lei."
+    doc="total for N items"
+
+@t.shop.sw015 core.test
+    input="A pencil costs 2 lei. how much for all 3 pencils together"
+    expect="3 pencils cost 6 lei."
+    doc="total for N items"
+
+@t.shop.sw016 core.test
+    input="A pencil costs 2 lei. altogether 3 pencils how much"
+    expect="3 pencils cost 6 lei."
+    doc="total for N items"
+
+@t.shop.sw017 core.test
+    input="A pencil costs 2 lei. whole cost of 3 pencils?"
+    expect="3 pencils cost 6 lei."
+    doc="total for N items"
+
+@t.shop.sw018 core.test
+    input="A pencil costs 2 lei. what do 3 pencils come to all together"
+    expect="3 pencils cost 6 lei."
+    doc="total for N items"
+
+@t.shop.sw019 core.test
+    input="A pencil costs 2 lei. 3 pencils altogether cost?"
+    expect="3 pencils cost 6 lei."
+    doc="total for N items"
+
+@t.shop.sw020 core.test
+    input="A pencil costs 2 lei. how much will i pay for 3 pencils"
+    expect="3 pencils cost 6 lei."
+    doc="total for N items"
+
+@t.shop.sw021 core.test
+    input="A kite costs 4 lei. A puzzle costs 11 lei. how much are 4 kites and a puzzle all together"
+    expect="4 kites and a puzzle cost 27 lei."
+    doc="total for two items"
+
+@t.shop.sw022 core.test
+    input="A kite costs 4 lei. A puzzle costs 11 lei. altogether 4 kites and puzzle price?"
+    expect="4 kites and a puzzle cost 27 lei."
+    doc="total for two items"
+
+@t.shop.sw023 core.test
+    input="A kite costs 4 lei. A puzzle costs 11 lei. whats the total for 4 kites and a puzzle"
+    expect="4 kites and a puzzle cost 27 lei."
+    doc="total for two items"
+
+@t.shop.sw024 core.test
+    input="A kite costs 4 lei. A puzzle costs 11 lei. how much will i pay for 4 kites and a puzzle"
+    expect="4 kites and a puzzle cost 27 lei."
+    doc="total for two items"
+
+@t.shop.sw025 core.test
+    input="I have 30 lei. I spent 5 lei. lei left in my purse?"
+    expect="You have 25 lei left."
+    doc="balance: money left"
+
+@t.shop.sw026 core.test
+    input="I have 30 lei. I spent 5 lei. what is my money after shopping"
+    expect="You have 25 lei left."
+    doc="balance: money left"
+
+@t.shop.sw027 core.test
+    input="I have 30 lei. I spent 5 lei. money left for me?"
+    expect="You have 25 lei left."
+    doc="balance: money left"
+
+@t.shop.sw028 core.test
+    input="I have 30 lei. I spent 5 lei. after the spending, how many lei"
+    expect="You have 25 lei left."
+    doc="balance: money left"
+
+@t.shop.sw029 core.test
+    input="I have 30 lei. I spent 5 lei. my purse, how much now?"
+    expect="You have 25 lei left."
+    doc="balance: money left"
+
+@t.shop.sw030 core.test
+    input="I have 30 lei. I spent 5 lei. my money?"
+    expect="You have 25 lei left."
+    doc="balance: money left"
+
+@t.shop.sw031 core.test
+    input="I have 30 lei. I spent 5 lei. how many lei in my pocket now"
+    expect="You have 25 lei left."
+    doc="balance: money left"
+
+@t.shop.sw032 core.test
+    input="I have 30 lei. I spent 5 lei. how much money am i left with"
+    expect="You have 25 lei left."
+    doc="balance: money left"
+
+@t.shop.sw033 core.test
+    input="I have 30 lei. I spent 5 lei. money i have right now?"
+    expect="You have 25 lei left."
+    doc="balance: money left"
+
+@t.shop.sw034 core.test
+    input="I have 30 lei. I spent 5 lei. lei count now"
+    expect="You have 25 lei left."
+    doc="balance: money left"
+
+@t.shop.sw035 core.test
+    input="I have 20 lei. A kite costs 4 lei. A puzzle costs 11 lei. is a puzzle and 2 kites ok for my money"
+    expect="Yes. A puzzle and 2 kites cost 19 lei and you have 20 lei."
+    doc="affordability: can I buy"
+
+@t.shop.sw036 core.test
+    input="I have 20 lei. A kite costs 4 lei. A puzzle costs 11 lei. puzzle + 2 kites, can i pay?"
+    expect="Yes. A puzzle and 2 kites cost 19 lei and you have 20 lei."
+    doc="affordability: can I buy"
+
+@t.shop.sw037 core.test
+    input="I have 20 lei. A kite costs 4 lei. A puzzle costs 11 lei. is it possible to buy a puzzle and two kites"
+    expect="Yes. A puzzle and 2 kites cost 19 lei and you have 20 lei."
+    doc="affordability: can I buy"
+
+@t.shop.sw038 core.test
+    input="I have 20 lei. A kite costs 4 lei. A puzzle costs 11 lei. can i get a puzzle and 2 kites"
+    expect="Yes. A puzzle and 2 kites cost 19 lei and you have 20 lei."
+    doc="affordability: can I buy"
+
+@t.shop.sw039 core.test
+    input="I have 20 lei. A kite costs 4 lei. A puzzle costs 11 lei. could i afford a puzzle and 2 kites"
+    expect="Yes. A puzzle and 2 kites cost 19 lei and you have 20 lei."
+    doc="affordability: can I buy"
+
+@t.shop.sw040 core.test
+    input="I have 20 lei. A kite costs 4 lei. A puzzle costs 11 lei. do i have the money for a puzzle and 2 kites"
+    expect="Yes. A puzzle and 2 kites cost 19 lei and you have 20 lei."
+    doc="affordability: can I buy"
+
+@t.shop.sw041 core.test
+    input="I have 8 lei. A puzzle costs 11 lei. is my money enough for the puzzle"
+    expect="No. A puzzle costs 11 lei, but you have only 8 lei."
+    doc="affordability: enough money"
+
+@t.shop.sw042 core.test
+    input="I have 8 lei. A puzzle costs 11 lei. i have enough for puzzle?"
+    expect="No. A puzzle costs 11 lei, but you have only 8 lei."
+    doc="affordability: enough money"
+
+@t.shop.sw043 core.test
+    input="I have 8 lei. A puzzle costs 11 lei. is 8 lei enough for a puzzle"
+    expect="No. A puzzle costs 11 lei, but you have only 8 lei."
+    doc="affordability: enough money"
+
+@t.shop.sw044 core.test
+    input="I have 8 lei. A puzzle costs 11 lei. enough for a puzzle or nah"
+    expect="No. A puzzle costs 11 lei, but you have only 8 lei."
+    doc="affordability: enough money"
+
+@t.shop.sw045 core.test
+    input="I have 8 lei. A puzzle costs 11 lei. could i afford a puzzle"
+    expect="No. A puzzle costs 11 lei, but you have only 8 lei."
+    doc="affordability: enough money"
+
+@t.shop.sw046 core.test
+    input="I have 8 lei. A puzzle costs 11 lei. is my money good for a puzzle"
+    expect="No. A puzzle costs 11 lei, but you have only 8 lei."
+    doc="affordability: enough money"
+
+@t.shop.sw047 core.test
+    input="A kite costs 4 lei. how much back if i give 20 lei for a kite"
+    expect="Your change from 20 lei is 16 lei."
+    doc="change from a payment"
+
+@t.shop.sw048 core.test
+    input="A kite costs 4 lei. how much will i get back from 20 for a kite"
+    expect="Your change from 20 lei is 16 lei."
+    doc="change from a payment"
+
+@t.shop.sw049 core.test
+    input="A kite costs 4 lei. kite change from 20?"
+    expect="Your change from 20 lei is 16 lei."
+    doc="change from a payment"
+
+@t.shop.sw050 core.test
+    input="A kite costs 4 lei. what do i get back after paying 20 lei for the kite"
+    expect="Your change from 20 lei is 16 lei."
+    doc="change from a payment"
+
+@t.shop.sw051 core.test
+    input="A kite costs 4 lei. if i give 20 lei for a kite whats my change"
+    expect="Your change from 20 lei is 16 lei."
+    doc="change from a payment"
+
+@t.shop.sw052 core.test
+    input="A kite costs 4 lei. if i pay 20 lei for a kite whats my change"
+    expect="Your change from 20 lei is 16 lei."
+    doc="change from a payment"
+
+@t.shop.sw053 core.test
+    input="A kite costs 4 lei. kite, i pay 20 lei, how much change"
+    expect="Your change from 20 lei is 16 lei."
+    doc="change from a payment"
+
+@t.shop.sw054 core.test
+    input="A kite costs 4 lei. 20 lei and a kite, what change do i get"
+    expect="Your change from 20 lei is 16 lei."
+    doc="change from a payment"
+
+@t.shop.sw055 core.test
+    input="A kite costs 4 lei. A puzzle costs 11 lei. change from thirty lei, puzzle and 2 kites"
+    expect="Your change from 30 lei is 11 lei."
+    doc="change: two items"
+
+@t.shop.sw056 core.test
+    input="A kite costs 4 lei. A puzzle costs 11 lei. puzzle + 2 kites with 30 lei, change pls"
+    expect="Your change from 30 lei is 11 lei."
+    doc="change: two items"
+
+@t.shop.sw057 core.test
+    input="A kite costs 4 lei. A puzzle costs 11 lei. if i pay 30 lei how much change for a puzzle and two kites"
+    expect="Your change from 30 lei is 11 lei."
+    doc="change: two items"
+
+@t.shop.sw058 core.test
+    input="A kite costs 4 lei. A puzzle costs 11 lei. give me the change, 30 lei, puzzle and 2 kites"
+    expect="Your change from 30 lei is 11 lei."
+    doc="change: two items"
+
+@t.shop.sw059 core.test
+    input="A kite costs 4 lei. A puzzle costs 11 lei. after 30 lei for puzzle and 2 kites how much left"
+    expect="Your change from 30 lei is 11 lei."
+    doc="change: two items"
+
+@t.shop.sw060 core.test
+    input="i got 40 lei in my purse. How many lei do I have now?"
+    expect="You have 40 lei now."
+    doc="statement: money in the purse"
+
+@t.shop.sw061 core.test
+    input="40 lei is what i have. How many lei do I have now?"
+    expect="You have 40 lei now."
+    doc="statement: money in the purse"
+
+@t.shop.sw062 core.test
+    input="me 40 lei. How many lei do I have now?"
+    expect="You have 40 lei now."
+    doc="statement: money in the purse"
+
+@t.shop.sw063 core.test
+    input="im carrying 40 lei. How many lei do I have now?"
+    expect="You have 40 lei now."
+    doc="statement: money in the purse"
+
+@t.shop.sw064 core.test
+    input="i only have 40 lei now. How many lei do I have now?"
+    expect="You have 40 lei now."
+    doc="statement: money in the purse"
+
+@t.shop.sw065 core.test
+    input="fyi i have 40 lei. How many lei do I have now?"
+    expect="You have 40 lei now."
+    doc="statement: money in the purse"
+
+@t.shop.sw066 core.test
+    input="i am holding 40 lei. How many lei do I have now?"
+    expect="You have 40 lei now."
+    doc="statement: money in the purse"
+
+@t.shop.sw067 core.test
+    input="I have 20 lei. i paid 2 lei for a sweet. How many lei do I have now?"
+    expect="You have 18 lei left."
+    doc="statement: spending"
+
+@t.shop.sw068 core.test
+    input="I have 20 lei. 2 lei gone on candy. How many lei do I have now?"
+    expect="You have 18 lei left."
+    doc="statement: spending"
+
+@t.shop.sw069 core.test
+    input="I have 20 lei. i used 2 lei. How many lei do I have now?"
+    expect="You have 18 lei left."
+    doc="statement: spending"
+
+@t.shop.sw070 core.test
+    input="I have 20 lei. spent 2 lei just now. How many lei do I have now?"
+    expect="You have 18 lei left."
+    doc="statement: spending"
+
+@t.shop.sw071 core.test
+    input="I have 20 lei. i gave 2 lei to the shop. How many lei do I have now?"
+    expect="You have 18 lei left."
+    doc="statement: spending"
+
+@t.shop.sw072 core.test
+    input="I have 20 lei. i lost 2 lei buying a sweet. How many lei do I have now?"
+    expect="You have 18 lei left."
+    doc="statement: spending"
+
+@t.shop.sw073 core.test
+    input="I have 20 lei. minus 2 lei, i bought candy. How many lei do I have now?"
+    expect="You have 18 lei left."
+    doc="statement: spending"
+
+@t.shop.sw074 core.test
+    input="I have 20 lei. mom gave me 5 lei. How many lei do I have now?"
+    expect="You have 25 lei now."
+    doc="statement: receiving money"
+
+@t.shop.sw075 core.test
+    input="I have 20 lei. i just found 5 lei. How many lei do I have now?"
+    expect="You have 25 lei now."
+    doc="statement: receiving money"
+
+@t.shop.sw076 core.test
+    input="I have 20 lei. i earned 5 lei. How many lei do I have now?"
+    expect="You have 25 lei now."
+    doc="statement: receiving money"
+
+@t.shop.sw077 core.test
+    input="I have 20 lei. grandma gave me 5 lei today. How many lei do I have now?"
+    expect="You have 25 lei now."
+    doc="statement: receiving money"
+
+@t.shop.sw078 core.test
+    input="I have 20 lei. i received 5 lei. How many lei do I have now?"
+    expect="You have 25 lei now."
+    doc="statement: receiving money"
+
+@t.shop.sw079 core.test
+    input="kite 4 lei. How much does a kite cost?"
+    expect="A kite costs 4 lei."
+    doc="statement: price of an item"
+
+@t.shop.sw080 core.test
+    input="kite cost 4 lei fyi. How much does a kite cost?"
+    expect="A kite costs 4 lei."
+    doc="statement: price of an item"
+
+@t.shop.sw081 core.test
+    input="remember a kite is 4 lei. How much does a kite cost?"
+    expect="A kite costs 4 lei."
+    doc="statement: price of an item"
+
+@t.shop.sw082 core.test
+    input="kite price 4 lei. How much does a kite cost?"
+    expect="A kite costs 4 lei."
+    doc="statement: price of an item"
+
+@t.shop.sw083 core.test
+    input="4 lei for a kite. How much does a kite cost?"
+    expect="A kite costs 4 lei."
+    doc="statement: price of an item"
+
+@t.shop.sw084 core.test
+    input="btw a kite costs 4 lei. How much does a kite cost?"
+    expect="A kite costs 4 lei."
+    doc="statement: price of an item"
+
+@t.shop.sw085 core.test
+    input="I have 30 lei. A pencil costs 2 lei. i just bought 3 pencils. How many lei do I have now?"
+    expect="You have 24 lei left."
+    doc="statement: buying"
+
+@t.shop.sw086 core.test
+    input="I have 30 lei. A pencil costs 2 lei. bought 3 pencils. How many lei do I have now?"
+    expect="You have 24 lei left."
+    doc="statement: buying"
+
+@t.shop.sw087 core.test
+    input="I have 30 lei. A pencil costs 2 lei. i purchased 3 pencils today. How many lei do I have now?"
+    expect="You have 24 lei left."
+    doc="statement: buying"
+
+@t.shop.sw088 core.test
+    input="I have 30 lei. A pencil costs 2 lei. i picked up 3 pencils. How many lei do I have now?"
+    expect="You have 24 lei left."
+    doc="statement: buying"

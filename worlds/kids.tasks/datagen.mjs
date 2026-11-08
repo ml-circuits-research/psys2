@@ -174,6 +174,39 @@ add('tasks.near', 'near-miss', (r) => { const item = pick(r, ALL);
 add('tasks.ood', 'out-of-domain', (r, x) => { const p = x.person(r);
   return { text: pick(r, [`${p.name} has 5 apples.`, 'How much does a ball cost?', 'What day is tomorrow?', 'What does a rabbit eat?', 'What is 7 plus 5?', 'Open the editor.', 'Play hangman.', 'What color is the sky?', 'Hello!', 'Is a whale a fish?', 'How many sides does a hexagon have?', 'Center.']), negative: true }; });
 
+
+// ---- rule sweep: wider phrasing families (chat abbreviations, word orders, run-ons, many verbs per operation) ----
+const SWL = (r) => pick(r, LISTS);
+add('tasks.sw.add', 'request', (r) => { const item = pick(r, BUY), l = SWL(r);
+  return { text: (pick(r, [`please write ${item} on my ${l} list`, `can u add ${item} to my ${l} list`, `pop ${item} onto my ${l} list pls`, `hey put ${item} on the ${l} list for me`, `i need ${item} on my ${l} list`, `${item} needs to go on my ${l} list`, `${item} for the ${l} list please`, `${l} list: ${item}`, `add ${item} to ${l}`, `put ${item} on ${l}`])), expect: E(R('add', { item: q(item), list: q(l) })) }; });
+add('tasks.sw.remove', 'request', (r) => { const item = pick(r, BUY), l = SWL(r);
+  return { text: (pick(r, [`delete ${item} off my ${l} list`, `take ${item} away from my ${l} list`, `get ${item} off the ${l} list please`, `${item} off the ${l} list`, `${l} list no more ${item}`, `toss ${item} off my ${l} list`, `hey delete ${item} from ${l} list`, `${l} list minus ${item}`])), expect: E(R('remove', { item: q(item), list: q(l) })) }; });
+add('tasks.sw.done', 'statement', (r) => { const item = pick(r, DO.filter((d) => !/^(bring|call|my )/.test(d)));
+  return { text: (pick(r, [`i finished ${item}`, `${item} is done`, `${item} finished!`, `all done with ${item}`, `yay finished ${item}`, `done with ${item}`, `${item} all done`])), expect: E(R('done', { item: q(item) })) }; });
+add('tasks.sw.tick', 'request', (r) => { const item = pick(r, BUY), l = SWL(r);
+  return { text: (pick(r, [`tick ${item} off the ${l} list`, `check ${item} off my ${l} list`, `mark ${item} done on ${l} list`, `check off ${item} on the ${l} list pls`])), expect: E(R('done', { item: q(item), list: q(l) })) }; });
+add('tasks.sw.notdone', 'statement', (r) => { const item = pick(r, DO.filter((d) => !/^(my |bring|call)/.test(d)));
+  return { text: (pick(r, [`i didnt finish ${item}`, `${item} not finished`, `${item} still not done`, `not finished ${item}`, `i still didnt finish ${item}`, `${item} is not done pls`, `no ${item} finished yet`])), expect: E(R('notDone', { item: q(item) })) }; });
+add('tasks.sw.remind', 'request', (r) => { const item = pick(r, DO.filter((d) => !/^my /.test(d)));
+  return { text: (pick(r, [`can u remind me to ${item}`, `nudge me about ${item} later`, `ping me to ${item}`, `alarm me to ${item}`, `dont let me forget to ${item}`, `${item}, remind me`, `later remind me to ${item}`, `i need a reminder to ${item}`, `reminder: ${item}`, `could you remind me about ${item} later please`])), expect: E(R('remind', { item: q(item) })) }; });
+add('tasks.sw.show', 'question', (r) => { const l = SWL(r);
+  return { text: (pick(r, [`whats on the ${l} list`, `what is on the ${l} list right now`, `what items are on the ${l} list`, `tell me whats on my ${l} list`, `anything on my ${l} list?`, `read my ${l} list`, `${l} list please`])), expect: E(R('show', { list: q(l) })) }; });
+add('tasks.sw.reminders', 'question', (r) => ({ text: pick(r, ['what reminders do i have', 'tell me my reminders', 'any reminders for me?', 'reminders please', 'do i have any reminders', 'what do you remind me of']), expect: E(R('show', { list: 'reminders' })) }));
+add('tasks.sw.lists', 'question', (r) => ({ text: pick(r, ['lists i got?', 'what kinds of lists do i have', 'show all my lists', 'which lists exist', 'name my lists']), expect: E(R('lists')) }));
+add('tasks.sw.pending', 'question', (r) => { const l = SWL(r);
+  return { text: (pick(r, [`whats left on my ${l} list`, `what is still on the ${l} list`, `remaining items on ${l} list?`, `what am i still missing from the ${l} list`])), expect: E(R('pending', { list: q(l) })) }; });
+add('tasks.sw.pending.todo', 'question', (r) => ({ text: pick(r, ['what do i need to do still', "what's still open for me", "what's still on my to do", 'what do i got left todo']), expect: E(R('pending', { list: 'to-do' })) }));
+add('tasks.sw.pending.buy', 'question', (r) => ({ text: pick(r, ["what's left to buy", 'still to buy?', 'what else do i still need to buy']), expect: E(R('pending', { list: 'shopping' })) }));
+add('tasks.sw.count', 'question', (r) => { const l = SWL(r);
+  return { text: (pick(r, [`how many things r on my ${l} list`, `hw many things on my ${l} list`, `how long is my ${l} list`, `count the things on my ${l} list`, `number of items on my ${l} list?`])), expect: E(R('count', { list: q(l) })) }; });
+add('tasks.sw.count.pending', 'question', (r) => ({ text: pick(r, ['how much do i still have to do', 'how many more things do i need to do', 'how many things still open', 'how many tasks still todo', 'how many chores do we still have']), expect: E(R('countPending', { list: 'to-do' })) }));
+add('tasks.sw.clear', 'request', (r) => { const l = SWL(r);
+  return { text: (pick(r, [`clear the ${l} list pls`, `${l} list empty it`, `can u empty my ${l} list`, `make the ${l} list blank`, `hey clear my ${l} list`, `could you empty the ${l} list for me`, `remove everything from the ${l} list`, `wipe my ${l} list clean`])), expect: E(R('clear', { list: q(l) })) }; });
+add('tasks.sw.has', 'question', (r) => { const item = pick(r, BUY), l = SWL(r);
+  return { text: pick(r, [`is there ${item} on the ${l} list`, `do we have ${item} on the ${l} list`, `${item} on my ${l} list or not`, `check if ${item} is on my ${l} list`, `does my ${l} list have ${item}`, `can u check if ${item} is on the ${l} list`, `did i put ${item} on my ${l} list`]), expect: E(R('has', { item: q(item), list: q(l) })) }; });
+add('tasks.sw.check', 'question', (r) => { const item = pick(r, DO.filter((d) => !/^(my |bring|call)/.test(d)));
+  return { text: pick(r, [`did i finish ${item}`, `have i done ${item}`, `${item} done or not`, `was ${item} finished`, `could you tell me if i finished ${item}`, `finished ${item}?`]), expect: E(R('check', { item: q(item) })) }; });
+
 export function generate({ rng, count = 2000, context } = {}) {
   return run(T, rng, count, mk(context));
 }

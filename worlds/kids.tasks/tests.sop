@@ -343,3 +343,783 @@
     input="Wipe my list."
     expect="Your to-do list is already empty."
     doc="wording variant (widened phrasing)"
+
+@t.tasks.sw001 core.test
+    input="Please write milk on my shopping list."
+    expect="Done! I added milk to your shopping list."
+    doc="add: verbs, politeness, fillers"
+
+@t.tasks.sw002 core.test
+    input="can u add milk to my shopping list"
+    expect="Done! I added milk to your shopping list."
+    doc="add: verbs, politeness, fillers"
+
+@t.tasks.sw003 core.test
+    input="pop milk onto my shopping list pls"
+    expect="Done! I added milk to your shopping list."
+    doc="add: verbs, politeness, fillers"
+
+@t.tasks.sw004 core.test
+    input="could you jot down milk on my shopping list"
+    expect="Done! I added milk to your shopping list."
+    doc="add: verbs, politeness, fillers"
+
+@t.tasks.sw005 core.test
+    input="hey put milk on the shopping list for me"
+    expect="Done! I added milk to your shopping list."
+    doc="add: verbs, politeness, fillers"
+
+@t.tasks.sw006 core.test
+    input="i need milk on my shopping list"
+    expect="Done! I added milk to your shopping list."
+    doc="add: verbs, politeness, fillers"
+
+@t.tasks.sw007 core.test
+    input="we need milk on the shopping list"
+    expect="Done! I added milk to your shopping list."
+    doc="add: verbs, politeness, fillers"
+
+@t.tasks.sw008 core.test
+    input="i forgot milk on my shopping list"
+    expect="Done! I added milk to your shopping list."
+    doc="add: verbs, politeness, fillers"
+
+@t.tasks.sw009 core.test
+    input="milk needs to go on my shopping list"
+    expect="Done! I added milk to your shopping list."
+    doc="add: verbs, politeness, fillers"
+
+@t.tasks.sw010 core.test
+    input="milk should be on the shopping list"
+    expect="Done! I added milk to your shopping list."
+    doc="add: verbs, politeness, fillers"
+
+@t.tasks.sw011 core.test
+    input="would you mind adding milk to my shopping list"
+    expect="Done! I added milk to your shopping list."
+    doc="add: verbs, politeness, fillers"
+
+@t.tasks.sw012 core.test
+    input="i want you to add milk to my shopping list"
+    expect="Done! I added milk to your shopping list."
+    doc="add: verbs, politeness, fillers"
+
+@t.tasks.sw013 core.test
+    input="stick milk on my shopping list"
+    expect="Done! I added milk to your shopping list."
+    doc="add: verbs, politeness, fillers"
+
+@t.tasks.sw014 core.test
+    input="socks for the garden list please"
+    expect="Done! I added socks to your garden list."
+    doc="add: noun-first and list-first"
+
+@t.tasks.sw015 core.test
+    input="socks on the garden list"
+    expect="Done! I added socks to your garden list."
+    doc="add: noun-first and list-first"
+
+@t.tasks.sw016 core.test
+    input="garden list: socks"
+    expect="Done! I added socks to your garden list."
+    doc="add: noun-first and list-first"
+
+@t.tasks.sw017 core.test
+    input="garden list add socks"
+    expect="Done! I added socks to your garden list."
+    doc="add: noun-first and list-first"
+
+@t.tasks.sw018 core.test
+    input="socks go on the garden list"
+    expect="Done! I added socks to your garden list."
+    doc="add: noun-first and list-first"
+
+@t.tasks.sw019 core.test
+    input="add socks to garden list pls"
+    expect="Done! I added socks to your garden list."
+    doc="add: noun-first and list-first"
+
+@t.tasks.sw020 core.test
+    input="can u put socks on my garden list"
+    expect="Done! I added socks to your garden list."
+    doc="add: noun-first and list-first"
+
+@t.tasks.sw021 core.test
+    input="add socks in my garden list"
+    expect="Done! I added socks to your garden list."
+    doc="add: noun-first and list-first"
+
+@t.tasks.sw022 core.test
+    input="hey put socks on the garden list"
+    expect="Done! I added socks to your garden list."
+    doc="add: noun-first and list-first"
+
+@t.tasks.sw023 core.test
+    input="add bread to shopping"
+    expect="Done! I added bread to your shopping list."
+    doc="add: list named without the word list"
+
+@t.tasks.sw024 core.test
+    input="put bread on shopping"
+    expect="Done! I added bread to your shopping list."
+    doc="add: list named without the word list"
+
+@t.tasks.sw025 core.test
+    input="add bread to my shopping"
+    expect="Done! I added bread to your shopping list."
+    doc="add: list named without the word list"
+
+@t.tasks.sw026 core.test
+    input="bread to my shopping list"
+    expect="Done! I added bread to your shopping list."
+    doc="add: list named without the word list"
+
+@t.tasks.sw027 core.test
+    input="could you add bread to shopping"
+    expect="Done! I added bread to your shopping list."
+    doc="add: list named without the word list"
+
+@t.tasks.sw028 core.test
+    input="Add milk to my shopping list. delete milk off my shopping list. What is on my shopping list?"
+    expect="Your shopping list is empty. You can say: Add milk to my shopping list."
+    doc="remove: verbs and word orders"
+
+@t.tasks.sw029 core.test
+    input="Add milk to my shopping list. take milk away from my shopping list. What is on my shopping list?"
+    expect="Your shopping list is empty. You can say: Add milk to my shopping list."
+    doc="remove: verbs and word orders"
+
+@t.tasks.sw030 core.test
+    input="Add milk to my shopping list. get milk off the shopping list please. What is on my shopping list?"
+    expect="Your shopping list is empty. You can say: Add milk to my shopping list."
+    doc="remove: verbs and word orders"
+
+@t.tasks.sw031 core.test
+    input="Add milk to my shopping list. milk off the shopping list. What is on my shopping list?"
+    expect="Your shopping list is empty. You can say: Add milk to my shopping list."
+    doc="remove: verbs and word orders"
+
+@t.tasks.sw032 core.test
+    input="Add milk to my shopping list. shopping list no more milk. What is on my shopping list?"
+    expect="Your shopping list is empty. You can say: Add milk to my shopping list."
+    doc="remove: verbs and word orders"
+
+@t.tasks.sw033 core.test
+    input="Add milk to my shopping list. remove the milk from my shopping. What is on my shopping list?"
+    expect="Your shopping list is empty. You can say: Add milk to my shopping list."
+    doc="remove: verbs and word orders"
+
+@t.tasks.sw034 core.test
+    input="Add milk to my shopping list. toss milk off my shopping list. What is on my shopping list?"
+    expect="Your shopping list is empty. You can say: Add milk to my shopping list."
+    doc="remove: verbs and word orders"
+
+@t.tasks.sw035 core.test
+    input="Add milk to my shopping list. cut milk from the shopping list. What is on my shopping list?"
+    expect="Your shopping list is empty. You can say: Add milk to my shopping list."
+    doc="remove: verbs and word orders"
+
+@t.tasks.sw036 core.test
+    input="Add milk to my shopping list. hey delete milk from shopping list. What is on my shopping list?"
+    expect="Your shopping list is empty. You can say: Add milk to my shopping list."
+    doc="remove: verbs and word orders"
+
+@t.tasks.sw037 core.test
+    input="Add milk to my shopping list. drop milk from the shopping list pls. What is on my shopping list?"
+    expect="Your shopping list is empty. You can say: Add milk to my shopping list."
+    doc="remove: verbs and word orders"
+
+@t.tasks.sw038 core.test
+    input="Add milk to my shopping list. get rid of milk on shopping list. What is on my shopping list?"
+    expect="Your shopping list is empty. You can say: Add milk to my shopping list."
+    doc="remove: verbs and word orders"
+
+@t.tasks.sw039 core.test
+    input="Add milk to my shopping list. shopping list minus milk. What is on my shopping list?"
+    expect="Your shopping list is empty. You can say: Add milk to my shopping list."
+    doc="remove: verbs and word orders"
+
+@t.tasks.sw040 core.test
+    input="Add homework to my list. i finished homework. Did I finish my homework?"
+    expect="Yes, you finished homework."
+    doc="done: statements"
+
+@t.tasks.sw041 core.test
+    input="Add homework to my list. homework is done. Did I finish my homework?"
+    expect="Yes, you finished homework."
+    doc="done: statements"
+
+@t.tasks.sw042 core.test
+    input="Add homework to my list. homework finished. Did I finish my homework?"
+    expect="Yes, you finished homework."
+    doc="done: statements"
+
+@t.tasks.sw043 core.test
+    input="Add homework to my list. all done with homework. Did I finish my homework?"
+    expect="Yes, you finished homework."
+    doc="done: statements"
+
+@t.tasks.sw044 core.test
+    input="Add homework to my list. yay finished homework. Did I finish my homework?"
+    expect="Yes, you finished homework."
+    doc="done: statements"
+
+@t.tasks.sw045 core.test
+    input="Add homework to my list. homework done now. Did I finish my homework?"
+    expect="Yes, you finished homework."
+    doc="done: statements"
+
+@t.tasks.sw046 core.test
+    input="Add homework to my list. i just finished my homework. Did I finish my homework?"
+    expect="Yes, you finished homework."
+    doc="done: statements"
+
+@t.tasks.sw047 core.test
+    input="Add homework to my list. done with my homework. Did I finish my homework?"
+    expect="Yes, you finished homework."
+    doc="done: statements"
+
+@t.tasks.sw048 core.test
+    input="Add milk to my shopping list. tick milk off the shopping list. What is still left on my shopping list?"
+    expect="Everything on your shopping list is done. Well done!"
+    doc="done: tick / cross / mark"
+
+@t.tasks.sw049 core.test
+    input="Add milk to my shopping list. check milk off my shopping list. What is still left on my shopping list?"
+    expect="Everything on your shopping list is done. Well done!"
+    doc="done: tick / cross / mark"
+
+@t.tasks.sw050 core.test
+    input="Add milk to my shopping list. mark milk done on shopping list. What is still left on my shopping list?"
+    expect="Everything on your shopping list is done. Well done!"
+    doc="done: tick / cross / mark"
+
+@t.tasks.sw051 core.test
+    input="Add milk to my shopping list. strike milk from the shopping list. What is still left on my shopping list?"
+    expect="Everything on your shopping list is done. Well done!"
+    doc="done: tick / cross / mark"
+
+@t.tasks.sw052 core.test
+    input="Add milk to my shopping list. check off milk on the shopping list pls. What is still left on my shopping list?"
+    expect="Everything on your shopping list is done. Well done!"
+    doc="done: tick / cross / mark"
+
+@t.tasks.sw053 core.test
+    input="Add milk to my shopping list. mark milk as done on my shopping list. What is still left on my shopping list?"
+    expect="Everything on your shopping list is done. Well done!"
+    doc="done: tick / cross / mark"
+
+@t.tasks.sw054 core.test
+    input="Add milk to my shopping list. milk done on shopping. What is still left on my shopping list?"
+    expect="Everything on your shopping list is done. Well done!"
+    doc="done: tick / cross / mark"
+
+@t.tasks.sw055 core.test
+    input="Add homework to my list. i have not done my homework. Did I finish my homework?"
+    expect="Not yet. Homework is still on your to-do list."
+    doc="not done: negative reports"
+
+@t.tasks.sw056 core.test
+    input="Add homework to my list. homework not finished. Did I finish my homework?"
+    expect="Not yet. Homework is still on your to-do list."
+    doc="not done: negative reports"
+
+@t.tasks.sw057 core.test
+    input="Add homework to my list. homework still not done. Did I finish my homework?"
+    expect="Not yet. Homework is still on your to-do list."
+    doc="not done: negative reports"
+
+@t.tasks.sw058 core.test
+    input="Add homework to my list. not finished homework. Did I finish my homework?"
+    expect="Not yet. Homework is still on your to-do list."
+    doc="not done: negative reports"
+
+@t.tasks.sw059 core.test
+    input="Add homework to my list. i still didnt finish my homework. Did I finish my homework?"
+    expect="Not yet. Homework is still on your to-do list."
+    doc="not done: negative reports"
+
+@t.tasks.sw060 core.test
+    input="Add homework to my list. homework is not done pls. Did I finish my homework?"
+    expect="Not yet. Homework is still on your to-do list."
+    doc="not done: negative reports"
+
+@t.tasks.sw061 core.test
+    input="Add homework to my list. no homework finished yet. Did I finish my homework?"
+    expect="Not yet. Homework is still on your to-do list."
+    doc="not done: negative reports"
+
+@t.tasks.sw062 core.test
+    input="Add homework to my list. i havent finished homework yet. Did I finish my homework?"
+    expect="Not yet. Homework is still on your to-do list."
+    doc="not done: negative reports"
+
+@t.tasks.sw063 core.test
+    input="can u remind me to feed the cat"
+    expect="OK, I will keep feed the cat in your reminders. I cannot ring a bell, but you can ask me: What are my reminders?"
+    doc="remind: verbs and prepositions"
+
+@t.tasks.sw064 core.test
+    input="ping me to feed the cat"
+    expect="OK, I will keep feed the cat in your reminders. I cannot ring a bell, but you can ask me: What are my reminders?"
+    doc="remind: verbs and prepositions"
+
+@t.tasks.sw065 core.test
+    input="alarm me to feed the cat"
+    expect="OK, I will keep feed the cat in your reminders. I cannot ring a bell, but you can ask me: What are my reminders?"
+    doc="remind: verbs and prepositions"
+
+@t.tasks.sw066 core.test
+    input="remind me to feed the cat tomorrow"
+    expect="OK, I will keep feed the cat in your reminders. I cannot ring a bell, but you can ask me: What are my reminders?"
+    doc="remind: verbs and prepositions"
+
+@t.tasks.sw067 core.test
+    input="could you remind me to feed the cat later please"
+    expect="OK, I will keep feed the cat in your reminders. I cannot ring a bell, but you can ask me: What are my reminders?"
+    doc="remind: verbs and prepositions"
+
+@t.tasks.sw068 core.test
+    input="later remind me to feed the cat"
+    expect="OK, I will keep feed the cat in your reminders. I cannot ring a bell, but you can ask me: What are my reminders?"
+    doc="remind: verbs and prepositions"
+
+@t.tasks.sw069 core.test
+    input="feed the cat, remind me"
+    expect="OK, I will keep feed the cat in your reminders. I cannot ring a bell, but you can ask me: What are my reminders?"
+    doc="remind: verbs and prepositions"
+
+@t.tasks.sw070 core.test
+    input="don't let me forget to feed the cat"
+    expect="OK, I will keep feed the cat in your reminders. I cannot ring a bell, but you can ask me: What are my reminders?"
+    doc="remind: verbs and prepositions"
+
+@t.tasks.sw071 core.test
+    input="dont let me forget to feed the cat"
+    expect="OK, I will keep feed the cat in your reminders. I cannot ring a bell, but you can ask me: What are my reminders?"
+    doc="remind: verbs and prepositions"
+
+@t.tasks.sw072 core.test
+    input="make sure i remember to feed the cat"
+    expect="OK, I will keep feed the cat in your reminders. I cannot ring a bell, but you can ask me: What are my reminders?"
+    doc="remind: verbs and prepositions"
+
+@t.tasks.sw073 core.test
+    input="set reminder water the plants pls"
+    expect="OK, I will keep water the plants in your reminders. I cannot ring a bell, but you can ask me: What are my reminders?"
+    doc="remind: reminder nouns"
+
+@t.tasks.sw074 core.test
+    input="reminder: water the plants"
+    expect="OK, I will keep water the plants in your reminders. I cannot ring a bell, but you can ask me: What are my reminders?"
+    doc="remind: reminder nouns"
+
+@t.tasks.sw075 core.test
+    input="i need a reminder to water the plants"
+    expect="OK, I will keep water the plants in your reminders. I cannot ring a bell, but you can ask me: What are my reminders?"
+    doc="remind: reminder nouns"
+
+@t.tasks.sw076 core.test
+    input="can you set a remindr to water the plants"
+    expect="OK, I will keep water the plants in your reminders. I cannot ring a bell, but you can ask me: What are my reminders?"
+    doc="remind: reminder nouns"
+
+@t.tasks.sw077 core.test
+    input="water the plants reminder pls"
+    expect="OK, I will keep water the plants in your reminders. I cannot ring a bell, but you can ask me: What are my reminders?"
+    doc="remind: reminder nouns"
+
+@t.tasks.sw078 core.test
+    input="make a reminder to water the plants"
+    expect="OK, I will keep water the plants in your reminders. I cannot ring a bell, but you can ask me: What are my reminders?"
+    doc="remind: reminder nouns"
+
+@t.tasks.sw079 core.test
+    input="Add milk to my shopping list. whats on the shopping list"
+    expect="On your shopping list: milk."
+    doc="show list"
+
+@t.tasks.sw080 core.test
+    input="Add milk to my shopping list. what is on the shopping list right now"
+    expect="On your shopping list: milk."
+    doc="show list"
+
+@t.tasks.sw081 core.test
+    input="Add milk to my shopping list. what items are on the shopping list"
+    expect="On your shopping list: milk."
+    doc="show list"
+
+@t.tasks.sw082 core.test
+    input="Add milk to my shopping list. tell me whats on my shopping list"
+    expect="On your shopping list: milk."
+    doc="show list"
+
+@t.tasks.sw083 core.test
+    input="Add milk to my shopping list. show me my shopping list"
+    expect="On your shopping list: milk."
+    doc="show list"
+
+@t.tasks.sw084 core.test
+    input="Add milk to my shopping list. anything on my shopping list?"
+    expect="On your shopping list: milk."
+    doc="show list"
+
+@t.tasks.sw085 core.test
+    input="Add milk to my shopping list. read my shopping list"
+    expect="On your shopping list: milk."
+    doc="show list"
+
+@t.tasks.sw086 core.test
+    input="Add milk to my shopping list. what do i have on my shopping list"
+    expect="On your shopping list: milk."
+    doc="show list"
+
+@t.tasks.sw087 core.test
+    input="Add milk to my shopping list. shopping list please"
+    expect="On your shopping list: milk."
+    doc="show list"
+
+@t.tasks.sw088 core.test
+    input="Add milk to my shopping list. can u show me the shopping list"
+    expect="On your shopping list: milk."
+    doc="show list"
+
+@t.tasks.sw089 core.test
+    input="Add milk to my list. whats on the list"
+    expect="On your to-do list: milk."
+    doc="show default list"
+
+@t.tasks.sw090 core.test
+    input="Add milk to my list. show me my list"
+    expect="On your to-do list: milk."
+    doc="show default list"
+
+@t.tasks.sw091 core.test
+    input="Add milk to my list. what items are on my list"
+    expect="On your to-do list: milk."
+    doc="show default list"
+
+@t.tasks.sw092 core.test
+    input="Add milk to my list. anything on my list?"
+    expect="On your to-do list: milk."
+    doc="show default list"
+
+@t.tasks.sw093 core.test
+    input="Remind me to feed the cat. what reminders do i have"
+    expect="On your reminders list: feed the cat."
+    doc="reminders"
+
+@t.tasks.sw094 core.test
+    input="Remind me to feed the cat. tell me my reminders"
+    expect="On your reminders list: feed the cat."
+    doc="reminders"
+
+@t.tasks.sw095 core.test
+    input="Remind me to feed the cat. any reminders for me?"
+    expect="On your reminders list: feed the cat."
+    doc="reminders"
+
+@t.tasks.sw096 core.test
+    input="Remind me to feed the cat. reminders please"
+    expect="On your reminders list: feed the cat."
+    doc="reminders"
+
+@t.tasks.sw097 core.test
+    input="Remind me to feed the cat. what are my reminders"
+    expect="On your reminders list: feed the cat."
+    doc="reminders"
+
+@t.tasks.sw098 core.test
+    input="Remind me to feed the cat. do i have any reminders"
+    expect="On your reminders list: feed the cat."
+    doc="reminders"
+
+@t.tasks.sw099 core.test
+    input="Add milk to my shopping list. lists i got?"
+    expect="You have these lists: shopping (1)."
+    doc="lists"
+
+@t.tasks.sw100 core.test
+    input="Add milk to my shopping list. what kinds of lists do i have"
+    expect="You have these lists: shopping (1)."
+    doc="lists"
+
+@t.tasks.sw101 core.test
+    input="Add milk to my shopping list. show all my lists"
+    expect="You have these lists: shopping (1)."
+    doc="lists"
+
+@t.tasks.sw102 core.test
+    input="Add milk to my shopping list. which lists exist"
+    expect="You have these lists: shopping (1)."
+    doc="lists"
+
+@t.tasks.sw103 core.test
+    input="Add milk to my shopping list. name my lists"
+    expect="You have these lists: shopping (1)."
+    doc="lists"
+
+@t.tasks.sw104 core.test
+    input="Add milk to my shopping list. Add eggs to my shopping list. Cross milk off my shopping list. whats left on my shopping list"
+    expect="Still to do on your shopping list: eggs."
+    doc="pending: what is left"
+
+@t.tasks.sw105 core.test
+    input="Add milk to my shopping list. Add eggs to my shopping list. Cross milk off my shopping list. what is still on the shopping list"
+    expect="Still to do on your shopping list: eggs."
+    doc="pending: what is left"
+
+@t.tasks.sw106 core.test
+    input="Add milk to my shopping list. Add eggs to my shopping list. Cross milk off my shopping list. remaining items on shopping list?"
+    expect="Still to do on your shopping list: eggs."
+    doc="pending: what is left"
+
+@t.tasks.sw107 core.test
+    input="Add milk to my shopping list. Add eggs to my shopping list. Cross milk off my shopping list. what hasnt been bought yet on the shopping list"
+    expect="Still to do on your shopping list: eggs."
+    doc="pending: what is left"
+
+@t.tasks.sw108 core.test
+    input="Add milk to my shopping list. Add eggs to my shopping list. Cross milk off my shopping list. what's left to buy"
+    expect="Still to do on your shopping list: eggs."
+    doc="pending: what is left"
+
+@t.tasks.sw109 core.test
+    input="Add milk to my shopping list. Add eggs to my shopping list. Cross milk off my shopping list. what else do i need from the shopping list"
+    expect="Still to do on your shopping list: eggs."
+    doc="pending: what is left"
+
+@t.tasks.sw110 core.test
+    input="Add milk to my shopping list. Add eggs to my shopping list. Cross milk off my shopping list. still to buy?"
+    expect="Still to do on your shopping list: eggs."
+    doc="pending: what is left"
+
+@t.tasks.sw111 core.test
+    input="Add milk to my shopping list. Add eggs to my shopping list. Cross milk off my shopping list. what am i still missing from the shopping list"
+    expect="Still to do on your shopping list: eggs."
+    doc="pending: what is left"
+
+@t.tasks.sw112 core.test
+    input="Add homework to my list. Add reading to my list. what do i need to do still"
+    expect="Still to do on your to-do list: homework and reading."
+    doc="pending: to do"
+
+@t.tasks.sw113 core.test
+    input="Add homework to my list. Add reading to my list. what's still open for me"
+    expect="Still to do on your to-do list: homework and reading."
+    doc="pending: to do"
+
+@t.tasks.sw114 core.test
+    input="Add homework to my list. Add reading to my list. what's still on my to do"
+    expect="Still to do on your to-do list: homework and reading."
+    doc="pending: to do"
+
+@t.tasks.sw115 core.test
+    input="Add homework to my list. Add reading to my list. what do i got left todo"
+    expect="Still to do on your to-do list: homework and reading."
+    doc="pending: to do"
+
+@t.tasks.sw116 core.test
+    input="Add homework to my list. Add reading to my list. what is left to do"
+    expect="Still to do on your to-do list: homework and reading."
+    doc="pending: to do"
+
+@t.tasks.sw117 core.test
+    input="Add milk to my shopping list. Add eggs to my shopping list. how many things r on my shopping list"
+    expect="You have 2 things on your shopping list."
+    doc="count"
+
+@t.tasks.sw118 core.test
+    input="Add milk to my shopping list. Add eggs to my shopping list. hw many things on my shopping list"
+    expect="You have 2 things on your shopping list."
+    doc="count"
+
+@t.tasks.sw119 core.test
+    input="Add milk to my shopping list. Add eggs to my shopping list. how many items are on the shopping list"
+    expect="You have 2 things on your shopping list."
+    doc="count"
+
+@t.tasks.sw120 core.test
+    input="Add milk to my shopping list. Add eggs to my shopping list. how long is my shopping list"
+    expect="You have 2 things on your shopping list."
+    doc="count"
+
+@t.tasks.sw121 core.test
+    input="Add milk to my shopping list. Add eggs to my shopping list. count the things on my shopping list"
+    expect="You have 2 things on your shopping list."
+    doc="count"
+
+@t.tasks.sw122 core.test
+    input="Add milk to my shopping list. Add eggs to my shopping list. number of items on my shopping list?"
+    expect="You have 2 things on your shopping list."
+    doc="count"
+
+@t.tasks.sw123 core.test
+    input="Add milk to my shopping list. Add eggs to my shopping list. how many tasks are on my shopping list"
+    expect="You have 2 things on your shopping list."
+    doc="count"
+
+@t.tasks.sw124 core.test
+    input="Add homework to my list. Add reading to my list. I finished my reading. how much do i still have to do"
+    expect="You still have 1 thing left on your to-do list."
+    doc="count pending"
+
+@t.tasks.sw125 core.test
+    input="Add homework to my list. Add reading to my list. I finished my reading. how many more things do i need to do"
+    expect="You still have 1 thing left on your to-do list."
+    doc="count pending"
+
+@t.tasks.sw126 core.test
+    input="Add homework to my list. Add reading to my list. I finished my reading. how many things still open"
+    expect="You still have 1 thing left on your to-do list."
+    doc="count pending"
+
+@t.tasks.sw127 core.test
+    input="Add homework to my list. Add reading to my list. I finished my reading. how many tasks still todo"
+    expect="You still have 1 thing left on your to-do list."
+    doc="count pending"
+
+@t.tasks.sw128 core.test
+    input="Add homework to my list. Add reading to my list. I finished my reading. how many chores do we still have"
+    expect="You still have 1 thing left on your to-do list."
+    doc="count pending"
+
+@t.tasks.sw129 core.test
+    input="Add socks to my garden list. Add a hat to my garden list. clear the garden list pls. What is on my garden list?"
+    expect="Your garden list is empty. You can say: Add milk to my shopping list."
+    doc="clear a list"
+
+@t.tasks.sw130 core.test
+    input="Add socks to my garden list. Add a hat to my garden list. garden list empty it. What is on my garden list?"
+    expect="Your garden list is empty. You can say: Add milk to my shopping list."
+    doc="clear a list"
+
+@t.tasks.sw131 core.test
+    input="Add socks to my garden list. Add a hat to my garden list. can u empty my garden list. What is on my garden list?"
+    expect="Your garden list is empty. You can say: Add milk to my shopping list."
+    doc="clear a list"
+
+@t.tasks.sw132 core.test
+    input="Add socks to my garden list. Add a hat to my garden list. make the garden list blank. What is on my garden list?"
+    expect="Your garden list is empty. You can say: Add milk to my shopping list."
+    doc="clear a list"
+
+@t.tasks.sw133 core.test
+    input="Add socks to my garden list. Add a hat to my garden list. hey clear my garden list. What is on my garden list?"
+    expect="Your garden list is empty. You can say: Add milk to my shopping list."
+    doc="clear a list"
+
+@t.tasks.sw134 core.test
+    input="Add socks to my garden list. Add a hat to my garden list. could you empty the garden list for me. What is on my garden list?"
+    expect="Your garden list is empty. You can say: Add milk to my shopping list."
+    doc="clear a list"
+
+@t.tasks.sw135 core.test
+    input="Add socks to my garden list. Add a hat to my garden list. remove everything from the garden list. What is on my garden list?"
+    expect="Your garden list is empty. You can say: Add milk to my shopping list."
+    doc="clear a list"
+
+@t.tasks.sw136 core.test
+    input="Add socks to my garden list. Add a hat to my garden list. wipe my garden list clean. What is on my garden list?"
+    expect="Your garden list is empty. You can say: Add milk to my shopping list."
+    doc="clear a list"
+
+@t.tasks.sw137 core.test
+    input="Add socks to my garden list. Add a hat to my garden list. erase everything on my garden list. What is on my garden list?"
+    expect="Your garden list is empty. You can say: Add milk to my shopping list."
+    doc="clear a list"
+
+@t.tasks.sw138 core.test
+    input="Add socks to my garden list. Add a hat to my garden list. delete everything on the garden list. What is on my garden list?"
+    expect="Your garden list is empty. You can say: Add milk to my shopping list."
+    doc="clear a list"
+
+@t.tasks.sw139 core.test
+    input="Add socks to my garden list. Add a hat to my garden list. get rid of my garden list. What is on my garden list?"
+    expect="Your garden list is empty. You can say: Add milk to my shopping list."
+    doc="clear a list"
+
+@t.tasks.sw140 core.test
+    input="Add milk to my shopping list. is there milk on the shopping list"
+    expect="Yes, milk is on your shopping list."
+    doc="has: is X on the list"
+
+@t.tasks.sw141 core.test
+    input="Add milk to my shopping list. do we have milk on the shopping list"
+    expect="Yes, milk is on your shopping list."
+    doc="has: is X on the list"
+
+@t.tasks.sw142 core.test
+    input="Add milk to my shopping list. milk on my shopping list or not"
+    expect="Yes, milk is on your shopping list."
+    doc="has: is X on the list"
+
+@t.tasks.sw143 core.test
+    input="Add milk to my shopping list. check if milk is on my shopping list"
+    expect="Yes, milk is on your shopping list."
+    doc="has: is X on the list"
+
+@t.tasks.sw144 core.test
+    input="Add milk to my shopping list. does my shopping list have milk"
+    expect="Yes, milk is on your shopping list."
+    doc="has: is X on the list"
+
+@t.tasks.sw145 core.test
+    input="Add milk to my shopping list. can u check if milk is on the shopping list"
+    expect="Yes, milk is on your shopping list."
+    doc="has: is X on the list"
+
+@t.tasks.sw146 core.test
+    input="Add milk to my shopping list. could you see if milk is on the shopping list"
+    expect="Yes, milk is on your shopping list."
+    doc="has: is X on the list"
+
+@t.tasks.sw147 core.test
+    input="Add milk to my shopping list. milk on my shopping list?"
+    expect="Yes, milk is on your shopping list."
+    doc="has: is X on the list"
+
+@t.tasks.sw148 core.test
+    input="Add milk to my shopping list. did i put milk on my shopping list"
+    expect="Yes, milk is on your shopping list."
+    doc="has: is X on the list"
+
+@t.tasks.sw149 core.test
+    input="Add milk to my shopping list. is milk in my shopping list"
+    expect="Yes, milk is on your shopping list."
+    doc="has: is X on the list"
+
+@t.tasks.sw150 core.test
+    input="Add homework to my list. I finished my homework. did i do my homework yet"
+    expect="Yes, you finished homework."
+    doc="check: did I finish X"
+
+@t.tasks.sw151 core.test
+    input="Add homework to my list. I finished my homework. have i done my homework"
+    expect="Yes, you finished homework."
+    doc="check: did I finish X"
+
+@t.tasks.sw152 core.test
+    input="Add homework to my list. I finished my homework. is my homework done yet"
+    expect="Yes, you finished homework."
+    doc="check: did I finish X"
+
+@t.tasks.sw153 core.test
+    input="Add homework to my list. I finished my homework. homework done or not"
+    expect="Yes, you finished homework."
+    doc="check: did I finish X"
+
+@t.tasks.sw154 core.test
+    input="Add homework to my list. I finished my homework. was my homework finished"
+    expect="Yes, you finished homework."
+    doc="check: did I finish X"
+
+@t.tasks.sw155 core.test
+    input="Add homework to my list. I finished my homework. could you tell me if i finished my homework"
+    expect="Yes, you finished homework."
+    doc="check: did I finish X"
+
+@t.tasks.sw156 core.test
+    input="Add homework to my list. I finished my homework. finished my homework?"
+    expect="Yes, you finished homework."
+    doc="check: did I finish X"
