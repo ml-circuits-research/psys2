@@ -70,9 +70,9 @@ test('unknown_argument is a penalised fallback and never blocks other candidates
   assert.ok(swallow.score < Math.log(0.9) - 4, 'carries the unknownArgPenalty');
 });
 
-test('probe: unknown eyes "wobbly" does not win when the simplified text recovers', async () => {
+test('probe: unknown eyes "wobbly" does not win when the simplified text recovers (value checker off: the rewrite replaces the word of the user)', async () => {
   const t = 'Make your eyes wobbly';
-  const r = await validator.validate({ id: 't', text: t, context: {}, segmentations: [{ score: 0, segments: [{ start: 0, end: t.length, text: t, simplified: 'Make your eyes round', worlds: W(['ui.avatar', 0.9]) }] }] });
+  const r = await validator.validate({ id: 't', text: t, context: {}, segmentations: [{ score: 0, segments: [{ start: 0, end: t.length, text: t, simplified: 'Make your eyes round', worlds: W(['ui.avatar', 0.9]) }] }] }, { checkValues: false });
   assert.equal(r.status, 'understood');
   assert.equal(r.produced[0].textUsed, 'simplified');
   for (const p of r.produced) assert.doesNotMatch(p.sop, /setPartUnknown/);
