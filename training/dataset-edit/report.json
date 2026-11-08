@@ -2,572 +2,572 @@
  "generated_by": "node scripts/build-edit-tags.mjs",
  "vocabulary_size": 500,
  "vocab_cap": 500,
- "examples": 46912,
+ "examples": 56673,
  "by_split": {
-  "test": {
-   "total": 4118,
-   "aligned": 253,
-   "identity": 3865
+  "dev": {
+   "total": 4875,
+   "aligned": 436,
+   "identity": 4439
   },
   "train": {
-   "total": 37099,
-   "aligned": 1824,
-   "identity": 35275
+   "total": 44896,
+   "aligned": 2874,
+   "identity": 42022
   },
-  "dev": {
-   "total": 4201,
-   "aligned": 349,
-   "identity": 3852
+  "test": {
+   "total": 4733,
+   "aligned": 428,
+   "identity": 4305
   },
   "heldout": {
-   "total": 1494,
-   "aligned": 994,
-   "identity": 500
+   "total": 2169,
+   "aligned": 1214,
+   "identity": 955
   }
  },
  "tag_counts": {
-  "DELETE": 21103,
-  "KEEP": 290448,
-  "A:": 2409,
-  "R:": 4894,
-  "P:": 457
+  "KEEP": 328102,
+  "DELETE": 22523,
+  "R:": 6804,
+  "A:": 2977,
+  "P:": 496
  },
  "worlds": {
   "art.draw": {
-   "variants": 500,
-   "with_target": 500,
-   "orig_ok": 159,
-   "failing": 341,
-   "failing_aligned": 82,
-   "aligned": 151,
-   "identity_only": 90,
-   "no_alignment": 259,
-   "no_verified_ref": 259,
+   "variants": 597,
+   "with_target": 597,
+   "orig_ok": 577,
+   "failing": 20,
+   "failing_aligned": 1,
+   "aligned": 227,
+   "identity_only": 351,
+   "no_alignment": 19,
+   "no_verified_ref": 19,
    "rejected_by_rules": 0,
-   "canonical_identity": 48,
-   "generator_identity": 1964
+   "canonical_identity": 59,
+   "generator_identity": 2557
   },
   "data.charts": {
-   "variants": 500,
-   "with_target": 500,
-   "orig_ok": 218,
-   "failing": 282,
-   "failing_aligned": 95,
-   "aligned": 233,
-   "identity_only": 80,
-   "no_alignment": 187,
-   "no_verified_ref": 186,
-   "rejected_by_rules": 1,
-   "canonical_identity": 50,
-   "generator_identity": 2010
+   "variants": 606,
+   "with_target": 606,
+   "orig_ok": 586,
+   "failing": 20,
+   "failing_aligned": 13,
+   "aligned": 339,
+   "identity_only": 260,
+   "no_alignment": 7,
+   "no_verified_ref": 7,
+   "rejected_by_rules": 0,
+   "canonical_identity": 62,
+   "generator_identity": 2310
   },
   "docs.editor": {
-   "variants": 690,
-   "with_target": 690,
-   "orig_ok": 179,
-   "failing": 511,
-   "failing_aligned": 199,
-   "aligned": 297,
-   "identity_only": 81,
-   "no_alignment": 312,
-   "no_verified_ref": 306,
-   "rejected_by_rules": 6,
-   "canonical_identity": 69,
-   "generator_identity": 486
-  },
-  "games.chess": {
-   "variants": 400,
-   "with_target": 400,
-   "orig_ok": 282,
-   "failing": 118,
-   "failing_aligned": 29,
-   "aligned": 203,
-   "identity_only": 108,
-   "no_alignment": 89,
-   "no_verified_ref": 88,
+   "variants": 767,
+   "with_target": 767,
+   "orig_ok": 417,
+   "failing": 350,
+   "failing_aligned": 52,
+   "aligned": 227,
+   "identity_only": 242,
+   "no_alignment": 298,
+   "no_verified_ref": 297,
    "rejected_by_rules": 1,
-   "canonical_identity": 40,
-   "generator_identity": 2459
+   "canonical_identity": 80,
+   "generator_identity": 840
   },
-  "games.guess": {
-   "variants": 300,
-   "with_target": 300,
-   "orig_ok": 240,
-   "failing": 60,
-   "failing_aligned": 16,
-   "aligned": 154,
-   "identity_only": 102,
-   "no_alignment": 44,
-   "no_verified_ref": 44,
+  "docs.reader": {
+   "variants": 270,
+   "with_target": 270,
+   "orig_ok": 228,
+   "failing": 42,
+   "failing_aligned": 14,
+   "aligned": 146,
+   "identity_only": 96,
+   "no_alignment": 28,
+   "no_verified_ref": 28,
    "rejected_by_rules": 0,
    "canonical_identity": 27,
-   "generator_identity": 1277
+   "generator_identity": 2399
   },
-  "games.hangman": {
-   "variants": 300,
-   "with_target": 300,
-   "orig_ok": 227,
-   "failing": 73,
-   "failing_aligned": 26,
-   "aligned": 211,
-   "identity_only": 42,
+  "games.chess": {
+   "variants": 508,
+   "with_target": 508,
+   "orig_ok": 444,
+   "failing": 64,
+   "failing_aligned": 17,
+   "aligned": 267,
+   "identity_only": 194,
    "no_alignment": 47,
    "no_verified_ref": 47,
    "rejected_by_rules": 0,
-   "canonical_identity": 27,
-   "generator_identity": 1599
+   "canonical_identity": 51,
+   "generator_identity": 2530
+  },
+  "games.guess": {
+   "variants": 412,
+   "with_target": 412,
+   "orig_ok": 358,
+   "failing": 54,
+   "failing_aligned": 11,
+   "aligned": 214,
+   "identity_only": 155,
+   "no_alignment": 43,
+   "no_verified_ref": 43,
+   "rejected_by_rules": 0,
+   "canonical_identity": 39,
+   "generator_identity": 1333
+  },
+  "games.hangman": {
+   "variants": 420,
+   "with_target": 420,
+   "orig_ok": 365,
+   "failing": 55,
+   "failing_aligned": 16,
+   "aligned": 303,
+   "identity_only": 78,
+   "no_alignment": 39,
+   "no_verified_ref": 39,
+   "rejected_by_rules": 0,
+   "canonical_identity": 41,
+   "generator_identity": 1701
   },
   "games.tictactoe": {
-   "variants": 300,
-   "with_target": 300,
-   "orig_ok": 222,
-   "failing": 78,
-   "failing_aligned": 16,
-   "aligned": 157,
-   "identity_only": 81,
-   "no_alignment": 62,
-   "no_verified_ref": 62,
+   "variants": 403,
+   "with_target": 403,
+   "orig_ok": 361,
+   "failing": 42,
+   "failing_aligned": 11,
+   "aligned": 265,
+   "identity_only": 107,
+   "no_alignment": 31,
+   "no_verified_ref": 31,
    "rejected_by_rules": 0,
-   "canonical_identity": 26,
-   "generator_identity": 1449
+   "canonical_identity": 39,
+   "generator_identity": 1527
   },
   "geo.map": {
-   "variants": 500,
-   "with_target": 500,
-   "orig_ok": 155,
-   "failing": 345,
-   "failing_aligned": 76,
-   "aligned": 162,
-   "identity_only": 69,
-   "no_alignment": 269,
-   "no_verified_ref": 269,
+   "variants": 608,
+   "with_target": 608,
+   "orig_ok": 605,
+   "failing": 3,
+   "failing_aligned": 0,
+   "aligned": 284,
+   "identity_only": 321,
+   "no_alignment": 3,
+   "no_verified_ref": 3,
    "rejected_by_rules": 0,
-   "canonical_identity": 50,
-   "generator_identity": 2110
+   "canonical_identity": 62,
+   "generator_identity": 2523
   },
   "kids.animals": {
-   "variants": 300,
-   "with_target": 300,
-   "orig_ok": 198,
-   "failing": 102,
-   "failing_aligned": 47,
-   "aligned": 182,
-   "identity_only": 63,
-   "no_alignment": 55,
-   "no_verified_ref": 53,
-   "rejected_by_rules": 2,
-   "canonical_identity": 30,
-   "generator_identity": 1928
+   "variants": 418,
+   "with_target": 418,
+   "orig_ok": 403,
+   "failing": 15,
+   "failing_aligned": 7,
+   "aligned": 265,
+   "identity_only": 145,
+   "no_alignment": 8,
+   "no_verified_ref": 8,
+   "rejected_by_rules": 0,
+   "canonical_identity": 42,
+   "generator_identity": 2192
   },
   "kids.arith": {
-   "variants": 300,
-   "with_target": 300,
-   "orig_ok": 208,
-   "failing": 92,
-   "failing_aligned": 26,
-   "aligned": 150,
-   "identity_only": 84,
-   "no_alignment": 66,
-   "no_verified_ref": 66,
+   "variants": 413,
+   "with_target": 413,
+   "orig_ok": 331,
+   "failing": 82,
+   "failing_aligned": 11,
+   "aligned": 194,
+   "identity_only": 148,
+   "no_alignment": 71,
+   "no_verified_ref": 71,
    "rejected_by_rules": 0,
-   "canonical_identity": 30,
-   "generator_identity": 2074
+   "canonical_identity": 42,
+   "generator_identity": 2291
   },
   "kids.common": {
-   "variants": 300,
-   "with_target": 300,
-   "orig_ok": 163,
-   "failing": 137,
-   "failing_aligned": 27,
-   "aligned": 91,
-   "identity_only": 99,
-   "no_alignment": 110,
-   "no_verified_ref": 108,
-   "rejected_by_rules": 2,
-   "canonical_identity": 25,
-   "generator_identity": 1398
+   "variants": 420,
+   "with_target": 420,
+   "orig_ok": 348,
+   "failing": 72,
+   "failing_aligned": 5,
+   "aligned": 250,
+   "identity_only": 103,
+   "no_alignment": 67,
+   "no_verified_ref": 67,
+   "rejected_by_rules": 0,
+   "canonical_identity": 35,
+   "generator_identity": 1596
   },
   "kids.shapes": {
-   "variants": 300,
-   "with_target": 300,
-   "orig_ok": 209,
-   "failing": 91,
-   "failing_aligned": 57,
-   "aligned": 238,
-   "identity_only": 28,
-   "no_alignment": 34,
-   "no_verified_ref": 34,
+   "variants": 418,
+   "with_target": 418,
+   "orig_ok": 412,
+   "failing": 6,
+   "failing_aligned": 3,
+   "aligned": 351,
+   "identity_only": 64,
+   "no_alignment": 3,
+   "no_verified_ref": 3,
    "rejected_by_rules": 0,
-   "canonical_identity": 30,
-   "generator_identity": 1855
+   "canonical_identity": 42,
+   "generator_identity": 1991
   },
   "kids.shop": {
-   "variants": 300,
-   "with_target": 300,
-   "orig_ok": 206,
-   "failing": 94,
-   "failing_aligned": 48,
-   "aligned": 196,
-   "identity_only": 58,
-   "no_alignment": 46,
-   "no_verified_ref": 46,
+   "variants": 399,
+   "with_target": 399,
+   "orig_ok": 364,
+   "failing": 35,
+   "failing_aligned": 10,
+   "aligned": 257,
+   "identity_only": 117,
+   "no_alignment": 25,
+   "no_verified_ref": 25,
    "rejected_by_rules": 0,
-   "canonical_identity": 30,
-   "generator_identity": 2007
+   "canonical_identity": 42,
+   "generator_identity": 2101
   },
   "kids.tasks": {
-   "variants": 300,
-   "with_target": 300,
-   "orig_ok": 140,
-   "failing": 160,
-   "failing_aligned": 61,
-   "aligned": 159,
-   "identity_only": 42,
-   "no_alignment": 99,
-   "no_verified_ref": 99,
+   "variants": 401,
+   "with_target": 401,
+   "orig_ok": 331,
+   "failing": 70,
+   "failing_aligned": 7,
+   "aligned": 219,
+   "identity_only": 119,
+   "no_alignment": 63,
+   "no_verified_ref": 63,
    "rejected_by_rules": 0,
-   "canonical_identity": 28,
-   "generator_identity": 1960
+   "canonical_identity": 42,
+   "generator_identity": 2163
   },
   "kids.time": {
-   "variants": 300,
-   "with_target": 300,
-   "orig_ok": 241,
-   "failing": 59,
-   "failing_aligned": 27,
-   "aligned": 185,
-   "identity_only": 83,
-   "no_alignment": 32,
-   "no_verified_ref": 31,
-   "rejected_by_rules": 1,
-   "canonical_identity": 30,
-   "generator_identity": 1969
+   "variants": 413,
+   "with_target": 413,
+   "orig_ok": 398,
+   "failing": 15,
+   "failing_aligned": 7,
+   "aligned": 280,
+   "identity_only": 125,
+   "no_alignment": 8,
+   "no_verified_ref": 8,
+   "rejected_by_rules": 0,
+   "canonical_identity": 42,
+   "generator_identity": 2132
   },
   "media.music": {
-   "variants": 500,
-   "with_target": 500,
-   "orig_ok": 198,
-   "failing": 302,
-   "failing_aligned": 59,
-   "aligned": 157,
-   "identity_only": 100,
-   "no_alignment": 243,
-   "no_verified_ref": 237,
-   "rejected_by_rules": 6,
-   "canonical_identity": 49,
-   "generator_identity": 2012
+   "variants": 599,
+   "with_target": 599,
+   "orig_ok": 590,
+   "failing": 9,
+   "failing_aligned": 1,
+   "aligned": 207,
+   "identity_only": 384,
+   "no_alignment": 8,
+   "no_verified_ref": 8,
+   "rejected_by_rules": 0,
+   "canonical_identity": 61,
+   "generator_identity": 2467
   },
   "ui.avatar": {
-   "variants": 500,
-   "with_target": 500,
-   "orig_ok": 217,
-   "failing": 283,
-   "failing_aligned": 105,
-   "aligned": 245,
-   "identity_only": 77,
-   "no_alignment": 178,
-   "no_verified_ref": 178,
+   "variants": 598,
+   "with_target": 598,
+   "orig_ok": 429,
+   "failing": 169,
+   "failing_aligned": 44,
+   "aligned": 316,
+   "identity_only": 157,
+   "no_alignment": 125,
+   "no_verified_ref": 125,
    "rejected_by_rules": 0,
-   "canonical_identity": 49,
-   "generator_identity": 278
-  },
-  "ui.shell": {
-   "variants": 300,
-   "with_target": 300,
-   "orig_ok": 122,
-   "failing": 178,
-   "failing_aligned": 69,
-   "aligned": 162,
-   "identity_only": 29,
-   "no_alignment": 109,
-   "no_verified_ref": 106,
-   "rejected_by_rules": 3,
-   "canonical_identity": 28,
-   "generator_identity": 1611
-  },
-  "docs.reader": {
-   "variants": 150,
-   "with_target": 150,
-   "orig_ok": 43,
-   "failing": 107,
-   "failing_aligned": 28,
-   "aligned": 55,
-   "identity_only": 16,
-   "no_alignment": 79,
-   "no_verified_ref": 79,
-   "rejected_by_rules": 0,
-   "canonical_identity": 15,
-   "generator_identity": 2103
+   "canonical_identity": 61,
+   "generator_identity": 1980
   },
   "ui.help": {
-   "variants": 100,
-   "with_target": 100,
-   "orig_ok": 20,
-   "failing": 80,
-   "failing_aligned": 21,
-   "aligned": 32,
-   "identity_only": 9,
-   "no_alignment": 59,
-   "no_verified_ref": 59,
+   "variants": 220,
+   "with_target": 220,
+   "orig_ok": 195,
+   "failing": 25,
+   "failing_aligned": 4,
+   "aligned": 116,
+   "identity_only": 83,
+   "no_alignment": 21,
+   "no_verified_ref": 21,
    "rejected_by_rules": 0,
-   "canonical_identity": 9,
-   "generator_identity": 912
+   "canonical_identity": 19,
+   "generator_identity": 1260
+  },
+  "ui.shell": {
+   "variants": 412,
+   "with_target": 412,
+   "orig_ok": 275,
+   "failing": 137,
+   "failing_aligned": 19,
+   "aligned": 225,
+   "identity_only": 69,
+   "no_alignment": 118,
+   "no_verified_ref": 116,
+   "rejected_by_rules": 2,
+   "canonical_identity": 37,
+   "generator_identity": 1585
   }
  },
  "totals": {
-  "variants": 7140,
-  "with_target": 7140,
-  "orig_ok": 3647,
-  "failing": 3493,
-  "failing_aligned": 1114,
-  "aligned": 3420,
-  "identity_only": 1341,
-  "no_alignment": 2379,
-  "no_verified_ref": 2357,
-  "rejected_by_rules": 22,
-  "canonical_identity": 690,
-  "generator_identity": 33461
+  "variants": 9302,
+  "with_target": 9302,
+  "orig_ok": 8017,
+  "failing": 1285,
+  "failing_aligned": 253,
+  "aligned": 4952,
+  "identity_only": 3318,
+  "no_alignment": 1032,
+  "no_verified_ref": 1029,
+  "rejected_by_rules": 3,
+  "canonical_identity": 925,
+  "generator_identity": 39478
  },
  "top_tags": [
   [
    "A:.",
-   361
+   485
   ],
   [
    "A:?",
-   316
-  ],
-  [
-   "R:the",
-   195
-  ],
-  [
-   "R:is",
-   155
-  ],
-  [
-   "R:what",
-   121
+   438
   ],
   [
    "A:pls",
-   112
-  ],
-  [
-   "A:the",
-   112
-  ],
-  [
-   "R:a",
-   98
-  ],
-  [
-   "R:to",
-   94
+   261
   ],
   [
    "R:pls",
-   93
+   253
+  ],
+  [
+   "R:the",
+   237
+  ],
+  [
+   "R:is",
+   213
+  ],
+  [
+   "R:what",
+   157
   ],
   [
    "R:i",
-   78
+   146
   ],
   [
-   "A:a",
-   74
-  ],
-  [
-   "R:do",
-   69
-  ],
-  [
-   "R:my",
-   69
-  ],
-  [
-   "R:how",
-   66
-  ],
-  [
-   "R:make",
-   66
-  ],
-  [
-   "R:me",
-   63
+   "R:to",
+   124
   ],
   [
    "R:can",
-   60
+   118
   ],
   [
-   "R:it",
-   60
+   "R:a",
+   116
   ],
   [
-   "R:you",
-   58
-  ],
-  [
-   "R:are",
-   56
-  ],
-  [
-   "A:please",
-   53
-  ],
-  [
-   "R:in",
-   53
-  ],
-  [
-   "R:which",
-   51
+   "A:the",
+   111
   ],
   [
    "R:please",
-   48
+   110
   ],
   [
-   "R:does",
-   46
+   "A:please",
+   108
   ],
   [
-   "R:show",
-   45
+   "R:me",
+   108
   ],
   [
-   "R:of",
-   44
-  ],
-  [
-   "R:have",
-   42
-  ],
-  [
-   "A:is",
-   41
-  ],
-  [
-   "R:what is",
-   40
-  ],
-  [
-   "A:,",
-   38
-  ],
-  [
-   "R:for",
-   38
-  ],
-  [
-   "R:play",
-   38
-  ],
-  [
-   "R:many",
-   37
-  ],
-  [
-   "A:to",
-   36
-  ],
-  [
-   "R:go",
-   36
+   "R:how",
+   99
   ],
   [
    "R:u",
-   35
+   95
   ],
   [
-   "P:is",
-   34
+   "A:,",
+   90
   ],
   [
-   "A:have",
-   29
+   "R:do",
+   90
   ],
   [
-   "R:on",
-   29
+   "R:are",
+   88
   ],
   [
-   "R:what's",
-   29
+   "R:you",
+   88
   ],
   [
-   "A:are",
-   27
+   "A:a",
+   82
   ],
   [
-   "A:my",
-   27
+   "R:it",
+   82
   ],
   [
-   "R:from",
-   27
+   "R:my",
+   79
   ],
   [
-   "R:add",
-   26
+   "R:which",
+   78
   ],
   [
-   "P:how many",
-   25
-  ],
-  [
-   "P:what",
-   25
-  ],
-  [
-   "R:give",
-   25
-  ],
-  [
-   "A:in",
-   23
-  ],
-  [
-   "R:list",
-   23
+   "R:of",
+   77
   ],
   [
    "R:whats",
-   23
+   77
   ],
   [
-   "R:your",
-   23
+   "R:make",
+   76
   ],
   [
-   "A:do",
-   22
+   "R:in",
+   75
   ],
   [
-   "A:does",
-   22
+   "R:have",
+   70
   ],
   [
-   "A:right",
-   22
+   "R:on",
+   63
   ],
   [
-   "R:remove",
-   22
+   "A:is",
+   62
   ],
   [
-   "R:change",
-   21
+   "R:for",
+   58
+  ],
+  [
+   "R:does",
+   57
+  ],
+  [
+   "R:many",
+   56
+  ],
+  [
+   "R:show",
+   56
+  ],
+  [
+   "A:to",
+   50
+  ],
+  [
+   "R:go",
+   48
+  ],
+  [
+   "P:is",
+   46
+  ],
+  [
+   "R:what's",
+   44
+  ],
+  [
+   "R:play",
+   42
+  ],
+  [
+   "R:give",
+   41
+  ],
+  [
+   "R:could",
+   38
   ],
   [
    "R:now",
-   21
+   38
+  ],
+  [
+   "A:have",
+   37
+  ],
+  [
+   "R:tell",
+   37
+  ],
+  [
+   "R:got",
+   36
   ],
   [
    "P:can u",
-   20
+   35
+  ],
+  [
+   "R:count",
+   35
+  ],
+  [
+   "R:from",
+   35
+  ],
+  [
+   "R:your",
+   35
+  ],
+  [
+   "A:are",
+   34
+  ],
+  [
+   "A:=",
+   33
+  ],
+  [
+   "A:in",
+   33
+  ],
+  [
+   "A:now",
+   33
+  ],
+  [
+   "R:change",
+   33
+  ],
+  [
+   "A:right",
+   32
+  ],
+  [
+   "R:has",
+   32
+  ],
+  [
+   "R:what is",
+   32
+  ],
+  [
+   "R:2",
+   30
   ]
  ]
 }
