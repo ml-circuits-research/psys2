@@ -668,3 +668,11 @@
     input="Who are you?"
     expect="I am Ziggy"
     session=i
+
+@t.ui.avatar.charchange1 core.test
+    input="Change avatar to be a human"
+    expect="Now I am a person"
+
+@t.ui.avatar.charchange2 core.test
+    input="I want an emoji avatar"
+    expect="Now I am an emoji"

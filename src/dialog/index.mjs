@@ -230,7 +230,9 @@ export class DialogSession {
     const answerWires = [];
     for (const seg of segments) {
       if (seg.unparsed) {
-        let ex = examplesFor(set, seg.worlds.map((w) => w.id));
+        // examples from the world of the open tab first: the router's word-overlap guess can point anywhere
+        const routed = seg.worlds.map((w) => w.id), here = Object.entries(this.focus()).find(([, n]) => n >= 3)?.[0];
+        let ex = examplesFor(set, here ? [here, ...routed.filter((w) => w !== here)] : routed);
         // the user's own words are quoted verbatim and never back-translated
         const quoted = lang === 'en' ? seg.text : originalSentence(text, seg, translation?.alignment);
         const line = [T('I did not understand '), { text: `"${quoted}"`, translate: false, quote: true }, { text: '.', translate: false }];

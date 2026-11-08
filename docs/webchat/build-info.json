@@ -29,7 +29,7 @@
     "music.mjs"
   ],
   "files": {
-    "lib/dialog/index.mjs": "adba2f69b9a05da4",
+    "lib/dialog/index.mjs": "a135c6e01a60f83d",
     "lib/dialog/test-runner.mjs": "3338d6d08f4f428f",
     "lib/formalizer/index.mjs": "e440aae44ed286c7",
     "lib/formalizer/rules/emit.mjs": "005ccd4894820cdc",
@@ -79,7 +79,7 @@
     "worlds/games.tictactoe/ops.mjs": "ce4b6949663f3c83",
     "worlds/geo.map/datagen.mjs": "be4ffa57e489d335",
     "worlds/geo.map/ops.mjs": "c4b7c109ce8d551e",
-    "worlds/index.json": "27aa98b9ba9b9ce1",
+    "worlds/index.json": "5c18bdec728132f7",
     "worlds/kids.animals/datagen.mjs": "918ec63d25d818eb",
     "worlds/kids.animals/ops.mjs": "644e845de473918a",
     "worlds/kids.arith/datagen.mjs": "3dafe0423306c210",
@@ -103,5 +103,5 @@
     "worlds/ui.shell/datagen.mjs": "e524ed406847141c",
     "worlds/ui.shell/ops.mjs": "4c71ea06b11a2172"
   },
-  "builtAt": "2026-11-08T01:27:42.913Z"
+  "builtAt": "2026-11-08T07:22:33.359Z"
 }
