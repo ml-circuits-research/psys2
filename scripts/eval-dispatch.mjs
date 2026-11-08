@@ -24,6 +24,7 @@
  * records). A negative record is correct when the result is `not_understood`. Records without a target (routing-only rows) are not scored end to end.
  * Segmentation match: same number of pieces and every piece overlaps its gold segment with character IoU >= --seg-iou (default 0.6).
  *
+ * Normalizer (N1, spec 03 section 7.11): `--normalizer-record <requests.jsonl>` collects the pieces no candidate validates (run once, results discarded), `python -m psys2_train.normalizer predict` rewrites them, `--normalizer <outputs.jsonl> --name <n>-norm` reruns every mode with the rewrites as extra candidates (compare with the run without).
  * Usage: node scripts/eval-dispatch.mjs [--pred <file>]... [--name <n>] [--jobs N] [--policy '<json>'] [--seg-iou 0.6] [--limit N] [--no-write]
  * Writes training/results/dispatch-<name>.json and training/runs/dispatch-<name>-traces.jsonl (per-record traces).
  */
@@ -31,7 +32,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from 
 import { resolve, dirname, join, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { cpus } from 'node:os';
-import { Worker, isMainThread, parentPort } from 'node:worker_threads';
+import { Worker, isMainThread, parentPort, workerData } from 'node:worker_threads';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { createDispatchValidator, normalizePrediction } from '../src/dialog/dispatch-validate.mjs';
@@ -90,6 +91,7 @@ const worldOk = (gseg, w) => w === gseg.world || (gseg.alt_worlds ?? []).include
 function evalRecord(env, pred, gold, o) {
   const { validator, legends } = env;
   validator.clearCache();
+  env.reqs.length = 0;
   const np = normalizePrediction(pred);
   const gsegs = gold.segments;
   const pos = !gold.negative;
@@ -180,14 +182,22 @@ function evalRecord(env, pred, gold, o) {
       rules_only: { ok: ok.R, cat: cat.R, worlds: rules.worlds, sop: rules.sop }, dispatcher_top1: beam[0]?.segments.map((p) => ({ text: p.text, worlds: p.worlds.slice(0, 3).map((w) => w.world) })) ?? [],
       not_understood: lead.notUnderstood, trace: lead.trace,
     };
-    return { row, trace };
+    return { row, trace, reqs: [...env.reqs] };
   });
 }
 
 if (!isMainThread) {
   const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
-  const validator = createDispatchValidator({ engine });
-  const env = { validator, legends: engine.set.legends, engine };
+  // optional seq2seq normalizer (N1, spec 03 section 7.11): precomputed outputs (--normalizer <jsonl from psys2_train.normalizer predict>), or a recording pass (--normalizer-record) that collects the requests
+  const nz = workerData?.normalizer;
+  const reqs = [];
+  let provider = null;
+  if (nz?.file) {
+    const table = new Map(readFileSync(nz.file, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l)).map((p) => [JSON.stringify([p.world, p.tab ?? null, p.text]), p.outputs.map((t, i) => ({ text: t, score: p.scores?.[i] ?? null }))]));
+    provider = async ({ world, tab, text, beam }) => (table.get(JSON.stringify([world, tab ?? null, text])) ?? []).slice(0, beam);
+  } else if (nz?.record) provider = async ({ world, tab, text }) => { reqs.push({ world, tab: tab ?? null, text }); return []; };
+  const validator = createDispatchValidator({ engine, normalizer: provider });
+  const env = { validator, legends: engine.set.legends, engine, reqs };
   parentPort.on('message', async (t) => {
     try {
       const results = [];
@@ -202,7 +212,7 @@ if (!isMainThread) {
 }
 
 // ---- main side -----------------------------------------------------------------------------------------------------
-async function runPool(tasks, jobs) {
+async function runPool(tasks, jobs, wd = {}) {
   const results = new Array(tasks.length);
   let next = 0, done = 0;
   await new Promise((res, rej) => {
@@ -210,7 +220,7 @@ async function runPool(tasks, jobs) {
     const workers = [];
     const feed = (w) => { if (next < tasks.length) { const idx = next++; w.postMessage({ ...tasks[idx], idx }); } };
     for (let i = 0; i < Math.min(jobs, tasks.length); i++) {
-      const w = new Worker(fileURLToPath(import.meta.url));
+      const w = new Worker(fileURLToPath(import.meta.url), { workerData: wd });
       workers.push(w);
       w.on('message', (m) => {
         if (m.ready) return feed(w);
@@ -313,7 +323,14 @@ async function main() {
   }
   const tasks = [];
   for (let i = 0; i < items.length; i += CHUNK) tasks.push({ items: items.slice(i, i + CHUNK), opts: { policy, segIou } });
-  const results = (await runPool(tasks, jobs)).flat();
+  const nzFile = opt('--normalizer', null), nzRecord = opt('--normalizer-record', null);
+  const results = (await runPool(tasks, jobs, { normalizer: nzFile ? { file: resolve(nzFile) } : nzRecord ? { record: true } : null })).flat();
+  if (nzRecord) {
+    const seenReq = new Set(), lines = [];
+    for (const r of results) for (const q of r.reqs ?? []) { const k = JSON.stringify([q.world, q.tab, q.text]); if (!seenReq.has(k)) { seenReq.add(k); lines.push(JSON.stringify({ id: `r${lines.length}`, ...q })); } }
+    writeFileSync(resolve(nzRecord), lines.join('\n') + '\n');
+    console.log(`recorded ${lines.length} normalizer requests -> ${nzRecord}`);
+  }
   const errors = results.filter((r) => r.error).map((r) => r.error);
   const ok = results.filter((r) => !r.error);
   const rows = ok.map((r) => r.row);
@@ -364,6 +381,7 @@ async function main() {
 
   const report = {
     task: 'D3', name, command: `node scripts/eval-dispatch.mjs ${preds.map((p) => '--pred ' + p.replace(REPO + '/', '')).join(' ')}`,
+    normalizer: nzFile ? { outputs: nzFile } : null,
     inputs: { files: preds.map((p) => p.replace(REPO + '/', '')), records: items.length, skipped_no_gold: noGold, skipped_duplicate: dup, unparsable_lines: bad, evaluation_errors: errors.length },
     policy: { ...policy, seg_iou: segIou },
     definitions: {

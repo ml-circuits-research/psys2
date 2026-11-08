@@ -11,3 +11,4 @@ training/phrase-logs/*.jsonl
 .claude/
 training/dataset-edit/*.jsonl
 training/dataset-edit/build.log
+training/dataset-normalizer/*.jsonl

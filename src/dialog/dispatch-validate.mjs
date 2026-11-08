@@ -18,6 +18,7 @@ import { formalize, FormSession } from '../formalizer/index.mjs';
 import { serialize } from '../soplang/index.mjs';
 import { spellCorrect, spellAlternates, worldVocabulary, spellVocabulary, ignorable } from '../formalizer/spell.mjs';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs';
+import { checkValues } from './value-check.mjs';
 
 /** Default policy; every weight is an option. */
 export const DEFAULT_POLICY = {
@@ -40,6 +41,13 @@ export const DEFAULT_POLICY = {
   partialPenalty: 1.5,        // log-units subtracted for any partial parse (always better than unparsedPenalty, so a full parse of any candidate wins)
   partialUncoveredPenalty: 3.0, // plus this times the fraction of the text that was not understood
   minCoverage: 0.25,          // a partial parse must understand at least this fraction of the characters
+  tryNormalizer: true,        // when a normalizer provider is injected and no candidate of the piece validates, try its rewrites (spec 03 section 7.11)
+  normalizerBeam: 3,          // rewrites asked from the provider per (world, piece)
+  normalizerPenalty: 0.3,     // log-units subtracted when the winning reading came from a normalizer rewrite
+  valueStrictness: 'strict',  // 'strict' adds opposite-word, grounded-word and kept-known-word checks to the basic value check (spec 03 section 7.11)
+  normalizerMinScore: null,   // rewrites whose provider score (length-normalized log-probability) is lower are not tried; null = no threshold
+  valueLost: 'unknown',        // which unknown source words must survive a rewrite: 'unknown' (all words the world does not know: names, junk) or 'capitalized' (only capitalized ones)
+  checkValues: true,          // a rewrite must also keep numbers, colours, negation, quoted text and the value words of the piece (src/dialog/value-check.mjs)
   intersegmentContext: true,  // pieces after the first run in a session where the earlier chosen pieces were committed
 };
 
@@ -88,10 +96,21 @@ export function normalizePrediction(pred) {
  * Create a validator bound to a dialog engine (`createEngine` result). The engine must hold all worlds the dispatcher can name.
  * Holds a cache of candidate checks (keyed by context, committed earlier pieces, world and text); `clearCache()` empties it.
  */
-export function createDispatchValidator({ engine, policy = {} } = {}) {
+export function createDispatchValidator({ engine, policy = {}, normalizer = null } = {}) {
   const base = { ...DEFAULT_POLICY, ...policy };
   const restricted = new Map();
   let cache = new Map();
+  const normCache = new Map();
+  /** Rewrites of `text` for `world` from the injected provider (`{ propose({ world, tab, text, beam }) -> string[] | Promise<string[]> }` or a bare function), cached. */
+  const proposeRewrites = async (world, tab, text, beam) => {
+    const key = JSON.stringify([world, tab, text, beam]);
+    if (!normCache.has(key)) {
+      let out = [];
+      try { out = await (typeof normalizer === 'function' ? normalizer : normalizer.propose)({ world, tab, text, beam }); } catch { out = []; }
+      normCache.set(key, (Array.isArray(out) ? out : []).map((x) => (typeof x === 'string' ? { text: x.trim(), score: null } : { text: String(x?.text ?? '').trim(), score: Number.isFinite(x?.score) ? x.score : null })).filter((x) => x.text).slice(0, beam));
+    }
+    return normCache.get(key);
+  };
 
   /** A view of the world set with only the given worlds and their imports (own memo cache; legends shared). */
   const view = (worlds) => {
@@ -217,6 +236,26 @@ export function createDispatchValidator({ engine, policy = {} } = {}) {
           attempts.push(at); refs.push([at, r, w]);
         }
       }
+      // normalizer (spec 03 section 7.11): only when nothing validates yet; the first rewrite that the rules read AND whose values are preserved wins
+      if (normalizer && o.tryNormalizer && !attempts.some((a) => a.valid)) {
+        for (const [rank, w] of worlds.entries()) {
+          const vocab = worldVocabulary(engine.set, w.world);
+          for (const { text, score: nzScore } of await proposeRewrites(w.world, pred.context.tab, piece.text, o.normalizerBeam)) {
+            if (text === piece.text.trim()) continue;
+            if (o.normalizerMinScore != null && nzScore != null && nzScore < o.normalizerMinScore) continue;
+            const vc = o.checkValues ? checkValues(piece.text, text, { vocab, lost: o.valueLost, ...(o.valueStrictness === 'strict' ? { polarity: true, grounded: true, keepKnown: true } : {}) }) : { ok: true };
+            if (!vc.ok) {
+              attempts.push({ world: w.world, rank: rank + 1, worldScore: w.score, variant: 'normalized', text, valid: false, refused: false, reason: `value check: ${vc.reason}`, unparsed: 0, matchedWorlds: [], statuses: [], score: o.worldWeight * logpOf(w) - o.unparsedPenalty, wires: [], corrections: [], partial: null });
+              continue;
+            }
+            const r = await check(pred.context, ctxPrefix, w.world, text, o);
+            const score = o.worldWeight * logpOf(w) - o.normalizerPenalty - (r.valid ? 0 : r.refused && o.acceptRefused ? o.interpreterPenalty : o.unparsedPenalty);
+            const at = { world: w.world, rank: rank + 1, worldScore: w.score, variant: 'normalized', text, valid: accepts(r), refused: r.refused, reason: r.reason, unparsed: r.unparsed, matchedWorlds: r.matchedWorlds, statuses: r.statuses, score, wires: r.wires, corrections: [], partial: null };
+            attempts.push(at);
+            if (at.valid) break;
+          }
+        }
+      }
       // second chance: one known word changed to a close neighbour ("yes" -> "eyes"); only when nothing parses yet, kept only if the rules parse it
       if (o.trySpell && !attempts.some((a) => a.valid)) {
         for (const [rank, w] of worlds.entries()) {
@@ -234,7 +273,7 @@ export function createDispatchValidator({ engine, policy = {} } = {}) {
       if (o.acceptPartial && !attempts.some((a) => a.valid)) {
         const partialScore = (w, corr, coverage) => o.worldWeight * logpOf(w) - o.spellPenalty * corr.length - o.partialPenalty - o.partialUncoveredPenalty * (1 - coverage);
         for (const [at, r, w] of refs) {
-          if (at.variant === "simplified" || !r.parsed || !r.unparsed || r.coverage < o.minCoverage || (r.partialRefused && !o.acceptRefused)) continue;
+          if (at.variant === 'simplified' || at.variant === 'normalized' || !r.parsed || !r.unparsed || r.coverage < o.minCoverage || (r.partialRefused && !o.acceptRefused)) continue;
           attempts.push({ ...at, variant: 'partial', baseVariant: at.variant, valid: true, reason: `partial: ${Math.round(r.coverage * 100)}% understood`, score: partialScore(w, at.corrections, r.coverage), partial: { ignored: r.ignored, coverage: r.coverage, window: false } });
         }
         if (!attempts.some((a) => a.valid)) {
@@ -302,6 +341,7 @@ export function createDispatchValidator({ engine, policy = {} } = {}) {
       for (const p of winner.pieces) {
         const c = p.chosen;
         if (c.rank > 1) parts.push(`piece "${clip(p.text, 40)}": candidate world ${c.rank} (${c.world}) recovered after ${p.attempts.filter((a) => a.rank < c.rank && !a.valid).map((a) => a.world).filter((x, i, arr) => arr.indexOf(x) === i).join(', ')} failed`);
+        if (c.variant === 'normalized') parts.push(`piece "${clip(p.text, 40)}": read as the normalizer's rewrite "${clip(c.text, 60)}"`);
         if (c.variant === 'simplified') parts.push(`piece "${clip(p.text, 40)}": only the simplified text validates`);
         if (c.corrections?.length) parts.push(`piece "${clip(p.text, 40)}": read after correcting ${c.corrections.map((x) => `"${x.from}" to "${x.to}"`).join(', ')}`);
         if (c.partial) parts.push(`piece "${clip(p.text, 40)}": partial understanding (${Math.round(c.partial.coverage * 100)}%), ignored ${c.partial.ignored.map((x) => `"${clip(x.text, 30)}"`).join(', ')}`);
@@ -333,8 +373,8 @@ export function createDispatchValidator({ engine, policy = {} } = {}) {
 }
 
 /** One-shot helper: `validateDispatch({ prediction, engine, policy })`. */
-export function validateDispatch({ prediction, engine, policy = {} }) {
-  return createDispatchValidator({ engine, policy }).validate(prediction);
+export function validateDispatch({ prediction, engine, policy = {}, normalizer = null }) {
+  return createDispatchValidator({ engine, policy, normalizer }).validate(prediction);
 }
 
 export { FormSession };

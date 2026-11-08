@@ -1,0 +1,36 @@
+{
+ "generated_by": "node scripts/build-normalizer-pairs.mjs --fresh-dir /tmp/claude-1000/-home-salboaie-work-psys2/57c88231-38dc-4b27-a5d0-162542cee3e0/scratchpad/h5out/out",
+ "pairs": {
+  "train/variant": 1684,
+  "train/variant-shorter": 1651,
+  "train/variant-identity": 351,
+  "dev/variant": 266,
+  "dev/variant-canonical": 535,
+  "dev/variant-identity": 63,
+  "train/variant-canonical": 2926,
+  "dev/variant-shorter": 335,
+  "train/canonical": 292,
+  "dev/canonical-shorter": 13,
+  "dev/canonical": 54,
+  "train/canonical-shorter": 85,
+  "train/rule-derived": 1464,
+  "dev/rule-derived": 203,
+  "dev/generator": 1294,
+  "dev/generator-shorter": 1987,
+  "train/rule-derived-shorter": 858,
+  "train/generator": 10701,
+  "train/generator-shorter": 12768,
+  "dev/rule-derived-shorter": 92,
+  "train/example": 480,
+  "train/example-shorter": 2321,
+  "train/synthetic": 150000
+ },
+ "totals": {
+  "train": 185581,
+  "dev": 4842
+ },
+ "pattern_examples": 2967,
+ "clean_sentences": 33076,
+ "equivalence_classes": 14525,
+ "fresh_eval_records": 2460
+}
