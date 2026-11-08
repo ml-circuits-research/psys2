@@ -41,7 +41,20 @@ export class World {
   /** Plain summary for listings. */
   summary() {
     return { id: this.id, title: this.title, summary: this.summaryPhrase, status: this.status, version: this.version, doc: this.doc,
-      language: this.language, imports: this.imports, formalization: txt(this.manifest ?? { entries: [] }, 'formalization') ?? 'rules' };
+      language: this.language, imports: this.imports, formalization: txt(this.manifest ?? { entries: [] }, 'formalization') ?? 'rules', tab: this.tab };
+  }
+  /**
+   * Tab declared by a tool world in its manifest (spec 07 §6): tab, tabTitle, tabAlias (repeatable), tabOrder,
+   * tabKind (tool|game), tabNew, tabHint, tabGiveUp (action names). null when the world has no tab.
+   */
+  get tab() {
+    const m = this.manifest ?? { entries: [] };
+    const id = txt(m, 'tab');
+    if (!id) return null;
+    const all = (k) => m.entries.filter((e) => e.key === k || e.key.endsWith('.' + k)).map((e) => String(e.value.v));
+    return { id, title: txt(m, 'tabTitle') ?? this.title, aliases: all('tabAlias').map((a) => a.replace(/_/g, ' ')),
+      order: Number(txt(m, 'tabOrder') ?? 100), kind: txt(m, 'tabKind') ?? 'tool',
+      new: txt(m, 'tabNew') ?? null, hint: txt(m, 'tabHint') ?? null, giveUp: txt(m, 'tabGiveUp') ?? null };
   }
 }
 

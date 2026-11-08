@@ -1,0 +1,474 @@
+@tpl.games.chess.move core.template
+    for=action.chess.move
+    text="{value}"
+
+@tpl.games.chess.move.unsupported core.template
+    for=action.chess.move
+    status=unsupported
+    text="{note}"
+
+@tpl.games.chess.move.missing core.template
+    for=action.chess.move
+    status=missing
+    text="{note}"
+
+@tpl.games.chess.move.ambiguous core.template
+    for=action.chess.move
+    status=ambiguous
+    text="{note}"
+
+@tpl.games.chess.can core.template
+    for=action.chess.can
+    text="{value}"
+
+@tpl.games.chess.can.unsupported core.template
+    for=action.chess.can
+    status=unsupported
+    text="{note}"
+
+@tpl.games.chess.can.missing core.template
+    for=action.chess.can
+    status=missing
+    text="{note}"
+
+@tpl.games.chess.can.ambiguous core.template
+    for=action.chess.can
+    status=ambiguous
+    text="{note}"
+
+@tpl.games.chess.pick core.template
+    for=action.chess.pick
+    text="{value}"
+
+@tpl.games.chess.pick.unsupported core.template
+    for=action.chess.pick
+    status=unsupported
+    text="{note}"
+
+@tpl.games.chess.pick.missing core.template
+    for=action.chess.pick
+    status=missing
+    text="{note}"
+
+@tpl.games.chess.pick.ambiguous core.template
+    for=action.chess.pick
+    status=ambiguous
+    text="{note}"
+
+@tpl.games.chess.promote core.template
+    for=action.chess.promote
+    text="{value}"
+
+@tpl.games.chess.promote.unsupported core.template
+    for=action.chess.promote
+    status=unsupported
+    text="{note}"
+
+@tpl.games.chess.promote.missing core.template
+    for=action.chess.promote
+    status=missing
+    text="{note}"
+
+@tpl.games.chess.promote.ambiguous core.template
+    for=action.chess.promote
+    status=ambiguous
+    text="{note}"
+
+@tpl.games.chess.moves core.template
+    for=action.chess.moves
+    text="{value}"
+
+@tpl.games.chess.moves.unsupported core.template
+    for=action.chess.moves
+    status=unsupported
+    text="{note}"
+
+@tpl.games.chess.moves.missing core.template
+    for=action.chess.moves
+    status=missing
+    text="{note}"
+
+@tpl.games.chess.moves.ambiguous core.template
+    for=action.chess.moves
+    status=ambiguous
+    text="{note}"
+
+@tpl.games.chess.hint core.template
+    for=action.chess.hint
+    text="{value}"
+
+@tpl.games.chess.hint.unsupported core.template
+    for=action.chess.hint
+    status=unsupported
+    text="{note}"
+
+@tpl.games.chess.hint.missing core.template
+    for=action.chess.hint
+    status=missing
+    text="{note}"
+
+@tpl.games.chess.hint.ambiguous core.template
+    for=action.chess.hint
+    status=ambiguous
+    text="{note}"
+
+@tpl.games.chess.status core.template
+    for=action.chess.status
+    text="{value}"
+
+@tpl.games.chess.status.unsupported core.template
+    for=action.chess.status
+    status=unsupported
+    text="{note}"
+
+@tpl.games.chess.status.missing core.template
+    for=action.chess.status
+    status=missing
+    text="{note}"
+
+@tpl.games.chess.status.ambiguous core.template
+    for=action.chess.status
+    status=ambiguous
+    text="{note}"
+
+@tpl.games.chess.check core.template
+    for=action.chess.check
+    text="{value}"
+
+@tpl.games.chess.check.unsupported core.template
+    for=action.chess.check
+    status=unsupported
+    text="{note}"
+
+@tpl.games.chess.check.missing core.template
+    for=action.chess.check
+    status=missing
+    text="{note}"
+
+@tpl.games.chess.check.ambiguous core.template
+    for=action.chess.check
+    status=ambiguous
+    text="{note}"
+
+@tpl.games.chess.last core.template
+    for=action.chess.last
+    text="{value}"
+
+@tpl.games.chess.last.unsupported core.template
+    for=action.chess.last
+    status=unsupported
+    text="{note}"
+
+@tpl.games.chess.last.missing core.template
+    for=action.chess.last
+    status=missing
+    text="{note}"
+
+@tpl.games.chess.last.ambiguous core.template
+    for=action.chess.last
+    status=ambiguous
+    text="{note}"
+
+@tpl.games.chess.describe core.template
+    for=action.chess.describe
+    text="{value}"
+
+@tpl.games.chess.describe.unsupported core.template
+    for=action.chess.describe
+    status=unsupported
+    text="{note}"
+
+@tpl.games.chess.describe.missing core.template
+    for=action.chess.describe
+    status=missing
+    text="{note}"
+
+@tpl.games.chess.describe.ambiguous core.template
+    for=action.chess.describe
+    status=ambiguous
+    text="{note}"
+
+@tpl.games.chess.where core.template
+    for=action.chess.where
+    text="{value}"
+
+@tpl.games.chess.where.unsupported core.template
+    for=action.chess.where
+    status=unsupported
+    text="{note}"
+
+@tpl.games.chess.where.missing core.template
+    for=action.chess.where
+    status=missing
+    text="{note}"
+
+@tpl.games.chess.where.ambiguous core.template
+    for=action.chess.where
+    status=ambiguous
+    text="{note}"
+
+@tpl.games.chess.count core.template
+    for=action.chess.count
+    text="{value}"
+
+@tpl.games.chess.count.unsupported core.template
+    for=action.chess.count
+    status=unsupported
+    text="{note}"
+
+@tpl.games.chess.count.missing core.template
+    for=action.chess.count
+    status=missing
+    text="{note}"
+
+@tpl.games.chess.count.ambiguous core.template
+    for=action.chess.count
+    status=ambiguous
+    text="{note}"
+
+@tpl.games.chess.lost core.template
+    for=action.chess.lost
+    text="{value}"
+
+@tpl.games.chess.lost.unsupported core.template
+    for=action.chess.lost
+    status=unsupported
+    text="{note}"
+
+@tpl.games.chess.lost.missing core.template
+    for=action.chess.lost
+    status=missing
+    text="{note}"
+
+@tpl.games.chess.lost.ambiguous core.template
+    for=action.chess.lost
+    status=ambiguous
+    text="{note}"
+
+@tpl.games.chess.turn core.template
+    for=action.chess.turn
+    text="{value}"
+
+@tpl.games.chess.turn.unsupported core.template
+    for=action.chess.turn
+    status=unsupported
+    text="{note}"
+
+@tpl.games.chess.turn.missing core.template
+    for=action.chess.turn
+    status=missing
+    text="{note}"
+
+@tpl.games.chess.turn.ambiguous core.template
+    for=action.chess.turn
+    status=ambiguous
+    text="{note}"
+
+@tpl.games.chess.history core.template
+    for=action.chess.history
+    text="{value}"
+
+@tpl.games.chess.history.unsupported core.template
+    for=action.chess.history
+    status=unsupported
+    text="{note}"
+
+@tpl.games.chess.history.missing core.template
+    for=action.chess.history
+    status=missing
+    text="{note}"
+
+@tpl.games.chess.history.ambiguous core.template
+    for=action.chess.history
+    status=ambiguous
+    text="{note}"
+
+@tpl.games.chess.level core.template
+    for=action.chess.level
+    text="{value}"
+
+@tpl.games.chess.level.unsupported core.template
+    for=action.chess.level
+    status=unsupported
+    text="{note}"
+
+@tpl.games.chess.level.missing core.template
+    for=action.chess.level
+    status=missing
+    text="{note}"
+
+@tpl.games.chess.level.ambiguous core.template
+    for=action.chess.level
+    status=ambiguous
+    text="{note}"
+
+@tpl.games.chess.fen core.template
+    for=action.chess.fen
+    text="{value}"
+
+@tpl.games.chess.fen.unsupported core.template
+    for=action.chess.fen
+    status=unsupported
+    text="{note}"
+
+@tpl.games.chess.fen.missing core.template
+    for=action.chess.fen
+    status=missing
+    text="{note}"
+
+@tpl.games.chess.fen.ambiguous core.template
+    for=action.chess.fen
+    status=ambiguous
+    text="{note}"
+
+@tpl.games.chess.square core.template
+    for=action.chess.square
+    text="{value}"
+
+@tpl.games.chess.square.unsupported core.template
+    for=action.chess.square
+    status=unsupported
+    text="{note}"
+
+@tpl.games.chess.square.missing core.template
+    for=action.chess.square
+    status=missing
+    text="{note}"
+
+@tpl.games.chess.square.ambiguous core.template
+    for=action.chess.square
+    status=ambiguous
+    text="{note}"
+
+@tpl.games.chess.engineMove core.template
+    for=action.chess.engineMove
+    text="{value}"
+
+@tpl.games.chess.engineMove.unsupported core.template
+    for=action.chess.engineMove
+    status=unsupported
+    text="{note}"
+
+@tpl.games.chess.engineMove.missing core.template
+    for=action.chess.engineMove
+    status=missing
+    text="{note}"
+
+@tpl.games.chess.engineMove.ambiguous core.template
+    for=action.chess.engineMove
+    status=ambiguous
+    text="{note}"
+
+@tpl.games.chess.new core.template
+    for=action.chess.new
+    text="{value}"
+
+@tpl.games.chess.new.unsupported core.template
+    for=action.chess.new
+    status=unsupported
+    text="{note}"
+
+@tpl.games.chess.new.missing core.template
+    for=action.chess.new
+    status=missing
+    text="{note}"
+
+@tpl.games.chess.new.ambiguous core.template
+    for=action.chess.new
+    status=ambiguous
+    text="{note}"
+
+@tpl.games.chess.side core.template
+    for=action.chess.side
+    text="{value}"
+
+@tpl.games.chess.side.unsupported core.template
+    for=action.chess.side
+    status=unsupported
+    text="{note}"
+
+@tpl.games.chess.side.missing core.template
+    for=action.chess.side
+    status=missing
+    text="{note}"
+
+@tpl.games.chess.side.ambiguous core.template
+    for=action.chess.side
+    status=ambiguous
+    text="{note}"
+
+@tpl.games.chess.flip core.template
+    for=action.chess.flip
+    text="{value}"
+
+@tpl.games.chess.flip.unsupported core.template
+    for=action.chess.flip
+    status=unsupported
+    text="{note}"
+
+@tpl.games.chess.flip.missing core.template
+    for=action.chess.flip
+    status=missing
+    text="{note}"
+
+@tpl.games.chess.flip.ambiguous core.template
+    for=action.chess.flip
+    status=ambiguous
+    text="{note}"
+
+@tpl.games.chess.undo core.template
+    for=action.chess.undo
+    text="{value}"
+
+@tpl.games.chess.undo.unsupported core.template
+    for=action.chess.undo
+    status=unsupported
+    text="{note}"
+
+@tpl.games.chess.undo.missing core.template
+    for=action.chess.undo
+    status=missing
+    text="{note}"
+
+@tpl.games.chess.undo.ambiguous core.template
+    for=action.chess.undo
+    status=ambiguous
+    text="{note}"
+
+@tpl.games.chess.resign core.template
+    for=action.chess.resign
+    text="{value}"
+
+@tpl.games.chess.resign.unsupported core.template
+    for=action.chess.resign
+    status=unsupported
+    text="{note}"
+
+@tpl.games.chess.resign.missing core.template
+    for=action.chess.resign
+    status=missing
+    text="{note}"
+
+@tpl.games.chess.resign.ambiguous core.template
+    for=action.chess.resign
+    status=ambiguous
+    text="{note}"
+
+@tpl.games.chess.draw core.template
+    for=action.chess.draw
+    text="{value}"
+
+@tpl.games.chess.draw.unsupported core.template
+    for=action.chess.draw
+    status=unsupported
+    text="{note}"
+
+@tpl.games.chess.draw.missing core.template
+    for=action.chess.draw
+    status=missing
+    text="{note}"
+
+@tpl.games.chess.draw.ambiguous core.template
+    for=action.chess.draw
+    status=ambiguous
+    text="{note}"

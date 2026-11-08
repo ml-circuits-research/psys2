@@ -1,0 +1,1118 @@
+@pat.games.chess.move.piece core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [move|play|go|put|push|advance|bring|shift|slide|jump|send|run|place|develop|retreat|plays|moves|goes]? [the|my|our|that|this|a|an|your]? [white|black]? {p:lex.games.chess.pieces} [to|2|too|on|at|onto|into|towards|over_to|up_to|down_to|forward_to|back_to|goes_to|go_to|moves_to|move_to|should_go_to|for|in]? [square]? {tf:lex.games.chess.files} {tr:number} [and|then|and_then]? [promote|promoting|promotes|promoted|queening|underpromote|underpromoting|upgrade|upgrading|becomes|becoming|become|equals|promote_to|promoting_to]? [to|into|as|equals|a|becoming]? [a|an|the]? {pr:lex.games.chess.promos?} [now|there|here|next|then|again|as_well|for_me|first]?"
+    emit="@{_} core.request action=chess.move arg.piece={p} arg.tf={tf} arg.tr={tr} arg.promo={pr}"
+    kind=request
+    priority=13
+    example="Knight to f3."
+    example="Move my knight to f3."
+    example="Pawn to e4."
+    example="Knight f3."
+    example="I want to play the queen to d5."
+    example="Move the pawn to e8 and promote to a queen."
+    example="Pawn to e eight."
+
+@pat.games.chess.move.bare core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [move|go|put|push|advance|bring|shift|slide|jump|send|run|place|develop|retreat|moves|goes]? [to|2|too|on|at|onto|into|towards|over_to|up_to|down_to|forward_to|back_to|goes_to|go_to|moves_to|move_to|should_go_to|for|in]? [square]? {tf:lex.games.chess.files} {tr:number} [and|then|and_then]? [promote|promoting|promotes|promoted|queening|underpromote|underpromoting|upgrade|upgrading|becomes|becoming|become|equals|promote_to|promoting_to]? [to|into|as|equals|a|becoming]? [a|an|the]? {pr:lex.games.chess.promos?} [now|there|here|next|then|again|as_well|for_me|first]?"
+    emit="@{_} core.request action=chess.move arg.tf={tf} arg.tr={tr} arg.promo={pr}"
+    kind=request
+    priority=13
+    example="e4."
+    example="Move to d5."
+    example="e 8 equals queen."
+
+@pat.games.chess.move.bare.play core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [play|plays] [to|2|too|on|at|onto|into|towards|over_to|up_to|down_to|forward_to|back_to|goes_to|go_to|moves_to|move_to|should_go_to|for|in]? [square]? {tf:lex.games.chess.files_dh} {tr:number} [and|then|and_then]? [promote|promoting|promotes|promoted|queening|underpromote|underpromoting|upgrade|upgrading|becomes|becoming|become|equals|promote_to|promoting_to]? [to|into|as|equals|a|becoming]? [a|an|the]? {pr:lex.games.chess.promos?} [now|there|here|next|then|again|as_well|for_me|first]?"
+    emit="@{_} core.request action=chess.move arg.tf={tf} arg.tr={tr} arg.promo={pr}"
+    kind=request
+    priority=13
+    example="Play e4."
+    example="Let me play echo four."
+
+@pat.games.chess.move.bare.play.low core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [play|plays] [to|2|too|on|at|onto|into|towards|over_to|up_to|down_to|forward_to|back_to|goes_to|go_to|moves_to|move_to|should_go_to|for|in]? [square]? {tf:lex.games.chess.files} {tr:number} [and|then|and_then]? [promote|promoting|promotes|promoted|queening|underpromote|underpromoting|upgrade|upgrading|becomes|becoming|become|equals|promote_to|promoting_to]? [to|into|as|equals|a|becoming]? [a|an|the]? {pr:lex.games.chess.promos?} [now|there|here|next|then|again|as_well|for_me|first]?"
+    emit="@{_} core.request action=chess.move arg.tf={tf} arg.tr={tr} arg.promo={pr}"
+    kind=request
+    priority=11
+    example="Play a3."
+    example="Let me play alpha three."
+
+@pat.games.chess.move.fromto core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [move|play|go|put|push|advance|bring|shift|slide|jump|send|run|place|develop|retreat|plays|moves|goes]? [the|my|our|that|this|a|an|your]? [white|black]? {p:lex.games.chess.pieces?} [from|on|at|in|standing_on|sitting_on|that_is_on|which_is_on]? [square]? {ff:lex.games.chess.files} {fr:number} [to|2|too|onto|towards|up_to|down_to|over_to|forward_to|back_to|goes_to|moves_to|move_to|go_to|then]? [square]? {tf:lex.games.chess.files} {tr:number} [and|then|and_then]? [promote|promoting|promotes|promoted|queening|underpromote|underpromoting|upgrade|upgrading|becomes|becoming|become|equals|promote_to|promoting_to]? [to|into|as|equals|a|becoming]? [a|an|the]? {pr:lex.games.chess.promos?} [now|there|here|next|then|again|as_well|for_me|first]?"
+    emit="@{_} core.request action=chess.move arg.piece={p} arg.ff={ff} arg.fr={fr} arg.tf={tf} arg.tr={tr} arg.promo={pr}"
+    kind=request
+    priority=13
+    example="e2 to e4."
+    example="e2 e4."
+    example="Move the pawn on e2 to e4."
+    example="Knight from g1 to f3."
+    example="Play e7 e8 q."
+    example="Echo two to echo four."
+
+@pat.games.chess.move.san core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [move|play|go|put|push|advance|bring|shift|slide|jump|send|run|place|develop|retreat|plays|moves|goes]? {s:lex.games.chess.san} {tr:number} [and|then|and_then]? [promote|promoting|promotes|promoted|queening|underpromote|underpromoting|upgrade|upgrading|becomes|becoming|become|equals|promote_to|promoting_to]? [to|into|as|equals|a|becoming]? [a|an|the]? {pr:lex.games.chess.promos?} [now|there|here|next|then|again|as_well|for_me|first]?"
+    emit="@{_} core.request action=chess.move arg.san=\"{s}\" arg.tr={tr} arg.promo={pr}"
+    kind=request
+    priority=13
+    example="Nf3."
+    example="Qxd5."
+    example="exd5."
+    example="Bb5."
+    example="Play Nxe5."
+
+@pat.games.chess.cap.square core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [the|my|our|that|this|a|an|your]? [white|black]? {p:lex.games.chess.pieces?} [takes|take|taking|captures|capture|capturing|eats|eat|kills|kill|beats|beat|snatches|grabs|grab|wins|x|trades_for|swaps_for|exchanges_for] [the|that|their|his|your|enemy|opposing|a|an]? [white|black]? {tp:lex.games.chess.pieces?} [on|at|in|standing_on|sitting_on|located_on|over_on|from|with_the_piece_on|the_piece_on|whatever_is_on|whatever_is_at|what_is_on|what_is_at|that_is_on|which_is_on]? [square]? {tf:lex.games.chess.files} {tr:number} [and|then|and_then]? [promote|promoting|promotes|promoted|queening|underpromote|underpromoting|upgrade|upgrading|becomes|becoming|become|equals|promote_to|promoting_to]? [to|into|as|equals|a|becoming]? [a|an|the]? {pr:lex.games.chess.promos?} [now|there|here|next|then|again|as_well|for_me|first]?"
+    emit="@{_} core.request action=chess.move arg.piece={p} arg.cap=true arg.tp={tp} arg.tf={tf} arg.tr={tr} arg.promo={pr}"
+    kind=request
+    priority=13
+    example="Bishop takes c6."
+    example="Queen captures on d5."
+    example="Take the pawn on d5."
+    example="Bishop takes the knight on c6."
+    example="I take d5."
+    example="Capture e5."
+    example="Pawn takes e5."
+
+@pat.games.chess.cap.piece core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [the|my|our|that|this|a|an|your]? [white|black]? {p:lex.games.chess.pieces} [takes|take|taking|captures|capture|capturing|eats|eat|kills|kill|beats|beat|snatches|grabs|grab|wins|x|trades_for|swaps_for|exchanges_for] [the|that|their|his|your|enemy|opposing|a|an]? [white|black]? {tp:lex.games.chess.pieces} [now|there|here|next|then|again|as_well|for_me|first]?"
+    emit="@{_} core.request action=chess.move arg.piece={p} arg.cap=true arg.tp={tp}"
+    kind=request
+    priority=13
+    example="Bishop takes knight."
+    example="Pawn takes pawn."
+    example="The queen takes the queen."
+
+@pat.games.chess.cap.with.square core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [takes|take|taking|captures|capture|capturing|eats|eat|kills|kill|beats|beat|snatches|grabs|grab|wins|x|trades_for|swaps_for|exchanges_for] [the|that|their|his|your|enemy|opposing|a|an]? [white|black]? {tp:lex.games.chess.pieces} [on|at|in|standing_on|sitting_on|located_on|over_on|from|with_the_piece_on|the_piece_on|whatever_is_on|whatever_is_at|what_is_on|what_is_at|that_is_on|which_is_on]? [square]? {tf:lex.games.chess.files} {tr:number} [with|using|by|via|through] [the|my|our|that|this|a|an|your]? [white|black]? {wp:lex.games.chess.pieces}"
+    emit="@{_} core.request action=chess.move arg.cap=true arg.tp={tp} arg.tf={tf} arg.tr={tr} arg.wp={wp}"
+    kind=request
+    priority=13
+    example="Take the knight on c6 with the pawn."
+
+@pat.games.chess.cap.with core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [takes|take|taking|captures|capture|capturing|eats|eat|kills|kill|beats|beat|snatches|grabs|grab|wins|x|trades_for|swaps_for|exchanges_for] [the|that|their|his|your|enemy|opposing|a|an]? [white|black]? {tp:lex.games.chess.pieces} [with|using|by|via|through] [the|my|our|that|this|a|an|your]? [white|black]? {wp:lex.games.chess.pieces}"
+    emit="@{_} core.request action=chess.move arg.cap=true arg.tp={tp} arg.wp={wp}"
+    kind=request
+    priority=13
+    example="Take the knight with the pawn."
+    example="Capture the bishop with my queen."
+
+@pat.games.chess.cap.square.with core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [takes|take|taking|captures|capture|capturing|eats|eat|kills|kill|beats|beat|snatches|grabs|grab|wins|x|trades_for|swaps_for|exchanges_for] [square]? {tf:lex.games.chess.files} {tr:number} [with|using|by|via|through] [the|my|our|that|this|a|an|your]? [white|black]? {wp:lex.games.chess.pieces}"
+    emit="@{_} core.request action=chess.move arg.cap=true arg.tf={tf} arg.tr={tr} arg.wp={wp}"
+    kind=request
+    priority=13
+    example="Capture d5 with the knight."
+    example="Take e5 with the pawn."
+
+@pat.games.chess.cap.bare core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [the|my|our|that|this|a|an|your]? [white|black]? {p:lex.games.chess.pieces} [takes|take|taking|captures|capture|capturing|eats|eat|kills|kill|beats|beat|snatches|grabs|grab|wins|x|trades_for|swaps_for|exchanges_for] [something|anything|a_piece|it|one]?"
+    emit="@{_} core.request action=chess.move arg.piece={p} arg.cap=true"
+    kind=request
+    priority=13
+    example="Queen takes."
+    example="My knight captures something."
+
+@pat.games.chess.castle.k core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [castle|castles|castling|do_a_castle|do_castling|castle_my_king|castle_the_king|play_castle|make_a_castle|do_the_castle] [on|to|towards|at|with|using|by|in|in_the|on_the|to_the|at_the|towards_the|with_the|using_the]? [the]? [kingside|king_side|king_'s_side|short|short_side|shortside|short_way|king_s_side] [side|way|castle|castling|rook]? [now|there|here|next|then|again|as_well|for_me|first]?"
+    emit="@{_} core.request action=chess.move arg.castle=k"
+    kind=request
+    priority=13
+    example="Castle kingside."
+    example="I castle on the king side."
+
+@pat.games.chess.castle.k.adj core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [a|the|do_a|do_the|make_a|make_the]? [kingside|king_side|king_'s_side|short|short_side|shortside|short_way|king_s_side] [castle|castling|castles] [now|there|here|next|then|again|as_well|for_me|first]?"
+    emit="@{_} core.request action=chess.move arg.castle=k"
+    kind=request
+    priority=13
+    example="Short castle."
+    example="King side castle."
+
+@pat.games.chess.castle.k.notation core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [o-o|0_-_0]"
+    emit="@{_} core.request action=chess.move arg.castle=k"
+    kind=request
+    priority=13
+    example="O-O."
+    example="0-0."
+
+@pat.games.chess.castle.q core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [castle|castles|castling|do_a_castle|do_castling|castle_my_king|castle_the_king|play_castle|make_a_castle|do_the_castle] [on|to|towards|at|with|using|by|in|in_the|on_the|to_the|at_the|towards_the|with_the|using_the]? [the]? [queenside|queen_side|queen_'s_side|long|long_side|longside|long_way|queen_s_side] [side|way|castle|castling|rook]? [now|there|here|next|then|again|as_well|for_me|first]?"
+    emit="@{_} core.request action=chess.move arg.castle=q"
+    kind=request
+    priority=13
+    example="Castle queenside."
+    example="Castle to the queen side."
+
+@pat.games.chess.castle.q.adj core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [a|the|do_a|do_the|make_a|make_the]? [queenside|queen_side|queen_'s_side|long|long_side|longside|long_way|queen_s_side] [castle|castling|castles] [now|there|here|next|then|again|as_well|for_me|first]?"
+    emit="@{_} core.request action=chess.move arg.castle=q"
+    kind=request
+    priority=13
+    example="Long castle."
+    example="Queen side castling."
+
+@pat.games.chess.castle.q.notation core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [o-o-o|0_-_0_-_0]"
+    emit="@{_} core.request action=chess.move arg.castle=q"
+    kind=request
+    priority=13
+    example="O-O-O."
+    example="0-0-0."
+
+@pat.games.chess.castle.k.reply core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [on|to|the|on_the|to_the|at_the|towards_the]? [kingside|king_side|king_'s_side|short|short_side|shortside|short_way|king_s_side] [side|way|castle|castling|please]?"
+    emit="@{_} core.request action=chess.move arg.castle=k"
+    kind=request
+    priority=13
+    example="Kingside."
+    example="On the short side."
+
+@pat.games.chess.castle.q.reply core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [on|to|the|on_the|to_the|at_the|towards_the]? [queenside|queen_side|queen_'s_side|long|long_side|longside|long_way|queen_s_side] [side|way|castle|castling|please]?"
+    emit="@{_} core.request action=chess.move arg.castle=q"
+    kind=request
+    priority=13
+    example="Queenside."
+    example="The long side."
+
+@pat.games.chess.castle.any core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [castle|castles|castling|do_a_castle|do_castling|castle_my_king|castle_the_king|play_castle|make_a_castle|do_the_castle] [now|please|here|then]?"
+    emit="@{_} core.request action=chess.move arg.castle=any"
+    kind=request
+    priority=13
+    example="Castle."
+    example="I castle."
+    example="Castle my king."
+
+@pat.games.chess.can.piece core.pattern
+    match="[can_i|could_i|may_i|can_we|am_i_allowed_to|am_i_able_to|am_i_permitted_to|is_it_possible_to|is_it_legal_to|would_it_be_legal_to|is_it_ok_to|is_it_okay_to|is_it_allowed_to|is_it_possible_for_me_to] [move|play|go|put|push|advance|bring|shift|slide|jump|send|run|place|develop|retreat|plays|moves|goes]? [the|my|our|that|this|a|an|your]? [white|black]? {p:lex.games.chess.pieces} [to|2|too|on|at|onto|into|towards|over_to|up_to|down_to|forward_to|back_to|goes_to|go_to|moves_to|move_to|should_go_to|for|in]? [square]? {tf:lex.games.chess.files} {tr:number}"
+    emit="@{_} core.request action=chess.can arg.piece={p} arg.tf={tf} arg.tr={tr}"
+    kind=request
+    priority=13
+    example="Can I move my knight to f3?"
+    example="Is it legal to play knight to f3?"
+    example="Can I play the bishop to b5?"
+
+@pat.games.chess.can.bare core.pattern
+    match="[can_i|could_i|may_i|can_we|am_i_allowed_to|am_i_able_to|am_i_permitted_to|is_it_possible_to|is_it_legal_to|would_it_be_legal_to|is_it_ok_to|is_it_okay_to|is_it_allowed_to|is_it_possible_for_me_to] [move|play|go|put|push|advance|bring|shift|slide|jump|send|run|place|develop|retreat|plays|moves|goes]? [to|2|too|on|at|onto|into|towards|over_to|up_to|down_to|forward_to|back_to|goes_to|go_to|moves_to|move_to|should_go_to|for|in]? [square]? {tf:lex.games.chess.files} {tr:number}"
+    emit="@{_} core.request action=chess.can arg.tf={tf} arg.tr={tr}"
+    kind=request
+    priority=13
+    example="Can I play e5?"
+    example="Is it legal to move to d4?"
+
+@pat.games.chess.can.fromto core.pattern
+    match="[can_i|could_i|may_i|can_we|am_i_allowed_to|am_i_able_to|am_i_permitted_to|is_it_possible_to|is_it_legal_to|would_it_be_legal_to|is_it_ok_to|is_it_okay_to|is_it_allowed_to|is_it_possible_for_me_to] [move|play|go|put|push|advance|bring|shift|slide|jump|send|run|place|develop|retreat|plays|moves|goes]? [the|my|our|that|this|a|an|your]? [white|black]? {p:lex.games.chess.pieces?} [from|on|at|in|standing_on|sitting_on|that_is_on|which_is_on]? [square]? {ff:lex.games.chess.files} {fr:number} [to|2|too|onto|towards|up_to|down_to|over_to|forward_to|back_to|goes_to|moves_to|move_to|go_to|then]? [square]? {tf:lex.games.chess.files} {tr:number}"
+    emit="@{_} core.request action=chess.can arg.piece={p} arg.ff={ff} arg.fr={fr} arg.tf={tf} arg.tr={tr}"
+    kind=request
+    priority=13
+    example="Can I move e2 to e5?"
+    example="Can I move the rook on a1 to a4?"
+
+@pat.games.chess.can.cap core.pattern
+    match="[can_i|could_i|may_i|can_we|am_i_allowed_to|am_i_able_to|am_i_permitted_to|is_it_possible_to|is_it_legal_to|would_it_be_legal_to|is_it_ok_to|is_it_okay_to|is_it_allowed_to|is_it_possible_for_me_to] [takes|take|taking|captures|capture|capturing|eats|eat|kills|kill|beats|beat|snatches|grabs|grab|wins|x|trades_for|swaps_for|exchanges_for] [the|that|their|his|your|enemy|opposing|a|an]? [white|black]? {tp:lex.games.chess.pieces?} [on|at|in|standing_on|sitting_on|located_on|over_on|from|with_the_piece_on|the_piece_on|whatever_is_on|whatever_is_at|what_is_on|what_is_at|that_is_on|which_is_on]? [square]? {tf:lex.games.chess.files} {tr:number}"
+    emit="@{_} core.request action=chess.can arg.cap=true arg.tp={tp} arg.tf={tf} arg.tr={tr}"
+    kind=request
+    priority=13
+    example="Can I take the pawn on d5?"
+    example="Can I capture on e5?"
+
+@pat.games.chess.can.cap.with core.pattern
+    match="[can_i|could_i|may_i|can_we|am_i_allowed_to|am_i_able_to|am_i_permitted_to|is_it_possible_to|is_it_legal_to|would_it_be_legal_to|is_it_ok_to|is_it_okay_to|is_it_allowed_to|is_it_possible_for_me_to] [takes|take|taking|captures|capture|capturing|eats|eat|kills|kill|beats|beat|snatches|grabs|grab|wins|x|trades_for|swaps_for|exchanges_for] [the|that|their|his|your|enemy|opposing|a|an]? [white|black]? {tp:lex.games.chess.pieces} [with|using|by|via|through] [the|my|our|that|this|a|an|your]? [white|black]? {wp:lex.games.chess.pieces}"
+    emit="@{_} core.request action=chess.can arg.cap=true arg.tp={tp} arg.wp={wp}"
+    kind=request
+    priority=13
+    example="Can I take the knight with the pawn?"
+
+@pat.games.chess.can.sq core.pattern
+    match="[can|could|may|will|would|might] [the|my|our|that|this|a|an|your]? [white|black]? {p:lex.games.chess.pieces} [on|at|from]? [go|move|jump|get|land|reach|capture|take|retreat|advance|slide|be_on|stand_on] [to|2|too|on|at|onto|into|towards|over_to|up_to|down_to|forward_to|back_to|goes_to|go_to|moves_to|move_to|should_go_to|for|in]? [square]? {tf:lex.games.chess.files} {tr:number}"
+    emit="@{_} core.request action=chess.can arg.piece={p} arg.tf={tf} arg.tr={tr}"
+    kind=request
+    priority=13
+    example="Can my knight go to f3?"
+    example="Can the queen reach d5?"
+    example="Can the bishop take c6?"
+
+@pat.games.chess.can.sq.from core.pattern
+    match="[can|could|may|will|would|might] [the|my|our|that|this|a|an|your]? [white|black]? {p:lex.games.chess.pieces} [on|at|from] [square]? {ff:lex.games.chess.files} {fr:number} [go|move|jump|get|land|reach|capture|take] [to|2|too|on|at|onto|into|towards|over_to|up_to|down_to|forward_to|back_to|goes_to|go_to|moves_to|move_to|should_go_to|for|in]? [square]? {tf:lex.games.chess.files} {tr:number}"
+    emit="@{_} core.request action=chess.can arg.piece={p} arg.ff={ff} arg.fr={fr} arg.tf={tf} arg.tr={tr}"
+    kind=request
+    priority=13
+    example="Can the knight on g1 go to f3?"
+
+@pat.games.chess.can.legal core.pattern
+    match="[is|would_be|would] [it|that|this]? [a]? [legal|possible|allowed|ok|okay|valid|fine|permitted] [to|for_me_to]? [move|play|go|put|push|advance|bring|shift|slide|jump|send|run|place|develop|retreat|plays|moves|goes]? [the|my|our|that|this|a|an|your]? [white|black]? {p:lex.games.chess.pieces?} [to|2|too|on|at|onto|into|towards|over_to|up_to|down_to|forward_to|back_to|goes_to|go_to|moves_to|move_to|should_go_to|for|in]? [square]? {tf:lex.games.chess.files} {tr:number}"
+    emit="@{_} core.request action=chess.can arg.piece={p} arg.tf={tf} arg.tr={tr}"
+    kind=request
+    priority=13
+    example="Is it legal to play e4?"
+    example="Is it possible to move the knight to f3?"
+
+@pat.games.chess.can.legal.after core.pattern
+    match="[is|would_be] [the|my|our|that|this|a|an|your]? [white|black]? {p:lex.games.chess.pieces?} [to|2|too|on|at|onto|into|towards|over_to|up_to|down_to|forward_to|back_to|goes_to|go_to|moves_to|move_to|should_go_to|for|in]? [square]? {tf:lex.games.chess.files} {tr:number} [a|an|the]? [legal|possible|allowed|ok|okay|valid|fine|permitted|legal_move|valid_move|possible_move|a_legal_move|a_valid_move|a_possible_move] [move]?"
+    emit="@{_} core.request action=chess.can arg.piece={p} arg.tf={tf} arg.tr={tr}"
+    kind=request
+    priority=13
+    example="Is e4 legal?"
+    example="Is knight to f3 a legal move?"
+    example="Is pawn to e5 possible?"
+
+@pat.games.chess.can.castle.k core.pattern
+    match="[can_i|could_i|may_i|am_i_allowed_to|am_i_able_to|is_it_possible_to|is_it_legal_to|is_it_ok_to] [castle|castles|castling|do_a_castle|do_castling|castle_my_king|castle_the_king|play_castle|make_a_castle|do_the_castle] [on|to|towards|at|with|using|by|in|in_the|on_the|to_the|at_the|towards_the|with_the|using_the]? [the]? [kingside|king_side|king_'s_side|short|short_side|shortside|short_way|king_s_side] [side|way|castle|castling|rook]?"
+    emit="@{_} core.request action=chess.can arg.castle=k"
+    kind=request
+    priority=13
+    example="Can I castle kingside?"
+
+@pat.games.chess.can.castle.k.adj core.pattern
+    match="[is|would_be] [it|that]? [kingside|king_side|king_'s_side|short|short_side|shortside|short_way|king_s_side] [castling|castle] [legal|possible|allowed|ok|okay|valid|available]"
+    emit="@{_} core.request action=chess.can arg.castle=k"
+    kind=request
+    priority=13
+    example="Is short castling possible?"
+
+@pat.games.chess.can.castle.q core.pattern
+    match="[can_i|could_i|may_i|am_i_allowed_to|am_i_able_to|is_it_possible_to|is_it_legal_to|is_it_ok_to] [castle|castles|castling|do_a_castle|do_castling|castle_my_king|castle_the_king|play_castle|make_a_castle|do_the_castle] [on|to|towards|at|with|using|by|in|in_the|on_the|to_the|at_the|towards_the|with_the|using_the]? [the]? [queenside|queen_side|queen_'s_side|long|long_side|longside|long_way|queen_s_side] [side|way|castle|castling|rook]?"
+    emit="@{_} core.request action=chess.can arg.castle=q"
+    kind=request
+    priority=13
+    example="Can I castle queenside?"
+
+@pat.games.chess.can.castle.q.adj core.pattern
+    match="[is|would_be] [it|that]? [queenside|queen_side|queen_'s_side|long|long_side|longside|long_way|queen_s_side] [castling|castle] [legal|possible|allowed|ok|okay|valid|available]"
+    emit="@{_} core.request action=chess.can arg.castle=q"
+    kind=request
+    priority=13
+    example="Is long castling legal?"
+
+@pat.games.chess.can.castle core.pattern
+    match="[can_i|could_i|may_i|am_i_allowed_to|am_i_able_to|is_it_possible_to|is_it_legal_to|is_it_ok_to] [castle|castles|castling|do_a_castle|do_castling|castle_my_king|castle_the_king|play_castle|make_a_castle|do_the_castle]"
+    emit="@{_} core.request action=chess.can arg.castle=any"
+    kind=request
+    priority=13
+    example="Can I castle?"
+    example="Am I allowed to castle?"
+
+@pat.games.chess.can.castle.is core.pattern
+    match="[is|would_be] [castling|castle] [legal|possible|allowed|ok|okay|valid|available] [now|here|for_me|for_us]?"
+    emit="@{_} core.request action=chess.can arg.castle=any"
+    kind=request
+    priority=13
+    example="Is castling possible?"
+    example="Is castling legal now?"
+
+@pat.games.chess.pick.piece core.pattern
+    match="[the|that|this|use|with|take|play|move|i_mean|i_meant|i_said|go_with|choose|pick|select|i_choose|i_pick|i_mean_the|use_the|the_one|that_one|this_one|with_the|take_the|play_the|move_the]? [the]? [1|piece]? {p:lex.games.chess.pieces?} [on|from|at|in|standing_on|that_is_on]? [square]? {ff:lex.games.chess.files} {fr:number}"
+    emit="@{_} core.request action=chess.pick arg.piece={p} arg.ff={ff} arg.fr={fr}"
+    kind=request
+    priority=11
+    example="The one on g1."
+    example="That one on g1."
+    example="I mean the one on g1."
+
+@pat.games.chess.pick.ordinal core.pattern
+    match="[the|take_the|use_the|go_with_the|i_mean_the|play_the|i_choose_the|the_one]? {o:lex.games.chess.ordinals} [1|piece|option|choice|knight|bishop|rook|queen|pawn|king]?"
+    emit="@{_} core.request action=chess.pick arg.ord={o}"
+    kind=request
+    priority=13
+    example="The first one."
+    example="The left one."
+    example="The second one."
+    example="Take the right one."
+
+@pat.games.chess.pick.side core.pattern
+    match="[the|that]? 1 [on|to|at]? [the]? {o:lex.games.chess.ordinals} [side|hand]?"
+    emit="@{_} core.request action=chess.pick arg.ord={o}"
+    kind=request
+    priority=13
+    example="The one on the left."
+    example="The one on the right side."
+
+@pat.games.chess.promote.reply core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [promote|promoting|promotes|underpromote|underpromoting|upgrade|upgrading|turn|turning|change|changing|make|making|choose|pick|take|get|want|go_with|with|as|queen_it|i_choose|i_want|i_will_take]? [it|the_pawn|my_pawn|that|that_pawn|this|this_pawn|pawn]? [to|into|as|for]? [a|an|the]? {pr:lex.games.chess.promos}"
+    emit="@{_} core.request action=chess.promote arg.piece={pr}"
+    kind=request
+    priority=11
+    example="Promote to a queen."
+    example="Queen."
+    example="Make it a knight."
+    example="Promote the pawn to a rook."
+    example="I want a bishop."
+
+@pat.games.chess.moves.can core.pattern
+    match="[what|where] [can|could|may|might|will] [the|my|our|that|this|a|an|your]? [white|black]? {p:lex.games.chess.pieces} [do|go|move|jump|capture|take|reach|get_to|get|land|be_moved|slide|retreat|advance|step]"
+    emit="@{_} core.request action=chess.moves arg.piece={p}"
+    kind=request
+    priority=13
+    example="What can my knight do?"
+    example="Where can the queen go?"
+
+@pat.games.chess.moves.which core.pattern
+    match="[which|what] [moves|squares|places|options|spots|ways] [does|can|could|do|has|have|will|might] [the|my|our|that|this|a|an|your]? [white|black]? {p:lex.games.chess.pieces} [have|make|go_to|reach|move_to|go|get_to|jump_to|take|play]?"
+    emit="@{_} core.request action=chess.moves arg.piece={p}"
+    kind=request
+    priority=13
+    example="What moves does the bishop have?"
+    example="Which squares can my bishop reach?"
+
+@pat.games.chess.moves.dowith core.pattern
+    match="what [can|could|should|might] [i|we] do with [the|my|our|that|this|a|an|your]? [white|black]? {p:lex.games.chess.pieces}"
+    emit="@{_} core.request action=chess.moves arg.piece={p}"
+    kind=request
+    priority=13
+    example="What can I do with my rook?"
+
+@pat.games.chess.moves.poss core.pattern
+    match="what [are|is] [the|my|our|that|this|a|an|your]? [white|black]? {p:lex.games.chess.pieces} 's [moves|options|legal_moves|possible_moves|squares|choices]"
+    emit="@{_} core.request action=chess.moves arg.piece={p}"
+    kind=request
+    priority=13
+    example="What are my knight's moves?"
+
+@pat.games.chess.moves.list core.pattern
+    match="[show_me|show|list|give_me|tell_me|name|read|read_me|display|highlight|what_are] [all|the|my|every]? [legal|possible|available|valid]? [moves|options|squares] [for|of|with|by|from] [the|my|our|that|this|a|an|your]? [white|black]? {p:lex.games.chess.pieces}"
+    emit="@{_} core.request action=chess.moves arg.piece={p}"
+    kind=request
+    priority=13
+    example="Show me the moves for my knight."
+    example="List the legal moves of the queen."
+
+@pat.games.chess.moves.can.sq core.pattern
+    match="[what|where] [can|could|may|might|will] [the|my|our|that|this|a|an|your]? [white|black]? {p:lex.games.chess.pieces?} [from|on|at|in|standing_on|sitting_on|that_is_on|which_is_on]? [square]? {ff:lex.games.chess.files} {fr:number} [do|go|move|jump|capture|take|reach|get_to|get|land|be_moved|slide|retreat|advance|step]"
+    emit="@{_} core.request action=chess.moves arg.piece={p} arg.ff={ff} arg.fr={fr}"
+    kind=request
+    priority=13
+    example="What can the piece on g1 do?"
+    example="Where can my knight on g1 go?"
+
+@pat.games.chess.moves.which.sq core.pattern
+    match="[which|what] [moves|squares|places|options|spots|ways] [does|can|could|do|has|have|will|might] [the|my|our|that|this|a|an|your]? [white|black]? {p:lex.games.chess.pieces?} [from|on|at|in|standing_on|sitting_on|that_is_on|which_is_on]? [square]? {ff:lex.games.chess.files} {fr:number} [have|make|go_to|reach|move_to|go|get_to|jump_to|take|play]?"
+    emit="@{_} core.request action=chess.moves arg.piece={p} arg.ff={ff} arg.fr={fr}"
+    kind=request
+    priority=13
+    example="What moves does the knight on g1 have?"
+
+@pat.games.chess.moves.dowith.sq core.pattern
+    match="what [can|could|should|might] [i|we] do with [the|my|our|that|this|a|an|your]? [white|black]? {p:lex.games.chess.pieces?} [from|on|at|in|standing_on|sitting_on|that_is_on|which_is_on]? [square]? {ff:lex.games.chess.files} {fr:number}"
+    emit="@{_} core.request action=chess.moves arg.piece={p} arg.ff={ff} arg.fr={fr}"
+    kind=request
+    priority=13
+    example="What can I do with the pawn on e2?"
+
+@pat.games.chess.moves.list.sq core.pattern
+    match="[show_me|show|list|give_me|tell_me|name|read|read_me|display|highlight|what_are] [all|the|my|every]? [legal|possible|available|valid]? [moves|options|squares] [for|of|with|by|from] [the|my|our|that|this|a|an|your]? [white|black]? {p:lex.games.chess.pieces?} [from|on|at|in|standing_on|sitting_on|that_is_on|which_is_on]? [square]? {ff:lex.games.chess.files} {fr:number}"
+    emit="@{_} core.request action=chess.moves arg.piece={p} arg.ff={ff} arg.fr={fr}"
+    kind=request
+    priority=13
+    example="Show me the moves for the pawn on e2."
+
+@pat.games.chess.moves.piece.on core.pattern
+    match="[what|where] [can|could|may] [the|my] [piece|one|1] [from|on|at|in|standing_on|sitting_on|that_is_on|which_is_on]? [square]? {ff:lex.games.chess.files} {fr:number} [do|go|move|jump|capture|take|reach|get_to|get|land|be_moved|slide|retreat|advance|step]"
+    emit="@{_} core.request action=chess.moves arg.ff={ff} arg.fr={fr}"
+    kind=request
+    priority=13
+    example="What can the piece on e2 do?"
+    example="Where can the piece on g1 go?"
+
+@pat.games.chess.moves.all core.pattern
+    match="[what|which] [are|is] [all|my|the|all_my|all_the]? [legal|possible|available|valid]? [moves|options|choices]"
+    emit="@{_} core.request action=chess.moves arg.all=true"
+    kind=request
+    priority=13
+    example="What are my legal moves?"
+    example="What are the possible moves?"
+
+@pat.games.chess.moves.all.have core.pattern
+    match="[what|which] [moves|options|choices] [do|can|could|may] [i|we] [have|make|play|do|choose]"
+    emit="@{_} core.request action=chess.moves arg.all=true"
+    kind=request
+    priority=13
+    example="What moves do I have?"
+    example="Which moves can I make?"
+
+@pat.games.chess.moves.all.list core.pattern
+    match="[list|show|show_me|tell_me|give_me] [me]? [all|my|all_my|all_the]? [legal|possible|available|valid]? [moves|options]"
+    emit="@{_} core.request action=chess.moves arg.all=true"
+    kind=request
+    priority=13
+    example="List all legal moves."
+    example="Show me my moves."
+
+@pat.games.chess.moves.count core.pattern
+    match="how_many [legal|possible|available|valid]? [moves|options] [do_i_have|can_i_make|are_there|do_i_have_available|can_i_play|are_possible|are_available]"
+    emit="@{_} core.request action=chess.moves arg.all=true arg.count=true"
+    kind=request
+    priority=13
+    example="How many legal moves do I have?"
+    example="How many moves are there?"
+
+@pat.games.chess.hint.best core.pattern
+    match="[what_is|what_s|which_is|tell_me|show_me|give_me|find] [the|my|a|a_good|the_best|my_best|a_better]? [best|good|better|strongest|right]? [move|move_for_me]"
+    emit="@{_} core.request action=chess.hint"
+    kind=request
+    priority=13
+    example="What is the best move?"
+    example="What is a good move?"
+    example="Tell me the best move."
+
+@pat.games.chess.hint.should core.pattern
+    match="[what|which_move|which_piece|where] [should|would|could|do_you_think_i_should|do_you_recommend|do_you_suggest] [i|we|you]? [play|do|move|try|go|move_next|play_next|play_here] [now|next|here|then]?"
+    emit="@{_} core.request action=chess.hint"
+    kind=request
+    priority=11
+    example="What should I play?"
+    example="What would you play?"
+    example="Where should I move?"
+
+@pat.games.chess.hint.suggest core.pattern
+    match="[suggest|recommend|propose|advise|show_me|give_me] [me|a|a_move|the|my]? [a|the|good|best]? [move|suggestion|tip|idea|recommendation|move_for_me]"
+    emit="@{_} core.request action=chess.hint"
+    kind=request
+    priority=13
+    example="Suggest a move."
+    example="Give me a suggestion."
+    example="Recommend a move."
+
+@pat.games.chess.hint.help core.pattern
+    match="[help_me|help_me_out|any_ideas|any_suggestions|any_tips|what_do_you_recommend|what_do_you_suggest|what_do_you_think|what_now|i_am_stuck|i_am_lost|i_do_not_know_what_to_play|i_do_not_know_what_to_do|i_do_not_know_what_to_move|which_move_is_best|which_move_is_better|what_move_should_i_make|what_move_should_i_play|what_move_do_you_suggest|what_move_do_you_recommend|which_move_should_i_make|which_move_should_i_play|what_is_my_best_move] [here|now|please]?"
+    emit="@{_} core.request action=chess.hint"
+    kind=request
+    priority=13
+    example="Any ideas?"
+    example="Help me out."
+    example="I am stuck."
+    example="I do not know what to play."
+
+@pat.games.chess.status.winning core.pattern
+    match="[who_is|who_s|who_has_been] [winning|ahead|leading|better|up|losing|behind|going_to_win|doing_better|in_front|stronger|better_off|winning_now] [now|right_now|at_the_moment|here|so_far]?"
+    emit="@{_} core.request action=chess.status"
+    kind=request
+    priority=13
+    example="Who is winning?"
+    example="Who is ahead?"
+    example="Who is better?"
+
+@pat.games.chess.status.am core.pattern
+    match="[am_i|are_you|are_we|is_white|is_black] [winning|ahead|leading|better|losing|behind|doing_better|doing_well|in_front|ahead_in_material|up_material|down_material|down] [now|right_now|at_the_moment|here|so_far|in_material]?"
+    emit="@{_} core.request action=chess.status"
+    kind=request
+    priority=13
+    example="Am I winning?"
+    example="Are you winning?"
+    example="Am I ahead?"
+    example="Am I losing?"
+
+@pat.games.chess.status.how core.pattern
+    match="[how_am_i_doing|how_are_we_doing|how_is_the_game_going|how_is_it_going|how_is_the_game|how_am_i_doing_here|how_are_things|how_is_the_position|how_does_the_position_look|how_do_i_stand|how_do_we_stand|who_has_more_pieces|who_has_more_material|who_has_the_advantage|who_has_the_better_position|who_is_in_front|who_will_win|who_is_going_to_win|who_has_won|who_won|did_i_win|did_you_win|is_it_a_draw|is_the_game_over|has_the_game_ended|is_it_over|who_is_winning_the_game|who_is_winning_now]"
+    emit="@{_} core.request action=chess.status"
+    kind=request
+    priority=13
+    example="How am I doing?"
+    example="Who has more material?"
+    example="How is the game going?"
+
+@pat.games.chess.status.eval core.pattern
+    match="[what_is|what_s|show_me|tell_me|give_me|evaluate|count|assess|check|compute|calculate] [the|my|our]? [material|score|material_count|material_balance|evaluation|balance|material_difference|points|advantage|material_score] [count|balance|difference|now|evaluation|right_now|here]?"
+    emit="@{_} core.request action=chess.status"
+    kind=request
+    priority=13
+    example="What is the material count?"
+    example="Count the material."
+    example="What is the score?"
+
+@pat.games.chess.status.position core.pattern
+    match="[evaluate|assess|analyse|analyze|judge|rate|appraise|evaluate_for_me|size_up] [the|my|our|this]? [position|game|board|situation|material|balance] [please|now|for_me]?"
+    emit="@{_} core.request action=chess.status"
+    kind=request
+    priority=13
+    example="Evaluate the position."
+    example="Assess the game."
+
+@pat.games.chess.check.is core.pattern
+    match="[is|am|are|was] [it|that|this|the_king|my_king|your_king|the_white_king|the_black_king|i|you|we|the_game|the_position|my_position|there_a|there]? [in|under|giving|a]? {k:lex.games.chess.checkwords}"
+    emit="@{_} core.request action=chess.check arg.k={k}"
+    kind=request
+    priority=13
+    example="Is it check?"
+    example="Am I in check?"
+    example="Are you in check?"
+    example="Is that checkmate?"
+    example="Is my king in check?"
+    example="Is the king in check?"
+
+@pat.games.chess.check.who core.pattern
+    match="[who_is|who_s|is_anyone|is_anybody|is_either_king|are_we|is_somebody|is_someone] [in|under|giving|put_in] {k:lex.games.chess.checkwords}"
+    emit="@{_} core.request action=chess.check arg.k={k}"
+    kind=request
+    priority=13
+    example="Who is in check?"
+    example="Is anyone in check?"
+
+@pat.games.chess.check.do core.pattern
+    match="[do_i_have|do_you_have|did_i_give|did_you_give|have_i_given|have_you_given|did_i_just_give|did_you_just_give] [a|the]? {k:lex.games.chess.checkwords}"
+    emit="@{_} core.request action=chess.check arg.k={k}"
+    kind=request
+    priority=13
+    example="Did you give check?"
+    example="Did I give checkmate?"
+
+@pat.games.chess.last.your core.pattern
+    match="[what|which|where] [was|is|were|did|has|have] [your|you|the|that] [last|latest|previous|recent|just|last_move|move]? [move|moves|play|played|go|move_to|take|make|made|moved|do|did|just_play|just_played|just_move|just_moved|just_make|just_made|just_do|just_did]? [just|last|now|then]?"
+    emit="@{_} core.request action=chess.last"
+    kind=request
+    priority=13
+    example="What was your last move?"
+    example="What did you play?"
+    example="What was the last move?"
+    example="What did you just play?"
+    example="Which move did you make?"
+
+@pat.games.chess.last.which core.pattern
+    match="[what|which] move [did|do|have|has] [you|i] [just|last]? [make|play|made|played|do|did]"
+    emit="@{_} core.request action=chess.last"
+    kind=request
+    priority=13
+    example="Which move did you make?"
+    example="What move did you just make?"
+
+@pat.games.chess.last.who core.pattern
+    match="[what|which] [was|is] [my|our] [last|previous|latest] [move]"
+    emit="@{_} core.request action=chess.last arg.who=me"
+    kind=request
+    priority=13
+    example="What was my last move?"
+
+@pat.games.chess.last.piece core.pattern
+    match="[which|what] [piece|pawn|knight|bishop|rook|queen|king] [did|have] [you|i] [just|last]? [move|moved|play|played|take|took|capture|captured]"
+    emit="@{_} core.request action=chess.last"
+    kind=request
+    priority=13
+    example="Which piece did you move?"
+    example="Which piece did you just move?"
+
+@pat.games.chess.last.repeat core.pattern
+    match="[repeat|say|tell_me|say_again|read|announce] [your|the|that|it]? [last|latest]? [move|move_again|again]"
+    emit="@{_} core.request action=chess.last"
+    kind=request
+    priority=13
+    example="Repeat your move."
+    example="Say the last move again."
+
+@pat.games.chess.describe.board core.pattern
+    match="[can_you|could_you|will_you|would_you|please_can_you]? [describe|read|read_me|say|tell_me|show_me|explain|narrate|recite|give_me|announce] [the|me_the|this|our|my]? [board|position|chess_board|chessboard|game|pieces|current_position|current_board|whole_board|whole_position|situation|game_state] [to_me|out_loud|aloud|please|now|for_me]?"
+    emit="@{_} core.request action=chess.describe"
+    kind=request
+    priority=13
+    example="Read the board."
+    example="Describe the position."
+    example="Describe the board."
+    example="Tell me the position."
+
+@pat.games.chess.describe.what core.pattern
+    match="[what_is|what_s|what_are|what_does|what_pieces_are|which_pieces_are|where_are_all] [on|the|in|on_the|in_the|the_board|the_position|the_pieces]? [board|position|the_board|the_position|the_pieces|pieces|on_the_board|in_the_position|look_like|the_board_look_like|the_position_look_like|on_the_board_now|there|on_the_board_right_now]"
+    emit="@{_} core.request action=chess.describe"
+    kind=request
+    priority=13
+    example="What is on the board?"
+    example="What pieces are on the board?"
+    example="What does the board look like?"
+    example="What is the position?"
+
+@pat.games.chess.describe.owner core.pattern
+    match="[describe|list|name|read|say|show|show_me|tell_me|where_are|what_are|give_me|read_me] [all|me|all_of]? [of]? {o:lex.games.chess.owners} [pieces|forces|army|men|side|position]"
+    emit="@{_} core.request action=chess.describe arg.o={o}"
+    kind=request
+    priority=13
+    example="List my pieces."
+    example="Describe your pieces."
+    example="Describe white pieces."
+
+@pat.games.chess.describe.have core.pattern
+    match="[which|what] pieces [do|does|did|have|has] {w:lex.games.chess.subjects} [have|got|own|left|have_left|still_have|keep|remaining]?"
+    emit="@{_} core.request action=chess.describe arg.who={w}"
+    kind=request
+    priority=13
+    example="What pieces do I have?"
+    example="Which pieces do you have?"
+    example="What pieces does white have left?"
+
+@pat.games.chess.where.is core.pattern
+    match="[where|where_exactly] [is|are|was|were|did_i_leave|did_i_put] {o:lex.games.chess.owners?} {p:lex.games.chess.pieces}"
+    emit="@{_} core.request action=chess.where arg.o={o} arg.piece={p}"
+    kind=request
+    priority=15
+    example="Where is my king?"
+    example="Where are my rooks?"
+    example="Where is the queen?"
+    example="Where are your pawns?"
+    example="Where is the white queen?"
+
+@pat.games.chess.where.show core.pattern
+    match="[show|show_me|point_to|highlight|find|locate|spot|tell_me_where_is|tell_me_where_are] [me]? {o:lex.games.chess.owners?} {p:lex.games.chess.pieces}"
+    emit="@{_} core.request action=chess.where arg.o={o} arg.piece={p}"
+    kind=request
+    priority=15
+    example="Show me my king."
+    example="Find the black queen."
+    example="Highlight your rooks."
+
+@pat.games.chess.count.have core.pattern
+    match="how_many {p:lex.games.chess.pieces} [do|does|did|will|can] {w:lex.games.chess.subjects} [still|currently|now]? [have|got|own|left|keep|control|hold|have_left|have_now|have_on_the_board|still_have]?"
+    emit="@{_} core.request action=chess.count arg.piece={p} arg.who={w}"
+    kind=request
+    priority=13
+    example="How many pieces do I have?"
+    example="How many pawns do you have?"
+    example="How many knights does white have left?"
+
+@pat.games.chess.count.left core.pattern
+    match="how_many {p:lex.games.chess.pieces} [are|is|remain|remains|exist] [there|left|remaining|still|on_the_board|in_play|alive|still_on_the_board|still_alive|still_in_play]? [left|remaining|on_the_board|in_play|alive|still_on_the_board|still_alive|still_in_play|now|here]?"
+    emit="@{_} core.request action=chess.count arg.piece={p}"
+    kind=request
+    priority=13
+    example="How many pieces are left?"
+    example="How many pawns are on the board?"
+    example="How many pieces are still in play?"
+
+@pat.games.chess.count.owner core.pattern
+    match="[count|tally|number|total] [up]? {o:lex.games.chess.owners?} {p:lex.games.chess.pieces}"
+    emit="@{_} core.request action=chess.count arg.o={o} arg.piece={p}"
+    kind=request
+    priority=13
+    example="Count my pieces."
+    example="Count the pieces."
+    example="Count your pawns."
+
+@pat.games.chess.lost.lose core.pattern
+    match="[which|what] [pieces|piece|pawns|material|men|things]? [did|have|has|do|had|will] {w:lex.games.chess.subjects} [lose|lost|sacrificed|given_up|been_losing|given_away] [so_far|already|until_now|by_now]?"
+    emit="@{_} core.request action=chess.lost arg.who={w}"
+    kind=request
+    priority=13
+    example="Which pieces did I lose?"
+    example="What did I lose?"
+    example="What pieces have you lost?"
+    example="What have you lost?"
+
+@pat.games.chess.lost.capture core.pattern
+    match="[which|what] [pieces|piece|pawns|material|men|things]? [did|have|has|do|had] {w:lex.games.chess.subjects} [capture|captured|take|taken|took|win|won|eaten|eat|ate] [so_far|already|until_now|by_now]?"
+    emit="@{_} core.request action=chess.lost arg.who={w} arg.verb=capture"
+    kind=request
+    priority=13
+    example="What did I capture?"
+    example="Which pieces have you captured?"
+    example="What have I taken so far?"
+
+@pat.games.chess.lost.passive core.pattern
+    match="[which|what] [pieces|piece|pawns|material|men]? [have|has|were|are|got|had] [been|gone|got]? [captured|lost|taken|gone|removed|eaten|sacrificed|traded|exchanged] [so_far|already|until_now|by_now]?"
+    emit="@{_} core.request action=chess.lost arg.who=we"
+    kind=request
+    priority=13
+    example="Which pieces have been captured?"
+    example="What has been captured?"
+    example="What pieces are gone?"
+
+@pat.games.chess.lost.show core.pattern
+    match="[show|show_me|list|tell_me|what_are|read|give_me|display|name] [me]? [the|all|all_the|my|our]? [captured|lost|taken|missing|eaten|gone|sacrificed|dead] [pieces|material|men|pawns]?"
+    emit="@{_} core.request action=chess.lost arg.who=we"
+    kind=request
+    priority=13
+    example="Show captured pieces."
+    example="List the lost pieces."
+    example="Show me the captured material."
+
+@pat.games.chess.turn.whose core.pattern
+    match="[whose_turn|whose_move|who_is_to_move|who_moves|who_moves_next|who_plays|who_plays_next|who_goes|who_goes_next|who_has_the_move|who_to_move|whose_go] [is_it|now|next|it_is|is_it_now|is_it_next|right_now]?"
+    emit="@{_} core.request action=chess.turn"
+    kind=request
+    priority=13
+    example="Whose turn is it?"
+    example="Who is to move?"
+    example="Who moves next?"
+
+@pat.games.chess.turn.is core.pattern
+    match="[is|was] it [my|your|the_white|the_black|white|black|the_engine|the_computer|the_machine|our|his|her] [turn|move|go|time|play|turn_to_move|turn_now|turn_to_play] [now|yet|again|right_now|to_move|to_play]?"
+    emit="@{_} core.request action=chess.turn"
+    kind=request
+    priority=13
+    example="Is it my turn?"
+    example="Is it your move?"
+
+@pat.games.chess.turn.color core.pattern
+    match="[what|which] [colour|color|side|colour_am_i|color_am_i|side_am_i|colour_do_i_have|color_do_i_have|side_do_i_have|colour_do_i_play|color_do_i_play|side_do_i_play] [am_i|do_i_have|do_i_play|am_i_playing|am_i_on|do_i_play_as|are_we_playing|is_mine|am_i_using|did_i_choose|have_i_got|am_i_playing_as|is_yours|are_you_playing|do_you_have|do_you_play|are_you]?"
+    emit="@{_} core.request action=chess.turn arg.q=color"
+    kind=request
+    priority=13
+    example="What colour am I?"
+    example="Which side am I playing?"
+    example="Which colour do I have?"
+
+@pat.games.chess.turn.am core.pattern
+    match="[am_i|are_you|do_i_play|do_you_play|am_i_playing|are_you_playing|do_i_have|do_you_have] [white|black|as_white|as_black|the_white_pieces|the_black_pieces]"
+    emit="@{_} core.request action=chess.turn arg.q=color"
+    kind=request
+    priority=13
+    example="Am I white?"
+    example="Am I playing black?"
+    example="Are you black?"
+
+@pat.games.chess.history.list core.pattern
+    match="[what|which] [moves|moves_have|moves_did|moves_were|moves_are] [been|we|you|i|have|been_played|played]? [been|played|made|so_far|we_played|we_made|been_played|been_made|been_played_so_far|played_so_far|made_so_far]? [so_far|played|made|already|until_now]?"
+    emit="@{_} core.request action=chess.history"
+    kind=request
+    priority=13
+    example="What moves have been played?"
+    example="Which moves have we played so far?"
+
+@pat.games.chess.history.read core.pattern
+    match="[list|show|show_me|read|read_me|tell_me|give_me|say|recite|repeat] [me]? [the|all|all_the|our|my|the_whole]? [move|moves|move_list|move_history|game_so_far|game_history|history|notation|game|moves_so_far|moves_played|played_moves|record|score_sheet|scoresheet] [so_far|played|list|history|out_loud|aloud|please|again]?"
+    emit="@{_} core.request action=chess.history"
+    kind=request
+    priority=13
+    example="Show the move list."
+    example="Read the moves."
+    example="List the moves so far."
+    example="Tell me the move history."
+
+@pat.games.chess.history.count core.pattern
+    match="how_many [moves|turns|plies|half_moves] [have|did|were|are|has|do]? [we|been|you|i|there]? [played|play|been_played|made|been_made|so_far|been_played_so_far|played_so_far|made_so_far|played_yet]? [so_far|already|yet|until_now]?"
+    emit="@{_} core.request action=chess.history arg.count=true"
+    kind=request
+    priority=13
+    example="How many moves have been played?"
+    example="How many moves did we play so far?"
+
+@pat.games.chess.level.ask core.pattern
+    match="[what|which|how] [level|difficulty|strength|skill|hard|strong|good|level_is|level_are|strong_are|hard_are] [are_you|is_it|are_we_playing|is_the_game|is_this|is_the_engine|is_your_level|are_you_playing|is_the_computer|are_you_at|is_set|are_we_on|is_that|are_we_at|are_you_on|do_you_play|do_you_play_at|are_you_set_to|are_we_set_to]? [now|set|right_now|at|on|today|here|set_to|playing|playing_at]?"
+    emit="@{_} core.request action=chess.level"
+    kind=request
+    priority=13
+    example="What level are you?"
+    example="What level is it?"
+    example="How strong are you?"
+    example="Which level are we playing?"
+
+@pat.games.chess.level.set core.pattern
+    match="[set|change|switch|put|adjust|use|play_at|play_on|go_to|go_up_to|go_down_to|choose|select|pick|make] [the|your|my|a]? [level|difficulty|strength|skill|rating|setting] [to|at|on|of|as]? {n:number}"
+    emit="@{_} core.request action=chess.level arg.n={n}"
+    kind=request
+    priority=13
+    example="Set level 5."
+    example="Set the level to 3."
+    example="Change the difficulty to 7."
+    example="Play at level 4."
+
+@pat.games.chess.level.bare core.pattern
+    match="[level|difficulty|strength|skill] {n:number} [please|now|level|strength]?"
+    emit="@{_} core.request action=chess.level arg.n={n}"
+    kind=request
+    priority=13
+    example="Level 6."
+    example="Difficulty 2."
+
+@pat.games.chess.level.play core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [play|go|be|use|try|i_want|let_us_play|let_me_play|i_would_like|start|begin]? [at|on|with|to|in|as|like]? [a|the|an]? [level|difficulty|strength|skill] {n:number} [level|strength|please]?"
+    emit="@{_} core.request action=chess.level arg.n={n}"
+    kind=request
+    priority=13
+    example="I want to play at level 4."
+    example="Play on level 2."
+    example="Let me play at difficulty 6."
+
+@pat.games.chess.level.name core.pattern
+    match="[set|change|switch|make|put|turn|adjust|use|select|choose] [the|your|my|a]? [level|difficulty|strength|skill|opponent|game|engine|computer|you|it|the_game|yourself|the_computer|the_engine|this|that|things]? [to|at|on|a_bit|a_little|much|bit|little|a_lot|even|way]? [a|an|the]? {l:lex.games.chess.strengths} [level|mode|setting|difficulty|strength|game|please|now]?"
+    emit="@{_} core.request action=chess.level arg.name={l}"
+    kind=request
+    priority=13
+    example="Make it harder."
+    example="Set the level to expert."
+    example="Make the game easier."
+    example="Change the difficulty to beginner."
+
+@pat.games.chess.level.play.name core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [play|be|go|get|try|start|begin|become|turn] [a_bit|a_little|a_lot|much|bit|little|even|way|at|on|with|like|like_a|as_a|at_a|on_a|with_a|at_the|on_the]? [a|an|the]? {l:lex.games.chess.strengths} [level|mode|setting|difficulty|strength|game|opponent|player|now|strength_level|to_me|on_me|with_me]?"
+    emit="@{_} core.request action=chess.level arg.name={l}"
+    kind=request
+    priority=13
+    example="Play easier."
+    example="Play harder."
+    example="Play like a grandmaster."
+    example="Play at beginner level."
+    example="Play at maximum strength."
+
+@pat.games.chess.level.want core.pattern
+    match="[i_want|i_would_like|give_me|i_need|i_prefer|i_ask_for|let_us_have|let_me_have|can_i_have|could_i_have|may_i_have|i_d_like|i_would_prefer|i_wish_for] [a|an|the]? [bit|little|much]? {l:lex.games.chess.strengths} [game|level|opponent|match|setting|difficulty|one|strength|challenge|engine|play|mode]"
+    emit="@{_} core.request action=chess.level arg.name={l}"
+    kind=request
+    priority=13
+    example="I want an easy game."
+    example="Give me a harder game."
+    example="I would like a tougher opponent."
+
+@pat.games.chess.level.easy core.pattern
+    match="[go|be|take_it|take] [easy|gentle|gently] [on_me|with_me|on_us|please|a_bit|for_me]?"
+    emit="@{_} core.request action=chess.level arg.name=easier"
+    kind=request
+    priority=13
+    example="Go easy on me."
+    example="Be gentle."
+
+@pat.games.chess.level.best core.pattern
+    match="[play|try|give|show|do|use] [your|the|full|maximum|max|all_your|all_of_your] [best|strength|power|full_strength|maximum_strength|everything|game|level|skill]?"
+    emit="@{_} core.request action=chess.level arg.name=maximum"
+    kind=request
+    priority=13
+    example="Play your best."
+    example="Use full strength."
+
+@pat.games.chess.fen.read core.pattern
+    match="[what_is|what_s|give_me|show_me|show|read|tell_me|say|copy|export|get|display] [the|my|our|me_the]? [fen|fen_string|fen_code|fen_notation|position_in_fen|board_in_fen|position_as_fen|fen_position|current_fen] [please|now|string|code|notation|of_the_position|of_the_board|of_the_game]?"
+    emit="@{_} core.request action=chess.fen"
+    kind=request
+    priority=13
+    example="What is the FEN?"
+    example="Give me the FEN."
+
+@pat.games.chess.square.what core.pattern
+    match="[what_is|what_s|which_piece_is|what_piece_is|which_one_is|what_stands|what_sits|who_is|what_was|what_piece|which_piece|tell_me_what_is|tell_me_whats] [there|standing|sitting|located|placed|parked|found]? [on|at|in|standing_on|sitting_on|on_the_square|at_the_square|in_the_square|on_square|at_square]? [square]? {ff:lex.games.chess.files} {fr:number}"
+    emit="@{_} core.request action=chess.square arg.ff={ff} arg.fr={fr}"
+    kind=request
+    priority=13
+    example="What is on e4?"
+    example="Which piece is on g1?"
+    example="What is on the square d5?"
+    example="What is e2?"
+
+@pat.games.chess.square.is core.pattern
+    match="[is_there|is_there_a|is_there_any|is_there_a_piece|is_there_anything|is_anything|does_anything_stand|do_i_have_a_piece|do_you_have_a_piece|is_there_something|is_someone|is_something|is_any_piece|is_a_piece|is_a_pawn|is_there_a_pawn] [piece|anything|something|a_piece|a_pawn|there|standing|sitting|located|on]? [on|at|in|standing_on|sitting_on|on_the_square|at_the_square|in_the_square|on_square|at_square]? [square]? {ff:lex.games.chess.files} {fr:number}"
+    emit="@{_} core.request action=chess.square arg.ff={ff} arg.fr={fr} arg.q=piece"
+    kind=request
+    priority=13
+    example="Is there a piece on e4?"
+    example="Is there anything on d5?"
+
+@pat.games.chess.square.empty core.pattern
+    match="[is|was] [square]? {ff:lex.games.chess.files} {fr:number} [empty|free|occupied|taken|vacant|open|clear|blocked|busy|used|filled]"
+    emit="@{_} core.request action=chess.square arg.ff={ff} arg.fr={fr} arg.q=piece"
+    kind=request
+    priority=13
+    example="Is e4 empty?"
+    example="Is d5 occupied?"
+    example="Is f3 free?"
+
+@pat.games.chess.engine.move core.pattern
+    match="[make_your_move|make_a_move|play_your_move|play_a_move|your_move|your_turn|it_is_your_move|it_is_your_turn|go_ahead|go_on|your_go|move_now|play_now|play_for_me|you_go|you_move|you_play|you_can_move|you_can_play|over_to_you|hurry_up|move_already|what_are_you_waiting_for|are_you_there|are_you_thinking|why_so_slow|what_is_taking_so_long|what_is_taking_you_so_long|come_on|do_you_have_a_move|any_move|are_you_going_to_move|when_will_you_move|when_do_you_move|did_you_move|have_you_moved] [please|now|already|then|next|then_please|again|quickly|fast]?"
+    emit="@{_} core.request action=chess.engineMove"
+    kind=request
+    priority=13
+    example="Make your move."
+    example="Your move."
+    example="Go ahead."
+    example="Hurry up."
+    example="Are you thinking?"
+
+@pat.games.chess.new.game core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [start|begin|play|have|set_up|setup|do|play_another|start_another|begin_another|try|launch|create|play_one_more|start_one_more|play_a_new|start_a_new|begin_a_new]? [a|an|another|one_more|the|my|our]? [new|fresh|another|next|second|clean|different] chess [game|match|round|board|position|pieces|now|please|with_you|against_you|with_me|against_the_computer|against_the_engine]?"
+    emit="@{_} core.request action=chess.new"
+    kind=request
+    priority=13
+    example="New chess game."
+    example="Start a new chess game."
+    example="Set up a new chess board."
+
+@pat.games.chess.new.again core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [start|begin|play|have|try|do|launch] [a|the|some|my|our]? chess [game|match|round]? again [please|now]?"
+    emit="@{_} core.request action=chess.new"
+    kind=request
+    priority=13
+    example="I want to play chess again."
+    example="Play chess again."
+
+@pat.games.chess.new.keep core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [start|begin|play|have|try|launch|open|play_a|start_a|play_some|play_the|start_the] [a|the|some|a_game_of|a_round_of|the_game_of|a_match_of|my|our]? chess [game|match|round|with_you|against_you|with_me|against_the_computer|against_the_engine|now|please]?"
+    emit="@{_} core.request action=chess.new arg.keep=true"
+    kind=request
+    priority=13
+    example="Play chess."
+    example="Let us play a game of chess."
+    example="I want to play a chess game."
+
+@pat.games.chess.new.game.of core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [start|begin|play|have|try|launch|do|play_another|start_another|begin_another|play_one_more|play_a_new|start_a_new|begin_a_new] [a|an|another|one_more|the|a_new|another_new|a_fresh|one_more_new]? [new|fresh|another|next|second] [game|match|round] of chess [again|now|please|with_you|against_you|with_me]?"
+    emit="@{_} core.request action=chess.new"
+    kind=request
+    priority=13
+    example="Play a new game of chess."
+    example="Start another game of chess."
+
+@pat.games.chess.new.reset core.pattern
+    match="[can_you|could_you|will_you|would_you]? [reset|restart|clear|wipe|empty|set_up|setup|reset_up|rack_up|arrange] [the|my|our|this]? [chess|chessboard|chess_board|chess_pieces|pieces|chess_game] [board|pieces|game|position|again|now|please]?"
+    emit="@{_} core.request action=chess.new"
+    kind=request
+    priority=13
+    example="Reset the chess board."
+    example="Restart the chess game."
+    example="Set up the pieces."
+
+@pat.games.chess.new.color core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [start|begin|play|have|try|do|launch] [a|another|the]? [new|fresh|another]? [game|match|round] [as|with|playing|and_play|and_i_play|where_i_play|i_play|i_am|i_will_be|let_me_be|as_the|with_the|playing_as|playing_the|with_me_as|with_me_playing] {c:lex.games.chess.colors} [pieces|side|please|now]?"
+    emit="@{_} core.request action=chess.side arg.color={c} arg.fresh=true"
+    kind=request
+    priority=13
+    example="Start a new game as black."
+    example="Start a new game as white."
+    example="I want to start a new game playing white."
+
+@pat.games.chess.side.play core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [play|take|choose|pick|have|want|use|am|play_as|be_the|take_the|play_the|am_the|will_play|will_take|will_be|am_playing|be|would_like|prefer|play_with|start_as|switch_to|swap_to|change_to|am_going_to_be|am_going_to_play|go_as|go_with] [as|the|with|a|to|for|playing|being]? {c:lex.games.chess.colors} [pieces|side|please|this_time|again|now|instead|for_me|from_now_on]?"
+    emit="@{_} core.request action=chess.side arg.color={c}"
+    kind=request
+    priority=13
+    example="I play black."
+    example="I want to play white."
+    example="Let me play as black."
+    example="I will be black."
+    example="I would like to play white."
+
+@pat.games.chess.side.give core.pattern
+    match="[give_me|make_me|let_me_have|let_me_be|let_me_play|i_choose|i_take|i_will_play|i_will_take|i_pick|put_me_as|put_me_on|set_me_as|assign_me|i_will_play_as|i_would_take|i_would_play|i_would_be] [as|the|with|a]? {c:lex.games.chess.colors} [pieces|side|please|this_time|now|again]?"
+    emit="@{_} core.request action=chess.side arg.color={c}"
+    kind=request
+    priority=13
+    example="Give me black."
+    example="Make me white."
+    example="I will take white."
+    example="I choose white."
+
+@pat.games.chess.side.swap core.pattern
+    match="[can_you|could_you|will_you|would_you|let_us|lets|let_me|i_want_to|i_would_like_to|shall_we|can_we|could_we]? [switch|swap|change|exchange|reverse|flip|trade] [the|our|my]? [sides|colors|colours|side|color|colour|places|seats] [please|now|again]?"
+    emit="@{_} core.request action=chess.side arg.swap=true"
+    kind=request
+    priority=13
+    example="Switch sides."
+    example="Swap colors."
+    example="Can we swap sides?"
+
+@pat.games.chess.side.other core.pattern
+    match="[i|i_will|i_would|i_would_like_to|i_want_to|i_wanna|i_wish_to|i_am_going_to|i_am_gonna|let_me|let_us|may_i|can_you|could_you|will_you|would_you|my_move_is|my_move|my_turn|next|now]? [play|take|be|choose|pick|try|use|play_as|take_the] [the|as_the|as]? [other|opposite|different|another] [side|color|colour|pieces|colors|colours]"
+    emit="@{_} core.request action=chess.side arg.swap=true"
+    kind=request
+    priority=13
+    example="Let me play the other side."
+    example="I take the opposite colour."
+
+@pat.games.chess.flip.board core.pattern
+    match="[can_you|could_you|will_you|would_you|let_us|lets|let_me|please_can_you]? [flip|turn|rotate|reverse|invert|spin|switch|swap|mirror] [the|this|my|our]? [board|chessboard|view|position|chess_board|it|orientation|perspective|screen|game] [around|over|upside_down|the_other_way|to_the_other_side|round|please|now|again|the_other_way_round|the_other_way_around|around_please]?"
+    emit="@{_} core.request action=chess.flip"
+    kind=request
+    priority=16
+    example="Flip the board."
+    example="Turn the board around."
+    example="Rotate the board."
+    example="Can you flip the board?"
+
+@pat.games.chess.flip.side core.pattern
+    match="[show|view|display|see|look_at|orient|rotate|turn|put|play|draw|set|flip] [me|it]? [the|this|my|our]? [board|chessboard|view|position|chess_board|it|game|screen]? [from|as|for|to|with|by|in|on|at|so_that|seen_from|viewed_from] [the|a]? {c:lex.games.chess.colors} ['s]? [side|view|perspective|point_of_view|pov|end|side_of_the_board|corner|seat|angle|pieces|side_up|at_the_bottom|on_the_bottom|at_the_front|at_the_top|on_top|on_the_top|down|up]?"
+    emit="@{_} core.request action=chess.flip arg.color={c}"
+    kind=request
+    priority=13
+    example="Show the board from black's side."
+    example="View the board from the white side."
+    example="Orient the board for black."
+
+@pat.games.chess.undo.move core.pattern
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_to|i_would_like_to|i_need_to|let_me|let_us|may_i|can_i|could_i|i_will|i_want_you_to|i_would_like_you_to|you_should|you_must|you_can|we_should|we_can]? [undo|take_back|revert|retract|rewind|cancel|rollback|roll_back|unplay|withdraw|delete|erase|reverse|step_back|go_back|redo] [my|the|that|this|our|your|a]? [last|latest|previous|recent|final|whole|entire|very_last|one]? [move|turn|play|go|step|half_move|ply] [please|now|again|for_me]?"
+    emit="@{_} core.request action=chess.undo arg.n=1"
+    kind=request
+    priority=13
+    example="Undo my move."
+    example="Take back my last move."
+    example="Undo the last move."
+    example="Can you take back that move?"
+
+@pat.games.chess.undo.n core.pattern
+    match="[undo|take_back|revert|retract|rewind|cancel|rollback|roll_back|unplay|withdraw|go_back|step_back|erase|delete] {n:number} [moves|turns|plies|half_moves|steps|moves_back|turns_back|moves_please|of_my_moves|of_the_last_moves]"
+    emit="@{_} core.request action=chess.undo arg.n={n}"
+    kind=request
+    priority=13
+    example="Undo 2 moves."
+    example="Take back three moves."
+
+@pat.games.chess.undo.back core.pattern
+    match="[go|step|move|rewind|roll|take_it|take_us|take_me] back [a|1|one|the_last|my_last|the_previous]? [move|step|turn|half_move|ply|moves]"
+    emit="@{_} core.request action=chess.undo arg.n=1"
+    kind=request
+    priority=13
+    example="Go back one move."
+    example="Step back a move."
+
+@pat.games.chess.undo.bare core.pattern
+    match="[undo|undo_that|undo_it|revert|take_that_back|takeback|take_it_back|undo_please|retract_that|go_back_a_move]"
+    emit="@{_} core.request action=chess.undo arg.n=1 arg.bare=true"
+    kind=request
+    priority=15
+    example="Undo."
+    example="Undo that."
+
+@pat.games.chess.undo.oops core.pattern
+    match="[oops|whoops|oh_no|i_made_a_mistake|that_was_a_mistake|that_was_a_blunder|i_blundered|i_misclicked|wrong_move|that_was_wrong|let_me_retry|let_me_try_again|can_i_try_again|can_i_take_that_back|can_i_take_it_back|i_take_it_back|i_want_to_take_it_back|let_me_take_it_back|let_me_take_that_back|i_did_not_mean_that|i_did_not_mean_to|i_meant_something_else|that_was_not_what_i_meant|wait_no|no_wait|hold_on|sorry_wrong_move|my_mistake|my_bad] [undo|please|sorry|undo_that|undo_it|take_it_back|take_that_back]?"
+    emit="@{_} core.request action=chess.undo arg.n=1"
+    kind=request
+    priority=13
+    example="Oops, undo."
+    example="I made a mistake."
+    example="Let me try again."
+    example="That was a blunder."
+
+@pat.games.chess.resign.want core.pattern
+    match="[i_will|i_would_like_to|i_want_to|i_am_going_to|i_have_to|let_me|i_must|i_choose_to|i_decide_to|i_need_to|i_wish_to|i_should|i_think_i_will|i_think_i_should|i_am_ready_to|i_can_not_continue_so_i|we_should] [resign|concede] [the|this|my|our|now|here|please|the_game|this_game|the_match|the_round|now_please]? [game|match|round|now|here|please|to_you|to_the_computer|this_time|for_now|at_this_point]?"
+    emit="@{_} core.request action=chess.resign"
+    kind=request
+    priority=13
+    example="I want to resign."
+    example="I would like to resign."
+    example="Let me resign the game."
+
+@pat.games.chess.resign.game core.pattern
+    match="[i|i_will|let_me|we|you_can|you_may]? [resign|resigned|resigns|am_resigning] [the|this|my|our|the_game|this_game|the_match|the_round] [game|match|round|now|please|to_you|this_time|for_now]?"
+    emit="@{_} core.request action=chess.resign"
+    kind=request
+    priority=13
+    example="I resign the game."
+    example="Resign this game."
+
+@pat.games.chess.resign.concede core.pattern
+    match="[i|i_will|let_me|we|i_want_to|i_would_like_to|i_must|i_have_to|i_choose_to]? [concede|conceded|concedes|am_conceding|concede_the_game|concede_this_game|concede_the_match] [the|this|my|our|now|here|please|the_game|this_game|the_match|the_round|to_you]? [game|match|round|now|here|please|to_you|this_time|for_now]?"
+    emit="@{_} core.request action=chess.resign"
+    kind=request
+    priority=13
+    example="I concede."
+    example="Concede the game."
+
+@pat.games.chess.resign.admit core.pattern
+    match="[i_admit_defeat|i_lose|i_have_lost|i_am_lost|you_win|you_have_won|you_won|you_beat_me|i_am_beaten|i_am_defeated|i_accept_defeat|i_surrender_the_game|i_throw_in_the_towel|i_am_throwing_in_the_towel|i_am_done_you_win|i_am_out_you_win|i_have_no_chance|there_is_no_hope|game_over_you_win|it_is_over_you_win|you_got_me|you_got_me_i_resign|i_cannot_win|i_can_not_win|you_are_too_good|you_are_too_strong] [now|here|this_time|again|please|this_game|game]?"
+    emit="@{_} core.request action=chess.resign"
+    kind=request
+    priority=13
+    example="I admit defeat."
+    example="You win."
+    example="I throw in the towel."
+
+@pat.games.chess.draw.offer core.pattern
+    match="[i|i_will|i_would_like_to|i_want_to|let_me|can_i|may_i|could_i|let_us|shall_we|can_we|could_we|will_you|would_you|do_you|would_you_like_to|do_you_want_to|do_you_accept_a|i_propose_a]? [offer|propose|suggest|claim|ask_for|request|agree_to|accept|call|declare|take|want|have|draw|agree_on|agree_to_a|make|agree|go_for|settle_for|settle_on|take_a|offer_you|offer_you_a|propose_you|propose_you_a|propose_to_you] [you|to_you|us|a|the|an|for_a|for|a_draw_with_you|a_draw]? [a]? draw [please|now|here|with_you|to_you|with_me|then|offer|this_game|game|agreement|by_agreement|to_you_please|now_please]?"
+    emit="@{_} core.request action=chess.draw"
+    kind=request
+    priority=13
+    example="I offer a draw."
+    example="Offer a draw."
+    example="Do you accept a draw?"
+    example="I propose a draw."
+
+@pat.games.chess.draw.short core.pattern
+    match="[can_we_draw|could_we_draw|shall_we_draw|let_us_draw|lets_draw|want_a_draw|a_draw|draw|draw_please|how_about_a_draw|what_about_a_draw|what_do_you_say_to_a_draw|would_you_take_a_draw|would_you_accept_a_draw|will_you_accept_a_draw|do_you_accept_a_draw|do_you_want_a_draw|are_you_up_for_a_draw|are_you_open_to_a_draw|is_a_draw_ok|is_a_draw_okay|is_a_draw_possible|is_a_draw_fine|will_you_draw|would_you_draw|agree_to_draw|agree_to_a_draw] [please|now|here|then]?"
+    emit="@{_} core.request action=chess.draw"
+    kind=request
+    priority=13
+    example="Can we draw?"
+    example="How about a draw?"
+    example="Draw?"

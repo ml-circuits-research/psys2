@@ -292,7 +292,7 @@ export class Interpreter {
       ask_text: (key) => L.keyInfo(key)?.ask,
       name: (id) => this.renderer.nameOf(mem, String(id).replace(/^\$/, '')),
       /** List the loaded worlds: [{ id, title, summary, status, doc }]. Browser-safe, read-only. */
-      worlds: () => this.set.list().map((w) => ({ id: w.id, title: w.title, summary: w.summaryPhrase, status: w.status, doc: w.doc })),
+      worlds: () => this.set.list().map((w) => ({ id: w.id, title: w.title, summary: w.summaryPhrase, status: w.status, doc: w.doc, tab: w.tab })),
     };
     return ctx;
   }
@@ -318,6 +318,19 @@ export class Interpreter {
       if (res?.handled) return { worldId: w.id, reply: res.reply, ops: st.ops };
     }
     return null;
+  }
+
+  /**
+   * Observation hook (spec 07 §1): run `onObservation(ctx, obs)` of world `worldId` as an action context.
+   * @returns {{ reply?: string } | null}
+   */
+  observe(session, worldId, obs) {
+    const w = this.set.get(worldId);
+    if (typeof w?.ops?.onObservation !== 'function') return null;
+    const op = { id: `op.${w.id}.onObservation`, worldId: w.id, semantics: 'action' };
+    const st = { depth: 0, visited: 0, ops: [] };
+    const ctx = this._makeCtx(session, op, st, { deadline: performance.now() + this.opTimeoutMs * 5 });
+    try { return w.ops.onObservation(ctx, obs) ?? null; } catch (e) { return { reply: `Something went wrong while I handled the result of ${obs.effect} (${e?.message ?? e}).` }; }
   }
 
   _emit(session, op, sopText) {

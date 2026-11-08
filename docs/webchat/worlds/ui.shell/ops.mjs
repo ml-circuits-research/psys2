@@ -26,6 +26,24 @@ const GAME_ACTIONS = {
   giveUp: { tictactoe: 'ttt.giveup', guess: 'guess.giveup', hangman: 'hm.giveup' },
   hint: { tictactoe: 'ttt.hint', guess: 'guess.hint', hangman: 'hm.hint' },
 };
+/**
+ * Tabs declared by other worlds in their manifests (spec 07 §6: tab, tabTitle, tabAlias, tabNew, tabHint, tabGiveUp)
+ * are merged into the tables above, so a new tool world gets voice navigation without editing this world.
+ */
+const norm = (w) => String(w ?? '').toLowerCase().trim().replace(/^(the|a|an|my|your)\s+/, '').replace(/\s+/g, '_');
+function refresh(ctx) {
+  for (const w of ctx.worlds?.() ?? []) {
+    const t = w.tab;
+    if (!t?.id) continue;
+    TABS[t.id] ??= { title: t.title, world: w.id };
+    for (const a of [t.id, t.title, ...(t.aliases ?? [])]) TAB_OF_WORD[norm(a)] ??= t.id;
+    if (t.new) GAME_ACTIONS.new[t.id] ??= t.new;
+    if (t.hint) GAME_ACTIONS.hint[t.id] ??= t.hint;
+    if (t.giveUp) GAME_ACTIONS.giveUp[t.id] ??= t.giveUp;
+  }
+}
+const resolveTab = (tab) => (TABS[tab] ? tab : TAB_OF_WORD[tab] ?? TAB_OF_WORD[norm(tab)] ?? TAB_OF_WORD[norm(tab).replace(/s$/, '')]);
+
 const RATE_MIN = 0.5, RATE_MAX = 2, RATE_STEP = 0.25;
 
 export function initialState() {
@@ -45,18 +63,22 @@ function show(ctx, tab) {
 }
 
 export function openTab(ctx, { tab }) {
-  const id = TABS[tab] ? tab : TAB_OF_WORD[tab];
+  refresh(ctx);
+  const id = resolveTab(tab);
   if (!id) return no('unsupported', `I do not know a tab called ${tab}.`);
   if (!show(ctx, id)) return ok(`You are already on the ${TABS[id].title} tab.`);
   return ok(`OK, here is the ${TABS[id].title} tab.`);
 }
 
 export function playGame(ctx, { tab }) {
-  const id = TAB_OF_WORD[tab] ?? tab;
+  refresh(ctx);
+  const id = resolveTab(tab) ?? tab;
+  if (!TABS[id]) return no('unsupported', `I do not know a game called ${tab}.`);
   if (!GAME_ACTIONS.new[id]) return openTab(ctx, { tab: id });
   show(ctx, id);
   const r = ctx.request(GAME_ACTIONS.new[id], { keep: 'true' });
   return ok(`OK, let's play ${TABS[id].title === 'Tic-tac-toe' ? 'tic-tac-toe' : TABS[id].title.toLowerCase()}! ${text(r)}`.trim());
+  // (a declared game whose start action fails still opens its tab: see openTab)
 }
 
 export function chooseGame() {
@@ -64,6 +86,7 @@ export function chooseGame() {
 }
 
 export function back(ctx) {
+  refresh(ctx);
   const s = ctx.state;
   if (!s.previousTab) return no('missing', 'There is no previous tab to go back to.');
   const target = s.previousTab;
@@ -73,11 +96,13 @@ export function back(ctx) {
 }
 
 export function whichTab(ctx) {
+  refresh(ctx);
   return ok(`You are on the ${TABS[ctx.state.activeTab].title} tab.`);
 }
 
 /** 4-6 example commands for the active tab, from the pattern examples of the world that owns the tab. */
 export function help(ctx) {
+  refresh(ctx);
   const tab = ctx.state.activeTab;
   const seen = new Set();
   const all = [];
@@ -137,6 +162,7 @@ export function language(ctx, { lang }) {
 }
 
 function gameAction(ctx, which, args = {}) {
+  refresh(ctx);
   const tab = ctx.state.activeTab;
   const action = GAME_ACTIONS[which][tab];
   if (!action) return no('missing', `There is no game open on the ${TABS[tab].title} tab. You can say, for example, "let's play hangman".`);

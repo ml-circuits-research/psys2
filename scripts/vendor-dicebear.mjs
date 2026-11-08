@@ -5,7 +5,7 @@
 //
 // In a temporary directory: npm-installs the pinned @dicebear/core and @dicebear/styles, bundles @dicebear/core
 // into ONE ES module (docs/webchat/vendor/dicebear-core.mjs, esbuild via npx), copies the chosen style
-// definitions to docs/webchat/vendor/dicebear-styles/<style>.json and writes docs/webchat/vendor/README.md.
+// definitions to docs/webchat/vendor/dicebear-styles/<style>.json and writes docs/webchat/vendor/dicebear-styles/LICENSES.md.
 // Nothing is added to package.json. Needs network access (npm registry) and npx.
 import { mkdtemp, mkdir, readFile, writeFile, copyFile, rm } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
@@ -67,7 +67,7 @@ try {
     ...rows.map((r) => `| \`dicebear-styles/${r.style}.json\` | ${r.name} | ${r.creator || 'n/a'} | ${r.license}${r.url ? ` (${r.url})` : ''} |`), '',
     'The definitions are also the source of the `ui.avatar` legend and lexicon (`scripts/legend-from-dicebear.mjs`).', '',
   ];
-  await writeFile(path.join(VENDOR, 'README.md'), lines.join('\n'));
+  await writeFile(path.join(VENDOR, 'dicebear-styles/LICENSES.md'), lines.join('\n'));
   console.log(`vendored @dicebear/core ${corePkg.version} and ${rows.length} styles (${rows.map((r) => `${r.style}: ${r.license}`).join(', ')})`);
 } finally {
   await rm(tmp, { recursive: true, force: true });

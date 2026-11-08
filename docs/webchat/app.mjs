@@ -218,11 +218,26 @@ export async function mountPsys2(element, options = {}) {
     state: (worldId) => states[worldId],
     setWorldState: (worldId, patch) => session?.setWorldState?.(worldId, patch),
     asset: (path) => new URL(path, base).href,
+    /** Report a later outcome (playback finished, position found) to the world that owns the tab. */
+    observe: (effect, { ok = true, detail = '', data = null } = {}, world = null) => observeAndFollow(
+      typeof effect === 'object' ? { ok: true, detail: '', data: null, world: null, ...effect } : { effect, ok, detail, data, world }),
     get speaking() { return !!speech?.speaking; },
   };
   // Effects declared by tab plugins: the tab's UI executes them (a chess engine, a synthesizer, a map...).
   for (const t of tabDefs) for (const [name, fn] of Object.entries(t.effects ?? {})) {
     if (!Object.hasOwn(ALLOW, name)) ALLOW[name] = (args) => fn(args, { ui: panelUI[t.id]?.ui, host: hostApi });
+  }
+  /** Report an observation to the engine and render the world's reaction (vision §8: action -> effect -> observation). */
+  async function observeAndFollow(obs, depth = 0) {
+    let follow = null;
+    try { follow = await session?.observe?.(obs); } catch (e) { console.warn('observe failed', e); }
+    if (!follow || typeof follow !== 'object') return [];
+    if (follow.state && Object.keys(follow.state).length) applyState(follow.state);
+    if (follow.text) {
+      addMessage('bot', follow.text);
+      if (settings.speaker && speech && speechSupport.synthesis) speech.speak(follow.text, { lang: speechLangTag() });
+    }
+    return follow.effects?.length && depth < 5 ? runEffects(follow.effects, depth + 1) : [];
   }
   async function runEffects(effects, depth = 0) {
     const out = [];
@@ -237,17 +252,7 @@ export async function mountPsys2(element, options = {}) {
         try { const r = await fn(args); rec.ok = r?.ok !== false; rec.detail = r?.detail ?? ''; data = r?.data ?? null; } catch (e) { rec.detail = e?.message ?? String(e); }
       }
       out.push(rec);
-      let follow = null;
-      try { follow = await session?.observe?.({ effect: name, ok: rec.ok, detail: rec.detail || (rec.ok ? 'executed' : 'failed'), data, world: raw?.world ?? null }); } catch (e) { console.warn('observe failed', e); }
-      // The world may react to the observation (vision §8: action -> effect -> observation -> new state).
-      if (follow && typeof follow === 'object') {
-        if (follow.state && Object.keys(follow.state).length) applyState(follow.state);
-        if (follow.text) {
-          addMessage('bot', follow.text);
-          if (settings.speaker && speech && speechSupport.synthesis) speech.speak(follow.text, { lang: speechLangTag() });
-        }
-        if (follow.effects?.length && depth < 5) out.push(...await runEffects(follow.effects, depth + 1));
-      }
+      out.push(...await observeAndFollow({ effect: name, ok: rec.ok, detail: rec.detail || (rec.ok ? 'executed' : 'failed'), data, world: raw?.world ?? null }, depth));
     }
     return out;
   }

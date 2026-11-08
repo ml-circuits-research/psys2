@@ -92,7 +92,7 @@ export function makeEnv(text, set, form, lex) {
 }
 
 /** Ranked full matches of every pattern against `tokens` (commas removed). */
-function rankMatches(tokens, isQuestion, set, env, lex) {
+function rankMatches(tokens, isQuestion, set, env, lex, focus = {}) {
   const toks = tokens.filter((t) => t.kind !== 'punct');
   const matches = [];
   for (const { p, order } of allPatterns(set)) {
@@ -104,8 +104,10 @@ function rankMatches(tokens, isQuestion, set, env, lex) {
   }
   const worlds = routeScores(toks, set, lex, new Set(matches.map((m) => m.pattern.worldId)));
   const score = (id) => worlds.find((w) => w.id === id)?.score ?? 0;
-  for (const m of matches) m.score = score(m.pattern.worldId);
-  matches.sort((a, b) => b.pattern.priority - a.pattern.priority || b.literals - a.literals || a.skips - b.skips
+  // Dialogue context (spec 03 §4): the world of the active tab and recently used worlds get a small priority bonus,
+  // so "B2" means a tic-tac-toe move on the tic-tac-toe tab and a chess square on the chess tab.
+  for (const m of matches) { m.score = score(m.pattern.worldId); m.rank = m.pattern.priority + (focus[m.pattern.worldId] ?? 0); }
+  matches.sort((a, b) => b.rank - a.rank || b.literals - a.literals || a.skips - b.skips
     || b.score - a.score || a.order - b.order);
   return { matches, worlds };
 }
@@ -125,7 +127,7 @@ function signature(m) {
  * Formalize `text` (English) into wires.
  * @returns {{ segments: object[], wires: object[] }}
  */
-export function formalize(text, { worlds, session, source = 'input' } = {}) {
+export function formalize(text, { worlds, session, source = 'input', focus = {} } = {}) {
   const set = worlds;
   const form = session instanceof FormSession ? session : session.form;
   const lex = lexIndex(set);
@@ -138,7 +140,7 @@ export function formalize(text, { worlds, session, source = 'input' } = {}) {
     const first = tokens[0], last = tokens[tokens.length - 1];
     const span = [first.start, last.end];
     const segText = text.slice(span[0], span[1]);
-    const { matches, worlds: scores } = rankMatches(tokens, isQuestion, set, env, lex);
+    const { matches, worlds: scores } = rankMatches(tokens, isQuestion, set, env, lex, focus);
     const seg = { text: segText, span, isQuestion, worlds: scores, match: null, wires: [], unparsed: true, alternatives: [], errors: [] };
     const sourceRef = `${source}#${span[0]}-${span[1]}`;
     for (const m of matches) {
@@ -184,7 +186,7 @@ export function formalize(text, { worlds, session, source = 'input' } = {}) {
         const bestSig = signature(m);
         for (const o of matches) {
           if (o === m || o.pattern.worldId === m.pattern.worldId) continue;
-          if (o.pattern.priority === m.pattern.priority && o.literals === m.literals && o.skips === m.skips && o.score === m.score
+          if (o.rank === m.rank && o.literals === m.literals && o.skips === m.skips && o.score === m.score
             && signature(o) !== bestSig) {
             seg.alternatives.push({ patternId: o.pattern.id, worldId: o.pattern.worldId, kind: o.pattern.kind, slots: plainSlots(o.slots) });
           }

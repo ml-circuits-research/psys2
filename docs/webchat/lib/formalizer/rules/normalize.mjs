@@ -55,7 +55,8 @@ export function splitSentences(text) {
 }
 
 // Letters exclude the multiplication and division signs (U+00D7, U+00F7), which are operators here.
-const TOKEN_RE = /(?<![\w)])-\d+(?:\.\d+)?|\d+(?:\.\d+)?|[A-Za-zÀ-ÖØ-öø-ɏ]+(?:['’-][A-Za-zÀ-ÖØ-öø-ɏ]+)*|,|[+\-*\/×÷=]/g;
+// Note names with accidentals (F#, B♭) are kept and spoken out: "F#" -> "F sharp".
+const TOKEN_RE = /\b[A-Ga-g][#♯♭](?![\w#♯♭])|(?<![\w)])-\d+(?:\.\d+)?|\d+(?:\.\d+)?|[A-Za-zÀ-ÖØ-öø-ɏ]+(?:['’-][A-Za-zÀ-ÖØ-öø-ɏ]+)*|,|[+\-*\/×÷=]/g;
 const OP_NORMAL = { '×': '*', '÷': '/' };
 
 /**
@@ -68,6 +69,11 @@ export function tokenize(sentence, base = 0) {
     const raw = m[0].replace(/’/g, "'");
     const start = base + m.index, end = start + m[0].length;
     if (raw === ',') { toks.push({ raw, lower: ',', start, end, kind: 'punct' }); continue; }
+    if (/^[A-Ga-g][#♯♭]$/.test(raw)) {
+      const acc = raw[1] === '♭' ? 'flat' : 'sharp';
+      toks.push({ raw: raw[0], lower: raw[0].toLowerCase(), start, end: start + 1, kind: 'word' }, { raw: acc, lower: acc, start: start + 1, end, kind: 'word' });
+      continue;
+    }
     if (raw.length === 1 && '+-*/×÷='.includes(raw)) { toks.push({ raw, lower: OP_NORMAL[raw] ?? raw, start, end, kind: 'op' }); continue; }
     if (/^-?\d/.test(raw)) { toks.push({ raw, lower: raw, start, end, kind: 'number' }); continue; }
     const lower = raw.toLowerCase();

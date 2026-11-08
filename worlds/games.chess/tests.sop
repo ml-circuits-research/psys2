@@ -1,0 +1,682 @@
+@t.games.chess.n001 core.test
+    input="Let's play chess."
+    expect="You are white"
+    expectState="user=white"
+    expectState="status=playing"
+    expectState="level=3"
+    expectState="pendingEngine=false"
+    expectState="history.length=0"
+    session=a
+
+@t.games.chess.n002 core.test
+    input="e4"
+    expect="You play pawn to e4"
+    expectState="history.0=e4"
+    expectState="history.length=1"
+    expectState="turn=black"
+    expectState="pendingEngine=true"
+    expectState="lastMove.to=e4"
+    expectEffect=chess.engine.bestmove
+    session=a
+
+@t.games.chess.n003 core.test
+    input="Knight to f3."
+    expect="still thinking"
+    expectStatus=missing
+    expectState="history.length=1"
+    session=a
+
+@t.games.chess.n004 core.test
+    input="Make your move."
+    expect="I play"
+    expectState="pendingEngine=false"
+    expectState="history.length=2"
+    expectState="turn=white"
+    expectState="engine=builtin"
+    session=a
+
+@t.games.chess.n005 core.test
+    input="Knight to f3."
+    expect="You play knight to f3"
+    expectState="history.2=Nf3"
+    expectState="history.length=3"
+    expectState="pendingEngine=true"
+    expectEffect=chess.engine.bestmove
+    session=a
+
+@t.games.chess.n006 core.test
+    input="Your move."
+    expect="still thinking"
+    session=a
+
+@t.games.chess.n007 core.test
+    input="Hurry up."
+    expect="I play"
+    expectState="history.length=4"
+    expectState="turn=white"
+    session=a
+
+@t.games.chess.n008 core.test
+    input="What was your last move?"
+    expect="My last move was"
+    session=a
+
+@t.games.chess.n009 core.test
+    input="What was my last move?"
+    expect="Your last move was knight to f3"
+    session=a
+
+@t.games.chess.n010 core.test
+    input="Whose turn is it?"
+    expect="It is your move"
+    session=a
+
+@t.games.chess.n011 core.test
+    input="Who is winning?"
+    expect="Material is level"
+    session=a
+
+@t.games.chess.n012 core.test
+    input="How many pieces do I have?"
+    expect="16 pieces"
+    session=a
+
+@t.games.chess.n013 core.test
+    input="How many pawns do you have?"
+    expect="I have 8 pawns"
+    session=a
+
+@t.games.chess.n014 core.test
+    input="Where is my king?"
+    expect="Your king is on e1"
+    session=a
+
+@t.games.chess.n015 core.test
+    input="Where are your rooks?"
+    expect="My rooks are on a8 and h8"
+    session=a
+
+@t.games.chess.n016 core.test
+    input="Which pieces did I lose?"
+    expect="You have not lost any pieces yet"
+    session=a
+
+@t.games.chess.n017 core.test
+    input="Is it check?"
+    expect="neither king is in check"
+    session=a
+
+@t.games.chess.n018 core.test
+    input="What is on e4?"
+    expect="your pawn"
+    session=a
+
+@t.games.chess.n019 core.test
+    input="Is e5 empty?"
+    expect="empty"
+    session=a
+
+@t.games.chess.n020 core.test
+    input="Describe the position."
+    expect="You are white"
+    expect="I have king on e8"
+    session=a
+
+@t.games.chess.n021 core.test
+    input="What moves have been played?"
+    expect="The moves so far: 1. e4"
+    session=a
+
+@t.games.chess.n022 core.test
+    input="How many moves have been played so far?"
+    expect="4 moves have been played"
+    session=a
+
+@t.games.chess.n023 core.test
+    input="What colour am I?"
+    expect="You are playing white"
+    session=a
+
+@t.games.chess.n024 core.test
+    input="Give me the FEN."
+    expect="FEN notation is"
+    session=a
+
+@t.games.chess.n025 core.test
+    input="What is the best move?"
+    expect="Let me think"
+    expectState="pendingHint=true"
+    expectEffect=chess.engine.hint
+    session=a
+
+@t.games.chess.n026 core.test
+    input="Undo my move."
+    expect="took back your last move and my reply"
+    expectState="history.length=2"
+    expectState="turn=white"
+    expectState="pendingHint=false"
+    session=a
+
+@t.games.chess.n027 core.test
+    input="Take back two moves."
+    expect="back at the start"
+    expectState="history.length=0"
+    expectState="fen=rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+    session=a
+
+@t.games.chess.n028 core.test
+    input="Undo my move."
+    expect="nothing to take back"
+    expectStatus=missing
+    session=a
+
+@t.games.chess.n029 core.test
+    input="Move my knight to f3."
+    expect="You play"
+    expectState="history.0=Nf3"
+    expectState="history.length=1"
+    session=b1
+
+@t.games.chess.n030 core.test
+    input="Pawn to d4."
+    expect="You play"
+    expectState="history.0=d4"
+    expectState="history.length=1"
+    session=b2
+
+@t.games.chess.n031 core.test
+    input="e2 to e4."
+    expect="You play"
+    expectState="history.0=e4"
+    expectState="history.length=1"
+    session=b3
+
+@t.games.chess.n032 core.test
+    input="e2 e4"
+    expect="You play"
+    expectState="history.0=e4"
+    expectState="history.length=1"
+    session=b4
+
+@t.games.chess.n033 core.test
+    input="Play e four."
+    expect="You play"
+    expectState="history.0=e4"
+    expectState="history.length=1"
+    session=b5
+
+@t.games.chess.n034 core.test
+    input="Echo two to echo four."
+    expect="You play"
+    expectState="history.0=e4"
+    expectState="history.length=1"
+    session=b6
+
+@t.games.chess.n035 core.test
+    input="Nf3"
+    expect="You play"
+    expectState="history.0=Nf3"
+    expectState="history.length=1"
+    session=b7
+
+@t.games.chess.n036 core.test
+    input="e2-e4"
+    expect="You play"
+    expectState="history.0=e4"
+    expectState="history.length=1"
+    session=b8
+
+@t.games.chess.n037 core.test
+    input="Knight from g1 to f3."
+    expect="You play"
+    expectState="history.0=Nf3"
+    expectState="history.length=1"
+    session=b9
+
+@t.games.chess.n038 core.test
+    input="Move the pawn on e2 to e4."
+    expect="You play"
+    expectState="history.0=e4"
+    expectState="history.length=1"
+    session=b10
+
+@t.games.chess.n039 core.test
+    input="I would like to play knight to c3."
+    expect="You play"
+    expectState="history.0=Nc3"
+    expectState="history.length=1"
+    session=b11
+
+@t.games.chess.n040 core.test
+    input="Knight 2 f3."
+    expect="You play"
+    expectState="history.0=Nf3"
+    expectState="history.length=1"
+    session=b12
+
+@t.games.chess.n041 core.test
+    input="Let me push the pawn to h3."
+    expect="You play"
+    expectState="history.0=h3"
+    expectState="history.length=1"
+    session=b13
+
+@t.games.chess.n042 core.test
+    input="g1 to f3"
+    expect="You play"
+    expectState="history.0=Nf3"
+    expectState="history.length=1"
+    session=b14
+
+@t.games.chess.n043 core.test
+    input="e2 to e5."
+    expect="one square forward, or two"
+    expectStatus=unsupported
+    expectState="history.length=0"
+    session=b15
+
+@t.games.chess.n044 core.test
+    input="Bishop on c1 to g5."
+    expect="Your bishop on c1 is blocked by your pawn on d2"
+    expectStatus=unsupported
+    session=b16
+
+@t.games.chess.n045 core.test
+    input="Knight to e5."
+    expect="None of your knights can reach e5"
+    expectStatus=unsupported
+    session=b17
+
+@t.games.chess.n046 core.test
+    input="Take the pawn on d5."
+    expect="nothing to capture on d5"
+    expectStatus=unsupported
+    session=b18
+
+@t.games.chess.n047 core.test
+    input="Castle kingside."
+    expect="bishop on f1"
+    expect="between your king and your rook"
+    expectStatus=unsupported
+    session=b19
+
+@t.games.chess.n048 core.test
+    input="Castle queenside."
+    expect="can't castle queenside yet"
+    expectStatus=unsupported
+    session=b20
+
+@t.games.chess.n049 core.test
+    input="e2 to e9."
+    expect="There is no square e9"
+    expectStatus=unsupported
+    session=b21
+
+@t.games.chess.n050 core.test
+    input="Bishop to c4."
+    expect="None of your bishops can reach c4"
+    expectStatus=unsupported
+    session=b22
+
+@t.games.chess.n051 core.test
+    input="Knight to f6."
+    expect="None of your knights can reach f6"
+    session=b23
+
+@t.games.chess.n052 core.test
+    input="e2 to e1."
+    expect="already there"
+    expectStatus=unsupported
+    session=b24
+
+@t.games.chess.n053 core.test
+    input="e7 to e5."
+    expect="is mine, not yours"
+    expectStatus=unsupported
+    session=b25
+
+@t.games.chess.n054 core.test
+    input="e3 to e4."
+    expect="There is no piece on e3"
+    expectStatus=unsupported
+    session=b26
+
+@t.games.chess.n055 core.test
+    input="Rook to a3."
+    expect="rook"
+    expectStatus=unsupported
+    session=b27
+
+@t.games.chess.n056 core.test
+    input="Can I move my knight to f3?"
+    expect="Yes, you can play knight to f3"
+    expectState="history.length=0"
+    session=b28
+
+@t.games.chess.n057 core.test
+    input="Can I castle?"
+    expect="No."
+    expectState="history.length=0"
+    session=b29
+
+@t.games.chess.n058 core.test
+    input="Is e4 legal?"
+    expect="Yes, you can play pawn to e4"
+    session=b30
+
+@t.games.chess.n059 core.test
+    input="Is e5 legal?"
+    expect="No."
+    session=b31
+
+@t.games.chess.n060 core.test
+    input="What can my knight do?"
+    expect="Your knight on b1 can go to a3 and c3"
+    expect="Your knight on g1 can go to f3 and h3"
+    expectState="highlights.length=2"
+    session=b32
+
+@t.games.chess.n061 core.test
+    input="Where can the queen go?"
+    expect="no legal moves"
+    session=b33
+
+@t.games.chess.n062 core.test
+    input="What can the piece on e2 do?"
+    expect="e3 and e4"
+    session=b34
+
+@t.games.chess.n063 core.test
+    input="How many legal moves do I have?"
+    expect="20 legal moves"
+    session=b35
+
+@t.games.chess.n064 core.test
+    input="What are my legal moves?"
+    expect="20 legal moves"
+    session=b36
+
+@t.games.chess.n065 core.test
+    input="Who is winning?"
+    expect="Material is level"
+    expect="not started"
+    session=b37
+
+@t.games.chess.n066 core.test
+    input="Am I in check?"
+    expect="neither king"
+    session=b38
+
+@t.games.chess.n067 core.test
+    input="Knight to f3."
+    expect="You play"
+    session=c
+
+@t.games.chess.n068 core.test
+    input="Pawn to d3."
+    expect="still thinking"
+    session=c
+
+@t.games.chess.n069 core.test
+    input="Pawn to d3."
+    expect="You play pawn to d3"
+    expectState="history.2=d3"
+    session=c
+
+@t.games.chess.n070 core.test
+    input="Your move."
+    expect="still thinking"
+    session=c
+
+@t.games.chess.n071 core.test
+    input="Your move."
+    expect="I play"
+    session=c
+
+@t.games.chess.n072 core.test
+    input="Knight to d2."
+    expect="Which knight?"
+    expect="one on b1"
+    expect="one on f3"
+    expectStatus=ambiguous
+    expectState="pending.kind=ambiguous"
+    expectState="pending.options.length=2"
+    expectState="history.length=4"
+    session=c
+
+@t.games.chess.n073 core.test
+    input="The one on f3."
+    expect="You play knight to d2"
+    expectState="pending=null"
+    expectState="history.4=Nfd2"
+    session=c
+
+@t.games.chess.n074 core.test
+    input="Knight to f3."
+    expect="You play"
+    session=d
+
+@t.games.chess.n075 core.test
+    input="Pawn to d3."
+    expect="still thinking"
+    session=d
+
+@t.games.chess.n076 core.test
+    input="Pawn to d3."
+    expect="You play"
+    session=d
+
+@t.games.chess.n077 core.test
+    input="Your move."
+    expect="still thinking"
+    session=d
+
+@t.games.chess.n078 core.test
+    input="Your move."
+    expect="I play"
+    session=d
+
+@t.games.chess.n079 core.test
+    input="Knight to d2."
+    expect="Which knight?"
+    expectStatus=ambiguous
+    session=d
+
+@t.games.chess.n080 core.test
+    input="The left one."
+    expect="You play knight to d2"
+    expectState="history.4=Nbd2"
+    session=d
+
+@t.games.chess.n081 core.test
+    input="I play black."
+    expect="you play black"
+    expect="I move first"
+    expectState="user=black"
+    expectState="orientation=black"
+    expectState="pendingEngine=true"
+    expectEffect=chess.engine.bestmove
+    session=e
+
+@t.games.chess.n082 core.test
+    input="Make your move."
+    expect="still thinking"
+    session=e
+
+@t.games.chess.n083 core.test
+    input="Make your move."
+    expect="I play"
+    expectState="history.length=1"
+    expectState="turn=black"
+    expectState="pendingEngine=false"
+    session=e
+
+@t.games.chess.n084 core.test
+    input="What colour am I?"
+    expect="You are playing black"
+    session=e
+
+@t.games.chess.n085 core.test
+    input="Flip the board."
+    expect="white"
+    expectState="orientation=white"
+    session=e
+
+@t.games.chess.n086 core.test
+    input="Show the board from black's side."
+    expect="black"
+    expectState="orientation=black"
+    session=e
+
+@t.games.chess.n087 core.test
+    input="Set level 5."
+    expect="level 5"
+    expectState="level=5"
+    session=e
+
+@t.games.chess.n088 core.test
+    input="Play easier."
+    expect="level 4"
+    expectState="level=4"
+    session=e
+
+@t.games.chess.n089 core.test
+    input="Play harder."
+    expect="level 5"
+    expectState="level=5"
+    session=e
+
+@t.games.chess.n090 core.test
+    input="Make it harder."
+    expect="level 6"
+    expectState="level=6"
+    session=e
+
+@t.games.chess.n091 core.test
+    input="Set the level to expert."
+    expect="level 7 (expert)"
+    expectState="level=7"
+    session=e
+
+@t.games.chess.n092 core.test
+    input="Play at maximum strength."
+    expect="level 8"
+    expectState="level=8"
+    session=e
+
+@t.games.chess.n093 core.test
+    input="Play harder."
+    expect="already at the highest level"
+    session=e
+
+@t.games.chess.n094 core.test
+    input="Set level 9."
+    expect="1 (beginner) to 8"
+    expectStatus=unsupported
+    expectState="level=8"
+    session=e
+
+@t.games.chess.n095 core.test
+    input="What level are you?"
+    expect="level 8 (master)"
+    session=e
+
+@t.games.chess.n096 core.test
+    input="I want an easy game."
+    expect="level 2"
+    expectState="level=2"
+    session=e
+
+@t.games.chess.n097 core.test
+    input="Play like a grandmaster."
+    expect="level 8"
+    session=e
+
+@t.games.chess.n098 core.test
+    input="I play white."
+    expect="new game"
+    expect="you play white"
+    expectState="user=white"
+    expectState="history.length=0"
+    expectState="pendingEngine=false"
+    expectState="orientation=white"
+    session=e
+
+@t.games.chess.n099 core.test
+    input="Switch sides."
+    expect="you play black"
+    expectState="user=black"
+    session=e
+
+@t.games.chess.n100 core.test
+    input="Start a new game as white."
+    expect="you play white"
+    expectState="user=white"
+    expectState="history.length=0"
+    session=e
+
+@t.games.chess.n101 core.test
+    input="I play white."
+    expect="already"
+    session=e
+
+@t.games.chess.n102 core.test
+    input="I resign the game."
+    expect="you resign"
+    expectState="status=resigned"
+    expectState="winner=black"
+    expectState="result=0-1"
+    session=e
+
+@t.games.chess.n103 core.test
+    input="e4"
+    expect="You resigned this game"
+    expectStatus=unsupported
+    session=e
+
+@t.games.chess.n104 core.test
+    input="Start a new chess game."
+    expect="New game of chess"
+    expectState="status=playing"
+    expectState="history.length=0"
+    expectState="winner=null"
+    session=e
+
+@t.games.chess.n105 core.test
+    input="Offer a draw."
+    expect="early for a draw"
+    session=e
+
+@t.games.chess.n106 core.test
+    input="I concede."
+    expect="you resign"
+    expectState="status=resigned"
+    session=e
+
+@t.games.chess.n107 core.test
+    input="Who is winning?"
+    expect="you resigned"
+    session=e
+
+@t.games.chess.n108 core.test
+    input="Play tic tac toe."
+    expect="tic-tac-toe"
+    expectState="ui.shell:activeTab=tictactoe"
+    session=g
+
+@t.games.chess.n109 core.test
+    input="a3"
+    expect="You took"
+    expectState="games.tictactoe:board.6=X"
+    expectState="history.length=0"
+    session=g
+
+@t.games.chess.n110 core.test
+    input="Who is winning?"
+    expect="even"
+    session=g
+
+@t.games.chess.n111 core.test
+    input="Describe the board."
+    expect="row"
+    session=g

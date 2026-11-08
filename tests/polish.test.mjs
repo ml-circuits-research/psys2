@@ -208,11 +208,15 @@ test('capabilities: a short grouped sentence from world summaries, falling back 
   const r = await say(['What can you do?']);
   assert.match(r.text, /^I can chat, /);
   assert.match(r.text, /do sums/);
-  assert.match(r.text, /talk about animals, shapes and colors, (shopping and time|time and shopping)/);
-  assert.match(r.text, /play (guess the animal|hangman|tic-tac-toe), (guess the animal|hangman|tic-tac-toe) and (guess the animal|hangman|tic-tac-toe)/);
+  // Grouped by leading verb; the exact list grows with the installed worlds.
+  assert.match(r.text, /talk about [^.]*animals/);
+  assert.match(r.text, /talk about [^.]*shapes and colors/);
+  assert.match(r.text, /play [^.]*hangman/);
+  assert.match(r.text, /play [^.]*tic-tac-toe/);
   assert.match(r.text, /change my face/);
   assert.match(r.text, /Ask me "what can I say here\?" for examples\.$/);
-  assert.ok(r.text.length < 300);
+  assert.equal((r.text.match(/\bplay\b/g) ?? []).length, 1, 'one "play" group');
+  assert.ok(r.text.length < 400);
   const ctx = { worlds: () => [
     { id: 'core', title: 'Core', summary: '' }, { id: 'a', title: 'Chat world', summary: 'chat' }, { id: 'b', title: 'Sums', summary: 'do sums' },
     { id: 'c', title: 'Plain title' }, { id: 'd', title: 'x', summary: '' }, { id: 'e', title: 'x', summary: 'play chess' }, { id: 'f', title: 'x', summary: 'play go' },
