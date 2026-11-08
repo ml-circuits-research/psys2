@@ -25,6 +25,8 @@ JOINERS = [(" and ", "strip"), (", and ", "strip"), (" then ", "strip"), (", the
 JOINER_W = [5, 1, 3, 3, 2, 3, 2, 4, 0.0]  # the bare " " joiner is only used by the plain variant
 END_PUNCT = ".!?"
 SIZES = {"train": 30000, "dev": 3000, "test": 4000}
+P_COMP = {"train": 0.40, "dev": 0.40, "test": 0.40}   # share of compositional programs (review F4, compositional.py)
+N_LONG = {"train": 0, "dev": 100, "test": 200}         # long concatenations (14-24 commands) that exceed the 192-token window (review F8)
 P_SINGLE, P_THREE, P_SAME_WORLD, P_PLAIN, P_LOWER_NEXT = 0.25, 0.30, 0.40, 0.20, 0.4
 
 LEAD_RE = re.compile(r"^(?:[\s,;]+|(?:and|then)\b[\s,]*)+", re.I)
@@ -77,14 +79,16 @@ def build_message(sents, rng, plain):
     return text, segs
 
 
-def build_split(rows, n, rng):
+def build_split(rows, n, rng, k_range=None):
     by_world = {}
     for r in rows:
         by_world.setdefault(r["world"], []).append(r)
     worlds = sorted(by_world)
     out = []
     for k in range(n):
-        if rng.random() < P_SINGLE:
+        if k_range:
+            k_sent = rng.randint(*k_range)
+        elif rng.random() < P_SINGLE:
             k_sent = 1
         else:
             k_sent = 3 if rng.random() < P_THREE else 2
@@ -97,8 +101,25 @@ def build_split(rows, n, rng):
         text, segs = build_message(sents, rng, plain)
         c = sents[0]["context"]
         out.append({"id": f"mc{k:06d}", "text": text, "context": {"tab": c.get("tab"), "recent_worlds": c.get("recent_worlds", []), "session": [], "synthetic": True},
-                    "variant": "plain" if plain else "clean", "n_segments": len(segs), "segments": segs})
+                    "variant": "plain" if plain else "clean", "n_segments": len(segs), "segments": segs,
+                    "family": "long" if k_range else ("single" if len(segs) == 1 else "concat")})
     return out
+
+
+def build_mix(rows, split, n, seed, epoch=0):
+    """Messages of one split: concatenations of routing sentences + compositional programs (F4) + long messages (F8).
+    `epoch` changes the seed, so training combinations are regenerated every epoch (review F6)."""
+    from . import compositional
+    n_comp = int(n * P_COMP[split]); n_long = N_LONG[split]
+    rng = random.Random(f"{seed}-{split}-{epoch}")
+    recs = build_split(rows, n - n_comp - n_long, rng)
+    if n_long:
+        recs += build_split(rows, n_long, rng, k_range=(14, 24))
+    recs += compositional.generate(n_comp, split, f"{seed}-{epoch}")
+    rng.shuffle(recs)
+    for i, r in enumerate(recs):
+        r["id"] = f"mc{i:06d}"
+    return recs
 
 
 MULTICMD = DATASET.parent / "runs" / "multicmd"
@@ -119,10 +140,14 @@ def main(argv=None):
     for split, n in SIZES.items():
         rng = random.Random(f"{a.seed}-{split}")
         pool = [r for r in rows if r["split"] == split]
-        recs = build_split(pool, n, rng)
+        recs = build_mix(pool, split, n, a.seed)
         (out / f"{split}.jsonl").write_text("".join(json.dumps(r) + "\n" for r in recs))
         if a.mirror:
             Path(a.mirror).mkdir(parents=True, exist_ok=True); (Path(a.mirror) / f"{split}.jsonl").write_text((out / f"{split}.jsonl").read_text())
+        fam = {}
+        for r in recs:
+            fam[r["family"]] = fam.get(r["family"], 0) + 1
+        print(split, "families", json.dumps(dict(sorted(fam.items()))))
         print(split, len(recs), "messages;", sum(r["n_segments"] > 1 for r in recs), "multi-command;", sum(r["variant"] == "plain" for r in recs), "plain")
 
 

@@ -1,0 +1,48 @@
+{
+ "file": "/home/salboaie/work/psys2/training/runs/multicmd-f4/test.jsonl",
+ "n": 1600,
+ "families": {
+  "ref_created": {
+   "n": 408,
+   "steps_ok": 408,
+   "composite_ok": 408,
+   "agree": 163
+  },
+  "repeat_undo": {
+   "n": 225,
+   "steps_ok": 225,
+   "composite_ok": 221,
+   "agree": 29
+  },
+  "world_switch": {
+   "n": 425,
+   "steps_ok": 425,
+   "composite_ok": 378,
+   "agree": 162
+  },
+  "self_correct": {
+   "n": 262,
+   "steps_ok": 262,
+   "composite_ok": 238,
+   "agree": 0
+  },
+  "shared_arg": {
+   "n": 105,
+   "steps_ok": 105,
+   "composite_ok": 105,
+   "agree": 0
+  },
+  "ellipsis": {
+   "n": 175,
+   "steps_ok": 175,
+   "composite_ok": 175,
+   "agree": 43
+  }
+ },
+ "total": {
+  "n": 1600,
+  "steps_ok": 1600,
+  "composite_ok": 1525,
+  "agree": 397
+ }
+}

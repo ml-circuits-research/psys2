@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { createDispatcherRuntime, candidateSegmentations, segmentsFromStarts, trimSegment, tokenInfo, routingText } from '../src/formalizer/dispatcher-runtime.mjs';
+import { createDispatcherRuntime, candidateSegmentations, segmentsFromStarts, trimSegment, tokenInfo, routingText, windowSpans } from '../src/formalizer/dispatcher-runtime.mjs';
 import { createWordPieceTokenizer } from '../src/formalizer/wordpiece.mjs';
 
 const VOCAB = ['[PAD]', '[UNK]', '[CLS]', '[SEP]', 'add', 'milk', 'and', 'open', 'the', 'map', ',', 'tab', 'none', ';', ':', 'recent', 'a', 'b'];
@@ -84,4 +84,37 @@ test('predict: segmentation beam + top-3 worlds as softmax probabilities, one wo
 
 test('createDispatcherRuntime validates its arguments', () => {
   assert.throws(() => createDispatcherRuntime({ ort, session: {}, tokenizer: tk, worlds: WORLDS }));
+});
+
+test('windowSpans: overlapping windows, last one ends at n (mirror of psys2_train.windows.window_spans)', () => {
+  assert.deepEqual(windowSpans(10, 10), [[0, 10]]);
+  assert.deepEqual(windowSpans(25, 10), [[0, 10], [5, 15], [10, 20], [15, 25]]);
+  assert.deepEqual(windowSpans(26, 10, 5), [[0, 10], [5, 15], [10, 20], [15, 25], [16, 26]]);
+});
+
+test('F8: a message longer than the segmentation limit is read by overlapping windows, boundaries survive everywhere', async () => {
+  const session = fakeSession((ids, i) => (ids[i] === AND ? 0.95 : 0.02), () => [1, 0, 0]);
+  const rt = createDispatcherRuntime({ ort, session, tokenizer: tk, worlds: WORLDS, segMaxLen: 32, worldMaxLen: 40 });
+  const text = Array.from({ length: 30 }, () => 'add milk').join(' and ');       // 30 commands, ~89 tokens > 32
+  const pred = await rt.predict(text, {});
+  assert.ok(session.calls.every((ids) => ids.length <= 40), 'no model input exceeds its limit');
+  assert.ok(session.calls.filter((ids) => ids.length === 32).length >= 3, 'several full segmentation windows');
+  const top = pred.segmentations[0].segments;
+  assert.equal(top.length, 30, 'every "and" is a boundary although no single window sees the whole message');
+  assert.ok(top.every((s) => s.text === 'add milk'));
+  assert.ok(pred.boundaries.length >= 29);
+});
+
+test('F8: an over-long segment is routed by overlapping windows with averaged world probabilities', async () => {
+  const session = fakeSession(() => 0.01, (ids) => { const body = ids.slice(ids.indexOf(2) + 1); return body.includes(MAP) ? [0, 3, 0] : [1, 0, 0]; });
+  const rt = createDispatcherRuntime({ ort, session, tokenizer: tk, worlds: WORLDS, segMaxLen: 512, worldMaxLen: 24 });
+  const text = 'open the map ' + 'a '.repeat(60) + 'b';                           // far beyond 24 tokens; "map" is only in the first window
+  const r = await rt.rankFull(text, { tab: 'none', recent_worlds: [] });
+  assert.ok(r.windows >= 3);
+  assert.ok(session.calls.every((ids) => ids.length <= 24));
+  assert.equal(r.worlds.length, 3);
+  assert.ok(Math.abs(r.worlds.reduce((a, w) => a + w.score, 0) - 1) < 1e-6);
+  assert.equal(r.simplified, null);
+  const short = await rt.rankFull('open the map', {});
+  assert.equal(short.windows, 1);
 });

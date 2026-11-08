@@ -118,6 +118,20 @@ const softmax = (v) => {
   return e.map((x) => x / z);
 };
 
+/**
+ * Overlapping windows over `n` tokens (review F8): [[a, b), ...] of at most `size` tokens, consecutive windows start `stride` apart and the
+ * last one ends at `n`. One window [0, n) when everything fits. Mirrors psys2_train.windows.window_spans.
+ */
+export function windowSpans(n, size, stride = Math.max(1, size >> 1)) {
+  if (n <= size) return [[0, n]];
+  const out = [];
+  for (let a = 0; a + size < n; a += stride) out.push([a, a + size]);
+  out.push([n - size, n]);
+  return out;
+}
+
+const FULL = 1e9;   // maxLength meaning "do not truncate" for the tokenizer
+
 export function createDispatcherRuntime({ ort, session, tokenizer, worlds, editTags = null, editTau = 0.5, useContext = true, segMaxLen = 192, worldMaxLen = 128, beam = 4, uncertain = 6, topK = 3 } = {}) {
   if (!ort?.Tensor || !session?.run || !tokenizer?.encode || !worlds?.length) throw new Error('createDispatcherRuntime needs { ort, session, tokenizer, worlds }');
   const cache = new Map();
@@ -134,26 +148,58 @@ export function createDispatcherRuntime({ ort, session, tokenizer, worlds, editT
 
   /** Per-token P(B) and token offsets of a raw message. */
   const segment = async (text) => {
-    const enc = tokenizer.encode(text, { maxLength: segMaxLen });
-    const { seg } = await run(enc.ids);
-    const probs = enc.ids.map((_, i) => { const p = softmax([seg[2 * i], seg[2 * i + 1]]); return p[1]; });
-    return { enc, probs };
+    const enc = tokenizer.encode(text, { maxLength: FULL });
+    if (enc.ids.length <= segMaxLen) {
+      const { seg } = await run(enc.ids);
+      return { enc, probs: enc.ids.map((_, i) => softmax([seg[2 * i], seg[2 * i + 1]])[1]), windows: 1 };
+    }
+    // review F8: longer than the model limit -> overlapping windows; a token takes the probability of the windows that see it
+    // with their distance to the window edge as weight (a boundary decision made near an edge counts less).
+    const n = enc.ids.length - 2, cls = enc.ids[0], sep = enc.ids[enc.ids.length - 1];
+    const spans = windowSpans(n, segMaxLen - 2);
+    const acc = new Float64Array(n), wsum = new Float64Array(n);
+    for (const [a, b] of spans) {
+      const { seg } = await run([cls, ...enc.ids.slice(1 + a, 1 + b), sep]);
+      for (let k = a; k < b; k++) {
+        const r = k - a + 1, w = Math.min(r, b - k);
+        acc[k] += w * softmax([seg[2 * r], seg[2 * r + 1]])[1]; wsum[k] += w;
+      }
+    }
+    const probs = [0, ...Array.from(acc, (x, k) => x / wsum[k]), 0];
+    return { enc, probs, windows: spans.length };
   };
 
   /** Top-k worlds (softmax probability) and the simplified text (edit head, or null) for one segment text in a context (cached). */
   const rankFull = async (text, ctx) => {
     const input = useContext ? routingText(text, ctx) : text;
     if (cache.has(input)) return cache.get(input);
-    const enc = tokenizer.encode(input, { maxLength: worldMaxLen });
-    const { world, edit } = await run(enc.ids);
-    const p = softmax(world);
+    const enc = tokenizer.encode(input, { maxLength: FULL });
+    let p, edit = null, windowed = 1;
+    if (enc.ids.length <= worldMaxLen) {
+      const r = await run(enc.ids);
+      p = softmax(r.world); edit = r.edit;
+    } else {
+      // review F8: an overlong segment is routed by overlapping windows of its own text (each with the context prefix);
+      // the world probabilities are averaged; no simplification for such a segment (the edit head sees one window only).
+      const prefixTokens = tokenizer.encode(routingText('', ctx), { maxLength: FULL }).ids.length - 2;
+      const te = tokenizer.encode(text, { maxLength: FULL });
+      const spans = windowSpans(te.ids.length - 2, Math.max(worldMaxLen - 2 - prefixTokens, 16));
+      windowed = spans.length;
+      const acc = new Float64Array(worlds.length);
+      for (const [a, b] of spans) {
+        const wt = text.slice(te.offsets[1 + a][0], te.offsets[b][1]);
+        const wi = tokenizer.encode(useContext ? routingText(wt, ctx) : wt, { maxLength: worldMaxLen });
+        softmax((await run(wi.ids)).world).forEach((x, i) => { acc[i] += x / spans.length; });
+      }
+      p = Array.from(acc);
+    }
     const top = p.map((x, i) => [x, i]).sort((a, b) => b[0] - a[0] || a[1] - b[1]).slice(0, topK).map(([x, i]) => ({ world: worlds[i], score: x }));
     let simplified = null, tags = null;
     if (editTags && edit) {
       const d = decodeEditTags(text, input.length - text.length, enc.offsets, edit, editTags.length, editTags, editTau);
       simplified = d.simplified; tags = d.tags;
     }
-    const res = { worlds: top, simplified, tags };
+    const res = { worlds: top, simplified, tags, windows: windowed };
     if (cache.size > 2000) cache.clear();
     cache.set(input, res);
     return res;
