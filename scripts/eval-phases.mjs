@@ -25,9 +25,9 @@
  *   node scripts/eval-phases.mjs --ort <onnxruntime-node entry> [--data-root <training dir>] [--n 1500] [--workers 20] [--seed 7]
  *        [--name train] [--operational] [--limit N]
  * Modes: default = stratified sample of the training data (training/dataset/<world>/train.jsonl, multicmd train, paraphrase variants of
- * training/paraphrases/out incl. needs_review / fail); --operational = the operational-set cases that are not right in
- * training/results/operational-full.json (no gold SOP there: phases are judged against the case's world and expectations).
- * Writes training/results/phase-analysis-<name>.json (+ the report is written by scripts/lib/phase-report.mjs when --report is given).
+ * training/paraphrases/out incl. needs_review / fail); --operational = every case of the operational set (training/eval/operational.jsonl), failures traced
+ * (no gold SOP there: phases are judged against the case's world and expectations).
+ * Writes training/results/phase-analysis-<name>.json (the Markdown report: node scripts/lib/phase-report.mjs).
  * The training data is not tracked in git: --data-root defaults to <repo>/training and falls back to the main checkout.
  */
 import { readFileSync, writeFileSync, existsSync, readdirSync, mkdirSync } from 'node:fs';
@@ -463,10 +463,7 @@ async function main() {
   const workers = Number(arg('workers', 20));
   let items;
   if (operational) {
-    const all = readJsonl(join(REPO, 'training/eval/operational.jsonl'));
-    const prev = JSON.parse(readFileSync(join(REPO, 'training/results/operational-full.json'), 'utf8'));
-    const bad = new Set(prev.cases.filter((c) => c.outcome !== 'right').map((c) => c.id));
-    items = all.filter((c) => bad.has(c.id));
+    items = readJsonl(join(REPO, 'training/eval/operational.jsonl'));   // every case runs; the failures are the rows with a phase
   } else items = buildSample(root, Number(arg('n', 1500)), Number(arg('seed', 7)));
   if (arg('limit')) items = shuffle(items, rng(1)).slice(0, Number(arg('limit')));
   const modelDir = resolve(arg('model-dir', join(REPO, 'docs/webchat/models/dispatcher')));
