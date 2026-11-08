@@ -232,7 +232,15 @@ const isMain = process.argv[1] && resolve(process.argv[1]) === fileURLToPath(imp
 if (isMain) {
   const args = process.argv.slice(2);
   const opt = (n, d) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] : d; };
-  const input = args.find((a, i) => !a.startsWith('--') && !['--root', '--out-dir', '--dev'].includes(args[i - 1]));
+  // several files may be given (a shell glob expands to many arguments); each is merged into the out files in turn
+  const inputs = args.filter((a, i) => !a.startsWith('--') && !['--root', '--out-dir', '--dev'].includes(args[i - 1]));
+  if (inputs.length > 1) {
+    const { spawnSync } = await import('node:child_process');
+    const rest = args.filter((a) => !inputs.includes(a));
+    for (const f of inputs) { const r = spawnSync(process.execPath, [process.argv[1], f, ...rest], { stdio: 'inherit' }); if (r.status) process.exitCode = r.status; }
+    process.exit(process.exitCode ?? 0);
+  }
+  const input = inputs[0];
   if (!input || !existsSync(input)) { console.error('usage: node scripts/collect-paraphrases.mjs <file|dir> [--report] [--root worlds] [--out-dir training/paraphrases] [--dev 0.1] [--no-write]'); process.exit(2); }
   const { report, errors, processed } = await collect({ input, root: resolve(opt('--root', DEFAULT_ROOT)), outDir: opt('--out-dir', 'training/paraphrases'), devShare: Number(opt('--dev', '0.1')), write: !args.includes('--no-write') });
   for (const e of errors) console.error('error: ' + e);

@@ -9,9 +9,11 @@ Three files coordinate the worker and the reviewer:
 
 | File | Who writes | Rules |
 |---|---|---|
-| `worker-tasks.md` (this file) | reviewer only | **Append-only.** The worker never edits it. The reviewer never changes earlier text; new tasks, answers and corrections are appended at the end as new sections (`## Round N`). A later section overrides an earlier one when they conflict. |
-| `questions.md` | worker appends, reviewer removes | The worker appends a question whenever it is blocked or a decision is not covered here, and **never deletes** anything. The reviewer removes a question only after answering it in a new section of `worker-tasks.md`. |
-| `worker-log.md` | worker only | Append-only progress log: one entry per task with status (`done` / `partial` / `blocked`), commands run, key numbers, commit hash, deviations. |
+| `worker-tasks.md` (this file) | reviewer only | The worker never edits it. **The reviewer manages it:** after validating a task, the reviewer deletes it (it moves to "Validated" at the end as one line). When a task fails review, the reviewer rewrites it with what must be fixed. Answers and new tasks go into the relevant task or a new round. **Always read the current version: `git pull` before starting each task.** |
+| `questions.md` | worker appends, reviewer removes | The worker appends a question whenever it is blocked or a decision is not covered here, and **never deletes** anything. The reviewer removes a question after answering it in this file. |
+| `worker-log.md` | worker only | Append-only progress log: one entry per task with status (`done` / `partial` / `blocked`), commands run, key numbers, commit hash, deviations. Write the entry and push as soon as a task is done: the reviewer validates from it. |
+
+Baseline freeze: once the worker records the baseline commit in T1, the reviewer does not change `worlds/` or `src/` until the session ends, except through a task in this file. So pulling before each task is always safe.
 
 Working rules:
 
@@ -50,7 +52,7 @@ Validation: log lists the versions, the test counts, and smoke test OK.
 ### T1 — Dataset rebuild and sanity
 
 Steps:
-1. `git pull` again first: rule improvements may land on `main` while T0 runs. Record the commit hash you build from in `worker-log.md`; it is the baseline commit for every later number. After that, do not pull again until T9 unless a new round in this file asks you to.
+1. `git pull` again first: rule improvements may land on `main` while T0 runs. Record the commit hash you build from in `worker-log.md`. It is the baseline commit for every later number: from then on `worlds/` and `src/` are frozen (see §0).
 2. `node scripts/export-training.mjs`, `node scripts/collect-paraphrases.mjs training/paraphrases/inbox --report`, then `node scripts/build-dataset.mjs`.
 3. Compare `training/dataset/stats.json` with the committed version and explain any large difference.
 4. Check that no group (`group` field) appears in two splits; write a short script `training/psys2_train/check_splits.py` for this.
@@ -243,3 +245,7 @@ Stage 2 runs only if Stage 1 is not satisfactory, and only for the world groups 
 - a seq2seq normalizer.
 
 Do not start them. If you finish Stage 1 early, write in `questions.md` which Stage 2 task you would run first, with the evidence from D3, and stop.
+
+## Validated
+
+(the reviewer moves validated tasks here, one line each)
