@@ -171,3 +171,19 @@ Deviations / choices:
 - Multi-command gold targets come from the source record (`source_id`), so a piece whose target depended on the source record's own context messages, or `plain` variants without punctuation, can be unreachable even for the oracle (multi-command ceiling 74.7 %).
 - Segmentation match = same piece count and character IoU >= 0.6 per piece (`--seg-iou`).
 - The producer must write the dataset record id as `id` (per-world test id, routing row id or `mc......`); `gold` in the prediction is ignored.
+
+## B1 — Rebaseline — done (2026-11-08)
+Baseline: c989cd1 (HEAD is 68ec94d). `git diff --stat c989cd1 HEAD -- worlds src`: only `src/dialog/dispatch-validate.mjs` (+267, D2); worlds/ unchanged.
+Commands: `node scripts/export-training.mjs && node scripts/build-dataset.mjs`; `python -m psys2_train.check_splits`; `node scripts/eval-rules.mjs` (twice, rules.json byte-identical); `node scripts/eval-rules.mjs --heldout`; `npm test` (534 pass).
+Dataset: 20 worlds, 40,748 records (train 31,442 / dev 4,684 / test 4,622), routing 38,899, duplicates dropped 4,901 (was 4,752), conflicting targets 926 (was 853), source records read 45,769 (was 44,873). check_splits: OK, no group or routing text crosses splits. training/dataset/stats.json changed (committed one was the 055fbeb build). training/paraphrases/out/*.jsonl were NOT rewritten (git status clean there).
+Warning: build-dataset DELETED the gitignored `training/dataset/multicmd/` (it wipes every directory under training/dataset). The multicmd agent must regenerate it with its own script; build-dataset should be changed to leave it alone if both are to coexist.
+Rules, 055fbeb -> c989cd1 (restricted / routed %; test splits differ in content between the two builds):
+- all positives: 88.7 / 88.3 -> 94.1 / 93.4; negatives 98.1 -> 97.5 (n 412 -> 321)
+- paraphrase test (contaminated): 30.1 / 30.4 -> 60.4 / 61.0; rule-derived 100 / 94.0 -> 100 / 94.3; generator 100 / 100 -> 100 / 99.7
+- held-out (clean, 2,255 positives, 73 needs_review excluded: docs.reader 66, tictactoe 2, 6 other worlds 1 each): 49.4 / 50.4
+- routing (rows): 89.7% -> 95.3% (unseen text 89.7 -> 95.4; real-context paraphrases 42.7 -> 75.9)
+- per group (restricted / routed): kids 93.3/93.3 -> 97.9/97.8; avatar/shell/editor 84.3/84.3 -> 88.6/88.6; music/draw/map/charts 84.9/83.5 -> 86.8/85.3; games 83.6/83.8 -> 97.5/96.4; documents 100/98.7 -> 100/98.7
+- held-out per group (restricted / routed): kids 58.1/57.9; avatar/shell/editor 38.9/40.5; music/draw/map/charts 41.8/42.3; games 57.5/62.1; documents 35.1/32.7. Per world in training/RESULTS.md and rules.json.
+Files: scripts/eval-rules.mjs (--heldout, --no-heldout, heldout section), training/results/rules.json (c989cd1), training/results/rules-055fbeb.json (from HEAD), training/RESULTS.md (side-by-side), training/dataset/stats.json (rebuilt; dataset/ itself is gitignored).
+Commit: (filled by coordinator)
+Deviations / choices: one run does test splits + routing + held-out (held-out inside rules.json under `heldout`); `--heldout` = held-out only, writes training/results/rules-heldout.json by default; `--no-heldout` skips it. Held-out target = `expected_circuit`, context = record `context` (identical to `setup`), tab = record `tab`. Held-out failures are appended to training/runs/rules-failures.jsonl (source `heldout`). The 49.4% differs from the reviewer's 45% (variants-only, labelling pass); mine includes the canonical records and is exact-SOP.
