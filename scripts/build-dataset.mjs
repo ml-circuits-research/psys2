@@ -122,8 +122,11 @@ for (const [world, rs] of byWorld) {
 }
 
 // ---- write per-world files ----------------------------------------------------------------------------------------------------
-rmSync(OUT, { recursive: true, force: true });
+// remove only the per-world directories this script writes (they hold train.jsonl); other generated data under OUT is kept
 mkdirSync(OUT, { recursive: true });
+for (const d of readdirSync(OUT, { withFileTypes: true })) {
+  if (d.isDirectory() && existsSync(join(OUT, d.name, 'train.jsonl')) && !d.name.startsWith('multicmd')) rmSync(join(OUT, d.name), { recursive: true, force: true });
+}
 const stats = { seed: SEED, shares: { dev: DEV, test: TEST }, source_records_read: totalRead, dedupe: dupStats, worlds: {}, routing: {}, unlabelled: {}, totals: {} };
 const inc = (o, ...path) => { let c = o; for (const p of path.slice(0, -1)) c = c[p] ??= {}; const l = path.at(-1); c[l] = (c[l] ?? 0) + 1; };
 const clean = ({ _review, _flagged, ...r }) => r;
