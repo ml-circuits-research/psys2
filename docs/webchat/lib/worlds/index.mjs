@@ -22,6 +22,7 @@ export class World {
     this.imports = [];
     this.legendWires = [];
     this.lexicons = [];
+    this.phrases = [];   // core.phrase macros (spec 03 section 2.5)
     this.patterns = [];
     this.operations = [];
     this.kbRaw = [];
@@ -133,7 +134,16 @@ function buildWorld(id, files, ops) {
   w.lexicons = wires['lexicon.sop'].filter((x) => x.type === 'core.lexicon').map((x) => ({
     id: x.id, wire: x, worldId: id, class: txt(x, 'class'), words: getAll(x, 'word').map((v) => v.v),
     plurals: getAll(x, 'plural').map((v) => v.v), gender: txt(x, 'gender'),
+    extends: getAll(x, 'extends').map((v) => String(v.v).replace(/^\$/, '')), exclude: getAll(x, 'exclude').map((v) => String(v.v).toLowerCase()),
   }));
+  w.phrases = wires['lexicon.sop'].filter((x) => x.type === 'core.phrase').map((x) => ({
+    id: x.id.replace(/^phrase\./, ''), wireId: x.id, wire: x, worldId: id, frame: txt(x, 'frame') !== 'false',
+    alts: [...new Set(getAll(x, 'alt').map((v) => String(v.v).toLowerCase()))].map((a) => a.split('_').filter(Boolean)),
+  }));
+  for (const ph of w.phrases) {
+    if (!ph.wireId.startsWith('phrase.')) w.errors.push({ file: 'lexicon.sop', message: `phrase '${ph.wireId}' must have an id starting with 'phrase.'` });
+    if (!ph.alts.length) w.errors.push({ file: 'lexicon.sop', message: `phrase '${ph.wireId}' has no alternatives` });
+  }
   w.patterns = wires['patterns.sop'].filter((x) => x.type === 'core.pattern').map((x) => ({
     id: x.id, wire: x, worldId: id, match: txt(x, 'match'), emit: txt(x, 'emit'),
     kind: txt(x, 'kind') ?? 'statement', priority: Number(txt(x, 'priority') ?? 0),
@@ -196,6 +206,7 @@ export async function loadWorlds(loader) {
     set.worlds.set(id, w);
     set.legends.add(w.legendWires, { worldId: id });
   }
+  resolveLexiconExtends(set);
   for (const w of set.list()) {
     w.kb = [];
     for (const raw of w.kbRaw) {
@@ -206,4 +217,34 @@ export async function loadWorlds(loader) {
     }
   }
   return set;
+}
+
+/**
+ * Lexicon inheritance (spec 02): `extends=$lex.x` (repeatable) adds the words (and plurals) of the named lexicons, `exclude=<word>`
+ * (repeatable) removes entries from the inherited ones. The resolved list replaces `words`, so every consumer sees one flat list.
+ */
+function resolveLexiconExtends(set) {
+  const byId = new Map();
+  for (const w of set.list()) for (const l of w.lexicons) byId.set(l.id, l);
+  const state = new Map();
+  const resolve = (l) => {
+    if (!l.extends.length || state.get(l) === 2) return;
+    const w = set.get(l.worldId);
+    if (state.get(l) === 1) { w.errors.push({ file: 'lexicon.sop', message: `lexicon '${l.id}': extends cycle` }); return; }
+    state.set(l, 1);
+    const inherited = [], plurals = [];
+    for (const id of l.extends) {
+      const base = byId.get(id);
+      if (!base) { w.errors.push({ file: 'lexicon.sop', message: `lexicon '${l.id}': extends unknown lexicon '${id}'` }); continue; }
+      resolve(base);
+      inherited.push(...base.words);
+      plurals.push(...base.plurals);
+    }
+    const drop = new Set(l.exclude);
+    for (const x of l.exclude) if (!inherited.some((y) => y.toLowerCase() === x)) w.errors.push({ file: 'lexicon.sop', message: `lexicon '${l.id}': exclude '${x}' is not an inherited word` });
+    l.words = [...new Set([...inherited.filter((x) => !drop.has(x.toLowerCase())), ...l.words])];
+    l.plurals = [...new Set([...plurals, ...l.plurals])];
+    state.set(l, 2);
+  };
+  for (const l of byId.values()) resolve(l);
 }
