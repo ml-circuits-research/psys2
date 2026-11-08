@@ -436,3 +436,15 @@ Added the message-level correction phase: `correctMessage` in `src/formalizer/ru
 - Tests: ui.avatar g3a1-g3a5 / g3n1-g3n2, art.draw g3b1-g3b2 (boat after a drawing), tests/bounded-captures.test.mjs. Spec 03 (rest slot, section 7.9) updated.
 - Gates on tip rebased on 85e2f4b: test-world all 0 FAIL; npm test pass 748 fail 0. eval-operational --rules-only: right 86.7 -> 87.0, wrong 2.9 -> 2.6, not_understood 8.9 -> 9.0 (avatar group right 79.7 -> 80.6, games 87.6 -> 88.3). eval-rules --no-heldout routing 4587 -> 4594 of 4751, no new routing failure (8 tic-tac-toe/shell routing failures fixed, avatar no longer steals "let us play ...").
 - Limitation: the dialog (`src/dialog/index.mjs`, not touched) does not pass `protect` (the open tab's vocabulary) to spellCorrect/spellAlternates; the lexicon-noun heuristic stands in for it. One line `protect: vocabOf(ctx.tabWorld)` in `_lenient` and dispatch-validate would make "never change a word the tab knows" exact.
+
+## Parallel evaluation and test tools (2026-11-08)
+Module `scripts/lib/shard.mjs` (`defaultJobs`, `parseJobs`, `runSharded`, `serveShard`); `--jobs N` everywhere, default `os.availableParallelism()` (20 on the DGX Spark). The machine was heavily loaded by other agents during measurement (load average 30-45), so the times are upper bounds.
+| tool | before (`--jobs 1` / old) | after (20 jobs) | check |
+| --- | --- | --- | --- |
+| `eval-operational --rules-only` | 88 s | 16 s | per-case JSON identical except `ms` and the new `run` field |
+| `eval-operational --ort` | 757 s (single-thread mode, p50 404 ms) | 117 s (sharded, p50 1018 ms with contention) | totals, groups, per-case rows identical |
+| `eval-rules` (was already sharded per world, default min(cores, 20)) | 441 s (`--jobs 1`) | 46 s | output file byte-identical |
+| `eval-dispatch` (already sharded per 250-record chunk; small kids sample is 1 chunk) | 341 s (`--jobs 1`) | 126 s | stdout identical |
+| `test-world all` | 111 s (`--jobs 1`) | 25 s | same 23 lines, exit 0 |
+| `npm test` | about 7.4 min CPU (serial estimate) | 89-132 s, 736/736 x3 | green 3 times |
+Notes: `eval-operational` prints `mode single-thread` or `mode sharded xN` and records `run: {mode, jobs}` in the JSON; latency is measured per message inside the worker, so use `--jobs 1` for the CPU latency measurement. Each worker loads the engine and the ONNX session once (intraOpNumThreads 1). `npm test` now runs `scripts/run-tests.mjs` (`--test-concurrency` = cores, `--jobs N`); tests already use `mkdtemp` and `listen(0)`, so none needed changes. `src/cli.mjs test-world all` uses worker threads (`--jobs`, `--jobs 1` = in-process). Spec: `specs/06-dialog-server-webchat.md` (CLI section), `docs/api.html`.
