@@ -52,3 +52,12 @@
 @tpl.kids.shop.ack.price core.template
     for=ack.kids.shop.price
     text="OK, one {item} costs {cost} lei."
+
+@tpl.kids.shop.leftafter core.template
+    for=kids.shop.leftafter.amount
+    text="You would have {value} {unit:plural} left."
+
+@tpl.kids.shop.leftafter.conflicting core.template
+    for=kids.shop.leftafter.amount
+    status=conflicting
+    text="{note}"

@@ -195,3 +195,34 @@
     card=one
     ask="How many lei of change does the user get?"
     compute=true
+
+@kids.shop.leftafter core.type
+    extends=core.state
+    doc="How much money the user would have left after buying a basket (a what-if: nothing is recorded)."
+    example="How much money do I have left after I buy 2 pencils?"
+
+@kids.shop.leftafter.item core.key
+    value=atom
+    card=one
+    ask="What is the first kind of item in the basket?"
+
+@kids.shop.leftafter.count core.key
+    value=number
+    card=one
+    ask="How many of the first kind?"
+
+@kids.shop.leftafter.item2 core.key
+    value=atom
+    card=one
+    ask="What is the second kind of item in the basket?"
+
+@kids.shop.leftafter.count2 core.key
+    value=number
+    card=one
+    ask="How many of the second kind?"
+
+@kids.shop.leftafter.amount core.key
+    value=number
+    card=one
+    ask="How many lei would the user have left?"
+    compute=true

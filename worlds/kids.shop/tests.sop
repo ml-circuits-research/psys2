@@ -613,3 +613,59 @@
     input="I have 30 lei. A pencil costs 2 lei. i picked up 3 pencils. How many lei do I have now?"
     expect="You have 24 lei left."
     doc="statement: buying"
+
+@t.shop.la01 core.test
+    input="I have 12 lei. A pencil costs 2 lei. How much money do I have left after I buy 2 pencils?"
+    expect="You would have 8 lei left."
+    doc="question: money left after a buy clause"
+
+@t.shop.la02 core.test
+    input="I have 17 lei. A kite costs 4 lei. How much money do I have left after I buy 2 kites?"
+    expect="You would have 9 lei left."
+    doc="question: money left after a buy clause"
+
+@t.shop.la03 core.test
+    input="I have 36 lei. A puzzle costs 11 lei. How much money do I have left after I buy 1 puzzle?"
+    expect="You would have 25 lei left."
+    doc="question: money left after a buy clause"
+
+@t.shop.la04 core.test
+    input="I have 23 lei. A sandwich costs 6 lei. How much money do I have left after I buy 2 sandwiches?"
+    expect="You would have 11 lei left."
+    doc="question: money left after a buy clause"
+
+@t.shop.la05 core.test
+    input="I have 20 lei. If I buy 3 pencils, how much do I have left?"
+    expect="You would have 14 lei left."
+    doc="question: buy clause first"
+
+@t.shop.la06 core.test
+    input="I have 20 lei. How many lei will I have left if I buy a ball?"
+    expect="You would have 15 lei left."
+    doc="question: single item, a/an"
+
+@t.shop.la07 core.test
+    input="I have 30 lei. What is my money after I buy 2 pencils and 3 balls?"
+    expect="You would have 11 lei left."
+    doc="question: two items"
+
+@t.shop.la08 core.test
+    input="I have 10 lei. A kite costs 4 lei. How much money will I have left after buying 2 kites?"
+    expect="You would have 2 lei left."
+    doc="question: after buying"
+
+@t.shop.la09 core.test
+    input="I have 7 lei. How much money do I have left after I buy 3 pencils?"
+    expect="You would have 1 leu left."
+    doc="question: money left, price from the list"
+
+@t.shop.la10 core.test
+    input="I have 3 lei. How much money do I have left after I buy 5 balls?"
+    expectStatus=conflicting
+    doc="question: not enough money"
+
+@t.shop.la11 core.test
+    session=la11
+    input="I have 20 lei. A pencil costs 2 lei. How much money do I have left after I buy 2 pencils? How much money do I have left?"
+    expect="You have 20 lei now."
+    doc="question: a what-if does not spend the money"

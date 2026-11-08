@@ -41,3 +41,13 @@
     impl=changeFor
     semantics=query
     doc="The amount paid minus the cost of the basket."
+
+@op.kids.shop.leftAfter core.operation
+    outputs=kids.shop.leftafter.amount
+    inputs=kids.shop.leftafter.item
+    inputs=kids.shop.leftafter.count
+    inputs=kids.shop.leftafter.item2
+    inputs=kids.shop.leftafter.count2
+    impl=leftAfter
+    semantics=query
+    doc="The current money minus the cost of the basket; nothing is recorded."

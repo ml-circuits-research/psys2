@@ -3211,3 +3211,172 @@
     priority=10
     example="Kite 4 lei."
 
+
+@pat.kids.shop.la.n0 core.pattern
+    match="how_much [money|lei|leu]? [do|will|would|shall] i [still]? have [left|remaining|over|left_over|then|afterwards]? [after|if|when|once|after_buying|if_buying|after_i|if_i|when_i] [i]? [buy|bought|get|purchase|purchased|pay_for|take|will_buy|buying|purchasing|am_buying|am_going_to_buy] {n1:number} {i1:lex.kids.shop.items} [pls|plz|please|thanks|now|then|exactly]?"
+    emit="@{_} core.question type=kids.shop.leftafter seek=amount where.item={i1} where.count={n1}"
+    kind=question
+    priority=12
+    example="how much money do i have left after i buy 2 pencils"
+
+@pat.kids.shop.la.n1 core.pattern
+    match="how_many [lei|leu] [do|will|would|shall] i [still]? have [left|remaining|over|left_over|then|afterwards]? [after|if|when|once|after_buying|if_buying|after_i|if_i|when_i] [i]? [buy|bought|get|purchase|purchased|pay_for|take|will_buy|buying|purchasing|am_buying|am_going_to_buy] {n1:number} {i1:lex.kids.shop.items} [pls|plz|please|thanks|now|then|exactly]?"
+    emit="@{_} core.question type=kids.shop.leftafter seek=amount where.item={i1} where.count={n1}"
+    kind=question
+    priority=12
+    example="how many lei do i have left after i buy 2 pencils"
+
+@pat.kids.shop.la.n2 core.pattern
+    match="how_much [money|lei|leu]? [is|will_be|would_be] [left|remaining|left_over|over] [for_me]? [after|if|when|once|after_buying|if_buying|after_i|if_i|when_i] [i]? [buy|bought|get|purchase|purchased|pay_for|take|will_buy|buying|purchasing|am_buying|am_going_to_buy] {n1:number} {i1:lex.kids.shop.items} [pls|plz|please|thanks|now|then|exactly]?"
+    emit="@{_} core.question type=kids.shop.leftafter seek=amount where.item={i1} where.count={n1}"
+    kind=question
+    priority=12
+    example="how much money is left after i buy 2 pencils"
+
+@pat.kids.shop.la.n3 core.pattern
+    match="[what|whats|what_is] [my|the]? [money|balance] [left]? [after|if|when|once|after_buying|if_buying|after_i|if_i|when_i] [i]? [buy|bought|get|purchase|purchased|pay_for|take|will_buy|buying|purchasing|am_buying|am_going_to_buy] {n1:number} {i1:lex.kids.shop.items} [pls|plz|please|thanks|now|then|exactly]?"
+    emit="@{_} core.question type=kids.shop.leftafter seek=amount where.item={i1} where.count={n1}"
+    kind=question
+    priority=12
+    example="what is my money left after i buy 2 pencils"
+
+@pat.kids.shop.la.n4 core.pattern
+    match="[after|if|when|once] i [buy|bought|get|purchase|purchased|pay_for|take|will_buy|buying|purchasing|am_buying|am_going_to_buy] {n1:number} {i1:lex.kids.shop.items} how_much [money|lei|leu]? [do|will|would|shall] i [still]? have [left|remaining|over|left_over|then|afterwards]? [pls|plz|please|thanks|now|then|exactly]?"
+    emit="@{_} core.question type=kids.shop.leftafter seek=amount where.item={i1} where.count={n1}"
+    kind=question
+    priority=12
+    example="if i buy 2 pencils how much money do i have left"
+
+@pat.kids.shop.la.n5 core.pattern
+    match="[after|if|when|once] i [buy|bought|get|purchase|purchased|pay_for|take|will_buy|buying|purchasing|am_buying|am_going_to_buy] {n1:number} {i1:lex.kids.shop.items} how_many [lei|leu] [do|will|would|shall] i [still]? have [left|remaining|over|left_over|then|afterwards]? [pls|plz|please|thanks|now|then|exactly]?"
+    emit="@{_} core.question type=kids.shop.leftafter seek=amount where.item={i1} where.count={n1}"
+    kind=question
+    priority=12
+    example="if i buy 2 pencils how many lei do i have left"
+
+@pat.kids.shop.la.n6 core.pattern
+    match="[after|if|when|once] i [buy|bought|get|purchase|purchased|pay_for|take|will_buy|buying|purchasing|am_buying|am_going_to_buy] {n1:number} {i1:lex.kids.shop.items} how_much [money|lei|leu]? [is|will_be|would_be] [left|remaining|left_over|over] [for_me]? [pls|plz|please|thanks|now|then|exactly]?"
+    emit="@{_} core.question type=kids.shop.leftafter seek=amount where.item={i1} where.count={n1}"
+    kind=question
+    priority=12
+    example="if i buy 2 pencils how much money is left"
+
+@pat.kids.shop.la.n7 core.pattern
+    match="[after|if|when|once] i [buy|bought|get|purchase|purchased|pay_for|take|will_buy|buying|purchasing|am_buying|am_going_to_buy] {n1:number} {i1:lex.kids.shop.items} [what|whats|what_is] [my|the]? [money|balance] [left]? [pls|plz|please|thanks|now|then|exactly]?"
+    emit="@{_} core.question type=kids.shop.leftafter seek=amount where.item={i1} where.count={n1}"
+    kind=question
+    priority=12
+    example="if i buy 2 pencils what is my money left"
+
+@pat.kids.shop.la.a8 core.pattern
+    match="how_much [money|lei|leu]? [do|will|would|shall] i [still]? have [left|remaining|over|left_over|then|afterwards]? [after|if|when|once|after_buying|if_buying|after_i|if_i|when_i] [i]? [buy|bought|get|purchase|purchased|pay_for|take|will_buy|buying|purchasing|am_buying|am_going_to_buy] [a|an|one|the]? {i1:lex.kids.shop.items} [pls|plz|please|thanks|now|then|exactly]?"
+    emit="@{_} core.question type=kids.shop.leftafter seek=amount where.item={i1} where.count=1"
+    kind=question
+    priority=12
+    example="how much money do i have left after i buy a ball"
+
+@pat.kids.shop.la.a9 core.pattern
+    match="how_many [lei|leu] [do|will|would|shall] i [still]? have [left|remaining|over|left_over|then|afterwards]? [after|if|when|once|after_buying|if_buying|after_i|if_i|when_i] [i]? [buy|bought|get|purchase|purchased|pay_for|take|will_buy|buying|purchasing|am_buying|am_going_to_buy] [a|an|one|the]? {i1:lex.kids.shop.items} [pls|plz|please|thanks|now|then|exactly]?"
+    emit="@{_} core.question type=kids.shop.leftafter seek=amount where.item={i1} where.count=1"
+    kind=question
+    priority=12
+    example="how many lei do i have left after i buy a ball"
+
+@pat.kids.shop.la.a10 core.pattern
+    match="how_much [money|lei|leu]? [is|will_be|would_be] [left|remaining|left_over|over] [for_me]? [after|if|when|once|after_buying|if_buying|after_i|if_i|when_i] [i]? [buy|bought|get|purchase|purchased|pay_for|take|will_buy|buying|purchasing|am_buying|am_going_to_buy] [a|an|one|the]? {i1:lex.kids.shop.items} [pls|plz|please|thanks|now|then|exactly]?"
+    emit="@{_} core.question type=kids.shop.leftafter seek=amount where.item={i1} where.count=1"
+    kind=question
+    priority=12
+    example="how much money is left after i buy a ball"
+
+@pat.kids.shop.la.a11 core.pattern
+    match="[what|whats|what_is] [my|the]? [money|balance] [left]? [after|if|when|once|after_buying|if_buying|after_i|if_i|when_i] [i]? [buy|bought|get|purchase|purchased|pay_for|take|will_buy|buying|purchasing|am_buying|am_going_to_buy] [a|an|one|the]? {i1:lex.kids.shop.items} [pls|plz|please|thanks|now|then|exactly]?"
+    emit="@{_} core.question type=kids.shop.leftafter seek=amount where.item={i1} where.count=1"
+    kind=question
+    priority=12
+    example="what is my money left after i buy a ball"
+
+@pat.kids.shop.la.a12 core.pattern
+    match="[after|if|when|once] i [buy|bought|get|purchase|purchased|pay_for|take|will_buy|buying|purchasing|am_buying|am_going_to_buy] [a|an|one|the]? {i1:lex.kids.shop.items} how_much [money|lei|leu]? [do|will|would|shall] i [still]? have [left|remaining|over|left_over|then|afterwards]? [pls|plz|please|thanks|now|then|exactly]?"
+    emit="@{_} core.question type=kids.shop.leftafter seek=amount where.item={i1} where.count=1"
+    kind=question
+    priority=12
+    example="if i buy a ball how much money do i have left"
+
+@pat.kids.shop.la.a13 core.pattern
+    match="[after|if|when|once] i [buy|bought|get|purchase|purchased|pay_for|take|will_buy|buying|purchasing|am_buying|am_going_to_buy] [a|an|one|the]? {i1:lex.kids.shop.items} how_many [lei|leu] [do|will|would|shall] i [still]? have [left|remaining|over|left_over|then|afterwards]? [pls|plz|please|thanks|now|then|exactly]?"
+    emit="@{_} core.question type=kids.shop.leftafter seek=amount where.item={i1} where.count=1"
+    kind=question
+    priority=12
+    example="if i buy a ball how many lei do i have left"
+
+@pat.kids.shop.la.a14 core.pattern
+    match="[after|if|when|once] i [buy|bought|get|purchase|purchased|pay_for|take|will_buy|buying|purchasing|am_buying|am_going_to_buy] [a|an|one|the]? {i1:lex.kids.shop.items} how_much [money|lei|leu]? [is|will_be|would_be] [left|remaining|left_over|over] [for_me]? [pls|plz|please|thanks|now|then|exactly]?"
+    emit="@{_} core.question type=kids.shop.leftafter seek=amount where.item={i1} where.count=1"
+    kind=question
+    priority=12
+    example="if i buy a ball how much money is left"
+
+@pat.kids.shop.la.a15 core.pattern
+    match="[after|if|when|once] i [buy|bought|get|purchase|purchased|pay_for|take|will_buy|buying|purchasing|am_buying|am_going_to_buy] [a|an|one|the]? {i1:lex.kids.shop.items} [what|whats|what_is] [my|the]? [money|balance] [left]? [pls|plz|please|thanks|now|then|exactly]?"
+    emit="@{_} core.question type=kids.shop.leftafter seek=amount where.item={i1} where.count=1"
+    kind=question
+    priority=12
+    example="if i buy a ball what is my money left"
+
+@pat.kids.shop.la.nn16 core.pattern
+    match="how_much [money|lei|leu]? [do|will|would|shall] i [still]? have [left|remaining|over|left_over|then|afterwards]? [after|if|when|once|after_buying|if_buying|after_i|if_i|when_i] [i]? [buy|bought|get|purchase|purchased|pay_for|take|will_buy|buying|purchasing|am_buying|am_going_to_buy] {n1:number} {i1:lex.kids.shop.items} [and|plus|also]? {n2:number} {i2:lex.kids.shop.items} [pls|plz|please|thanks|now|then|exactly]?"
+    emit="@{_} core.question type=kids.shop.leftafter seek=amount where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=12
+    example="how much money do i have left after i buy 2 pencils and 3 balls"
+
+@pat.kids.shop.la.nn17 core.pattern
+    match="how_many [lei|leu] [do|will|would|shall] i [still]? have [left|remaining|over|left_over|then|afterwards]? [after|if|when|once|after_buying|if_buying|after_i|if_i|when_i] [i]? [buy|bought|get|purchase|purchased|pay_for|take|will_buy|buying|purchasing|am_buying|am_going_to_buy] {n1:number} {i1:lex.kids.shop.items} [and|plus|also]? {n2:number} {i2:lex.kids.shop.items} [pls|plz|please|thanks|now|then|exactly]?"
+    emit="@{_} core.question type=kids.shop.leftafter seek=amount where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=12
+    example="how many lei do i have left after i buy 2 pencils and 3 balls"
+
+@pat.kids.shop.la.nn18 core.pattern
+    match="how_much [money|lei|leu]? [is|will_be|would_be] [left|remaining|left_over|over] [for_me]? [after|if|when|once|after_buying|if_buying|after_i|if_i|when_i] [i]? [buy|bought|get|purchase|purchased|pay_for|take|will_buy|buying|purchasing|am_buying|am_going_to_buy] {n1:number} {i1:lex.kids.shop.items} [and|plus|also]? {n2:number} {i2:lex.kids.shop.items} [pls|plz|please|thanks|now|then|exactly]?"
+    emit="@{_} core.question type=kids.shop.leftafter seek=amount where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=12
+    example="how much money is left after i buy 2 pencils and 3 balls"
+
+@pat.kids.shop.la.nn19 core.pattern
+    match="[what|whats|what_is] [my|the]? [money|balance] [left]? [after|if|when|once|after_buying|if_buying|after_i|if_i|when_i] [i]? [buy|bought|get|purchase|purchased|pay_for|take|will_buy|buying|purchasing|am_buying|am_going_to_buy] {n1:number} {i1:lex.kids.shop.items} [and|plus|also]? {n2:number} {i2:lex.kids.shop.items} [pls|plz|please|thanks|now|then|exactly]?"
+    emit="@{_} core.question type=kids.shop.leftafter seek=amount where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=12
+    example="what is my money left after i buy 2 pencils and 3 balls"
+
+@pat.kids.shop.la.nn20 core.pattern
+    match="[after|if|when|once] i [buy|bought|get|purchase|purchased|pay_for|take|will_buy|buying|purchasing|am_buying|am_going_to_buy] {n1:number} {i1:lex.kids.shop.items} [and|plus|also]? {n2:number} {i2:lex.kids.shop.items} how_much [money|lei|leu]? [do|will|would|shall] i [still]? have [left|remaining|over|left_over|then|afterwards]? [pls|plz|please|thanks|now|then|exactly]?"
+    emit="@{_} core.question type=kids.shop.leftafter seek=amount where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=12
+    example="if i buy 2 pencils and 3 balls how much money do i have left"
+
+@pat.kids.shop.la.nn21 core.pattern
+    match="[after|if|when|once] i [buy|bought|get|purchase|purchased|pay_for|take|will_buy|buying|purchasing|am_buying|am_going_to_buy] {n1:number} {i1:lex.kids.shop.items} [and|plus|also]? {n2:number} {i2:lex.kids.shop.items} how_many [lei|leu] [do|will|would|shall] i [still]? have [left|remaining|over|left_over|then|afterwards]? [pls|plz|please|thanks|now|then|exactly]?"
+    emit="@{_} core.question type=kids.shop.leftafter seek=amount where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=12
+    example="if i buy 2 pencils and 3 balls how many lei do i have left"
+
+@pat.kids.shop.la.nn22 core.pattern
+    match="[after|if|when|once] i [buy|bought|get|purchase|purchased|pay_for|take|will_buy|buying|purchasing|am_buying|am_going_to_buy] {n1:number} {i1:lex.kids.shop.items} [and|plus|also]? {n2:number} {i2:lex.kids.shop.items} how_much [money|lei|leu]? [is|will_be|would_be] [left|remaining|left_over|over] [for_me]? [pls|plz|please|thanks|now|then|exactly]?"
+    emit="@{_} core.question type=kids.shop.leftafter seek=amount where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=12
+    example="if i buy 2 pencils and 3 balls how much money is left"
+
+@pat.kids.shop.la.nn23 core.pattern
+    match="[after|if|when|once] i [buy|bought|get|purchase|purchased|pay_for|take|will_buy|buying|purchasing|am_buying|am_going_to_buy] {n1:number} {i1:lex.kids.shop.items} [and|plus|also]? {n2:number} {i2:lex.kids.shop.items} [what|whats|what_is] [my|the]? [money|balance] [left]? [pls|plz|please|thanks|now|then|exactly]?"
+    emit="@{_} core.question type=kids.shop.leftafter seek=amount where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=12
+    example="if i buy 2 pencils and 3 balls what is my money left"
+
