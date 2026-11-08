@@ -418,3 +418,9 @@ Baseline v2 (ckpt 2040) on the regenerated test (`training/results/g6-v2-test-bu
 | 6-8 | 356 | .702 | .385 | 63 | 10 | 15/263 |
 | long | 400 | .205 | .083 | 668 | 13 | 59/366 |
 Next, after G1-G3 are merged (one combined rebuild): `python -m psys2_train.multicmd`, retrain as in "R2 retrain + publish", `eval_buckets --baseline training/results/g6-v2-test-buckets.json`, operational baseline vs candidate in parallel.
+## G1 (P0) hierarchical selection over segmentations
+- Change: src/dialog/dispatch-validate.mjs ranks segmentations by validity class (`tier`: 0 original/spell complete, 1 generated complete, 2 partial/fallback, 3 invalid), then score, then dispatcher order. Phase 1 evaluates all segmentations without the normalizer; the normalizer runs only if no segmentation is complete (tier <= 1). Spec 03 section 7.13 and ADR-005 amendment G1 written. Tests: tests/dispatch-order.test.mjs (colours, operands, objects, cities).
+- `wat do red and yelow mak` (encoder, onnxruntime-node): before = wrong ("I don't know what red and red make yet") with N1; after = "Red and yellow make orange." both with N1 (docs/webchat/models/normalizer) and without.
+- Gates on tip rebased on 8866230: `node src/cli.mjs test-world all` 0 FAIL; `npm test` pass 730 fail 0. `eval-operational.mjs --rules-only` (does not use the validator): n=1234 right 1070 partly 18 wrong 36 not_understood 110.
+- Per coordinator rule the full encoder eval was NOT run. Encoder subset, `eval-operational.mjs --ort ... --limit 250` before (HEAD~1) vs after: right 230 -> 230, wrong 5 -> 7, not_understood 15 -> 13; broken (right becoming wrong or not understood) = 0; two not_understood became wrong: kids.arith#053 (known_gap, "what is 7 plus 5 minus 2": a bad split "what is 7 plus 5" + "minus 2" is now a complete reading and beats the unparsed whole) and ui.avatar#027.
+- eval-operational.mjs has no N1 mode (G5 adds it); not built here.
