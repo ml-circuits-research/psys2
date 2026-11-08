@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Builds the static browser demo (spec 06 "Webchat", spec 07 §4).
 //
-//   node scripts/build-webchat.mjs [--out <dir>] [--models [<export dir>]]      (default out: docs/webchat)
+//   node scripts/build-webchat.mjs [--out <dir>] [--models [<export dir>] [--meta-only]]      (default out: docs/webchat)
 //
 // Output (only these paths are written; everything else in the out dir is left alone):
 //   lib/                    browser-safe copies of src/{soplang,legends,worlds,formalizer,interpreter,dialog,translate}
@@ -10,7 +10,7 @@
 //   worlds/<id>/*.mjs       the world's operation modules
 //   build-info.json         { worlds, files: { path: sha256 }, builtAt }  (no commit ids)
 //   models/dispatcher/      (only with --models [dir], default dir training/runs/export/dispatcher-distilbert) the Encoder formalizer's model:
-//                           model.int8.onnx, vocab.txt, meta.json. Copied, never removed; *.onnx is gitignored (see the vendor README).
+//                           model.int8.onnx, vocab.txt, meta.json. Copied only when changed, never removed; meta.json carries a `version` block. --meta-only regenerates meta.json without touching the model.
 // Idempotent: lib/, worlds/ and build-info.json are removed and recreated on every run.
 import { readFile, writeFile, readdir, mkdir, rm, cp, stat } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
@@ -38,21 +38,50 @@ const sha = (buf) => createHash('sha256').update(buf).digest('hex').slice(0, 16)
 
 export const DEFAULT_MODEL_EXPORT = 'training/runs/export/dispatcher-distilbert';
 
-/** Copy the exported dispatcher (python -m psys2_train.export_onnx) into <outDir>/models/dispatcher. Returns the file list or null when the export is missing. */
-export async function copyDispatcherModel({ root = REPO, outDir, exportDir = DEFAULT_MODEL_EXPORT, log = () => {} } = {}) {
+const fileSha256 = async (p) => createHash('sha256').update(await readFile(p)).digest('hex');
+
+/**
+ * Copy the exported dispatcher (python -m psys2_train.export_onnx) into <outDir>/models/dispatcher and write meta.json with a `version` block
+ * (checkpoint, model name, dataset baseline commit and hash, export date, sha256 of model.int8.onnx, headline metrics).
+ * Idempotent: unchanged files are not rewritten and the export date comes from the export's mtime, so a rerun gives no git diff.
+ * Returns the file list, or null (nothing touched) when the export is missing. With metaOnly, the published model and vocab are left alone
+ * and only meta.json is regenerated from the published model's sha256.
+ */
+export async function copyDispatcherModel({ root = REPO, outDir, exportDir = DEFAULT_MODEL_EXPORT, metaOnly = false, log = () => {} } = {}) {
   const from = path.resolve(root, exportDir);
   const files = { 'model.int8.onnx': 'model.int8.onnx', 'vocab.txt': 'tokenizer/vocab.txt' };
-  if (!(await exists(path.join(from, files['model.int8.onnx'])))) { log(`webchat: no dispatcher export in ${from} (run: cd training && python -m psys2_train.export_onnx --ckpt runs/dispatcher-distilbert); the Encoder option stays unavailable`); return null; }
+  const srcModel = path.join(from, files['model.int8.onnx']);
+  if (!(await exists(srcModel))) { log(`webchat: no dispatcher export in ${from} (run: cd training && python -m psys2_train.export_onnx --ckpt runs/dispatcher-distilbert); models/dispatcher left untouched`); return null; }
   const to = path.join(outDir, 'models/dispatcher');
   await mkdir(to, { recursive: true });
-  for (const [dst, src] of Object.entries(files)) await cp(path.join(from, src), path.join(to, dst));
+  if (!metaOnly) {
+    for (const [dst, src] of Object.entries(files)) {
+      const a = path.join(from, src), b = path.join(to, dst);
+      if (!(await exists(b)) || (await fileSha256(a)) !== (await fileSha256(b))) await cp(a, b);
+    }
+  }
   const meta = JSON.parse(await readFile(path.join(from, 'meta.json'), 'utf8'));
-  await writeFile(path.join(to, 'meta.json'), JSON.stringify({ model: meta.model, worlds: meta.worlds, context: meta.context, max_len: meta.max_len, onnx: meta.onnx }, null, 1) + '\n');
-  log(`webchat: dispatcher model (${meta.model}, int8) -> ${to}`);
+  const name = path.basename(from);
+  const readJson = async (p) => (await exists(p)) ? JSON.parse(await readFile(p, 'utf8')) : {};
+  const res = await readJson(path.join(root, 'training/results', `${name}.json`));
+  const rules = await readJson(path.join(root, 'training/results/rules.json'));
+  const seg = res.test?.segmentation?.boundary;
+  const r3 = (x) => (typeof x === 'number' ? Math.round(x * 1000) / 1000 : null);
+  const version = {
+    checkpoint: path.posix.join(path.relative(root, path.dirname(path.dirname(from))).split(path.sep).join('/'), name),
+    model: meta.model,
+    dataset_baseline_commit: rules.baseline_commit ?? null,
+    dataset_hash: res.data_hash ?? null,
+    export_date: (await stat(srcModel)).mtime.toISOString().slice(0, 10),
+    sha256: await fileSha256(path.join(to, 'model.int8.onnx')),
+    metrics: { split: 'test', world_top1: r3(res.test?.world?.top1), world_top3: r3(res.test?.world?.top3), seg_f1: r3(seg?.f1) },
+  };
+  await writeFile(path.join(to, 'meta.json'), JSON.stringify({ model: meta.model, worlds: meta.worlds, context: meta.context, max_len: meta.max_len, onnx: meta.onnx, version }, null, 1) + '\n');
+  log(`webchat: dispatcher model (${meta.model}, int8, sha256 ${version.sha256.slice(0, 12)}) -> ${to}${metaOnly ? ' (meta.json only)' : ''}`);
   return Object.keys(files).concat('meta.json');
 }
 
-export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs/webchat'), models = null, log = () => {} } = {}) {
+export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs/webchat'), models = null, metaOnly = false, log = () => {} } = {}) {
   const src = path.join(root, 'src');
   const worldsRoot = path.join(root, 'worlds');
   await mkdir(outDir, { recursive: true });
@@ -96,7 +125,7 @@ export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs
   await writeFile(path.join(outDir, 'ui/tabs/index.json'), JSON.stringify(tabFiles) + '\n');
 
   // 3b. dispatcher model for the Encoder formalizer (optional)
-  const modelFiles = models ? await copyDispatcherModel({ root, outDir, exportDir: typeof models === 'string' ? models : DEFAULT_MODEL_EXPORT, log }) : null;
+  const modelFiles = models ? await copyDispatcherModel({ root, outDir, exportDir: typeof models === 'string' ? models : DEFAULT_MODEL_EXPORT, metaOnly, log }) : null;
 
   // 4. build info
   const files = {};
@@ -114,5 +143,5 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   const outDir = i > 0 ? path.resolve(process.argv[i + 1]) : undefined;
   const m = process.argv.indexOf('--models');
   const models = m > 0 ? (process.argv[m + 1] && !process.argv[m + 1].startsWith('--') ? process.argv[m + 1] : true) : null;
-  await buildWebchat({ outDir, models, log: console.log });
+  await buildWebchat({ outDir, models, metaOnly: process.argv.includes('--meta-only'), log: console.log });
 }

@@ -35,5 +35,19 @@
   ],
   "world_max_len": 128,
   "seg_max_len": 192
+ },
+ "version": {
+  "checkpoint": "training/runs/dispatcher-distilbert",
+  "model": "distilbert-base-uncased",
+  "dataset_baseline_commit": "c989cd1",
+  "dataset_hash": "a541a99bf494dd4e",
+  "export_date": "2026-11-08",
+  "sha256": "d66026ded00d07e1bca91dcc05db6e10fde50ae649de60f0db513ebc00acf16e",
+  "metrics": {
+   "split": "test",
+   "world_top1": 0.971,
+   "world_top3": 0.994,
+   "seg_f1": 0.985
+  }
  }
 }

@@ -150,6 +150,15 @@ export async function mountPsys2(element, options = {}) {
   }
   let dispatcherStatus = { state: 'idle', message: '' };   // Encoder formalizer (lazy model load)
   let dispatcherEnc = null;
+  let dispatcherVersion = null;   // meta.json `version` block of the published model
+  let encoderNoticed = false;
+  function encoderFailed(message) {   // model did not load (network, missing file, wasm): rules take over, one line in the chat
+    if (encoderNoticed) return;
+    encoderNoticed = true;
+    note(`The Encoder model could not be loaded (${String(message).slice(0, 120)}); using the rules instead.`);
+    encoderOk = false; settings.formalizer = 'rules'; applyEngineSettings();
+    if (!settingsEl.hidden) renderSettings();
+  }
   function setStatus() {
     const parts = [];
     if (busy) parts.push('Thinking…');
@@ -399,6 +408,13 @@ export async function mountPsys2(element, options = {}) {
   // ---------- settings ----------
   let browserAvail = browserTranslatorKind() ? 'checking…' : 'unsupported';
   let encoderOk = false;
+  function dispatcherVersionText() {
+    const v = dispatcherVersion;
+    if (!v) return '';
+    const m = v.metrics ?? {};
+    const pct = (x) => (typeof x === 'number' ? `${(x * 100).toFixed(1)}%` : '?');
+    return `Model version: ${v.model ?? 'dispatcher'}, exported ${v.export_date ?? '?'}, sha256 ${String(v.sha256 ?? '').slice(0, 8)}, ${m.split ?? 'test'} world top-1 ${pct(m.world_top1)}, top-3 ${pct(m.world_top3)}, segmentation F1 ${pct(m.seg_f1)}. `;
+  }
   function toggleSettings(force) {
     const open = force ?? settingsEl.hidden;
     settingsEl.hidden = !open; gearBtn.setAttribute('aria-expanded', String(open));
@@ -433,8 +449,8 @@ export async function mountPsys2(element, options = {}) {
       field('Formalizer', select([['rules', 'Rules (deterministic)'], ['encoder', encoderOk ? 'Encoder (dispatcher + rule validation)' : 'Encoder (not available)', !encoderOk]], settings.formalizer === 'encoder' && !encoderOk ? 'rules' : settings.formalizer,
         (v) => { settings.formalizer = v; applyEngineSettings(); save(); renderSettings(); }),
         settings.formalizer === 'encoder' && encoderOk
-          ? `A small neural dispatcher (DistilBERT, int8, in your browser) proposes how to cut the message and which worlds fit each piece; the rules check every proposal. Status: ${dispatcherStatus.state === 'idle' ? 'model not loaded yet' : dispatcherStatus.state === 'ready' ? `ready (loaded in ${Math.round((dispatcherStatus.ms ?? 0) / 100) / 10} s)` : dispatcherStatus.message}.`
-          : encoderOk ? 'Worlds the chosen formalizer cannot read fall back to the rules. The Encoder downloads a 64 MB model the first time you choose it.' : 'This build has no dispatcher model (see docs/webchat/README.md). Worlds the chosen formalizer cannot read fall back to the rules.'),
+          ? `${dispatcherVersionText()}A small neural dispatcher (DistilBERT, int8, in your browser) proposes how to cut the message and which worlds fit each piece; the rules check every proposal. Status: ${dispatcherStatus.state === 'idle' ? 'model not loaded yet' : dispatcherStatus.state === 'ready' ? `ready (loaded in ${Math.round((dispatcherStatus.ms ?? 0) / 100) / 10} s)` : dispatcherStatus.message}.`
+          : encoderOk ? `${dispatcherVersionText()}Worlds the chosen formalizer cannot read fall back to the rules. The Encoder downloads a 64 MB model the first time you choose it.` : dispatcherStatus.state === 'error' ? `${dispatcherVersionText()}The model could not be loaded (${dispatcherStatus.message}); the rules are in use. Reload the page to try again.` : 'This build has no dispatcher model (see docs/webchat/README.md). Worlds the chosen formalizer cannot read fall back to the rules.'),
       ...(settings.formalizer === 'encoder' && encoderOk
         ? [check('Accept parses the interpreter refuses (for example “move the piece” when no game is on)', settings.encoderAcceptRefused, (v) => { settings.encoderAcceptRefused = v; save(); })] : []),
       field('Translation', select([['auto', 'Automatic'], ['browser-api', 'Browser API'], ['rules', 'Rules']], settings.translation, (v) => { settings.translation = v; save(); renderSettings(); }),
@@ -537,7 +553,8 @@ export async function mountPsys2(element, options = {}) {
         });
         dispatcherEnc.attach(engine);
         engine.formalizers.encoder = dispatcherEnc;
-        dispatcherEnc.onStatus((st) => { dispatcherStatus = { ...st, message: st.state === 'loading' ? dispatcherStatus.message || st.message : st.message }; setStatus(); if (!settingsEl.hidden) renderSettings(); });
+        dispatcherVersion = meta.version ?? null;
+        dispatcherEnc.onStatus((st) => { if (st.state === 'error') encoderFailed(st.message); else if (st.state === 'ready') encoderNoticed = false; dispatcherStatus = { ...st, message: st.state === 'loading' ? dispatcherStatus.message || st.message : st.message }; setStatus(); if (!settingsEl.hidden) renderSettings(); });
       }
     } catch (e) { console.warn('Encoder formalizer unavailable', e); }
     const problems = engine.problems?.() ?? [];
