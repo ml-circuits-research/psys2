@@ -2,152 +2,42 @@
     for=action.ttt.move
     text="{value}"
 
-@tpl.games.tictactoe.ttt_move.unsupported core.template
-    for=action.ttt.move
-    status=unsupported
-    text="{note}"
-
-@tpl.games.tictactoe.ttt_move.missing core.template
-    for=action.ttt.move
-    status=missing
-    text="{note}"
-
 @tpl.games.tictactoe.ttt_new core.template
     for=action.ttt.new
     text="{value}"
-
-@tpl.games.tictactoe.ttt_new.unsupported core.template
-    for=action.ttt.new
-    status=unsupported
-    text="{note}"
-
-@tpl.games.tictactoe.ttt_new.missing core.template
-    for=action.ttt.new
-    status=missing
-    text="{note}"
 
 @tpl.games.tictactoe.ttt_first core.template
     for=action.ttt.first
     text="{value}"
 
-@tpl.games.tictactoe.ttt_first.unsupported core.template
-    for=action.ttt.first
-    status=unsupported
-    text="{note}"
-
-@tpl.games.tictactoe.ttt_first.missing core.template
-    for=action.ttt.first
-    status=missing
-    text="{note}"
-
 @tpl.games.tictactoe.ttt_whoFirst core.template
     for=action.ttt.whoFirst
     text="{value}"
-
-@tpl.games.tictactoe.ttt_whoFirst.unsupported core.template
-    for=action.ttt.whoFirst
-    status=unsupported
-    text="{note}"
-
-@tpl.games.tictactoe.ttt_whoFirst.missing core.template
-    for=action.ttt.whoFirst
-    status=missing
-    text="{note}"
 
 @tpl.games.tictactoe.ttt_status core.template
     for=action.ttt.status
     text="{value}"
 
-@tpl.games.tictactoe.ttt_status.unsupported core.template
-    for=action.ttt.status
-    status=unsupported
-    text="{note}"
-
-@tpl.games.tictactoe.ttt_status.missing core.template
-    for=action.ttt.status
-    status=missing
-    text="{note}"
-
 @tpl.games.tictactoe.ttt_describe core.template
     for=action.ttt.describe
     text="{value}"
-
-@tpl.games.tictactoe.ttt_describe.unsupported core.template
-    for=action.ttt.describe
-    status=unsupported
-    text="{note}"
-
-@tpl.games.tictactoe.ttt_describe.missing core.template
-    for=action.ttt.describe
-    status=missing
-    text="{note}"
 
 @tpl.games.tictactoe.ttt_level core.template
     for=action.ttt.level
     text="{value}"
 
-@tpl.games.tictactoe.ttt_level.unsupported core.template
-    for=action.ttt.level
-    status=unsupported
-    text="{note}"
-
-@tpl.games.tictactoe.ttt_level.missing core.template
-    for=action.ttt.level
-    status=missing
-    text="{note}"
-
 @tpl.games.tictactoe.ttt_hint core.template
     for=action.ttt.hint
     text="{value}"
-
-@tpl.games.tictactoe.ttt_hint.unsupported core.template
-    for=action.ttt.hint
-    status=unsupported
-    text="{note}"
-
-@tpl.games.tictactoe.ttt_hint.missing core.template
-    for=action.ttt.hint
-    status=missing
-    text="{note}"
 
 @tpl.games.tictactoe.ttt_giveup core.template
     for=action.ttt.giveup
     text="{value}"
 
-@tpl.games.tictactoe.ttt_giveup.unsupported core.template
-    for=action.ttt.giveup
-    status=unsupported
-    text="{note}"
-
-@tpl.games.tictactoe.ttt_giveup.missing core.template
-    for=action.ttt.giveup
-    status=missing
-    text="{note}"
-
 @tpl.games.tictactoe.ttt_last core.template
     for=action.ttt.last
     text="{value}"
 
-@tpl.games.tictactoe.ttt_last.unsupported core.template
-    for=action.ttt.last
-    status=unsupported
-    text="{note}"
-
-@tpl.games.tictactoe.ttt_last.missing core.template
-    for=action.ttt.last
-    status=missing
-    text="{note}"
-
 @tpl.games.tictactoe.ttt_count core.template
     for=action.ttt.count
     text="{value}"
-
-@tpl.games.tictactoe.ttt_count.unsupported core.template
-    for=action.ttt.count
-    status=unsupported
-    text="{note}"
-
-@tpl.games.tictactoe.ttt_count.missing core.template
-    for=action.ttt.count
-    status=missing
-    text="{note}"

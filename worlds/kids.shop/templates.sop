@@ -2,28 +2,13 @@
     for=kids.shop.price.cost
     text="{note} {value} {unit:plural}."
 
-@tpl.kids.shop.price.missing core.template
-    for=kids.shop.price.cost
-    status=missing
-    text="{note}"
-
 @tpl.kids.shop.total core.template
     for=kids.shop.total.total
     text="{note} {value} {unit:plural}."
 
-@tpl.kids.shop.total.missing core.template
-    for=kids.shop.total.total
-    status=missing
-    text="{note}"
-
 @tpl.kids.shop.balance core.template
     for=kids.shop.balance.amount
     text="You have {value} {unit:plural} {note}."
-
-@tpl.kids.shop.balance.missing core.template
-    for=kids.shop.balance.amount
-    status=missing
-    text="{note}"
 
 @tpl.kids.shop.balance.conflicting core.template
     for=kids.shop.balance.amount
@@ -34,11 +19,6 @@
     for=kids.shop.affordability.answer
     text="{value:cap}. {note}."
 
-@tpl.kids.shop.afford.missing core.template
-    for=kids.shop.affordability.answer
-    status=missing
-    text="{note}"
-
 @tpl.kids.shop.afford.conflicting core.template
     for=kids.shop.affordability.answer
     status=conflicting
@@ -47,11 +27,6 @@
 @tpl.kids.shop.change core.template
     for=kids.shop.change.amount
     text="Your change from {paid} lei is {value} {unit:plural}."
-
-@tpl.kids.shop.change.missing core.template
-    for=kids.shop.change.amount
-    status=missing
-    text="{note}"
 
 @tpl.kids.shop.change.conflicting core.template
     for=kids.shop.change.amount

@@ -2,634 +2,178 @@
     for=action.geo.show
     text="{value}"
 
-@tpl.geo.map.show.unsupported core.template
-    for=action.geo.show
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.show.missing core.template
-    for=action.geo.show
-    status=missing
-    text="{note}"
-
 @tpl.geo.map.where core.template
     for=action.geo.where
     text="{value}"
-
-@tpl.geo.map.where.unsupported core.template
-    for=action.geo.where
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.where.missing core.template
-    for=action.geo.where
-    status=missing
-    text="{note}"
 
 @tpl.geo.map.coords core.template
     for=action.geo.coords
     text="{value}"
 
-@tpl.geo.map.coords.unsupported core.template
-    for=action.geo.coords
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.coords.missing core.template
-    for=action.geo.coords
-    status=missing
-    text="{note}"
-
 @tpl.geo.map.zoom core.template
     for=action.geo.zoom
     text="{value}"
-
-@tpl.geo.map.zoom.unsupported core.template
-    for=action.geo.zoom
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.zoom.missing core.template
-    for=action.geo.zoom
-    status=missing
-    text="{note}"
 
 @tpl.geo.map.zoomTo core.template
     for=action.geo.zoomTo
     text="{value}"
 
-@tpl.geo.map.zoomTo.unsupported core.template
-    for=action.geo.zoomTo
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.zoomTo.missing core.template
-    for=action.geo.zoomTo
-    status=missing
-    text="{note}"
-
 @tpl.geo.map.pan core.template
     for=action.geo.pan
     text="{value}"
-
-@tpl.geo.map.pan.unsupported core.template
-    for=action.geo.pan
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.pan.missing core.template
-    for=action.geo.pan
-    status=missing
-    text="{note}"
 
 @tpl.geo.map.world core.template
     for=action.geo.world
     text="{value}"
 
-@tpl.geo.map.world.unsupported core.template
-    for=action.geo.world
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.world.missing core.template
-    for=action.geo.world
-    status=missing
-    text="{note}"
-
 @tpl.geo.map.reset core.template
     for=action.geo.reset
     text="{value}"
-
-@tpl.geo.map.reset.unsupported core.template
-    for=action.geo.reset
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.reset.missing core.template
-    for=action.geo.reset
-    status=missing
-    text="{note}"
 
 @tpl.geo.map.clearAll core.template
     for=action.geo.clearAll
     text="{value}"
 
-@tpl.geo.map.clearAll.unsupported core.template
-    for=action.geo.clearAll
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.clearAll.missing core.template
-    for=action.geo.clearAll
-    status=missing
-    text="{note}"
-
 @tpl.geo.map.mark core.template
     for=action.geo.mark
     text="{value}"
-
-@tpl.geo.map.mark.unsupported core.template
-    for=action.geo.mark
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.mark.missing core.template
-    for=action.geo.mark
-    status=missing
-    text="{note}"
 
 @tpl.geo.map.markHere core.template
     for=action.geo.markHere
     text="{value}"
 
-@tpl.geo.map.markHere.unsupported core.template
-    for=action.geo.markHere
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.markHere.missing core.template
-    for=action.geo.markHere
-    status=missing
-    text="{note}"
-
 @tpl.geo.map.markSet core.template
     for=action.geo.markSet
     text="{value}"
-
-@tpl.geo.map.markSet.unsupported core.template
-    for=action.geo.markSet
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.markSet.missing core.template
-    for=action.geo.markSet
-    status=missing
-    text="{note}"
 
 @tpl.geo.map.clearMarkers core.template
     for=action.geo.clearMarkers
     text="{value}"
 
-@tpl.geo.map.clearMarkers.unsupported core.template
-    for=action.geo.clearMarkers
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.clearMarkers.missing core.template
-    for=action.geo.clearMarkers
-    status=missing
-    text="{note}"
-
 @tpl.geo.map.highlight core.template
     for=action.geo.highlight
     text="{value}"
-
-@tpl.geo.map.highlight.unsupported core.template
-    for=action.geo.highlight
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.highlight.missing core.template
-    for=action.geo.highlight
-    status=missing
-    text="{note}"
 
 @tpl.geo.map.clearHighlight core.template
     for=action.geo.clearHighlight
     text="{value}"
 
-@tpl.geo.map.clearHighlight.unsupported core.template
-    for=action.geo.clearHighlight
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.clearHighlight.missing core.template
-    for=action.geo.clearHighlight
-    status=missing
-    text="{note}"
-
 @tpl.geo.map.clearLines core.template
     for=action.geo.clearLines
     text="{value}"
-
-@tpl.geo.map.clearLines.unsupported core.template
-    for=action.geo.clearLines
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.clearLines.missing core.template
-    for=action.geo.clearLines
-    status=missing
-    text="{note}"
 
 @tpl.geo.map.layer core.template
     for=action.geo.layer
     text="{value}"
 
-@tpl.geo.map.layer.unsupported core.template
-    for=action.geo.layer
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.layer.missing core.template
-    for=action.geo.layer
-    status=missing
-    text="{note}"
-
 @tpl.geo.map.capital core.template
     for=action.geo.capital
     text="{value}"
-
-@tpl.geo.map.capital.unsupported core.template
-    for=action.geo.capital
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.capital.missing core.template
-    for=action.geo.capital
-    status=missing
-    text="{note}"
 
 @tpl.geo.map.capitalOfWhich core.template
     for=action.geo.capitalOfWhich
     text="{value}"
 
-@tpl.geo.map.capitalOfWhich.unsupported core.template
-    for=action.geo.capitalOfWhich
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.capitalOfWhich.missing core.template
-    for=action.geo.capitalOfWhich
-    status=missing
-    text="{note}"
-
 @tpl.geo.map.isCapital core.template
     for=action.geo.isCapital
     text="{value}"
-
-@tpl.geo.map.isCapital.unsupported core.template
-    for=action.geo.isCapital
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.isCapital.missing core.template
-    for=action.geo.isCapital
-    status=missing
-    text="{note}"
 
 @tpl.geo.map.population core.template
     for=action.geo.population
     text="{value}"
 
-@tpl.geo.map.population.unsupported core.template
-    for=action.geo.population
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.population.missing core.template
-    for=action.geo.population
-    status=missing
-    text="{note}"
-
 @tpl.geo.map.area core.template
     for=action.geo.area
     text="{value}"
-
-@tpl.geo.map.area.unsupported core.template
-    for=action.geo.area
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.area.missing core.template
-    for=action.geo.area
-    status=missing
-    text="{note}"
 
 @tpl.geo.map.compare core.template
     for=action.geo.compare
     text="{value}"
 
-@tpl.geo.map.compare.unsupported core.template
-    for=action.geo.compare
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.compare.missing core.template
-    for=action.geo.compare
-    status=missing
-    text="{note}"
-
 @tpl.geo.map.compareYN core.template
     for=action.geo.compareYN
     text="{value}"
-
-@tpl.geo.map.compareYN.unsupported core.template
-    for=action.geo.compareYN
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.compareYN.missing core.template
-    for=action.geo.compareYN
-    status=missing
-    text="{note}"
 
 @tpl.geo.map.borders core.template
     for=action.geo.borders
     text="{value}"
 
-@tpl.geo.map.borders.unsupported core.template
-    for=action.geo.borders
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.borders.missing core.template
-    for=action.geo.borders
-    status=missing
-    text="{note}"
-
 @tpl.geo.map.neighbourCount core.template
     for=action.geo.neighbourCount
     text="{value}"
-
-@tpl.geo.map.neighbourCount.unsupported core.template
-    for=action.geo.neighbourCount
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.neighbourCount.missing core.template
-    for=action.geo.neighbourCount
-    status=missing
-    text="{note}"
 
 @tpl.geo.map.borderYN core.template
     for=action.geo.borderYN
     text="{value}"
 
-@tpl.geo.map.borderYN.unsupported core.template
-    for=action.geo.borderYN
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.borderYN.missing core.template
-    for=action.geo.borderYN
-    status=missing
-    text="{note}"
-
 @tpl.geo.map.landlocked core.template
     for=action.geo.landlocked
     text="{value}"
-
-@tpl.geo.map.landlocked.unsupported core.template
-    for=action.geo.landlocked
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.landlocked.missing core.template
-    for=action.geo.landlocked
-    status=missing
-    text="{note}"
 
 @tpl.geo.map.continent core.template
     for=action.geo.continent
     text="{value}"
 
-@tpl.geo.map.continent.unsupported core.template
-    for=action.geo.continent
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.continent.missing core.template
-    for=action.geo.continent
-    status=missing
-    text="{note}"
-
 @tpl.geo.map.isIn core.template
     for=action.geo.isIn
     text="{value}"
-
-@tpl.geo.map.isIn.unsupported core.template
-    for=action.geo.isIn
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.isIn.missing core.template
-    for=action.geo.isIn
-    status=missing
-    text="{note}"
 
 @tpl.geo.map.country core.template
     for=action.geo.country
     text="{value}"
 
-@tpl.geo.map.country.unsupported core.template
-    for=action.geo.country
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.country.missing core.template
-    for=action.geo.country
-    status=missing
-    text="{note}"
-
 @tpl.geo.map.superlative core.template
     for=action.geo.superlative
     text="{value}"
-
-@tpl.geo.map.superlative.unsupported core.template
-    for=action.geo.superlative
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.superlative.missing core.template
-    for=action.geo.superlative
-    status=missing
-    text="{note}"
 
 @tpl.geo.map.listOp core.template
     for=action.geo.listOp
     text="{value}"
 
-@tpl.geo.map.listOp.unsupported core.template
-    for=action.geo.listOp
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.listOp.missing core.template
-    for=action.geo.listOp
-    status=missing
-    text="{note}"
-
 @tpl.geo.map.count core.template
     for=action.geo.count
     text="{value}"
-
-@tpl.geo.map.count.unsupported core.template
-    for=action.geo.count
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.count.missing core.template
-    for=action.geo.count
-    status=missing
-    text="{note}"
 
 @tpl.geo.map.currency core.template
     for=action.geo.currency
     text="{value}"
 
-@tpl.geo.map.currency.unsupported core.template
-    for=action.geo.currency
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.currency.missing core.template
-    for=action.geo.currency
-    status=missing
-    text="{note}"
-
 @tpl.geo.map.languages core.template
     for=action.geo.languages
     text="{value}"
-
-@tpl.geo.map.languages.unsupported core.template
-    for=action.geo.languages
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.languages.missing core.template
-    for=action.geo.languages
-    status=missing
-    text="{note}"
 
 @tpl.geo.map.info core.template
     for=action.geo.info
     text="{value}"
 
-@tpl.geo.map.info.unsupported core.template
-    for=action.geo.info
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.info.missing core.template
-    for=action.geo.info
-    status=missing
-    text="{note}"
-
 @tpl.geo.map.distance core.template
     for=action.geo.distance
     text="{value}"
-
-@tpl.geo.map.distance.unsupported core.template
-    for=action.geo.distance
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.distance.missing core.template
-    for=action.geo.distance
-    status=missing
-    text="{note}"
 
 @tpl.geo.map.distanceFrom core.template
     for=action.geo.distanceFrom
     text="{value}"
 
-@tpl.geo.map.distanceFrom.unsupported core.template
-    for=action.geo.distanceFrom
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.distanceFrom.missing core.template
-    for=action.geo.distanceFrom
-    status=missing
-    text="{note}"
-
 @tpl.geo.map.locate core.template
     for=action.geo.locate
     text="{value}"
-
-@tpl.geo.map.locate.unsupported core.template
-    for=action.geo.locate
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.locate.missing core.template
-    for=action.geo.locate
-    status=missing
-    text="{note}"
 
 @tpl.geo.map.here core.template
     for=action.geo.here
     text="{value}"
 
-@tpl.geo.map.here.unsupported core.template
-    for=action.geo.here
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.here.missing core.template
-    for=action.geo.here
-    status=missing
-    text="{note}"
-
 @tpl.geo.map.describe core.template
     for=action.geo.describe
     text="{value}"
-
-@tpl.geo.map.describe.unsupported core.template
-    for=action.geo.describe
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.describe.missing core.template
-    for=action.geo.describe
-    status=missing
-    text="{note}"
 
 @tpl.geo.map.markers core.template
     for=action.geo.markers
     text="{value}"
 
-@tpl.geo.map.markers.unsupported core.template
-    for=action.geo.markers
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.markers.missing core.template
-    for=action.geo.markers
-    status=missing
-    text="{note}"
-
 @tpl.geo.map.highlights core.template
     for=action.geo.highlights
     text="{value}"
 
-@tpl.geo.map.highlights.unsupported core.template
-    for=action.geo.highlights
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.highlights.missing core.template
-    for=action.geo.highlights
-    status=missing
-    text="{note}"
-
 @tpl.geo.map.unknown core.template
     for=action.geo.unknown
     text="{value}"
-
-@tpl.geo.map.unknown.unsupported core.template
-    for=action.geo.unknown
-    status=unsupported
-    text="{note}"
-
-@tpl.geo.map.unknown.missing core.template
-    for=action.geo.unknown
-    status=missing
-    text="{note}"
-
-
-@tpl.geo.map.askPlace.missing core.template
-    for=action.geo.askPlace
-    status=missing
-    text="{note}"

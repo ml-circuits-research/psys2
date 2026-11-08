@@ -2,587 +2,166 @@
     for=action.chart.fromText
     text="{value}"
 
-@tpl.data.charts.fromText.missing core.template
-    for=action.chart.fromText
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.fromText.unsupported core.template
-    for=action.chart.fromText
-    status=unsupported
-    text="{note}"
-
 @tpl.data.charts.new core.template
     for=action.chart.new
     text="{value}"
-
-@tpl.data.charts.new.missing core.template
-    for=action.chart.new
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.new.unsupported core.template
-    for=action.chart.new
-    status=unsupported
-    text="{note}"
 
 @tpl.data.charts.refresh core.template
     for=action.chart.refresh
     text="{value}"
 
-@tpl.data.charts.refresh.missing core.template
-    for=action.chart.refresh
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.refresh.unsupported core.template
-    for=action.chart.refresh
-    status=unsupported
-    text="{note}"
-
 @tpl.data.charts.duplicate core.template
     for=action.chart.duplicate
     text="{value}"
-
-@tpl.data.charts.duplicate.missing core.template
-    for=action.chart.duplicate
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.duplicate.unsupported core.template
-    for=action.chart.duplicate
-    status=unsupported
-    text="{note}"
 
 @tpl.data.charts.fromHoldings core.template
     for=action.chart.fromHoldings
     text="{value}"
 
-@tpl.data.charts.fromHoldings.missing core.template
-    for=action.chart.fromHoldings
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.fromHoldings.unsupported core.template
-    for=action.chart.fromHoldings
-    status=unsupported
-    text="{note}"
-
 @tpl.data.charts.fromPrices core.template
     for=action.chart.fromPrices
     text="{value}"
-
-@tpl.data.charts.fromPrices.missing core.template
-    for=action.chart.fromPrices
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.fromPrices.unsupported core.template
-    for=action.chart.fromPrices
-    status=unsupported
-    text="{note}"
 
 @tpl.data.charts.fromLegs core.template
     for=action.chart.fromLegs
     text="{value}"
 
-@tpl.data.charts.fromLegs.missing core.template
-    for=action.chart.fromLegs
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.fromLegs.unsupported core.template
-    for=action.chart.fromLegs
-    status=unsupported
-    text="{note}"
-
 @tpl.data.charts.fromList core.template
     for=action.chart.fromList
     text="{value}"
-
-@tpl.data.charts.fromList.missing core.template
-    for=action.chart.fromList
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.fromList.unsupported core.template
-    for=action.chart.fromList
-    status=unsupported
-    text="{note}"
 
 @tpl.data.charts.addPoint core.template
     for=action.chart.addPoint
     text="{value}"
 
-@tpl.data.charts.addPoint.missing core.template
-    for=action.chart.addPoint
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.addPoint.unsupported core.template
-    for=action.chart.addPoint
-    status=unsupported
-    text="{note}"
-
 @tpl.data.charts.removePoint core.template
     for=action.chart.removePoint
     text="{value}"
-
-@tpl.data.charts.removePoint.missing core.template
-    for=action.chart.removePoint
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.removePoint.unsupported core.template
-    for=action.chart.removePoint
-    status=unsupported
-    text="{note}"
 
 @tpl.data.charts.setPoint core.template
     for=action.chart.setPoint
     text="{value}"
 
-@tpl.data.charts.setPoint.missing core.template
-    for=action.chart.setPoint
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.setPoint.unsupported core.template
-    for=action.chart.setPoint
-    status=unsupported
-    text="{note}"
-
 @tpl.data.charts.adjustPoint core.template
     for=action.chart.adjustPoint
     text="{value}"
-
-@tpl.data.charts.adjustPoint.missing core.template
-    for=action.chart.adjustPoint
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.adjustPoint.unsupported core.template
-    for=action.chart.adjustPoint
-    status=unsupported
-    text="{note}"
 
 @tpl.data.charts.renamePoint core.template
     for=action.chart.renamePoint
     text="{value}"
 
-@tpl.data.charts.renamePoint.missing core.template
-    for=action.chart.renamePoint
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.renamePoint.unsupported core.template
-    for=action.chart.renamePoint
-    status=unsupported
-    text="{note}"
-
 @tpl.data.charts.clearData core.template
     for=action.chart.clearData
     text="{value}"
-
-@tpl.data.charts.clearData.missing core.template
-    for=action.chart.clearData
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.clearData.unsupported core.template
-    for=action.chart.clearData
-    status=unsupported
-    text="{note}"
 
 @tpl.data.charts.setType core.template
     for=action.chart.setType
     text="{value}"
 
-@tpl.data.charts.setType.missing core.template
-    for=action.chart.setType
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.setType.unsupported core.template
-    for=action.chart.setType
-    status=unsupported
-    text="{note}"
-
 @tpl.data.charts.setStacked core.template
     for=action.chart.setStacked
     text="{value}"
-
-@tpl.data.charts.setStacked.missing core.template
-    for=action.chart.setStacked
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.setStacked.unsupported core.template
-    for=action.chart.setStacked
-    status=unsupported
-    text="{note}"
 
 @tpl.data.charts.setTitle core.template
     for=action.chart.setTitle
     text="{value}"
 
-@tpl.data.charts.setTitle.missing core.template
-    for=action.chart.setTitle
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.setTitle.unsupported core.template
-    for=action.chart.setTitle
-    status=unsupported
-    text="{note}"
-
 @tpl.data.charts.removeTitle core.template
     for=action.chart.removeTitle
     text="{value}"
-
-@tpl.data.charts.removeTitle.missing core.template
-    for=action.chart.removeTitle
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.removeTitle.unsupported core.template
-    for=action.chart.removeTitle
-    status=unsupported
-    text="{note}"
 
 @tpl.data.charts.setColor core.template
     for=action.chart.setColor
     text="{value}"
 
-@tpl.data.charts.setColor.missing core.template
-    for=action.chart.setColor
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.setColor.unsupported core.template
-    for=action.chart.setColor
-    status=unsupported
-    text="{note}"
-
 @tpl.data.charts.setPalette core.template
     for=action.chart.setPalette
     text="{value}"
-
-@tpl.data.charts.setPalette.missing core.template
-    for=action.chart.setPalette
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.setPalette.unsupported core.template
-    for=action.chart.setPalette
-    status=unsupported
-    text="{note}"
 
 @tpl.data.charts.setSort core.template
     for=action.chart.setSort
     text="{value}"
 
-@tpl.data.charts.setSort.missing core.template
-    for=action.chart.setSort
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.setSort.unsupported core.template
-    for=action.chart.setSort
-    status=unsupported
-    text="{note}"
-
 @tpl.data.charts.setOrientation core.template
     for=action.chart.setOrientation
     text="{value}"
-
-@tpl.data.charts.setOrientation.missing core.template
-    for=action.chart.setOrientation
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.setOrientation.unsupported core.template
-    for=action.chart.setOrientation
-    status=unsupported
-    text="{note}"
 
 @tpl.data.charts.setValues core.template
     for=action.chart.setValues
     text="{value}"
 
-@tpl.data.charts.setValues.missing core.template
-    for=action.chart.setValues
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.setValues.unsupported core.template
-    for=action.chart.setValues
-    status=unsupported
-    text="{note}"
-
 @tpl.data.charts.setLegend core.template
     for=action.chart.setLegend
     text="{value}"
-
-@tpl.data.charts.setLegend.missing core.template
-    for=action.chart.setLegend
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.setLegend.unsupported core.template
-    for=action.chart.setLegend
-    status=unsupported
-    text="{note}"
 
 @tpl.data.charts.extreme core.template
     for=action.chart.extreme
     text="{value}"
 
-@tpl.data.charts.extreme.missing core.template
-    for=action.chart.extreme
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.extreme.unsupported core.template
-    for=action.chart.extreme
-    status=unsupported
-    text="{note}"
-
 @tpl.data.charts.total core.template
     for=action.chart.total
     text="{value}"
-
-@tpl.data.charts.total.missing core.template
-    for=action.chart.total
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.total.unsupported core.template
-    for=action.chart.total
-    status=unsupported
-    text="{note}"
 
 @tpl.data.charts.average core.template
     for=action.chart.average
     text="{value}"
 
-@tpl.data.charts.average.missing core.template
-    for=action.chart.average
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.average.unsupported core.template
-    for=action.chart.average
-    status=unsupported
-    text="{note}"
-
 @tpl.data.charts.difference core.template
     for=action.chart.difference
     text="{value}"
-
-@tpl.data.charts.difference.missing core.template
-    for=action.chart.difference
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.difference.unsupported core.template
-    for=action.chart.difference
-    status=unsupported
-    text="{note}"
 
 @tpl.data.charts.compare core.template
     for=action.chart.compare
     text="{value}"
 
-@tpl.data.charts.compare.missing core.template
-    for=action.chart.compare
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.compare.unsupported core.template
-    for=action.chart.compare
-    status=unsupported
-    text="{note}"
-
 @tpl.data.charts.percent core.template
     for=action.chart.percent
     text="{value}"
-
-@tpl.data.charts.percent.missing core.template
-    for=action.chart.percent
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.percent.unsupported core.template
-    for=action.chart.percent
-    status=unsupported
-    text="{note}"
 
 @tpl.data.charts.valueOf core.template
     for=action.chart.valueOf
     text="{value}"
 
-@tpl.data.charts.valueOf.missing core.template
-    for=action.chart.valueOf
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.valueOf.unsupported core.template
-    for=action.chart.valueOf
-    status=unsupported
-    text="{note}"
-
 @tpl.data.charts.countItems core.template
     for=action.chart.countItems
     text="{value}"
-
-@tpl.data.charts.countItems.missing core.template
-    for=action.chart.countItems
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.countItems.unsupported core.template
-    for=action.chart.countItems
-    status=unsupported
-    text="{note}"
 
 @tpl.data.charts.describe core.template
     for=action.chart.describe
     text="{value}"
 
-@tpl.data.charts.describe.missing core.template
-    for=action.chart.describe
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.describe.unsupported core.template
-    for=action.chart.describe
-    status=unsupported
-    text="{note}"
-
 @tpl.data.charts.read core.template
     for=action.chart.read
     text="{value}"
-
-@tpl.data.charts.read.missing core.template
-    for=action.chart.read
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.read.unsupported core.template
-    for=action.chart.read
-    status=unsupported
-    text="{note}"
 
 @tpl.data.charts.switchChart core.template
     for=action.chart.switchChart
     text="{value}"
 
-@tpl.data.charts.switchChart.missing core.template
-    for=action.chart.switchChart
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.switchChart.unsupported core.template
-    for=action.chart.switchChart
-    status=unsupported
-    text="{note}"
-
 @tpl.data.charts.deleteChart core.template
     for=action.chart.deleteChart
     text="{value}"
-
-@tpl.data.charts.deleteChart.missing core.template
-    for=action.chart.deleteChart
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.deleteChart.unsupported core.template
-    for=action.chart.deleteChart
-    status=unsupported
-    text="{note}"
 
 @tpl.data.charts.listCharts core.template
     for=action.chart.listCharts
     text="{value}"
 
-@tpl.data.charts.listCharts.missing core.template
-    for=action.chart.listCharts
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.listCharts.unsupported core.template
-    for=action.chart.listCharts
-    status=unsupported
-    text="{note}"
-
 @tpl.data.charts.download core.template
     for=action.chart.download
     text="{value}"
-
-@tpl.data.charts.download.missing core.template
-    for=action.chart.download
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.download.unsupported core.template
-    for=action.chart.download
-    status=unsupported
-    text="{note}"
 
 @tpl.data.charts.downloadData core.template
     for=action.chart.downloadData
     text="{value}"
 
-@tpl.data.charts.downloadData.missing core.template
-    for=action.chart.downloadData
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.downloadData.unsupported core.template
-    for=action.chart.downloadData
-    status=unsupported
-    text="{note}"
-
 @tpl.data.charts.copyData core.template
     for=action.chart.copyData
     text="{value}"
-
-@tpl.data.charts.copyData.missing core.template
-    for=action.chart.copyData
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.copyData.unsupported core.template
-    for=action.chart.copyData
-    status=unsupported
-    text="{note}"
 
 @tpl.data.charts.toDocument core.template
     for=action.chart.toDocument
     text="{value}"
 
-@tpl.data.charts.toDocument.missing core.template
-    for=action.chart.toDocument
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.toDocument.unsupported core.template
-    for=action.chart.toDocument
-    status=unsupported
-    text="{note}"
-
 @tpl.data.charts.toDocumentData core.template
     for=action.chart.toDocumentData
     text="{value}"
-
-@tpl.data.charts.toDocumentData.missing core.template
-    for=action.chart.toDocumentData
-    status=missing
-    text="{note}"
-
-@tpl.data.charts.toDocumentData.unsupported core.template
-    for=action.chart.toDocumentData
-    status=unsupported
-    text="{note}"
-

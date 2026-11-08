@@ -2,16 +2,6 @@
     for=action.prof.start
     text="{value}"
 
-@tpl.user.profile.start.missing core.template
-    for=action.prof.start
-    status=missing
-    text="{note}"
-
-@tpl.user.profile.start.unsupported core.template
-    for=action.prof.start
-    status=unsupported
-    text="{note}"
-
 @tpl.user.profile.start.ambiguous core.template
     for=action.prof.start
     status=ambiguous
@@ -20,16 +10,6 @@
 @tpl.user.profile.pause core.template
     for=action.prof.pause
     text="{value}"
-
-@tpl.user.profile.pause.missing core.template
-    for=action.prof.pause
-    status=missing
-    text="{note}"
-
-@tpl.user.profile.pause.unsupported core.template
-    for=action.prof.pause
-    status=unsupported
-    text="{note}"
 
 @tpl.user.profile.pause.ambiguous core.template
     for=action.prof.pause
@@ -40,16 +20,6 @@
     for=action.prof.know
     text="{value}"
 
-@tpl.user.profile.know.missing core.template
-    for=action.prof.know
-    status=missing
-    text="{note}"
-
-@tpl.user.profile.know.unsupported core.template
-    for=action.prof.know
-    status=unsupported
-    text="{note}"
-
 @tpl.user.profile.know.ambiguous core.template
     for=action.prof.know
     status=ambiguous
@@ -58,16 +28,6 @@
 @tpl.user.profile.progress core.template
     for=action.prof.progress
     text="{value}"
-
-@tpl.user.profile.progress.missing core.template
-    for=action.prof.progress
-    status=missing
-    text="{note}"
-
-@tpl.user.profile.progress.unsupported core.template
-    for=action.prof.progress
-    status=unsupported
-    text="{note}"
 
 @tpl.user.profile.progress.ambiguous core.template
     for=action.prof.progress
@@ -78,16 +38,6 @@
     for=action.prof.tell
     text="{value}"
 
-@tpl.user.profile.tell.missing core.template
-    for=action.prof.tell
-    status=missing
-    text="{note}"
-
-@tpl.user.profile.tell.unsupported core.template
-    for=action.prof.tell
-    status=unsupported
-    text="{note}"
-
 @tpl.user.profile.tell.ambiguous core.template
     for=action.prof.tell
     status=ambiguous
@@ -96,16 +46,6 @@
 @tpl.user.profile.forget core.template
     for=action.prof.forget
     text="{value}"
-
-@tpl.user.profile.forget.missing core.template
-    for=action.prof.forget
-    status=missing
-    text="{note}"
-
-@tpl.user.profile.forget.unsupported core.template
-    for=action.prof.forget
-    status=unsupported
-    text="{note}"
 
 @tpl.user.profile.forget.ambiguous core.template
     for=action.prof.forget
@@ -116,16 +56,6 @@
     for=action.prof.confirm
     text="{value}"
 
-@tpl.user.profile.confirm.missing core.template
-    for=action.prof.confirm
-    status=missing
-    text="{note}"
-
-@tpl.user.profile.confirm.unsupported core.template
-    for=action.prof.confirm
-    status=unsupported
-    text="{note}"
-
 @tpl.user.profile.confirm.ambiguous core.template
     for=action.prof.confirm
     status=ambiguous
@@ -134,16 +64,6 @@
 @tpl.user.profile.delete core.template
     for=action.prof.delete
     text="{value}"
-
-@tpl.user.profile.delete.missing core.template
-    for=action.prof.delete
-    status=missing
-    text="{note}"
-
-@tpl.user.profile.delete.unsupported core.template
-    for=action.prof.delete
-    status=unsupported
-    text="{note}"
 
 @tpl.user.profile.delete.ambiguous core.template
     for=action.prof.delete
@@ -154,16 +74,6 @@
     for=action.prof.export
     text="{value}"
 
-@tpl.user.profile.export.missing core.template
-    for=action.prof.export
-    status=missing
-    text="{note}"
-
-@tpl.user.profile.export.unsupported core.template
-    for=action.prof.export
-    status=unsupported
-    text="{note}"
-
 @tpl.user.profile.export.ambiguous core.template
     for=action.prof.export
     status=ambiguous
@@ -172,16 +82,6 @@
 @tpl.user.profile.sensitive core.template
     for=action.prof.sensitive
     text="{value}"
-
-@tpl.user.profile.sensitive.missing core.template
-    for=action.prof.sensitive
-    status=missing
-    text="{note}"
-
-@tpl.user.profile.sensitive.unsupported core.template
-    for=action.prof.sensitive
-    status=unsupported
-    text="{note}"
 
 @tpl.user.profile.sensitive.ambiguous core.template
     for=action.prof.sensitive
@@ -192,18 +92,7 @@
     for=action.prof.mention
     text="{value}"
 
-@tpl.user.profile.mention.missing core.template
-    for=action.prof.mention
-    status=missing
-    text="{note}"
-
-@tpl.user.profile.mention.unsupported core.template
-    for=action.prof.mention
-    status=unsupported
-    text="{note}"
-
 @tpl.user.profile.mention.ambiguous core.template
     for=action.prof.mention
     status=ambiguous
     text="{note}"
-

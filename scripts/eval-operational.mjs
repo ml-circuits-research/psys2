@@ -10,7 +10,7 @@
  *
  *   node scripts/eval-operational.mjs --rules-only [--name rules]
  *   node scripts/eval-operational.mjs --ort <scratch>/node_modules/onnxruntime-node/dist/index.js [--model docs/webchat/models/dispatcher] [--name full]
- *   options: --model-dir <dir> (dispatcher export: model.int8.onnx, vocab.txt, meta.json) --edit-tau <float> (simplifier threshold) --json (last stdout line = one JSON object {n,right,partly_right,wrong,not_understood,latency_ms}; combine with --no-write)  --limit N  --world <id>  --family <name>  --set <file>  --no-write  --verbose (print non-right cases)
+ *   options: --model-dir <dir> (dispatcher export: model.int8.onnx, vocab.txt, meta.json) --edit-tau <float> (simplifier threshold) --json (last stdout line = one JSON object {n,right,partly_right,wrong,not_understood,latency_ms}; combine with --no-write)  --limit N  --world <id>  --family <name>  --set <file>  --no-write  --verbose (print non-right cases)  --replies (print every case's outcome and reply, for diffing runs)
  *
  * onnxruntime-node is NOT a dependency of the repository: install it in a scratch directory and pass the path (like verify-dispatcher-js.mjs).
  *
@@ -141,6 +141,7 @@ async function main() {
   for (const c of cases) {
     const r = await runCase(engine, formalizer, c);
     rows.push(r);
+    if (flag('replies') && !flag('json')) console.log(`${c.id}\t${r.outcome}\t${JSON.stringify(r.reply ?? r.error ?? null)}`);
     if (flag('verbose') && !flag('json') && r.outcome !== 'right') console.log(`${r.outcome.padEnd(14)} ${c.world.padEnd(15)} ${c.id}  "${c.message}"  -> ${r.reply ?? r.error}  [${(r.failing ?? []).join('; ')}]`);
   }
   const summary = summarize(cases, rows);

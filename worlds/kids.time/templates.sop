@@ -2,11 +2,6 @@
     for=kids.time.shift.result
     text="{note} {value:cap}."
 
-@tpl.kids.time.shift.missing core.template
-    for=kids.time.shift.result
-    status=missing
-    text="{note}"
-
 @tpl.kids.time.shift.unsupported core.template
     for=kids.time.shift.result
     status=unsupported
@@ -15,11 +10,6 @@
 @tpl.kids.time.gap core.template
     for=kids.time.gap.count
     text="{note} {value} {unit:plural}."
-
-@tpl.kids.time.gap.missing core.template
-    for=kids.time.gap.count
-    status=missing
-    text="{note}"
 
 @tpl.kids.time.hoursgap core.template
     for=kids.time.hoursgap.count
@@ -84,11 +74,6 @@
 @tpl.kids.time.clock core.template
     for=kids.time.clock.result
     text="It {note} {value}."
-
-@tpl.kids.time.clock.missing core.template
-    for=kids.time.clock.result
-    status=missing
-    text="{note}"
 
 @tpl.kids.time.clock.unsupported core.template
     for=kids.time.clock.result

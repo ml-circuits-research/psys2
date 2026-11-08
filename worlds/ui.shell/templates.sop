@@ -2,180 +2,50 @@
     for=action.ui.openTab
     text="{value}"
 
-@tpl.ui.shell.ui_openTab.unsupported core.template
-    for=action.ui.openTab
-    status=unsupported
-    text="{note}"
-
-@tpl.ui.shell.ui_openTab.missing core.template
-    for=action.ui.openTab
-    status=missing
-    text="{note}"
-
 @tpl.ui.shell.ui_playGame core.template
     for=action.ui.playGame
     text="{value}"
-
-@tpl.ui.shell.ui_playGame.unsupported core.template
-    for=action.ui.playGame
-    status=unsupported
-    text="{note}"
-
-@tpl.ui.shell.ui_playGame.missing core.template
-    for=action.ui.playGame
-    status=missing
-    text="{note}"
 
 @tpl.ui.shell.ui_chooseGame core.template
     for=action.ui.chooseGame
     text="{value}"
 
-@tpl.ui.shell.ui_chooseGame.unsupported core.template
-    for=action.ui.chooseGame
-    status=unsupported
-    text="{note}"
-
-@tpl.ui.shell.ui_chooseGame.missing core.template
-    for=action.ui.chooseGame
-    status=missing
-    text="{note}"
-
 @tpl.ui.shell.ui_back core.template
     for=action.ui.back
     text="{value}"
-
-@tpl.ui.shell.ui_back.unsupported core.template
-    for=action.ui.back
-    status=unsupported
-    text="{note}"
-
-@tpl.ui.shell.ui_back.missing core.template
-    for=action.ui.back
-    status=missing
-    text="{note}"
 
 @tpl.ui.shell.ui_whichTab core.template
     for=action.ui.whichTab
     text="{value}"
 
-@tpl.ui.shell.ui_whichTab.unsupported core.template
-    for=action.ui.whichTab
-    status=unsupported
-    text="{note}"
-
-@tpl.ui.shell.ui_whichTab.missing core.template
-    for=action.ui.whichTab
-    status=missing
-    text="{note}"
-
 @tpl.ui.shell.ui_speaker core.template
     for=action.ui.speaker
     text="{value}"
-
-@tpl.ui.shell.ui_speaker.unsupported core.template
-    for=action.ui.speaker
-    status=unsupported
-    text="{note}"
-
-@tpl.ui.shell.ui_speaker.missing core.template
-    for=action.ui.speaker
-    status=missing
-    text="{note}"
 
 @tpl.ui.shell.ui_listening core.template
     for=action.ui.listening
     text="{value}"
 
-@tpl.ui.shell.ui_listening.unsupported core.template
-    for=action.ui.listening
-    status=unsupported
-    text="{note}"
-
-@tpl.ui.shell.ui_listening.missing core.template
-    for=action.ui.listening
-    status=missing
-    text="{note}"
-
 @tpl.ui.shell.ui_handsFree core.template
     for=action.ui.handsFree
     text="{value}"
-
-@tpl.ui.shell.ui_handsFree.unsupported core.template
-    for=action.ui.handsFree
-    status=unsupported
-    text="{note}"
-
-@tpl.ui.shell.ui_handsFree.missing core.template
-    for=action.ui.handsFree
-    status=missing
-    text="{note}"
 
 @tpl.ui.shell.ui_rate core.template
     for=action.ui.rate
     text="{value}"
 
-@tpl.ui.shell.ui_rate.unsupported core.template
-    for=action.ui.rate
-    status=unsupported
-    text="{note}"
-
-@tpl.ui.shell.ui_rate.missing core.template
-    for=action.ui.rate
-    status=missing
-    text="{note}"
-
 @tpl.ui.shell.ui_language core.template
     for=action.ui.language
     text="{value}"
-
-@tpl.ui.shell.ui_language.unsupported core.template
-    for=action.ui.language
-    status=unsupported
-    text="{note}"
-
-@tpl.ui.shell.ui_language.missing core.template
-    for=action.ui.language
-    status=missing
-    text="{note}"
 
 @tpl.ui.shell.ui_newGame core.template
     for=action.ui.newGame
     text="{value}"
 
-@tpl.ui.shell.ui_newGame.unsupported core.template
-    for=action.ui.newGame
-    status=unsupported
-    text="{note}"
-
-@tpl.ui.shell.ui_newGame.missing core.template
-    for=action.ui.newGame
-    status=missing
-    text="{note}"
-
 @tpl.ui.shell.ui_giveUp core.template
     for=action.ui.giveUp
     text="{value}"
 
-@tpl.ui.shell.ui_giveUp.unsupported core.template
-    for=action.ui.giveUp
-    status=unsupported
-    text="{note}"
-
-@tpl.ui.shell.ui_giveUp.missing core.template
-    for=action.ui.giveUp
-    status=missing
-    text="{note}"
-
 @tpl.ui.shell.ui_hint core.template
     for=action.ui.hint
     text="{value}"
-
-@tpl.ui.shell.ui_hint.unsupported core.template
-    for=action.ui.hint
-    status=unsupported
-    text="{note}"
-
-@tpl.ui.shell.ui_hint.missing core.template
-    for=action.ui.hint
-    status=missing
-    text="{note}"
