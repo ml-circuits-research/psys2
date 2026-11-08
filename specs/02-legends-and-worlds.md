@@ -83,6 +83,24 @@ One directory per world under `worlds/`, named by namespace. Only `world.sop` an
 ```
 `class` is `noun`, `name`, `verb`, `unit`, `trigger` or any world-defined class; multi-word entries use `_` between words. Plural forms are derived by the rule engine (spec 03); irregular plurals are declared as `plural=child:children`.
 
+#### Lexicon inheritance (`extends=`, `exclude=`)
+```
+@lex.ui.avatar.colors core.lexicon
+    class=noun
+    extends=$lex.lang.colour
+    exclude=navy
+    word=teal
+```
+`extends=$<lexicon id>` (repeatable) adds every word and irregular plural of the named lexicons (any loaded world; inherit through imports by convention); `exclude=<word>` (repeatable) removes an inherited entry. The loader resolves the chain when the world set is built, in dependency order: after loading, `words` is the flat list (inherited words first, then own words, no duplicates). An unknown base, a cycle, or an `exclude` that is not an inherited word is a load error.
+
+#### Phrase macros (`core.phrase`)
+`lexicon.sop` may also hold `core.phrase` wires: named groups of literal alternatives that patterns reference as `[$id]` (spec 03 section 2.5).
+```
+@phrase.lang.lead.polite core.phrase
+    alt=could_you_please alt=can_you alt=please
+```
+The wire id must start with `phrase.`; the macro id is the rest (`lang.lead.polite`). Alternatives use `_` between words. The shared world `worlds/lang.common` (imported through `kids.common`) holds the common lead-in, suffix and filler phrases and the shared lexicons (`lex.lang.colour`, `ordinal`, `size`, `degree`, `direction`, `position`, `unit`). It is a `status=fixture` world with `summary=""` that claims nothing (no patterns): new common phrasing goes there, never inline in a world's patterns.
+
 ### Tests
 ```
 @t.arith.1 core.test

@@ -42,9 +42,11 @@ function listsFiller(words) {
 
 /**
  * Compile a match string into elements.
+ * `phrases` (optional) maps a phrase id to `{ alts }`: `[$id]`, `[$id]?` and `[$id|lit]` expand to the phrase's alternatives
+ * (a shared array when the group is only the macro); the macro alternatives come first and count as frame literals (spec 03 section 2.5).
  * @returns {{ elements: object[], slots: Map<string, {cls:string, optional:boolean}> }}
  */
-export function compilePattern(match) {
+export function compilePattern(match, phrases = null) {
   if (typeof match !== 'string' || !match.trim()) throw new PatternError('empty match string');
   const elements = [];
   const slots = new Map();
@@ -67,9 +69,18 @@ export function compilePattern(match) {
       continue;
     }
     if ((m = part.match(/^\[([^\[\]]*)\](\?)?$/))) {
-      const alts = m[1].split('|').map((a) => a.split('_').filter(Boolean).map((w) => w.toLowerCase()));
-      if (alts.some((a) => a.length === 0)) throw new PatternError(`empty alternative in '${part}'`);
-      elements.push({ t: 'alt', alts, optional: !!m[2] });
+      const raw = m[1].split('|');
+      const macroIds = raw.filter((a) => a.startsWith('$')).map((a) => a.slice(1));
+      const lits = raw.filter((a) => !a.startsWith('$')).map((a) => a.split('_').filter(Boolean).map((w) => w.toLowerCase()));
+      if (lits.some((a) => a.length === 0) || macroIds.some((a) => !a)) throw new PatternError(`empty alternative in '${part}'`);
+      if (!macroIds.length) { elements.push({ t: 'alt', alts: lits, optional: !!m[2] }); continue; }
+      const tables = macroIds.map((id) => {
+        const ph = phrases?.get(id);
+        if (!ph) throw new PatternError(`unknown phrase '$${id}' in '${part}'`);
+        return ph.alts;
+      });
+      const alts = tables.length === 1 && !lits.length ? tables[0] : [...tables.flat(), ...lits];
+      elements.push({ t: 'alt', alts, optional: !!m[2], frameN: tables.reduce((n, a) => n + a.length, 0), macros: macroIds });
       continue;
     }
     if (/[\[\]{}|]/.test(part)) throw new PatternError(`malformed element '${part}'`);
@@ -171,14 +182,15 @@ function candidates(el, tokens, i, env, slotsSoFar) {
 /**
  * Match a compiled pattern against the whole token list (anchored).
  * `env` = { text, lex, resolveAgent(tokens, i) }.
- * @returns {{ slots: object, literals: number, skips: number } | null}
+ * `literals` counts every matched literal word; `frameLiterals` (<= literals) the ones that came from phrase macros.
+ * @returns {{ slots: object, literals: number, skips: number, frameLiterals: number } | null}
  */
 export function matchTokens(compiled, tokens, env) {
   const els = compiled.elements;
   // a trailing question mark is visible only to patterns that list `?`; the others behave as if it were not there
   const n = tokens.length - (!compiled.hasQ && tokens[tokens.length - 1]?.kind === 'qmark' ? 1 : 0);
   const slots = {};
-  let literals = 0, skips = 0;
+  let literals = 0, skips = 0, frameLiterals = 0;
 
   /** Token index after matching the literal words at tokens[i], or -1. A token matches by `lower` or by `alt` (the original number word, `u`); operator symbols and their words are one literal. */
   const matchWords = (words, i) => {
@@ -219,12 +231,16 @@ export function matchTokens(compiled, tokens, env) {
       return false;
     }
     if (el.t === 'alt') {
-      for (const alt of el.alts) {
+      for (let a = 0; a < el.alts.length; a++) {
+        const alt = el.alts[a];
         const e = matchWords(alt, i);
         if (e < 0) continue;
+        const fr = a < (el.frameN ?? 0) ? alt.length : 0;
         literals += alt.length;
+        frameLiterals += fr;
         if (run(k + 1, e)) return true;
         literals -= alt.length;
+        frameLiterals -= fr;
       }
       return el.optional ? run(k + 1, i) : false;
     }
@@ -248,7 +264,7 @@ export function matchTokens(compiled, tokens, env) {
     return false;
   }
 
-  return run(0, 0) ? { slots: { ...slots }, literals, skips } : null;
+  return run(0, 0) ? { slots: { ...slots }, literals, skips, frameLiterals } : null;
 }
 
 // ---- prefilter (spec 03 section 2, "Prefilter") ------------------------------------------------------------------------

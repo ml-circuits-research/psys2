@@ -67,6 +67,10 @@
     extends=core.thing
     doc="A word list."
 
+@core.phrase core.type
+    extends=core.thing
+    doc="A phrase macro: a named group of literal alternatives that patterns use as [$id] (spec 03 section 2.5)."
+
 @core.note core.type
     extends=core.thing
     doc="A free-text note (SOP Lang v1 has no comments)."
@@ -582,6 +586,26 @@
     ask="Which gender do the names have (m or f)?"
 
 @core.lexicon.doc core.key
+    value=string
+    card=one
+    ask="What is it?"
+
+@core.lexicon.extends core.key
+    value=any
+    card=many
+    ask="Which lexicons does this one inherit words from?"
+
+@core.lexicon.exclude core.key
+    value=atom
+    card=many
+    ask="Which inherited words are removed?"
+
+@core.phrase.alt core.key
+    value=atom
+    card=many
+    ask="Which literal alternatives (words joined by _)?"
+
+@core.phrase.doc core.key
     value=string
     card=one
     ask="What is it?"

@@ -17,8 +17,10 @@ function build(set) {
   const units = new Set();
   const nounsMulti = new Set();   // multi-word noun lemmas with '_'
   const byWorld = new Map();      // worldId -> Map(lemma -> weight)
+  const phrases = new Map();      // phrase macro id -> { id, worldId, alts: string[][] }
   for (const w of set.list()) {
     const weights = new Map();
+    for (const ph of w.phrases ?? []) phrases.set(ph.id, { id: ph.id, worldId: w.id, alts: ph.alts });
     for (const lex of w.lexicons) {
       const words = new Set(lex.words.map((x) => x.toLowerCase()));
       lexicons.set(lex.id, { id: lex.id, class: lex.class, worldId: w.id, words });
@@ -33,9 +35,10 @@ function build(set) {
         if (!word.includes('_')) weights.set(word, Math.max(weights.get(word) ?? 0, lex.class === 'trigger' ? 2 : 1));
       }
     }
-    byWorld.set(w.id, weights);
+    // a world with nothing to run (lang.common: phrases and shared lexicons only) is never a routing target
+    if (w.patterns.length || w.operations.length) byWorld.set(w.id, weights);
   }
-  const index = { plurals, irregularSingular, lexicons, names, units, nounsMulti, byWorld };
+  const index = { plurals, irregularSingular, lexicons, names, units, nounsMulti, byWorld, phrases };
   index.lemma = (word) => singularLemma(word, irregularSingular);
   return index;
 }

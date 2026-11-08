@@ -22,12 +22,14 @@ export { singularLemma, pluralize } from './lemma.mjs';
 
 const compiledCache = new WeakMap();
 /** Compile (memoized) a pattern object; returns { compiled } or { error }. */
-function compiled(p) {
+function compiled(p, set) {
   if (!compiledCache.has(p)) {
-    try { compiledCache.set(p, { compiled: compilePattern(p.match) }); } catch (e) { compiledCache.set(p, { error: e.message }); }
+    try { compiledCache.set(p, { compiled: compilePattern(p.match, lexIndex(set).phrases) }); } catch (e) { compiledCache.set(p, { error: e.message }); }
   }
   return compiledCache.get(p);
 }
+
+const macroIdsOf = (c) => [...new Set(c.elements.flatMap((e) => e.macros ?? []))];
 
 /**
  * Static check of one pattern: syntax, slot classes, emit placeholders, emit parses.
@@ -39,7 +41,11 @@ export function checkPattern(p, set) {
   if (!p.match) return [`${p.id}: no match string`];
   if (!p.emit) return [`${p.id}: no emit template`];
   let c;
-  try { c = compilePattern(p.match); } catch (e) { return [`${p.id}: ${e.message}`]; }
+  try { c = compilePattern(p.match, lex.phrases); } catch (e) { return [`${p.id}: ${e.message}`]; }
+  for (const id of macroIdsOf(c)) {
+    const ph = lex.phrases.get(id);
+    if (ph && p.worldId && set.get(p.worldId) && !set.available(p.worldId).includes(ph.worldId)) problems.push(`${p.id}: phrase '$${id}' belongs to world '${ph.worldId}', which '${p.worldId}' does not import`);
+  }
   for (const [name, def] of c.slots) {
     if (!BUILTIN_CLASSES.has(def.cls) && !lex.lexicons.has(def.cls)) problems.push(`${p.id}: slot '${name}' has unknown class '${def.cls}'`);
     if (def.cls === 'recent' && !lex.lexicons.has(def.args[0])) problems.push(`${p.id}: slot '${name}' refers to unknown lexicon '${def.args[0]}'`);
@@ -74,7 +80,7 @@ export function vocabularyOf(set) {
     vocab.freq = freq;
     const add = (w) => { if (w) { const l = w.toLowerCase(); vocab.add(l); freq.set(l, (freq.get(l) ?? 0) + 1); } };
     for (const { p } of allPatterns(set)) {
-      const c = compiled(p).compiled;
+      const c = compiled(p, set).compiled;
       if (!c) continue;
       for (const el of c.elements) {
         if (el.t === 'lit') el.words.forEach(add);
@@ -200,7 +206,7 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
     const bag = wordBag(view), bagNoPct = noPct ? wordBag(noPct) : null;
     for (const { p, order } of allPatterns(set)) {
       if (isQuestion && p.kind === 'statement') continue;
-      const c = compiled(p);
+      const c = compiled(p, set);
       if (!c.compiled || (last && !c.compiled.usesFiller)) continue;
       let m = prefilterPasses(c.compiled, bag) ? matchTokens(c.compiled, view, env) : null;
       if (!m && noPct && prefilterPasses(c.compiled, bagNoPct)) m = matchTokens(c.compiled, noPct, env);
@@ -346,7 +352,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
   const isWeak = (seg) => {
     if (seg.unparsed || !seg.match) return false;
     const pat = patternById(set).get(seg.match.patternId);
-    const els = pat ? compiled(pat).compiled?.elements ?? [] : [];
+    const els = pat ? compiled(pat, set).compiled?.elements ?? [] : [];
     // an explicit "unknown argument" catch-all (emit action ...Unknown) that swallowed a coordination is never a reading to keep
     const unknownArg = !!pat && /action=\S*unknown/i.test(pat.emit);
     return Object.entries(seg.match.slots).some(([name, sl]) => {

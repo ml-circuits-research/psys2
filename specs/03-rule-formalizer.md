@@ -68,6 +68,8 @@ Real messages often omit or repeat words: "make your eyes and body blue", "eyes 
 | `{name:class(args)}` | class with arguments: `words(20)`, `recent(<lexicon>,<agent slot>)` |
 | `...` | skip 0–4 arbitrary tokens (lazy) |
 
+| `[$id]` `[$id]?` `[$id\|lit]?` | phrase macro: one of the alternatives of the `core.phrase` `phrase.<id>` (see "Phrase macros"), optionally mixed with literal alternatives |
+
 ### Slot classes
 | Class | Accepts | Captured value |
 | --- | --- | --- |
@@ -84,6 +86,14 @@ Real messages often omit or repeat words: "make your eyes and body blue", "eyes 
 Singular lemma: irregular plurals from `plural=` lexicon entries first; (and a few built-in Latin plurals: `cacti`, `octopi`, `fungi`); then `ies`→`y`, `ves`→`f`, `(ch\|sh\|x\|ss)es`→drop `es`, `-us` plurals (`octopuses`, `buses`, `viruses`, `walruses`, `cactuses`)→drop `es`, `s`→drop. Singular nouns ending in `ss`, `us` or `is` (`glass`, `octopus`, `iris`) keep their `s`; a short list of `-is` plurals (`kiwis`, `taxis`) still loses it. The lemma is used for matching lexicons and in emitted atoms.
 
 Optional elements and lazy skips are tried in a backtracking matcher; the first full match in left-to-right, prefer-consume order wins for one pattern.
+
+### Phrase macros (2.5)
+A `core.phrase` wire (spec 02, `lexicon.sop`) names a list of literal alternatives. In a match string `[$lang.lead.polite]` stands for `[a|b|c...]` of that phrase, `[$id]?` for the optional form, and `[$id|extra_word]` or `[$a|$b]?` for a union of macros and literals. Rules:
+- **Expansion** happens in `compilePattern(match, phrases)`: the element is an ordinary `alt` whose `alts` array is the phrase's (shared, not copied, when the group is only one macro); with several parts the macro alternatives come first, then the inline literals. Alternatives are tried in the order of the phrase, so a phrase lists longer alternatives first.
+- **Matching** is identical to an inline group; `literals` and `skips` are unchanged, so ranking and routing are unchanged. `matchTokens` additionally returns `frameLiterals` (<= `literals`): the literal words that came from macro alternatives (lead-ins, suffixes, fillers), so that a later ranking can prefer content literals over frame literals (ADR-007).
+- **Scope**: phrases are global to the loaded set, like lexicons, but a pattern may only use a phrase of its own world or of a world it imports (transitively).
+- **Checks**: `checkPattern` reports an unknown phrase id (`unknown phrase '$x'`) and a phrase of a world that is not imported. `compiled` patterns with an unknown id never match. `vocabularyOf` includes the words of every macro alternative that some pattern uses, so typo correction is unchanged by the migration.
+- **Migration**: `scripts/migrate-macros.mjs <world> [--write]` replaces alternative groups that are subsets of a phrase by the macro (alternatives outside every macro stay inline next to it) and drops alternatives that can never match because the tokenizer removes those words.
 
 ### Emit templates
 `emit` is SOP Lang with placeholders:
