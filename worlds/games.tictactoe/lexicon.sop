@@ -135,6 +135,10 @@
     word=lower
     word=down
     word=low
+    word=bot
+    word=btm
+    word=topmost
+    word=bottommost
 
 @lex.games.tictactoe.colw core.lexicon
     class=noun
@@ -190,3 +194,21 @@
     word=winning
     word=square
     word=corner
+
+@lex.games.tictactoe.sw.edges core.lexicon
+    class=noun
+    doc="Column words that name an edge or middle column, used with an ordinal row"
+    word=left
+    word=leftmost
+    word=left_most
+    word=left-most
+    word=right-most
+    word=lefthand
+    word=middle
+    word=mid
+    word=center
+    word=centre
+    word=right
+    word=rightmost
+    word=right_most
+    word=righthand

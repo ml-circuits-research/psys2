@@ -99,3 +99,443 @@
     input="which ones could it still be?"
     expectStatus=supported
     session=v
+
+@t.games.guess.sw001a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw001
+
+@t.games.guess.sw001b core.test
+    input="yep"
+    expectState="asked.0.answer=yes"
+    session=sw001
+
+@t.games.guess.sw002a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw002
+
+@t.games.guess.sw002b core.test
+    input="um yeah it does"
+    expectState="asked.0.answer=yes"
+    session=sw002
+
+@t.games.guess.sw003a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw003
+
+@t.games.guess.sw003b core.test
+    input="that is right"
+    expectState="asked.0.answer=yes"
+    session=sw003
+
+@t.games.guess.sw004a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw004
+
+@t.games.guess.sw004b core.test
+    input="ya"
+    expectState="asked.0.answer=yes"
+    session=sw004
+
+@t.games.guess.sw005a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw005
+
+@t.games.guess.sw005b core.test
+    input="absolutely"
+    expectState="asked.0.answer=yes"
+    session=sw005
+
+@t.games.guess.sw006a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw006
+
+@t.games.guess.sw006b core.test
+    input="nope"
+    expectState="asked.0.answer=no"
+    session=sw006
+
+@t.games.guess.sw007a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw007
+
+@t.games.guess.sw007b core.test
+    input="nop"
+    expectState="asked.0.answer=no"
+    session=sw007
+
+@t.games.guess.sw008a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw008
+
+@t.games.guess.sw008b core.test
+    input="no it isnt"
+    expectState="asked.0.answer=no"
+    session=sw008
+
+@t.games.guess.sw009a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw009
+
+@t.games.guess.sw009b core.test
+    input="no, thats wrong"
+    expectState="asked.0.answer=no"
+    session=sw009
+
+@t.games.guess.sw010a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw010
+
+@t.games.guess.sw010b core.test
+    input="not at all"
+    expectState="asked.0.answer=no"
+    session=sw010
+
+@t.games.guess.sw011a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw011
+
+@t.games.guess.sw011b core.test
+    input="i dont know"
+    expectState="asked.0.answer=dontknow"
+    session=sw011
+
+@t.games.guess.sw012a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw012
+
+@t.games.guess.sw012b core.test
+    input="i really dont know"
+    expectState="asked.0.answer=dontknow"
+    session=sw012
+
+@t.games.guess.sw013a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw013
+
+@t.games.guess.sw013b core.test
+    input="sorry, i dont know the answer"
+    expectState="asked.0.answer=dontknow"
+    session=sw013
+
+@t.games.guess.sw014a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw014
+
+@t.games.guess.sw014b core.test
+    input="no idea"
+    expectState="asked.0.answer=dontknow"
+    session=sw014
+
+@t.games.guess.sw015a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw015
+
+@t.games.guess.sw015b core.test
+    input="dunno"
+    expectState="asked.0.answer=dontknow"
+    session=sw015
+
+@t.games.guess.sw016a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw016
+
+@t.games.guess.sw016b core.test
+    input="its possible"
+    expectState="asked.0.answer=maybe"
+    session=sw016
+
+@t.games.guess.sw017a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw017
+
+@t.games.guess.sw017b core.test
+    input="sometimes"
+    expectState="asked.0.answer=maybe"
+    session=sw017
+
+@t.games.guess.sw018a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw018
+
+@t.games.guess.sw018b core.test
+    input="sort of"
+    expectState="asked.0.answer=maybe"
+    session=sw018
+
+@t.games.guess.sw019a core.test
+    input="I have an animal in mind."
+    expectState="phase=asking"
+    session=sw019
+
+@t.games.guess.sw020a core.test
+    input="Guess my animal."
+    expectState="phase=asking"
+    session=sw020
+
+@t.games.guess.sw021a core.test
+    input="start twenty questions"
+    expectState="phase=asking"
+    session=sw021
+
+@t.games.guess.sw022a core.test
+    input="ok lets play 20 questions"
+    expectState="phase=asking"
+    session=sw022
+
+@t.games.guess.sw023a core.test
+    input="begin the guess game pls"
+    expectState="phase=asking"
+    session=sw023
+
+@t.games.guess.sw024a core.test
+    input="you can start asking now"
+    expectState="phase=asking"
+    session=sw024
+
+@t.games.guess.sw025a core.test
+    input="start guessing"
+    expectState="phase=asking"
+    session=sw025
+
+@t.games.guess.sw026a core.test
+    input="let's do the animal game"
+    expectState="phase=asking"
+    session=sw026
+
+@t.games.guess.sw027a core.test
+    input="time to guess, start"
+    expectState="phase=asking"
+    session=sw027
+
+@t.games.guess.sw028a core.test
+    input="ask me questions"
+    expectState="phase=asking"
+    session=sw028
+
+@t.games.guess.sw029a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw029
+
+@t.games.guess.sw029b core.test
+    input="It was a penguin."
+    expect="penguin"
+    session=sw029
+
+@t.games.guess.sw030a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw030
+
+@t.games.guess.sw030b core.test
+    input="it was a penguin, i had one in mind"
+    expect="penguin"
+    session=sw030
+
+@t.games.guess.sw031a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw031
+
+@t.games.guess.sw031b core.test
+    input="the one i picked was a penguin"
+    expect="penguin"
+    session=sw031
+
+@t.games.guess.sw032a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw032
+
+@t.games.guess.sw032b core.test
+    input="it was a penguin, add it"
+    expect="penguin"
+    session=sw032
+
+@t.games.guess.sw033a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw033
+
+@t.games.guess.sw033b core.test
+    input="a penguin, new animal for you"
+    expect="penguin"
+    session=sw033
+
+@t.games.guess.sw034a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw034
+
+@t.games.guess.sw034b core.test
+    input="Why did you ask that?"
+    expect="splits"
+    session=sw034
+
+@t.games.guess.sw035a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw035
+
+@t.games.guess.sw035b core.test
+    input="why is that question being asked"
+    expect="splits"
+    session=sw035
+
+@t.games.guess.sw036a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw036
+
+@t.games.guess.sw036b core.test
+    input="what made you pick that question"
+    expect="splits"
+    session=sw036
+
+@t.games.guess.sw037a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw037
+
+@t.games.guess.sw037b core.test
+    input="why did you choose it"
+    expect="splits"
+    session=sw037
+
+@t.games.guess.sw038a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw038
+
+@t.games.guess.sw038b core.test
+    input="Which animals are left?"
+    expect="still"
+    session=sw038
+
+@t.games.guess.sw039a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw039
+
+@t.games.guess.sw039b core.test
+    input="what can it still be"
+    expect="still"
+    session=sw039
+
+@t.games.guess.sw040a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw040
+
+@t.games.guess.sw040b core.test
+    input="list what it could be"
+    expect="still"
+    session=sw040
+
+@t.games.guess.sw041a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw041
+
+@t.games.guess.sw041b core.test
+    input="possible ones now?"
+    expect="still"
+    session=sw041
+
+@t.games.guess.sw042a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw042
+
+@t.games.guess.sw042b core.test
+    input="which are left in the list"
+    expect="still"
+    session=sw042
+
+@t.games.guess.sw043a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw043
+
+@t.games.guess.sw043b core.test
+    input="How many questions have you asked?"
+    expect="question"
+    session=sw043
+
+@t.games.guess.sw044a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw044
+
+@t.games.guess.sw044b core.test
+    input="how many questions are you on"
+    expect="question"
+    session=sw044
+
+@t.games.guess.sw045a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw045
+
+@t.games.guess.sw045b core.test
+    input="Repeat the question."
+    expect="Question"
+    session=sw045
+
+@t.games.guess.sw046a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw046
+
+@t.games.guess.sw046b core.test
+    input="could you repeat your question"
+    expect="Question"
+    session=sw046
+
+@t.games.guess.sw047a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw047
+
+@t.games.guess.sw047b core.test
+    input="sorry, say that again"
+    expect="Question"
+    session=sw047
+
+@t.games.guess.sw048a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw048
+
+@t.games.guess.sw048b core.test
+    input="i missed it, again?"
+    expect="Question"
+    session=sw048
+
+@t.games.guess.sw049a core.test
+    input="I am thinking of an animal."
+    expectStatus=supported
+    session=sw049
+
+@t.games.guess.sw049b core.test
+    input="I give up."
+    expectStatus=supported
+    session=sw049

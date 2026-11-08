@@ -705,3 +705,623 @@
     input="all moves so far"
     expectStatus=supported
     session=v
+
+@t.games.chess.sw001a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw001
+
+@t.games.chess.sw001b core.test
+    input="e4"
+    expectState="history.0=e4"
+    session=sw001
+
+@t.games.chess.sw002a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw002
+
+@t.games.chess.sw002b core.test
+    input="Knight to f3."
+    expectState="history.0=Nf3"
+    session=sw002
+
+@t.games.chess.sw003a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw003
+
+@t.games.chess.sw003b core.test
+    input="how about d4"
+    expectState="history.0=d4"
+    session=sw003
+
+@t.games.chess.sw004a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw004
+
+@t.games.chess.sw004b core.test
+    input="mm lets go e4"
+    expectState="history.0=e4"
+    session=sw004
+
+@t.games.chess.sw005a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw005
+
+@t.games.chess.sw005b core.test
+    input="could you play e four please"
+    expectState="history.0=e4"
+    session=sw005
+
+@t.games.chess.sw006a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw006
+
+@t.games.chess.sw006b core.test
+    input="pawn to e4"
+    expectState="history.0=e4"
+    session=sw006
+
+@t.games.chess.sw007a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw007
+
+@t.games.chess.sw007b core.test
+    input="e two to e four"
+    expectState="history.0=e4"
+    session=sw007
+
+@t.games.chess.sw008a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw008
+
+@t.games.chess.sw008b core.test
+    input="b1 to c3 pls"
+    expectState="history.0=Nc3"
+    session=sw008
+
+@t.games.chess.sw009a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw009
+
+@t.games.chess.sw009b core.test
+    input="knight to the f3 square"
+    expectState="history.0=Nf3"
+    session=sw009
+
+@t.games.chess.sw010a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw010
+
+@t.games.chess.sw010b core.test
+    input="e pawn to e4"
+    expectState="history.0=e4"
+    session=sw010
+
+@t.games.chess.sw011a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw011
+
+@t.games.chess.sw011b core.test
+    input="my move is d4"
+    expectState="history.0=d4"
+    session=sw011
+
+@t.games.chess.sw012a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw012
+
+@t.games.chess.sw012b core.test
+    input="Can I move my knight to f3?"
+    expectStatus=supported
+    session=sw012
+
+@t.games.chess.sw013a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw013
+
+@t.games.chess.sw013b core.test
+    input="may i play queen h5"
+    expectStatus=supported
+    session=sw013
+
+@t.games.chess.sw014a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw014
+
+@t.games.chess.sw014b core.test
+    input="queen to h5 allowed?"
+    expectStatus=supported
+    session=sw014
+
+@t.games.chess.sw015a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw015
+
+@t.games.chess.sw015b core.test
+    input="is h5 possible for my queen"
+    expectStatus=supported
+    session=sw015
+
+@t.games.chess.sw016a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw016
+
+@t.games.chess.sw016b core.test
+    input="would queen to h5 be a legal move"
+    expectStatus=supported
+    session=sw016
+
+@t.games.chess.sw017a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw017
+
+@t.games.chess.sw017b core.test
+    input="What can my knight do?"
+    expectStatus=supported
+    session=sw017
+
+@t.games.chess.sw018a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw018
+
+@t.games.chess.sw018b core.test
+    input="can u list the legal moves of the queen"
+    expectStatus=supported
+    session=sw018
+
+@t.games.chess.sw019a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw019
+
+@t.games.chess.sw019b core.test
+    input="could you show what squares my queen can reach"
+    expectStatus=supported
+    session=sw019
+
+@t.games.chess.sw020a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw020
+
+@t.games.chess.sw020b core.test
+    input="my queen where can she move"
+    expectStatus=supported
+    session=sw020
+
+@t.games.chess.sw021a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw021
+
+@t.games.chess.sw021b core.test
+    input="knight g1 moves?"
+    expectStatus=supported
+    session=sw021
+
+@t.games.chess.sw022a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw022
+
+@t.games.chess.sw022b core.test
+    input="where can the g1 knight go"
+    expectStatus=supported
+    session=sw022
+
+@t.games.chess.sw023a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw023
+
+@t.games.chess.sw023b core.test
+    input="g1 knight options"
+    expectStatus=supported
+    session=sw023
+
+@t.games.chess.sw024a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw024
+
+@t.games.chess.sw024b core.test
+    input="the knight on g one, where can it go"
+    expectStatus=supported
+    session=sw024
+
+@t.games.chess.sw025a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw025
+
+@t.games.chess.sw025b core.test
+    input="my colour?"
+    expectStatus=supported
+    session=sw025
+
+@t.games.chess.sw026a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw026
+
+@t.games.chess.sw026b core.test
+    input="am I white or black"
+    expectStatus=supported
+    session=sw026
+
+@t.games.chess.sw027a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw027
+
+@t.games.chess.sw027b core.test
+    input="are my pieces white"
+    expectStatus=supported
+    session=sw027
+
+@t.games.chess.sw028a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw028
+
+@t.games.chess.sw028b core.test
+    input="what colour are my pieces in this game"
+    expectStatus=supported
+    session=sw028
+
+@t.games.chess.sw029a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw029
+
+@t.games.chess.sw029b core.test
+    input="switch colours with you"
+    expectState="user=black"
+    session=sw029
+
+@t.games.chess.sw030a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw030
+
+@t.games.chess.sw030b core.test
+    input="I want the other colour now"
+    expectState="user=black"
+    session=sw030
+
+@t.games.chess.sw031a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw031
+
+@t.games.chess.sw031b core.test
+    input="can we swap, you take my side"
+    expectState="user=black"
+    session=sw031
+
+@t.games.chess.sw032a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw032
+
+@t.games.chess.sw032b core.test
+    input="black please, new game"
+    expectState="user=black"
+    session=sw032
+
+@t.games.chess.sw033a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw033
+
+@t.games.chess.sw033b core.test
+    input="Flip the board."
+    expect="side"
+    session=sw033
+
+@t.games.chess.sw034a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw034
+
+@t.games.chess.sw034b core.test
+    input="can u rotate the chess board"
+    expect="side"
+    session=sw034
+
+@t.games.chess.sw035a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw035
+
+@t.games.chess.sw035b core.test
+    input="show it from the other side"
+    expect="side"
+    session=sw035
+
+@t.games.chess.sw036a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw036
+
+@t.games.chess.sw036b core.test
+    input="i want to see from black side"
+    expectState="orientation=black"
+    session=sw036
+
+@t.games.chess.sw037a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw037
+
+@t.games.chess.sw037b core.test
+    input="turn it so i see the black side"
+    expectState="orientation=black"
+    session=sw037
+
+@t.games.chess.sw038a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw038
+
+@t.games.chess.sw038b core.test
+    input="Describe the board."
+    expectStatus=supported
+    session=sw038
+
+@t.games.chess.sw039a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw039
+
+@t.games.chess.sw039b core.test
+    input="describe white"
+    expectStatus=supported
+    session=sw039
+
+@t.games.chess.sw040a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw040
+
+@t.games.chess.sw040b core.test
+    input="read out the black pieces"
+    expectStatus=supported
+    session=sw040
+
+@t.games.chess.sw041a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw041
+
+@t.games.chess.sw041b core.test
+    input="what white has on the board"
+    expectStatus=supported
+    session=sw041
+
+@t.games.chess.sw042a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw042
+
+@t.games.chess.sw042b core.test
+    input="white pieces please, describe"
+    expectStatus=supported
+    session=sw042
+
+@t.games.chess.sw043a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw043
+
+@t.games.chess.sw043b core.test
+    input="Where is my king?"
+    expectStatus=supported
+    session=sw043
+
+@t.games.chess.sw044a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw044
+
+@t.games.chess.sw044b core.test
+    input="where r my rooks"
+    expectStatus=supported
+    session=sw044
+
+@t.games.chess.sw045a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw045
+
+@t.games.chess.sw045b core.test
+    input="rooks where?"
+    expectStatus=supported
+    session=sw045
+
+@t.games.chess.sw046a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw046
+
+@t.games.chess.sw046b core.test
+    input="location of my rook pieces"
+    expectStatus=supported
+    session=sw046
+
+@t.games.chess.sw047a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw047
+
+@t.games.chess.sw047b core.test
+    input="can you tell me where my two rooks are"
+    expectStatus=supported
+    session=sw047
+
+@t.games.chess.sw048a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw048
+
+@t.games.chess.sw048b core.test
+    input="what is on e4"
+    expectStatus=supported
+    session=sw048
+
+@t.games.chess.sw049a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw049
+
+@t.games.chess.sw049b core.test
+    input="h8 has what"
+    expectStatus=supported
+    session=sw049
+
+@t.games.chess.sw050a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw050
+
+@t.games.chess.sw050b core.test
+    input="Show the move list."
+    expectStatus=supported
+    session=sw050
+
+@t.games.chess.sw051a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw051
+
+@t.games.chess.sw051b core.test
+    input="move list"
+    expectStatus=supported
+    session=sw051
+
+@t.games.chess.sw052a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw052
+
+@t.games.chess.sw052b core.test
+    input="history of moves"
+    expectStatus=supported
+    session=sw052
+
+@t.games.chess.sw053a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw053
+
+@t.games.chess.sw053b core.test
+    input="moves played till now"
+    expectStatus=supported
+    session=sw053
+
+@t.games.chess.sw054a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw054
+
+@t.games.chess.sw054b core.test
+    input="game moves please"
+    expectStatus=supported
+    session=sw054
+
+@t.games.chess.sw055a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw055
+
+@t.games.chess.sw055b core.test
+    input="Set the level to 5."
+    expectState="level=5"
+    session=sw055
+
+@t.games.chess.sw056a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw056
+
+@t.games.chess.sw056b core.test
+    input="make it level 5 for me"
+    expectState="level=5"
+    session=sw056
+
+@t.games.chess.sw057a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw057
+
+@t.games.chess.sw057b core.test
+    input="make the engine stronger, level five"
+    expectState="level=5"
+    session=sw057
+
+@t.games.chess.sw058a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw058
+
+@t.games.chess.sw058b core.test
+    input="What should I play?"
+    expectStatus=supported
+    session=sw058
+
+@t.games.chess.sw059a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw059
+
+@t.games.chess.sw059b core.test
+    input="Who is winning?"
+    expectStatus=supported
+    session=sw059
+
+@t.games.chess.sw060a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw060
+
+@t.games.chess.sw060b core.test
+    input="Am I in check?"
+    expectStatus=supported
+    session=sw060
+
+@t.games.chess.sw061a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw061
+
+@t.games.chess.sw061b core.test
+    input="What was your last move?"
+    expectStatus=supported
+    session=sw061
+
+@t.games.chess.sw062a core.test
+    input="Let's play chess."
+    expectStatus=supported
+    session=sw062
+
+@t.games.chess.sw062b core.test
+    input="offer a draw"
+    expectStatus=supported
+    session=sw062

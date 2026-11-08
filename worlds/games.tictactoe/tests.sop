@@ -125,3 +125,623 @@
     input="how many moves so far"
     expect="moves"
     session=v
+
+@t.games.tictactoe.sw001a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw001
+
+@t.games.tictactoe.sw001b core.test
+    input="Play the center."
+    expectState="board.4=X"
+    session=sw001
+
+@t.games.tictactoe.sw002a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw002
+
+@t.games.tictactoe.sw002b core.test
+    input="I would like the top left corner please."
+    expectState="board.0=X"
+    session=sw002
+
+@t.games.tictactoe.sw003a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw003
+
+@t.games.tictactoe.sw003b core.test
+    input="Can I go bottom right?"
+    expectState="board.8=X"
+    session=sw003
+
+@t.games.tictactoe.sw004a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw004
+
+@t.games.tictactoe.sw004b core.test
+    input="top right"
+    expectState="board.2=X"
+    session=sw004
+
+@t.games.tictactoe.sw005a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw005
+
+@t.games.tictactoe.sw005b core.test
+    input="um, top right I think"
+    expectState="board.2=X"
+    session=sw005
+
+@t.games.tictactoe.sw006a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw006
+
+@t.games.tictactoe.sw006b core.test
+    input="uh okay gonna take the middle left"
+    expectState="board.3=X"
+    session=sw006
+
+@t.games.tictactoe.sw007a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw007
+
+@t.games.tictactoe.sw007b core.test
+    input="bl pls"
+    expectState="board.6=X"
+    session=sw007
+
+@t.games.tictactoe.sw008a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw008
+
+@t.games.tictactoe.sw008b core.test
+    input="the left side of the middle row"
+    expectState="board.3=X"
+    session=sw008
+
+@t.games.tictactoe.sw009a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw009
+
+@t.games.tictactoe.sw009b core.test
+    input="middle of the bottom row"
+    expectState="board.7=X"
+    session=sw009
+
+@t.games.tictactoe.sw010a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw010
+
+@t.games.tictactoe.sw010b core.test
+    input="the one at the bottom in the middle"
+    expectState="board.7=X"
+    session=sw010
+
+@t.games.tictactoe.sw011a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw011
+
+@t.games.tictactoe.sw011b core.test
+    input="bot middle"
+    expectState="board.7=X"
+    session=sw011
+
+@t.games.tictactoe.sw012a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw012
+
+@t.games.tictactoe.sw012b core.test
+    input="down the bottom, middle column"
+    expectState="board.7=X"
+    session=sw012
+
+@t.games.tictactoe.sw013a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw013
+
+@t.games.tictactoe.sw013b core.test
+    input="my move is the center"
+    expectState="board.4=X"
+    session=sw013
+
+@t.games.tictactoe.sw014a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw014
+
+@t.games.tictactoe.sw014b core.test
+    input="hey could you put my x in the top middle please"
+    expectState="board.1=X"
+    session=sw014
+
+@t.games.tictactoe.sw015a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw015
+
+@t.games.tictactoe.sw015b core.test
+    input="B2"
+    expectState="board.4=X"
+    session=sw015
+
+@t.games.tictactoe.sw016a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw016
+
+@t.games.tictactoe.sw016b core.test
+    input="square c3 for me"
+    expectState="board.8=X"
+    session=sw016
+
+@t.games.tictactoe.sw017a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw017
+
+@t.games.tictactoe.sw017b core.test
+    input="gonna take c3"
+    expectState="board.8=X"
+    session=sw017
+
+@t.games.tictactoe.sw018a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw018
+
+@t.games.tictactoe.sw018b core.test
+    input="bee two pls"
+    expectState="board.4=X"
+    session=sw018
+
+@t.games.tictactoe.sw019a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw019
+
+@t.games.tictactoe.sw019b core.test
+    input="row two column three"
+    expectState="board.5=X"
+    session=sw019
+
+@t.games.tictactoe.sw020a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw020
+
+@t.games.tictactoe.sw020b core.test
+    input="3 1"
+    expectState="board.6=X"
+    session=sw020
+
+@t.games.tictactoe.sw021a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw021
+
+@t.games.tictactoe.sw021b core.test
+    input="second row third column"
+    expectState="board.5=X"
+    session=sw021
+
+@t.games.tictactoe.sw022a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw022
+
+@t.games.tictactoe.sw022b core.test
+    input="third row, left-most square"
+    expectState="board.6=X"
+    session=sw022
+
+@t.games.tictactoe.sw023a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw023
+
+@t.games.tictactoe.sw023b core.test
+    input="Start a new tic tac toe game."
+    expectState="winner=null"
+    session=sw023
+
+@t.games.tictactoe.sw024a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw024
+
+@t.games.tictactoe.sw024b core.test
+    input="Clear the board."
+    expectState="winner=null"
+    session=sw024
+
+@t.games.tictactoe.sw025a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw025
+
+@t.games.tictactoe.sw025b core.test
+    input="I want a fresh game"
+    expectState="winner=null"
+    session=sw025
+
+@t.games.tictactoe.sw026a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw026
+
+@t.games.tictactoe.sw026b core.test
+    input="clean board"
+    expectState="winner=null"
+    session=sw026
+
+@t.games.tictactoe.sw027a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw027
+
+@t.games.tictactoe.sw027b core.test
+    input="um play again from scratch"
+    expectState="winner=null"
+    session=sw027
+
+@t.games.tictactoe.sw028a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw028
+
+@t.games.tictactoe.sw028b core.test
+    input="lets start over from the beginning"
+    expectState="winner=null"
+    session=sw028
+
+@t.games.tictactoe.sw029a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw029
+
+@t.games.tictactoe.sw029b core.test
+    input="Let me go 1st"
+    expectState="user=X"
+    session=sw029
+
+@t.games.tictactoe.sw030a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw030
+
+@t.games.tictactoe.sw030b core.test
+    input="can I start?"
+    expectState="user=X"
+    session=sw030
+
+@t.games.tictactoe.sw031a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw031
+
+@t.games.tictactoe.sw031b core.test
+    input="You go first."
+    expectState="user=O"
+    session=sw031
+
+@t.games.tictactoe.sw032a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw032
+
+@t.games.tictactoe.sw032b core.test
+    input="I want you to start"
+    expectState="user=O"
+    session=sw032
+
+@t.games.tictactoe.sw033a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw033
+
+@t.games.tictactoe.sw033b core.test
+    input="Who goes first?"
+    expect="goes first"
+    session=sw033
+
+@t.games.tictactoe.sw034a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw034
+
+@t.games.tictactoe.sw034b core.test
+    input="whos up first"
+    expect="goes first"
+    session=sw034
+
+@t.games.tictactoe.sw035a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw035
+
+@t.games.tictactoe.sw035b core.test
+    input="Who is winning?"
+    expect="Nobody is ahead"
+    session=sw035
+
+@t.games.tictactoe.sw036a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw036
+
+@t.games.tictactoe.sw036b core.test
+    input="winning?"
+    expect="Nobody is ahead"
+    session=sw036
+
+@t.games.tictactoe.sw037a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw037
+
+@t.games.tictactoe.sw037b core.test
+    input="whos winning rn"
+    expect="Nobody is ahead"
+    session=sw037
+
+@t.games.tictactoe.sw038a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw038
+
+@t.games.tictactoe.sw038b core.test
+    input="Describe the board."
+    expect="empty"
+    session=sw038
+
+@t.games.tictactoe.sw039a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw039
+
+@t.games.tictactoe.sw039b core.test
+    input="what's on the board right now"
+    expect="empty"
+    session=sw039
+
+@t.games.tictactoe.sw040a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw040
+
+@t.games.tictactoe.sw040b core.test
+    input="where are the x's and o's"
+    expect="empty"
+    session=sw040
+
+@t.games.tictactoe.sw041a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw041
+
+@t.games.tictactoe.sw041b core.test
+    input="Where should I play?"
+    expect="How about"
+    session=sw041
+
+@t.games.tictactoe.sw042a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw042
+
+@t.games.tictactoe.sw042b core.test
+    input="any tip for my move?"
+    expect="How about"
+    session=sw042
+
+@t.games.tictactoe.sw043a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw043
+
+@t.games.tictactoe.sw043b core.test
+    input="what would you do in my place"
+    expect="How about"
+    session=sw043
+
+@t.games.tictactoe.sw044a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw044
+
+@t.games.tictactoe.sw044b core.test
+    input="i dont know what to play"
+    expect="How about"
+    session=sw044
+
+@t.games.tictactoe.sw045a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw045
+
+@t.games.tictactoe.sw045b core.test
+    input="uh what should i do"
+    expect="How about"
+    session=sw045
+
+@t.games.tictactoe.sw046a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw046
+
+@t.games.tictactoe.sw046b core.test
+    input="which move is good for me"
+    expect="How about"
+    session=sw046
+
+@t.games.tictactoe.sw047a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw047
+
+@t.games.tictactoe.sw047b core.test
+    input="any advice on my move"
+    expect="How about"
+    session=sw047
+
+@t.games.tictactoe.sw048a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw048
+
+@t.games.tictactoe.sw048b core.test
+    input="Where did you play?"
+    expect="not played yet"
+    session=sw048
+
+@t.games.tictactoe.sw049a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw049
+
+@t.games.tictactoe.sw049b core.test
+    input="which square did you take last"
+    expect="not played yet"
+    session=sw049
+
+@t.games.tictactoe.sw050a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw050
+
+@t.games.tictactoe.sw050b core.test
+    input="where did you just go"
+    expect="not played yet"
+    session=sw050
+
+@t.games.tictactoe.sw051a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw051
+
+@t.games.tictactoe.sw051b core.test
+    input="which spot did u pick"
+    expect="not played yet"
+    session=sw051
+
+@t.games.tictactoe.sw052a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw052
+
+@t.games.tictactoe.sw052b core.test
+    input="tell me your last square"
+    expect="not played yet"
+    session=sw052
+
+@t.games.tictactoe.sw053a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw053
+
+@t.games.tictactoe.sw053b core.test
+    input="How many moves have we made?"
+    expect="Nobody has played"
+    session=sw053
+
+@t.games.tictactoe.sw054a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw054
+
+@t.games.tictactoe.sw054b core.test
+    input="Set the level to perfect."
+    expectState="level=perfect"
+    session=sw054
+
+@t.games.tictactoe.sw055a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw055
+
+@t.games.tictactoe.sw055b core.test
+    input="go easy on me"
+    expectState="level=easy"
+    session=sw055
+
+@t.games.tictactoe.sw056a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw056
+
+@t.games.tictactoe.sw056b core.test
+    input="lower the level to easy"
+    expectState="level=easy"
+    session=sw056
+
+@t.games.tictactoe.sw057a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw057
+
+@t.games.tictactoe.sw057b core.test
+    input="can u make the computer easy"
+    expectState="level=easy"
+    session=sw057
+
+@t.games.tictactoe.sw058a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw058
+
+@t.games.tictactoe.sw058b core.test
+    input="dumb it down, easy level"
+    expectState="level=easy"
+    session=sw058
+
+@t.games.tictactoe.sw059a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw059
+
+@t.games.tictactoe.sw059b core.test
+    input="play harder"
+    expectState="level=perfect"
+    session=sw059
+
+@t.games.tictactoe.sw060a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw060
+
+@t.games.tictactoe.sw060b core.test
+    input="don't go easy on me"
+    expectState="level=perfect"
+    session=sw060
+
+@t.games.tictactoe.sw061a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw061
+
+@t.games.tictactoe.sw061b core.test
+    input="what level are you"
+    expect="level"
+    session=sw061
+
+@t.games.tictactoe.sw062a core.test
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+    session=sw062
+
+@t.games.tictactoe.sw062b core.test
+    input="ugh I give up"
+    expect="give up"
+    session=sw062

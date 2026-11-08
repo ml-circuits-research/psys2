@@ -317,3 +317,162 @@
     kind=request
     priority=10
     example="I had a zebra in mind."
+
+@pat.games.guess.sw.no2 core.pattern
+    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [sorry|im_afraid|afraid|well|hmm|um]? [no|nope|nop|nah|naw|negative|wrong|never|nay|incorrect] [no|nope|nah]? [it_isnt|it_is_not|it_doesnt|it_does_not|it_cant|it_cannot|it_has_not|it_hasnt|it_didnt|it_wont|isnt_it|thats_wrong|that_is_wrong|thats_not_right|that_is_not_right|thats_not_it|that_is_not_it|not_really|not_at_all|of_course_not|no_way|its_not|its_not_it|not_it|not_that|not_correct|incorrect|i_dont_think_so|i_do_not_think_so|dont_think_so|afraid_not|im_afraid_not|they_dont|they_cant|they_arent|theyre_not|they_are_not|it_is_not_that|it_isnt_that|you_are_wrong|youre_wrong|you_got_it_wrong|wrong_guess|not_this_one|nope_not_it|it_is_nothing_like_that|nothing_like_that|no_such_thing|no_they_dont|nothing_of_the_sort|not_even_close|nowhere_near|far_from_it|not_in_the_least|not_a_chance|absolutely_not|certainly_not|definitely_not|surely_not|not_quite|not_exactly|nope_it_isnt|no_it_isnt|nay|never_ever|no_not_at_all|not_so|not_so_much]?"
+    emit="@{_} core.request action=guess.answer arg.answer=no"
+    kind=request
+    priority=14
+    example="No it isnt."
+    example="Nop."
+    example="No, thats wrong."
+
+@pat.games.guess.sw.no3 core.pattern
+    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [sorry|im_afraid|afraid|well|hmm|um]? [it_isnt|it_is_not|it_doesnt|it_does_not|it_cant|it_cannot|it_has_not|it_hasnt|it_didnt|it_wont|isnt_it|thats_wrong|that_is_wrong|thats_not_right|that_is_not_right|thats_not_it|that_is_not_it|not_really|not_at_all|of_course_not|no_way|its_not|its_not_it|not_it|not_that|not_correct|incorrect|i_dont_think_so|i_do_not_think_so|dont_think_so|afraid_not|im_afraid_not|they_dont|they_cant|they_arent|theyre_not|they_are_not|it_is_not_that|it_isnt_that|you_are_wrong|youre_wrong|you_got_it_wrong|wrong_guess|not_this_one|nope_not_it|it_is_nothing_like_that|nothing_like_that|no_such_thing|no_they_dont|nothing_of_the_sort|not_even_close|nowhere_near|far_from_it|not_in_the_least|not_a_chance|absolutely_not|certainly_not|definitely_not|surely_not|not_quite|not_exactly|nope_it_isnt|no_it_isnt|nay|never_ever|no_not_at_all|not_so|not_so_much]"
+    emit="@{_} core.request action=guess.answer arg.answer=no"
+    kind=request
+    priority=13
+    example="It is not that."
+    example="Thats not it."
+
+@pat.games.guess.sw.left13 core.pattern
+    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [what|which|which_ones|what_ones|which_animals|what_animals|whats|what_s] [can|could|might|may|would] [it|they|the_animal|the_answer|that|this] [still|possibly|even|now|really|yet|actually]? [be|mean|fit] [now|still|yet|so_far|right_now|currently|at_this_point|please|pls|plz|anymore|then]?"
+    emit="@{_} core.request action=guess.remaining"
+    kind=request
+    priority=11
+    example="What can it still be?"
+
+@pat.games.guess.sw.dontknow2 core.pattern
+    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [sorry|well|hmm|honestly|really|actually|um|umm|ehh|uh]? [i|we]? [really|honestly|truly|actually|just|simply|totally|completely|still|kinda|sort_of]? [dont_know|do_not_know|dunno|idk|cant_say|cannot_say|cant_tell|cannot_tell|have_no_idea|have_no_clue|no_idea|no_clue|not_sure|not_certain|am_not_sure|am_not_certain|dont_remember|cant_remember|havent_a_clue|dont_have_a_clue|dont_have_any_idea|dont_know_that|dont_know_this|dont_know_the_answer|dont_know_it|dont_know_about_that|am_unsure|not_really_sure|unsure|uncertain|clueless|who_knows|who_can_say|hard_to_say|difficult_to_say|cant_really_say|no_comment|skip|skip_it|pass|skip_this|pass_on_this|next_question|ask_another|ask_something_else|another_question|unknown|dont_know_sorry|cant_say_dont_know|do_not_know_the_answer|dont_know_what_to_say|dont_know_what_to_answer|dont_know_either|dont_know_for_sure] [the_answer|about_that|about_this|that|this|it|really|sorry|honestly|at_all|here|either|too|now|exactly|for_sure|for_certain|sure]? [the_answer|sorry|really|dont_know|do_not_know|dunno]?"
+    emit="@{_} core.request action=guess.answer arg.answer=dontknow"
+    kind=request
+    priority=14
+    example="I really dont know."
+    example="Sorry, I dont know the answer."
+    example="Cant say, dont know."
+
+@pat.games.guess.sw.maybe2 core.pattern
+    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [it_is_possible|its_possible|possibly|possible|perhaps|probably|sort_of|kind_of|kinda|sorta|more_or_less|somewhat|partly|in_a_way|so_so|it_might|it_may|it_could|might_be|could_be|not_always|some_do|some_are|some_can|sometimes|occasionally|rarely|seldom|usually|often|mostly|half_and_half|fifty_fifty|yes_and_no|well_maybe|maybe_not|maybe_yes|depends_on_the_kind|depends_on_which|some_species|some_kinds|only_some|a_few_of_them|sort_of_yes|kind_of_yes|more_yes_than_no|mostly_yes|yes_usually|yes_sometimes|no_sometimes|it_is_possible_yes|that_is_possible|thats_possible|that_could_be|that_might_be|that_may_be|in_some_cases|some_cases|in_some_ways|to_some_degree|to_some_extent] [yes|no|maybe|possibly|sometimes]?"
+    emit="@{_} core.request action=guess.answer arg.answer=maybe"
+    kind=request
+    priority=13
+    example="Its possible."
+    example="In some cases."
+
+@pat.games.guess.sw.rev.tail core.pattern
+    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [no|nope|wrong|nah|you_got_it_wrong|you_were_wrong|you_lose|you_lost|i_win|you_failed|you_gave_up|you_didnt_get_it|you_dont_know_it]? [it_was|the_answer_was|the_answer_is|the_animal_was|the_animal_is|the_1_i_picked_was|the_1_i_chose_was|the_1_i_had_in_mind_was|the_1_i_was_thinking_of_was|what_i_picked_was|what_i_had_in_mind_was|what_i_was_thinking_of_was] [actually|really|just|a|an|the]? {x:word} [you_dont_know_it|i_had_1_in_mind|i_had_it_in_mind|add_it|new_animal_for_you|learn_it|remember_it|remember_that|save_it|add_it_to_the_list|a_new_animal|new_1|new_animal|you_never_knew_it|you_did_not_know_it|you_didnt_know_it|you_dont_know_that_1|you_do_not_know_it|dont_you_know_it|thats_my_answer|my_secret_animal|thats_it|thats_the_answer|in_my_head|in_my_mind|that_was_it|i_had_in_mind|i_was_thinking_of|i_picked|i_chose|you_missed_it|you_didnt_guess_it|you_could_not_guess_it|you_couldnt_guess_it|you_didnt_get_it|you_did_not_get_it|you_gave_up|you_lost|i_win|you_lose]?"
+    emit="@{_} core.request action=guess.reveal arg.animal=\"{x}\""
+    kind=request
+    priority=13
+    example="It was a tiger, I had one in mind."
+    example="The one I picked was a tiger."
+    example="It was a penguin, add it."
+
+@pat.games.guess.sw.rev.tail2 core.pattern
+    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [no|nope|wrong|nah|you_got_it_wrong|you_lose|i_win]? [it_is|its|i_picked|i_chose|i_had|i_meant] [actually|really|just|a|an|the]? {x:word} [you_dont_know_it|i_had_1_in_mind|i_had_it_in_mind|add_it|new_animal_for_you|learn_it|remember_it|save_it|add_it_to_the_list|a_new_animal|new_animal|you_never_knew_it|you_didnt_know_it|you_dont_know_that_1|dont_you_know_it|thats_my_answer|my_secret_animal|thats_the_answer|in_my_head|in_my_mind|that_was_it|you_missed_it|you_didnt_guess_it|you_couldnt_guess_it]"
+    emit="@{_} core.request action=guess.reveal arg.animal=\"{x}\""
+    kind=request
+    priority=13
+    example="It is penguin, you dont know it."
+
+@pat.games.guess.sw.rev.short core.pattern
+    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [a|an|the] {x:word} [new_animal_for_you|new_1_for_you|for_you|new_animal|a_new_1|new_1|you_dont_know_it|you_didnt_know_it]"
+    emit="@{_} core.request action=guess.reveal arg.animal=\"{x}\""
+    kind=request
+    priority=9
+    example="A penguin, new animal for you."
+
+@pat.games.guess.sw.why5 core.pattern
+    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [why|how_come|what_made_you|what_is_the_reason_for|whats_the_reason_for|what_was_the_reason_for|what_is_the_point_of|whats_the_point_of|why_on_earth|why_in_the_world|why_the_heck] [is|was|are|did|do|does|would|did_you|do_you|are_you|are_u|did_u|do_u]? [that|this|the|your|ur|it|such|those]? [question|being_asked|ask|asking|that_question|this_question|pick|choose|chose|picking|choosing|asked|select|selected] [that|this|the|your|ur|it|such|those|question|being_asked|asked|pick|choosing|choose|that_question|this_question]? [question|being_asked|asked|1|that_1|this_1|first|it|that|this]? [please|pls|plz|though|anyway|exactly|then|now]?"
+    emit="@{_} core.request action=guess.why"
+    kind=request
+    priority=11
+    example="Why is that question being asked?"
+    example="What made you pick that question?"
+    example="Why did you choose it?"
+
+@pat.games.guess.sw.left9 core.pattern
+    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [what|which|list|show|tell_me|show_me|give_me|name|say|whats|what_are|which_are|which_ones|possible|remaining|still] [me]? [the|all|any|other|remaining|possible|those|these]? [animals|ones|options|candidates|choices|possibilities|animal|species|answers|things] [still|possibly|now]? [can_it_be|could_it_be|could_it_still_be|can_it_still_be|it_could_be|it_can_be|it_might_be|it_may_be|are_left|are_still_left|are_possible|are_remaining|are_still_possible|are_left_in_the_list|are_in_the_list|are_on_the_list|remain|left|remaining|possible|still_possible|still_left|still_remaining|in_the_list|on_the_list|in_the_running|in_play|to_choose_from|to_pick_from|still_in_play|still_in_the_running|still_in_the_list|still_on_the_list|it_still_could_be|it_still_can_be|it_could_still_be|it_can_still_be|might_it_be|could_it_possibly_be|still_be|be_left|be_possible|be_now]? [now|so_far|yet|still|right_now|currently|at_this_point|at_the_moment|please|pls|plz|anymore|any_more|at_all]?"
+    emit="@{_} core.request action=guess.remaining"
+    kind=request
+    priority=11
+    example="Which animals are left in the list?"
+    example="List the animals it could still be."
+
+@pat.games.guess.sw.left10 core.pattern
+    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [list|show|tell|tell_me|show_me|give_me|name|say|what|which|whats|which_ones|what_ones|any|got_any|so_what|so_which|and_what|and_which] [me]? [what|which|all|the|any|the_animals|animals|ones]? [it|they|the_animal|the_answer|that|this]? [could|can|might|may|would|will|should] [still|possibly|even|now|really|yet]? [be|do|mean|fit]? [now|still|yet|so_far|right_now|currently|at_this_point|please|pls|plz|anymore|then]?"
+    emit="@{_} core.request action=guess.remaining"
+    kind=request
+    priority=11
+    example="What can it still be?"
+    example="List what it could be."
+
+@pat.games.guess.sw.left11 core.pattern
+    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [possible|remaining|left|still_possible|still_left|other|more|any_other|the_other|the_rest|rest|the_possible|the_remaining|all_possible] [ones|animals|options|candidates|choices|possibilities|species|answers|things|guesses|matches|critters|creatures] [now|left|still|yet|so_far|at_this_point|remaining|please|pls|plz|in_the_list|on_the_list|are_there|do_you_have|are_left|there_are|you_have|you_got]?"
+    emit="@{_} core.request action=guess.remaining"
+    kind=request
+    priority=10
+    example="Possible ones now?"
+
+@pat.games.guess.sw.left12 core.pattern
+    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [which|what|whats|which_ones|what_ones|which_animals|what_animals|which_of_them|what_of_them|which_of_those] [are|is|r|remain|remains|do|does|have|has]? [left|remaining|still|possible|there|still_left|still_there|still_possible|still_in|still_on|left_over|over|around|alive|standing] [in|on|in_the|on_the|at_the|from_the|of_the|from|of|within|among]? [the]? [list|running|game|mix|play|table|options|candidates|choices|set|pool|group|lineup|line_up|field]? [now|so_far|yet|still|at_this_point|right_now|currently|please|pls|plz|anymore|any_more]?"
+    emit="@{_} core.request action=guess.remaining"
+    kind=request
+    priority=11
+    example="Which are left in the list?"
+
+@pat.games.guess.sw.repeat3 core.pattern
+    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [sorry|pardon|excuse_me|oops|hm|huh|what|wait|hold_on|one_moment|just_a_sec]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [repeat|say|ask|read|tell|state|give|spell_out|replay|rephrase|restate|reread] [me]? [your|ur|the|that|this|the_last|the_previous|that_last|your_last|your_previous] [last|previous]? [question|1|it|that|this] [again|once_more|1_more_time|once_again|please|pls|plz|for_me|to_me|thanks|thank_you]?"
+    emit="@{_} core.request action=guess.repeat"
+    kind=request
+    priority=14
+    example="Could you repeat your question?"
+
+@pat.games.guess.sw.repeat3b core.pattern
+    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [sorry|pardon|excuse_me|oops|hm|huh|what|wait|hold_on|one_moment|just_a_sec]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [repeat|say|ask|read|tell|state|give|spell_out|replay|rephrase|restate|reread] [me]? [your|ur|the|that|this|the_last|the_previous|that_last|your_last|your_previous|it|that|this]? [question|1|it|that|this]? [again|once_more|1_more_time|once_again] [please|pls|plz|for_me|to_me|thanks]?"
+    emit="@{_} core.request action=guess.repeat"
+    kind=request
+    priority=14
+    example="Sorry, say that again."
+
+@pat.games.guess.sw.repeat4 core.pattern
+    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [i_missed_it|i_missed_that|i_didnt_catch_that|i_did_not_catch_that|i_didnt_hear|i_did_not_hear|i_didnt_get_that|i_did_not_get_that|i_didnt_understand|i_did_not_understand|i_dont_understand|i_do_not_understand|i_didnt_see_it|i_did_not_see_it|i_missed_the_question|i_didnt_catch_the_question|i_didnt_get_the_question|what_was_that|what_was_the_question|what_did_you_ask|what_did_you_say|what_was_it|come_again|say_what|huh|sorry|pardon|excuse_me|wat|wut|come_again_please|come_again_pls|one_more_time|once_more|again|say_it_again|say_again|again_please|1_more_time|1_more_time_please|what_did_you_just_ask|what_did_you_just_say|what_were_you_asking|what_are_you_asking|what_is_the_question|what_is_your_question|whats_the_question|whats_your_question|what_s_the_question|what_s_your_question|what_do_you_want_to_know|what_do_you_want|what_are_you_saying|what_you_say] [please|pls|plz|again|once_more|1_more_time|could_you_repeat|can_you_repeat|can_u_repeat|could_u_repeat|can_you_say_it_again|could_you_say_it_again|say_it_again|say_again|say_that_again|repeat_that|repeat_it|repeat_please|ask_again|again_please|once_again|1_more_time_please]? [please|pls|plz|again|once_more]?"
+    emit="@{_} core.request action=guess.repeat"
+    kind=request
+    priority=10
+    example="I missed it, again?"
+    example="What was the question?"
+
+@pat.games.guess.sw.count6 core.pattern
+    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [how_many|what_number|which_number|how_much|what] [question|questions|q_s|qs] [number]? [are_you_on|are_we_on|am_i_on|have_you_asked|did_you_ask|have_we_had|have_we_done|are_we_at|are_you_at|have_i_answered|did_i_answer|have_i_had|do_you_have_left|are_there|are_left|are_left_to_go|do_i_have|remain|are_remaining|you_got_left|you_asked|you_have_asked|youve_asked|you_have_left|we_have_left|is_this|is_that|is_it|was_that|was_this|are_we_up_to|are_you_up_to|you_up_to|you_at|you_on|is_this_1|is_that_1|are_you_asking|did_you_just_ask]? [so_far|now|already|until_now|yet|up_to_now|in_total|altogether|total|left|remaining|still|to_go|please|pls|plz|today|here|this_time|this_round|this_game]? [please|pls|plz|so_far|now]?"
+    emit="@{_} core.request action=guess.count"
+    kind=request
+    priority=11
+    example="How many questions are you on?"
+    example="What question number is this?"
+
+@pat.games.guess.sw.startgame core.pattern
+    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [i_want_to|i_wanna|i_would_like_to|i_d_like_to|i_need_to|let_me|lets|let_us|we_should|we_could|can_we|could_we|shall_we|how_about_we|id_like_to|i_gotta|i_have_to|im_going_to|im_gonna|gonna]? [start|begin|play|do|open|launch|run|try|have|go_for|resume|kick_off|set_up|go_with|play_a_round_of|play_a_game_of|play_the|do_the|try_the|start_the|begin_the|start_a|begin_a|have_a|have_the|give_me_the|give_me_a|i_want_the|i_want_a|get_the|get_a|lets_play|let_us_play|lets_do|let_us_do|how_about] [the|a|an|some|that|this|our|my|another|1_more|1|new|fresh|next|round_of|game_of|round|game]? [new|fresh|next|another|1_more]? [round_of|game_of|round|game]? [the]? [guessing|guess|animal|twenty|20|twenty_question|20_question|animal_guessing|guess_the_animal|guess_my_animal|animal_guess|animal_game|guess_game|guessing_game|twenty_questions|20_questions|20_q|twenty_q|20q] [game|questions|question|animal|animals|round|time|session|match|quiz|challenge|pls|plz|please|now|then|again|with_me|for_me]? [game|questions|round|time|session|pls|plz|please|now|then|again]?"
+    emit="@{_} core.request action=guess.start"
+    kind=request
+    priority=11
+    example="Start twenty questions."
+    example="Lets play 20 questions."
+    example="Lets do the animal game."
+    example="Begin the guess game pls."
+
+@pat.games.guess.sw.startask core.pattern
+    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [you_can|you_may|you_should|go_ahead_and|go_ahead|time_to|its_time_to|ready_to|lets|let_us|can_we|shall_we|now_you_can|now|ok|okay]? [start|begin|commence|resume] [asking|guessing|questioning|with_the_questions|the_questions|the_guessing|guessing_now|asking_now] [now|please|pls|plz|already|then|away|first]?"
+    emit="@{_} core.request action=guess.start"
+    kind=request
+    priority=11
+    example="Start guessing."
+    example="You can start asking now."
+
+@pat.games.guess.sw.askme core.pattern
+    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [ask_me|ask_me_questions|ask_me_stuff|ask_away|fire_away|ask_your_first_question|ask_the_first_question|ask_your_questions|go_ahead_and_ask|you_can_ask|you_may_ask|time_to_guess|its_time_to_guess|time_to_ask|its_time_to_ask|start_with_your_first_question|your_first_question|first_question] [now|please|pls|plz|already|then|away|first|when_ready|whenever_you_are_ready|whenever_you_want|anything|something|a_question|questions]?"
+    emit="@{_} core.request action=guess.start"
+    kind=request
+    priority=11
+    example="Ask me questions."
+    example="Time to guess, start."

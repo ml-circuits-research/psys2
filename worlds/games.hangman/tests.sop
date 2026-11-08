@@ -148,3 +148,503 @@
     input="any clue?"
     expectStatus=supported
     session=v
+
+@t.games.hangman.sw001a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw001
+
+@t.games.hangman.sw001b core.test
+    input="Is there an E?"
+    expectState="guessed.0=e"
+    session=sw001
+
+@t.games.hangman.sw002a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw002
+
+@t.games.hangman.sw002b core.test
+    input="o is there?"
+    expectState="guessed.0=o"
+    session=sw002
+
+@t.games.hangman.sw003a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw003
+
+@t.games.hangman.sw003b core.test
+    input="is it n"
+    expectState="guessed.0=n"
+    session=sw003
+
+@t.games.hangman.sw004a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw004
+
+@t.games.hangman.sw004b core.test
+    input="L"
+    expectState="guessed.0=l"
+    session=sw004
+
+@t.games.hangman.sw005a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw005
+
+@t.games.hangman.sw005b core.test
+    input="um, next letter, n"
+    expectState="guessed.0=n"
+    session=sw005
+
+@t.games.hangman.sw006a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw006
+
+@t.games.hangman.sw006b core.test
+    input="zed"
+    expectState="guessed.0=z"
+    session=sw006
+
+@t.games.hangman.sw007a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw007
+
+@t.games.hangman.sw007b core.test
+    input="does z appear"
+    expectState="guessed.0=z"
+    session=sw007
+
+@t.games.hangman.sw008a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw008
+
+@t.games.hangman.sw008b core.test
+    input="guessing z"
+    expectState="guessed.0=z"
+    session=sw008
+
+@t.games.hangman.sw009a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw009
+
+@t.games.hangman.sw009b core.test
+    input="can i get an r"
+    expectState="guessed.0=r"
+    session=sw009
+
+@t.games.hangman.sw010a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw010
+
+@t.games.hangman.sw010b core.test
+    input="any e?"
+    expectState="guessed.0=e"
+    session=sw010
+
+@t.games.hangman.sw011a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw011
+
+@t.games.hangman.sw011b core.test
+    input="try the letter s"
+    expectState="guessed.0=s"
+    session=sw011
+
+@t.games.hangman.sw012a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw012
+
+@t.games.hangman.sw012b core.test
+    input="e in the word?"
+    expectState="guessed.0=e"
+    session=sw012
+
+@t.games.hangman.sw013a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw013
+
+@t.games.hangman.sw013b core.test
+    input="got any s pls"
+    expectState="guessed.0=s"
+    session=sw013
+
+@t.games.hangman.sw014a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw014
+
+@t.games.hangman.sw014b core.test
+    input="try double you"
+    expectState="guessed.0=w"
+    session=sw014
+
+@t.games.hangman.sw015a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw015
+
+@t.games.hangman.sw015b core.test
+    input="Is it tiger?"
+    expectState="wrong.0=tiger"
+    session=sw015
+
+@t.games.hangman.sw016a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw016
+
+@t.games.hangman.sw016b core.test
+    input="tiger?"
+    expectState="wrong.0=tiger"
+    session=sw016
+
+@t.games.hangman.sw017a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw017
+
+@t.games.hangman.sw017b core.test
+    input="tiger, my answer"
+    expectState="wrong.0=tiger"
+    session=sw017
+
+@t.games.hangman.sw018a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw018
+
+@t.games.hangman.sw018b core.test
+    input="is tiger right"
+    expectState="wrong.0=tiger"
+    session=sw018
+
+@t.games.hangman.sw019a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw019
+
+@t.games.hangman.sw019b core.test
+    input="my final answer is tiger"
+    expectState="wrong.0=tiger"
+    session=sw019
+
+@t.games.hangman.sw020a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw020
+
+@t.games.hangman.sw020b core.test
+    input="I guess tiger"
+    expectState="wrong.0=tiger"
+    session=sw020
+
+@t.games.hangman.sw021a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw021
+
+@t.games.hangman.sw021b core.test
+    input="Tell me something about it."
+    expectStatus=supported
+    session=sw021
+
+@t.games.hangman.sw022a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw022
+
+@t.games.hangman.sw022b core.test
+    input="tell me a fact about it"
+    expectStatus=supported
+    session=sw022
+
+@t.games.hangman.sw023a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw023
+
+@t.games.hangman.sw023b core.test
+    input="fact?"
+    expectStatus=supported
+    session=sw023
+
+@t.games.hangman.sw024a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw024
+
+@t.games.hangman.sw024b core.test
+    input="i want a fact"
+    expectStatus=supported
+    session=sw024
+
+@t.games.hangman.sw025a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw025
+
+@t.games.hangman.sw025b core.test
+    input="what is it known for"
+    expectStatus=supported
+    session=sw025
+
+@t.games.hangman.sw026a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw026
+
+@t.games.hangman.sw026b core.test
+    input="tell me one thing about this animal"
+    expectStatus=supported
+    session=sw026
+
+@t.games.hangman.sw027a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw027
+
+@t.games.hangman.sw027b core.test
+    input="uh give me something about it, not a letter"
+    expectStatus=supported
+    session=sw027
+
+@t.games.hangman.sw028a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw028
+
+@t.games.hangman.sw028b core.test
+    input="whats a fact about the mystery animal"
+    expectStatus=supported
+    session=sw028
+
+@t.games.hangman.sw029a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw029
+
+@t.games.hangman.sw029b core.test
+    input="How many guesses are left?"
+    expect="6 wrong guesses left"
+    session=sw029
+
+@t.games.hangman.sw030a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw030
+
+@t.games.hangman.sw030b core.test
+    input="how many letters are hidden"
+    expect="6 wrong guesses left"
+    session=sw030
+
+@t.games.hangman.sw031a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw031
+
+@t.games.hangman.sw031b core.test
+    input="what does the word look like now"
+    expect="6 wrong guesses left"
+    session=sw031
+
+@t.games.hangman.sw032a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw032
+
+@t.games.hangman.sw032b core.test
+    input="show me the mask"
+    expect="6 wrong guesses left"
+    session=sw032
+
+@t.games.hangman.sw033a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw033
+
+@t.games.hangman.sw033b core.test
+    input="display the dashes"
+    expect="6 wrong guesses left"
+    session=sw033
+
+@t.games.hangman.sw034a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw034
+
+@t.games.hangman.sw034b core.test
+    input="letters still missing?"
+    expect="6 wrong guesses left"
+    session=sw034
+
+@t.games.hangman.sw035a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw035
+
+@t.games.hangman.sw035b core.test
+    input="how many spaces left in the word"
+    expect="6 wrong guesses left"
+    session=sw035
+
+@t.games.hangman.sw036a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw036
+
+@t.games.hangman.sw036b core.test
+    input="hidden word view"
+    expect="6 wrong guesses left"
+    session=sw036
+
+@t.games.hangman.sw037a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw037
+
+@t.games.hangman.sw037b core.test
+    input="Start a new hangman game."
+    expectState="status=playing"
+    session=sw037
+
+@t.games.hangman.sw038a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw038
+
+@t.games.hangman.sw038b core.test
+    input="hangman again"
+    expectState="status=playing"
+    session=sw038
+
+@t.games.hangman.sw039a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw039
+
+@t.games.hangman.sw039b core.test
+    input="play again hangman"
+    expectState="status=playing"
+    session=sw039
+
+@t.games.hangman.sw040a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw040
+
+@t.games.hangman.sw040b core.test
+    input="hangman round two"
+    expectState="status=playing"
+    session=sw040
+
+@t.games.hangman.sw041a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw041
+
+@t.games.hangman.sw041b core.test
+    input="lets go again with a new animal"
+    expectState="status=playing"
+    session=sw041
+
+@t.games.hangman.sw042a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw042
+
+@t.games.hangman.sw042b core.test
+    input="start over hangman"
+    expectState="status=playing"
+    session=sw042
+
+@t.games.hangman.sw043a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw043
+
+@t.games.hangman.sw043b core.test
+    input="giraffe is the word"
+    expectState="word=giraffe"
+    session=sw043
+
+@t.games.hangman.sw044a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw044
+
+@t.games.hangman.sw044b core.test
+    input="make a hangman round with giraffe pls"
+    expectState="word=giraffe"
+    session=sw044
+
+@t.games.hangman.sw045a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw045
+
+@t.games.hangman.sw045b core.test
+    input="hidden word: giraffe"
+    expectState="word=giraffe"
+    session=sw045
+
+@t.games.hangman.sw046a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw046
+
+@t.games.hangman.sw046b core.test
+    input="ok new hangman, its giraffe"
+    expectState="word=giraffe"
+    session=sw046
+
+@t.games.hangman.sw047a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw047
+
+@t.games.hangman.sw047b core.test
+    input="can u set the word to giraffe for hangman"
+    expectState="word=giraffe"
+    session=sw047
+
+@t.games.hangman.sw048a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw048
+
+@t.games.hangman.sw048b core.test
+    input="Play hangman with the word zebra."
+    expectState="word=zebra"
+    session=sw048
+
+@t.games.hangman.sw049a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw049
+
+@t.games.hangman.sw049b core.test
+    input="I give up the word."
+    expect="The word was lion"
+    session=sw049
+
+@t.games.hangman.sw050a core.test
+    input="Play hangman with the word lion."
+    expectStatus=supported
+    session=sw050
+
+@t.games.hangman.sw050b core.test
+    input="end the game pls"
+    expect="The word was lion"
+    session=sw050
