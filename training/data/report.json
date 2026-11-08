@@ -825,16 +825,16 @@
       ]
     },
     "ui.help": {
-      "total": 1693,
+      "total": 1694,
       "by_status": {
-        "rule-derived": 75,
+        "rule-derived": 76,
         "generator-backed": 1467,
         "generator-disagrees": 133,
         "negative": 18
       },
       "by_phenomenon": {
         "request": 727,
-        "chat": 7,
+        "chat": 8,
         "question": 718,
         "paraphrase": 223,
         "negation": 5,
@@ -842,7 +842,7 @@
         "out-of-domain": 7
       },
       "by_split": {
-        "train": 1320,
+        "train": 1321,
         "dev": 373
       },
       "generator": true,
@@ -1407,15 +1407,15 @@
     }
   },
   "totals": {
-    "records": 39250,
+    "records": 39251,
     "by_status": {
-      "rule-derived": 3279,
+      "rule-derived": 3280,
       "generator-backed": 33203,
       "negative": 1827,
       "generator-disagrees": 941
     },
     "by_split": {
-      "train": 34988,
+      "train": 34989,
       "dev": 4262
     }
   }

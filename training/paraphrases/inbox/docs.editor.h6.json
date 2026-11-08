@@ -1,0 +1,78 @@
+{
+  "world": "docs.editor",
+  "tab": "editor",
+  "author": "haiku",
+  "batch": "h6",
+  "tasks": [
+    {
+      "id": "docs.editor.h6.t1",
+      "goal": "Get the word count and reading time of the document",
+      "setup": ["Add a heading Weekend.", "Add a paragraph We hiked up the hill and had lunch by the lake."],
+      "canonical": "Give me the statistics.",
+      "variants": ["stats pls", "how many words and how long to read it", "show me the document stats", "what's the word count", "reading time of the doc?", "tell me the stats for this", "how long would it take to read this", "can u give me the doc statistics", "wordcount plz", "give me some numbers about the text: words, sentences, etc"]
+    },
+    {
+      "id": "docs.editor.h6.t2",
+      "goal": "Put the whole document on the clipboard as markdown",
+      "setup": ["Add a heading Weekend.", "Add a paragraph We hiked up the hill."],
+      "canonical": "Copy the document as markdown.",
+      "variants": ["copy the doc as md", "put the whole document on the clipboard as markdown", "can you copy everything as markdown pls", "markdown copy of the document please", "copy this as markdown", "I want the text in markdown on my clipboard", "copy document in markdown form", "grab the doc as markdown and copy it", "copy as markdown", "clipboard, markdown, the whole doc"]
+    },
+    {
+      "id": "docs.editor.h6.t3",
+      "goal": "Show the last paragraph as a block quote",
+      "setup": ["Add a paragraph It rained all day.", "Add a paragraph We stayed inside and played games."],
+      "canonical": "Turn this paragraph into a quote.",
+      "variants": ["make the last paragraph a quote", "turn the second paragraph into a blockquote", "can u change the last para to a quote", "quote style for the last paragraph pls", "convert the final paragraph into a quotation", "I want the last paragraph shown as a quote", "make that paragraph a quote block", "last paragraph into a quote, ok?", "turn last paragraph to quote", "make the second para a quote pls"]
+    },
+    {
+      "id": "docs.editor.h6.t4",
+      "goal": "Move the cursor to the second heading",
+      "setup": ["Add a heading Shopping.", "Add a paragraph Milk and eggs.", "Add a heading Plans.", "Add a paragraph Visit grandma."],
+      "canonical": "Go to the second heading.",
+      "variants": ["jump to the 2nd heading", "scroll down to the second header", "take me to the 2nd heading please", "navigate to the second heading", "where's the second heading? go there", "cursor to heading two", "go to heading number 2", "can you jump to the second header", "go to the heading after the first one", "scroll to the heading that comes second"]
+    },
+    {
+      "id": "docs.editor.h6.t5",
+      "goal": "Remove the sentence I have selected",
+      "setup": ["Add a paragraph Rain fell. We stayed home all day. The sky was grey.", "Select the sentence We stayed home all day."],
+      "canonical": "Delete the selection.",
+      "variants": ["remove what I selected", "delete the highlighted part", "get rid of the selected text", "cut it out", "can u delete whatever is selected", "the selected bit, kill it", "delete the selected sentence please", "erase the selection pls", "that sentence I picked, remove it", "remove the selected part"]
+    },
+    {
+      "id": "docs.editor.h6.t6",
+      "goal": "Make the second heading smaller",
+      "setup": ["Add a heading Shopping.", "Add a paragraph Milk.", "Add a heading Plans."],
+      "canonical": "Make the second heading smaller.",
+      "variants": ["shrink the 2nd heading", "second heading smaller pls", "make heading number two a bit smaller", "the second heading is too big, make it smaller", "can you reduce the size of the second heading", "turn the second heading down a notch", "I want the 2nd header smaller", "make the last heading smaller", "smaller second heading please", "lower the size of the second header"]
+    },
+    {
+      "id": "docs.editor.h6.t7",
+      "goal": "Right-align the second paragraph",
+      "setup": ["Add a paragraph It rained.", "Add a paragraph We stayed in."],
+      "canonical": "Align the second paragraph to the right.",
+      "variants": ["right align the last paragraph", "paragraph two, align right", "push the second paragraph to the right side", "can u align the 2nd para on the right", "last paragraph to the right edge pls", "set the alignment of the second paragraph to right", "I want the last paragraph aligned right", "make the second paragraph right aligned", "the second para should sit on the right, fix that", "aling the second paragraf to the rigt"]
+    },
+    {
+      "id": "docs.editor.h6.t8",
+      "goal": "Make the word cat a link to animals dot example dot org",
+      "setup": ["Add a paragraph The cat sat on the mat."],
+      "canonical": "Link the word cat to animals dot example dot org.",
+      "variants": ["make cat a link to animals dot example dot org", "add a link to animals dot example dot org on the word cat", "cat should link to animals.example.org", "can you hyperlink cat to animals dot example dot org", "link cat to animals example org pls", "put a url on the word cat: animals dot example dot org", "when someone clicks cat it should go to animals.example.org", "I'd like cat to be a link going to animals example org", "attach animals.example.org to cat", "linkk the word cat to animals dot example dot org"]
+    },
+    {
+      "id": "docs.editor.h6.t9",
+      "goal": "Clear whatever is selected right now",
+      "setup": ["Add a paragraph Dogs bark loudly.", "Select the word loudly."],
+      "canonical": "Deselect.",
+      "variants": ["unselect", "un-select that", "nothing should be selected anymore", "let go of the selection", "can u deselect everything", "please deselect", "select nothing", "stop having the word selected", "drop the selection pls", "deselect the word, I'm done with it"]
+    },
+    {
+      "id": "docs.editor.h6.t10",
+      "goal": "Find out what text is selected right now",
+      "setup": ["Add a paragraph Dogs bark loudly.", "Select the word loudly."],
+      "canonical": "What have I selected?",
+      "variants": ["which word did I select", "what's my current selection", "tell me what I have selected", "what is it that's selected", "is anything selected, and what", "what did i select last", "what's selected?", "which part is selected at the moment", "what thing is selected rn", "what text is the current selection"]
+    }
+  ]
+}

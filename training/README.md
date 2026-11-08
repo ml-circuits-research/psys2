@@ -52,3 +52,39 @@ Metrics, per world and macro-averaged, on dev (datagen, paraphrase and rule-deri
 - size of the ONNX int8 export (and the accuracy drop after quantization, measured on the same dev set).
 
 Report one table per world with the rule formalizer as the baseline row; decide per world, not globally (a LoRA adapter per world also saves download size for ModernBERT; DistilBERT needs a full model per world or shared weights plus heads). Record commands, seeds, data hashes and versions as in the first GPU session.
+
+## Dataset (`scripts/build-dataset.mjs`)
+`node scripts/build-dataset.mjs` merges `training/data/*.jsonl` (generators + rule-derived; `export-training` runs first if the directory is empty), `training/paraphrases/out/*.jsonl` and optional webchat phrase-log exports dropped in `training/phrase-logs/*.jsonl` into `training/dataset/` (gitignored except `stats.json`):
+- `<world>/{train,dev,test}.jsonl` - fields `text`, `context` (earlier messages), `target` (SOP circuit; empty for negatives), `negative`, `label_status`, `source` (generator | rule-derived | paraphrase), `weight`, `group`, `phenomenon`, `tab`, `provenance`, `split`.
+- `<world>/review.jsonl` - `needs_review` rows (excluded from training and test) and flagged `generator-disagrees` rows whose group landed in test.
+- `routing.jsonl` - `text`, `context {tab, recent_worlds, session, synthetic}` -> `world` (`alt_worlds` when the same text belongs to several worlds), with `split`. Paraphrase and phrase-log rows keep their real tab; generator and rule-derived rows get a deterministic synthetic context (tab: own world 60 %, another 20 %, none 20 %; 0-2 recent worlds), flagged `synthetic`. Negatives are not routed. Phrase-log rows routed to exactly one world with status `supported` join routing (weight 0.8).
+- `unlabelled.jsonl` - rows without a trusted target (every phrase-log row carries no circuit; paraphrase rows with `target_from=null`), for review.
+- `stats.json` - counts per world / split / source / label, dedupe counts, routing and unlabelled counts.
+Splits are per group (world + generator group or task goal), by hash of `--seed` (default 1337), about 80/10/10 per world, so paraphrases of one goal never cross splits. Dedupe is per world on normalized text + context (the most trusted copy wins). Weights: generator-backed, rule-derived, `rules-agree`, `canonical-ok` 1.0; `target_from=canonical` 0.8; `generator-disagrees` 0.5 (never in test).
+
+## Model target format (`training/psys2_train/`)
+One encoder pass, three heads (`model.py`), input = `[CLS] text [SEP] last 2 context messages [SEP]`:
+1. **Intent (sequence classification, first token).** The class is the circuit *skeleton*: the normalized circuit (`core.agent` wires and `core.via/source/seq/in` dropped, keys shortened to their last segment, entries sorted, wire ids replaced by position) with every value that can be located in the text replaced by a slot placeholder, for example `kids.arith.holding count={w0.count} item={w0.item} owner={w0.owner}`. Values that are not in the text (`action=draw.add`, normalized lemmas that were not aligned) stay constants of the skeleton. Texts the world must not formalize get the class `NONE`. Classes are per world (the skeleton list is saved in `labels.json`).
+2. **Slots (token classification, BIO).** Tag names are `w<wire index>.<key>` (`B-w0.owner`, `I-w0.owner`, `O`). Gold spans come from `psys2_train.sop.align`: each value is searched case-insensitively with word boundaries (entities `$e.tom` -> "tom", numbers -> digits or number word, words -> plural forms), leftmost free match. Only the text segment is tagged; context tokens are ignored (-100).
+3. **Routing (sequence classification, separate run).** Input `tab: <tab> ; recent: <worlds> ;; <text>` -> world id over all worlds; evaluated with and without the context prefix (ADR-004).
+
+**Decoding to SOP** (`sop.decode`): predicted skeleton, placeholders filled from the predicted spans. A surface is converted to a circuit value by `ValueMap`, learned from the training set per key (surface -> most common value, e.g. "apples" -> `apple`), with a fallback by the key's dominant kind (entity `$e.<surface>`, quoted string, number, word). The result is compared as normalized text, so a prediction is exact only if skeleton, spans and values all agree. `python -m psys2_train.oracle` decodes the gold skeleton and spans and reports the ceiling of this format per world (0.95-1.0 for most worlds; lower for `docs.reader` and `kids.time`, where values are normalized rather than copied from the text; unseen skeletons in dev are the other loss and show the cost of constants in the class).
+The emit templates of `patterns.sop` are not needed at training time; because pattern ids are not in the generator records, skeleton classes play the role of the pattern. At inference the skeleton is turned into wires by the same rendering (ids assigned, `core.via` set from the legend), a step for the inference worker.
+
+Metrics (`metrics.py`): exact SOP match after decoding (also split by source: generator / paraphrase / rule-derived), slot F1 (micro over (slot, span)), intent accuracy, negative rejection, routing accuracy with and without context.
+
+## Commands
+```bash
+# data (CPU, anywhere)
+node scripts/export-training.mjs && node scripts/collect-paraphrases.mjs training/paraphrases/inbox --report
+node scripts/build-dataset.mjs                      # -> training/dataset/, stats.json
+# smoke test (CPU, tiny random BERT, no download, 20 steps)
+bash training/smoke_test.sh
+# real runs (DGX Spark), from training/
+cd training && python check_env.py
+python -m psys2_train.train --world kids.arith --model answerdotai/ModernBERT-base --epochs 5 --bf16
+python -m psys2_train.train --task routing --model answerdotai/ModernBERT-base --epochs 3 --bf16
+python -m psys2_train.train --world kids.arith --model distilbert-base-uncased --no-lora --lr 5e-5   # ablation (a)
+# runs are written to training/runs/<name>-<time>/ (best.pt, labels.json, metrics.json with command, data hash, versions)
+python -m psys2_train.export_onnx <run dir> <model> out.onnx    # stub, untested
+```

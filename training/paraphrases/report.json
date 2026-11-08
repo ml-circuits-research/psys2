@@ -21,22 +21,22 @@
       "retry": []
     },
     "docs.editor": {
-      "tasks": 40,
-      "attempts": 443,
-      "canonical_success": 39,
-      "canonical_success_rate": 0.975,
-      "variants": 400,
+      "tasks": 60,
+      "attempts": 663,
+      "canonical_success": 59,
+      "canonical_success_rate": 0.9833,
+      "variants": 600,
       "variant_labels": {
-        "rules-fail": 200,
-        "rules-differ": 110,
-        "rules-agree": 90
+        "rules-agree": 128,
+        "rules-differ": 162,
+        "rules-fail": 310
       },
-      "variant_rules_coverage": 0.225,
+      "variant_rules_coverage": 0.2133,
       "variants_needing_review": 10,
-      "trainable_records": 429,
+      "trainable_records": 649,
       "by_split": {
-        "train": 377,
-        "dev": 66
+        "train": 586,
+        "dev": 77
       },
       "retry": [
         {
@@ -99,9 +99,9 @@
       "canonical_success_rate": 1,
       "variants": 400,
       "variant_labels": {
-        "rules-fail": 290,
-        "rules-differ": 47,
-        "rules-agree": 63
+        "rules-differ": 48,
+        "rules-agree": 63,
+        "rules-fail": 289
       },
       "variant_rules_coverage": 0.1575,
       "variants_needing_review": 0,
@@ -119,8 +119,8 @@
       "canonical_success_rate": 1,
       "variants": 300,
       "variant_labels": {
-        "rules-fail": 125,
         "rules-agree": 139,
+        "rules-fail": 125,
         "rules-differ": 36
       },
       "variant_rules_coverage": 0.4633,
@@ -217,11 +217,11 @@
       "canonical_success_rate": 1,
       "variants": 200,
       "variant_labels": {
-        "rules-agree": 57,
-        "rules-fail": 130,
-        "rules-differ": 13
+        "rules-fail": 77,
+        "rules-agree": 113,
+        "rules-differ": 10
       },
-      "variant_rules_coverage": 0.285,
+      "variant_rules_coverage": 0.565,
       "variants_needing_review": 0,
       "trainable_records": 220,
       "by_split": {
@@ -297,11 +297,11 @@
       "canonical_success_rate": 1,
       "variants": 200,
       "variant_labels": {
-        "rules-agree": 81,
-        "rules-fail": 100,
+        "rules-agree": 85,
+        "rules-fail": 96,
         "rules-differ": 19
       },
-      "variant_rules_coverage": 0.405,
+      "variant_rules_coverage": 0.425,
       "variants_needing_review": 0,
       "trainable_records": 220,
       "by_split": {
@@ -384,19 +384,19 @@
       "variants_needing_review": 0,
       "trainable_records": 220,
       "by_split": {
-        "dev": 22,
-        "train": 198
+        "train": 198,
+        "dev": 22
       },
       "retry": []
     }
   },
   "totals": {
-    "tasks": 490,
-    "attempts": 5402,
-    "canonical_success": 489,
-    "variants": 4900,
-    "agree": 1205,
+    "tasks": 510,
+    "attempts": 5622,
+    "canonical_success": 509,
+    "variants": 5100,
+    "agree": 1303,
     "canonical_success_rate": 0.998,
-    "variant_rules_coverage": 0.2459
+    "variant_rules_coverage": 0.2555
   }
 }

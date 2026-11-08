@@ -1,0 +1,78 @@
+{
+  "world": "docs.editor",
+  "tab": "editor",
+  "author": "haiku",
+  "batch": "h5",
+  "tasks": [
+    {
+      "id": "docs.editor.h5.t1",
+      "goal": "Put the last paragraph on the clipboard so I can paste it elsewhere",
+      "setup": ["Add a heading Notes.", "Add a paragraph Buy tea and biscuits."],
+      "canonical": "Copy the last paragraph.",
+      "variants": ["copy the last para", "put the final paragraph on the clipboard pls", "can u copy the last paragraph for me", "grab the last paragraph and copy it", "copy last paragrah", "I need to paste the last paragraph somewhere, copy it", "clipboard: the last paragraph", "could you copy the bottom paragraph please", "copy the paragraph at the end", "last paragraph, copy it to the clipboard"]
+    },
+    {
+      "id": "docs.editor.h5.t2",
+      "goal": "Hear what the document says, as plain text",
+      "setup": ["Add a paragraph We went to the zoo.", "Add a paragraph We saw a lion."],
+      "canonical": "What does the document say?",
+      "variants": ["what does it say", "tell me what the doc says", "whats in the document", "what have I written so far", "so what is written in here?", "tell me whats in it", "can you tell me what the document says pls", "what did I write in the doc", "what is in the text?", "what does the whole thing say"]
+    },
+    {
+      "id": "docs.editor.h5.t3",
+      "goal": "Make the word example a clickable link to example dot com",
+      "setup": ["Add a paragraph See the example page for more."],
+      "canonical": "Add a link to example dot com on the word example.",
+      "variants": ["put a link on the word example pointing to example dot com", "can u link example to example.com", "hyperlink the word example, url is example dot com", "add link example.com to the word example pls", "the word example should go to example dot com, add the link", "make a link from example to example dot com", "please attach example dot com as a link on example", "link that word example to the site example dot com", "add a url example dot com on example", "I want the word example to open example dot com when clicked"]
+    },
+    {
+      "id": "docs.editor.h5.t4",
+      "goal": "Make the heading larger",
+      "setup": ["Add a heading Shopping.", "Add a paragraph Milk and eggs."],
+      "canonical": "Make the heading bigger.",
+      "variants": ["heading bigger pls", "enlarge the heading", "can u make the heading a bit larger", "the heading is too small, make it bigger", "bump up the heading size", "shrink the heading a little", "I want the heading bigger than it is", "could you increase the size of the heading", "make the heading slightly bigger please", "headng needs to be larger, fix it"]
+    },
+    {
+      "id": "docs.editor.h5.t5",
+      "goal": "Center the heading on the page",
+      "setup": ["Add a heading Shopping."],
+      "canonical": "Center the heading.",
+      "variants": ["heading to the middle", "put the heading in the center", "can u centre the heading", "align the heading in the middle of the page", "make the heading centered pls", "middle align the heading", "I want the heading in the middle", "could you line the heading up in the centre", "heading centred please", "shift the heading to center alignment"]
+    },
+    {
+      "id": "docs.editor.h5.t6",
+      "goal": "Change the shopping list so its items are numbered",
+      "setup": ["Add a list with milk, eggs and bread."],
+      "canonical": "Turn the list into a numbered list.",
+      "variants": ["make the list numbered", "change the list to numbers", "convert the list into a numbered one", "can u turn that list into a numbered list", "numbered list instead of bullets pls", "switch the list to a numbered list", "turn the list into numbers", "make it a numbered list", "the list should be numbered, change it", "convrt the list to a numbered list"]
+    },
+    {
+      "id": "docs.editor.h5.t7",
+      "goal": "Drop the current selection so nothing is selected",
+      "setup": ["Add a paragraph We walk to school every day.", "Select the word school."],
+      "canonical": "Clear the selection.",
+      "variants": ["unselect everything", "deselect it", "nothing selected please", "forget the selection", "can you drop the selection", "unselect pls", "stop selecting that", "click off the selection, deselect", "let go of the selected word", "empty the selection"]
+    },
+    {
+      "id": "docs.editor.h5.t8",
+      "goal": "Ask which part of the text is currently selected",
+      "setup": ["Add a paragraph We walk to school every day.", "Select the word school."],
+      "canonical": "What is selected?",
+      "variants": ["what's selected right now", "which bit is selected", "what have I selected so far", "what am I selecting", "tell me the selection", "is anything selected? what is it", "what part is my selection covering", "wat is selected atm", "remind me what I have selected", "which text did I pick out"]
+    },
+    {
+      "id": "docs.editor.h5.t9",
+      "goal": "Move the cursor to the very end of the document",
+      "setup": ["Add a heading Shopping.", "Add a paragraph Milk and eggs.", "Add a paragraph Bread and jam."],
+      "canonical": "Go to the end.",
+      "variants": ["jump to the end", "scroll down to the bottom", "take me to the end of the doc", "put the cursor at the end", "can u go to the bottom", "navigate to the end please", "bottom of the page", "go down to the end of it", "I want to be at the end of the document", "end pls"]
+    },
+    {
+      "id": "docs.editor.h5.t10",
+      "goal": "Delete only the word Milk from the text",
+      "setup": ["Add a paragraph Milk and eggs are on the list."],
+      "canonical": "Delete the word milk.",
+      "variants": ["remove the word milk", "erase milk", "take out the word milk", "delete milk pls", "can u delete the word milk", "drop the word milk from the paragraph", "cut the word milk out", "remove milk from the text", "milk needs to go, delete that word", "the word milk, delete please"]
+    }
+  ]
+}
