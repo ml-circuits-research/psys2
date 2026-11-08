@@ -1,0 +1,11 @@
+@world.lang.common core.world
+    namespace=lang.common
+    version=0.1.0
+    legend=$legend.lang.common
+    imports=world.core
+    formalization=rules
+    language=en
+    status=fixture
+    title="Common phrasing"
+    summary=""
+    doc="Shared phrasing for every world: phrase macros (core.phrase) for polite request lead-ins, indirect-question lead-ins, spoken fillers and sentence-final politeness, and shared lexicons (colour, ordinal, size, degree, direction, position, unit) that worlds extend with extends=. It has no patterns and no operations, so it claims nothing and is never a routing target. New common phrasing goes here, never inline in a world. Hand-built platform fixture, not produced by the C1 workflow."

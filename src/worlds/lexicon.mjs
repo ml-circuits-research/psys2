@@ -20,7 +20,7 @@ function build(set) {
   const phrases = new Map();      // phrase macro id -> { id, worldId, alts: string[][] }
   for (const w of set.list()) {
     const weights = new Map();
-    for (const ph of w.phrases ?? []) phrases.set(ph.id, { id: ph.id, worldId: w.id, alts: ph.alts });
+    for (const ph of w.phrases ?? []) phrases.set(ph.id, { id: ph.id, worldId: w.id, alts: ph.alts, frame: ph.frame });
     for (const lex of w.lexicons) {
       const words = new Set(lex.words.map((x) => x.toLowerCase()));
       lexicons.set(lex.id, { id: lex.id, class: lex.class, worldId: w.id, words });

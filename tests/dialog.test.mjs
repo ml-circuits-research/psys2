@@ -148,8 +148,8 @@ test('without a translator everything is treated as English', async () => {
 
 test('engine.worlds() lists manifests', () => {
   const ids = engine.worlds().map((w) => w.id);
-  assert.deepEqual(ids, ['core', 'kids.common', 'ui.help', 'test.counting']);
-  assert.equal(engine.worlds()[3].status, 'fixture');
+  assert.deepEqual(ids, ['core', 'lang.common', 'kids.common', 'ui.help', 'test.counting']);
+  assert.equal(engine.worlds()[4].status, 'fixture');
 });
 
 // ---- world tests runner -----------------------------------------------------------------
@@ -218,8 +218,8 @@ test('server: health, worlds, sessions, messages, memory, 501 for learning', asy
   });
   try {
     const health = JSON.parse((await call('GET', '/v1/health')).body);
-    assert.deepEqual([health.ok, health.worlds], [true, 4]);
-    assert.equal(JSON.parse((await call('GET', '/v1/worlds')).body).length, 4);
+    assert.deepEqual([health.ok, health.worlds], [true, 5]);
+    assert.equal(JSON.parse((await call('GET', '/v1/worlds')).body).length, 5);
     const w = JSON.parse((await call('GET', '/v1/worlds/test.counting')).body);
     assert.equal(w.manifest.id, 'test.counting');
     assert.ok(w.legend.types.length >= 4);

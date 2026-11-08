@@ -605,6 +605,11 @@
     card=many
     ask="Which literal alternatives (words joined by _)?"
 
+@core.phrase.frame core.key
+    value=atom
+    card=one
+    ask="Is it frame vocabulary (true, the default) or content (false)?"
+
 @core.phrase.doc core.key
     value=string
     card=one

@@ -13,7 +13,7 @@ export const fixtureEngine = (extra = {}) => {
   // test.counting on purpose and have their own tests (tests/kids-worlds.test.mjs, `test-world`).
   const loader = createFsLoader({ roots: [DEFAULT_ROOT, FIXTURES] });
   const listWorlds = loader.listWorlds.bind(loader);
-  loader.listWorlds = async () => (await listWorlds()).filter((id) => id === 'core' || id === 'kids.common' || id === 'ui.help' || id.startsWith('test.'));
+  loader.listWorlds = async () => (await listWorlds()).filter((id) => id === 'core' || id === 'lang.common' || id === 'kids.common' || id === 'ui.help' || id.startsWith('test.'));
   return createEngine({ loader, ...extra });
 };
 

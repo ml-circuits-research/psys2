@@ -1,0 +1,5 @@
+@legend.lang.common core.legend
+    namespace=lang.common
+    version=0.1.0
+    imports=core
+    doc="Shared phrasing: phrase macros and shared lexicons. Declares no types of its own."

@@ -88,6 +88,18 @@ test('vocabularyOf includes macro words; formalize uses the macro', () => {
   assert.ok(!r.segments[0].unparsed, JSON.stringify(r.segments[0]).slice(0, 600));
 });
 
+test('frame=false phrases are content: expanded but not counted as frame literals', async () => {
+  const s3 = await bundleSet({ t: mini('t', { files: { 'lexicon.sop': LEX + '@phrase.t.verbs core.phrase\n    frame=false\n    alt=daub alt=smear\n' } }) });
+  const l3 = lexIndex(s3);
+  const toks = (text) => tokenize(text, 0).filter((t) => t.kind !== 'punct');
+  const env = (text) => makeEnv(text, s3, new FormSession(), l3);
+  const r = matchTokens(compilePattern('[$t.lead|$t.verbs] {c:word}', l3.phrases), toks('daub red'), env('daub red'));
+  assert.deepEqual([r.literals, r.frameLiterals], [1, 0]);
+  const r2 = matchTokens(compilePattern('[$t.verbs|$t.lead] {c:word}', l3.phrases), toks('kindly red'), env('kindly red'));
+  assert.deepEqual([r2.literals, r2.frameLiterals], [1, 1]);
+  assert.equal(l3.phrases.get('t.verbs').frame, false);
+});
+
 test('lexicon extends / exclude', () => {
   const words = [...lex.lexicons.get('lex.t.shade').words].sort();
   assert.deepEqual(words, ['green', 'red', 'teal']);

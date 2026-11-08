@@ -77,10 +77,12 @@ export function compilePattern(match, phrases = null) {
       const tables = macroIds.map((id) => {
         const ph = phrases?.get(id);
         if (!ph) throw new PatternError(`unknown phrase '$${id}' in '${part}'`);
-        return ph.alts;
+        return ph;
       });
-      const alts = tables.length === 1 && !lits.length ? tables[0] : [...tables.flat(), ...lits];
-      elements.push({ t: 'alt', alts, optional: !!m[2], frameN: tables.reduce((n, a) => n + a.length, 0), macros: macroIds });
+      // frame phrases first (they count as frame literals), then content phrases (`frame=false`), then the inline literals
+      const ordered = [...tables.filter((p) => p.frame !== false), ...tables.filter((p) => p.frame === false)];
+      const alts = ordered.length === 1 && !lits.length ? ordered[0].alts : [...ordered.flatMap((p) => p.alts), ...lits];
+      elements.push({ t: 'alt', alts, optional: !!m[2], frameN: tables.reduce((n, p) => n + (p.frame === false ? 0 : p.alts.length), 0), macros: macroIds });
       continue;
     }
     if (/[\[\]{}|]/.test(part)) throw new PatternError(`malformed element '${part}'`);

@@ -3,6 +3,7 @@
     version=0.1.0
     legend=$legend.kids.common
     imports=world.core
+    imports=world.lang.common
     formalization=rules
     language=en
     status=fixture

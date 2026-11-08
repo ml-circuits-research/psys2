@@ -1,0 +1,11 @@
+@t.lang.common.n1 core.test
+    input="Hey, so, hello!"
+    expect="Hello"
+
+@t.lang.common.n2 core.test
+    input="Hello there"
+    expect="Hello"
+
+@t.lang.common.n3 core.test
+    input="Zorb flimbles for me"
+    expectStatus=unparsed

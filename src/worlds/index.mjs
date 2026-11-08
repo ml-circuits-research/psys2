@@ -137,7 +137,7 @@ function buildWorld(id, files, ops) {
     extends: getAll(x, 'extends').map((v) => String(v.v).replace(/^\$/, '')), exclude: getAll(x, 'exclude').map((v) => String(v.v).toLowerCase()),
   }));
   w.phrases = wires['lexicon.sop'].filter((x) => x.type === 'core.phrase').map((x) => ({
-    id: x.id.replace(/^phrase\./, ''), wireId: x.id, wire: x, worldId: id,
+    id: x.id.replace(/^phrase\./, ''), wireId: x.id, wire: x, worldId: id, frame: txt(x, 'frame') !== 'false',
     alts: [...new Set(getAll(x, 'alt').map((v) => String(v.v).toLowerCase()))].map((a) => a.split('_').filter(Boolean)),
   }));
   for (const ph of w.phrases) {
