@@ -6,26 +6,26 @@
   },
   "worlds": {
     "kids.common": {
-      "total": 2078,
+      "total": 2537,
       "by_status": {
-        "rule-derived": 78,
-        "generator-backed": 1692,
-        "negative": 308
+        "rule-derived": 537,
+        "generator-backed": 1689,
+        "negative": 311
       },
       "by_phenomenon": {
-        "chat": 21,
-        "question": 129,
-        "request": 134,
-        "statement": 329,
-        "coreference": 147,
-        "multi-entity": 1010,
-        "near-miss": 250,
+        "question": 615,
+        "chat": 33,
+        "request": 158,
+        "statement": 612,
+        "coreference": 413,
+        "multi-entity": 395,
+        "near-miss": 264,
         "negation": 5,
-        "out-of-domain": 53
+        "out-of-domain": 42
       },
       "by_split": {
-        "train": 2069,
-        "dev": 9
+        "train": 2484,
+        "dev": 53
       },
       "generator": true,
       "generator_version": "1",
@@ -35,60 +35,233 @@
         "rate": 1,
         "positive_rate": 1,
         "negative_rate": 1,
-        "positives": 1692,
-        "positives_agree": 1692,
-        "negatives": 308,
-        "negatives_ok": 308,
+        "positives": 1689,
+        "positives_agree": 1689,
+        "negatives": 311,
+        "negatives_ok": 311,
         "invalid_expect": 0
       },
       "pattern_gaps": []
     },
-    "kids.shapes": {
-      "total": 2127,
+    "ui.avatar": {
+      "total": 2451,
       "by_status": {
-        "rule-derived": 127,
-        "generator-backed": 1816,
-        "negative": 178,
-        "generator-disagrees": 6
+        "rule-derived": 451,
+        "generator-backed": 1468,
+        "generator-disagrees": 523,
+        "negative": 9
       },
       "by_phenomenon": {
-        "question": 1182,
-        "statement": 466,
-        "new-vocabulary": 20,
-        "negation": 102,
-        "multi-entity": 122,
-        "number-words": 28,
-        "context": 120,
-        "near-miss": 62,
-        "out-of-domain": 25
+        "request": 2214,
+        "question": 227,
+        "statement": 1,
+        "near-miss": 5,
+        "out-of-domain": 4
       },
       "by_split": {
-        "train": 1915,
-        "dev": 212
+        "train": 1862,
+        "dev": 589
+      },
+      "generator": true,
+      "generator_version": "1",
+      "seed": 1070941082,
+      "generator_records": 2000,
+      "agreement": {
+        "rate": 0.7385,
+        "positive_rate": 0.7373,
+        "negative_rate": 1,
+        "positives": 1991,
+        "positives_agree": 1468,
+        "negatives": 9,
+        "negatives_ok": 9,
+        "invalid_expect": 0
+      },
+      "pattern_gaps": [
+        {
+          "group": "avatar.coordinated",
+          "count": 301,
+          "example": {
+            "text": "Make the eyes wider and then the body yellow.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=avatar.resizePart core.request.arg.dir=wider core.request.arg.part=eye",
+              "core.request core.request.action=avatar.setColor core.request.arg.color=yellow core.request.arg.part=body"
+            ],
+            "got": [
+              "core.request core.request.action=avatar.setColor core.request.arg.color=yellow core.request.arg.part=body",
+              "core.request core.request.action=draw.resize core.request.arg.d=wider core.request.arg.t=\"the eyes\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "avatar.color.main",
+          "count": 75,
+          "example": {
+            "text": "Make me blue.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=avatar.setColor core.request.arg.color=blue core.request.arg.part=main"
+            ],
+            "got": [
+              "core.request core.request.action=draw.recolor core.request.arg.color=blue core.request.arg.t=\"me\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "avatar.color.modal",
+          "count": 48,
+          "example": {
+            "text": "The background needs to be blue.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=avatar.setColor core.request.arg.color=blue core.request.arg.part=background"
+            ],
+            "got": [
+              "core.request core.request.action=draw.recolor core.request.arg.color=blue core.request.arg.t=\"the background\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "avatar.resize.adjective",
+          "count": 38,
+          "example": {
+            "text": "Make your eyes big.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=avatar.resizePart core.request.arg.dir=big core.request.arg.part=eye"
+            ],
+            "got": [
+              "core.request core.request.action=draw.setSize core.request.arg.s=big core.request.arg.t=\"your eyes\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "avatar.resize",
+          "count": 25,
+          "example": {
+            "text": "Make the eyes smaller.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=avatar.resizePart core.request.arg.dir=smaller core.request.arg.part=eye"
+            ],
+            "got": [
+              "core.request core.request.action=draw.resize core.request.arg.d=smaller core.request.arg.t=\"the eyes\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "avatar.reset.part",
+          "count": 20,
+          "example": {
+            "text": "Restore ur hair.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=avatar.resetPart core.request.arg.part=hair"
+            ],
+            "got": [
+              "core.request core.request.action=draw.redo"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "avatar.color.word_order",
+          "count": 14,
+          "example": {
+            "text": "Hair color red!",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=avatar.setColor core.request.arg.color=red core.request.arg.part=hair"
+            ],
+            "got": [
+              "core.request core.request.action=draw.recolor core.request.arg.color=red core.request.arg.t=\"the Hair\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "avatar.wear.sunglasses",
+          "count": 2,
+          "example": {
+            "text": "Put some sunnies on.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=avatar.setPart core.request.arg.text=\"sunglasses\" core.request.arg.value=sunglass"
+            ],
+            "got": [
+              "core.request core.request.action=draw.move core.request.arg.phrase=\"some sunnies on\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        }
+      ]
+    },
+    "kids.shapes": {
+      "total": 2665,
+      "by_status": {
+        "rule-derived": 665,
+        "generator-backed": 1845,
+        "negative": 135,
+        "generator-disagrees": 20
+      },
+      "by_phenomenon": {
+        "question": 1955,
+        "statement": 380,
+        "new-vocabulary": 14,
+        "negation": 73,
+        "multi-entity": 76,
+        "number-words": 24,
+        "context": 76,
+        "near-miss": 44,
+        "out-of-domain": 23
+      },
+      "by_split": {
+        "train": 2488,
+        "dev": 177
       },
       "generator": true,
       "generator_version": "1",
       "seed": 1737424665,
       "generator_records": 2000,
       "agreement": {
-        "rate": 0.997,
-        "positive_rate": 0.9967,
+        "rate": 0.99,
+        "positive_rate": 0.9893,
         "negative_rate": 1,
-        "positives": 1822,
-        "positives_agree": 1816,
-        "negatives": 178,
-        "negatives_ok": 178,
+        "positives": 1865,
+        "positives_agree": 1845,
+        "negatives": 135,
+        "negatives_ok": 135,
         "invalid_expect": 0
       },
       "pattern_gaps": [
         {
           "group": "shapes.t.context",
-          "count": 4,
+          "count": 11,
           "example": {
-            "text": "What color is the shirt?",
+            "text": "What color is the ship?",
             "context": [
-              "A shirt is grey."
+              "A ship is black."
             ],
+            "expect": [
+              "core.question core.question.seek=color core.question.type=kids.shapes.thing core.question.where.name=ship"
+            ],
+            "got": [
+              "core.request core.request.action=draw.colorOf core.request.arg.t=\"ship\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "shapes.q.color-of",
+          "count": 6,
+          "example": {
+            "text": "Well, what color is the shirt?",
+            "context": [],
             "expect": [
               "core.question core.question.seek=color core.question.type=kids.shapes.thing core.question.where.name=shirt"
             ],
@@ -99,16 +272,158 @@
           }
         },
         {
-          "group": "shapes.q.summary",
-          "count": 2,
+          "group": "shapes.wording.color-of",
+          "count": 3,
           "example": {
-            "text": "What is a square?",
+            "text": "orange colour pls",
             "context": [],
             "expect": [
-              "core.question core.question.seek=summary core.question.type=kids.shapes.shape core.question.where.name=square"
+              "core.question core.question.seek=color core.question.type=kids.shapes.thing core.question.where.name=orange"
             ],
             "got": [
-              "core.request core.request.action=ttt.hint"
+              "core.request core.request.action=chart.setColor core.request.arg.c=orange"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        }
+      ]
+    },
+    "data.charts": {
+      "total": 2645,
+      "by_status": {
+        "rule-derived": 645,
+        "generator-backed": 1924,
+        "generator-disagrees": 61,
+        "negative": 15
+      },
+      "by_phenomenon": {
+        "request": 2025,
+        "multi-entity": 308,
+        "ellipsis": 87,
+        "negation": 27,
+        "question": 183,
+        "out-of-domain": 15
+      },
+      "by_split": {
+        "train": 2190,
+        "dev": 455
+      },
+      "generator": true,
+      "generator_version": "1",
+      "seed": 3931188022,
+      "generator_records": 2000,
+      "agreement": {
+        "rate": 0.9695,
+        "positive_rate": 0.9693,
+        "negative_rate": 1,
+        "positives": 1985,
+        "positives_agree": 1924,
+        "negatives": 15,
+        "negatives_ok": 15,
+        "invalid_expect": 0
+      },
+      "pattern_gaps": [
+        {
+          "group": "chart.removePoint.out",
+          "count": 22,
+          "example": {
+            "text": "Take the dogs out.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=chart.removePoint core.request.arg.l=\"dogs\""
+            ],
+            "got": [
+              "core.request core.request.action=draw.move core.request.arg.phrase=\"the dogs out\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "chart.adjustPoint.double",
+          "count": 19,
+          "example": {
+            "text": "Double apples.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=chart.adjustPoint core.request.arg.factor=2 core.request.arg.l=\"apples\""
+            ],
+            "got": [
+              "core.request core.request.action=draw.duplicate core.request.arg.t=\"apples\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "chart.addPoint",
+          "count": 8,
+          "example": {
+            "text": "Include dogs 11.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=chart.addPoint core.request.arg.text=\"dogs 11\""
+            ],
+            "got": [
+              "core.request core.request.action=draw.add core.request.arg.kind=dog core.request.arg.kt=\"dogs\" core.request.arg.where=\"11\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "chart.setSort.none",
+          "count": 4,
+          "example": {
+            "text": "Restore the original order",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=chart.setSort core.request.arg.mode=none"
+            ],
+            "got": [
+              "core.request core.request.action=draw.redo"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "chart.listCharts.casual",
+          "count": 4,
+          "example": {
+            "text": "My charts?",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=chart.listCharts"
+            ],
+            "got": [
+              "core.request core.request.action=ui.openTab core.request.arg.tab=\"charts\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "chart.removePoint.nomore",
+          "count": 3,
+          "example": {
+            "text": "No more dogs.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=chart.removePoint core.request.arg.l=\"dogs\""
+            ],
+            "got": [
+              "core.request core.request.action=draw.remove core.request.arg.phrase=\"the dogs\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "chart.difference.gap",
+          "count": 1,
+          "example": {
+            "text": "Gap between mon and tue.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=chart.difference core.request.arg.a=\"mon\" core.request.arg.b=\"tue\""
+            ],
+            "got": [
+              "core.question core.question.seek=count core.question.type=kids.time.gap core.question.where.from=monday core.question.where.to=tuesday"
             ],
             "note": "rule wires differ from expect"
           }
@@ -116,39 +431,82 @@
       ]
     },
     "art.draw": {
-      "total": 2246,
+      "total": 2830,
       "by_status": {
-        "rule-derived": 246,
-        "generator-backed": 1841,
-        "negative": 158,
-        "generator-disagrees": 1
+        "rule-derived": 830,
+        "generator-backed": 1851,
+        "negative": 102,
+        "generator-disagrees": 47
       },
       "by_phenomenon": {
-        "request": 2003,
-        "question": 85,
-        "negation": 69,
-        "near-miss": 48,
-        "out-of-domain": 41
+        "request": 2084,
+        "question": 178,
+        "negation": 68,
+        "near-miss": 44,
+        "out-of-domain": 32,
+        "elliptic": 243,
+        "voice": 181
       },
       "by_split": {
-        "train": 2168,
-        "dev": 78
+        "train": 2728,
+        "dev": 102
       },
       "generator": true,
       "generator_version": "1",
       "seed": 2703261279,
       "generator_records": 2000,
       "agreement": {
-        "rate": 0.9995,
-        "positive_rate": 0.9995,
-        "negative_rate": 1,
-        "positives": 1842,
-        "positives_agree": 1841,
-        "negatives": 158,
-        "negatives_ok": 158,
+        "rate": 0.9765,
+        "positive_rate": 0.9973,
+        "negative_rate": 0.7083,
+        "positives": 1856,
+        "positives_agree": 1851,
+        "negatives": 144,
+        "negatives_ok": 102,
         "invalid_expect": 0
       },
       "pattern_gaps": [
+        {
+          "group": "draw.neg",
+          "count": 22,
+          "example": {
+            "text": "I do not want a mountain.",
+            "context": [],
+            "expect": [],
+            "got": [
+              "core.request core.request.action=draw.remove core.request.arg.phrase=\"the mountain\""
+            ],
+            "note": "negative text was formalized by this world"
+          }
+        },
+        {
+          "group": "draw.near",
+          "count": 20,
+          "example": {
+            "text": "I like squares.",
+            "context": [],
+            "expect": [],
+            "got": [
+              "core.request core.request.action=draw.add core.request.arg.kind=square core.request.arg.kt=\"squares\""
+            ],
+            "note": "negative text was formalized by this world"
+          }
+        },
+        {
+          "group": "draw.exists",
+          "count": 4,
+          "example": {
+            "text": "Is there a fish?",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=draw.exists core.request.arg.kind=fish core.request.arg.kt=\"fish\""
+            ],
+            "got": [
+              "core.question core.question.seek=is_a core.question.type=kids.animals.animal core.question.where.is_a=fish core.question.where.name=there"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
         {
           "group": "draw.clear",
           "count": 1,
@@ -167,97 +525,169 @@
       ]
     },
     "docs.editor": {
-      "total": 558,
+      "total": 947,
       "by_status": {
-        "rule-derived": 205,
-        "generator-backed": 341,
-        "negative": 12
+        "rule-derived": 517,
+        "generator-backed": 412,
+        "negative": 12,
+        "generator-disagrees": 6
       },
       "by_phenomenon": {
-        "request": 418,
-        "negation": 44,
-        "ellipsis": 13,
-        "multi-entity": 52,
+        "request": 750,
+        "question": 35,
+        "negation": 40,
+        "ellipsis": 14,
+        "multi-entity": 47,
         "near-miss": 5,
         "coreference": 9,
-        "question": 10,
+        "number-words": 40,
         "out-of-domain": 7
       },
       "by_split": {
-        "train": 520,
-        "dev": 38
+        "train": 857,
+        "dev": 90
       },
       "generator": true,
       "generator_version": "1",
       "seed": 132811389,
-      "generator_records": 353,
+      "generator_records": 430,
       "agreement": {
-        "rate": 1,
-        "positive_rate": 1,
+        "rate": 0.986,
+        "positive_rate": 0.9856,
         "negative_rate": 1,
-        "positives": 341,
-        "positives_agree": 341,
+        "positives": 418,
+        "positives_agree": 412,
         "negatives": 12,
         "negatives_ok": 12,
         "invalid_expect": 0
       },
-      "pattern_gaps": []
+      "pattern_gaps": [
+        {
+          "group": "highlight.color",
+          "count": 3,
+          "example": {
+            "text": "Color the word milk green please.",
+            "context": [
+              "Add a paragraph Buy milk and eggs."
+            ],
+            "expect": [
+              "core.request core.request.action=doc.format core.request.arg.color=green core.request.arg.mark=highlight core.request.arg.t=\"the word milk\""
+            ],
+            "got": [
+              "core.request core.request.action=draw.recolor core.request.arg.color=green core.request.arg.t=\"the word milk\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "stats.chat",
+          "count": 1,
+          "example": {
+            "text": "Number of words in the doc?",
+            "context": [
+              "Add a paragraph The cat sat on the mat."
+            ],
+            "expect": [
+              "core.request core.request.action=doc.stats"
+            ],
+            "got": [
+              "core.request core.request.action=docr.stats core.request.arg.u=word"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "align.chat",
+          "count": 1,
+          "example": {
+            "text": "Heading to the middle.",
+            "context": [
+              "Add a heading Shopping."
+            ],
+            "expect": [
+              "core.request core.request.action=doc.align core.request.arg.how=center core.request.arg.t=\"the heading\""
+            ],
+            "got": [
+              "core.request core.request.action=doc.align core.request.arg.how=center core.request.arg.t=\"the Heading\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "link.word",
+          "count": 1,
+          "example": {
+            "text": "Example should link to example dot com.",
+            "context": [
+              "Add a paragraph This is an example text."
+            ],
+            "expect": [
+              "core.request core.request.action=doc.link core.request.arg.t=\"the word example\" core.request.arg.url=\"example dot com\""
+            ],
+            "got": [
+              "core.request core.request.action=doc.link core.request.arg.t=\"the word Example\" core.request.arg.url=\"example dot com\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        }
+      ]
     },
     "games.tictactoe": {
-      "total": 2074,
+      "total": 2169,
       "by_status": {
-        "rule-derived": 74,
-        "generator-backed": 1381,
-        "generator-disagrees": 444,
-        "negative": 175
+        "rule-derived": 169,
+        "generator-backed": 1353,
+        "generator-disagrees": 489,
+        "negative": 158
       },
       "by_phenomenon": {
-        "request": 1196,
-        "ellipsis": 166,
-        "context": 174,
-        "paraphrase": 216,
-        "question": 145,
-        "negation": 117,
-        "near-miss": 31,
-        "out-of-domain": 29
+        "request": 1190,
+        "ellipsis": 153,
+        "context": 149,
+        "paraphrase": 191,
+        "question": 136,
+        "negation": 109,
+        "near-miss": 26,
+        "out-of-domain": 25,
+        "sweep": 190
       },
       "by_split": {
-        "train": 1530,
-        "dev": 544
+        "train": 1646,
+        "dev": 523
       },
       "generator": true,
       "generator_version": "1",
       "seed": 150222436,
       "generator_records": 2000,
       "agreement": {
-        "rate": 0.778,
-        "positive_rate": 0.7575,
-        "negative_rate": 0.9887,
-        "positives": 1823,
-        "positives_agree": 1381,
-        "negatives": 177,
-        "negatives_ok": 175,
+        "rate": 0.7555,
+        "positive_rate": 0.7353,
+        "negative_rate": 0.9875,
+        "positives": 1840,
+        "positives_agree": 1353,
+        "negatives": 160,
+        "negatives_ok": 158,
         "invalid_expect": 0
       },
       "pattern_gaps": [
         {
           "group": "ttt.level.set",
-          "count": 110,
+          "count": 100,
           "example": {
-            "text": "Give me a tough level.",
+            "text": "Set it hard.",
             "context": [],
             "expect": [
-              "core.request core.request.action=ttt.level core.request.arg.level=tough"
+              "core.request core.request.action=ttt.level core.request.arg.level=hard"
             ],
             "got": [
-              "core.request core.request.action=chess.level core.request.arg.name=tough"
+              "core.request core.request.action=chess.level core.request.arg.name=hard"
             ],
             "note": "rule wires differ from expect"
           }
         },
         {
           "group": "ttt.coord",
-          "count": 77,
+          "count": 80,
           "example": {
             "text": "Take C1!",
             "context": [],
@@ -272,7 +702,7 @@
         },
         {
           "group": "ttt.describe",
-          "count": 56,
+          "count": 53,
           "example": {
             "text": "Show me the board!",
             "context": [],
@@ -286,31 +716,31 @@
           }
         },
         {
-          "group": "ttt.level.paraphrase",
-          "count": 54,
+          "group": "ttt.clear",
+          "count": 40,
           "example": {
-            "text": "Switch to strong.",
+            "text": "Could you wipe the board?",
             "context": [],
             "expect": [
-              "core.request core.request.action=ttt.level core.request.arg.level=strong"
+              "core.request core.request.action=ttt.new"
             ],
             "got": [
-              "core.request core.request.action=chess.level core.request.arg.name=strong"
+              "core.request core.request.action=geo.clearAll"
             ],
             "note": "rule wires differ from expect"
           }
         },
         {
-          "group": "ttt.level.ask",
-          "count": 34,
+          "group": "ttt.level.paraphrase",
+          "count": 38,
           "example": {
-            "text": "How hard is this?",
+            "text": "Switch to tough.",
             "context": [],
             "expect": [
-              "core.request core.request.action=ttt.level"
+              "core.request core.request.action=ttt.level core.request.arg.level=tough"
             ],
             "got": [
-              "core.request core.request.action=chess.level"
+              "core.request core.request.action=chess.level core.request.arg.name=tough"
             ],
             "note": "rule wires differ from expect"
           }
@@ -331,8 +761,38 @@
           }
         },
         {
+          "group": "ttt.level.ask",
+          "count": 28,
+          "example": {
+            "text": "How hard is this?",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ttt.level"
+            ],
+            "got": [
+              "core.request core.request.action=chess.level"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "ttt.move.bare",
+          "count": 26,
+          "example": {
+            "text": "Middle row right",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ttt.move core.request.arg.pos=middle_row_right"
+            ],
+            "got": [
+              "core.request core.request.action=ttt.move core.request.arg.col=3 core.request.arg.numeric=true core.request.arg.row=2"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
           "group": "ttt.last",
-          "count": 19,
+          "count": 18,
           "example": {
             "text": "Where did you play?",
             "context": [],
@@ -346,10 +806,25 @@
           }
         },
         {
-          "group": "ttt.hint",
-          "count": 13,
+          "group": "ttt.describe.paraphrase",
+          "count": 12,
           "example": {
-            "text": "What move should I make?",
+            "text": "Tell me what is on the board.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ttt.describe"
+            ],
+            "got": [
+              "core.request core.request.action=draw.describe"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "ttt.hint",
+          "count": 12,
+          "example": {
+            "text": "Which move is best?",
             "context": [],
             "expect": [
               "core.request core.request.action=ttt.hint"
@@ -361,23 +836,25 @@
           }
         },
         {
-          "group": "ttt.status.paraphrase",
-          "count": 11,
+          "group": "ttt.move.context",
+          "count": 12,
           "example": {
-            "text": "Is the game over?",
-            "context": [],
+            "text": "Play the top row center.",
+            "context": [
+              "Start a new tic tac toe game."
+            ],
             "expect": [
-              "core.request core.request.action=ttt.status"
+              "core.request core.request.action=ttt.move core.request.arg.pos=top_row_center"
             ],
             "got": [
-              "core.request core.request.action=chess.status"
+              "core.request core.request.action=ttt.move core.request.arg.col=2 core.request.arg.numeric=true core.request.arg.row=1"
             ],
             "note": "rule wires differ from expect"
           }
         },
         {
           "group": "ttt.hint.paraphrase",
-          "count": 10,
+          "count": 8,
           "example": {
             "text": "Give me a tip?",
             "context": [],
@@ -392,7 +869,7 @@
         },
         {
           "group": "ttt.last.paraphrase",
-          "count": 10,
+          "count": 8,
           "example": {
             "text": "Where was your last move",
             "context": [],
@@ -406,31 +883,50 @@
           }
         },
         {
-          "group": "ttt.clear",
-          "count": 9,
+          "group": "ttt.sw.new.imperative",
+          "count": 7,
           "example": {
-            "text": "Restart the board?",
-            "context": [],
+            "text": "Clear the board.",
+            "context": [
+              "Start a new tic tac toe game."
+            ],
             "expect": [
               "core.request core.request.action=ttt.new"
             ],
             "got": [
-              "core.request core.request.action=chess.new"
+              "core.request core.request.action=geo.clearAll"
             ],
             "note": "rule wires differ from expect"
           }
         },
         {
-          "group": "ttt.describe.paraphrase",
-          "count": 5,
+          "group": "ttt.sw.new.elliptic",
+          "count": 6,
           "example": {
-            "text": "Describe the position.",
-            "context": [],
+            "text": "clean board",
+            "context": [
+              "Start a new tic tac toe game."
+            ],
             "expect": [
-              "core.request core.request.action=ttt.describe"
+              "core.request core.request.action=ttt.new"
             ],
             "got": [
-              "core.request core.request.action=chess.describe"
+              "core.request core.request.action=geo.clearAll"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "ttt.status.paraphrase",
+          "count": 4,
+          "example": {
+            "text": "Is the game over?",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ttt.status"
+            ],
+            "got": [
+              "core.request core.request.action=chess.status"
             ],
             "note": "rule wires differ from expect"
           }
@@ -449,16 +945,16 @@
           }
         },
         {
-          "group": "ttt.move.bare",
-          "count": 1,
+          "group": "ttt.move",
+          "count": 2,
           "example": {
-            "text": "The middle",
+            "text": "Mark the middle row left cell",
             "context": [],
             "expect": [
-              "core.request core.request.action=ttt.move core.request.arg.pos=the_middle"
+              "core.request core.request.action=ttt.move core.request.arg.pos=middle_row_left"
             ],
             "got": [
-              "core.request core.request.action=ttt.move core.request.arg.pos=middle"
+              "core.request core.request.action=ttt.move core.request.arg.col=1 core.request.arg.numeric=true core.request.arg.row=2"
             ],
             "note": "rule wires differ from expect"
           }
@@ -466,22 +962,23 @@
       ]
     },
     "games.chess": {
-      "total": 2562,
+      "total": 2689,
       "by_status": {
-        "rule-derived": 562,
+        "rule-derived": 689,
         "negative": 20,
-        "generator-backed": 1950,
-        "generator-disagrees": 30
+        "generator-disagrees": 30,
+        "generator-backed": 1950
       },
       "by_phenomenon": {
-        "request": 2181,
+        "request": 2232,
         "out-of-domain": 20,
-        "question": 253,
-        "ellipsis": 108
+        "sweep": 61,
+        "question": 259,
+        "ellipsis": 117
       },
       "by_split": {
-        "train": 2289,
-        "dev": 273
+        "train": 2425,
+        "dev": 264
       },
       "generator": true,
       "generator_version": "1",
@@ -500,15 +997,45 @@
       "pattern_gaps": [
         {
           "group": "chess.move.bare",
-          "count": 29,
+          "count": 24,
           "example": {
-            "text": "Let me play c5.",
+            "text": "I play a3.",
             "context": [],
             "expect": [
-              "core.request core.request.action=chess.move core.request.arg.tf=c core.request.arg.tr=5"
+              "core.request core.request.action=chess.move core.request.arg.tf=a core.request.arg.tr=3"
             ],
             "got": [
-              "core.request core.request.action=music.playNote core.request.arg.note=c core.request.arg.oct=5"
+              "core.request core.request.action=ttt.move core.request.arg.col=a core.request.arg.row=3"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "chess.control.undo",
+          "count": 3,
+          "example": {
+            "text": "Undo my move.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=chess.undo core.request.arg.n=1"
+            ],
+            "got": [
+              "core.request core.request.action=draw.undo"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "chess.q.count",
+          "count": 2,
+          "example": {
+            "text": "How many pieces do you have?",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=chess.count core.request.arg.piece=piece core.request.arg.who=you"
+            ],
+            "got": [
+              "core.request core.request.action=chart.countItems"
             ],
             "note": "rule wires differ from expect"
           }
@@ -530,47 +1057,101 @@
         }
       ]
     },
-    "ui.shell": {
-      "total": 2138,
+    "kids.animals": {
+      "total": 2793,
       "by_status": {
-        "rule-derived": 138,
-        "generator-backed": 1801,
-        "generator-disagrees": 133,
-        "negative": 66
+        "rule-derived": 793,
+        "generator-backed": 1896,
+        "negative": 103,
+        "generator-disagrees": 1
       },
       "by_phenomenon": {
-        "request": 1498,
-        "question": 24,
-        "declared-tab": 133,
-        "number-words": 229,
-        "paraphrase": 152,
-        "ellipsis": 36,
-        "negation": 26,
-        "near-miss": 18,
-        "out-of-domain": 22
+        "question": 1927,
+        "statement": 585,
+        "negation": 142,
+        "multi-entity": 36,
+        "new-vocabulary": 29,
+        "context": 24,
+        "near-miss": 37,
+        "out-of-domain": 13
       },
       "by_split": {
-        "train": 2070,
-        "dev": 68
+        "train": 2549,
+        "dev": 244
+      },
+      "generator": true,
+      "generator_version": "1",
+      "seed": 993511613,
+      "generator_records": 2000,
+      "agreement": {
+        "rate": 0.9995,
+        "positive_rate": 0.9995,
+        "negative_rate": 1,
+        "positives": 1897,
+        "positives_agree": 1896,
+        "negatives": 103,
+        "negatives_ok": 103,
+        "invalid_expect": 0
+      },
+      "pattern_gaps": [
+        {
+          "group": "animals.q.live",
+          "count": 1,
+          "example": {
+            "text": "Where do ducks live?",
+            "context": [],
+            "expect": [
+              "core.question core.question.seek=lives core.question.type=kids.animals.animal core.question.where.name=duck"
+            ],
+            "got": [
+              "core.request core.request.action=docr.where core.request.arg.mode=live core.request.arg.x=\"ducks\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        }
+      ]
+    },
+    "ui.shell": {
+      "total": 2285,
+      "by_status": {
+        "rule-derived": 285,
+        "generator-backed": 1770,
+        "generator-disagrees": 163,
+        "negative": 67
+      },
+      "by_phenomenon": {
+        "request": 1680,
+        "question": 44,
+        "declared-tab": 122,
+        "number-words": 208,
+        "paraphrase": 126,
+        "ellipsis": 38,
+        "negation": 25,
+        "near-miss": 16,
+        "out-of-domain": 26
+      },
+      "by_split": {
+        "train": 2179,
+        "dev": 106
       },
       "generator": true,
       "generator_version": "1",
       "seed": 790118588,
       "generator_records": 2000,
       "agreement": {
-        "rate": 0.9335,
-        "positive_rate": 0.9312,
+        "rate": 0.9185,
+        "positive_rate": 0.9157,
         "negative_rate": 1,
-        "positives": 1934,
-        "positives_agree": 1801,
-        "negatives": 66,
-        "negatives_ok": 66,
+        "positives": 1933,
+        "positives_agree": 1770,
+        "negatives": 67,
+        "negatives_ok": 67,
         "invalid_expect": 0
       },
       "pattern_gaps": [
         {
           "group": "shell.hint",
-          "count": 69,
+          "count": 63,
           "example": {
             "text": "Can I have another hint",
             "context": [],
@@ -584,10 +1165,40 @@
           }
         },
         {
-          "group": "shell.hint.bare",
-          "count": 19,
+          "group": "shell.new",
+          "count": 21,
           "example": {
-            "text": "Any hint.",
+            "text": "Start over.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.newGame"
+            ],
+            "got": [
+              "core.request core.request.action=geo.clearAll"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "shell.speaker.on",
+          "count": 21,
+          "example": {
+            "text": "Read aloud.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.speaker core.request.arg.on=true"
+            ],
+            "got": [
+              "core.request core.request.action=chart.read"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "shell.hint.bare",
+          "count": 20,
+          "example": {
+            "text": "Give me a clue.",
             "context": [],
             "expect": [
               "core.request core.request.action=ui.hint"
@@ -599,53 +1210,68 @@
           }
         },
         {
-          "group": "shell.new",
-          "count": 17,
-          "example": {
-            "text": "Start over.",
-            "context": [],
-            "expect": [
-              "core.request core.request.action=ui.newGame"
-            ],
-            "got": [
-              "core.request core.request.action=avatar.reset core.request.arg.scope=all"
-            ],
-            "note": "rule wires differ from expect"
-          }
-        },
-        {
           "group": "shell.choose",
-          "count": 15,
+          "count": 11,
           "example": {
-            "text": "Will you play",
+            "text": "Can we play.",
             "context": [],
             "expect": [
               "core.request core.request.action=ui.chooseGame"
             ],
             "got": [
-              "core.request core.request.action=ttt.first core.request.arg.who=system"
+              "core.request core.request.action=ttt.first core.request.arg.who=user"
             ],
             "note": "rule wires differ from expect"
           }
         },
         {
-          "group": "shell.which",
-          "count": 5,
+          "group": "shell.which.paraphrase",
+          "count": 6,
           "example": {
-            "text": "Um, where am I?",
+            "text": "What am I looking at?",
             "context": [],
             "expect": [
               "core.request core.request.action=ui.whichTab"
             ],
             "got": [
-              "core.request core.request.action=geo.locate"
+              "core.request core.request.action=geo.here"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "shell.speaker.off",
+          "count": 4,
+          "example": {
+            "text": "Switch off the sound.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.speaker core.request.arg.on=false"
+            ],
+            "got": [
+              "core.request core.request.action=music.stop"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "shell.rate.fixed",
+          "count": 4,
+          "example": {
+            "text": "Read quickly.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.rate core.request.arg.value=1.75"
+            ],
+            "got": [
+              "core.request core.request.action=music.showNotes"
             ],
             "note": "rule wires differ from expect"
           }
         },
         {
           "group": "shell.rate.faster",
-          "count": 5,
+          "count": 4,
           "example": {
             "text": "Go faster",
             "context": [],
@@ -659,47 +1285,116 @@
           }
         },
         {
-          "group": "shell.which.paraphrase",
+          "group": "shell.new.paraphrase",
+          "count": 4,
+          "example": {
+            "text": "I want to play once more.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.newGame"
+            ],
+            "got": [
+              "core.request core.request.action=music.replay"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "shell.which",
           "count": 3,
           "example": {
-            "text": "What am I looking at?",
+            "text": "Where am I",
             "context": [],
             "expect": [
               "core.request core.request.action=ui.whichTab"
             ],
             "got": [
-              "core.request core.request.action=geo.here"
+              "core.request core.request.action=geo.locate"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "shell.choose.chat.paraphrase",
+          "count": 2,
+          "example": {
+            "text": "Well, I am bored, pick a game.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.chooseGame"
+            ],
+            "got": [
+              "core.request core.request.action=chart.valueOf core.request.arg.l=\"I am bored\"",
+              "core.request core.request.action=ui.chooseGame"
             ],
             "note": "rule wires differ from expect"
           }
         }
       ]
     },
-    "kids.arith": {
-      "total": 2221,
+    "geo.map": {
+      "total": 2854,
       "by_status": {
-        "rule-derived": 221,
-        "generator-backed": 1875,
-        "negative": 115,
+        "rule-derived": 854,
+        "generator-backed": 1991,
+        "negative": 9
+      },
+      "by_phenomenon": {
+        "request": 1090,
+        "question": 559,
+        "multi-entity": 543,
+        "ellipsis": 31,
+        "chat-style": 460,
+        "word-order": 85,
+        "synonym": 59,
+        "state": 18,
+        "out-of-domain": 9
+      },
+      "by_split": {
+        "train": 2626,
+        "dev": 228
+      },
+      "generator": true,
+      "generator_version": "2",
+      "seed": 3084165198,
+      "generator_records": 2000,
+      "agreement": {
+        "rate": 1,
+        "positive_rate": 1,
+        "negative_rate": 1,
+        "positives": 1991,
+        "positives_agree": 1991,
+        "negatives": 9,
+        "negatives_ok": 9,
+        "invalid_expect": 0
+      },
+      "pattern_gaps": []
+    },
+    "kids.arith": {
+      "total": 2599,
+      "by_status": {
+        "rule-derived": 599,
+        "generator-backed": 1901,
+        "negative": 89,
         "generator-disagrees": 10
       },
       "by_phenomenon": {
-        "statement": 741,
-        "question": 247,
-        "negation": 57,
-        "coreference": 277,
-        "multi-entity": 114,
-        "ellipsis": 197,
-        "comparison": 191,
-        "arithmetic": 162,
-        "request": 28,
-        "number-words": 112,
-        "near-miss": 82,
-        "out-of-domain": 13
+        "statement": 997,
+        "question": 500,
+        "negation": 61,
+        "coreference": 208,
+        "multi-entity": 104,
+        "ellipsis": 147,
+        "comparison": 225,
+        "arithmetic": 180,
+        "request": 21,
+        "number-words": 83,
+        "near-miss": 63,
+        "out-of-domain": 10
       },
       "by_split": {
-        "train": 2034,
-        "dev": 187
+        "train": 2406,
+        "dev": 193
       },
       "generator": true,
       "generator_version": "1",
@@ -707,39 +1402,69 @@
       "generator_records": 2000,
       "agreement": {
         "rate": 0.995,
-        "positive_rate": 0.9989,
-        "negative_rate": 0.935,
-        "positives": 1877,
-        "positives_agree": 1875,
-        "negatives": 123,
-        "negatives_ok": 115,
+        "positive_rate": 0.9974,
+        "negative_rate": 0.9468,
+        "positives": 1906,
+        "positives_agree": 1901,
+        "negatives": 94,
+        "negatives_ok": 89,
         "invalid_expect": 0
       },
       "pattern_gaps": [
         {
           "group": "arith.near.no-number",
-          "count": 8,
+          "count": 5,
           "example": {
-            "text": "Elena has some cubes.",
+            "text": "Bailey has some cakes.",
             "context": [],
             "expect": [],
             "got": [
-              "core.question core.question.seek=answer core.question.type=kids.arith.has core.question.where.item=cube core.question.where.owner=$e.elena"
+              "core.question core.question.seek=answer core.question.type=kids.arith.has core.question.where.item=cake core.question.where.owner=$e.bailey"
             ],
             "note": "negative text was formalized by this world"
           }
         },
         {
           "group": "arith.q.count.user",
-          "count": 2,
+          "count": 3,
           "example": {
-            "text": "How many cars do I have?",
+            "text": "How many rocks do I have?",
             "context": [],
             "expect": [
-              "core.question core.question.seek=count core.question.type=kids.arith.holding core.question.where.item=car core.question.where.owner=$e.user"
+              "core.question core.question.seek=count core.question.type=kids.arith.holding core.question.where.item=rock core.question.where.owner=$e.user"
             ],
             "got": [
-              "core.request core.request.action=draw.count core.request.arg.kind=car core.request.arg.kt=\"cars\""
+              "core.request core.request.action=chess.count core.request.arg.piece=rock core.request.arg.who=i"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "arith.sw.q.total.all",
+          "count": 1,
+          "example": {
+            "text": "total flags?",
+            "context": [],
+            "expect": [
+              "core.question core.question.seek=count core.question.type=kids.arith.total core.question.where.item=flag"
+            ],
+            "got": [
+              "core.request core.request.action=geo.markers"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "arith.sw.calc.chat",
+          "count": 1,
+          "example": {
+            "text": "8 times 2 equals what",
+            "context": [],
+            "expect": [
+              "core.question core.question.seek=result core.question.type=kids.arith.calc core.question.where.a=8 core.question.where.b=2 core.question.where.op=times"
+            ],
+            "got": [
+              "core.question core.question.seek=result core.question.type=kids.arith.double core.question.where.n=8"
             ],
             "note": "rule wires differ from expect"
           }
@@ -747,46 +1472,46 @@
       ]
     },
     "kids.shop": {
-      "total": 2194,
+      "total": 2495,
       "by_status": {
-        "rule-derived": 194,
-        "generator-backed": 1839,
-        "generator-disagrees": 10,
-        "negative": 151
+        "rule-derived": 495,
+        "generator-backed": 1860,
+        "generator-disagrees": 14,
+        "negative": 126
       },
       "by_phenomenon": {
-        "statement": 619,
-        "question": 1002,
-        "multi-entity": 120,
-        "coreference": 60,
-        "number-words": 183,
-        "context": 59,
-        "negation": 45,
-        "near-miss": 94,
-        "out-of-domain": 12
+        "statement": 879,
+        "question": 1149,
+        "multi-entity": 94,
+        "coreference": 47,
+        "number-words": 154,
+        "context": 46,
+        "negation": 39,
+        "near-miss": 76,
+        "out-of-domain": 11
       },
       "by_split": {
-        "train": 2032,
-        "dev": 162
+        "train": 2303,
+        "dev": 192
       },
       "generator": true,
       "generator_version": "1",
       "seed": 1055456574,
       "generator_records": 2000,
       "agreement": {
-        "rate": 0.995,
-        "positive_rate": 0.9946,
+        "rate": 0.993,
+        "positive_rate": 0.9925,
         "negative_rate": 1,
-        "positives": 1849,
-        "positives_agree": 1839,
-        "negatives": 151,
-        "negatives_ok": 151,
+        "positives": 1874,
+        "positives_agree": 1860,
+        "negatives": 126,
+        "negatives_ok": 126,
         "invalid_expect": 0
       },
       "pattern_gaps": [
         {
           "group": "shop.q.price",
-          "count": 8,
+          "count": 12,
           "example": {
             "text": "How much does one sticker cost?",
             "context": [],
@@ -815,592 +1540,16 @@
           }
         },
         {
-          "group": "shop.q.can.buy",
+          "group": "shop.sw.total.n",
           "count": 1,
           "example": {
-            "text": "Can I have a ball?",
+            "text": "whats the total for a toy car and an ice cream",
             "context": [],
             "expect": [
-              "core.question core.question.seek=answer core.question.type=kids.shop.affordability core.question.where.count=1 core.question.where.item=ball"
+              "core.question core.question.seek=total core.question.type=kids.shop.total core.question.where.count2=1 core.question.where.count=1 core.question.where.item2=ice_cream core.question.where.item=toy_car"
             ],
             "got": [
-              "core.request core.request.action=draw.add core.request.arg.kind=ball core.request.arg.kt=\"ball\""
-            ],
-            "note": "rule wires differ from expect"
-          }
-        }
-      ]
-    },
-    "kids.tasks": {
-      "total": 2156,
-      "by_status": {
-        "rule-derived": 156,
-        "generator-backed": 1909,
-        "negative": 85,
-        "generator-disagrees": 6
-      },
-      "by_phenomenon": {
-        "request": 1211,
-        "statement": 228,
-        "multi-entity": 205,
-        "number-words": 34,
-        "question": 291,
-        "context": 55,
-        "negation": 93,
-        "near-miss": 25,
-        "out-of-domain": 14
-      },
-      "by_split": {
-        "train": 1905,
-        "dev": 251
-      },
-      "generator": true,
-      "generator_version": "1",
-      "seed": 1927479681,
-      "generator_records": 2000,
-      "agreement": {
-        "rate": 0.997,
-        "positive_rate": 0.999,
-        "negative_rate": 0.9551,
-        "positives": 1911,
-        "positives_agree": 1909,
-        "negatives": 89,
-        "negatives_ok": 85,
-        "invalid_expect": 0
-      },
-      "pattern_gaps": [
-        {
-          "group": "tasks.neg",
-          "count": 4,
-          "example": {
-            "text": "Never put cheese on my list.",
-            "context": [],
-            "expect": [],
-            "got": [
-              "core.request core.request.action=tasks.add core.request.arg.item=\"Never put cheese\" core.request.arg.list=to-do"
-            ],
-            "note": "negative text was formalized by this world"
-          }
-        },
-        {
-          "group": "tasks.show",
-          "count": 2,
-          "example": {
-            "text": "What is on the list",
-            "context": [],
-            "expect": [
-              "core.request core.request.action=tasks.show core.request.arg.list=to-do"
-            ],
-            "got": [
-              "core.request core.request.action=guess.remaining"
-            ],
-            "note": "rule wires differ from expect"
-          }
-        }
-      ]
-    },
-    "media.music": {
-      "total": 2450,
-      "by_status": {
-        "rule-derived": 450,
-        "generator-backed": 1920,
-        "generator-disagrees": 64,
-        "negative": 16
-      },
-      "by_phenomenon": {
-        "request": 2316,
-        "question": 81,
-        "ellipsis": 37,
-        "out-of-domain": 16
-      },
-      "by_split": {
-        "train": 1679,
-        "dev": 771
-      },
-      "generator": true,
-      "generator_version": "1",
-      "seed": 946628051,
-      "generator_records": 2000,
-      "agreement": {
-        "rate": 0.968,
-        "positive_rate": 0.9677,
-        "negative_rate": 1,
-        "positives": 1984,
-        "positives_agree": 1920,
-        "negatives": 16,
-        "negatives_ok": 16,
-        "invalid_expect": 0
-      },
-      "pattern_gaps": [
-        {
-          "group": "music.tempo.slower",
-          "count": 22,
-          "example": {
-            "text": "Okay, slower!",
-            "context": [],
-            "expect": [
-              "core.request core.request.action=music.tempo core.request.arg.dir=slower"
-            ],
-            "got": [
-              "core.request core.request.action=ui.rate core.request.arg.dir=slower"
-            ],
-            "note": "rule wires differ from expect"
-          }
-        },
-        {
-          "group": "music.tempo.faster",
-          "count": 21,
-          "example": {
-            "text": "Faster.",
-            "context": [],
-            "expect": [
-              "core.request core.request.action=music.tempo core.request.arg.dir=faster"
-            ],
-            "got": [
-              "core.request core.request.action=ui.rate core.request.arg.dir=faster"
-            ],
-            "note": "rule wires differ from expect"
-          }
-        },
-        {
-          "group": "music.stop",
-          "count": 8,
-          "example": {
-            "text": "Be quiet.",
-            "context": [],
-            "expect": [
-              "core.request core.request.action=music.stop"
-            ],
-            "got": [
-              "core.request core.request.action=ui.speaker core.request.arg.on=false"
-            ],
-            "note": "rule wires differ from expect"
-          }
-        },
-        {
-          "group": "music.instrument",
-          "count": 7,
-          "example": {
-            "text": "Switch to the piano.",
-            "context": [],
-            "expect": [
-              "core.request core.request.action=music.instrument core.request.arg.inst=piano"
-            ],
-            "got": [
-              "core.request core.request.action=ui.openTab core.request.arg.tab=\"piano\""
-            ],
-            "note": "rule wires differ from expect"
-          }
-        },
-        {
-          "group": "music.loop",
-          "count": 6,
-          "example": {
-            "text": "Um, play it on repeat.",
-            "context": [],
-            "expect": [
-              "core.request core.request.action=music.loop core.request.arg.on=true"
-            ],
-            "got": [
-              "core.request core.request.action=music.playAny core.request.arg.title=\"it on repeat\""
-            ],
-            "note": "rule wires differ from expect"
-          }
-        }
-      ]
-    },
-    "kids.animals": {
-      "total": 2164,
-      "by_status": {
-        "rule-derived": 164,
-        "generator-backed": 1867,
-        "negative": 130,
-        "generator-disagrees": 3
-      },
-      "by_phenomenon": {
-        "question": 1222,
-        "statement": 592,
-        "negation": 171,
-        "multi-entity": 40,
-        "new-vocabulary": 42,
-        "context": 30,
-        "near-miss": 49,
-        "out-of-domain": 18
-      },
-      "by_split": {
-        "dev": 249,
-        "train": 1915
-      },
-      "generator": true,
-      "generator_version": "1",
-      "seed": 993511613,
-      "generator_records": 2000,
-      "agreement": {
-        "rate": 0.9985,
-        "positive_rate": 0.9984,
-        "negative_rate": 1,
-        "positives": 1870,
-        "positives_agree": 1867,
-        "negatives": 130,
-        "negatives_ok": 130,
-        "invalid_expect": 0
-      },
-      "pattern_gaps": [
-        {
-          "group": "animals.q.live",
-          "count": 3,
-          "example": {
-            "text": "Where is a goldfish found?",
-            "context": [],
-            "expect": [
-              "core.question core.question.seek=lives core.question.type=kids.animals.animal core.question.where.name=goldfish"
-            ],
-            "got": [
-              "core.request core.request.action=draw.where core.request.arg.kind=goldfish core.request.arg.kt=\"goldfish\""
-            ],
-            "note": "rule wires differ from expect"
-          }
-        }
-      ]
-    },
-    "data.charts": {
-      "total": 2305,
-      "by_status": {
-        "rule-derived": 305,
-        "generator-backed": 1982,
-        "negative": 18
-      },
-      "by_phenomenon": {
-        "request": 1692,
-        "question": 177,
-        "multi-entity": 322,
-        "ellipsis": 83,
-        "negation": 13,
-        "out-of-domain": 18
-      },
-      "by_split": {
-        "train": 1916,
-        "dev": 389
-      },
-      "generator": true,
-      "generator_version": "1",
-      "seed": 3931188022,
-      "generator_records": 2000,
-      "agreement": {
-        "rate": 1,
-        "positive_rate": 1,
-        "negative_rate": 1,
-        "positives": 1982,
-        "positives_agree": 1982,
-        "negatives": 18,
-        "negatives_ok": 18,
-        "invalid_expect": 0
-      },
-      "pattern_gaps": []
-    },
-    "ui.avatar": {
-      "total": 359,
-      "by_status": {
-        "rule-derived": 359
-      },
-      "by_phenomenon": {
-        "request": 332,
-        "question": 26,
-        "statement": 1
-      },
-      "by_split": {
-        "train": 301,
-        "dev": 58
-      },
-      "generator": false
-    },
-    "docs.reader": {
-      "total": 2188,
-      "by_status": {
-        "rule-derived": 188,
-        "generator-backed": 1950,
-        "generator-disagrees": 26,
-        "negative": 24
-      },
-      "by_phenomenon": {
-        "question": 1039,
-        "request": 767,
-        "multi-entity": 358,
-        "out-of-domain": 24
-      },
-      "by_split": {
-        "train": 2078,
-        "dev": 110
-      },
-      "generator": true,
-      "generator_version": "1",
-      "seed": 2901016660,
-      "generator_records": 2000,
-      "agreement": {
-        "rate": 0.987,
-        "positive_rate": 0.9868,
-        "negative_rate": 1,
-        "positives": 1976,
-        "positives_agree": 1950,
-        "negatives": 24,
-        "negatives_ok": 24,
-        "invalid_expect": 0
-      },
-      "pattern_gaps": [
-        {
-          "group": "doc.who",
-          "count": 16,
-          "example": {
-            "text": "Tell me about Hansel.",
-            "context": [],
-            "expect": [
-              "core.request core.request.action=docr.who core.request.arg.x=\"Hansel\""
-            ],
-            "got": [
-              "core.request core.request.action=music.songInfo core.request.arg.title=\"Hansel\" core.request.arg.what=about"
-            ],
-            "note": "rule wires differ from expect"
-          }
-        },
-        {
-          "group": "doc.clear",
-          "count": 10,
-          "example": {
-            "text": "Um, stop highlighting.",
-            "context": [],
-            "expect": [
-              "core.request core.request.action=docr.clearSearch"
-            ],
-            "got": [
-              "core.request core.request.action=geo.clearHighlight"
-            ],
-            "note": "rule wires differ from expect"
-          }
-        }
-      ]
-    },
-    "ui.help": {
-      "total": 1694,
-      "by_status": {
-        "rule-derived": 76,
-        "generator-backed": 1451,
-        "generator-disagrees": 149,
-        "negative": 18
-      },
-      "by_phenomenon": {
-        "request": 727,
-        "chat": 8,
-        "question": 718,
-        "paraphrase": 223,
-        "negation": 5,
-        "near-miss": 6,
-        "out-of-domain": 7
-      },
-      "by_split": {
-        "train": 1321,
-        "dev": 373
-      },
-      "generator": true,
-      "generator_version": "1",
-      "seed": 2176726849,
-      "generator_records": 1618,
-      "agreement": {
-        "rate": 0.9079,
-        "positive_rate": 0.9069,
-        "negative_rate": 1,
-        "positives": 1600,
-        "positives_agree": 1451,
-        "negatives": 18,
-        "negatives_ok": 18,
-        "invalid_expect": 0
-      },
-      "pattern_gaps": [
-        {
-          "group": "help.me",
-          "count": 46,
-          "example": {
-            "text": "I am lost",
-            "context": [],
-            "expect": [
-              "core.request core.request.action=ui.helpMe"
-            ],
-            "got": [
-              "core.request core.request.action=chess.hint"
-            ],
-            "note": "rule wires differ from expect"
-          }
-        },
-        {
-          "group": "help.game.named",
-          "count": 46,
-          "example": {
-            "text": "How can I play the twenty questions game",
-            "context": [],
-            "expect": [
-              "core.request core.request.action=ui.helpGame core.request.arg.game=twenty_questions"
-            ],
-            "got": [
-              "core.request core.request.action=ui.helpHow core.request.arg.what=\"play the twenty questions game\""
-            ],
-            "note": "rule wires differ from expect"
-          }
-        },
-        {
-          "group": "help.one.paraphrase",
-          "count": 18,
-          "example": {
-            "text": "One example",
-            "context": [],
-            "expect": [
-              "core.request core.request.action=ui.help core.request.arg.count=1"
-            ],
-            "got": [],
-            "note": "rule formalizer found no reading"
-          }
-        },
-        {
-          "group": "help.more.paraphrase",
-          "count": 16,
-          "example": {
-            "text": "Next examples.",
-            "context": [],
-            "expect": [
-              "core.request core.request.action=ui.helpMore"
-            ],
-            "got": [
-              "core.request core.request.action=music.melodyAdd core.request.arg.notes=\"examples\""
-            ],
-            "note": "rule wires differ from expect"
-          }
-        },
-        {
-          "group": "help.here.paraphrase",
-          "count": 14,
-          "example": {
-            "text": "What are the options.",
-            "context": [],
-            "expect": [
-              "core.request core.request.action=ui.help"
-            ],
-            "got": [
-              "core.request core.request.action=chess.moves core.request.arg.all=true"
-            ],
-            "note": "rule wires differ from expect"
-          }
-        },
-        {
-          "group": "help.tab",
-          "count": 9,
-          "example": {
-            "text": "Tell me about this page?",
-            "context": [],
-            "expect": [
-              "core.request core.request.action=ui.helpAbout"
-            ],
-            "got": [
-              "core.request core.request.action=draw.describe"
-            ],
-            "note": "rule wires differ from expect"
-          }
-        }
-      ]
-    },
-    "geo.map": {
-      "total": 2211,
-      "by_status": {
-        "rule-derived": 211,
-        "generator-backed": 1991,
-        "negative": 9
-      },
-      "by_phenomenon": {
-        "request": 624,
-        "question": 913,
-        "multi-entity": 625,
-        "ellipsis": 40,
-        "out-of-domain": 9
-      },
-      "by_split": {
-        "train": 2088,
-        "dev": 123
-      },
-      "generator": true,
-      "generator_version": "1",
-      "seed": 3413081213,
-      "generator_records": 2000,
-      "agreement": {
-        "rate": 1,
-        "positive_rate": 1,
-        "negative_rate": 1,
-        "positives": 1991,
-        "positives_agree": 1991,
-        "negatives": 9,
-        "negatives_ok": 9,
-        "invalid_expect": 0
-      },
-      "pattern_gaps": []
-    },
-    "games.guess": {
-      "total": 2082,
-      "by_status": {
-        "rule-derived": 82,
-        "generator-backed": 1936,
-        "generator-disagrees": 25,
-        "negative": 39
-      },
-      "by_phenomenon": {
-        "request": 1028,
-        "paraphrase": 237,
-        "context": 606,
-        "negation": 75,
-        "question": 102,
-        "near-miss": 6,
-        "out-of-domain": 28
-      },
-      "by_split": {
-        "train": 1941,
-        "dev": 141
-      },
-      "generator": true,
-      "generator_version": "1",
-      "seed": 3081542235,
-      "generator_records": 2000,
-      "agreement": {
-        "rate": 0.9875,
-        "positive_rate": 0.9873,
-        "negative_rate": 1,
-        "positives": 1961,
-        "positives_agree": 1936,
-        "negatives": 39,
-        "negatives_ok": 39,
-        "invalid_expect": 0
-      },
-      "pattern_gaps": [
-        {
-          "group": "guess.repeat.paraphrase",
-          "count": 13,
-          "example": {
-            "text": "One more time please!",
-            "context": [],
-            "expect": [
-              "core.request core.request.action=guess.repeat"
-            ],
-            "got": [
-              "core.request core.request.action=music.replay"
-            ],
-            "note": "rule wires differ from expect"
-          }
-        },
-        {
-          "group": "guess.repeat",
-          "count": 12,
-          "example": {
-            "text": "Repeat that.",
-            "context": [],
-            "expect": [
-              "core.request core.request.action=guess.repeat"
-            ],
-            "got": [
-              "core.request core.request.action=music.replay"
+              "core.request core.request.action=chart.valueOf core.request.arg.l=\"a toy car\""
             ],
             "note": "rule wires differ from expect"
           }
@@ -1408,46 +1557,47 @@
       ]
     },
     "games.hangman": {
-      "total": 2078,
+      "total": 2203,
       "by_status": {
-        "rule-derived": 78,
-        "generator-backed": 1749,
-        "generator-disagrees": 35,
-        "negative": 216
+        "rule-derived": 203,
+        "generator-backed": 1755,
+        "generator-disagrees": 50,
+        "negative": 195
       },
       "by_phenomenon": {
-        "request": 629,
-        "question": 799,
-        "ellipsis": 100,
-        "context": 45,
-        "statement": 253,
-        "paraphrase": 36,
-        "negation": 51,
-        "near-miss": 137,
-        "out-of-domain": 28
+        "request": 681,
+        "question": 718,
+        "ellipsis": 84,
+        "context": 46,
+        "statement": 222,
+        "paraphrase": 33,
+        "negation": 52,
+        "near-miss": 117,
+        "out-of-domain": 26,
+        "sweep": 224
       },
       "by_split": {
-        "train": 2032,
-        "dev": 46
+        "train": 2087,
+        "dev": 116
       },
       "generator": true,
       "generator_version": "1",
       "seed": 2616804589,
       "generator_records": 2000,
       "agreement": {
-        "rate": 0.9825,
-        "positive_rate": 0.9804,
+        "rate": 0.975,
+        "positive_rate": 0.9723,
         "negative_rate": 1,
-        "positives": 1784,
-        "positives_agree": 1749,
-        "negatives": 216,
-        "negatives_ok": 216,
+        "positives": 1805,
+        "positives_agree": 1755,
+        "negatives": 195,
+        "negatives_ok": 195,
         "invalid_expect": 0
       },
       "pattern_gaps": [
         {
           "group": "hm.hint",
-          "count": 11,
+          "count": 15,
           "example": {
             "text": "Tell me more?",
             "context": [],
@@ -1461,8 +1611,23 @@
           }
         },
         {
+          "group": "hm.letter.guess",
+          "count": 12,
+          "example": {
+            "text": "Letter C.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=hm.letter core.request.arg.letter=c"
+            ],
+            "got": [
+              "core.request core.request.action=music.playNote core.request.arg.explicit=true core.request.arg.note=c"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
           "group": "hm.hint.paraphrase",
-          "count": 11,
+          "count": 9,
           "example": {
             "text": "Give me a hint",
             "context": [],
@@ -1476,10 +1641,27 @@
           }
         },
         {
-          "group": "hm.status.paraphrase",
-          "count": 8,
+          "group": "hm.sw.new.elliptic",
+          "count": 6,
           "example": {
-            "text": "How many letters are missing",
+            "text": "hangman again",
+            "context": [
+              "Play hangman with the word lion."
+            ],
+            "expect": [
+              "core.request core.request.action=hm.new"
+            ],
+            "got": [
+              "core.request core.request.action=ui.playGame core.request.arg.tab=hangman"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "hm.status.paraphrase",
+          "count": 5,
+          "example": {
+            "text": "What have I guessed so far?",
             "context": [],
             "expect": [
               "core.request core.request.action=hm.status"
@@ -1502,18 +1684,684 @@
             ],
             "note": "rule wires differ from expect"
           }
-        },
+        }
+      ]
+    },
+    "kids.tasks": {
+      "total": 2652,
+      "by_status": {
+        "rule-derived": 652,
+        "generator-backed": 1914,
+        "negative": 72,
+        "generator-disagrees": 14
+      },
+      "by_phenomenon": {
+        "request": 1586,
+        "statement": 304,
+        "multi-entity": 143,
+        "number-words": 27,
+        "question": 437,
+        "context": 48,
+        "negation": 70,
+        "near-miss": 22,
+        "out-of-domain": 15
+      },
+      "by_split": {
+        "train": 2382,
+        "dev": 270
+      },
+      "generator": true,
+      "generator_version": "1",
+      "seed": 1927479681,
+      "generator_records": 2000,
+      "agreement": {
+        "rate": 0.993,
+        "positive_rate": 0.9938,
+        "negative_rate": 0.973,
+        "positives": 1926,
+        "positives_agree": 1914,
+        "negatives": 74,
+        "negatives_ok": 72,
+        "invalid_expect": 0
+      },
+      "pattern_gaps": [
         {
-          "group": "hm.letter.guess",
-          "count": 2,
+          "group": "tasks.remove",
+          "count": 8,
           "example": {
-            "text": "I guess Y.",
+            "text": "Delete apples from list.",
             "context": [],
             "expect": [
-              "core.request core.request.action=hm.letter core.request.arg.letter=y"
+              "core.request core.request.action=tasks.remove core.request.arg.item=\"apples\""
             ],
             "got": [
-              "core.request core.request.action=guess.answer core.request.arg.answer=yes"
+              "core.request core.request.action=tasks.clear core.request.arg.list=\"apples from\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "tasks.neg",
+          "count": 2,
+          "example": {
+            "text": "Never put eggs on my list.",
+            "context": [],
+            "expect": [],
+            "got": [
+              "core.request core.request.action=tasks.add core.request.arg.item=\"Never put eggs\" core.request.arg.list=to-do"
+            ],
+            "note": "negative text was formalized by this world"
+          }
+        },
+        {
+          "group": "tasks.count",
+          "count": 2,
+          "example": {
+            "text": "How many tasks do I still have to do?",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=tasks.countPending core.request.arg.list=to-do"
+            ],
+            "got": [
+              "core.request core.request.action=doc.countTasks core.request.arg.state=left"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "tasks.add.need-to",
+          "count": 1,
+          "example": {
+            "text": "I need to read my book.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=tasks.add core.request.arg.item=\"read my book\" core.request.arg.list=to-do"
+            ],
+            "got": [
+              "core.request core.request.action=docr.read core.request.arg.all=true"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "tasks.add.need-to-buy",
+          "count": 1,
+          "example": {
+            "text": "I need to buy ice cream.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=tasks.add core.request.arg.item=\"ice cream\" core.request.arg.list=shopping"
+            ],
+            "got": [
+              "core.request core.request.action=draw.recolor core.request.arg.color=cream core.request.arg.t=\"to buy ice\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        }
+      ]
+    },
+    "media.music": {
+      "total": 2983,
+      "by_status": {
+        "rule-derived": 983,
+        "generator-backed": 1927,
+        "generator-disagrees": 57,
+        "negative": 16
+      },
+      "by_phenomenon": {
+        "request": 2414,
+        "question": 177,
+        "ellipsis": 317,
+        "indirect": 59,
+        "out-of-domain": 16
+      },
+      "by_split": {
+        "train": 2498,
+        "dev": 485
+      },
+      "generator": true,
+      "generator_version": "1",
+      "seed": 946628051,
+      "generator_records": 2000,
+      "agreement": {
+        "rate": 0.9715,
+        "positive_rate": 0.9713,
+        "negative_rate": 1,
+        "positives": 1984,
+        "positives_agree": 1927,
+        "negatives": 16,
+        "negatives_ok": 16,
+        "invalid_expect": 0
+      },
+      "pattern_gaps": [
+        {
+          "group": "music.tempo.indirect",
+          "count": 18,
+          "example": {
+            "text": "Okay, its too fast.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=music.tempo core.request.arg.dir=slower"
+            ],
+            "got": [
+              "core.request core.request.action=ui.rate core.request.arg.dir=slower"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "music.tempo.slower",
+          "count": 14,
+          "example": {
+            "text": "Okay, slower!",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=music.tempo core.request.arg.dir=slower"
+            ],
+            "got": [
+              "core.request core.request.action=ui.rate core.request.arg.dir=slower"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "music.tempo.faster",
+          "count": 11,
+          "example": {
+            "text": "Faster.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=music.tempo core.request.arg.dir=faster"
+            ],
+            "got": [
+              "core.request core.request.action=ui.rate core.request.arg.dir=faster"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "music.stop",
+          "count": 5,
+          "example": {
+            "text": "Be quiet.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=music.stop"
+            ],
+            "got": [
+              "core.request core.request.action=ui.speaker core.request.arg.on=false"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "music.instrument.wish",
+          "count": 5,
+          "example": {
+            "text": "Go back to the piano.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=music.instrument core.request.arg.inst=piano"
+            ],
+            "got": [
+              "core.request core.request.action=ui.openTab core.request.arg.tab=\"piano\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "music.instrument",
+          "count": 4,
+          "example": {
+            "text": "Switch to the piano.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=music.instrument core.request.arg.inst=piano"
+            ],
+            "got": [
+              "core.request core.request.action=ui.openTab core.request.arg.tab=\"piano\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        }
+      ]
+    },
+    "docs.reader": {
+      "total": 2555,
+      "by_status": {
+        "rule-derived": 555,
+        "generator-backed": 1909,
+        "generator-disagrees": 67,
+        "negative": 24
+      },
+      "by_phenomenon": {
+        "request": 1145,
+        "question": 1165,
+        "multi-entity": 221,
+        "out-of-domain": 24
+      },
+      "by_split": {
+        "train": 2396,
+        "dev": 159
+      },
+      "generator": true,
+      "generator_version": "1",
+      "seed": 2901016660,
+      "generator_records": 2000,
+      "agreement": {
+        "rate": 0.9665,
+        "positive_rate": 0.9661,
+        "negative_rate": 1,
+        "positives": 1976,
+        "positives_agree": 1909,
+        "negatives": 24,
+        "negatives_ok": 24,
+        "invalid_expect": 0
+      },
+      "pattern_gaps": [
+        {
+          "group": "doc.who",
+          "count": 15,
+          "example": {
+            "text": "Please, tell me about the woodcutter.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=docr.who core.request.arg.x=\"woodcutter\""
+            ],
+            "got": [
+              "core.request core.request.action=music.songInfo core.request.arg.title=\"woodcutter\" core.request.arg.what=about"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "doc.read",
+          "count": 8,
+          "example": {
+            "text": "Read paragraph 4 aloud.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=docr.read core.request.arg.n=4 core.request.arg.u=paragraph"
+            ],
+            "got": [
+              "core.request core.request.action=doc.read core.request.arg.kind=paragraph core.request.arg.n=4"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "doc.clear",
+          "count": 7,
+          "example": {
+            "text": "Um, stop highlighting.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=docr.clearSearch"
+            ],
+            "got": [
+              "core.request core.request.action=geo.clearHighlight"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "doc.step.sweep",
+          "count": 7,
+          "example": {
+            "text": "Um, previous one",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=docr.searchStep core.request.arg.dir=prev"
+            ],
+            "got": [
+              "core.request core.request.action=chart.switchChart core.request.arg.dir=prev"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "doc.stats.sweep",
+          "count": 6,
+          "example": {
+            "text": "Word count",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=docr.stats core.request.arg.u=word"
+            ],
+            "got": [
+              "core.request core.request.action=doc.stats"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "doc.count.sweep",
+          "count": 6,
+          "example": {
+            "text": "How many times does the name the witch appear?",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=docr.count core.request.arg.x=\"witch\""
+            ],
+            "got": [
+              "core.request core.request.action=docr.count core.request.arg.x=\"the witch\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "doc.clear.sweep",
+          "count": 5,
+          "example": {
+            "text": "Get rid of the highlighting",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=docr.clearSearch"
+            ],
+            "got": [
+              "core.request core.request.action=geo.clearHighlight"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "doc.read.sweep",
+          "count": 4,
+          "example": {
+            "text": "Show me the third paragraph.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=docr.read core.request.arg.ord=third core.request.arg.u=paragraph"
+            ],
+            "got": [
+              "core.request core.request.action=doc.goto core.request.arg.kind=paragraph core.request.arg.ord=third"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "doc.outline",
+          "count": 4,
+          "example": {
+            "text": "Show me the outline.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=docr.outline"
+            ],
+            "got": [
+              "core.request core.request.action=geo.layer core.request.arg.l=outline"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "doc.summary",
+          "count": 4,
+          "example": {
+            "text": "Please, summarize the paper.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=docr.summary"
+            ],
+            "got": [
+              "core.request core.request.action=draw.describe"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "doc.sentence.sweep",
+          "count": 1,
+          "example": {
+            "text": "Line 1 please",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=docr.sentence core.request.arg.n=1"
+            ],
+            "got": [
+              "core.request core.request.action=chart.setType core.request.arg.type=line"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        }
+      ]
+    },
+    "ui.help": {
+      "total": 2175,
+      "by_status": {
+        "rule-derived": 175,
+        "generator-backed": 1875,
+        "negative": 18,
+        "generator-disagrees": 107
+      },
+      "by_phenomenon": {
+        "request": 975,
+        "chat": 14,
+        "question": 893,
+        "paraphrase": 275,
+        "negation": 5,
+        "near-miss": 6,
+        "out-of-domain": 7
+      },
+      "by_split": {
+        "train": 1915,
+        "dev": 260
+      },
+      "generator": true,
+      "generator_version": "1",
+      "seed": 2176726849,
+      "generator_records": 2000,
+      "agreement": {
+        "rate": 0.9465,
+        "positive_rate": 0.946,
+        "negative_rate": 1,
+        "positives": 1982,
+        "positives_agree": 1875,
+        "negatives": 18,
+        "negatives_ok": 18,
+        "invalid_expect": 0
+      },
+      "pattern_gaps": [
+        {
+          "group": "help.how.chat",
+          "count": 41,
+          "example": {
+            "text": "Change the eyes how",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.helpHow core.request.arg.what=\"change the eyes\""
+            ],
+            "got": [
+              "core.request core.request.action=ui.helpHow core.request.arg.what=\"Change the eyes\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "help.me",
+          "count": 29,
+          "example": {
+            "text": "I am lost.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.helpMe"
+            ],
+            "got": [
+              "core.request core.request.action=chess.hint"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "help.here.paraphrase",
+          "count": 11,
+          "example": {
+            "text": "What are the options.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.help"
+            ],
+            "got": [
+              "core.request core.request.action=chess.moves core.request.arg.all=true"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "help.examples.chat",
+          "count": 10,
+          "example": {
+            "text": "Commands here.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.help"
+            ],
+            "got": [
+              "core.request core.request.action=chat.meet core.request.arg.name=\"Commands\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "help.me.chat",
+          "count": 8,
+          "example": {
+            "text": "Help me out.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.helpMe"
+            ],
+            "got": [
+              "core.request core.request.action=chess.hint"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "help.here",
+          "count": 4,
+          "example": {
+            "text": "What can I try on this page",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.help"
+            ],
+            "got": [
+              "core.request core.request.action=draw.help"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "help.how",
+          "count": 4,
+          "example": {
+            "text": "How to make the title bigger?",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.helpHow core.request.arg.what=\"make the title bigger\""
+            ],
+            "got": [
+              "core.request core.request.action=chart.compare core.request.arg.a=\"How\" core.request.arg.b=\"make the title\" core.request.arg.w=bigger"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        }
+      ]
+    },
+    "games.guess": {
+      "total": 2162,
+      "by_status": {
+        "rule-derived": 162,
+        "generator-backed": 1933,
+        "generator-disagrees": 19,
+        "negative": 48
+      },
+      "by_phenomenon": {
+        "request": 978,
+        "paraphrase": 210,
+        "context": 556,
+        "negation": 70,
+        "question": 92,
+        "near-miss": 6,
+        "out-of-domain": 37,
+        "sweep": 213
+      },
+      "by_split": {
+        "train": 2018,
+        "dev": 144
+      },
+      "generator": true,
+      "generator_version": "1",
+      "seed": 3081542235,
+      "generator_records": 2000,
+      "agreement": {
+        "rate": 0.9905,
+        "positive_rate": 0.9903,
+        "negative_rate": 1,
+        "positives": 1952,
+        "positives_agree": 1933,
+        "negatives": 48,
+        "negatives_ok": 48,
+        "invalid_expect": 0
+      },
+      "pattern_gaps": [
+        {
+          "group": "guess.repeat.paraphrase",
+          "count": 11,
+          "example": {
+            "text": "One more time please!",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=guess.repeat"
+            ],
+            "got": [
+              "core.request core.request.action=music.replay"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "guess.repeat",
+          "count": 6,
+          "example": {
+            "text": "Repeat that!",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=guess.repeat"
+            ],
+            "got": [
+              "core.request core.request.action=music.replay"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "guess.reveal",
+          "count": 1,
+          "example": {
+            "text": "The animal is a polar bear",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=guess.reveal core.request.arg.animal=\"polar bear\""
+            ],
+            "got": [
+              "core.request core.request.action=hm.word core.request.arg.word=polar_bear"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "guess.start.guess-my",
+          "count": 1,
+          "example": {
+            "text": "Guess the animal",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=guess.start"
+            ],
+            "got": [
+              "core.request core.request.action=ui.playGame core.request.arg.tab=guess_the_animal"
             ],
             "note": "rule wires differ from expect"
           }
@@ -1521,54 +2369,101 @@
       ]
     },
     "kids.time": {
-      "total": 2264,
+      "total": 2566,
       "by_status": {
-        "rule-derived": 264,
-        "generator-backed": 1906,
-        "negative": 94
+        "rule-derived": 566,
+        "generator-backed": 1911,
+        "generator-disagrees": 10,
+        "negative": 79
       },
       "by_phenomenon": {
-        "question": 1800,
-        "statement": 206,
-        "context": 68,
-        "number-words": 45,
-        "ellipsis": 51,
-        "negation": 46,
-        "near-miss": 30,
-        "out-of-domain": 18
+        "question": 2113,
+        "statement": 255,
+        "context": 45,
+        "number-words": 39,
+        "ellipsis": 35,
+        "negation": 41,
+        "near-miss": 21,
+        "out-of-domain": 17
       },
       "by_split": {
-        "train": 1978,
-        "dev": 286
+        "train": 2339,
+        "dev": 227
       },
       "generator": true,
       "generator_version": "1",
       "seed": 2702766029,
       "generator_records": 2000,
       "agreement": {
-        "rate": 1,
-        "positive_rate": 1,
+        "rate": 0.995,
+        "positive_rate": 0.9948,
         "negative_rate": 1,
-        "positives": 1906,
-        "positives_agree": 1906,
-        "negatives": 94,
-        "negatives_ok": 94,
+        "positives": 1921,
+        "positives_agree": 1911,
+        "negatives": 79,
+        "negatives_ok": 79,
         "invalid_expect": 0
       },
-      "pattern_gaps": []
+      "pattern_gaps": [
+        {
+          "group": "time.sw.lists.days",
+          "count": 5,
+          "example": {
+            "text": "list the days of the week pls",
+            "context": [],
+            "expect": [
+              "core.question core.question.mode=list core.question.seek=name core.question.type=kids.time.dayinfo"
+            ],
+            "got": [
+              "core.question core.question.mode=list core.question.seek=name core.question.type=kids.time.dayinfo core.question.where.kind=school"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "time.today",
+          "count": 4,
+          "example": {
+            "text": "It was Wednesday.",
+            "context": [],
+            "expect": [
+              "kids.time.today kids.time.today.day=wednesday"
+            ],
+            "got": [
+              "core.request core.request.action=guess.reveal core.request.arg.animal=\"Wednesday\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "time.q.lists",
+          "count": 1,
+          "example": {
+            "text": "What are the days of the week?",
+            "context": [],
+            "expect": [
+              "core.question core.question.mode=list core.question.seek=name core.question.type=kids.time.dayinfo"
+            ],
+            "got": [
+              "core.question core.question.mode=list core.question.seek=name core.question.type=kids.time.dayinfo core.question.where.kind=school"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        }
+      ]
     }
   },
   "totals": {
-    "records": 40149,
+    "records": 49255,
     "by_status": {
-      "rule-derived": 4178,
-      "generator-backed": 33197,
-      "negative": 1832,
-      "generator-disagrees": 942
+      "rule-derived": 10825,
+      "generator-backed": 35134,
+      "negative": 1608,
+      "generator-disagrees": 1688
     },
     "by_split": {
-      "train": 35781,
-      "dev": 4368
+      "train": 44378,
+      "dev": 4877
     }
   }
 }

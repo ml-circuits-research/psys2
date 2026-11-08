@@ -4,1377 +4,1481 @@
     "dev": 0.1,
     "test": 0.1
   },
-  "source_records_read": 45769,
+  "source_records_read": 57515,
   "dedupe": {
-    "duplicates": 4901,
-    "conflicting_targets": 926
+    "duplicates": 8319,
+    "conflicting_targets": 2373
   },
   "worlds": {
     "art.draw": {
-      "total": 2557,
+      "total": 3252,
       "splits": {
-        "test": 256,
-        "train": 1990,
-        "dev": 311
+        "train": 2585,
+        "dev": 336,
+        "test": 331
       },
       "by_source": {
-        "paraphrase": 435,
-        "rule-derived": 222,
-        "generator": 1900
+        "rule-derived": 748,
+        "paraphrase": 570,
+        "generator": 1957
       },
       "by_label": {
-        "canonical-ok": 40,
-        "rule-derived": 222,
-        "generator-backed": 1742,
-        "rules-agree": 132,
-        "negative": 158,
-        "rules-differ": 130,
-        "rules-fail": 133
+        "rule-derived": 748,
+        "canonical-ok": 51,
+        "generator-backed": 1809,
+        "rules-own": 158,
+        "rules-agree": 340,
+        "negative": 102,
+        "generator-disagrees": 46,
+        "needs_review": 8,
+        "rules-differ": 1,
+        "rules-fail": 7,
+        "canonical-failed": 1,
+        "rules-unverified": 4
       },
       "by_split_source": {
-        "test": {
-          "paraphrase": 119,
-          "rule-derived": 47,
-          "generator": 90
-        },
         "train": {
-          "rule-derived": 167,
-          "generator": 1595,
-          "paraphrase": 228
+          "rule-derived": 528,
+          "generator": 1703,
+          "paraphrase": 354
         },
         "dev": {
-          "rule-derived": 8,
-          "generator": 215,
-          "paraphrase": 88
+          "paraphrase": 99,
+          "rule-derived": 139,
+          "generator": 98
+        },
+        "test": {
+          "rule-derived": 81,
+          "generator": 152,
+          "paraphrase": 98
         }
       },
       "by_split_label": {
-        "test": {
-          "canonical-ok": 11,
-          "rule-derived": 47,
-          "generator-backed": 49,
-          "rules-agree": 47,
-          "negative": 41,
-          "rules-differ": 37,
-          "rules-fail": 24
-        },
         "train": {
-          "rule-derived": 167,
-          "generator-backed": 1478,
-          "canonical-ok": 21,
-          "negative": 117,
-          "rules-fail": 86,
-          "rules-agree": 60,
-          "rules-differ": 61
+          "rule-derived": 528,
+          "generator-backed": 1591,
+          "canonical-ok": 33,
+          "rules-own": 104,
+          "rules-agree": 217,
+          "negative": 70,
+          "generator-disagrees": 42
         },
         "dev": {
-          "rule-derived": 8,
-          "generator-backed": 215,
-          "canonical-ok": 8,
-          "rules-fail": 23,
-          "rules-agree": 25,
-          "rules-differ": 32
+          "canonical-ok": 9,
+          "rule-derived": 139,
+          "rules-own": 35,
+          "generator-backed": 66,
+          "rules-agree": 54,
+          "negative": 32,
+          "rules-fail": 1
+        },
+        "test": {
+          "rule-derived": 81,
+          "generator-backed": 152,
+          "canonical-ok": 9,
+          "rules-agree": 69,
+          "rules-own": 19,
+          "rules-differ": 1
         }
       },
-      "negatives": 158,
-      "review": 0
+      "negatives": 144,
+      "review": 23
     },
     "data.charts": {
-      "total": 2463,
+      "total": 2875,
       "splits": {
-        "train": 1938,
-        "test": 276,
-        "dev": 249
+        "train": 2291,
+        "test": 290,
+        "dev": 294
       },
       "by_source": {
-        "paraphrase": 440,
-        "rule-derived": 215,
-        "generator": 1813
+        "rule-derived": 510,
+        "paraphrase": 568,
+        "generator": 1820
       },
       "by_label": {
-        "canonical-ok": 40,
-        "rule-derived": 215,
-        "generator-backed": 1795,
-        "rules-agree": 175,
-        "negative": 18,
-        "rules-differ": 120,
-        "rules-fail": 100,
-        "canonical-failed": 5
+        "rule-derived": 510,
+        "canonical-ok": 47,
+        "generator-backed": 1751,
+        "rules-agree": 396,
+        "rules-own": 90,
+        "generator-disagrees": 54,
+        "negative": 15,
+        "canonical-failed": 5,
+        "needs_review": 14,
+        "rules-fail": 16
       },
       "by_split_source": {
         "train": {
-          "paraphrase": 380,
-          "rule-derived": 175,
-          "generator": 1383
+          "rule-derived": 407,
+          "paraphrase": 474,
+          "generator": 1410
         },
         "test": {
-          "rule-derived": 18,
-          "generator": 247,
-          "paraphrase": 11
+          "rule-derived": 35,
+          "generator": 235,
+          "paraphrase": 20
         },
         "dev": {
-          "rule-derived": 22,
-          "generator": 183,
-          "paraphrase": 44
+          "rule-derived": 68,
+          "generator": 171,
+          "paraphrase": 55
         }
       },
       "by_split_label": {
         "train": {
-          "canonical-ok": 35,
-          "rule-derived": 175,
-          "generator-backed": 1365,
-          "rules-agree": 155,
-          "negative": 18,
-          "rules-differ": 103,
-          "rules-fail": 87
+          "rule-derived": 407,
+          "canonical-ok": 41,
+          "rules-agree": 345,
+          "generator-backed": 1345,
+          "rules-own": 74,
+          "generator-disagrees": 50,
+          "negative": 15,
+          "rules-fail": 14
         },
         "test": {
-          "rule-derived": 18,
-          "generator-backed": 247,
+          "rule-derived": 35,
+          "generator-backed": 235,
           "canonical-ok": 1,
-          "rules-differ": 10
+          "rules-own": 12,
+          "rules-agree": 6,
+          "rules-fail": 1
         },
         "dev": {
-          "rule-derived": 22,
-          "generator-backed": 183,
-          "canonical-ok": 4,
-          "rules-fail": 13,
-          "rules-agree": 20,
-          "rules-differ": 7
+          "rule-derived": 68,
+          "generator-backed": 171,
+          "canonical-ok": 5,
+          "rules-agree": 45,
+          "rules-own": 4,
+          "rules-fail": 1
         }
       },
-      "negatives": 18,
-      "review": 5
+      "negatives": 15,
+      "review": 23
     },
     "docs.editor": {
-      "total": 1145,
+      "total": 1589,
       "splits": {
-        "train": 913,
-        "test": 116,
-        "dev": 116
+        "train": 1265,
+        "test": 167,
+        "dev": 157
       },
       "by_source": {
-        "rule-derived": 149,
-        "generator": 349,
-        "paraphrase": 660
+        "rule-derived": 450,
+        "generator": 404,
+        "paraphrase": 792
       },
       "by_label": {
-        "rule-derived": 149,
-        "generator-backed": 337,
-        "canonical-ok": 59,
+        "rule-derived": 450,
+        "generator-backed": 388,
+        "canonical-ok": 71,
+        "rules-agree": 241,
         "negative": 12,
-        "rules-fail": 252,
-        "rules-agree": 149,
-        "rules-differ": 196,
+        "generator-disagrees": 4,
+        "rules-own": 308,
+        "rules-fail": 115,
+        "needs_review": 42,
+        "rules-differ": 11,
         "canonical-failed": 4
       },
       "by_split_source": {
         "train": {
-          "rule-derived": 116,
-          "generator": 260,
-          "paraphrase": 537
+          "rule-derived": 348,
+          "generator": 312,
+          "paraphrase": 605
         },
         "test": {
-          "rule-derived": 21,
-          "generator": 51,
-          "paraphrase": 44
+          "rule-derived": 54,
+          "generator": 48,
+          "paraphrase": 65
         },
         "dev": {
-          "rule-derived": 12,
-          "paraphrase": 66,
-          "generator": 38
+          "rule-derived": 48,
+          "paraphrase": 67,
+          "generator": 42
         }
       },
       "by_split_label": {
         "train": {
-          "rule-derived": 116,
-          "generator-backed": 248,
-          "canonical-ok": 49,
+          "rule-derived": 348,
+          "generator-backed": 299,
+          "canonical-ok": 58,
+          "rules-agree": 181,
           "negative": 12,
-          "rules-fail": 198,
-          "rules-agree": 125,
-          "rules-differ": 165
+          "generator-disagrees": 1,
+          "rules-own": 265,
+          "rules-fail": 92,
+          "rules-differ": 9
         },
         "test": {
-          "rule-derived": 21,
-          "generator-backed": 51,
-          "canonical-ok": 4,
-          "rules-fail": 20,
-          "rules-agree": 6,
-          "rules-differ": 14
+          "rule-derived": 54,
+          "generator-backed": 48,
+          "rules-agree": 40,
+          "canonical-ok": 6,
+          "rules-own": 14,
+          "rules-fail": 5
         },
         "dev": {
-          "rule-derived": 12,
-          "canonical-ok": 6,
-          "generator-backed": 38,
-          "rules-agree": 18,
-          "rules-fail": 25,
-          "rules-differ": 17
+          "rule-derived": 48,
+          "canonical-ok": 7,
+          "generator-backed": 41,
+          "generator-disagrees": 1,
+          "rules-agree": 20,
+          "rules-own": 29,
+          "rules-fail": 9,
+          "rules-differ": 2
         }
       },
       "negatives": 12,
-      "review": 13
+      "review": 57
     },
     "docs.reader": {
-      "total": 2127,
+      "total": 2547,
       "splits": {
-        "train": 1574,
-        "test": 306,
-        "dev": 247
+        "train": 2030,
+        "test": 258,
+        "dev": 259
       },
       "by_source": {
-        "rule-derived": 127,
-        "generator": 2000
+        "rule-derived": 437,
+        "paraphrase": 128,
+        "generator": 1992
       },
       "by_label": {
-        "rule-derived": 127,
-        "generator-backed": 1950,
-        "generator-disagrees": 26,
-        "negative": 24
+        "rule-derived": 437,
+        "canonical-ok": 11,
+        "generator-backed": 1903,
+        "rules-agree": 64,
+        "generator-disagrees": 65,
+        "negative": 24,
+        "rules-fail": 33,
+        "rules-own": 18,
+        "rules-differ": 1,
+        "canonical-failed": 1
       },
       "by_split_source": {
         "train": {
-          "rule-derived": 105,
-          "generator": 1469
+          "rule-derived": 385,
+          "paraphrase": 108,
+          "generator": 1537
         },
         "test": {
-          "rule-derived": 14,
-          "generator": 292
-        },
-        "dev": {
-          "rule-derived": 8,
+          "rule-derived": 19,
           "generator": 239
-        }
-      },
-      "by_split_label": {
-        "train": {
-          "rule-derived": 105,
-          "generator-backed": 1419,
-          "generator-disagrees": 26,
-          "negative": 24
-        },
-        "test": {
-          "rule-derived": 14,
-          "generator-backed": 292
-        },
-        "dev": {
-          "rule-derived": 8,
-          "generator-backed": 239
-        }
-      },
-      "negatives": 24,
-      "review": 0
-    },
-    "games.chess": {
-      "total": 2807,
-      "splits": {
-        "dev": 284,
-        "train": 2148,
-        "test": 375
-      },
-      "by_source": {
-        "rule-derived": 479,
-        "generator": 2000,
-        "paraphrase": 328
-      },
-      "by_label": {
-        "rule-derived": 479,
-        "generator-backed": 1950,
-        "negative": 20,
-        "generator-disagrees": 30,
-        "canonical-ok": 30,
-        "rules-agree": 239,
-        "rules-fail": 19,
-        "rules-differ": 40
-      },
-      "by_split_source": {
-        "dev": {
-          "rule-derived": 30,
-          "generator": 188,
-          "paraphrase": 66
-        },
-        "train": {
-          "rule-derived": 410,
-          "generator": 1520,
-          "paraphrase": 218
-        },
-        "test": {
-          "rule-derived": 39,
-          "generator": 292,
-          "paraphrase": 44
-        }
-      },
-      "by_split_label": {
-        "dev": {
-          "rule-derived": 30,
-          "generator-backed": 159,
-          "generator-disagrees": 29,
-          "canonical-ok": 6,
-          "rules-agree": 51,
-          "rules-fail": 4,
-          "rules-differ": 5
-        },
-        "train": {
-          "rule-derived": 410,
-          "generator-backed": 1499,
-          "negative": 20,
-          "generator-disagrees": 1,
-          "canonical-ok": 20,
-          "rules-agree": 160,
-          "rules-fail": 12,
-          "rules-differ": 26
-        },
-        "test": {
-          "rule-derived": 39,
-          "generator-backed": 292,
-          "canonical-ok": 4,
-          "rules-agree": 28,
-          "rules-differ": 9,
-          "rules-fail": 3
-        }
-      },
-      "negatives": 20,
-      "review": 0
-    },
-    "games.guess": {
-      "total": 1526,
-      "splits": {
-        "test": 158,
-        "dev": 157,
-        "train": 1211
-      },
-      "by_source": {
-        "generator": 1254,
-        "rule-derived": 62,
-        "paraphrase": 210
-      },
-      "by_label": {
-        "generator-backed": 1202,
-        "rule-derived": 62,
-        "generator-disagrees": 13,
-        "negative": 39,
-        "canonical-ok": 19,
-        "rules-agree": 177,
-        "rules-fail": 3,
-        "rules-differ": 11
-      },
-      "by_split_source": {
-        "test": {
-          "generator": 73,
-          "rule-derived": 11,
-          "paraphrase": 74
-        },
-        "dev": {
-          "rule-derived": 9,
-          "generator": 108,
-          "paraphrase": 40
-        },
-        "train": {
-          "rule-derived": 42,
-          "generator": 1073,
-          "paraphrase": 96
-        }
-      },
-      "by_split_label": {
-        "test": {
-          "generator-backed": 45,
-          "rule-derived": 11,
-          "negative": 28,
-          "canonical-ok": 7,
-          "rules-agree": 66,
-          "rules-fail": 1
-        },
-        "dev": {
-          "rule-derived": 9,
-          "generator-backed": 108,
-          "canonical-ok": 3,
-          "rules-agree": 33,
-          "rules-differ": 3,
-          "rules-fail": 1
-        },
-        "train": {
-          "rule-derived": 42,
-          "generator-backed": 1049,
-          "generator-disagrees": 13,
-          "negative": 11,
-          "canonical-ok": 9,
-          "rules-agree": 78,
-          "rules-fail": 1,
-          "rules-differ": 8
-        }
-      },
-      "negatives": 39,
-      "review": 0
-    },
-    "games.hangman": {
-      "total": 2018,
-      "splits": {
-        "train": 1594,
-        "dev": 208,
-        "test": 216
-      },
-      "by_source": {
-        "rule-derived": 66,
-        "generator": 1751,
-        "paraphrase": 201
-      },
-      "by_label": {
-        "rule-derived": 66,
-        "generator-backed": 1509,
-        "generator-disagrees": 26,
-        "negative": 216,
-        "canonical-ok": 15,
-        "rules-agree": 171,
-        "rules-differ": 10,
-        "rules-fail": 5
-      },
-      "by_split_source": {
-        "train": {
-          "rule-derived": 33,
-          "generator": 1420,
-          "paraphrase": 141
         },
         "dev": {
           "rule-derived": 33,
-          "generator": 115,
-          "paraphrase": 60
-        },
-        "test": {
-          "generator": 216
-        }
-      },
-      "by_split_label": {
-        "train": {
-          "rule-derived": 33,
-          "generator-backed": 1223,
-          "negative": 188,
-          "generator-disagrees": 9,
-          "canonical-ok": 12,
-          "rules-agree": 120,
-          "rules-differ": 5,
-          "rules-fail": 4
-        },
-        "dev": {
-          "rule-derived": 33,
-          "generator-backed": 98,
-          "generator-disagrees": 17,
-          "canonical-ok": 3,
-          "rules-agree": 51,
-          "rules-differ": 5,
-          "rules-fail": 1
-        },
-        "test": {
-          "generator-backed": 188,
-          "negative": 28
-        }
-      },
-      "negatives": 216,
-      "review": 0
-    },
-    "games.tictactoe": {
-      "total": 1861,
-      "splits": {
-        "test": 144,
-        "dev": 261,
-        "train": 1456
-      },
-      "by_source": {
-        "rule-derived": 56,
-        "generator": 1642,
-        "paraphrase": 214
-      },
-      "by_label": {
-        "rule-derived": 56,
-        "generator-backed": 1117,
-        "generator-disagrees": 360,
-        "negative": 165,
-        "canonical-ok": 20,
-        "rules-agree": 174,
-        "rules-fail": 7,
-        "rules-differ": 13
-      },
-      "by_split_source": {
-        "test": {
-          "rule-derived": 21,
-          "generator": 49,
-          "paraphrase": 74
-        },
-        "dev": {
-          "generator": 228,
-          "rule-derived": 1,
-          "paraphrase": 32
-        },
-        "train": {
-          "rule-derived": 34,
-          "generator": 1314,
-          "paraphrase": 108
-        }
-      },
-      "by_split_label": {
-        "test": {
-          "rule-derived": 21,
-          "generator-backed": 49,
-          "canonical-ok": 7,
-          "rules-agree": 61,
-          "rules-differ": 5,
-          "rules-fail": 1
-        },
-        "dev": {
-          "generator-backed": 152,
-          "rule-derived": 1,
-          "generator-disagrees": 19,
-          "negative": 57,
-          "canonical-ok": 3,
-          "rules-agree": 25,
-          "rules-differ": 1,
-          "rules-fail": 3
-        },
-        "train": {
-          "rule-derived": 34,
-          "generator-backed": 916,
-          "generator-disagrees": 290,
-          "negative": 108,
-          "canonical-ok": 10,
-          "rules-agree": 88,
-          "rules-fail": 3,
-          "rules-differ": 7
-        }
-      },
-      "negatives": 167,
-      "review": 51
-    },
-    "geo.map": {
-      "total": 2555,
-      "splits": {
-        "train": 1915,
-        "test": 341,
-        "dev": 299
-      },
-      "by_source": {
-        "rule-derived": 145,
-        "paraphrase": 431,
-        "generator": 1979
-      },
-      "by_label": {
-        "rule-derived": 145,
-        "canonical-ok": 40,
-        "generator-backed": 1970,
-        "negative": 9,
-        "rules-agree": 109,
-        "rules-fail": 194,
-        "rules-differ": 88
-      },
-      "by_split_source": {
-        "train": {
-          "rule-derived": 113,
-          "paraphrase": 323,
-          "generator": 1479
-        },
-        "test": {
-          "rule-derived": 20,
-          "generator": 299,
-          "paraphrase": 22
-        },
-        "dev": {
-          "rule-derived": 12,
-          "paraphrase": 86,
-          "generator": 201
-        }
-      },
-      "by_split_label": {
-        "train": {
-          "rule-derived": 113,
-          "canonical-ok": 30,
-          "generator-backed": 1470,
-          "negative": 9,
-          "rules-agree": 78,
-          "rules-fail": 153,
-          "rules-differ": 62
-        },
-        "test": {
-          "rule-derived": 20,
-          "generator-backed": 299,
-          "canonical-ok": 2,
-          "rules-agree": 6,
-          "rules-differ": 9,
-          "rules-fail": 5
-        },
-        "dev": {
-          "rule-derived": 12,
-          "canonical-ok": 8,
-          "generator-backed": 201,
-          "rules-agree": 25,
-          "rules-fail": 36,
-          "rules-differ": 17
-        }
-      },
-      "negatives": 9,
-      "review": 0
-    },
-    "kids.animals": {
-      "total": 2276,
-      "splits": {
-        "train": 1777,
-        "test": 260,
-        "dev": 239
-      },
-      "by_source": {
-        "generator": 1952,
-        "rule-derived": 109,
-        "paraphrase": 218
-      },
-      "by_label": {
-        "generator-backed": 1819,
-        "rule-derived": 109,
-        "canonical-ok": 20,
-        "rules-agree": 154,
-        "negative": 130,
-        "generator-disagrees": 3,
-        "rules-fail": 36,
-        "rules-differ": 8
-      },
-      "by_split_source": {
-        "train": {
-          "generator": 1499,
-          "rule-derived": 93,
-          "paraphrase": 185
-        },
-        "test": {
-          "paraphrase": 22,
-          "generator": 228,
-          "rule-derived": 10
-        },
-        "dev": {
-          "rule-derived": 6,
-          "generator": 222,
-          "paraphrase": 11
-        }
-      },
-      "by_split_label": {
-        "train": {
-          "generator-backed": 1387,
-          "rule-derived": 93,
-          "canonical-ok": 17,
-          "rules-agree": 129,
-          "negative": 112,
-          "rules-fail": 31,
-          "rules-differ": 8
-        },
-        "test": {
-          "canonical-ok": 2,
-          "generator-backed": 228,
-          "rule-derived": 10,
-          "rules-agree": 17,
-          "rules-fail": 3
-        },
-        "dev": {
-          "rule-derived": 6,
-          "generator-backed": 204,
-          "negative": 18,
-          "canonical-ok": 1,
-          "rules-agree": 8,
-          "rules-fail": 2
-        }
-      },
-      "negatives": 130,
-      "review": 3
-    },
-    "kids.arith": {
-      "total": 2403,
-      "splits": {
-        "train": 1885,
-        "test": 268,
-        "dev": 250
-      },
-      "by_source": {
-        "rule-derived": 201,
-        "generator": 1996,
-        "paraphrase": 206
-      },
-      "by_label": {
-        "rule-derived": 201,
-        "generator-backed": 1871,
-        "canonical-ok": 20,
-        "rules-agree": 144,
-        "negative": 115,
-        "generator-disagrees": 10,
-        "rules-fail": 37,
-        "rules-differ": 5
-      },
-      "by_split_source": {
-        "train": {
-          "rule-derived": 177,
-          "generator": 1543,
-          "paraphrase": 165
-        },
-        "test": {
-          "rule-derived": 21,
-          "generator": 227,
-          "paraphrase": 20
-        },
-        "dev": {
-          "rule-derived": 3,
-          "generator": 226,
-          "paraphrase": 21
-        }
-      },
-      "by_split_label": {
-        "train": {
-          "rule-derived": 177,
-          "generator-backed": 1446,
-          "canonical-ok": 16,
-          "rules-agree": 115,
-          "negative": 87,
-          "generator-disagrees": 10,
-          "rules-fail": 30,
-          "rules-differ": 4
-        },
-        "test": {
-          "rule-derived": 21,
-          "generator-backed": 199,
-          "negative": 28,
-          "canonical-ok": 2,
-          "rules-agree": 15,
-          "rules-fail": 2,
-          "rules-differ": 1
-        },
-        "dev": {
-          "rule-derived": 3,
-          "generator-backed": 226,
-          "canonical-ok": 2,
-          "rules-agree": 14,
-          "rules-fail": 5
-        }
-      },
-      "negatives": 123,
-      "review": 0
-    },
-    "kids.common": {
-      "total": 1867,
-      "splits": {
-        "train": 1332,
-        "test": 208,
-        "dev": 327
-      },
-      "by_source": {
-        "paraphrase": 210,
-        "rule-derived": 49,
-        "generator": 1608
-      },
-      "by_label": {
-        "canonical-ok": 17,
-        "rule-derived": 49,
-        "rules-agree": 124,
-        "generator-backed": 1349,
-        "negative": 259,
-        "rules-fail": 24,
-        "rules-differ": 45
-      },
-      "by_split_source": {
-        "train": {
-          "paraphrase": 156,
-          "rule-derived": 42,
-          "generator": 1134
-        },
-        "test": {
-          "paraphrase": 54,
-          "rule-derived": 7,
-          "generator": 147
-        },
-        "dev": {
-          "generator": 327
-        }
-      },
-      "by_split_label": {
-        "train": {
-          "canonical-ok": 13,
-          "rule-derived": 42,
-          "rules-agree": 93,
-          "generator-backed": 1022,
-          "negative": 112,
-          "rules-fail": 12,
-          "rules-differ": 38
-        },
-        "test": {
-          "canonical-ok": 4,
-          "rules-agree": 31,
-          "rule-derived": 7,
-          "negative": 147,
-          "rules-differ": 7,
-          "rules-fail": 12
-        },
-        "dev": {
-          "generator-backed": 327
-        }
-      },
-      "negatives": 259,
-      "review": 0
-    },
-    "kids.shapes": {
-      "total": 2246,
-      "splits": {
-        "train": 1773,
-        "test": 228,
-        "dev": 245
-      },
-      "by_source": {
-        "rule-derived": 79,
-        "generator": 1954,
-        "paraphrase": 213
-      },
-      "by_label": {
-        "rule-derived": 79,
-        "generator-backed": 1770,
-        "canonical-ok": 20,
-        "rules-agree": 135,
-        "negative": 178,
-        "generator-disagrees": 6,
-        "rules-fail": 49,
-        "rules-differ": 9
-      },
-      "by_split_source": {
-        "train": {
-          "rule-derived": 67,
-          "generator": 1535,
-          "paraphrase": 171
-        },
-        "test": {
-          "generator": 184,
-          "rule-derived": 12,
-          "paraphrase": 32
-        },
-        "dev": {
-          "generator": 235,
+          "generator": 216,
           "paraphrase": 10
         }
       },
       "by_split_label": {
         "train": {
-          "rule-derived": 67,
-          "generator-backed": 1471,
-          "canonical-ok": 16,
-          "rules-agree": 106,
-          "negative": 62,
-          "generator-disagrees": 2,
-          "rules-fail": 41,
-          "rules-differ": 8
-        },
-        "test": {
-          "generator-backed": 159,
-          "rule-derived": 12,
-          "rules-agree": 21,
-          "negative": 25,
-          "canonical-ok": 3,
-          "rules-fail": 7,
+          "rule-derived": 385,
+          "canonical-ok": 10,
+          "generator-backed": 1454,
+          "rules-agree": 59,
+          "generator-disagrees": 59,
+          "negative": 24,
+          "rules-fail": 20,
+          "rules-own": 18,
           "rules-differ": 1
         },
+        "test": {
+          "rule-derived": 19,
+          "generator-backed": 239
+        },
         "dev": {
-          "generator-backed": 140,
-          "negative": 91,
-          "generator-disagrees": 4,
+          "rule-derived": 33,
+          "generator-backed": 210,
           "canonical-ok": 1,
-          "rules-agree": 8,
-          "rules-fail": 1
+          "generator-disagrees": 6,
+          "rules-agree": 5,
+          "rules-fail": 4
         }
       },
-      "negatives": 178,
-      "review": 0
+      "negatives": 24,
+      "review": 10
     },
-    "kids.shop": {
-      "total": 2372,
+    "games.chess": {
+      "total": 2988,
       "splits": {
-        "train": 1832,
-        "test": 264,
-        "dev": 276
+        "dev": 304,
+        "train": 2350,
+        "test": 334
       },
       "by_source": {
-        "rule-derived": 166,
-        "generator": 1992,
-        "paraphrase": 214
+        "rule-derived": 554,
+        "generator": 2000,
+        "paraphrase": 446
       },
       "by_label": {
-        "rule-derived": 166,
-        "generator-backed": 1831,
+        "rule-derived": 554,
+        "generator-backed": 1950,
+        "negative": 20,
+        "generator-disagrees": 30,
+        "canonical-ok": 37,
+        "rules-agree": 316,
+        "rules-own": 55,
+        "needs_review": 12,
+        "rules-fail": 23,
+        "rules-differ": 3
+      },
+      "by_split_source": {
+        "dev": {
+          "rule-derived": 56,
+          "generator": 187,
+          "paraphrase": 61
+        },
+        "train": {
+          "rule-derived": 471,
+          "generator": 1557,
+          "paraphrase": 322
+        },
+        "test": {
+          "rule-derived": 27,
+          "generator": 256,
+          "paraphrase": 51
+        }
+      },
+      "by_split_label": {
+        "dev": {
+          "rule-derived": 56,
+          "generator-backed": 163,
+          "generator-disagrees": 24,
+          "canonical-ok": 4,
+          "rules-agree": 40,
+          "rules-own": 15,
+          "rules-fail": 2
+        },
+        "train": {
+          "rule-derived": 471,
+          "generator-backed": 1531,
+          "negative": 20,
+          "generator-disagrees": 6,
+          "canonical-ok": 28,
+          "rules-agree": 237,
+          "rules-own": 33,
+          "rules-fail": 21,
+          "rules-differ": 3
+        },
+        "test": {
+          "rule-derived": 27,
+          "generator-backed": 256,
+          "canonical-ok": 5,
+          "rules-agree": 39,
+          "rules-own": 7
+        }
+      },
+      "negatives": 20,
+      "review": 12
+    },
+    "games.guess": {
+      "total": 1714,
+      "splits": {
+        "train": 1371,
+        "dev": 173,
+        "test": 170
+      },
+      "by_source": {
+        "paraphrase": 339,
+        "rule-derived": 93,
+        "generator": 1288
+      },
+      "by_label": {
+        "canonical-ok": 31,
+        "rule-derived": 93,
+        "generator-backed": 1230,
+        "rules-agree": 256,
         "generator-disagrees": 10,
-        "negative": 151,
-        "canonical-ok": 20,
-        "rules-agree": 144,
-        "rules-fail": 37,
-        "rules-differ": 13
+        "negative": 48,
+        "rules-fail": 14,
+        "needs_review": 6,
+        "rules-own": 31,
+        "rules-differ": 1
       },
       "by_split_source": {
         "train": {
-          "rule-derived": 145,
-          "generator": 1506,
-          "paraphrase": 181
-        },
-        "test": {
-          "rule-derived": 13,
-          "generator": 251
+          "paraphrase": 207,
+          "rule-derived": 64,
+          "generator": 1100
         },
         "dev": {
-          "rule-derived": 8,
-          "generator": 235,
-          "paraphrase": 33
+          "rule-derived": 13,
+          "generator": 109,
+          "paraphrase": 51
+        },
+        "test": {
+          "rule-derived": 16,
+          "generator": 79,
+          "paraphrase": 75
         }
       },
       "by_split_label": {
         "train": {
-          "rule-derived": 145,
-          "generator-backed": 1380,
+          "canonical-ok": 20,
+          "rule-derived": 64,
+          "generator-backed": 1079,
+          "rules-agree": 153,
           "generator-disagrees": 10,
-          "negative": 116,
-          "canonical-ok": 17,
-          "rules-agree": 124,
-          "rules-fail": 32,
-          "rules-differ": 8
-        },
-        "test": {
-          "rule-derived": 13,
-          "generator-backed": 251
+          "negative": 11,
+          "rules-fail": 6,
+          "rules-own": 27,
+          "rules-differ": 1
         },
         "dev": {
-          "rule-derived": 8,
-          "generator-backed": 200,
-          "negative": 35,
-          "canonical-ok": 3,
-          "rules-agree": 20,
+          "rule-derived": 13,
+          "generator-backed": 109,
+          "canonical-ok": 4,
+          "rules-agree": 43,
+          "rules-own": 1,
+          "rules-fail": 3
+        },
+        "test": {
+          "rule-derived": 16,
+          "generator-backed": 42,
+          "canonical-ok": 7,
+          "rules-agree": 60,
+          "negative": 37,
           "rules-fail": 5,
-          "rules-differ": 5
+          "rules-own": 3
         }
       },
-      "negatives": 151,
+      "negatives": 48,
+      "review": 6
+    },
+    "games.hangman": {
+      "total": 2225,
+      "splits": {
+        "dev": 232,
+        "train": 1769,
+        "test": 224
+      },
+      "by_source": {
+        "rule-derived": 143,
+        "paraphrase": 328,
+        "generator": 1754
+      },
+      "by_label": {
+        "rule-derived": 143,
+        "canonical-ok": 27,
+        "generator-backed": 1523,
+        "rules-agree": 257,
+        "generator-disagrees": 36,
+        "negative": 195,
+        "rules-fail": 16,
+        "rules-own": 26,
+        "rules-differ": 2
+      },
+      "by_split_source": {
+        "dev": {
+          "rule-derived": 23,
+          "generator": 148,
+          "paraphrase": 61
+        },
+        "train": {
+          "rule-derived": 104,
+          "paraphrase": 257,
+          "generator": 1408
+        },
+        "test": {
+          "rule-derived": 16,
+          "generator": 198,
+          "paraphrase": 10
+        }
+      },
+      "by_split_label": {
+        "dev": {
+          "rule-derived": 23,
+          "generator-backed": 131,
+          "canonical-ok": 4,
+          "generator-disagrees": 17,
+          "rules-agree": 49,
+          "rules-own": 7,
+          "rules-fail": 1
+        },
+        "train": {
+          "rule-derived": 104,
+          "canonical-ok": 22,
+          "generator-backed": 1220,
+          "rules-agree": 201,
+          "negative": 169,
+          "generator-disagrees": 19,
+          "rules-fail": 14,
+          "rules-differ": 2,
+          "rules-own": 18
+        },
+        "test": {
+          "rule-derived": 16,
+          "generator-backed": 172,
+          "canonical-ok": 1,
+          "negative": 26,
+          "rules-agree": 7,
+          "rules-fail": 1,
+          "rules-own": 1
+        }
+      },
+      "negatives": 195,
       "review": 0
     },
-    "kids.tasks": {
-      "total": 2264,
+    "games.tictactoe": {
+      "total": 2044,
       "splits": {
-        "train": 1698,
-        "test": 294,
-        "dev": 272
+        "test": 172,
+        "train": 1662,
+        "dev": 210
       },
       "by_source": {
         "rule-derived": 117,
-        "paraphrase": 215,
-        "generator": 1932
+        "generator": 1626,
+        "paraphrase": 344
       },
       "by_label": {
         "rule-derived": 117,
-        "canonical-ok": 20,
-        "generator-backed": 1842,
-        "rules-agree": 86,
-        "negative": 85,
-        "generator-disagrees": 5,
-        "rules-differ": 54,
-        "rules-fail": 55
+        "generator-backed": 1109,
+        "canonical-ok": 32,
+        "rules-agree": 280,
+        "generator-disagrees": 366,
+        "negative": 151,
+        "needs_review": 2,
+        "rules-own": 20,
+        "rules-fail": 10
+      },
+      "by_split_source": {
+        "test": {
+          "rule-derived": 37,
+          "paraphrase": 74,
+          "generator": 61
+        },
+        "train": {
+          "rule-derived": 61,
+          "generator": 1409,
+          "paraphrase": 192
+        },
+        "dev": {
+          "generator": 115,
+          "rule-derived": 19,
+          "paraphrase": 76
+        }
+      },
+      "by_split_label": {
+        "test": {
+          "rule-derived": 37,
+          "canonical-ok": 7,
+          "generator-backed": 61,
+          "rules-agree": 56,
+          "rules-own": 7,
+          "rules-fail": 4
+        },
+        "train": {
+          "rule-derived": 61,
+          "generator-backed": 948,
+          "canonical-ok": 18,
+          "rules-agree": 158,
+          "generator-disagrees": 310,
+          "negative": 151,
+          "rules-own": 12,
+          "rules-fail": 4
+        },
+        "dev": {
+          "generator-backed": 100,
+          "rule-derived": 19,
+          "canonical-ok": 7,
+          "generator-disagrees": 15,
+          "rules-agree": 66,
+          "rules-own": 1,
+          "rules-fail": 2
+        }
+      },
+      "negatives": 153,
+      "review": 43
+    },
+    "geo.map": {
+      "total": 3077,
+      "splits": {
+        "train": 2459,
+        "test": 311,
+        "dev": 307
+      },
+      "by_source": {
+        "rule-derived": 590,
+        "paraphrase": 548,
+        "generator": 1950
+      },
+      "by_label": {
+        "rule-derived": 590,
+        "canonical-ok": 44,
+        "generator-backed": 1941,
+        "rules-own": 102,
+        "rules-agree": 389,
+        "negative": 9,
+        "needs_review": 11,
+        "rules-differ": 1,
+        "rules-fail": 1
       },
       "by_split_source": {
         "train": {
-          "rule-derived": 113,
-          "paraphrase": 204,
-          "generator": 1381
+          "rule-derived": 427,
+          "paraphrase": 435,
+          "generator": 1597
         },
         "test": {
-          "generator": 293,
-          "rule-derived": 1
+          "rule-derived": 59,
+          "generator": 231,
+          "paraphrase": 21
         },
         "dev": {
-          "rule-derived": 3,
-          "generator": 258,
+          "rule-derived": 104,
+          "paraphrase": 81,
+          "generator": 122
+        }
+      },
+      "by_split_label": {
+        "train": {
+          "rule-derived": 427,
+          "canonical-ok": 36,
+          "generator-backed": 1588,
+          "rules-own": 81,
+          "rules-agree": 316,
+          "negative": 9,
+          "rules-differ": 1,
+          "rules-fail": 1
+        },
+        "test": {
+          "rule-derived": 59,
+          "generator-backed": 231,
+          "canonical-ok": 1,
+          "rules-agree": 20
+        },
+        "dev": {
+          "rule-derived": 104,
+          "canonical-ok": 7,
+          "generator-backed": 122,
+          "rules-agree": 53,
+          "rules-own": 21
+        }
+      },
+      "negatives": 9,
+      "review": 11
+    },
+    "kids.animals": {
+      "total": 2614,
+      "splits": {
+        "train": 2044,
+        "test": 269,
+        "dev": 301
+      },
+      "by_source": {
+        "rule-derived": 333,
+        "paraphrase": 320,
+        "generator": 1963
+      },
+      "by_label": {
+        "rule-derived": 333,
+        "canonical-ok": 24,
+        "rules-agree": 283,
+        "generator-backed": 1859,
+        "rules-own": 5,
+        "negative": 103,
+        "generator-disagrees": 1,
+        "rules-fail": 7,
+        "needs_review": 1
+      },
+      "by_split_source": {
+        "train": {
+          "rule-derived": 276,
+          "paraphrase": 242,
+          "generator": 1526
+        },
+        "test": {
+          "paraphrase": 49,
+          "rule-derived": 37,
+          "generator": 183
+        },
+        "dev": {
+          "paraphrase": 28,
+          "rule-derived": 20,
+          "generator": 253
+        }
+      },
+      "by_split_label": {
+        "train": {
+          "rule-derived": 276,
+          "canonical-ok": 19,
+          "rules-agree": 213,
+          "generator-backed": 1436,
+          "negative": 90,
+          "rules-fail": 7,
+          "rules-own": 3
+        },
+        "test": {
+          "canonical-ok": 3,
+          "rule-derived": 37,
+          "generator-backed": 183,
+          "rules-agree": 46
+        },
+        "dev": {
+          "canonical-ok": 2,
+          "rule-derived": 20,
+          "generator-backed": 240,
+          "rules-agree": 24,
+          "rules-own": 2,
+          "negative": 13
+        }
+      },
+      "negatives": 103,
+      "review": 2
+    },
+    "kids.arith": {
+      "total": 2713,
+      "splits": {
+        "train": 2165,
+        "test": 275,
+        "dev": 273
+      },
+      "by_source": {
+        "rule-derived": 388,
+        "paraphrase": 334,
+        "generator": 1997
+      },
+      "by_label": {
+        "rule-derived": 388,
+        "canonical-ok": 31,
+        "rules-agree": 225,
+        "generator-backed": 1898,
+        "negative": 89,
+        "generator-disagrees": 10,
+        "rules-fail": 58,
+        "rules-own": 13,
+        "needs_review": 6,
+        "rules-differ": 1
+      },
+      "by_split_source": {
+        "train": {
+          "rule-derived": 339,
+          "paraphrase": 289,
+          "generator": 1537
+        },
+        "test": {
+          "rule-derived": 25,
+          "generator": 231,
+          "paraphrase": 19
+        },
+        "dev": {
+          "rule-derived": 24,
+          "generator": 229,
+          "paraphrase": 20
+        }
+      },
+      "by_split_label": {
+        "train": {
+          "rule-derived": 339,
+          "canonical-ok": 27,
+          "rules-agree": 192,
+          "generator-backed": 1460,
+          "negative": 68,
+          "generator-disagrees": 9,
+          "rules-fail": 57,
+          "rules-own": 12,
+          "rules-differ": 1
+        },
+        "test": {
+          "rule-derived": 25,
+          "generator-backed": 210,
+          "negative": 21,
+          "canonical-ok": 2,
+          "rules-agree": 16,
+          "rules-fail": 1
+        },
+        "dev": {
+          "rule-derived": 24,
+          "generator-backed": 228,
+          "generator-disagrees": 1,
+          "canonical-ok": 2,
+          "rules-agree": 17,
+          "rules-own": 1
+        }
+      },
+      "negatives": 94,
+      "review": 6
+    },
+    "kids.common": {
+      "total": 2170,
+      "splits": {
+        "train": 1614,
+        "test": 275,
+        "dev": 281
+      },
+      "by_source": {
+        "paraphrase": 301,
+        "rule-derived": 161,
+        "generator": 1708
+      },
+      "by_label": {
+        "canonical-ok": 23,
+        "rule-derived": 161,
+        "rules-agree": 210,
+        "generator-backed": 1435,
+        "rules-own": 63,
+        "negative": 273,
+        "rules-fail": 5
+      },
+      "by_split_source": {
+        "train": {
+          "paraphrase": 244,
+          "rule-derived": 141,
+          "generator": 1229
+        },
+        "test": {
+          "paraphrase": 57,
+          "generator": 198,
+          "rule-derived": 20
+        },
+        "dev": {
+          "generator": 281
+        }
+      },
+      "by_split_label": {
+        "train": {
+          "canonical-ok": 19,
+          "rule-derived": 141,
+          "rules-agree": 161,
+          "generator-backed": 1136,
+          "rules-own": 59,
+          "negative": 93,
+          "rules-fail": 5
+        },
+        "test": {
+          "canonical-ok": 4,
+          "generator-backed": 18,
+          "rules-agree": 49,
+          "rule-derived": 20,
+          "rules-own": 4,
+          "negative": 180
+        },
+        "dev": {
+          "generator-backed": 281
+        }
+      },
+      "negatives": 273,
+      "review": 0
+    },
+    "kids.shapes": {
+      "total": 2449,
+      "splits": {
+        "train": 1899,
+        "test": 288,
+        "dev": 262
+      },
+      "by_source": {
+        "paraphrase": 325,
+        "rule-derived": 179,
+        "generator": 1947
+      },
+      "by_label": {
+        "canonical-ok": 26,
+        "rule-derived": 179,
+        "generator-backed": 1792,
+        "rules-agree": 292,
+        "negative": 135,
+        "generator-disagrees": 20,
+        "needs_review": 2,
+        "rules-fail": 4,
+        "rules-own": 1
+      },
+      "by_split_source": {
+        "train": {
+          "paraphrase": 257,
+          "rule-derived": 153,
+          "generator": 1489
+        },
+        "test": {
+          "generator": 227,
+          "rule-derived": 16,
+          "paraphrase": 45
+        },
+        "dev": {
+          "rule-derived": 10,
+          "paraphrase": 21,
+          "generator": 231
+        }
+      },
+      "by_split_label": {
+        "train": {
+          "canonical-ok": 22,
+          "rule-derived": 153,
+          "generator-backed": 1436,
+          "rules-agree": 230,
+          "negative": 44,
+          "generator-disagrees": 9,
+          "rules-fail": 4,
+          "rules-own": 1
+        },
+        "test": {
+          "generator-backed": 204,
+          "rule-derived": 16,
+          "rules-agree": 43,
+          "negative": 23,
+          "canonical-ok": 2
+        },
+        "dev": {
+          "rule-derived": 10,
+          "rules-agree": 19,
+          "generator-backed": 152,
+          "canonical-ok": 2,
+          "negative": 68,
+          "generator-disagrees": 11
+        }
+      },
+      "negatives": 135,
+      "review": 2
+    },
+    "kids.shop": {
+      "total": 2549,
+      "splits": {
+        "train": 1996,
+        "test": 253,
+        "dev": 300
+      },
+      "by_source": {
+        "rule-derived": 243,
+        "paraphrase": 341,
+        "generator": 1984
+      },
+      "by_label": {
+        "rule-derived": 243,
+        "canonical-ok": 32,
+        "generator-backed": 1845,
+        "rules-agree": 264,
+        "generator-disagrees": 13,
+        "negative": 126,
+        "rules-fail": 19,
+        "rules-own": 7,
+        "needs_review": 19
+      },
+      "by_split_source": {
+        "train": {
+          "rule-derived": 207,
+          "paraphrase": 283,
+          "generator": 1506
+        },
+        "test": {
+          "rule-derived": 15,
+          "generator": 221,
+          "paraphrase": 17
+        },
+        "dev": {
+          "rule-derived": 21,
+          "generator": 257,
+          "paraphrase": 22
+        }
+      },
+      "by_split_label": {
+        "train": {
+          "rule-derived": 207,
+          "canonical-ok": 28,
+          "generator-backed": 1397,
+          "rules-agree": 232,
+          "generator-disagrees": 13,
+          "negative": 96,
+          "rules-fail": 16,
+          "rules-own": 7
+        },
+        "test": {
+          "rule-derived": 15,
+          "generator-backed": 221,
+          "canonical-ok": 2,
+          "rules-agree": 15
+        },
+        "dev": {
+          "rule-derived": 21,
+          "generator-backed": 227,
+          "negative": 30,
+          "canonical-ok": 2,
+          "rules-agree": 17,
+          "rules-fail": 3
+        }
+      },
+      "negatives": 126,
+      "review": 19
+    },
+    "kids.tasks": {
+      "total": 2561,
+      "splits": {
+        "train": 2003,
+        "test": 261,
+        "dev": 297
+      },
+      "by_source": {
+        "paraphrase": 342,
+        "rule-derived": 282,
+        "generator": 1955
+      },
+      "by_label": {
+        "rules-own": 73,
+        "rule-derived": 282,
+        "canonical-ok": 30,
+        "generator-backed": 1869,
+        "rules-agree": 199,
+        "negative": 72,
+        "generator-disagrees": 14,
+        "needs_review": 18,
+        "rules-fail": 17,
+        "rules-differ": 5
+      },
+      "by_split_source": {
+        "train": {
+          "paraphrase": 295,
+          "rule-derived": 258,
+          "generator": 1450
+        },
+        "test": {
+          "rule-derived": 10,
+          "paraphrase": 18,
+          "generator": 233
+        },
+        "dev": {
+          "rule-derived": 14,
+          "generator": 272,
           "paraphrase": 11
         }
       },
       "by_split_label": {
         "train": {
-          "rule-derived": 113,
-          "canonical-ok": 19,
-          "generator-backed": 1291,
-          "rules-agree": 79,
-          "negative": 85,
-          "generator-disagrees": 5,
-          "rules-differ": 52,
-          "rules-fail": 54
+          "rules-own": 65,
+          "rule-derived": 258,
+          "canonical-ok": 28,
+          "generator-backed": 1409,
+          "rules-agree": 181,
+          "negative": 37,
+          "generator-disagrees": 4,
+          "rules-fail": 16,
+          "rules-differ": 5
         },
         "test": {
-          "generator-backed": 293,
-          "rule-derived": 1
+          "rule-derived": 10,
+          "rules-agree": 8,
+          "generator-backed": 233,
+          "rules-own": 8,
+          "canonical-ok": 1,
+          "rules-fail": 1
         },
         "dev": {
-          "rule-derived": 3,
-          "generator-backed": 258,
+          "rule-derived": 14,
+          "generator-backed": 227,
           "canonical-ok": 1,
-          "rules-agree": 7,
-          "rules-differ": 2,
-          "rules-fail": 1
+          "rules-agree": 10,
+          "negative": 35,
+          "generator-disagrees": 10
         }
       },
-      "negatives": 89,
-      "review": 0
+      "negatives": 74,
+      "review": 18
     },
     "kids.time": {
-      "total": 2282,
+      "total": 2542,
       "splits": {
-        "train": 1760,
-        "dev": 255,
-        "test": 267
+        "train": 2034,
+        "dev": 256,
+        "test": 252
       },
       "by_source": {
-        "paraphrase": 219,
-        "generator": 1901,
-        "rule-derived": 162
+        "paraphrase": 337,
+        "rule-derived": 294,
+        "generator": 1919
       },
       "by_label": {
-        "canonical-ok": 20,
-        "generator-backed": 1807,
-        "rule-derived": 162,
-        "rules-agree": 170,
-        "negative": 94,
-        "rules-fail": 24,
-        "rules-differ": 5
+        "canonical-ok": 28,
+        "rule-derived": 294,
+        "generator-backed": 1834,
+        "rules-agree": 294,
+        "negative": 79,
+        "generator-disagrees": 6,
+        "needs_review": 6,
+        "rules-own": 3,
+        "rules-fail": 4,
+        "rules-differ": 2
       },
       "by_split_source": {
         "train": {
-          "paraphrase": 198,
-          "generator": 1422,
-          "rule-derived": 140
+          "paraphrase": 272,
+          "generator": 1543,
+          "rule-derived": 219
         },
         "dev": {
-          "rule-derived": 19,
-          "paraphrase": 21,
-          "generator": 215
+          "rule-derived": 61,
+          "paraphrase": 42,
+          "generator": 153
         },
         "test": {
-          "generator": 264,
-          "rule-derived": 3
+          "generator": 221,
+          "rule-derived": 14,
+          "paraphrase": 17
         }
       },
       "by_split_label": {
         "train": {
-          "canonical-ok": 18,
-          "generator-backed": 1404,
-          "rule-derived": 140,
-          "rules-agree": 154,
-          "negative": 18,
-          "rules-differ": 5,
-          "rules-fail": 21
-        },
-        "dev": {
-          "rule-derived": 19,
-          "canonical-ok": 2,
-          "generator-backed": 139,
-          "rules-agree": 16,
-          "negative": 76,
-          "rules-fail": 3
-        },
-        "test": {
-          "generator-backed": 264,
-          "rule-derived": 3
-        }
-      },
-      "negatives": 94,
-      "review": 0
-    },
-    "media.music": {
-      "total": 2439,
-      "splits": {
-        "test": 236,
-        "dev": 252,
-        "train": 1951
-      },
-      "by_source": {
-        "rule-derived": 397,
-        "paraphrase": 407,
-        "generator": 1646
-      },
-      "by_label": {
-        "rule-derived": 397,
-        "canonical-ok": 40,
-        "generator-backed": 1596,
-        "rules-agree": 168,
-        "generator-disagrees": 34,
-        "negative": 16,
-        "rules-differ": 163,
-        "rules-fail": 36
-      },
-      "by_split_source": {
-        "test": {
-          "rule-derived": 108,
-          "paraphrase": 78,
-          "generator": 50
-        },
-        "dev": {
-          "rule-derived": 51,
-          "generator": 135,
-          "paraphrase": 66
-        },
-        "train": {
-          "rule-derived": 238,
-          "paraphrase": 263,
-          "generator": 1450
-        }
-      },
-      "by_split_label": {
-        "test": {
-          "rule-derived": 108,
-          "canonical-ok": 8,
-          "rules-agree": 18,
-          "generator-backed": 50,
-          "rules-differ": 42,
-          "rules-fail": 10
-        },
-        "dev": {
-          "rule-derived": 51,
-          "generator-backed": 120,
-          "canonical-ok": 6,
-          "generator-disagrees": 15,
-          "rules-agree": 34,
-          "rules-differ": 18,
-          "rules-fail": 8
-        },
-        "train": {
-          "rule-derived": 238,
-          "canonical-ok": 26,
-          "generator-backed": 1426,
-          "rules-agree": 116,
-          "negative": 16,
-          "generator-disagrees": 8,
-          "rules-differ": 103,
-          "rules-fail": 18
-        }
-      },
-      "negatives": 16,
-      "review": 11
-    },
-    "ui.avatar": {
-      "total": 704,
-      "splits": {
-        "train": 533,
-        "test": 71,
-        "dev": 100
-      },
-      "by_source": {
-        "rule-derived": 278,
-        "paraphrase": 427
-      },
-      "by_label": {
-        "rule-derived": 278,
-        "canonical-ok": 40,
-        "rules-agree": 171,
-        "rules-fail": 159,
-        "rules-differ": 56,
-        "canonical-failed": 1
-      },
-      "by_split_source": {
-        "train": {
-          "rule-derived": 161,
-          "paraphrase": 372
-        },
-        "test": {
-          "rule-derived": 50,
-          "paraphrase": 21
-        },
-        "dev": {
-          "paraphrase": 33,
-          "rule-derived": 67
-        }
-      },
-      "by_split_label": {
-        "train": {
-          "rule-derived": 161,
-          "canonical-ok": 35,
-          "rules-agree": 149,
-          "rules-fail": 136,
-          "rules-differ": 52
-        },
-        "test": {
-          "rule-derived": 50,
-          "canonical-ok": 2,
-          "rules-agree": 11,
-          "rules-fail": 7,
+          "canonical-ok": 23,
+          "generator-backed": 1522,
+          "rule-derived": 219,
+          "rules-agree": 243,
+          "negative": 17,
+          "generator-disagrees": 4,
+          "rules-own": 2,
+          "rules-fail": 3,
           "rules-differ": 1
         },
         "dev": {
-          "canonical-ok": 3,
-          "rule-derived": 67,
-          "rules-agree": 11,
-          "rules-fail": 16,
-          "rules-differ": 3
-        }
-      },
-      "negatives": 0,
-      "review": 1
-    },
-    "ui.help": {
-      "total": 932,
-      "splits": {
-        "train": 697,
-        "dev": 140,
-        "test": 95
-      },
-      "by_source": {
-        "rule-derived": 41,
-        "generator": 927
-      },
-      "by_label": {
-        "rule-derived": 41,
-        "generator-backed": 832,
-        "generator-disagrees": 77,
-        "negative": 18
-      },
-      "by_split_source": {
-        "train": {
-          "rule-derived": 37,
-          "generator": 660
-        },
-        "dev": {
-          "generator": 139,
-          "rule-derived": 1
-        },
-        "test": {
-          "rule-derived": 3,
-          "generator": 92
-        }
-      },
-      "by_split_label": {
-        "train": {
-          "rule-derived": 37,
-          "generator-backed": 606,
-          "negative": 18,
-          "generator-disagrees": 36
-        },
-        "dev": {
-          "generator-backed": 134,
-          "rule-derived": 1,
-          "generator-disagrees": 5
-        },
-        "test": {
-          "rule-derived": 3,
-          "generator-backed": 92
-        }
-      },
-      "negatives": 18,
-      "review": 36
-    },
-    "ui.shell": {
-      "total": 1904,
-      "splits": {
-        "train": 1465,
-        "dev": 196,
-        "test": 243
-      },
-      "by_source": {
-        "generator": 1631,
-        "rule-derived": 58,
-        "paraphrase": 215
-      },
-      "by_label": {
-        "generator-backed": 1483,
-        "rule-derived": 58,
-        "rules-agree": 92,
-        "canonical-ok": 20,
-        "generator-disagrees": 85,
-        "negative": 63,
-        "rules-differ": 26,
-        "rules-fail": 77
-      },
-      "by_split_source": {
-        "train": {
-          "generator": 1276,
-          "rule-derived": 39,
-          "paraphrase": 150
-        },
-        "dev": {
-          "paraphrase": 44,
-          "rule-derived": 16,
-          "generator": 136
-        },
-        "test": {
-          "rule-derived": 3,
-          "paraphrase": 21,
-          "generator": 219
-        }
-      },
-      "by_split_label": {
-        "train": {
-          "generator-backed": 1221,
-          "rule-derived": 39,
-          "canonical-ok": 14,
-          "rules-agree": 63,
-          "generator-disagrees": 38,
-          "negative": 17,
-          "rules-differ": 20,
-          "rules-fail": 53
-        },
-        "dev": {
-          "rules-agree": 24,
-          "rule-derived": 16,
+          "rule-derived": 61,
           "canonical-ok": 4,
-          "generator-backed": 67,
-          "generator-disagrees": 47,
-          "negative": 22,
-          "rules-fail": 14,
+          "generator-backed": 91,
+          "rules-agree": 35,
+          "negative": 62,
+          "rules-fail": 1,
+          "rules-own": 1,
+          "rules-differ": 1
+        },
+        "test": {
+          "generator-backed": 221,
+          "rule-derived": 14,
+          "rules-agree": 16,
+          "canonical-ok": 1
+        }
+      },
+      "negatives": 79,
+      "review": 8
+    },
+    "media.music": {
+      "total": 3027,
+      "splits": {
+        "dev": 307,
+        "train": 2412,
+        "test": 308
+      },
+      "by_source": {
+        "rule-derived": 810,
+        "paraphrase": 553,
+        "generator": 1676
+      },
+      "by_label": {
+        "rule-derived": 810,
+        "canonical-ok": 47,
+        "generator-backed": 1619,
+        "rules-agree": 303,
+        "rules-own": 189,
+        "generator-disagrees": 41,
+        "negative": 16,
+        "needs_review": 12,
+        "rules-differ": 2
+      },
+      "by_split_source": {
+        "dev": {
+          "rule-derived": 122,
+          "paraphrase": 75,
+          "generator": 110
+        },
+        "train": {
+          "rule-derived": 579,
+          "paraphrase": 402,
+          "generator": 1431
+        },
+        "test": {
+          "paraphrase": 64,
+          "rule-derived": 109,
+          "generator": 135
+        }
+      },
+      "by_split_label": {
+        "dev": {
+          "rule-derived": 122,
+          "canonical-ok": 7,
+          "generator-backed": 94,
+          "rules-own": 26,
+          "rules-agree": 42,
+          "generator-disagrees": 16
+        },
+        "train": {
+          "rule-derived": 579,
+          "canonical-ok": 35,
+          "generator-backed": 1390,
+          "rules-agree": 236,
+          "rules-own": 129,
+          "negative": 16,
+          "generator-disagrees": 25,
           "rules-differ": 2
         },
         "test": {
-          "rule-derived": 3,
-          "canonical-ok": 2,
-          "generator-backed": 195,
-          "negative": 24,
-          "rules-agree": 5,
-          "rules-fail": 10,
-          "rules-differ": 4
+          "canonical-ok": 5,
+          "rule-derived": 109,
+          "rules-own": 34,
+          "rules-agree": 25,
+          "generator-backed": 135
         }
       },
-      "negatives": 63,
-      "review": 0
+      "negatives": 16,
+      "review": 12
+    },
+    "ui.avatar": {
+      "total": 2512,
+      "splits": {
+        "dev": 268,
+        "train": 2017,
+        "test": 227
+      },
+      "by_source": {
+        "rule-derived": 309,
+        "paraphrase": 544,
+        "generator": 1745
+      },
+      "by_label": {
+        "rule-derived": 309,
+        "canonical-ok": 45,
+        "rules-agree": 272,
+        "generator-backed": 1279,
+        "rules-own": 117,
+        "generator-disagrees": 457,
+        "negative": 9,
+        "rules-fail": 79,
+        "canonical-failed": 1,
+        "needs_review": 22,
+        "rules-differ": 8
+      },
+      "by_split_source": {
+        "dev": {
+          "rule-derived": 75,
+          "paraphrase": 70,
+          "generator": 123
+        },
+        "train": {
+          "rule-derived": 161,
+          "paraphrase": 363,
+          "generator": 1493
+        },
+        "test": {
+          "rule-derived": 73,
+          "paraphrase": 88,
+          "generator": 66
+        }
+      },
+      "by_split_label": {
+        "dev": {
+          "rule-derived": 75,
+          "canonical-ok": 6,
+          "generator-backed": 96,
+          "rules-agree": 41,
+          "generator-disagrees": 27,
+          "rules-own": 16,
+          "rules-fail": 7
+        },
+        "train": {
+          "rule-derived": 161,
+          "canonical-ok": 33,
+          "rules-agree": 177,
+          "generator-backed": 1121,
+          "rules-own": 88,
+          "generator-disagrees": 367,
+          "negative": 5,
+          "rules-fail": 57,
+          "rules-differ": 8
+        },
+        "test": {
+          "rule-derived": 73,
+          "canonical-ok": 6,
+          "generator-backed": 62,
+          "rules-agree": 54,
+          "negative": 4,
+          "rules-fail": 15,
+          "rules-own": 13
+        }
+      },
+      "negatives": 9,
+      "review": 86
+    },
+    "ui.help": {
+      "total": 1411,
+      "splits": {
+        "train": 1077,
+        "dev": 179,
+        "test": 155
+      },
+      "by_source": {
+        "rule-derived": 62,
+        "paraphrase": 129,
+        "generator": 1223
+      },
+      "by_label": {
+        "rule-derived": 62,
+        "canonical-ok": 12,
+        "generator-backed": 1137,
+        "rules-agree": 87,
+        "rules-own": 18,
+        "negative": 18,
+        "generator-disagrees": 68,
+        "rules-fail": 12
+      },
+      "by_split_source": {
+        "train": {
+          "rule-derived": 58,
+          "paraphrase": 108,
+          "generator": 911
+        },
+        "dev": {
+          "rule-derived": 1,
+          "generator": 178
+        },
+        "test": {
+          "paraphrase": 21,
+          "rule-derived": 3,
+          "generator": 131
+        }
+      },
+      "by_split_label": {
+        "train": {
+          "rule-derived": 58,
+          "canonical-ok": 10,
+          "generator-backed": 828,
+          "rules-agree": 69,
+          "rules-own": 18,
+          "negative": 18,
+          "generator-disagrees": 65,
+          "rules-fail": 11
+        },
+        "dev": {
+          "rule-derived": 1,
+          "generator-backed": 178
+        },
+        "test": {
+          "rules-agree": 18,
+          "rule-derived": 3,
+          "canonical-ok": 2,
+          "generator-backed": 131,
+          "rules-fail": 1
+        }
+      },
+      "negatives": 18,
+      "review": 3
+    },
+    "ui.shell": {
+      "total": 1990,
+      "splits": {
+        "train": 1531,
+        "dev": 208,
+        "test": 251
+      },
+      "by_source": {
+        "generator": 1555,
+        "rule-derived": 115,
+        "paraphrase": 326
+      },
+      "by_label": {
+        "generator-backed": 1378,
+        "rule-derived": 115,
+        "rules-agree": 202,
+        "canonical-ok": 26,
+        "rules-own": 54,
+        "generator-disagrees": 111,
+        "negative": 66,
+        "rules-fail": 38,
+        "needs_review": 6
+      },
+      "by_split_source": {
+        "train": {
+          "generator": 1235,
+          "rule-derived": 80,
+          "paraphrase": 216
+        },
+        "dev": {
+          "paraphrase": 51,
+          "rule-derived": 24,
+          "generator": 133
+        },
+        "test": {
+          "rule-derived": 11,
+          "paraphrase": 53,
+          "generator": 187
+        }
+      },
+      "by_split_label": {
+        "train": {
+          "generator-backed": 1157,
+          "rule-derived": 80,
+          "canonical-ok": 19,
+          "rules-agree": 129,
+          "rules-own": 37,
+          "generator-disagrees": 63,
+          "negative": 15,
+          "rules-fail": 31
+        },
+        "dev": {
+          "rules-agree": 36,
+          "rule-derived": 24,
+          "generator-backed": 59,
+          "canonical-ok": 4,
+          "generator-disagrees": 48,
+          "negative": 26,
+          "rules-own": 7,
+          "rules-fail": 4
+        },
+        "test": {
+          "rule-derived": 11,
+          "rules-agree": 37,
+          "generator-backed": 162,
+          "canonical-ok": 3,
+          "negative": 25,
+          "rules-own": 10,
+          "rules-fail": 3
+        }
+      },
+      "negatives": 66,
+      "review": 6
     }
   },
   "routing": {
     "by_split": {
-      "test": 4300,
-      "train": 30229,
-      "dev": 4370
+      "train": 37482,
+      "dev": 4927,
+      "test": 4751
     },
     "by_world": {
-      "art.draw": 2399,
-      "data.charts": 2445,
-      "docs.editor": 1133,
-      "docs.reader": 2103,
-      "games.chess": 2787,
-      "games.guess": 1487,
-      "games.hangman": 1800,
-      "games.tictactoe": 1663,
-      "geo.map": 2541,
-      "kids.animals": 2146,
-      "kids.arith": 2280,
-      "kids.common": 1608,
-      "kids.shapes": 2068,
-      "kids.shop": 2221,
-      "kids.tasks": 2175,
-      "kids.time": 2188,
-      "media.music": 2419,
-      "ui.avatar": 698,
-      "ui.help": 912,
-      "ui.shell": 1826
+      "art.draw": 3108,
+      "data.charts": 2859,
+      "docs.editor": 1577,
+      "docs.reader": 2517,
+      "games.chess": 2964,
+      "games.guess": 1666,
+      "games.hangman": 2029,
+      "games.tictactoe": 1869,
+      "geo.map": 3060,
+      "kids.animals": 2511,
+      "kids.arith": 2619,
+      "kids.common": 1897,
+      "kids.shapes": 2314,
+      "kids.shop": 2423,
+      "kids.tasks": 2487,
+      "kids.time": 2463,
+      "media.music": 3008,
+      "ui.avatar": 2495,
+      "ui.help": 1389,
+      "ui.shell": 1905
     },
     "by_source": {
-      "paraphrase": 5438,
-      "rule-derived": 3172,
-      "generator": 30289
+      "rule-derived": 6808,
+      "paraphrase": 7682,
+      "generator": 32670
     },
     "ambiguous_texts": {
-      "n": 63
+      "n": 76
     },
-    "total": 38899
+    "total": 47160
   },
   "unlabelled": {
     "total": 0
   },
   "totals": {
-    "records": 40748,
-    "test": 4622,
-    "train": 31442,
-    "dev": 4684,
+    "records": 48849,
+    "train": 38574,
+    "dev": 5204,
+    "test": 5071,
     "worlds": 20
   }
 }
