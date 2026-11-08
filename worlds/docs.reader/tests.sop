@@ -957,3 +957,128 @@
     input="i want to know how the story ends"
     expect="At the end:"
     session=sw
+
+@t.docs.reader.rel1_ core.test
+    input="Open the documents tab."
+    expectState="ui.shell:activeTab=documents"
+    session=rel1
+
+@t.docs.reader.rel1a core.test
+    input="Summarize section 2."
+    expect="Lost in the Forest"
+    expectState="section=2"
+    session=rel1
+
+@t.docs.reader.rel1b core.test
+    input="the next section"
+    expect="The Witch"
+    expectState="section=3"
+    session=rel1
+
+@t.docs.reader.rel1c core.test
+    input="and the one before that?"
+    expect="Lost in the Forest"
+    expectState="section=2"
+    session=rel1
+
+@t.docs.reader.rel1d core.test
+    input="Summarize that section."
+    expect="Lost in the Forest"
+    session=rel1
+
+@t.docs.reader.rel1e core.test
+    input="and the last section?"
+    expect="Home Again"
+    expectState="section=4"
+    session=rel1
+
+@t.docs.reader.rel1f core.test
+    input="go to the next section"
+    expect="last one"
+    session=rel1
+
+@t.docs.reader.rel1g core.test
+    input="section 1"
+    expect="The Poor Woodcutter"
+    session=rel1
+
+@t.docs.reader.rel1h core.test
+    input="and the first section?"
+    expect="The Poor Woodcutter"
+    session=rel1
+
+@t.docs.reader.rel2a core.test
+    input="Open the documents tab."
+    expectState="ui.shell:activeTab=documents"
+    session=rel2
+
+@t.docs.reader.rel2b core.test
+    input="Summarize that section."
+    expect="Which section"
+    session=rel2
+
+@t.docs.reader.ctx1_ core.test
+    input="Open the documents tab."
+    expectState="ui.shell:activeTab=documents"
+    session=ctx1
+
+@t.docs.reader.ctx1a core.test
+    input="Search for bread."
+    expect="results"
+    expectState="ctx=result"
+    session=ctx1
+
+@t.docs.reader.ctx1b core.test
+    input="and the one after that?"
+    expect="Result 2 of"
+    session=ctx1
+
+@t.docs.reader.ctx1c core.test
+    input="the last one"
+    expect="Result 4 of 4"
+    session=ctx1
+
+@t.docs.reader.ctx1d core.test
+    input="No, I meant oven."
+    expect="3 results"
+    session=ctx1
+
+@t.docs.reader.ctx1e core.test
+    input="Summarize section 3."
+    expectState="ctx=section"
+    session=ctx1
+
+@t.docs.reader.ctx1f core.test
+    input="the last one"
+    expect="Home Again"
+    session=ctx1
+
+@t.docs.reader.ctx1g core.test
+    input="and the one before that?"
+    expect="The Witch"
+    session=ctx1
+
+@t.docs.reader.ctx2_ core.test
+    input="Open the documents tab."
+    expectState="ui.shell:activeTab=documents"
+    session=ctx2
+
+@t.docs.reader.ctx2__ core.test
+    input="Open the fairy tale story."
+    expect="is open"
+    session=ctx2
+
+@t.docs.reader.ctx2a core.test
+    input="Find it."
+    expect="What should I look for"
+    session=ctx2
+
+@t.docs.reader.ctx2b core.test
+    input="The witch."
+    expect="results"
+    session=ctx2
+
+@t.docs.reader.ctx2c core.test
+    input="Read a section aloud."
+    expect="Which section"
+    session=ctx2

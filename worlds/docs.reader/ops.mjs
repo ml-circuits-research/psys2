@@ -178,13 +178,32 @@ export function describe(ctx) {
   return answer(ctx, d, bits.join(' '), { entities: chars.map((e) => e.id), cite: [], note: false, last: { op: 'describe' } });
 }
 
-export function summary(ctx, { n, ord, k, scope } = {}) {
+/**
+ * Relative section reference ("that section", "the next section", "the one before that") against the section last read or summarized
+ * (`state.section` of `state.sectionDoc`). Returns { idx } or { env } (the answer when it cannot be resolved).
+ */
+function relativeSection(ctx, d, rel) {
+  const s = ctx.state;
+  const cur = s.sectionDoc === d.id && Number.isInteger(s.section) ? s.section : null;
+  const word = { same: 'that', next: 'the next', prev: 'the previous' }[rel] ?? rel;
+  if (cur === null) {
+    if (rel === 'next') return { idx: 1 };
+    return { env: no('missing', `Which section do you mean by "${word} section"? Say for example "section 2" (this document has ${d.sections.length}).`) };
+  }
+  const idx = rel === 'same' ? cur : rel === 'next' ? cur + 1 : cur - 1;
+  if (idx < 1 || idx > d.sections.length) return { env: no('missing', rel === 'next' ? `Section ${cur} is the last one.` : `Section ${cur} is the first one.`) };
+  return { idx };
+}
+
+export function summary(ctx, { n, ord, k, scope, rel } = {}) {
   const r = need(ctx); if (r.env) return r.env;
   const d = r.d;
   let idx = null;
   if (ord) idx = ORDINALS[String(ord).toLowerCase()];
   if (n !== undefined && n !== '') idx = Number(n);
   if (idx === -1) idx = d.sections.length;
+  if (rel) { const x = relativeSection(ctx, d, rel); if (x.env) return x.env; idx = x.idx; }
+  if (idx && d.sections[idx - 1]) { ctx.state.section = idx; ctx.state.sectionDoc = d.id; ctx.state.ctx = 'section'; }
   let from = 0, to = d.sentences.length - 1, label = '';
   if (idx) {
     if (!d.sections[idx - 1]) return no('missing', `"${d.title}" has only ${d.sections.length} ${d.sections.length === 1 ? 'section' : 'sections'}.`);
@@ -574,7 +593,8 @@ export function search(ctx, { q } = {}) {
   const r = need(ctx); if (r.env) return r.env;
   const d = r.d;
   const query = String(q ?? '').replace(/[“”"]/g, '').trim();
-  if (!query) return no('missing', 'What should I look for? For example: find "witch".');
+  if (!query) { ctx.state.awaiting = 'search'; return no('missing', 'What should I look for? For example: find "witch".'); }
+  ctx.state.awaiting = null; ctx.state.ctx = 'result';
   const res = bm25Search(bm(d), query, { limit: 60 });
   const lc = norm(query);
   // an exact phrase that occurs in the text goes first
@@ -593,14 +613,16 @@ export function search(ctx, { q } = {}) {
   const lines = top.map((i, k) => `${k + 1}. sentence ${i + 1}: ${snippet(d.sentences[i].text, 100)}`);
   return answer(ctx, d, `${hits.length} ${hits.length === 1 ? 'result' : 'results'} for "${snippet(query, 40)}": ${lines.join(' | ').replace(/[.]+$/, '')}${hits.length > 5 ? ` (and ${hits.length - 5} more; say "next result")` : ''}.`, { cite: hits.slice(0, 40), terms: res.query, note: false, last: { op: 'search' }, emphasis: hits[0], data: { total: hits.length } });
 }
-export function searchStep(ctx, { dir } = {}) {
+export function searchStep(ctx, { dir, at } = {}) {
   const s = st(ctx);
   const d = current(ctx);
   if (!d) return no('missing', EMPTY);
   const se = s.search;
   if (!se || se.doc !== d.id || !se.hits.length) return no('missing', 'There is no search yet. Say, for example: find "witch".');
+  ctx.state.ctx = 'result';
   const n = se.hits.length;
-  if (dir === 'first') se.pos = 0;
+  if (at !== undefined) se.pos = Math.max(0, Math.min(n - 1, Number(at) - 1));
+  else if (dir === 'first') se.pos = 0;
   else if (dir === 'last') se.pos = n - 1;
   else if (dir === 'prev') se.pos = (se.pos - 1 + n) % n;
   else se.pos = (se.pos + 1) % n;
@@ -609,6 +631,22 @@ export function searchStep(ctx, { dir } = {}) {
     ? { ...ok(`Result ${se.pos + 1} of ${n} for "${snippet(se.query, 40)}": ${d.sentences[i].text} (sentence ${i + 1}, section ${d.sentences[i].sec + 1})`, { from: fromOf(d, [i]), data: { doc: d.id, cite: [i], pos: se.pos, total: n } }) }
     : no('error', 'search failed');
 }
+
+/**
+ * "the last one", "the one before that", "the second one": the thing last shown decides what is meant, a search result or a section
+ * (`state.ctx`, set by the search and section operations).
+ */
+export function pick(ctx, { ord, rel } = {}) {
+  const s = st(ctx);
+  const O = ORDINALS[String(ord ?? '').toLowerCase()];
+  if (s.ctx === 'result' && s.search?.hits?.length) {
+    if (O === -1) return searchStep(ctx, { dir: 'last' });
+    if (O) return searchStep(ctx, { at: O });
+    return searchStep(ctx, { dir: rel === 'prev' ? 'prev' : 'next' });
+  }
+  return summary(ctx, { ord, rel });
+}
+
 export function clearSearch(ctx) {
   const s = st(ctx);
   s.search = null;
@@ -669,15 +707,18 @@ export function isRelated(ctx, { x, y } = {}) {
 }
 
 // ---- reading aloud --------------------------------------------------------------------------------------------------------
-export function read(ctx, { u, n, ord, all } = {}) {
+export function read(ctx, { u, n, ord, all, rel } = {}) {
   const r = need(ctx); if (r.env) return r.env;
   const d = r.d;
-  const unit = singular(String(u ?? 'document').toLowerCase());
+  const unit = singular(String(rel ? 'section' : u ?? 'document').toLowerCase());
   let idx = n !== undefined && n !== '' ? Number(n) : ord ? ORDINALS[String(ord).toLowerCase()] : null;
+  if (rel) { const x = relativeSection(ctx, d, rel); if (x.env) return x.env; idx = x.idx; }
+  if (unit === 'section' || unit === 'chapter' || unit === 'heading') { const i = idx === -1 ? d.sections.length : idx; if (i && d.sections[i - 1]) { ctx.state.section = i; ctx.state.sectionDoc = d.id; ctx.state.ctx = 'section'; } }
   let from, to, label;
   if (all === 'true' || (!u && idx === null)) { from = 0; to = d.sentences.length - 1; label = `Reading "${d.title}"`; }
   else if (unit === 'section' || unit === 'chapter' || unit === 'heading') {
     if (idx === -1) idx = d.sections.length;
+    if (idx === null && u && !all) return { status: 'missing', note: `Which section should I read? "${d.title}" has ${d.sections.length}: ${d.sections.map((x, i) => `${i + 1} ${x.title}`).join(', ')}.`, pending: { key: 'n', type: 'number' } };
     if (!idx || !d.sections[idx - 1]) return no('missing', `"${d.title}" has only ${d.sections.length} ${d.sections.length === 1 ? 'section' : 'sections'}.`);
     [from, to] = sectionRange(d, idx - 1); label = `Reading ${secLabel(d, idx - 1)}`;
   } else if (unit === 'paragraph') {
@@ -873,8 +914,12 @@ export function interceptInput(ctx, text) {
     if (st2.length && d.sentences.some((x) => words(x.text).some((w) => st2.includes(stem(w))))) return reply(count(ctx, { x: m[1] }));
     return { handled: false };
   }
-  if ((m = t.match(/^(?:find|search for|look for|locate|highlight|where is) (.+?)(?: mentioned)?$/))) {
-    const q = m[1].replace(/^(?:the word |the words |all the |all )/, '').replace(/ in (?:the |this |that |my )?(?:story|file|text|document|book|tale|article|essay)$/, '');
+  if (/^(?:find|search|look for|search for|look up|find me)(?: (?:it|something|a word|something else|that|a term|a name))?$/.test(t)) return reply(search(ctx, { q: '' }));
+  if (s.awaiting === 'search' && t.split(' ').length <= 4 && !/^(?:what|who|where|when|why|how|which)\b/.test(t)) { const q = t.replace(/^(?:the word |the name |the )/, ''); s.awaiting = null; return reply(search(ctx, { q })); }
+  // "no, I meant oven" / "no, search for oven instead" right after a search replaces the query
+  if (s.ctx === 'result' && s.search && (m = t.match(/^(?:no|nope|wait|sorry|actually|oops|hmm)[ ,]+(?:i meant|i mean|i said|search for|look for|find|try|rather|make it|use)?\s*(?:the word )?(.+?)(?: instead| please)?$/)) && m[1].split(' ').length <= 3 && bm25Search(bm(d), m[1], { limit: 1 }).hits.length) return reply(search(ctx, { q: m[1] }));
+  if ((m = t.match(/^(?:and |now |ok |okay |then )*(?:find|search for|look for|locate|highlight|where is) (.+?)(?: mentioned)?$/))) {
+    const q = m[1].replace(/ (?:instead|please|pls|now|again|too|also)$/, '').replace(/^(?:the word |the words |all the |all )/, '').replace(/ in (?:the |this |that |my )?(?:story|file|text|document|book|tale|article|essay)$/, '');
     if (bm25Search(bm(d), q, { limit: 1 }).hits.length) return reply(search(ctx, { q }));
     return { handled: false };
   }

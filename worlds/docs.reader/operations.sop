@@ -201,3 +201,9 @@
     semantics=action
     action=docr.ask
     doc="Catch-all for questions about the document: closest passage or an honest \"does not say\"."
+
+@op.docs.reader.pick core.operation
+    impl=pick
+    semantics=action
+    action=docr.pick
+    doc="\"the last one\", \"the one before that\": a search result when a search was shown last, else a section."

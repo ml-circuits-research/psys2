@@ -2732,3 +2732,95 @@
     kind=request
     priority=7
     example="Tell me what the story is about."
+
+@pat.docs.reader.sec.bare.n core.pattern
+    match="[and|what_about|how_about|now|and_now|then]? [the]? [section|chapter] {n:number}"
+    emit="@{_} core.request action=docr.summary arg.n={n}"
+    kind=request
+    priority=11
+    tabOnly=true
+    example="Section 3."
+    example="And section 4?"
+
+@pat.docs.reader.sec.bare.ord core.pattern
+    match="[and|what_about|how_about|now|and_now|then]? [the]? {o:lex.docs.reader.ordinals} [section|chapter]"
+    emit="@{_} core.request action=docr.summary arg.ord={o}"
+    kind=request
+    priority=11
+    tabOnly=true
+    example="And the last section?"
+
+@pat.docs.reader.sec.rel.next core.pattern
+    match="[and|what_about|how_about|now|and_now|then]? [the]? [next|following|subsequent] [section|chapter]"
+    emit="@{_} core.request action=docr.summary arg.rel=next"
+    kind=request
+    priority=12
+    tabOnly=true
+    example="And the next section?"
+
+@pat.docs.reader.sec.rel.prev core.pattern
+    match="[and|what_about|how_about|now|and_now|then]? [the]? [previous|preceding|prior|earlier] [section|chapter]"
+    emit="@{_} core.request action=docr.summary arg.rel=prev"
+    kind=request
+    priority=12
+    tabOnly=true
+    example="And the previous section?"
+
+@pat.docs.reader.sec.rel.after core.pattern
+    match="[and|what_about|how_about|now|and_now|then]? [the]? [one|section|chapter] after [that|this|it|that_one|this_one]"
+    emit="@{_} core.request action=docr.pick arg.rel=next"
+    kind=request
+    priority=16
+    tabOnly=true
+    example="And the one after that?"
+
+@pat.docs.reader.sec.rel.before core.pattern
+    match="[and|what_about|how_about|now|and_now|then]? [the]? [one|section|chapter] before [that|this|it|that_one|this_one]"
+    emit="@{_} core.request action=docr.pick arg.rel=prev"
+    kind=request
+    priority=16
+    tabOnly=true
+    example="And the one before that?"
+
+@pat.docs.reader.sec.same.summary core.pattern
+    match="[can_you|could_you|please_can_you]? [summarize|summarise|recap|sum_up] [that|this|the_same|the_current|the_last_one] [section|chapter|one]"
+    emit="@{_} core.request action=docr.summary arg.rel=same"
+    kind=request
+    priority=12
+    example="Summarize that section."
+
+@pat.docs.reader.sec.same.read core.pattern
+    match="[can_you|could_you|please_can_you]? [read|read_out] [me]? [that|this|the_same|the_current] [section|chapter] [again|aloud|out_loud]?"
+    emit="@{_} core.request action=docr.read arg.rel=same"
+    kind=request
+    priority=12
+    example="Read that section again."
+
+@pat.docs.reader.sec.go.next core.pattern
+    match="[can_you|could_you|please_can_you]? [read|go_to|show|open|move_to|continue_with|skip_to] [me]? [the]? [next|following|subsequent] [section|chapter]"
+    emit="@{_} core.request action=docr.read arg.rel=next"
+    kind=request
+    priority=13
+    example="Go to the next section."
+
+@pat.docs.reader.sec.go.prev core.pattern
+    match="[can_you|could_you|please_can_you]? [read|go_to|show|open|move_to|go_back_to|skip_back_to] [me]? [the]? [previous|preceding|prior|earlier] [section|chapter]"
+    emit="@{_} core.request action=docr.read arg.rel=prev"
+    kind=request
+    priority=13
+    example="Go to the previous section."
+
+@pat.docs.reader.sec.bare.ordone core.pattern
+    match="[and|what_about|how_about|now|and_now|then|ok_and|ok|okay]? [the]? {o:lex.docs.reader.ordinals} [one|result|hit|match]"
+    emit="@{_} core.request action=docr.pick arg.ord={o}"
+    kind=request
+    priority=16
+    tabOnly=true
+    example="And the last one?"
+
+@pat.docs.reader.sec.read.which core.pattern
+    match="[can_you|could_you|please_can_you]? [read|read_out] [me]? [a|any|some|one|the]? [section|chapter] [aloud|out_loud|to_me|please]?"
+    emit="@{_} core.request action=docr.read arg.u=section"
+    kind=request
+    priority=12
+    example="Read a section aloud."

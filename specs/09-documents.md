@@ -77,3 +77,9 @@ File input: `.md` and `.txt` via `File.text()`; `.pdf` via pdf.js (lines to para
 - PDF layout (columns, tables, headings) is flattened; docx tables and footnotes are skipped.
 - English only. The "documents" tab alias is shadowed by the editor's lemma "document".
 - Generator agreement (`datagen.mjs`) 98.7%; tests: 95 in `tests.sop`.
+
+## 8. Conversation inside a document (dialogue-set audit)
+- State: `section` / `sectionDoc` (the section last summarized or read) and `ctx` (`'section'` or `'result'`: what was shown last, a section or a search result), `awaiting` (`'search'` after "find it").
+- Section references: `section N`, `the last section`, `the first section` (also after "and" / "what about", on the Documents tab), `the next / previous section`, `the one before / after that`, `that section` (`summarize that section`, `read that section again`), `go to the next section` (`rel` = same | next | prev in `docr.summary` and `docr.read`; at the ends: "Section 4 is the last one."). The discourse ellipsis also resolves "and section 1?" after "summarize section 2" (spec 11 section 10, label rule).
+- `docr.pick` ("the last one", "the second one", "the one before that"): a search result when a search was shown last (`searchStep` with `at`), else a section. "Read a section aloud." asks which one (pending `n`).
+- Search: "find it." asks what to look for and the next short answer is the query; "no, I meant oven" / "no, search for oven instead" right after a search replaces the query; trailing "instead / please / now / again" is not part of a query.
