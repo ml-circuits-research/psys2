@@ -10,9 +10,17 @@ Python is used here because model training and ML inference are where it is the 
 - One LoRA adapter per world, trained on that world's data plus pinned parent replay data.
 
 ## Data
-`node scripts/export-training.mjs --out training/data/rules.jsonl` exports records produced by the rule formalizer (ADR-001) from every world's tests and pattern examples. Label status is `rule-derived`; splits are assigned per source group (world + pattern), so paraphrases never straddle train and dev. Record fields: `example_id`, `lineage`, `source_group`, `language`, `text`, `context`, `segment_span`, `mentions`, `keys` (wire, full key, character span, value), `references`, `kind`, `expected_circuit` (SOP Lang), `label_status`, `split`.
+`node scripts/export-training.mjs` writes one JSONL file per world, `training/data/<world>.jsonl`, plus `training/data/report.json` (spec 08). Options: `--world <id>` (one world; its entry in `report.json` is merged), `--count <n>` (generator examples per world, default 2000), `--out-dir <dir>`, `--dev <share>` (default 0.1), `--seed-salt <text>`, `--no-rules`.
 
-The fixture worlds yield only a few hundred records — enough to test the pipeline end to end, not to train a useful model. Volume comes later from C1 generators and teacher annotations (vision §6).
+Two sources, both formalized by the rule strategy (ADR-001):
+- **rule-derived** - the inputs of every world's `tests.sop` (replayed per test session, so earlier messages are context) and the `example=` entries of `patterns.sop`. `label_status = rule-derived`.
+- **generator** - the examples of `worlds/<id>/datagen.mjs` (spec 08: text, `expect` circuit written from the symbolic seed, `group`, `phenomenon`, optional `context` messages, `negative`). The seed of each world is `sha256(world id @ generator version)` and is recorded in every record. The exporter formalizes `context` and then `text` in one session and compares the canonical wires with `expect` (ids, `core.source`, `core.seq`, `core.via`, `core.in` and `core.agent` entity wires ignored): `generator-backed` (they agree), `generator-disagrees` (kept and flagged with `rule_circuit` and `note`: a pattern gap, a conflict with another world's pattern, or a generator bug), `negative` (text this world must not formalize; if the world claims it, it is `generator-disagrees`).
+
+Record fields: `example_id`, `lineage`, `source_group`, `group`, `language`, `text` (the sentence, or the whole generated message), `message`, `context` (earlier messages of the session), `segment_span`, `mentions`, `keys` (wire, full key, character span, value), `references`, `kind`, `expected_circuit` (SOP Lang), `label_status`, `phenomenon`, `split`; generator records also `negative`, `seed`, `generator_version`; disagreements also `rule_circuit`, `note`. Splits are assigned per group (hash of world + group), so paraphrases of one template never straddle train and dev.
+
+`report.json` holds, per world, the counts per status, phenomenon and split, the generator seed and version, the agreement between generator and rules (`rate` over all generator records, `positive_rate` over non-negative ones, `negative_rate`) and `pattern_gaps` (disagreeing groups with one example each). The agreement rate is also a coverage metric of the rule formalizer.
+
+The generators use the worlds' lexicons and KB through the `context` argument of `generate({ rng, count, context })` (`context.lexicons`, `context.names`, `context.kb`) and fall back to small embedded lists, so `datagen.mjs` stays browser-safe and import-free. Volume beyond the generators comes later from C1 generators and teacher annotations (vision section 6).
 
 ## Plan for the first GPU session
 1. `python training/check_env.py` — GPU, memory, precision support, library versions, backbone download.

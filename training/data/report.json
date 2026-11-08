@@ -1,0 +1,1658 @@
+{
+  "options": {
+    "count": 2000,
+    "dev_share": 0.1,
+    "seed_salt": ""
+  },
+  "worlds": {
+    "kids.common": {
+      "total": 2011,
+      "by_status": {
+        "rule-derived": 11,
+        "generator-backed": 1617,
+        "generator-disagrees": 66,
+        "negative": 317
+      },
+      "by_phenomenon": {
+        "chat": 11,
+        "request": 135,
+        "question": 48,
+        "multi-entity": 1452,
+        "near-miss": 301,
+        "negation": 5,
+        "out-of-domain": 59
+      },
+      "by_split": {
+        "train": 2006,
+        "dev": 5
+      },
+      "generator": true,
+      "generator_version": "1",
+      "seed": 4200353445,
+      "generator_records": 2000,
+      "agreement": {
+        "rate": 0.967,
+        "positive_rate": 0.989,
+        "negative_rate": 0.8685,
+        "positives": 1635,
+        "positives_agree": 1617,
+        "negatives": 365,
+        "negatives_ok": 317,
+        "invalid_expect": 0
+      },
+      "pattern_gaps": [
+        {
+          "group": "common.neg.near-miss",
+          "count": 48,
+          "example": {
+            "text": "Hi, my name is Ben.",
+            "context": [],
+            "expect": [],
+            "got": [
+              "core.request core.request.action=chat.greet"
+            ],
+            "note": "negative text was formalized by this world"
+          }
+        },
+        {
+          "group": "common.name",
+          "count": 18,
+          "example": {
+            "text": "What's your name",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=chat.name"
+            ],
+            "got": [
+              "core.request core.request.action=avatar.askName"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        }
+      ]
+    },
+    "ui.avatar": {
+      "total": 233,
+      "by_status": {
+        "rule-derived": 233
+      },
+      "by_phenomenon": {
+        "request": 233
+      },
+      "by_split": {
+        "train": 197,
+        "dev": 36
+      },
+      "generator": false
+    },
+    "kids.arith": {
+      "total": 2160,
+      "by_status": {
+        "rule-derived": 160,
+        "generator-backed": 1840,
+        "generator-disagrees": 37,
+        "negative": 123
+      },
+      "by_phenomenon": {
+        "statement": 726,
+        "question": 201,
+        "negation": 57,
+        "coreference": 277,
+        "multi-entity": 114,
+        "ellipsis": 197,
+        "comparison": 191,
+        "arithmetic": 162,
+        "request": 28,
+        "number-words": 112,
+        "near-miss": 82,
+        "out-of-domain": 13
+      },
+      "by_split": {
+        "train": 1978,
+        "dev": 182
+      },
+      "generator": true,
+      "generator_version": "1",
+      "seed": 2243354345,
+      "generator_records": 2000,
+      "agreement": {
+        "rate": 0.9815,
+        "positive_rate": 0.9803,
+        "negative_rate": 1,
+        "positives": 1877,
+        "positives_agree": 1840,
+        "negatives": 123,
+        "negatives_ok": 123,
+        "invalid_expect": 0
+      },
+      "pattern_gaps": [
+        {
+          "group": "arith.buy.of",
+          "count": 28,
+          "example": {
+            "text": "Anne buys 3 of her sandwiches.",
+            "context": [],
+            "expect": [
+              "kids.arith.buy kids.arith.change.count=3 kids.arith.change.item=sandwich kids.arith.change.who=$e.anne"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "arith.q.count.variants",
+          "count": 5,
+          "example": {
+            "text": "What is the number of cupcakes Max has?",
+            "context": [],
+            "expect": [
+              "core.question core.question.seek=count core.question.type=kids.arith.holding core.question.where.item=cupcake core.question.where.owner=$e.max"
+            ],
+            "got": [
+              "core.request core.request.action=chart.valueOf core.request.arg.l=\"cupcakes Max has\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "arith.get.a",
+          "count": 3,
+          "example": {
+            "text": "Bogdan collected a teddy bear",
+            "context": [],
+            "expect": [
+              "kids.arith.receive kids.arith.change.count=1 kids.arith.change.item=teddy_bear kids.arith.change.who=$e.bogdan"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "arith.q.count.user",
+          "count": 1,
+          "example": {
+            "text": "How many rocks do I have?",
+            "context": [],
+            "expect": [
+              "core.question core.question.seek=count core.question.type=kids.arith.holding core.question.where.item=rock core.question.where.owner=$e.user"
+            ],
+            "got": [
+              "core.request core.request.action=chess.count core.request.arg.piece=rock core.request.arg.who=i"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        }
+      ]
+    },
+    "kids.shop": {
+      "total": 2144,
+      "by_status": {
+        "rule-derived": 144,
+        "generator-backed": 1788,
+        "generator-disagrees": 61,
+        "negative": 151
+      },
+      "by_phenomenon": {
+        "statement": 609,
+        "question": 962,
+        "multi-entity": 120,
+        "coreference": 60,
+        "number-words": 183,
+        "context": 59,
+        "negation": 45,
+        "near-miss": 94,
+        "out-of-domain": 12
+      },
+      "by_split": {
+        "train": 1987,
+        "dev": 157
+      },
+      "generator": true,
+      "generator_version": "1",
+      "seed": 1055456574,
+      "generator_records": 2000,
+      "agreement": {
+        "rate": 0.9695,
+        "positive_rate": 0.967,
+        "negative_rate": 1,
+        "positives": 1849,
+        "positives_agree": 1788,
+        "negatives": 151,
+        "negatives_ok": 151,
+        "invalid_expect": 0
+      },
+      "pattern_gaps": [
+        {
+          "group": "shop.price.of",
+          "count": 21,
+          "example": {
+            "text": "The price of one notebook is 9 lei.",
+            "context": [],
+            "expect": [
+              "kids.shop.price kids.shop.price.cost=9 kids.shop.price.item=notebook"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "shop.q.price",
+          "count": 21,
+          "example": {
+            "text": "How much does one sticker cost?",
+            "context": [],
+            "expect": [
+              "core.question core.question.seek=cost core.question.type=kids.shop.price core.question.where.item=sticker"
+            ],
+            "got": [
+              "core.question core.question.seek=total core.question.type=kids.shop.total core.question.where.count=1 core.question.where.item=sticker"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "shop.q.total.price",
+          "count": 18,
+          "example": {
+            "text": "What is the cost for 2 dolls?",
+            "context": [],
+            "expect": [
+              "core.question core.question.seek=total core.question.type=kids.shop.total core.question.where.count=2 core.question.where.item=doll"
+            ],
+            "got": [
+              "core.request core.request.action=chart.valueOf core.request.arg.l=\"2 dolls\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "shop.q.balance",
+          "count": 1,
+          "example": {
+            "text": "What is my balance?",
+            "context": [],
+            "expect": [
+              "core.question core.question.seek=amount core.question.type=kids.shop.balance"
+            ],
+            "got": [
+              "core.request core.request.action=chess.status"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        }
+      ]
+    },
+    "data.charts": {
+      "total": 143,
+      "by_status": {
+        "rule-derived": 143
+      },
+      "by_phenomenon": {
+        "request": 143
+      },
+      "by_split": {
+        "train": 130,
+        "dev": 13
+      },
+      "generator": false
+    },
+    "kids.tasks": {
+      "total": 2107,
+      "by_status": {
+        "rule-derived": 107,
+        "generator-backed": 1852,
+        "generator-disagrees": 78,
+        "negative": 70
+      },
+      "by_phenomenon": {
+        "request": 1177,
+        "statement": 235,
+        "multi-entity": 201,
+        "number-words": 36,
+        "question": 306,
+        "context": 65,
+        "negation": 51,
+        "near-miss": 19,
+        "out-of-domain": 17
+      },
+      "by_split": {
+        "train": 1850,
+        "dev": 257
+      },
+      "generator": true,
+      "generator_version": "1",
+      "seed": 1927479681,
+      "generator_records": 2000,
+      "agreement": {
+        "rate": 0.961,
+        "positive_rate": 0.9681,
+        "negative_rate": 0.8046,
+        "positives": 1913,
+        "positives_agree": 1852,
+        "negatives": 87,
+        "negatives_ok": 70,
+        "invalid_expect": 0
+      },
+      "pattern_gaps": [
+        {
+          "group": "tasks.add.two-in-one",
+          "count": 61,
+          "example": {
+            "text": "Add ice cream to my list and add a new notebook to my list.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=tasks.add core.request.arg.item=\"a new notebook\" core.request.arg.list=to-do",
+              "core.request core.request.action=tasks.add core.request.arg.item=\"ice cream\" core.request.arg.list=to-do"
+            ],
+            "got": [
+              "core.request core.request.action=tasks.add core.request.arg.item=\"ice cream to my list and add a new notebook\" core.request.arg.list=to-do"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "tasks.neg",
+          "count": 17,
+          "example": {
+            "text": "I didn't buy milk.",
+            "context": [],
+            "expect": [],
+            "got": [
+              "core.request core.request.action=tasks.done core.request.arg.item=\"didn't buy milk\""
+            ],
+            "note": "negative text was formalized by this world"
+          }
+        }
+      ]
+    },
+    "kids.animals": {
+      "total": 2131,
+      "by_status": {
+        "rule-derived": 131,
+        "generator-backed": 1870,
+        "negative": 130
+      },
+      "by_phenomenon": {
+        "question": 1190,
+        "statement": 591,
+        "negation": 171,
+        "multi-entity": 40,
+        "new-vocabulary": 42,
+        "context": 30,
+        "near-miss": 49,
+        "out-of-domain": 18
+      },
+      "by_split": {
+        "dev": 245,
+        "train": 1886
+      },
+      "generator": true,
+      "generator_version": "1",
+      "seed": 993511613,
+      "generator_records": 2000,
+      "agreement": {
+        "rate": 1,
+        "positive_rate": 1,
+        "negative_rate": 1,
+        "positives": 1870,
+        "positives_agree": 1870,
+        "negatives": 130,
+        "negatives_ok": 130,
+        "invalid_expect": 0
+      },
+      "pattern_gaps": []
+    },
+    "docs.editor": {
+      "total": 172,
+      "by_status": {
+        "rule-derived": 172
+      },
+      "by_phenomenon": {
+        "request": 172
+      },
+      "by_split": {
+        "dev": 16,
+        "train": 156
+      },
+      "generator": false
+    },
+    "games.chess": {
+      "total": 368,
+      "by_status": {
+        "rule-derived": 368
+      },
+      "by_phenomenon": {
+        "request": 368
+      },
+      "by_split": {
+        "train": 321,
+        "dev": 47
+      },
+      "generator": false
+    },
+    "games.guess": {
+      "total": 2028,
+      "by_status": {
+        "rule-derived": 28,
+        "generator-backed": 1688,
+        "generator-disagrees": 265,
+        "negative": 47
+      },
+      "by_phenomenon": {
+        "request": 965,
+        "paraphrase": 210,
+        "context": 626,
+        "negation": 82,
+        "question": 102,
+        "near-miss": 7,
+        "out-of-domain": 36
+      },
+      "by_split": {
+        "train": 1900,
+        "dev": 128
+      },
+      "generator": true,
+      "generator_version": "1",
+      "seed": 3081542235,
+      "generator_records": 2000,
+      "agreement": {
+        "rate": 0.8675,
+        "positive_rate": 0.8648,
+        "negative_rate": 0.9792,
+        "positives": 1952,
+        "positives_agree": 1688,
+        "negatives": 48,
+        "negatives_ok": 47,
+        "invalid_expect": 0
+      },
+      "pattern_gaps": [
+        {
+          "group": "guess.reveal",
+          "count": 38,
+          "example": {
+            "text": "It was actually an goat.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=guess.reveal core.request.arg.animal=\"goat\""
+            ],
+            "got": [
+              "core.request core.request.action=guess.reveal core.request.arg.animal=\"actually an goat\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "guess.start.paraphrase",
+          "count": 32,
+          "example": {
+            "text": "Try to read my mind!",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=guess.start"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "guess.answer.yes.paraphrase",
+          "count": 30,
+          "example": {
+            "text": "Yes it really is!",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=guess.answer core.request.arg.answer=yes"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "guess.answer.maybe.paraphrase",
+          "count": 29,
+          "example": {
+            "text": "In a way.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=guess.answer core.request.arg.answer=maybe"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "guess.answer.no.paraphrase",
+          "count": 28,
+          "example": {
+            "text": "No it is not at all!",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=guess.answer core.request.arg.answer=no"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "guess.answer.dontknow.paraphrase",
+          "count": 26,
+          "example": {
+            "text": "I really do not know!",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=guess.answer core.request.arg.answer=dontknow"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "guess.repeat.paraphrase",
+          "count": 19,
+          "example": {
+            "text": "One more time please!",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=guess.repeat"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "guess.why.paraphrase",
+          "count": 18,
+          "example": {
+            "text": "What is that question for?",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=guess.why"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "guess.remaining.paraphrase",
+          "count": 15,
+          "example": {
+            "text": "Which animals are still in the game",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=guess.remaining"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "guess.count.paraphrase",
+          "count": 13,
+          "example": {
+            "text": "How many questions remain?",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=guess.count"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "guess.answer.yes.context",
+          "count": 7,
+          "example": {
+            "text": "Right!",
+            "context": [
+              "I am thinking of an animal.",
+              "Does it have four legs?"
+            ],
+            "expect": [
+              "core.request core.request.action=guess.answer core.request.arg.answer=yes"
+            ],
+            "got": [
+              "core.request core.request.action=chess.pick core.request.arg.ord=right"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "guess.repeat",
+          "count": 6,
+          "example": {
+            "text": "Say that again.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=guess.repeat"
+            ],
+            "got": [
+              "core.request core.request.action=chess.last"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "guess.answer.yes",
+          "count": 3,
+          "example": {
+            "text": "Right!",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=guess.answer core.request.arg.answer=yes"
+            ],
+            "got": [
+              "core.request core.request.action=chess.pick core.request.arg.ord=right"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "guess.near",
+          "count": 1,
+          "example": {
+            "text": "Yes, but only on Sundays.",
+            "context": [],
+            "expect": [],
+            "got": [
+              "core.request core.request.action=guess.answer core.request.arg.answer=yes"
+            ],
+            "note": "negative text was formalized by this world"
+          }
+        }
+      ]
+    },
+    "ui.shell": {
+      "total": 2087,
+      "by_status": {
+        "rule-derived": 87,
+        "generator-backed": 1638,
+        "generator-disagrees": 293,
+        "negative": 69
+      },
+      "by_phenomenon": {
+        "request": 1391,
+        "declared-tab": 138,
+        "number-words": 232,
+        "paraphrase": 155,
+        "question": 64,
+        "ellipsis": 38,
+        "negation": 28,
+        "near-miss": 16,
+        "out-of-domain": 25
+      },
+      "by_split": {
+        "train": 2024,
+        "dev": 63
+      },
+      "generator": true,
+      "generator_version": "1",
+      "seed": 790118588,
+      "generator_records": 2000,
+      "agreement": {
+        "rate": 0.8535,
+        "positive_rate": 0.8483,
+        "negative_rate": 1,
+        "positives": 1931,
+        "positives_agree": 1638,
+        "negatives": 69,
+        "negatives_ok": 69,
+        "invalid_expect": 0
+      },
+      "pattern_gaps": [
+        {
+          "group": "shell.rate.set",
+          "count": 54,
+          "example": {
+            "text": "Set the reading speed at 0.8.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.rate core.request.arg.value=0.8"
+            ],
+            "got": [
+              "core.request core.request.action=chart.setPoint core.request.arg.l=\"reading speed\" core.request.arg.n=0.8"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "shell.hint",
+          "count": 19,
+          "example": {
+            "text": "Tell me one more hint.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.hint"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "shell.speaker.on.paraphrase",
+          "count": 15,
+          "example": {
+            "text": "Please start talking",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.speaker core.request.arg.on=true"
+            ],
+            "got": [
+              "core.request core.request.action=ui.playGame core.request.arg.tab=\"talking\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "shell.new.paraphrase",
+          "count": 15,
+          "example": {
+            "text": "I want to play once more.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.newGame"
+            ],
+            "got": [
+              "core.request core.request.action=ui.playGame core.request.arg.tab=\"once more\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "shell.help.paraphrase",
+          "count": 14,
+          "example": {
+            "text": "How can I use this app?",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.help"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "shell.handsfree.on.paraphrase",
+          "count": 14,
+          "example": {
+            "text": "Let us use hands-free.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.handsFree core.request.arg.on=true"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "shell.giveup.paraphrase",
+          "count": 14,
+          "example": {
+            "text": "I cannot go on.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.giveUp"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "shell.rate.set.number-words",
+          "count": 13,
+          "example": {
+            "text": "Set the speech rate to three.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.rate core.request.arg.value=3"
+            ],
+            "got": [
+              "core.request core.request.action=chart.setPoint core.request.arg.l=\"speech rate\" core.request.arg.n=3"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "shell.speaker.off.paraphrase",
+          "count": 11,
+          "example": {
+            "text": "I do not want to hear you.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.speaker core.request.arg.on=false"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "shell.handsfree.off.paraphrase",
+          "count": 11,
+          "example": {
+            "text": "No more hands-free.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.handsFree core.request.arg.on=false"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "shell.which.paraphrase",
+          "count": 10,
+          "example": {
+            "text": "Which page is this?",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.whichTab"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "shell.listening.off.paraphrase",
+          "count": 10,
+          "example": {
+            "text": "Close the microphone.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.listening core.request.arg.on=false"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "shell.rate.faster.paraphrase",
+          "count": 10,
+          "example": {
+            "text": "So, could you hurry up",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.rate core.request.arg.dir=faster"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "shell.listening.on.paraphrase",
+          "count": 9,
+          "example": {
+            "text": "Please listen now.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.listening core.request.arg.on=true"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "shell.new",
+          "count": 9,
+          "example": {
+            "text": "Start over",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.newGame"
+            ],
+            "got": [
+              "core.request core.request.action=avatar.reset core.request.arg.scope=all"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "shell.back.paraphrase",
+          "count": 8,
+          "example": {
+            "text": "Return to the last tab.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.back"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "shell.speaker.on",
+          "count": 8,
+          "example": {
+            "text": "Will you put on the speaker?",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.speaker core.request.arg.on=true"
+            ],
+            "got": [
+              "core.request core.request.action=avatar.setPart core.request.arg.text=\"speaker\" core.request.arg.value=speaker"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "shell.play.declared",
+          "count": 8,
+          "example": {
+            "text": "Play chess.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.playGame core.request.arg.tab=\"chess\""
+            ],
+            "got": [
+              "core.request core.request.action=chess.new"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "shell.open",
+          "count": 8,
+          "example": {
+            "text": "Select my document tab.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.openTab core.request.arg.tab=document"
+            ],
+            "got": [
+              "core.request core.request.action=doc.select core.request.arg.t=\"my document tab\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "shell.speaker.off",
+          "count": 8,
+          "example": {
+            "text": "Could you stop reading?",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.speaker core.request.arg.on=false"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "shell.rate.slower.paraphrase",
+          "count": 7,
+          "example": {
+            "text": "Please use a slower voice.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.rate core.request.arg.dir=slower"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "shell.hint.bare",
+          "count": 6,
+          "example": {
+            "text": "Give me a clue.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.hint"
+            ],
+            "got": [
+              "core.request core.request.action=hm.hint"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "shell.giveup",
+          "count": 5,
+          "example": {
+            "text": "Resign",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.giveUp"
+            ],
+            "got": [
+              "core.request core.request.action=chess.resign"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "shell.rate.slower",
+          "count": 3,
+          "example": {
+            "text": "Could you slow down?",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.rate core.request.arg.dir=slower"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "shell.rate.faster",
+          "count": 2,
+          "example": {
+            "text": "Could you speed up?",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.rate core.request.arg.dir=faster"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "shell.open.declared",
+          "count": 1,
+          "example": {
+            "text": "Open the chess board.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.openTab core.request.arg.tab=\"chess board\""
+            ],
+            "got": [
+              "core.request core.request.action=chess.new"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "shell.help",
+          "count": 1,
+          "example": {
+            "text": "Help me?",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ui.help"
+            ],
+            "got": [
+              "core.request core.request.action=chess.hint"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        }
+      ]
+    },
+    "games.hangman": {
+      "total": 2029,
+      "by_status": {
+        "rule-derived": 29,
+        "generator-backed": 1728,
+        "generator-disagrees": 56,
+        "negative": 216
+      },
+      "by_phenomenon": {
+        "request": 580,
+        "question": 799,
+        "ellipsis": 100,
+        "context": 45,
+        "statement": 253,
+        "paraphrase": 36,
+        "negation": 51,
+        "near-miss": 137,
+        "out-of-domain": 28
+      },
+      "by_split": {
+        "train": 1986,
+        "dev": 43
+      },
+      "generator": true,
+      "generator_version": "1",
+      "seed": 2616804589,
+      "generator_records": 2000,
+      "agreement": {
+        "rate": 0.972,
+        "positive_rate": 0.9686,
+        "negative_rate": 1,
+        "positives": 1784,
+        "positives_agree": 1728,
+        "negatives": 216,
+        "negatives_ok": 216,
+        "invalid_expect": 0
+      },
+      "pattern_gaps": [
+        {
+          "group": "hm.hint.paraphrase",
+          "count": 19,
+          "example": {
+            "text": "Give me a hint",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=hm.hint"
+            ],
+            "got": [
+              "core.request core.request.action=ui.hint"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "hm.status.paraphrase",
+          "count": 17,
+          "example": {
+            "text": "How many tries do I have?",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=hm.status"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "hm.letter.bare",
+          "count": 16,
+          "example": {
+            "text": "N?",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=hm.letter core.request.arg.letter=n"
+            ],
+            "got": [
+              "core.request core.request.action=chess.promote core.request.arg.piece=n"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "hm.letter.guess",
+          "count": 4,
+          "example": {
+            "text": "Pick b.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=hm.letter core.request.arg.letter=b"
+            ],
+            "got": [
+              "core.request core.request.action=chess.promote core.request.arg.piece=b"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        }
+      ]
+    },
+    "games.tictactoe": {
+      "total": 2022,
+      "by_status": {
+        "rule-derived": 22,
+        "generator-backed": 1134,
+        "generator-disagrees": 708,
+        "negative": 158
+      },
+      "by_phenomenon": {
+        "request": 1227,
+        "ellipsis": 135,
+        "context": 148,
+        "paraphrase": 197,
+        "question": 157,
+        "negation": 99,
+        "near-miss": 30,
+        "out-of-domain": 29
+      },
+      "by_split": {
+        "train": 1487,
+        "dev": 535
+      },
+      "generator": true,
+      "generator_version": "1",
+      "seed": 150222436,
+      "generator_records": 2000,
+      "agreement": {
+        "rate": 0.646,
+        "positive_rate": 0.6156,
+        "negative_rate": 1,
+        "positives": 1842,
+        "positives_agree": 1134,
+        "negatives": 158,
+        "negatives_ok": 158,
+        "invalid_expect": 0
+      },
+      "pattern_gaps": [
+        {
+          "group": "ttt.level.set",
+          "count": 169,
+          "example": {
+            "text": "Give me a difficult level.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ttt.level core.request.arg.level=difficult"
+            ],
+            "got": [
+              "core.request core.request.action=chess.level core.request.arg.name=difficult"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "ttt.coord",
+          "count": 122,
+          "example": {
+            "text": "Take C1!",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ttt.move core.request.arg.col=c core.request.arg.row=1"
+            ],
+            "got": [
+              "core.request core.request.action=chess.move core.request.arg.cap=true core.request.arg.tf=c core.request.arg.tr=1"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "ttt.level.paraphrase",
+          "count": 61,
+          "example": {
+            "text": "Let us play hard.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ttt.level core.request.arg.level=hard"
+            ],
+            "got": [
+              "core.request core.request.action=chess.level core.request.arg.name=hard"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "ttt.describe",
+          "count": 57,
+          "example": {
+            "text": "Show me the board!",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ttt.describe"
+            ],
+            "got": [
+              "core.request core.request.action=chess.describe"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "ttt.rowcol",
+          "count": 40,
+          "example": {
+            "text": "Go to the row 3 col 3.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ttt.move core.request.arg.col=3 core.request.arg.numeric=true core.request.arg.row=3"
+            ],
+            "got": [
+              "core.request core.request.action=ui.openTab core.request.arg.tab=\"row 3 col 3\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "ttt.level.ask",
+          "count": 37,
+          "example": {
+            "text": "How hard is this?",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ttt.level"
+            ],
+            "got": [
+              "core.request core.request.action=chess.level"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "ttt.hint",
+          "count": 28,
+          "example": {
+            "text": "Well, where should I play",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ttt.hint"
+            ],
+            "got": [
+              "core.request core.request.action=chess.hint"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "ttt.first.paraphrase",
+          "count": 24,
+          "example": {
+            "text": "I would like to go first.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ttt.first core.request.arg.who=user"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "ttt.status.paraphrase",
+          "count": 23,
+          "example": {
+            "text": "Is the game over?",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ttt.status"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "ttt.status",
+          "count": 22,
+          "example": {
+            "text": "Are you winning?",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ttt.status"
+            ],
+            "got": [
+              "core.request core.request.action=chess.status"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "ttt.last",
+          "count": 20,
+          "example": {
+            "text": "Where did you play?",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ttt.last"
+            ],
+            "got": [
+              "core.request core.request.action=chess.last"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "ttt.last.paraphrase",
+          "count": 20,
+          "example": {
+            "text": "Where was your last move",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ttt.last"
+            ],
+            "got": [
+              "core.request core.request.action=chess.last"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "ttt.describe.paraphrase",
+          "count": 19,
+          "example": {
+            "text": "Tell me what is on the board.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ttt.describe"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "ttt.hint.paraphrase",
+          "count": 18,
+          "example": {
+            "text": "Give me a tip?",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ttt.hint"
+            ],
+            "got": [
+              "core.request core.request.action=chess.hint"
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "ttt.second.paraphrase",
+          "count": 17,
+          "example": {
+            "text": "I would like to go second.",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ttt.first core.request.arg.who=system"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "ttt.whoFirst.paraphrase",
+          "count": 15,
+          "example": {
+            "text": "Who is first",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ttt.whoFirst"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "ttt.move.bare",
+          "count": 14,
+          "example": {
+            "text": "Center left!",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ttt.move core.request.arg.pos=center_left"
+            ],
+            "got": [
+              "core.request core.request.action=doc.align core.request.arg.how=center core.request.arg.t=\"left\""
+            ],
+            "note": "rule wires differ from expect"
+          }
+        },
+        {
+          "group": "ttt.whoFirst",
+          "count": 2,
+          "example": {
+            "text": "Okay, which one am I?",
+            "context": [],
+            "expect": [
+              "core.request core.request.action=ttt.whoFirst"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        }
+      ]
+    },
+    "kids.shapes": {
+      "total": 2096,
+      "by_status": {
+        "rule-derived": 96,
+        "generator-backed": 1822,
+        "negative": 175,
+        "generator-disagrees": 3
+      },
+      "by_phenomenon": {
+        "question": 1148,
+        "statement": 466,
+        "new-vocabulary": 21,
+        "negation": 101,
+        "multi-entity": 125,
+        "number-words": 28,
+        "context": 119,
+        "near-miss": 63,
+        "out-of-domain": 25
+      },
+      "by_split": {
+        "train": 1883,
+        "dev": 213
+      },
+      "generator": true,
+      "generator_version": "1",
+      "seed": 1737424665,
+      "generator_records": 2000,
+      "agreement": {
+        "rate": 0.9985,
+        "positive_rate": 1,
+        "negative_rate": 0.9831,
+        "positives": 1822,
+        "positives_agree": 1822,
+        "negatives": 178,
+        "negatives_ok": 175,
+        "invalid_expect": 0
+      },
+      "pattern_gaps": [
+        {
+          "group": "shapes.near",
+          "count": 3,
+          "example": {
+            "text": "What color is Tuesday?",
+            "context": [],
+            "expect": [],
+            "got": [
+              "core.question core.question.seek=color core.question.type=kids.shapes.thing core.question.where.name=tuesday"
+            ],
+            "note": "negative text was formalized by this world"
+          }
+        }
+      ]
+    },
+    "kids.time": {
+      "total": 2136,
+      "by_status": {
+        "rule-derived": 136,
+        "generator-backed": 1853,
+        "generator-disagrees": 53,
+        "negative": 94
+      },
+      "by_phenomenon": {
+        "question": 1673,
+        "statement": 205,
+        "context": 68,
+        "number-words": 45,
+        "ellipsis": 51,
+        "negation": 46,
+        "near-miss": 30,
+        "out-of-domain": 18
+      },
+      "by_split": {
+        "train": 1869,
+        "dev": 267
+      },
+      "generator": true,
+      "generator_version": "1",
+      "seed": 2702766029,
+      "generator_records": 2000,
+      "agreement": {
+        "rate": 0.9735,
+        "positive_rate": 0.9722,
+        "negative_rate": 1,
+        "positives": 1906,
+        "positives_agree": 1853,
+        "negatives": 94,
+        "negatives_ok": 94,
+        "invalid_expect": 0
+      },
+      "pattern_gaps": [
+        {
+          "group": "time.q.month.n",
+          "count": 15,
+          "example": {
+            "text": "What month will it be 10 months before March?",
+            "context": [],
+            "expect": [
+              "core.question core.question.seek=result core.question.type=kids.time.shift core.question.where.by=-10 core.question.where.from=march core.question.where.unit=month"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "time.q.day.n",
+          "count": 12,
+          "example": {
+            "text": "What day will it be 4 days before Sunday?",
+            "context": [],
+            "expect": [
+              "core.question core.question.seek=result core.question.type=kids.time.shift core.question.where.by=-4 core.question.where.from=sunday core.question.where.unit=day"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "time.q.month.after-before",
+          "count": 8,
+          "example": {
+            "text": "What month follows January?",
+            "context": [],
+            "expect": [
+              "core.question core.question.seek=result core.question.type=kids.time.shift core.question.where.by=1 core.question.where.from=january core.question.where.unit=month"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "time.q.day.after-before",
+          "count": 7,
+          "example": {
+            "text": "The day before Tuesday?",
+            "context": [],
+            "expect": [
+              "core.question core.question.seek=result core.question.type=kids.time.shift core.question.where.by=-1 core.question.where.from=tuesday core.question.where.unit=day"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "time.q.season.shift",
+          "count": 6,
+          "example": {
+            "text": "Well, which season follows Summer?",
+            "context": [],
+            "expect": [
+              "core.question core.question.seek=result core.question.type=kids.time.seasonshift core.question.where.by=1 core.question.where.from=summer core.question.where.unit=season"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        },
+        {
+          "group": "time.q.len",
+          "count": 5,
+          "example": {
+            "text": "How many weeks make one year?",
+            "context": [],
+            "expect": [
+              "core.question core.question.seek=count core.question.type=kids.time.length core.question.where.part=week core.question.where.whole=year"
+            ],
+            "got": [],
+            "note": "rule formalizer found no reading"
+          }
+        }
+      ]
+    }
+  },
+  "totals": {
+    "records": 23867,
+    "by_status": {
+      "rule-derived": 1867,
+      "generator-backed": 18830,
+      "generator-disagrees": 1620,
+      "negative": 1550
+    },
+    "by_split": {
+      "train": 21660,
+      "dev": 2207
+    }
+  }
+}
