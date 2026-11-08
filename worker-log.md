@@ -247,3 +247,29 @@ Results:
 - Browser, LOCAL (docs/ static server, with the new code): Settings shows the model version line and "ready (loaded in 2.1 s)"; same first sentence answered; a messy "hey could u tell me whats seven times six pls" was not understood (Did you mean "What time is it?"), a model-quality finding, not a loading issue. The failure fallback path was not exercised in a browser (code path only; node --check passes).
 Commit: model 32fd79d; code (filled by coordinator)
 Deviations: the live site could not show the new Settings version line or fallback notice (they are uncommitted); verified locally only. On the live page the option list briefly reads "Encoder (not available)" until the async availability probe finishes (pre-existing behaviour).
+
+## D3 — Evaluation — done (2026-11-08 12:50)
+Commands:
+```
+node scripts/eval-dispatch.mjs --name distilbert                      # test.jsonl + heldout.jsonl of training/runs/dispatch-pred, 10,877 messages, about 9 min with 20 workers
+node scripts/eval-dispatch.mjs --name modernbert-full --pred training/runs/dispatch-pred/modernbert-full/test.jsonl --pred training/runs/dispatch-pred/modernbert-full/heldout.jsonl
+node scripts/make-dispatch-sample.mjs                                 # training/results/dispatch-pred-kids-sample.jsonl (347 messages, 0.9 MB)
+node scripts/eval-dispatch.mjs --pred training/results/dispatch-pred-kids-sample.jsonl --name kids-sample    # about 30 s; run twice with different --jobs: byte-identical JSON
+npm test                                                              # 553 pass
+```
+Results (DistilBERT dispatcher, held-out NOT in training = the "before" number; tables in training/RESULTS.md section D3, report training/results/dispatch-distilbert.json). Headline = realistic positives (paraphrase test 636, held-out 2,255, multi-command 4,000), right / fallback / wrong %:
+- all realistic: rules only 43.0 / 25.5 / 31.5; Br 68.5 / 22.8 / 8.7; B strict 64.7 / 27.2 / 8.1; Brf (Br + rules fallback) 69.1 / 18.4 / 12.5.
+- multi-command: R 36.0 / 19.8 / 44.3; Br 80.8 / 11.5 / 7.8. Held-out: R 50.4 / 37.8 / 11.8; Br 49.2 / 43.1 / 7.7. Paraphrase test: R 61.0 / 18.4 / 20.6; Br 59.6 / 22.6 / 17.8. Per group (single-sentence sources included) in RESULTS.md: kids Br 60.5 (R 60.0), avatar/shell/editor 37.6 (39.4), music/draw/map/charts 40.6 (41.6), games 66.8 (70.6), documents 32.7 (32.7).
+- Oracle coverage (all positives): segmentation in beam 99.9, top-1 97.5; world top-1 92.4, top-3 98.3 (held-out 94.1 / 98.9; multi-command per-message 89.1 / 97.4). Multi-command segmentation F1 0.9874.
+- Exact SOP, all 10,556 positives: R 62.5, A top-1 + rules 75.3, B 74.2, Br 78.5, Brf 79.4. Games B 68.2 vs Br 82.6 (strict rejects legal state refusals).
+- Recovery (Br): 606 recoverable (top-1 segmentation right, a wrong top-1 world, right world in top 3); wrong top-1 rejected 450 (74.3 %), exact after recovery 305 (50.3 %), wrong top-1 accepted 156.
+- Failures of Br on realistic sources: rule gap 1496, sop differs 433, wrong reading chosen 121, world not in candidates 116, segmentation wrong 5. Biggest rule gaps: docs.editor 143, kids.common 143, art.draw 132, docs.reader 105, kids.arith 102, media.music 88, ui.shell 88, kids.animals 87 (per world with frequent words and examples in RESULTS.md and the JSON `rule_gaps`).
+- ModernBERT full vs DistilBERT: headline Br 68.1 vs 68.5, world top-1/top-3 91.8/98.0 vs 92.4/98.3, multi-command seg F1 0.9916 vs 0.9874: no gain that justifies 2.2x the parameters.
+- Simplification mode (C): not available (no prediction has `simplified`), C = B.
+Commit: (filled by coordinator)
+Deviations / choices:
+- scripts/eval-dispatch.mjs extended: mode R (rules only through the dialog session over all worlds, same tab/context as the record, also for multi-command), the right / fallback / wrong outcome per mode, headline section, modes Bf / Brf (validator, then the rules over all worlds when not understood; whole-message approximation of the per-piece retry in spec 03 section 7.7), failure classification for Br instead of C, recovery for B and Br, rule gaps per world, 30-failure sample round-robin over groups and causes (realistic sources only). scripts/lib/dispatch-gold.mjs: held-out gold (id = example_id, target = expected_circuit, tab and context from the record, needs_review excluded). New scripts/make-dispatch-sample.mjs. No change to src/ (no bug found in the validation layer); the default policy in dispatch-validate.mjs is still strict (Q3 asks for acceptRefused default: it is a one-line change in DEFAULT_POLICY plus test updates, left for the task that owns src).
+- R on paraphrase test and held-out equals eval-rules routed (61.0 and 50.4); R on multi-command is new (one session reads the whole message).
+- "Negatives" here count a negative as correct only when no world understands it (46.1 % for R, 62.0 % for the pipeline); eval-rules asks only that the record's own world does not claim it (97.5 %).
+- Multi-command targets come from the source records. The D2 oracle ceilings for multi-command (B 68.0, Br 74.6) were measured on the earlier multicmd build; Br now reaches 80.8 on the rebuilt one, so they are not comparable (the oracle should be rerun on the current dataset).
+- Prediction file ids: world-record ids and multicmd ids as before; held-out ids are example_id.

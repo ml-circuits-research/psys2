@@ -1,0 +1,4648 @@
+{
+  "task": "D3",
+  "name": "kids-sample",
+  "command": "node scripts/eval-dispatch.mjs --pred training/results/dispatch-pred-kids-sample.jsonl",
+  "inputs": {
+    "files": [
+      "training/results/dispatch-pred-kids-sample.jsonl"
+    ],
+    "records": 347,
+    "skipped_no_gold": 0,
+    "skipped_duplicate": 0,
+    "unparsable_lines": 0,
+    "evaluation_errors": 0
+  },
+  "policy": {
+    "seg_iou": 0.6
+  },
+  "definitions": {
+    "modes": {
+      "A": "dispatcher top-1 segmentation, top-1 world per piece, original text, rules only (no interpreter)",
+      "B": "beam 4, top-3 worlds, original text, rules + interpreter validation (strict)",
+      "C": "B plus simplified text (equal to B when no piece has simplified)",
+      "Bni": "B without the interpreter check",
+      "Br": "B with acceptRefused (a complete parse the interpreter refuses counts as understood)",
+      "Bf": "B, then the rules-over-all-worlds result (R) when B says not_understood",
+      "Brf": "Br, then R when Br says not_understood",
+      "R": "rules only: the whole message through the dialog session over all worlds (current router), no dispatcher"
+    },
+    "exact_sop": "concatenation (message order) of id-normalized SOP of produced pieces equals the concatenation of id-normalized SOP of each gold segment target; negative: result is not_understood",
+    "understanding": "right = exact SOP; fallback = not_understood (R: a segment unparsed or nothing parsed); wrong = understood but another SOP",
+    "segmentation_match": "same number of pieces, every piece overlaps its gold segment with character IoU >= 0.6",
+    "recovery": "recoverable = top-1 segmentation right, some piece has the gold world not first but within top 3; wrong_top1_rejected = every such piece top-1 candidate fails validation; recovered_exact = exact SOP (per policy B and Br)",
+    "failure_classes": "failures of Br: segmentation wrong (no beam entry matches) > world not in candidates (gold world of a piece not in top 3) > rule gap (rules of the gold world do not parse the piece) > interpreter rejects correct parse > wrong reading chosen (gold reading valid but another won) > sop differs (gold world and segmentation chosen, circuits differ)"
+  },
+  "headline": {
+    "definition": "share of realistic positive messages (paraphrase test, held-out, multi-command) whose final result is: right = exact SOP, fallback = \"not understood / Did you mean ...?\", wrong = understood with another SOP. R = rules only (current router), B = dispatcher top-3 + validation (strict), Br = same with acceptRefused (lead policy); Bf / Brf = B / Br followed by the engine fallback (a not-understood message is retried with the rules over all worlds = R; whole-message approximation of the per-piece retry of spec 03 section 7.7)",
+    "realistic_all": {
+      "n": 208,
+      "R": {
+        "right": 0.5048,
+        "fallback": 0.274,
+        "wrong": 0.2212
+      },
+      "B": {
+        "right": 0.6587,
+        "fallback": 0.3029,
+        "wrong": 0.0385
+      },
+      "Br": {
+        "right": 0.7163,
+        "fallback": 0.2452,
+        "wrong": 0.0385
+      },
+      "Bf": {
+        "right": 0.6731,
+        "fallback": 0.2212,
+        "wrong": 0.1058
+      },
+      "Brf": {
+        "right": 0.7212,
+        "fallback": 0.2163,
+        "wrong": 0.0625
+      }
+    },
+    "by_group": {
+      "kids": {
+        "n": 108,
+        "R": {
+          "right": 0.6019,
+          "fallback": 0.3333,
+          "wrong": 0.0648
+        },
+        "B": {
+          "right": 0.6111,
+          "fallback": 0.3519,
+          "wrong": 0.037
+        },
+        "Br": {
+          "right": 0.6111,
+          "fallback": 0.3519,
+          "wrong": 0.037
+        },
+        "Bf": {
+          "right": 0.6111,
+          "fallback": 0.3333,
+          "wrong": 0.0556
+        },
+        "Brf": {
+          "right": 0.6111,
+          "fallback": 0.3333,
+          "wrong": 0.0556
+        }
+      },
+      "multi-command": {
+        "n": 100,
+        "R": {
+          "right": 0.4,
+          "fallback": 0.21,
+          "wrong": 0.39
+        },
+        "B": {
+          "right": 0.71,
+          "fallback": 0.25,
+          "wrong": 0.04
+        },
+        "Br": {
+          "right": 0.83,
+          "fallback": 0.13,
+          "wrong": 0.04
+        },
+        "Bf": {
+          "right": 0.74,
+          "fallback": 0.1,
+          "wrong": 0.16
+        },
+        "Brf": {
+          "right": 0.84,
+          "fallback": 0.09,
+          "wrong": 0.07
+        }
+      }
+    },
+    "by_source": {
+      "paraphrase": {
+        "n": 11,
+        "R": {
+          "right": 0.6364,
+          "fallback": 0.2727,
+          "wrong": 0.0909
+        },
+        "B": {
+          "right": 0.6364,
+          "fallback": 0.2727,
+          "wrong": 0.0909
+        },
+        "Br": {
+          "right": 0.6364,
+          "fallback": 0.2727,
+          "wrong": 0.0909
+        },
+        "Bf": {
+          "right": 0.6364,
+          "fallback": 0.2727,
+          "wrong": 0.0909
+        },
+        "Brf": {
+          "right": 0.6364,
+          "fallback": 0.2727,
+          "wrong": 0.0909
+        }
+      },
+      "heldout": {
+        "n": 97,
+        "R": {
+          "right": 0.5979,
+          "fallback": 0.3402,
+          "wrong": 0.0619
+        },
+        "B": {
+          "right": 0.6082,
+          "fallback": 0.3608,
+          "wrong": 0.0309
+        },
+        "Br": {
+          "right": 0.6082,
+          "fallback": 0.3608,
+          "wrong": 0.0309
+        },
+        "Bf": {
+          "right": 0.6082,
+          "fallback": 0.3402,
+          "wrong": 0.0515
+        },
+        "Brf": {
+          "right": 0.6082,
+          "fallback": 0.3402,
+          "wrong": 0.0515
+        }
+      },
+      "multi-command": {
+        "n": 100,
+        "R": {
+          "right": 0.4,
+          "fallback": 0.21,
+          "wrong": 0.39
+        },
+        "B": {
+          "right": 0.71,
+          "fallback": 0.25,
+          "wrong": 0.04
+        },
+        "Br": {
+          "right": 0.83,
+          "fallback": 0.13,
+          "wrong": 0.04
+        },
+        "Bf": {
+          "right": 0.74,
+          "fallback": 0.1,
+          "wrong": 0.16
+        },
+        "Brf": {
+          "right": 0.84,
+          "fallback": 0.09,
+          "wrong": 0.07
+        }
+      }
+    },
+    "by_source_group": {
+      "paraphrase | kids": {
+        "n": 11,
+        "R": {
+          "right": 0.6364,
+          "fallback": 0.2727,
+          "wrong": 0.0909
+        },
+        "B": {
+          "right": 0.6364,
+          "fallback": 0.2727,
+          "wrong": 0.0909
+        },
+        "Br": {
+          "right": 0.6364,
+          "fallback": 0.2727,
+          "wrong": 0.0909
+        },
+        "Bf": {
+          "right": 0.6364,
+          "fallback": 0.2727,
+          "wrong": 0.0909
+        },
+        "Brf": {
+          "right": 0.6364,
+          "fallback": 0.2727,
+          "wrong": 0.0909
+        }
+      },
+      "heldout | kids": {
+        "n": 97,
+        "R": {
+          "right": 0.5979,
+          "fallback": 0.3402,
+          "wrong": 0.0619
+        },
+        "B": {
+          "right": 0.6082,
+          "fallback": 0.3608,
+          "wrong": 0.0309
+        },
+        "Br": {
+          "right": 0.6082,
+          "fallback": 0.3608,
+          "wrong": 0.0309
+        },
+        "Bf": {
+          "right": 0.6082,
+          "fallback": 0.3402,
+          "wrong": 0.0515
+        },
+        "Brf": {
+          "right": 0.6082,
+          "fallback": 0.3402,
+          "wrong": 0.0515
+        }
+      },
+      "multi-command | multi-command": {
+        "n": 100,
+        "R": {
+          "right": 0.4,
+          "fallback": 0.21,
+          "wrong": 0.39
+        },
+        "B": {
+          "right": 0.71,
+          "fallback": 0.25,
+          "wrong": 0.04
+        },
+        "Br": {
+          "right": 0.83,
+          "fallback": 0.13,
+          "wrong": 0.04
+        },
+        "Bf": {
+          "right": 0.74,
+          "fallback": 0.1,
+          "wrong": 0.16
+        },
+        "Brf": {
+          "right": 0.84,
+          "fallback": 0.09,
+          "wrong": 0.07
+        }
+      }
+    }
+  },
+  "totals": {
+    "n": 347,
+    "pos": 323,
+    "neg": 24,
+    "scored_pos": 323,
+    "seg_beam": 323,
+    "seg_top1": 315,
+    "w_top1": 308,
+    "w_top3": 321,
+    "with_simplified": 0,
+    "seg_tp": 417,
+    "seg_pred": 429,
+    "seg_gold": 421,
+    "neg_ok": {
+      "A": 23,
+      "B": 23,
+      "C": 23,
+      "Bni": 23,
+      "Br": 23,
+      "R": 21,
+      "Bf": 21,
+      "Brf": 21
+    },
+    "ok": {
+      "A": 255,
+      "B": 252,
+      "C": 252,
+      "Bni": 264,
+      "Br": 264,
+      "R": 220,
+      "Bf": 255,
+      "Brf": 265
+    },
+    "cat": {
+      "A": {
+        "right": 255,
+        "fallback": 60,
+        "wrong": 8
+      },
+      "B": {
+        "right": 252,
+        "fallback": 63,
+        "wrong": 8
+      },
+      "C": {
+        "right": 252,
+        "fallback": 63,
+        "wrong": 8
+      },
+      "Bni": {
+        "right": 264,
+        "fallback": 51,
+        "wrong": 8
+      },
+      "Br": {
+        "right": 264,
+        "fallback": 51,
+        "wrong": 8
+      },
+      "R": {
+        "right": 220,
+        "fallback": 57,
+        "wrong": 46
+      },
+      "Bf": {
+        "right": 255,
+        "fallback": 46,
+        "wrong": 22
+      },
+      "Brf": {
+        "right": 265,
+        "fallback": 45,
+        "wrong": 13
+      }
+    },
+    "rec": {
+      "B": {
+        "recoverable": 13,
+        "rejected": 9,
+        "recovered": 5,
+        "wrong_accepted": 4
+      },
+      "Br": {
+        "recoverable": 13,
+        "rejected": 9,
+        "recovered": 5,
+        "wrong_accepted": 4
+      }
+    },
+    "failure_classes": {
+      "rule gap": 51,
+      "wrong reading chosen": 3,
+      "sop differs": 3,
+      "world not in candidates": 2
+    },
+    "oracle": {
+      "segmentation_in_beam": 1,
+      "segmentation_top1": 0.9752,
+      "world_top1": 0.9536,
+      "world_top3": 0.9938
+    },
+    "segmentation_f1_top1": 0.9812,
+    "exact_sop": {
+      "A": 0.7895,
+      "B": 0.7802,
+      "C": 0.7802,
+      "Bni": 0.8173,
+      "Br": 0.8173,
+      "R": 0.6811,
+      "Bf": 0.7895,
+      "Brf": 0.8204
+    },
+    "understanding": {
+      "A": {
+        "right": 0.7895,
+        "fallback": 0.1858,
+        "wrong": 0.0248
+      },
+      "B": {
+        "right": 0.7802,
+        "fallback": 0.195,
+        "wrong": 0.0248
+      },
+      "C": {
+        "right": 0.7802,
+        "fallback": 0.195,
+        "wrong": 0.0248
+      },
+      "Bni": {
+        "right": 0.8173,
+        "fallback": 0.1579,
+        "wrong": 0.0248
+      },
+      "Br": {
+        "right": 0.8173,
+        "fallback": 0.1579,
+        "wrong": 0.0248
+      },
+      "R": {
+        "right": 0.6811,
+        "fallback": 0.1765,
+        "wrong": 0.1424
+      },
+      "Bf": {
+        "right": 0.7895,
+        "fallback": 0.1424,
+        "wrong": 0.0681
+      },
+      "Brf": {
+        "right": 0.8204,
+        "fallback": 0.1393,
+        "wrong": 0.0402
+      }
+    },
+    "negatives_rejected": {
+      "A": 0.9583,
+      "B": 0.9583,
+      "C": 0.9583,
+      "Bni": 0.9583,
+      "Br": 0.9583,
+      "R": 0.875,
+      "Bf": 0.875,
+      "Brf": 0.875
+    },
+    "recovery": {
+      "B": {
+        "recoverable": 13,
+        "wrong_top1_rejected": 9,
+        "recovered_exact": 5,
+        "wrong_top1_accepted": 4
+      },
+      "Br": {
+        "recoverable": 13,
+        "wrong_top1_rejected": 9,
+        "recovered_exact": 5,
+        "wrong_top1_accepted": 4
+      }
+    }
+  },
+  "by_group": {
+    "kids": {
+      "n": 247,
+      "pos": 223,
+      "neg": 24,
+      "scored_pos": 223,
+      "seg_beam": 223,
+      "seg_top1": 216,
+      "w_top1": 218,
+      "w_top3": 223,
+      "with_simplified": 0,
+      "seg_tp": 220,
+      "seg_pred": 230,
+      "seg_gold": 223,
+      "neg_ok": {
+        "A": 23,
+        "B": 23,
+        "C": 23,
+        "Bni": 23,
+        "Br": 23,
+        "R": 21,
+        "Bf": 21,
+        "Brf": 21
+      },
+      "ok": {
+        "A": 178,
+        "B": 181,
+        "C": 181,
+        "Bni": 181,
+        "Br": 181,
+        "R": 180,
+        "Bf": 181,
+        "Brf": 181
+      },
+      "cat": {
+        "A": {
+          "right": 178,
+          "fallback": 41,
+          "wrong": 4
+        },
+        "B": {
+          "right": 181,
+          "fallback": 38,
+          "wrong": 4
+        },
+        "C": {
+          "right": 181,
+          "fallback": 38,
+          "wrong": 4
+        },
+        "Bni": {
+          "right": 181,
+          "fallback": 38,
+          "wrong": 4
+        },
+        "Br": {
+          "right": 181,
+          "fallback": 38,
+          "wrong": 4
+        },
+        "R": {
+          "right": 180,
+          "fallback": 36,
+          "wrong": 7
+        },
+        "Bf": {
+          "right": 181,
+          "fallback": 36,
+          "wrong": 6
+        },
+        "Brf": {
+          "right": 181,
+          "fallback": 36,
+          "wrong": 6
+        }
+      },
+      "rec": {
+        "B": {
+          "recoverable": 5,
+          "rejected": 4,
+          "recovered": 1,
+          "wrong_accepted": 1
+        },
+        "Br": {
+          "recoverable": 5,
+          "rejected": 4,
+          "recovered": 1,
+          "wrong_accepted": 1
+        }
+      },
+      "failure_classes": {
+        "rule gap": 39,
+        "wrong reading chosen": 1,
+        "sop differs": 2
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 0.9686,
+        "world_top1": 0.9776,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 0.9713,
+      "exact_sop": {
+        "A": 0.7982,
+        "B": 0.8117,
+        "C": 0.8117,
+        "Bni": 0.8117,
+        "Br": 0.8117,
+        "R": 0.8072,
+        "Bf": 0.8117,
+        "Brf": 0.8117
+      },
+      "understanding": {
+        "A": {
+          "right": 0.7982,
+          "fallback": 0.1839,
+          "wrong": 0.0179
+        },
+        "B": {
+          "right": 0.8117,
+          "fallback": 0.1704,
+          "wrong": 0.0179
+        },
+        "C": {
+          "right": 0.8117,
+          "fallback": 0.1704,
+          "wrong": 0.0179
+        },
+        "Bni": {
+          "right": 0.8117,
+          "fallback": 0.1704,
+          "wrong": 0.0179
+        },
+        "Br": {
+          "right": 0.8117,
+          "fallback": 0.1704,
+          "wrong": 0.0179
+        },
+        "R": {
+          "right": 0.8072,
+          "fallback": 0.1614,
+          "wrong": 0.0314
+        },
+        "Bf": {
+          "right": 0.8117,
+          "fallback": 0.1614,
+          "wrong": 0.0269
+        },
+        "Brf": {
+          "right": 0.8117,
+          "fallback": 0.1614,
+          "wrong": 0.0269
+        }
+      },
+      "negatives_rejected": {
+        "A": 0.9583,
+        "B": 0.9583,
+        "C": 0.9583,
+        "Bni": 0.9583,
+        "Br": 0.9583,
+        "R": 0.875,
+        "Bf": 0.875,
+        "Brf": 0.875
+      },
+      "recovery": {
+        "B": {
+          "recoverable": 5,
+          "wrong_top1_rejected": 4,
+          "recovered_exact": 1,
+          "wrong_top1_accepted": 1
+        },
+        "Br": {
+          "recoverable": 5,
+          "wrong_top1_rejected": 4,
+          "recovered_exact": 1,
+          "wrong_top1_accepted": 1
+        }
+      },
+      "by_source": {
+        "generator": {
+          "n": 134,
+          "pos": 110,
+          "neg": 24,
+          "scored_pos": 110,
+          "seg_beam": 110,
+          "seg_top1": 110,
+          "w_top1": 109,
+          "w_top3": 110,
+          "with_simplified": 0,
+          "seg_tp": 110,
+          "seg_pred": 110,
+          "seg_gold": 110,
+          "neg_ok": {
+            "A": 23,
+            "B": 23,
+            "C": 23,
+            "Bni": 23,
+            "Br": 23,
+            "R": 21,
+            "Bf": 21,
+            "Brf": 21
+          },
+          "ok": {
+            "A": 109,
+            "B": 110,
+            "C": 110,
+            "Bni": 110,
+            "Br": 110,
+            "R": 110,
+            "Bf": 110,
+            "Brf": 110
+          },
+          "cat": {
+            "A": {
+              "right": 109,
+              "fallback": 1,
+              "wrong": 0
+            },
+            "B": {
+              "right": 110,
+              "fallback": 0,
+              "wrong": 0
+            },
+            "C": {
+              "right": 110,
+              "fallback": 0,
+              "wrong": 0
+            },
+            "Bni": {
+              "right": 110,
+              "fallback": 0,
+              "wrong": 0
+            },
+            "Br": {
+              "right": 110,
+              "fallback": 0,
+              "wrong": 0
+            },
+            "R": {
+              "right": 110,
+              "fallback": 0,
+              "wrong": 0
+            },
+            "Bf": {
+              "right": 110,
+              "fallback": 0,
+              "wrong": 0
+            },
+            "Brf": {
+              "right": 110,
+              "fallback": 0,
+              "wrong": 0
+            }
+          },
+          "rec": {
+            "B": {
+              "recoverable": 1,
+              "rejected": 1,
+              "recovered": 1,
+              "wrong_accepted": 0
+            },
+            "Br": {
+              "recoverable": 1,
+              "rejected": 1,
+              "recovered": 1,
+              "wrong_accepted": 0
+            }
+          },
+          "failure_classes": {},
+          "oracle": {
+            "segmentation_in_beam": 1,
+            "segmentation_top1": 1,
+            "world_top1": 0.9909,
+            "world_top3": 1
+          },
+          "segmentation_f1_top1": 1,
+          "exact_sop": {
+            "A": 0.9909,
+            "B": 1,
+            "C": 1,
+            "Bni": 1,
+            "Br": 1,
+            "R": 1,
+            "Bf": 1,
+            "Brf": 1
+          },
+          "understanding": {
+            "A": {
+              "right": 0.9909,
+              "fallback": 0.0091,
+              "wrong": 0
+            },
+            "B": {
+              "right": 1,
+              "fallback": 0,
+              "wrong": 0
+            },
+            "C": {
+              "right": 1,
+              "fallback": 0,
+              "wrong": 0
+            },
+            "Bni": {
+              "right": 1,
+              "fallback": 0,
+              "wrong": 0
+            },
+            "Br": {
+              "right": 1,
+              "fallback": 0,
+              "wrong": 0
+            },
+            "R": {
+              "right": 1,
+              "fallback": 0,
+              "wrong": 0
+            },
+            "Bf": {
+              "right": 1,
+              "fallback": 0,
+              "wrong": 0
+            },
+            "Brf": {
+              "right": 1,
+              "fallback": 0,
+              "wrong": 0
+            }
+          },
+          "negatives_rejected": {
+            "A": 0.9583,
+            "B": 0.9583,
+            "C": 0.9583,
+            "Bni": 0.9583,
+            "Br": 0.9583,
+            "R": 0.875,
+            "Bf": 0.875,
+            "Brf": 0.875
+          },
+          "recovery": {
+            "B": {
+              "recoverable": 1,
+              "wrong_top1_rejected": 1,
+              "recovered_exact": 1,
+              "wrong_top1_accepted": 0
+            },
+            "Br": {
+              "recoverable": 1,
+              "wrong_top1_rejected": 1,
+              "recovered_exact": 1,
+              "wrong_top1_accepted": 0
+            }
+          }
+        },
+        "heldout": {
+          "n": 97,
+          "pos": 97,
+          "neg": 0,
+          "scored_pos": 97,
+          "seg_beam": 97,
+          "seg_top1": 91,
+          "w_top1": 94,
+          "w_top3": 97,
+          "with_simplified": 0,
+          "seg_tp": 94,
+          "seg_pred": 103,
+          "seg_gold": 97,
+          "neg_ok": {
+            "A": 0,
+            "B": 0,
+            "C": 0,
+            "Bni": 0,
+            "Br": 0,
+            "R": 0,
+            "Bf": 0,
+            "Brf": 0
+          },
+          "ok": {
+            "A": 57,
+            "B": 59,
+            "C": 59,
+            "Bni": 59,
+            "Br": 59,
+            "R": 58,
+            "Bf": 59,
+            "Brf": 59
+          },
+          "cat": {
+            "A": {
+              "right": 57,
+              "fallback": 37,
+              "wrong": 3
+            },
+            "B": {
+              "right": 59,
+              "fallback": 35,
+              "wrong": 3
+            },
+            "C": {
+              "right": 59,
+              "fallback": 35,
+              "wrong": 3
+            },
+            "Bni": {
+              "right": 59,
+              "fallback": 35,
+              "wrong": 3
+            },
+            "Br": {
+              "right": 59,
+              "fallback": 35,
+              "wrong": 3
+            },
+            "R": {
+              "right": 58,
+              "fallback": 33,
+              "wrong": 6
+            },
+            "Bf": {
+              "right": 59,
+              "fallback": 33,
+              "wrong": 5
+            },
+            "Brf": {
+              "right": 59,
+              "fallback": 33,
+              "wrong": 5
+            }
+          },
+          "rec": {
+            "B": {
+              "recoverable": 3,
+              "rejected": 3,
+              "recovered": 0,
+              "wrong_accepted": 0
+            },
+            "Br": {
+              "recoverable": 3,
+              "rejected": 3,
+              "recovered": 0,
+              "wrong_accepted": 0
+            }
+          },
+          "failure_classes": {
+            "rule gap": 35,
+            "wrong reading chosen": 1,
+            "sop differs": 2
+          },
+          "oracle": {
+            "segmentation_in_beam": 1,
+            "segmentation_top1": 0.9381,
+            "world_top1": 0.9691,
+            "world_top3": 1
+          },
+          "segmentation_f1_top1": 0.94,
+          "exact_sop": {
+            "A": 0.5876,
+            "B": 0.6082,
+            "C": 0.6082,
+            "Bni": 0.6082,
+            "Br": 0.6082,
+            "R": 0.5979,
+            "Bf": 0.6082,
+            "Brf": 0.6082
+          },
+          "understanding": {
+            "A": {
+              "right": 0.5876,
+              "fallback": 0.3814,
+              "wrong": 0.0309
+            },
+            "B": {
+              "right": 0.6082,
+              "fallback": 0.3608,
+              "wrong": 0.0309
+            },
+            "C": {
+              "right": 0.6082,
+              "fallback": 0.3608,
+              "wrong": 0.0309
+            },
+            "Bni": {
+              "right": 0.6082,
+              "fallback": 0.3608,
+              "wrong": 0.0309
+            },
+            "Br": {
+              "right": 0.6082,
+              "fallback": 0.3608,
+              "wrong": 0.0309
+            },
+            "R": {
+              "right": 0.5979,
+              "fallback": 0.3402,
+              "wrong": 0.0619
+            },
+            "Bf": {
+              "right": 0.6082,
+              "fallback": 0.3402,
+              "wrong": 0.0515
+            },
+            "Brf": {
+              "right": 0.6082,
+              "fallback": 0.3402,
+              "wrong": 0.0515
+            }
+          },
+          "negatives_rejected": null,
+          "recovery": {
+            "B": {
+              "recoverable": 3,
+              "wrong_top1_rejected": 3,
+              "recovered_exact": 0,
+              "wrong_top1_accepted": 0
+            },
+            "Br": {
+              "recoverable": 3,
+              "wrong_top1_rejected": 3,
+              "recovered_exact": 0,
+              "wrong_top1_accepted": 0
+            }
+          }
+        },
+        "paraphrase": {
+          "n": 11,
+          "pos": 11,
+          "neg": 0,
+          "scored_pos": 11,
+          "seg_beam": 11,
+          "seg_top1": 10,
+          "w_top1": 10,
+          "w_top3": 11,
+          "with_simplified": 0,
+          "seg_tp": 11,
+          "seg_pred": 12,
+          "seg_gold": 11,
+          "neg_ok": {
+            "A": 0,
+            "B": 0,
+            "C": 0,
+            "Bni": 0,
+            "Br": 0,
+            "R": 0,
+            "Bf": 0,
+            "Brf": 0
+          },
+          "ok": {
+            "A": 7,
+            "B": 7,
+            "C": 7,
+            "Bni": 7,
+            "Br": 7,
+            "R": 7,
+            "Bf": 7,
+            "Brf": 7
+          },
+          "cat": {
+            "A": {
+              "right": 7,
+              "fallback": 3,
+              "wrong": 1
+            },
+            "B": {
+              "right": 7,
+              "fallback": 3,
+              "wrong": 1
+            },
+            "C": {
+              "right": 7,
+              "fallback": 3,
+              "wrong": 1
+            },
+            "Bni": {
+              "right": 7,
+              "fallback": 3,
+              "wrong": 1
+            },
+            "Br": {
+              "right": 7,
+              "fallback": 3,
+              "wrong": 1
+            },
+            "R": {
+              "right": 7,
+              "fallback": 3,
+              "wrong": 1
+            },
+            "Bf": {
+              "right": 7,
+              "fallback": 3,
+              "wrong": 1
+            },
+            "Brf": {
+              "right": 7,
+              "fallback": 3,
+              "wrong": 1
+            }
+          },
+          "rec": {
+            "B": {
+              "recoverable": 1,
+              "rejected": 0,
+              "recovered": 0,
+              "wrong_accepted": 1
+            },
+            "Br": {
+              "recoverable": 1,
+              "rejected": 0,
+              "recovered": 0,
+              "wrong_accepted": 1
+            }
+          },
+          "failure_classes": {
+            "rule gap": 4
+          },
+          "oracle": {
+            "segmentation_in_beam": 1,
+            "segmentation_top1": 0.9091,
+            "world_top1": 0.9091,
+            "world_top3": 1
+          },
+          "segmentation_f1_top1": 0.9565,
+          "exact_sop": {
+            "A": 0.6364,
+            "B": 0.6364,
+            "C": 0.6364,
+            "Bni": 0.6364,
+            "Br": 0.6364,
+            "R": 0.6364,
+            "Bf": 0.6364,
+            "Brf": 0.6364
+          },
+          "understanding": {
+            "A": {
+              "right": 0.6364,
+              "fallback": 0.2727,
+              "wrong": 0.0909
+            },
+            "B": {
+              "right": 0.6364,
+              "fallback": 0.2727,
+              "wrong": 0.0909
+            },
+            "C": {
+              "right": 0.6364,
+              "fallback": 0.2727,
+              "wrong": 0.0909
+            },
+            "Bni": {
+              "right": 0.6364,
+              "fallback": 0.2727,
+              "wrong": 0.0909
+            },
+            "Br": {
+              "right": 0.6364,
+              "fallback": 0.2727,
+              "wrong": 0.0909
+            },
+            "R": {
+              "right": 0.6364,
+              "fallback": 0.2727,
+              "wrong": 0.0909
+            },
+            "Bf": {
+              "right": 0.6364,
+              "fallback": 0.2727,
+              "wrong": 0.0909
+            },
+            "Brf": {
+              "right": 0.6364,
+              "fallback": 0.2727,
+              "wrong": 0.0909
+            }
+          },
+          "negatives_rejected": null,
+          "recovery": {
+            "B": {
+              "recoverable": 1,
+              "wrong_top1_rejected": 0,
+              "recovered_exact": 0,
+              "wrong_top1_accepted": 1
+            },
+            "Br": {
+              "recoverable": 1,
+              "wrong_top1_rejected": 0,
+              "recovered_exact": 0,
+              "wrong_top1_accepted": 1
+            }
+          }
+        },
+        "rule-derived": {
+          "n": 5,
+          "pos": 5,
+          "neg": 0,
+          "scored_pos": 5,
+          "seg_beam": 5,
+          "seg_top1": 5,
+          "w_top1": 5,
+          "w_top3": 5,
+          "with_simplified": 0,
+          "seg_tp": 5,
+          "seg_pred": 5,
+          "seg_gold": 5,
+          "neg_ok": {
+            "A": 0,
+            "B": 0,
+            "C": 0,
+            "Bni": 0,
+            "Br": 0,
+            "R": 0,
+            "Bf": 0,
+            "Brf": 0
+          },
+          "ok": {
+            "A": 5,
+            "B": 5,
+            "C": 5,
+            "Bni": 5,
+            "Br": 5,
+            "R": 5,
+            "Bf": 5,
+            "Brf": 5
+          },
+          "cat": {
+            "A": {
+              "right": 5,
+              "fallback": 0,
+              "wrong": 0
+            },
+            "B": {
+              "right": 5,
+              "fallback": 0,
+              "wrong": 0
+            },
+            "C": {
+              "right": 5,
+              "fallback": 0,
+              "wrong": 0
+            },
+            "Bni": {
+              "right": 5,
+              "fallback": 0,
+              "wrong": 0
+            },
+            "Br": {
+              "right": 5,
+              "fallback": 0,
+              "wrong": 0
+            },
+            "R": {
+              "right": 5,
+              "fallback": 0,
+              "wrong": 0
+            },
+            "Bf": {
+              "right": 5,
+              "fallback": 0,
+              "wrong": 0
+            },
+            "Brf": {
+              "right": 5,
+              "fallback": 0,
+              "wrong": 0
+            }
+          },
+          "rec": {
+            "B": {
+              "recoverable": 0,
+              "rejected": 0,
+              "recovered": 0,
+              "wrong_accepted": 0
+            },
+            "Br": {
+              "recoverable": 0,
+              "rejected": 0,
+              "recovered": 0,
+              "wrong_accepted": 0
+            }
+          },
+          "failure_classes": {},
+          "oracle": {
+            "segmentation_in_beam": 1,
+            "segmentation_top1": 1,
+            "world_top1": 1,
+            "world_top3": 1
+          },
+          "segmentation_f1_top1": 1,
+          "exact_sop": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "Bni": 1,
+            "Br": 1,
+            "R": 1,
+            "Bf": 1,
+            "Brf": 1
+          },
+          "understanding": {
+            "A": {
+              "right": 1,
+              "fallback": 0,
+              "wrong": 0
+            },
+            "B": {
+              "right": 1,
+              "fallback": 0,
+              "wrong": 0
+            },
+            "C": {
+              "right": 1,
+              "fallback": 0,
+              "wrong": 0
+            },
+            "Bni": {
+              "right": 1,
+              "fallback": 0,
+              "wrong": 0
+            },
+            "Br": {
+              "right": 1,
+              "fallback": 0,
+              "wrong": 0
+            },
+            "R": {
+              "right": 1,
+              "fallback": 0,
+              "wrong": 0
+            },
+            "Bf": {
+              "right": 1,
+              "fallback": 0,
+              "wrong": 0
+            },
+            "Brf": {
+              "right": 1,
+              "fallback": 0,
+              "wrong": 0
+            }
+          },
+          "negatives_rejected": null,
+          "recovery": {
+            "B": {
+              "recoverable": 0,
+              "wrong_top1_rejected": 0,
+              "recovered_exact": 0,
+              "wrong_top1_accepted": 0
+            },
+            "Br": {
+              "recoverable": 0,
+              "wrong_top1_rejected": 0,
+              "recovered_exact": 0,
+              "wrong_top1_accepted": 0
+            }
+          }
+        }
+      }
+    },
+    "multi-command": {
+      "n": 100,
+      "pos": 100,
+      "neg": 0,
+      "scored_pos": 100,
+      "seg_beam": 100,
+      "seg_top1": 99,
+      "w_top1": 90,
+      "w_top3": 98,
+      "with_simplified": 0,
+      "seg_tp": 197,
+      "seg_pred": 199,
+      "seg_gold": 198,
+      "neg_ok": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Bni": 0,
+        "Br": 0,
+        "R": 0,
+        "Bf": 0,
+        "Brf": 0
+      },
+      "ok": {
+        "A": 77,
+        "B": 71,
+        "C": 71,
+        "Bni": 83,
+        "Br": 83,
+        "R": 40,
+        "Bf": 74,
+        "Brf": 84
+      },
+      "cat": {
+        "A": {
+          "right": 77,
+          "fallback": 19,
+          "wrong": 4
+        },
+        "B": {
+          "right": 71,
+          "fallback": 25,
+          "wrong": 4
+        },
+        "C": {
+          "right": 71,
+          "fallback": 25,
+          "wrong": 4
+        },
+        "Bni": {
+          "right": 83,
+          "fallback": 13,
+          "wrong": 4
+        },
+        "Br": {
+          "right": 83,
+          "fallback": 13,
+          "wrong": 4
+        },
+        "R": {
+          "right": 40,
+          "fallback": 21,
+          "wrong": 39
+        },
+        "Bf": {
+          "right": 74,
+          "fallback": 10,
+          "wrong": 16
+        },
+        "Brf": {
+          "right": 84,
+          "fallback": 9,
+          "wrong": 7
+        }
+      },
+      "rec": {
+        "B": {
+          "recoverable": 8,
+          "rejected": 5,
+          "recovered": 4,
+          "wrong_accepted": 3
+        },
+        "Br": {
+          "recoverable": 8,
+          "rejected": 5,
+          "recovered": 4,
+          "wrong_accepted": 3
+        }
+      },
+      "failure_classes": {
+        "world not in candidates": 2,
+        "rule gap": 12,
+        "wrong reading chosen": 2,
+        "sop differs": 1
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 0.99,
+        "world_top1": 0.9,
+        "world_top3": 0.98
+      },
+      "segmentation_f1_top1": 0.9924,
+      "exact_sop": {
+        "A": 0.77,
+        "B": 0.71,
+        "C": 0.71,
+        "Bni": 0.83,
+        "Br": 0.83,
+        "R": 0.4,
+        "Bf": 0.74,
+        "Brf": 0.84
+      },
+      "understanding": {
+        "A": {
+          "right": 0.77,
+          "fallback": 0.19,
+          "wrong": 0.04
+        },
+        "B": {
+          "right": 0.71,
+          "fallback": 0.25,
+          "wrong": 0.04
+        },
+        "C": {
+          "right": 0.71,
+          "fallback": 0.25,
+          "wrong": 0.04
+        },
+        "Bni": {
+          "right": 0.83,
+          "fallback": 0.13,
+          "wrong": 0.04
+        },
+        "Br": {
+          "right": 0.83,
+          "fallback": 0.13,
+          "wrong": 0.04
+        },
+        "R": {
+          "right": 0.4,
+          "fallback": 0.21,
+          "wrong": 0.39
+        },
+        "Bf": {
+          "right": 0.74,
+          "fallback": 0.1,
+          "wrong": 0.16
+        },
+        "Brf": {
+          "right": 0.84,
+          "fallback": 0.09,
+          "wrong": 0.07
+        }
+      },
+      "negatives_rejected": null,
+      "recovery": {
+        "B": {
+          "recoverable": 8,
+          "wrong_top1_rejected": 5,
+          "recovered_exact": 4,
+          "wrong_top1_accepted": 3
+        },
+        "Br": {
+          "recoverable": 8,
+          "wrong_top1_rejected": 5,
+          "recovered_exact": 4,
+          "wrong_top1_accepted": 3
+        }
+      },
+      "by_source": {
+        "multi-command": {
+          "n": 100,
+          "pos": 100,
+          "neg": 0,
+          "scored_pos": 100,
+          "seg_beam": 100,
+          "seg_top1": 99,
+          "w_top1": 90,
+          "w_top3": 98,
+          "with_simplified": 0,
+          "seg_tp": 197,
+          "seg_pred": 199,
+          "seg_gold": 198,
+          "neg_ok": {
+            "A": 0,
+            "B": 0,
+            "C": 0,
+            "Bni": 0,
+            "Br": 0,
+            "R": 0,
+            "Bf": 0,
+            "Brf": 0
+          },
+          "ok": {
+            "A": 77,
+            "B": 71,
+            "C": 71,
+            "Bni": 83,
+            "Br": 83,
+            "R": 40,
+            "Bf": 74,
+            "Brf": 84
+          },
+          "cat": {
+            "A": {
+              "right": 77,
+              "fallback": 19,
+              "wrong": 4
+            },
+            "B": {
+              "right": 71,
+              "fallback": 25,
+              "wrong": 4
+            },
+            "C": {
+              "right": 71,
+              "fallback": 25,
+              "wrong": 4
+            },
+            "Bni": {
+              "right": 83,
+              "fallback": 13,
+              "wrong": 4
+            },
+            "Br": {
+              "right": 83,
+              "fallback": 13,
+              "wrong": 4
+            },
+            "R": {
+              "right": 40,
+              "fallback": 21,
+              "wrong": 39
+            },
+            "Bf": {
+              "right": 74,
+              "fallback": 10,
+              "wrong": 16
+            },
+            "Brf": {
+              "right": 84,
+              "fallback": 9,
+              "wrong": 7
+            }
+          },
+          "rec": {
+            "B": {
+              "recoverable": 8,
+              "rejected": 5,
+              "recovered": 4,
+              "wrong_accepted": 3
+            },
+            "Br": {
+              "recoverable": 8,
+              "rejected": 5,
+              "recovered": 4,
+              "wrong_accepted": 3
+            }
+          },
+          "failure_classes": {
+            "world not in candidates": 2,
+            "rule gap": 12,
+            "wrong reading chosen": 2,
+            "sop differs": 1
+          },
+          "oracle": {
+            "segmentation_in_beam": 1,
+            "segmentation_top1": 0.99,
+            "world_top1": 0.9,
+            "world_top3": 0.98
+          },
+          "segmentation_f1_top1": 0.9924,
+          "exact_sop": {
+            "A": 0.77,
+            "B": 0.71,
+            "C": 0.71,
+            "Bni": 0.83,
+            "Br": 0.83,
+            "R": 0.4,
+            "Bf": 0.74,
+            "Brf": 0.84
+          },
+          "understanding": {
+            "A": {
+              "right": 0.77,
+              "fallback": 0.19,
+              "wrong": 0.04
+            },
+            "B": {
+              "right": 0.71,
+              "fallback": 0.25,
+              "wrong": 0.04
+            },
+            "C": {
+              "right": 0.71,
+              "fallback": 0.25,
+              "wrong": 0.04
+            },
+            "Bni": {
+              "right": 0.83,
+              "fallback": 0.13,
+              "wrong": 0.04
+            },
+            "Br": {
+              "right": 0.83,
+              "fallback": 0.13,
+              "wrong": 0.04
+            },
+            "R": {
+              "right": 0.4,
+              "fallback": 0.21,
+              "wrong": 0.39
+            },
+            "Bf": {
+              "right": 0.74,
+              "fallback": 0.1,
+              "wrong": 0.16
+            },
+            "Brf": {
+              "right": 0.84,
+              "fallback": 0.09,
+              "wrong": 0.07
+            }
+          },
+          "negatives_rejected": null,
+          "recovery": {
+            "B": {
+              "recoverable": 8,
+              "wrong_top1_rejected": 5,
+              "recovered_exact": 4,
+              "wrong_top1_accepted": 3
+            },
+            "Br": {
+              "recoverable": 8,
+              "wrong_top1_rejected": 5,
+              "recovered_exact": 4,
+              "wrong_top1_accepted": 3
+            }
+          }
+        }
+      }
+    }
+  },
+  "by_source": {
+    "generator": {
+      "n": 134,
+      "pos": 110,
+      "neg": 24,
+      "scored_pos": 110,
+      "seg_beam": 110,
+      "seg_top1": 110,
+      "w_top1": 109,
+      "w_top3": 110,
+      "with_simplified": 0,
+      "seg_tp": 110,
+      "seg_pred": 110,
+      "seg_gold": 110,
+      "neg_ok": {
+        "A": 23,
+        "B": 23,
+        "C": 23,
+        "Bni": 23,
+        "Br": 23,
+        "R": 21,
+        "Bf": 21,
+        "Brf": 21
+      },
+      "ok": {
+        "A": 109,
+        "B": 110,
+        "C": 110,
+        "Bni": 110,
+        "Br": 110,
+        "R": 110,
+        "Bf": 110,
+        "Brf": 110
+      },
+      "cat": {
+        "A": {
+          "right": 109,
+          "fallback": 1,
+          "wrong": 0
+        },
+        "B": {
+          "right": 110,
+          "fallback": 0,
+          "wrong": 0
+        },
+        "C": {
+          "right": 110,
+          "fallback": 0,
+          "wrong": 0
+        },
+        "Bni": {
+          "right": 110,
+          "fallback": 0,
+          "wrong": 0
+        },
+        "Br": {
+          "right": 110,
+          "fallback": 0,
+          "wrong": 0
+        },
+        "R": {
+          "right": 110,
+          "fallback": 0,
+          "wrong": 0
+        },
+        "Bf": {
+          "right": 110,
+          "fallback": 0,
+          "wrong": 0
+        },
+        "Brf": {
+          "right": 110,
+          "fallback": 0,
+          "wrong": 0
+        }
+      },
+      "rec": {
+        "B": {
+          "recoverable": 1,
+          "rejected": 1,
+          "recovered": 1,
+          "wrong_accepted": 0
+        },
+        "Br": {
+          "recoverable": 1,
+          "rejected": 1,
+          "recovered": 1,
+          "wrong_accepted": 0
+        }
+      },
+      "failure_classes": {},
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 0.9909,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 0.9909,
+        "B": 1,
+        "C": 1,
+        "Bni": 1,
+        "Br": 1,
+        "R": 1,
+        "Bf": 1,
+        "Brf": 1
+      },
+      "understanding": {
+        "A": {
+          "right": 0.9909,
+          "fallback": 0.0091,
+          "wrong": 0
+        },
+        "B": {
+          "right": 1,
+          "fallback": 0,
+          "wrong": 0
+        },
+        "C": {
+          "right": 1,
+          "fallback": 0,
+          "wrong": 0
+        },
+        "Bni": {
+          "right": 1,
+          "fallback": 0,
+          "wrong": 0
+        },
+        "Br": {
+          "right": 1,
+          "fallback": 0,
+          "wrong": 0
+        },
+        "R": {
+          "right": 1,
+          "fallback": 0,
+          "wrong": 0
+        },
+        "Bf": {
+          "right": 1,
+          "fallback": 0,
+          "wrong": 0
+        },
+        "Brf": {
+          "right": 1,
+          "fallback": 0,
+          "wrong": 0
+        }
+      },
+      "negatives_rejected": {
+        "A": 0.9583,
+        "B": 0.9583,
+        "C": 0.9583,
+        "Bni": 0.9583,
+        "Br": 0.9583,
+        "R": 0.875,
+        "Bf": 0.875,
+        "Brf": 0.875
+      },
+      "recovery": {
+        "B": {
+          "recoverable": 1,
+          "wrong_top1_rejected": 1,
+          "recovered_exact": 1,
+          "wrong_top1_accepted": 0
+        },
+        "Br": {
+          "recoverable": 1,
+          "wrong_top1_rejected": 1,
+          "recovered_exact": 1,
+          "wrong_top1_accepted": 0
+        }
+      }
+    },
+    "heldout": {
+      "n": 97,
+      "pos": 97,
+      "neg": 0,
+      "scored_pos": 97,
+      "seg_beam": 97,
+      "seg_top1": 91,
+      "w_top1": 94,
+      "w_top3": 97,
+      "with_simplified": 0,
+      "seg_tp": 94,
+      "seg_pred": 103,
+      "seg_gold": 97,
+      "neg_ok": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Bni": 0,
+        "Br": 0,
+        "R": 0,
+        "Bf": 0,
+        "Brf": 0
+      },
+      "ok": {
+        "A": 57,
+        "B": 59,
+        "C": 59,
+        "Bni": 59,
+        "Br": 59,
+        "R": 58,
+        "Bf": 59,
+        "Brf": 59
+      },
+      "cat": {
+        "A": {
+          "right": 57,
+          "fallback": 37,
+          "wrong": 3
+        },
+        "B": {
+          "right": 59,
+          "fallback": 35,
+          "wrong": 3
+        },
+        "C": {
+          "right": 59,
+          "fallback": 35,
+          "wrong": 3
+        },
+        "Bni": {
+          "right": 59,
+          "fallback": 35,
+          "wrong": 3
+        },
+        "Br": {
+          "right": 59,
+          "fallback": 35,
+          "wrong": 3
+        },
+        "R": {
+          "right": 58,
+          "fallback": 33,
+          "wrong": 6
+        },
+        "Bf": {
+          "right": 59,
+          "fallback": 33,
+          "wrong": 5
+        },
+        "Brf": {
+          "right": 59,
+          "fallback": 33,
+          "wrong": 5
+        }
+      },
+      "rec": {
+        "B": {
+          "recoverable": 3,
+          "rejected": 3,
+          "recovered": 0,
+          "wrong_accepted": 0
+        },
+        "Br": {
+          "recoverable": 3,
+          "rejected": 3,
+          "recovered": 0,
+          "wrong_accepted": 0
+        }
+      },
+      "failure_classes": {
+        "rule gap": 35,
+        "wrong reading chosen": 1,
+        "sop differs": 2
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 0.9381,
+        "world_top1": 0.9691,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 0.94,
+      "exact_sop": {
+        "A": 0.5876,
+        "B": 0.6082,
+        "C": 0.6082,
+        "Bni": 0.6082,
+        "Br": 0.6082,
+        "R": 0.5979,
+        "Bf": 0.6082,
+        "Brf": 0.6082
+      },
+      "understanding": {
+        "A": {
+          "right": 0.5876,
+          "fallback": 0.3814,
+          "wrong": 0.0309
+        },
+        "B": {
+          "right": 0.6082,
+          "fallback": 0.3608,
+          "wrong": 0.0309
+        },
+        "C": {
+          "right": 0.6082,
+          "fallback": 0.3608,
+          "wrong": 0.0309
+        },
+        "Bni": {
+          "right": 0.6082,
+          "fallback": 0.3608,
+          "wrong": 0.0309
+        },
+        "Br": {
+          "right": 0.6082,
+          "fallback": 0.3608,
+          "wrong": 0.0309
+        },
+        "R": {
+          "right": 0.5979,
+          "fallback": 0.3402,
+          "wrong": 0.0619
+        },
+        "Bf": {
+          "right": 0.6082,
+          "fallback": 0.3402,
+          "wrong": 0.0515
+        },
+        "Brf": {
+          "right": 0.6082,
+          "fallback": 0.3402,
+          "wrong": 0.0515
+        }
+      },
+      "negatives_rejected": null,
+      "recovery": {
+        "B": {
+          "recoverable": 3,
+          "wrong_top1_rejected": 3,
+          "recovered_exact": 0,
+          "wrong_top1_accepted": 0
+        },
+        "Br": {
+          "recoverable": 3,
+          "wrong_top1_rejected": 3,
+          "recovered_exact": 0,
+          "wrong_top1_accepted": 0
+        }
+      }
+    },
+    "multi-command": {
+      "n": 100,
+      "pos": 100,
+      "neg": 0,
+      "scored_pos": 100,
+      "seg_beam": 100,
+      "seg_top1": 99,
+      "w_top1": 90,
+      "w_top3": 98,
+      "with_simplified": 0,
+      "seg_tp": 197,
+      "seg_pred": 199,
+      "seg_gold": 198,
+      "neg_ok": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Bni": 0,
+        "Br": 0,
+        "R": 0,
+        "Bf": 0,
+        "Brf": 0
+      },
+      "ok": {
+        "A": 77,
+        "B": 71,
+        "C": 71,
+        "Bni": 83,
+        "Br": 83,
+        "R": 40,
+        "Bf": 74,
+        "Brf": 84
+      },
+      "cat": {
+        "A": {
+          "right": 77,
+          "fallback": 19,
+          "wrong": 4
+        },
+        "B": {
+          "right": 71,
+          "fallback": 25,
+          "wrong": 4
+        },
+        "C": {
+          "right": 71,
+          "fallback": 25,
+          "wrong": 4
+        },
+        "Bni": {
+          "right": 83,
+          "fallback": 13,
+          "wrong": 4
+        },
+        "Br": {
+          "right": 83,
+          "fallback": 13,
+          "wrong": 4
+        },
+        "R": {
+          "right": 40,
+          "fallback": 21,
+          "wrong": 39
+        },
+        "Bf": {
+          "right": 74,
+          "fallback": 10,
+          "wrong": 16
+        },
+        "Brf": {
+          "right": 84,
+          "fallback": 9,
+          "wrong": 7
+        }
+      },
+      "rec": {
+        "B": {
+          "recoverable": 8,
+          "rejected": 5,
+          "recovered": 4,
+          "wrong_accepted": 3
+        },
+        "Br": {
+          "recoverable": 8,
+          "rejected": 5,
+          "recovered": 4,
+          "wrong_accepted": 3
+        }
+      },
+      "failure_classes": {
+        "world not in candidates": 2,
+        "rule gap": 12,
+        "wrong reading chosen": 2,
+        "sop differs": 1
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 0.99,
+        "world_top1": 0.9,
+        "world_top3": 0.98
+      },
+      "segmentation_f1_top1": 0.9924,
+      "exact_sop": {
+        "A": 0.77,
+        "B": 0.71,
+        "C": 0.71,
+        "Bni": 0.83,
+        "Br": 0.83,
+        "R": 0.4,
+        "Bf": 0.74,
+        "Brf": 0.84
+      },
+      "understanding": {
+        "A": {
+          "right": 0.77,
+          "fallback": 0.19,
+          "wrong": 0.04
+        },
+        "B": {
+          "right": 0.71,
+          "fallback": 0.25,
+          "wrong": 0.04
+        },
+        "C": {
+          "right": 0.71,
+          "fallback": 0.25,
+          "wrong": 0.04
+        },
+        "Bni": {
+          "right": 0.83,
+          "fallback": 0.13,
+          "wrong": 0.04
+        },
+        "Br": {
+          "right": 0.83,
+          "fallback": 0.13,
+          "wrong": 0.04
+        },
+        "R": {
+          "right": 0.4,
+          "fallback": 0.21,
+          "wrong": 0.39
+        },
+        "Bf": {
+          "right": 0.74,
+          "fallback": 0.1,
+          "wrong": 0.16
+        },
+        "Brf": {
+          "right": 0.84,
+          "fallback": 0.09,
+          "wrong": 0.07
+        }
+      },
+      "negatives_rejected": null,
+      "recovery": {
+        "B": {
+          "recoverable": 8,
+          "wrong_top1_rejected": 5,
+          "recovered_exact": 4,
+          "wrong_top1_accepted": 3
+        },
+        "Br": {
+          "recoverable": 8,
+          "wrong_top1_rejected": 5,
+          "recovered_exact": 4,
+          "wrong_top1_accepted": 3
+        }
+      }
+    },
+    "paraphrase": {
+      "n": 11,
+      "pos": 11,
+      "neg": 0,
+      "scored_pos": 11,
+      "seg_beam": 11,
+      "seg_top1": 10,
+      "w_top1": 10,
+      "w_top3": 11,
+      "with_simplified": 0,
+      "seg_tp": 11,
+      "seg_pred": 12,
+      "seg_gold": 11,
+      "neg_ok": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Bni": 0,
+        "Br": 0,
+        "R": 0,
+        "Bf": 0,
+        "Brf": 0
+      },
+      "ok": {
+        "A": 7,
+        "B": 7,
+        "C": 7,
+        "Bni": 7,
+        "Br": 7,
+        "R": 7,
+        "Bf": 7,
+        "Brf": 7
+      },
+      "cat": {
+        "A": {
+          "right": 7,
+          "fallback": 3,
+          "wrong": 1
+        },
+        "B": {
+          "right": 7,
+          "fallback": 3,
+          "wrong": 1
+        },
+        "C": {
+          "right": 7,
+          "fallback": 3,
+          "wrong": 1
+        },
+        "Bni": {
+          "right": 7,
+          "fallback": 3,
+          "wrong": 1
+        },
+        "Br": {
+          "right": 7,
+          "fallback": 3,
+          "wrong": 1
+        },
+        "R": {
+          "right": 7,
+          "fallback": 3,
+          "wrong": 1
+        },
+        "Bf": {
+          "right": 7,
+          "fallback": 3,
+          "wrong": 1
+        },
+        "Brf": {
+          "right": 7,
+          "fallback": 3,
+          "wrong": 1
+        }
+      },
+      "rec": {
+        "B": {
+          "recoverable": 1,
+          "rejected": 0,
+          "recovered": 0,
+          "wrong_accepted": 1
+        },
+        "Br": {
+          "recoverable": 1,
+          "rejected": 0,
+          "recovered": 0,
+          "wrong_accepted": 1
+        }
+      },
+      "failure_classes": {
+        "rule gap": 4
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 0.9091,
+        "world_top1": 0.9091,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 0.9565,
+      "exact_sop": {
+        "A": 0.6364,
+        "B": 0.6364,
+        "C": 0.6364,
+        "Bni": 0.6364,
+        "Br": 0.6364,
+        "R": 0.6364,
+        "Bf": 0.6364,
+        "Brf": 0.6364
+      },
+      "understanding": {
+        "A": {
+          "right": 0.6364,
+          "fallback": 0.2727,
+          "wrong": 0.0909
+        },
+        "B": {
+          "right": 0.6364,
+          "fallback": 0.2727,
+          "wrong": 0.0909
+        },
+        "C": {
+          "right": 0.6364,
+          "fallback": 0.2727,
+          "wrong": 0.0909
+        },
+        "Bni": {
+          "right": 0.6364,
+          "fallback": 0.2727,
+          "wrong": 0.0909
+        },
+        "Br": {
+          "right": 0.6364,
+          "fallback": 0.2727,
+          "wrong": 0.0909
+        },
+        "R": {
+          "right": 0.6364,
+          "fallback": 0.2727,
+          "wrong": 0.0909
+        },
+        "Bf": {
+          "right": 0.6364,
+          "fallback": 0.2727,
+          "wrong": 0.0909
+        },
+        "Brf": {
+          "right": 0.6364,
+          "fallback": 0.2727,
+          "wrong": 0.0909
+        }
+      },
+      "negatives_rejected": null,
+      "recovery": {
+        "B": {
+          "recoverable": 1,
+          "wrong_top1_rejected": 0,
+          "recovered_exact": 0,
+          "wrong_top1_accepted": 1
+        },
+        "Br": {
+          "recoverable": 1,
+          "wrong_top1_rejected": 0,
+          "recovered_exact": 0,
+          "wrong_top1_accepted": 1
+        }
+      }
+    },
+    "rule-derived": {
+      "n": 5,
+      "pos": 5,
+      "neg": 0,
+      "scored_pos": 5,
+      "seg_beam": 5,
+      "seg_top1": 5,
+      "w_top1": 5,
+      "w_top3": 5,
+      "with_simplified": 0,
+      "seg_tp": 5,
+      "seg_pred": 5,
+      "seg_gold": 5,
+      "neg_ok": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Bni": 0,
+        "Br": 0,
+        "R": 0,
+        "Bf": 0,
+        "Brf": 0
+      },
+      "ok": {
+        "A": 5,
+        "B": 5,
+        "C": 5,
+        "Bni": 5,
+        "Br": 5,
+        "R": 5,
+        "Bf": 5,
+        "Brf": 5
+      },
+      "cat": {
+        "A": {
+          "right": 5,
+          "fallback": 0,
+          "wrong": 0
+        },
+        "B": {
+          "right": 5,
+          "fallback": 0,
+          "wrong": 0
+        },
+        "C": {
+          "right": 5,
+          "fallback": 0,
+          "wrong": 0
+        },
+        "Bni": {
+          "right": 5,
+          "fallback": 0,
+          "wrong": 0
+        },
+        "Br": {
+          "right": 5,
+          "fallback": 0,
+          "wrong": 0
+        },
+        "R": {
+          "right": 5,
+          "fallback": 0,
+          "wrong": 0
+        },
+        "Bf": {
+          "right": 5,
+          "fallback": 0,
+          "wrong": 0
+        },
+        "Brf": {
+          "right": 5,
+          "fallback": 0,
+          "wrong": 0
+        }
+      },
+      "rec": {
+        "B": {
+          "recoverable": 0,
+          "rejected": 0,
+          "recovered": 0,
+          "wrong_accepted": 0
+        },
+        "Br": {
+          "recoverable": 0,
+          "rejected": 0,
+          "recovered": 0,
+          "wrong_accepted": 0
+        }
+      },
+      "failure_classes": {},
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "Bni": 1,
+        "Br": 1,
+        "R": 1,
+        "Bf": 1,
+        "Brf": 1
+      },
+      "understanding": {
+        "A": {
+          "right": 1,
+          "fallback": 0,
+          "wrong": 0
+        },
+        "B": {
+          "right": 1,
+          "fallback": 0,
+          "wrong": 0
+        },
+        "C": {
+          "right": 1,
+          "fallback": 0,
+          "wrong": 0
+        },
+        "Bni": {
+          "right": 1,
+          "fallback": 0,
+          "wrong": 0
+        },
+        "Br": {
+          "right": 1,
+          "fallback": 0,
+          "wrong": 0
+        },
+        "R": {
+          "right": 1,
+          "fallback": 0,
+          "wrong": 0
+        },
+        "Bf": {
+          "right": 1,
+          "fallback": 0,
+          "wrong": 0
+        },
+        "Brf": {
+          "right": 1,
+          "fallback": 0,
+          "wrong": 0
+        }
+      },
+      "negatives_rejected": null,
+      "recovery": {
+        "B": {
+          "recoverable": 0,
+          "wrong_top1_rejected": 0,
+          "recovered_exact": 0,
+          "wrong_top1_accepted": 0
+        },
+        "Br": {
+          "recoverable": 0,
+          "wrong_top1_rejected": 0,
+          "recovered_exact": 0,
+          "wrong_top1_accepted": 0
+        }
+      }
+    }
+  },
+  "by_world": {
+    "kids.animals": {
+      "n": 36,
+      "pos": 36,
+      "neg": 0,
+      "scored_pos": 36,
+      "seg_beam": 36,
+      "seg_top1": 36,
+      "w_top1": 34,
+      "w_top3": 36,
+      "with_simplified": 0,
+      "seg_tp": 36,
+      "seg_pred": 36,
+      "seg_gold": 36,
+      "neg_ok": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Bni": 0,
+        "Br": 0,
+        "R": 0,
+        "Bf": 0,
+        "Brf": 0
+      },
+      "ok": {
+        "A": 27,
+        "B": 28,
+        "C": 28,
+        "Bni": 28,
+        "Br": 28,
+        "R": 28,
+        "Bf": 28,
+        "Brf": 28
+      },
+      "cat": {
+        "A": {
+          "right": 27,
+          "fallback": 9,
+          "wrong": 0
+        },
+        "B": {
+          "right": 28,
+          "fallback": 8,
+          "wrong": 0
+        },
+        "C": {
+          "right": 28,
+          "fallback": 8,
+          "wrong": 0
+        },
+        "Bni": {
+          "right": 28,
+          "fallback": 8,
+          "wrong": 0
+        },
+        "Br": {
+          "right": 28,
+          "fallback": 8,
+          "wrong": 0
+        },
+        "R": {
+          "right": 28,
+          "fallback": 6,
+          "wrong": 2
+        },
+        "Bf": {
+          "right": 28,
+          "fallback": 6,
+          "wrong": 2
+        },
+        "Brf": {
+          "right": 28,
+          "fallback": 6,
+          "wrong": 2
+        }
+      },
+      "rec": {
+        "B": {
+          "recoverable": 2,
+          "rejected": 2,
+          "recovered": 1,
+          "wrong_accepted": 0
+        },
+        "Br": {
+          "recoverable": 2,
+          "rejected": 2,
+          "recovered": 1,
+          "wrong_accepted": 0
+        }
+      },
+      "failure_classes": {
+        "rule gap": 8
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 0.9444,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 0.75,
+        "B": 0.7778,
+        "C": 0.7778,
+        "Bni": 0.7778,
+        "Br": 0.7778,
+        "R": 0.7778,
+        "Bf": 0.7778,
+        "Brf": 0.7778
+      },
+      "understanding": {
+        "A": {
+          "right": 0.75,
+          "fallback": 0.25,
+          "wrong": 0
+        },
+        "B": {
+          "right": 0.7778,
+          "fallback": 0.2222,
+          "wrong": 0
+        },
+        "C": {
+          "right": 0.7778,
+          "fallback": 0.2222,
+          "wrong": 0
+        },
+        "Bni": {
+          "right": 0.7778,
+          "fallback": 0.2222,
+          "wrong": 0
+        },
+        "Br": {
+          "right": 0.7778,
+          "fallback": 0.2222,
+          "wrong": 0
+        },
+        "R": {
+          "right": 0.7778,
+          "fallback": 0.1667,
+          "wrong": 0.0556
+        },
+        "Bf": {
+          "right": 0.7778,
+          "fallback": 0.1667,
+          "wrong": 0.0556
+        },
+        "Brf": {
+          "right": 0.7778,
+          "fallback": 0.1667,
+          "wrong": 0.0556
+        }
+      },
+      "negatives_rejected": null,
+      "recovery": {
+        "B": {
+          "recoverable": 2,
+          "wrong_top1_rejected": 2,
+          "recovered_exact": 1,
+          "wrong_top1_accepted": 0
+        },
+        "Br": {
+          "recoverable": 2,
+          "wrong_top1_rejected": 2,
+          "recovered_exact": 1,
+          "wrong_top1_accepted": 0
+        }
+      }
+    },
+    "kids.arith": {
+      "n": 36,
+      "pos": 26,
+      "neg": 10,
+      "scored_pos": 26,
+      "seg_beam": 26,
+      "seg_top1": 24,
+      "w_top1": 26,
+      "w_top3": 26,
+      "with_simplified": 0,
+      "seg_tp": 26,
+      "seg_pred": 28,
+      "seg_gold": 26,
+      "neg_ok": {
+        "A": 10,
+        "B": 10,
+        "C": 10,
+        "Bni": 10,
+        "Br": 10,
+        "R": 10,
+        "Bf": 10,
+        "Brf": 10
+      },
+      "ok": {
+        "A": 18,
+        "B": 19,
+        "C": 19,
+        "Bni": 19,
+        "Br": 19,
+        "R": 19,
+        "Bf": 19,
+        "Brf": 19
+      },
+      "cat": {
+        "A": {
+          "right": 18,
+          "fallback": 8,
+          "wrong": 0
+        },
+        "B": {
+          "right": 19,
+          "fallback": 7,
+          "wrong": 0
+        },
+        "C": {
+          "right": 19,
+          "fallback": 7,
+          "wrong": 0
+        },
+        "Bni": {
+          "right": 19,
+          "fallback": 7,
+          "wrong": 0
+        },
+        "Br": {
+          "right": 19,
+          "fallback": 7,
+          "wrong": 0
+        },
+        "R": {
+          "right": 19,
+          "fallback": 7,
+          "wrong": 0
+        },
+        "Bf": {
+          "right": 19,
+          "fallback": 7,
+          "wrong": 0
+        },
+        "Brf": {
+          "right": 19,
+          "fallback": 7,
+          "wrong": 0
+        }
+      },
+      "rec": {
+        "B": {
+          "recoverable": 0,
+          "rejected": 0,
+          "recovered": 0,
+          "wrong_accepted": 0
+        },
+        "Br": {
+          "recoverable": 0,
+          "rejected": 0,
+          "recovered": 0,
+          "wrong_accepted": 0
+        }
+      },
+      "failure_classes": {
+        "rule gap": 7
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 0.9231,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 0.963,
+      "exact_sop": {
+        "A": 0.6923,
+        "B": 0.7308,
+        "C": 0.7308,
+        "Bni": 0.7308,
+        "Br": 0.7308,
+        "R": 0.7308,
+        "Bf": 0.7308,
+        "Brf": 0.7308
+      },
+      "understanding": {
+        "A": {
+          "right": 0.6923,
+          "fallback": 0.3077,
+          "wrong": 0
+        },
+        "B": {
+          "right": 0.7308,
+          "fallback": 0.2692,
+          "wrong": 0
+        },
+        "C": {
+          "right": 0.7308,
+          "fallback": 0.2692,
+          "wrong": 0
+        },
+        "Bni": {
+          "right": 0.7308,
+          "fallback": 0.2692,
+          "wrong": 0
+        },
+        "Br": {
+          "right": 0.7308,
+          "fallback": 0.2692,
+          "wrong": 0
+        },
+        "R": {
+          "right": 0.7308,
+          "fallback": 0.2692,
+          "wrong": 0
+        },
+        "Bf": {
+          "right": 0.7308,
+          "fallback": 0.2692,
+          "wrong": 0
+        },
+        "Brf": {
+          "right": 0.7308,
+          "fallback": 0.2692,
+          "wrong": 0
+        }
+      },
+      "negatives_rejected": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "Bni": 1,
+        "Br": 1,
+        "R": 1,
+        "Bf": 1,
+        "Brf": 1
+      },
+      "recovery": {
+        "B": {
+          "recoverable": 0,
+          "wrong_top1_rejected": 0,
+          "recovered_exact": 0,
+          "wrong_top1_accepted": 0
+        },
+        "Br": {
+          "recoverable": 0,
+          "wrong_top1_rejected": 0,
+          "recovered_exact": 0,
+          "wrong_top1_accepted": 0
+        }
+      }
+    },
+    "kids.common": {
+      "n": 32,
+      "pos": 19,
+      "neg": 13,
+      "scored_pos": 19,
+      "seg_beam": 19,
+      "seg_top1": 16,
+      "w_top1": 18,
+      "w_top3": 19,
+      "with_simplified": 0,
+      "seg_tp": 18,
+      "seg_pred": 22,
+      "seg_gold": 19,
+      "neg_ok": {
+        "A": 13,
+        "B": 13,
+        "C": 13,
+        "Bni": 13,
+        "Br": 13,
+        "R": 11,
+        "Bf": 11,
+        "Brf": 11
+      },
+      "ok": {
+        "A": 9,
+        "B": 9,
+        "C": 9,
+        "Bni": 9,
+        "Br": 9,
+        "R": 9,
+        "Bf": 9,
+        "Brf": 9
+      },
+      "cat": {
+        "A": {
+          "right": 9,
+          "fallback": 8,
+          "wrong": 2
+        },
+        "B": {
+          "right": 9,
+          "fallback": 8,
+          "wrong": 2
+        },
+        "C": {
+          "right": 9,
+          "fallback": 8,
+          "wrong": 2
+        },
+        "Bni": {
+          "right": 9,
+          "fallback": 8,
+          "wrong": 2
+        },
+        "Br": {
+          "right": 9,
+          "fallback": 8,
+          "wrong": 2
+        },
+        "R": {
+          "right": 9,
+          "fallback": 8,
+          "wrong": 2
+        },
+        "Bf": {
+          "right": 9,
+          "fallback": 8,
+          "wrong": 2
+        },
+        "Brf": {
+          "right": 9,
+          "fallback": 8,
+          "wrong": 2
+        }
+      },
+      "rec": {
+        "B": {
+          "recoverable": 1,
+          "rejected": 0,
+          "recovered": 0,
+          "wrong_accepted": 1
+        },
+        "Br": {
+          "recoverable": 1,
+          "rejected": 0,
+          "recovered": 0,
+          "wrong_accepted": 1
+        }
+      },
+      "failure_classes": {
+        "rule gap": 9,
+        "wrong reading chosen": 1
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 0.8421,
+        "world_top1": 0.9474,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 0.8781,
+      "exact_sop": {
+        "A": 0.4737,
+        "B": 0.4737,
+        "C": 0.4737,
+        "Bni": 0.4737,
+        "Br": 0.4737,
+        "R": 0.4737,
+        "Bf": 0.4737,
+        "Brf": 0.4737
+      },
+      "understanding": {
+        "A": {
+          "right": 0.4737,
+          "fallback": 0.4211,
+          "wrong": 0.1053
+        },
+        "B": {
+          "right": 0.4737,
+          "fallback": 0.4211,
+          "wrong": 0.1053
+        },
+        "C": {
+          "right": 0.4737,
+          "fallback": 0.4211,
+          "wrong": 0.1053
+        },
+        "Bni": {
+          "right": 0.4737,
+          "fallback": 0.4211,
+          "wrong": 0.1053
+        },
+        "Br": {
+          "right": 0.4737,
+          "fallback": 0.4211,
+          "wrong": 0.1053
+        },
+        "R": {
+          "right": 0.4737,
+          "fallback": 0.4211,
+          "wrong": 0.1053
+        },
+        "Bf": {
+          "right": 0.4737,
+          "fallback": 0.4211,
+          "wrong": 0.1053
+        },
+        "Brf": {
+          "right": 0.4737,
+          "fallback": 0.4211,
+          "wrong": 0.1053
+        }
+      },
+      "negatives_rejected": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "Bni": 1,
+        "Br": 1,
+        "R": 0.8462,
+        "Bf": 0.8462,
+        "Brf": 0.8462
+      },
+      "recovery": {
+        "B": {
+          "recoverable": 1,
+          "wrong_top1_rejected": 0,
+          "recovered_exact": 0,
+          "wrong_top1_accepted": 1
+        },
+        "Br": {
+          "recoverable": 1,
+          "wrong_top1_rejected": 0,
+          "recovered_exact": 0,
+          "wrong_top1_accepted": 1
+        }
+      }
+    },
+    "kids.shapes": {
+      "n": 32,
+      "pos": 31,
+      "neg": 1,
+      "scored_pos": 31,
+      "seg_beam": 31,
+      "seg_top1": 31,
+      "w_top1": 31,
+      "w_top3": 31,
+      "with_simplified": 0,
+      "seg_tp": 31,
+      "seg_pred": 31,
+      "seg_gold": 31,
+      "neg_ok": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Bni": 0,
+        "Br": 0,
+        "R": 0,
+        "Bf": 0,
+        "Brf": 0
+      },
+      "ok": {
+        "A": 26,
+        "B": 26,
+        "C": 26,
+        "Bni": 26,
+        "Br": 26,
+        "R": 26,
+        "Bf": 26,
+        "Brf": 26
+      },
+      "cat": {
+        "A": {
+          "right": 26,
+          "fallback": 5,
+          "wrong": 0
+        },
+        "B": {
+          "right": 26,
+          "fallback": 5,
+          "wrong": 0
+        },
+        "C": {
+          "right": 26,
+          "fallback": 5,
+          "wrong": 0
+        },
+        "Bni": {
+          "right": 26,
+          "fallback": 5,
+          "wrong": 0
+        },
+        "Br": {
+          "right": 26,
+          "fallback": 5,
+          "wrong": 0
+        },
+        "R": {
+          "right": 26,
+          "fallback": 5,
+          "wrong": 0
+        },
+        "Bf": {
+          "right": 26,
+          "fallback": 5,
+          "wrong": 0
+        },
+        "Brf": {
+          "right": 26,
+          "fallback": 5,
+          "wrong": 0
+        }
+      },
+      "rec": {
+        "B": {
+          "recoverable": 0,
+          "rejected": 0,
+          "recovered": 0,
+          "wrong_accepted": 0
+        },
+        "Br": {
+          "recoverable": 0,
+          "rejected": 0,
+          "recovered": 0,
+          "wrong_accepted": 0
+        }
+      },
+      "failure_classes": {
+        "rule gap": 5
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 0.8387,
+        "B": 0.8387,
+        "C": 0.8387,
+        "Bni": 0.8387,
+        "Br": 0.8387,
+        "R": 0.8387,
+        "Bf": 0.8387,
+        "Brf": 0.8387
+      },
+      "understanding": {
+        "A": {
+          "right": 0.8387,
+          "fallback": 0.1613,
+          "wrong": 0
+        },
+        "B": {
+          "right": 0.8387,
+          "fallback": 0.1613,
+          "wrong": 0
+        },
+        "C": {
+          "right": 0.8387,
+          "fallback": 0.1613,
+          "wrong": 0
+        },
+        "Bni": {
+          "right": 0.8387,
+          "fallback": 0.1613,
+          "wrong": 0
+        },
+        "Br": {
+          "right": 0.8387,
+          "fallback": 0.1613,
+          "wrong": 0
+        },
+        "R": {
+          "right": 0.8387,
+          "fallback": 0.1613,
+          "wrong": 0
+        },
+        "Bf": {
+          "right": 0.8387,
+          "fallback": 0.1613,
+          "wrong": 0
+        },
+        "Brf": {
+          "right": 0.8387,
+          "fallback": 0.1613,
+          "wrong": 0
+        }
+      },
+      "negatives_rejected": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Bni": 0,
+        "Br": 0,
+        "R": 0,
+        "Bf": 0,
+        "Brf": 0
+      },
+      "recovery": {
+        "B": {
+          "recoverable": 0,
+          "wrong_top1_rejected": 0,
+          "recovered_exact": 0,
+          "wrong_top1_accepted": 0
+        },
+        "Br": {
+          "recoverable": 0,
+          "wrong_top1_rejected": 0,
+          "recovered_exact": 0,
+          "wrong_top1_accepted": 0
+        }
+      }
+    },
+    "kids.shop": {
+      "n": 36,
+      "pos": 36,
+      "neg": 0,
+      "scored_pos": 36,
+      "seg_beam": 36,
+      "seg_top1": 35,
+      "w_top1": 36,
+      "w_top3": 36,
+      "with_simplified": 0,
+      "seg_tp": 35,
+      "seg_pred": 37,
+      "seg_gold": 36,
+      "neg_ok": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Bni": 0,
+        "Br": 0,
+        "R": 0,
+        "Bf": 0,
+        "Brf": 0
+      },
+      "ok": {
+        "A": 32,
+        "B": 32,
+        "C": 32,
+        "Bni": 32,
+        "Br": 32,
+        "R": 32,
+        "Bf": 32,
+        "Brf": 32
+      },
+      "cat": {
+        "A": {
+          "right": 32,
+          "fallback": 4,
+          "wrong": 0
+        },
+        "B": {
+          "right": 32,
+          "fallback": 4,
+          "wrong": 0
+        },
+        "C": {
+          "right": 32,
+          "fallback": 4,
+          "wrong": 0
+        },
+        "Bni": {
+          "right": 32,
+          "fallback": 4,
+          "wrong": 0
+        },
+        "Br": {
+          "right": 32,
+          "fallback": 4,
+          "wrong": 0
+        },
+        "R": {
+          "right": 32,
+          "fallback": 4,
+          "wrong": 0
+        },
+        "Bf": {
+          "right": 32,
+          "fallback": 4,
+          "wrong": 0
+        },
+        "Brf": {
+          "right": 32,
+          "fallback": 4,
+          "wrong": 0
+        }
+      },
+      "rec": {
+        "B": {
+          "recoverable": 0,
+          "rejected": 0,
+          "recovered": 0,
+          "wrong_accepted": 0
+        },
+        "Br": {
+          "recoverable": 0,
+          "rejected": 0,
+          "recovered": 0,
+          "wrong_accepted": 0
+        }
+      },
+      "failure_classes": {
+        "rule gap": 4
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 0.9722,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 0.9589,
+      "exact_sop": {
+        "A": 0.8889,
+        "B": 0.8889,
+        "C": 0.8889,
+        "Bni": 0.8889,
+        "Br": 0.8889,
+        "R": 0.8889,
+        "Bf": 0.8889,
+        "Brf": 0.8889
+      },
+      "understanding": {
+        "A": {
+          "right": 0.8889,
+          "fallback": 0.1111,
+          "wrong": 0
+        },
+        "B": {
+          "right": 0.8889,
+          "fallback": 0.1111,
+          "wrong": 0
+        },
+        "C": {
+          "right": 0.8889,
+          "fallback": 0.1111,
+          "wrong": 0
+        },
+        "Bni": {
+          "right": 0.8889,
+          "fallback": 0.1111,
+          "wrong": 0
+        },
+        "Br": {
+          "right": 0.8889,
+          "fallback": 0.1111,
+          "wrong": 0
+        },
+        "R": {
+          "right": 0.8889,
+          "fallback": 0.1111,
+          "wrong": 0
+        },
+        "Bf": {
+          "right": 0.8889,
+          "fallback": 0.1111,
+          "wrong": 0
+        },
+        "Brf": {
+          "right": 0.8889,
+          "fallback": 0.1111,
+          "wrong": 0
+        }
+      },
+      "negatives_rejected": null,
+      "recovery": {
+        "B": {
+          "recoverable": 0,
+          "wrong_top1_rejected": 0,
+          "recovered_exact": 0,
+          "wrong_top1_accepted": 0
+        },
+        "Br": {
+          "recoverable": 0,
+          "wrong_top1_rejected": 0,
+          "recovered_exact": 0,
+          "wrong_top1_accepted": 0
+        }
+      }
+    },
+    "kids.tasks": {
+      "n": 38,
+      "pos": 38,
+      "neg": 0,
+      "scored_pos": 38,
+      "seg_beam": 38,
+      "seg_top1": 38,
+      "w_top1": 36,
+      "w_top3": 38,
+      "with_simplified": 0,
+      "seg_tp": 38,
+      "seg_pred": 38,
+      "seg_gold": 38,
+      "neg_ok": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Bni": 0,
+        "Br": 0,
+        "R": 0,
+        "Bf": 0,
+        "Brf": 0
+      },
+      "ok": {
+        "A": 32,
+        "B": 32,
+        "C": 32,
+        "Bni": 32,
+        "Br": 32,
+        "R": 31,
+        "Bf": 32,
+        "Brf": 32
+      },
+      "cat": {
+        "A": {
+          "right": 32,
+          "fallback": 4,
+          "wrong": 2
+        },
+        "B": {
+          "right": 32,
+          "fallback": 4,
+          "wrong": 2
+        },
+        "C": {
+          "right": 32,
+          "fallback": 4,
+          "wrong": 2
+        },
+        "Bni": {
+          "right": 32,
+          "fallback": 4,
+          "wrong": 2
+        },
+        "Br": {
+          "right": 32,
+          "fallback": 4,
+          "wrong": 2
+        },
+        "R": {
+          "right": 31,
+          "fallback": 4,
+          "wrong": 3
+        },
+        "Bf": {
+          "right": 32,
+          "fallback": 4,
+          "wrong": 2
+        },
+        "Brf": {
+          "right": 32,
+          "fallback": 4,
+          "wrong": 2
+        }
+      },
+      "rec": {
+        "B": {
+          "recoverable": 2,
+          "rejected": 2,
+          "recovered": 0,
+          "wrong_accepted": 0
+        },
+        "Br": {
+          "recoverable": 2,
+          "rejected": 2,
+          "recovered": 0,
+          "wrong_accepted": 0
+        }
+      },
+      "failure_classes": {
+        "sop differs": 2,
+        "rule gap": 4
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 0.9474,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 0.8421,
+        "B": 0.8421,
+        "C": 0.8421,
+        "Bni": 0.8421,
+        "Br": 0.8421,
+        "R": 0.8158,
+        "Bf": 0.8421,
+        "Brf": 0.8421
+      },
+      "understanding": {
+        "A": {
+          "right": 0.8421,
+          "fallback": 0.1053,
+          "wrong": 0.0526
+        },
+        "B": {
+          "right": 0.8421,
+          "fallback": 0.1053,
+          "wrong": 0.0526
+        },
+        "C": {
+          "right": 0.8421,
+          "fallback": 0.1053,
+          "wrong": 0.0526
+        },
+        "Bni": {
+          "right": 0.8421,
+          "fallback": 0.1053,
+          "wrong": 0.0526
+        },
+        "Br": {
+          "right": 0.8421,
+          "fallback": 0.1053,
+          "wrong": 0.0526
+        },
+        "R": {
+          "right": 0.8158,
+          "fallback": 0.1053,
+          "wrong": 0.0789
+        },
+        "Bf": {
+          "right": 0.8421,
+          "fallback": 0.1053,
+          "wrong": 0.0526
+        },
+        "Brf": {
+          "right": 0.8421,
+          "fallback": 0.1053,
+          "wrong": 0.0526
+        }
+      },
+      "negatives_rejected": null,
+      "recovery": {
+        "B": {
+          "recoverable": 2,
+          "wrong_top1_rejected": 2,
+          "recovered_exact": 0,
+          "wrong_top1_accepted": 0
+        },
+        "Br": {
+          "recoverable": 2,
+          "wrong_top1_rejected": 2,
+          "recovered_exact": 0,
+          "wrong_top1_accepted": 0
+        }
+      }
+    },
+    "kids.time": {
+      "n": 37,
+      "pos": 37,
+      "neg": 0,
+      "scored_pos": 37,
+      "seg_beam": 37,
+      "seg_top1": 36,
+      "w_top1": 37,
+      "w_top3": 37,
+      "with_simplified": 0,
+      "seg_tp": 36,
+      "seg_pred": 38,
+      "seg_gold": 37,
+      "neg_ok": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Bni": 0,
+        "Br": 0,
+        "R": 0,
+        "Bf": 0,
+        "Brf": 0
+      },
+      "ok": {
+        "A": 34,
+        "B": 35,
+        "C": 35,
+        "Bni": 35,
+        "Br": 35,
+        "R": 35,
+        "Bf": 35,
+        "Brf": 35
+      },
+      "cat": {
+        "A": {
+          "right": 34,
+          "fallback": 3,
+          "wrong": 0
+        },
+        "B": {
+          "right": 35,
+          "fallback": 2,
+          "wrong": 0
+        },
+        "C": {
+          "right": 35,
+          "fallback": 2,
+          "wrong": 0
+        },
+        "Bni": {
+          "right": 35,
+          "fallback": 2,
+          "wrong": 0
+        },
+        "Br": {
+          "right": 35,
+          "fallback": 2,
+          "wrong": 0
+        },
+        "R": {
+          "right": 35,
+          "fallback": 2,
+          "wrong": 0
+        },
+        "Bf": {
+          "right": 35,
+          "fallback": 2,
+          "wrong": 0
+        },
+        "Brf": {
+          "right": 35,
+          "fallback": 2,
+          "wrong": 0
+        }
+      },
+      "rec": {
+        "B": {
+          "recoverable": 0,
+          "rejected": 0,
+          "recovered": 0,
+          "wrong_accepted": 0
+        },
+        "Br": {
+          "recoverable": 0,
+          "rejected": 0,
+          "recovered": 0,
+          "wrong_accepted": 0
+        }
+      },
+      "failure_classes": {
+        "rule gap": 2
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 0.973,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 0.96,
+      "exact_sop": {
+        "A": 0.9189,
+        "B": 0.9459,
+        "C": 0.9459,
+        "Bni": 0.9459,
+        "Br": 0.9459,
+        "R": 0.9459,
+        "Bf": 0.9459,
+        "Brf": 0.9459
+      },
+      "understanding": {
+        "A": {
+          "right": 0.9189,
+          "fallback": 0.0811,
+          "wrong": 0
+        },
+        "B": {
+          "right": 0.9459,
+          "fallback": 0.0541,
+          "wrong": 0
+        },
+        "C": {
+          "right": 0.9459,
+          "fallback": 0.0541,
+          "wrong": 0
+        },
+        "Bni": {
+          "right": 0.9459,
+          "fallback": 0.0541,
+          "wrong": 0
+        },
+        "Br": {
+          "right": 0.9459,
+          "fallback": 0.0541,
+          "wrong": 0
+        },
+        "R": {
+          "right": 0.9459,
+          "fallback": 0.0541,
+          "wrong": 0
+        },
+        "Bf": {
+          "right": 0.9459,
+          "fallback": 0.0541,
+          "wrong": 0
+        },
+        "Brf": {
+          "right": 0.9459,
+          "fallback": 0.0541,
+          "wrong": 0
+        }
+      },
+      "negatives_rejected": null,
+      "recovery": {
+        "B": {
+          "recoverable": 0,
+          "wrong_top1_rejected": 0,
+          "recovered_exact": 0,
+          "wrong_top1_accepted": 0
+        },
+        "Br": {
+          "recoverable": 0,
+          "wrong_top1_rejected": 0,
+          "recovered_exact": 0,
+          "wrong_top1_accepted": 0
+        }
+      }
+    }
+  },
+  "failure_classes": {
+    "rule gap": 51,
+    "sop differs": 3,
+    "world not in candidates": 2,
+    "wrong reading chosen": 3
+  },
+  "failure_classes_realistic": {
+    "rule gap": 51,
+    "sop differs": 3,
+    "world not in candidates": 2,
+    "wrong reading chosen": 3
+  },
+  "rule_gaps": {
+    "kids.common": {
+      "n": 13,
+      "top_words": [
+        "are (4)",
+        "thanks (4)",
+        "name (3)",
+        "u (3)",
+        "go (2)",
+        "great (2)",
+        "bot (1)",
+        "by (1)"
+      ],
+      "top_bigrams": [
+        "are you (2)",
+        "great thanks (2)",
+        "a robot (1)",
+        "are me (1)",
+        "are u (1)",
+        "bot are (1)"
+      ],
+      "examples": [
+        "great, thanks",
+        "name you go by?",
+        "u recognise me or not",
+        "hello friend how are u",
+        "which bot are you"
+      ]
+    },
+    "kids.arith": {
+      "n": 9,
+      "top_words": [
+        "how (3)",
+        "leo (3)",
+        "many (3)",
+        "zoe (3)",
+        "marbles (2)",
+        "stickers (2)",
+        "among (1)",
+        "at (1)"
+      ],
+      "top_bigrams": [
+        "how many (3)",
+        "zoe marbles (2)",
+        "20 among (1)",
+        "4 how (1)",
+        "4 lollipops (1)",
+        "4 sheets (1)"
+      ],
+      "examples": [
+        "how many stickers is leo at now",
+        "zoe got 5 pencils from the shop",
+        "together leo zoe marbles how many",
+        "total stickers?",
+        "leo vs zoe marbles who wins"
+      ]
+    },
+    "kids.animals": {
+      "n": 8,
+      "top_words": [
+        "legs (4)",
+        "animals (2)",
+        "have (2)",
+        "tell (2)",
+        "about (1)",
+        "called (1)",
+        "calves (1)",
+        "cow (1)"
+      ],
+      "top_bigrams": [
+        "tell me (2)",
+        "4 legs (1)",
+        "6 legs (1)",
+        "a dog (1)",
+        "a spider (1)",
+        "a zebra (1)"
+      ],
+      "examples": [
+        "tell me the legs of a spider",
+        "tell me about calves",
+        "animals with six legs",
+        "can you find animals that have 6 legs",
+        "cow say?"
+      ]
+    },
+    "kids.shapes": {
+      "n": 5,
+      "top_words": [
+        "triangle (2)",
+        "brown (1)",
+        "hexagon (1)",
+        "how (1)",
+        "made (1)",
+        "mix (1)",
+        "orange (1)",
+        "pentagon (1)"
+      ],
+      "top_bigrams": [
+        "a hexagon (1)",
+        "a pentagon (1)",
+        "a triangle (1)",
+        "brown mix (1)",
+        "hexagon is (1)",
+        "how made (1)"
+      ],
+      "examples": [
+        "brown = mix what",
+        "triangle polygon?",
+        "a hexagon is a triangle right",
+        "whats a pentagon",
+        "orange how made?"
+      ]
+    },
+    "kids.shop": {
+      "n": 4,
+      "top_words": [
+        "lei (3)",
+        "change (2)",
+        "from (2)",
+        "kite (2)",
+        "kites (1)",
+        "puzzle (1)",
+        "thirty (1)",
+        "used (1)"
+      ],
+      "top_bigrams": [
+        "change from (2)",
+        "2 kites (1)",
+        "2 lei (1)",
+        "4 lei (1)",
+        "and 2 (1)",
+        "from 20 (1)"
+      ],
+      "examples": [
+        "i used 2 lei",
+        "kite = 4 lei",
+        "kite change from 20?",
+        "change from thirty lei, puzzle and 2 kites"
+      ]
+    },
+    "kids.tasks": {
+      "n": 4,
+      "top_words": [
+        "about (1)",
+        "dishes (1)",
+        "done (1)",
+        "empty (1)",
+        "finished (1)",
+        "garden (1)",
+        "homework (1)",
+        "list (1)"
+      ],
+      "top_bigrams": [
+        "a nudge (1)",
+        "about the (1)",
+        "done pls (1)",
+        "empty the (1)",
+        "finished yet (1)",
+        "garden list (1)"
+      ],
+      "examples": [
+        "i need a nudge about the dishes",
+        "reading done pls",
+        "no homework finished yet",
+        "could you empty the garden list for me"
+      ]
+    },
+    "art.draw": {
+      "n": 3,
+      "top_words": [
+        "house (2)",
+        "corner (1)",
+        "left (1)",
+        "pls (1)",
+        "red (1)",
+        "right (1)",
+        "shove (1)",
+        "side (1)"
+      ],
+      "top_bigrams": [
+        "house please (1)",
+        "house pls (1)",
+        "left side (1)",
+        "red house (1)",
+        "right corner (1)",
+        "shove it (1)"
+      ],
+      "examples": [
+        "shove it to the top right corner.",
+        "red house pls",
+        "left side for the house please"
+      ]
+    },
+    "kids.time": {
+      "n": 2,
+      "top_words": [
+        "days (2)",
+        "after (1)",
+        "back (1)",
+        "count (1)",
+        "from (1)",
+        "sun (1)",
+        "wednesday (1)"
+      ],
+      "top_bigrams": [
+        "4 days (1)",
+        "5 days (1)",
+        "after sun (1)",
+        "back 5 (1)",
+        "count back (1)",
+        "days after (1)"
+      ],
+      "examples": [
+        "4 days after sun?",
+        "count back 5 days from wednesday"
+      ]
+    },
+    "ui.avatar": {
+      "n": 2,
+      "top_words": [
+        "mouth (2)",
+        "one (1)",
+        "pls (1)",
+        "prev (1)",
+        "previous (1)"
+      ],
+      "top_bigrams": [
+        "mouth previous (1)",
+        "one pls (1)",
+        "prev mouth (1)",
+        "previous one (1)"
+      ],
+      "examples": [
+        "mouth previous one pls",
+        "prev mouth"
+      ]
+    },
+    "docs.editor": {
+      "n": 1,
+      "top_words": [
+        "did (1)",
+        "out (1)",
+        "pick (1)",
+        "text (1)",
+        "which (1)"
+      ],
+      "top_bigrams": [
+        "did i (1)",
+        "i pick (1)",
+        "pick out (1)",
+        "text did (1)",
+        "which text (1)"
+      ],
+      "examples": [
+        "which text did I pick out"
+      ]
+    }
+  },
+  "failure_sample": [
+    {
+      "id": "413aab0a754c5a71",
+      "class": "rule gap",
+      "group": "kids",
+      "source": "paraphrase",
+      "text": "great, thanks",
+      "tab": "robot",
+      "session": [],
+      "expected": [
+        "kids.common: great, thanks => core.request ; core.request.action=chat.thanks"
+      ],
+      "dispatcher_top1": [
+        "kids.common/games.guess/ui.avatar: great, thanks"
+      ],
+      "status": "not_understood",
+      "produced": [],
+      "rules_only": "fallback",
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.000) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc000640",
+      "class": "rule gap",
+      "group": "multi-command",
+      "source": "multi-command",
+      "text": "great thanks",
+      "tab": "robot",
+      "session": [],
+      "expected": [
+        "kids.common: great thanks => core.request ; core.request.action=chat.thanks"
+      ],
+      "dispatcher_top1": [
+        "kids.common/ui.avatar/kids.shop: great thanks"
+      ],
+      "status": "not_understood",
+      "produced": [],
+      "rules_only": "fallback",
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.000) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "912a9f22462fcd0a",
+      "class": "sop differs",
+      "group": "kids",
+      "source": "heldout",
+      "text": "socks on the garden list",
+      "tab": "editor",
+      "session": [],
+      "expected": [
+        "kids.tasks: socks on the garden list => core.request ; core.request.action=draw.move ; core.request.arg.phrase=\"socks on my garden\""
+      ],
+      "dispatcher_top1": [
+        "kids.tasks/art.draw/kids.arith: socks on the garden list"
+      ],
+      "status": "understood",
+      "produced": [
+        "kids.tasks [original]: socks on the garden list => core.request ; core.request.action=tasks.add ; core.request.arg.item=\"socks\" ; core.request.arg.list=\"garden\""
+      ],
+      "rules_only": "wrong",
+      "why": "segmentation 1 of 4 wins with score -0.000 (dispatcher -0.000), all 1 piece(s) validate"
+    },
+    {
+      "id": "mc002280",
+      "class": "sop differs",
+      "group": "multi-command",
+      "source": "multi-command",
+      "text": "is lily ahead of sam on stickers and put the house next to the tree",
+      "tab": "robot",
+      "session": [],
+      "expected": [
+        "kids.arith: is lily ahead of sam on stickers => core.question ; core.question.type=kids.arith.verdict ; core.question.seek=answer ; core.question.where.item=sticker ; core.question.where.who1=$e.lily ; core.question.where.who2=$e.sam",
+        "art.draw: put the house next to the tree => core.request ; core.request.action=draw.move ; core.request.arg.phrase=\"the tree to the left\""
+      ],
+      "dispatcher_top1": [
+        "kids.arith/kids.tasks/kids.animals: is lily ahead of sam on stickers",
+        "art.draw/ui.avatar/kids.arith: put the house next to the tree"
+      ],
+      "status": "understood",
+      "produced": [
+        "kids.arith [original]: is lily ahead of sam on stickers => core.question ; core.question.type=kids.arith.verdict ; core.question.seek=answer ; core.question.where.item=sticker ; core.question.where.who1=$e.lily ; core.question.where.who2=$e.sam",
+        "art.draw [original]: put the house next to the tree => core.request ; core.request.action=draw.move ; core.request.arg.phrase=\"the house next to the tree\""
+      ],
+      "rules_only": "wrong",
+      "why": "segmentation 1 of 4 wins with score -0.001 (dispatcher -0.000), all 2 piece(s) validate"
+    },
+    {
+      "id": "d99d3eab0d7e1dbd",
+      "class": "wrong reading chosen",
+      "group": "kids",
+      "source": "heldout",
+      "text": "tell me about you, who are u",
+      "tab": "robot",
+      "session": [],
+      "expected": [
+        "kids.common: tell me about you, who are u => core.request ; core.request.action=chat.who"
+      ],
+      "dispatcher_top1": [
+        "kids.common/ui.avatar/kids.animals: tell me about you",
+        "kids.common/ui.avatar/kids.animals: who are u"
+      ],
+      "status": "understood",
+      "produced": [
+        "kids.common [original]: tell me about you => core.request ; core.request.action=chat.who",
+        "kids.common [original]: who are u => core.request ; core.request.action=chat.who"
+      ],
+      "rules_only": "wrong",
+      "why": "segmentation 1 of 4 wins with score -0.012 (dispatcher -0.004), all 2 piece(s) validate"
+    },
+    {
+      "id": "mc000360",
+      "class": "world not in candidates",
+      "group": "multi-command",
+      "source": "multi-command",
+      "text": "What is on b four, and open up my guess the animal.",
+      "tab": "chess",
+      "session": [],
+      "expected": [
+        "games.chess: What is on b four => core.request ; action=chess.square ; arg.ff=b ; arg.fr=4",
+        "ui.shell: open up my guess the animal. => core.request ; action=ui.openTab ; arg.tab=guess_the_animal"
+      ],
+      "dispatcher_top1": [
+        "games.chess/media.music/games.tictactoe: What is on b four",
+        "games.guess/games.hangman/docs.reader: open up my guess the animal."
+      ],
+      "status": "not_understood",
+      "produced": [
+        "games.chess [original]: What is on b four => core.request ; core.request.action=chess.square ; core.request.arg.ff=b ; core.request.arg.fr=4"
+      ],
+      "rules_only": "right",
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.002) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "547390791a94ed6d",
+      "class": "rule gap",
+      "group": "kids",
+      "source": "paraphrase",
+      "text": "who said they are me, do u know",
+      "tab": "robot",
+      "session": [],
+      "expected": [
+        "kids.common: who said they are me, do u know => core.request ; core.request.action=chat.myname"
+      ],
+      "dispatcher_top1": [
+        "kids.common/ui.avatar/kids.animals: who said they are me",
+        "kids.common/ui.avatar/ui.shell: do u know"
+      ],
+      "status": "not_understood",
+      "produced": [],
+      "rules_only": "fallback",
+      "why": "no segmentation validates; best candidate is segmentation 2 (score -7.037) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc000960",
+      "class": "wrong reading chosen",
+      "group": "multi-command",
+      "source": "multi-command",
+      "text": "Color each bar differently and then change the house to navy",
+      "tab": "charts",
+      "session": [],
+      "expected": [
+        "data.charts: Color each bar differently => core.request ; core.request.action=chart.setPalette ; core.request.arg.p=different",
+        "art.draw: change the house to navy => core.request ; core.request.action=draw.recolor ; core.request.arg.t=\"the house\" ; core.request.arg.color=blue"
+      ],
+      "dispatcher_top1": [
+        "data.charts/ui.avatar/docs.editor: Color each bar differently",
+        "data.charts/ui.avatar/art.draw: change the house to navy"
+      ],
+      "status": "understood",
+      "produced": [
+        "data.charts [original]: Color each bar differently => core.request ; core.request.action=chart.setPalette ; core.request.arg.p=different",
+        "data.charts [original]: change the house to navy => core.request ; core.request.action=chart.renamePoint ; core.request.arg.l=\"house\" ; core.request.arg.to=\"navy\""
+      ],
+      "rules_only": "wrong",
+      "why": "segmentation 1 of 4 wins with score -0.005 (dispatcher -0.000), all 2 piece(s) validate"
+    },
+    {
+      "id": "7bc0d2c481b6c1a4",
+      "class": "sop differs",
+      "group": "kids",
+      "source": "heldout",
+      "text": "could you add socks to my garden list",
+      "tab": "editor",
+      "session": [],
+      "expected": [
+        "kids.tasks: could you add socks to my garden list => core.request ; core.request.action=draw.move ; core.request.arg.phrase=\"socks on my garden\""
+      ],
+      "dispatcher_top1": [
+        "kids.tasks/docs.editor/art.draw: could you add socks to my garden list"
+      ],
+      "status": "understood",
+      "produced": [
+        "kids.tasks [original]: could you add socks to my garden list => core.request ; core.request.action=tasks.add ; core.request.arg.item=\"socks\" ; core.request.arg.list=\"garden\""
+      ],
+      "rules_only": "wrong",
+      "why": "segmentation 1 of 4 wins with score -0.000 (dispatcher -0.000), all 1 piece(s) validate"
+    },
+    {
+      "id": "mc002320",
+      "class": "rule gap",
+      "group": "multi-command",
+      "source": "multi-command",
+      "text": "What season does June fall in, mouth previous one pls, then Please colour Asia.",
+      "tab": null,
+      "session": [],
+      "expected": [
+        "kids.time: What season does June fall in => core.question ; type=kids.time.monthinfo ; seek=season ; where.name=june",
+        "ui.avatar: mouth previous one pls => core.request ; core.request.action=avatar.step ; core.request.arg.part=mouth ; core.request.arg.dir=previous",
+        "geo.map: Please colour Asia. => core.request ; action=geo.highlight ; arg.a=asia"
+      ],
+      "dispatcher_top1": [
+        "kids.time/docs.reader/kids.tasks: What season does June fall in",
+        "ui.avatar/kids.common/docs.editor: mouth previous one pls",
+        "geo.map/kids.shapes/art.draw: Please colour Asia."
+      ],
+      "status": "not_understood",
+      "produced": [
+        "kids.time [original]: What season does June fall in => core.question ; core.question.type=kids.time.monthinfo ; core.question.seek=season ; core.question.where.name=june",
+        "geo.map [original]: Please colour Asia. => core.request ; core.request.action=geo.highlight ; core.request.arg.a=asia"
+      ],
+      "rules_only": "fallback",
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.005) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "1774e1d6c3c3c2a3",
+      "class": "rule gap",
+      "group": "kids",
+      "source": "paraphrase",
+      "text": "name you go by?",
+      "tab": "robot",
+      "session": [],
+      "expected": [
+        "kids.common: name you go by? => core.request ; core.request.action=chat.name"
+      ],
+      "dispatcher_top1": [
+        "ui.avatar/kids.common/ui.shell: name you go by?"
+      ],
+      "status": "understood",
+      "produced": [
+        "ui.avatar [original]: name you go by? => core.request ; core.request.action=avatar.setName ; core.request.arg.name=\"go by\""
+      ],
+      "rules_only": "wrong",
+      "why": "segmentation 1 of 4 wins with score -0.408 (dispatcher -0.000), all 1 piece(s) validate"
+    },
+    {
+      "id": "mc000600",
+      "class": "world not in candidates",
+      "group": "multi-command",
+      "source": "multi-command",
+      "text": "This is not what I wanted, then Where do ostriches live?",
+      "tab": null,
+      "session": [],
+      "expected": [
+        "ui.avatar: This is not what I wanted => core.request ; core.request.action=avatar.explainSwitch",
+        "kids.animals: Where do ostriches live? => core.question ; type=kids.animals.animal ; seek=lives ; where.name=ostrich"
+      ],
+      "dispatcher_top1": [
+        "ui.help/games.chess/games.guess: This is not what I wanted",
+        "kids.animals/games.guess/docs.reader: Where do ostriches live?"
+      ],
+      "status": "not_understood",
+      "produced": [
+        "kids.animals [original]: Where do ostriches live? => core.question ; core.question.type=kids.animals.animal ; core.question.seek=lives ; core.question.where.name=ostrich"
+      ],
+      "rules_only": "wrong",
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.021) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "bd12d4b0ac829bbc",
+      "class": "rule gap",
+      "group": "kids",
+      "source": "paraphrase",
+      "text": "brown = mix what",
+      "tab": "robot",
+      "session": [],
+      "expected": [
+        "kids.shapes: brown = mix what => core.question ; core.question.type=kids.shapes.mix ; core.question.seek=recipe ; core.question.where.result=brown"
+      ],
+      "dispatcher_top1": [
+        "kids.shapes/data.charts/ui.avatar: brown = mix what"
+      ],
+      "status": "not_understood",
+      "produced": [],
+      "rules_only": "fallback",
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.013) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc001280",
+      "class": "wrong reading chosen",
+      "group": "multi-command",
+      "source": "multi-command",
+      "text": "Make your eyes smaller and then Please, how can I play the hangman game?",
+      "tab": "draw",
+      "session": [],
+      "expected": [
+        "art.draw: Make your eyes smaller => core.request ; core.request.action=draw.resize ; core.request.arg.t=\"your eyes\" ; core.request.arg.d=smaller",
+        "ui.help: Please, how can I play the hangman game? => core.request ; action=ui.helpGame ; arg.game=hangman"
+      ],
+      "dispatcher_top1": [
+        "ui.avatar/art.draw/data.charts: Make your eyes smaller",
+        "ui.help/ui.shell/kids.shop: Please, how can I play the hangman game?"
+      ],
+      "status": "understood",
+      "produced": [
+        "ui.avatar [original]: Make your eyes smaller => core.request ; core.request.action=avatar.resizePart ; core.request.arg.part=eye ; core.request.arg.dir=smaller",
+        "ui.help [original]: Please, how can I play the hangman game? => core.request ; core.request.action=ui.helpGame ; core.request.arg.game=hangman"
+      ],
+      "rules_only": "right",
+      "why": "segmentation 1 of 4 wins with score -0.007 (dispatcher -0.000), all 2 piece(s) validate"
+    },
+    {
+      "id": "b11471b548f6eb29",
+      "class": "rule gap",
+      "group": "kids",
+      "source": "heldout",
+      "text": "tell me the legs of a spider",
+      "tab": "robot",
+      "session": [],
+      "expected": [
+        "kids.animals: tell me the legs of a spider => core.question ; core.question.type=kids.animals.animal ; core.question.seek=legs ; core.question.where.name=spider"
+      ],
+      "dispatcher_top1": [
+        "kids.animals/ui.avatar/kids.shapes: tell me the legs of a spider"
+      ],
+      "status": "not_understood",
+      "produced": [],
+      "rules_only": "fallback",
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.000) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc002680",
+      "class": "rule gap",
+      "group": "multi-command",
+      "source": "multi-command",
+      "text": "Remove butter from homework list; what are you, a robot?",
+      "tab": "editor",
+      "session": [],
+      "expected": [
+        "kids.tasks: Remove butter from homework list => core.request ; action=tasks.remove ; arg.item=\"butter\" ; arg.list=\"homework\"",
+        "kids.common: what are you, a robot? => core.request ; core.request.action=chat.who"
+      ],
+      "dispatcher_top1": [
+        "kids.tasks/docs.editor/kids.arith: Remove butter from homework list",
+        "ui.avatar/kids.common/kids.animals: what are you, a robot?"
+      ],
+      "status": "understood",
+      "produced": [
+        "kids.tasks [original]: Remove butter from homework list => core.request ; core.request.action=tasks.remove ; core.request.arg.item=\"butter\" ; core.request.arg.list=\"homework\"",
+        "ui.avatar [original]: what are you, a robot? => core.request ; core.request.action=chat.who ; core.request ; core.request.action=avatar.setCharacter ; core.request.arg.who=robot"
+      ],
+      "rules_only": "wrong",
+      "why": "segmentation 1 of 4 wins with score -0.020 (dispatcher -0.004), all 2 piece(s) validate"
+    },
+    {
+      "id": "14d2e6c2c62952a8",
+      "class": "rule gap",
+      "group": "kids",
+      "source": "heldout",
+      "text": "tell me about calves",
+      "tab": "robot",
+      "session": [],
+      "expected": [
+        "kids.animals: tell me about calves => core.question ; core.question.type=kids.animals.animal ; core.question.seek=name ; core.question.mode=list ; core.question.where.baby=calf"
+      ],
+      "dispatcher_top1": [
+        "kids.animals/data.charts/games.guess: tell me about calves"
+      ],
+      "status": "not_understood",
+      "produced": [],
+      "rules_only": "wrong",
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.000) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc002840",
+      "class": "rule gap",
+      "group": "multi-command",
+      "source": "multi-command",
+      "text": "Please, She breaks 4 sheets then Remove my swimming bag from our party list.",
+      "tab": "arith",
+      "session": [],
+      "expected": [
+        "kids.arith: Please, She breaks 4 sheets => kids.arith.break ; who=$e.diana ; count=4 ; item=sheet",
+        "kids.tasks: Remove my swimming bag from our party list. => core.request ; action=tasks.remove ; arg.item=\"my swimming bag\" ; arg.list=\"party\""
+      ],
+      "dispatcher_top1": [
+        "kids.arith/docs.reader/kids.time: Please, She breaks 4 sheets",
+        "kids.tasks/art.draw/kids.arith: Remove my swimming bag from our party list."
+      ],
+      "status": "not_understood",
+      "produced": [
+        "kids.tasks [original]: Remove my swimming bag from our party list. => core.request ; core.request.action=tasks.remove ; core.request.arg.item=\"my swimming bag\" ; core.request.arg.list=\"party\""
+      ],
+      "rules_only": "fallback",
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.000) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "893ee7d64e91bd1c",
+      "class": "rule gap",
+      "group": "kids",
+      "source": "heldout",
+      "text": "animals with six legs",
+      "tab": "robot",
+      "session": [],
+      "expected": [
+        "kids.animals: animals with six legs => core.question ; core.question.type=kids.animals.animal ; core.question.seek=matching ; core.question.where.legs=6"
+      ],
+      "dispatcher_top1": [
+        "kids.animals/ui.avatar/games.guess: animals with six legs"
+      ],
+      "status": "not_understood",
+      "produced": [],
+      "rules_only": "fallback",
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.000) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc002960",
+      "class": "rule gap",
+      "group": "multi-command",
+      "source": "multi-command",
+      "text": "Highlight the second heading in yellow then which text did I pick out",
+      "tab": "editor",
+      "session": [],
+      "expected": [
+        "docs.editor: Highlight the second heading in yellow => core.request ; action=doc.format ; arg.t=\"the second heading\" ; arg.mark=highlight ; arg.color=yellow",
+        "docs.editor: which text did I pick out => core.request ; core.request.action=doc.whatSelected"
+      ],
+      "dispatcher_top1": [
+        "docs.editor/geo.map/docs.reader: Highlight the second heading in yellow",
+        "docs.editor/games.tictactoe/docs.reader: which text did I pick out"
+      ],
+      "status": "not_understood",
+      "produced": [
+        "docs.editor [original]: Highlight the second heading in yellow => core.request ; core.request.action=doc.format ; core.request.arg.t=\"the second heading\" ; core.request.arg.mark=highlight ; core.request.arg.color=yellow"
+      ],
+      "rules_only": "wrong",
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.000) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "fd7cd655abb7789c",
+      "class": "rule gap",
+      "group": "kids",
+      "source": "heldout",
+      "text": "can you find animals that have 6 legs",
+      "tab": "robot",
+      "session": [],
+      "expected": [
+        "kids.animals: can you find animals that have 6 legs => core.question ; core.question.type=kids.animals.animal ; core.question.seek=matching ; core.question.where.legs=6"
+      ],
+      "dispatcher_top1": [
+        "kids.animals/ui.avatar/games.guess: can you find animals that have 6 legs"
+      ],
+      "status": "not_understood",
+      "produced": [],
+      "rules_only": "fallback",
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.000) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc003000",
+      "class": "rule gap",
+      "group": "multi-command",
+      "source": "multi-command",
+      "text": "Um, Draw some grass, then is it bee; he broke 4 lollipops.",
+      "tab": "draw",
+      "session": [],
+      "expected": [
+        "art.draw: Um, Draw some grass => core.request ; action=draw.ground ; arg.g=grass",
+        "games.hangman: is it bee => core.request ; action=hm.word ; arg.word=bee",
+        "kids.arith: he broke 4 lollipops. => kids.arith.break ; who=$e.radu ; count=4 ; item=lollipop"
+      ],
+      "dispatcher_top1": [
+        "art.draw/geo.map/games.chess: Um, Draw some grass",
+        "games.hangman/art.draw/data.charts: is it bee",
+        "kids.arith/art.draw/kids.tasks: he broke 4 lollipops."
+      ],
+      "status": "not_understood",
+      "produced": [
+        "art.draw [original]: Um, Draw some grass => core.request ; core.request.action=draw.ground ; core.request.arg.g=grass",
+        "games.hangman [original]: is it bee => core.request ; core.request.action=hm.word ; core.request.arg.word=bee"
+      ],
+      "rules_only": "fallback",
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.355) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "af44743f180b139a",
+      "class": "rule gap",
+      "group": "kids",
+      "source": "heldout",
+      "text": "cow say?",
+      "tab": "robot",
+      "session": [],
+      "expected": [
+        "kids.animals: cow say? => core.question ; core.question.type=kids.animals.animal ; core.question.seek=sound ; core.question.where.name=cow"
+      ],
+      "dispatcher_top1": [
+        "kids.animals/games.guess/kids.common: cow say?"
+      ],
+      "status": "not_understood",
+      "produced": [],
+      "rules_only": "fallback",
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.000) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc003040",
+      "class": "rule gap",
+      "group": "multi-command",
+      "source": "multi-command",
+      "text": "shove it to the top right corner. Name an animal that cannot fly.",
+      "tab": "draw",
+      "session": [],
+      "expected": [
+        "art.draw: shove it to the top right corner. => core.request ; core.request.action=ttt.move ; core.request.arg.pos=top_right",
+        "kids.animals: Name an animal that cannot fly. => core.question ; type=kids.animals.animal ; seek=matching ; where.can_fly=false"
+      ],
+      "dispatcher_top1": [
+        "games.tictactoe/art.draw/docs.editor: shove it to the top right corner.",
+        "kids.animals/kids.shapes/art.draw: Name an animal that cannot fly."
+      ],
+      "status": "not_understood",
+      "produced": [
+        "kids.animals [original]: Name an animal that cannot fly. => core.question ; core.question.type=kids.animals.animal ; core.question.seek=matching ; core.question.where.can_fly=false"
+      ],
+      "rules_only": "fallback",
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.096) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "d343268b0f7c5d86",
+      "class": "rule gap",
+      "group": "kids",
+      "source": "heldout",
+      "text": "remember a zebra has 4 legs",
+      "tab": "robot",
+      "session": [],
+      "expected": [
+        "kids.animals: remember a zebra has 4 legs => kids.animals.animal ; kids.animals.animal.name=zebra ; kids.animals.animal.legs=4"
+      ],
+      "dispatcher_top1": [
+        "kids.animals/games.guess/kids.shop: remember a zebra has 4 legs"
+      ],
+      "status": "not_understood",
+      "produced": [],
+      "rules_only": "fallback",
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.002) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc003120",
+      "class": "rule gap",
+      "group": "multi-command",
+      "source": "multi-command",
+      "text": "add snow slide the tree over to the right and red house pls",
+      "tab": "draw",
+      "session": [],
+      "expected": [
+        "art.draw: add snow => core.request ; action=draw.ground ; arg.g=snow",
+        "art.draw: slide the tree over to the right => core.request ; core.request.action=draw.move ; core.request.arg.phrase=\"the tree to the left\"",
+        "art.draw: red house pls => core.request ; core.request.action=draw.add ; core.request.arg.m1=red ; core.request.arg.kind=house ; core.request.arg.kt=\"house\""
+      ],
+      "dispatcher_top1": [
+        "art.draw/games.chess/ui.avatar: add snow",
+        "art.draw/games.chess/geo.map: slide the tree over to the right",
+        "art.draw/games.chess/ui.avatar: red house pls"
+      ],
+      "status": "not_understood",
+      "produced": [
+        "art.draw [original]: add snow => core.request ; core.request.action=draw.ground ; core.request.arg.g=snow",
+        "art.draw [original]: slide the tree over to the right => core.request ; core.request.action=draw.move ; core.request.arg.phrase=\"the tree over to the right\""
+      ],
+      "rules_only": "wrong",
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.011) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "f882559e67a987e9",
+      "class": "rule gap",
+      "group": "kids",
+      "source": "heldout",
+      "text": "i have a dog called rex",
+      "tab": "robot",
+      "session": [],
+      "expected": [
+        "kids.animals: i have a dog called rex => kids.animals.pet ; kids.animals.pet.owner=$e.user ; kids.animals.pet.kind=dog ; kids.animals.pet.called=$e.rex"
+      ],
+      "dispatcher_top1": [
+        "kids.animals/kids.common/kids.arith: i have a dog called rex"
+      ],
+      "status": "not_understood",
+      "produced": [],
+      "rules_only": "fallback",
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.000) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc003360",
+      "class": "rule gap",
+      "group": "multi-command",
+      "source": "multi-command",
+      "text": "left side for the house please show me the face page",
+      "tab": "draw",
+      "session": [],
+      "expected": [
+        "art.draw: left side for the house please => core.request ; core.request.action=draw.move ; core.request.arg.phrase=\"the red house on the left\"",
+        "ui.shell: show me the face page => core.request ; action=ui.openTab ; arg.tab=face"
+      ],
+      "dispatcher_top1": [
+        "art.draw/games.chess/ui.shell: left side for the house",
+        "ui.shell/ui.avatar/art.draw: please show me the face page"
+      ],
+      "status": "not_understood",
+      "produced": [
+        "ui.shell [original]: please show me the face page => core.request ; core.request.action=ui.openTab ; core.request.arg.tab=face"
+      ],
+      "rules_only": "fallback",
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.003) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "e106099a9f310a40",
+      "class": "rule gap",
+      "group": "kids",
+      "source": "heldout",
+      "text": "my pet name?",
+      "tab": "robot",
+      "session": [
+        "My dog is called Rex."
+      ],
+      "expected": [
+        "kids.animals: my pet name? => core.question ; core.question.type=kids.animals.pet ; core.question.seek=called ; core.question.where.owner=$e.user"
+      ],
+      "dispatcher_top1": [
+        "kids.common/kids.animals/ui.avatar: my pet name?"
+      ],
+      "status": "not_understood",
+      "produced": [],
+      "rules_only": "wrong",
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.531) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc003600",
+      "class": "rule gap",
+      "group": "multi-command",
+      "source": "multi-command",
+      "text": "can u tell my name and Who is speaking to me, then do you have my name saved",
+      "tab": "robot",
+      "session": [],
+      "expected": [
+        "kids.common: can u tell my name => core.request ; core.request.action=chat.myname",
+        "kids.common: Who is speaking to me => core.request ; core.request.action=chat.who",
+        "kids.common: do you have my name saved => core.request ; core.request.action=chat.myname"
+      ],
+      "dispatcher_top1": [
+        "kids.common/ui.avatar/games.hangman: can u tell my name",
+        "kids.common/ui.shell/kids.animals: Who is speaking to me",
+        "kids.common/ui.avatar/games.hangman: do you have my name saved"
+      ],
+      "status": "not_understood",
+      "produced": [
+        "kids.common [original]: can u tell my name => core.request ; core.request.action=chat.myname",
+        "kids.common [original]: Who is speaking to me => core.request ; core.request.action=chat.who"
+      ],
+      "rules_only": "fallback",
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.004) with 1 piece(s) the rules cannot read"
+    }
+  ]
+}

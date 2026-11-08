@@ -4,6 +4,7 @@
  * A prediction record is joined to its gold by `id`:
  *   - the id of a per-world dataset record (training/dataset/<world>/test.jsonl): one gold segment, world = record world, target = record target;
  *   - the id of a routing row (training/dataset/routing.jsonl): world only (no target: end-to-end SOP is not scored);
+ *   - the example_id of a held-out paraphrase (training/paraphrases/heldout/out, needs_review excluded): one gold segment, source 'heldout', target = expected_circuit;
  *   - the id of a multi-command message (training/dataset/multicmd/test.jsonl, ids mc......): gold segments [{start,end,text,world,source_id}],
  *     the target of each segment is the target of the per-world record `source_id` (looked up in any split).
  * Gold is { id, kind: 'single' | 'multi', source, negative, text, context, segments: [{ start, end, text, world, target }], hasTarget }.
@@ -14,7 +15,7 @@ import { join } from 'node:path';
 const readJsonl = (f) => readFileSync(f, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l));
 
 /** Load every label needed. `root` = training/dataset. */
-export function loadGold(root) {
+export function loadGold(root, { heldoutDir = join(root, '..', 'paraphrases', 'heldout', 'out') } = {}) {
   const known = Object.keys(JSON.parse(readFileSync(join(root, 'stats.json'), 'utf8')).worlds);
   const worldDirs = readdirSync(root, { withFileTypes: true }).filter((d) => d.isDirectory() && known.includes(d.name)).map((d) => d.name).sort();
   const recs = new Map();      // id -> per-world record (test split first, other splits only for source_id lookups)
@@ -27,6 +28,13 @@ export function loadGold(root) {
     }
   }
   const routing = new Map(readJsonl(join(root, 'routing.jsonl')).filter((r) => r.split === 'test').map((r) => [r.id, r]));
+  // held-out paraphrases (training/paraphrases/heldout/out/<world>.jsonl): id = example_id, target = expected_circuit, needs_review excluded
+  const heldout = new Map();
+  if (existsSync(heldoutDir)) {
+    for (const f of readdirSync(heldoutDir).filter((x) => x.endsWith('.jsonl')).sort()) {
+      for (const r of readJsonl(join(heldoutDir, f))) if (!r.needs_review) heldout.set(r.example_id, { ...r, world: r.world ?? f.replace(/\.jsonl$/, '') });
+    }
+  }
   const mcFile = join(root, 'multicmd', 'test.jsonl');
   const multi = new Map((existsSync(mcFile) ? readJsonl(mcFile) : []).map((r) => [r.id, r]));
   return {
@@ -35,6 +43,7 @@ export function loadGold(root) {
     multiIds: () => [...multi.keys()],
     testIds: () => [...testIds],
     routingRows: () => [...routing.values()],
+    heldoutIds: () => [...heldout.keys()],
     get(id) {
       const m = multi.get(id);
       if (m) {
@@ -46,6 +55,8 @@ export function loadGold(root) {
         const ctx = { tab: r.tab ?? null, recent_worlds: [], session: r.context ?? [] };
         return { id, kind: 'single', source: r.source, negative: !!r.negative, text: r.text, context: ctx, segments: [{ start: 0, end: r.text.length, text: r.text, world: r.world, target: r.negative ? '' : r.target }], hasTarget: true };
       }
+      const h = heldout.get(id);
+      if (h) return { id, kind: 'single', source: 'heldout', negative: false, text: h.text, context: { tab: h.tab ?? null, recent_worlds: [], session: h.context ?? [] }, segments: [{ start: 0, end: h.text.length, text: h.text, world: h.world, target: h.expected_circuit }], hasTarget: true };
       const g = routing.get(id);
       if (g) return { id, kind: 'single', source: g.source, negative: false, text: g.text, context: g.context, segments: [{ start: 0, end: g.text.length, text: g.text, world: g.world, alt_worlds: g.alt_worlds ?? [], target: null }], hasTarget: false };
       return null;
