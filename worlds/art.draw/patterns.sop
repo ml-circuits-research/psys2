@@ -104,6 +104,14 @@
     example="Shrink the house."
     example="Shrink the tree a little."
 
+@pat.art.draw.samesize core.pattern
+    match="[please|pls|can_you|could_you|will_you|would_you|can_you_please|could_you_please]? [make|let|turn|get] {t:words(5)} [the_same_size_as|the_same_size_like|as_big_as|as_large_as|as_small_as|as_tall_as|the_same_as|equal_in_size_to] {o:words(5)} [please|pls|thanks|now]?"
+    emit="@{_} core.request action=draw.matchSize arg.t=\"{t}\" arg.o=\"{o}\""
+    kind=request
+    priority=15
+    example="Make the tree the same size as the house."
+    example="Make the cat as big as the dog."
+
 @pat.art.draw.size core.pattern
     match="[um|uh|hmm|so|like|ok|okay|yeah|well|er|ah|oh|alright|right|so_like|and|then|but|also|now|actually|basically|hey|yo|hi|pls|plz|just]? [um|uh|hmm|so|like|ok|okay|yeah|well|er|ah|oh|alright|right|so_like|and|then|but|also|now|actually|basically|hey|yo|hi|pls|plz|just]? [can_you|could_you|can_u|could_u|will_you|would_you|would_u|will_u|can_you_please|could_you_please|i_want_you_to|i_need_you_to|i_would_like_you_to|you_can|you_should|hey|yo|let_us|just|go_ahead_and|maybe|then|and|would_you_mind|do_you_mind|could_you_possibly|would_you_be_so_kind_as_to|i_was_wondering_if_you_could|is_it_possible_to|is_there_a_way_to|why_dont_you|you_could|please_try_to|feel_free_to|can_i_get|i_d_love_for_you_to|i_d_like_you_to|i_would_love_you_to|we_could|we_should|we_can|maybe_you_could|perhaps_you_could|would_it_be_possible_to|if_you_could|will_you_please|do_me_a_favor_and|be_a_dear_and|just_go_ahead_and|go_on_and|right_now|immediately]? [make|let|turn|get] {t:words(6)} {s:lex.art.draw.sizes} [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
     emit="@{_} core.request action=draw.setSize arg.t=\"{t}\" arg.s={s}"

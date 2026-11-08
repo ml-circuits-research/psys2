@@ -539,3 +539,39 @@
     input="make a table animal legs food"
     expect="3 columns: Animal, Legs and Food"
     session=re4
+
+@t.docs.editor.dm01 core.test
+    input="Open the editor tab."
+    expect="Editor"
+    session=dm
+
+@t.docs.editor.dm02 core.test
+    input="Write a paragraph: cats are nice."
+    expectState="blocks.length=1"
+    session=dm
+
+@t.docs.editor.dm03 core.test
+    input="Add a paragraph: dogs are fun."
+    expectState="blocks.length=2"
+    session=dm
+
+@t.docs.editor.dm04 core.test
+    input="Add a heading: Pets."
+    expectState="blocks.length=3"
+    session=dm
+
+@t.docs.editor.dm05 core.test
+    input="Center the first paragraph."
+    expectState="blocks.0.align=center"
+    session=dm
+
+@t.docs.editor.dm06 core.test
+    input="No, the second one."
+    expect="centered the last paragraph"
+    expectState="blocks.1.align=center"
+    session=dm
+
+@t.docs.editor.dm07 core.test
+    input="Make the last one italic."
+    expect="heading is now italic"
+    session=dm

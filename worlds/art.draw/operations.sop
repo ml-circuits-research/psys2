@@ -40,6 +40,12 @@
     action=draw.resize
     doc="Makes things bigger or smaller by a relative amount."
 
+@op.art.draw.matchSize core.operation
+    impl=matchSize
+    semantics=action
+    action=draw.matchSize
+    doc="Gives things the same size as another thing: make the tree the same size as the house."
+
 @op.art.draw.setSize core.operation
     impl=setSize
     semantics=action

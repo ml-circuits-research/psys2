@@ -139,6 +139,9 @@ export class Renderer {
 /** Plain-text fallback for an envelope (spec 04). */
 export function fallbackText(env, { mode = 'value', ask } = {}) {
   const val = (x) => words(x);
+  // An operation's own note is the reply for missing / unsupported (replaces per-operation `{note}` templates). Interpreter-made
+  // notes (reason unsupported_operation, execution_error) are technical and never shown.
+  if (env.note && (env.status === 'missing' || (env.status === 'unsupported' && env.reason !== 'unsupported_operation'))) return String(env.note);
   switch (env.status) {
     case 'supported': {
       if (mode === 'exists') return env.value === 'yes' ? 'Yes.' : 'No.';

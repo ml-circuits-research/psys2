@@ -911,6 +911,29 @@ export const resize = guard((ctx, args, s) => {
   return ok(withNote(`${opener(s)} I made ${r.everything ? 'everything' : name} ${up ? 'bigger' : 'smaller'}${capped ? ' (that is as far as it goes!)' : ''}.`, r));
 });
 
+/** "make the tree the same size as the house": the target gets the width of the reference thing. */
+export const matchSize = guard((ctx, args, s) => {
+  const ref = target(s, args.o ?? '', { many: false });
+  if (ref.error) return ref.error;
+  const r0 = ref.r.objs?.[0];
+  if (!r0 || ref.r.special) return no('I can only compare the size of things you drew.');
+  const t = target(s, args.t ?? 'it', { many: true });
+  if (t.error) return t.error;
+  const { r } = t;
+  if (r.special) return no('The sky and the ground fill the whole page, so their size can not change.');
+  remember(s, 'matched a size');
+  for (const o of r.objs) {
+    if (o.id === r0.id) continue;
+    const k = KINDS[o.kind];
+    o.size = Math.min(1100, Math.max(Math.max(24, k.size * 0.2), r0.size));
+    clampIn(o);
+  }
+  s.last = r.objs.map((o) => o.id);
+  open(ctx);
+  const name = r.objs.length === 1 ? sayObj(r.objs[0]) : `the ${pluralOfKind(r.objs[0].kind, r.objs.length)}`;
+  return ok(`${opener(s)} ${cap1(name)} ${r.objs.length > 1 ? 'are' : 'is'} now the same size as ${sayObj(r0)}.`);
+});
+
 export const setSize = guard((ctx, args, s) => {
   const word = String(args.s ?? '').toLowerCase();
   const factor = SIZE_WORDS[word];
@@ -1462,3 +1485,21 @@ export const openTab = guard((ctx) => {
 
 /** "Draw" alone: ask what to draw; the dialog layer keeps the question pending for the next utterance (spec 11). */
 export const askKind = guard((ctx, args, s) => ({ status: 'missing', note: 'What should I draw?', pending: { key: 'kind', type: 'lex.art.draw.things' } }));
+
+
+// ---- discourse hooks (spec 11): read-only, called by the dialog layer through interp.hook -----------------------------------
+/** Everything a person can point at ("the red one", "the second one", "both"): [{ id, kind, noun, words, attrs: { color, size, x, y }, salient }]. */
+export function referents(ctx) {
+  const s = ensure(ctx);
+  const salient = new Set([...(s.last ?? []), ...(s.selected ? [s.selected] : [])]);
+  const wordsOfKind = (k) => Object.entries(KIND_WORDS).filter(([, v]) => v === k).map(([w]) => w);
+  return s.objects.filter((o) => !o.tag).map((o) => ({
+    id: o.id, kind: o.kind, noun: o.kind, words: wordsOfKind(o.kind), attrs: { color: effectiveColor(o), size: o.size, x: o.x, y: o.y },
+    salient: salient.has(o.id), sig: JSON.stringify([o.kind, o.x, o.y, o.size, o.color, o.fill, o.rotation, o.flip, o.parts]),
+  }));
+}
+/** One sentence about the picture, for "where were we?". */
+export function summary(ctx) {
+  const r = describe(ctx, {});
+  return r?.value ?? null;
+}

@@ -22,6 +22,10 @@
     for=action.draw.givePart
     text="{value}"
 
+@tpl.art.draw.matchSize core.template
+    for=action.draw.matchSize
+    text="{value}"
+
 @tpl.art.draw.resize core.template
     for=action.draw.resize
     text="{value}"

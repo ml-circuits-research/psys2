@@ -15,6 +15,7 @@ function plural(item, n) {
 const subject = (ctx, id) => (id === 'e.user' ? 'you' : ctx.name(id));
 const verbHas = (id) => (id === 'e.user' ? 'have' : 'has');
 const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+const joinAnd = (a) => (a.length <= 1 ? a.join('') : `${a.slice(0, -1).join(', ')} and ${a.at(-1)}`);
 const num = (x) => (x === undefined ? undefined : Number(x));
 
 /**
@@ -57,9 +58,11 @@ function replay(ctx, item) {
       }
       if (actor.n !== undefined) actor.n -= n;
       if (to.n !== undefined) to.n += n;
+      else { to.recv = (to.recv ?? 0) + n; (to.donors ??= []).push(actorId); }   // start unknown: only what was received is known
     } else if (kind === 'receive' || kind === 'buy') {
       actor.from.push(w.id);
       if (actor.n !== undefined) actor.n += n;
+      else actor.recv = (actor.recv ?? 0) + n;
     } else {
       actor.from.push(w.id);
       if (actor.n !== undefined && actor.n < n) {
@@ -80,6 +83,11 @@ export function currentCount(ctx, { owner, item }) {
   if (!owner || !item) return needItem(key);
   const p = replay(ctx, item).get(owner);
   if (p?.conflict) return { status: 'conflicting', alternatives: [], from: p.from, note: p.conflict };
+  if (p && p.n === undefined && p.recv > 0) {
+    // start unknown, but the dialog said what was received ("And Ana?" after "Tom gives 2 to Ana"): report that, not a total
+    const donors = [...new Set(p.donors ?? [])].map((d) => subject(ctx, d));
+    return { status: 'supported', value: p.recv, unit: 'received', note: donors.length ? ` from ${joinAnd(donors)}` : '', from: p.from };
+  }
   if (!p || p.n === undefined) {
     return { status: 'missing', missing: [key], from: p?.from, note: `the starting number of ${item} of ${ctx.name(owner)} is not known` };
   }

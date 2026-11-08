@@ -26,6 +26,7 @@ export function buildRecord({ text, mode = 'typed', language = 'en', tab = null,
     id: newId(now), time: new Date(now).toISOString(), text: String(text ?? ''), mode: MODES.includes(mode) ? mode : 'typed',
     source: mode === 'chip' ? 'chip' : 'human', lang: reply?.lang ?? language, english, tab, segments,
     unparsed: segments.some((s) => s.unparsed), formalizer: reply?.trace?.formalizer?.used?.join('+') ?? segments[0]?.strategy ?? null,
+    feedback: reply?.feedback ?? reply?.trace?.feedback ?? null,   // 'negative' when the person said the last answer was wrong (spec 11 section 13)
   };
 }
 
@@ -47,7 +48,7 @@ export const summaryWorlds = (r) => [...new Set(r.segments.map((s) => s.world).f
 
 /** Export record, in the spirit of the training records of spec 08. */
 export function exportRecord(r) {
-  return { text: r.text, lang: r.lang, english: r.english ?? r.text, mode: r.mode, tab: r.tab, worlds: summaryWorlds(r), status: worstStatus(r), time: r.time };
+  return { text: r.text, lang: r.lang, english: r.english ?? r.text, mode: r.mode, tab: r.tab, worlds: summaryWorlds(r), status: worstStatus(r), time: r.time, ...(r.feedback ? { feedback: r.feedback } : {}) };
 }
 /** Chips are not human phrasing: excluded unless includeChips. */
 export function toJSONL(list, { includeChips = false } = {}) {

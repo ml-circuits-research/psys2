@@ -1123,3 +1123,43 @@
     input="Add homework to my list. I finished my homework. finished my homework?"
     expect="Yes, you finished homework."
     doc="check: did I finish X"
+
+@t.tasks.dm101 core.test
+    input="Let's make a shopping list."
+    expect="shopping list"
+    session=dm1
+
+@t.tasks.dm102 core.test
+    input="milk"
+    expect="I added milk to your shopping list"
+    session=dm1
+
+@t.tasks.dm103 core.test
+    input="eggs"
+    expect="I added eggs to your shopping list"
+    session=dm1
+
+@t.tasks.dm104 core.test
+    input="That's all."
+    expect="milk and eggs"
+    session=dm1
+
+@t.tasks.dm105 core.test
+    input="What?"
+    expect="milk and eggs"
+    session=dm1
+
+@t.tasks.dm201 core.test
+    input="Let's start a homework list."
+    expect="homework list"
+    session=dm2
+
+@t.tasks.dm202 core.test
+    input="maths"
+    expect="I added maths to your homework list"
+    session=dm2
+
+@t.tasks.dm203 core.test
+    input="Never mind."
+    expect="stopped the homework list"
+    session=dm2

@@ -1325,3 +1325,28 @@
     input="offer a draw"
     expectStatus=supported
     session=sw062
+
+@t.games.chess.dm101 core.test
+    input="Open the chess tab."
+    expect="Chess"
+    session=dm1
+
+@t.games.chess.dm102 core.test
+    input="e4"
+    expect="e4"
+    session=dm1
+
+@t.games.chess.dm103 core.test
+    input="Open the drawing tab."
+    expect="Drawing"
+    session=dm1
+
+@t.games.chess.dm104 core.test
+    input="Back to the chess game."
+    expect="Back to Chess. The chess game has 1 move"
+    session=dm1
+
+@t.games.chess.dm105 core.test
+    input="Where were we?"
+    expect="Back to Chess"
+    session=dm1

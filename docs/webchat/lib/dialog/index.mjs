@@ -336,12 +336,20 @@ export class DialogSession {
     const pend = disc.takePending();   // an expectation lives for one turn (spec 11)
     const icpt = interp.intercept(this.isession, english);   // modal input (spec 07 section 2)
     let pre = null;   // discourse resolution (spec 11): the reply fills a pending argument, or a fragment is an ellipsis of an earlier frame
+    let meta = null;  // meta-dialogue (spec 11 sections 6-14): cancel, repeat, explain, feedback, topic, list mode, repair, degree, references
+    let formalText = english;
     if (!icpt) {
-      if (pend?.type === 'fill') pre = await disc.fill(pend, english, sid);
-      if (!pre) pre = await disc.ellipsis(english, sid);
+      meta = await disc.meta(english, pend, sid);
+      if (meta?.rewrite) formalText = meta.rewrite;
+      if (meta?.pre) pre = meta.pre;
+      if (!pre && !meta) {
+        if (pend?.type === 'fill') pre = await disc.fill(pend, english, sid);
+        if (!pre) pre = await disc.ellipsis(english, sid);
+      }
     }
-    let formal = icpt ? { segments: [], wires: [] } : pre ? { ...pre.res, dispatch: null } : await this._formalize(english, sid, formalizer ?? this.formalizer, { spell: spell ?? this.spell, partial: partial ?? this.partial });
-    if (!icpt && !pre && formal.segments.length === 1 && formal.segments[0].unparsed) {
+    let formal = icpt || meta?.reply != null ? { segments: [], wires: [] } : pre ? { ...pre.res, dispatch: null } : await this._formalize(formalText, sid, formalizer ?? this.formalizer, { spell: spell ?? this.spell, partial: partial ?? this.partial });
+    if (meta?.rewrite && !pre) for (const sg of formal.segments) sg.discourse = meta.info;
+    if (!icpt && !pre && !meta && formal.segments.length === 1 && formal.segments[0].unparsed) {
       pre = await disc.ellipsis(english, sid, { bare: true });
       if (pre) formal = { ...pre.res, dispatch: null };
     }
@@ -349,8 +357,10 @@ export class DialogSession {
     this._noteWorlds(segments);
     const T = (text, extra = {}) => ({ text, translate: true, ...extra });
     const lines = icpt?.reply ? [[T(icpt.reply)]] : [];   // each line is an array of parts [{ text, translate, quote? }]
+    if (meta?.reply != null) lines.push([T(meta.reply)]);
+    else if (meta?.prefix) lines.push([T(meta.prefix)]);
     const answers = [];
-    const statuses = icpt ? ['supported'] : [];
+    const statuses = icpt || meta?.reply != null ? ['supported'] : [];
     const ops = [];
     const answerWires = [];
     let followTab = null;   // tab of the last world that gave a supported answer (tab follow, spec 07 section 6)
@@ -403,7 +413,8 @@ export class DialogSession {
         statuses.push(r.status);
         if (r.status === 'supported') { const wid = seg.match?.worldId; const t = set.get(wid)?.tab?.id ?? BUILTIN_TAB[wid]; if (t) followTab = t; }
         ops.push(...r.ops);
-        if (r.status === 'supported') disc.recordFrame(seg, this._msg);
+        disc.noteTurn(seg, rendered, this._msg);
+        if (r.status === 'supported') { const fr = disc.recordFrame(seg, this._msg); if (fr) { fr.reply = rendered; fr.opId = r.ops[0]?.op ?? null; } }
         else if (r.status === 'missing' && r.envelope?.pending) disc.openFill(seg, r.envelope, rendered, this._msg);
         answerWires.push(r.answer);
         answers.push({
@@ -456,16 +467,20 @@ export class DialogSession {
       } catch { parts = englishParts.map(({ join, fallback, ...p }) => p); reply = englishReply; }
     }
     if (!disc.pending) disc.openConfirm(englishReply, this._msg);
+    disc.commitTurn({ turn: this._msg, text: english, before: stateBefore });
+    if (meta?.info?.kind !== 'repeat' && meta?.info?.kind !== 'explain') disc.lastAnswer = { text: englishReply, turn: this._msg };
+    const feedback = meta?.feedback ?? null;
     const state = {};
     for (const [k, v] of Object.entries(this.isession.state)) if (JSON.stringify(v) !== stateBefore[k]) state[k] = structuredClone(v);
     const effects = this.isession.effects;
     this.isession.effects = [];
     return {
-      text: reply, parts, lang, translation, segments, wires: [...wires, ...answerWires], answers, statuses, state, effects,
+      text: reply, parts, lang, translation, segments, wires: [...wires, ...answerWires], answers, statuses, state, effects, ...(feedback ? { feedback } : {}),
       trace: {
         intercepted: icpt?.worldId ?? null, effects, formalizer: { preferred: formalizer ?? this.formalizer, used: [...new Set(segments.map((s) => s.strategy))], ...(encoderError ? { error: encoderError } : {}) },
         dispatch: dispatch ?? null,
-        discourse: { resolved: pre?.info ?? null, pending: disc.pending ? { type: disc.pending.type, world: disc.pending.world, key: disc.pending.key, expected: disc.pending.expected, question: disc.pending.question } : null, consumed: pend ? { type: pend.type, world: pend.world, question: pend.question } : null, frames: disc.frames.length },
+        discourse: { resolved: pre?.info ?? null, meta: meta?.info ?? null, ...(feedback ? { feedback } : {}), pending: disc.pending ? { type: disc.pending.type, world: disc.pending.world, key: disc.pending.key, expected: disc.pending.expected, question: disc.pending.question } : null, consumed: pend ? { type: pend.type, world: pend.world, question: pend.question } : null, frames: disc.frames.length },
+        ...(feedback ? { feedback } : {}),
         source: sid, language: lang, original: text, english, replyEnglish: englishReply,
         segments: segments.map(plainSegment), router: segments.map((s) => s.worlds),
         routing: icpt ? [{ router: 'policy', tier: 1, tierName: 'modal', reason: `modal input of ${icpt.worldId}`, contested: false, winner: { worldId: icpt.worldId }, runnerUp: null }] : segments.map((s) => s.routing ?? null),

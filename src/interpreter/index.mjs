@@ -357,6 +357,22 @@ export class Interpreter {
     try { return w.ops.onObservation(ctx, obs) ?? null; } catch (e) { return { reply: `Something went wrong while I handled the result of ${obs.effect} (${e?.message ?? e}).` }; }
   }
 
+  /**
+   * Read-only world hook (spec 11): call the plain export `name(ctx, args)` of world `worldId`'s ops.mjs with a query ctx
+   * (no emit, effects or requests). `state` overrides the world state seen by the hook (a snapshot, for undo and repairs).
+   * Returns undefined when the world has no such export or it throws.
+   */
+  hook(session, worldId, name, args = {}, { state = null } = {}) {
+    const w = this.set.get(worldId);
+    const fn = w?.ops?.[name];
+    if (typeof fn !== 'function') return undefined;
+    const op = { id: `op.${w.id}.${name}`, worldId: w.id, semantics: 'query' };
+    const st = { depth: 0, visited: 0, ops: [] };
+    const ctx = this._makeCtx(session, op, st, { deadline: performance.now() + this.opTimeoutMs * 5 });
+    if (state) ctx.state = structuredClone(state);
+    try { return fn(ctx, args); } catch { return undefined; }
+  }
+
   _emit(session, op, sopText) {
     const ids = new Map();
     const text = sopText.replace(/\{(_\d*)\}/g, (_m, n) => { if (!ids.has(n)) ids.set(n, session.form.freshId('w')); return ids.get(n); });

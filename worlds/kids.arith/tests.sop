@@ -104,7 +104,7 @@
 
 @t.arith.n24 core.test
     input="Tom gets 3 apples from Ana. How many apples does Tom have?"
-    expectStatus=missing
+    expect="Tom got 3 apples from Ana. I don't know how many Tom had before."
 
 @t.arith.n25 core.test
     input="What is 7 plus 5?"
@@ -189,7 +189,7 @@
 @t.arith.ell2 core.test
     session=ellipsis
     input="How many apples does Ana have?"
-    expectStatus=missing
+    expect="Ana got 2 apples from Tom. I don't know how many Ana had before."
 
 @t.arith.ell3 core.test
     session=ellipsis
@@ -894,3 +894,13 @@
     input="And Ana?"
     expect="Ana"
     session=disc_arith
+
+@t.kids.arith.dm101 core.test
+    input="Tom has 5 apples. He gives 2 to Ana. How many does he have now?"
+    expect="Tom has 3 apples."
+    session=dm1
+
+@t.kids.arith.dm102 core.test
+    input="And Ana?"
+    expect="Ana got 2 apples from Tom. I don't know how many Ana had before."
+    session=dm1

@@ -222,3 +222,10 @@ export function notDone(ctx, { item } = {}) {
   const what = clean(item);
   return { status: 'supported', note: what ? `Okay, I did not tick off ${what}. Nothing changed on your lists. Tell me when you have done it.` : 'Okay, nothing changed on your lists.' };
 }
+
+/** One sentence about the lists, for "where were we?" (read-only hook of the dialog layer, spec 11). */
+export function summary(ctx) {
+  const lists = Object.entries(ctx.state.lists ?? {}).filter(([, items]) => items.length);
+  if (!lists.length) return 'Your lists are empty.';
+  return lists.map(([name, items]) => `On your ${name} list: ${joinAnd(items.map((i) => i.text))}.`).join(' ');
+}

@@ -1085,3 +1085,19 @@ export const fromList = W(_fromList);
 export const report = W(_report);
 export const holdings = W(_holdings);
 export function interceptInput(ctx, text) { const r = _interceptInput(ctx, text); if (r.handled) sync(ctx.state); return r; }
+
+// ---- discourse hooks (spec 11): read-only, called by the dialog layer through interp.hook ------------------------------------
+/** Blocks a person can point at ("the second paragraph", "the last one"): [{ id, kind, noun, words, attrs, salient }]. */
+export function referents(ctx) {
+  const s = ctx.state;
+  return (s.blocks ?? []).map((b, i) => ({
+    id: b.id, kind: b.kind ?? 'paragraph', noun: b.kind ?? 'paragraph', words: [b.kind ?? 'paragraph'], attrs: { align: b.align ?? 'left' },
+    salient: i === s.cursor, sig: JSON.stringify(b),
+  }));
+}
+/** One sentence about the document, for "where were we?". */
+export function summary(ctx) {
+  const s = ctx.state;
+  const n = (s.blocks ?? []).length;
+  return n ? `The document "${s.title}" has ${n} ${n === 1 ? 'block' : 'blocks'}.` : `The document "${s.title}" is empty.`;
+}

@@ -1,3 +1,8 @@
+@tpl.kids.arith.count.received core.template
+    for=kids.arith.holding.count
+    when="unit=received"
+    text="{owner:cap} got {value} {item:plural}{note}. I don't know how many {owner} had before."
+
 @tpl.kids.arith.count core.template
     for=kids.arith.holding.count
     text="{owner:cap} {owner:has} {value} {item:plural}."

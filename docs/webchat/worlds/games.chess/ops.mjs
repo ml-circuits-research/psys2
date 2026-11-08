@@ -924,3 +924,11 @@ export function draw(ctx) {
   s.pendingEngine = false; s.pendingHint = false; s.dests = {}; s.pending = null; s.highlights = []; s.hint = null;
   return ok('OK, I accept the draw. Good game!');
 }
+
+/** One sentence about the game, for "where were we?" (read-only hook of the dialog layer, spec 11). */
+export function summary(ctx) {
+  const s = ctx.state;
+  const n = (s.history ?? []).length;
+  if (!n) return 'The game has not started yet: it is white to move.';
+  return `The chess game has ${n} ${n === 1 ? 'move' : 'moves'} so far${s.status === 'playing' ? `, and it is ${s.turn} to move` : `, and it is over (${s.reason ?? s.result})`}.`;
+}

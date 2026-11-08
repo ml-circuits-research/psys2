@@ -13,3 +13,6 @@ A small module (`src/dialog/discourse.mjs`, spec 11) keeps the last 5 formalized
 - The rewritten sentence goes through the normal validator, so wrong guesses mostly fail to parse and fall back to normal routing.
 - Cost: up to slots x variants x frames formalizations (restricted to one world), only for marker-led or unparsed fragments.
 - Limitation: the replacement is textual, so a frame whose slots do not map back to its text (expanded clauses) cannot be edited, only repeated.
+
+## Amendment: phase 2 (meta-dialogue)
+Repairs, cancellation, attribute and ordinal references, degree fragments, choice questions, list-entry mode, repeat and explain, feedback and topic return follow the same principles: rule-based, generic, explainable in the trace (`trace.discourse.meta`). Undo is a restore of the world-state snapshot taken for each effectful turn, so no world needs an undo hook; worlds only add optional read-only hooks `referents(ctx)` and `summary(ctx)`. Choice and offer expectations live one turn like `fill`; the list mode repeats until ended. Shared vocabulary is in `src/dialog/lang.mjs` until the reusable library (worker-tasks L) absorbs it as `ctx.lang`. Spec 11 sections 6-9.
