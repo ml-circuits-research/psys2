@@ -25,3 +25,28 @@
 @t.kids.common.n8 core.test
     input="Zorb flimbles quickly"
     expectStatus=unparsed
+
+@t.kids.common.w01 core.test
+    input="Hello friend"
+    expect="Hello"
+    doc="wording variant (widened phrasing)"
+
+@t.kids.common.w02 core.test
+    input="thx"
+    expect="You are welcome"
+    doc="wording variant (widened phrasing)"
+
+@t.kids.common.w03 core.test
+    input="my name's ben. whats my name again?"
+    expect="Your name is Ben."
+    doc="wording variant (widened phrasing)"
+
+@t.kids.common.w04 core.test
+    input="Ben is my name. do u know who i am?"
+    expect="Your name is Ben."
+    doc="wording variant (widened phrasing)"
+
+@t.kids.common.w05 core.test
+    input="cya bot"
+    expect="Goodbye"
+    doc="wording variant (widened phrasing)"

@@ -1,5 +1,5 @@
 @pat.games.tictactoe.move core.pattern
-    match="[i|i_will|i_would|let_me|can_i|may_i|could_i|i_want|i_choose|i_take|i_play|i_pick|i_go|i_put]? [play|go|put|place|take|mark|choose|pick|move|put_x|play_x|x|put_an_x|place_an_x|draw_an_x|want_to_go|want_to_play|want_to_take|will_take|will_play|will_go|put_my_x]? [at|in|on|to]? [the]? {pos:lex.games.tictactoe.positions} [square|cell|corner|spot|box|one|position|1]?"
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er]? [i|i_will|i_would|let_me|can_i|may_i|could_i|i_want|i_choose|i_take|i_play|i_pick|i_go|i_put|me|my_move_is|my_move|i_will_go|i_will_put|i_will_play|i_will_take|i_wanna_go|i_wanna_play|i_wanna_take|i_wanna_put|let_me_go|let_me_play|let_me_take|let_me_put|can_i_go|can_i_play|can_i_take|can_i_put|can_i_have|may_i_have|could_i_have|how_about|what_about|lets_go|let_us_go|go_for|i_go_for|i_will_go_for|then|ill_take|ill_go|ill_play|ill_put]? [play|go|put|place|take|mark|choose|pick|move|put_x|play_x|x|put_an_x|place_an_x|draw_an_x|want_to_go|want_to_play|want_to_take|will_take|will_play|will_go|put_my_x|put_it|place_it|play_it|move_it|mark_it|take_it|go_with|go_for|try|use|plant_an_x|drop_an_x|drop_x|my_x|my_x_goes|x_goes|x_on|x_at|x_in|an_x|x_to|set_x|set_an_x|draw_x|place_x|mark_x|mark_an_x|x_marks|choose_the|pick_the|put_it_in|put_it_on|put_it_at|play_in|play_on|play_at|go_in|go_on|go_at|go_to|put_x_in|put_x_on|put_x_at|put_an_x_in|put_an_x_on|put_an_x_at|put_an_x_on_the|put_my_x_in|put_my_x_on|put_my_x_at]? [at|in|on|to]? [the]? {pos:lex.games.tictactoe.positions} [square|cell|corner|spot|box|1|position|side|edge|one|tile|slot|space|please|spot_please]? [corner|square|cell|spot|side]? [pls|plz|thanks|thx|then|now|lol|rn|yeah|maybe|i_guess]?"
     emit="@{_} core.request action=ttt.move arg.pos={pos}"
     kind=request
     priority=15
@@ -9,7 +9,7 @@
     example="Middle row left."
 
 @pat.games.tictactoe.coord core.pattern
-    match="[i|i_will|i_would|let_me|can_i|may_i|could_i|i_want|i_choose|i_take|i_play|i_pick|i_go|i_put]? [play|go|put|place|take|mark|choose|pick|move|put_x|play_x|x|put_an_x|place_an_x|draw_an_x|want_to_go|want_to_play|want_to_take|will_take|will_play|will_go|put_my_x]? [at|in|on|to]? [the]? [square|cell|spot|position]? {c:lex.games.tictactoe.cols} {r:number}"
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er]? [i|i_will|i_would|let_me|can_i|may_i|could_i|i_want|i_choose|i_take|i_play|i_pick|i_go|i_put|me|my_move_is|my_move|i_will_go|i_will_put|i_will_play|i_will_take|i_wanna_go|i_wanna_play|i_wanna_take|i_wanna_put|let_me_go|let_me_play|let_me_take|let_me_put|can_i_go|can_i_play|can_i_take|can_i_put|can_i_have|may_i_have|could_i_have|how_about|what_about|lets_go|let_us_go|go_for|i_go_for|i_will_go_for|then|ill_take|ill_go|ill_play|ill_put]? [play|go|put|place|take|mark|choose|pick|move|put_x|play_x|x|put_an_x|place_an_x|draw_an_x|want_to_go|want_to_play|want_to_take|will_take|will_play|will_go|put_my_x|put_it|place_it|play_it|move_it|mark_it|take_it|go_with|go_for|try|use|plant_an_x|drop_an_x|drop_x|my_x|my_x_goes|x_goes|x_on|x_at|x_in|an_x|x_to|set_x|set_an_x|draw_x|place_x|mark_x|mark_an_x|x_marks|choose_the|pick_the|put_it_in|put_it_on|put_it_at|play_in|play_on|play_at|go_in|go_on|go_at|go_to|put_x_in|put_x_on|put_x_at|put_an_x_in|put_an_x_on|put_an_x_at|put_an_x_on_the|put_my_x_in|put_my_x_on|put_my_x_at]? [at|in|on|to]? [the]? [square|cell|spot|position|tile]? {c:lex.games.tictactoe.cols} {r:number} [pls|plz|thanks|thx|then|now|lol|rn|yeah|maybe|i_guess]?"
     emit="@{_} core.request action=ttt.move arg.col={c} arg.row={r}"
     kind=request
     priority=12
@@ -17,7 +17,7 @@
     example="I play A1."
 
 @pat.games.tictactoe.rowcol core.pattern
-    match="[i|i_will|i_would|let_me|can_i|may_i|could_i|i_want|i_choose|i_take|i_play|i_pick|i_go|i_put]? [play|go|put|place|take|mark|choose|pick|move|put_x|play_x|x|put_an_x|place_an_x|draw_an_x|want_to_go|want_to_play|want_to_take|will_take|will_play|will_go|put_my_x]? [at|in|on|to]? [the]? row {r:number} [column|col] {c:number}"
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er]? [i|i_will|i_would|let_me|can_i|may_i|could_i|i_want|i_choose|i_take|i_play|i_pick|i_go|i_put|me|my_move_is|my_move|i_will_go|i_will_put|i_will_play|i_will_take|i_wanna_go|i_wanna_play|i_wanna_take|i_wanna_put|let_me_go|let_me_play|let_me_take|let_me_put|can_i_go|can_i_play|can_i_take|can_i_put|can_i_have|may_i_have|could_i_have|how_about|what_about|lets_go|let_us_go|go_for|i_go_for|i_will_go_for|then|ill_take|ill_go|ill_play|ill_put]? [play|go|put|place|take|mark|choose|pick|move|put_x|play_x|x|put_an_x|place_an_x|draw_an_x|want_to_go|want_to_play|want_to_take|will_take|will_play|will_go|put_my_x|put_it|place_it|play_it|move_it|mark_it|take_it|go_with|go_for|try|use|plant_an_x|drop_an_x|drop_x|my_x|my_x_goes|x_goes|x_on|x_at|x_in|an_x|x_to|set_x|set_an_x|draw_x|place_x|mark_x|mark_an_x|x_marks|choose_the|pick_the|put_it_in|put_it_on|put_it_at|play_in|play_on|play_at|go_in|go_on|go_at|go_to|put_x_in|put_x_on|put_x_at|put_an_x_in|put_an_x_on|put_an_x_at|put_an_x_on_the|put_my_x_in|put_my_x_on|put_my_x_at]? [at|in|on|to]? [the]? [it]? row {r:number} [column|col|c|and_column|and_col] {c:number} [pls|plz|thanks|thx|then|now|lol|rn|yeah|maybe|i_guess]?"
     emit="@{_} core.request action=ttt.move arg.col={c} arg.row={r} arg.numeric=true"
     kind=request
     priority=15
@@ -78,7 +78,7 @@
     example="What is on the board?"
 
 @pat.games.tictactoe.level core.pattern
-    match="[set|change|switch] [the]? [level|difficulty|mode] [to|at]? {l:lex.games.tictactoe.levels}"
+    match="[set|change|switch] [the]? [level|difficulty|mode] [to|at]? [the]? {l:lex.games.tictactoe.levels}"
     emit="@{_} core.request action=ttt.level arg.level={l}"
     kind=request
     priority=12
@@ -106,7 +106,7 @@
     example="Give me an easy game."
 
 @pat.games.tictactoe.level5 core.pattern
-    match="[can_you|could_you|will_you|would_you|let_us|lets]? [switch|change|go|move|turn] [over]? to {l:lex.games.tictactoe.levels} [level|mode|difficulty]?"
+    match="[can_you|could_you|will_you|would_you|let_us|lets]? [switch|change|go|move|turn] [over]? to [the]? {l:lex.games.tictactoe.levels} [level|mode|difficulty]?"
     emit="@{_} core.request action=ttt.level arg.level={l}"
     kind=request
     priority=12
@@ -140,3 +140,224 @@
     kind=request
     priority=12
     example="Where did you play?"
+
+@pat.games.tictactoe.move.rc core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er]? [i|i_will|i_would|let_me|can_i|may_i|could_i|i_want|i_choose|i_take|i_play|i_pick|i_go|i_put|me|my_move_is|my_move|i_will_go|i_will_put|i_will_play|i_will_take|i_wanna_go|i_wanna_play|i_wanna_take|i_wanna_put|let_me_go|let_me_play|let_me_take|let_me_put|can_i_go|can_i_play|can_i_take|can_i_put|can_i_have|may_i_have|could_i_have|how_about|what_about|lets_go|let_us_go|go_for|i_go_for|i_will_go_for|then|ill_take|ill_go|ill_play|ill_put]? [play|go|put|place|take|mark|choose|pick|move|put_x|play_x|x|put_an_x|place_an_x|draw_an_x|want_to_go|want_to_play|want_to_take|will_take|will_play|will_go|put_my_x|put_it|place_it|play_it|move_it|mark_it|take_it|go_with|go_for|try|use|plant_an_x|drop_an_x|drop_x|my_x|my_x_goes|x_goes|x_on|x_at|x_in|an_x|x_to|set_x|set_an_x|draw_x|place_x|mark_x|mark_an_x|x_marks|choose_the|pick_the|put_it_in|put_it_on|put_it_at|play_in|play_on|play_at|go_in|go_on|go_at|go_to|put_x_in|put_x_on|put_x_at|put_an_x_in|put_an_x_on|put_an_x_at|put_an_x_on_the|put_my_x_in|put_my_x_on|put_my_x_at]? [at|in|on|to]? [the]? [corner|square|cell|spot|tile]? [at|in|on|to]? [the]? {r:lex.games.tictactoe.rows} [row|side|edge|line]? [on|at|in|to]? [the]? {c:lex.games.tictactoe.colw} [side|edge|corner|square|cell|spot|one|box|tile|slot]? [corner|square|cell|spot|side]? [pls|plz|thanks|thx|then|now|lol|rn|yeah|maybe|i_guess]?"
+    emit="@{_} core.request action=ttt.move arg.rname={r} arg.cname={c}"
+    kind=request
+    priority=14
+    example="Middle row on the left."
+    example="Put it at the top right corner please."
+    example="Um mid row left."
+
+@pat.games.tictactoe.move.ord core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er]? [i|i_will|i_would|let_me|can_i|may_i|could_i|i_want|i_choose|i_take|i_play|i_pick|i_go|i_put|me|my_move_is|my_move|i_will_go|i_will_put|i_will_play|i_will_take|i_wanna_go|i_wanna_play|i_wanna_take|i_wanna_put|let_me_go|let_me_play|let_me_take|let_me_put|can_i_go|can_i_play|can_i_take|can_i_put|can_i_have|may_i_have|could_i_have|how_about|what_about|lets_go|let_us_go|go_for|i_go_for|i_will_go_for|then|ill_take|ill_go|ill_play|ill_put]? [play|go|put|place|take|mark|choose|pick|move|put_x|play_x|x|put_an_x|place_an_x|draw_an_x|want_to_go|want_to_play|want_to_take|will_take|will_play|will_go|put_my_x|put_it|place_it|play_it|move_it|mark_it|take_it|go_with|go_for|try|use|plant_an_x|drop_an_x|drop_x|my_x|my_x_goes|x_goes|x_on|x_at|x_in|an_x|x_to|set_x|set_an_x|draw_x|place_x|mark_x|mark_an_x|x_marks|choose_the|pick_the|put_it_in|put_it_on|put_it_at|play_in|play_on|play_at|go_in|go_on|go_at|go_to|put_x_in|put_x_on|put_x_at|put_an_x_in|put_an_x_on|put_an_x_at|put_an_x_on_the|put_my_x_in|put_my_x_on|put_my_x_at]? [at|in|on|to]? [the]? {r:lex.games.tictactoe.ords} row [and|then|at]? [the]? {c:lex.games.tictactoe.ords} [column|col|one|square|cell|spot]? [pls|plz|thanks|thx|then|now|lol|rn|yeah|maybe|i_guess]?"
+    emit="@{_} core.request action=ttt.move arg.col={c} arg.row={r} arg.numeric=true"
+    kind=request
+    priority=15
+    example="Second row third column."
+
+@pat.games.tictactoe.move.abbr core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er]? [i|i_will|i_would|let_me|can_i|may_i|could_i|i_want|i_choose|i_take|i_play|i_pick|i_go|i_put|me|my_move_is|my_move|i_will_go|i_will_put|i_will_play|i_will_take|i_wanna_go|i_wanna_play|i_wanna_take|i_wanna_put|let_me_go|let_me_play|let_me_take|let_me_put|can_i_go|can_i_play|can_i_take|can_i_put|can_i_have|may_i_have|could_i_have|how_about|what_about|lets_go|let_us_go|go_for|i_go_for|i_will_go_for|then|ill_take|ill_go|ill_play|ill_put]? [play|go|put|place|take|mark|choose|pick|move|put_x|play_x|x|put_an_x|place_an_x|draw_an_x|want_to_go|want_to_play|want_to_take|will_take|will_play|will_go|put_my_x|put_it|place_it|play_it|move_it|mark_it|take_it|go_with|go_for|try|use|plant_an_x|drop_an_x|drop_x|my_x|my_x_goes|x_goes|x_on|x_at|x_in|an_x|x_to|set_x|set_an_x|draw_x|place_x|mark_x|mark_an_x|x_marks|choose_the|pick_the|put_it_in|put_it_on|put_it_at|play_in|play_on|play_at|go_in|go_on|go_at|go_to|put_x_in|put_x_on|put_x_at|put_an_x_in|put_an_x_on|put_an_x_at|put_an_x_on_the|put_my_x_in|put_my_x_on|put_my_x_at]? [at|in|on|to]? [the]? [corner]? {r:lex.games.tictactoe.rows} {c:lex.games.tictactoe.colw} [corner]? [pls|plz|thanks|thx|then|now|lol|rn|yeah|maybe|i_guess]?"
+    emit="@{_} core.request action=ttt.move arg.rname={r} arg.cname={c}"
+    kind=request
+    priority=14
+    example="Top left."
+
+@pat.games.tictactoe.coord.rc core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er]? [i|i_will|i_would|let_me|can_i|may_i|could_i|i_want|i_choose|i_take|i_play|i_pick|i_go|i_put|me|my_move_is|my_move|i_will_go|i_will_put|i_will_play|i_will_take|i_wanna_go|i_wanna_play|i_wanna_take|i_wanna_put|let_me_go|let_me_play|let_me_take|let_me_put|can_i_go|can_i_play|can_i_take|can_i_put|can_i_have|may_i_have|could_i_have|how_about|what_about|lets_go|let_us_go|go_for|i_go_for|i_will_go_for|then|ill_take|ill_go|ill_play|ill_put]? [play|go|put|place|take|mark|choose|pick|move|put_x|play_x|x|put_an_x|place_an_x|draw_an_x|want_to_go|want_to_play|want_to_take|will_take|will_play|will_go|put_my_x|put_it|place_it|play_it|move_it|mark_it|take_it|go_with|go_for|try|use|plant_an_x|drop_an_x|drop_x|my_x|my_x_goes|x_goes|x_on|x_at|x_in|an_x|x_to|set_x|set_an_x|draw_x|place_x|mark_x|mark_an_x|x_marks|choose_the|pick_the|put_it_in|put_it_on|put_it_at|play_in|play_on|play_at|go_in|go_on|go_at|go_to|put_x_in|put_x_on|put_x_at|put_an_x_in|put_an_x_on|put_an_x_at|put_an_x_on_the|put_my_x_in|put_my_x_on|put_my_x_at]? [at|in|on|to]? [the]? [row|r] {r:number} [column|col|c|and_column|and_col] {c:number} [pls|plz|thanks|thx|then|now|lol|rn|yeah|maybe|i_guess]?"
+    emit="@{_} core.request action=ttt.move arg.col={c} arg.row={r} arg.numeric=true"
+    kind=request
+    priority=15
+    example="R2 c3 pls."
+
+@pat.games.tictactoe.new2 core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|ok]? [can_we|can_you|could_we|let_us|lets|i_want|i_wanna|i_want_to|i_would_like_to|please_can_we|again|go_again]? [start|play|begin|have|do|restart|reset|try|go_for|set_up|setup|open|make]? [a|another|1_more|the|1|one_more|a_fresh|a_clean]? [new|fresh|clean|next|another|empty|blank|clear]? [round_of|game_of|round|game|board|grid|1]? tic_tac_toe [new|fresh|again|over|restart|1_more_time|once_more|from_scratch|start_over|another|next]? [game|round|1|board|start|a_new_1|new_1|new_round|new_game]? [pls|plz|now|then|please]?"
+    emit="@{_} core.request action=ttt.new"
+    kind=request
+    priority=12
+    example="Restart tic tac toe."
+    example="Fresh tic tac toe."
+
+@pat.games.tictactoe.new3 core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|ok|again|and]? [can_we|can_you|could_we|let_us|lets|i_want|i_wanna|i_want_to|i_would_like_to|please_can_we|let_us_do|lets_do|lets_have|let_us_have|give_me|gimme|i_need|go_for]? [a|another|1_more|the|1|one_more|a_fresh|a_clean]? [new|fresh|clean|next|another|empty|blank|clear|reset] [board|grid|1|again|new_board|fresh_board|round|try|go] [new|fresh|please|pls|plz|now|then|board|grid|round|1]? [pls|plz|now|then|please]?"
+    emit="@{_} core.request action=ttt.new"
+    kind=request
+    priority=11
+    example="Clean board."
+    example="Let us do a new one."
+    example="Again please, new board."
+
+@pat.games.tictactoe.new5 core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|ok]? [a|another|the]? [fresh|clean|empty|blank] [game|round|start|match] [pls|plz|now|then|please]?"
+    emit="@{_} core.request action=ttt.new"
+    kind=request
+    priority=11
+    example="Fresh game."
+
+@pat.games.tictactoe.new4 core.pattern
+    match="[clear|reset|empty|wipe|restart|clean|refresh|redo|wipe_out] [it|that|this|the_game|everything|all|the_marks|the_board_again]"
+    emit="@{_} core.request action=ttt.new"
+    kind=request
+    priority=10
+    example="Clear it."
+
+@pat.games.tictactoe.first2 core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|ok]? [can_i|may_i|could_i|can_we|let_me|i_will|i_want_to|i_wanna|i_would_like_to|i_d_like_to|ill|i_ll|i|me]? [go|start|play|move|begin|be|take_the_first_turn|have_the_first_move|get_the_first_move|go_ahead_and_go|take_my_turn] [first|1st|1|the_first]? [pls|plz|now|then|please|lol|rn|1st]? [first|1st]? [pls|plz|now|then|please|lol|rn]?"
+    emit="@{_} core.request action=ttt.first arg.who=user"
+    kind=request
+    priority=11
+    example="Can I start?"
+    example="I will go first."
+
+@pat.games.tictactoe.first3 core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|ok]? [first|1st|me_first|1st_move|first_move|my_move_first|first_turn|first_go] [for_me|by_me|to_me|is_mine|please|pls|plz|me|goes_to_me|my_turn|let_me|is_for_me]"
+    emit="@{_} core.request action=ttt.first arg.who=user"
+    kind=request
+    priority=11
+    example="First for me."
+
+@pat.games.tictactoe.first4 core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|ok|well]? [can_you|could_you|will_you|would_you|can_u|could_u|will_u|please_can_you|you_can|you_should|you_may|you_must|let_the|let_you|let_your|you_have_to|you_need_to|i_want_you_to|i_d_like_you_to|i_would_like_you_to|go_ahead_and|go_on_and|you_go_ahead_and|u_can|u_should|u|you|the|machine|computer|ai|bot|let_the_computer|let_the_machine|let_the_ai|let_the_bot]? [you|u|computer|machine|ai|bot|the_computer|the_machine|cpu|engine]? [go|start|play|move|begin|goes|starts|plays|moves|begins|can_start|should_start|can_go|should_go|take_the_first_turn|make_the_first_move|go_ahead|begin_the_game|start_the_game|your_move|your_turn] [first|1st|1|the_first|ahead]? [pls|plz|now|then|please|lol|rn|first|1st]?"
+    emit="@{_} core.request action=ttt.first arg.who=system"
+    kind=request
+    priority=10
+    example="You start please."
+    example="Let the computer start."
+    example="Machine goes first."
+
+@pat.games.tictactoe.first5 core.pattern
+    match="[your_move_first|your_turn_first|you_first_pls|you_first_please|your_go_first|you_move_first|computer_first|machine_first|ai_first|cpu_first|you_go_1st|you_can_go_1st|u_go_1st|u_go_first|u_first|you_start_pls|you_start_please|u_start|u_start_pls|go_first_you|you_should_start|you_should_go_first|you_can_start|you_can_go_first|computer_goes_first|machine_goes_first|ai_goes_first|bot_goes_first|cpu_goes_first|let_the_computer_start|let_the_machine_start|let_the_ai_start|let_the_bot_start|let_the_computer_go_first|let_the_machine_go_first|you_move_first_pls]"
+    emit="@{_} core.request action=ttt.first arg.who=system"
+    kind=request
+    priority=11
+    example="Your move first."
+
+@pat.games.tictactoe.whofirst2 core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|ok]? [who|whos|who_s|who_is|who_are|which|whose|what|what_is|what_s|am_i] [goes|going|starts|starting|plays|playing|moves|moving|is|has|gets|begins|beginning|to_go|to_start|to_move|to_play|will_go|will_start|will_play|up|x|o|the_first|first|1st|my_turn|turn]? [first|1st|1|the_first|second|x|o|the_first_turn|the_1st_turn|the_first_move|the_1st_move|turn|move|up_first|to_move_first|to_play_first|to_start|to_go_first|to_start_first|to_move|to_play|go_first|go_1st|start|begin|go|plays|moves|starts]? [first|1st|1|second|in_this_game|in_the_game|here|now|then|today|pls|plz|please|rn|of_us|of_the_two|between_us]?"
+    emit="@{_} core.request action=ttt.whoFirst"
+    kind=request
+    priority=10
+    example="Whos going first?"
+    example="Who starts the game?"
+    example="First to move?"
+
+@pat.games.tictactoe.whofirst3 core.pattern
+    match="[who_has|who_gets|who_had|who_takes|who_got|who_will_have|whose|whos_got] [the]? [first|1st|1|opening|starting|initial|top|leading|1st_turn|first_turn|first_move|1st_move|first_go|1st_go|opening_move|opening_turn|first_play|1st_play] [turn|move|go|play|row|spot|shot|chance|round|try|attempt|start|say|pick|choice|the_move|the_turn]? [in_this_game|in_the_game|here|now|then|today|pls|plz|please|rn|of_us|of_the_two]?"
+    emit="@{_} core.request action=ttt.whoFirst"
+    kind=request
+    priority=10
+    example="Who has the first turn?"
+
+@pat.games.tictactoe.whofirst4 core.pattern
+    match="[whos_up_first|who_s_up_first|who_is_up_first|whos_up|who_s_up|who_is_up|first_to_move|first_to_go|first_to_play|first_to_start|who_moves_first|who_plays_first|who_starts_the_game|who_begins_the_game|who_goes_first_here|who_goes_1st|who_starts_first|who_is_to_start|who_is_to_move|who_is_to_go|who_is_to_play|who_is_the_first_to_go|who_is_the_first_to_start|who_is_the_first_to_move|who_is_the_first_to_play]"
+    emit="@{_} core.request action=ttt.whoFirst"
+    kind=request
+    priority=10
+    example="Who is up first?"
+
+@pat.games.tictactoe.level6 core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|ok|well]? [can_you|could_you|will_you|would_you|can_u|let_us|lets|i_want|i_wanna|i_would_like|give_me|gimme|go_to|go_with|use|try|play|switch_to|set_to|set_it_to|make_it|change_to|set_the_game_to|put_it_on|put_it_to|put_on|turn_on|turn_it_to|let_me_play|i_will_play|i_will_take|i_will_go_with|i_want_the|i_want_a|a|an|the|1|level|mode|difficulty|play_on|play_at|play_in|on]? [a|an|the]? [level|mode|difficulty]? {l:lex.games.tictactoe.levels} [level|mode|difficulty|game|round|setting|setup|opponent|please|pls|plz|now|then|lol|settings|rn]? [level|mode|difficulty|game|please|pls|plz|now|then]?"
+    emit="@{_} core.request action=ttt.level arg.level={l}"
+    kind=request
+    priority=11
+    example="Easy mode."
+    example="Level perfect."
+    example="Perfect difficulty pls."
+    example="Max difficulty."
+
+@pat.games.tictactoe.status2 core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|ok|well]? [who_is|whos|who_s|who|am_i|are_you|are_we|is_it|is_anyone|has_anyone|how_is|how_s|hows|how_am_i|how_are_we|what_s|whats|who_has|who_is_getting|who_looks|who_looks_like|who_s_looking|who_is_looking] [the|my|our|this]? [winning|ahead|leading|beating|winning_the_game|winner|game|edge|upper_hand|advantage|in_front|doing|looking|beating_you|beating_me|going_to_win|gonna_win|will_win|better|stronger|losing|behind|won|got_the_edge|got_the_advantage|got_the_upper_hand|has_the_edge|has_the_advantage|has_the_upper_hand|the_edge|the_advantage] [the]? [game|me|you|it|edge|advantage|upper_hand|looking|going|so_far|now|rn|currently|right_now|atm|pls|plz|please|the_game|this_game|here|then|yet|already|thus_far|at_the_moment|currently_winning|so_far_now]? [the]? [game|me|you|it|so_far|now|rn|currently|right_now|atm|pls|plz|please|then|yet|looking|going]?"
+    emit="@{_} core.request action=ttt.status"
+    kind=request
+    priority=10
+    example="Whos winning rn?"
+    example="Who has the edge?"
+    example="Am I beating you?"
+    example="How is the game looking?"
+
+@pat.games.tictactoe.status3 core.pattern
+    match="[winning|winner|score|who_is_winning|whos_winning|result|standings|standing|status|game_status|the_score|the_status|the_result] [now|so_far|rn|currently|pls|plz|please|then|yet|atm]?"
+    emit="@{_} core.request action=ttt.status"
+    kind=request
+    priority=9
+    example="Winning?"
+
+@pat.games.tictactoe.describe2 core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|ok|well]? [can_you|could_you|will_you|would_you|can_u|could_u|will_u|please_can_you|let_me|i_want_to|i_wanna|i_would_like_to|i_d_like_to|i_need_to|lets|let_us|go_ahead_and]? [describe|read|show|tell|say|list|give|display|explain|spell_out|speak|print|narrate|whats|what_is|what_s|where_are|where_is|how_is|how_does|how_do|what_does|what_do|show_me|tell_me|read_me|give_me|describe_to_me|say_out|read_out|read_aloud|say_aloud|speak_out|read_out_loud|say_out_loud] [me|us]? [the|my|our|this|that|all|all_the|all_of_the|what_is_on|what_is_in|what_s_on|what_s_in|whats_on|whats_in|whats_on_the|whats_in_the|what_is_on_the|what_is_in_the]? [board|grid|game|position|x_s_and_o_s|xs_and_os|x_and_o|x_and_os|marks|state|layout|situation|moves|cells|squares|it|that|things|pieces|picture|current_board|current_position|current_grid|current_game|current_state|current_layout|current_situation|current_picture] [in_words|in_text|in_detail|in_full|out_loud|aloud|in_a_sentence|in_sentences|to_me|for_me|right_now|rn|now|currently|at_the_moment|so_far|pls|plz|please|then|atm|looks_like|look_like|looking|look|is_like|are_like|currently_looks_like|right_now_looks_like|looks_like_now|looks_like_right_now|look_like_now|look_like_right_now|look_like_rn|looks_like_rn|looks_like_at_the_moment|look_like_at_the_moment|looks_like_currently|look_like_currently]? [in_words|in_text|in_detail|in_full|out_loud|aloud|now|rn|please|pls|plz|then|right_now|so_far|atm]?"
+    emit="@{_} core.request action=ttt.describe"
+    kind=request
+    priority=10
+    example="Show me the board in words."
+    example="Describe it."
+    example="Describe board pls."
+
+@pat.games.tictactoe.describe3 core.pattern
+    match="[board|grid|the_board|the_grid|whats_on_it|what_is_on_it|whats_there|what_is_there|where_are_the_x_s_and_o_s|where_are_the_xs_and_os|where_are_the_x_and_os|where_are_the_marks|where_is_everything|where_is_everyone|where_is_x_and_o|where_are_x_and_o|where_are_the_x_s_and_the_o_s|where_are_the_xs_and_the_os|where_are_all_the_marks|where_is_everything_now|describe_it|describe_that|describe_this|read_it|read_that|read_this|read_it_out|read_that_out|read_this_out|read_it_to_me|read_that_to_me|read_this_to_me|state_of_play|the_state_of_play|situation|the_situation|position|the_position|the_current_position|current_position|current_board|the_current_board] [now|rn|please|pls|plz|then|right_now|so_far|atm|currently|in_words|in_text|aloud|out_loud]?"
+    emit="@{_} core.request action=ttt.describe"
+    kind=request
+    priority=9
+    example="Board?"
+
+@pat.games.tictactoe.hint2 core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|ok|well]? [can_you|could_you|will_you|would_you|can_u|could_u|will_u|please_can_you|help_me|i_need|i_want|i_would_like|i_d_like|show_me|tell_me|give_me|gimme|get_me|let_me_have|lets_have|any|got_any|have_you_got_any|do_you_have_any|do_you_have|whats|what_is|what_s|where_to|where_do|where_should|where_can|where_would|what_to|what_should|which_should|which_to|which_would|which_can|how_about|suggest|recommend|advise|advice|help|help_me_pick|help_me_choose|help_me_find|help_me_decide|help_me_with|help_me_out|help_with|choose_for_me|pick_for_me|decide_for_me|find_me|show_me_where|tell_me_where|tell_me_what|tell_me_which|show_me_what|show_me_which] [me|us|i|we|u|you]? [a|an|the|any|some|1_more|another|my|our|next|best|good|nice|smart|great|little|small|quick|bit_of|nice_little]? [best|good|nice|smart|great|little|small|quick|next|bit_of|nice_little|safe|safest|winning|right]? [hint|hints|tip|tips|clue|clues|spot|spots|square|squares|cell|cells|move|moves|play|plays|place|places|position|positions|idea|ideas|suggestion|suggestions|advice|help|where|what|where_to_play|where_to_go|where_to_move|where_to_put|where_to_place|where_to_mark|where_to_play_next|where_to_go_next|where_to_move_next|what_to_play|what_to_do|what_to_play_next|what_to_do_next|what_to_pick|what_to_choose|go|pick|choose|put|place|take|mark|play_next|go_next|move_next|next|next_move|next_spot|next_square|next_play|next_turn|where_next|what_next|spot_next|square_next|move_next] [for_me|to_play|to_go|to_take|to_pick|to_choose|to_put|to_place|to_mark|to_move|to_play_next|to_go_next|to_move_next|to_pick_next|to_choose_next|to_take_next|here|now|next|please|pls|plz|then|rn|pls_help|where|what|i_should_play|i_should_go|i_should_take|i_should_pick|i_should_choose|i_should_put|i_should_place|i_should_mark|i_should_move|i_could_play|i_could_go|i_could_take|i_could_pick|i_can_play|i_can_go|i_can_take|i_can_pick|i_can_choose|i_can_put|i_can_place|i_can_mark|i_can_move|i_could_choose|i_could_put|i_could_place|i_could_mark|i_could_move|do_i_go|do_i_play|do_i_take|do_i_pick|do_i_choose|do_i_put|do_i_place|do_i_mark|do_i_move]?"
+    emit="@{_} core.request action=ttt.hint"
+    kind=request
+    priority=10
+    example="Suggest a spot."
+    example="Help me pick a square."
+    example="Where to play next?"
+
+@pat.games.tictactoe.hint3 core.pattern
+    match="[where|what|which] [do|should|shall|can|could|would|will|to] [i|we|u|you]? [go|play|move|put|place|mark|take|pick|choose|start|begin]? [now|next|here|then|rn|pls|plz|please|first]?"
+    emit="@{_} core.request action=ttt.hint"
+    kind=request
+    priority=9
+    example="Where do I go?"
+
+@pat.games.tictactoe.hint4 core.pattern
+    match="[hint|hints|any_hints|a_hint|any_hint|give_me_a_hint|clue|a_clue|any_clue|tip|a_tip|any_tip|tips|suggestion|suggestions|a_suggestion|help|help_me|advice|any_advice]"
+    emit="@{_} core.request action=ttt.hint"
+    kind=request
+    priority=9
+    example="Any hints?"
+
+@pat.games.tictactoe.last2 core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|ok|well]? [where|what|which|whats|what_is|what_s|where_is|where_was|where_s] [did|was|is|were|do|does|has|have|had|d]? [you|u|ur|your|the_computer|the_machine|the_ai|the_bot|the_cpu|the_engine|the_opponent|my_opponent|it|that]? [last|latest|most_recent|previous|prev|recent|final]? [move|play|spot|square|cell|place|position|mark|turn|go|pick|choice|o|x|play_at|play_in|play_on|move_to|move_at|move_on|put_your_o|put_an_o|put_your_mark|place_your_o|place_your_mark|take|take_in|take_at|take_on|use|go_to|go_in|go_at|go_on|pick_in|pick_at|pick_on|choose|choose_in|choose_at|choose_on|put|place|mark|move_in|moved|played|went|picked|chose|put_it|used|took|selected|select|made|make|made_your_move|made_a_move|make_a_move|play_your_move|played_your_move] [last|latest|most_recent|previous|just|just_now|now|rn|then|there|before|earlier|pls|plz|please|move|play|spot|square|cell|place|position|mark|turn|go|pick|choice|use|take|choose|put|place|mark]? [last|latest|most_recent|previous|just|just_now|now|rn|then|there|before|earlier|pls|plz|please|move|play|spot|square|cell|place|position|mark|turn|go|pick|choice|use|take|choose|put|place|mark]?"
+    emit="@{_} core.request action=ttt.last"
+    kind=request
+    priority=10
+    example="Where did u go?"
+
+@pat.games.tictactoe.last3 core.pattern
+    match="[your|ur|the_computer_s|the_machine_s|the_ai_s|the_bot_s|the_opponent_s|my_opponent_s|the_last|last|latest|previous|most_recent] [last|latest|previous|most_recent|recent|final]? [move|play|spot|square|cell|place|position|mark|turn|go|pick|choice] [pls|plz|please|now|rn|then|again|once_more|1_more_time|so_far]?"
+    emit="@{_} core.request action=ttt.last"
+    kind=request
+    priority=9
+    example="Your last spot."
+    example="Last move?"
+
+@pat.games.tictactoe.count2 core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|ok|well]? [how_many|how_much|the_number_of|number_of|count_of|the_count_of|count|total|the_total|tally|what_is_the_number_of|whats_the_number_of|what_is_the_count_of|whats_the_count_of|what_is_the_total|whats_the_total|what_is_the_tally|whats_the_tally|can_you_count|could_you_count|count_the|count_all|count_all_the|count_all_of_the|tell_me_how_many|tell_me_the_number_of|tell_me_the_count_of|tell_me_the_total_of] [the|all|all_the|all_of_the|our|my|your|total|more|moves_so_far]? [moves|move|turns|turn|plays|play|goes|go|marks|mark|tries|try|attempts|attempt|steps|step|rounds|round|picks|pick|choices|choice|squares|square|cells|cell|spots|spot|places|place|positions|position|x_s|xs|o_s|os] [count|total|number|tally|so_far|now|rn|have_we_made|have_we_played|have_been_made|have_been_played|did_we_make|did_we_play|have_i_made|have_i_had|have_you_made|have_you_played|were_made|were_played|are_there|have_we_had|have_i_played|have_i_taken|have_we_taken|have_i_used|have_we_done|did_i_make|did_you_make|played|made|taken|used|done|done_so_far|played_so_far|made_so_far|taken_so_far|used_so_far|were_played_so_far|were_made_so_far|have_been_played_so_far|have_been_made_so_far|pls|plz|please|then|yet|already|in_total|altogether|overall|all_in_all|in_all|thus_far|until_now|till_now|up_to_now|to_date|at_the_moment|atm|currently]? [so_far|now|rn|pls|plz|please|then|yet|already|in_total|altogether|overall|all_in_all|in_all|thus_far|until_now|till_now|up_to_now|to_date|at_the_moment|atm|currently|played|made|taken|used|done]?"
+    emit="@{_} core.request action=ttt.count"
+    kind=request
+    priority=10
+    example="Count the moves."
+    example="Number of moves."
+    example="Moves so far?"
+
+@pat.games.tictactoe.count3 core.pattern
+    match="[moves|turns|plays|goes|marks|tries|attempts|steps|rounds] [count|total|number|tally|so_far|played|made|taken]"
+    emit="@{_} core.request action=ttt.count"
+    kind=request
+    priority=9
+    example="Moves count?"
+
+@pat.games.tictactoe.giveup core.pattern
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|ok|well]? [i|we|let_me|let_us|lets|i_want_to|i_wanna|i_would_like_to|i_will|i_d_like_to|i_am_going_to|im_going_to|i_am|im|i_have_to|i_gotta|i_must|i_need_to|i_shall|can_i|may_i|could_i|can_we|may_we|could_we|shall_we|should_we|i_think_i_will|i_think_i_should|i_think_ill|i_guess_i_will|i_guess_i_should|i_guess_ill|time_to|its_time_to|time_for_me_to|time_for_us_to|going_to|gonna|about_to|ready_to|going_to_have_to|gonna_have_to|have_to|gotta|must|should|need_to|ought_to]? [give|giving|gave|quit|quitting|surrender|surrendering|forfeit|forfeiting|resign|resigning|concede|conceding|stop|stopping|abandon|abandoning|end|ending|leave|leaving|abort|aborting|throw_in_the_towel|am_done|am_giving|will_give|am_quitting|am_surrendering|am_resigning|am_conceding|am_stopping|am_abandoning|am_ending|am_leaving|am_aborting|give_up|gave_up|giving_up|quit_the_game|resign_the_game|forfeit_the_game|surrender_the_game|concede_the_game|stop_the_game|abandon_the_game|end_the_game|leave_the_game|abort_the_game] [up]? [now|pls|plz|the_game|this_game|the_round|this_round|it|then|here|rn|please|the_match|this_match|game|round|match|already|for_now|for_today]? [now|pls|plz|then|here|rn|please|already|for_now|for_today]?"
+    emit="@{_} core.request action=ttt.giveup"
+    kind=request
+    priority=8
+    example="Forfeit."
+    example="Quit this game."
+    example="Resign the game."

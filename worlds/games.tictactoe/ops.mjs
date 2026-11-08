@@ -19,13 +19,14 @@ const POS = {
   middle_left: 3, center_left: 3, left_middle: 3, center: 4, centre: 4, middle: 4, middle_right: 5, center_right: 5, right_middle: 5,
   bottom_left: 6, lower_left: 6, bottom_middle: 7, bottom_center: 7, bottom_centre: 7, bottom_right: 8, lower_right: 8,
 };
+Object.assign(POS, { tl: 0, tr: 2, bl: 6, br: 8, mid_left: 3, mid_right: 5, mid_middle: 4, middle_middle: 4, dead_center: 4, the_middle: 4, upper_middle: 1, lower_middle: 7, mid_top: 1, mid_bottom: 7, down_left: 6, down_right: 8, up_left: 0, up_right: 2, left_top: 0, right_top: 2, left_bottom: 6, right_bottom: 8, top_mid: 1, bottom_mid: 7, middle_top: 1, middle_bottom: 7, left_center: 3, right_center: 5, left_centre: 3, right_centre: 5, center_top: 1, center_bottom: 7, center_middle: 4, centre_middle: 4, middle_center: 4, middle_centre: 4, mid_center: 4 });
 const RC = { top: 0, middle: 1, bottom: 2 };
 const CC = { left: 0, middle: 1, center: 1, right: 2 };
 for (const r of Object.keys(RC)) for (const c of Object.keys(CC)) {
   POS[`${r}_row_${c}`] = RC[r] * 3 + CC[c];
   POS[`${c}_column_${r}`] = RC[r] * 3 + CC[c];
 }
-const LEVEL_OF = { easy: 'easy', easier: 'easy', simple: 'easy', beginner: 'easy', perfect: 'perfect', perfectly: 'perfect', hard: 'perfect', harder: 'perfect', hardest: 'perfect', unbeatable: 'perfect', expert: 'perfect', difficult: 'perfect' };
+const LEVEL_OF = { easy: 'easy', easier: 'easy', simple: 'easy', beginner: 'easy', perfect: 'perfect', perfectly: 'perfect', hard: 'perfect', harder: 'perfect', hardest: 'perfect', unbeatable: 'perfect', expert: 'perfect', difficult: 'perfect', lighter: 'easy', light: 'easy', easiest: 'easy', lowest: 'easy', weak: 'easy', max: 'perfect', maximum: 'perfect', highest: 'perfect', toughest: 'perfect', tough: 'perfect', impossible: 'perfect', strong: 'perfect', smart: 'perfect', maxed: 'perfect' };
 
 const ok = (value) => ({ status: 'supported', value });
 const no = (status, note) => ({ status, note });
@@ -128,13 +129,24 @@ export function whoFirst(ctx) {
   return ok(s.user === 'X' ? 'X goes first. You are X, so you go first, and I am O.' : 'X goes first. I am X, so I go first, and you are O.');
 }
 
-export function move(ctx, { pos, col, row, numeric }) {
+// Spoken forms: letters said as words ("bee two"), ordinals ("second row third column"), row and column words.
+const PHON = { ay: 'a', eh: 'a', bee: 'b', be: 'b', cee: 'c', see: 'c', sea: 'c' };
+const ORD = { first: 1, '1st': 1, second: 2, '2nd': 2, third: 3, '3rd': 3, last: 3 };
+const ROWW = { top: 0, upper: 0, up: 0, high: 0, highest: 0, first: 0, middle: 1, mid: 1, center: 1, centre: 1, second: 1, bottom: 2, lower: 2, down: 2, low: 2, lowest: 2, third: 2, last: 2 };
+const COLW = { left: 0, first: 0, middle: 1, mid: 1, center: 1, centre: 1, second: 1, right: 2, third: 2, last: 2 };
+
+export function move(ctx, { pos, col, row, numeric, rname, cname }) {
   const s = ctx.state;
   let idx;
-  if (pos !== undefined) idx = POS[pos];
+  if (rname !== undefined && cname !== undefined) {
+    const r = ROWW[rname], c = COLW[cname];
+    if (r === undefined || c === undefined) return no('unsupported', `I do not know the place ${rname} ${cname}.`);
+    idx = r * 3 + c;
+  } else if (pos !== undefined) idx = POS[pos] ?? POS[String(pos).replace(/-/g, '_')];
   else {
-    const c = numeric === 'true' ? Number(col) - 1 : 'abc'.indexOf(String(col).toLowerCase());
-    const r = Number(row) - 1;
+    const colL = PHON[String(col).toLowerCase()] ?? String(col).toLowerCase();
+    const c = numeric === 'true' ? (ORD[colL] ?? Number(col)) - 1 : 'abc'.indexOf(colL);
+    const r = (ORD[String(row).toLowerCase()] ?? Number(row)) - 1;
     if (!(c >= 0 && c <= 2 && r >= 0 && r <= 2)) return no('unsupported', 'The board has columns A to C and rows 1 to 3, for example B2.');
     idx = r * 3 + c;
   }

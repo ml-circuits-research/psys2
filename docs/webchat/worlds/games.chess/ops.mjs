@@ -21,7 +21,7 @@ const NAME = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'k
 const PLURAL = { p: 'pawns', n: 'knights', b: 'bishops', r: 'rooks', q: 'queens', k: 'kings' };
 const VAL = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 const ORDER = 'kqrbnp';
-const PIECE_WORD = { pawn: 'p', knight: 'n', bishop: 'b', rook: 'r', queen: 'q', king: 'k', horse: 'n', night: 'n', rock: 'r', p: 'p', n: 'n', b: 'b', r: 'r', q: 'q', k: 'k' };
+const PIECE_WORD = { pawn: 'p', knight: 'n', bishop: 'b', rook: 'r', queen: 'q', king: 'k', horse: 'n', night: 'n', rock: 'r', kngt: 'n', knite: 'n', nite: 'n', horsey: 'n', bish: 'b', pown: 'p', rok: 'r', p: 'p', n: 'n', b: 'b', r: 'r', q: 'q', k: 'k' };
 const FILE_WORD = { alpha: 'a', bravo: 'b', charlie: 'c', delta: 'd', echo: 'e', foxtrot: 'f', golf: 'g', hotel: 'h', bee: 'b', dee: 'd', eff: 'f', gee: 'g', aitch: 'h' };
 const LEVEL_NAME = ['', 'beginner', 'easy', 'casual', 'intermediate', 'club player', 'strong', 'expert', 'master'];
 const MOVETIME = [0, 150, 200, 300, 450, 650, 900, 1200, 1800];
@@ -696,7 +696,7 @@ function inventory(c, color) {
 function ownerLetter(s, w) {
   const x = String(w ?? '').toLowerCase();
   if (['my', 'our', 'mine', 'i', 'we'].includes(x)) return ucol(s);
-  if (['your', 'yours', 'their', 'his', 'her', 'enemy', 'opponent', 'opposing', 'the_enemy', 'the_opposing', 'you'].includes(x)) return ecol(s);
+  if (['your', 'yours', 'their', 'his', 'her', 'enemy', 'opponent', 'opposing', 'the_enemy', 'the_opposing', 'you', 'u', 'ur'].includes(x)) return ecol(s);
   if (x === 'white' || x === 'the_white') return 'w';
   if (x === 'black' || x === 'the_black') return 'b';
   return null;

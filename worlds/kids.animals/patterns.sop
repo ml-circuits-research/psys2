@@ -529,3 +529,185 @@
     kind=question
     priority=12
     example="Do I have a dog?"
+
+@pat.kids.animals.w.ab.aux core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|hey|quick_question|ok|so|please]? [can|could|does|do|will|is|are|would|did|if|whether|tell_me_if|check_if] [a|an|the|every|any|all|each]? {a:noun} [be|even|really|actually|possibly|know_how_to|able_to|capable_of|manage_to|learn_to|go|ever|often|usually|normally]? {ab:lex.kids.animals.abilities} [in_water|in_the_air|a_lot|well|too]? [right|yes|no|yeah|correct|or_no|or_not|or_nah|yes_or_no|right_or_not|yes_no|true_or_false|too|at_all]? [pls|plz|please|thanks|exactly|anyway|lol]?"
+    emit="@{_} core.question type=kids.animals.animal seek=can_{ab} where.name={a}"
+    kind=question
+    priority=10
+    example="Could a hen possibly swim?"
+
+@pat.kids.animals.w.ab.tag core.pattern
+    match="[a|an|the|every|any|all|each]? {a:noun} [can|could|does|do|will|is|are|even|really|actually|possibly|know_how_to|able_to|capable_of|go|ever|often|usually|normally]? {ab:lex.kids.animals.abilities} [right|yes|no|yeah|correct|or_no|or_not|or_nah|yes_or_no|right_or_not|yes_no|true_or_false] [pls|plz|please|thanks|exactly|anyway|lol]?"
+    emit="@{_} core.question type=kids.animals.animal seek=can_{ab} where.name={a}"
+    kind=question
+    priority=10
+    example="A hen can swim right?"
+
+@pat.kids.animals.w.ab.rev core.pattern
+    match="{ab:lex.kids.animals.abilities} [a|an|the|every|any|all|each]? {a:noun} [right|yes|no|yeah|correct|or_no|or_not|or_nah|yes_or_no|right_or_not|yes_no|true_or_false|too|at_all]? [pls|plz|please|thanks|exactly|anyway|lol]?"
+    emit="@{_} core.question type=kids.animals.animal seek=can_{ab} where.name={a}"
+    kind=question
+    priority=10
+    example="Swim hen?"
+
+@pat.kids.animals.w.ab.bare core.pattern
+    match="{a:noun} {ab:lex.kids.animals.abilities} [right|yes|no|yeah|correct|or_no|or_not|or_nah|yes_or_no|right_or_not|yes_no|true_or_false|too|at_all]? [pls|plz|please|thanks|exactly|anyway|lol]?"
+    emit="@{_} core.question type=kids.animals.animal seek=can_{ab} where.name={a}"
+    kind=question
+    priority=10
+    example="Hen swim?"
+
+@pat.kids.animals.w.isa.aux core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|hey|quick_question|ok|so|please]? [is|are|would_you_call|would_you_say|do_you_call|can_you_call|can|could|does|do|if|whether|tell_me_if|would_you_classify|would_you_consider]? [you]? [a|an|the|every|any|all|each]? {a:noun} [be|is|are|as|counted_as|classed_as|classified_as|considered|called|count_as|counts_as|classed|a_kind_of|kind_of|a_type_of|a_sort_of|part_of_the|1_of_the|belong_to_the|belongs_to_the|belong_to|belongs_to|in_the]? [a|an|the]? [kind_of|type_of|sort_of]? {k:lex.kids.animals.kinds} [group|class|family|category]? [right|yes|no|yeah|correct|or_no|or_not|or_nah|yes_or_no|right_or_not|yes_no|true_or_false|too|at_all]? [pls|plz|please|thanks|exactly|anyway|lol]?"
+    emit="@{_} core.question type=kids.animals.animal seek=is_a where.name={a} where.is_a={k}"
+    kind=question
+    priority=9
+    example="Would you classify a bat as a mammal?"
+
+@pat.kids.animals.w.isa.tag core.pattern
+    match="[a|an|the|every|any|all|each]? {a:noun} [be|is|are|as|counted_as|classed_as|classified_as|considered|called|count_as|counts_as|classed|a_kind_of|kind_of|a_type_of|a_sort_of|part_of_the|1_of_the|belong_to_the|belongs_to_the|belong_to|belongs_to|in_the]? [a|an|the]? [kind_of|type_of|sort_of]? {k:lex.kids.animals.kinds} [group|class|family|category]? [right|yes|no|yeah|correct|or_no|or_not|or_nah|yes_or_no|right_or_not|yes_no|true_or_false] [pls|plz|please|thanks|exactly|anyway|lol]?"
+    emit="@{_} core.question type=kids.animals.animal seek=is_a where.name={a} where.is_a={k}"
+    kind=question
+    priority=10
+    example="A bat a mammal right?"
+
+@pat.kids.animals.w.isa.bare core.pattern
+    match="{a:noun} [a|an] {k:lex.kids.animals.kinds} [pls|plz|please|thanks|exactly|anyway|lol]?"
+    emit="@{_} core.question type=kids.animals.animal seek=is_a where.name={a} where.is_a={k}"
+    kind=question
+    priority=9
+    example="Bat a mammal?"
+
+@pat.kids.animals.w.isa.grp core.pattern
+    match="{a:noun} [in|part_of|among|belongs_to|belong_to] [the]? {k:lex.kids.animals.kinds} [group|class|family|category]? [right|yes|no|yeah|correct|or_no|or_not|or_nah|yes_or_no|right_or_not|yes_no|true_or_false|too|at_all]? [pls|plz|please|thanks|exactly|anyway|lol]?"
+    emit="@{_} core.question type=kids.animals.animal seek=is_a where.name={a} where.is_a={k}"
+    kind=question
+    priority=10
+    example="Bat in the mammal group?"
+
+@pat.kids.animals.w.live.f1 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|hey|quick_question|ok|so|please]? [where|which_place|what_place] [does|do|can|could|is|are|will|would]? [i|we|you]? [a|an|the|every|any|all|each]? {a:noun} [live|lives|stay|stays|be_found|found|hang_out|hangs_out|come_from|comes_from|reside|dwell|be_seen|be_met|hang_around|is_from|are_from|is_found|are_found|from|sleep|stay_at] [live|lives|stay|be_found|found|hang_out|from|come_from]? [pls|plz|please|thanks|exactly|anyway|lol]?"
+    emit="@{_} core.question type=kids.animals.animal seek=lives where.name={a}"
+    kind=question
+    priority=10
+    example="Where can hens be found?"
+
+@pat.kids.animals.w.live.f2 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|hey|quick_question|ok|so|please]? where [to|can_i|do_i|should_i|could_i|can_we|do_we] [find|see|meet|spot|look_for|watch] [a|an|the|every|any|all|each]? {a:noun} [pls|plz|please|thanks|exactly|anyway|lol]?"
+    emit="@{_} core.question type=kids.animals.animal seek=lives where.name={a}"
+    kind=question
+    priority=10
+    example="Where to spot a hen?"
+
+@pat.kids.animals.w.live.f3 core.pattern
+    match="[a|an|the|every|any|all|each]? {a:noun} [home|location|habitat|house|place|homeland|address|whereabouts] [pls|plz|please|thanks|exactly|anyway|lol]?"
+    emit="@{_} core.question type=kids.animals.animal seek=lives where.name={a}"
+    kind=question
+    priority=10
+    example="Hen habitat?"
+
+@pat.kids.animals.w.live.f4 core.pattern
+    match="[a|an|the|every|any|all|each]? {a:noun} [live|lives|stay|stays|hang_out|are_found|is_found|come_from|comes_from|sleep] where [pls|plz|please|thanks|exactly|anyway|lol]?"
+    emit="@{_} core.question type=kids.animals.animal seek=lives where.name={a}"
+    kind=question
+    priority=10
+    example="Hens stay where?"
+
+@pat.kids.animals.w.live.f5 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|hey|quick_question|ok|so|please]? [which|what] place [has|have|is_home_to|are_home_to|holds|keeps] [a|an|the|every|any|all|each]? {a:noun} [pls|plz|please|thanks|exactly|anyway|lol]?"
+    emit="@{_} core.question type=kids.animals.animal seek=lives where.name={a}"
+    kind=question
+    priority=10
+    example="Which place has hens?"
+
+@pat.kids.animals.w.cov.f1 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|hey|quick_question|ok|so|please]? [a|an|the|every|any|all|each]? {a:noun} [body]? [is|are]? [covered_with|covered_in|covered_by] what [pls|plz|please|thanks|exactly|anyway|lol]?"
+    emit="@{_} core.question type=kids.animals.animal seek=covered where.name={a}"
+    kind=question
+    priority=10
+    example="Hen body covered with what?"
+
+@pat.kids.animals.w.cov.f2 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|hey|quick_question|ok|so|please]? what [does|do|is|are]? [a|an|the|every|any|all|each]? {a:noun} [have|wear|got|has]? [on_its|on_their|on_the|as_its|as_a|for_a]? [skin|body|outside|outer_covering|outer_layer|coat|covering|bodies] [pls|plz|please|thanks|exactly|anyway|lol]?"
+    emit="@{_} core.question type=kids.animals.animal seek=covered where.name={a}"
+    kind=question
+    priority=10
+    example="What does a hen wear on its body?"
+
+@pat.kids.animals.w.cov.f3 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|hey|quick_question|ok|so|please]? [what|whats|what_is]? [is]? [the]? [a|an|the|every|any|all|each]? {a:noun} ['s]? [outer|body]? [covering|coat|skin|outer_covering|body_covering|outer_layer] [pls|plz|please|thanks|exactly|anyway|lol]?"
+    emit="@{_} core.question type=kids.animals.animal seek=covered where.name={a}"
+    kind=question
+    priority=10
+    example="The hen body covering?"
+
+@pat.kids.animals.w.cov.f4 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|hey|quick_question|ok|so|please]? what [covers|coats|wraps] [a|an|the|every|any|all|each]? {a:noun} [pls|plz|please|thanks|exactly|anyway|lol]?"
+    emit="@{_} core.question type=kids.animals.animal seek=covered where.name={a}"
+    kind=question
+    priority=10
+    example="What coats a hen?"
+
+@pat.kids.animals.w.desc.f1 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|hey|quick_question|ok|so|please]? [tell_me|show_me|give_me|say|explain|describe|define|talk_about|talk_to_me_about|info_on|facts_about|about|what_do_you_know_about|tell_me_more_about|tell_me_something_about|tell_me_stuff_about|tell_me_all_about|what_can_you_say_about|share_facts_about|give_me_info_on|give_me_facts_about|i_want_to_know_about|teach_me_about|tell_me_facts_about] [stuff|something|more|facts|info|all|everything]? [about|on]? [a|an|the|some]? {a:lex.kids.animals.names} [to_me|for_me]? [pls|plz|please|thanks|exactly|anyway|lol]?"
+    emit="@{_} core.question type=kids.animals.animal seek=summary where.name={a}"
+    kind=question
+    priority=10
+    example="Teach me about a dolphin."
+
+@pat.kids.animals.w.desc.f2 core.pattern
+    match="[a|an|the|every|any|all|each]? {a:lex.kids.animals.names} [info|facts|details|summary|description|profile|stuff|personality|character|traits|overview]"
+    emit="@{_} core.question type=kids.animals.animal seek=summary where.name={a}"
+    kind=question
+    priority=10
+    example="Dolphin traits?"
+
+@pat.kids.animals.w.desc.f3 core.pattern
+    match="[a|an|the|every|any|all|each]? {a:lex.kids.animals.names} [what_are_they_like|like_what|what_is_it_like|what_are_they|what_about_them|what_s_up_with_them]"
+    emit="@{_} core.question type=kids.animals.animal seek=summary where.name={a}"
+    kind=question
+    priority=10
+    example="Dolphins what are they like?"
+
+@pat.kids.animals.w.desc.f4 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|hey|quick_question|ok|so|please]? [what|whats] [kind_of|sort_of|type_of]? [animal|thing]? [are|is|do]? [the]? {a:lex.kids.animals.names} [like|all_about]"
+    emit="@{_} core.question type=kids.animals.animal seek=summary where.name={a}"
+    kind=question
+    priority=10
+    example="What kind of animal are dolphins like?"
+
+@pat.kids.animals.w.hab.f1 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|hey|quick_question|ok|so|please]? [list|show|name|give_me|find|tell_me]? [all|some|the]? [animal|animals] [of|in|from|near|living_in|found_in|that_live_in|that_live_on|that_live_near|that_live|living_on|who_live_in|who_live_on|which_live_in|which_live_on|found_on|on|at|around|in_the|are_found_in|are_found_on|are_found_near|are_found] [the|a]? {h:word} [list|pls|plz|please]?"
+    emit="@{_} core.question type=kids.animals.animal seek=matching where.habitat={h}"
+    kind=question
+    priority=10
+    example="List animals around the pond."
+
+@pat.kids.animals.w.hab.f2 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|hey|quick_question|ok|so|please]? [which|what] [animal|animals] [are|is] [found|seen|living|common|around] [in|on|at|near|around] [the|a]? {h:word} [pls|plz|please|thanks|exactly|anyway|lol]?"
+    emit="@{_} core.question type=kids.animals.animal seek=matching where.habitat={h}"
+    kind=question
+    priority=10
+    example="Which animals are seen near the pond?"
+
+@pat.kids.animals.w.hab.f3 core.pattern
+    match="{h:word} animals [list|names]? [pls|plz|please|thanks|exactly|anyway|lol]?"
+    emit="@{_} core.question type=kids.animals.animal seek=matching where.habitat={h}"
+    kind=question
+    priority=9
+    example="Pond animals please."
+
+@pat.kids.animals.w.cab.f1 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|hey|quick_question|ok|so|please]? [name|give_me|find_me|show_me|tell_me|any|some|got_any|do_you_know|is_there|list|an_example_of]? [a|an|some|any]? {ab:lex.kids.animals.abilities} {c:lex.kids.animals.classes} [pls|plz|please|thanks|exactly|anyway|lol]?"
+    emit="@{_} core.question type=kids.animals.animal seek=matching where.class={c} where.can_{ab}=true"
+    kind=question
+    priority=10
+    example="Show me a swimming bird."
+
+@pat.kids.animals.w.cab.f2 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|hey|quick_question|ok|so|please]? [any|some|name|which|got_any|are_there_any|is_there_any|do_you_know_any|find_me_any|list_any]? [a|an|some|any]? {c:lex.kids.animals.classes} [that|which|who]? [can|could|are_able_to|know_how_to|are_good_at] {ab:lex.kids.animals.abilities} [pls|plz|please|thanks|exactly|anyway|lol]?"
+    emit="@{_} core.question type=kids.animals.animal seek=matching where.class={c} where.can_{ab}=true"
+    kind=question
+    priority=10
+    example="Got any birds who could swim?"

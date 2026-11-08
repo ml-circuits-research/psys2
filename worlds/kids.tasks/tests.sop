@@ -318,3 +318,28 @@
     input="Add please"
     expectStatus=unparsed
     doc="no item and no list: not understood"
+
+@t.tasks.w01 core.test
+    input="Add milk to my list. Whats in my list?"
+    expect="On your to-do list: milk."
+    doc="wording variant (widened phrasing)"
+
+@t.tasks.w02 core.test
+    input="Please add milk 2 my list."
+    expect="Done! I added milk to your to-do list."
+    doc="wording variant (widened phrasing)"
+
+@t.tasks.w03 core.test
+    input="Add milk to my shopping list. Is there milk on the shopping list?"
+    expect="Yes, milk is on your shopping list."
+    doc="wording variant (widened phrasing)"
+
+@t.tasks.w04 core.test
+    input="Add milk to my list. Add eggs to my list. Count what is left to do."
+    expect="You still have 2 things left on your to-do list."
+    doc="wording variant (widened phrasing)"
+
+@t.tasks.w05 core.test
+    input="Wipe my list."
+    expect="Your to-do list is already empty."
+    doc="wording variant (widened phrasing)"

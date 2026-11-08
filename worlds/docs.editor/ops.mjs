@@ -909,7 +909,9 @@ function convertPunctuation(text) {
   return t.replace(/([.!?]\s+|\n)([a-z])/g, (_m, a, b) => a + b.toUpperCase());
 }
 const norm = (t) => String(t).toLowerCase().replace(/[^a-z ]+/g, ' ').replace(/\s+/g, ' ').trim();
-const STOP = /^(stop dictation|stop dictating|end dictation|finish dictation|dictation off|done dictating|i am done dictating)$/;
+const POLITE = '(?:ok|okay|alright|hey|so|well|and|now|please|pls|can you|could you|would you)';
+const DICT = '(?:the |this |my |our )?(?:dictation|dictating)(?: mode)?';
+const STOP = new RegExp(`^(?:${POLITE} )*(?:(?:stop|end|finish|quit|exit|cancel|close|leave|disable|kill|cut) ${DICT}|(?:turn|switch|shut|put|set) ${DICT} (?:off|stop)|(?:turn|switch|shut) off ${DICT}|${DICT} (?:off|stop|stopped|end|ended|over|done)|(?:i am|i m|im|we are|we re) (?:done|finished|through) (?:with )?${DICT.replace('(?:the |this |my |our )?', '(?:the |this |my |our )?')}|(?:done|finished) (?:with )?${DICT}|that is it for ${DICT}|no more dictating|that is enough dictating)(?: (?:${POLITE.slice(3, -1)}|thanks|thank you|again|for now|here|there))*$`);
 
 /** Modal input hook (spec 07 section 2): called before formalization while inputMode is set. */
 function _interceptInput(ctx, text) {
@@ -921,7 +923,7 @@ function _interceptInput(ctx, text) {
   if (n === 'undo that' || n === 'undo' || n === 'scratch that') { const r = _undo(ctx); return { handled: true, reply: r.value ?? r.note }; }
   if (/^(delete|remove|erase) (the )?(last|previous) sentence$/.test(n)) { const r = _deleteSentence(ctx); return { handled: true, reply: r.value ?? r.note }; }
   let raw = String(text).trim(), stopAfter = false;
-  const tail = raw.match(/^(.*?)[\s,.]*\b(?:stop dictation|stop dictating)\s*[.!]?$/i);
+  const tail = raw.match(/^(.*?)[\s,.]*\b(?:(?:and )?(?:please )?(?:stop|end|finish) (?:the |this )?(?:dictation|dictating)(?: mode)?(?: now| please)?)\s*[.!]?$/i);
   if (tail) { raw = tail[1]; stopAfter = true; }
   const added = convertPunctuation(raw);
   if (added) {

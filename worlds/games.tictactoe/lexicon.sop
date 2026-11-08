@@ -48,12 +48,112 @@
     word=right_column_top
     word=right_column_middle
     word=right_column_bottom
+    word=tl
+    word=tr
+    word=bl
+    word=br
+    word=mid_left
+    word=mid_right
+    word=mid_middle
+    word=middle_middle
+    word=dead_center
+    word=the_middle
+    word=upper_middle
+    word=lower_middle
+    word=mid_top
+    word=mid_bottom
+    word=down_left
+    word=down_right
+    word=up_left
+    word=up_right
+    word=left_top
+    word=right_top
+    word=left_bottom
+    word=right_bottom
+    word=top_mid
+    word=bottom_mid
+    word=middle_top
+    word=middle_bottom
+    word=left_center
+    word=right_center
+    word=left_centre
+    word=right_centre
+    word=center_top
+    word=center_bottom
+    word=center_middle
+    word=centre_middle
+    word=middle_center
+    word=middle_centre
+    word=mid_center
+    word=top-left
+    word=top-right
+    word=bottom-left
+    word=bottom-right
+    word=top-middle
+    word=bottom-middle
+    word=top-center
+    word=bottom-center
+    word=middle-left
+    word=middle-right
+    word=center-left
+    word=center-right
+    word=upper-left
+    word=upper-right
+    word=lower-left
+    word=lower-right
+    word=down-left
+    word=down-right
+    word=up-left
+    word=up-right
+    word=mid-left
+    word=mid-right
+    word=dead-center
 
 @lex.games.tictactoe.cols core.lexicon
     class=noun
     word=a
     word=b
     word=c
+    word=ay
+    word=bee
+    word=be
+    word=cee
+    word=see
+    word=sea
+
+@lex.games.tictactoe.rows core.lexicon
+    class=noun
+    word=top
+    word=upper
+    word=up
+    word=high
+    word=middle
+    word=mid
+    word=center
+    word=centre
+    word=bottom
+    word=lower
+    word=down
+    word=low
+
+@lex.games.tictactoe.colw core.lexicon
+    class=noun
+    word=left
+    word=middle
+    word=mid
+    word=center
+    word=centre
+    word=right
+
+@lex.games.tictactoe.ords core.lexicon
+    class=noun
+    word=first
+    word=second
+    word=third
+    word=1st
+    word=2nd
+    word=3rd
+    word=last
 
 @lex.games.tictactoe.levels core.lexicon
     class=noun
@@ -69,6 +169,20 @@
     word=unbeatable
     word=expert
     word=difficult
+    word=lighter
+    word=light
+    word=easiest
+    word=lowest
+    word=weak
+    word=max
+    word=maximum
+    word=highest
+    word=toughest
+    word=tough
+    word=impossible
+    word=strong
+    word=smart
+    word=maxed
 
 @lex.games.tictactoe.triggers core.lexicon
     class=trigger

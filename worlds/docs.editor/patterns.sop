@@ -1,159 +1,159 @@
 @pat.docs.editor.heading core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|create|write|put_in] [a|the|another]? [heading|header|subheading] [saying|called|named|that_says|reading]? {t:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [add|insert|create|write|put_in] [a|the|another]? [heading|header|subheading] [saying|called|named|that_says|reading]? {t:rest}"
     emit="@{_} core.request action=doc.addHeading arg.text=\"{t}\""
     kind=request
     priority=11
     example="Add a heading Shopping."
 
 @pat.docs.editor.paragraph core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|type|write|put_in|append] [a|the|another|one_more|1_more]? [paragraph|line|sentence|note] [saying|that_says|reading|with_the_text|with]? {t:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [add|insert|type|write|put_in|append] [a|the|another|one_more|1_more]? [paragraph|line|sentence|note] [saying|that_says|reading|with_the_text|with]? {t:rest}"
     emit="@{_} core.request action=doc.addParagraph arg.text=\"{t}\""
     kind=request
     priority=11
     example="Add a paragraph The cat sat on the mat."
 
 @pat.docs.editor.list core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|create|make|write|put_in] [a|the|another]? [list|bullet_list|bulleted_list] [with|of|containing|including]? {t:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [add|insert|create|make|write|put_in] [a|the|another]? [list|bullet_list|bulleted_list] [with|of|containing|including]? {t:rest}"
     emit="@{_} core.request action=doc.addList arg.text=\"{t}\""
     kind=request
     priority=11
     example="Add a list with milk, eggs and bread."
 
 @pat.docs.editor.bare core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [type|write_down|note_down|put_down] {t:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [type|write_down|note_down|put_down] {t:rest}"
     emit="@{_} core.request action=doc.addParagraph arg.text=\"{t}\""
     kind=request
     priority=5
     example="Type remember to buy milk."
 
 @pat.docs.editor.delete.ord core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [delete|remove|erase|drop|get_rid_of] [the|my]? {ord:lex.docs.editor.ordinals} {kind:lex.docs.editor.kinds}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [delete|remove|erase|drop|get_rid_of] [the|my]? {ord:lex.docs.editor.ordinals} {kind:lex.docs.editor.kinds} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.delete arg.ord={ord} arg.kind={kind}"
     kind=request
     priority=11
     example="Delete the last paragraph."
 
 @pat.docs.editor.delete.num core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [delete|remove|erase|drop|get_rid_of] [the|my]? {kind:lex.docs.editor.kinds} {n:number}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [delete|remove|erase|drop|get_rid_of] [the|my]? {kind:lex.docs.editor.kinds} {n:number} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.delete arg.n={n} arg.kind={kind}"
     kind=request
     priority=11
     example="Delete paragraph 2."
 
 @pat.docs.editor.delete.bare core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [delete|remove|erase|drop|get_rid_of] [the|my]? {kind:lex.docs.editor.kinds}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [delete|remove|erase|drop|get_rid_of] [the|my]? {kind:lex.docs.editor.kinds} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.delete arg.ord=first arg.kind={kind}"
     kind=request
     priority=10
     example="Delete the paragraph."
 
 @pat.docs.editor.delsent core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [delete|remove|erase] [the]? [last|previous] sentence"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [delete|remove|erase] [the]? [last|previous] sentence [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.deleteSentence"
     kind=request
     priority=11
     example="Delete the last sentence."
 
 @pat.docs.editor.clear core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [clear|empty|erase|wipe|reset|delete|remove] [the|my]? [document|text|page|doc|everything]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [clear|empty|erase|wipe|reset|delete|remove] [the|my]? [document|text|page|doc|everything] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.clear"
     kind=request
     priority=11
     example="Clear the document."
 
 @pat.docs.editor.replace core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [replace|change|swap] [all]? {a:words} [with|to|by|for] {b:words}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [replace|change|swap] [all]? {a:words} [with|to|by|for] {b:words}"
     emit="@{_} core.request action=doc.replace arg.from=\"{a}\" arg.to=\"{b}\""
     kind=request
     priority=6
     example="Replace cat with dog."
 
 @pat.docs.editor.movetop.ord core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [move|put|send] [the|my]? {ord:lex.docs.editor.ordinals} {kind:lex.docs.editor.kinds} to [the]? [top|beginning|start|front] [of_the_document]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [move|put|send] [the|my]? {ord:lex.docs.editor.ordinals} {kind:lex.docs.editor.kinds} to [the]? [top|beginning|start|front] [of_the_document]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.move arg.ord={ord} arg.kind={kind} arg.where=top"
     kind=request
     priority=12
     example="Move the last paragraph to the top."
 
 @pat.docs.editor.movetop.num core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [move|put|send] [the|my]? {kind:lex.docs.editor.kinds} {n:number} to [the]? [top|beginning|start|front] [of_the_document]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [move|put|send] [the|my]? {kind:lex.docs.editor.kinds} {n:number} to [the]? [top|beginning|start|front] [of_the_document]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.move arg.n={n} arg.kind={kind} arg.where=top"
     kind=request
     priority=12
     example="Move paragraph 2 to the top."
 
 @pat.docs.editor.movebottom.ord core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [move|put|send] [the|my]? {ord:lex.docs.editor.ordinals} {kind:lex.docs.editor.kinds} to [the]? [bottom|end|back] [of_the_document]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [move|put|send] [the|my]? {ord:lex.docs.editor.ordinals} {kind:lex.docs.editor.kinds} to [the]? [bottom|end|back] [of_the_document]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.move arg.ord={ord} arg.kind={kind} arg.where=bottom"
     kind=request
     priority=12
     example="Move the first paragraph to the end."
 
 @pat.docs.editor.movebottom.num core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [move|put|send] [the|my]? {kind:lex.docs.editor.kinds} {n:number} to [the]? [bottom|end|back] [of_the_document]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [move|put|send] [the|my]? {kind:lex.docs.editor.kinds} {n:number} to [the]? [bottom|end|back] [of_the_document]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.move arg.n={n} arg.kind={kind} arg.where=bottom"
     kind=request
     priority=12
     example="Move paragraph 2 to the end."
 
 @pat.docs.editor.moveup.ord core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? move [the|my]? {ord:lex.docs.editor.ordinals} {kind:lex.docs.editor.kinds} up"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? move [the|my]? {ord:lex.docs.editor.ordinals} {kind:lex.docs.editor.kinds} up [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.move arg.ord={ord} arg.kind={kind} arg.where=up"
     kind=request
     priority=12
     example="Move the second paragraph up."
 
 @pat.docs.editor.moveup.num core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? move [the|my]? {kind:lex.docs.editor.kinds} {n:number} up"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? move [the|my]? {kind:lex.docs.editor.kinds} {n:number} up [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.move arg.n={n} arg.kind={kind} arg.where=up"
     kind=request
     priority=12
     example="Move paragraph 2 up."
 
 @pat.docs.editor.movedown.ord core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? move [the|my]? {ord:lex.docs.editor.ordinals} {kind:lex.docs.editor.kinds} down"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? move [the|my]? {ord:lex.docs.editor.ordinals} {kind:lex.docs.editor.kinds} down [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.move arg.ord={ord} arg.kind={kind} arg.where=down"
     kind=request
     priority=12
     example="Move the second paragraph down."
 
 @pat.docs.editor.movedown.num core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? move [the|my]? {kind:lex.docs.editor.kinds} {n:number} down"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? move [the|my]? {kind:lex.docs.editor.kinds} {n:number} down [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.move arg.n={n} arg.kind={kind} arg.where=down"
     kind=request
     priority=12
     example="Move paragraph 2 down."
 
 @pat.docs.editor.title core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [make|set|change|put] [the]? [title|document_title|name] [of_the_document]? [to|into|as]? {t:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [make|set|change|put] [the]? [title|document_title|name] [of_the_document]? [to|into|as]? {t:rest}"
     emit="@{_} core.request action=doc.setTitle arg.text=\"{t}\""
     kind=request
     priority=11
     example="Make the title Our Trip."
 
 @pat.docs.editor.title2 core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [call|name|rename|title] [the|this]? [document|doc] [to|as]? {t:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [call|name|rename|title] [the|this]? [document|doc] [to|as]? {t:rest}"
     emit="@{_} core.request action=doc.setTitle arg.text=\"{t}\""
     kind=request
     priority=11
     example="Call the document Weekend Plans."
 
 @pat.docs.editor.newdoc core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [start|create|make|open|begin]? [a|an|another]? new [document|doc|page|file]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [start|create|make|open|begin]? [a|an|another]? new [document|doc|page|file] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.newDoc"
     kind=request
     priority=11
     example="Start a new document."
 
 @pat.docs.editor.newdoc2 core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [start|create|make|open|begin]? [a|an|another]? new [document|doc|page|file] [called|named|titled|about] {t:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [start|create|make|open|begin]? [a|an|another]? new [document|doc|page|file] [called|named|titled|about] {t:rest}"
     emit="@{_} core.request action=doc.newDoc arg.text=\"{t}\""
     kind=request
     priority=12
     example="Create a new document called Holiday."
 
 @pat.docs.editor.undo core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [undo|undo_that|undo_it|undo_the_last_change|undo_the_last_edit|undo_my_last_change|go_back_one_step|revert|take_that_back|go_back_1_step]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [undo|undo_that|undo_it|undo_the_last_change|undo_the_last_edit|undo_my_last_change|go_back_one_step|revert|take_that_back|go_back_1_step] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.undo"
     kind=request
     priority=11
@@ -161,14 +161,14 @@
     example="Undo that."
 
 @pat.docs.editor.redo core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [redo|redo_that|redo_it|redo_the_last_change|do_that_again|put_it_back|bring_it_back]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [redo|redo_that|redo_it|redo_the_last_change|do_that_again|put_it_back|bring_it_back] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.redo"
     kind=request
     priority=11
     example="Redo."
 
 @pat.docs.editor.read core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [read|read_me|read_out|read_aloud|speak] [me]? [the|my]? [document|doc|text|page|everything|whole_document|whole_text|whole_thing] [aloud|out_loud|back|back_to_me|to_me|out]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [read|read_me|read_out|read_aloud|speak] [me]? [the|my]? [document|doc|text|page|everything|whole_document|whole_text|whole_thing] [aloud|out_loud|back|back_to_me|to_me|out]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.read"
     kind=request
     priority=11
@@ -176,63 +176,63 @@
     example="Read me the document."
 
 @pat.docs.editor.read2 core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? read it [back|aloud|out_loud|out]? [to_me]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? read it [back|aloud|out_loud|out]? [to_me]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.read"
     kind=request
     priority=11
     example="Read it back to me."
 
 @pat.docs.editor.read.ord core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? read [me]? [the|my]? {ord:lex.docs.editor.ordinals} {kind:lex.docs.editor.kinds}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? read [me]? [the|my]? {ord:lex.docs.editor.ordinals} {kind:lex.docs.editor.kinds} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.read arg.ord={ord} arg.kind={kind}"
     kind=request
     priority=11
     example="Read the second paragraph."
 
 @pat.docs.editor.read.num core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? read [me]? [the|my]? {kind:lex.docs.editor.kinds} {n:number}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? read [me]? [the|my]? {kind:lex.docs.editor.kinds} {n:number} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.read arg.n={n} arg.kind={kind}"
     kind=request
     priority=11
     example="Read paragraph 2."
 
 @pat.docs.editor.read.bare core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? read [me]? [the|my]? {kind:lex.docs.editor.kinds}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? read [me]? [the|my]? {kind:lex.docs.editor.kinds} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.read arg.ord=first arg.kind={kind}"
     kind=request
     priority=10
     example="Read the paragraph."
 
 @pat.docs.editor.copy core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [copy|put_on_the_clipboard|copy_to_the_clipboard] [the|my]? [document|text|doc|whole_document|everything|page|it]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [copy|put_on_the_clipboard|copy_to_the_clipboard] [the|my]? [document|text|doc|whole_document|everything|page|it] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.copy"
     kind=request
     priority=11
     example="Copy the document."
 
 @pat.docs.editor.copy.ord core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [copy] [the|my]? {ord:lex.docs.editor.ordinals} {kind:lex.docs.editor.kinds}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [copy] [the|my]? {ord:lex.docs.editor.ordinals} {kind:lex.docs.editor.kinds} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.copy arg.ord={ord} arg.kind={kind}"
     kind=request
     priority=11
     example="Copy the last paragraph."
 
 @pat.docs.editor.copy.num core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [copy] [the|my]? {kind:lex.docs.editor.kinds} {n:number}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [copy] [the|my]? {kind:lex.docs.editor.kinds} {n:number} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.copy arg.n={n} arg.kind={kind}"
     kind=request
     priority=11
     example="Copy paragraph 2."
 
 @pat.docs.editor.copy.bare core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [copy] [the|my]? {kind:lex.docs.editor.kinds}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [copy] [the|my]? {kind:lex.docs.editor.kinds} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.copy arg.ord=first arg.kind={kind}"
     kind=request
     priority=10
     example="Copy the paragraph."
 
 @pat.docs.editor.download core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [download|save|export] [the|my]? [document|doc|text|file|it]? [as|to|in]? [a|an]? {f:lex.docs.editor.formats?} [file|format]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [download|save|export] [the|my]? [document|doc|text|file|it]? [as|to|in]? [a|an]? {f:lex.docs.editor.formats?} [file|format]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.download arg.format={f}"
     kind=request
     priority=11
@@ -240,98 +240,98 @@
     example="Download the document."
 
 @pat.docs.editor.q.count core.pattern
-    match="[how_many|how_much] {kind:lex.docs.editor.kinds} [are|is] there [in_the_document|in_it|in_the_text|in_total]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [how_many|how_much] {kind:lex.docs.editor.kinds} [are|is] there [in_the_document|in_it|in_the_text|in_total]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.count arg.kind={kind}"
     kind=request
     priority=11
     example="How many paragraphs are there?"
 
 @pat.docs.editor.q.count2 core.pattern
-    match="[how_many|how_much] {kind:lex.docs.editor.kinds} [does_the_document_have|does_it_have|are_in_the_document|does_the_text_have]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [how_many|how_much] {kind:lex.docs.editor.kinds} [does_the_document_have|does_it_have|are_in_the_document|does_the_text_have] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.count arg.kind={kind}"
     kind=request
     priority=11
     example="How many words does the document have?"
 
 @pat.docs.editor.q.title core.pattern
-    match="what [is|was] [the]? [title|name] [of_the_document|of_it|of_this_document]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [what|wat] [is|was] [the]? [title|name] [of_the_document|of_it|of_this_document]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.askTitle"
     kind=request
     priority=11
     example="What is the title?"
 
 @pat.docs.editor.q.title2 core.pattern
-    match="[what_is_the_document_called|what_is_this_document_called|what_do_we_call_the_document]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [what_is_the_document_called|what_is_this_document_called|what_do_we_call_the_document] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.askTitle"
     kind=request
     priority=11
     example="What is the document called?"
 
 @pat.docs.editor.q.block core.pattern
-    match="what [is|does] [the]? {ord:lex.docs.editor.ordinals} {kind:lex.docs.editor.kinds} [say]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [what|wat] [is|does] [the]? {ord:lex.docs.editor.ordinals} {kind:lex.docs.editor.kinds} [say]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.whatIs arg.ord={ord} arg.kind={kind}"
     kind=request
     priority=11
     example="What does the first paragraph say?"
 
 @pat.docs.editor.q.say core.pattern
-    match="[what_is_in_the_document|what_does_the_document_say|what_have_i_written|what_is_written_in_the_document|what_does_it_say|what_is_in_it|what_is_in_the_text]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [what_is_in_the_document|what_does_the_document_say|what_have_i_written|what_is_written_in_the_document|what_does_it_say|what_is_in_it|what_is_in_the_text] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.say"
     kind=request
     priority=11
     example="What does the document say?"
 
 @pat.docs.editor.q.mention core.pattern
-    match="[does|did] [the|my]? [document|text|doc|page|it] [mention|contain|say|include|have] {w:words}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [does|did] [the|my]? [document|text|doc|page|it] [mention|contain|say|include|have] {w:words}"
     emit="@{_} core.request action=doc.mentions arg.word=\"{w}\""
     kind=request
     priority=11
     example="Does the document mention milk?"
 
 @pat.docs.editor.q.empty core.pattern
-    match="[is|are] [the]? [document|doc|page|text] empty"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [is|are] [the]? [document|doc|page|text] empty [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.isEmpty"
     kind=request
     priority=11
     example="Is the document empty?"
 
 @pat.docs.editor.dict.start core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [start|begin|turn_on|enable|switch_on|activate|resume] [the]? [dictation|dictating|taking_dictation]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [start|begin|turn_on|enable|switch_on|activate|resume] [the]? [dictation|dictating|taking_dictation] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.dictate"
     kind=request
     priority=11
     example="Start dictation."
 
 @pat.docs.editor.dict.start2 core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [dictate|let_me_dictate|take_dictation|i_want_to_dictate|i_will_dictate|take_down_what_i_say|dictation_mode]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [dictate|let_me_dictate|take_dictation|i_want_to_dictate|i_will_dictate|take_down_what_i_say|dictation_mode] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.dictate"
     kind=request
     priority=11
     example="Let me dictate."
 
 @pat.docs.editor.dict.stop core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [stop|end|finish|turn_off|disable|quit] [the]? [dictation|dictating]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [stop|end|finish|turn_off|disable|quit] [the]? [dictation|dictating] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.dictateStop"
     kind=request
     priority=11
     example="Stop dictation."
 
 @pat.docs.editor.from.list core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [make|create|write|build|start|generate|prepare] [me]? [a|the]? [document|doc|page|note] [from|of|out_of|with|using] [my|the|our]? {list:words} list"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [make|create|write|build|start|generate|prepare] [me]? [a|the]? [document|doc|page|note] [from|of|out_of|with|using] [my|the|our]? {list:words} list [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.fromList arg.list=\"{list}\""
     kind=request
     priority=12
     example="Make a document from my shopping list."
 
 @pat.docs.editor.from.list2 core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [turn|make|put|write_down|write|note_down] [my|the|our]? {list:words} list [into|in|as]? [a|the]? [document|doc|page]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [turn|make|put|write_down|write|note_down] [my|the|our]? {list:words} list [into|in|as]? [a|the]? [document|doc|page]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.fromList arg.list=\"{list}\""
     kind=request
     priority=9
     example="Turn my shopping list into a document."
 
 @pat.docs.editor.report core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [write|make|create|prepare|compose|build] [me]? [a|the]? [report|document|doc|summary|page] [about|on]  {t:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [write|make|create|prepare|compose|build] [me]? [a|the]? [report|document|doc|summary|page] [about|on]  {t:rest}"
     emit="@{_} core.request action=doc.report arg.topic=\"{t}\""
     kind=request
     priority=12
@@ -339,7 +339,7 @@
     example="Make a document about farm animals."
 
 @pat.docs.editor.holdings core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [write_down|note_down|put_down|make_a_note_of|list|record|write_a_document_of|make_a_document_of|write_a_document_with|make_a_document_with|make_a_document_from] what {who:words} [has|have|got|owns|own]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [write_down|note_down|put_down|make_a_note_of|list|record|write_a_document_of|make_a_document_of|write_a_document_with|make_a_document_with|make_a_document_from] [what|wat] {who:words} [has|have|got|owns|own] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.holdings arg.who=\"{who}\""
     kind=request
     priority=12
@@ -347,14 +347,14 @@
     example="Write down what Tom and Ana have."
 
 @pat.docs.editor.holdings2 core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [write|make|create] [a|the]? [document|doc|list|summary] [of|about|with|from] what {who:words} [has|have|got|owns|own]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [write|make|create] [a|the]? [document|doc|list|summary] [of|about|with|from] [what|wat] {who:words} [has|have|got|owns|own] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.holdings arg.who=\"{who}\""
     kind=request
     priority=12
     example="Make a document of what everyone has."
 
 @pat.docs.editor.fmt.make core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [make|set] {t:words} {m:lex.docs.editor.marks}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [make|set] {t:words} {m:lex.docs.editor.marks} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.format arg.t=\"{t}\" arg.mark={m}"
     kind=request
     priority=14
@@ -363,7 +363,7 @@
     example="Make it italic."
 
 @pat.docs.editor.fmt.verb core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? {m:lex.docs.editor.markverbs} {t:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? {m:lex.docs.editor.markverbs} {t:rest}"
     emit="@{_} core.request action=doc.format arg.t=\"{t}\" arg.mark={m}"
     kind=request
     priority=13
@@ -371,14 +371,14 @@
     example="Italicize the first sentence."
 
 @pat.docs.editor.fmt.unverb core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? {m:lex.docs.editor.unmarkverbs} {t:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? {m:lex.docs.editor.unmarkverbs} {t:rest}"
     emit="@{_} core.request action=doc.format arg.t=\"{t}\" arg.mark={m} arg.off=true"
     kind=request
     priority=13
     example="Unbold the title."
 
 @pat.docs.editor.fmt.off core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [remove|clear|take_off|take_away|get_rid_of] [the]? {m:lex.docs.editor.marks} [formatting|style]? [from|off|on|of] {t:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [remove|clear|take_off|take_away|get_rid_of] [the]? {m:lex.docs.editor.marks} [formatting|style]? [from|off|on|of] {t:rest}"
     emit="@{_} core.request action=doc.format arg.t=\"{t}\" arg.mark={m} arg.off=true"
     kind=request
     priority=14
@@ -386,35 +386,35 @@
     example="Remove the highlight from the last sentence."
 
 @pat.docs.editor.fmt.not core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? make {t:words} not {m:lex.docs.editor.marks}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? make {t:words} not {m:lex.docs.editor.marks} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.format arg.t=\"{t}\" arg.mark={m} arg.off=true"
     kind=request
     priority=14
     example="Make it not bold."
 
 @pat.docs.editor.fmt.plain core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [make|set] {d:lex.docs.editor.determiners} {t:words} [normal|plain|regular]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [make|set] {d:lex.docs.editor.determiners} {t:words} [normal|plain|regular] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.clearFormat arg.t=\"{d} {t}\""
     kind=request
     priority=14
     example="Make the title plain."
 
 @pat.docs.editor.fmt.clear core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [clear|remove|reset] [the]? [formatting|styling] [from|of|on] {t:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [clear|remove|reset] [the]? [formatting|styling] [from|of|on] {t:rest}"
     emit="@{_} core.request action=doc.clearFormat arg.t=\"{t}\""
     kind=request
     priority=13
     example="Clear the formatting of the second paragraph."
 
 @pat.docs.editor.fmt.clear.it core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [clear|remove|reset] [all|the]? [formatting|styling]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [clear|remove|reset] [all|the]? [formatting|styling] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.clearFormat arg.t=\"it\""
     kind=request
     priority=13
     example="Clear the formatting."
 
 @pat.docs.editor.fmt.hl.color core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? highlight {t:words} [in|with|using|as|to]? {c:lex.docs.editor.colors} [color|colour|highlight]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? highlight {t:words} [in|with|using|as|to]? {c:lex.docs.editor.colors} [color|colour|highlight]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.format arg.t=\"{t}\" arg.mark=highlight arg.color={c}"
     kind=request
     priority=14
@@ -422,84 +422,84 @@
     example="Highlight the word milk in green."
 
 @pat.docs.editor.fmt.hl core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? highlight {t:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? highlight {t:rest}"
     emit="@{_} core.request action=doc.format arg.t=\"{t}\" arg.mark=highlight"
     kind=request
     priority=13
     example="Highlight the second paragraph."
 
 @pat.docs.editor.link.on core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|put|make|create] [a|the]? link to {u:words} on {t:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [add|insert|put|make|create] [a|the]? link to {u:words} on {t:rest}"
     emit="@{_} core.request action=doc.link arg.url=\"{u}\" arg.t=\"{t}\""
     kind=request
     priority=14
     example="Add a link to example dot com on the word example."
 
 @pat.docs.editor.link.to core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|put|make|create] [a|the]? link to {u:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [add|insert|put|make|create] [a|the]? link to {u:rest}"
     emit="@{_} core.request action=doc.link arg.url=\"{u}\" arg.t=\"it\""
     kind=request
     priority=12
     example="Add a link to example dot com."
 
 @pat.docs.editor.link.verb core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? link {t:words} to {u:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? link {t:words} to {u:rest}"
     emit="@{_} core.request action=doc.link arg.url=\"{u}\" arg.t=\"{t}\""
     kind=request
     priority=13
     example="Link the word cat to animals dot example dot org."
 
 @pat.docs.editor.link.make core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? make {t:words} a link to {u:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? make {t:words} a link to {u:rest}"
     emit="@{_} core.request action=doc.link arg.url=\"{u}\" arg.t=\"{t}\""
     kind=request
     priority=14
     example="Make the word cat a link to example dot com."
 
 @pat.docs.editor.size.verb core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? {s:lex.docs.editor.sizeverbs} [the]? [size_of]? {t:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? {s:lex.docs.editor.sizeverbs} [the]? [size_of]? {t:rest}"
     emit="@{_} core.request action=doc.size arg.t=\"{t}\" arg.how={s}"
     kind=request
     priority=13
     example="Enlarge the title."
 
 @pat.docs.editor.size.level core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [make|set|change|turn] {t:words} [into|to|as]? [a]? [heading|header] [level]? {n:number}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [make|set|change|turn] {t:words} [into|to|as]? [a]? [heading|header] [level]? {n:number} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.convert arg.t=\"{t}\" arg.to=heading arg.n={n}"
     kind=request
     priority=15
     example="Turn the second paragraph into heading 1."
 
 @pat.docs.editor.align.center core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [center|centre] {t:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [center|centre] {t:rest}"
     emit="@{_} core.request action=doc.align arg.t=\"{t}\" arg.how=center"
     kind=request
     priority=14
     example="Center the title."
 
 @pat.docs.editor.align.justify core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? justify {t:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? justify {t:rest}"
     emit="@{_} core.request action=doc.align arg.t=\"{t}\" arg.how=justify"
     kind=request
     priority=14
     example="Justify the first paragraph."
 
 @pat.docs.editor.align.to core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? align {t:words} [to|on]? [the]? {a:lex.docs.editor.aligns}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? align {t:words} [to|on]? [the]? {a:lex.docs.editor.aligns} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.align arg.t=\"{t}\" arg.how={a}"
     kind=request
     priority=14
     example="Align the second paragraph to the right."
 
 @pat.docs.editor.align.make core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? make {d:lex.docs.editor.determiners} {t:words} {a:lex.docs.editor.aligns}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? make {d:lex.docs.editor.determiners} {t:words} {a:lex.docs.editor.aligns} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.align arg.t=\"{d} {t}\" arg.how={a}"
     kind=request
     priority=13
     example="Make the title centered."
 
 @pat.docs.editor.convert core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [turn|change|convert|transform|make] {d:lex.docs.editor.determiners} {t:words} [into|to|as]? [a|an]? {k:lex.docs.editor.convert} {n:number?}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [turn|change|convert|transform|make] {d:lex.docs.editor.determiners} {t:words} [into|to|as]? [a|an]? {k:lex.docs.editor.convert} {n:number?} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.convert arg.t=\"{d} {t}\" arg.to={k} arg.n={n}"
     kind=request
     priority=16
@@ -508,14 +508,14 @@
     example="Make the list a task list."
 
 @pat.docs.editor.convert.it core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [turn|change|convert|transform|make] [it|this|that|them] [into|to|as]? [a|an]? {k:lex.docs.editor.convert} {n:number?}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [turn|change|convert|transform|make] [it|this|that|them] [into|to|as]? [a|an]? {k:lex.docs.editor.convert} {n:number?} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.convert arg.t=\"it\" arg.to={k} arg.n={n}"
     kind=request
     priority=16
     example="Turn it into a quote."
 
 @pat.docs.editor.select core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [select|pick_out] {t:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [select|pick_out] {t:rest}"
     emit="@{_} core.request action=doc.select arg.t=\"{t}\""
     kind=request
     priority=13
@@ -524,7 +524,7 @@
     example="Select everything."
 
 @pat.docs.editor.unselect core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [unselect|deselect|select_nothing|clear_the_selection|clear_selection|drop_the_selection]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [unselect|deselect|select_nothing|clear_the_selection|clear_selection|drop_the_selection] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.unselect"
     kind=request
     priority=13
@@ -532,7 +532,7 @@
     example="Clear the selection."
 
 @pat.docs.editor.whatsel core.pattern
-    match="what [is|did_i|have_i] [selected|select]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [what|wat] [is|did_i|have_i] [selected|select] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.whatSelected"
     kind=request
     priority=12
@@ -540,7 +540,7 @@
     example="What did I select?"
 
 @pat.docs.editor.delete.it core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [delete|remove|erase|cut|drop] [it|this|that|the_selection|selection|the_selected_text|the_selected_part]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [delete|remove|erase|cut|drop] [it|this|that|the_selection|selection|the_selected_text|the_selected_part] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.deleteTarget arg.t=\"it\""
     kind=request
     priority=13
@@ -548,49 +548,49 @@
     example="Delete the selection."
 
 @pat.docs.editor.delete.word core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [delete|remove|erase] [the]? [word|words|phrase] {w:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [delete|remove|erase] [the]? [word|words|phrase] {w:rest}"
     emit="@{_} core.request action=doc.deleteTarget arg.t=\"the word {w}\""
     kind=request
     priority=12
     example="Delete the word milk."
 
 @pat.docs.editor.delete.row core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [delete|remove] [the]? row {name:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [delete|remove] [the]? row {name:rest}"
     emit="@{_} core.request action=doc.deleteRow arg.name=\"{name}\""
     kind=request
     priority=9
     example="Remove the row cat."
 
 @pat.docs.editor.delete.column core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [delete|remove] [the]? column {name:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [delete|remove] [the]? column {name:rest}"
     emit="@{_} core.request action=doc.deleteColumn arg.name=\"{name}\""
     kind=request
     priority=9
     example="Delete the column food."
 
 @pat.docs.editor.copy.sel core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? copy [the]? [selection|selected_text|selected_part|this|that]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? copy [the]? [selection|selected_text|selected_part|this|that] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.copy arg.t=\"it\""
     kind=request
     priority=12
     example="Copy the selection."
 
 @pat.docs.editor.read.sel core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? read [me]? [the]? [selection|selected_text|selected_part|this|that]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? read [me]? [the]? [selection|selected_text|selected_part|this|that] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.read arg.t=\"it\""
     kind=request
     priority=12
     example="Read the selection."
 
 @pat.docs.editor.copy.as core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? copy [the|my]? [document|doc|text|page|it] as {f:lex.docs.editor.formats}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? copy [the|my]? [document|doc|text|page|it] as {f:lex.docs.editor.formats} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.copy arg.format={f}"
     kind=request
     priority=12
     example="Copy the document as markdown."
 
 @pat.docs.editor.go.pos core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [go|jump|scroll|navigate] [to|down_to|up_to]? [the]? {w:lex.docs.editor.positions} [of_the_document|of_the_page|of_it]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [go|jump|scroll|navigate] [to|down_to|up_to]? [the]? {w:lex.docs.editor.positions} [of_the_document|of_the_page|of_it]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.goto arg.where={w}"
     kind=request
     priority=12
@@ -598,28 +598,28 @@
     example="Go to the top."
 
 @pat.docs.editor.go.ord core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [go|jump|scroll|navigate] to [the]? {ord:lex.docs.editor.ordinals} {kind:lex.docs.editor.kinds}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [go|jump|scroll|navigate] to [the]? {ord:lex.docs.editor.ordinals} {kind:lex.docs.editor.kinds} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.goto arg.ord={ord} arg.kind={kind}"
     kind=request
     priority=12
     example="Go to the second heading."
 
 @pat.docs.editor.go.kind core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [go|jump|scroll|navigate] to [the]? {kind:lex.docs.editor.kinds}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [go|jump|scroll|navigate] to [the]? {kind:lex.docs.editor.kinds} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.goto arg.ord=first arg.kind={kind}"
     kind=request
     priority=11
     example="Go to the table."
 
 @pat.docs.editor.go.word core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [go|jump|scroll|navigate] to [the]? [word|text|phrase] {w:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [go|jump|scroll|navigate] to [the]? [word|text|phrase] {w:rest}"
     emit="@{_} core.request action=doc.goto arg.w=\"{w}\""
     kind=request
     priority=12
     example="Go to the word milk."
 
 @pat.docs.editor.table.spec core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|create|make|put_in] [a|an|another|one_more|1_more]? [new]? table [with|of|containing|that_has|having]? {t:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [add|insert|create|make|put_in] [a|an|another|one_more|1_more]? [new]? table [with|of|containing|that_has|having]? {t:rest}"
     emit="@{_} core.request action=doc.addTable arg.spec=\"{t}\""
     kind=request
     priority=13
@@ -627,154 +627,154 @@
     example="Add a table with 4 columns and 3 rows."
 
 @pat.docs.editor.table.bare core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|create|make|put_in] [a|an|another|one_more|1_more]? [new]? table"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [add|insert|create|make|put_in] [a|an|another|one_more|1_more]? [new]? table [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.addTable"
     kind=request
     priority=12
     example="Add a table."
 
 @pat.docs.editor.row.add core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|append|put_in] [a|another|one_more|a_new|1_more]? row [to_the_table|in_the_table|at_the_end]? [with|of|containing|saying]? {t:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [add|insert|append|put_in] [a|another|one_more|a_new|1_more]? row [to_the_table|in_the_table|at_the_end]? [with|of|containing|saying]? {t:rest}"
     emit="@{_} core.request action=doc.addRow arg.t=\"{t}\""
     kind=request
     priority=13
     example="Add a row: cat, 4, fish."
 
 @pat.docs.editor.row.bare core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|append|put_in] [a|another|one_more|a_new|1_more]? [empty]? row [to_the_table|in_the_table|at_the_end]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [add|insert|append|put_in] [a|another|one_more|a_new|1_more]? [empty]? row [to_the_table|in_the_table|at_the_end]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.addRow"
     kind=request
     priority=12
     example="Add a row."
 
 @pat.docs.editor.col.add core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|append|put_in] [a|another|one_more|a_new|1_more]? column [called|named|titled|for|with_the_header]? {t:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [add|insert|append|put_in] [a|another|one_more|a_new|1_more]? column [called|named|titled|for|with_the_header]? {t:rest}"
     emit="@{_} core.request action=doc.addColumn arg.t=\"{t}\""
     kind=request
     priority=13
     example="Add a column weight."
 
 @pat.docs.editor.col.bare core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|append|put_in] [a|another|one_more|a_new|1_more]? [empty]? column [to_the_table|in_the_table|at_the_end]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [add|insert|append|put_in] [a|another|one_more|a_new|1_more]? [empty]? column [to_the_table|in_the_table|at_the_end]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.addColumn"
     kind=request
     priority=12
     example="Add a column."
 
 @pat.docs.editor.table.fill core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [fill|populate|complete|fill_in|fill_up] [the]? table [in]? [with|using|from]? {t:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [fill|populate|complete|fill_in|fill_up] [the]? table [in]? [with|using|from]? {t:rest}"
     emit="@{_} core.request action=doc.fillTable arg.topic=\"{t}\""
     kind=request
     priority=13
     example="Fill the table with sea animals."
 
 @pat.docs.editor.cell.set core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [set|change|put|write|make] [the]? cell [in]? row {r:number} column {c:number} [to|as|with|says]? {t:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [set|change|put|write|make] [the]? cell [in]? row {r:number} column {c:number} [to|as|with|says]? {t:rest}"
     emit="@{_} core.request action=doc.setCell arg.r={r} arg.c={c} arg.t=\"{t}\""
     kind=request
     priority=13
     example="Set the cell in row 1 column 2 to 4 legs."
 
 @pat.docs.editor.task.add core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|create|put_in|write] [a|the|another|one_more|a_new|1_more]? [task|todo|checkbox|checklist_item] [saying|called|named|to]? {t:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [add|insert|create|put_in|write] [a|the|another|one_more|a_new|1_more]? [task|todo|checkbox|checklist_item] [saying|called|named|to]? {t:rest}"
     emit="@{_} core.request action=doc.addTask arg.t=\"{t}\""
     kind=request
     priority=12
     example="Add a task buy bread."
 
 @pat.docs.editor.task.check.ord core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [check|tick|complete|finish|tick_off] [the]? {ord:lex.docs.editor.ordinals} [task|item|checkbox|todo]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [check|tick|complete|finish|tick_off] [the]? {ord:lex.docs.editor.ordinals} [task|item|checkbox|todo] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.checkTask arg.ord={ord} arg.state=check"
     kind=request
     priority=12
     example="Check the first task."
 
 @pat.docs.editor.task.check.num core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [check|tick|complete|finish|tick_off] [the]? [task|item|checkbox] {n:number}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [check|tick|complete|finish|tick_off] [the]? [task|item|checkbox] {n:number} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.checkTask arg.n={n} arg.state=check"
     kind=request
     priority=12
     example="Check task 2."
 
 @pat.docs.editor.task.check.text core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [check|tick|complete|finish|tick_off] [the]? [task|checkbox] {t:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [check|tick|complete|finish|tick_off] [the]? [task|checkbox] {t:rest}"
     emit="@{_} core.request action=doc.checkTask arg.t=\"{t}\" arg.state=check"
     kind=request
     priority=11
     example="Check the task buy bread."
 
 @pat.docs.editor.task.check.all core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [check|tick|complete|finish|tick_off] [all|every|each] [of]? [the]? [tasks|items|checkboxes|boxes]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [check|tick|complete|finish|tick_off] [all|every|each] [of]? [the]? [tasks|items|checkboxes|boxes] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.checkTask arg.all=true arg.state=check"
     kind=request
     priority=12
     example="Check all tasks."
 
 @pat.docs.editor.task.uncheck.ord core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [uncheck|untick|unmark|reopen] [the]? {ord:lex.docs.editor.ordinals} [task|item|checkbox|todo]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [uncheck|untick|unmark|reopen] [the]? {ord:lex.docs.editor.ordinals} [task|item|checkbox|todo] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.checkTask arg.ord={ord} arg.state=uncheck"
     kind=request
     priority=12
     example="Uncheck the first task."
 
 @pat.docs.editor.task.uncheck.num core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [uncheck|untick|unmark|reopen] [the]? [task|item|checkbox] {n:number}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [uncheck|untick|unmark|reopen] [the]? [task|item|checkbox] {n:number} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.checkTask arg.n={n} arg.state=uncheck"
     kind=request
     priority=12
     example="Uncheck task 2."
 
 @pat.docs.editor.task.uncheck.text core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [uncheck|untick|unmark|reopen] [the]? [task|checkbox] {t:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [uncheck|untick|unmark|reopen] [the]? [task|checkbox] {t:rest}"
     emit="@{_} core.request action=doc.checkTask arg.t=\"{t}\" arg.state=uncheck"
     kind=request
     priority=11
     example="Uncheck the task buy bread."
 
 @pat.docs.editor.task.uncheck.all core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [uncheck|untick|unmark|reopen] [all|every|each] [of]? [the]? [tasks|items|checkboxes|boxes]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [uncheck|untick|unmark|reopen] [all|every|each] [of]? [the]? [tasks|items|checkboxes|boxes] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.checkTask arg.all=true arg.state=uncheck"
     kind=request
     priority=12
     example="Uncheck all tasks."
 
 @pat.docs.editor.task.count.done core.pattern
-    match="[how_many] [tasks|items|checkboxes] [are|is] [done|checked|completed|finished|ticked]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [how_many] [tasks|items|checkboxes] [are|is] [done|checked|completed|finished|ticked] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.countTasks arg.state=done"
     kind=request
     priority=12
     example="How many tasks are done?"
 
 @pat.docs.editor.task.count.left core.pattern
-    match="[how_many] [tasks|items|checkboxes] [are|is] [left|open|unchecked|remaining|undone|unfinished|not_done|still_open]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [how_many] [tasks|items|checkboxes] [are|is] [left|open|unchecked|remaining|undone|unfinished|not_done|still_open] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.countTasks arg.state=left"
     kind=request
     priority=12
     example="How many tasks are left?"
 
 @pat.docs.editor.task.count.notdone core.pattern
-    match="[how_many] [tasks|items|checkboxes] [are|is] not [done|checked|completed|finished|ticked]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [how_many] [tasks|items|checkboxes] [are|is] not [done|checked|completed|finished|ticked] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.countTasks arg.state=left"
     kind=request
     priority=12
     example="How many tasks are not done?"
 
 @pat.docs.editor.task.list.done core.pattern
-    match="[what|which] [tasks|items] [are|is] [done|checked|completed|finished|ticked]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [what|which] [tasks|items] [are|is] [done|checked|completed|finished|ticked] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.listTasks arg.state=done"
     kind=request
     priority=12
     example="Which tasks are done?"
 
 @pat.docs.editor.task.list.left core.pattern
-    match="[what|which] [tasks|items] [are|is] [left|open|unchecked|remaining|undone|unfinished|not_done|still_open]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [what|which] [tasks|items] [are|is] [left|open|unchecked|remaining|undone|unfinished|not_done|still_open] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.listTasks arg.state=left"
     kind=request
     priority=12
     example="Which tasks are left?"
 
 @pat.docs.editor.rule core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [insert|add|draw|put_in|create] [a|an]? [horizontal]? [line|rule|divider|separator|horizontal_line|horizontal_rule|dividing_line|page_break]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [insert|add|draw|put_in|create] [a|an]? [horizontal]? [line|rule|divider|separator|horizontal_line|horizontal_rule|dividing_line|page_break] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.addRule"
     kind=request
     priority=12
@@ -782,28 +782,28 @@
     example="Add a horizontal rule."
 
 @pat.docs.editor.quote core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|write|put_in|create] [a|the|another]? [quote|block_quote|blockquote|quotation] [saying|that_says|reading|from|with]? {t:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [add|insert|write|put_in|create] [a|the|another]? [quote|block_quote|blockquote|quotation] [saying|that_says|reading|from|with]? {t:rest}"
     emit="@{_} core.request action=doc.addQuote arg.text=\"{t}\""
     kind=request
     priority=12
     example="Add a quote Be kind to every animal."
 
 @pat.docs.editor.list.numbered core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|create|make|write|put_in] [a|the|another]? [numbered_list|ordered_list|number_list] [with|of|containing|including]? {t:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [add|insert|create|make|write|put_in] [a|the|another]? [numbered_list|ordered_list|number_list] [with|of|containing|including]? {t:rest}"
     emit="@{_} core.request action=doc.addList arg.text=\"{t}\" arg.style=numbered"
     kind=request
     priority=12
     example="Add a numbered list with wake up, eat and play."
 
 @pat.docs.editor.list.task core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [add|insert|create|make|write|put_in] [a|the|another]? [task_list|checklist|todo_list|checkbox_list|list_of_tasks] [with|of|containing|including]? {t:rest}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [add|insert|create|make|write|put_in] [a|the|another]? [task_list|checklist|todo_list|checkbox_list|list_of_tasks] [with|of|containing|including]? {t:rest}"
     emit="@{_} core.request action=doc.addList arg.text=\"{t}\" arg.style=task"
     kind=request
     priority=12
     example="Add a task list with buy milk, call Ana and clean the room."
 
 @pat.docs.editor.count.bare core.pattern
-    match="[how_many] {kind:lex.docs.editor.kinds} [in_the_document|in_total|in_it]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [how_many] {kind:lex.docs.editor.kinds} [in_the_document|in_total|in_it]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.count arg.kind={kind}"
     kind=request
     priority=10
@@ -811,42 +811,42 @@
     example="How many tasks are there?"
 
 @pat.docs.editor.stats core.pattern
-    match="[what_is|whats|show_me|give_me|tell_me] [the]? [word_count|statistics|stats|document_statistics|document_stats|reading_time]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [what_is|whats|show_me|give_me|tell_me|wats|wat_is|gimme] [the]? [word_count|statistics|stats|document_statistics|document_stats|reading_time] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.stats"
     kind=request
     priority=12
     example="Give me the statistics."
 
 @pat.docs.editor.stats.bare core.pattern
-    match="[word_count|statistics|stats|document_stats]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [word_count|statistics|stats|document_stats] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.stats"
     kind=request
     priority=12
     example="Word count."
 
 @pat.docs.editor.stats.long core.pattern
-    match="how_long [is|will_it_take_to_read] [the|my]? [document|doc|text|page|it]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? how_long [is|will_it_take_to_read] [the|my]? [document|doc|text|page|it]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.stats"
     kind=request
     priority=11
     example="How long is the document?"
 
 @pat.docs.editor.align.it core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? make [it|this|that|them] {a:lex.docs.editor.aligns}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? make [it|this|that|them] {a:lex.docs.editor.aligns} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.align arg.t=\"it\" arg.how={a}"
     kind=request
     priority=13
     example="Make it centered."
 
 @pat.docs.editor.fmt.plain.it core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [make|set] [it|this|that|them] [normal|plain|regular]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [make|set] [it|this|that|them] [normal|plain|regular] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.clearFormat arg.t=\"it\""
     kind=request
     priority=14
     example="Make it plain."
 
 @pat.docs.editor.size.make core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [make|set] [the|this|that|my]? {k:lex.docs.editor.sizeables} [much|a_bit|a_little|a_lot|slightly]? {s:lex.docs.editor.sizes}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [make|set] [the|this|that|my]? {k:lex.docs.editor.sizeables} [much|a_bit|a_little|a_lot|slightly]? {s:lex.docs.editor.sizes} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.size arg.t=\"the {k}\" arg.how={s}"
     kind=request
     priority=16
@@ -854,14 +854,14 @@
     example="Make the heading smaller."
 
 @pat.docs.editor.size.ord core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [make|set] [the|this|that|my]? {ord:lex.docs.editor.ordinals} {k:lex.docs.editor.sizeables} [much|a_bit|a_little|a_lot|slightly]? {s:lex.docs.editor.sizes}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [make|set] [the|this|that|my]? {ord:lex.docs.editor.ordinals} {k:lex.docs.editor.sizeables} [much|a_bit|a_little|a_lot|slightly]? {s:lex.docs.editor.sizes} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.size arg.t=\"the {ord} {k}\" arg.how={s}"
     kind=request
     priority=16
     example="Make the second heading bigger."
 
 @pat.docs.editor.count.table core.pattern
-    match="[how_many] {kind:lex.docs.editor.kinds} [does_the_table_have|are_in_the_table|in_the_table|are_there_in_the_table|does_it_have]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [how_many] {kind:lex.docs.editor.kinds} [does_the_table_have|are_in_the_table|in_the_table|are_there_in_the_table|does_it_have] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=doc.count arg.kind={kind}"
     kind=request
     priority=13

@@ -680,3 +680,28 @@
     input="Describe the board."
     expect="row"
     session=g
+
+@t.games.chess.v01 core.test
+    input="um knight to f three please"
+    expect="knight"
+    session=v
+
+@t.games.chess.v02 core.test
+    input="whos move is it"
+    expectStatus=supported
+    session=v
+
+@t.games.chess.v03 core.test
+    input="fen?"
+    expect="rnbqkb"
+    session=v
+
+@t.games.chess.v04 core.test
+    input="whats on e4"
+    expectStatus=supported
+    session=v
+
+@t.games.chess.v05 core.test
+    input="all moves so far"
+    expectStatus=supported
+    session=v

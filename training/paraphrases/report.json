@@ -7,11 +7,11 @@
       "canonical_success_rate": 1,
       "variants": 200,
       "variant_labels": {
-        "rules-agree": 75,
-        "rules-fail": 117,
-        "rules-differ": 8
+        "rules-agree": 158,
+        "rules-fail": 37,
+        "rules-differ": 5
       },
-      "variant_rules_coverage": 0.375,
+      "variant_rules_coverage": 0.79,
       "variants_needing_review": 0,
       "trainable_records": 220,
       "by_split": {
@@ -27,11 +27,11 @@
       "canonical_success_rate": 0.9833,
       "variants": 600,
       "variant_labels": {
-        "rules-fail": 317,
-        "rules-differ": 162,
-        "rules-agree": 121
+        "rules-fail": 253,
+        "rules-agree": 151,
+        "rules-differ": 196
       },
-      "variant_rules_coverage": 0.2017,
+      "variant_rules_coverage": 0.2517,
       "variants_needing_review": 10,
       "trainable_records": 649,
       "by_split": {
@@ -53,7 +53,7 @@
             {
               "attempt": 2,
               "text": "Stop the dictation.",
-              "reply": "Added.",
+              "reply": "OK, dictation is off.",
               "label": "canonical-failed"
             },
             {
@@ -65,7 +65,7 @@
             {
               "attempt": 4,
               "text": "Stop the dictation mode.",
-              "reply": "Added.",
+              "reply": "OK, dictation is off.",
               "label": "canonical-failed"
             }
           ]
@@ -79,11 +79,11 @@
       "canonical_success_rate": 1,
       "variants": 400,
       "variant_labels": {
-        "rules-fail": 198,
-        "rules-differ": 126,
-        "rules-agree": 76
+        "rules-agree": 169,
+        "rules-differ": 195,
+        "rules-fail": 36
       },
-      "variant_rules_coverage": 0.19,
+      "variant_rules_coverage": 0.4225,
       "variants_needing_review": 0,
       "trainable_records": 440,
       "by_split": {
@@ -99,11 +99,11 @@
       "canonical_success_rate": 1,
       "variants": 400,
       "variant_labels": {
-        "rules-fail": 290,
-        "rules-differ": 47,
-        "rules-agree": 63
+        "rules-fail": 159,
+        "rules-differ": 62,
+        "rules-agree": 179
       },
-      "variant_rules_coverage": 0.1575,
+      "variant_rules_coverage": 0.4475,
       "variants_needing_review": 0,
       "trainable_records": 440,
       "by_split": {
@@ -119,11 +119,11 @@
       "canonical_success_rate": 1,
       "variants": 300,
       "variant_labels": {
-        "rules-fail": 125,
-        "rules-agree": 139,
-        "rules-differ": 36
+        "rules-agree": 241,
+        "rules-fail": 19,
+        "rules-differ": 40
       },
-      "variant_rules_coverage": 0.4633,
+      "variant_rules_coverage": 0.8033,
       "variants_needing_review": 0,
       "trainable_records": 330,
       "by_split": {
@@ -138,11 +138,11 @@
       "canonical_success_rate": 1,
       "variants": 400,
       "variant_labels": {
-        "rules-fail": 149,
-        "rules-differ": 124,
-        "rules-agree": 127
+        "rules-differ": 134,
+        "rules-fail": 133,
+        "rules-agree": 133
       },
-      "variant_rules_coverage": 0.3175,
+      "variant_rules_coverage": 0.3325,
       "variants_needing_review": 0,
       "trainable_records": 440,
       "by_split": {
@@ -153,20 +153,20 @@
     },
     "kids.common": {
       "tasks": 20,
-      "attempts": 222,
+      "attempts": 220,
       "canonical_success": 20,
       "canonical_success_rate": 1,
       "variants": 200,
       "variant_labels": {
-        "rules-agree": 30,
-        "rules-fail": 157,
-        "rules-differ": 13
+        "rules-agree": 127,
+        "rules-fail": 25,
+        "rules-differ": 48
       },
-      "variant_rules_coverage": 0.15,
+      "variant_rules_coverage": 0.635,
       "variants_needing_review": 0,
       "trainable_records": 220,
       "by_split": {
-        "train": 222
+        "train": 220
       },
       "retry": []
     },
@@ -177,11 +177,11 @@
       "canonical_success_rate": 1,
       "variants": 200,
       "variant_labels": {
-        "rules-agree": 91,
-        "rules-differ": 26,
-        "rules-fail": 83
+        "rules-agree": 180,
+        "rules-fail": 7,
+        "rules-differ": 13
       },
-      "variant_rules_coverage": 0.455,
+      "variant_rules_coverage": 0.9,
       "variants_needing_review": 0,
       "trainable_records": 220,
       "by_split": {
@@ -197,11 +197,11 @@
       "canonical_success_rate": 1,
       "variants": 200,
       "variant_labels": {
-        "rules-agree": 20,
-        "rules-fail": 157,
-        "rules-differ": 23
+        "rules-agree": 141,
+        "rules-fail": 50,
+        "rules-differ": 9
       },
-      "variant_rules_coverage": 0.1,
+      "variant_rules_coverage": 0.705,
       "variants_needing_review": 0,
       "trainable_records": 220,
       "by_split": {
@@ -217,11 +217,11 @@
       "canonical_success_rate": 1,
       "variants": 200,
       "variant_labels": {
-        "rules-agree": 57,
-        "rules-fail": 130,
-        "rules-differ": 13
+        "rules-agree": 182,
+        "rules-differ": 13,
+        "rules-fail": 5
       },
-      "variant_rules_coverage": 0.285,
+      "variant_rules_coverage": 0.91,
       "variants_needing_review": 0,
       "trainable_records": 220,
       "by_split": {
@@ -237,11 +237,11 @@
       "canonical_success_rate": 1,
       "variants": 200,
       "variant_labels": {
-        "rules-agree": 31,
-        "rules-fail": 133,
-        "rules-differ": 36
+        "rules-agree": 89,
+        "rules-differ": 56,
+        "rules-fail": 55
       },
-      "variant_rules_coverage": 0.155,
+      "variant_rules_coverage": 0.445,
       "variants_needing_review": 0,
       "trainable_records": 220,
       "by_split": {
@@ -257,11 +257,11 @@
       "canonical_success_rate": 1,
       "variants": 200,
       "variant_labels": {
-        "rules-fail": 182,
-        "rules-differ": 6,
-        "rules-agree": 12
+        "rules-agree": 171,
+        "rules-fail": 24,
+        "rules-differ": 5
       },
-      "variant_rules_coverage": 0.06,
+      "variant_rules_coverage": 0.855,
       "variants_needing_review": 0,
       "trainable_records": 220,
       "by_split": {
@@ -277,11 +277,11 @@
       "canonical_success_rate": 1,
       "variants": 200,
       "variant_labels": {
-        "rules-agree": 60,
-        "rules-fail": 125,
-        "rules-differ": 15
+        "rules-agree": 186,
+        "rules-fail": 3,
+        "rules-differ": 11
       },
-      "variant_rules_coverage": 0.3,
+      "variant_rules_coverage": 0.93,
       "variants_needing_review": 0,
       "trainable_records": 220,
       "by_split": {
@@ -297,11 +297,11 @@
       "canonical_success_rate": 1,
       "variants": 200,
       "variant_labels": {
-        "rules-agree": 81,
-        "rules-fail": 100,
-        "rules-differ": 19
+        "rules-agree": 93,
+        "rules-fail": 77,
+        "rules-differ": 30
       },
-      "variant_rules_coverage": 0.405,
+      "variant_rules_coverage": 0.465,
       "variants_needing_review": 0,
       "trainable_records": 220,
       "by_split": {
@@ -317,11 +317,11 @@
       "canonical_success_rate": 1,
       "variants": 200,
       "variant_labels": {
-        "rules-agree": 32,
-        "rules-fail": 163,
-        "rules-differ": 5
+        "rules-agree": 150,
+        "rules-fail": 37,
+        "rules-differ": 13
       },
-      "variant_rules_coverage": 0.16,
+      "variant_rules_coverage": 0.75,
       "variants_needing_review": 0,
       "trainable_records": 220,
       "by_split": {
@@ -336,11 +336,11 @@
       "canonical_success_rate": 1,
       "variants": 400,
       "variant_labels": {
-        "rules-fail": 213,
-        "rules-agree": 103,
-        "rules-differ": 84
+        "rules-agree": 114,
+        "rules-fail": 194,
+        "rules-differ": 92
       },
-      "variant_rules_coverage": 0.2575,
+      "variant_rules_coverage": 0.285,
       "variants_needing_review": 0,
       "trainable_records": 440,
       "by_split": {
@@ -356,11 +356,11 @@
       "canonical_success_rate": 1,
       "variants": 400,
       "variant_labels": {
-        "rules-differ": 90,
-        "rules-fail": 231,
-        "rules-agree": 79
+        "rules-differ": 122,
+        "rules-agree": 175,
+        "rules-fail": 103
       },
-      "variant_rules_coverage": 0.1975,
+      "variant_rules_coverage": 0.4375,
       "variants_needing_review": 0,
       "trainable_records": 440,
       "by_split": {
@@ -376,11 +376,11 @@
       "canonical_success_rate": 1,
       "variants": 200,
       "variant_labels": {
-        "rules-fail": 154,
-        "rules-agree": 39,
-        "rules-differ": 7
+        "rules-agree": 156,
+        "rules-fail": 36,
+        "rules-differ": 8
       },
-      "variant_rules_coverage": 0.195,
+      "variant_rules_coverage": 0.78,
       "variants_needing_review": 0,
       "trainable_records": 220,
       "by_split": {
@@ -392,11 +392,11 @@
   },
   "totals": {
     "tasks": 510,
-    "attempts": 5622,
+    "attempts": 5620,
     "canonical_success": 509,
     "variants": 5100,
-    "agree": 1236,
+    "agree": 2795,
     "canonical_success_rate": 0.998,
-    "variant_rules_coverage": 0.2424
+    "variant_rules_coverage": 0.548
   }
 }

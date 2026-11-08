@@ -1,5 +1,5 @@
 @pat.ui.shell.open core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [open|show|display|bring_up|go_to|switch_to|take_me_to|jump_to|select|view|show_me|open_up] [me]? [the|my|your]? {tab:lex.ui.shell.tabs} [tab|page|screen|panel|window]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [open|show|display|bring_up|go_to|switch_to|take_me_to|jump_to|select|view|show_me|open_up] [me]? [the|my|your|ur]? {tab:lex.ui.shell.tabs} [tab|page|screen|panel|window]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.openTab arg.tab={tab}"
     kind=request
     priority=10
@@ -8,7 +8,7 @@
     example="Go to the hangman tab."
 
 @pat.ui.shell.play core.pattern
-    match="[let_us|i_want_to|i_would_like_to|can_we|could_we|shall_we|we_could|can_you|could_you|will_you|i_wanna|lets]? [play|start|begin|launch|have] [a|an|the|some|a_game_of|a_round_of|the_game_of|another_game_of]? {tab:lex.ui.shell.tabs} [game|again]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [let_us|i_want_to|i_would_like_to|can_we|could_we|shall_we|we_could|can_u|can_you|could_u|could_you|will_you|i_wanna|lets|will_u]? [play|start|begin|launch|have] [a|an|the|some|a_game_of|a_round_of|the_game_of|another_game_of]? {tab:lex.ui.shell.tabs} [game|again]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.playGame arg.tab={tab}"
     kind=request
     priority=11
@@ -17,21 +17,21 @@
     example="Can we play twenty questions?"
 
 @pat.ui.shell.play20 core.pattern
-    match="[let_us|i_want_to|i_would_like_to|can_we|could_we|shall_we|we_could|can_you|could_you|will_you|i_wanna|lets]? [play|start|begin|have] [a|the|a_game_of|the_game_of]? 20 [questions|question] [game]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [let_us|i_want_to|i_would_like_to|can_we|could_we|shall_we|we_could|can_u|can_you|could_u|could_you|will_you|i_wanna|lets|will_u]? [play|start|begin|have] [a|the|a_game_of|the_game_of]? 20 [questions|question] [game]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.playGame arg.tab=guess"
     kind=request
     priority=11
     example="Can we play twenty questions?"
 
 @pat.ui.shell.open20 core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [open|show|go_to|switch_to|show_me] [the]? 20 [questions|question] [tab]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [open|show|go_to|switch_to|show_me] [the]? 20 [questions|question] [tab]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.openTab arg.tab=guess"
     kind=request
     priority=10
     example="Open twenty questions."
 
 @pat.ui.shell.choose core.pattern
-    match="[let_us|i_want_to|i_would_like_to|can_we|could_we|shall_we|we_could|can_you|could_you|will_you|i_wanna|lets]? [play|play_a_game|play_a_game_with_you|play_games]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [let_us|i_want_to|i_would_like_to|can_we|could_we|shall_we|we_could|can_u|can_you|could_u|could_you|will_you|i_wanna|lets|will_u]? [play|play_a_game|play_a_game_with_you|play_games] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.chooseGame"
     kind=request
     priority=10
@@ -39,7 +39,7 @@
     example="I want to play."
 
 @pat.ui.shell.back core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [go_back|back|previous_tab|go_to_the_previous_tab|take_me_back|switch_back|go_back_to_the_previous_tab|return_to_the_last_tab|return_to_the_previous_tab|go_to_the_tab_before|go_to_the_last_tab|return_to_the_tab_before|return|go_to_the_previous_one]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [go_back|back|previous_tab|go_to_the_previous_tab|take_me_back|switch_back|go_back_to_the_previous_tab|return_to_the_last_tab|return_to_the_previous_tab|go_to_the_tab_before|go_to_the_last_tab|return_to_the_tab_before|return|go_to_the_previous_one] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.back"
     kind=request
     priority=10
@@ -47,21 +47,21 @@
     example="Previous tab."
 
 @pat.ui.shell.which core.pattern
-    match="[which_tab|what_tab|which_page|what_page|which_screen|what_screen|which_panel] [am_i_on|are_we_on|is_this|is_open|is_it|am_i_looking_at]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [which_tab|what_tab|which_page|what_page|which_screen|what_screen|which_panel] [am_i_on|are_we_on|is_this|is_open|is_it|am_i_looking_at] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.whichTab"
     kind=request
     priority=10
     example="Which tab am I on?"
 
 @pat.ui.shell.where core.pattern
-    match="[where_am_i|what_is_open|what_is_on_the_screen|what_am_i_looking_at|what_is_this_screen|what_is_this_page]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [where_am_i|what_is_open|what_is_on_the_screen|what_am_i_looking_at|what_is_this_screen|what_is_this_page] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.whichTab"
     kind=request
     priority=10
     example="Where am I?"
 
 @pat.ui.shell.spk.on core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [turn_on|switch_on|enable|activate|unmute|put_on] [the|your]? [speaker|sound|voice|speech|audio]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [turn_on|switch_on|enable|activate|unmute|put_on] [the|your|ur]? [speaker|sound|voice|speech|audio] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.speaker arg.on=true"
     kind=request
     priority=13
@@ -69,14 +69,14 @@
     example="Unmute the sound."
 
 @pat.ui.shell.spk.on2 core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? turn [the|your]? [speaker|sound|voice|speech|audio] on"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? turn [the|your|ur]? [speaker|sound|voice|speech|audio] on [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.speaker arg.on=true"
     kind=request
     priority=10
     example="Turn the speaker on."
 
 @pat.ui.shell.spk.on3 core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [speak_to_me|talk_to_me|read_aloud|read_out_loud|speak_out_loud|speak_your_answers|read_your_answers_aloud|read_the_answers_aloud|unmute]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [speak_to_me|talk_to_me|read_aloud|read_out_loud|speak_out_loud|speak_your_answers|read_your_answers_aloud|read_the_answers_aloud|unmute] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.speaker arg.on=true"
     kind=request
     priority=10
@@ -84,7 +84,7 @@
     example="Read your answers aloud."
 
 @pat.ui.shell.spk.off core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [turn_off|switch_off|disable|deactivate|mute|put_off] [the|your]? [speaker|sound|voice|speech|audio]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [turn_off|switch_off|disable|deactivate|mute|put_off] [the|your|ur]? [speaker|sound|voice|speech|audio] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.speaker arg.on=false"
     kind=request
     priority=10
@@ -92,14 +92,14 @@
     example="Mute the voice."
 
 @pat.ui.shell.spk.off2 core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? turn [the|your]? [speaker|sound|voice|speech|audio] off"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? turn [the|your|ur]? [speaker|sound|voice|speech|audio] off [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.speaker arg.on=false"
     kind=request
     priority=10
     example="Turn the speaker off."
 
 @pat.ui.shell.spk.off3 core.pattern
-    match="[be_quiet|stop_talking|stop_speaking|shut_up|be_silent|stop_reading|mute|stop_reading_aloud|do_not_speak|do_not_talk]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [be_quiet|stop_talking|stop_speaking|shut_up|be_silent|stop_reading|mute|stop_reading_aloud|do_not_speak|do_not_talk] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.speaker arg.on=false"
     kind=request
     priority=10
@@ -107,42 +107,42 @@
     example="Stop talking."
 
 @pat.ui.shell.lis.on core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [start|begin|keep|resume|continue] listening"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [start|begin|keep|resume|continue] listening [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.listening arg.on=true"
     kind=request
     priority=10
     example="Start listening."
 
 @pat.ui.shell.lis.on2 core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [turn_on|switch_on|enable|activate] [the|my]? [microphone|mic]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [turn_on|switch_on|enable|activate] [the|my]? [microphone|mic] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.listening arg.on=true"
     kind=request
     priority=10
     example="Turn on the microphone."
 
 @pat.ui.shell.lis.on3 core.pattern
-    match="[listen|listen_to_me|listen_up|can_you_hear_me|are_you_listening]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [listen|listen_to_me|listen_up|can_you_hear_me|are_you_listening] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.listening arg.on=true"
     kind=request
     priority=10
     example="Listen to me."
 
 @pat.ui.shell.lis.off core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [stop|quit|pause|end|cease] listening"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [stop|quit|pause|end|cease] listening [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.listening arg.on=false"
     kind=request
     priority=10
     example="Stop listening."
 
 @pat.ui.shell.lis.off2 core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [turn_off|switch_off|disable|deactivate|mute] [the|my]? [microphone|mic]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [turn_off|switch_off|disable|deactivate|mute] [the|my]? [microphone|mic] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.listening arg.on=false"
     kind=request
     priority=10
     example="Turn off the microphone."
 
 @pat.ui.shell.hf.on core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [turn_on|enable|start|switch_on|activate|go|be|use] [the]? [hands-free|hands_free] [mode]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [turn_on|enable|start|switch_on|activate|go|be|use] [the]? [hands-free|hands_free] [mode]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.handsFree arg.on=true"
     kind=request
     priority=10
@@ -150,28 +150,28 @@
     example="Go hands-free."
 
 @pat.ui.shell.hf.on2 core.pattern
-    match="[hands-free|hands_free] [mode]? on"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [hands-free|hands_free] [mode]? on [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.handsFree arg.on=true"
     kind=request
     priority=10
     example="Hands-free mode on."
 
 @pat.ui.shell.hf.off core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [turn_off|disable|stop|switch_off|deactivate|leave|exit|end] [the]? [hands-free|hands_free] [mode]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [turn_off|disable|stop|switch_off|deactivate|leave|exit|end] [the]? [hands-free|hands_free] [mode]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.handsFree arg.on=false"
     kind=request
     priority=10
     example="Turn off hands-free mode."
 
 @pat.ui.shell.hf.off2 core.pattern
-    match="[hands-free|hands_free] [mode]? off"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [hands-free|hands_free] [mode]? off [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.handsFree arg.on=false"
     kind=request
     priority=10
     example="Hands-free mode off."
 
 @pat.ui.shell.rate.slow core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [speak|talk|read|go|say_it|answer] [a_bit|a_little|a_lot|much|even|bit|little]? [slower|more_slowly|slow_down]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [speak|talk|read|go|say_it|answer] [a_bit|a_little|a_lot|much|even|bit|little]? [slower|more_slowly|slow_down] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.rate arg.dir=slower"
     kind=request
     priority=10
@@ -179,14 +179,14 @@
     example="Talk a little slower."
 
 @pat.ui.shell.rate.slow2 core.pattern
-    match="[slower|slow_down|more_slowly|speak_more_slowly|too_fast|you_talk_too_fast]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [slower|slow_down|more_slowly|speak_more_slowly|too_fast|you_talk_too_fast] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.rate arg.dir=slower"
     kind=request
     priority=10
     example="Slow down."
 
 @pat.ui.shell.rate.fast core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [speak|talk|read|go|say_it|answer] [a_bit|a_little|a_lot|much|even|bit|little]? [faster|more_quickly|quicker|speed_up]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [speak|talk|read|go|say_it|answer] [a_bit|a_little|a_lot|much|even|bit|little]? [faster|more_quickly|quicker|speed_up] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.rate arg.dir=faster"
     kind=request
     priority=10
@@ -194,42 +194,42 @@
     example="Talk a bit faster."
 
 @pat.ui.shell.rate.fast2 core.pattern
-    match="[faster|speed_up|more_quickly|quicker|too_slow|you_talk_too_slow]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [faster|speed_up|more_quickly|quicker|too_slow|you_talk_too_slow] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.rate arg.dir=faster"
     kind=request
     priority=10
     example="Speed up."
 
 @pat.ui.shell.rate.set core.pattern
-    match="[set|change|make] [the|your]? [speech|speaking|voice|talking|reading]? [rate|speed] [to|at]? {n:number}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [set|change|make] [the|your|ur]? [speech|speaking|voice|talking|reading]? [rate|speed] [to|at]? {n:number} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.rate arg.value={n}"
     kind=request
     priority=10
     example="Set the speech rate to 1.5."
 
 @pat.ui.shell.rate.normal core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [speak|talk|read|go]? [at|with]? [normal|regular|default|usual|natural] [speed|rate|pace]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [speak|talk|read|go]? [at|with]? [normal|regular|default|usual|natural] [speed|rate|pace] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.rate arg.value=1"
     kind=request
     priority=10
     example="Speak at normal speed."
 
 @pat.ui.shell.rate.vslow core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [speak|talk|read] [very|really|super|extremely]? slowly"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [speak|talk|read] [very|really|super|extremely]? slowly [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.rate arg.value=0.5"
     kind=request
     priority=10
     example="Speak very slowly."
 
 @pat.ui.shell.rate.vfast core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [speak|talk|read] [very|really|super|extremely]? [fast|quickly]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [speak|talk|read] [very|really|super|extremely]? [fast|quickly] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.rate arg.value=1.75"
     kind=request
     priority=10
     example="Speak quickly."
 
 @pat.ui.shell.lang core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [switch|change|go|talk|speak|answer|reply|respond|use|set_the_language|change_the_language|switch_the_language] [the_language]? [to|in|into]? {l:lex.ui.shell.langs}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [switch|change|go|talk|speak|answer|reply|respond|use|set_the_language|change_the_language|switch_the_language] [the_language]? [to|in|into]? {l:lex.ui.shell.langs} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.language arg.lang={l}"
     kind=request
     priority=10
@@ -238,14 +238,14 @@
     example="Change the language to Romanian."
 
 @pat.ui.shell.lang2 core.pattern
-    match="{l:lex.ui.shell.langs} [please|again]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? {l:lex.ui.shell.langs} [please|again]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.language arg.lang={l}"
     kind=request
     priority=8
     example="Romanian."
 
 @pat.ui.shell.new core.pattern
-    match="[let_us|i_want_to|i_would_like_to|can_we|could_we|shall_we|we_could|can_you|could_you|will_you|i_wanna|lets]? [new_game|play_again|start_over|restart|restart_the_game|play_another_game|another_game|one_more_game|start_a_new_game|begin_a_new_game|new_round|another_round|play_another_round|play_one_more_time|start_again|try_again|play_a_new_game|play_it_again|reset_the_game|new_word|another_word|1_more_game|play_1_more_time|play_once_more|begin_again|deal_me_a_new_game|deal_a_new_game|i_want_to_play_once_more|play_once_again|go_again|one_more_round|1_more_round|start_afresh|play_the_game_again]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [let_us|i_want_to|i_would_like_to|can_we|could_we|shall_we|we_could|can_u|can_you|could_u|could_you|will_you|i_wanna|lets|will_u]? [new_game|play_again|start_over|restart|restart_the_game|play_another_game|another_game|one_more_game|start_a_new_game|begin_a_new_game|new_round|another_round|play_another_round|play_one_more_time|start_again|try_again|play_a_new_game|play_it_again|reset_the_game|new_word|another_word|1_more_game|play_1_more_time|play_once_more|begin_again|deal_me_a_new_game|deal_a_new_game|i_want_to_play_once_more|play_once_again|go_again|one_more_round|1_more_round|start_afresh|play_the_game_again] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.newGame"
     kind=request
     priority=11
@@ -254,7 +254,7 @@
     example="Start over."
 
 @pat.ui.shell.giveup core.pattern
-    match="[i_give_up|give_up|i_quit|quit_the_game|i_surrender|i_resign|resign|surrender|i_want_to_give_up|i_am_giving_up|quit]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [i_give_up|give_up|i_quit|quit_the_game|i_surrender|i_resign|resign|surrender|i_want_to_give_up|i_am_giving_up|quit] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.giveUp"
     kind=request
     priority=10
@@ -262,7 +262,7 @@
     example="Quit the game."
 
 @pat.ui.shell.hint core.pattern
-    match="[give_me|tell_me|show_me|can_i_have|i_need|i_want|can_you_give_me|could_i_have|may_i_have|could_you_give_me|i_would_like] [a|another|one_more|the_next|1_more]? hint"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [give_me|tell_me|show_me|can_i_have|i_need|i_want|can_you_give_me|could_i_have|may_i_have|could_you_give_me|i_would_like|gimme|i_wanna|i_wana] [a|another|one_more|the_next|1_more]? hint [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.hint"
     kind=request
     priority=10
@@ -270,14 +270,14 @@
     example="Can I have another hint?"
 
 @pat.ui.shell.hint2 core.pattern
-    match="[hint|a_hint|any_hint|another_hint|one_more_hint|any_hints|a_clue|give_me_a_clue|another_clue|1_more_hint]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [hint|a_hint|any_hint|another_hint|one_more_hint|any_hints|a_clue|give_me_a_clue|another_clue|1_more_hint] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.hint"
     kind=request
     priority=10
     example="Hint please."
 
 @pat.ui.shell.spk.on4 core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [start|begin|keep|resume|continue] [talking|speaking|reading|reading_aloud|reading_out_loud|speaking_aloud]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [start|begin|keep|resume|continue] [talking|speaking|reading|reading_aloud|reading_out_loud|speaking_aloud] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.speaker arg.on=true"
     kind=request
     priority=12
@@ -285,7 +285,7 @@
     example="Could you start reading aloud?"
 
 @pat.ui.shell.spk.on5 core.pattern
-    match="[i_want_to_hear_you|say_your_answers_out_loud|say_your_answers_aloud|say_it_out_loud|say_it_aloud|read_your_answers_out_loud|let_me_hear_you|let_me_hear_your_voice|speak_up|talk_to_me]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [i_want_to_hear_you|say_your_answers_out_loud|say_your_answers_aloud|say_it_out_loud|say_it_aloud|read_your_answers_out_loud|let_me_hear_you|let_me_hear_your_voice|speak_up|talk_to_me] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.speaker arg.on=true"
     kind=request
     priority=12
@@ -293,7 +293,7 @@
     example="Say your answers out loud."
 
 @pat.ui.shell.spk.off4 core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [stop|quit|cease|end] [talking|speaking|reading|reading_aloud|reading_out_loud|speaking_aloud]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [stop|quit|cease|end] [talking|speaking|reading|reading_aloud|reading_out_loud|speaking_aloud] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.speaker arg.on=false"
     kind=request
     priority=12
@@ -301,7 +301,7 @@
     example="Will you stop talking?"
 
 @pat.ui.shell.spk.off5 core.pattern
-    match="[i_do_not_want_to_hear_you|i_do_not_want_to_hear_it|no_more_talking|no_more_speaking|stay_silent|stay_quiet|keep_quiet|keep_silent|no_more_sound|silence|be_still|do_not_read_aloud]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [i_do_not_want_to_hear_you|i_do_not_want_to_hear_it|no_more_talking|no_more_speaking|stay_silent|stay_quiet|keep_quiet|keep_silent|no_more_sound|silence|be_still|do_not_read_aloud] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.speaker arg.on=false"
     kind=request
     priority=12
@@ -310,7 +310,7 @@
     example="I do not want to hear you."
 
 @pat.ui.shell.lis.on4 core.pattern
-    match="[listen_now|listen_to_me_now|start_hearing_me|open_your_ears|prick_up_your_ears|hear_me|you_can_listen_now]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [listen_now|listen_to_me_now|start_hearing_me|open_your_ears|prick_up_your_ears|hear_me|you_can_listen_now] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.listening arg.on=true"
     kind=request
     priority=12
@@ -318,49 +318,49 @@
     example="Open your ears."
 
 @pat.ui.shell.lis.off3 core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [close|shut|switch_off|turn_off] [the|my]? [microphone|mic]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [close|shut|switch_off|turn_off] [the|my]? [microphone|mic] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.listening arg.on=false"
     kind=request
     priority=12
     example="Close the microphone."
 
 @pat.ui.shell.lis.off4 core.pattern
-    match="[do_not_listen|do_not_listen_to_me|stop_hearing_me|close_your_ears|you_can_stop_listening|no_more_listening|stop_listening_now]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [do_not_listen|do_not_listen_to_me|stop_hearing_me|close_your_ears|you_can_stop_listening|no_more_listening|stop_listening_now] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.listening arg.on=false"
     kind=request
     priority=12
     example="Please do not listen."
 
 @pat.ui.shell.hf.on3 core.pattern
-    match="[let_us|lets|can_we|could_we|i_want_to|i_would_like_to|i_wanna|we_could|shall_we]? [use|try|go|switch_to|start_using|turn_on] [the]? [hands-free|hands_free] [mode]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [let_us|lets|can_we|could_we|i_want_to|i_would_like_to|i_wanna|we_could|shall_we]? [use|try|go|switch_to|start_using|turn_on] [the]? [hands-free|hands_free] [mode]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.handsFree arg.on=true"
     kind=request
     priority=12
     example="Let us use hands-free."
 
 @pat.ui.shell.hf.on4 core.pattern
-    match="[i_want_to_talk_without_typing|let_us_talk_without_typing|lets_talk_without_typing|talk_without_typing|no_typing|i_do_not_want_to_type|i_want_to_just_talk|let_us_just_talk]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [i_want_to_talk_without_typing|let_us_talk_without_typing|lets_talk_without_typing|talk_without_typing|no_typing|i_do_not_want_to_type|i_want_to_just_talk|let_us_just_talk] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.handsFree arg.on=true"
     kind=request
     priority=12
     example="I want to talk without typing."
 
 @pat.ui.shell.hf.off3 core.pattern
-    match="[no_more|stop_using|quit|enough] [the]? [hands-free|hands_free] [mode]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [no_more|stop_using|quit|enough] [the]? [hands-free|hands_free] [mode]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.handsFree arg.on=false"
     kind=request
     priority=12
     example="No more hands-free."
 
 @pat.ui.shell.hf.off4 core.pattern
-    match="[back_to_typing|let_us_type|lets_type|i_want_to_type|i_will_type|i_want_to_type_again|go_back_to_typing]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [back_to_typing|let_us_type|lets_type|i_want_to_type|i_will_type|i_want_to_type_again|go_back_to_typing] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.handsFree arg.on=false"
     kind=request
     priority=12
     example="Back to typing."
 
 @pat.ui.shell.rate.fast3 core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [speed_up|hurry_up|use_a_faster_voice|use_a_quicker_voice|use_a_faster_speed|talk_faster|talk_quicker|read_quicker|be_faster|be_quicker]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [speed_up|hurry_up|use_a_faster_voice|use_a_quicker_voice|use_a_faster_speed|talk_faster|talk_quicker|read_quicker|be_faster|be_quicker] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.rate arg.dir=faster"
     kind=request
     priority=12
@@ -369,7 +369,7 @@
     example="Please use a quicker voice."
 
 @pat.ui.shell.rate.slow3 core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [slow_down|use_a_slower_voice|use_a_slower_speed|talk_slower|read_slower|be_slower|take_it_slower|calm_down]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [slow_down|use_a_slower_voice|use_a_slower_speed|talk_slower|read_slower|be_slower|take_it_slower|calm_down] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.rate arg.dir=slower"
     kind=request
     priority=12
@@ -377,7 +377,7 @@
     example="Please use a slower voice."
 
 @pat.ui.shell.giveup2 core.pattern
-    match="[i_can_not_go_on|this_is_too_hard_for_me|this_is_too_hard|stop_the_game|end_the_game|end_game|i_can_not_do_it|i_can_not_continue|i_do_not_want_to_play_any_more|i_have_had_enough|i_am_stuck]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [i_can_not_go_on|this_is_too_hard_for_me|this_is_too_hard|stop_the_game|end_the_game|end_game|i_can_not_do_it|i_can_not_continue|i_do_not_want_to_play_any_more|i_have_had_enough|i_am_stuck] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.giveUp"
     kind=request
     priority=12
@@ -385,14 +385,14 @@
     example="Stop the game."
 
 @pat.ui.shell.hint3 core.pattern
-    match="[give_me_a_clue|a_clue|another_clue|1_more_clue|tell_me_a_clue|i_need_a_clue|i_want_a_clue|can_i_have_a_clue|one_clue_please|help_me_with_a_hint]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [give_me_a_clue|a_clue|another_clue|1_more_clue|tell_me_a_clue|i_need_a_clue|i_want_a_clue|can_i_have_a_clue|one_clue_please|help_me_with_a_hint] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.hint"
     kind=request
     priority=12
     example="Give me a clue."
 
 @pat.ui.shell.open.marked core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [open|show|display|bring_up|go_to|switch_to|take_me_to|jump_to|select|view|show_me|open_up|pick|choose] [me]? [the|my|your]? {tab:lex.ui.shell.tabs} [tab|page|screen|panel|window]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [open|show|display|bring_up|go_to|switch_to|take_me_to|jump_to|select|view|show_me|open_up|pick|choose] [me]? [the|my|your|ur]? {tab:lex.ui.shell.tabs} [tab|page|screen|panel|window] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.openTab arg.tab={tab}"
     kind=request
     priority=14
@@ -400,7 +400,7 @@
     example="Go to the editor page."
 
 @pat.ui.shell.open.declaredtab core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [open|show|display|bring_up|go_to|switch_to|take_me_to|jump_to|select|view|show_me|open_up|pick|choose] [me]? [the|my|your]? {tab:lex.ui.shell.declaredtabs} [tab|page|screen|panel|window]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [open|show|display|bring_up|go_to|switch_to|take_me_to|jump_to|select|view|show_me|open_up|pick|choose] [me]? [the|my|your|ur]? {tab:lex.ui.shell.declaredtabs} [tab|page|screen|panel|window]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.openTab arg.tab=\"{tab}\""
     kind=request
     priority=14
@@ -408,7 +408,7 @@
     example="Show the map tab."
 
 @pat.ui.shell.play.declaredtab core.pattern
-    match="[let_us|i_want_to|i_would_like_to|can_we|could_we|shall_we|we_could|can_you|could_you|will_you|i_wanna|lets]? [play|start|begin|launch|have] [a|an|the|some|a_game_of|a_round_of|the_game_of|another_game_of]? {tab:lex.ui.shell.playtabs} [game|again]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [let_us|i_want_to|i_would_like_to|can_we|could_we|shall_we|we_could|can_u|can_you|could_u|could_you|will_you|i_wanna|lets|will_u]? [play|start|begin|launch|have] [a|an|the|some|a_game_of|a_round_of|the_game_of|another_game_of]? {tab:lex.ui.shell.playtabs} [game|again]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.playGame arg.tab=\"{tab}\""
     kind=request
     priority=14
@@ -416,7 +416,7 @@
     example="Play the drawing game."
 
 @pat.ui.shell.open.declared core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [open|show|display|bring_up|go_to|switch_to|take_me_to|jump_to|select|view|show_me|open_up] [me]? [the|my|your]? {tab:words(3)} [tab|page|screen|panel|window]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [open|show|display|bring_up|go_to|switch_to|take_me_to|jump_to|select|view|show_me|open_up] [me]? [the|my|your|ur]? {tab:words(3)} [tab|page|screen|panel|window] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.openTab arg.tab=\"{tab}\""
     kind=request
     priority=5
@@ -424,7 +424,7 @@
     example="Open the photo album tab."
 
 @pat.ui.shell.play.declared core.pattern
-    match="[let_us|i_want_to|i_would_like_to|can_we|could_we|shall_we|we_could|can_you|could_you|will_you|i_wanna|lets]? [play|start|begin|launch|have] [a|an|the|some|a_game_of|a_round_of|the_game_of|another_game_of]? {tab:words(3)} game"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [let_us|i_want_to|i_would_like_to|can_we|could_we|shall_we|we_could|can_u|can_you|could_u|could_you|will_you|i_wanna|lets|will_u]? [play|start|begin|launch|have] [a|an|the|some|a_game_of|a_round_of|the_game_of|another_game_of]? {tab:words(3)} game [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.playGame arg.tab=\"{tab}\""
     kind=request
     priority=5
@@ -432,7 +432,7 @@
     example="Let's play the cards game."
 
 @pat.ui.shell.plog.show core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [show|open|display|view|bring_up|show_me] [me]? [my|the] [phrase|phrases|sentence|sentences] [log|history|list]"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [show|open|display|view|bring_up|show_me] [me]? [my|the] [phrase|phrases|sentence|sentences] [log|history|list] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.phraseLog arg.what=show"
     kind=request
     priority=14
@@ -440,7 +440,7 @@
     example="Open the phrase log."
 
 @pat.ui.shell.plog.export core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you]? [export|download|save] [me]? [my|the] [phrase|phrases|sentence|sentences] [log|history|list]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [export|download|save] [me]? [my|the] [phrase|phrases|sentence|sentences] [log|history|list]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.phraseLog arg.what=export"
     kind=request
     priority=14
@@ -448,7 +448,7 @@
     example="Download my phrase log."
 
 @pat.ui.shell.plog.count core.pattern
-    match="how many [phrase|phrases|sentence|sentences] [have|did] [i|we] [said|say|spoken|typed|type|dictated] [so_far|today]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? how many [phrase|phrases|sentence|sentences] [have|did] [i|we] [said|say|spoken|typed|type|dictated] [so_far|today]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.phraseLog arg.what=count"
     kind=question
     priority=14

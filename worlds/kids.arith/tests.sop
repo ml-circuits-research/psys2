@@ -254,3 +254,28 @@
 @t.arith.sym8 core.test
     input="What is 20 ÷ 4?"
     expect="20 divided by 4 is 5."
+
+@t.arith.w01 core.test
+    input="Tom has 8 apples. Ana has 4 apples. Whose got the most apples?"
+    expect="Tom has the most apples: 8."
+    doc="wording variant (widened phrasing)"
+
+@t.arith.w02 core.test
+    input="Tom has 8 apples. Ana has 4 apples. How many extra apples does Tom have compared to Ana?"
+    expect="Tom has 4 more apples than Ana."
+    doc="wording variant (widened phrasing)"
+
+@t.arith.w03 core.test
+    input="Whats 9 and 6 added up?"
+    expect="9 plus 6 is 15."
+    doc="wording variant (widened phrasing)"
+
+@t.arith.w04 core.test
+    input="Whats double 9?"
+    expect="Double 9 is 18."
+    doc="wording variant (widened phrasing)"
+
+@t.arith.w05 core.test
+    input="Split 18 into 3 equal parts."
+    expect="18 divided by 3 is 6."
+    doc="wording variant (widened phrasing)"

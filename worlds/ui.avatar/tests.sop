@@ -876,3 +876,31 @@
     input="Make your eyes wobbly."
     expect="do not know"
     session=x
+
+@t.ui.avatar.y01 core.test
+    input="Give yourself visor eyes."
+    expectState="robot.eyes=visor"
+    session=ywhy
+
+@t.ui.avatar.y02 core.test
+    input="why did you change it?"
+    expect="sorry"
+    expect="Say \"undo\" to go back"
+    session=ywhy
+
+@t.ui.avatar.y03 core.test
+    input="that's wrong"
+    expect="sorry"
+    expect="undo"
+    session=ywhy
+
+@t.ui.avatar.y04 core.test
+    input="No, this is not what I wanted"
+    expect="undo"
+    session=ywhy
+
+@t.ui.avatar.y05 core.test
+    input="why you turned it in a robot, this is wrong"
+    expect="sorry"
+    expect="undo"
+    session=ywhy

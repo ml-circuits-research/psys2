@@ -1,5 +1,5 @@
 @pat.data.charts.create.text core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [make|create|draw|build|plot|prepare|start] [me]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [of|with|for|from|showing|about]? {d:rest}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [make|create|draw|build|plot|prepare|start] [me]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [of|with|for|from|showing|about]? {d:rest}"
     emit="@{_} core.request action=chart.fromText arg.text=\"{d}\" arg.type={t}"
     kind=request
     priority=10
@@ -7,14 +7,14 @@
     example="Make a pie chart of cats 4, dogs 6 and fish 2."
 
 @pat.data.charts.create.text2 core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [chart|graph|plot|visualize|visualise] {d:rest}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [chart|graph|plot|visualize|visualise] {d:rest}"
     emit="@{_} core.request action=chart.fromText arg.text=\"{d}\""
     kind=request
     priority=9
     example="Chart apples 5, pears 3 and plums 8."
 
 @pat.data.charts.create.new core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [make|create|start|open|draw|add]? [me]? [a|an]? [new|another|fresh|blank|empty] {t:lex.data.charts.types?} {c:lex.data.charts.nouns}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [make|create|start|open|draw|add]? [me]? [a|an]? [new|another|fresh|blank|empty] {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.new arg.type={t}"
     kind=request
     priority=12
@@ -22,35 +22,35 @@
     example="Create another pie chart."
 
 @pat.data.charts.create.new.named core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [make|create|start|open|draw|add]? [me]? [a|an]? [new|another|fresh|blank|empty] {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [called|named|titled] {ti:rest}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [make|create|start|open|draw|add]? [me]? [a|an]? [new|another|fresh|blank|empty] {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [called|named|titled] {ti:rest}"
     emit="@{_} core.request action=chart.new arg.type={t} arg.title=\"{ti}\""
     kind=request
     priority=13
     example="Create a new chart called Fruit."
 
 @pat.data.charts.create.refresh core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [update|refresh|redo|rebuild|recount] [the|this|my|that]? {c:lex.data.charts.nouns} [again|now|with_the_new_numbers|from_the_conversation]?"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [update|refresh|redo|rebuild|recount] [the|this|my|that]? {c:lex.data.charts.nouns} [again|now|with_the_new_numbers|from_the_conversation]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.refresh"
     kind=request
     priority=12
     example="Update the chart."
 
 @pat.data.charts.create.duplicate core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [duplicate|copy|clone] [the|this|my|that]? {c:lex.data.charts.nouns}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [duplicate|copy|clone] [the|this|my|that]? {c:lex.data.charts.nouns} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.duplicate"
     kind=request
     priority=12
     example="Duplicate the chart."
 
 @pat.data.charts.create.duplicate2 core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [make|create|save] [a|me_a]? [copy|duplicate|clone] [of]? [the|this|my|that]? {c:lex.data.charts.nouns}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [make|create|save] [a|me_a]? [copy|duplicate|clone] [of]? [the|this|my|that]? {c:lex.data.charts.nouns} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.duplicate"
     kind=request
     priority=12
     example="Make a copy of the chart."
 
 @pat.data.charts.create.holdings core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [make|create|draw|build|show|give|prepare] [me]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [of|for|from|about|showing]? what {who:words} [has|have|got|owns|own|holds|hold]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [make|create|draw|build|show|give|prepare] [me]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [of|for|from|about|showing]? what {who:words} [has|have|got|owns|own|holds|hold] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.fromHoldings arg.who=\"{who}\" arg.type={t}"
     kind=request
     priority=14
@@ -58,7 +58,7 @@
     example="Show me a pie chart of what Tom and Ana have."
 
 @pat.data.charts.create.holdings2 core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [chart|graph|plot|visualize|visualise|show|draw] [me]? what {who:words} [has|have|got|owns|own|holds|hold] [as|in|on]? [a|an]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns?}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [chart|graph|plot|visualize|visualise|show|draw] [me]? what {who:words} [has|have|got|owns|own|holds|hold] [as|in|on]? [a|an]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.fromHoldings arg.who=\"{who}\" arg.type={t}"
     kind=request
     priority=14
@@ -66,21 +66,21 @@
     example="Graph what everyone has as a pie chart."
 
 @pat.data.charts.create.holdings.item core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [make|create|draw|build|show|give|prepare] [me]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [of|for]? [all]? [the]? {item:lex.kids.arith.items}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [make|create|draw|build|show|give|prepare] [me]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [of|for]? [all]? [the]? {item:lex.kids.arith.items} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.fromHoldings arg.who=\"everyone\" arg.item={item} arg.type={t}"
     kind=request
     priority=14
     example="Make a bar chart of the apples."
 
 @pat.data.charts.create.holdings.item2 core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [chart|graph|plot|visualize] [all]? [the]? {item:lex.kids.arith.items}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [chart|graph|plot|visualize] [all]? [the]? {item:lex.kids.arith.items} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.fromHoldings arg.who=\"everyone\" arg.item={item}"
     kind=request
     priority=14
     example="Chart the pears."
 
 @pat.data.charts.create.prices core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [make|create|draw|build|plot|chart|graph|show|give|prepare|compare|visualize] [me]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns?} [of|for|about|showing]? [the]? [prices|price|costs|cost] [of|for]? [the|all_the|all]? {w:words}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [make|create|draw|build|plot|chart|graph|show|give|prepare|compare|visualize] [me]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns?} [of|for|about|showing]? [the]? [prices|price|costs|cost] [of|for]? [the|all_the|all]? {w:words}"
     emit="@{_} core.request action=chart.fromPrices arg.what=\"{w}\" arg.type={t}"
     kind=request
     priority=14
@@ -89,21 +89,21 @@
     example="Make a bar chart of the prices of the school things."
 
 @pat.data.charts.create.prices.all core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [chart|graph|plot|visualize] [all]? [the]? [prices|costs]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [chart|graph|plot|visualize] [all]? [the]? [prices|costs] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.fromPrices arg.what=\"everything\""
     kind=request
     priority=14
     example="Chart all the prices."
 
 @pat.data.charts.create.prices.how core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [make|create|draw|build|plot|chart|graph|show|give|prepare|compare|visualize] [me]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns?} how_much {w:words} [cost|costs]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [make|create|draw|build|plot|chart|graph|show|give|prepare|compare|visualize] [me]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns?} how_much {w:words} [cost|costs] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.fromPrices arg.what=\"{w}\" arg.type={t}"
     kind=request
     priority=14
     example="Chart how much the toys cost."
 
 @pat.data.charts.create.legs core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [make|create|draw|build|plot|chart|graph|show|give|prepare|compare|visualize] [me]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns?} [of|for|about|showing]? [the]? legs [of|for|on]? [the|all_the|all]? {w:words}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [make|create|draw|build|plot|chart|graph|show|give|prepare|compare|visualize] [me]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns?} [of|for|about|showing]? [the]? legs [of|for|on]? [the|all_the|all]? {w:words}"
     emit="@{_} core.request action=chart.fromLegs arg.what=\"{w}\" arg.type={t}"
     kind=request
     priority=14
@@ -111,56 +111,56 @@
     example="Chart the legs of a dog, a spider and a bee."
 
 @pat.data.charts.create.legs.how core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [make|create|draw|build|plot|chart|graph|show|give|prepare|compare|visualize] [me]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns?} [of|for|about]? how_many legs [the|all_the|all|do_the|do|does_a|does_the|does|do_all_the]? {w:words} [have|has]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [make|create|draw|build|plot|chart|graph|show|give|prepare|compare|visualize] [me]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns?} [of|for|about]? how_many legs [the|all_the|all|do_the|do|does_a|does_the|does|do_all_the]? {w:words} [have|has] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.fromLegs arg.what=\"{w}\" arg.type={t}"
     kind=request
     priority=14
     example="Chart how many legs the farm animals have."
 
 @pat.data.charts.create.list core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [make|create|draw|build|plot|chart|graph|show|give|prepare|compare|visualize] [me]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [of|for|from]? [my|the|our]? {list:words} list"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [make|create|draw|build|plot|chart|graph|show|give|prepare|compare|visualize] [me]? [a|an|the]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [of|for|from]? [my|the|our]? {list:words} list [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.fromList arg.list=\"{list}\" arg.type={t}"
     kind=request
     priority=14
     example="Make a pie chart of my shopping list."
 
 @pat.data.charts.create.list.as core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [show|display|plot|draw|chart|graph|visualize|make|turn|give] [me]? [my|the|our]? {list:words} list [as|in|on|into|with]? [a|an]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [show|display|plot|draw|chart|graph|visualize|make|turn|give] [me]? [my|the|our]? {list:words} list [as|in|on|into|with]? [a|an]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.fromList arg.list=\"{list}\" arg.type={t}"
     kind=request
     priority=14
     example="Show my shopping list as a chart."
 
 @pat.data.charts.create.list.chart core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [chart|graph|plot|visualize] [my|the|our]? {list:words} list"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [chart|graph|plot|visualize] [my|the|our]? {list:words} list [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.fromList arg.list=\"{list}\""
     kind=request
     priority=14
     example="Chart my to-do list."
 
 @pat.data.charts.create.lists core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [chart|graph|plot|visualize] [all]? [my|the|our]? lists"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [chart|graph|plot|visualize] [all]? [my|the|our]? lists [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.fromList arg.list=\"\""
     kind=request
     priority=14
     example="Chart my lists."
 
 @pat.data.charts.create.lists.as core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [show|display|make|give] [me]? [all]? [my|the|our]? lists [as|in|on|into]? [a|an]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [show|display|make|give] [me]? [all]? [my|the|our]? lists [as|in|on|into]? [a|an]? {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.fromList arg.list=\"\""
     kind=request
     priority=14
     example="Show my lists as a chart."
 
 @pat.data.charts.data.add core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [add|put|include|insert] {l:words} {n:number}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [add|put|include|insert] {l:words} {n:number} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.addPoint arg.text=\"{l} {n}\""
     kind=request
     priority=11
     example="Add bananas 4."
 
 @pat.data.charts.data.add.chart core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [add|put|include|insert] {d:words} [in|into|to|on|onto] [the|this|my|that]? {c:lex.data.charts.nouns}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [add|put|include|insert] {d:words} [in|into|to|on|onto] [the|this|my|that]? {c:lex.data.charts.nouns} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.addPoint arg.text=\"{d}\""
     kind=request
     priority=12
@@ -168,119 +168,119 @@
     example="Add kiwis 2 and figs 7 to the chart."
 
 @pat.data.charts.data.add.bare core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [add|put|include|insert] {n:number} {l:words}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [add|put|include|insert] {n:number} {l:words}"
     emit="@{_} core.request action=chart.addPoint arg.text=\"{n} {l}\""
     kind=request
     priority=8
     example="Add 4 bananas."
 
 @pat.data.charts.data.remove.chart core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [remove|delete|drop|take_out|erase|get_rid_of|take_away] [the]? {l:words} [from|in|out_of|off] [the|this|my|that]? {c:lex.data.charts.nouns}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [remove|delete|drop|take_out|erase|get_rid_of|take_away] [the]? {l:words} [from|in|out_of|off] [the|this|my|that]? {c:lex.data.charts.nouns} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.removePoint arg.l=\"{l}\""
     kind=request
     priority=12
     example="Delete plums from the chart."
 
 @pat.data.charts.data.remove.take core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? take [the]? {l:words} [off|out_of|out] [the|this|my|that]? {c:lex.data.charts.nouns}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? take [the]? {l:words} [off|out_of|out] [the|this|my|that]? {c:lex.data.charts.nouns} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.removePoint arg.l=\"{l}\""
     kind=request
     priority=12
     example="Take plums off the chart."
 
 @pat.data.charts.data.remove core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [remove|delete|drop|erase] [the]? {l:words}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [remove|delete|drop|erase] [the]? {l:words}"
     emit="@{_} core.request action=chart.removePoint arg.l=\"{l}\""
     kind=request
     priority=7
     example="Remove plums."
 
 @pat.data.charts.data.set core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [change|set|update|adjust|correct|fix] [the|that]? {l:words} [value]? [to|at|into|equal_to|equals] {n:number}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [change|set|update|adjust|correct|fix] [the|that]? {l:words} [value]? [to|at|into|equal_to|equals] {n:number} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setPoint arg.l=\"{l}\" arg.n={n}"
     kind=request
     priority=10
     example="Change pears to 6."
 
 @pat.data.charts.data.set.make core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? make [the]? {l:words} {n:number}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? make [the]? {l:words} {n:number} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setPoint arg.l=\"{l}\" arg.n={n}"
     kind=request
     priority=9
     example="Make the pears 6."
 
 @pat.data.charts.data.set.should core.pattern
-    match="{l:words} [should_be|must_be|is_now|are_now|should_equal] {n:number}"
+    match="{l:words} [should_be|must_be|is_now|are_now|should_equal] {n:number} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setPoint arg.l=\"{l}\" arg.n={n}"
     kind=request
     priority=10
     example="Plums should be 9."
 
 @pat.data.charts.data.up core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [increase|raise|boost|bump|increment|grow] [the]? {l:words} by {n:number}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [increase|raise|boost|bump|increment|grow] [the]? {l:words} by {n:number} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.by={n} arg.dir=up"
     kind=request
     priority=13
     example="Increase apples by 2."
 
 @pat.data.charts.data.down core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [decrease|lower|reduce|cut|decrement|shrink|drop] [the]? {l:words} by {n:number}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [decrease|lower|reduce|cut|decrement|shrink|drop] [the]? {l:words} by {n:number} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.by={n} arg.dir=down"
     kind=request
     priority=13
     example="Decrease plums by 3."
 
 @pat.data.charts.data.up.to core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? add {n:number} to [the]? {l:words}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? add {n:number} to [the]? {l:words}"
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.by={n} arg.dir=up"
     kind=request
     priority=12
     example="Add 2 to apples."
 
 @pat.data.charts.data.down.from core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [take|subtract|remove] {n:number} from [the]? {l:words}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [take|subtract|remove] {n:number} from [the]? {l:words}"
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.by={n} arg.dir=down"
     kind=request
     priority=12
     example="Take 2 from plums."
 
 @pat.data.charts.data.double core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? double [the]? {l:words}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? double [the]? {l:words}"
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.factor=2"
     kind=request
     priority=9
     example="Double the apples."
 
 @pat.data.charts.data.triple core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? triple [the]? {l:words}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? triple [the]? {l:words}"
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.factor=3"
     kind=request
     priority=9
     example="Triple the pears."
 
 @pat.data.charts.data.halve core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? halve [the]? {l:words}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? halve [the]? {l:words}"
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.factor=0.5"
     kind=request
     priority=9
     example="Halve the plums."
 
 @pat.data.charts.data.rename core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? rename [the]? {a:words} [to|as] {b:words}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? rename [the]? {a:words} [to|as] {b:words}"
     emit="@{_} core.request action=chart.renamePoint arg.l=\"{a}\" arg.to=\"{b}\""
     kind=request
     priority=10
     example="Rename pears to cherries."
 
 @pat.data.charts.data.clear core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [clear|empty|reset|wipe] [the|this|my|that]? [chart|graph|data|bars|numbers]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [clear|empty|reset|wipe] [the|this|my|that]? [chart|graph|data|bars|numbers] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.clearData"
     kind=request
     priority=11
     example="Clear the chart."
 
 @pat.data.charts.type.set core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [make|turn|change|switch|convert|show|display|plot|draw|view|use|try|give|set] [it|the_chart|this_chart|the_graph|this_graph|that_chart|this|that|them|me|the_data]? [into|to|as|in|like|a|an]? [a|an]? {t:lex.data.charts.types} [chart|graph|plot|diagram|style|view]?"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [make|turn|change|switch|convert|show|display|plot|draw|view|use|try|give|set] [it|the_chart|this_chart|the_graph|this_graph|that_chart|this|that|them|me|the_data]? [into|to|as|in|like|a|an]? [a|an]? {t:lex.data.charts.types} [chart|graph|plot|diagram|style|view]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setType arg.type={t}"
     kind=request
     priority=15
@@ -290,14 +290,14 @@
     example="Switch to a radar chart."
 
 @pat.data.charts.type.bare core.pattern
-    match="{t:lex.data.charts.types} {c:lex.data.charts.nouns}"
+    match="{t:lex.data.charts.types} {c:lex.data.charts.nouns} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setType arg.type={t}"
     kind=request
     priority=6
     example="Pie chart."
 
 @pat.data.charts.type.stacked core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [make|turn|change|switch|show|use|plot|draw|give|put] [it|the_chart|the_graph|this|that|them|me|these]? [into|to|as|in|a|an]? [a|an]? stacked {t:lex.data.charts.types?} {c:lex.data.charts.nouns?}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [make|turn|change|switch|show|use|plot|draw|give|put] [it|the_chart|the_graph|this|that|them|me|these]? [into|to|as|in|a|an]? [a|an]? stacked {t:lex.data.charts.types?} {c:lex.data.charts.nouns?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setType arg.type={t} arg.stacked=true"
     kind=request
     priority=12
@@ -305,28 +305,28 @@
     example="Make it stacked."
 
 @pat.data.charts.type.stack core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [stack|pile|pile_up] [the|them|it|these|all_the]? [bars|bar|columns|series|lines|data|up|values]? [up]?"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [stack|pile|pile_up] [the|them|it|these|all_the]? [bars|bar|columns|series|lines|data|up|values]? [up]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setStacked arg.on=true"
     kind=request
     priority=11
     example="Stack the bars."
 
 @pat.data.charts.type.unstack core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [unstack|ungroup|unpile] [the|them|it|these]? [bars|bar|columns|series|lines|data|values]?"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [unstack|ungroup|unpile] [the|them|it|these]? [bars|bar|columns|series|lines|data|values]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setStacked arg.on=false"
     kind=request
     priority=11
     example="Unstack the bars."
 
 @pat.data.charts.type.group core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [make|put|show|set] [the|them|it|these]? [bars|columns|series|lines]? [grouped|side_by_side|unstacked|not_stacked]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [make|put|show|set] [the|them|it|these]? [bars|columns|series|lines]? [grouped|side_by_side|unstacked|not_stacked] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setStacked arg.on=false"
     kind=request
     priority=11
     example="Put the bars side by side."
 
 @pat.data.charts.title.call core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [call|name|title|rename|label] [it|the_chart|this_chart|that_chart|the_graph|this_graph|that_graph] [as|to]? {t:rest}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [call|name|title|rename|label] [it|the_chart|this_chart|that_chart|the_graph|this_graph|that_graph] [as|to]? {t:rest}"
     emit="@{_} core.request action=chart.setTitle arg.t=\"{t}\""
     kind=request
     priority=11
@@ -334,42 +334,42 @@
     example="Call the chart Pets at home."
 
 @pat.data.charts.title.change core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [change|set|make|update|put|give] [the|this]? {c:lex.data.charts.nouns} [title|name|heading|caption] [to|as|be|is]? {t:rest}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [change|set|make|update|put|give] [the|this]? {c:lex.data.charts.nouns} [title|name|heading|caption] [to|as|be|is]? {t:rest}"
     emit="@{_} core.request action=chart.setTitle arg.t=\"{t}\""
     kind=request
     priority=12
     example="Change the chart title to Fruit."
 
 @pat.data.charts.title.of core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [change|set|make|update] [the]? [title|name] [of_the_chart|of_the_graph|of_this_chart|of_it] [to|as]? {t:rest}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [change|set|make|update] [the]? [title|name] [of_the_chart|of_the_graph|of_this_chart|of_it] [to|as]? {t:rest}"
     emit="@{_} core.request action=chart.setTitle arg.t=\"{t}\""
     kind=request
     priority=12
     example="Set the title of the chart to Fruit."
 
 @pat.data.charts.title.give core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? give [it|the_chart|this_chart|the_graph] [a|the]? title {t:rest}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? give [it|the_chart|this_chart|the_graph] [a|the]? title {t:rest}"
     emit="@{_} core.request action=chart.setTitle arg.t=\"{t}\""
     kind=request
     priority=12
     example="Give it the title Fruit."
 
 @pat.data.charts.title.remove core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [remove|delete|hide|clear] [the]? {c:lex.data.charts.nouns} title"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [remove|delete|hide|clear] [the]? {c:lex.data.charts.nouns} title [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.removeTitle"
     kind=request
     priority=12
     example="Remove the chart title."
 
 @pat.data.charts.title.remove2 core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [remove|delete|hide|clear] [the]? title [from|of] [the|this|my|that]? {c:lex.data.charts.nouns}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [remove|delete|hide|clear] [the]? title [from|of] [the|this|my|that]? {c:lex.data.charts.nouns} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.removeTitle"
     kind=request
     priority=12
     example="Remove the title from the chart."
 
 @pat.data.charts.color.all core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [make|paint|color|colour|turn|change|set|fill|dye|tint] [the]? [bars|bar|columns|column|line|lines|chart|graph|pie|slices|points|dots|everything|it|them|all] [to|in|into|as]? {s:lex.data.charts.shades?} {c:lex.data.charts.colors}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [make|paint|color|colour|turn|change|set|fill|dye|tint] [the]? [bars|bar|columns|column|line|lines|chart|graph|pie|slices|points|dots|everything|it|them|all] [to|in|into|as]? {s:lex.data.charts.shades?} {c:lex.data.charts.colors} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setColor arg.c={c} arg.shade={s}"
     kind=request
     priority=12
@@ -378,14 +378,14 @@
     example="Paint the chart orange."
 
 @pat.data.charts.color.use core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [use|try|choose|pick|go_with|switch_to] [a|the]? {s:lex.data.charts.shades?} {c:lex.data.charts.colors} [for_the_chart|for_everything|for_the_bars|for_the_line|for_it|for_them|for_all|instead]?"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [use|try|choose|pick|go_with|switch_to] [a|the]? {s:lex.data.charts.shades?} {c:lex.data.charts.colors} [for_the_chart|for_everything|for_the_bars|for_the_line|for_it|for_them|for_all|instead]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setColor arg.c={c} arg.shade={s}"
     kind=request
     priority=11
     example="Use dark green."
 
 @pat.data.charts.color.label core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [make|paint|color|colour|turn|change|set] [the]? {l:words} [bar|slice|point|column|segment|dot] [to|in|into|as]? {s:lex.data.charts.shades?} {c:lex.data.charts.colors}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [make|paint|color|colour|turn|change|set] [the]? {l:words} [bar|slice|point|column|segment|dot] [to|in|into|as]? {s:lex.data.charts.shades?} {c:lex.data.charts.colors} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setColor arg.c={c} arg.shade={s} arg.label=\"{l}\""
     kind=request
     priority=12
@@ -393,7 +393,7 @@
     example="Color the plums slice light orange."
 
 @pat.data.charts.color.palette core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [use|try|apply|switch_to|change_to|give_me|pick|choose|go_with|make_it|make_them|make_the_chart|color_it|colour_it|paint_it]? [the]? {p:lex.data.charts.palettes} [colors|colours|palette|theme|colour_scheme|color_scheme|shades|look]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [use|try|apply|switch_to|change_to|give_me|pick|choose|go_with|make_it|make_them|make_the_chart|color_it|colour_it|paint_it]? [the]? {p:lex.data.charts.palettes} [colors|colours|palette|theme|colour_scheme|color_scheme|shades|look] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setPalette arg.p={p}"
     kind=request
     priority=12
@@ -402,35 +402,35 @@
     example="Use the default colors."
 
 @pat.data.charts.color.palette.bare core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [make|turn|color|colour|paint] [it|them|the_chart|the_bars|everything] {p:lex.data.charts.palettes}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [make|turn|color|colour|paint] [it|them|the_chart|the_bars|everything] {p:lex.data.charts.palettes} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setPalette arg.p={p}"
     kind=request
     priority=11
     example="Make it rainbow."
 
 @pat.data.charts.color.colorful core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [make|turn|paint|color|colour] [it|them|the_chart|the_bars|everything] [colorful|colourful|multicolored|multicoloured|more_colorful|more_colourful]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [make|turn|paint|color|colour] [it|them|the_chart|the_bars|everything] [colorful|colourful|multicolored|multicoloured|more_colorful|more_colourful] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setPalette arg.p=rainbow"
     kind=request
     priority=11
     example="Make it colorful."
 
 @pat.data.charts.color.each core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [color|colour|paint|make] [each|every] [bar|slice|point|column|item] [differently|different|a_different_color|in_a_different_color|in_different_colors|a_different_colour]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [color|colour|paint|make] [each|every] [bar|slice|point|column|item] [differently|different|a_different_color|in_a_different_color|in_different_colors|a_different_colour] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setPalette arg.p=different"
     kind=request
     priority=11
     example="Color each bar differently."
 
 @pat.data.charts.color.reset core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [reset|restore|clear|undo] [the]? [chart|graph|bar|bars] [default|original|standard]? [colors|colours]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [reset|restore|clear|undo] [the]? [chart|graph|bar|bars] [default|original|standard]? [colors|colours] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setPalette arg.p=default"
     kind=request
     priority=11
     example="Reset the chart colors."
 
 @pat.data.charts.sort.by core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [sort|order|arrange|rank] [the|them|it|these]? [bars|chart|data|values|items|slices|columns|points|graph]? [from|by|in|with|starting_with]? [the]? {a:lex.data.charts.extent} [first]? [to|down_to|and_then]? [the]? {b:lex.data.charts.extent?} [order|first]?"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [sort|order|arrange|rank] [the|them|it|these]? [bars|chart|data|values|items|slices|columns|points|graph]? [from|by|in|with|starting_with]? [the]? {a:lex.data.charts.extent} [first]? [to|down_to|and_then]? [the]? {b:lex.data.charts.extent?} [order|first]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setSort arg.from={a}"
     kind=request
     priority=12
@@ -439,42 +439,42 @@
     example="Sort in descending order."
 
 @pat.data.charts.sort.value core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [sort|order|arrange|rank] [the|them|it|these]? [bars|chart|data|items|slices|columns|points|graph]? [by|on|according_to] [the]? [value|values|size|sizes|number|numbers|amount|amounts]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [sort|order|arrange|rank] [the|them|it|these]? [bars|chart|data|items|slices|columns|points|graph]? [by|on|according_to] [the]? [value|values|size|sizes|number|numbers|amount|amounts] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setSort arg.mode=desc"
     kind=request
     priority=12
     example="Sort by value."
 
 @pat.data.charts.sort.alpha core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [sort|order|arrange] [the|them|it|these]? [bars|chart|data|values|items|labels|slices|columns]? [alphabetically|by_name|by_label|by_letter|in_alphabetical_order|alphabetical|from_a_to_z|a_to_z|by_the_name|by_the_names|in_alphabetic_order]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [sort|order|arrange] [the|them|it|these]? [bars|chart|data|values|items|labels|slices|columns]? [alphabetically|by_name|by_label|by_letter|in_alphabetical_order|alphabetical|from_a_to_z|a_to_z|by_the_name|by_the_names|in_alphabetic_order] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setSort arg.mode=alpha"
     kind=request
     priority=12
     example="Sort alphabetically."
 
 @pat.data.charts.sort.none core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [stop_sorting|unsort|do_not_sort|undo_the_sorting|remove_the_sorting|reset_the_order|original_order|stop_sorting_it|do_not_sort_it|no_sorting]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [stop_sorting|unsort|do_not_sort|undo_the_sorting|remove_the_sorting|reset_the_order|original_order|stop_sorting_it|do_not_sort_it|no_sorting] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setSort arg.mode=none"
     kind=request
     priority=12
     example="Stop sorting."
 
 @pat.data.charts.sort.none2 core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [restore|reset|put_back|bring_back] [the]? [original|first|normal|natural|default] order"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [restore|reset|put_back|bring_back] [the]? [original|first|normal|natural|default] order [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setSort arg.mode=none"
     kind=request
     priority=12
     example="Restore the original order."
 
 @pat.data.charts.sort.bare core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [sort|order|rank] [the|it|them|this]? [chart|bars|data|graph|values|items]?"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [sort|order|rank] [the|it|them|this]? [chart|bars|data|graph|values|items]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setSort"
     kind=request
     priority=8
     example="Sort the chart."
 
 @pat.data.charts.orient.set core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [make|turn|change|switch|show|put|draw|plot|rotate|flip|use] [it|the_chart|this_chart|the_bars|the_bar_chart|bars|them|the_graph|this|the_line_chart|the_line]? [to|into|as|in|on_its_side]? [a|an]? {o:lex.data.charts.orient} [bars|bar|bar_chart|chart|graph|columns|way|direction|line_chart]?"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [make|turn|change|switch|show|put|draw|plot|rotate|flip|use] [it|the_chart|this_chart|the_bars|the_bar_chart|bars|them|the_graph|this|the_line_chart|the_line]? [to|into|as|in|on_its_side]? [a|an]? {o:lex.data.charts.orient} [bars|bar|bar_chart|chart|graph|columns|way|direction|line_chart]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setOrientation arg.o={o}"
     kind=request
     priority=15
@@ -482,70 +482,70 @@
     example="Make the bars vertical."
 
 @pat.data.charts.orient.bare core.pattern
-    match="{o:lex.data.charts.orient} [bars|bar_chart|chart|graph|columns]"
+    match="{o:lex.data.charts.orient} [bars|bar_chart|chart|graph|columns] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setOrientation arg.o={o}"
     kind=request
     priority=10
     example="Horizontal bars."
 
 @pat.data.charts.values.show core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [show|display|add|put|turn_on|switch_on|print|write|include|give_me|let_me_see] [me]? [the|all_the|each|all]? [values|numbers|value_labels|data_labels|amounts|counts|figures] [on_the_bars|on_the_chart|on_top|above_the_bars|on_each_bar|on_them|on_it|on_the_slices|on_the_points|on_the_graph|in_the_chart|too|as_well]?"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [show|display|add|put|turn_on|switch_on|print|write|include|give_me|let_me_see] [me]? [the|all_the|each|all]? [values|numbers|value_labels|data_labels|amounts|counts|figures] [on_the_bars|on_the_chart|on_top|above_the_bars|on_each_bar|on_them|on_it|on_the_slices|on_the_points|on_the_graph|in_the_chart|too|as_well]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setValues arg.mode=on"
     kind=request
     priority=11
     example="Show the values."
 
 @pat.data.charts.values.label core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [label|mark|annotate] [the|each|all_the]? [bars|slices|points|columns|segments|bar|slice] with [the]? [values|numbers|amounts|figures]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [label|mark|annotate] [the|each|all_the]? [bars|slices|points|columns|segments|bar|slice] with [the]? [values|numbers|amounts|figures] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setValues arg.mode=on"
     kind=request
     priority=11
     example="Label the bars with the numbers."
 
 @pat.data.charts.values.hide core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [hide|remove|delete|turn_off|switch_off|stop_showing|do_not_show|take_away|clear|drop] [the|all_the|each|all]? [values|numbers|value_labels|data_labels|amounts|counts|figures] [on_the_bars|on_the_chart|on_top|above_the_bars|on_each_bar|on_them|on_it|on_the_slices|on_the_points|on_the_graph|in_the_chart|too|as_well]?"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [hide|remove|delete|turn_off|switch_off|stop_showing|do_not_show|take_away|clear|drop] [the|all_the|each|all]? [values|numbers|value_labels|data_labels|amounts|counts|figures] [on_the_bars|on_the_chart|on_top|above_the_bars|on_each_bar|on_them|on_it|on_the_slices|on_the_points|on_the_graph|in_the_chart|too|as_well]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setValues arg.mode=off"
     kind=request
     priority=11
     example="Hide the numbers."
 
 @pat.data.charts.values.percent core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [show|display|add|put|use|give_me] [me]? [the]? [percentages|percents|percentage_labels|percent_values|percent|shares] [on_the_chart|on_the_slices|instead|on_each_slice|too]?"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [show|display|add|put|use|give_me] [me]? [the]? [percentages|percents|percentage_labels|percent_values|percent|shares] [on_the_chart|on_the_slices|instead|on_each_slice|too]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setValues arg.mode=percent"
     kind=request
     priority=11
     example="Show the percentages."
 
 @pat.data.charts.legend.show core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [show|display|add|put|turn_on|switch_on|bring_back|include|give_me] [me]? [the|a]? legend [back]? [on_the_chart|on_the_side|again|too]?"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [show|display|add|put|turn_on|switch_on|bring_back|include|give_me] [me]? [the|a]? legend [back]? [on_the_chart|on_the_side|again|too]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setLegend arg.on=true"
     kind=request
     priority=11
     example="Show the legend."
 
 @pat.data.charts.legend.hide core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [hide|remove|delete|turn_off|switch_off|take_away|get_rid_of|drop|clear] [the|a]? legend [on_the_chart|again]?"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [hide|remove|delete|turn_off|switch_off|take_away|get_rid_of|drop|clear] [the|a]? legend [on_the_chart|again]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setLegend arg.on=false"
     kind=request
     priority=11
     example="Hide the legend."
 
 @pat.data.charts.legend.on core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [turn|switch|put|set] [the]? legend on"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [turn|switch|put|set] [the]? legend on [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setLegend arg.on=true"
     kind=request
     priority=15
     example="Turn the legend on."
 
 @pat.data.charts.legend.off core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [turn|switch|put|set] [the]? legend off"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [turn|switch|put|set] [the]? legend off [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.setLegend arg.on=false"
     kind=request
     priority=15
     example="Turn the legend off."
 
 @pat.data.charts.q.extreme core.pattern
-    match="[which|what] [is|are]? [the]? {w:lex.data.charts.extent} [1|bar|item|slice|value|number|label|thing|column|point|segment]? [in_the_chart|in_it|here|of_all|of_them|in_the_graph|on_the_chart|of_the_bars]?"
+    match="[which|what] [is|are]? [the]? {w:lex.data.charts.extent} [1|bar|item|slice|value|number|label|thing|column|point|segment]? [in_the_chart|in_it|here|of_all|of_them|in_the_graph|on_the_chart|of_the_bars]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.extreme arg.w={w}"
     kind=request
     priority=12
@@ -553,7 +553,7 @@
     example="What is the smallest?"
 
 @pat.data.charts.q.extreme2 core.pattern
-    match="[which|what] [1|bar|item|slice|value|number|label|thing|column|point|segment]? [has|have|got|is_the|is|are_the|are] [the]? {w:lex.data.charts.extent} [value|number|amount|count|1]?"
+    match="[which|what] [1|bar|item|slice|value|number|label|thing|column|point|segment]? [has|have|got|is_the|is|are_the|are] [the]? {w:lex.data.charts.extent} [value|number|amount|count|1]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.extreme arg.w={w}"
     kind=request
     priority=12
@@ -561,28 +561,28 @@
     example="Which one is the lowest?"
 
 @pat.data.charts.q.total core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [what|how_much] [is|are]? [the]? [total|sum|grand_total|total_amount|total_number|total_value|overall_total] [of_all|of_everything|of_the_bars|of_them|altogether|in_total|in_all|in_the_chart|of_the_chart|of_all_of_them]?"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [what|how_much] [is|are]? [the]? [total|sum|grand_total|total_amount|total_number|total_value|overall_total] [of_all|of_everything|of_the_bars|of_them|altogether|in_total|in_all|in_the_chart|of_the_chart|of_all_of_them]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.total"
     kind=request
     priority=12
     example="What is the total?"
 
 @pat.data.charts.q.total.up core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [add|sum|total|count] [them|everything|it|all_the_bars|the_bars|the_values|the_numbers|these]? [up|together]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [add|sum|total|count] [them|everything|it|all_the_bars|the_bars|the_values|the_numbers|these]? [up|together] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.total"
     kind=request
     priority=12
     example="Add them up."
 
 @pat.data.charts.q.total.many core.pattern
-    match="how_many [are_there|do_we_have|do_they_have|in_all|altogether|in_total|all_together|are_there_in_total|are_there_altogether|are_there_all_together]"
+    match="how_many [are_there|do_we_have|do_they_have|in_all|altogether|in_total|all_together|are_there_in_total|are_there_altogether|are_there_all_together] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.total"
     kind=request
     priority=11
     example="How many altogether?"
 
 @pat.data.charts.q.average core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [what|how_much] [is|are]? [the]? [average|mean|avg] [value|number|amount|size|height]? [of_all|of_them|of_the_bars|in_the_chart|of_the_chart|per_bar|per_item|per_person|each|overall]?"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [what|how_much] [is|are]? [the]? [average|mean|avg] [value|number|amount|size|height]? [of_all|of_them|of_the_bars|in_the_chart|of_the_chart|per_bar|per_item|per_person|each|overall]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.average"
     kind=request
     priority=12
@@ -624,21 +624,21 @@
     example="What percentage are apples?"
 
 @pat.data.charts.q.percent.of core.pattern
-    match="what [percentage|percent|share|proportion|fraction] [of_the_total|of_the_chart|of_the_whole|of_everything|of_all] [is|are|does|do] [the]? {l:words(3)} [make_up|take_up|have|account_for|represent|get|take]?"
+    match="what [percentage|percent|share|proportion|fraction] [of_the_total|of_the_chart|of_the_whole|of_everything|of_all] [is|are|does|do] [the]? {l:words(3)} [make_up|take_up|have|account_for|represent|get|take]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.percent arg.l=\"{l}\""
     kind=request
     priority=12
     example="What share of the chart do plums take?"
 
 @pat.data.charts.q.percent.much core.pattern
-    match="how_much [of_the_chart|of_the_total|of_the_whole|of_it|of_the_pie] [is|are|does|do] [the]? {l:words(3)} [make_up|take_up|have|account_for|represent|take]?"
+    match="how_much [of_the_chart|of_the_total|of_the_whole|of_it|of_the_pie] [is|are|does|do] [the]? {l:words(3)} [make_up|take_up|have|account_for|represent|take]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.percent arg.l=\"{l}\""
     kind=request
     priority=12
     example="How much of the chart is apples?"
 
 @pat.data.charts.q.percent.does core.pattern
-    match="what [percent|percentage|share] [does|do] [the]? {l:words(3)} [make_up|take_up|have|account_for|represent|get|take]"
+    match="what [percent|percentage|share] [does|do] [the]? {l:words(3)} [make_up|take_up|have|account_for|represent|get|take] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.percent arg.l=\"{l}\""
     kind=request
     priority=12
@@ -652,42 +652,42 @@
     example="What is the value of apples?"
 
 @pat.data.charts.q.value.big core.pattern
-    match="how_big [is|are] [the]? {l:words(3)} [bar|slice|point|column|segment]?"
+    match="how_big [is|are] [the]? {l:words(3)} [bar|slice|point|column|segment]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.valueOf arg.l=\"{l}\""
     kind=request
     priority=11
     example="How big is the plums bar?"
 
 @pat.data.charts.q.count core.pattern
-    match="how_many [bars|slices|points|columns|categories|segments|entries|values|labels] [are_there|does_it_have|does_the_chart_have|are_in_the_chart|are_shown|do_we_have|are_on_the_chart|are_in_it|does_the_chart_show]? [in_the_chart|in_it|in_total]?"
+    match="how_many [bars|slices|points|columns|categories|segments|entries|values|labels] [are_there|does_it_have|does_the_chart_have|are_in_the_chart|are_shown|do_we_have|are_on_the_chart|are_in_it|does_the_chart_show]? [in_the_chart|in_it|in_total]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.countItems"
     kind=request
     priority=12
     example="How many bars are there?"
 
 @pat.data.charts.q.describe core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [describe|explain|summarize|summarise|tell_me_about] [the|this|my|that]? {c:lex.data.charts.nouns}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [describe|explain|summarize|summarise|tell_me_about] [the|this|my|that]? {c:lex.data.charts.nouns} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.describe"
     kind=request
     priority=12
     example="Describe the chart."
 
 @pat.data.charts.q.describe2 core.pattern
-    match="[what_does_the_chart_show|what_does_the_graph_show|what_is_on_the_chart|what_is_in_the_chart|what_is_the_chart_about|what_does_this_chart_show|what_does_it_show|what_do_you_see|what_is_on_the_graph|what_does_this_graph_show|what_are_the_values|what_are_the_numbers]"
+    match="[what_does_the_chart_show|what_does_the_graph_show|what_is_on_the_chart|what_is_in_the_chart|what_is_the_chart_about|what_does_this_chart_show|what_does_it_show|what_do_you_see|what_is_on_the_graph|what_does_this_graph_show|what_are_the_values|what_are_the_numbers] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.describe"
     kind=request
     priority=12
     example="What does the chart show?"
 
 @pat.data.charts.q.read core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [read|read_out] [me]? [the|this|my|that]? {c:lex.data.charts.nouns} [aloud|out_loud|out]?"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [read|read_out] [me]? [the|this|my|that]? {c:lex.data.charts.nouns} [aloud|out_loud|out]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.read"
     kind=request
     priority=12
     example="Read the chart aloud."
 
 @pat.data.charts.nav.ordinal core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [go_back_to|go_to|show|open|switch_to|bring_up|display|return_to|back_to|take_me_to|see] [the]? {o:lex.data.charts.ordinals} {c:lex.data.charts.nouns}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [go_back_to|go_to|show|open|switch_to|bring_up|display|return_to|back_to|take_me_to|see] [the]? {o:lex.data.charts.ordinals} {c:lex.data.charts.nouns} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.switchChart arg.ord={o}"
     kind=request
     priority=12
@@ -695,84 +695,84 @@
     example="Show the last chart."
 
 @pat.data.charts.nav.number core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [go_back_to|go_to|show|open|switch_to|bring_up|display|return_to|back_to|take_me_to|see] [the]? {c:lex.data.charts.nouns} {n:number}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [go_back_to|go_to|show|open|switch_to|bring_up|display|return_to|back_to|take_me_to|see] [the]? {c:lex.data.charts.nouns} {n:number} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.switchChart arg.n={n}"
     kind=request
     priority=12
     example="Go to chart 2."
 
 @pat.data.charts.nav.next core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [go_to|show|open|switch_to|display|go|bring_up]? [the]? [next|following] {c:lex.data.charts.nouns}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [go_to|show|open|switch_to|display|go|bring_up]? [the]? [next|following] {c:lex.data.charts.nouns} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.switchChart arg.dir=next"
     kind=request
     priority=12
     example="Show the next chart."
 
 @pat.data.charts.nav.prev core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [go_to|show|open|switch_to|display|go|bring_up|go_back_to]? [the]? [previous|earlier|prior|preceding] {c:lex.data.charts.nouns}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [go_to|show|open|switch_to|display|go|bring_up|go_back_to]? [the]? [previous|earlier|prior|preceding] {c:lex.data.charts.nouns} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.switchChart arg.dir=prev"
     kind=request
     priority=12
     example="Go to the previous chart."
 
 @pat.data.charts.nav.title core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [show|open|go_to|switch_to|bring_up|display|go_back_to] [the]? {t:words} {c:lex.data.charts.nouns}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [show|open|go_to|switch_to|bring_up|display|go_back_to] [the]? {t:words} {c:lex.data.charts.nouns} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.switchChart arg.t=\"{t}\""
     kind=request
     priority=7
     example="Show the fruit chart."
 
 @pat.data.charts.nav.delete core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [delete|remove|erase|discard|close|get_rid_of|throw_away|drop|scrap] [this|the|that|my|current]? {c:lex.data.charts.nouns}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [delete|remove|erase|discard|close|get_rid_of|throw_away|drop|scrap] [this|the|that|my|current]? {c:lex.data.charts.nouns} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.deleteChart"
     kind=request
     priority=13
     example="Delete this chart."
 
 @pat.data.charts.nav.delete.ord core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [delete|remove|erase|discard|close|get_rid_of|throw_away|drop|scrap] [the]? {o:lex.data.charts.ordinals} {c:lex.data.charts.nouns}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [delete|remove|erase|discard|close|get_rid_of|throw_away|drop|scrap] [the]? {o:lex.data.charts.ordinals} {c:lex.data.charts.nouns} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.deleteChart arg.ord={o}"
     kind=request
     priority=13
     example="Delete the second chart."
 
 @pat.data.charts.nav.delete.num core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [delete|remove|erase|discard|close|get_rid_of|throw_away|drop|scrap] [the]? {c:lex.data.charts.nouns} {n:number}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [delete|remove|erase|discard|close|get_rid_of|throw_away|drop|scrap] [the]? {c:lex.data.charts.nouns} {n:number} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.deleteChart arg.n={n}"
     kind=request
     priority=13
     example="Delete chart 2."
 
 @pat.data.charts.nav.delete.all core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [delete|remove|erase|discard|close|get_rid_of|throw_away|drop|scrap] [all|all_the|all_of_the|every|all_my] {c:lex.data.charts.nouns}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [delete|remove|erase|discard|close|get_rid_of|throw_away|drop|scrap] [all|all_the|all_of_the|every|all_my] {c:lex.data.charts.nouns} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.deleteChart arg.all=true"
     kind=request
     priority=13
     example="Delete all the charts."
 
 @pat.data.charts.nav.list core.pattern
-    match="[what|which] [charts|graphs] [do_i_have|have_i_made|are_there|do_we_have|exist|have_i_got]"
+    match="[what|which] [charts|graphs] [do_i_have|have_i_made|are_there|do_we_have|exist|have_i_got] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.listCharts"
     kind=request
     priority=12
     example="What charts do I have?"
 
 @pat.data.charts.nav.list.count core.pattern
-    match="how_many [charts|graphs] [do_i_have|are_there|have_i_made|do_we_have|have_i_got|exist]"
+    match="how_many [charts|graphs] [do_i_have|are_there|have_i_made|do_we_have|have_i_got|exist] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.listCharts"
     kind=request
     priority=12
     example="How many charts do I have?"
 
 @pat.data.charts.nav.list.show core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [list|show|name|tell_me] [me]? [all]? [my|the|our]? [charts|graphs]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [list|show|name|tell_me] [me]? [all]? [my|the|our]? [charts|graphs] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.listCharts"
     kind=request
     priority=8
     example="List my charts."
 
 @pat.data.charts.export.image core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [download|save|export|get|give_me] [me]? [the|this|my|a]? {c:lex.data.charts.nouns?} [as|to|in|into]? [a|an]? [image|picture|png|photo|jpeg|jpg|screenshot|pic|photograph]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [download|save|export|get|give_me] [me]? [the|this|my|a]? {c:lex.data.charts.nouns?} [as|to|in|into]? [a|an]? [image|picture|png|photo|jpeg|jpg|screenshot|pic|photograph] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.download"
     kind=request
     priority=12
@@ -780,44 +780,399 @@
     example="Save the chart as a picture."
 
 @pat.data.charts.export.picture core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [take|grab|get|make] [a]? [picture|image|screenshot|photo|snapshot] of [the|this|my|that]? {c:lex.data.charts.nouns}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [take|grab|get|make] [a]? [picture|image|screenshot|photo|snapshot] of [the|this|my|that]? {c:lex.data.charts.nouns} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.download"
     kind=request
     priority=12
     example="Take a picture of the chart."
 
 @pat.data.charts.export.chart core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [download|save|export] [the|this|my|that]? {c:lex.data.charts.nouns}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [download|save|export] [the|this|my|that]? {c:lex.data.charts.nouns} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.download"
     kind=request
     priority=11
     example="Download the chart."
 
 @pat.data.charts.export.csv core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [download|save|export] [the|this|my|that]? [chart]? [data|numbers|values|table|spreadsheet|csv] [as|to|in]? [a|an]? [csv|spreadsheet|text|file|table]?"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [download|save|export] [the|this|my|that]? [chart]? [data|numbers|values|table|spreadsheet|csv] [as|to|in]? [a|an]? [csv|spreadsheet|text|file|table]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.downloadData"
     kind=request
     priority=12
     example="Download the chart data as a spreadsheet."
 
 @pat.data.charts.export.copy core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? copy [the|this|my|that]? [chart]? [data|numbers|values|table]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? copy [the|this|my|that]? [chart]? [data|numbers|values|table] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.copyData"
     kind=request
     priority=12
     example="Copy the chart data."
 
 @pat.data.charts.export.doc core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [put|add|insert|place|paste|drop|include|move] [the|this|my|that]? [chart|graph|picture|image] [in|into|to|on|onto] [the|this|my|that]? [document|doc|editor|page]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [put|add|insert|place|paste|drop|include|move] [the|this|my|that]? [chart|graph|picture|image] [in|into|to|on|onto] [the|this|my|that]? [document|doc|editor|page] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.toDocument"
     kind=request
     priority=12
     example="Put the chart in the document."
 
 @pat.data.charts.export.doc.data core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us]? [put|add|insert|place|paste|drop|include|move] [the|this|my|that]? [chart]? [data|numbers|values|table] [in|into|to|on|onto] [the|this|my|that]? [document|doc|editor|page]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want|i_want_to|i_would_like|i_would_like_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [put|add|insert|place|paste|drop|include|move] [the|this|my|that]? [chart]? [data|numbers|values|table] [in|into|to|on|onto] [the|this|my|that]? [document|doc|editor|page] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=chart.toDocumentData"
     kind=request
     priority=12
     example="Put the chart data in the document."
 
+
+@pat.data.charts.x.create.text3 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? {d:words(12)} [as_a_chart|as_a_graph|in_a_chart|in_a_graph|chart_it|graph_it|plot_it|as_bars|as_a_bar_chart|chart|graph]"
+    emit="@{_} core.request action=chart.fromText arg.text=\"{d}\""
+    kind=request
+    priority=8
+    example="Apples 5, pears 3, plums 8 as a chart."
+
+@pat.data.charts.x.create.text4 core.pattern
+    match="[so]? {d:words(12)} [and]? [chart_it|graph_it|plot_it|chart_that|graph_that|plot_that|make_a_chart|make_it_a_chart]"
+    emit="@{_} core.request action=chart.fromText arg.text=\"{d}\""
+    kind=request
+    priority=8
+    example="So apples 5 pears 3 and plums 8 chart it."
+
+@pat.data.charts.x.create.text5 core.pattern
+    match="[bar_chart|pie_chart|line_chart|chart|graph|plot|bar_graph|pie_graph] [please|pls|plz]? [:|of|for]? {d:rest}"
+    emit="@{_} core.request action=chart.fromText arg.text=\"{d}\""
+    kind=request
+    priority=8
+    example="Bar chart please: apples 5, pears 3."
+
+@pat.data.charts.x.create.new2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [start|begin|open|create|make|let_us_start|lets_start|can_we_start]? [over_with|over_with_a|a|an|another|fresh|clean|blank|one_more]? [new|fresh|blank|another|empty] {t:lex.data.charts.types?} {c:lex.data.charts.nouns} [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.new arg.type={t}"
+    kind=request
+    priority=12
+    example="Start over with a new chart."
+    example="Can we start a new chart."
+
+@pat.data.charts.x.dup3 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [make|create|get|give_me|i_want|i_need|want|need|save|have|do|produce] [me]? [a|an|another|one_more|one|a_second|two|2|a_duplicate_of]? [duplicate|dupe|copy|clone|second_copy|second|replica|twin|another_copy]? [of]? [the|this|my|that|a|an|our|it]? {c:lex.data.charts.nouns?} [one|please]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.duplicate"
+    kind=request
+    priority=9
+    example="Make a duplicate of it."
+    example="I want a second copy of this chart."
+
+@pat.data.charts.x.dup4 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [dupe|dup|duplicate|copy|clone|double|doubling] [the|this|my|that|a|an|our|it]? {c:lex.data.charts.nouns?} [one|this_one|that_one|please]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.duplicate"
+    kind=request
+    priority=12
+    example="Dupe the chart."
+    example="Can you duplicate this one?"
+
+@pat.data.charts.x.dup5 core.pattern
+    match="[two|2] [of|copies_of] [the|this|my|that|a|an|our|it]? {c:lex.data.charts.nouns} [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.duplicate"
+    kind=request
+    priority=12
+    example="Two of this chart please."
+
+@pat.data.charts.x.refresh2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [redraw|re_draw|reload|refresh|update|rebuild|re_build|renew|regenerate|recalculate|redo] [it|that|this|the|my]? {c:lex.data.charts.nouns?} [again|now|please]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.refresh"
+    kind=request
+    priority=11
+    example="Redraw it."
+    example="Reload the chart."
+    example="Refresh it pls."
+
+@pat.data.charts.x.add3 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [add|put|include|insert|stick|throw|chuck|toss|pop|tack|append|give_me] [in]? [the|a|an]? {n:number} {l:words(3)} [in|into|to|on|onto|up]? [the|this|my|that]? {c:lex.data.charts.nouns?} [there]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.addPoint arg.text=\"{n} {l}\""
+    kind=request
+    priority=2
+    example="Add 4 bananas."
+    example="Include 4 bananas in the chart."
+
+@pat.data.charts.x.add4 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [add|put|include|insert|stick|throw|chuck|toss|pop|tack|append] {l:words(3)} [in|into|to|on|onto|in_with]? [the|this|my|that]? [chart|graph|plot|there|it|with|bars]? [with|at|of|=|as]? {n:number} [of_them|each]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.addPoint arg.text=\"{l} {n}\""
+    kind=request
+    priority=2
+    example="Stick bananas on there with 4."
+    example="Put bananas in with 4."
+
+@pat.data.charts.x.remove2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [no_more|get_rid_of|lose|ditch|drop|kill|delete|remove|erase|cut|take_away|scrap|remove_the_bar_for|bin|zap|nix|axe|dump|toss] [the]? {l:words(3)} [bar|slice|point|column|segment|dot|entry|item]? [off|out_of|from|in|out]? [the|this|my|that]? {c:lex.data.charts.nouns?} [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.removePoint arg.l=\"{l}\""
+    kind=request
+    priority=2
+    example="No more plums."
+    example="Lose the plums bar."
+    example="Plums out of the chart."
+
+@pat.data.charts.x.up2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [bump|raise|boost|increase|grow|give|lift|up|push|add] [the]? {l:words(3)} [up|more|higher|bigger]? [by|with|=|plus]? {n:number} [more|extra|higher|please]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.by={n} arg.dir=up"
+    kind=request
+    priority=2
+    example="Bump apples up 2."
+    example="Give apples 2 more."
+
+@pat.data.charts.x.down2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [lower|reduce|drop|decrease|shrink|cut|lose|take|bring_down|knock] [the]? {l:words(3)} [down|less|lower|smaller]? [by|with|=|minus]? {n:number} [less|fewer|lower|please]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.by={n} arg.dir=down"
+    kind=request
+    priority=2
+    example="Lower apples by 2."
+
+@pat.data.charts.x.rename2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [rename|relabel|label|call|name|retitle|change_the_label_of|change_the_name_of|change] [the]? {a:words(3)} [to|as|into|->|=>|with|is|now]? {b:words(3)} [instead|now|label|please]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.renamePoint arg.l=\"{a}\" arg.to=\"{b}\""
+    kind=request
+    priority=2
+    example="Relabel pears as cherries."
+    example="Label pears as cherries pls."
+
+@pat.data.charts.x.clear2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [wipe|empty|clean|clear|reset|zero|blank|erase|flush|purge|delete|scrap] [out|off]? [the|this|my|that|all_the|all|it]? [numbers|data|bars|chart|graph|values|figures|everything|it|numbers_off|data_out]? [out|off|away|from_the_chart|off_the_chart|out_of_the_chart|data]? [of|from]? [the]? [chart|graph]? [out|please]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.clearData"
+    kind=request
+    priority=9
+    example="Wipe the numbers off."
+    example="Reset the chart data."
+    example="Clear it pls."
+    example="Empty it out."
+
+@pat.data.charts.x.type2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [show|make|switch|turn|change|want|use|do|give|i_want|i_d_like|put|set|have|keep|try|lines|bars]? [it|them|the_bars|the_lines|the_chart|this]? [as|to|into|in|like]? [a|an]? {t:lex.data.charts.types} [chart|graph|plot|please|pls|plz|instead|now|not_bars|only]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.setType arg.type={t}"
+    kind=request
+    priority=11
+    example="Line graph instead."
+    example="Line please."
+    example="I want it as a line."
+    example="Switch the bars to a line."
+
+@pat.data.charts.x.type3 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [switch|change|turn|convert|swap|flip] [the]? [bars|bar|columns|slices|pie|lines|line] [to|into|over_to|for]? [a|an]? {t:lex.data.charts.types} [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.setType arg.type={t}"
+    kind=request
+    priority=12
+    example="Bars to line."
+    example="Switch the bars to a line."
+
+@pat.data.charts.x.stack2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [make|turn|switch|put|set|show|have|keep|stack|pile|get|use|do|go|switch_on|turn_on|enable|set_to]? [it|them|the|the_bars|all_the_bars|the_bars_on_top_of_each_other|this]? [bars|bar|columns|series|data|on]? [stacked|stacking|stack|on_top_of_each_other|piled_up|piled|pile|stacked_up|one_on_top_of_the_other|stacked_on_top] [bars|bar|chart|version|graph|on|up|please|pls|plz|mode]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.setStacked arg.on=true"
+    kind=request
+    priority=11
+    example="Stacked please."
+    example="Make the bars stacked."
+    example="Stacked bars."
+    example="Turn stacking on."
+    example="Make it stack."
+
+@pat.data.charts.x.stack3 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [pile|stack|put|place|lay] [the]? [bars|bar|columns|series|them|it|data]? [on_top_of_each_other|one_on_top_of_the_other|on_top_of_one_another|up|together|in_a_pile]"
+    emit="@{_} core.request action=chart.setStacked arg.on=true"
+    kind=request
+    priority=11
+    example="Pile the bars on top of each other."
+
+@pat.data.charts.x.title2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [label|call|name|title|retitle|give|rename|can_u_title|can_you_title] [the]? [whole|entire|full]? [chart|graph|plot|it|this|that|this_chart|the_chart|the_graph|this_graph|a_title|a_name|a_heading|a_label] [a|the]? [name|title|heading|caption|label|as|to]? [,|:|to|as|=|of|called|is|saying|says]? {t:rest}"
+    emit="@{_} core.request action=chart.setTitle arg.t=\"{t}\""
+    kind=request
+    priority=8
+    example="Label the whole chart Fruit."
+    example="Give the chart a name, Fruit."
+    example="Title this Fruit."
+
+@pat.data.charts.x.untitle core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [untitle|un_title|no_title|title_off|remove_title|delete_title|hide_title|clear_title|drop_title|kill_the_title|lose_the_title|ditch_the_title|get_rid_of_the_title|do_not_want_a_title|i_do_not_want_a_title|i_dont_want_a_title|dont_want_a_title|do_not_need_a_title|dont_need_a_title|no_heading|without_a_title|remove_the_heading|nix_the_title] [on|from|of]? [the|this|my|that|it]? [chart|graph|it|there]? [on_it|on_there|please|pls|plz]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.removeTitle"
+    kind=request
+    priority=12
+    example="No title please."
+    example="Untitle the chart."
+    example="Title off."
+    example="I don't want a title on it."
+
+@pat.data.charts.x.untitle2 core.pattern
+    match="[title|heading|name|caption] [off|away|gone|removed|please_remove|remove]"
+    emit="@{_} core.request action=chart.removeTitle"
+    kind=request
+    priority=12
+    example="Title off."
+
+@pat.data.charts.x.color2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [make|paint|color|colour|turn|change|set|fill|dye|tint|use|show|have|let|put|give|do|go|switch]? [the|all|all_the|every|everything|each]? [bars|bar|columns|column|line|lines|chart|graph|pie|slices|points|dots|everything|it|them|all|things|stuff]? [to|in|into|as|be|should_be|are|is|go|goes|with|all]? [a|the|an]? {s:lex.data.charts.shades?} {c:lex.data.charts.colors} [bars|bar|colour|color|please|pls|plz|everywhere|now|for_everything|instead|ones|columns|slices|lines|too|thanks]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.setColor arg.c={c} arg.shade={s}"
+    kind=request
+    priority=11
+    example="Green bars."
+    example="Bars in green pls."
+    example="Colour the bars green."
+    example="Make everything green."
+    example="Green please."
+
+@pat.data.charts.x.color3 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [bars|bar|columns|lines|line|pie|slices|points|the_bars|the_lines|chart] [in|should_be|are|to_be|to|must_be|all|go|in_all]? {s:lex.data.charts.shades?} {c:lex.data.charts.colors} [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.setColor arg.c={c} arg.shade={s}"
+    kind=request
+    priority=11
+    example="Bars in green pls."
+    example="Bars should be green."
+
+@pat.data.charts.x.pal2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [make|use|give|do|go|have|show|can_you_do|apply|color|colour|paint|turn|try|switch_to|pick|choose|put]? [it|them|everything|the_chart|the_bars|each_bar|all]? [a|the|an|in|with|in_all_the]? [all_the]? {p:lex.data.charts.palettes} [colors|colours|palette|theme|colorful|colourful|scheme|bars|of_the_rainbow|please|pls|plz|now]? [of_the_rainbow|colours|colors]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.setPalette arg.p={p}"
+    kind=request
+    priority=11
+    example="Rainbow please."
+    example="Make it a rainbow."
+    example="All the colours of the rainbow."
+    example="Can you do rainbow colours?"
+
+@pat.data.charts.x.pal3 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [each|every|all] [bar|slice|point|column|item|line]? [a|in_a|with_a|its_own|their_own|different]? [different|own|distinct|separate|unique|various]? [colour|color|colours|colors|shade|hue]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.setPalette arg.p=different"
+    kind=request
+    priority=11
+    example="Each bar a different colour."
+
+@pat.data.charts.x.pal4 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [bright|multicolour|multicolor|multi_colour|multi_color|many|more|colorful|colourful|vivid|varied|lots_of|several|all_kinds_of|lively|cheerful|mixed|assorted] [colours|colors|colour|color|coloured|colored|bars|hues|shades|tones]? [for|on|in|with|to|per]? [each|every|all|the|the_bars]? [bar|bars|slice|slices|column|columns|one|item]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.setPalette arg.p=rainbow"
+    kind=request
+    priority=10
+    example="Multicolour bars."
+    example="Bright colours for each bar."
+
+@pat.data.charts.x.sort2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [sort|order|arrange|rank|put|list|show|go|run|have|keep|do]? [them|the_bars|the_chart|it|the_values|everything|these|the_data|the_numbers|all]? [from|by|in|with|starting_with|starting_from|going_from|going]? [the]? {a:lex.data.charts.extent} [bar|one|value|number|item|first|to|on_top|at_the_top|order|please|pls|plz]? [first]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.setSort arg.from={a}"
+    kind=request
+    priority=9
+    example="Biggest bar first."
+    example="Sort desc."
+    example="Descending please."
+
+@pat.data.charts.x.orient2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [make|turn|change|switch|show|put|draw|plot|rotate|flip|use|lay|lie|lay_out|set|have|do|go|bars|stack|let]? [it|the_chart|this_chart|the_bars|the_bar_chart|bars|them|the_graph|this|the_line_chart|the_line|the_lines|the_columns|the|chart|all]? [to|into|as|in|on_its_side|go|going|flat|flat_on|lie|lying|run|running|out|laid|over]? [a|an|the]? {o:lex.data.charts.orient} [bars|bar_chart|chart|graph|columns|please|pls|plz|ly|now|direction|layout|way|orientation|instead|across|flat]? [across|flat]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.setOrientation arg.o={o}"
+    kind=request
+    priority=11
+    example="Sideways bars."
+    example="Horizontal please."
+    example="Make the bars go across."
+    example="Lay the bars flat."
+
+@pat.data.charts.x.orient3 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [lay|lie|put|make|have|flip|rotate|turn|set|let] [it|the_bars|the_chart|them|the_graph|the_columns] [flat|across|on_their_side|on_its_side|on_the_side|sideways|lying_down|on_their_sides|horizontal|lengthwise|crosswise|go_across|run_across|go_sideways|run_sideways|lay_flat]"
+    emit="@{_} core.request action=chart.setOrientation arg.o=horizontal"
+    kind=request
+    priority=11
+    example="Lay the bars flat."
+
+@pat.data.charts.x.orient4 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [make|turn|let|have|set|lay|put] [the]? [bars|columns|chart|graph|lines] [go|run|lie|stand|point|extend|stretch]? [across|flat|sideways|lengthwise|left_to_right|horizontally|horizontal]"
+    emit="@{_} core.request action=chart.setOrientation arg.o=horizontal"
+    kind=request
+    priority=11
+    example="Make the bars go across."
+
+@pat.data.charts.x.legend2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [hide|remove|delete|turn_off|switch_off|take_away|get_rid_of|drop|clear|kill|lose|ditch|no|do_not_need|dont_need|i_do_not_need|i_dont_need|i_do_not_want|i_dont_want|do_not_want|dont_want|away_with|bin|zap|cut|skip|without|nix] [the|a|that|this|any|my]? [legend|labels_box|key|legend_box|legend_thing|label_box|legend_panel|legend_key|colour_key|color_key] [thing|box|please|pls|plz|now|anymore|off|away|on_it|there]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.setLegend arg.on=false"
+    kind=request
+    priority=12
+    example="No legend please."
+    example="I don't need the legend."
+    example="Hide the labels box."
+    example="Can you hide that legend thing?"
+
+@pat.data.charts.x.legend3 core.pattern
+    match="[the]? [legend|key|legend_box|legend_panel] [off|away|gone|out|hidden|removed|please_hide|please_remove|please_off|no|no_thanks]"
+    emit="@{_} core.request action=chart.setLegend arg.on=false"
+    kind=request
+    priority=12
+    example="Legend off."
+    example="Legend away pls."
+
+@pat.data.charts.x.q.count2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [how_many|count|number_of|the_number_of|count_of|tell_me_how_many|what_is_the_number_of|what_is_the_count_of|total_number_of|how_many_total|how_many_are_there|give_me_the_count_of|give_me_the_number_of|count_the|count_all_the|number|how_many_do_we_have|whats_the_count_of] [the|all_the|all|of]? [bars|slices|points|columns|categories|segments|entries|values|labels|things|items|fruits|data_points|rows|elements|names|people|series] [are]? [there|on_the_chart|in_the_chart|in_it|on_it|in_the_graph|on_the_graph|are_there|do_we_have|do_i_have|does_it_have|does_the_chart_have|are_in_the_chart|are_shown|are_on_the_chart|are_in_it|here|total|in_all|altogether|please|pls|plz|there_are]? [in|on]? [the|it|this]? [chart|graph|it|there]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.countItems"
+    kind=question
+    priority=9
+    example="Number of bars?"
+    example="Count the bars."
+    example="How many things are in the chart?"
+
+@pat.data.charts.x.nav.ord2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [go_back_to|go_to|show|open|switch_to|bring_up|display|return_to|back_to|take_me_to|see|view|pull_up|load|get|give_me|let_me_see|can_i_see|show_me|find|select|pick|choose|go|jump_to|head_to|back|return|go_back] [me]? [the|my|that|this|our|a]? [very]? {o:lex.data.charts.ordinals} [one|chart|graph|plot|diagram|again|please|pls|plz|back|now|first]? [one|chart|graph|plot|diagram|again|please|pls|plz|back|now]? [again|please|pls|plz|back|now]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.switchChart arg.ord={o}"
+    kind=request
+    priority=11
+    example="First chart please."
+    example="Show the first one again."
+    example="Return to the very first chart."
+
+@pat.data.charts.x.nav.num2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [go_back_to|go_to|show|open|switch_to|bring_up|display|return_to|back_to|take_me_to|see|view|pull_up|load|get|give_me|let_me_see|can_i_see|show_me|find|select|pick|choose|jump_to|head_to] [me]? [the|my|that|this|our|a]? [chart|graph|plot|diagram]? [number|no|num|nr|#]? {n:number} [chart|graph|plot|diagram|one|please|pls|plz]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.switchChart arg.n={n}"
+    kind=request
+    priority=11
+    example="Show me chart number one."
+
+@pat.data.charts.x.nav.del2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [bin|trash|dump|zap|nuke|kill|ditch|toss|axe|delete|remove|erase|discard|close|get_rid_of|throw_away|drop|scrap|junk|lose] [the|my|that|this|our|a]? [chart|graph|plot|diagram]? [number|no|num|nr|#]? {n:number} [chart|graph|plot|diagram|please|pls|plz]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.deleteChart arg.n={n}"
+    kind=request
+    priority=13
+    example="Bin chart 2."
+
+@pat.data.charts.x.export.csv2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [get|grab|give_me|download|save|export|send_me|i_want|let_me_have|can_i_get|can_i_download|can_i_have|make|create|produce|turn_into|put|dump|write|output|fetch|pull|extract|take] [me]? [the|my|this|that|a|an|all_the|all|these|those]? [chart|graph|plot|diagram]? [numbers|values|data|table|figures|spreadsheet|sheet|csv|numbers_as|values_as|data_as|figures_as|table_as|as_a_spreadsheet|data_as_a_spreadsheet|numbers_in|values_in|figures_in|data_in|numbers_into|values_into|figures_into|data_into|numbers_to|values_to|figures_to|data_to|figures_as_a|numbers_as_a|values_as_a|data_as_a] [as|to|in|into|for]? [a|an|the]? [spreadsheet|sheet|csv|file|table|excel|xls|xlsx|spreadsheet_file|csv_file|text_file|text|download|document_file]? [file|please|pls|plz]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.downloadData"
+    kind=request
+    priority=9
+    example="Spreadsheet of the chart data."
+    example="Get the chart numbers as a spreadsheet."
+    example="Save the numbers in a spreadsheet file."
+
+@pat.data.charts.x.export.csv3 core.pattern
+    match="[spreadsheet|sheet|csv|excel|table] [of|for|from|with]? [the|my|this|that]? [chart|graph|plot]? [data|numbers|values|figures|please|pls|plz]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.downloadData"
+    kind=request
+    priority=10
+    example="Spreadsheet of the chart data."
+
+@pat.data.charts.x.export.csv4 core.pattern
+    match="[can_i|could_i|may_i|can_we|could_we|can_you_let_me|let_me|i_want_to|i_would_like_to|i_wanna|how_do_i|how_can_i|id_like_to] [download|save|get|export|have|grab|take] [the|my|this|that|a]? [values|numbers|data|figures|table|chart_data|chart_numbers|chart_values|chart_figures] [as|in|to|into]? [a|an|the]? [sheet|spreadsheet|csv|file|table|excel]?"
+    emit="@{_} core.request action=chart.downloadData"
+    kind=request
+    priority=12
+    example="Can I download the values as a sheet?"
+
+@pat.data.charts.x.export.doc2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [paste|put|insert|place|drop|add|move|send|copy|transfer|push|pour|write|include|stick|throw|get|bring|export|import|pull|dump|inject|embed|attach|append] [me]? [the|my|this|that|all_the|all|these|those]? [chart|graph|plot|diagram]? [figures|numbers|values|data|table|figures_in|numbers_in|values_in|data_in|figures_into|numbers_into|values_into|data_into|figures_to|numbers_to|values_to|data_to|chart_figures|chart_numbers|chart_values|chart_data] [in|into|to|on|onto|inside|within|in_to|over_to]? [the|this|my|that|a]? [document|doc|editor|page|text|notes|file|word_doc|word_document|docs]? [please|pls|plz|now]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.toDocumentData"
+    kind=request
+    priority=9
+    example="Paste the figures in the doc."
+    example="Numbers into the document please."
+    example="Insert the chart figures in the document."
+
+@pat.data.charts.x.values3 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|can_we|id_like_to|i_want|i_would_like]? [i_want_to_see|let_me_see|can_i_see|show|display|add|put|turn_on|switch_on|print|include|give_me|label|annotate|numbers_on|figures_on|put_numbers_on|write] [me]? [the|all_the|each|all|every|their|its]? [bars|slices|points|columns|segments]? [with]? [their|the|its]? [values|numbers|value_labels|data_labels|amounts|counts|figures|numerals|digits] [on_the_bars|on_the_chart|on_it|on_them|on_top|too|on|on_each_bar|there|above_the_bars|as_well|here]? [pls|plz|thanks|thank_you|for_me|now]?"
+    emit="@{_} core.request action=chart.setValues arg.mode=on"
+    kind=request
+    priority=11
+    example="I want to see the figures."
+    example="Label the bars with their numbers."
+
+@pat.data.charts.x.values4 core.pattern
+    match="[numbers|figures|values|amounts|counts] [on|please|pls|plz|on_please|on_pls|visible|shown|showing]"
+    emit="@{_} core.request action=chart.setValues arg.mode=on"
+    kind=request
+    priority=11
+    example="Numbers on please."

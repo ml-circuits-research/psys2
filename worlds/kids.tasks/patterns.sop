@@ -376,3 +376,269 @@
     kind=request
     priority=10
     example="Is homework done?"
+
+@pat.kids.tasks.w.add.f1 core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? [add|put|stick|write|jot|jot_down|note|note_down|include|throw|pop|drop|insert|place|save|record] {item:words(4)} [to|on|onto|into|in|2|at_the_end_of]? [my|the|our|a]? list [pls|plz|thx|thanks|please|now|asap|for_me]?"
+    emit="@{_} core.request action=tasks.add arg.item=\"{item}\" arg.list=to-do"
+    kind=request
+    priority=9
+    example="Pls jot down socks onto the list."
+
+@pat.kids.tasks.w.add.f2 core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? [add|put|stick|write|jot|jot_down|note|note_down|include|throw|pop|drop|insert|place|save|record] {item:words(4)} [to|on|onto|into|in|2|at_the_end_of]? [my|the|our|a]? {list:words(2)} list [pls|plz|thx|thanks|please|now|asap|for_me]?"
+    emit="@{_} core.request action=tasks.add arg.item=\"{item}\" arg.list=\"{list}\""
+    kind=request
+    priority=9
+    example="Pls jot down socks onto the garden list."
+
+@pat.kids.tasks.w.add.f3 core.pattern
+    match="{item:words(3)} [to|on|onto|into|in] [my|the|our] list [pls|plz|thx|thanks|please|now|asap|for_me]?"
+    emit="@{_} core.request action=tasks.add arg.item=\"{item}\" arg.list=to-do"
+    kind=request
+    priority=9
+    example="Socks to my list."
+
+@pat.kids.tasks.w.add.f4 core.pattern
+    match="{item:words(3)} [to|on|onto|into|in] [my|the|our] {list:words(2)} list [pls|plz|thx|thanks|please|now|asap|for_me]?"
+    emit="@{_} core.request action=tasks.add arg.item=\"{item}\" arg.list=\"{list}\""
+    kind=request
+    priority=9
+    example="Socks to my garden list."
+
+@pat.kids.tasks.w.add.f5 core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? [add|put|stick|write|jot|jot_down|note|note_down|include|throw|pop|drop|insert|place|save|record] {item:words(4)} [to|on|onto|into|in] [my|the|our] {list:words(1)} [pls|plz|thx|thanks|please|now|asap|for_me]?"
+    emit="@{_} core.request action=tasks.add arg.item=\"{item}\" arg.list=\"{list}\""
+    kind=request
+    priority=8
+    example="Put socks on my garden."
+
+@pat.kids.tasks.w.add.and core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? [add|put|stick|write|jot|jot_down|note|note_down|include|throw|pop|drop|insert|place|save|record] {a:words(3)} [to|on|onto|into] [my|the|our]? {la:words(1)} [list]? [and|and_also|also|plus|then] [add|put]? {b:words(3)} [to|on|onto|into|for]? [my|the|our]? {lb:words(1)} [list]? [pls|plz|thx|thanks|please|now|asap|for_me]?"
+    emit="@{_} core.request action=tasks.add arg.item=\"{a}\" arg.list=\"{la}\"\n@{_1} core.request action=tasks.add arg.item=\"{b}\" arg.list=\"{lb}\""
+    kind=request
+    priority=8
+    example="Put socks on my garden and also a hat to chores."
+
+@pat.kids.tasks.w.rem.f1 core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? [remind|ping|nudge|alert|notify|buzz|prompt] me [to|about|of|that_i_need_to|that_i_have_to|that_i_must]? {item:words(5)} [later|tomorrow|pls|plz|thx|thanks|please|soon|today|tonight|again]?"
+    emit="@{_} core.request action=tasks.remind arg.item=\"{item}\""
+    kind=request
+    priority=9
+    example="Nudge me about the dishes later."
+
+@pat.kids.tasks.w.rem.f2 core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? [set|make|create|add|new|put_a|write_a|need_a]? [a|an|the]? reminder [to|for|about|of]? {item:words(5)} [pls|plz|thx|please|later|tomorrow]?"
+    emit="@{_} core.request action=tasks.remind arg.item=\"{item}\""
+    kind=request
+    priority=9
+    example="Add a reminder about the dishes."
+
+@pat.kids.tasks.w.rem.f3 core.pattern
+    match="{item:words(5)} reminder [pls|plz|please|thx]?"
+    emit="@{_} core.request action=tasks.remind arg.item=\"{item}\""
+    kind=request
+    priority=9
+    example="The dishes reminder please."
+
+@pat.kids.tasks.w.neg.f1 core.pattern
+    match="[no|nope|nah|still_no|not_yet|sadly|oops]? [i]? [did_not|didnt|havent|have_not|never|did_not_buy|didnt_buy|did_not_get|didnt_get|never_bought|never_got|forgot_to_buy|didnt_manage_to_buy|have_not_bought|havent_bought|have_not_got|havent_got] [buy|get|purchase|pick_up|bought|got]? [the|any|a|an|my]? {item:words(3)} [today|yet|pls|it]?"
+    emit="@{_} core.request action=tasks.notDone arg.item=\"{item}\""
+    kind=request
+    priority=9
+    example="Nope I forgot to buy the eggs."
+
+@pat.kids.tasks.w.del.f1 core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? [remove|delete|drop|rm|erase|take|pull|get_rid_of|scratch|cut|kill|ditch|lose|take_out|pull_out|toss] {item:words(3)} [from|off|out_of|of|on|off_of] [my|the|our|a]? list [pls|plz|thx|thanks|please|now|asap|for_me]?"
+    emit="@{_} core.request action=tasks.remove arg.item=\"{item}\""
+    kind=request
+    priority=9
+    example="Ditch socks from my list."
+
+@pat.kids.tasks.w.del.f2 core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? [remove|delete|drop|rm|erase|take|pull|get_rid_of|scratch|cut|kill|ditch|lose|take_out|pull_out|toss] {item:words(3)} [from|off|out_of|of|on|off_of] [my|the|our|a]? {list:words(2)} list [pls|plz|thx|thanks|please|now|asap|for_me]?"
+    emit="@{_} core.request action=tasks.remove arg.item=\"{item}\" arg.list=\"{list}\""
+    kind=request
+    priority=9
+    example="Ditch socks from my garden list."
+
+@pat.kids.tasks.w.fin.f1 core.pattern
+    match="[i]? [just|already|finally]? [finished|completed|did|done_with|am_done_with|have_finished|have_completed|just_finished|just_did|wrapped_up|got_done|done] {item:words(4)}"
+    emit="@{_} core.request action=tasks.done arg.item=\"{item}\""
+    kind=statement
+    priority=9
+    example="I just wrapped up my reading."
+
+@pat.kids.tasks.w.fin.f2 core.pattern
+    match="{item:words(4)} 's [done|finished|completed|complete|all_done]"
+    emit="@{_} core.request action=tasks.done arg.item=\"{item}\""
+    kind=statement
+    priority=9
+    example="My reading's finished."
+
+@pat.kids.tasks.w.fin.f3 core.pattern
+    match="[tick|check|cross|strike|scratch|mark|tick_off|cross_off|strike_off|check_off] {item:words(3)} [off|from|out_of|on]? [my|the|our|a]? {list:words(2)} list [pls|plz|thx|thanks|please|now|asap|for_me]?"
+    emit="@{_} core.request action=tasks.done arg.item=\"{item}\" arg.list=\"{list}\""
+    kind=request
+    priority=9
+    example="Strike socks off the garden list."
+
+@pat.kids.tasks.w.fin.f4 core.pattern
+    match="[tick|check|cross|strike|scratch|tick_off|cross_off|strike_off|check_off] {item:words(3)} [off|from|out_of|on]? [my|the|our|a]? list [pls|plz|thx|thanks|please|now|asap|for_me]?"
+    emit="@{_} core.request action=tasks.done arg.item=\"{item}\""
+    kind=request
+    priority=9
+    example="Strike socks off the list."
+
+@pat.kids.tasks.w.show.f1 core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? [what|whats|what_is|what_are|tell_me_what_is|tell_me_whats|show_me_whats|read_out|show|read|list|display|open|give_me|let_me_see|see|check|view|read_me|say] [do_i_have|i_have|have_i_got|do_i_got|is|are]? [on|in|inside|at]? [me]? [my|the|our|a]? list [to_me|pls|plz|please|out_loud|now]?"
+    emit="@{_} core.request action=tasks.show arg.list=to-do"
+    kind=request
+    priority=9
+    example="Display the list now."
+
+@pat.kids.tasks.w.show.f2 core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? [what|whats|what_is|what_are|tell_me_what_is|tell_me_whats|show_me_whats|read_out|show|read|list|display|open|give_me|let_me_see|see|check|view|read_me|say] [do_i_have|i_have|have_i_got|do_i_got|is|are]? [on|in|inside|at]? [me]? [my|the|our|a]? {list:words(2)} list [to_me|pls|plz|please|out_loud|now]?"
+    emit="@{_} core.request action=tasks.show arg.list=\"{list}\""
+    kind=request
+    priority=9
+    example="Display the garden list now."
+
+@pat.kids.tasks.w.show.lists core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? [show|list|display|tell_me|what|which|whats|name|see|give_me|view] [me]? [all]? [of]? [my|the|our]? [lists|list_names] [do_i_have|i_have|exist|are_there|there_are|do_i_got|i_got|have_i_got|names]?"
+    emit="@{_} core.request action=tasks.lists"
+    kind=request
+    priority=9
+    example="Display my lists."
+
+@pat.kids.tasks.w.show.lists2 core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? [what|which] list [names|name] [do_i_have|exist|are_there|i_have|do_i_got]"
+    emit="@{_} core.request action=tasks.lists"
+    kind=request
+    priority=9
+    example="Which list names exist?"
+
+@pat.kids.tasks.w.show.lists3 core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? [what|which] lists [exist|are_there|do_i_have|i_have|there_are|exist_right_now|are_around]"
+    emit="@{_} core.request action=tasks.lists"
+    kind=request
+    priority=9
+    example="Which lists exist?"
+
+@pat.kids.tasks.w.show.rem core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? [what|whats|what_is|what_are|show|show_me|read|list|display|open|give_me|check|view|see|let_me_see] [are|is]? [me]? [my|the|our]? reminders [pls|plz|thx|thanks|please|now|asap|for_me]?"
+    emit="@{_} core.request action=tasks.show arg.list=reminders"
+    kind=request
+    priority=9
+    example="Check my reminders."
+
+@pat.kids.tasks.w.pend.p1 core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? [things|tasks|items|stuff|chores] [i|we]? [still|yet]? [have_to|need_to|got_to|gotta|must|should|left_to|to] do [pls|plz|thx|thanks|please|now|asap|for_me]?"
+    emit="@{_} core.request action=tasks.pending arg.list=to-do"
+    kind=request
+    priority=9
+    example="Chores I still need to do?"
+
+@pat.kids.tasks.w.pend.p2 core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? [remaining|unfinished|undone|pending|outstanding|not_done|left|open] [tasks|things|items|stuff|chores|todos|to_dos] [pls|plz|thx|thanks|please|now|asap|for_me]?"
+    emit="@{_} core.request action=tasks.pending arg.list=to-do"
+    kind=request
+    priority=9
+    example="Unfinished chores?"
+
+@pat.kids.tasks.w.pend.p3 core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? what [do|did]? [i|we] [got|have]? [still]? [left|remaining]? [todo|to_do|left_todo|left_to_do|undone] [pls|plz|thx|thanks|please|now|asap|for_me]?"
+    emit="@{_} core.request action=tasks.pending arg.list=to-do"
+    kind=request
+    priority=9
+    example="What do i have left undone?"
+
+@pat.kids.tasks.w.pend.p4 core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? [what|whats|what_is] [is|are]? [still|yet]? [left|remaining|pending|undone|outstanding] [to_do|todo|for_me|for_me_to_do]? [pls|plz|thx|thanks|please|now|asap|for_me]?"
+    emit="@{_} core.request action=tasks.pending arg.list=to-do"
+    kind=request
+    priority=9
+    example="Whats still pending?"
+
+@pat.kids.tasks.w.cnt.p1 core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? [how_many|count|count_the|number_of|the_number_of|tell_me_how_many] [things|tasks|items|stuff|chores|todos]? [do|are|is|have]? [i|we]? [still|yet]? [have_to|need_to|got_to|gotta|must|should|remain|remains|left|remaining|are_left|is_left|left_to_do|to_do|todo|have_left|got_left|still_left|are_remaining|remain_for_me|remain_for_us|remain_to_do] [do|todo|to_do|left|for_me|for_us]? [pls|plz|thx|thanks|please|now|asap|for_me]?"
+    emit="@{_} core.request action=tasks.countPending arg.list=to-do"
+    kind=request
+    priority=9
+    example="How many chores remain for us?"
+
+@pat.kids.tasks.w.cnt.p2 core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? count [what|whats|what_is|the_things|the_tasks|the_items]? [is|are]? [still]? [left|remaining|pending] [to_do|todo]? [pls|plz|thx|thanks|please|now|asap|for_me]?"
+    emit="@{_} core.request action=tasks.countPending arg.list=to-do"
+    kind=request
+    priority=9
+    example="Count whats remaining."
+
+@pat.kids.tasks.w.cnt.p3 core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? [things|tasks|items|stuff|chores] [left|remaining|pending] [to_do|todo]? [how_many|count|number] [pls|plz|thx|thanks|please|now|asap|for_me]?"
+    emit="@{_} core.request action=tasks.countPending arg.list=to-do"
+    kind=request
+    priority=9
+    example="Chores remaining how many?"
+
+@pat.kids.tasks.w.cnt.l1 core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? [how_many|how_much|count|number_of|count_the] [things|items|tasks|stuff|chores|todos]? [are|is|do_i_have|have_i_got|i_have|there_are|there_is|do_i_got]? [on|in|inside]? [my|the|our|a]? list [pls|plz|thx|thanks|please|now|asap|for_me]?"
+    emit="@{_} core.request action=tasks.count arg.list=to-do"
+    kind=request
+    priority=9
+    example="Count the stuff on the list."
+
+@pat.kids.tasks.w.cnt.l2 core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? [list|my_list|the_list] [count|size|length|total]"
+    emit="@{_} core.request action=tasks.count arg.list=to-do"
+    kind=request
+    priority=9
+    example="List size?"
+
+@pat.kids.tasks.w.cnt.l3 core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? [count|size|length|number_of_items|number_of_things|total] [of]? [my|the|our|a]? list"
+    emit="@{_} core.request action=tasks.count arg.list=to-do"
+    kind=request
+    priority=9
+    example="Size of the list?"
+
+@pat.kids.tasks.w.clr.f1 core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? [clear|empty|wipe|erase|reset|purge|flush|wipe_out|clean|clean_out|nuke|dump|clear_out|empty_out|delete_everything_on|remove_everything_from|remove_all_from|delete_all_from|clear_everything_from|delete_everything_from] [out]? [all]? [of]? [my|the|our|a]? list [pls|plz|thx|thanks|please|now|asap|for_me]?"
+    emit="@{_} core.request action=tasks.clear arg.list=to-do"
+    kind=request
+    priority=9
+    example="Flush my list."
+
+@pat.kids.tasks.w.clr.f2 core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? make [my|the|our|a]? list [empty|blank|clean|clear]"
+    emit="@{_} core.request action=tasks.clear arg.list=to-do"
+    kind=request
+    priority=9
+    example="Make the list blank."
+
+@pat.kids.tasks.w.clr.f3 core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? [wipe|erase|reset|purge|flush|wipe_out|clean_out|nuke|dump|empty_out|clear_out] [my|the|our|a]? {list:words(2)} list [pls|plz|thx|thanks|please|now|asap|for_me]?"
+    emit="@{_} core.request action=tasks.clear arg.list=\"{list}\""
+    kind=request
+    priority=9
+    example="Flush my garden list."
+
+@pat.kids.tasks.w.has.f1 core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? [is|are|does|do]? [there|it|that]? [check_if|check_whether|tell_me_if|see_if|is_there|if|whether|check_that]? {item:words(3)} [is|are|exists|exist|appears|appear|shows_up|written|listed|there]? [on|in|inside|at] [my|the|our|a]? {list:words(2)} list [or_not|yes_or_no|right|pls|please]?"
+    emit="@{_} core.request action=tasks.has arg.item=\"{item}\" arg.list=\"{list}\""
+    kind=request
+    priority=9
+    example="Check if socks show up on the garden list."
+
+@pat.kids.tasks.w.has.f2 core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? [is|are|does|do]? [there|it|that]? [check_if|check_whether|tell_me_if|see_if|is_there|if|whether|check_that]? {item:words(3)} [is|are|exists|exist|appears|appear|shows_up|written|listed|there]? [on|in|inside|at] [my|the|our|a]? list [or_not|yes_or_no|right|pls|please]?"
+    emit="@{_} core.request action=tasks.has arg.item=\"{item}\" arg.list=to-do"
+    kind=request
+    priority=9
+    example="Check if socks show up on the list."
+
+@pat.kids.tasks.w.chk.f1 core.pattern
+    match="[can_you|could_you|will_you|would_you|please|pls|hey|can_u|could_u|ok|okay|just|so|i_want_you_to|i_would_like_to|id_like_to]? [did|have|had] i [already|actually|ever|just]? [finish|finished|complete|completed|do|done|get|got] {item:words(4)} [done|finished|completed|complete]? [yet|already|or_not|pls]?"
+    emit="@{_} core.request action=tasks.check arg.item=\"{item}\""
+    kind=request
+    priority=9
+    example="Did I actually complete my reading yet?"

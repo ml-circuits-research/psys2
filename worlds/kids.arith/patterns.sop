@@ -523,3 +523,324 @@
     priority=12
     example="What is 10 halved?"
 
+@pat.kids.arith.w.cnt.f1 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|please_tell_me|do_you_know|i_wanna_know|i_want_to_know|i_need_to_know|id_like_to_know|hey|quick_question|ok|so|please|pls|just]? [how_many|how_much|count|count_the|number_of|the_number_of|what_is_the_number_of|whats_the_number_of] [of]? {item:lex.kids.arith.items} [does|do|did|will|has|have|is|are]? {who:agent} [still|now|currently|right_now]? [have|has|got|own|owns|holding|hold|holds|keep|keeps|carrying|carries|left|remaining|remain|have_left|has_left|have_got|has_got|is_holding|are_holding] [now|left|still|right_now|currently|today|at_the_end|then|altogether|in_total]? [now|left|still|right_now|currently|today|at_the_end|then|altogether|in_total]? [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.holding seek=count where.owner={who} where.item={item}"
+    kind=question
+    priority=10
+    example="Count the apples Ben has now."
+
+@pat.kids.arith.w.cnt.f2 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|please_tell_me|do_you_know|i_wanna_know|i_want_to_know|i_need_to_know|id_like_to_know|hey|quick_question|ok|so|please|pls|just]? [how_many|how_much|count|number_of] {item:lex.kids.arith.items} [remain|are_left|is_left|are_remaining|are_still_left|is_still_left|remain_with|are_left_with|are_left_for] [with|for|at]? {who:agent} [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.holding seek=count where.owner={who} where.item={item}"
+    kind=question
+    priority=10
+    example="How many apples remain with Ben?"
+
+@pat.kids.arith.w.cnt.f3 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|please_tell_me|do_you_know|i_wanna_know|i_want_to_know|i_need_to_know|id_like_to_know|hey|quick_question|ok|so|please|pls|just]? [count|show|tell_me|give_me|check|whats|what_is|what_are]? [the]? {who:agent} ['s]? {item:lex.kids.arith.items} [count|total|left|number|now|remaining|tally|amount|please|pls]? [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.holding seek=count where.owner={who} where.item={item}"
+    kind=question
+    priority=9
+    example="Count Ben apples please."
+
+@pat.kids.arith.w.cnt.f4 core.pattern
+    match="{item:lex.kids.arith.items} {who:agent} [have|has|got|holding|own|owns] [how_many|now|left|still]? [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.holding seek=count where.owner={who} where.item={item}"
+    kind=question
+    priority=9
+    example="Marbles Ben has now?"
+
+@pat.kids.arith.w.cnt.f5 core.pattern
+    match="{who:agent} [has|have|got|owns|holds|is_holding|is_carrying] [how_many|how_much] {item:lex.kids.arith.items} [now|left|still|right_now|currently|today|at_the_end|then|altogether|in_total]? [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.holding seek=count where.owner={who} where.item={item}"
+    kind=question
+    priority=10
+    example="Ben holds how many apples now?"
+
+@pat.kids.arith.w.cnt.f6 core.pattern
+    match="[how_many|how_much] [does|do|did|will]? {who:agent} [have|has|got|own|hold] [of]? {item:lex.kids.arith.items} [now|left|still|right_now|currently|today|at_the_end|then|altogether|in_total]? [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.holding seek=count where.owner={who} where.item={item}"
+    kind=question
+    priority=10
+    example="How many does Ben have of apples?"
+
+@pat.kids.arith.w.most.f1 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|please_tell_me|do_you_know|i_wanna_know|i_want_to_know|i_need_to_know|id_like_to_know|hey|quick_question|ok|so|please|pls|just]? [who|whos|whose|which_kid|which_child|which_person|which_one|which_of_them|who_all|which_boy_or_girl|which_friend] [has|have|had|owns|got|holds|have_got|has_got|is_holding|keeps|is_the_one_with|is_the_owner_of]? [got]? [the]? [most|largest_number_of|biggest_number_of|highest|biggest|greatest|largest|highest_number_of|top|maximum|max] [number_of|count_of|amount_of]? {item:lex.kids.arith.items} [count|total|number|amount]? [than_the_other|than_the_rest|than_everyone|than_others|than_anyone]? [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.leader seek=winner where.item={item}"
+    kind=question
+    priority=10
+    example="Which friend has got the top apples total?"
+
+@pat.kids.arith.w.most.f2 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|please_tell_me|do_you_know|i_wanna_know|i_want_to_know|i_need_to_know|id_like_to_know|hey|quick_question|ok|so|please|pls|just]? [the]? [most|largest_number_of|biggest_number_of|highest|biggest|greatest|largest|highest_number_of|top|maximum|max] {item:lex.kids.arith.items} [belongs_to|belong_to|goes_to|is_with|is_owned_by|is_held_by|is_for|are_with|are_owned_by|are_held_by|is_at|are_at] [who|whom|which_kid|which_child]"
+    emit="@{_} core.question type=kids.arith.leader seek=winner where.item={item}"
+    kind=question
+    priority=10
+    example="Most apples belongs to who?"
+
+@pat.kids.arith.w.tot.f1 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|please_tell_me|do_you_know|i_wanna_know|i_want_to_know|i_need_to_know|id_like_to_know|hey|quick_question|ok|so|please|pls|just]? [how_many|how_much|count|number_of|the_number_of|total|the_total_of|sum_of|the_sum_of] [of]? [all]? [the]? {item:lex.kids.arith.items} [are|is|were|do_we_have|do_they_have|have_we_got|there_are|we_have|do_we_have_there]? [there]? [altogether|in_total|in_all|all_together|together|overall|combined|total|put_together|collectively|in_sum|when_added_up|added_up|all_in_all|in_all_together] [altogether|in_total|in_all|all_together|together|overall|combined|total|put_together|collectively|in_sum|when_added_up|added_up|all_in_all|in_all_together]? [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.total seek=count where.item={item}"
+    kind=question
+    priority=10
+    example="Count the apples collectively."
+
+@pat.kids.arith.w.tot.f2 core.pattern
+    match="{item:lex.kids.arith.items} [altogether|in_total|in_all|all_together|together|overall|combined|total|put_together|collectively|in_sum|when_added_up|added_up|all_in_all|in_all_together] [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.total seek=count where.item={item}"
+    kind=question
+    priority=10
+    example="Marbles overall?"
+
+@pat.kids.arith.w.tot.f3 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|please_tell_me|do_you_know|i_wanna_know|i_want_to_know|i_need_to_know|id_like_to_know|hey|quick_question|ok|so|please|pls|just]? [add_up|sum_up|count_up|total_up|tally|tally_up|sum|add|count] [all]? [the|of_the]? {item:lex.kids.arith.items} [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.total seek=count where.item={item}"
+    kind=question
+    priority=9
+    example="Tally up the apples."
+
+@pat.kids.arith.w.tot.f4 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|please_tell_me|do_you_know|i_wanna_know|i_want_to_know|i_need_to_know|id_like_to_know|hey|quick_question|ok|so|please|pls|just]? [how_many|how_much|count|number_of|the_number_of|total] [of]? [all]? [the]? {item:lex.kids.arith.items} [are|is|were]? there [in_all|overall|in_total|altogether|combined]? [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.total seek=count where.item={item}"
+    kind=question
+    priority=9
+    example="How many of all the apples are there?"
+
+@pat.kids.arith.w.tp.f1 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|please_tell_me|do_you_know|i_wanna_know|i_want_to_know|i_need_to_know|id_like_to_know|hey|quick_question|ok|so|please|pls|just]? [how_many|how_much|count|number_of|total] {item:lex.kids.arith.items} [do|does|did|have|has|are|is|between|can]? {who1:agent} [and|n|plus|with|&]? {who2:agent} [have|has|got|own|hold|are_holding]? [altogether|in_total|in_all|all_together|together|overall|combined|total|put_together|collectively|in_sum|when_added_up|added_up|all_in_all|in_all_together]? [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.total seek=count where.item={item} where.who1={who1} where.who2={who2}"
+    kind=question
+    priority=10
+    example="How many apples between Ben and Ana in total?"
+
+@pat.kids.arith.w.tp.f2 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|please_tell_me|do_you_know|i_wanna_know|i_want_to_know|i_need_to_know|id_like_to_know|hey|quick_question|ok|so|please|pls|just]? [what_is|whats|what_are]? [the]? {who1:agent} [and|n|plus|with|&]? {who2:agent} ['s]? {item:lex.kids.arith.items} [total|combined|count|sum|together|altogether]? [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.total seek=count where.item={item} where.who1={who1} where.who2={who2}"
+    kind=question
+    priority=9
+    example="Whats the Ben and Ana apples total?"
+
+@pat.kids.arith.w.tp.f3 core.pattern
+    match="{who1:agent} [and|n|plus|with|&]? {who2:agent} [how_many|how_much] {item:lex.kids.arith.items} [altogether|in_total|in_all|all_together|together|overall|combined|total|put_together|collectively|in_sum|when_added_up|added_up|all_in_all|in_all_together]? [do_they_have|they_have|have_they|do_they_got]? [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.total seek=count where.item={item} where.who1={who1} where.who2={who2}"
+    kind=question
+    priority=10
+    example="Ben and Ana how many apples combined?"
+
+@pat.kids.arith.w.tp.f4 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|please_tell_me|do_you_know|i_wanna_know|i_want_to_know|i_need_to_know|id_like_to_know|hey|quick_question|ok|so|please|pls|just]? [how_many|how_much] [do|does|did]? {who1:agent} [and|n|plus|with|&]? {who2:agent} {item:recent(lex.kids.arith.items,who1)} [have|has|got|own|hold|are_holding]? [altogether|in_total|in_all|all_together|together|overall|combined|total|put_together|collectively|in_sum|when_added_up|added_up|all_in_all|in_all_together] [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.total seek=count where.item={item} where.who1={who1} where.who2={who2}"
+    kind=question
+    priority=10
+    example="How many do Ben n Ana have combined?"
+
+@pat.kids.arith.w.gap.f1 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|please_tell_me|do_you_know|i_wanna_know|i_want_to_know|i_need_to_know|id_like_to_know|hey|quick_question|ok|so|please|pls|just]? [how_many|how_much|by_how_many|by_how_much|what_is_the_number_of|whats_the_number_of] [more|extra|additional|surplus] {item:lex.kids.arith.items} [does|do|did|has|have|is]? {who1:agent} [have|has|got|hold|own|beat|lead|exceed]? [than|compared_to|over|vs|versus|against|relative_to|more_than|ahead_of|compared_with] {who2:agent} [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.gap seek=diff where.item={item} where.who1={who1} where.who2={who2}"
+    kind=question
+    priority=10
+    example="How many extra apples does Ben own compared with Ana?"
+
+@pat.kids.arith.w.gap.f2 core.pattern
+    match="{who1:agent} [has|have|got|is_ahead_of|leads|beats]? [how_many|how_much] [more|extra] {item:lex.kids.arith.items} [than|compared_to|over|vs|versus|against|relative_to|more_than|ahead_of|compared_with] {who2:agent} [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.gap seek=diff where.item={item} where.who1={who1} where.who2={who2}"
+    kind=question
+    priority=10
+    example="Ben has how many extra apples than Ana?"
+
+@pat.kids.arith.w.gap.f3 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|please_tell_me|do_you_know|i_wanna_know|i_want_to_know|i_need_to_know|id_like_to_know|hey|quick_question|ok|so|please|pls|just]? [by_how_many|by_how_much] {item:lex.kids.arith.items} [does|do|did] {who1:agent} [beat|lead|top|exceed|outnumber|outdo|get_ahead_of|pass|outscore] {who2:agent} [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.gap seek=diff where.item={item} where.who1={who1} where.who2={who2}"
+    kind=question
+    priority=10
+    example="By how many apples does Ben outnumber Ana?"
+
+@pat.kids.arith.w.gap.f4 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|please_tell_me|do_you_know|i_wanna_know|i_want_to_know|i_need_to_know|id_like_to_know|hey|quick_question|ok|so|please|pls|just]? [what_is|whats]? [the]? [difference|gap|diff|margin] [in|of|for|between]? [the]? {item:lex.kids.arith.items} [between|of|for]? {who1:agent} [and|vs|versus|n|&]? {who2:agent} [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.gap seek=diff where.item={item} where.who1={who1} where.who2={who2}"
+    kind=question
+    priority=10
+    example="What is the gap in apples between Ben and Ana?"
+
+@pat.kids.arith.w.gap.f5 core.pattern
+    match="{item:lex.kids.arith.items} [difference|gap|diff|margin] [between]? {who1:agent} [and|vs|versus|n|&]? {who2:agent} [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.gap seek=diff where.item={item} where.who1={who1} where.who2={who2}"
+    kind=question
+    priority=10
+    example="Marbles gap, Ben vs Ana?"
+
+@pat.kids.arith.w.gap.f6 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|please_tell_me|do_you_know|i_wanna_know|i_want_to_know|i_need_to_know|id_like_to_know|hey|quick_question|ok|so|please|pls|just]? [how_many|how_much|by_how_many|by_how_much] [fewer|less] {item:lex.kids.arith.items} [does|do|did|has|have|is]? {who1:agent} [have|has|got]? [than|compared_to|over|vs|versus|against|relative_to|more_than|ahead_of|compared_with] {who2:agent} [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.gap seek=diff where.item={item} where.who1={who1} where.who2={who2}"
+    kind=question
+    priority=10
+    example="How much less apples has Ben than Ana?"
+
+@pat.kids.arith.w.gap.f7 core.pattern
+    match="{who1:agent} [has|have|got|is]? [how_many|how_much] [fewer|less|short|behind] {item:lex.kids.arith.items} [than|compared_to|over|vs|versus|against|relative_to|more_than|ahead_of|compared_with] {who2:agent} [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.gap seek=diff where.item={item} where.who1={who1} where.who2={who2}"
+    kind=question
+    priority=10
+    example="Ben has how many fewer apples than Ana?"
+
+@pat.kids.arith.w.gap.f8 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|please_tell_me|do_you_know|i_wanna_know|i_want_to_know|i_need_to_know|id_like_to_know|hey|quick_question|ok|so|please|pls|just]? [by_how_many|by_how_much] [does|do|did] {who1:agent} [trail|lag_behind|fall_behind|fall_short_of|lose_to|lag] {who2:agent} [in|on|for]? {item:lex.kids.arith.items} [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.gap seek=diff where.item={item} where.who1={who1} where.who2={who2}"
+    kind=question
+    priority=10
+    example="By how many does Ben trail Ana in apples?"
+
+@pat.kids.arith.w.vd.f1 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|please_tell_me|do_you_know|i_wanna_know|i_want_to_know|i_need_to_know|id_like_to_know|hey|quick_question|ok|so|please|pls|just]? [is_it_true_that|is_it_true|tell_me_if|tell_me_whether|check_if|check_whether|do_you_think|would_you_say|is_it_right_that|is_it_correct_that|does|do|did|has|have|is|if|whether]? {who1:agent} [has|have|got|owns|holds|has_got|have_got|is_holding]? [got]? [a|an]? [more|a_bigger_number_of|a_larger_number_of|a_greater_number_of|bigger_number_of|larger_number_of|greater_number_of|a_higher_number_of|a_bigger_amount_of|a_larger_amount_of|a_higher_count_of|extra|additional] [of]? {item:lex.kids.arith.items} [than|compared_to|over|vs|versus|against|relative_to|more_than|ahead_of|compared_with] {who2:agent} [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no]? [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.verdict seek=answer where.item={item} where.who1={who1} where.who2={who2}"
+    kind=question
+    priority=10
+    example="Check if Ben got a higher count of apples than Ana."
+
+@pat.kids.arith.w.vd.f2 core.pattern
+    match="[more|a_bigger_number_of|a_larger_number_of|a_greater_number_of|bigger_number_of|larger_number_of|greater_number_of|a_higher_number_of|a_bigger_amount_of|a_larger_amount_of|a_higher_count_of|extra|additional] {item:lex.kids.arith.items} [for|with|by|at|to] {who1:agent} [than|compared_to|over|vs|versus|against|relative_to|more_than|ahead_of|compared_with] {who2:agent} [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no]? [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.verdict seek=answer where.item={item} where.who1={who1} where.who2={who2}"
+    kind=question
+    priority=10
+    example="More apples for Ben than Ana?"
+
+@pat.kids.arith.w.vd.f3 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|please_tell_me|do_you_know|i_wanna_know|i_want_to_know|i_need_to_know|id_like_to_know|hey|quick_question|ok|so|please|pls|just]? [is|are] {who1:agent} [ahead_of|leading|beating|above|over|winning_against|in_front_of] {who2:agent} [on|in|for|with|at]? {item:lex.kids.arith.items} [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no]? [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.verdict seek=answer where.item={item} where.who1={who1} where.who2={who2}"
+    kind=question
+    priority=10
+    example="Is Ben beating Ana in apples?"
+
+@pat.kids.arith.w.vd.f4 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|please_tell_me|do_you_know|i_wanna_know|i_want_to_know|i_need_to_know|id_like_to_know|hey|quick_question|ok|so|please|pls|just]? [does|do|did|has|have|is]? {who1:agent} [have|has|got]? [fewer|less|a_smaller_number_of|a_lower_number_of] [of]? {item:lex.kids.arith.items} [than|compared_to|over|vs|versus|against|relative_to|more_than|ahead_of|compared_with] {who2:agent} [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no]? [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.verdict seek=answer where.item={item} where.who1={who2} where.who2={who1}"
+    kind=question
+    priority=10
+    example="Does Ben have a lower number of apples than Ana?"
+
+@pat.kids.arith.w.any.f1 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|please_tell_me|do_you_know|i_wanna_know|i_want_to_know|i_need_to_know|id_like_to_know|hey|quick_question|ok|so|please|pls|just]? [does|do|did|has|have|is|are|got]? {who:agent} [got|have|has|own|owns|hold|holds|holding|carrying|keeps|possess|is_holding]? [any|some|a_single|at_least_1|even_1|zero|0|no|even_a] {item:lex.kids.arith.items} [at_all|or_not|yes_or_no|right|left|still|now|or_what]? [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.has seek=answer where.owner={who} where.item={item}"
+    kind=question
+    priority=10
+    example="Is Ben carrying any apples at all?"
+
+@pat.kids.arith.w.any.f2 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|please_tell_me|do_you_know|i_wanna_know|i_want_to_know|i_need_to_know|id_like_to_know|hey|quick_question|ok|so|please|pls|just]? [are|is]? there [any|some]? {item:lex.kids.arith.items} [with|at|on|for|left_with|left_for] {who:agent} [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.has seek=answer where.owner={who} where.item={item}"
+    kind=question
+    priority=10
+    example="Are there any apples with Ben?"
+
+@pat.kids.arith.w.any.f3 core.pattern
+    match="[tell_me|can_you_tell_me|could_you_tell_me|please_tell_me|do_you_know|i_wanna_know|i_want_to_know|i_need_to_know|id_like_to_know|hey|quick_question|ok|so|please|pls|just]? [does|do|did] {who:agent} [own|have|hold|got|possess|keep] {item:lex.kids.arith.items} [at_all|or_not|or_what|yes_or_no] [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.has seek=answer where.owner={who} where.item={item}"
+    kind=question
+    priority=10
+    example="Does Ben own apples at all?"
+
+@pat.kids.arith.w.give.f1 core.pattern
+    match="{who:agent} [just|then|also|already|later|again|quickly|kindly]? [gives|gave|give|handed|hands|passed|passes|pass|sent|sends|send|lent|lends|donated|donates|offered|offers|tossed|threw|throws|brings|brought|delivers|delivered|presented|hands_over|handed_over|passed_over|slid|slides] {to:agent} {n:number} [more]? {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.give who={who} to={to} count={n} item={item}"
+    kind=statement
+    priority=9
+    example="Ana passed Tom 3 pears."
+
+@pat.kids.arith.w.give.f2 core.pattern
+    match="{who:agent} [just|then|also|already|later|again|quickly|kindly]? [gives|gave|give|handed|hands|passed|passes|pass|sent|sends|send|lent|lends|donated|donates|offered|offers|tossed|threw|throws|brings|brought|delivers|delivered|presented|hands_over|handed_over|passed_over|slid|slides] {to:agent} [a|an|one] {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.give who={who} to={to} count=1 item={item}"
+    kind=statement
+    priority=9
+    example="Ana passed Tom a pear."
+
+@pat.kids.arith.w.give.f3 core.pattern
+    match="{who:agent} [just|then|also|already|later|again|quickly|kindly]? [gives|gave|give|handed|hands|passed|passes|pass|sent|sends|send|lent|lends|donated|donates|offered|offers|tossed|threw|throws|brings|brought|delivers|delivered|presented|hands_over|handed_over|passed_over|slid|slides] {n:number} {item:lex.kids.arith.items} to {to:agent}"
+    emit="@{_} kids.arith.give who={who} to={to} count={n} item={item}"
+    kind=statement
+    priority=9
+    example="Ana passed 3 pears to Tom."
+
+@pat.kids.arith.w.give.f4 core.pattern
+    match="{who:agent} [just|then|also|already|later|again|quickly|kindly]? [gives|gave|give|handed|hands|passed|passes|pass|sent|sends|send|lent|lends|donated|donates|offered|offers|tossed|threw|throws|brings|brought|delivers|delivered|presented|hands_over|handed_over|passed_over|slid|slides] [a|an|one] {item:lex.kids.arith.items} to {to:agent}"
+    emit="@{_} kids.arith.give who={who} to={to} count=1 item={item}"
+    kind=statement
+    priority=9
+    example="Ana passed a pear to Tom."
+
+@pat.kids.arith.w.has.f1 core.pattern
+    match="[fyi|remember_that|note_that|btw|by_the_way|just_so_you_know|so|ok|well|look|listen|note|know_that|keep_in_mind_that|did_you_know|guess_what|fun_fact|just_so_you_know_that|hey|so_yeah|oh_and]? {who:agent} [now|currently|right_now]? [has|have|had|owns|own|holds|hold|keeps|keep|is_holding|are_holding|possesses|possess|has_got|have_got|is_carrying|are_carrying] [got|now|exactly|a_total_of]? {n:number} {item:lex.kids.arith.items}"
+    emit="@{_} kids.arith.holding owner={who} count={n} item={item}"
+    kind=statement
+    priority=9
+    example="FYI Ana is carrying 4 pears."
+
+@pat.kids.arith.w.plus.f1 core.pattern
+    match="[what_is|whats|how_much_is|how_many_is|calculate|tell_me|what_are|what_do_you_get_for|what_do_you_get|what_does|what_do|compute|work_out|figure_out|find|give_me|whats_the|what_is_the|can_you_calculate|can_you_work_out|can_you_compute|i_need|how_much_does|please_calculate|solve]? {a:number} [and|with|plus|added_to|added_with] {b:number} [added_together|added_up|add_up_to|add_together|put_together|summed|together|combined|all_together|make|equals|is|equal|come_to|come_to_in_total|sum|total|add_up|added|add_up_to_in_total] [=]? [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=plus where.a={a} where.b={b}"
+    kind=question
+    priority=10
+    example="Whats 4 with 3 combined?"
+
+@pat.kids.arith.w.plus.f2 core.pattern
+    match="[what_is|whats|how_much_is|how_many_is|calculate|tell_me|what_are|what_do_you_get_for|what_do_you_get|what_does|what_do|compute|work_out|figure_out|find|give_me|whats_the|what_is_the|can_you_calculate|can_you_work_out|can_you_compute|i_need|how_much_does|please_calculate|solve]? [the]? [sum|total|addition] [of]? {a:number} [and|plus|with]? {b:number} [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=plus where.a={a} where.b={b}"
+    kind=question
+    priority=10
+    example="The total of 4 and 3?"
+
+@pat.kids.arith.w.div.f1 core.pattern
+    match="[what_is|whats|how_much_is|how_many_is|calculate|tell_me|what_are|what_do_you_get_for|what_do_you_get|what_does|what_do|compute|work_out|figure_out|find|give_me|whats_the|what_is_the|can_you_calculate|can_you_work_out|can_you_compute|i_need|how_much_does|please_calculate|solve]? {a:number} [divided|divided_up|split|shared|shared_out|cut|share|split_up] [by|into|between|over|in|among|with]? {b:number} [equal_parts|equal_groups|equal_piles|equal_shares|parts|groups|piles|each|ways]? [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=divided_by where.a={a} where.b={b}"
+    kind=question
+    priority=10
+    example="Whats 12 shared by 4?"
+
+@pat.kids.arith.w.div.f2 core.pattern
+    match="[split|share|divide|cut|break|spread|distribute|separate|group|sort] {a:number} [into|between|among|by|in|over]? {b:number} [equal_parts|equal_groups|equal_piles|equal_shares|parts|groups|piles|each|ways|people|kids|friends]? [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=divided_by where.a={a} where.b={b}"
+    kind=question
+    priority=10
+    example="Spread 12 between 4 groups."
+
+@pat.kids.arith.w.div.f3 core.pattern
+    match="[what_is|whats|how_much_is|how_many_is|calculate|tell_me|what_are|what_do_you_get_for|what_do_you_get|what_does|what_do|compute|work_out|figure_out|find|give_me|whats_the|what_is_the|can_you_calculate|can_you_work_out|can_you_compute|i_need|how_much_does|please_calculate|solve]? [the]? quotient [of]? {a:number} [and|by|divided_by|over]? {b:number} [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.calc seek=result where.op=divided_by where.a={a} where.b={b}"
+    kind=question
+    priority=10
+    example="Quotient of 12 by 4?"
+
+@pat.kids.arith.w.half.f1 core.pattern
+    match="[what_is|whats|how_much_is|how_many_is|calculate|tell_me|what_are|what_do_you_get_for|what_do_you_get|what_does|what_do|compute|work_out|figure_out|find|give_me|whats_the|what_is_the|can_you_calculate|can_you_work_out|can_you_compute|i_need|how_much_does|please_calculate|solve]? {n:number} [half|halved|halves|in_half|divided_in_half|split_in_half|cut_in_half|divided_by_2|divided_in_two|divided_into_two|split_in_two|in_two|split_in_2|shared_in_two|shared_in_half|divided_in_2|divided_into_2] [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.half seek=result where.n={n}"
+    kind=question
+    priority=10
+    example="Whats 12 halved?"
+
+@pat.kids.arith.w.half.f2 core.pattern
+    match="[what_is|whats|how_much_is|how_many_is|calculate|tell_me|what_are|what_do_you_get_for|what_do_you_get|what_does|what_do|compute|work_out|figure_out|find|give_me|whats_the|what_is_the|can_you_calculate|can_you_work_out|can_you_compute|i_need|how_much_does|please_calculate|solve]? [split|divide|cut|halve|share|break|separate] {n:number} [in|into]? [half|two|2|2_equal_parts|two_equal_parts|halves|two_halves] [whats_one_half|what_is_one_half|whats_half]? [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.half seek=result where.n={n}"
+    kind=question
+    priority=10
+    example="Cut 12 in two."
+
+@pat.kids.arith.w.half.f3 core.pattern
+    match="[what_is|whats|how_much_is|how_many_is|calculate|tell_me|what_are|what_do_you_get_for|what_do_you_get|what_does|what_do|compute|work_out|figure_out|find|give_me|whats_the|what_is_the|can_you_calculate|can_you_work_out|can_you_compute|i_need|how_much_does|please_calculate|solve]? [half|half_of|1_half_of|the_half_of|a_half_of|1_half_of|half_a|halve] {n:number} [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.half seek=result where.n={n}"
+    kind=question
+    priority=10
+    example="Half of 12?"
+
+@pat.kids.arith.w.dbl.f1 core.pattern
+    match="[what_is|whats|how_much_is|how_many_is|calculate|tell_me|what_are|what_do_you_get_for|what_do_you_get|what_does|what_do|compute|work_out|figure_out|find|give_me|whats_the|what_is_the|can_you_calculate|can_you_work_out|can_you_compute|i_need|how_much_does|please_calculate|solve]? [doubling|double|doubled|twice|twice_of|two_times|2_times|times_2_of|the_double_of|a_double_of|the_doubling_of|doubling_of] [of]? {n:number} [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.double seek=result where.n={n}"
+    kind=question
+    priority=10
+    example="Whats the doubling of 6?"
+
+@pat.kids.arith.w.dbl.f2 core.pattern
+    match="[what_is|whats|how_much_is|how_many_is|calculate|tell_me|what_are|what_do_you_get_for|what_do_you_get|what_does|what_do|compute|work_out|figure_out|find|give_me|whats_the|what_is_the|can_you_calculate|can_you_work_out|can_you_compute|i_need|how_much_does|please_calculate|solve]? {n:number} [doubled|twice|times_two|times_2|multiplied_by_2|double|x_2|times_two_is] [pls|plz|please|thanks|lol|rn|exactly|anyway|again|today]?"
+    emit="@{_} core.question type=kids.arith.double seek=result where.n={n}"
+    kind=question
+    priority=10
+    example="Whats 6 doubled?"

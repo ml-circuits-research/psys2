@@ -1,8 +1,8 @@
 @pat.media.music.note core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [play|hear|listen_to|play_me|give_me|sound|strum|try_playing|start_playing|perform|let_me_hear|let_us_hear|i_want_to_hear|i_would_like_to_hear|can_i_hear|could_i_hear] [a|an|the|some|that|this|my|your]? {reg:lex.media.music.registers?} [note]? {note:lex.media.music.notes} [note]? [in_octave|in_the_octave|octave|at_octave]? {oct:number?} [on|with|using|on_the|with_the|using_the|on_a|on_an|through]? {inst:lex.media.music.instruments?}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [play|hear|listen_to|play_me|give_me|sound|strum|try_playing|start_playing|perform|let_me_hear|let_us_hear|i_want_to_hear|i_would_like_to_hear|can_i_hear|could_i_hear|hit|spin|sing|sing_me|run_through|go_through|put_on|play_back|replay] [a|an|the|some|that|this|my|your]? {reg:lex.media.music.registers?} [note]? {note:lex.media.music.notes} [note]? [in_octave|in_the_octave|octave|at_octave]? {oct:number?} [on|with|using|on_the|with_the|using_the|on_a|on_an|through]? {inst:lex.media.music.instruments?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.playNote arg.reg={reg} arg.note={note} arg.oct={oct} arg.inst={inst}"
     kind=request
-    priority=13
+    priority=12
     example="Play middle C."
     example="Play C sharp."
     example="Play a high G on the flute."
@@ -10,7 +10,7 @@
     example="Could you play a B flat?"
 
 @pat.media.music.note.explicit core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [play|hear|listen_to|play_me|give_me|sound|strum|try_playing|start_playing|perform|let_me_hear|let_us_hear|i_want_to_hear|i_would_like_to_hear|can_i_hear|could_i_hear] [a|an|the|some|that|this|my|your]? {reg:lex.media.music.registers?} note {note:lex.media.music.notes} {oct:number?} [on|with|using|on_the|with_the|using_the|on_a|on_an|through]? {inst:lex.media.music.instruments?}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [play|hear|listen_to|play_me|give_me|sound|strum|try_playing|start_playing|perform|let_me_hear|let_us_hear|i_want_to_hear|i_would_like_to_hear|can_i_hear|could_i_hear|hit|spin|sing|sing_me|run_through|go_through|put_on|play_back|replay] [a|an|the|some|that|this|my|your]? {reg:lex.media.music.registers?} note {note:lex.media.music.notes} {oct:number?} [on|with|using|on_the|with_the|using_the|on_a|on_an|through]? {inst:lex.media.music.instruments?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.playNote arg.reg={reg} arg.note={note} arg.oct={oct} arg.inst={inst} arg.explicit=true"
     kind=request
     priority=14
@@ -18,7 +18,7 @@
     example="Play note E."
 
 @pat.media.music.note.sounds core.pattern
-    match="[how_does|what_does] [a|an|the|some|that|this|my|your]? {reg:lex.media.music.registers?} {note:lex.media.music.notes} [note]? sound [like]?"
+    match="[how_does|what_does] [a|an|the|some|that|this|my|your]? {reg:lex.media.music.registers?} {note:lex.media.music.notes} [note]? sound [like]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.playNote arg.reg={reg} arg.note={note}"
     kind=request
     priority=13
@@ -26,7 +26,7 @@
     example="What does an A sound like?"
 
 @pat.media.music.chord core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [play|hear|listen_to|play_me|give_me|sound|strum|try_playing|start_playing|perform|let_me_hear|let_us_hear|i_want_to_hear|i_would_like_to_hear|can_i_hear|could_i_hear]? [a|an|the|some|that|this|my|your]? {root:lex.media.music.notes} {q:lex.media.music.qualities?} {n:number?} [chord|chords|triad] [on|with|using|on_the|with_the|using_the|on_a|on_an|through]? {inst:lex.media.music.instruments?}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [play|hear|listen_to|play_me|give_me|sound|strum|try_playing|start_playing|perform|let_me_hear|let_us_hear|i_want_to_hear|i_would_like_to_hear|can_i_hear|could_i_hear|hit|spin|sing|sing_me|run_through|go_through|put_on|play_back|replay]? [a|an|the|some|that|this|my|your]? {root:lex.media.music.notes} {q:lex.media.music.qualities?} {n:number?} [chord|chords|triad] [on|with|using|on_the|with_the|using_the|on_a|on_an|through]? {inst:lex.media.music.instruments?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.playChord arg.root={root} arg.q={q} arg.n={n} arg.inst={inst}"
     kind=request
     priority=12
@@ -37,7 +37,7 @@
     example="A C chord."
 
 @pat.media.music.chord.bare core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [play|hear|listen_to|play_me|give_me|sound|strum|try_playing|start_playing|perform|let_me_hear|let_us_hear|i_want_to_hear|i_would_like_to_hear|can_i_hear|could_i_hear] [a|an|the|some|that|this|my|your]? {root:lex.media.music.notes} {q:lex.media.music.qualities} {n:number?} [on|with|using|on_the|with_the|using_the|on_a|on_an|through]? {inst:lex.media.music.instruments?}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [play|hear|listen_to|play_me|give_me|sound|strum|try_playing|start_playing|perform|let_me_hear|let_us_hear|i_want_to_hear|i_would_like_to_hear|can_i_hear|could_i_hear|hit|spin|sing|sing_me|run_through|go_through|put_on|play_back|replay] [a|an|the|some|that|this|my|your]? {root:lex.media.music.notes} {q:lex.media.music.qualities} {n:number?} [on|with|using|on_the|with_the|using_the|on_a|on_an|through]? {inst:lex.media.music.instruments?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.playChord arg.root={root} arg.q={q} arg.n={n} arg.inst={inst}"
     kind=request
     priority=12
@@ -46,7 +46,7 @@
     example="Play G seventh."
 
 @pat.media.music.chord.of core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [play|hear|listen_to|play_me|give_me|sound|strum|try_playing|start_playing|perform|let_me_hear|let_us_hear|i_want_to_hear|i_would_like_to_hear|can_i_hear|could_i_hear] [a|an|the|some|that|this|my|your]? chord [of|in|on|for] {root:lex.media.music.notes} {q:lex.media.music.qualities?} {n:number?} [on|with|using|on_the|with_the|using_the|on_a|on_an|through]? {inst:lex.media.music.instruments?}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [play|hear|listen_to|play_me|give_me|sound|strum|try_playing|start_playing|perform|let_me_hear|let_us_hear|i_want_to_hear|i_would_like_to_hear|can_i_hear|could_i_hear|hit|spin|sing|sing_me|run_through|go_through|put_on|play_back|replay] [a|an|the|some|that|this|my|your]? chord [of|in|on|for] {root:lex.media.music.notes} {q:lex.media.music.qualities?} {n:number?} [on|with|using|on_the|with_the|using_the|on_a|on_an|through]? {inst:lex.media.music.instruments?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.playChord arg.root={root} arg.q={q} arg.n={n} arg.inst={inst}"
     kind=request
     priority=12
@@ -54,7 +54,7 @@
     example="Play a chord in E minor."
 
 @pat.media.music.chord.sym core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [play|hear|listen_to|play_me|give_me|sound|strum|try_playing|start_playing|perform|let_me_hear|let_us_hear|i_want_to_hear|i_would_like_to_hear|can_i_hear|could_i_hear] [a|an|the|some|that|this|my|your]? {sym:lex.media.music.chordsyms} [chord]? [on|with|using|on_the|with_the|using_the|on_a|on_an|through]? {inst:lex.media.music.instruments?}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [play|hear|listen_to|play_me|give_me|sound|strum|try_playing|start_playing|perform|let_me_hear|let_us_hear|i_want_to_hear|i_would_like_to_hear|can_i_hear|could_i_hear|hit|spin|sing|sing_me|run_through|go_through|put_on|play_back|replay] [a|an|the|some|that|this|my|your]? {sym:lex.media.music.chordsyms} [chord]? [on|with|using|on_the|with_the|using_the|on_a|on_an|through]? {inst:lex.media.music.instruments?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.playChord arg.sym={sym} arg.inst={inst}"
     kind=request
     priority=12
@@ -62,7 +62,7 @@
     example="Play Am."
 
 @pat.media.music.arpeggio core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [play|hear|listen_to|play_me|give_me|sound|strum|try_playing|start_playing|perform|let_me_hear|let_us_hear|i_want_to_hear|i_would_like_to_hear|can_i_hear|could_i_hear] [a|an|the|some|that|this|my|your]? {root:lex.media.music.notes} {q:lex.media.music.qualities?} {n:number?} [arpeggio|arpeggios] [on|with|using|on_the|with_the|using_the|on_a|on_an|through]? {inst:lex.media.music.instruments?}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [play|hear|listen_to|play_me|give_me|sound|strum|try_playing|start_playing|perform|let_me_hear|let_us_hear|i_want_to_hear|i_would_like_to_hear|can_i_hear|could_i_hear|hit|spin|sing|sing_me|run_through|go_through|put_on|play_back|replay] [a|an|the|some|that|this|my|your]? {root:lex.media.music.notes} {q:lex.media.music.qualities?} {n:number?} [arpeggio|arpeggios] [on|with|using|on_the|with_the|using_the|on_a|on_an|through]? {inst:lex.media.music.instruments?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.playChord arg.root={root} arg.q={q} arg.n={n} arg.inst={inst} arg.mode=arpeggio"
     kind=request
     priority=12
@@ -70,7 +70,7 @@
     example="Play an E minor arpeggio on the organ."
 
 @pat.media.music.arpeggio.verb core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [arpeggiate|play_broken|break_up|spread|roll] [a|an|the|some|that|this|my|your]? {root:lex.media.music.notes} {q:lex.media.music.qualities?} {n:number?} [chord]? [on|with|using|on_the|with_the|using_the|on_a|on_an|through]? {inst:lex.media.music.instruments?}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [arpeggiate|play_broken|break_up|spread|roll] [a|an|the|some|that|this|my|your]? {root:lex.media.music.notes} {q:lex.media.music.qualities?} {n:number?} [chord]? [on|with|using|on_the|with_the|using_the|on_a|on_an|through]? {inst:lex.media.music.instruments?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.playChord arg.root={root} arg.q={q} arg.n={n} arg.inst={inst} arg.mode=arpeggio"
     kind=request
     priority=12
@@ -78,7 +78,7 @@
     example="Break up a G major chord."
 
 @pat.media.music.chord.notes core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [play|hear|listen_to|play_me|give_me|sound|strum|try_playing|start_playing|perform|let_me_hear|let_us_hear|i_want_to_hear|i_would_like_to_hear|can_i_hear|could_i_hear] [a|an|the|some|that|this|my|your]? [notes]? {seq:words(8)} [together|at_once|all_at_once|all_together|at_the_same_time|as_a_chord]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [play|hear|listen_to|play_me|give_me|sound|strum|try_playing|start_playing|perform|let_me_hear|let_us_hear|i_want_to_hear|i_would_like_to_hear|can_i_hear|could_i_hear|hit|spin|sing|sing_me|run_through|go_through|put_on|play_back|replay] [a|an|the|some|that|this|my|your]? [notes]? {seq:words(8)} [together|at_once|all_at_once|all_together|at_the_same_time|as_a_chord] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.playChord arg.seq=\"{seq}\" arg.mode=chord"
     kind=request
     priority=12
@@ -86,7 +86,7 @@
     example="Play the notes D F A at once."
 
 @pat.media.music.scale core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [play|hear|listen_to|play_me|give_me|sound|strum|try_playing|start_playing|perform|let_me_hear|let_us_hear|i_want_to_hear|i_would_like_to_hear|can_i_hear|could_i_hear] [a|an|the|some|that|this|my|your]? {root:lex.media.music.notes?} {st:lex.media.music.scaletypes?} [scale|scales] {dir:lex.media.music.directions?} [on|with|using|on_the|with_the|using_the|on_a|on_an|through]? {inst:lex.media.music.instruments?}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [play|hear|listen_to|play_me|give_me|sound|strum|try_playing|start_playing|perform|let_me_hear|let_us_hear|i_want_to_hear|i_would_like_to_hear|can_i_hear|could_i_hear|hit|spin|sing|sing_me|run_through|go_through|put_on|play_back|replay] [a|an|the|some|that|this|my|your]? {root:lex.media.music.notes?} {st:lex.media.music.scaletypes?} [scale|scales] {dir:lex.media.music.directions?} [on|with|using|on_the|with_the|using_the|on_a|on_an|through]? {inst:lex.media.music.instruments?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.playScale arg.root={root} arg.st={st} arg.dir={dir} arg.inst={inst}"
     kind=request
     priority=12
@@ -97,7 +97,7 @@
     example="Play a blues scale."
 
 @pat.media.music.scale.of core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [play|hear|listen_to|play_me|give_me|sound|strum|try_playing|start_playing|perform|let_me_hear|let_us_hear|i_want_to_hear|i_would_like_to_hear|can_i_hear|could_i_hear] [a|an|the|some|that|this|my|your]? {st:lex.media.music.scaletypes?} [scale|scales] [of|in|on|from|starting_on|starting_from|beginning_on|for] {root:lex.media.music.notes} {st2:lex.media.music.scaletypes?} {dir:lex.media.music.directions?} [on|with|using|on_the|with_the|using_the|on_a|on_an|through]? {inst:lex.media.music.instruments?}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [play|hear|listen_to|play_me|give_me|sound|strum|try_playing|start_playing|perform|let_me_hear|let_us_hear|i_want_to_hear|i_would_like_to_hear|can_i_hear|could_i_hear|hit|spin|sing|sing_me|run_through|go_through|put_on|play_back|replay] [a|an|the|some|that|this|my|your]? {st:lex.media.music.scaletypes?} [scale|scales] [of|in|on|from|starting_on|starting_from|beginning_on|for] {root:lex.media.music.notes} {st2:lex.media.music.scaletypes?} {dir:lex.media.music.directions?} [on|with|using|on_the|with_the|using_the|on_a|on_an|through]? {inst:lex.media.music.instruments?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.playScale arg.st={st} arg.root={root} arg.st2={st2} arg.dir={dir} arg.inst={inst}"
     kind=request
     priority=12
@@ -105,7 +105,7 @@
     example="Play the scale of C major."
 
 @pat.media.music.scale.mode core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [play|hear|listen_to|play_me|give_me|sound|strum|try_playing|start_playing|perform|let_me_hear|let_us_hear|i_want_to_hear|i_would_like_to_hear|can_i_hear|could_i_hear] [a|an|the|some|that|this|my|your]? {root:lex.media.music.notes} {st:lex.media.music.scalemodes} {dir:lex.media.music.directions?} [on|with|using|on_the|with_the|using_the|on_a|on_an|through]? {inst:lex.media.music.instruments?}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [play|hear|listen_to|play_me|give_me|sound|strum|try_playing|start_playing|perform|let_me_hear|let_us_hear|i_want_to_hear|i_would_like_to_hear|can_i_hear|could_i_hear|hit|spin|sing|sing_me|run_through|go_through|put_on|play_back|replay] [a|an|the|some|that|this|my|your]? {root:lex.media.music.notes} {st:lex.media.music.scalemodes} {dir:lex.media.music.directions?} [on|with|using|on_the|with_the|using_the|on_a|on_an|through]? {inst:lex.media.music.instruments?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.playScale arg.root={root} arg.st={st} arg.dir={dir} arg.inst={inst}"
     kind=request
     priority=12
@@ -114,14 +114,14 @@
     example="Play E minor pentatonic."
 
 @pat.media.music.scale.tempo core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [play|hear|listen_to|play_me|give_me|sound|strum|try_playing|start_playing|perform|let_me_hear|let_us_hear|i_want_to_hear|i_would_like_to_hear|can_i_hear|could_i_hear] [a|an|the|some|that|this|my|your]? {root:lex.media.music.notes?} {st:lex.media.music.scaletypes?} [scale|scales] [at|with|in] {bpm:number} [bpm|beats_per_minute|beats_a_minute]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [play|hear|listen_to|play_me|give_me|sound|strum|try_playing|start_playing|perform|let_me_hear|let_us_hear|i_want_to_hear|i_would_like_to_hear|can_i_hear|could_i_hear|hit|spin|sing|sing_me|run_through|go_through|put_on|play_back|replay] [a|an|the|some|that|this|my|your]? {root:lex.media.music.notes?} {st:lex.media.music.scaletypes?} [scale|scales] [at|with|in] {bpm:number} [bpm|beats_per_minute|beats_a_minute] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.playScale arg.root={root} arg.st={st} arg.bpm={bpm}"
     kind=request
     priority=12
     example="Play the C major scale at 120 bpm."
 
 @pat.media.music.song core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [play|hear|listen_to|play_me|give_me|sound|strum|try_playing|start_playing|perform|let_me_hear|let_us_hear|i_want_to_hear|i_would_like_to_hear|can_i_hear|could_i_hear] [a|an|the|some|that|this|my|your]? [song|tune|melody|piece|nursery_rhyme|one_called|one_named|called|named|titled|song_called|song_named|1_called|1_named]? {title:words(8)}"
+    match="{pre:lex.media.music.polite?} {v:lex.media.music.playverbs} [a|an|the|some|that|this|my|your]? [song|tune|melody|piece|nursery_rhyme|one_called|one_named|called|named|titled|song_called|song_named|1_called|1_named]? {title:words(8)}"
     emit="@{_} core.request action=music.playAny arg.title=\"{title}\""
     kind=request
     priority=10
@@ -130,7 +130,7 @@
     example="Play C D E F G."
 
 @pat.media.music.song.inst core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [play|hear|listen_to|play_me|give_me|sound|strum|try_playing|start_playing|perform|let_me_hear|let_us_hear|i_want_to_hear|i_would_like_to_hear|can_i_hear|could_i_hear] [a|an|the|some|that|this|my|your]? [song|tune|melody|piece]? {title:words(8)} [on|with|using|on_the|with_the|using_the|on_a|on_an] {inst:lex.media.music.instruments}"
+    match="{pre:lex.media.music.polite?} {v:lex.media.music.playverbs} [a|an|the|some|that|this|my|your]? [song|tune|melody|piece]? {title:words(8)} [on|with|using|on_the|with_the|using_the|on_a|on_an] {inst:lex.media.music.instruments} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.playAny arg.title=\"{title}\" arg.inst={inst}"
     kind=request
     priority=11
@@ -138,14 +138,14 @@
     example="Play Happy Birthday with the bells."
 
 @pat.media.music.song.bpm core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [play|hear|listen_to|play_me|give_me|sound|strum|try_playing|start_playing|perform|let_me_hear|let_us_hear|i_want_to_hear|i_would_like_to_hear|can_i_hear|could_i_hear] [a|an|the|some|that|this|my|your]? [song|tune|melody|piece]? {title:words(8)} [at|at_a_tempo_of|with_a_tempo_of] {bpm:number} [bpm|beats_per_minute|beats_a_minute]?"
+    match="{pre:lex.media.music.polite?} {v:lex.media.music.playverbs} [a|an|the|some|that|this|my|your]? [song|tune|melody|piece]? {title:words(8)} [at|at_a_tempo_of|with_a_tempo_of] {bpm:number} [bpm|beats_per_minute|beats_a_minute]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.playAny arg.title=\"{title}\" arg.bpm={bpm}"
     kind=request
     priority=11
     example="Play Jingle Bells at 140 bpm."
 
 @pat.media.music.random core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [play_a_song|play_me_a_song|play_a_tune|play_some_music|play_something|play_me_something|play_anything|play_music|put_on_some_music|put_on_a_song|play_a_random_song|play_another_song|play_the_next_song|play_another_one|play_me_a_tune|play_something_nice|another_song|next_song|play_a_melody|play_me_some_music|play_me_a_melody|play_a_nursery_rhyme|sing_me_a_song|sing_something|sing_a_song|play_another_1] [on|with|using|on_the|with_the|using_the|on_a|on_an|through]? {inst:lex.media.music.instruments?}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [play_a_song|play_me_a_song|play_a_tune|play_some_music|play_something|play_me_something|play_anything|play_music|put_on_some_music|put_on_a_song|play_a_random_song|play_another_song|play_the_next_song|play_another_one|play_me_a_tune|play_something_nice|another_song|next_song|play_a_melody|play_me_some_music|play_me_a_melody|play_a_nursery_rhyme|sing_me_a_song|sing_something|sing_a_song|play_another_1] [on|with|using|on_the|with_the|using_the|on_a|on_an|through]? {inst:lex.media.music.instruments?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.random arg.inst={inst}"
     kind=request
     priority=12
@@ -154,7 +154,7 @@
     example="Play another song."
 
 @pat.media.music.replay core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [play_it_again|play_that_again|play_it_back|play_it|play_that|play_this|play_the_music_again|play_the_song_again|play_the_tune_again|play_the_melody_again|once_more|one_more_time|repeat_that|repeat_it|replay_it|replay|replay_that|encore|play_it_once_more|play_that_once_more|play_it_one_more_time|play_that_one_more_time|hear_it_again|hear_that_again|let_me_hear_it_again|let_me_hear_that_again|do_that_once_more|1_more_time|play_it_1_more_time|play_that_1_more_time]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [play_it_again|play_that_again|play_it_back|play_it|play_that|play_this|play_the_music_again|play_the_song_again|play_the_tune_again|play_the_melody_again|once_more|one_more_time|repeat_that|repeat_it|replay_it|replay|replay_that|encore|play_it_once_more|play_that_once_more|play_it_one_more_time|play_that_one_more_time|hear_it_again|hear_that_again|let_me_hear_it_again|let_me_hear_that_again|do_that_once_more|1_more_time|play_it_1_more_time|play_that_1_more_time] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.replay"
     kind=request
     priority=12
@@ -164,7 +164,7 @@
     example="Play it."
 
 @pat.media.music.replay.inst core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [play|do|hear|try] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything] [again]? [on|with|using|on_the|with_the|using_the|as_a|on_a] {inst:lex.media.music.instruments}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [play|do|hear|try] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything] [again]? [on|with|using|on_the|with_the|using_the|as_a|on_a] {inst:lex.media.music.instruments} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.replay arg.inst={inst}"
     kind=request
     priority=12
@@ -172,7 +172,7 @@
     example="Play that again with the bells."
 
 @pat.media.music.mymelody core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [play|hear|play_back|replay|let_me_hear|listen_to|perform] [back]? [my_melody|my_tune|my_song|my_composition|my_piece|my_creation|the_melody_i_wrote|the_melody_i_made|the_melody_i_composed|the_tune_i_wrote|what_i_wrote|what_i_composed|what_i_made|what_i_just_wrote|what_i_just_made|the_song_i_wrote|the_composition|my_music|the_notes_i_wrote|my_notes] [on|with|using|on_the|with_the|using_the|on_a|on_an|through]? {inst:lex.media.music.instruments?}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [play|hear|play_back|replay|let_me_hear|listen_to|perform] [back]? [my_melody|my_tune|my_song|my_composition|my_piece|my_creation|the_melody_i_wrote|the_melody_i_made|the_melody_i_composed|the_tune_i_wrote|what_i_wrote|what_i_composed|what_i_made|what_i_just_wrote|what_i_just_made|the_song_i_wrote|the_composition|my_music|the_notes_i_wrote|my_notes] [on|with|using|on_the|with_the|using_the|on_a|on_an|through]? {inst:lex.media.music.instruments?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.playMelody arg.inst={inst}"
     kind=request
     priority=12
@@ -181,7 +181,7 @@
     example="Let me hear the melody I wrote."
 
 @pat.media.music.stop core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [stop|stop_it|stop_that|stop_playing|stop_the_music|stop_the_song|stop_the_sound|stop_the_tune|stop_the_melody|stop_the_piano|pause|pause_the_music|pause_it|pause_the_song|halt|enough|that_is_enough|that_will_do|silence|end_the_music|turn_off_the_music|shut_off_the_music|cut_the_music|quiet_please]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [stop|stop_it|stop_that|stop_playing|stop_the_music|stop_the_song|stop_the_sound|stop_the_tune|stop_the_melody|stop_the_piano|pause|pause_the_music|pause_it|pause_the_song|halt|enough|that_is_enough|that_will_do|silence|end_the_music|turn_off_the_music|shut_off_the_music|cut_the_music|quiet_please] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.stop"
     kind=request
     priority=12
@@ -190,7 +190,7 @@
     example="Pause the music."
 
 @pat.media.music.loop.on core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [loop|repeat|keep_playing|play_on_repeat|play_in_a_loop|play_continuously|keep_repeating|put_it_on_repeat|play_over_and_over|turn_on_the_loop|turn_the_loop_on|loop_on|set_the_loop|start_the_loop] [it|that|this|the_song|the_melody|the_music|the_tune]? [forever|continuously|endlessly|in_a_loop|on_repeat|over_and_over]?"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [loop|repeat|keep_playing|play_on_repeat|play_in_a_loop|play_continuously|keep_repeating|put_it_on_repeat|play_over_and_over|turn_on_the_loop|turn_the_loop_on|loop_on|set_the_loop|start_the_loop] [it|that|this|the_song|the_melody|the_music|the_tune]? [forever|continuously|endlessly|in_a_loop|on_repeat|over_and_over]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.loop arg.on=true"
     kind=request
     priority=12
@@ -199,7 +199,7 @@
     example="Play on repeat."
 
 @pat.media.music.loop.off core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [stop_looping|stop_the_loop|turn_off_the_loop|turn_the_loop_off|do_not_loop|no_loop|loop_off|stop_repeating|play_it_once|play_it_only_once|do_not_repeat|do_not_repeat_it|unloop|no_repeat|stop_the_repeat]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [stop_looping|stop_the_loop|turn_off_the_loop|turn_the_loop_off|do_not_loop|no_loop|loop_off|stop_repeating|play_it_once|play_it_only_once|do_not_repeat|do_not_repeat_it|unloop|no_repeat|stop_the_repeat] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.loop arg.on=false"
     kind=request
     priority=12
@@ -207,7 +207,7 @@
     example="Turn off the loop."
 
 @pat.media.music.slow.play core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [play|try|take|do] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? {deg:lex.media.music.degrees?} [slower|more_slowly|slowly]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [play|try|take|do] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? {deg:lex.media.music.degrees?} [slower|more_slowly|slowly] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.tempo arg.deg={deg} arg.dir=slower arg.replay=true"
     kind=request
     priority=12
@@ -215,7 +215,7 @@
     example="Play it a bit slower."
 
 @pat.media.music.fast.play core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [play|try|take|do] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? {deg:lex.media.music.degrees?} [faster|more_quickly|quicker|quickly|more_fast]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [play|try|take|do] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? {deg:lex.media.music.degrees?} [faster|more_quickly|quicker|quickly|more_fast] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.tempo arg.deg={deg} arg.dir=faster arg.replay=true"
     kind=request
     priority=12
@@ -223,7 +223,7 @@
     example="Play it a bit faster."
 
 @pat.media.music.slow.make core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [make|have|set|let_us_go] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? {deg:lex.media.music.degrees?} [slower|more_slowly]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [make|have|set|let_us_go] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? {deg:lex.media.music.degrees?} [slower|more_slowly] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.tempo arg.deg={deg} arg.dir=slower"
     kind=request
     priority=12
@@ -231,7 +231,7 @@
     example="Make the music a lot slower."
 
 @pat.media.music.fast.make core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [make|have|set|let_us_go] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? {deg:lex.media.music.degrees?} [faster|more_quickly|quicker]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [make|have|set|let_us_go] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? {deg:lex.media.music.degrees?} [faster|more_quickly|quicker] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.tempo arg.deg={deg} arg.dir=faster"
     kind=request
     priority=12
@@ -239,7 +239,7 @@
     example="Make it a bit faster."
 
 @pat.media.music.slow.down core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [slow_it_down|slow_that_down|slow_the_music_down|slow_the_song_down|slow_the_tune_down|slow_down_the_music|slow_down_the_song|slow_down_the_tune|slow_down_the_melody|decrease_the_tempo|reduce_the_tempo|lower_the_tempo|decrease_tempo|slow_the_tempo_down]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [slow_it_down|slow_that_down|slow_the_music_down|slow_the_song_down|slow_the_tune_down|slow_down_the_music|slow_down_the_song|slow_down_the_tune|slow_down_the_melody|decrease_the_tempo|reduce_the_tempo|lower_the_tempo|decrease_tempo|slow_the_tempo_down] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.tempo arg.dir=slower"
     kind=request
     priority=12
@@ -247,7 +247,7 @@
     example="Lower the tempo."
 
 @pat.media.music.speed.up core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [speed_it_up|speed_that_up|speed_the_music_up|speed_the_song_up|speed_up_the_music|speed_up_the_song|speed_up_the_tune|speed_up_the_melody|speed_up_the_playback|increase_the_tempo|raise_the_tempo|boost_the_tempo|increase_tempo|speed_the_tempo_up]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [speed_it_up|speed_that_up|speed_the_music_up|speed_the_song_up|speed_up_the_music|speed_up_the_song|speed_up_the_tune|speed_up_the_melody|speed_up_the_playback|increase_the_tempo|raise_the_tempo|boost_the_tempo|increase_tempo|speed_the_tempo_up] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.tempo arg.dir=faster"
     kind=request
     priority=12
@@ -255,7 +255,7 @@
     example="Increase the tempo."
 
 @pat.media.music.tempo.set core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [set|change|make|put|adjust|use] [the|a|my|your]? [tempo|bpm|beat|pace] [to|at|of|as]? {bpm:number} [bpm|beats_per_minute|beats_a_minute]?"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [set|change|make|put|adjust|use] [the|a|my|your]? [tempo|bpm|beat|pace] [to|at|of|as]? {bpm:number} [bpm|beats_per_minute|beats_a_minute]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.tempo arg.bpm={bpm}"
     kind=request
     priority=12
@@ -263,14 +263,14 @@
     example="Change the tempo to 80 bpm."
 
 @pat.media.music.tempo.play core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [play|do|go|run|take] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? [at|with|in] {bpm:number} [bpm|beats_per_minute|beats_a_minute]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [play|do|go|run|take] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? [at|with|in] {bpm:number} [bpm|beats_per_minute|beats_a_minute] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.tempo arg.bpm={bpm} arg.replay=true"
     kind=request
     priority=12
     example="Play it at 90 bpm."
 
 @pat.media.music.tempo.factor core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [play|do|go|run|take|put] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? [at]? {f:number} [speed|the_speed|times_the_speed|times_as_fast|times_speed]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [play|do|go|run|take|put] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? [at]? {f:number} [speed|the_speed|times_the_speed|times_as_fast|times_speed] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.tempo arg.f={f} arg.replay=true"
     kind=request
     priority=12
@@ -278,21 +278,21 @@
     example="Play it at 2 times the speed."
 
 @pat.media.music.tempo.double core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [play|do|go|run|take|put] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? [at]? [double_speed|double_time|twice_the_speed|twice_as_fast|double_the_speed|twice_as_quickly]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [play|do|go|run|take|put] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? [at]? [double_speed|double_time|twice_the_speed|twice_as_fast|double_the_speed|twice_as_quickly] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.tempo arg.f=2 arg.replay=true"
     kind=request
     priority=12
     example="Play it twice as fast."
 
 @pat.media.music.tempo.reset core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [reset|restore|unlock] [the]? [tempo|speed_of_the_song]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [reset|restore|unlock] [the]? [tempo|speed_of_the_song] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.tempo arg.dir=reset"
     kind=request
     priority=12
     example="Reset the tempo."
 
 @pat.media.music.loud.make core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [make|turn|play|have|set|put|do]? [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? {deg:lex.media.music.degrees?} [louder|more_loudly|more_loud]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [make|turn|play|have|set|put|do]? [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? {deg:lex.media.music.degrees?} [louder|more_loudly|more_loud] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.volume arg.deg={deg} arg.dir=louder"
     kind=request
     priority=12
@@ -301,7 +301,7 @@
     example="Play it a bit louder."
 
 @pat.media.music.quiet.make core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [make|turn|play|have|set|put|do]? [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? {deg:lex.media.music.degrees?} [quieter|softer|more_quietly|more_softly|more_quiet]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [make|turn|play|have|set|put|do]? [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? {deg:lex.media.music.degrees?} [quieter|softer|more_quietly|more_softly|more_quiet] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.volume arg.deg={deg} arg.dir=quieter"
     kind=request
     priority=12
@@ -310,7 +310,7 @@
     example="Play it a bit quieter."
 
 @pat.media.music.loud.up core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [turn_it_up|turn_the_volume_up|turn_up_the_volume|turn_the_music_up|turn_up_the_music|volume_up|increase_the_volume|raise_the_volume|turn_the_sound_up|turn_up_the_sound|more_volume|turn_it_up_a_bit|turn_it_up_a_little]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [turn_it_up|turn_the_volume_up|turn_up_the_volume|turn_the_music_up|turn_up_the_music|volume_up|increase_the_volume|raise_the_volume|turn_the_sound_up|turn_up_the_sound|more_volume|turn_it_up_a_bit|turn_it_up_a_little] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.volume arg.dir=louder"
     kind=request
     priority=12
@@ -318,7 +318,7 @@
     example="Turn it up."
 
 @pat.media.music.quiet.down core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [turn_it_down|turn_the_volume_down|turn_down_the_volume|turn_the_music_down|turn_down_the_music|volume_down|decrease_the_volume|lower_the_volume|reduce_the_volume|turn_the_sound_down|turn_down_the_sound|less_volume|turn_it_down_a_bit|turn_it_down_a_little]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [turn_it_down|turn_the_volume_down|turn_down_the_volume|turn_the_music_down|turn_down_the_music|volume_down|decrease_the_volume|lower_the_volume|reduce_the_volume|turn_the_sound_down|turn_down_the_sound|less_volume|turn_it_down_a_bit|turn_it_down_a_little] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.volume arg.dir=quieter"
     kind=request
     priority=12
@@ -326,7 +326,7 @@
     example="Turn it down."
 
 @pat.media.music.volume.set core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [set|change|make|put|adjust] [the|a|my|your]? volume [to|at]? {v:number} [percent|per_cent]?"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [set|change|make|put|adjust] [the|a|my|your]? volume [to|at]? {v:number} [percent|per_cent]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.volume arg.v={v}"
     kind=request
     priority=12
@@ -334,35 +334,35 @@
     example="Set the volume to 80 percent."
 
 @pat.media.music.volume.n core.pattern
-    match="volume {v:number} [percent|per_cent]?"
+    match="volume {v:number} [percent|per_cent]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.volume arg.v={v}"
     kind=request
     priority=12
     example="Volume 30."
 
 @pat.media.music.volume.full core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [full_volume|maximum_volume|max_volume|loudest|as_loud_as_possible|play_at_full_volume|set_the_volume_to_maximum|set_the_volume_to_max]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [full_volume|maximum_volume|max_volume|loudest|as_loud_as_possible|play_at_full_volume|set_the_volume_to_maximum|set_the_volume_to_max] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.volume arg.v=100"
     kind=request
     priority=12
     example="Full volume."
 
 @pat.media.music.volume.mid core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [0.5_volume|medium_volume|normal_volume|default_volume|play_at_normal_volume|set_the_volume_to_normal]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [0.5_volume|medium_volume|normal_volume|default_volume|play_at_normal_volume|set_the_volume_to_normal] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.volume arg.v=70"
     kind=request
     priority=12
     example="Normal volume."
 
 @pat.media.music.volume.low core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [minimum_volume|lowest_volume|very_quiet|very_quietly|as_quiet_as_possible|play_very_softly|set_the_volume_to_minimum]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [minimum_volume|lowest_volume|very_quiet|very_quietly|as_quiet_as_possible|play_very_softly|set_the_volume_to_minimum] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.volume arg.v=10"
     kind=request
     priority=12
     example="Very quiet."
 
 @pat.media.music.inst.change core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [change|switch|set|swap|select|choose|pick] [the|my|your]? [instrument|sound|voice|timbre] [to|for|into|with|as]? [the|a|an|some]? {inst:lex.media.music.instruments}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [change|switch|set|swap|select|choose|pick] [the|my|your]? [instrument|sound|voice|timbre] [to|for|into|with|as]? [the|a|an|some]? {inst:lex.media.music.instruments} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.instrument arg.inst={inst}"
     kind=request
     priority=12
@@ -370,7 +370,7 @@
     example="Switch the sound to the bells."
 
 @pat.media.music.inst.use core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [use|switch_to|change_to|go_to|select|choose|pick|take|give_me|i_want|i_would_like|i_like|let_us_try|how_about|what_about|put_on|try] [the|a|an|some]? {inst:lex.media.music.instruments} [sound|instrument|voice]?"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [use|switch_to|change_to|go_to|select|choose|pick|take|give_me|i_want|i_would_like|i_like|let_us_try|how_about|what_about|put_on|try] [the|a|an|some]? {inst:lex.media.music.instruments} [sound|instrument|voice]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.instrument arg.inst={inst}"
     kind=request
     priority=12
@@ -380,7 +380,7 @@
     example="How about the marimba?"
 
 @pat.media.music.inst.like core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [make|let|have] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? [sound|play|be|play_like|sound_like|play_as]? [like|as]? [the|a|an|some]? {inst:lex.media.music.instruments}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [make|let|have] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? [sound|play|be|play_like|sound_like|play_as]? [like|as]? [the|a|an|some]? {inst:lex.media.music.instruments} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.instrument arg.inst={inst}"
     kind=request
     priority=12
@@ -388,7 +388,7 @@
     example="Make it bells."
 
 @pat.media.music.octave.play core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [play|do|try|hear] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? [by]? [an|one|a|1]? {deg:lex.media.music.degrees?} {n:number?} [octave|octaves] {dir:lex.media.music.dirs}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [play|do|try|hear] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? [by]? [an|one|a|1]? {deg:lex.media.music.degrees?} {n:number?} [octave|octaves] {dir:lex.media.music.dirs} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.octave arg.deg={deg} arg.n={n} arg.dir={dir} arg.replay=true"
     kind=request
     priority=12
@@ -396,7 +396,7 @@
     example="Play it two octaves lower."
 
 @pat.media.music.octave.shift core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [shift|move|raise|lift|lower|drop|transpose|take|put|go|pitch]? [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? [by]? [an|one|a]? {n:number?} [octave|octaves] {dir:lex.media.music.dirs}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [shift|move|raise|lift|lower|drop|transpose|take|put|go|pitch]? [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? [by]? [an|one|a]? {n:number?} [octave|octaves] {dir:lex.media.music.dirs} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.octave arg.n={n} arg.dir={dir}"
     kind=request
     priority=12
@@ -405,7 +405,7 @@
     example="An octave higher."
 
 @pat.media.music.octave.dirfirst core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [shift|move|transpose|go|play|raise|lift|take|pitch|put] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? {dir:lex.media.music.dirs} [by]? [an|one|a]? {n:number?} [octave|octaves]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [shift|move|transpose|go|play|raise|lift|take|pitch|put] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? {dir:lex.media.music.dirs} [by]? [an|one|a]? {n:number?} [octave|octaves] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.octave arg.dir={dir} arg.n={n}"
     kind=request
     priority=12
@@ -413,21 +413,21 @@
     example="Play it up an octave."
 
 @pat.media.music.octave.raise core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [raise|lift|boost|take_up|bring_up] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? [by]? [an|one|a]? {n:number?} [octave|octaves]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [raise|lift|boost|take_up|bring_up] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? [by]? [an|one|a]? {n:number?} [octave|octaves] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.octave arg.n={n} arg.dir=up"
     kind=request
     priority=12
     example="Raise it an octave."
 
 @pat.media.music.octave.lower core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [lower|drop|take_down|bring_down] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? [by]? [an|one|a]? {n:number?} [octave|octaves]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [lower|drop|take_down|bring_down] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? [by]? [an|one|a]? {n:number?} [octave|octaves] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.octave arg.n={n} arg.dir=down"
     kind=request
     priority=12
     example="Lower it two octaves."
 
 @pat.media.music.octave.hl core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [play|make|go|take|put|do] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything] {deg:lex.media.music.degrees?} {dir:lex.media.music.dirs}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [play|make|go|take|put|do] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything] {deg:lex.media.music.degrees?} {dir:lex.media.music.dirs} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.octave arg.deg={deg} arg.dir={dir} arg.hl=true"
     kind=request
     priority=12
@@ -435,7 +435,7 @@
     example="Make it a lot lower."
 
 @pat.media.music.transpose.by core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [transpose|shift|move|raise|lift|lower|drop|take|put|go|pitch|play|try|sing] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? {dir:lex.media.music.dirs} [by|a|an|one|the_interval_of]? {n:number?} {unit:lex.media.music.intervals}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [transpose|shift|move|raise|lift|lower|drop|take|put|go|pitch|play|try|sing] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? {dir:lex.media.music.dirs} [by|a|an|one|the_interval_of]? {n:number?} {unit:lex.media.music.intervals} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.transpose arg.dir={dir} arg.n={n} arg.unit={unit}"
     kind=request
     priority=12
@@ -445,7 +445,7 @@
     example="Move it up a minor third."
 
 @pat.media.music.transpose.to core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [transpose|shift|move|change|put|take|play|sing|modulate|try] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? [to|into|in] [the]? [key_of|key]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [key]?"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [transpose|shift|move|change|put|take|play|sing|modulate|try] [it|that|this|the_song|the_tune|the_melody|the_music|the_scale|the_chord|the_notes|everything]? [to|into|in] [the]? [key_of|key]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [key]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.transposeTo arg.root={root} arg.m={m}"
     kind=request
     priority=12
@@ -454,7 +454,7 @@
     example="Move it to the key of A minor."
 
 @pat.media.music.key.set core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [set|change|switch|make|put] [the]? key [to|as|of]? {root:lex.media.music.notes} {m:lex.media.music.modes?}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [set|change|switch|make|put] [the]? key [to|as|of]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.key arg.root={root} arg.m={m}"
     kind=request
     priority=12
@@ -462,7 +462,7 @@
     example="Change the key to A minor."
 
 @pat.media.music.key.in core.pattern
-    match="[we_are_in|we_are_playing_in|i_am_in|the_key_is|our_key_is|we_are_in_the_key_of|let_us_play_in] [the]? [key_of|key]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [key]?"
+    match="[we_are_in|we_are_playing_in|i_am_in|the_key_is|our_key_is|we_are_in_the_key_of|let_us_play_in] [the]? [key_of|key]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [key]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.key arg.root={root} arg.m={m}"
     kind=request
     priority=12
@@ -470,7 +470,7 @@
     example="The key is E minor."
 
 @pat.media.music.melody.write core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [write|compose|create|make|make_up|start|begin|record|enter|type|input|note_down|jot_down|put_together|come_up_with] [me]? [a|an|the|my|new]? [new]? [melody|tune|song|motif|riff|phrase|sequence|sequence_of_notes] [with|using|of|made_of|from|containing|like|saying|that_goes|called]? {notes:rest}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [write|compose|create|make|make_up|start|begin|record|enter|type|input|note_down|jot_down|put_together|come_up_with] [me]? [a|an|the|my|new]? [new]? [melody|tune|song|motif|riff|phrase|sequence|sequence_of_notes] [with|using|of|made_of|from|containing|like|saying|that_goes|called]? {notes:rest}"
     emit="@{_} core.request action=music.melodySet arg.notes=\"{notes}\""
     kind=request
     priority=12
@@ -486,14 +486,14 @@
     example="My melody is C E G E C."
 
 @pat.media.music.melody.notes core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [compose|write|record|enter|type|jot_down|note_down]? [the_notes|these_notes] {notes:rest}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [compose|write|record|enter|type|jot_down|note_down]? [the_notes|these_notes] {notes:rest}"
     emit="@{_} core.request action=music.melodySet arg.notes=\"{notes}\""
     kind=request
     priority=12
     example="Enter the notes C D E."
 
 @pat.media.music.melody.add core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [add|append|insert|continue_with|follow_with|extend_it_with|extend_my_melody_with|extend_the_melody_with|then_add] [the_notes|these_notes|notes|the_note|a_note|note|one_more_note|more_notes|the_following_notes|1_more_note] {notes:rest}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [add|append|insert|continue_with|follow_with|extend_it_with|extend_my_melody_with|extend_the_melody_with|then_add] [the_notes|these_notes|notes|the_note|a_note|note|one_more_note|more_notes|the_following_notes|1_more_note] {notes:rest}"
     emit="@{_} core.request action=music.melodyAdd arg.notes=\"{notes}\""
     kind=request
     priority=12
@@ -501,7 +501,7 @@
     example="Continue with the notes E D C."
 
 @pat.media.music.melody.add.bare core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [add|append|continue_with|follow_with|extend_it_with|extend_my_melody_with|extend_the_melody_with|then_add] {notes:rest}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [add|append|continue_with|follow_with|extend_it_with|extend_my_melody_with|extend_the_melody_with|then_add] {notes:rest}"
     emit="@{_} core.request action=music.melodyAdd arg.notes=\"{notes}\""
     kind=request
     priority=9
@@ -510,14 +510,14 @@
     example="Continue with E D C."
 
 @pat.media.music.melody.add.rest core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [add|append|insert] [a|one|1]? [rest|pause] [to_my_melody|to_the_melody|at_the_end]?"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [add|append|insert] [a|one|1]? [rest|pause] [to_my_melody|to_the_melody|at_the_end]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.melodyAdd arg.notes=rest"
     kind=request
     priority=12
     example="Add a pause."
 
 @pat.media.music.melody.clear core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [clear|delete|erase|reset|forget|throw_away|remove|discard|wipe|empty|scrap] [my|the|this]? [melody|tune|composition|recording|notes]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [clear|delete|erase|reset|forget|throw_away|remove|discard|wipe|empty|scrap] [my|the|this]? [melody|tune|composition|recording|notes] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.melodyClear"
     kind=request
     priority=12
@@ -525,14 +525,14 @@
     example="Delete the melody."
 
 @pat.media.music.melody.new core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [start|begin|create|make|open] [a|my]? new [melody|tune|composition]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [start|begin|create|make|open] [a|my]? new [melody|tune|composition] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.melodyClear"
     kind=request
     priority=12
     example="Start a new melody."
 
 @pat.media.music.melody.undo core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [remove|delete|erase|undo|take_away|drop|cut] [the]? [last|final|previous] note"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [remove|delete|erase|undo|take_away|drop|cut] [the]? [last|final|previous] note [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.melodyUndo"
     kind=request
     priority=12
@@ -540,7 +540,7 @@
     example="Undo the last note."
 
 @pat.media.music.melody.show core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [show|read|tell|display|list|let_me_see|what_is|what_are|what_was] [me]? [my|the]? [melody|tune|composition|melody_so_far] [so_far|i_wrote|i_made|that_i_wrote]?"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [show|read|tell|display|list|let_me_see|what_is|what_are|what_was] [me]? [my|the]? [melody|tune|composition|melody_so_far] [so_far|i_wrote|i_made|that_i_wrote]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.melodyShow"
     kind=request
     priority=12
@@ -549,14 +549,14 @@
     example="Read my melody."
 
 @pat.media.music.melody.count core.pattern
-    match="[how_many_notes] [are_in|are_there_in|does_my_melody_have|does_the_melody_have|has_my_melody] [my|the]? [melody]? [have]?"
+    match="[how_many_notes] [are_in|are_there_in|does_my_melody_have|does_the_melody_have|has_my_melody] [my|the]? [melody]? [have]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.melodyShow arg.count=true"
     kind=request
     priority=12
     example="How many notes are in my melody?"
 
 @pat.media.music.show.notes core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [show|tell|display|list|name|read|let_me_see|what_are|which_are|what_were|which_were|what_are_all|what_notes_are|which_notes_are] [me]? [the|these|those|those_are|these_are]? [notes|notes_playing|notes_you_played|notes_you_are_playing|notes_you_just_played|notes_in_it|notes_in_this|notes_of_it|notes_of_this]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [show|tell|display|list|name|read|let_me_see|what_are|which_are|what_were|which_were|what_are_all|what_notes_are|which_notes_are] [me]? [the|these|those|those_are|these_are]? [notes|notes_playing|notes_you_played|notes_you_are_playing|notes_you_just_played|notes_in_it|notes_in_this|notes_of_it|notes_of_this] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.showNotes"
     kind=request
     priority=12
@@ -564,7 +564,7 @@
     example="Name the notes."
 
 @pat.media.music.show.notes2 core.pattern
-    match="[what|which] [notes|notes_did_you_play|notes_are_you_playing|notes_are_playing|notes_are_in_it|notes_are_in_this|notes_were_those|notes_are_those|notes_are_these|notes_are_there|notes_does_it_use|notes_does_it_have]"
+    match="[what|which] [notes|notes_did_you_play|notes_are_you_playing|notes_are_playing|notes_are_in_it|notes_are_in_this|notes_were_those|notes_are_those|notes_are_these|notes_are_there|notes_does_it_use|notes_does_it_have] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.showNotes"
     kind=request
     priority=12
@@ -572,7 +572,7 @@
     example="Which notes does it use?"
 
 @pat.media.music.show.score core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and]? [show|display|open|let_me_see|can_i_see|bring_up|put_up|show_me|write_out] [me]? [the|my|your]? [sheet_music|score|notation|staff|stave|music_sheet|sheet|music_score|written_music]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|can_you_please|i_want_you_to|i_would_like_you_to|let_us|lets|let_me|i_want_to|i_would_like_to|i_wanna|we_could|can_we|shall_we|go_ahead_and|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just|pls|plz|pls_can_you|plz_can_you]? [show|display|open|let_me_see|can_i_see|bring_up|put_up|show_me|write_out] [me]? [the|my|your]? [sheet_music|score|notation|staff|stave|music_sheet|sheet|music_score|written_music] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.showScore"
     kind=request
     priority=12
@@ -580,7 +580,7 @@
     example="Show the score."
 
 @pat.media.music.list.songs core.pattern
-    match="[which|what] [songs|tunes|melodies|pieces|nursery_rhymes|music] [do_you_know|can_you_play|do_you_have|are_there|are_available|are_in_your_library|can_i_hear|do_you_remember|can_you_sing|do_you_play|can_i_ask_for|can_i_choose]"
+    match="[which|what] [songs|tunes|melodies|pieces|nursery_rhymes|music] [do_you_know|can_you_play|do_you_have|are_there|are_available|are_in_your_library|can_i_hear|do_you_remember|can_you_sing|do_you_play|can_i_ask_for|can_i_choose] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.listSongs"
     kind=request
     priority=12
@@ -588,7 +588,7 @@
     example="What tunes can you play?"
 
 @pat.media.music.list.songs2 core.pattern
-    match="[list|show|show_me|tell_me|name|give_me|name_all] [me]? [all]? [the|your]? [songs|tunes|melodies|library|song_list|song_library|music_library|nursery_rhymes]"
+    match="[list|show|show_me|tell_me|name|give_me|name_all] [me]? [all]? [the|your]? [songs|tunes|melodies|library|song_list|song_library|music_library|nursery_rhymes] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.listSongs"
     kind=request
     priority=12
@@ -596,14 +596,14 @@
     example="Show me your song library."
 
 @pat.media.music.list.songs3 core.pattern
-    match="[how_many] [songs|tunes|melodies] [do_you_know|do_you_have|can_you_play|are_there]"
+    match="[how_many] [songs|tunes|melodies] [do_you_know|do_you_have|can_you_play|are_there] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.listSongs"
     kind=request
     priority=12
     example="How many songs do you know?"
 
 @pat.media.music.list.inst core.pattern
-    match="[which|what] [instruments|sounds|voices] [do_you_have|can_you_play|can_you_use|are_there|are_available|can_i_use|can_i_choose|do_you_know|can_you_imitate|can_i_pick|can_i_try]"
+    match="[which|what] [instruments|sounds|voices] [do_you_have|can_you_play|can_you_use|are_there|are_available|can_i_use|can_i_choose|do_you_know|can_you_imitate|can_i_pick|can_i_try] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.listInstruments"
     kind=request
     priority=12
@@ -611,14 +611,14 @@
     example="Which sounds can I choose?"
 
 @pat.media.music.list.inst2 core.pattern
-    match="[list|show|name|show_me|tell_me] [me]? [all]? [the|your]? [instruments|sounds|instrument_list]"
+    match="[list|show|name|show_me|tell_me] [me]? [all]? [the|your]? [instruments|sounds|instrument_list] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.listInstruments"
     kind=request
     priority=12
     example="List the instruments."
 
 @pat.media.music.list.types core.pattern
-    match="[which|what] {what:lex.media.music.things} [do_you_know|can_you_play|are_there|can_i_play|are_available|can_you_do|can_i_ask_for]"
+    match="[which|what] {what:lex.media.music.things} [do_you_know|can_you_play|are_there|can_i_play|are_available|can_you_do|can_i_ask_for] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.listTypes arg.what={what}"
     kind=request
     priority=12
@@ -626,7 +626,7 @@
     example="Which chords can you play?"
 
 @pat.media.music.list.types2 core.pattern
-    match="[list|show|name|tell_me|show_me] [me]? [all]? [the|your]? {what:lex.media.music.things} [types|names|list]?"
+    match="[list|show|name|tell_me|show_me] [me]? [all]? [the|your]? {what:lex.media.music.things} [types|names|list]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.listTypes arg.what={what}"
     kind=request
     priority=12
@@ -634,7 +634,7 @@
     example="Show me the chords."
 
 @pat.media.music.q.scale.in core.pattern
-    match="[what|which] [notes|tones|pitches] [are|is] [in|there_in|found_in|part_of|contained_in|used_in] [the|a]? {root:lex.media.music.notes} {st:lex.media.music.scaletypes?} [scale|key]?"
+    match="[what|which] [notes|tones|pitches] [are|is] [in|there_in|found_in|part_of|contained_in|used_in] [the|a]? {root:lex.media.music.notes} {st:lex.media.music.scaletypes?} [scale|key]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.scaleNotes arg.root={root} arg.st={st}"
     kind=request
     priority=12
@@ -642,7 +642,7 @@
     example="Which notes are in the D dorian scale?"
 
 @pat.media.music.q.scale.of core.pattern
-    match="[what_are|what_is|tell_me|give_me|show_me|name|list] [all]? [the]? [notes|tones|pitches] [of|in|for|that_belong_to] [the|a]? {root:lex.media.music.notes} {st:lex.media.music.scaletypes?} [scale|key]?"
+    match="[what_are|what_is|tell_me|give_me|show_me|name|list] [all]? [the]? [notes|tones|pitches] [of|in|for|that_belong_to] [the|a]? {root:lex.media.music.notes} {st:lex.media.music.scaletypes?} [scale|key]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.scaleNotes arg.root={root} arg.st={st}"
     kind=request
     priority=12
@@ -650,7 +650,7 @@
     example="Tell me the notes in G major."
 
 @pat.media.music.q.scale.spell core.pattern
-    match="[spell|spell_out|show|show_me|display|write|write_out|name|list] [me]? [the|a]? {root:lex.media.music.notes} {st:lex.media.music.scaletypes?} scale"
+    match="[spell|spell_out|show|show_me|display|write|write_out|name|list] [me]? [the|a]? {root:lex.media.music.notes} {st:lex.media.music.scaletypes?} scale [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.scaleNotes arg.root={root} arg.st={st}"
     kind=request
     priority=12
@@ -658,7 +658,7 @@
     example="Show me the G major scale."
 
 @pat.media.music.q.chord.in core.pattern
-    match="[what|which] [notes|tones|pitches] [are|is] [in|there_in|found_in|part_of|contained_in|used_in|make_up|form] [the|a|an]? {root:lex.media.music.notes} {q:lex.media.music.qualities?} {n:number?} [chord|triad]"
+    match="[what|which] [notes|tones|pitches] [are|is] [in|there_in|found_in|part_of|contained_in|used_in|make_up|form] [the|a|an]? {root:lex.media.music.notes} {q:lex.media.music.qualities?} {n:number?} [chord|triad] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.chordNotes arg.root={root} arg.q={q} arg.n={n}"
     kind=request
     priority=12
@@ -666,14 +666,14 @@
     example="Which notes are in an A 7 chord?"
 
 @pat.media.music.q.chord.of core.pattern
-    match="[what_are|what_is|tell_me|give_me|show_me|name|list] [the]? [notes|tones|pitches] [of|in|for] [the|a|an]? {root:lex.media.music.notes} {q:lex.media.music.qualities?} {n:number?} [chord|triad]"
+    match="[what_are|what_is|tell_me|give_me|show_me|name|list] [the]? [notes|tones|pitches] [of|in|for] [the|a|an]? {root:lex.media.music.notes} {q:lex.media.music.qualities?} {n:number?} [chord|triad] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.chordNotes arg.root={root} arg.q={q} arg.n={n}"
     kind=request
     priority=12
     example="What are the notes of a G major chord?"
 
 @pat.media.music.q.chord.spell core.pattern
-    match="[spell|spell_out|show|show_me|display|write_out|name] [me]? [the|a|an]? {root:lex.media.music.notes} {q:lex.media.music.qualities?} {n:number?} [chord|triad]"
+    match="[spell|spell_out|show|show_me|display|write_out|name] [me]? [the|a|an]? {root:lex.media.music.notes} {q:lex.media.music.qualities?} {n:number?} [chord|triad] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.chordNotes arg.root={root} arg.q={q} arg.n={n}"
     kind=request
     priority=12
@@ -681,7 +681,7 @@
     example="Show me a D minor chord."
 
 @pat.media.music.q.chord.name core.pattern
-    match="[what|which] chord [is|are|do|does|would|will] {notes:words(10)} [make|form|together|make_up|spell|give|produce|together_make]?"
+    match="[what|which] chord [is|are|do|does|would|will] {notes:words(10)} [make|form|together|make_up|spell|give|produce|together_make]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.chordName arg.notes=\"{notes}\""
     kind=request
     priority=12
@@ -690,7 +690,7 @@
     example="Which chord is A C E?"
 
 @pat.media.music.q.chord.name2 core.pattern
-    match="[name|identify|find|tell_me|what_is|recognize] [the]? chord [of|for|with|made_of|made_up_of|containing|from]? {notes:words(10)} [together|played_together]?"
+    match="[name|identify|find|tell_me|what_is|recognize] [the]? chord [of|for|with|made_of|made_up_of|containing|from]? {notes:words(10)} [together|played_together]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.chordName arg.notes=\"{notes}\""
     kind=request
     priority=11
@@ -698,7 +698,7 @@
     example="Identify the chord D F# A."
 
 @pat.media.music.q.sig.does core.pattern
-    match="how_many {acc:lex.media.music.accs} [does|do|has] [the]? [key_of|scale_of|key|scale]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [key|scale]? [have|contain|use|need]?"
+    match="how_many {acc:lex.media.music.accs} [does|do|has] [the]? [key_of|scale_of|key|scale]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [key|scale]? [have|contain|use|need]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.keySig arg.acc={acc} arg.root={root} arg.m={m}"
     kind=request
     priority=12
@@ -706,7 +706,7 @@
     example="How many flats does F major have?"
 
 @pat.media.music.q.sig.in core.pattern
-    match="how_many {acc:lex.media.music.accs} [are|is] [there]? [in|there_in|found_in|used_in] [the]? [key_of|scale_of|key|scale]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [key|scale]?"
+    match="how_many {acc:lex.media.music.accs} [are|is] [there]? [in|there_in|found_in|used_in] [the]? [key_of|scale_of|key|scale]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [key|scale]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.keySig arg.acc={acc} arg.root={root} arg.m={m}"
     kind=request
     priority=12
@@ -714,7 +714,7 @@
     example="How many sharps are in the key of A?"
 
 @pat.media.music.q.sig.what core.pattern
-    match="[what_is|what_are|tell_me|show_me|give_me|which_are] [the]? [key_signature|sharps|flats|accidentals|key_signature_of] [of|for|in]? [the]? [key_of|scale_of|key|scale]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [key|scale]?"
+    match="[what_is|what_are|tell_me|show_me|give_me|which_are] [the]? [key_signature|sharps|flats|accidentals|key_signature_of] [of|for|in]? [the]? [key_of|scale_of|key|scale]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [key|scale]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.keySig arg.root={root} arg.m={m}"
     kind=request
     priority=12
@@ -722,14 +722,14 @@
     example="What are the sharps in D major?"
 
 @pat.media.music.q.sig.which core.pattern
-    match="which [notes|ones|notes_are] [are|is]? {acc:lex.media.music.accs} [in|for|of] [the]? [key_of|scale_of|key|scale]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [key|scale]?"
+    match="which [notes|ones|notes_are] [are|is]? {acc:lex.media.music.accs} [in|for|of] [the]? [key_of|scale_of|key|scale]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [key|scale]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.keySig arg.acc={acc} arg.root={root} arg.m={m}"
     kind=request
     priority=12
     example="Which notes are sharp in G major?"
 
 @pat.media.music.q.sig.rev core.pattern
-    match="[which|what] {m:lex.media.music.modes?} [key|keys|scale] [has|have|uses|use|contains|contain|with] {n:number} {acc:lex.media.music.accs}"
+    match="[which|what] {m:lex.media.music.modes?} [key|keys|scale] [has|have|uses|use|contains|contain|with] {n:number} {acc:lex.media.music.accs} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.keyWith arg.m={m} arg.n={n} arg.acc={acc}"
     kind=request
     priority=12
@@ -737,7 +737,7 @@
     example="What key has 3 flats?"
 
 @pat.media.music.q.interval.between core.pattern
-    match="[what_is|what_was|tell_me|give_me|name] [the]? interval [between|from] {a:lex.media.music.notes} {oa:number?} [and|to] {b:lex.media.music.notes} {ob:number?}"
+    match="[what_is|what_was|tell_me|give_me|name] [the]? interval [between|from] {a:lex.media.music.notes} {oa:number?} [and|to] {b:lex.media.music.notes} {ob:number?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.interval arg.a={a} arg.oa={oa} arg.b={b} arg.ob={ob}"
     kind=request
     priority=12
@@ -745,28 +745,28 @@
     example="What is the interval from E to B?"
 
 @pat.media.music.q.interval.is core.pattern
-    match="[what|which] interval [is|are|do|does] {a:lex.media.music.notes} {oa:number?} [to|and|from] {b:lex.media.music.notes} {ob:number?}"
+    match="[what|which] interval [is|are|do|does] {a:lex.media.music.notes} {oa:number?} [to|and|from] {b:lex.media.music.notes} {ob:number?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.interval arg.a={a} arg.oa={oa} arg.b={b} arg.ob={ob}"
     kind=request
     priority=12
     example="What interval is C to E?"
 
 @pat.media.music.q.interval.semis core.pattern
-    match="[how_many|how_far] [semitones|half_steps|steps] [are_there|are|is_it|is|are_there_in|apart]? [between|from] {a:lex.media.music.notes} {oa:number?} [and|to] {b:lex.media.music.notes} {ob:number?}"
+    match="[how_many|how_far] [semitones|half_steps|steps] [are_there|are|is_it|is|are_there_in|apart]? [between|from] {a:lex.media.music.notes} {oa:number?} [and|to] {b:lex.media.music.notes} {ob:number?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.interval arg.a={a} arg.oa={oa} arg.b={b} arg.ob={ob} arg.want=semitones"
     kind=request
     priority=12
     example="How many semitones are between C and G?"
 
 @pat.media.music.q.interval.far core.pattern
-    match="[how_far_is|what_is_the_distance_from|what_is_the_distance_between] {a:lex.media.music.notes} {oa:number?} [from|to|and] {b:lex.media.music.notes} {ob:number?}"
+    match="[how_far_is|what_is_the_distance_from|what_is_the_distance_between] {a:lex.media.music.notes} {oa:number?} [from|to|and] {b:lex.media.music.notes} {ob:number?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.interval arg.a={a} arg.oa={oa} arg.b={b} arg.ob={ob}"
     kind=request
     priority=12
     example="How far is C from E?"
 
 @pat.media.music.q.above core.pattern
-    match="[what|which] [note|pitch]? [is|are|lies|comes|do_you_get] [a|an|the]? {iv:lex.media.music.intervals} {dir:lex.media.music.dirs} {note:lex.media.music.notes}"
+    match="[what|which] [note|pitch]? [is|are|lies|comes|do_you_get] [a|an|the]? {iv:lex.media.music.intervals} {dir:lex.media.music.dirs} {note:lex.media.music.notes} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.above arg.iv={iv} arg.dir={dir} arg.note={note}"
     kind=request
     priority=12
@@ -775,7 +775,7 @@
     example="Which note is a major third above E flat?"
 
 @pat.media.music.q.relative core.pattern
-    match="[what_is|what_are|which_is|tell_me] [the]? relative {kind:lex.media.music.modes} [of|to|for] {root:lex.media.music.notes} {m:lex.media.music.modes?} [key]?"
+    match="[what_is|what_are|which_is|tell_me] [the]? relative {kind:lex.media.music.modes} [of|to|for] {root:lex.media.music.notes} {m:lex.media.music.modes?} [key]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.relative arg.kind={kind} arg.root={root} arg.m={m}"
     kind=request
     priority=12
@@ -783,7 +783,7 @@
     example="What is the relative major of A minor?"
 
 @pat.media.music.q.keychords core.pattern
-    match="[what|which] chords [are|can_i_play|can_i_use|belong|fit|do_you_get|are_there] [in|to|of|from|for|belong_to|fit_in] [the]? [key_of|scale_of|key|scale]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [key|scale]?"
+    match="[what|which] chords [are|can_i_play|can_i_use|belong|fit|do_you_get|are_there] [in|to|of|from|for|belong_to|fit_in] [the]? [key_of|scale_of|key|scale]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [key|scale]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.keyChords arg.root={root} arg.m={m}"
     kind=request
     priority=12
@@ -791,14 +791,14 @@
     example="Which chords fit in G major?"
 
 @pat.media.music.q.keychords2 core.pattern
-    match="[what_are|show_me|give_me|tell_me|list] [all]? [the]? chords [in|of|for|from] [the]? [key_of|scale_of|key|scale]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [key|scale]?"
+    match="[what_are|show_me|give_me|tell_me|list] [all]? [the]? chords [in|of|for|from] [the]? [key_of|scale_of|key|scale]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [key|scale]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.keyChords arg.root={root} arg.m={m}"
     kind=request
     priority=12
     example="What are the chords in D major?"
 
 @pat.media.music.q.freq core.pattern
-    match="[what_is|what_are|tell_me|give_me] [the]? [frequency|pitch|hertz] [of|for] [the|a]? {reg:lex.media.music.registers?} [note]? {note:lex.media.music.notes} {oct:number?}"
+    match="[what_is|what_are|tell_me|give_me] [the]? [frequency|pitch|hertz] [of|for] [the|a]? {reg:lex.media.music.registers?} [note]? {note:lex.media.music.notes} {oct:number?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.frequency arg.reg={reg} arg.note={note} arg.oct={oct}"
     kind=request
     priority=12
@@ -806,14 +806,14 @@
     example="What is the frequency of middle C?"
 
 @pat.media.music.q.freq2 core.pattern
-    match="how_many [hertz|hz] [is|does] [the|a]? {reg:lex.media.music.registers?} [note]? {note:lex.media.music.notes} {oct:number?} [have]?"
+    match="how_many [hertz|hz] [is|does] [the|a]? {reg:lex.media.music.registers?} [note]? {note:lex.media.music.notes} {oct:number?} [have]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.frequency arg.reg={reg} arg.note={note} arg.oct={oct}"
     kind=request
     priority=12
     example="How many hertz is middle C?"
 
 @pat.media.music.q.enh core.pattern
-    match="[what_is|what_are|tell_me] [another|the_other|an_alternative|the_enharmonic|the_alternate|the_equivalent|an_other] [name|names|spelling|note]? [for|of] {note:lex.media.music.notes}"
+    match="[what_is|what_are|tell_me] [another|the_other|an_alternative|the_enharmonic|the_alternate|the_equivalent|an_other] [name|names|spelling|note]? [for|of] {note:lex.media.music.notes} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.enharmonic arg.note={note}"
     kind=request
     priority=12
@@ -821,7 +821,7 @@
     example="What is the enharmonic of A flat?"
 
 @pat.media.music.s.tempo core.pattern
-    match="[what_is|what_was|tell_me|show_me|what_are] [the|your|my|our]? [tempo|bpm|beats_per_minute]"
+    match="[what_is|what_was|tell_me|show_me|what_are] [the|your|my|our]? [tempo|bpm|beats_per_minute] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.status arg.what=tempo"
     kind=request
     priority=12
@@ -829,14 +829,14 @@
     example="Tell me the bpm."
 
 @pat.media.music.s.tempo2 core.pattern
-    match="[how_fast|how_slow] [is|are_you_playing|is_it|is_the_music|are_we_playing|is_the_tempo]"
+    match="[how_fast|how_slow] [is|are_you_playing|is_it|is_the_music|are_we_playing|is_the_tempo] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.status arg.what=tempo"
     kind=request
     priority=12
     example="How fast is it?"
 
 @pat.media.music.s.inst core.pattern
-    match="[what|which] [instrument|sound] [is|are|am|do] [this|that|it|you_using|you_playing|selected|being_used|in_use|used|set|do_you_use|are_we_using|i_using|playing|you_use]"
+    match="[what|which] [instrument|sound] [is|are|am|do] [this|that|it|you_using|you_playing|selected|being_used|in_use|used|set|do_you_use|are_we_using|i_using|playing|you_use] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.status arg.what=instrument"
     kind=request
     priority=12
@@ -844,28 +844,28 @@
     example="Which instrument are you using?"
 
 @pat.media.music.s.volume core.pattern
-    match="[how_loud|what_is_the_volume|what_volume|how_loud_is_it|how_loud_is_the_music|what_is_the_volume_level|what_is_the_current_volume|how_loud_are_you]"
+    match="[how_loud|what_is_the_volume|what_volume|how_loud_is_it|how_loud_is_the_music|what_is_the_volume_level|what_is_the_current_volume|how_loud_are_you] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.status arg.what=volume"
     kind=request
     priority=12
     example="How loud is it?"
 
 @pat.media.music.s.key core.pattern
-    match="what key [are_we_in|am_i_in|are_you_in|are_we_playing_in|is_selected|is_set|are_we_using|do_we_have]"
+    match="what key [are_we_in|am_i_in|are_you_in|are_we_playing_in|is_selected|is_set|are_we_using|do_we_have] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.status arg.what=key"
     kind=request
     priority=12
     example="What key are we in?"
 
 @pat.media.music.s.key2 core.pattern
-    match="[what_is|which_is|tell_me] [the|our|my]? [key|current_key]"
+    match="[what_is|which_is|tell_me] [the|our|my]? [key|current_key] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.status arg.what=key"
     kind=request
     priority=12
     example="What is the key?"
 
 @pat.media.music.s.playing core.pattern
-    match="[what_is_playing|what_are_you_playing|what_are_you_playing_now|what_did_you_play|what_did_you_just_play|what_was_that|what_is_this_song|what_is_this_tune|what_song_is_this|what_song_is_that|what_is_that_song|what_am_i_hearing|what_is_playing_now|what_are_we_listening_to|what_is_this_melody|what_is_the_current_melody]"
+    match="[what_is_playing|what_are_you_playing|what_are_you_playing_now|what_did_you_play|what_did_you_just_play|what_was_that|what_is_this_song|what_is_this_tune|what_song_is_this|what_song_is_that|what_is_that_song|what_am_i_hearing|what_is_playing_now|what_are_we_listening_to|what_is_this_melody|what_is_the_current_melody] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.status arg.what=playing"
     kind=request
     priority=12
@@ -873,7 +873,7 @@
     example="What are you playing?"
 
 @pat.media.music.s.isplaying core.pattern
-    match="[is|are] [the_music|you|it|anything|something|the_piano] [playing|looping|on]"
+    match="[is|are] [the_music|you|it|anything|something|the_piano] [playing|looping|on] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.status arg.what=isplaying"
     kind=request
     priority=12
@@ -881,7 +881,7 @@
     example="Are you playing?"
 
 @pat.media.music.s.loop core.pattern
-    match="[is_loop_on|is_the_loop_on|is_it_looping|are_you_looping|is_looping_on|am_i_looping|is_it_on_repeat|is_the_loop_active]"
+    match="[is_loop_on|is_the_loop_on|is_it_looping|are_you_looping|is_looping_on|am_i_looping|is_it_on_repeat|is_the_loop_active] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.status arg.what=loop"
     kind=request
     priority=12
@@ -897,7 +897,7 @@
     example="Who wrote this song?"
 
 @pat.media.music.song.key core.pattern
-    match="[what|which] key [is|was] [the|this|that]? [song|tune|melody]? {title:words(8)} [in|written_in|played_in|set_in]"
+    match="[what|which] key [is|was] [the|this|that]? [song|tune|melody]? {title:words(8)} [in|written_in|played_in|set_in] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=music.songInfo arg.title=\"{title}\" arg.what=key"
     kind=request
     priority=12
@@ -925,3 +925,486 @@
     kind=request
     priority=9
     example="How long is Ode to Joy?"
+
+@pat.media.music.loop.on2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [put|keep|have|let|make] [it|that|this|the_song|the_melody|the_tune|the_music]? [on_loop|looping|loop|on_repeat|repeating|loop_over_and_over|repeat_over_and_over|repeat_endlessly|repeat_forever|play_forever|play_endlessly|keep_going|go_on_forever|loop_forever|loop_endlessly|play_on_loop] [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.loop arg.on=true"
+    kind=request
+    priority=13
+    example="Keep looping that."
+    example="Let it repeat endlessly."
+    example="Make it loop over and over."
+
+@pat.media.music.loop.on3 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [loop|repeat|replay|cycle] [this|that|it|the|my]? [song|tune|melody|music|track]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.loop arg.on=true"
+    kind=request
+    priority=11
+    example="Loop this song."
+    example="Loop it."
+
+@pat.media.music.loop.off2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [no_more|stop|quit|end|cancel|turn_off|switch_off|disable|cut|kill|drop|do_not|dont|i_do_not_want|i_dont_want|i_do_not_want_it|i_dont_want_it] [the]? [looping|loop|repeating|repeat|it_looping|it_repeating|it_repeat|it_to_loop|it_to_repeat|that_looping|repeating_it|repeating_that|repeat_it|repeat_that|repeat_it_anymore|repeat_that_anymore|it_on_loop] [it|that|anymore|any_more|any_longer]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.loop arg.on=false"
+    kind=request
+    priority=13
+    example="No more looping."
+    example="End the repeat."
+    example="Don't repeat it anymore."
+    example="Cancel the loop."
+
+@pat.media.music.loop.off3 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [unloop|unrepeat|loop_off|repeat_off|no_loop|no_repeat|loop_stop] [it|that|this|the_song|the_melody|the_tune]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.loop arg.on=false"
+    kind=request
+    priority=13
+    example="Unloop it."
+    example="Loop off."
+
+@pat.media.music.vol.up2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [turn_up|boost|crank_up|raise|pump_up|bump_up|increase|up|amp_up|volume_up|raise_the_volume|turn_it_up|boost_it|crank_it_up|bring_up] [it|that|this|the_music|the_sound|the_volume|the_song|volume|the_music_a_bit]? {deg:lex.media.music.degrees?} [it]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.volume arg.deg={deg} arg.dir=louder"
+    kind=request
+    priority=11
+    example="Crank it up a little."
+
+@pat.media.music.vol.down2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [turn_down|lower|drop|reduce|decrease|bring_down|down|volume_down|lower_the_volume|turn_it_down|tone_down|soften|hush] [it|that|this|the_music|the_sound|the_volume|the_song|volume|the_music_a_bit]? {deg:lex.media.music.degrees?} [it]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.volume arg.deg={deg} arg.dir=quieter"
+    kind=request
+    priority=11
+    example="Crank it down a little."
+
+@pat.media.music.tempo.fast2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [speed|step|bump|pick|hurry|crank|raise|push|up|increase|quicken|accelerate|go] [it|that|this|the_song|the_music|the_tempo|the_beat|the_pace]? [up|faster|quicker|more_quickly] {deg:lex.media.music.degrees?} [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.tempo arg.deg={deg} arg.dir=faster"
+    kind=request
+    priority=11
+    example="Speed it up a bit."
+    example="Bump the tempo up."
+
+@pat.media.music.tempo.fast3 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [higher|faster|quicker|increase|raise|bump_up|speed_up|up|more] [the]? [tempo|bpm|speed|pace|beat] {deg:lex.media.music.degrees?} [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.tempo arg.deg={deg} arg.dir=faster"
+    kind=request
+    priority=11
+    example="Higher tempo please."
+    example="Increase the speed."
+
+@pat.media.music.tempo.fast4 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [a_bit|a_little|slightly|a_lot|much|just_a_bit|bit|little] [faster|quicker|zippier|speedier|livelier] [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.tempo arg.dir=faster"
+    kind=request
+    priority=11
+    example="A little quicker please."
+    example="A bit faster."
+
+@pat.media.music.x.tempo.fast5 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [make|get|have|play|go|run] [it|that|this|the_song|the_music]? [a_bit|a_little|slightly|a_lot|much|just_a_bit|bit|little]? [zippier|speedier|livelier|snappier|brisker|hastier|rapid|peppier] [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.tempo arg.dir=faster"
+    kind=request
+    priority=11
+    example="Make it zippier."
+
+@pat.media.music.x.tempo.slow2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [slow|ease|wind|bring|take|drop|lower|reduce|decrease|calm|tone] [it|that|this|the_song|the_music|the_tempo|the_beat|the_pace]? [down|slower|more_slowly|off] {deg:lex.media.music.degrees?} [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.tempo arg.deg={deg} arg.dir=slower"
+    kind=request
+    priority=11
+    example="Slow it down a bit."
+    example="Take the tempo down."
+
+@pat.media.music.x.tempo.slow3 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [lower|slower|reduce|decrease|drop|less] [the]? [tempo|bpm|speed|pace|beat] {deg:lex.media.music.degrees?} [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.tempo arg.deg={deg} arg.dir=slower"
+    kind=request
+    priority=11
+    example="Lower the tempo."
+    example="Slower speed please."
+
+@pat.media.music.x.tempo.slow4 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [a_bit|a_little|slightly|a_lot|much|just_a_bit|bit|little] [slower|calmer|mellower|gentler] [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.tempo arg.dir=slower"
+    kind=request
+    priority=11
+    example="A little slower please."
+
+@pat.media.music.x.tempo.q2 core.pattern
+    match="[how_fast|how_slow|how_quick|how_fast_is|how_fast_are_we|how_quick_is|how_slow_is|is_it_slow_or_fast|is_it_fast_or_slow|what_speed|what_bpm|what_tempo|what_is_the_speed|how_fast_is_the_beat] [is|are|we]? [it|this|that|the_song|the_music|the_beat|we]? [going|playing|at|right_now|now|currently|at_now|at_right_now]? [at|right_now|now|currently|going]? [right_now|now|currently|at|going]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.status arg.what=tempo"
+    kind=question
+    priority=12
+    example="How fast is it going?"
+    example="What bpm are we at?"
+
+@pat.media.music.x.tempo.q3 core.pattern
+    match="[tempo|bpm|speed|beat|beats_per_minute|current_bpm|current_tempo|the_tempo|the_bpm|current_speed] [now|currently|right_now|please]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.status arg.what=tempo"
+    kind=question
+    priority=12
+    example="Tempo?"
+    example="Current bpm?"
+    example="Beats per minute now?"
+
+@pat.media.music.x.tempo.q4 core.pattern
+    match="[what_s|whats|what_is|what_was|what_are|tell_me|show_me|give_me] [the|our|my]? [current|present]? [tempo|bpm|beats_per_minute|speed|beat] [at|right_now|now|currently|is_it|are_we_at|are_we|is_this]? [right_now|now|currently|at|it]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.status arg.what=tempo"
+    kind=question
+    priority=12
+    example="What's the tempo at?"
+    example="What speed is this at?"
+
+@pat.media.music.x.inst.set2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [play|use|try|switch_to|go_with|change_to|make_it|let_it_be|let_it_play_on|let_it_play_as|use_the|play_on|play_it_on|play_it_as|have_it_on|put_it_on|set_it_to|do_it_on|make_it_sound_like|sound_like|play_like|be] [it|that|this|the|a|an|some|on|on_the|on_a|as|as_the|as_a|like|like_a|like_the]? [the|a|an]? {inst:lex.media.music.instruments} [instead|now|please|sound|instrument|voice]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.instrument arg.inst={inst}"
+    kind=request
+    priority=12
+    example="Let it play on the xylophone."
+    example="Can it be the organ instead?"
+    example="Make it sound like a marimba."
+
+@pat.media.music.x.inst.bare core.pattern
+    match="[the|a|an]? {inst:lex.media.music.instruments} [please|pls|plz|instead|now|sound|instrument|voice|thanks]? "
+    emit="@{_} core.request action=music.instrument arg.inst={inst}"
+    kind=request
+    priority=9
+    example="Flute please."
+    example="Organ instead."
+
+@pat.media.music.x.inst.can core.pattern
+    match="[can|could|may] [it|that|this|the_music|the_song] [be|play|sound|go] [on]? [the|a|an|like|like_a|like_the|as|as_a|as_the]? {inst:lex.media.music.instruments} [instead|now|please|pls|plz|sound]?"
+    emit="@{_} core.request action=music.instrument arg.inst={inst}"
+    kind=request
+    priority=12
+    example="Can it be the organ instead?"
+
+@pat.media.music.x.oct.bare core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [an|one|a|1|two|2|three|3]? [octave|octaves] {dir:lex.media.music.dirs} [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.octave arg.dir={dir} arg.replay=true"
+    kind=request
+    priority=12
+    example="An octave up please."
+    example="Octave lower."
+
+@pat.media.music.x.oct.bare2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? {dir:lex.media.music.dirs} [by]? [an|one|a|1|two|2|three|3]? [octave|octaves] [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.octave arg.dir={dir} arg.replay=true"
+    kind=request
+    priority=12
+    example="Higher, one octave."
+    example="Up one octave, can u."
+
+@pat.media.music.x.transpose.up2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [transpose|shift|move|raise|lift|go|pitch|take|bring|put] [it|that|this|the_song|the_tune|the_melody|the_music]? {dir:lex.media.music.dirs} [a|an|by|by_a|by_an|one|the_interval_of]? {n:number?} {unit:lex.media.music.intervals} [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.transpose arg.dir={dir} arg.n={n} arg.unit={unit}"
+    kind=request
+    priority=12
+    example="Transpose it upwards by a fourth."
+    example="Up a whole tone please."
+
+@pat.media.music.x.transpose.up3 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? {dir:lex.media.music.dirs} [a|an|by|by_a|by_an|one|the_interval_of]? {n:number?} {unit:lex.media.music.intervals} [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.transpose arg.dir={dir} arg.n={n} arg.unit={unit}"
+    kind=request
+    priority=12
+    example="Up a whole tone."
+
+@pat.media.music.x.transpose.to2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [make|play|put|do|have|set|get|take|shift|move|change|switch|use|sing|go|transpose|let_us_use|lets_use|let_us_play|lets_play|we_are|we_re|we_are_in] [it|this|that|the_song|the_tune|the_melody|the_music|everything]? [play|sound|be|go|run]? [in|into|to|in_the_key_of|to_the_key_of|to_key|in_key|into_the_key_of|the_key_of|in_the]? [the]? [key]? [of]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [now|major|key|please|instead]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.transposeTo arg.root={root} arg.m={m}"
+    kind=request
+    priority=11
+    example="Make it play in G."
+    example="Make this in D major please."
+    example="Let's use the key of B flat."
+
+@pat.media.music.x.key.set2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [the|my|our|a]? [key|tonality] [of|is|equals|to|in|=]? [the]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [now|key|please]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.key arg.root={root} arg.m={m}"
+    kind=request
+    priority=11
+    example="Key of D major please."
+    example="Key = D major."
+
+@pat.media.music.x.key.set3 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [we_are|we_re|we_are_now|i_am|i_m|it_is|it_s|this_is|we_are_playing|we_play|we_are_in|the_song_is|the_music_is|the_key_is] [now]? [in|in_the_key_of|in_key|playing_in]? [the]? [key]? [of]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [now|key]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.key arg.root={root} arg.m={m}"
+    kind=request
+    priority=11
+    example="We're in F major now."
+
+@pat.media.music.x.melody.set2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [new|my|a_new|start_a_new|begin_a_new|let_me_write_a|let_me_enter_a] [melody|tune|song|piece|composition|motif|riff]? [:|is|=|with|starting_with|made_of]? {notes:rest}"
+    emit="@{_} core.request action=music.melodySet arg.notes=\"{notes}\""
+    kind=request
+    priority=10
+    example="New tune E E F G."
+
+@pat.media.music.x.melody.add2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [tack_on|tack|keep_going_with|go_on_with|go_on|carry_on_with|also_add|also_append|then|and_then|next_add|next|plus|add_on|put_on_the_end|put_at_the_end|attach|stick_on] [the_notes|these_notes|notes|the_note|a_note|note]? {notes:rest}"
+    emit="@{_} core.request action=music.melodyAdd arg.notes=\"{notes}\""
+    kind=request
+    priority=11
+    example="Tack on G G A G."
+    example="Keep going with D C."
+    example="Also add a pause."
+
+@pat.media.music.x.melody.clear2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [wipe|throw_away|throw|clean_up|clean|get_rid_of|start_over_with|blank|zap|trash|dump|bin|nuke|delete|erase] [out]? [my|the|this|all_my|all_the|all]? [melody|tune|song|composition|recording|notes|music|track|piece] [away|out|up|over|again]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.melodyClear"
+    kind=request
+    priority=12
+    example="Wipe my song."
+    example="Throw my melody away."
+    example="Clean up my melody."
+
+@pat.media.music.x.melody.undo2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [back_off|backspace|undo|take_back|remove|delete|erase|pop|drop|cut|rewind|take_off|get_rid_of|scrap|ditch] [the]? [last|final|previous|latest|most_recent|newest] [note|one|tone|pitch] [of|from|in]? [my|the|this]? [melody|tune|song|composition|notes]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.melodyUndo"
+    kind=request
+    priority=13
+    example="Backspace the last note."
+    example="Undo last note of my melody."
+
+@pat.media.music.x.melody.show2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [let_me_see|can_i_see|may_i_see|show|show_me|let_me_view|display|open|view|see|read|read_out|play_back|bring_up|pull_up|what_does|what_do|what_did] [me]? [my|the|our|a]? [melody|tune|song|notes|composition|piece|creation] [i|that_i|you|we]? [made|wrote|wrote_down|have|composed|entered|did|look_like|looks_like|as_sheet_music|as_notation|so_far|back]? [as|in|on|with]? [sheet_music|notation|the_staff|a_staff]? [look_like|looks_like]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.melodyShow"
+    kind=request
+    priority=12
+    example="Let me see my notes."
+    example="View my tune."
+    example="What does my song look like?"
+
+@pat.media.music.x.score.show2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [show|display|open|let_me_see|can_i_see|bring_up|put_up|give_me|i_want_to_see|i_want_to_read|let_me_read|i_want_to_look_at|can_you_show|see|view|read|pull_up|write_out|need|want] [me]? [the|my|your|some|a]? [sheet_music|score|notation|staff|stave|music_sheet|sheet|music_score|written_music|music_notation|the_music|the_notes_on_the_staff|notes_on_the_staff|music_on_the_staff] [on_the_staff|on_a_staff|as_notation|on_the_stave]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.showScore"
+    kind=request
+    priority=12
+    example="Can I see the music notation?"
+    example="I want to read the music."
+    example="Notation please."
+
+@pat.media.music.x.score.bare core.pattern
+    match="[the]? [sheet_music|score|notation|staff|stave|music_sheet|music_score|written_music|music_notation|the_staff|the_score|the_notation] [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.showScore"
+    kind=request
+    priority=10
+    example="Notation please."
+    example="Score."
+
+@pat.media.music.x.score.show3 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [let_me_see|show|display|put|write] [me]? [the]? [notes] [on_the_staff|on_the_stave|on_staff|on_the_sheet]"
+    emit="@{_} core.request action=music.showScore"
+    kind=request
+    priority=12
+    example="Let me see the notes on the staff."
+
+@pat.media.music.x.notes.show2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [name|label|show|tell_me|list|spell|read|display|identify|mark|call_out|say|give_me|spell_out|what_are|which_are|what_is|which_is|point_out|annotate] [me]? [each|every|all|the|these|those]? [note|notes|pitches|tones|letters]? [it|you|that|this]? [is|are|were|was]? [playing|plays|using|used|plays_now|played|you_play|you_played|you_are_playing|on_the_keyboard|on_the_keys|on_keys|on_the_piano|names]? [on_the_keyboard|on_the_keys|on_the_piano|on_keys|on_the_staff|by_name|one_by_one|with_names|here]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.showNotes"
+    kind=request
+    priority=11
+    example="Name each note."
+    example="Label the notes on the keyboard."
+    example="Tell me what notes it plays."
+
+@pat.media.music.x.notes.q core.pattern
+    match="[what|which|whats|what_s] [notes|pitches|tones] [is|are|does|do|did|was]? [it|this|that|the_music|the_song|the_melody|you|we]? [playing|using|use|play|played|has|have|contain|plays|got]"
+    emit="@{_} core.request action=music.showNotes"
+    kind=question
+    priority=11
+    example="What notes is it using?"
+
+@pat.media.music.x.list.songs2 core.pattern
+    match="[what|which|whats|what_s|show|list|name|tell_me|give_me|show_me]? [me]? [all]? [the|your|my]? [songs|tunes|melodies|pieces|nursery_rhymes|music|tracks|song_library|library|catalog|repertoire|song_list] [do|can|you|that|in]? [you|i]? [know|have|can_play|play|got|can_do|offer|library|catalog|know_how_to_play]? [for_me|to_play|to_choose_from|available|in_your_library|in_your_song_library|you_have|you_know|you_can_play]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.listSongs"
+    kind=request
+    priority=11
+    example="Songs you know?"
+    example="What's in your song library?"
+    example="Name the songs you have."
+
+@pat.media.music.x.list.songs3 core.pattern
+    match="[what|which] [can|do|could] [you|i] [play|hear|listen_to|ask_for|choose|pick|request] [for_me|to_hear]? [songs|tunes|music]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.listSongs"
+    kind=question
+    priority=11
+    example="What can you play for me, songs?"
+
+@pat.media.music.x.list.inst2 core.pattern
+    match="[what|which|show|list|name|tell_me|give_me|show_me|whats|what_s]? [me]? [all]? [the|your|my|some]? [instruments|instrument|sounds|voices|sound_presets|presets|timbres|instrument_options|instrument_choices|options_for_instruments|options|choices|sound_options|sound_choices|tone_options] [options|choices|presets|available|exist|do_you_have|can_i_use|you_have|you_can_play|you_know|can_i_choose|to_choose_from|there_are|are_there|you_offer|for_it]? [for_it|available]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.listInstruments"
+    kind=request
+    priority=11
+    example="Instruments?"
+    example="Show the instrument options."
+    example="Tell me the sound presets."
+
+@pat.media.music.x.list.inst3 core.pattern
+    match="[what|which] [can|could|may] [i|we] [play|use|pick|choose|try|have] [it|this|that|the_music|the_song]? [on|with|as|using|in]? [instruments|instrument|sounds|sound|voices|voice]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.listInstruments"
+    kind=question
+    priority=11
+    example="What can I play it on?"
+
+@pat.media.music.x.q.scale.notes2 core.pattern
+    match="[what|which|whats|what_s|tell_me|show_me|show|list|give_me|name|what_are|what_is]? [the|a]? [notes|tones|pitches] [are]? [in|of|for|from|that_make_up|make_up|which_make_up|that_are_in|inside|within|does|do|has|have|belong_to|belongs_to|are_in] [the|a|an]? {root:lex.media.music.notes} {st:lex.media.music.scaletypes?} [scale|key|scale_starting_on|scale_has|has|have|contain|use]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.scaleNotes arg.root={root} arg.st={st}"
+    kind=question
+    priority=11
+    example="Notes in G major?"
+    example="What notes make up the D dorian scale?"
+    example="Notes of F major please."
+
+@pat.media.music.x.q.chord.notes2 core.pattern
+    match="[what|which|whats|what_s|tell_me|show_me|show|list|give_me|name|what_are|what_is]? [the|a|an]? [notes|tones|pitches|chord_notes] [are]? [in|of|for|from|inside|within|make_up|that_make_up|which_make_up|does|do|has|have|are_in|belong_to|in_a|in_an] [the|a|an]? [chord]? [notes]? [for|of|in]? {root:lex.media.music.notes} {q:lex.media.music.qualities?} {n:number?} [chord|triad|have|contain|use|has|include|includes]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.chordNotes arg.root={root} arg.q={q} arg.n={n}"
+    kind=question
+    priority=11
+    example="Notes of E minor chord?"
+    example="Chord notes for F# minor please."
+    example="Which notes does a G dominant 7 chord have?"
+
+@pat.media.music.x.q.chord.inside core.pattern
+    match="[what_is|what_s|whats|what_are|which_are] [inside|in|within] [a|an|the]? {root:lex.media.music.notes} {q:lex.media.music.qualities?} {n:number?} [chord|triad]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.chordNotes arg.root={root} arg.q={q} arg.n={n}"
+    kind=question
+    priority=11
+    example="What's inside a D seventh chord?"
+
+@pat.media.music.x.q.sig2 core.pattern
+    match="[what_is|what_s|whats|tell_me|give_me|show_me|what_are|which_are|how_many]? [the]? [key_signature|key_sig|signature|sharps|flats|accidentals|sharps_count|flats_count|number_of_sharps|number_of_flats|sharps_and_flats|accidental_count] [do|does|are|is|in|of|for|has|have|count|number|signature]? [the]? [key|scale]? [of|in|for|has|have|does]? [the]? [key|scale]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [key|scale|major|minor]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.keySig arg.root={root} arg.m={m}"
+    kind=question
+    priority=10
+    example="Sharps in A major?"
+    example="Signature of C# major?"
+    example="What's the key sig of G major?"
+
+@pat.media.music.x.q.sig3 core.pattern
+    match="how_many {acc:lex.media.music.accs} [are|does|do|has|have|in|is|are_there] [there]? [in|has|have|does|for]? [the]? [key_of|scale_of|key|scale]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [key|scale|have|contain|use|need]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.keySig arg.acc={acc} arg.root={root} arg.m={m}"
+    kind=question
+    priority=12
+    example="How many sharps in E major?"
+
+@pat.media.music.x.q.keywith2 core.pattern
+    match="[what|which|tell_me|name|give_me|a|whats|what_s]? [the]? [major|minor]? [key|keys|scale|signature|key_signature]? [that|which|with|has|have|having]? [a|the]? [key|major_key|minor_key|key_signature|signature|major|minor]? [that|which|with|has|have|having|containing|contains|uses|use|using]? {n:number} {acc:lex.media.music.accs} [or|and]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.keyWith arg.n={n} arg.acc={acc}"
+    kind=question
+    priority=11
+    example="A key with 4 sharps?"
+    example="Which key signature has 6 flats?"
+    example="Tell me the key that has 3 sharps."
+
+@pat.media.music.x.q.interval2 core.pattern
+    match="[what_is|what_s|whats|tell_me|name|give_me|what_was|how_big_is|how_wide_is]? [the]? [interval|gap|distance|steps|step_count|how_many_steps|number_of_steps]? [is]? [between|from]? {a:lex.media.music.notes} {oa:number?} [up]? [and|to|up_to] {b:lex.media.music.notes} {ob:number?} [interval|gap|distance]? [is]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.interval arg.a={a} arg.oa={oa} arg.b={b} arg.ob={ob}"
+    kind=question
+    priority=10
+    example="Interval from C to G?"
+    example="What's the gap from B to F sharp?"
+    example="C to A interval?"
+
+@pat.media.music.x.q.above2 core.pattern
+    match="[what|which|whats|what_s|tell_me|name]? [note|pitch|tone|is]? [is|are|lies|comes|do_you_get|you_get|that_is]? [a|an|the|one]? {iv:lex.media.music.intervals} {dir:lex.media.music.dirs} [from|than|on|of]? {note:lex.media.music.notes} [is|is_what|what_note]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.above arg.iv={iv} arg.dir={dir} arg.note={note}"
+    kind=question
+    priority=11
+    example="A fifth above D?"
+    example="What's a third up from C?"
+    example="Third below E please."
+
+@pat.media.music.x.q.relative2 core.pattern
+    match="[what_is|what_s|whats|tell_me|which_is|what_are]? [the]? relative [key|minor|major|minor_key|major_key|scale]? [of|to|for|key_of]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [key|scale|is|is_what]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.relative arg.root={root} arg.m={m}"
+    kind=question
+    priority=10
+    example="Relative minor of C major?"
+
+@pat.media.music.x.q.keychords2 core.pattern
+    match="[what|which|whats|what_s|tell_me|show_me|show|list|give_me|name|what_are|what_is]? [the]? [chords|triads] [are]? [in|of|for|from|go_with|fit|belong_to|does|do|can_i_play_in|are_in|in_the_key_of|of_the_key_of|for_the_key_of] [the]? [key_of|scale_of|key|scale]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [key|scale|have|has|use|include]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.keyChords arg.root={root} arg.m={m}"
+    kind=question
+    priority=11
+    example="Chords in C major?"
+    example="Chords for E flat major please."
+    example="What triads does F major have?"
+
+@pat.media.music.x.q.freq2 core.pattern
+    match="[what_is|what_s|whats|tell_me|give_me|what|how_many]? [the]? [frequency|freq|pitch|hertz|hz|pitch_in_hz|cycles_per_second] [in|of|for|is]? [hz|hertz]? [the|a]? {reg:lex.media.music.registers?} [note]? {note:lex.media.music.notes} {oct:number?} [in_hz|hz|hertz|frequency|freq]? [is]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.frequency arg.reg={reg} arg.note={note} arg.oct={oct}"
+    kind=question
+    priority=10
+    example="Hz of middle C?"
+    example="Freq of G 3."
+    example="Middle C hertz?"
+
+@pat.media.music.x.q.freq3 core.pattern
+    match="[what|which|how_many] [hertz|hz|cycles_per_second|cycles] [is|are|does|do|per_second]? [the|a]? {reg:lex.media.music.registers?} [note]? {note:lex.media.music.notes} {oct:number?} [have|has|vibrate_at|per_second]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.frequency arg.reg={reg} arg.note={note} arg.oct={oct}"
+    kind=question
+    priority=11
+    example="What hertz is middle C?"
+
+@pat.media.music.x.q.enh2 core.pattern
+    match="[what_is|what_s|whats|tell_me|name|give_me|what_else_is|which_note_is]? [the|an|another|a]? [other|another|alternative|enharmonic|alternate|equivalent|same|different]? [name|names|spelling|note|way_to_write|way_to_spell|equivalent|enharmonic|equal]? [for|of|as|to|is|to_write|to_spell]? {note:lex.media.music.notes} [also_called|another_name|called|in_flats|in_sharps|also_known_as|the_same|the_same_as|another_way|different_name|has_another_name|enharmonic|equivalent|alternative]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.enharmonic arg.note={note}"
+    kind=question
+    priority=9
+    example="Enharmonic of A flat?"
+    example="Alternative name for B flat?"
+
+@pat.media.music.x.q.chordname2 core.pattern
+    match="[what|which|whats|what_s|tell_me|show_me|show|list|give_me|name|what_are|what_is]? [chord|chords|triad] [is|are|has|have|do|does|would|will]? [this|that|these|it|the_notes|those|the]? [notes]? [this]? {n1:lex.media.music.notes} {n2:lex.media.music.notes} {n3:lex.media.music.notes} {n4:lex.media.music.notes?}"
+    emit="@{_} core.request action=music.chordName arg.notes=\"{n1} {n2} {n3} {n4}\""
+    kind=question
+    priority=11
+    example="What chord has notes G B D?"
+
+@pat.media.music.x.songinfo.comp2 core.pattern
+    match="[the]? [song|tune|melody|piece]? {title:words(8)} [composer|writer|author|composed_by|written_by|creator|who_wrote_it|who_composed_it|who_made_it|who_wrote_that|who_composed|who_wrote]"
+    emit="@{_} core.request action=music.songInfo arg.title=\"{title}\" arg.what=composer"
+    kind=question
+    priority=9
+    example="Ode to Joy composer?"
+
+@pat.media.music.x.songinfo.comp3 core.pattern
+    match="[composer|writer|author|creator|who_wrote|who_composed] [of|for|behind|is]? [the]? [song|tune|melody|piece]? {title:words(8)}"
+    emit="@{_} core.request action=music.songInfo arg.title=\"{title}\" arg.what=composer"
+    kind=question
+    priority=9
+    example="Composer of Jingle Bells please."
+
+@pat.media.music.x.songinfo.about2 core.pattern
+    match="[song_info|info|information|facts|details|background|history|trivia] [for|on|about|of]? [the]? [song|tune|melody|piece]? {title:words(8)}"
+    emit="@{_} core.request action=music.songInfo arg.title=\"{title}\" arg.what=about"
+    kind=question
+    priority=9
+    example="Song info for Mary Had a Little Lamb."
+
+@pat.media.music.x.random2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [surprise_me|sing_me_something|hit_me_with_something|give_me_something|something_to_listen_to|anything|play_anything|play_something_random|hit_me|surprise_me_with_some_music|surprise_me_with_a_song|play_me_a_nursery_rhyme|nursery_rhyme|a_nursery_rhyme|play_a_nursery_rhyme|next_song|next_tune|another_song|another_tune|another_one|different_song|something_else|something_different|random_song|random_tune|random_music|some_music|a_song|a_tune|any_song|any_tune|any_music|something|music] [with|using|on|in|at]? [a|an|some|the|me]? [random|new|different|nice|any|fun|cool]? [song|tune|music|melody|nursery_rhyme|rhyme|one|something|track]? [please|pls|plz|for_me|for_us|now|then]? "
+    emit="@{_} core.request action=music.random"
+    kind=request
+    priority=10
+    example="Surprise me with some music."
+    example="Hit me with a random tune."
+    example="Next song please."
+
+@pat.media.music.x.replay2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [again|once_more|one_more_time|encore|one_more|do_that_again|play_again|say_that_again|do_it_again|do_it_once_more|replay|repeat|go_again|run_it_again|hit_it_again|do_that_once_more|play_the_same_thing_again|the_same_thing_again|play_the_same_again|same_again|same_thing_again|can_i_hear_it_again|let_me_hear_it_again|again_please|one_more_play|play_it_one_more_time|more] [that|it|this|the_same|the_last_one|the_same_thing|the_song|the_music|the_melody|the_tune]? [again|once_more|one_more_time|please|pls|plz|back]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.replay"
+    kind=request
+    priority=11
+    example="Again."
+    example="Do that again please."
+    example="Can u replay that?"
+
+@pat.media.music.x.stop2 core.pattern
+    match="[can_you|could_you|can_u|could_u|please_can_you|hey|pls|plz|i_want_to|i_would_like_to|let_me|i_wanna|id_like_to]? [silence|quiet|hush|shush|mute|pause|halt|end|stop|cease|cut|kill|turn_off|switch_off|shut_off|shut_up|enough|that_is_enough|thats_enough|no_more|no_more_music|no_more_sound|cut_the_sound|cut_the_music|kill_the_music|kill_the_sound|stop_the_sound|turn_off_the_sound|turn_the_sound_off|turn_off_the_music|turn_the_music_off|mute_it|mute_the_music|mute_the_sound|stop_it|stop_that|stop_playing|stop_the_song|stop_the_tune|stop_the_melody|stop_the_music] [it|that|this|the_sound|the_music|the_song|the_tune|the_melody|playing|please|now]? [pls|plz|thanks|thank_you|for_me]?"
+    emit="@{_} core.request action=music.stop"
+    kind=request
+    priority=9
+    example="Silence."
+    example="Cut the sound."

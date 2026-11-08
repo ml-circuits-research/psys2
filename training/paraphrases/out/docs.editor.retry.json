@@ -15,7 +15,7 @@
         {
           "attempt": 2,
           "text": "Stop the dictation.",
-          "reply": "Added.",
+          "reply": "OK, dictation is off.",
           "label": "canonical-failed"
         },
         {
@@ -27,7 +27,7 @@
         {
           "attempt": 4,
           "text": "Stop the dictation mode.",
-          "reply": "Added.",
+          "reply": "OK, dictation is off.",
           "label": "canonical-failed"
         }
       ]

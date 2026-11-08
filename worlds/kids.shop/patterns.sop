@@ -698,3 +698,1024 @@
     priority=11
     example="I give the cashier 50 lei for a ball and a pencil, how much change do I get?"
 
+@pat.kids.shop.w.price.a core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [what|whats|what_is|how_much|tell_me|tell_me_the|the]? [is|are|does|do]? [the]? [price|cost|prices|costs] [of|for|on]? [a|an|the|one|1]? {item:lex.kids.shop.items} [pls|plz|please|is|are|now|today|each|again|exactly]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.price seek=cost where.item={item}"
+    kind=question
+    priority=10
+    example="Tell me the price of an eraser."
+
+@pat.kids.shop.w.price.b core.pattern
+    match="[a|an|the|one]? {item:lex.kids.shop.items} [price|cost|prices|costs|how_much|price_tag] [pls|plz|please|is|now|today|each|what|how_much|again]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.price seek=cost where.item={item}"
+    kind=question
+    priority=10
+    example="The eraser costs how much?"
+
+@pat.kids.shop.w.price.c core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? how_much [for|is|are|does|do|would|will]? [money]? [is|are]? [a|an|the|one|1]? {item:lex.kids.shop.items} [go_for|cost|sell_for|run|be]? [each|now|today|pls]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.price seek=cost where.item={item}"
+    kind=question
+    priority=10
+    example="How much for an eraser?"
+
+@pat.kids.shop.w.price.d core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [what|whats] [does|do|will|would]? [a|an|the|one|1]? {item:lex.kids.shop.items} [go_for|sell_for|cost|run|set_me_back|cost_me|come_to] [me]? [each]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.price seek=cost where.item={item}"
+    kind=question
+    priority=10
+    example="What does an eraser set me back?"
+
+@pat.kids.shop.w.total.t1.n core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [how_much|how_much_money|what|whats|what_is|what_do|what_does|what_will|what_would|how_much_do|how_much_does|how_much_would|how_much_will|how_much_are|how_much_is|how_much_money_do|how_much_money_are|total|total_cost|total_price|the_total|the_cost|the_price|price|cost|cost_of|price_of|total_for|price_for|cost_for|the_total_for|the_total_of|the_cost_of|the_price_of|tell_me_the_cost_of|tell_me_the_price_of|tell_me_the_total_for|tell_me_the_total|give_me_the_total_for|cost_to_me] [do|does|would|will|is|are|be|for|of]? {n1:number} {i1:lex.kids.shop.items} [cost|costs|come_to|comes_to|add_up_to|be|total|cost_me|come_to_in_total|total_up_to]? [me|for_me|to_me|together|altogether|in_total|come_to]? [together|altogether|in_total|for_me|to_me]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="What do 2 balls cost me altogether?"
+
+@pat.kids.shop.w.total.t2.n core.pattern
+    match="{n1:number} {i1:lex.kids.shop.items} [cost|costs|come_to|comes_to|add_up_to|total|cost_me|is|are|be] [how_much|how_much_money|what|together|altogether|in_total|to_me]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="2 balls cost how much?"
+
+@pat.kids.shop.w.total.t3.n core.pattern
+    match="{n1:number} {i1:lex.kids.shop.items} [how_much|how_much_money|total|price|cost|what|how_much_in_total|how_much_together|how_much_altogether] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="2 balls how much?"
+
+@pat.kids.shop.w.total.pay1.n core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [how_much|what|how_much_money] [will|would|do|should|must|shall]? [i|we]? [pay|need|spend|owe|have_to_pay|need_to_pay|be_paying|end_up_paying] [for|on]? {n1:number} {i1:lex.kids.shop.items} [pls|plz|please|in_total|altogether|together]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="What would I owe for 2 balls?"
+
+@pat.kids.shop.w.total.pay2.n core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [pay|spend] how_much [for|on]? {n1:number} {i1:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="Pay how much for 2 balls?"
+
+@pat.kids.shop.w.total.pay3.n core.pattern
+    match="{n1:number} {i1:lex.kids.shop.items} [how_much|what] [will|would|do|should|must|shall]? [i|we]? [pay|owe|spend|need] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="2 balls, how much will i owe?"
+
+@pat.kids.shop.w.total.pay4.n core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [what|whats|what_is|how_much] [i|we] [will|would|have_to|need_to|must|shall] [pay|owe|spend] [for|on] {n1:number} {i1:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="What I have to pay for 2 balls?"
+
+@pat.kids.shop.w.total.pay5.n core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [cost|price|total|bill] [to_me|for_me|for_us]? [for|of] {n1:number} {i1:lex.kids.shop.items} [to_me|for_me]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="Bill for 2 balls?"
+
+@pat.kids.shop.w.aff.af1.n core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [can|could|may|am|do|will|would|is|are|does|if|whether|check_if|can_u_check_if|can_you_check_if|tell_me_if|tell_me_whether] [i|we|it]? [can|could|will|would]? [be]? [able_to|even|possibly|ok_to|okay_to|allowed_to|fine_to]? [buy|get|afford|have|purchase|take|pay_for|manage|get_me|buy_me] {n1:number} {i1:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="Am I able to afford 2 balls?"
+
+@pat.kids.shop.w.aff.af2.n core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [is|are|would|will|does|do]? {n1:number} {i1:lex.kids.shop.items} [affordable|possible|doable|ok|okay|fine|enough|within_my_budget|in_my_budget|something_i_can_buy|something_i_can_afford|too_much|too_expensive|something_i_can_get|possible_for_me|affordable_for_me|ok_for_me|doable_for_me|something_i_can_pay_for] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="Is 2 balls affordable?"
+
+@pat.kids.shop.w.aff.af3.n core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [do_i_have|is_there|have_i_got|got]? [enough|enough_money|enough_lei|enough_cash|money_enough|enough_to_buy|enough_money_for|enough_money_to_buy|sufficient_money] [for|to_buy|to_get|to_afford]? {n1:number} {i1:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="Enough cash for 2 balls?"
+
+@pat.kids.shop.w.aff.af4.n core.pattern
+    match="{n1:number} {i1:lex.kids.shop.items} [can|could|may] [i|we] [get|buy|afford|have] [them|it|that|those|these]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="2 balls, could i buy them?"
+
+@pat.kids.shop.w.aff.af5.n core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [i_want|i_need|i_would_like|i_d_like|im_going_to_buy|i_wanna_buy|i_wanna_get|id_like|wanna_buy|want_to_buy|i_want_to_buy] {n1:number} {i1:lex.kids.shop.items} [can|could|may] [i|we] [get|buy|afford|have]? [them|it|that|those|these]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="I wanna buy 2 balls, may I?"
+
+@pat.kids.shop.w.aff.af6.n core.pattern
+    match="{n1:number} {i1:lex.kids.shop.items} [possible|doable|ok|okay|fine|allowed] [for_me|to_buy|for_us]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="2 balls possible for me?"
+
+@pat.kids.shop.w.chg.o1.n core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [what|whats|what_is|how_much|what_will|how_much_will|what_would]? [is|will_be|would_be]? [my|the]? [change|money_back|how_much_change|how_much_back|how_much_money_back|change_back|rest|remainder|how_much_do_i_get_back] [do_i_get|will_i_get|would_i_get|can_i_expect|i_get|do_i_receive|will_i_have|will_i_receive]? [from|out_of|with|if_i_pay|if_i_pay_with|paying|when_i_pay_with|if_i_pay_from|using|from_a|from_my] {m:number} [lei|leu]? [if_i_buy|when_i_buy|after_i_buy|after_buying|if_i_purchase|to_buy|buying|if_buying|when_buying|if_i_pay_for|for_buying|for|on|after|if|when|if_i_get|if_i_take|i_buy|i_get] {n1:number} {i1:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="What change out of 5 lei if I take 2 balls?"
+
+@pat.kids.shop.w.chg.o2.n core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [what|whats|what_is|how_much|what_will|how_much_will|what_would]? [is|will_be|would_be]? [my|the]? [change|money_back|how_much_change|how_much_back|how_much_money_back|change_back|rest|remainder|how_much_do_i_get_back] [do_i_get|will_i_get|would_i_get|i_get|do_i_receive|will_i_receive]? [for|on|after|buying|if_i_buy|when_i_buy|if_i_get] {n1:number} {i1:lex.kids.shop.items} [from|out_of|with|if_i_pay|if_i_pay_with|paying|when_i_pay_with|if_i_pay_from|using|from_a|from_my] {m:number} [lei|leu]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="Change for 2 balls with 5 lei?"
+
+@pat.kids.shop.w.chg.o3.n core.pattern
+    match="[if|when|after] i [buy|get|purchase|pay_for|take] {n1:number} {i1:lex.kids.shop.items} [with|from|using|paying|and_pay|and_pay_with|paying_with|out_of|and_give|and_hand_over] {m:number} [lei|leu]? [what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="If I take 2 balls using 5 lei, whats my change?"
+
+@pat.kids.shop.w.chg.o4.n core.pattern
+    match="{m:number} [lei|leu]? [minus|less|for|buys|buy|pays_for|spent_on|to_pay_for|paid_for|for_buying|for_the_price_of|takes_away|take_away] {n1:number} {i1:lex.kids.shop.items} [what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="5 lei minus 2 balls, what is left?"
+
+@pat.kids.shop.w.chg.o5.n core.pattern
+    match="[what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [do_i_get|will_i_get|would_i_get|i_get|do_i_receive|will_i_receive|do_i_have]? [if|when|after]? i [buy|get|purchase|pay_for|take] {n1:number} {i1:lex.kids.shop.items} [with|from|using|paying|paying_with|out_of] {m:number} [lei|leu]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="How much back if I take 2 balls with 5 lei?"
+
+@pat.kids.shop.w.chg.o6.n core.pattern
+    match="[i|we]? [pay|give|pay_with|hand|give_the_shopkeeper|give_the_cashier|give_the_seller|hand_over] {m:number} [lei|leu]? [for|to_buy|on] {n1:number} {i1:lex.kids.shop.items} [what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="I hand over 5 lei for 2 balls, change?"
+
+@pat.kids.shop.w.chg.o7.n core.pattern
+    match="{n1:number} {i1:lex.kids.shop.items} {m:number} [lei|leu]? [what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [how_much|what]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="2 balls, 5 lei, change how much"
+
+@pat.kids.shop.w.chg.o8.n core.pattern
+    match="[what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [do_i_get|will_i_get|would_i_get|i_get|do_i_receive|will_i_receive]? [from|out_of|with|if_i_pay_with|when_i_pay_with|paying|if_i_pay] {m:number} [lei|leu]? [for|if_i_buy|when_i_buy|after_i_buy|if_i_get|to_buy|buying|on|if_buying|if_i_purchase|if_i_pay_for|after_buying|if|when] {n1:number} {i1:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="How much back out of 5 lei for 2 balls?"
+
+@pat.kids.shop.w.chg.o9.n core.pattern
+    match="[what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [do_i_get|will_i_get|would_i_get|i_get|do_i_receive|will_i_receive]? [if|when|after] i [buy|get|purchase|pay_for|take] {n1:number} {i1:lex.kids.shop.items} [with|from|using|paying|out_of] {m:number} [lei|leu]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="Change if I buy 2 balls from 5 lei?"
+
+@pat.kids.shop.w.total.pay1.a core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [how_much|what|how_much_money] [will|would|do|should|must|shall]? [i|we]? [pay|need|spend|owe|have_to_pay|need_to_pay|be_paying|end_up_paying] [for|on]? [a|an|one|1|the]? {i1:lex.kids.shop.items} [pls|plz|please|in_total|altogether|together]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="What would I owe for 2 balls?"
+
+@pat.kids.shop.w.total.pay2.a core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [pay|spend] how_much [for|on]? [a|an|one|1|the]? {i1:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="Pay how much for 2 balls?"
+
+@pat.kids.shop.w.total.pay3.a core.pattern
+    match="[a|an|one|1|the]? {i1:lex.kids.shop.items} [how_much|what] [will|would|do|should|must|shall]? [i|we]? [pay|owe|spend|need] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="2 balls, how much will i owe?"
+
+@pat.kids.shop.w.total.pay4.a core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [what|whats|what_is|how_much] [i|we] [will|would|have_to|need_to|must|shall] [pay|owe|spend] [for|on] [a|an|one|1|the]? {i1:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="What I have to pay for 2 balls?"
+
+@pat.kids.shop.w.total.pay5.a core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [cost|price|total|bill] [to_me|for_me|for_us]? [for|of] [a|an|one|1|the]? {i1:lex.kids.shop.items} [to_me|for_me]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="Bill for 2 balls?"
+
+@pat.kids.shop.w.aff.af1.a core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [can|could|may|am|do|will|would|is|are|does|if|whether|check_if|can_u_check_if|can_you_check_if|tell_me_if|tell_me_whether] [i|we|it]? [can|could|will|would]? [be]? [able_to|even|possibly|ok_to|okay_to|allowed_to|fine_to]? [buy|get|afford|have|purchase|take|pay_for|manage|get_me|buy_me] [a|an|one|1|the]? {i1:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="Am I able to afford 2 balls?"
+
+@pat.kids.shop.w.aff.af2.a core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [is|are|would|will|does|do]? [a|an|one|1|the]? {i1:lex.kids.shop.items} [affordable|possible|doable|ok|okay|fine|enough|within_my_budget|in_my_budget|something_i_can_buy|something_i_can_afford|too_much|too_expensive|something_i_can_get|possible_for_me|affordable_for_me|ok_for_me|doable_for_me|something_i_can_pay_for] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="Is 2 balls affordable?"
+
+@pat.kids.shop.w.aff.af3.a core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [do_i_have|is_there|have_i_got|got]? [enough|enough_money|enough_lei|enough_cash|money_enough|enough_to_buy|enough_money_for|enough_money_to_buy|sufficient_money] [for|to_buy|to_get|to_afford]? [a|an|one|1|the]? {i1:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="Enough cash for 2 balls?"
+
+@pat.kids.shop.w.aff.af4.a core.pattern
+    match="[a|an|one|1|the]? {i1:lex.kids.shop.items} [can|could|may] [i|we] [get|buy|afford|have] [them|it|that|those|these]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="2 balls, could i buy them?"
+
+@pat.kids.shop.w.aff.af5.a core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [i_want|i_need|i_would_like|i_d_like|im_going_to_buy|i_wanna_buy|i_wanna_get|id_like|wanna_buy|want_to_buy|i_want_to_buy] [a|an|one|1|the]? {i1:lex.kids.shop.items} [can|could|may] [i|we] [get|buy|afford|have]? [them|it|that|those|these]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="I wanna buy 2 balls, may I?"
+
+@pat.kids.shop.w.aff.af6.a core.pattern
+    match="[a|an|one|1|the]? {i1:lex.kids.shop.items} [possible|doable|ok|okay|fine|allowed] [for_me|to_buy|for_us]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="2 balls possible for me?"
+
+@pat.kids.shop.w.chg.o1.a core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [what|whats|what_is|how_much|what_will|how_much_will|what_would]? [is|will_be|would_be]? [my|the]? [change|money_back|how_much_change|how_much_back|how_much_money_back|change_back|rest|remainder|how_much_do_i_get_back] [do_i_get|will_i_get|would_i_get|can_i_expect|i_get|do_i_receive|will_i_have|will_i_receive]? [from|out_of|with|if_i_pay|if_i_pay_with|paying|when_i_pay_with|if_i_pay_from|using|from_a|from_my] {m:number} [lei|leu]? [if_i_buy|when_i_buy|after_i_buy|after_buying|if_i_purchase|to_buy|buying|if_buying|when_buying|if_i_pay_for|for_buying|for|on|after|if|when|if_i_get|if_i_take|i_buy|i_get] [a|an|one|1|the]? {i1:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="What change out of 5 lei if I take 2 balls?"
+
+@pat.kids.shop.w.chg.o2.a core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [what|whats|what_is|how_much|what_will|how_much_will|what_would]? [is|will_be|would_be]? [my|the]? [change|money_back|how_much_change|how_much_back|how_much_money_back|change_back|rest|remainder|how_much_do_i_get_back] [do_i_get|will_i_get|would_i_get|i_get|do_i_receive|will_i_receive]? [for|on|after|buying|if_i_buy|when_i_buy|if_i_get] [a|an|one|1|the]? {i1:lex.kids.shop.items} [from|out_of|with|if_i_pay|if_i_pay_with|paying|when_i_pay_with|if_i_pay_from|using|from_a|from_my] {m:number} [lei|leu]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="Change for 2 balls with 5 lei?"
+
+@pat.kids.shop.w.chg.o3.a core.pattern
+    match="[if|when|after] i [buy|get|purchase|pay_for|take] [a|an|one|1|the]? {i1:lex.kids.shop.items} [with|from|using|paying|and_pay|and_pay_with|paying_with|out_of|and_give|and_hand_over] {m:number} [lei|leu]? [what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="If I take 2 balls using 5 lei, whats my change?"
+
+@pat.kids.shop.w.chg.o4.a core.pattern
+    match="{m:number} [lei|leu]? [minus|less|for|buys|buy|pays_for|spent_on|to_pay_for|paid_for|for_buying|for_the_price_of|takes_away|take_away] [a|an|one|1|the]? {i1:lex.kids.shop.items} [what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="5 lei minus 2 balls, what is left?"
+
+@pat.kids.shop.w.chg.o5.a core.pattern
+    match="[what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [do_i_get|will_i_get|would_i_get|i_get|do_i_receive|will_i_receive|do_i_have]? [if|when|after]? i [buy|get|purchase|pay_for|take] [a|an|one|1|the]? {i1:lex.kids.shop.items} [with|from|using|paying|paying_with|out_of] {m:number} [lei|leu]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="How much back if I take 2 balls with 5 lei?"
+
+@pat.kids.shop.w.chg.o6.a core.pattern
+    match="[i|we]? [pay|give|pay_with|hand|give_the_shopkeeper|give_the_cashier|give_the_seller|hand_over] {m:number} [lei|leu]? [for|to_buy|on] [a|an|one|1|the]? {i1:lex.kids.shop.items} [what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="I hand over 5 lei for 2 balls, change?"
+
+@pat.kids.shop.w.chg.o7.a core.pattern
+    match="[a|an|one|1|the]? {i1:lex.kids.shop.items} {m:number} [lei|leu]? [what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [how_much|what]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="2 balls, 5 lei, change how much"
+
+@pat.kids.shop.w.chg.o8.a core.pattern
+    match="[what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [do_i_get|will_i_get|would_i_get|i_get|do_i_receive|will_i_receive]? [from|out_of|with|if_i_pay_with|when_i_pay_with|paying|if_i_pay] {m:number} [lei|leu]? [for|if_i_buy|when_i_buy|after_i_buy|if_i_get|to_buy|buying|on|if_buying|if_i_purchase|if_i_pay_for|after_buying|if|when] [a|an|one|1|the]? {i1:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="How much back out of 5 lei for 2 balls?"
+
+@pat.kids.shop.w.chg.o9.a core.pattern
+    match="[what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [do_i_get|will_i_get|would_i_get|i_get|do_i_receive|will_i_receive]? [if|when|after] i [buy|get|purchase|pay_for|take] [a|an|one|1|the]? {i1:lex.kids.shop.items} [with|from|using|paying|out_of] {m:number} [lei|leu]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="Change if I buy 2 balls from 5 lei?"
+
+@pat.kids.shop.w.total.t1.nn core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [how_much|how_much_money|what|whats|what_is|what_do|what_does|what_will|what_would|how_much_do|how_much_does|how_much_would|how_much_will|how_much_are|how_much_is|how_much_money_do|how_much_money_are|total|total_cost|total_price|the_total|the_cost|the_price|price|cost|cost_of|price_of|total_for|price_for|cost_for|the_total_for|the_total_of|the_cost_of|the_price_of|tell_me_the_cost_of|tell_me_the_price_of|tell_me_the_total_for|tell_me_the_total|give_me_the_total_for|cost_to_me] [do|does|would|will|is|are|be|for|of]? {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [cost|costs|come_to|comes_to|add_up_to|be|total|cost_me|come_to_in_total|total_up_to]? [me|for_me|to_me|together|altogether|in_total|come_to]? [together|altogether|in_total|for_me|to_me]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="What do 2 balls cost me altogether?"
+
+@pat.kids.shop.w.total.t2.nn core.pattern
+    match="{n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [cost|costs|come_to|comes_to|add_up_to|total|cost_me|is|are|be] [how_much|how_much_money|what|together|altogether|in_total|to_me]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="2 balls cost how much?"
+
+@pat.kids.shop.w.total.t3.nn core.pattern
+    match="{n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [how_much|how_much_money|total|price|cost|what|how_much_in_total|how_much_together|how_much_altogether] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="2 balls how much?"
+
+@pat.kids.shop.w.total.pay1.nn core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [how_much|what|how_much_money] [will|would|do|should|must|shall]? [i|we]? [pay|need|spend|owe|have_to_pay|need_to_pay|be_paying|end_up_paying] [for|on]? {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [pls|plz|please|in_total|altogether|together]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="What would I owe for 2 balls?"
+
+@pat.kids.shop.w.total.pay2.nn core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [pay|spend] how_much [for|on]? {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="Pay how much for 2 balls?"
+
+@pat.kids.shop.w.total.pay3.nn core.pattern
+    match="{n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [how_much|what] [will|would|do|should|must|shall]? [i|we]? [pay|owe|spend|need] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="2 balls, how much will i owe?"
+
+@pat.kids.shop.w.total.pay4.nn core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [what|whats|what_is|how_much] [i|we] [will|would|have_to|need_to|must|shall] [pay|owe|spend] [for|on] {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="What I have to pay for 2 balls?"
+
+@pat.kids.shop.w.total.pay5.nn core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [cost|price|total|bill] [to_me|for_me|for_us]? [for|of] {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [to_me|for_me]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="Bill for 2 balls?"
+
+@pat.kids.shop.w.aff.af1.nn core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [can|could|may|am|do|will|would|is|are|does|if|whether|check_if|can_u_check_if|can_you_check_if|tell_me_if|tell_me_whether] [i|we|it]? [can|could|will|would]? [be]? [able_to|even|possibly|ok_to|okay_to|allowed_to|fine_to]? [buy|get|afford|have|purchase|take|pay_for|manage|get_me|buy_me] {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="Am I able to afford 2 balls?"
+
+@pat.kids.shop.w.aff.af2.nn core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [is|are|would|will|does|do]? {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [affordable|possible|doable|ok|okay|fine|enough|within_my_budget|in_my_budget|something_i_can_buy|something_i_can_afford|too_much|too_expensive|something_i_can_get|possible_for_me|affordable_for_me|ok_for_me|doable_for_me|something_i_can_pay_for] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="Is 2 balls affordable?"
+
+@pat.kids.shop.w.aff.af3.nn core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [do_i_have|is_there|have_i_got|got]? [enough|enough_money|enough_lei|enough_cash|money_enough|enough_to_buy|enough_money_for|enough_money_to_buy|sufficient_money] [for|to_buy|to_get|to_afford]? {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="Enough cash for 2 balls?"
+
+@pat.kids.shop.w.aff.af4.nn core.pattern
+    match="{n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [can|could|may] [i|we] [get|buy|afford|have] [them|it|that|those|these]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="2 balls, could i buy them?"
+
+@pat.kids.shop.w.aff.af5.nn core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [i_want|i_need|i_would_like|i_d_like|im_going_to_buy|i_wanna_buy|i_wanna_get|id_like|wanna_buy|want_to_buy|i_want_to_buy] {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [can|could|may] [i|we] [get|buy|afford|have]? [them|it|that|those|these]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="I wanna buy 2 balls, may I?"
+
+@pat.kids.shop.w.aff.af6.nn core.pattern
+    match="{n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [possible|doable|ok|okay|fine|allowed] [for_me|to_buy|for_us]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="2 balls possible for me?"
+
+@pat.kids.shop.w.chg.o1.nn core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [what|whats|what_is|how_much|what_will|how_much_will|what_would]? [is|will_be|would_be]? [my|the]? [change|money_back|how_much_change|how_much_back|how_much_money_back|change_back|rest|remainder|how_much_do_i_get_back] [do_i_get|will_i_get|would_i_get|can_i_expect|i_get|do_i_receive|will_i_have|will_i_receive]? [from|out_of|with|if_i_pay|if_i_pay_with|paying|when_i_pay_with|if_i_pay_from|using|from_a|from_my] {m:number} [lei|leu]? [if_i_buy|when_i_buy|after_i_buy|after_buying|if_i_purchase|to_buy|buying|if_buying|when_buying|if_i_pay_for|for_buying|for|on|after|if|when|if_i_get|if_i_take|i_buy|i_get] {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="What change out of 5 lei if I take 2 balls?"
+
+@pat.kids.shop.w.chg.o2.nn core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [what|whats|what_is|how_much|what_will|how_much_will|what_would]? [is|will_be|would_be]? [my|the]? [change|money_back|how_much_change|how_much_back|how_much_money_back|change_back|rest|remainder|how_much_do_i_get_back] [do_i_get|will_i_get|would_i_get|i_get|do_i_receive|will_i_receive]? [for|on|after|buying|if_i_buy|when_i_buy|if_i_get] {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [from|out_of|with|if_i_pay|if_i_pay_with|paying|when_i_pay_with|if_i_pay_from|using|from_a|from_my] {m:number} [lei|leu]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="Change for 2 balls with 5 lei?"
+
+@pat.kids.shop.w.chg.o3.nn core.pattern
+    match="[if|when|after] i [buy|get|purchase|pay_for|take] {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [with|from|using|paying|and_pay|and_pay_with|paying_with|out_of|and_give|and_hand_over] {m:number} [lei|leu]? [what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="If I take 2 balls using 5 lei, whats my change?"
+
+@pat.kids.shop.w.chg.o4.nn core.pattern
+    match="{m:number} [lei|leu]? [minus|less|for|buys|buy|pays_for|spent_on|to_pay_for|paid_for|for_buying|for_the_price_of|takes_away|take_away] {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="5 lei minus 2 balls, what is left?"
+
+@pat.kids.shop.w.chg.o5.nn core.pattern
+    match="[what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [do_i_get|will_i_get|would_i_get|i_get|do_i_receive|will_i_receive|do_i_have]? [if|when|after]? i [buy|get|purchase|pay_for|take] {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [with|from|using|paying|paying_with|out_of] {m:number} [lei|leu]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="How much back if I take 2 balls with 5 lei?"
+
+@pat.kids.shop.w.chg.o6.nn core.pattern
+    match="[i|we]? [pay|give|pay_with|hand|give_the_shopkeeper|give_the_cashier|give_the_seller|hand_over] {m:number} [lei|leu]? [for|to_buy|on] {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="I hand over 5 lei for 2 balls, change?"
+
+@pat.kids.shop.w.chg.o7.nn core.pattern
+    match="{n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} {m:number} [lei|leu]? [what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [how_much|what]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="2 balls, 5 lei, change how much"
+
+@pat.kids.shop.w.chg.o8.nn core.pattern
+    match="[what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [do_i_get|will_i_get|would_i_get|i_get|do_i_receive|will_i_receive]? [from|out_of|with|if_i_pay_with|when_i_pay_with|paying|if_i_pay] {m:number} [lei|leu]? [for|if_i_buy|when_i_buy|after_i_buy|if_i_get|to_buy|buying|on|if_buying|if_i_purchase|if_i_pay_for|after_buying|if|when] {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="How much back out of 5 lei for 2 balls?"
+
+@pat.kids.shop.w.chg.o9.nn core.pattern
+    match="[what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [do_i_get|will_i_get|would_i_get|i_get|do_i_receive|will_i_receive]? [if|when|after] i [buy|get|purchase|pay_for|take] {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [with|from|using|paying|out_of] {m:number} [lei|leu]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="Change if I buy 2 balls from 5 lei?"
+
+@pat.kids.shop.w.total.t1.an core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [how_much|how_much_money|what|whats|what_is|what_do|what_does|what_will|what_would|how_much_do|how_much_does|how_much_would|how_much_will|how_much_are|how_much_is|how_much_money_do|how_much_money_are|total|total_cost|total_price|the_total|the_cost|the_price|price|cost|cost_of|price_of|total_for|price_for|cost_for|the_total_for|the_total_of|the_cost_of|the_price_of|tell_me_the_cost_of|tell_me_the_price_of|tell_me_the_total_for|tell_me_the_total|give_me_the_total_for|cost_to_me] [do|does|would|will|is|are|be|for|of]? [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [cost|costs|come_to|comes_to|add_up_to|be|total|cost_me|come_to_in_total|total_up_to]? [me|for_me|to_me|together|altogether|in_total|come_to]? [together|altogether|in_total|for_me|to_me]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="What do 2 balls cost me altogether?"
+
+@pat.kids.shop.w.total.t2.an core.pattern
+    match="[a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [cost|costs|come_to|comes_to|add_up_to|total|cost_me|is|are|be] [how_much|how_much_money|what|together|altogether|in_total|to_me]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="2 balls cost how much?"
+
+@pat.kids.shop.w.total.t3.an core.pattern
+    match="[a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [how_much|how_much_money|total|price|cost|what|how_much_in_total|how_much_together|how_much_altogether] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="2 balls how much?"
+
+@pat.kids.shop.w.total.pay1.an core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [how_much|what|how_much_money] [will|would|do|should|must|shall]? [i|we]? [pay|need|spend|owe|have_to_pay|need_to_pay|be_paying|end_up_paying] [for|on]? [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [pls|plz|please|in_total|altogether|together]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="What would I owe for 2 balls?"
+
+@pat.kids.shop.w.total.pay2.an core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [pay|spend] how_much [for|on]? [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="Pay how much for 2 balls?"
+
+@pat.kids.shop.w.total.pay3.an core.pattern
+    match="[a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [how_much|what] [will|would|do|should|must|shall]? [i|we]? [pay|owe|spend|need] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="2 balls, how much will i owe?"
+
+@pat.kids.shop.w.total.pay4.an core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [what|whats|what_is|how_much] [i|we] [will|would|have_to|need_to|must|shall] [pay|owe|spend] [for|on] [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="What I have to pay for 2 balls?"
+
+@pat.kids.shop.w.total.pay5.an core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [cost|price|total|bill] [to_me|for_me|for_us]? [for|of] [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [to_me|for_me]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="Bill for 2 balls?"
+
+@pat.kids.shop.w.aff.af1.an core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [can|could|may|am|do|will|would|is|are|does|if|whether|check_if|can_u_check_if|can_you_check_if|tell_me_if|tell_me_whether] [i|we|it]? [can|could|will|would]? [be]? [able_to|even|possibly|ok_to|okay_to|allowed_to|fine_to]? [buy|get|afford|have|purchase|take|pay_for|manage|get_me|buy_me] [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="Am I able to afford 2 balls?"
+
+@pat.kids.shop.w.aff.af2.an core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [is|are|would|will|does|do]? [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [affordable|possible|doable|ok|okay|fine|enough|within_my_budget|in_my_budget|something_i_can_buy|something_i_can_afford|too_much|too_expensive|something_i_can_get|possible_for_me|affordable_for_me|ok_for_me|doable_for_me|something_i_can_pay_for] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="Is 2 balls affordable?"
+
+@pat.kids.shop.w.aff.af3.an core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [do_i_have|is_there|have_i_got|got]? [enough|enough_money|enough_lei|enough_cash|money_enough|enough_to_buy|enough_money_for|enough_money_to_buy|sufficient_money] [for|to_buy|to_get|to_afford]? [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="Enough cash for 2 balls?"
+
+@pat.kids.shop.w.aff.af4.an core.pattern
+    match="[a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [can|could|may] [i|we] [get|buy|afford|have] [them|it|that|those|these]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="2 balls, could i buy them?"
+
+@pat.kids.shop.w.aff.af5.an core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [i_want|i_need|i_would_like|i_d_like|im_going_to_buy|i_wanna_buy|i_wanna_get|id_like|wanna_buy|want_to_buy|i_want_to_buy] [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [can|could|may] [i|we] [get|buy|afford|have]? [them|it|that|those|these]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="I wanna buy 2 balls, may I?"
+
+@pat.kids.shop.w.aff.af6.an core.pattern
+    match="[a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [possible|doable|ok|okay|fine|allowed] [for_me|to_buy|for_us]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="2 balls possible for me?"
+
+@pat.kids.shop.w.chg.o1.an core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [what|whats|what_is|how_much|what_will|how_much_will|what_would]? [is|will_be|would_be]? [my|the]? [change|money_back|how_much_change|how_much_back|how_much_money_back|change_back|rest|remainder|how_much_do_i_get_back] [do_i_get|will_i_get|would_i_get|can_i_expect|i_get|do_i_receive|will_i_have|will_i_receive]? [from|out_of|with|if_i_pay|if_i_pay_with|paying|when_i_pay_with|if_i_pay_from|using|from_a|from_my] {m:number} [lei|leu]? [if_i_buy|when_i_buy|after_i_buy|after_buying|if_i_purchase|to_buy|buying|if_buying|when_buying|if_i_pay_for|for_buying|for|on|after|if|when|if_i_get|if_i_take|i_buy|i_get] [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="What change out of 5 lei if I take 2 balls?"
+
+@pat.kids.shop.w.chg.o2.an core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [what|whats|what_is|how_much|what_will|how_much_will|what_would]? [is|will_be|would_be]? [my|the]? [change|money_back|how_much_change|how_much_back|how_much_money_back|change_back|rest|remainder|how_much_do_i_get_back] [do_i_get|will_i_get|would_i_get|i_get|do_i_receive|will_i_receive]? [for|on|after|buying|if_i_buy|when_i_buy|if_i_get] [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [from|out_of|with|if_i_pay|if_i_pay_with|paying|when_i_pay_with|if_i_pay_from|using|from_a|from_my] {m:number} [lei|leu]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="Change for 2 balls with 5 lei?"
+
+@pat.kids.shop.w.chg.o3.an core.pattern
+    match="[if|when|after] i [buy|get|purchase|pay_for|take] [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [with|from|using|paying|and_pay|and_pay_with|paying_with|out_of|and_give|and_hand_over] {m:number} [lei|leu]? [what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="If I take 2 balls using 5 lei, whats my change?"
+
+@pat.kids.shop.w.chg.o4.an core.pattern
+    match="{m:number} [lei|leu]? [minus|less|for|buys|buy|pays_for|spent_on|to_pay_for|paid_for|for_buying|for_the_price_of|takes_away|take_away] [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="5 lei minus 2 balls, what is left?"
+
+@pat.kids.shop.w.chg.o5.an core.pattern
+    match="[what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [do_i_get|will_i_get|would_i_get|i_get|do_i_receive|will_i_receive|do_i_have]? [if|when|after]? i [buy|get|purchase|pay_for|take] [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [with|from|using|paying|paying_with|out_of] {m:number} [lei|leu]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="How much back if I take 2 balls with 5 lei?"
+
+@pat.kids.shop.w.chg.o6.an core.pattern
+    match="[i|we]? [pay|give|pay_with|hand|give_the_shopkeeper|give_the_cashier|give_the_seller|hand_over] {m:number} [lei|leu]? [for|to_buy|on] [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="I hand over 5 lei for 2 balls, change?"
+
+@pat.kids.shop.w.chg.o7.an core.pattern
+    match="[a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} {m:number} [lei|leu]? [what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [how_much|what]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="2 balls, 5 lei, change how much"
+
+@pat.kids.shop.w.chg.o8.an core.pattern
+    match="[what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [do_i_get|will_i_get|would_i_get|i_get|do_i_receive|will_i_receive]? [from|out_of|with|if_i_pay_with|when_i_pay_with|paying|if_i_pay] {m:number} [lei|leu]? [for|if_i_buy|when_i_buy|after_i_buy|if_i_get|to_buy|buying|on|if_buying|if_i_purchase|if_i_pay_for|after_buying|if|when] [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="How much back out of 5 lei for 2 balls?"
+
+@pat.kids.shop.w.chg.o9.an core.pattern
+    match="[what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [do_i_get|will_i_get|would_i_get|i_get|do_i_receive|will_i_receive]? [if|when|after] i [buy|get|purchase|pay_for|take] [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? {n2:number} {i2:lex.kids.shop.items} [with|from|using|paying|out_of] {m:number} [lei|leu]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1 where.item2={i2} where.count2={n2}"
+    kind=question
+    priority=11
+    example="Change if I buy 2 balls from 5 lei?"
+
+@pat.kids.shop.w.total.t1.na core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [how_much|how_much_money|what|whats|what_is|what_do|what_does|what_will|what_would|how_much_do|how_much_does|how_much_would|how_much_will|how_much_are|how_much_is|how_much_money_do|how_much_money_are|total|total_cost|total_price|the_total|the_cost|the_price|price|cost|cost_of|price_of|total_for|price_for|cost_for|the_total_for|the_total_of|the_cost_of|the_price_of|tell_me_the_cost_of|tell_me_the_price_of|tell_me_the_total_for|tell_me_the_total|give_me_the_total_for|cost_to_me] [do|does|would|will|is|are|be|for|of]? {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [cost|costs|come_to|comes_to|add_up_to|be|total|cost_me|come_to_in_total|total_up_to]? [me|for_me|to_me|together|altogether|in_total|come_to]? [together|altogether|in_total|for_me|to_me]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="What do 2 balls cost me altogether?"
+
+@pat.kids.shop.w.total.t2.na core.pattern
+    match="{n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [cost|costs|come_to|comes_to|add_up_to|total|cost_me|is|are|be] [how_much|how_much_money|what|together|altogether|in_total|to_me]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="2 balls cost how much?"
+
+@pat.kids.shop.w.total.t3.na core.pattern
+    match="{n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [how_much|how_much_money|total|price|cost|what|how_much_in_total|how_much_together|how_much_altogether] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="2 balls how much?"
+
+@pat.kids.shop.w.total.pay1.na core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [how_much|what|how_much_money] [will|would|do|should|must|shall]? [i|we]? [pay|need|spend|owe|have_to_pay|need_to_pay|be_paying|end_up_paying] [for|on]? {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [pls|plz|please|in_total|altogether|together]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="What would I owe for 2 balls?"
+
+@pat.kids.shop.w.total.pay2.na core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [pay|spend] how_much [for|on]? {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="Pay how much for 2 balls?"
+
+@pat.kids.shop.w.total.pay3.na core.pattern
+    match="{n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [how_much|what] [will|would|do|should|must|shall]? [i|we]? [pay|owe|spend|need] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="2 balls, how much will i owe?"
+
+@pat.kids.shop.w.total.pay4.na core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [what|whats|what_is|how_much] [i|we] [will|would|have_to|need_to|must|shall] [pay|owe|spend] [for|on] {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="What I have to pay for 2 balls?"
+
+@pat.kids.shop.w.total.pay5.na core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [cost|price|total|bill] [to_me|for_me|for_us]? [for|of] {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [to_me|for_me]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="Bill for 2 balls?"
+
+@pat.kids.shop.w.aff.af1.na core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [can|could|may|am|do|will|would|is|are|does|if|whether|check_if|can_u_check_if|can_you_check_if|tell_me_if|tell_me_whether] [i|we|it]? [can|could|will|would]? [be]? [able_to|even|possibly|ok_to|okay_to|allowed_to|fine_to]? [buy|get|afford|have|purchase|take|pay_for|manage|get_me|buy_me] {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="Am I able to afford 2 balls?"
+
+@pat.kids.shop.w.aff.af2.na core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [is|are|would|will|does|do]? {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [affordable|possible|doable|ok|okay|fine|enough|within_my_budget|in_my_budget|something_i_can_buy|something_i_can_afford|too_much|too_expensive|something_i_can_get|possible_for_me|affordable_for_me|ok_for_me|doable_for_me|something_i_can_pay_for] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="Is 2 balls affordable?"
+
+@pat.kids.shop.w.aff.af3.na core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [do_i_have|is_there|have_i_got|got]? [enough|enough_money|enough_lei|enough_cash|money_enough|enough_to_buy|enough_money_for|enough_money_to_buy|sufficient_money] [for|to_buy|to_get|to_afford]? {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="Enough cash for 2 balls?"
+
+@pat.kids.shop.w.aff.af4.na core.pattern
+    match="{n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [can|could|may] [i|we] [get|buy|afford|have] [them|it|that|those|these]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="2 balls, could i buy them?"
+
+@pat.kids.shop.w.aff.af5.na core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [i_want|i_need|i_would_like|i_d_like|im_going_to_buy|i_wanna_buy|i_wanna_get|id_like|wanna_buy|want_to_buy|i_want_to_buy] {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [can|could|may] [i|we] [get|buy|afford|have]? [them|it|that|those|these]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="I wanna buy 2 balls, may I?"
+
+@pat.kids.shop.w.aff.af6.na core.pattern
+    match="{n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [possible|doable|ok|okay|fine|allowed] [for_me|to_buy|for_us]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="2 balls possible for me?"
+
+@pat.kids.shop.w.chg.o1.na core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [what|whats|what_is|how_much|what_will|how_much_will|what_would]? [is|will_be|would_be]? [my|the]? [change|money_back|how_much_change|how_much_back|how_much_money_back|change_back|rest|remainder|how_much_do_i_get_back] [do_i_get|will_i_get|would_i_get|can_i_expect|i_get|do_i_receive|will_i_have|will_i_receive]? [from|out_of|with|if_i_pay|if_i_pay_with|paying|when_i_pay_with|if_i_pay_from|using|from_a|from_my] {m:number} [lei|leu]? [if_i_buy|when_i_buy|after_i_buy|after_buying|if_i_purchase|to_buy|buying|if_buying|when_buying|if_i_pay_for|for_buying|for|on|after|if|when|if_i_get|if_i_take|i_buy|i_get] {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="What change out of 5 lei if I take 2 balls?"
+
+@pat.kids.shop.w.chg.o2.na core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [what|whats|what_is|how_much|what_will|how_much_will|what_would]? [is|will_be|would_be]? [my|the]? [change|money_back|how_much_change|how_much_back|how_much_money_back|change_back|rest|remainder|how_much_do_i_get_back] [do_i_get|will_i_get|would_i_get|i_get|do_i_receive|will_i_receive]? [for|on|after|buying|if_i_buy|when_i_buy|if_i_get] {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [from|out_of|with|if_i_pay|if_i_pay_with|paying|when_i_pay_with|if_i_pay_from|using|from_a|from_my] {m:number} [lei|leu]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="Change for 2 balls with 5 lei?"
+
+@pat.kids.shop.w.chg.o3.na core.pattern
+    match="[if|when|after] i [buy|get|purchase|pay_for|take] {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [with|from|using|paying|and_pay|and_pay_with|paying_with|out_of|and_give|and_hand_over] {m:number} [lei|leu]? [what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="If I take 2 balls using 5 lei, whats my change?"
+
+@pat.kids.shop.w.chg.o4.na core.pattern
+    match="{m:number} [lei|leu]? [minus|less|for|buys|buy|pays_for|spent_on|to_pay_for|paid_for|for_buying|for_the_price_of|takes_away|take_away] {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="5 lei minus 2 balls, what is left?"
+
+@pat.kids.shop.w.chg.o5.na core.pattern
+    match="[what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [do_i_get|will_i_get|would_i_get|i_get|do_i_receive|will_i_receive|do_i_have]? [if|when|after]? i [buy|get|purchase|pay_for|take] {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [with|from|using|paying|paying_with|out_of] {m:number} [lei|leu]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="How much back if I take 2 balls with 5 lei?"
+
+@pat.kids.shop.w.chg.o6.na core.pattern
+    match="[i|we]? [pay|give|pay_with|hand|give_the_shopkeeper|give_the_cashier|give_the_seller|hand_over] {m:number} [lei|leu]? [for|to_buy|on] {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="I hand over 5 lei for 2 balls, change?"
+
+@pat.kids.shop.w.chg.o7.na core.pattern
+    match="{n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} {m:number} [lei|leu]? [what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [how_much|what]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="2 balls, 5 lei, change how much"
+
+@pat.kids.shop.w.chg.o8.na core.pattern
+    match="[what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [do_i_get|will_i_get|would_i_get|i_get|do_i_receive|will_i_receive]? [from|out_of|with|if_i_pay_with|when_i_pay_with|paying|if_i_pay] {m:number} [lei|leu]? [for|if_i_buy|when_i_buy|after_i_buy|if_i_get|to_buy|buying|on|if_buying|if_i_purchase|if_i_pay_for|after_buying|if|when] {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="How much back out of 5 lei for 2 balls?"
+
+@pat.kids.shop.w.chg.o9.na core.pattern
+    match="[what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [do_i_get|will_i_get|would_i_get|i_get|do_i_receive|will_i_receive]? [if|when|after] i [buy|get|purchase|pay_for|take] {n1:number} {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [with|from|using|paying|out_of] {m:number} [lei|leu]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1} where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="Change if I buy 2 balls from 5 lei?"
+
+@pat.kids.shop.w.total.t1.aa core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [how_much|how_much_money|what|whats|what_is|what_do|what_does|what_will|what_would|how_much_do|how_much_does|how_much_would|how_much_will|how_much_are|how_much_is|how_much_money_do|how_much_money_are|total|total_cost|total_price|the_total|the_cost|the_price|price|cost|cost_of|price_of|total_for|price_for|cost_for|the_total_for|the_total_of|the_cost_of|the_price_of|tell_me_the_cost_of|tell_me_the_price_of|tell_me_the_total_for|tell_me_the_total|give_me_the_total_for|cost_to_me] [do|does|would|will|is|are|be|for|of]? [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [cost|costs|come_to|comes_to|add_up_to|be|total|cost_me|come_to_in_total|total_up_to]? [me|for_me|to_me|together|altogether|in_total|come_to]? [together|altogether|in_total|for_me|to_me]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="What do 2 balls cost me altogether?"
+
+@pat.kids.shop.w.total.t2.aa core.pattern
+    match="[a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [cost|costs|come_to|comes_to|add_up_to|total|cost_me|is|are|be] [how_much|how_much_money|what|together|altogether|in_total|to_me]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="2 balls cost how much?"
+
+@pat.kids.shop.w.total.t3.aa core.pattern
+    match="[a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [how_much|how_much_money|total|price|cost|what|how_much_in_total|how_much_together|how_much_altogether] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="2 balls how much?"
+
+@pat.kids.shop.w.total.pay1.aa core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [how_much|what|how_much_money] [will|would|do|should|must|shall]? [i|we]? [pay|need|spend|owe|have_to_pay|need_to_pay|be_paying|end_up_paying] [for|on]? [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [pls|plz|please|in_total|altogether|together]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="What would I owe for 2 balls?"
+
+@pat.kids.shop.w.total.pay2.aa core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [pay|spend] how_much [for|on]? [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="Pay how much for 2 balls?"
+
+@pat.kids.shop.w.total.pay3.aa core.pattern
+    match="[a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [how_much|what] [will|would|do|should|must|shall]? [i|we]? [pay|owe|spend|need] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="2 balls, how much will i owe?"
+
+@pat.kids.shop.w.total.pay4.aa core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [what|whats|what_is|how_much] [i|we] [will|would|have_to|need_to|must|shall] [pay|owe|spend] [for|on] [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="What I have to pay for 2 balls?"
+
+@pat.kids.shop.w.total.pay5.aa core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [cost|price|total|bill] [to_me|for_me|for_us]? [for|of] [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [to_me|for_me]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="Bill for 2 balls?"
+
+@pat.kids.shop.w.aff.af1.aa core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [can|could|may|am|do|will|would|is|are|does|if|whether|check_if|can_u_check_if|can_you_check_if|tell_me_if|tell_me_whether] [i|we|it]? [can|could|will|would]? [be]? [able_to|even|possibly|ok_to|okay_to|allowed_to|fine_to]? [buy|get|afford|have|purchase|take|pay_for|manage|get_me|buy_me] [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="Am I able to afford 2 balls?"
+
+@pat.kids.shop.w.aff.af2.aa core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [is|are|would|will|does|do]? [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [affordable|possible|doable|ok|okay|fine|enough|within_my_budget|in_my_budget|something_i_can_buy|something_i_can_afford|too_much|too_expensive|something_i_can_get|possible_for_me|affordable_for_me|ok_for_me|doable_for_me|something_i_can_pay_for] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="Is 2 balls affordable?"
+
+@pat.kids.shop.w.aff.af3.aa core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [do_i_have|is_there|have_i_got|got]? [enough|enough_money|enough_lei|enough_cash|money_enough|enough_to_buy|enough_money_for|enough_money_to_buy|sufficient_money] [for|to_buy|to_get|to_afford]? [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="Enough cash for 2 balls?"
+
+@pat.kids.shop.w.aff.af4.aa core.pattern
+    match="[a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [can|could|may] [i|we] [get|buy|afford|have] [them|it|that|those|these]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="2 balls, could i buy them?"
+
+@pat.kids.shop.w.aff.af5.aa core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [i_want|i_need|i_would_like|i_d_like|im_going_to_buy|i_wanna_buy|i_wanna_get|id_like|wanna_buy|want_to_buy|i_want_to_buy] [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [can|could|may] [i|we] [get|buy|afford|have]? [them|it|that|those|these]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="I wanna buy 2 balls, may I?"
+
+@pat.kids.shop.w.aff.af6.aa core.pattern
+    match="[a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [possible|doable|ok|okay|fine|allowed] [for_me|to_buy|for_us]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="2 balls possible for me?"
+
+@pat.kids.shop.w.chg.o1.aa core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [what|whats|what_is|how_much|what_will|how_much_will|what_would]? [is|will_be|would_be]? [my|the]? [change|money_back|how_much_change|how_much_back|how_much_money_back|change_back|rest|remainder|how_much_do_i_get_back] [do_i_get|will_i_get|would_i_get|can_i_expect|i_get|do_i_receive|will_i_have|will_i_receive]? [from|out_of|with|if_i_pay|if_i_pay_with|paying|when_i_pay_with|if_i_pay_from|using|from_a|from_my] {m:number} [lei|leu]? [if_i_buy|when_i_buy|after_i_buy|after_buying|if_i_purchase|to_buy|buying|if_buying|when_buying|if_i_pay_for|for_buying|for|on|after|if|when|if_i_get|if_i_take|i_buy|i_get] [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="What change out of 5 lei if I take 2 balls?"
+
+@pat.kids.shop.w.chg.o2.aa core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [what|whats|what_is|how_much|what_will|how_much_will|what_would]? [is|will_be|would_be]? [my|the]? [change|money_back|how_much_change|how_much_back|how_much_money_back|change_back|rest|remainder|how_much_do_i_get_back] [do_i_get|will_i_get|would_i_get|i_get|do_i_receive|will_i_receive]? [for|on|after|buying|if_i_buy|when_i_buy|if_i_get] [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [from|out_of|with|if_i_pay|if_i_pay_with|paying|when_i_pay_with|if_i_pay_from|using|from_a|from_my] {m:number} [lei|leu]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="Change for 2 balls with 5 lei?"
+
+@pat.kids.shop.w.chg.o3.aa core.pattern
+    match="[if|when|after] i [buy|get|purchase|pay_for|take] [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [with|from|using|paying|and_pay|and_pay_with|paying_with|out_of|and_give|and_hand_over] {m:number} [lei|leu]? [what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="If I take 2 balls using 5 lei, whats my change?"
+
+@pat.kids.shop.w.chg.o4.aa core.pattern
+    match="{m:number} [lei|leu]? [minus|less|for|buys|buy|pays_for|spent_on|to_pay_for|paid_for|for_buying|for_the_price_of|takes_away|take_away] [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="5 lei minus 2 balls, what is left?"
+
+@pat.kids.shop.w.chg.o5.aa core.pattern
+    match="[what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [do_i_get|will_i_get|would_i_get|i_get|do_i_receive|will_i_receive|do_i_have]? [if|when|after]? i [buy|get|purchase|pay_for|take] [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [with|from|using|paying|paying_with|out_of] {m:number} [lei|leu]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="How much back if I take 2 balls with 5 lei?"
+
+@pat.kids.shop.w.chg.o6.aa core.pattern
+    match="[i|we]? [pay|give|pay_with|hand|give_the_shopkeeper|give_the_cashier|give_the_seller|hand_over] {m:number} [lei|leu]? [for|to_buy|on] [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="I hand over 5 lei for 2 balls, change?"
+
+@pat.kids.shop.w.chg.o7.aa core.pattern
+    match="[a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} {m:number} [lei|leu]? [what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [how_much|what]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="2 balls, 5 lei, change how much"
+
+@pat.kids.shop.w.chg.o8.aa core.pattern
+    match="[what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [do_i_get|will_i_get|would_i_get|i_get|do_i_receive|will_i_receive]? [from|out_of|with|if_i_pay_with|when_i_pay_with|paying|if_i_pay] {m:number} [lei|leu]? [for|if_i_buy|when_i_buy|after_i_buy|if_i_get|to_buy|buying|on|if_buying|if_i_purchase|if_i_pay_for|after_buying|if|when] [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="How much back out of 5 lei for 2 balls?"
+
+@pat.kids.shop.w.chg.o9.aa core.pattern
+    match="[what|whats|what_is|how_much|what_will|how_much_will|how_much_do_i_get]? [is|will_be|would_be]? [my|the]? [change|money_back|back|change_back|rest|how_much_change|how_much_back|how_much_change_do_i_get|left|how_much_is_left|how_much_will_be_left|remainder|how_much] [do_i_get|will_i_get|would_i_get|i_get|do_i_receive|will_i_receive]? [if|when|after] i [buy|get|purchase|pay_for|take] [a|an|one|1|the]? {i1:lex.kids.shop.items} [and|plus|with|also]? [a|an|one|1|the]? {i2:lex.kids.shop.items} [with|from|using|paying|out_of] {m:number} [lei|leu]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="Change if I buy 2 balls from 5 lei?"
+
+@pat.kids.shop.w.bal.f1 core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [how_much|how_many|what|whats|what_is] [money|cash|lei|leu|my_money|my_cash|my_balance|balance|the_money]? [do|will|would|did|is|are|am]? [i|me]? [still|now|even]? [have|got|has|left|remaining|remain|left_over|leftover|left_of_my_money|left_of_my_cash] [left|now|remaining|over|leftover|left_over|in_my_wallet|in_my_pocket|in_total|of_my_money|of_my_cash|still|have|got]? [have|got]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.balance seek=amount"
+    kind=question
+    priority=10
+    example="How much cash do I still have?"
+
+@pat.kids.shop.w.bal.f2 core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [my|the]? [money|cash|lei|balance|funds] [left|remaining|leftover|left_over|balance]"
+    emit="@{_} core.question type=kids.shop.balance seek=amount"
+    kind=question
+    priority=10
+    example="My cash left?"
+
+@pat.kids.shop.w.bal.f3 core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [left|remaining|leftover] [money|cash|lei|balance]"
+    emit="@{_} core.question type=kids.shop.balance seek=amount"
+    kind=question
+    priority=10
+    example="Left cash?"
+
+@pat.kids.shop.w.bal.f4 core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [whats|what_is|show_me|tell_me|check]? [my|the] balance [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.balance seek=amount"
+    kind=question
+    priority=10
+    example="Show me my balance."
+
+@pat.kids.shop.w.bal.f5 core.pattern
+    match="[hey|so|um|ok|okay|hi|tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|quick_question|please]? [how_much|what|whats|what_is|show|show_me|tell_me|check|how_much_money_is|how_much_is] [is|do_i_have|have_i_got|i_have|do_i_have_in]? [in|on]? [my]? [wallet|piggy_bank|pocket|purse|money_box|money|cash] [amount|now|total|in_total|altogether]? [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.balance seek=amount"
+    kind=question
+    priority=10
+    example="Show me my cash total."
+
+@pat.kids.shop.w.bal.f6 core.pattern
+    match="[my|the]? [wallet|piggy_bank|purse|money|cash|money_box] [amount|total|sum|now|check]"
+    emit="@{_} core.question type=kids.shop.balance seek=amount"
+    kind=question
+    priority=10
+    example="Wallet total?"
+
+@pat.kids.shop.w.bal.f7 core.pattern
+    match="how_much [money]? [is|are] there [pls|plz|please|thanks|lol|rn|now|exactly|then]?"
+    emit="@{_} core.question type=kids.shop.balance seek=amount"
+    kind=question
+    priority=10
+    example="How much money is there?"

@@ -355,3 +355,28 @@
 @t.animals.n76 core.test
     input="Can a walrus swim?"
     expect="Yes, a walrus can swim."
+
+@t.animals.w01 core.test
+    input="Can a dolphin go swimming?"
+    expect="Yes, a dolphin can swim."
+    doc="wording variant (widened phrasing)"
+
+@t.animals.w02 core.test
+    input="Is a whale classed as a fish?"
+    expect="No, a whale is not a fish."
+    doc="wording variant (widened phrasing)"
+
+@t.animals.w03 core.test
+    input="Where do camels hang out?"
+    expect="Camels live in the desert."
+    doc="wording variant (widened phrasing)"
+
+@t.animals.w04 core.test
+    input="What does a duck have on its body?"
+    expect="A duck is covered in feathers."
+    doc="wording variant (widened phrasing)"
+
+@t.animals.w05 core.test
+    input="Any birds that can swim?"
+    expect="Birds that can swim: ducks, geese, penguins and swans."
+    doc="wording variant (widened phrasing)"

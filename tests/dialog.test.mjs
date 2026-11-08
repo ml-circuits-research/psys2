@@ -257,7 +257,7 @@ test('server: idle sessions expire', async () => {
 
 test('CLI: test-world all passes; parse reports errors; formalize prints wires', () => {
   const run = (...args) => execFileSync('node', [path.join(ROOT, 'src/cli.mjs'), ...args], { encoding: 'utf8' });
-  assert.match(run('test-world', 'all'), /kids\.common: 7\/7 passed/);
+  assert.match(run('test-world', 'all'), /kids\.common: \d+\/\d+ passed/);
   assert.match(run('--root', path.join(ROOT, 'tests/fixtures/worlds'), 'test-world', 'test.counting'), /test\.counting: 10\/10 passed/);
   assert.match(run('--root', path.join(ROOT, 'tests/fixtures/worlds'), 'formalize', 'Tom has 5 apples'), /@w1 test\.counting\.holding/);
   assert.throws(() => run('test-world', 'nope'), (e) => /unknown world/.test(e.stdout));

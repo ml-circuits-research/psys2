@@ -118,3 +118,20 @@ test('datagen: deterministic, valid SOP, negatives, many groups', () => {
     assert.ok(wires.length >= 1);
   }
 });
+
+test('music tab: chess moves are not taken by the catch-all song pattern, songs and note sequences still are', async () => {
+  const onMusic = async (text) => {
+    const s = engine.createSession({ language: 'en' });
+    s.setWorldState('ui.shell', { activeTab: 'music' });
+    const r = await s.send(text);
+    return { r, winner: r.trace.routing[0]?.winner?.worldId };
+  };
+  for (const t of ['Play knight to f3', 'Can you play the knight to f3?', 'Play pawn to e4', 'Please play the queen to d5']) {
+    const { r, winner } = await onMusic(t);
+    assert.equal(winner, 'games.chess', t);
+    assert.ok(!/do not know a song/i.test(r.reply), t);
+  }
+  for (const t of ['Play Ode to Joy', 'Play C D E F G', 'Could you play Jingle Bells on the organ?', 'Play Yesterday']) {
+    assert.equal((await onMusic(t)).winner, 'media.music', t);
+  }
+});

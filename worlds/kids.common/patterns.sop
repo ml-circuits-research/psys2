@@ -77,3 +77,262 @@
     kind=chat
     priority=10
     example="Goodbye!"
+
+@pat.kids.common.w.hello core.pattern
+    match="[hello|hi|hey|hiya|yo|howdy|hullo|heya|greetings|sup|wassup|whats_up|good_morning|good_afternoon|good_evening|morning|evening|hi_there|hello_there|hey_there|hiii|hii|hiiii|heyy|heyyy|helloo|hellooo|hey_hey|hi_hi|hello_hello|hola|ahoy|g'day|salutations] [again|there|friend|buddy|everyone|robot|pal|mate|all|you|guys|team|assistant|everybody]?"
+    emit="@{_} core.request action=chat.greet"
+    kind=question
+    priority=10
+    example="Hello friend."
+
+@pat.kids.common.w.name.f1 core.pattern
+    match="[hey|so|um|ok|okay|hi|hello|yo|hmm|oh|tell_me|can_you_tell_me|could_you_tell_me|quick_question]? [what|whats|what_is|wat|wats|wat_is|what_s|say]? [is]? [your|ur|ya|yer|the_assistants|the_robots] name [pls|plz|please|thanks|lol|haha|again|rn|now|then|exactly|actually]?"
+    emit="@{_} core.request action=chat.name"
+    kind=question
+    priority=12
+    example="Say your name pls."
+
+@pat.kids.common.w.name.f2 core.pattern
+    match="[hey|so|um|ok|okay|hi|hello|yo|hmm|oh|tell_me|can_you_tell_me|could_you_tell_me|quick_question]? [your|ur] name [is|was]? [what|again]? [pls|plz|please|thanks|lol|haha|again|rn|now|then|exactly|actually]?"
+    emit="@{_} core.request action=chat.name"
+    kind=question
+    priority=12
+    example="Your name again?"
+
+@pat.kids.common.w.name.f3 core.pattern
+    match="[do|did|have|can|could]? [you|u] [got|have|has|even_have] [a|an]? [name|nickname] [pls|plz|please|thanks|lol|haha|again|rn|now|then|exactly|actually]?"
+    emit="@{_} core.request action=chat.name"
+    kind=question
+    priority=12
+    example="Do you even have a name?"
+
+@pat.kids.common.w.name.f4 core.pattern
+    match="[hey|so|um|ok|okay|hi|hello|yo|hmm|oh|tell_me|can_you_tell_me|could_you_tell_me|quick_question]? [what|how] [are|r|were] [you|u] [called|named|addressed] [pls|plz|please|thanks|lol|haha|again|rn|now|then|exactly|actually]?"
+    emit="@{_} core.request action=chat.name"
+    kind=question
+    priority=12
+    example="How are you addressed?"
+
+@pat.kids.common.w.name.f5 core.pattern
+    match="[hey|so|um|ok|okay|hi|hello|yo|hmm|oh|tell_me|can_you_tell_me|could_you_tell_me|quick_question]? [so]? [you|u] [are|r] [called|named|known_as] [what|how] [pls|plz|please|thanks|lol|haha|again|rn|now|then|exactly|actually]?"
+    emit="@{_} core.request action=chat.name"
+    kind=question
+    priority=12
+    example="So you are known as what?"
+
+@pat.kids.common.w.name.f6 core.pattern
+    match="[hey|so|um|ok|okay|hi|hello|yo|hmm|oh|tell_me|can_you_tell_me|could_you_tell_me|quick_question]? how [should|do|can|could|would|shall] [i|we] [address|name|call|refer_to] [you|u] [pls|plz|please|thanks|lol|haha|again|rn|now|then|exactly|actually]?"
+    emit="@{_} core.request action=chat.name"
+    kind=question
+    priority=12
+    example="How should I refer to you?"
+
+@pat.kids.common.w.name.f7 core.pattern
+    match="[hey|so|um|ok|okay|hi|hello|yo|hmm|oh|tell_me|can_you_tell_me|could_you_tell_me|quick_question]? who [am_i|do_i|should_i|can_i] [talk|talking|speak|speaking|chat|chatting] [to|with] [what_name]? [what|whats]? [name]? [pls|plz|please|thanks|lol|haha|again|rn|now|then|exactly|actually]?"
+    emit="@{_} core.request action=chat.name"
+    kind=question
+    priority=12
+    example="Who am I chatting with?"
+
+@pat.kids.common.w.name.f8 core.pattern
+    match="[hey|so|um|ok|okay|hi|hello|yo|hmm|oh|tell_me|can_you_tell_me|could_you_tell_me|quick_question]? name [of_yours|of_the_assistant|of_the_robot|of_the_bot|of_you|of_the_helper|please|pls|plz|again]? [pls|plz|please|thanks|lol|haha|again|rn|now|then|exactly|actually]?"
+    emit="@{_} core.request action=chat.name"
+    kind=question
+    priority=11
+    example="Name of the helper?"
+
+@pat.kids.common.w.name.f9 core.pattern
+    match="[hey|so|um|ok|okay|hi|hello|yo|hmm|oh|tell_me|can_you_tell_me|could_you_tell_me|quick_question]? [what|whats|what_is] name [do_you_go_by|do_you_use|are_you_called|were_you_given|do_you_have|should_i_use|should_i_call_you]"
+    emit="@{_} core.request action=chat.name"
+    kind=question
+    priority=12
+    example="What name do you go by?"
+
+@pat.kids.common.w.meet.f1 core.pattern
+    match="[hello|hi|hey|yo|hiya]? [there]? [just|please|pls|actually|well]? [my_name_is|my_name_s|my_names|my_name's|my_nickname_is|my_nick_is|my_nickname_s|name_s|names|name's|the_name_is|the_name's|the_names|im_called|i_am_called|i_go_by|you_can_call_me|can_you_call_me|call_me|just_call_me|please_call_me|everybody_calls_me|people_call_me|they_call_me|my_friends_call_me|i_am_named|im_named|my_first_name_is|the_name_s|the_name_is_actually|you_can_know_me_as|know_me_as|refer_to_me_as|address_me_as|you_can_address_me_as|i_am_known_as|im_known_as|name_is|first_name_is|full_name_is|my_full_name_is|my_first_name_is] {n:words(3)}"
+    emit="@{_} core.request action=chat.meet arg.name=\"{n}\""
+    kind=question
+    priority=12
+    example="Hi, you can call me Zed."
+
+@pat.kids.common.w.meet.f2 core.pattern
+    match="[hello|hi|hey|yo|hiya]? [there]? [this_is|hi_this_is] {n:agent}"
+    emit="@{_} core.request action=chat.meet arg.name=\"{n}\""
+    kind=question
+    priority=12
+    example="Hi, this is Zed."
+
+@pat.kids.common.w.meet.f3 core.pattern
+    match="{n:words(3)} [is_my_name|is_me|that_is_me|thats_me|is_who_i_am|is_what_i_am_called|is_what_people_call_me|is_my_nickname|call_me_that|is_what_to_call_me|is_what_i_go_by|speaking|talking|here]"
+    emit="@{_} core.request action=chat.meet arg.name=\"{n}\""
+    kind=question
+    priority=12
+    example="Zed is my name."
+
+@pat.kids.common.w.meet.f4 core.pattern
+    match="[this_is] {n:agent} [talking|speaking|here|again]"
+    emit="@{_} core.request action=chat.meet arg.name=\"{n}\""
+    kind=question
+    priority=12
+    example="This is Zed talking."
+
+@pat.kids.common.w.myname.f1 core.pattern
+    match="[hey|so|um|ok|okay|hi|hello|yo|hmm|oh|tell_me|can_you_tell_me|could_you_tell_me|quick_question]? [do|did|can|could|will|would]? [you|u]? [still]? [remember|know|recall|tell_me|remember_what|know_what|say|tell]? [what|whats|what_is|what_was|what_s]? [is|was]? my_name [is|was]? [what]? [again|now|pls|plz|please|lol|to_you|it|right|ok|huh|eh|or_not]?"
+    emit="@{_} core.request action=chat.myname"
+    kind=question
+    priority=12
+    example="Can you still recall my name?"
+
+@pat.kids.common.w.myname.f2 core.pattern
+    match="[what|which|whats|what_name]? [name]? [did_i|have_i|i|did_i_just] [give|gave|tell|told|say|said|share|use|type|put] [you|u]? [my_name]? [was|is]? [again]?"
+    emit="@{_} core.request action=chat.myname"
+    kind=question
+    priority=12
+    example="Which name did I tell you?"
+
+@pat.kids.common.w.myname.f3 core.pattern
+    match="[hey|so|um|ok|okay|hi|hello|yo|hmm|oh|tell_me|can_you_tell_me|could_you_tell_me|quick_question]? [who|what] [i_am_called|i_was_called|i_said_i_was|i_told_you_i_was|am_i|was_i|i_am|i_was|am_i_called|was_i_called|did_i_say_i_was|do_you_think_i_am|am_i_to_you] [to_you|again|called|now|pls|lol|then]? [called]?"
+    emit="@{_} core.request action=chat.myname"
+    kind=question
+    priority=12
+    example="Who was I again?"
+
+@pat.kids.common.w.myname.f4 core.pattern
+    match="[hey|so|um|ok|okay|hi|hello|yo|hmm|oh|tell_me|can_you_tell_me|could_you_tell_me|quick_question]? [do|did|can|could]? [you|u] [know|remember|recall] who [i_am|am_i]"
+    emit="@{_} core.request action=chat.myname"
+    kind=question
+    priority=12
+    example="Do you recall who I am?"
+
+@pat.kids.common.w.myname.f5 core.pattern
+    match="[did|have]? i [tell|told|give|gave|say|said] [you|u] my_name [pls|plz|please|thanks|lol|haha|again|rn|now|then|exactly|actually]?"
+    emit="@{_} core.request action=chat.myname"
+    kind=question
+    priority=12
+    example="Did I tell you my name?"
+
+@pat.kids.common.w.myname.f6 core.pattern
+    match="[i]? [forgot|forget|lost|cant_remember|cannot_remember|can_not_remember] my_name [lol|haha|hmm]? [do|can|could]? [you|u]? [know|remember|recall|tell_me]? [it|that|what_it_is]?"
+    emit="@{_} core.request action=chat.myname"
+    kind=question
+    priority=12
+    example="I forgot my name, can you recall it?"
+
+@pat.kids.common.w.myname.f7 core.pattern
+    match="[you]? [remember|know|recall]? [name|my_name] [i_told_u|i_told_you|i_gave_you|remember|remembered|i_gave_u|i_said|i_typed|i_told_you_earlier|that_i_gave_you]? [right|ok|huh|eh]?"
+    emit="@{_} core.request action=chat.myname"
+    kind=question
+    priority=11
+    example="Name i gave you?"
+
+@pat.kids.common.w.myname.f8 core.pattern
+    match="[do|did|can|could|will|would]? [you|u]? [remember|know|recognize|recognise|recall] me [pls|plz|please|thanks|lol|haha|again|rn|now|then|exactly|actually]?"
+    emit="@{_} core.request action=chat.myname"
+    kind=question
+    priority=12
+    example="Do you recognise me?"
+
+@pat.kids.common.w.name.f10 core.pattern
+    match="[hey|so|um|ok|okay|hi|hello|yo|hmm|oh|tell_me|can_you_tell_me|could_you_tell_me|quick_question]? what [do|did|would|should|can]? [people|everyone|they|others|i|we|folks|friends|kids] [call|name|address|know] [you|u] [by|as]? [pls|plz|please|thanks|lol|haha|again|rn|now|then|exactly|actually]?"
+    emit="@{_} core.request action=chat.name"
+    kind=question
+    priority=12
+    example="What do folks call you?"
+
+@pat.kids.common.w.name.f11 core.pattern
+    match="[may|can|could|might] [i|we] [know|ask|have|get] [your|ur] name [pls|plz|please|thanks|lol|haha|again|rn|now|then|exactly|actually]?"
+    emit="@{_} core.request action=chat.name"
+    kind=question
+    priority=12
+    example="Can I get your name?"
+
+@pat.kids.common.w.who.f5 core.pattern
+    match="[hey|so|um|ok|okay|hi|hello|yo|hmm|oh|tell_me|can_you_tell_me|could_you_tell_me|quick_question]? [explain|tell_me|say]? [who|whos] [is]? [this|that|you|u|r|talking_to_me|speaking|there|youre|you_are|talking|speaking_to_me]? [u|you|r|are|be|is]? [talking_to_me|speaking|there|this|talking|speaking_to_me]? [to_me]? [pls|plz|please|thanks|lol|haha|again|rn|now|then|exactly|actually]?"
+    emit="@{_} core.request action=chat.who"
+    kind=question
+    priority=12
+    example="Who is speaking to me?"
+
+@pat.kids.common.w.who.f6 core.pattern
+    match="[you|u] [are|r] who [pls|plz|please|thanks|lol|haha|again|rn|now|then|exactly|actually]?"
+    emit="@{_} core.request action=chat.who"
+    kind=question
+    priority=12
+    example="You are who?"
+
+@pat.kids.common.w.meet.f5 core.pattern
+    match="[my_name|my_nickname|the_name|name|my_first_name] 's {n:words(3)}"
+    emit="@{_} core.request action=chat.meet arg.name=\"{n}\""
+    kind=question
+    priority=12
+    example="My name's Zed."
+
+@pat.kids.common.w.meet.f6 core.pattern
+    match="[name|first_name|full_name|nickname] is {n:words(3)}"
+    emit="@{_} core.request action=chat.meet arg.name=\"{n}\""
+    kind=question
+    priority=12
+    example="Name is Zed."
+
+@pat.kids.common.w.meet.f7 core.pattern
+    match="{n:words(3)} [is|works|will_do|would_be] [fine|ok|okay|good|great|perfect|cool|best] [for|with|by]? [me]?"
+    emit="@{_} core.request action=chat.meet arg.name=\"{n}\""
+    kind=question
+    priority=12
+    example="Zed is fine by me."
+
+@pat.kids.common.w.meet.f8 core.pattern
+    match="{n:words(3)} [nice_to_meet_you|pleased_to_meet_you|nice_to_meetcha|good_to_meet_you|glad_to_meet_you|nice_to_meet_u]"
+    emit="@{_} core.request action=chat.meet arg.name=\"{n}\""
+    kind=question
+    priority=12
+    example="Zed, nice to meet you."
+
+@pat.kids.common.w.meet.f9 core.pattern
+    match="[hello|hi|hey]? [there]? [my_name_is|my_name_s|my_names|my_name's|my_nickname_is|my_nick_is|my_nickname_s|name_s|names|name's|the_name_is|the_name's|the_names|im_called|i_am_called|i_go_by|you_can_call_me|can_you_call_me|call_me|just_call_me|please_call_me|everybody_calls_me|people_call_me|they_call_me|my_friends_call_me|i_am_named|im_named|my_first_name_is|the_name_s|the_name_is_actually|you_can_know_me_as|know_me_as|refer_to_me_as|address_me_as|you_can_address_me_as|i_am_known_as|im_known_as|name_is|first_name_is|full_name_is|my_full_name_is|my_first_name_is] {n:words(3)} [pls|plz|please|now|ok|then|from_now_on|ok_then|thanks|lol]"
+    emit="@{_} core.request action=chat.meet arg.name=\"{n}\""
+    kind=question
+    priority=13
+    example="Call me Zed please."
+
+@pat.kids.common.w.who.f1 core.pattern
+    match="[hey|so|um|ok|okay|hi|hello|yo|hmm|oh|tell_me|can_you_tell_me|could_you_tell_me|quick_question]? [who|what|wat|whos|whats] [are|r|is|re]? [you|u|ya] [exactly|then|really|actually|anyway|pls|again|even|supposed_to_be]?"
+    emit="@{_} core.request action=chat.who"
+    kind=question
+    priority=12
+    example="Who are you exactly?"
+
+@pat.kids.common.w.who.f2 core.pattern
+    match="[hey|so|um|ok|okay|hi|hello|yo|hmm|oh|tell_me|can_you_tell_me|could_you_tell_me|quick_question]? what [kind_of|sort_of|type_of] [thing|robot|person|animal|bot|creature|being|helper|assistant]? [are|r] [you|u] [pls|plz|please|thanks|lol|haha|again|rn|now|then|exactly|actually]?"
+    emit="@{_} core.request action=chat.who"
+    kind=question
+    priority=12
+    example="What type of bot are you?"
+
+@pat.kids.common.w.who.f3 core.pattern
+    match="[hey|so|um|ok|okay|hi|hello|yo|hmm|oh|tell_me|can_you_tell_me|could_you_tell_me|quick_question]? [tell_me|say] [about|more_about|something_about|a_bit_about|a_little_about|abt]? [you|yourself|u] [pls|plz|please|thanks|lol|haha|again|rn|now|then|exactly|actually]?"
+    emit="@{_} core.request action=chat.who"
+    kind=question
+    priority=12
+    example="Tell me a bit about yourself."
+
+@pat.kids.common.w.who.f4 core.pattern
+    match="[hey|so|um|ok|okay|hi|hello|yo|hmm|oh|tell_me|can_you_tell_me|could_you_tell_me|quick_question]? [describe|introduce|explain|present] [you|yourself|u] [pls|plz|please|thanks|lol|haha|again|rn|now|then|exactly|actually]?"
+    emit="@{_} core.request action=chat.who"
+    kind=question
+    priority=12
+    example="Introduce yourself."
+
+@pat.kids.common.w.thanks core.pattern
+    match="[thanks|thank_you|thank_ya|tanks|ty_ty|thx|tysm|ty|thank_yous|thank_u|thankyou|thnx|thanx|cheers|ta|many_thanks|thanks_so_much|thank_you_so_much|thank_you_very_much|thanks_a_lot|thanks_a_ton|thanks_a_bunch|much_appreciated|appreciate_it|i_appreciate_it|thankss|thanksss|tyvm|thx_a_lot|thanks_a_million] [a_lot|so_much|very_much|a_ton|a_bunch|lots|loads|heaps|a_million|again]? [friend|buddy|pal|robot|mate|assistant|bot]?"
+    emit="@{_} core.request action=chat.thanks"
+    kind=question
+    priority=11
+    example="Thanks a ton buddy."
+
+@pat.kids.common.w.bye core.pattern
+    match="[ok|okay|well|so|alright|right]? [bye|goodbye|see_you|see_ya|cya|later|laters|gotta_go|got_to_go|i_have_to_go|i_must_go|i_gotta_go|farewell|good_night|goodnight|night|ttyl|talk_later|talk_to_you_later|catch_you_later|see_you_later|take_care|im_off|i_am_off|bye_bye|byebye|bye_for_now|until_next_time|have_a_good_one|im_leaving|i_am_leaving|time_to_go|so_long|adios|ciao|see_you_soon|see_you_tomorrow] [bye|now|friend|everyone|all|for_now|later|then|buddy|pal|for_today|robot|bot]? [have_a_nice_day|have_a_good_day|have_a_great_day|see_you|take_care|nice_day|see_you_later|talk_later|bye]?"
+    emit="@{_} core.request action=chat.bye"
+    kind=question
+    priority=11
+    example="Alright, time to go, bye for now."

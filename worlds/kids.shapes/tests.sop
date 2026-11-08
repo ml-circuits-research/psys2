@@ -282,3 +282,38 @@
 @t.shapes.n62 core.test
     input="Hello! Is a square a rectangle?"
     expect="Yes, a square is a rectangle."
+
+@t.shapes.w01 core.test
+    input="A square counts as a rectangle right?"
+    expect="Yes, a square is a rectangle."
+    doc="wording variant (widened phrasing)"
+
+@t.shapes.w02 core.test
+    input="Is a circle round or no?"
+    expect="Yes, a circle is a round shape."
+    doc="wording variant (widened phrasing)"
+
+@t.shapes.w03 core.test
+    input="tell me stuff about circles"
+    expect="A circle is a round shape"
+    doc="wording variant (widened phrasing)"
+
+@t.shapes.w04 core.test
+    input="Is green one of the secondary colors?"
+    expect="Yes, green is a secondary color."
+    doc="wording variant (widened phrasing)"
+
+@t.shapes.w05 core.test
+    input="Whats the usual colour of a banana?"
+    expect="A banana is usually yellow."
+    doc="wording variant (widened phrasing)"
+
+@t.shapes.w06 core.test
+    input="Mix red with yellow, what happens?"
+    expect="Red and yellow make orange."
+    doc="wording variant (widened phrasing)"
+
+@t.shapes.w07 core.test
+    input="Which colours do I mix to get green?"
+    expect="Green is made by mixing blue and yellow."
+    doc="wording variant (widened phrasing)"

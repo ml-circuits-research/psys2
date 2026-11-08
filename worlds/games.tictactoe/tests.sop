@@ -104,3 +104,24 @@
     input="I give up"
     expectStatus=missing
     session=e2
+
+@t.games.tictactoe.v01 core.test
+    input="um put an x in the bottom-right"
+    expect="bottom right"
+    expectState="board.8=X"
+    session=v
+
+@t.games.tictactoe.v02 core.test
+    input="mid row left pls"
+    expectState="board.3=X"
+    session=v
+
+@t.games.tictactoe.v03 core.test
+    input="second row third column"
+    expectState="board.5=X"
+    session=v
+
+@t.games.tictactoe.v05 core.test
+    input="how many moves so far"
+    expect="moves"
+    session=v

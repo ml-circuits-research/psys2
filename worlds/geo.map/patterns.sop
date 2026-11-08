@@ -1,5 +1,5 @@
 @pat.geo.map.show core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [show|show_me|display|find|locate|focus_on|look_at|go_to|fly_to|take_me_to|zoom_to|zoom_in_on|zoom_into|pan_to|center_on|centre_on|center_the_map_on|centre_the_map_on|navigate_to|jump_to|open|visit|bring_up|let_me_see|i_want_to_see|see|view|search_for|look_up|move_to|head_to|scroll_to|get_me_to|bring_me_to|show_the_map_of|display_the_map_of] [me]? [the]? [map]? [of|at|on|to|in]? [the]? {a:lex.geo.map.places} [,|and|,_and]? {b:lex.geo.map.places?} [,|and|,_and]? {c:lex.geo.map.places?} [,|and|,_and]? {d:lex.geo.map.places?} [,|and|,_and]? {e:lex.geo.map.places?} [on_the_map|on_map|in_the_map]?"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [show|show_me|display|find|locate|focus_on|look_at|go_to|fly_to|take_me_to|zoom_to|zoom_in_on|zoom_into|pan_to|center_on|centre_on|center_the_map_on|centre_the_map_on|navigate_to|jump_to|open|visit|bring_up|let_me_see|i_want_to_see|see|view|search_for|look_up|move_to|head_to|scroll_to|get_me_to|bring_me_to|show_the_map_of|display_the_map_of] [me]? [the]? [map]? [of|at|on|to|in]? [the]? {a:lex.geo.map.places} [,|and|,_and]? {b:lex.geo.map.places?} [,|and|,_and]? {c:lex.geo.map.places?} [,|and|,_and]? {d:lex.geo.map.places?} [,|and|,_and]? {e:lex.geo.map.places?} [on_the_map|on_map|in_the_map]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.show arg.a={a} arg.b={b} arg.c={c} arg.d={d} arg.e={e}"
     kind=request
     priority=14
@@ -11,7 +11,7 @@
     example="Center on Cluj."
 
 @pat.geo.map.bare core.pattern
-    match="{a:lex.geo.map.places} [on_the_map|in_the_map|map]?"
+    match="{a:lex.geo.map.places} [on_the_map|in_the_map|map]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.show arg.a={a}"
     kind=request
     priority=6
@@ -19,21 +19,21 @@
     example="Romania on the map."
 
 @pat.geo.map.mapof core.pattern
-    match="[a|the]? map [of|for] {a:lex.geo.map.places} [,|and|,_and]? {b:lex.geo.map.places?} [,|and|,_and]? {c:lex.geo.map.places?} [,|and|,_and]? {d:lex.geo.map.places?} [,|and|,_and]? {e:lex.geo.map.places?}"
+    match="[a|the]? map [of|for] {a:lex.geo.map.places} [,|and|,_and]? {b:lex.geo.map.places?} [,|and|,_and]? {c:lex.geo.map.places?} [,|and|,_and]? {d:lex.geo.map.places?} [,|and|,_and]? {e:lex.geo.map.places?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.show arg.a={a} arg.b={b} arg.c={c} arg.d={d} arg.e={e}"
     kind=request
     priority=12
     example="The map of Italy."
 
 @pat.geo.map.where core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [where_is|where_are|where_exactly_is|where_can_i_find|where_do_i_find|can_you_find|do_you_know_where_is|tell_me_where_is|could_you_tell_me_where_is|show_me_where_is|i_want_to_know_where_is|where_would_i_find] [the]? {p:lex.geo.map.places} [located|situated|on_the_map|in_the_world|exactly]?"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [where_is|where_are|where_exactly_is|where_can_i_find|where_do_i_find|can_you_find|do_you_know_where_is|tell_me_where_is|could_you_tell_me_where_is|show_me_where_is|i_want_to_know_where_is|where_would_i_find] [the]? {p:lex.geo.map.places} [located|situated|on_the_map|in_the_world|exactly]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.where arg.p={p}"
     kind=question
     priority=13
     example="Where is Paris?"
 
 @pat.geo.map.coords core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [go_to|show|show_me|center_on|centre_on|fly_to|jump_to|zoom_to|take_me_to] [the]? [coordinates|latitude|lat] {la:number} [,|and|longitude|lon|lng|comma]? {lo:number}"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [go_to|show|show_me|center_on|centre_on|fly_to|jump_to|zoom_to|take_me_to] [the]? [coordinates|latitude|lat] {la:number} [,|and|longitude|lon|lng|comma]? {lo:number} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.coords arg.la={la} arg.lo={lo}"
     kind=request
     priority=12
@@ -41,7 +41,7 @@
     example="Show latitude 48.8 longitude 2.3."
 
 @pat.geo.map.zoomin core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [zoom_in|go_closer|get_closer|come_closer|move_closer|closer|zoom_closer|magnify|zoom_in_closer|make_it_bigger|make_the_map_bigger|enlarge] {amt:lex.geo.map.amounts?} [more|further|closer|again|on_the_map|the_map|on_it]?"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [zoom_in|go_closer|get_closer|come_closer|move_closer|closer|zoom_closer|magnify|zoom_in_closer|make_it_bigger|make_the_map_bigger|enlarge] {amt:lex.geo.map.amounts?} [more|further|closer|again|on_the_map|the_map|on_it]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.zoom arg.dir=in arg.amt={amt}"
     kind=request
     priority=12
@@ -51,7 +51,7 @@
     example="Come closer."
 
 @pat.geo.map.zoomout core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [zoom_out|zoom_away|get_farther|go_farther|move_farther|move_away|go_further_away|farther|further|zoom_further_out|step_back|move_back|make_it_smaller|make_the_map_smaller|shrink] {amt:lex.geo.map.amounts?} [more|further|farther|again|on_the_map|the_map|on_it]?"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [zoom_out|zoom_away|get_farther|go_farther|move_farther|move_away|go_further_away|farther|further|zoom_further_out|step_back|move_back|make_it_smaller|make_the_map_smaller|shrink] {amt:lex.geo.map.amounts?} [more|further|farther|again|on_the_map|the_map|on_it]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.zoom arg.dir=out arg.amt={amt}"
     kind=request
     priority=12
@@ -60,42 +60,42 @@
     example="Zoom all the way out."
 
 @pat.geo.map.zoomallout core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? zoom {amt:lex.geo.map.amounts} out"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? zoom {amt:lex.geo.map.amounts} out [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.zoom arg.dir=out arg.amt={amt}"
     kind=request
     priority=12
     example="Zoom all the way out."
 
 @pat.geo.map.zoomallin core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? zoom {amt:lex.geo.map.amounts} in"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? zoom {amt:lex.geo.map.amounts} in [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.zoom arg.dir=in arg.amt={amt}"
     kind=request
     priority=12
     example="Zoom a lot in."
 
 @pat.geo.map.zoominn core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? zoom_in {n:number} [times|steps|levels|notches]"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? zoom_in {n:number} [times|steps|levels|notches] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.zoom arg.dir=in arg.n={n}"
     kind=request
     priority=12
     example="Zoom in 3 times."
 
 @pat.geo.map.zoomoutn core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? zoom_out {n:number} [times|steps|levels|notches]"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? zoom_out {n:number} [times|steps|levels|notches] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.zoom arg.dir=out arg.n={n}"
     kind=request
     priority=12
     example="Zoom out 2 times."
 
 @pat.geo.map.zoomto core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [zoom_to|zoom_level|set_the_zoom_to|set_zoom_to|set_the_zoom_level_to|set_zoom_level_to|change_the_zoom_to|zoom] [level]? {n:number}"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [zoom_to|zoom_level|set_the_zoom_to|set_zoom_to|set_the_zoom_level_to|set_zoom_level_to|change_the_zoom_to|zoom] [level]? {n:number} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.zoomTo arg.n={n}"
     kind=request
     priority=12
     example="Zoom to level 5."
 
 @pat.geo.map.pan core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [go|move|pan|scroll|head|look|shift|slide|travel|fly|navigate|move_the_map|pan_the_map|scroll_the_map|shift_the_map|show_me|take_me] {amt:lex.geo.map.amounts?} [further|farther|more]? [to_the|towards_the|toward_the|towards|toward|to|the]? {d:lex.geo.map.directions} {amt2:lex.geo.map.amounts?}"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [go|move|pan|scroll|head|look|shift|slide|travel|fly|navigate|move_the_map|pan_the_map|scroll_the_map|shift_the_map|show_me|take_me] {amt:lex.geo.map.amounts?} [further|farther|more]? [to_the|towards_the|toward_the|towards|toward|to|the]? {d:lex.geo.map.directions} {amt2:lex.geo.map.amounts?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.pan arg.d={d} arg.amt={amt} arg.amt2={amt2}"
     kind=request
     priority=12
@@ -105,21 +105,21 @@
     example="Scroll down."
 
 @pat.geo.map.pankm core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [go|move|pan|travel|fly|head] {km:number} [km|kilometers|kilometres|kilometer|kilometre] [to_the|towards|toward|to]? {d:lex.geo.map.directions}"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [go|move|pan|travel|fly|head] {km:number} [km|kilometers|kilometres|kilometer|kilometre] [to_the|towards|toward|to]? {d:lex.geo.map.directions} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.pan arg.km={km} arg.d={d}"
     kind=request
     priority=12
     example="Go 200 kilometres north."
 
 @pat.geo.map.panmi core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [go|move|pan|travel|fly|head] {km:number} [miles|mile] [to_the|towards|toward|to]? {d:lex.geo.map.directions}"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [go|move|pan|travel|fly|head] {km:number} [miles|mile] [to_the|towards|toward|to]? {d:lex.geo.map.directions} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.pan arg.km={km} arg.unit=miles arg.d={d}"
     kind=request
     priority=12
     example="Go 100 miles east."
 
 @pat.geo.map.world core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [show|show_me|display|see|view|go_to|zoom_out_to_see|zoom_out_to_show|zoom_out_to|let_me_see|take_me_to|fly_to|open|bring_up|look_at]? [me]? [the|a]? [whole|entire|full|complete|global] [world|earth|globe|planet] [map|view]?"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [show|show_me|display|see|view|go_to|zoom_out_to_see|zoom_out_to_show|zoom_out_to|let_me_see|take_me_to|fly_to|open|bring_up|look_at]? [me]? [the|a]? [whole|entire|full|complete|global] [world|earth|globe|planet] [map|view]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.world"
     kind=request
     priority=12
@@ -127,21 +127,21 @@
     example="Zoom out to the entire world."
 
 @pat.geo.map.resetall core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [reset|restart|start_over_with|start_again_with] [the]? [whole]? [map|atlas]"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [reset|restart|start_over_with|start_again_with] [the]? [whole]? [map|atlas] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.reset arg.all=true"
     kind=request
     priority=12
     example="Reset the map."
 
 @pat.geo.map.resetview core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [reset|restore|recenter|recentre|re_center] [the]? [view|zoom|map_view|position|camera]"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [reset|restore|recenter|recentre|re_center] [the]? [view|zoom|map_view|position|camera] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.reset arg.all=false"
     kind=request
     priority=12
     example="Reset the view."
 
 @pat.geo.map.clearall core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [clear|empty|wipe|clean|erase] [the]? [whole]? [map|everything|everything_on_the_map|everything_from_the_map|it_all]"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [clear|empty|wipe|clean|erase] [the]? [whole]? [map|everything|everything_on_the_map|everything_from_the_map|it_all] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.clearAll"
     kind=request
     priority=12
@@ -149,7 +149,7 @@
     example="Wipe everything."
 
 @pat.geo.map.mark core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [put|place|drop|add|set|stick|make|create] [a|an|the|some]? [marker|markers|pin|pins|flag|flags] [on|at|in|for|to|over|onto|next_to|near]? [the]? {a:lex.geo.map.places} [,|and|,_and]? {b:lex.geo.map.places?} [,|and|,_and]? {c:lex.geo.map.places?} [,|and|,_and]? {d:lex.geo.map.places?} [,|and|,_and]? {e:lex.geo.map.places?}"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [put|place|drop|add|set|stick|make|create] [a|an|the|some]? [marker|markers|pin|pins|flag|flags] [on|at|in|for|to|over|onto|next_to|near]? [the]? {a:lex.geo.map.places} [,|and|,_and]? {b:lex.geo.map.places?} [,|and|,_and]? {c:lex.geo.map.places?} [,|and|,_and]? {d:lex.geo.map.places?} [,|and|,_and]? {e:lex.geo.map.places?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.mark arg.a={a} arg.b={b} arg.c={c} arg.d={d} arg.e={e}"
     kind=request
     priority=12
@@ -158,7 +158,7 @@
     example="Drop a pin on Tokyo."
 
 @pat.geo.map.mark2 core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [mark|pin|flag|bookmark|label|tag] [the]? [place|city|country|capital]? {a:lex.geo.map.places} [,|and|,_and]? {b:lex.geo.map.places?} [,|and|,_and]? {c:lex.geo.map.places?} [,|and|,_and]? {d:lex.geo.map.places?} [,|and|,_and]? {e:lex.geo.map.places?} [on_the_map|on_map]?"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [mark|pin|flag|bookmark|label|tag] [the]? [place|city|country|capital]? {a:lex.geo.map.places} [,|and|,_and]? {b:lex.geo.map.places?} [,|and|,_and]? {c:lex.geo.map.places?} [,|and|,_and]? {d:lex.geo.map.places?} [,|and|,_and]? {e:lex.geo.map.places?} [on_the_map|on_map]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.mark arg.a={a} arg.b={b} arg.c={c} arg.d={d} arg.e={e}"
     kind=request
     priority=12
@@ -166,21 +166,21 @@
     example="Pin Berlin."
 
 @pat.geo.map.markhere core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [put|place|drop|add|set|make] [a|an]? [marker|pin|flag] [here|there|right_here|on_the_map|in_the_middle|at_the_center|in_the_center|at_the_centre|in_the_centre|on_this_spot|on_this_place]"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [put|place|drop|add|set|make] [a|an]? [marker|pin|flag] [here|there|right_here|on_the_map|in_the_middle|at_the_center|in_the_center|at_the_centre|in_the_centre|on_this_spot|on_this_place] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.markHere"
     kind=request
     priority=12
     example="Put a marker here."
 
 @pat.geo.map.markhere2 core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [mark|pin|flag|bookmark] [this|here|this_place|this_spot|this_point]"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [mark|pin|flag|bookmark] [this|here|this_place|this_spot|this_point] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.markHere"
     kind=request
     priority=12
     example="Mark this place."
 
 @pat.geo.map.markcap core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [mark|pin|flag|label|show|put_markers_on|put_pins_on|add_markers_to|put_a_marker_on|put_a_marker_on_each_of|drop_pins_on|place_markers_on|show_me|display] [me]? [all]? [of]? [the|all_the]? [capitals|capital_cities] [of|in|across|from|for]? [the]? {r:lex.geo.map.places}"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [mark|pin|flag|label|show|put_markers_on|put_pins_on|add_markers_to|put_a_marker_on|put_a_marker_on_each_of|drop_pins_on|place_markers_on|show_me|display] [me]? [all]? [of]? [the|all_the]? [capitals|capital_cities] [of|in|across|from|for]? [the]? {r:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.markSet arg.what=capitals arg.r={r}"
     kind=request
     priority=12
@@ -188,14 +188,14 @@
     example="Put markers on all the capitals in South America."
 
 @pat.geo.map.markcapall core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [mark|pin|flag|label|show|show_me|display] [all]? [the|all_the]? [capitals|capital_cities]"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [mark|pin|flag|label|show|show_me|display] [all]? [the|all_the]? [capitals|capital_cities] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.markSet arg.what=capitals arg.r=world"
     kind=request
     priority=12
     example="Mark all capitals."
 
 @pat.geo.map.markcity core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [mark|pin|flag|label|show|put_markers_on|put_pins_on|add_markers_to|put_a_marker_on|put_a_marker_on_each_of|drop_pins_on|place_markers_on|show_me|display] [me]? [all]? [of]? [the|all_the]? {n:number?} {m:lex.geo.map.superlatives?} [cities|towns] [of|in|across|from|for|within]? [the]? {r:lex.geo.map.places}"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [mark|pin|flag|label|show|put_markers_on|put_pins_on|add_markers_to|put_a_marker_on|put_a_marker_on_each_of|drop_pins_on|place_markers_on|show_me|display] [me]? [all]? [of]? [the|all_the]? {n:number?} {m:lex.geo.map.superlatives?} [cities|towns] [of|in|across|from|for|within]? [the]? {r:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.markSet arg.what=cities arg.r={r} arg.n={n} arg.m={m}"
     kind=request
     priority=12
@@ -203,7 +203,7 @@
     example="Mark the cities of Romania."
 
 @pat.geo.map.clearmarks core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [remove|clear|delete|erase|get_rid_of|hide|wipe|wipe_out|take_away|take_off|undo] [all|every]? [of]? [the|my|these|those]? [markers|marker|pins|pin|flags|points]"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [remove|clear|delete|erase|get_rid_of|hide|wipe|wipe_out|take_away|take_off|undo] [all|every]? [of]? [the|my|these|those]? [markers|marker|pins|pin|flags|points] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.clearMarkers"
     kind=request
     priority=14
@@ -211,28 +211,28 @@
     example="Delete all markers."
 
 @pat.geo.map.clearmark1 core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [remove|clear|delete|erase|get_rid_of|hide|take_off|take_away] [the|my]? [marker|pin|flag] [on|at|from|for|of|in]? [the]? {p:lex.geo.map.places}"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [remove|clear|delete|erase|get_rid_of|hide|take_off|take_away] [the|my]? [marker|pin|flag] [on|at|from|for|of|in]? [the]? {p:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.clearMarkers arg.p={p}"
     kind=request
     priority=14
     example="Remove the marker on Paris."
 
 @pat.geo.map.clearmark2 core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [remove|clear|delete|erase|get_rid_of|hide|take_off] [the]? {p:lex.geo.map.places} [marker|pin|flag]"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [remove|clear|delete|erase|get_rid_of|hide|take_off] [the]? {p:lex.geo.map.places} [marker|pin|flag] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.clearMarkers arg.p={p}"
     kind=request
     priority=14
     example="Remove the Rome marker."
 
 @pat.geo.map.clearlast core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [remove|delete|undo|erase|clear|take_off] [the]? [last|latest|previous|newest|recent] [marker|pin|flag]"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [remove|delete|undo|erase|clear|take_off] [the]? [last|latest|previous|newest|recent] [marker|pin|flag] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.clearMarkers arg.last=true"
     kind=request
     priority=14
     example="Remove the last marker."
 
 @pat.geo.map.hl core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [highlight|color|colour|shade|light_up|emphasize|emphasise|mark_out|select|paint|outline|fill|tint] [the]? [country|countries|nation|nations]? [of|in|from]? [the]? {a:lex.geo.map.places} [,|and|,_and]? {b:lex.geo.map.places?} [,|and|,_and]? {c:lex.geo.map.places?} [,|and|,_and]? {d:lex.geo.map.places?} [,|and|,_and]? {e:lex.geo.map.places?}"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [highlight|color|colour|shade|light_up|emphasize|emphasise|mark_out|select|paint|outline|fill|tint] [the]? [country|countries|nation|nations]? [of|in|from]? [the]? {a:lex.geo.map.places} [,|and|,_and]? {b:lex.geo.map.places?} [,|and|,_and]? {c:lex.geo.map.places?} [,|and|,_and]? {d:lex.geo.map.places?} [,|and|,_and]? {e:lex.geo.map.places?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.highlight arg.a={a} arg.b={b} arg.c={c} arg.d={d} arg.e={e}"
     kind=request
     priority=16
@@ -241,28 +241,28 @@
     example="Highlight the countries of South America."
 
 @pat.geo.map.hlnb core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [highlight|color|colour|shade|light_up|emphasize|emphasise|mark_out|select|paint|outline|fill|tint] [the]? {a:lex.geo.map.places} [and|plus|with|along_with|together_with|including] [its|their|his|her|all_its|all_their|the] [neighbours|neighbors|neighbouring_countries|neighboring_countries|bordering_countries|borders|neighbouring_states]"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [highlight|color|colour|shade|light_up|emphasize|emphasise|mark_out|select|paint|outline|fill|tint] [the]? {a:lex.geo.map.places} [and|plus|with|along_with|together_with|including] [its|their|his|her|all_its|all_their|the] [neighbours|neighbors|neighbouring_countries|neighboring_countries|bordering_countries|borders|neighbouring_states] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.highlight arg.a={a} arg.nb=true"
     kind=request
     priority=16
     example="Highlight Romania and its neighbours."
 
 @pat.geo.map.hlnb2 core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [highlight|color|colour|shade|light_up|emphasize|emphasise|mark_out|select|paint|outline|fill|tint] [the]? [neighbours|neighbors|neighbouring_countries|neighboring_countries|bordering_countries|countries_around|countries_next_to|countries_bordering|countries_that_border] [of|around|next_to|bordering|to]? [the]? {a:lex.geo.map.places}"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [highlight|color|colour|shade|light_up|emphasize|emphasise|mark_out|select|paint|outline|fill|tint] [the]? [neighbours|neighbors|neighbouring_countries|neighboring_countries|bordering_countries|countries_around|countries_next_to|countries_bordering|countries_that_border] [of|around|next_to|bordering|to]? [the]? {a:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.highlight arg.a={a} arg.nb=true arg.self=false"
     kind=request
     priority=16
     example="Highlight the neighbours of Hungary."
 
 @pat.geo.map.hlall core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [highlight|color|colour|shade] [all]? [the]? [countries|nations]"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [highlight|color|colour|shade] [all]? [the]? [countries|nations] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.highlight arg.a=world"
     kind=request
     priority=16
     example="Highlight all countries."
 
 @pat.geo.map.unhl core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [remove|clear|reset|turn_off|stop|get_rid_of|delete|hide|undo|stop_showing] [all]? [of]? [the]? [highlights|highlighting|highlighted_countries|highlighted|highlight]"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [remove|clear|reset|turn_off|stop|get_rid_of|delete|hide|undo|stop_showing] [all]? [of]? [the]? [highlights|highlighting|highlighted_countries|highlighted|highlight] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.clearHighlight"
     kind=request
     priority=14
@@ -270,21 +270,21 @@
     example="Clear the highlighting."
 
 @pat.geo.map.unhl1 core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [unhighlight|dehighlight|uncolor|uncolour|stop_highlighting] [the]? [country]? {p:lex.geo.map.places}"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [unhighlight|dehighlight|uncolor|uncolour|stop_highlighting] [the]? [country]? {p:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.clearHighlight arg.p={p}"
     kind=request
     priority=14
     example="Stop highlighting France."
 
 @pat.geo.map.unhl2 core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [remove|clear|delete|hide] [the]? highlight [on|from|of|for]? [the]? {p:lex.geo.map.places}"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [remove|clear|delete|hide] [the]? highlight [on|from|of|for]? [the]? {p:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.clearHighlight arg.p={p}"
     kind=request
     priority=14
     example="Remove the highlight from Spain."
 
 @pat.geo.map.clearlines core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [remove|clear|delete|erase|hide|get_rid_of|wipe] [all|every]? [the|my]? [lines|line|routes|route|measurements|measurement|distances|distance|distance_lines|distance_line|paths|path|rulers|ruler]"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [remove|clear|delete|erase|hide|get_rid_of|wipe] [all|every]? [the|my]? [lines|line|routes|route|measurements|measurement|distances|distance|distance_lines|distance_line|paths|path|rulers|ruler] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.clearLines"
     kind=request
     priority=14
@@ -292,7 +292,7 @@
     example="Clear the distances."
 
 @pat.geo.map.layer core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [switch|change|go|turn|set|swap|toggle|use|show|display|bring_up|give_me|let_me_see|view|put_on|open|enable|activate|switch_over|change_over] [me]? [to|back_to|over_to|on]? [the|a|an]? {l:lex.geo.map.layers} [map|view|layer|tiles|style|mode|version|maps|display]?"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [switch|change|go|turn|set|swap|toggle|use|show|display|bring_up|give_me|let_me_see|view|put_on|open|enable|activate|switch_over|change_over] [me]? [to|back_to|over_to|on]? [the|a|an]? {l:lex.geo.map.layers} [map|view|layer|tiles|style|mode|version|maps|display]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.layer arg.l={l}"
     kind=request
     priority=12
@@ -301,7 +301,7 @@
     example="Go back to the offline map."
 
 @pat.geo.map.cap1 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what_is|what_was|which_is|which_city_is|what_city_is|what_s|which_town_is|what_would_be]? [the]? capital [city]? [of|in]? [the]? {c:lex.geo.map.places}"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what_is|what_was|which_is|which_city_is|what_city_is|what_s|which_town_is|what_would_be]? [the]? capital [city]? [of|in]? [the]? {c:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.capital arg.c={c}"
     kind=question
     priority=12
@@ -309,49 +309,49 @@
     example="Tell me the capital of Hungary."
 
 @pat.geo.map.cap2 core.pattern
-    match="[what_is|which_is]? {c:lex.geo.map.places} 's [capital|capital_city]"
+    match="[what_is|which_is]? {c:lex.geo.map.places} 's [capital|capital_city] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.capital arg.c={c}"
     kind=question
     priority=12
     example="What is Japan's capital?"
 
 @pat.geo.map.cap3 core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [show|show_me|display|find|locate|mark|go_to|take_me_to|fly_to] [me]? [the]? capital [city]? [of|in]? [the]? {c:lex.geo.map.places}"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [show|show_me|display|find|locate|mark|go_to|take_me_to|fly_to] [me]? [the]? capital [city]? [of|in]? [the]? {c:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.capital arg.c={c}"
     kind=request
     priority=12
     example="Show me the capital of France."
 
 @pat.geo.map.capof core.pattern
-    match="[which|what] [country|nation|state|place] [is|has] {c:lex.geo.map.places} [the]? capital [of]?"
+    match="[which|what] [country|nation|state|place] [is|has] {c:lex.geo.map.places} [the]? capital [of]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.capitalOfWhich arg.c={c}"
     kind=question
     priority=12
     example="Which country is Tokyo the capital of?"
 
 @pat.geo.map.capof2 core.pattern
-    match="[is|was] {c:lex.geo.map.places} [a|the]? capital [city]?"
+    match="[is|was] {c:lex.geo.map.places} [a|the]? capital [city]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.capitalOfWhich arg.c={c}"
     kind=question
     priority=12
     example="Is Paris a capital?"
 
 @pat.geo.map.capof3 core.pattern
-    match="which_country_has {c:lex.geo.map.places} as [its|their|the] capital"
+    match="which_country_has {c:lex.geo.map.places} as [its|their|the] capital [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.capitalOfWhich arg.c={c}"
     kind=question
     priority=12
     example="Which country has Madrid as its capital?"
 
 @pat.geo.map.iscap core.pattern
-    match="[is|was] [the]? {a:lex.geo.map.places} [the]? capital [city]? of [the]? {b:lex.geo.map.places}"
+    match="[is|was] [the]? {a:lex.geo.map.places} [the]? capital [city]? of [the]? {b:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.isCapital arg.a={a} arg.b={b}"
     kind=question
     priority=12
     example="Is Paris the capital of France?"
 
 @pat.geo.map.pop1 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [how_many|how_much] [people|inhabitants|persons|citizens|residents|humans|souls|folks] [live|lives|are_there|dwell|reside|stay|are_living|is_there|living|can_live|are] [in|there_in|living_in|within|of]? [the]? {p:lex.geo.map.places}"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [how_many|how_much] [people|inhabitants|persons|citizens|residents|humans|souls|folks] [live|lives|are_there|dwell|reside|stay|are_living|is_there|living|can_live|are] [in|there_in|living_in|within|of]? [the]? {p:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.population arg.p={p}"
     kind=question
     priority=12
@@ -359,49 +359,49 @@
     example="How many people are there in Brazil?"
 
 @pat.geo.map.pop2 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [how_many|how_much] [people|inhabitants|persons|citizens|residents|humans|souls|folks] [does|do|has|have] [the]? {p:lex.geo.map.places} [have|got|contain|hold]"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [how_many|how_much] [people|inhabitants|persons|citizens|residents|humans|souls|folks] [does|do|has|have] [the]? {p:lex.geo.map.places} [have|got|contain|hold] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.population arg.p={p}"
     kind=question
     priority=12
     example="How many inhabitants does Paris have?"
 
 @pat.geo.map.pop3 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what_is|what_s]? [the]? [population|number_of_people|number_of_inhabitants|human_population] [of|in]? [the]? {p:lex.geo.map.places}"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what_is|what_s]? [the]? [population|number_of_people|number_of_inhabitants|human_population] [of|in]? [the]? {p:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.population arg.p={p}"
     kind=question
     priority=12
     example="What is the population of Canada?"
 
 @pat.geo.map.pop4 core.pattern
-    match="[what_is|what_s]? {p:lex.geo.map.places} 's [population|number_of_people]"
+    match="[what_is|what_s]? {p:lex.geo.map.places} 's [population|number_of_people] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.population arg.p={p}"
     kind=question
     priority=12
     example="What is Egypt's population?"
 
 @pat.geo.map.pop5 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [how_populous|how_populated|how_crowded] [is|are]? [the]? {p:lex.geo.map.places}"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [how_populous|how_populated|how_crowded] [is|are]? [the]? {p:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.population arg.p={p}"
     kind=question
     priority=12
     example="How populous is India?"
 
 @pat.geo.map.area1 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [how_big|how_large|how_huge|how_small] [is|are]? [the]? {p:lex.geo.map.places}"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [how_big|how_large|how_huge|how_small] [is|are]? [the]? {p:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.area arg.p={p}"
     kind=question
     priority=12
     example="How big is Romania?"
 
 @pat.geo.map.area2 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what_is|what_s]? [the]? [area|size|surface_area|surface|extent] [of|for]? [the]? {p:lex.geo.map.places}"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what_is|what_s]? [the]? [area|size|surface_area|surface|extent] [of|for]? [the]? {p:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.area arg.p={p}"
     kind=question
     priority=12
     example="What is the area of France?"
 
 @pat.geo.map.cmp1 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [which|what] [one|country|city|place|nation|town|1]? [is|has|was] [the|a]? {m:lex.geo.map.measures} [,|of|between|out_of]? [the]? {a:lex.geo.map.places} [or|and|vs|versus|compared_to] [the]? {b:lex.geo.map.places}"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [which|what] [one|country|city|place|nation|town|1]? [is|has|was] [the|a]? {m:lex.geo.map.measures} [,|of|between|out_of]? [the]? {a:lex.geo.map.places} [or|and|vs|versus|compared_to] [the]? {b:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.compare arg.a={a} arg.b={b} arg.m={m}"
     kind=question
     priority=12
@@ -409,35 +409,35 @@
     example="Which city has more people, Paris or Rome?"
 
 @pat.geo.map.cmp2 core.pattern
-    match="[is|was|are] [the]? {a:lex.geo.map.places} {m:lex.geo.map.measures} [than] [the]? {b:lex.geo.map.places}"
+    match="[is|was|are] [the]? {a:lex.geo.map.places} {m:lex.geo.map.measures} [than] [the]? {b:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.compareYN arg.a={a} arg.b={b} arg.m={m}"
     kind=question
     priority=12
     example="Is Brazil bigger than Canada?"
 
 @pat.geo.map.cmp3 core.pattern
-    match="[does|do] [the]? {a:lex.geo.map.places} have {m:lex.geo.map.measures} [than] [the]? {b:lex.geo.map.places}"
+    match="[does|do] [the]? {a:lex.geo.map.places} have {m:lex.geo.map.measures} [than] [the]? {b:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.compareYN arg.a={a} arg.b={b} arg.m={m}"
     kind=question
     priority=12
     example="Does India have more people than China?"
 
 @pat.geo.map.cmp4 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [compare|contrast|compare_the_size_of|compare_the_sizes_of] [the]? {a:lex.geo.map.places} [and|with|to|vs|versus|against|compared_to] [the]? {b:lex.geo.map.places}"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [compare|contrast|compare_the_size_of|compare_the_sizes_of] [the]? {a:lex.geo.map.places} [and|with|to|vs|versus|against|compared_to] [the]? {b:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.compare arg.a={a} arg.b={b}"
     kind=question
     priority=12
     example="Compare Spain and Italy."
 
 @pat.geo.map.cmp5 core.pattern
-    match="how_does [the]? {a:lex.geo.map.places} compare [with|to|against] [the]? {b:lex.geo.map.places}"
+    match="how_does [the]? {a:lex.geo.map.places} compare [with|to|against] [the]? {b:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.compare arg.a={a} arg.b={b}"
     kind=question
     priority=12
     example="How does Spain compare with Italy?"
 
 @pat.geo.map.bor1 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [which|what] [countries|nations|states|places|ones|country] [border|neighbour|neighbor|touch|surround|are_next_to|are_beside|are_around|are_adjacent_to|share_a_border_with|are_neighbours_of|are_neighbors_of|neighbours|neighbors|lie_next_to|are_neighbours_to|are_neighbors_to|are_near|lie_around|have_a_border_with|are_bordering|share_borders_with] [the]? {p:lex.geo.map.places}"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [which|what] [countries|nations|states|places|ones|country] [border|neighbour|neighbor|touch|surround|are_next_to|are_beside|are_around|are_adjacent_to|share_a_border_with|are_neighbours_of|are_neighbors_of|neighbours|neighbors|lie_next_to|are_neighbours_to|are_neighbors_to|are_near|lie_around|have_a_border_with|are_bordering|share_borders_with] [the]? {p:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.borders arg.p={p}"
     kind=question
     priority=12
@@ -445,70 +445,70 @@
     example="What countries are next to Peru?"
 
 @pat.geo.map.bor2 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [who|which_country|what_country] [borders|neighbours|neighbors|touches|surrounds|is_next_to|is_beside] [the]? {p:lex.geo.map.places}"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [who|which_country|what_country] [borders|neighbours|neighbors|touches|surrounds|is_next_to|is_beside] [the]? {p:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.borders arg.p={p}"
     kind=question
     priority=12
     example="Who borders Switzerland?"
 
 @pat.geo.map.bor3 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what_are|what_is|list|name|show|show_me|give_me|tell_me|which_are] [the]? [neighbours|neighbors|neighbouring_countries|neighboring_countries|bordering_countries|borders|borders_of] [of|for|around|to]? [the]? {p:lex.geo.map.places}"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what_are|what_is|list|name|show|show_me|give_me|tell_me|which_are] [the]? [neighbours|neighbors|neighbouring_countries|neighboring_countries|bordering_countries|borders|borders_of] [of|for|around|to]? [the]? {p:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.borders arg.p={p}"
     kind=question
     priority=12
     example="What are the neighbours of Hungary?"
 
 @pat.geo.map.bor4 core.pattern
-    match="[what_are|which_are]? {p:lex.geo.map.places} 's [neighbours|neighbors|neighbouring_countries|borders]"
+    match="[what_are|which_are]? {p:lex.geo.map.places} 's [neighbours|neighbors|neighbouring_countries|borders] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.borders arg.p={p}"
     kind=question
     priority=12
     example="What are Hungary's neighbours?"
 
 @pat.geo.map.bor5 core.pattern
-    match="[which|what] [countries|nations] [does|do] [the]? {p:lex.geo.map.places} [border|neighbour|touch|share_a_border_with]"
+    match="[which|what] [countries|nations] [does|do] [the]? {p:lex.geo.map.places} [border|neighbour|touch|share_a_border_with] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.borders arg.p={p}"
     kind=question
     priority=12
     example="Which countries does Germany border?"
 
 @pat.geo.map.bor6 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? how_many [neighbours|neighbors|neighbouring_countries|neighboring_countries|borders|bordering_countries] [does|has|have|do] [the]? {p:lex.geo.map.places} [have]?"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? how_many [neighbours|neighbors|neighbouring_countries|neighboring_countries|borders|bordering_countries] [does|has|have|do] [the]? {p:lex.geo.map.places} [have]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.neighbourCount arg.p={p}"
     kind=question
     priority=12
     example="How many neighbours does Hungary have?"
 
 @pat.geo.map.borYN core.pattern
-    match="[does|do|did] [the]? {a:lex.geo.map.places} [border|neighbour|neighbor|touch|share_a_border_with|adjoin|lie_next_to|abut] [the]? {b:lex.geo.map.places}"
+    match="[does|do|did] [the]? {a:lex.geo.map.places} [border|neighbour|neighbor|touch|share_a_border_with|adjoin|lie_next_to|abut] [the]? {b:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.borderYN arg.a={a} arg.b={b}"
     kind=question
     priority=12
     example="Does France border Spain?"
 
 @pat.geo.map.borYN2 core.pattern
-    match="[is|are] [the]? {a:lex.geo.map.places} [next_to|bordering|adjacent_to|a_neighbour_of|a_neighbor_of|neighbouring|neighboring] [the]? {b:lex.geo.map.places}"
+    match="[is|are] [the]? {a:lex.geo.map.places} [next_to|bordering|adjacent_to|a_neighbour_of|a_neighbor_of|neighbouring|neighboring] [the]? {b:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.borderYN arg.a={a} arg.b={b}"
     kind=question
     priority=12
     example="Is Austria next to Italy?"
 
 @pat.geo.map.landl core.pattern
-    match="[is|are] [the]? {p:lex.geo.map.places} [landlocked|land_locked|without_a_coast|without_a_sea_coast]"
+    match="[is|are] [the]? {p:lex.geo.map.places} [landlocked|land_locked|without_a_coast|without_a_sea_coast] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.landlocked arg.p={p}"
     kind=question
     priority=12
     example="Is Hungary landlocked?"
 
 @pat.geo.map.landl2 core.pattern
-    match="[does|do] [the]? {p:lex.geo.map.places} [have|has] [a]? [coast|sea|seaside|coastline|sea_coast|access_to_the_sea|port]"
+    match="[does|do] [the]? {p:lex.geo.map.places} [have|has] [a]? [coast|sea|seaside|coastline|sea_coast|access_to_the_sea|port] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.landlocked arg.p={p}"
     kind=question
     priority=12
     example="Does Bolivia have a coast?"
 
 @pat.geo.map.cont1 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what|which] continent [is|does|lies|lie|do] [the]? {p:lex.geo.map.places} [in|on|belong_to|belong_on|lie_in|lie_on|part_of|located_in|located_on|belong|sit_on|sit_in]?"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what|which] continent [is|does|lies|lie|do] [the]? {p:lex.geo.map.places} [in|on|belong_to|belong_on|lie_in|lie_on|part_of|located_in|located_on|belong|sit_on|sit_in]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.continent arg.p={p}"
     kind=question
     priority=12
@@ -516,21 +516,21 @@
     example="Which continent does Peru belong to?"
 
 @pat.geo.map.cont2 core.pattern
-    match="[in|on] [what|which] continent [is|does|lies] [the]? {p:lex.geo.map.places} [lie|belong|sit|located]?"
+    match="[in|on] [what|which] continent [is|does|lies] [the]? {p:lex.geo.map.places} [lie|belong|sit|located]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.continent arg.p={p}"
     kind=question
     priority=12
     example="In which continent is Japan?"
 
 @pat.geo.map.cont3 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what|which] part_of_the_world [is|does] [the]? {p:lex.geo.map.places} [in|on|belong_to|located_in]?"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what|which] part_of_the_world [is|does] [the]? {p:lex.geo.map.places} [in|on|belong_to|located_in]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.continent arg.p={p}"
     kind=question
     priority=12
     example="What part of the world is Chile in?"
 
 @pat.geo.map.isin core.pattern
-    match="[is|are|was] [the]? {p:lex.geo.map.places} [in|on|part_of|located_in|located_on|inside|within|a_part_of|a_member_of] [the]? {q:lex.geo.map.places}"
+    match="[is|are|was] [the]? {p:lex.geo.map.places} [in|on|part_of|located_in|located_on|inside|within|a_part_of|a_member_of] [the]? {q:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.isIn arg.p={p} arg.q={q}"
     kind=question
     priority=12
@@ -538,21 +538,21 @@
     example="Is Paris in France?"
 
 @pat.geo.map.ctry1 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what|which] [country|nation|state] [is|does|lies|lie] [the]? {p:lex.geo.map.places} [in|belong_to|lie_in|located_in|part_of|belong|lie|found_in]?"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what|which] [country|nation|state] [is|does|lies|lie] [the]? {p:lex.geo.map.places} [in|belong_to|lie_in|located_in|part_of|belong|lie|found_in]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.country arg.p={p}"
     kind=question
     priority=12
     example="Which country is Cluj in?"
 
 @pat.geo.map.ctry2 core.pattern
-    match="[in|on] [which|what] [country|nation|state] [is|does|lies] [the]? {p:lex.geo.map.places} [lie|belong|sit|located]?"
+    match="[in|on] [which|what] [country|nation|state] [is|does|lies] [the]? {p:lex.geo.map.places} [lie|belong|sit|located]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.country arg.p={p}"
     kind=question
     priority=12
     example="In which country is Lyon?"
 
 @pat.geo.map.sup1 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [which_is|what_is|what_s|which_one_is|which|what|which_1_is]? [the]? {m:lex.geo.map.superlatives} {k:lex.geo.map.kinds} [in|of|on|within|across|from|around]? [the]? {p:lex.geo.map.places?}"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [which_is|what_is|what_s|which_one_is|which|what|which_1_is]? [the]? {m:lex.geo.map.superlatives} {k:lex.geo.map.kinds} [in|of|on|within|across|from|around]? [the]? {p:lex.geo.map.places?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.superlative arg.m={m} arg.k={k} arg.p={p}"
     kind=question
     priority=12
@@ -560,21 +560,21 @@
     example="What is the smallest country in the world?"
 
 @pat.geo.map.sup2 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [which|what] {k:lex.geo.map.kinds} [in|of|within] [the]? {p:lex.geo.map.places} is [the]? {m:lex.geo.map.superlatives}"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [which|what] {k:lex.geo.map.kinds} [in|of|within] [the]? {p:lex.geo.map.places} is [the]? {m:lex.geo.map.superlatives} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.superlative arg.m={m} arg.k={k} arg.p={p}"
     kind=question
     priority=12
     example="Which city in Japan is the biggest?"
 
 @pat.geo.map.sup3 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [which|what] {k:lex.geo.map.kinds} is [the]? {m:lex.geo.map.superlatives} [in_the_world|on_earth|overall|anywhere]?"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [which|what] {k:lex.geo.map.kinds} is [the]? {m:lex.geo.map.superlatives} [in_the_world|on_earth|overall|anywhere]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.superlative arg.m={m} arg.k={k}"
     kind=question
     priority=12
     example="Which country is the biggest?"
 
 @pat.geo.map.supl1 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what_are|which_are|list|name|show|show_me|tell_me|give_me|what_is|which_is]? [the]? {n:number?} {m:lex.geo.map.superlatives} [cities|towns] [in|of|on|within|across|from|around]? [the]? {p:lex.geo.map.places?}"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what_are|which_are|list|name|show|show_me|tell_me|give_me|what_is|which_is]? [the]? {n:number?} {m:lex.geo.map.superlatives} [cities|towns] [in|of|on|within|across|from|around]? [the]? {p:lex.geo.map.places?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.superlative arg.m={m} arg.k=city arg.p={p} arg.n={n} arg.plural=true"
     kind=question
     priority=12
@@ -582,14 +582,14 @@
     example="List the 3 largest cities in Japan."
 
 @pat.geo.map.supl2 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what_are|which_are|list|name|show|show_me|tell_me|give_me|what_is|which_is]? [the]? {n:number?} {m:lex.geo.map.superlatives} [countries|nations] [in|of|on|within|across|from|around]? [the]? {p:lex.geo.map.places?}"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what_are|which_are|list|name|show|show_me|tell_me|give_me|what_is|which_is]? [the]? {n:number?} {m:lex.geo.map.superlatives} [countries|nations] [in|of|on|within|across|from|around]? [the]? {p:lex.geo.map.places?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.superlative arg.m={m} arg.k=country arg.p={p} arg.n={n} arg.plural=true"
     kind=question
     priority=12
     example="Name the 5 largest countries in Africa."
 
 @pat.geo.map.list1 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [list|name|show|show_me|tell_me|give_me|list_all|name_all|what_are|which_are|what|which|show_me_all] [all]? [the]? [countries|nations] [are|are_there|exist]? [there]? [in|of|within|across|from|on|that_are_in]? [the]? {p:lex.geo.map.places}"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [list|name|show|show_me|tell_me|give_me|list_all|name_all|what_are|which_are|what|which|show_me_all] [all]? [the]? [countries|nations] [are|are_there|exist]? [there]? [in|of|within|across|from|on|that_are_in]? [the]? {p:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.listOp arg.k=countries arg.p={p}"
     kind=question
     priority=12
@@ -597,28 +597,28 @@
     example="Which countries are in Africa?"
 
 @pat.geo.map.list2 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [list|name|show|show_me|tell_me|give_me|list_all|name_all|what_are|which_are|what|which|show_me_all] [all]? [the]? [cities|towns] [are|are_there|do_you_know|do_you_know_in|do_you_know_of|exist]? [there]? [in|of|within|across|from|on]? [the]? {p:lex.geo.map.places}"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [list|name|show|show_me|tell_me|give_me|list_all|name_all|what_are|which_are|what|which|show_me_all] [all]? [the]? [cities|towns] [are|are_there|do_you_know|do_you_know_in|do_you_know_of|exist]? [there]? [in|of|within|across|from|on]? [the]? {p:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.listOp arg.k=cities arg.p={p}"
     kind=question
     priority=12
     example="List the cities in Romania."
 
 @pat.geo.map.cnt1 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? how_many [countries|nations] [are|are_there|exist|does|is_there]? [there]? [in|on|across|of|within]? [the]? {p:lex.geo.map.places} [have|contain]?"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? how_many [countries|nations] [are|are_there|exist|does|is_there]? [there]? [in|on|across|of|within]? [the]? {p:lex.geo.map.places} [have|contain]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.count arg.k=countries arg.p={p}"
     kind=question
     priority=12
     example="How many countries are in Europe?"
 
 @pat.geo.map.cnt2 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? how_many [cities|towns] [are|are_there|do_you_know|do_you_have|do_you_know_in|do_you_know_of|exist|does|is_there]? [there]? [in|of|within|across|on]? [the]? {p:lex.geo.map.places} [have|contain]?"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? how_many [cities|towns] [are|are_there|do_you_know|do_you_have|do_you_know_in|do_you_know_of|exist|does|is_there]? [there]? [in|of|within|across|on]? [the]? {p:lex.geo.map.places} [have|contain]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.count arg.k=cities arg.p={p}"
     kind=question
     priority=12
     example="How many cities do you know in Romania?"
 
 @pat.geo.map.cur1 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what|which] [currency|money|currencies] [does|do|is|are]? [the]? {p:lex.geo.map.places} [use|using|have|used|accept|take]?"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what|which] [currency|money|currencies] [does|do|is|are]? [the]? {p:lex.geo.map.places} [use|using|have|used|accept|take]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.currency arg.p={p}"
     kind=question
     priority=12
@@ -626,28 +626,28 @@
     example="Which currency is Poland using?"
 
 @pat.geo.map.cur2 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what|which] [currency|money|currencies] [is|are]? [used|spent|accepted] [in|at]? [the]? {p:lex.geo.map.places}"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what|which] [currency|money|currencies] [is|are]? [used|spent|accepted] [in|at]? [the]? {p:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.currency arg.p={p}"
     kind=question
     priority=12
     example="What currency is used in Brazil?"
 
 @pat.geo.map.cur3 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what_is|what_s]? [the]? [currency|money] [of|in|for]? [the]? {p:lex.geo.map.places}"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what_is|what_s]? [the]? [currency|money] [of|in|for]? [the]? {p:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.currency arg.p={p}"
     kind=question
     priority=12
     example="What is the currency of Sweden?"
 
 @pat.geo.map.cur4 core.pattern
-    match="[what_is|what_s]? {p:lex.geo.map.places} 's [currency|money]"
+    match="[what_is|what_s]? {p:lex.geo.map.places} 's [currency|money] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.currency arg.p={p}"
     kind=question
     priority=12
     example="What is Mexico's currency?"
 
 @pat.geo.map.lang1 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what|which] [language|languages|tongue|tongues] [do|does|is|are]? [they|people|the_people|folks|locals|everyone]? [speak|spoken|speaks|used|talk|talked]? [in|by|there_in]? [the]? {p:lex.geo.map.places} [speak|speaks|use|uses|spoken]?"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what|which] [language|languages|tongue|tongues] [do|does|is|are]? [they|people|the_people|folks|locals|everyone]? [speak|spoken|speaks|used|talk|talked]? [in|by|there_in]? [the]? {p:lex.geo.map.places} [speak|speaks|use|uses|spoken]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.languages arg.p={p}"
     kind=question
     priority=12
@@ -655,21 +655,21 @@
     example="What languages are spoken in Switzerland?"
 
 @pat.geo.map.lang2 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what_is|what_s]? [the]? [official|main|national|primary]? [language|languages] [of|in|for]? [the]? {p:lex.geo.map.places}"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what_is|what_s]? [the]? [official|main|national|primary]? [language|languages] [of|in|for]? [the]? {p:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.languages arg.p={p}"
     kind=question
     priority=12
     example="What is the official language of Peru?"
 
 @pat.geo.map.lang3 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? what [do|does] [they|people] speak [in]? [the]? {p:lex.geo.map.places}"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? what [do|does] [they|people] speak [in]? [the]? {p:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.languages arg.p={p}"
     kind=question
     priority=12
     example="What do they speak in Austria?"
 
 @pat.geo.map.info core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [tell_me_about|tell_me_more_about|what_do_you_know_about|what_can_you_tell_me_about|describe|give_me_some_facts_about|give_me_facts_about|give_me_information_about|give_me_info_on|info_on|information_on|information_about|facts_about|tell_me_something_about|i_want_to_know_about|i_would_like_to_know_about|what_about|who_is|what_is|what_s|what_are] [the]? {p:lex.geo.map.places}"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [tell_me_about|tell_me_more_about|what_do_you_know_about|what_can_you_tell_me_about|describe|give_me_some_facts_about|give_me_facts_about|give_me_information_about|give_me_info_on|info_on|information_on|information_about|facts_about|tell_me_something_about|i_want_to_know_about|i_would_like_to_know_about|what_about|who_is|what_is|what_s|what_are] [the]? {p:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.info arg.p={p}"
     kind=question
     priority=12
@@ -677,7 +677,7 @@
     example="What do you know about Cluj?"
 
 @pat.geo.map.dist1 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? how_far [is|are|apart_are|it_is|away_is|is_it|are_we|away_are]? [it]? [from|between]? [the]? {a:lex.geo.map.places} [from|to|and|away_from|apart_from|and_from]? [the]? {b:lex.geo.map.places} [apart|away]?"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? how_far [is|are|apart_are|it_is|away_is|is_it|are_we|away_are]? [it]? [from|between]? [the]? {a:lex.geo.map.places} [from|to|and|away_from|apart_from|and_from]? [the]? {b:lex.geo.map.places} [apart|away]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.distance arg.a={a} arg.b={b}"
     kind=question
     priority=12
@@ -685,7 +685,7 @@
     example="How far apart are Madrid and Berlin?"
 
 @pat.geo.map.dist2 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what_is|what_s]? [the]? [distance|length] [between|from|of|to]? [the]? {a:lex.geo.map.places} [and|to|from|between]? [the]? {b:lex.geo.map.places}"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what_is|what_s]? [the]? [distance|length] [between|from|of|to]? [the]? {a:lex.geo.map.places} [and|to|from|between]? [the]? {b:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.distance arg.a={a} arg.b={b}"
     kind=question
     priority=12
@@ -693,14 +693,14 @@
     example="Distance from Cluj to Bucharest."
 
 @pat.geo.map.dist3 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? how_many [kilometres|kilometers|miles|km|kms] [is_it|are_there|is|are_there_between|is_there|apart]? [from|between]? [the]? {a:lex.geo.map.places} [to|and|from]? [the]? {b:lex.geo.map.places}"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? how_many [kilometres|kilometers|miles|km|kms] [is_it|are_there|is|are_there_between|is_there|apart]? [from|between]? [the]? {a:lex.geo.map.places} [to|and|from]? [the]? {b:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.distance arg.a={a} arg.b={b}"
     kind=question
     priority=12
     example="How many kilometres are there between Paris and Rome?"
 
 @pat.geo.map.dist4 core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [measure|draw|trace|plot|connect|link|join|draw_me|measure_out] [me]? [a]? [the]? [line|distance|route|path|ruler|measurement]? [from|between]? [the]? {a:lex.geo.map.places} [to|and|with|from]? [the]? {b:lex.geo.map.places}"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [measure|draw|trace|plot|connect|link|join|draw_me|measure_out] [me]? [a]? [the]? [line|distance|route|path|ruler|measurement]? [from|between]? [the]? {a:lex.geo.map.places} [to|and|with|from]? [the]? {b:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.distance arg.a={a} arg.b={b}"
     kind=request
     priority=12
@@ -708,35 +708,35 @@
     example="Measure the distance between Oslo and Rome."
 
 @pat.geo.map.dist5 core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [show|display|give_me|tell_me] [me]? [the]? [distance|line] [from|between] [the]? {a:lex.geo.map.places} [to|and|from]? [the]? {b:lex.geo.map.places}"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [show|display|give_me|tell_me] [me]? [the]? [distance|line] [from|between] [the]? {a:lex.geo.map.places} [to|and|from]? [the]? {b:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.distance arg.a={a} arg.b={b}"
     kind=request
     priority=12
     example="Show the distance between Paris and Rome."
 
 @pat.geo.map.distf1 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? how_far [is|is_it_to|is_it|away_is]? [it]? [to]? [the]? {b:lex.geo.map.places} [from_me|from_where_i_am|from_my_location]"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? how_far [is|is_it_to|is_it|away_is]? [it]? [to]? [the]? {b:lex.geo.map.places} [from_me|from_where_i_am|from_my_location] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.distanceFrom arg.b={b} arg.from=me"
     kind=question
     priority=12
     example="How far is Rome from me?"
 
 @pat.geo.map.distf2 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? how_far [am_i|are_we] [from|away_from|to]? [the]? {b:lex.geo.map.places}"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? how_far [am_i|are_we] [from|away_from|to]? [the]? {b:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.distanceFrom arg.b={b} arg.from=me"
     kind=question
     priority=12
     example="How far am I from Paris?"
 
 @pat.geo.map.distf3 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? how_far [is|is_it_to|is_it|away_is]? [it]? [to|from]? [the]? {b:lex.geo.map.places} [from_here|away|away_from_here]?"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? how_far [is|is_it_to|is_it|away_is]? [it]? [to|from]? [the]? {b:lex.geo.map.places} [from_here|away|away_from_here]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.distanceFrom arg.b={b}"
     kind=question
     priority=12
     example="How far is Rome?"
 
 @pat.geo.map.locate core.pattern
-    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to]? [where_am_i|where_am_i_now|where_am_i_right_now|where_exactly_am_i|locate_me|find_me|find_my_location|find_my_position|show_my_location|show_me_where_i_am|show_where_i_am|what_is_my_location|what_s_my_location|where_are_we|show_my_position|use_my_location|center_on_me|centre_on_me|go_to_my_location|go_to_where_i_am|where_do_i_live|show_my_current_location|take_me_to_my_location|locate_my_position]"
+    match="[can_you|could_you|will_you|would_you|i_want_to|i_would_like_to|i_want_you_to|let_us|let_me|you_can|you_should|i_need_to|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [where_am_i|where_am_i_now|where_am_i_right_now|where_exactly_am_i|locate_me|find_me|find_my_location|find_my_position|show_my_location|show_me_where_i_am|show_where_i_am|what_is_my_location|what_s_my_location|where_are_we|show_my_position|use_my_location|center_on_me|centre_on_me|go_to_my_location|go_to_where_i_am|where_do_i_live|show_my_current_location|take_me_to_my_location|locate_my_position] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.locate"
     kind=question
     priority=12
@@ -744,7 +744,7 @@
     example="Locate me."
 
 @pat.geo.map.here core.pattern
-    match="[what_is_here|what_s_here|what_is_this|what_s_this|what_is_this_place|what_place_is_this|where_is_this|what_is_there|what_is_that|what_do_you_see_here|what_is_in_the_middle|what_is_in_the_center|what_s_in_the_middle|what_am_i_looking_at|where_am_i_looking|what_country_is_this|which_country_is_this|what_is_this_country|what_is_this_spot|what_is_at_the_center]"
+    match="[what_is_here|what_s_here|what_is_this|what_s_this|what_is_this_place|what_place_is_this|where_is_this|what_is_there|what_is_that|what_do_you_see_here|what_is_in_the_middle|what_is_in_the_center|what_s_in_the_middle|what_am_i_looking_at|where_am_i_looking|what_country_is_this|which_country_is_this|what_is_this_country|what_is_this_spot|what_is_at_the_center] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.here"
     kind=question
     priority=12
@@ -752,14 +752,14 @@
     example="What am I looking at?"
 
 @pat.geo.map.describe core.pattern
-    match="[what_is_on_the_map|what_s_on_the_map|describe_the_map|describe_the_view|what_do_i_have_on_the_map|what_is_marked|what_is_marked_on_the_map|what_have_i_marked|what_is_on_my_map|what_is_shown|what_is_shown_on_the_map|summarize_the_map|summarise_the_map|what_is_the_map_showing|what_is_the_map_showing_now|what_are_you_showing]"
+    match="[what_is_on_the_map|what_s_on_the_map|describe_the_map|describe_the_view|what_do_i_have_on_the_map|what_is_marked|what_is_marked_on_the_map|what_have_i_marked|what_is_on_my_map|what_is_shown|what_is_shown_on_the_map|summarize_the_map|summarise_the_map|what_is_the_map_showing|what_is_the_map_showing_now|what_are_you_showing] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.describe"
     kind=question
     priority=12
     example="What is on the map?"
 
 @pat.geo.map.markersq core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what|which|how_many] [markers|pins|flags|places] [do_i_have|are_there|have_i_set|are_on_the_map|have_i_marked|are_marked|did_i_mark|did_i_put|are_set] [on_the_map|there|now]?"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [what|which|how_many] [markers|pins|flags|places] [do_i_have|are_there|have_i_set|are_on_the_map|have_i_marked|are_marked|did_i_mark|did_i_put|are_set] [on_the_map|there|now]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.markers"
     kind=question
     priority=12
@@ -767,14 +767,14 @@
     example="Which places are marked?"
 
 @pat.geo.map.markersq2 core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [list|show|name|tell_me|read|give_me|what_are] [me]? [all]? [the|my]? [markers|pins|marked_places|marked_cities]"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [list|show|name|tell_me|read|give_me|what_are] [me]? [all]? [the|my]? [markers|pins|marked_places|marked_cities] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.markers"
     kind=question
     priority=12
     example="List my markers."
 
 @pat.geo.map.hlq core.pattern
-    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [which|what|how_many] [countries|nations] [are|have_i] [highlighted|coloured|colored|shaded|selected|highlighted_now|highlighted_on_the_map]"
+    match="[tell_me|can_you_tell_me|could_you_tell_me|do_you_know|tell_me_please|i_want_to_know|i_would_like_to_know|i_wonder|name|give_me|find_out]? [which|what|how_many] [countries|nations] [are|have_i] [highlighted|coloured|colored|shaded|selected|highlighted_now|highlighted_on_the_map] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.highlights"
     kind=question
     priority=16

@@ -123,3 +123,28 @@
     input="Try S"
     expectStatus=missing
     session=c
+
+@t.games.hangman.v01 core.test
+    input="hangman again"
+    expectState="status=playing"
+    session=v
+
+@t.games.hangman.v02 core.test
+    input="got an e?"
+    expectState="guessed.0=e"
+    session=v
+
+@t.games.hangman.v03 core.test
+    input="uh i pick r please"
+    expectState="guessed.1=r"
+    session=v
+
+@t.games.hangman.v04 core.test
+    input="how many tries left"
+    expect="wrong"
+    session=v
+
+@t.games.hangman.v05 core.test
+    input="any clue?"
+    expectStatus=supported
+    session=v

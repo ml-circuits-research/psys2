@@ -705,9 +705,16 @@ export function explainSwitch(ctx, { who } = {}) {
   const before = [...(s.undo ?? [])].reverse().find((x) => x.character !== s.character);
   const hit = who ? ctx.lexicon(`${DATA}characters`).map((w) => w.split(':')).find(([w]) => w === who) : null;
   if (hit && hit[1] !== s.character) return ok(`I am ${spoken(s.character)} now, not ${spoken(hit[1])}.`);
-  if (!before) return ok(`I did not change my character: I am ${spoken(s.character)}. Say "become a person", "become a robot" or "become an emoji" if you want another one.`);
+  if (!before) {
+    const last = s.undo?.at(-1);
+    const keys = last ? Object.keys(s[s.character] ?? {}).filter((k) => k !== 'colors' && JSON.stringify(last[s.character]?.[k]) !== JSON.stringify(s[s.character][k])) : [];
+    const colors = last ? Object.keys(s[s.character]?.colors ?? {}).filter((k) => last[s.character]?.colors?.[k] !== s[s.character].colors[k]) : [];
+    const what = [...keys.map((k) => `my ${LABEL[k] ?? k}`), ...colors.map((k) => `my ${(COLOR_SAY[k] ?? [k])[0]}`)];
+    if (what.length) return ok(`I am sorry about that! I changed ${andList(what)}, because I understood that is what you asked for. Say "undo" to go back.`);
+    return ok(`I am sorry if something looks wrong. I did not change my character: I am ${spoken(s.character)}, and I have not changed anything yet. Tell me what you would like different, or say "undo" after a change to go back.`);
+  }
   return ok(`I am sorry about that! I turned into ${spoken(s.character)} because I thought you wanted something only ${the(s.character)} has, and I should have asked first. `
-    + `To go back, say "become ${spoken(before.character)}" or just "undo". From now on I will ask before I change my character.`);
+    + `To go back, say "undo", or say "become ${spoken(before.character)}". From now on I will ask before I change my character.`);
 }
 
 /** Color key a colored variant ("a red hat") can take, per character and component: [spoken part, color key]. */

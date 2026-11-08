@@ -1,6 +1,15 @@
 @lex.kids.time.days core.lexicon
     class=noun
-    doc="Days of the week"
+    doc="Days of the week (plural= lines are abbreviations: the lemma of an abbreviation is the full name)"
+    plural=monday:mon
+    plural=tuesday:tue
+    plural=tuesday:tues
+    plural=wednesday:wed
+    plural=thursday:thu
+    plural=thursday:thur
+    plural=thursday:thurs
+    plural=friday:fri
+    plural=saturday:sat
     word=monday
     word=tuesday
     word=wednesday
@@ -11,7 +20,16 @@
 
 @lex.kids.time.months core.lexicon
     class=noun
-    doc="Months of the year"
+    doc="Months of the year (plural= lines are abbreviations: the lemma of an abbreviation is the full name)"
+    plural=february:feb
+    plural=april:apr
+    plural=june:jun
+    plural=july:jul
+    plural=august:aug
+    plural=september:sep
+    plural=september:sept
+    plural=october:oct
+    plural=november:nov
     word=january
     word=february
     word=march

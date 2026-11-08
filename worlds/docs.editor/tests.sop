@@ -385,3 +385,72 @@
     input="Undo"
     expectState="blocks.length=6"
     session=g
+
+@t.docs.editor.z01 core.test
+    input="Start dictation"
+    expectState="inputMode=dictation"
+    session=dstop
+
+@t.docs.editor.z02 core.test
+    input="hello there period"
+    expectState="blocks.0.text=Hello there."
+    session=dstop
+
+@t.docs.editor.z03 core.test
+    input="Stop the dictation"
+    expectState="inputMode=null"
+    expectState="blocks.length=1"
+    session=dstop
+
+@t.docs.editor.z04 core.test
+    input="start dictation"
+    expectState="inputMode=dictation"
+    session=dstop
+
+@t.docs.editor.z05 core.test
+    input="stop the dictation mode"
+    expectState="inputMode=null"
+    expectState="blocks.length=1"
+    session=dstop
+
+@t.docs.editor.z06 core.test
+    input="start dictation"
+    expectState="inputMode=dictation"
+    session=dstop
+
+@t.docs.editor.z07 core.test
+    input="turn dictation off"
+    expectState="inputMode=null"
+    session=dstop
+
+@t.docs.editor.z08 core.test
+    input="start dictation"
+    expectState="inputMode=dictation"
+    session=dstop
+
+@t.docs.editor.z09 core.test
+    input="dictation off please"
+    expectState="inputMode=null"
+    session=dstop
+
+@t.docs.editor.z10 core.test
+    input="start dictation"
+    expectState="inputMode=dictation"
+    session=dstop
+
+@t.docs.editor.z11 core.test
+    input="ok stop dictating now"
+    expectState="inputMode=null"
+    expectState="blocks.length=1"
+    session=dstop
+
+@t.docs.editor.z12 core.test
+    input="start dictation"
+    expectState="inputMode=dictation"
+    session=dstop
+
+@t.docs.editor.z13 core.test
+    input="more words here and stop the dictation"
+    expectState="inputMode=null"
+    expectState="blocks.1.text=More words here"
+    session=dstop

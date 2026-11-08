@@ -74,3 +74,28 @@
     input="Give me a hint"
     expect="guessing"
     session=b
+
+@t.games.guess.v01 core.test
+    input="ok can u guess my animal?"
+    expectState="phase=asking"
+    session=v
+
+@t.games.guess.v02 core.test
+    input="nope never"
+    expectState="count=1"
+    session=v
+
+@t.games.guess.v03 core.test
+    input="idk"
+    expectState="count=2"
+    session=v
+
+@t.games.guess.v04 core.test
+    input="yeah it does"
+    expectState="count=3"
+    session=v
+
+@t.games.guess.v05 core.test
+    input="which ones could it still be?"
+    expectStatus=supported
+    session=v

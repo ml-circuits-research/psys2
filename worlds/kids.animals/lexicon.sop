@@ -164,7 +164,9 @@
 
 @lex.kids.animals.abilities core.lexicon
     class=noun
-    doc="Abilities the world knows"
+    doc="Abilities the world knows (plural= lines map the -ing forms to the base word)"
+    plural=fly:flying
+    plural=swim:swimming
     word=fly
     word=swim
 

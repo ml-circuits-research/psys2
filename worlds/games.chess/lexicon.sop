@@ -11,6 +11,13 @@
     word=horse
     word=night
     word=rock
+    word=kngt
+    word=knite
+    word=nite
+    word=horsey
+    word=bish
+    word=pown
+    word=rok
 
 @lex.games.chess.files core.lexicon
     class=noun
@@ -197,6 +204,7 @@
     doc="Who has or lost something"
     word=i
     word=you
+    word=u
     word=we
     word=white
     word=black
@@ -291,3 +299,12 @@
     word=promotion
     word=board
     word=square
+
+@lex.games.chess.sanletters core.lexicon
+    class=noun
+    doc="Piece letters of algebraic notation said as separate words (n f3)"
+    word=n
+    word=b
+    word=r
+    word=q
+    word=k

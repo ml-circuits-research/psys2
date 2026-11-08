@@ -1,5 +1,5 @@
 @pat.art.draw.add core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us]? [draw|sketch|paint|add|make|put|create|give_me|show_me|i_want|i_would_like|i_need|draw_me|paint_me|make_me|sketch_me|let_us_draw|i_want_to_draw|i_would_like_to_draw|how_about|can_i_have|i_will_have|i_want_to_add|i_would_like_to_add|throw_in] [a_picture_of|a_drawing_of|a_painting_of|a_sketch_of|a_picture_with]? [a|an|another|1_more|more|some|a_few]? {n:number?} {q:lex.art.draw.quantity?} [of]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {m3:lex.art.draw.mods?} {k:lex.art.draw.things} {w:rest?}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [draw|sketch|paint|add|make|put|create|give_me|show_me|i_want|i_would_like|i_need|draw_me|paint_me|make_me|sketch_me|let_us_draw|i_want_to_draw|i_would_like_to_draw|how_about|can_i_have|i_will_have|i_want_to_add|i_would_like_to_add|throw_in] [a_picture_of|a_drawing_of|a_painting_of|a_sketch_of|a_picture_with]? [a|an|another|1_more|more|some|a_few]? {n:number?} {q:lex.art.draw.quantity?} [of]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {m3:lex.art.draw.mods?} {k:lex.art.draw.things} {w:rest?}"
     emit="@{_} core.request action=draw.add arg.n={n} arg.q={q} arg.m1={m1} arg.m2={m2} arg.m3={m3} arg.kind={k} arg.kt=\"{k}\" arg.where=\"{w}\""
     kind=request
     priority=12
@@ -14,7 +14,7 @@
     doc="Draws one or more things: count, size, color, kind, and an optional place or parts (\"in the top right corner\", \"next to the sun\", \"with a red roof\")."
 
 @pat.art.draw.add.the core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us]? [draw|sketch|draw_me|sketch_me] the {n:number?} {q:lex.art.draw.quantity?} {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {m3:lex.art.draw.mods?} {k:lex.art.draw.things} {w:rest?}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [draw|sketch|draw_me|sketch_me] the {n:number?} {q:lex.art.draw.quantity?} {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {m3:lex.art.draw.mods?} {k:lex.art.draw.things} {w:rest?}"
     emit="@{_} core.request action=draw.add arg.n={n} arg.q={q} arg.m1={m1} arg.m2={m2} arg.m3={m3} arg.kind={k} arg.kt=\"{k}\" arg.where=\"{w}\""
     kind=request
     priority=12
@@ -22,7 +22,7 @@
     example="Sketch the moon in the sky."
 
 @pat.art.draw.ground core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us]? [draw|add|put|make|paint|create|give_me|i_want|i_need|show_me|add_some|draw_some] [me]? [some|the|a_bit_of|more|a|a_lot_of]? {g:lex.art.draw.ground} [on_the_ground|to_the_ground|to_the_picture|to_my_picture|to_my_drawing|to_it|everywhere|at_the_bottom|on_the_floor|to_the_bottom]?"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [draw|add|put|make|paint|create|give_me|i_want|i_need|show_me|add_some|draw_some] [me]? [some|the|a_bit_of|more|a|a_lot_of]? {g:lex.art.draw.ground} [on_the_ground|to_the_ground|to_the_picture|to_my_picture|to_my_drawing|to_it|everywhere|at_the_bottom|on_the_floor|to_the_bottom]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.ground arg.g={g}"
     kind=request
     priority=13
@@ -32,7 +32,7 @@
     example="Put water on the ground."
 
 @pat.art.draw.scene core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us]? [draw|make|paint|create|show|sketch|give] [me|us]? [a|an|something|anything|a_surprise]? [random|nice|pretty|beautiful|lovely|surprise|new|cool|happy|sunny]? [picture|scene|landscape|drawing|something|surprise|painting|masterpiece]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [draw|make|paint|create|show|sketch|give] [me|us]? [a|an|something|anything|a_surprise]? [random|nice|pretty|beautiful|lovely|surprise|new|cool|happy|sunny]? [picture|scene|landscape|drawing|something|surprise|painting|masterpiece] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.scene"
     kind=request
     priority=13
@@ -41,7 +41,7 @@
     example="Paint a landscape."
 
 @pat.art.draw.night core.pattern
-    match="[make|turn|let|set|change|switch|go] [it|the_picture|the_drawing|the_sky|the_scene|the_day|everything]? [into|to|be|become]? [a|the]? {w:lex.art.draw.times} [time|day|night|please]?"
+    match="[make|turn|let|set|change|switch|go] [it|the_picture|the_drawing|the_sky|the_scene|the_day|everything]? [into|to|be|become]? [a|the]? {w:lex.art.draw.times} [time|day|night|please]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.mood arg.w={w}"
     kind=request
     priority=13
@@ -51,14 +51,14 @@
     example="Turn it into sunset."
 
 @pat.art.draw.night.is core.pattern
-    match="[it_is|it_was|it_gets|it_becomes] {w:lex.art.draw.times} [time|now|outside]?"
+    match="[it_is|it_was|it_gets|it_becomes] {w:lex.art.draw.times} [time|now|outside]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.mood arg.w={w}"
     kind=request
     priority=12
     example="It is night."
 
 @pat.art.draw.recolor core.pattern
-    match="[make|color|colour|paint|turn|dye|fill|change|set|shade|crayon|color_in|colour_in] {t:words(7)} [to|into|in|with|using|be]? {sh:lex.art.draw.shades?} {c:lex.art.draw.colors}"
+    match="[make|color|colour|paint|turn|dye|fill|change|set|shade|crayon|color_in|colour_in] {t:words(7)} [to|into|in|with|using|be]? {sh:lex.art.draw.shades?} {c:lex.art.draw.colors} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.recolor arg.t=\"{t}\" arg.shade={sh} arg.color={c}"
     kind=request
     priority=13
@@ -79,7 +79,7 @@
     example="Give the car black wheels."
 
 @pat.art.draw.grow core.pattern
-    match="[make|let|turn|get] {t:words(6)} {amt:lex.art.draw.amounts?} {d:lex.art.draw.grow}"
+    match="[make|let|turn|get] {t:words(6)} {amt:lex.art.draw.amounts?} {d:lex.art.draw.grow} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.resize arg.t=\"{t}\" arg.amt={amt} arg.d={d}"
     kind=request
     priority=15
@@ -89,7 +89,7 @@
     example="Make the sun twice as big."
 
 @pat.art.draw.enlarge core.pattern
-    match="[enlarge|grow|expand|blow_up|inflate|increase|scale_up|magnify] {t:words(6)} {amt:lex.art.draw.amounts?}"
+    match="[enlarge|grow|expand|blow_up|inflate|increase|scale_up|magnify] {t:words(6)} {amt:lex.art.draw.amounts?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.resize arg.t=\"{t}\" arg.amt={amt} arg.d=bigger"
     kind=request
     priority=13
@@ -97,7 +97,7 @@
     example="Blow up the balloon a lot."
 
 @pat.art.draw.shrink core.pattern
-    match="[shrink|reduce|decrease|squash|minimize|scale_down|squeeze] {t:words(6)} {amt:lex.art.draw.amounts?}"
+    match="[shrink|reduce|decrease|squash|minimize|scale_down|squeeze] {t:words(6)} {amt:lex.art.draw.amounts?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.resize arg.t=\"{t}\" arg.amt={amt} arg.d=smaller"
     kind=request
     priority=13
@@ -105,7 +105,7 @@
     example="Shrink the tree a little."
 
 @pat.art.draw.size core.pattern
-    match="[make|let|turn|get] {t:words(6)} {s:lex.art.draw.sizes}"
+    match="[make|let|turn|get] {t:words(6)} {s:lex.art.draw.sizes} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.setSize arg.t=\"{t}\" arg.s={s}"
     kind=request
     priority=15
@@ -126,7 +126,7 @@
     example="Send the cloud behind the house."
 
 @pat.art.draw.nudge core.pattern
-    match="[make|let|get] {t:words(6)} {amt:lex.art.draw.amounts?} {d:lex.art.draw.moves}"
+    match="[make|let|get] {t:words(6)} {amt:lex.art.draw.amounts?} {d:lex.art.draw.moves} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.nudge arg.t=\"{t}\" arg.amt={amt} arg.d={d}"
     kind=request
     priority=13
@@ -134,7 +134,7 @@
     example="Make the cat a bit lower."
 
 @pat.art.draw.turn core.pattern
-    match="{v:lex.art.draw.turnverbs} {t:words(6)} {d:lex.art.draw.turndirs}"
+    match="{v:lex.art.draw.turnverbs} {t:words(6)} {d:lex.art.draw.turndirs} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.turn arg.verb={v} arg.phrase=\"{t} {d}\""
     kind=request
     priority=14
@@ -153,7 +153,7 @@
     example="Spin the star."
 
 @pat.art.draw.face core.pattern
-    match="[make|get|let] {p:words(7)} [face|look|point|go|face_to|look_to|looking|facing] [to|towards]? [the]? {d:lex.art.draw.leftright}"
+    match="[make|get|let] {p:words(7)} [face|look|point|go|face_to|look_to|looking|facing] [to|towards]? [the]? {d:lex.art.draw.leftright} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.turn arg.phrase=\"{p} face {d}\""
     kind=request
     priority=15
@@ -161,14 +161,14 @@
     example="Make the dog look to the right."
 
 @pat.art.draw.upside core.pattern
-    match="[make|get|let|turn] {p:words(7)} upside_down"
+    match="[make|get|let|turn] {p:words(7)} upside_down [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.turn arg.phrase=\"{p} upside down\""
     kind=request
     priority=15
     example="Make the house upside down."
 
 @pat.art.draw.clear core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us]? [delete|remove|erase|clear|wipe|empty|clean|get_rid_of|throw_away|trash|destroy|wipe_out|clean_up] [all|everything|all_of|all_the]? [everything|things|stuff]? [in|on|from|off]? [my|the|this]? [whole]? [picture|drawing|painting|canvas|drawing_board|page|paper|screen|everything]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [delete|remove|erase|clear|wipe|empty|clean|get_rid_of|throw_away|trash|destroy|wipe_out|clean_up] [all|everything|all_of|all_the]? [everything|things|stuff]? [in|on|from|off]? [my|the|this]? [whole]? [picture|drawing|painting|canvas|drawing_board|page|paper|screen|everything] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.clearAll"
     kind=request
     priority=12
@@ -177,14 +177,14 @@
     example="Wipe the canvas."
 
 @pat.art.draw.remove.it core.pattern
-    match="[delete|remove|erase|get_rid_of|throw_away|trash|destroy] [it|this|that|them]"
+    match="[delete|remove|erase|get_rid_of|throw_away|trash|destroy] [it|this|that|them] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.removeIt"
     kind=request
     priority=14
     example="Delete it."
 
 @pat.art.draw.remove core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us]? [delete|remove|erase|get_rid_of|take_away|rub_out|throw_away|take_out|destroy|wipe_out|trash|scrub_out|clear_away] {p:rest}"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [delete|remove|erase|get_rid_of|take_away|rub_out|throw_away|take_out|destroy|wipe_out|trash|scrub_out|clear_away] {p:rest}"
     emit="@{_} core.request action=draw.remove arg.phrase=\"{p}\""
     kind=request
     priority=9
@@ -195,7 +195,7 @@
     example="Get rid of the clouds."
 
 @pat.art.draw.new core.pattern
-    match="[start|begin|make|get|open|take|give_me|i_want|let_us_start|let_us_make|can_i_have|i_need]? [a|an|another]? [new|fresh|blank|clean|empty] [drawing|picture|painting|canvas|sheet|sheet_of_paper|paper|piece_of_paper|drawing_board]"
+    match="[start|begin|make|get|open|take|give_me|i_want|let_us_start|let_us_make|can_i_have|i_need]? [a|an|another]? [new|fresh|blank|clean|empty] [drawing|picture|painting|canvas|sheet|sheet_of_paper|paper|piece_of_paper|drawing_board] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.new"
     kind=request
     priority=13
@@ -204,7 +204,7 @@
     example="New picture."
 
 @pat.art.draw.undo core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us]? [undo|undo_that|undo_it|undo_this|undo_the_last_thing|undo_my_last_thing|undo_the_last_drawing|undo_my_last_drawing|undo_the_last_change|take_that_back|take_it_back|oops]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [undo|undo_that|undo_it|undo_this|undo_the_last_thing|undo_my_last_thing|undo_the_last_drawing|undo_my_last_drawing|undo_the_last_change|take_that_back|take_it_back|oops] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.undo"
     kind=request
     priority=15
@@ -213,7 +213,7 @@
     example="Take that back."
 
 @pat.art.draw.redo core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us]? [redo|redo_that|redo_it|do_it_again|put_it_back|bring_it_back]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [redo|redo_that|redo_it|do_it_again|put_it_back|bring_it_back] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.redo"
     kind=request
     priority=15
@@ -221,7 +221,7 @@
     example="Bring it back."
 
 @pat.art.draw.select core.pattern
-    match="[select|click|tap|pick|choose|touch|highlight|point_at|click_on|tap_on|focus_on] [on]? [the|my|that]? {o:lex.art.draw.ordinals?} {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things}"
+    match="[select|click|tap|pick|choose|touch|highlight|point_at|click_on|tap_on|focus_on] [on]? [the|my|that]? {o:lex.art.draw.ordinals?} {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.select arg.o={o} arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
     kind=request
     priority=14
@@ -230,21 +230,21 @@
     example="Select the red car."
 
 @pat.art.draw.deselect core.pattern
-    match="[deselect|unselect|unpick|unhighlight] [everything|it|all|the_picture|that]?"
+    match="[deselect|unselect|unpick|unhighlight] [everything|it|all|the_picture|that]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.deselect"
     kind=request
     priority=14
     example="Deselect everything."
 
 @pat.art.draw.deselect.clear core.pattern
-    match="[clear|remove|drop] [the|my]? selection"
+    match="[clear|remove|drop] [the|my]? selection [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.deselect"
     kind=request
     priority=12
     example="Clear the selection."
 
 @pat.art.draw.fill core.pattern
-    match="[make|color|colour|fill|turn|leave|draw] {t:words(5)} {m:lex.art.draw.fillmodes}"
+    match="[make|color|colour|fill|turn|leave|draw] {t:words(5)} {m:lex.art.draw.fillmodes} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.fill arg.t=\"{t}\" arg.mode={m}"
     kind=request
     priority=11
@@ -253,7 +253,7 @@
     example="Make the heart hollow."
 
 @pat.art.draw.fill.in core.pattern
-    match="[fill|color|colour] [in]? {t:words(5)} [in]?"
+    match="[fill|color|colour] [in]? {t:words(5)} [in]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.fill arg.t=\"{t}\" arg.mode=crayon"
     kind=request
     priority=10
@@ -276,7 +276,7 @@
     example="Make a copy of the cat."
 
 @pat.art.draw.another core.pattern
-    match="[make|draw|add|give_me] [me]? [another|1_more] [1|copy|of_it|of_that|of_them]?"
+    match="[make|draw|add|give_me] [me]? [another|1_more] [1|copy|of_it|of_that|of_them]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.duplicate arg.t=it"
     kind=request
     priority=12
@@ -284,14 +284,14 @@
     example="Draw one more."
 
 @pat.art.draw.more core.pattern
-    match="[make|draw|add|give_me] {n:number} more [of_them|of_it|of_that]?"
+    match="[make|draw|add|give_me] {n:number} more [of_them|of_it|of_that]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.duplicate arg.t=it arg.n={n}"
     kind=request
     priority=12
     example="Make 2 more."
 
 @pat.art.draw.describe core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us]? [describe|tell_me_about|show_me|what_is_in|what_is_on|what_do_you_see_in|what_can_you_see_in|look_at|tell_me_what_is_in] [all_of]? [my|the|this]? [picture|drawing|painting|artwork|canvas|page|paper|masterpiece]"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [describe|tell_me_about|show_me|what_is_in|what_is_on|what_do_you_see_in|what_can_you_see_in|look_at|tell_me_what_is_in] [all_of]? [my|the|this]? [picture|drawing|painting|artwork|canvas|page|paper|masterpiece] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.describe"
     kind=request
     priority=13
@@ -299,21 +299,21 @@
     example="What is in my drawing?"
 
 @pat.art.draw.describe.did core.pattern
-    match="what [did|have] [i|we] [draw|drawn|drew|paint|painted|make|made|add|added] [so_far|already|here|today]?"
+    match="what [did|have] [i|we] [draw|drawn|drew|paint|painted|make|made|add|added] [so_far|already|here|today]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.describe"
     kind=request
     priority=13
     example="What did I draw?"
 
 @pat.art.draw.describe.see core.pattern
-    match="what [do|can] [you] see [in|on]? [my|the]? [picture|drawing|painting|page|paper|canvas]?"
+    match="what [do|can] [you] see [in|on]? [my|the]? [picture|drawing|painting|page|paper|canvas]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.describe"
     kind=request
     priority=12
     example="What can you see in my picture?"
 
 @pat.art.draw.count core.pattern
-    match="how_many {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [are_there|are_there_in_my_picture|are_in_my_picture|are_in_my_drawing|are_in_the_picture|are_in_the_drawing|are_there_in_the_picture|are_there_in_my_drawing|did_i_draw|have_i_drawn|do_i_have|have_i_got|are_here|can_you_see|do_you_see|are_there_now|in_my_picture|in_my_drawing|in_the_picture|in_the_drawing|are_on_the_ground|are_in_the_sky]?"
+    match="how_many {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [are_there|are_there_in_my_picture|are_in_my_picture|are_in_my_drawing|are_in_the_picture|are_in_the_drawing|are_there_in_the_picture|are_there_in_my_drawing|did_i_draw|have_i_drawn|do_i_have|have_i_got|are_here|can_you_see|do_you_see|are_there_now|in_my_picture|in_my_drawing|in_the_picture|in_the_drawing|are_on_the_ground|are_in_the_sky]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.count arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
     kind=request
     priority=12
@@ -322,7 +322,7 @@
     example="How many things are in my picture?"
 
 @pat.art.draw.count.verb core.pattern
-    match="count [all]? [the|my]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things}"
+    match="count [all]? [the|my]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.count arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
     kind=request
     priority=12
@@ -338,7 +338,7 @@
     example="Where is the second tree?"
 
 @pat.art.draw.exists core.pattern
-    match="[is_there|are_there] [a|an|any|some]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [in|on|inside]? [my|the|this]? [picture|drawing|painting|page|paper|canvas|scene|artwork]"
+    match="[is_there|are_there] [a|an|any|some]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [in|on|inside]? [my|the|this]? [picture|drawing|painting|page|paper|canvas|scene|artwork] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.exists arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
     kind=request
     priority=12
@@ -346,7 +346,7 @@
     example="Are there any clouds in my drawing?"
 
 @pat.art.draw.exists.have core.pattern
-    match="[do|did] [i|we] have [a|an|any|some]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [in|on]? [my|the|this]? [picture|drawing|painting|page|paper|canvas|scene|artwork]"
+    match="[do|did] [i|we] have [a|an|any|some]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [in|on]? [my|the|this]? [picture|drawing|painting|page|paper|canvas|scene|artwork] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.exists arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
     kind=request
     priority=12
@@ -360,7 +360,7 @@
     example="What color is my house?"
 
 @pat.art.draw.color.in core.pattern
-    match="what [color|colour] [is|are] [the]? {t:words(5)} [in|of|on] [my|the] [picture|drawing|painting|page|paper|canvas]"
+    match="what [color|colour] [is|are] [the]? {t:words(5)} [in|of|on] [my|the] [picture|drawing|painting|page|paper|canvas] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.colorOf arg.t=\"{t}\""
     kind=request
     priority=13
@@ -381,21 +381,21 @@
     example="What is next to the sun?"
 
 @pat.art.draw.help core.pattern
-    match="[what|which] [things|shapes|animals|pictures]? [can|could|may] [i|you|we] [draw|paint|make|add]"
+    match="[what|which] [things|shapes|animals|pictures]? [can|could|may] [i|you|we] [draw|paint|make|add] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.help"
     kind=request
     priority=12
     example="What can I draw?"
 
 @pat.art.draw.colors core.pattern
-    match="what [colors|colours|crayons|paints] [can|do|may] [i|you|we] [use|have|know|paint_with|draw_with]"
+    match="what [colors|colours|crayons|paints] [can|do|may] [i|you|we] [use|have|know|paint_with|draw_with] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.colors"
     kind=request
     priority=13
     example="What colors can I use?"
 
 @pat.art.draw.save core.pattern
-    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us]? [save|download|export|keep|store|print|get|send_me|i_want|can_i_have] [me]? [my|the|this|a|an]? [drawing|picture|painting|image|artwork|masterpiece|picture_file|drawing_file] [as|in|to|into]? [a|an]? {f:lex.art.draw.formats?} [file|image|picture|format]?"
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us|can_u|could_u|would_u|will_u|hey|hey_can_you|hey_can_u|hey_could_you|ok_can_you|yo|i_d_like_to|id_like_to|i_d_like_you_to|im_gonna|we_want_to|we_would_like_to|i_need_you_to|could_you_please|would_you_please|can_you_just]? [save|download|export|keep|store|print|get|send_me|i_want|can_i_have] [me]? [my|the|this|a|an]? [drawing|picture|painting|image|artwork|masterpiece|picture_file|drawing_file] [as|in|to|into]? [a|an]? {f:lex.art.draw.formats?} [file|image|picture|format]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.save arg.f={f}"
     kind=request
     priority=13
@@ -404,14 +404,14 @@
     example="Download the drawing as a PNG."
 
 @pat.art.draw.save.it core.pattern
-    match="[save|download|export] [it|this|that] [as|in|to|into] [a|an]? {f:lex.art.draw.formats} [file|image|picture|format]?"
+    match="[save|download|export] [it|this|that] [as|in|to|into] [a|an]? {f:lex.art.draw.formats} [file|image|picture|format]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.save arg.f={f}"
     kind=request
     priority=13
     example="Save it as SVG."
 
 @pat.art.draw.open core.pattern
-    match="[open|show|go_to|switch_to|take_me_to|show_me|bring_up|let_us_go_to|i_want_to_go_to] [me]? [the|my]? [drawing|painting|paint|picture|art|sketch|drawing_board|drawing_pad|canvas|art_board|paintbox|easel] [tab|page|board|screen|app|pad|mode|window|area]?"
+    match="[open|show|go_to|switch_to|take_me_to|show_me|bring_up|let_us_go_to|i_want_to_go_to] [me]? [the|my]? [drawing|painting|paint|picture|art|sketch|drawing_board|drawing_pad|canvas|art_board|paintbox|easel] [tab|page|board|screen|app|pad|mode|window|area]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=draw.open"
     kind=request
     priority=11

@@ -207,3 +207,63 @@
 @t.time.n50 core.test
     input="What comes after August?"
     expect="The month after August is September."
+
+@t.time.w01 core.test
+    input="days in february"
+    expect="There are 28 days in February"
+    doc="wording variant (widened phrasing)"
+
+@t.time.w02 core.test
+    input="monday then what day"
+    expect="The day after Monday is Tuesday."
+    doc="wording variant (widened phrasing)"
+
+@t.time.w03 core.test
+    input="whats the month ahead of may"
+    expect="The month before May is April."
+    doc="wording variant (widened phrasing)"
+
+@t.time.w04 core.test
+    input="how many hrs from 3 to 7 o clock"
+    expect="4 hours"
+    doc="wording variant (widened phrasing)"
+
+@t.time.w05 core.test
+    input="how many days in 2 weeks"
+    expect="There are 14 days in 2 weeks."
+    doc="wording variant (widened phrasing)"
+
+@t.time.w06 core.test
+    input="if its 3 oclock whats the time in 2 hrs"
+    expect="It will be 5 o'clock."
+    doc="wording variant (widened phrasing)"
+
+@t.time.w07 core.test
+    input="Today is Friday. tmrw is what day?"
+    expect="Tomorrow is Saturday."
+    doc="wording variant (widened phrasing)"
+
+@t.time.w08 core.test
+    input="after winter what season"
+    expect="The season after winter is spring."
+    doc="wording variant (widened phrasing)"
+
+@t.time.w09 core.test
+    input="how many days from mon to fri"
+    expect="From Monday to Friday is 4 days."
+    doc="wording variant (widened phrasing)"
+
+@t.time.w10 core.test
+    input="hours in a day"
+    expect="There are 24 hours in a day."
+    doc="wording variant (widened phrasing)"
+
+@t.time.w11 core.test
+    input="What month is 3 months on from may?"
+    expect="3 months after May is August."
+    doc="wording variant (widened phrasing)"
+
+@t.time.w12 core.test
+    input="what is 3 hours before 5 oclock"
+    expect="It was 2 o'clock."
+    doc="wording variant (widened phrasing)"

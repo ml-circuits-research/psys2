@@ -148,3 +148,28 @@
 @t.shop.n35 core.test
     input="I have 1 leu. How much money do I have?"
     expect="You have 1 leu now."
+
+@t.shop.w01 core.test
+    input="A ball costs 7 lei. The pencil is 3 lei. Total for 2 balls and 3 pencils?"
+    expect="2 balls and 3 pencils cost 23 lei."
+    doc="wording variant (widened phrasing)"
+
+@t.shop.w02 core.test
+    input="I have 30 lei. I spent 5 lei. How much cash left?"
+    expect="You have 25 lei left."
+    doc="wording variant (widened phrasing)"
+
+@t.shop.w03 core.test
+    input="A ball costs 7 lei. Change from 50 lei if I buy a ball."
+    expect="Your change from 50 lei is 43 lei."
+    doc="wording variant (widened phrasing)"
+
+@t.shop.w04 core.test
+    input="A ball costs 7 lei. Whats a ball cost?"
+    expect="A ball costs 7 lei."
+    doc="wording variant (widened phrasing)"
+
+@t.shop.w05 core.test
+    input="I have 20 lei. A ball costs 7 lei. The pencil is 3 lei. Can I get a ball plus 2 pencils?"
+    expect="Yes."
+    doc="wording variant (widened phrasing)"
