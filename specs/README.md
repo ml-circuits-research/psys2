@@ -14,3 +14,4 @@ The vision (`vision/PSys2-vision-v1.md`) defines the target architecture. These 
 | [decisions/ADR-002](decisions/ADR-002-translation-strategies-and-speech.md) | Translation strategies (rules, small CPU models, browser API) and speech in the webchat |
 | [decisions/ADR-003](decisions/ADR-003-rules-profile-simplifications.md) | Deliberate simplifications of the first implementation |
 | [07-tool-worlds-and-demo.md](07-tool-worlds-and-demo.md) | Tool-use worlds (app shell, robot avatar, document editor, games), state and effects contract, hands-free demo page |
+| [08-training-data.md](08-training-data.md) | Training data from worlds: generators (datagen.mjs), rule-derived records, export and reports |

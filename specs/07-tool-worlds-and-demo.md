@@ -49,3 +49,23 @@ State: `{ title, blocks: [{ id, kind: 'heading'|'paragraph'|'list', text?, items
 
 ## 5. Third-party code
 The host UI may use open-source libraries (for example for the avatar or games), vendored as single bundled files under `docs/webchat/vendor/` per AGENTS.md. Worlds and the engine never depend on them: game rules, avatar state and document model live in the worlds; libraries only draw.
+
+## 6. Library-backed tool worlds (pluggable tabs)
+Principle: pick a well-made, recognizable open-source library, let what the library can do become the world's legend (types, keys, closed value lists, operations), and spend our effort on the language layer.
+
+- **Where the library runs.** If the library supplies *rules or semantics* that answers depend on (chess move legality, distances on a map, music theory), a copy is vendored inside the world (`worlds/<id>/vendor/<lib>.mjs`, one bundled file, imported relatively by `ops.mjs`) so C2 reasoning stays deterministic and testable in Node. If it only *renders or executes* (a chess board, a synthesizer, map tiles, a chess engine), it lives in the host under `docs/webchat/vendor/` and is reached through effects.
+- **Tabs are declared by worlds** in `world.sop`: `tab=<id> tabTitle="..." tabAlias=<words_with_underscores> (repeatable) tabOrder=<n> tabKind=tool|game tabNew=<action> tabHint=<action> tabGiveUp=<action>`. `ui.shell` discovers them (navigation by voice, "new game", "hint", "I give up", "what can I say here?") with no change to `ui.shell`.
+- **Tab plugins in the host**: `docs/webchat/ui/tabs/<id>.mjs` default-exports `{ id, label, world, order, make(holder, host) -> { update(state) }, effects?: { '<effect.name>': async (args, { ui, host }) -> { ok, detail?, data? } } }`. The build lists them in `ui/tabs/index.json`; `app.mjs` loads them. `host` offers `send(text)` (a click becomes a typed command, so mouse and voice share the language layer), `speak(text)`, `state(worldId)`, `setWorldState(worldId, patch)`, `asset(path)`.
+- **Observation loop** (vision §8): every effect carries its `world`; after the host executes it, `session.observe({ effect, ok, detail, data, world })` records a `core.observation` wire and calls the world's optional `onObservation(ctx, obs)`, which may update state, queue effects and return `{ reply }`. The host shows the reply as a new message. Example: chess asks for `chess.engine.bestmove`, the host runs the engine, the world plays the move and answers "I play knight to f6".
+
+## 7. Worlds in the professional demo
+| Tab | World | Libraries | Licence |
+| --- | --- | --- | --- |
+| Avatar (default) | `ui.avatar` | DiceBear core + CC0 styles (voxel-bot, open-peeps, moods) | MIT / CC0 |
+| Editor | `docs.editor` | TipTap (ProseMirror) | MIT |
+| Chess | `games.chess` | chess.js (rules, in the world), chessground (board), Stockfish WASM (engine, effect) | BSD-2 / GPL-3 / GPL-3 |
+| Music | `media.music` | Tone.js (sound), abcjs (sheet music) | MIT / MIT |
+| Map | `geo.map` | Leaflet + OpenStreetMap tiles; GeoNames city gazetteer (in the world) | BSD-2 / ODbL tiles / CC BY 4.0 data |
+| Charts | `data.charts` | Chart.js | MIT |
+| Drawing | `art.draw` | rough.js | MIT |
+| Tic-tac-toe, Guess the animal, Hangman | `games.*` | own code | — |

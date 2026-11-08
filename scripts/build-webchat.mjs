@@ -71,12 +71,18 @@ export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs
   await mkdir(path.join(outDir, 'worlds'), { recursive: true });
   await writeFile(path.join(outDir, 'worlds/index.json'), JSON.stringify(bundle) + '\n');
 
-  // 3. build info
+  // 3. tab plugins: docs/webchat/ui/tabs/*.mjs -> ui/tabs/index.json (loaded by app.mjs, spec 07 §6)
+  const tabsSrc = path.join(root, 'docs/webchat/ui/tabs');
+  const tabFiles = (await exists(tabsSrc)) ? (await readdir(tabsSrc)).filter((f) => f.endsWith('.mjs')).sort() : [];
+  await mkdir(path.join(outDir, 'ui/tabs'), { recursive: true });
+  await writeFile(path.join(outDir, 'ui/tabs/index.json'), JSON.stringify(tabFiles) + '\n');
+
+  // 4. build info
   const files = {};
   for (const sub of ['lib', 'worlds']) {
     for (const f of await walk(path.join(outDir, sub))) files[`${sub}/${f}`] = sha(await readFile(path.join(outDir, sub, f)));
   }
-  const info = { worlds: ids, files, builtAt: new Date().toISOString() };
+  const info = { worlds: ids, tabs: tabFiles, files, builtAt: new Date().toISOString() };
   await writeFile(path.join(outDir, 'build-info.json'), JSON.stringify(info, null, 2) + '\n');
   log(`webchat: ${ids.length} worlds, ${Object.keys(files).length} files -> ${outDir}`);
   return info;

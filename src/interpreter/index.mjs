@@ -320,6 +320,19 @@ export class Interpreter {
     return null;
   }
 
+  /**
+   * Observation hook (spec 07 §1): run `onObservation(ctx, obs)` of world `worldId` as an action context.
+   * @returns {{ reply?: string } | null}
+   */
+  observe(session, worldId, obs) {
+    const w = this.set.get(worldId);
+    if (typeof w?.ops?.onObservation !== 'function') return null;
+    const op = { id: `op.${w.id}.onObservation`, worldId: w.id, semantics: 'action' };
+    const st = { depth: 0, visited: 0, ops: [] };
+    const ctx = this._makeCtx(session, op, st, { deadline: performance.now() + this.opTimeoutMs * 5 });
+    try { return w.ops.onObservation(ctx, obs) ?? null; } catch (e) { return { reply: `Something went wrong while I handled the result of ${obs.effect} (${e?.message ?? e}).` }; }
+  }
+
   _emit(session, op, sopText) {
     const ids = new Map();
     const text = sopText.replace(/\{(_\d*)\}/g, (_m, n) => { if (!ids.has(n)) ids.set(n, session.form.freshId('w')); return ids.get(n); });

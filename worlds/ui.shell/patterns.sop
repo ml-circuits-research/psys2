@@ -303,3 +303,19 @@
     kind=request
     priority=10
     example="Hint please."
+
+@pat.ui.shell.open.declared core.pattern
+    match="[can_you|could_you|will_you|would_you|please_can_you]? [open|show|display|bring_up|go_to|switch_to|take_me_to|jump_to|select|view|show_me|open_up] [me]? [the|my|your]? {tab:words(4)} [tab|page|screen|panel|window]?"
+    emit="@{_} core.request action=ui.openTab arg.tab=\"{tab}\""
+    kind=request
+    priority=4
+    doc="Fallback for tabs declared by other worlds in their manifests (spec 07 §6); unknown names get a polite refusal."
+    example="Open the chess board."
+
+@pat.ui.shell.play.declared core.pattern
+    match="[let_us|i_want_to|i_would_like_to|can_we|could_we|shall_we|we_could|can_you|could_you|will_you|i_wanna|lets]? [play|start|begin|launch|have] [a|an|the|some|a_game_of|a_round_of|the_game_of|another_game_of]? {tab:words(4)} [game|again]?"
+    emit="@{_} core.request action=ui.playGame arg.tab=\"{tab}\""
+    kind=request
+    priority=4
+    doc="Fallback for games declared by other worlds in their manifests (spec 07 §6)."
+    example="Let's play chess."

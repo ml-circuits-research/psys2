@@ -339,6 +339,46 @@
     card=one
     ask="What is it about?"
 
+@core.world.tab core.key
+    value=atom
+    card=one
+    ask="Which tab does the world show in the app (an id such as chess)?"
+
+@core.world.tabTitle core.key
+    value=string
+    card=one
+    ask="What is the tab called?"
+
+@core.world.tabAlias core.key
+    value=atom
+    card=many
+    ask="What else can people call the tab (words joined by _)?"
+
+@core.world.tabOrder core.key
+    value=integer
+    card=one
+    ask="Where does the tab go in the tab bar (lower first)?"
+
+@core.world.tabKind core.key
+    value=atom
+    card=one
+    ask="Is the tab a tool or a game?"
+
+@core.world.tabNew core.key
+    value=atom
+    card=one
+    ask="Which action starts something new on the tab (new game, new document)?"
+
+@core.world.tabHint core.key
+    value=atom
+    card=one
+    ask="Which action gives a hint on the tab?"
+
+@core.world.tabGiveUp core.key
+    value=atom
+    card=one
+    ask="Which action gives up on the tab?"
+
 @core.pattern.match core.key
     value=string
     card=one

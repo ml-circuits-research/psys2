@@ -90,7 +90,8 @@ test('session.setWorldState merges host changes without reply or effects', async
 test('session.observe records a core.observation wire', async () => {
   const e = await toolEngine();
   const s = e.createSession();
-  const id = s.observe({ effect: 'speech.say', ok: false, detail: 'no voice' });
+  const { id, text } = s.observe({ effect: 'speech.say', ok: false, detail: 'no voice' });
+  assert.equal(text, null); // no world given: nothing reacts
   const mem = s.memory();
   assert.match(mem, new RegExp(`@${id} core.observation`));
   assert.match(mem, /effect=speech\.say/);
@@ -272,4 +273,15 @@ test('hangman: hidden word until the end, six wrong guesses, hints from the know
   assert.doesNotMatch((await s.send('How many guesses are left?')).text, /giraffe/);
   const st = s.state('games.hangman');
   assert.equal(st.wrongLeft, 6);
+});
+
+test('session.observe lets the originating world react through onObservation', async () => {
+  const e = await toolEngine();
+  const s = e.createSession();
+  const w = e.set.list().find((x) => x.ops && x.id !== 'core');
+  w.ops = { ...w.ops, onObservation: (ctx, obs) => { ctx.state.lastObserved = obs.effect; ctx.effect('speech.say', { text: 'heard' }); return { reply: `Observed ${obs.effect} with ${obs.data?.n}.` }; } };
+  const out = s.observe({ effect: 'demo.compute', ok: true, data: { n: 42 }, world: w.id });
+  assert.equal(out.text, 'Observed demo.compute with 42.');
+  assert.equal(out.state[w.id].lastObserved, 'demo.compute');
+  assert.equal(out.effects[0].name, 'speech.say');
 });

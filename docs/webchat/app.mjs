@@ -5,7 +5,7 @@
 //
 // The host renders world state (`reply.state`, `session.state()`) and executes effects from an allow-list.
 import { h } from './ui/util.mjs';
-import { createRobot } from './ui/robot.mjs';
+import { createAvatar } from './ui/avatar.mjs';
 import { createEditor } from './ui/editor.mjs';
 import { createTicTacToe, createGuess, createHangman } from './ui/games.mjs';
 import { createSpeech, speechSupport, LANG_TAGS } from './ui/speech.mjs';
@@ -15,15 +15,30 @@ import { renderTrace } from './ui/trace.mjs';
 const HERE = new URL('.', import.meta.url);
 
 export const TABS = [
-  { id: 'robot', label: 'Robot', world: 'ui.avatar', make: createRobot },
+  { id: 'robot', label: 'Avatar', world: 'ui.avatar', make: createAvatar },
   { id: 'editor', label: 'Editor', world: 'docs.editor', make: createEditor },
   { id: 'tictactoe', label: 'Tic-tac-toe', world: 'games.tictactoe', make: createTicTacToe },
   { id: 'guess', label: 'Guess the animal', world: 'games.guess', make: createGuess },
   { id: 'hangman', label: 'Hangman', world: 'games.hangman', make: createHangman },
 ];
+/**
+ * Tab plugins (spec 07 §6): every module listed in ui/tabs/index.json (written by scripts/build-webchat.mjs from
+ * docs/webchat/ui/tabs/*.mjs) default-exports { id, label, world, order?, make(holder, host) -> { update(state) },
+ * effects?: { [effectName]: async (args, { ui, host }) -> { ok, detail?, data? } } }.
+ */
+async function loadTabPlugins(base) {
+  let list = [];
+  try { const r = await fetch(new URL('ui/tabs/index.json', base)); if (r.ok) list = await r.json(); } catch { return []; }
+  const out = [];
+  for (const file of Array.isArray(list) ? list : []) {
+    try { const m = await import(new URL(`ui/tabs/${file}`, base).href); if (m.default?.id && m.default?.make) out.push(m.default); }
+    catch (e) { console.warn(`tab plugin ${file} failed to load`, e); }
+  }
+  return out;
+}
 const SHELL = 'ui.shell';
 const EXAMPLES = [
-  'Make your eyes bigger', 'Let’s play tic tac toe', 'Open the editor and start dictation', 'How many legs does a spider have?',
+  'Become a person', 'Let’s play tic tac toe', 'Open the editor and start dictation', 'How many legs does a spider have?',
   'Tom has 5 apples. He gives 2 to Ana. How many apples does Tom have?',
 ];
 const DEFAULT_SETTINGS = { language: 'en', formalizer: 'rules', translation: 'auto', speechLang: 'follow', voice: '', rate: 1, handsFree: false, speaker: false, showTrace: false };
@@ -57,7 +72,10 @@ export async function mountPsys2(element, options = {}) {
   }
   const settings = { ...loadSettings(options.persist !== false), ...(options.language ? { language: options.language } : {}) };
   const save = () => { if (options.persist !== false) try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch { /* storage unavailable */ } };
-  const tabDefs = TABS.filter((t) => !options.tabs || options.tabs.includes(t.id));
+  const plugins = await loadTabPlugins(base);
+  const builtin = TABS.map((t, i) => ({ order: (i + 1) * 10, ...t }));
+  const allTabs = [...builtin.filter((t) => !plugins.some((p) => p.id === t.id)), ...plugins].sort((a, b) => (a.order ?? 100) - (b.order ?? 100));
+  const tabDefs = allTabs.filter((t) => !options.tabs || options.tabs.includes(t.id));
   const states = {};           // world id -> latest state snapshot
   const panelUI = {};          // tab id -> { ui, present }
   let engine = null, session = null, translator = null, speech = null;
@@ -184,6 +202,7 @@ export async function mountPsys2(element, options = {}) {
       const a = h('a', { href: url, download: name, hidden: true }); document.body.append(a); a.click(); a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 5000); toast(`Downloaded ${name}`); return { ok: true, detail: name };
     },
+    'avatar.animate': async (args) => { robotUI()?.animate?.(args); return { ok: !!robotUI() }; },
     'ui.focus': async ({ target, element: el }) => {
       const t = String(target ?? el ?? 'input');
       if (t === 'input' || t === 'chat') input.focus();
@@ -192,19 +211,43 @@ export async function mountPsys2(element, options = {}) {
       return { ok: true };
     },
   };
-  async function runEffects(effects) {
+  /** What tab plugins may use: send a command through the language layer, speak, read/patch world state, load assets. */
+  const hostApi = {
+    send: (text) => send(String(text)),
+    speak: (text) => { if (speech && speechSupport.synthesis) speech.speak(String(text), { lang: speechLangTag() }); },
+    state: (worldId) => states[worldId],
+    setWorldState: (worldId, patch) => session?.setWorldState?.(worldId, patch),
+    asset: (path) => new URL(path, base).href,
+    get speaking() { return !!speech?.speaking; },
+  };
+  // Effects declared by tab plugins: the tab's UI executes them (a chess engine, a synthesizer, a map...).
+  for (const t of tabDefs) for (const [name, fn] of Object.entries(t.effects ?? {})) {
+    if (!Object.hasOwn(ALLOW, name)) ALLOW[name] = (args) => fn(args, { ui: panelUI[t.id]?.ui, host: hostApi });
+  }
+  async function runEffects(effects, depth = 0) {
     const out = [];
     for (const raw of Array.isArray(effects) ? effects : []) {
       const name = raw?.name ?? raw?.effect;
       const args = raw?.args ?? raw?.arguments ?? {};
       const rec = { name, args, ok: false, detail: '' };
       const fn = Object.hasOwn(ALLOW, name) ? ALLOW[name] : null;
+      let data = null;
       if (!fn) rec.detail = 'not in the host allow-list';
       else {
-        try { const r = await fn(args); rec.ok = r?.ok !== false; rec.detail = r?.detail ?? ''; } catch (e) { rec.detail = e?.message ?? String(e); }
+        try { const r = await fn(args); rec.ok = r?.ok !== false; rec.detail = r?.detail ?? ''; data = r?.data ?? null; } catch (e) { rec.detail = e?.message ?? String(e); }
       }
       out.push(rec);
-      try { await session?.observe?.({ effect: name, ok: rec.ok, detail: rec.detail || (rec.ok ? 'executed' : 'failed') }); } catch (e) { console.warn('observe failed', e); }
+      let follow = null;
+      try { follow = await session?.observe?.({ effect: name, ok: rec.ok, detail: rec.detail || (rec.ok ? 'executed' : 'failed'), data, world: raw?.world ?? null }); } catch (e) { console.warn('observe failed', e); }
+      // The world may react to the observation (vision §8: action -> effect -> observation -> new state).
+      if (follow && typeof follow === 'object') {
+        if (follow.state && Object.keys(follow.state).length) applyState(follow.state);
+        if (follow.text) {
+          addMessage('bot', follow.text);
+          if (settings.speaker && speech && speechSupport.synthesis) speech.speak(follow.text, { lang: speechLangTag() });
+        }
+        if (follow.effects?.length && depth < 5) out.push(...await runEffects(follow.effects, depth + 1));
+      }
     }
     return out;
   }
@@ -410,7 +453,7 @@ export async function mountPsys2(element, options = {}) {
     if (loaded.has(t.world) || options.renderAllTabs) { // renderAllTabs: development aid to test the renderers without the worlds
       const holder = h('div', { class: 'p2-tabbody' });
       panel.append(holder);
-      panelUI[t.id] = { ui: t.make(holder) };
+      panelUI[t.id] = { ui: t.make(holder, hostApi) };
     } else {
       panel.append(h('div', { class: 'p2-placeholder' }, h('h3', {}, `${t.label} is not in this build`),
         h('p', {}, `The world “${t.world}” was not found, so this tab has nothing to show yet. Add the world and run `, h('code', {}, 'npm run build:webchat'), ' again.')));

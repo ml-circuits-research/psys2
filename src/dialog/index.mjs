@@ -128,14 +128,28 @@ export class DialogSession {
     return structuredClone(st);
   }
 
-  /** Record the outcome of a host-executed effect as a core.observation wire (spec 07). Returns the wire id. */
-  observe({ effect, ok = true, detail = '' } = {}) {
+  /**
+   * Record the outcome of a host-executed effect as a core.observation wire (spec 07 §1, vision §8), then, when the
+   * effect came from a world whose ops.mjs exports `onObservation(ctx, obs)`, let that world react (update its state,
+   * queue further effects, answer). Returns `{ id, text, state, effects }`; `text` is null when the world says nothing.
+   * The host renders a non-empty `text` as a new assistant message and applies `state` and `effects` like a reply.
+   */
+  observe({ effect, ok = true, detail = '', data = null, world = null } = {}) {
     const id = this.isession.form.freshId('o');
     const pairs = [['core.observation.effect', atom(String(effect))], ['core.observation.ok', atom(ok ? 'true' : 'false')]];
     if (detail !== '' && detail != null) pairs.push(['core.observation.detail', str(String(detail))]);
     pairs.push(['core.seq', atom(this.isession.form.nextSeq())]);
     this.isession.add([makeWire(id, 'core.observation', pairs)]);
-    return id;
+    const out = { id, text: null, state: {}, effects: [] };
+    if (!world) return out;
+    const stateBefore = Object.fromEntries(Object.entries(this.isession.state).map(([k, v]) => [k, JSON.stringify(v)]));
+    this.isession.effects = [];
+    const res = this.engine.interp.observe(this.isession, world, { effect, ok, detail, data, id });
+    for (const [k, v] of Object.entries(this.isession.state)) if (JSON.stringify(v) !== stateBefore[k]) out.state[k] = structuredClone(v);
+    out.effects = this.isession.effects;
+    this.isession.effects = [];
+    out.text = res?.reply ?? null;
+    return out;
   }
 
   /**
