@@ -429,3 +429,7 @@ Empty. Every item has a plausible intended action in some world.
 | ui.avatar#060 | go back one (after: your mouth should be a grill) | not_understood: There is no previous tab to go back to.  | state:robot.mouth=smile (got grill) | "go back one" is ambiguous (previous tab or undo the last change) |
 | ui.avatar#118 | i would rather talk to a human | not_understood: I did not understand "i would rather talk to a human". For example: "Give yourself visor eyes." or "Body color?"  | state:character=person (got robot) | "i would rather talk to a human": could mean a request for a human operator or for the person character; no clear intended action |
 
+
+## Addendum after rebase
+
+Upstream commit 8866230 made the operational checker treat an empty cell as equal to null. That removes the null-versus-empty-string problem described for games.tictactoe#029, #033 (class D) and #031 (gold part); those corrections are no longer needed and the items may now pass. The analysis above is of the run before that change.
