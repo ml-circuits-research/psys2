@@ -132,7 +132,7 @@ The review's claims were checked: the music labels (`a key with 4 sharps?` label
 - Apply noise only to eligible zones: politeness, casing, final punctuation, abbreviations, controlled typos.
 - Record the transformation and the protected spans. Test that the payload is preserved.
 
-**F4 (P1) — compositional multi-command data. The training side is done (3424ec2). STILL OPEN on the rules side:** `Become a robot` + `Make your eyes and body blue` still answers "I do not know eyes like 'and body blue'" at 16:45. Implement the conservative expansion in the rule formalizer, with tests, for the shared argument, verb ellipsis and self-correction ("blue, no, green"). Today it is concatenation only, with the context dropped (`session: []`) and the target recovered via `source_id`.
+**F4 (P1) — compositional multi-command data — DONE and validated (3424ec2 training, 0bd45a8 rules).** (Earlier note, now resolved:) `Become a robot` + `Make your eyes and body blue` still answers "I do not know eyes like 'and body blue'" at 16:45. Implement the conservative expansion in the rule formalizer, with tests, for the shared argument, verb ellipsis and self-correction ("blue, no, green"). Today it is concatenation only, with the context dropped (`session: []`) and the target recovered via `source_id`.
 - Generate a small program (operations, values, references, initial context), then verbalize it in several ways.
 - Add explicit families: shared argument ("eyes and body blue"), verb ellipsis ("eyes blue and body red"), self-correction ("blue, no, green"), reference to a created object ("draw a circle and put it above the square"), repetition and undo ("move left twice, then undo"), switching world.
 - Keep or construct the needed context. Report full-request success per family.
@@ -387,3 +387,5 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
 - F2, F3, F6 iterator — reviewer (a40da8d): tests pass.
 - F5 — Refusal reasons (6ddc7c1): 591 tests and all world tests pass.
 - F4 (training side), F6 budgets/sampling, F7 selection hook, F8 windows (3424ec2): 20 Python tests pass. F4 still needs its rules part.
+- F4 rules — Pre-parse expansion (0bd45a8): "eyes and body blue" and "blue, no, green" now work in the CLI.
+- Operational set (1de5a5a): 1,234 fixed messages. Reviewer rerun, rules only, at 4c60162: 85.9% right, 3.1% wrong, 9.5% not understood (worker: 84.3% before the F4 rules). This is the headline from now on.
