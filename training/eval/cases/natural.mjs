@@ -1,0 +1,128 @@
+// Natural phrasings a user could type that are not templates of the worlds (hand-written; expectations by judgment of what the user means).
+export default function natural({ add }) {
+  const P = ['paraphrase'];
+  const robot = (m, state, o = {}) => add('ui.avatar', m, { state }, { tab: 'robot', fam: P, ...o });
+  robot('can you give yourself a pair of visor eyes', ['robot.eyes=visor']);
+  robot('i think you would look better with square eyes', ['robot.eyes=square']);
+  robot('swap your eyes for cyclops ones', ['robot.eyes=cyclops']);
+  robot('how about happy eyes', ['robot.eyes=happy']);
+  robot('let us try a grill for the mouth', ['robot.mouth=grill']);
+  robot('your mouth could be a zigzag', ['robot.mouth=zigzag']);
+  robot('i would like you to wear a dish on top of your head', ['robot.top=dish']);
+  robot('get rid of the antenna', ['robot.top=none']);
+  robot('could you put a siren up there', ['robot.top=siren']);
+  robot('i want a heart on your chest please', ['robot.chest=heart']);
+  robot('turn your whole body green', ['robot.colors.body=69db7c']);
+  robot('i prefer you in yellow', ['robot.colors.body=ffd43b'], { note: 'colour the robot' });
+  robot('can you be purple', ['robot.colors.body=b6a6f5']);
+  robot('go red', ['robot.colors.body=ff9d9d']);
+  robot('change into a person', ['character=person']);
+  robot('i would rather talk to a human', ['character=person'], { gap: true });
+  robot('can you look like an emoji', ['character=emoji']);
+  robot('i am going to call you Max', ['name=Max']);
+  robot('from now on your name is Luna', ['name=Luna']);
+  robot('put your eyes back like they were', ['robot.eyes=round'], { setup: ['Give yourself visor eyes.'] });
+  robot('actually i did not like that, undo it', ['robot.top=antenna'], { setup: ['Siren on top'] });
+  robot('wear glasses and a hat', ['person.accessories!=none', 'person.head!=short1'], { setup: ['be a person'], gap: true });
+
+  const draw = (m, state, o = {}) => add('art.draw', m, { state }, { tab: 'draw', fam: P, ...o });
+  draw('could you paint me a big red house', ['objects[kind=house].color=red']);
+  draw('i would like a tree in the picture', ['objects[kind=tree].kind=tree']);
+  draw('give me three stars', ['objects.length=3']);
+  draw('add a sun', ['objects[kind=sun].kind=sun']);
+  draw('put a boat on the water', ['objects[kind=boat].kind=boat']);
+  draw('make the house a little bit smaller', ['objects[kind=house].size<240'], { setup: ['Draw a red house.'] });
+  draw('the house should be blue instead', ['objects[kind=house].color=blue'], { setup: ['Draw a red house.'] });
+  draw('shift the tree to the left', ['objects[kind=tree].x<500'], { setup: ['Draw a tree.'] });
+  draw('get rid of the tree', ['objects.length=0'], { setup: ['Draw a tree.'] });
+  draw('i want a clean page', ['objects.length=0'], { setup: ['Draw a tree.'] });
+  draw('make it look like night time', ['mood=night']);
+  add('art.draw', 'how many things did i draw', { answer: ['2'] }, { tab: 'draw', setup: ['Draw a red house.', 'Draw a tree.'], fam: P });
+
+  const music = (m, state, o = {}) => add('media.music', m, { state }, { tab: 'music', fam: P, ...o });
+  music('can you play a middle c for me', ['playing=true']);
+  music('i would like to hear the g major scale', ['current.key=G major']);
+  music('could you play happy birthday', ['playing=true']);
+  music('let us hear twinkle twinkle', ['current.songId=twinkle']);
+  music('switch the sound to a flute', ['instrument=flute']);
+  music('the tempo should be 140', ['tempo=140']);
+  music('play it a bit slower', ['tempo<100'], { setup: ['Play Twinkle Twinkle.'] });
+  music('shut up the music', ['playing=false'], { setup: ['Play Twinkle Twinkle.'] });
+  add('media.music', 'which key has two sharps', { answer: ['D major'] }, { tab: 'music', fam: P });
+  add('media.music', 'tell me the notes of a g major chord', { answer: ['G B D'] }, { tab: 'music', fam: P });
+
+  const map = (m, state, o = {}) => add('geo.map', m, { state }, { tab: 'map', fam: P, ...o });
+  map('take me to Madrid', ['focus.name=Madrid']);
+  map('i would like to see Tokyo on the map', ['focus.name=Tokyo']);
+  map('drop a pin on Rome', ['markers.0.name=Rome']);
+  map('colour Spain in', ['highlighted.0.name=Spain']);
+  map('clear everything on the map', ['markers.length=0', 'highlighted.length=0'], { setup: ['Mark Berlin.', 'Highlight Spain.'] });
+  add('geo.map', 'what is the distance between Madrid and Rome', { answer: ['1,365'] }, { tab: 'map', fam: P });
+  add('geo.map', 'name the capital city of Italy', { answer: ['Rome'] }, { tab: 'map', fam: P });
+  add('geo.map', 'which countries share a border with Romania', { answer: ['Bulgaria', 'Serbia'] }, { tab: 'map', fam: P });
+
+  const chart = (m, state, o = {}) => add('data.charts', m, { state }, { tab: 'charts', fam: P, ...o });
+  const base = 'make a chart: apples 5, pears 3, plums 8';
+  chart('can you chart apples 5, pears 3 and plums 8 for me', ['charts.0.labels.length=3']);
+  chart('i would rather see it as a pie', ['charts.0.type=pie'], { setup: [base] });
+  chart('throw in bananas with 4', ['charts.0.labels.length=4'], { setup: [base] });
+  chart('take out the pears', ['charts.0.labels.length=2'], { setup: [base] });
+  add('data.charts', 'which one is the largest', { answer: ['Plums'] }, { tab: 'charts', setup: [base], fam: P });
+  add('data.charts', 'how much is the total of everything', { answer: ['16'] }, { tab: 'charts', setup: [base], fam: P, gap: true });
+
+  const q = (w, m, a, o = {}) => add(w, m, { answer: a }, { fam: P, ...o });
+  q('kids.arith', 'could you work out four times nine for me', ['36']);
+  q('kids.arith', 'if i add eight and seven what do i get', ['15']);
+  q('kids.arith', 'subtract 6 from 20', ['14']);
+  q('kids.arith', 'what is one hundred minus ten', ['90'], { gap: true });
+  q('kids.arith', 'Mia had 9 stickers and found 4 more, how many does she have now', ['13'], { gap: true });
+  q('kids.arith', 'Ben has 12 marbles and loses 5. How many marbles does Ben have?', ['7']);
+  q('kids.animals', 'how many legs is it that a spider walks on', ['8'], { gap: true });
+  q('kids.animals', 'what noise does a duck make', ['quack']);
+  q('kids.animals', 'do dolphins breathe air or are they fish', ['mammal'], { gap: true });
+  q('kids.animals', 'i have a dog and his name is Max. what is my dog called', ['Max'], { gap: true });
+  q('kids.animals', 'where does a camel come from', ['desert'], { gap: true });
+  q('kids.shapes', 'how many corners has a square', ['4']);
+  q('kids.shapes', 'if i mix blue and yellow paint what colour do i get', ['green']);
+  q('kids.shapes', 'tell me what a rectangle is', ['4 sides']);
+  q('kids.shapes', 'is the grass blue', ['No']);
+  q('kids.time', 'what is the day after tomorrow if today is Monday', ['Wednesday'], { gap: true });
+  q('kids.time', 'how many weeks are there in a year', ['52'], { gap: true });
+  q('kids.time', 'name the month that follows March', ['April']);
+  q('kids.time', 'what comes before Sunday', ['Saturday']);
+  q('kids.tasks', 'put eggs on my shopping list', ['eggs']);
+  q('kids.tasks', 'i need to buy bread, add it to the list', ['bread'], { gap: true });
+  q('kids.tasks', 'remind me to call grandma', ['call grandma']);
+  q('kids.shop', 'a toy car costs 9 lei, how much are 2 toy cars', ['18'], { gap: true });
+  q('kids.shop', 'a ball costs 5 lei and i have 12 lei, can i buy 2 balls', ['Yes'], { gap: true });
+  q('kids.common', 'good evening', ['Hello'], { gap: true });
+  q('kids.common', 'my name is Sofia, nice to meet you', ['Sofia']);
+
+  const ttt = (m, state, o = {}) => add('games.tictactoe', m, { state }, { tab: 'tictactoe', setup: ['Start a new tic tac toe game.'], fam: P, ...o });
+  ttt('i will go in the middle', ['board.4=X']);
+  ttt('put me in the upper right corner', ['board.2=X']);
+  ttt('take the bottom row middle', ['board.7=X']);
+  const hm = (m, state, o = {}) => add('games.hangman', m, { state }, { tab: 'hangman', setup: ['Play hangman with the word lion.'], fam: P, ...o });
+  hm('is there a letter n in it', ['guessed.0=n']);
+  hm('i guess the letter t', ['guessed.0=t']);
+  hm('could the word be lion', ['status=won']);
+  const ch = (m, state, o = {}) => add('games.chess', m, { state }, { tab: 'chess', setup: ["Let's play chess."], fam: P, ...o });
+  ch('i will open with the king pawn two squares', ['history.0=e4'], { gap: true });
+  ch('move my knight to c3', ['history.0=Nc3']);
+  ch('lower the difficulty to 2', ['level=2']);
+
+  const ed = (m, state, o = {}) => add('docs.editor', m, { state }, { tab: 'editor', fam: P, ...o });
+  ed('please add a heading called Recipes', ['blocks.0.text==Recipes']);
+  ed('start the document with a title: My trip', ['blocks.0.text==My trip'], { gap: true });
+  ed('insert a bullet list of cats and dogs', ['blocks.0.kind=list', 'blocks.0.items.length=2'], { gap: true });
+  ed('make that list numbered', ['blocks.0.style=numbered'], { setup: ['Add a list: milk, eggs'], gap: true });
+  ed('scratch the last thing i added', ['blocks.length=1'], { setup: ['Add a heading Top', 'Add a paragraph body'] });
+
+  const sh = (m, state, o = {}) => add('ui.shell', m, { state }, { tab: 'robot', fam: P, ...o });
+  sh('take me to the editor', ['activeTab=editor']);
+  sh('i would like to see the map', ['activeTab=map']);
+  sh('can we go to the music page', ['activeTab=music']);
+  sh('speak a bit quicker', ['rate=1.25']);
+  sh('talk more slowly please', ['rate=0.75']);
+  sh('change the language to english', ['language=en']);
+}

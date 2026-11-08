@@ -1,5 +1,83 @@
 # Training results
 
+## Operational headline
+
+The single measure of success: **the share of messages whose final state/answer is right**, through the pipeline in the webchat configuration (encoder formalizer = dispatcher via onnxruntime-node from the published `docs/webchat/models/dispatcher/`, spellcheck, partial understanding, acceptRefused). Fixed committed set `training/eval/operational.jsonl` (1234 messages, built from `training/eval/cases/*.mjs` by `scripts/build-operational.mjs`; expectations written by judgment of the correct outcome, not recorded from output; `known_gap` marks things the world cannot support yet: they still count). Runner: `node scripts/eval-operational.mjs [--rules-only] --ort <onnxruntime-node entry> [--model-dir D] [--edit-tau T] [--json]`; results in `training/results/operational-{rules-only,full}.json`. Outcomes: right / partly right / wrong action (it acted or answered, result wrong: worse) / not understood.
+
+No real phrase-log messages were available (`training/phrase-logs/` is empty); the set is authored. Rules-only run: 1 min; full pipeline: 11.6 min (single thread).
+
+| config | n | right % | partly % | wrong % | not understood % | latency mean / p50 / p95 ms |
+|---|---|---|---|---|---|---|
+| rules-only (spell+partial) | 1234 | 84.3 | 1.9 | 3.6 | 10.3 | 41 / 13 / 162 |
+| full pipeline (current main) | 1234 | 89 | 0.5 | 4.3 | 6.2 | 519 / 337 / 1566 |
+
+Excluding the 117 known-gap messages: rules-only right 87.5 %, full 92.5 % (wrong 2.1 / 2.7 %).
+
+### By world group (rules-only | full)
+
+| group | n | right % rules | right % full | wrong % rules | wrong % full | not understood % rules | not understood % full | partly % rules | partly % full |
+|---|---|---|---|---|---|---|---|---|---|
+| kids | 501 | 89.2 | 93.2 | 1.6 | 2 | 6.6 | 4.6 | 2.6 | 0.2 |
+| avatar/shell/editor | 232 | 76.3 | 78.9 | 6.9 | 9.1 | 15.9 | 11.2 | 0.9 | 0.9 |
+| music/draw/map/charts | 332 | 81 | 89.8 | 3.3 | 3.6 | 13.3 | 5.7 | 2.4 | 0.9 |
+| games | 145 | 86.2 | 88.3 | 5.5 | 6.2 | 8.3 | 5.5 | 0 | 0 |
+| documents | 24 | 91.7 | 91.7 | 4.2 | 4.2 | 4.2 | 4.2 | 0 | 0 |
+
+### By world (right %, rules-only | full)
+
+| world | n | rules | full |
+|---|---|---|---|
+| art.draw | 99 | 71.7 | 82.8 |
+| data.charts | 57 | 82.5 | 89.5 |
+| docs.editor | 43 | 65.1 | 72.1 |
+| docs.reader | 24 | 91.7 | 91.7 |
+| games.chess | 41 | 87.8 | 87.8 |
+| games.guess | 29 | 96.6 | 96.6 |
+| games.hangman | 32 | 84.4 | 84.4 |
+| games.tictactoe | 43 | 79.1 | 86 |
+| geo.map | 94 | 88.3 | 94.7 |
+| kids.animals | 80 | 90 | 93.8 |
+| kids.arith | 145 | 90.3 | 91.7 |
+| kids.common | 36 | 94.4 | 94.4 |
+| kids.shapes | 62 | 87.1 | 96.8 |
+| kids.shop | 43 | 83.7 | 83.7 |
+| kids.tasks | 38 | 86.8 | 97.4 |
+| kids.time | 97 | 89.7 | 94.8 |
+| media.music | 82 | 82.9 | 92.7 |
+| ui.avatar | 124 | 69.4 | 73.4 |
+| ui.help | 20 | 95 | 90 |
+| ui.shell | 45 | 97.8 | 95.6 |
+
+### By family (right %, rules-only | full; families overlap)
+
+| family | n | rules | full |
+|---|---|---|---|
+| abbrev | 24 | 70.8 | 75 |
+| compare | 8 | 100 | 100 |
+| coordinates | 14 | 64.3 | 71.4 |
+| count | 6 | 100 | 100 |
+| decimal | 15 | 86.7 | 86.7 |
+| ellipsis | 8 | 75 | 75 |
+| messy | 231 | 93.5 | 97 |
+| multi | 197 | 71.6 | 92.9 |
+| negative | 21 | 95.2 | 95.2 |
+| negative-numbers | 1 | 100 | 100 |
+| number-words | 7 | 100 | 100 |
+| paraphrase | 174 | 77 | 78.7 |
+| probe | 55 | 74.5 | 76.4 |
+| reference | 28 | 71.4 | 75 |
+| repeat-undo | 26 | 65.4 | 61.5 |
+| self-correction | 20 | 20 | 30 |
+| shared-arg | 13 | 53.8 | 69.2 |
+| triple | 22 | 72.7 | 100 |
+| typo | 38 | 60.5 | 68.4 |
+| user-example | 7 | 100 | 100 |
+| word-problem | 86 | 87.2 | 87.2 |
+| world-switch | 188 | 80.3 | 99.5 |
+
+Reading: the dispatcher mainly helps multi-command and world-switching messages (multi 71.6 to 92.9, world-switch 80.3 to 99.5) and draw/music/charts; self-correction (20 / 30 %), shared argument, typos, repeat-undo and the avatar world stay weak, and the full pipeline raises wrong actions slightly (3.6 to 4.3 %).
+
+
 All numbers trace to `training/results/*.json`. Two rule baselines are kept side by side:
 
 - **before widening (055fbeb)**: `training/results/rules-055fbeb.json`. Its test splits come from the dataset built at that commit.
