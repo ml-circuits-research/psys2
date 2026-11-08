@@ -9,7 +9,7 @@ import { createAvatar } from './ui/avatar.mjs';
 import { createEditor } from './ui/editor.mjs';
 import { createTicTacToe, createGuess, createHangman } from './ui/games.mjs';
 import { createSpeech, speechSupport, LANG_TAGS } from './ui/speech.mjs';
-import { createSwitchTranslator, browserTranslatorKind, browserTranslatorAvailability } from './ui/translation.mjs';
+import { createSwitchTranslator, browserTranslatorKind, browserTranslatorAvailability, browserDetectorKind, browserDetectorAvailability } from './ui/translation.mjs';
 import { renderTrace } from './ui/trace.mjs';
 import { findDispatcherModel, dispatcherLoader, versionLabel } from './ui/dispatcher-host.mjs';
 import { findNormalizerModel, createNormalizerHost } from './ui/normalizer-host.mjs';
@@ -319,6 +319,7 @@ export async function mountPsys2(element, options = {}) {
     typing.msg.remove();
     recordPhrase(text, mode, reply);
     const usage = translator.usage.map((u) => ({ ...u }));
+    const detection = translator.detectUsage.map((u) => ({ ...u }));
     const answer = (reply.text ?? '').trim() || '(no answer)';
     const botMsg = addMessage('bot', answer);
     currentBot = botMsg;
@@ -337,7 +338,7 @@ export async function mountPsys2(element, options = {}) {
     const traceBox = h('div', { class: 'p2-trace-slot', hidden: !settings.showTrace });
     let built = false;
     const toggle = h('button', { class: 'p2-linkbtn', type: 'button', 'aria-expanded': String(!!settings.showTrace) }, 'Trace');
-    const build = () => { if (!built) { built = true; traceBox.append(renderTrace(reply, { translation: usage, effects, serializeWires, formalizer: settings.formalizer })); } };
+    const build = () => { if (!built) { built = true; traceBox.append(renderTrace(reply, { translation: usage, detection, effects, serializeWires, formalizer: settings.formalizer })); } };
     if (settings.showTrace) build();
     toggle.addEventListener('click', () => { const open = traceBox.hidden; traceBox.hidden = !open; toggle.setAttribute('aria-expanded', String(open)); if (open) build(); });
     botMsg.meta.append(toggle);
@@ -408,6 +409,7 @@ export async function mountPsys2(element, options = {}) {
 
   // ---------- settings ----------
   let browserAvail = browserTranslatorKind() ? 'checking…' : 'unsupported';
+  let detectAvail = browserDetectorKind() ? 'checking…' : 'unsupported';
   const encoderOk = () => !!dispatcherEnc && dispatcherStatus.state !== 'error';
   function dispatcherVersionText() {
     const v = dispatcherVersion;
@@ -459,6 +461,8 @@ export async function mountPsys2(element, options = {}) {
       check('Partial understanding: do what I understood and say what I ignored', settings.partialUnderstanding, (v) => { settings.partialUnderstanding = v; applyEngineSettings(); save(); }),
       field('Translation', select([['auto', 'Automatic'], ['browser-api', 'Browser API'], ['rules', 'Rules']], settings.translation, (v) => { settings.translation = v; save(); renderSettings(); }),
         `Used when the language is not English. Browser on-device translator: ${browserAvail}. Its output is checked and falls back to the rules translator.`),
+      field('Language detection', select([['auto', 'Automatic'], ['browser-api', 'Browser API'], ['rules', 'Rules']], settings.languageDetection, (v) => { settings.languageDetection = v; save(); renderSettings(); }),
+        `Decides whether a message is English or Romanian. Browser on-device language detector: ${detectAvail}. Uncertain or other-language results keep the current language; without the browser API, or while it downloads, the rules detector is used.`),
       field('Speech language', select([['follow', 'Same as language'], ['en-US', 'English (US)'], ['en-GB', 'English (UK)'], ['ro-RO', 'Română']], settings.speechLang, (v) => { settings.speechLang = v; save(); renderSettings(); })),
       field('Voice', select(voiceOpts, settings.voice, (v) => { settings.voice = v; save(); }), speechSupport.synthesis ? (voices.length ? null : 'Voices are still loading or none are installed.') : 'Speech synthesis is not supported by this browser.'),
       h('div', { class: 'p2-field' }, h('label', {}, 'Speech rate ', rateVal), rate),
@@ -545,7 +549,7 @@ export async function mountPsys2(element, options = {}) {
       else if (w.opsUrl) w.opsUrl = new URL(w.opsUrl, base).href;
     }
     lib = { serialize: soplang.serialize };
-    translator = createSwitchTranslator({ rules: translate.createTranslator(), getStrategy: () => settings.translation });
+    translator = createSwitchTranslator({ rules: translate.createTranslator(), getStrategy: () => settings.translation, getDetectStrategy: () => settings.languageDetection });
     engine = await dialog.createEngine({ loader: loaders.createBundleLoader(bundle), translator });
     try {   // Encoder formalizer (the default): only when this build ships the dispatcher model; the model is fetched at once, in the background, and cached by version
       const meta = await findDispatcherModel(base);
@@ -603,6 +607,7 @@ export async function mountPsys2(element, options = {}) {
   setStatus();
 
   // optional capabilities, checked once
+  if (browserDetectorKind()) browserDetectorAvailability().then((a) => { detectAvail = a; renderSettings(); });
   if (browserTranslatorKind()) browserTranslatorAvailability('ro', 'en').then((a) => { browserAvail = a; renderSettings(); });
   else browserAvail = 'not supported by this browser';
 

@@ -28,7 +28,7 @@ export function initialState() {
 /** Spoken part (lemma) -> component keys it can mean, in order of preference. */
 export const PART_KEYS = {
   eye: ['eyes'], mouth: ['mouth'], lip: ['mouth'], antenna: ['top'], top: ['top'], head_piece: ['top'], chest: ['chest'],
-  hair: ['head'], hairstyle: ['head'], hair_style: ['head'], haircut: ['head'], head: ['head'], expression: ['expression'],
+  hair: ['head'], hairstyle: ['head'], hair_style: ['head'], haircut: ['head'], head: ['head', 'top'], expression: ['expression'],
   face: ['expression', 'face'], face_shape: ['face'], accessory: ['accessories'], beard: ['facialHair'], facial_hair: ['facialHair'],
   mask: ['mask'], cheek: ['cheeks'],
 };

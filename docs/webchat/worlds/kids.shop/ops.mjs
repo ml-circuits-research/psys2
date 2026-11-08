@@ -142,3 +142,18 @@ export function changeFor(ctx, args) {
   }
   return { status: 'supported', value: round2(paid - c.total), unit: 'leu', from: c.from };
 }
+
+/** What-if: the money in force minus the cost of the basket; the purchase is not recorded. */
+export function leftAfter(ctx, args) {
+  const items = basket(args);
+  if (!items.length) return { status: 'missing', missing: [K('leftafter.amount')], note: 'Which things do you want to buy?' };
+  const c = cost(ctx, items);
+  if (c.env) return c.env;
+  const w = wallet(ctx);
+  if (w.env) return w.env;
+  const from = [...new Set([...c.from, ...w.from])];
+  if (c.total > w.amount) {
+    return { status: 'conflicting', alternatives: [], from, note: `${cap(c.text)} ${c.plural ? 'cost' : 'costs'} ${money(c.total)}, but you have only ${money(w.amount)}.` };
+  }
+  return { status: 'supported', value: round2(w.amount - c.total), unit: 'leu', from };
+}

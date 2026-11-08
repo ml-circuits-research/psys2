@@ -50,6 +50,7 @@ A static page that runs C2 entirely in the browser, with no server: the same `sr
 ### Webchat features (ADR-002)
 - Language selector: interface, speech recognition and speech synthesis language (English and Romanian at least).
 - Translation: `browser-api` strategy when the browser offers an on-device translator (feature-detected), otherwise the `rules` translator; the trace shows which one was used and whether the checker fell back.
+- Language detection: setting `languageDetection` (`auto` default | `browser-api` | `rules`). The browser `LanguageDetector` (or older `ai.languageDetector`) is used when present; its result is mapped to en/ro/unknown (other languages and confidence below 0.5 are `unknown`, so the session language is kept); the `rules` detector is the backup (API missing, downloading, throwing, or input under 3 letters). The trace shows which detector ran. Demo only: `src/translate` is unchanged.
 - Microphone button: dictation with the Web Speech recognition API in the selected language; the recognized text is sent as a message.
 - Speaker toggle: when on, every answer is read aloud with the speech-synthesis API in the selected language.
 - Missing browser APIs disable the corresponding control with a tooltip; nothing else depends on them.

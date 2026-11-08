@@ -176,7 +176,7 @@ const pitchTitle = (name) => {
   return n.oct === 4 && n.letter === 'C' && !n.acc ? 'middle C' : spoken(name);
 };
 
-export function playNote(ctx, { note, oct, reg, inst, explicit }) {
+export function playNote(ctx, { note, oct, reg, inst, explicit, beats, secs }) {
   const s = ctx.state;
   const pc = pcFromLex(note);
   if (!pc) return no('unsupported', 'Which note should I play? Say a letter from A to G, for example "play C sharp".');
@@ -194,10 +194,19 @@ export function playNote(ctx, { note, oct, reg, inst, explicit }) {
   if (!Number.isInteger(octave) || octave < 0 || octave > 8) return no('unsupported', 'I can play octaves 0 to 8.');
   const r1 = setInstrument(ctx, inst); if (r1?.status) return r1;
   const name = `${pc}${octave}`;
-  const abc = itemsToAbc([{ p: [name], beats: 2 }], { title: pitchTitle(name), key: 'C major', tempo: s.tempo });
+  // "play A4 for 2 beats" / "for 3 seconds": the length of the note (beats, or seconds at the current tempo)
+  let len = 2;
+  if (beats !== undefined || secs !== undefined) {
+    len = beats !== undefined ? Number(beats) : Number(secs) * (s.tempo ?? 100) / 60;
+    if (!Number.isFinite(len) || len <= 0) return no('unsupported', 'How long should the note last? For example "play A4 for 2 beats".');
+    if (len > 16) return no('unsupported', 'A single note can last up to 16 beats.');
+    len = Math.max(0.25, Math.round(len * 4) / 4);
+  }
+  const abc = itemsToAbc([{ p: [name], beats: len }], { title: pitchTitle(name), key: 'C major', tempo: s.tempo });
   startPlay(ctx, makeCurrent('note', pitchTitle(name), abc));
   const f = tFreq(name);
-  return ok(`Playing ${pitchTitle(name)}${pitchTitle(name) === 'middle C' ? ' (C4)' : ''}, ${Math.round(f * 10) / 10} Hz, ${onInst(s)}.`);
+  const lasting = beats !== undefined || secs !== undefined ? ` for ${len} ${len === 1 ? 'beat' : 'beats'}` : '';
+  return ok(`Playing ${pitchTitle(name)}${pitchTitle(name) === 'middle C' ? ' (C4)' : ''}${lasting}, ${Math.round(f * 10) / 10} Hz, ${onInst(s)}.`);
 }
 
 function stackUp(names) {
@@ -348,7 +357,7 @@ function again(ctx, replayFlag) {
   if (s.current && (replayFlag === 'true' || s.playing)) { startPlay(ctx, s.current); return true; }
   return false;
 }
-export function tempo(ctx, { dir, deg, bpm, f, replay: rp }) {
+function _tempo(ctx, { dir, deg, bpm, f, replay: rp }) {
   const s = ctx.state;
   const before = s.tempo;
   if (dir === 'reset') {
@@ -371,7 +380,7 @@ export function tempo(ctx, { dir, deg, bpm, f, replay: rp }) {
   const played = again(ctx, rp);
   return ok(`${played ? 'Playing again at' : 'OK, the tempo is now'} ${bpmText(s)}${before !== s.tempo ? ` (it was ${before})` : ''}.`);
 }
-export function volume(ctx, { dir, deg, v }) {
+function _volume(ctx, { dir, deg, v }) {
   const s = ctx.state;
   if (v !== undefined) {
     const n = Number(v);
@@ -386,7 +395,7 @@ export function volume(ctx, { dir, deg, v }) {
   }
   return ok(`OK, the volume is ${s.volume} percent.`);
 }
-export function instrument(ctx, { inst }) {
+function _instrument(ctx, { inst }) {
   const s = ctx.state;
   const r = setInstrument(ctx, inst); if (r?.status) return r;
   const played = s.playing && s.current ? (startPlay(ctx, s.current), true) : false;
@@ -454,6 +463,7 @@ const melodyCount = (s) => count(s.melody.items);
 function melodyAbc(s) { return s.melody.abc || itemsToAbc(s.melody.items, { title: 'My melody', key: 'C major', tempo: s.tempo }); }
 function storeMelody(ctx, items) {
   const s = ctx.state;
+  s.lastChangeWasSetting = false;
   const abc = itemsToAbc(items, { title: 'My melody', key: 'C major', tempo: s.tempo });
   s.melody = { items, abc };
   display(ctx, makeCurrent('melody', 'My melody', abc, { mine: true }));
@@ -485,6 +495,12 @@ export function melodyClear(ctx) {
 }
 export function melodyUndo(ctx) {
   const s = ctx.state;
+  if (s.lastChangeWasSetting && s.settingHistory?.length) {
+    const prev = s.settingHistory.pop();
+    Object.assign(s, prev);
+    if (!s.settingHistory.length) s.lastChangeWasSetting = false;
+    return ok(`OK, I undid that: the tempo is ${s.tempo} beats per minute and I play ${onInst(s)}.`);
+  }
   if (!s.melody.items.length) return no('missing', 'Your melody is empty.');
   const items = s.melody.items.slice(0, -1);
   const gone = s.melody.items.at(-1);
@@ -721,4 +737,24 @@ export { LETTERS, keyField };
 /** "Play" alone: ask what to play; the dialog layer keeps the question pending for the next utterance (spec 11). */
 export function askWhat() {
   return { status: 'missing', note: 'What should I play? For example a note, a chord or a song.', pending: { key: 'what', type: 'music' } };
+}
+export const tempo = settingChange(_tempo);
+export const volume = settingChange(_volume);
+export const instrument = settingChange(_instrument);
+
+// ---- undo of a setting ("make it faster, then undo") ---------------------------------------------------------
+const SETTING_KEYS = ['tempo', 'tempoLocked', 'volume', 'instrument'];
+/** Wraps tempo, volume and instrument: the settings before the change are kept, and "undo" takes them back while that was the last change. */
+function settingChange(fn) {
+  return (ctx, args) => {
+    const s = ctx.state;
+    const before = Object.fromEntries(SETTING_KEYS.map((k) => [k, s[k]]));
+    const r = fn(ctx, args);
+    if (r?.status === 'supported' && SETTING_KEYS.some((k) => s[k] !== before[k])) {
+      (s.settingHistory ??= []).push(before);
+      if (s.settingHistory.length > 20) s.settingHistory.shift();
+      s.lastChangeWasSetting = true;
+    }
+    return r;
+  };
 }

@@ -368,12 +368,27 @@ function createFrom(ctx, kind, args) {
   const c = place(ctx, args, r.b);
   return created(ctx, c, r.what);
 }
-export const fromHoldings = (ctx, args) => createFrom(ctx, 'holdings', args);
-export const fromPrices = (ctx, args) => createFrom(ctx, 'prices', args);
-export const fromList = (ctx, args) => createFrom(ctx, 'list', args);
-export const fromLegs = (ctx, args) => createFrom(ctx, 'legs', args);
+export const fromHoldings = undoable((ctx, args) => createFrom(ctx, 'holdings', args));
+export const fromPrices = undoable((ctx, args) => createFrom(ctx, 'prices', args));
+export const fromList = undoable((ctx, args) => createFrom(ctx, 'list', args));
+export const fromLegs = undoable((ctx, args) => createFrom(ctx, 'legs', args));
 
-export function fromText(ctx, args) {
+/** Politeness and a chart type that end the data text: "plums 8 for me", "dogs 7 as a pie". Returns { text, type }. */
+function splitDataTail(text, type) {
+  let t = String(text ?? '').trim(), ty = type;
+  for (let again = true; again;) {
+    again = false;
+    const pol = t.match(/\s+(?:for me|for us|please|pls|plz|thanks|thank you|thx|now|asap|real quick|if you can|ok)$/i);
+    if (pol) { t = t.slice(0, pol.index).trim(); again = true; }
+    const ty2 = t.match(/\s+(?:as|in|into|like|on|with)\s+(?:a|an|the)?\s*(bar|column|line|pie|doughnut|donut|radar|scatter|polar(?: area)?)(?:\s+(?:chart|graph|plot|diagram))?$/i);
+    if (ty2) { ty ??= ty2[1].toLowerCase().replace(/\s+/g, '_'); t = t.slice(0, ty2.index).trim(); again = true; }
+  }
+  return { text: t, type: ty };
+}
+
+function _fromText(ctx, args) {
+  const tail = splitDataTail(args.text, args.type);
+  args = { ...args, text: tail.text, type: tail.type };
   const { items, bad } = parseData(args.text);
   if (!items.length) return no('missing', `I could not find numbers in "${String(args.text).trim()}". Say it like this: "make a chart: apples 5, pears 3, plums 8".`);
   const seen = new Map();
@@ -387,7 +402,7 @@ export function fromText(ctx, args) {
   return done(ctx, `OK, here is ${/^[aeiou]/.test(kindWord(c)) ? 'an' : 'a'} ${kindWord(c)} with ${rows.length} ${rows.length === 1 ? 'item' : 'items'}: ${joinAnd(rows.map((r) => `${low(c, r.label)} ${fmt(r.value)}`))}.${extra}`, { from: c.source });
 }
 
-export function newChart(ctx, args = {}) {
+function _newChart(ctx, args = {}) {
   const s = st(ctx);
   const c = blank(s, args.title ? cap(String(args.title).trim()) : `Chart ${s.nextId}`);
   c.type = canonType(args.type) ?? 'bar';
@@ -408,7 +423,7 @@ export function refresh(ctx) {
   return done(ctx, same ? `The chart "${c.title}" is already up to date.` : `OK, I updated the chart "${c.title}" from what you told me since.`, { from: c.source });
 }
 
-export function duplicate(ctx) {
+function _duplicate(ctx) {
   const r = needChart(ctx);
   if (r.env) return r.env;
   const s = st(ctx);
@@ -432,7 +447,7 @@ function addRows(c, rows) {
   }
   return { added, changed };
 }
-export function addPoint(ctx, args) {
+function _addPoint(ctx, args) {
   const r = needChart(ctx);
   if (r.env) return r.env;
   const text = args.n !== undefined && args.l !== undefined ? `${args.l} ${args.n}` : args.text;
@@ -450,7 +465,7 @@ export function addPoint(ctx, args) {
 }
 
 const notThere = (c, l) => no('missing', `I do not see ${String(l).trim()} in the chart "${c.title}". It has ${joinAnd(c.labels.map((x) => low(c, x)))}.`.replace(' It has .', ''));
-export function removePoint(ctx, { l }) {
+function _removePoint(ctx, { l }) {
   const r = needChart(ctx);
   if (r.env) return r.env;
   const c = r.c, i = find(c, l);
@@ -460,7 +475,7 @@ export function removePoint(ctx, { l }) {
   delete c.options.pointColors[label];
   return done(ctx, `OK, I removed ${low(c, label)} from the chart.${c.labels.length ? '' : ' The chart is empty now.'}`);
 }
-export function setPoint(ctx, { l, n }) {
+function _setPoint(ctx, { l, n }) {
   const r = needChart(ctx);
   if (r.env) return r.env;
   const c = r.c, i = find(c, l);
@@ -471,7 +486,7 @@ export function setPoint(ctx, { l, n }) {
   c.datasets[0].data[i] = v;
   return done(ctx, `OK, ${low(c, c.labels[i])} is now ${fmt(v)} (it was ${fmt(old)}).`);
 }
-export function adjustPoint(ctx, { l, by, dir, factor, div }) {
+function _adjustPoint(ctx, { l, by, dir, factor, div }) {
   const r = needChart(ctx);
   if (r.env) return r.env;
   const c = r.c, i = find(c, l);
@@ -484,7 +499,7 @@ export function adjustPoint(ctx, { l, by, dir, factor, div }) {
   c.datasets[0].data[i] = round(v, 6);
   return done(ctx, `OK, ${low(c, c.labels[i])} went from ${fmt(old)} to ${fmt(c.datasets[0].data[i])}.`);
 }
-export function renamePoint(ctx, { l, to }) {
+function _renamePoint(ctx, { l, to }) {
   const r = needChart(ctx);
   if (r.env) return r.env;
   const c = r.c, i = find(c, l);
@@ -494,7 +509,7 @@ export function renamePoint(ctx, { l, to }) {
   if (c.options.pointColors[old]) { c.options.pointColors[c.labels[i]] = c.options.pointColors[old]; delete c.options.pointColors[old]; }
   return done(ctx, `OK, ${low(c, old)} is now called ${low(c, c.labels[i])}.`);
 }
-export function clearData(ctx) {
+function _clearData(ctx) {
   const r = needChart(ctx);
   if (r.env) return r.env;
   const c = r.c;
@@ -504,7 +519,7 @@ export function clearData(ctx) {
 }
 
 // ---- style ----------------------------------------------------------------------------------------------
-export function setType(ctx, args) {
+function _setType(ctx, args) {
   const type = canonType(args.type);
   if (args.type && !type) return no('unsupported', `I can draw bar, line, pie, doughnut, radar, polar area and scatter charts, not "${sp(args.type)}".`);
   let c = current(ctx);
@@ -524,7 +539,7 @@ export function setType(ctx, args) {
   const note = type === 'scatter' && c.labels.length && c.labels.some((l) => !Number.isFinite(Number(l))) ? ' The x position follows the order of the items unless the labels are numbers.' : '';
   return ok(`OK, it is ${/^[aeiou]/.test(kindWord(c)) ? 'an' : 'a'} ${kindWord(c)} now${stackNote}.${note}`);
 }
-export function setTitle(ctx, { t }) {
+function _setTitle(ctx, { t }) {
   const r = needChart(ctx);
   if (r.env) return r.env;
   const title = String(t ?? '').trim().replace(/^["'“”]+|["'“”]+$/g, '');
@@ -532,7 +547,7 @@ export function setTitle(ctx, { t }) {
   r.c.title = cap(title);
   return done(ctx, `OK, the chart is called "${r.c.title}".`);
 }
-export function removeTitle(ctx) {
+function _removeTitle(ctx) {
   const r = needChart(ctx);
   if (r.env) return r.env;
   r.c.title = '';
@@ -550,7 +565,7 @@ function colorHex(name, shade) {
   const s = SHADE[String(shade ?? '').toLowerCase()];
   return s ? mix(base, s[0], s[1]) : base;
 }
-export function setColor(ctx, { c: name, shade, label }) {
+function _setColor(ctx, { c: name, shade, label }) {
   const r = needChart(ctx);
   if (r.env) return r.env;
   const hex = colorHex(name, shade);
@@ -567,7 +582,7 @@ export function setColor(ctx, { c: name, shade, label }) {
   c.datasets.forEach((d, i) => { d.color = i === 0 ? hex : mix(hex, '#ffffff', Math.min(0.7, i * 0.3)); });
   return done(ctx, `OK, the chart is ${word} now.${multi(c) ? ' The other series are lighter shades of it.' : ''}`);
 }
-export function setPalette(ctx, { p }) {
+function _setPalette(ctx, { p }) {
   const r = needChart(ctx);
   if (r.env) return r.env;
   const key = String(p ?? '').toLowerCase();
@@ -581,7 +596,7 @@ export function setPalette(ctx, { p }) {
 }
 const UP = new Set(['biggest', 'largest', 'highest', 'greatest', 'most', 'big', 'large', 'high', 'top', 'descending', 'tallest', 'maximum', 'max', 'longest', 'best', 'bigger', 'larger', 'higher', 'greater', 'desc']);
 const DOWN = new Set(['smallest', 'lowest', 'least', 'small', 'low', 'bottom', 'ascending', 'shortest', 'minimum', 'min', 'fewest', 'worst', 'smaller', 'lower', 'less', 'fewer', 'tiniest', 'littlest', 'tiny', 'little', 'asc']);
-export function setSort(ctx, { from, mode }) {
+function _setSort(ctx, { from, mode }) {
   const r = needChart(ctx);
   if (r.env) return r.env;
   const c = r.c;
@@ -595,7 +610,7 @@ export function setSort(ctx, { from, mode }) {
   const how = { desc: 'from the biggest to the smallest', asc: 'from the smallest to the biggest', alpha: 'alphabetically' }[m];
   return done(ctx, `OK, the chart is sorted ${how}.${c.type === 'scatter' ? ' (A scatter plot keeps its order.)' : ''}`);
 }
-export function setOrientation(ctx, { o }) {
+function _setOrientation(ctx, { o }) {
   const r = needChart(ctx);
   if (r.env) return r.env;
   const c = r.c;
@@ -607,7 +622,7 @@ export function setOrientation(ctx, { o }) {
   c.options.horizontal = horizontal;
   return done(ctx, `OK, the ${kindWord(c)} is ${horizontal ? 'horizontal' : 'vertical'} now.${note}`);
 }
-export function setValues(ctx, { mode }) {
+function _setValues(ctx, { mode }) {
   const r = needChart(ctx);
   if (r.env) return r.env;
   const c = r.c;
@@ -616,14 +631,14 @@ export function setValues(ctx, { mode }) {
   c.options.showValues = true;
   return done(ctx, 'OK, the chart shows the numbers.');
 }
-export function setLegend(ctx, { on }) {
+function _setLegend(ctx, { on }) {
   const r = needChart(ctx);
   if (r.env) return r.env;
   const yes = on !== 'false';
   r.c.options.showLegend = yes;
   return done(ctx, yes ? 'OK, the legend is on.' : 'OK, the legend is hidden.');
 }
-export function setStacked(ctx, { on }) {
+function _setStacked(ctx, { on }) {
   const r = needChart(ctx);
   if (r.env) return r.env;
   const c = r.c, yes = on !== 'false';
@@ -764,7 +779,7 @@ export function switchChart(ctx, { ord, n, dir, t }) {
   const c = s.charts[idx];
   return done(ctx, `OK, here is chart ${idx + 1}: "${c.title}".`);
 }
-export function deleteChart(ctx, { ord, n, all }) {
+function _deleteChart(ctx, { ord, n, all }) {
   const s = st(ctx);
   if (!s.charts.length) return no('missing', NONE);
   if (all === 'true') {
@@ -906,4 +921,59 @@ export function chartView(c, view = {}) {
     showLegend: o.showLegend ?? (c.datasets.length > 1 || POINT_TYPES.has(c.type)), showValues: o.showValues ?? false,
     empty: !c.labels.length,
   };
+}
+export const newChart = undoable(_newChart);
+export const duplicate = undoable(_duplicate);
+export const addPoint = undoable(_addPoint);
+export const removePoint = undoable(_removePoint);
+export const setPoint = undoable(_setPoint);
+export const adjustPoint = undoable(_adjustPoint);
+export const renamePoint = undoable(_renamePoint);
+export const clearData = undoable(_clearData);
+export const setType = undoable(_setType);
+export const setTitle = undoable(_setTitle);
+export const removeTitle = undoable(_removeTitle);
+export const setColor = undoable(_setColor);
+export const setPalette = undoable(_setPalette);
+export const setSort = undoable(_setSort);
+export const setOrientation = undoable(_setOrientation);
+export const setValues = undoable(_setValues);
+export const setLegend = undoable(_setLegend);
+export const setStacked = undoable(_setStacked);
+export const deleteChart = undoable(_deleteChart);
+export const fromText = undoable(_fromText);
+
+// ---- undo ------------------------------------------------------------------------------------------------
+const MAX_UNDO = 30;
+const snapshot = (st) => JSON.stringify({ charts: st.charts, active: st.active, nextId: st.nextId, inputMode: st.inputMode });
+/** Wraps a changing operation: the state before it is kept for "undo" unless it changed nothing (a refusal). */
+function undoable(fn) {
+  return (ctx, args) => {
+    const before = snapshot(ctx.state);
+    const r = fn(ctx, args);
+    if (r?.status === 'supported' && snapshot(ctx.state) !== before) {
+      (ctx.state.history ??= []).push(before);
+      if (ctx.state.history.length > MAX_UNDO) ctx.state.history.shift();
+      ctx.state.future = [];
+    }
+    return r;
+  };
+}
+export function undo(ctx) {
+  const st = ctx.state;
+  const prev = st.history?.pop();
+  if (!prev) return no('missing', 'There is nothing to undo in the charts yet.');
+  (st.future ??= []).push(snapshot(st));
+  Object.assign(st, JSON.parse(prev));
+  refresh(ctx);
+  return ok('OK, I undid the last change to the chart.');
+}
+export function redo(ctx) {
+  const st = ctx.state;
+  const next = st.future?.pop();
+  if (!next) return no('missing', 'There is nothing to redo in the charts.');
+  (st.history ??= []).push(snapshot(st));
+  Object.assign(st, JSON.parse(next));
+  refresh(ctx);
+  return ok('OK, I did it again.');
 }

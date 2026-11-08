@@ -10,7 +10,7 @@ export const DEFAULT_SETTINGS = {
   settingsVersion: SETTINGS_VERSION,
   language: 'en',
   ...RUNTIME_DEFAULTS,            // formalizer, encoderAcceptRefused, partialUnderstanding, normalizer, spellcheck: one definition shared with the evaluators (src/dialog/runtime-config.mjs)
-  translation: 'auto', speechLang: 'follow', voice: '', rate: 1, handsFree: false, speaker: false, showTrace: false, logPhrases: true,
+  translation: 'auto', languageDetection: 'auto', speechLang: 'follow', voice: '', rate: 1, handsFree: false, speaker: false, showTrace: false, logPhrases: true,
 };
 
 /**

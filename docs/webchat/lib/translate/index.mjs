@@ -12,38 +12,85 @@ import { analyze } from './morphology.ro.mjs';
 import { translateRoEn } from './ro-en.mjs';
 import { translateEnRo, isEnglishWord } from './en-ro.mjs';
 
+// Romanian evidence, in points (a rough log-odds of "Romanian" against "English"), for words typed with OR without diacritics.
+// Words that are also English words ("cat", "care", "la", "fa", "pune", "do"...) carry only a small weight by themselves;
+// their weight comes from context (see contextEvidence). Tokens in AMBIGUOUS carry none.
+const RO_W = new Map();
+const addW = (w, words) => { for (const k of words.split(' ')) RO_W.set(k, w); };
+addW(2, 'sau este sunt pentru din vreau unde cand daca foarte cum multumesc buna deseneaza arata sterge adauga spune ziua seara dimineata esti poti vrei iti imi avem '
+  + 'aceasta acest asta dupa intre fara catre despre mereu doar toate toti mele mea meu mei tale tau tai nostru noastra cate cati cata cine revedere unei sunteti');
+addW(1.5, 'si sa cu pe acum azi maine ieri');
+addW(1.2, 'nu mai');
+addW(1, 'ce da dar fa pune');
+addW(0.7, 'care');
+addW(0.5, 'cat de un una ca lui ta');
+addW(0.3, 'la');
+const AMBIGUOUS = new Set(['a', 'o', 'are', 'an', 'am', 'no', 'in', 'ok', 'okay', 'pa', 'mare', 'data', 'salut', 'ion', 'ana', 'maria', 'plus', 'minus', 'e', 'ai', 'te', 'mi', 'ma']);
 const EN_STOP = new Set(['the', 'is', 'are', 'of', 'to', 'and', 'you', 'i', 'he', 'she', 'it', 'we', 'they', 'have', 'has', 'had', 'how', 'what',
   'who', 'where', 'when', 'why', 'does', 'do', 'did', 'not', 'my', 'your', 'in', 'on', 'with', 'that', 'this', 'there', 'many', 'much', 'yes',
-  'hello', 'thanks', 'thank', 'please', 'many', 'been', 'was', 'were', 'will', 'can', 'don\'t', 'doesn\'t', 'it\'s', 'i\'m', 'o\'clock']);
-const RO_STOP = new Set(['si', 'nu', 'ce', 'cum', 'cate', 'cati', 'cat', 'sunt', 'este', 'dar', 'pe', 'la', 'de', 'din', 'cu', 'pentru', 'lui', 'mai',
-  'sau', 'unde', 'cand', 'daca', 'ca', 'ai', 'mi', 'imi', 'iti', 'te', 'sa', 'buna', 'multumesc', 'un', 'una', 'unei', 'fie', 'cine', 'care',
-  'asta', 'acest', 'aceasta', 'mea', 'meu', 'tau', 'ta', 'foarte', 'acum', 'azi', 'maine', 'ieri', 'revedere', 'poti', 'esti', 'sunteti', 'avem']);
-const AMBIGUOUS = new Set(['a', 'o', 'are', 'an', 'am', 'no', 'in', 'ok', 'okay', 'pa', 'mare', 'data', 'salut', 'ion', 'ana', 'maria', 'nu', 'plus', 'minus', 'sa']);
+  'hello', 'thanks', 'thank', 'please', 'been', 'was', 'were', 'will', 'can', 'don\'t', 'doesn\'t', 'it\'s', 'i\'m', 'o\'clock']);
+const RO_NUM = new Set(['unu', 'doi', 'doua', 'trei', 'patru', 'cinci', 'sase', 'sapte', 'opt', 'noua', 'zece']);
+const EN_BEFORE_ARE = new Set(['there', 'they', 'we', 'you', 'what', 'how', 'where', 'who', 'these', 'those', 'which', 'why', 'when', 'if', 'that']);
+// Romanian-only word endings, for words with no lexicon entry (min. 5 letters): -eaza, -easca, -esti, -ește, -ției/-tie, -ul/-ului, -ilor/-elor, -area/-irea, -itate (diacritics folded)
+const RO_SUFFIX = /(eaza|easca|easte|este|esti|tie|tia|tiei|tiile|ului|ilor|elor|area|irea|atul|itate|iune|iuni)$|(?<!f|l)ul$/;
+const RO_STRONG_SUFFIX = /(.{4}este|.{4}esti|eaza|easca|ului|ilor|elor|itate|iune|iuni)$/;
+const SOLFEGE = new Set(['do', 're', 'mi', 'fa', 'sol', 'la', 'si']);
+const NUM_AFTER_ARE_STOP = new Set(['and', 'or', 'plus', 'minus', 'times', 'to', 'equals', 'equal']);
+
+/** Context rules for words that exist in both languages ("cat face 3 plus 4", "are 3 mere"). */
+function contextEvidence(ws) {
+  let ro = 0;
+  for (let i = 0; i < ws.length; i++) {
+    const k = ws[i].key, nx = ws[i + 1], pv = ws[i - 1];
+    const isNum = (t) => t && (t.kind === 'num' || RO_NUM.has(t.key));
+    if (k === 'cat' && nx) {
+      if (/^(costa|sunt|este|ai|mai|timp|de|are|au|avem|e)$/.test(nx.key)) ro += 2.5;
+      else if (/^(face|fac)$/.test(nx.key) && isNum(ws[i + 2])) ro += 2.5;
+    }
+    if ((k === 'face' || k === 'fac') && pv && /^(ce|cate)$/.test(pv.key)) ro += 1;
+    if (k === 'am' && !(pv && pv.key === 'i') && nx && nx.key !== 'i' && (nx.kind === 'num' || /^(o|un|mai|doi|doua|trei|nevoie|de)$/.test(nx.key) || (analyze(nx.key).length > 0 && !isEnglishWord(nx.key)))) ro += 1.5;   // "Am o pisica", "Am 20 de lei", "Am gasit 5 lei" (English "am" follows "I")
+    if (k === 'de' && pv && pv.kind === 'num') ro += 1.5;   // "20 de lei"
+    if (k === 'are') {
+      const nextNum = nx && nx.kind === 'num' && !(ws[i + 2] && NUM_AFTER_ARE_STOP.has(ws[i + 2].key));
+      const nextRo = nx && nx.kind === 'word' && (/^(un|o|mai|doi|doua)$/.test(nx.key) || (RO_NUM.has(nx.key)) || (analyze(nx.key).length > 0 && !isEnglishWord(nx.key)));
+      if ((nextNum || nextRo) && !(pv && EN_BEFORE_ARE.has(pv.key))) ro += 1.5;
+    }
+  }
+  return ro;
+}
 
 export function detectLanguage(text) {
-  const toks = tokenize(String(text ?? '')).filter((t) => t.kind === 'word');
+  const toks = tokenize(String(text ?? '')).filter((t) => t.kind === 'word' || t.kind === 'num');
+  const words = toks.filter((t) => t.kind === 'word');
   let ro = 0;
   let en = 0;
-  let diacritics = 0, strongStops = 0, weakRo = 0;   // evidence for Romanian: a single short or ambiguous token ("e", "da", "e, no, z") is not enough
-  for (const t of toks) {
+  const solfege = words.filter((t) => SOLFEGE.has(t.key)).length >= 3;   // "do re mi fa sol la si" is music, not Romanian
+  for (const t of words) {
     const key = t.key;
-    if (/[ăâîșț]/i.test(t.raw.normalize('NFC'))) { ro += 2; diacritics++; }
+    if (/[ăâîșț]/i.test(t.raw.normalize('NFC'))) ro += 2;
     if (/'/.test(key) && /^(don't|doesn't|didn't|isn't|aren't|it's|i'm|can't|won't|what's|that's)$/.test(key)) { en += 2; continue; }
-    const roHit = RO_STOP.has(key) || analyze(key).length > 0;
-    const enHit = EN_STOP.has(key) || isEnglishWord(key);
     if (AMBIGUOUS.has(key)) continue;
+    const w = RO_W.get(key);
+    if (w) { if (!(solfege && SOLFEGE.has(key))) ro += w; continue; }
+    const roHit = analyze(key).length > 0;
+    const enHit = EN_STOP.has(key) || isEnglishWord(key);
     if (roHit && enHit) continue;
-    if (roHit) { ro += RO_STOP.has(key) ? 1 : 0.7; if (RO_STOP.has(key)) strongStops++; else if (!RO_STOP.has(key) && key.length >= 3) weakRo++; }
+    const dash = /^(\p{L}{3,})-(mi|ti|te|ma|ne|va|le|l|o|si|imi|iti)$/u.exec(key);   // Romanian enclitics: "reseteaza-ti", "arata-mi", "uita-te"
+    if (dash && !isEnglishWord(dash[1])) { ro += RO_SUFFIX.test(dash[1]) || analyze(dash[1]).length ? 2 : 1.5; continue; }
+    if (roHit) ro += key.length >= 7 || (key.length >= 5 && RO_SUFFIX.test(key)) ? 2 : key.length >= 5 ? 1.5 : key.length >= 4 ? 1 : 0.5;   // a lexicon word that is not English: the longer, the less likely a coincidence
     else if (enHit) en += EN_STOP.has(key) ? 1 : 0.7;
+    else if (key.length >= 5 && RO_SUFFIX.test(key)) ro += RO_STRONG_SUFFIX.test(key) ? 2 : 1.5;
+  }
+  ro += contextEvidence(toks);
+  // Romanian is claimed on at least 2 points that beat the English evidence by 1: a diacritic, two function words, a function word and a Romanian-looking word or ending...
+  // A single short or ambiguous token ("e", "da", "cat", "face", "la la la") stays below that: the caller then keeps its session language (default English).
+  if (ro >= 2 && ro - en >= 1) {
+    const total = ro + en;
+    return { lang: 'ro', confidence: Math.round((ro / total) * (0.5 + 0.5 * Math.min(1, total / 2)) * 1000) / 1000 };
   }
   const total = ro + en;
-  if (total < 0.7 || Math.abs(ro - en) < 0.5) return { lang: 'unknown', confidence: 0 };
-  const lang = ro > en ? 'ro' : 'en';
-  // Romanian is claimed only on strong evidence: a diacritic, two Romanian-only function words, or one plus a Romanian-looking word, three Romanian-looking words, or one in a sentence of at least three words with nothing English.
-  // Otherwise the caller keeps its session language (default English): translating a whole reply to Romanian because of "e" is worse than missing a short Romanian word.
-  if (lang === 'ro' && !(diacritics > 0 || strongStops >= 2 || (strongStops >= 1 && strongStops + weakRo >= 2) || weakRo >= 3 || (weakRo >= 1 && toks.length >= 3 && en === 0))) return { lang: 'unknown', confidence: 0 };
-  const confidence = Math.round((Math.max(ro, en) / total) * (0.5 + 0.5 * Math.min(1, total / 2)) * 1000) / 1000;
-  return { lang, confidence };
+  if (en < 0.7 || en - ro < 0.5 || total < 0.7) return { lang: 'unknown', confidence: 0 };
+  return { lang: 'en', confidence: Math.round((en / total) * (0.5 + 0.5 * Math.min(1, total / 2)) * 1000) / 1000 };
 }
 
 export function translate(text, opts = {}) {

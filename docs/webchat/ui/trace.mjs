@@ -31,6 +31,7 @@ export function renderTrace(reply, extra = {}) {
     ['Original', t.original],
     ['English', t.english !== t.original ? t.english : undefined],
     ['Reply in English', t.replyEnglish && t.replyEnglish !== reply.text ? t.replyEnglish : undefined],
+    ['Detection', (extra.detection ?? []).length ? extra.detection.map((d) => `${d.strategy}${d.detected ? ` → ${d.detected}` : ''}${d.confidence != null ? ` (${Number(d.confidence).toFixed(2)})` : ''}${d.fallback ? ` (fell back to rules: ${d.reason})` : ''}`).join('; ') : undefined],
     ['Strategy', usage.length ? usage.map((u) => `${u.direction}: ${u.strategy}${u.fallback ? ` (fell back to rules: ${u.reason})` : ''}`).join('; ') : (reply.lang && reply.lang !== 'en' ? 'rules' : 'none (English input)')],
     ['Confidence', tr?.confidence != null ? String(tr.confidence) : undefined],
     ['Unknown words', tr?.unknown?.length ? tr.unknown.map((u) => u.word).join(', ') : undefined],

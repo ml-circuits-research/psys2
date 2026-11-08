@@ -188,7 +188,26 @@ function terminates(a, b) {
   return den === 1;
 }
 
-export function calc(ctx, { op, a, b }) {
+/** Two or three numbers: `a op b [op2 c]`, with times and division before plus and minus ("7 plus 2 times 3" is 13). */
+export function calc(ctx, { op, a, b, op2, c }) {
+  if (op2 === undefined || c === undefined) return calc2(ctx, { op, a, b });
+  const hi = (o) => o === 'times' || o === 'divided_by';
+  const first = hi(op2) && !hi(op) ? 'right' : 'left';
+  const step = (o, x, y) => calc2(ctx, { op: o, a: x, b: y });
+  let r1, r2;
+  if (first === 'left') {
+    r1 = step(op, a, b);
+    if (r1.status !== 'supported') return r1;
+    r2 = step(op2, r1.value, c);
+    if (r2.status === 'supported' && r1.note) r2.note = r2.note ?? r1.note;
+    return r2;
+  }
+  r1 = step(op2, b, c);
+  if (r1.status !== 'supported') return r1;
+  return step(op, a, r1.value);
+}
+
+function calc2(ctx, { op, a, b }) {
   const x = num(a), y = num(b);
   if (!op || Number.isNaN(x) || Number.isNaN(y) || x === undefined || y === undefined) return { status: 'missing', missing: [K('calc.result')], note: 'two numbers are needed' };
   switch (op) {

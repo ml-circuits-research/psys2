@@ -725,7 +725,10 @@ export const add = guard((ctx, args, s) => {
   const withParts0 = parseWith(spec0.kind, words0);
   const { first, more } = splitMore(withParts0.rest);
   const withParts = { parts: withParts0.parts, rest: first };
-  const place = parsePlace(withParts.rest);
+  const WATER = /^(?:on|in|at|over|across|by|near|beside)\s+(?:the\s+|a\s+)?(?:water|sea|lake|river|ocean|pond|waves|harbou?r|bay)$/;
+  const waterTail = WATER.test(withParts.rest.join(' '));
+  const place = waterTail ? parsePlace(['at', 'the', 'bottom']) : parsePlace(withParts.rest);
+  if (waterTail) withParts.rest = [];
   // a color in the tail: "in blue", "in red" (a house in red) when no color was named before
   let color = spec0.color;
   const colorish = withParts.rest.filter((w) => !['in', 'using', 'with', 'colored', 'coloured', 'color', 'colour', 'a', 'an', 'the', 'crayon', 'please'].includes(w));
@@ -744,7 +747,13 @@ export const add = guard((ctx, args, s) => {
     refs = r.refs; drawnRefs = r.drawn;
     if (place.rel === 'between' && refs.length < 2) { s.history.pop(); return no('I need two things to put it between, for example "between the house and the tree".', 'missing'); }
   }
-  let count = spec0.count, capped = false;
+  let count = spec0.count, capped = false, fracNote = '';
+  // "draw 1.5 houses": things are whole; never round silently
+  if (spec0.explicit && !Number.isInteger(count)) {
+    if (count < 1) { s.history.pop(); return no('I can only draw whole things. How many would you like, for example "draw 2 houses"?'); }
+    fracNote = ` (I can only draw whole things, so ${count} became ${Math.floor(count)})`;
+    count = Math.floor(count);
+  }
   const cap = spec0.kind === 'star' ? MAX_STARS : MAX_COUNT;
   if (count > cap) { count = cap; capped = true; }
   if (count < 1) count = 1;
@@ -766,7 +775,7 @@ export const add = guard((ctx, args, s) => {
   if (partNote0 && firstGroup.length) firstGroup[firstGroup.length - 1] += partNote0;
   const phrase = andList([...firstGroup, ...groupPhrase(extras)]);
   const where = made.length && extras.length === 0 ? describePlacing(made[0], place, refs) : '';
-  const capNote = capped ? ` (${cap} is plenty!)` : '';
+  const capNote = (capped ? ` (${cap} is plenty!)` : '') + fracNote;
   const partNote = '';
   return ok(`${opener(s)} I drew ${phrase}${partNote}${where}${capNote}.`, { data: { made: s.last.slice() } });
 });
@@ -998,6 +1007,9 @@ export function splitDest(text) {
 export function parseDest(text) {
   let w = toks(text);
   if (!w.length) return null;
+  // absolute coordinates on the 1000 x 700 canvas: "at 200, 300", "to x 200 y 300", "to 200 by 300"
+  const abs = w.join(' ').match(/^(?:at|to|on|onto|into)?\s*(?:the\s+)?(?:position|point|spot|coordinates)?\s*(?:x\s*)?(\d+(?:\.\d+)?)\s*(?:,|and|by|x|comma)?\s*(?:y\s*)?(\d+(?:\.\d+)?)$/);
+  if (abs) return { kind: 'abs', x: Number(abs[1]), y: Number(abs[2]) };
   // amount words
   let amount = 1;
   const joined = w.join(' ');
@@ -1034,6 +1046,7 @@ function applyDest(s, objs, dest) {
   for (const o of objs) {
     const b = bbox(o);
     if (dest.kind === 'step') { o.x += dest.dx; o.y += dest.dy; clampIn(o); }
+    else if (dest.kind === 'abs') { o.x = dest.x; o.y = dest.y; clampIn(o); }
     else if (dest.kind === 'region') { placeRegion(s, o, dest.region); }
     else if (dest.kind === 'rel') {
       const refs = [];
@@ -1054,6 +1067,8 @@ export const move = guard((ctx, args, s) => {
   let phrase = args.phrase ?? '';
   const adj = [args.m1, args.m2].filter(Boolean).join(' ');
   if (adj) phrase = /^the /i.test(phrase) ? phrase.replace(/^the /i, `the ${adj} `) : `${adj} ${phrase}`;
+  // "slide the house over to the right": "over to" is a direction, not the relation "over"
+  phrase = phrase.replace(/\b(?:over|across|along) (to|towards|toward)\b/gi, '$1');
   const { target: tt, dest } = splitDest(phrase);
   if (!dest) return no('Where should it go? You can say, for example, "move the tree to the left", "put the cat next to the house" or "move it to the top right corner".');
   const t = target(s, tt || 'it', { many: true });
@@ -1068,10 +1083,10 @@ export const move = guard((ctx, args, s) => {
   s.last = r.objs.map((o) => o.id);
   open(ctx);
   const name = r.objs.length === 1 ? sayObj(r.objs[0]) : `the ${pluralOfKind(r.objs[0].kind, r.objs.length)}`;
-  const where = d.kind === 'step' ? ` ${d.label}` : d.kind === 'region' ? ` ${describePlacing(null, { region: d.region }, [])}`.replace(/\s+/g, ' ') : d.kind === 'z' ? ` to the ${d.dir}` : '';
+  const where = d.kind === 'abs' ? ` to ${d.x}, ${d.y}` : d.kind === 'step' ? ` ${d.label}` : d.kind === 'region' ? ` ${describePlacing(null, { region: d.region }, [])}`.replace(/\s+/g, ' ') : d.kind === 'z' ? ` to the ${d.dir}` : '';
   const relText = d.kind === 'rel' ? describePlacing(r.objs[0], { rel: d.rel }, d.refs.map((x) => resolveNP(s, parseNP(x)).objs[0] ?? r.objs[0])) : '';
   const regionText = d.kind === 'region' ? describePlacing(null, { region: d.region }, []) : '';
-  return ok(withNote(`${opener(s)} I moved ${name}${d.kind === 'step' ? ` ${d.label}` : d.kind === 'rel' ? relText : d.kind === 'region' ? regionText : d.kind === 'z' ? ` to the ${d.dir}` : ''}.`, r));
+  return ok(withNote(`${opener(s)} I moved ${name}${d.kind === 'abs' ? ` to ${d.x}, ${d.y}` : d.kind === 'step' ? ` ${d.label}` : d.kind === 'rel' ? relText : d.kind === 'region' ? regionText : d.kind === 'z' ? ` to the ${d.dir}` : ''}.`, r));
 });
 void 0;
 

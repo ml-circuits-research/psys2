@@ -52,3 +52,6 @@ Microphone (single shot), push-to-talk (hold the space bar when no input has foc
 </script>
 ```
 Options: `baseUrl` (where `lib/` and `worlds/` live), `worlds`, `tabs`, `language`, `title`, `onboarding`, `persist` (settings in localStorage), `pushToTalk`, `onReply(reply)`, `onState(states, changedIds)`. Styles are scoped under `.p2`; the layout adapts to the width of the element (container query), not the window.
+
+## Language detection
+Settings has a "Language detection" choice next to Translation: Automatic (the browser `LanguageDetector` API, with the rules detector as backup; default), Browser API, or Rules. Uncertain results (confidence below 0.5), other languages and very short inputs keep the session language or use the rules detector. The trace of each answer shows the detector used. See ADR-002.

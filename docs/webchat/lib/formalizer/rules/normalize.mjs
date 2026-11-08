@@ -162,8 +162,40 @@ function markFillers(toks) {
     while (i < n && (toks[i].kind === 'punct' || toks[i].filler)) i++;
     if (i < n && toks[i].kind === 'word' && INITIAL_DROP.has(toks[i].lower)) { toks[i].filler = true; toks[i].lead = true; i++; continue; }
     if (i + 1 < n && toks[i].lower === 'after' && toks[i + 1].lower === 'that') { toks[i].filler = toks[i + 1].filler = true; toks[i].lead = toks[i + 1].lead = true; i += 2; continue; }
+    const phrase = i < n ? leadPhraseAt(toks, i) : 0;
+    if (phrase) { for (let k = i; k < i + phrase; k++) { toks[k].filler = true; toks[k].lead = true; } i += phrase; continue; }
     break;
   }
+  // "real quick" / "quickly" closing a request: "what day is it real quick"
+  let e = n;
+  while (e > 0 && (toks[e - 1].kind === 'punct' || toks[e - 1].kind === 'qmark')) e--;
+  for (const tail of TRAIL_PHRASES) {
+    const s = e - tail.length;
+    if (s > 0 && tail.every((w, k) => toks[s + k].kind === 'word' && toks[s + k].lower === w && !toks[s + k].filler)) { for (let k = s; k < e; k++) toks[k].filler = true; break; }
+  }
+}
+
+/** Spoken lead-ins that announce a request without being one ("quick one: center", "real quick, what day is it"). Longest first. */
+const LEAD_PHRASES = [
+  'just a quick one for you', 'quick one for you', 'just a quick one here', 'quick one here', 'just a quick one', 'one quick one', 'a quick one', 'quick one',
+  'one quick question', 'a quick question', 'quick question', 'one quick thing', 'a quick thing', 'quick thing', 'just a quick question',
+  'a small question', 'small question', 'a little question', 'little question', 'a tiny question', 'tiny question', 'a simple one', 'simple one',
+  'an easy one', 'easy one', 'a hard one', 'hard one', 'a tough one', 'tough one', 'a short one', 'short one', 'a trick question', 'trick question',
+  'real quick', 'really quick', 'super quick', 'very quick', 'one sec', 'just checking', 'just curious',
+].map((x) => x.split(' ')).sort((a, b) => b.length - a.length);
+const TRAIL_PHRASES = ['real quick', 'really quick', 'super quick', 'very quick'].map((x) => x.split(' '));
+
+/** Length of a lead phrase starting at token `i` (0 when none): only when something else follows it. */
+function leadPhraseAt(toks, i) {
+  for (const ph of LEAD_PHRASES) {
+    if (i + ph.length >= toks.length) continue;
+    if (ph.every((w, k) => (toks[i + k].kind === 'word' || toks[i + k].kind === 'number') && String(toks[i + k].raw).toLowerCase() === w)) {
+      let j = i + ph.length;
+      while (j < toks.length && (toks[j].kind === 'punct' || toks[j].filler)) j++;
+      if (j < toks.length) return ph.length;
+    }
+  }
+  return 0;
 }
 
 /**
@@ -280,6 +312,17 @@ export function editDistance(a, b, max = Infinity) {
 
 /** Allowed edit distance for a word: none below 4 letters, 1 for 4 to 7 letters, 2 for 8 and more. */
 export const typoBudget = (word) => (word.length >= 8 ? 2 : word.length >= 4 ? 1 : 0);
+
+/**
+ * Chat misspellings of short common words. Below 4 letters the edit distance is not allowed (too many neighbours), so the
+ * frequent ones are listed. Used only when the word is unknown and the target is in the vocabulary.
+ */
+export const SHORT_TYPOS = {
+  wat: 'what', wht: 'what', wot: 'what', wut: 'what', waht: 'what', whta: 'what', whts: 'whats', wats: 'whats', hw: 'how', hwo: 'how',
+  mak: 'make', mke: 'make', amke: 'make', mkae: 'make', maek: 'make', ther: 'there', thre: 'there', wher: 'where', whre: 'where',
+  wen: 'when', whn: 'when', hve: 'have', hav: 'have', giv: 'give', gve: 'give', thn: 'then', hlp: 'help', plya: 'play',
+  whch: 'which', wich: 'which', hwmany: 'how many',
+};
 
 const QUOTE_RE = /"[^"]*"|\u201c[^\u201d]*\u201d/g;
 

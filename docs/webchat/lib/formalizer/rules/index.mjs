@@ -16,7 +16,7 @@ import { parse, serialize } from '../../soplang/index.mjs';
 
 export { FormSession } from './session.mjs';
 export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs';
-export { analyze, splitSentences, tokenize, editDistance, correctTokens } from './normalize.mjs';
+export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs';
 export { compilePattern, matchTokens } from './matcher.mjs';
 export { singularLemma, pluralize } from './lemma.mjs';
 
@@ -475,7 +475,10 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
       const swallowed = clauses.length > 1 && Object.values(whole.match?.slots ?? {}).some((sl) => (sl.class === 'words' || sl.class === 'rest') && /(^|[\s,])(and|then|but)([\s,]|$)|,/i.test(sl.text ?? ''));
       if (swallowed) {
         const parts = clauses.map((c, idx) => readGroup(c, QUESTION_WORDS.has(firstWord(c)) || (s.isQuestion && idx === clauses.length - 1 && /\?/.test(text.slice(s.span[1], s.span[1] + 3)))));
-        if (parts.every((p) => !p.unparsed && (p.match?.priority ?? 0) >= (whole.match?.priority ?? 0) && p.match?.worldId === parts[0].match?.worldId)) return { done: parts, fallback: null };
+        // clauses of one world, or a command followed by a question of another world ("add a heading Shopping and what is 2 plus 2")
+        const sameWorld = (p) => p.match?.worldId === parts[0].match?.worldId;
+        const trailingQuestions = clauses.slice(1).every((c) => QUESTION_WORDS.has(firstWord(c)));
+        if (parts.every((p) => !p.unparsed && (p.match?.priority ?? 0) >= (whole.match?.priority ?? 0) && (sameWorld(p) || trailingQuestions)) && (parts.slice(1).every(sameWorld) || trailingQuestions)) return { done: parts, fallback: null };
       }
       return { done: [{ ...whole, span: s.span, text: s.text }], fallback: null };
     }

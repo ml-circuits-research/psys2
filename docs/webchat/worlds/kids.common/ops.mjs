@@ -39,3 +39,8 @@ export function myName(ctx) {
 export function thanks() { return { status: 'supported', value: 'You are welcome' }; }
 
 export function bye() { return { status: 'supported', value: 'Goodbye' }; }
+
+const HOWRU = ['I am fine, thank you!', 'I am doing well, thanks for asking!', 'I am great! What shall we do?'];
+let howruTurn = 0;
+/** Small talk ("how are you"): a friendly answer, rotating a little so it does not repeat. */
+export function howAreYou() { return { status: 'supported', value: HOWRU[howruTurn++ % HOWRU.length] }; }

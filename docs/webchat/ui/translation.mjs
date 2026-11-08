@@ -52,9 +52,54 @@ export async function browserTranslatorAvailability(from = 'ro', to = 'en') {
   } catch { return 'unavailable'; }
 }
 
-export function createSwitchTranslator({ rules, getStrategy }) {
+/** 'detector' (current LanguageDetector API), 'ai' (older Chrome origin-trial `ai.languageDetector`) or null. */
+export function browserDetectorKind() {
+  if (typeof self === 'undefined') return null;
+  if (typeof self.LanguageDetector?.create === 'function') return 'detector';
+  if (typeof self.ai?.languageDetector?.create === 'function') return 'ai';
+  return null;
+}
+
+/** 'available' | 'downloadable' | 'downloading' | 'unavailable' | 'unsupported' (same words as the Translator API). */
+export async function browserDetectorAvailability() {
+  const kind = browserDetectorKind();
+  if (!kind) return 'unsupported';
+  try {
+    if (kind === 'detector') return await self.LanguageDetector.availability();
+    const r = await self.ai.languageDetector.capabilities();
+    const a = r?.available ?? r;
+    return a === 'readily' ? 'available' : a === 'after-download' ? 'downloadable' : 'unavailable';
+  } catch { return 'unavailable'; }
+}
+
+/**
+ * Detection confidence below this is reported as 'unknown' (the dialog engine then keeps the session language, default English).
+ * Chrome's detector returns about 0.9+ for a clear sentence and 0.3-0.6 for one or two words; 0.5 keeps the clear cases and drops
+ * the guesses. Inputs with fewer than MIN_LETTERS letters are left to the rules detector, which knows chat words ("ok", "e", "da").
+ */
+export const DETECT_MIN_CONFIDENCE = 0.5;
+export const MIN_LETTERS = 3;
+/** Languages the session understands; any other detected language is 'unknown'. */
+const SUPPORTED = new Set(['en', 'ro']);
+
+export function createSwitchTranslator({ rules, getStrategy, getDetectStrategy = () => 'auto' }) {
   const cache = new Map();
   const usage = [];
+  const detectUsage = [];
+  let detectorPromise = null;
+  /** Cached detector instance; null while it is still downloading (a background create() starts the download). */
+  async function browserDetector() {
+    const kind = browserDetectorKind();
+    if (!kind) throw new Error('no browser language detector');
+    if (!detectorPromise) {
+      const avail = await browserDetectorAvailability();
+      if (avail === 'unavailable' || avail === 'unsupported') throw new Error(`browser language detector ${avail}`);
+      const make = kind === 'detector' ? self.LanguageDetector.create() : self.ai.languageDetector.create();
+      detectorPromise = Promise.resolve(make).catch((e) => { detectorPromise = null; throw e; });
+      if (avail !== 'available') { detectorPromise.catch(() => {}); return null; }
+    }
+    return detectorPromise;
+  }
   async function browserTranslate(text, from, to) {
     const kind = browserTranslatorKind();
     if (!kind) throw new Error('no browser translator');
@@ -67,8 +112,30 @@ export function createSwitchTranslator({ rules, getStrategy }) {
   }
   const translator = {
     usage,
-    resetUsage() { usage.length = 0; },
-    detectLanguage: (text) => rules.detectLanguage(text),
+    detectUsage,
+    resetUsage() { usage.length = 0; detectUsage.length = 0; },
+    async detectLanguage(text) {
+      const pref = getDetectStrategy();
+      const entry = { requested: pref, strategy: 'rules', fallback: false, reason: null, detected: null, confidence: null };
+      detectUsage.push(entry);
+      if (pref !== 'rules') {
+        try {
+          if ((String(text ?? '').match(/\p{L}/gu) ?? []).length < MIN_LETTERS) throw Object.assign(new Error('too short for the browser detector'), { quiet: true });
+          const det = await browserDetector();
+          if (!det) throw new Error('still downloading');
+          const top = (await det.detect(String(text)))?.[0];
+          if (!top?.detectedLanguage) throw new Error('empty detection result');
+          const code = String(top.detectedLanguage).toLowerCase().split(/[-_]/)[0];
+          const confidence = Number(top.confidence) || 0;
+          entry.strategy = 'browser-api'; entry.detected = code; entry.confidence = confidence;
+          if (!SUPPORTED.has(code) || confidence < DETECT_MIN_CONFIDENCE) return { lang: 'unknown', confidence, detected: code, strategy: 'browser-api' };
+          return { lang: code, confidence, strategy: 'browser-api' };
+        } catch (e) { entry.strategy = 'rules'; entry.fallback = true; entry.reason = e?.quiet ? 'input too short' : `browser API: ${e?.message ?? e}`; }
+      }
+      const r = rules.detectLanguage(text);
+      entry.detected = r?.lang ?? null; entry.confidence = r?.confidence ?? null;
+      return r;
+    },
     supports: (f, t) => rules.supports?.(f, t) ?? true,
     async translate(text, opts) {
       const { from, to } = opts;

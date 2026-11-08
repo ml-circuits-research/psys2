@@ -178,7 +178,7 @@ function describePlace(D, e) {
   return `${cap} ${e.rkind === 'continent' ? `is a continent with ${n} countries` : e.rkind === 'subregion' ? `is a region with ${n} countries` : `is a group of ${n} countries`}.`;
 }
 
-export function showPlace(ctx, args) {
+function _showPlace(ctx, args) {
   const D = db(ctx), s = ctx.state;
   const ps = places(D, args);
   const bad = ps.find((p) => !p.e);
@@ -204,8 +204,9 @@ export function where(ctx, { p }) {
   return ok(describePlace(D, e));
 }
 
-export function coords(ctx, { la, lo }) {
-  const s = ctx.state, lat = Number(la), lon = Number(lo);
+function _coords(ctx, { la, lo, ns, ew }) {
+  // compass words: "45.5 north 25 east", "12 south 30 west" (south and west are negative)
+  const s = ctx.state, lat = (ns === 'south' ? -1 : 1) * Number(la), lon = (ew === 'west' ? -1 : 1) * Number(lo);
   if (!(Math.abs(lat) <= 90 && Math.abs(lon) <= 180)) return no('unsupported', 'Latitude must be between -90 and 90 and longitude between -180 and 180.');
   tab(ctx);
   viewPoint(s, lat, lon, 8);
@@ -221,7 +222,7 @@ const AMT = { a_lot: 3, a_lot_more: 3, much: 3, way: 3, far: 3, hugely: 3, a_gre
   alot: 3, a_whole_lot: 3, big_time: 3, lots: 3, heaps: 3, tons: 3, massively: 3, loads: 3, a_ton: 3, quite_a_bit: 2, a_good_bit: 2, a_fair_bit: 1.5,
   a_tiny_bit: 0.5, a_wee_bit: 0.5, a_smidge: 0.5, a_tad: 0.5, just_a_tad: 0.5, barely: 0.5, marginally: 0.5 };
 
-export function zoom(ctx, { dir, amt, n }) {
+function _zoom(ctx, { dir, amt, n }) {
   const s = ctx.state;
   tab(ctx);
   const maxZ = maxZoom(s);
@@ -235,7 +236,7 @@ export function zoom(ctx, { dir, amt, n }) {
   return ok(`Zoomed ${dir === 'out' ? 'out' : 'in'} to zoom ${z}.`);
 }
 
-export function zoomTo(ctx, { n }) {
+function _zoomTo(ctx, { n }) {
   const s = ctx.state, z = Number(n);
   if (!(z >= 1 && z <= 18)) return no('unsupported', 'The zoom level must be between 1 and 18.');
   tab(ctx);
@@ -248,7 +249,7 @@ const DIR = { north: [1, 0], south: [-1, 0], east: [0, 1], west: [0, -1], northe
   northward: [1, 0], southward: [-1, 0], eastward: [0, 1], westward: [0, -1] };
 const DIR_NAME = (v) => (v[0] > 0 ? 'north' : v[0] < 0 ? 'south' : '') + (v[0] && v[1] ? '-' : '') + (v[1] > 0 ? 'east' : v[1] < 0 ? 'west' : '');
 
-export function pan(ctx, { d, amt, amt2, km, unit }) {
+function _pan(ctx, { d, amt, amt2, km, unit }) {
   const s = ctx.state, v = DIR[d];
   if (!v) return no('unsupported', `I do not know the direction ${d}.`);
   tab(ctx);
@@ -276,7 +277,7 @@ export function world(ctx) {
   return ok('Here is the whole world.');
 }
 
-export function reset(ctx, { all } = {}) {
+function _reset(ctx, { all } = {}) {
   const s = ctx.state;
   tab(ctx);
   s.center = { lat: WORLD_VIEW.lat, lon: WORLD_VIEW.lon }; s.zoom = WORLD_VIEW.zoom; s.bounds = null;
@@ -284,7 +285,7 @@ export function reset(ctx, { all } = {}) {
   return ok('The view is reset to the whole world.');
 }
 
-export function clearAll(ctx) {
+function _clearAll(ctx) {
   const s = ctx.state;
   tab(ctx);
   const n = s.markers.length + s.highlighted.length + s.lines.length;
@@ -293,7 +294,7 @@ export function clearAll(ctx) {
 }
 
 // ---- markers, highlights, lines -------------------------------------------------------------------------------------------
-export function mark(ctx, args) {
+function _mark(ctx, args) {
   const D = db(ctx), s = ctx.state;
   const ps = places(D, args);
   const bad = ps.find((p) => !p.e);
@@ -311,7 +312,7 @@ export function mark(ctx, args) {
   return ok(`${added.length ? `OK, I put markers on ${list(added)}.` : ''}${had.length ? ` ${list(had)} ${had.length === 1 ? 'was' : 'were'} already marked.` : ''}`.trim());
 }
 
-export function markHere(ctx) {
+function _markHere(ctx) {
   const s = ctx.state, D = db(ctx);
   tab(ctx);
   const p = s.clicked ? { lat: s.clicked.lat, lon: s.clicked.lon } : { lat: s.center.lat, lon: s.center.lon };
@@ -321,7 +322,7 @@ export function markHere(ctx) {
   return ok(`OK, I put a marker here (${deg(p.lat, p.lon)}).`);
 }
 
-export function markSet(ctx, { what, r, n, m }) {
+function _markSet(ctx, { what, r, n, m }) {
   const D = db(ctx), s = ctx.state, scope = place(D, r);
   if (!scope) return no('unsupported', unknownNote(r));
   let cs = [], desc;
@@ -348,7 +349,7 @@ export function markSet(ctx, { what, r, n, m }) {
   return ok(`OK, I marked ${desc}${cs.length <= 6 ? `: ${list(cs.map((c) => c.name))}` : ` (${cs.length} markers)`}.${added < cs.length ? ` ${cs.length - added} already had a marker.` : ''}`);
 }
 
-export function clearMarkers(ctx, { p, last }) {
+function _clearMarkers(ctx, { p, last }) {
   const D = db(ctx), s = ctx.state;
   tab(ctx);
   if (last === 'true') {
@@ -367,7 +368,7 @@ export function clearMarkers(ctx, { p, last }) {
   return n ? ok(`OK, I removed ${n === 1 ? 'the marker' : `all ${n} markers`}.`) : ok('There were no markers.');
 }
 
-export function highlightPlaces(ctx, args) {
+function _highlightPlaces(ctx, args) {
   const D = db(ctx), s = ctx.state;
   const ps = places(D, args);
   const bad = ps.find((p) => !p.e);
@@ -394,7 +395,7 @@ export function highlightPlaces(ctx, args) {
   return ok(added ? `OK, I highlighted ${what}.` : `${what.charAt(0).toUpperCase()}${what.slice(1)} ${names.length === 1 ? 'is' : 'are'} already highlighted.`);
 }
 
-export function clearHighlight(ctx, { p } = {}) {
+function _clearHighlight(ctx, { p } = {}) {
   const D = db(ctx), s = ctx.state;
   tab(ctx);
   if (p !== undefined) {
@@ -409,7 +410,7 @@ export function clearHighlight(ctx, { p } = {}) {
   return n ? ok('OK, I removed the highlights.') : ok('Nothing was highlighted.');
 }
 
-export function clearLines(ctx) {
+function _clearLines(ctx) {
   const s = ctx.state;
   tab(ctx);
   const n = s.lines.length;
@@ -418,7 +419,7 @@ export function clearLines(ctx) {
 }
 
 const OSM_WORDS = new Set(['street', 'road', 'detailed', 'osm', 'openstreetmap', 'open_street_map', 'online', 'real', 'tile', 'realistic', 'live']);
-export function layer(ctx, { l }) {
+function _layer(ctx, { l }) {
   const s = ctx.state;
   const want = OSM_WORDS.has(l) ? 'osm' : 'offline';
   tab(ctx);
@@ -859,4 +860,59 @@ export function unknown(ctx, { x }) {
 /** "Show me" alone: ask which place; the dialog layer keeps the question pending for the next utterance (spec 11). */
 export function askPlace() {
   return { status: 'missing', note: 'Which place should I show?', pending: { key: 'p', type: 'lex.geo.map.places' } };
+}
+export const showPlace = undoable(_showPlace);
+export const coords = undoable(_coords);
+export const zoom = undoable(_zoom);
+export const zoomTo = undoable(_zoomTo);
+export const pan = undoable(_pan);
+export const reset = undoable(_reset);
+export const clearAll = undoable(_clearAll);
+export const mark = undoable(_mark);
+export const markHere = undoable(_markHere);
+export const markSet = undoable(_markSet);
+export const clearMarkers = undoable(_clearMarkers);
+export const highlightPlaces = undoable(_highlightPlaces);
+export const clearHighlight = undoable(_clearHighlight);
+export const clearLines = undoable(_clearLines);
+export const layer = undoable(_layer);
+
+// ---- undo ------------------------------------------------------------------------------------------------
+const MAX_UNDO = 30;
+const snapshot = (st) => { const { history, future, ...rest } = st; return JSON.stringify(rest); };
+/** Wraps a changing operation: the state before it is kept for "undo" unless it changed nothing. */
+function undoable(fn) {
+  return (ctx, args) => {
+    const before = snapshot(ctx.state);
+    const r = fn(ctx, args);
+    if (r?.status === 'supported' && snapshot(ctx.state) !== before) {
+      (ctx.state.history ??= []).push(before);
+      if (ctx.state.history.length > MAX_UNDO) ctx.state.history.shift();
+      ctx.state.future = [];
+    }
+    return r;
+  };
+}
+function restoreFrom(st, json) {
+  const { history, future } = st;
+  for (const k of Object.keys(st)) if (k !== 'history' && k !== 'future') delete st[k];
+  Object.assign(st, JSON.parse(json), { history, future });
+}
+export function undo(ctx) {
+  const st = ctx.state;
+  const prev = st.history?.pop();
+  if (!prev) return no('missing', 'There is nothing to undo on the map yet.');
+  (st.future ??= []).push(snapshot(st));
+  restoreFrom(st, prev);
+  tab(ctx);
+  return ok('OK, I undid the last change to the map.');
+}
+export function redo(ctx) {
+  const st = ctx.state;
+  const next = st.future?.pop();
+  if (!next) return no('missing', 'There is nothing to redo on the map.');
+  (st.history ??= []).push(snapshot(st));
+  restoreFrom(st, next);
+  tab(ctx);
+  return ok('OK, I did it again.');
 }
