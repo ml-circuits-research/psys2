@@ -153,12 +153,33 @@ export class DialogSession {
   }
 
   /**
+   * Dialogue focus for ranking readings (spec 03 §4): +3 for the world that owns the active tab (ui.shell state),
+   * +1 for each of the last three worlds that produced a reading. Ties between worlds are then decided by context.
+   */
+  focus() {
+    const focus = {};
+    const BUILTIN = { robot: 'ui.avatar', avatar: 'ui.avatar', editor: 'docs.editor', tictactoe: 'games.tictactoe', guess: 'games.guess', hangman: 'games.hangman' };
+    for (const w of this._recentWorlds ?? []) focus[w] = (focus[w] ?? 0) + 1;
+    const tab = this.isession.state['ui.shell']?.activeTab;
+    if (tab) {
+      const owner = this.engine.set.list().find((w) => w.tab?.id === tab)?.id ?? BUILTIN[tab];
+      if (owner) focus[owner] = (focus[owner] ?? 0) + 3;
+    }
+    return focus;
+  }
+
+  _noteWorlds(segments) {
+    const ids = segments.map((s) => s.match?.worldId).filter((w) => w && w !== 'ui.shell' && w !== 'kids.common');
+    this._recentWorlds = [...new Set([...ids.reverse(), ...(this._recentWorlds ?? [])])].slice(0, 3);
+  }
+
+  /**
    * Formalize with the preferred strategy, per world falling back to the rule formalizer (spec 06).
    * Each returned segment carries `strategy`. Unparsed encoder segments are retried with the rules.
    */
   async _formalize(english, sid, preferred = this.formalizer) {
     const { set, formalizers } = this.engine;
-    const opts = { worlds: set, session: this.isession, source: sid };
+    const opts = { worlds: set, session: this.isession, source: sid, focus: this.focus() };
     const rules = formalizers.rules;
     const enc = preferred === 'encoder' ? formalizers.encoder : null;
     let usable = false;
@@ -200,6 +221,7 @@ export class DialogSession {
     this.isession.effects = [];
     const icpt = interp.intercept(this.isession, english);   // modal input (spec 07 section 2)
     const { segments, wires } = icpt ? { segments: [], wires: [] } : await this._formalize(english, sid, formalizer ?? this.formalizer);
+    this._noteWorlds(segments);
     const T = (text, extra = {}) => ({ text, translate: true, ...extra });
     const lines = icpt?.reply ? [[T(icpt.reply)]] : [];   // each line is an array of parts [{ text, translate, quote? }]
     const answers = [];

@@ -79,7 +79,7 @@ The engine adds to every emitted wire: `core.via=$<patternId>`, `core.source="<s
 ## 4. Choosing a reading
 For each sentence:
 1. Try every pattern of every loaded world (patterns are cheap).
-2. Rank full matches by: `priority` (higher first), then number of literal tokens matched, then fewer `...`/`words` captures, then router score of the world.
+2. Rank full matches by: `priority` plus the **dialogue focus** bonus (+3 for the world that owns the active tab in `ui.shell`, +1 for each of the last three worlds that produced a reading) (higher first), then number of literal tokens matched, then fewer `...`/`words` captures, then router score of the world.
 3. If no pattern matches the whole sentence, split it into clauses at `,`, `and`, `then`, `but` (one level) and match each clause; a clause that still fails is reported as unparsed.
 4. Equal-rank matches from different worlds that emit different wires are kept as **alternatives**; the dialog layer reports the ambiguity instead of choosing silently (vision §7).
 
