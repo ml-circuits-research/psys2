@@ -93,7 +93,7 @@ test('a piece the rules parse but the interpreter refuses is accepted by default
 });
 
 test('candidate order per world: original, then spell-corrected; simplified only when none of them validates (S1 lexicographic preference)', async () => {
-  const t = 'whats seven timez six';
+  const t = 'whats seven times six sweetie';
   const r = await validator.validate(msg(t, [{ score: -0.1, segments: [piece(t, W(['kids.arith', 0.9]), { simplified: 'what is seven times six' })] }]));
   const att = r.trace.segmentations[0].pieces[0].attempts.map((a) => a.variant);
   assert.deepEqual(att, ['original', 'spell', 'simplified']);   // nothing else validated, so the simplified text is tried last
