@@ -1129,12 +1129,13 @@
 
 @t.media.music.r103 core.test
     input="Quicker."
-    expect="my speech rate is"
+    expect="Playing again at 220"
     session=zt
+    doc="a bare tempo word yields to the music world when music answered last (spec 03 section 4)"
 
 @t.media.music.r104 core.test
     input="a bit quicker plz"
-    expect="Playing again at 220"
+    expect="Playing again at 240"
     session=zt
 
 @t.media.music.r105 core.test

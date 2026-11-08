@@ -384,6 +384,31 @@
     card=one
     ask="Which action gives up on the tab?"
 
+@core.world.tabUndo core.key
+    value=atom
+    card=one
+    ask="Which action undoes the last move on the tab (the shell's game controls emit it on the game tab)?"
+
+@core.world.gameNew core.key
+    value=atom
+    card=one
+    ask="Which action starts a new game (the shell's game controls emit it on the game tab)?"
+
+@core.world.gameHint core.key
+    value=atom
+    card=one
+    ask="Which action gives a hint (the shell's game controls emit it on the game tab)?"
+
+@core.world.gameGiveUp core.key
+    value=atom
+    card=one
+    ask="Which action gives up (the shell's game controls emit it on the game tab)?"
+
+@core.world.gameUndo core.key
+    value=atom
+    card=one
+    ask="Which action takes back the last move (the shell's game controls emit it on the game tab)?"
+
 @core.pattern.match core.key
     value=string
     card=one
@@ -405,6 +430,21 @@
     value=integer
     card=one
     ask="Which priority?"
+
+@core.pattern.tabOnly core.key
+    value=boolean
+    card=one
+    ask="Does the pattern apply only while its world's tab is active?"
+
+@core.pattern.tabPriority core.key
+    value=integer
+    card=one
+    ask="Which priority applies while the world's tab is active?"
+
+@core.pattern.yieldsTo core.key
+    value=atom
+    card=many
+    ask="Which world does a tier 2b setting give way to when that world is the tab or a recent world?"
 
 @core.pattern.example core.key
     value=string

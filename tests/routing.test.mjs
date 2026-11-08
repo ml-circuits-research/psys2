@@ -29,7 +29,7 @@ test('tier 2a: a navigation command that names a tab beats the tab world, whatev
 });
 
 test('tier 2b: a settings command beats the tab world unless another world has a higher priority', () => {
-  const rate = cand('ui.shell', 'rate', { priority: 10, emit: '@{_} core.request action=ui.rate arg.dir=faster' });
+  const rate = cand('ui.shell', 'rate', { priority: 10, literals: 3, emit: '@{_} core.request action=ui.rate arg.dir=faster' });
   const lower = cand('media.music', 'x', { priority: 10 });
   assert.equal(route([lower, rate], { tabWorld: 'media.music' }).decision.winner.patternId, 'rate');
   const higher = cand('media.music', 'y', { priority: 12 });

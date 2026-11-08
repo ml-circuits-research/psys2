@@ -56,7 +56,7 @@ export class FormSession {
     const id = 'e.' + raw.toLowerCase();
     const known = this.agents.get(id);
     return known ? { id, name: known.name, gender: known.gender, isNew: false }
-      : { id, name: raw, gender, isNew: true };
+      : { id, name: raw.replace(/^\p{Ll}/u, (c) => c.toUpperCase()), gender, isNew: true };
   }
 
   /** Resolve a pronoun to an existing agent (no mutation); null when it cannot be resolved. */

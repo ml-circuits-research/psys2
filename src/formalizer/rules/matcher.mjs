@@ -17,6 +17,9 @@ export const BUILTIN_CLASSES = new Set(['number', 'ordinal', 'word', 'words', 'r
 /** Default and maximum token count of a `words` slot (`{x:words}` = 12, `{x:words(20)}` = 20). */
 export const WORDS_DEFAULT_MAX = 12;
 
+/** Longest multi-word lexicon entry a slot can capture (song titles). */
+export const LEXICON_MAX_WORDS = 4;
+
 export class PatternError extends Error {}
 
 /**
@@ -150,7 +153,7 @@ function candidates(el, tokens, i, env, slotsSoFar) {
       const lexicon = env.lex.lexicons.get(cls);
       if (!lexicon) return [];
       const out = [];
-      for (let len = 3; len >= 1; len--) {
+      for (let len = LEXICON_MAX_WORDS; len >= 1; len--) {
         if (i + len > tokens.length) continue;
         const ws = tokens.slice(i, i + len);
         if (!ws.every((x) => x.kind === 'word')) continue;

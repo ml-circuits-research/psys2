@@ -21,4 +21,5 @@
     tabNew=chess.new
     tabHint=chess.hint
     tabGiveUp=chess.resign
+    tabUndo=chess.undo
     doc="Chess against the system, by voice or typing: moves in plain English (knight to f3, e2 to e4, bishop takes c6, castle kingside, promote to a queen), spoken squares (e four, echo four), ambiguity resolution, illegal moves explained, questions about the position, undo, levels 1 to 8, hints. Rules come from the vendored chess.js (BSD-2) inside the world; the system reply move is asked from the host as the effect chess.engine.bestmove (Stockfish WASM in the browser tab) through the observation loop, with a deterministic built-in chooser as fallback. Hand-built platform fixture, not produced by the C1 workflow."

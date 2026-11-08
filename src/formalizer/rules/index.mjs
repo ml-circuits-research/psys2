@@ -9,7 +9,7 @@ import { analyze, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } fro
 import { compilePattern, matchTokens, BUILTIN_CLASSES, PatternError } from './matcher.mjs';
 import { buildWires, substituteEmit, dummySlots } from './emit.mjs';
 import { routeScores } from './router.mjs';
-import { createRouter, contextFromFocus, normalizeContext, defaultRouter } from '../routing.mjs';
+import { createRouter, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction } from '../routing.mjs';
 import { FormSession, STOP_WORDS, isPronoun } from './session.mjs';
 import { selfCorrect, sharedArgument, repetition, ellipsisPrefixes, joinText, MARKER_RE, SEP_RE } from './expand.mjs';
 import { parse, serialize } from '../../soplang/index.mjs';
@@ -44,7 +44,7 @@ export function checkPattern(p, set) {
     if (!BUILTIN_CLASSES.has(def.cls) && !lex.lexicons.has(def.cls)) problems.push(`${p.id}: slot '${name}' has unknown class '${def.cls}'`);
     if (def.cls === 'recent' && !lex.lexicons.has(def.args[0])) problems.push(`${p.id}: slot '${name}' refers to unknown lexicon '${def.args[0]}'`);
   }
-  for (const [, name] of p.emit.matchAll(/\{([A-Za-z_]\w*)\}/g)) {
+  for (const [, name] of p.emit.matchAll(/\{([A-Za-z_]\w*)(?:\|\w+)?\}/g)) {
     if (!c.slots.has(name) && !/^_\d*$/.test(name)) problems.push(`${p.id}: emit uses '{${name}}' but the match has no such slot`);
   }
   if (!['statement', 'question', 'request', 'chat'].includes(p.kind)) problems.push(`${p.id}: unknown kind '${p.kind}'`);
@@ -211,6 +211,15 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
   for (const m of matches) { m.score = score(m.pattern.worldId); m.rank = m.pattern.priority; }
   // The router (src/formalizer/routing.mjs, spec 03 section 4) orders the candidates using the application context.
   const routed = router.route({ matches, context, scores: worlds, tokens: toks });
+  // Game controls of ui.shell on a game tab emit the active game's own action (spec 03 section 4, Q5): one meaning, one label.
+  const gameTab = context?.tabWorld && String(context.tabWorld).startsWith('games.') ? set.list().find((w) => w.id === context.tabWorld) : null;
+  if (gameTab?.gameControls) {
+    for (const m of routed.matches) {
+      if (!isGameControl(m)) continue;
+      const own = gameControlAction(m.pattern, gameTab.gameControls);
+      if (own) m.pattern = { ...m.pattern, emit: m.pattern.emit.replace(/action=[\w.]+/, `action=${own}`) };
+    }
+  }
   return { matches: routed.matches, worlds, decision: routed.decision };
 }
 

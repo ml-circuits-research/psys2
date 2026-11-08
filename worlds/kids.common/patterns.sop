@@ -22,7 +22,7 @@
 
 @pat.kids.common.meet core.pattern
     match="[hello|hi|hey]? [there]? my name is {n:words(3)}"
-    emit="@{_} core.request action=chat.meet arg.name=\"{n}\""
+    emit="@{_} core.request action=chat.meet arg.name=\"{n|cap}\""
     kind=chat
     priority=12
     example="Hi, my name is Ben."
@@ -30,7 +30,7 @@
 
 @pat.kids.common.meet.call core.pattern
     match="[hello|hi|hey]? [there]? [call_me|you_can_call_me|please_call_me|everybody_calls_me|i_am_called|i_am_named] {n:words(3)}"
-    emit="@{_} core.request action=chat.meet arg.name=\"{n}\""
+    emit="@{_} core.request action=chat.meet arg.name=\"{n|cap}\""
     kind=chat
     priority=12
     example="Call me Sam."
@@ -150,28 +150,28 @@
 
 @pat.kids.common.w.meet.f1 core.pattern
     match="[hello|hi|hey|yo|hiya]? [there]? [just|please|pls|actually|well]? [my_name_is|my_name_s|my_names|my_name's|my_nickname_is|my_nick_is|my_nickname_s|name_s|names|name's|the_name_is|the_name's|the_names|im_called|i_am_called|i_go_by|you_can_call_me|can_you_call_me|call_me|just_call_me|please_call_me|everybody_calls_me|people_call_me|they_call_me|my_friends_call_me|i_am_named|im_named|my_first_name_is|the_name_s|the_name_is_actually|you_can_know_me_as|know_me_as|refer_to_me_as|address_me_as|you_can_address_me_as|i_am_known_as|im_known_as|name_is|first_name_is|full_name_is|my_full_name_is|my_first_name_is] {n:words(3)}"
-    emit="@{_} core.request action=chat.meet arg.name=\"{n}\""
+    emit="@{_} core.request action=chat.meet arg.name=\"{n|cap}\""
     kind=question
     priority=12
     example="Hi, you can call me Zed."
 
 @pat.kids.common.w.meet.f2 core.pattern
     match="[hello|hi|hey|yo|hiya]? [there]? [this_is|hi_this_is] {n:agent}"
-    emit="@{_} core.request action=chat.meet arg.name=\"{n}\""
+    emit="@{_} core.request action=chat.meet arg.name=\"{n|cap}\""
     kind=question
     priority=12
     example="Hi, this is Zed."
 
 @pat.kids.common.w.meet.f3 core.pattern
     match="{n:words(3)} [is_my_name|is_me|that_is_me|thats_me|is_who_i_am|is_what_i_am_called|is_what_people_call_me|is_my_nickname|call_me_that|is_what_to_call_me|is_what_i_go_by|speaking|talking|here]"
-    emit="@{_} core.request action=chat.meet arg.name=\"{n}\""
+    emit="@{_} core.request action=chat.meet arg.name=\"{n|cap}\""
     kind=question
     priority=12
     example="Zed is my name."
 
 @pat.kids.common.w.meet.f4 core.pattern
     match="[this_is] {n:agent} [talking|speaking|here|again]"
-    emit="@{_} core.request action=chat.meet arg.name=\"{n}\""
+    emit="@{_} core.request action=chat.meet arg.name=\"{n|cap}\""
     kind=question
     priority=12
     example="This is Zed talking."
@@ -262,35 +262,35 @@
 
 @pat.kids.common.w.meet.f5 core.pattern
     match="[my_name|my_nickname|the_name|name|my_first_name] 's {n:words(3)}"
-    emit="@{_} core.request action=chat.meet arg.name=\"{n}\""
+    emit="@{_} core.request action=chat.meet arg.name=\"{n|cap}\""
     kind=question
     priority=12
     example="My name's Zed."
 
 @pat.kids.common.w.meet.f6 core.pattern
     match="[name|first_name|full_name|nickname] is {n:words(3)}"
-    emit="@{_} core.request action=chat.meet arg.name=\"{n}\""
+    emit="@{_} core.request action=chat.meet arg.name=\"{n|cap}\""
     kind=question
     priority=12
     example="Name is Zed."
 
 @pat.kids.common.w.meet.f7 core.pattern
     match="{n:words(3)} [is|works|will_do|would_be] [fine|ok|okay|good|great|perfect|cool|best] [for|with|by]? [me]?"
-    emit="@{_} core.request action=chat.meet arg.name=\"{n}\""
+    emit="@{_} core.request action=chat.meet arg.name=\"{n|cap}\""
     kind=question
     priority=12
     example="Zed is fine by me."
 
 @pat.kids.common.w.meet.f8 core.pattern
     match="{n:words(3)} [nice_to_meet_you|pleased_to_meet_you|nice_to_meetcha|good_to_meet_you|glad_to_meet_you|nice_to_meet_u]"
-    emit="@{_} core.request action=chat.meet arg.name=\"{n}\""
+    emit="@{_} core.request action=chat.meet arg.name=\"{n|cap}\""
     kind=question
     priority=12
     example="Zed, nice to meet you."
 
 @pat.kids.common.w.meet.f9 core.pattern
     match="[hello|hi|hey]? [there]? [my_name_is|my_name_s|my_names|my_name's|my_nickname_is|my_nick_is|my_nickname_s|name_s|names|name's|the_name_is|the_name's|the_names|im_called|i_am_called|i_go_by|you_can_call_me|can_you_call_me|call_me|just_call_me|please_call_me|everybody_calls_me|people_call_me|they_call_me|my_friends_call_me|i_am_named|im_named|my_first_name_is|the_name_s|the_name_is_actually|you_can_know_me_as|know_me_as|refer_to_me_as|address_me_as|you_can_address_me_as|i_am_known_as|im_known_as|name_is|first_name_is|full_name_is|my_full_name_is|my_first_name_is] {n:words(3)} [pls|plz|please|now|ok|then|from_now_on|ok_then|thanks|lol]"
-    emit="@{_} core.request action=chat.meet arg.name=\"{n}\""
+    emit="@{_} core.request action=chat.meet arg.name=\"{n|cap}\""
     kind=question
     priority=13
     example="Call me Zed please."
@@ -535,7 +535,7 @@
 
 @pat.kids.common.x.meet.lead core.pattern
     match="[hello|hi|hey|yo|hiya|hi_there|hello_there|hey_there|hey_bot|hi_bot|hello_bot|so|well|oh|actually|just_so_you_know|just_so_u_know|fyi|btw|by_the_way|listen|look|guess_what|did_you_know|you_should_know|for_the_record|in_case_you_dont_know|in_case_you_didnt_know|as_you_know|remember|note|note_that|ok|okay|alright|hmm|um|uh|ah|hey_you|first|first_of_all|let_me_introduce_myself|let_me_introduce_myself_to_you|allow_me_to_introduce_myself|i_wanna_say|i_want_to_say|just|pls|please|plz|hey_so|ok_so|okay_so|oh_hi|oh_hello|oh_hey|so_hi|so_hello|so_hey]? [hello|hi|hey|yo|hiya|hi_there|hello_there|hey_there|hey_bot|hi_bot|hello_bot|so|well|oh|actually|just_so_you_know|just_so_u_know|fyi|btw|by_the_way|listen|look|guess_what|did_you_know|you_should_know|for_the_record|in_case_you_dont_know|in_case_you_didnt_know|as_you_know|remember|note|note_that|ok|okay|alright|hmm|um|uh|ah|hey_you|first|first_of_all|let_me_introduce_myself|let_me_introduce_myself_to_you|allow_me_to_introduce_myself|i_wanna_say|i_want_to_say|just|pls|please|plz|hey_so|ok_so|okay_so|oh_hi|oh_hello|oh_hey|so_hi|so_hello|so_hey]? [my_name_is|my_name_s|my_names|my_nickname_is|my_nick_is|my_nickname_s|name_is|names|the_name_is|the_names|im_called|i_am_called|i_go_by|you_can_call_me|can_you_call_me|could_you_call_me|call_me|just_call_me|please_call_me|everybody_calls_me|everyone_calls_me|people_call_me|they_call_me|my_friends_call_me|i_am_named|im_named|my_first_name_is|you_can_know_me_as|know_me_as|refer_to_me_as|address_me_as|you_can_address_me_as|i_am_known_as|im_known_as|first_name_is|full_name_is|my_full_name_is|my_real_name_is|my_given_name_is|you_may_call_me|you_could_call_me|you_should_call_me|u_can_call_me|u_may_call_me|my_nick_name_is] {n:words(3)} [by_the_way|btw|by_the_way_lol|here|again|nice_to_meet_you|nice_to_meet_u|pleased_to_meet_you|good_to_meet_you|glad_to_meet_you|nice_to_meet_ya|hello|hi|hey|haha|fyi|if_you_want|if_you_like|you_know|ok|okay|then|now|pls|plz|please|thanks|lol|from_now_on|ok_then|just_so_you_know|just_saying|for_short|speaking|here_i_am|this_is_me|im_new|im_a_kid|your_new_friend|your_friend|new_here]? [by_the_way|btw|by_the_way_lol|here|again|nice_to_meet_you|nice_to_meet_u|pleased_to_meet_you|good_to_meet_you|glad_to_meet_you|nice_to_meet_ya|hello|hi|hey|haha|fyi|if_you_want|if_you_like|you_know|ok|okay|then|now|pls|plz|please|thanks|lol|from_now_on|ok_then|just_so_you_know|just_saying|for_short|speaking|here_i_am|this_is_me|im_new|im_a_kid|your_new_friend|your_friend|new_here]?"
-    emit="@{_} core.request action=chat.meet arg.name=\"{n}\""
+    emit="@{_} core.request action=chat.meet arg.name=\"{n|cap}\""
     kind=question
     priority=12
     example="Hello my name is Zed by the way"
@@ -543,7 +543,7 @@
 
 @pat.kids.common.x.meet.s core.pattern
     match="[hello|hi|hey|yo|hiya|hi_there|hello_there|hey_there|hey_bot|hi_bot|hello_bot|so|well|oh|actually|just_so_you_know|just_so_u_know|fyi|btw|by_the_way|listen|look|guess_what|did_you_know|you_should_know|for_the_record|in_case_you_dont_know|in_case_you_didnt_know|as_you_know|remember|note|note_that|ok|okay|alright|hmm|um|uh|ah|hey_you|first|first_of_all|let_me_introduce_myself|let_me_introduce_myself_to_you|allow_me_to_introduce_myself|i_wanna_say|i_want_to_say|just|pls|please|plz|hey_so|ok_so|okay_so|oh_hi|oh_hello|oh_hey|so_hi|so_hello|so_hey]? [hello|hi|hey|yo|hiya|hi_there|hello_there|hey_there|hey_bot|hi_bot|hello_bot|so|well|oh|actually|just_so_you_know|just_so_u_know|fyi|btw|by_the_way|listen|look|guess_what|did_you_know|you_should_know|for_the_record|in_case_you_dont_know|in_case_you_didnt_know|as_you_know|remember|note|note_that|ok|okay|alright|hmm|um|uh|ah|hey_you|first|first_of_all|let_me_introduce_myself|let_me_introduce_myself_to_you|allow_me_to_introduce_myself|i_wanna_say|i_want_to_say|just|pls|please|plz|hey_so|ok_so|okay_so|oh_hi|oh_hello|oh_hey|so_hi|so_hello|so_hey]? [my_name|my_nickname|the_name|name|my_first_name|my_nick] 's {n:words(3)} [by_the_way|btw|by_the_way_lol|here|again|nice_to_meet_you|nice_to_meet_u|pleased_to_meet_you|good_to_meet_you|glad_to_meet_you|nice_to_meet_ya|hello|hi|hey|haha|fyi|if_you_want|if_you_like|you_know|ok|okay|then|now|pls|plz|please|thanks|lol|from_now_on|ok_then|just_so_you_know|just_saying|for_short|speaking|here_i_am|this_is_me|im_new|im_a_kid|your_new_friend|your_friend|new_here]? [by_the_way|btw|by_the_way_lol|here|again|nice_to_meet_you|nice_to_meet_u|pleased_to_meet_you|good_to_meet_you|glad_to_meet_you|nice_to_meet_ya|hello|hi|hey|haha|fyi|if_you_want|if_you_like|you_know|ok|okay|then|now|pls|plz|please|thanks|lol|from_now_on|ok_then|just_so_you_know|just_saying|for_short|speaking|here_i_am|this_is_me|im_new|im_a_kid|your_new_friend|your_friend|new_here]?"
-    emit="@{_} core.request action=chat.meet arg.name=\"{n}\""
+    emit="@{_} core.request action=chat.meet arg.name=\"{n|cap}\""
     kind=question
     priority=12
     example="Name's Zed by the way"
@@ -551,7 +551,7 @@
 
 @pat.kids.common.x.meet.iam core.pattern
     match="[hello|hi|hey|yo|hiya|hi_there|hello_there|hey_there|hey_bot|hi_bot|hello_bot|so|well|oh|actually|just_so_you_know|just_so_u_know|fyi|btw|by_the_way|listen|look|guess_what|did_you_know|you_should_know|for_the_record|in_case_you_dont_know|in_case_you_didnt_know|as_you_know|remember|note|note_that|ok|okay|alright|hmm|um|uh|ah|hey_you|first|first_of_all|let_me_introduce_myself|let_me_introduce_myself_to_you|allow_me_to_introduce_myself|i_wanna_say|i_want_to_say|just|pls|please|plz|hey_so|ok_so|okay_so|oh_hi|oh_hello|oh_hey|so_hi|so_hello|so_hey]? [hello|hi|hey|yo|hiya|hi_there|hello_there|hey_there|hey_bot|hi_bot|hello_bot|so|well|oh|actually|just_so_you_know|just_so_u_know|fyi|btw|by_the_way|listen|look|guess_what|did_you_know|you_should_know|for_the_record|in_case_you_dont_know|in_case_you_didnt_know|as_you_know|remember|note|note_that|ok|okay|alright|hmm|um|uh|ah|hey_you|first|first_of_all|let_me_introduce_myself|let_me_introduce_myself_to_you|allow_me_to_introduce_myself|i_wanna_say|i_want_to_say|just|pls|please|plz|hey_so|ok_so|okay_so|oh_hi|oh_hello|oh_hey|so_hi|so_hello|so_hey]? [i_am|im|i_m|ima|me_is|me_am|i_be|its|it_is] {n:agent} [by_the_way|btw|by_the_way_lol|here|again|nice_to_meet_you|nice_to_meet_u|pleased_to_meet_you|good_to_meet_you|glad_to_meet_you|nice_to_meet_ya|hello|hi|hey|haha|fyi|if_you_want|if_you_like|you_know|ok|okay|then|now|pls|plz|please|thanks|lol|from_now_on|ok_then|just_so_you_know|just_saying|for_short|speaking|here_i_am|this_is_me|im_new|im_a_kid|your_new_friend|your_friend|new_here]? [by_the_way|btw|by_the_way_lol|here|again|nice_to_meet_you|nice_to_meet_u|pleased_to_meet_you|good_to_meet_you|glad_to_meet_you|nice_to_meet_ya|hello|hi|hey|haha|fyi|if_you_want|if_you_like|you_know|ok|okay|then|now|pls|plz|please|thanks|lol|from_now_on|ok_then|just_so_you_know|just_saying|for_short|speaking|here_i_am|this_is_me|im_new|im_a_kid|your_new_friend|your_friend|new_here]?"
-    emit="@{_} core.request action=chat.meet arg.name=\"{n}\""
+    emit="@{_} core.request action=chat.meet arg.name=\"{n|cap}\""
     kind=question
     priority=8
     example="I am Zed"
@@ -560,7 +560,7 @@
 
 @pat.kids.common.x.meet.tail core.pattern
     match="[hello|hi|hey|yo|hiya|hi_there|hello_there|hey_there|hey_bot|hi_bot|hello_bot|so|well|oh|actually|just_so_you_know|just_so_u_know|fyi|btw|by_the_way|listen|look|guess_what|did_you_know|you_should_know|for_the_record|in_case_you_dont_know|in_case_you_didnt_know|as_you_know|remember|note|note_that|ok|okay|alright|hmm|um|uh|ah|hey_you|first|first_of_all|let_me_introduce_myself|let_me_introduce_myself_to_you|allow_me_to_introduce_myself|i_wanna_say|i_want_to_say|just|pls|please|plz|hey_so|ok_so|okay_so|oh_hi|oh_hello|oh_hey|so_hi|so_hello|so_hey]? [hello|hi|hey|yo|hiya|hi_there|hello_there|hey_there|hey_bot|hi_bot|hello_bot|so|well|oh|actually|just_so_you_know|just_so_u_know|fyi|btw|by_the_way|listen|look|guess_what|did_you_know|you_should_know|for_the_record|in_case_you_dont_know|in_case_you_didnt_know|as_you_know|remember|note|note_that|ok|okay|alright|hmm|um|uh|ah|hey_you|first|first_of_all|let_me_introduce_myself|let_me_introduce_myself_to_you|allow_me_to_introduce_myself|i_wanna_say|i_want_to_say|just|pls|please|plz|hey_so|ok_so|okay_so|oh_hi|oh_hello|oh_hey|so_hi|so_hello|so_hey]? {n:words(3)} [is_my_name|is_me|that_is_me|thats_me|is_who_i_am|is_what_i_am_called|is_what_people_call_me|is_my_nickname|is_what_to_call_me|is_what_i_go_by|is_my_first_name|is_my_real_name|is_what_my_friends_call_me|is_what_everyone_calls_me|is_my_nick|is_my_given_name|speaking|talking|here] [by_the_way|btw|by_the_way_lol|here|again|nice_to_meet_you|nice_to_meet_u|pleased_to_meet_you|good_to_meet_you|glad_to_meet_you|nice_to_meet_ya|hello|hi|hey|haha|fyi|if_you_want|if_you_like|you_know|ok|okay|then|now|pls|plz|please|thanks|lol|from_now_on|ok_then|just_so_you_know|just_saying|for_short|speaking|here_i_am|this_is_me|im_new|im_a_kid|your_new_friend|your_friend|new_here]? [by_the_way|btw|by_the_way_lol|here|again|nice_to_meet_you|nice_to_meet_u|pleased_to_meet_you|good_to_meet_you|glad_to_meet_you|nice_to_meet_ya|hello|hi|hey|haha|fyi|if_you_want|if_you_like|you_know|ok|okay|then|now|pls|plz|please|thanks|lol|from_now_on|ok_then|just_so_you_know|just_saying|for_short|speaking|here_i_am|this_is_me|im_new|im_a_kid|your_new_friend|your_friend|new_here]?"
-    emit="@{_} core.request action=chat.meet arg.name=\"{n}\""
+    emit="@{_} core.request action=chat.meet arg.name=\"{n|cap}\""
     kind=question
     priority=12
     example="Zed is my name pls"
@@ -643,63 +643,63 @@
 
 @pat.kids.common.x.meet.iamlex0 core.pattern
     match="[hello|hi|hey|yo|hiya|hi_there|hello_there|hey_there|so|well|oh|ok|okay|actually]? [hello|hi|hey]? [i_am|im|i_m|ima|its|it_is|this_is|my_name_is|call_me|you_can_call_me] {f:lex.kids.common.names.en.m} {l:word} [by_the_way|btw|here|nice_to_meet_you|pls|please|lol]?"
-    emit="@{_} core.request action=chat.meet arg.name=\"{f} {l}\""
+    emit="@{_} core.request action=chat.meet arg.name=\"{f|cap} {l|cap}\""
     kind=question
     priority=11
     example="Im mia lee"
 
 @pat.kids.common.x.meet.iamlexone0 core.pattern
     match="[hello|hi|hey|yo|hiya|hi_there|hello_there|hey_there|so|well|oh|ok|okay|actually]? [hello|hi|hey]? [i_am|im|i_m|ima|its|it_is|this_is] {f:lex.kids.common.names.en.m} [by_the_way|btw|here|nice_to_meet_you|pls|please|lol]?"
-    emit="@{_} core.request action=chat.meet arg.name=\"{f}\""
+    emit="@{_} core.request action=chat.meet arg.name=\"{f|cap}\""
     kind=question
     priority=9
     example="Hey im mia"
 
 @pat.kids.common.x.meet.iamlex1 core.pattern
     match="[hello|hi|hey|yo|hiya|hi_there|hello_there|hey_there|so|well|oh|ok|okay|actually]? [hello|hi|hey]? [i_am|im|i_m|ima|its|it_is|this_is|my_name_is|call_me|you_can_call_me] {f:lex.kids.common.names.en.f} {l:word} [by_the_way|btw|here|nice_to_meet_you|pls|please|lol]?"
-    emit="@{_} core.request action=chat.meet arg.name=\"{f} {l}\""
+    emit="@{_} core.request action=chat.meet arg.name=\"{f|cap} {l|cap}\""
     kind=question
     priority=11
     example="Im mia lee"
 
 @pat.kids.common.x.meet.iamlexone1 core.pattern
     match="[hello|hi|hey|yo|hiya|hi_there|hello_there|hey_there|so|well|oh|ok|okay|actually]? [hello|hi|hey]? [i_am|im|i_m|ima|its|it_is|this_is] {f:lex.kids.common.names.en.f} [by_the_way|btw|here|nice_to_meet_you|pls|please|lol]?"
-    emit="@{_} core.request action=chat.meet arg.name=\"{f}\""
+    emit="@{_} core.request action=chat.meet arg.name=\"{f|cap}\""
     kind=question
     priority=9
     example="Hey im mia"
 
 @pat.kids.common.x.meet.iamlex2 core.pattern
     match="[hello|hi|hey|yo|hiya|hi_there|hello_there|hey_there|so|well|oh|ok|okay|actually]? [hello|hi|hey]? [i_am|im|i_m|ima|its|it_is|this_is|my_name_is|call_me|you_can_call_me] {f:lex.kids.common.names.ro.m} {l:word} [by_the_way|btw|here|nice_to_meet_you|pls|please|lol]?"
-    emit="@{_} core.request action=chat.meet arg.name=\"{f} {l}\""
+    emit="@{_} core.request action=chat.meet arg.name=\"{f|cap} {l|cap}\""
     kind=question
     priority=11
     example="Im mia lee"
 
 @pat.kids.common.x.meet.iamlexone2 core.pattern
     match="[hello|hi|hey|yo|hiya|hi_there|hello_there|hey_there|so|well|oh|ok|okay|actually]? [hello|hi|hey]? [i_am|im|i_m|ima|its|it_is|this_is] {f:lex.kids.common.names.ro.m} [by_the_way|btw|here|nice_to_meet_you|pls|please|lol]?"
-    emit="@{_} core.request action=chat.meet arg.name=\"{f}\""
+    emit="@{_} core.request action=chat.meet arg.name=\"{f|cap}\""
     kind=question
     priority=9
     example="Hey im mia"
 
 @pat.kids.common.x.meet.iamlex3 core.pattern
     match="[hello|hi|hey|yo|hiya|hi_there|hello_there|hey_there|so|well|oh|ok|okay|actually]? [hello|hi|hey]? [i_am|im|i_m|ima|its|it_is|this_is|my_name_is|call_me|you_can_call_me] {f:lex.kids.common.names.ro.f} {l:word} [by_the_way|btw|here|nice_to_meet_you|pls|please|lol]?"
-    emit="@{_} core.request action=chat.meet arg.name=\"{f} {l}\""
+    emit="@{_} core.request action=chat.meet arg.name=\"{f|cap} {l|cap}\""
     kind=question
     priority=11
     example="Im mia lee"
 
 @pat.kids.common.x.meet.iamlexone3 core.pattern
     match="[hello|hi|hey|yo|hiya|hi_there|hello_there|hey_there|so|well|oh|ok|okay|actually]? [hello|hi|hey]? [i_am|im|i_m|ima|its|it_is|this_is] {f:lex.kids.common.names.ro.f} [by_the_way|btw|here|nice_to_meet_you|pls|please|lol]?"
-    emit="@{_} core.request action=chat.meet arg.name=\"{f}\""
+    emit="@{_} core.request action=chat.meet arg.name=\"{f|cap}\""
     kind=question
     priority=9
     example="Hey im mia"
 
 @pat.kids.common.x.meet.sposs core.pattern
     match="[hello|hi|hey]? {n:words(3)} 's [my_name|my_nickname|me|my_first_name|my_nick|my_real_name] [by_the_way|btw|here|pls|please|lol]?"
-    emit="@{_} core.request action=chat.meet arg.name=\"{n}\""
+    emit="@{_} core.request action=chat.meet arg.name=\"{n|cap}\""
     kind=question
     priority=12
     example="Ben's my name"

@@ -16,3 +16,9 @@ The module exports `createRouter({ id, model })`. `route({ matches, context, sco
 - The tab decides ambiguous commands ("Play B3", "Repeat that", "Start over", "Make it bigger"); cross-world questions still work when the tab world has no match.
 - Tier 2b yields to a higher priority so that phrases such as "Hurry up" (chess) or "Where am I?" (map) keep their world.
 - Training export (`--routing-context`) labels cross-world ties with the generator's world as active tab. Agreement over all generator records, 300 per world: 96.7% without routing context, 98.8% with it (tic-tac-toe 69.7% to 100%, guess 98.3% to 100%, hangman 94.3% to 96.0%). On the music tab "Play knight to f3" now stays a music request, which the music generator lists as a negative.
+
+## Amendment (engine improvements)
+- Tier 3 exception is now "clearly more specific wins": the tab's catch-all loses to another world's zero-wildcard match that is not of lower priority and has two more literals or a higher priority; catch-alls of other worlds and lower-priority literal matches never steal from the tab.
+- `ui.shell` game controls on a game tab are rewritten to the game's own action (manifest keys `gameNew`/`gameGiveUp`/`gameHint`/`gameUndo`, fallback `tab*`), so the dataset has one label per meaning (reviewer decision Q5). Off a game tab the shell form stays.
+- Patterns may declare `tabOnly`, `tabPriority` and `yieldsTo`; bare tempo words yield to the music world (tier 2b) without any priority change.
+- Emit filter `{slot|cap}` and four-word lexicon entries (spec 03 section 2).
