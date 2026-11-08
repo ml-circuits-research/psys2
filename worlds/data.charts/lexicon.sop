@@ -1,0 +1,224 @@
+@lex.data.charts.types core.lexicon
+    class=noun
+    doc="Chart types as people say them (Chart.js: bar, line, pie, doughnut, radar, polarArea, scatter)"
+    word=bar
+    word=line
+    word=pie
+    word=doughnut
+    word=donut
+    word=radar
+    word=polar_area
+    word=polar
+    word=scatter
+    plural=pie:pies
+
+@lex.data.charts.nouns core.lexicon
+    class=noun
+    doc="Words for a chart"
+    word=chart
+    word=graph
+    word=plot
+    word=diagram
+
+@lex.data.charts.colors core.lexicon
+    class=noun
+    doc="Color names the chart understands"
+    word=red
+    word=orange
+    word=yellow
+    word=green
+    word=blue
+    word=purple
+    word=pink
+    word=teal
+    word=brown
+    word=gray
+    word=grey
+    word=black
+    word=white
+    word=indigo
+    word=cyan
+    word=lime
+    word=gold
+    word=navy
+    word=coral
+    word=mint
+    word=violet
+    word=magenta
+    word=turquoise
+    word=crimson
+    word=maroon
+    word=lavender
+    word=peach
+    word=silver
+    word=beige
+
+@lex.data.charts.shades core.lexicon
+    class=noun
+    doc="Shades of a color"
+    word=light
+    word=dark
+    word=pale
+    word=bright
+    word=deep
+
+@lex.data.charts.palettes core.lexicon
+    class=noun
+    doc="Palette names"
+    word=rainbow
+    word=pastel
+    word=ocean
+    word=sea
+    word=forest
+    word=sunset
+    word=warm
+    word=cool
+    word=neon
+    word=earth
+    word=autumn
+    word=classic
+    word=different
+    word=default
+    word=original
+    word=standard
+    word=normal
+
+@lex.data.charts.ordinals core.lexicon
+    class=noun
+    doc="Positions of a chart"
+    word=first
+    word=second
+    word=third
+    word=fourth
+    word=fifth
+    word=sixth
+    word=seventh
+    word=eighth
+    word=ninth
+    word=tenth
+    word=last
+
+@lex.data.charts.extent core.lexicon
+    class=noun
+    doc="Words for the biggest and the smallest, and sort directions"
+    word=biggest
+    word=largest
+    word=highest
+    word=greatest
+    word=most
+    word=big
+    word=large
+    word=high
+    word=top
+    word=descending
+    word=tallest
+    word=maximum
+    word=max
+    word=longest
+    word=best
+    word=bigger
+    word=larger
+    word=higher
+    word=greater
+    word=smallest
+    word=lowest
+    word=least
+    word=small
+    word=low
+    word=bottom
+    word=ascending
+    word=shortest
+    word=minimum
+    word=min
+    word=fewest
+    word=worst
+    word=smaller
+    word=lower
+
+@lex.data.charts.orient core.lexicon
+    class=noun
+    doc="Orientation of the bars"
+    word=horizontal
+    word=horizontally
+    word=sideways
+    word=vertical
+    word=vertically
+    word=upright
+
+@lex.data.charts.g_toys core.lexicon
+    class=noun
+    doc="Items of the shop price list that are toys"
+    word=ball
+    word=doll
+    word=kite
+    word=puzzle
+    word=balloon
+    word=toy_car
+
+@lex.data.charts.g_fruit core.lexicon
+    class=noun
+    doc="Fruit on the shop price list"
+    word=apple
+    word=banana
+    word=orange
+    word=pear
+
+@lex.data.charts.g_school core.lexicon
+    class=noun
+    doc="School things on the shop price list"
+    word=pencil
+    word=pen
+    word=eraser
+    word=ruler
+    word=notebook
+    word=sticker
+    word=book
+    word=backpack
+
+@lex.data.charts.g_snacks core.lexicon
+    class=noun
+    doc="Snacks and baked things on the shop price list"
+    word=biscuit
+    word=chocolate
+    word=ice_cream
+    word=sandwich
+    word=bread
+
+@lex.data.charts.g_drinks core.lexicon
+    class=noun
+    doc="Drinks on the shop price list"
+    word=juice
+    word=milk
+    word=water
+
+@lex.data.charts.g_food core.lexicon
+    class=noun
+    doc="Everything to eat or drink on the shop price list"
+    word=apple
+    word=banana
+    word=orange
+    word=pear
+    word=bread
+    word=milk
+    word=juice
+    word=water
+    word=biscuit
+    word=chocolate
+    word=ice_cream
+    word=sandwich
+
+@lex.data.charts.triggers core.lexicon
+    class=trigger
+    doc="Words that point to charts"
+    word=chart
+    word=graph
+    word=plot
+    word=diagram
+    word=bar
+    word=pie
+    word=doughnut
+    word=legend
+    word=stacked
+    word=horizontal
+    word=vertical
+

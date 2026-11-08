@@ -1,0 +1,609 @@
+@t.data.charts.n01 core.test
+    input="Make a chart: apples 5, pears 3, plums 8"
+    expectState="charts.0.type=bar"
+    expectState="charts.0.labels.length=3"
+    expectState="charts.0.datasets.0.data.2=8"
+    expectState="active=c1"
+    expectState="inputMode=chart"
+    expectState="charts.0.source.length=1"
+    session=a
+
+@t.data.charts.n02 core.test
+    input="Add bananas 4"
+    expectState="charts.0.labels.length=4"
+    expectState="charts.0.labels.3=Bananas"
+    expectState="charts.0.datasets.0.data.3=4"
+    session=a
+
+@t.data.charts.n03 core.test
+    input="Remove plums"
+    expectState="charts.0.labels.length=3"
+    expectState="charts.0.labels.2=Bananas"
+    session=a
+
+@t.data.charts.n04 core.test
+    input="Change pears to 6"
+    expect="6"
+    expectState="charts.0.datasets.0.data.1=6"
+    session=a
+
+@t.data.charts.n05 core.test
+    input="Increase apples by 2"
+    expectState="charts.0.datasets.0.data.0=7"
+    session=a
+
+@t.data.charts.n06 core.test
+    input="Double the bananas"
+    expectState="charts.0.datasets.0.data.2=8"
+    session=a
+
+@t.data.charts.n07 core.test
+    input="Rename bananas to kiwis"
+    expectState="charts.0.labels.2=Kiwis"
+    session=a
+
+@t.data.charts.n08 core.test
+    input="Make it a pie chart"
+    expectState="charts.0.type=pie"
+    session=a
+
+@t.data.charts.n09 core.test
+    input="Show it as a line"
+    expectState="charts.0.type=line"
+    session=a
+
+@t.data.charts.n10 core.test
+    input="Turn it into a doughnut chart"
+    expectState="charts.0.type=doughnut"
+    session=a
+
+@t.data.charts.n11 core.test
+    input="Make it a radar chart"
+    expectState="charts.0.type=radar"
+    session=a
+
+@t.data.charts.n12 core.test
+    input="Make it a polar area chart"
+    expectState="charts.0.type=polarArea"
+    session=a
+
+@t.data.charts.n13 core.test
+    input="Plot it as a scatter plot"
+    expectState="charts.0.type=scatter"
+    session=a
+
+@t.data.charts.n14 core.test
+    input="Make it a bar chart"
+    expectState="charts.0.type=bar"
+    session=a
+
+@t.data.charts.n15 core.test
+    input="Call it Fruit"
+    expectState="charts.0.title=Fruit"
+    session=a
+
+@t.data.charts.n16 core.test
+    input="Change the chart title to Fruit stand"
+    expectState="charts.0.title=Fruit stand"
+    session=a
+
+@t.data.charts.n17 core.test
+    input="Make the bars green"
+    expectState="charts.0.datasets.0.color=#2f9e44"
+    session=a
+
+@t.data.charts.n18 core.test
+    input="Color it light blue"
+    expect="light blue"
+    expectState="charts.0.datasets.0.color=#75a7e4"
+    session=a
+
+@t.data.charts.n19 core.test
+    input="Use rainbow colors"
+    expectState="charts.0.options.palette=rainbow"
+    expectState="charts.0.datasets.0.color=null"
+    session=a
+
+@t.data.charts.n20 core.test
+    input="Make the pears bar red"
+    expectState="charts.0.options.pointColors.Pears=#e34948"
+    session=a
+
+@t.data.charts.n21 core.test
+    input="Color each bar differently"
+    expectState="charts.0.options.palette=classic"
+    session=a
+
+@t.data.charts.n22 core.test
+    input="Reset the chart colors"
+    expectState="charts.0.options.palette=null"
+    session=a
+
+@t.data.charts.n23 core.test
+    input="Sort from biggest to smallest"
+    expectState="charts.0.options.sort=desc"
+    session=a
+
+@t.data.charts.n24 core.test
+    input="Sort from smallest to biggest"
+    expectState="charts.0.options.sort=asc"
+    session=a
+
+@t.data.charts.n25 core.test
+    input="Sort alphabetically"
+    expectState="charts.0.options.sort=alpha"
+    session=a
+
+@t.data.charts.n26 core.test
+    input="Stop sorting"
+    expectState="charts.0.options.sort=null"
+    session=a
+
+@t.data.charts.n27 core.test
+    input="Make it horizontal"
+    expectState="charts.0.options.horizontal=true"
+    session=a
+
+@t.data.charts.n28 core.test
+    input="Make it vertical"
+    expectState="charts.0.options.horizontal=false"
+    session=a
+
+@t.data.charts.n29 core.test
+    input="Show the values"
+    expectState="charts.0.options.showValues=true"
+    session=a
+
+@t.data.charts.n30 core.test
+    input="Show the percentages"
+    expectState="charts.0.options.showValues=percent"
+    session=a
+
+@t.data.charts.n31 core.test
+    input="Hide the numbers"
+    expectState="charts.0.options.showValues=false"
+    session=a
+
+@t.data.charts.n32 core.test
+    input="Hide the legend"
+    expectState="charts.0.options.showLegend=false"
+    session=a
+
+@t.data.charts.n33 core.test
+    input="Show the legend"
+    expectState="charts.0.options.showLegend=true"
+    session=a
+
+@t.data.charts.n34 core.test
+    input="Make it a stacked bar chart"
+    expectState="charts.0.options.stacked=true"
+    expectState="charts.0.type=bar"
+    session=a
+
+@t.data.charts.n35 core.test
+    input="Unstack the bars"
+    expectState="charts.0.options.stacked=false"
+    session=a
+
+@t.data.charts.n36 core.test
+    input="Which is the biggest?"
+    expect="Kiwis is the biggest, with 8"
+    session=a
+
+@t.data.charts.n37 core.test
+    input="Which has the least?"
+    expect="Pears is the smallest, with 6"
+    session=a
+
+@t.data.charts.n38 core.test
+    input="What is the total?"
+    expect="The total is 21"
+    session=a
+
+@t.data.charts.n39 core.test
+    input="What is the average?"
+    expect="The average is 7"
+    session=a
+
+@t.data.charts.n40 core.test
+    input="How many more kiwis than pears?"
+    expect="Kiwis is 2 more than Pears"
+    session=a
+
+@t.data.charts.n41 core.test
+    input="What percentage are apples?"
+    expect="33.3%"
+    session=a
+
+@t.data.charts.n42 core.test
+    input="What is the value of pears?"
+    expect="Pears is 6"
+    session=a
+
+@t.data.charts.n43 core.test
+    input="What is Kiwis?"
+    expect="Kiwis is 8"
+    expect="38.1%"
+    session=a
+
+@t.data.charts.n44 core.test
+    input="Which is bigger, apples or pears?"
+    expect="Apples is bigger"
+    session=a
+
+@t.data.charts.n45 core.test
+    input="How many bars are there?"
+    expect="3 bars"
+    session=a
+
+@t.data.charts.n46 core.test
+    input="Describe the chart"
+    expect="Fruit stand"
+    expectStatus=supported
+    session=a
+
+@t.data.charts.n47 core.test
+    input="Read the chart aloud"
+    expectEffect=speech.say
+    session=a
+
+@t.data.charts.n48 core.test
+    input="Download the chart as an image"
+    expectEffect=charts.download
+    session=a
+
+@t.data.charts.n49 core.test
+    input="Download the chart data as a spreadsheet"
+    expectEffect=file.download
+    session=a
+
+@t.data.charts.n50 core.test
+    input="Copy the chart data"
+    expectEffect=clipboard.copy
+    session=a
+
+@t.data.charts.n51 core.test
+    input="Put the chart in the document"
+    expectStatus=unsupported
+    session=a
+
+@t.data.charts.n52 core.test
+    input="Put the chart data in the document"
+    expectState="docs.editor:blocks.0.kind=heading"
+    expectState="docs.editor:blocks.0.text=Fruit stand"
+    session=a
+
+@t.data.charts.n53 core.test
+    input="New chart"
+    expectState="charts.length=2"
+    expectState="active=c2"
+    expectState="inputMode=null"
+    session=a
+
+@t.data.charts.n54 core.test
+    input="Go back to the first chart"
+    expectState="active=c1"
+    expectState="inputMode=chart"
+    session=a
+
+@t.data.charts.n55 core.test
+    input="Duplicate the chart"
+    expectState="charts.length=3"
+    expectState="charts.1.title=Fruit stand copy"
+    session=a
+
+@t.data.charts.n56 core.test
+    input="What charts do I have?"
+    expect="3 charts"
+    session=a
+
+@t.data.charts.n57 core.test
+    input="Delete the second chart"
+    expectState="charts.length=2"
+    expectState="active=c2"
+    expectState="charts.1.id=c2"
+    session=a
+
+@t.data.charts.n58 core.test
+    input="Delete this chart"
+    expectState="charts.length=1"
+    session=a
+
+@t.data.charts.n59 core.test
+    input="Clear the chart"
+    expectState="charts.0.labels.length=0"
+    expectState="inputMode=null"
+    session=a
+
+@t.data.charts.n60 core.test
+    input="Delete all the charts"
+    expectState="charts.length=0"
+    expectState="active=null"
+    session=a
+
+@t.data.charts.n61 core.test
+    input="Tom has 5 apples. Ana has 3 apples. Tom has 2 pears. Ana has 4 pears."
+    expect="OK"
+    session=b
+
+@t.data.charts.n62 core.test
+    input="Make a bar chart of what everyone has"
+    expectState="charts.0.labels.0=Tom"
+    expectState="charts.0.datasets.length=2"
+    expectState="charts.0.datasets.1.label=Pears"
+    expectState="charts.0.datasets.0.data.1=3"
+    expectState="charts.0.source.length=4"
+    expectState="charts.0.title=Who has what"
+    session=b
+
+@t.data.charts.n63 core.test
+    input="Ana gives Tom 2 apples."
+    expect="OK"
+    session=b
+
+@t.data.charts.n64 core.test
+    input="Update the chart"
+    expectState="charts.0.datasets.0.data.0=7"
+    expectState="charts.0.datasets.0.data.1=1"
+    expectState="charts.0.source.length=5"
+    session=b
+
+@t.data.charts.n65 core.test
+    input="Make it stacked"
+    expectState="charts.0.options.stacked=true"
+    session=b
+
+@t.data.charts.n66 core.test
+    input="What is the total?"
+    expect="The total is 14"
+    expect="Apples 8"
+    session=b
+
+@t.data.charts.n67 core.test
+    input="Chart the apples"
+    expectState="charts.length=2"
+    expectState="charts.1.datasets.0.label=Apples"
+    expectState="charts.1.labels.length=2"
+    session=b
+
+@t.data.charts.n68 core.test
+    input="Chart what Tom has"
+    expectState="charts.2.labels.length=2"
+    expectState="charts.2.title=What Tom has"
+    session=b
+
+@t.data.charts.n69 core.test
+    input="Chart what Zed has"
+    expectStatus=missing
+    session=b
+
+@t.data.charts.n70 core.test
+    input="Chart the prices of the toys"
+    expectState="charts.0.labels.length=6"
+    expectState="charts.0.datasets.0.label=Price (lei)"
+    expectState="charts.0.title=Prices of toys (lei)"
+    expectState="charts.0.source.0=kb.shop.price.ball"
+    session=c
+
+@t.data.charts.n71 core.test
+    input="Which is the biggest?"
+    expect="Puzzle is the biggest, with 18"
+    session=c
+
+@t.data.charts.n72 core.test
+    input="Chart the prices of a ball, a book and a doll"
+    expectState="charts.1.labels.length=3"
+    expectState="charts.1.datasets.0.data.1=12"
+    session=c
+
+@t.data.charts.n73 core.test
+    input="A ball costs 7 lei."
+    expect="OK"
+    session=c
+
+@t.data.charts.n74 core.test
+    input="Update the chart"
+    expectState="charts.1.datasets.0.data.0=7"
+    session=c
+
+@t.data.charts.n75 core.test
+    input="Chart how much the fruit costs"
+    expectState="charts.2.labels.length=4"
+    session=c
+
+@t.data.charts.n76 core.test
+    input="Chart the prices of the dragons"
+    expectStatus=missing
+    session=c
+
+@t.data.charts.n77 core.test
+    input="Compare the legs of the sea animals"
+    expectState="charts.0.labels.length=9"
+    expectState="charts.0.datasets.0.label=Legs"
+    expectState="charts.0.title=Legs of sea animals"
+    session=d
+
+@t.data.charts.n78 core.test
+    input="Chart the legs of a dog, a spider and a bee"
+    expectState="charts.1.datasets.0.data.1=8"
+    expectState="charts.1.labels.2=Bee"
+    expectState="charts.1.datasets.0.data.2=6"
+    session=d
+
+@t.data.charts.n79 core.test
+    input="Chart how many legs the farm animals have"
+    expectState="charts.2.labels.length=10"
+    session=d
+
+@t.data.charts.n80 core.test
+    input="Make a pie chart of the legs of the birds"
+    expectState="charts.3.type=pie"
+    session=d
+
+@t.data.charts.n81 core.test
+    input="Compare the legs of the unicorns"
+    expectStatus=missing
+    session=d
+
+@t.data.charts.n82 core.test
+    input="Show my shopping list as a chart"
+    expectStatus=missing
+    session=e
+
+@t.data.charts.n83 core.test
+    input="I need to buy milk, 2 eggs and 3 apples."
+    expect="shopping"
+    session=e
+
+@t.data.charts.n84 core.test
+    input="Show my shopping list as a chart"
+    expectState="charts.0.labels.length=3"
+    expectState="charts.0.datasets.0.data.1=2"
+    expectState="charts.0.datasets.0.data.2=3"
+    expectState="charts.0.labels.2=Apples"
+    session=e
+
+@t.data.charts.n85 core.test
+    input="I finished the milk"
+    expect="done"
+    session=e
+
+@t.data.charts.n86 core.test
+    input="Update the chart"
+    expectState="charts.0.datasets.length=2"
+    expectState="charts.0.datasets.1.label=Done"
+    session=e
+
+@t.data.charts.n87 core.test
+    input="I have to do homework."
+    expect="to-do"
+    session=e
+
+@t.data.charts.n88 core.test
+    input="Chart my lists"
+    expectState="charts.1.labels.length=2"
+    expectState="charts.1.datasets.0.label=To do"
+    session=e
+
+@t.data.charts.n89 core.test
+    input="What is the total?"
+    expectStatus=missing
+    session=f
+
+@t.data.charts.n90 core.test
+    input="Add bananas 4"
+    expectStatus=missing
+    session=f
+
+@t.data.charts.n91 core.test
+    input="Make it a pie chart"
+    expectState="charts.0.type=pie"
+    expectState="charts.0.labels.length=0"
+    session=f
+
+@t.data.charts.n92 core.test
+    input="Download the chart as an image"
+    expectStatus=missing
+    session=f
+
+@t.data.charts.n93 core.test
+    input="Add bananas 4 and pears 3"
+    expectState="charts.0.labels.length=2"
+    expectState="charts.0.datasets.0.data.1=3"
+    session=f
+
+@t.data.charts.n94 core.test
+    input="Make a pie chart of cats 4, dogs 6 and fish 2"
+    expectState="charts.0.type=pie"
+    expectState="charts.0.labels.length=3"
+    expectState="charts.0.datasets.0.data.1=6"
+    session=g
+
+@t.data.charts.n95 core.test
+    input="Add 4 bananas to the chart"
+    expectState="charts.0.labels.3=Bananas"
+    session=g
+
+@t.data.charts.n96 core.test
+    input="Add kiwis 2 and figs 7 to the chart"
+    expectState="charts.0.labels.length=6"
+    expectState="charts.0.datasets.0.data.5=7"
+    session=g
+
+@t.data.charts.n97 core.test
+    input="Change cats to six"
+    expectState="charts.0.datasets.0.data.0=6"
+    session=g
+
+@t.data.charts.n98 core.test
+    input="Remove plums from the chart"
+    expectStatus=missing
+    session=g
+
+@t.data.charts.n99 core.test
+    input="Remove dogs"
+    expectState="charts.0.labels.length=5"
+    session=g
+
+@t.data.charts.n100 core.test
+    input="Make a chart: apples five, pears three"
+    expectState="charts.1.datasets.0.data.0=5"
+    expectState="charts.1.datasets.0.data.1=3"
+    session=g
+
+@t.data.charts.n101 core.test
+    input="Make a chart: apples, pears"
+    expectStatus=missing
+    session=g
+
+@t.data.charts.n102 core.test
+    input="Make a chart: Tom 3, Ana 5"
+    expect="Tom 3"
+    session=g
+
+@t.data.charts.n103 core.test
+    input="Make the Tom bar orange"
+    expect="Tom is orange"
+    session=g
+
+@t.data.charts.n104 core.test
+    input="Make Tom light green"
+    expectState="charts.2.options.pointColors.Tom=#78c085"
+    session=g
+
+@t.data.charts.n105 core.test
+    input="Go to chart 1"
+    expectState="active=c1"
+    session=g
+
+@t.data.charts.n106 core.test
+    input="Show the next chart"
+    expectState="active=c2"
+    session=g
+
+@t.data.charts.n107 core.test
+    input="Go to the previous chart"
+    expectState="active=c1"
+    session=g
+
+@t.data.charts.n108 core.test
+    input="Show the last chart"
+    expectState="active=c3"
+    session=g
+
+@t.data.charts.n109 core.test
+    input="Make it horizontal"
+    expectState="charts.2.type=bar"
+    expectState="charts.2.options.horizontal=true"
+    session=g
+
+@t.data.charts.n110 core.test
+    input="Make it a doughnut chart"
+    expectState="charts.2.type=doughnut"
+    session=g
+
+@t.data.charts.n111 core.test
+    input="Make it horizontal"
+    expectState="charts.2.type=bar"
+    session=g
+

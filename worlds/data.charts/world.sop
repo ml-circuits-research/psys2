@@ -1,0 +1,24 @@
+@world.data.charts core.world
+    namespace=data.charts
+    version=0.1.0
+    legend=$legend.data.charts
+    imports=world.core
+    imports=world.kids.common
+    imports=world.kids.arith
+    imports=world.kids.shop
+    imports=world.kids.tasks
+    imports=world.kids.animals
+    formalization=rules
+    language=en
+    status=fixture
+    tab=charts
+    tabTitle="Charts"
+    tabAlias=chart
+    tabAlias=graph
+    tabAlias=charts
+    tabAlias=graphs
+    tabOrder=70
+    tabKind=tool
+    title="Charts (Chart.js)"
+    summary="draw charts"
+    doc="Talk with charts drawn by the Chart.js library in the Charts tab: bar, line, pie, doughnut, radar, polar area and scatter. Charts are built from the conversation (what people have, the prices of the toys, a shopping list, the legs of the sea animals) or from numbers you type, and every number of such a chart keeps the ids of the wires it came from. Change the type, title, colors, order, orientation, labels, legend and stacking by language, ask about the data (biggest, total, average, difference, percentage), keep several charts, and download a chart as a picture. State lives in ctx.state; the tab renders it. Hand-built platform fixture, not produced by the C1 workflow."

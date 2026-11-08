@@ -1,0 +1,76 @@
+@legend.data.charts core.legend
+    namespace=data.charts
+    version=0.1.0
+    imports=core
+    imports=kids.common
+    imports=kids.arith
+    imports=kids.shop
+    imports=kids.tasks
+    imports=kids.animals
+    doc="Charts drawn by Chart.js: the chart types, their data and the options people can change by talking. The state holds the charts; the legend describes what one chart is."
+
+@data.charts.chart core.type
+    extends=core.state
+    doc="One chart: a type, a title, labelled numbers in one or more series, display options and the ids of the wires the numbers came from."
+    example="Make a bar chart of what everyone has."
+    negative="Tom has 5 apples."
+
+@data.charts.chart.type core.key
+    value=atom
+    card=one
+    ask="Which kind of chart is it (bar, line, pie, doughnut, radar, polar area or scatter)?"
+
+@data.charts.chart.title core.key
+    value=string
+    card=one
+    ask="What is the chart called?"
+
+@data.charts.chart.label core.key
+    value=string
+    card=many
+    ask="Which labels (bars, slices or points) does the chart have?"
+
+@data.charts.chart.series core.key
+    value=string
+    card=many
+    ask="Which series (sets of numbers) does the chart have?"
+
+@data.charts.chart.value core.key
+    value=number
+    card=many
+    ask="Which numbers does the chart show?"
+
+@data.charts.chart.color core.key
+    value=atom
+    card=one
+    ask="Which color or palette does the chart use?"
+
+@data.charts.chart.sort core.key
+    value=atom
+    card=one
+    ask="How are the items ordered (biggest first, smallest first, alphabetically or as given)?"
+
+@data.charts.chart.horizontal core.key
+    value=boolean
+    card=one
+    ask="Does the chart lie on its side?"
+
+@data.charts.chart.stacked core.key
+    value=boolean
+    card=one
+    ask="Are the series stacked?"
+
+@data.charts.chart.legend core.key
+    value=boolean
+    card=one
+    ask="Is the legend shown?"
+
+@data.charts.chart.showValues core.key
+    value=boolean
+    card=one
+    ask="Are the numbers written on the chart?"
+
+@data.charts.chart.source core.key
+    value=atom
+    card=many
+    ask="Which wires did the numbers come from?"

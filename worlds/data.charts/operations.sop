@@ -1,0 +1,252 @@
+@op.data.charts.fromText core.operation
+    impl=fromText
+    semantics=action
+    action=chart.fromText
+    doc="Builds a chart from numbers typed by the user (\"apples 5, pears 3\"); the numbers keep the id of the request wire."
+
+@op.data.charts.new core.operation
+    impl=newChart
+    semantics=action
+    action=chart.new
+    doc="Starts a new empty chart and makes it the active one."
+
+@op.data.charts.refresh core.operation
+    impl=refresh
+    semantics=action
+    action=chart.refresh
+    doc="Reads the source of the active chart again (what people have, prices, lists, legs) and updates the numbers; keeps the style."
+
+@op.data.charts.duplicate core.operation
+    impl=duplicate
+    semantics=action
+    action=chart.duplicate
+    doc="Copies the active chart (data and style) into a new chart."
+
+@op.data.charts.fromHoldings core.operation
+    impl=fromHoldings
+    semantics=action
+    action=chart.fromHoldings
+    doc="Builds a chart of what people have: reads the kids.arith holdings and asks the computed counts (ctx.ask count); every number comes from wires whose ids are kept in the chart source."
+
+@op.data.charts.fromPrices core.operation
+    impl=fromPrices
+    semantics=action
+    action=chart.fromPrices
+    doc="Builds a chart of prices from the kids.shop price list (ctx.ask cost) for a group (toys, fruit, school things, snacks, drinks) or named items."
+
+@op.data.charts.fromLegs core.operation
+    impl=fromLegs
+    semantics=action
+    action=chart.fromLegs
+    doc="Builds a chart of the number of legs from the kids.animals knowledge base (ctx.ask matching and legs) for a group of animals or named animals."
+
+@op.data.charts.fromList core.operation
+    impl=fromList
+    semantics=action
+    action=chart.fromList
+    doc="Builds a chart from the kids.tasks entries of one list (quantities from \"3 apples\"), or the number of items on every list."
+
+@op.data.charts.addPoint core.operation
+    impl=addPoint
+    semantics=action
+    action=chart.addPoint
+    doc="Adds one or more labelled numbers to the active chart (an existing label is changed)."
+
+@op.data.charts.removePoint core.operation
+    impl=removePoint
+    semantics=action
+    action=chart.removePoint
+    doc="Removes one label from the active chart."
+
+@op.data.charts.setPoint core.operation
+    impl=setPoint
+    semantics=action
+    action=chart.setPoint
+    doc="Sets the number of one label."
+
+@op.data.charts.adjustPoint core.operation
+    impl=adjustPoint
+    semantics=action
+    action=chart.adjustPoint
+    doc="Increases, decreases, doubles, triples or halves the number of one label."
+
+@op.data.charts.renamePoint core.operation
+    impl=renamePoint
+    semantics=action
+    action=chart.renamePoint
+    doc="Renames one label."
+
+@op.data.charts.clearData core.operation
+    impl=clearData
+    semantics=action
+    action=chart.clearData
+    doc="Removes all data from the active chart and keeps its style."
+
+@op.data.charts.setType core.operation
+    impl=setType
+    semantics=action
+    action=chart.setType
+    doc="Changes the type (bar, line, pie, doughnut, radar, polar area, scatter), optionally stacked; creates an empty chart when there is none."
+
+@op.data.charts.setStacked core.operation
+    impl=setStacked
+    semantics=action
+    action=chart.setStacked
+    doc="Stacks the series or puts them side by side."
+
+@op.data.charts.setTitle core.operation
+    impl=setTitle
+    semantics=action
+    action=chart.setTitle
+    doc="Sets the title of the active chart."
+
+@op.data.charts.removeTitle core.operation
+    impl=removeTitle
+    semantics=action
+    action=chart.removeTitle
+    doc="Removes the title of the active chart."
+
+@op.data.charts.setColor core.operation
+    impl=setColor
+    semantics=action
+    action=chart.setColor
+    doc="Colors the whole chart (or one label) with a named color and optional shade."
+
+@op.data.charts.setPalette core.operation
+    impl=setPalette
+    semantics=action
+    action=chart.setPalette
+    doc="Applies a palette (rainbow, pastel, ocean, forest, sunset, warm, cool, neon, earth), different colors per bar, or the default."
+
+@op.data.charts.setSort core.operation
+    impl=setSort
+    semantics=action
+    action=chart.setSort
+    doc="Sorts the items of the active chart (biggest first, smallest first, alphabetically) or restores the order."
+
+@op.data.charts.setOrientation core.operation
+    impl=setOrientation
+    semantics=action
+    action=chart.setOrientation
+    doc="Makes a bar or line chart horizontal or vertical."
+
+@op.data.charts.setValues core.operation
+    impl=setValues
+    semantics=action
+    action=chart.setValues
+    doc="Shows or hides the numbers (or percentages) on the chart."
+
+@op.data.charts.setLegend core.operation
+    impl=setLegend
+    semantics=action
+    action=chart.setLegend
+    doc="Shows or hides the legend."
+
+@op.data.charts.extreme core.operation
+    impl=extreme
+    semantics=action
+    action=chart.extreme
+    doc="Answers which label is the biggest or the smallest in the active chart."
+
+@op.data.charts.total core.operation
+    impl=total
+    semantics=action
+    action=chart.total
+    doc="Answers the total of the numbers in the active chart."
+
+@op.data.charts.average core.operation
+    impl=average
+    semantics=action
+    action=chart.average
+    doc="Answers the average of the numbers in the active chart."
+
+@op.data.charts.difference core.operation
+    impl=difference
+    semantics=action
+    action=chart.difference
+    doc="Answers how much more or less one label is than another."
+
+@op.data.charts.compare core.operation
+    impl=compare
+    semantics=action
+    action=chart.compare
+    doc="Answers which of two labels is bigger or smaller."
+
+@op.data.charts.percent core.operation
+    impl=percent
+    semantics=action
+    action=chart.percent
+    doc="Answers which percentage of the total a label is."
+
+@op.data.charts.valueOf core.operation
+    impl=valueOf
+    semantics=action
+    action=chart.valueOf
+    doc="Answers the number of one label and its share of the total."
+
+@op.data.charts.countItems core.operation
+    impl=countItems
+    semantics=action
+    action=chart.countItems
+    doc="Answers how many items (bars, slices, points) the active chart has."
+
+@op.data.charts.describe core.operation
+    impl=describe
+    semantics=action
+    action=chart.describe
+    doc="Describes the active chart in one text (type, title, numbers, biggest)."
+
+@op.data.charts.read core.operation
+    impl=read
+    semantics=action
+    action=chart.read
+    doc="Reads the description of the active chart aloud (effect speech.say)."
+
+@op.data.charts.switchChart core.operation
+    impl=switchChart
+    semantics=action
+    action=chart.switchChart
+    doc="Makes another chart the active one: by position (first, last, 2), next, previous or title."
+
+@op.data.charts.deleteChart core.operation
+    impl=deleteChart
+    semantics=action
+    action=chart.deleteChart
+    doc="Deletes the active chart, a numbered chart or all charts."
+
+@op.data.charts.listCharts core.operation
+    impl=listCharts
+    semantics=action
+    action=chart.listCharts
+    doc="Lists the charts with their titles and types."
+
+@op.data.charts.download core.operation
+    impl=download
+    semantics=action
+    action=chart.download
+    doc="Saves the active chart as a picture (effect charts.download, executed by the Charts tab with canvas toDataURL)."
+
+@op.data.charts.downloadData core.operation
+    impl=downloadData
+    semantics=action
+    action=chart.downloadData
+    doc="Downloads the numbers as a CSV file (effect file.download)."
+
+@op.data.charts.copyData core.operation
+    impl=copyData
+    semantics=action
+    action=chart.copyData
+    doc="Copies the numbers to the clipboard (effect clipboard.copy)."
+
+@op.data.charts.toDocument core.operation
+    impl=toDocument
+    semantics=action
+    action=chart.toDocument
+    doc="Puts the chart picture into the document: asks docs.editor for the action doc.addImage (not offered yet, so it explains)."
+
+@op.data.charts.toDocumentData core.operation
+    impl=toDocumentData
+    semantics=action
+    action=chart.toDocumentData
+    doc="Puts the title and the numbers of the chart into the document with the documented requests doc.addHeading and doc.addList."
+
