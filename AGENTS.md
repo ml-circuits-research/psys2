@@ -26,5 +26,10 @@
 - Tests: `npm test` must pass before committing. Every world ships `tests.sop` and must pass `node src/cli.mjs test-world <id>`.
 - Commits go directly to `main` (no pull requests for now). Small, descriptive commits.
 
+## Data principle: industrial research, not fundamental research
+- We never have too much training data. Good data is never deleted or held back from training to keep an evaluation pure.
+- Overlap between training and test data is acceptable: when a test set gets contaminated, we generate a fresh test set (as with `training/paraphrases/heldout/`) instead of removing training data.
+- The goal is that the system handles what real users ask, not that a model generalizes in a research sense. In production we keep learning from user phrasings (phrase logs) and add them to training, even when this makes the evaluation less clean.
+
 ## Worker sessions (training on the DGX Spark)
 - A worker agent starts from `worker-tasks.md` and follows its protocol: `worker-tasks.md` is written and managed only by the reviewer (validated tasks move to "Validated", failed ones are rewritten); the worker appends questions to `questions.md` (never deletes) and progress to `worker-log.md`.
