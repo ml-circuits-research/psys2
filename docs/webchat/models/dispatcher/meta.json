@@ -31,23 +31,25 @@
   ],
   "outputs": [
    "seg_logits",
-   "world_logits"
+   "world_logits",
+   "edit_logits"
   ],
   "world_max_len": 128,
   "seg_max_len": 192
  },
+ "edit_threshold": 0.7,
  "version": {
-  "checkpoint": "training/runs/dispatcher-distilbert",
+  "checkpoint": "training/runs/dispatcher-distilbert-v2",
   "model": "distilbert-base-uncased",
   "dataset_baseline_commit": "c989cd1",
-  "dataset_hash": "a541a99bf494dd4e",
+  "dataset_hash": "36b32db9901e568f",
   "export_date": "2026-11-08",
-  "sha256": "d66026ded00d07e1bca91dcc05db6e10fde50ae649de60f0db513ebc00acf16e",
+  "sha256": "7e8055fdcbb41a5e9ea2ef1f040d5d9256f90c58b413b4d0fc1d4f19e841b8ac",
   "metrics": {
    "split": "test",
    "world_top1": 0.971,
    "world_top3": 0.994,
-   "seg_f1": 0.985
+   "seg_f1": 0.958
   }
  }
 }

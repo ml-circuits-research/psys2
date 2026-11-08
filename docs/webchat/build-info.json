@@ -34,7 +34,7 @@
     "music.mjs",
     "profile.mjs"
   ],
-  "dispatcherModel": false,
+  "dispatcherModel": true,
   "files": {
     "lib/dialog/discourse.mjs": "e377e8002674edc3",
     "lib/dialog/dispatch-validate.mjs": "a0d8bba238ac9395",
@@ -137,5 +137,5 @@
     "worlds/user.profile/ops.mjs": "3fa6e7ff1d90954e",
     "worlds/user.profile/understand.mjs": "2950c98f1f25800a"
   },
-  "builtAt": "2026-11-08T19:10:19.633Z"
+  "builtAt": "2026-11-08T19:40:14.795Z"
 }

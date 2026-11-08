@@ -1,0 +1,1092 @@
+{
+ "model": "distilbert-base-uncased",
+ "name": "distilbert-v2",
+ "lora": false,
+ "context": true,
+ "lr": 5e-05,
+ "params": {
+  "trainable": 66765836,
+  "total": 66765836
+ },
+ "train_seconds": 364.1386306285858,
+ "steps": 2448,
+ "gpu": "NVIDIA GB10",
+ "gpu_peak_mem_gb": 3.427330493927002,
+ "command": "python -m psys2_train.dispatcher --model distilbert-base-uncased --no-lora --lr 5e-5 --epochs 6 --no-select --out /home/salboaie/work/psys2/training/runs/dispatcher-distilbert-v2 --results results/dispatcher-distilbert-v2.json",
+ "data_hash": "36b32db9901e568f",
+ "edit": {
+  "enabled": true,
+  "tags": 502,
+  "heldout_in_training": true,
+  "heldout_world_rows": 2237,
+  "edit_batch": 48,
+  "identity_ratio": 3.0,
+  "edit_weight": 1.0,
+  "aligned_train": 12088
+ },
+ "seed": 1,
+ "routing_train_overlap_with_dev_test": 576,
+ "routing_train_rows": 37482,
+ "versions": {
+  "python": "3.12.3",
+  "torch": "2.14.1+cu130"
+ },
+ "budgets": {
+  "routing": {
+   "budget": 2448,
+   "used": 2448
+  },
+  "seg": {
+   "budget": 2448,
+   "used": 2448
+  },
+  "edit": {
+   "budget": 2448,
+   "used": 2448
+  }
+ },
+ "shown": {
+  "routing": {
+   "kind:base": 238014,
+   "kind:contrastive": 18384,
+   "kind:failure": 35072,
+   "kind:replay": 21437,
+   "source:generator": 189788,
+   "source:heldout": 14664,
+   "source:paraphrase": 57161,
+   "source:rule-derived": 51294,
+   "tag:before_after": 4399,
+   "tag:command": 45332,
+   "tag:number_words": 7916,
+   "tag:question": 111016,
+   "tag:set_increase": 3149,
+   "total": 312907,
+   "world:art.draw": 20349,
+   "world:data.charts": 20435,
+   "world:docs.editor": 12403,
+   "world:docs.reader": 15736,
+   "world:games.chess": 18277,
+   "world:games.guess": 10231,
+   "world:games.hangman": 13193,
+   "world:games.tictactoe": 15848,
+   "world:geo.map": 17940,
+   "world:kids.animals": 16134,
+   "world:kids.arith": 15318,
+   "world:kids.common": 18663,
+   "world:kids.shapes": 13953,
+   "world:kids.shop": 13463,
+   "world:kids.tasks": 14225,
+   "world:kids.time": 13915,
+   "world:media.music": 17951,
+   "world:ui.avatar": 23315,
+   "world:ui.help": 8192,
+   "world:ui.shell": 13366
+  },
+  "seg": {
+   "kind:concat": 140852,
+   "kind:ellipsis": 18106,
+   "kind:ref_created": 26651,
+   "kind:repeat_undo": 18054,
+   "kind:self_correct": 17638,
+   "kind:shared_arg": 17851,
+   "kind:single": 46726,
+   "kind:world_switch": 26666,
+   "tag:n_segments:1": 100321,
+   "tag:n_segments:2": 163173,
+   "tag:n_segments:3": 49050,
+   "total": 312544
+  },
+  "edit": {
+   "kind:canonical": 1814,
+   "kind:generator": 63133,
+   "kind:rule-derived": 12617,
+   "kind:synthetic": 22234,
+   "kind:variant": 11251,
+   "kind:variant-identity": 6408,
+   "total": 117457
+  }
+ },
+ "selection": null,
+ "sampler": {
+  "focus_frac": 0.15,
+  "source_floor": {
+   "paraphrase": 0.15,
+   "rule-derived": 0.05,
+   "heldout": 0.02
+  },
+  "near_miss_pool": 2372,
+  "routing_epochs_started": 6,
+  "seg_passes_started": 11,
+  "regen": true
+ },
+ "dev": {
+  "world": {
+   "n": 4927,
+   "top1": 0.9632636492794804,
+   "top3": 0.9928962857722752,
+   "top1_strict": 0.9624517962248833,
+   "top3_strict": 0.992693322508626,
+   "macro_f1": 0.961925125540874,
+   "macro_f1_strict": 0.9611789070687603,
+   "by_group": {
+    "avatar/shell/editor": {
+     "n": 604,
+     "top1": 0.9420529801324503,
+     "top3": 0.9850993377483444
+    },
+    "documents": {
+     "n": 258,
+     "top1": 0.9767441860465116,
+     "top3": 0.9961240310077519
+    },
+    "games": {
+     "n": 915,
+     "top1": 0.9606557377049181,
+     "top3": 0.9978142076502732
+    },
+    "kids": {
+     "n": 1760,
+     "top1": 0.9971590909090909,
+     "top3": 1.0
+    },
+    "music/draw/map/charts": {
+     "n": 1211,
+     "top1": 0.930635838150289,
+     "top3": 0.9826589595375722
+    },
+    "other": {
+     "n": 179,
+     "top1": 0.9162011173184358,
+     "top3": 0.9888268156424581
+    }
+   },
+   "by_source": {
+    "generator": {
+     "n": 3152,
+     "top1": 0.9698604060913706,
+     "top3": 0.9942893401015228
+    },
+    "paraphrase": {
+     "n": 901,
+     "top1": 0.9822419533851277,
+     "top3": 1.0
+    },
+    "rule-derived": {
+     "n": 874,
+     "top1": 0.919908466819222,
+     "top3": 0.9805491990846682
+    }
+   },
+   "by_world": {
+    "art.draw": {
+     "n": 304,
+     "top1": 0.881578947368421,
+     "top3": 0.9703947368421053
+    },
+    "data.charts": {
+     "n": 294,
+     "top1": 0.95578231292517,
+     "top3": 0.9965986394557823
+    },
+    "docs.editor": {
+     "n": 157,
+     "top1": 0.9936305732484076,
+     "top3": 1.0
+    },
+    "docs.reader": {
+     "n": 258,
+     "top1": 0.9767441860465116,
+     "top3": 0.9961240310077519
+    },
+    "games.chess": {
+     "n": 304,
+     "top1": 0.9671052631578947,
+     "top3": 1.0
+    },
+    "games.guess": {
+     "n": 173,
+     "top1": 0.9710982658959537,
+     "top3": 1.0
+    },
+    "games.hangman": {
+     "n": 231,
+     "top1": 0.9307359307359307,
+     "top3": 0.9913419913419913
+    },
+    "games.tictactoe": {
+     "n": 207,
+     "top1": 0.9758454106280193,
+     "top3": 1.0
+    },
+    "geo.map": {
+     "n": 307,
+     "top1": 0.9771986970684039,
+     "top3": 0.993485342019544
+    },
+    "kids.animals": {
+     "n": 288,
+     "top1": 0.9965277777777778,
+     "top3": 1.0
+    },
+    "kids.arith": {
+     "n": 273,
+     "top1": 0.9963369963369964,
+     "top3": 1.0
+    },
+    "kids.common": {
+     "n": 281,
+     "top1": 0.9928825622775801,
+     "top3": 1.0
+    },
+    "kids.shapes": {
+     "n": 194,
+     "top1": 1.0,
+     "top3": 1.0
+    },
+    "kids.shop": {
+     "n": 270,
+     "top1": 0.9962962962962963,
+     "top3": 1.0
+    },
+    "kids.tasks": {
+     "n": 260,
+     "top1": 1.0,
+     "top3": 1.0
+    },
+    "kids.time": {
+     "n": 194,
+     "top1": 1.0,
+     "top3": 1.0
+    },
+    "media.music": {
+     "n": 306,
+     "top1": 0.9084967320261438,
+     "top3": 0.9705882352941176
+    },
+    "ui.avatar": {
+     "n": 267,
+     "top1": 0.8951310861423221,
+     "top3": 0.9662921348314607
+    },
+    "ui.help": {
+     "n": 179,
+     "top1": 0.9162011173184358,
+     "top3": 0.9888268156424581
+    },
+    "ui.shell": {
+     "n": 180,
+     "top1": 0.9666666666666667,
+     "top3": 1.0
+    }
+   },
+   "unseen_text": {
+    "n": 4388,
+    "top1": 0.9649042844120328,
+    "top3": 0.9938468550592525
+   },
+   "top_confusions": [
+    {
+     "gold": "art.draw",
+     "pred": "ui.avatar",
+     "count": 11
+    },
+    {
+     "gold": "media.music",
+     "pred": "docs.editor",
+     "count": 8
+    },
+    {
+     "gold": "art.draw",
+     "pred": "kids.shapes",
+     "count": 7
+    },
+    {
+     "gold": "media.music",
+     "pred": "ui.shell",
+     "count": 7
+    },
+    {
+     "gold": "ui.avatar",
+     "pred": "games.tictactoe",
+     "count": 7
+    },
+    {
+     "gold": "ui.help",
+     "pred": "ui.shell",
+     "count": 7
+    },
+    {
+     "gold": "games.hangman",
+     "pred": "games.guess",
+     "count": 5
+    },
+    {
+     "gold": "media.music",
+     "pred": "kids.tasks",
+     "count": 5
+    },
+    {
+     "gold": "data.charts",
+     "pred": "docs.reader",
+     "count": 4
+    },
+    {
+     "gold": "ui.avatar",
+     "pred": "ui.shell",
+     "count": 4
+    },
+    {
+     "gold": "ui.help",
+     "pred": "ui.avatar",
+     "count": 4
+    },
+    {
+     "gold": "ui.help",
+     "pred": "games.hangman",
+     "count": 4
+    },
+    {
+     "gold": "art.draw",
+     "pred": "docs.editor",
+     "count": 3
+    },
+    {
+     "gold": "data.charts",
+     "pred": "media.music",
+     "count": 3
+    },
+    {
+     "gold": "docs.reader",
+     "pred": "games.tictactoe",
+     "count": 3
+    }
+   ]
+  },
+  "segmentation": {
+   "n": 3000,
+   "boundary": {
+    "precision": 0.9780434252256648,
+    "recall": 0.9297309833024119,
+    "f1": 0.9532754725954108,
+    "tp": 4009,
+    "fp": 90,
+    "fn": 303
+   },
+   "exact_segmentation": 0.9173333333333333,
+   "end_to_end_exact": 0.811,
+   "exact_by_variant": {
+    "clean": 0.9255184088023699,
+    "plain": 0.8869701726844584
+   },
+   "exact_by_n_segments": {
+    "1": 0.9873271889400922,
+    "2": 0.9337579617834395,
+    "3": 0.9112554112554112,
+    "14": 0.15384615384615385,
+    "15": 0.125,
+    "16": 0.14285714285714285,
+    "17": 0.0,
+    "18": 0.14285714285714285,
+    "19": 0.0,
+    "20": 0.0,
+    "21": 0.0,
+    "22": 0.0,
+    "23": 0.2,
+    "24": 0.08333333333333333
+   },
+   "exact_by_family": {
+    "concat": 0.9399519615692554,
+    "ellipsis": 1.0,
+    "long": 0.08,
+    "ref_created": 0.922360248447205,
+    "repeat_undo": 0.8597560975609756,
+    "self_correct": 1.0,
+    "shared_arg": 1.0,
+    "single": 0.975609756097561,
+    "world_switch": 0.9259259259259259
+   },
+   "end_to_end_by_family": {
+    "concat": 0.7758206565252201,
+    "ellipsis": 1.0,
+    "long": 0.02,
+    "ref_created": 0.8571428571428571,
+    "repeat_undo": 0.725609756097561,
+    "self_correct": 1.0,
+    "shared_arg": 0.9702970297029703,
+    "single": 0.9379157427937915,
+    "world_switch": 0.7744107744107744
+   },
+   "n_by_family": {
+    "concat": 1249,
+    "ellipsis": 135,
+    "long": 100,
+    "ref_created": 322,
+    "repeat_undo": 164,
+    "self_correct": 181,
+    "shared_arg": 101,
+    "single": 451,
+    "world_switch": 297
+   }
+  },
+  "edit": {
+   "n": 4875,
+   "words": 28952,
+   "tag_accuracy": 0.9352030947775629,
+   "edit_precision": 0.2105666156202144,
+   "edit_recall": 0.22123893805309736,
+   "edit_f1": 0.21577089054531187,
+   "exact_sentences": 0.8194871794871795,
+   "recovered_misled_broken": {
+    "recovered": 23,
+    "misled": 225,
+    "not_recovered_unchanged": 188,
+    "kept_ok": 3972,
+    "broken": 467
+   },
+   "exact_by_kind": {
+    "canonical": 1.0,
+    "generator": 0.9476522842639594,
+    "rule-derived": 0.7768878718535469,
+    "variant": 0.052752293577981654,
+    "variant-identity": 0.672782874617737
+   },
+   "n_by_kind": {
+    "canonical": 86,
+    "generator": 3152,
+    "rule-derived": 874,
+    "variant": 436,
+    "variant-identity": 327
+   }
+  },
+  "edit_aligned_only": {
+   "n": 436,
+   "words": 2120,
+   "tag_accuracy": 0.5033018867924528,
+   "edit_precision": 0.5693581780538303,
+   "edit_recall": 0.22123893805309736,
+   "edit_f1": 0.3186558516801854,
+   "exact_sentences": 0.052752293577981654,
+   "recovered_misled_broken": {
+    "recovered": 23,
+    "misled": 225,
+    "not_recovered_unchanged": 188,
+    "kept_ok": 0,
+    "broken": 0
+   },
+   "exact_by_kind": {
+    "variant": 0.052752293577981654
+   },
+   "n_by_kind": {
+    "variant": 436
+   }
+  }
+ },
+ "test": {
+  "world": {
+   "n": 4751,
+   "top1": 0.9705325194695853,
+   "top3": 0.9943169858977058,
+   "top1_strict": 0.9705325194695853,
+   "top3_strict": 0.9943169858977058,
+   "macro_f1": 0.968293104575434,
+   "macro_f1_strict": 0.968293104575434,
+   "by_group": {
+    "avatar/shell/editor": {
+     "n": 613,
+     "top1": 0.9363784665579119,
+     "top3": 0.9869494290375204
+    },
+    "documents": {
+     "n": 258,
+     "top1": 0.9922480620155039,
+     "top3": 1.0
+    },
+    "games": {
+     "n": 837,
+     "top1": 0.972520908004779,
+     "top3": 0.997610513739546
+    },
+    "kids": {
+     "n": 1649,
+     "top1": 0.989084293511219,
+     "top3": 0.9987871437234688
+    },
+    "music/draw/map/charts": {
+     "n": 1239,
+     "top1": 0.9556093623890234,
+     "top3": 0.9878934624697336
+    },
+    "other": {
+     "n": 155,
+     "top1": 0.9806451612903225,
+     "top3": 1.0
+    }
+   },
+   "by_source": {
+    "generator": {
+     "n": 3214,
+     "top1": 0.9744866210329807,
+     "top3": 0.9956440572495333
+    },
+    "paraphrase": {
+     "n": 862,
+     "top1": 0.9791183294663574,
+     "top3": 0.9976798143851509
+    },
+    "rule-derived": {
+     "n": 675,
+     "top1": 0.9407407407407408,
+     "top3": 0.9837037037037037
+    }
+   },
+   "by_world": {
+    "art.draw": {
+     "n": 331,
+     "top1": 0.8912386706948641,
+     "top3": 0.9637462235649547
+    },
+    "data.charts": {
+     "n": 290,
+     "top1": 0.9827586206896551,
+     "top3": 1.0
+    },
+    "docs.editor": {
+     "n": 167,
+     "top1": 0.9580838323353293,
+     "top3": 0.9940119760479041
+    },
+    "docs.reader": {
+     "n": 258,
+     "top1": 0.9922480620155039,
+     "top3": 1.0
+    },
+    "games.chess": {
+     "n": 334,
+     "top1": 0.9880239520958084,
+     "top3": 1.0
+    },
+    "games.guess": {
+     "n": 133,
+     "top1": 0.9774436090225563,
+     "top3": 1.0
+    },
+    "games.hangman": {
+     "n": 198,
+     "top1": 0.9646464646464646,
+     "top3": 0.9949494949494949
+    },
+    "games.tictactoe": {
+     "n": 172,
+     "top1": 0.9476744186046512,
+     "top3": 0.9941860465116279
+    },
+    "geo.map": {
+     "n": 310,
+     "top1": 0.9903225806451613,
+     "top3": 0.9967741935483871
+    },
+    "kids.animals": {
+     "n": 269,
+     "top1": 0.9925650557620818,
+     "top3": 1.0
+    },
+    "kids.arith": {
+     "n": 254,
+     "top1": 0.9881889763779528,
+     "top3": 1.0
+    },
+    "kids.common": {
+     "n": 95,
+     "top1": 0.9263157894736842,
+     "top3": 1.0
+    },
+    "kids.shapes": {
+     "n": 265,
+     "top1": 0.9924528301886792,
+     "top3": 1.0
+    },
+    "kids.shop": {
+     "n": 253,
+     "top1": 0.9960474308300395,
+     "top3": 1.0
+    },
+    "kids.tasks": {
+     "n": 261,
+     "top1": 0.9885057471264368,
+     "top3": 0.9923371647509579
+    },
+    "kids.time": {
+     "n": 252,
+     "top1": 1.0,
+     "top3": 1.0
+    },
+    "media.music": {
+     "n": 308,
+     "top1": 0.9642857142857143,
+     "top3": 0.9935064935064936
+    },
+    "ui.avatar": {
+     "n": 223,
+     "top1": 0.9372197309417041,
+     "top3": 0.9775784753363229
+    },
+    "ui.help": {
+     "n": 155,
+     "top1": 0.9806451612903225,
+     "top3": 1.0
+    },
+    "ui.shell": {
+     "n": 223,
+     "top1": 0.9192825112107623,
+     "top3": 0.9910313901345291
+    }
+   },
+   "unseen_text": {
+    "n": 4367,
+    "top1": 0.9709182505152278,
+    "top3": 0.994275246164415
+   },
+   "top_confusions": [
+    {
+     "gold": "art.draw",
+     "pred": "kids.shapes",
+     "count": 10
+    },
+    {
+     "gold": "ui.shell",
+     "pred": "ui.avatar",
+     "count": 9
+    },
+    {
+     "gold": "art.draw",
+     "pred": "kids.tasks",
+     "count": 6
+    },
+    {
+     "gold": "media.music",
+     "pred": "games.hangman",
+     "count": 6
+    },
+    {
+     "gold": "art.draw",
+     "pred": "data.charts",
+     "count": 5
+    },
+    {
+     "gold": "games.hangman",
+     "pred": "kids.animals",
+     "count": 5
+    },
+    {
+     "gold": "games.tictactoe",
+     "pred": "ui.shell",
+     "count": 5
+    },
+    {
+     "gold": "ui.avatar",
+     "pred": "ui.help",
+     "count": 5
+    },
+    {
+     "gold": "kids.common",
+     "pred": "ui.avatar",
+     "count": 4
+    },
+    {
+     "gold": "media.music",
+     "pred": "ui.shell",
+     "count": 4
+    },
+    {
+     "gold": "ui.avatar",
+     "pred": "ui.shell",
+     "count": 4
+    },
+    {
+     "gold": "art.draw",
+     "pred": "geo.map",
+     "count": 3
+    },
+    {
+     "gold": "art.draw",
+     "pred": "docs.reader",
+     "count": 3
+    },
+    {
+     "gold": "docs.editor",
+     "pred": "docs.reader",
+     "count": 3
+    },
+    {
+     "gold": "games.chess",
+     "pred": "games.tictactoe",
+     "count": 3
+    }
+   ]
+  },
+  "segmentation": {
+   "n": 4000,
+   "boundary": {
+    "precision": 0.9849452554744526,
+    "recall": 0.931674338319908,
+    "f1": 0.9575694855115316,
+    "tp": 6477,
+    "fp": 99,
+    "fn": 475
+   },
+   "exact_segmentation": 0.908,
+   "end_to_end_exact": 0.81125,
+   "exact_by_variant": {
+    "clean": 0.9165120593692022,
+    "plain": 0.8720626631853786
+   },
+   "exact_by_n_segments": {
+    "1": 0.9877704609595485,
+    "2": 0.9352283317800559,
+    "3": 0.9018612521150592,
+    "14": 0.42105263157894735,
+    "15": 0.25,
+    "16": 0.14285714285714285,
+    "17": 0.30434782608695654,
+    "18": 0.3,
+    "19": 0.06666666666666667,
+    "20": 0.13043478260869565,
+    "21": 0.3076923076923077,
+    "22": 0.18181818181818182,
+    "23": 0.05555555555555555,
+    "24": 0.05263157894736842
+   },
+   "exact_by_family": {
+    "concat": 0.9511614055985705,
+    "ellipsis": 1.0,
+    "long": 0.21,
+    "ref_created": 0.9215686274509803,
+    "repeat_undo": 0.8444444444444444,
+    "self_correct": 1.0,
+    "shared_arg": 1.0,
+    "single": 0.9750479846449136,
+    "world_switch": 0.8870588235294118
+   },
+   "end_to_end_by_family": {
+    "concat": 0.8117927337701013,
+    "ellipsis": 1.0,
+    "long": 0.075,
+    "ref_created": 0.8578431372549019,
+    "repeat_undo": 0.7288888888888889,
+    "self_correct": 0.9694656488549618,
+    "shared_arg": 0.9428571428571428,
+    "single": 0.9577735124760077,
+    "world_switch": 0.7670588235294118
+   },
+   "n_by_family": {
+    "concat": 1679,
+    "ellipsis": 175,
+    "long": 200,
+    "ref_created": 408,
+    "repeat_undo": 225,
+    "self_correct": 262,
+    "shared_arg": 105,
+    "single": 521,
+    "world_switch": 425
+   }
+  },
+  "edit": {
+   "n": 4733,
+   "words": 29651,
+   "tag_accuracy": 0.9351455262891639,
+   "edit_precision": 0.24329501915708812,
+   "edit_recall": 0.3021411578112609,
+   "edit_f1": 0.26954368588609834,
+   "exact_sentences": 0.8047749841538137,
+   "recovered_misled_broken": {
+    "recovered": 37,
+    "misled": 257,
+    "not_recovered_unchanged": 134,
+    "kept_ok": 3772,
+    "broken": 533
+   },
+   "exact_by_kind": {
+    "canonical": 1.0,
+    "generator": 0.9352831362787803,
+    "rule-derived": 0.7185185185185186,
+    "variant": 0.08644859813084112,
+    "variant-identity": 0.5933734939759037
+   },
+   "n_by_kind": {
+    "canonical": 84,
+    "generator": 3214,
+    "rule-derived": 675,
+    "variant": 428,
+    "variant-identity": 332
+   }
+  },
+  "edit_aligned_only": {
+   "n": 428,
+   "words": 2126,
+   "tag_accuracy": 0.5446848541862653,
+   "edit_precision": 0.6235679214402619,
+   "edit_recall": 0.3021411578112609,
+   "edit_f1": 0.40705128205128205,
+   "exact_sentences": 0.08644859813084112,
+   "recovered_misled_broken": {
+    "recovered": 37,
+    "misled": 257,
+    "not_recovered_unchanged": 134,
+    "kept_ok": 0,
+    "broken": 0
+   },
+   "exact_by_kind": {
+    "variant": 0.08644859813084112
+   },
+   "n_by_kind": {
+    "variant": 428
+   }
+  },
+  "world_inference_without_context": {
+   "top1": 0.8916017680488318,
+   "top3": 0.9673752894127552,
+   "macro_f1": 0.8837838251075679
+  }
+ },
+ "heldout_edit": {
+  "trained_on": true,
+  "all": {
+   "n": 2169,
+   "words": 10986,
+   "tag_accuracy": 0.7856362643364282,
+   "edit_precision": 0.6244453408632513,
+   "edit_recall": 0.47094615150593244,
+   "edit_f1": 0.5369406867845993,
+   "exact_sentences": 0.4250806823420931,
+   "recovered_misled_broken": {
+    "recovered": 218,
+    "misled": 679,
+    "not_recovered_unchanged": 317,
+    "kept_ok": 704,
+    "broken": 251
+   },
+   "exact_by_kind": {
+    "canonical": 0.99,
+    "variant": 0.17957166392092258,
+    "variant-identity": 0.6701986754966888
+   },
+   "n_by_kind": {
+    "canonical": 200,
+    "variant": 1214,
+    "variant-identity": 755
+   }
+  }
+ },
+ "history": [
+  {
+   "epoch": 1,
+   "step": 408,
+   "world_loss": 0.6419024022122589,
+   "seg_loss": 0.1140525186737981,
+   "dev_top1": 0.9521006697787701,
+   "dev_top3": 0.9896488735538868,
+   "dev_seg_f1": 0.9444378907632417,
+   "dev_exact_seg": 0.9006666666666666,
+   "dev_seg_by_family": {
+    "concat": 0.899119295436349,
+    "ellipsis": 1.0,
+    "long": 0.08,
+    "ref_created": 0.922360248447205,
+    "repeat_undo": 0.8597560975609756,
+    "self_correct": 1.0,
+    "shared_arg": 1.0,
+    "single": 0.9778270509977827,
+    "world_switch": 0.9259259259259259
+   },
+   "probe_failures": 220,
+   "probe_solved": 19780,
+   "dev_score": 1.9710123867697504,
+   "edit_loss": 0.9881850518651453,
+   "dev_edit_f1": 0.14894765245547759,
+   "dev_tag_acc": 0.9468085106382979,
+   "dev_edit_exact": 0.8508717948717949,
+   "dev_edit_rmb": {
+    "recovered": 13,
+    "misled": 116,
+    "not_recovered_unchanged": 307,
+    "kept_ok": 4135,
+    "broken": 304
+   }
+  },
+  {
+   "epoch": 2,
+   "step": 816,
+   "world_loss": 0.04175683463964721,
+   "seg_loss": 0.01643353929188486,
+   "dev_top1": 0.9565658615790542,
+   "dev_top3": 0.9918814694540288,
+   "dev_seg_f1": 0.9457731470518588,
+   "dev_exact_seg": 0.907,
+   "dev_seg_by_family": {
+    "concat": 0.9167333867093675,
+    "ellipsis": 1.0,
+    "long": 0.09,
+    "ref_created": 0.922360248447205,
+    "repeat_undo": 0.8597560975609756,
+    "self_correct": 1.0,
+    "shared_arg": 1.0,
+    "single": 0.9689578713968958,
+    "world_switch": 0.9259259259259259
+   },
+   "probe_failures": 59,
+   "probe_solved": 19941,
+   "dev_score": 1.9906316915577422,
+   "edit_loss": 0.4074294566195093,
+   "dev_edit_f1": 0.17658536585365855,
+   "dev_tag_acc": 0.9437689969604863,
+   "dev_edit_exact": 0.8326153846153846,
+   "dev_edit_rmb": {
+    "recovered": 12,
+    "misled": 155,
+    "not_recovered_unchanged": 269,
+    "kept_ok": 4047,
+    "broken": 392
+   }
+  },
+  {
+   "epoch": 3,
+   "step": 1224,
+   "world_loss": 0.023020437063749732,
+   "seg_loss": 0.012528016548529588,
+   "dev_top1": 0.9620458696975848,
+   "dev_top3": 0.9918814694540288,
+   "dev_seg_f1": 0.948821709116877,
+   "dev_exact_seg": 0.915,
+   "dev_seg_by_family": {
+    "concat": 0.932746196957566,
+    "ellipsis": 1.0,
+    "long": 0.07,
+    "ref_created": 0.922360248447205,
+    "repeat_undo": 0.8597560975609756,
+    "self_correct": 1.0,
+    "shared_arg": 1.0,
+    "single": 0.9822616407982262,
+    "world_switch": 0.9259259259259259
+   },
+   "probe_failures": 17,
+   "probe_solved": 19983,
+   "dev_score": 2.006024029736022,
+   "edit_loss": 0.33635363075882196,
+   "dev_edit_f1": 0.19031290184312044,
+   "dev_tag_acc": 0.9381044487427466,
+   "dev_edit_exact": 0.8194871794871795,
+   "dev_edit_rmb": {
+    "recovered": 14,
+    "misled": 198,
+    "not_recovered_unchanged": 224,
+    "kept_ok": 3981,
+    "broken": 458
+   }
+  },
+  {
+   "epoch": 4,
+   "step": 1632,
+   "world_loss": 0.013715303641434088,
+   "seg_loss": 0.010733589855554587,
+   "dev_top1": 0.9632636492794804,
+   "dev_top3": 0.9928962857722752,
+   "dev_seg_f1": 0.9532754725954108,
+   "dev_exact_seg": 0.9173333333333333,
+   "dev_seg_by_family": {
+    "concat": 0.9399519615692554,
+    "ellipsis": 1.0,
+    "long": 0.08,
+    "ref_created": 0.922360248447205,
+    "repeat_undo": 0.8597560975609756,
+    "self_correct": 1.0,
+    "shared_arg": 1.0,
+    "single": 0.975609756097561,
+    "world_switch": 0.9259259259259259
+   },
+   "probe_failures": 5,
+   "probe_solved": 19995,
+   "dev_score": 2.0244245671475474,
+   "edit_loss": 0.27336327307948877,
+   "dev_edit_f1": 0.21577089054531187,
+   "dev_tag_acc": 0.9352030947775629,
+   "dev_edit_exact": 0.8194871794871795,
+   "dev_edit_rmb": {
+    "recovered": 23,
+    "misled": 225,
+    "not_recovered_unchanged": 188,
+    "kept_ok": 3972,
+    "broken": 467
+   }
+  },
+  {
+   "epoch": 5,
+   "step": 2040,
+   "world_loss": 0.012668266025452884,
+   "seg_loss": 0.009480245238485034,
+   "dev_top1": 0.9614369799066369,
+   "dev_top3": 0.9933022122995738,
+   "dev_seg_f1": 0.9540325454329492,
+   "dev_exact_seg": 0.918,
+   "dev_seg_by_family": {
+    "concat": 0.9407526020816653,
+    "ellipsis": 1.0,
+    "long": 0.1,
+    "ref_created": 0.922360248447205,
+    "repeat_undo": 0.8597560975609756,
+    "self_correct": 1.0,
+    "shared_arg": 1.0,
+    "single": 0.9733924611973392,
+    "world_switch": 0.9259259259259259
+   },
+   "probe_failures": 1,
+   "probe_solved": 19999,
+   "dev_score": 2.0074603720215083,
+   "edit_loss": 0.25605752201312604,
+   "dev_edit_f1": 0.1839816933638444,
+   "dev_tag_acc": 0.941972920696325,
+   "dev_edit_exact": 0.8365128205128205,
+   "dev_edit_rmb": {
+    "recovered": 17,
+    "misled": 189,
+    "not_recovered_unchanged": 230,
+    "kept_ok": 4061,
+    "broken": 378
+   }
+  },
+  {
+   "epoch": 6,
+   "step": 2448,
+   "world_loss": 0.034987076884135604,
+   "seg_loss": 0.008963336106378348,
+   "dev_top1": 0.9628577227521818,
+   "dev_top3": 0.9922873959813274,
+   "dev_seg_f1": 0.9540026013952939,
+   "dev_exact_seg": 0.914,
+   "dev_seg_by_family": {
+    "concat": 0.9319455564451561,
+    "ellipsis": 1.0,
+    "long": 0.1,
+    "ref_created": 0.922360248447205,
+    "repeat_undo": 0.8597560975609756,
+    "self_correct": 1.0,
+    "shared_arg": 1.0,
+    "single": 0.9711751662971175,
+    "world_switch": 0.9259259259259259
+   },
+   "probe_failures": 4,
+   "probe_solved": 19996,
+   "dev_score": 2.0128395718776964,
+   "edit_loss": 0.19567662871935787,
+   "dev_edit_f1": 0.19195849546044097,
+   "dev_tag_acc": 0.9393133462282398,
+   "dev_edit_exact": 0.832,
+   "dev_edit_rmb": {
+    "recovered": 16,
+    "misled": 209,
+    "not_recovered_unchanged": 211,
+    "kept_ok": 4040,
+    "broken": 399
+   }
+  }
+ ]
+}

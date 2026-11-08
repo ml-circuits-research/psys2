@@ -1,0 +1,412 @@
+{
+ "checkpoint": "runs/dispatcher-distilbert-v2",
+ "model": "distilbert-base-uncased",
+ "export_dir": "runs/export/dispatcher-distilbert-v2",
+ "command": "python -m psys2_train.export_onnx --ckpt runs/dispatcher-distilbert-v2 --out runs/export/dispatcher-distilbert-v2",
+ "sizes_mb": {
+  "fp32": 254.80229568481445,
+  "int8": 64.2534704208374
+ },
+ "targets": {
+  "max_size_mb": 150,
+  "max_ms_per_message": 50,
+  "min_agreement": 0.995
+ },
+ "gold_top1_lenient_on_gold_segments_of_sample": {
+  "n": 405,
+  "torch": 0.928395061728395,
+  "fp32": 0.928395061728395,
+  "int8": 0.9308641975308642
+ },
+ "agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "reference": "PyTorch CUDA fp32",
+  "onnx_fp32": {
+   "items": 200,
+   "world_same": 405,
+   "world_n": 405,
+   "boundary_same": 2354,
+   "boundary_n": 2354,
+   "msgs_all_boundaries_same": 200,
+   "max_abs_prob_diff_world": 3.039836883544922e-06,
+   "max_abs_prob_diff_seg": 3.516674041748047e-06,
+   "top3_same": 405,
+   "world_agreement": 1.0,
+   "boundary_agreement": 1.0,
+   "message_boundary_agreement": 1.0
+  },
+  "onnx_int8": {
+   "items": 200,
+   "world_same": 398,
+   "world_n": 405,
+   "boundary_same": 2348,
+   "boundary_n": 2354,
+   "msgs_all_boundaries_same": 195,
+   "max_abs_prob_diff_world": 0.4039396643638611,
+   "max_abs_prob_diff_seg": 0.5230467319488525,
+   "top3_same": 276,
+   "world_agreement": 0.9827160493827161,
+   "boundary_agreement": 0.9974511469838573,
+   "message_boundary_agreement": 0.975
+  },
+  "int8_vs_fp32": {
+   "items": 200,
+   "world_same": 398,
+   "world_n": 405,
+   "boundary_same": 2348,
+   "boundary_n": 2354,
+   "msgs_all_boundaries_same": 195,
+   "max_abs_prob_diff_world": 0.40394073724746704,
+   "max_abs_prob_diff_seg": 0.5230483412742615,
+   "top3_same": 276,
+   "world_agreement": 0.9827160493827161,
+   "boundary_agreement": 0.9974511469838573,
+   "message_boundary_agreement": 0.975
+  },
+  "disagreements": [
+   {
+    "cmp": "onnx_int8",
+    "text": "Lily is my friend.",
+    "world_a": "kids.arith",
+    "world_b": "kids.common",
+    "p_a": 0.5894768834114075,
+    "p_b": 0.660362720489502
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Lily is my friend.",
+    "world_a": "kids.arith",
+    "world_b": "kids.common",
+    "p_a": 0.5894764065742493,
+    "p_b": 0.660362720489502
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "take off the rulers",
+    "world_a": "games.tictactoe",
+    "world_b": "art.draw",
+    "p_a": 0.5335582494735718,
+    "p_b": 0.35761895775794983
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "take off the rulers",
+    "world_a": "games.tictactoe",
+    "world_b": "art.draw",
+    "p_a": 0.5335582494735718,
+    "p_b": 0.35761895775794983
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "could you describe where everything is, and Add some sand, Pie chart of what everyone has then Okay, are you grinning then I spent four lei, then Open the tictactoe, and Which countries are in Asia, then take off the rulers then is my money enough to buy a kite and a doll, get rid of the grass then Add a rest then Move the queen on b2 to b3. what would be a good move for me, hiya bot then where did the cat go and pick the tree then Um, tempo 120, then take off the rulers and Irina gave 3 pears to Bogdan, then Highlight the last sentence in purple.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "take off the rulers",
+    "world_a": "games.tictactoe",
+    "world_b": "art.draw",
+    "p_a": 0.5335575342178345,
+    "p_b": 0.35761895775794983
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "take off the rulers",
+    "world_a": "games.tictactoe",
+    "world_b": "art.draw",
+    "p_a": 0.5335575342178345,
+    "p_b": 0.35761895775794983
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "could you describe where everything is, and Add some sand, Pie chart of what everyone has then Okay, are you grinning then I spent four lei, then Open the tictactoe, and Which countries are in Asia, then take off the rulers then is my money enough to buy a kite and a doll, get rid of the grass then Add a rest then Move the queen on b2 to b3. what would be a good move for me, hiya bot then where did the cat go and pick the tree then Um, tempo 120, then take off the rulers and Irina gave 3 pears to Bogdan, then Highlight the last sentence in purple.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Florin just bought ten toy cars now.",
+    "world_a": "kids.shop",
+    "world_b": "kids.arith",
+    "p_a": 0.5308306217193604,
+    "p_b": 0.6049913763999939
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Florin just bought ten toy cars now.",
+    "world_a": "kids.shop",
+    "world_b": "kids.arith",
+    "p_a": 0.5308292508125305,
+    "p_b": 0.6049913763999939
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Load the sample story and where did you put the tree, fyi elena gobbled 7 balloons now.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Load the sample story and where did you put the tree, fyi elena gobbled 7 balloons now.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "uh how many questions have u asked and Its possible. Im thinking of one and how many questions and it is and then yes it does, uh how many questions have u asked, I think so, how many q's u asked so far, So, possible ones now, then why that question lol, then What question number is this, i really dont know then can you read my mind then Right, then How many questions are you on, dunno",
+    "boundary_flips": 2
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "uh how many questions have u asked and Its possible. Im thinking of one and how many questions and it is and then yes it does, uh how many questions have u asked, I think so, how many q's u asked so far, So, possible ones now, then why that question lol, then What question number is this, i really dont know then can you read my mind then Right, then How many questions are you on, dunno",
+    "boundary_flips": 2
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Um, add 1 mon to the chart and then Spread the G chord out then can u summarize the last section please, then Is a pentagon a quadrilateral then How many altogether. id say elephant, then Is the hexagon a hexagon? where do cats live and dolphin in the mammal group, any song, then please, how does a d sound then say your name, please, move the rook on f8 to hotel five, then what was the time 4 hours before 6 oclock, Is it wolf, and how much do stickers cost, and Which move did you make",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Um, add 1 mon to the chart and then Spread the G chord out then can u summarize the last section please, then Is a pentagon a quadrilateral then How many altogether. id say elephant, then Is the hexagon a hexagon? where do cats live and dolphin in the mammal group, any song, then please, how does a d sound then say your name, please, move the rook on f8 to hotel five, then what was the time 4 hours before 6 oclock, Is it wolf, and how much do stickers cost, and Which move did you make",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "move it down twice",
+    "world_a": "art.draw",
+    "world_b": "media.music",
+    "p_a": 0.39436599612236023,
+    "p_b": 0.3680459260940552
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "move it down twice",
+    "world_a": "art.draw",
+    "world_b": "media.music",
+    "p_a": 0.39436596632003784,
+    "p_b": 0.3680459260940552
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "undo that",
+    "world_a": "art.draw",
+    "world_b": "ui.avatar",
+    "p_a": 0.7134830951690674,
+    "p_b": 0.6354333758354187
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "undo that",
+    "world_a": "art.draw",
+    "world_b": "ui.avatar",
+    "p_a": 0.7134841680526733,
+    "p_b": 0.6354333758354187
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "How many seconds are in 5 days, then Who meet the woodcutter, then which two colors make red; which two colors make black, highlight the second paragraph in pink, giraffe swim? what is the difference in flowers between Rocky and Ella, and show Italy and Portugal in color, Tempo 140; What day will it be 3 days after Monday? highlight Brazil and its neighbours, it should be faster, give me info about Romania then No, this is not what I wanted and then ocean animals. Paint yourself purple then Is my money enough for 8 notebooks, um, tempo 70, download the chart as an image. is the word a cat?",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "How many seconds are in 5 days, then Who meet the woodcutter, then which two colors make red; which two colors make black, highlight the second paragraph in pink, giraffe swim? what is the difference in flowers between Rocky and Ella, and show Italy and Portugal in color, Tempo 140; What day will it be 3 days after Monday? highlight Brazil and its neighbours, it should be faster, give me info about Romania then No, this is not what I wanted and then ocean animals. Paint yourself purple then Is my money enough for 8 notebooks, um, tempo 70, download the chart as an image. is the word a cat?",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "why did u ask",
+    "world_a": "ui.help",
+    "world_b": "games.guess",
+    "p_a": 0.5722485780715942,
+    "p_b": 0.49842569231987
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "why did u ask",
+    "world_a": "ui.help",
+    "world_b": "games.guess",
+    "p_a": 0.5722496509552002,
+    "p_b": 0.49842569231987
+   }
+  ]
+ },
+ "edit_agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "rewritten_by_torch": 0.375,
+  "onnx_fp32": {
+   "n": 200,
+   "simplified_same": 200,
+   "tags_same": 200,
+   "words": 934,
+   "word_tags_same": 934,
+   "top1_world_same": 200,
+   "simplified_agreement": 1.0,
+   "tag_sequence_agreement": 1.0,
+   "word_tag_agreement": 1.0
+  },
+  "onnx_int8": {
+   "n": 200,
+   "simplified_same": 184,
+   "tags_same": 184,
+   "words": 934,
+   "word_tags_same": 917,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.92,
+   "tag_sequence_agreement": 0.92,
+   "word_tag_agreement": 0.9817987152034261
+  },
+  "int8_vs_fp32": {
+   "n": 200,
+   "simplified_same": 184,
+   "tags_same": 184,
+   "words": 934,
+   "word_tags_same": 917,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.92,
+   "tag_sequence_agreement": 0.92,
+   "word_tag_agreement": 0.9817987152034261
+  },
+  "examples_differing": [
+   {
+    "text": "skip to the next match",
+    "torch": "next match",
+    "int8": "next"
+   },
+   {
+    "text": "what was the question",
+    "torch": "what did the question",
+    "int8": null
+   },
+   {
+    "text": "blue leaf ok?",
+    "torch": "blue leaf?",
+    "int8": null
+   },
+   {
+    "text": "it does ok",
+    "torch": null,
+    "int8": "it does"
+   },
+   {
+    "text": "could you repeat your question",
+    "torch": "repeat your question",
+    "int8": "you repeat your question"
+   },
+   {
+    "text": "how long is june",
+    "torch": null,
+    "int8": "how days is june"
+   },
+   {
+    "text": "let me start",
+    "torch": null,
+    "int8": "me start"
+   },
+   {
+    "text": "go ahead, read my mind",
+    "torch": "read my mind",
+    "int8": ", read my mind"
+   },
+   {
+    "text": "o is there?",
+    "torch": "is o is there?",
+    "int8": null
+   },
+   {
+    "text": "hint pls",
+    "torch": "hint",
+    "int8": null
+   },
+   {
+    "text": "my turn?",
+    "torch": null,
+    "int8": "my turn"
+   },
+   {
+    "text": "lets start the guessing game",
+    "torch": null,
+    "int8": "start the guessing game"
+   },
+   {
+    "text": "time to go, bye",
+    "torch": null,
+    "int8": "to go, bye"
+   },
+   {
+    "text": "forget it, i quit",
+    "torch": "it i quit",
+    "int8": "forget it i surrender"
+   },
+   {
+    "text": "can u make it a sunny day",
+    "torch": "u make it a sunny day",
+    "int8": "make it a sunny day"
+   }
+  ]
+ },
+ "latency_cpu_batch1": {
+  "fp32_threads1": {
+   "encoder_pass_ms": {
+    "p50": 10.778662996017374,
+    "p95": 20.87897399906069,
+    "mean": 13.374579529918265
+   },
+   "dispatch_message_ms": {
+    "p50": 115.05921500065597,
+    "p95": 178.88088500330923,
+    "mean": 124.6320445202582
+   },
+   "avg_distinct_segments_per_message": 7.16,
+   "n": 100
+  },
+  "int8_threads1": {
+   "encoder_pass_ms": {
+    "p50": 3.2591120034339838,
+    "p95": 5.274739000014961,
+    "mean": 3.7866058897634503
+   },
+   "dispatch_message_ms": {
+    "p50": 31.492101996263955,
+    "p95": 47.551233001286164,
+    "mean": 33.54443955984607
+   },
+   "avg_distinct_segments_per_message": 7.17,
+   "n": 100
+  },
+  "fp32_threads4": {
+   "encoder_pass_ms": {
+    "p50": 3.9988069984246977,
+    "p95": 6.625585003348533,
+    "mean": 4.654219170479337
+   },
+   "dispatch_message_ms": {
+    "p50": 40.02013200079091,
+    "p95": 58.119386005273554,
+    "mean": 42.816783090747776
+   },
+   "avg_distinct_segments_per_message": 7.16,
+   "n": 100
+  },
+  "int8_threads4": {
+   "encoder_pass_ms": {
+    "p50": 1.5244289970723912,
+    "p95": 2.318298997124657,
+    "mean": 1.717998059830279
+   },
+   "dispatch_message_ms": {
+    "p50": 15.229149001243059,
+    "p95": 20.99548900150694,
+    "mean": 16.069527150393697
+   },
+   "avg_distinct_segments_per_message": 7.17,
+   "n": 100
+  }
+ },
+ "cpu": "Grace aarch64 (DGX Spark)",
+ "versions": {
+  "torch": "2.14.1+cu130",
+  "onnx": "1.23.2",
+  "onnxruntime": "1.31.1",
+  "opset": 17
+ }
+}

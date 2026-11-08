@@ -380,3 +380,16 @@ Notes: with the rebased rules `eval-simplify` style numbers of D1b dropped (35 r
 ## Status 2026-11-08 20:15 (coordinator)
 - L2-L4 validated by the coordinator on 3a31d56 (rebased on 371e0d8): `test-world all` 0 FAIL, `npm test` 717/717; pushed to main.
 - R2 retrain in progress: dataset rebuilt after F1 relabel (48,849 records; commits 089e05e, 745c656 are local in the main checkout and will be rebased and pushed with the model). DistilBERT v2 trained (test top-1 world 0.9705, segmentation F1 0.958). Operational evals of the published model and 8 checkpoint x tau runs are running; first result ckpt 1632, tau 0.7: right 1124 / partly 4 / wrong 35 / not understood 71 of 1234 (91.1 %). Publishing under D4b once the baseline eval finishes.
+
+## R2 retrain + publish (2026-11-08)
+Commands: `collect-paraphrases.mjs training/paraphrases/inbox --report` and `... heldout/inbox --out-dir training/paraphrases/heldout --report` (cff3f36; train 7500 variants: rules-agree 5412, rules-own 1363, needs_review 199, rules-differ 38, rules-fail 484; held-out 2100 variants: agree 1888, own 114, fail 43, needs_review 29); `export-training.mjs` + `build-dataset.mjs` (36 min; 48,849 records, train 38,574 / dev 5,204 / test 5,071, routing 47,160, 8,319 duplicates dropped); `python -m psys2_train.multicmd` (train 30,000 / dev 3,000 / test 4,000 messages), `check_splits` OK; `build-edit-tags.mjs`, `build-normalizer-pairs.mjs` (normalizer not retrained).
+Training: `python -m psys2_train.dispatcher --model distilbert-base-uncased --no-lora --lr 5e-5 --epochs 6 --no-select --out /abs/training/runs/dispatcher-distilbert-v2` (all data incl. held-out, edit head, F6 sampler defaults, 2448 steps, 364 s). Test world top-1 0.9705 / top-3 0.9943, seg F1 0.9576, exact 0.908. In-trainer selection was off because one operational eval takes 10-19 min (CPU, rules); instead the 3 kept checkpoints (1632, 2040, 2448) x tau 0.5/0.7/0.9 were run in parallel with `eval-operational.mjs --ort ... --model-dir <export> --edit-tau T --json`: right 1124-1125, wrong 34-35 for all nine, tau barely matters. Chosen: ckpt 2040, tau 0.7 (edit_threshold in meta.json). Export: `python -m psys2_train.export_onnx --ckpt runs/dispatcher-distilbert-v2` -> runs/export/dispatcher-distilbert-v2 (int8 agreement 100% on 200 edit items, dispatch 15 ms p50 at 4 threads).
+Operational set (1234), published D1 model vs v2:
+| group | published right/wrong | v2 right/wrong |
+| all | 90.0 / 4.0 (partly 0.2, nu 5.8, p50 670 ms) | 91.2 / 2.8 (partly 0.2, nu 5.8, p50 401 ms) |
+| kids | 93.6 / 1.8 | 94.6 / 1.0 |
+| avatar/shell/editor | 80.6 / 8.6 | 83.6 / 5.6 |
+| music/draw/map/charts | 91.3 / 3.3 | 91.9 / 2.4 |
+| games | 89.0 / 5.5 | 89.7 / 5.5 |
+| documents | 91.7 / 4.2 | 91.7 / 4.2 |
+Published (D4b rule met): `node scripts/build-webchat.mjs --models training/runs/export/dispatcher-distilbert-v2`; the model now has the edit head (edit-vocab.json added). eval-operational.mjs falls back to tokenizer/vocab.txt in --model-dir.
