@@ -108,6 +108,23 @@ For **every world with operations** (all 20; `core` holds only the shared legend
 
 Log as `R2 <world>` entries plus one `R2 summary` table: world · catalogue lines · supported · tests · rules-only coverage before → after · fresh-batch coverage.
 
+### S1 — make simplification safe (reviewer analysis 15:35; do before the next model publication)
+
+Why the simplification head still breaks meaning (from `dispatcher-distilbert-simp-clean.json` and the code):
+1. **The rewrite competes on score with the original.** In `dispatch-validate.mjs` the simplified variant has only `simplifiedPenalty: 0.05`. A rewrite that validates in the top-1 world beats an original that validates in the rank-2 world, so a correct reading loses to a rewrite. These are the "broken" cases: original right, rewrite wrong, 56 on held-out.
+2. **No check that the values survive.** A rewrite is accepted as soon as the rules parse it. The edit vocabulary contains content tags such as `R:2`, `R:3`, `R:left`, `R:and`, `R:make`, `R:add`, `R:remove`, `R:change`, `R:play`, `R:chart`, `R:clear`, `R:turn`, `R:name`, `R:count`, so the model can change numbers, directions, verbs and coordination. The rules then happily parse a different command: the "misled" cases, 91 on held-out against 72 recovered. The worst group is music/draw/map/charts: 36 misled, 9 recovered.
+3. **It rewrites too much.** It changes 45% of the held-out sentences (928/2050), and only 36% of those rewrites are correct.
+4. **The targets come from the task's canonical,** which is often a different wording of the goal, so the model learns to push towards the canonical template instead of minimal edits.
+
+Fixes, in this order:
+1. **Lexicographic preference.** Any valid original or spell-corrected reading in any candidate world beats any simplified reading. Use the simplified text only when nothing else validates. Unit test.
+2. **Value checker** (shared with N1). Reject a rewrite if:
+   - a number, a name, a lexicon value of the world (colour, direction, piece, note, place…) or a negation in the original is missing from or changed in the rewrite;
+   - or if the rewrite introduces a content word that is not in the original, apart from a small whitelist of normalizations (abbreviation and typo expansions, articles, "please").
+3. **Safe tag set.** Retrain the head with `DELETE`, plus `REPLACE` only towards normalization targets (abbreviations, typos, contractions, number words → digits) and `PREPEND`/`APPEND` only for function words. Drop content `R:` tags from the vocabulary.
+4. **Minimal-edit targets.** Rebuild the alignments as the smallest edit that makes the rules give the target SOP: search deletions of fillers and normalizations first. Use the canonical only as a fallback.
+5. Report recovered / misled / broken per group before and after each step. Target: broken = 0, misled ≤ ¼ of recovered. Keep the head disabled by default in the webchat until this holds.
+
 ### N1 — seq2seq normalizer experiment (user decision 13:16; run on the GPU in parallel with R2)
 
 Idea: a small encoder-decoder rewrites any user sentence into the **simplest phrasing that keeps the meaning and that the rules understand**. The rules then only need to cover simple forms, and the normalizer absorbs the variety. The rules stay the formalizer (AGENTS.md exception: the output must validate with the rules and pass a value checker).
@@ -145,7 +162,7 @@ Loop until the session ends:
 
 **The goal of this session is to avoid training per-world models.** We validate one idea first: a single small shared model, the **dispatcher**, proposes candidates, and the existing rule formalizers validate them. No per-world LoRA in this session.
 
-Order: **R2 (main, finishes this stage)**, with R1 loops as its engine; **N1 in parallel on the GPU**; then D5. T9 is updated at the end of the session. D1, D2, D3, D4 are done; D1b is accepted as partial, with its policy below.
+Order: **R2 (main, finishes this stage)**, with R1 loops as its engine; **S1 next** (small, high value); **N1 in parallel on the GPU**; then D5. T9 is updated at the end of the session. D1, D2, D3, D4 are done; D1b is accepted as partial, with its policy below.
 
 2. **D1 — dispatcher model:** done and validated (segmentation + world heads; DistilBERT kept as the main model).
    **D1b — simplification head (still open, do after D3).** It is the third head of Round 1: KEEP / DELETE / REPLACE edit tags, learned from aligning the paraphrase variants with their canonical phrasings. D3 will show how many failures are rule gaps on messy wording; this head targets exactly those. Add it to the DistilBERT dispatcher, export it in the same ONNX model, and use it in the validation layer: try the simplified text when the original does not validate. Report the headline metric before and after.
