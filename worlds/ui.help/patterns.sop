@@ -327,7 +327,7 @@
     match="[i_want_to|i_wanna|i_need_to|i_would_like_to|id_like_to|i_d_like_to|i_have_to|i_would_like_to|i_cant|i_cannot|i_do_not_know_how_to|i_dont_know_how_to|how_do_i]? {what:words(8)} [how|how_to|how_do_i|how_do_i_do_that|how_do_i_do_it|how_do_you|how_can_i|how_do_u|how_do_you_do_that|how_to_do_it|how_do_you_do_it|how_do_i_do_this|how_can_i_do_that|how_can_i_do_it|how_does_that_work|how_is_that_done|how_to_do_that|how_to_do_this|how_is_it_done|how_is_this_done|how_does_one_do_that]"
     emit="@{_} core.request action=ui.helpHow arg.what=\"{what}\""
     kind=question
-    priority=11
+    priority=9
     example="Draw a circle how"
     example="I want to draw a circle, how"
 

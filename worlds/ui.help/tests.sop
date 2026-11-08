@@ -116,12 +116,18 @@
     session=a
 
 @t.ui.help.n22 core.test
-    input="Hangmn"
-    expect="Did you mean \"Play hangman.\""
+    input="Hangmxq"
+    expect="Did you mean"
     expectStatus=unparsed
-    expectState="lastUnparsed.text=Hangmn"
+    expectState="lastUnparsed.text=Hangmxq"
     expectEffect=chat.suggest
     session=a
+
+@t.ui.help.n22b core.test
+    input="Hangmn"
+    expect="let's play hangman"
+    expectStatus=supported
+    session=sp1
 
 @t.ui.help.n23 core.test
     input="What did I do wrong?"
