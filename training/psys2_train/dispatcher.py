@@ -87,7 +87,9 @@ def require_cuda():
 
 # ---- data ----------------------------------------------------------------------------------------------------------
 def plain_text(s):
-    return re.sub(r"\s+", " ", re.sub(r"[.,;?!]", " ", s.lower())).strip()
+    # review F3: never destroy decimals, times or quoted payload (see safe_noise.py)
+    from .safe_noise import plain
+    return plain(s)
 
 
 def world_soft_target(r, w_id):
@@ -455,7 +457,16 @@ def main(argv=None):
 
     step, best, bad, history, done = 0, -1.0, 0, [], False
     le = []
-    seg_iter = itertools.cycle(sl)
+    def _restarting(loader):
+        # review F6: restart the loader at exhaustion (a shuffling loader reshuffles), never memorise batches like itertools.cycle
+        while True:
+            yielded = False
+            for b in loader:
+                yielded = True
+                yield b
+            if not yielded:
+                return
+    seg_iter = _restarting(sl)
     t0 = time.time()
     for epoch in range(10 ** 6):
         model.train(); lw, ls = [], []

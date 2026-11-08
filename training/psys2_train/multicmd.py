@@ -44,7 +44,9 @@ def trim_segment(text, a, b):
 
 
 def _plain(s):
-    return re.sub(r"\s+", " ", re.sub(r"[.,;?!]", " ", s.lower())).strip()
+    # review F3: never destroy decimals, times or quoted payload (see safe_noise.py)
+    from .safe_noise import plain
+    return plain(s)
 
 
 def build_message(sents, rng, plain):

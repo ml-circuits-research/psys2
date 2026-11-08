@@ -54,3 +54,23 @@ test('batch validation and summary', () => {
   const f = summarize([rec('canonical', 'canonical-failed', { target_from: null, expected_circuit: '' })]);
   assert.equal(f.retry.length, 1);
 });
+
+// ---- review F2: order of actions is part of the meaning ----------------------------------------------------------
+import { parse } from '../src/soplang/index.mjs';
+const sopOf = (text) => normalizedSop(parse(text).wires);
+const req = (id, seq, action, color) => `@${id} core.request\n    core.request.action=${action}\n    core.request.arg.color=${color}\n    core.seq=${seq}\n`;
+
+test('F2: the same requests in another order are a different SOP', () => {
+  const a = sopOf(req('w1', 1, 'avatar.setColor', 'red') + req('w2', 2, 'avatar.setColor', 'blue'));
+  const b = sopOf(req('w1', 1, 'avatar.setColor', 'blue') + req('w2', 2, 'avatar.setColor', 'red'));
+  assert.notDeepEqual(a, b);
+  const create = `@w1 core.request\n    core.request.action=draw.add\n    core.request.arg.shape=circle\n`, del = `@w2 core.request\n    core.request.action=draw.delete\n    core.request.arg.target=$w1\n`;
+  assert.notDeepEqual(sopOf(create + del), sopOf(del.replace('$w1', '$w2').replace('@w2', '@w1') + create.replace('@w1', '@w2')));
+});
+
+test('F2: renumbered ids and reordered independent facts still compare equal', () => {
+  const f1 = `@a core.fact\n    k=1\n`, f2 = `@b core.fact\n    k=2\n`;
+  const q = (ref) => `@q core.question\n    core.question.type=t\n    core.question.where.x=$${ref}\n`;
+  assert.deepEqual(sopOf(f1 + f2 + q('a')), sopOf(f2.replace('@b', '@z') + f1.replace('@a', '@y') + q('y')));
+  assert.deepEqual(sopOf(req('w7', 1, 'x.y', 'red')), sopOf(req('w1', 9, 'x.y', 'red')));
+});

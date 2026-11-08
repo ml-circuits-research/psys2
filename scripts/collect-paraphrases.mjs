@@ -29,17 +29,26 @@ const valueText = (v) => (v.kind === 'string' ? JSON.stringify(v.v) : v.kind ===
  * sorted, references to wire ids renamed by position (#1, #2, ...; entity references such as $e.tom are kept), lines sorted.
  */
 export function normalizedSop(wires, legends) {
-  const ws = wires.filter((w) => w.type !== 'core.agent');
-  const idx = new Map(ws.map((w, i) => [w.id, `#${i + 1}`]));
-  const lines = ws.map((w) => {
-    const n = legends ? legends.normalizeWire(w).wire : w;
+  // Order matters (review F2): requests and questions act on the state at their position, so they keep their relative
+  // order. Only a run of consecutive plain facts (statements between two actions) is compared as a set.
+  const ws = wires.filter((w) => w.type !== 'core.agent').map((w) => ({ w, n: legends ? legends.normalizeWire(w).wire : w }));
+  const ordered = (n) => n.type === 'core.request' || n.type === 'core.question' || n.type === 'core.retract';
+  const keyOf = ({ n }) => `${n.type} ${n.entries.filter((e) => !IGNORED_KEYS.has(e.key)).map((e) => `${e.key}=${e.value.kind === 'ref' ? '$' : valueText(e.value)}`).sort().join(' ')}`;
+  const seq = [];
+  for (let i = 0; i < ws.length;) {
+    if (ordered(ws[i].n)) { seq.push(ws[i++]); continue; }
+    const run = [];
+    while (i < ws.length && !ordered(ws[i].n)) run.push(ws[i++]);
+    seq.push(...run.sort((a, b) => (keyOf(a) < keyOf(b) ? -1 : keyOf(a) > keyOf(b) ? 1 : 0)));
+  }
+  const idx = new Map(seq.map(({ w }, i) => [w.id, `#${i + 1}`]));
+  return seq.map(({ n }) => {
     const entries = n.entries.filter((e) => !IGNORED_KEYS.has(e.key)).map((e) => {
       const v = e.value.kind === 'ref' && idx.has(e.value.v) ? `$${idx.get(e.value.v)}` : valueText(e.value);
       return `${e.key}=${v}`;
     }).sort();
     return `${n.type} ${entries.join(' ')}`;
   });
-  return lines.sort();
 }
 
 /** Grade of a canonical outcome: success (everything parsed), partial (some segments unparsed), fail (nothing parsed). */
