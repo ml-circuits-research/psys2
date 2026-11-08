@@ -247,3 +247,58 @@ export function matchTokens(compiled, tokens, env) {
 
   return run(0, 0) ? { slots: { ...slots }, literals, skips } : null;
 }
+
+// ---- prefilter (spec 03 section 2, "Prefilter") ------------------------------------------------------------------------
+
+/** Words that can start a literal word list `words` (a token matches by `lower`, by `alt`, or through the operator table). */
+function firstWords(words, into) {
+  const w = words[0];
+  if (!w) return;
+  into.add(w);
+  for (const ph of OP_WORDS[w] ?? []) into.add(ph[0]);
+}
+
+const needsCache = new WeakMap();
+/**
+ * Per compiled pattern: for every mandatory literal / alternative group, the set of words one of which must occur among the
+ * sentence's tokens (the possible first words of its alternatives). Smallest sets first, so a miss is found early.
+ */
+export function prefilterNeeds(compiled) {
+  let needs = needsCache.get(compiled);
+  if (!needs) {
+    needs = [];
+    for (const el of compiled.elements) {
+      if (el.t === 'lit') { const s = new Set(); firstWords(el.words, s); if (s.size) needs.push(s); }
+      else if (el.t === 'alt' && !el.optional) {
+        const s = new Set();
+        for (const alt of el.alts) firstWords(alt, s);
+        if (s.size) needs.push(s);
+      }
+    }
+    needs.sort((a, b) => a.size - b.size);
+    needsCache.set(compiled, needs);
+  }
+  return needs;
+}
+
+/** The bag of words a token list offers to literals: `lower`, `alt`, and the first words of the operator phrases of an operator token. */
+export function wordBag(tokens) {
+  const bag = new Set();
+  for (const t of tokens) {
+    bag.add(t.lower);
+    if (t.alt) bag.add(t.alt);
+    if (t.kind === 'op') for (const ph of OP_WORDS[t.lower] ?? []) bag.add(ph[0]);
+  }
+  return bag;
+}
+
+/** False only when `matchTokens(compiled, tokens)` is certain to fail: some mandatory literal / group has none of its first words in the bag. */
+export function prefilterPasses(compiled, bag) {
+  for (const need of prefilterNeeds(compiled)) {
+    let hit = false;
+    if (need.size <= bag.size) { for (const w of need) if (bag.has(w)) { hit = true; break; } }
+    else for (const w of bag) if (need.has(w)) { hit = true; break; }
+    if (!hit) return false;
+  }
+  return true;
+}
