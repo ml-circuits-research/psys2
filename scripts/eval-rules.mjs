@@ -209,14 +209,18 @@ async function main() {
   if (only && !worlds.length) { console.error(`unknown world ${only}`); process.exit(2); }
 
   // routing rows: test split; `unseen` = normalized text absent from routing train
-  const routingAll = readJsonl(join(DATASET, 'routing.jsonl'));
+  const routingFile = join(DATASET, 'routing.jsonl');
+  if (!existsSync(routingFile)) console.error(`routing: ${routingFile} missing (training/dataset is generated, not tracked); routing section is empty`);
+  const routingAll = existsSync(routingFile) ? readJsonl(routingFile) : [];
   const trainTexts = new Set(routingAll.filter((r) => r.split === 'train').map((r) => normText(r.text)));
   const routingTest = routingAll.filter((r) => r.split === 'test' && (!only || r.world === only)).map((r) => ({ ...r, unseen: !trainTexts.has(normText(r.text)) }));
 
   const tasks = [];
   if (!hoOnly) for (const w of worlds) tasks.push({ kind: 'world', world: w });
   const nWorldTasks = tasks.length;
-  const hoWorlds = doHeldout ? worlds.filter((w) => existsSync(join(HELDOUT, `${w}.jsonl`))) : [];
+  // held-out worlds come from the held-out files themselves (not from the dataset directories, which are untracked and may be absent)
+  const hoWorlds = doHeldout && existsSync(HELDOUT) ? readdirSync(HELDOUT).filter((f) => f.endsWith('.jsonl')).map((f) => f.slice(0, -6)).sort().filter((w) => !only || w === only) : [];
+  if (doHeldout && !hoWorlds.length) console.error(`heldout: no held-out records found in ${HELDOUT}${only ? ` for ${only}` : ''}; skipping the held-out section`);
   for (const w of hoWorlds) tasks.push({ kind: 'world', world: w, heldout: true });
   const nHoEnd = tasks.length;
   if (!hoOnly) for (let i = 0; i < routingTest.length; i += CHUNK) tasks.push({ kind: 'routing', rows: routingTest.slice(i, i + CHUNK) });
@@ -254,7 +258,7 @@ async function main() {
   const { perWorld, perSource, groups, total } = main_;
   const failures = main_.failures;
   let heldout = null;
-  if (doHeldout) {
+  if (doHeldout && hoWorlds.length) {
     const hr = results.slice(nWorldTasks, nHoEnd);
     const h = aggregate(hoWorlds, hr);
     const excluded = Object.fromEntries(hoWorlds.map((w, i) => [w, hr[i].review_excluded]));
@@ -300,7 +304,7 @@ async function main() {
   }
   console.log('per world: restricted | routed');
   for (const [w, v] of Object.entries(perWorld)) console.log(`${w.padEnd(18)} pos ${f(v.pos)}   neg ${f(v.neg)}`);
-  if (heldout) {
+  if (heldout?.totals) {
     console.log(`heldout (needs_review excluded: ${heldout.needs_review_excluded.total}): restricted | routed`);
     for (const [w, v] of Object.entries(heldout.by_world)) console.log(`${w.padEnd(18)} pos ${f(v.pos)}`);
     for (const [g, v] of Object.entries(heldout.by_group)) console.log(`group ${g.padEnd(24)} pos ${f(v.pos)}`);

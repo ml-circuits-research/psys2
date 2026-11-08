@@ -16,7 +16,7 @@
  */
 import { formalize, FormSession } from '../formalizer/index.mjs';
 import { serialize } from '../soplang/index.mjs';
-import { spellCorrect, spellAlternates, worldVocabulary, spellVocabulary, ignorable } from '../formalizer/spell.mjs';
+import { spellCorrect, spellAlternates, protectedWordsOf, worldVocabulary, spellVocabulary, ignorable } from '../formalizer/spell.mjs';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs';
 import { checkValues } from './value-check.mjs';
 
@@ -259,7 +259,7 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
         const variants = [{ kind: 'original', text: piece.text, corrections: [] }];
         if (o.trySpell) {
           let sp = null;
-          try { sp = spellCorrect(piece.text, { vocab: worldVocabulary(engine.set, w.world) }); } catch { sp = null; }
+          try { sp = spellCorrect(piece.text, { vocab: worldVocabulary(engine.set, w.world), protect: protectedWordsOf(engine.set, pred.context?.tab) }); } catch { sp = null; }
           spelled.set(w.world, sp);
           if (sp?.corrections.length) variants.push({ kind: 'spell', text: sp.text, corrections: sp.corrections });
         }
@@ -313,7 +313,7 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
       if (o.trySpell && !attempts.some((a) => a.valid)) {
         for (const [rank, w] of worlds.entries()) {
           let alts = [];
-          try { alts = spellAlternates(piece.text, { vocab: worldVocabulary(engine.set, w.world) }); } catch { alts = []; }
+          try { alts = spellAlternates(piece.text, { vocab: worldVocabulary(engine.set, w.world), protect: protectedWordsOf(engine.set, pred.context?.tab) }); } catch { alts = []; }
           for (const v of alts) {
             const r = await check(pred.context, ctxPrefix, w.world, v.text, o);
             const score = o.worldWeight * logpOf(w) - o.spellPenalty * 2 - rpen(r);

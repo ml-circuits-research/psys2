@@ -100,6 +100,13 @@ export function worldVocabulary(set, worldId) {
   });
 }
 
+/** Lexicon words (with plurals) of one world and its imports, memoized: the `protect` set for the open tab (never pattern literals: that broke `stat` -> `start`). */
+export function protectedWordsOf(set, worldOrTab) {
+  const worldId = worldOrTab && !set.get(worldOrTab) ? set.list().find((w) => w.tab?.id === worldOrTab)?.id : worldOrTab;   // a tab id also works
+  if (!worldId || !set.get(worldId)) return null;
+  return set.memo(`spell-protect:${worldId}`, () => lexiconWordsOf(restrictedSet(set, [worldId])));
+}
+
 /** A view of the world set with only `ids` (and their imports); the legends are shared. Own memo cache. */
 export function restrictedSet(set, ids) {
   const all = [...new Set(ids.flatMap((w) => (set.get(w) ? set.available(w) : [])))];

@@ -15,7 +15,7 @@ import { createInterpreter } from '../interpreter/index.mjs';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs';
 import { splitSentences } from '../formalizer/rules/normalize.mjs';
-import { spellCorrect, spellAlternates, worldVocabulary, spellVocabulary, restrictedSet, ignorable, FUNCTION_WORDS } from '../formalizer/spell.mjs';
+import { spellCorrect, spellAlternates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, FUNCTION_WORDS } from '../formalizer/spell.mjs';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs';
 import { Discourse } from './discourse.mjs';
 import { correctMessage } from '../formalizer/rules/expand.mjs';
@@ -212,6 +212,7 @@ export class DialogSession {
     ids.push('*');   // finally every world together (a clause of a longer message may belong to a world the whole message did not suggest)
     const setOf = (world) => (world === '*' ? set : restrictedSet(set, [world]));
     const vocabOf = (world) => (world === '*' ? spellVocabulary(set) : worldVocabulary(set, world));
+    const protect = protectedWordsOf(set, ctx.tabWorld);   // words the open tab knows are never changed
     const parse = async (world, text) => {
       let res;
       try { res = await rules.formalize(text, { ...opts, worlds: setOf(world) }); } catch { return null; }
@@ -222,14 +223,14 @@ export class DialogSession {
     const spelled = new Map();
     if (spell) {
       for (const world of ids) {
-        const sp = spellCorrect(seg.text, { vocab: vocabOf(world) });
+        const sp = spellCorrect(seg.text, { vocab: vocabOf(world), protect });
         spelled.set(world, sp);
         if (!sp.corrections.length) continue;
         const res = await parse(world, sp.text);
         if (res) return wrap(res, { corrections: sp.corrections });
       }
       for (const world of ids) {
-        for (const v of spellAlternates(seg.text, { vocab: vocabOf(world) })) {
+        for (const v of spellAlternates(seg.text, { vocab: vocabOf(world), protect })) {
           const res = await parse(world, v.text);
           if (res) return wrap(res, { corrections: v.corrections });
         }

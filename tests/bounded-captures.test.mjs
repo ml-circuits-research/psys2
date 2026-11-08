@@ -3,7 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
-import { spellCorrect, spellAlternates, worldVocabulary, spellVocabulary } from '../src/formalizer/spell.mjs';
+import { spellCorrect, spellAlternates, protectedWordsOf, worldVocabulary, spellVocabulary } from '../src/formalizer/spell.mjs';
 
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
 const nameAfter = async (text) => { const s = engine.createSession(); await s.send(text); return s.state('ui.avatar')?.name; };
@@ -33,4 +33,17 @@ test('spelling: a content word of another world is not corrected into this world
   await s.send('Draw a red circle.');
   await s.send('a purple boat please');
   assert.equal(s.state('art.draw').objects.length, 2);
+});
+
+test('tab protection: a word of the open tab is never changed, a typo still is', async () => {
+  const protect = protectedWordsOf(engine.set, 'art.draw');
+  assert.ok(protect.has('boat'));
+  assert.equal(protectedWordsOf(engine.set, 'draw')?.has('boat'), true);   // by tab id
+  const s = engine.createSession();
+  s.setWorldState('ui.shell', { activeTab: 'draw' });
+  await s.send('Draw a red circle.');
+  await s.send('a purple boat please');
+  assert.deepEqual(s.state('art.draw').objects.map((o) => o.kind), ['circle', 'boat']);
+  await s.send('add a red sqare');
+  assert.deepEqual(s.state('art.draw').objects.map((o) => o.kind), ['circle', 'boat', 'square']);
 });
