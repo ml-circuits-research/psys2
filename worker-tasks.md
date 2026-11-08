@@ -42,19 +42,16 @@ The working hypothesis: on small worlds, **rules plus a small learned front-end*
 
 The clean measure is a fresh **held-out paraphrase set** that nobody has used for rules: `training/paraphrases/heldout/`. **It has landed (11:20):** 21 batches, 210 tasks, 2,100 variants, one batch per world (two for docs.reader), labelled at c989cd1. Rules understand 45% of these variants, against 55% on the training paraphrases. In the games the rules were tuned on the training paraphrases: 80–93% there, 36–44% here. Five docs.reader canonicals fail or are partial; their variants are flagged `needs_review`. Exclude them from metrics and count them. Never train on this set, and never use it to pick hyperparameters (use dev).
 
-### B1 — Rebaseline (do this next, small)
+### Answers and notes (reviewer, 11:30)
 
-1. `git pull`. Record c989cd1 (or later, if the reviewer says so here) as the baseline in `worker-log.md`.
-2. `node scripts/export-training.mjs && node scripts/build-dataset.mjs`; rerun `check_splits.py`.
-3. `node scripts/eval-rules.mjs`. Keep the 055fbeb numbers in RESULTS.md as "before widening" and add the c989cd1 numbers next to them.
-4. When `training/paraphrases/heldout/out/` exists, extend `eval-rules.mjs` with `--heldout`. It evaluates those records the same way, as a separate source `heldout`. This is the primary paraphrase metric from now on.
+- **Q3 (`acceptRefused`): yes, make it the default.** A complete parse whose action the current state refuses is a correct understanding, and the refusal is the reply: an illegal chess move, drawing on an empty canvas. Make Br the default policy and keep strict as an option. Keep three cases apart where the status allows it:
+  - a state refusal (an operation exists, the precondition fails) is **valid**, with a small penalty used only to break ties;
+  - `unsupported` because no operation or legend key handles the wires is **invalid**;
+  - `error` (an exception) is **invalid**.
 
-Validation: the reviewer reruns `eval-rules.mjs` at the logged commit.
-
-### Answers
-
-- **Q1 (routing split by text):** your interim choice is fine; keep reporting both numbers. In addition, for D1 training, drop from routing *train* every row whose (normalized text, active tab) also occurs in dev or test. Report how many rows were dropped.
-- **Q2 (hangman coverage 0.565 → 0.285):** expected. The committed outputs were produced mid-edit by the reviewer, and your regenerated ones were correct for 055fbeb. This is superseded by B1: the outputs at c989cd1 are now committed.
+  If the current statuses cannot tell the first two apart, add a reason field in `dispatch-validate.mjs`, not in the worlds, and report how often each case occurs. Update spec 03 §7 and ADR-005.
+- **build-dataset wipes `training/dataset/multicmd/`:** change `scripts/build-dataset.mjs` so that it removes only the world directories it writes, or move multi-command data generation into build-dataset itself (preferred: one command builds everything). Note it in the D1 log entry.
+- **Use `--jobs` wisely:** evaluations reproduce exactly. The reviewer reruns subsets with `--limit`, so keep `--limit` deterministic: the first N records in a fixed order.
 
 ## 3. Stage 1 tasks — the dispatcher (this session)
 
@@ -68,16 +65,7 @@ Order: B1 → D1 → D2 → D3 → D4 → T9 (Stage 1 only).
    - **simplification (optional head):** KEEP / DELETE / REPLACE edit tags as in Round 1. It produces a cleaner variant of each piece. The original piece is always kept as a candidate too.
 
    Train with LoRA or full fine-tune, whichever is better for this single model. Training data: `routing.jsonl`, multi-command messages built from test-disjoint sentences (join 2–3 with "and", "then", commas, periods), and the edit-tag alignments of Round 1.
-3. **D2 — validation layer (JS, in `src/`).** It takes the dispatcher output (candidate segmentations, top-k worlds per piece, optional simplified text) and **checks the candidates with the rule formalizers**:
-   - Build candidate segmentations: the most likely one plus alternatives from uncertain boundaries (a small beam, ≤ 4).
-   - For each piece, try the candidate worlds in score order, on both the original and the simplified text. Restrict the rule formalizer to that world (and its `extends`).
-   - A candidate is **valid** when the world's rules parse it completely (no unparsed tokens left) and the interpreter does not return `unsupported` or `error`.
-   - Choose the segmentation with the best total score (dispatcher score × validity, with a penalty for unparsed pieces). Ties are broken by the routing policy tiers (ADR-004: modal, navigation, active tab, …).
-   - If nothing validates, return the best candidate as "not understood" together with the candidate worlds. `ui.help` can then say "Did you mean …?".
-   - Write the trace: candidates, which ones validated, why the winner won.
-   - Spec: new section in `specs/03` (or a new spec) plus ADR-005. Unit tests.
-
-   For the evaluation, the dispatcher can run offline: Python writes the predictions to JSONL, and Node (`scripts/eval-dispatch.mjs`) runs the validation layer over them. The reviewer must be able to rerun the Node part from the committed predictions file of one world group.
+3. **D2 — validation layer:** done and validated. The default policy changes to accept state refusals (see the answer to Q3).
 4. **D3 — evaluation.** Per world group and source (generator / paraphrase / multi-command), on the test splits:
    - **oracle coverage:** is the right world in the top-1 / top-3 candidates; is the right segmentation in the beam;
    - **end-to-end exact SOP:** rules only (T2) · dispatcher top-1 + rules · dispatcher top-3 + validation · top-3 + simplification + validation;
@@ -230,3 +218,5 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
 - T0 — Environment: torch 2.14.1+cu130 on GB10, tests and smoke test pass (055fbeb).
 - T1 — Dataset rebuild and split check (6852ee8); routing text overlap answered in §2 Q1.
 - T2 — Rule baseline at 055fbeb (c95e250): 88.3% exact SOP routed, paraphrases 30.4%, routing 89.7%. The numbers reproduced exactly.
+- B1 — Rebaseline at c989cd1 (b24ac56): rules 93.4% routed, held-out 50.4%, routing 95.3%. The rules.json numbers reproduced exactly.
+- D2 — Validation layer (68ec94d): tests pass. An oracle rerun on 1,500 records shows the same pattern (games 97.1% top-1 / 61.1% strict / 97.1% accepting refusals).
