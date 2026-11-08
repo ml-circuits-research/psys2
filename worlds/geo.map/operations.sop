@@ -274,3 +274,15 @@
     semantics=action
     action=geo.askPlace
     doc="Clarification for a map command without a place: asks which place and opens a pending expectation (spec 11)."
+
+@op.geo.map.undo core.operation
+    impl=undo
+    semantics=action
+    action=geo.undo
+    doc="Undoes the last change to the map (view, markers, highlights, lines, layer); the history is kept in the world state."
+
+@op.geo.map.redo core.operation
+    impl=redo
+    semantics=action
+    action=geo.redo
+    doc="Does the undone change again."

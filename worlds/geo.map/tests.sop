@@ -2224,3 +2224,28 @@
     input="34 south 58.4 west"
     expectState="center.lat=-34"
     expectState="center.lon=-58.4"
+
+@t.geo.map.x301 core.test
+    session=gu1
+    input="mark Paris"
+    expectState="markers.length=1"
+
+@t.geo.map.x302 core.test
+    session=gu1
+    input="undo"
+    expectState="markers.length=0"
+
+@t.geo.map.x303 core.test
+    session=gu1
+    input="redo"
+    expectState="markers.length=1"
+
+@t.geo.map.x304 core.test
+    session=gu2
+    input="zoom in"
+    expectState="zoom=3"
+
+@t.geo.map.x305 core.test
+    session=gu2
+    input="undo that"
+    expectState="zoom=2"

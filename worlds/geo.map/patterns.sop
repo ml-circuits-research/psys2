@@ -2553,3 +2553,18 @@
     kind=request
     priority=14
     example="Show me 45.5 south 25 west."
+
+@pat.geo.map.x2.undo core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [undo|undo_that|undo_it|undo_the_last_change|undo_the_last_marker|take_that_back|take_it_back|revert|revert_that|go_back|step_back|cancel_that|reverse_that|put_it_back|change_it_back] [on_the_map|the_marker|that_change|please|pls|plz|thanks|now]?"
+    emit="@{_} core.request action=geo.undo"
+    kind=request
+    priority=9
+    example="Undo."
+    example="Undo that."
+
+@pat.geo.map.x2.redo core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [redo|redo_that|redo_it|do_it_again|do_that_again]"
+    emit="@{_} core.request action=geo.redo"
+    kind=request
+    priority=9
+    example="Redo."

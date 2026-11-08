@@ -2632,3 +2632,18 @@
     kind=request
     priority=8
     example="What does apples say."
+
+@pat.data.charts.x2.undo core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [undo|undo_that|undo_it|undo_the_last_change|undo_the_last_edit|take_that_back|take_it_back|revert|revert_that|go_back|step_back|cancel_that|never_mind_that|scratch_that|reverse_that|put_it_back|change_it_back|change_that_back|back_to_how_it_was] [the_chart|the_graph|the_pie|that_change|please|pls|plz|thanks|now]?"
+    emit="@{_} core.request action=chart.undo"
+    kind=request
+    priority=9
+    example="Undo."
+    example="Undo that."
+
+@pat.data.charts.x2.redo core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [redo|redo_that|redo_it|do_it_again|do_that_again|put_it_back_again|undo_the_undo]"
+    emit="@{_} core.request action=chart.redo"
+    kind=request
+    priority=9
+    example="Redo."

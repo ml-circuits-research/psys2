@@ -1298,3 +1298,44 @@
     session=ch4
     input="pears should be cherries"
     expectState="charts.0.labels.1=Cherries"
+
+@t.data.charts.x301 core.test
+    session=cu1
+    input="make a chart: apples 5, pears 3, plums 8"
+    expectState="charts.0.type=bar"
+
+@t.data.charts.x302 core.test
+    session=cu1
+    input="make it a pie chart"
+    expectState="charts.0.type=pie"
+
+@t.data.charts.x303 core.test
+    session=cu1
+    input="undo"
+    expectState="charts.0.type=bar"
+
+
+@t.data.charts.x305 core.test
+    session=cu2
+    input="make a chart: apples 5, pears 3, plums 8"
+    expectStatus=supported
+
+@t.data.charts.x306 core.test
+    session=cu2
+    input="make it a pie chart then undo"
+    expectState="charts.0.type=bar"
+
+@t.data.charts.x307 core.test
+    session=cu3
+    input="make a chart: apples 5, pears 3, plums 8"
+    expectStatus=supported
+
+@t.data.charts.x308 core.test
+    session=cu3
+    input="remove plums"
+    expectState="charts.0.labels.length=2"
+
+@t.data.charts.x309 core.test
+    session=cu3
+    input="take that back"
+    expectState="charts.0.labels.length=3"

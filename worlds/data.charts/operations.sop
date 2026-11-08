@@ -256,3 +256,15 @@
     semantics=action
     action=chart.options
     doc="Tells what the Charts tab can do: the chart types, colors and palettes, the settings and the questions it answers."
+
+@op.data.charts.undo core.operation
+    impl=undo
+    semantics=action
+    action=chart.undo
+    doc="Undoes the last change to a chart (type, colours, points, titles, data); the history is kept in the world state."
+
+@op.data.charts.redo core.operation
+    impl=redo
+    semantics=action
+    action=chart.redo
+    doc="Does the undone change again."

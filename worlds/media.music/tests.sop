@@ -1991,3 +1991,33 @@
     session=mx7
     input="please play C sharp 5 for 1 beat"
     expect="for 1 beat"
+
+@t.media.music.x301 core.test
+    session=mu1
+    input="make it faster"
+    expectState="tempo=125"
+
+@t.media.music.x302 core.test
+    session=mu1
+    input="undo"
+    expectState="tempo=100"
+
+@t.media.music.x303 core.test
+    session=mu2
+    input="write a melody: C D E"
+    expectStatus=supported
+
+@t.media.music.x304 core.test
+    session=mu2
+    input="make it faster"
+    expectState="tempo=125"
+
+@t.media.music.x305 core.test
+    session=mu2
+    input="undo"
+    expectState="tempo=100"
+
+@t.media.music.x306 core.test
+    session=mu2
+    input="undo"
+    expect="Removed"
