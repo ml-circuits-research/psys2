@@ -904,3 +904,115 @@
     expect="sorry"
     expect="undo"
     session=ywhy
+
+@t.ui.avatar.t01 core.test
+    input="Red body colour."
+    expectState="robot.colors.body=ff9d9d"
+    session=t1
+
+@t.ui.avatar.t02 core.test
+    input="body color should be red"
+    expectState="robot.colors.body=ff9d9d"
+    session=t2
+
+@t.ui.avatar.t03 core.test
+    input="Paint the body red."
+    expectState="robot.colors.body=ff9d9d"
+    session=t3
+
+@t.ui.avatar.t04 core.test
+    input="I want the body to be blue."
+    expectState="robot.colors.body=74c0fc"
+    session=t4
+
+@t.ui.avatar.t05 core.test
+    input="Make my body colour blue please."
+    expectState="robot.colors.body=74c0fc"
+    session=t5
+
+@t.ui.avatar.t06 core.test
+    input="Your background must be yellow."
+    expectState="robot.colors.background=ffdfbf"
+    session=t6
+
+@t.ui.avatar.t07 core.test
+    input="Make it blue."
+    expectState="robot.colors.body=74c0fc"
+    session=t7
+
+@t.ui.avatar.t08 core.test
+    input="Become a human."
+    expectState="character=person"
+    session=t8
+
+@t.ui.avatar.t09 core.test
+    input="Make me a human."
+    expectState="character=person"
+    session=t9
+
+@t.ui.avatar.t10 core.test
+    input="I want to be an emoji."
+    expectState="character=emoji"
+    session=t10
+
+@t.ui.avatar.t11 core.test
+    input="Make the eyes bigger and the lips red."
+    expect="lip color"
+    session=t11
+
+@t.ui.avatar.t12 core.test
+    input="make bigger yes and red lips"
+    expect="lip color"
+    session=t12
+
+@t.ui.avatar.t13 core.test
+    input="Bigger eyes please."
+    expect="scale my eyes"
+    session=t13
+
+@t.ui.avatar.t14 core.test
+    input="The eyes should be smaller."
+    expect="scale my eyes"
+    session=t14
+
+@t.ui.avatar.t15 core.test
+    input="Make yes bigger."
+    expect="scale my eyes"
+    session=t15
+
+@t.ui.avatar.t16 core.test
+    input="Make the eyes huge."
+    expect="scale my eyes"
+    session=t16
+
+@t.ui.avatar.t17 core.test
+    input="Give me bigger eyes."
+    expect="scale my eyes"
+    session=t17
+
+@t.ui.avatar.t18 core.test
+    input="Make the eyes round and the body blue."
+    expectState="robot.eyes=round"
+    expectState="robot.colors.body=74c0fc"
+    session=t18
+
+@t.ui.avatar.t19 core.test
+    input="Mouth grill please."
+    expectState="robot.mouth=grill"
+    session=t19
+
+@t.ui.avatar.t20 core.test
+    input="Dish on top pls."
+    expectState="robot.top=dish"
+    session=t20
+
+@t.ui.avatar.t21 core.test
+    input="Put a dish up top."
+    expectState="robot.top=dish"
+    session=t21
+
+@t.ui.avatar.t22 core.test
+    input="Make the eyes round, the body blue."
+    expectState="robot.eyes=round"
+    expectState="robot.colors.body=74c0fc"
+    session=t22

@@ -40,26 +40,31 @@
     example="Make your eyes a bit smaller."
 
 @pat.ui.avatar.resize.give core.pattern
-    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you|would_u|will_u]? [give_yourself|give_me|get|have|i_want|i_would_like|i_want_you_to_have|you_should_have|gimme|i_wanna|i_wana] [a_bit|a_little|a_lot|much]? {s:lex.ui.avatar.size} {p:lex.ui.avatar.parts} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you|would_u|will_u]? [give_yourself|give_me|get|have|make|i_want|i_would_like|i_would_like_to_have|i_want_you_to_have|you_should_have|gimme|i_wanna|i_wana|i_need|id_like|make_yourself_have|i_d_like]? [a|an|the|your|my|ur|some]? [a_bit|a_little|a_lot|much|even|way|slightly]? {s:lex.ui.avatar.size} {p:lex.ui.avatar.parts} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=avatar.resizePart arg.part={p} arg.dir={s}"
     kind=request
     priority=13
     example="Give yourself bigger eyes."
     example="I want smaller eyes."
+    example="Make bigger eyes."
+    example="Bigger eyes please."
+    example="Make your eyes much larger."
 
 @pat.ui.avatar.resize.grow core.pattern
-    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you|would_u|will_u]? [enlarge|widen|grow|expand|enlarge_your|widen_your] [your|the|ur]? {p:lex.ui.avatar.parts} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you|would_u|will_u]? [enlarge|widen|grow|expand|enlarge_your|widen_your|increase|upsize|make_larger|make_bigger] [your|the|ur]? {p:lex.ui.avatar.parts} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=avatar.resizePart arg.part={p} arg.dir=bigger"
     kind=request
     priority=13
     example="Enlarge your eyes."
+    example="Increase the eyes."
 
 @pat.ui.avatar.resize.shrink core.pattern
-    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you|would_u|will_u]? [shrink|reduce|narrow] [your|the|ur]? {p:lex.ui.avatar.parts} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you|would_u|will_u]? [shrink|reduce|narrow|decrease|downsize|make_smaller] [your|the|ur]? {p:lex.ui.avatar.parts} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=avatar.resizePart arg.part={p} arg.dir=smaller"
     kind=request
     priority=13
     example="Shrink your eyes."
+    example="Decrease the eyes."
 
 @pat.ui.avatar.setpart.unknown core.pattern
     match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you|would_u|will_u]? [change|make|set|switch|turn|swap] [your|the|ur]? {p:lex.ui.avatar.parts} [to|into|be|like|with|as]? [a|an|the]? {w:words(4)}"
@@ -121,11 +126,13 @@
     example="Turn your skin dark brown."
 
 @pat.ui.avatar.color.adj core.pattern
-    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you|would_u|will_u]? [give_yourself|give_me|have|get|wear|use|show_me|pick|choose|i_want|i_would_like|try|make|make_yourself|make_me|i_need|gimme|i_wanna|i_wana]? [a|an|the|your|my|ur]? {c:lex.ui.avatar.colors} {p:lex.ui.avatar.colorparts} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you|would_u|will_u]? [give_yourself|give_me|have|get|wear|use|show_me|pick|choose|i_want|i_would_like|try|make|make_yourself|make_me|i_need|gimme|i_wanna|i_wana]? [a|an|the|your|my|ur]? {c:lex.ui.avatar.colors} {p:lex.ui.avatar.colorparts} [color|colour]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=avatar.setColor arg.part={p} arg.color={c}"
     kind=request
     priority=14
     example="Give yourself a light green screen."
+    example="Red body colour."
+    example="I want a blue background colour."
     example="Blue eyes."
     example="I want a dark gray background."
 
@@ -183,7 +190,7 @@
     example="What colors can you change?"
 
 @pat.ui.avatar.char.set core.pattern
-    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you|would_u|will_u]? [become|turn_into|change_into|transform_into|switch_to|morph_into|go_back_to_being|look_like|be|turn_back_into|change_back_into|i_want_you_to_be|i_want_you_to_become|you_should_be|you_should_become|show_me|i_want_to_see|let_me_see|i_would_like_to_see] [a|an|the]? {who:lex.ui.avatar.characters} [again|instead|now|please|for_me|once_more|next|version]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you|would_u|will_u]? [become|turn_into|change_into|transform_into|switch_to|morph_into|go_back_to_being|look_like|be|turn_back_into|change_back_into|i_want_you_to_be|i_want_you_to_become|you_should_be|you_should_become|show_me|i_want_to_see|let_me_see|i_would_like_to_see|i_want_to_be|i_wanna_be|i_want_to_become|i_wanna_become|let_me_be|make_me|make_yourself|turn_me_into|turn_yourself_into|change_me_into|change_yourself_into|transform_me_into|transform_yourself_into|i_want_to_look_like|i_wanna_look_like|dress_up_as|you_be|u_be|be_like|become_like|go_back_to|revert_to|return_to|i_want_you_as|id_like_to_see|can_i_see|may_i_see|i_would_like_you_to_look_like|i_want_you_to_look_like|i_want_you_to_turn_into|i_want_you_to_change_into|i_want_you_to_transform_into] [a|an|the]? {who:lex.ui.avatar.characters} [again|instead|now|please|for_me|once_more|next|version]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=avatar.setCharacter arg.who={who}"
     kind=request
     priority=12
@@ -211,7 +218,7 @@
     example="Are you an emoji?"
 
 @pat.ui.avatar.char.set2 core.pattern
-    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|would_you|will_you|please|i_want_you_to|i_would_like_you_to|please_can_you|would_u|will_u]? [change|turn|switch|make|transform|set|morph|convert] [the|your|my|ur]? [avatar|face|character|robot|picture|look|yourself|you|it|urself|ur_self|u] [to|into|to_be|into_being|so_it_is|so_you_are|to_look_like|in]? [a|an|the]? {who:lex.ui.avatar.characters} [again|instead|now|please]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|would_you|will_you|please|i_want_you_to|i_would_like_you_to|please_can_you|would_u|will_u]? [change|turn|switch|make|transform|set|morph|convert] [the|your|my|ur]? [avatar|face|character|robot|picture|look|yourself|you|it|urself|ur_self|u|me|myself|my_avatar|this] [to|into|to_be|into_being|so_it_is|so_you_are|to_look_like|in]? [a|an|the]? {who:lex.ui.avatar.characters} [again|instead|now|please]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=avatar.setCharacter arg.who={who}"
     kind=request
     priority=14
@@ -925,3 +932,58 @@
     kind=question
     priority=5
     example="Happy right now?"
+
+@pat.ui.avatar.resize.should core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you|would_u|will_u]? [i_want|i_would_like|i_need|id_like|i_d_like|i_wish|make_sure]? [the|your|my|ur]? {p:lex.ui.avatar.parts} [should_be|must_be|needs_to_be|need_to_be|has_to_be|have_to_be|to_be|will_be|shall_be|can_be|could_be|should_get|to_get|is|are|be|get|gets|look|looks]? [a_bit|a_little|a_lot|much|even|way|slightly|a_bit_more]? {s:lex.ui.avatar.size} [please|pls|plz|thanks|thank_you|now|for_me|right_now|lol|thx]?"
+    emit="@{_} core.request action=avatar.resizePart arg.part={p} arg.dir={s}"
+    kind=request
+    priority=12
+    example="The eyes should be bigger."
+    example="I want the eyes larger."
+    example="Eyes much bigger please."
+    example="Your eyes need to be smaller."
+
+@pat.ui.avatar.color.should core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you|would_u|will_u]? [i_want|i_would_like|i_need|id_like|i_d_like|i_wish|i_prefer|make_sure]? [the|your|my|ur]? {p:lex.ui.avatar.colorparts} [color|colour]? [should_be|must_be|needs_to_be|need_to_be|has_to_be|have_to_be|to_be|will_be|shall_be|can_be|could_be|should_become|to_become|should_turn|to_turn|should_go|to_go|should_look|is|are|be|becomes|turns|goes]? [a|an]? {c:lex.ui.avatar.colors} [please|pls|plz|thanks|thank_you|now|for_me|right_now|lol|thx]?"
+    emit="@{_} core.request action=avatar.setColor arg.part={p} arg.color={c}"
+    kind=request
+    priority=13
+    example="Body color should be red."
+    example="I want the body colour to be blue."
+    example="Your background must be dark gray."
+    example="Hair colour green."
+
+@pat.ui.avatar.color.who core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you|would_u|will_u]? [make|paint|color|colour|dye|turn|change|i_want|i_would_like|id_like|i_d_like|i_want_you|i_want_you_to_be|i_want_to_be|let_me_be|you_should_be] [me|myself|it|u|you|my_avatar|the_avatar|your_avatar|the_robot|the_character|everything] [to_be|into|to]? [a|an]? {c:lex.ui.avatar.colors} [please|pls|plz|thanks|thank_you|now|for_me|right_now|lol|thx]?"
+    emit="@{_} core.request action=avatar.setColor arg.part=main arg.color={c}"
+    kind=request
+    priority=12
+    example="Make it red."
+    example="Make me green."
+    example="Turn the avatar blue."
+
+@pat.ui.avatar.setpart.noun_first core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you|would_u|will_u|u_should|u_can|you_can]? [i_want|i_would_like|id_like|i_d_like|i_need|i_wanna|gimme]? [your|the|my|ur|a|an]? {p:lex.ui.avatar.parts} [to|as|into|like|be|should_be|to_be|with]? [a|an|the]? {v:lex.ui.avatar.options} {n:number?} [please|pls|plz|thanks|thank_you|now|for_me|right_now|lol|thx]?"
+    emit="@{_} core.request action=avatar.setPart arg.part={p} arg.value={v} arg.n={n} arg.text=\"{v}\""
+    kind=request
+    priority=11
+    example="Mouth grill please."
+    example="I want your mouth as a grill."
+    example="Eyes visor."
+
+@pat.ui.avatar.setpart.adj_noun core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you|would_u|will_u|u_should|u_can|you_can]? [i_want|i_would_like|id_like|i_d_like|i_need|i_wanna|gimme|give_yourself|give_me|put|place|stick|slap]? [a|an|the|your|my|ur|some|new]? {v:lex.ui.avatar.options} [on|on_top_of|on_your|on_my|on_the|in|up|in_your]? {p:lex.ui.avatar.parts} {n:number?} [please|pls|plz|thanks|thank_you|now|for_me|right_now|lol|thx]?"
+    emit="@{_} core.request action=avatar.setPart arg.part={p} arg.value={v} arg.n={n} arg.text=\"{v}\""
+    kind=request
+    priority=11
+    example="Grill mouth now."
+    example="Dish on top please."
+    example="Put a dish up top."
+
+@pat.ui.avatar.setpart.on core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you|would_u|will_u|u_should|u_can|you_can]? [put|place|have|wear|try|add|get|i_want|i_wanna|gimme|give_yourself]? [a|an|the|some|your]? {v:lex.ui.avatar.options} [on|on_you|on_u|on_urself|on_yourself|on_me]  [please|pls|plz|thanks|thank_you|now|for_me|right_now|lol|thx]?"
+    emit="@{_} core.request action=avatar.setPart arg.value={v} arg.text=\"{v}\""
+    kind=request
+    priority=10
+    example="Shades on you please."
+    example="Put sunglasses on."

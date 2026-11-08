@@ -206,7 +206,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
         }));
         seg.wires = [...entityWires, ...renumbered];
         seg.unparsed = false;
-        seg.match = { patternId: m.pattern.id, worldId: m.pattern.worldId, kind: m.pattern.kind, slots: plainSlots(m.slots) };
+        seg.match = { patternId: m.pattern.id, worldId: m.pattern.worldId, kind: m.pattern.kind, priority: m.pattern.priority, slots: plainSlots(m.slots) };
         const bestSig = signature(m);
         for (const o of matches) {
           if (o === m || o.pattern.worldId === m.pattern.worldId) continue;
@@ -226,8 +226,18 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
   /** Read a sentence as a whole, else clause by clause; returns the segments or null when nothing was understood. */
   const readSentence = (s, tokens) => {
     const whole = readGroup(tokens, s.isQuestion);
-    if (!whole.unparsed) return { done: [{ ...whole, span: s.span, text: s.text }], fallback: null };
     const clauses = splitClauses(tokens);
+    if (!whole.unparsed) {
+      // A free-text slot (words, rest) that swallowed a clause separator ("make eyes bigger AND lips red") means the whole-sentence
+      // reading is a catch-all: prefer the clause-by-clause reading when every clause is understood on its own by a pattern
+      // of at least the same priority, all of the same world (so a list "a, b and c" of one world is never split across worlds).
+      const swallowed = clauses.length > 1 && Object.values(whole.match?.slots ?? {}).some((sl) => (sl.class === 'words' || sl.class === 'rest') && /(^|[\s,])(and|then|but)([\s,]|$)|,/i.test(sl.text ?? ''));
+      if (swallowed) {
+        const parts = clauses.map((c, idx) => readGroup(c, QUESTION_WORDS.has(c[0].lower) || (s.isQuestion && idx === clauses.length - 1 && /\?/.test(text.slice(s.span[1], s.span[1] + 3)))));
+        if (parts.every((p) => !p.unparsed && (p.match?.priority ?? 0) >= (whole.match?.priority ?? 0) && p.match?.worldId === parts[0].match?.worldId)) return { done: parts, fallback: null };
+      }
+      return { done: [{ ...whole, span: s.span, text: s.text }], fallback: null };
+    }
     if (clauses.length > 1) {
       const parts = clauses.map((c, idx) => {
         const q = QUESTION_WORDS.has(c[0].lower) || (s.isQuestion && idx === clauses.length - 1 && /\?/.test(text.slice(s.span[1], s.span[1] + 3)));

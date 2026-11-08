@@ -1193,6 +1193,8 @@
 @lex.ui.avatar.parts core.lexicon
     class=noun
     plural=antenna:antennae
+    plural=eye:yes
+    plural=eye:eys
     doc="Names of the components people can talk about. ops.mjs maps each word to a component of the active character."
     word=eye
     word=mouth
@@ -1244,6 +1246,8 @@
     word=hair
     word=face
     word=head
+    word=lip
+    word=mouth
 
 @lex.ui.avatar.moods core.lexicon
     class=noun
@@ -1321,3 +1325,9 @@
     word=smaller
     word=tinier
     word=narrower
+    word=huge
+    word=giant
+    word=big
+    word=large
+    word=small
+    word=tiny
