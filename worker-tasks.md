@@ -119,6 +119,23 @@ The reviewer is implementing dialogue continuity in a new `src/dialog/discourse.
 
 Avoid conflicting edits there. Pull and rebase often. Add messages of these kinds to the operational set once it lands.
 
+### Merge from the reviewer (21:50) — the last reviewer code; from now on all code is yours
+
+Everything is already on `main` and rebased over your G1/G6/G8 commits. `npm test` passes 747/747 at f7e25b3. Just `git pull --rebase`. The commits:
+- ac3785b `src/dialog/value-check.mjs`: typed values first (signed, decimal, `1,5`, times, notes, ordinals, spoken "minus"), operand order, from/to, coordinate order, units, colour↔part bindings.
+- 8866230 `scripts/lib/operational-check.mjs`: whole signed numbers and typed answer `value`; an empty cell `null` equals `""`; refreshed `training/results/operational-rules-only.json` (1070 right / 36 wrong / 110 not understood).
+- a3f19d3 `scripts/build-normalizer-pairs.mjs` + `scripts/lib/safe-noise.mjs`: safe noise shared with Python (JSON fixture); every synthetic pair audited with `checkValues` (5,822 rejected); pairs report regenerated.
+- e139210 `src/dialog/dispatch-validate.mjs` (normCache) + `docs/webchat/ui/normalizer-host.mjs`: provider status `not_ready | error | ready`, only `ready` is memoised, stamp invalidation, `clearCache` clears both caches.
+- 10068d4 `src/translate/index.mjs`: short or ambiguous input keeps the session language; Romanian needs diacritics or several Romanian-only words.
+- 2201691, f7e25b3 `src/dialog/discourse.mjs` + games.guess tests: a bare yes/no with nothing pending and no game gives a neutral answer.
+
+What this means for your tasks:
+- **G4:** rebuild the normalizer pairs with the new noiser before retraining.
+- **G1:** your selection code and e139210 both touch `dispatch-validate.mjs`; check that the normalizer status is respected in your residue-only path.
+- **G5:** use the new evaluator for all three modes.
+- **Language detection (new task L-RO):** Romanian typed without diacritics now stays English ("cat face 3 plus 4"). Improve the evidence, for example Romanian function words and word endings, so diacritic-less Romanian is still detected, without breaking short English input. Test both directions.
+- From now on, new phrasing and shared vocabulary go into `lang.common` (L8 absorbs `src/dialog/lang.mjs`).
+
 ### G — review 2 fixes (external review of 215677c, checked by the reviewer at 21:15: every claim reproduced)
 
 The reviewer's agent is fixing, in parallel: the typed value checker (sign, decimals, roles), the operational evaluator (signed numbers), the N1 noiser (safe noise, value audit), the normalizer cache, language detection for short inputs, and the neutral answer to a bare yes/no. Pull those before G4/G5. Do the rest:
@@ -529,3 +546,4 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
 - Discourse phases 1 and 2 (reviewer agents): ellipsis, pending clarifications, verb distribution, repairs, cancellation, attribute/ordinal references, comparatives, choice clarification, list mode, repeat/explain, negative feedback (phrase log), topic return; `src/dialog/lang.mjs` holds the shared vocabulary that L8 should absorb into `lang.common`. Operational unchanged (1068 right / 37 wrong). Use these mechanisms in the DLG dialogues.
 - L2–L4 — phrase macros, `lang.common`, `migrate-macros`, ui.avatar pilot (d6abc37, 0a28f0e, 780255c, 751f448): 717 tests pass. Operational unchanged (1068/18/37/111). The size target is reinterpreted: −60% of the whole file was unreachable (32 KB of ui.avatar is examples/emit/ids). Match text −43% is accepted. For L7, measure the **match text** and the number of repeated groups, not the file bytes.
 - R2 dispatcher v2 published (215677c), chosen by the full-pipeline result: operational **right 90.0 → 91.2%, wrong 4.0 → 2.8%**. Reviewer check in headless Chrome with the Encoder: multi-command, typo, tab-routing and abbreviation messages answered correctly, no console errors.
+- Review-2 small fixes by the reviewer (ac3785b, 8866230, a3f19d3, e139210, 10068d4, 2201691, f7e25b3) + worker G1/G6/G8: 747 tests pass at f7e25b3.
