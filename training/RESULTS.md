@@ -486,3 +486,6 @@ Labelling errors are mostly tasks whose variants change the parameters (canonica
 | TOTAL | 9600 | 3741/0/1348/2107/4/0 (trainable 7140) | 7256/1485/37/554/29/239 (trainable 9291) |
 
 Commands to rebuild everything derived from these labels (not run here): `node scripts/export-training.mjs && node scripts/build-dataset.mjs`, then `node scripts/build-edit-tags.mjs` (usual options) and, once it exists (N1), `scripts/build-normalizer-pairs.mjs`, and re-run `node scripts/eval-rules.mjs --heldout` for the held-out rules metrics.
+
+## Dialogue set audit (rules mode)
+Audit of `training/eval/dialogues.jsonl` and the fixes of the system gaps it found: see `worker-log.md` ("Dialogue audit and system gaps") for the audit counts and the before / after numbers on the same audited set (395 dialogues).
