@@ -1,0 +1,141 @@
+@kb.song.twinkle media.music.song
+    title="Twinkle, Twinkle, Little Star"
+    aka="twinkle twinkle"
+    aka="twinkle twinkle little star"
+    aka="twinkle"
+    composer="Traditional; the melody is the French folk song \"Ah! vous dirai-je, maman\" (published 1761), the English words are by Jane Taylor (1806)"
+    key="C major"
+    tempo=100
+    meter="4/4"
+    year=1761
+    blurb="a nursery rhyme with a very simple tune"
+    abc="X:1\nT:Twinkle, Twinkle, Little Star\nC:Traditional\nM:4/4\nL:1/4\nQ:1/4=100\nK:C\nC C G G | A A G2 | F F E E | D D C2 | G G F F | E E D2 | G G F F | E E D2 | C C G G | A A G2 | F F E E | D D C2 |]\n"
+    core.source="fixture:media.music/songs (public domain melody)"
+
+@kb.song.birthday media.music.song
+    title="Happy Birthday to You"
+    aka="happy birthday"
+    aka="happy birthday to you"
+    aka="birthday song"
+    composer="Patty Hill and Mildred J. Hill, 1893 (as \"Good Morning to All\")"
+    key="G major"
+    tempo=100
+    meter="3/4"
+    year=1893
+    blurb="the most sung song in English"
+    abc="X:1\nT:Happy Birthday to You\nC:Patty Hill and Mildred J. Hill\nM:3/4\nL:1/8\nQ:1/4=100\nK:G\nD3/2 D/2 | E2 D2 G2 | F4 D3/2 D/2 | E2 D2 A2 | G4 D3/2 D/2 | d2 B2 G2 | F2 E2 c3/2 c/2 | B2 G2 A2 | G6 |]\n"
+    core.source="fixture:media.music/songs (public domain melody)"
+
+@kb.song.ode media.music.song
+    title="Ode to Joy"
+    aka="ode to joy"
+    aka="ode"
+    aka="joy"
+    aka="ode an die freude"
+    composer="Ludwig van Beethoven, 1824 (theme of the last movement of Symphony No. 9, words by Friedrich Schiller)"
+    key="C major"
+    tempo=108
+    meter="4/4"
+    year=1824
+    blurb="the joyful theme from Beethoven's ninth symphony"
+    abc="X:1\nT:Ode to Joy\nC:Ludwig van Beethoven\nM:4/4\nL:1/4\nQ:1/4=108\nK:C\nE E F G | G F E D | C C D E | E3/2 D/2 D2 | E E F G | G F E D | C C D E | D3/2 C/2 C2 | D D E C | D E/2F/2 E C | D E/2F/2 E D | C D G,2 | E E F G | G F E D | C C D E | D3/2 C/2 C2 |]\n"
+    core.source="fixture:media.music/songs (public domain melody)"
+
+@kb.song.jacques media.music.song
+    title="Frère Jacques"
+    aka="frere jacques"
+    aka="brother john"
+    aka="are you sleeping"
+    aka="frère jacques"
+    composer="Traditional French nursery rhyme (18th century)"
+    key="C major"
+    tempo=120
+    meter="4/4"
+    blurb="a round: sing it with friends, each starting two bars later"
+    abc="X:1\nT:Frère Jacques\nC:Traditional French nursery rhyme\nM:4/4\nL:1/4\nQ:1/4=120\nK:C\nC D E C | C D E C | E F G2 | E F G2 | G/2A/2G/2F/2 E C | G/2A/2G/2F/2 E C | C G, C2 | C G, C2 |]\n"
+    core.source="fixture:media.music/songs (public domain melody)"
+
+@kb.song.mary media.music.song
+    title="Mary Had a Little Lamb"
+    aka="mary had a little lamb"
+    aka="mary had a lamb"
+    aka="little lamb"
+    composer="Traditional tune; the poem is by Sarah Josepha Hale (1830)"
+    key="C major"
+    tempo=110
+    meter="4/4"
+    year=1830
+    blurb="an American nursery rhyme"
+    abc="X:1\nT:Mary Had a Little Lamb\nC:Traditional tune\nM:4/4\nL:1/4\nQ:1/4=110\nK:C\nE D C D | E E E2 | D D D2 | E G G2 | E D C D | E E E E | D D E D | C4 |]\n"
+    core.source="fixture:media.music/songs (public domain melody)"
+
+@kb.song.jingle media.music.song
+    title="Jingle Bells"
+    aka="jingle bells"
+    aka="jingle"
+    composer="James Lord Pierpont, 1857"
+    key="C major"
+    tempo=120
+    meter="4/4"
+    year=1857
+    blurb="a winter song about a one-horse open sleigh"
+    abc="X:1\nT:Jingle Bells\nC:James Lord Pierpont\nM:4/4\nL:1/4\nQ:1/4=120\nK:C\nE E E2 | E E E2 | E G C3/2 D/2 | E4 | F F F3/2 F/2 | F E E E/2E/2 | E D D E | D2 G2 | E E E2 | E E E2 | E G C3/2 D/2 | E4 | F F F3/2 F/2 | F E E E/2E/2 | G G F D | C4 |]\n"
+    core.source="fixture:media.music/songs (public domain melody)"
+
+@kb.song.macdonald media.music.song
+    title="Old MacDonald Had a Farm"
+    aka="old macdonald"
+    aka="old macdonald had a farm"
+    aka="macdonald"
+    aka="farm song"
+    composer="Traditional folk song"
+    key="C major"
+    tempo=110
+    meter="4/4"
+    blurb="a farm song where you can add any animal"
+    abc="X:1\nT:Old MacDonald Had a Farm\nC:Traditional folk song\nM:4/4\nL:1/4\nQ:1/4=110\nK:C\nC C C G | A A G2 | E E D D | C2 z G | C C C G | A A G2 | E E D D | C4 |]\n"
+    core.source="fixture:media.music/songs (public domain melody)"
+
+@kb.song.london media.music.song
+    title="London Bridge Is Falling Down"
+    aka="london bridge"
+    aka="london bridge is falling down"
+    aka="falling down"
+    composer="Traditional English nursery rhyme"
+    key="C major"
+    tempo=110
+    meter="4/4"
+    blurb="a nursery rhyme and a singing game"
+    abc="X:1\nT:London Bridge Is Falling Down\nC:Traditional English nursery rhyme\nM:4/4\nL:1/4\nQ:1/4=110\nK:C\nG3/2 A/2 G F | E F G2 | D E F2 | E F G2 | G3/2 A/2 G F | E F G2 | D G E C |]\n"
+    core.source="fixture:media.music/songs (public domain melody)"
+
+@kb.song.row media.music.song
+    title="Row, Row, Row Your Boat"
+    aka="row row row your boat"
+    aka="row your boat"
+    aka="row row row"
+    aka="row row"
+    composer="Traditional nursery rhyme"
+    key="C major"
+    tempo=100
+    meter="6/8"
+    blurb="a round about rowing gently down the stream"
+    abc="X:1\nT:Row, Row, Row Your Boat\nC:Traditional nursery rhyme\nM:6/8\nL:1/8\nQ:1/4=100\nK:C\nC3 C3 | C2 D E3 | E2 D E2 F | G6 | c c c G G G | E E E C C C | G2 F E2 D | C6 |]\n"
+    core.source="fixture:media.music/songs (public domain melody)"
+
+@kb.song.brahms media.music.song
+    title="Brahms' Lullaby"
+    aka="brahms' lullaby"
+    aka="brahms lullaby"
+    aka="lullaby"
+    aka="wiegenlied"
+    aka="lullaby and goodnight"
+    aka="brahms"
+    composer="Johannes Brahms, 1868 (Wiegenlied, Op. 49 No. 4)"
+    key="D major"
+    tempo=80
+    meter="3/4"
+    year=1868
+    blurb="a famous lullaby, \"Lullaby and good night\""
+    abc="X:1\nT:Brahms' Lullaby\nC:Johannes Brahms\nM:3/4\nL:1/8\nQ:1/4=80\nK:D\nFF | A3 FF2 | A4 FA | d2 c3 B | B2 A2 EF | G2 E2 EF | G4 EG | cB A2 c2 | d4 DD | d4 BG | A4 FD | G2 A2 B2 | A4 DD | d4 BG | A4 FD | GA/G/ F2 E2 | D4 |]\n"
+    core.source="fixture:media.music/songs (public domain melody)"

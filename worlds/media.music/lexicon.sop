@@ -1,0 +1,302 @@
+@lex.media.music.notes core.lexicon
+    class=note
+    doc="Note names: letters, with sharp or flat as a second word (c_sharp, c-sharp) or as b (bb)"
+    word=c
+    word=d
+    word=e
+    word=f
+    word=g
+    word=a
+    word=b
+    word=c_sharp
+    word=c-sharp
+    word=c_flat
+    word=c-flat
+    word=d_sharp
+    word=d-sharp
+    word=d_flat
+    word=d-flat
+    word=e_sharp
+    word=e-sharp
+    word=e_flat
+    word=e-flat
+    word=f_sharp
+    word=f-sharp
+    word=f_flat
+    word=f-flat
+    word=g_sharp
+    word=g-sharp
+    word=g_flat
+    word=g-flat
+    word=a_sharp
+    word=a-sharp
+    word=a_flat
+    word=a-flat
+    word=b_sharp
+    word=b-sharp
+    word=b_flat
+    word=b-flat
+    word=bb
+    word=eb
+    word=ab
+    word=db
+    word=gb
+
+@lex.media.music.registers core.lexicon
+    class=register
+    doc="Register words before a note name: middle C, a high G"
+    word=high
+    word=higher
+    word=low
+    word=lower
+    word=middle
+
+@lex.media.music.qualities core.lexicon
+    class=quality
+    doc="Chord qualities"
+    word=major
+    word=minor
+    word=diminished
+    word=augmented
+    word=dominant
+    word=seventh
+    word=major_seventh
+    word=minor_seventh
+    word=dominant_seventh
+    word=diminished_seventh
+    word=half_diminished
+    word=sus
+    word=suspended
+    word=sus2
+    word=sus4
+    word=sixth
+    word=minor_sixth
+    word=ninth
+    word=power
+    word=maj
+    word=min
+    word=dim
+    word=aug
+
+@lex.media.music.chordsyms core.lexicon
+    class=chordsym
+    doc="Short minor chord symbols (Am, Dm)"
+    word=am
+    word=bm
+    word=cm
+    word=dm
+    word=em
+    word=fm
+    word=gm
+
+@lex.media.music.scaletypes core.lexicon
+    class=scaletype
+    doc="Scale types (tonal scale dictionary)"
+    word=major
+    word=minor
+    word=natural_minor
+    word=harmonic_minor
+    word=melodic_minor
+    word=dorian
+    word=phrygian
+    word=lydian
+    word=mixolydian
+    word=locrian
+    word=ionian
+    word=aeolian
+    word=pentatonic
+    word=major_pentatonic
+    word=minor_pentatonic
+    word=blues
+    word=blue
+    word=chromatic
+    word=whole_tone
+
+@lex.media.music.scalemodes core.lexicon
+    class=scalemode
+    doc="Scale types that can follow a note name without the word scale (D dorian, C blues)"
+    word=dorian
+    word=phrygian
+    word=lydian
+    word=mixolydian
+    word=locrian
+    word=harmonic_minor
+    word=melodic_minor
+    word=natural_minor
+    word=pentatonic
+    word=major_pentatonic
+    word=minor_pentatonic
+    word=blues
+    word=blue
+    word=chromatic
+    word=whole_tone
+
+@lex.media.music.instruments core.lexicon
+    class=instrument
+    doc="Instrument names and synonyms, mapped to the synthesizer presets piano, organ, flute, strings, bells, bass, marimba"
+    word=piano
+    word=keyboard
+    word=grand_piano
+    word=electric_piano
+    word=organ
+    word=church_organ
+    word=flute
+    word=whistle
+    word=recorder
+    word=string
+    word=violin
+    word=cello
+    word=fiddle
+    word=orchestra
+    word=bell
+    word=glockenspiel
+    word=chime
+    word=celesta
+    word=bass
+    word=bass_guitar
+    word=double_bass
+    word=marimba
+    word=xylophone
+    word=vibraphone
+
+@lex.media.music.dirs core.lexicon
+    class=direction
+    doc="Direction words for transposition and intervals"
+    word=up
+    word=upward
+    word=upwards
+    word=higher
+    word=above
+    word=over
+    word=up_from
+    word=higher_than
+    word=down
+    word=downward
+    word=downwards
+    word=lower
+    word=below
+    word=under
+    word=down_from
+    word=lower_than
+
+@lex.media.music.directions core.lexicon
+    class=direction
+    doc="Direction of a scale"
+    word=ascending
+    word=descending
+    word=up
+    word=down
+    word=upwards
+    word=downwards
+    word=up_and_down
+    word=down_and_up
+    word=both_ways
+    word=back_down
+
+@lex.media.music.intervals core.lexicon
+    class=interval
+    doc="Interval and step names"
+    word=semitone
+    word=half_step
+    word=step
+    word=tone
+    word=whole_step
+    word=whole_tone
+    word=second
+    word=minor_second
+    word=major_second
+    word=third
+    word=minor_third
+    word=major_third
+    word=fourth
+    word=perfect_fourth
+    word=augmented_fourth
+    word=tritone
+    word=diminished_fifth
+    word=fifth
+    word=perfect_fifth
+    word=sixth
+    word=minor_sixth
+    word=major_sixth
+    word=seventh
+    word=minor_seventh
+    word=major_seventh
+    word=octave
+
+@lex.media.music.modes core.lexicon
+    class=mode
+    doc="Key modes"
+    word=major
+    word=minor
+
+@lex.media.music.accs core.lexicon
+    class=accidental
+    doc="Sharps and flats"
+    word=sharp
+    word=flat
+    word=accidental
+
+@lex.media.music.degrees core.lexicon
+    class=degree
+    doc="Degree words before slower, faster, louder, higher"
+    word=a_bit
+    word=a_little
+    word=a_lot
+    word=a_tad
+    word=just_a_bit
+    word=just_a_little
+    word=bit
+    word=little
+    word=slightly
+    word=somewhat
+    word=lot
+    word=much
+    word=way
+    word=much_more
+
+@lex.media.music.things core.lexicon
+    class=thing
+    doc="Kinds of theory things that can be listed"
+    word=scale
+    word=chord
+    word=key
+    word=interval
+
+@lex.media.music.triggers core.lexicon
+    class=trigger
+    doc="Words that point at the music world"
+    word=chord
+    word=scale
+    word=note
+    word=melody
+    word=tempo
+    word=octave
+    word=sharp
+    word=flat
+    word=transpose
+    word=semitone
+    word=interval
+    word=bpm
+    word=volume
+    word=louder
+    word=quieter
+    word=softer
+    word=instrument
+    word=song
+    word=sheet
+    word=score
+    word=arpeggio
+    word=loop
+    word=twinkle
+    word=birthday
+    word=jingle
+    word=lullaby
+    word=jacques
+    word=brahms
+    word=beethoven
+    word=macdonald
+    word=organ
+    word=flute
+    word=marimba
+    word=piano
+    word=keyboard

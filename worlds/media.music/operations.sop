@@ -1,0 +1,233 @@
+@op.media.music.playNote core.operation
+    impl=playNote
+    semantics=action
+    action=music.playNote
+    doc="Plays one note (name, optional octave and register such as middle C, optional instrument)."
+
+@op.media.music.playChord core.operation
+    impl=playChord
+    semantics=action
+    action=music.playChord
+    doc="Plays a chord or arpeggio by root and quality, or from a list of notes."
+
+@op.media.music.playScale core.operation
+    impl=playScale
+    semantics=action
+    action=music.playScale
+    doc="Plays a scale (any tonal scale type, ascending, descending or both)."
+
+@op.media.music.playAny core.operation
+    impl=playAny
+    semantics=action
+    action=music.playAny
+    doc="Plays a song by title (with aliases), or a list of note names, with optional instrument, tempo."
+
+@op.media.music.random core.operation
+    impl=random
+    semantics=action
+    action=music.random
+    doc="Plays a song from the library, the next one each time."
+
+@op.media.music.replay core.operation
+    impl=replay
+    semantics=action
+    action=music.replay
+    doc="Plays the current thing again (optionally on another instrument)."
+
+@op.media.music.playMelody core.operation
+    impl=playMelody
+    semantics=action
+    action=music.playMelody
+    doc="Plays the melody the user composed."
+
+@op.media.music.stop core.operation
+    impl=stop
+    semantics=action
+    action=music.stop
+    doc="Stops playing."
+
+@op.media.music.loop core.operation
+    impl=loop
+    semantics=action
+    action=music.loop
+    doc="Turns looping on or off."
+
+@op.media.music.tempo core.operation
+    impl=tempo
+    semantics=action
+    action=music.tempo
+    doc="Sets or changes the tempo (slower, faster, a number of bpm, a speed factor)."
+
+@op.media.music.volume core.operation
+    impl=volume
+    semantics=action
+    action=music.volume
+    doc="Sets or changes the volume (louder, quieter, a percentage)."
+
+@op.media.music.instrument core.operation
+    impl=instrument
+    semantics=action
+    action=music.instrument
+    doc="Changes the instrument (synth preset)."
+
+@op.media.music.octave core.operation
+    impl=octave
+    semantics=action
+    action=music.octave
+    doc="Moves the current thing up or down by octaves."
+
+@op.media.music.transpose core.operation
+    impl=transpose
+    semantics=action
+    action=music.transpose
+    doc="Transposes the current thing by an interval or a number of steps."
+
+@op.media.music.transposeTo core.operation
+    impl=transposeTo
+    semantics=action
+    action=music.transposeTo
+    doc="Transposes the current thing into a key."
+
+@op.media.music.key core.operation
+    impl=key
+    semantics=action
+    action=music.key
+    doc="Sets the key."
+
+@op.media.music.melodySet core.operation
+    impl=melodySet
+    semantics=action
+    action=music.melodySet
+    doc="Starts a new user melody from a list of notes."
+
+@op.media.music.melodyAdd core.operation
+    impl=melodyAdd
+    semantics=action
+    action=music.melodyAdd
+    doc="Adds notes to the user melody."
+
+@op.media.music.melodyClear core.operation
+    impl=melodyClear
+    semantics=action
+    action=music.melodyClear
+    doc="Clears the user melody."
+
+@op.media.music.melodyUndo core.operation
+    impl=melodyUndo
+    semantics=action
+    action=music.melodyUndo
+    doc="Removes the last note of the user melody."
+
+@op.media.music.melodyShow core.operation
+    impl=melodyShow
+    semantics=action
+    action=music.melodyShow
+    doc="Shows the user melody as notes and sheet music."
+
+@op.media.music.showNotes core.operation
+    impl=showNotes
+    semantics=action
+    action=music.showNotes
+    doc="Names the notes of the current thing and lights them on the keyboard."
+
+@op.media.music.showScore core.operation
+    impl=showScore
+    semantics=action
+    action=music.showScore
+    doc="Shows the sheet music of the current thing."
+
+@op.media.music.listSongs core.operation
+    impl=listSongs
+    semantics=action
+    action=music.listSongs
+    doc="Lists the songs in the library."
+
+@op.media.music.listInstruments core.operation
+    impl=listInstruments
+    semantics=action
+    action=music.listInstruments
+    doc="Lists the instruments."
+
+@op.media.music.listTypes core.operation
+    impl=listTypes
+    semantics=action
+    action=music.listTypes
+    doc="Lists scale or chord types."
+
+@op.media.music.scaleNotes core.operation
+    impl=scaleNotes
+    semantics=action
+    action=music.scaleNotes
+    doc="Names the notes of a scale and shows them."
+
+@op.media.music.chordNotes core.operation
+    impl=chordNotes
+    semantics=action
+    action=music.chordNotes
+    doc="Names the notes of a chord and shows them."
+
+@op.media.music.chordName core.operation
+    impl=chordName
+    semantics=action
+    action=music.chordName
+    doc="Names the chord made of the given notes."
+
+@op.media.music.keySig core.operation
+    impl=keySig
+    semantics=action
+    action=music.keySig
+    doc="Tells the key signature of a key."
+
+@op.media.music.keyWith core.operation
+    impl=keyWith
+    semantics=action
+    action=music.keyWith
+    doc="Tells which key has a number of sharps or flats."
+
+@op.media.music.interval core.operation
+    impl=interval
+    semantics=action
+    action=music.interval
+    doc="Tells the interval between two notes."
+
+@op.media.music.above core.operation
+    impl=above
+    semantics=action
+    action=music.above
+    doc="Tells the note an interval above or below a note."
+
+@op.media.music.relative core.operation
+    impl=relative
+    semantics=action
+    action=music.relative
+    doc="Tells the relative major or minor key."
+
+@op.media.music.keyChords core.operation
+    impl=keyChords
+    semantics=action
+    action=music.keyChords
+    doc="Lists the chords of a key."
+
+@op.media.music.frequency core.operation
+    impl=frequency
+    semantics=action
+    action=music.frequency
+    doc="Tells the frequency of a note in hertz."
+
+@op.media.music.enharmonic core.operation
+    impl=enharmonic
+    semantics=action
+    action=music.enharmonic
+    doc="Tells the enharmonic name of a note."
+
+@op.media.music.status core.operation
+    impl=status
+    semantics=action
+    action=music.status
+    doc="Tells tempo, instrument, volume, key, loop state or what is playing."
+
+@op.media.music.songInfo core.operation
+    impl=songInfo
+    semantics=action
+    action=music.songInfo
+    doc="Tells composer, key, tempo, length or a short note about a song."

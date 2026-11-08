@@ -1,0 +1,545 @@
+@tpl.media.music.playNote core.template
+    for=action.music.playNote
+    text="{value}"
+
+@tpl.media.music.playNote.unsupported core.template
+    for=action.music.playNote
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.playNote.missing core.template
+    for=action.music.playNote
+    status=missing
+    text="{note}"
+
+@tpl.media.music.playChord core.template
+    for=action.music.playChord
+    text="{value}"
+
+@tpl.media.music.playChord.unsupported core.template
+    for=action.music.playChord
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.playChord.missing core.template
+    for=action.music.playChord
+    status=missing
+    text="{note}"
+
+@tpl.media.music.playScale core.template
+    for=action.music.playScale
+    text="{value}"
+
+@tpl.media.music.playScale.unsupported core.template
+    for=action.music.playScale
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.playScale.missing core.template
+    for=action.music.playScale
+    status=missing
+    text="{note}"
+
+@tpl.media.music.playAny core.template
+    for=action.music.playAny
+    text="{value}"
+
+@tpl.media.music.playAny.unsupported core.template
+    for=action.music.playAny
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.playAny.missing core.template
+    for=action.music.playAny
+    status=missing
+    text="{note}"
+
+@tpl.media.music.random core.template
+    for=action.music.random
+    text="{value}"
+
+@tpl.media.music.random.unsupported core.template
+    for=action.music.random
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.random.missing core.template
+    for=action.music.random
+    status=missing
+    text="{note}"
+
+@tpl.media.music.replay core.template
+    for=action.music.replay
+    text="{value}"
+
+@tpl.media.music.replay.unsupported core.template
+    for=action.music.replay
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.replay.missing core.template
+    for=action.music.replay
+    status=missing
+    text="{note}"
+
+@tpl.media.music.playMelody core.template
+    for=action.music.playMelody
+    text="{value}"
+
+@tpl.media.music.playMelody.unsupported core.template
+    for=action.music.playMelody
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.playMelody.missing core.template
+    for=action.music.playMelody
+    status=missing
+    text="{note}"
+
+@tpl.media.music.stop core.template
+    for=action.music.stop
+    text="{value}"
+
+@tpl.media.music.stop.unsupported core.template
+    for=action.music.stop
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.stop.missing core.template
+    for=action.music.stop
+    status=missing
+    text="{note}"
+
+@tpl.media.music.loop core.template
+    for=action.music.loop
+    text="{value}"
+
+@tpl.media.music.loop.unsupported core.template
+    for=action.music.loop
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.loop.missing core.template
+    for=action.music.loop
+    status=missing
+    text="{note}"
+
+@tpl.media.music.tempo core.template
+    for=action.music.tempo
+    text="{value}"
+
+@tpl.media.music.tempo.unsupported core.template
+    for=action.music.tempo
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.tempo.missing core.template
+    for=action.music.tempo
+    status=missing
+    text="{note}"
+
+@tpl.media.music.volume core.template
+    for=action.music.volume
+    text="{value}"
+
+@tpl.media.music.volume.unsupported core.template
+    for=action.music.volume
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.volume.missing core.template
+    for=action.music.volume
+    status=missing
+    text="{note}"
+
+@tpl.media.music.instrument core.template
+    for=action.music.instrument
+    text="{value}"
+
+@tpl.media.music.instrument.unsupported core.template
+    for=action.music.instrument
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.instrument.missing core.template
+    for=action.music.instrument
+    status=missing
+    text="{note}"
+
+@tpl.media.music.octave core.template
+    for=action.music.octave
+    text="{value}"
+
+@tpl.media.music.octave.unsupported core.template
+    for=action.music.octave
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.octave.missing core.template
+    for=action.music.octave
+    status=missing
+    text="{note}"
+
+@tpl.media.music.transpose core.template
+    for=action.music.transpose
+    text="{value}"
+
+@tpl.media.music.transpose.unsupported core.template
+    for=action.music.transpose
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.transpose.missing core.template
+    for=action.music.transpose
+    status=missing
+    text="{note}"
+
+@tpl.media.music.transposeTo core.template
+    for=action.music.transposeTo
+    text="{value}"
+
+@tpl.media.music.transposeTo.unsupported core.template
+    for=action.music.transposeTo
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.transposeTo.missing core.template
+    for=action.music.transposeTo
+    status=missing
+    text="{note}"
+
+@tpl.media.music.key core.template
+    for=action.music.key
+    text="{value}"
+
+@tpl.media.music.key.unsupported core.template
+    for=action.music.key
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.key.missing core.template
+    for=action.music.key
+    status=missing
+    text="{note}"
+
+@tpl.media.music.melodySet core.template
+    for=action.music.melodySet
+    text="{value}"
+
+@tpl.media.music.melodySet.unsupported core.template
+    for=action.music.melodySet
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.melodySet.missing core.template
+    for=action.music.melodySet
+    status=missing
+    text="{note}"
+
+@tpl.media.music.melodyAdd core.template
+    for=action.music.melodyAdd
+    text="{value}"
+
+@tpl.media.music.melodyAdd.unsupported core.template
+    for=action.music.melodyAdd
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.melodyAdd.missing core.template
+    for=action.music.melodyAdd
+    status=missing
+    text="{note}"
+
+@tpl.media.music.melodyClear core.template
+    for=action.music.melodyClear
+    text="{value}"
+
+@tpl.media.music.melodyClear.unsupported core.template
+    for=action.music.melodyClear
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.melodyClear.missing core.template
+    for=action.music.melodyClear
+    status=missing
+    text="{note}"
+
+@tpl.media.music.melodyUndo core.template
+    for=action.music.melodyUndo
+    text="{value}"
+
+@tpl.media.music.melodyUndo.unsupported core.template
+    for=action.music.melodyUndo
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.melodyUndo.missing core.template
+    for=action.music.melodyUndo
+    status=missing
+    text="{note}"
+
+@tpl.media.music.melodyShow core.template
+    for=action.music.melodyShow
+    text="{value}"
+
+@tpl.media.music.melodyShow.unsupported core.template
+    for=action.music.melodyShow
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.melodyShow.missing core.template
+    for=action.music.melodyShow
+    status=missing
+    text="{note}"
+
+@tpl.media.music.showNotes core.template
+    for=action.music.showNotes
+    text="{value}"
+
+@tpl.media.music.showNotes.unsupported core.template
+    for=action.music.showNotes
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.showNotes.missing core.template
+    for=action.music.showNotes
+    status=missing
+    text="{note}"
+
+@tpl.media.music.showScore core.template
+    for=action.music.showScore
+    text="{value}"
+
+@tpl.media.music.showScore.unsupported core.template
+    for=action.music.showScore
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.showScore.missing core.template
+    for=action.music.showScore
+    status=missing
+    text="{note}"
+
+@tpl.media.music.listSongs core.template
+    for=action.music.listSongs
+    text="{value}"
+
+@tpl.media.music.listSongs.unsupported core.template
+    for=action.music.listSongs
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.listSongs.missing core.template
+    for=action.music.listSongs
+    status=missing
+    text="{note}"
+
+@tpl.media.music.listInstruments core.template
+    for=action.music.listInstruments
+    text="{value}"
+
+@tpl.media.music.listInstruments.unsupported core.template
+    for=action.music.listInstruments
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.listInstruments.missing core.template
+    for=action.music.listInstruments
+    status=missing
+    text="{note}"
+
+@tpl.media.music.listTypes core.template
+    for=action.music.listTypes
+    text="{value}"
+
+@tpl.media.music.listTypes.unsupported core.template
+    for=action.music.listTypes
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.listTypes.missing core.template
+    for=action.music.listTypes
+    status=missing
+    text="{note}"
+
+@tpl.media.music.scaleNotes core.template
+    for=action.music.scaleNotes
+    text="{value}"
+
+@tpl.media.music.scaleNotes.unsupported core.template
+    for=action.music.scaleNotes
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.scaleNotes.missing core.template
+    for=action.music.scaleNotes
+    status=missing
+    text="{note}"
+
+@tpl.media.music.chordNotes core.template
+    for=action.music.chordNotes
+    text="{value}"
+
+@tpl.media.music.chordNotes.unsupported core.template
+    for=action.music.chordNotes
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.chordNotes.missing core.template
+    for=action.music.chordNotes
+    status=missing
+    text="{note}"
+
+@tpl.media.music.chordName core.template
+    for=action.music.chordName
+    text="{value}"
+
+@tpl.media.music.chordName.unsupported core.template
+    for=action.music.chordName
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.chordName.missing core.template
+    for=action.music.chordName
+    status=missing
+    text="{note}"
+
+@tpl.media.music.keySig core.template
+    for=action.music.keySig
+    text="{value}"
+
+@tpl.media.music.keySig.unsupported core.template
+    for=action.music.keySig
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.keySig.missing core.template
+    for=action.music.keySig
+    status=missing
+    text="{note}"
+
+@tpl.media.music.keyWith core.template
+    for=action.music.keyWith
+    text="{value}"
+
+@tpl.media.music.keyWith.unsupported core.template
+    for=action.music.keyWith
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.keyWith.missing core.template
+    for=action.music.keyWith
+    status=missing
+    text="{note}"
+
+@tpl.media.music.interval core.template
+    for=action.music.interval
+    text="{value}"
+
+@tpl.media.music.interval.unsupported core.template
+    for=action.music.interval
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.interval.missing core.template
+    for=action.music.interval
+    status=missing
+    text="{note}"
+
+@tpl.media.music.above core.template
+    for=action.music.above
+    text="{value}"
+
+@tpl.media.music.above.unsupported core.template
+    for=action.music.above
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.above.missing core.template
+    for=action.music.above
+    status=missing
+    text="{note}"
+
+@tpl.media.music.relative core.template
+    for=action.music.relative
+    text="{value}"
+
+@tpl.media.music.relative.unsupported core.template
+    for=action.music.relative
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.relative.missing core.template
+    for=action.music.relative
+    status=missing
+    text="{note}"
+
+@tpl.media.music.keyChords core.template
+    for=action.music.keyChords
+    text="{value}"
+
+@tpl.media.music.keyChords.unsupported core.template
+    for=action.music.keyChords
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.keyChords.missing core.template
+    for=action.music.keyChords
+    status=missing
+    text="{note}"
+
+@tpl.media.music.frequency core.template
+    for=action.music.frequency
+    text="{value}"
+
+@tpl.media.music.frequency.unsupported core.template
+    for=action.music.frequency
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.frequency.missing core.template
+    for=action.music.frequency
+    status=missing
+    text="{note}"
+
+@tpl.media.music.enharmonic core.template
+    for=action.music.enharmonic
+    text="{value}"
+
+@tpl.media.music.enharmonic.unsupported core.template
+    for=action.music.enharmonic
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.enharmonic.missing core.template
+    for=action.music.enharmonic
+    status=missing
+    text="{note}"
+
+@tpl.media.music.status core.template
+    for=action.music.status
+    text="{value}"
+
+@tpl.media.music.status.unsupported core.template
+    for=action.music.status
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.status.missing core.template
+    for=action.music.status
+    status=missing
+    text="{note}"
+
+@tpl.media.music.songInfo core.template
+    for=action.music.songInfo
+    text="{value}"
+
+@tpl.media.music.songInfo.unsupported core.template
+    for=action.music.songInfo
+    status=unsupported
+    text="{note}"
+
+@tpl.media.music.songInfo.missing core.template
+    for=action.music.songInfo
+    status=missing
+    text="{note}"

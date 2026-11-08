@@ -1,0 +1,53 @@
+@legend.media.music core.legend
+    namespace=media.music
+    version=0.1.0
+    imports=core
+    imports=kids.common
+    doc="Music: the song library (public-domain melodies in ABC notation) and the player state"
+
+@media.music.session core.type
+    extends=core.state
+    doc="The player. The world state holds instrument, tempo, volume, key, current (note, chord, scale, song or melody), score (ABC), playing, loop, the recorded melody and the keyboard highlight."
+    example="Play middle C."
+
+@media.music.song core.type
+    extends=core.state
+    doc="A public-domain melody in ABC notation with its composer, key and tempo."
+    example="Play Twinkle Twinkle."
+
+@media.music.song.title core.key
+    value=string
+    ask="What is the song called?"
+
+@media.music.song.aka core.key
+    value=string
+    card=many
+    ask="What else is the song called?"
+
+@media.music.song.composer core.key
+    value=string
+    ask="Who wrote the song?"
+
+@media.music.song.key core.key
+    value=string
+    ask="Which key is the song in?"
+
+@media.music.song.tempo core.key
+    value=integer
+    ask="How fast is the song, in beats per minute?"
+
+@media.music.song.meter core.key
+    value=string
+    ask="Which time signature does the song have?"
+
+@media.music.song.year core.key
+    value=integer
+    ask="In which year was the song written or first published?"
+
+@media.music.song.blurb core.key
+    value=string
+    ask="What is the song like?"
+
+@media.music.song.abc core.key
+    value=string
+    ask="What is the song in ABC notation?"

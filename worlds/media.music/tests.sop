@@ -1,0 +1,618 @@
+@t.media.music.n01 core.test
+    input="Play middle C."
+    expect="middle C"
+    expect="261.6"
+    expectState="current.kind=note"
+    expectState="playing=true"
+    expectState="instrument=piano"
+    expectEffect=music.play
+    session=a
+
+@t.media.music.n02 core.test
+    input="Play C sharp."
+    expect="C sharp 4"
+    expectState="current.notes.0=C#4"
+    expectEffect=music.play
+    session=a
+
+@t.media.music.n03 core.test
+    input="Play a high G on the flute."
+    expect="G 5"
+    expect="flute"
+    expectState="instrument=flute"
+    expectState="current.notes.0=G5"
+    session=a
+
+@t.media.music.n04 core.test
+    input="Play the note B flat 3."
+    expect="B flat 3"
+    expectState="current.notes.0=Bb3"
+    session=a
+
+@t.media.music.n05 core.test
+    input="How does middle C sound?"
+    expect="middle C"
+    expectEffect=music.play
+    session=a
+
+@t.media.music.n06 core.test
+    input="Stop."
+    expect="Stopped"
+    expectState="playing=false"
+    expectEffect=music.stop
+    session=a
+
+@t.media.music.n07 core.test
+    input="Play A 4."
+    expect="440"
+    expectState="current.notes.0=A4"
+    session=a
+
+@t.media.music.n08 core.test
+    input="What is the frequency of A 4?"
+    expect="440 Hz"
+    expect="69"
+    session=a
+
+@t.media.music.n09 core.test
+    input="How many hertz is middle C?"
+    expect="261.63"
+    session=a
+
+@t.media.music.n10 core.test
+    input="Play a C major chord."
+    expect="C major"
+    expect="C E G"
+    expectState="current.kind=chord"
+    expectState="current.notes.length=3"
+    expectEffect=music.play
+    session=b
+
+@t.media.music.n11 core.test
+    input="Play an A minor chord on the organ."
+    expect="A minor"
+    expect="A C E"
+    expect="organ"
+    expectState="instrument=organ"
+    session=b
+
+@t.media.music.n12 core.test
+    input="Play a D minor seventh chord."
+    expect="D F A C"
+    session=b
+
+@t.media.music.n13 core.test
+    input="Play G seventh."
+    expect="G B D F"
+    session=b
+
+@t.media.music.n14 core.test
+    input="Play a C major arpeggio."
+    expect="arpeggio"
+    expectState="current.kind=chord"
+    session=b
+
+@t.media.music.n15 core.test
+    input="Play C E G together."
+    expect="C major chord"
+    session=b
+
+@t.media.music.n16 core.test
+    input="Play the D major scale."
+    expect="D E F# G A B C# D"
+    expectState="current.kind=scale"
+    expectState="current.key=D major"
+    session=b
+
+@t.media.music.n17 core.test
+    input="Play an A minor scale on the strings."
+    expect="A B C D E F G A"
+    expectState="instrument=strings"
+    session=b
+
+@t.media.music.n18 core.test
+    input="Play D dorian."
+    expect="dorian"
+    expectState="current.kind=scale"
+    session=b
+
+@t.media.music.n19 core.test
+    input="Play the C blues scale."
+    expect="blues"
+    session=b
+
+@t.media.music.n20 core.test
+    input="Play the pentatonic scale in G."
+    expect="G A B D E G"
+    session=b
+
+@t.media.music.n21 core.test
+    input="Play a C major scale up and down."
+    expect="up and down"
+    session=b
+
+@t.media.music.n22 core.test
+    input="Play the C major scale at 120 bpm."
+    expect="C major scale"
+    expectState="tempo=120"
+    expectState="tempoLocked=true"
+    session=b
+
+@t.media.music.n23 core.test
+    input="Play Twinkle Twinkle."
+    expect="Twinkle, Twinkle, Little Star"
+    expect="100 beats"
+    expectState="current.kind=song"
+    expectState="current.songId=twinkle"
+    expectState="tempo=100"
+    expectEffect=music.play
+    session=c
+
+@t.media.music.n24 core.test
+    input="Play Ode to Joy on the organ."
+    expect="Ode to Joy"
+    expect="organ"
+    expectState="instrument=organ"
+    expectState="current.songId=ode"
+    session=c
+
+@t.media.music.n25 core.test
+    input="Play Happy Birthday."
+    expect="G major"
+    expectState="current.songId=birthday"
+    session=c
+
+@t.media.music.n26 core.test
+    input="Play Frere Jacques."
+    expectState="current.songId=jacques"
+    session=c
+
+@t.media.music.n27 core.test
+    input="Play Brahms Lullaby."
+    expectState="current.songId=brahms"
+    session=c
+
+@t.media.music.n28 core.test
+    input="Play Jingle Bells at 140 bpm."
+    expect="140"
+    expectState="tempo=140"
+    session=c
+
+@t.media.music.n29 core.test
+    input="Play Mary had a little lamb."
+    expectState="current.songId=mary"
+    session=c
+
+@t.media.music.n30 core.test
+    input="Play row row row your boat."
+    expectState="current.songId=row"
+    session=c
+
+@t.media.music.n31 core.test
+    input="Play London Bridge."
+    expectState="current.songId=london"
+    session=c
+
+@t.media.music.n32 core.test
+    input="Play old MacDonald."
+    expectState="current.songId=macdonald"
+    session=c
+
+@t.media.music.n33 core.test
+    input="Play Yesterday."
+    expect="I do not know a song called"
+    expectStatus=missing
+    session=c
+
+@t.media.music.n34 core.test
+    input="Play C D E F G."
+    expect="C D E F G"
+    expectState="current.kind=melody"
+    session=c
+
+@t.media.music.n35 core.test
+    input="Play me a song."
+    expectState="current.kind=song"
+    expectEffect=music.play
+    session=c
+
+@t.media.music.n36 core.test
+    input="Play Ode to Joy."
+    expectState="tempo=108"
+    session=d
+
+@t.media.music.n37 core.test
+    input="Play it slower."
+    expect="86"
+    expectState="tempo=86"
+    expectState="tempoLocked=true"
+    expectEffect=music.play
+    session=d
+
+@t.media.music.n38 core.test
+    input="Make it a bit faster."
+    expectState="tempo=96"
+    session=d
+
+@t.media.music.n39 core.test
+    input="Set the tempo to 120."
+    expectState="tempo=120"
+    session=d
+
+@t.media.music.n40 core.test
+    input="What is the tempo?"
+    expect="120 beats per minute"
+    session=d
+
+@t.media.music.n41 core.test
+    input="Play it at half speed."
+    expectState="tempo=60"
+    session=d
+
+@t.media.music.n42 core.test
+    input="Louder."
+    expect="80 percent"
+    expectState="volume=80"
+    session=d
+
+@t.media.music.n43 core.test
+    input="Make it quieter."
+    expectState="volume=70"
+    session=d
+
+@t.media.music.n44 core.test
+    input="Set the volume to 35."
+    expectState="volume=35"
+    session=d
+
+@t.media.music.n45 core.test
+    input="How loud is it?"
+    expect="35 percent"
+    session=d
+
+@t.media.music.n46 core.test
+    input="Change the instrument to flute."
+    expectState="instrument=flute"
+    session=d
+
+@t.media.music.n47 core.test
+    input="Use the marimba."
+    expectState="instrument=marimba"
+    session=d
+
+@t.media.music.n48 core.test
+    input="What instrument is this?"
+    expect="marimba"
+    session=d
+
+@t.media.music.n49 core.test
+    input="Play it again."
+    expect="again"
+    expectState="playing=true"
+    expectEffect=music.play
+    session=d
+
+@t.media.music.n50 core.test
+    input="Loop it."
+    expectState="loop=true"
+    expectEffect=music.play
+    session=d
+
+@t.media.music.n51 core.test
+    input="Is the loop on?"
+    expect="Yes"
+    session=d
+
+@t.media.music.n52 core.test
+    input="Stop looping."
+    expectState="loop=false"
+    expectEffect=music.loop
+    session=d
+
+@t.media.music.n53 core.test
+    input="Stop."
+    expectState="playing=false"
+    session=d
+
+@t.media.music.n54 core.test
+    input="Which songs do you know?"
+    expect="10 songs"
+    expect="Ode to Joy"
+    session=d
+
+@t.media.music.n55 core.test
+    input="What instruments do you have?"
+    expect="piano, organ, flute, strings, bells, bass and marimba"
+    session=d
+
+@t.media.music.n56 core.test
+    input="Play Twinkle Twinkle."
+    expectState="current.key=C major"
+    session=e
+
+@t.media.music.n57 core.test
+    input="Play it an octave higher."
+    expect="octave"
+    expectState="current.notes.0=C5"
+    expectEffect=music.play
+    session=e
+
+@t.media.music.n58 core.test
+    input="Play it two octaves lower."
+    expectState="current.notes.0=C3"
+    session=e
+
+@t.media.music.n59 core.test
+    input="Transpose up two steps."
+    expect="4 semitones"
+    expectState="current.key=E major"
+    session=e
+
+@t.media.music.n60 core.test
+    input="Transpose it down a fifth."
+    expect="7 semitones"
+    session=e
+
+@t.media.music.n61 core.test
+    input="Transpose it to D major."
+    expect="D major"
+    expectState="current.key=D major"
+    session=e
+
+@t.media.music.n62 core.test
+    input="Play it in G."
+    expectState="current.key=G major"
+    session=e
+
+@t.media.music.n63 core.test
+    input="What key is it in?"
+    expect="G major"
+    session=e
+
+@t.media.music.n64 core.test
+    input="Transpose up a semitone."
+    expect="nothing to transpose"
+    expectStatus=missing
+    session=e2
+
+@t.media.music.n65 core.test
+    input="Write a melody: C D E F G."
+    expect="5 notes"
+    expectState="melody.items.length=5"
+    expectState="current.mine=true"
+    session=f
+
+@t.media.music.n66 core.test
+    input="Add G G A G."
+    expect="9 notes"
+    expectState="melody.items.length=9"
+    session=f
+
+@t.media.music.n67 core.test
+    input="Add a rest."
+    expectState="melody.items.length=10"
+    session=f
+
+@t.media.music.n68 core.test
+    input="Remove the last note."
+    expectState="melody.items.length=9"
+    session=f
+
+@t.media.music.n69 core.test
+    input="What is my melody?"
+    expect="C D E F G G G A G"
+    session=f
+
+@t.media.music.n70 core.test
+    input="How many notes are in my melody?"
+    expect="9 notes"
+    session=f
+
+@t.media.music.n71 core.test
+    input="Play my melody."
+    expect="9 notes"
+    expectState="current.title=My melody"
+    expectEffect=music.play
+    session=f
+
+@t.media.music.n72 core.test
+    input="Show me the notes."
+    expect="6 different notes"
+    expect="C D E F G A"
+    session=f
+
+@t.media.music.n73 core.test
+    input="Transpose up two steps."
+    expectState="current.mine=true"
+    session=f
+
+@t.media.music.n74 core.test
+    input="Clear my melody."
+    expectState="melody.items.length=0"
+    session=f
+
+@t.media.music.n75 core.test
+    input="Play my melody."
+    expect="not written a melody"
+    expectStatus=missing
+    session=f
+
+@t.media.music.n76 core.test
+    input="Write a melody: C D banana."
+    expect="could not read"
+    expectStatus=unsupported
+    session=f2
+
+@t.media.music.n77 core.test
+    input="What notes are in C major?"
+    expect="C D E F G A B"
+    session=g
+
+@t.media.music.n78 core.test
+    input="What notes are in D major?"
+    expect="D E F# G A B C#"
+    expect="2 sharps"
+    expectState="current.kind=scale"
+    expectState="playing=false"
+    session=g
+
+@t.media.music.n79 core.test
+    input="What are the notes of the A minor scale?"
+    expect="A B C D E F G"
+    session=g
+
+@t.media.music.n80 core.test
+    input="What notes are in a C minor chord?"
+    expect="C Eb G"
+    session=g
+
+@t.media.music.n81 core.test
+    input="What chord is C E G?"
+    expect="C major chord"
+    session=g
+
+@t.media.music.n82 core.test
+    input="What chord is A C E?"
+    expect="A minor"
+    session=g
+
+@t.media.music.n83 core.test
+    input="What chord do G B D F make?"
+    expect="G dominant seventh"
+    session=g
+
+@t.media.music.n84 core.test
+    input="How many sharps does D major have?"
+    expect="2 sharps"
+    expect="F# C#"
+    session=g
+
+@t.media.music.n85 core.test
+    input="How many flats are in E flat major?"
+    expect="3 flats"
+    session=g
+
+@t.media.music.n86 core.test
+    input="How many sharps does F major have?"
+    expect="no sharps"
+    expect="1 flat"
+    session=g
+
+@t.media.music.n87 core.test
+    input="Which major key has two sharps?"
+    expect="D major"
+    session=g
+
+@t.media.music.n88 core.test
+    input="What is the interval between C and G?"
+    expect="perfect fifth"
+    expect="7 semitones"
+    session=g
+
+@t.media.music.n89 core.test
+    input="How many semitones are between C and E?"
+    expect="4 semitones"
+    expect="major third"
+    session=g
+
+@t.media.music.n90 core.test
+    input="What note is a fifth above D?"
+    expect="is A"
+    session=g
+
+@t.media.music.n91 core.test
+    input="What is the relative minor of C major?"
+    expect="A minor"
+    session=g
+
+@t.media.music.n92 core.test
+    input="What chords are in the key of C major?"
+    expect="C, Dm, Em, F, G, Am and Bdim"
+    session=g
+
+@t.media.music.n93 core.test
+    input="What is another name for C sharp?"
+    expect="D flat"
+    session=g
+
+@t.media.music.n94 core.test
+    input="Set the key to G major."
+    expect="F#"
+    expectState="key=G major"
+    session=g
+
+@t.media.music.n95 core.test
+    input="What key are we in?"
+    expect="G major"
+    session=g
+
+@t.media.music.n96 core.test
+    input="Play the scale."
+    expect="G major scale"
+    session=g
+
+@t.media.music.n97 core.test
+    input="Who wrote Ode to Joy?"
+    expect="Beethoven"
+    session=h
+
+@t.media.music.n98 core.test
+    input="Who composed Brahms Lullaby?"
+    expect="Johannes Brahms"
+    session=h
+
+@t.media.music.n99 core.test
+    input="What key is Twinkle Twinkle in?"
+    expect="C major"
+    session=h
+
+@t.media.music.n100 core.test
+    input="What is the tempo of Jingle Bells?"
+    expect="120"
+    session=h
+
+@t.media.music.n101 core.test
+    input="Tell me about Happy Birthday."
+    expect="1893"
+    session=h
+
+@t.media.music.n102 core.test
+    input="How long is Ode to Joy?"
+    expect="seconds"
+    session=h
+
+@t.media.music.n103 core.test
+    input="Who wrote this song?"
+    expect="not played anything"
+    expectStatus=missing
+    session=h
+
+@t.media.music.n104 core.test
+    input="Play Ode to Joy."
+    expect="Ode to Joy"
+    session=h
+
+@t.media.music.n105 core.test
+    input="Who wrote it?"
+    expect="Beethoven"
+    session=h
+
+@t.media.music.n106 core.test
+    input="What are you playing?"
+    expect="Ode to Joy"
+    session=h
+
+@t.media.music.n107 core.test
+    input="Is the music playing?"
+    expect="Yes"
+    session=h
+
+@t.media.music.n108 core.test
+    input="Make your face blue"
+    expect="blue"
+    session=i
+
+@t.media.music.n109 core.test
+    input="Play the note C."
+    expect="middle C"
+    session=i

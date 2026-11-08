@@ -1,0 +1,21 @@
+@world.media.music core.world
+    namespace=media.music
+    version=0.1.0
+    legend=$legend.media.music
+    imports=world.core
+    imports=world.kids.common
+    formalization=rules
+    language=en
+    status=fixture
+    title="Music"
+    summary="play music"
+    tab=music
+    tabTitle="Music"
+    tabAlias=piano
+    tabAlias=music
+    tabAlias=keyboard
+    tabAlias=sheet_music
+    tabAlias=the_piano
+    tabOrder=50
+    tabKind=tool
+    doc="Voice-controlled music: notes, chords, scales, ten public-domain songs, a melody the user composes, tempo, volume, instruments (Tone.js synth presets), transposition, and music theory questions answered with the vendored tonal library (vendor/tonal.mjs). The host plays the sound (Tone.js) and draws sheet music (abcjs) and a keyboard. State lives in ctx.state. Hand-built platform fixture, not produced by the C1 workflow."
