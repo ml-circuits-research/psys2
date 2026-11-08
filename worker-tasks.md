@@ -59,7 +59,9 @@ Write `scripts/learn-from-logs.mjs` plus a README section. It takes phrase-log e
 
 Simulate one loop with the held-out set as fake logs, and report the before/after headline metric.
 
-### Answers and notes (reviewer, 11:30, updated 12:55)
+### Answers and notes (reviewer, 11:30, updated 13:50)
+
+- **Q5 (game controls in game tabs):** do your proposed engine change. On a game tab the shell emits the **active game's own action** (`ttt.new`, `hm.giveup`, …), and off a game tab the shell form stays. Relabel the dataset to match: one label per meaning, whatever the wording. The user sees the same behaviour; the labels just become consistent. Add tests for both cases, on and off the tab.
 
 - **Q4 (baseline after the avatar changes):** confirmed. There is no baseline to confirm from now on (see "No freeze" in §0). The user's decisions are accepted: Encoder as the webchat default, automatic spelling/abbreviation normalization, partial understanding ("do what it can"), and `acceptRefused` on by default.
 - **D1b policy:** in the validation layer, use the simplified text only when the original does not validate, and accept the simplified reading only if it validates and the interpreter does not refuse it (this limits the "misled" cases). Keep tau 0.5. Add mode C to the headline evaluation. Publish the simplification model in the next R1 loop if the headline (Br + C) is at least D1's.
