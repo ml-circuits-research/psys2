@@ -141,6 +141,56 @@ Use this phenomenon catalogue: one family per line, **every family covered in ev
 
 Store them in `training/eval/dialogues.jsonl`, at least 30 per world group. Extend `scripts/eval-operational.mjs` to run them turn by turn and report the share of turns right and the share of whole dialogues right. Add this as a second headline next to the operational set. The reviewer's discourse agent implements the mechanisms, so expect the numbers to rise as it lands.
 
+### L — reusable symbolic library (feasibility analysis 18:00, verdict GO, staged)
+
+Why: one analysis pass of the 20 worlds found **82% of the pattern match text is verbatim copies** of the same lead-in, suffix and filler lists (124 distinct lead-in lists, 233 suffix lists, 180 filler lists; one 187-alternative lead-in copied 808 times). **7% of the alternatives can never match**, because the tokenizer already drops those words. Six colour lexicons, five identical ordinal lexicons, undo/redo in 27 patterns across 6 worlds, yes/no regexes copied into ops, and about 800 boilerplate `{note}` templates. The copies also distort routing: longer copied lead-ins add literals and steal sentences. They cost 22–24 ms per matcher pass, and 7 MB of patterns ship to the browser.
+
+The plan keeps SOP Lang, the matcher and `core.pattern`, and adds:
+- phrase macros (`core.phrase`, used as `[$lang.lead.polite]?`);
+- a shared world `worlds/lang.common` (phrases plus shared lexicons with `extends=`/`exclude=`), imported by everyone through `kids.common`;
+- load-time generation of request shapes (`core.shape`: one declaration per operation → imperative / question / wish / indirect / word order / short / state / options forms);
+- a matcher prefilter (prototype: 24 → 4.6 ms per pass);
+- a `{note}` rendering fallback and `ctx.lang` helpers (yesNo, ordinal, degree, colour).
+
+From now on, any new phrasing goes into `lang.common` or a shape, never inline.
+
+Gates for every step: the operational set (`node scripts/eval-operational.mjs --rules-only`) must not lose "right" or gain "wrong" against the previous commit; `npm test` and `test-world all` stay green; `eval-rules` negatives and routing do not drop. **Coordinate with the reviewer's discourse agent** on L8: its pending confirmations should use `ctx.lang.yesNo`.
+
+Run L1–L3 and L5 in parallel with R2/DLG (additive engine work). Migrate worlds (L4, L7) one per commit, in windows when no sweep is touching that world.
+
+### L0 — baseline (½ h)
+Record at the current commit: `node scripts/eval-operational.mjs --rules-only --json --no-write`; `node scripts/eval-rules.mjs --no-write` (restricted/routed/negative/held-out numbers); `time node src/cli.mjs test-world all`; pattern statistics with `node scripts/pattern-stats.mjs` (new, read-only: patterns, alternatives, repeated groups, unreachable alternatives; the script of this report). Log as `L0` with the commit hash. **Accept:** numbers in `worker-log.md`.
+
+#### L1 — matcher prefilter and first-word index (engine only)
+In `matcher.mjs`/`index.mjs`: per compiled pattern, the sets of possible first words of every mandatory element; skip patterns whose sets are not all hit by the sentence's word bag; index alternative groups by first word. No behaviour change. **Accept:** `npm test` and `test-world all` green; `eval-operational --rules-only` identical counts (1062/18/37/117 at baseline) with `latency_ms` ≤ 40; unit test that prefilter never rejects a pattern `matchTokens` would match (fuzz over all pattern examples).
+
+#### L2 — phrase macros
+`core.phrase` wire type (legend in `worlds/core/legend.sop`), parsed from `lexicon.sop`; `[$id]` / `[$id|lit]?` in `compilePattern` with a shared `alts` array and `frame: true`; `matchTokens` returns `frameLiterals` separately (ranking unchanged for now); `checkPattern` reports unknown macro ids; `vocabularyOf` includes macro words. Spec 03 §2 "Phrase macros", ADR-007. **Accept:** unit tests (expansion, optional, mixed, unknown id error, frame counts); all L0 numbers unchanged.
+
+#### L3 — `worlds/lang.common`
+Create the world (`status=fixture`, `summary=""`), imported by `kids.common`. Phrase groups listed in §2.2, built as the **union** of today's per-world lists (`scripts/pattern-stats.mjs --union lead|tail|filler`), minus the unreachable alternatives. Shared lexicons `lex.lang.colour/ordinal/size/degree/direction/position/unit`. Lexicon `extends=`/`exclude=` in `lexicon.mjs`; spec 02 "Lexicon". `tests.sop` for the world (macros resolve; nothing is claimed by `lang.common` itself). **Accept:** `test-world all` green; `eval-rules` negatives unchanged (the world claims nothing).
+
+#### L4 — migration script and pilot `ui.avatar`
+`scripts/migrate-macros.mjs <world> [--write]`: replaces every alternative group that is a subset of a macro by `[$macro]`, drops unreachable alternatives, reports groups it could not map (alternatives outside every macro are kept inline next to the macro). Run on `ui.avatar`, review the diff, then `lex.ui.avatar.colors extends=$lex.lang.colour`. **Accept:** `test-world ui.avatar` 205/205; operational right ≥ 1062 and wrong ≤ 37; `patterns.sop` of ui.avatar shrinks ≥ 60 %; one commit `L4 ui.avatar`.
+
+#### L5 — `{note}` fallback and template cleanup
+`render.mjs` `fallbackText` renders `env.note` for `missing/unsupported/error` when present; remove templates whose text is exactly `{note}`; spec 04 "Rendering". **Accept:** `npm test`, `test-world all` green; template count drops by ≈ 800; replies of the operational set byte-identical (`--verbose` diff).
+
+#### L6 — request shapes
+`core.shape` legend, `src/formalizer/rules/shapes.mjs` (families `set do ask.value ask.count ask.exists list`, forms `imp q wish ind order short state opts`, examples derived, `short` at priority-2), expansion in `buildWorld` after macro loading; `scripts/expand-patterns.mjs <world>` prints generated SOP; `checkPattern` on generated patterns at load (errors in `world.errors`). Routing: a `short`-form match is dropped at tier 5. Spec 03 §2b "Request shapes" with the exact generated templates per family. Pilot: rewrite ui.avatar colour, part and size operations as shapes; keep hand-written patterns the shapes cannot express. **Accept:** unit tests per family/form; ui.avatar 205/205 plus ≥ 1 new test per generated form; `export-training --world ui.avatar` agreement not lower; operational gate holds.
+
+#### L7 — roll-out by biggest win
+Order: media.music, kids.shop, kids.time, kids.arith, kids.tasks, docs.editor, geo.map, data.charts, docs.reader, games.chess, then the rest. Per world: `migrate-macros` (L4), lexicon `extends`, shapes for the operations the `coverage.md` catalogue lists; update `coverage.md` lines to name the shape that covers them. One commit per world, operational gate after each. **Accept:** total `patterns.sop` ≤ 2 MB; no world below its L0 `eval-rules` restricted score; headline ≥ 1062 right, ≤ 37 wrong.
+
+#### L8 — shared yes/no/cancel and `ctx.lang`
+`ctx.lang.yesNo/ordinal/degree/colour` in the interpreter context, backed by `lang.common`; replace the `YES` regex in `ui.avatar/ops.mjs`, the filler regex in `docs.reader/ops.mjs`, and let `discourse.openConfirm`/`interceptInput` consumers use it; `games.guess` yes/no patterns via `[$lang.yes]`/`[$lang.no]`/`[$lang.unsure]`. Spec 04 "ctx". **Accept:** unit tests; all four interceptor worlds' tests green; new operational cases for "sure thing", "nah", "never mind" on avatar confirm and guess.
+
+#### L9 — frame literals in routing (measured)
+`inTier` ranks by content literals, then frame literals. Run `eval-rules` routing, operational and `export-training --routing-context` with and without; keep it only if `wrong` does not rise and routing agreement does not fall. **Accept:** both result tables in the log; ADR-007 amended with the decision.
+
+#### L10 — rebuild and document
+`scripts/build-webchat.mjs`, `docs/formalizer-rules.html` and `docs/worlds.html` (macros, lang.common, shapes, `expand-patterns`), AGENTS.md note "new phrasing goes into `lang.common` or a shape, never inline". **Accept:** webchat `worlds/index.json` ≤ 2.5 MB; docs mention every new wire type; `L summary` table in `worker-log.md` (world · patterns before → after · bytes · headline before → after).
+
 ### Review fixes F1–F8 (from the external review of 6b0db7c, accepted by the reviewer 16:00)
 
 The review's claims were checked: the music labels (`a key with 4 sharps?` labelled `n=3, acc=flat`), `Make your eyes and body blue` → unknown eyes "and body blue", and `itertools.cycle(sl)` in `dispatcher.py`. **F1 and F2 are P0:** they corrupt labels and metrics, so do them before the next dataset rebuild and retraining. Continue R2 in parallel: it touches the rules, not the labels.
