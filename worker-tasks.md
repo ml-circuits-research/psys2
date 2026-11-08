@@ -42,6 +42,14 @@ The working hypothesis: on small worlds, **rules plus a small learned front-end*
 
 The clean measure is a fresh **held-out paraphrase set** that nobody has used for rules: `training/paraphrases/heldout/`. **It has landed (11:20):** 21 batches, 210 tasks, 2,100 variants, one batch per world (two for docs.reader), labelled at c989cd1. Rules understand 45% of these variants, against 55% on the training paraphrases. In the games the rules were tuned on the training paraphrases: 80–93% there, 36–44% here. Five docs.reader canonicals fail or are partial; their variants are flagged `needs_review`. Exclude them from metrics and count them. (Update 11:45: this set may now be used for training; see the data principle below.)
 
+### D4b — publish the dispatcher model in the repo (user decision 12:25; do it now, before D3)
+
+The user chose to commit the model directly to the repo, so that the public GitHub Pages demo can use the Encoder formalizer. GitHub Release assets cannot be fetched from a browser (no CORS), and Git LFS files are not served by Pages.
+1. In `.gitignore`, remove the rule that ignores `docs/webchat/models/**/*.onnx`. Commit `docs/webchat/models/dispatcher/{model.int8.onnx, vocab.txt, meta.json}` from the best DistilBERT checkpoint (`runs/dispatcher-distilbert`). Only the int8 file, never fp32. Check that it is under 100 MB.
+2. Make `scripts/build-webchat.mjs --models` idempotent and document in the README how to publish a new model version: overwrite the same paths, one commit per model version, with the checkpoint, dataset commit and headline metric in the commit message.
+3. Webchat: keep rules as the default formalizer; Encoder stays a setting. If the model fails to load, fall back to rules with a one-line notice. Show the model version (from `meta.json`) in Settings.
+4. After pushing, wait for GitHub Pages to deploy, then check that https://ml-circuits-research.github.io/psys2/webchat/index.html loads the model with Encoder selected (open it with puppeteer-core if the machine has network access; otherwise say so in the log).
+
 ### Data principle (reviewer, 11:45): read the new section in AGENTS.md; it overrides earlier purity rules
 
 We are building an engineering system that learns as it is used, not doing fundamental research. What matters is what users experience. Concretely, this replaces earlier instructions:
@@ -74,7 +82,7 @@ Simulate one loop with the held-out set as fake logs, and report the before/afte
 
 **The goal of this session is to avoid training per-world models.** We validate one idea first: a single small shared model, the **dispatcher**, proposes candidates, and the existing rule formalizers validate them. No per-world LoRA in this session.
 
-Order: D3 → D1b → D5 → T9 (Stage 1 only). D1, D2 and D4 are done.
+Order: D4b → D3 → D1b → D5 → T9 (Stage 1 only). D1, D2 and D4 are done.
 
 2. **D1 — dispatcher model:** done and validated (segmentation + world heads; DistilBERT kept as the main model).
    **D1b — simplification head (still open, do after D3).** It is the third head of Round 1: KEEP / DELETE / REPLACE edit tags, learned from aligning the paraphrase variants with their canonical phrasings. D3 will show how many failures are rule gaps on messy wording; this head targets exactly those. Add it to the DistilBERT dispatcher, export it in the same ONNX model, and use it in the validation layer: try the simplified text when the original does not validate. Report the headline metric before and after.
