@@ -108,7 +108,7 @@ For **every world with operations** (all 20; `core` holds only the shared legend
 
 Log as `R2 <world>` entries plus one `R2 summary` table: world · catalogue lines · supported · tests · rules-only coverage before → after · fresh-batch coverage.
 
-### Discourse layer — being built by the reviewer's agent (17:30); do not edit these files
+### Discourse layer — LANDED (584c3d3, 26cecc7, dd35d15); reviewer agents still polish it
 
 The reviewer is implementing dialogue continuity in a new `src/dialog/discourse.mjs`, with small hooks in `src/dialog/index.mjs`, a spec and ADR-006:
 - ellipsis ("And from Berlin?", "And Ana?", "Now bigger", "the same for the tree");
@@ -476,3 +476,4 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
 - S1 + N1 + engine normalization (60d99b6, 18a9f59, a6ba84b): 655 tests pass. Operational rules-only per group: kids 90.2, avatar/shell/editor 79.3, music/draw/map/charts 85.2, games 86.2, documents 91.7, all ≥ the previous run. N1 shipped policy on the fresh set: 65.1 → 68.9, misled/recovered 0.21. Still open: the pipeline-level eval with the normalizer (`eval-dispatch --normalizer`), and games, where misled ≈ recovered: keep the normalizer off there until it improves.
 - L0 baseline + L1 matcher prefilter (d26b57b, cb5c252), checked together with the discourse layer (584c3d3) and the Profile world: 668 tests pass. Operational rules-only: **86.5% right, 3.0% wrong, 9.0% not understood, p50 latency 11 ms** (was 22 ms).
 - L5 — `{note}` fallback (01d1220): 661 templates removed. 680 tests pass; operational unchanged at 86.5% right / 3.0% wrong.
+- Discourse phases 1 and 2 (reviewer agents): ellipsis, pending clarifications, verb distribution, repairs, cancellation, attribute/ordinal references, comparatives, choice clarification, list mode, repeat/explain, negative feedback (phrase log), topic return; `src/dialog/lang.mjs` holds the shared vocabulary that L8 should absorb into `lang.common`. Operational unchanged (1068 right / 37 wrong). Use these mechanisms in the DLG dialogues.
