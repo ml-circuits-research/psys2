@@ -484,3 +484,9 @@ Class A, B (greedy patterns) and C items, rebased on origin/main (after G2, G3, 
   2. `node scripts/build-dataset.mjs`
   3. then the existing multicmd / dispatcher rebuild steps (`python -m psys2_train.multicmd`, training).
   Gate: `npm test`, `node src/cli.mjs test-world all`.
+
+## L-RO: Romanian without diacritics (language detection)
+- `detectLanguage` rewritten as a points score (specs/decisions/ADR-002, section "Language detection without diacritics"): weighted Romanian function words, lexicon words that are not English, Romanian word endings, enclitics, and context rules for the collisions (`cat face 3 plus 4`, `are 3 mere`, `am o pisica`, `20 de lei`, solfege). The session-language rule stays for single ambiguous words (`nu`, `da`, `cat`, `face`, `are`, `la la la`).
+- `translateRoEn` resolves `sa`/`tai`/`peste`/imperative folded forms for text without diacritics.
+- Numbers on the 413 Romanian twins with diacritics stripped: detected as Romanian 327 -> 387, full pipeline right 314 -> 377 (original with diacritics: 399 detected, 406 right). Remaining misses are one-word imperatives (`Taci.`, `Refa.`, `Nu.`) and the definite/indefinite `iarba`.
+- English: 0 of 1,647 messages (operational set + English twins) detected as Romanian. New tests: 50 diacritic-less Romanian inputs (detected and translated exactly), 90 short English inputs never Romanian, stripped-twins thresholds.

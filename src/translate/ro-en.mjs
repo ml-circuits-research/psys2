@@ -1427,11 +1427,27 @@ function assemble(sentences) {
   return { text, alignment };
 }
 
+// Text typed without diacritics: a few forms fold onto another word ("sa" = "să" or "sa" his, "tai" = "tăi" your or "tai" cut,
+// "peste" = "pește" fish or "peste" over, "aduna" = imperative "adună"). Choose by the neighbouring tokens.
+const DETERMINER_KEYS = new Set(['un', 'o', 'acest', 'acel', 'vreun', 'niste', 'doi', 'trei', 'patru', 'cinci', 'mai', 'ce', 'care', 'al', 'cat', 'cati']);
+function resolveDiaFree(toks) {
+  const words = toks.filter((t) => t.kind === 'word');
+  words.forEach((t, i) => {
+    const nx = words[i + 1], pv = words[i - 1];
+    const all = () => M.analyze(t.key);
+    if (t.key === 'sa' && nx && M.analyze(nx.key).some((a) => a.pos === 'verb' && (a.tense === 'subj' || a.tense === 'inf'))) t.an = [];
+    else if (t.key === 'tai' && pv && M.analyze(pv.key).some((a) => a.pos === 'noun')) { const p = all().filter((a) => a.pos === 'func' && a.fpos === 'poss'); if (p.length) t.an = p; }
+    else if (t.key === 'peste' && pv && DETERMINER_KEYS.has(pv.key)) { const n = all().filter((a) => a.pos === 'noun'); if (n.length) t.an = n; }
+    else if (!pv && nx && nx.kind === 'word') { const imp = all().filter((a) => a.pos === 'verb' && a.tense === 'imp'); if (imp.length && !all().some((a) => a.pos !== 'verb')) t.an = imp; }
+  });
+}
+
 export function translateRoEn(original) {
   const source = String(original ?? '');
   const toks = tokenize(source);
   const diaFree = !/[ăâîșțĂÂÎȘȚşţŞŢ]/.test(source);
   for (const t of toks) t.diaFree = diaFree;
+  if (diaFree) resolveDiaFree(toks);
   const sents = splitSentences(toks);
   const ctx = { unknown: [], notes: [], content: 0, mapped: 0 };
   const results = [];
