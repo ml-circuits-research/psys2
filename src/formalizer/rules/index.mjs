@@ -6,7 +6,7 @@
  */
 import { lexIndex } from '../../worlds/lexicon.mjs';
 import { analyze, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs';
-import { compilePattern, matchTokens, BUILTIN_CLASSES, PatternError } from './matcher.mjs';
+import { compilePattern, matchTokens, wordBag, prefilterPasses, BUILTIN_CLASSES, PatternError } from './matcher.mjs';
 import { buildWires, substituteEmit, dummySlots } from './emit.mjs';
 import { routeScores } from './router.mjs';
 import { createRouter, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction } from '../routing.mjs';
@@ -197,12 +197,13 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
     if (!hasContent(view)) continue;
     const noPct = view.some((t) => t.pct) ? view.filter((t) => !t.pct) : null;
     toks = view.filter((t) => t.kind !== 'qmark');
+    const bag = wordBag(view), bagNoPct = noPct ? wordBag(noPct) : null;
     for (const { p, order } of allPatterns(set)) {
       if (isQuestion && p.kind === 'statement') continue;
       const c = compiled(p);
       if (!c.compiled || (last && !c.compiled.usesFiller)) continue;
-      let m = matchTokens(c.compiled, view, env);
-      if (!m && noPct) m = matchTokens(c.compiled, noPct, env);
+      let m = prefilterPasses(c.compiled, bag) ? matchTokens(c.compiled, view, env) : null;
+      if (!m && noPct && prefilterPasses(c.compiled, bagNoPct)) m = matchTokens(c.compiled, noPct, env);
       if (m) matches.push({ pattern: p, order, ...m });
     }
   }

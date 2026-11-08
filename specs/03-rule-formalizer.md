@@ -95,6 +95,9 @@ Optional elements and lazy skips are tried in a backtracking matcher; the first 
 
 The engine adds to every emitted wire: `core.via=$<patternId>`, `core.source="<source>#<start>-<end>"`, `core.seq=<n>` (strictly increasing per session; it orders events) and `core.in=$<worldId>`.
 
+### Prefilter (L1)
+Before `matchTokens`, the engine skips patterns that cannot match. Per compiled pattern (`prefilterNeeds`) it keeps, for every mandatory literal and every non-optional alternative group, the set of possible first words (the first word of each alternative; an operator symbol also contributes the first words of its word phrases, and the reverse). The sentence view offers a bag of words (`wordBag`: each token's `lower` and `alt`, plus the first words of the operator phrases of an operator token). A pattern is tried only when every need set shares a word with the bag. The test is conservative: it never rejects a pattern `matchTokens` would match (fuzz test `tests/matcher-prefilter.test.mjs`), so results are unchanged; it only saves time.
+
 ### Pattern kinds
 - `statement` — asserts facts or events into session memory.
 - `question` — emits a `core.question` (spec 04).
