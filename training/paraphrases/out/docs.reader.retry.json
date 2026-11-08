@@ -1,0 +1,18 @@
+{
+  "world": "docs.reader",
+  "retry": [
+    {
+      "batch": "h5",
+      "task": "docs.reader.h5.t7",
+      "goal": "Find when the witch locked Hansel in a cage",
+      "tried": [
+        {
+          "attempt": 1,
+          "text": "When did the witch lock Hansel in a cage?",
+          "reply": "I did not understand \"When did the witch lock Hansel in a cage\". Did you mean \"Who did the witch lock?\" or \"Tell me who did the witch lock.\"?",
+          "label": "canonical-failed"
+        }
+      ]
+    }
+  ]
+}

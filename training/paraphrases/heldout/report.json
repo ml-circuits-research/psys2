@@ -7,11 +7,11 @@
       "canonical_success_rate": 1,
       "variants": 100,
       "variant_labels": {
-        "rules-agree": 41,
-        "rules-fail": 45,
-        "rules-differ": 14
+        "rules-agree": 91,
+        "rules-own": 9
       },
-      "variant_rules_coverage": 0.41,
+      "variant_rules_coverage": 0.91,
+      "variant_rules_parsed": 1,
       "variants_needing_review": 0,
       "trainable_records": 110,
       "by_split": {
@@ -26,11 +26,13 @@
       "canonical_success_rate": 1,
       "variants": 100,
       "variant_labels": {
-        "rules-agree": 46,
-        "rules-fail": 36,
-        "rules-differ": 18
+        "rules-agree": 92,
+        "rules-own": 5,
+        "rules-fail": 2,
+        "rules-differ": 1
       },
-      "variant_rules_coverage": 0.46,
+      "variant_rules_coverage": 0.92,
+      "variant_rules_parsed": 0.97,
       "variants_needing_review": 0,
       "trainable_records": 110,
       "by_split": {
@@ -45,11 +47,11 @@
       "canonical_success_rate": 1,
       "variants": 100,
       "variant_labels": {
-        "rules-agree": 24,
-        "rules-fail": 61,
-        "rules-differ": 15
+        "rules-agree": 89,
+        "rules-own": 11
       },
-      "variant_rules_coverage": 0.24,
+      "variant_rules_coverage": 0.89,
+      "variant_rules_parsed": 1,
       "variants_needing_review": 0,
       "trainable_records": 110,
       "by_split": {
@@ -65,13 +67,14 @@
       "canonical_success_rate": 1,
       "variants": 100,
       "variant_labels": {
-        "rules-agree": 29,
-        "rules-fail": 47,
-        "rules-differ": 24
+        "rules-agree": 92,
+        "rules-own": 7,
+        "needs_review": 1
       },
-      "variant_rules_coverage": 0.29,
-      "variants_needing_review": 0,
-      "trainable_records": 110,
+      "variant_rules_coverage": 0.92,
+      "variant_rules_parsed": 0.99,
+      "variants_needing_review": 1,
+      "trainable_records": 109,
       "by_split": {
         "train": 99,
         "dev": 11
@@ -80,21 +83,22 @@
     },
     "docs.reader": {
       "tasks": 20,
-      "attempts": 231,
-      "canonical_success": 15,
-      "canonical_success_rate": 0.75,
+      "attempts": 229,
+      "canonical_success": 16,
+      "canonical_success_rate": 0.8,
       "variants": 200,
       "variant_labels": {
-        "rules-agree": 39,
-        "rules-fail": 136,
-        "rules-unverified": 4,
-        "rules-differ": 21
+        "rules-agree": 141,
+        "rules-fail": 31,
+        "rules-unverified": 24,
+        "rules-own": 4
       },
-      "variant_rules_coverage": 0.195,
-      "variants_needing_review": 50,
-      "trainable_records": 169,
+      "variant_rules_coverage": 0.705,
+      "variant_rules_parsed": 0.725,
+      "variants_needing_review": 40,
+      "trainable_records": 200,
       "by_split": {
-        "train": 197,
+        "train": 195,
         "dev": 34
       },
       "retry": [
@@ -175,31 +179,6 @@
         },
         {
           "batch": "x2",
-          "task": "docs.reader.x2.t04",
-          "goal": "Count mentions of a character",
-          "tried": [
-            {
-              "attempt": 1,
-              "text": "How many times is the witch mentioned?",
-              "reply": "The witch is mentioned 26 times, in 18 sentences.",
-              "label": "canonical-failed"
-            },
-            {
-              "attempt": 2,
-              "text": "Count how many times the witch is mentioned.",
-              "reply": "I did not understand \"Count how many times the witch is mentioned\". Did you mean \"How many times is Hansel mentioned?\" or \"How many times does the witch appear?\"?",
-              "label": "canonical-failed"
-            },
-            {
-              "attempt": 3,
-              "text": "How often is the witch mentioned?",
-              "reply": "The witch is mentioned 26 times, in 18 sentences.",
-              "label": "canonical-failed"
-            }
-          ]
-        },
-        {
-          "batch": "x2",
           "task": "docs.reader.x2.t05",
           "goal": "Find who spoke a quoted line",
           "tried": [
@@ -226,13 +205,14 @@
       "canonical_success_rate": 1,
       "variants": 100,
       "variant_labels": {
-        "rules-agree": 40,
-        "rules-differ": 27,
-        "rules-fail": 33
+        "rules-agree": 74,
+        "rules-own": 25,
+        "needs_review": 1
       },
-      "variant_rules_coverage": 0.4,
-      "variants_needing_review": 0,
-      "trainable_records": 110,
+      "variant_rules_coverage": 0.74,
+      "variant_rules_parsed": 0.99,
+      "variants_needing_review": 1,
+      "trainable_records": 109,
       "by_split": {
         "train": 110
       },
@@ -245,13 +225,15 @@
       "canonical_success_rate": 1,
       "variants": 100,
       "variant_labels": {
-        "rules-agree": 31,
-        "rules-fail": 42,
-        "rules-differ": 27
+        "rules-agree": 89,
+        "rules-own": 9,
+        "needs_review": 1,
+        "rules-fail": 1
       },
-      "variant_rules_coverage": 0.31,
-      "variants_needing_review": 0,
-      "trainable_records": 110,
+      "variant_rules_coverage": 0.89,
+      "variant_rules_parsed": 0.98,
+      "variants_needing_review": 1,
+      "trainable_records": 109,
       "by_split": {
         "train": 99,
         "dev": 11
@@ -265,11 +247,12 @@
       "canonical_success_rate": 1,
       "variants": 100,
       "variant_labels": {
-        "rules-agree": 52,
-        "rules-fail": 40,
-        "rules-differ": 8
+        "rules-agree": 92,
+        "rules-fail": 4,
+        "rules-own": 4
       },
-      "variant_rules_coverage": 0.52,
+      "variant_rules_coverage": 0.92,
+      "variant_rules_parsed": 0.96,
       "variants_needing_review": 0,
       "trainable_records": 111,
       "by_split": {
@@ -284,13 +267,15 @@
       "canonical_success_rate": 1,
       "variants": 100,
       "variant_labels": {
-        "rules-agree": 32,
-        "rules-fail": 48,
-        "rules-differ": 20
+        "rules-agree": 83,
+        "rules-own": 11,
+        "rules-fail": 1,
+        "needs_review": 5
       },
-      "variant_rules_coverage": 0.32,
-      "variants_needing_review": 0,
-      "trainable_records": 110,
+      "variant_rules_coverage": 0.83,
+      "variant_rules_parsed": 0.94,
+      "variants_needing_review": 5,
+      "trainable_records": 105,
       "by_split": {
         "train": 99,
         "dev": 11
@@ -304,11 +289,11 @@
       "canonical_success_rate": 1,
       "variants": 100,
       "variant_labels": {
-        "rules-agree": 50,
-        "rules-fail": 35,
-        "rules-differ": 15
+        "rules-agree": 96,
+        "rules-own": 4
       },
-      "variant_rules_coverage": 0.5,
+      "variant_rules_coverage": 0.96,
+      "variant_rules_parsed": 1,
       "variants_needing_review": 0,
       "trainable_records": 110,
       "by_split": {
@@ -319,80 +304,81 @@
     },
     "geo.map": {
       "tasks": 10,
-      "attempts": 111,
+      "attempts": 110,
       "canonical_success": 10,
       "canonical_success_rate": 1,
       "variants": 100,
       "variant_labels": {
-        "rules-agree": 42,
-        "rules-differ": 10,
-        "rules-fail": 48
+        "rules-agree": 96,
+        "rules-own": 4
       },
-      "variant_rules_coverage": 0.42,
+      "variant_rules_coverage": 0.96,
+      "variant_rules_parsed": 1,
       "variants_needing_review": 0,
       "trainable_records": 110,
       "by_split": {
-        "train": 100,
+        "train": 99,
         "dev": 11
       },
       "retry": []
     },
     "games.tictactoe": {
       "tasks": 10,
-      "attempts": 112,
-      "canonical_success": 10,
-      "canonical_success_rate": 1,
-      "variants": 100,
-      "variant_labels": {
-        "rules-agree": 53,
-        "rules-fail": 30,
-        "rules-differ": 17
-      },
-      "variant_rules_coverage": 0.53,
-      "variants_needing_review": 0,
-      "trainable_records": 110,
-      "by_split": {
-        "train": 100,
-        "dev": 12
-      },
-      "retry": []
-    },
-    "data.charts": {
-      "tasks": 10,
       "attempts": 111,
       "canonical_success": 10,
       "canonical_success_rate": 1,
       "variants": 100,
       "variant_labels": {
-        "rules-agree": 41,
-        "rules-differ": 31,
-        "rules-fail": 28
+        "rules-agree": 80,
+        "needs_review": 15,
+        "rules-own": 5
       },
-      "variant_rules_coverage": 0.41,
-      "variants_needing_review": 0,
-      "trainable_records": 110,
+      "variant_rules_coverage": 0.8,
+      "variant_rules_parsed": 0.85,
+      "variants_needing_review": 15,
+      "trainable_records": 95,
       "by_split": {
         "train": 100,
         "dev": 11
       },
       "retry": []
     },
-    "games.hangman": {
+    "data.charts": {
       "tasks": 10,
-      "attempts": 111,
+      "attempts": 110,
       "canonical_success": 10,
       "canonical_success_rate": 1,
       "variants": 100,
       "variant_labels": {
-        "rules-agree": 62,
-        "rules-fail": 26,
-        "rules-differ": 12
+        "rules-agree": 87,
+        "rules-own": 13
       },
-      "variant_rules_coverage": 0.62,
+      "variant_rules_coverage": 0.87,
+      "variant_rules_parsed": 1,
       "variants_needing_review": 0,
       "trainable_records": 110,
       "by_split": {
-        "train": 111
+        "train": 99,
+        "dev": 11
+      },
+      "retry": []
+    },
+    "games.hangman": {
+      "tasks": 10,
+      "attempts": 110,
+      "canonical_success": 10,
+      "canonical_success_rate": 1,
+      "variants": 100,
+      "variant_labels": {
+        "rules-agree": 99,
+        "rules-own": 1
+      },
+      "variant_rules_coverage": 0.99,
+      "variant_rules_parsed": 1,
+      "variants_needing_review": 0,
+      "trainable_records": 110,
+      "by_split": {
+        "train": 110
       },
       "retry": []
     },
@@ -403,13 +389,14 @@
       "canonical_success_rate": 1,
       "variants": 100,
       "variant_labels": {
-        "rules-agree": 42,
-        "rules-fail": 46,
-        "rules-differ": 12
+        "rules-agree": 98,
+        "rules-own": 1,
+        "needs_review": 1
       },
-      "variant_rules_coverage": 0.42,
-      "variants_needing_review": 0,
-      "trainable_records": 110,
+      "variant_rules_coverage": 0.98,
+      "variant_rules_parsed": 0.99,
+      "variants_needing_review": 1,
+      "trainable_records": 109,
       "by_split": {
         "train": 77,
         "dev": 33
@@ -418,21 +405,21 @@
     },
     "games.guess": {
       "tasks": 10,
-      "attempts": 111,
+      "attempts": 110,
       "canonical_success": 10,
       "canonical_success_rate": 1,
       "variants": 100,
       "variant_labels": {
-        "rules-agree": 77,
-        "rules-fail": 15,
-        "rules-differ": 8
+        "rules-agree": 98,
+        "needs_review": 2
       },
-      "variant_rules_coverage": 0.77,
-      "variants_needing_review": 0,
-      "trainable_records": 110,
+      "variant_rules_coverage": 0.98,
+      "variant_rules_parsed": 0.98,
+      "variants_needing_review": 2,
+      "trainable_records": 108,
       "by_split": {
         "train": 77,
-        "dev": 34
+        "dev": 33
       },
       "retry": []
     },
@@ -443,11 +430,10 @@
       "canonical_success_rate": 1,
       "variants": 100,
       "variant_labels": {
-        "rules-agree": 69,
-        "rules-fail": 29,
-        "rules-differ": 2
+        "rules-agree": 100
       },
-      "variant_rules_coverage": 0.69,
+      "variant_rules_coverage": 1,
+      "variant_rules_parsed": 1,
       "variants_needing_review": 0,
       "trainable_records": 110,
       "by_split": {
@@ -462,13 +448,14 @@
       "canonical_success_rate": 1,
       "variants": 100,
       "variant_labels": {
-        "rules-agree": 50,
-        "rules-fail": 43,
-        "rules-differ": 7
+        "rules-agree": 97,
+        "rules-fail": 2,
+        "needs_review": 1
       },
-      "variant_rules_coverage": 0.5,
-      "variants_needing_review": 0,
-      "trainable_records": 110,
+      "variant_rules_coverage": 0.97,
+      "variant_rules_parsed": 0.97,
+      "variants_needing_review": 1,
+      "trainable_records": 109,
       "by_split": {
         "train": 99,
         "dev": 11
@@ -482,13 +469,14 @@
       "canonical_success_rate": 1,
       "variants": 100,
       "variant_labels": {
-        "rules-agree": 57,
-        "rules-fail": 36,
-        "rules-differ": 7
+        "rules-agree": 98,
+        "rules-fail": 1,
+        "needs_review": 1
       },
-      "variant_rules_coverage": 0.57,
-      "variants_needing_review": 0,
-      "trainable_records": 110,
+      "variant_rules_coverage": 0.98,
+      "variant_rules_parsed": 0.98,
+      "variants_needing_review": 1,
+      "trainable_records": 109,
       "by_split": {
         "train": 99,
         "dev": 11
@@ -502,13 +490,16 @@
       "canonical_success_rate": 1,
       "variants": 100,
       "variant_labels": {
-        "rules-agree": 69,
-        "rules-fail": 30,
-        "rules-differ": 1
+        "rules-agree": 96,
+        "rules-fail": 1,
+        "rules-own": 1,
+        "rules-differ": 1,
+        "needs_review": 1
       },
-      "variant_rules_coverage": 0.69,
-      "variants_needing_review": 0,
-      "trainable_records": 110,
+      "variant_rules_coverage": 0.96,
+      "variant_rules_parsed": 0.97,
+      "variants_needing_review": 1,
+      "trainable_records": 109,
       "by_split": {
         "dev": 11,
         "train": 99
@@ -518,11 +509,11 @@
   },
   "totals": {
     "tasks": 210,
-    "attempts": 2328,
-    "canonical_success": 205,
+    "attempts": 2321,
+    "canonical_success": 206,
     "variants": 2100,
-    "agree": 946,
-    "canonical_success_rate": 0.9762,
-    "variant_rules_coverage": 0.4505
+    "agree": 1888,
+    "canonical_success_rate": 0.981,
+    "variant_rules_coverage": 0.899
   }
 }

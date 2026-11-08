@@ -1,4 +1,18 @@
 {
   "world": "art.draw",
-  "retry": []
+  "retry": [
+    {
+      "batch": "h5",
+      "task": "art.draw.h5.t9",
+      "goal": "Fill in with solid color",
+      "tried": [
+        {
+          "attempt": 1,
+          "text": "Use solid fill.",
+          "reply": "I did not understand \"Use solid fill\". Did you mean \"Use full strength.\"?",
+          "label": "canonical-failed"
+        }
+      ]
+    }
+  ]
 }

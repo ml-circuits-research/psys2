@@ -1,42 +1,48 @@
 {
   "worlds": {
     "kids.arith": {
-      "tasks": 20,
-      "attempts": 220,
-      "canonical_success": 20,
+      "tasks": 32,
+      "attempts": 352,
+      "canonical_success": 32,
       "canonical_success_rate": 1,
-      "variants": 200,
+      "variants": 320,
       "variant_labels": {
-        "rules-agree": 158,
-        "rules-fail": 37,
-        "rules-differ": 5
+        "rules-agree": 242,
+        "rules-fail": 58,
+        "rules-own": 13,
+        "needs_review": 6,
+        "rules-differ": 1
       },
-      "variant_rules_coverage": 0.79,
-      "variants_needing_review": 0,
-      "trainable_records": 220,
+      "variant_rules_coverage": 0.7562,
+      "variant_rules_parsed": 0.7969,
+      "variants_needing_review": 6,
+      "trainable_records": 346,
       "by_split": {
         "dev": 33,
-        "train": 187
+        "train": 319
       },
       "retry": []
     },
     "docs.editor": {
-      "tasks": 60,
-      "attempts": 663,
-      "canonical_success": 59,
-      "canonical_success_rate": 0.9833,
-      "variants": 600,
+      "tasks": 72,
+      "attempts": 795,
+      "canonical_success": 71,
+      "canonical_success_rate": 0.9861,
+      "variants": 720,
       "variant_labels": {
-        "rules-fail": 253,
-        "rules-agree": 151,
-        "rules-differ": 196
+        "rules-own": 308,
+        "rules-agree": 243,
+        "rules-fail": 116,
+        "needs_review": 42,
+        "rules-differ": 11
       },
-      "variant_rules_coverage": 0.2517,
-      "variants_needing_review": 10,
-      "trainable_records": 649,
+      "variant_rules_coverage": 0.3375,
+      "variant_rules_parsed": 0.7653,
+      "variants_needing_review": 52,
+      "trainable_records": 739,
       "by_split": {
-        "train": 586,
-        "dev": 77
+        "train": 707,
+        "dev": 88
       },
       "retry": [
         {
@@ -73,330 +79,442 @@
       ]
     },
     "media.music": {
-      "tasks": 40,
-      "attempts": 440,
-      "canonical_success": 40,
+      "tasks": 52,
+      "attempts": 572,
+      "canonical_success": 52,
       "canonical_success_rate": 1,
-      "variants": 400,
+      "variants": 520,
       "variant_labels": {
-        "rules-agree": 169,
-        "rules-differ": 195,
-        "rules-fail": 36
+        "rules-agree": 309,
+        "rules-own": 189,
+        "needs_review": 20,
+        "rules-differ": 2
       },
-      "variant_rules_coverage": 0.4225,
-      "variants_needing_review": 0,
-      "trainable_records": 440,
+      "variant_rules_coverage": 0.5942,
+      "variant_rules_parsed": 0.9577,
+      "variants_needing_review": 20,
+      "trainable_records": 552,
       "by_split": {
-        "train": 385,
-        "dev": 55
+        "train": 506,
+        "dev": 66
       },
       "retry": []
     },
     "ui.avatar": {
-      "tasks": 40,
-      "attempts": 441,
-      "canonical_success": 40,
+      "tasks": 52,
+      "attempts": 573,
+      "canonical_success": 52,
       "canonical_success_rate": 1,
-      "variants": 400,
+      "variants": 520,
       "variant_labels": {
-        "rules-fail": 159,
-        "rules-differ": 62,
-        "rules-agree": 179
+        "rules-agree": 293,
+        "rules-fail": 79,
+        "rules-own": 118,
+        "needs_review": 22,
+        "rules-differ": 8
       },
-      "variant_rules_coverage": 0.4475,
-      "variants_needing_review": 0,
-      "trainable_records": 440,
+      "variant_rules_coverage": 0.5635,
+      "variant_rules_parsed": 0.7904,
+      "variants_needing_review": 22,
+      "trainable_records": 550,
       "by_split": {
-        "train": 430,
-        "dev": 11
+        "train": 551,
+        "dev": 22
       },
       "retry": []
     },
     "games.chess": {
-      "tasks": 30,
-      "attempts": 330,
-      "canonical_success": 30,
+      "tasks": 42,
+      "attempts": 462,
+      "canonical_success": 42,
       "canonical_success_rate": 1,
-      "variants": 300,
+      "variants": 420,
       "variant_labels": {
-        "rules-agree": 241,
-        "rules-fail": 19,
-        "rules-differ": 40
+        "rules-agree": 326,
+        "rules-own": 56,
+        "needs_review": 12,
+        "rules-fail": 23,
+        "rules-differ": 3
       },
-      "variant_rules_coverage": 0.8033,
-      "variants_needing_review": 0,
-      "trainable_records": 330,
+      "variant_rules_coverage": 0.7762,
+      "variant_rules_parsed": 0.9095,
+      "variants_needing_review": 12,
+      "trainable_records": 450,
       "by_split": {
-        "train": 330
+        "train": 462
       },
       "retry": []
     },
     "art.draw": {
-      "tasks": 40,
-      "attempts": 440,
-      "canonical_success": 40,
-      "canonical_success_rate": 1,
-      "variants": 400,
+      "tasks": 52,
+      "attempts": 572,
+      "canonical_success": 51,
+      "canonical_success_rate": 0.9808,
+      "variants": 520,
       "variant_labels": {
-        "rules-differ": 134,
-        "rules-fail": 133,
-        "rules-agree": 133
+        "rules-agree": 342,
+        "rules-own": 158,
+        "needs_review": 8,
+        "rules-differ": 1,
+        "rules-fail": 7,
+        "rules-unverified": 4
       },
-      "variant_rules_coverage": 0.3325,
-      "variants_needing_review": 0,
-      "trainable_records": 440,
+      "variant_rules_coverage": 0.6577,
+      "variant_rules_parsed": 0.9615,
+      "variants_needing_review": 18,
+      "trainable_records": 557,
       "by_split": {
-        "train": 396,
-        "dev": 44
+        "train": 517,
+        "dev": 55
       },
-      "retry": []
+      "retry": [
+        {
+          "batch": "h5",
+          "task": "art.draw.h5.t9",
+          "goal": "Fill in with solid color",
+          "tried": [
+            {
+              "attempt": 1,
+              "text": "Use solid fill.",
+              "reply": "I did not understand \"Use solid fill\". Did you mean \"Use full strength.\"?",
+              "label": "canonical-failed"
+            }
+          ]
+        }
+      ]
     },
     "kids.common": {
-      "tasks": 20,
-      "attempts": 220,
-      "canonical_success": 20,
+      "tasks": 32,
+      "attempts": 352,
+      "canonical_success": 32,
       "canonical_success_rate": 1,
-      "variants": 200,
+      "variants": 320,
       "variant_labels": {
-        "rules-agree": 127,
-        "rules-fail": 25,
-        "rules-differ": 48
+        "rules-agree": 248,
+        "rules-own": 67,
+        "rules-fail": 5
       },
-      "variant_rules_coverage": 0.635,
+      "variant_rules_coverage": 0.775,
+      "variant_rules_parsed": 0.9844,
       "variants_needing_review": 0,
-      "trainable_records": 220,
+      "trainable_records": 352,
       "by_split": {
-        "train": 220
+        "train": 341,
+        "dev": 11
       },
       "retry": []
     },
     "games.tictactoe": {
-      "tasks": 20,
-      "attempts": 220,
-      "canonical_success": 20,
+      "tasks": 32,
+      "attempts": 352,
+      "canonical_success": 32,
       "canonical_success_rate": 1,
-      "variants": 200,
+      "variants": 320,
       "variant_labels": {
-        "rules-agree": 180,
-        "rules-fail": 7,
-        "rules-differ": 13
+        "rules-agree": 288,
+        "needs_review": 2,
+        "rules-own": 20,
+        "rules-fail": 10
       },
       "variant_rules_coverage": 0.9,
-      "variants_needing_review": 0,
-      "trainable_records": 220,
+      "variant_rules_parsed": 0.9625,
+      "variants_needing_review": 2,
+      "trainable_records": 350,
       "by_split": {
-        "train": 209,
+        "train": 341,
         "dev": 11
       },
       "retry": []
     },
     "kids.shapes": {
-      "tasks": 20,
-      "attempts": 220,
-      "canonical_success": 20,
+      "tasks": 32,
+      "attempts": 352,
+      "canonical_success": 32,
       "canonical_success_rate": 1,
-      "variants": 200,
+      "variants": 320,
       "variant_labels": {
-        "rules-agree": 141,
-        "rules-fail": 50,
-        "rules-differ": 9
+        "rules-agree": 313,
+        "needs_review": 2,
+        "rules-fail": 4,
+        "rules-own": 1
       },
-      "variant_rules_coverage": 0.705,
-      "variants_needing_review": 0,
-      "trainable_records": 220,
+      "variant_rules_coverage": 0.9781,
+      "variant_rules_parsed": 0.9812,
+      "variants_needing_review": 2,
+      "trainable_records": 350,
       "by_split": {
-        "dev": 33,
-        "train": 187
+        "dev": 44,
+        "train": 308
       },
       "retry": []
     },
     "games.hangman": {
-      "tasks": 20,
-      "attempts": 220,
-      "canonical_success": 20,
+      "tasks": 32,
+      "attempts": 352,
+      "canonical_success": 32,
       "canonical_success_rate": 1,
-      "variants": 200,
+      "variants": 320,
       "variant_labels": {
-        "rules-agree": 182,
-        "rules-differ": 13,
-        "rules-fail": 5
+        "rules-agree": 276,
+        "rules-own": 26,
+        "rules-differ": 2,
+        "rules-fail": 16
       },
-      "variant_rules_coverage": 0.91,
+      "variant_rules_coverage": 0.8625,
+      "variant_rules_parsed": 0.9437,
       "variants_needing_review": 0,
-      "trainable_records": 220,
+      "trainable_records": 352,
       "by_split": {
-        "train": 187,
+        "train": 319,
         "dev": 33
       },
       "retry": []
     },
     "kids.tasks": {
-      "tasks": 20,
-      "attempts": 220,
-      "canonical_success": 20,
+      "tasks": 32,
+      "attempts": 352,
+      "canonical_success": 32,
       "canonical_success_rate": 1,
-      "variants": 200,
+      "variants": 320,
       "variant_labels": {
-        "rules-agree": 89,
-        "rules-differ": 56,
-        "rules-fail": 55
+        "rules-agree": 207,
+        "needs_review": 18,
+        "rules-own": 73,
+        "rules-fail": 17,
+        "rules-differ": 5
       },
-      "variant_rules_coverage": 0.445,
-      "variants_needing_review": 0,
-      "trainable_records": 220,
+      "variant_rules_coverage": 0.6469,
+      "variant_rules_parsed": 0.875,
+      "variants_needing_review": 18,
+      "trainable_records": 334,
       "by_split": {
-        "train": 209,
-        "dev": 11
+        "train": 330,
+        "dev": 22
       },
       "retry": []
     },
     "kids.time": {
-      "tasks": 20,
-      "attempts": 220,
-      "canonical_success": 20,
+      "tasks": 32,
+      "attempts": 352,
+      "canonical_success": 32,
       "canonical_success_rate": 1,
-      "variants": 200,
+      "variants": 320,
       "variant_labels": {
-        "rules-agree": 171,
-        "rules-fail": 24,
-        "rules-differ": 5
+        "rules-agree": 305,
+        "needs_review": 6,
+        "rules-own": 3,
+        "rules-fail": 4,
+        "rules-differ": 2
       },
-      "variant_rules_coverage": 0.855,
-      "variants_needing_review": 0,
-      "trainable_records": 220,
+      "variant_rules_coverage": 0.9531,
+      "variant_rules_parsed": 0.9625,
+      "variants_needing_review": 6,
+      "trainable_records": 346,
       "by_split": {
-        "train": 209,
+        "train": 341,
         "dev": 11
       },
       "retry": []
     },
     "games.guess": {
-      "tasks": 20,
-      "attempts": 220,
-      "canonical_success": 20,
+      "tasks": 32,
+      "attempts": 352,
+      "canonical_success": 32,
       "canonical_success_rate": 1,
-      "variants": 200,
+      "variants": 320,
       "variant_labels": {
-        "rules-agree": 186,
-        "rules-fail": 3,
-        "rules-differ": 11
+        "rules-agree": 268,
+        "rules-fail": 14,
+        "needs_review": 6,
+        "rules-own": 31,
+        "rules-differ": 1
       },
-      "variant_rules_coverage": 0.93,
-      "variants_needing_review": 0,
-      "trainable_records": 220,
+      "variant_rules_coverage": 0.8375,
+      "variant_rules_parsed": 0.9344,
+      "variants_needing_review": 6,
+      "trainable_records": 346,
       "by_split": {
-        "train": 176,
-        "dev": 44
+        "train": 286,
+        "dev": 66
       },
       "retry": []
     },
     "ui.shell": {
-      "tasks": 20,
-      "attempts": 220,
-      "canonical_success": 20,
+      "tasks": 32,
+      "attempts": 352,
+      "canonical_success": 32,
       "canonical_success_rate": 1,
-      "variants": 200,
+      "variants": 320,
       "variant_labels": {
-        "rules-agree": 93,
-        "rules-fail": 77,
-        "rules-differ": 30
+        "rules-agree": 214,
+        "rules-fail": 40,
+        "rules-own": 58,
+        "needs_review": 8
       },
-      "variant_rules_coverage": 0.465,
-      "variants_needing_review": 0,
-      "trainable_records": 220,
+      "variant_rules_coverage": 0.6687,
+      "variant_rules_parsed": 0.85,
+      "variants_needing_review": 8,
+      "trainable_records": 344,
       "by_split": {
-        "train": 209,
+        "train": 341,
         "dev": 11
       },
       "retry": []
     },
     "kids.shop": {
-      "tasks": 20,
-      "attempts": 220,
-      "canonical_success": 20,
+      "tasks": 32,
+      "attempts": 352,
+      "canonical_success": 32,
       "canonical_success_rate": 1,
-      "variants": 200,
+      "variants": 320,
       "variant_labels": {
-        "rules-agree": 150,
-        "rules-fail": 37,
-        "rules-differ": 13
+        "rules-agree": 274,
+        "rules-fail": 19,
+        "rules-own": 7,
+        "needs_review": 20
       },
-      "variant_rules_coverage": 0.75,
-      "variants_needing_review": 0,
-      "trainable_records": 220,
+      "variant_rules_coverage": 0.8562,
+      "variant_rules_parsed": 0.8781,
+      "variants_needing_review": 20,
+      "trainable_records": 332,
       "by_split": {
-        "train": 220
+        "train": 330,
+        "dev": 22
       },
       "retry": []
     },
     "geo.map": {
-      "tasks": 40,
-      "attempts": 440,
-      "canonical_success": 40,
+      "tasks": 52,
+      "attempts": 572,
+      "canonical_success": 52,
       "canonical_success_rate": 1,
-      "variants": 400,
+      "variants": 520,
       "variant_labels": {
-        "rules-agree": 114,
-        "rules-fail": 194,
-        "rules-differ": 92
+        "rules-agree": 404,
+        "rules-own": 102,
+        "needs_review": 12,
+        "rules-differ": 1,
+        "rules-fail": 1
       },
-      "variant_rules_coverage": 0.285,
-      "variants_needing_review": 0,
-      "trainable_records": 440,
+      "variant_rules_coverage": 0.7769,
+      "variant_rules_parsed": 0.9731,
+      "variants_needing_review": 12,
+      "trainable_records": 560,
       "by_split": {
-        "dev": 55,
-        "train": 385
+        "dev": 99,
+        "train": 473
       },
       "retry": []
     },
     "data.charts": {
-      "tasks": 40,
-      "attempts": 446,
-      "canonical_success": 40,
+      "tasks": 52,
+      "attempts": 578,
+      "canonical_success": 52,
       "canonical_success_rate": 1,
-      "variants": 400,
+      "variants": 520,
       "variant_labels": {
-        "rules-differ": 122,
-        "rules-agree": 175,
-        "rules-fail": 103
+        "rules-agree": 396,
+        "rules-own": 92,
+        "needs_review": 14,
+        "rules-fail": 18
       },
-      "variant_rules_coverage": 0.4375,
-      "variants_needing_review": 0,
-      "trainable_records": 440,
+      "variant_rules_coverage": 0.7615,
+      "variant_rules_parsed": 0.9385,
+      "variants_needing_review": 14,
+      "trainable_records": 558,
       "by_split": {
-        "train": 433,
-        "dev": 13
+        "train": 543,
+        "dev": 35
       },
       "retry": []
     },
     "kids.animals": {
-      "tasks": 20,
-      "attempts": 220,
-      "canonical_success": 20,
+      "tasks": 32,
+      "attempts": 352,
+      "canonical_success": 32,
       "canonical_success_rate": 1,
-      "variants": 200,
+      "variants": 320,
       "variant_labels": {
-        "rules-agree": 156,
-        "rules-fail": 36,
-        "rules-differ": 8
+        "rules-agree": 307,
+        "rules-fail": 7,
+        "rules-own": 5,
+        "needs_review": 1
       },
-      "variant_rules_coverage": 0.78,
-      "variants_needing_review": 0,
-      "trainable_records": 220,
+      "variant_rules_coverage": 0.9594,
+      "variant_rules_parsed": 0.975,
+      "variants_needing_review": 1,
+      "trainable_records": 351,
       "by_split": {
-        "dev": 22,
-        "train": 198
+        "dev": 33,
+        "train": 319
+      },
+      "retry": []
+    },
+    "docs.reader": {
+      "tasks": 12,
+      "attempts": 132,
+      "canonical_success": 11,
+      "canonical_success_rate": 0.9167,
+      "variants": 120,
+      "variant_labels": {
+        "rules-agree": 67,
+        "rules-fail": 34,
+        "rules-own": 18,
+        "rules-differ": 1
+      },
+      "variant_rules_coverage": 0.5583,
+      "variant_rules_parsed": 0.7083,
+      "variants_needing_review": 10,
+      "trainable_records": 121,
+      "by_split": {
+        "train": 99,
+        "dev": 33
+      },
+      "retry": [
+        {
+          "batch": "h5",
+          "task": "docs.reader.h5.t7",
+          "goal": "Find when the witch locked Hansel in a cage",
+          "tried": [
+            {
+              "attempt": 1,
+              "text": "When did the witch lock Hansel in a cage?",
+              "reply": "I did not understand \"When did the witch lock Hansel in a cage\". Did you mean \"Who did the witch lock?\" or \"Tell me who did the witch lock.\"?",
+              "label": "canonical-failed"
+            }
+          ]
+        }
+      ]
+    },
+    "ui.help": {
+      "tasks": 12,
+      "attempts": 132,
+      "canonical_success": 12,
+      "canonical_success_rate": 1,
+      "variants": 120,
+      "variant_labels": {
+        "rules-agree": 90,
+        "rules-fail": 12,
+        "rules-own": 18
+      },
+      "variant_rules_coverage": 0.75,
+      "variant_rules_parsed": 0.9,
+      "variants_needing_review": 0,
+      "trainable_records": 132,
+      "by_split": {
+        "train": 110,
+        "dev": 22
       },
       "retry": []
     }
   },
   "totals": {
-    "tasks": 510,
-    "attempts": 5620,
-    "canonical_success": 509,
-    "variants": 5100,
-    "agree": 2795,
-    "canonical_success_rate": 0.998,
-    "variant_rules_coverage": 0.548
+    "tasks": 750,
+    "attempts": 8260,
+    "canonical_success": 747,
+    "variants": 7500,
+    "agree": 5412,
+    "canonical_success_rate": 0.996,
+    "variant_rules_coverage": 0.7216
   }
 }

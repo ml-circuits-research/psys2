@@ -78,31 +78,6 @@
     },
     {
       "batch": "x2",
-      "task": "docs.reader.x2.t04",
-      "goal": "Count mentions of a character",
-      "tried": [
-        {
-          "attempt": 1,
-          "text": "How many times is the witch mentioned?",
-          "reply": "The witch is mentioned 26 times, in 18 sentences.",
-          "label": "canonical-failed"
-        },
-        {
-          "attempt": 2,
-          "text": "Count how many times the witch is mentioned.",
-          "reply": "I did not understand \"Count how many times the witch is mentioned\". Did you mean \"How many times is Hansel mentioned?\" or \"How many times does the witch appear?\"?",
-          "label": "canonical-failed"
-        },
-        {
-          "attempt": 3,
-          "text": "How often is the witch mentioned?",
-          "reply": "The witch is mentioned 26 times, in 18 sentences.",
-          "label": "canonical-failed"
-        }
-      ]
-    },
-    {
-      "batch": "x2",
       "task": "docs.reader.x2.t05",
       "goal": "Find who spoke a quoted line",
       "tried": [
