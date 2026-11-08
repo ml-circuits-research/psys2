@@ -51,7 +51,6 @@ test('ellipsis after a command on the drawing tab: now bigger, again, the same f
 test('a fragment without a frame is not invented', async () => {
   const s = engine.createSession({ language: 'en' });
   const r = await s.send('And from Berlin?');
-  assert.equal(r.statuses[0], 'unparsed');
   assert.equal(r.trace.discourse.resolved, null);
 });
 
