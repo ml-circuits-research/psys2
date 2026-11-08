@@ -1,0 +1,80 @@
+{
+  "world": "kids.animals",
+  "tab": "robot",
+  "author": "haiku",
+  "batch": "h5",
+  "tasks": [
+    {
+      "id": "kids.animals.h5.t1",
+      "goal": "Check whether a bat can fly",
+      "canonical": "Can a bat fly?",
+      "variants": ["can bats fly?", "is a bat able to fly", "does a bat fly", "can a bat fly pls", "bat can fly right?", "is it true a bat can fly", "can u tell me if a bat flies", "do bats fly", "can a bat actually fly?", "um can a bat fly"]
+    },
+    {
+      "id": "kids.animals.h5.t2",
+      "goal": "Check whether a penguin can fly",
+      "canonical": "Can a penguin fly?",
+      "variants": ["can penguins fly?", "do penguins fly", "is a penguin able to fly", "penguin fly?", "can a penguin fly pls", "can penguins flyy, idk", "can u tell me if penguins can fly", "is it possible for a penguin to fly", "can a penguins fly lol", "can a penguin take off and fly"]
+    },
+    {
+      "id": "kids.animals.h5.t3",
+      "goal": "Check whether a dolphin can swim",
+      "canonical": "Can a dolphin swim?",
+      "variants": ["do dolphins swim", "can dolphins swim?", "is a dolphin able to swim", "can a dolphin swim pls", "dolphins can swim right", "can u tell me if a dolphin swims", "does a dolphin swim", "dolphin swim?", "can a dolphin swim?? lol", "u think a dolphin can swim?"]
+    },
+    {
+      "id": "kids.animals.h5.t4",
+      "goal": "Check whether a whale is a fish",
+      "canonical": "Is a whale a fish?",
+      "variants": ["is a whale a fish", "whale is a fish right?", "are whales fish", "is a whale classed as a fish", "would you say a whale is a fish", "is a whale a kind of fish?", "whales are fish, true?", "um is a whale a fish", "so is a whale a fish or no", "is it true a whale is a fish"]
+    },
+    {
+      "id": "kids.animals.h5.t5",
+      "goal": "Check whether a dolphin is a mammal",
+      "canonical": "Is a dolphin a mammal?",
+      "variants": ["is a dolphin a mammal", "are dolphins mammals", "dolphins are mammals right?", "is a dolphin a kind of mammal", "can u tell me if a dolphin is a mammal", "dolphin mammal?", "is a dolphin a mammal pls", "would a dolphin count as a mammal", "u think a dolphin's a mammal?", "is a dolphin a fish or a mammal"]
+    },
+    {
+      "id": "kids.animals.h5.t6",
+      "goal": "Check whether a cow is a carnivore",
+      "canonical": "Is a cow a carnivore?",
+      "variants": ["is a cow a carnivore", "are cows carnivores", "cows eat meat, right?", "is a cow a meat eater", "is a cow carnivorous", "would u call a cow a carnivore", "cow = carnivore?", "is a cow a carnivore pls", "is cow a carnivore or not", "can u tell me if cows are carnivores"]
+    },
+    {
+      "id": "kids.animals.h5.t7",
+      "goal": "Ask where a camel lives",
+      "canonical": "Where does a camel live?",
+      "variants": ["where do camels live", "wheres a camel's home", "where do camels hang out", "where is a camel found", "whats a camel's habitat", "where does a camel live pls", "where can i find a camel", "where do camels live at", "wheres home for a camel", "tell me where camels live"]
+    },
+    {
+      "id": "kids.animals.h5.t8",
+      "goal": "Ask what covers a cow's body",
+      "canonical": "What is a cow covered in?",
+      "variants": ["what covers a cow's body", "whats a cow covered in", "cow covered in what?", "what kind of skin or fur does a cow have", "whats on a cow's body", "what does a cow have on its body", "cows are covered in what", "what is the covering of a cow", "so whats a cow covered in", "whats a cows body covered with"]
+    },
+    {
+      "id": "kids.animals.h5.t9",
+      "goal": "Get a description of a dolphin",
+      "canonical": "Tell me about a dolphin.",
+      "variants": ["tell me about dolphins", "what can u tell me about a dolphin", "describe a dolphin", "dolphin info pls", "whats a dolphin like", "give me the basics on dolphins", "tell me something about a dolphin", "i wanna know about dolphins", "could u describe a dolphin", "whats the deal with dolphins"]
+    },
+    {
+      "id": "kids.animals.h5.t10",
+      "goal": "List the animals that live in the sea",
+      "canonical": "Which animals live in the sea?",
+      "variants": ["what animals live in the sea", "animals that live in the ocean?", "which animals live in the ocean", "name the sea animals", "list animals that live in the sea", "what creatures live in the sea", "can u tell me which animals live in the sea", "sea animals?", "which animals are found in the sea", "any animals that live in the sea? list them"]
+    },
+    {
+      "id": "kids.animals.h5.t11",
+      "goal": "Tell the system a fact: a zebra cannot swim",
+      "canonical": "A zebra cannot swim.",
+      "variants": ["zebras cannot swim", "a zebra cant swim", "fyi zebras cant swim", "just so u know, a zebra cannot swim", "a zebra is not able to swim", "zebra cant swim btw", "remember that a zebra cannot swim", "a zebra cannot swim, ok?", "note: zebras dont swim", "so yeah, a zebra cannot swim"]
+    },
+    {
+      "id": "kids.animals.h5.t12",
+      "goal": "Tell the system my cat's name",
+      "canonical": "I have a cat called Tom.",
+      "variants": ["i got a cat named tom", "my cats name is tom", "i have a cat called tom pls", "btw i own a cat called tom", "ive got a cat, her name is tom", "my kitty is named tom", "tom is my cat", "my pet cat is called tom", "i have a cat and its called tom", "meet tom, hes my cat"]
+    }
+  ]
+}

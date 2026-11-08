@@ -1,0 +1,80 @@
+{
+  "world": "games.hangman",
+  "tab": "hangman",
+  "author": "haiku",
+  "batch": "h5",
+  "tasks": [
+    {
+      "id": "games.hangman.h5.t1",
+      "goal": "Start a new hangman game with a random animal word",
+      "canonical": "New game.",
+      "variants": ["new game pls", "start over", "lets play hangman again", "can u start a new game", "i want a new hangman game", "hangman again pls", "restart the game", "lets go again, new round", "start a fresh game of hangman", "new one please"]
+    },
+    {
+      "id": "games.hangman.h5.t2",
+      "goal": "Start a hangman game with the word zebra",
+      "canonical": "Play hangman with the word zebra.",
+      "variants": ["hangman with zebra pls", "can we play hangman, the word is zebra", "lets do hangman using zebra", "i want to play hangman with the word zebra", "start hangman, word = zebra", "play hangman w/ zebra", "um so like play hangman with the word zebra", "hangman, word zebra, go", "could u play hangman with zebra as the word", "pls start a hangman game using the word zebra"]
+    },
+    {
+      "id": "games.hangman.h5.t3",
+      "goal": "Guess the letter E",
+      "canonical": "Is there an E?",
+      "variants": ["is there an e", "got an e?", "does the word have an E in it?", "any e in there?", "e in it?", "is there a letter e", "is an e in the word", "hmm is there an e", "e?", "does it contain an E"]
+    },
+    {
+      "id": "games.hangman.h5.t4",
+      "goal": "Guess the letter Z",
+      "canonical": "Does it have a Z?",
+      "variants": ["does it have a z", "z in there?", "is there a z in it", "got a z?", "uh does the word contain z", "any zs?", "can i guess z? is there one", "is z in the word", "does it have a Z pls", "is there a zee in it lol"]
+    },
+    {
+      "id": "games.hangman.h5.t5",
+      "goal": "Guess the whole word elephant",
+      "canonical": "Is it elephant?",
+      "variants": ["is it elephant", "elephant?", "i think its elephant", "my guess is elephant", "could it be elephant", "um is it an elephant", "its elephant, right?", "guessing elephant", "is the animal elephant", "id say elephant"]
+    },
+    {
+      "id": "games.hangman.h5.t6",
+      "goal": "Guess the whole word zebra",
+      "canonical": "I think it is a zebra.",
+      "variants": ["i think its a zebra", "its a zebra i think", "my guess is zebra", "zebra?", "i reckon it's a zebra", "id go with zebra", "is it a zebra", "pretty sure it's a zebra", "could it be a zebra", "the word is zebra i bet"]
+    },
+    {
+      "id": "games.hangman.h5.t7",
+      "goal": "Ask for a hint about the animal",
+      "canonical": "Give me a hint.",
+      "variants": ["hint pls", "any hints?", "can u give me a clue", "i need a hint", "help, give me a hint", "gimme a clue about it", "hint plz", "could you tell me a hint", "um can i get a hint", "any clue about the word"]
+    },
+    {
+      "id": "games.hangman.h5.t8",
+      "goal": "Ask how many wrong guesses are left",
+      "canonical": "How many guesses are left?",
+      "variants": ["how many guesses left", "how many tries are left?", "how many lives do i have left", "how many wrong guesses can i still make", "guesses left?", "how many more tries do i get", "how many chances are left", "um how many guesses are left", "how many tries left", "how many wrong tries do i have left"]
+    },
+    {
+      "id": "games.hangman.h5.t9",
+      "goal": "Ask which letters I have already tried",
+      "canonical": "What letters have I guessed?",
+      "variants": ["which letters have i tried", "what letters did i guess", "show me the letters i tried", "what have i guessed so far", "list my letters", "which letters have i guessed", "which letters did i already try", "show my guessed letters", "what letters are used up", "what letters have i tried already"]
+    },
+    {
+      "id": "games.hangman.h5.t10",
+      "goal": "Give up and hear the word",
+      "canonical": "I give up.",
+      "variants": ["i give up", "ok i give up, what was it", "you win, i quit", "i give up pls tell me the word", "give up", "fine i surrender", "im done, i give up", "ugh i give up", "gonna give up on this one", "i quit, whats the word"]
+    },
+    {
+      "id": "games.hangman.h5.t11",
+      "goal": "Guess the letter R",
+      "canonical": "The letter R.",
+      "variants": ["r pls", "uh i pick r", "ill go with r", "letter r", "how about r", "let me try r", "is it r", "r!", "i choose the letter r", "try r please"]
+    },
+    {
+      "id": "games.hangman.h5.t12",
+      "goal": "Guess the letter S",
+      "canonical": "Try S.",
+      "variants": ["try s", "how about s", "lets see, s", "i guess s", "s please", "can i try s", "try the letter s pls", "s?", "i'd try s next", "go with s"]
+    }
+  ]
+}

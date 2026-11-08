@@ -1,0 +1,80 @@
+{
+  "world": "geo.map",
+  "tab": "map",
+  "author": "haiku",
+  "batch": "h5",
+  "tasks": [
+    {
+      "id": "geo.map.h5.t1",
+      "goal": "Show a city on the map",
+      "canonical": "Show me Bucharest.",
+      "variants": ["bucharest pls", "can u show me bucharest", "i want to see bucharest on the map", "show bucharest", "lets look at bucharest", "map me bucharest", "pull up bucharest", "lemme see bucharest thx", "could you bring up bucharest", "uh show me bucharest lol"]
+    },
+    {
+      "id": "geo.map.h5.t2",
+      "goal": "Zoom the map to level 5",
+      "canonical": "Zoom to level 5.",
+      "variants": ["zoom level 5", "set the zoom to 5", "zoom u to level five", "level 5 zoom pls", "can u zoom to 5", "make the zoom level five", "i want zoom 5", "zoom in to level 5 please", "set zoom level to five", "go to zoom 5"]
+    },
+    {
+      "id": "geo.map.h5.t3",
+      "goal": "Switch the map to the street map",
+      "canonical": "Switch to the street map.",
+      "variants": ["street map pls", "use the street map", "can u switch to streets", "change to the streets map", "show the street map instead", "i want the street map", "switch the map to streets", "street map plz", "could you use the street map", "go to the street map"]
+    },
+    {
+      "id": "geo.map.h5.t4",
+      "goal": "Go to latitude 45.5 and longitude 25.3",
+      "canonical": "Go to coordinates 45.5 25.3.",
+      "variants": ["coordinates 45.5 25.3", "take me to 45.5 25.3", "go to 45.5, 25.3", "move to coords 45.5 25.3", "lat 45.5 lon 25.3 pls", "can u go to coordinates 45.5 and 25.3", "goto 45.5 25.3", "i want coordinates forty five point five, twenty five point three", "lets go to 45.5 25.3 lol", "take the map to 45.5, 25.3 thx"]
+    },
+    {
+      "id": "geo.map.h5.t5",
+      "goal": "Put a marker on Cluj",
+      "canonical": "Put a marker on Cluj.",
+      "variants": ["mark cluj", "drop a pin on cluj", "marker on cluj pls", "can u put a marker on cluj", "add a pin to cluj", "i want a marker on cluj", "pin cluj for me", "could you mark cluj", "put a marker on Cluj thx", "cluj marker please"]
+    },
+    {
+      "id": "geo.map.h5.t6",
+      "goal": "Mark all the capitals of Europe",
+      "canonical": "Mark the capitals of Europe.",
+      "variants": ["mark europes capitals", "put markers on all the european capitals", "can u mark the capitals in europe", "markers on the capitals of europe pls", "show all of europe's capitals with markers", "i want the capitals of europe marked", "pin every capital in europe", "mark all european capitals", "could u put pins on europe's capitals", "europe capitals marked please"]
+    },
+    {
+      "id": "geo.map.h5.t7",
+      "goal": "Highlight France and Spain",
+      "canonical": "Highlight France and Spain.",
+      "variants": ["highlight france and spain pls", "can u highlight france & spain", "make france and spain stand out", "i want france and spain highlighted", "spain and france highlighted please", "highlight spain and france", "could you highlight both france and spain", "france n spain highlight", "show france and spain highlighted", "light up france and spain"]
+    },
+    {
+      "id": "geo.map.h5.t8",
+      "goal": "Ask how far Paris is from Rome",
+      "canonical": "How far is Paris from Rome?",
+      "variants": ["paris to rome distance", "how far is paris from rome", "distance from paris to rome?", "how many km from paris to rome", "whats the distance between paris and rome", "how far apart are paris and rome", "how far is it from paris to rome", "how many kilometres is paris from rome lol", "how far apart r paris and rome", "um so how far is paris from rome"]
+    },
+    {
+      "id": "geo.map.h5.t9",
+      "goal": "Ask the capital of Japan",
+      "canonical": "What is the capital of Japan?",
+      "variants": ["capital of japan?", "whats japan's capital", "japan capital city?", "which city is the capital of japan", "can u tell me the capital of japan", "what city is japan's capital", "tell me japans capital", "capital of japan pls", "i wanna know the capital of japan", "whats the capital city of japan, thx"]
+    },
+    {
+      "id": "geo.map.h5.t10",
+      "goal": "Compare the size of Brazil and Canada",
+      "canonical": "Which is bigger, Brazil or Canada?",
+      "variants": ["brazil or canada, which is bigger?", "is brazil or canada bigger", "which one is larger, brazil or canada", "bigger one: brazil or canada?", "canada vs brazil, who's bigger", "which is the bigger country, brazil or canada", "um which is bigger brazil or canada", "brazil or canada, which is larger lol", "tell me which is bigger: brazil or canada", "is canada or brazil the bigger one"]
+    },
+    {
+      "id": "geo.map.h5.t11",
+      "goal": "Find the largest city in Romania",
+      "canonical": "Which is the largest city in Romania?",
+      "variants": ["biggest city in romania?", "whats romania's largest city", "which city is the biggest in romania", "largest city of romania pls", "romania's biggest city is what", "what city is the biggest in romania", "tell me the largest city in romania", "which romanian city is biggest", "can u tell me romania's biggest city", "biggest city in romania, which one?"]
+    },
+    {
+      "id": "geo.map.h5.t12",
+      "goal": "Ask how many neighbouring countries Hungary has",
+      "canonical": "How many neighbours does Hungary have?",
+      "variants": ["how many countries border hungary", "number of hungary's neighbours?", "how many neighbours has hungary", "how many countries touch hungary", "hungary borders how many countries", "count hungary's neighbours pls", "how many neighbor countries does hungary have", "hungary has how many neighbours?", "how many countries share a border with hungary", "u know how many neighbours hungary has?"]
+    }
+  ]
+}

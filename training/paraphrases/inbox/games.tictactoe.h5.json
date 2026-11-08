@@ -1,0 +1,80 @@
+{
+  "world": "games.tictactoe",
+  "tab": "tictactoe",
+  "author": "haiku",
+  "batch": "h5",
+  "tasks": [
+    {
+      "id": "games.tictactoe.h5.t1",
+      "goal": "Start a new tic tac toe game",
+      "canonical": "New game.",
+      "variants": ["new game pls", "start over", "lets play again", "can u start a new tic tac toe game", "restart the game", "start a fresh tictactoe game", "new round please", "lets go again from scratch", "reset the board and start over", "new game ok"]
+    },
+    {
+      "id": "games.tictactoe.h5.t2",
+      "goal": "Start a game with me going first",
+      "canonical": "Let me go first.",
+      "variants": ["i wanna go first", "can i start pls", "let me start", "ill go first", "can i be first", "me first!", "i want to play first", "could i go first", "let me make the first move", "id like to go first thx"]
+    },
+    {
+      "id": "games.tictactoe.h5.t3",
+      "goal": "Ask who goes first",
+      "canonical": "Who goes first?",
+      "variants": ["who starts?", "whos first", "who's going first here", "do i go first or you", "which one of us goes first", "wait, who is going first", "who makes the first move", "who gets to start", "who plays first", "so who goes first, me or u"]
+    },
+    {
+      "id": "games.tictactoe.h5.t4",
+      "goal": "Play my mark in the top left square",
+      "canonical": "Top left.",
+      "variants": ["top left pls", "ill take the top left", "put it in the top left", "upper left", "um top left corner", "can u play top left", "top-left", "top left spot, thx", "I'll go top left", "top left square please"]
+    },
+    {
+      "id": "games.tictactoe.h5.t5",
+      "goal": "Play on square B2",
+      "canonical": "Play B2.",
+      "variants": ["b2", "ill play b2", "can u put it on b2", "go with B2", "B 2", "let me take b two", "mark b2 pls", "how about b2", "put my mark on B2", "b2 please"]
+    },
+    {
+      "id": "games.tictactoe.h5.t6",
+      "goal": "Ask who is winning",
+      "canonical": "Who is winning?",
+      "variants": ["whos winning", "am i winning?", "who's ahead right now", "who's winning rn", "tell me who is winning", "who has the upper hand", "hows the game going, who's winning", "are we winning or are you", "so who's winning lol", "who is winning at the moment"]
+    },
+    {
+      "id": "games.tictactoe.h5.t7",
+      "goal": "Describe the board row by row",
+      "canonical": "Describe the board.",
+      "variants": ["describe the board pls", "what does the board look like", "tell me the board", "read me the board", "can u describe the board row by row", "whats on the board", "say whats on the board", "how does the board look now", "could you describe where everything is", "board please describe it"]
+    },
+    {
+      "id": "games.tictactoe.h5.t8",
+      "goal": "Set the level to perfect",
+      "canonical": "Set the level to perfect.",
+      "variants": ["level perfect", "make it perfect", "i want the perfect level", "switch to perfect mode", "can u make the computer perfect", "play at the perfect level", "perfect level pls", "make the ai perfect", "change difficulty to perfect", "lets play on perfect"]
+    },
+    {
+      "id": "games.tictactoe.h5.t9",
+      "goal": "Ask for a suggestion for my best move",
+      "canonical": "Where should I play?",
+      "variants": ["suggest a move", "whats my best move", "where should i go", "give me a hint on where to play", "which square is best for me", "hint pls where should i put my mark", "what would be a good move for me", "can u suggest where i play", "where do i play", "best move for me?"]
+    },
+    {
+      "id": "games.tictactoe.h5.t10",
+      "goal": "Resign the game",
+      "canonical": "I give up.",
+      "variants": ["i give up", "i resign", "ok you win, i give up", "give up", "i quit this game", "fine, i surrender", "gg i give up", "im giving up", "resign", "im done, i give up lol"]
+    },
+    {
+      "id": "games.tictactoe.h5.t11",
+      "goal": "Ask where the system played last",
+      "canonical": "Where did you play?",
+      "variants": ["where did u go", "what was your last move", "where'd you put your o", "which square did you take last", "what did you play", "where did you just play", "what was ur last move", "your last move was where?", "where did the computer go", "so where did you move"]
+    },
+    {
+      "id": "games.tictactoe.h5.t12",
+      "goal": "Count the moves made so far",
+      "canonical": "How many moves so far?",
+      "variants": ["how many moves have we made", "how many tries so far", "count the moves", "how many turns have been played", "moves so far?", "how many moves are on the board", "how many moves in total so far", "how many tries have we had", "how many turns have we taken", "number of moves so far pls"]
+    }
+  ]
+}

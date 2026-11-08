@@ -1,0 +1,80 @@
+{
+  "world": "ui.help",
+  "tab": "robot",
+  "author": "haiku",
+  "batch": "h5",
+  "tasks": [
+    {
+      "id": "ui.help.h5.t1",
+      "goal": "Ask what the assistant can do",
+      "canonical": "What can you do?",
+      "variants": ["what u can do", "tell me what you can do", "what are your abilities", "wat can u do", "so what can you do for me", "capabilities?", "what things can you help with", "what can this thing do", "could you tell me what you are able to do", "what r u good at"]
+    },
+    {
+      "id": "ui.help.h5.t2",
+      "goal": "Ask what you can say on this tab",
+      "canonical": "What can I say here?",
+      "variants": ["what can i say here", "wat can i say here", "what do i say here pls", "what can i say on this page", "what could i try here?", "tell me what i can say in this tab", "so what can i say here", "what can i ask here", "what should i say here", "u know what i can say here?"]
+    },
+    {
+      "id": "ui.help.h5.t3",
+      "goal": "Say that you are lost",
+      "canonical": "I am lost.",
+      "variants": ["im lost", "i am totally lost", "i'm so lost rn", "i am lost, sorry", "i really am lost", "im kinda lost here", "i got lost", "i am lost. ok", "totally lost over here", "i am lost right now"]
+    },
+    {
+      "id": "ui.help.h5.t4",
+      "goal": "Ask for more examples",
+      "canonical": "More examples.",
+      "variants": ["more examples pls", "give me more examples", "show me more examples", "any more examples?", "more exampls", "can u show more examples", "another few examples please", "i want more examples", "more examples ty", "could you give me some more examples"]
+    },
+    {
+      "id": "ui.help.h5.t5",
+      "goal": "Ask what this tab is for",
+      "canonical": "Explain this tab.",
+      "variants": ["what does this tab do", "explain this tab pls", "what is this tab for?", "tell me about this tab", "what's this tab about", "describe this tab for me", "what is this page for", "explain this tab to me", "what is this tab good for", "tell me what this tab is for"]
+    },
+    {
+      "id": "ui.help.h5.t6",
+      "goal": "Ask how to play chess",
+      "canonical": "How do I play chess?",
+      "variants": ["how do i play chess", "how to play chess?", "how can I play chess?", "chess how do I play", "how do u play chess", "how would i play chess", "how should we play chess", "wait how do i play chess pls", "show me how to play chess", "how do i play the chess game"]
+    },
+    {
+      "id": "ui.help.h5.t7",
+      "goal": "Ask for the rules of tic tac toe",
+      "canonical": "What are the rules of tic tac toe?",
+      "variants": ["rules of tic tac toe?", "whats the tic tac toe rules", "tic tac toe rules pls", "explain the rules of tic tac toe", "tell me the rules of tic-tac-toe", "what are tic tac toe's rules", "can u explain tic tac toe rules", "what are the rules for tic tac toe", "rules for tic tac toe please", "tic tac toe, what are the rules?"]
+    },
+    {
+      "id": "ui.help.h5.t8",
+      "goal": "Ask how to change the eyes",
+      "canonical": "How do I change the eyes?",
+      "variants": ["how do i change the eyes", "how can i change your eyes?", "how to change the eyes", "how do u change the eyes", "what do i say to change the eyes?", "how do I change ur eyes", "how would i change the eyes", "tell me how to change the eyes", "how can i change the eyes pls", "change the eyes how do i do it"]
+    },
+    {
+      "id": "ui.help.h5.t9",
+      "goal": "Ask why the assistant did not understand",
+      "canonical": "Why did you not understand that?",
+      "variants": ["why didnt u understand that", "why did u not get that", "why didn't you understand that", "why could you not understand that", "how come you didn't understand that", "why did you not understand", "why u not get that", "why would you not understand that", "you didnt understand that, why", "why couldnt you understand that"]
+    },
+    {
+      "id": "ui.help.h5.t10",
+      "goal": "Ask for one example command",
+      "canonical": "Give me an example.",
+      "variants": ["example pls", "an example please", "can u give me an example", "show me an example", "gimme an example", "i need one example", "one example please", "could you show me an example", "give me one example", "an example, ty"]
+    },
+    {
+      "id": "ui.help.h5.t11",
+      "goal": "Ask for help",
+      "canonical": "Help me please.",
+      "variants": ["help me pls", "can u help me", "help please", "i need some help", "could you help me please", "please help", "help me out here", "i need help", "pls help me", "can you help me please"]
+    },
+    {
+      "id": "ui.help.h5.t12",
+      "goal": "Ask what the rules of the game are",
+      "canonical": "What are the rules?",
+      "variants": ["rules?", "what r the rules", "what are the rules pls", "tell me the rules", "whats the goal of this game", "what are the rules of this game", "explain the rules", "what is the goal of the game", "what are the game rules", "rules of the game please"]
+    }
+  ]
+}

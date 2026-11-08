@@ -1,0 +1,80 @@
+{
+  "world": "ui.avatar",
+  "tab": "robot",
+  "author": "haiku",
+  "batch": "h5",
+  "tasks": [
+    {
+      "id": "ui.avatar.h5.t1",
+      "goal": "Give the avatar glasses 3",
+      "canonical": "Give yourself glasses 3.",
+      "variants": ["glasses 3 pls", "can u give urself glasses 3", "make me glasses 3", "put glasses 3 on yourself", "could you switch your glasses to glasses 3", "glasses three for u", "give urself glasses 3 lol", "i'd like you to wear glasses 3", "try glasses 3 on yourself", "glasses 3 for the robot please"]
+    },
+    {
+      "id": "ui.avatar.h5.t2",
+      "goal": "Make the avatar's body blue",
+      "canonical": "Make your body blue.",
+      "variants": ["body blue", "can u make ur body blue", "make the body blue pls", "i want the body to be blue", "paint ur body blue", "your body should be blue", "blue body please", "could you make your body colour blue", "change ur body to blue", "hey make ya body blue"]
+    },
+    {
+      "id": "ui.avatar.h5.t3",
+      "goal": "Make the body a bit darker",
+      "canonical": "Make your body a bit darker.",
+      "variants": ["body a bit darker", "can u make ur body a little darker", "darken the body a bit pls", "make ur body slightly darker", "i want your body a bit darker", "body a tiny bit darker plz", "could u darken ur body a bit", "your body should be a bit darker", "a bit darker body", "make the body bit darker thx"]
+    },
+    {
+      "id": "ui.avatar.h5.t4",
+      "goal": "Change the avatar into a human",
+      "canonical": "Become a human.",
+      "variants": ["become a human", "can u become a human", "be a human now", "turn into a human pls", "i want you to be a human", "human please", "could you become human", "change into a human", "switch to being a human", "turn yourself into a human"]
+    },
+    {
+      "id": "ui.avatar.h5.t5",
+      "goal": "Make the avatar look surprised",
+      "canonical": "Look surprised.",
+      "variants": ["look surprised pls", "can u look surprised", "make a surprised face", "show me a surprised look", "look suprised", "i want you to look surprised", "could you look surprised", "surprised face please", "look all surprised", "pull a surprised face"]
+    },
+    {
+      "id": "ui.avatar.h5.t6",
+      "goal": "Ask whether the avatar is happy right now",
+      "canonical": "Are you happy?",
+      "variants": ["r u happy", "are u happy rn", "you happy?", "is your face happy?", "do you look happy", "happy right now?", "hey are you feeling happy", "u happy or what", "would you say you are happy", "are you in a happy mood"]
+    },
+    {
+      "id": "ui.avatar.h5.t7",
+      "goal": "Make the avatar's eyes bigger",
+      "canonical": "Make your eyes bigger.",
+      "variants": ["bigger eyes pls", "can u make ur eyes bigger", "eyes bigger", "enlarge your eyes", "i want your eyes bigger", "make the eyes bigger please", "could you make ur eyes larger", "your eyes should be bigger", "make ur eyes big", "eyes bigger ok thx"]
+    },
+    {
+      "id": "ui.avatar.h5.t8",
+      "goal": "Move on to the next set of eyes",
+      "canonical": "Next eyes.",
+      "variants": ["next eyes pls", "go to the next eyes", "eyes next", "can u show the next eyes", "switch to the next eyes", "next set of eyes please", "could you give me the next eyes", "next eye style", "move on to the next eyes", "next one for the eyes"]
+    },
+    {
+      "id": "ui.avatar.h5.t9",
+      "goal": "Take off the hat",
+      "canonical": "Take off your hat.",
+      "variants": ["take ur hat off", "remove the hat", "can u take off your hat", "hat off pls", "i want the hat gone", "take the hat off", "could you remove your hat", "lose the hat", "off with the hat", "hat off ur head please"]
+    },
+    {
+      "id": "ui.avatar.h5.t10",
+      "goal": "Give the avatar the name Pixel",
+      "canonical": "Call yourself Pixel.",
+      "variants": ["call urself pixel", "your name is pixel", "name yourself Pixel", "can u go by the name Pixel", "i want to call you Pixel", "pixel is ur name now", "call yourself pixel pls", "from now on ur name is Pixel", "i'll call you Pixel", "could you call yourself Pixel"]
+    },
+    {
+      "id": "ui.avatar.h5.t11",
+      "goal": "Ask which glasses the avatar can wear",
+      "canonical": "What glasses can you have?",
+      "variants": ["glasses options?", "which glasses can u have", "list the glasses you can wear", "what glasses are there for you", "what kinds of glasses can you have", "glasses you can have?", "tell me which glasses u can get", "can you have any glasses? which ones", "what glasses do you offer", "show me the glasses you can have"]
+    },
+    {
+      "id": "ui.avatar.h5.t12",
+      "goal": "Ask what colour the avatar's body is",
+      "canonical": "What color is your body?",
+      "variants": ["body colour?", "color of ur body?", "what colour is ur body", "whats your body color", "tell me what colour your body is", "your body is what color?", "what color is ya body rn", "which colour is your body", "body color pls", "could you tell me your body colour"]
+    }
+  ]
+}

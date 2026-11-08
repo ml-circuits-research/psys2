@@ -1,0 +1,80 @@
+{
+  "world": "media.music",
+  "tab": "music",
+  "author": "haiku",
+  "batch": "h5",
+  "tasks": [
+    {
+      "id": "media.music.h5.t1",
+      "goal": "Hear a single note, middle C",
+      "canonical": "Play middle C.",
+      "variants": ["play middle c", "can u play middle C for me", "hey play the note middle c pls", "let me hear middle c", "play a middle C", "i want to hear middle c", "middle c please", "could you play middle c", "play me middle C now", "pls play middle c thx"]
+    },
+    {
+      "id": "media.music.h5.t2",
+      "goal": "Play a C major chord",
+      "canonical": "Play a C major chord.",
+      "variants": ["play c major chord", "can u play a C major chord", "i'd like a c major chord played", "chord of c major pls", "play the C major triad", "let me hear a c major chord", "could you play C major as a chord", "C major chord play pls", "hit a C major chord for me", "play a chord, C major"]
+    },
+    {
+      "id": "media.music.h5.t3",
+      "goal": "Play the D major scale",
+      "canonical": "Play the D major scale.",
+      "variants": ["d major scale pls", "can u play the D major scale", "play a D major scale", "let me hear the D major scale", "i wanna hear the D major scale", "scale in D major, play it", "play D major scale for me", "could you play the scale of D major", "play the scale in D major", "D major scale plz"]
+    },
+    {
+      "id": "media.music.h5.t4",
+      "goal": "Play the song Happy Birthday",
+      "canonical": "Play Happy Birthday.",
+      "variants": ["happy birthday pls", "can u play happy birthday", "play the happy birthday song", "i want to hear Happy Birthday", "could you play happy birthday for me", "happy bday song please", "let's play happy birthday", "play Happy Birthday now", "hey play the song Happy Birthday", "birthday song, Happy Birthday, go"]
+    },
+    {
+      "id": "media.music.h5.t5",
+      "goal": "Switch the instrument to flute",
+      "canonical": "Change the instrument to flute.",
+      "variants": ["switch to flute", "can u use the flute instead", "make it a flute", "i want the flute now", "use flute pls", "instrument = flute", "could you change the instrument to a flute", "change it to the flute sound", "flute please", "swap to the flute instrument"]
+    },
+    {
+      "id": "media.music.h5.t6",
+      "goal": "Set the tempo to 120 beats per minute",
+      "canonical": "Set the tempo to 120.",
+      "variants": ["tempo 120", "can u make the tempo 120", "set the speed to 120 bpm", "i want the tempo at 120", "make it 120 bpm pls", "could you set tempo to one hundred twenty", "tempo should be 120", "120 beats per minute please", "change the tempo to 120 ok", "bpm to 120"]
+    },
+    {
+      "id": "media.music.h5.t7",
+      "goal": "Set the volume to 35",
+      "canonical": "Set the volume to 35.",
+      "variants": ["volume 35", "can u turn the volume to 35", "volume 35 pls", "i want the volume at 35", "make the volume thirty five", "set the sound level to 35", "could you put volume on 35", "volume should be 35", "35 volume please", "hey set volume to 35 thx"]
+    },
+    {
+      "id": "media.music.h5.t8",
+      "goal": "Ask the frequency of A 4",
+      "canonical": "What is the frequency of A 4?",
+      "variants": ["frequency of A 4?", "whats the freq of A 4", "how many hertz is A 4", "A 4 frequency pls", "what hertz is A4", "tell me the frequency of A 4", "how many Hz does A 4 have", "A 4, what is its frequency?", "could u tell me the freq of A 4", "frequency for A 4 please"]
+    },
+    {
+      "id": "media.music.h5.t9",
+      "goal": "Transpose the music up two steps",
+      "canonical": "Transpose up two steps.",
+      "variants": ["transpose up 2 steps", "move it up two steps", "can u shift it up two steps", "raise it two steps", "go up two steps pls", "transpose it up by two steps", "could you transpose up 2 steps", "up two steps, transpose", "shift the music up by 2 steps", "make it two steps higher"]
+    },
+    {
+      "id": "media.music.h5.t10",
+      "goal": "Write a melody from the notes C D E F G",
+      "canonical": "Write a melody: C D E F G.",
+      "variants": ["melody: C D E F G", "make a melody C D E F G", "can u write a melody C D E F G", "my melody is C D E F G", "i want a melody C, D, E, F, G", "write me a tune C D E F G", "melody C D E F G please", "could you write the melody C D E F G", "C D E F G as my melody", "put down the melody C D E F G"]
+    },
+    {
+      "id": "media.music.h5.t11",
+      "goal": "Find out who wrote Ode to Joy",
+      "canonical": "Who wrote Ode to Joy?",
+      "variants": ["who wrote ode to joy", "whos the composer of Ode to Joy?", "who composed ode to joy", "author of Ode to Joy?", "who made ode to joy", "Ode to Joy, who wrote it?", "tell me who wrote Ode to Joy", "who is the composer of Ode to Joy", "u know who wrote ode to joy?", "whos behind Ode to Joy"]
+    },
+    {
+      "id": "media.music.h5.t12",
+      "goal": "Stop the music",
+      "canonical": "Stop.",
+      "variants": ["stop", "stop pls", "can u stop the music", "hold on, stop", "stop playing", "please stop the music now", "enough, stop", "could you stop it", "stop it right now", "halt the music thx"]
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "world": "kids.time",
+  "tab": "robot",
+  "author": "haiku",
+  "batch": "h5",
+  "tasks": [
+    {
+      "id": "kids.time.h5.t1",
+      "goal": "Find out how many days February has",
+      "canonical": "How many days are in February?",
+      "variants": ["days in feb?", "hey how many days does february have", "february how many days", "u know how long feb is in days", "number of days in february pls", "february has how many days, thx", "how many days in february", "wait how many days are in feb", "tell me the number of days february has", "februrary how many days has it got"]
+    },
+    {
+      "id": "kids.time.h5.t2",
+      "goal": "Tell the assistant that today is Friday",
+      "canonical": "Today is Friday.",
+      "variants": ["its friday today", "today's friday btw", "so today is friday", "friday is today, just so u know", "today = friday", "fyi its friday today", "I should tell you, today is Friday", "todays friday ok", "hey today is friday", "we are on friday today"]
+    },
+    {
+      "id": "kids.time.h5.t3",
+      "goal": "Ask which day comes after Monday",
+      "canonical": "What day comes after Monday?",
+      "variants": ["what day is after monday", "day after monday?", "which day follows monday", "monday then what day", "whats the day after mon", "after monday which day is it", "tell me the day that comes after monday", "monday's next day?", "hey what day comes after monday pls", "what weekday is right after monday"]
+    },
+    {
+      "id": "kids.time.h5.t4",
+      "goal": "Ask which day comes before Friday",
+      "canonical": "What day comes before Friday?",
+      "variants": ["whats the day before friday", "which day was before friday", "friday's previous day?", "day before fri?", "before friday what day is it", "the day right before friday is what", "what comes just before friday", "u know what day is before friday", "tell me the day that comes before friday", "what day is one before friday, thx"]
+    },
+    {
+      "id": "kids.time.h5.t5",
+      "goal": "Count the days from Monday to Friday",
+      "canonical": "How many days from Monday to Friday?",
+      "variants": ["days from monday to friday?", "how many days is it from mon to fri", "count the days from monday until friday", "monday to friday how many days", "how many days between monday and friday", "from monday to friday, how many days", "number of days from monday to friday pls", "Mon to Fri - how many days?", "how many days from mon till fri", "give me the day count from monday to friday"]
+    },
+    {
+      "id": "kids.time.h5.t6",
+      "goal": "Count the hours from 3 o'clock to 7 o'clock",
+      "canonical": "How many hours from 3 o'clock to 7 o'clock?",
+      "variants": ["hours from 3 o clock to 7 o clock?", "how many hrs from 3 to 7 oclock", "how long is it from three o'clock until seven o'clock in hours", "count the hours from 3 o'clock to 7 o'clock", "3 o'clock to 7 o'clock, how many hours?", "how many hours between 3 and 7 o clock", "from 3 o'clock to 7 o'clock how long in hours", "whats the hour gap from 3 oclock to 7", "hours from three o'clock to seven o'clock?", "how many hours is it from 3 o'clock till 7 o'clock"]
+    },
+    {
+      "id": "kids.time.h5.t7",
+      "goal": "Find how many days are in 2 weeks",
+      "canonical": "How many days are in 2 weeks?",
+      "variants": ["days in 2 weeks?", "two weeks is how many days", "how many days make up 2 weeks", "2 wks = how many days", "how many days in two weeks", "count the days in 2 weeks pls", "2 weeks how many days in total", "so 2 weeks is how many days?", "tell me the number of days in 2 weeks", "how many days does 2 weeks have"]
+    },
+    {
+      "id": "kids.time.h5.t8",
+      "goal": "Work out the time 2 hours after 3 o'clock",
+      "canonical": "If it is 3 o'clock, what time will it be in 2 hours?",
+      "variants": ["if its 3 oclock whats the time in 2 hrs", "its 3 o'clock, what time will it be in 2 hours?", "at 3 oclock, what time is it 2 hours later", "when its 3 oclock, in two hours what time will it be", "3 oclock now, whats the time in 2 hrs", "if it's 3 o'clock, what's the time two hours from now", "if the clock says 3, what time will it be in 2 hours", "its 3 oclock. time in 2 hours?", "assume it is 3 oclock, what time is it in 2 hrs", "if it is 3 o'clock right now, what will it be in two hours"]
+    },
+    {
+      "id": "kids.time.h5.t9",
+      "goal": "Ask the time after the clock was set to 8 o'clock",
+      "setup": ["It is 8 o'clock."],
+      "canonical": "What time is it?",
+      "variants": ["whats the time", "what time is it now?", "time pls", "can u tell me the time", "current time?", "what's the time right now", "do u know what time it is", "tell me the time", "clock time?", "hey what time is it rn"]
+    },
+    {
+      "id": "kids.time.h5.t10",
+      "goal": "Find the season that comes after winter",
+      "canonical": "What season comes after winter?",
+      "variants": ["after winter what season", "winter then what season?", "whats the season after winter", "which season is next after winter", "season after winter?", "what season follows winter", "what season is it after winter, thx", "tell me the season that comes after winter", "winter's next season?", "u know what season is after winter"]
+    },
+    {
+      "id": "kids.time.h5.t11",
+      "goal": "Find the month that is 3 months after November",
+      "canonical": "What month is 3 months after November?",
+      "variants": ["3 months after november is what month?", "november plus 3 months, which month?", "whats 3 months after nov", "which month comes 3 months after november", "if i go 3 months past november what month", "november + 3 months = which month?", "what month is three months after november", "count 3 months on from november, which month", "3 months after november is which month pls", "in 3 months after november, what month do we get"]
+    },
+    {
+      "id": "kids.time.h5.t12",
+      "goal": "List which days make up the weekend",
+      "canonical": "Which days are the weekend?",
+      "variants": ["weekend days?", "what days are the weekend", "which days is the weekend", "name the weekend days pls", "what are the days of the weekend", "tell me which days are weekend", "whats the weekend, which days", "which days count as weekend?", "days of the weekend plz", "hey which days are weekend days ty"]
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "world": "ui.shell",
+  "tab": "robot",
+  "author": "haiku",
+  "batch": "h5",
+  "tasks": [
+    {
+      "id": "ui.shell.h5.t1",
+      "goal": "Open the hangman tab",
+      "canonical": "Open the hangman tab.",
+      "variants": ["hangman tab pls", "open the hangman tab now", "go to hangman", "show me the hangman tab", "i want the hangman tab", "bring up the hangman tab", "could you open hangman for me", "take me to the hangman tab", "hangman tab plz", "open hangmen"]
+    },
+    {
+      "id": "ui.shell.h5.t2",
+      "goal": "Start a game of tic tac toe",
+      "canonical": "Let's play tic tac toe.",
+      "variants": ["lets play tic tac toe", "can we play tic-tac-toe", "i want to play tic tac toe", "tic tac toe time pls", "play tic tac toe with me", "could we do a game of tic tac toe", "wanna play tic tac toe", "tic tac toe please", "lets do tic tac toe", "play tictactoe pls"]
+    },
+    {
+      "id": "ui.shell.h5.t3",
+      "goal": "Start a fresh game",
+      "canonical": "New game.",
+      "variants": ["new game pls", "start a new game", "fresh game please", "begin a new game", "i want a new game", "new game ok", "could you start a new game", "new round please", "let's have a new game", "new game now thx"]
+    },
+    {
+      "id": "ui.shell.h5.t4",
+      "goal": "Say that you give up",
+      "canonical": "I give up.",
+      "variants": ["i give up", "i give up pls", "giving up", "i quit", "i surrender", "im giving up", "i cannot go on", "i'm done, i give up", "give up", "could I just give up"]
+    },
+    {
+      "id": "ui.shell.h5.t5",
+      "goal": "Ask which tab you are on",
+      "canonical": "Which tab am I on?",
+      "variants": ["what tab am i on", "which tab is this", "where am i", "what tab are we on", "tell me which tab i am on", "current tab?", "which page am i on", "what tab is open right now", "where am i in the app", "which tab am i in right now"]
+    },
+    {
+      "id": "ui.shell.h5.t6",
+      "goal": "Turn the speaker on",
+      "canonical": "Turn on the speaker.",
+      "variants": ["speaker on", "turn the speaker on", "can u turn on the speaker", "switch the speaker on pls", "i want the speaker on", "speaker on please", "could you turn on the speaker", "turn the speaker on now", "speaker on ty", "let the speaker be on"]
+    },
+    {
+      "id": "ui.shell.h5.t7",
+      "goal": "Turn hands-free mode on",
+      "canonical": "Hands-free mode on.",
+      "variants": ["hands free on", "go hands-free", "handsfree on pls", "let me talk without typing", "turn on hands free mode", "hands free mode on please", "i want hands-free mode", "could you turn hands-free on", "hands free please", "switch to hands free mode"]
+    },
+    {
+      "id": "ui.shell.h5.t8",
+      "goal": "Stop the microphone listening",
+      "canonical": "Stop listening.",
+      "variants": ["stop listening", "stop listening pls", "turn off the microphone", "close the microphone", "stop the mic", "can u stop listening", "please stop listening now", "dont listen anymore", "mic off", "could you stop listening to me"]
+    },
+    {
+      "id": "ui.shell.h5.t9",
+      "goal": "Make the assistant speak faster",
+      "canonical": "Speak faster.",
+      "variants": ["faster please", "can u speak faster", "talk faster", "speed up", "could you speak faster", "talk quicker pls", "u can speak faster now", "speak quicker", "could you hurry up", "faster pls ty"]
+    },
+    {
+      "id": "ui.shell.h5.t10",
+      "goal": "Switch the language to Romanian",
+      "canonical": "Switch to Romanian.",
+      "variants": ["romanian pls", "switch to romanian", "change the language to romanian", "can we talk in romanian", "i want romanian now", "go romanian", "use romanian from now on", "could you speak romanian", "romanian please", "let's do it in romanian"]
+    },
+    {
+      "id": "ui.shell.h5.t11",
+      "goal": "Ask for a hint",
+      "canonical": "Give me a hint.",
+      "variants": ["hint please", "can i have a hint", "i need a hint", "give me a clue", "hint pls", "any hint?", "could you give me a hint", "a hint would help", "hint?", "help me with a hint"]
+    },
+    {
+      "id": "ui.shell.h5.t12",
+      "goal": "Ask how many phrases you have said",
+      "canonical": "How many phrases have I said?",
+      "variants": ["how many phrases did i say", "count my phrases pls", "how many phrases have i said so far", "number of phrases ive said", "how many sentences have i said", "tell me how many phrases i said", "how many phrases i have said?", "how many things have i said to you", "how many phrases have i spoken", "count how many phrases i said"]
+    }
+  ]
+}

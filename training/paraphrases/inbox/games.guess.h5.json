@@ -1,0 +1,80 @@
+{
+  "world": "games.guess",
+  "tab": "guess",
+  "author": "haiku",
+  "batch": "h5",
+  "tasks": [
+    {
+      "id": "games.guess.h5.t1",
+      "goal": "Start a round where the system guesses my animal",
+      "canonical": "Guess my animal.",
+      "variants": ["guess my animal pls", "can u guess my animal?", "ok lets play, guess what animal im thinking of", "I want you to guess my animal", "um so like, can we start, guess my animal", "go on then, guess my animal thx", "lets do the guessing game, you guess my animal", "could you try to guess my animal?", "gess my animal lol", "hey guess what animal i got in mind"]
+    },
+    {
+      "id": "games.guess.h5.t2",
+      "goal": "Answer yes to the current question",
+      "canonical": "Yes.",
+      "variants": ["yep", "yeah thats right", "y", "um yes", "uh huh, yes", "yup thats it", "correct, yes", "yea", "sure, yes", "yes thats the one"]
+    },
+    {
+      "id": "games.guess.h5.t3",
+      "goal": "Answer no to the current question",
+      "canonical": "No.",
+      "variants": ["nope", "nah", "no way", "um no", "n", "not really", "no it doesnt", "nope, never", "no, not that", "negative"]
+    },
+    {
+      "id": "games.guess.h5.t4",
+      "goal": "Say I don't know the answer to the current question",
+      "canonical": "I don't know.",
+      "variants": ["idk", "no idea", "i dont know tbh", "dunno", "not sure what the answer is", "hmm i have no clue", "i really dont know", "dont know lol", "um i dont know", "i have no idea honestly"]
+    },
+    {
+      "id": "games.guess.h5.t5",
+      "goal": "Answer maybe or sometimes to the current question",
+      "canonical": "Maybe.",
+      "variants": ["maybe", "perhaps", "sometimes", "kinda, maybe", "i guess maybe", "possibly", "could be", "mmm maybe", "sometimes i guess", "maybe sometimes, depends"]
+    },
+    {
+      "id": "games.guess.h5.t6",
+      "goal": "Tell the system which animal it was after a wrong guess",
+      "canonical": "It was a zebra.",
+      "variants": ["it was a zebra", "the answer is zebra", "zebra, it was a zebra lol", "u got it wrong, it was a zebra", "i was thinking of a zebra", "the animal was a zebra", "it was zebra thx", "i was thinking of a zebra actually", "zebra!!", "gotcha, the answer was a zebra"]
+    },
+    {
+      "id": "games.guess.h5.t7",
+      "goal": "I give up on the guessing round",
+      "canonical": "I give up.",
+      "variants": ["i give up", "ok i give up, what was it", "you win, i give up", "give up", "i surrender lol", "im giving up", "cant guess it, i give up", "i quit, tell me", "ugh fine i give up", "gonna give up now"]
+    },
+    {
+      "id": "games.guess.h5.t8",
+      "goal": "Ask for a hint",
+      "canonical": "Give me a hint.",
+      "variants": ["hint pls", "any hint?", "can u give me a hint", "i need a hint", "gimme a clue", "help me out with a hint", "could you give me a little hint please", "hint?", "throw me a hint thx", "i wanna get a hint"]
+    },
+    {
+      "id": "games.guess.h5.t9",
+      "goal": "Ask why the current question was chosen",
+      "canonical": "Why did you ask that?",
+      "variants": ["why that question?", "why'd you ask that", "um why did you pick that question", "whats the reason for that question", "how come you asked that", "why are you asking me that", "wait why that one", "explain why you asked that", "so why did u ask that", "why did u choose that question"]
+    },
+    {
+      "id": "games.guess.h5.t10",
+      "goal": "Ask which animals are still possible",
+      "canonical": "Which animals are left?",
+      "variants": ["what animals are left", "which ones could it still be?", "list the possible animals", "whats still on the list", "name the animals that are still possible", "which animals could still be it", "remind me whats left", "can u list the options left", "what are the remaining candidates", "which animals are still in the running"]
+    },
+    {
+      "id": "games.guess.h5.t11",
+      "goal": "Ask how many questions have been asked so far",
+      "canonical": "How many questions have you asked?",
+      "variants": ["how many q's u asked so far", "how many questions have we done", "how many questions did you ask me", "count the questions youve asked", "number of questions asked up to now", "how many have you asked me yet", "so how many questions was that", "tell me how many questions youve asked", "how many questions did you already ask", "uh how many questions have u asked"]
+    },
+    {
+      "id": "games.guess.h5.t12",
+      "goal": "Ask the system to repeat the current question",
+      "canonical": "Repeat the question.",
+      "variants": ["say that again", "can u repeat the question", "what was the question again?", "sorry, what did you ask", "ask again pls", "say the question once more", "what was that question", "repeat that", "huh? say it again", "one more time, whats the question"]
+    }
+  ]
+}
