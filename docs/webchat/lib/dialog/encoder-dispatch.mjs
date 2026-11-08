@@ -32,7 +32,7 @@ function restrictedSet(set, ids) {
   return sub;
 }
 
-export function createDispatcherFormalizer({ load, getPolicy = () => ENCODER_DEFAULT_POLICY, historyLimit = 6, now = () => Date.now(), waitForModel = true } = {}) {
+export function createDispatcherFormalizer({ load, getPolicy = () => ENCODER_DEFAULT_POLICY, historyLimit = 6, now = () => Date.now(), waitForModel = true, normalizer = null } = {}) {
   let engine = null;
   let validator = null;
   let runtime = null;
@@ -75,7 +75,7 @@ export function createDispatcherFormalizer({ load, getPolicy = () => ENCODER_DEF
     async formalize(text, { worlds: set, session, source = 'input', context } = {}) {
       if (!engine) throw new Error('the dispatcher formalizer is not attached to an engine');
       const rt = await prepare();
-      validator ??= createDispatchValidator({ engine, policy: getPolicy() });
+      validator ??= createDispatchValidator({ engine, policy: getPolicy(), normalizer });
       const past = history.get(session) ?? [];
       const ctx = { tab: context?.activeTab ?? null, recent_worlds: context?.recentWorlds ?? [], session: past.slice(-historyLimit) };
       const t0 = now();

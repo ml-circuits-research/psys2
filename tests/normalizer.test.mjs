@@ -11,7 +11,7 @@ const piece = (text, world) => ({ start: 0, end: text.length, text, worlds: [{ w
 const msg = (text, world) => ({ id: 't', text, context: { tab: null, recent_worlds: [], session: [] }, segmentations: [{ score: -0.1, segments: [piece(text, world)] }] });
 /** A fake provider: a table text -> rewrites; records its calls. */
 const fake = (table) => { const calls = []; return { calls, propose: async ({ world, tab, text, beam }) => { calls.push({ world, tab, text, beam }); return table[text] ?? []; } }; };
-const NOISY = 'um okay so what is 20 divided by 4 haha';
+const NOISY = 'what is 20 divided by 4 lol haha hmm yeah well um so like';
 const CLEAN = 'What is 20 divided by 4';
 
 test('value checker: numbers, colours, negation, quotes', () => {

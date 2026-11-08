@@ -134,6 +134,22 @@ lists('shell.new', 'newGame', {}, ['new game', 'play again', 'start over', 'rest
 lists('shell.giveup', 'giveUp', {}, ['I give up', 'give up', 'I quit', 'quit the game', 'I surrender', 'I resign', 'resign', 'surrender', 'I want to give up', 'I am giving up', 'quit'], ['I cannot go on', 'this is too hard for me', 'stop the game'], 'request', false);
 add('shell.hint', 'request', (r) => ({ text: fin(r, `${pick(r, ['Give me', 'Tell me', 'Show me', 'Can I have', 'I need', 'I want', 'Can you give me', 'Could I have', 'May I have', 'Could you give me', 'I would like'])} ${pick(r, ['a', 'another', 'one more', 'the next'])} hint`), expect: E(R('hint')) }));
 add('shell.hint.bare', 'ellipsis', (r) => ({ text: fin(r, cap(pick(r, ['hint', 'a hint', 'any hint', 'another hint', 'one more hint', 'any hints', 'a clue', 'give me a clue', 'another clue']))), expect: E(R('hint')) }));
+// ---- rule sweep: chat forms (pls/u/can we), bare tab and game names, word orders, phrase log, rate words, stop-game forms
+add('shell.open.chat', 'request', (r) => { const t = pick(r, ['chess board', 'map', 'chessboard']);
+  return { text: pick(r, [`${t} tab pls`, `i want the ${t}`, `${t} please`, `open ${t} for me now`, `take me to the ${t}`, `i want to see the ${t} tab`, `could you bring up the ${t} tab`, `can u show me the ${t}`]), expect: E(R('openTab', { tab: q(t) })) }; });
+add('shell.play.chat', 'request', (r) => { const t = pick(r, ['hangman', 'tic tac toe']); const tn = t.replace(/ /g, '_');
+  return { text: fin(r, pick(r, [`${t} pls`, `${t} game please`, `can u play ${t} with me`, `play the ${t} game now`, `wanna play ${t}`, `i feel like playing ${t}`, `${t} time`]), false), expect: E(R('playGame', { tab: tn })) }; });
+lists('shell.choose.chat', 'chooseGame', {}, ['what games can we play', 'pick a game', 'i want to play something', 'games', 'choose a game for me', 'show me the games', 'game time', 'which game', 'let me choose a game', 'what games do you have', 'list the games'], ['i am bored, pick a game'], 'request', false);
+lists('shell.back.chat', 'back', {}, ['go back to the last one', 'previous screen', 'back one tab', 'return to where i was', 'back pls', 'take me back', 'go to the previous page'], [], 'request', true);
+lists('shell.plog.count', 'phraseLog', { what: 'count' }, ['count my phrases', 'phrase count', 'how many things have i said so far', 'hw many phrases i said', 'number of phrases i said', 'tell me how many phrases i said', 'so how many phrases have i said till now', 'how many phrases have i said'], [], 'question');
+lists('shell.plog.export', 'phraseLog', { what: 'export' }, ['i want a copy of my phrase log', 'phrase log download pls', 'get my phrase log as a file', 'export phrase log', 'download the phrases i said', 'phrase log to file please', 'save my phrase log', 'download my phrase log'], [], 'request', false);
+add('shell.rate.set.chat', 'request', (r) => { const c = pick(r, [['1.5', 'speech rate 1.5'], ['1.5', 'voice speed 1.5 pls'], ['1.5', 'speak at 1.5'], ['1.5', 'rate 1.5 please'], ['1.5', 'could you set talking speed to 1.5'], ['1.5', 'make the speed 1.5'], ['1.5', 'set the rate to one point five'], ['1.5', 'i want speech rate one and a half'], ['2', 'speech rate 2'], ['0.5', 'speech rate half']]);
+  return { text: fin(r, c[1], false), expect: E(R('rate', { value: c[0] })) }; });
+lists('shell.rate.slower.chat', 'rate', { dir: 'slower' }, ['less fast please', 'slower voice', 'too fast, slow it', 'you talk too fast slow down'], [], 'request', false);
+lists('shell.rate.faster.chat', 'rate', { dir: 'faster' }, ['faster voice', 'not so slow', 'too slow, speed it up'], [], 'request', false);
+add('shell.language.chat', 'request', (r, x) => { const l = pick(r, langs(x));
+  return { text: fin(r, pick(r, [`i want ${l}`, `back to ${l}`, `could you use ${l} from now on`, `${l} pls`, `can u speak ${l} now`, `in ${l} please`]), false), expect: E(R('language', { lang: l })) }; });
+lists('shell.giveup.chat', 'giveUp', {}, ['stop game pls', 'can we stop the game', 'i want to stop the game now', 'stop it, game over', 'stop the game for now', 'game stop', 'could you stop the game', 'game over'], [], 'request', false);
 // negation, near misses, out of domain
 add('shell.neg', 'negation', (r, x) => { const t = pick(r, tabs(x));
   return { text: pick(r, [`Don't open the ${tname(t)}.`, `Do not turn on the speaker.`, `I don't want to play ${tname(t)}.`, `Never go back.`, `Do not stop listening.`, `I won't give up.`]), negative: true }; });

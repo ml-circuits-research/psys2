@@ -190,6 +190,29 @@ add('shop.near.other-person', 'near-miss', (r, x) => { const p = x.person(r), it
   return { text: pick(r, [`${p.name} has ${n} ${sp(plural(it))}.`, `${p.name} bought ${n} ${sp(plural(it))}.`, `How many ${sp(plural(it))} does ${p.name} have?`]), negative: true }; });
 add('shop.ood', 'out-of-domain', (r) => ({ text: pick(r, ['What day is tomorrow?', 'What does a rabbit eat?', 'How many sides does a hexagon have?', 'What is 7 plus 5?', 'Add milk to my shopping list.', 'Open the editor.', 'Play hangman.', 'What color is the sky?', 'Hello!', 'Where does a camel live?', 'Is a whale a fish?', 'Center.']), negative: true }));
 
+
+// ---- rule sweep: wider phrasing families (chat abbreviations, word orders, fillers, many ways to ask about change and money) ----
+const itemOf = (x) => pick; // placeholder to keep helpers local
+add('shop.sw.price.of', 'question', (r, x) => { const it = pick(r, all(x)), s_ = sp(it), pl = sp(plural(it));
+  return { text: pick(r, [`tell me the cost of ${art(s_)} ${s_}`, `${s_} price?`, `how much r ${pl}`, `how much for ${art(s_)} ${s_}`, `whats ${art(s_)} ${s_} cost`, `${s_} how much`, `can u tell me the ${s_} price`]), expect: E(Q('price', 'cost', { item: it })) }; });
+add('shop.sw.total.n', 'question', (r, x) => { const b = basket(r, x, { minN: 2 });
+  return { text: pick(r, [`whats the total for ${b.text}`, `${b.text} altogether how much`, `if i buy ${b.text} how much do they cost`, `how much for all ${b.text} together`, `whole cost of ${b.text}?`, `what do ${b.text} come to all together`, `how much will i pay for ${b.text}`]), expect: E(Q('total', 'total', b.where)) }; });
+add('shop.sw.balance', 'question', (r) => ({ text: pick(r, ['lei left in my purse?', 'what is my money after shopping', 'money left for me?', 'after the spending, how many lei', 'my purse, how much now?', 'my money?', 'how many lei in my pocket now', 'how much money am i left with', 'money i have right now?', 'lei count now', 'how much is left of the money']), expect: E(Q('balance', 'amount', {})) }));
+add('shop.sw.afford', 'question', (r, x) => { const b = basket(r, x, { minN: 1 });
+  return { text: pick(r, [`do i have the money for ${b.text}`, `is my money good for ${b.text}`, `enough for ${b.text} or nah`, `could i afford ${b.text}`, `is it possible to buy ${b.text}`, `can i get ${b.text}`, `is my money enough for ${b.text}`, `is ${b.text} ok for my money`, `i have enough for ${b.text}?`]), expect: E(Q('affordability', 'answer', b.where)) }; });
+add('shop.sw.change', 'question', (r, x) => { const b = basket(r, x, { minN: 1 }), m = 10 + N(r, 90);
+  return { text: pick(r, [`how much back if i give ${m} lei for ${b.text}`, `how much will i get back from ${m} for ${b.text}`, `if i give ${m} lei for ${b.text} whats my change`, `if i pay ${m} lei how much change for ${b.text}`, `change from ${m} lei, ${b.text}`, `what do i get back after paying ${m} lei for ${b.text}`, `after ${m} lei for ${b.text} how much left`]), expect: E(Q('change', 'amount', { paid: m, ...b.where })) }; });
+add('shop.sw.money.say', 'statement', (r) => { const n = N(r, 60);
+  return { text: pick(r, [`i got ${n} lei in my purse`, `${n} lei is what i have`, `me ${n} lei`, `im carrying ${n} lei`, `fyi i have ${n} lei`, `i only have ${n} lei now`]), expect: E([T_ + 'money', { count: n, unit: 'leu' }]) }; });
+add('shop.sw.expense.say', 'statement', (r) => { const n = N(r, 30);
+  return { text: pick(r, [`i paid ${n} lei for a sweet`, `${n} lei gone on candy`, `i used ${n} lei`, `spent ${n} lei just now`, `i gave ${n} lei to the shop`, `i lost ${n} lei buying a sweet`, `minus ${n} lei, i bought candy`]), expect: E([T_ + 'expense', { count: n, unit: 'leu' }]) }; });
+add('shop.sw.income.say', 'statement', (r) => { const n = N(r, 30);
+  return { text: pick(r, [`mom gave me ${n} lei`, `i just found ${n} lei`, `i earned ${n} lei`, `grandma gave me ${n} lei today`, `i received ${n} lei`]), expect: E([T_ + 'income', { count: n, unit: 'leu' }]) }; });
+add('shop.sw.price.say', 'statement', (r, x) => { const it = pick(r, all(x)), n = N(r, 30), s_ = sp(it);
+  return { text: pick(r, [`${s_} ${n} lei`, `${s_} cost ${n} lei fyi`, `remember ${art(s_)} ${s_} is ${n} lei`, `${s_} price ${n} lei`, `${n} lei for ${art(s_)} ${s_}`, `btw ${art(s_)} ${s_} costs ${n} lei`]), expect: E([T_ + 'price', { item: it, cost: n }]) }; });
+add('shop.sw.buy.say', 'statement', (r, x) => { const it = pick(r, countable(x)), n = 2 + N(r, 8);
+  return { text: pick(r, [`i just bought ${n} ${sp(plural(it))}`, `bought ${n} ${sp(plural(it))}`, `i purchased ${n} ${sp(plural(it))} today`, `i picked up ${n} ${sp(plural(it))}`]), expect: E([T_ + 'purchase', { item: it, count: n }]) }; });
+
 export function generate({ rng, count = 2000, context } = {}) {
   return run(T, rng, count, mk(context));
 }

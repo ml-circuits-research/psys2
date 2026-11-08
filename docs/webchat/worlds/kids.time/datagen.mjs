@@ -189,6 +189,51 @@ add('time.near', 'near-miss', (r, x) => { const d = pick(r, days(x)), m = pick(r
 add('time.ood', 'out-of-domain', (r, x) => { const p = x.person(r);
   return { text: pick(r, [`${p.name} has 5 apples.`, 'How much does a ball cost?', 'What does a rabbit eat?', 'What is 7 plus 5?', 'How many sides does a hexagon have?', 'Add milk to my shopping list.', 'Open the editor.', 'Play hangman.', 'What color is the sky?', 'Hello!', 'Is a whale a fish?', 'Where does a camel live?']), negative: true }; });
 
+
+// ---- rule sweep: wider phrasing families (chat abbreviations, word orders, run-ons, abbreviations of units) ----
+const lcd = (d) => String(d).toLowerCase();
+const UNIT_NOUN = { day: 'days', month: 'months', season: 'seasons' };
+for (const unit of ['day', 'month', 'season']) {
+  const pool = (x) => (unit === 'day' ? days(x) : unit === 'month' ? months(x) : seasons(x));
+  const word = unit === 'season' ? pick : pick;
+  add(`time.sw.${unit}.n.after`, 'question', (r, x) => { const d = pick(r, pool(x)), k = unit === 'season' ? 2 + Math.floor(r() * 2) : 2 + N(r, 7), up = chance(r, 0.5), un = UNIT_NOUN[unit];
+    const t = up ? pick(r, [`whats the ${unit} ${k} ${un} after ${d}`, `${unit} that is ${k} ${un} later than ${d}`, `if its ${d} what ${unit} in ${k} ${un}`, `${d} ${k} ${un} later is what ${unit}`, `count forward ${k} ${un} from ${d}`, `${k} ${un} after ${d} is which ${unit}`])
+      : pick(r, [`count back ${k} ${un} from ${d}`, `${d} ${k} ${un} ago is what ${unit}`, `${unit} ${k} ${un} before ${d}`, `go back ${k} ${un} from ${d}`, `${k} ${un} before ${d} what ${unit}`]);
+    return { text: t, expect: E(shift(unit, d, up ? k : -k)) }; });
+  add(`time.sw.${unit}.next-prev`, 'question', (r, x) => { const d = pick(r, pool(x)), up = chance(r, 0.5);
+    const t = up ? pick(r, [`next ${unit} after ${d} pls`, `after ${d} which ${unit} is it`, `the ${unit} after ${d}`, `u know what ${unit} is after ${d}`, `what ${unit} is right after ${d}`])
+      : pick(r, [`the ${unit} before ${d}?`, `before ${d} what ${unit} is it`, `the ${unit} right before ${d} is what`, `u know what ${unit} is before ${d}`, `what ${unit} is right before ${d}`]);
+    return { text: t, expect: E(shift(unit, d, up ? 1 : -1)) }; });
+}
+add('time.sw.day.today-so', 'question', (r, x) => { const d = pick(r, days(x)), up = chance(r, 0.5);
+  return { text: `${lcd(d)} today so ${up ? 'tomorrow' : 'yesterday'} ${up ? 'is' : 'was'} what`, expect: E(shift('day', d, up ? 1 : -1)) }; });
+add('time.sw.today.say', 'statement', (r, x) => { const d = pick(r, days(x));
+  return { text: pick(r, [`its ${lcd(d)} today`, `today's ${lcd(d)} btw`, `fyi its ${lcd(d)} today`, `todays ${lcd(d)} ok`, `hey today is ${lcd(d)}`, `we are on ${lcd(d)} today`]), expect: E([T_ + 'today', { day: d }]) }; });
+add('time.sw.month.say', 'statement', (r, x) => { const m = pick(r, months(x));
+  return { text: pick(r, [`its ${lcd(m)} now`, `fyi we are in ${lcd(m)}`, `hey this month is ${lcd(m)}`]), expect: E([T_ + 'thismonth', { month: m }]) }; });
+add('time.sw.clock.say', 'statement', (r) => { const h = N(r, 12);
+  return { text: pick(r, [`its ${h} oclock now`, `the clock says ${h} oclock`, `the time is ${h} oclock`, `its ${h} o clock`]), expect: E([T_ + 'clockset', { hour: h }]) }; });
+add('time.sw.month.days', 'question', (r, x) => { const m = pick(r, months(x));
+  return { text: pick(r, [`how many days in ${lcd(m)} right`, `whats the length of ${lcd(m)}`, `can u tell me how many days ${lcd(m)} has`, `${lcd(m)} days?`, `is ${lcd(m)} 30 days`, `wait how many days are in ${lcd(m)}`, `how long is ${lcd(m)} in days`]), expect: E(Q('monthinfo', 'days', { name: m })) }; });
+add('time.sw.len.abbr', 'question', (r) => { const c = pick(r, [['how many hrs in a day', 'day', 'hour'], ['how many mins in 1 hour', 'hour', 'minute'], ['in one hour how many minutes are there', 'hour', 'minute'], ['how many mins in an hr', 'hour', 'minute'], ['how many days in a wk', 'week', 'day'], ['how many secs in a minute', 'minute', 'second']]);
+  return { text: c[0], expect: E(Q('length', 'count', { whole: c[1], part: c[2] })) }; });
+add('time.sw.len.times', 'question', (r) => { const k = 2 + N(r, 4);
+  return { text: pick(r, [`how many days in ${k} wks`, `${k} wks = how many days`, `${k} weeks how many days in total`, `how many days does ${k} weeks have`]), expect: E(Q('length', 'count', { whole: 'week', part: 'day', times: k })) }; });
+add('time.sw.gap.days', 'question', (r, x) => { const a = pick(r, days(x)); let b = pick(r, days(x)); while (b === a) b = pick(r, days(x));
+  const t = pick(r, [`from ${lcd(a)} how many days until ${lcd(b)}`, `${lcd(a)}, how many days till ${lcd(b)}`, `how long until ${lcd(b)} if its ${lcd(a)}`, `how many more days to ${lcd(b)} when its ${lcd(a)}`, `give me the day count from ${lcd(a)} to ${lcd(b)}`, `days between ${lcd(a)} and ${lcd(b)}?`]);
+  return { text: t, expect: E(Q('gap', 'count', { from: a, to: b })) }; });
+add('time.sw.hours.gap', 'question', (r) => { const a = N(r, 12); let b = N(r, 12); while (b === a) b = N(r, 12);
+  return { text: pick(r, [`time from ${a} oclock to ${b} oclock in hours`, `whats the hour gap from ${a} oclock to ${b}`, `${a} to ${b} hours to go?`, `countdown in hours from ${a} to ${b}`, `hours from now till ${b} if its ${a} oclock`, `how long until ${b} oclock when its ${a}`, `${a} oclock to ${b} how many hours left`]), expect: E(Q('hoursgap', 'count', { from: a, to: b })) }; });
+add('time.sw.clock.plus', 'question', (r) => { const h = N(r, 12), k = N(r, 8);
+  return { text: pick(r, [`at ${h} oclock what time is it ${k} hours later`, `in ${k} hours from ${h} oclock it will be what`, `if its ${h} oclock whats the time in ${k} hrs`, `ten oclock ${k} hours later?`.replace('ten', String(h))]), expect: E(Q('clock', 'result', { at: h, shift: k })) }; });
+add('time.sw.clock.minus', 'question', (r) => { const h = N(r, 12), k = N(r, 8);
+  return { text: pick(r, [`what was the time ${k} hours before ${h} oclock`, `if its ${h} oclock what time was it ${k} hours ago`, `${k} hours ago from ${h} oclock what time`]), expect: E(Q('clock', 'result', { at: h, shift: -k })) }; });
+add('time.sw.clock.half', 'question', (r) => { const h = N(r, 12);
+  return { text: pick(r, [`what was the time half an hour before ${h} o clock`, `half an hour before ${h} oclock?`]), expect: E(Q('clock', 'result', { at: h, minutes: -30 })) }; });
+add('time.sw.reading', 'question', (r) => ({ text: pick(r, ['what time r we at', 'do u know what time it is', 'can u tell me the time', 'whats the time', 'time pls', "what o'clock is it", 'time check']), expect: E(Q('reading', 'time', {})) }));
+add('time.sw.lists.weekend', 'question', (r) => ({ text: pick(r, ['weekend days?', 'which days is the weekend', 'name the weekend days pls', 'what are the days of the weekend', 'tell me which days are weekend', 'which days count as weekend?']), expect: E(Q('dayinfo', 'name', { kind: 'weekend' }, { mode: 'list' })) }));
+add('time.sw.lists.days', 'question', (r) => ({ text: pick(r, ['name all the days of the week', 'list the days of the week pls', 'days of the week pls']), expect: E(Q('dayinfo', 'name', {}, { mode: 'list' })) }));
+
 export function generate({ rng, count = 2000, context } = {}) {
   return run(T, rng, count, mk(context));
 }

@@ -12,6 +12,7 @@ import { createSpeech, speechSupport, LANG_TAGS } from './ui/speech.mjs';
 import { createSwitchTranslator, browserTranslatorKind, browserTranslatorAvailability } from './ui/translation.mjs';
 import { renderTrace } from './ui/trace.mjs';
 import { findDispatcherModel, dispatcherLoader, versionLabel } from './ui/dispatcher-host.mjs';
+import { findNormalizerModel, createNormalizerHost } from './ui/normalizer-host.mjs';
 import { DEFAULT_SETTINGS, SETTINGS_KEY, loadSettings } from './ui/settings.mjs';
 import { buildRecord, createStore, filterRecords, toJSONL, toText, exportFilename, summaryStatus, summaryWorlds } from './ui/phrase-log.mjs';
 
@@ -147,6 +148,8 @@ export async function mountPsys2(element, options = {}) {
   let dispatcherVersion = null;   // meta.json `version` block of the published model
   let dispatcherLabel = '';       // 'v<date> <sha8>'
   let modelSource = null;         // 'cache' | 'network' (where the loaded model came from)
+  let normalizerHost = null;      // phrasing normalizer (seq2seq fallback, spec 03 section 7.11); null when this build ships no model
+  const normalizerText = () => (normalizerHost ? `model ${normalizerHost.label}, ${normalizerHost.meta.model}, int8 ${Math.round(Object.values(normalizerHost.meta.sizes_MB ?? {}).reduce((a, b) => a + b, 0))} MB; status: ${{ idle: 'not loaded yet', loading: `loading, ${normalizerHost.status.message}`, ready: `ready (${normalizerHost.status.source === 'cache' ? 'from the cache' : 'downloaded'}, ${Math.round((normalizerHost.status.ms ?? 0) / 100) / 10} s)`, error: `not available (${normalizerHost.status.message})` }[normalizerHost.status.state]}` : 'this build has no normalizer model');
   let encoderChecked = false;     // the page looked for the model (until then the Encoder option reads 'checking')
   let encoderNoticed = false;
   function encoderFailed(message) {   // model did not load (network, missing file, wasm): rules take over, one line in the chat
@@ -451,6 +454,7 @@ export async function mountPsys2(element, options = {}) {
           : `A small neural dispatcher (DistilBERT, int8, in your browser) proposes how to cut the message and which worlds fit each piece; the rules check every proposal. It is kept up to date automatically and cached in this browser. Status: ${dispatcherStatus.state === 'ready' ? `ready (${modelSource === 'cache' ? 'from the cache' : 'downloaded'}, ${Math.round((dispatcherStatus.ms ?? 0) / 100) / 10} s)` : dispatcherStatus.state === 'loading' ? `loading, ${dispatcherStatus.message}; the rules answer meanwhile` : 'not loaded (the rules are in use)'}.`)),
       ...(dispatcherEnc ? [check('Accept parses the interpreter refuses (for example “move the piece” when no game is on)', settings.encoderAcceptRefused, (v) => { settings.encoderAcceptRefused = v; save(); })] : []),
       check('Spellcheck: correct typos and chat abbreviations against the worlds’ vocabulary (for example “yes” → “eyes”)', settings.spellcheck, (v) => { settings.spellcheck = v; applyEngineSettings(); save(); }),
+      check(`Simplify phrasing (normalizer): only when nothing else reads a sentence, a small model proposes a simpler wording that the rules must read and that keeps every number, name, colour and negation (${normalizerText()})`, settings.normalizer !== false, (v) => { settings.normalizer = v; if (v) normalizerHost?.prepare().catch(() => {}); save(); renderSettings(); }, normalizerHost ? null : 'no model in this build'),
       check('Partial understanding: do what I understood and say what I ignored', settings.partialUnderstanding, (v) => { settings.partialUnderstanding = v; applyEngineSettings(); save(); }),
       field('Translation', select([['auto', 'Automatic'], ['browser-api', 'Browser API'], ['rules', 'Rules']], settings.translation, (v) => { settings.translation = v; save(); renderSettings(); }),
         `Used when the language is not English. Browser on-device translator: ${browserAvail}. Its output is checked and falls back to the rules translator.`),
@@ -546,11 +550,17 @@ export async function mountPsys2(element, options = {}) {
     engine = await dialog.createEngine({ loader: loaders.createBundleLoader(bundle), translator });
     try {   // Encoder formalizer (the default): only when this build ships the dispatcher model; the model is fetched at once, in the background, and cached by version
       const meta = await findDispatcherModel(base);
+      const nzMeta = await findNormalizerModel(base);
       if (meta) {
+        if (nzMeta) {
+          const nzrt = await import(new URL('lib/dialog/normalizer-runtime.mjs', base).href);
+          normalizerHost = createNormalizerHost({ base, meta: nzMeta, lib: nzrt, onStatus: () => { if (!settingsEl.hidden) renderSettings(); } });
+        }
         const [enc, wp] = await Promise.all([import(new URL('lib/dialog/encoder-dispatch.mjs', base).href), import(new URL('lib/formalizer/wordpiece.mjs', base).href)]);
         dispatcherEnc = enc.createDispatcherFormalizer({
           load: dispatcherLoader({ base, meta, lib: wp, onSource: (src) => { modelSource = src; }, onProgress: (m) => { dispatcherStatus = { ...dispatcherStatus, message: m }; setStatus(); } }),
-          getPolicy: () => ({ acceptRefused: settings.encoderAcceptRefused !== false, trySpell: settings.spellcheck !== false, acceptPartial: settings.partialUnderstanding !== false }),
+          getPolicy: () => ({ acceptRefused: settings.encoderAcceptRefused !== false, trySpell: settings.spellcheck !== false, acceptPartial: settings.partialUnderstanding !== false, tryNormalizer: settings.normalizer !== false }),
+          normalizer: normalizerHost?.provider ?? null,
           waitForModel: false,   // the model loads in the background; the rules answer until it is ready
         });
         dispatcherEnc.attach(engine);
@@ -561,6 +571,7 @@ export async function mountPsys2(element, options = {}) {
       }
       encoderChecked = true;
       if (dispatcherEnc && settings.formalizer === 'encoder') dispatcherEnc.prepare().catch(() => {});   // load the model in the background right away
+      if (normalizerHost && settings.normalizer !== false && settings.formalizer === 'encoder') dispatcherEnc?.prepare().then(() => normalizerHost.prepare()).catch(() => {});   // then the normalizer (about 95 MB, cached by sha256)
     } catch (e) { encoderChecked = true; console.warn('Encoder formalizer unavailable', e); }
     if (!settingsEl.hidden) renderSettings();
     const problems = engine.problems?.() ?? [];

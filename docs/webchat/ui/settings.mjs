@@ -10,6 +10,7 @@ export const DEFAULT_SETTINGS = {
   formalizer: 'encoder',          // the DistilBERT dispatcher validated by the rules; rules answer while it loads or when it cannot load
   encoderAcceptRefused: true,
   partialUnderstanding: true,     // execute what was understood and say what was ignored (spec 03 section 7.10)
+  normalizer: true,               // seq2seq phrasing normalizer, a fallback only: original and spell-corrected readings always win (spec 03 section 7.11)
   spellcheck: true,               // spell correction against the worlds' vocabulary (spec 03 section 7.9)
   translation: 'auto', speechLang: 'follow', voice: '', rate: 1, handsFree: false, speaker: false, showTrace: false, logPhrases: true,
 };

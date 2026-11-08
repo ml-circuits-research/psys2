@@ -20,7 +20,7 @@
 
 const TAB = 'charts';
 const TYPES = ['bar', 'line', 'pie', 'doughnut', 'radar', 'polarArea', 'scatter'];
-const TYPE_WORD = { bar: 'bar', line: 'line', pie: 'pie', doughnut: 'doughnut', donut: 'doughnut', radar: 'radar', polar: 'polarArea', polar_area: 'polarArea', polararea: 'polarArea', scatter: 'scatter' };
+const TYPE_WORD = { bar: 'bar', line: 'line', pie: 'pie', doughnut: 'doughnut', donut: 'doughnut', radar: 'radar', polar: 'polarArea', column: 'bar', slice: 'pie', polar_area: 'polarArea', polararea: 'polarArea', scatter: 'scatter' };
 const TYPE_NAME = { bar: 'bar chart', line: 'line chart', pie: 'pie chart', doughnut: 'doughnut chart', radar: 'radar chart', polarArea: 'polar area chart', scatter: 'scatter plot' };
 const POINT_TYPES = new Set(['pie', 'doughnut', 'polarArea']);
 
@@ -68,7 +68,7 @@ export const fmt = (n) => String(round(Number(n), 2));
 const slug = (s) => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'chart';
 const idsOf = (args) => (args?.request?.id ? [args.request.id] : []);
 const uniq = (a) => [...new Set(a.filter(Boolean))];
-const ORD = { first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6, seventh: 7, eighth: 8, ninth: 9, tenth: 10, last: -1 };
+const ORD = { first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6, seventh: 7, eighth: 8, ninth: 9, tenth: 10, '1st': 1, '2nd': 2, '3rd': 3, '4th': 4, '5th': 5, '6th': 6, '7th': 7, '8th': 8, '9th': 9, '10th': 10, last: -1 };
 
 const NUMW = { zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16, seventeen: 17, eighteen: 18, nineteen: 19, twenty: 20, thirty: 30, forty: 40, fifty: 50, sixty: 60, seventy: 70, eighty: 80, ninety: 90, hundred: 100 };
 /** "5", "-2.5", "seven", "twenty-one" -> number, NaN otherwise. */
@@ -95,15 +95,26 @@ const tidyLabel = (s) => cap(String(s).replace(/\s+/g, ' ').replace(/^[\s:=\-–
 /** "apples 5, pears 3 and plums 8" or "5 apples, 3 pears" -> { items: [{ label, value }], bad: [piece] }. */
 export function parseData(text) {
   const pieces = String(text ?? '').split(/\s*(?:,|;|\n|\band\b)\s*/i).map((p) => p.trim()).filter(Boolean);
+  // "bikes 4 scooters 9 kites 2" (no commas): cut after every number ("label number" runs) or before every number ("4 bikes 9 scooters")
+  const runs = (p) => {
+    const toks = p.replace(/\s*[:=]\s*/g, ' ').split(/\s+/).filter(Boolean);
+    const isN = (x) => Number.isFinite(toNum(x));
+    if (toks.filter(isN).length < 2) return [p];
+    const out = [];
+    let cur = [];
+    if (!isN(toks[0])) { for (const x of toks) { cur.push(x); if (isN(x)) { out.push(cur.join(' ')); cur = []; } } if (cur.length) return [p]; }
+    else { for (const x of toks) { if (isN(x) && cur.length > 1) { out.push(cur.join(' ')); cur = []; } cur.push(x); } if (cur.length) out.push(cur.join(' ')); }
+    return out.every((g) => g.split(' ').length >= 2) ? out : [p];
+  };
   const items = [], bad = [];
-  for (const p0 of pieces) {
+  for (const p0 of pieces.flatMap(runs)) {
     const p = p0.replace(/\s*[:=]\s*/g, ' ').replace(/\s+/g, ' ').trim();
     const toks = p.split(' ');
     let label = null, value = NaN;
     if (toks.length >= 2) {
       // number at the end ("apples 5", "apples x 5", "ice cream twelve")
       const lastN = toNum(toks.at(-1));
-      if (Number.isFinite(lastN)) { value = lastN; label = toks.slice(0, -1).join(' ').replace(/\s+(?:x|=|-|is|are|has|have)$/i, ''); }
+      if (Number.isFinite(lastN)) { value = lastN; label = toks.slice(0, -1).join(' ').replace(/\s+(?:in with|on there|on it|x|=|-|is|are|has|have|at|with|of|for|as|equal|equals|times|worth)$/i, ''); }
       else {
         const firstN = toNum(toks[0]);
         if (Number.isFinite(firstN)) { value = firstN; label = toks.slice(1).join(' ').replace(/^(?:x|of)\s+/i, ''); }
@@ -191,7 +202,7 @@ const singular = (w) => labelKey(w).replace(/ /g, '_');
 /** kids.arith holdings -> labels = people, one series per kind of item (or labels = items for one person). */
 function buildHoldings(ctx, { who, item }) {
   const spec = String(who ?? 'everyone').toLowerCase().trim();
-  const everyone = !spec || /^(everyone|everybody|all|all of them|they|them|the children|the kids|each person|each child|every child|everything|people|the people|each of us|us|we)$/.test(spec);
+  const everyone = !spec || /^(everyone|everybody|everyones|everybodys|everyone's|everybody's|all|all of them|they|them|the children|the kids|the kid|kids|children|each person|each child|each kid|each|each of them|every child|every kid|every person|all the kids|all the children|everything|people|the people|each of us|all of us|us|we)$/.test(spec);
   let owners = null;
   if (!everyone) {
     const names = splitList(spec).map((n) => n.replace(/^(the|a)\s+/, ''));
@@ -460,14 +471,15 @@ export function setPoint(ctx, { l, n }) {
   c.datasets[0].data[i] = v;
   return done(ctx, `OK, ${low(c, c.labels[i])} is now ${fmt(v)} (it was ${fmt(old)}).`);
 }
-export function adjustPoint(ctx, { l, by, dir, factor }) {
+export function adjustPoint(ctx, { l, by, dir, factor, div }) {
   const r = needChart(ctx);
   if (r.env) return r.env;
   const c = r.c, i = find(c, l);
   if (i < 0) return notThere(c, l);
   const old = c.datasets[0].data[i];
   let v;
-  if (factor !== undefined) v = old * Number(factor);
+  if (div !== undefined) { const d = toNum(div); if (!Number.isFinite(d) || d === 0) return no('unsupported', 'Divide by which number?'); v = old / d; }
+  else if (factor !== undefined) v = old * Number(factor);
   else { const d = toNum(by); if (!Number.isFinite(d)) return no('unsupported', 'By how much?'); v = dir === 'down' ? old - d : old + d; }
   c.datasets[0].data[i] = round(v, 6);
   return done(ctx, `OK, ${low(c, c.labels[i])} went from ${fmt(old)} to ${fmt(c.datasets[0].data[i])}.`);
@@ -567,8 +579,8 @@ export function setPalette(ctx, { p }) {
   if (!name) return done(ctx, 'OK, I went back to the default colors.');
   return done(ctx, `OK, ${name === 'classic' ? 'every bar has its own color now' : `the chart uses ${name} colors now`}.`);
 }
-const UP = new Set(['biggest', 'largest', 'highest', 'greatest', 'most', 'big', 'large', 'high', 'top', 'descending', 'tallest', 'maximum', 'max', 'longest', 'best']);
-const DOWN = new Set(['smallest', 'lowest', 'least', 'small', 'low', 'bottom', 'ascending', 'shortest', 'minimum', 'min', 'fewest', 'worst']);
+const UP = new Set(['biggest', 'largest', 'highest', 'greatest', 'most', 'big', 'large', 'high', 'top', 'descending', 'tallest', 'maximum', 'max', 'longest', 'best', 'bigger', 'larger', 'higher', 'greater', 'desc']);
+const DOWN = new Set(['smallest', 'lowest', 'least', 'small', 'low', 'bottom', 'ascending', 'shortest', 'minimum', 'min', 'fewest', 'worst', 'smaller', 'lower', 'less', 'fewer', 'tiniest', 'littlest', 'tiny', 'little', 'asc']);
 export function setSort(ctx, { from, mode }) {
   const r = needChart(ctx);
   if (r.env) return r.env;
@@ -587,7 +599,7 @@ export function setOrientation(ctx, { o }) {
   const r = needChart(ctx);
   if (r.env) return r.env;
   const c = r.c;
-  const horizontal = /^(horizontal|horizontally|sideways)$/.test(String(o));
+  const horizontal = /^(horizontal|horizontally|sideways|sideway)$/.test(String(o));
   let note = '';
   if (horizontal && !['bar', 'line'].includes(c.type)) { c.type = 'bar'; note = ' I switched to a bar chart because only bar and line charts can lie down.'; }
   if (!horizontal && c.options.horizontal === false && !note) return ok('The chart is already vertical.');
@@ -722,6 +734,10 @@ export function read(ctx) {
   if (r.env) return r.env;
   ctx.effect('speech.say', { text: summary(r.c) });
   return ok(`OK, reading the chart "${r.c.title}".`);
+}
+
+export function options() {
+  return ok('I can draw bar, line, pie, doughnut, radar, polar area and scatter charts. Colors: red, orange, yellow, green, blue, purple, pink, teal, brown, gray, black and more, with light or dark shades, or a palette (rainbow, pastel, ocean, forest, sunset, warm, cool, neon, earth). I can change the type, title, order, direction, legend, numbers and stacking, answer questions (biggest, total, average, difference, percentage), keep several charts, and download or copy the chart.');
 }
 
 // ---- several charts ---------------------------------------------------------------------------------------

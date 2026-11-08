@@ -95,7 +95,7 @@ function makeNoiser(rnd) {
 async function main() {
   const outDir = resolve(REPO, opt('--out', 'training/dataset-normalizer'));
   const synthCount = Number(opt('--synthetic', '150000'));
-  const freshDir = opt('--fresh-dir', null);
+  const extraDir = opt('--extra-dir', opt('--fresh-dir', null));   // freshly collected batches: half of the tasks (by task-id hash) train, the other half is the fresh evaluation set
   const seed = Number(opt('--seed', '7'));
   mkdirSync(outDir, { recursive: true });
   const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
@@ -111,12 +111,16 @@ async function main() {
       for (const r of readJsonl(join(REPO, dir, f))) if (!r.needs_review) recs.push({ ...r, set });
     }
   }
+  if (extraDir) {
+    for (const f of readdirSync(resolve(extraDir)).filter((x) => x.endsWith('.jsonl')).sort()) for (const r of readJsonl(join(resolve(extraDir), f))) if (!r.needs_review) recs.push({ ...r, set: 'extra' });
+  }
+  const parity = (str) => [...str].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7) % 2;
   const idToGroup = new Map(recs.filter((r) => r.set === 'out').map((r) => [r.example_id, r.group]));
   for (const row of routing) {
     const id = row.provenance?.example_id;
     if (row.source === 'paraphrase' && id) { splitById.set(id, row.split); if (idToGroup.has(id)) splitByGroup.set(idToGroup.get(id), row.split); }
   }
-  const splitOfRec = (r) => (r.set === 'heldout' ? 'heldout' : splitById.get(r.example_id) ?? splitByGroup.get(r.group) ?? 'train');
+  const splitOfRec = (r) => (r.set === 'extra' ? (parity(`${r.world}|${r.batch}|${r.task}`) ? 'fresh' : 'train') : r.set === 'heldout' ? 'heldout' : splitById.get(r.example_id) ?? splitByGroup.get(r.group) ?? 'train');
 
   // pattern examples per world (every example="..." of the world's .sop files)
   const examplesByWorld = new Map();
@@ -182,7 +186,7 @@ async function main() {
       for (const x of examplesOf(rec.world, rec.tab).get(it.tkey) ?? []) cands.add(x);
       if (isOk(it.res, it.tkey)) cands.add(it.text.trim());
       const verified = [...cands].filter((c) => c === it.text.trim() || isOk(run(...ctx, c), it.tkey)).sort(shorter);
-      if (!verified.length) continue;
+      if (!verified.length) { add(it.split, { world: rec.world, tab: rec.tab ?? null, id: rec.example_id, src: it.text.trim(), tgt: it.text.trim(), source: 'abstain' }); continue; }   // no rule-readable equivalent: the model learns to return the input unchanged
       const best = verified[0];
       const base = { world: rec.world, tab: rec.tab ?? null };
       if (best === it.text.trim()) add(it.split, { ...base, id: rec.example_id, src: it.text.trim(), tgt: best, source: 'variant-identity' });
@@ -240,19 +244,14 @@ async function main() {
     if ((counts['train/synthetic'] ?? 0) > before) made++;
   }
 
-  // 4. fresh eval records
-  let fresh = 0;
-  if (freshDir) {
-    const rows = [];
-    for (const f of readdirSync(resolve(freshDir)).filter((x) => x.endsWith('.jsonl'))) {
-      for (const r of readJsonl(join(resolve(freshDir), f))) {
-        if (r.needs_review || r.lineage.role !== 'variant' || !r.expected_circuit) continue;
-        rows.push({ id: r.example_id, world: r.world, split: 'fresh', tab: r.tab ?? null, setup: r.setup ?? [], text: r.text, target: r.expected_circuit, role: 'variant', label_status: r.label_status, context: { tab: r.tab ?? null, recent_worlds: [] } });
-      }
-    }
-    fresh = rows.length;
-    writeFileSync(join(outDir, 'eval-fresh.jsonl'), rows.map((x) => JSON.stringify(x)).join('\n') + '\n');
+  // 4. fresh eval records: variants of the held-back half of the extra batches
+  const freshRows = [];
+  for (const t of tasks.values()) for (const it of t.items) {
+    if (it.split !== 'fresh' || it.role !== 'variant' || !it.rec.expected_circuit) continue;
+    freshRows.push({ id: it.rec.example_id, world: it.rec.world, split: 'fresh', tab: it.rec.tab ?? null, setup: it.rec.setup ?? [], text: it.text, target: it.rec.expected_circuit, role: 'variant', label_status: it.rec.label_status, context: { tab: it.rec.tab ?? null, recent_worlds: [] } });
   }
+  const fresh = freshRows.length;
+  if (extraDir) writeFileSync(join(outDir, 'eval-fresh.jsonl'), freshRows.map((x) => JSON.stringify(x)).join('\n') + '\n');
 
   for (const [s, rows] of Object.entries(pairs)) writeFileSync(join(outDir, `${s}.jsonl`), rows.map((x) => JSON.stringify(x)).join('\n') + '\n');
   const report = { generated_by: `node scripts/build-normalizer-pairs.mjs ${args.join(' ')}`, pairs: counts, totals: Object.fromEntries(Object.entries(pairs).map(([s, r]) => [s, r.length])), pattern_examples: nEx, clean_sentences: clean.length, equivalence_classes: classes.size, fresh_eval_records: fresh };

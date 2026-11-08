@@ -136,6 +136,45 @@ add('ttt.near', 'near-miss', (r, x) => { const p = pick(r, pos(x));
 add('ttt.ood', 'out-of-domain', (r, x) => { const p = x.person(r);
   return { text: pick(r, [`${p.name} has 5 apples.`, 'How much does a ball cost?', 'What day is tomorrow?', 'What does a rabbit eat?', 'What is 7 plus 5?', 'Add milk to my shopping list.', 'Open the editor.', 'Is it elephant?', 'Hello!', 'Is a whale a fish?', 'Yes.', 'Are you thinking of an animal?']), negative: true }; });
 
+
+
+
+
+
+
+
+
+
+// ---- rule sweep families
+add("ttt.sw.move.imperative", 'sweep', (r) => { const [text, act, args, ctx] = pick(r, [["Play the center.","move",{"pos":"center"},["Start a new tic tac toe game."]]]); return { text, context: ctx.length ? ctx : undefined, expect: E(R(act, args)) }; });
+add("ttt.sw.move.wish", 'sweep', (r) => { const [text, act, args, ctx] = pick(r, [["I would like the top left corner please.","move",{"pos":"top_left"},["Start a new tic tac toe game."]]]); return { text, context: ctx.length ? ctx : undefined, expect: E(R(act, args)) }; });
+add("ttt.sw.move.question", 'sweep', (r) => { const [text, act, args, ctx] = pick(r, [["Can I go bottom right?","move",{"pos":"bottom_right"},["Start a new tic tac toe game."]]]); return { text, context: ctx.length ? ctx : undefined, expect: E(R(act, args)) }; });
+add("ttt.sw.move.elliptic", 'sweep', (r) => { const [text, act, args, ctx] = pick(r, [["top right","move",{"pos":"top_right"},["Start a new tic tac toe game."]]]); return { text, context: ctx.length ? ctx : undefined, expect: E(R(act, args)) }; });
+add("ttt.sw.move.abbreviations", 'sweep', (r) => { const [text, act, args, ctx] = pick(r, [["bl pls","move",{"pos":"bl"},["Start a new tic tac toe game."]]]); return { text, context: ctx.length ? ctx : undefined, expect: E(R(act, args)) }; });
+add("ttt.sw.move.word order", 'sweep', (r) => { const [text, act, args, ctx] = pick(r, [["the left side of the middle row","move",{"pos":"middle_left"},["Start a new tic tac toe game."]],["middle of the bottom row","move",{"pos":"bottom_middle"},["Start a new tic tac toe game."]]]); return { text, context: ctx.length ? ctx : undefined, expect: E(R(act, args)) }; });
+add("ttt.sw.move.synonyms", 'sweep', (r) => { const [text, act, args, ctx] = pick(r, [["the one at the bottom in the middle","move",{"pos":"bottom_middle"},["Start a new tic tac toe game."]],["bot middle","move",{"pos":"bottom_middle"},["Start a new tic tac toe game."]],["down the bottom, middle column","move",{"pos":"bottom_middle"},["Start a new tic tac toe game."]]]); return { text, context: ctx.length ? ctx : undefined, expect: E(R(act, args)) }; });
+add("ttt.sw.move.statement-as-command", 'sweep', (r) => { const [text, act, args, ctx] = pick(r, [["my move is the center","move",{"pos":"center"},["Start a new tic tac toe game."]]]); return { text, context: ctx.length ? ctx : undefined, expect: E(R(act, args)) }; });
+add("ttt.sw.move.politeness", 'sweep', (r) => { const [text, act, args, ctx] = pick(r, [["hey could you put my x in the top middle please","move",{"pos":"top_middle"},["Start a new tic tac toe game."]]]); return { text, context: ctx.length ? ctx : undefined, expect: E(R(act, args)) }; });
+add("ttt.sw.move.number words", 'sweep', (r) => { const [text, act, args, ctx] = pick(r, [["row two column three","move",{"col":3,"row":2,"numeric":"true"},["Start a new tic tac toe game."]]]); return { text, context: ctx.length ? ctx : undefined, expect: E(R(act, args)) }; });
+add("ttt.sw.move.quantities", 'sweep', (r) => { const [text, act, args, ctx] = pick(r, [["3 1","move",{"col":1,"row":3,"numeric":"true"},["Start a new tic tac toe game."]]]); return { text, context: ctx.length ? ctx : undefined, expect: E(R(act, args)) }; });
+add("ttt.sw.new.imperative", 'sweep', (r) => { const [text, act, args, ctx] = pick(r, [["Start a new tic tac toe game.","new",{},["Start a new tic tac toe game."]],["Clear the board.","new",{},["Start a new tic tac toe game."]]]); return { text, context: ctx.length ? ctx : undefined, expect: E(R(act, args)) }; });
+add("ttt.sw.new.elliptic", 'sweep', (r) => { const [text, act, args, ctx] = pick(r, [["clean board","new",{},["Start a new tic tac toe game."]]]); return { text, context: ctx.length ? ctx : undefined, expect: E(R(act, args)) }; });
+add("ttt.sw.new.voice fillers", 'sweep', (r) => { const [text, act, args, ctx] = pick(r, [["um play again from scratch","new",{},["Start a new tic tac toe game."]]]); return { text, context: ctx.length ? ctx : undefined, expect: E(R(act, args)) }; });
+add("ttt.sw.new.synonyms", 'sweep', (r) => { const [text, act, args, ctx] = pick(r, [["lets start over from the beginning","new",{},["Start a new tic tac toe game."]]]); return { text, context: ctx.length ? ctx : undefined, expect: E(R(act, args)) }; });
+add("ttt.sw.first.imperative", 'sweep', (r) => { const [text, act, args, ctx] = pick(r, [["Let me go 1st","first",{"who":"user"},["Start a new tic tac toe game."]],["You go first.","first",{"who":"system"},["Start a new tic tac toe game."]]]); return { text, context: ctx.length ? ctx : undefined, expect: E(R(act, args)) }; });
+add("ttt.sw.first.question", 'sweep', (r) => { const [text, act, args, ctx] = pick(r, [["can I start?","first",{"who":"user"},["Start a new tic tac toe game."]]]); return { text, context: ctx.length ? ctx : undefined, expect: E(R(act, args)) }; });
+add("ttt.sw.first.wish", 'sweep', (r) => { const [text, act, args, ctx] = pick(r, [["I want you to start","first",{"who":"system"},["Start a new tic tac toe game."]]]); return { text, context: ctx.length ? ctx : undefined, expect: E(R(act, args)) }; });
+add("ttt.sw.whoFirst.question", 'sweep', (r) => { const [text, act, args, ctx] = pick(r, [["Who goes first?","whoFirst",{},["Start a new tic tac toe game."]]]); return { text, context: ctx.length ? ctx : undefined, expect: E(R(act, args)) }; });
+add("ttt.sw.whoFirst.abbreviations", 'sweep', (r) => { const [text, act, args, ctx] = pick(r, [["whos up first","whoFirst",{},["Start a new tic tac toe game."]]]); return { text, context: ctx.length ? ctx : undefined, expect: E(R(act, args)) }; });
+add("ttt.sw.status.elliptic", 'sweep', (r) => { const [text, act, args, ctx] = pick(r, [["winning?","status",{},["Start a new tic tac toe game."]]]); return { text, context: ctx.length ? ctx : undefined, expect: E(R(act, args)) }; });
+add("ttt.sw.hint.indirect", 'sweep', (r) => { const [text, act, args, ctx] = pick(r, [["what would you do in my place","hint",{},["Start a new tic tac toe game."]]]); return { text, context: ctx.length ? ctx : undefined, expect: E(R(act, args)) }; });
+add("ttt.sw.last.abbreviations", 'sweep', (r) => { const [text, act, args, ctx] = pick(r, [["which spot did u pick","last",{},["Start a new tic tac toe game."]]]); return { text, context: ctx.length ? ctx : undefined, expect: E(R(act, args)) }; });
+add("ttt.sw.last.imperative", 'sweep', (r) => { const [text, act, args, ctx] = pick(r, [["tell me your last square","last",{},["Start a new tic tac toe game."]]]); return { text, context: ctx.length ? ctx : undefined, expect: E(R(act, args)) }; });
+add("ttt.sw.level.question", 'sweep', (r) => { const [text, act, args, ctx] = pick(r, [["can u make the computer easy","level",{"level":"easy"},["Start a new tic tac toe game."]]]); return { text, context: ctx.length ? ctx : undefined, expect: E(R(act, args)) }; });
+add("ttt.sw.level.negation", 'sweep', (r) => { const [text, act, args, ctx] = pick(r, [["don't go easy on me","level",{"level":"perfect"},["Start a new tic tac toe game."]]]); return { text, context: ctx.length ? ctx : undefined, expect: E(R(act, args)) }; });
+add("ttt.sw.giveup.statement-as-command", 'sweep', (r) => { const [text, act, args, ctx] = pick(r, [["ugh I give up","giveup",{},["Start a new tic tac toe game."]]]); return { text, context: ctx.length ? ctx : undefined, expect: E(R(act, args)) }; });
+// ---- end rule sweep families
+
 export function generate({ rng, count = 2000, context } = {}) {
   return run(T, rng, count, mk(context));
 }

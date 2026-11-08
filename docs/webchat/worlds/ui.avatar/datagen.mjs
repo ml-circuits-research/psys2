@@ -108,6 +108,20 @@ add('avatar.character', 'request', (r, x) => { const w = pick(r, chars(x));
 add('avatar.coordinated', 'request', (r, x) => { const c = pick(r, colors(x)), s = pick(r, SIZES_FB), p = pick(r, ['body', 'background', 'screen']);
   const j = pick(r, ['and', 'and then', ',']);
   return { text: `Make the eyes ${s} ${j === ',' ? ',' : j} the ${p} ${c}.`.replace(' ,', ','), expect: E(R('resizePart', { part: 'eye', dir: DIRN[s] ?? s }), R('setColor', { part: p, color: c })) }; });
+// ---- rule sweep: questions (colour, hair, having), reset/previous/next of a part, chat forms of wearing an option
+add('avatar.reset.part', 'request', (r) => { const m = pick(r, ['mouth', 'eye', 'hair']);
+  return { text: pick(r, [`Reset your ${m}.`, `${cap(m)} back to normal.`, `Can u reset ur ${m} to default.`, `${cap(m)} to default please.`, `Undo the ${m} change.`, `Go back to the normal ${m}.`, `I want the default ${m} again.`, `Restore ur ${m}.`]), expect: E(R('resetPart', { part: m })) }; });
+add('avatar.step.previous', 'request', (r) => { const m = pick(r, ['mouth', 'eye', 'top']);
+  return { text: pick(r, [`Previous ${m}.`, `Prev ${m}.`, `Back one for the ${m}.`, `Go to the ${m} before this one.`, `${cap(m)} previous one pls.`, `Can you go back to the last ${m}.`, `${cap(m)} one step back.`, `The ${m} from before, please.`]), expect: E(R('step', { part: m, dir: 'previous' })) }; });
+add('avatar.step.hair', 'request', (r) => ({ text: pick(r, ['Next hair please.', 'Can u show the next hair.', 'Try the following hair.', 'Next hair style for me.', 'The next hair please thank you.']), expect: E(R('step', { part: 'hairstyle', dir: 'next' })) }));
+add('avatar.ask.color', 'question', (r) => { const p = pick(r, ['eye', 'body', 'hair']); const pl = p === 'eye' ? 'eyes' : p;
+  return { text: pick(r, [`Wat colour r ur ${pl}?`, `Which color are your ${pl}?`, `Tell me the color of your ${pl} please.`, `Can you say what color your ${pl} are?`]), expect: E(R('askColor', { part: p })) }; });
+add('avatar.ask.hair', 'question', (r) => ({ text: pick(r, ['What hair u got?', 'Hair types?', 'Which hairstyle do you have now?', 'What sort of hair is on you?', 'Tell me ur hair style.', 'Hairstyle?', 'Could u tell me what hair u have?', 'Whats ur hair like?', 'What kind of hair u got pls?']), expect: E(R('askPart', { part: 'hair' })) }));
+add('avatar.ask.has', 'question', (r) => { const v = pick(r, ['glasses', 'a hat', 'a beard']); const val = v.replace(/^a /, '').replace(/glasses/, 'glass');
+  return { text: pick(r, [`R u wearing ${v}?`, `U got ${v}?`, `Is there ${v} on you?`, `You have ${v} or not?`, `Do u have ${v} on?`]), expect: E(R('hasThing', { value: val, text: q(v.replace(/^a /, '')) })) }; });
+add('avatar.ask.smiling', 'question', (r) => ({ text: pick(r, ['Are u smiling?', 'Are you smiling right now?', 'Are you grinning?']), expect: E(R('checkMood', { mood: 'happy' })) }));
+add('avatar.wear.sunglasses', 'request', (r) => ({ text: pick(r, ['Sunglasses pls.', 'U should wear sunglasses lol.', 'Wear sunglasses right now thank you.', 'Shades on you please.', 'Put some sunnies on.']), expect: E(R('setPart', { value: 'sunglass', text: q('sunglasses') })) }));
+add('avatar.wear.top', 'request', (r) => ({ text: pick(r, ['Can i have a dish on top of u.', 'Would like a dish on the top.', 'A dish on top would be nice.', 'I wanna see a dish on top.', 'Put a dish up top.']), expect: E(R('setPart', { part: 'top', value: 'dish', text: q('dish') })) }));
 add('avatar.neg', 'near-miss', (r) => ({ text: pick(r, ['My eyes are tired.', 'What colour is the sky?', 'The body of the car is red.', 'I like robots.', 'Is a human taller than a robot?']), negative: true }));
 add('avatar.ood', 'out-of-domain', (r) => ({ text: pick(r, ['What is 7 plus 5?', 'Add milk to my shopping list.', 'How many legs does a spider have?', 'Hello!']), negative: true }));
 

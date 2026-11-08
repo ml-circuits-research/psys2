@@ -13,6 +13,7 @@ const code = (text) => h('pre', { class: 'p2-code' }, h('code', {}, text));
 
 const variantNote = (a) => (a.variant === 'spell' ? `spelling: ${(a.corrections ?? []).map((c) => `${c.to} ← ${c.from}`).join(', ')}`
   : a.variant === 'partial' ? `partial ${Math.round((a.partial?.coverage ?? 0) * 100)}%, ignored ${(a.partial?.ignored ?? []).map((x) => `“${x.text}”`).join(', ') || 'nothing'}${a.corrections?.length ? `, spelling: ${a.corrections.map((c) => `${c.to} ← ${c.from}`).join(', ')}` : ''}`
+  : a.variant === 'normalized' ? `normalizer: ${a.text}`
   : a.variant);
 
 /**
@@ -64,8 +65,9 @@ export function renderTrace(reply, extra = {}) {
         ` dispatcher log-prob ${g.dispatcherScore.toFixed(2)}, total ${g.score.toFixed(2)}`),
       h('ul', { class: 'p2-list' }, g.pieces.map((p) => h('li', {}, h('q', {}, clip(p.text)), ' ',
         p.simplified ? h('span', { class: 'p2-muted' }, 'rephrased: ', h('q', {}, clip(p.simplified)), p.chosen?.variant === 'simplified' ? h('span', { class: 'p2-tag is-supported' }, 'used') : ' (not used)', ' ') : null,
+        ...p.attempts.filter((a, i, all) => a.variant === 'normalized' && all.findIndex((x) => x.variant === 'normalized' && x.text === a.text) === i).map((a) => h('span', { class: 'p2-muted' }, 'normalizer: ', h('q', {}, clip(a.text)), a.valid && p.chosen?.variant === 'normalized' && p.chosen.text === a.text ? h('span', { class: 'p2-tag is-supported' }, 'used') : ` (rejected: ${a.reason})`, ' ')),
         p.valid && p.chosen ? h('span', { class: 'p2-ok' }, `→ ${p.chosen.world}${p.chosen.rank > 1 ? ` (candidate ${p.chosen.rank})` : ''}`) : h('span', { class: 'p2-bad' }, 'not validated'),
-        h('div', { class: 'p2-muted' }, p.attempts.filter((a) => a.variant === 'original' || a.variant === 'simplified' || a.valid).map((a) => `${a.world} ${pct(a.worldScore)} ${a.variant === 'original' ? '' : `[${variantNote(a)}] `}${a.valid ? (a.refused ? 'accepted (refused by state)' : 'validated') : `rejected: ${a.reason}`}`).join(' | '))))))))));
+        h('div', { class: 'p2-muted' }, p.attempts.filter((a) => a.variant === 'original' || a.variant === 'simplified' || a.variant === 'normalized' || a.valid).map((a) => `${a.world} ${pct(a.worldScore)} ${a.variant === 'original' ? '' : `[${variantNote(a)}] `}${a.valid ? (a.refused ? 'accepted (refused by state)' : 'validated') : `rejected: ${a.reason}`}`).join(' | '))))))))));
   }
 
   let sop = '';

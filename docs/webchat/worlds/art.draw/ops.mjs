@@ -42,11 +42,11 @@ export const KIND_WORDS = {
   rocket: 'rocket', spaceship: 'rocket', moon: 'moon', crescent: 'moon',
   circle: 'circle', ball: 'circle', dot: 'circle', square: 'square', box: 'square', rectangle: 'rectangle', triangle: 'triangle',
   star: 'star', heart: 'heart', line: 'line', arrow: 'arrow', oval: 'oval', ellipse: 'oval',
-  thing: '*', object: '*', item: '*', shape: '*',
+  thing: '*', object: '*', item: '*', shape: '*', bit: '*', piece: '*',
 };
 const IRREGULAR = { people: 'person', men: 'person', women: 'person', children: 'person', kids: 'person', mice: null, leaves: null, fishes: 'fish' };
 /** Ground cover words -> ground kind. */
-export const GROUND_WORDS = { grass: 'grass', lawn: 'grass', meadow: 'grass', sand: 'sand', beach: 'sand', snow: 'snow', water: 'sea', sea: 'sea', ocean: 'sea', lake: 'sea' };
+export const GROUND_WORDS = { grass: 'grass', lawn: 'grass', meadow: 'grass', sand: 'sand', beach: 'sand', snow: 'snow', water: 'sea', sea: 'sea', ocean: 'sea', lake: 'sea', sandy: 'sand', snowy: 'snow', grassy: 'grass', watery: 'sea', icy: 'snow', wet: 'sea', beachy: 'sand' };
 const GROUND_COLOR = { grass: 'green', sand: 'yellow', snow: 'white', sea: 'blue' };
 const GROUND_NAME = { grass: 'grass', sand: 'sand', snow: 'snow', sea: 'water' };
 
@@ -1028,7 +1028,10 @@ function applyDest(s, objs, dest) {
 }
 
 export const move = guard((ctx, args, s) => {
-  const { target: tt, dest } = splitDest(args.phrase ?? '');
+  let phrase = args.phrase ?? '';
+  const adj = [args.m1, args.m2].filter(Boolean).join(' ');
+  if (adj) phrase = /^the /i.test(phrase) ? phrase.replace(/^the /i, `the ${adj} `) : `${adj} ${phrase}`;
+  const { target: tt, dest } = splitDest(phrase);
   if (!dest) return no('Where should it go? You can say, for example, "move the tree to the left", "put the cat next to the house" or "move it to the top right corner".');
   const t = target(s, tt || 'it', { many: true });
   if (t.error) return t.error;
@@ -1064,8 +1067,8 @@ export const turn = guard((ctx, args, s) => {
   const rest = [];
   for (let i = 0; i < words.length; i++) {
     const w = words[i];
-    if (['around', 'over', 'round', 'back'].includes(w) && !action) { action = 'flip'; continue; }
-    if (w === 'other' && words[i + 1] === 'way') { action = 'flip'; i += 2; continue; }
+    if (['around', 'over', 'round', 'back', 'backwards', 'backward', 'flipped', 'mirrored', 'reversed'].includes(w) && !action) { action = 'flip'; continue; }
+    if ((w === 'other' || w === 'wrong') && words[i + 1] === 'way') { action = 'flip'; i += 2; continue; }
     if (w === 'upside' && words[i + 1] === 'down') { action = 'upside'; i++; continue; }
     if (['face', 'look', 'looking', 'facing', 'point', 'pointing', 'towards', 'toward', 'to'].includes(w) && (words[i + 1] === 'left' || words[i + 1] === 'right' || words[i + 2] === 'left' || words[i + 2] === 'right')) { action = 'face'; continue; }
     if ((w === 'left' || w === 'right') && (action === 'face' || /\b(face|facing|look|looking|point|pointing)\b/.test(text)) && !dirWord) { dirWord = w; continue; }
@@ -1248,7 +1251,7 @@ function clearNightThings(s) {
 }
 export const setMood = guard((ctx, args, s) => {
   const w = String(args.w ?? 'night').toLowerCase();
-  const mood = { night: 'night', nighttime: 'night', night_time: 'night', dark: 'night', evening: 'night', midnight: 'night', day: 'day', daytime: 'day', morning: 'day', daylight: 'day', bright: 'day', sunny: 'day', light: 'day', noon: 'day', sunset: 'sunset', sunrise: 'sunset', dusk: 'sunset', dawn: 'sunset' }[w];
+  const mood = { nite: 'night', twilight: 'sunset', night: 'night', nighttime: 'night', night_time: 'night', dark: 'night', evening: 'night', midnight: 'night', day: 'day', daytime: 'day', morning: 'day', daylight: 'day', bright: 'day', sunny: 'day', light: 'day', noon: 'day', sunset: 'sunset', sunrise: 'sunset', dusk: 'sunset', dawn: 'sunset' }[w];
   if (!mood) return no(`I do not know the time "${w}". Try night, day or sunset.`);
   if (s.mood === mood) return ok(`It is already ${mood === 'night' ? 'night' : mood === 'day' ? 'day' : 'sunset'}.`);
   remember(s, `made it ${mood}`);

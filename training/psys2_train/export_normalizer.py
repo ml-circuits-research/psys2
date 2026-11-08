@@ -146,6 +146,22 @@ class OrtGreedy:
         return self.tok.decode(out, skip_special_tokens=True).strip()
 
 
+def write_meta(out, ckpt, metrics=None, policy=None):
+    """meta.json for the webchat (docs/webchat/models/normalizer): config, sizes and the sha256 of every file (the host checks and caches by them)."""
+    import hashlib, datetime
+    out = Path(out)
+    cfg = json.load(open(out / "config.json"))
+    files = ["encoder.int8.onnx", "decoder.int8.onnx", "tokenizer.json", "config.json"]
+    sha = {n: hashlib.sha256((out / n).read_bytes()).hexdigest() for n in files}
+    ver = hashlib.sha256("".join(sha[n] for n in files).encode()).hexdigest()
+    base = json.load(open(Path(ckpt) / "meta.json")).get("model", "flan-t5-small")
+    meta = {"model": base, "kind": "seq2seq-normalizer", "input_format": "<world> | <tab or -> | <piece>",
+            "config": {"layers": cfg["num_decoder_layers"], "heads": cfg["num_heads"], "dKv": cfg["d_kv"]}, "files": files, "sizes_MB": {n: round((out / n).stat().st_size / 1e6, 1) for n in files},
+            "policy": policy or {}, "version": {"checkpoint": str(ckpt), "export_date": datetime.date.today().isoformat(), "sha256": ver, "files_sha256": sha, "metrics": metrics or {}}}
+    json.dump(meta, open(out / "meta.json", "w"), indent=1)
+    return meta
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--ckpt", required=True); ap.add_argument("--out", required=True); ap.add_argument("--n", type=int, default=200); ap.add_argument("--requests", default="/home/salboaie/work/psys2/training/runs/n1/requests.jsonl")
@@ -156,7 +172,7 @@ def main(argv=None):
     export(model, tok, out, "cpu")
     for n in ("encoder", "decoder"):
         quantize(out / f"{n}.onnx", out / f"{n}.int8.onnx")
-    tok.save_pretrained(out / "tokenizer"); model.config.save_pretrained(out)
+    tok.save_pretrained(out / "tokenizer"); model.config.save_pretrained(out); shutil.copy(out / "tokenizer" / "tokenizer.json", out / "tokenizer.json")
     c = model.config; nl, h, d = c.num_decoder_layers, c.num_heads, c.d_kv
     reqs = read_jsonl(a.requests)[:: max(1, len(read_jsonl(a.requests)) // a.n)][: a.n]
     inputs = [make_input(r["world"], r.get("tab"), r["text"]) for r in reqs]
@@ -185,6 +201,7 @@ def main(argv=None):
             res["latency_ms_per_piece"][f"{tag}_{th}thread"] = {"median": round(statistics.median(ts), 1), "p90": round(sorted(ts)[int(len(ts) * 0.9)], 1)}
         print(tag, res["agreement_with_pytorch_greedy"][tag], res["latency_ms_per_piece"], flush=True)
     json.dump(res, open(out / "export.json", "w"), indent=1)
+    write_meta(out, a.ckpt)
     print(json.dumps(res, indent=1))
 
 

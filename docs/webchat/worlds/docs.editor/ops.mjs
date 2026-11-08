@@ -170,7 +170,12 @@ function parseTableSpec(spec) {
   const cols = num(/(\d+)\s*(?:columns?|cols?)\b/i);
   const rows = num(/(\d+)\s*rows?\b/i);
   t = t.replace(/^[\s,:]*(?:and\s+)?/i, '').replace(/^(?:with|of|containing|that has|having)\s+/i, '').replace(/^(?:the\s+)?(?:columns?|headers?|headings?|column names|called|named|titled|for)\s*[:,]?\s*/i, '').replace(/^[\s,:]+/, '');
-  const names = splitItems(t);
+  let names = splitItems(t);
+  // "table animal legs food": a single run of words without commas is a list of column names written without separators
+  if (names.length === 1 && !/[,;]/.test(t) && !/\band\b/i.test(t)) {
+    const ws = names[0].split(/\s+/).filter(Boolean);
+    if (ws.length >= 2 && ws.length <= 8 && (cols === null || cols === ws.length)) names = ws;
+  }
   return { cols, rows, names };
 }
 function _addTable(ctx, { spec } = {}) {

@@ -97,9 +97,11 @@ export function checkValues(src, cand, { vocab = null, lost = 'unknown', grounde
   }
   if (grounded || keepKnown) {
     const cs2 = contentWords(src), cc2 = contentWords(cand);
+    const allSrc = [...stripQuotes(src).matchAll(WORD_RE)].map((m) => lc(m[0])), allCand = [...stripQuotes(cand).matchAll(WORD_RE)].map((m) => lc(m[0]));   // counterparts are searched among ALL words (a typo of a function word counts)
     const has = (list, w) => list.some((x) => x === w || stem(x) === stem(w) || close(x, w));
-    if (grounded) { const g = cc2.find((w) => !ADDABLE.has(w) && !has(cs2, w)); if (g) return { ok: false, reason: `word "${g}" is not grounded in the original` }; }
-    if (keepKnown && vocab) { const k = cs2.find((w) => (vocab.has(w) || vocab.has(stem(w))) && !ADDABLE.has(w) && !has(cc2, w)); if (k) return { ok: false, reason: `known word "${k}" was dropped` }; }
+    const expansions = new Set([...stripQuotes(src).matchAll(WORD_RE)].flatMap((m) => String(ABBREVIATIONS[lc(m[0])] ?? '').split(' ')));   // normalization whitelist: abbreviation expansions (u -> you, whats -> what is)
+    if (grounded) { const g = cc2.find((w) => !ADDABLE.has(w) && !expansions.has(w) && !has(allSrc, w)); if (g) return { ok: false, reason: `word "${g}" is not grounded in the original` }; }
+    if (keepKnown && vocab) { const k = cs2.find((w) => (vocab.has(w) || vocab.has(stem(w))) && !ADDABLE.has(w) && !has(allCand, w)); if (k) return { ok: false, reason: `known word "${k}" was dropped` }; }
   }
   return { ok: true, reason: 'values preserved' };
 }

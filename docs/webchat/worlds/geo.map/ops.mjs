@@ -103,7 +103,9 @@ function db(ctx) {
   CACHE = { n: wires.length, first: wires[0], byKey, byCc, cities, countries, regions, capitalOf, citiesOf };
   return CACHE;
 }
-const place = (D, key) => (key === undefined ? null : D.byKey.get(String(key)) ?? null);
+/** Demonym adjectives (japanese, brazilian ...) -> the country key; used when the language layer captured an adjective instead of a place. */
+const DEMONYM = { japanese: 'japan', brazilian: 'brazil', romanian: 'romania', german: 'germany', french: 'france', spanish: 'spain', italian: 'italy', portuguese: 'portugal', polish: 'poland', hungarian: 'hungary', austrian: 'austria', swiss: 'switzerland', dutch: 'netherland', belgian: 'belgium', british: 'uk', american: 'usa', canadian: 'canada', mexican: 'mexico', argentinian: 'argentina', argentine: 'argentina', chilean: 'chile', peruvian: 'peru', colombian: 'colombia', bolivian: 'bolivia', chinese: 'china', indian: 'india', russian: 'russia', ukrainian: 'ukraine', turkish: 'turkiye', egyptian: 'egypt', nigerian: 'nigeria', kenyan: 'kenya', ethiopian: 'ethiopia', moroccan: 'morocco', australian: 'australia', greek: 'greece', swedish: 'sweden', norwegian: 'norway', danish: 'denmark', finnish: 'finland', irish: 'ireland', czech: 'czech_republic', serbian: 'serbia', bulgarian: 'bulgaria', croatian: 'croatia', slovak: 'slovakia', vietnamese: 'vietnam', thai: 'thailand', indonesian: 'indonesia', korean: 'south_korea', iranian: 'iran', iraqi: 'iraq', israeli: 'israel', saudi: 'saudi_arabia', pakistani: 'pakistan', bangladeshi: 'bangladesh', filipino: 'philippine', cuban: 'cuba', venezuelan: 'venezuela' };
+const place = (D, key) => (key === undefined ? null : D.byKey.get(String(key)) ?? D.byKey.get(DEMONYM[String(key)]) ?? null);
 const the = (e) => (e.kind === 'country' && THE.has(e.name) ? `the ${e.name}` : e.name);
 const theCap = (e) => { const t = the(e); return t.charAt(0).toUpperCase() + t.slice(1); };
 const countryOf = (D, e) => (e?.kind === 'country' ? e : e?.kind === 'city' ? D.byCc.get(e.cc) ?? null : null);
@@ -215,7 +217,9 @@ export function coords(ctx, { la, lo }) {
 // ---- moving the view -------------------------------------------------------------------------------------------------
 const AMT = { a_lot: 3, a_lot_more: 3, much: 3, way: 3, far: 3, hugely: 3, a_great_deal: 3, all_the_way: 99, completely: 99, fully: 99,
   a_bit: 0.5, a_little: 0.5, a_little_bit: 0.5, slightly: 0.5, just_a_little: 0.5, just_a_bit: 0.5, somewhat: 0.5, a_touch: 0.5,
-  more: 1, further: 1, farther: 1, even_more: 1.5, some_more: 1, twice: 2, once: 1 };
+  more: 1, further: 1, farther: 1, even_more: 1.5, some_more: 1, twice: 2, once: 1,
+  alot: 3, a_whole_lot: 3, big_time: 3, lots: 3, heaps: 3, tons: 3, massively: 3, loads: 3, a_ton: 3, quite_a_bit: 2, a_good_bit: 2, a_fair_bit: 1.5,
+  a_tiny_bit: 0.5, a_wee_bit: 0.5, a_smidge: 0.5, a_tad: 0.5, just_a_tad: 0.5, barely: 0.5, marginally: 0.5 };
 
 export function zoom(ctx, { dir, amt, n }) {
   const s = ctx.state;

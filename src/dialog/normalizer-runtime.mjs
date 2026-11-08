@@ -145,7 +145,7 @@ export function createNormalizerRuntime({ ort, encoder, decoder, tokenizer, conf
     async propose({ world, tab, text, beam = 3 }) {
       const hyps = await generate(makeInput(world, tab, text), beam);
       const seen = new Set();
-      return hyps.map((h) => tok.decode(h.ids)).filter((t) => t && !seen.has(t) && seen.add(t));
+      return hyps.map((h) => ({ text: tok.decode(h.ids), score: h.score })).filter((h) => h.text && !seen.has(h.text) && seen.add(h.text));   // [{ text, score }]: score = length-normalized log-probability
     },
   };
 }

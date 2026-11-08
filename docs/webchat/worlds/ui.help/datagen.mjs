@@ -101,6 +101,19 @@ add('help.neg', 'negation', (r) => ({ text: pick(r, ['I do not need help.', "Don
 add('help.near', 'near-miss', (r) => ({ text: pick(r, ['Thanks for helping me.', 'The helper is nice.', 'What can you see?', 'He asked how to play.', 'Tom has an example.', 'This tab is red.']), negative: true }));
 add('help.ood', 'out-of-domain', (r) => ({ text: pick(r, ['Open the editor.', 'Play hangman.', 'What is 7 plus 5?', 'Add milk to my list.', 'Make your eyes blue.', 'Speak slower.', 'Hello!']), negative: true }));
 
+// ---- rule sweep: polite/chat forms, word orders, abbreviations, short answers (all lists below must be understood by the rules)
+lists('help.capabilities.chat', 'chat.capabilities', {}, ['what u can do', 'tell me what you can do', 'what can u do for me', 'capabilities', 'what things can you help with', 'what can this thing do', 'could you tell me what you are able to do', 'what are your features', 'what do u do'], ['what are ur skills']);
+lists('help.examples.chat', 'ui.help', {}, ['examples pls', 'some examples please', 'can u give examples', 'show me examples of things to say', 'example sentences', 'i need examples', 'give me a few examples to try', 'what could i say, give examples', 'examples for me please', 'commands here'], ['gimme some sample commands'], 'request');
+lists('help.one.chat', 'ui.help', { count: '1' }, ['example pls', 'can u give me an example', 'one example please', 'gimme an example', 'just one example'], [], 'request');
+lists('help.more.chat', 'ui.helpMore', {}, ['more', 'more please', 'more examples pls', 'can u show more', 'show me more things i can say', 'anything else i can say', 'next examples please', 'more ideas of what to say', 'could you give me some more examples', 'any other ideas', 'different ideas'], ['gimme more'], 'request');
+lists('help.tab.chat', 'ui.helpAbout', {}, ['this tab what does it do', 'explain this tab pls', 'what can i do on this page', 'whats this tab for', 'what is this screen for', 'could you explain what this tab does', 'tell me about this tab', 'what does this page do'], ['what is this page about']);
+lists('help.me.chat', 'ui.helpMe', {}, ['im lost', 'i am lost help', 'help i am lost', 'im so lost right now', 'lost, help me', 'i dont know what to do', 'im confused what now', 'i feel lost here', 'halp', 'help me out'], ['sos'], 'request');
+add('help.game.named.chat', 'request', (r) => { const g = pick(r, GAMES_FB); const gn = g.replace(/ /g, '_');
+  return { text: fin(r, pick(r, [`${g} how to play`, `how to play ${g} pls`, `explain ${g} to me`, `how u play ${g}`, `tell me how to play ${g}`, `could you explain how i play ${g}`, `${g} rules pls`, `what are the ${g} rules`, `rules of ${g}`, `what r the rules of ${g}`, `can u explain ${g} rules`, `could you go over the ${g} rules`, `how do i move in ${g}`, `i want to learn ${g} how do i start`]), true), expect: E(R('ui.helpGame', { game: gn })) }; });
+add('help.how.chat', 'question', (r) => { const x = pick(r, TASKS);
+  return { text: fin(r, pick(r, [`tell me how to ${x} pls`, `could you tell me how to ${x}`, `${x} how`, `i want to ${x}, how`, `how can i ${x} pls`]), true), expect: E(R('ui.helpHow', { what: q(x) })) }; });
+lists('help.why.chat', 'ui.helpWhy', {}, ['why u no understand', 'why didnt you get that', 'why you dont understand me', 'you did not understand, why', 'why did you miss that', 'how come you did not get it', 'why not understand that', 'why couldnt you understand that', 'could you tell me why you did not understand that', 'what was wrong with what i said', 'which part did you not get', 'what did i say that was wrong', 'what i said wrong', 'which words did you not understand', 'was something wrong with what i said', 'what did i do wrong just now', 'could you tell me what i said wrong'], []);
+
 export function generate({ rng, count = 2000, context } = {}) {
   return run(T, rng, count, mk(context));
 }

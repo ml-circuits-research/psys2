@@ -56,7 +56,7 @@ test('nothing validates: not understood, with the candidate worlds', async () =>
 });
 
 test('simplified text validates when the original does not', async () => {
-  const orig = 'blorp what is 20 divided by 4 blorp';
+  const orig = 'what is 20 divided by 4 lol haha hmm yeah well um so like';
   const simple = 'what is 20 divided by 4';
   const pred = msg(orig, [{ score: -0.1, segments: [piece(orig, W(['kids.arith', 0.9]), { simplified: simple })] }]);
   const withSimp = await validator.validate(pred);
@@ -92,11 +92,27 @@ test('a piece the rules parse but the interpreter refuses is accepted by default
   assert.equal(strict.trace.segmentations[0].pieces[0].attempts[0].refused, true);
 });
 
-test('candidate order per world: original, then spell-corrected, then simplified', async () => {
-  const t = 'whats seven times six pls';
+test('candidate order per world: original, then spell-corrected; simplified only when none of them validates (S1 lexicographic preference)', async () => {
+  const t = 'whats seven timez six';
   const r = await validator.validate(msg(t, [{ score: -0.1, segments: [piece(t, W(['kids.arith', 0.9]), { simplified: 'what is seven times six' })] }]));
   const att = r.trace.segmentations[0].pieces[0].attempts.map((a) => a.variant);
-  assert.deepEqual(att, ['original', 'spell', 'simplified']);
+  assert.deepEqual(att, ['original', 'spell', 'simplified']);   // nothing else validated, so the simplified text is tried last
+  assert.equal(r.produced[0].textUsed, 'simplified');
+});
+
+test('S1: a valid original in the rank-2 world beats a valid simplified text in the rank-1 world', async () => {
+  const t = 'What is 20 divided by 4';
+  const r = await validator.validate(msg(t, [{ score: -0.1, segments: [piece(t, W(['games.chess', 0.6], ['kids.arith', 0.3]), { simplified: 'Show me the board' })] }]));
+  assert.equal(r.produced[0].world, 'kids.arith');
+  assert.equal(r.produced[0].textUsed, 'original');
+  assert.ok(!r.trace.segmentations[0].pieces[0].attempts.some((a) => a.variant === 'simplified'));
+});
+
+test('S1: a simplified text that changes a number is rejected by the value checker', async () => {
+  const orig = 'what is 20 divided by 4 lol haha hmm yeah well um so like';
+  const r = await validator.validate(msg(orig, [{ score: -0.1, segments: [piece(orig, W(['kids.arith', 0.9]), { simplified: 'what is 20 divided by 5' })] }]));
+  assert.equal(r.status, 'not_understood');
+  assert.match(r.trace.segmentations[0].pieces[0].attempts.find((a) => a.variant === 'simplified').reason, /value check: numbers differ/);
 });
 
 test('a spell-corrected text is accepted only when the rules parse it', async () => {

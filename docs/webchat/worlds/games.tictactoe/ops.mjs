@@ -131,7 +131,7 @@ export function whoFirst(ctx) {
 
 // Spoken forms: letters said as words ("bee two"), ordinals ("second row third column"), row and column words.
 const PHON = { ay: 'a', eh: 'a', bee: 'b', be: 'b', cee: 'c', see: 'c', sea: 'c' };
-const ORD = { first: 1, '1st': 1, second: 2, '2nd': 2, third: 3, '3rd': 3, last: 3 };
+const ORD = { first: 1, '1st': 1, second: 2, '2nd': 2, third: 3, '3rd': 3, last: 3, left: 1, leftmost: 1, left_most: 1, lefthand: 1, middle: 2, mid: 2, center: 2, centre: 2, right: 3, rightmost: 3, right_most: 3, righthand: 3 };
 const ROWW = { top: 0, upper: 0, up: 0, high: 0, highest: 0, first: 0, middle: 1, mid: 1, center: 1, centre: 1, second: 1, bottom: 2, lower: 2, down: 2, low: 2, lowest: 2, third: 2, last: 2 };
 const COLW = { left: 0, first: 0, middle: 1, mid: 1, center: 1, centre: 1, second: 1, right: 2, third: 2, last: 2 };
 

@@ -227,12 +227,26 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
           spelled.set(w.world, sp);
           if (sp?.corrections.length) variants.push({ kind: 'spell', text: sp.text, corrections: sp.corrections });
         }
-        if (o.trySimplified && piece.simplified) variants.push({ kind: 'simplified', text: piece.simplified, corrections: [] });
         for (const v of variants) {
           const r = await check(pred.context, ctxPrefix, w.world, v.text, o);
           const score = o.worldWeight * logpOf(w) - (v.kind === 'simplified' ? o.simplifiedPenalty : 0) - o.spellPenalty * v.corrections.length
             - rpen(r);
           const at = { world: w.world, rank: rank + 1, worldScore: w.score, variant: v.kind, text: v.text, valid: accepts(r), refused: r.refused, refusal: r.refusal, unknownArg: r.unknownArg, reason: r.reason, unparsed: r.unparsed, matchedWorlds: r.matchedWorlds, statuses: r.statuses, score, wires: r.wires, corrections: v.corrections, partial: null };
+          attempts.push(at); refs.push([at, r, w]);
+        }
+      }
+      // simplified text of the edit-tag head (spec 03 sections 7.8 and 7.12): lexicographic preference, tried only when no original or spell-corrected reading validates in any candidate world, and only if the values survive
+      if (o.trySimplified && piece.simplified && !attempts.some((a) => a.valid)) {
+        for (const [rank, w] of worlds.entries()) {
+          const vocab = worldVocabulary(engine.set, w.world);
+          const vc = o.checkValues ? checkValues(piece.text, piece.simplified, { vocab, lost: o.valueLost, ...(o.valueStrictness === 'strict' ? { polarity: true, grounded: true, keepKnown: true } : {}) }) : { ok: true };
+          if (!vc.ok) {
+            attempts.push({ world: w.world, rank: rank + 1, worldScore: w.score, variant: 'simplified', text: piece.simplified, valid: false, refused: false, reason: `value check: ${vc.reason}`, unparsed: 0, matchedWorlds: [], statuses: [], score: o.worldWeight * logpOf(w) - o.unparsedPenalty, wires: [], corrections: [], partial: null });
+            continue;
+          }
+          const r = await check(pred.context, ctxPrefix, w.world, piece.simplified, o);
+          const score = o.worldWeight * logpOf(w) - o.simplifiedPenalty - (r.valid ? 0 : r.refused && o.acceptRefused ? o.interpreterPenalty : o.unparsedPenalty);
+          const at = { world: w.world, rank: rank + 1, worldScore: w.score, variant: 'simplified', text: piece.simplified, valid: accepts(r), refused: r.refused, reason: r.reason, unparsed: r.unparsed, matchedWorlds: r.matchedWorlds, statuses: r.statuses, score, wires: r.wires, corrections: [], partial: null };
           attempts.push(at); refs.push([at, r, w]);
         }
       }

@@ -1,0 +1,39 @@
+{
+ "model": "google/flan-t5-small",
+ "kind": "seq2seq-normalizer",
+ "input_format": "<world> | <tab or -> | <piece>",
+ "config": {
+  "layers": 8,
+  "heads": 6,
+  "dKv": 64
+ },
+ "files": [
+  "encoder.int8.onnx",
+  "decoder.int8.onnx",
+  "tokenizer.json",
+  "config.json"
+ ],
+ "sizes_MB": {
+  "encoder.int8.onnx": 39.0,
+  "decoder.int8.onnx": 55.5,
+  "tokenizer.json": 2.4,
+  "config.json": 0.0
+ },
+ "policy": {
+  "normalizerBeam": 3,
+  "normalizerMinScore": -0.3,
+  "valueStrictness": "strict"
+ },
+ "version": {
+  "checkpoint": "/home/salboaie/work/psys2/training/runs/n1/flan-t5-small",
+  "export_date": "2026-11-08",
+  "sha256": "26f428118e00bd8f15bbf1403f1981d7303617bcee26a42a3733563455dff066",
+  "files_sha256": {
+   "encoder.int8.onnx": "56d50399c35569cd829dff25840a99d37788240232c866a3f6dd5548e3b4a58f",
+   "decoder.int8.onnx": "e4742602719b6979fcc568c18b035708957d9267715ab082b34ab955784eb4ed",
+   "tokenizer.json": "422313e620b8888d251769794affbd278faf06c129df653708bc82d053673a1d",
+   "config.json": "1a8523e3f53ac38784a045bd9509e092811f60048c5be33b1804e3214514541c"
+  },
+  "metrics": {}
+ }
+}
