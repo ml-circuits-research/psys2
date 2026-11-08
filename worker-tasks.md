@@ -191,3 +191,55 @@ Use one encoder (ModernBERT-base first, then DistilBERT for comparison) with thr
 End-to-end table, per world group: rules only · world head + rules · segmentation + world + simplification + rules · full neural per-world (T5, if done).
 
 Also report the size and CPU latency of the shared encoder (int8 ONNX, T8 method). The whole front-end has to stay small enough for the browser.
+
+## Round 2 — session scope: Stage 1 = the dispatcher only (reviewer, overrides §2–§3 and Round 1)
+
+**The goal of this session is to avoid training per-world models.** We validate one idea first: a single small shared model, the **dispatcher**, proposes candidates, and the existing rule formalizers validate them. No per-world LoRA in this session.
+
+### Stage 1 (this session)
+
+Tasks, in order:
+
+1. **T0, T1, T2** as written. T2 is the baseline: rules only, with the current rule router.
+2. **D1 — dispatcher model.** One encoder (ModernBERT-base; DistilBERT as the comparison, same data) with three heads:
+   - **segmentation:** a boundary probability per token. It cuts messages into small pieces (commands, clauses);
+   - **world candidates:** for each piece, a ranked list of the **top-k worlds with scores** (k = 3), using the context (active tab, recent worlds);
+   - **simplification (optional head):** KEEP / DELETE / REPLACE edit tags as in Round 1. It produces a cleaner variant of each piece. The original piece is always kept as a candidate too.
+
+   Train with LoRA or full fine-tune, whichever is better for this single model. Training data: `routing.jsonl`, multi-command messages built from test-disjoint sentences (join 2–3 with "and", "then", commas, periods), and the edit-tag alignments of Round 1.
+3. **D2 — validation layer (JS, in `src/`).** It takes the dispatcher output (candidate segmentations, top-k worlds per piece, optional simplified text) and **checks the candidates with the rule formalizers**:
+   - Build candidate segmentations: the most likely one plus alternatives from uncertain boundaries (a small beam, ≤ 4).
+   - For each piece, try the candidate worlds in score order, on both the original and the simplified text. Restrict the rule formalizer to that world (and its `extends`).
+   - A candidate is **valid** when the world's rules parse it completely (no unparsed tokens left) and the interpreter does not return `unsupported` or `error`.
+   - Choose the segmentation with the best total score (dispatcher score × validity, with a penalty for unparsed pieces). Ties are broken by the routing policy tiers (ADR-004: modal, navigation, active tab, …).
+   - If nothing validates, return the best candidate as "not understood" together with the candidate worlds. `ui.help` can then say "Did you mean …?".
+   - Write the trace: candidates, which ones validated, why the winner won.
+   - Spec: new section in `specs/03` (or a new spec) plus ADR-005. Unit tests.
+
+   For the evaluation, the dispatcher can run offline: Python writes the predictions to JSONL, and Node (`scripts/eval-dispatch.mjs`) runs the validation layer over them. The reviewer must be able to rerun the Node part from the committed predictions file of one world group.
+4. **D3 — evaluation.** Per world group and source (generator / paraphrase / multi-command), on the test splits:
+   - **oracle coverage:** is the right world in the top-1 / top-3 candidates; is the right segmentation in the beam;
+   - **end-to-end exact SOP:** rules only (T2) · dispatcher top-1 + rules · dispatcher top-3 + validation · top-3 + simplification + validation;
+   - **segmentation F1** on multi-command messages;
+   - how often the validation layer **rejects a wrong top-1 and recovers** with candidate 2 or 3;
+   - error analysis: 30 failures, sorted into causes: the right world not among the candidates · segmentation wrong · the rules cannot parse even the simplified text (= a rule gap, which tells us where rules are missing) · other.
+5. **D4 — size and speed.** The dispatcher as int8 ONNX (T8 method): size, CPU latency per message, PyTorch/ONNX agreement on 200 sentences. If time remains, run it in Node (onnxruntime-node or transformers.js) behind `createEncoderFormalizer`, so the webchat build can use it later.
+6. **T9 — RESULTS.md**, limited to Stage 1, with a clear verdict: is dispatcher + rules good enough on its own? Per world group, say which groups are satisfied and which are not, and why (rule gaps vs dispatcher errors).
+
+### Acceptance targets for Stage 1 (what "good enough" means)
+
+The verdict is against these numbers:
+- world top-3 coverage ≥ 0.99 and top-1 ≥ 0.97 on test, with context;
+- segmentation F1 ≥ 0.95 on multi-command messages;
+- end-to-end exact SOP with dispatcher + validation clearly above rules only on paraphrase records. Report the gain per world group;
+- dispatcher int8 ONNX ≤ 150 MB and ≤ 50 ms per message on the Grace CPU.
+
+### Stage 2 (NOT in this session)
+
+Stage 2 runs only if Stage 1 is not satisfactory, and only for the world groups that fail:
+- T3 compositional targets;
+- T5 per-world or shared formalizers;
+- the T6 ablation beyond the dispatcher;
+- a seq2seq normalizer.
+
+Do not start them. If you finish Stage 1 early, write in `questions.md` which Stage 2 task you would run first, with the evidence from D3, and stop.
