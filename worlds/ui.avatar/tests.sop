@@ -1016,3 +1016,63 @@
     expectState="robot.eyes=round"
     expectState="robot.colors.body=74c0fc"
     session=t22
+
+@t.ui.avatar.r01 core.test
+    input="Wear sunglasses right now thank you"
+    expect="sunglass"
+    session=ra1
+
+@t.ui.avatar.r02 core.test
+    input="Put a dish up top."
+    expectState="robot.top=dish"
+    session=ra2
+
+@t.ui.avatar.r03 core.test
+    input="Would like a dish on the top"
+    expectState="robot.top=dish"
+    session=ra2
+
+@t.ui.avatar.r04 core.test
+    input="Mouth to default please"
+    expect="mouth again"
+    session=ra3
+
+@t.ui.avatar.r05 core.test
+    input="What hair u got"
+    expect="hair"
+    session=ra3
+
+@t.ui.avatar.r06 core.test
+    input="wat colour r ur eyes"
+    expect="eye"
+    session=ra3
+
+@t.ui.avatar.r07 core.test
+    input="Are u smiling?"
+    expect="I do not look happy"
+    session=ra3
+
+@t.ui.avatar.r08 core.test
+    input="Back one for the mouth"
+    expect="mouth now"
+    session=ra3
+
+@t.ui.avatar.r09 core.test
+    input="Next mouth please"
+    expect="mouth now"
+    session=ra3
+
+@t.ui.avatar.r10 core.test
+    input="Prev mouth"
+    expect="mouth now"
+    session=ra3
+
+@t.ui.avatar.r11 core.test
+    input="Can u reset ur mouth to default"
+    expect="mouth again"
+    session=ra3
+
+@t.ui.avatar.r12 core.test
+    input="R u wearing glasses"
+    expect="I do not have"
+    session=ra3

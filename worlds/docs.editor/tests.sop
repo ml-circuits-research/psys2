@@ -454,3 +454,88 @@
     expectState="inputMode=null"
     expectState="blocks.1.text=More words here"
     session=dstop
+
+@t.docs.editor.r01 core.test
+    input="Add a paragraph One."
+    expectState="blocks.0.text=One."
+    session=re1
+
+@t.docs.editor.r02 core.test
+    input="Add a paragraph Two."
+    expectState="blocks.1.text=Two."
+    session=re1
+
+@t.docs.editor.r03 core.test
+    input="second para bold pls"
+    expect="the second paragraph is now bold"
+    session=re1
+
+@t.docs.editor.r04 core.test
+    input="read para 2"
+    expect="reading paragraph"
+    session=re1
+
+@t.docs.editor.r05 core.test
+    input="Read the 2nd paragraph"
+    expect="reading paragraph"
+    session=re1
+
+@t.docs.editor.r06 core.test
+    input="second paragraph read please"
+    expect="reading paragraph"
+    session=re1
+
+@t.docs.editor.r07 core.test
+    input="pick the second paragraph"
+    expect="I selected the second paragraph"
+    session=re1
+
+@t.docs.editor.r08 core.test
+    input="what have I selected so far"
+    expect="Selected"
+    session=re1
+
+@t.docs.editor.r09 core.test
+    input="Add a heading Shopping"
+    expectState="blocks.2.kind=heading"
+    session=re1
+
+@t.docs.editor.r10 core.test
+    input="Add a heading Garden"
+    expectState="blocks.3.kind=heading"
+    session=re1
+
+@t.docs.editor.r11 core.test
+    input="jump to 2nd heading"
+    expect="went to the second heading"
+    session=re1
+
+@t.docs.editor.r12 core.test
+    input="New task buy bread pls"
+    expect="added the task"
+    session=re2
+
+@t.docs.editor.r13 core.test
+    input="how many unfinished tasks are there"
+    expect="still open"
+    session=re2
+
+@t.docs.editor.r14 core.test
+    input="Add a paragraph Buy milk and eggs."
+    expect="added a paragraph"
+    session=re3
+
+@t.docs.editor.r15 core.test
+    input="milk should be highlighted green"
+    expect="highlighted in green"
+    session=re3
+
+@t.docs.editor.r16 core.test
+    input="wordcount pls"
+    expect="word"
+    session=re3
+
+@t.docs.editor.r17 core.test
+    input="make a table animal legs food"
+    expect="3 columns: Animal, Legs and Food"
+    session=re4

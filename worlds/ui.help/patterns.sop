@@ -164,3 +164,302 @@
     kind=question
     priority=11
     example="Why did you not understand that?"
+
+@pat.ui.help.capabilities2 core.pattern
+    match="[can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|tell_me|please_tell_me|i_want_to_know|i_wanna_know|i_would_like_to_know|let_me_know|hey|so|ok_so]? [what_can_you_do|what_can_u_do|what_u_can_do|what_you_can_do|what_do_you_do|what_do_u_do|what_u_do|what_you_are_able_to_do|what_u_are_able_to_do|what_are_you_able_to_do|what_are_u_able_to_do|what_you_are_good_at|what_you_can_help_with|what_you_can_help_me_with|what_things_can_you_help_with|what_things_can_you_help_me_with|what_can_you_help_with|what_can_you_help_me_with|what_can_u_help_with|what_can_u_help_me_with|what_can_this_thing_do|what_can_this_do|what_can_this_app_do|what_can_this_robot_do|what_can_you_actually_do|what_are_you_capable_of|what_are_your_abilities|what_are_your_features|what_are_your_capabilities|what_r_your_abilities|what_r_ur_abilities|what_are_ur_abilities|what_are_ur_skills|what_are_your_skills|what_do_you_offer|what_you_offer|your_abilities|your_capabilities|your_features|your_skills|capabilities|abilities|features|skills|what_can_you_even_do|what_is_it_you_can_do] [for_me|to_me|now|really|exactly|anyway|lol|pls|plz|please|then|actually]?"
+    emit="@{_} core.request action=chat.capabilities"
+    kind=chat
+    priority=11
+    example="What u can do"
+    example="Tell me what you can do."
+    example="Capabilities?"
+    example="Could you tell me what you are able to do?"
+
+@pat.ui.help.examples2 core.pattern
+    match="[uh|um|hm|hey|ok]? [give_me|show_me|let_me_see|i_need|i_want|i_would_like|can_you_give_me|can_u_give_me|can_u_give|can_you_give|can_you_show_me|can_u_show_me|could_you_give_me|could_you_show_me|could_u_give_me|could_u_show_me|gimme|get_me|got_any|have_you_got|do_you_have|tell_me|list|give|show|need|want|any|i_wanna_see|i_would_like_to_see|i_want_to_see|what_about]? [a_few|some|several|a_couple_of|any|all_the|the|a_couple|few]? [examples|example_sentences|example_commands|example_phrases|example_things|sample_commands|sample_sentences|sample_phrases|samples|example_ideas|sentences_to_try|commands_to_try|example_inputs] [of_things_to_say|of_what_to_say|of_things_i_can_say|of_things_i_could_say|to_try|to_say|for_me|i_can_say|i_could_say|i_can_try|i_could_try|to_use|to_type|of_commands|of_phrases|of_sentences|of_commands_i_can_use|of_what_i_can_say|of_things_to_try|of_things_to_type]? [for_me|to_try|pls|plz|please|now|thanks|thank_you]?"
+    emit="@{_} core.request action=ui.help"
+    kind=request
+    priority=11
+    example="Examples pls"
+    example="Can u give examples?"
+    example="Show me examples of things to say."
+    example="Give me a few examples to try."
+    example="I need examples."
+    example="Example sentences?"
+
+@pat.ui.help.examples3 core.pattern
+    match="[what_could_i_say|what_can_i_say|what_should_i_say|what_do_i_say|what_can_i_try|what_could_i_try|what_can_i_type|what_do_i_type|what_do_i_do|what_should_i_do|what_can_i_do] [give_me|show_me|give|show|list|tell_me] [some|a_few|several|a_couple_of]? [examples|ideas|suggestions|commands|options]"
+    emit="@{_} core.request action=ui.help"
+    kind=request
+    priority=11
+    example="What could I say, give examples."
+
+@pat.ui.help.examples4 core.pattern
+    match="[examples|commands|ideas|options|suggestions|sample_commands] [pls|plz|please|now]"
+    emit="@{_} core.request action=ui.help"
+    kind=request
+    priority=11
+    example="Commands pls"
+
+@pat.ui.help.one3 core.pattern
+    match="[uh|um|hm|hey|ok]? [give_me|show_me|let_me_see|i_need|i_want|can_i_have|can_you_give_me|can_u_give_me|can_u_give|can_you_show_me|can_u_show_me|could_you_give_me|could_you_show_me|gimme|get_me|tell_me|give|show|need|want]? [a|an|one|1|another|a_single|just_one|just_1|just_an|any]? [example|sample|example_command|example_sentence|example_phrase|example_thing|sample_command|sample_sentence] [pls|plz|please|for_me|now|to_try|i_can_try|i_can_say|thanks]?"
+    emit="@{_} core.request action=ui.help arg.count=1"
+    kind=request
+    priority=10
+    example="Example pls"
+    example="Can u give me an example?"
+
+@pat.ui.help.more3 core.pattern
+    match="[uh|um|hm|hey|ok|yes|yeah|yep]? [can_you_give_me|can_u_give_me|could_you_give_me|could_u_give_me|can_you_show|can_u_show|could_you_show|could_u_show|can_you_show_me|can_u_show_me|could_you_show_me|show_me|show|give_me|give|i_want|i_need|i_would_like|gimme|tell_me|let_me_see|i_wanna_see|i_want_to_see|what_about|any|got_any|can_i_have|can_i_get|get_me|and|next|next_up]? [some|a_few|a_couple_of|any]? [more|some_more|few_more|a_few_more|a_bit_more|even_more|many_more|more_of_them|more_of_those] [examples|ideas|commands|options|things|things_to_say|things_i_can_say|things_i_could_say|ideas_of_what_to_say|ideas_of_what_i_can_say|ideas_what_to_say|of_them|of_those|of_it|sentences|phrases|stuff|suggestions|help|of_what_to_say|examples_of_things_to_say|stuff_to_say|stuff_i_can_say|to_say|to_try|samples|example_sentences|example_commands|examples_to_try|ones|options_to_try]? [to_say|to_try|i_can_say|i_could_say|i_can_try|i_could_try|for_me|ones]? [pls|plz|please|now|thanks|thank_you|again|lol]?"
+    emit="@{_} core.request action=ui.helpMore"
+    kind=request
+    priority=12
+    example="More"
+    example="More please"
+    example="More examples pls"
+    example="Can u show more"
+    example="Show me more things i can say"
+    example="More ideas of what to say"
+    example="Could you give me some more examples"
+
+@pat.ui.help.more4 core.pattern
+    match="[anything_else|something_else|what_else|any_other|any_more|anything_more|other|else] [i_can_say|i_could_say|i_can_do|i_could_do|i_can_try|i_could_try|to_say|to_try|to_do|can_i_say|can_i_do|can_i_try|could_i_say|could_i_try|can_u_do|can_you_do|u_can_do|you_can_do|examples|commands|ideas|options|things_to_say|things_i_can_say|things_to_try|do_you_know|else_is_there|is_there] [pls|plz|please|now]?"
+    emit="@{_} core.request action=ui.helpMore"
+    kind=request
+    priority=11
+    example="Anything else i can say?"
+    example="Any other ideas"
+
+@pat.ui.help.tab2 core.pattern
+    match="[can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|tell_me|please_tell_me|i_want_to_know|i_wanna_know|i_would_like_to_know|let_me_know|hey|so|ok_so|can_you|could_you|can_u|could_u|just]? [what_does_this|what_does_the|what_is_this|what_is_the|whats_this|whats_the|what_is_the_point_of_this|what_is_the_purpose_of_this|what_is_the_use_of_this|what_is_the_use_of_the|explain_what_this|explain_what_the|explain_this|explain_the|describe_this|describe_the|tell_me_about_this|tell_me_about_the|what_about_this|what_about_the|what_is_on_this|whats_on_this|what_am_i_looking_at_on_this] [current|active|open]? [tab|page|screen|panel|view|section|window] [for|do|does_it_do|does_it_do_here|is_for|is_about|is_used_for|does|is|about|good_for|used_for|mean|is_it_for|is_it_about|is_it|is_it_used_for|is_here|offers|offer|has|show|contain|contains|here|means|can_do|can_it_do|is_meant_for]? [for|do|does_it_do|is_for|is_about|is_used_for|does|is|about|good_for|used_for|exactly|actually|again|anyway|now|here|for_me|to_me|even|please|pls|plz]?"
+    emit="@{_} core.request action=ui.helpAbout"
+    kind=request
+    priority=13
+    example="Whats this tab for?"
+    example="What is this screen for?"
+    example="Could you explain what this tab does?"
+    example="Explain this tab pls"
+    example="Tell me about this page?"
+
+@pat.ui.help.tab3 core.pattern
+    match="[this|the_current|the_active|the_open] [tab|page|screen|panel|view|section|window] [what_does_it_do|what_is_it_for|what_is_it|what_is_it_about|whats_it_for|what_for|what_does_it_do_here|what_can_it_do|what_is_it_used_for|what_do_i_do_here|what_do_i_do_on_it|what_is_it_good_for|what_does_this_do|what_is_this_for|what_is_this|explained|explanation|info|help|description] [pls|plz|please|exactly|again|anyway|now|here|for_me|to_me]?"
+    emit="@{_} core.request action=ui.helpAbout"
+    kind=request
+    priority=11
+    example="This tab what does it do"
+    example="This page what is it for"
+
+@pat.ui.help.me2 core.pattern
+    match="[hey|um|uh|ok|oh|please|pls|plz|so|well|oh_no]? [help_me|help|halp|i_need_help|i_need_some_help|im_lost|i_am_lost|im_totally_lost|im_so_lost|i_am_so_lost|im_a_bit_lost|i_am_a_bit_lost|im_really_lost|i_am_really_lost|im_confused|i_am_confused|im_so_confused|i_am_so_confused|i_feel_lost|i_feel_confused|lost|confused|im_stuck|i_am_stuck|i_dont_know_what_to_do|i_dont_know_what_to_say|i_dont_get_it|i_dont_understand|i_dont_know_how_this_works|i_dont_know_where_to_start|where_to_start|where_do_i_begin|how_do_i_begin|how_do_i_get_started|how_do_i_start|what_now|now_what|what_do_i_do_now|what_next|im_clueless|i_am_clueless|i_have_no_idea_what_to_do|no_idea_what_to_do|can_you_help|can_u_help|can_you_help_me|can_u_help_me|could_you_help|could_you_help_me|could_u_help_me|will_you_help_me|would_you_help_me|i_need_your_help|need_help|need_some_help|help_please|a_little_help|a_bit_of_help|give_me_a_hand|lend_me_a_hand|help_me_out|assist_me|i_need_assistance|help_needed|sos] [pls|plz|please|here|now|help|help_me|please_help|please_help_me|what_now|what_do_i_do|what_to_do|right_now|for_a_sec|a_bit|a_little|thanks|thank_you|lol|haha|with_this|with_this_app|with_this_thing|with_this_tab|with_this_page]?"
+    emit="@{_} core.request action=ui.helpMe"
+    kind=request
+    priority=12
+    example="Im lost"
+    example="I am lost help"
+    example="Help i am lost"
+    example="Im so lost right now"
+    example="Lost, help me"
+
+@pat.ui.help.more5 core.pattern
+    match="[uh|um|hm|hey|ok|yes|yeah|yep]? [can_you_give_me|can_u_give_me|could_you_give_me|can_you_show|can_u_show|show_me|show|give_me|give|i_want|i_need|gimme|tell_me|let_me_see|what_about|any|can_i_have]? [another_few|the_next|next|other|different|new|another_set_of|the_next_few|the_next_set_of|a_different_set_of|some_other|some_different|some_new] [examples|ideas|commands|options|things_to_say|things_i_can_say|sentences|phrases|suggestions|example_sentences|example_commands|samples|ones|set|batch|few|five] [to_say|to_try|i_can_say|for_me|pls|plz|please|now|thanks]?"
+    emit="@{_} core.request action=ui.helpMore"
+    kind=request
+    priority=12
+    example="Next examples please"
+    example="Different ideas"
+
+@pat.ui.help.game5 core.pattern
+    match="[can_you|could_you|can_u|could_u|would_you|will_you|please|hey|ok|so|uh|um|well|yo|tell_me|could_you_please]? [how_do_i_play|how_do_you_play|how_do_u_play|how_u_play|how_can_i_play|how_can_we_play|how_do_we_play|how_does_one_play|how_should_i_play|how_to_play|how_i_play|how_i_can_play|how_you_play|how_to_win_at|how_do_i_win_at|how_do_i_move_in|how_do_i_start|how_do_i_start_playing|how_do_i_get_started_with|how_do_i_get_started_in|how_do_u_move_in|how_do_you_move_in|how_can_i_move_in|how_to_move_in|how_do_i_win_in|how_do_i_move_pieces_in|explain|explain_to_me|teach_me|teach_me_to_play|teach_me_how_to_play|show_me_how_to_play|tell_me_how_to_play|tell_me_how_i_play|explain_how_to_play|explain_how_i_play|explain_how_you_play|explain_how_do_i_play|i_want_to_learn|i_want_to_learn_how_to_play|i_wanna_learn|i_wanna_learn_how_to_play|i_would_like_to_learn|learn|help_me_with|help_me_learn|help_me_play|i_dont_know_how_to_play|i_do_not_know_how_to_play|dont_know_how_to_play|how_does_it_work_in|i_dont_know|i_do_not_know|i_dont_know_how_to_play_the|walk_me_through|run_me_through|show_me_how_i_play|what_do_i_do_in|how_do_i_do_in|how_does_one_win_at|how_does_one_win_in] [the|a|an|some]? {g:lex.ui.help.games} [game]? [to_me|for_me|pls|plz|please|now|how_to_play|how_do_i_play|how|how_to|how_do_i_start|how_do_i_begin|first|again|in_detail|step_by_step|thanks|real_quick|quickly|a_bit|properly|from_scratch|explain|how_does_it_work|how_it_works|how_do_i_move|how_to_win]?"
+    emit="@{_} core.request action=ui.helpGame arg.game={g}"
+    kind=question
+    priority=13
+    example="How to play chess pls"
+    example="Explain chess to me"
+    example="I want to learn chess how do i start"
+    example="How do i move in chess"
+    example="How u play chess"
+    example="Tell me how to play chess"
+    example="Could you explain how i play chess"
+
+@pat.ui.help.game6 core.pattern
+    match="[uh|um|hm|hey|ok|so|yo]? [what_are|what_r|whats|what_is|tell_me|explain|show_me|give_me|list|go_over|go_through|read_me|can_you_explain|can_u_explain|could_you_explain|could_u_explain|can_you_go_over|could_you_go_over|could_you_go_through|can_you_tell_me|could_you_tell_me|can_u_tell_me|can_you_show_me|can_u_show_me|i_dont_know|i_do_not_know|i_dont_know_the|i_do_not_know_the|i_forgot|i_forgot_the|i_dont_remember|i_dont_remember_the|i_need|i_want|show|tell|give|walk_me_through|run_me_through|remind_me_of|remind_me|what_were|what_are_all|explain_all|sum_up|summarize|summarise|recap|i_wanna_know|i_want_to_know|let_me_know|read_out]? [the|all_the|all_of_the|its|a|some|all|ur|your]? [rules_of|rules_for|rules_to|goal_of|aim_of|instructions_for|instructions_of|instructions_to|game_rules_of|game_rules_for|basics_of|basics_for|the_basics_of|goal_for|objective_of|objective_for|object_of|guide_to|tutorial_for|tutorial_on|tutorial_of|rules|rule|how_to_play] [of|for|to|in|on]? [the]? {g:lex.ui.help.games} [game]? [how_to_play|how_to|how_do_i_play|how_do_you_play|how_u_play|how_does_it_work|how_it_works|how_to_win|rules|the_rules|game_rules|instructions|tutorial|help|how_do_i_start|explained|explanation|guide|basics|the_basics|goal|aim|the_goal|how_i_play|how_to_begin|explain|please_explain|rules_please|rules_pls|rules_plz|rules_explained|pls|plz|please|again|now|for_me|to_me|in_detail]? [how_to_play|explain|rules|pls|plz|please|please_explain|again|now|for_me|to_me|explained]?"
+    emit="@{_} core.request action=ui.helpGame arg.game={g}"
+    kind=question
+    priority=12
+    example="Chess rules pls"
+    example="What are the chess rules"
+    example="Rules of chess?"
+    example="What r the rules of chess"
+    example="Could you go over the chess rules"
+
+@pat.ui.help.game6b core.pattern
+    match="[uh|um|hm|hey|ok|so|yo]? [what_are|what_r|whats|what_is|tell_me|explain|show_me|give_me|list|go_over|go_through|read_me|can_you_explain|can_u_explain|could_you_explain|could_u_explain|can_you_go_over|could_you_go_over|could_you_go_through|can_you_tell_me|could_you_tell_me|can_u_tell_me|can_you_show_me|can_u_show_me|i_dont_know|i_do_not_know|i_dont_know_the|i_do_not_know_the|i_forgot|i_forgot_the|i_dont_remember|i_dont_remember_the|i_need|i_want|show|tell|give|walk_me_through|run_me_through|remind_me_of|remind_me|what_were|what_are_all|explain_all|sum_up|summarize|summarise|recap|i_wanna_know|i_want_to_know|let_me_know|read_out]? [the|all_the|all_of_the|its|a|some|all|ur|your]? [the]? {g:lex.ui.help.games} [game]? [how_to_play|how_to|how_do_i_play|how_do_you_play|how_u_play|how_does_it_work|how_it_works|how_to_win|rules|the_rules|game_rules|instructions|tutorial|help|how_do_i_start|explained|explanation|guide|basics|the_basics|goal|aim|the_goal|how_i_play|how_to_begin|explain|please_explain|rules_explained] [how_to_play|explain|rules|pls|plz|please|please_explain|again|now|for_me|to_me|explained]?"
+    emit="@{_} core.request action=ui.helpGame arg.game={g}"
+    kind=question
+    priority=12
+    example="Chess how to play"
+
+@pat.ui.help.game7 core.pattern
+    match="[can_you|could_you|can_u|could_u|would_you|will_you|please|hey|ok|so|uh|um|well|yo|tell_me|could_you_please]? [what_are_the_rules|what_r_the_rules|whats_the_goal|what_is_the_goal|what_is_the_aim|what_are_the_rules_of_this_game|what_are_the_rules_of_the_game|explain_the_rules|explain_the_game|explain_this_game|explain_how_to_play|tell_me_the_rules|tell_me_how_to_play|show_me_the_rules|show_me_how_to_play|how_to_play|how_do_i_play|how_do_u_play|how_u_play|how_do_you_play|how_can_i_play|how_do_i_win|how_do_u_win|how_do_you_win|how_to_win|how_can_i_win|how_can_u_win|how_does_this_game_work|how_does_this_work_as_a_game|how_do_i_win_this|what_do_i_do_in_this_game|what_do_i_do_here_in_this_game|i_dont_know_how_to_play|i_do_not_know_how_to_play|dont_know_how_to_play|i_dont_know_the_rules|teach_me_how_to_play|teach_me_the_rules|teach_me_to_play|teach_me_the_game|rules|the_rules|game_rules|the_game_rules|rules_of_the_game|rules_of_this_game|instructions|game_instructions|goal_of_the_game|goal_of_this_game|aim_of_the_game|how_it_works|how_to_play_this_game|how_to_play_the_game|how_to_play_it|how_do_i_play_it|how_do_i_play_this|how_do_i_play_the_game|how_do_i_play_this_game|how_do_we_play|how_do_we_play_this|how_do_we_play_this_game|how_do_we_play_the_game] [pls|plz|please|now|to_me|for_me|please_explain|explain|again|in_detail|thanks|thank_you|first|real_quick|quickly]?"
+    emit="@{_} core.request action=ui.helpGame"
+    kind=question
+    priority=12
+    example="Rules pls"
+    example="Can u explain how to play"
+    example="I dont know how to play"
+
+@pat.ui.help.how4 core.pattern
+    match="[can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|tell_me|please_tell_me|i_want_to_know|i_wanna_know|i_would_like_to_know|let_me_know|can_you_explain|could_you_explain|can_u_explain|could_u_explain|explain|show_me|teach_me|show_me_how|help_me_understand|tell_me_about|please_explain|please_show_me|can_you_show_me|can_u_show_me|could_you_show_me|i_dont_know|i_do_not_know|i_dont_know_how|dont_know|hey|so|ok_so|um|uh|well|yo] how [to|do_i|can_i|do_you|can_you|do_u|can_u|should_i|would_i|could_i|do_we|can_we|does_one|i_can|i_could|i|u|you|we|one|do_i_even|can_i_even|would_you|could_you|should_we|would_we|could_we|will_i|will_we|is_it_possible_to|am_i_supposed_to|are_you_supposed_to|are_we_supposed_to] {what:words(8)} [pls|plz|thanks|thank_you|for_me|please]?"
+    emit="@{_} core.request action=ui.helpHow arg.what=\"{what}\""
+    kind=question
+    priority=6
+    example="Tell me how to draw a circle pls"
+    example="Could you tell me how to draw a circle"
+
+@pat.ui.help.how5 core.pattern
+    match="how [u|one|we_can|i_can|i_could|we_could|you_can|you_could|does_one|does_a_person|could_i|can_u|do_u|did_i|should_u] {what:words(8)} [pls|plz|thanks|thank_you|for_me|please]?"
+    emit="@{_} core.request action=ui.helpHow arg.what=\"{what}\""
+    kind=question
+    priority=6
+    example="How u draw circle"
+
+@pat.ui.help.how6 core.pattern
+    match="[i_want_to|i_wanna|i_need_to|i_would_like_to|id_like_to|i_d_like_to|i_have_to|i_would_like_to|i_cant|i_cannot|i_do_not_know_how_to|i_dont_know_how_to|how_do_i]? {what:words(8)} [how|how_to|how_do_i|how_do_i_do_that|how_do_i_do_it|how_do_you|how_can_i|how_do_u|how_do_you_do_that|how_to_do_it|how_do_you_do_it|how_do_i_do_this|how_can_i_do_that|how_can_i_do_it|how_does_that_work|how_is_that_done|how_to_do_that|how_to_do_this|how_is_it_done|how_is_this_done|how_does_one_do_that]"
+    emit="@{_} core.request action=ui.helpHow arg.what=\"{what}\""
+    kind=question
+    priority=11
+    example="Draw a circle how"
+    example="I want to draw a circle, how"
+
+@pat.ui.help.why4 core.pattern
+    match="[can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|tell_me|please_tell_me|i_want_to_know|i_wanna_know|i_would_like_to_know|let_me_know|explain|explain_to_me|hey|so|ok|um|uh|well|yo|but|and]? [why|why_is_it_that|why_was_it_that|why_the_heck|why_on_earth|why_the_hell|how_come] [did|do|could|can|would|does|didnt|dont|couldnt|cant|wouldnt|did_not|do_not|could_not|can_not|would_not]? [you|u|the_robot|the_app|this_thing|it]? [not|no|never|didnt|dont|couldnt|cant|wouldnt|did_not|do_not|could_not|can_not|would_not|fail_to|failed_to|fail_at|failed_at|cannot|doesnt|does_not] [understand|get|follow|know|catch|grasp|recognise|recognize|comprehend|parse|read|see|work_out|figure_out|make_out|make_sense_of|hear|understood|got|followed|caught|recognised|recognized|comprehended|heard|read_it|get_it|get_that|understand_it|understand_that] [that|it|me|what_i_said|what_i_meant|what_i_wrote|my_sentence|the_sentence|my_message|my_words|my_command|my_request|this|what_i_typed|what_i_just_said|my_last_sentence|my_last_message|my_phrase|my_question|that_sentence|what_i_asked|what_i_want|what_i_wanted|the_last_sentence|the_last_one]? [just_now|then|there|before|earlier|again|just|a_moment_ago|last_time|now|please|pls|plz]?"
+    emit="@{_} core.request action=ui.helpWhy"
+    kind=question
+    priority=11
+    example="Why u no understand"
+    example="Why didnt you get that"
+    example="Why you dont understand me"
+    example="Why not understand that"
+    example="Why couldnt you understand that"
+    example="Could you tell me why you did not understand that"
+    example="How come you did not get it"
+
+@pat.ui.help.why5 core.pattern
+    match="[can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|tell_me|please_tell_me|i_want_to_know|i_wanna_know|let_me_know|explain|hey|so|ok|um|uh|well|yo]? [why|why_is_it_that|how_come|why_the_heck|why_on_earth] [did|do|could|can|would|does|didnt|dont|couldnt|cant|wouldnt]? [you|u|the_robot|the_app|this_thing|it] [miss|misunderstand|misread|mishear|fail|failed|not_catch|mishear|skip|ignore|ignored|misunderstood|missed|misheard|misread] [that|it|me|what_i_said|what_i_meant|my_sentence|the_sentence|my_message|my_words|this|my_command|what_i_wrote|what_i_typed|my_last_sentence|the_last_sentence|my_request|my_question|that_sentence|what_i_asked|to_get_that|to_understand|to_understand_that|to_get_it|to_follow|to_understand_me|to_get_me]? [just_now|then|there|before|earlier|again|just|a_moment_ago|last_time|now|please|pls|plz]?"
+    emit="@{_} core.request action=ui.helpWhy"
+    kind=question
+    priority=11
+    example="Why did you miss that"
+    example="Why did you fail to understand that"
+
+@pat.ui.help.why6 core.pattern
+    match="[uh|um|hm|hey|ok|so|well|yo|but|and|hmm|oh|oh_no|yo|lol|wow]? [you|u|the_robot|the_app|this_thing|it] [did_not|didnt|do_not|dont|can_not|cant|could_not|couldnt|would_not|wouldnt|never|failed_to|fail_to|cannot|still_dont|still_didnt|just_didnt|just_did_not|just_dont|just_do_not|still_do_not|still_did_not|obviously_didnt|obviously_did_not|clearly_didnt|clearly_did_not|did_not_even|didnt_even|dont_even|do_not_even|didnt_really|did_not_really|dont_really|do_not_really] [understand|get|follow|know|catch|grasp|recognise|recognize|comprehend|parse|hear|read|see|understood|get_it|get_that|understand_it|understand_that|understand_me|get_me|get_what_i_said|understand_what_i_said|get_what_i_meant|understand_what_i_meant|get_my_sentence|understand_my_sentence] [that|it|me|what_i_said|what_i_meant|my_sentence|this|my_message|my_words|my_command|just_now|then|there|before|earlier|again|a_moment_ago|last_time|now]? [why|so_why|but_why|and_why|why_not|how_come|why_is_that|why_is_this|why_though|but_why_though|why_tho|wy|y|why_not_tell_me|can_you_tell_me_why|can_u_tell_me_why|could_you_tell_me_why|tell_me_why|explain_why|explain|please_explain|why_please|why_pls|why_plz|just_why|but_why_please|why_is_it|why_was_it|why_was_that|why_exactly|why_exactly_not|why_not_exactly|why_really|really_why|why_again|why_now|why_so]"
+    emit="@{_} core.request action=ui.helpWhy"
+    kind=question
+    priority=11
+    example="You did not understand, why"
+    example="You didnt get it why"
+
+@pat.ui.help.why7 core.pattern
+    match="[can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|tell_me|please_tell_me|i_want_to_know|i_wanna_know|i_would_like_to_know|let_me_know|explain|hey|so|ok|um|uh|well|yo|but|and]? [what|which_part|which_parts|which_words|which_word|which_bit|which_bits|which_part_of_it|which_part_of_that|what_part|what_part_of_it|what_part_of_that|what_words|what_bit|what_exactly|where|which_one|what_in_it|what_in_that|which_bit_of_it|which_bit_of_that|which_part_of_my_sentence|which_part_of_what_i_said|which_words_of_mine|what_words_of_mine] [did_you|did_u|didnt_you|didnt_u|do_you|do_u|dont_you|dont_u|could_you|couldnt_you|can_you|cant_you|can_u|cant_u|could_u|couldnt_u|have_you|havent_you|was_it_that_you|is_it_that_you|is_it_you|was_it_you] [not|no|never|didnt|dont|couldnt|cant|did_not|do_not|could_not|can_not|fail_to|failed_to|havent|have_not|still_dont|still_didnt|still_do_not|just_dont|just_didnt|just_do_not|just_did_not] [understand|get|follow|know|catch|grasp|recognise|recognize|comprehend|parse|hear|read|see|understood|get_it|get_that|understand_it|understand_that|understand_me|get_me|get_what_i_said|understand_what_i_said|get_what_i_meant|understand_what_i_meant|get_my_sentence|understand_my_sentence|got|followed|caught|grasped|recognised|recognized|comprehended|heard|missed|miss|misunderstand|misunderstood|misread|misheard|ignored|ignore|skipped|skip|failed|fail|fail_to_understand|fail_to_get|fail_to_follow|failed_to_understand|failed_to_get|failed_to_follow|get_wrong|got_wrong|understand_wrongly|understand_wrong|read_wrong|read_wrongly|hear_wrong|hear_wrongly|catch_wrong|catch_wrongly|miss_out_on|missed_out_on] [about|in|of|from]? [that|it|me|what_i_said|what_i_meant|my_sentence|this|my_message|my_words|my_command|just_now|then|there|before|earlier|again|a_moment_ago|last_time|now|my_sentence_that_you_did_not_understand|what_i_wrote|what_i_typed|my_last_sentence|the_last_sentence|that_sentence|what_i_asked|my_request|my_question|the_sentence|my_last_message|the_last_one|that_one|my_phrase|my_text|what_i_texted|my_last_phrase|my_last_command|my_last_request|my_last_question|my_last_text|my_last_words|the_last_message|the_last_phrase|the_last_command|the_last_request|the_last_question|the_last_text|the_last_words|my_last_input|the_last_input|my_input|the_input|what_i_input|what_i_entered|what_i_said_last|what_i_said_before|what_i_said_earlier|what_i_said_just_now|what_i_said_then|what_i_said_there|what_i_said_again]? [just_now|then|there|before|earlier|again|just|a_moment_ago|last_time|now|please|pls|plz]?"
+    emit="@{_} core.request action=ui.helpWhy"
+    kind=question
+    priority=11
+    example="Which part did you not get"
+    example="Which words did you not understand"
+
+
+@pat.ui.help.why8 core.pattern
+    match="[can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|tell_me|please_tell_me|i_want_to_know|i_wanna_know|let_me_know|explain|hey|so|ok|um|uh|well|yo|but|and]? [what|where|which_part|which_bit|what_part|what_exactly] [did|do|have|had|could|should|can]? i [say|do|type|write|put|ask|get|input|enter] [that_was|that_is|that_went|that_is_so|that_is_totally]? [wrong|incorrectly|badly|bad|incorrect|that_was_wrong|that_is_wrong|that_was_bad|that_was_incorrect|wrong_there|wrong_here|wrong_again|wrong_just_now|wrong_then] [just_now|then|there|before|earlier|again|just|a_moment_ago|last_time|now|please|pls|plz]?"
+    emit="@{_} core.request action=ui.helpWhy"
+    kind=question
+    priority=11
+    example="What did i say that was wrong"
+    example="What did i do wrong just now"
+
+@pat.ui.help.why9 core.pattern
+    match="[can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|tell_me|please_tell_me|i_want_to_know|i_wanna_know|let_me_know|explain|hey|so|ok|um|uh|well|yo|but|and]? [what|where|which_part|which_bit|what_part|what_exactly] i [said|did|typed|wrote|asked|put|got|entered|inputted] [wrong|incorrectly|badly|bad|incorrect|wrong_there|wrong_here|wrong_again|wrong_just_now|wrong_then] [just_now|then|there|before|earlier|again|just|a_moment_ago|last_time|now|please|pls|plz]?"
+    emit="@{_} core.request action=ui.helpWhy"
+    kind=question
+    priority=11
+    example="What i said wrong?"
+    example="Could you tell me what i said wrong"
+
+@pat.ui.help.why10 core.pattern
+    match="[can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|tell_me|please_tell_me|i_want_to_know|i_wanna_know|let_me_know|explain|hey|so|ok|um|uh|well|yo|but|and]? [was|is|were|did]? [what|something|anything|there_something|there_anything|there_a_problem|there_a_mistake|there_an_error|what_exactly|which_part|which_bit|the_problem|the_mistake|the_error|the_issue] [was|is|went|has_gone|were|being|seems|seemed|looks|looked|got]? [wrong|a_problem|a_mistake|an_error|off|bad|incorrect|not_right|the_problem|the_mistake|the_issue] [with|in|about|on] [what_i_said|my_sentence|that|it|what_i_wrote|my_message|what_i_just_said|the_sentence|my_phrase|my_words|what_i_typed|my_command|my_request|my_input|what_i_asked|my_last_sentence|my_last_message|the_last_sentence|that_sentence] [just_now|then|there|before|earlier|again|just|a_moment_ago|last_time|now|please|pls|plz]?"
+    emit="@{_} core.request action=ui.helpWhy"
+    kind=question
+    priority=11
+    example="What was wrong with what i said"
+    example="Was something wrong with what i said"
+
+@pat.ui.help.why4b core.pattern
+    match="[can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|tell_me|please_tell_me|i_want_to_know|i_wanna_know|let_me_know|explain|hey|so|ok|um|uh|well|yo|but|and]? [why|how_come] [didnt|dont|couldnt|cant|wouldnt|did_not|do_not|could_not|can_not|would_not|cannot|doesnt|does_not|havent|have_not|hasnt|has_not] [you|u|the_robot|the_app|this_thing|it] [understand|get|follow|know|catch|grasp|recognise|recognize|comprehend|parse|hear|read|see|get_it|get_that|understand_it|understand_that|understand_me|get_me|understand_what_i_said|get_what_i_said|understand_what_i_meant|get_what_i_meant|work_out|figure_out|make_out] [that|it|me|what_i_said|what_i_meant|what_i_wrote|my_sentence|the_sentence|my_message|my_words|my_command|my_request|this|what_i_typed|what_i_just_said|my_last_sentence|my_last_message|my_phrase|my_question|that_sentence|what_i_asked|the_last_sentence|the_last_one]? [just_now|then|there|before|earlier|again|just|a_moment_ago|last_time|now|please|pls|plz]?"
+    emit="@{_} core.request action=ui.helpWhy"
+    kind=question
+    priority=11
+    example="Why didnt you get that"
+    example="Why couldnt you understand that"
+
+@pat.ui.help.tab4 core.pattern
+    match="[can_you_tell_me|could_you_tell_me|tell_me|hey|so|ok|um|uh|well|yo]? what [can|could] [i|we] do [on|in|at] this [page|screen] [pls|plz|please|now|exactly]?"
+    emit="@{_} core.request action=ui.helpAbout"
+    kind=request
+    priority=12
+    example="What can I do on this page"
+
+@pat.ui.help.how7 core.pattern
+    match="how [do|can|could|would|should|will] [i|we|you|u] {what:words(8)} [pls|plz|thx]"
+    emit="@{_} core.request action=ui.helpHow arg.what=\"{what}\""
+    kind=question
+    priority=7
+    example="How can i add a table pls"
+
+@pat.ui.help.how8 core.pattern
+    match="how to {what:words(8)} [pls|plz|thx]"
+    emit="@{_} core.request action=ui.helpHow arg.what=\"{what}\""
+    kind=question
+    priority=7
+    example="How to draw a circle pls"
+
+@pat.ui.help.game3.twenty core.pattern
+    match="how [do|can|would|should] [i|we|you] play [the|a|some|an]? [20_questions|20_question|20_q] [game]?"
+    emit="@{_} core.request action=ui.helpGame arg.game=twenty_questions"
+    kind=question
+    priority=13
+    example="What are the rules of twenty questions"
+
+@pat.ui.help.game4.twenty core.pattern
+    match="[what_are|tell_me|explain|show_me|what_is_the_goal_of|how_does_it_work_in] [the]? [rules|rules_of|rules_for|goal_of|game] [of|for]? [the]? [20_questions|20_question|20_q] [game]?"
+    emit="@{_} core.request action=ui.helpGame arg.game=twenty_questions"
+    kind=question
+    priority=13
+    example="What are the rules of twenty questions"
+
+@pat.ui.help.game5.twenty core.pattern
+    match="[can_you|could_you|can_u|could_u|would_you|will_you|please|hey|ok|so|uh|um|well|yo|tell_me|could_you_please]? [how_do_i_play|how_do_you_play|how_do_u_play|how_u_play|how_can_i_play|how_can_we_play|how_do_we_play|how_does_one_play|how_should_i_play|how_to_play|how_i_play|how_i_can_play|how_you_play|how_to_win_at|how_do_i_win_at|how_do_i_move_in|how_do_i_start|how_do_i_start_playing|how_do_i_get_started_with|how_do_i_get_started_in|how_do_u_move_in|how_do_you_move_in|how_can_i_move_in|how_to_move_in|how_do_i_win_in|how_do_i_move_pieces_in|explain|explain_to_me|teach_me|teach_me_to_play|teach_me_how_to_play|show_me_how_to_play|tell_me_how_to_play|tell_me_how_i_play|explain_how_to_play|explain_how_i_play|explain_how_you_play|explain_how_do_i_play|i_want_to_learn|i_want_to_learn_how_to_play|i_wanna_learn|i_wanna_learn_how_to_play|i_would_like_to_learn|learn|help_me_with|help_me_learn|help_me_play|i_dont_know_how_to_play|i_do_not_know_how_to_play|dont_know_how_to_play|how_does_it_work_in|i_dont_know|i_do_not_know|i_dont_know_how_to_play_the|walk_me_through|run_me_through|show_me_how_i_play|what_do_i_do_in|how_do_i_do_in|how_does_one_win_at|how_does_one_win_in] [the|a|an|some]? [20_questions|20_question|20_q] [game]? [to_me|for_me|pls|plz|please|now|how_to_play|how_do_i_play|how|how_to|how_do_i_start|how_do_i_begin|first|again|in_detail|step_by_step|thanks|real_quick|quickly|a_bit|properly|from_scratch|explain|how_does_it_work|how_it_works|how_do_i_move|how_to_win]?"
+    emit="@{_} core.request action=ui.helpGame arg.game=twenty_questions"
+    kind=question
+    priority=13
+    example="How do i play twenty questions"
+
+@pat.ui.help.game6.twenty core.pattern
+    match="[uh|um|hm|hey|ok|so|yo]? [what_are|what_r|whats|what_is|tell_me|explain|show_me|give_me|list|go_over|go_through|read_me|can_you_explain|can_u_explain|could_you_explain|could_u_explain|can_you_go_over|could_you_go_over|could_you_go_through|can_you_tell_me|could_you_tell_me|can_u_tell_me|can_you_show_me|can_u_show_me|i_dont_know|i_do_not_know|i_dont_know_the|i_do_not_know_the|i_forgot|i_forgot_the|i_dont_remember|i_dont_remember_the|i_need|i_want|show|tell|give|walk_me_through|run_me_through|remind_me_of|remind_me|what_were|what_are_all|explain_all|sum_up|summarize|summarise|recap|i_wanna_know|i_want_to_know|let_me_know|read_out]? [the|all_the|all_of_the|its|a|some|all|ur|your]? [rules_of|rules_for|rules_to|goal_of|aim_of|instructions_for|instructions_of|instructions_to|game_rules_of|game_rules_for|basics_of|basics_for|the_basics_of|goal_for|objective_of|objective_for|object_of|guide_to|tutorial_for|tutorial_on|tutorial_of|rules|rule|how_to_play] [of|for|to|in|on]? [the]? [20_questions|20_question|20_q] [game]? [how_to_play|how_to|how_do_i_play|how_do_you_play|how_u_play|how_does_it_work|how_it_works|how_to_win|rules|the_rules|game_rules|instructions|tutorial|help|how_do_i_start|explained|explanation|guide|basics|the_basics|goal|aim|the_goal|how_i_play|how_to_begin|explain|please_explain|rules_please|rules_pls|rules_plz|rules_explained|pls|plz|please|again|now|for_me|to_me|in_detail]? [how_to_play|explain|rules|pls|plz|please|please_explain|again|now|for_me|to_me|explained]?"
+    emit="@{_} core.request action=ui.helpGame arg.game=twenty_questions"
+    kind=question
+    priority=12
+    example="What are the rules of twenty questions"
+
+@pat.ui.help.game6b.twenty core.pattern
+    match="[uh|um|hm|hey|ok|so|yo]? [what_are|what_r|whats|what_is|tell_me|explain|show_me|give_me|list|go_over|go_through|read_me|can_you_explain|can_u_explain|could_you_explain|could_u_explain|can_you_go_over|could_you_go_over|could_you_go_through|can_you_tell_me|could_you_tell_me|can_u_tell_me|can_you_show_me|can_u_show_me|i_dont_know|i_do_not_know|i_dont_know_the|i_do_not_know_the|i_forgot|i_forgot_the|i_dont_remember|i_dont_remember_the|i_need|i_want|show|tell|give|walk_me_through|run_me_through|remind_me_of|remind_me|what_were|what_are_all|explain_all|sum_up|summarize|summarise|recap|i_wanna_know|i_want_to_know|let_me_know|read_out]? [the|all_the|all_of_the|its|a|some|all|ur|your]? [the]? [20_questions|20_question|20_q] [game]? [how_to_play|how_to|how_do_i_play|how_do_you_play|how_u_play|how_does_it_work|how_it_works|how_to_win|rules|the_rules|game_rules|instructions|tutorial|help|how_do_i_start|explained|explanation|guide|basics|the_basics|goal|aim|the_goal|how_i_play|how_to_begin|explain|please_explain|rules_explained] [how_to_play|explain|rules|pls|plz|please|please_explain|again|now|for_me|to_me|explained]?"
+    emit="@{_} core.request action=ui.helpGame arg.game=twenty_questions"
+    kind=question
+    priority=12
+    example="What are the rules of twenty questions"
+
+@pat.ui.help.me3 core.pattern
+    match="[help|help_me|please_help|halp|oh_no|um|uh|hey] [im_lost|i_am_lost|im_confused|i_am_confused|im_stuck|i_am_stuck|i_need_help|im_so_lost|i_am_so_lost|i_dont_know_what_to_do|where_do_i_start|what_now|what_do_i_do|im_totally_lost|i_am_totally_lost|i_feel_lost|i_dont_get_it|i_dont_understand] [pls|plz|please|now|here]?"
+    emit="@{_} core.request action=ui.helpMe"
+    kind=request
+    priority=12
+    example="Help i am lost"

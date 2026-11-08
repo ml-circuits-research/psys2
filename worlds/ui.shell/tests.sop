@@ -173,3 +173,111 @@
     input="How many legs does a spider have?"
     expectStatus=supported
     session=s10
+
+@t.ui.shell.r01 core.test
+    input="hangman pls"
+    expect="letters"
+    expectState="activeTab=hangman"
+    expectState="games.hangman:status=playing"
+    session=rs1
+
+@t.ui.shell.r02 core.test
+    input="stop game pls"
+    expect="The word was"
+    session=rs1
+
+@t.ui.shell.r03 core.test
+    input="i want the editor"
+    expectState="activeTab=editor"
+    expectState="previousTab=robot"
+    session=rs2
+
+@t.ui.shell.r04 core.test
+    input="back pls"
+    expectState="activeTab=robot"
+    session=rs2
+
+@t.ui.shell.r05 core.test
+    input="go back to the last one"
+    expectState="activeTab=editor"
+    session=rs2
+
+@t.ui.shell.r06 core.test
+    input="previous screen"
+    expectState="activeTab=robot"
+    session=rs2
+
+@t.ui.shell.r07 core.test
+    input="can u play tic tac toe with me"
+    expectState="activeTab=tictactoe"
+    session=rs3
+
+@t.ui.shell.r08 core.test
+    input="what games can we play"
+    expect="hangman"
+    session=rs4
+
+@t.ui.shell.r09 core.test
+    input="pick a game"
+    expect="hangman"
+    session=rs4
+
+@t.ui.shell.r10 core.test
+    input="speech rate 1.5"
+    expectState="rate=1.5"
+    session=rs5
+
+@t.ui.shell.r11 core.test
+    input="voice speed 1.25 pls"
+    expectState="rate=1.25"
+    session=rs5
+
+@t.ui.shell.r12 core.test
+    input="make the speed one and a half"
+    expectState="rate=1.5"
+    session=rs5
+
+@t.ui.shell.r13 core.test
+    input="less fast please"
+    expectState="rate=1.25"
+    session=rs5
+
+@t.ui.shell.r14 core.test
+    input="too fast, slow it"
+    expectState="rate=1"
+    session=rs5
+
+@t.ui.shell.r15 core.test
+    input="faster voice"
+    expectState="rate=1.25"
+    session=rs5
+
+@t.ui.shell.r16 core.test
+    input="i want romanian"
+    expectState="language=ro"
+    session=rs6
+
+@t.ui.shell.r17 core.test
+    input="back to english"
+    expectState="language=en"
+    session=rs6
+
+@t.ui.shell.r18 core.test
+    input="could you use romanian from now on"
+    expectState="language=ro"
+    session=rs6
+
+@t.ui.shell.r19 core.test
+    input="english pls"
+    expectState="language=en"
+    session=rs6
+
+@t.ui.shell.r20 core.test
+    input="how many things have i said so far"
+    expectEffect=phraselog
+    session=rs7
+
+@t.ui.shell.r21 core.test
+    input="phrase log download pls"
+    expectEffect=phraselog
+    session=rs7

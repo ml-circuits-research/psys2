@@ -77,3 +77,19 @@
     word=faster
     word=microphone
     word=mute
+
+@lex.ui.shell.gametabs core.lexicon
+    class=noun
+    doc="Game tabs that a bare game name (hangman pls, hangman game) starts. Same entries as the game words of ui.shell.tabs."
+    word=hangman
+    plural=hangman:hangmen
+    word=tic_tac_toe
+    word=tictactoe
+    word=tic-tac-toe
+    word=noughts_and_cross
+    word=guess
+    word=guess_the_animal
+    word=guessing_game
+    word=twenty_question
+    word=20_question
+    word=animal_game

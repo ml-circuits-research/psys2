@@ -638,7 +638,7 @@
     example="Why you turned it in a robot, this is wrong."
 
 @pat.ui.avatar.char.why.bare core.pattern
-    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [why|how_come|why_on_earth] [did_you|have_you|you|did_it|has_it|do_you|would_you|did_the_avatar|did_u|have_u|u|do_u|would_u] [turn|turned|change|changed|switch|switched|make|made|become|became|transform|transformed|alter|altered|redo|redid|touch|touched|mess_up|messed_up|do|did] [it|that|this|yourself|everything|me|the_avatar|the_look|your_look|your_face|so_much|anything|urself|ur_self]? [again|already|just_now|like_that|that_way|there]? {r:words(8)?}"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [why|how_come|why_on_earth] [did_you|have_you|you|did_it|has_it|do_you|would_you|did_the_avatar|did_u|have_u|u|do_u|would_u] [turn|turned|change|changed|switch|switched|make|made|become|became|transform|transformed|alter|altered|redo|redid|touch|touched|mess_up|messed_up|do_that|do_it|do_this|did_that|did_it|did_this] [it|that|this|yourself|everything|me|the_avatar|the_look|your_look|your_face|so_much|anything|urself|ur_self]? [again|already|just_now|like_that|that_way|there]? {r:words(8)?}"
     emit="@{_} core.request action=avatar.explainSwitch"
     kind=request
     priority=12
@@ -987,3 +987,192 @@
     priority=10
     example="Shades on you please."
     example="Put sunglasses on."
+
+@pat.ui.avatar.x2.wear core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|uh|hmm|well|just|yo|oh|hi|and|then|now|ah]? [can_u|can_you|could_u|could_you|would_you|will_you|would_u|will_u|please_can_you|can_you_please|could_you_please|i_want_you_to|i_would_like_you_to|you_should|u_should|u_can|you_can|you_could|u_could|i_wanna|i_want_to|i_would_like_to|id_like_to|i_d_like_to|lets|let_us|let_me|can_i|could_i|may_i|can_we|could_we|go_ahead_and|try_to|i_need_you_to|do_you_mind|you_might_want_to|maybe_you_should|why_dont_you|why_not]? [give_yourself|give_urself|give_me|get|have|wear|use|add|put_on|try|try_on|grow|show|show_me|switch_to|change_to|i_want|i_would_like|would_like|i_need|gimme|i_wanna|i_wana|put|place|stick|slap|rock|sport|be_wearing|look_with|come_with|come_in|try_out|test|test_out|go_with|go_for|lets_try|let_me_see|i_wanna_see|i_want_to_see|how_about|what_about|can_i_see|show_yourself_with|show_urself_with|become_with|dress_up_with|dress_up_in|put_on_some|put_on_a|put_on_your|put_on_ur] [a|an|the|your|ur|my|some|new|a_pair_of|some_kind_of]? {v:lex.ui.avatar.options} {n:number?} [on|on_you|on_u|on_yourself|on_urself|on_your_face|on_ur_face|on_your_head|on_ur_head|on_now|on_for_me|on_please|on_pls|with_you|for_you|for_u|for_me|as_well|too|also|as_well_please|on_too|on_as_well]? [lol|haha|hehe|rn|right_now|right_now_thank_you|now_thank_you|thank_you|thanks|thx|please|pls|plz|now|for_me|asap|then|ok|okay|if_you_can|for_now|too|already|today|today_please|real_quick|quickly]? [please|pls|plz|thanks|thank_you|thx|ty|now|for_me|right_now|rn|asap|again|then|lol|haha|ok|okay|real_quick|quickly|if_you_can|for_now|too|already|right_now_thank_you|now_thank_you|please_thanks|pls_thx|plz_thx|thanks_a_lot|thank_you_very_much|pretty_please|for_me_please|for_me_now|right_away|at_once|immediately|today]?"
+    emit="@{_} core.request action=avatar.setPart arg.value={v} arg.n={n} arg.text=\"{v}\""
+    kind=request
+    priority=11
+    example="U should wear sunglasses lol"
+    example="Wear sunglasses right now thank you"
+
+@pat.ui.avatar.x2.bare core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|uh|hmm|well|just|yo|oh|hi|and|then|now|ah]? [a|an|the|your|ur|my|some|new|a_pair_of|some_kind_of]? {v:lex.ui.avatar.options} {n:number?} [pls|plz|thx|lol|asap|now_pls|now_plz|for_me|for_me_pls|on_pls|on_plz|on_you_pls|on_you_please|on_you|on_u|on_urself|on_yourself|on_me|on_for_me|on_please|thanks|thank_you|haha|hehe]"
+    emit="@{_} core.request action=avatar.setPart arg.value={v} arg.n={n} arg.text=\"{v}\""
+    kind=request
+    priority=9
+    example="Sunglasses pls"
+
+@pat.ui.avatar.x2.shades core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|uh|hmm|well|just|yo|oh|hi|and|then|now|ah]? [can_u|can_you|could_u|could_you|would_you|will_you|would_u|will_u|please_can_you|can_you_please|could_you_please|i_want_you_to|i_would_like_you_to|you_should|u_should|u_can|you_can|you_could|u_could|i_wanna|i_want_to|i_would_like_to|id_like_to|i_d_like_to|lets|let_us|let_me|can_i|could_i|may_i|can_we|could_we|go_ahead_and|try_to|i_need_you_to|do_you_mind|you_might_want_to|maybe_you_should|why_dont_you|why_not]? [give_yourself|give_urself|get|have|wear|put_on|try|try_on|show|show_me|i_want|i_would_like|i_need|gimme|put|rock|sport|be_wearing|let_me_see|i_wanna_see|i_want_to_see|how_about|what_about]? [the|a|an|your|ur|my]? [shades|sunnies|cool_shades|dark_shades|dark_glasses|sun_glasses|sun_glass|cool_glasses|summer_glasses|sunglasses] [on|on_you|on_u|on_yourself|on_urself|on_now|on_for_me|on_too]? [please|pls|plz|thanks|thank_you|thx|ty|now|for_me|right_now|rn|asap|again|then|lol|haha|ok|okay|real_quick|quickly|if_you_can|for_now|too|already|right_now_thank_you|now_thank_you|please_thanks|pls_thx|plz_thx|thanks_a_lot|thank_you_very_much|pretty_please|for_me_please|for_me_now|right_away|at_once|immediately|today]?"
+    emit="@{_} core.request action=avatar.setPart arg.value=sunglass arg.text=\"sunglasses\""
+    kind=request
+    priority=13
+    example="Shades on you please"
+    example="Put some sunnies on"
+
+@pat.ui.avatar.x2.top core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|uh|hmm|well|just|yo|oh|hi|and|then|now|ah]? [can_u|can_you|could_u|could_you|would_you|will_you|would_u|will_u|please_can_you|can_you_please|could_you_please|i_want_you_to|i_would_like_you_to|you_should|u_should|u_can|you_can|you_could|u_could|i_wanna|i_want_to|i_would_like_to|id_like_to|i_d_like_to|lets|let_us|let_me|can_i|could_i|may_i|can_we|could_we|go_ahead_and|try_to|i_need_you_to|do_you_mind|you_might_want_to|maybe_you_should|why_dont_you|why_not]? [give_yourself|give_urself|give_me|get|have|put|place|stick|slap|show|show_me|i_want|i_would_like|would_like|i_need|gimme|i_wanna|i_wana|i_wanna_see|i_want_to_see|i_wanna_have|can_i_have|could_i_have|may_i_have|let_me_see|let_me_have|try|add|how_about|what_about|put_up|add_on]? [the|a|an|your|ur|my]? {v:lex.ui.avatar.options} {n:number?} [on|on_top_of|up|up_on|at|in|onto|over|at_the|on_the|up_at]? [the|a|an|your|ur|my]? {p:lex.ui.avatar.parts} {n2:number?} [of_you|of_u|of_yourself|of_urself|of_ur_head|of_your_head|of_it|would_be_nice|would_be_cool|would_be_great|would_be_fun|would_be_good|would_be_awesome|would_be_lovely|would_be_neat|is_nice|is_cool|please|pls|plz|lol|thx|thanks|haha|hehe|rn|now|for_me|ok|okay|too|as_well|if_possible|if_you_can|right_now]? [please|pls|plz|thanks|thank_you|thx|ty|now|for_me|right_now|rn|asap|again|then|lol|haha|ok|okay|real_quick|quickly|if_you_can|for_now|too|already|right_now_thank_you|now_thank_you|please_thanks|pls_thx|plz_thx|thanks_a_lot|thank_you_very_much|pretty_please|for_me_please|for_me_now|right_away|at_once|immediately|today]?"
+    emit="@{_} core.request action=avatar.setPart arg.part={p} arg.value={v} arg.n={n} arg.text=\"{v}\""
+    kind=request
+    priority=12
+    example="Can i have a dish on top of u"
+    example="Would like a dish on the top"
+    example="A dish on top would be nice"
+    example="I wanna see a dish on top"
+
+@pat.ui.avatar.x2.top2 core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|uh|hmm|well|just|yo|oh|hi|and|then|now|ah]? [can_u|can_you|could_u|could_you|would_you|will_you|would_u|will_u|please_can_you|can_you_please|could_you_please|i_want_you_to|i_would_like_you_to|you_should|u_should|u_can|you_can|you_could|u_could|i_wanna|i_want_to|i_would_like_to|id_like_to|i_d_like_to|lets|let_us|let_me|can_i|could_i|may_i|can_we|could_we|go_ahead_and|try_to|i_need_you_to|do_you_mind|you_might_want_to|maybe_you_should|why_dont_you|why_not]? [give_yourself|give_urself|give_me|get|have|put|place|stick|slap|show|show_me|i_want|i_would_like|would_like|i_need|gimme|i_wanna|i_wana|i_wanna_see|i_want_to_see|i_wanna_have|can_i_have|could_i_have|may_i_have|let_me_see|let_me_have|try|add|how_about|what_about|put_up|add_on]? [the|a|an|your|ur|my]? {p:lex.ui.avatar.parts} {n2:number?} [of_it]? [with|as|to_be|to|into|be|like]? [the|a|an|your|ur|my]? {v:lex.ui.avatar.options} [of_you|of_u|of_yourself|of_urself|of_ur_head|of_your_head|of_it|would_be_nice|would_be_cool|would_be_great|would_be_fun|would_be_good|would_be_awesome|would_be_lovely|would_be_neat|is_nice|is_cool|please|pls|plz|lol|thx|thanks|haha|hehe|rn|now|for_me|ok|okay|too|as_well|if_possible|if_you_can|right_now]? [please|pls|plz|thanks|thank_you|thx|ty|now|for_me|right_now|rn|asap|again|then|lol|haha|ok|okay|real_quick|quickly|if_you_can|for_now|too|already|right_now_thank_you|now_thank_you|please_thanks|pls_thx|plz_thx|thanks_a_lot|thank_you_very_much|pretty_please|for_me_please|for_me_now|right_away|at_once|immediately|today]?"
+    emit="@{_} core.request action=avatar.setPart arg.part={p} arg.value={v} arg.text=\"{v}\""
+    kind=request
+    priority=10
+    example="Top dish plz"
+
+@pat.ui.avatar.x2.color.q core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|uh|hmm|well|just|yo|oh|hi|and|then|now|ah]? [can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|tell_me|please_tell_me|do_you_know|let_me_know|i_wonder|i_want_to_know|i_wanna_know|i_would_like_to_know|show_me|say|so|and|hey|ok_so|quick_question|just_wondering|im_curious|i_am_curious|curious|out_of_curiosity]? [what|wat|which|whats|what_is|what_s|tell_me_what|tell_me_which|say_what|say_which|and_what|and_which] [color|colour|colors|colours|shade|hue|tint] [are|r|is|do|does]? [your|ur|the|my|ur_]? {p:lex.ui.avatar.colorparts} [are|r|is|have|be|look|do_you_have|you_have|currently|right_now|now|rn|today|looking|exactly|really|then|atm|anyway]? [please|pls|plz|thanks|thank_you|thx|ty|now|for_me|right_now|rn|asap|again|then|lol|haha|ok|okay|real_quick|quickly|if_you_can|for_now|too|already|right_now_thank_you|now_thank_you|please_thanks|pls_thx|plz_thx|thanks_a_lot|thank_you_very_much|pretty_please|for_me_please|for_me_now|right_away|at_once|immediately|today]?"
+    emit="@{_} core.request action=avatar.askColor arg.part={p}"
+    kind=question
+    priority=13
+    example="Wat colour r ur eyes"
+    example="Which color are your eyes"
+    example="Can you say what color your eyes are"
+
+@pat.ui.avatar.x2.color.q2 core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|uh|hmm|well|just|yo|oh|hi|and|then|now|ah]? [can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|tell_me|please_tell_me|do_you_know|let_me_know|i_wonder|i_want_to_know|i_wanna_know|i_would_like_to_know|show_me|say|so|and|hey|ok_so|quick_question|just_wondering|im_curious|i_am_curious|curious|out_of_curiosity]? [the|your|ur]? [color|colour|colors|colours|shade|hue|tint] [of|for|on|of_the|of_your|of_ur] [the|your|ur|my]? {p:lex.ui.avatar.colorparts} [please|pls|plz|now|rn|right_now|currently|atm|today|exactly|again|thanks|thx]? [please|pls|plz|thanks|thank_you|thx|ty|now|for_me|right_now|rn|asap|again|then|lol|haha|ok|okay|real_quick|quickly|if_you_can|for_now|too|already|right_now_thank_you|now_thank_you|please_thanks|pls_thx|plz_thx|thanks_a_lot|thank_you_very_much|pretty_please|for_me_please|for_me_now|right_away|at_once|immediately|today]?"
+    emit="@{_} core.request action=avatar.askColor arg.part={p}"
+    kind=question
+    priority=13
+    example="Tell me the color of your eyes please"
+
+@pat.ui.avatar.x2.hair.q core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|uh|hmm|well|just|yo|oh|hi|and|then|now|ah]? [what|which|wat|whats|what_is|what_s|tell_me|tell_me_what|tell_me_which|tell_me_your|tell_me_ur|tell_me_the|can_you_tell_me|can_you_tell_me_what|can_u_tell_me|can_u_tell_me_what|could_u_tell_me|could_you_tell_me|could_u_tell_me_what|could_you_tell_me_what|can_you_say|can_you_say_what|do_you_know|show_me|show_me_your|show_me_ur|show_me_the|say|say_what|say_your|what_are|what_is_your|what_is_ur|and_what|and_which|so_what|so_which|what_about|how_about|how_s|how_is|which_is|what_s_your] [of]? [your|ur|the]? [kind_of|kind|kinds_of|type_of|types_of|sort_of|sorts_of|style_of|styles_of|kinds|types|sorts|styles|type|sort|style]? [of]? [your|ur|the]? [hair|hairstyle|hair_style|haircut|hairdo|hair_do] [do_you_have|do_u_have|u_have|you_have|u_got|you_got|have_you_got|have_u_got|are_you_wearing|are_u_wearing|are_you_using|do_you_use|do_you_wear|do_u_wear|is_on_you|is_on_u|is_that|is_it|is_yours|are_you_sporting|are_you_rocking|you_wearing|u_wearing|u_got_on|you_got_on|u_have_on|you_have_on|look_like|looks_like|like|is_like|do_you_got|do_u_got|have_you|have_u|got|have|now|currently|right_now|rn|today|atm|do_you_have_now|you_have_now|u_have_now|you_got_now|u_got_now|do_u_have_now|is_it_now|is_it_currently|is_on_you_now|is_on_u_now|are_you_wearing_now|are_u_wearing_now|you_have_right_now|u_have_right_now|you_got_atm|u_got_atm|are_you_wearing_atm|do_you_have_right_now|do_u_have_right_now|do_you_have_at_the_moment|are_you_using_now|are_u_using_now]? [please|pls|plz|thanks|thank_you|thx|ty|now|for_me|right_now|rn|asap|again|then|lol|haha|ok|okay|real_quick|quickly|if_you_can|for_now|too|already|right_now_thank_you|now_thank_you|please_thanks|pls_thx|plz_thx|thanks_a_lot|thank_you_very_much|pretty_please|for_me_please|for_me_now|right_away|at_once|immediately|today]?"
+    emit="@{_} core.request action=avatar.askPart arg.part=hair"
+    kind=question
+    priority=13
+    example="What hair u got"
+    example="Which hairstyle do you have now"
+    example="What sort of hair is on you"
+    example="Tell me ur hair style"
+    example="Could u tell me what hair u have"
+    example="Whats ur hair like"
+    example="What kind of hair u got pls"
+
+@pat.ui.avatar.x2.hair.q2 core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|uh|hmm|well|just|yo|oh|hi|and|then|now|ah]? [hairstyle|hair_style|haircut|hairdo|hair_type|hair_types|hair_styles|hairstyles|haircuts|hairdos|hair_kinds|hair_options|hair_choices|hair_variants|types_of_hair|kinds_of_hair|styles_of_hair|hair_variety|hair_varieties|hair_types_you_have|hair_style_you_have|hairstyle_you_have|your_hair|ur_hair|your_hairstyle|ur_hairstyle|your_hair_style|ur_hair_style] [please|pls|plz|thanks|thank_you|thx|ty|now|for_me|right_now|rn|asap|again|then|lol|haha|ok|okay|real_quick|quickly|if_you_can|for_now|too|already|right_now_thank_you|now_thank_you|please_thanks|pls_thx|plz_thx|thanks_a_lot|thank_you_very_much|pretty_please|for_me_please|for_me_now|right_away|at_once|immediately|today]?"
+    emit="@{_} core.request action=avatar.askPart arg.part=hair"
+    kind=question
+    priority=8
+    example="Hair types?"
+    example="Hairstyle?"
+
+@pat.ui.avatar.x2.has core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|uh|hmm|well|just|yo|oh|hi|and|then|now|ah]? [can_u|can_you|could_u|could_you|would_you|will_you|would_u|will_u|please_can_you|can_you_please|could_you_please|i_want_you_to|i_would_like_you_to|you_should|u_should|u_can|you_can|you_could|u_could|i_wanna|i_want_to|i_would_like_to|id_like_to|i_d_like_to|lets|let_us|let_me|can_i|could_i|may_i|can_we|could_we|go_ahead_and|try_to|i_need_you_to|do_you_mind|you_might_want_to|maybe_you_should|why_dont_you|why_not]? [do_you_have|do_u_have|have_you_got|have_u_got|are_you_wearing|are_u_wearing|r_u_wearing|r_you_wearing|do_you_wear|do_u_wear|are_you_using|r_u_using|u_got|you_got|u_have|you_have|is_there|are_there|have_you|have_u|you_wearing|u_wearing|u_sporting|you_sporting|are_you_sporting|r_u_sporting|are_you_rocking|r_u_rocking|do_you_got|do_u_got|have_you_got_any|do_you_have_any|do_u_have_any|got_any|have_any|is_that|do_you_sport|do_you_rock|do_u_sport|do_u_rock|are_you_with|r_u_with|you_with|u_with|does_it_have|you_still_have|u_still_have|do_you_still_have|do_u_still_have|are_you_still_wearing|r_u_still_wearing] [a|an|the|your|ur|my|some|new|a_pair_of|some_kind_of]? {v:lex.ui.avatar.options} {n:number?} [on|on_you|on_u|on_urself|on_yourself|on_me|on_now|now|on_right_now|right_now|rn|today|atm|currently|or_not|or_no|or_nah|or_what|yet|at_all|too|also|already|there|then|here|on_your_face|on_ur_face|on_your_head|on_ur_head|at_the_moment|on_at_the_moment|on_rn|on_atm|or_nope|or_naw|or_nay|or_something]? [please|pls|plz|thanks|thank_you|thx|ty|now|for_me|right_now|rn|asap|again|then|lol|haha|ok|okay|real_quick|quickly|if_you_can|for_now|too|already|right_now_thank_you|now_thank_you|please_thanks|pls_thx|plz_thx|thanks_a_lot|thank_you_very_much|pretty_please|for_me_please|for_me_now|right_away|at_once|immediately|today]?"
+    emit="@{_} core.request action=avatar.hasThing arg.value={v} arg.text=\"{v}\""
+    kind=question
+    priority=13
+    example="R u wearing glasses"
+    example="U got glasses?"
+    example="Is there glasses on you"
+    example="You have glasses or not"
+    example="Do u have glasses on"
+
+@pat.ui.avatar.x2.mood.smile core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|uh|hmm|well|just|yo|oh|hi|and|then|now|ah]? [are_you|are_u|r_u|r_you|do_you_look|do_u_look|you_are|u_are|you_look|u_look|is_your_face|is_ur_face|you|u] [smiling|grinning|beaming|smiley|smiling_now|smiling_rn|smiling_right_now|smiling_atm] [right_now|rn|now|or_nah|or_not|today|atm|at_the_moment|currently|or_what|or_no|or_nope]? [please|pls|plz|thanks|thank_you|thx|ty|now|for_me|right_now|rn|asap|again|then|lol|haha|ok|okay|real_quick|quickly|if_you_can|for_now|too|already|right_now_thank_you|now_thank_you|please_thanks|pls_thx|plz_thx|thanks_a_lot|thank_you_very_much|pretty_please|for_me_please|for_me_now|right_away|at_once|immediately|today]?"
+    emit="@{_} core.request action=avatar.checkMood arg.mood=happy"
+    kind=question
+    priority=13
+    example="Are u smiling?"
+
+@pat.ui.avatar.x2.reset1 core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|uh|hmm|well|just|yo|oh|hi|and|then|now|ah]? [can_u|can_you|could_u|could_you|would_you|will_you|would_u|will_u|please_can_you|can_you_please|could_you_please|i_want_you_to|i_would_like_you_to|you_should|u_should|u_can|you_can|you_could|u_could|i_wanna|i_want_to|i_would_like_to|id_like_to|i_d_like_to|lets|let_us|let_me|can_i|could_i|may_i|can_we|could_we|go_ahead_and|try_to|i_need_you_to|do_you_mind|you_might_want_to|maybe_you_should|why_dont_you|why_not]? [reset|restore|revert|undo|default|normalize|normalise|put_back|set_back|bring_back|change_back|switch_back|turn_back|reset_back|restore_back] [your|the|ur|my]? {p:lex.ui.avatar.parts} [to|back_to|to_the|back_to_the|back_to_its|to_its|back_into|into|as]? [normal|default|original|standard|usual|regular|initial|factory|first|starting|base|plain|how_it_was|what_it_was|before|the_way_it_was|the_default|the_original|the_normal|its_default|its_original|its_normal|as_before|as_it_was|like_before|like_it_was|how_it_used_to_be|the_old_one|its_old_self|the_standard|the_usual|the_regular|the_initial|the_factory_setting|factory_settings|default_settings|normal_settings|the_old_1]? [please|pls|plz|thanks|thank_you|thx|ty|now|for_me|right_now|rn|asap|again|then|lol|haha|ok|okay|real_quick|quickly|if_you_can|for_now|too|already|right_now_thank_you|now_thank_you|please_thanks|pls_thx|plz_thx|thanks_a_lot|thank_you_very_much|pretty_please|for_me_please|for_me_now|right_away|at_once|immediately|today]?"
+    emit="@{_} core.request action=avatar.resetPart arg.part={p}"
+    kind=request
+    priority=12
+    example="Can u reset ur mouth to default"
+    example="Reset the mouth pls"
+
+@pat.ui.avatar.x2.reset2 core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|uh|hmm|well|just|yo|oh|hi|and|then|now|ah]? [can_u|can_you|could_u|could_you|would_you|will_you|would_u|will_u|please_can_you|can_you_please|could_you_please|i_want_you_to|i_would_like_you_to|you_should|u_should|u_can|you_can|you_could|u_could|i_wanna|i_want_to|i_would_like_to|id_like_to|i_d_like_to|lets|let_us|let_me|can_i|could_i|may_i|can_we|could_we|go_ahead_and|try_to|i_need_you_to|do_you_mind|you_might_want_to|maybe_you_should|why_dont_you|why_not]? [your|the|ur|my]? {p:lex.ui.avatar.parts} [back_to|to|back_to_the|to_the|back|go_back_to|goes_back_to|should_go_back_to|should_be|must_be|needs_to_be|to_be|be|is_to_be|should_return_to|return_to|returns_to|reset_to|reset_to_the|restored_to|revert_to|reverted_to|set_to|set_back_to|change_back_to] [normal|default|original|standard|usual|regular|initial|factory|first|starting|base|plain|how_it_was|what_it_was|before|the_way_it_was|the_default|the_original|the_normal|its_default|its_original|its_normal|as_before|as_it_was|like_before|like_it_was|how_it_used_to_be|the_old_one|its_old_self|the_standard|the_usual|the_regular|the_initial|the_factory_setting|factory_settings|default_settings|normal_settings|the_old_1] [again|please|pls|plz|now|rn]? [please|pls|plz|thanks|thank_you|thx|ty|now|for_me|right_now|rn|asap|again|then|lol|haha|ok|okay|real_quick|quickly|if_you_can|for_now|too|already|right_now_thank_you|now_thank_you|please_thanks|pls_thx|plz_thx|thanks_a_lot|thank_you_very_much|pretty_please|for_me_please|for_me_now|right_away|at_once|immediately|today]?"
+    emit="@{_} core.request action=avatar.resetPart arg.part={p}"
+    kind=request
+    priority=12
+    example="Mouth back to normal"
+    example="Mouth to default please"
+
+@pat.ui.avatar.x2.reset3 core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|uh|hmm|well|just|yo|oh|hi|and|then|now|ah]? [can_u|can_you|could_u|could_you|would_you|will_you|would_u|will_u|please_can_you|can_you_please|could_you_please|i_want_you_to|i_would_like_you_to|you_should|u_should|u_can|you_can|you_could|u_could|i_wanna|i_want_to|i_would_like_to|id_like_to|i_d_like_to|lets|let_us|let_me|can_i|could_i|may_i|can_we|could_we|go_ahead_and|try_to|i_need_you_to|do_you_mind|you_might_want_to|maybe_you_should|why_dont_you|why_not]? [undo|revert|cancel|reverse|take_back|rollback|roll_back|remove] [the|my|your|ur|that|this|last]? [last]? {p:lex.ui.avatar.parts} [change|changes|edit|edits|switch|swap|modification|modifications|thing|update|updates|alteration|alterations|customization|customisation|tweak|tweaks|adjustment|adjustments] [please|pls|plz|thanks|thank_you|thx|ty|now|for_me|right_now|rn|asap|again|then|lol|haha|ok|okay|real_quick|quickly|if_you_can|for_now|too|already|right_now_thank_you|now_thank_you|please_thanks|pls_thx|plz_thx|thanks_a_lot|thank_you_very_much|pretty_please|for_me_please|for_me_now|right_away|at_once|immediately|today]?"
+    emit="@{_} core.request action=avatar.resetPart arg.part={p}"
+    kind=request
+    priority=12
+    example="Undo the mouth change"
+
+@pat.ui.avatar.x2.reset4 core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|uh|hmm|well|just|yo|oh|hi|and|then|now|ah]? [can_u|can_you|could_u|could_you|would_you|will_you|would_u|will_u|please_can_you|can_you_please|could_you_please|i_want_you_to|i_would_like_you_to|you_should|u_should|u_can|you_can|you_could|u_could|i_wanna|i_want_to|i_would_like_to|id_like_to|i_d_like_to|lets|let_us|let_me|can_i|could_i|may_i|can_we|could_we|go_ahead_and|try_to|i_need_you_to|do_you_mind|you_might_want_to|maybe_you_should|why_dont_you|why_not]? [go_back_to|return_to|switch_back_to|change_back_to|back_to|bring_back|give_me_back|i_want|i_want_back|i_wanna_have|i_would_like|can_i_have|could_i_have|gimme|put_back|restore|reset|i_need|i_wanna_see|i_want_to_see|let_me_see|show_me|show|bring_back_the|give_back|get_back] [the|my|your|ur]? [normal|default|original|standard|usual|regular|initial|factory|first|starting|base|plain|how_it_was|what_it_was|before|the_way_it_was|the_default|the_original|the_normal|its_default|its_original|its_normal|as_before|as_it_was|like_before|like_it_was|how_it_used_to_be|the_old_one|its_old_self|the_standard|the_usual|the_regular|the_initial|the_factory_setting|factory_settings|default_settings|normal_settings|the_old_1] {p:lex.ui.avatar.parts} [again|back|please|pls|plz|now|for_me|rn|once_more|one_more_time|as_before|1_more_time]? [please|pls|plz|thanks|thank_you|thx|ty|now|for_me|right_now|rn|asap|again|then|lol|haha|ok|okay|real_quick|quickly|if_you_can|for_now|too|already|right_now_thank_you|now_thank_you|please_thanks|pls_thx|plz_thx|thanks_a_lot|thank_you_very_much|pretty_please|for_me_please|for_me_now|right_away|at_once|immediately|today]?"
+    emit="@{_} core.request action=avatar.resetPart arg.part={p}"
+    kind=request
+    priority=12
+    example="Go back to the normal mouth"
+    example="I want the default mouth again"
+
+@pat.ui.avatar.x2.prev1 core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|uh|hmm|well|just|yo|oh|hi|and|then|now|ah]? [can_u|can_you|could_u|could_you|would_you|will_you|would_u|will_u|please_can_you|can_you_please|could_you_please|i_want_you_to|i_would_like_you_to|you_should|u_should|u_can|you_can|you_could|u_could|i_wanna|i_want_to|i_would_like_to|id_like_to|i_d_like_to|lets|let_us|let_me|can_i|could_i|may_i|can_we|could_we|go_ahead_and|try_to|i_need_you_to|do_you_mind|you_might_want_to|maybe_you_should|why_dont_you|why_not]? [go_to|show_me|try|switch_to|use|get|pick|choose|show|go_back_to|back_to|return_to|i_want|i_want_the|give_me|give_me_the|can_i_have|let_me_see|let_me_have|take_me_to|bring_back|bring_me_back_to|put_back|switch_back_to|change_back_to|revert_to|i_wanna_see|i_want_to_see|how_about|what_about|load|cycle_to|step_to|move_to|jump_to|flip_to|scroll_to|rotate_to]? [the|a|an|your|ur|my]? [previous|prev|prior|earlier|last|former|preceding|one_before|old|before|1_before] [one|1]? [for|of|on|in|with]? [the|a|an|your|ur|my]? {p:lex.ui.avatar.parts} [please|pls|plz|thanks|thank_you|thx|ty|now|for_me|right_now|rn|asap|again|then|lol|haha|ok|okay|real_quick|quickly|if_you_can|for_now|too|already|right_now_thank_you|now_thank_you|please_thanks|pls_thx|plz_thx|thanks_a_lot|thank_you_very_much|pretty_please|for_me_please|for_me_now|right_away|at_once|immediately|today]?"
+    emit="@{_} core.request action=avatar.step arg.part={p} arg.dir=previous"
+    kind=request
+    priority=12
+    example="Prev mouth"
+    example="Can you go back to the last mouth"
+
+@pat.ui.avatar.x2.prev2 core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|uh|hmm|well|just|yo|oh|hi|and|then|now|ah]? [can_u|can_you|could_u|could_you|would_you|will_you|would_u|will_u|please_can_you|can_you_please|could_you_please|i_want_you_to|i_would_like_you_to|you_should|u_should|u_can|you_can|you_could|u_could|i_wanna|i_want_to|i_would_like_to|id_like_to|i_d_like_to|lets|let_us|let_me|can_i|could_i|may_i|can_we|could_we|go_ahead_and|try_to|i_need_you_to|do_you_mind|you_might_want_to|maybe_you_should|why_dont_you|why_not]? [back_one|go_back_one|one_back|one_step_back|step_back|go_back_a_step|back_a_step|back_one_step|go_back|back|go_one_back|go_one_step_back|take_one_step_back|go_back_1|go_back_one_step|step_back_on|step_back_for|undo_one_step_on|undo_one_step_for|rewind|rewind_the|go_back_on|go_back_for|go_back_with|back_1|1_back|1_step_back|back_1_step|go_1_back|go_1_step_back|take_1_step_back|go_back_1_step|undo_1_step_on|undo_1_step_for] [for|on|in|with|of|to]? [the|a|an|your|ur|my]? {p:lex.ui.avatar.parts} [one|one_step|a_step|1_step|please|1]? [please|pls|plz|thanks|thank_you|thx|ty|now|for_me|right_now|rn|asap|again|then|lol|haha|ok|okay|real_quick|quickly|if_you_can|for_now|too|already|right_now_thank_you|now_thank_you|please_thanks|pls_thx|plz_thx|thanks_a_lot|thank_you_very_much|pretty_please|for_me_please|for_me_now|right_away|at_once|immediately|today]?"
+    emit="@{_} core.request action=avatar.step arg.part={p} arg.dir=previous"
+    kind=request
+    priority=12
+    example="Back one for the mouth"
+
+@pat.ui.avatar.x2.prev3 core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|uh|hmm|well|just|yo|oh|hi|and|then|now|ah]? [can_u|can_you|could_u|could_you|would_you|will_you|would_u|will_u|please_can_you|can_you_please|could_you_please|i_want_you_to|i_would_like_you_to|you_should|u_should|u_can|you_can|you_could|u_could|i_wanna|i_want_to|i_would_like_to|id_like_to|i_d_like_to|lets|let_us|let_me|can_i|could_i|may_i|can_we|could_we|go_ahead_and|try_to|i_need_you_to|do_you_mind|you_might_want_to|maybe_you_should|why_dont_you|why_not]? [the|a|an|your|ur|my]? {p:lex.ui.avatar.parts} [previous|prev|last|before|prior|earlier|former|one_back|one_step_back|a_step_back|back_one|back_one_step|back_a_step|previous_one|the_previous_one|the_last_one|the_one_before|from_before|before_this|before_this_one|one_before|back|backwards|backward|go_back|step_back|1_back|1_step_back|before_that|before_that_one|the_one_from_before|the_previous|the_last|the_earlier_one|the_old_one|previous_please|prev_one|last_one|former_one|prior_one|back_1|back_1_step|previous_1|the_previous_1|the_last_1|the_1_before|before_this_1|1_before|before_that_1|the_1_from_before|the_earlier_1|the_old_1|prev_1|last_1|former_1|prior_1] [one|please|pls|plz|now|for_me|1]? [please|pls|plz|thanks|thank_you|thx|ty|now|for_me|right_now|rn|asap|again|then|lol|haha|ok|okay|real_quick|quickly|if_you_can|for_now|too|already|right_now_thank_you|now_thank_you|please_thanks|pls_thx|plz_thx|thanks_a_lot|thank_you_very_much|pretty_please|for_me_please|for_me_now|right_away|at_once|immediately|today]?"
+    emit="@{_} core.request action=avatar.step arg.part={p} arg.dir=previous"
+    kind=request
+    priority=12
+    example="Mouth previous one pls"
+    example="Mouth one step back"
+    example="The mouth from before, please"
+
+@pat.ui.avatar.x2.prev4 core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|uh|hmm|well|just|yo|oh|hi|and|then|now|ah]? [can_u|can_you|could_u|could_you|would_you|will_you|would_u|will_u|please_can_you|can_you_please|could_you_please|i_want_you_to|i_would_like_you_to|you_should|u_should|u_can|you_can|you_could|u_could|i_wanna|i_want_to|i_would_like_to|id_like_to|i_d_like_to|lets|let_us|let_me|can_i|could_i|may_i|can_we|could_we|go_ahead_and|try_to|i_need_you_to|do_you_mind|you_might_want_to|maybe_you_should|why_dont_you|why_not]? [go_to|show_me|try|switch_to|use|get|pick|choose|show|go_back_to|back_to|i_want|give_me|take_me_to|let_me_see|i_want_to_see] [the|a|an|your|ur|my]? {p:lex.ui.avatar.parts} [before|prior_to|preceding|previous_to|that_came_before|from_before|just_before] [this_one|this|that_one|the_current_one|the_current|now|it|the_present_one|the_present|current|this_1|that_1|the_current_1|the_present_1] [please|pls|plz|thanks|thank_you|thx|ty|now|for_me|right_now|rn|asap|again|then|lol|haha|ok|okay|real_quick|quickly|if_you_can|for_now|too|already|right_now_thank_you|now_thank_you|please_thanks|pls_thx|plz_thx|thanks_a_lot|thank_you_very_much|pretty_please|for_me_please|for_me_now|right_away|at_once|immediately|today]?"
+    emit="@{_} core.request action=avatar.step arg.part={p} arg.dir=previous"
+    kind=request
+    priority=12
+    example="Go to the mouth before this one"
+
+@pat.ui.avatar.x2.next.hair core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|uh|hmm|well|just|yo|oh|hi|and|then|now|ah]? [can_u|can_you|could_u|could_you|would_you|will_you|would_u|will_u|please_can_you|can_you_please|could_you_please|i_want_you_to|i_would_like_you_to|you_should|u_should|u_can|you_can|you_could|u_could|i_wanna|i_want_to|i_would_like_to|id_like_to|i_d_like_to|lets|let_us|let_me|can_i|could_i|may_i|can_we|could_we|go_ahead_and|try_to|i_need_you_to|do_you_mind|you_might_want_to|maybe_you_should|why_dont_you|why_not]? [go_to|show_me|try|switch_to|use|get|pick|choose|show|go_back_to|back_to|return_to|i_want|i_want_the|give_me|give_me_the|can_i_have|let_me_see|let_me_have|take_me_to|bring_back|bring_me_back_to|put_back|switch_back_to|change_back_to|revert_to|i_wanna_see|i_want_to_see|how_about|what_about|load|cycle_to|step_to|move_to|jump_to|flip_to|scroll_to|rotate_to]? [the|a|an|your|ur|my]? [next|following|subsequent|another|new] [hair|hair_style|hairdo|haircut|hairstyle] [please|pls|plz|thanks|thank_you|thx|ty|now|for_me|right_now|rn|asap|again|then|lol|haha|ok|okay|real_quick|quickly|if_you_can|for_now|too|already|right_now_thank_you|now_thank_you|please_thanks|pls_thx|plz_thx|thanks_a_lot|thank_you_very_much|pretty_please|for_me_please|for_me_now|right_away|at_once|immediately|today]?"
+    emit="@{_} core.request action=avatar.step arg.part=hairstyle arg.dir=next"
+    kind=request
+    priority=13
+    example="Next hair please"
+    example="Try the following hair"
+    example="Next hair style for me"
+
+@pat.ui.avatar.x2.prev.hair core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|uh|hmm|well|just|yo|oh|hi|and|then|now|ah]? [can_u|can_you|could_u|could_you|would_you|will_you|would_u|will_u|please_can_you|can_you_please|could_you_please|i_want_you_to|i_would_like_you_to|you_should|u_should|u_can|you_can|you_could|u_could|i_wanna|i_want_to|i_would_like_to|id_like_to|i_d_like_to|lets|let_us|let_me|can_i|could_i|may_i|can_we|could_we|go_ahead_and|try_to|i_need_you_to|do_you_mind|you_might_want_to|maybe_you_should|why_dont_you|why_not]? [go_to|show_me|try|switch_to|use|get|pick|choose|show|go_back_to|back_to|return_to|i_want|i_want_the|give_me|give_me_the|can_i_have|let_me_see|let_me_have|take_me_to|bring_back|bring_me_back_to|put_back|switch_back_to|change_back_to|revert_to|i_wanna_see|i_want_to_see|how_about|what_about|load|cycle_to|step_to|move_to|jump_to|flip_to|scroll_to|rotate_to]? [the|a|an|your|ur|my]? [previous|prev|prior|earlier|last|former|preceding|one_before|old|before|1_before] [hair|hair_style|hairdo|haircut|hairstyle] [please|pls|plz|thanks|thank_you|thx|ty|now|for_me|right_now|rn|asap|again|then|lol|haha|ok|okay|real_quick|quickly|if_you_can|for_now|too|already|right_now_thank_you|now_thank_you|please_thanks|pls_thx|plz_thx|thanks_a_lot|thank_you_very_much|pretty_please|for_me_please|for_me_now|right_away|at_once|immediately|today]?"
+    emit="@{_} core.request action=avatar.step arg.part=hairstyle arg.dir=previous"
+    kind=request
+    priority=13
+    example="Previous hair please"
+
+@pat.ui.avatar.x2.next1 core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|uh|hmm|well|just|yo|oh|hi|and|then|now|ah]? [can_u|can_you|could_u|could_you|would_you|will_you|would_u|will_u|please_can_you|can_you_please|could_you_please|i_want_you_to|i_would_like_you_to|you_should|u_should|u_can|you_can|you_could|u_could|i_wanna|i_want_to|i_would_like_to|id_like_to|i_d_like_to|lets|let_us|let_me|can_i|could_i|may_i|can_we|could_we|go_ahead_and|try_to|i_need_you_to|do_you_mind|you_might_want_to|maybe_you_should|why_dont_you|why_not]? [the|a|an|your|ur|my]? {p:lex.ui.avatar.parts} [next|following|subsequent|next_one|one_forward|forward|step_forward|forwards|the_next_one|the_next|the_following_one|the_following|one_ahead|ahead|one_step_forward|a_step_forward|forward_one|forward_one_step|next_please|next_1|1_forward|the_next_1|the_following_1|1_ahead|1_step_forward|forward_1|forward_1_step] [one|please|pls|plz|now|for_me|1]? [please|pls|plz|thanks|thank_you|thx|ty|now|for_me|right_now|rn|asap|again|then|lol|haha|ok|okay|real_quick|quickly|if_you_can|for_now|too|already|right_now_thank_you|now_thank_you|please_thanks|pls_thx|plz_thx|thanks_a_lot|thank_you_very_much|pretty_please|for_me_please|for_me_now|right_away|at_once|immediately|today]?"
+    emit="@{_} core.request action=avatar.step arg.part={p} arg.dir=next"
+    kind=request
+    priority=12
+    example="Mouth next one pls"
+
+@pat.ui.avatar.x2.surprised core.pattern
+    match="[please|pls|plz|hey|ok|okay|so|um|uh|hmm|well|just|yo|oh|hi|and|then|now|ah]? [can_u|can_you|could_u|could_you|would_you|will_you|would_u|will_u|please_can_you|can_you_please|could_you_please|i_want_you_to|i_would_like_you_to|you_should|u_should|u_can|you_can|you_could|u_could|i_wanna|i_want_to|i_would_like_to|id_like_to|i_d_like_to|lets|let_us|let_me|can_i|could_i|may_i|can_we|could_we|go_ahead_and|try_to|i_need_you_to|do_you_mind|you_might_want_to|maybe_you_should|why_dont_you|why_not]? [make|set|turn|change|put|give_me|make_yourself|look|be|act|pull|do|try|i_want|i_wanna_see|i_want_to_see|i_wanna_have|let_me_see|can_i_see|how_about|what_about|go|get|have|look_like|appear|seem|act_like|pretend_to_be|pretend_you_are|pretend_you_re|pretend_to_look] [a|an|the|your|ur|me|you|u|yourself|urself|ur_face|your_face|ur_look|your_look|ur_expression|your_expression]? [face|look|expression|ur_face|your_face]? [to|into|be|look|looking|like|as]? [a|an]? [surprised|shocked|astonished|amazed|stunned|startled] [face|look|expression|look_on_your_face|look_on_ur_face|on_your_face|on_ur_face]? [please|pls|plz|thanks|thank_you|thx|ty|now|for_me|right_now|rn|asap|again|then|lol|haha|ok|okay|real_quick|quickly|if_you_can|for_now|too|already|right_now_thank_you|now_thank_you|please_thanks|pls_thx|plz_thx|thanks_a_lot|thank_you_very_much|pretty_please|for_me_please|for_me_now|right_away|at_once|immediately|today]?"
+    emit="@{_} core.request action=avatar.setMood arg.mood=surprised"
+    kind=request
+    priority=12
+    example="Make ur face surprised"
+    example="I want to see you surprised"
+    example="Look surprised pls"

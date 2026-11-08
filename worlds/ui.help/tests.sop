@@ -259,3 +259,98 @@
     input="What does this tab do?"
     expect="The Chess tab lets you play chess"
     session=e
+
+@t.ui.help.r01 core.test
+    input="examples pls"
+    expect="you can say, for example"
+    session=rh1
+
+@t.ui.help.r02 core.test
+    input="more pls"
+    expect="more things you can say"
+    session=rh1
+
+@t.ui.help.r03 core.test
+    input="next examples please"
+    expect="more things"
+    session=rh1
+
+@t.ui.help.r04 core.test
+    input="example pls"
+    expect="for example: \""
+    session=rh2
+
+@t.ui.help.r05 core.test
+    input="what u can do"
+    expect="I can chat"
+    session=rh3
+
+@t.ui.help.r06 core.test
+    input="tell me what you can do"
+    expect="I can chat"
+    session=rh3
+
+@t.ui.help.r07 core.test
+    input="chess rules pls"
+    expect="Chess:"
+    session=rh4
+
+@t.ui.help.r08 core.test
+    input="how u play chess"
+    expect="Chess:"
+    session=rh4
+
+@t.ui.help.r09 core.test
+    input="could you explain how i play tic tac toe"
+    expect="Tic-tac-toe:"
+    session=rh4
+
+@t.ui.help.r10 core.test
+    input="how do i play twenty questions"
+    expect="twenty yes/no questions"
+    session=rh4
+
+@t.ui.help.r11 core.test
+    input="im lost"
+    expect="Avatar tab"
+    session=rh5
+
+@t.ui.help.r12 core.test
+    input="help i am lost"
+    expect="Avatar tab"
+    session=rh5
+
+@t.ui.help.r13 core.test
+    input="whats this tab for"
+    expect="The Avatar tab lets you change my face"
+    session=rh5
+
+@t.ui.help.r14 core.test
+    input="what can i do on this page"
+    expect="The Avatar tab lets you change my face"
+    session=rh5
+
+@t.ui.help.r15 core.test
+    input="how can i draw a circle pls"
+    expect="circle"
+    session=rh6
+
+@t.ui.help.r16 core.test
+    input="zorb flimbles quickly"
+    expect="I did not understand"
+    session=rh7
+
+@t.ui.help.r17 core.test
+    input="why u no understand"
+    expect="I did not understand"
+    session=rh7
+
+@t.ui.help.r18 core.test
+    input="which part did you not get"
+    expect="I did not understand"
+    session=rh7
+
+@t.ui.help.r19 core.test
+    input="what was wrong with what i said"
+    expect="I did not understand"
+    session=rh7
