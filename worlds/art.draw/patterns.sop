@@ -1393,3 +1393,34 @@
     priority=11
     example="Draw."
     doc="A drawing command without the thing to draw: asks what to draw and expects the answer as the next utterance (discourse pending, spec 11). Priority 11 keeps the chess draw offer on other tabs; on the drawing tab the tab bias selects this pattern."
+
+@pat.art.draw.x2.bare.colored core.pattern
+    match="[$lang.lead.filler|pls|plz]? [a|an|one|some|another]? {n:number?} {m1:lex.art.draw.mods} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [$lang.tail.filler|please|pls|plz|thanks]?"
+    emit="@{_} core.request action=draw.add arg.n={n} arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
+    kind=request
+    priority=9
+    example="A purple tree please."
+    example="A big red house."
+
+@pat.art.draw.x2.mood.look core.pattern
+    match="[$lang.lead.filler|pls|plz]? [make|turn|let|have|set|change] [it|the_picture|the_scene|the_sky|everything|the_drawing|this] [to]? [look|seem|feel|be|become|turn|go|appear|get] [like|as|into]? {w:lex.art.draw.times} [time|now|outside|please|pls]?"
+    emit="@{_} core.request action=draw.mood arg.w={w}"
+    kind=request
+    priority=12
+    example="Make it look like night time."
+    example="Turn it into evening."
+
+@pat.art.draw.x2.mood.want core.pattern
+    match="[$lang.lead.filler|pls|plz]? [i_want|i_would_like|i_d_like|id_like|i_need|let_it_be|let_us_have|can_we_have|can_i_have|how_about|give_me] [it|the_picture|the_scene|the_sky]? [to_be|to_look_like|to_look|to_feel_like|like]? [a|an|the]? {w:lex.art.draw.times} [time|scene|sky|mood|picture]? [please|pls]?"
+    emit="@{_} core.request action=draw.mood arg.w={w}"
+    kind=request
+    priority=11
+    example="I want it to be night."
+
+@pat.art.draw.x2.clean.page core.pattern
+    match="[$lang.lead.filler|pls|plz]? [i_want|i_would_like|i_d_like|id_like|i_need|give_me|can_i_have|could_i_have|may_i_have|let_me_have|start_with|let_us_start_with|how_about] [a|an|the|my]? [clean|blank|empty|fresh|new|white|clear|clean_white|plain] [page|canvas|paper|sheet|picture|drawing|slate|board|screen]"
+    emit="@{_} core.request action=draw.clearAll"
+    kind=request
+    priority=12
+    example="I want a clean page."
+    example="Give me a blank canvas."

@@ -1717,7 +1717,7 @@
 
 @t.art.draw.r2move10 core.test
     input="Slide the tree over to the right."
-    expect="I moved the tree above the g"
+    expect="I moved the tree right"
     expectStatus=supported
     session=r2move
 
@@ -3514,193 +3514,193 @@
 @t.art.draw.dm101 core.test
     input="Open the drawing tab."
     expect="Drawing"
-    session=dm1
+    session=xmv1
 
 @t.art.draw.dm102 core.test
     input="Draw a red house."
     expectState="objects.length=1"
-    session=dm1
+    session=xmv1
 
 @t.art.draw.dm103 core.test
     input="Draw a blue house."
     expectState="objects.length=2"
-    session=dm1
+    session=xmv1
 
 @t.art.draw.dm104 core.test
     input="Draw a tree."
     expectState="objects.length=3"
-    session=dm1
+    session=xmv1
 
 @t.art.draw.dm105 core.test
     input="Make the blue house bigger."
     expectState="objects.1.size=312"
-    session=dm1
+    session=xmv1
 
 @t.art.draw.dm106 core.test
     input="No, I meant the tree."
     expectState="objects.1.size=240"
     expectState="objects.2.size=221"
-    session=dm1
+    session=xmv1
 
 @t.art.draw.dm107 core.test
     input="Not that one, the other one."
     expectState="objects.2.size=170"
     expectState="objects.0.size=312"
-    session=dm1
+    session=xmv1
 
 @t.art.draw.dm108 core.test
     input="Make the tree small."
     expectState="objects.2.size=111"
-    session=dm1
+    session=xmv1
 
 @t.art.draw.dm109 core.test
     input="Make the house green."
     expect="Which one: the red house or the blue house?"
     expectState="objects.0.color=red"
-    session=dm1
+    session=xmv1
 
 @t.art.draw.dm110 core.test
     input="the blue one"
     expect="green now"
     expectState="objects.1.color=green"
     expectState="objects.0.color=red"
-    session=dm1
+    session=xmv1
 
 @t.art.draw.dm111 core.test
     input="Make the tree big."
     expectState="objects.2.size=255"
-    session=dm1
+    session=xmv1
 
 @t.art.draw.dm112 core.test
     input="Make the house purple."
     expect="Which one: the red house or the green house?"
-    session=dm1
+    session=xmv1
 
 @t.art.draw.dm113 core.test
     input="never mind"
     expect="never mind"
     expectState="objects.0.color=red"
-    session=dm1
+    session=xmv1
 
 @t.art.draw.dm114 core.test
     input="Draw a cat."
     expectState="objects.length=4"
-    session=dm1
+    session=xmv1
 
 @t.art.draw.dm115 core.test
     input="What did you do?"
     expect="You asked me to draw a cat"
     expect="so I did it"
-    session=dm1
+    session=xmv1
 
 @t.art.draw.dm116 core.test
     input="What?"
     expect="orange cat"
-    session=dm1
+    session=xmv1
 
 @t.art.draw.dm117 core.test
     input="That's wrong."
     expect="Shall I undo it?"
-    session=dm1
+    session=xmv1
 
 @t.art.draw.dm118 core.test
     input="yes"
     expect="undid"
     expectState="objects.length=3"
-    session=dm1
+    session=xmv1
 
 @t.art.draw.dm201 core.test
     input="Draw a red house."
     expectState="objects.0.color=red"
-    session=dm2
+    session=xmv2
 
 @t.art.draw.dm202 core.test
     input="Actually make it blue."
     expectState="objects.length=1"
     expectState="objects.0.color=blue"
-    session=dm2
+    session=xmv2
 
 @t.art.draw.dm203 core.test
     input="Make it bigger."
     expectState="objects.0.size=312"
-    session=dm2
+    session=xmv2
 
 @t.art.draw.dm204 core.test
     input="A bit more."
     expectState="objects.0.size=359"
-    session=dm2
+    session=xmv2
 
 @t.art.draw.dm205 core.test
     input="Much bigger."
     expectState="objects.0.size=610"
-    session=dm2
+    session=xmv2
 
 @t.art.draw.dm206 core.test
     input="Even smaller."
     expectState="objects.0.size=469"
-    session=dm2
+    session=xmv2
 
 @t.art.draw.dm207 core.test
     input="Twice as big."
     expectState="objects.0.size=938"
-    session=dm2
+    session=xmv2
 
 @t.art.draw.dm208 core.test
     input="Draw a tree."
     expectState="objects.length=2"
-    session=dm2
+    session=xmv2
 
 @t.art.draw.dm209 core.test
     input="Make the tree the same size as the house."
     expect="same size as the house"
     expectState="objects.1.size=938"
-    session=dm2
+    session=xmv2
 
 @t.art.draw.dm210 core.test
     input="Make the tree small."
     expectState="objects.1.size=111"
-    session=dm2
+    session=xmv2
 
 @t.art.draw.dm211 core.test
     input="The same size as the house."
     expect="same size"
     expectState="objects.1.size=938"
-    session=dm2
+    session=xmv2
 
 @t.art.draw.dm301 core.test
     input="Open the drawing tab."
     expect="Drawing"
-    session=dm3
+    session=xmv3
 
 @t.art.draw.dm302 core.test
     input="Draw a sun."
     expectState="objects.0.kind=sun"
-    session=dm3
+    session=xmv3
 
 @t.art.draw.dm303 core.test
     input="Open the chess tab."
     expect="Chess"
-    session=dm3
+    session=xmv3
 
 @t.art.draw.dm304 core.test
     input="Back to the drawing."
     expect="In your picture I can see"
-    session=dm3
+    session=xmv3
 
 @t.art.draw.dm305 core.test
     input="Draw."
     expect="What should I draw?"
-    session=dm3
+    session=xmv3
 
 @t.art.draw.dm306 core.test
     input="Never mind."
     expect="never mind"
-    session=dm3
+    session=xmv3
 
 @t.art.draw.dm307 core.test
     input="A dog."
     expectState="objects.length=1"
-    session=dm3
+    session=xmv3
 
 @t.art.draw.g3b1 core.test
     input="Draw a red circle."
@@ -3713,3 +3713,115 @@
     expectState="objects.length=2"
     session=g3boat
     doc="G3 contrast (boat/coat): on the drawing tab a word the tab knows is never spell-corrected into another world's word"
+
+@t.art.draw.x210 core.test
+    session=dx0
+    input="a purple tree please"
+    expectState="objects.0.color=purple"
+    expectState="objects.length=1"
+
+@t.art.draw.x211 core.test
+    session=dx1
+    input="a purple boat please"
+    expectState="objects.0.color=purple"
+    expectState="objects.length=1"
+
+@t.art.draw.x212 core.test
+    session=dx2
+    input="a big red house"
+    expectState="objects.0.color=red"
+    expectState="objects.length=1"
+
+@t.art.draw.x213 core.test
+    session=dx3
+    input="put a boat on the water"
+    expectState="objects.0.kind=boat"
+    expectState="objects.length=1"
+
+@t.art.draw.x214 core.test
+    session=dx4
+    input="draw a boat on the sea"
+    expectState="objects.0.kind=boat"
+
+@t.art.draw.x215 core.test
+    session=dx5
+    input="make it look like night time"
+    expectState="mood=night"
+
+@t.art.draw.x216 core.test
+    session=dx6
+    input="turn it into evening"
+    expectState="mood=night"
+
+@t.art.draw.x217 core.test
+    session=dx7
+    input="i want a clean page"
+    expectState="objects.length=0"
+
+@t.art.draw.x218 core.test
+    session=dx8
+    input="give me a blank canvas"
+    expectState="objects.length=0"
+
+@t.art.draw.x219 core.test
+    session=dx9
+    input="draw 1.5 houses"
+    expectState="objects.length=1"
+
+@t.art.draw.x220 core.test
+    session=dx10
+    input="draw 0.5 trees"
+    expectState="objects.length=0"
+
+@t.art.draw.x230 core.test
+    session=xzmv0
+    input="Draw a red house."
+    expectStatus=supported
+
+@t.art.draw.x231 core.test
+    session=xzmv0
+    input="slide the house over to the right"
+    expect="moved the house right"
+
+@t.art.draw.x232 core.test
+    session=xzmv1
+    input="Draw a red house."
+    expectStatus=supported
+
+@t.art.draw.x233 core.test
+    session=xzmv1
+    input="shift the house over to the left"
+    expect="moved the house left"
+
+@t.art.draw.x234 core.test
+    session=xzmv2
+    input="Draw a red house."
+    expectStatus=supported
+
+@t.art.draw.x235 core.test
+    session=xzmv2
+    input="put the house at 200, 300"
+    expectState="objects.0.x=200"
+    expectState="objects.0.y=300"
+
+@t.art.draw.x236 core.test
+    session=xzmv3
+    input="Draw a red house."
+    expectStatus=supported
+
+@t.art.draw.x237 core.test
+    session=xzmv3
+    input="move the house to 250 by 250"
+    expectState="objects.0.x=250"
+    expectState="objects.0.y=250"
+
+@t.art.draw.x238 core.test
+    session=xzmv4
+    input="Draw a red house."
+    expectStatus=supported
+
+@t.art.draw.x239 core.test
+    session=xzmv4
+    input="move the house to x 600 y 150"
+    expectState="objects.0.x=600"
+    expectState="objects.0.y=150"
