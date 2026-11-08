@@ -3589,8 +3589,8 @@
 
 @t.art.draw.dm115 core.test
     input="What did you do?"
-    expect="Draw a cat"
-    expect="pat.art.draw"
+    expect="You asked me to draw a cat"
+    expect="so I did it"
     session=dm1
 
 @t.art.draw.dm116 core.test

@@ -183,6 +183,29 @@ function parseYears(n) {
  * Read what the user said about themselves. `pending` is the field of the question that is waiting for an answer (short answers
  * like "nurse" or "12 years" are read as answers to it). Returns the fields found; `deny` is true for a clear "no".
  */
+// ---- plausibility: does a value fit the type of its field? -------------------------------------------------------------------
+const CLAUSE_LEAD = new Set(['i', 'my', 'we', 'he', 'she', 'they', 'it', 'you', 'his', 'her', 'our', 'their', 'there', 'that', 'this', 'because', 'when', 'if', 'but', 'then', 'what', 'how', 'why']);
+const CLAUSE_VERB = new Set(['was', 'were', 'did', 'took', 'went', 'got', 'had', 'am', 'is', 'are', 'told', 'said', 'made', 'gave', 'let']);
+/** True for a clause or a story ("my dad took me", "it was fun"): never a value of a profile field. */
+export function clauseLike(v) {
+  const t = toks(norm(Array.isArray(v) ? v.join(' ') : v));
+  return t.length > 0 && (CLAUSE_LEAD.has(t[0]) || t.slice(1).some((w) => CLAUSE_VERB.has(w)) || CLAUSE_VERB.has(t[0]));
+}
+const MAX_WORDS = { learning: 8, skills: 6, tools: 6, hobbies: 6, topics: 6, media: 8, sports: 6, previous: 6, role: 7, org: 7, field: 6, location: 5, education: 10, name: 3, address: 5, career: 16, year: 16, length: 3, tone: 3, language: 3 };
+/** Type check per field: an activity/skill/topic noun phrase, a role, an organisation, a number of years, a place ... and never a clause. */
+export function fits(key, value) {
+  const s = clean(Array.isArray(value) ? value.join(' ') : value);
+  if (!s) return false;
+  if (key === 'years') return /\d/.test(s) && !clauseLike(s.replace(/\d+\+?/g, '')) ;
+  if (clauseLike(s)) return false;
+  if (key === 'career' || key === 'year') return words(s).length <= MAX_WORDS[key];
+  if (/\b(?:i|me|we|you)\b/i.test(s)) return false;
+  if (key === 'location' && /\d/.test(s)) return false;
+  return words(s).length <= (MAX_WORDS[key] ?? 12);
+}
+/** A value that is safe to repeat in an acknowledgement (short, and not a clause). */
+export const echoable = (v) => { const s = clean(Array.isArray(v) ? v.join(' ') : v); return !!s && words(s).length <= 8 && !clauseLike(s) && !/\b(?:i|me|we|you)\b/i.test(s); };
+
 export function extract(text, env) {
   const { lex = () => [], industries = [], pending = null } = env ?? {};
   const raw = String(text ?? '').trim();
@@ -405,6 +428,11 @@ export function extract(text, env) {
     const w = cleaned.split(/\s+/).filter(Boolean);
     if (w.length >= 1 && w.length <= 3 && w.every((x) => /^[\p{L}][\p{L}'.-]*$/u.test(x)) && !NOT_NAME.has(w[0].toLowerCase()) && !(w.length === 1 && lex('roles').includes(w[0].toLowerCase()))) put('name', w.map(sentenceCase).join(' '), { how: 'name-bare' });
   }
+  out.items = out.items.map((it) => {
+    const vals = Array.isArray(it.value) ? it.value : [it.value];
+    const ok = vals.filter((x) => fits(it.key, x));
+    return ok.length === vals.length ? it : ok.length ? { ...it, value: ok } : null;
+  }).filter(Boolean);
   out.sens = sensitive(raw, lex);
   return out;
 }

@@ -35,7 +35,7 @@
   ],
   "dispatcherModel": false,
   "files": {
-    "lib/dialog/discourse.mjs": "0c98398a495d3e4d",
+    "lib/dialog/discourse.mjs": "e377e8002674edc3",
     "lib/dialog/dispatch-validate.mjs": "a0d8bba238ac9395",
     "lib/dialog/encoder-dispatch.mjs": "43ac27ef66b4706b",
     "lib/dialog/index.mjs": "17d82aecea82ed42",
@@ -53,7 +53,7 @@
     "lib/formalizer/rules/expand.mjs": "b18f5d563646e50d",
     "lib/formalizer/rules/index.mjs": "e046209ec9bd3936",
     "lib/formalizer/rules/lemma.mjs": "459e515e4394aead",
-    "lib/formalizer/rules/matcher.mjs": "2ee5d422a49800b6",
+    "lib/formalizer/rules/matcher.mjs": "449b8a5a53f8923c",
     "lib/formalizer/rules/normalize.mjs": "48feca7f43e5d803",
     "lib/formalizer/rules/numbers.mjs": "9d8b00ef65eb3af8",
     "lib/formalizer/rules/router.mjs": "d9e1a4c0ecf3dd3e",
@@ -105,13 +105,13 @@
     "worlds/games.tictactoe/ops.mjs": "7e85fc09ef9be20a",
     "worlds/geo.map/datagen.mjs": "7bdabe28b74dfa9e",
     "worlds/geo.map/ops.mjs": "548315deb2f470bd",
-    "worlds/index.json": "475cf2e119a23890",
+    "worlds/index.json": "06e500ebbe73d434",
     "worlds/kids.animals/datagen.mjs": "6ad9f00ea4316ed7",
     "worlds/kids.animals/ops.mjs": "644e845de473918a",
     "worlds/kids.arith/datagen.mjs": "eaddc6e69e6c0b20",
     "worlds/kids.arith/ops.mjs": "25afbbfc278cc2b3",
     "worlds/kids.common/datagen.mjs": "d9dbe0460eb43452",
-    "worlds/kids.common/ops.mjs": "a698f431fdd7211d",
+    "worlds/kids.common/ops.mjs": "d9e549d8fb7382be",
     "worlds/kids.shapes/datagen.mjs": "6d59eb7efaf11354",
     "worlds/kids.shapes/ops.mjs": "680e38c07f4be6ef",
     "worlds/kids.shop/datagen.mjs": "a64578dfc3f418ab",
@@ -126,15 +126,15 @@
     "worlds/media.music/theory.mjs": "aee595e3c2bde999",
     "worlds/media.music/vendor/tonal.mjs": "331490751dea871a",
     "worlds/ui.avatar/datagen.mjs": "cfe14093d9dc480c",
-    "worlds/ui.avatar/ops.mjs": "9764e520e1b56eb2",
+    "worlds/ui.avatar/ops.mjs": "77284ec3c335bef0",
     "worlds/ui.help/datagen.mjs": "2a566dd11e1a621a",
     "worlds/ui.help/ops.mjs": "55b1fc33043e09e4",
     "worlds/ui.shell/datagen.mjs": "ed03fcd2c4012de6",
     "worlds/ui.shell/ops.mjs": "41fb8a42f31b821f",
     "worlds/user.profile/cv.mjs": "a1aa32d0f33cffe1",
     "worlds/user.profile/datagen.mjs": "b5072a56e9ba2dd9",
-    "worlds/user.profile/ops.mjs": "8582b435a848bb37",
-    "worlds/user.profile/understand.mjs": "90e63ca1faba3615"
+    "worlds/user.profile/ops.mjs": "3fa6e7ff1d90954e",
+    "worlds/user.profile/understand.mjs": "2950c98f1f25800a"
   },
-  "builtAt": "2026-11-08T18:28:57.487Z"
+  "builtAt": "2026-11-08T18:46:17.451Z"
 }

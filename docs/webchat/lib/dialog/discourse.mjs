@@ -373,9 +373,13 @@ export class Discourse {
     const a = this._recentAction(6);
     const f = a?.frames[0] ?? this.frames[0];
     if (!f) return null;
-    const how = `I read "${f.text}" with the rule ${f.patternId} of ${f.world}${f.opId ? ` and ran ${f.opId}` : ''}.`;
-    const said = f.reply ? ` My answer was: ${f.reply}` : '';
-    const reply = a ? `You said "${f.text}", so I did it. ${how}${said}` : `You asked "${f.text}". ${how}${said}`;
+    // plain wording for the user; ids (rule, operation) stay in info and the trace only
+    const asked = String(f.text ?? '').trim().replace(/[.!\s]+$/, '');
+    const isQuestion = /\?$/.test(asked) || /^(?:what|who|whom|whose|where|when|why|how|which|is|are|was|were|does|do|did|can|could|will|would|should)\b/i.test(asked);
+    const imperative = !isQuestion && /^(?:please\s+)?[a-z]+\b/i.test(asked) && !/^(?:i|we|you|my|the|a|an)\b/i.test(asked);
+    const what = imperative ? `You asked me to ${asked.replace(/^please\s+/i, '').replace(/^(\w)/, (c) => c.toLowerCase())}` : `You said "${asked}"`;
+    const said = f.reply ? ` What I answered: ${f.reply}` : '';
+    const reply = `${what}, so ${a ? 'I did it' : 'I answered it'}.${said}`;
     return { reply, info: { kind: 'explain', of: f.text, world: f.world, pattern: f.patternId, op: f.opId, changed: a?.worlds ?? [] } };
   }
 

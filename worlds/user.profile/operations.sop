@@ -64,3 +64,15 @@
     action=prof.mention
     doc="Asks about one field next."
 
+
+@op.user.profile.setName core.operation
+    impl=setName
+    semantics=action
+    action=prof.setName
+    doc="The user's preferred name as one fact shared with kids.common: ctx.request(\"prof.setName\", { name }). No acknowledgement and no tab switch."
+
+@op.user.profile.nameOf core.operation
+    impl=nameOf
+    semantics=action
+    action=prof.nameOf
+    doc="The preferred name (empty when unknown): ctx.request(\"prof.nameOf\")."

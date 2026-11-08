@@ -558,6 +558,9 @@ function _askMood(ctx) {
 }
 function _setName(ctx, { name }) {
   const n = String(name ?? '').trim().replace(/[.!?]+$/, '');
+  // "call me Andy" names the user, not the avatar; only "call yourself X" / "your name is X" name the avatar
+  const me = /^me\s+(?:as\s+|by\s+|the name\s+)?(\S.*)$/i.exec(n);
+  if (me) { const r = ctx.request('chat.meet', { name: me[1] }); if (r?.status === 'supported') return ok(r.value); }
   if (!n) return no('What should my name be?');
   if (n.length > 40) return no('That name is too long for me.');
   ensure(ctx).name = n;

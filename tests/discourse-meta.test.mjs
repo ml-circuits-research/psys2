@@ -245,11 +245,11 @@ test('repeat and explain', async () => {
   assert.equal(rep.text, first.text);
   assert.equal((await s.send('what?')).text, first.text, 'repeating does not replace the answer');
   const why = await s.send('what did you do?');
-  assert.match(why.text, /You said "Draw a cat"/);
-  assert.match(why.text, /pat\.art\.draw/);
-  assert.match(why.text, /op\.art\.draw/);
+  assert.match(why.text, /You asked me to draw a cat, so I did it/);
+  assert.doesNotMatch(why.text, /pat\.|op\.|rule/, 'no internal ids in the user-facing explanation');
+  assert.match(why.trace.discourse.meta.pattern, /^pat\.art\.draw/, 'technical detail stays in the trace');
   assert.equal(why.trace.discourse.meta.kind, 'explain');
-  assert.match((await s.send('why?')).text, /Draw a cat/);
+  assert.match((await s.send('why?')).text, /draw a cat/);
 });
 
 test('feedback: apology, undo offer, trace and phrase-log mark', async () => {

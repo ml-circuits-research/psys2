@@ -33,6 +33,9 @@ export const OP_WORDS = {
 };
 
 /** True when the literal word list contains a filler (an old or new filler word, `for me`, `u know`, `like`) or a leading `then` / `so` / `and` / `after that`. */
+// Personal pronouns are never a noun slot value ("I live in Cluj" is not a fact about an animal called "i").
+const PERSONAL_PRONOUNS = new Set(['i', 'you', 'we', 'they', 'he', 'she', 'it', 'me', 'us', 'him', 'her', 'them']);
+
 function listsFiller(words) {
   return words.some((w, k) => isFillerWord(w) || w === 'like' || w === 'then' || w === 'so' || w === 'and' || (w === 'that' && words[k - 1] === 'after') || (w === 'me' && words[k - 1] === 'for') || (w === 'know' && ['u', 'you', 'ya'].includes(words[k - 1])));
 }
@@ -135,7 +138,7 @@ function candidates(el, tokens, i, env, slotsSoFar) {
         const lemma = [...ws.slice(0, -1).map((x) => x.lower), lex.lemma(ws[len - 1].lower)].join('_');
         if (lex.nounsMulti.has(lemma)) out.push({ len, value: lemma, text: text(len), span: span(len) });
       }
-      if (t.kind === 'word' && t.lower !== "'s") out.push({ len: 1, value: lex.lemma(t.lower), text: t.raw, span: span(1) });
+      if (t.kind === 'word' && t.lower !== "'s" && !PERSONAL_PRONOUNS.has(t.lower)) out.push({ len: 1, value: lex.lemma(t.lower), text: t.raw, span: span(1) });
       return out;
     }
     case 'agent': {

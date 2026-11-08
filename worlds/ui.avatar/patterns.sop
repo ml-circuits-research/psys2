@@ -841,7 +841,7 @@
     example="Show surprise."
 
 @pat.ui.avatar.x.name.set core.pattern
-    match="[please|pls|plz|hey|ok|okay|so|um|well|just]? [can_u|can_you|could_u|could_you|would_you|will_you|please_can_you|i_want_you_to|i_would_like_you_to|you_should|i_wanna|i_want|can_i|could_i|may_i|let_me]? [name|call|rename|dub|label|christen] [yourself|urself|you|u|me|it|the_avatar|the_robot|this_avatar|this_one]? [as|to|by|the_name]? {name:rest} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|well|just]? [can_u|can_you|could_u|could_you|would_you|will_you|please_can_you|i_want_you_to|i_would_like_you_to|you_should|i_wanna|i_want|can_i|could_i|may_i|let_me]? [name|call|rename|dub|label|christen] [yourself|urself|you|u|it|the_avatar|the_robot|this_avatar|this_one]? [as|to|by|the_name]? {name:rest} [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=avatar.setName arg.name=\"{name}\""
     kind=request
     priority=9

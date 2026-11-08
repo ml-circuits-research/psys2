@@ -75,7 +75,7 @@ Real messages often omit or repeat words: "make your eyes and body blue", "eyes 
 | `word` | any single token | atom (lowercase) |
 | `words` | 1–12 tokens, lazy; `words(N)` sets the maximum to N | string (original text) |
 | `recent(<lexicon id>,<agent slot>)` | zero tokens: ellipsis. The item of that lexicon most recently mentioned together with the agent captured by `<agent slot>` (an earlier slot of the pattern), else the one most recently mentioned in the session. No such item: the pattern does not match (no guessing) | atom: the lexicon entry |
-| `noun` | a single word, or a multi-word lexicon noun | atom: singular lemma, `_` joins multi-word (`ice_cream`) |
+| `noun` | a single word that is not a personal pronoun (i, you, we, they, he, she, it, me, us, him, her, them), or a multi-word lexicon noun | atom: singular lemma, `_` joins multi-word (`ice_cream`) |
 | `<lexicon id>` (e.g. `lex.kids.animals.names`) | a word (or multi-word entry of up to 4 words, e.g. song titles) whose singular lemma is in that lexicon | atom: the lexicon entry |
 | `agent` | a person: a capitalized token that is not a known lowercase word, or a name from any `class=name` lexicon, or a pronoun | reference to an agent entity (`$e.tom`) |
 | `unit` | a token in any `class=unit` lexicon or the quantity unit table | atom |

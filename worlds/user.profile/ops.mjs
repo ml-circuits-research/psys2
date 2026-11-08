@@ -8,7 +8,7 @@
 // The plan (fields, priorities, sensitivity, phrasings, follow-ups) is read from the knowledge base (kb.sop); answers are read by understand.mjs.
 // Modal input: while `inputMode` is set, the engine offers every message to interceptInput(); clear commands for other worlds and this world's own
 // commands pass through (handled: false), everything else is read as the answer. Effects: file.download { filename, text, mime }.
-import { extract, norm, isSkip, isStop, isDecline, YES, NO, sensitive, fieldForRole, fieldForRoleText, pretty, sentenceCase, withArticle } from './understand.mjs';
+import { extract, clauseLike, echoable, norm, isSkip, isStop, isDecline, YES, NO, sensitive, fieldForRole, fieldForRoleText, pretty, sentenceCase, withArticle } from './understand.mjs';
 import { toJson, toMarkdown, counts, PLAN_FALLBACK, SECTIONS_FALLBACK } from './cv.mjs';
 
 const TAB = 'profile';
@@ -123,7 +123,7 @@ function ackText(ctx, s, plan, changes, correction, turn) {
   if (!text) {
     const tpl = pl(c.key)?.ack ?? [];
     const val = display(c.added?.length ? c.added : c.value);
-    text = tpl.length ? tpl[turn % tpl.length].replace('{A}', sentenceCase(withArticle(val))).replace('{V}', sentenceCase(val)).replace('{v}', val) : `Noted: ${val}.`;
+    text = !echoable(val) ? 'Thanks, noted.' : tpl.length ? tpl[turn % tpl.length].replace('{A}', sentenceCase(withArticle(val))).replace('{V}', sentenceCase(val)).replace('{v}', val) : `Noted: ${val}.`;
   }
   const extras = changes.filter((x) => x !== c && !x.same).slice(0, 2).map((x) => `${(pl(x.key)?.label ?? x.key).toLowerCase()}: ${display(x.added?.length ? x.added : x.value)}`);
   return extras.length ? `${text} I also noted ${joinAnd(extras)}.` : text;
@@ -169,6 +169,7 @@ function nextQuestion(s, plan, withAck) {
 function sayFollow(s, plan, p, retry) {
   s.pending = { kind: 'follow', key: p.id, followKey: retry ? '' : p.followKey || '', retry: !!retry };
   s.followed[p.id] = true; s.lastFollow = true;
+  if (!p.followKey && !retry) s.lastFollowNote = { key: p.id, turn: s.turns };
   const q = p.follow;
   s.question = q;
   return q;
@@ -253,13 +254,28 @@ function interceptTurn(ctx, text) {
   }
   if (!ex.items.length && cur?.kind === 'follow' && !cur.followKey && !cur.retry && !looksOther(n, raw) && n.split(' ').length <= 40) {
     const f = s.fields[cur.key];
-    if (f) f.note = clean(raw).slice(0, 160);
+    if (f && !YES.test(n) && !NO.test(n)) f.note = clean(raw).slice(0, 160);
     s.pending = null; s.focus = { key: cur.key, n: ++s.n };
     const thanks = ['Thanks for sharing that.', 'That is good to know.', 'I like that.'][s.turns % 3];
     return { handled: true, reply: `${thanks} ${nextQuestion(s, plan, true)}` };
   }
   if (!ex.items.length) {
-    if (looksOther(n, raw) || !cur || n.split(' ').length > 8) return { handled: false };
+    if (looksOther(n, raw) || !cur) return { handled: false };
+    // a clause or a story is never a value: it may belong to the previous follow-up (kept as a note), else it is acknowledged politely and the question is asked again once
+    if (cur.kind === 'ask' && field && clauseLike(raw) && n.split(' ').length <= 40) {
+      const lf = s.lastFollowNote;
+      if (lf && lf.key !== field.id && s.turns - lf.turn <= 5 && s.fields[lf.key] && !s.fields[lf.key].note) {
+        s.fields[lf.key].note = clean(raw).slice(0, 160); s.lastFollowNote = null;
+        s.asks[field.id] = Math.max(0, (s.asks[field.id] ?? 1) - 1);
+        return { handled: true, reply: `Thanks, I added that to your ${(plan.find((x) => x.id === lf.key)?.label ?? lf.key).toLowerCase()} notes. ${askField(s, plan, field)}` };
+      }
+      if (!(s.storied ??= {})[field.id]) {
+        s.storied[field.id] = true;
+        s.asks[field.id] = Math.max(0, (s.asks[field.id] ?? 1) - 1);
+        return { handled: true, reply: `Nice story! ${askField(s, plan, field, 'And ').replace(/^And (?!I\b)([A-Z])/, (m, c) => `And ${c.toLowerCase()}`)}` };
+      }
+    }
+    if (n.split(' ').length > 8) return { handled: false };
     // not understood
     if (cur.kind === 'ask' && field?.follow && !s.followed[field.id]) return { handled: true, reply: `Hmm, I am not sure I got that. ${sayFollow(s, plan, field, true)}` };
     if (cur.kind === 'follow' && cur.followKey) { s.pending = null; return { handled: true, reply: `Okay. ${nextQuestion(s, plan, true)}` }; }
@@ -404,6 +420,18 @@ const FIELD_WORDS = {
   ambitions: ['career'], previous: ['previous'], learning: ['learning'], year: ['year'], length: ['length'], media: ['media'], org: ['org'], tone: ['tone'], style: ['tone', 'length'], answers: ['length'], address: ['address'], topics: ['topics'], field: ['field'], industry: ['field'], field_: ['field'],
 };
 const keysOf = (w) => FIELD_WORDS[String(w ?? '').toLowerCase().replace(/ /g, '_')] ?? [];
+
+/** The user's preferred name as one shared fact (kids.common reads and writes it here): no acknowledgement, no tab switch. */
+export const setName = W((ctx, { name }) => {
+  const s = st(ctx);
+  const n = clean(name);
+  if (!n) return no('unsupported', 'What should I call you?');
+  s.fields.name = { v: n, src: 'said', at: ++s.n };
+  delete s.skipped.name;
+  s.focus = { key: 'name', n: s.n };
+  return ok(n);
+});
+export const nameOf = (ctx) => ok(list(st(ctx).fields.name?.v)[0] ?? '');
 
 export const forget = W((ctx, { w }) => {
   const s = st(ctx); const plan = planOf(ctx);

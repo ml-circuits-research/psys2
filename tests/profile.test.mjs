@@ -128,3 +128,81 @@ test('the world declares the Profile tab and the plugin is built', () => {
 test('world loads without problems', () => {
   assert.deepEqual(engine.problems().filter((p) => p.startsWith('user.profile')), []);
 });
+
+// ---- plausibility, polite handling of off-topic replies, one shared name, "I live in" ---------------------------------------------------
+
+test('type check per field: a clause is never a value', async () => {
+  const { fits, clauseLike, echoable } = await import('../worlds/user.profile/understand.mjs');
+  assert.equal(clauseLike('my dad took me'), true);
+  assert.equal(clauseLike('it was a lot of fun'), true);
+  assert.equal(clauseLike('play the guitar'), false);
+  assert.equal(fits('learning', 'my dad took me'), false);
+  assert.equal(fits('learning', 'Spanish'), true);
+  assert.equal(fits('learning', 'play the guitar'), true);
+  assert.equal(fits('role', 'software engineer'), true);
+  assert.equal(fits('role', 'she told me to apply'), false);
+  assert.equal(fits('years', '12'), true);
+  assert.equal(fits('years', 'my dad took me'), false);
+  assert.equal(fits('location', 'Cluj'), true);
+  assert.equal(echoable('Dad took me'), false);
+  assert.equal(echoable('Spanish'), true);
+  assert.deepEqual(items('my dad took me', 'learning'), {});
+  assert.deepEqual(items('Spanish', 'learning'), { learning: ['Spanish'] });
+});
+
+const interview = async (answerFor) => {
+  const s = engine.createSession({ language: 'en' });
+  await s.send('open the profile tab');
+  let r = await s.send('interview me');
+  const log = [];
+  for (let i = 0; i < 40; i++) {
+    const p = s.state('user.profile').pending;
+    const a = answerFor(p);
+    if (a === null) break;
+    log.push(a); r = await s.send(a);
+  }
+  return { s, r, log };
+};
+
+test('a story as the answer to the learning question is not stored; it is acknowledged politely and the question is asked again', async () => {
+  const { s, r } = await interview((p) => (p?.kind === 'confirm' ? 'yes' : p?.kind === 'follow' ? 'we went up the mountain' : p?.key === 'name' ? 'Ana' : p?.key === 'role' ? 'nurse' : p?.key === 'hobbies' ? 'hiking' : p?.key === 'learning' ? null : 'skip'));
+  assert.equal(s.state('user.profile').pending.key, 'learning');
+  const a = await s.send('my dad took me');
+  assert.match(a.text, /^Nice story! And /);
+  assert.match(a.text, /\?/);
+  const f = s.state('user.profile').fields;
+  assert.equal(f.learning, undefined, 'a clause is not a learning goal');
+  assert.doesNotMatch(a.text, /dad took me|noted/i, 'no raw clause echoed');
+  assert.equal(s.state('user.profile').pending.key, 'learning', 'asked again');
+  const b = await s.send('Spanish');
+  assert.deepEqual(s.state('user.profile').fields.learning.v, ['Spanish']);
+  assert.match(b.text, /Spanish/);
+  void r;
+});
+
+test('a story that fits the previous follow-up is stored there as a note', async () => {
+  const { s } = await interview((p) => (p?.kind === 'confirm' ? 'yes' : p?.kind === 'follow' ? 'yes' : p?.key === 'name' ? 'Ana' : p?.key === 'role' ? 'nurse' : p?.key === 'hobbies' ? 'hiking' : p?.key === 'learning' ? null : 'skip'));
+  const a = await s.send('my dad took me');
+  assert.match(a.text, /^Thanks, I added that to your hobbies notes\./);
+  assert.equal(s.state('user.profile').fields.hobbies.note, 'my dad took me');
+  assert.equal(s.state('user.profile').fields.learning, undefined);
+});
+
+test('"call me X" is the user\'s name (one fact in user.profile and kids.common), "call yourself X" is the avatar; "I live in X" is the profile city', async () => {
+  const s = engine.createSession({ language: 'en' });
+  assert.equal(s.state('ui.shell')?.activeTab ?? 'robot', 'robot');
+  assert.match((await s.send('call me Andy')).text, /Andy/);
+  assert.deepEqual(s.state('user.profile').fields.name.v, 'Andy');
+  assert.match((await s.send('what is my name')).text, /Your name is Andy/);
+  assert.match((await s.send('my name is Ben')).text, /Ben/);
+  assert.equal(s.state('user.profile').fields.name.v, 'Ben');
+  assert.match((await s.send('what is my name')).text, /Your name is Ben/);
+  assert.match((await s.send('call yourself Bolt')).text, /my name is Bolt/);
+  assert.equal(s.state('ui.avatar').name, 'Bolt');
+  assert.equal(s.state('user.profile').fields.name.v, 'Ben');
+  assert.match((await s.send('your name is Pixel')).text, /my name is Pixel/);
+  const r = await s.send('I live in Cluj');
+  assert.equal(r.trace.segments[0].match.worldId, 'user.profile');
+  assert.deepEqual(s.state('user.profile').fields.location.v, 'Cluj');
+  assert.equal((await s.send('A zebra lives on the savanna.')).trace.segments[0].match.worldId, 'kids.animals');
+});
