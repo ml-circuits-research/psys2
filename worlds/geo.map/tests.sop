@@ -1,0 +1,577 @@
+@t.geo.map.n001 core.test
+    input="Show me Bucharest."
+    expect="Bucharest"
+    expect="capital of Romania"
+    expectState="focus.name=Bucharest"
+    expectState="zoom=9"
+    expectState="center.lat=44.4323"
+    expectState="center.lon=26.1063"
+    expectState="bounds=null"
+    session=nav
+
+@t.geo.map.n002 core.test
+    input="Zoom in."
+    expect="zoom 10"
+    expectState="zoom=10"
+    session=nav
+
+@t.geo.map.n003 core.test
+    input="Zoom out a bit."
+    expect="9.5"
+    expectState="zoom=9.5"
+    session=nav
+
+@t.geo.map.n004 core.test
+    input="Zoom in a lot."
+    expect="zoom 12"
+    expectState="zoom=12"
+    session=nav
+
+@t.geo.map.n005 core.test
+    input="Zoom out."
+    expectState="zoom=11"
+    session=nav
+
+@t.geo.map.n006 core.test
+    input="Zoom to level 6."
+    expect="Zoom is now 6"
+    expectState="zoom=6"
+    session=nav
+
+@t.geo.map.n007 core.test
+    input="Zoom in 2 times."
+    expectState="zoom=8"
+    session=nav
+
+@t.geo.map.n008 core.test
+    input="Go north."
+    expect="Moved north"
+    session=nav
+
+@t.geo.map.n009 core.test
+    input="Zoom all the way out."
+    expect="whole world"
+    expectState="zoom=2"
+    expectState="center.lat=25"
+    expectState="center.lon=10"
+    session=nav
+
+@t.geo.map.n010 core.test
+    input="Go to the east."
+    expect="Moved east"
+    expectState="center.lat=25"
+    session=nav
+
+@t.geo.map.n011 core.test
+    input="Show the whole world."
+    expect="whole world"
+    expectState="zoom=2"
+    session=nav
+
+@t.geo.map.n012 core.test
+    input="Show Europe."
+    expect="Europe"
+    expectState="focus.kind=region"
+    expectState="focus.name=Europe"
+    session=nav
+
+@t.geo.map.n013 core.test
+    input="Where is Paris?"
+    expect="capital of France"
+    expect="48.85 N"
+    expectState="focus.name=Paris"
+    expectState="focus.cc=FR"
+    session=nav
+
+@t.geo.map.n014 core.test
+    input="Take me to Tokyo."
+    expect="Tokyo"
+    expectState="focus.name=Tokyo"
+    expectState="zoom=8"
+    session=nav
+
+@t.geo.map.n015 core.test
+    input="Fly to Paris and Rome."
+    expect="Paris and Rome"
+    expectState="focus.name=Paris"
+    session=nav
+
+@t.geo.map.n016 core.test
+    input="Go to coordinates 45.5 25.3."
+    expect="45.50 N, 25.30 E"
+    expectState="center.lat=45.5"
+    expectState="center.lon=25.3"
+    expectState="zoom=8"
+    expectState="focus.kind=point"
+    session=nav
+
+@t.geo.map.n017 core.test
+    input="Go 200 kilometres north."
+    expect="Moved north"
+    session=nav
+
+@t.geo.map.n018 core.test
+    input="Zoom to level 40."
+    expectStatus=unsupported
+    session=nav
+
+@t.geo.map.n019 core.test
+    input="Reset the view."
+    expect="reset"
+    expectState="zoom=2"
+    expectState="center.lat=25"
+    session=nav
+
+@t.geo.map.n020 core.test
+    input="Show me Romania."
+    expect="Romania"
+    expect="country in Europe"
+    expectState="focus.kind=country"
+    expectState="focus.cc=RO"
+    expectState="zoom=6"
+    expectState="bounds.0.0=43.3946"
+
+@t.geo.map.n021 core.test
+    input="Show me Cluj."
+    expect="Cluj-Napoca"
+    expectState="focus.name=Cluj-Napoca"
+    expectState="center.lat=46.7667"
+
+@t.geo.map.n022 core.test
+    input="Where is Atlantis?"
+    expect="do not know a place called Atlantis"
+    expectStatus=unsupported
+
+@t.geo.map.n023 core.test
+    input="Show Chisinau."
+    expect="capital of Moldova"
+    expectState="focus.cc=MD"
+
+@t.geo.map.n024 core.test
+    input="Show me Peking."
+    expect="Beijing"
+    expectState="focus.cc=CN"
+
+@t.geo.map.n025 core.test
+    input="Move a bit to the west."
+    expect="Moved west"
+
+@t.geo.map.n026 core.test
+    input="Put a marker on Cluj."
+    expect="Cluj-Napoca"
+    expectState="markers.length=1"
+    expectState="markers.0.name=Cluj-Napoca"
+    expectState="markers.0.lat=46.7667"
+    expectState="markers.0.id=m1"
+    session=mk
+
+@t.geo.map.n027 core.test
+    input="Mark Paris, Rome and Berlin."
+    expect="Paris, Rome and Berlin"
+    expectState="markers.length=4"
+    session=mk
+
+@t.geo.map.n028 core.test
+    input="Mark Paris."
+    expect="already marked"
+    expectState="markers.length=4"
+    session=mk
+
+@t.geo.map.n029 core.test
+    input="How many markers are there?"
+    expect="4 markers"
+    expect="Cluj-Napoca"
+    session=mk
+
+@t.geo.map.n030 core.test
+    input="Remove the marker on Paris."
+    expect="removed the marker on Paris"
+    expectState="markers.length=3"
+    session=mk
+
+@t.geo.map.n031 core.test
+    input="Remove the last marker."
+    expect="Berlin"
+    expectState="markers.length=2"
+    session=mk
+
+@t.geo.map.n032 core.test
+    input="Mark the 3 largest cities in Japan."
+    expect="Tokyo, Yokohama and Osaka"
+    expectState="markers.length=5"
+    session=mk
+
+@t.geo.map.n033 core.test
+    input="Put a marker here."
+    expect="marker here"
+    expectState="markers.length=6"
+    session=mk
+
+@t.geo.map.n034 core.test
+    input="Remove the markers."
+    expect="all 6 markers"
+    expectState="markers.length=0"
+    session=mk
+
+@t.geo.map.n035 core.test
+    input="Which places are marked?"
+    expect="no markers"
+    session=mk
+
+@t.geo.map.n036 core.test
+    input="Mark the capitals of Europe."
+    expect="capitals of Europe"
+    expectState="markers.length=45"
+
+@t.geo.map.n037 core.test
+    input="Mark the capitals of Scandinavia."
+    expect="Oslo, Stockholm and Copenhagen"
+    expectState="markers.length=3"
+
+@t.geo.map.n038 core.test
+    input="Mark all capitals."
+    expect="capitals of the world"
+    expectState="markers.length=196"
+
+@t.geo.map.n039 core.test
+    input="Mark the cities of Romania."
+    expect="cities of Romania"
+    expectState="markers.length=30"
+
+@t.geo.map.n040 core.test
+    input="Drop a pin on Tokyo."
+    expect="Tokyo"
+    expectState="markers.length=1"
+
+@t.geo.map.n041 core.test
+    input="Mark Atlantis."
+    expectStatus=unparsed
+
+@t.geo.map.n042 core.test
+    input="Mark Europe."
+    expect="not a whole region"
+    expect="highlight Europe"
+    expectState="markers.length=0"
+    expectStatus=unsupported
+
+@t.geo.map.n043 core.test
+    input="Highlight Romania and its neighbours."
+    expect="Romania, Bulgaria, Hungary, Moldova, Serbia and Ukraine"
+    expectState="highlighted.length=6"
+    expectState="highlighted.0.cc=RO"
+    expectState="bounds=[[40.5734,14.6476],[53.0166,41.5724]]"
+    session=hl
+
+@t.geo.map.n044 core.test
+    input="Highlight France."
+    expect="France"
+    expectState="highlighted.length=7"
+    session=hl
+
+@t.geo.map.n045 core.test
+    input="Which countries are highlighted?"
+    expect="7 highlighted countries"
+    session=hl
+
+@t.geo.map.n046 core.test
+    input="Stop highlighting France."
+    expect="no longer highlighted"
+    expectState="highlighted.length=6"
+    session=hl
+
+@t.geo.map.n047 core.test
+    input="Remove the highlights."
+    expect="removed the highlights"
+    expectState="highlighted.length=0"
+    session=hl
+
+@t.geo.map.n048 core.test
+    input="Highlight the countries of South America."
+    expect="12 countries"
+    expectState="highlighted.length=12"
+
+@t.geo.map.n049 core.test
+    input="Highlight the neighbours of Hungary."
+    expect="Austria"
+    expect="Ukraine"
+    expectState="highlighted.length=7"
+
+@t.geo.map.n050 core.test
+    input="Highlight the EU."
+    expect="27 countries"
+    expectState="highlighted.length=27"
+
+@t.geo.map.n051 core.test
+    input="Highlight France and Spain."
+    expect="France and Spain"
+    expectState="highlighted.length=2"
+
+@t.geo.map.n052 core.test
+    input="How far is Paris from Rome?"
+    expect="1,107 km"
+    expect="688 miles"
+    expectState="lines.length=1"
+    expectState="lines.0.km=1107"
+    expectState="lines.0.from.name=Paris"
+    expectState="lines.0.to.name=Rome"
+    session=ds
+
+@t.geo.map.n053 core.test
+    input="What is the distance between Cluj and Bucharest?"
+    expect="325 km"
+    expectState="lines.length=2"
+    expectState="lines.1.km=325"
+    session=ds
+
+@t.geo.map.n054 core.test
+    input="Draw a line from Oslo to Rome."
+    expect="2,007 km"
+    expectState="lines.length=3"
+    session=ds
+
+@t.geo.map.n055 core.test
+    input="How far is Rome?"
+    expect="Distance from where"
+    expectState="lines.length=3"
+    expectStatus=missing
+    session=ds
+
+@t.geo.map.n056 core.test
+    input="How far am I from Paris?"
+    expect="need your location"
+    expectState="pending.action=distance"
+    expectEffect=geo.locate
+    session=ds
+
+@t.geo.map.n057 core.test
+    input="Clear the lines."
+    expect="removed all 3 lines"
+    expectState="lines.length=0"
+    session=ds
+
+@t.geo.map.n058 core.test
+    input="How far is France from Spain?"
+    expect="between their centres"
+    expectState="lines.length=1"
+
+@t.geo.map.n059 core.test
+    input="How many kilometres are there between London and Paris?"
+    expect="km"
+    expectState="lines.length=1"
+
+@t.geo.map.n060 core.test
+    input="Switch to the street map."
+    expect="OpenStreetMap"
+    expectState="layer=osm"
+    session=ly
+
+@t.geo.map.n061 core.test
+    input="Use the street map."
+    expect="already on"
+    expectState="layer=osm"
+    session=ly
+
+@t.geo.map.n062 core.test
+    input="Go back to the offline map."
+    expect="offline country map"
+    expectState="layer=offline"
+    session=ly
+
+@t.geo.map.n063 core.test
+    input="Where am I?"
+    expect="browser will ask"
+    expectEffect=geo.locate
+
+@t.geo.map.n064 core.test
+    input="What is here?"
+    expect="nearest city"
+    expectState="focus.kind=point"
+
+@t.geo.map.n065 core.test
+    input="What is on the map?"
+    expect="The map is centred"
+
+@t.geo.map.n066 core.test
+    input="What is the capital of Japan?"
+    expect="The capital of Japan is Tokyo"
+    expectState="focus.name=Tokyo"
+
+@t.geo.map.n067 core.test
+    input="What is Peru's capital?"
+    expect="Lima"
+
+@t.geo.map.n068 core.test
+    input="Is Paris the capital of France?"
+    expect="Yes, Paris is the capital of France"
+
+@t.geo.map.n069 core.test
+    input="Is Berlin the capital of France?"
+    expect="No"
+    expect="Paris"
+
+@t.geo.map.n070 core.test
+    input="Which country is Tokyo the capital of?"
+    expect="Tokyo is the capital of Japan"
+
+@t.geo.map.n071 core.test
+    input="What is the capital of South Africa?"
+    expect="3 capitals"
+    expect="Pretoria"
+
+@t.geo.map.n072 core.test
+    input="How many people live in Tokyo?"
+    expect="8.3 million"
+    expectState="focus.name=Tokyo"
+
+@t.geo.map.n073 core.test
+    input="What is the population of Canada?"
+    expect="Canada has about 37.1 million"
+
+@t.geo.map.n074 core.test
+    input="How big is Romania?"
+    expect="238,391 square kilometres"
+    expectState="focus.cc=RO"
+
+@t.geo.map.n075 core.test
+    input="Which is bigger, Brazil or Canada?"
+    expect="Canada is bigger than Brazil"
+    expectState="highlighted.length=2"
+
+@t.geo.map.n076 core.test
+    input="Is Brazil bigger than Canada?"
+    expect="No, Canada is bigger"
+
+@t.geo.map.n077 core.test
+    input="Which city has more people, Paris or Rome?"
+    expect="Rome is more populous"
+    expectState="markers.length=2"
+
+@t.geo.map.n078 core.test
+    input="Compare Spain and Italy."
+    expect="Spain is bigger than Italy"
+
+@t.geo.map.n079 core.test
+    input="Which countries border Hungary?"
+    expect="Hungary borders 7 countries"
+    expect="Austria, Croatia, Romania"
+    expectState="highlighted.length=8"
+
+@t.geo.map.n080 core.test
+    input="Does France border Spain?"
+    expect="Yes"
+    expectState="highlighted.length=2"
+
+@t.geo.map.n081 core.test
+    input="Does France border Japan?"
+    expect="No"
+
+@t.geo.map.n082 core.test
+    input="How many neighbours does Hungary have?"
+    expect="7 neighbours"
+
+@t.geo.map.n083 core.test
+    input="Is Hungary landlocked?"
+    expect="Yes"
+    expect="landlocked"
+
+@t.geo.map.n084 core.test
+    input="Does Spain have a coast?"
+    expect="not landlocked"
+
+@t.geo.map.n085 core.test
+    input="What continent is Egypt in?"
+    expect="Egypt is in Africa"
+    expectState="focus.cc=EG"
+
+@t.geo.map.n086 core.test
+    input="Is Egypt in Africa?"
+    expect="Yes"
+
+@t.geo.map.n087 core.test
+    input="Is Egypt in Europe?"
+    expect="No, Egypt is not in Europe"
+
+@t.geo.map.n088 core.test
+    input="Which country is Cluj in?"
+    expect="Cluj-Napoca is in Romania"
+
+@t.geo.map.n089 core.test
+    input="Which is the largest city in Romania?"
+    expect="largest city in Romania"
+    expect="Bucharest"
+    expectState="focus.name=Bucharest"
+
+@t.geo.map.n090 core.test
+    input="What is the smallest country in the world?"
+    expect="Monaco"
+    expectState="highlighted.0.cc=MC"
+
+@t.geo.map.n091 core.test
+    input="What are the biggest cities in Romania?"
+    expect="Bucharest"
+    expect="Iaşi"
+
+@t.geo.map.n092 core.test
+    input="Name the 3 largest countries in Africa."
+    expect="Algeria"
+    expect="DR Congo"
+    expect="Sudan"
+    expectState="highlighted.length=3"
+
+@t.geo.map.n093 core.test
+    input="List the countries in South America."
+    expect="12 countries"
+    expect="Argentina"
+    expectState="highlighted.length=12"
+
+@t.geo.map.n094 core.test
+    input="How many countries are in Europe?"
+    expect="45 countries"
+    expectState="highlighted.length=45"
+
+@t.geo.map.n095 core.test
+    input="List the cities in Moldova."
+    expect="Tiraspol"
+
+@t.geo.map.n096 core.test
+    input="What currency does Japan use?"
+    expect="Japanese yen"
+
+@t.geo.map.n097 core.test
+    input="What languages are spoken in Switzerland?"
+    expect="German"
+    expect="Italian"
+
+@t.geo.map.n098 core.test
+    input="Tell me about Romania."
+    expect="Bucharest"
+    expect="Romanian leu"
+    expectState="focus.cc=RO"
+
+@t.geo.map.n099 core.test
+    input="What do you know about Cluj?"
+    expect="Cluj-Napoca is a city in Romania"
+
+@t.geo.map.n100 core.test
+    input="Clear the map."
+    expect="already clear"
+
+@t.geo.map.n101 core.test
+    input="Mark Paris."
+    expectState="markers.length=1"
+    session=rs
+
+@t.geo.map.n102 core.test
+    input="Highlight Spain."
+    expectState="highlighted.length=1"
+    session=rs
+
+@t.geo.map.n103 core.test
+    input="Reset the map."
+    expect="reset"
+    expectState="markers.length=0"
+    expectState="highlighted.length=0"
+    expectState="zoom=2"
+    expectState="focus=null"
+    session=rs
+

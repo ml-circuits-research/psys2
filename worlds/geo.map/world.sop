@@ -1,0 +1,18 @@
+@world.geo.map core.world
+    namespace=geo.map
+    version=0.1.0
+    legend=$legend.geo.map
+    imports=world.core
+    imports=world.kids.common
+    formalization=rules
+    language=en
+    status=fixture
+    title="World map"
+    summary="show places on a map"
+    tab=map
+    tabTitle="Map"
+    tabAlias=world_map
+    tabAlias=atlas
+    tabOrder=60
+    tabKind=tool
+    doc="A voice-controlled map: every country, capital, city of 500,000+ people and Romanian and Moldovan towns of 30,000+, with population, area, borders, currency and languages. Moving, zooming, markers, highlighted countries, distance lines, comparisons and questions about places. State lives in ctx.state; the host draws it with Leaflet over an offline country outline map (street map tiles optional). Data from world-countries (ODbL), country-json (MIT), GeoNames via all-the-cities (CC BY 4.0) and Natural Earth (public domain), see data/README.md. Hand-built platform fixture, not produced by the C1 workflow."

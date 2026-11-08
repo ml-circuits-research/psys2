@@ -1,0 +1,112 @@
+@legend.geo.map core.legend
+    namespace=geo.map
+    version=0.1.0
+    imports=core
+    imports=kids.common
+    doc="Places of the world (countries, cities, regions) and the state of a map view. Facts are generated from open datasets by scripts/build-geo-data.mjs."
+
+@geo.map.view core.type
+    extends=core.state
+    doc="The map view. The world state holds center, zoom, bounds, markers, highlighted countries, lines, layer, focus, me."
+    example="Show me Bucharest."
+
+@geo.map.place core.type
+    extends=core.state
+    doc="A named place with a position: a country, a city or a region."
+    example="Paris is in France."
+
+@geo.map.place.name core.key
+    value=string
+    ask="What is the place called?"
+
+@geo.map.place.key core.key
+    value=atom
+    card=many
+    ask="Which lexicon words name this place?"
+
+@geo.map.place.cc core.key
+    value=atom
+    ask="Which country code (ISO 3166-1 alpha-2) is it?"
+
+@geo.map.place.pop core.key
+    value=integer
+    ask="How many people live there?"
+
+@geo.map.place.lat core.key
+    value=number
+    ask="What is its latitude?"
+
+@geo.map.place.lon core.key
+    value=number
+    ask="What is its longitude?"
+
+@geo.map.place.bb core.key
+    value=string
+    ask="What is its bounding box (south,west,north,east)?"
+
+@geo.map.country core.type
+    extends=geo.map.place
+    doc="A country or territory (ISO 3166-1)."
+    example="Romania is a country."
+
+@geo.map.country.capital core.key
+    value=string
+    card=many
+    ask="What is its capital?"
+
+@geo.map.country.cont core.key
+    value=atom
+    ask="Which continent is it in?"
+
+@geo.map.country.sub core.key
+    value=string
+    ask="Which UN subregion is it in?"
+
+@geo.map.country.area core.key
+    value=integer
+    ask="What is its area in square kilometres?"
+
+@geo.map.country.nb core.key
+    value=atom
+    card=many
+    ask="Which countries border it (country codes)?"
+
+@geo.map.country.cur core.key
+    value=string
+    card=many
+    ask="Which currency does it use?"
+
+@geo.map.country.lang core.key
+    value=string
+    card=many
+    ask="Which languages are spoken there?"
+
+@geo.map.country.land core.key
+    value=boolean
+    ask="Is it landlocked?"
+
+@geo.map.country.ind core.key
+    value=boolean
+    ask="Is it an independent country?"
+
+@geo.map.city core.type
+    extends=geo.map.place
+    doc="A city: a capital, a city of 500,000+ people or a Romanian or Moldovan town of 30,000+."
+    example="Cluj-Napoca is a city."
+
+@geo.map.city.capital core.key
+    value=boolean
+    ask="Is it a capital?"
+
+@geo.map.region core.type
+    extends=geo.map.place
+    doc="A continent, UN subregion or group of countries (EU, Nordic ...), or the world."
+    example="Europe is a continent."
+
+@geo.map.region.kind core.key
+    value=atom
+    ask="Is it a continent, subregion, group or the world?"
+
+@geo.map.region.members core.key
+    value=string
+    ask="Which countries are in it (country codes)?"

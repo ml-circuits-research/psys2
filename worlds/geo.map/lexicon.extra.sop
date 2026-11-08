@@ -1,0 +1,36 @@
+@lex.geo.map.directions core.lexicon
+    class=noun
+    doc="Compass and screen directions (values mapped by ops.mjs)"
+    word=north word=south word=east word=west word=northeast word=northwest word=southeast word=southwest
+    word=north-east word=north-west word=south-east word=south-west word=up word=down word=left word=right
+    word=northward word=southward word=eastward word=westward
+
+@lex.geo.map.amounts core.lexicon
+    class=noun
+    doc="How much: zoom or move amounts (values mapped by ops.mjs)"
+    word=a_lot word=a_lot_more word=much word=way word=far word=hugely word=a_great_deal word=all_the_way word=completely word=fully
+    word=a_bit word=a_little word=a_little_bit word=slightly word=just_a_little word=just_a_bit word=somewhat word=a_touch
+    word=more word=further word=farther word=even_more word=some_more word=twice word=once
+
+@lex.geo.map.layers core.lexicon
+    class=noun
+    doc="Base map styles: street words select the OpenStreetMap layer, the others the offline country outlines"
+    word=street word=road word=detailed word=osm word=openstreetmap word=open_street_map word=online word=real word=tile word=realistic word=live
+    word=offline word=simple word=outline word=plain word=basic word=political word=minimal word=default word=country
+
+@lex.geo.map.superlatives core.lexicon
+    class=noun
+    doc="Superlatives for cities and countries"
+    word=largest word=biggest word=smallest word=most_populous word=most_populated word=least_populated word=least_populous word=greatest word=tiniest
+    word=main word=major word=top
+
+@lex.geo.map.measures core.lexicon
+    class=noun
+    doc="Comparatives (values mapped by ops.mjs)"
+    word=bigger word=larger word=smaller word=more_populous word=more_populated word=less_populous word=less_populated word=more_people word=fewer_people word=more_person word=fewer_person
+    word=bigger_population word=larger_population word=smaller_population word=greater word=more_inhabitant word=fewer_inhabitant
+
+@lex.geo.map.kinds core.lexicon
+    class=noun
+    doc="Kinds of place that can be ranked (singular lemma; plural forms reduce to these)"
+    word=city word=town word=country word=nation
