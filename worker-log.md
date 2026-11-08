@@ -393,3 +393,7 @@ Operational set (1234), published D1 model vs v2:
 | games | 89.0 / 5.5 | 89.7 / 5.5 |
 | documents | 91.7 / 4.2 | 91.7 / 4.2 |
 Published (D4b rule met): `node scripts/build-webchat.mjs --models training/runs/export/dispatcher-distilbert-v2`; the model now has the edit head (edit-vocab.json added). eval-operational.mjs falls back to tokenizer/vocab.txt in --model-dir.
+
+## Operational failure analysis v2 (reviewer question)
+- Ran the full pipeline (dispatcher distilbert v2) and `--rules-only` on `training/eval/operational.jsonl` and classified all 109 failures by hand: A rules gap 55, B dispatch/selection/segmentation 25, C wrong action 20 (5 harmful), D gold error 6, E 0, F ambiguous 3. Effective accuracy with D+F acceptable: 91.9% (headline 91.2%).
+- Report: `training/results/operational-failures-v2.md` (fix list for class A, gold corrections for class D). The operational set was not changed. Note: `--json` suppresses the per-item lines of eval-operational; use `--verbose` for the failure list.
