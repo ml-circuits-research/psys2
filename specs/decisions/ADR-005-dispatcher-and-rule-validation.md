@@ -23,3 +23,6 @@ The rule formalizers are exact and cheap but brittle on paraphrases (T2 baseline
 
 ## Amendment F5: explicit refusal reasons
 "Refused" was one bucket. The interpreter now sets `reason` (`precondition_failed`, `unknown_argument`, `unsupported_operation`, `execution_error`) and the validator reads it: preconditions keep the reading, unsupported operations keep it and report the limit, execution errors are never valid, and an `unknown_argument` reading (a catch-all swallowing text) is only a penalised last-resort fallback that never blocks recovery (other worlds, spell, simplified, partial). See specs/03 section 7.2 and specs/04.
+
+## Amendment G1: hierarchical selection over segmentations
+The lexicographic preference (original/spell before generated, complete before partial) held per piece but not between segmentations, which were compared by total score; a partial segmentation with a normalizer rewrite could beat a complete reading. Selection is now ordered by validity class first (0 original/spell complete, 1 generated complete, 2 partial or fallback, 3 invalid) and by score only inside a class; the normalizer runs only when no segmentation in the beam is complete. See specs/03 section 7.13.

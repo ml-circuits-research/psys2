@@ -121,7 +121,7 @@ export function createDispatcherFormalizer({ load, getPolicy = () => ENCODER_DEF
         modelMs: Math.round(tModel), totalMs: Math.round(tTotal),
         boundaries: prediction.boundaries,
         segmentations: out.trace.segmentations.map((g) => ({
-          index: g.index, dispatcherScore: g.dispatcherScore, score: g.score, valid: g.valid, nInvalid: g.nInvalid,
+          index: g.index, dispatcherScore: g.dispatcherScore, score: g.score, tier: g.tier, valid: g.valid, nInvalid: g.nInvalid,
           pieces: g.pieces.map((p) => ({ start: p.start, end: p.end, text: p.text, simplified: p.simplified ?? null, valid: p.valid, tie: p.tie,
             chosen: p.chosen ? { world: p.chosen.world, rank: p.chosen.rank, variant: p.chosen.variant, score: p.chosen.score, text: p.chosen.text, corrections: p.chosen.corrections ?? [], partial: p.chosen.partial ?? null } : null,
             attempts: p.attempts.map((a) => ({ world: a.world, rank: a.rank, worldScore: a.worldScore, variant: a.variant, text: a.text, valid: a.valid, refused: a.refused, reason: a.reason, score: a.score, corrections: a.corrections ?? [], partial: a.partial ?? null })) })),
