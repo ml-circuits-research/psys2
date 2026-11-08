@@ -1,0 +1,69 @@
+{
+  "world": "kids.animals",
+  "tab": "robot",
+  "author": "haiku-heldout",
+  "batch": "x1",
+  "tasks": [
+    {
+      "id": "kids.animals.x1.t01",
+      "goal": "Look up how many legs a spider has",
+      "canonical": "How many legs does a spider have?",
+      "variants": ["how many legs does a spider have", "spider legs?", "legs on a spider", "how many legs do spiders have", "count spider legs", "spider leg number", "how many legs has a spider got", "tell me the legs of a spider", "spiders how many legs pls", "can you say how many legs a spider has"]
+    },
+    {
+      "id": "kids.animals.x1.t02",
+      "goal": "Get a short write-up on a baby cow",
+      "canonical": "What is a calf?",
+      "variants": ["what is a calf", "calf?", "whats a calf", "what's a calf", "tell me about calves", "calf meaning", "what is a baby cow called and what is it", "who is a calf", "calves what are they", "can you tell me what a calf is"]
+    },
+    {
+      "id": "kids.animals.x1.t03",
+      "goal": "Filter animals by number of legs",
+      "canonical": "Which animals have 6 legs?",
+      "variants": ["which animals have 6 legs", "animals with six legs", "6 legs animals", "what animals have 6 legs", "list animals that have six legs", "six legged animals?", "which animals got 6 legs", "animals 6 legs pls", "show me animals with 6 legs", "can you find animals that have 6 legs"]
+    },
+    {
+      "id": "kids.animals.x1.t04",
+      "goal": "Learn the noise an animal makes",
+      "canonical": "What does a cow say?",
+      "variants": ["what does a cow say", "cow sound?", "what sound does a cow make", "cows say what", "what noise does a cow make", "how does a cow sound", "cow say?", "what's the cow sound", "tell me the sound a cow makes", "can you tell me what a cow says"]
+    },
+    {
+      "id": "kids.animals.x1.t05",
+      "goal": "Teach the robot a fact about zebras",
+      "canonical": "A zebra has 4 legs.",
+      "variants": ["a zebra has 4 legs", "zebra has four legs", "zebras have 4 legs", "remember a zebra has 4 legs", "fyi zebra 4 legs", "zebra = 4 legs", "a zebra got 4 legs", "just so you know a zebra has 4 legs", "zebra has 4 leggs", "the zebra has four legs ok"]
+    },
+    {
+      "id": "kids.animals.x1.t06",
+      "goal": "Check a flightless bird",
+      "canonical": "Can an ostrich fly?",
+      "variants": ["can an ostrich fly", "ostrich fly?", "can ostriches fly", "do ostriches fly", "is an ostrich able to fly", "ostrich flying?", "can a ostrich fly", "does an ostrich fly", "ostrich can fly or no", "can u tell me if an ostrich can fly"]
+    },
+    {
+      "id": "kids.animals.x1.t07",
+      "goal": "Tell the robot a pet's name",
+      "canonical": "My dog is called Rex.",
+      "variants": ["my dog is called rex", "my dogs name is rex", "rex is my dog", "my dog's name is Rex", "the dog is named rex", "i have a dog called rex", "my doggy is rex", "name of my dog: rex", "rex is the name of my dog", "my dog is rex btw"]
+    },
+    {
+      "id": "kids.animals.x1.t08",
+      "goal": "Ask for the name of a pet mentioned earlier",
+      "setup": ["My dog is called Rex."],
+      "canonical": "What is my pet called?",
+      "variants": ["what is my pet called", "whats my pets name", "my pet name?", "what did i call my pet", "name of my pet?", "how is my pet called", "what's my dogs name", "remind me my pets name", "what is my pet named", "can you tell me what my pet is called"]
+    },
+    {
+      "id": "kids.animals.x1.t09",
+      "goal": "Check if a farm animal is a plant eater",
+      "canonical": "Is a cow a herbivore?",
+      "variants": ["is a cow a herbivore", "cow a herbivore?", "does a cow eat plants", "is a cow a plant eater", "cows herbivore yes?", "is a cow herbivore", "is cow a veggie eater", "a cow is a herbivore right?", "is a cow an herbivore", "can you tell me if a cow is a herbivore"]
+    },
+    {
+      "id": "kids.animals.x1.t10",
+      "goal": "Check an animal class and get its real class",
+      "canonical": "Is a shark a mammal?",
+      "variants": ["is a shark a mammal", "shark mammal?", "are sharks mammals", "is a shark a mamal", "sharks are mammals right", "is a shark a kind of mammal", "shark = mammal?", "is a shark a mammel", "a shark mammal or not", "can you check if a shark is a mammal"]
+    }
+  ]
+}

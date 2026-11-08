@@ -1,0 +1,210 @@
+{
+  "world": "games.guess",
+  "tab": "guess",
+  "author": "haiku-heldout",
+  "batch": "x1",
+  "tasks": [
+    {
+      "id": "games.guess.x1.t01",
+      "goal": "Start a twenty questions round",
+      "setup": [],
+      "canonical": "Let's start the guessing game.",
+      "variants": [
+        "lets start the guessing game",
+        "start twenty questions",
+        "ok lets play 20 questions",
+        "begin the guess game pls",
+        "you can start asking now",
+        "start guessing",
+        "let's do the animal game",
+        "go ahead and start",
+        "time to guess, start",
+        "can we start the guessing game"
+      ]
+    },
+    {
+      "id": "games.guess.x1.t02",
+      "goal": "Confirm that the answer is true",
+      "setup": [
+        "Play twenty questions."
+      ],
+      "canonical": "Yes.",
+      "variants": [
+        "yes",
+        "yeah",
+        "y",
+        "yes it is",
+        "correct, yes",
+        "yep",
+        "ya",
+        "true",
+        "yes pls",
+        "uh yes"
+      ]
+    },
+    {
+      "id": "games.guess.x1.t03",
+      "goal": "Reject the question",
+      "setup": [
+        "Play twenty questions."
+      ],
+      "canonical": "No.",
+      "variants": [
+        "no",
+        "nope",
+        "n",
+        "no it isnt",
+        "not really, no",
+        "nah",
+        "no way",
+        "no, thats wrong",
+        "no it does not",
+        "nop"
+      ]
+    },
+    {
+      "id": "games.guess.x1.t04",
+      "goal": "Skip a question I cannot answer",
+      "setup": [
+        "Play twenty questions."
+      ],
+      "canonical": "I don't know.",
+      "variants": [
+        "i dont know",
+        "idk",
+        "no idea",
+        "i do not know that one",
+        "dunno",
+        "i have no clue",
+        "cant say, dont know",
+        "no clue sorry",
+        "i really dont know",
+        "sorry, i dont know the answer"
+      ]
+    },
+    {
+      "id": "games.guess.x1.t05",
+      "goal": "Say the answer is possibly yes",
+      "setup": [
+        "Play twenty questions."
+      ],
+      "canonical": "Perhaps.",
+      "variants": [
+        "perhaps",
+        "maybe, perhaps",
+        "possibly",
+        "it might be",
+        "could be i guess",
+        "perhaps yes",
+        "kinda maybe",
+        "maybe",
+        "its possible",
+        "eh, perhaps"
+      ]
+    },
+    {
+      "id": "games.guess.x1.t06",
+      "goal": "Tell the system my animal was a tiger",
+      "setup": [
+        "Play twenty questions."
+      ],
+      "canonical": "It was a tiger.",
+      "variants": [
+        "it was a tiger",
+        "the animal was a tiger",
+        "tiger!",
+        "i was thinking of a tiger",
+        "it was tiger",
+        "you got it wrong, it was a tiger",
+        "my animal is a tiger",
+        "tiger was it",
+        "it was a tiger, i had one in mind",
+        "the one i picked was a tiger"
+      ]
+    },
+    {
+      "id": "games.guess.x1.t07",
+      "goal": "Teach the system my animal, a penguin",
+      "setup": [
+        "Play twenty questions."
+      ],
+      "canonical": "It was a penguin.",
+      "variants": [
+        "it was a penguin",
+        "penguin",
+        "my animal was a penguin",
+        "it is penguin, you dont know it",
+        "a penguin, new animal for you",
+        "it was a penguin, add it",
+        "i was thinking of a penguin",
+        "penguin pls",
+        "its a penguin",
+        "the answer was penguin"
+      ]
+    },
+    {
+      "id": "games.guess.x1.t08",
+      "goal": "Ask why the system picked that question",
+      "setup": [
+        "Play twenty questions."
+      ],
+      "canonical": "Why is that question being asked?",
+      "variants": [
+        "why is that question being asked",
+        "why that one?",
+        "why did u ask that",
+        "what made you pick that question",
+        "reason for that question?",
+        "why ask that",
+        "whats the point of that question",
+        "why this question",
+        "why did you choose it",
+        "how come that question"
+      ],
+      "canonical_retries": [
+        "Why did you ask that?",
+        "Why did u ask?"
+      ]
+    },
+    {
+      "id": "games.guess.x1.t09",
+      "goal": "See the candidates still possible",
+      "setup": [
+        "Play twenty questions."
+      ],
+      "canonical": "Which animals are still possible?",
+      "variants": [
+        "which animals are still possible",
+        "still possible animals?",
+        "candidates left?",
+        "what can it still be",
+        "show the possible animals",
+        "animals still in play",
+        "list what it could be",
+        "possible ones now?",
+        "which are left in the list",
+        "show me the remaining options"
+      ]
+    },
+    {
+      "id": "games.guess.x1.t10",
+      "goal": "Hear the last question again",
+      "setup": [
+        "Play twenty questions."
+      ],
+      "canonical": "Say the question again.",
+      "variants": [
+        "say the question again",
+        "what was the question",
+        "sorry, say that again",
+        "repeat that",
+        "i missed it, again?",
+        "say it again please",
+        "come again?",
+        "what did you ask",
+        "again pls",
+        "could you repeat your question"
+      ]
+    }
+  ]
+}

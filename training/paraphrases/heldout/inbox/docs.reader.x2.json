@@ -1,0 +1,82 @@
+{
+  "world": "docs.reader",
+  "tab": "documents",
+  "author": "haiku-heldout",
+  "batch": "x2",
+  "tasks": [
+    {
+      "id": "docs.reader.x2.t01",
+      "goal": "Find every mention of a word in the text",
+      "setup": ["Load the sample story."],
+      "canonical": "Search for the word forest.",
+      "canonical_retries": ["Search the file for forest.", "Find forest in the text."],
+      "variants": ["search for forest", "find forest in the text", "forest search", "look for the word forest", "where does forest appear", "find the word forest pls", "search forest", "can you look for forest in here", "is the word forest in the story, search it", "forest find"]
+    },
+    {
+      "id": "docs.reader.x2.t02",
+      "goal": "Jump to the next search hit",
+      "setup": ["Load the sample story.", "Search the file for oven."],
+      "canonical": "Show the next result.",
+      "variants": ["next result", "next one", "go to next hit", "next match please", "show the next search result", "nxt", "following result", "next found", "skip to the next match", "can u go to the next one"]
+    },
+    {
+      "id": "docs.reader.x2.t03",
+      "goal": "Remove the search highlights",
+      "setup": ["Load the sample story.", "Search the file for oven."],
+      "canonical": "Clear the search highlights.",
+      "canonical_retries": ["Clear the search.", "Clear the highlighting."],
+      "variants": ["clear the search highlights", "remove highlights", "unhighlight", "clear highlights pls", "get rid of the highlighting", "turn off the search marks", "clear the search", "no more highlights", "remove the yellow marks", "can you clear the highlights"]
+    },
+    {
+      "id": "docs.reader.x2.t04",
+      "goal": "Count mentions of a character",
+      "setup": ["Load the sample story."],
+      "canonical": "How many times is the witch mentioned?",
+      "canonical_retries": ["Count how many times the witch is mentioned.", "How often is the witch mentioned?"],
+      "variants": ["how many times is the witch mentioned", "witch mentions count", "how often does the witch appear", "count the witch", "witch how many times", "how many mentions of the witch", "times the witch is named?", "number of witch mentions", "how many times does witch come up", "can you count how often the witch is mentioned"]
+    },
+    {
+      "id": "docs.reader.x2.t05",
+      "goal": "Find who spoke a quoted line",
+      "setup": ["Load the sample story."],
+      "canonical": "Who said \"Show me first\" in the story?",
+      "canonical_retries": ["Who said \"Show me first\"?"],
+      "variants": ["who said show me first", "who said \"show me first\"", "show me first, who said that", "whose line is show me first", "speaker of show me first?", "who says show me first in here", "who uttered show me first", "who said that show me first thing", "find who said show me first", "who was it that said show me first"]
+    },
+    {
+      "id": "docs.reader.x2.t06",
+      "goal": "Jump to one numbered sentence",
+      "setup": ["Load the sample story."],
+      "canonical": "What is sentence 5?",
+      "variants": ["what is sentence 5", "sentence 5", "show sentence five", "line 5 please", "sentence number 5", "whats sentence 5", "give me sentence 5", "read me number 5 sentence", "show me sentence 5 pls", "can you show sentence 5"]
+    },
+    {
+      "id": "docs.reader.x2.t07",
+      "goal": "Get the length of the text",
+      "setup": ["Load the sample story."],
+      "canonical": "How many words are in the story?",
+      "variants": ["how many words are in the story", "word count", "how long is the story in words", "words in the story?", "story word count pls", "how many words", "count the words", "length in words", "how many words does it have", "can u tell me the word count of the story"]
+    },
+    {
+      "id": "docs.reader.x2.t08",
+      "goal": "See the chapter headings in order",
+      "setup": ["Load the sample story."],
+      "canonical": "Show the outline of the document.",
+      "variants": ["show the outline", "outline pls", "list the headings", "what are the headings", "give me the outline of this", "show the chapter titles", "table of contents?", "heading list", "outline of the doc", "can you show me the outline"]
+    },
+    {
+      "id": "docs.reader.x2.t09",
+      "goal": "Check which open files mention a topic",
+      "setup": ["Load the sample story."],
+      "canonical": "Which documents mention the witch?",
+      "variants": ["which documents mention the witch", "what files talk about the witch", "witch in which docs", "is the witch in any of my documents", "which of my files mention witch", "witch across documents", "docs that mention the witch", "in what documents is the witch", "which doc has the witch", "can you check which documents mention the witch"]
+    },
+    {
+      "id": "docs.reader.x2.t10",
+      "goal": "See which files are open",
+      "setup": ["Load the sample story."],
+      "canonical": "List the documents.",
+      "variants": ["list the documents", "which docs are open", "show my documents", "what files do i have", "documents list", "open files?", "show all the documents", "what documents are loaded", "list my docs pls", "can you list the documents i have open"]
+    }
+  ]
+}

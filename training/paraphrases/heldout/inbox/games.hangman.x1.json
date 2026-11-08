@@ -1,0 +1,210 @@
+{
+  "world": "games.hangman",
+  "tab": "hangman",
+  "author": "haiku-heldout",
+  "batch": "x1",
+  "tasks": [
+    {
+      "id": "games.hangman.x1.t01",
+      "goal": "Start a round where the hidden word is giraffe",
+      "setup": [],
+      "canonical": "Start hangman with the word giraffe.",
+      "variants": [
+        "start hangman with giraffe",
+        "hangman, the word is giraffe",
+        "giraffe is the word",
+        "use giraffe as the hidden word",
+        "let's play hangman, word giraffe",
+        "hangman giraffe",
+        "make a hangman round with giraffe pls",
+        "hidden word: giraffe",
+        "ok new hangman, it's giraffe",
+        "can u set the word to giraffe for hangman"
+      ]
+    },
+    {
+      "id": "games.hangman.x1.t02",
+      "goal": "Ask if the word has an O",
+      "setup": [
+        "Play hangman with the word lion."
+      ],
+      "canonical": "Is there an O?",
+      "variants": [
+        "is there an o",
+        "o in the word?",
+        "does it have an O",
+        "any o?",
+        "there's an o right",
+        "is o in there",
+        "hmm does the word have o",
+        "got an o?",
+        "is the letter o in it",
+        "o is there?"
+      ]
+    },
+    {
+      "id": "games.hangman.x1.t03",
+      "goal": "Try the letter N",
+      "setup": [
+        "Play hangman with the word lion."
+      ],
+      "canonical": "Try the letter N.",
+      "variants": [
+        "try n",
+        "letter n",
+        "i guess n",
+        "n please",
+        "n",
+        "i pick n",
+        "let me try the letter n",
+        "trying n",
+        "is it n",
+        "next letter, n"
+      ]
+    },
+    {
+      "id": "games.hangman.x1.t04",
+      "goal": "Guess the whole word as tiger",
+      "setup": [
+        "Play hangman with the word lion."
+      ],
+      "canonical": "Is it tiger?",
+      "variants": [
+        "is it tiger",
+        "tiger?",
+        "I think its tiger",
+        "the word is tiger",
+        "tiger, my answer",
+        "guess: tiger",
+        "could it be a tiger",
+        "is the answer tiger",
+        "tigre?",
+        "i'll say tiger"
+      ]
+    },
+    {
+      "id": "games.hangman.x1.t05",
+      "goal": "Get a fact about the animal",
+      "setup": [
+        "Play hangman with the word lion."
+      ],
+      "canonical": "Tell me a fact about it.",
+      "variants": [
+        "tell me a fact about it",
+        "something about the animal pls",
+        "fact about the word?",
+        "say a fun fact",
+        "i want a fact",
+        "what is it known for",
+        "tell me one thing about this animal",
+        "fact?",
+        "give me something about it, not a letter",
+        "whats a fact about the mystery animal"
+      ],
+      "canonical_retries": [
+        "Tell me something about it.",
+        "Any clue at all?"
+      ]
+    },
+    {
+      "id": "games.hangman.x1.t06",
+      "goal": "Check how many letters are still hidden",
+      "setup": [
+        "Play hangman with the word lion."
+      ],
+      "canonical": "Show the masked word.",
+      "variants": [
+        "show the masked word",
+        "how many letters are hidden",
+        "show the blanks",
+        "masked word pls",
+        "what does the word look like now",
+        "how many spaces left in the word",
+        "hidden word view",
+        "display the dashes",
+        "letters still missing?",
+        "show me the mask"
+      ]
+    },
+    {
+      "id": "games.hangman.x1.t07",
+      "goal": "Stop the round and see the answer",
+      "setup": [
+        "Play hangman with the word lion."
+      ],
+      "canonical": "I give up.",
+      "variants": [
+        "i give up",
+        "give up, what was it",
+        "quit this round",
+        "ok i surrender",
+        "i'm done, tell me the word",
+        "forget it, i quit",
+        "reveal it, i give up",
+        "giving up",
+        "end the game pls",
+        "i can't guess it, give up"
+      ]
+    },
+    {
+      "id": "games.hangman.x1.t08",
+      "goal": "Try the letter Z",
+      "setup": [
+        "Play hangman with the word lion."
+      ],
+      "canonical": "Try Z.",
+      "variants": [
+        "try z",
+        "z?",
+        "letter z",
+        "is there a z",
+        "z pls",
+        "i try z",
+        "zed",
+        "z is my guess",
+        "does z appear",
+        "guessing z"
+      ]
+    },
+    {
+      "id": "games.hangman.x1.t09",
+      "goal": "Guess the whole word as penguin",
+      "setup": [
+        "Play hangman with the word giraffe."
+      ],
+      "canonical": "Is it penguin?",
+      "variants": [
+        "is it penguin",
+        "penguin?",
+        "its a penguin",
+        "the word is penguin i think",
+        "could it be penguin",
+        "penguin, final answer",
+        "guess penguin",
+        "is penguin right",
+        "i say penguin",
+        "maybe penguin?"
+      ]
+    },
+    {
+      "id": "games.hangman.x1.t10",
+      "goal": "Begin again with a new hidden animal",
+      "setup": [
+        "Play hangman with the word giraffe."
+      ],
+      "canonical": "Start a new hangman game.",
+      "variants": [
+        "start a new hangman game",
+        "new hangman please",
+        "another hangman round",
+        "play again hangman",
+        "let's go again with a new animal",
+        "reset hangman",
+        "hangman round two",
+        "new game pls",
+        "again, new word",
+        "start over hangman"
+      ]
+    }
+  ]
+}

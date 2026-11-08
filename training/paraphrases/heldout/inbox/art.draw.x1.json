@@ -1,0 +1,75 @@
+{
+  "world": "art.draw",
+  "tab": "draw",
+  "author": "haiku-heldout",
+  "batch": "x1",
+  "tasks": [
+    {
+      "id": "art.draw.x1.t01",
+      "goal": "Put five stars in the sky",
+      "canonical": "Add 5 stars.",
+      "variants": ["add 5 stars", "5 stars pls", "can u put five stars in", "more stars, like 5", "add five stars to the picture", "stars x5", "i want 5 stars added", "put 5 stars in the sky", "add 5 stars to my drawing please", "5 stars"]
+    },
+    {
+      "id": "art.draw.x1.t02",
+      "goal": "Add a strip of sand to the ground",
+      "canonical": "Add some sand to the ground.",
+      "variants": ["add some sand to the ground", "sand on the ground", "put sand down", "ground should be sand", "add sand pls", "can you make the floor sandy", "sand for the ground", "add sand to ground", "i want sand under everything", "put some sand on the bottom"]
+    },
+    {
+      "id": "art.draw.x1.t03",
+      "goal": "Turn the sky to sunset colors",
+      "canonical": "Make it sunset.",
+      "variants": ["make it sunset", "sunset please", "change to sunset", "make the picture sunset", "sunset mode", "it should look like sunset", "can you make it a sunset", "set the mood to sunset", "evening sunset look pls", "sunset time"]
+    },
+    {
+      "id": "art.draw.x1.t04",
+      "goal": "Paint the roof of the house green",
+      "setup": ["Draw a red house."],
+      "canonical": "Make the roof green.",
+      "variants": ["make the roof green", "green roof", "roof to green", "paint the roof green", "color the top of the house green", "roof = green", "can u make the roof green", "change roof color to green", "green the roof pls", "the roof should be green"]
+    },
+    {
+      "id": "art.draw.x1.t05",
+      "goal": "Shrink the tree a lot",
+      "setup": ["Draw a tree."],
+      "canonical": "Make the tree smaller.",
+      "variants": ["make the tree smaller", "shrink the tree", "tree smaller pls", "tree too big, make it small", "make it much smaller", "tiny tree please", "smaller tree", "reduce the tree size", "the tree is huge, shrink it", "can you make that tree littler"]
+    },
+    {
+      "id": "art.draw.x1.t06",
+      "goal": "Mirror the dog so it faces the other way",
+      "setup": ["Draw a dog."],
+      "canonical": "Flip the dog.",
+      "variants": ["flip the dog", "dog the other way", "turn the dog around", "make the dog face left", "mirror the dog", "flip dog pls", "dog facing backwards", "can u flip him", "reverse the dog", "turn doggo over"]
+    },
+    {
+      "id": "art.draw.x1.t07",
+      "goal": "Place the cat in the gap between two trees",
+      "setup": ["Draw a cat.", "Draw two trees."],
+      "canonical": "Put the cat between the trees.",
+      "variants": ["put the cat between the trees", "cat between the two trees", "move the cat in between the trees", "cat goes between the trees", "place cat between trees", "cat in the middle of the trees", "put cat betwen the trees", "can you put the cat between them trees", "move kitty between the trees", "cat between trees please"]
+    },
+    {
+      "id": "art.draw.x1.t08",
+      "goal": "Make a second copy of the car",
+      "setup": ["Draw a car."],
+      "canonical": "Make another one.",
+      "variants": ["make another one", "one more car", "copy the car", "a second car please", "duplicate it", "make one more of those", "another car", "clone the car", "can you make a twin of the car", "again, the same car"]
+    },
+    {
+      "id": "art.draw.x1.t09",
+      "goal": "Ask where the trees stand in the picture",
+      "setup": ["Draw a red house.", "Draw two trees."],
+      "canonical": "Where are the trees?",
+      "variants": ["where are the trees", "where r the trees", "trees where?", "location of the trees", "where did you put the trees", "which place are the trees in", "tell me where the trees are", "where are they, the trees", "trees, where exactly", "can you say where the trees are"]
+    },
+    {
+      "id": "art.draw.x1.t10",
+      "goal": "Fill the heart with solid color",
+      "setup": ["Draw a heart."],
+      "canonical": "Fill the heart with solid color.",
+      "variants": ["fill the heart with solid color", "solid heart", "make the heart solid", "color the heart in fully", "heart solid color pls", "fill heart solid", "no outline, solid heart", "fill it in with one color", "solid fill for the heart", "can u fill the heart all the way"]
+    }
+  ]
+}

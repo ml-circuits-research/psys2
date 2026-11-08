@@ -1,0 +1,76 @@
+{
+  "world": "docs.editor",
+  "tab": "editor",
+  "author": "haiku-heldout",
+  "batch": "x1",
+  "tasks": [
+    {
+      "id": "docs.editor.x1.t01",
+      "goal": "Hear the second paragraph read aloud",
+      "setup": ["Add a paragraph The cat sat on the mat.", "Add a paragraph Dogs like to run."],
+      "canonical": "Read paragraph 2.",
+      "variants": ["read paragraph 2", "read the 2nd paragraph", "read number two paragraph pls", "can u read paragraph two out loud", "read para 2", "second paragraph read please", "read me the second one", "say paragraph 2", "hey read the second para to me", "could you read out paragraph 2 for me"]
+    },
+    {
+      "id": "docs.editor.x1.t02",
+      "goal": "Get the word count of the document",
+      "setup": ["Add a paragraph The cat sat on the mat."],
+      "canonical": "Word count.",
+      "variants": ["word count", "wordcount pls", "how many words is it", "count the words", "number of words in the doc?", "how many words are in here", "words how many?", "can u count the words", "hw many words in the document", "tell me the word count please"]
+    },
+    {
+      "id": "docs.editor.x1.t03",
+      "goal": "Make the second paragraph bold",
+      "setup": ["Add a paragraph Milk and eggs.", "Add a paragraph Bread and jam."],
+      "canonical": "Make the second paragraph bold.",
+      "variants": ["make the second paragraph bold", "bold the 2nd paragraph", "second para bold pls", "can u make paragraph two bold", "bold paragraph 2", "i want the second paragraph in bold", "make para 2 bold please", "bolden the second paragraph", "hey make the second one bold", "could you bold the second paragraph for me"]
+    },
+    {
+      "id": "docs.editor.x1.t04",
+      "goal": "Color the word milk green",
+      "setup": ["Add a paragraph Buy milk and eggs."],
+      "canonical": "Highlight the word milk in green.",
+      "variants": ["highlight the word milk in green", "milk green highlight", "make milk green", "highlight milk green pls", "can u highlight the word milk in green", "green highlight on milk", "milk should be highlighted green", "color the word milk green please", "hey highlight milk in green", "could you put a green highlight on milk"]
+    },
+    {
+      "id": "docs.editor.x1.t05",
+      "goal": "Turn the word example into a link to a web page",
+      "setup": ["Add a paragraph This is an example text."],
+      "canonical": "Add a link to example dot com on the word example.",
+      "variants": ["add a link to example dot com on the word example", "link the word example to example dot com", "make example a link to example dot com", "example should link to example dot com", "link example to example dot com pls", "can u link the word example to example dot com", "put a link on example pointing to example dot com", "word example link example dot com", "hey make example link to example dot com", "could you add a link to example dot com on example"]
+    },
+    {
+      "id": "docs.editor.x1.t06",
+      "goal": "Make a three-column table for animals",
+      "canonical": "Add a table with 3 columns: animal, legs, food.",
+      "variants": ["add a table with 3 columns animal legs food", "table 3 columns animal legs food", "make a table animal legs food", "add table: animal, legs, food", "can u add a table with columns animal legs and food", "new table animal legs food pls", "3 column table animal legs food", "i need a table with animal legs food", "put a table in with animal legs food please", "could you add a three column table animal legs food"]
+    },
+    {
+      "id": "docs.editor.x1.t07",
+      "goal": "Add a task to buy bread",
+      "canonical": "Add a task buy bread.",
+      "variants": ["add a task buy bread", "task: buy bread", "new task buy bread pls", "add buy bread as a task", "todo buy bread", "can u add a task to buy bread", "put a task buy bread in the doc", "task buy bread please", "hey add task buy bread", "could you add a task called buy bread"]
+    },
+    {
+      "id": "docs.editor.x1.t08",
+      "goal": "Ask how many tasks are still open",
+      "setup": ["Add a task buy bread.", "Add a task call Ana.", "Check the task buy bread."],
+      "canonical": "How many tasks are not done?",
+      "variants": ["how many tasks are not done", "how many tasks are still open", "tasks not done how many", "how many unfinished tasks are there", "how many tasks are undone", "number of open tasks?", "how many tasks not finished yet", "how many tasks have i not done", "open tasks count pls", "could you tell me how many tasks are not done"]
+    },
+    {
+      "id": "docs.editor.x1.t09",
+      "goal": "Select the word cat in the text",
+      "setup": ["Add a paragraph The cat sat on the mat."],
+      "canonical": "Select the word cat.",
+      "variants": ["select the word cat", "select cat", "pick the word cat", "highlight cat so i can select it", "select the word cat pls", "can u select cat", "select the cat word", "i want to select the word cat", "hey select cat", "could you select the word cat for me"]
+    },
+    {
+      "id": "docs.editor.x1.t10",
+      "goal": "Jump to the second heading in the document",
+      "setup": ["Add a heading Shopping.", "Add a paragraph Milk.", "Add a heading Garden."],
+      "canonical": "Go to the second heading.",
+      "variants": ["go to the second heading", "jump to 2nd heading", "heading two please", "take me to the second heading", "go to heading number 2", "move to the second heading pls", "second heading go", "can u jump to the second heading", "scroll to the 2nd heading", "could you take me to the second heading"]
+    }
+  ]
+}

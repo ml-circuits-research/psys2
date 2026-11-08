@@ -1,0 +1,218 @@
+{
+  "world": "kids.arith",
+  "tab": "arith",
+  "author": "haiku-heldout",
+  "batch": "x1",
+  "tasks": [
+    {
+      "id": "kids.arith.x1.t01",
+      "goal": "Find how many stickers Leo has after losing some",
+      "setup": [
+        "Leo has 9 stickers.",
+        "Leo lost 4 stickers."
+      ],
+      "canonical": "How many stickers does Leo have?",
+      "variants": [
+        "how many stickers does leo have",
+        "leo's stickers now?",
+        "how many stickers leo got left",
+        "stickers leo has?",
+        "how many does leo have after losing some",
+        "count leo's stickers pls",
+        "leo stickers how many",
+        "uh leo has how many stickers",
+        "can u tell me leos sticker number",
+        "how many stickers is leo at now"
+      ]
+    },
+    {
+      "id": "kids.arith.x1.t02",
+      "goal": "Record that Zoe bought five pencils",
+      "setup": [],
+      "canonical": "Zoe bought 5 pencils.",
+      "variants": [
+        "zoe bought 5 pencils",
+        "Zoe bought five pencils",
+        "zoe buy 5 pencils",
+        "Zoe just bought 5 pencils",
+        "ok zoe bought 5 pencils",
+        "5 pencils were bought by zoe",
+        "zoe got 5 pencils from the shop",
+        "Zoe bought 5 pencil",
+        "fyi zoe bought 5 pencils",
+        "Zoe has bought 5 pencils now"
+      ]
+    },
+    {
+      "id": "kids.arith.x1.t03",
+      "goal": "Ask whether Ben has any pears at all",
+      "setup": [
+        "Ben has no pears."
+      ],
+      "canonical": "Does Ben have any pears?",
+      "variants": [
+        "does ben have any pears",
+        "ben got any pears?",
+        "any pears for ben?",
+        "has ben got pears",
+        "does Ben own some pears",
+        "ben pears? any?",
+        "is there a pear with ben",
+        "do u know if ben has pears",
+        "ben have any pears or not",
+        "does ben have even one pear"
+      ]
+    },
+    {
+      "id": "kids.arith.x1.t04",
+      "goal": "Find how many marbles Leo and Zoe have together",
+      "setup": [
+        "Leo has 3 marbles.",
+        "Zoe has 5 marbles."
+      ],
+      "canonical": "How many marbles do Leo and Zoe have together?",
+      "variants": [
+        "how many marbles do leo and zoe have together",
+        "leo and zoe marbles total?",
+        "marbles leo + zoe?",
+        "how many marbles do they have all together",
+        "leo and zoe, how many marbles combined",
+        "total marbles for leo and zoe",
+        "how many marbles r there between leo and zoe",
+        "sum of leo and zoes marbles pls",
+        "together leo zoe marbles how many",
+        "can u add leo's and zoe's marbles"
+      ],
+      "canonical_retries": [
+        "How many marbles have Leo and Zoe got in total?",
+        "How many marbles do Leo and Zoe have altogether?"
+      ]
+    },
+    {
+      "id": "kids.arith.x1.t05",
+      "goal": "Find how many stickers all the kids have in total",
+      "setup": [
+        "Leo has 9 stickers.",
+        "Zoe has 2 stickers.",
+        "Ben has 6 stickers."
+      ],
+      "canonical": "How many stickers are there altogether?",
+      "variants": [
+        "how many stickers are there altogether",
+        "all the stickers total?",
+        "stickers all together how many",
+        "sum of everybody's stickers",
+        "how many stickers do we have in all",
+        "total stickers?",
+        "altogether how many stickers",
+        "count all the stickers pls",
+        "how many stickers in the whole group",
+        "add all the stickers up for me"
+      ]
+    },
+    {
+      "id": "kids.arith.x1.t06",
+      "goal": "Find how many fewer marbles Zoe has than Leo",
+      "setup": [
+        "Leo has 3 marbles.",
+        "Zoe has 5 marbles."
+      ],
+      "canonical": "How many fewer marbles does Zoe have than Leo?",
+      "variants": [
+        "how many fewer marbles does zoe have than leo",
+        "zoe has how many less marbles than leo?",
+        "how many less marbles zoe than leo",
+        "leo has more marbles by how many, zoe is short by?",
+        "zoe is behind leo by how many marbles",
+        "how many marbles does zoe lack compared to leo",
+        "difference marbles zoe leo?",
+        "how many fewer does zoe got than leo",
+        "how many less marbles does zoe have",
+        "could u tell how many marbles zoe is missing vs leo"
+      ],
+      "canonical_retries": [
+        "How many marbles does Zoe have fewer than Leo?",
+        "What is the difference in marbles between Zoe and Leo?"
+      ]
+    },
+    {
+      "id": "kids.arith.x1.t07",
+      "goal": "Find out who has more marbles between Leo and Zoe",
+      "setup": [
+        "Leo has 3 marbles.",
+        "Zoe has 5 marbles."
+      ],
+      "canonical": "Who has more marbles, Leo or Zoe?",
+      "variants": [
+        "who has more marbles leo or zoe",
+        "leo or zoe more marbles?",
+        "zoe or leo, who has the most marbles",
+        "whos got more marbles, leo or zoe",
+        "which one has more marbles, leo or zoe",
+        "more marbles: leo or zoe?",
+        "who is ahead on marbles, leo or zoe",
+        "leo vs zoe marbles who wins",
+        "between leo and zoe who has more",
+        "who has the bigger marble count"
+      ],
+      "canonical_retries": [
+        "Between Leo and Zoe, who has more marbles?",
+        "Which of Leo and Zoe has more marbles?"
+      ]
+    },
+    {
+      "id": "kids.arith.x1.t08",
+      "goal": "Work out what 15 minus 8 is",
+      "setup": [],
+      "canonical": "What is 15 minus 8?",
+      "variants": [
+        "what is 15 minus 8",
+        "15 - 8?",
+        "15-8",
+        "whats 15 minus 8",
+        "how much is 15 take away 8",
+        "subtract 8 from 15",
+        "fifteen minus eight",
+        "tell me 15 minus 8",
+        "can u do 15 minus 8 for me",
+        "15 less 8 is?"
+      ]
+    },
+    {
+      "id": "kids.arith.x1.t09",
+      "goal": "Work out what 20 divided by 4 is",
+      "setup": [],
+      "canonical": "What is 20 divided by 4?",
+      "variants": [
+        "what is 20 divided by 4",
+        "20 / 4?",
+        "20 divided by 4",
+        "whats 20 divided by 4",
+        "how much is 20 split by 4",
+        "divide 20 by 4",
+        "twenty divided by four",
+        "tell me 20 over 4",
+        "20 div 4 pls",
+        "if i share 20 among 4 how many each"
+      ]
+    },
+    {
+      "id": "kids.arith.x1.t10",
+      "goal": "Get double of 13",
+      "setup": [],
+      "canonical": "What is double 13?",
+      "variants": [
+        "what is double 13",
+        "double 13?",
+        "13 doubled?",
+        "whats 13 times 2",
+        "double of thirteen",
+        "give me double 13",
+        "what do i get doubling 13",
+        "13 x2 = ?",
+        "could u double 13 for me",
+        "double thirteen pls"
+      ]
+    }
+  ]
+}

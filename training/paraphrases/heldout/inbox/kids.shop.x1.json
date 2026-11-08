@@ -1,0 +1,226 @@
+{
+  "world": "kids.shop",
+  "tab": "robot",
+  "author": "haiku-heldout",
+  "batch": "x1",
+  "tasks": [
+    {
+      "id": "kids.shop.x1.t01",
+      "goal": "Tell the system I have 40 lei in my purse",
+      "setup": [],
+      "canonical": "I have 40 lei.",
+      "variants": [
+        "i have 40 lei",
+        "i got 40 lei in my purse",
+        "my purse has 40 lei",
+        "i have forty lei",
+        "40 lei is what i have",
+        "so i have 40 lei",
+        "me: 40 lei",
+        "i have 40 lei now",
+        "im carrying 40 lei",
+        "i have fourty lei"
+      ]
+    },
+    {
+      "id": "kids.shop.x1.t02",
+      "goal": "Record that I spent 2 lei on a sweet",
+      "setup": [
+        "I have 20 lei."
+      ],
+      "canonical": "I spent 2 lei.",
+      "variants": [
+        "i spent 2 lei",
+        "i paid 2 lei for a sweet",
+        "2 lei gone on candy",
+        "i spent two lei",
+        "i used 2 lei",
+        "spent 2 lei just now",
+        "i gave 2 lei to the shop",
+        "i lost 2 lei buying a sweet",
+        "minus 2 lei, i bought candy",
+        "i spend 2 lei"
+      ]
+    },
+    {
+      "id": "kids.shop.x1.t03",
+      "goal": "Tell the system what a kite costs",
+      "setup": [],
+      "canonical": "A kite costs 4 lei.",
+      "variants": [
+        "a kite costs 4 lei",
+        "kite is 4 lei",
+        "kite 4 lei",
+        "the kite costs four lei",
+        "a kite is 4 lei",
+        "the price of a kite is 4 lei",
+        "kite: 4 lei",
+        "kite cost 4 lei fyi",
+        "remember a kite is 4 lei",
+        "kite = 4 lei"
+      ]
+    },
+    {
+      "id": "kids.shop.x1.t04",
+      "goal": "Find out the price of a puzzle",
+      "setup": [
+        "A puzzle costs 11 lei."
+      ],
+      "canonical": "How much does a puzzle cost?",
+      "variants": [
+        "how much does a puzzle cost",
+        "puzzle price?",
+        "how much is the puzzle",
+        "what does a puzzle cost",
+        "cost of a puzzle?",
+        "how much is a puzzle",
+        "puzzle how much",
+        "whats the price of the puzzle",
+        "how much do puzzles cost",
+        "can u tell me the puzzle price"
+      ]
+    },
+    {
+      "id": "kids.shop.x1.t05",
+      "goal": "Add up the cost of 4 kites and a puzzle",
+      "setup": [
+        "A kite costs 4 lei.",
+        "A puzzle costs 11 lei."
+      ],
+      "canonical": "How much do 4 kites and a puzzle cost?",
+      "variants": [
+        "how much do 4 kites and a puzzle cost",
+        "4 kites + puzzle = ?",
+        "total for 4 kites and a puzzle",
+        "how much 4 kites and 1 puzzle",
+        "what do 4 kites and a puzzle come to",
+        "how much are 4 kites and a puzzle all together",
+        "cost of four kites plus a puzzle",
+        "4 kites and a puzzle, how much",
+        "how much will 4 kites and a puzzle be",
+        "altogether 4 kites and puzzle price?"
+      ],
+      "canonical_retries": [
+        "How much do 4 kite and a puzzle cost?",
+        "What do 4 kite and a puzzle cost?"
+      ]
+    },
+    {
+      "id": "kids.shop.x1.t06",
+      "goal": "Check how much money is still in my purse after shopping",
+      "setup": [
+        "I have 30 lei.",
+        "I spent 5 lei."
+      ],
+      "canonical": "How many lei do I have now?",
+      "variants": [
+        "how many lei do i have now",
+        "how much is in my purse now",
+        "lei left in my purse?",
+        "how much money i got left",
+        "what is my money after shopping",
+        "how many lei remain",
+        "money left for me?",
+        "after the spending, how many lei",
+        "how much do i still have",
+        "my purse, how much now?"
+      ]
+    },
+    {
+      "id": "kids.shop.x1.t07",
+      "goal": "Check if I can afford a puzzle and 2 kites",
+      "setup": [
+        "I have 20 lei.",
+        "A kite costs 4 lei.",
+        "A puzzle costs 11 lei."
+      ],
+      "canonical": "Can I buy a puzzle and 2 kites?",
+      "variants": [
+        "can i buy a puzzle and 2 kites",
+        "can i afford a puzzle and 2 kites?",
+        "is a puzzle and 2 kites ok for my money",
+        "do i have enough for a puzzle and 2 kites",
+        "puzzle + 2 kites, can i pay?",
+        "could i get a puzzle and two kites",
+        "enough money for puzzle and 2 kites?",
+        "can i buy the puzzle with 2 kites",
+        "is it possible to buy a puzzle and two kites",
+        "can i get a puzzle and 2 kite, i have 20"
+      ],
+      "canonical_retries": [
+        "Can I buy a puzzle and 2 kite?",
+        "Can I buy 2 kite and a puzzle?"
+      ]
+    },
+    {
+      "id": "kids.shop.x1.t08",
+      "goal": "Check if I have enough money for a puzzle",
+      "setup": [
+        "I have 8 lei.",
+        "A puzzle costs 11 lei."
+      ],
+      "canonical": "Do I have enough money for a puzzle?",
+      "variants": [
+        "do i have enough money for a puzzle",
+        "enough for a puzzle?",
+        "can i pay for a puzzle",
+        "is my money enough for the puzzle",
+        "do i have enough lei for a puzzle",
+        "can i afford a puzzle",
+        "i have enough for puzzle?",
+        "is 8 lei enough for a puzzle",
+        "could i buy a puzzle now",
+        "puzzle affordable for me?"
+      ]
+    },
+    {
+      "id": "kids.shop.x1.t09",
+      "goal": "Find my change if I pay 20 lei for a kite",
+      "setup": [
+        "A kite costs 4 lei."
+      ],
+      "canonical": "How much change do I get if I pay 20 lei for a kite?",
+      "variants": [
+        "how much change do i get if i pay 20 lei for a kite",
+        "i pay 20 lei for a kite, change?",
+        "change from 20 lei for a kite",
+        "how much back if i give 20 lei for a kite",
+        "20 lei for kite, whats my change",
+        "how much will i get back from 20 for a kite",
+        "if i hand over 20 lei for a kite how much is left",
+        "kite change from 20?",
+        "what do i get back after paying 20 lei for the kite",
+        "change for a kite if i pay 20"
+      ],
+      "canonical_retries": [
+        "What is my change if I pay 20 lei for a kite?",
+        "How much change from 20 lei for a kite?"
+      ]
+    },
+    {
+      "id": "kids.shop.x1.t10",
+      "goal": "Get my change from 30 lei for a puzzle and 2 kites",
+      "setup": [
+        "A kite costs 4 lei.",
+        "A puzzle costs 11 lei."
+      ],
+      "canonical": "How much change do I get if I pay 30 lei for a puzzle and 2 kites?",
+      "variants": [
+        "how much change if i pay 30 lei for a puzzle and 2 kites",
+        "30 lei for puzzle and 2 kites, change?",
+        "what is my change from 30 lei for a puzzle and two kites",
+        "i give 30 lei for the puzzle and 2 kites, how much back",
+        "change from thirty lei, puzzle and 2 kites",
+        "how much do i get back paying 30 for a puzzle and 2 kites",
+        "puzzle + 2 kites with 30 lei, change pls",
+        "if i pay 30 lei how much change for a puzzle and two kites",
+        "after 30 lei for puzzle and 2 kites how much left",
+        "give me the change, 30 lei, puzzle and 2 kites"
+      ],
+      "canonical_retries": [
+        "How much change do I get if I pay 30 lei for a puzzle and 2 kite?",
+        "What is my change if I pay 30 lei for a puzzle and 2 kite?"
+      ]
+    }
+  ]
+}

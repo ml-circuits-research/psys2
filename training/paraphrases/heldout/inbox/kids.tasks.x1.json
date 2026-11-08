@@ -1,0 +1,75 @@
+{
+  "world": "kids.tasks",
+  "tab": "editor",
+  "author": "haiku-heldout",
+  "batch": "x1",
+  "tasks": [
+    {
+      "id": "kids.tasks.x1.t01",
+      "goal": "Put socks on the garden list",
+      "canonical": "Put socks on my garden.",
+      "variants": ["put socks on my garden", "socks on the garden list", "add socks to garden list pls", "garden list: socks", "can u put socks on my garden list", "i need socks on the garden list", "socks for the garden list please", "add socks in my garden list", "hey put socks on the garden", "could you add socks to my garden list"]
+    },
+    {
+      "id": "kids.tasks.x1.t02",
+      "goal": "Ask to be reminded about the dishes later",
+      "canonical": "Nudge me about the dishes later.",
+      "variants": ["nudge me about the dishes later", "remind me about dishes later", "dishes reminder later pls", "later remind me of the dishes", "can u remind me about the dishes", "dishes later, remind me", "i need a nudge about the dishes", "remind me to do the dishes later", "hey nudge me about dishes", "could you remind me about the dishes later please"]
+    },
+    {
+      "id": "kids.tasks.x1.t03",
+      "goal": "Say that the reading is finished",
+      "setup": ["Add reading to my list."],
+      "canonical": "My reading's finished.",
+      "variants": ["my reading is finished", "reading finished", "i finished reading", "reading done pls", "i am done with reading", "reading is over for me", "i completed my reading", "reading done now", "finished my reading", "reading, all done"]
+    },
+    {
+      "id": "kids.tasks.x1.t04",
+      "goal": "Take socks off the garden list",
+      "setup": ["Put socks on my garden."],
+      "canonical": "Ditch socks from my garden list.",
+      "variants": ["ditch socks from my garden list", "remove socks from garden list", "socks off the garden list", "delete socks from the garden list pls", "get rid of socks on garden list", "can u take socks off my garden list", "garden list no more socks", "remove the socks from my garden", "hey delete socks from garden list", "could you take the socks off my garden list"]
+    },
+    {
+      "id": "kids.tasks.x1.t05",
+      "goal": "Say that homework is still not finished",
+      "setup": ["Add homework to my list."],
+      "canonical": "I have not finished my homework.",
+      "variants": ["i have not finished my homework", "homework not finished", "i didnt finish homework", "homework still not done", "i havent done my homework yet", "no homework finished yet", "i have not done homework", "homework is not done pls", "i still didnt finish my homework", "not finished homework"]
+    },
+    {
+      "id": "kids.tasks.x1.t06",
+      "goal": "Check whether socks is on the garden list",
+      "setup": ["Put socks on my garden."],
+      "canonical": "Check if socks show up on the garden list.",
+      "variants": ["check if socks show up on the garden list", "is socks on the garden list", "socks on garden list?", "are socks on my garden list", "check socks garden list pls", "can u check if socks is on the list", "is there socks on my garden list", "socks in the garden list or not", "hey check socks on the garden list", "could you see if socks are on the garden list"]
+    },
+    {
+      "id": "kids.tasks.x1.t07",
+      "goal": "See all the lists I have made",
+      "canonical": "Display my lists.",
+      "variants": ["display my lists", "show all my lists", "what lists are there", "my lists pls", "show me the lists i have", "list all my lists", "which lists do i have", "display the lists", "can u show my lists", "could you display my lists please"]
+    },
+    {
+      "id": "kids.tasks.x1.t08",
+      "goal": "Find out how many chores are still to do",
+      "setup": ["Add the dishes to my chores list.", "Add the laundry to my chores list.", "Mark the laundry as done."],
+      "canonical": "How many chores remain for us?",
+      "variants": ["how many chores remain for us", "how many chores are left", "chores left how many", "how many chores still to do", "count the chores left pls", "how many chores do we still have", "chores remaining?", "how many chores are not done", "number of chores left", "could you tell me how many chores remain"]
+    },
+    {
+      "id": "kids.tasks.x1.t09",
+      "goal": "Empty the garden list completely",
+      "setup": ["Put socks on my garden.", "Put a hat on my garden."],
+      "canonical": "Flush my garden list.",
+      "variants": ["flush my garden list", "empty the garden list", "clear the garden list pls", "garden list empty it", "wipe the garden list", "can u empty my garden list", "remove everything from the garden list", "make the garden list blank", "hey clear my garden list", "could you empty the garden list for me"]
+    },
+    {
+      "id": "kids.tasks.x1.t10",
+      "goal": "Ask whether the reading task is completed yet",
+      "setup": ["Add reading to my list."],
+      "canonical": "Did I actually complete my reading yet?",
+      "variants": ["did i complete my reading yet", "is my reading done yet", "did i finish reading", "reading done yet?", "have i completed reading", "was my reading finished yet", "did i actually finish my reading", "is reading completed", "reading finished or not yet", "could you tell me if i completed my reading"]
+    }
+  ]
+}

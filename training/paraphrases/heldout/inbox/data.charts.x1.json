@@ -1,0 +1,77 @@
+{
+  "world": "data.charts",
+  "tab": "charts",
+  "author": "haiku-heldout",
+  "batch": "x1",
+  "tasks": [
+    {
+      "id": "data.charts.x1.t01",
+      "goal": "Graph a made-up list of toys",
+      "canonical": "Make a chart: bikes 4, scooters 9, kites 2.",
+      "variants": ["make a chart: bikes 4, scooters 9, kites 2", "chart bikes 4 scooters 9 kites 2", "bikes 4 scooters 9 kites 2 as a graph", "graph: bikes 4, scooters 9, kites 2", "can you chart bikes 4 scooters 9 and kites 2", "bikes four scooters nine kites two chart", "new chart bikes 4 scooters 9 kites 2", "toys chart: bikes 4, scooters 9, kites 2", "make me a bar graph bikes 4 scooters 9 kites 2", "chart this pls: bikes 4, scooters 9, kites 2"]
+    },
+    {
+      "id": "data.charts.x1.t02",
+      "goal": "Show each kid's fruit as slices",
+      "setup": ["Tom has 5 apples.", "Ana has 3 apples."],
+      "canonical": "Graph what everyone has as a pie chart.",
+      "variants": ["graph what everyone has as a pie chart", "pie chart of what everyone has", "show each kids fruit as slices", "pie of everybodys stuff", "everyone's things as a pie", "make a pie with what the kids have", "kids stuff in a pie chart pls", "pie chart of the kids apples", "can u do a pie of what each kid has", "slices for what everyone owns"]
+    },
+    {
+      "id": "data.charts.x1.t03",
+      "goal": "Compare animal legs in a graph",
+      "canonical": "Chart the legs of spiders and cows.",
+      "variants": ["chart the legs of spiders and cows", "spiders vs cows legs chart", "graph legs for spiders and cows", "how many legs spiders and cows as a chart", "legs chart spider cow", "compare spider and cow legs in a graph", "chart: legs of spiders and cows", "spiders and cows legs bar chart", "can you graph the legs of a spider and a cow", "make a legs chart for spiders and cows"]
+    },
+    {
+      "id": "data.charts.x1.t04",
+      "goal": "Change the picture style to a line graph",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Line graph instead.",
+      "canonical_retries": ["Show it as a line.", "Make it a line chart."],
+      "variants": ["line graph instead", "make it a line graph", "switch to a line graph", "line instead of bars", "use lines not bars", "line chart pls", "change it to a line graph", "lines instead", "can you make the graph a line one", "turn the bars into a line"]
+    },
+    {
+      "id": "data.charts.x1.t05",
+      "goal": "Give each slice a rainbow color",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Use the rainbow colors.",
+      "variants": ["use the rainbow colors", "rainbow colours please", "make it rainbow", "rainbow palette", "colour it like a rainbow", "rainbow colors pls", "can u do rainbow colors", "rainbow theme for the chart", "put rainbow on it", "use rainbow"]
+    },
+    {
+      "id": "data.charts.x1.t06",
+      "goal": "Cut one fruit count in half",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Halve the plums.",
+      "variants": ["halve the plums", "plums in half", "cut the plums by half", "plums half", "make plums half of what it is", "divide plums by two", "halve plums pls", "plums to half", "can u halve the plums", "half the plums number"]
+    },
+    {
+      "id": "data.charts.x1.t07",
+      "goal": "Arrange bars from the tiniest up",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Sort from smallest to biggest.",
+      "variants": ["sort from smallest to biggest", "smallest first", "tiniest to biggest", "order them small to big", "sort smallest first pls", "lowest to highest", "arrange from small to large", "smallest at the start", "sort it low to high", "can you sort the bars smallest first"]
+    },
+    {
+      "id": "data.charts.x1.t08",
+      "goal": "Find the sum of every count",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "How many altogether?",
+      "variants": ["how many altogether", "altogether?", "whats the sum", "total of everything", "how many all together", "add them all up", "grand total?", "all together how many", "what do they add up to", "sum pls"]
+    },
+    {
+      "id": "data.charts.x1.t09",
+      "goal": "Jump back to the second graph",
+      "setup": ["Make a chart: apples 5, pears 3.", "Make a chart: fish 4, cats 1."],
+      "canonical": "Go to chart 2.",
+      "variants": ["go to chart 2", "chart number 2", "show me the second chart", "open chart 2", "switch to chart two", "second graph please", "chart 2 pls", "go to the 2nd chart", "back to chart 2", "can you bring up chart 2"]
+    },
+    {
+      "id": "data.charts.x1.t10",
+      "goal": "Get the figures onto the clipboard",
+      "setup": ["Make a chart: apples 5, pears 3."],
+      "canonical": "Copy the chart data.",
+      "variants": ["copy the chart data", "copy the numbers", "clipboard the figures", "copy data pls", "put the numbers on my clipboard", "copy the data from the chart", "can u copy the chart numbers", "copy the values", "copy it to clipboard", "grab the numbers and copy them"]
+    }
+  ]
+}

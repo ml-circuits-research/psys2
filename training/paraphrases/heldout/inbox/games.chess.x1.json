@@ -1,0 +1,78 @@
+{
+  "world": "games.chess",
+  "tab": "chess",
+  "author": "haiku-heldout",
+  "batch": "x1",
+  "tasks": [
+    {
+      "id": "games.chess.x1.t01",
+      "goal": "See every legal move for my queen",
+      "setup": ["Play chess."],
+      "canonical": "Which moves can my queen make?",
+      "variants": ["which moves can my queen make", "queen moves?", "where can my queen go", "show me all the queen moves pls", "can u list the legal moves of the queen", "what can the queen do now", "qween moves", "could you show what squares my queen can reach", "my queen where can she move", "list queen moves for me please"]
+    },
+    {
+      "id": "games.chess.x1.t02",
+      "goal": "Check what stands on h8",
+      "setup": ["Play chess."],
+      "canonical": "What is on h8?",
+      "variants": ["what is on h8", "h8?", "whats on h8", "what piece is on h8", "is anything on h8", "tell me what is at h eight", "h8 has what", "uh what is on square h8", "whats h8 right now", "what sits on h8 please"]
+    },
+    {
+      "id": "games.chess.x1.t03",
+      "goal": "Find out where my rooks are",
+      "setup": ["Play chess."],
+      "canonical": "Where are my rooks?",
+      "variants": ["where are my rooks", "wher my rooks", "rooks where?", "which squares are my rooks on", "location of my rook pieces", "can you tell me where my two rooks are", "where r my rooks", "show me the rooks", "the rooks, where are they", "where are my castles (rooks)"]
+    },
+    {
+      "id": "games.chess.x1.t04",
+      "goal": "Find out which colour I play",
+      "setup": ["Play chess."],
+      "canonical": "Which colour do I play?",
+      "variants": ["which colour do I play", "what colour am i", "am I white or black", "what side am I on", "which color do i have", "my colour?", "i play which one, white or black", "tell me my colour please", "are my pieces white", "what colour are my pieces in this game"]
+    },
+    {
+      "id": "games.chess.x1.t05",
+      "goal": "Swap sides with the engine",
+      "setup": ["Play chess."],
+      "canonical": "Let us swap sides.",
+      "variants": ["let us swap sides", "swap sides", "switch colours with you", "can we swap, you take my side", "lets swap sides pls", "I want the other colour now", "change sides", "swap colors", "could we switch sides please", "ok flip our sides"]
+    },
+    {
+      "id": "games.chess.x1.t06",
+      "goal": "Turn the board so I see it from black's side",
+      "setup": ["Play chess."],
+      "canonical": "Flip the board.",
+      "variants": ["flip the board", "turn the board around", "rotate board", "show it from the other side", "board upside down please", "flip it", "i want to see from black side", "can u rotate the chess board", "spin the board around", "turn it so i see the black side"]
+    },
+    {
+      "id": "games.chess.x1.t07",
+      "goal": "Hear only the white pieces described",
+      "setup": ["Play chess."],
+      "canonical": "Describe the white pieces.",
+      "variants": ["describe the white pieces", "read out the white pieces", "what white has on the board", "tell me only white's pieces", "white pieces please, describe", "describe white", "say what white has", "read the white side out loud", "white side description pls", "could you describe just white"]
+    },
+    {
+      "id": "games.chess.x1.t08",
+      "goal": "Check whether my queen may go to h5",
+      "setup": ["Play chess.", "e4."],
+      "canonical": "Is it legal to move my queen to h5?",
+      "variants": ["is it legal to move my queen to h5", "can my queen go to h5", "queen to h5 allowed?", "is queen h5 legal", "may i play queen h5", "can the queen reach h5", "queen h5 ok?", "is h5 possible for my queen", "would queen to h5 be a legal move", "hey can i put the queen on h5"]
+    },
+    {
+      "id": "games.chess.x1.t09",
+      "goal": "List the moves the knight on g1 has",
+      "setup": ["Play chess."],
+      "canonical": "Which moves can the knight on g1 make?",
+      "variants": ["which moves can the knight on g1 make", "knight g1 moves?", "where can the g1 knight go", "g1 knight options", "show knight g1 moves", "the knight on g one, where can it go", "list moves for the knight at g1", "what can my g1 knight do", "knight on g1 possible squares", "can u show the moves of the g1 horse"]
+    },
+    {
+      "id": "games.chess.x1.t10",
+      "goal": "Raise the engine strength to level 5",
+      "setup": ["Play chess."],
+      "canonical": "Set the level to 5.",
+      "variants": ["set the level to 5", "level 5 please", "make the engine stronger, level five", "change level to 5", "lvl 5", "i want level 5 now", "put the strength on 5", "can you play at level five", "level to 5 pls", "make it level 5 for me"]
+    }
+  ]
+}

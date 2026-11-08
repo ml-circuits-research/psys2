@@ -1,0 +1,68 @@
+{
+  "world": "ui.shell",
+  "tab": "robot",
+  "author": "haiku-heldout",
+  "batch": "x1",
+  "tasks": [
+    {
+      "id": "ui.shell.x1.t01",
+      "goal": "Open the chess board tab",
+      "canonical": "Open the chess board.",
+      "variants": ["open the chess board", "chess board tab pls", "can u open the chess board", "i want the chess board", "chess board please", "show chess", "take me to the chessboard", "open chess board for me now", "go to the chess tab", "could you open up the chess board"]
+    },
+    {
+      "id": "ui.shell.x1.t02",
+      "goal": "Start a game of hangman",
+      "canonical": "Play hangman.",
+      "variants": ["play hangman", "hangman pls", "lets do hangman", "can we play hangman", "i wanna play hangman", "hangman game please", "start hangman", "hangmen game", "can u play hangman with me", "play the hangman game now"]
+    },
+    {
+      "id": "ui.shell.x1.t03",
+      "goal": "Switch to the map tab",
+      "canonical": "Show the map tab.",
+      "variants": ["show the map tab", "map tab pls", "can u show me the map", "switch to the map", "open the map please", "go to map", "map tab now", "i want to see the map tab", "show map", "could you bring up the map tab"]
+    },
+    {
+      "id": "ui.shell.x1.t04",
+      "goal": "Ask how many phrases have been said so far",
+      "canonical": "How many phrases have I said?",
+      "variants": ["how many phrases have i said", "how many phrases did i say", "count my phrases", "phrase count?", "how many things have i said so far", "hw many phrases i said", "number of phrases i said", "how many sentences have i spoken", "tell me how many phrases i said", "so how many phrases have i said till now"]
+    },
+    {
+      "id": "ui.shell.x1.t05",
+      "goal": "Save a copy of the phrase log to a file",
+      "canonical": "Download my phrase log.",
+      "variants": ["download my phrase log", "save my phrase log", "i want a copy of my phrase log", "phrase log download pls", "can u save the phrase log", "get my phrase log as a file", "export phrase log", "download the phrases i said", "phrase log to file please", "could you download my phrase log for me"]
+    },
+    {
+      "id": "ui.shell.x1.t06",
+      "goal": "Set the voice speed to 1.5",
+      "canonical": "Set the speech rate to 1.5.",
+      "variants": ["set the speech rate to 1.5", "speech rate 1.5", "voice speed 1.5 pls", "make the speed 1.5", "can u set the rate to one point five", "speak at 1.5", "rate 1.5 please", "set speed to 1,5", "i want speech rate one and a half", "could you set talking speed to 1.5"]
+    },
+    {
+      "id": "ui.shell.x1.t07",
+      "goal": "Change the language back to English",
+      "canonical": "Speak English.",
+      "variants": ["speak english", "english pls", "change to english", "can u speak english now", "switch the language to english", "english please", "i want english", "talk english", "back to english", "could you use english from now on"]
+    },
+    {
+      "id": "ui.shell.x1.t08",
+      "goal": "Ask the system for a clue in the current game",
+      "canonical": "Give me a clue.",
+      "variants": ["give me a clue", "clue pls", "i need a clue", "can u give me a clue", "clue please i am stuck", "any clue?", "help me with a clue", "could you give me a clue now", "clue me", "i dont know, give a clue"]
+    },
+    {
+      "id": "ui.shell.x1.t09",
+      "goal": "Stop the game that is running",
+      "canonical": "Stop the game.",
+      "variants": ["stop the game", "stop game pls", "end the game", "can we stop the game", "i want to stop the game now", "stop it, game over", "quit this game please", "stop the game for now", "game stop", "could you stop the game"]
+    },
+    {
+      "id": "ui.shell.x1.t10",
+      "goal": "Go back to the tab I was on before",
+      "canonical": "Go back.",
+      "variants": ["go back", "back pls", "go back to the last one", "can u go back", "back please", "previous screen", "take me back", "back one tab", "return to where i was", "could you go back for me"]
+    }
+  ]
+}

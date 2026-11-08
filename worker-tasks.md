@@ -40,7 +40,7 @@ The working hypothesis: on small worlds, **rules plus a small learned front-end*
 
 **Contamination.** The rules were widened by reading **all** paraphrase records, including the test split. From now on, rule numbers on paraphrase test records are optimistic. That makes the comparison unfair in favour of rules alone; it does not touch the dispatcher's training data.
 
-The clean measure is a fresh **held-out paraphrase set** that nobody has used for rules: `training/paraphrases/heldout/`. The reviewer is generating it now. It lands as `heldout/inbox/*.json` plus `heldout/out/*.jsonl`, with 1 batch (10 tasks × 10 variants) per world. Never train on it.
+The clean measure is a fresh **held-out paraphrase set** that nobody has used for rules: `training/paraphrases/heldout/`. **It has landed (11:20):** 21 batches, 210 tasks, 2,100 variants, one batch per world (two for docs.reader), labelled at c989cd1. Rules understand 45% of these variants, against 55% on the training paraphrases. In the games the rules were tuned on the training paraphrases: 80–93% there, 36–44% here. Five docs.reader canonicals fail or are partial; their variants are flagged `needs_review`. Exclude them from metrics and count them. Never train on this set, and never use it to pick hyperparameters (use dev).
 
 ### B1 — Rebaseline (do this next, small)
 

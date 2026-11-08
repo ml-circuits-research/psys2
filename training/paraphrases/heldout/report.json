@@ -1,0 +1,528 @@
+{
+  "worlds": {
+    "ui.avatar": {
+      "tasks": 10,
+      "attempts": 110,
+      "canonical_success": 10,
+      "canonical_success_rate": 1,
+      "variants": 100,
+      "variant_labels": {
+        "rules-agree": 41,
+        "rules-fail": 45,
+        "rules-differ": 14
+      },
+      "variant_rules_coverage": 0.41,
+      "variants_needing_review": 0,
+      "trainable_records": 110,
+      "by_split": {
+        "train": 110
+      },
+      "retry": []
+    },
+    "ui.shell": {
+      "tasks": 10,
+      "attempts": 110,
+      "canonical_success": 10,
+      "canonical_success_rate": 1,
+      "variants": 100,
+      "variant_labels": {
+        "rules-agree": 46,
+        "rules-fail": 36,
+        "rules-differ": 18
+      },
+      "variant_rules_coverage": 0.46,
+      "variants_needing_review": 0,
+      "trainable_records": 110,
+      "by_split": {
+        "train": 110
+      },
+      "retry": []
+    },
+    "ui.help": {
+      "tasks": 10,
+      "attempts": 110,
+      "canonical_success": 10,
+      "canonical_success_rate": 1,
+      "variants": 100,
+      "variant_labels": {
+        "rules-agree": 24,
+        "rules-fail": 61,
+        "rules-differ": 15
+      },
+      "variant_rules_coverage": 0.24,
+      "variants_needing_review": 0,
+      "trainable_records": 110,
+      "by_split": {
+        "train": 99,
+        "dev": 11
+      },
+      "retry": []
+    },
+    "docs.editor": {
+      "tasks": 10,
+      "attempts": 110,
+      "canonical_success": 10,
+      "canonical_success_rate": 1,
+      "variants": 100,
+      "variant_labels": {
+        "rules-agree": 29,
+        "rules-fail": 47,
+        "rules-differ": 24
+      },
+      "variant_rules_coverage": 0.29,
+      "variants_needing_review": 0,
+      "trainable_records": 110,
+      "by_split": {
+        "train": 99,
+        "dev": 11
+      },
+      "retry": []
+    },
+    "docs.reader": {
+      "tasks": 20,
+      "attempts": 231,
+      "canonical_success": 15,
+      "canonical_success_rate": 0.75,
+      "variants": 200,
+      "variant_labels": {
+        "rules-agree": 39,
+        "rules-fail": 136,
+        "rules-unverified": 4,
+        "rules-differ": 21
+      },
+      "variant_rules_coverage": 0.195,
+      "variants_needing_review": 50,
+      "trainable_records": 169,
+      "by_split": {
+        "train": 197,
+        "dev": 34
+      },
+      "retry": [
+        {
+          "batch": "x1",
+          "task": "docs.reader.x1.t02",
+          "goal": "Ask who the witch is",
+          "tried": [
+            {
+              "attempt": 1,
+              "text": "Who is the witch?",
+              "reply": "The witch is a character (also: the woman). The witch is mentioned 26 times, first in sentence 32. For example, the witch came out and smiled. (sentences 32 and 33)",
+              "label": "canonical-failed"
+            },
+            {
+              "attempt": 2,
+              "text": "What do you know about the witch?",
+              "reply": "The witch is a character (also: the woman). The witch is mentioned 26 times, first in sentence 32. For example, the witch came out and smiled. (sentences 32 and 33)",
+              "label": "canonical-failed"
+            },
+            {
+              "attempt": 3,
+              "text": "Tell me about the witch.",
+              "reply": "The witch is a character (also: the woman). The witch is mentioned 26 times, first in sentence 32. For example, the witch came out and smiled. (sentences 32 and 33)",
+              "label": "canonical-failed"
+            }
+          ]
+        },
+        {
+          "batch": "x1",
+          "task": "docs.reader.x1.t03",
+          "goal": "Count how often Hansel is named",
+          "tried": [
+            {
+              "attempt": 1,
+              "text": "How many times is Hansel mentioned?",
+              "reply": "Hansel is mentioned 36 times, in 28 sentences.",
+              "label": "canonical-failed"
+            },
+            {
+              "attempt": 2,
+              "text": "How often is Hansel mentioned?",
+              "reply": "Hansel is mentioned 36 times, in 28 sentences.",
+              "label": "canonical-failed"
+            },
+            {
+              "attempt": 3,
+              "text": "How many times does Hansel appear?",
+              "reply": "Hansel is mentioned 36 times, in 28 sentences.",
+              "label": "canonical-failed"
+            }
+          ]
+        },
+        {
+          "batch": "x1",
+          "task": "docs.reader.x1.t04",
+          "goal": "Find out who is Hansel's sister",
+          "tried": [
+            {
+              "attempt": 1,
+              "text": "Who is Hansel's sister?",
+              "reply": "Gretel is Hansel's sister. (sentence 2)",
+              "label": "canonical-failed"
+            },
+            {
+              "attempt": 2,
+              "text": "Who is the sister of Hansel?",
+              "reply": "Gretel is Hansel's sister. (sentence 2)",
+              "label": "canonical-failed"
+            },
+            {
+              "attempt": 3,
+              "text": "What do you know about Hansel's sister?",
+              "reply": "The document does not say that. The closest sentences are: \"The boy was called Hansel and his little sister was called Gretel.\" \"He told his sister about the plan.\" \"\"I do not know how,\" said Gretel.\" (sentences 2, 11 and 49)",
+              "label": "canonical-failed"
+            }
+          ]
+        },
+        {
+          "batch": "x2",
+          "task": "docs.reader.x2.t04",
+          "goal": "Count mentions of a character",
+          "tried": [
+            {
+              "attempt": 1,
+              "text": "How many times is the witch mentioned?",
+              "reply": "The witch is mentioned 26 times, in 18 sentences.",
+              "label": "canonical-failed"
+            },
+            {
+              "attempt": 2,
+              "text": "Count how many times the witch is mentioned.",
+              "reply": "I did not understand \"Count how many times the witch is mentioned\". Did you mean \"How many times is Hansel mentioned?\" or \"How many times does the witch appear?\"?",
+              "label": "canonical-failed"
+            },
+            {
+              "attempt": 3,
+              "text": "How often is the witch mentioned?",
+              "reply": "The witch is mentioned 26 times, in 18 sentences.",
+              "label": "canonical-failed"
+            }
+          ]
+        },
+        {
+          "batch": "x2",
+          "task": "docs.reader.x2.t05",
+          "goal": "Find who spoke a quoted line",
+          "tried": [
+            {
+              "attempt": 1,
+              "text": "Who said \"Show me first\" in the story?",
+              "reply": "Gretel said: \"Show me first.\" (sentence 50)",
+              "label": "canonical-failed"
+            },
+            {
+              "attempt": 2,
+              "text": "Who said \"Show me first\"?",
+              "reply": "Gretel said: \"Show me first.\" (sentence 50)",
+              "label": "canonical-failed"
+            }
+          ]
+        }
+      ]
+    },
+    "kids.tasks": {
+      "tasks": 10,
+      "attempts": 110,
+      "canonical_success": 10,
+      "canonical_success_rate": 1,
+      "variants": 100,
+      "variant_labels": {
+        "rules-agree": 40,
+        "rules-differ": 27,
+        "rules-fail": 33
+      },
+      "variant_rules_coverage": 0.4,
+      "variants_needing_review": 0,
+      "trainable_records": 110,
+      "by_split": {
+        "train": 110
+      },
+      "retry": []
+    },
+    "media.music": {
+      "tasks": 10,
+      "attempts": 110,
+      "canonical_success": 10,
+      "canonical_success_rate": 1,
+      "variants": 100,
+      "variant_labels": {
+        "rules-agree": 31,
+        "rules-fail": 42,
+        "rules-differ": 27
+      },
+      "variant_rules_coverage": 0.31,
+      "variants_needing_review": 0,
+      "trainable_records": 110,
+      "by_split": {
+        "train": 99,
+        "dev": 11
+      },
+      "retry": []
+    },
+    "kids.common": {
+      "tasks": 10,
+      "attempts": 111,
+      "canonical_success": 10,
+      "canonical_success_rate": 1,
+      "variants": 100,
+      "variant_labels": {
+        "rules-agree": 52,
+        "rules-fail": 40,
+        "rules-differ": 8
+      },
+      "variant_rules_coverage": 0.52,
+      "variants_needing_review": 0,
+      "trainable_records": 111,
+      "by_split": {
+        "train": 111
+      },
+      "retry": []
+    },
+    "art.draw": {
+      "tasks": 10,
+      "attempts": 110,
+      "canonical_success": 10,
+      "canonical_success_rate": 1,
+      "variants": 100,
+      "variant_labels": {
+        "rules-agree": 32,
+        "rules-fail": 48,
+        "rules-differ": 20
+      },
+      "variant_rules_coverage": 0.32,
+      "variants_needing_review": 0,
+      "trainable_records": 110,
+      "by_split": {
+        "train": 99,
+        "dev": 11
+      },
+      "retry": []
+    },
+    "games.chess": {
+      "tasks": 10,
+      "attempts": 110,
+      "canonical_success": 10,
+      "canonical_success_rate": 1,
+      "variants": 100,
+      "variant_labels": {
+        "rules-agree": 50,
+        "rules-fail": 35,
+        "rules-differ": 15
+      },
+      "variant_rules_coverage": 0.5,
+      "variants_needing_review": 0,
+      "trainable_records": 110,
+      "by_split": {
+        "train": 88,
+        "dev": 22
+      },
+      "retry": []
+    },
+    "geo.map": {
+      "tasks": 10,
+      "attempts": 111,
+      "canonical_success": 10,
+      "canonical_success_rate": 1,
+      "variants": 100,
+      "variant_labels": {
+        "rules-agree": 42,
+        "rules-differ": 10,
+        "rules-fail": 48
+      },
+      "variant_rules_coverage": 0.42,
+      "variants_needing_review": 0,
+      "trainable_records": 110,
+      "by_split": {
+        "train": 100,
+        "dev": 11
+      },
+      "retry": []
+    },
+    "games.tictactoe": {
+      "tasks": 10,
+      "attempts": 112,
+      "canonical_success": 10,
+      "canonical_success_rate": 1,
+      "variants": 100,
+      "variant_labels": {
+        "rules-agree": 53,
+        "rules-fail": 30,
+        "rules-differ": 17
+      },
+      "variant_rules_coverage": 0.53,
+      "variants_needing_review": 0,
+      "trainable_records": 110,
+      "by_split": {
+        "train": 100,
+        "dev": 12
+      },
+      "retry": []
+    },
+    "data.charts": {
+      "tasks": 10,
+      "attempts": 111,
+      "canonical_success": 10,
+      "canonical_success_rate": 1,
+      "variants": 100,
+      "variant_labels": {
+        "rules-agree": 41,
+        "rules-differ": 31,
+        "rules-fail": 28
+      },
+      "variant_rules_coverage": 0.41,
+      "variants_needing_review": 0,
+      "trainable_records": 110,
+      "by_split": {
+        "train": 100,
+        "dev": 11
+      },
+      "retry": []
+    },
+    "games.hangman": {
+      "tasks": 10,
+      "attempts": 111,
+      "canonical_success": 10,
+      "canonical_success_rate": 1,
+      "variants": 100,
+      "variant_labels": {
+        "rules-agree": 62,
+        "rules-fail": 26,
+        "rules-differ": 12
+      },
+      "variant_rules_coverage": 0.62,
+      "variants_needing_review": 0,
+      "trainable_records": 110,
+      "by_split": {
+        "train": 111
+      },
+      "retry": []
+    },
+    "kids.animals": {
+      "tasks": 10,
+      "attempts": 110,
+      "canonical_success": 10,
+      "canonical_success_rate": 1,
+      "variants": 100,
+      "variant_labels": {
+        "rules-agree": 42,
+        "rules-fail": 46,
+        "rules-differ": 12
+      },
+      "variant_rules_coverage": 0.42,
+      "variants_needing_review": 0,
+      "trainable_records": 110,
+      "by_split": {
+        "train": 77,
+        "dev": 33
+      },
+      "retry": []
+    },
+    "games.guess": {
+      "tasks": 10,
+      "attempts": 111,
+      "canonical_success": 10,
+      "canonical_success_rate": 1,
+      "variants": 100,
+      "variant_labels": {
+        "rules-agree": 77,
+        "rules-fail": 15,
+        "rules-differ": 8
+      },
+      "variant_rules_coverage": 0.77,
+      "variants_needing_review": 0,
+      "trainable_records": 110,
+      "by_split": {
+        "train": 77,
+        "dev": 34
+      },
+      "retry": []
+    },
+    "kids.shapes": {
+      "tasks": 10,
+      "attempts": 110,
+      "canonical_success": 10,
+      "canonical_success_rate": 1,
+      "variants": 100,
+      "variant_labels": {
+        "rules-agree": 69,
+        "rules-fail": 29,
+        "rules-differ": 2
+      },
+      "variant_rules_coverage": 0.69,
+      "variants_needing_review": 0,
+      "trainable_records": 110,
+      "by_split": {
+        "train": 110
+      },
+      "retry": []
+    },
+    "kids.arith": {
+      "tasks": 10,
+      "attempts": 110,
+      "canonical_success": 10,
+      "canonical_success_rate": 1,
+      "variants": 100,
+      "variant_labels": {
+        "rules-agree": 50,
+        "rules-fail": 43,
+        "rules-differ": 7
+      },
+      "variant_rules_coverage": 0.5,
+      "variants_needing_review": 0,
+      "trainable_records": 110,
+      "by_split": {
+        "train": 99,
+        "dev": 11
+      },
+      "retry": []
+    },
+    "kids.shop": {
+      "tasks": 10,
+      "attempts": 110,
+      "canonical_success": 10,
+      "canonical_success_rate": 1,
+      "variants": 100,
+      "variant_labels": {
+        "rules-agree": 57,
+        "rules-fail": 36,
+        "rules-differ": 7
+      },
+      "variant_rules_coverage": 0.57,
+      "variants_needing_review": 0,
+      "trainable_records": 110,
+      "by_split": {
+        "train": 99,
+        "dev": 11
+      },
+      "retry": []
+    },
+    "kids.time": {
+      "tasks": 10,
+      "attempts": 110,
+      "canonical_success": 10,
+      "canonical_success_rate": 1,
+      "variants": 100,
+      "variant_labels": {
+        "rules-agree": 69,
+        "rules-fail": 30,
+        "rules-differ": 1
+      },
+      "variant_rules_coverage": 0.69,
+      "variants_needing_review": 0,
+      "trainable_records": 110,
+      "by_split": {
+        "dev": 11,
+        "train": 99
+      },
+      "retry": []
+    }
+  },
+  "totals": {
+    "tasks": 210,
+    "attempts": 2328,
+    "canonical_success": 205,
+    "variants": 2100,
+    "agree": 946,
+    "canonical_success_rate": 0.9762,
+    "variant_rules_coverage": 0.4505
+  }
+}

@@ -1,0 +1,215 @@
+{
+  "world": "games.tictactoe",
+  "tab": "tictactoe",
+  "author": "haiku-heldout",
+  "batch": "x1",
+  "tasks": [
+    {
+      "id": "games.tictactoe.x1.t01",
+      "goal": "Take the top right corner",
+      "setup": [
+        "Play tic tac toe."
+      ],
+      "canonical": "Top right.",
+      "variants": [
+        "top right",
+        "top right corner pls",
+        "I take top right",
+        "upper right corner",
+        "tr",
+        "put my x in the top right",
+        "top-right",
+        "um, top right I think",
+        "the corner up on the right side",
+        "can i go top right"
+      ]
+    },
+    {
+      "id": "games.tictactoe.x1.t02",
+      "goal": "Put my mark at C3",
+      "setup": [
+        "Play tic tac toe."
+      ],
+      "canonical": "C3.",
+      "variants": [
+        "c3",
+        "C3 please",
+        "play c3",
+        "i go c3",
+        "c three",
+        "mark c3",
+        "square c3 for me",
+        "c 3",
+        "let me play C3",
+        "gonna take c3"
+      ]
+    },
+    {
+      "id": "games.tictactoe.x1.t03",
+      "goal": "Mark the bottom middle square",
+      "setup": [
+        "Play tic tac toe."
+      ],
+      "canonical": "Bottom middle.",
+      "variants": [
+        "bottom middle",
+        "bottom center",
+        "middle of the bottom row",
+        "bottom middle square please",
+        "the one at the bottom in the middle",
+        "bot middle",
+        "i'll take bottom middle",
+        "bottom mid",
+        "down the bottom, middle column",
+        "can i have the bottom centre"
+      ]
+    },
+    {
+      "id": "games.tictactoe.x1.t04",
+      "goal": "Place my mark on row 3, column 1",
+      "setup": [
+        "Play tic tac toe."
+      ],
+      "canonical": "Row 3 column 1.",
+      "variants": [
+        "row 3 column 1",
+        "r3 c1",
+        "row three, column one",
+        "third row first column",
+        "row3 col1 pls",
+        "row 3 col 1",
+        "3 1",
+        "i pick row 3 column 1",
+        "third row, left-most square",
+        "row 3 and column 1 please"
+      ]
+    },
+    {
+      "id": "games.tictactoe.x1.t05",
+      "goal": "Start a game where I am X and go first",
+      "setup": [],
+      "canonical": "I'll go first, X.",
+      "variants": [
+        "i'll go first as x",
+        "I am x and I start",
+        "me first, x please",
+        "i want to be x and go first",
+        "let me start with x",
+        "x goes first, that's me",
+        "new game, i am x",
+        "i take x and move first",
+        "start with me as x",
+        "can i be x and start the game"
+      ]
+    },
+    {
+      "id": "games.tictactoe.x1.t06",
+      "goal": "Set the computer to easy",
+      "setup": [
+        "Play tic tac toe."
+      ],
+      "canonical": "Set the level to easy.",
+      "variants": [
+        "set level to easy",
+        "easy level please",
+        "go easy on me",
+        "make it easy",
+        "lower the level to easy",
+        "easy mode pls",
+        "i want easy",
+        "level easy",
+        "can u make the computer easy",
+        "dumb it down, easy level"
+      ]
+    },
+    {
+      "id": "games.tictactoe.x1.t07",
+      "goal": "Get a tip for my next move",
+      "setup": [
+        "Play tic tac toe."
+      ],
+      "canonical": "Give me a hint.",
+      "variants": [
+        "give me a hint",
+        "hint pls",
+        "any tip for my move?",
+        "what would you do in my place",
+        "help, i'm stuck",
+        "hint please",
+        "tip?",
+        "which move is good for me",
+        "uh what should i do",
+        "any advice on my move"
+      ]
+    },
+    {
+      "id": "games.tictactoe.x1.t08",
+      "goal": "Read the board row by row as text",
+      "setup": [
+        "Play tic tac toe."
+      ],
+      "canonical": "Show the board row by row.",
+      "variants": [
+        "show the board row by row",
+        "board row by row please",
+        "text version of the board",
+        "rows of the board in words",
+        "read the board to me row by row",
+        "board as text",
+        "row by row board",
+        "can you write out the board",
+        "whats the board, row by row",
+        "list each row of the board"
+      ],
+      "canonical_retries": [
+        "Describe the board row by row.",
+        "Describe the board."
+      ]
+    },
+    {
+      "id": "games.tictactoe.x1.t09",
+      "goal": "Concede this round",
+      "setup": [
+        "Play tic tac toe."
+      ],
+      "canonical": "I give up.",
+      "variants": [
+        "i give up",
+        "ok i concede",
+        "i resign this round",
+        "you win, i quit",
+        "giving up",
+        "i surrender",
+        "forfeit pls",
+        "i'm done, you win",
+        "ugh i give up",
+        "i quit the game"
+      ]
+    },
+    {
+      "id": "games.tictactoe.x1.t10",
+      "goal": "Find out which square the computer took last",
+      "setup": [
+        "Play tic tac toe.",
+        "B2."
+      ],
+      "canonical": "Which square did you take last?",
+      "variants": [
+        "which square did you take last",
+        "what was your last move",
+        "where did you just go",
+        "your last move?",
+        "which spot did u pick",
+        "last one you played?",
+        "what did you take",
+        "which cell did you mark last",
+        "where did the computer go last",
+        "tell me your last square"
+      ],
+      "canonical_retries": [
+        "Where did you play?",
+        "Which spot did you play last?"
+      ]
+    }
+  ]
+}

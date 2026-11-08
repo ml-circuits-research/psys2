@@ -1,0 +1,218 @@
+{
+  "world": "docs.reader",
+  "tab": "documents",
+  "author": "haiku-heldout",
+  "batch": "x1",
+  "tasks": [
+    {
+      "id": "docs.reader.x1.t01",
+      "goal": "Find out how the story starts",
+      "setup": [
+        "Load the sample story."
+      ],
+      "canonical": "How does the story begin?",
+      "variants": [
+        "how does the story begin",
+        "how does it start",
+        "what is the beginning like",
+        "start of the story?",
+        "how does the tale open",
+        "beginning of the story pls",
+        "what happens first in the story",
+        "how does the story start",
+        "tell me how it begins",
+        "could you say how the story begins"
+      ]
+    },
+    {
+      "id": "docs.reader.x1.t02",
+      "goal": "Ask who the witch is",
+      "setup": [
+        "Load the sample story."
+      ],
+      "canonical": "Who is the witch?",
+      "variants": [
+        "who is the witch",
+        "witch who is she",
+        "whos the witch",
+        "tell me who the witch is",
+        "the witch, who is that",
+        "who is the old witch",
+        "what is the witch, who",
+        "who is that witch",
+        "hey who is the witch",
+        "could you tell me who the witch is"
+      ],
+      "canonical_retries": [
+        "What do you know about the witch?",
+        "Tell me about the witch."
+      ]
+    },
+    {
+      "id": "docs.reader.x1.t03",
+      "goal": "Count how often Hansel is named",
+      "setup": [
+        "Load the sample story."
+      ],
+      "canonical": "How many times is Hansel mentioned?",
+      "variants": [
+        "how many times is hansel mentioned",
+        "hansel mentioned how many times",
+        "how often does hansel come up",
+        "count hansel",
+        "how many times does the name hansel appear",
+        "times hansel is in the story?",
+        "how many hansel mentions",
+        "how many times hansel appears",
+        "hw many times is hansel said",
+        "could you count how many times hansel is mentioned"
+      ],
+      "canonical_retries": [
+        "How often is Hansel mentioned?",
+        "How many times does Hansel appear?"
+      ]
+    },
+    {
+      "id": "docs.reader.x1.t04",
+      "goal": "Find out who is Hansel's sister",
+      "setup": [
+        "Load the sample story."
+      ],
+      "canonical": "Who is Hansel's sister?",
+      "variants": [
+        "who is hansels sister",
+        "hansel sister who",
+        "whos hansels sister",
+        "who is the sister of hansel",
+        "hansel has a sister, who",
+        "name of hansel's sister?",
+        "who is hansel's younger sister",
+        "who is the sister",
+        "tell me hansels sister",
+        "could you say who hansel's sister is"
+      ],
+      "canonical_retries": [
+        "Who is the sister of Hansel?",
+        "What do you know about Hansel's sister?"
+      ]
+    },
+    {
+      "id": "docs.reader.x1.t05",
+      "goal": "Search the text for the word oven",
+      "setup": [
+        "Load the sample story."
+      ],
+      "canonical": "Search the file for oven.",
+      "variants": [
+        "search the file for oven",
+        "find oven in the story",
+        "look for oven",
+        "oven search pls",
+        "can u search for oven",
+        "find the word oven",
+        "where is oven in the text",
+        "search oven in the story please",
+        "hey look up oven",
+        "could you search the story for oven"
+      ]
+    },
+    {
+      "id": "docs.reader.x1.t06",
+      "goal": "Move to the next match of the search",
+      "setup": [
+        "Load the sample story.",
+        "Search the file for oven."
+      ],
+      "canonical": "Show the next result.",
+      "variants": [
+        "show the next result",
+        "next match",
+        "next one please",
+        "go to the next result",
+        "next oven",
+        "show next hit",
+        "move on to the next result",
+        "next result pls",
+        "one more result",
+        "could you show the next result"
+      ]
+    },
+    {
+      "id": "docs.reader.x1.t07",
+      "goal": "Get a short summary of section 2",
+      "setup": [
+        "Load the sample story."
+      ],
+      "canonical": "Summarize section 2.",
+      "variants": [
+        "summarize section 2",
+        "sum up section two",
+        "section 2 summary pls",
+        "short summary of section 2",
+        "what is section 2 in short",
+        "can u summarize the second section",
+        "summary of section 2 please",
+        "tldr section 2",
+        "give me a summary of section 2",
+        "could you sum up section 2 for me"
+      ]
+    },
+    {
+      "id": "docs.reader.x1.t08",
+      "goal": "See which documents are available",
+      "canonical": "List my documents.",
+      "variants": [
+        "list my documents",
+        "what documents do i have",
+        "my docs?",
+        "show my files",
+        "which files are there",
+        "documents list pls",
+        "what files do i have here",
+        "show me my documents",
+        "can u list the documents",
+        "could you list my files please"
+      ]
+    },
+    {
+      "id": "docs.reader.x1.t09",
+      "goal": "Check whether the story mentions a dragon",
+      "setup": [
+        "Load the sample story."
+      ],
+      "canonical": "Does the story mention a dragon?",
+      "variants": [
+        "does the story mention a dragon",
+        "is there a dragon in the story",
+        "dragon in the story?",
+        "does the text talk about dragons",
+        "any dragon in there",
+        "is a dragon mentioned",
+        "dragon, does it appear",
+        "does the tale have a dragon",
+        "check if there is a dragon",
+        "could you tell me if the story mentions a dragon"
+      ]
+    },
+    {
+      "id": "docs.reader.x1.t10",
+      "goal": "List the places in the story",
+      "setup": [
+        "Load the sample story."
+      ],
+      "canonical": "Which places are mentioned?",
+      "variants": [
+        "which places are mentioned",
+        "what places are in the story",
+        "places in the story?",
+        "where does the story happen, list places",
+        "list the locations",
+        "what towns are mentioned",
+        "which places appear in the text",
+        "name the places please",
+        "places mentioned pls",
+        "could you list the places from the story"
+      ]
+    }
+  ]
+}

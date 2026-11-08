@@ -1,0 +1,69 @@
+{
+  "world": "geo.map",
+  "tab": "map",
+  "author": "haiku-heldout",
+  "batch": "x1",
+  "tasks": [
+    {
+      "id": "geo.map.x1.t01",
+      "goal": "Bring up Kyoto on the map",
+      "canonical": "Show me Kyoto.",
+      "variants": ["show me kyoto", "kyoto on the map", "where is kyoto on this", "go to kyoto", "show kyoto pls", "pull up kyoto", "can u show kyoto", "map kyoto", "i wanna see kyoto", "display Kyoto, thanks"]
+    },
+    {
+      "id": "geo.map.x1.t02",
+      "goal": "Pin a spot on the map",
+      "canonical": "Put a marker on Cluj.",
+      "variants": ["put a marker on cluj", "pin cluj", "marker on Cluj please", "add a pin at cluj", "mark cluj on the map", "cluj marker", "drop a pin on cluj", "can you place a marker on Cluj", "stick a pin in cluj", "put cluj on the map with a marker"]
+    },
+    {
+      "id": "geo.map.x1.t03",
+      "goal": "Color two countries on the map",
+      "canonical": "Highlight Italy and Portugal.",
+      "variants": ["highlight italy and portugal", "color italy and portugal", "italy & portugal highlighted", "make italy and portugal stand out", "shade italy and portugal", "highlight portugal and italy pls", "can you highlight italy, portugal", "show italy and portugal in color", "light up italy and portugal", "mark italy and portugal"]
+    },
+    {
+      "id": "geo.map.x1.t04",
+      "goal": "Check if a country has no sea coast",
+      "canonical": "Is Bolivia landlocked?",
+      "variants": ["is bolivia landlocked", "bolivia no coast?", "does bolivia have a sea border", "is bolivia without sea access", "bolivia landlocked or not", "no ocean for bolivia?", "is bolivia land locked", "does bolivia touch the sea", "bolivia landlockd?", "can you tell me if bolivia is landlocked"]
+    },
+    {
+      "id": "geo.map.x1.t05",
+      "goal": "Find the tiniest country in a region",
+      "canonical": "Which country is the smallest in Europe?",
+      "canonical_retries": ["Which country in Europe is the smallest?", "What is the smallest country in Europe?"],
+      "variants": ["which country is smallest in europe", "smallest country in europe?", "tiniest european country", "whats the smallest country in europe", "europe smallest country pls", "which european country is the least big", "smallest one in europe", "which country in europe has the smallest area", "tell me the smallest european country", "euro smallest country?"]
+    },
+    {
+      "id": "geo.map.x1.t06",
+      "goal": "Work out the gap between two cities",
+      "canonical": "How far is Madrid from Lisbon?",
+      "variants": ["how far is madrid from lisbon", "madrid to lisbon distance", "distance madrid lisbon", "how far apart are madrid and lisbon", "madrid lisbon km?", "how far is lisbon from madrid", "whats the gap between madrid and lisbon", "far is madrid from lisbon?", "how many km from madrid to lisbon", "can you tell me how far madrid is from lisbon"]
+    },
+    {
+      "id": "geo.map.x1.t07",
+      "goal": "Slide the map view to the right",
+      "canonical": "Go east.",
+      "variants": ["go east", "move east", "slide right", "map east", "pan east a bit", "go to the east", "shift the map east", "east pls", "move the view to the right", "can you pan the map east"]
+    },
+    {
+      "id": "geo.map.x1.t08",
+      "goal": "Find my spot on the map",
+      "canonical": "Locate me.",
+      "variants": ["locate me", "where am i", "find my location", "where am i on the map", "locate my position", "show me where i am", "my location please", "find me", "where r we", "can u find where i am"]
+    },
+    {
+      "id": "geo.map.x1.t09",
+      "goal": "Find the continent of a country",
+      "canonical": "Which continent does Chile belong to?",
+      "variants": ["which continent does chile belong to", "chile is in what continent", "what continent is chile", "continent of chile?", "chile continent", "which continent is chile in", "chile - which continent", "what continent does chile belong to", "chile which continent pls", "can you tell me the continent for chile"]
+    },
+    {
+      "id": "geo.map.x1.t10",
+      "goal": "Count the land neighbours of a country",
+      "canonical": "How many neighbours does Germany have?",
+      "variants": ["how many neighbours does germany have", "how many countries border germany", "germany neighbours count", "how many land neighbours has germany", "number of countries next to germany", "germany borders how many", "how many nations touch germany", "count germanys neighbours", "germany how many neighbors", "how many countries share a border with germany"]
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "world": "ui.avatar",
+  "tab": "robot",
+  "author": "haiku-heldout",
+  "batch": "x1",
+  "tasks": [
+    {
+      "id": "ui.avatar.x1.t01",
+      "goal": "Put sunglasses on the avatar",
+      "canonical": "Wear sunglasses.",
+      "variants": ["wear sunglasses", "can u put sunglasses on", "sunglasses pls", "could you wear the sunglasses now", "give yourself sunglasses for me", "try sunglasses on", "hey put some sunglasses on urself", "u should wear sunglasses lol", "shades on you please", "wear sunglasses right now thank you"]
+    },
+    {
+      "id": "ui.avatar.x1.t02",
+      "goal": "Give the avatar a dish on its head",
+      "canonical": "I want a dish on top.",
+      "variants": ["i want a dish on top", "dish on top pls", "can i have a dish on top of u", "would like a dish on the top", "put a dish up top", "a dish on top would be nice", "i wanna see a dish on top", "so, dish on top?", "please give yourself a dish on top", "dish top plz"]
+    },
+    {
+      "id": "ui.avatar.x1.t03",
+      "goal": "Change the mouth to a grill",
+      "canonical": "Set your mouth to a grill.",
+      "variants": ["set your mouth to a grill", "mouth grill pls", "change ur mouth into a grill", "make the mouth a grill", "can u switch your mouth to grill", "mouth to grill please", "i want your mouth as a grill", "turn ur mouth into grill", "grill mouth now", "could you change the mouth to a grille"]
+    },
+    {
+      "id": "ui.avatar.x1.t04",
+      "goal": "Paint the avatar body blue",
+      "canonical": "Make your body blue.",
+      "variants": ["make your body blue", "body blue pls", "can u make ur body blue", "i would like the body to be blue", "paint ur body blue", "blue body please", "turn the body blue", "your body should be blue", "hey make ur body bleu", "could you color ur body blue for me"]
+    },
+    {
+      "id": "ui.avatar.x1.t05",
+      "goal": "Ask what color the avatar's eyes are",
+      "canonical": "What color are your eyes?",
+      "variants": ["what color are your eyes", "eye color?", "wat colour r ur eyes", "which color are your eyes", "what color eyes do you have", "tell me the color of your eyes please", "eyes what color", "hey what color are ur eyes", "can you say what color your eyes are", "what colour is ur eye"]
+    },
+    {
+      "id": "ui.avatar.x1.t06",
+      "goal": "See which hairstyles the avatar could have",
+      "canonical": "What kind of hair do you have?",
+      "variants": ["what kind of hair do you have", "what hair u got", "hair types?", "which hairstyle do you have now", "what sort of hair is on you", "tell me ur hair style", "hairstyle?", "could u tell me what hair u have", "whats ur hair like", "what kind of hair u got pls"]
+    },
+    {
+      "id": "ui.avatar.x1.t07",
+      "goal": "Make the avatar look surprised",
+      "canonical": "Show surprise.",
+      "variants": ["show surprise", "look surprised pls", "can u make a surprised face", "surprised look please", "make ur face surprised", "i want to see you surprised", "show me a surprise face", "surprise face now", "show surprise for me", "be surprised please"]
+    },
+    {
+      "id": "ui.avatar.x1.t08",
+      "goal": "Put the mouth back to the default",
+      "canonical": "Reset your mouth.",
+      "variants": ["reset your mouth", "mouth back to normal", "reset the mouth pls", "restore ur mouth", "can u reset ur mouth to default", "mouth to default please", "undo the mouth change", "go back to the normal mouth", "reset mouth", "i want the default mouth again"]
+    },
+    {
+      "id": "ui.avatar.x1.t09",
+      "goal": "Look at the next hairstyle",
+      "canonical": "Show me the next hairstyle.",
+      "variants": ["show me the next hairstyle", "next hair please", "next hairstyle pls", "can u show the next hair", "go to next hairstyle", "try the following hair", "next hair style for me", "show next hairstyle now", "the next hair please thank you", "hey next hairstyle"]
+    },
+    {
+      "id": "ui.avatar.x1.t10",
+      "goal": "Ask whether the avatar has glasses on",
+      "canonical": "Do you have glasses?",
+      "variants": ["do you have glasses", "r u wearing glasses", "glasses on you?", "are you wearing glasses now", "u got glasses?", "do you wear glasses", "is there glasses on you", "you have glasses or not", "do u have glasses on", "have you got any glasses"]
+    }
+  ]
+}

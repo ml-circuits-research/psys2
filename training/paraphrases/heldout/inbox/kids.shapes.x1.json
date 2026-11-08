@@ -1,0 +1,68 @@
+{
+  "world": "kids.shapes",
+  "tab": "robot",
+  "author": "haiku-heldout",
+  "batch": "x1",
+  "tasks": [
+    {
+      "id": "kids.shapes.x1.t01",
+      "goal": "Check a shape belongs to a broad group",
+      "canonical": "Is a triangle a kind of polygon?",
+      "variants": ["is a triangle a polygon", "triangle a polygon?", "is a triangle a kind of polygon", "triangles are polygons right", "is a triangle a polygon or not", "triangle polygon?", "is a tri a polygon", "is triangle a type of polygon", "are triangles polygons", "can you tell me if a triangle is a polygon"]
+    },
+    {
+      "id": "kids.shapes.x1.t02",
+      "goal": "Rule out a shape being another kind",
+      "canonical": "Is a hexagon a triangle?",
+      "variants": ["is a hexagon a triangle", "hexagon triangle?", "a hexagon is a triangle right", "is hexagon a triangle", "is a hexagon a tri", "can a hexagon be a triangle", "hexagon = triangle?", "is a hexagon triangle or no", "hexagons triangles same?", "could a hexagon be a triangle"]
+    },
+    {
+      "id": "kids.shapes.x1.t03",
+      "goal": "Ask for a short shape summary",
+      "canonical": "Describe a pentagon.",
+      "variants": ["describe a pentagon", "pentagon?", "tell me about pentagons", "what is a pentagon like", "pentagon description pls", "describe pentagon", "pentagon info", "whats a pentagon", "give me a pentagon summary", "can you describe a pentagon for me"]
+    },
+    {
+      "id": "kids.shapes.x1.t04",
+      "goal": "Find the usual color of a carrot",
+      "canonical": "What color is a carrot?",
+      "variants": ["what color is a carrot", "carrot color?", "whats the color of a carrot", "carrots are what color", "color of carrot", "what colour is a carrot", "carrot colour pls", "what color are carrots", "tell me the carrot color", "can you say what color a carrot is"]
+    },
+    {
+      "id": "kids.shapes.x1.t05",
+      "goal": "Confirm the color of grass",
+      "canonical": "Is grass green?",
+      "variants": ["is grass green", "grass green?", "is the grass green", "grass is green right", "are grass green", "is grass a green thing", "green grass?", "grass = green?", "is grass colored green", "can you tell me if grass is green"]
+    },
+    {
+      "id": "kids.shapes.x1.t06",
+      "goal": "Test an unlikely color for a leaf",
+      "canonical": "Could a leaf be blue?",
+      "variants": ["could a leaf be blue", "leaf blue?", "can a leaf be blue", "is a blue leaf possible", "leaves can be blue?", "a leaf could be blue right", "blue leaf ok?", "can leaves be blue", "is a leaf blue", "could the leaf be blue or not"]
+    },
+    {
+      "id": "kids.shapes.x1.t07",
+      "goal": "Sort orange into its color family",
+      "canonical": "Is orange a secondary color?",
+      "variants": ["is orange a secondary color", "orange secondary?", "is orange secondary", "orange a secondary colour", "is orange a secondary one", "secondary orange?", "orange - secondary?", "is orange in the secondary colors", "orange is secondary right", "can you tell me if orange is secondary"]
+    },
+    {
+      "id": "kids.shapes.x1.t08",
+      "goal": "Check that black is not a primary color",
+      "canonical": "Is black a primary color?",
+      "variants": ["is black a primary color", "black primary?", "is black primary", "black a primary colour", "is black one of the primary colors", "primary black?", "is black a primary", "black primary color or not", "is black primary colour", "can you tell me if black is a primary color"]
+    },
+    {
+      "id": "kids.shapes.x1.t09",
+      "goal": "Find out what blue and yellow make together",
+      "canonical": "What do blue and yellow make?",
+      "variants": ["what do blue and yellow make", "blue and yellow makes what", "blue + yellow?", "mix blue and yellow", "blue yellow mix?", "what color is blue mixed with yellow", "blue and yellow = ?", "what happens if i mix blue and yellow", "whats blue plus yellow", "can you tell me what blue and yellow make"]
+    },
+    {
+      "id": "kids.shapes.x1.t10",
+      "goal": "Work out which colors give orange",
+      "canonical": "How do you get orange?",
+      "variants": ["how do you get orange", "how to make orange", "orange how made?", "what mixes into orange", "how do i make orange paint", "which colors make orange", "get orange by mixing what", "make orange how", "orange from what colors", "can you tell me how to get orange"]
+    }
+  ]
+}

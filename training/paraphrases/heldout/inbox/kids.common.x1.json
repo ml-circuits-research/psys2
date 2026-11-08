@@ -1,0 +1,185 @@
+{
+  "world": "kids.common",
+  "tab": "robot",
+  "author": "haiku-heldout",
+  "batch": "x1",
+  "tasks": [
+    {
+      "id": "kids.common.x1.t01",
+      "goal": "Ask the assistant to introduce itself",
+      "canonical": "Introduce yourself.",
+      "variants": [
+        "introduce yourself",
+        "intro yourself pls",
+        "can u introduce urself",
+        "tell me about you, who are u",
+        "introduce yourself to me please",
+        "say something about yourself",
+        "who r u, intro",
+        "hey introduce yourself",
+        "could you introduce yourself to me",
+        "introduce urself"
+      ]
+    },
+    {
+      "id": "kids.common.x1.t02",
+      "goal": "Tell the assistant that your name is Zed",
+      "canonical": "Zed is my name.",
+      "variants": [
+        "zed is my name",
+        "my name is zed",
+        "im zed",
+        "the name is zed",
+        "zed is my name pls",
+        "you can know me as zed",
+        "i am zed",
+        "name's zed by the way",
+        "hey im zed",
+        "just so you know, zed is my name"
+      ]
+    },
+    {
+      "id": "kids.common.x1.t03",
+      "goal": "Ask whether the assistant recognises you",
+      "canonical": "Do you recognise me?",
+      "variants": [
+        "do you recognise me",
+        "do u know me",
+        "you recognize me?",
+        "do you remember me",
+        "are you able to recognise me",
+        "u recognise me or not",
+        "do you know who i am",
+        "you know me?",
+        "can you tell if you recognise me",
+        "do you recognise me, pls say"
+      ]
+    },
+    {
+      "id": "kids.common.x1.t04",
+      "goal": "Ask what people usually call the assistant",
+      "canonical": "What do folks call you?",
+      "variants": [
+        "what do folks call you",
+        "what do people call you",
+        "what do others call u",
+        "how do people call you",
+        "what do ppl call u",
+        "what is your nickname",
+        "folks call u what",
+        "what do friends call you",
+        "how do others know you",
+        "could you tell me what folks call you"
+      ]
+    },
+    {
+      "id": "kids.common.x1.t05",
+      "goal": "Ask the name of the helper",
+      "canonical": "Name of the helper?",
+      "variants": [
+        "name of the helper",
+        "helper name?",
+        "what is the helpers name",
+        "whats the helper called",
+        "name of helper pls",
+        "helper name please",
+        "the helper is called what",
+        "what is the name of this helper",
+        "helper's name?",
+        "tell me the helper name"
+      ]
+    },
+    {
+      "id": "kids.common.x1.t06",
+      "goal": "Greet the assistant in a friendly way",
+      "canonical": "Hello friend.",
+      "variants": [
+        "hello friend",
+        "hi friend",
+        "hello my friend!",
+        "hey friend",
+        "hello friend how are u",
+        "hi buddy",
+        "hello there friend",
+        "hiya friend",
+        "yo friend",
+        "hello friend, nice to see you"
+      ]
+    },
+    {
+      "id": "kids.common.x1.t07",
+      "goal": "Say you are leaving for now",
+      "canonical": "Alright, time to go, bye for now.",
+      "variants": [
+        "alright time to go bye for now",
+        "ok bye for now",
+        "time to go, bye",
+        "bye for now pls",
+        "i have to go now, bye for now",
+        "see u later, bye for now",
+        "ok i go now bye for now",
+        "bye for now!",
+        "alright bye for now",
+        "time to go bye for now thanks"
+      ],
+      "canonical_retries": [
+        "Time to go, bye for now.",
+        "Bye for now."
+      ]
+    },
+    {
+      "id": "kids.common.x1.t08",
+      "goal": "Ask which name I gave to the assistant earlier",
+      "setup": [
+        "Hi, my name is Ben."
+      ],
+      "canonical": "Which name did I tell you?",
+      "variants": [
+        "which name did i tell you",
+        "what name did i give you",
+        "which name did i say",
+        "the name i told u what was it",
+        "what name did i tell u earlier",
+        "remind me which name i told you",
+        "name i gave u?",
+        "what was the name i said",
+        "which name did i give",
+        "could you tell me which name i told you"
+      ]
+    },
+    {
+      "id": "kids.common.x1.t09",
+      "goal": "Ask what kind of bot the assistant is",
+      "canonical": "What type of bot are you?",
+      "variants": [
+        "what type of bot are you",
+        "what kind of bot r u",
+        "what sort of bot are you",
+        "which bot are you",
+        "bot type?",
+        "what kind of robot program are you",
+        "what bot is this",
+        "what type of assistant are you",
+        "what kinda bot u r",
+        "could you tell me what type of bot you are"
+      ]
+    },
+    {
+      "id": "kids.common.x1.t10",
+      "goal": "Thank the assistant warmly",
+      "canonical": "Thanks a ton buddy.",
+      "variants": [
+        "thanks a ton buddy",
+        "thanks a lot buddy",
+        "thank u so much buddy",
+        "many thanks buddy",
+        "thx buddy",
+        "thanks buddy, you are great",
+        "cheers buddy",
+        "thank you buddy",
+        "ty buddy",
+        "thanks a bunch buddy"
+      ]
+    }
+  ]
+}

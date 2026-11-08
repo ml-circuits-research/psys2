@@ -1,0 +1,73 @@
+{
+  "world": "media.music",
+  "tab": "music",
+  "author": "haiku-heldout",
+  "batch": "x1",
+  "tasks": [
+    {
+      "id": "media.music.x1.t01",
+      "goal": "Hear the note E by itself",
+      "canonical": "Play note E.",
+      "variants": ["play note e", "E note pls", "can u play the note E", "let me hear an E", "just one E note", "play E", "e note", "hey play the note e for me", "Play the letter E as a note", "could you play a single E for me"]
+    },
+    {
+      "id": "media.music.x1.t02",
+      "goal": "Hear a chord spread out one note at a time",
+      "canonical": "Break up a G major chord.",
+      "variants": ["break up a g major chord", "G major chord but one note after another", "play g major chord as arpeggio", "arpeggiate G major", "spread the G chord out", "g maj broken up pls", "can you play the G chord slowly one note at a time", "G major, notes one by one", "make the g chord into single notes", "play the G major arpeggio"]
+    },
+    {
+      "id": "media.music.x1.t03",
+      "goal": "Hear the pentatonic scale in E minor",
+      "canonical": "Play E minor pentatonic.",
+      "variants": ["play e minor pentatonic", "E minor pentatonic scale please", "pentatonic in e minor", "e min pentatonic", "can you play that five note scale in E minor", "play the E minor pentatonic", "E minor pentatonic plz", "hear the e minor pentatonic scale", "play e pentatonic minor", "minor pentatonic, key of E"]
+    },
+    {
+      "id": "media.music.x1.t04",
+      "goal": "Hear Happy Birthday on the bells",
+      "canonical": "Play Happy Birthday with the bells.",
+      "variants": ["play happy birthday with bells", "happy birthday on the bells", "bells version of happy birthday", "i want happy birthday but with bells", "happy bday on bells pls", "can you play happy birthday using the bells sound", "birthday song with bells", "play happy birthday, bells please", "hpy birthday on bels", "play the happy birthday tune on bells for my mum"]
+    },
+    {
+      "id": "media.music.x1.t05",
+      "goal": "Max out the volume",
+      "canonical": "Full volume.",
+      "variants": ["full volume", "volume to max", "max volume", "turn it all the way up", "set volume full", "put the volume at 100", "all the way up please", "full vol", "make it as loud as it goes", "volume max pls"]
+    },
+    {
+      "id": "media.music.x1.t06",
+      "goal": "Set a specific number of beats per minute",
+      "setup": ["Play Ode to Joy."],
+      "canonical": "Play it at 90 bpm.",
+      "variants": ["play it at 90 bpm", "set the speed to 90 bpm", "make it 90 beats per minute", "90 bpm please", "tempo 90", "can you set it to ninety bpm", "change the speed so it is 90 bpm", "bpm 90", "at 90 beats a minute", "make the tempo 90 bpm now"]
+    },
+    {
+      "id": "media.music.x1.t07",
+      "goal": "Move the tune down two octaves",
+      "setup": ["Play Ode to Joy."],
+      "canonical": "Play it two octaves lower.",
+      "variants": ["play it two octaves lower", "two octaves down", "drop it 2 octaves", "lower it by two octaves", "make it much lower, two octaves", "down 2 octaves pls", "can you play it an octave lower twice", "two octaves lower please", "octave down x2", "play the tune two octaves below"]
+    },
+    {
+      "id": "media.music.x1.t08",
+      "goal": "Repeat the last thing once more",
+      "setup": ["Play Happy Birthday with the bells."],
+      "canonical": "Once more.",
+      "variants": ["once more", "again", "one more time", "play it again", "do it again pls", "encore", "repeat that", "again again", "one more go", "can you run that once more"]
+    },
+    {
+      "id": "media.music.x1.t09",
+      "goal": "See the sheet music of the tune that is playing",
+      "setup": ["Play Ode to Joy."],
+      "canonical": "Show the sheet music.",
+      "variants": ["show the sheet music", "show me the score", "sheet music pls", "let me see the notes on paper", "display the music sheet", "can i see the written music", "score please", "show the staff", "where is the sheet music for this", "i want to read the music of this tune"]
+    },
+    {
+      "id": "media.music.x1.t10",
+      "goal": "Check which song is playing right now",
+      "setup": ["Play Ode to Joy."],
+      "canonical": "What is playing?",
+      "variants": ["what is playing", "whats playing now", "which song is on", "what song is this", "name the song playing", "what is this tune called", "tell me whats playing", "current song?", "what is playing at the moment", "which tune is currently on"]
+    }
+  ]
+}

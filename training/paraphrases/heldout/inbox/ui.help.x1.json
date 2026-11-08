@@ -1,0 +1,68 @@
+{
+  "world": "ui.help",
+  "tab": "robot",
+  "author": "haiku-heldout",
+  "batch": "x1",
+  "tasks": [
+    {
+      "id": "ui.help.x1.t01",
+      "goal": "Find out what the assistant can do",
+      "canonical": "What can you do?",
+      "variants": ["what can you do", "what u can do", "tell me what you can do", "what are your abilities", "what can u do for me", "so what do you do", "capabilities?", "what things can you help with", "what can this thing do", "could you tell me what you are able to do"]
+    },
+    {
+      "id": "ui.help.x1.t02",
+      "goal": "Ask for a few sample things to say",
+      "canonical": "Give me some examples.",
+      "variants": ["give me some examples", "examples pls", "some examples please", "can u give examples", "show me examples of things to say", "example sentences?", "i need examples", "give me a few examples to try", "what could i say, give examples", "examples for me please"]
+    },
+    {
+      "id": "ui.help.x1.t03",
+      "goal": "Ask for more sample phrases after the first list",
+      "canonical": "Give me more examples.",
+      "variants": ["give me more examples", "more please", "more examples pls", "can u show more", "show me more things i can say", "anything else i can say?", "more", "next examples please", "more ideas of what to say", "could you give me some more examples"]
+    },
+    {
+      "id": "ui.help.x1.t04",
+      "goal": "Learn how to play chess",
+      "canonical": "How can I play chess?",
+      "variants": ["how can i play chess", "how do i play chess", "chess how to play", "how to play chess pls", "explain chess to me", "i want to learn chess how do i start", "how do i move in chess", "how u play chess", "tell me how to play chess", "could you explain how i play chess"]
+    },
+    {
+      "id": "ui.help.x1.t05",
+      "goal": "Hear the rules of chess",
+      "canonical": "Explain the rules of chess.",
+      "variants": ["explain the rules of chess", "chess rules pls", "what are the chess rules", "rules of chess?", "tell me the rules for chess", "i dont know chess rules, explain", "chess rules please", "what r the rules of chess", "can u explain chess rules", "could you go over the chess rules"]
+    },
+    {
+      "id": "ui.help.x1.t06",
+      "goal": "Learn how to draw a circle",
+      "canonical": "How to draw a circle?",
+      "variants": ["how to draw a circle", "how do i draw a circle", "draw a circle how", "circle how to?", "how can i make a circle", "tell me how to draw a circle pls", "how u draw circle", "i want to draw a circle, how", "explain how to draw circles", "could you tell me how to draw a circle"]
+    },
+    {
+      "id": "ui.help.x1.t07",
+      "goal": "Ask why the assistant did not understand the last words",
+      "canonical": "Why did you not understand that?",
+      "variants": ["why did you not understand that", "why u no understand", "why didnt you get that", "why you dont understand me", "you did not understand, why", "why did you miss that", "how come you did not get it", "why not understand that", "why couldnt you understand that", "could you tell me why you did not understand that"]
+    },
+    {
+      "id": "ui.help.x1.t08",
+      "goal": "Ask what the current tab is for",
+      "canonical": "What does this tab do?",
+      "variants": ["what does this tab do", "what is this tab for", "this tab what does it do", "explain this tab pls", "what can i do on this page", "whats this tab for", "tell me about this tab", "what is this screen for", "what does this page do", "could you explain what this tab does"]
+    },
+    {
+      "id": "ui.help.x1.t09",
+      "goal": "Say that I am confused and want help",
+      "canonical": "I am lost.",
+      "variants": ["i am lost", "im lost", "i am lost help", "i'm confused what now", "lost, help me", "i dont know what to do", "im so lost right now", "i am lost pls", "help i am lost", "i feel lost here"]
+    },
+    {
+      "id": "ui.help.x1.t10",
+      "goal": "Ask which of my words was not understood",
+      "canonical": "What did I say wrong?",
+      "variants": ["what did i say wrong", "what was wrong with what i said", "which part did you not get", "what did i say that was wrong", "what did you not understand", "what i said wrong?", "which words did you not understand", "was something wrong with what i said", "what did i do wrong just now", "could you tell me what i said wrong"]
+    }
+  ]
+}

@@ -1,0 +1,124 @@
+{
+  "world": "docs.reader",
+  "retry": [
+    {
+      "batch": "x1",
+      "task": "docs.reader.x1.t02",
+      "goal": "Ask who the witch is",
+      "tried": [
+        {
+          "attempt": 1,
+          "text": "Who is the witch?",
+          "reply": "The witch is a character (also: the woman). The witch is mentioned 26 times, first in sentence 32. For example, the witch came out and smiled. (sentences 32 and 33)",
+          "label": "canonical-failed"
+        },
+        {
+          "attempt": 2,
+          "text": "What do you know about the witch?",
+          "reply": "The witch is a character (also: the woman). The witch is mentioned 26 times, first in sentence 32. For example, the witch came out and smiled. (sentences 32 and 33)",
+          "label": "canonical-failed"
+        },
+        {
+          "attempt": 3,
+          "text": "Tell me about the witch.",
+          "reply": "The witch is a character (also: the woman). The witch is mentioned 26 times, first in sentence 32. For example, the witch came out and smiled. (sentences 32 and 33)",
+          "label": "canonical-failed"
+        }
+      ]
+    },
+    {
+      "batch": "x1",
+      "task": "docs.reader.x1.t03",
+      "goal": "Count how often Hansel is named",
+      "tried": [
+        {
+          "attempt": 1,
+          "text": "How many times is Hansel mentioned?",
+          "reply": "Hansel is mentioned 36 times, in 28 sentences.",
+          "label": "canonical-failed"
+        },
+        {
+          "attempt": 2,
+          "text": "How often is Hansel mentioned?",
+          "reply": "Hansel is mentioned 36 times, in 28 sentences.",
+          "label": "canonical-failed"
+        },
+        {
+          "attempt": 3,
+          "text": "How many times does Hansel appear?",
+          "reply": "Hansel is mentioned 36 times, in 28 sentences.",
+          "label": "canonical-failed"
+        }
+      ]
+    },
+    {
+      "batch": "x1",
+      "task": "docs.reader.x1.t04",
+      "goal": "Find out who is Hansel's sister",
+      "tried": [
+        {
+          "attempt": 1,
+          "text": "Who is Hansel's sister?",
+          "reply": "Gretel is Hansel's sister. (sentence 2)",
+          "label": "canonical-failed"
+        },
+        {
+          "attempt": 2,
+          "text": "Who is the sister of Hansel?",
+          "reply": "Gretel is Hansel's sister. (sentence 2)",
+          "label": "canonical-failed"
+        },
+        {
+          "attempt": 3,
+          "text": "What do you know about Hansel's sister?",
+          "reply": "The document does not say that. The closest sentences are: \"The boy was called Hansel and his little sister was called Gretel.\" \"He told his sister about the plan.\" \"\"I do not know how,\" said Gretel.\" (sentences 2, 11 and 49)",
+          "label": "canonical-failed"
+        }
+      ]
+    },
+    {
+      "batch": "x2",
+      "task": "docs.reader.x2.t04",
+      "goal": "Count mentions of a character",
+      "tried": [
+        {
+          "attempt": 1,
+          "text": "How many times is the witch mentioned?",
+          "reply": "The witch is mentioned 26 times, in 18 sentences.",
+          "label": "canonical-failed"
+        },
+        {
+          "attempt": 2,
+          "text": "Count how many times the witch is mentioned.",
+          "reply": "I did not understand \"Count how many times the witch is mentioned\". Did you mean \"How many times is Hansel mentioned?\" or \"How many times does the witch appear?\"?",
+          "label": "canonical-failed"
+        },
+        {
+          "attempt": 3,
+          "text": "How often is the witch mentioned?",
+          "reply": "The witch is mentioned 26 times, in 18 sentences.",
+          "label": "canonical-failed"
+        }
+      ]
+    },
+    {
+      "batch": "x2",
+      "task": "docs.reader.x2.t05",
+      "goal": "Find who spoke a quoted line",
+      "tried": [
+        {
+          "attempt": 1,
+          "text": "Who said \"Show me first\" in the story?",
+          "reply": "Gretel said: \"Show me first.\" (sentence 50)",
+          "label": "canonical-failed"
+        },
+        {
+          "attempt": 2,
+          "text": "Who said \"Show me first\"?",
+          "reply": "Gretel said: \"Show me first.\" (sentence 50)",
+          "label": "canonical-failed"
+        }
+      ]
+    }
+  ]
+}

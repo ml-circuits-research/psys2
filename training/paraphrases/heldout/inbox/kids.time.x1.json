@@ -1,0 +1,78 @@
+{
+  "world": "kids.time",
+  "tab": "robot",
+  "author": "haiku-heldout",
+  "batch": "x1",
+  "tasks": [
+    {
+      "id": "kids.time.x1.t01",
+      "goal": "Find how many days June has",
+      "setup": [],
+      "canonical": "How many days does June have?",
+      "variants": ["how many days does june have", "june has how many days?", "days in june", "how long is june", "number of days june", "june days pls", "how many days in june right", "whats the length of june", "how many days june got", "can u tell me how many days june has"]
+    },
+    {
+      "id": "kids.time.x1.t02",
+      "goal": "Find the day four days after Sunday",
+      "setup": [],
+      "canonical": "What day is 4 days after Sunday?",
+      "variants": ["what day is 4 days after sunday", "4 days after sunday?", "sunday plus 4 days", "whats the day 4 days after sunday", "which day is four days after sunday", "sunday + 4 = ?", "day that is 4 days later than sunday", "if its sunday what day in 4 days", "4 days after sun?", "what weekday comes 4 days after sunday"]
+    },
+    {
+      "id": "kids.time.x1.t03",
+      "goal": "Count back five days from Wednesday",
+      "setup": [],
+      "canonical": "What day is 5 days before Wednesday?",
+      "variants": ["what day is 5 days before wednesday", "5 days before wednesday?", "wednesday minus 5 days", "whats five days earlier than wednesday", "which day was 5 days before wed", "count back 5 days from wednesday", "wednesday 5 days ago is what day", "day 5 days before weds", "what weekday is 5 days before wednesday", "5 days before wednesday pls"]
+    },
+    {
+      "id": "kids.time.x1.t04",
+      "goal": "Find the month four months ahead of March",
+      "setup": [],
+      "canonical": "What month is 4 months after March?",
+      "variants": ["what month is 4 months after march", "4 months after march?", "march plus 4 months", "which month is four months after march", "march + 4 months = ?", "month four months later than march", "if its march, what month in 4 months", "4 months from march is what month", "what month comes 4 months after march", "march then 4 months later, which month"]
+    },
+    {
+      "id": "kids.time.x1.t05",
+      "goal": "Work out which season comes two seasons after spring",
+      "setup": [],
+      "canonical": "What season is 2 seasons after spring?",
+      "variants": ["what season is 2 seasons after spring", "2 seasons after spring?", "spring plus two seasons", "which season is two after spring", "spring +2 seasons", "two seasons later than spring is what", "season 2 steps after spring", "whats 2 seasons after spring", "which season comes two after spring", "after spring then two more seasons, which"]
+    },
+    {
+      "id": "kids.time.x1.t06",
+      "goal": "Find how many days until Sunday if today is Thursday",
+      "setup": [],
+      "canonical": "How many days until Sunday if today is Thursday?",
+      "variants": ["how many days until sunday if today is thursday", "thursday to sunday how many days", "days till sunday from thursday?", "if today is thu how many days to sunday", "how far is sunday from thursday in days", "from thursday how many days until sunday", "thursday, how many days till sun", "how long until sunday if its thursday", "days until sunday, today thursday", "how many more days to sunday when its thursday"]
+    },
+    {
+      "id": "kids.time.x1.t07",
+      "goal": "Count the hours from 9 o'clock to 12 o'clock",
+      "setup": [],
+      "canonical": "How many hours from 9 o'clock to 12 o'clock?",
+      "variants": ["how many hours from 9 o'clock to 12 o'clock", "9 to 12 how many hours", "hours between nine and twelve o'clock", "from 9 o clock to noon how many hours", "how long between 9 and 12 oclock", "9 o'clock until 12 o'clock hours?", "count hours 9 to 12", "how many hours is it from 9 to 12", "hours from nine to twelve", "9 to 12 o'clock, how many hours pls"]
+    },
+    {
+      "id": "kids.time.x1.t08",
+      "goal": "Count how many minutes are in an hour",
+      "setup": [],
+      "canonical": "How many minutes are in an hour?",
+      "variants": ["how many minutes are in an hour", "minutes in an hour?", "how many mins in 1 hour", "an hour has how many minutes", "minutes per hour", "how many minutes make an hour", "1 hour = how many minutes", "how many minutes is one hour", "hour how many minutes pls", "in one hour how many minutes are there"]
+    },
+    {
+      "id": "kids.time.x1.t09",
+      "goal": "Find the clock time 4 hours after 10 o'clock",
+      "setup": [],
+      "canonical": "What time is 4 hours after 10 o'clock?",
+      "variants": ["what time is 4 hours after 10 o'clock", "10 o'clock plus 4 hours?", "4 hours after 10 oclock", "whats the time 4 hours after ten", "if its 10 o'clock what time in 4 hours", "10 + 4 hours is what time", "ten oclock four hours later?", "what time will it be 4 hours after 10", "4 hrs after 10 o clock?", "clock 4 hours later than 10 please"]
+    },
+    {
+      "id": "kids.time.x1.t10",
+      "goal": "Ask the system what time it is right now",
+      "setup": [],
+      "canonical": "What time is it right now?",
+      "variants": ["what time is it right now", "time now?", "whats the time", "what time is it", "can u tell me the time", "current time pls", "what o'clock is it", "time?", "hey what time is it right now", "do you know the time now"]
+    }
+  ]
+}
