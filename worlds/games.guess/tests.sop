@@ -1,5 +1,5 @@
 @t.games.guess.n01 core.test
-    input="Yes"
+    input="Yes it does"
     expectStatus=missing
     session=a
 
