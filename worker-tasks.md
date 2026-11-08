@@ -112,7 +112,7 @@ Log as `R2 <world>` entries plus one `R2 summary` table: world · catalogue line
 
 The review's claims were checked: the music labels (`a key with 4 sharps?` labelled `n=3, acc=flat`), `Make your eyes and body blue` → unknown eyes "and body blue", and `itertools.cycle(sl)` in `dispatcher.py`. **F1 and F2 are P0:** they corrupt labels and metrics, so do them before the next dataset rebuild and retraining. Continue R2 in parallel: it touches the rules, not the labels.
 
-**F1 (P0) — labels must keep each variant's own parameters.** `labelVariant` in `collect-paraphrases.mjs` copies the canonical's target onto variants that may carry different values.
+**F1 (P0) — labels must keep each variant's own parameters — code DONE and validated (26316f0).** Still to do: the committed `training/paraphrases/out/*.jsonl` still hold the old labels (`a key with 4 sharps?` → n=3 flat). Rerun the collector on the whole inbox (it now merges several files), commit the outputs, then rebuild. `labelVariant` in `collect-paraphrases.mjs` copies the canonical's target onto variants that may carry different values.
 - Separate the operation family (the goal) from the semantic instance (operation + arguments + context).
 - A variant inherits the canonical target only when its values match it.
 - When the rules parse the variant completely, use the rules' own SOP as the label if every slot value occurs in the variant's text (`label_status=rules-own`).
@@ -389,3 +389,4 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
 - F4 (training side), F6 budgets/sampling, F7 selection hook, F8 windows (3424ec2): 20 Python tests pass. F4 still needs its rules part.
 - F4 rules — Pre-parse expansion (0bd45a8): "eyes and body blue" and "blue, no, green" now work in the CLI.
 - Operational set (1de5a5a): 1,234 fixed messages. Reviewer rerun, rules only, at 4c60162: 85.9% right, 3.1% wrong, 9.5% not understood (worker: 84.3% before the F4 rules). This is the headline from now on.
+- F1 — Label logic (26316f0): 20 tests pass. A dry run on media.music.h4 shows rules-own 58 and needs_review 8. The outputs are not yet regenerated (see F1).
