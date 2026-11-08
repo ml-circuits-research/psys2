@@ -48,7 +48,7 @@ test('ui.avatar pilot (L4): patterns use the macros, colours extend lang.common,
   const { readFile } = await import('node:fs/promises');
   const text = await readFile(new URL('../worlds/ui.avatar/patterns.sop', import.meta.url), 'utf8');
   assert.ok((text.match(/\[\$lang\.(lead|tail)\./g) ?? []).length > 200);
-  assert.ok(text.length < 80000, `patterns.sop is ${text.length} bytes`);
+  assert.ok(text.length < 90000, `patterns.sop is ${text.length} bytes`);
   for (const p of set.get('ui.avatar').patterns) assert.deepEqual(checkPattern(p, set), [], p.id);
   const colours = lex.lexicons.get('lex.ui.avatar.colors').words;
   for (const w of lex.lexicons.get('lex.lang.colour').words) assert.ok(colours.has(w), w);

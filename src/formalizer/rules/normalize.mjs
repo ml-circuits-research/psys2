@@ -340,13 +340,6 @@ export function correctTokens(tokens, text, vocab, known = (w) => vocab.has(w), 
     if (corrections.length >= maxCorrections || t.kind !== 'word' || t.filler || !/^[a-z]+$/.test(t.lower)) return t;
     if (i !== firstWord && /^[A-ZÀ-Þ]/.test(t.raw)) return t;
     if (quoted.some(([a, b]) => t.start >= a && t.end <= b)) return t;
-    if (Object.hasOwn(SHORT_TYPOS, t.lower)) {
-      const to = SHORT_TYPOS[t.lower];
-      if (vocab.has(to)) {
-        corrections.push({ from: t.raw, to, span: [t.start, t.end] });
-        return { ...t, raw: to, lower: to };
-      }
-    }
     const budget = typoBudget(t.lower);
     if (!budget || known(t.lower)) return t;
     let bestD = budget + 1, tied = [];
