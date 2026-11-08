@@ -172,3 +172,12 @@ const relay = (r) => (r.status === 'supported' ? ok(text(r)) : no(r.status, text
 export const newGame = (ctx) => relay(gameAction(ctx, 'new'));
 export const giveUp = (ctx) => relay(gameAction(ctx, 'giveUp'));
 export const hint = (ctx) => relay(gameAction(ctx, 'hint'));
+
+/** Phrase log commands; the host owns the log (localStorage) and carries out the effect. */
+export function phraseLog(ctx, { what }) {
+  if (!['show', 'export', 'count'].includes(what)) return no('unsupported', 'I can show, export or count your phrase log.');
+  ctx.effect('phraselog', { what });
+  if (what === 'show') return ok('OK, here is your phrase log in the settings.');
+  if (what === 'export') return ok('OK, I am exporting your phrases as a JSONL file.');
+  return ok('Let me count your phrases.');
+}

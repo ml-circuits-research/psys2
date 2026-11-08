@@ -172,3 +172,21 @@
 @media (prefers-reduced-motion: reduce) {
   .p2 *, .p2 *::before, .p2 *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+/* Phrase log (settings) */
+.p2-plog { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--line); padding-top: 12px; }
+.p2-plog-count { margin: 0; color: var(--muted); font-size: 12px; }
+.p2-plog-list { list-style: none; margin: 0; padding: 0; max-height: 240px; overflow-y: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-2); }
+.p2-plog-item { display: flex; gap: 8px; align-items: flex-start; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+.p2-plog-item:last-child { border-bottom: 0; }
+.p2-plog-mode { flex: none; width: 1.4em; text-align: center; }
+.p2-plog-body { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.p2-plog-text { overflow-wrap: anywhere; }
+.p2-plog-body small { color: var(--muted); font-size: 12px; }
+.p2-plog-status { font-weight: 600; color: var(--ok); }
+.p2-plog-status.s-missing, .p2-plog-status.s-unsupported, .p2-plog-status.s-unparsed { color: var(--bad); }
+.p2-plog-empty { padding: 10px; color: var(--muted); font-size: 13px; }
+.p2-plog-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.p2-plog-actions .p2-btn-text { border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 8px; padding: 6px 10px; font-size: 13px; cursor: pointer; }
+.p2-plog-actions .p2-btn-text.is-danger { background: var(--bad); border-color: var(--bad); color: #fff; }
+.p2-plog-confirm { font-size: 13px; color: var(--bad); }

@@ -458,3 +458,26 @@
     priority=5
     doc="Fallback for games declared by other worlds in their manifests (spec 07 §6)."
     example="Let's play the cards game."
+
+@pat.ui.shell.plog.show core.pattern
+    match="[can_you|could_you|will_you|would_you|please_can_you]? [show|open|display|view|bring_up|show_me] [me]? [my|the] [phrase|phrases|sentence|sentences] [log|history|list]"
+    emit="@{_} core.request action=ui.phraseLog arg.what=show"
+    kind=request
+    priority=14
+    example="Show my phrase log."
+    example="Open the phrase log."
+
+@pat.ui.shell.plog.export core.pattern
+    match="[can_you|could_you|will_you|would_you|please_can_you]? [export|download|save] [me]? [my|the] [phrase|phrases|sentence|sentences] [log|history|list]?"
+    emit="@{_} core.request action=ui.phraseLog arg.what=export"
+    kind=request
+    priority=14
+    example="Export my phrases."
+    example="Download my phrase log."
+
+@pat.ui.shell.plog.count core.pattern
+    match="how many [phrase|phrases|sentence|sentences] [have|did] [i|we] [said|say|spoken|typed|type|dictated] [so_far|today]?"
+    emit="@{_} core.request action=ui.phraseLog arg.what=count"
+    kind=question
+    priority=14
+    example="How many phrases have I said?"

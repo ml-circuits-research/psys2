@@ -166,3 +166,26 @@
     input="I cannot go on"
     expectStatus=supported
     session=s6
+
+@t.ui.shell.n31 core.test
+    input="Show my phrase log"
+    expect="phrase log"
+    expectEffect=phraselog
+    session=s7
+
+@t.ui.shell.n32 core.test
+    input="Export my phrases"
+    expect="JSONL"
+    expectEffect=phraselog
+    session=s8
+
+@t.ui.shell.n33 core.test
+    input="How many phrases have I said?"
+    expect="count your phrases"
+    expectEffect=phraselog
+    session=s9
+
+@t.ui.shell.n34 core.test
+    input="How many legs does a spider have?"
+    expectStatus=supported
+    session=s10

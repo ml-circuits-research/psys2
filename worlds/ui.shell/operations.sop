@@ -81,3 +81,9 @@
     semantics=action
     action=ui.hint
     doc="Asks the game of the active tab for a hint (ctx.request)."
+
+@op.ui.shell.phraseLog core.operation
+    impl=phraseLog
+    semantics=action
+    action=ui.phraseLog
+    doc="Phrase log of the host (what the user typed or said, kept in the browser): shows it in Settings, exports it, or reports its size. Effect phraselog { what: show | export | count } is carried out by the host."
