@@ -40,7 +40,24 @@ The working hypothesis: on small worlds, **rules plus a small learned front-end*
 
 **Contamination.** The rules were widened by reading **all** paraphrase records, including the test split. From now on, rule numbers on paraphrase test records are optimistic. That makes the comparison unfair in favour of rules alone; it does not touch the dispatcher's training data.
 
-The clean measure is a fresh **held-out paraphrase set** that nobody has used for rules: `training/paraphrases/heldout/`. **It has landed (11:20):** 21 batches, 210 tasks, 2,100 variants, one batch per world (two for docs.reader), labelled at c989cd1. Rules understand 45% of these variants, against 55% on the training paraphrases. In the games the rules were tuned on the training paraphrases: 80–93% there, 36–44% here. Five docs.reader canonicals fail or are partial; their variants are flagged `needs_review`. Exclude them from metrics and count them. Never train on this set, and never use it to pick hyperparameters (use dev).
+The clean measure is a fresh **held-out paraphrase set** that nobody has used for rules: `training/paraphrases/heldout/`. **It has landed (11:20):** 21 batches, 210 tasks, 2,100 variants, one batch per world (two for docs.reader), labelled at c989cd1. Rules understand 45% of these variants, against 55% on the training paraphrases. In the games the rules were tuned on the training paraphrases: 80–93% there, 36–44% here. Five docs.reader canonicals fail or are partial; their variants are flagged `needs_review`. Exclude them from metrics and count them. (Update 11:45: this set may now be used for training; see the data principle below.)
+
+### Data principle (reviewer, 11:45): read the new section in AGENTS.md; it overrides earlier purity rules
+
+We are building an engineering system that learns as it is used, not doing fundamental research. What matters is what users experience. Concretely, this replaces earlier instructions:
+- **Train on all the data we have**, including `training/paraphrases/heldout/` and the routing rows that overlap dev/test. Withdraw the Q1 instruction to drop overlapping routing rows. Keep dev only for early stopping and for picking hyperparameters.
+- The held-out set may go into training once its "before" number is reported. Mark later numbers on it as "seen". When we need a fresh clean number, the reviewer generates a new held-out batch.
+- **Headline metric = user-perceived understanding:** the share of realistic user messages (paraphrases, held-out, multi-command, later phrase logs) that end in the right action/answer through the full pipeline (dispatcher → validation → rules). Report it per world group, next to how many messages fall back to "Did you mean …?".
+- Contamination warnings are no longer needed in RESULTS.md beyond one line per table saying what was trained on.
+
+### D5 — learning loop (new, after D3; small and practical)
+
+Write `scripts/learn-from-logs.mjs` plus a README section. It takes phrase-log exports (`training/phrase-logs/*.jsonl`) and the failure traces of the evaluation scripts, then:
+1. **Self-labels** messages that the dispatcher + validation layer resolved validly with a clear margin. They go to `training/phrase-logs/labelled/` with `label_status=self-validated`.
+2. Queues the rest in `training/phrase-logs/review.jsonl`, grouped by world candidate and by the closest pattern example. A coding agent or the reviewer turns them into new patterns or canonical tasks.
+3. Rebuilds the dataset and retrains the dispatcher in one command (`--retrain`).
+
+Simulate one loop with the held-out set as fake logs, and report the before/after headline metric.
 
 ### Answers and notes (reviewer, 11:30)
 
@@ -57,7 +74,7 @@ The clean measure is a fresh **held-out paraphrase set** that nobody has used fo
 
 **The goal of this session is to avoid training per-world models.** We validate one idea first: a single small shared model, the **dispatcher**, proposes candidates, and the existing rule formalizers validate them. No per-world LoRA in this session.
 
-Order: B1 → D1 → D2 → D3 → D4 → T9 (Stage 1 only).
+Order: D1 → D3 → D5 → D4 → T9 (Stage 1 only).
 
 2. **D1 — dispatcher model.** One encoder with three heads. **Train DistilBERT first** (`distilbert-base-uncased`): it is the fast, robust baseline, about 67 MB as int8, with no special attention kernels needed on aarch64. **Then train ModernBERT-base** on exactly the same data, seeds and heads. If DistilBERT already meets the Stage 1 targets, ModernBERT must justify its size with a clear gain. The heads:
    - **segmentation:** a boundary probability per token. It cuts messages into small pieces (commands, clauses);
@@ -104,7 +121,7 @@ The verdict is against these numbers:
 - dispatcher int8 ONNX ≤ 150 MB and ≤ 50 ms per message on the Grace CPU.
 
 
-For D3, report every paraphrase metric on the **held-out set** first, then on the (contaminated) test split.
+For D3, lead with the user-perceived headline metric (see the data principle in §2). Then report the held-out "before" number and the test splits.
 
 ### T9 — Results report (Stage 1 only)
 
