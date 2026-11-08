@@ -536,3 +536,424 @@
     input="Who are the characters?"
     expect="Hansel"
     session=a
+
+@t.docs.reader.s001 core.test
+    input="Load the sample story."
+    expect="Hansel and Gretel"
+    session=sw
+
+@t.docs.reader.s002 core.test
+    input="what is the beginning like"
+    expect="At the beginning:"
+    session=sw
+
+@t.docs.reader.s003 core.test
+    input="start of the story?"
+    expect="At the beginning:"
+    session=sw
+
+@t.docs.reader.s004 core.test
+    input="how does the tale open"
+    expect="At the beginning:"
+    session=sw
+
+@t.docs.reader.s005 core.test
+    input="what happens first in the story"
+    expect="At the beginning:"
+    session=sw
+
+@t.docs.reader.s006 core.test
+    input="tell me how it ends"
+    expect="At the end:"
+    session=sw
+
+@t.docs.reader.s007 core.test
+    input="what is the ending like"
+    expect="At the end:"
+    session=sw
+
+@t.docs.reader.s008 core.test
+    input="what is the middle like"
+    expect="In the middle"
+    session=sw
+
+@t.docs.reader.s009 core.test
+    input="what is going on in section 2"
+    expect="In section 2, \"Lost in the Forest\""
+    session=sw
+
+@t.docs.reader.s010 core.test
+    input="what does section 2 cover"
+    expect="Section 2, \"Lost in the Forest\""
+    session=sw
+
+@t.docs.reader.s011 core.test
+    input="sum up section two"
+    expect="Section 2, \"Lost in the Forest\""
+    session=sw
+
+@t.docs.reader.s012 core.test
+    input="section 2 summary pls"
+    expect="Section 2, \"Lost in the Forest\""
+    session=sw
+
+@t.docs.reader.s013 core.test
+    input="what is section 3 in short"
+    expect="Section 3, \"The Witch's Oven\""
+    session=sw
+
+@t.docs.reader.s014 core.test
+    input="tldr section 2"
+    expect="Section 2"
+    session=sw
+
+@t.docs.reader.s015 core.test
+    input="can u summarize the second section"
+    expect="Section 2"
+    session=sw
+
+@t.docs.reader.s016 core.test
+    input="tell me about section 3"
+    expect="Section 3"
+    session=sw
+
+@t.docs.reader.s017 core.test
+    input="give me the gist"
+    expect="In short:"
+    session=sw
+
+@t.docs.reader.s018 core.test
+    input="whats this about"
+    expect="In short:"
+    session=sw
+
+@t.docs.reader.s019 core.test
+    input="what is the plot of the story"
+    expect="In short:"
+    session=sw
+
+@t.docs.reader.s020 core.test
+    input="sum it up"
+    expect="In short:"
+    session=sw
+
+@t.docs.reader.s021 core.test
+    input="what is this file"
+    expect="\"Hansel and Gretel\" has 685 words"
+    session=sw
+
+@t.docs.reader.s022 core.test
+    input="give me an overview of the file"
+    expect="685 words"
+    session=sw
+
+@t.docs.reader.s023 core.test
+    input="who appears in it"
+    expect="The characters are"
+    session=sw
+
+@t.docs.reader.s024 core.test
+    input="list all the characters"
+    expect="The characters are"
+    session=sw
+
+@t.docs.reader.s025 core.test
+    input="cast of the story"
+    expect="The characters are"
+    session=sw
+
+@t.docs.reader.s026 core.test
+    input="who is the story about"
+    expect="The main character is Hansel"
+    session=sw
+
+@t.docs.reader.s027 core.test
+    input="who does the story follow"
+    expect="The main character is Hansel"
+    session=sw
+
+@t.docs.reader.s028 core.test
+    input="where does the story happen, list places"
+    expect="The places mentioned"
+    session=sw
+
+@t.docs.reader.s029 core.test
+    input="what towns are mentioned"
+    expect="The places mentioned"
+    session=sw
+
+@t.docs.reader.s030 core.test
+    input="places mentioned pls"
+    expect="The places mentioned"
+    session=sw
+
+@t.docs.reader.s031 core.test
+    input="what are the most common words"
+    expect="key words"
+    session=sw
+
+@t.docs.reader.s032 core.test
+    input="give me the top words"
+    expect="key words"
+    session=sw
+
+@t.docs.reader.s033 core.test
+    input="table of contents?"
+    expect="4 sections"
+    session=sw
+
+@t.docs.reader.s034 core.test
+    input="what are the headings"
+    expect="4 sections"
+    session=sw
+
+@t.docs.reader.s035 core.test
+    input="show the chapter titles"
+    expect="4 sections"
+    session=sw
+
+@t.docs.reader.s036 core.test
+    input="word count"
+    expect="685 words"
+    session=sw
+
+@t.docs.reader.s037 core.test
+    input="how long is the story in words"
+    expect="685 words"
+    session=sw
+
+@t.docs.reader.s038 core.test
+    input="words in the story?"
+    expect="685 words"
+    session=sw
+
+@t.docs.reader.s039 core.test
+    input="count the sentences"
+    expect="66 sentences"
+    session=sw
+
+@t.docs.reader.s040 core.test
+    input="sentence 5"
+    expect="Sentence 5"
+    session=sw
+
+@t.docs.reader.s041 core.test
+    input="line 5 please"
+    expect="Sentence 5"
+    session=sw
+
+@t.docs.reader.s042 core.test
+    input="whats sentence 5"
+    expect="Sentence 5"
+    session=sw
+
+@t.docs.reader.s043 core.test
+    input="whos the witch"
+    expect="The witch is a character"
+    session=sw
+
+@t.docs.reader.s044 core.test
+    input="tell me who the witch is"
+    expect="The witch is a character"
+    session=sw
+
+@t.docs.reader.s045 core.test
+    input="who is the old witch"
+    expect="The witch is a character"
+    session=sw
+
+@t.docs.reader.s046 core.test
+    input="what is the witch like"
+    expect="The witch is a character"
+    session=sw
+
+@t.docs.reader.s047 core.test
+    input="what role does the witch play"
+    expect="The witch:"
+    session=sw
+
+@t.docs.reader.s048 core.test
+    input="how many times does the name hansel appear"
+    expect="Hansel is mentioned"
+    session=sw
+
+@t.docs.reader.s049 core.test
+    input="count the witch"
+    expect="The witch is mentioned"
+    session=sw
+
+@t.docs.reader.s050 core.test
+    input="witch mentions count"
+    expect="The witch is mentioned"
+    session=sw
+
+@t.docs.reader.s051 core.test
+    input="how many mentions of the witch"
+    expect="The witch is mentioned"
+    session=sw
+
+@t.docs.reader.s052 core.test
+    input="who is hansel's younger sister"
+    expect="Gretel is Hansel's sister"
+    session=sw
+
+@t.docs.reader.s053 core.test
+    input="could you say who hansel's sister is"
+    expect="Gretel is Hansel's sister"
+    session=sw
+
+@t.docs.reader.s054 core.test
+    input="who said show me first"
+    expect="Gretel said"
+    session=sw
+
+@t.docs.reader.s055 core.test
+    input="whose line is show me first"
+    expect="Gretel said"
+    session=sw
+
+@t.docs.reader.s056 core.test
+    input="look for oven"
+    expect="3 results for \"oven\""
+    expectState="search.pos=0"
+    session=sw
+
+@t.docs.reader.s057 core.test
+    input="next one please"
+    expect="Result 2 of 3"
+    session=sw
+
+@t.docs.reader.s058 core.test
+    input="one more result"
+    expect="Result 3 of 3"
+    session=sw
+
+@t.docs.reader.s059 core.test
+    input="nxt"
+    expect="Result 1 of 3"
+    session=sw
+
+@t.docs.reader.s060 core.test
+    input="previous one"
+    expect="Result 3 of 3"
+    session=sw
+
+@t.docs.reader.s061 core.test
+    input="jump to the first hit"
+    expect="Result 1 of 3"
+    session=sw
+
+@t.docs.reader.s062 core.test
+    input="go to the last match"
+    expect="Result 3 of 3"
+    session=sw
+
+@t.docs.reader.s063 core.test
+    input="get rid of the highlighting"
+    expect="highlights are cleared"
+    session=sw
+
+@t.docs.reader.s064 core.test
+    input="search for the word forest"
+    expect="results for \"forest\""
+    session=sw
+
+@t.docs.reader.s065 core.test
+    input="oven search pls"
+    expect="3 results for \"oven\""
+    session=sw
+
+@t.docs.reader.s066 core.test
+    input="where does forest appear"
+    expect="results for \"forest\""
+    session=sw
+
+@t.docs.reader.s067 core.test
+    input="unhighlight"
+    expect="highlights are cleared"
+    session=sw
+
+@t.docs.reader.s068 core.test
+    input="no more highlights"
+    expect="highlights are cleared"
+    session=sw
+
+@t.docs.reader.s069 core.test
+    input="what files talk about the witch"
+    expect="Only \"Hansel and Gretel\""
+    session=sw
+
+@t.docs.reader.s070 core.test
+    input="is the witch in any of my documents"
+    expect="Only \"Hansel and Gretel\""
+    session=sw
+
+@t.docs.reader.s071 core.test
+    input="list my docs pls"
+    expect="You have 1 document"
+    session=sw
+
+@t.docs.reader.s072 core.test
+    input="what files do i have here"
+    expect="You have 1 document"
+    session=sw
+
+@t.docs.reader.s073 core.test
+    input="how many files do i have"
+    expect="You have 1 document"
+    session=sw
+
+@t.docs.reader.s074 core.test
+    input="read section two"
+    expect="Reading section 2"
+    session=sw
+
+@t.docs.reader.s075 core.test
+    input="read out the second paragraph"
+    expect="Reading paragraph 2"
+    session=sw
+
+@t.docs.reader.s076 core.test
+    input="show me the third paragraph"
+    expect="Reading paragraph 3"
+    session=sw
+
+@t.docs.reader.s077 core.test
+    input="read it to me"
+    expect="Reading \"Hansel and Gretel\""
+    session=sw
+
+@t.docs.reader.s078 core.test
+    input="read out the beginning of the story"
+    expect="Reading the beginning"
+    session=sw
+
+@t.docs.reader.s079 core.test
+    input="is there a dragon in the story"
+    expect="does not say"
+    session=sw
+
+@t.docs.reader.s080 core.test
+    input="does the tale have a dragon"
+    expect="does not say"
+    session=sw
+
+@t.docs.reader.s081 core.test
+    input="check if there is a dragon"
+    expect="does not say"
+    session=sw
+
+@t.docs.reader.s082 core.test
+    input="could you tell me if the story mentions a dragon"
+    expect="does not say"
+    session=sw
+
+@t.docs.reader.s083 core.test
+    input="tell me what the story is about"
+    expect="In short:"
+    session=sw
+
+@t.docs.reader.s084 core.test
+    input="i want to know how the story ends"
+    expect="At the end:"
+    session=sw

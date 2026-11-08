@@ -828,6 +828,8 @@ const known = (d, x) => { const e = findEntity(d, x, null, true); return e && e.
 const hasEntity = (d, text) => { const ws = norm(text).split(' '); for (let n = Math.min(4, ws.length); n >= 1; n--) for (let i = 0; i + n <= ws.length; i++) { const e = known(d, ws.slice(i, i + n).join(' ')); if (e && !STOP.has(ws.slice(i, i + n).join(' '))) return e; } return null; };
 const reply = (r) => ({ handled: true, reply: r.value ?? r.note ?? '' });
 
+const STRUCTURED_Q = /(?:^(?:what|how) (?:is|was|are|were) .+ like$)|\brole\b|\bfate\b|\bend(?:s|ed)? up\b|\bfinally\b|\beventually\b|\bmentions? of\b|\bwhich (?:doc|document|file|story|text|book|paper)\b|\b(?:appear|appears|come up|comes up|show up|shows up)$|^who (?:the )?.+ (?:is|are|was|were)$|^where (?:the )?.+ (?:lives|stays|goes)$|\bhow many times\b|\bhow often\b/;
+
 export function interceptInput(ctx, text) {
   const s = st(ctx);
   const d = current(ctx);
@@ -878,6 +880,8 @@ export function interceptInput(ctx, text) {
   }
   if ((m = t.match(/^how (?:are|is) (.+?) and (.+?) related$/)) && known(d, m[1]) && known(d, m[2])) return reply(isRelated(ctx, { x: m[1], y: m[2] }));
   // any other question that names a known entity: the closest passage or an honest "the document does not say"
+  // shapes the pattern file reads itself (rule sweep): left to the formalizer, not to the passage fallback
+  if (STRUCTURED_Q.test(t)) return { handled: false };
   if (/^(?:what|who|whom|whose|where|when|why|how|which|did|does|do|is|was|are|were|can|could|has|have|had)\b/.test(t) && !/\b(?:documents|files|stories|texts|books)\b/.test(t) && hasEntity(d, t)) return reply(ask(ctx, { q: raw }));
   return { handled: false };
 }
