@@ -108,6 +108,60 @@ For **every world with operations** (all 20; `core` holds only the shared legend
 
 Log as `R2 <world>` entries plus one `R2 summary` table: world · catalogue lines · supported · tests · rules-only coverage before → after · fresh-batch coverage.
 
+### Review fixes F1–F8 (from the external review of 6b0db7c, accepted by the reviewer 16:00)
+
+The review's claims were checked: the music labels (`a key with 4 sharps?` labelled `n=3, acc=flat`), `Make your eyes and body blue` → unknown eyes "and body blue", and `itertools.cycle(sl)` in `dispatcher.py`. **F1 and F2 are P0:** they corrupt labels and metrics, so do them before the next dataset rebuild and retraining. Continue R2 in parallel: it touches the rules, not the labels.
+
+**F1 (P0) — labels must keep each variant's own parameters.** `labelVariant` in `collect-paraphrases.mjs` copies the canonical's target onto variants that may carry different values.
+- Separate the operation family (the goal) from the semantic instance (operation + arguments + context).
+- A variant inherits the canonical target only when its values match it.
+- When the rules parse the variant completely, use the rules' own SOP as the label if every slot value occurs in the variant's text (`label_status=rules-own`).
+- Otherwise mark it `needs_review` and leave it out of training until it is relabelled.
+- Audit `rules-differ` first, then `rules-fail` with inherited targets. Write a report that separates parser errors from labelling errors. Relabel and rebuild everything derived from these labels: dataset, edit tags, normalizer pairs.
+- Update the Haiku instructions (spec 10): every variant keeps the instance's parameters. Varying a parameter means a new task/instance.
+- Acceptance: the three music examples keep their own values, plus minimal pairs with one argument changed for every numeric family.
+
+**F2 (P0) — SOP comparison must keep the order of actions.** `normalizedSop` drops `core.seq` and sorts lines, so "body red. body blue" equals "body blue. body red".
+- Keep the relative order (and dependencies) of request/operation wires. Ids may be renumbered; facts that do not depend on each other may still be compared as a set.
+- Use the same comparison everywhere: collection, simplification/normalizer pairs, dispatcher and rules evaluation.
+- Optionally, also compare the final state on 2–3 relevant initial states.
+- Tests: the colour pair above, create→delete, move→undo, two settings of one property. Renumbered ids must still compare equal.
+
+**F3 (P1) — safe augmentation.** `_plain` in `multicmd.py` and `plain_text` in `dispatcher.py` destroy decimals, coordinates and literal text ("45.5" → "45 5").
+- Protect numbers, decimals, negatives, times, coordinates, units, note names and quoted or dictated payload spans.
+- Apply noise only to eligible zones: politeness, casing, final punctuation, abbreviations, controlled typos.
+- Record the transformation and the protected spans. Test that the payload is preserved.
+
+**F4 (P1) — compositional multi-command data.** Today it is concatenation only, with the context dropped (`session: []`) and the target recovered via `source_id`.
+- Generate a small program (operations, values, references, initial context), then verbalize it in several ways.
+- Add explicit families: shared argument ("eyes and body blue"), verb ellipsis ("eyes blue and body red"), self-correction ("blue, no, green"), reference to a created object ("draw a circle and put it above the square"), repetition and undo ("move left twice, then undo"), switching world.
+- Keep or construct the needed context. Report full-request success per family.
+- **Rules side (R2):** coordination with a shared argument and self-correction belong in the rules, through a conservative expansion before parsing ("eyes and body blue" → "eyes blue; body blue", provenance kept). The segmenter must not be asked to copy arguments.
+
+**F5 (P1) — explicit reasons instead of "refused".** Add a shared `reason` field, set by the interpreter and read by the validator:
+- `precondition_failed`: keep the reading and explain the refusal;
+- `unknown_argument`: try other readings, the spell-corrected text, the normalizer;
+- `unsupported_operation`: report the limit, never confirm false success;
+- `execution_error`: a bug, never a valid example.
+
+Catch-all patterns that swallow text (unknown argument) must not block recovery. Tests for each reason. This completes the Q3 answer and S1.
+
+**F6 (P1) — training loop.**
+- Replace `itertools.cycle(sl)` with an iterator that restarts the loader at exhaustion (reshuffled, no memorised batches). Regenerate multi-command combinations each epoch.
+- Give explicit step budgets per head (routing / segmentation / simplification).
+- Controlled sampling by source, world and phenomenon (generators are 78% of the routing data): keep all data, but reserve exposure for recent failures and contrastive near-misses (set/increase, before/after, three/thirteen, question vs command), with a replay pool of solved cases.
+- Log what was actually shown to the model, per source and family.
+
+**F7 (P1) — pick checkpoints and thresholds by the whole pipeline.** The current choice is "world top-1 + boundary F1 + 0.5 × edit F1".
+- Run a compact operational set (about 1–2k realistic messages, fixed and committed) through the full pipeline (dispatcher → validation → rules) for the best 2–3 checkpoints of each run, and choose by **right / partly right / wrong / not understood / latency**.
+- For simplification and the normalizer, always report recovered / misled / broken. Add contrastive pairs where every word is kept but the roles change (red eyes + blue body vs blue eyes + red body), so the value checker also checks roles, not just words.
+
+**F8 (P2) — long messages and the learning loop.**
+- Handle inputs over the runtime limits (192 tokens segmentation, 128 routing) with overlapping windows, and test them.
+- D5: self-labelling from usage needs more than `supported`. Require no user correction afterwards and an observable successful effect. Keep user corrections as labels.
+
+Order: F1 → F2 (then rebuild data) → F5 → F3 → F6 → F4 → F7 → F8. R2 and N1 continue in parallel. Do S1 (below) together with F5.
+
 ### S1 — make simplification safe (reviewer analysis 15:35; do before the next model publication)
 
 Why the simplification head still breaks meaning (from `dispatcher-distilbert-simp-clean.json` and the code):
@@ -162,7 +216,7 @@ Loop until the session ends:
 
 **The goal of this session is to avoid training per-world models.** We validate one idea first: a single small shared model, the **dispatcher**, proposes candidates, and the existing rule formalizers validate them. No per-world LoRA in this session.
 
-Order: **R2 (main, finishes this stage)**, with R1 loops as its engine; **S1 next** (small, high value); **N1 in parallel on the GPU**; then D5. T9 is updated at the end of the session. D1, D2, D3, D4 are done; D1b is accepted as partial, with its policy below.
+Order: **F1 and F2 first (P0: labels and comparison)**, then the other review fixes; **R2 continues in parallel** (rules); S1 together with F5; N1 in parallel on the GPU; then D5. T9 is updated at the end of the session. D1, D2, D3, D4 are done; D1b is accepted as partial, with its policy below.
 
 2. **D1 — dispatcher model:** done and validated (segmentation + world heads; DistilBERT kept as the main model).
    **D1b — simplification head (still open, do after D3).** It is the third head of Round 1: KEEP / DELETE / REPLACE edit tags, learned from aligning the paraphrase variants with their canonical phrasings. D3 will show how many failures are rule gaps on messy wording; this head targets exactly those. Add it to the DistilBERT dispatcher, export it in the same ONNX model, and use it in the validation layer: try the simplified text when the original does not validate. Report the headline metric before and after.
