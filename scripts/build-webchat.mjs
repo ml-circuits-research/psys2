@@ -54,6 +54,7 @@ export async function copyDispatcherModel({ root = REPO, outDir, exportDir = DEF
   if (!(await exists(srcModel))) { log(`webchat: no dispatcher export in ${from} (run: cd training && python -m psys2_train.export_onnx --ckpt runs/dispatcher-distilbert); models/dispatcher left untouched`); return null; }
   const to = path.join(outDir, 'models/dispatcher');
   await mkdir(to, { recursive: true });
+  if (await exists(path.join(from, 'edit-vocab.json'))) files['edit-vocab.json'] = 'edit-vocab.json';   // rephraser (edit-tag head) tag vocabulary
   if (!metaOnly) {
     for (const [dst, src] of Object.entries(files)) {
       const a = path.join(from, src), b = path.join(to, dst);
@@ -76,7 +77,7 @@ export async function copyDispatcherModel({ root = REPO, outDir, exportDir = DEF
     sha256: await fileSha256(path.join(to, 'model.int8.onnx')),
     metrics: { split: 'test', world_top1: r3(res.test?.world?.top1), world_top3: r3(res.test?.world?.top3), seg_f1: r3(seg?.f1) },
   };
-  await writeFile(path.join(to, 'meta.json'), JSON.stringify({ model: meta.model, worlds: meta.worlds, context: meta.context, max_len: meta.max_len, onnx: meta.onnx, version }, null, 1) + '\n');
+  await writeFile(path.join(to, 'meta.json'), JSON.stringify({ model: meta.model, worlds: meta.worlds, context: meta.context, max_len: meta.max_len, onnx: meta.onnx, ...(meta.edit_tags ? { edit_threshold: meta.edit_threshold ?? 0.5 } : {}), version }, null, 1) + '\n');
   log(`webchat: dispatcher model (${meta.model}, int8, sha256 ${version.sha256.slice(0, 12)}) -> ${to}${metaOnly ? ' (meta.json only)' : ''}`);
   return Object.keys(files).concat('meta.json');
 }

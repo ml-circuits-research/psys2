@@ -1,0 +1,1709 @@
+[
+{
+"text": "apples go up by 2",
+"tags": [
+"P:give",
+"DELETE",
+"DELETE",
+"DELETE",
+"A:more"
+],
+"words": [
+[
+"apples",
+0,
+6
+],
+[
+"go",
+7,
+9
+],
+[
+"up",
+10,
+12
+],
+[
+"by",
+13,
+15
+],
+[
+"2",
+16,
+17
+]
+],
+"rewrite": "give apples 2 more",
+"simplified": "give apples 2 more"
+},
+{
+"text": "the one on g1 please",
+"tags": [
+"KEEP",
+"KEEP",
+"KEEP",
+"A:.",
+"DELETE"
+],
+"words": [
+[
+"the",
+0,
+3
+],
+[
+"one",
+4,
+7
+],
+[
+"on",
+8,
+10
+],
+[
+"g1",
+11,
+13
+],
+[
+"please",
+14,
+20
+]
+],
+"rewrite": "the one on g1.",
+"simplified": "the one on g1."
+},
+{
+"text": "apples +2",
+"tags": [
+"P:give",
+"DELETE",
+"A:more"
+],
+"words": [
+[
+"apples",
+0,
+6
+],
+[
+"+",
+7,
+8
+],
+[
+"2",
+8,
+9
+]
+],
+"rewrite": "give apples2 more",
+"simplified": "give apples2 more"
+},
+{
+"text": "change i get from 50 lei for three pencils and a ball",
+"tags": [
+"KEEP",
+"DELETE",
+"DELETE",
+"KEEP",
+"KEEP",
+"A:if i",
+"R:buy",
+"R:3",
+"KEEP",
+"KEEP",
+"KEEP",
+"KEEP"
+],
+"words": [
+[
+"change",
+0,
+6
+],
+[
+"i",
+7,
+8
+],
+[
+"get",
+9,
+12
+],
+[
+"from",
+13,
+17
+],
+[
+"50",
+18,
+20
+],
+[
+"lei",
+21,
+24
+],
+[
+"for",
+25,
+28
+],
+[
+"three",
+29,
+34
+],
+[
+"pencils",
+35,
+42
+],
+[
+"and",
+43,
+46
+],
+[
+"a",
+47,
+48
+],
+[
+"ball",
+49,
+53
+]
+],
+"rewrite": "change from 50 lei if i buy 3 pencils and a ball",
+"simplified": "change from 50 lei if i buy 3 pencils and a ball"
+},
+{
+"text": "which continent has egypt",
+"tags": [
+"KEEP",
+"KEEP",
+"R:is",
+"A:on"
+],
+"words": [
+[
+"which",
+0,
+5
+],
+[
+"continent",
+6,
+15
+],
+[
+"has",
+16,
+19
+],
+[
+"egypt",
+20,
+25
+]
+],
+"rewrite": "which continent is egypt on",
+"simplified": "which continent is egypt on"
+},
+{
+"text": "take the highlights off",
+"tags": [
+"R:undo",
+"KEEP",
+"KEEP",
+"DELETE"
+],
+"words": [
+[
+"take",
+0,
+4
+],
+[
+"the",
+5,
+8
+],
+[
+"highlights",
+9,
+19
+],
+[
+"off",
+20,
+23
+]
+],
+"rewrite": "undo the highlights",
+"simplified": "undo the highlights"
+},
+{
+"text": "march - days count?",
+"tags": [
+"A:how many",
+"DELETE",
+"KEEP",
+"DELETE",
+"DELETE"
+],
+"words": [
+[
+"march",
+0,
+5
+],
+[
+"-",
+6,
+7
+],
+[
+"days",
+8,
+12
+],
+[
+"count",
+13,
+18
+],
+[
+"?",
+18,
+19
+]
+],
+"rewrite": "march how many days",
+"simplified": "march how many days"
+},
+{
+"text": "its not",
+"tags": [
+"R:it's",
+"KEEP"
+],
+"words": [
+[
+"its",
+0,
+3
+],
+[
+"not",
+4,
+7
+]
+],
+"rewrite": "it's not",
+"simplified": "it's not"
+},
+{
+"text": "which city is japan's capital",
+"tags": [
+"DELETE",
+"DELETE",
+"DELETE",
+"KEEP",
+"A:?"
+],
+"words": [
+[
+"which",
+0,
+5
+],
+[
+"city",
+6,
+10
+],
+[
+"is",
+11,
+13
+],
+[
+"japan's",
+14,
+21
+],
+[
+"capital",
+22,
+29
+]
+],
+"rewrite": "japan's capital?",
+"simplified": "japan's capital?"
+},
+{
+"text": "can you tell me what the document says pls",
+"tags": [
+"DELETE",
+"DELETE",
+"DELETE",
+"DELETE",
+"KEEP",
+"R:does",
+"R:it",
+"R:say",
+"DELETE"
+],
+"words": [
+[
+"can",
+0,
+3
+],
+[
+"you",
+4,
+7
+],
+[
+"tell",
+8,
+12
+],
+[
+"me",
+13,
+15
+],
+[
+"what",
+16,
+20
+],
+[
+"the",
+21,
+24
+],
+[
+"document",
+25,
+33
+],
+[
+"says",
+34,
+38
+],
+[
+"pls",
+39,
+42
+]
+],
+"rewrite": "what does it say",
+"simplified": "what does it say"
+},
+{
+"text": "rub out the car",
+"tags": [
+"DELETE",
+"R:erase",
+"KEEP",
+"KEEP"
+],
+"words": [
+[
+"rub",
+0,
+3
+],
+[
+"out",
+4,
+7
+],
+[
+"the",
+8,
+11
+],
+[
+"car",
+12,
+15
+]
+],
+"rewrite": "erase the car",
+"simplified": "erase the car"
+},
+{
+"text": "show my money pls",
+"tags": [
+"R:what is",
+"KEEP",
+"A:?",
+"DELETE"
+],
+"words": [
+[
+"show",
+0,
+4
+],
+[
+"my",
+5,
+7
+],
+[
+"money",
+8,
+13
+],
+[
+"pls",
+14,
+17
+]
+],
+"rewrite": "what is my money?",
+"simplified": "what is my money?"
+},
+{
+"text": "the letter r",
+"tags": [
+"KEEP",
+"KEEP",
+"A:."
+],
+"words": [
+[
+"the",
+0,
+3
+],
+[
+"letter",
+4,
+10
+],
+[
+"r",
+11,
+12
+]
+],
+"rewrite": "the letter r.",
+"simplified": "the letter r."
+},
+{
+"text": "how many tasks did I finish",
+"tags": [
+"KEEP",
+"KEEP",
+"KEEP",
+"DELETE",
+"R:are",
+"R:finished"
+],
+"words": [
+[
+"how",
+0,
+3
+],
+[
+"many",
+4,
+8
+],
+[
+"tasks",
+9,
+14
+],
+[
+"did",
+15,
+18
+],
+[
+"I",
+19,
+20
+],
+[
+"finish",
+21,
+27
+]
+],
+"rewrite": "how many tasks are finished",
+"simplified": "how many tasks are finished"
+},
+{
+"text": "say what the chart is",
+"tags": [
+"R:what's",
+"R:in",
+"KEEP",
+"KEEP",
+"DELETE"
+],
+"words": [
+[
+"say",
+0,
+3
+],
+[
+"what",
+4,
+8
+],
+[
+"the",
+9,
+12
+],
+[
+"chart",
+13,
+18
+],
+[
+"is",
+19,
+21
+]
+],
+"rewrite": "what's in the chart",
+"simplified": "what's in the chart"
+},
+{
+"text": "can you lose the hat",
+"tags": [
+"DELETE",
+"DELETE",
+"R:remove",
+"KEEP",
+"KEEP"
+],
+"words": [
+[
+"can",
+0,
+3
+],
+[
+"you",
+4,
+7
+],
+[
+"lose",
+8,
+12
+],
+[
+"the",
+13,
+16
+],
+[
+"hat",
+17,
+20
+]
+],
+"rewrite": "remove the hat",
+"simplified": "remove the hat"
+},
+{
+"text": "colour it like a rainbow",
+"tags": [
+"R:make",
+"KEEP",
+"DELETE",
+"KEEP",
+"KEEP"
+],
+"words": [
+[
+"colour",
+0,
+6
+],
+[
+"it",
+7,
+9
+],
+[
+"like",
+10,
+14
+],
+[
+"a",
+15,
+16
+],
+[
+"rainbow",
+17,
+24
+]
+],
+"rewrite": "make it a rainbow",
+"simplified": "make it a rainbow"
+},
+{
+"text": "is there an r",
+"tags": [
+"KEEP",
+"A:a",
+"R:letter",
+"A:?"
+],
+"words": [
+[
+"is",
+0,
+2
+],
+[
+"there",
+3,
+8
+],
+[
+"an",
+9,
+11
+],
+[
+"r",
+12,
+13
+]
+],
+"rewrite": "is there a letter r?",
+"simplified": "is there a letter r?"
+},
+{
+"text": "I want a new chart pls",
+"tags": [
+"DELETE",
+"R:begin",
+"KEEP",
+"KEEP",
+"KEEP",
+"DELETE"
+],
+"words": [
+[
+"I",
+0,
+1
+],
+[
+"want",
+2,
+6
+],
+[
+"a",
+7,
+8
+],
+[
+"new",
+9,
+12
+],
+[
+"chart",
+13,
+18
+],
+[
+"pls",
+19,
+22
+]
+],
+"rewrite": "begin a new chart",
+"simplified": "begin a new chart"
+},
+{
+"text": "romanian please",
+"tags": [
+"P:use",
+"DELETE"
+],
+"words": [
+[
+"romanian",
+0,
+8
+],
+[
+"please",
+9,
+15
+]
+],
+"rewrite": "use romanian",
+"simplified": "use romanian"
+},
+{
+"text": "bring the final para to the top",
+"tags": [
+"R:move",
+"KEEP",
+"R:last",
+"R:paragraph",
+"KEEP",
+"KEEP",
+"A:."
+],
+"words": [
+[
+"bring",
+0,
+5
+],
+[
+"the",
+6,
+9
+],
+[
+"final",
+10,
+15
+],
+[
+"para",
+16,
+20
+],
+[
+"to",
+21,
+23
+],
+[
+"the",
+24,
+27
+],
+[
+"top",
+28,
+31
+]
+],
+"rewrite": "move the last paragraph to the top.",
+"simplified": "move the last paragraph to the top."
+},
+{
+"text": "clear all the text",
+"tags": [
+"KEEP",
+"DELETE",
+"KEEP",
+"R:document ."
+],
+"words": [
+[
+"clear",
+0,
+5
+],
+[
+"all",
+6,
+9
+],
+[
+"the",
+10,
+13
+],
+[
+"text",
+14,
+18
+]
+],
+"rewrite": "clear the document .",
+"simplified": "clear the document ."
+},
+{
+"text": "take the legend off",
+"tags": [
+"DELETE",
+"DELETE",
+"KEEP",
+"KEEP"
+],
+"words": [
+[
+"take",
+0,
+4
+],
+[
+"the",
+5,
+8
+],
+[
+"legend",
+9,
+15
+],
+[
+"off",
+16,
+19
+]
+],
+"rewrite": "legend off",
+"simplified": "legend off"
+},
+{
+"text": "biggest city in romania?",
+"tags": [
+"P:what's the",
+"KEEP",
+"KEEP",
+"KEEP",
+"DELETE"
+],
+"words": [
+[
+"biggest",
+0,
+7
+],
+[
+"city",
+8,
+12
+],
+[
+"in",
+13,
+15
+],
+[
+"romania",
+16,
+23
+],
+[
+"?",
+23,
+24
+]
+],
+"rewrite": "what's the biggest city in romania",
+"simplified": "what's the biggest city in romania"
+},
+{
+"text": "ben have marbles?",
+"tags": [
+"A:got",
+"R:any",
+"KEEP",
+"KEEP"
+],
+"words": [
+[
+"ben",
+0,
+3
+],
+[
+"have",
+4,
+8
+],
+[
+"marbles",
+9,
+16
+],
+[
+"?",
+16,
+17
+]
+],
+"rewrite": "ben got any marbles?",
+"simplified": "ben got any marbles?"
+},
+{
+"text": "chart title: Fruit",
+"tags": [
+"DELETE",
+"A:it",
+"DELETE",
+"KEEP"
+],
+"words": [
+[
+"chart",
+0,
+5
+],
+[
+"title",
+6,
+11
+],
+[
+":",
+11,
+12
+],
+[
+"Fruit",
+13,
+18
+]
+],
+"rewrite": "title it Fruit",
+"simplified": "title it Fruit"
+},
+{
+"text": "take it back",
+"tags": [
+"DELETE",
+"DELETE",
+"R:undo"
+],
+"words": [
+[
+"take",
+0,
+4
+],
+[
+"it",
+5,
+7
+],
+[
+"back",
+8,
+12
+]
+],
+"rewrite": "undo",
+"simplified": "undo"
+},
+{
+"text": "clear the list",
+"tags": [
+"KEEP",
+"R:my",
+"A:."
+],
+"words": [
+[
+"clear",
+0,
+5
+],
+[
+"the",
+6,
+9
+],
+[
+"list",
+10,
+14
+]
+],
+"rewrite": "clear my list.",
+"simplified": "clear my list."
+},
+{
+"text": "make the rate 1.5",
+"tags": [
+"DELETE",
+"R:change",
+"A:to",
+"KEEP",
+"KEEP",
+"KEEP"
+],
+"words": [
+[
+"make",
+0,
+4
+],
+[
+"the",
+5,
+8
+],
+[
+"rate",
+9,
+13
+],
+[
+"1",
+14,
+15
+],
+[
+".",
+15,
+16
+],
+[
+"5",
+16,
+17
+]
+],
+"rewrite": "change rate to 1.5",
+"simplified": "change rate to 1.5"
+},
+{
+"text": "I want to know about Romania",
+"tags": [
+"R:tell",
+"DELETE",
+"DELETE",
+"R:me",
+"KEEP",
+"A:."
+],
+"words": [
+[
+"I",
+0,
+1
+],
+[
+"want",
+2,
+6
+],
+[
+"to",
+7,
+9
+],
+[
+"know",
+10,
+14
+],
+[
+"about",
+15,
+20
+],
+[
+"Romania",
+21,
+28
+]
+],
+"rewrite": "tell me about Romania.",
+"simplified": "tell me about Romania."
+},
+{
+"text": "highlight the notes",
+"tags": [
+"DELETE",
+"P:name",
+"A:."
+],
+"words": [
+[
+"highlight",
+0,
+9
+],
+[
+"the",
+10,
+13
+],
+[
+"notes",
+14,
+19
+]
+],
+"rewrite": "name the notes.",
+"simplified": "name the notes."
+},
+{
+"text": "7 plus 5?",
+"tags": [
+"P:what is",
+"KEEP",
+"KEEP",
+"KEEP"
+],
+"words": [
+[
+"7",
+0,
+1
+],
+[
+"plus",
+2,
+6
+],
+[
+"5",
+7,
+8
+],
+[
+"?",
+8,
+9
+]
+],
+"rewrite": "what is 7 plus 5?",
+"simplified": "what is 7 plus 5?"
+},
+{
+"text": "i pay 50 lei for a ball, change?",
+"tags": [
+"R:change",
+"R:from",
+"KEEP",
+"A:if i",
+"R:buy",
+"KEEP",
+"KEEP",
+"DELETE",
+"DELETE",
+"DELETE"
+],
+"words": [
+[
+"i",
+0,
+1
+],
+[
+"pay",
+2,
+5
+],
+[
+"50",
+6,
+8
+],
+[
+"lei",
+9,
+12
+],
+[
+"for",
+13,
+16
+],
+[
+"a",
+17,
+18
+],
+[
+"ball",
+19,
+23
+],
+[
+",",
+23,
+24
+],
+[
+"change",
+25,
+31
+],
+[
+"?",
+31,
+32
+]
+],
+"rewrite": "change from 50 lei if i buy a ball",
+"simplified": "change from 50 lei if i buy a ball"
+},
+{
+"text": "6 times 4?",
+"tags": [
+"P:what is",
+"KEEP",
+"KEEP",
+"KEEP"
+],
+"words": [
+[
+"6",
+0,
+1
+],
+[
+"times",
+2,
+7
+],
+[
+"4",
+8,
+9
+],
+[
+"?",
+9,
+10
+]
+],
+"rewrite": "what is 6 times 4?",
+"simplified": "what is 6 times 4?"
+},
+{
+"text": "oops take that back",
+"tags": [
+"DELETE",
+"R:undo",
+"KEEP",
+"DELETE"
+],
+"words": [
+[
+"oops",
+0,
+4
+],
+[
+"take",
+5,
+9
+],
+[
+"that",
+10,
+14
+],
+[
+"back",
+15,
+19
+]
+],
+"rewrite": "undo that",
+"simplified": "undo that"
+},
+{
+"text": "insert the quote be kind to every animal",
+"tags": [
+"R:add",
+"R:a",
+"A:-",
+"KEEP",
+"KEEP",
+"KEEP",
+"KEEP",
+"KEEP"
+],
+"words": [
+[
+"insert",
+0,
+6
+],
+[
+"the",
+7,
+10
+],
+[
+"quote",
+11,
+16
+],
+[
+"be",
+17,
+19
+],
+[
+"kind",
+20,
+24
+],
+[
+"to",
+25,
+27
+],
+[
+"every",
+28,
+33
+],
+[
+"animal",
+34,
+40
+]
+],
+"rewrite": "add a quote- be kind to every animal",
+"simplified": "add a quote- be kind to every animal"
+},
+{
+"text": "put a column for weight in the table",
+"tags": [
+"R:add",
+"KEEP",
+"KEEP",
+"DELETE",
+"A:.",
+"DELETE",
+"DELETE",
+"DELETE"
+],
+"words": [
+[
+"put",
+0,
+3
+],
+[
+"a",
+4,
+5
+],
+[
+"column",
+6,
+12
+],
+[
+"for",
+13,
+16
+],
+[
+"weight",
+17,
+23
+],
+[
+"in",
+24,
+26
+],
+[
+"the",
+27,
+30
+],
+[
+"table",
+31,
+36
+]
+],
+"rewrite": "add a column weight.",
+"simplified": "add a column weight."
+},
+{
+"text": "what is a circle like",
+"tags": [
+"DELETE",
+"R:what's",
+"KEEP",
+"KEEP",
+"DELETE"
+],
+"words": [
+[
+"what",
+0,
+4
+],
+[
+"is",
+5,
+7
+],
+[
+"a",
+8,
+9
+],
+[
+"circle",
+10,
+16
+],
+[
+"like",
+17,
+21
+]
+],
+"rewrite": "what's a circle",
+"simplified": "what's a circle"
+},
+{
+"text": "random look plz",
+"tags": [
+"P:go",
+"DELETE",
+"DELETE"
+],
+"words": [
+[
+"random",
+0,
+6
+],
+[
+"look",
+7,
+11
+],
+[
+"plz",
+12,
+15
+]
+],
+"rewrite": "go random",
+"simplified": "go random"
+},
+{
+"text": "switch on the dictation mode",
+"tags": [
+"R:turn",
+"KEEP",
+"DELETE",
+"KEEP",
+"DELETE"
+],
+"words": [
+[
+"switch",
+0,
+6
+],
+[
+"on",
+7,
+9
+],
+[
+"the",
+10,
+13
+],
+[
+"dictation",
+14,
+23
+],
+[
+"mode",
+24,
+28
+]
+],
+"rewrite": "turn on dictation",
+"simplified": "turn on dictation"
+},
+{
+"text": "  what's   the tempo ?  ",
+"tags": [
+"DELETE",
+"A:?",
+"A:?",
+"DELETE"
+],
+"words": [
+[
+"what's",
+2,
+8
+],
+[
+"the",
+11,
+14
+],
+[
+"tempo",
+15,
+20
+],
+[
+"?",
+21,
+22
+]
+],
+"rewrite": "the? tempo?",
+"simplified": "the? tempo?"
+},
+{
+"text": "e2e4, uh e2 to e4!",
+"tags": [
+"R:what is",
+"A:?",
+"P:how many",
+"A:the",
+"A:?",
+"KEEP",
+"A:?"
+],
+"words": [
+[
+"e2e4",
+0,
+4
+],
+[
+",",
+4,
+5
+],
+[
+"uh",
+6,
+8
+],
+[
+"e2",
+9,
+11
+],
+[
+"to",
+12,
+14
+],
+[
+"e4",
+15,
+17
+],
+[
+"!",
+17,
+18
+]
+],
+"rewrite": "what is,? how many uh e2 the to? e4!?",
+"simplified": "what is,? how many uh e2 the to? e4!?"
+},
+{
+"text": "I'd say “zebra” pls",
+"tags": [
+"KEEP",
+"R:5",
+"P:how many",
+"R:what is"
+],
+"words": [
+[
+"I'd",
+0,
+3
+],
+[
+"say",
+4,
+7
+],
+[
+"“zebra”",
+8,
+15
+],
+[
+"pls",
+16,
+19
+]
+],
+"rewrite": "I'd 5 how many “zebra” what is",
+"simplified": "I'd 5 how many “zebra” what is"
+},
+{
+"text": "tom’s apples  ",
+"tags": [
+"A:?",
+"DELETE"
+],
+"words": [
+[
+"tom’s",
+0,
+5
+],
+[
+"apples",
+6,
+12
+]
+],
+"rewrite": "tom’s?",
+"simplified": "tom’s?"
+},
+{
+"text": "um ok",
+"tags": [
+"DELETE",
+"DELETE"
+],
+"words": [
+[
+"um",
+0,
+2
+],
+[
+"ok",
+3,
+5
+]
+],
+"rewrite": "",
+"simplified": null
+}
+]

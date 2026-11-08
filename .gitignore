@@ -9,3 +9,5 @@ training/dataset/*
 !training/dataset/stats.json
 training/phrase-logs/*.jsonl
 .claude/
+training/dataset-edit/*.jsonl
+training/dataset-edit/build.log

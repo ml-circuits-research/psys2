@@ -1,0 +1,276 @@
+{
+ "checkpoint": "runs/dispatcher-distilbert-simp",
+ "model": "distilbert-base-uncased",
+ "export_dir": "/home/salboaie/work/psys2/training/runs/export/dispatcher-distilbert-simp",
+ "command": "python -m psys2_train.export_onnx --ckpt runs/dispatcher-distilbert-simp",
+ "sizes_mb": {
+  "fp32": 254.80229568481445,
+  "int8": 64.2534704208374
+ },
+ "targets": {
+  "max_size_mb": 150,
+  "max_ms_per_message": 50,
+  "min_agreement": 0.995
+ },
+ "gold_top1_lenient_on_gold_segments_of_sample": {
+  "n": 291,
+  "torch": 0.9243986254295533,
+  "fp32": 0.9243986254295533,
+  "int8": 0.9243986254295533
+ },
+ "agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "reference": "PyTorch CUDA fp32",
+  "onnx_fp32": {
+   "items": 200,
+   "world_same": 291,
+   "world_n": 291,
+   "boundary_same": 1711,
+   "boundary_n": 1711,
+   "msgs_all_boundaries_same": 200,
+   "max_abs_prob_diff_world": 5.036592483520508e-06,
+   "max_abs_prob_diff_seg": 1.2516975402832031e-06,
+   "top3_same": 291,
+   "world_agreement": 1.0,
+   "boundary_agreement": 1.0,
+   "message_boundary_agreement": 1.0
+  },
+  "onnx_int8": {
+   "items": 200,
+   "world_same": 290,
+   "world_n": 291,
+   "boundary_same": 1710,
+   "boundary_n": 1711,
+   "msgs_all_boundaries_same": 199,
+   "max_abs_prob_diff_world": 0.3368590474128723,
+   "max_abs_prob_diff_seg": 0.4227786064147949,
+   "top3_same": 185,
+   "world_agreement": 0.9965635738831615,
+   "boundary_agreement": 0.9994155464640561,
+   "message_boundary_agreement": 0.995
+  },
+  "int8_vs_fp32": {
+   "items": 200,
+   "world_same": 290,
+   "world_n": 291,
+   "boundary_same": 1710,
+   "boundary_n": 1711,
+   "msgs_all_boundaries_same": 199,
+   "max_abs_prob_diff_world": 0.3368576169013977,
+   "max_abs_prob_diff_seg": 0.4227798581123352,
+   "top3_same": 185,
+   "world_agreement": 0.9965635738831615,
+   "boundary_agreement": 0.9994155464640561,
+   "message_boundary_agreement": 0.995
+  },
+  "disagreements": [
+   {
+    "cmp": "onnx_int8",
+    "text": "go back to the simple one",
+    "world_a": "games.chess",
+    "world_b": "media.music",
+    "p_a": 0.5921956896781921,
+    "p_b": 0.36261534690856934
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "go back to the simple one",
+    "world_a": "games.chess",
+    "world_b": "media.music",
+    "p_a": 0.5921953916549683,
+    "p_b": 0.36261534690856934
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "the mouth from before, please",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "the mouth from before, please",
+    "boundary_flips": 1
+   }
+  ]
+ },
+ "edit_agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "rewritten_by_torch": 0.48,
+  "onnx_fp32": {
+   "n": 200,
+   "simplified_same": 200,
+   "tags_same": 200,
+   "words": 954,
+   "word_tags_same": 954,
+   "top1_world_same": 200,
+   "simplified_agreement": 1.0,
+   "tag_sequence_agreement": 1.0,
+   "word_tag_agreement": 1.0
+  },
+  "onnx_int8": {
+   "n": 200,
+   "simplified_same": 175,
+   "tags_same": 175,
+   "words": 954,
+   "word_tags_same": 925,
+   "top1_world_same": 197,
+   "simplified_agreement": 0.875,
+   "tag_sequence_agreement": 0.875,
+   "word_tag_agreement": 0.9696016771488469
+  },
+  "int8_vs_fp32": {
+   "n": 200,
+   "simplified_same": 175,
+   "tags_same": 175,
+   "words": 954,
+   "word_tags_same": 925,
+   "top1_world_same": 197,
+   "simplified_agreement": 0.875,
+   "tag_sequence_agreement": 0.875,
+   "word_tag_agreement": 0.9696016771488469
+  },
+  "examples_differing": [
+   {
+    "text": "is e in there",
+    "torch": "is e there",
+    "int8": "is e"
+   },
+   {
+    "text": "let's go with level 3",
+    "torch": "with level 3.",
+    "int8": "with level 3"
+   },
+   {
+    "text": "tick off the first to-do",
+    "torch": "tick off the first-",
+    "int8": "tick off the first"
+   },
+   {
+    "text": "hangman please, new one",
+    "torch": null,
+    "int8": "hangman please new one"
+   },
+   {
+    "text": "chile continent",
+    "torch": null,
+    "int8": "chile"
+   },
+   {
+    "text": "can u tell me leos sticker number",
+    "torch": "what me leos sticker",
+    "int8": "tell me leos sticker number"
+   },
+   {
+    "text": "blue and yellow = ?",
+    "torch": "blue yellow ?",
+    "int8": "blue yellow"
+   },
+   {
+    "text": "i want 5 stars added",
+    "torch": "add 5 stars added",
+    "int8": "i add 5 stars added"
+   },
+   {
+    "text": "the corner at top left",
+    "torch": null,
+    "int8": "the corner top left"
+   },
+   {
+    "text": "any pears for ben?",
+    "torch": null,
+    "int8": "pears for ben?"
+   },
+   {
+    "text": "spiders vs cows legs chart",
+    "torch": "spiders vs cows legs",
+    "int8": "spiders vs cows"
+   },
+   {
+    "text": "what documents are loaded",
+    "torch": "what documents",
+    "int8": "which documents"
+   },
+   {
+    "text": "fresh start hangman",
+    "torch": "fresh hangman",
+    "int8": null
+   },
+   {
+    "text": "hangman new",
+    "torch": null,
+    "int8": "hangman"
+   },
+   {
+    "text": "which season is two after spring",
+    "torch": "what season is 2 after spring?",
+    "int8": "what season is two after spring"
+   }
+  ]
+ },
+ "latency_cpu_batch1": {
+  "fp32_threads1": {
+   "encoder_pass_ms": {
+    "p50": 11.650030000055267,
+    "p95": 20.99034699949698,
+    "mean": 12.399836949998644
+   },
+   "dispatch_message_ms": {
+    "p50": 116.49611800021376,
+    "p95": 160.78930899948318,
+    "mean": 119.47682182998506
+   },
+   "avg_distinct_segments_per_message": 6.95,
+   "n": 100
+  },
+  "int8_threads1": {
+   "encoder_pass_ms": {
+    "p50": 3.2191039999815985,
+    "p95": 5.290558999149653,
+    "mean": 3.428559390022201
+   },
+   "dispatch_message_ms": {
+    "p50": 32.06152900020243,
+    "p95": 43.30259900052624,
+    "mean": 32.16296586997487
+   },
+   "avg_distinct_segments_per_message": 6.95,
+   "n": 100
+  },
+  "fp32_threads4": {
+   "encoder_pass_ms": {
+    "p50": 4.138303000218002,
+    "p95": 6.604911000067659,
+    "mean": 4.376068660012606
+   },
+   "dispatch_message_ms": {
+    "p50": 40.69978299958166,
+    "p95": 53.66325199975108,
+    "mean": 40.881323089952275
+   },
+   "avg_distinct_segments_per_message": 6.95,
+   "n": 100
+  },
+  "int8_threads4": {
+   "encoder_pass_ms": {
+    "p50": 1.6805759996714187,
+    "p95": 2.4532799998269184,
+    "mean": 1.7896880599437281
+   },
+   "dispatch_message_ms": {
+    "p50": 16.945436000241898,
+    "p95": 22.212779000255978,
+    "mean": 17.04455814998255
+   },
+   "avg_distinct_segments_per_message": 6.95,
+   "n": 100
+  }
+ },
+ "cpu": "Grace aarch64 (DGX Spark)",
+ "versions": {
+  "torch": "2.14.1+cu130",
+  "onnx": "1.23.2",
+  "onnxruntime": "1.31.1",
+  "opset": 17
+ }
+}

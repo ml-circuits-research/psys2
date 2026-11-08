@@ -57,8 +57,9 @@ export function renderTrace(reply, extra = {}) {
       h('div', {}, `Segmentation ${g.index + 1}`, g.index === d.winnerIndex ? h('span', { class: 'p2-tag is-supported' }, 'winner') : null, g.valid ? null : h('span', { class: 'p2-tag is-warn' }, `${g.nInvalid} piece(s) not read`),
         ` dispatcher log-prob ${g.dispatcherScore.toFixed(2)}, total ${g.score.toFixed(2)}`),
       h('ul', { class: 'p2-list' }, g.pieces.map((p) => h('li', {}, h('q', {}, clip(p.text)), ' ',
+        p.simplified ? h('span', { class: 'p2-muted' }, 'rephrased: ', h('q', {}, clip(p.simplified)), p.chosen?.variant === 'simplified' ? h('span', { class: 'p2-tag is-supported' }, 'used') : ' (not used)', ' ') : null,
         p.valid && p.chosen ? h('span', { class: 'p2-ok' }, `→ ${p.chosen.world}${p.chosen.rank > 1 ? ` (candidate ${p.chosen.rank})` : ''}`) : h('span', { class: 'p2-bad' }, 'not validated'),
-        h('div', { class: 'p2-muted' }, p.attempts.filter((a) => a.variant === 'original').map((a) => `${a.world} ${pct(a.worldScore)} ${a.valid ? (a.refused ? 'accepted (refused by state)' : 'validated') : `rejected: ${a.reason}`}`).join(' | '))))))))));
+        h('div', { class: 'p2-muted' }, p.attempts.filter((a) => a.variant === 'original' || a.variant === 'simplified').map((a) => `${a.variant === 'simplified' ? 'rephrased ' : ''}${a.world} ${pct(a.worldScore)} ${a.valid ? (a.refused ? 'accepted (refused by state)' : 'validated') : `rejected: ${a.reason}`}`).join(' | '))))))))));
   }
 
   let sop = '';

@@ -12,7 +12,7 @@ from pathlib import Path
 from transformers import AutoTokenizer
 from .dispatch_predict import collect_inputs
 from .dispatcher import require_cuda
-from .export_onnx import load_torch, Backend, OrtModel, TorchImpl, dispatch_once
+from .export_onnx import load_torch, Backend, OrtModel, TorchImpl, dispatch_once, dispatch_once_edit
 
 
 def main(argv=None):
@@ -21,20 +21,31 @@ def main(argv=None):
     ap.add_argument("--n", type=int, default=50); ap.add_argument("--seed", type=int, default=5)
     a = ap.parse_args(argv)
     dev = require_cuda()
-    model, meta = load_torch(a.ckpt, dev); worlds = meta["worlds"]
+    model, meta = load_torch(a.ckpt, dev); worlds = meta["worlds"]; edit_tags = meta.get("edit_tags")
     tok = AutoTokenizer.from_pretrained(Path(a.ckpt) / "tokenizer")
     ex = Path(a.export)
     backs = {"torch": Backend(tok, "torch", TorchImpl(model, dev)), "fp32": Backend(tok, "onnx", OrtModel(ex / "model.onnx", 1)), "int8": Backend(tok, "onnx", OrtModel(ex / "model.int8.onnx", 1))}
     items = collect_inputs("test"); random.Random(a.seed).shuffle(items)
-    multi = [i for i in items if i["kind"] == "multicmd"][: a.n // 2]; single = [i for i in items if i["kind"] != "multicmd"][: a.n - len(multi)]
+    if edit_tags:   # half of the reference items are messy paraphrase variants (dev/test/held-out), where the edit head actually rewrites
+        from .data import read_jsonl
+        from .edit import EDIT_DIR
+        er = [r for sp in ("dev", "test", "heldout") for r in read_jsonl(EDIT_DIR / f"eval-{sp}.jsonl")]; random.Random(a.seed).shuffle(er)
+        items = [{"text": r["text"], "kind": "paraphrase", "context": {"tab": r["context"].get("tab"), "recent_worlds": r["context"].get("recent_worlds", [])}} for r in er[:a.n]] + items
+    n_multi, n_para = (a.n // 4, a.n // 2) if edit_tags else (a.n // 2, 0)
+    multi = [i for i in items if i["kind"] == "multicmd"][:n_multi]
+    single = [i for i in items if i["kind"] == "paraphrase"][:n_para] + [i for i in items if i["kind"] not in ("multicmd", "paraphrase")][: a.n - n_multi - n_para]
     out = Path(a.out or ex / "reference.jsonl")
     with open(out, "w") as f:
         for it in single + multi:
             ctx = {"tab": it["context"].get("tab"), "recent_worlds": it["context"].get("recent_worlds", [])}
             rec = {"text": it["text"], "context": ctx}
             for k, be in backs.items():
-                cands, seen = dispatch_once(be, it["text"], ctx, worlds)
-                rec[k] = [{"score": sc, "segments": [{"start": x, "end": y, "text": it["text"][x:y], "worlds": [{"world": w, "score": p} for w, p in seen[it["text"][x:y]]]} for x, y in segs]} for sc, segs in cands]
+                if edit_tags:
+                    cands, seen, simp = dispatch_once_edit(be, it["text"], ctx, worlds, edit_tags)
+                else:
+                    (cands, seen), simp = dispatch_once(be, it["text"], ctx, worlds), {}
+                rec[k] = [{"score": sc, "segments": [{"start": x, "end": y, "text": it["text"][x:y], "worlds": [{"world": w, "score": p} for w, p in seen[it["text"][x:y]]],
+                                                      **({"simplified": simp[it["text"][x:y]]} if simp.get(it["text"][x:y]) else {})} for x, y in segs]} for sc, segs in cands]
             f.write(json.dumps(rec) + "\n")
     print("wrote", out)
 

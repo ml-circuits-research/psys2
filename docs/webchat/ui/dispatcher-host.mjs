@@ -49,8 +49,10 @@ export function dispatcherLoader({ base, meta, lib, onProgress = () => {} }) {
       const mb = (n) => (n / 1048576).toFixed(0);
       onProgress(total ? `downloading the model ${mb(got)} / ${mb(total)} MB` : `downloading the model ${mb(got)} MB`);
     });
+    let editTags = null;   // rephraser (edit-tag head): its tag vocabulary sits next to the model
+    if (meta.onnx?.outputs?.includes('edit_logits')) editTags = (await (await fetch(new URL(`${MODEL_DIR}edit-vocab.json`, base))).json()).tags;
     onProgress('starting the model…');
     const session = await ort.InferenceSession.create(bytes, { executionProviders: ['wasm'], graphOptimizationLevel: 'all' });
-    return { ort, session, tokenizer: lib.createWordPieceTokenizer(vocab), worlds: meta.worlds, useContext: meta.context !== false };
+    return { ort, session, tokenizer: lib.createWordPieceTokenizer(vocab), worlds: meta.worlds, editTags, editTau: meta.edit_threshold ?? 0.5, useContext: meta.context !== false };
   };
 }

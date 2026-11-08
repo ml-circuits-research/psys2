@@ -17,11 +17,11 @@ One JSON object per line:
     "segmentations": [                              # beam <= 4, best first
        {"score": float,                             # log-probability <= 0 of the boundary decisions (independent per-token model)
         "segments": [{"start": int, "end": int, "text": str,        # joiners ("and", "then", ",", ";") trimmed
-                      "worlds": [{"world": str, "score": float}]}]}]   # top-3, softmax PROBABILITY in [0,1], best first
-        # "simplified": reserved for the (not yet trained) simplification head
+                      "worlds": [{"world": str, "score": float}],     # top-3, softmax PROBABILITY in [0,1], best first
+                      "simplified": str}]}]   # only when the edit head (D1b) rewrote the piece differently from its text
   }
 Alternatives come from flipping subsets of the 6 most uncertain boundaries. Runs on CUDA in large batches.
-Held-out records are never used for training or model selection.
+Held-out records are not used for model selection (a checkpoint trained with --heldout-train default includes them in training: see its metrics.json "edit.heldout_in_training").
 """
 from __future__ import annotations
 import argparse, json, time
@@ -36,7 +36,7 @@ from .dispatcher import build, dispatch, require_cuda
 def load_ckpt(ckpt, dev):
     ckpt = Path(ckpt); meta = json.loads((ckpt / "meta.json").read_text())
     tok = AutoTokenizer.from_pretrained(ckpt / "tokenizer")
-    model = build(meta["model"], len(meta["worlds"]), meta["lora"], meta.get("lora_r", 16)).to(dev)
+    model = build(meta["model"], len(meta["worlds"]), meta["lora"], meta.get("lora_r", 16), len(meta.get("edit_tags") or [])).to(dev)
     model.load_state_dict(torch.load(ckpt / "best.pt", map_location=dev)); model.eval()
     return model, tok, meta
 
@@ -79,7 +79,7 @@ def main(argv=None):
         with open(path, "w") as f:
             for st in range(0, len(items), a.chunk):
                 chunk = items[st:st + a.chunk]
-                for it, res in zip(chunk, dispatch(model, tok, chunk, meta["context"], dev, meta["worlds"])):
+                for it, res in zip(chunk, dispatch(model, tok, chunk, meta["context"], dev, meta["worlds"], edit_tags=meta.get("edit_tags"), edit_tau=meta.get("edit_threshold", 0.5))):
                     f.write(json.dumps(dict(it, split=a.split, boundaries=[{"offset": t["start"], "p": t["p_boundary"]} for t in res["tokens"][1:] if t["word_start"]],
                                             segmentations=res["candidates"])) + "\n"); n += 1
         print(f"wrote {n} predictions to {path} in {time.time() - t0:.1f}s (ckpt {a.ckpt}, context={meta['context']})")

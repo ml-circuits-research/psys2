@@ -1,0 +1,138 @@
+{
+ "model": "dispatcher-distilbert-simp-clean (held-out NOT in training)",
+ "note": "edit threshold sweep; rules_original_or_rewrite = what the chain gets when the validator tries original first, then the rephrased text; misled = original fails and the rewrite parses to a different SOP than the target",
+ "tau": {
+  "0.15": {
+   "dev": {
+    "n": 680,
+    "rules_on_original": 0.5853,
+    "rules_on_rewrite": 0.2735,
+    "rules_original_or_rewrite": 0.6132,
+    "changed": 478,
+    "recovered": 19,
+    "broken": 98,
+    "misled": 49
+   },
+   "heldout": {
+    "n": 2050,
+    "rules_on_original": 0.4478,
+    "rules_on_rewrite": 0.259,
+    "rules_original_or_rewrite": 0.5059,
+    "changed": 1559,
+    "recovered": 119,
+    "broken": 211,
+    "misled": 141
+   }
+  },
+  "0.3": {
+   "dev": {
+    "n": 680,
+    "rules_on_original": 0.5853,
+    "rules_on_rewrite": 0.2235,
+    "rules_original_or_rewrite": 0.6103,
+    "changed": 371,
+    "recovered": 17,
+    "broken": 61,
+    "misled": 36
+   },
+   "heldout": {
+    "n": 2050,
+    "rules_on_original": 0.4478,
+    "rules_on_rewrite": 0.218,
+    "rules_original_or_rewrite": 0.4956,
+    "changed": 1262,
+    "recovered": 98,
+    "broken": 111,
+    "misled": 128
+   }
+  },
+  "0.5": {
+   "dev": {
+    "n": 680,
+    "rules_on_original": 0.5853,
+    "rules_on_rewrite": 0.1618,
+    "rules_original_or_rewrite": 0.5985,
+    "changed": 265,
+    "recovered": 9,
+    "broken": 27,
+    "misled": 27
+   },
+   "heldout": {
+    "n": 2050,
+    "rules_on_original": 0.4478,
+    "rules_on_rewrite": 0.162,
+    "rules_original_or_rewrite": 0.4829,
+    "changed": 928,
+    "recovered": 72,
+    "broken": 56,
+    "misled": 91
+   }
+  },
+  "0.7": {
+   "dev": {
+    "n": 680,
+    "rules_on_original": 0.5853,
+    "rules_on_rewrite": 0.1147,
+    "rules_original_or_rewrite": 0.5985,
+    "changed": 192,
+    "recovered": 9,
+    "broken": 21,
+    "misled": 15
+   },
+   "heldout": {
+    "n": 2050,
+    "rules_on_original": 0.4478,
+    "rules_on_rewrite": 0.1254,
+    "rules_original_or_rewrite": 0.4795,
+    "changed": 690,
+    "recovered": 65,
+    "broken": 41,
+    "misled": 77
+   }
+  },
+  "0.85": {
+   "dev": {
+    "n": 680,
+    "rules_on_original": 0.5853,
+    "rules_on_rewrite": 0.0912,
+    "rules_original_or_rewrite": 0.5971,
+    "changed": 148,
+    "recovered": 8,
+    "broken": 16,
+    "misled": 13
+   },
+   "heldout": {
+    "n": 2050,
+    "rules_on_original": 0.4478,
+    "rules_on_rewrite": 0.0941,
+    "rules_original_or_rewrite": 0.4741,
+    "changed": 493,
+    "recovered": 54,
+    "broken": 28,
+    "misled": 58
+   }
+  },
+  "0.95": {
+   "dev": {
+    "n": 680,
+    "rules_on_original": 0.5853,
+    "rules_on_rewrite": 0.0515,
+    "rules_original_or_rewrite": 0.5926,
+    "changed": 87,
+    "recovered": 5,
+    "broken": 10,
+    "misled": 9
+   },
+   "heldout": {
+    "n": 2050,
+    "rules_on_original": 0.4478,
+    "rules_on_rewrite": 0.058,
+    "rules_original_or_rewrite": 0.4629,
+    "changed": 316,
+    "recovered": 31,
+    "broken": 26,
+    "misled": 44
+   }
+  }
+ }
+}

@@ -1,0 +1,1170 @@
+{
+ "model": "distilbert-base-uncased",
+ "name": "distilbert-simp",
+ "lora": false,
+ "context": true,
+ "lr": 0.00005,
+ "params": {
+  "trainable": 66765836,
+  "total": 66765836
+ },
+ "train_seconds": 548.7664861679077,
+ "steps": 1740,
+ "gpu": "NVIDIA GB10",
+ "gpu_peak_mem_gb": 3.356065273284912,
+ "command": "python -m psys2_train.dispatcher --model distilbert-base-uncased --no-lora --lr 5e-5 --epochs 6 --out runs/dispatcher-distilbert-simp",
+ "data_hash": "3e739e95d952b69b",
+ "edit": {
+  "enabled": true,
+  "tags": 502,
+  "heldout_in_training": true,
+  "heldout_world_rows": 2255,
+  "edit_batch": 48,
+  "identity_ratio": 3,
+  "edit_weight": 1,
+  "aligned_train": 10818
+ },
+ "seed": 1,
+ "routing_train_overlap_with_dev_test": 338,
+ "routing_train_rows": 30229,
+ "versions": {
+  "python": "3.12.3",
+  "torch": "2.14.1+cu130"
+ },
+ "dev": {
+  "world": {
+   "n": 4370,
+   "top1": 0.9643020594965676,
+   "top3": 0.9922196796338673,
+   "top1_strict": 0.962929061784897,
+   "top3_strict": 0.9922196796338673,
+   "macro_f1": 0.9609835930411421,
+   "macro_f1_strict": 0.9597175968926914,
+   "by_group": {
+    "avatar/shell/editor": {
+     "n": 387,
+     "top1": 0.9509043927648578,
+     "top3": 0.9948320413436692
+    },
+    "documents": {
+     "n": 247,
+     "top1": 0.9919028340080972,
+     "top3": 1
+    },
+    "games": {
+     "n": 845,
+     "top1": 0.9526627218934911,
+     "top3": 0.9940828402366864
+    },
+    "kids": {
+     "n": 1644,
+     "top1": 0.9914841849148418,
+     "top3": 0.9987834549878345
+    },
+    "music/draw/map/charts": {
+     "n": 1107,
+     "top1": 0.938572719060524,
+     "top3": 0.9774164408310749
+    },
+    "other": {
+     "n": 140,
+     "top1": 0.9071428571428571,
+     "top3": 1
+    }
+   },
+   "by_source": {
+    "generator": {
+     "n": 3329,
+     "top1": 0.9633523580654851,
+     "top3": 0.9906878942625413
+    },
+    "paraphrase": {
+     "n": 732,
+     "top1": 0.9631147540983607,
+     "top3": 0.9972677595628415
+    },
+    "rule-derived": {
+     "n": 309,
+     "top1": 0.9773462783171522,
+     "top3": 0.9967637540453075
+    }
+   },
+   "by_world": {
+    "art.draw": {
+     "n": 311,
+     "top1": 0.8392282958199357,
+     "top3": 0.9228295819935691
+    },
+    "data.charts": {
+     "n": 249,
+     "top1": 0.963855421686747,
+     "top3": 1
+    },
+    "docs.editor": {
+     "n": 116,
+     "top1": 0.9913793103448276,
+     "top3": 1
+    },
+    "docs.reader": {
+     "n": 247,
+     "top1": 0.9919028340080972,
+     "top3": 1
+    },
+    "games.chess": {
+     "n": 284,
+     "top1": 0.971830985915493,
+     "top3": 1
+    },
+    "games.guess": {
+     "n": 157,
+     "top1": 0.9745222929936306,
+     "top3": 0.9936305732484076
+    },
+    "games.hangman": {
+     "n": 206,
+     "top1": 0.883495145631068,
+     "top3": 0.9951456310679612
+    },
+    "games.tictactoe": {
+     "n": 198,
+     "top1": 0.9797979797979798,
+     "top3": 0.9848484848484849
+    },
+    "geo.map": {
+     "n": 295,
+     "top1": 0.9898305084745763,
+     "top3": 0.9966101694915255
+    },
+    "kids.animals": {
+     "n": 221,
+     "top1": 0.995475113122172,
+     "top3": 1
+    },
+    "kids.arith": {
+     "n": 250,
+     "top1": 0.996,
+     "top3": 1
+    },
+    "kids.common": {
+     "n": 327,
+     "top1": 0.9663608562691132,
+     "top3": 0.9938837920489296
+    },
+    "kids.shapes": {
+     "n": 154,
+     "top1": 1,
+     "top3": 1
+    },
+    "kids.shop": {
+     "n": 241,
+     "top1": 0.995850622406639,
+     "top3": 1
+    },
+    "kids.tasks": {
+     "n": 272,
+     "top1": 1,
+     "top3": 1
+    },
+    "kids.time": {
+     "n": 179,
+     "top1": 1,
+     "top3": 1
+    },
+    "media.music": {
+     "n": 252,
+     "top1": 0.9761904761904762,
+     "top3": 1
+    },
+    "ui.avatar": {
+     "n": 100,
+     "top1": 0.91,
+     "top3": 0.99
+    },
+    "ui.help": {
+     "n": 140,
+     "top1": 0.9071428571428571,
+     "top3": 1
+    },
+    "ui.shell": {
+     "n": 171,
+     "top1": 0.9473684210526315,
+     "top3": 0.9941520467836257
+    }
+   },
+   "unseen_text": {
+    "n": 4092,
+    "top1": 0.9640762463343109,
+    "top3": 0.9924242424242424
+   },
+   "top_confusions": [
+    {
+     "gold": "art.draw",
+     "pred": "kids.shapes",
+     "count": 16
+    },
+    {
+     "gold": "games.hangman",
+     "pred": "ui.shell",
+     "count": 16
+    },
+    {
+     "gold": "art.draw",
+     "pred": "kids.animals",
+     "count": 8
+    },
+    {
+     "gold": "kids.common",
+     "pred": "games.hangman",
+     "count": 8
+    },
+    {
+     "gold": "ui.help",
+     "pred": "games.guess",
+     "count": 8
+    },
+    {
+     "gold": "art.draw",
+     "pred": "data.charts",
+     "count": 7
+    },
+    {
+     "gold": "art.draw",
+     "pred": "ui.shell",
+     "count": 6
+    },
+    {
+     "gold": "ui.help",
+     "pred": "docs.reader",
+     "count": 5
+    },
+    {
+     "gold": "art.draw",
+     "pred": "geo.map",
+     "count": 4
+    },
+    {
+     "gold": "data.charts",
+     "pred": "kids.animals",
+     "count": 4
+    },
+    {
+     "gold": "games.chess",
+     "pred": "games.tictactoe",
+     "count": 4
+    },
+    {
+     "gold": "media.music",
+     "pred": "ui.shell",
+     "count": 4
+    },
+    {
+     "gold": "ui.shell",
+     "pred": "games.tictactoe",
+     "count": 4
+    },
+    {
+     "gold": "art.draw",
+     "pred": "kids.arith",
+     "count": 3
+    },
+    {
+     "gold": "games.hangman",
+     "pred": "kids.animals",
+     "count": 3
+    }
+   ]
+  },
+  "segmentation": {
+   "n": 3000,
+   "boundary": {
+    "precision": 0.9436619718309859,
+    "recall": 0.9828850855745721,
+    "f1": 0.962874251497006,
+    "tp": 2814,
+    "fp": 168,
+    "fn": 49
+   },
+   "exact_segmentation": 0.9356666666666666,
+   "end_to_end_exact": 0.8203333333333334,
+   "exact_by_variant": {
+    "clean": 0.9438625890238793,
+    "plain": 0.9037520391517129
+   },
+   "exact_by_n_segments": {
+    "1": 0.9388264669163545,
+    "2": 0.9439739413680782,
+    "3": 0.9126506024096386
+   }
+  },
+  "edit": {
+   "n": 4201,
+   "words": 26222,
+   "tag_accuracy": 0.9576309968728548,
+   "edit_precision": 0.35640648011782033,
+   "edit_recall": 0.23381642512077294,
+   "edit_f1": 0.2823803967327888,
+   "exact_sentences": 0.8790764103784813,
+   "exact_by_kind": {
+    "canonical": 1,
+    "generator": 0.9819765695404026,
+    "rule-derived": 0.7669902912621359,
+    "variant": 0.03151862464183381,
+    "variant-identity": 0.7414965986394558
+   },
+   "n_by_kind": {
+    "canonical": 67,
+    "generator": 3329,
+    "rule-derived": 309,
+    "variant": 349,
+    "variant-identity": 147
+   }
+  },
+  "edit_aligned_only": {
+   "n": 349,
+   "words": 1596,
+   "tag_accuracy": 0.4567669172932331,
+   "edit_precision": 0.5563218390804597,
+   "edit_recall": 0.23381642512077294,
+   "edit_f1": 0.3292517006802721,
+   "exact_sentences": 0.03151862464183381,
+   "exact_by_kind": {
+    "variant": 0.03151862464183381
+   },
+   "n_by_kind": {
+    "variant": 349
+   }
+  }
+ },
+ "test": {
+  "world": {
+   "n": 4300,
+   "top1": 0.9672093023255814,
+   "top3": 0.9955813953488372,
+   "top1_strict": 0.9672093023255814,
+   "top3_strict": 0.9955813953488372,
+   "macro_f1": 0.9550084781663861,
+   "macro_f1_strict": 0.9550084781663861,
+   "by_group": {
+    "avatar/shell/editor": {
+     "n": 406,
+     "top1": 0.896551724137931,
+     "top3": 0.9729064039408867
+    },
+    "documents": {
+     "n": 306,
+     "top1": 0.9869281045751634,
+     "top3": 1
+    },
+    "games": {
+     "n": 837,
+     "top1": 0.9796893667861409,
+     "top3": 1
+    },
+    "kids": {
+     "n": 1589,
+     "top1": 0.9823788546255506,
+     "top3": 0.9987413467589679
+    },
+    "music/draw/map/charts": {
+     "n": 1067,
+     "top1": 0.9531396438612934,
+     "top3": 0.9943767572633552
+    },
+    "other": {
+     "n": 95,
+     "top1": 1,
+     "top3": 1
+    }
+   },
+   "by_source": {
+    "generator": {
+     "n": 3243,
+     "top1": 0.9774899784150478,
+     "top3": 0.9966080789392537
+    },
+    "paraphrase": {
+     "n": 636,
+     "top1": 0.9591194968553459,
+     "top3": 0.9968553459119497
+    },
+    "rule-derived": {
+     "n": 421,
+     "top1": 0.9002375296912114,
+     "top3": 0.9857482185273159
+    }
+   },
+   "by_world": {
+    "art.draw": {
+     "n": 215,
+     "top1": 0.8837209302325582,
+     "top3": 0.9953488372093023
+    },
+    "data.charts": {
+     "n": 276,
+     "top1": 0.9818840579710145,
+     "top3": 0.9927536231884058
+    },
+    "docs.editor": {
+     "n": 116,
+     "top1": 0.896551724137931,
+     "top3": 1
+    },
+    "docs.reader": {
+     "n": 306,
+     "top1": 0.9869281045751634,
+     "top3": 1
+    },
+    "games.chess": {
+     "n": 375,
+     "top1": 0.976,
+     "top3": 1
+    },
+    "games.guess": {
+     "n": 130,
+     "top1": 0.9846153846153847,
+     "top3": 1
+    },
+    "games.hangman": {
+     "n": 188,
+     "top1": 0.9787234042553191,
+     "top3": 1
+    },
+    "games.tictactoe": {
+     "n": 144,
+     "top1": 0.9861111111111112,
+     "top3": 1
+    },
+    "geo.map": {
+     "n": 341,
+     "top1": 0.9912023460410557,
+     "top3": 0.9970674486803519
+    },
+    "kids.animals": {
+     "n": 260,
+     "top1": 0.9692307692307692,
+     "top3": 0.9961538461538462
+    },
+    "kids.arith": {
+     "n": 240,
+     "top1": 1,
+     "top3": 1
+    },
+    "kids.common": {
+     "n": 61,
+     "top1": 0.8524590163934426,
+     "top3": 0.9836065573770492
+    },
+    "kids.shapes": {
+     "n": 203,
+     "top1": 1,
+     "top3": 1
+    },
+    "kids.shop": {
+     "n": 264,
+     "top1": 1,
+     "top3": 1
+    },
+    "kids.tasks": {
+     "n": 294,
+     "top1": 0.9625850340136054,
+     "top3": 1
+    },
+    "kids.time": {
+     "n": 267,
+     "top1": 1,
+     "top3": 1
+    },
+    "media.music": {
+     "n": 235,
+     "top1": 0.9276595744680851,
+     "top3": 0.9914893617021276
+    },
+    "ui.avatar": {
+     "n": 71,
+     "top1": 0.8732394366197183,
+     "top3": 0.9436619718309859
+    },
+    "ui.help": {
+     "n": 95,
+     "top1": 1,
+     "top3": 1
+    },
+    "ui.shell": {
+     "n": 219,
+     "top1": 0.9041095890410958,
+     "top3": 0.9680365296803652
+    }
+   },
+   "unseen_text": {
+    "n": 4054,
+    "top1": 0.9686729156388751,
+    "top3": 0.99580661075481
+   },
+   "top_confusions": [
+    {
+     "gold": "art.draw",
+     "pred": "ui.avatar",
+     "count": 14
+    },
+    {
+     "gold": "media.music",
+     "pred": "games.hangman",
+     "count": 10
+    },
+    {
+     "gold": "docs.editor",
+     "pred": "kids.tasks",
+     "count": 9
+    },
+    {
+     "gold": "ui.shell",
+     "pred": "games.guess",
+     "count": 8
+    },
+    {
+     "gold": "kids.animals",
+     "pred": "kids.arith",
+     "count": 6
+    },
+    {
+     "gold": "kids.tasks",
+     "pred": "docs.editor",
+     "count": 6
+    },
+    {
+     "gold": "kids.common",
+     "pred": "ui.avatar",
+     "count": 6
+    },
+    {
+     "gold": "games.chess",
+     "pred": "games.tictactoe",
+     "count": 5
+    },
+    {
+     "gold": "art.draw",
+     "pred": "kids.tasks",
+     "count": 4
+    },
+    {
+     "gold": "kids.tasks",
+     "pred": "data.charts",
+     "count": 4
+    },
+    {
+     "gold": "ui.shell",
+     "pred": "ui.avatar",
+     "count": 4
+    },
+    {
+     "gold": "games.hangman",
+     "pred": "kids.animals",
+     "count": 3
+    },
+    {
+     "gold": "ui.avatar",
+     "pred": "art.draw",
+     "count": 3
+    },
+    {
+     "gold": "ui.shell",
+     "pred": "ui.help",
+     "count": 3
+    },
+    {
+     "gold": "art.draw",
+     "pred": "games.tictactoe",
+     "count": 3
+    }
+   ]
+  },
+  "segmentation": {
+   "n": 4000,
+   "boundary": {
+    "precision": 0.9830971911508825,
+    "recall": 0.9845655962160816,
+    "f1": 0.9838308457711443,
+    "tp": 3955,
+    "fp": 68,
+    "fn": 62
+   },
+   "exact_segmentation": 0.9705,
+   "end_to_end_exact": 0.8635,
+   "exact_by_variant": {
+    "clean": 0.9793650793650793,
+    "plain": 0.9376470588235294
+   },
+   "exact_by_n_segments": {
+    "1": 0.9885654885654885,
+    "2": 0.9713453132588635,
+    "3": 0.95097037793667
+   }
+  },
+  "edit": {
+   "n": 4118,
+   "words": 27117,
+   "tag_accuracy": 0.9665154700003687,
+   "edit_precision": 0.2931596091205212,
+   "edit_recall": 0.25,
+   "edit_f1": 0.2698650674662669,
+   "exact_sentences": 0.8941233608547838,
+   "exact_by_kind": {
+    "canonical": 1,
+    "generator": 0.9836571076164046,
+    "rule-derived": 0.7410926365795725,
+    "variant": 0.09090909090909091,
+    "variant-identity": 0.6901408450704225
+   },
+   "n_by_kind": {
+    "canonical": 59,
+    "generator": 3243,
+    "rule-derived": 421,
+    "variant": 253,
+    "variant-identity": 142
+   }
+  },
+  "edit_aligned_only": {
+   "n": 253,
+   "words": 1183,
+   "tag_accuracy": 0.514792899408284,
+   "edit_precision": 0.6428571428571429,
+   "edit_recall": 0.25,
+   "edit_f1": 0.36,
+   "exact_sentences": 0.09090909090909091,
+   "exact_by_kind": {
+    "variant": 0.09090909090909091
+   },
+   "n_by_kind": {
+    "variant": 253
+   }
+  },
+  "world_inference_without_context": {
+   "top1": 0.901860465116279,
+   "top3": 0.9688372093023255,
+   "macro_f1": 0.8727427192464923
+  }
+ },
+ "heldout_edit": {
+  "trained_on": true,
+  "all": {
+   "n": 1494,
+   "words": 7569,
+   "tag_accuracy": 0.819130664552781,
+   "edit_precision": 0.723834652594547,
+   "edit_recall": 0.6237211064797271,
+   "edit_f1": 0.6700590270710359,
+   "exact_sentences": 0.45917001338688085,
+   "exact_by_kind": {
+    "canonical": 1,
+    "variant": 0.289738430583501,
+    "variant-identity": 0.6655737704918033
+   },
+   "n_by_kind": {
+    "canonical": 195,
+    "variant": 994,
+    "variant-identity": 305
+   }
+  }
+ },
+ "history": [
+  {
+   "epoch": 1,
+   "step": 290,
+   "world_loss": 0.7151502688190546,
+   "seg_loss": 0.13591785522434732,
+   "dev_top1": 0.9535469107551487,
+   "dev_top3": 0.9864988558352403,
+   "dev_seg_f1": 0.9532742155525239,
+   "dev_exact_seg": 0.9163333333333333,
+   "edit_loss": 0.9850452343965399,
+   "dev_edit_f1": 0.24052916416115452,
+   "dev_tag_acc": 0.9559911524673937,
+   "dev_edit_exact": 0.8762199476315163
+  },
+  {
+   "epoch": 2,
+   "step": 580,
+   "world_loss": 0.036376716195734154,
+   "seg_loss": 0.015007876770988363,
+   "dev_top1": 0.9604118993135011,
+   "dev_top3": 0.994508009153318,
+   "dev_seg_f1": 0.9544453852667232,
+   "dev_exact_seg": 0.918,
+   "edit_loss": 0.3052192856268636,
+   "dev_edit_f1": 0.2222222222222222,
+   "dev_tag_acc": 0.9559148806345816,
+   "dev_edit_exact": 0.8650321352059034
+  },
+  {
+   "epoch": 3,
+   "step": 870,
+   "world_loss": 0.015084298920279755,
+   "seg_loss": 0.009485185953611829,
+   "dev_top1": 0.9590389016018307,
+   "dev_top3": 0.991304347826087,
+   "dev_seg_f1": 0.9523809523809523,
+   "dev_exact_seg": 0.9146666666666666,
+   "edit_loss": 0.25254553060593277,
+   "dev_edit_f1": 0.24181060154854084,
+   "dev_tag_acc": 0.9554191137213027,
+   "dev_edit_exact": 0.8707450606998334
+  },
+  {
+   "epoch": 4,
+   "step": 1160,
+   "world_loss": 0.007049665983328756,
+   "seg_loss": 0.006408171422763503,
+   "dev_top1": 0.9663615560640733,
+   "dev_top3": 0.9947368421052631,
+   "dev_seg_f1": 0.9631147540983607,
+   "dev_exact_seg": 0.934,
+   "edit_loss": 0.18781445978915898,
+   "dev_edit_f1": 0.26749435665914223,
+   "dev_tag_acc": 0.9551521623064603,
+   "dev_edit_exact": 0.8657462508926446
+  },
+  {
+   "epoch": 5,
+   "step": 1450,
+   "world_loss": 0.004846586580117281,
+   "seg_loss": 0.004794949226097429,
+   "dev_top1": 0.9633867276887872,
+   "dev_top3": 0.9922196796338673,
+   "dev_seg_f1": 0.9650205761316872,
+   "dev_exact_seg": 0.9393333333333334,
+   "edit_loss": 0.17730642701659738,
+   "dev_edit_f1": 0.27787507297139524,
+   "dev_tag_acc": 0.9569445503775456,
+   "dev_edit_exact": 0.8762199476315163
+  },
+  {
+   "epoch": 6,
+   "step": 1740,
+   "world_loss": 0.0034048030653703507,
+   "seg_loss": 0.003984530055333443,
+   "dev_top1": 0.9643020594965676,
+   "dev_top3": 0.9922196796338673,
+   "dev_seg_f1": 0.962874251497006,
+   "dev_exact_seg": 0.9356666666666666,
+   "edit_loss": 0.15500737061274464,
+   "dev_edit_f1": 0.2823803967327888,
+   "dev_tag_acc": 0.9576309968728548,
+   "dev_edit_exact": 0.8790764103784813
+  }
+ ],
+ "rules_on_rewrite": {
+  "command": "node scripts/eval-simplify.mjs --pred-dir training/runs/edit-tags/distilbert-simp --merge training/results/dispatcher-distilbert-simp.json",
+  "dev": {
+   "n": 680,
+   "orig_ok": 398,
+   "changed": 287,
+   "rewrite_ok": 119,
+   "either_ok": 412,
+   "recovered": 14,
+   "broken": 37,
+   "changed_ok": 119,
+   "misled": 20,
+   "misled_share": 0.0294,
+   "rules_on_original": 0.5853,
+   "rules_on_rewrite": 0.175,
+   "rules_original_or_rewrite": 0.6059,
+   "rewrite_precision_when_changed": 0.4146,
+   "by_group": {
+    "music/draw/map/charts": {
+     "n": 260,
+     "orig_ok": 104,
+     "changed": 103,
+     "rewrite_ok": 35,
+     "either_ok": 111,
+     "recovered": 7,
+     "broken": 7,
+     "changed_ok": 35,
+     "misled": 13,
+     "misled_share": 0.05,
+     "rules_on_original": 0.4,
+     "rules_on_rewrite": 0.1346,
+     "rules_original_or_rewrite": 0.4269,
+     "rewrite_precision_when_changed": 0.3398
+    },
+    "avatar/shell/editor": {
+     "n": 130,
+     "orig_ok": 48,
+     "changed": 78,
+     "rewrite_ok": 18,
+     "either_ok": 52,
+     "recovered": 4,
+     "broken": 7,
+     "changed_ok": 18,
+     "misled": 5,
+     "misled_share": 0.0385,
+     "rules_on_original": 0.3692,
+     "rules_on_rewrite": 0.1385,
+     "rules_original_or_rewrite": 0.4,
+     "rewrite_precision_when_changed": 0.2308
+    },
+    "games": {
+     "n": 190,
+     "orig_ok": 170,
+     "changed": 67,
+     "rewrite_ok": 43,
+     "either_ok": 170,
+     "recovered": 0,
+     "broken": 16,
+     "changed_ok": 43,
+     "misled": 2,
+     "misled_share": 0.0105,
+     "rules_on_original": 0.8947,
+     "rules_on_rewrite": 0.2263,
+     "rules_original_or_rewrite": 0.8947,
+     "rewrite_precision_when_changed": 0.6418
+    },
+    "kids": {
+     "n": 100,
+     "orig_ok": 76,
+     "changed": 39,
+     "rewrite_ok": 23,
+     "either_ok": 79,
+     "recovered": 3,
+     "broken": 7,
+     "changed_ok": 23,
+     "misled": 0,
+     "misled_share": 0,
+     "rules_on_original": 0.76,
+     "rules_on_rewrite": 0.23,
+     "rules_original_or_rewrite": 0.79,
+     "rewrite_precision_when_changed": 0.5897
+    }
+   },
+   "by_label_status": {
+    "rules-fail": {
+     "n": 161,
+     "orig_ok": 0,
+     "changed": 96,
+     "rewrite_ok": 10,
+     "either_ok": 10,
+     "recovered": 10,
+     "broken": 0,
+     "changed_ok": 10,
+     "misled": 6,
+     "misled_share": 0.0373,
+     "rules_on_original": 0,
+     "rules_on_rewrite": 0.0621,
+     "rules_original_or_rewrite": 0.0621,
+     "rewrite_precision_when_changed": 0.1042
+    },
+    "rules-agree": {
+     "n": 401,
+     "orig_ok": 393,
+     "changed": 147,
+     "rewrite_ok": 105,
+     "either_ok": 393,
+     "recovered": 0,
+     "broken": 37,
+     "changed_ok": 105,
+     "misled": 0,
+     "misled_share": 0,
+     "rules_on_original": 0.98,
+     "rules_on_rewrite": 0.2618,
+     "rules_original_or_rewrite": 0.98,
+     "rewrite_precision_when_changed": 0.7143
+    },
+    "rules-differ": {
+     "n": 118,
+     "orig_ok": 5,
+     "changed": 44,
+     "rewrite_ok": 4,
+     "either_ok": 9,
+     "recovered": 4,
+     "broken": 0,
+     "changed_ok": 4,
+     "misled": 14,
+     "misled_share": 0.1186,
+     "rules_on_original": 0.0424,
+     "rules_on_rewrite": 0.0339,
+     "rules_original_or_rewrite": 0.0763,
+     "rewrite_precision_when_changed": 0.0909
+    }
+   }
+  },
+  "test": {
+   "n": 600,
+   "orig_ok": 337,
+   "changed": 239,
+   "rewrite_ok": 93,
+   "either_ok": 343,
+   "recovered": 6,
+   "broken": 34,
+   "changed_ok": 93,
+   "misled": 35,
+   "misled_share": 0.0583,
+   "rules_on_original": 0.5617,
+   "rules_on_rewrite": 0.155,
+   "rules_original_or_rewrite": 0.5717,
+   "rewrite_precision_when_changed": 0.3891,
+   "by_group": {
+    "music/draw/map/charts": {
+     "n": 220,
+     "orig_ok": 68,
+     "changed": 84,
+     "rewrite_ok": 17,
+     "either_ok": 70,
+     "recovered": 2,
+     "broken": 7,
+     "changed_ok": 17,
+     "misled": 28,
+     "misled_share": 0.1273,
+     "rules_on_original": 0.3091,
+     "rules_on_rewrite": 0.0773,
+     "rules_original_or_rewrite": 0.3182,
+     "rewrite_precision_when_changed": 0.2024
+    },
+    "avatar/shell/editor": {
+     "n": 80,
+     "orig_ok": 23,
+     "changed": 46,
+     "rewrite_ok": 13,
+     "either_ok": 25,
+     "recovered": 2,
+     "broken": 3,
+     "changed_ok": 13,
+     "misled": 5,
+     "misled_share": 0.0625,
+     "rules_on_original": 0.2875,
+     "rules_on_rewrite": 0.1625,
+     "rules_original_or_rewrite": 0.3125,
+     "rewrite_precision_when_changed": 0.2826
+    },
+    "games": {
+     "n": 180,
+     "orig_ok": 159,
+     "changed": 46,
+     "rewrite_ok": 27,
+     "either_ok": 160,
+     "recovered": 1,
+     "broken": 13,
+     "changed_ok": 27,
+     "misled": 1,
+     "misled_share": 0.0056,
+     "rules_on_original": 0.8833,
+     "rules_on_rewrite": 0.15,
+     "rules_original_or_rewrite": 0.8889,
+     "rewrite_precision_when_changed": 0.587
+    },
+    "kids": {
+     "n": 120,
+     "orig_ok": 87,
+     "changed": 63,
+     "rewrite_ok": 36,
+     "either_ok": 88,
+     "recovered": 1,
+     "broken": 11,
+     "changed_ok": 36,
+     "misled": 1,
+     "misled_share": 0.0083,
+     "rules_on_original": 0.725,
+     "rules_on_rewrite": 0.3,
+     "rules_original_or_rewrite": 0.7333,
+     "rewrite_precision_when_changed": 0.5714
+    }
+   },
+   "by_label_status": {
+    "rules-differ": {
+     "n": 153,
+     "orig_ok": 3,
+     "changed": 53,
+     "rewrite_ok": 5,
+     "either_ok": 7,
+     "recovered": 4,
+     "broken": 1,
+     "changed_ok": 5,
+     "misled": 26,
+     "misled_share": 0.1699,
+     "rules_on_original": 0.0196,
+     "rules_on_rewrite": 0.0327,
+     "rules_original_or_rewrite": 0.0458,
+     "rewrite_precision_when_changed": 0.0943
+    },
+    "rules-agree": {
+     "n": 342,
+     "orig_ok": 334,
+     "changed": 121,
+     "rewrite_ok": 86,
+     "either_ok": 334,
+     "recovered": 0,
+     "broken": 33,
+     "changed_ok": 86,
+     "misled": 0,
+     "misled_share": 0,
+     "rules_on_original": 0.9766,
+     "rules_on_rewrite": 0.2515,
+     "rules_original_or_rewrite": 0.9766,
+     "rewrite_precision_when_changed": 0.7107
+    },
+    "rules-fail": {
+     "n": 105,
+     "orig_ok": 0,
+     "changed": 65,
+     "rewrite_ok": 2,
+     "either_ok": 2,
+     "recovered": 2,
+     "broken": 0,
+     "changed_ok": 2,
+     "misled": 9,
+     "misled_share": 0.0857,
+     "rules_on_original": 0,
+     "rules_on_rewrite": 0.019,
+     "rules_original_or_rewrite": 0.019,
+     "rewrite_precision_when_changed": 0.0308
+    }
+   }
+  },
+  "heldout": {
+   "n": 2050,
+   "orig_ok": 918,
+   "changed": 1235,
+   "rewrite_ok": 532,
+   "either_ok": 1088,
+   "recovered": 170,
+   "broken": 85,
+   "changed_ok": 532,
+   "misled": 107,
+   "misled_share": 0.0522,
+   "rules_on_original": 0.4478,
+   "rules_on_rewrite": 0.2595,
+   "rules_original_or_rewrite": 0.5307,
+   "rewrite_precision_when_changed": 0.4308,
+   "by_group": {
+    "music/draw/map/charts": {
+     "n": 400,
+     "orig_ok": 145,
+     "changed": 219,
+     "rewrite_ok": 82,
+     "either_ok": 188,
+     "recovered": 43,
+     "broken": 12,
+     "changed_ok": 82,
+     "misled": 40,
+     "misled_share": 0.1,
+     "rules_on_original": 0.3625,
+     "rules_on_rewrite": 0.205,
+     "rules_original_or_rewrite": 0.47,
+     "rewrite_precision_when_changed": 0.3744
+    },
+    "avatar/shell/editor": {
+     "n": 400,
+     "orig_ok": 133,
+     "changed": 277,
+     "rewrite_ok": 107,
+     "either_ok": 177,
+     "recovered": 44,
+     "broken": 12,
+     "changed_ok": 107,
+     "misled": 28,
+     "misled_share": 0.07,
+     "rules_on_original": 0.3325,
+     "rules_on_rewrite": 0.2675,
+     "rules_original_or_rewrite": 0.4425,
+     "rewrite_precision_when_changed": 0.3863
+    },
+    "documents": {
+     "n": 150,
+     "orig_ok": 43,
+     "changed": 100,
+     "rewrite_ok": 25,
+     "either_ok": 57,
+     "recovered": 14,
+     "broken": 8,
+     "changed_ok": 25,
+     "misled": 2,
+     "misled_share": 0.0133,
+     "rules_on_original": 0.2867,
+     "rules_on_rewrite": 0.1667,
+     "rules_original_or_rewrite": 0.38,
+     "rewrite_precision_when_changed": 0.25
+    },
+    "games": {
+     "n": 400,
+     "orig_ok": 218,
+     "changed": 228,
+     "rewrite_ok": 117,
+     "either_ok": 246,
+     "recovered": 28,
+     "broken": 14,
+     "changed_ok": 117,
+     "misled": 10,
+     "misled_share": 0.025,
+     "rules_on_original": 0.545,
+     "rules_on_rewrite": 0.2925,
+     "rules_original_or_rewrite": 0.615,
+     "rewrite_precision_when_changed": 0.5132
+    },
+    "kids": {
+     "n": 700,
+     "orig_ok": 379,
+     "changed": 411,
+     "rewrite_ok": 201,
+     "either_ok": 420,
+     "recovered": 41,
+     "broken": 39,
+     "changed_ok": 201,
+     "misled": 27,
+     "misled_share": 0.0386,
+     "rules_on_original": 0.5414,
+     "rules_on_rewrite": 0.2871,
+     "rules_original_or_rewrite": 0.6,
+     "rewrite_precision_when_changed": 0.4891
+    }
+   },
+   "by_label_status": {
+    "rules-agree": {
+     "n": 946,
+     "orig_ok": 905,
+     "changed": 469,
+     "rewrite_ok": 358,
+     "either_ok": 906,
+     "recovered": 1,
+     "broken": 83,
+     "changed_ok": 358,
+     "misled": 6,
+     "misled_share": 0.0063,
+     "rules_on_original": 0.9567,
+     "rules_on_rewrite": 0.3784,
+     "rules_original_or_rewrite": 0.9577,
+     "rewrite_precision_when_changed": 0.7633
+    },
+    "rules-fail": {
+     "n": 808,
+     "orig_ok": 3,
+     "changed": 562,
+     "rewrite_ok": 128,
+     "either_ok": 129,
+     "recovered": 126,
+     "broken": 0,
+     "changed_ok": 128,
+     "misled": 35,
+     "misled_share": 0.0433,
+     "rules_on_original": 0.0037,
+     "rules_on_rewrite": 0.1584,
+     "rules_original_or_rewrite": 0.1597,
+     "rewrite_precision_when_changed": 0.2278
+    },
+    "rules-differ": {
+     "n": 296,
+     "orig_ok": 10,
+     "changed": 204,
+     "rewrite_ok": 46,
+     "either_ok": 53,
+     "recovered": 43,
+     "broken": 2,
+     "changed_ok": 46,
+     "misled": 66,
+     "misled_share": 0.223,
+     "rules_on_original": 0.0338,
+     "rules_on_rewrite": 0.1554,
+     "rules_original_or_rewrite": 0.1791,
+     "rewrite_precision_when_changed": 0.2255
+    }
+   }
+  }
+ }
+}

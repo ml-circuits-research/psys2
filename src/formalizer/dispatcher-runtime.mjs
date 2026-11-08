@@ -7,13 +7,18 @@
  *   const rt = createDispatcherRuntime({ ort, session, tokenizer, worlds });   // ort: onnxruntime-web / -node module, session: InferenceSession
  *   const prediction = await rt.predict('add milk and open the map', { tab: 'robot', recent_worlds: ['kids.shop'] });
  *
- * Model contract: inputs `input_ids`, `attention_mask` (int64 [1, T]); outputs `seg_logits` [1, T, 2], `world_logits` [1, W].
+ * Model contract: inputs `input_ids`, `attention_mask` (int64 [1, T]); outputs `seg_logits` [1, T, 2], `world_logits` [1, W] and, for a
+ * model with the simplification head (D1b), `edit_logits` [1, T, K] (per-token edit tag scores; `editTags` lists the K tags: KEEP, DELETE,
+ * R:/P:/A: vocabulary, see src/formalizer/edit-tags.mjs).
  *  - segmentation pass: the raw message (max 192 tokens); P(B) per token = softmax(seg_logits)[1]; a boundary is possible at
  *    word-start tokens (not the first); candidates are subsets of flips of the `uncertain` (6) most uncertain boundaries, scored by the
  *    independent Bernoulli log-probability, best `beam` (4) distinct segmentations; joiners ("and", "then", ",", ";") are trimmed;
  *  - world pass: one pass per distinct candidate segment with the input `tab: <tab|none> ; recent: <w1 w2|none> ;; <segment>`
- *    (max 128 tokens), top-3 worlds with softmax probabilities.
+ *    (max 128 tokens), top-3 worlds with softmax probabilities. The same pass gives the edit tags of the piece: one tag per word of the
+ *    piece (argmax of the first sub-token of the word), applied by `simplifiedText` -> `segment.simplified` (only when the rewrite
+ *    differs from the piece text). Mirrors training/psys2_train/dispatcher.py `run_world(edit_tags=...)` and edit.py `word_tokens`.
  */
+import { wordsOf, simplifiedText } from './edit-tags.mjs';
 
 const LEAD_RE = /^(?:[\s,;]+|(?:and|then)\b[\s,]*)+/i;
 const TRAIL_RE = /(?:[\s,;]+|\b(?:and|then)\b[\s,]*)+$/i;
@@ -75,6 +80,33 @@ export function candidateSegmentations(text, offsets, probs, beam = 4, uncertain
   return [...cands.values()].sort((x, y) => y.score - x.score).slice(0, beam);
 }
 
+/** Per word the index of its first token (null when truncated away); `prefix` = characters before the piece in the model input (edit.word_tokens). */
+export function wordTokens(offsets, prefix, words) {
+  const out = [];
+  let i = 0;
+  const n = offsets.length;
+  for (const { start, end } of words) {
+    const s = start + prefix, e = end + prefix;
+    while (i < n && !(offsets[i][1] > offsets[i][0] && offsets[i][1] > s)) i++;
+    out.push(i < n && offsets[i][0] < e ? i : null);
+  }
+  return out;
+}
+
+/** Edit tags of the words of `text` from the per-token logits (flat [T*K]); tokens are those of the full routing input. */
+export function decodeEditTags(text, prefix, offsets, logits, K, editTags, tau = 0.5) {
+  const words = wordsOf(text);
+  const tags = wordTokens(offsets, prefix, words).map((t) => {
+    if (t === null) return 'KEEP';
+    // best non-KEEP tag, taken only when its softmax probability reaches `tau` (editTags[0] is KEEP); mirrors run_world(edit_tau)
+    const p = softmax(Array.from({ length: K }, (_, k) => logits[t * K + k]));
+    let best = 1;
+    for (let k = 2; k < K; k++) if (p[k] > p[best]) best = k;
+    return p[best] >= tau ? editTags[best] ?? 'KEEP' : 'KEEP';
+  });
+  return { words, tags, simplified: simplifiedText(text, words, tags) };
+}
+
 /** The routing input of the world head (data.routing_text with context). */
 export const routingText = (text, ctx = {}) => `tab: ${ctx.tab || 'none'} ; recent: ${(ctx.recent_worlds ?? []).join(' ') || 'none'} ;; ${text}`;
 
@@ -86,7 +118,7 @@ const softmax = (v) => {
   return e.map((x) => x / z);
 };
 
-export function createDispatcherRuntime({ ort, session, tokenizer, worlds, useContext = true, segMaxLen = 192, worldMaxLen = 128, beam = 4, uncertain = 6, topK = 3 } = {}) {
+export function createDispatcherRuntime({ ort, session, tokenizer, worlds, editTags = null, editTau = 0.5, useContext = true, segMaxLen = 192, worldMaxLen = 128, beam = 4, uncertain = 6, topK = 3 } = {}) {
   if (!ort?.Tensor || !session?.run || !tokenizer?.encode || !worlds?.length) throw new Error('createDispatcherRuntime needs { ort, session, tokenizer, worlds }');
   const cache = new Map();
 
@@ -97,7 +129,7 @@ export function createDispatcherRuntime({ ort, session, tokenizer, worlds, useCo
       attention_mask: new ort.Tensor('int64', BigInt64Array.from(ids, () => 1n), [1, n]),
     };
     const out = await session.run(feeds);
-    return { seg: out.seg_logits.data, world: out.world_logits.data };
+    return { seg: out.seg_logits.data, world: out.world_logits.data, edit: out.edit_logits?.data ?? null };
   };
 
   /** Per-token P(B) and token offsets of a raw message. */
@@ -108,17 +140,25 @@ export function createDispatcherRuntime({ ort, session, tokenizer, worlds, useCo
     return { enc, probs };
   };
 
-  /** Top-k worlds with softmax probability for one segment text in a context (cached). */
-  const rank = async (text, ctx) => {
+  /** Top-k worlds (softmax probability) and the simplified text (edit head, or null) for one segment text in a context (cached). */
+  const rankFull = async (text, ctx) => {
     const input = useContext ? routingText(text, ctx) : text;
     if (cache.has(input)) return cache.get(input);
-    const { world } = await run(tokenizer.encode(input, { maxLength: worldMaxLen }).ids);
+    const enc = tokenizer.encode(input, { maxLength: worldMaxLen });
+    const { world, edit } = await run(enc.ids);
     const p = softmax(world);
     const top = p.map((x, i) => [x, i]).sort((a, b) => b[0] - a[0] || a[1] - b[1]).slice(0, topK).map(([x, i]) => ({ world: worlds[i], score: x }));
+    let simplified = null, tags = null;
+    if (editTags && edit) {
+      const d = decodeEditTags(text, input.length - text.length, enc.offsets, edit, editTags.length, editTags, editTau);
+      simplified = d.simplified; tags = d.tags;
+    }
+    const res = { worlds: top, simplified, tags };
     if (cache.size > 2000) cache.clear();
-    cache.set(input, top);
-    return top;
+    cache.set(input, res);
+    return res;
   };
+  const rank = async (text, ctx) => (await rankFull(text, ctx)).worlds;
 
   /** Prediction object of spec 03 section 7.1 for one message. */
   const predict = async (text, context = {}) => {
@@ -126,14 +166,14 @@ export function createDispatcherRuntime({ ort, session, tokenizer, worlds, useCo
     const { enc, probs } = await segment(text);
     const cands = candidateSegmentations(text, enc.offsets, probs, beam, uncertain);
     const seen = new Map();
-    for (const c of cands) for (const [a, b] of c.segments) { const t = text.slice(a, b); if (!seen.has(t)) seen.set(t, await rank(t, ctx)); }
+    for (const c of cands) for (const [a, b] of c.segments) { const t = text.slice(a, b); if (!seen.has(t)) seen.set(t, await rankFull(t, ctx)); }
     const info = tokenInfo(text, enc.offsets);
     return {
       text, context: ctx,
       boundaries: info.slice(1).filter(([, , , ws]) => ws).map(([i, s]) => ({ offset: s, p: probs[i] })),
-      segmentations: cands.map((c) => ({ score: c.score, segments: c.segments.map(([a, b]) => ({ start: a, end: b, text: text.slice(a, b), worlds: seen.get(text.slice(a, b)) })) })),
+      segmentations: cands.map((c) => ({ score: c.score, segments: c.segments.map(([a, b]) => { const r = seen.get(text.slice(a, b)); return { start: a, end: b, text: text.slice(a, b), worlds: r.worlds, ...(r.simplified ? { simplified: r.simplified } : {}) }; }) })),
     };
   };
 
-  return { predict, segment, rank, worlds, clearCache: () => cache.clear() };
+  return { predict, segment, rank, rankFull, worlds, editTags, clearCache: () => cache.clear() };
 }
