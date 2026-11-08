@@ -91,3 +91,51 @@ test('provider scores: rewrites below normalizerMinScore are not tried', async (
   const ok = await createDispatchValidator({ engine, normalizer: p, policy: { normalizerMinScore: -1 } }).validate(msg(NOISY, 'kids.arith'));
   assert.equal(ok.produced[0].textUsed, 'normalized');
 });
+
+test('value checker: typed values are compared as values (sign, decimal separator, times, notes)', () => {
+  const strict = { polarity: true, grounded: true, keepKnown: true };
+  const no = (a, b, re) => { const r = checkValues(a, b, strict); assert.equal(r.ok, false, `${a} -> ${b}`); if (re) assert.match(r.reason, re); };
+  no('-45.5 25.3', '45.5 25.3', /numbers differ/);
+  no('go to -45.5 -25.3', 'go to 45.5 -25.3', /numbers differ/);
+  no('1.5', '1 5');
+  no('1.5', '15');
+  no('1.5', '1.6');
+  no('wake me at 7:30', 'wake me at 7 30');
+  no('wake me at 7:30 am', 'wake me at 7:30 pm');
+  no('play C# and Bb', 'play C and B', /typed values differ/);
+  no('play C4 then D4', 'play C5 then D4');
+  no('set it to minus 5', 'set it to 5');
+  assert.equal(checkValues('go to -45.5 25.3', 'go to -45.5 25.3', strict).ok, true);
+  assert.equal(checkValues('1,5', '1.5', strict).ok, true);          // decimal separator is a notation, not a value
+  assert.equal(checkValues('add 1,500 and 2', 'add 1500 and 2', strict).ok, true);
+  assert.equal(checkValues('set it to minus 5', 'set it to -5', { polarity: false }).ok, true);
+  assert.equal(checkValues('wake me at 7 pm', 'wake me at 19:00', { polarity: false }).ok, true);
+  assert.equal(checkValues('play C# and Bb', 'play c# and bb', strict).ok, true);
+  assert.deepEqual(numbersOf('-45.5 and 1.5, then 3-5'), ['-45.5', '1.5', '3', '5']);
+  assert.deepEqual(numbersOf('1 5'), ['1', '5']);
+});
+
+test('value checker: operand order, source/destination, property bindings, units', () => {
+  const strict = { polarity: true, grounded: true, keepKnown: true };
+  const no = (a, b, re) => { const r = checkValues(a, b, strict); assert.equal(r.ok, false, `${a} -> ${b}`); if (re) assert.match(r.reason, re); };
+  no('3 minus 10', '10 minus 3', /operand order/);
+  no('what is 20 divided by 4', 'what is 4 divided by 20', /operand order/);
+  no('subtract 3 from 10', 'subtract 10 from 3', /operand order/);
+  no('subtract 3 from 10', '3 minus 10', /operand order/);
+  assert.equal(checkValues('subtract 3 from 10', '10 minus 3', { polarity: false }).ok, true);
+  assert.equal(checkValues('3 - 10', '3 minus 10', { polarity: false }).ok, true);
+  assert.equal(checkValues('divide 20 by 4', '20 divided by 4', { polarity: false }).ok, true);
+  no('from Paris to Rome', 'from Rome to Paris', /bound to a different value/);
+  no('move the piece from e2 to e4', 'move the piece from e4 to e2');
+  no('from 3 to 10', 'from 10 to 3');
+  assert.equal(checkValues('to Rome from Paris', 'from Paris to Rome', strict).ok, true);
+  assert.equal(checkValues('from Paris to Rome', 'from Paris to Rome', strict).ok, true);
+  no('eyes red and body blue', 'eyes blue and body red', /colour bound/);
+  no('red eyes and blue body', 'blue eyes and red body', /colour bound/);
+  no('make the eyes red and the body blue', 'make the eyes blue and the body red', /colour bound/);
+  assert.equal(checkValues('the eyes are red and the body is blue', 'make the eyes red and the body blue', { polarity: false }).ok, true);
+  assert.equal(checkValues('eyes red and body blue', 'blue body and red eyes', { polarity: false }).ok, true);
+  no('wait 5 minutes', 'wait 5 seconds', /units differ/);
+  no('3, 5', '5, 3', /adjacent numbers/);
+  assert.equal(checkValues('wait 5 mins', 'wait 5 minutes', { polarity: false }).ok, true);
+});
