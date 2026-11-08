@@ -79,12 +79,19 @@ The engine adds to every emitted wire: `core.via=$<patternId>`, `core.source="<s
 ## 4. Choosing a reading
 For each sentence:
 1. Try every pattern of every loaded world (patterns are cheap).
-2. Rank full matches by: `priority` plus the **dialogue focus** bonus (+3 for the world that owns the active tab in `ui.shell`, +1 for each of the last three worlds that produced a reading) (higher first), then number of literal tokens matched, then fewer `...`/`words` captures, then router score of the world.
+2. Order the full matches with the **routing policy** (`src/formalizer/routing.mjs`, ADR-004), which knows the application state. The dialog session passes a context `{ activeTab, tabWorld, modalWorld, gameWorld, recentWorlds, lastWorld }`. Tiers, smaller wins:
+   1. **Modal intercept**: a world with an open modal input consumes the sentence before formalization (spec 07 §2).
+   2. **Navigation / meta**: `ui.shell` requests without wildcard captures. 2a: naming a tab (`ui.openTab`, `ui.playGame`) always wins. 2b: settings and meta (speaker, listening, hands-free, rate, language, phrase log, help, which tab, go back) win over every other match of equal or lower priority (a world that claims the phrase with a higher priority keeps it: "Where am I?" on the map).
+   3. **Active tab**: a match from the world that owns the active tab wins over other worlds, and `ui.shell` game controls (new game, give up, hint) count as the tab's when the tab belongs to a `games.*` world. Exception: another world's match wins when the tab's match is a catch-all (its wildcard captures, `rest`/`words`/`...`, are more tokens than its literal words) and the other match has no wildcard capture and at least two more literal words.
+   4. **Recent**: the world with an active game, then the worlds that produced the last readings, most recent first.
+   5. **Everything else**: by `priority`.
+   Inside a tier: `priority`, number of literal tokens, fewer `...`/`words` captures, router score of the world, pattern order. If the tab world has no match, nothing is claimed by the tab, so cross-world questions ("How many legs does a spider have?" on the editor tab) work.
+   Every segment and the trace carry the **decision**: `{ router, tier, tierName, reason, winner, runnerUp, contested, context }`. A learned router (for example a ModernBERT/LoRA head over state + text) plugs in through `createRouter({ id, model })` with the same `route({ matches, context, scores, tokens })` interface.
 3. If no pattern matches the whole sentence, split it into clauses at `,`, `and`, `then`, `but` (one level) and match each clause; a clause that still fails is reported as unparsed.
-4. Equal-rank matches from different worlds that emit different wires are kept as **alternatives**; the dialog layer reports the ambiguity instead of choosing silently (vision §7).
+4. Matches from different worlds with the same tier, rank and literals that emit different wires are kept as **alternatives**; the dialog layer reports the ambiguity instead of choosing silently (vision §7).
 
 ## 5. Router
 Scores every loaded world for each sentence: `+5` if one of its patterns matches the sentence, `+1` for each token whose lemma is in one of its lexicons (`trigger` entries `+2`). Worlds with score > 0 are candidates (top 3 reported). The router is used for reporting, for ordering ties, and later for restricting the encoder strategy, which cannot afford to try every world.
 
 ## 6. Training-data export
-Because every emitted wire carries `core.source` offsets and the slot spans, the rule formalizer can export encoder training records (vision §6: text, mentions, key spans, references, label status `generator-backed` or `rule-derived`). `scripts/export-training.mjs` writes JSONL for `training/`.
+Because every emitted wire carries `core.source` offsets and the slot spans, the rule formalizer can export encoder training records (vision §6: text, mentions, key spans, references, label status `generator-backed` or `rule-derived`). `scripts/export-training.mjs` writes JSONL for `training/`. With `--routing-context` the generator's own world is the active tab (`routing` is attached to each record) and the report gives the agreement with and without that context, so cross-world ties are labelled by context instead of counted as disagreements.

@@ -1,0 +1,153 @@
+/**
+ * Routing policy (spec 03 section 4, ADR-004). Browser-safe, deterministic and explainable.
+ *
+ * A router decides which world's formalization wins when several worlds match the same sentence. Interface (the seam
+ * for a future learned router, for instance a ModernBERT/LoRA head trained on application state + text):
+ *
+ *   router = { id, route({ matches, context, scores, tokens }) -> { matches, decision } }
+ *
+ *   matches   candidate full matches of every world: { pattern, order, slots, literals, skips, score }
+ *   context   what the dialog session knows about the application (see `emptyContext`)
+ *   scores    word-overlap router scores [{ id, score }] (spec 03 section 5)
+ *   returns   `matches` best first, and a `decision` that explains the choice (kept in the trace).
+ *
+ * Tiers (smaller wins; see ADR-004):
+ *   1  modal intercept     a world with an open modal input consumes the sentence before formalization (dialog layer)
+ *   2  navigation / meta   ui.shell requests (wildcard captures excluded). 2a: naming a tab (open <tab>, play <tab>)
+ *                          always wins. 2b: app settings and meta (speech, listening, hands-free, rate, language,
+ *                          phrase log, help, which tab, go back) win over every other world's match of equal or
+ *                          lower priority, so "Hurry up" or "Where am I?" still go to a world that claims them
+ *                          with a higher priority.
+ *   3  active tab          a match from the world that owns the active tab wins over every other world, unless another
+ *                          world's match is clearly more specific: the tab's match is a catch-all (its wildcard
+ *                          captures, `rest`, `words`, `...`, are more tokens than its literal words), the other match
+ *                          has no wildcard capture and at least two more literal words. The tab's game controls
+ *                          (new game, give up, hint of `ui.shell`) count as matches of the tab's world when the tab
+ *                          belongs to a games.* world.
+ *   4  recent worlds       the world with an active game, then the worlds that answered last (most recent first)
+ *   5  everything else     by pattern priority, literal words, fewer captures, word-overlap score, pattern order
+ * Inside a tier the order is always: priority, literals, fewer wildcard tokens, router score, pattern order.
+ */
+
+export function emptyContext() {
+  return { activeTab: null, tabWorld: null, modalWorld: null, gameWorld: null, recentWorlds: [], lastWorld: null };
+}
+
+/** Normalize a context object (missing fields default; lastWorld defaults to the first recent world). */
+export function normalizeContext(c) {
+  const ctx = { ...emptyContext(), ...(c ?? {}) };
+  ctx.recentWorlds = [...(ctx.recentWorlds ?? [])];
+  if (!ctx.lastWorld) ctx.lastWorld = ctx.recentWorlds[0] ?? null;
+  return ctx;
+}
+
+/** Legacy `focus` map ({ world: bonus }, +3 tab, +1 recent) to a context. */
+export function contextFromFocus(focus = {}) {
+  const entries = Object.entries(focus);
+  return normalizeContext({
+    tabWorld: entries.find(([, n]) => n >= 3)?.[0] ?? null,
+    recentWorlds: entries.filter(([, n]) => n % 3 === 1).sort((a, b) => b[1] - a[1]).map(([w]) => w),
+  });
+}
+
+/** `ui.shell` actions that name a tab (tier 2a: always win). */
+export const TAB_ACTIONS = new Set(['ui.openTab', 'ui.playGame']);
+/** `ui.shell` actions that change an application setting or ask about the app (tier 2b). */
+/** `ui.shell` game controls: handled by whichever game the active tab shows. */
+export const GAME_CONTROL_ACTIONS = new Set(['ui.newGame', 'ui.giveUp', 'ui.hint']);
+export const SETTING_ACTIONS = new Set([
+  'ui.back', 'ui.whichTab', 'ui.help', 'ui.speaker', 'ui.listening', 'ui.handsFree', 'ui.rate', 'ui.language', 'ui.phraseLog',
+]);
+
+/** Is this a `ui.shell` game-control match (new game, give up, hint)? */
+export function isGameControl(m) {
+  return m.pattern.worldId === 'ui.shell' && GAME_CONTROL_ACTIONS.has(/action=([\w.]+)/.exec(m.pattern.emit ?? '')?.[1]);
+}
+
+/** Number of tokens a match captured with wildcards (`rest`, `words`, `...` skips, loose captures). */
+export function wildTokens(m) {
+  let n = 0;
+  for (const s of Object.values(m.slots ?? {})) if ((s.class === 'rest' || s.class === 'words') && s.tokens) n += s.tokens[1] - s.tokens[0];
+  return Math.max(n, m.skips ?? 0);
+}
+
+/** Navigation class of a match: 'tab' (2a), 'setting' (2b) or null. Wildcard captures never count as explicit. */
+export function navigationKind(m) {
+  if (m.pattern.worldId !== 'ui.shell' || wildTokens(m) > 0) return null;
+  const action = /action=([\w.]+)/.exec(m.pattern.emit ?? '')?.[1];
+  return TAB_ACTIONS.has(action) ? 'tab' : SETTING_ACTIONS.has(action) ? 'setting' : null;
+}
+
+const TIER_NAMES = { 2: 'navigation', 3: 'active-tab', 4: 'recent', 5: 'priority' };
+
+/** `a` is clearly more specific than the tab's match `t` (tier 3 exception). */
+export function clearlyMoreSpecific(a, t) {
+  return wildTokens(t) > t.literals && wildTokens(a) === 0 && a.literals >= t.literals + 2;
+}
+
+const brief = (m) => (m ? { patternId: m.pattern.id, worldId: m.pattern.worldId, priority: m.pattern.priority } : null);
+
+/** Deterministic routing policy. `model(features) -> { worldId: number }` optionally orders tier 5 (learned head). */
+export function createRouter({ id = 'policy', model = null } = {}) {
+  return {
+    id,
+    route({ matches, context, scores = [], tokens = [] } = {}) {
+      const ctx = normalizeContext(context);
+      const list = [...matches];
+      const wscore = (w) => scores.find((s) => s.id === w)?.score ?? 0;
+      const learned = model ? (model({ text: tokens.map((t) => t.raw).join(' '), context: ctx, worlds: [...new Set(list.map((m) => m.pattern.worldId))] }) ?? {}) : {};
+      const maxOther = Math.max(-Infinity, ...list.filter((o) => !navigationKind(o)).map((o) => o.pattern.priority));
+      const isNav = (m) => {
+        const k = navigationKind(m);
+        return k === 'tab' || (k === 'setting' && m.pattern.priority >= maxOther);
+      };
+      const gameTab = !!ctx.tabWorld && ctx.tabWorld.startsWith('games.');
+      const ofTab = (m) => m.pattern.worldId === ctx.tabWorld || (gameTab && isGameControl(m));
+      const tabMatches = ctx.tabWorld ? list.filter((m) => ofTab(m) && !isNav(m)) : [];
+      const bestTab = [...tabMatches].sort(inTier(wscore))[0] ?? null;
+      const overriding = bestTab ? list.filter((m) => !isNav(m) && !ofTab(m) && clearlyMoreSpecific(m, bestTab)) : [];
+      const reasons = new Map();
+      for (const m of list) {
+        const w = m.pattern.worldId;
+        if (isNav(m)) { m.tier = 2; m.sub = 0; reasons.set(m, 'explicit navigation or settings command'); }
+        else if (overriding.includes(m)) { m.tier = 3; m.sub = 0; reasons.set(m, `more specific than the active tab's ${bestTab.pattern.id} (no wildcard, ${m.literals} vs ${bestTab.literals} literal words, tab match is a catch-all)`); }
+        else if (ofTab(m)) { m.tier = 3; m.sub = 1; reasons.set(m, `match from the world of the active tab (${ctx.activeTab ?? w})`); }
+        else if (w === ctx.gameWorld) { m.tier = 4; m.sub = 0; reasons.set(m, 'world with an active game'); }
+        else if (ctx.recentWorlds.includes(w)) { m.tier = 4; m.sub = 1 + ctx.recentWorlds.indexOf(w); reasons.set(m, w === ctx.lastWorld ? 'world that answered last' : 'recently used world'); }
+        else { m.tier = 5; m.sub = -(learned[w] ?? 0); reasons.set(m, 'best pattern priority'); }
+      }
+      list.sort((a, b) => a.tier - b.tier || a.sub - b.sub || inTier(wscore)(a, b));
+      const win = list[0] ?? null;
+      const runner = list.find((m) => m !== win && m.pattern.worldId !== win?.pattern.worldId) ?? list[1] ?? null;
+      const decision = win ? {
+        router: id, tier: win.tier, tierName: TIER_NAMES[win.tier], reason: reasons.get(win),
+        contested: list.some((m) => m !== win && m.pattern.worldId !== win.pattern.worldId),
+        winner: brief(win), runnerUp: runner ? { ...brief(runner), tier: runner.tier, reason: reasons.get(runner) } : null,
+        context: { activeTab: ctx.activeTab, tabWorld: ctx.tabWorld, gameWorld: ctx.gameWorld, recentWorlds: ctx.recentWorlds },
+      } : null;
+      return { matches: list, decision };
+    },
+  };
+}
+
+/** Order inside a tier: priority, literal words, fewer wildcard tokens, word-overlap score, pattern order. */
+function inTier(wscore) {
+  return (a, b) => b.pattern.priority - a.pattern.priority || b.literals - a.literals || a.skips - b.skips
+    || wscore(b.pattern.worldId) - wscore(a.pattern.worldId) || a.order - b.order;
+}
+
+/** The context-free default order of earlier versions: priority only (no tiers). Kept for comparisons. */
+export function createPriorityRouter() {
+  return {
+    id: 'priority',
+    route({ matches, scores = [] }) {
+      const wscore = (w) => scores.find((s) => s.id === w)?.score ?? 0;
+      const list = [...matches];
+      for (const m of list) { m.tier = 5; m.sub = 0; }
+      list.sort(inTier(wscore));
+      return { matches: list, decision: list[0] ? { router: 'priority', tier: 5, tierName: 'priority', reason: 'best pattern priority', contested: false, winner: brief(list[0]), runnerUp: brief(list[1]) } : null };
+    },
+  };
+}
+
+export const defaultRouter = createRouter();

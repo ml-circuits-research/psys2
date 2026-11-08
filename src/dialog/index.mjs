@@ -10,6 +10,7 @@
  */
 import { loadWorlds } from '../worlds/index.mjs';
 import { validateWorldSet } from '../worlds/validate.mjs';
+import { defaultRouter } from '../formalizer/routing.mjs';
 import { createInterpreter } from '../interpreter/index.mjs';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs';
@@ -18,7 +19,7 @@ import { splitSentences } from '../formalizer/rules/normalize.mjs';
 export { runWorldTests } from './test-runner.mjs';
 
 const plainSegment = (s) => ({
-  text: s.text, span: s.span, isQuestion: s.isQuestion, worlds: s.worlds, match: s.match,
+  text: s.text, span: s.span, isQuestion: s.isQuestion, worlds: s.worlds, routing: s.routing, match: s.match,
   unparsed: s.unparsed, alternatives: s.alternatives, errors: s.errors, strategy: s.strategy,
   wires: s.wires.map((w) => w.id),
 });
@@ -153,18 +154,28 @@ export class DialogSession {
   }
 
   /**
-   * Dialogue focus for ranking readings (spec 03 §4): +3 for the world that owns the active tab (ui.shell state),
-   * +1 for each of the last three worlds that produced a reading. Ties between worlds are then decided by context.
+   * Routing context (spec 03 section 4, ADR-004): what the application state says about where a command belongs.
+   * `{ activeTab, tabWorld, modalWorld, gameWorld, recentWorlds, lastWorld }`. The tab owner comes from the `tab=` of a
+   * world or the built-in tabs; `gameWorld` is `ui.shell` state `activeGame` (set by the host); `modalWorld` is the
+   * world whose state has an open `inputMode`.
    */
-  focus() {
-    const focus = {};
+  context() {
     const BUILTIN = { robot: 'ui.avatar', avatar: 'ui.avatar', editor: 'docs.editor', tictactoe: 'games.tictactoe', guess: 'games.guess', hangman: 'games.hangman' };
-    for (const w of this._recentWorlds ?? []) focus[w] = (focus[w] ?? 0) + 1;
-    const tab = this.isession.state['ui.shell']?.activeTab;
-    if (tab) {
-      const owner = this.engine.set.list().find((w) => w.tab?.id === tab)?.id ?? BUILTIN[tab];
-      if (owner) focus[owner] = (focus[owner] ?? 0) + 3;
-    }
+    const st = this.isession.state;
+    const activeTab = st['ui.shell']?.activeTab ?? null;
+    const tabWorld = activeTab ? (this.engine.set.list().find((w) => w.tab?.id === activeTab)?.id ?? BUILTIN[activeTab] ?? null) : null;
+    const modalWorld = Object.keys(st).find((id) => st[id]?.inputMode) ?? null;
+    const gameWorld = st['ui.shell']?.activeGame ?? null;
+    const recentWorlds = [...(this._recentWorlds ?? [])];
+    return { activeTab, tabWorld, modalWorld, gameWorld, recentWorlds, lastWorld: recentWorlds[0] ?? null };
+  }
+
+  /** Legacy focus map derived from the context: +3 for the tab world, +1 for each recent world. */
+  focus() {
+    const c = this.context();
+    const focus = {};
+    for (const w of c.recentWorlds) focus[w] = (focus[w] ?? 0) + 1;
+    if (c.tabWorld) focus[c.tabWorld] = (focus[c.tabWorld] ?? 0) + 3;
     return focus;
   }
 
@@ -179,7 +190,7 @@ export class DialogSession {
    */
   async _formalize(english, sid, preferred = this.formalizer) {
     const { set, formalizers } = this.engine;
-    const opts = { worlds: set, session: this.isession, source: sid, focus: this.focus() };
+    const opts = { worlds: set, session: this.isession, source: sid, context: this.context(), router: this.engine.router };
     const rules = formalizers.rules;
     const enc = preferred === 'encoder' ? formalizers.encoder : null;
     let usable = false;
@@ -305,6 +316,7 @@ export class DialogSession {
         intercepted: icpt?.worldId ?? null, effects, formalizer: { preferred: formalizer ?? this.formalizer, used: [...new Set(segments.map((s) => s.strategy))] },
         source: sid, language: lang, original: text, english, replyEnglish: englishReply,
         segments: segments.map(plainSegment), router: segments.map((s) => s.worlds),
+        routing: icpt ? [{ router: 'policy', tier: 1, tierName: 'modal', reason: `modal input of ${icpt.worldId}`, contested: false, winner: { worldId: icpt.worldId }, runnerUp: null }] : segments.map((s) => s.routing ?? null),
         patterns: segments.filter((s) => s.match).map((s) => s.match.patternId),
         operations: icpt ? [...ops, ...icpt.ops] : ops, statuses, wires: [...wires, ...answerWires].map((w) => w.id),
       },
@@ -317,7 +329,7 @@ export async function createEngine({ loader, translator = null, options = {}, fo
   const set = await loadWorlds(loader);
   const interp = createInterpreter(set, options);
   const engine = {
-    set, interp, translator, loader,
+    set, interp, translator, loader, router: options.router ?? defaultRouter,
     /** Formalizer strategies by id (spec 06); `formalizers` overrides them (tests, an encoder endpoint). */
     formalizers: { rules: createRulesFormalizer(), encoder: createEncoderFormalizer({ endpoint: options.encoderEndpoint ?? null }), ...formalizers },
     /** Problems found at load time and by static validation (empty when everything is consistent). */

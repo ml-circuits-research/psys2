@@ -15,6 +15,8 @@
  *
  * Usage: node scripts/export-training.mjs [--world <id>] [--count <n per world>] [--out-dir training/data]
  *                                         [--dev 0.1] [--root worlds] [--seed-salt <text>] [--no-rules]
+ *                                         [--routing-context]   attach the generator's world as the active tab; report agreement
+ *                                                               with and without that routing context
  */
 import { writeFileSync, mkdirSync, readFileSync, existsSync } from 'node:fs';
 import { resolve, join } from 'node:path';
@@ -109,12 +111,17 @@ function spansOf(res, patterns) {
 const sha = (s) => createHash('sha256').update(s).digest('hex').slice(0, 16);
 
 /** Formalize `messages` in order inside one fresh session; returns the result of the last one. */
-function formalizeSession(set, messages) {
+function formalizeSession(set, messages, { context = null, router } = {}) {
   const form = new FormSession();
   form.initDefaults();
   let res = null;
-  messages.forEach((m, i) => { res = formalize(m, { worlds: set, session: form, source: `msg${i + 1}` }); });
+  messages.forEach((m, i) => { res = formalize(m, { worlds: set, session: form, source: `msg${i + 1}`, context, router }); });
   return res;
+}
+
+/** Routing context of a generator's own world as the active tab (spec 03 section 4, ADR-004). */
+export function routingContextOf(world) {
+  return { activeTab: world.tab?.id ?? world.id, tabWorld: world.id, recentWorlds: [world.id] };
 }
 
 /** Plain data handed to generators through `context` (generators stay browser-safe and import nothing). */
@@ -159,9 +166,10 @@ const bump = (o, k) => { o[k] = (o[k] ?? 0) + 1; };
 
 /**
  * Export. Returns { records: Map(worldId -> record[]), report }.
- * `opts`: { root, world, count, devShare, seedSalt, ruleDerived (default true), log }
+ * `opts`: { root, world, count, devShare, seedSalt, ruleDerived (default true), routing (attach the generator's world as
+ * routing context and report agreement with and without it), log }
  */
-export async function exportTraining({ root = DEFAULT_ROOT, world: only = null, count = DEFAULT_COUNT, devShare = 0.1, seedSalt = '', ruleDerived = true, log = () => {} } = {}) {
+export async function exportTraining({ root = DEFAULT_ROOT, world: only = null, count = DEFAULT_COUNT, devShare = 0.1, seedSalt = '', ruleDerived = true, routing = false, log = () => {} } = {}) {
   const loader = createFsLoader({ roots: [root] });
   const set = await loadWorlds(loader);
   const legends = set.legends;
@@ -234,14 +242,28 @@ export async function exportTraining({ root = DEFAULT_ROOT, world: only = null, 
     const seed = seedOf(w.id, version, seedSalt);
     let items;
     try { items = await runGenerator(mod, { world: w, set, count, seed }); } catch (e) { gen.set(w.id, { error: `generate failed: ${e.message}`, version, seed }); continue; }
-    const stat = { seed, version, total: 0, by_status: {}, positives: 0, positives_agree: 0, negatives: 0, negatives_ok: 0, invalid_expect: 0, gap_groups: {}, gap_examples: {} };
+    const stat = { seed, version, total: 0, by_status: {}, positives: 0, positives_agree: 0, negatives: 0, negatives_ok: 0, invalid_expect: 0, plain_ok: 0, plain_total: 0, context_ok: 0, context_total: 0, gap_groups: {}, gap_examples: {} };
     gen.set(w.id, stat);
     for (const it of items) {
       const context = Array.isArray(it.context) ? it.context : [];
       const group = String(it.group ?? 'default');
       const negative = !!it.negative;
       let status, note = null, res;
-      try { res = formalizeSession(set, [...context, it.text]); } catch (e) { res = { segments: [], wires: [] }; note = `formalizer error: ${e.message}`; }
+      const rctx = routing ? routingContextOf(w) : null;
+      const okOf = (r) => {
+        const fw = r.segments.some((s) => s.match && s.match.worldId === w.id);
+        if (negative) return !fw;
+        return !!it.expect && JSON.stringify(canonicalWires(r.segments.flatMap((s) => s.wires), legends)) === JSON.stringify(canonicalWires(parse(String(it.expect), { source: group }).wires.map((x) => x), legends));
+      };
+      try {
+        res = formalizeSession(set, [...context, it.text], { context: rctx });
+        if (routing) {
+          // same text without routing context: counted as a plain agreement, to measure what the context buys
+          const plain = formalizeSession(set, [...context, it.text]);
+          stat.plain_total++; stat.context_total++;
+          try { if (okOf(plain)) stat.plain_ok++; if (okOf(res)) stat.context_ok++; } catch { /* invalid expect: counted as disagreement */ }
+        }
+      } catch (e) { res = { segments: [], wires: [] }; note = `formalizer error: ${e.message}`; }
       const gotWires = res.segments.flatMap((s) => s.wires);
       const got = canonicalWires(gotWires, legends);
       const fromThisWorld = res.segments.some((s) => s.match && s.match.worldId === w.id);
@@ -286,6 +308,7 @@ export async function exportTraining({ root = DEFAULT_ROOT, world: only = null, 
         source_group: `${w.id}/${group}`, group, language: 'en',
         text: it.text, message, context, segment_span: [0, it.text.length],
         mentions, keys, references,
+        ...(routing ? { routing: { context: rctx, decision: res.segments.find((x) => x.routing)?.routing ?? null } } : {}),
         kind: it.kind ?? it.phenomenon ?? 'statement',
         expected_circuit: expectedCircuit,
         label_status: status, phenomenon: it.phenomenon ?? 'statement', negative,
@@ -319,6 +342,10 @@ export async function exportTraining({ root = DEFAULT_ROOT, world: only = null, 
           positives: g.positives, positives_agree: g.positives_agree, negatives: g.negatives, negatives_ok: g.negatives_ok,
           invalid_expect: g.invalid_expect,
         };
+        if (g.context_total) {
+          entry.agreement.without_context = Number((g.plain_ok / g.plain_total).toFixed(4));
+          entry.agreement.with_context = Number((g.context_ok / g.context_total).toFixed(4));
+        }
         entry.pattern_gaps = Object.entries(g.gap_groups).sort((a, b) => b[1] - a[1]).map(([group, n]) => ({ group, count: n, example: g.gap_examples[group] }));
       }
     }
@@ -347,7 +374,7 @@ if (isMain) {
   const count = Number(opt('--count', DEFAULT_COUNT));
   const devShare = Number(opt('--dev', '0.1'));
   const seedSalt = opt('--seed-salt', '');
-  const { records, report } = await exportTraining({ root, world: only, count, devShare, seedSalt, ruleDerived: !args.includes('--no-rules') });
+  const { records, report } = await exportTraining({ root, world: only, count, devShare, seedSalt, ruleDerived: !args.includes('--no-rules'), routing: args.includes('--routing-context') });
   mkdirSync(outDir, { recursive: true });
   for (const [id, recs] of records) {
     writeFileSync(join(outDir, `${id}.jsonl`), recs.map((r) => JSON.stringify(r)).join('\n') + (recs.length ? '\n' : ''));
@@ -374,7 +401,7 @@ if (isMain) {
     total += recs.length;
     const e = report.worlds[id];
     const a = e?.agreement;
-    console.log(`${id.padEnd(16)} ${String(recs.length).padStart(6)} records  ${Object.entries(e.by_status).map(([k, v]) => `${k}=${v}`).join(' ')}${a ? `  agreement=${a.rate} (positives ${a.positive_rate})` : ''}`);
+    console.log(`${id.padEnd(16)} ${String(recs.length).padStart(6)} records  ${Object.entries(e.by_status).map(([k, v]) => `${k}=${v}`).join(' ')}${a ? `  agreement=${a.rate} (positives ${a.positive_rate})${a.with_context != null ? ` plain=${a.without_context} context=${a.with_context}` : ''}` : ''}`);
   }
   console.log(`wrote ${total} records for ${records.size} worlds to ${outDir}`);
 }
