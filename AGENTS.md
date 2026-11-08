@@ -21,7 +21,7 @@
 - Open-source libraries are allowed for the **browser host UI** (avatar, games, editor widgets, speech helpers), never in the core. They are vendored as **one bundled file per library** under `docs/webchat/vendor/` (built with a bundler in a temporary directory, not added to `package.json`), each with a header comment naming the library, version, source URL and licence, and listed in `docs/webchat/vendor/README.md`. Licences must be compatible with GPL-3.0 (MIT, BSD, Apache-2.0, ISC, MPL-2.0). Prefer no library when a few dozen lines of our own code do the job.
 - Python lives under `training/` with pinned requirements; it is never imported by the Node core, only run as a separate process.
 - Every behaviour is specified in `specs/` before or together with its implementation. If code and spec disagree, fix one of them in the same commit.
-- No generative LLM is used in C2 (operation). LLMs may only be used by coding agents during C1/C3 authoring.
+- No generative LLM is used in C2 (operation). LLMs may only be used by coding agents during C1/C3 authoring. Exception (user decision 2026-11-08): a small seq2seq **normalizer** (about 100M parameters at most, e.g. T5-small) may run in C2. It only proposes a simpler phrasing, which the world's rules must formalize and a value checker (numbers, names, negation) must accept; the rules stay the only formalizer.
 - Worlds marked `status=fixture` are hand-built platform fixtures and demos; they are not produced by the C1 workflow and must say so.
 - Tests: `npm test` must pass before committing. Every world ships `tests.sop` and must pass `node src/cli.mjs test-world <id>`.
 - Commits go directly to `main` (no pull requests for now). Small, descriptive commits.

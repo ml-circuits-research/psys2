@@ -106,6 +106,29 @@ For **every world with operations** (all 20; `core` holds only the shared legend
 
 Log as `R2 <world>` entries plus one `R2 summary` table: world · catalogue lines · supported · tests · rules-only coverage before → after · fresh-batch coverage.
 
+### N1 — seq2seq normalizer experiment (user decision 13:16; run on the GPU in parallel with R2)
+
+Idea: a small encoder-decoder rewrites any user sentence into the **simplest phrasing that keeps the meaning and that the rules understand**. The rules then only need to cover simple forms, and the normalizer absorbs the variety. The rules stay the formalizer (AGENTS.md exception: the output must validate with the rules and pass a value checker).
+
+1. **Training pairs (source → simplest form).** Build `scripts/build-normalizer-pairs.mjs`. Each pair is kept only if the target formalizes to the same SOP as the source's label (verified by the rules), and as many pairs as possible:
+   - Haiku paraphrase variants → their canonical, and → any pattern `example=` of the same world that formalizes to the same SOP; choose the shortest one that validates;
+   - all generator / rule-derived / canonical sentences → themselves (identity pairs, so clean sentences stay as they are), plus → a shorter equivalent when the rules give the same SOP;
+   - synthetic noise on clean sentences (typos, abbreviations, fillers, politeness, voice run-ons, word-order swaps) → the clean sentence: unlimited, labels known;
+   - optionally, Haiku batches in the reverse direction: give Haiku existing sentences and ask for the simplest equivalent, then keep only the rule-verified ones;
+   - multi-command messages are split by the dispatcher first; the normalizer sees single pieces.
+2. **Models:** FLAN-T5-small (77M) first, then T5-small and ByT5-small (character-level, good at typos). Input = world candidate + tab + the piece; output = the simplified piece.
+3. **In the pipeline** (`src/dialog/dispatch-validate.mjs`): try the original piece first. If it does not validate, try the normalizer output, beam 3, and accept the first candidate that validates and passes the **value checker**: numbers, names, colours and negation are preserved; reuse the translation checker idea (ADR-002).
+4. **Metrics** on the paraphrase sources and on a fresh Haiku batch:
+   - recovered (original fails, normalized right);
+   - misled (normalized validates with a different SOP);
+   - headline before → after;
+   - compared with the D1b edit-tag head on the same messages.
+   
+   Target: misled ≤ ¼ of recovered, and a clear headline gain.
+5. **Browser:** int8 ONNX export (encoder + decoder with past key values), size, latency per piece with transformers.js or onnxruntime-web. Do not publish until the reviewer has seen the numbers.
+
+Log as `N1` with the pair counts per source, the model comparison table and the browser numbers.
+
 ### R1 — continuous rule widening (main task from now on, run in loops)
 
 Loop until the session ends:
@@ -120,7 +143,7 @@ Loop until the session ends:
 
 **The goal of this session is to avoid training per-world models.** We validate one idea first: a single small shared model, the **dispatcher**, proposes candidates, and the existing rule formalizers validate them. No per-world LoRA in this session.
 
-Order: **R2 (main, finishes this stage)**, with R1 loops as its engine, then D5. T9 is updated at the end of the session. D1, D2, D3, D4 are done; D1b is accepted as partial, with its policy below.
+Order: **R2 (main, finishes this stage)**, with R1 loops as its engine; **N1 in parallel on the GPU**; then D5. T9 is updated at the end of the session. D1, D2, D3, D4 are done; D1b is accepted as partial, with its policy below.
 
 2. **D1 — dispatcher model:** done and validated (segmentation + world heads; DistilBERT kept as the main model).
    **D1b — simplification head (still open, do after D3).** It is the third head of Round 1: KEEP / DELETE / REPLACE edit tags, learned from aligning the paraphrase variants with their canonical phrasings. D3 will show how many failures are rule gaps on messy wording; this head targets exactly those. Add it to the DistilBERT dispatcher, export it in the same ONNX model, and use it in the validation layer: try the simplified text when the original does not validate. Report the headline metric before and after.
