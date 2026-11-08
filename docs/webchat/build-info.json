@@ -99,7 +99,7 @@
     "worlds/games.tictactoe/ops.mjs": "7e85fc09ef9be20a",
     "worlds/geo.map/datagen.mjs": "7bdabe28b74dfa9e",
     "worlds/geo.map/ops.mjs": "9d2167c0adb790b8",
-    "worlds/index.json": "b30ea898e3a32681",
+    "worlds/index.json": "267a35f182c885d0",
     "worlds/kids.animals/datagen.mjs": "6ad9f00ea4316ed7",
     "worlds/kids.animals/ops.mjs": "644e845de473918a",
     "worlds/kids.arith/datagen.mjs": "eaddc6e69e6c0b20",
@@ -126,5 +126,5 @@
     "worlds/ui.shell/datagen.mjs": "ed03fcd2c4012de6",
     "worlds/ui.shell/ops.mjs": "41fb8a42f31b821f"
   },
-  "builtAt": "2026-11-08T14:41:43.948Z"
+  "builtAt": "2026-11-08T14:54:51.830Z"
 }
