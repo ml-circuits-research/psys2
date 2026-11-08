@@ -1,0 +1,589 @@
+@tpl.art.draw.add core.template
+    for=action.draw.add
+    text="{value}"
+
+@tpl.art.draw.add.unsupported core.template
+    for=action.draw.add
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.add.missing core.template
+    for=action.draw.add
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.add.error core.template
+    for=action.draw.add
+    status=error
+    text="{note}"
+
+@tpl.art.draw.ground core.template
+    for=action.draw.ground
+    text="{value}"
+
+@tpl.art.draw.ground.unsupported core.template
+    for=action.draw.ground
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.ground.missing core.template
+    for=action.draw.ground
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.ground.error core.template
+    for=action.draw.ground
+    status=error
+    text="{note}"
+
+@tpl.art.draw.scene core.template
+    for=action.draw.scene
+    text="{value}"
+
+@tpl.art.draw.scene.unsupported core.template
+    for=action.draw.scene
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.scene.missing core.template
+    for=action.draw.scene
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.scene.error core.template
+    for=action.draw.scene
+    status=error
+    text="{note}"
+
+@tpl.art.draw.mood core.template
+    for=action.draw.mood
+    text="{value}"
+
+@tpl.art.draw.mood.unsupported core.template
+    for=action.draw.mood
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.mood.missing core.template
+    for=action.draw.mood
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.mood.error core.template
+    for=action.draw.mood
+    status=error
+    text="{note}"
+
+@tpl.art.draw.recolor core.template
+    for=action.draw.recolor
+    text="{value}"
+
+@tpl.art.draw.recolor.unsupported core.template
+    for=action.draw.recolor
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.recolor.missing core.template
+    for=action.draw.recolor
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.recolor.error core.template
+    for=action.draw.recolor
+    status=error
+    text="{note}"
+
+@tpl.art.draw.givePart core.template
+    for=action.draw.givePart
+    text="{value}"
+
+@tpl.art.draw.givePart.unsupported core.template
+    for=action.draw.givePart
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.givePart.missing core.template
+    for=action.draw.givePart
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.givePart.error core.template
+    for=action.draw.givePart
+    status=error
+    text="{note}"
+
+@tpl.art.draw.resize core.template
+    for=action.draw.resize
+    text="{value}"
+
+@tpl.art.draw.resize.unsupported core.template
+    for=action.draw.resize
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.resize.missing core.template
+    for=action.draw.resize
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.resize.error core.template
+    for=action.draw.resize
+    status=error
+    text="{note}"
+
+@tpl.art.draw.setSize core.template
+    for=action.draw.setSize
+    text="{value}"
+
+@tpl.art.draw.setSize.unsupported core.template
+    for=action.draw.setSize
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.setSize.missing core.template
+    for=action.draw.setSize
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.setSize.error core.template
+    for=action.draw.setSize
+    status=error
+    text="{note}"
+
+@tpl.art.draw.move core.template
+    for=action.draw.move
+    text="{value}"
+
+@tpl.art.draw.move.unsupported core.template
+    for=action.draw.move
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.move.missing core.template
+    for=action.draw.move
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.move.error core.template
+    for=action.draw.move
+    status=error
+    text="{note}"
+
+@tpl.art.draw.nudge core.template
+    for=action.draw.nudge
+    text="{value}"
+
+@tpl.art.draw.nudge.unsupported core.template
+    for=action.draw.nudge
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.nudge.missing core.template
+    for=action.draw.nudge
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.nudge.error core.template
+    for=action.draw.nudge
+    status=error
+    text="{note}"
+
+@tpl.art.draw.turn core.template
+    for=action.draw.turn
+    text="{value}"
+
+@tpl.art.draw.turn.unsupported core.template
+    for=action.draw.turn
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.turn.missing core.template
+    for=action.draw.turn
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.turn.error core.template
+    for=action.draw.turn
+    status=error
+    text="{note}"
+
+@tpl.art.draw.remove core.template
+    for=action.draw.remove
+    text="{value}"
+
+@tpl.art.draw.remove.unsupported core.template
+    for=action.draw.remove
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.remove.missing core.template
+    for=action.draw.remove
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.remove.error core.template
+    for=action.draw.remove
+    status=error
+    text="{note}"
+
+@tpl.art.draw.removeIt core.template
+    for=action.draw.removeIt
+    text="{value}"
+
+@tpl.art.draw.removeIt.unsupported core.template
+    for=action.draw.removeIt
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.removeIt.missing core.template
+    for=action.draw.removeIt
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.removeIt.error core.template
+    for=action.draw.removeIt
+    status=error
+    text="{note}"
+
+@tpl.art.draw.clearAll core.template
+    for=action.draw.clearAll
+    text="{value}"
+
+@tpl.art.draw.clearAll.unsupported core.template
+    for=action.draw.clearAll
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.clearAll.missing core.template
+    for=action.draw.clearAll
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.clearAll.error core.template
+    for=action.draw.clearAll
+    status=error
+    text="{note}"
+
+@tpl.art.draw.new core.template
+    for=action.draw.new
+    text="{value}"
+
+@tpl.art.draw.new.unsupported core.template
+    for=action.draw.new
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.new.missing core.template
+    for=action.draw.new
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.new.error core.template
+    for=action.draw.new
+    status=error
+    text="{note}"
+
+@tpl.art.draw.undo core.template
+    for=action.draw.undo
+    text="{value}"
+
+@tpl.art.draw.undo.unsupported core.template
+    for=action.draw.undo
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.undo.missing core.template
+    for=action.draw.undo
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.undo.error core.template
+    for=action.draw.undo
+    status=error
+    text="{note}"
+
+@tpl.art.draw.redo core.template
+    for=action.draw.redo
+    text="{value}"
+
+@tpl.art.draw.redo.unsupported core.template
+    for=action.draw.redo
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.redo.missing core.template
+    for=action.draw.redo
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.redo.error core.template
+    for=action.draw.redo
+    status=error
+    text="{note}"
+
+@tpl.art.draw.select core.template
+    for=action.draw.select
+    text="{value}"
+
+@tpl.art.draw.select.unsupported core.template
+    for=action.draw.select
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.select.missing core.template
+    for=action.draw.select
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.select.error core.template
+    for=action.draw.select
+    status=error
+    text="{note}"
+
+@tpl.art.draw.deselect core.template
+    for=action.draw.deselect
+    text="{value}"
+
+@tpl.art.draw.deselect.unsupported core.template
+    for=action.draw.deselect
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.deselect.missing core.template
+    for=action.draw.deselect
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.deselect.error core.template
+    for=action.draw.deselect
+    status=error
+    text="{note}"
+
+@tpl.art.draw.fill core.template
+    for=action.draw.fill
+    text="{value}"
+
+@tpl.art.draw.fill.unsupported core.template
+    for=action.draw.fill
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.fill.missing core.template
+    for=action.draw.fill
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.fill.error core.template
+    for=action.draw.fill
+    status=error
+    text="{note}"
+
+@tpl.art.draw.duplicate core.template
+    for=action.draw.duplicate
+    text="{value}"
+
+@tpl.art.draw.duplicate.unsupported core.template
+    for=action.draw.duplicate
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.duplicate.missing core.template
+    for=action.draw.duplicate
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.duplicate.error core.template
+    for=action.draw.duplicate
+    status=error
+    text="{note}"
+
+@tpl.art.draw.describe core.template
+    for=action.draw.describe
+    text="{value}"
+
+@tpl.art.draw.describe.unsupported core.template
+    for=action.draw.describe
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.describe.missing core.template
+    for=action.draw.describe
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.describe.error core.template
+    for=action.draw.describe
+    status=error
+    text="{note}"
+
+@tpl.art.draw.count core.template
+    for=action.draw.count
+    text="{value}"
+
+@tpl.art.draw.count.unsupported core.template
+    for=action.draw.count
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.count.missing core.template
+    for=action.draw.count
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.count.error core.template
+    for=action.draw.count
+    status=error
+    text="{note}"
+
+@tpl.art.draw.where core.template
+    for=action.draw.where
+    text="{value}"
+
+@tpl.art.draw.where.unsupported core.template
+    for=action.draw.where
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.where.missing core.template
+    for=action.draw.where
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.where.error core.template
+    for=action.draw.where
+    status=error
+    text="{note}"
+
+@tpl.art.draw.exists core.template
+    for=action.draw.exists
+    text="{value}"
+
+@tpl.art.draw.exists.unsupported core.template
+    for=action.draw.exists
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.exists.missing core.template
+    for=action.draw.exists
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.exists.error core.template
+    for=action.draw.exists
+    status=error
+    text="{note}"
+
+@tpl.art.draw.colorOf core.template
+    for=action.draw.colorOf
+    text="{value}"
+
+@tpl.art.draw.colorOf.unsupported core.template
+    for=action.draw.colorOf
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.colorOf.missing core.template
+    for=action.draw.colorOf
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.colorOf.error core.template
+    for=action.draw.colorOf
+    status=error
+    text="{note}"
+
+@tpl.art.draw.near core.template
+    for=action.draw.near
+    text="{value}"
+
+@tpl.art.draw.near.unsupported core.template
+    for=action.draw.near
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.near.missing core.template
+    for=action.draw.near
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.near.error core.template
+    for=action.draw.near
+    status=error
+    text="{note}"
+
+@tpl.art.draw.help core.template
+    for=action.draw.help
+    text="{value}"
+
+@tpl.art.draw.help.unsupported core.template
+    for=action.draw.help
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.help.missing core.template
+    for=action.draw.help
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.help.error core.template
+    for=action.draw.help
+    status=error
+    text="{note}"
+
+@tpl.art.draw.colors core.template
+    for=action.draw.colors
+    text="{value}"
+
+@tpl.art.draw.colors.unsupported core.template
+    for=action.draw.colors
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.colors.missing core.template
+    for=action.draw.colors
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.colors.error core.template
+    for=action.draw.colors
+    status=error
+    text="{note}"
+
+@tpl.art.draw.save core.template
+    for=action.draw.save
+    text="{value}"
+
+@tpl.art.draw.save.unsupported core.template
+    for=action.draw.save
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.save.missing core.template
+    for=action.draw.save
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.save.error core.template
+    for=action.draw.save
+    status=error
+    text="{note}"
+
+@tpl.art.draw.open core.template
+    for=action.draw.open
+    text="{value}"
+
+@tpl.art.draw.open.unsupported core.template
+    for=action.draw.open
+    status=unsupported
+    text="{note}"
+
+@tpl.art.draw.open.missing core.template
+    for=action.draw.open
+    status=missing
+    text="{note}"
+
+@tpl.art.draw.open.error core.template
+    for=action.draw.open
+    status=error
+    text="{note}"
+

@@ -1,0 +1,186 @@
+@op.art.draw.add core.operation
+    impl=add
+    semantics=action
+    action=draw.add
+    doc="Draws one or more things (kind, count, size, color, parts, place) and answers what it drew. Brings the Drawing tab forward."
+
+@op.art.draw.ground core.operation
+    impl=ground
+    semantics=action
+    action=draw.ground
+    doc="Adds grass, sand, snow or water to the ground."
+
+@op.art.draw.scene core.operation
+    impl=scene
+    semantics=action
+    action=draw.scene
+    doc="Draws a seeded surprise scene with sun, clouds, house, trees and flowers."
+
+@op.art.draw.setMood core.operation
+    impl=setMood
+    semantics=action
+    action=draw.mood
+    doc="Night (dark sky, moon and stars), day (blue sky and sun) or sunset."
+
+@op.art.draw.recolor core.operation
+    impl=recolor
+    semantics=action
+    action=draw.recolor
+    doc="Colors an object, a part of it (roof, door, wheels), the sky, the ground or the background."
+
+@op.art.draw.givePart core.operation
+    impl=givePart
+    semantics=action
+    action=draw.givePart
+    doc="Colors a named part of a thing: give the house a blue door."
+
+@op.art.draw.resize core.operation
+    impl=resize
+    semantics=action
+    action=draw.resize
+    doc="Makes things bigger or smaller by a relative amount."
+
+@op.art.draw.setSize core.operation
+    impl=setSize
+    semantics=action
+    action=draw.setSize
+    doc="Sets the size by a word: tiny, small, big, huge."
+
+@op.art.draw.move core.operation
+    impl=move
+    semantics=action
+    action=draw.move
+    doc="Moves things to a named region, by a step, or next to / above / under / between other things."
+
+@op.art.draw.nudge core.operation
+    impl=nudge
+    semantics=action
+    action=draw.nudge
+    doc="Moves things a bit higher, lower, left or right."
+
+@op.art.draw.turn core.operation
+    impl=turn
+    semantics=action
+    action=draw.turn
+    doc="Turns things around, to face a side, upside down or by degrees."
+
+@op.art.draw.remove core.operation
+    impl=remove
+    semantics=action
+    action=draw.remove
+    doc="Deletes things, the sky color or the ground; \"everything except\" keeps some things."
+
+@op.art.draw.removeIt core.operation
+    impl=removeIt
+    semantics=action
+    action=draw.removeIt
+    doc="Deletes the selected thing or what was just drawn (with the editor open: its selection)."
+
+@op.art.draw.clearEverything core.operation
+    impl=clearEverything
+    semantics=action
+    action=draw.clearAll
+    doc="Clears the whole picture (shared with the document editor: with the editor open it clears the document)."
+
+@op.art.draw.newDrawing core.operation
+    impl=newDrawing
+    semantics=action
+    action=draw.new
+    doc="Starts a new drawing; undo brings the old one back."
+
+@op.art.draw.undo core.operation
+    impl=undo
+    semantics=action
+    action=draw.undo
+    doc="Undoes the last change (history of 50); when the editor tab is open it undoes the document instead."
+
+@op.art.draw.redo core.operation
+    impl=redo
+    semantics=action
+    action=draw.redo
+    doc="Redoes what was undone."
+
+@op.art.draw.select core.operation
+    impl=select
+    semantics=action
+    action=draw.select
+    doc="Selects a thing (outlined in the tab); also what a click on the tab sends."
+
+@op.art.draw.deselect core.operation
+    impl=deselect
+    semantics=action
+    action=draw.deselect
+    doc="Clears the selection."
+
+@op.art.draw.fillMode core.operation
+    impl=fillMode
+    semantics=action
+    action=draw.fill
+    doc="Fills in with crayon, solid color, or leaves only an outline."
+
+@op.art.draw.duplicate core.operation
+    impl=duplicate
+    semantics=action
+    action=draw.duplicate
+    doc="Copies a thing."
+
+@op.art.draw.describe core.operation
+    impl=describe
+    semantics=action
+    action=draw.describe
+    doc="Describes the picture in words: things, places, sky and ground."
+
+@op.art.draw.count core.operation
+    impl=count
+    semantics=action
+    action=draw.count
+    doc="Counts things of a kind (and color)."
+
+@op.art.draw.whereIs core.operation
+    impl=whereIs
+    semantics=action
+    action=draw.where
+    doc="Tells where a thing is."
+
+@op.art.draw.exists core.operation
+    impl=exists
+    semantics=action
+    action=draw.exists
+    doc="Tells whether a thing is in the picture."
+
+@op.art.draw.colorOfThing core.operation
+    impl=colorOfThing
+    semantics=action
+    action=draw.colorOf
+    doc="Tells the color of a thing, a part, the sky or the ground."
+
+@op.art.draw.whatsNear core.operation
+    impl=whatsNear
+    semantics=action
+    action=draw.near
+    doc="Tells what is near a thing."
+
+@op.art.draw.help core.operation
+    impl=help
+    semantics=action
+    action=draw.help
+    doc="Tells what can be drawn."
+
+@op.art.draw.colors core.operation
+    impl=colors
+    semantics=action
+    action=draw.colors
+    doc="Tells which colors can be used."
+
+@op.art.draw.save core.operation
+    impl=save
+    semantics=action
+    action=draw.save
+    doc="Queues the effect draw.download (PNG or SVG)."
+
+@op.art.draw.openTab core.operation
+    impl=openTab
+    semantics=action
+    action=draw.open
+    doc="Brings the Drawing tab forward."
+

@@ -1,0 +1,420 @@
+@pat.art.draw.add core.pattern
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us]? [draw|sketch|paint|add|make|put|create|give_me|show_me|i_want|i_would_like|i_need|draw_me|paint_me|make_me|sketch_me|let_us_draw|i_want_to_draw|i_would_like_to_draw|how_about|can_i_have|i_will_have|i_want_to_add|i_would_like_to_add|throw_in] [a_picture_of|a_drawing_of|a_painting_of|a_sketch_of|a_picture_with]? [a|an|another|1_more|more|some|a_few]? {n:number?} {q:lex.art.draw.quantity?} [of]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {m3:lex.art.draw.mods?} {k:lex.art.draw.things} {w:rest?}"
+    emit="@{_} core.request action=draw.add arg.n={n} arg.q={q} arg.m1={m1} arg.m2={m2} arg.m3={m3} arg.kind={k} arg.kt=\"{k}\" arg.where=\"{w}\""
+    kind=request
+    priority=12
+    example="Draw a red house."
+    example="Draw three trees."
+    example="Put a big yellow sun in the top right corner."
+    example="Add a cloud next to the sun."
+    example="Draw a cat under the tree."
+    example="Draw a house with a red roof and a blue door."
+    example="Add 5 stars."
+    example="Draw a small blue fish."
+    doc="Draws one or more things: count, size, color, kind, and an optional place or parts (\"in the top right corner\", \"next to the sun\", \"with a red roof\")."
+
+@pat.art.draw.add.the core.pattern
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us]? [draw|sketch|draw_me|sketch_me] the {n:number?} {q:lex.art.draw.quantity?} {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {m3:lex.art.draw.mods?} {k:lex.art.draw.things} {w:rest?}"
+    emit="@{_} core.request action=draw.add arg.n={n} arg.q={q} arg.m1={m1} arg.m2={m2} arg.m3={m3} arg.kind={k} arg.kt=\"{k}\" arg.where=\"{w}\""
+    kind=request
+    priority=12
+    example="Draw the sun."
+    example="Sketch the moon in the sky."
+
+@pat.art.draw.ground core.pattern
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us]? [draw|add|put|make|paint|create|give_me|i_want|i_need|show_me|add_some|draw_some] [me]? [some|the|a_bit_of|more|a|a_lot_of]? {g:lex.art.draw.ground} [on_the_ground|to_the_ground|to_the_picture|to_my_picture|to_my_drawing|to_it|everywhere|at_the_bottom|on_the_floor|to_the_bottom]?"
+    emit="@{_} core.request action=draw.ground arg.g={g}"
+    kind=request
+    priority=13
+    example="Add grass."
+    example="Draw some sand."
+    example="Add some snow to the ground."
+    example="Put water on the ground."
+
+@pat.art.draw.scene core.pattern
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us]? [draw|make|paint|create|show|sketch|give] [me|us]? [a|an|something|anything|a_surprise]? [random|nice|pretty|beautiful|lovely|surprise|new|cool|happy|sunny]? [picture|scene|landscape|drawing|something|surprise|painting|masterpiece]"
+    emit="@{_} core.request action=draw.scene"
+    kind=request
+    priority=13
+    example="Draw me a nice picture."
+    example="Draw something."
+    example="Paint a landscape."
+
+@pat.art.draw.night core.pattern
+    match="[make|turn|let|set|change|switch|go] [it|the_picture|the_drawing|the_sky|the_scene|the_day|everything]? [into|to|be|become]? [a|the]? {w:lex.art.draw.times} [time|day|night|please]?"
+    emit="@{_} core.request action=draw.mood arg.w={w}"
+    kind=request
+    priority=13
+    example="Make it night."
+    example="Make it day."
+    example="Make it a sunny day."
+    example="Turn it into sunset."
+
+@pat.art.draw.night.is core.pattern
+    match="[it_is|it_was|it_gets|it_becomes] {w:lex.art.draw.times} [time|now|outside]?"
+    emit="@{_} core.request action=draw.mood arg.w={w}"
+    kind=request
+    priority=12
+    example="It is night."
+
+@pat.art.draw.recolor core.pattern
+    match="[make|color|colour|paint|turn|dye|fill|change|set|shade|crayon|color_in|colour_in] {t:words(7)} [to|into|in|with|using|be]? {sh:lex.art.draw.shades?} {c:lex.art.draw.colors}"
+    emit="@{_} core.request action=draw.recolor arg.t=\"{t}\" arg.shade={sh} arg.color={c}"
+    kind=request
+    priority=13
+    example="Color the sun orange."
+    example="Make the sky dark blue."
+    example="Paint the house blue."
+    example="Make the roof of the house green."
+    example="Color the door brown."
+    example="Make it red."
+    example="Change the grass to light green."
+
+@pat.art.draw.part core.pattern
+    match="[give|put] {t:words(5)} [a|an|some|its]? {sh:lex.art.draw.shades?} {c:lex.art.draw.colors} {part:words(2)}"
+    emit="@{_} core.request action=draw.givePart arg.t=\"{t}\" arg.shade={sh} arg.color={c} arg.part=\"{part}\""
+    kind=request
+    priority=11
+    example="Give the house a blue door."
+    example="Give the car black wheels."
+
+@pat.art.draw.grow core.pattern
+    match="[make|let|turn|get] {t:words(6)} {amt:lex.art.draw.amounts?} {d:lex.art.draw.grow}"
+    emit="@{_} core.request action=draw.resize arg.t=\"{t}\" arg.amt={amt} arg.d={d}"
+    kind=request
+    priority=15
+    example="Make the house bigger."
+    example="Make the tree a bit smaller."
+    example="Make it much bigger."
+    example="Make the sun twice as big."
+
+@pat.art.draw.enlarge core.pattern
+    match="[enlarge|grow|expand|blow_up|inflate|increase|scale_up|magnify] {t:words(6)} {amt:lex.art.draw.amounts?}"
+    emit="@{_} core.request action=draw.resize arg.t=\"{t}\" arg.amt={amt} arg.d=bigger"
+    kind=request
+    priority=13
+    example="Enlarge the sun."
+    example="Blow up the balloon a lot."
+
+@pat.art.draw.shrink core.pattern
+    match="[shrink|reduce|decrease|squash|minimize|scale_down|squeeze] {t:words(6)} {amt:lex.art.draw.amounts?}"
+    emit="@{_} core.request action=draw.resize arg.t=\"{t}\" arg.amt={amt} arg.d=smaller"
+    kind=request
+    priority=13
+    example="Shrink the house."
+    example="Shrink the tree a little."
+
+@pat.art.draw.size core.pattern
+    match="[make|let|turn|get] {t:words(6)} {s:lex.art.draw.sizes}"
+    emit="@{_} core.request action=draw.setSize arg.t=\"{t}\" arg.s={s}"
+    kind=request
+    priority=15
+    example="Make the sun huge."
+    example="Make it tiny."
+    example="Make the tree small."
+
+@pat.art.draw.move core.pattern
+    match="[move|shift|push|drag|bring|put|place|set|slide|carry|send|take|lift|lower|raise|nudge|relocate|position] {p:rest}"
+    emit="@{_} core.request action=draw.move arg.phrase=\"{p}\""
+    kind=request
+    priority=10
+    example="Move the tree to the left."
+    example="Move the sun a bit higher."
+    example="Put the cat next to the house."
+    example="Move it to the top right corner."
+    example="Put the red house on the left."
+    example="Send the cloud behind the house."
+
+@pat.art.draw.nudge core.pattern
+    match="[make|let|get] {t:words(6)} {amt:lex.art.draw.amounts?} {d:lex.art.draw.moves}"
+    emit="@{_} core.request action=draw.nudge arg.t=\"{t}\" arg.amt={amt} arg.d={d}"
+    kind=request
+    priority=13
+    example="Make the sun higher."
+    example="Make the cat a bit lower."
+
+@pat.art.draw.turn core.pattern
+    match="{v:lex.art.draw.turnverbs} {t:words(6)} {d:lex.art.draw.turndirs}"
+    emit="@{_} core.request action=draw.turn arg.verb={v} arg.phrase=\"{t} {d}\""
+    kind=request
+    priority=14
+    example="Turn the car around."
+    example="Rotate the house 45 degrees."
+    example="Turn it upside down."
+    example="Turn the dog to face left."
+
+@pat.art.draw.turn.bare core.pattern
+    match="[flip|rotate|spin|tilt|mirror|twist|swivel|lean] {p:rest}"
+    emit="@{_} core.request action=draw.turn arg.verb=flip arg.phrase=\"{p}\""
+    kind=request
+    priority=14
+    example="Flip the dog."
+    example="Tilt the tree."
+    example="Spin the star."
+
+@pat.art.draw.face core.pattern
+    match="[make|get|let] {p:words(7)} [face|look|point|go|face_to|look_to|looking|facing] [to|towards]? [the]? {d:lex.art.draw.leftright}"
+    emit="@{_} core.request action=draw.turn arg.phrase=\"{p} face {d}\""
+    kind=request
+    priority=15
+    example="Make the car face left."
+    example="Make the dog look to the right."
+
+@pat.art.draw.upside core.pattern
+    match="[make|get|let|turn] {p:words(7)} upside_down"
+    emit="@{_} core.request action=draw.turn arg.phrase=\"{p} upside down\""
+    kind=request
+    priority=15
+    example="Make the house upside down."
+
+@pat.art.draw.clear core.pattern
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us]? [delete|remove|erase|clear|wipe|empty|clean|get_rid_of|throw_away|trash|destroy|wipe_out|clean_up] [all|everything|all_of|all_the]? [everything|things|stuff]? [in|on|from|off]? [my|the|this]? [whole]? [picture|drawing|painting|canvas|drawing_board|page|paper|screen|everything]"
+    emit="@{_} core.request action=draw.clearAll"
+    kind=request
+    priority=12
+    example="Clear the picture."
+    example="Erase everything."
+    example="Wipe the canvas."
+
+@pat.art.draw.remove.it core.pattern
+    match="[delete|remove|erase|get_rid_of|throw_away|trash|destroy] [it|this|that|them]"
+    emit="@{_} core.request action=draw.removeIt"
+    kind=request
+    priority=14
+    example="Delete it."
+
+@pat.art.draw.remove core.pattern
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us]? [delete|remove|erase|get_rid_of|take_away|rub_out|throw_away|take_out|destroy|wipe_out|trash|scrub_out|clear_away] {p:rest}"
+    emit="@{_} core.request action=draw.remove arg.phrase=\"{p}\""
+    kind=request
+    priority=9
+    example="Delete the car."
+    example="Remove everything except the house."
+    example="Remove the grass."
+    example="Delete the second tree."
+    example="Get rid of the clouds."
+
+@pat.art.draw.new core.pattern
+    match="[start|begin|make|get|open|take|give_me|i_want|let_us_start|let_us_make|can_i_have|i_need]? [a|an|another]? [new|fresh|blank|clean|empty] [drawing|picture|painting|canvas|sheet|sheet_of_paper|paper|piece_of_paper|drawing_board]"
+    emit="@{_} core.request action=draw.new"
+    kind=request
+    priority=13
+    example="Start a new drawing."
+    example="Give me a fresh sheet of paper."
+    example="New picture."
+
+@pat.art.draw.undo core.pattern
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us]? [undo|undo_that|undo_it|undo_this|undo_the_last_thing|undo_my_last_thing|undo_the_last_drawing|undo_my_last_drawing|undo_the_last_change|take_that_back|take_it_back|oops]"
+    emit="@{_} core.request action=draw.undo"
+    kind=request
+    priority=15
+    example="Undo."
+    example="Undo my last drawing."
+    example="Take that back."
+
+@pat.art.draw.redo core.pattern
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us]? [redo|redo_that|redo_it|do_it_again|put_it_back|bring_it_back]"
+    emit="@{_} core.request action=draw.redo"
+    kind=request
+    priority=15
+    example="Redo."
+    example="Bring it back."
+
+@pat.art.draw.select core.pattern
+    match="[select|click|tap|pick|choose|touch|highlight|point_at|click_on|tap_on|focus_on] [on]? [the|my|that]? {o:lex.art.draw.ordinals?} {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things}"
+    emit="@{_} core.request action=draw.select arg.o={o} arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
+    kind=request
+    priority=14
+    example="Select the house."
+    example="Click the second tree."
+    example="Select the red car."
+
+@pat.art.draw.deselect core.pattern
+    match="[deselect|unselect|unpick|unhighlight] [everything|it|all|the_picture|that]?"
+    emit="@{_} core.request action=draw.deselect"
+    kind=request
+    priority=14
+    example="Deselect everything."
+
+@pat.art.draw.deselect.clear core.pattern
+    match="[clear|remove|drop] [the|my]? selection"
+    emit="@{_} core.request action=draw.deselect"
+    kind=request
+    priority=12
+    example="Clear the selection."
+
+@pat.art.draw.fill core.pattern
+    match="[make|color|colour|fill|turn|leave|draw] {t:words(5)} {m:lex.art.draw.fillmodes}"
+    emit="@{_} core.request action=draw.fill arg.t=\"{t}\" arg.mode={m}"
+    kind=request
+    priority=11
+    example="Make the circle solid."
+    example="Make the star an outline."
+    example="Make the heart hollow."
+
+@pat.art.draw.fill.in core.pattern
+    match="[fill|color|colour] [in]? {t:words(5)} [in]?"
+    emit="@{_} core.request action=draw.fill arg.t=\"{t}\" arg.mode=crayon"
+    kind=request
+    priority=10
+    example="Fill in the star."
+    example="Fill the circle."
+
+@pat.art.draw.copy core.pattern
+    match="[copy|duplicate|clone|double] {t:words(5)}"
+    emit="@{_} core.request action=draw.duplicate arg.t=\"{t}\""
+    kind=request
+    priority=10
+    example="Copy the house."
+    example="Duplicate the tree."
+
+@pat.art.draw.copy.of core.pattern
+    match="[make|draw|add|give_me] [a|1]? copy_of {t:words(5)}"
+    emit="@{_} core.request action=draw.duplicate arg.t=\"{t}\""
+    kind=request
+    priority=12
+    example="Make a copy of the cat."
+
+@pat.art.draw.another core.pattern
+    match="[make|draw|add|give_me] [me]? [another|1_more] [1|copy|of_it|of_that|of_them]?"
+    emit="@{_} core.request action=draw.duplicate arg.t=it"
+    kind=request
+    priority=12
+    example="Make another one."
+    example="Draw one more."
+
+@pat.art.draw.more core.pattern
+    match="[make|draw|add|give_me] {n:number} more [of_them|of_it|of_that]?"
+    emit="@{_} core.request action=draw.duplicate arg.t=it arg.n={n}"
+    kind=request
+    priority=12
+    example="Make 2 more."
+
+@pat.art.draw.describe core.pattern
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us]? [describe|tell_me_about|show_me|what_is_in|what_is_on|what_do_you_see_in|what_can_you_see_in|look_at|tell_me_what_is_in] [all_of]? [my|the|this]? [picture|drawing|painting|artwork|canvas|page|paper|masterpiece]"
+    emit="@{_} core.request action=draw.describe"
+    kind=request
+    priority=13
+    example="Describe my picture."
+    example="What is in my drawing?"
+
+@pat.art.draw.describe.did core.pattern
+    match="what [did|have] [i|we] [draw|drawn|drew|paint|painted|make|made|add|added] [so_far|already|here|today]?"
+    emit="@{_} core.request action=draw.describe"
+    kind=request
+    priority=13
+    example="What did I draw?"
+
+@pat.art.draw.describe.see core.pattern
+    match="what [do|can] [you] see [in|on]? [my|the]? [picture|drawing|painting|page|paper|canvas]?"
+    emit="@{_} core.request action=draw.describe"
+    kind=request
+    priority=12
+    example="What can you see in my picture?"
+
+@pat.art.draw.count core.pattern
+    match="how_many {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [are_there|are_there_in_my_picture|are_in_my_picture|are_in_my_drawing|are_in_the_picture|are_in_the_drawing|are_there_in_the_picture|are_there_in_my_drawing|did_i_draw|have_i_drawn|do_i_have|have_i_got|are_here|can_you_see|do_you_see|are_there_now|in_my_picture|in_my_drawing|in_the_picture|in_the_drawing|are_on_the_ground|are_in_the_sky]?"
+    emit="@{_} core.request action=draw.count arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
+    kind=request
+    priority=12
+    example="How many trees are there?"
+    example="How many red balloons are there?"
+    example="How many things are in my picture?"
+
+@pat.art.draw.count.verb core.pattern
+    match="count [all]? [the|my]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things}"
+    emit="@{_} core.request action=draw.count arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
+    kind=request
+    priority=12
+    example="Count the clouds."
+
+@pat.art.draw.where core.pattern
+    match="where [is|are] [the|my|a|that|this]? {o:lex.art.draw.ordinals?} {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} {r:rest?}"
+    emit="@{_} core.request action=draw.where arg.o={o} arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
+    kind=request
+    priority=12
+    example="Where is the cat?"
+    example="Where are the trees?"
+    example="Where is the second tree?"
+
+@pat.art.draw.exists core.pattern
+    match="[is_there|are_there] [a|an|any|some]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [in|on|inside]? [my|the|this]? [picture|drawing|painting|page|paper|canvas|scene|artwork]"
+    emit="@{_} core.request action=draw.exists arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
+    kind=request
+    priority=12
+    example="Is there a house in my picture?"
+    example="Are there any clouds in my drawing?"
+
+@pat.art.draw.exists.have core.pattern
+    match="[do|did] [i|we] have [a|an|any|some]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [in|on]? [my|the|this]? [picture|drawing|painting|page|paper|canvas|scene|artwork]"
+    emit="@{_} core.request action=draw.exists arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
+    kind=request
+    priority=12
+    example="Do I have a sun in my picture?"
+
+@pat.art.draw.color.my core.pattern
+    match="what [color|colour] [is|are] my {t:words(5)}"
+    emit="@{_} core.request action=draw.colorOf arg.t=\"{t}\""
+    kind=request
+    priority=13
+    example="What color is my house?"
+
+@pat.art.draw.color.in core.pattern
+    match="what [color|colour] [is|are] [the]? {t:words(5)} [in|of|on] [my|the] [picture|drawing|painting|page|paper|canvas]"
+    emit="@{_} core.request action=draw.colorOf arg.t=\"{t}\""
+    kind=request
+    priority=13
+    example="What color is the sky in my picture?"
+
+@pat.art.draw.color.of core.pattern
+    match="what is the [color|colour] of my {t:words(5)}"
+    emit="@{_} core.request action=draw.colorOf arg.t=\"{t}\""
+    kind=request
+    priority=13
+    example="What is the color of my car?"
+
+@pat.art.draw.near core.pattern
+    match="what [is|are] [next_to|near|beside|by|close_to] [my|the]? {t:words(5)}"
+    emit="@{_} core.request action=draw.near arg.t=\"{t}\""
+    kind=request
+    priority=12
+    example="What is next to the sun?"
+
+@pat.art.draw.help core.pattern
+    match="[what|which] [things|shapes|animals|pictures]? [can|could|may] [i|you|we] [draw|paint|make|add]"
+    emit="@{_} core.request action=draw.help"
+    kind=request
+    priority=12
+    example="What can I draw?"
+
+@pat.art.draw.colors core.pattern
+    match="what [colors|colours|crayons|paints] [can|do|may] [i|you|we] [use|have|know|paint_with|draw_with]"
+    emit="@{_} core.request action=draw.colors"
+    kind=request
+    priority=13
+    example="What colors can I use?"
+
+@pat.art.draw.save core.pattern
+    match="[can_you|could_you|will_you|would_you|please_can_you|i_want_you_to|i_would_like_you_to|let_us]? [save|download|export|keep|store|print|get|send_me|i_want|can_i_have] [me]? [my|the|this|a|an]? [drawing|picture|painting|image|artwork|masterpiece|picture_file|drawing_file] [as|in|to|into]? [a|an]? {f:lex.art.draw.formats?} [file|image|picture|format]?"
+    emit="@{_} core.request action=draw.save arg.f={f}"
+    kind=request
+    priority=13
+    example="Save my drawing."
+    example="Save my picture as SVG."
+    example="Download the drawing as a PNG."
+
+@pat.art.draw.save.it core.pattern
+    match="[save|download|export] [it|this|that] [as|in|to|into] [a|an]? {f:lex.art.draw.formats} [file|image|picture|format]?"
+    emit="@{_} core.request action=draw.save arg.f={f}"
+    kind=request
+    priority=13
+    example="Save it as SVG."
+
+@pat.art.draw.open core.pattern
+    match="[open|show|go_to|switch_to|take_me_to|show_me|bring_up|let_us_go_to|i_want_to_go_to] [me]? [the|my]? [drawing|painting|paint|picture|art|sketch|drawing_board|drawing_pad|canvas|art_board|paintbox|easel] [tab|page|board|screen|app|pad|mode|window|area]?"
+    emit="@{_} core.request action=draw.open"
+    kind=request
+    priority=11
+    example="Open the drawing board."
+    example="Go to the paint tab."
+
