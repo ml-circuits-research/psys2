@@ -309,3 +309,19 @@ Deviations / choices:
 - `training/dataset-edit/` (16 MB) is not gitignored: the coordinator should decide whether to commit it or ignore the large jsonl files.
 - Open: the head needs more verified rewrite pairs (rule gaps) or a stricter acceptance policy for rewritten parses before it is worth publishing.
 - D1b correction: the int8 timing above is encoder pass p50 1.6 ms (4 threads) / 3.2 ms (1 thread), dispatch of a message 16 ms / 32 ms p50; the "4.4 ms per pass" figure is not from this export (see training/results/export-dispatcher-distilbert-simp.json).
+
+## R2 progress — partial (2026-11-08 15:35)
+Merged on main (each: `npm test` 577/577 and `node src/cli.mjs test-world all` green at the push):
+- 861565b Avatar tolerance (user examples: colour/should-be/word orders, become/make-me, bigger eyes, lip colour refusal, clause split for catch-all matches).
+- e5885b6 Webchat: Encoder default, auto-load with sha256 cache and version check, spellcheck + abbreviations (§7.9), partial understanding (§7.10), `acceptRefused` default (Q3).
+- 4dbc89e docs.reader sweep: held-out rules-only restricted 35.1% → 93.9% (routed 86.1%), 61/66 needs_review canonicals now parse.
+- 57062ef games sweep: held-out restricted chess 54.5 → 93.6, guess 68.2 → 88.2, hangman 56.4 → 90.9, tictactoe 50.9 → 73.6.
+- 9560f5f ui.shell / ui.help / ui.avatar / docs.editor sweep: held-out restricted 46.4 → 89.1, 26.4 → 87.3, 58.2 → 91.8, 35.4 → 85.5.
+- 794f290 kids.common / animals / shapes sweep: held-out restricted 53.6 → 88.2, 47.3 → 98.2, 71.8 → 99.1.
+- 43ebc6a cross-world fixes after merging (ui.help how6, ui.shell plog.count3 priorities, back.v3 nouns; n22 test uses real gibberish).
+Held-out rules-only total after 43ebc6a: 1680/2255 restricted (74.5 %), 1700/2255 routed (75.4 %); before the sweeps 49.4 / 50.4 %.
+Command: `node scripts/eval-rules.mjs --no-write` (held-out section).
+Every swept world has `worlds/<world>/coverage.md` (request-shape catalogue, supported/unsupported with reasons).
+Fresh Haiku batches committed: 5852bd1, 34d5fc7 (`training/paraphrases/inbox/*.h5.json`, `docs.editor.h7.json`; 20 worlds × 12 tasks × 10 variants), not yet collected.
+In progress, not pushed: integration of the music/draw/map/charts and kids.arith/time/shop/tasks sweeps (cross-world conflicts being fixed); engine changes (global fillers, indirect-question lead-ins, ordinals/number words, operators, question marker; Q5 game controls with relabelling, specificity rule, tab-only priority, name capitalization); N1 normalizer (interim, FLAN-T5-small, dev: right 58.7 → 70.7 %, fallback 30.7 → 7.2 %, wrong 10.6 → 22.1 %; misled ≈ recovered, being analysed and tightened). User decision: the normalizer will be ON by default in the webchat with a Settings flag.
+Then: collect the h5 batches, rebuild the dataset, retrain the dispatcher once, publish the model, rebuild the webchat, R2 summary table.
