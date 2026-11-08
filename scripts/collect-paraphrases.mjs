@@ -16,7 +16,8 @@ import { resolve, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
-import { createEngine } from '../src/dialog/index.mjs';
+import { createEngine, DialogSession } from '../src/dialog/index.mjs';
+import { restrictedEngine } from './lib/world-set.mjs';
 import { serialize } from '../src/soplang/index.mjs';
 import { splitOf, IGNORED_KEYS } from './export-training.mjs';
 
@@ -102,7 +103,10 @@ export function slotsOf(wires, legends) {
 
 /** Does one slot value occur in the text (numbers as digits or words; words by substring or stem; multi-word values word by word)? */
 export function valueInText(value, text) {
-  const t = String(text).toLowerCase();
+  // note names: "F#" is f_sharp, "Bb" is b_flat; written forms are spelled out so that the slot value can be found
+  const t = String(text).toLowerCase().replace(/(^|[^a-z])([a-g])#/g, '$1$2 sharp').replace(/(^|[^a-z])([a-g])b(?![a-z])/g, '$1$2 flat').replace(/♯/g, ' sharp').replace(/♭/g, ' flat');
+  // a one- or two-letter value ("d", "up") counts only as a whole word: "d" is not in "chord"
+  if (/^[a-z]{1,2}$/.test(value)) return new RegExp(`(^|[^a-z])${value}([^a-z]|$)`).test(t);
   if (value === 'true' || value === 'false') return true; // flags are set by words the rules cannot be asked to echo
   if (isNum(value)) return numbersIn(t).has(Number(value));
   const v =value.replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase();
@@ -175,8 +179,10 @@ export function labelVariant(canonical, variant) {
 }
 
 /** Run `text` in a fresh session (tab active, setup sentences first); returns the observed outcome. */
-export async function runAttempt(engine, { tab, setup = [], text }) {
-  const s = engine.createSession();
+export async function runAttempt(engine, { tab, setup = [], text, world = null }) {
+  // `world`: only the rules of the labelled world read the text (a label is that world's reading; the all-worlds router
+  // used to write targets of other worlds, e.g. music.melodyAdd for "add milk to my shopping list, is there milk on it")
+  const s = world ? new DialogSession(restrictedEngine(engine, [world]), {}) : engine.createSession();
   if (tab) s.setWorldState('ui.shell', { activeTab: tab });
   for (const m of setup) await s.send(m);
   const r = await s.send(text);
@@ -235,7 +241,7 @@ export async function collectBatch(engine, batch, { devShare = 0.1 } = {}) {
     const phrasings = [t.canonical, ...(t.canonical_retries ?? [])];
     let best = null, bestAttempt = 0;
     for (let i = 0; i < phrasings.length; i++) {
-      const o = await runAttempt(engine, { tab: batch.tab, setup, text: phrasings[i] });
+      const o = await runAttempt(engine, { tab: batch.tab, setup, text: phrasings[i], world: batch.world });
       const g = gradeOf(o);
       const lab = { label_status: g === 'success' ? 'canonical-ok' : g === 'partial' ? 'canonical-partial' : 'canonical-failed', target_from: g === 'fail' ? null : 'rules', needs_review: g !== 'success' };
       records.push(mk('canonical', phrasings[i], i + 1, o, lab));
@@ -245,7 +251,7 @@ export async function collectBatch(engine, batch, { devShare = 0.1 } = {}) {
     const canon = best ?? { matched: false };
     const canonicalTarget = best?.target ?? '';
     for (const v of t.variants ?? []) {
-      const o = await runAttempt(engine, { tab: batch.tab, setup, text: v });
+      const o = await runAttempt(engine, { tab: batch.tab, setup, text: v, world: batch.world });
       records.push(mk('variant', v, bestAttempt || phrasings.length, o, labelVariant(canon, o), { canonicalTarget }));
     }
     // semantic instance = context + the canonical's own reading (operation and arguments); all records of the task share it

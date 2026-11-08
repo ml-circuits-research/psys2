@@ -12,6 +12,17 @@
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
+/** The "plain" multi-command variant lower-cases the text, so the string values of a segment's target are lower-cased too (consistent gold). */
+export const lowerStrings = (target) => (target == null ? target : String(target).replace(/"(?:[^"\\]|\\.)*"/g, (x) => x.toLowerCase()));
+/**
+ * Gold target of a multi-command segment: the target of its source record, lower-cased in strings for the "plain" variant, and NONE when the
+ * source record reads values from its session context (ellipsis: "Amy eats 2." after "Amy has 8 plums."): the message carries no session, so
+ * the circuit cannot be derived from the segment (the segment still counts for segmentation and world routing).
+ */
+export function segmentTarget(rec, variant) {
+  if (!rec?.target || (rec.context ?? []).length > 0) return null;
+  return variant === 'plain' ? lowerStrings(rec.target) : rec.target;
+}
 const readJsonl = (f) => readFileSync(f, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l));
 
 /** Load every label needed. `root` = training/dataset. */
@@ -47,7 +58,7 @@ export function loadGold(root, { heldoutDir = join(root, '..', 'paraphrases', 'h
     get(id) {
       const m = multi.get(id);
       if (m) {
-        const segments = m.segments.map((s) => ({ start: s.start, end: s.end, text: s.text, world: s.world, target: recs.get(s.source_id)?.target ?? null, negative: !!recs.get(s.source_id)?.negative }));
+        const segments = m.segments.map((s) => ({ start: s.start, end: s.end, text: s.text, world: s.world, target: segmentTarget(recs.get(s.source_id), m.variant), negative: !!recs.get(s.source_id)?.negative }));
         return { id, kind: 'multi', source: 'multi-command', negative: false, text: m.text, context: m.context, segments, hasTarget: segments.every((s) => s.target), variant: m.variant };
       }
       const r = recs.get(id);

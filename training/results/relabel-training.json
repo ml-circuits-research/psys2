@@ -1,0 +1,880 @@
+{
+ "generated_by": "scripts/relabel-training.mjs",
+ "data_root": "/home/salboaie/work/psys2/training",
+ "seconds": 79,
+ "before": {
+  "records": 57515,
+  "by_cause": {
+   "label_says_rules_differ": 106,
+   "gold_value_not_in_text": 5,
+   "gold_target_from_another_world": 661,
+   "needs_review_readable": 6
+  },
+  "by_cause_in_dataset_train": {
+   "label_says_rules_differ": 68,
+   "gold_value_not_in_text": 5,
+   "gold_target_from_another_world": 531
+  },
+  "by_cause_x_label_status": {
+   "label_says_rules_differ": {
+    "generator-disagrees": 92,
+    "rules-differ": 14
+   },
+   "gold_value_not_in_text": {
+    "rule-derived": 5
+   },
+   "gold_target_from_another_world": {
+    "rules-own": 550,
+    "canonical-ok": 18,
+    "rules-agree": 90,
+    "rules-differ": 1,
+    "rules-fail": 2
+   },
+   "needs_review_readable": {
+    "rules-unverified": 2,
+    "needs_review": 4
+   }
+  },
+  "promotable_needs_review": 6,
+  "needs_review_total": 229,
+  "needs_review_variants_read_completely": 0
+ },
+ "fixes": {
+  "relabelled": {
+   "label_says_rules_differ": 59,
+   "gold_value_not_in_text": 4,
+   "gold_target_from_another_world": 192
+  },
+  "needs_review": {
+   "gold_value_not_in_text": 1,
+   "gold_target_from_another_world": 123
+  },
+  "kept": {
+   "label_says_rules_differ": 47
+  },
+  "promoted": 6,
+  "inherited_from_canonical": {
+   "gold_target_from_another_world": 346
+  }
+ },
+ "after": {
+  "records": 57515,
+  "by_cause": {
+   "label_says_rules_differ": 47,
+   "gold_target_from_another_world": 4
+  },
+  "needs_review_total": 344,
+  "quarantined_to_needs_review": 124,
+  "examples": [
+   {
+    "cause": "label_says_rules_differ",
+    "world": "games.tictactoe",
+    "status": "generator-disagrees",
+    "text": "Middle row right",
+    "detail": null,
+    "fix": "keep"
+   },
+   {
+    "cause": "label_says_rules_differ",
+    "world": "games.tictactoe",
+    "status": "generator-disagrees",
+    "text": "Bottom row left",
+    "detail": null,
+    "fix": "keep"
+   },
+   {
+    "cause": "label_says_rules_differ",
+    "world": "games.tictactoe",
+    "status": "generator-disagrees",
+    "text": "Middle row left.",
+    "detail": null,
+    "fix": "keep"
+   },
+   {
+    "cause": "label_says_rules_differ",
+    "world": "games.tictactoe",
+    "status": "generator-disagrees",
+    "text": "Top row right!",
+    "detail": null,
+    "fix": "keep"
+   },
+   {
+    "cause": "label_says_rules_differ",
+    "world": "games.tictactoe",
+    "status": "generator-disagrees",
+    "text": "Mark the middle row left cell",
+    "detail": null,
+    "fix": "keep"
+   },
+   {
+    "cause": "label_says_rules_differ",
+    "world": "games.tictactoe",
+    "status": "generator-disagrees",
+    "text": "Bottom row right.",
+    "detail": null,
+    "fix": "keep"
+   },
+   {
+    "cause": "label_says_rules_differ",
+    "world": "games.tictactoe",
+    "status": "generator-disagrees",
+    "text": "Play the top row center.",
+    "detail": null,
+    "fix": "keep"
+   },
+   {
+    "cause": "label_says_rules_differ",
+    "world": "games.tictactoe",
+    "status": "generator-disagrees",
+    "text": "Top row middle.",
+    "detail": null,
+    "fix": "keep"
+   },
+   {
+    "cause": "gold_target_from_another_world",
+    "world": "games.guess",
+    "status": "rules-fail",
+    "text": "hint",
+    "detail": [
+     "ui.shell"
+    ],
+    "fix": "needs_review"
+   },
+   {
+    "cause": "gold_target_from_another_world",
+    "world": "games.guess",
+    "status": "rules-fail",
+    "text": "hint pls",
+    "detail": [
+     "ui.shell"
+    ],
+    "fix": "needs_review"
+   },
+   {
+    "cause": "gold_target_from_another_world",
+    "world": "games.guess",
+    "status": "rules-fail",
+    "text": "hint pls",
+    "detail": [
+     "ui.shell"
+    ],
+    "fix": "needs_review"
+   },
+   {
+    "cause": "gold_target_from_another_world",
+    "world": "games.guess",
+    "status": "rules-fail",
+    "text": "hint?",
+    "detail": [
+     "ui.shell"
+    ],
+    "fix": "needs_review"
+   }
+  ]
+ },
+ "conflicting_duplicates": {
+  "texts": 165,
+  "records": 545,
+  "true_ambiguity": 149,
+  "generator_or_label_bug": 16,
+  "examples_ambiguous": [
+   {
+    "text": "Color from mixing red and yellow",
+    "worlds": [
+     "art.draw",
+     "kids.shapes"
+    ],
+    "bad_worlds": []
+   },
+   {
+    "text": "Make it red",
+    "worlds": [
+     "art.draw",
+     "ui.avatar"
+    ],
+    "bad_worlds": []
+   },
+   {
+    "text": "Restore the original order",
+    "worlds": [
+     "art.draw",
+     "data.charts"
+    ],
+    "bad_worlds": []
+   },
+   {
+    "text": "Undo my move",
+    "worlds": [
+     "art.draw",
+     "games.chess"
+    ],
+    "bad_worlds": []
+   },
+   {
+    "text": "Take back my last move",
+    "worlds": [
+     "art.draw",
+     "games.chess"
+    ],
+    "bad_worlds": []
+   },
+   {
+    "text": "Undo the last move",
+    "worlds": [
+     "art.draw",
+     "games.chess"
+    ],
+    "bad_worlds": []
+   },
+   {
+    "text": "Undo my zoom and pan",
+    "worlds": [
+     "art.draw",
+     "geo.map"
+    ],
+    "bad_worlds": []
+   },
+   {
+    "text": "Surprise me",
+    "worlds": [
+     "art.draw",
+     "ui.avatar"
+    ],
+    "bad_worlds": []
+   },
+   {
+    "text": "Make it blue",
+    "worlds": [
+     "art.draw",
+     "ui.avatar"
+    ],
+    "bad_worlds": []
+   },
+   {
+    "text": "Make the eyes huge",
+    "worlds": [
+     "art.draw",
+     "ui.avatar"
+    ],
+    "bad_worlds": []
+   },
+   {
+    "text": "Make your eyes bigger",
+    "worlds": [
+     "art.draw",
+     "ui.avatar"
+    ],
+    "bad_worlds": []
+   },
+   {
+    "text": "Go back to normal",
+    "worlds": [
+     "art.draw",
+     "ui.avatar"
+    ],
+    "bad_worlds": []
+   },
+   {
+    "text": "Show surprise",
+    "worlds": [
+     "art.draw",
+     "ui.avatar"
+    ],
+    "bad_worlds": []
+   },
+   {
+    "text": "Redo the whole look",
+    "worlds": [
+     "art.draw",
+     "ui.avatar"
+    ],
+    "bad_worlds": []
+   },
+   {
+    "text": "Make me green",
+    "worlds": [
+     "art.draw",
+     "ui.avatar"
+    ],
+    "bad_worlds": []
+   }
+  ],
+  "examples_bug": [
+   {
+    "text": "Put some sunnies on",
+    "worlds": [
+     "art.draw",
+     "ui.avatar"
+    ],
+    "bad_worlds": [
+     "ui.avatar"
+    ]
+   },
+   {
+    "text": "Give me a hint",
+    "worlds": [
+     "games.chess",
+     "games.hangman",
+     "ui.shell",
+     "games.guess"
+    ],
+    "bad_worlds": [
+     "games.guess"
+    ]
+   },
+   {
+    "text": "Giving up",
+    "worlds": [
+     "games.tictactoe",
+     "ui.shell"
+    ],
+    "bad_worlds": [
+     "ui.shell"
+    ]
+   },
+   {
+    "text": "You win, I quit",
+    "worlds": [
+     "games.tictactoe",
+     "games.hangman"
+    ],
+    "bad_worlds": [
+     "games.hangman"
+    ]
+   },
+   {
+    "text": "Start over",
+    "worlds": [
+     "geo.map",
+     "ui.shell",
+     "games.hangman",
+     "games.tictactoe"
+    ],
+    "bad_worlds": [
+     "games.hangman",
+     "games.tictactoe"
+    ]
+   },
+   {
+    "text": "New game",
+    "worlds": [
+     "ui.shell",
+     "games.hangman",
+     "games.tictactoe"
+    ],
+    "bad_worlds": [
+     "games.hangman",
+     "games.tictactoe"
+    ]
+   },
+   {
+    "text": "I need a hint.",
+    "worlds": [
+     "ui.shell",
+     "games.guess",
+     "games.hangman"
+    ],
+    "bad_worlds": [
+     "games.guess"
+    ]
+   },
+   {
+    "text": "Hint",
+    "worlds": [
+     "ui.shell",
+     "games.guess"
+    ],
+    "bad_worlds": [
+     "games.guess"
+    ]
+   },
+   {
+    "text": "Any hint.",
+    "worlds": [
+     "ui.shell",
+     "games.guess"
+    ],
+    "bad_worlds": [
+     "games.guess"
+    ]
+   },
+   {
+    "text": "Restart the game.",
+    "worlds": [
+     "ui.shell",
+     "games.hangman",
+     "games.tictactoe"
+    ],
+    "bad_worlds": [
+     "games.hangman"
+    ]
+   },
+   {
+    "text": "ok i give up, what was it",
+    "worlds": [
+     "games.guess",
+     "games.hangman"
+    ],
+    "bad_worlds": [
+     "games.hangman"
+    ]
+   },
+   {
+    "text": "im giving up",
+    "worlds": [
+     "games.guess",
+     "games.tictactoe",
+     "ui.shell"
+    ],
+    "bad_worlds": [
+     "games.guess",
+     "ui.shell"
+    ]
+   },
+   {
+    "text": "hint pls",
+    "worlds": [
+     "games.guess",
+     "games.hangman",
+     "ui.shell"
+    ],
+    "bad_worlds": [
+     "games.guess"
+    ]
+   },
+   {
+    "text": "new game pls",
+    "worlds": [
+     "games.hangman",
+     "games.tictactoe",
+     "ui.shell"
+    ],
+    "bad_worlds": [
+     "games.hangman",
+     "games.tictactoe"
+    ]
+   },
+   {
+    "text": "fine i surrender",
+    "worlds": [
+     "games.hangman",
+     "games.tictactoe"
+    ],
+    "bad_worlds": [
+     "games.hangman"
+    ]
+   },
+   {
+    "text": "new game ok",
+    "worlds": [
+     "games.tictactoe",
+     "ui.shell"
+    ],
+    "bad_worlds": [
+     "games.tictactoe"
+    ]
+   }
+  ],
+  "bug_by_world_pair": {
+   "ui.avatar": 1,
+   "games.guess": 6,
+   "ui.shell": 2,
+   "games.hangman": 7,
+   "games.tictactoe": 4
+  }
+ },
+ "casing": {
+  "context_dependent_segments": 5913,
+  "segments": 54974,
+  "messages_with_context_dependent_segment": 5207,
+  "plain_segments": 6931,
+  "mismatching_before": 242,
+  "mismatching_after": 0,
+  "examples": [
+   {
+    "text": "well hey who is hansel",
+    "value": "\"Hansel\""
+   },
+   {
+    "text": "im alice",
+    "value": "\"Alice\""
+   },
+   {
+    "text": "they call me cristina",
+    "value": "\"Cristina\""
+   },
+   {
+    "text": "can u write a melody c d e f g",
+    "value": "\"C D E F G\" \"msg1#0-30\""
+   },
+   {
+    "text": "here is my tune: f g g a",
+    "value": "\"F G G A\""
+   },
+   {
+    "text": "who did gretel found",
+    "value": "\"Gretel\""
+   }
+  ]
+ },
+ "examples": {
+  "label_says_rules_differ": [
+   {
+    "world": "art.draw",
+    "status": "generator-disagrees",
+    "text": "Start a new drawing.",
+    "old": "action=draw.clearAll",
+    "fix": "relabel",
+    "new": "core.request.action=draw.new",
+    "detail": null
+   },
+   {
+    "world": "docs.reader",
+    "status": "generator-disagrees",
+    "text": "How many times does the name the witch appear?",
+    "old": "action=docr.count arg.x=\"witch\"",
+    "fix": "relabel",
+    "new": "core.request.action=docr.count core.request.arg.x=\"the witch\"",
+    "detail": null
+   },
+   {
+    "world": "docs.reader",
+    "status": "generator-disagrees",
+    "text": "How many times does the name the stepmother appear?",
+    "old": "action=docr.count arg.x=\"stepmother\"",
+    "fix": "relabel",
+    "new": "core.request.action=docr.count core.request.arg.x=\"the stepmother\"",
+    "detail": null
+   },
+   {
+    "world": "docs.reader",
+    "status": "generator-disagrees",
+    "text": "Well, how many times does the name the stepmother appear?",
+    "old": "action=docr.count arg.x=\"stepmother\"",
+    "fix": "relabel",
+    "new": "core.request.action=docr.count core.request.arg.x=\"the stepmother\"",
+    "detail": null
+   },
+   {
+    "world": "docs.reader",
+    "status": "generator-disagrees",
+    "text": "How many times does the name the woodcutter appear?",
+    "old": "action=docr.count arg.x=\"woodcutter\"",
+    "fix": "relabel",
+    "new": "core.request.action=docr.count core.request.arg.x=\"the woodcutter\"",
+    "detail": null
+   },
+   {
+    "world": "docs.reader",
+    "status": "generator-disagrees",
+    "text": "How many times does the name the father appear?",
+    "old": "action=docr.count arg.x=\"father\"",
+    "fix": "relabel",
+    "new": "core.request.action=docr.count core.request.arg.x=\"the father\"",
+    "detail": null
+   },
+   {
+    "world": "games.hangman",
+    "status": "generator-disagrees",
+    "text": "What kind of animal is it?",
+    "old": "action=hm.hint",
+    "fix": "relabel",
+    "new": "core.request.action=chat.who",
+    "detail": null
+   },
+   {
+    "world": "games.hangman",
+    "status": "generator-disagrees",
+    "text": "What kind of animal is it",
+    "old": "action=hm.hint",
+    "fix": "relabel",
+    "new": "core.request.action=chat.who",
+    "detail": null
+   },
+   {
+    "world": "games.hangman",
+    "status": "generator-disagrees",
+    "text": "Well, what kind of animal is it?",
+    "old": "action=hm.hint",
+    "fix": "relabel",
+    "new": "core.request.action=chat.who",
+    "detail": null
+   },
+   {
+    "world": "games.hangman",
+    "status": "generator-disagrees",
+    "text": "Please, what kind of animal is it?",
+    "old": "action=hm.hint",
+    "fix": "relabel",
+    "new": "core.request.action=chat.who",
+    "detail": null
+   },
+   {
+    "world": "games.hangman",
+    "status": "generator-disagrees",
+    "text": "Um, what kind of animal is it?",
+    "old": "action=hm.hint",
+    "fix": "relabel",
+    "new": "core.request.action=chat.who",
+    "detail": null
+   },
+   {
+    "world": "games.tictactoe",
+    "status": "generator-disagrees",
+    "text": "Middle row right",
+    "old": "action=ttt.move arg.pos=middle_row_right",
+    "fix": "keep",
+    "new": "",
+    "detail": null
+   }
+  ],
+  "gold_value_not_in_text": [
+   {
+    "world": "geo.map",
+    "status": "rule-derived",
+    "text": "Which city has more people, Paris or Rome",
+    "old": "core.request.action=geo.compare core.request.arg.a=paris core.request.arg.b=rome core.request.arg.m=more_person",
+    "fix": "relabel",
+    "new": "core.request.action=geo.compare core.request.arg.a=paris core.request.arg.b=rome core.request.arg.m=more_people",
+    "detail": [
+     "more_person"
+    ]
+   },
+   {
+    "world": "geo.map",
+    "status": "rule-derived",
+    "text": "Which city has more people, Paris or Rome",
+    "old": "core.request.action=geo.compare core.request.arg.a=paris core.request.arg.b=rome core.request.arg.m=more_person",
+    "fix": "relabel",
+    "new": "core.request.action=geo.compare core.request.arg.a=paris core.request.arg.b=rome core.request.arg.m=more_people",
+    "detail": [
+     "more_person"
+    ]
+   },
+   {
+    "world": "geo.map",
+    "status": "rule-derived",
+    "text": "Does India have more people than China",
+    "old": "core.request.action=geo.compareYN core.request.arg.a=india core.request.arg.b=china core.request.arg.m=more_person",
+    "fix": "relabel",
+    "new": "core.request.action=geo.compareYN core.request.arg.a=india core.request.arg.b=china core.request.arg.m=more_people",
+    "detail": [
+     "more_person"
+    ]
+   },
+   {
+    "world": "geo.map",
+    "status": "rule-derived",
+    "text": "Does India have more people than China",
+    "old": "core.request.action=geo.compareYN core.request.arg.a=india core.request.arg.b=china core.request.arg.m=more_person",
+    "fix": "relabel",
+    "new": "core.request.action=geo.compareYN core.request.arg.a=india core.request.arg.b=china core.request.arg.m=more_people",
+    "detail": [
+     "more_person"
+    ]
+   },
+   {
+    "world": "kids.arith",
+    "status": "rule-derived",
+    "text": "Ana loses 1",
+    "old": "",
+    "fix": "needs_review",
+    "new": "",
+    "detail": [
+     "apple"
+    ]
+   }
+  ],
+  "gold_target_from_another_world": [
+   {
+    "world": "art.draw",
+    "status": "rules-own",
+    "text": "move it to the bottom left",
+    "old": "core.request.action=ttt.move core.request.arg.pos=bottom_left",
+    "fix": "relabel",
+    "new": "core.request.action=draw.move core.request.arg.phrase=\"it to the bottom left\"",
+    "detail": [
+     "ttt.move"
+    ]
+   },
+   {
+    "world": "art.draw",
+    "status": "rules-own",
+    "text": "oops, delete it",
+    "old": "core.request.action=music.melodyUndo",
+    "fix": "relabel",
+    "new": "core.request.action=draw.undo core.request.action=draw.removeIt",
+    "detail": [
+     "music.melodyUndo"
+    ]
+   },
+   {
+    "world": "art.draw",
+    "status": "canonical-ok",
+    "text": "Go to the paint tab.",
+    "old": "core.request.action=ui.openTab core.request.arg.tab=\"paint\"",
+    "fix": "relabel",
+    "new": "core.request.action=draw.open",
+    "detail": [
+     "ui.openTab"
+    ]
+   },
+   {
+    "world": "art.draw",
+    "status": "rules-own",
+    "text": "open the drawing board",
+    "old": "core.request.action=ui.openTab core.request.arg.tab=\"drawing board\"",
+    "fix": "relabel",
+    "new": "core.request.action=draw.open",
+    "detail": [
+     "ui.openTab"
+    ]
+   },
+   {
+    "world": "art.draw",
+    "status": "rules-own",
+    "text": "show me the drawing tab",
+    "old": "core.request.action=ui.openTab core.request.arg.tab=\"drawing\"",
+    "fix": "relabel",
+    "new": "core.request.action=draw.open",
+    "detail": [
+     "ui.openTab"
+    ]
+   },
+   {
+    "world": "art.draw",
+    "status": "rules-agree",
+    "text": "switch to the paint tab",
+    "old": "core.request.action=ui.openTab core.request.arg.tab=\"paint\"",
+    "fix": "relabel",
+    "new": "core.request.action=draw.open",
+    "detail": [
+     "ui.openTab"
+    ]
+   },
+   {
+    "world": "art.draw",
+    "status": "rules-own",
+    "text": "go to the drawing screen",
+    "old": "core.request.action=ui.openTab core.request.arg.tab=\"drawing\"",
+    "fix": "relabel",
+    "new": "core.request.action=draw.open",
+    "detail": [
+     "ui.openTab"
+    ]
+   },
+   {
+    "world": "art.draw",
+    "status": "rules-own",
+    "text": "switch to drawing",
+    "old": "core.request.action=ui.openTab core.request.arg.tab=\"drawing\"",
+    "fix": "relabel",
+    "new": "core.request.action=draw.open",
+    "detail": [
+     "ui.openTab"
+    ]
+   },
+   {
+    "world": "art.draw",
+    "status": "rules-agree",
+    "text": "i wanna go to the paint page",
+    "old": "core.request.action=ui.openTab core.request.arg.tab=\"paint\"",
+    "fix": "relabel",
+    "new": "core.request.action=draw.open",
+    "detail": [
+     "ui.openTab"
+    ]
+   },
+   {
+    "world": "art.draw",
+    "status": "rules-own",
+    "text": "bigger sun, like twice",
+    "old": "core.request.action=chart.adjustPoint core.request.arg.l=\"bigger sun, like\" core.request.arg.factor=2",
+    "fix": "needs_review",
+    "new": "",
+    "detail": [
+     "chart.adjustPoint"
+    ]
+   },
+   {
+    "world": "art.draw",
+    "status": "canonical-ok",
+    "text": "Move it to the top right corner.",
+    "old": "core.request.action=ttt.move core.request.arg.pos=top_right",
+    "fix": "relabel",
+    "new": "core.request.action=draw.move core.request.arg.phrase=\"it to the top right corner\"",
+    "detail": [
+     "ttt.move"
+    ]
+   },
+   {
+    "world": "art.draw",
+    "status": "rules-agree",
+    "text": "put it in the top right corner",
+    "old": "core.request.action=ttt.move core.request.arg.pos=top_right",
+    "fix": "relabel",
+    "new": "core.request.action=draw.move core.request.arg.phrase=\"it in the top right corner\"",
+    "detail": [
+     "ttt.move"
+    ]
+   }
+  ],
+  "needs_review_readable": [
+   {
+    "world": "art.draw",
+    "status": "rules-unverified",
+    "text": "can u fill things in solid",
+    "old": "core.request.action=draw.fill core.request.arg.t=\"things in\" core.request.arg.mode=solid",
+    "fix": "promote",
+    "new": "core.request.action=draw.fill core.request.arg.t=\"things in\" core.request.arg.mode=solid",
+    "detail": null
+   },
+   {
+    "world": "art.draw",
+    "status": "rules-unverified",
+    "text": "fill them in with solid colors ok",
+    "old": "core.request.action=draw.fill core.request.arg.t=\"them in with solid colors\" core.request.arg.mode=crayon",
+    "fix": "promote",
+    "new": "core.request.action=draw.fill core.request.arg.t=\"them in with solid colors\" core.request.arg.mode=crayon",
+    "detail": null
+   },
+   {
+    "world": "kids.tasks",
+    "status": "needs_review",
+    "text": "milk there?",
+    "old": "",
+    "fix": "promote",
+    "new": "core.request.action=tasks.add core.request.arg.item=\"milk there\" core.request.arg.list=\"shopping\"",
+    "detail": null
+   },
+   {
+    "world": "kids.tasks",
+    "status": "needs_review",
+    "text": "what's left to buy",
+    "old": "",
+    "fix": "promote",
+    "new": "core.request.action=tasks.pending core.request.arg.list=shopping",
+    "detail": null
+   },
+   {
+    "world": "kids.tasks",
+    "status": "needs_review",
+    "text": "still to buy?",
+    "old": "",
+    "fix": "promote",
+    "new": "core.request.action=tasks.pending core.request.arg.list=shopping",
+    "detail": null
+   },
+   {
+    "world": "media.music",
+    "status": "needs_review",
+    "text": "signature of C# major?",
+    "old": "",
+    "fix": "promote",
+    "new": "core.request.action=music.keySig core.request.arg.root=c_sharp core.request.arg.m=major",
+    "detail": null
+   }
+  ]
+ },
+ "notes": "before = causes found in the source records; after = causes found when the repaired records are judged again (kept = verdict `keep`, rules-differ records the value checker does not accept, left unchanged). Records quarantined to needs_review keep text and world label."
+}

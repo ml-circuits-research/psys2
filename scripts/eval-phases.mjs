@@ -41,7 +41,7 @@ import { createWordPieceTokenizer } from '../src/formalizer/wordpiece.mjs';
 import { formalize } from '../src/formalizer/rules/index.mjs';
 import { parse } from '../src/soplang/index.mjs';
 import { normalizedSop, firmNumbersIn } from './collect-paraphrases.mjs';
-import { segmentationMatches } from './lib/dispatch-gold.mjs';
+import { segmentationMatches, segmentTarget } from './lib/dispatch-gold.mjs';
 import { evaluateCase, classify } from './lib/operational-check.mjs';
 
 const POP = {};
@@ -444,7 +444,7 @@ function buildSample(root, n, seed) {
   // pool 3: multi-command train
   const multi = [];
   for (const m of readJsonl(join(dsRoot, 'multicmd', 'train.jsonl'))) {
-    const segs = m.segments.map((s) => ({ start: s.start, end: s.end, text: s.text, world: s.world, target: all.get(s.source_id)?.target ?? null, neg: !!all.get(s.source_id)?.negative }));
+    const segs = m.segments.map((s) => ({ start: s.start, end: s.end, text: s.text, world: s.world, target: segmentTarget(all.get(s.source_id), m.variant), neg: !!all.get(s.source_id)?.negative }));
     if (segs.some((s) => !s.target || s.neg)) continue;
     multi.push({ id: m.id, set: 'multicmd', world: segs[0].world, family: m.family, label_status: m.variant, negative: false, text: m.text, context: { tab: m.context?.tab ?? null, recent_worlds: m.context?.recent_worlds ?? [], session: m.context?.session ?? [] }, gold: segs, _k: `${m.family}|${m.n_segments}|${m.variant}` });
   }

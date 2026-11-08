@@ -30,6 +30,8 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
 const opt = (n, d) => { const i = args.indexOf('--' + n); return i >= 0 ? args[i + 1] : d; };
 const OUT = resolve(ROOT, opt('out-dir', 'training/dataset'));
+// generators / collector outputs; scripts/relabel-training.mjs --out-root <dir> writes repaired copies there (data/ and paraphrases/out/)
+const SRC = resolve(ROOT, opt('src-root', 'training'));
 const SEED = String(opt('seed', '1337'));
 const DEV = Number(opt('dev', '0.1'));
 const TEST = Number(opt('test', '0.1'));
@@ -41,7 +43,7 @@ const unit = (s) => sha(s).readUInt32BE(0) / 0x100000000;
 export const normText = (t) => String(t).toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
 const worldOfFile = (f) => f.split('/').pop().replace(/\.jsonl$/, '');
 
-if (listJsonl(join(ROOT, 'training/data')).length === 0) {
+if (listJsonl(join(SRC, 'data')).length === 0) {
   console.log('training/data is empty: running export-training first');
   const r = spawnSync(process.execPath, [join(ROOT, 'scripts/export-training.mjs')], { cwd: ROOT, stdio: 'inherit' });
   if (r.status !== 0) process.exit(r.status ?? 1);
@@ -78,7 +80,7 @@ function ingest(file, requireWorld) {
     const rec = {
       id: r.example_id, world, text: r.text, context: r.context ?? [], target: c.target, negative: c.negative,
       label_status: c.status, source: c.source, weight: c.weight, group: group.startsWith(world + '/') ? group : `${world}/${group}`,
-      phenomenon: r.phenomenon ?? null, tab: r.tab ?? null, target_from: r.target_from ?? null,
+      label_reason: r.label_reason ?? null, phenomenon: r.phenomenon ?? null, tab: r.tab ?? null, target_from: r.target_from ?? null,
       provenance: { file: file.replace(ROOT + '/', ''), example_id: r.example_id, lineage: r.lineage ?? null, author: r.author ?? null, batch: r.batch ?? null, attempt: r.attempt ?? null, seed: r.seed ?? null, generator_version: r.generator_version ?? null },
       _review: c.review, _flagged: c.flagged,
     };
@@ -86,8 +88,8 @@ function ingest(file, requireWorld) {
     rows.push(rec);
   }
 }
-for (const f of listJsonl(join(ROOT, 'training/data'))) ingest(f);
-for (const f of listJsonl(join(ROOT, 'training/paraphrases/out'))) ingest(f);
+for (const f of listJsonl(join(SRC, 'data'))) ingest(f);
+for (const f of listJsonl(join(SRC, 'paraphrases/out'))) ingest(f);
 
 // ---- dedupe by normalized text (+ context) per world; keep the most trustworthy ----------------------------------------
 const rank = (r) => (r._review ? -1 : r.weight) * 10 + (r.source === 'paraphrase' ? 2 : r.source === 'generator' ? 1 : 0) + (r.negative ? -0.5 : 0);
@@ -134,12 +136,14 @@ const out = { train: [], dev: [], test: [], review: [] };
 const files = new Map();
 const put = (world, name, rec) => { const f = join(OUT, world, name + '.jsonl'); if (!files.has(f)) { mkdirSync(dirname(f), { recursive: true }); files.set(f, []); } files.get(f).push(JSON.stringify(rec)); };
 const final = []; // records with their split, for routing
+const routeOnly = []; // relabel-quarantined records: no circuit, but the text and world label are right (dispatcher routing data)
 for (const r of kept) {
   let split = splitOfGroup.get(`${r.world}\u0000${r.group}`);
   const w = stats.worlds[r.world] ??= { total: 0, splits: {}, by_source: {}, by_label: {}, by_split_source: {}, by_split_label: {}, negatives: 0, review: 0 };
   if (r._review || (split === 'test' && r._flagged)) {
     put(r.world, 'review', { ...clean(r), split, reason: r._review ? 'needs_review' : 'flagged_in_test_group' });
     w.review++; inc(w, 'by_label', r.label_status); inc(w, 'by_source', r.source);
+    if (r._review && /^relabel:/.test(r.label_reason ?? '')) routeOnly.push({ ...r, split, weight: 0.8 });
     continue;
   }
   put(r.world, split, { ...clean(r), split });
@@ -177,7 +181,7 @@ const tabs = [...new Set(worldNames.map(tabOf).filter(Boolean))].sort();
 const routing = [];
 const seenRoute = new Map();
 const pick = (arr, s) => arr[Math.floor(unit(s) * arr.length) % arr.length];
-for (const r of final) {
+for (const r of [...final, ...routeOnly]) {
   if (r.negative) continue;
   const key = `${normText(r.text)}\u0000${r.context.map(normText).join('|')}\u0000${r.tab ?? ''}`;
   let tab = r.tab, recent = [], synthetic = false;
