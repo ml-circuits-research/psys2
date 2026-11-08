@@ -390,7 +390,10 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     if (phase === 'correct') {
       if (!sc) return null;
       const one = tryClauses([{ tokens: toks.filter((t) => t.kind !== 'punct'), span: sc.region, info: { kind: 'self-correction', source: sc.region, dropped: sc.dropped, copied: [] } }], null, bar);
-      return one;
+      if (one || !sc.ambiguous) return one;
+      // a short clause where the correction may answer instead of patching ("top left, no, center"): the whole clause is replaced
+      const w = selfCorrect(tokens, { whole: true });
+      return w ? tryClauses([{ tokens: w.tokens.filter((t) => t.kind !== 'punct'), span: w.region, info: { kind: 'self-correction', source: w.region, dropped: w.dropped, copied: [] } }], null, bar) : null;
     }
     for (const cand of sharedArgument(toks)) {
       const clauses = cand.clauses.map((c, i) => ({ tokens: c.tokens, span: c.own, guard: true, info: { kind: 'shared-argument', source: src, copied: c.copied, ...(sc ? { dropped: sc.dropped } : {}), index: i, of: cand.clauses.length } }));
