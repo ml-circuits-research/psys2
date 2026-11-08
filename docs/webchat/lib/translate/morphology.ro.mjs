@@ -44,6 +44,7 @@ function genSingular(sg, g) {
     const idx = stem.lastIndexOf('a');
     if (idx >= 0) out.push(stem.slice(0, idx) + 'e' + stem.slice(idx + 1) + 'i');
     if (idx >= 0) out.push(stem.slice(0, idx) + 'e' + stem.slice(idx + 1) + 'ei');
+    if (idx >= 0) out.push(stem.slice(0, idx) + 'e' + stem.slice(idx + 1) + 'ii');
   } else if (/ea$/.test(sg)) {
     out.push(sg.slice(0, -1) + 'ei');
   } else if (/ie$/.test(sg) && g === 'f') {

@@ -18,6 +18,7 @@ import { splitSentences } from '../formalizer/rules/normalize.mjs';
 import { spellCorrect, spellAlternates, worldVocabulary, spellVocabulary, restrictedSet, ignorable, FUNCTION_WORDS } from '../formalizer/spell.mjs';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs';
 import { Discourse } from './discourse.mjs';
+import { correctMessage } from '../formalizer/rules/expand.mjs';
 
 export { runWorldTests } from './test-runner.mjs';
 
@@ -315,6 +316,18 @@ export class DialogSession {
     return done;
   }
 
+  /** The message-level correction phase; `probe` reads a text with the rules, side-effect free with the rules (only used for ambiguous short clauses). */
+  async _correct(english) {
+    const { set, formalizers } = this.engine;
+    const probe = async (t) => {
+      try {
+        const r = await formalizers.rules.formalize(t, { worlds: set, session: this.isession, source: 'probe', context: this.context(), router: this.engine.router });
+        return r.segments.length > 0 && r.segments.every((x) => !x.unparsed) ? r.segments.map((x) => x.match?.patternId).join('+') : null;
+      } catch { return null; }
+    };
+    return correctMessage(english, { probe });
+  }
+
   async send(text, { language, formalizer, spell, partial } = {}) {
     const { engine } = this;
     const { set, interp, translator } = engine;
@@ -323,12 +336,20 @@ export class DialogSession {
     let lang = 'en', translation = null, english = text;
     if (translator) {
       lang = wanted === 'auto' ? langOf(await translator.detectLanguage(text)) : wanted;
+      if (wanted === 'auto') {   // a short or ambiguous input ("e", "ok") keeps the language of the session (default English); a confident detection becomes the session language
+        if (lang === 'unknown') lang = this._sessionLang ?? 'en';
+        else this._sessionLang = lang;
+      }
       if (lang !== 'en' && lang !== 'unknown') {
         translation = await translator.translate(text, { from: lang, to: 'en' });
         english = textOf(translation) ?? text;
       } else lang = 'en';
     }
     this.sources.set(sid, { original: text, english, lang, alignment: translation?.alignment });
+    // Correction phase (spec 03 section 1c, review G2): "knight to f3, no, knight to c3" is resolved on the whole message, before the
+    // modal interceptors, discourse, segmentation and routing, so the abandoned variant never has an effect.
+    const selfCorrections = await this._correct(english);
+    if (selfCorrections.corrections.length) english = selfCorrections.text;
 
     const stateBefore = Object.fromEntries(Object.entries(this.isession.state).map(([k, v]) => [k, JSON.stringify(v)]));
     this.isession.effects = [];
@@ -481,7 +502,7 @@ export class DialogSession {
         dispatch: dispatch ?? null,
         discourse: { resolved: pre?.info ?? null, meta: meta?.info ?? null, ...(feedback ? { feedback } : {}), pending: disc.pending ? { type: disc.pending.type, world: disc.pending.world, key: disc.pending.key, expected: disc.pending.expected, question: disc.pending.question } : null, consumed: pend ? { type: pend.type, world: pend.world, question: pend.question } : null, frames: disc.frames.length },
         ...(feedback ? { feedback } : {}),
-        source: sid, language: lang, original: text, english, replyEnglish: englishReply,
+        source: sid, language: lang, original: text, english, ...(selfCorrections.corrections.length ? { selfCorrections: selfCorrections.corrections } : {}), replyEnglish: englishReply,
         segments: segments.map(plainSegment), router: segments.map((s) => s.worlds),
         routing: icpt ? [{ router: 'policy', tier: 1, tierName: 'modal', reason: `modal input of ${icpt.worldId}`, contested: false, winner: { worldId: icpt.worldId }, runnerUp: null }] : segments.map((s) => s.routing ?? null),
         patterns: segments.filter((s) => s.match).map((s) => s.match.patternId),

@@ -13,6 +13,7 @@ import { createSwitchTranslator, browserTranslatorKind, browserTranslatorAvailab
 import { renderTrace } from './ui/trace.mjs';
 import { findDispatcherModel, dispatcherLoader, versionLabel } from './ui/dispatcher-host.mjs';
 import { findNormalizerModel, createNormalizerHost } from './ui/normalizer-host.mjs';
+import { sessionOptions } from './lib/dialog/runtime-config.mjs';
 import { DEFAULT_SETTINGS, SETTINGS_KEY, loadSettings } from './ui/settings.mjs';
 import { buildRecord, createStore, filterRecords, toJSONL, toText, exportFilename, summaryStatus, summaryWorlds } from './ui/phrase-log.mjs';
 
@@ -516,9 +517,7 @@ export async function mountPsys2(element, options = {}) {
   }
   function applyEngineSettings() {
     if (!session) return;
-    session.formalizer = settings.formalizer;
-    session.spell = settings.spellcheck !== false;
-    session.partial = settings.partialUnderstanding !== false;
+    Object.assign(session, sessionOptions(settings));
     if (session.settings && typeof session.settings === 'object') session.settings.formalizer = settings.formalizer;
     session.setOption?.('formalizer', settings.formalizer);
     if (settings.formalizer === 'encoder' && dispatcherEnc) dispatcherEnc.prepare().catch(() => {});   // lazy: only now is the model fetched
@@ -556,15 +555,13 @@ export async function mountPsys2(element, options = {}) {
           const nzrt = await import(new URL('lib/dialog/normalizer-runtime.mjs', base).href);
           normalizerHost = createNormalizerHost({ base, meta: nzMeta, lib: nzrt, onStatus: () => { if (!settingsEl.hidden) renderSettings(); } });
         }
-        const [enc, wp] = await Promise.all([import(new URL('lib/dialog/encoder-dispatch.mjs', base).href), import(new URL('lib/formalizer/wordpiece.mjs', base).href)]);
-        dispatcherEnc = enc.createDispatcherFormalizer({
+        const [rc, wp] = await Promise.all([import(new URL('lib/dialog/runtime-config.mjs', base).href), import(new URL('lib/formalizer/wordpiece.mjs', base).href)]);
+        dispatcherEnc = rc.createRuntime({   // the shared factory (lib/dialog/runtime-config.mjs, spec 03 section 7.14): same policy as the evaluators
+          engine, settings,
           load: dispatcherLoader({ base, meta, lib: wp, onSource: (src) => { modelSource = src; }, onProgress: (m) => { dispatcherStatus = { ...dispatcherStatus, message: m }; setStatus(); } }),
-          getPolicy: () => ({ acceptRefused: settings.encoderAcceptRefused !== false, trySpell: settings.spellcheck !== false, acceptPartial: settings.partialUnderstanding !== false, tryNormalizer: settings.normalizer !== false }),
           normalizer: normalizerHost?.provider ?? null,
           waitForModel: false,   // the model loads in the background; the rules answer until it is ready
         });
-        dispatcherEnc.attach(engine);
-        engine.formalizers.encoder = dispatcherEnc;
         dispatcherVersion = meta.version ?? null;
         dispatcherLabel = versionLabel(meta);
         dispatcherEnc.onStatus((st) => { if (st.state === 'error') encoderFailed(st.message); else if (st.state === 'ready') encoderNoticed = false; dispatcherStatus = { ...st, message: st.state === 'loading' ? dispatcherStatus.message || st.message : st.message }; setStatus(); if (!settingsEl.hidden) renderSettings(); });

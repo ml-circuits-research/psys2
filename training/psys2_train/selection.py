@@ -10,7 +10,7 @@ Two evaluators, one contract (a dict {n, right, partly_right, wrong, not_underst
 
   script  `node scripts/eval-operational.mjs ...` (built by the operational-set agent: training/eval/operational.jsonl, the real
           dispatcher -> validation -> rules pipeline in the webchat configuration). The command is a template, default
-          `node scripts/eval-operational.mjs --model-dir {export} --edit-tau {tau} --json`; {export} is the ONNX export directory made from the
+          `node scripts/eval-operational.mjs --mode encoder --model-dir {export} --edit-tau {tau} --json`; {export} is the ONNX export directory made from the
           checkpoint (python -m psys2_train.export_onnx), {ckpt} the checkpoint directory, {tau} the simplifier threshold. The script must print
           one JSON object (the contract above, optionally nested under "headline") on its last stdout line. Used when the script file exists.
   stub    until it lands: a small local set (training/eval/operational-stub.jsonl, `--make-stub`: the compositional families, the contrastive
@@ -26,7 +26,7 @@ from . import compositional, role_pairs
 EVAL = Path(__file__).resolve().parents[1] / "eval"
 STUB = EVAL / "operational-stub.jsonl"
 REPO = Path(__file__).resolve().parents[2]
-DEFAULT_CMD = "node scripts/eval-operational.mjs --model-dir {export} --edit-tau {tau} --json"
+DEFAULT_CMD = "node scripts/eval-operational.mjs --mode encoder --model-dir {export} --edit-tau {tau} --json"
 TAUS = [0.5, 0.6, 0.7, 0.8, 0.9]
 
 SINGLES = [

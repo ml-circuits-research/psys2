@@ -1,5 +1,7 @@
 // Webchat settings (spec 06 "Webchat settings"): defaults, the version bump and the one-time migration. Pure, no DOM, so node:test can import it.
 
+import { RUNTIME_DEFAULTS } from '../lib/dialog/runtime-config.mjs';
+
 /** Bumped whenever a default changes in a way saved settings must follow once. */
 export const SETTINGS_VERSION = 2;
 export const SETTINGS_KEY = 'psys2.webchat.settings';
@@ -7,11 +9,7 @@ export const SETTINGS_KEY = 'psys2.webchat.settings';
 export const DEFAULT_SETTINGS = {
   settingsVersion: SETTINGS_VERSION,
   language: 'en',
-  formalizer: 'encoder',          // the DistilBERT dispatcher validated by the rules; rules answer while it loads or when it cannot load
-  encoderAcceptRefused: true,
-  partialUnderstanding: true,     // execute what was understood and say what was ignored (spec 03 section 7.10)
-  normalizer: true,               // seq2seq phrasing normalizer, a fallback only: original and spell-corrected readings always win (spec 03 section 7.12)
-  spellcheck: true,               // spell correction against the worlds' vocabulary (spec 03 section 7.9)
+  ...RUNTIME_DEFAULTS,            // formalizer, encoderAcceptRefused, partialUnderstanding, normalizer, spellcheck: one definition shared with the evaluators (src/dialog/runtime-config.mjs)
   translation: 'auto', speechLang: 'follow', voice: '', rate: 1, handsFree: false, speaker: false, showTrace: false, logPhrases: true,
 };
 

@@ -1,0 +1,5 @@
+{
+ "file": null,
+ "status": "pending: written by the first full `node scripts/eval-operational.mjs --mode encoder+n1 --ort <onnxruntime-node>` run on the published models (G5; the combined full eval after the merges)",
+ "mode": "encoder+n1"
+}

@@ -35,6 +35,7 @@ import { defaultJobs } from './lib/shard.mjs';
 import { Worker, isMainThread, parentPort, workerData } from 'node:worker_threads';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
+import { policyFromSettings, runtimeSettings } from '../src/dialog/runtime-config.mjs';
 import { createDispatchValidator, normalizePrediction } from '../src/dialog/dispatch-validate.mjs';
 import { parse } from '../src/soplang/index.mjs';
 import { normalizedSop } from './collect-paraphrases.mjs';
@@ -55,7 +56,7 @@ export const MODES = {
   Bni: { ...STRICT, trySimplified: false, useInterpreter: false },
   Br: { ...STRICT, trySimplified: false, acceptRefused: true },
   Bs: { trySimplified: false, acceptRefused: true, trySpell: true },                          // Br plus the spell-corrected candidate (spec 03 section 7.9)
-  Bp: { trySimplified: false, acceptRefused: true, trySpell: true, acceptPartial: true },    // Bs plus partial understanding (spec 03 section 7.10)
+  Bp: { trySimplified: false, ...policyFromSettings(runtimeSettings()) },                     // Bs plus partial understanding (7.10): the shipped policy from the shared factory (src/dialog/runtime-config.mjs, 7.14), so it cannot drift from the webchat
 };
 
 // ---- worker side ---------------------------------------------------------------------------------------------------

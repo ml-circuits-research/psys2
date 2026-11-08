@@ -1,0 +1,8 @@
+{
+ "note": "Results of the evaluator before the shared runtime configuration (G5). Kept as data, not deleted; do not compare with the versioned reports one level up.",
+ "files": {
+  "operational-full.json": "89.0% right / 4.3% wrong, old dispatcher, no normalizer, evaluator without --mode (moved from training/results/operational-full.json)",
+  "operational-rules-only.json": "86.7% right, rules only, evaluator without --mode (moved from training/results/operational-rules-only.json)"
+ },
+ "superseded_by": "training/results/operational/published.json"
+}

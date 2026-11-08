@@ -613,6 +613,9 @@ gri|gray
 auriu,aurie,aurii,aurii|golden
 violet|violet
 mare,mari|big/bigger/biggest
+dublat,dublată,dublați,dublate|doubled
+triplat,triplată,triplați,triplate|tripled
+înjumătățit,înjumătățită,înjumătățiți,înjumătățite|halved
 mic,mică,mici,mici|small/smaller/smallest
 lung,lungă,lungi,lungi|long/longer/longest
 scurt,scurtă,scurți,scurte|short/shorter/shortest
@@ -810,6 +813,7 @@ acest,această,acești,aceste|this/these|det
 acel,acea,acei,acele|that/those|det
 fiecare|each|det quant
 orice,oricare|any|det quant
+vreun,vreo,vreunii,vreunele|any|det quant
 toți,toate,toată|all|det quant
 mulți,multe,multă|many|det quant
 puțini,puține,puțină|few|det quant

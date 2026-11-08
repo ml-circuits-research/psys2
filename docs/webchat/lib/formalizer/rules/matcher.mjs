@@ -73,7 +73,7 @@ export function compilePattern(match, phrases = null) {
       const macroIds = raw.filter((a) => a.startsWith('$')).map((a) => a.slice(1));
       const lits = raw.filter((a) => !a.startsWith('$')).map((a) => a.split('_').filter(Boolean).map((w) => w.toLowerCase()));
       if (lits.some((a) => a.length === 0) || macroIds.some((a) => !a)) throw new PatternError(`empty alternative in '${part}'`);
-      if (!macroIds.length) { elements.push({ t: 'alt', alts: lits, optional: !!m[2] }); continue; }
+      if (!macroIds.length) { elements.push({ t: 'alt', alts: lits, optional: !!m[2], order: null }); continue; }
       const tables = macroIds.map((id) => {
         const ph = phrases?.get(id);
         if (!ph) throw new PatternError(`unknown phrase '$${id}' in '${part}'`);
@@ -82,15 +82,21 @@ export function compilePattern(match, phrases = null) {
       // frame phrases first (they count as frame literals), then content phrases (`frame=false`), then the inline literals
       const ordered = [...tables.filter((p) => p.frame !== false), ...tables.filter((p) => p.frame === false)];
       const alts = ordered.length === 1 && !lits.length ? ordered[0].alts : [...ordered.flatMap((p) => p.alts), ...lits];
-      elements.push({ t: 'alt', alts, optional: !!m[2], frameN: tables.reduce((n, p) => n + (p.frame === false ? 0 : p.alts.length), 0), macros: macroIds });
+      elements.push({ t: 'alt', alts, optional: !!m[2], order: null, frameN: tables.reduce((n, p) => n + (p.frame === false ? 0 : p.alts.length), 0), macros: macroIds });
       continue;
     }
     if (/[\[\]{}|]/.test(part)) throw new PatternError(`malformed element '${part}'`);
     elements.push({ t: 'lit', words: part.split('_').filter(Boolean).map((w) => w.toLowerCase()) });
   }
+  // an alternative group directly before a free capture tries its longer alternatives first ("rename yourself to" before "rename yourself"),
+  // so a frame word never falls into the capture; elsewhere the written order stays (it can matter: "a" before "a few" with a number slot)
+  elements.forEach((e, k) => { if (e.t === 'alt' && elements[k + 1]?.t === 'slot' && elements[k + 1].cls === 'rest') e.order = byLength(e.alts); });
   const usesFiller = elements.some((e) => (e.t === 'lit' && listsFiller(e.words)) || (e.t === 'alt' && e.alts.some(listsFiller)));
   return { elements, slots, hasQ: elements.some((e) => e.t === 'q'), usesFiller };
 }
+
+/** Indexes of `alts` by descending word count (stable). */
+const byLength = (alts) => alts.map((a, k) => k).sort((x, y) => alts[y].length - alts[x].length || x - y);
 
 const isWordish = (t) => t && t.kind !== 'punct' && t.kind !== 'qmark' && !t.filler;
 
@@ -214,6 +220,9 @@ export function matchTokens(compiled, tokens, env) {
     return p;
   };
 
+  /** True when some alternative of the optional group `el` matches (non-empty) at tokens[i] and what follows it could end the sentence. */
+  const matchWords0 = (el, i) => el.alts.some((alt) => { const e = matchWords(alt, i); return e > 0 && e === n; });
+
   function run(k, i) {
     if (k === els.length) return i === n;
     const el = els[k];
@@ -233,7 +242,7 @@ export function matchTokens(compiled, tokens, env) {
       return false;
     }
     if (el.t === 'alt') {
-      for (let a = 0; a < el.alts.length; a++) {
+      for (const a of el.order ?? el.alts.keys()) {
         const alt = el.alts[a];
         const e = matchWords(alt, i);
         if (e < 0) continue;
@@ -247,7 +256,18 @@ export function matchTokens(compiled, tokens, env) {
       return el.optional ? run(k + 1, i) : false;
     }
     if (el.t === 'slot') {
-      for (const c of candidates(el, tokens, i, env, slots)) {
+      let cands = candidates(el, tokens, i, env, slots);
+      // a free capture stops before an optional suffix that follows it ("Zed from now on", "Bolt please"): the shorter capture with the suffix wins
+      const nx = els[k + 1];
+      if (el.cls === 'rest' && nx?.t === 'alt' && nx.optional && cands.length) {
+        const c0 = cands[0], all = [];
+        for (let len = c0.len; len >= 1; len--) {
+          const e = matchWords0(nx, i + len);
+          if (len === c0.len ? false : e) all.push({ ...c0, len, text: env.text.slice(tokens[i].start, tokens[i + len - 1].end), value: env.text.slice(tokens[i].start, tokens[i + len - 1].end), span: [tokens[i].start, tokens[i + len - 1].end] });
+        }
+        cands = [...all.slice(0, 1), ...cands];
+      }
+      for (const c of cands) {
         slots[el.name] = { class: el.cls, args: el.args, value: c.value, text: c.text, span: c.span, agent: c.agent, tokens: [i, i + c.len] };
         const loose = c.loose ? c.len : 0;
         skips += loose;

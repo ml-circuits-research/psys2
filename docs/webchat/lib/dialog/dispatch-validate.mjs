@@ -103,15 +103,27 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
   const restricted = new Map();
   let cache = new Map();
   const normCache = new Map();
-  /** Rewrites of `text` for `world` from the injected provider (`{ propose({ world, tab, text, beam }) -> string[] | Promise<string[]> }` or a bare function), cached. */
+  let normStamp;
+  const toRewrites = (out, beam) => (Array.isArray(out) ? out : []).map((x) => (typeof x === 'string' ? { text: x.trim(), score: null } : { text: String(x?.text ?? '').trim(), score: Number.isFinite(x?.score) ? x.score : null })).filter((x) => x.text).slice(0, beam);
+  /**
+   * Rewrites of `text` for `world` from the injected provider (a bare function or `{ propose({ world, tab, text, beam }), stamp? }`).
+   * The provider answers either an array of rewrites (status ready) or `{ status: 'not_ready' | 'error' | 'ready', rewrites }`.
+   * Only `ready` answers are memoized: an empty list returned while the model loads, or after an error, must not stick. A provider may expose
+   * `stamp` (a string or a function: model version and state); when it changes the memo is dropped, so a rewrite computed by an older model is never reused.
+   * Returns { status, rewrites }.
+   */
   const proposeRewrites = async (world, tab, text, beam) => {
+    const stamp = typeof normalizer?.stamp === 'function' ? normalizer.stamp() : normalizer?.stamp;
+    if (stamp !== normStamp) { normCache.clear(); normStamp = stamp; }
     const key = JSON.stringify([world, tab, text, beam]);
-    if (!normCache.has(key)) {
-      let out = [];
-      try { out = await (typeof normalizer === 'function' ? normalizer : normalizer.propose)({ world, tab, text, beam }); } catch { out = []; }
-      normCache.set(key, (Array.isArray(out) ? out : []).map((x) => (typeof x === 'string' ? { text: x.trim(), score: null } : { text: String(x?.text ?? '').trim(), score: Number.isFinite(x?.score) ? x.score : null })).filter((x) => x.text).slice(0, beam));
-    }
-    return normCache.get(key);
+    if (normCache.has(key)) return { status: 'ready', rewrites: normCache.get(key) };
+    let out;
+    try { out = await (typeof normalizer === 'function' ? normalizer : normalizer.propose)({ world, tab, text, beam }); } catch { return { status: 'error', rewrites: [] }; }
+    const status = Array.isArray(out) || out == null ? 'ready' : out.status === 'not_ready' || out.status === 'error' ? out.status : 'ready';
+    if (status !== 'ready') return { status, rewrites: [] };
+    const rewrites = toRewrites(Array.isArray(out) ? out : out?.rewrites, beam);
+    normCache.set(key, rewrites);
+    return { status: 'ready', rewrites };
   };
 
   /** A view of the world set with only the given worlds and their imports (own memo cache; legends shared). */
@@ -206,13 +218,35 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
     return seg ? { world: worlds.find((w) => w === mw) ?? worlds.find((w) => view([w]).ids.includes(mw)) ?? null, decision: seg.routing } : null;
   };
 
+  /**
+   * Validity class of a segmentation (spec 03 section 7.13): 0 = every piece read completely from the original or spell-corrected text;
+   * 1 = complete, but some piece needed generated text (simplified or normalizer); 2 = complete only through partial understanding or a
+   * weak fallback reading; 3 = some piece is not read at all, or two pieces are cut apart inside a clause (no punctuation or connective) and a neighbour is not a clean top-ranked original reading (weak cut). Selection is lexicographic: lower class first, scores only order within a class.
+   */
+  const DELIMITED = /[.,;:!?\n]|\b(and|then|also|but|or|next)\b/i;
+  /** A cut inside a clause (no punctuation or connective between two pieces) is only believed when both neighbours are read cleanly: top-ranked world, original text. */
+  const weakCut = (pieces, text) => pieces.some((p, i) => {
+    if (i === 0) return false;
+    const q = pieces[i - 1];
+    if (DELIMITED.test(text.slice(q.end, p.start)) || DELIMITED.test(q.text.slice(-1)) || /^(and|then|also|but|or|next)\b/i.test(p.text)) return false;
+    const clean = (x) => x.chosen.rank === 1 && x.chosen.variant === 'original';
+    return !(clean(q) && clean(p));
+  });
+  const tierOf = (pieces, text = '') => {
+    if (!pieces.length || pieces.some((p) => !p.valid) || weakCut(pieces, text)) return 3;
+    if (pieces.some((p) => p.chosen.partial || p.chosen.variant === 'partial' || p.chosen.fallback)) return 2;
+    if (pieces.some((p) => p.chosen.variant === 'simplified' || p.chosen.variant === 'normalized')) return 1;
+    return 0;
+  };
+
   /** Evaluate every piece of one segmentation (all candidates, no early exit) and pick each piece's best candidate. */
-  const evalSegmentation = async (pred, seg, o) => {
+  const evalSegmentation = async (pred, seg, o, useNormalizer = true) => {
     const prefix = [];
     const pieces = [];
     let total = o.segWeight * seg.score;
     for (const [pi, piece] of seg.segments.entries()) {
       const attempts = [];
+      let normalizerStatus = null;   // not_ready | error when the normalizer could not answer for this piece (trace only)
       const worlds = piece.worlds.slice(0, o.maxWorlds);
       const ctxPrefix = o.intersegmentContext ? prefix : [];
       const logpOf = (w) => Math.log(Math.max(w.score, o.scoreFloor));
@@ -253,11 +287,13 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
         }
       }
       // normalizer (spec 03 section 7.12): only when nothing validates yet; the first rewrite that the rules read AND whose values are preserved wins
-      if (normalizer && o.tryNormalizer && seg.index < o.normalizerSegmentations && !attempts.some((a) => a.valid)) {
+      if (useNormalizer && normalizer && o.tryNormalizer && seg.index < o.normalizerSegmentations && !attempts.some((a) => a.valid)) {
         for (const [rank, w] of worlds.entries()) {
           if (rank >= o.normalizerWorlds) break;
           const vocab = worldVocabulary(engine.set, w.world);
-          for (const { text, score: nzScore } of await proposeRewrites(w.world, pred.context.tab, piece.text, o.normalizerBeam)) {
+          const proposed = await proposeRewrites(w.world, pred.context.tab, piece.text, o.normalizerBeam);
+          if (proposed.status !== 'ready') { normalizerStatus = proposed.status; break; }   // loading or failed: the rules answer, nothing is remembered
+          for (const { text, score: nzScore } of proposed.rewrites) {
             if (text === piece.text.trim()) continue;
             if (o.normalizerMinScore != null && nzScore != null && nzScore < o.normalizerMinScore) continue;
             const vc = o.checkValues ? checkValues(piece.text, text, { vocab, lost: o.valueLost, ...(o.valueStrictness === 'strict' ? { polarity: true, grounded: true, keepKnown: true } : {}) }) : { ok: true };
@@ -329,10 +365,10 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
       const pieceScore = best ? best.score : -o.unparsedPenalty + Math.log(o.scoreFloor);
       total += pieceScore;
       if (best?.valid) prefix.push({ world: best.world, text: best.text });
-      pieces.push({ index: pi, start: piece.start, end: piece.end, text: piece.text, simplified: piece.simplified ?? null, attempts: attempts.map(({ wires, ...a }) => ({ ...a, wires: wires.length })),
-        chosen: best ? { world: best.world, rank: best.rank, variant: best.variant, text: best.text, valid: best.valid, score: best.score, wires: best.wires, corrections: best.corrections, partial: best.partial } : null, valid: !!best?.valid, tie });
+      pieces.push({ index: pi, start: piece.start, end: piece.end, text: piece.text, simplified: piece.simplified ?? null, ...(normalizerStatus ? { normalizerStatus } : {}), attempts: attempts.map(({ wires, ...a }) => ({ ...a, wires: wires.length })),
+        chosen: best ? { world: best.world, rank: best.rank, variant: best.variant, text: best.text, valid: best.valid, fallback: !!best.fallback, score: best.score, wires: best.wires, corrections: best.corrections, partial: best.partial } : null, valid: !!best?.valid, tie });
     }
-    return { index: seg.index, dispatcherScore: seg.score, score: total, valid: pieces.length > 0 && pieces.every((p) => p.valid), nInvalid: pieces.filter((p) => !p.valid).length, pieces };
+    return { index: seg.index, dispatcherScore: seg.score, score: total, tier: tierOf(pieces, pred.text), valid: pieces.length > 0 && pieces.every((p) => p.valid), nInvalid: pieces.filter((p) => !p.valid).length, pieces };
   };
 
   /** Validate one prediction. `override` replaces policy fields for this call only. */
@@ -341,9 +377,13 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
     const pred = normalizePrediction(prediction);
     const segs = pred.segmentations.slice(0, o.maxSegmentations);
     const evals = [];
-    for (const seg of segs) evals.push(await evalSegmentation(pred, seg, o));
-    // winner: best total score; ties (within tieEps) keep the dispatcher's order (most likely first)
-    const ranked = [...evals].sort((a, b) => b.score - a.score || a.index - b.index);
+    // phase 1: every segmentation without the normalizer; the normalizer only runs on residue that no segmentation reads completely (spec 03 section 7.13)
+    for (const seg of segs) evals.push(await evalSegmentation(pred, seg, o, false));
+    if (normalizer && o.tryNormalizer && evals.every((e) => e.tier > 1)) {
+      for (const [i, seg] of segs.entries()) if (seg.index < o.normalizerSegmentations) evals[i] = await evalSegmentation(pred, seg, o, true);
+    }
+    // winner: lowest validity class first (complete before partial, original/spell before generated); within a class the best total score; ties keep the dispatcher's order
+    const ranked = [...evals].sort((a, b) => a.tier - b.tier || b.score - a.score || a.index - b.index);
     const winner = ranked[0] ?? null;
     const understood = !!winner?.valid;
     const produced = winner ? winner.pieces.filter((p) => p.valid).map((p) => ({ start: p.start, end: p.end, text: p.text, world: p.chosen.world, textUsed: p.chosen.variant, usedText: p.chosen.text, corrections: p.chosen.corrections ?? [], partial: p.chosen.partial ?? null, wires: p.chosen.wires })) : [];
@@ -382,11 +422,11 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
       produced: produced.map((p) => ({ ...p, sop: sopOf(p.wires) })),
       notUnderstood, why,
       trace: { policy: o, segmentations: evals.map(({ pieces, ...e }) => ({ ...e, pieces: pieces.map((p) => ({ ...p, chosen: p.chosen && { ...p.chosen, wires: p.chosen.wires.length } })) })), winnerIndex: winner?.index ?? null,
-        formula: 'score(seg) = segWeight*seg.score + sum over pieces [ worldWeight*ln(max(p_world,scoreFloor)) - unparsedPenalty*(piece invalid) - simplifiedPenalty*(simplified used) ]' },
+        formula: 'order: class(seg) (0 original/spell complete, 1 generated complete, 2 partial, 3 invalid), then score(seg) = segWeight*seg.score + sum over pieces [ worldWeight*ln(max(p_world,scoreFloor)) - unparsedPenalty*(piece invalid) - simplifiedPenalty*(simplified used) ]' },
     };
   };
 
-  return { validate, clearCache: () => { cache = new Map(); }, policy: base, engine };
+  return { validate, clearCache: () => { cache = new Map(); normCache.clear(); normStamp = undefined; }, policy: base, engine };
 }
 
 /** One-shot helper: `validateDispatch({ prediction, engine, policy })`. */

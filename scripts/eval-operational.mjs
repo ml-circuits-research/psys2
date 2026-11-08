@@ -4,35 +4,35 @@
  * every message of training/eval/operational.jsonl goes through the full pipeline in the webchat configuration and the final
  * state / answer / effects are checked against the expectation written for it. Deterministic (no sampling, fixed order).
  *
- * Configurations (the webchat defaults, docs/webchat/ui/settings.mjs): formalizer 'encoder' (dispatcher model through onnxruntime-node,
- * rule validation), spellcheck on, partial understanding on, acceptRefused on. `--rules-only` uses the rule formalizer with the same
- * spellcheck/partial settings (what the webchat answers with while the model loads).
+ * Configurations come from ONE factory shared with the webchat (src/dialog/runtime-config.mjs, spec 03 section 7.14); `--mode`:
+ *   rules       the rule formalizer with the same spellcheck / partial settings (what the webchat answers with while the model loads)
+ *   encoder     dispatcher model through onnxruntime-node, rule validation, no normalizer
+ *   encoder+n1  the shipped default: encoder plus the seq2seq normalizer as a fallback (default mode)
  *
- *   node scripts/eval-operational.mjs --rules-only [--name rules]
- *   node scripts/eval-operational.mjs --ort <scratch>/node_modules/onnxruntime-node/dist/index.js [--model docs/webchat/models/dispatcher] [--name full]
- *   parallelism: --jobs N (default os.availableParallelism(): the cases are sharded over N worker threads, each loads the engine and the ONNX
- *     session once, onnxruntime intraOpNumThreads=1 per worker; results merged in the original order, totals identical to --jobs 1).
- *     Latency is measured per message inside the worker, so with N > 1 it includes CPU contention: use `--jobs 1` for the single-thread
- *     CPU latency measurement (the output says which mode was used: "mode single-thread" or "mode sharded xN").
- *   options: --model-dir <dir> (dispatcher export: model.int8.onnx, vocab.txt, meta.json) --edit-tau <float> (simplifier threshold) --json (last stdout line = one JSON object {n,right,partly_right,wrong,not_understood,latency_ms}; combine with --no-write)  --limit N  --world <id>  --family <name>  --set <file>  --no-write  --verbose (print non-right cases)  --replies (print every case's outcome and reply, for diffing runs)
+ *   node scripts/eval-operational.mjs --mode rules
+ *   node scripts/eval-operational.mjs --mode encoder+n1 --ort <scratch>/node_modules/onnxruntime-node/dist/index.js
+ *   parallelism: --jobs N (default all cores): the cases are sharded over N worker threads (scripts/lib/shard.mjs), each builds its own pipeline through the shared factory, onnxruntime one thread per worker; results merge in the original order, totals identical to --jobs 1. Latency with N > 1 includes CPU contention; cold start / model load are per worker (mean in the report, all in latency.per_worker); warm_cache only with --jobs 1.
+ *   options: --model-dir <dir> (dispatcher export: model.int8.onnx, vocab.txt, meta.json) --normalizer-dir <dir> --edit-tau <float> (simplifier threshold) --json (last stdout line = one JSON object {n,right,partly_right,wrong,not_understood,latency_ms}; combine with --no-write)  --limit N  --world <id>  --family <name>  --set <file>  --no-write  --verbose (print non-right cases)  --replies (print every case's outcome and reply, for diffing runs)  --rules-only (alias of --mode rules)  --name <label> (extra label in the file name)
  *
  * onnxruntime-node is NOT a dependency of the repository: install it in a scratch directory and pass the path (like verify-dispatcher-js.mjs).
  *
  * Outcomes per message: right | partly | wrong (it acted or answered, and the result is wrong or contradicts: worse than not understood)
  * | not_understood. Headline = right / all messages, per world and per world group (scripts/lib/world-groups.mjs); latency per message.
- * Writes training/results/operational-<name>.json (summary + one row per case).
+ * Writes training/results/operational/<mode>-<dispatcher sha8>-<date>[-label].json (summary + one row per case; each report carries the model
+ * hashes, the policy (settings) and cold-start / ready / warm timings) and updates training/results/operational/published.json when the run is the
+ * shipped configuration (mode encoder+n1, full set, published models).
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
-import { createDispatcherFormalizer } from '../src/dialog/encoder-dispatch.mjs';
-import { createWordPieceTokenizer } from '../src/formalizer/wordpiece.mjs';
-import { groupOf, GROUP_ORDER } from './lib/world-groups.mjs';
-import { evaluateCase, classify } from './lib/operational-check.mjs';
+import { DEFAULT_MODE, MODES, sessionOptions, settingsForMode, runtimeSettings } from '../src/dialog/runtime-config.mjs';
+import { openNodeRuntime, modelHashes } from './lib/runtime-node.mjs';
 import { isMainThread } from 'node:worker_threads';
 import { parseJobs, runSharded, serveShard } from './lib/shard.mjs';
+import { groupOf, GROUP_ORDER } from './lib/world-groups.mjs';
+import { evaluateCase, classify } from './lib/operational-check.mjs';
 
 const SELF = fileURLToPath(import.meta.url);
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -40,46 +40,26 @@ const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 &
 const flag = (k) => process.argv.includes(`--${k}`);
 const OUTCOMES = ['right', 'partly', 'wrong', 'not_understood'];
 
-/** The webchat default configuration (docs/webchat/ui/settings.mjs DEFAULT_SETTINGS). */
-export const WEBCHAT = { formalizer: 'encoder', spellcheck: true, partialUnderstanding: true, encoderAcceptRefused: true };
-
 export function loadCases(file) {
   return readFileSync(file, 'utf8').split('\n').filter((l) => l.trim()).map((l) => JSON.parse(l));
 }
 
-async function makeEngine({ rulesOnly, ortPath, modelDir, editTau, ortThreads }) {
+// ---- pipeline construction (the one place that differs per mode; the settings come from src/dialog/runtime-config.mjs) -------------
+async function buildPipeline({ mode, ortPath, modelDir, normalizerDir, editTau, ortThreads }) {
   const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT) });
-  if (rulesOnly) return { engine, formalizer: 'rules', modelInfo: null };
-  if (!ortPath) throw new Error('--ort <path to onnxruntime-node entry> is required (or use --rules-only)');
-  const mod = await import(pathToFileURL(resolve(ortPath)).href);
-  const ort = mod.InferenceSession ? mod : mod.default;
-  const dir = resolve(modelDir);
-  const meta = JSON.parse(readFileSync(join(dir, 'meta.json'), 'utf8'));
-  const enc = createDispatcherFormalizer({
-    waitForModel: true,
-    getPolicy: () => ({ acceptRefused: WEBCHAT.encoderAcceptRefused, trySpell: WEBCHAT.spellcheck, acceptPartial: WEBCHAT.partialUnderstanding }),
-    load: async () => {
-      const session = await ort.InferenceSession.create(join(dir, 'model.int8.onnx'), { graphOptimizationLevel: 'all', ...(ortThreads ? { intraOpNumThreads: ortThreads, interOpNumThreads: 1 } : {}) });
-      let editTags = null;
-      if (meta.onnx?.outputs?.includes('edit_logits')) editTags = JSON.parse(readFileSync(join(dir, 'edit-vocab.json'), 'utf8')).tags;
-      return { ort, session, tokenizer: createWordPieceTokenizer(readFileSync(existsSync(join(dir, 'vocab.txt')) ? join(dir, 'vocab.txt') : join(dir, 'tokenizer', 'vocab.txt'), 'utf8')), worlds: meta.worlds, editTags, editTau: editTau ?? meta.edit_threshold ?? 0.5, useContext: meta.context !== false };
-    },
-  });
-  enc.attach(engine);
-  engine.formalizers.encoder = enc;
-  await enc.prepare();
-  return { engine, formalizer: 'encoder', modelInfo: meta.version ?? { model: meta.model } };
+  const rt = await openNodeRuntime({ engine, mode, ortPath, dispatcherDir: modelDir, normalizerDir, editTau, ortThreads });
+  return { engine, ...rt };
 }
 
-function newSession(engine, formalizer, c) {
-  const s = engine.createSession({ language: 'en', formalizer, spell: WEBCHAT.spellcheck, partial: WEBCHAT.partialUnderstanding });
+function newSession(engine, settings, c) {
+  const s = engine.createSession(sessionOptions(settings, { language: 'en' }));
   if (c.tab) s.setWorldState('ui.shell', { activeTab: c.tab });
   for (const [w, patch] of Object.entries(c.init ?? {})) s.setWorldState(w, patch);
   return s;
 }
 
-export async function runCase(engine, formalizer, c) {
-  const s = newSession(engine, formalizer, c);
+export async function runCase(engine, settings, c) {
+  const s = newSession(engine, settings, c);
   for (const m of c.setup ?? []) await s.send(m);
   const before = s.state();
   const t0 = performance.now();
@@ -135,53 +115,84 @@ export function summarize(cases, rows) {
   };
 }
 
+const sha8 = (h) => (h ? h.slice(0, 8) : 'nomodel');
+
 async function main() {
   const file = resolve(arg('set', join(REPO, 'training/eval/operational.jsonl')));
   let cases = loadCases(file);
+  const fullSet = !arg('world') && !arg('family') && !arg('limit');
   if (arg('world')) cases = cases.filter((c) => c.world === arg('world'));
   if (arg('family')) cases = cases.filter((c) => (c.families ?? []).includes(arg('family')));
   if (arg('limit')) cases = cases.slice(0, Number(arg('limit')));
-  const rulesOnly = flag('rules-only');
-  const name = arg('name', rulesOnly ? 'rules-only' : 'full');
+  const mode = flag('rules-only') ? 'rules' : arg('mode', DEFAULT_MODE);
+  if (!MODES[mode]) throw new Error(`--mode must be one of ${Object.keys(MODES).join(' | ')}`);
+  const modelDir = arg('model-dir', arg('model', join(REPO, 'docs/webchat/models/dispatcher')));
+  const normalizerDir = arg('normalizer-dir', join(REPO, 'docs/webchat/models/normalizer'));
+  const popts = { mode, ortPath: arg('ort'), modelDir, normalizerDir, editTau: arg('edit-tau') !== undefined ? Number(arg('edit-tau')) : undefined };
   const jobs = Math.max(1, Math.min(parseJobs(), cases.length || 1));
-  const mopts = { rulesOnly, ortPath: arg('ort'), modelDir: arg('model-dir', arg('model', join(REPO, 'docs/webchat/models/dispatcher'))), editTau: arg('edit-tau') !== undefined ? Number(arg('edit-tau')) : undefined };
-  const mode = jobs === 1 ? 'single-thread' : `sharded x${jobs}`;
   const note = (c, r) => {
     if (flag('replies') && !flag('json')) console.log(`${c.id}\t${r.outcome}\t${JSON.stringify(r.reply ?? r.error ?? null)}`);
     if (flag('verbose') && !flag('json') && r.outcome !== 'right') console.log(`${r.outcome.padEnd(14)} ${c.world.padEnd(15)} ${c.id}  "${c.message}"  -> ${r.reply ?? r.error}  [${(r.failing ?? []).join('; ')}]`);
   };
-  const t0 = Date.now();
-  let rows, formalizer, modelInfo;
+  const lat = (a) => ({ n: a.length, mean: Math.round(a.reduce((x, y) => x + y, 0) / (a.length || 1)), p50: quant(a, 0.5), p95: quant(a, 0.95), max: Math.round(Math.max(0, ...a)) });
+  // Latency regimes (G5): cold start = start of the pipeline to ready models (per worker); first message = the first answer after loading (runtime warm-up,
+  // nothing memoized); steady state = the later messages; warm cache = a second pass over the first cases with the validator's memo filled (single job only).
+  let rows, info, latency;
   if (jobs === 1) {
-    const env = await makeEngine(mopts);
-    ({ formalizer, modelInfo } = env);
+    const tStart = performance.now();
+    const pipe = await buildPipeline(popts);
+    info = pipe.info;
+    const coldStartMs = Math.round(performance.now() - tStart);
     rows = [];
-    for (const c of cases) { const r = await runCase(env.engine, formalizer, c); rows.push(r); note(c, r); }
+    for (const c of cases) { const r = await runCase(pipe.engine, pipe.settings, c); rows.push(r); note(c, r); }
+    const ms = rows.map((r) => r.ms);
+    const warm = [];
+    for (const c of cases.slice(0, Math.min(20, cases.length))) warm.push((await runCase(pipe.engine, pipe.settings, c)).ms);
+    latency = { jobs, cold_start_ms: coldStartMs, model_load_ms: info.load_ms, first_message_ms: Math.round(ms[0] ?? 0), steady_state: lat(ms.slice(1)), warm_cache: lat(warm), normalizer_propose: pipe.normalizerHost ? lat(pipe.normalizerHost.timings) : null };
   } else {
-    rows = await runSharded({ file: SELF, items: cases, jobs, workerData: { ...mopts, ortThreads: rulesOnly ? 0 : 1 } });
-    formalizer = rulesOnly ? 'rules' : 'encoder';
-    if (rulesOnly) modelInfo = null;
-    else { const meta = JSON.parse(readFileSync(join(resolve(mopts.modelDir), 'meta.json'), 'utf8')); modelInfo = meta.version ?? { model: meta.model }; }
+    rows = await runSharded({ file: SELF, items: cases, jobs, workerData: { ...popts, ortThreads: mode === 'rules' ? 0 : 1 } });
     cases.forEach((c, i) => note(c, rows[i]));
+    const loads = rows.filter((r) => r._load).map((r) => ({ ...r._load, first_message_ms: Math.round(r.ms) }));
+    const firstIds = new Set(rows.filter((r) => r._load).map((r) => r.id));
+    for (const r of rows) delete r._load;
+    const dDir = resolve(modelDir);
+    info = { mode, settings: runtimeSettings(settingsForMode(mode)), hashes: mode === 'rules' ? null : modelHashes({ dispatcherDir: dDir, normalizerDir: resolve(normalizerDir), withNormalizer: settingsForMode(mode).normalizer !== false }) };
+    const mean = (k) => Math.round(loads.reduce((x, l) => x + l[k], 0) / (loads.length || 1));
+    latency = { jobs, workers: loads.length, cold_start_ms: mean('cold_start_ms'), cold_start_ms_max: Math.max(0, ...loads.map((l) => l.cold_start_ms)), model_load_ms: { dispatcher: loads[0]?.load_ms.dispatcher ?? null, normalizer: loads[0]?.load_ms.normalizer ?? null, note: 'first worker; per worker in per_worker' }, first_message_ms: mean('first_message_ms'), steady_state: lat(rows.filter((r) => !firstIds.has(r.id)).map((r) => r.ms)), warm_cache: null, normalizer_propose: null, contention: 'per-message latency includes CPU contention of the other workers; use --jobs 1 for single-thread latency', per_worker: loads };
   }
-  const wall = (Date.now() - t0) / 1000;
   const summary = summarize(cases, rows);
-  const out = { run: { mode, jobs }, config: { name, formalizer, ...WEBCHAT, rulesOnly, set: file.replace(`${REPO}/`, ''), cases: cases.length, model: modelInfo }, ...summary, cases: rows.map(({ ms, ...r }) => ({ ...r, ms: Math.round(ms) })) };
+  const dsha = info.hashes?.dispatcher?.sha256 ?? null;
+  const config = { mode, jobs, formalizer: settingsForMode(mode).formalizer, policy: info.settings, hashes: info.hashes, set: file.replace(`${REPO}/`, ''), cases: cases.length, full_set: fullSet, date: new Date().toISOString().slice(0, 10) };
+  const out = { config, ...summary, latency, cases: rows.map(({ ms, ...r }) => ({ ...r, ms: Math.round(ms) })) };
   const h = summary.headline;
-  if (!flag('json')) console.log(`mode ${mode} (${jobs} job${jobs > 1 ? 's' : ''}), wall ${wall.toFixed(1)} s; latency measured per message inside the worker${jobs > 1 ? ' (includes CPU contention; use --jobs 1 for single-thread CPU latency)' : ''}`);
-  if (!flag('json')) console.log(`config ${name}: ${h.n} messages  right ${h.right_pct}%  partly ${h.partly_pct}%  wrong ${h.wrong_pct}%  not understood ${h.not_understood_pct}%  latency p50 ${summary.latency_ms.p50} ms p95 ${summary.latency_ms.p95} ms`);
-  if (!flag('json')) for (const [g, t] of Object.entries(summary.by_group)) console.log(`  ${g.padEnd(24)} n=${String(t.n).padStart(4)}  right ${String(t.right_pct).padStart(5)}%  partly ${String(t.partly_pct).padStart(5)}%  wrong ${String(t.wrong_pct).padStart(5)}%  nu ${String(t.not_understood_pct).padStart(5)}%`);
+  if (!flag('json')) {
+    console.log(`mode ${mode}: ${h.n} messages  right ${h.right_pct}%  partly ${h.partly_pct}%  wrong ${h.wrong_pct}%  not understood ${h.not_understood_pct}%`);
+    console.log(`  latency: cold start ${latency.cold_start_ms} ms${jobs > 1 ? ` (mean of ${latency.workers} workers)` : ''} (dispatcher load ${latency.model_load_ms.dispatcher ?? '-'} ms, normalizer load ${latency.model_load_ms.normalizer ?? '-'} ms)  first message ${latency.first_message_ms} ms  steady p50 ${latency.steady_state.p50} / p95 ${latency.steady_state.p95} ms  warm cache ${latency.warm_cache ? `p50 ${latency.warm_cache.p50} / p95 ${latency.warm_cache.p95} ms` : 'n/a (sharded)'}`);
+    for (const [g, t] of Object.entries(summary.by_group)) console.log(`  ${g.padEnd(24)} n=${String(t.n).padStart(4)}  right ${String(t.right_pct).padStart(5)}%  partly ${String(t.partly_pct).padStart(5)}%  wrong ${String(t.wrong_pct).padStart(5)}%  nu ${String(t.not_understood_pct).padStart(5)}%`);
+  }
   if (!flag('no-write')) {
-    mkdirSync(join(REPO, 'training/results'), { recursive: true });
-    writeFileSync(join(REPO, `training/results/operational-${name}.json`), `${JSON.stringify(out, null, 1)}\n`);
+    const dir = join(REPO, 'training/results/operational');
+    mkdirSync(dir, { recursive: true });
+    const label = arg('name') ? `-${arg('name')}` : '';
+    const rel = `training/results/operational/${mode}-${sha8(dsha)}-${config.date}${label}${fullSet ? '' : `-limit${cases.length}`}.json`;
+    writeFileSync(join(REPO, rel), `${JSON.stringify(out, null, 1)}\n`);
+    if (!flag('json')) console.log(`wrote ${rel}`);
+    // the manifest records the published (shipped) configuration: mode encoder+n1, the whole set, the published model files
+    if (fullSet && mode === DEFAULT_MODE && info.hashes?.dispatcher?.match && info.hashes?.normalizer?.match) {
+      writeFileSync(join(dir, 'published.json'), `${JSON.stringify({ file: rel, mode, date: config.date, dispatcher_sha256: dsha, normalizer_sha256: info.hashes.normalizer.meta_sha256, policy: info.settings, headline: { n: h.n, right_pct: h.right_pct, wrong_pct: h.wrong_pct, not_understood_pct: h.not_understood_pct } }, null, 1)}\n`);
+    }
   }
   // checkpoint-selection contract: exactly one JSON object on the last stdout line
   if (flag('json')) console.log(JSON.stringify({ n: h.n, right: h.right, partly_right: h.partly, wrong: h.wrong, not_understood: h.not_understood, latency_ms: summary.latency_ms.mean }));
 }
 
 if (!isMainThread) {
+  // shard worker: builds its own pipeline through the shared factory (runtime-config via openNodeRuntime); the first row it returns carries its load info
   serveShard(async (wd) => {
-    const env = await makeEngine(wd);
-    return (c) => runCase(env.engine, env.formalizer, c);
+    const t0 = performance.now();
+    const env = await buildPipeline(wd);
+    const load = { cold_start_ms: Math.round(performance.now() - t0), load_ms: env.info.load_ms };
+    let sent = false;
+    return async (c) => { const r = await runCase(env.engine, env.settings, c); if (!sent) { sent = true; r._load = load; } return r; };
   });
-} else if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) await main();
+} else if (process.argv[1] && resolve(process.argv[1]) === SELF) await main();
