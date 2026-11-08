@@ -706,4 +706,5 @@
     emit="@{_} core.request action=hm.giveup"
     kind=request
     priority=12
+    tabOnly=true
     example="I cannot guess it, I give up."

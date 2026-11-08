@@ -3176,6 +3176,7 @@
     emit="@{_} core.request action=music.playNote arg.reg={reg} arg.note={note} arg.oct={oct} arg.inst={inst} arg.beats={n} arg.explicit=true"
     kind=request
     priority=13
+    example="4 beats of middle C."
 
 @pat.media.music.x2.middle core.pattern
     match="[what_is|whats|what_s|tell_me|what_pitch_is|how_high_is|how_high_is_the|what_hertz_is] [the]? {reg:lex.media.music.registers} [note]? {note:lex.media.music.notes} {oct:number?} [in_hertz|in_hz|in_frequency]? [pls|plz|please|thanks]?"

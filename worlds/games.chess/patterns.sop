@@ -1091,11 +1091,10 @@
     example="Concede the game."
 
 @pat.games.chess.resign.admit core.pattern
-    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|gg|um|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh|ok]? [i_admit_defeat|i_lose|i_have_lost|i_am_lost|you_win|you_have_won|you_won|you_beat_me|i_am_beaten|i_am_defeated|i_accept_defeat|i_surrender_the_game|i_throw_in_the_towel|i_am_throwing_in_the_towel|i_am_done_you_win|i_am_out_you_win|i_have_no_chance|there_is_no_hope|game_over_you_win|it_is_over_you_win|you_got_me|you_got_me_i_resign|i_cannot_win|i_can_not_win|you_are_too_good|you_are_too_strong] [now|here|this_time|again|please|this_game|game]? [pls|plz|thanks|thx|lol|rn|now|then|yeah|ok]?"
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|gg|um|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh|ok]? [i_admit_defeat|i_lose|i_have_lost|you_win|you_have_won|you_won|you_beat_me|i_am_beaten|i_am_defeated|i_accept_defeat|i_surrender_the_game|i_throw_in_the_towel|i_am_throwing_in_the_towel|i_am_done_you_win|i_am_out_you_win|i_have_no_chance|there_is_no_hope|game_over_you_win|it_is_over_you_win|you_got_me|you_got_me_i_resign|i_cannot_win|i_can_not_win|you_are_too_good|you_are_too_strong] [now|here|this_time|again|please|this_game|game]? [pls|plz|thanks|thx|lol|rn|now|then|yeah|ok]?"
     emit="@{_} core.request action=chess.resign"
     kind=request
     priority=13
-    tabOnly=true
     example="I admit defeat."
     example="You win."
     example="I throw in the towel."
