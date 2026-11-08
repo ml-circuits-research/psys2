@@ -25,3 +25,6 @@
 - Worlds marked `status=fixture` are hand-built platform fixtures and demos; they are not produced by the C1 workflow and must say so.
 - Tests: `npm test` must pass before committing. Every world ships `tests.sop` and must pass `node src/cli.mjs test-world <id>`.
 - Commits go directly to `main` (no pull requests for now). Small, descriptive commits.
+
+## Worker sessions (training on the DGX Spark)
+- A worker agent starts from `worker-tasks.md` and follows its protocol: `worker-tasks.md` is append-only and written by the reviewer; the worker appends questions to `questions.md` (never deletes) and progress to `worker-log.md`.
