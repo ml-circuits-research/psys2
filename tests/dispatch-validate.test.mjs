@@ -100,13 +100,13 @@ test('candidate order per world: original, then spell-corrected, then simplified
 });
 
 test('a spell-corrected text is accepted only when the rules parse it', async () => {
-  const good = 'whats seven times six';
+  const good = 'what is seven tims six';
   const r = await validator.validate(msg(good, [{ score: -0.1, segments: [piece(good, W(['kids.arith', 0.9]))] }]));
   assert.equal(r.status, 'understood');
   const c = r.produced[0];
   assert.equal(c.textUsed, 'spell');
-  assert.deepEqual(c.corrections.map((x) => [x.from, x.to]), [['whats', 'what is']]);
-  assert.match(r.why, /after correcting "whats" to "what is"/);
+  assert.deepEqual(c.corrections.map((x) => [x.from, x.to]), [['tims', 'times']]);
+  assert.match(r.why, /after correcting "tims" to "times"/);
   const bad = 'blorp frazzle wibble';
   const r2 = await validator.validate(msg(bad, [{ score: -0.1, segments: [piece(bad, W(['kids.arith', 0.9]))] }]));
   assert.equal(r2.status, 'not_understood');

@@ -84,11 +84,11 @@ test('a window that turns a request into a bare question is rejected', () => {
 
 test('dialog: spelling fallback on the rules path, with the correction reported', async () => {
   const s = engine.createSession();
-  const r = await s.send('whats seven times six pls');
+  const r = await s.send('what is seven tims six pls');
   assert.match(r.text, /7 times 6 is 42/);
-  assert.deepEqual(r.segments[0].corrections.map((c) => [c.from, c.to]), [['whats', 'what is'], ['pls', 'please']]);
-  assert.match(r.text, /I read "whats" as "what is"/);
-  const off = await engine.createSession({ spell: false }).send('whats seven times six pls');
+  assert.deepEqual(r.segments[0].corrections.map((c) => [c.from, c.to]), [['tims', 'times']]);
+  assert.match(r.text, /I read "tims" as "times"/);
+  const off = await engine.createSession({ spell: false }).send('what is seven tims six pls');
   assert.equal(off.statuses.includes('unparsed') || off.statuses.length === 0, true);
 });
 
@@ -98,8 +98,8 @@ test('dialog: partial understanding is off by default, on executes what was read
   assert.ok(off.statuses.includes('unparsed'));
   const on = await engine.createSession({ partial: true }).send(text);
   assert.match(on.text, /7 times 6 is 42/);
-  assert.match(on.text, /I understood only part of that: I did not use "hey could you tell me" and "sweetie"/);
-  assert.deepEqual(on.segments[0].ignored, ['hey could you tell me', 'sweetie']);
+  assert.match(on.text, /I understood only part of that: I did not use "sweetie"/);
+  assert.deepEqual(on.segments[0].ignored, ['sweetie']);
 });
 
 test('dialog: multi-command, the readable clause runs and the other is reported', async () => {

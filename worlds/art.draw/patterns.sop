@@ -953,7 +953,7 @@
     match="[where|wher] [did|do|does|can|could|will|would|should|have|has|had] [you|i|we|u]? [put|leave|place|draw|stick|add|see|find|spot|hide|move|keep|make|paint|drop|park] [the|my|that|this|those|these|all_the|all_of_the]? {o:lex.art.draw.ordinals?} {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
     emit="@{_} core.request action=draw.where arg.o={o} arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
     kind=request
-    priority=12
+    priority=8
     example="Where did you put the trees?"
     example="Where can I see the tree?"
 
@@ -1023,7 +1023,7 @@
     example="List the things I can draw."
 
 @pat.art.draw.x.help.showme core.pattern
-    match="[list|show|tell|name|give|explain|remind|let_me_see|let_me_know|i_want_to_know|i_wanna_know|do_you_know|can_you_tell_me|tell_me|show_me] [me]? what [i|we|you|u] [can|could|may|might] [draw|paint|make|add|do|sketch|create|put] [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
+    match="[list|show|tell|name|give|explain|remind|let_me_see|let_me_know|i_want_to_know|i_wanna_know|do_you_know|can_you_tell_me|tell_me|show_me] [me]? what [i|we|you|u] [can|could|may|might] [draw|paint|make|add|sketch|create|put] [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
     emit="@{_} core.request action=draw.help"
     kind=request
     priority=12
@@ -1315,7 +1315,7 @@
     example="Tell me how many trees there are."
 
 @pat.art.draw.x.count.nounfirst core.pattern
-    match="[the|my]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [how_many|how_many_are_there|how_many_are_in_it|how_many_in_total|how_many_altogether|how_much] [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
+    match="[the|my]? {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.things} [how_many|how_many_are_there|how_many_are_in_it|how_many_in_total|how_many_altogether] [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
     emit="@{_} core.request action=draw.count arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\""
     kind=request
     priority=12
