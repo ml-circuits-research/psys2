@@ -737,3 +737,10 @@
     kind=request
     priority=9
     example="Undo the last move."
+
+@pat.games.tictactoe.x2.hint.where core.pattern
+    match="[hint|tip|clue|help|advice|suggestion|suggest|any_hint|a_hint|some_help|a_tip] [pls|plz|please|me|thanks]? [where_should_i|where_do_i|where_can_i|where_to|where_would_you|what_should_i|which_square_should_i|which_place_should_i|what_is_my_best|whats_my_best|which_is_the_best] {r:rest?}"
+    emit="@{_} core.request action=ttt.hint"
+    kind=request
+    priority=12
+    example="Hint pls where should I put my mark."

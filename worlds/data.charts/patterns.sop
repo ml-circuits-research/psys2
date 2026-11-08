@@ -2662,3 +2662,11 @@
     priority=14
     example="I would rather see it as a pie."
     example="I prefer a line chart."
+
+@pat.data.charts.x2.set.not core.pattern
+    match="[wait|oops|whoops|sorry|hold_on|actually|no_wait|oh]? {l:words(3,label)} [are|is|was|were|should_be|has_to_be|must_be|equals|equal] {n:number} [not|and_not|rather_than|instead_of|but_not|no_not|not_actually] {m:number} [fix_it|fix_that|fix_this|correct_it|correct_that|please|pls|plz|thanks|ok|okay]?"
+    emit="@{_} core.request action=chart.setPoint arg.l=\"{l}\" arg.n={n}"
+    kind=request
+    priority=14
+    example="Pears are 6 not 3."
+    example="Wait, pears are 6 not 3, fix it."

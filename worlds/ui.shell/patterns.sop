@@ -798,7 +798,7 @@
     example="Enough, game over"
 
 @pat.ui.shell.x2.open.documents core.pattern
-    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [open|show|display|bring_up|go_to|switch_to|take_me_to|jump_to|select|view|show_me|open_up|pick|choose|let_me_see] [me]? [the|my|your|ur]? [documents|docs|reader|document_reader|library] [tab|page|screen|panel|window]? [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [can_u|can_you|could_u|could_you|will_you|would_you|please_can_you|will_u|would_u]? [open|show|display|bring_up|go_to|switch_to|take_me_to|jump_to|select|view|show_me|open_up|pick|choose|let_me_see] [me]? [the|my|your|ur]? [documents|docs|reader|document_reader|library] [tab|page|screen|panel|window] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=ui.openTab arg.tab=documents"
     kind=request
     priority=15

@@ -668,3 +668,23 @@
     session=hu1
     input="letter count"
     expect="4 letters"
+
+@t.games.hangman.x501 core.test
+    session=hg1
+    input="Play hangman with the word lion."
+    expectStatus=supported
+
+@t.games.hangman.x502 core.test
+    session=hg1
+    input="i can't guess it, give up"
+    expect="lion"
+
+@t.games.hangman.x503 core.test
+    session=hg2
+    input="Play hangman with the word lion."
+    expectStatus=supported
+
+@t.games.hangman.x504 core.test
+    session=hg2
+    input="i cannot solve it anymore, i quit"
+    expect="lion"

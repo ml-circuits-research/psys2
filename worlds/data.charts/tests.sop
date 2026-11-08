@@ -1339,3 +1339,18 @@
     session=cu3
     input="take that back"
     expectState="charts.0.labels.length=3"
+
+@t.data.charts.x501 core.test
+    session=cc1
+    input="make a chart: apples 5, pears 3, plums 8"
+    expectStatus=supported
+
+@t.data.charts.x502 core.test
+    session=cc1
+    input="wait, pears are 6 not 3, fix it"
+    expectState="charts.0.datasets.0.data.1=6"
+
+@t.data.charts.x503 core.test
+    session=cc1
+    input="plums are 2 not 8"
+    expectState="charts.0.datasets.0.data.2=2"

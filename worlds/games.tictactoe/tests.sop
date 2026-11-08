@@ -775,3 +775,18 @@
     session=tu2
     input="undo"
     expectStatus=missing
+
+@t.games.tictactoe.x501 core.test
+    session=th1
+    input="Start a new tic tac toe game."
+    expectStatus=supported
+
+@t.games.tictactoe.x502 core.test
+    session=th1
+    input="hint pls where should i put my mark"
+    expectStatus=supported
+
+@t.games.tictactoe.x503 core.test
+    session=th1
+    input="tip where do i play next"
+    expectStatus=supported

@@ -289,7 +289,7 @@
 
 @t.ui.shell.x202 core.test
     session=sh1
-    input="show my docs"
+    input="show my docs tab"
     expectState="activeTab=documents"
 
 @t.ui.shell.x203 core.test

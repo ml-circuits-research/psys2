@@ -700,3 +700,10 @@
     priority=11
     example="How many letters does the word have?"
     example="How long is the word?"
+
+@pat.games.hangman.x2.giveup.cant core.pattern
+    match="[i|we]? [can|could|cannot|can_not|can_t|cant|couldn_t|couldnt|am_not_able_to|am_unable_to|just_cant|just_can_t]? [not|never]? [guess|get|solve|figure_out|find|work_out|do|crack|think_of]? [it|this|the_word|that|any_of_it|the_letters]? [anymore|any_more|at_all|now|today|either]? [,]? [so|ok|okay|well|just]? [i]? [give_up|i_give_up|quit|i_quit|forget_it|i_surrender|i_am_done|im_done|show_me_the_word|tell_me_the_word|reveal_it|let_me_quit|stop|enough]"
+    emit="@{_} core.request action=hm.giveup"
+    kind=request
+    priority=12
+    example="I cannot guess it, I give up."

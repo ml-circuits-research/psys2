@@ -1380,3 +1380,18 @@
     session=cx3
     input="open with the queen pawn one square"
     expectState="history.0=d3"
+
+@t.games.chess.x501 core.test
+    session=cw1
+    input="Let's play chess."
+    expectStatus=supported
+
+@t.games.chess.x502 core.test
+    session=cw1
+    input="where are my castles (rooks)"
+    expect="rook"
+
+@t.games.chess.x503 core.test
+    session=cw1
+    input="where is my castle"
+    expect="rook"

@@ -1095,6 +1095,7 @@
     emit="@{_} core.request action=chess.resign"
     kind=request
     priority=13
+    tabOnly=true
     example="I admit defeat."
     example="You win."
     example="I throw in the towel."
@@ -1931,3 +1932,11 @@
     priority=13
     example="h pawn one squares."
 
+
+@pat.games.chess.x2.where.castles core.pattern
+    match="[where|where_exactly] [is|are|was|were] {o:lex.games.chess.owners?} [castle|castles] [rook|rooks]?"
+    emit="@{_} core.request action=chess.where arg.o={o} arg.piece=rook"
+    kind=request
+    priority=15
+    example="Where are my castles (rooks)?"
+    example="Where is my castle?"
