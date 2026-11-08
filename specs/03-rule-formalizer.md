@@ -99,3 +99,45 @@ Scores every loaded world for each sentence: `+5` if one of its patterns matches
 
 ## 6. Training-data export
 Because every emitted wire carries `core.source` offsets and the slot spans, the rule formalizer can export encoder training records (vision §6: text, mentions, key spans, references, label status `generator-backed` or `rule-derived`). `scripts/export-training.mjs` writes JSONL for `training/`. With `--routing-context` the generator's own world is the active tab (`routing` is attached to each record) and the report gives the agreement with and without that context, so cross-world ties are labelled by context instead of counted as disagreements.
+
+## 7. Dispatcher validation layer
+A learned **dispatcher** (one small shared encoder, worker-tasks D1) proposes how to cut a message and which worlds own each piece. It never produces circuits. The rule formalizers **validate** its proposals (ADR-005). Implementation: `src/dialog/dispatch-validate.mjs` (browser-safe, no `node:*`), evaluation: `scripts/eval-dispatch.mjs`.
+
+### 7.1 Input contract (dispatcher prediction, one JSON object per line)
+```
+{ id, text,
+  context: { tab, recent_worlds: [world...], session: [earlier user messages...] },
+  boundaries: [{ offset, p }],                      // optional, per-token boundary probability (informational)
+  segmentations: [                                  // beam <= 4, most likely first
+    { score,                                        // log-probability of the segmentation (<= 0)
+      segments: [ { start, end, text,               // character offsets in `text` and the piece text
+                    worlds: [{ world, score }],     // top-3, most likely first; score is a probability in [0,1]
+                    simplified? } ] } ],            // optional cleaner variant of the piece (edit-tag head)
+  gold? }                                           // ignored by the validator
+```
+`id` must be the dataset record id so the evaluation can join gold: the id of a `training/dataset/<world>/test.jsonl` record, of a `routing.jsonl` test row, or of a `multicmd/test.jsonl` message (`mc......`). Parsing is tolerant (`normalizePrediction`): negative world scores are read as natural-log probabilities, `worlds` entries may be `[world, score]` or bare ids (rank-based score), `p`/`prob` may replace `score`, a segmentation may be a bare list of segments, a missing `segmentations` becomes one segmentation of the whole text using the record's `worlds`, `simplified` equal to `text` is dropped, missing `text` of a piece is sliced from `start`/`end`.
+
+### 7.2 Checking a candidate
+For every piece, every candidate world (score order, up to `maxWorlds`) and every text variant (original, then `simplified` when present and `trySimplified`), a **fresh dialog session** is seeded exactly as the dataset records are: active tab (`ui.shell` state), recent worlds, then the `session` messages. When `intersegmentContext` is on, the pieces chosen earlier in the same segmentation are replayed first, so pronouns and elliptic sentences see what the earlier pieces said. The candidate is then formalized with the rule formalizer **restricted to the candidate world and its `extends`/imports** (a view of the world set with only those worlds), with the session's routing context and the engine's router. The wires of parsed segments are added to the session and every wire is resolved by the interpreter.
+
+A candidate is **valid** when
+1. every segment the rules found is parsed (no unparsed token group) and at least one segment exists, and
+2. the interpreter returns neither `unsupported` nor `error` for any wire (`missing`, `conflicting`, `budget` and `supported` are fine: the sentence was understood, the state may lack facts).
+
+A candidate that parses completely but is refused by the interpreter is `refused` (typical: an illegal chess move, a drawing command with nothing drawn). With `acceptRefused` it counts as valid with a smaller penalty (default off, as specified; the evaluation reports both).
+
+### 7.3 Scoring (log domain, all weights are policy options, defaults in `DEFAULT_POLICY`)
+For a piece, each candidate (world w, variant v) scores
+`s = worldWeight * ln(max(p_w, scoreFloor)) - simplifiedPenalty * [v is simplified] - penalty`, with `penalty = 0` when valid, `interpreterPenalty` when refused and `acceptRefused`, else `unparsedPenalty`.
+The piece takes its best candidate. A segmentation scores `segWeight * seg.score + sum of the piece scores` (a piece with no candidate contributes `-unparsedPenalty + ln(scoreFloor)`). Defaults: `segWeight 1`, `worldWeight 1`, `unparsedPenalty 6` (about x 0.0025), `interpreterPenalty 3`, `simplifiedPenalty 0.05`, `scoreFloor 1e-6`, `tieEps 1e-6`, `maxSegmentations 4`, `maxWorlds 3`. The winner is the segmentation with the highest score (ties keep the dispatcher order). The result is `understood` iff every piece of the winner is valid.
+
+### 7.4 Ties and routing policy
+Candidates of one piece whose scores differ by at most `tieEps`, same text, different worlds, are tied. The tie is broken by the routing policy of section 4: the text is formalized with the tied worlds together (same session, same context) and the router's winner is chosen, so the tiers apply unchanged (modal, navigation, active tab, game/recent worlds, priority). The decision tier and reason are recorded in the trace.
+
+### 7.5 Result and trace
+`validateDispatch` returns `{ id, text, status: 'understood' | 'not_understood', winner: { index, score }, produced: [{ start, end, text, world, textUsed, usedText, wires, sop }], notUnderstood, why, trace }`.
+- `notUnderstood` (only when nothing validates) holds the best segmentation's failing pieces with their candidate worlds (`pieces[].candidateWorlds`, `candidateWorlds`), so `ui.help` can say "Did you mean ...?" with examples from those worlds.
+- `trace.segmentations[]` lists every segmentation, every piece, **every candidate** (world, rank, variant, text, score, `valid`, `refused`, reason, matched worlds, interpreter statuses, unparsed count), the piece's choice and tie decision, and `why` explains the winner (beats the top segmentation, candidate 2 recovered after candidate 1 failed, only the simplified text validates, tie broken by tier ...).
+
+### 7.6 Exact SOP of a message
+For evaluation, the circuits of a message are the concatenation, in message order, of the id-normalized SOP (`normalizedSop`) of every produced piece; the gold is the same concatenation over the gold segments' targets. A negative record is correct when the result is `not_understood`.

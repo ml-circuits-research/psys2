@@ -1,0 +1,118 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
+import { createEngine } from '../src/dialog/index.mjs';
+import { createDispatchValidator, normalizePrediction, toProb, DEFAULT_POLICY } from '../src/dialog/dispatch-validate.mjs';
+
+const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
+const validator = createDispatchValidator({ engine });
+const W = (...pairs) => pairs.map(([world, score]) => ({ world, score }));
+const piece = (text, worlds, extra = {}, start = 0) => ({ start, end: start + text.length, text, worlds, ...extra });
+const msg = (text, segmentations, context = {}) => ({ id: 't', text, context: { tab: null, recent_worlds: [], session: [], ...context }, segmentations });
+const winnerWorlds = (r) => r.produced.map((p) => p.world);
+
+test('valid top-1 is accepted as is', async () => {
+  const t = 'What is 20 divided by 4';
+  const r = await validator.validate(msg(t, [{ score: -0.1, segments: [piece(t, W(['kids.arith', 0.9], ['kids.shapes', 0.05]))] }]));
+  assert.equal(r.status, 'understood');
+  assert.deepEqual(winnerWorlds(r), ['kids.arith']);
+  assert.match(r.produced[0].sop, /core.question/);
+  assert.equal(r.trace.segmentations[0].pieces[0].chosen.rank, 1);
+});
+
+test('wrong top-1 is rejected and candidate 2 recovers', async () => {
+  const t = 'What is 20 divided by 4';
+  const r = await validator.validate(msg(t, [{ score: -0.1, segments: [piece(t, W(['games.chess', 0.6], ['kids.arith', 0.3], ['kids.shapes', 0.1]))] }]));
+  assert.equal(r.status, 'understood');
+  assert.deepEqual(winnerWorlds(r), ['kids.arith']);
+  const att = r.trace.segmentations[0].pieces[0].attempts;
+  assert.equal(att.find((a) => a.world === 'games.chess').valid, false);
+  assert.equal(att.find((a) => a.world === 'kids.arith').rank, 2);
+  assert.match(r.why, /candidate world 2 \(kids.arith\) recovered/);
+});
+
+test('a segmentation alternative wins when the top one cannot be read', async () => {
+  const t = 'What is 20 divided by 4. How many legs does a spider have?';
+  const a = 'What is 20 divided by 4.', b = 'How many legs does a spider have?';
+  const r = await validator.validate(msg(t, [
+    { score: -0.1, segments: [piece(t, W(['kids.arith', 0.9]))] },
+    { score: -0.8, segments: [piece(a, W(['kids.arith', 0.9])), piece(b, W(['kids.animals', 0.8]), {}, t.indexOf(b))] },
+  ]));
+  assert.equal(r.status, 'understood');
+  assert.equal(r.winner.index, 1);
+  assert.deepEqual(winnerWorlds(r), ['kids.arith', 'kids.animals']);
+  assert.equal(r.trace.segmentations[0].valid, false);
+  assert.match(r.why, /beats the dispatcher's top segmentation/);
+});
+
+test('nothing validates: not understood, with the candidate worlds', async () => {
+  const t = 'blorp frazzle wibble';
+  const r = await validator.validate(msg(t, [{ score: -0.2, segments: [piece(t, W(['kids.arith', 0.5], ['kids.shapes', 0.3], ['media.music', 0.1]))] }]));
+  assert.equal(r.status, 'not_understood');
+  assert.deepEqual(r.produced, []);
+  assert.deepEqual(r.notUnderstood.candidateWorlds, ['kids.arith', 'kids.shapes', 'media.music']);
+  assert.equal(r.notUnderstood.pieces[0].text, t);
+  assert.ok(r.trace.segmentations[0].pieces[0].attempts.every((a) => !a.valid));
+});
+
+test('simplified text validates when the original does not', async () => {
+  const orig = 'blorp what is 20 divided by 4 blorp';
+  const simple = 'what is 20 divided by 4';
+  const pred = msg(orig, [{ score: -0.1, segments: [piece(orig, W(['kids.arith', 0.9]), { simplified: simple })] }]);
+  const withSimp = await validator.validate(pred);
+  assert.equal(withSimp.status, 'understood');
+  assert.equal(withSimp.produced[0].textUsed, 'simplified');
+  assert.equal(withSimp.produced[0].usedText, simple);
+  assert.match(withSimp.why, /only the simplified text validates/);
+  const without = await validator.validate(pred, { trySimplified: false });
+  assert.equal(without.status, 'not_understood');
+});
+
+test('a tie between worlds is broken by the routing policy tiers (active tab)', async () => {
+  const t = 'Play B3';
+  const run = (tab) => validator.validate(msg(t, [{ score: -0.1, segments: [piece(t, W(['games.tictactoe', 0.5], ['media.music', 0.5]))] }], { tab }));
+  const onMusic = await run('music'), onGame = await run('tictactoe');
+  assert.deepEqual(winnerWorlds(onMusic), ['media.music']);
+  assert.deepEqual(winnerWorlds(onGame), ['games.tictactoe']);
+  const tie = onMusic.trace.segmentations[0].pieces[0].tie;
+  assert.deepEqual(tie.worlds.sort(), ['games.tictactoe', 'media.music']);
+  assert.equal(tie.decision.tierName, 'active-tab');
+  assert.match(onMusic.why, /broken by routing policy/);
+});
+
+test('a piece the rules parse but the interpreter refuses is invalid unless acceptRefused', async () => {
+  const t = 'Move the pawn on d two to a3.';   // parsed by games.chess, refused as an illegal move
+  const pred = msg(t, [{ score: -0.1, segments: [piece(t, W(['games.chess', 0.9]))] }]);
+  const strict = await validator.validate(pred);
+  assert.equal(strict.status, 'not_understood');
+  assert.equal(strict.trace.segmentations[0].pieces[0].attempts[0].refused, true);
+  const lenient = await validator.validate(pred, { acceptRefused: true });
+  assert.equal(lenient.status, 'understood');
+  assert.equal(lenient.produced[0].world, 'games.chess');
+});
+
+test('scores follow the documented formula and the trace lists every candidate', async () => {
+  const t = 'What is 20 divided by 4';
+  const r = await validator.validate(msg(t, [{ score: -0.5, segments: [piece(t, W(['games.chess', 0.4], ['kids.arith', 0.2]))] }]));
+  const p = DEFAULT_POLICY;
+  const expected = p.segWeight * -0.5 + p.worldWeight * Math.log(0.2);
+  assert.ok(Math.abs(r.winner.score - expected) < 1e-9);
+  const att = r.trace.segmentations[0].pieces[0].attempts;
+  assert.equal(att.length, 2);
+  assert.ok(Math.abs(att[0].score - (Math.log(0.4) - p.unparsedPenalty)) < 1e-9);
+});
+
+test('prediction parsing is tolerant', () => {
+  assert.equal(toProb(-0.6931471805599453).toFixed(3), '0.500');
+  const n = normalizePrediction({ id: 'x', text: 'hello there', segmentations: [[{ start: 0, end: 5, worlds: [['kids.common', 0.9], 'ui.shell'] }]] });
+  assert.equal(n.segmentations[0].segments[0].text, 'hello');
+  assert.deepEqual(n.segmentations[0].segments[0].worlds.map((w) => w.world), ['kids.common', 'ui.shell']);
+  const bare = normalizePrediction({ id: 'y', text: 'hi', worlds: [{ world: 'kids.common', score: 1 }] });
+  assert.equal(bare.segmentations[0].segments[0].text, 'hi');
+});
+
+test('the validation layer is browser-safe (no node: imports)', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const src = await readFile(new URL('../src/dialog/dispatch-validate.mjs', import.meta.url), 'utf8');
+  assert.equal(/from\s+['"]node:/.test(src), false);
+});

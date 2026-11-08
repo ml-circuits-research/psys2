@@ -1,0 +1,3211 @@
+{
+  "task": "D3",
+  "name": "oracle",
+  "command": "node scripts/eval-dispatch.mjs --pred training/runs/dispatch-oracle/oracle.jsonl",
+  "inputs": {
+    "files": [
+      "training/runs/dispatch-oracle/oracle.jsonl"
+    ],
+    "records": 8654,
+    "skipped_no_gold": 0,
+    "skipped_duplicate": 0,
+    "unparsable_lines": 0,
+    "evaluation_errors": 0
+  },
+  "policy": {
+    "seg_iou": 0.6
+  },
+  "definitions": {
+    "modes": {
+      "A": "dispatcher top-1 segmentation, top-1 world per piece, original text, rules only (no interpreter)",
+      "B": "beam 4, top-3 worlds, original text, rules + interpreter validation",
+      "C": "B plus simplified text (equal to B when no piece has simplified)",
+      "Bni": "B without the interpreter check"
+    },
+    "exact_sop": "concatenation (message order) of id-normalized SOP of produced pieces equals the concatenation of id-normalized SOP of each gold segment target; negative: result is not_understood",
+    "segmentation_match": "same number of pieces, every piece overlaps its gold segment with character IoU >= 0.6",
+    "recovery": "recoverable = top-1 segmentation right, some piece has the gold world not first but within top 3; wrong_top1_rejected = every such piece top-1 candidate fails validation in B; recovered_exact = B exact",
+    "failure_classes": "for mode C failures: segmentation wrong (no beam entry matches) > world not in candidates (gold world of a piece not in top 3) > rule gap (rules of the gold world do not parse the piece, original or simplified) > interpreter rejects correct parse > wrong reading chosen (gold reading valid but another won) > sop differs (gold world and segmentation chosen, circuits differ)"
+  },
+  "totals": {
+    "n": 8654,
+    "pos": 8242,
+    "neg": 412,
+    "scored_pos": 8242,
+    "seg_beam": 8242,
+    "seg_top1": 8242,
+    "w_top1": 8242,
+    "w_top3": 8242,
+    "with_simplified": 0,
+    "recoverable": 0,
+    "rejected": 0,
+    "recovered": 0,
+    "wrong_accepted": 0,
+    "seg_tp": 12183,
+    "seg_pred": 12183,
+    "seg_gold": 12183,
+    "neg_ok": {
+      "A": 404,
+      "B": 375,
+      "C": 375,
+      "Bni": 374,
+      "Br": 374
+    },
+    "ok": {
+      "A": 6750,
+      "B": 6278,
+      "C": 6278,
+      "Bni": 6750,
+      "Br": 6746
+    },
+    "failure_classes": {
+      "interpreter rejects correct parse": 507,
+      "rule gap": 1209,
+      "sop differs": 248
+    },
+    "oracle": {
+      "segmentation_in_beam": 1,
+      "segmentation_top1": 1,
+      "world_top1": 1,
+      "world_top3": 1
+    },
+    "segmentation_f1_top1": 1,
+    "exact_sop": {
+      "A": 0.819,
+      "B": 0.7617,
+      "C": 0.7617,
+      "Bni": 0.819,
+      "Br": 0.8185
+    },
+    "negatives_rejected": {
+      "A": 0.9806,
+      "B": 0.9102,
+      "C": 0.9102,
+      "Bni": 0.9078,
+      "Br": 0.9078
+    },
+    "recovery": {
+      "recoverable": 0,
+      "wrong_top1_rejected": 0,
+      "recovered_exact": 0,
+      "wrong_top1_accepted": 0
+    }
+  },
+  "by_group": {
+    "kids": {
+      "n": 1848,
+      "pos": 1557,
+      "neg": 291,
+      "scored_pos": 1557,
+      "seg_beam": 1557,
+      "seg_top1": 1557,
+      "w_top1": 1557,
+      "w_top3": 1557,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 1557,
+      "seg_pred": 1557,
+      "seg_gold": 1557,
+      "neg_ok": {
+        "A": 290,
+        "B": 285,
+        "C": 285,
+        "Bni": 285,
+        "Br": 285
+      },
+      "ok": {
+        "A": 1452,
+        "B": 1451,
+        "C": 1451,
+        "Bni": 1452,
+        "Br": 1452
+      },
+      "failure_classes": {
+        "rule gap": 105,
+        "interpreter rejects correct parse": 1
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 0.9326,
+        "B": 0.9319,
+        "C": 0.9319,
+        "Bni": 0.9326,
+        "Br": 0.9326
+      },
+      "negatives_rejected": {
+        "A": 0.9966,
+        "B": 0.9794,
+        "C": 0.9794,
+        "Bni": 0.9794,
+        "Br": 0.9794
+      },
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      },
+      "by_source": {
+        "generator": {
+          "n": 1685,
+          "pos": 1394,
+          "neg": 291,
+          "scored_pos": 1394,
+          "seg_beam": 1394,
+          "seg_top1": 1394,
+          "w_top1": 1394,
+          "w_top3": 1394,
+          "with_simplified": 0,
+          "recoverable": 0,
+          "rejected": 0,
+          "recovered": 0,
+          "wrong_accepted": 0,
+          "seg_tp": 1394,
+          "seg_pred": 1394,
+          "seg_gold": 1394,
+          "neg_ok": {
+            "A": 290,
+            "B": 285,
+            "C": 285,
+            "Bni": 285,
+            "Br": 285
+          },
+          "ok": {
+            "A": 1394,
+            "B": 1394,
+            "C": 1394,
+            "Bni": 1394,
+            "Br": 1394
+          },
+          "failure_classes": {},
+          "oracle": {
+            "segmentation_in_beam": 1,
+            "segmentation_top1": 1,
+            "world_top1": 1,
+            "world_top3": 1
+          },
+          "segmentation_f1_top1": 1,
+          "exact_sop": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "Bni": 1,
+            "Br": 1
+          },
+          "negatives_rejected": {
+            "A": 0.9966,
+            "B": 0.9794,
+            "C": 0.9794,
+            "Bni": 0.9794,
+            "Br": 0.9794
+          },
+          "recovery": {
+            "recoverable": 0,
+            "wrong_top1_rejected": 0,
+            "recovered_exact": 0,
+            "wrong_top1_accepted": 0
+          }
+        },
+        "paraphrase": {
+          "n": 128,
+          "pos": 128,
+          "neg": 0,
+          "scored_pos": 128,
+          "seg_beam": 128,
+          "seg_top1": 128,
+          "w_top1": 128,
+          "w_top3": 128,
+          "with_simplified": 0,
+          "recoverable": 0,
+          "rejected": 0,
+          "recovered": 0,
+          "wrong_accepted": 0,
+          "seg_tp": 128,
+          "seg_pred": 128,
+          "seg_gold": 128,
+          "neg_ok": {
+            "A": 0,
+            "B": 0,
+            "C": 0,
+            "Bni": 0,
+            "Br": 0
+          },
+          "ok": {
+            "A": 23,
+            "B": 23,
+            "C": 23,
+            "Bni": 23,
+            "Br": 23
+          },
+          "failure_classes": {
+            "rule gap": 105
+          },
+          "oracle": {
+            "segmentation_in_beam": 1,
+            "segmentation_top1": 1,
+            "world_top1": 1,
+            "world_top3": 1
+          },
+          "segmentation_f1_top1": 1,
+          "exact_sop": {
+            "A": 0.1797,
+            "B": 0.1797,
+            "C": 0.1797,
+            "Bni": 0.1797,
+            "Br": 0.1797
+          },
+          "negatives_rejected": null,
+          "recovery": {
+            "recoverable": 0,
+            "wrong_top1_rejected": 0,
+            "recovered_exact": 0,
+            "wrong_top1_accepted": 0
+          }
+        },
+        "rule-derived": {
+          "n": 35,
+          "pos": 35,
+          "neg": 0,
+          "scored_pos": 35,
+          "seg_beam": 35,
+          "seg_top1": 35,
+          "w_top1": 35,
+          "w_top3": 35,
+          "with_simplified": 0,
+          "recoverable": 0,
+          "rejected": 0,
+          "recovered": 0,
+          "wrong_accepted": 0,
+          "seg_tp": 35,
+          "seg_pred": 35,
+          "seg_gold": 35,
+          "neg_ok": {
+            "A": 0,
+            "B": 0,
+            "C": 0,
+            "Bni": 0,
+            "Br": 0
+          },
+          "ok": {
+            "A": 35,
+            "B": 34,
+            "C": 34,
+            "Bni": 35,
+            "Br": 35
+          },
+          "failure_classes": {
+            "interpreter rejects correct parse": 1
+          },
+          "oracle": {
+            "segmentation_in_beam": 1,
+            "segmentation_top1": 1,
+            "world_top1": 1,
+            "world_top3": 1
+          },
+          "segmentation_f1_top1": 1,
+          "exact_sop": {
+            "A": 1,
+            "B": 0.9714,
+            "C": 0.9714,
+            "Bni": 1,
+            "Br": 1
+          },
+          "negatives_rejected": null,
+          "recovery": {
+            "recoverable": 0,
+            "wrong_top1_rejected": 0,
+            "recovered_exact": 0,
+            "wrong_top1_accepted": 0
+          }
+        }
+      }
+    },
+    "avatar/shell/editor": {
+      "n": 535,
+      "pos": 511,
+      "neg": 24,
+      "scored_pos": 511,
+      "seg_beam": 511,
+      "seg_top1": 511,
+      "w_top1": 511,
+      "w_top3": 511,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 511,
+      "seg_pred": 511,
+      "seg_gold": 511,
+      "neg_ok": {
+        "A": 24,
+        "B": 24,
+        "C": 24,
+        "Bni": 24,
+        "Br": 24
+      },
+      "ok": {
+        "A": 431,
+        "B": 423,
+        "C": 423,
+        "Bni": 431,
+        "Br": 431
+      },
+      "failure_classes": {
+        "rule gap": 73,
+        "sop differs": 6,
+        "interpreter rejects correct parse": 9
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 0.8434,
+        "B": 0.8278,
+        "C": 0.8278,
+        "Bni": 0.8434,
+        "Br": 0.8434
+      },
+      "negatives_rejected": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "Bni": 1,
+        "Br": 1
+      },
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      },
+      "by_source": {
+        "generator": {
+          "n": 362,
+          "pos": 338,
+          "neg": 24,
+          "scored_pos": 338,
+          "seg_beam": 338,
+          "seg_top1": 338,
+          "w_top1": 338,
+          "w_top3": 338,
+          "with_simplified": 0,
+          "recoverable": 0,
+          "rejected": 0,
+          "recovered": 0,
+          "wrong_accepted": 0,
+          "seg_tp": 338,
+          "seg_pred": 338,
+          "seg_gold": 338,
+          "neg_ok": {
+            "A": 24,
+            "B": 24,
+            "C": 24,
+            "Bni": 24,
+            "Br": 24
+          },
+          "ok": {
+            "A": 338,
+            "B": 338,
+            "C": 338,
+            "Bni": 338,
+            "Br": 338
+          },
+          "failure_classes": {},
+          "oracle": {
+            "segmentation_in_beam": 1,
+            "segmentation_top1": 1,
+            "world_top1": 1,
+            "world_top3": 1
+          },
+          "segmentation_f1_top1": 1,
+          "exact_sop": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "Bni": 1,
+            "Br": 1
+          },
+          "negatives_rejected": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "Bni": 1,
+            "Br": 1
+          },
+          "recovery": {
+            "recoverable": 0,
+            "wrong_top1_rejected": 0,
+            "recovered_exact": 0,
+            "wrong_top1_accepted": 0
+          }
+        },
+        "paraphrase": {
+          "n": 98,
+          "pos": 98,
+          "neg": 0,
+          "scored_pos": 98,
+          "seg_beam": 98,
+          "seg_top1": 98,
+          "w_top1": 98,
+          "w_top3": 98,
+          "with_simplified": 0,
+          "recoverable": 0,
+          "rejected": 0,
+          "recovered": 0,
+          "wrong_accepted": 0,
+          "seg_tp": 98,
+          "seg_pred": 98,
+          "seg_gold": 98,
+          "neg_ok": {
+            "A": 0,
+            "B": 0,
+            "C": 0,
+            "Bni": 0,
+            "Br": 0
+          },
+          "ok": {
+            "A": 18,
+            "B": 18,
+            "C": 18,
+            "Bni": 18,
+            "Br": 18
+          },
+          "failure_classes": {
+            "rule gap": 73,
+            "sop differs": 6,
+            "interpreter rejects correct parse": 1
+          },
+          "oracle": {
+            "segmentation_in_beam": 1,
+            "segmentation_top1": 1,
+            "world_top1": 1,
+            "world_top3": 1
+          },
+          "segmentation_f1_top1": 1,
+          "exact_sop": {
+            "A": 0.1837,
+            "B": 0.1837,
+            "C": 0.1837,
+            "Bni": 0.1837,
+            "Br": 0.1837
+          },
+          "negatives_rejected": null,
+          "recovery": {
+            "recoverable": 0,
+            "wrong_top1_rejected": 0,
+            "recovered_exact": 0,
+            "wrong_top1_accepted": 0
+          }
+        },
+        "rule-derived": {
+          "n": 75,
+          "pos": 75,
+          "neg": 0,
+          "scored_pos": 75,
+          "seg_beam": 75,
+          "seg_top1": 75,
+          "w_top1": 75,
+          "w_top3": 75,
+          "with_simplified": 0,
+          "recoverable": 0,
+          "rejected": 0,
+          "recovered": 0,
+          "wrong_accepted": 0,
+          "seg_tp": 75,
+          "seg_pred": 75,
+          "seg_gold": 75,
+          "neg_ok": {
+            "A": 0,
+            "B": 0,
+            "C": 0,
+            "Bni": 0,
+            "Br": 0
+          },
+          "ok": {
+            "A": 75,
+            "B": 67,
+            "C": 67,
+            "Bni": 75,
+            "Br": 75
+          },
+          "failure_classes": {
+            "interpreter rejects correct parse": 8
+          },
+          "oracle": {
+            "segmentation_in_beam": 1,
+            "segmentation_top1": 1,
+            "world_top1": 1,
+            "world_top3": 1
+          },
+          "segmentation_f1_top1": 1,
+          "exact_sop": {
+            "A": 1,
+            "B": 0.8933,
+            "C": 0.8933,
+            "Bni": 1,
+            "Br": 1
+          },
+          "negatives_rejected": null,
+          "recovery": {
+            "recoverable": 0,
+            "wrong_top1_rejected": 0,
+            "recovered_exact": 0,
+            "wrong_top1_accepted": 0
+          }
+        }
+      }
+    },
+    "music/draw/map/charts": {
+      "n": 1082,
+      "pos": 1041,
+      "neg": 41,
+      "scored_pos": 1041,
+      "seg_beam": 1041,
+      "seg_top1": 1041,
+      "w_top1": 1041,
+      "w_top3": 1041,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 1041,
+      "seg_pred": 1041,
+      "seg_gold": 1041,
+      "neg_ok": {
+        "A": 40,
+        "B": 27,
+        "C": 27,
+        "Bni": 27,
+        "Br": 27
+      },
+      "ok": {
+        "A": 884,
+        "B": 871,
+        "C": 871,
+        "Bni": 884,
+        "Br": 883
+      },
+      "failure_classes": {
+        "interpreter rejects correct parse": 15,
+        "rule gap": 92,
+        "sop differs": 63
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 0.8492,
+        "B": 0.8367,
+        "C": 0.8367,
+        "Bni": 0.8492,
+        "Br": 0.8482
+      },
+      "negatives_rejected": {
+        "A": 0.9756,
+        "B": 0.6585,
+        "C": 0.6585,
+        "Bni": 0.6585,
+        "Br": 0.6585
+      },
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      },
+      "by_source": {
+        "generator": {
+          "n": 694,
+          "pos": 653,
+          "neg": 41,
+          "scored_pos": 653,
+          "seg_beam": 653,
+          "seg_top1": 653,
+          "w_top1": 653,
+          "w_top3": 653,
+          "with_simplified": 0,
+          "recoverable": 0,
+          "rejected": 0,
+          "recovered": 0,
+          "wrong_accepted": 0,
+          "seg_tp": 653,
+          "seg_pred": 653,
+          "seg_gold": 653,
+          "neg_ok": {
+            "A": 40,
+            "B": 27,
+            "C": 27,
+            "Bni": 27,
+            "Br": 27
+          },
+          "ok": {
+            "A": 653,
+            "B": 653,
+            "C": 653,
+            "Bni": 653,
+            "Br": 653
+          },
+          "failure_classes": {},
+          "oracle": {
+            "segmentation_in_beam": 1,
+            "segmentation_top1": 1,
+            "world_top1": 1,
+            "world_top3": 1
+          },
+          "segmentation_f1_top1": 1,
+          "exact_sop": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "Bni": 1,
+            "Br": 1
+          },
+          "negatives_rejected": {
+            "A": 0.9756,
+            "B": 0.6585,
+            "C": 0.6585,
+            "Bni": 0.6585,
+            "Br": 0.6585
+          },
+          "recovery": {
+            "recoverable": 0,
+            "wrong_top1_rejected": 0,
+            "recovered_exact": 0,
+            "wrong_top1_accepted": 0
+          }
+        },
+        "paraphrase": {
+          "n": 234,
+          "pos": 234,
+          "neg": 0,
+          "scored_pos": 234,
+          "seg_beam": 234,
+          "seg_top1": 234,
+          "w_top1": 234,
+          "w_top3": 234,
+          "with_simplified": 0,
+          "recoverable": 0,
+          "rejected": 0,
+          "recovered": 0,
+          "wrong_accepted": 0,
+          "seg_tp": 234,
+          "seg_pred": 234,
+          "seg_gold": 234,
+          "neg_ok": {
+            "A": 0,
+            "B": 0,
+            "C": 0,
+            "Bni": 0,
+            "Br": 0
+          },
+          "ok": {
+            "A": 77,
+            "B": 77,
+            "C": 77,
+            "Bni": 77,
+            "Br": 77
+          },
+          "failure_classes": {
+            "rule gap": 92,
+            "sop differs": 63,
+            "interpreter rejects correct parse": 2
+          },
+          "oracle": {
+            "segmentation_in_beam": 1,
+            "segmentation_top1": 1,
+            "world_top1": 1,
+            "world_top3": 1
+          },
+          "segmentation_f1_top1": 1,
+          "exact_sop": {
+            "A": 0.3291,
+            "B": 0.3291,
+            "C": 0.3291,
+            "Bni": 0.3291,
+            "Br": 0.3291
+          },
+          "negatives_rejected": null,
+          "recovery": {
+            "recoverable": 0,
+            "wrong_top1_rejected": 0,
+            "recovered_exact": 0,
+            "wrong_top1_accepted": 0
+          }
+        },
+        "rule-derived": {
+          "n": 154,
+          "pos": 154,
+          "neg": 0,
+          "scored_pos": 154,
+          "seg_beam": 154,
+          "seg_top1": 154,
+          "w_top1": 154,
+          "w_top3": 154,
+          "with_simplified": 0,
+          "recoverable": 0,
+          "rejected": 0,
+          "recovered": 0,
+          "wrong_accepted": 0,
+          "seg_tp": 154,
+          "seg_pred": 154,
+          "seg_gold": 154,
+          "neg_ok": {
+            "A": 0,
+            "B": 0,
+            "C": 0,
+            "Bni": 0,
+            "Br": 0
+          },
+          "ok": {
+            "A": 154,
+            "B": 141,
+            "C": 141,
+            "Bni": 154,
+            "Br": 153
+          },
+          "failure_classes": {
+            "interpreter rejects correct parse": 13
+          },
+          "oracle": {
+            "segmentation_in_beam": 1,
+            "segmentation_top1": 1,
+            "world_top1": 1,
+            "world_top3": 1
+          },
+          "segmentation_f1_top1": 1,
+          "exact_sop": {
+            "A": 1,
+            "B": 0.9156,
+            "C": 0.9156,
+            "Bni": 1,
+            "Br": 0.9935
+          },
+          "negatives_rejected": null,
+          "recovery": {
+            "recoverable": 0,
+            "wrong_top1_rejected": 0,
+            "recovered_exact": 0,
+            "wrong_top1_accepted": 0
+          }
+        }
+      }
+    },
+    "games": {
+      "n": 883,
+      "pos": 827,
+      "neg": 56,
+      "scored_pos": 827,
+      "seg_beam": 827,
+      "seg_top1": 827,
+      "w_top1": 827,
+      "w_top3": 827,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 827,
+      "seg_pred": 827,
+      "seg_gold": 827,
+      "neg_ok": {
+        "A": 50,
+        "B": 39,
+        "C": 39,
+        "Bni": 38,
+        "Br": 38
+      },
+      "ok": {
+        "A": 691,
+        "B": 506,
+        "C": 506,
+        "Bni": 691,
+        "Br": 691
+      },
+      "failure_classes": {
+        "interpreter rejects correct parse": 185,
+        "rule gap": 129,
+        "sop differs": 7
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 0.8356,
+        "B": 0.6119,
+        "C": 0.6119,
+        "Bni": 0.8356,
+        "Br": 0.8356
+      },
+      "negatives_rejected": {
+        "A": 0.8929,
+        "B": 0.6964,
+        "C": 0.6964,
+        "Bni": 0.6786,
+        "Br": 0.6786
+      },
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      },
+      "by_source": {
+        "generator": {
+          "n": 623,
+          "pos": 567,
+          "neg": 56,
+          "scored_pos": 567,
+          "seg_beam": 567,
+          "seg_top1": 567,
+          "w_top1": 567,
+          "w_top3": 567,
+          "with_simplified": 0,
+          "recoverable": 0,
+          "rejected": 0,
+          "recovered": 0,
+          "wrong_accepted": 0,
+          "seg_tp": 567,
+          "seg_pred": 567,
+          "seg_gold": 567,
+          "neg_ok": {
+            "A": 50,
+            "B": 39,
+            "C": 39,
+            "Bni": 38,
+            "Br": 38
+          },
+          "ok": {
+            "A": 567,
+            "B": 389,
+            "C": 389,
+            "Bni": 567,
+            "Br": 567
+          },
+          "failure_classes": {
+            "interpreter rejects correct parse": 178
+          },
+          "oracle": {
+            "segmentation_in_beam": 1,
+            "segmentation_top1": 1,
+            "world_top1": 1,
+            "world_top3": 1
+          },
+          "segmentation_f1_top1": 1,
+          "exact_sop": {
+            "A": 1,
+            "B": 0.6861,
+            "C": 0.6861,
+            "Bni": 1,
+            "Br": 1
+          },
+          "negatives_rejected": {
+            "A": 0.8929,
+            "B": 0.6964,
+            "C": 0.6964,
+            "Bni": 0.6786,
+            "Br": 0.6786
+          },
+          "recovery": {
+            "recoverable": 0,
+            "wrong_top1_rejected": 0,
+            "recovered_exact": 0,
+            "wrong_top1_accepted": 0
+          }
+        },
+        "paraphrase": {
+          "n": 224,
+          "pos": 224,
+          "neg": 0,
+          "scored_pos": 224,
+          "seg_beam": 224,
+          "seg_top1": 224,
+          "w_top1": 224,
+          "w_top3": 224,
+          "with_simplified": 0,
+          "recoverable": 0,
+          "rejected": 0,
+          "recovered": 0,
+          "wrong_accepted": 0,
+          "seg_tp": 224,
+          "seg_pred": 224,
+          "seg_gold": 224,
+          "neg_ok": {
+            "A": 0,
+            "B": 0,
+            "C": 0,
+            "Bni": 0,
+            "Br": 0
+          },
+          "ok": {
+            "A": 88,
+            "B": 88,
+            "C": 88,
+            "Bni": 88,
+            "Br": 88
+          },
+          "failure_classes": {
+            "rule gap": 129,
+            "sop differs": 7
+          },
+          "oracle": {
+            "segmentation_in_beam": 1,
+            "segmentation_top1": 1,
+            "world_top1": 1,
+            "world_top3": 1
+          },
+          "segmentation_f1_top1": 1,
+          "exact_sop": {
+            "A": 0.3929,
+            "B": 0.3929,
+            "C": 0.3929,
+            "Bni": 0.3929,
+            "Br": 0.3929
+          },
+          "negatives_rejected": null,
+          "recovery": {
+            "recoverable": 0,
+            "wrong_top1_rejected": 0,
+            "recovered_exact": 0,
+            "wrong_top1_accepted": 0
+          }
+        },
+        "rule-derived": {
+          "n": 36,
+          "pos": 36,
+          "neg": 0,
+          "scored_pos": 36,
+          "seg_beam": 36,
+          "seg_top1": 36,
+          "w_top1": 36,
+          "w_top3": 36,
+          "with_simplified": 0,
+          "recoverable": 0,
+          "rejected": 0,
+          "recovered": 0,
+          "wrong_accepted": 0,
+          "seg_tp": 36,
+          "seg_pred": 36,
+          "seg_gold": 36,
+          "neg_ok": {
+            "A": 0,
+            "B": 0,
+            "C": 0,
+            "Bni": 0,
+            "Br": 0
+          },
+          "ok": {
+            "A": 36,
+            "B": 29,
+            "C": 29,
+            "Bni": 36,
+            "Br": 36
+          },
+          "failure_classes": {
+            "interpreter rejects correct parse": 7
+          },
+          "oracle": {
+            "segmentation_in_beam": 1,
+            "segmentation_top1": 1,
+            "world_top1": 1,
+            "world_top3": 1
+          },
+          "segmentation_f1_top1": 1,
+          "exact_sop": {
+            "A": 1,
+            "B": 0.8056,
+            "C": 0.8056,
+            "Bni": 1,
+            "Br": 1
+          },
+          "negatives_rejected": null,
+          "recovery": {
+            "recoverable": 0,
+            "wrong_top1_rejected": 0,
+            "recovered_exact": 0,
+            "wrong_top1_accepted": 0
+          }
+        }
+      }
+    },
+    "documents": {
+      "n": 306,
+      "pos": 306,
+      "neg": 0,
+      "scored_pos": 306,
+      "seg_beam": 306,
+      "seg_top1": 306,
+      "w_top1": 306,
+      "w_top3": 306,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 306,
+      "seg_pred": 306,
+      "seg_gold": 306,
+      "neg_ok": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Bni": 0,
+        "Br": 0
+      },
+      "ok": {
+        "A": 306,
+        "B": 306,
+        "C": 306,
+        "Bni": 306,
+        "Br": 306
+      },
+      "failure_classes": {},
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "Bni": 1,
+        "Br": 1
+      },
+      "negatives_rejected": null,
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      },
+      "by_source": {
+        "generator": {
+          "n": 292,
+          "pos": 292,
+          "neg": 0,
+          "scored_pos": 292,
+          "seg_beam": 292,
+          "seg_top1": 292,
+          "w_top1": 292,
+          "w_top3": 292,
+          "with_simplified": 0,
+          "recoverable": 0,
+          "rejected": 0,
+          "recovered": 0,
+          "wrong_accepted": 0,
+          "seg_tp": 292,
+          "seg_pred": 292,
+          "seg_gold": 292,
+          "neg_ok": {
+            "A": 0,
+            "B": 0,
+            "C": 0,
+            "Bni": 0,
+            "Br": 0
+          },
+          "ok": {
+            "A": 292,
+            "B": 292,
+            "C": 292,
+            "Bni": 292,
+            "Br": 292
+          },
+          "failure_classes": {},
+          "oracle": {
+            "segmentation_in_beam": 1,
+            "segmentation_top1": 1,
+            "world_top1": 1,
+            "world_top3": 1
+          },
+          "segmentation_f1_top1": 1,
+          "exact_sop": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "Bni": 1,
+            "Br": 1
+          },
+          "negatives_rejected": null,
+          "recovery": {
+            "recoverable": 0,
+            "wrong_top1_rejected": 0,
+            "recovered_exact": 0,
+            "wrong_top1_accepted": 0
+          }
+        },
+        "rule-derived": {
+          "n": 14,
+          "pos": 14,
+          "neg": 0,
+          "scored_pos": 14,
+          "seg_beam": 14,
+          "seg_top1": 14,
+          "w_top1": 14,
+          "w_top3": 14,
+          "with_simplified": 0,
+          "recoverable": 0,
+          "rejected": 0,
+          "recovered": 0,
+          "wrong_accepted": 0,
+          "seg_tp": 14,
+          "seg_pred": 14,
+          "seg_gold": 14,
+          "neg_ok": {
+            "A": 0,
+            "B": 0,
+            "C": 0,
+            "Bni": 0,
+            "Br": 0
+          },
+          "ok": {
+            "A": 14,
+            "B": 14,
+            "C": 14,
+            "Bni": 14,
+            "Br": 14
+          },
+          "failure_classes": {},
+          "oracle": {
+            "segmentation_in_beam": 1,
+            "segmentation_top1": 1,
+            "world_top1": 1,
+            "world_top3": 1
+          },
+          "segmentation_f1_top1": 1,
+          "exact_sop": {
+            "A": 1,
+            "B": 1,
+            "C": 1,
+            "Bni": 1,
+            "Br": 1
+          },
+          "negatives_rejected": null,
+          "recovery": {
+            "recoverable": 0,
+            "wrong_top1_rejected": 0,
+            "recovered_exact": 0,
+            "wrong_top1_accepted": 0
+          }
+        }
+      }
+    },
+    "multi-command": {
+      "n": 4000,
+      "pos": 4000,
+      "neg": 0,
+      "scored_pos": 4000,
+      "seg_beam": 4000,
+      "seg_top1": 4000,
+      "w_top1": 4000,
+      "w_top3": 4000,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 7941,
+      "seg_pred": 7941,
+      "seg_gold": 7941,
+      "neg_ok": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Bni": 0,
+        "Br": 0
+      },
+      "ok": {
+        "A": 2986,
+        "B": 2721,
+        "C": 2721,
+        "Bni": 2986,
+        "Br": 2983
+      },
+      "failure_classes": {
+        "interpreter rejects correct parse": 297,
+        "rule gap": 810,
+        "sop differs": 172
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 0.7465,
+        "B": 0.6803,
+        "C": 0.6803,
+        "Bni": 0.7465,
+        "Br": 0.7458
+      },
+      "negatives_rejected": null,
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      },
+      "by_source": {
+        "multi-command": {
+          "n": 4000,
+          "pos": 4000,
+          "neg": 0,
+          "scored_pos": 4000,
+          "seg_beam": 4000,
+          "seg_top1": 4000,
+          "w_top1": 4000,
+          "w_top3": 4000,
+          "with_simplified": 0,
+          "recoverable": 0,
+          "rejected": 0,
+          "recovered": 0,
+          "wrong_accepted": 0,
+          "seg_tp": 7941,
+          "seg_pred": 7941,
+          "seg_gold": 7941,
+          "neg_ok": {
+            "A": 0,
+            "B": 0,
+            "C": 0,
+            "Bni": 0,
+            "Br": 0
+          },
+          "ok": {
+            "A": 2986,
+            "B": 2721,
+            "C": 2721,
+            "Bni": 2986,
+            "Br": 2983
+          },
+          "failure_classes": {
+            "interpreter rejects correct parse": 297,
+            "rule gap": 810,
+            "sop differs": 172
+          },
+          "oracle": {
+            "segmentation_in_beam": 1,
+            "segmentation_top1": 1,
+            "world_top1": 1,
+            "world_top3": 1
+          },
+          "segmentation_f1_top1": 1,
+          "exact_sop": {
+            "A": 0.7465,
+            "B": 0.6803,
+            "C": 0.6803,
+            "Bni": 0.7465,
+            "Br": 0.7458
+          },
+          "negatives_rejected": null,
+          "recovery": {
+            "recoverable": 0,
+            "wrong_top1_rejected": 0,
+            "recovered_exact": 0,
+            "wrong_top1_accepted": 0
+          }
+        }
+      }
+    }
+  },
+  "by_source": {
+    "generator": {
+      "n": 3656,
+      "pos": 3244,
+      "neg": 412,
+      "scored_pos": 3244,
+      "seg_beam": 3244,
+      "seg_top1": 3244,
+      "w_top1": 3244,
+      "w_top3": 3244,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 3244,
+      "seg_pred": 3244,
+      "seg_gold": 3244,
+      "neg_ok": {
+        "A": 404,
+        "B": 375,
+        "C": 375,
+        "Bni": 374,
+        "Br": 374
+      },
+      "ok": {
+        "A": 3244,
+        "B": 3066,
+        "C": 3066,
+        "Bni": 3244,
+        "Br": 3244
+      },
+      "failure_classes": {
+        "interpreter rejects correct parse": 178
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 1,
+        "B": 0.9451,
+        "C": 0.9451,
+        "Bni": 1,
+        "Br": 1
+      },
+      "negatives_rejected": {
+        "A": 0.9806,
+        "B": 0.9102,
+        "C": 0.9102,
+        "Bni": 0.9078,
+        "Br": 0.9078
+      },
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      }
+    },
+    "multi-command": {
+      "n": 4000,
+      "pos": 4000,
+      "neg": 0,
+      "scored_pos": 4000,
+      "seg_beam": 4000,
+      "seg_top1": 4000,
+      "w_top1": 4000,
+      "w_top3": 4000,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 7941,
+      "seg_pred": 7941,
+      "seg_gold": 7941,
+      "neg_ok": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Bni": 0,
+        "Br": 0
+      },
+      "ok": {
+        "A": 2986,
+        "B": 2721,
+        "C": 2721,
+        "Bni": 2986,
+        "Br": 2983
+      },
+      "failure_classes": {
+        "interpreter rejects correct parse": 297,
+        "rule gap": 810,
+        "sop differs": 172
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 0.7465,
+        "B": 0.6803,
+        "C": 0.6803,
+        "Bni": 0.7465,
+        "Br": 0.7458
+      },
+      "negatives_rejected": null,
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      }
+    },
+    "paraphrase": {
+      "n": 684,
+      "pos": 684,
+      "neg": 0,
+      "scored_pos": 684,
+      "seg_beam": 684,
+      "seg_top1": 684,
+      "w_top1": 684,
+      "w_top3": 684,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 684,
+      "seg_pred": 684,
+      "seg_gold": 684,
+      "neg_ok": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Bni": 0,
+        "Br": 0
+      },
+      "ok": {
+        "A": 206,
+        "B": 206,
+        "C": 206,
+        "Bni": 206,
+        "Br": 206
+      },
+      "failure_classes": {
+        "rule gap": 399,
+        "sop differs": 76,
+        "interpreter rejects correct parse": 3
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 0.3012,
+        "B": 0.3012,
+        "C": 0.3012,
+        "Bni": 0.3012,
+        "Br": 0.3012
+      },
+      "negatives_rejected": null,
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      }
+    },
+    "rule-derived": {
+      "n": 314,
+      "pos": 314,
+      "neg": 0,
+      "scored_pos": 314,
+      "seg_beam": 314,
+      "seg_top1": 314,
+      "w_top1": 314,
+      "w_top3": 314,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 314,
+      "seg_pred": 314,
+      "seg_gold": 314,
+      "neg_ok": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Bni": 0,
+        "Br": 0
+      },
+      "ok": {
+        "A": 314,
+        "B": 285,
+        "C": 285,
+        "Bni": 314,
+        "Br": 313
+      },
+      "failure_classes": {
+        "interpreter rejects correct parse": 29
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 1,
+        "B": 0.9076,
+        "C": 0.9076,
+        "Bni": 1,
+        "Br": 0.9968
+      },
+      "negatives_rejected": null,
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      }
+    }
+  },
+  "by_world": {
+    "art.draw": {
+      "n": 256,
+      "pos": 215,
+      "neg": 41,
+      "scored_pos": 215,
+      "seg_beam": 215,
+      "seg_top1": 215,
+      "w_top1": 215,
+      "w_top3": 215,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 215,
+      "seg_pred": 215,
+      "seg_gold": 215,
+      "neg_ok": {
+        "A": 40,
+        "B": 27,
+        "C": 27,
+        "Bni": 27,
+        "Br": 27
+      },
+      "ok": {
+        "A": 151,
+        "B": 140,
+        "C": 140,
+        "Bni": 151,
+        "Br": 150
+      },
+      "failure_classes": {
+        "interpreter rejects correct parse": 12,
+        "rule gap": 32,
+        "sop differs": 31
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 0.7023,
+        "B": 0.6512,
+        "C": 0.6512,
+        "Bni": 0.7023,
+        "Br": 0.6977
+      },
+      "negatives_rejected": {
+        "A": 0.9756,
+        "B": 0.6585,
+        "C": 0.6585,
+        "Bni": 0.6585,
+        "Br": 0.6585
+      },
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      }
+    },
+    "data.charts": {
+      "n": 270,
+      "pos": 270,
+      "neg": 0,
+      "scored_pos": 270,
+      "seg_beam": 270,
+      "seg_top1": 270,
+      "w_top1": 270,
+      "w_top3": 270,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 270,
+      "seg_pred": 270,
+      "seg_gold": 270,
+      "neg_ok": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Bni": 0,
+        "Br": 0
+      },
+      "ok": {
+        "A": 260,
+        "B": 260,
+        "C": 260,
+        "Bni": 260,
+        "Br": 260
+      },
+      "failure_classes": {
+        "rule gap": 5,
+        "sop differs": 5
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 0.963,
+        "B": 0.963,
+        "C": 0.963,
+        "Bni": 0.963,
+        "Br": 0.963
+      },
+      "negatives_rejected": null,
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      }
+    },
+    "docs.editor": {
+      "n": 115,
+      "pos": 115,
+      "neg": 0,
+      "scored_pos": 115,
+      "seg_beam": 115,
+      "seg_top1": 115,
+      "w_top1": 115,
+      "w_top3": 115,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 115,
+      "seg_pred": 115,
+      "seg_gold": 115,
+      "neg_ok": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Bni": 0,
+        "Br": 0
+      },
+      "ok": {
+        "A": 78,
+        "B": 78,
+        "C": 78,
+        "Bni": 78,
+        "Br": 78
+      },
+      "failure_classes": {
+        "rule gap": 31,
+        "sop differs": 6
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 0.6783,
+        "B": 0.6783,
+        "C": 0.6783,
+        "Bni": 0.6783,
+        "Br": 0.6783
+      },
+      "negatives_rejected": null,
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      }
+    },
+    "docs.reader": {
+      "n": 306,
+      "pos": 306,
+      "neg": 0,
+      "scored_pos": 306,
+      "seg_beam": 306,
+      "seg_top1": 306,
+      "w_top1": 306,
+      "w_top3": 306,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 306,
+      "seg_pred": 306,
+      "seg_gold": 306,
+      "neg_ok": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Bni": 0,
+        "Br": 0
+      },
+      "ok": {
+        "A": 306,
+        "B": 306,
+        "C": 306,
+        "Bni": 306,
+        "Br": 306
+      },
+      "failure_classes": {},
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "Bni": 1,
+        "Br": 1
+      },
+      "negatives_rejected": null,
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      }
+    },
+    "games.chess": {
+      "n": 366,
+      "pos": 366,
+      "neg": 0,
+      "scored_pos": 366,
+      "seg_beam": 366,
+      "seg_top1": 366,
+      "w_top1": 366,
+      "w_top3": 366,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 366,
+      "seg_pred": 366,
+      "seg_gold": 366,
+      "neg_ok": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Bni": 0,
+        "Br": 0
+      },
+      "ok": {
+        "A": 338,
+        "B": 154,
+        "C": 154,
+        "Bni": 338,
+        "Br": 338
+      },
+      "failure_classes": {
+        "interpreter rejects correct parse": 184,
+        "rule gap": 24,
+        "sop differs": 4
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 0.9235,
+        "B": 0.4208,
+        "C": 0.4208,
+        "Bni": 0.9235,
+        "Br": 0.9235
+      },
+      "negatives_rejected": null,
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      }
+    },
+    "games.guess": {
+      "n": 163,
+      "pos": 135,
+      "neg": 28,
+      "scored_pos": 135,
+      "seg_beam": 135,
+      "seg_top1": 135,
+      "w_top1": 135,
+      "w_top3": 135,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 135,
+      "seg_pred": 135,
+      "seg_gold": 135,
+      "neg_ok": {
+        "A": 25,
+        "B": 20,
+        "C": 20,
+        "Bni": 19,
+        "Br": 19
+      },
+      "ok": {
+        "A": 81,
+        "B": 81,
+        "C": 81,
+        "Bni": 81,
+        "Br": 81
+      },
+      "failure_classes": {
+        "rule gap": 51,
+        "sop differs": 3
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 0.6,
+        "B": 0.6,
+        "C": 0.6,
+        "Bni": 0.6,
+        "Br": 0.6
+      },
+      "negatives_rejected": {
+        "A": 0.8929,
+        "B": 0.7143,
+        "C": 0.7143,
+        "Bni": 0.6786,
+        "Br": 0.6786
+      },
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      }
+    },
+    "games.hangman": {
+      "n": 216,
+      "pos": 188,
+      "neg": 28,
+      "scored_pos": 188,
+      "seg_beam": 188,
+      "seg_top1": 188,
+      "w_top1": 188,
+      "w_top3": 188,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 188,
+      "seg_pred": 188,
+      "seg_gold": 188,
+      "neg_ok": {
+        "A": 25,
+        "B": 19,
+        "C": 19,
+        "Bni": 19,
+        "Br": 19
+      },
+      "ok": {
+        "A": 188,
+        "B": 188,
+        "C": 188,
+        "Bni": 188,
+        "Br": 188
+      },
+      "failure_classes": {},
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "Bni": 1,
+        "Br": 1
+      },
+      "negatives_rejected": {
+        "A": 0.8929,
+        "B": 0.6786,
+        "C": 0.6786,
+        "Bni": 0.6786,
+        "Br": 0.6786
+      },
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      }
+    },
+    "games.tictactoe": {
+      "n": 138,
+      "pos": 138,
+      "neg": 0,
+      "scored_pos": 138,
+      "seg_beam": 138,
+      "seg_top1": 138,
+      "w_top1": 138,
+      "w_top3": 138,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 138,
+      "seg_pred": 138,
+      "seg_gold": 138,
+      "neg_ok": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Bni": 0,
+        "Br": 0
+      },
+      "ok": {
+        "A": 84,
+        "B": 83,
+        "C": 83,
+        "Bni": 84,
+        "Br": 84
+      },
+      "failure_classes": {
+        "interpreter rejects correct parse": 1,
+        "rule gap": 54
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 0.6087,
+        "B": 0.6014,
+        "C": 0.6014,
+        "Bni": 0.6087,
+        "Br": 0.6087
+      },
+      "negatives_rejected": null,
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      }
+    },
+    "geo.map": {
+      "n": 341,
+      "pos": 341,
+      "neg": 0,
+      "scored_pos": 341,
+      "seg_beam": 341,
+      "seg_top1": 341,
+      "w_top1": 341,
+      "w_top3": 341,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 341,
+      "seg_pred": 341,
+      "seg_gold": 341,
+      "neg_ok": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Bni": 0,
+        "Br": 0
+      },
+      "ok": {
+        "A": 326,
+        "B": 324,
+        "C": 324,
+        "Bni": 326,
+        "Br": 326
+      },
+      "failure_classes": {
+        "interpreter rejects correct parse": 2,
+        "rule gap": 12,
+        "sop differs": 3
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 0.956,
+        "B": 0.9501,
+        "C": 0.9501,
+        "Bni": 0.956,
+        "Br": 0.956
+      },
+      "negatives_rejected": null,
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      }
+    },
+    "kids.animals": {
+      "n": 258,
+      "pos": 258,
+      "neg": 0,
+      "scored_pos": 258,
+      "seg_beam": 258,
+      "seg_top1": 258,
+      "w_top1": 258,
+      "w_top3": 258,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 258,
+      "seg_pred": 258,
+      "seg_gold": 258,
+      "neg_ok": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Bni": 0,
+        "Br": 0
+      },
+      "ok": {
+        "A": 240,
+        "B": 240,
+        "C": 240,
+        "Bni": 240,
+        "Br": 240
+      },
+      "failure_classes": {
+        "rule gap": 18
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 0.9302,
+        "B": 0.9302,
+        "C": 0.9302,
+        "Bni": 0.9302,
+        "Br": 0.9302
+      },
+      "negatives_rejected": null,
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      }
+    },
+    "kids.arith": {
+      "n": 258,
+      "pos": 230,
+      "neg": 28,
+      "scored_pos": 230,
+      "seg_beam": 230,
+      "seg_top1": 230,
+      "w_top1": 230,
+      "w_top3": 230,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 230,
+      "seg_pred": 230,
+      "seg_gold": 230,
+      "neg_ok": {
+        "A": 28,
+        "B": 28,
+        "C": 28,
+        "Bni": 28,
+        "Br": 28
+      },
+      "ok": {
+        "A": 214,
+        "B": 213,
+        "C": 213,
+        "Bni": 214,
+        "Br": 214
+      },
+      "failure_classes": {
+        "interpreter rejects correct parse": 1,
+        "rule gap": 16
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 0.9304,
+        "B": 0.9261,
+        "C": 0.9261,
+        "Bni": 0.9304,
+        "Br": 0.9304
+      },
+      "negatives_rejected": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "Bni": 1,
+        "Br": 1
+      },
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      }
+    },
+    "kids.common": {
+      "n": 201,
+      "pos": 54,
+      "neg": 147,
+      "scored_pos": 54,
+      "seg_beam": 54,
+      "seg_top1": 54,
+      "w_top1": 54,
+      "w_top3": 54,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 54,
+      "seg_pred": 54,
+      "seg_gold": 54,
+      "neg_ok": {
+        "A": 147,
+        "B": 147,
+        "C": 147,
+        "Bni": 147,
+        "Br": 147
+      },
+      "ok": {
+        "A": 9,
+        "B": 9,
+        "C": 9,
+        "Bni": 9,
+        "Br": 9
+      },
+      "failure_classes": {
+        "rule gap": 45
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 0.1667,
+        "B": 0.1667,
+        "C": 0.1667,
+        "Bni": 0.1667,
+        "Br": 0.1667
+      },
+      "negatives_rejected": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "Bni": 1,
+        "Br": 1
+      },
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      }
+    },
+    "kids.shapes": {
+      "n": 312,
+      "pos": 196,
+      "neg": 116,
+      "scored_pos": 196,
+      "seg_beam": 196,
+      "seg_top1": 196,
+      "w_top1": 196,
+      "w_top3": 196,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 196,
+      "seg_pred": 196,
+      "seg_gold": 196,
+      "neg_ok": {
+        "A": 115,
+        "B": 110,
+        "C": 110,
+        "Bni": 110,
+        "Br": 110
+      },
+      "ok": {
+        "A": 170,
+        "B": 170,
+        "C": 170,
+        "Bni": 170,
+        "Br": 170
+      },
+      "failure_classes": {
+        "rule gap": 26
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 0.8673,
+        "B": 0.8673,
+        "C": 0.8673,
+        "Bni": 0.8673,
+        "Br": 0.8673
+      },
+      "negatives_rejected": {
+        "A": 0.9914,
+        "B": 0.9483,
+        "C": 0.9483,
+        "Bni": 0.9483,
+        "Br": 0.9483
+      },
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      }
+    },
+    "kids.shop": {
+      "n": 259,
+      "pos": 259,
+      "neg": 0,
+      "scored_pos": 259,
+      "seg_beam": 259,
+      "seg_top1": 259,
+      "w_top1": 259,
+      "w_top3": 259,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 259,
+      "seg_pred": 259,
+      "seg_gold": 259,
+      "neg_ok": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Bni": 0,
+        "Br": 0
+      },
+      "ok": {
+        "A": 259,
+        "B": 259,
+        "C": 259,
+        "Bni": 259,
+        "Br": 259
+      },
+      "failure_classes": {},
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "Bni": 1,
+        "Br": 1
+      },
+      "negatives_rejected": null,
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      }
+    },
+    "kids.tasks": {
+      "n": 293,
+      "pos": 293,
+      "neg": 0,
+      "scored_pos": 293,
+      "seg_beam": 293,
+      "seg_top1": 293,
+      "w_top1": 293,
+      "w_top3": 293,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 293,
+      "seg_pred": 293,
+      "seg_gold": 293,
+      "neg_ok": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Bni": 0,
+        "Br": 0
+      },
+      "ok": {
+        "A": 293,
+        "B": 293,
+        "C": 293,
+        "Bni": 293,
+        "Br": 293
+      },
+      "failure_classes": {},
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "Bni": 1,
+        "Br": 1
+      },
+      "negatives_rejected": null,
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      }
+    },
+    "kids.time": {
+      "n": 267,
+      "pos": 267,
+      "neg": 0,
+      "scored_pos": 267,
+      "seg_beam": 267,
+      "seg_top1": 267,
+      "w_top1": 267,
+      "w_top3": 267,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 267,
+      "seg_pred": 267,
+      "seg_gold": 267,
+      "neg_ok": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Bni": 0,
+        "Br": 0
+      },
+      "ok": {
+        "A": 267,
+        "B": 267,
+        "C": 267,
+        "Bni": 267,
+        "Br": 267
+      },
+      "failure_classes": {},
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "Bni": 1,
+        "Br": 1
+      },
+      "negatives_rejected": null,
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      }
+    },
+    "media.music": {
+      "n": 215,
+      "pos": 215,
+      "neg": 0,
+      "scored_pos": 215,
+      "seg_beam": 215,
+      "seg_top1": 215,
+      "w_top1": 215,
+      "w_top3": 215,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 215,
+      "seg_pred": 215,
+      "seg_gold": 215,
+      "neg_ok": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Bni": 0,
+        "Br": 0
+      },
+      "ok": {
+        "A": 147,
+        "B": 147,
+        "C": 147,
+        "Bni": 147,
+        "Br": 147
+      },
+      "failure_classes": {
+        "rule gap": 43,
+        "sop differs": 24,
+        "interpreter rejects correct parse": 1
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 0.6837,
+        "B": 0.6837,
+        "C": 0.6837,
+        "Bni": 0.6837,
+        "Br": 0.6837
+      },
+      "negatives_rejected": null,
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      }
+    },
+    "ui.avatar": {
+      "n": 79,
+      "pos": 79,
+      "neg": 0,
+      "scored_pos": 79,
+      "seg_beam": 79,
+      "seg_top1": 79,
+      "w_top1": 79,
+      "w_top3": 79,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 79,
+      "seg_pred": 79,
+      "seg_gold": 79,
+      "neg_ok": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Bni": 0,
+        "Br": 0
+      },
+      "ok": {
+        "A": 53,
+        "B": 45,
+        "C": 45,
+        "Bni": 53,
+        "Br": 53
+      },
+      "failure_classes": {
+        "interpreter rejects correct parse": 9,
+        "rule gap": 25
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 0.6709,
+        "B": 0.5696,
+        "C": 0.5696,
+        "Bni": 0.6709,
+        "Br": 0.6709
+      },
+      "negatives_rejected": null,
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      }
+    },
+    "ui.help": {
+      "n": 95,
+      "pos": 95,
+      "neg": 0,
+      "scored_pos": 95,
+      "seg_beam": 95,
+      "seg_top1": 95,
+      "w_top1": 95,
+      "w_top3": 95,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 95,
+      "seg_pred": 95,
+      "seg_gold": 95,
+      "neg_ok": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "Bni": 0,
+        "Br": 0
+      },
+      "ok": {
+        "A": 95,
+        "B": 95,
+        "C": 95,
+        "Bni": 95,
+        "Br": 95
+      },
+      "failure_classes": {},
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "Bni": 1,
+        "Br": 1
+      },
+      "negatives_rejected": null,
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      }
+    },
+    "ui.shell": {
+      "n": 246,
+      "pos": 222,
+      "neg": 24,
+      "scored_pos": 222,
+      "seg_beam": 222,
+      "seg_top1": 222,
+      "w_top1": 222,
+      "w_top3": 222,
+      "with_simplified": 0,
+      "recoverable": 0,
+      "rejected": 0,
+      "recovered": 0,
+      "wrong_accepted": 0,
+      "seg_tp": 222,
+      "seg_pred": 222,
+      "seg_gold": 222,
+      "neg_ok": {
+        "A": 24,
+        "B": 24,
+        "C": 24,
+        "Bni": 24,
+        "Br": 24
+      },
+      "ok": {
+        "A": 205,
+        "B": 205,
+        "C": 205,
+        "Bni": 205,
+        "Br": 205
+      },
+      "failure_classes": {
+        "rule gap": 17
+      },
+      "oracle": {
+        "segmentation_in_beam": 1,
+        "segmentation_top1": 1,
+        "world_top1": 1,
+        "world_top3": 1
+      },
+      "segmentation_f1_top1": 1,
+      "exact_sop": {
+        "A": 0.9234,
+        "B": 0.9234,
+        "C": 0.9234,
+        "Bni": 0.9234,
+        "Br": 0.9234
+      },
+      "negatives_rejected": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "Bni": 1,
+        "Br": 1
+      },
+      "recovery": {
+        "recoverable": 0,
+        "wrong_top1_rejected": 0,
+        "recovered_exact": 0,
+        "wrong_top1_accepted": 0
+      }
+    }
+  },
+  "failure_classes": {
+    "interpreter rejects correct parse": 507,
+    "rule gap": 1209,
+    "sop differs": 248
+  },
+  "failure_sample": [
+    {
+      "id": "mc000000",
+      "class": "interpreter rejects correct parse",
+      "source": "multi-command",
+      "text": "Move the pawn on d two to a3.",
+      "gold": [
+        "games.chess: Move the pawn on d two to a3."
+      ],
+      "status": "not_understood",
+      "produced": [],
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.155) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc000002",
+      "class": "rule gap",
+      "source": "multi-command",
+      "text": "c major's relative minor is what then it does have one what day will it be 3 days after sunday",
+      "gold": [
+        "media.music: c major's relative minor is what",
+        "games.guess: it does have one",
+        "kids.time: what day will it be 3 days after sunday"
+      ],
+      "status": "not_understood",
+      "produced": [
+        "kids.time: what day will it be 3 days after sunday"
+      ],
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -12.366) with 2 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc000018",
+      "class": "sop differs",
+      "source": "multi-command",
+      "text": "it does, yes. yep!",
+      "gold": [
+        "games.guess: it does, yes.",
+        "games.guess: yep!"
+      ],
+      "status": "understood",
+      "produced": [
+        "games.guess: it does, yes.",
+        "games.guess: yep!"
+      ],
+      "why": "segmentation 1 of 1 wins with score -0.261 (dispatcher -0.050), all 2 piece(s) validate"
+    },
+    {
+      "id": "mc000005",
+      "class": "interpreter rejects correct parse",
+      "source": "multi-command",
+      "text": "Make your eyes smaller",
+      "gold": [
+        "art.draw: Make your eyes smaller"
+      ],
+      "status": "understood",
+      "produced": [
+        "ui.avatar: Make your eyes smaller"
+      ],
+      "why": "segmentation 1 of 1 wins with score -3.269 (dispatcher -0.050), all 1 piece(s) validate; piece \"Make your eyes smaller\": candidate world 3 (ui.avatar) recovered after art.draw, ui.shell failed"
+    },
+    {
+      "id": "mc000004",
+      "class": "rule gap",
+      "source": "multi-command",
+      "text": "what would be a good move here, Move the rock on g six to e four.",
+      "gold": [
+        "games.chess: what would be a good move here",
+        "games.chess: Move the rock on g six to e four."
+      ],
+      "status": "not_understood",
+      "produced": [],
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -12.261) with 2 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc000031",
+      "class": "sop differs",
+      "source": "multi-command",
+      "text": "delete pencils from the packing list add pencils butter and milk to my shopping list",
+      "gold": [
+        "kids.tasks: delete pencils from the packing list",
+        "kids.tasks: add pencils butter and milk to my shopping list"
+      ],
+      "status": "understood",
+      "produced": [
+        "kids.tasks: delete pencils from the packing list",
+        "kids.tasks: add pencils butter and milk to my shopping list"
+      ],
+      "why": "segmentation 1 of 1 wins with score -0.261 (dispatcher -0.050), all 2 piece(s) validate"
+    },
+    {
+      "id": "mc000016",
+      "class": "interpreter rejects correct parse",
+      "source": "multi-command",
+      "text": "Move the pawn on hotel three to h2 and is a pentagon a kind of quadrilateral, Which crustaceans can fly?",
+      "gold": [
+        "games.chess: Move the pawn on hotel three to h2",
+        "kids.shapes: is a pentagon a kind of quadrilateral",
+        "kids.animals: Which crustaceans can fly?"
+      ],
+      "status": "not_understood",
+      "produced": [
+        "kids.shapes: is a pentagon a kind of quadrilateral",
+        "kids.animals: Which crustaceans can fly?"
+      ],
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.366) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc000019",
+      "class": "rule gap",
+      "source": "multi-command",
+      "text": "who you be, then ok bye now",
+      "gold": [
+        "kids.common: who you be",
+        "kids.common: ok bye now"
+      ],
+      "status": "not_understood",
+      "produced": [],
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -12.261) with 2 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc000038",
+      "class": "sop differs",
+      "source": "multi-command",
+      "text": "are squares triangles and who left hansel then add cat food ice cream and eggs to my shopping list",
+      "gold": [
+        "kids.shapes: are squares triangles",
+        "docs.reader: who left hansel",
+        "kids.tasks: add cat food ice cream and eggs to my shopping list"
+      ],
+      "status": "understood",
+      "produced": [
+        "kids.shapes: are squares triangles",
+        "docs.reader: who left hansel",
+        "kids.tasks: add cat food ice cream and eggs to my shopping list"
+      ],
+      "why": "segmentation 1 of 1 wins with score -0.366 (dispatcher -0.050), all 3 piece(s) validate"
+    },
+    {
+      "id": "mc000022",
+      "class": "interpreter rejects correct parse",
+      "source": "multi-command",
+      "text": "add a rest then which chord is made of e g# b",
+      "gold": [
+        "media.music: add a rest",
+        "media.music: which chord is made of e g# b"
+      ],
+      "status": "not_understood",
+      "produced": [
+        "media.music: add a rest"
+      ],
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.261) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc000020",
+      "class": "rule gap",
+      "source": "multi-command",
+      "text": "Which reptiles can swim and then sketch anything you like",
+      "gold": [
+        "kids.animals: Which reptiles can swim",
+        "art.draw: sketch anything you like"
+      ],
+      "status": "not_understood",
+      "produced": [
+        "kids.animals: Which reptiles can swim"
+      ],
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.261) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc000052",
+      "class": "sop differs",
+      "source": "multi-command",
+      "text": "um add some water and graph the legs of a dog spider bee",
+      "gold": [
+        "art.draw: um add some water",
+        "data.charts: graph the legs of a dog spider bee"
+      ],
+      "status": "understood",
+      "produced": [
+        "art.draw: um add some water",
+        "data.charts: graph the legs of a dog spider bee"
+      ],
+      "why": "segmentation 1 of 1 wins with score -0.261 (dispatcher -0.050), all 2 piece(s) validate"
+    },
+    {
+      "id": "mc000026",
+      "class": "interpreter rejects correct parse",
+      "source": "multi-command",
+      "text": "how many paragraphs are there then move the king on alpha three to d six and what day will it be 3 days before monday",
+      "gold": [
+        "docs.editor: how many paragraphs are there",
+        "games.chess: move the king on alpha three to d six",
+        "kids.time: what day will it be 3 days before monday"
+      ],
+      "status": "not_understood",
+      "produced": [
+        "docs.editor: how many paragraphs are there",
+        "kids.time: what day will it be 3 days before monday"
+      ],
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.366) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc000025",
+      "class": "rule gap",
+      "source": "multi-command",
+      "text": "Well, highlight Italy and its neighbours, no more grass pls",
+      "gold": [
+        "geo.map: Well, highlight Italy and its neighbours",
+        "art.draw: no more grass pls"
+      ],
+      "status": "not_understood",
+      "produced": [
+        "geo.map: Well, highlight Italy and its neighbours"
+      ],
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.261) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc000071",
+      "class": "sop differs",
+      "source": "multi-command",
+      "text": "Um, play me a song, What do you know about Frere Jacques and show me the chords in the key of B",
+      "gold": [
+        "media.music: Um, play me a song",
+        "media.music: What do you know about Frere Jacques",
+        "media.music: show me the chords in the key of B"
+      ],
+      "status": "understood",
+      "produced": [
+        "media.music: Um, play me a song",
+        "media.music: What do you know about Frere Jacques",
+        "media.music: show me the chords in the key of B"
+      ],
+      "why": "segmentation 1 of 1 wins with score -0.366 (dispatcher -0.050), all 3 piece(s) validate"
+    },
+    {
+      "id": "mc000049",
+      "class": "interpreter rejects correct parse",
+      "source": "multi-command",
+      "text": "Colour Africa. Who killed the stepmother then Move the horse on charlie five to e1.",
+      "gold": [
+        "geo.map: Colour Africa.",
+        "docs.reader: Who killed the stepmother",
+        "games.chess: Move the horse on charlie five to e1."
+      ],
+      "status": "not_understood",
+      "produced": [
+        "geo.map: Colour Africa.",
+        "docs.reader: Who killed the stepmother"
+      ],
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.366) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc000035",
+      "class": "rule gap",
+      "source": "multi-command",
+      "text": "show me the games",
+      "gold": [
+        "ui.shell: show me the games"
+      ],
+      "status": "not_understood",
+      "produced": [],
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.155) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc000105",
+      "class": "sop differs",
+      "source": "multi-command",
+      "text": "please can you add ice cream to my list then add a new notebook butter and eggs to my shopping list",
+      "gold": [
+        "kids.tasks: please can you add ice cream to my list",
+        "kids.tasks: add a new notebook butter and eggs to my shopping list"
+      ],
+      "status": "understood",
+      "produced": [
+        "kids.tasks: please can you add ice cream to my list",
+        "kids.tasks: add a new notebook butter and eggs to my shopping list"
+      ],
+      "why": "segmentation 1 of 1 wins with score -0.261 (dispatcher -0.050), all 2 piece(s) validate"
+    },
+    {
+      "id": "mc000055",
+      "class": "interpreter rejects correct parse",
+      "source": "multi-command",
+      "text": "Move the pawn on d two to a3 then Where does a grasshopper live and Name some shapes that have 4 sides.",
+      "gold": [
+        "games.chess: Move the pawn on d two to a3",
+        "kids.animals: Where does a grasshopper live",
+        "kids.shapes: Name some shapes that have 4 sides."
+      ],
+      "status": "not_understood",
+      "produced": [
+        "kids.animals: Where does a grasshopper live",
+        "kids.shapes: Name some shapes that have 4 sides."
+      ],
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.366) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc000036",
+      "class": "rule gap",
+      "source": "multi-command",
+      "text": "Add some stickers, orange juice and butter to my shopping list and then guess my name lol, do u know it",
+      "gold": [
+        "kids.tasks: Add some stickers, orange juice and butter to my shopping list",
+        "kids.common: guess my name lol, do u know it"
+      ],
+      "status": "not_understood",
+      "produced": [
+        "kids.tasks: Add some stickers, orange juice and butter to my shopping list"
+      ],
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.261) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc000120",
+      "class": "sop differs",
+      "source": "multi-command",
+      "text": "what is on d three shift the house over to the left side",
+      "gold": [
+        "games.chess: what is on d three",
+        "art.draw: shift the house over to the left side"
+      ],
+      "status": "understood",
+      "produced": [
+        "games.chess: what is on d three",
+        "art.draw: shift the house over to the left side"
+      ],
+      "why": "segmentation 1 of 1 wins with score -0.261 (dispatcher -0.050), all 2 piece(s) validate"
+    },
+    {
+      "id": "mc000063",
+      "class": "interpreter rejects correct parse",
+      "source": "multi-command",
+      "text": "Move the king on d6 to f3, and What day is four days before Monday; So, put some water.",
+      "gold": [
+        "games.chess: Move the king on d6 to f3",
+        "kids.time: What day is four days before Monday",
+        "art.draw: So, put some water."
+      ],
+      "status": "not_understood",
+      "produced": [
+        "kids.time: What day is four days before Monday",
+        "art.draw: So, put some water."
+      ],
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.366) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc000040",
+      "class": "rule gap",
+      "source": "multi-command",
+      "text": "Sara gives 12 flags to Diana; how many more apples has Tom than Ana?",
+      "gold": [
+        "kids.arith: Sara gives 12 flags to Diana",
+        "kids.arith: how many more apples has Tom than Ana?"
+      ],
+      "status": "not_understood",
+      "produced": [
+        "kids.arith: Sara gives 12 flags to Diana"
+      ],
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.261) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc000121",
+      "class": "sop differs",
+      "source": "multi-command",
+      "text": "who follow hansel and what can you do",
+      "gold": [
+        "docs.reader: who follow hansel",
+        "ui.help: what can you do"
+      ],
+      "status": "understood",
+      "produced": [
+        "docs.reader: who follow hansel",
+        "ui.help: what can you do"
+      ],
+      "why": "segmentation 1 of 1 wins with score -0.261 (dispatcher -0.050), all 2 piece(s) validate"
+    },
+    {
+      "id": "mc000072",
+      "class": "interpreter rejects correct parse",
+      "source": "multi-command",
+      "text": "Name some shapes that have 4 sides and Move the king on hotel three to h one, What do you call a baby walrus?",
+      "gold": [
+        "kids.shapes: Name some shapes that have 4 sides",
+        "games.chess: Move the king on hotel three to h one",
+        "kids.animals: What do you call a baby walrus?"
+      ],
+      "status": "not_understood",
+      "produced": [
+        "kids.shapes: Name some shapes that have 4 sides",
+        "kids.animals: What do you call a baby walrus?"
+      ],
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.366) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc000051",
+      "class": "rule gap",
+      "source": "multi-command",
+      "text": "guess what i'm thinking then emma had an eraser in what season is february",
+      "gold": [
+        "games.guess: guess what i'm thinking",
+        "kids.arith: emma had an eraser",
+        "kids.time: in what season is february"
+      ],
+      "status": "not_understood",
+      "produced": [
+        "kids.arith: emma had an eraser",
+        "kids.time: in what season is february"
+      ],
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.366) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc000126",
+      "class": "sop differs",
+      "source": "multi-command",
+      "text": "add a new notebook apples and eggs to my shopping list",
+      "gold": [
+        "kids.tasks: add a new notebook apples and eggs to my shopping list"
+      ],
+      "status": "understood",
+      "produced": [
+        "kids.tasks: add a new notebook apples and eggs to my shopping list"
+      ],
+      "why": "segmentation 1 of 1 wins with score -0.155 (dispatcher -0.050), all 1 piece(s) validate"
+    },
+    {
+      "id": "mc000082",
+      "class": "interpreter rejects correct parse",
+      "source": "multi-command",
+      "text": "Jane has got a leaf. Move the king on g five to g three.",
+      "gold": [
+        "kids.arith: Jane has got a leaf.",
+        "games.chess: Move the king on g five to g three."
+      ],
+      "status": "not_understood",
+      "produced": [
+        "kids.arith: Jane has got a leaf."
+      ],
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.261) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc000059",
+      "class": "rule gap",
+      "source": "multi-command",
+      "text": "Please, how much change would I receive from 40 after I buy a toy car and a banana; all moves so far",
+      "gold": [
+        "kids.shop: Please, how much change would I receive from 40 after I buy a toy car and a banana",
+        "games.chess: all moves so far"
+      ],
+      "status": "not_understood",
+      "produced": [
+        "kids.shop: Please, how much change would I receive from 40 after I buy a toy car and a banana"
+      ],
+      "why": "no segmentation validates; best candidate is segmentation 1 (score -6.261) with 1 piece(s) the rules cannot read"
+    },
+    {
+      "id": "mc000168",
+      "class": "sop differs",
+      "source": "multi-command",
+      "text": "it does, yep; Please, Maybe yes maybe no.",
+      "gold": [
+        "games.guess: it does, yep",
+        "games.guess: Please, Maybe yes maybe no."
+      ],
+      "status": "understood",
+      "produced": [
+        "games.guess: it does, yep",
+        "games.guess: Please, Maybe yes maybe no."
+      ],
+      "why": "segmentation 1 of 1 wins with score -0.261 (dispatcher -0.050), all 2 piece(s) validate"
+    }
+  ]
+}

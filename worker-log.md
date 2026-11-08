@@ -144,3 +144,30 @@ Deviations / choices:
 - Negative correct = the record's world (or its imports) does not claim the text; restricted = nothing parsed. Routing row correct = world of the first parsed segment is `world` or in `alt_worlds`; unparsed rows are wrong. The row's `recent_worlds` are set before its session messages, the tab as `ui.shell` activeTab.
 - Restricted mode uses a view of the world set with only the world and its imports (own memo cache), through `formalize()` with a FormSession, no interpreter. Routed mode uses `DialogSession.send` (the dialog server path).
 - Generator and rule-derived records have no tab, so routed mode runs them without a tab (the dialog default); the near-equal routed and restricted numbers show these texts are rarely ambiguous.
+
+## D2 — Validation layer — done (2026-11-08 14:00)
+Commands:
+```
+node --test tests/dispatch-validate.test.mjs        # 10 tests
+npm test                                             # 533 pass
+node src/cli.mjs test-world all                      # all worlds pass
+node scripts/make-oracle-pred.mjs                    # gold-derived predictions: training/runs/dispatch-oracle/oracle.jsonl (8654 records: 4654 single + 4000 multi-command)
+node scripts/eval-dispatch.mjs --pred training/runs/dispatch-oracle/oracle.jsonl --name oracle          # about 100 s, 20 workers
+node scripts/make-oracle-pred.mjs --noise 0.3 --split-noise 0.2 --out training/runs/dispatch-oracle/noisy.jsonl
+node scripts/eval-dispatch.mjs --pred training/runs/dispatch-oracle/noisy.jsonl --name oracle-noisy
+```
+Files: `src/dialog/dispatch-validate.mjs` (browser-safe), `scripts/eval-dispatch.mjs`, `scripts/make-oracle-pred.mjs`, `scripts/lib/dispatch-gold.mjs`, `tests/dispatch-validate.test.mjs`, spec 03 section 7, `specs/decisions/ADR-005-dispatcher-and-rule-validation.md`, `specs/README.md`. Results: `training/results/dispatch-oracle.json`, `dispatch-oracle-noisy.json`; traces `training/runs/dispatch-<name>-traces.jsonl` (gitignored). Two runs on the same input give byte-identical results and traces.
+Results (oracle predictions = gold segmentation, gold world first, no simplified text; exact SOP, modes A top-1 + rules, B top-3 + validation, C = B + simplified, Bni = B without interpreter, Br = B accepting interpreter refusals):
+- Oracle coverage 100 % (segmentation, top-1, top-3), segmentation F1 1.0. All 8654 records.
+- Exact SOP: A 81.9, B 76.2, C 76.2, Bni 81.9, Br 81.8 (all records). By source: generator 100 / 94.5 / 94.5 / 100 / 100; rule-derived 100 / 90.8 / 90.8 / 100 / 99.7; paraphrase 30.1 in every mode; multi-command 74.7 / 68.0 / 68.0 / 74.7 / 74.6.
+- The strict interpreter check (B) loses 5.7 points against A on the oracle: it rejects correct parses (games 83.6 -> 61.2: illegal or state-dependent moves are `unsupported`; 507 records). Br recovers it. This is a finding, not a bug of the oracle.
+- Noisy oracle (30 % of pieces with the gold world at rank 2/3, 20 % of records with a wrong first segmentation): world top-1 63.9 %, top-3 100 %; exact SOP A 53.4, B 74.8, Br 80.3 (Bni 80.2). Recovery: 2639 recoverable records, wrong top-1 rejected in 2506, recovered exactly in 1881; 133 wrong top-1 accepted by the wrong world's rules.
+- Failure classes at the oracle (mode C): rule gap 1209, interpreter rejects correct parse 507, sop differs 248 (mostly paraphrases and multi-command `plain` variants whose gold target was made from the punctuated text), segmentation wrong / world not in candidates 0.
+Commit: (filled by coordinator)
+Deviations / choices:
+- Added `acceptRefused` / `interpreterPenalty` to the policy and the mode Br, beyond the task text, because the strict rule (reject on `unsupported`) was shown by the oracle to cost 5.7 points. The strict rule stays the default.
+- The tie-break reuses the router: the tied worlds are formalized together and `engine.router` picks (no second tier implementation).
+- Scores in log domain: "dispatcher score x validity" becomes a sum of log-probabilities with a fixed penalty per invalid piece (spec 03 section 7.3).
+- Multi-command gold targets come from the source record (`source_id`), so a piece whose target depended on the source record's own context messages, or `plain` variants without punctuation, can be unreachable even for the oracle (multi-command ceiling 74.7 %).
+- Segmentation match = same piece count and character IoU >= 0.6 per piece (`--seg-iou`).
+- The producer must write the dataset record id as `id` (per-world test id, routing row id or `mc......`); `gold` in the prediction is ignored.
