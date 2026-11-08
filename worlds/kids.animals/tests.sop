@@ -2375,3 +2375,39 @@
     input="can u tell me which animals live in the sea"
     expect="Animals that live in the sea: seals, whales, dolphins, sharks, octopuses, walruses, crabs, jellyfish, starfish and turtles."
     doc="rule sweep probe: fresh-batch variant"
+
+@t.animals.x21 core.test
+    input="do dolphins breathe air or are they fish"
+    expect="mammal"
+
+@t.animals.x22 core.test
+    input="Is a whale a mammal or a fish?"
+    expect="mammal"
+
+@t.animals.x23 core.test
+    input="is a bat a bird or a mammal"
+    expect="mammal"
+
+@t.animals.x24 core.test
+    input="do bats breathe air or are they birds"
+    expect="mammal"
+
+@t.animals.x25 core.test
+    input="how many legs is it that a spider walks on"
+    expect="8 legs"
+
+@t.animals.x26 core.test
+    input="how many legs does a spider walk on"
+    expect="8 legs"
+
+@t.animals.x27 core.test
+    input="what is the number of legs a dog has"
+    expect="4 legs"
+
+@t.animals.x28 core.test
+    input="what is the number of legs of an ant"
+    expect="6 legs"
+
+@t.animals.x29 core.test
+    input="hw many legs does a spidr have"
+    expect="8 legs"

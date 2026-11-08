@@ -1809,3 +1809,59 @@
     kind=question
     priority=10
     example="Wheres home for a camel"
+
+@pat.kids.animals.x2.alt.breathe core.pattern
+    match="[do|does|did] [a|an|the]? {a:noun} [breathe|breath|breathe_in|breath_in|live_on_land|have_gills|have_lungs|have_fur|have_feathers|lay_eggs] [air|water|under_water|underwater]? or [are|is|do|does] [they|it|he|she|a|an]? [a|an]? {c1:lex.kids.animals.classes}"
+    emit="@{_} core.question type=kids.animals.animal seek=class where.name={a}"
+    kind=question
+    priority=11
+    example="Do dolphins breathe air or are they fish?"
+
+
+@pat.kids.animals.x2.alt.what core.pattern
+    match="[what|which] is [a|an|the]? {a:noun} [a|an]? {c1:lex.kids.animals.classes} or [a|an]? {c2:lex.kids.animals.classes}"
+    emit="@{_} core.question type=kids.animals.animal seek=class where.name={a}"
+    kind=question
+    priority=11
+    example="Which is a bat, a mammal or a bird?"
+
+@pat.kids.animals.x2.alt.noun core.pattern
+    match="[is|are] [a|an|the]? {a:noun} [fish|bird|mammal|reptile|insect] or [mammal|bird|fish|reptile|insect|amphibian]"
+    emit="@{_} core.question type=kids.animals.animal seek=class where.name={a}"
+    kind=question
+    priority=11
+
+@pat.kids.animals.x2.legs.walks core.pattern
+    match="how_many legs [is_it|are_there|is_that|do_you_count|can_you_count|do_you_see] that [a|an|the]? {a:noun} [walks|stands|runs|moves|crawls|goes] on"
+    emit="@{_} core.question type=kids.animals.animal seek=legs where.name={a}"
+    kind=question
+    priority=11
+    example="How many legs is it that a spider walks on?"
+
+@pat.kids.animals.x2.legs.walkon core.pattern
+    match="how_many legs [does|do] [a|an|the]? {a:noun} [walk|stand|run|move|crawl|go] on"
+    emit="@{_} core.question type=kids.animals.animal seek=legs where.name={a}"
+    kind=question
+    priority=11
+    example="How many legs does a spider walk on?"
+
+@pat.kids.animals.x2.legs.number core.pattern
+    match="[what|whats|what_is] the number of legs [that]? [a|an|the]? {a:noun} [has|have|owns|uses|walks_on|stands_on]"
+    emit="@{_} core.question type=kids.animals.animal seek=legs where.name={a}"
+    kind=question
+    priority=11
+    example="What is the number of legs a spider has?"
+
+@pat.kids.animals.x2.legs.number.of core.pattern
+    match="[what|whats|what_is] the number of legs [of|on|for] [a|an|the]? {a:noun}"
+    emit="@{_} core.question type=kids.animals.animal seek=legs where.name={a}"
+    kind=question
+    priority=11
+    example="What is the number of legs of a spider?"
+
+@pat.kids.animals.x2.legs.count core.pattern
+    match="[tell_me|can_you_tell_me|do_you_know|i_wonder|i_want_to_know] [the|how_many]? [number_of]? legs [that|does|do]? [a|an|the]? {a:noun} [has|have|walks_on|stands_on|walk_on|have_got]"
+    emit="@{_} core.question type=kids.animals.animal seek=legs where.name={a}"
+    kind=question
+    priority=11
+    example="Tell me the number of legs a spider has."
