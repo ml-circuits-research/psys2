@@ -1,131 +1,173 @@
-@op.ui.avatar.setColor core.operation
-    impl=setColor
+@op.ui.avatar.setPart core.operation
+    impl=setPart
     semantics=action
-    action=avatar.setColor
-    doc="Sets the color of the face, the eyes or the antenna. Every changing command also brings the robot tab forward: ctx.request(\"ui.openTab\")."
+    action=avatar.setPart
+    doc="Sets a component by name and by synonym (visor eyes, a dish on top, a medical mask). When only another character has it, the avatar becomes that character. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
 
-@op.ui.avatar.setSize core.operation
-    impl=setSize
+@op.ui.avatar.setPartUnknown core.operation
+    impl=setPartUnknown
     semantics=action
-    action=avatar.setSize
-    doc="Sets or steps the size of the eyes."
+    action=avatar.setPartUnknown
+    doc="A component named with words that are not a known variant: says what is possible. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
 
-@op.ui.avatar.setShape core.operation
-    impl=setShape
+@op.ui.avatar.step core.operation
+    impl=step
     semantics=action
-    action=avatar.setShape
-    doc="Sets the shape of the face or the eyes."
+    action=avatar.step
+    doc="Next, previous or different variant of a component (dir=next|previous|different). Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
 
-@op.ui.avatar.setMood core.operation
-    impl=setMood
+@op.ui.avatar.resetPart core.operation
+    impl=resetPart
     semantics=action
-    action=avatar.setMood
-    doc="Sets the mouth (smile, grin, sad, surprised, open, neutral)."
+    action=avatar.resetPart
+    doc="Back to the default variant of one component. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
 
-@op.ui.avatar.look core.operation
-    impl=look
+@op.ui.avatar.removePart core.operation
+    impl=removePart
     semantics=action
-    action=avatar.look
-    doc="Sets the gaze direction."
-
-@op.ui.avatar.animate core.operation
-    impl=animate
-    semantics=action
-    action=avatar.animate
-    doc="Queues the effect avatar.animate (wink, nod, dance, wave, shake, blink): a moment, not stored state."
-
-@op.ui.avatar.blink core.operation
-    impl=blink
-    semantics=action
-    action=avatar.blink
-    doc="Turns the blinking of the eyes on or off."
-
-@op.ui.avatar.wear core.operation
-    impl=wear
-    semantics=action
-    action=avatar.wear
-    doc="Puts on a hat, an accessory, ears or the antenna."
-
-@op.ui.avatar.remove core.operation
-    impl=remove
-    semantics=action
-    action=avatar.remove
-    doc="Takes off a hat, an accessory, ears or the antenna."
+    action=avatar.removePart
+    doc="Takes off a component that can be absent (mask, glasses, antenna) or a hat. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
 
 @op.ui.avatar.removeAll core.operation
     impl=removeAll
     semantics=action
     action=avatar.removeAll
-    doc="Takes off the hat and the accessory."
+    doc="Takes off everything that can be taken off. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
 
-@op.ui.avatar.setName core.operation
-    impl=setName
+@op.ui.avatar.setColor core.operation
+    impl=setColor
     semantics=action
-    action=avatar.setName
-    doc="Gives the robot a name."
+    action=avatar.setColor
+    doc="Sets a color part to the nearest entry of the style palette for a named color. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
 
-@op.ui.avatar.reset core.operation
-    impl=reset
+@op.ui.avatar.shiftColor core.operation
+    impl=shiftColor
     semantics=action
-    action=avatar.reset
-    doc="Back to the default face (the name is kept)."
+    action=avatar.shiftColor
+    doc="Makes a color part lighter or darker, one palette step. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
 
 @op.ui.avatar.askColor core.operation
     impl=askColor
     semantics=action
     action=avatar.askColor
-    doc="Tells a color of the face."
+    doc="Tells the color of a part in words. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
 
-@op.ui.avatar.askSize core.operation
-    impl=askSize
+@op.ui.avatar.listColors core.operation
+    impl=listColors
     semantics=action
-    action=avatar.askSize
-    doc="Tells the size of the eyes."
+    action=avatar.listColors
+    doc="Lists the colors a part can have, or the colored parts of the character. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
 
-@op.ui.avatar.askShape core.operation
-    impl=askShape
+@op.ui.avatar.surprise core.operation
+    impl=surprise
     semantics=action
-    action=avatar.askShape
-    doc="Tells a shape."
+    action=avatar.surprise
+    doc="Random look from a new recorded seed (mode=surprise) or everything different (mode=everything). Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
 
-@op.ui.avatar.askMood core.operation
-    impl=askMood
+@op.ui.avatar.setSeed core.operation
+    impl=setSeed
     semantics=action
-    action=avatar.askMood
-    doc="Tells the mouth."
+    action=avatar.setSeed
+    doc="Draws the character from a given seed; the same seed always gives the same look. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+
+@op.ui.avatar.askSeed core.operation
+    impl=askSeed
+    semantics=action
+    action=avatar.askSeed
+    doc="Tells the seed. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+
+@op.ui.avatar.setCharacter core.operation
+    impl=setCharacter
+    semantics=action
+    action=avatar.setCharacter
+    doc="Becomes a robot, a person or an emoji. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+
+@op.ui.avatar.askCharacter core.operation
+    impl=askCharacter
+    semantics=action
+    action=avatar.askCharacter
+    doc="Tells which character is shown. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+
+@op.ui.avatar.listCharacters core.operation
+    impl=listCharacters
+    semantics=action
+    action=avatar.listCharacters
+    doc="Lists the characters. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+
+@op.ui.avatar.setMood core.operation
+    impl=setMood
+    semantics=action
+    action=avatar.setMood
+    doc="Sets an expression by mood word, mapped per character. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
 
 @op.ui.avatar.checkMood core.operation
     impl=checkMood
     semantics=action
     action=avatar.checkMood
-    doc="Yes or no: is the mouth like that?"
+    doc="Yes or no: do I look like that? Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
 
-@op.ui.avatar.askLook core.operation
-    impl=askLook
+@op.ui.avatar.askMood core.operation
+    impl=askMood
     semantics=action
-    action=avatar.askLook
-    doc="Tells where the robot looks."
+    action=avatar.askMood
+    doc="Tells the mood the expression stands for. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
 
-@op.ui.avatar.askWearing core.operation
-    impl=askWearing
+@op.ui.avatar.setName core.operation
+    impl=setName
     semantics=action
-    action=avatar.askWearing
-    doc="Tells what the robot wears."
-
-@op.ui.avatar.hasThing core.operation
-    impl=hasThing
-    semantics=action
-    action=avatar.hasThing
-    doc="Yes or no: is the robot wearing or showing something?"
+    action=avatar.setName
+    doc="Gives the avatar a name. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
 
 @op.ui.avatar.askName core.operation
     impl=askName
     semantics=action
     action=avatar.askName
-    doc="Tells the robot name."
+    doc="Tells the name. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+
+@op.ui.avatar.reset core.operation
+    impl=reset
+    semantics=action
+    action=avatar.reset
+    doc="Back to the default look (scope=all: all characters, and the robot). Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+
+@op.ui.avatar.animate core.operation
+    impl=animate
+    semantics=action
+    action=avatar.animate
+    doc="Queues the effect avatar.animate (wave, nod, dance, wink ...): a moment, not stored state. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+
+@op.ui.avatar.askParts core.operation
+    impl=askParts
+    semantics=action
+    action=avatar.askParts
+    doc="Tells what can be changed. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+
+@op.ui.avatar.listOptions core.operation
+    impl=listOptions
+    semantics=action
+    action=avatar.listOptions
+    doc="Lists the variants of a component in words. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+
+@op.ui.avatar.askPart core.operation
+    impl=askPart
+    semantics=action
+    action=avatar.askPart
+    doc="Tells what the avatar has for a component. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+
+@op.ui.avatar.hasThing core.operation
+    impl=hasThing
+    semantics=action
+    action=avatar.hasThing
+    doc="Yes or no: does the avatar have or wear something? Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+
+@op.ui.avatar.askWearing core.operation
+    impl=askWearing
+    semantics=action
+    action=avatar.askWearing
+    doc="Tells what the avatar wears. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
 
 @op.ui.avatar.describe core.operation
     impl=describe
     semantics=action
     action=avatar.describe
-    doc="Describes the whole face."
+    doc="Describes the whole avatar in words. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."

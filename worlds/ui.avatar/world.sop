@@ -1,12 +1,12 @@
 @world.ui.avatar core.world
     namespace=ui.avatar
-    version=0.1.0
+    version=0.2.0
     legend=$legend.ui.avatar
     imports=world.core
     imports=world.kids.common
     formalization=rules
     language=en
     status=fixture
-    title="Robot face (avatar)"
+    title="Avatar (DiceBear)"
     summary="change my face"
-    doc="The robot face of the demo: colors, eyes, mouth, gaze, hat, accessories and a name, changed by voice or text. State lives in ctx.state; the host draws it. Hand-built platform fixture, not produced by the C1 workflow."
+    doc="The avatar of the demo: a robot, a person or an emoji drawn by the DiceBear library and changed by voice or text: parts, colors, mood, name, seed. State lives in ctx.state; the host draws it. The legend.sop and lexicon.sop are generated from the DiceBear style definitions by scripts/legend-from-dicebear.mjs (an example of building a legend from a tool's documentation); the patterns, operations, templates and tests are hand-built. Platform fixture, not produced by the C1 workflow."

@@ -1,405 +1,537 @@
-@pat.ui.avatar.color core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [make|turn|paint|color|colour|change|set] [your|the]? {part:lex.ui.avatar.parts} [to|into|be]? {c:lex.ui.avatar.colors}"
-    emit="@{_} core.request action=avatar.setColor arg.part={part} arg.color={c}"
+@pat.ui.avatar.setpart core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [give_yourself|give_me|get|have|wear|use|add|put_on|try|try_on|grow|show|show_me|switch_to|change_to|i_want|i_would_like|i_want_you_to_have|i_want_you_to_wear|i_would_like_you_to_have|i_want_you_to_wear|you_should_have|you_should_wear] [a|an|the|your|some|new]? {v:lex.ui.avatar.options} {n:number?} [on|on_your|on_my|on_the|in|in_your|for_your|with_your]? {p:lex.ui.avatar.parts?}"
+    emit="@{_} core.request action=avatar.setPart arg.part={p} arg.value={v} arg.n={n} arg.text=\"{v}\""
     kind=request
     priority=12
-    example="Turn your face blue."
-    example="Make your eyes green."
+    example="Give yourself visor eyes."
+    example="Use the cyclops eye."
+    example="Wear a medical mask."
+    example="Put on glasses."
+    example="Give yourself glasses 3."
+    example="Wear sunglasses."
+    example="I want a dish on top."
+    example="Try a heart on your chest."
 
-@pat.ui.avatar.color2 core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [change|set] [your|the]? {part:lex.ui.avatar.parts} [color|colour] [to|into]? {c:lex.ui.avatar.colors}"
-    emit="@{_} core.request action=avatar.setColor arg.part={part} arg.color={c}"
+@pat.ui.avatar.setpart.after core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [give_yourself|give_me|get|have|wear|use|add|put_on|try|try_on|grow|show|show_me|switch_to|change_to|i_want|i_would_like|i_want_you_to_have|i_want_you_to_wear|i_would_like_you_to_have|i_want_you_to_wear|you_should_have|you_should_wear] [a|an|the|your|some|new]? {v:lex.ui.avatar.options} [on|on_your|on_my|on_the|in|in_your|for_your]? {p:lex.ui.avatar.parts} {n:number}"
+    emit="@{_} core.request action=avatar.setPart arg.part={p} arg.value={v} arg.n={n} arg.text=\"{v}\""
     kind=request
     priority=12
-    example="Change your face color to red."
+    example="Give yourself short hair 3."
+    example="Give yourself a moustache 4."
 
-@pat.ui.avatar.color3 core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [make|paint|color|colour] yourself {c:lex.ui.avatar.colors}"
-    emit="@{_} core.request action=avatar.setColor arg.part=face arg.color={c}"
+@pat.ui.avatar.setpart.to core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [change|make|set|switch|turn|swap] [your|the]? {p:lex.ui.avatar.parts} [to|into|be|like|with|as]? [a|an|the]? {v:lex.ui.avatar.options} {n:number?}"
+    emit="@{_} core.request action=avatar.setPart arg.part={p} arg.value={v} arg.n={n} arg.text=\"{v}\""
     kind=request
     priority=12
+    example="Change your antenna to a dish."
+    example="Make your hair an afro."
+    example="Make your eyes round."
+    example="Set your mouth to a grill."
+    example="Switch your expression to calm."
+
+@pat.ui.avatar.setpart.unknown core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [change|make|set|switch|turn|swap] [your|the]? {p:lex.ui.avatar.parts} [to|into|be|like|with|as]? [a|an|the]? {w:words(4)}"
+    emit="@{_} core.request action=avatar.setPartUnknown arg.part={p} arg.words=\"{w}\""
+    kind=request
+    priority=4
+    example="Make your eyes wobbly."
+
+@pat.ui.avatar.step.next core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [give_yourself|show_me|try|switch_to|go_to|use|get|pick|choose|show]? [the|a|an]? [next|following] {p:lex.ui.avatar.parts}"
+    emit="@{_} core.request action=avatar.step arg.part={p} arg.dir=next"
+    kind=request
+    priority=12
+    example="Next eyes."
+    example="Show me the next hairstyle."
+    example="Try the next mouth."
+
+@pat.ui.avatar.step.prev core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [give_yourself|show_me|try|switch_to|go_to|use|get|pick|choose|show|go_back_to]? [the|a|an]? [previous|prior|earlier] {p:lex.ui.avatar.parts}"
+    emit="@{_} core.request action=avatar.step arg.part={p} arg.dir=previous"
+    kind=request
+    priority=12
+    example="Previous mouth."
+    example="Go back to the previous hair."
+
+@pat.ui.avatar.step.diff core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [give_yourself|show_me|try|switch_to|use|get|pick|choose|show|have|wear]? [a|an|the|some]? [different|another|new|random|other] {p:lex.ui.avatar.parts}"
+    emit="@{_} core.request action=avatar.step arg.part={p} arg.dir=different"
+    kind=request
+    priority=12
+    example="Different hair."
+    example="Give yourself another mouth."
+    example="Try a random expression."
+
+@pat.ui.avatar.step.change core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [change|swap|randomize|randomise|shuffle|switch|mix_up|reroll] [your|the]? {p:lex.ui.avatar.parts} [again|please|a_bit]?"
+    emit="@{_} core.request action=avatar.step arg.part={p} arg.dir=different"
+    kind=request
+    priority=11
+    example="Change your hair."
+    example="Randomize your eyes."
+
+@pat.ui.avatar.part.reset core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [reset|restore] [your|the]? {p:lex.ui.avatar.parts}"
+    emit="@{_} core.request action=avatar.resetPart arg.part={p}"
+    kind=request
+    priority=12
+    example="Reset your eyes."
+
+@pat.ui.avatar.color.set core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [make|turn|paint|color|colour|change|set|dye|tint] [your|the]? {p:lex.ui.avatar.colorparts} [color|colour]? [to|into|be|a|an]? {c:lex.ui.avatar.colors}"
+    emit="@{_} core.request action=avatar.setColor arg.part={p} arg.color={c}"
+    kind=request
+    priority=14
+    example="Make your body blue."
+    example="Make your screen light green."
+    example="Change your hair color to red."
+    example="Paint your background pink."
+    example="Turn your skin dark brown."
+
+@pat.ui.avatar.color.adj core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [give_yourself|have|get|wear|use|show_me|pick|choose|i_want|i_would_like|try]? [a|an|the]? {c:lex.ui.avatar.colors} {p:lex.ui.avatar.colorparts}"
+    emit="@{_} core.request action=avatar.setColor arg.part={p} arg.color={c}"
+    kind=request
+    priority=14
+    example="Give yourself a light green screen."
+    example="Blue eyes."
+    example="I want a dark gray background."
+
+@pat.ui.avatar.color.main core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [make|paint|color|colour|dye|turn] yourself {c:lex.ui.avatar.colors}"
+    emit="@{_} core.request action=avatar.setColor arg.part=main arg.color={c}"
+    kind=request
+    priority=13
     example="Paint yourself pink."
 
-@pat.ui.avatar.color4 core.pattern
+@pat.ui.avatar.color.main2 core.pattern
     match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [turn|go|become|be|get] {c:lex.ui.avatar.colors}"
-    emit="@{_} core.request action=avatar.setColor arg.part=face arg.color={c}"
+    emit="@{_} core.request action=avatar.setColor arg.part=main arg.color={c}"
     kind=request
-    priority=12
+    priority=13
     example="Turn purple."
+    example="Go orange."
 
-@pat.ui.avatar.color5 core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [give_yourself|have|get|wear|use|show_me] [a|an|some]? {c:lex.ui.avatar.colors} {part:lex.ui.avatar.parts}"
-    emit="@{_} core.request action=avatar.setColor arg.part={part} arg.color={c}"
+@pat.ui.avatar.color.tone core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [make|turn|change] [your|the]? {p:lex.ui.avatar.colorparts} [a_bit|a_little|a_lot|much|even|way]? {t:lex.ui.avatar.tone}"
+    emit="@{_} core.request action=avatar.shiftColor arg.part={p} arg.dir={t}"
     kind=request
-    priority=12
-    example="Give yourself orange eyes."
+    priority=14
+    example="Make your body lighter."
+    example="Make your screen a bit darker."
 
 @pat.ui.avatar.color.q core.pattern
-    match="what [color|colour] [are|is] [your|the] {part:lex.ui.avatar.parts}"
-    emit="@{_} core.request action=avatar.askColor arg.part={part}"
+    match="what [color|colour] [are|is] [your|the] {p:lex.ui.avatar.colorparts}"
+    emit="@{_} core.request action=avatar.askColor arg.part={p}"
     kind=request
     priority=12
     example="What color are your eyes?"
-    example="What color is your face?"
+    example="What color is your body?"
 
 @pat.ui.avatar.color.q2 core.pattern
     match="what [color|colour] are you"
-    emit="@{_} core.request action=avatar.askColor arg.part=face"
+    emit="@{_} core.request action=avatar.askColor arg.part=main"
     kind=request
     priority=12
     example="What color are you?"
 
-@pat.ui.avatar.size core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [make|turn|change|set|get] [your|the]? {part:lex.ui.avatar.parts} [a_bit|a_little|a_lot|much|even|way|very|so|really|bit|little]? {s:lex.ui.avatar.sizes}"
-    emit="@{_} core.request action=avatar.setSize arg.part={part} arg.size={s}"
+@pat.ui.avatar.color.list core.pattern
+    match="[what|which] [colors|colours|color|colour] [can|could] [your|the] {p:lex.ui.avatar.colorparts} [be|have]"
+    emit="@{_} core.request action=avatar.listColors arg.part={p}"
     kind=request
     priority=12
-    example="Make your eyes bigger."
-    example="Make your eyes huge."
-    example="Make your eyes smaller."
+    example="What colors can your screen be?"
+    example="Which colors can your hair have?"
 
-@pat.ui.avatar.size2 core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [give_yourself|have|get|use] [some]? {s:lex.ui.avatar.sizes} {part:lex.ui.avatar.parts}"
-    emit="@{_} core.request action=avatar.setSize arg.part={part} arg.size={s}"
+@pat.ui.avatar.color.list2 core.pattern
+    match="[what|which] [colors|colours|color|colour] [can_you_change|can_i_change|can_you_be|can_you_have|can_i_choose|can_i_pick|do_you_have]"
+    emit="@{_} core.request action=avatar.listColors"
     kind=request
     priority=12
-    example="Give yourself big eyes."
+    example="What colors can you change?"
 
-@pat.ui.avatar.size3 core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [shrink|make_smaller] [your|the]? {part:lex.ui.avatar.parts}"
-    emit="@{_} core.request action=avatar.setSize arg.part={part} arg.size=smaller"
+@pat.ui.avatar.char.set core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [become|turn_into|change_into|transform_into|switch_to|morph_into|go_back_to_being|look_like|be|turn_back_into|change_back_into|i_want_you_to_be|i_want_you_to_become|you_should_be|you_should_become|show_me|i_want_to_see|let_me_see|i_would_like_to_see] [a|an|the]? {who:lex.ui.avatar.characters} [again|instead|now|please|for_me|once_more|next|version]?"
+    emit="@{_} core.request action=avatar.setCharacter arg.who={who}"
     kind=request
     priority=12
-    example="Shrink your eyes."
+    example="Become a person."
+    example="Turn into an emoji."
+    example="Be a robot again."
+    example="Switch to the robot."
+    example="Look like a human."
+    example="I want to see a woman."
 
-@pat.ui.avatar.size4 core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [grow|enlarge|widen|make_bigger] [your|the]? {part:lex.ui.avatar.parts}"
-    emit="@{_} core.request action=avatar.setSize arg.part={part} arg.size=bigger"
+@pat.ui.avatar.char.q core.pattern
+    match="[what_are_you|which_character_are_you|what_kind_of_avatar_are_you|what_character_do_you_have|which_avatar_are_you|what_avatar_are_you]"
+    emit="@{_} core.request action=avatar.askCharacter"
     kind=request
     priority=12
-    example="Enlarge your eyes."
+    example="Which character are you?"
+    example="What kind of avatar are you?"
 
-@pat.ui.avatar.size5 core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? open [your|the]? eyes [wide|wider]"
-    emit="@{_} core.request action=avatar.setSize arg.part=eye arg.size=bigger"
+@pat.ui.avatar.char.q2 core.pattern
+    match="[are_you|are_you_still] [a|an]? {who:lex.ui.avatar.characters}"
+    emit="@{_} core.request action=avatar.askCharacter arg.who={who}"
     kind=request
     priority=12
-    example="Open your eyes wide."
+    example="Are you a robot?"
+    example="Are you an emoji?"
 
-@pat.ui.avatar.size.q core.pattern
-    match="how [big|large|small] [are|is] [your|the] {part:lex.ui.avatar.parts}"
-    emit="@{_} core.request action=avatar.askSize arg.part={part}"
+@pat.ui.avatar.char.list core.pattern
+    match="what [can|could] [you|i] [become|turn_into|change_into|be|transform_into]"
+    emit="@{_} core.request action=avatar.listCharacters"
     kind=request
     priority=12
-    example="How big are your eyes?"
+    example="What can you become?"
+    example="What can you turn into?"
 
-@pat.ui.avatar.shape core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [make|turn|change|set] [your|the]? {part:lex.ui.avatar.parts} [into|to|be]? [a|an]? {sh:lex.ui.avatar.shapes} [shaped]?"
-    emit="@{_} core.request action=avatar.setShape arg.part={part} arg.shape={sh}"
+@pat.ui.avatar.char.list2 core.pattern
+    match="[what|which] [characters|avatars|styles|kinds_of_avatar] [can_you_be|can_you_become|are_there|do_you_have|can_i_choose|are_available]"
+    emit="@{_} core.request action=avatar.listCharacters"
     kind=request
     priority=12
-    example="Make your eyes stars."
-    example="Make your face square."
-
-@pat.ui.avatar.shape2 core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [give_yourself|have|get] [a|an|some]? {sh:lex.ui.avatar.shapes} {part:lex.ui.avatar.parts}"
-    emit="@{_} core.request action=avatar.setShape arg.part={part} arg.shape={sh}"
-    kind=request
-    priority=12
-    example="Give yourself star eyes."
-
-@pat.ui.avatar.shape.q core.pattern
-    match="what shape [are|is] [your|the] {part:lex.ui.avatar.parts}"
-    emit="@{_} core.request action=avatar.askShape arg.part={part}"
-    kind=request
-    priority=12
-    example="What shape are your eyes?"
+    example="Which characters are there?"
+    example="What avatars do you have?"
 
 @pat.ui.avatar.mood core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [look|be|feel|seem|act|get|become|appear] [a_little|a_bit|very|so]? {m:lex.ui.avatar.moods}"
-    emit="@{_} core.request action=avatar.setMood arg.mood={m}"
-    kind=request
-    priority=10
-    example="Look surprised."
-    example="Be happy."
-
-@pat.ui.avatar.mood2 core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [make|pull|do|show|put_on] [me]? [a|an|your]? {m:lex.ui.avatar.moods} [face|expression|look]"
-    emit="@{_} core.request action=avatar.setMood arg.mood={m}"
-    kind=request
-    priority=10
-    example="Make a sad face."
-
-@pat.ui.avatar.mood3 core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [give|show] me [a|an|your]? {m:lex.ui.avatar.moods}"
-    emit="@{_} core.request action=avatar.setMood arg.mood={m}"
-    kind=request
-    priority=10
-    example="Give me a smile."
-
-@pat.ui.avatar.mood4 core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? {m:lex.ui.avatar.moods} [at_me|please|now|again|for_me|a_little|a_bit]?"
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [look|be|feel|seem|act|appear|get|become|sound] [a_little|a_bit|very|so|really|quite|more]? {m:lex.ui.avatar.moods}"
     emit="@{_} core.request action=avatar.setMood arg.mood={m}"
     kind=request
     priority=11
-    example="Can you smile?"
-    example="Grin."
+    example="Look surprised."
+    example="Be calm."
+    example="Look happy."
+    example="Look a little sad."
+    example="Get angry."
 
-@pat.ui.avatar.mood5 core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? open [your|the]? mouth [wide]?"
-    emit="@{_} core.request action=avatar.setMood arg.mood=open"
+@pat.ui.avatar.mood.face core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [make|pull|do|show|put_on|give_yourself|give_me|show_me] [a|an|your]? {m:lex.ui.avatar.moods} [face|expression|look]"
+    emit="@{_} core.request action=avatar.setMood arg.mood={m}"
     kind=request
-    priority=10
-    example="Open your mouth."
+    priority=13
+    example="Make a sad face."
+    example="Show me a surprised face."
 
-@pat.ui.avatar.mood6 core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [close|shut] [your|the]? mouth"
-    emit="@{_} core.request action=avatar.setMood arg.mood=neutral"
+@pat.ui.avatar.mood.smile core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [smile|smile_for_me|say_cheese|cheer_up|grin]"
+    emit="@{_} core.request action=avatar.setMood arg.mood=happy"
     kind=request
-    priority=10
-    example="Close your mouth."
-
-@pat.ui.avatar.mood7 core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [cheer_up|smile_for_me|say_cheese]"
-    emit="@{_} core.request action=avatar.setMood arg.mood=smile"
-    kind=request
-    priority=10
+    priority=11
+    example="Smile."
+    example="Say cheese."
     example="Cheer up."
 
+@pat.ui.avatar.mood.laugh core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [laugh|giggle|laugh_out_loud]"
+    emit="@{_} core.request action=avatar.setMood arg.mood=laughing"
+    kind=request
+    priority=11
+    example="Laugh."
+
+@pat.ui.avatar.mood.frown core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [frown|cry|pout]"
+    emit="@{_} core.request action=avatar.setMood arg.mood=sad"
+    kind=request
+    priority=11
+    example="Frown."
+
 @pat.ui.avatar.mood.q core.pattern
-    match="[are_you|do_you_look|are_you_feeling] {m:lex.ui.avatar.moods}"
+    match="[are_you|do_you_look|are_you_feeling|are_you_looking] {m:lex.ui.avatar.moods}"
     emit="@{_} core.request action=avatar.checkMood arg.mood={m}"
     kind=request
     priority=12
-    example="Are you smiling?"
+    example="Are you happy?"
+    example="Do you look surprised?"
 
 @pat.ui.avatar.mood.q2 core.pattern
-    match="[how_do_you_feel|how_are_you_feeling|what_is_your_mood|what_is_your_expression|what_is_your_face_doing|how_are_you]"
+    match="[how_do_you_feel|how_are_you_feeling|what_is_your_mood|what_is_your_expression|what_mood_are_you_in|what_is_your_face_doing]"
     emit="@{_} core.request action=avatar.askMood"
     kind=request
     priority=12
     example="How do you feel?"
+    example="What is your mood?"
 
-@pat.ui.avatar.look core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? look [to|towards|at]? [the|your|my]? {d:lex.ui.avatar.dirs}"
-    emit="@{_} core.request action=avatar.look arg.dir={d}"
+@pat.ui.avatar.name.set core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [call_yourself|rename_yourself|name_yourself|rename_yourself_to|name_yourself_as|rename_yourself_as] {name:rest}"
+    emit="@{_} core.request action=avatar.setName arg.name=\"{name}\""
     kind=request
     priority=12
-    example="Look to the left."
-    example="Look up."
+    example="Call yourself Robi."
+    example="Rename yourself to Pixel."
 
-@pat.ui.avatar.look2 core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? look [straight_ahead|straight|forward|ahead|at_me|back_at_me|straight_at_me]"
-    emit="@{_} core.request action=avatar.look arg.dir=center"
+@pat.ui.avatar.name.set2 core.pattern
+    match="[i_will_call_you|i_am_calling_you|i_call_you|we_will_call_you|i_am_going_to_call_you|from_now_on_i_will_call_you|call_you] {name:rest}"
+    emit="@{_} core.request action=avatar.setName arg.name=\"{name}\""
     kind=request
     priority=12
-    example="Look at me."
+    example="I will call you Robi."
 
-@pat.ui.avatar.look.q core.pattern
-    match="[where_are_you_looking|which_way_are_you_looking|what_are_you_looking_at|where_do_you_look]"
-    emit="@{_} core.request action=avatar.askLook"
+@pat.ui.avatar.name.set3 core.pattern
+    match="[from_now_on]? your name [is|will_be|shall_be] {name:rest}"
+    emit="@{_} core.request action=avatar.setName arg.name=\"{name}\""
     kind=request
     priority=12
-    example="Where are you looking?"
+    example="Your name is Robi."
+    example="From now on your name is Pixel."
+
+@pat.ui.avatar.name.set4 core.pattern
+    match="[from_now_on]? you are [called|named] {name:rest}"
+    emit="@{_} core.request action=avatar.setName arg.name=\"{name}\""
+    kind=request
+    priority=12
+    example="You are called Ziggy."
+
+@pat.ui.avatar.name.q core.pattern
+    match="[what_is_your_name|what_are_you_called|what_do_i_call_you|what_should_i_call_you|what_is_your_name_again|tell_me_your_name]"
+    emit="@{_} core.request action=avatar.askName"
+    kind=request
+    priority=12
+    example="What is your name?"
+    example="What are you called?"
+
+@pat.ui.avatar.seed.set core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [use|set|change|try|set_the|use_the|change_the|try_the] [the|your|a]? seed [to|as|from]? {s:rest}"
+    emit="@{_} core.request action=avatar.setSeed arg.seed=\"{s}\""
+    kind=request
+    priority=12
+    example="Use the seed banana."
+    example="Set your seed to 42."
+
+@pat.ui.avatar.seed.set2 core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [draw_yourself|make_yourself|generate_yourself|build_yourself] [from|with|using] [the|a]? seed {s:rest}"
+    emit="@{_} core.request action=avatar.setSeed arg.seed=\"{s}\""
+    kind=request
+    priority=12
+    example="Draw yourself from the seed apple."
+
+@pat.ui.avatar.seed.q core.pattern
+    match="[what_is_your_seed|which_seed_are_you_using|what_seed_are_you_using|what_seed_drew_you|tell_me_your_seed|show_me_your_seed|what_seed_do_you_have]"
+    emit="@{_} core.request action=avatar.askSeed"
+    kind=request
+    priority=12
+    example="What is your seed?"
+
+@pat.ui.avatar.surprise core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [surprise_me|surprise_us|surprise_me_again|roll_the_dice|shuffle_yourself|randomize_yourself|randomise_yourself|randomize|randomise|shuffle|make_a_random_avatar|pick_a_random_look]"
+    emit="@{_} core.request action=avatar.surprise arg.mode=surprise"
+    kind=request
+    priority=12
+    example="Surprise me."
+    example="Roll the dice."
+    example="Randomize yourself."
+
+@pat.ui.avatar.surprise.look core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [give_yourself|get|try|have|make_yourself|show_me|put_on|choose] [a|an]? [new|random|different|surprise] [look|avatar|face|style|appearance]"
+    emit="@{_} core.request action=avatar.surprise arg.mode=surprise"
+    kind=request
+    priority=12
+    example="Give yourself a random look."
+    example="Try a new avatar."
+
+@pat.ui.avatar.everything core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [change|swap|switch|randomize|randomise|shuffle|redo|redesign|mix_up|reroll] [everything|all|it_all|everything_about_you|your_whole_look|your_whole_face|all_of_it|all_your_parts|yourself]"
+    emit="@{_} core.request action=avatar.surprise arg.mode=everything"
+    kind=request
+    priority=12
+    example="Change everything."
+    example="Shuffle your whole look."
+
+@pat.ui.avatar.reset core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [reset|restore|reset_yourself|reset_your_look|reset_your_avatar|reset_your_face|go_back_to_normal|back_to_normal|go_back_to_default|go_back_to_the_default]"
+    emit="@{_} core.request action=avatar.reset"
+    kind=request
+    priority=12
+    example="Reset yourself."
+    example="Reset your face."
+    example="Go back to normal."
+
+@pat.ui.avatar.reset.all core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [start_over|start_again|reset_everything|reset_all|factory_reset|start_from_scratch|reset_all_characters]"
+    emit="@{_} core.request action=avatar.reset arg.scope=all"
+    kind=request
+    priority=12
+    example="Start over."
+    example="Reset everything."
+
+@pat.ui.avatar.remove core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [take_off|remove|lose|drop|ditch|get_rid_of|stop_wearing|take_away|hide|stop_using|take_out|do_not_wear|do_not_use] [your|the|that|a|an|my|these]? {v:lex.ui.avatar.options} {n:number?}"
+    emit="@{_} core.request action=avatar.removePart arg.value={v} arg.text=\"{v}\""
+    kind=request
+    priority=13
+    example="Take off your hat."
+    example="Remove the glasses."
+    example="Lose the moustache."
+
+@pat.ui.avatar.remove.part core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [take_off|remove|lose|drop|ditch|get_rid_of|stop_wearing|take_away|hide|stop_using|take_out] [your|the|that|a|an|my]? {p:lex.ui.avatar.parts}"
+    emit="@{_} core.request action=avatar.removePart arg.part={p}"
+    kind=request
+    priority=14
+    example="Remove your antenna."
+    example="Take off your mask."
+
+@pat.ui.avatar.remove.all core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [take_off|remove|lose|drop|get_rid_of] [everything|all_of_it|it_all|all_accessories|all_your_accessories|everything_you_are_wearing|all_of_that|everything_you_wear|all_your_things]"
+    emit="@{_} core.request action=avatar.removeAll"
+    kind=request
+    priority=13
+    example="Take off everything."
+    example="Remove all accessories."
 
 @pat.ui.avatar.anim core.pattern
     match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? {a:lex.ui.avatar.anims} [at_me|for_me|again|a_little|twice|please|now|to_me]?"
     emit="@{_} core.request action=avatar.animate arg.anim={a}"
     kind=request
     priority=11
-    example="Wink at me."
+    example="Wave at me."
     example="Can you dance?"
+    example="Wink."
 
-@pat.ui.avatar.anim2 core.pattern
+@pat.ui.avatar.anim.give core.pattern
     match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [give|show] me [a|an]? {a:lex.ui.avatar.anims}"
     emit="@{_} core.request action=avatar.animate arg.anim={a}"
     kind=request
     priority=10
     example="Give me a wink."
 
-@pat.ui.avatar.anim3 core.pattern
+@pat.ui.avatar.anim.do core.pattern
     match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [do|make] [a|an]? {a:lex.ui.avatar.anims}"
     emit="@{_} core.request action=avatar.animate arg.anim={a}"
     kind=request
     priority=10
     example="Do a dance."
 
-@pat.ui.avatar.anim4 core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [shake_your_head|shake_it]"
+@pat.ui.avatar.anim.shake core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [shake_your_head|shake_it|shake_no]"
     emit="@{_} core.request action=avatar.animate arg.anim=shake"
     kind=request
     priority=10
     example="Shake your head."
 
-@pat.ui.avatar.blink core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [blink|blink_your_eyes|blink_at_me|blink_twice]"
-    emit="@{_} core.request action=avatar.animate arg.anim=blink"
+@pat.ui.avatar.anim.spin core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [turn_around|spin_around|twirl|do_a_twirl]"
+    emit="@{_} core.request action=avatar.animate arg.anim=spin"
     kind=request
     priority=10
-    example="Blink."
+    example="Turn around."
 
-@pat.ui.avatar.blink.off core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [stop|quit|do_not] blinking"
-    emit="@{_} core.request action=avatar.blink arg.on=false"
+@pat.ui.avatar.q.parts core.pattern
+    match="[what|which] [can|could] [i|you] [change|customize|customise|modify|adjust|tweak] [about_you|about_yourself|on_you]?"
+    emit="@{_} core.request action=avatar.askParts"
     kind=request
     priority=12
-    example="Stop blinking."
+    example="What can I change?"
+    example="What can you change about yourself?"
 
-@pat.ui.avatar.blink.on core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [start|keep|continue|resume] blinking"
-    emit="@{_} core.request action=avatar.blink arg.on=true"
+@pat.ui.avatar.q.parts2 core.pattern
+    match="[what|which] [parts|options|features|components|things] [do_you_have|can_i_change|can_you_change|are_there|can_be_changed|can_i_customize|can_i_customise]"
+    emit="@{_} core.request action=avatar.askParts"
     kind=request
     priority=12
-    example="Start blinking."
+    example="Which parts can I change?"
+    example="What parts do you have?"
 
-@pat.ui.avatar.wear core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [put_on|wear|try_on|use|add|get|grow|show_me|show|put_on_your|wear_your] [a|an|the|your|some|my]? {t:lex.ui.avatar.wearables}"
-    emit="@{_} core.request action=avatar.wear arg.thing={t}"
+@pat.ui.avatar.q.parts3 core.pattern
+    match="[how_can_i_change_you|how_do_i_change_you|how_can_i_customize_you|how_do_i_customize_you|how_do_i_change_your_look]"
+    emit="@{_} core.request action=avatar.askParts"
     kind=request
     priority=12
-    example="Put on a party hat."
-    example="Wear glasses."
-    example="Put on a crown."
+    example="How can I change you?"
 
-@pat.ui.avatar.wear2 core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? put [a|an|the|your|some]? {t:lex.ui.avatar.wearables} on [your_head|your_face|yourself]?"
-    emit="@{_} core.request action=avatar.wear arg.thing={t}"
+@pat.ui.avatar.q.options core.pattern
+    match="[what|which] {p:lex.ui.avatar.parts} [can|could] [you|i] [have|wear|use|get|show|be|choose|pick|try]"
+    emit="@{_} core.request action=avatar.listOptions arg.part={p}"
     kind=request
     priority=12
-    example="Put a crown on your head."
+    example="What eyes can you have?"
+    example="Which hair can you have?"
+    example="What antennas can you use?"
 
-@pat.ui.avatar.wear3 core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [give_yourself|get_yourself] [a|an|some]? {t:lex.ui.avatar.wearables}"
-    emit="@{_} core.request action=avatar.wear arg.thing={t}"
+@pat.ui.avatar.q.options2 core.pattern
+    match="[what|which] [kind|kinds|type|types|sort|sorts|style|styles|variety|varieties] of {p:lex.ui.avatar.parts} [can_you_have|can_you_wear|can_you_use|can_you_get|are_there|can_i_choose|can_i_pick|can_i_give_you|are_available|exist|are_possible]"
+    emit="@{_} core.request action=avatar.listOptions arg.part={p}"
     kind=request
     priority=12
-    example="Give yourself glasses."
+    example="What kinds of masks are there?"
+    example="Which types of eyes can you have?"
 
-@pat.ui.avatar.wear4 core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? turn_on [the|your]? {t:lex.ui.avatar.wearables}"
-    emit="@{_} core.request action=avatar.wear arg.thing={t}"
+@pat.ui.avatar.q.options3 core.pattern
+    match="[list|show_me|show|tell_me|name] [me]? [all]? [the]? [possible|available|different|all_the]? {p:lex.ui.avatar.parts} [options|choices|styles|kinds|types|variants]?"
+    emit="@{_} core.request action=avatar.listOptions arg.part={p}"
+    kind=request
+    priority=11
+    example="List the eyes."
+    example="Show me all the mouth options."
+
+@pat.ui.avatar.q.options4 core.pattern
+    match="what [are|is] [the]? [options|choices|styles|variants] [for]? [your]? {p:lex.ui.avatar.parts}"
+    emit="@{_} core.request action=avatar.listOptions arg.part={p}"
     kind=request
     priority=12
-    example="Turn on your antenna."
+    example="What are the options for your mouth?"
 
-@pat.ui.avatar.wear5 core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? turn [the|your]? {t:lex.ui.avatar.wearables} on"
-    emit="@{_} core.request action=avatar.wear arg.thing={t}"
+@pat.ui.avatar.q.part core.pattern
+    match="[what|which] [kind|kinds|type|types|sort|sorts|style|styles]? [of]? {p:lex.ui.avatar.parts} [do_you_have|are_you_using|do_you_use|do_you_wear|are_you_wearing|have_you_got|have_you_got_on]"
+    emit="@{_} core.request action=avatar.askPart arg.part={p}"
     kind=request
     priority=12
-    example="Turn your antenna on."
+    example="What eyes do you have?"
+    example="What kind of hair do you have?"
+    example="Which mouth do you have?"
 
-@pat.ui.avatar.remove core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [take_off|remove|lose|drop|ditch|get_rid_of|take_away|hide|stop_wearing|turn_off|put_away] [the|your|that|a|an]? {t:lex.ui.avatar.wearables}"
-    emit="@{_} core.request action=avatar.remove arg.thing={t}"
+@pat.ui.avatar.q.part2 core.pattern
+    match="[what|how] [is|are] [your|the] {p:lex.ui.avatar.parts} [like|looking]"
+    emit="@{_} core.request action=avatar.askPart arg.part={p}"
     kind=request
     priority=12
-    example="Take off the glasses."
-    example="Take off your hat."
+    example="What are your eyes like?"
+    example="What is your hair like?"
 
-@pat.ui.avatar.remove2 core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [take|put] [the|your]? {t:lex.ui.avatar.wearables} off"
-    emit="@{_} core.request action=avatar.remove arg.thing={t}"
+@pat.ui.avatar.q.part3 core.pattern
+    match="what do [your|the] {p:lex.ui.avatar.parts} look_like"
+    emit="@{_} core.request action=avatar.askPart arg.part={p}"
     kind=request
     priority=12
-    example="Take your hat off."
+    example="What do your eyes look like?"
 
-@pat.ui.avatar.remove3 core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? turn [the|your]? {t:lex.ui.avatar.wearables} off"
-    emit="@{_} core.request action=avatar.remove arg.thing={t}"
+@pat.ui.avatar.q.has core.pattern
+    match="[do_you_have|are_you_wearing|do_you_wear|have_you_got|have_you_got_on|are_you_using] [a|an|any|some|your]? {v:lex.ui.avatar.options} {n:number?}"
+    emit="@{_} core.request action=avatar.hasThing arg.value={v} arg.text=\"{v}\""
     kind=request
     priority=12
-    example="Turn your antenna off."
-
-@pat.ui.avatar.remove4 core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [take_off_everything|take_it_all_off|remove_everything|take_everything_off|remove_all_accessories|undress]"
-    emit="@{_} core.request action=avatar.removeAll"
-    kind=request
-    priority=12
-    example="Take off everything."
-
-@pat.ui.avatar.wearing.q core.pattern
-    match="[are_you_wearing|do_you_have|have_you_got|do_you_wear|are_you_wearing_a] [a|an|any|the|some]? {t:lex.ui.avatar.wearables}"
-    emit="@{_} core.request action=avatar.hasThing arg.thing={t}"
-    kind=request
-    priority=12
-    example="Are you wearing a hat?"
     example="Do you have glasses?"
+    example="Are you wearing a medical mask?"
 
-@pat.ui.avatar.wearing.q2 core.pattern
-    match="[what_are_you_wearing|what_do_you_have_on|what_are_you_wearing_now|what_are_you_wearing_today|what_hat_are_you_wearing|what_accessory_do_you_have]"
+@pat.ui.avatar.q.has.part core.pattern
+    match="[do_you_have|are_you_wearing|do_you_wear|have_you_got|have_you_got_on|are_you_using] [a|an|any|some|your]? {p:lex.ui.avatar.parts}"
+    emit="@{_} core.request action=avatar.hasThing arg.part={p}"
+    kind=request
+    priority=12
+    example="Do you have a beard?"
+    example="Do you have eyes?"
+
+@pat.ui.avatar.q.wearing core.pattern
+    match="[what_are_you_wearing|what_do_you_wear|what_are_you_wearing_now|what_have_you_got_on|what_do_you_have_on|are_you_wearing_anything|what_accessories_do_you_have|do_you_wear_anything]"
     emit="@{_} core.request action=avatar.askWearing"
     kind=request
     priority=12
     example="What are you wearing?"
 
-@pat.ui.avatar.name core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [call|name|rename] yourself {n:words}"
-    emit="@{_} core.request action=avatar.setName arg.name=\"{n}\""
-    kind=request
-    priority=12
-    example="Call yourself Robi."
-
-@pat.ui.avatar.name2 core.pattern
-    match="your name is {n:words}"
-    emit="@{_} core.request action=avatar.setName arg.name=\"{n}\""
-    kind=request
-    priority=12
-    example="Your name is Robi."
-
-@pat.ui.avatar.name3 core.pattern
-    match="[i_will|i_am_going_to|i_am_gonna|let_us|i_want_to|we_will|i_shall] [call|name] you {n:words}"
-    emit="@{_} core.request action=avatar.setName arg.name=\"{n}\""
-    kind=request
-    priority=12
-    example="I will call you Robi."
-
-@pat.ui.avatar.name4 core.pattern
-    match="from_now_on [you_are|your_name_is|you_are_called|call_yourself|you_will_be] {n:words}"
-    emit="@{_} core.request action=avatar.setName arg.name=\"{n}\""
-    kind=request
-    priority=12
-    example="From now on you are Robi."
-
-@pat.ui.avatar.name5 core.pattern
-    match="you [are|will_be] [called|named] {n:words}"
-    emit="@{_} core.request action=avatar.setName arg.name=\"{n}\""
-    kind=request
-    priority=12
-    example="You are called Robi."
-
-@pat.ui.avatar.name.q core.pattern
-    match="[what_is|what_are|what_was] [your_name|you_called|your_new_name]"
-    emit="@{_} core.request action=avatar.askName"
-    kind=request
-    priority=11
-    example="What is your name?"
-
-@pat.ui.avatar.name.q2 core.pattern
-    match="[what_do_you_call_yourself|what_should_i_call_you|what_can_i_call_you]"
-    emit="@{_} core.request action=avatar.askName"
-    kind=request
-    priority=11
-    example="What should I call you?"
-
-@pat.ui.avatar.reset core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [reset|refresh] [your|the]? [face|yourself|robot|everything|appearance]?"
-    emit="@{_} core.request action=avatar.reset"
-    kind=request
-    priority=12
-    example="Reset your face."
-    example="Reset."
-
-@pat.ui.avatar.reset2 core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [go_back_to_normal|look_normal|be_normal|return_to_normal|change_back|go_back_to_how_you_were|clear_your_face]"
-    emit="@{_} core.request action=avatar.reset"
-    kind=request
-    priority=12
-    example="Go back to normal."
-
-@pat.ui.avatar.describe core.pattern
-    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? [describe_yourself|tell_me_about_your_face|what_do_you_look_like|how_do_you_look|show_me_how_you_look|what_does_your_face_look_like|what_do_you_look_like_now]"
+@pat.ui.avatar.q.describe core.pattern
+    match="[describe_yourself|describe_you|tell_me_about_yourself|what_do_you_look_like|what_do_you_look_like_now|show_yourself|tell_me_what_you_look_like|describe_your_look|describe_your_avatar|describe_your_face]"
     emit="@{_} core.request action=avatar.describe"
     kind=request
     priority=12
+    example="Describe yourself."
     example="What do you look like?"
+    example="Tell me about yourself."
+
+@pat.ui.avatar.q.describe2 core.pattern
+    match="[can_you|could_you|would_you|will_you|i_want_you_to|i_would_like_you_to|you_should|please_can_you]? describe [yourself|your_look|your_avatar|your_face|what_you_look_like]"
+    emit="@{_} core.request action=avatar.describe"
+    kind=request
+    priority=12
+    example="Can you describe yourself?"
