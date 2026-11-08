@@ -84,11 +84,11 @@ test('a window that turns a request into a bare question is rejected', () => {
 
 test('dialog: spelling fallback on the rules path, with the correction reported', async () => {
   const s = engine.createSession();
-  const r = await s.send('what is seven tims six pls');
+  const r = await s.send('what is seven tymes six pls');
   assert.match(r.text, /7 times 6 is 42/);
-  assert.deepEqual(r.segments[0].corrections.map((c) => [c.from, c.to]), [['tims', 'times']]);
-  assert.match(r.text, /I read "tims" as "times"/);
-  const off = await engine.createSession({ spell: false }).send('what is seven tims six pls');
+  assert.deepEqual(r.segments[0].corrections.map((c) => [c.from, c.to]), [['tymes', 'times']]);
+  assert.match(r.text, /I read "tymes" as "times"/);
+  const off = await engine.createSession({ spell: false }).send('what is seven tymes six pls');
   assert.equal(off.statuses.includes('unparsed') || off.statuses.length === 0, true);
 });
 

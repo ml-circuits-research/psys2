@@ -779,7 +779,7 @@
     example="Ctrl z."
 
 @pat.art.draw.x.undo.back core.pattern
-    match="[go|step|roll|take_it|put_it|get_it|bring_it|change_it|set_it|turn_it|go_1_step|go_one_step]? back [one_step|1_step|a_step|once|to_how_it_was|to_before|to_the_way_it_was|to_what_it_was|to_the_last_one|to_the_previous_one|one_move|1_move|one_change|1_change|to_normal|to_before_that|to_the_start|to_the_beginning|to_the_previous_state|to_how_it_looked|to_how_it_was_before|to_before_i_did_that|to_the_last_step] [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
+    match="[go|step|roll|take_it|put_it|get_it|bring_it|change_it|set_it|turn_it|go_1_step|go_one_step]? back [one_step|1_step|a_step|once|to_how_it_was|to_before|to_the_way_it_was|to_what_it_was|one_move|1_move|one_change|1_change|to_normal|to_before_that|to_the_start|to_the_beginning|to_the_previous_state|to_how_it_looked|to_how_it_was_before|to_before_i_did_that|to_the_last_step] [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
     emit="@{_} core.request action=draw.undo"
     kind=request
     priority=15
