@@ -117,14 +117,20 @@ export function createNormalizerHost({ base, meta, lib, onStatus = () => {} }) {
     }
     return loading;
   };
-  return {
+  const host = {
+    timings: [],
     prepare, meta, get status() { return status; }, label: versionLabel(meta),
     provider: {
       /** Rewrites of a piece the rules did not read. Not loaded yet: starts loading and returns nothing (the rules answer meanwhile). */
       async propose(req) {
         if (!runtime) { if (status.state !== 'error') prepare().catch(() => {}); return []; }
-        return runtime.propose(req);
+        const t0 = performance.now();
+        const out = await runtime.propose(req);
+        host.timings.push(Math.round(performance.now() - t0));
+        console.debug('normalizer propose ms', host.timings[host.timings.length - 1], JSON.stringify(req.text).slice(0, 60));
+        return out;
       },
     },
   };
+  return host;
 }

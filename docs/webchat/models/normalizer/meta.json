@@ -25,15 +25,21 @@
   "valueStrictness": "strict"
  },
  "version": {
-  "checkpoint": "/home/salboaie/work/psys2/training/runs/n1/flan-t5-small",
+  "checkpoint": "/home/salboaie/work/psys2/training/runs/n1/flan-t5-small-v2",
   "export_date": "2026-11-08",
-  "sha256": "26f428118e00bd8f15bbf1403f1981d7303617bcee26a42a3733563455dff066",
+  "sha256": "af99dd2e68d326765dadc708868a95f39bc807f1533129c7707909040baa655d",
   "files_sha256": {
-   "encoder.int8.onnx": "56d50399c35569cd829dff25840a99d37788240232c866a3f6dd5548e3b4a58f",
-   "decoder.int8.onnx": "e4742602719b6979fcc568c18b035708957d9267715ab082b34ab955784eb4ed",
+   "encoder.int8.onnx": "4f509d87ae13735d275d902f0b66b5eef9114531d13b17ce890d21ae59bcd397",
+   "decoder.int8.onnx": "8b97b2a05d97939b29e330961d8c1f17f7db1bf06b4f28b344bf8a2d9ed279e4",
    "tokenizer.json": "422313e620b8888d251769794affbd278faf06c129df653708bc82d053673a1d",
    "config.json": "1a8523e3f53ac38784a045bd9509e092811f60048c5be33b1804e3214514541c"
   },
-  "metrics": {}
+  "metrics": {
+   "fresh_recovered": 37,
+   "fresh_misled": 11,
+   "dev_recovered": 7,
+   "dev_misled": 1,
+   "note": "int8, strict value check, min score -0.3, rules of 2026-11-08 (bc240b2)"
+  }
  }
 }

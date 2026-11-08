@@ -33,7 +33,7 @@
   ],
   "dispatcherModel": false,
   "files": {
-    "lib/dialog/dispatch-validate.mjs": "9a104bf75fa9d3d1",
+    "lib/dialog/dispatch-validate.mjs": "8b4d0eb1f3793da5",
     "lib/dialog/encoder-dispatch.mjs": "43ac27ef66b4706b",
     "lib/dialog/index.mjs": "30beb00e714064ba",
     "lib/dialog/normalizer-runtime.mjs": "5d068a2fbe80c744",
@@ -126,5 +126,5 @@
     "worlds/ui.shell/datagen.mjs": "ed03fcd2c4012de6",
     "worlds/ui.shell/ops.mjs": "41fb8a42f31b821f"
   },
-  "builtAt": "2026-11-08T14:54:51.830Z"
+  "builtAt": "2026-11-08T15:05:56.052Z"
 }

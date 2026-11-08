@@ -1,0 +1,235 @@
+{
+ "pred": "/home/salboaie/work/psys2/training/runs/n1/out-flan-t5-small-fp32.jsonl",
+ "splits": [
+  "dev",
+  "heldout"
+ ],
+ "strict": false,
+ "attempted": 1188,
+ "recovered": 558,
+ "misled": 522,
+ "misled_by_class": {
+  "a": 22,
+  "b": 147,
+  "c": 115,
+  "d": 168,
+  "e": 0,
+  "f": 70
+ },
+ "misled_excluding_label_noise": 500,
+ "ratio_all": 0.935,
+ "ratio_excl_label_noise": 0.896,
+ "examples": {
+  "a": [
+   {
+    "split": "dev",
+    "world": "art.draw",
+    "text": "can u make it a sunny day",
+    "rewrite": "Make it a sunny day",
+    "score": -0.0305,
+    "reason": "same action",
+    "gold": "core.request:draw.mood",
+    "got": "core.request:draw.mood"
+   },
+   {
+    "split": "dev",
+    "world": "media.music",
+    "text": "up one octave, can u",
+    "rewrite": "Up one octave",
+    "score": -0.0356,
+    "reason": "same action",
+    "gold": "core.request:music.octave",
+    "got": "core.request:music.octave"
+   },
+   {
+    "split": "heldout",
+    "world": "docs.editor",
+    "text": "hey make example link to example dot com",
+    "rewrite": "Make the link to example dot com",
+    "score": -0.2223,
+    "reason": "same action",
+    "gold": "core.request:doc.link",
+    "got": "core.request:doc.link"
+   },
+   {
+    "split": "heldout",
+    "world": "kids.tasks",
+    "text": "reading finished",
+    "rewrite": "I finished my reading.",
+    "score": -0.1328,
+    "reason": "same action",
+    "gold": "core.request:tasks.done",
+    "got": "core.request:tasks.done"
+   }
+  ],
+  "b": [
+   {
+    "split": "dev",
+    "world": "art.draw",
+    "text": "redo the last step",
+    "rewrite": "Undo.",
+    "score": -0.1408,
+    "reason": "value word \"step\" is not in the rewrite",
+    "gold": "core.request:draw.redo",
+    "got": "core.request:draw.undo"
+   },
+   {
+    "split": "heldout",
+    "world": "art.draw",
+    "text": "can you say where the trees are",
+    "rewrite": "Where is my house?",
+    "score": -0.2215,
+    "reason": "value word \"trees\" is not in the rewrite",
+    "gold": "core.request:draw.where",
+    "got": "core.request:draw.where"
+   },
+   {
+    "split": "heldout",
+    "world": "games.tictactoe",
+    "text": "i'll go first as x",
+    "rewrite": "I give up.",
+    "score": -0.438,
+    "reason": "numbers differ (o1 vs none)",
+    "gold": "core.request:hm.letter|core.request:ttt.first",
+    "got": "core.request:ttt.giveup"
+   },
+   {
+    "split": "heldout",
+    "world": "kids.shop",
+    "text": "change from thirty lei, puzzle and 2 kites",
+    "rewrite": "What is the change from 30 lei if I buy a kite?",
+    "score": -0.1203,
+    "reason": "numbers differ (2 30 vs 30)",
+    "gold": "core.question:kids.shop.change",
+    "got": "core.question:kids.shop.change"
+   }
+  ],
+  "c": [
+   {
+    "split": "dev",
+    "world": "art.draw",
+    "text": "sun up a bit",
+    "rewrite": "Make the sun twice as big.",
+    "score": -0.0682,
+    "reason": "opposite-capable word \"up\" was dropped",
+    "gold": "core.request:draw.nudge",
+    "got": "core.request:draw.resize"
+   },
+   {
+    "split": "dev",
+    "world": "ui.shell",
+    "text": "speaker on",
+    "rewrite": "listen",
+    "score": -0.785,
+    "reason": "opposite-capable word \"on\" was dropped",
+    "gold": "core.request:ui.speaker",
+    "got": "core.request:ui.listening"
+   },
+   {
+    "split": "heldout",
+    "world": "games.guess",
+    "text": "lets start the guessing game",
+    "rewrite": "Animal chosen",
+    "score": -0.9345,
+    "reason": "opposite-capable word \"start\" was dropped",
+    "gold": "core.request:ui.playGame",
+    "got": "core.request:guess.start"
+   },
+   {
+    "split": "heldout",
+    "world": "kids.arith",
+    "text": "can u add leo's and zoe's marbles",
+    "rewrite": "How many marbles has Leo got?",
+    "score": -0.1055,
+    "reason": "opposite-capable word \"add\" was dropped",
+    "gold": "core.question:kids.arith.total",
+    "got": "core.question:kids.arith.holding"
+   }
+  ],
+  "d": [
+   {
+    "split": "dev",
+    "world": "art.draw",
+    "text": "undo the undo",
+    "rewrite": "Undo.",
+    "score": -0.1154,
+    "reason": "values preserved",
+    "gold": "core.request:draw.redo",
+    "got": "core.request:draw.undo"
+   },
+   {
+    "split": "heldout",
+    "world": "art.draw",
+    "text": "can you make that tree littler",
+    "rewrite": "Make the tree small.",
+    "score": -0.1588,
+    "reason": "known word \"littler\" was dropped",
+    "gold": "core.request:draw.resize",
+    "got": "core.request:draw.setSize"
+   },
+   {
+    "split": "heldout",
+    "world": "games.hangman",
+    "text": "what is it known for",
+    "rewrite": "Show me the word.",
+    "score": -0.2896,
+    "reason": "word \"word\" is not grounded in the original",
+    "gold": "core.request:hm.hint",
+    "got": "core.request:hm.status"
+   },
+   {
+    "split": "heldout",
+    "world": "kids.shop",
+    "text": "i gave 2 lei to the shop",
+    "rewrite": "I received 2 lei.",
+    "score": -0.104,
+    "reason": "word \"received\" is not grounded in the original",
+    "gold": "kids.shop.expense:",
+    "got": "kids.shop.income:"
+   }
+  ],
+  "e": [],
+  "f": [
+   {
+    "split": "dev",
+    "world": "geo.map",
+    "text": "Austria borders what countries",
+    "rewrite": "Who borders Austria?",
+    "score": -0.1163,
+    "reason": "known word \"countries\" was dropped",
+    "gold": "core.request:geo.borders",
+    "got": "core.request:geo.borders"
+   },
+   {
+    "split": "heldout",
+    "world": "games.chess",
+    "text": "tell me only white's pieces",
+    "rewrite": "Describe the board.",
+    "score": -0.3374,
+    "reason": "word \"describe\" is not grounded in the original",
+    "gold": "core.request:chess.describe",
+    "got": "core.request:chess.describe"
+   },
+   {
+    "split": "heldout",
+    "world": "kids.animals",
+    "text": "tell me the legs of a spider",
+    "rewrite": "What is a spider?",
+    "score": -0.1371,
+    "reason": "known word \"legs\" was dropped",
+    "gold": "core.question:kids.animals.animal",
+    "got": "core.question:kids.animals.animal"
+   },
+   {
+    "split": "heldout",
+    "world": "media.music",
+    "text": "i want happy birthday but with bells",
+    "rewrite": "Play happy birthday!",
+    "score": -0.1285,
+    "reason": "word \"play\" is not grounded in the original",
+    "gold": "core.request:music.playAny",
+    "got": "core.request:music.playAny"
+   }
+  ]
+ }
+}

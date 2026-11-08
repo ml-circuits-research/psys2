@@ -1,0 +1,33 @@
+{
+ "ckpt": "/home/salboaie/work/psys2/training/runs/n1/flan-t5-small-v2",
+ "params_M": 77.0,
+ "sizes_MB": {
+  "encoder_fp32": 154.1,
+  "encoder_int8": 39.0,
+  "decoder_fp32": 219.8,
+  "decoder_int8": 55.5,
+  "total_int8": 94.5
+ },
+ "agreement_with_pytorch_greedy": {
+  "fp32": 1.0,
+  "int8": 0.48
+ },
+ "latency_ms_per_piece": {
+  "fp32_1thread": {
+   "median": 49.9,
+   "p90": 112.7
+  },
+  "fp32_4thread": {
+   "median": 22.1,
+   "p90": 49.3
+  },
+  "int8_1thread": {
+   "median": 16.2,
+   "p90": 31.7
+  },
+  "int8_4thread": {
+   "median": 11.9,
+   "p90": 23.3
+  }
+ }
+}
