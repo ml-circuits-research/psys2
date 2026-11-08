@@ -1,0 +1,212 @@
+{
+  "world": "kids.arith",
+  "tab": "robot",
+  "author": "haiku",
+  "batch": "h5",
+  "tasks": [
+    {
+      "id": "kids.arith.h5.t1",
+      "goal": "Count after someone gives items away (give event, then ask the new count)",
+      "canonical": "Tom has 5 apples. Ana gives him 3 apples. How many apples does Tom have?",
+      "variants": [
+        "tom has 5 apples, ana gives him 3 apples. how many does tom have",
+        "Tom has five apples. Ana gives him three. How many apples does Tom have now?",
+        "ok so tom has 5 apples and then ana gives him 3 of them... how many apples does tom have",
+        "How many apples will Tom have if he has 5 and Ana gives him 3?",
+        "tom got 5 apples and ana gave him 3 more, how many apples does tom have now",
+        "Tom: 5 apples. Ana gives him 3. Tom's apple count?",
+        "Ana hands Tom 3 apples, and Tom already had 5. How many apples does he have?",
+        "tom has 5 apples lol and ana gives him 3 more. how many u think he has",
+        "Hey, Tom has 5 apples. Ana gives him 3 apples. Can you tell me how many apples Tom has?",
+        "pls tell me, tom has 5 apples, ana gives him 3, so how many apples does tom have"
+      ]
+    },
+    {
+      "id": "kids.arith.h5.t2",
+      "goal": "Count after someone eats some items",
+      "canonical": "Tom has 5 apples. Tom ate 2 apples. How many apples does he have?",
+      "variants": [
+        "tom has 5 apples. he ate 2 of them. how many apples left",
+        "Tom has five apples and then he eats two apples, how many does he have?",
+        "um so tom had 5 apples and he munched 2 of em. how many he got now",
+        "Tom's got 5 apples, he gobbles up 2. How many apples are left for Tom?",
+        "How many apples does Tom have if he has 5 and then eats 2?",
+        "5 apples for tom, he eats 2 apples. howmany apples he has",
+        "Tom has 5 apples. He ate 2. Whats left?",
+        "tom had 5 apples, tom ate 2 of his apples... how many does he have now",
+        "Tom starts with 5 apples and eats 2 of them. How many apples are left?",
+        "pls: tom has 5 apples, ate 2 apples. how many apples tom have"
+      ]
+    },
+    {
+      "id": "kids.arith.h5.t3",
+      "goal": "Count after someone loses items (ask what is left)",
+      "canonical": "Mia has 5 marbles. She lost 2 marbles. How many marbles does Mia have left?",
+      "variants": [
+        "mia has 5 marbles, she lost 2. how many marbles does mia have left",
+        "Mia has five marbles. She loses two marbles. How many marbles are left for Mia?",
+        "so mia had 5 marbles and then she lost 2 of them, how many she have left??",
+        "Mia got 5 marbles but lost 2, how many does she have left now",
+        "I think Mia has 5 marbles. She misplaced 2 of them. How many marbles does Mia have left?",
+        "How many marbles does mia have left if she has 5 and loses 2?",
+        "Mia has 5 marbles. Two of them are lost. How many marbles does Mia have left?",
+        "mia 5 marbles, lost 2, left?",
+        "Mia had 5 marbles and then lost 2 marbles, how many marbles are left for her?",
+        "pls how many marbles does mia have left? she had 5 and lost 2"
+      ]
+    },
+    {
+      "id": "kids.arith.h5.t4",
+      "goal": "Count after someone buys more items",
+      "canonical": "Ben has 2 pears. Ben buys 4 more pears. How many pears does Ben have?",
+      "variants": [
+        "ben has 2 pears, he buys 4 more. how many pears does he have",
+        "Ben has two pears. He buys four more. How many pears does Ben have now?",
+        "ben's got 2 pears and he's buying 4 more pears. how many pears total",
+        "How many pears will Ben have if he has 2 and buys 4 more?",
+        "Ben starts with 2 pears, then buys 4 more. Pear count for Ben?",
+        "so ben has 2 pears and he goes and buys 4 more... how many pears does ben have",
+        "ben buys 4 extra pears on top of his 2. how many pears does ben have now",
+        "2 pears for ben, then he buys 4 more pears. u know how many he has?",
+        "Ben buys 4 pears. Before that he had 2. How many pears does he have now?",
+        "pls tell me how many pears ben has after he has 2 and buys 4 more"
+      ]
+    },
+    {
+      "id": "kids.arith.h5.t5",
+      "goal": "Double a number",
+      "canonical": "Double 6.",
+      "variants": [
+        "double 6 pls",
+        "what's 6 doubled?",
+        "can u double the number 6",
+        "double of 6?",
+        "i need 6 doubled, what is it",
+        "um, double six?",
+        "What do you get when you double 6?",
+        "6 doubled lol",
+        "Double the number six, please.",
+        "dbl 6 pls"
+      ]
+    },
+    {
+      "id": "kids.arith.h5.t6",
+      "goal": "Total of two people's counts of the same item",
+      "canonical": "Tom has 5 apples. Ana has 4 apples. How many apples do Tom and Ana have together?",
+      "variants": [
+        "tom has 5 apples and ana has 4, how many apples do they have together",
+        "Tom has five apples. Ana has four apples. How many apples do the two of them have altogether?",
+        "ok tom 5 apples, ana 4 apples. total apples between them?",
+        "Together, how many apples do Tom and Ana have? Tom has 5 and Ana has 4.",
+        "if tom has 5 apples and ana has 4 apples, how many they got combined",
+        "5 apples for tom, 4 for ana. how many apples altogether",
+        "Tom has 5 apples, Ana has 4 apples. Add them up, how many apples is that?",
+        "tom got 5 apples n ana got 4 apples, so how many apples do they have in total?",
+        "Ana has 4 apples and Tom has 5. How many apples do Tom and Ana have together?",
+        "pls sum up the apples: tom has 5 apples, ana has 4 apples. how many altogether"
+      ]
+    },
+    {
+      "id": "kids.arith.h5.t7",
+      "goal": "Who has more of an item, between two named people",
+      "canonical": "Tom has 8 apples. Ana has 4 apples. Who has more apples, Tom or Ana?",
+      "variants": [
+        "tom has 8 apples, ana has 4. who has more apples, tom or ana",
+        "Tom has eight apples and Ana has four. Who has more apples: Tom or Ana?",
+        "ok so tom got 8 apples. ana got 4 apples. which one has more, tom or ana",
+        "Between Tom and Ana, who has more apples? Tom: 8. Ana: 4.",
+        "Tom 8 apples, Ana 4 apples... whos got more, tom or ana?",
+        "Who's got more apples out of Tom and Ana? Tom has 8, Ana has 4.",
+        "is it tom or ana who has more apples? tom 8, ana 4",
+        "tom has 8 apples and ana has 4 apples. who's ahead on apples, tom or ana",
+        "comparing tom and ana: tom has 8 apples, ana has 4. who has more?",
+        "pls tell me who has more apples between tom and ana, tom has 8 and ana has 4"
+      ]
+    },
+    {
+      "id": "kids.arith.h5.t8",
+      "goal": "How many more one person has than another",
+      "canonical": "Tom has 8 apples. Ana has 4 apples. How many more apples does Tom have than Ana?",
+      "variants": [
+        "tom has 8 apples and ana has 4. how many more apples does tom have than ana",
+        "Tom has eight apples. Ana has four. How many more apples does Tom have than Ana?",
+        "how many extra apples does tom have compared to ana? tom 8, ana 4",
+        "Ana has 4 apples, Tom has 8. How many more does Tom have than Ana?",
+        "tom: 8 apples. ana: 4 apples. whats the difference, how many more tom has?",
+        "u know how many more apples tom has than ana? tom 8 ana 4",
+        "Tom's apples beat Ana's by how many? Tom has 8, Ana has 4.",
+        "by how much does tom's apple count beat ana's? tom 8, ana 4",
+        "Tom has 8 apples and Ana only has 4. How many more apples does Tom have than Ana?",
+        "pls compute: how many more apples does tom have than ana, tom 8 apples, ana 4"
+      ]
+    },
+    {
+      "id": "kids.arith.h5.t9",
+      "goal": "Yes or no: does one person have more than another",
+      "canonical": "Tom has 8 apples. Ana has 4 apples. Does Tom have more apples than Ana?",
+      "variants": [
+        "tom has 8 apples, ana has 4. does tom have more apples than ana",
+        "Tom has eight apples and Ana has four. Does Tom have more apples than Ana? yes or no",
+        "ok tom got 8, ana got 4 apples. is it true tom has more apples than ana?",
+        "Is it true that Tom has more apples than Ana? Tom 8, Ana 4.",
+        "tom 8 apples ana 4 apples so, tom has more than ana right??",
+        "Does tom have more apples than ana? he has 8 and she has 4",
+        "does tom have more apples than ana, he's got 8 and ana's got 4",
+        "Tom has 8 apples, Ana has 4 apples. Is Tom ahead of Ana in apples?",
+        "yes or no: does tom have more apples than ana? tom 8, ana 4",
+        "pls answer yes or no. tom has 8 apples and ana has 4 apples. does tom have more?"
+      ]
+    },
+    {
+      "id": "kids.arith.h5.t10",
+      "goal": "Does a person have any of an item at all",
+      "canonical": "Kate has 3 books. Does Kate have any books?",
+      "variants": [
+        "kate has 3 books, does she have any books",
+        "Kate has three books. Does Kate have any books at all?",
+        "does kate have any books? she has 3 books",
+        "Kate owns 3 books. Does Kate have at least one book?",
+        "kate got 3 books. u think she has any books?",
+        "is there any book that kate has? she's got 3 books",
+        "Kate has 3 books. Has Kate got any books?",
+        "3 books for kate. does kate have any books or none",
+        "ok kate has 3 books. so does she have any books?",
+        "pls tell me if kate has any books, she has 3 books"
+      ]
+    },
+    {
+      "id": "kids.arith.h5.t11",
+      "goal": "Plain arithmetic: addition",
+      "canonical": "What is 7 plus 5?",
+      "variants": [
+        "whats 7 plus 5",
+        "7 + 5 = ?",
+        "how much is 7 plus 5",
+        "calculate 7+5",
+        "Seven plus five, what is it?",
+        "can u add 7 and 5 for me",
+        "7 plus 5 equals what",
+        "um what's seven plus five",
+        "what do u get if u add 7 and 5",
+        "pls work out 7 + 5"
+      ]
+    },
+    {
+      "id": "kids.arith.h5.t12",
+      "goal": "Half of a number",
+      "canonical": "What is half of 10?",
+      "variants": [
+        "half of 10?",
+        "whats half of ten",
+        "can u tell me half of 10",
+        "10 cut in half is what",
+        "what is 10 split into two equal halves",
+        "ok what's half of 10 lol",
+        "split 10 in half, what do i get",
+        "How much is half of ten?",
+        "gimme half of 10 pls",
+        "um half of 10 is what"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,250 @@
+{
+ "world": "docs.editor",
+ "tab": "editor",
+ "author": "haiku",
+ "batch": "h7",
+ "tasks": [
+  {
+   "id": "docs.editor.h7.t1",
+   "goal": "Add a table with name and age columns",
+   "canonical": "Add a table with 2 columns: name, age.",
+   "variants": [
+    "table pls, 2 columns, name and age",
+    "can u add a table with two columns, name and age",
+    "make a table with columns name and age",
+    "i want a table with 2 columns called name and age",
+    "um add a 2 column table, the columns are name and age",
+    "table with name and age columns please",
+    "could you put in a table, two columns: name, age",
+    "add table cols name, age thx",
+    "so add a table, 2 columns, name then age",
+    "name and age table, 2 columns, go"
+   ]
+  },
+  {
+   "id": "docs.editor.h7.t2",
+   "goal": "Add a row for Ana with age 12",
+   "setup": [
+    "Add a table with 2 columns: name, age."
+   ],
+   "canonical": "Add a row: Ana, 12.",
+   "variants": [
+    "row Ana, 12 pls",
+    "can u add a row with Ana and 12",
+    "add a row for Ana, twelve",
+    "put Ana and 12 in a new row",
+    "i want a row: Ana, 12",
+    "new row Ana 12",
+    "um add row Ana, 12 i guess",
+    "could you add a row with Ana and twelve",
+    "add a row, Ana and 12, thx",
+    "table needs a row: Ana, 12"
+   ]
+  },
+  {
+   "id": "docs.editor.h7.t3",
+   "goal": "Set the cell in row 1, column 2 to 15",
+   "setup": [
+    "Add a table with 2 columns: name, age.",
+    "Add a row: Ana, 12."
+   ],
+   "canonical": "Set row 1, column 2 to 15.",
+   "variants": [
+    "cell row 1 col 2 = 15",
+    "can u set row 1, column 2 to 15",
+    "put 15 in row 1 column 2",
+    "change row one, column two to fifteen",
+    "i want the cell at row 1 column 2 to be 15",
+    "set the cell in row 1, col 2, to 15 pls",
+    "um row 1 column 2 should be 15",
+    "row 1 col 2 → 15",
+    "could you change the cell at row 1 and column 2 to 15",
+    "make row 1 column 2 read 15 thx"
+   ]
+  },
+  {
+   "id": "docs.editor.h7.t4",
+   "goal": "Delete the second column of the table",
+   "setup": [
+    "Add a table with 2 columns: name, age."
+   ],
+   "canonical": "Delete the second column.",
+   "variants": [
+    "delete column 2 pls",
+    "can u delete the second column",
+    "remove the 2nd column",
+    "get rid of the second column",
+    "i want the second column gone",
+    "delete col two",
+    "um delete the second column i guess",
+    "could you remove column two from the table",
+    "the second column should go, delete it",
+    "drop the 2nd column thx"
+   ]
+  },
+  {
+   "id": "docs.editor.h7.t5",
+   "goal": "Ask how many tasks are done",
+   "setup": [
+    "Add a task buy a book.",
+    "Add a task call Mia.",
+    "Check the first task."
+   ],
+   "canonical": "How many tasks are done?",
+   "variants": [
+    "tasks done count?",
+    "how many tasks are finished",
+    "can u tell me how many tasks are done",
+    "how many of the tasks are checked off",
+    "how many tasks i finished so far",
+    "number of done tasks?",
+    "tasks done how many",
+    "um how many tasks are done already",
+    "how many checked tasks are there",
+    "count the done tasks pls"
+   ]
+  },
+  {
+   "id": "docs.editor.h7.t6",
+   "goal": "Make the second paragraph bold",
+   "setup": [
+    "Add a paragraph Hi there.",
+    "Add a paragraph We are fine."
+   ],
+   "canonical": "Make the second paragraph bold.",
+   "variants": [
+    "bold the 2nd paragraph",
+    "can u make the second paragraph bold",
+    "second paragraph bold pls",
+    "i want paragraph two in bold",
+    "put the second paragraph in bold",
+    "bold the second para",
+    "um make the 2nd paragraph bold i guess",
+    "could you bold the second paragraph",
+    "make paragraph number two bold thx",
+    "the second paragraph should be bold"
+   ]
+  },
+  {
+   "id": "docs.editor.h7.t7",
+   "goal": "Highlight the word krill in yellow",
+   "setup": [
+    "Add a paragraph Whales eat krill."
+   ],
+   "canonical": "Highlight the word krill in yellow.",
+   "variants": [
+    "highlight krill yellow pls",
+    "can u highlight the word krill in yellow",
+    "make krill yellow highlighted",
+    "i want the word krill highlighted in yellow",
+    "yellow highlight on krill please",
+    "highlight krill in yellow thx",
+    "um highlight the word krill, yellow",
+    "could you put a yellow highlight on the word krill",
+    "krill should be highlighted yellow",
+    "mark the word krill with yellow highlight"
+   ]
+  },
+  {
+   "id": "docs.editor.h7.t8",
+   "goal": "Make the title bigger",
+   "setup": [
+    "Make the title Party Plans."
+   ],
+   "canonical": "Make the title bigger.",
+   "variants": [
+    "bigger title pls",
+    "can u make the title bigger",
+    "title should be bigger",
+    "i want the title larger",
+    "bump the title up in size",
+    "um make the title bigger i think",
+    "could you enlarge the title",
+    "title needs to be bigger thx",
+    "increase the size of the title",
+    "make the title a bit bigger, ok"
+   ]
+  },
+  {
+   "id": "docs.editor.h7.t9",
+   "goal": "Turn the first paragraph into a heading",
+   "setup": [
+    "Add a paragraph Shopping list for today."
+   ],
+   "canonical": "Turn the first paragraph into a heading.",
+   "variants": [
+    "first paragraph to heading pls",
+    "can u turn the first paragraph into a heading",
+    "make the first paragraph a heading",
+    "convert the first paragraph to a heading",
+    "i want the first paragraph to be a heading",
+    "change paragraph one into a heading",
+    "um make the first para a heading",
+    "could you make the first paragraph a heading thx",
+    "heading instead of the first paragraph",
+    "the first paragraph should become a heading"
+   ]
+  },
+  {
+   "id": "docs.editor.h7.t10",
+   "goal": "Ask how many words the document has",
+   "setup": [
+    "Add a paragraph We need food for the party tonight."
+   ],
+   "canonical": "How many words are in the document?",
+   "variants": [
+    "word count pls",
+    "can u tell me how many words are in the document",
+    "how many words does the doc have",
+    "what's the word count of the document",
+    "i want to know the number of words in it",
+    "how many words we got",
+    "um how many words are in the document",
+    "count the words in the doc",
+    "words in the document, how many?",
+    "could you tell me the word count"
+   ]
+  },
+  {
+   "id": "docs.editor.h7.t11",
+   "goal": "Move the second paragraph up one place",
+   "setup": [
+    "Add a paragraph Hi there.",
+    "Add a paragraph We are fine."
+   ],
+   "canonical": "Move the second paragraph up.",
+   "variants": [
+    "second paragraph up pls",
+    "can u move the second paragraph up",
+    "move paragraph 2 up one",
+    "i want the second paragraph moved up",
+    "bump the second paragraph up a spot",
+    "put the second paragraph above the first one",
+    "um move the 2nd paragraph up i guess",
+    "could you shift the second paragraph up",
+    "swap the second paragraph up one place",
+    "the second paragraph should go up"
+   ]
+  },
+  {
+   "id": "docs.editor.h7.t12",
+   "goal": "Fill the table with sea animals",
+   "setup": [
+    "Add a table with 2 columns: animal, legs."
+   ],
+   "canonical": "Fill the table with sea animals.",
+   "variants": [
+    "sea animals in the table pls",
+    "can u fill the table with sea animals",
+    "put sea animals in the table",
+    "i want the table filled with sea animals",
+    "fill it with sea animals",
+    "add sea animals to the table",
+    "um fill the table up with sea animals",
+    "could you fill the table with sea animals thx",
+    "table of sea animals please, fill it",
+    "the table should have sea animals in it"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,224 @@
+{
+  "world": "games.chess",
+  "tab": "chess",
+  "author": "haiku",
+  "batch": "h5",
+  "tasks": [
+    {
+      "id": "games.chess.h5.t1",
+      "goal": "Move a pawn to d4",
+      "setup": ["Play chess."],
+      "canonical": "Pawn to d4.",
+      "variants": [
+        "pawn d4 pls",
+        "can u move the pawn to d4",
+        "move a pawn to d4",
+        "i want to play pawn to d4",
+        "d4 with a pawn",
+        "um pawn to d four",
+        "could u push the pawn to d4",
+        "play the pawn to d4 thx",
+        "pawn goes to d4, ok?",
+        "pawn d-four"
+      ]
+    },
+    {
+      "id": "games.chess.h5.t2",
+      "goal": "Ask whether I am allowed to castle",
+      "setup": ["Play chess."],
+      "canonical": "Can I castle?",
+      "variants": [
+        "castling possible?",
+        "can i castle right now",
+        "is castling allowed for me",
+        "am i able to castle",
+        "could i castle",
+        "can i do castling",
+        "um can i castle i wonder",
+        "is castle legal for me now",
+        "castle available?",
+        "can i castle, yes or no"
+      ]
+    },
+    {
+      "id": "games.chess.h5.t3",
+      "goal": "Find out where my knight can go",
+      "setup": ["Play chess."],
+      "canonical": "What can my knight do?",
+      "variants": [
+        "knight moves pls",
+        "what can my knight move to",
+        "tell me where my knight can go",
+        "list my knight's moves",
+        "which moves does my knight have",
+        "i want to know what my knight can do",
+        "um what can my knight do i wonder",
+        "could you show my knight's moves",
+        "my knight, what can it do",
+        "where can my knight move"
+      ]
+    },
+    {
+      "id": "games.chess.h5.t4",
+      "goal": "Get a hint for my move",
+      "setup": ["Play chess."],
+      "canonical": "Give me a hint.",
+      "variants": [
+        "hint pls",
+        "can u give me a hint",
+        "i need a hint",
+        "give me a suggestion for my move",
+        "any hint?",
+        "help me, give a hint",
+        "um can i get a hint",
+        "could you give me a hint thx",
+        "hint me pls",
+        "I'd like a hint"
+      ]
+    },
+    {
+      "id": "games.chess.h5.t5",
+      "goal": "Ask who is ahead in the game",
+      "setup": ["Play chess."],
+      "canonical": "Who is winning?",
+      "variants": [
+        "whos winning",
+        "who's ahead right now",
+        "who is ahead right now",
+        "which side is ahead",
+        "who has the material advantage",
+        "tell me who's winning pls",
+        "um who is winning atm",
+        "who's up in material",
+        "are we even or who's ahead",
+        "who is winning, you or me"
+      ]
+    },
+    {
+      "id": "games.chess.h5.t6",
+      "goal": "Ask whether my king is in check",
+      "setup": ["Play chess."],
+      "canonical": "Am I in check?",
+      "variants": [
+        "am i in check",
+        "is my king in check",
+        "im in check?",
+        "check? am i",
+        "can u tell me if im in check",
+        "do i have check right now",
+        "um am i in check i think",
+        "is it check against me",
+        "am i being checked",
+        "is my king checked"
+      ]
+    },
+    {
+      "id": "games.chess.h5.t7",
+      "goal": "Find out the last move you played",
+      "setup": ["Play chess.", "e4."],
+      "canonical": "What was your last move?",
+      "variants": [
+        "your last move?",
+        "what did you play last",
+        "what was the last move you made",
+        "which move did you play last",
+        "tell me your last move",
+        "what did u just move",
+        "um what was your last move",
+        "what was ur last move pls",
+        "your last move, what was it?",
+        "what was the last move you played"
+      ]
+    },
+    {
+      "id": "games.chess.h5.t8",
+      "goal": "Ask how many pieces I have",
+      "setup": ["Play chess."],
+      "canonical": "How many pieces do I have?",
+      "variants": [
+        "how many pieces do i have",
+        "pieces count for me?",
+        "how many pieces are mine",
+        "count my pieces",
+        "number of pieces i got?",
+        "um how many pieces do i have",
+        "can u count my pieces pls",
+        "how many chess pieces do i have",
+        "i wanna know how many pieces i have",
+        "pieces i have, how many?"
+      ]
+    },
+    {
+      "id": "games.chess.h5.t9",
+      "goal": "Set the playing level to 3",
+      "setup": ["Play chess."],
+      "canonical": "Set the level to 3.",
+      "variants": [
+        "level 3 pls",
+        "can u set the level to three",
+        "make the level 3",
+        "i want level 3",
+        "set level to 3 thx",
+        "level three please",
+        "um put the level at 3",
+        "change the level to 3 pls",
+        "lvl 3",
+        "set me to level three"
+      ]
+    },
+    {
+      "id": "games.chess.h5.t10",
+      "goal": "Swap the colours we play",
+      "setup": ["Play chess."],
+      "canonical": "Swap sides.",
+      "variants": [
+        "swap sides pls",
+        "can we swap sides",
+        "switch sides with you",
+        "let's switch sides",
+        "change sides please",
+        "um swap sides i guess",
+        "could you swap the sides",
+        "flip sides, swap them",
+        "swap who plays what, switch sides",
+        "switch sides thx"
+      ]
+    },
+    {
+      "id": "games.chess.h5.t11",
+      "goal": "Start a new game and keep the current one",
+      "setup": ["Play chess.", "e4."],
+      "canonical": "Start a new game and keep the current one.",
+      "variants": [
+        "new game but keep this one pls",
+        "can u start a new game and keep the current one",
+        "start another game, dont lose this one",
+        "i want a second game, keep the current game",
+        "new game, keep the one we're playing",
+        "open a new game and don't throw this one away",
+        "um start a new game but keep the current one i guess",
+        "could you make a new game and keep this one going",
+        "new game and keep this one going pls",
+        "start a fresh game alongside this one, keep this one"
+      ]
+    },
+    {
+      "id": "games.chess.h5.t12",
+      "goal": "Resign the game",
+      "setup": ["Play chess.", "e4."],
+      "canonical": "I resign.",
+      "variants": [
+        "i resign",
+        "resign pls",
+        "i give up",
+        "ok im resigning",
+        "i resign, game over for me",
+        "um i resign i guess",
+        "i'm resigning",
+        "resign the game pls",
+        "i'll resign, you win",
+        "i give up, resign thx"
+      ]
+    }
+  ]
+}

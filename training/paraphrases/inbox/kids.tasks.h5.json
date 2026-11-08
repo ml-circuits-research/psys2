@@ -1,0 +1,212 @@
+{
+  "world": "kids.tasks",
+  "tab": "editor",
+  "author": "haiku",
+  "batch": "h5",
+  "tasks": [
+    {
+      "id": "kids.tasks.h5.t1",
+      "goal": "Add an item to a list",
+      "canonical": "Add milk to my shopping list.",
+      "variants": [
+        "put milk on my shopping list pls",
+        "can u add milk to my shopping list",
+        "milk needs to go on my shopping list",
+        "add milk to the shopping list thx",
+        "i need milk on my shopping list, add it",
+        "hey could you pop milk onto my shopping list",
+        "shopping list + milk",
+        "um add like milk to my shopping list",
+        "Please write milk on my shopping list.",
+        "Put milk on the shopping list for me."
+      ]
+    },
+    {
+      "id": "kids.tasks.h5.t2",
+      "goal": "Add a reminder",
+      "canonical": "Remind me to feed the cat.",
+      "variants": [
+        "remind me to feed the cat",
+        "set a reminder to feed the cat pls",
+        "dont let me forget to feed the cat",
+        "i need a reminder: feed the cat",
+        "can u remind me to feed the cat, thx",
+        "remember to feed the cat, remind me",
+        "reminder: feed the cat",
+        "ping me to feed the cat",
+        "hey remind me abt feeding the cat",
+        "would u please remind me to feed the cat"
+      ]
+    },
+    {
+      "id": "kids.tasks.h5.t3",
+      "goal": "Remove an item from a list",
+      "canonical": "Add milk to my shopping list. Remove milk from my shopping list.",
+      "variants": [
+        "add milk to my shopping list, then remove milk from it",
+        "put milk on my shopping list and then take it off again",
+        "Add milk to my shopping list. Now delete milk from the list.",
+        "add milk to my shopping list and take milk back off",
+        "milk on my shopping list then remove it pls",
+        "Add milk to the shopping list and then erase milk from the shopping list",
+        "so i add milk to my shopping list and then i remove milk from it",
+        "add milk to shopping list. remove milk from shopping list.",
+        "Add milk to my shopping list, and afterwards get rid of milk on it",
+        "ok add milk to my shopping list and then remove milk from that list"
+      ]
+    },
+    {
+      "id": "kids.tasks.h5.t4",
+      "goal": "Mark an item as done (bought)",
+      "canonical": "Add eggs to my shopping list. I bought eggs.",
+      "variants": [
+        "put eggs on my shopping list, then i bought eggs",
+        "add eggs to shopping list. i bought the eggs already",
+        "eggs on my shopping list pls. i got the eggs, i bought them",
+        "Add eggs to my shopping list. Just bought eggs!",
+        "add eggs to my shopping list and i bought eggs",
+        "Eggs go on my shopping list. I have bought eggs now.",
+        "add eggs to my list for shopping, i bought em",
+        "add eggs to my shopping list. bought eggs, tick them off",
+        "Add eggs to my shopping list, and I have already bought eggs.",
+        "shopping list needs eggs. i bought eggs. done"
+      ]
+    },
+    {
+      "id": "kids.tasks.h5.t5",
+      "goal": "Say an item was NOT done, so nothing is ticked off",
+      "canonical": "Add milk to my shopping list. I didn't buy milk.",
+      "variants": [
+        "add milk to my shopping list. i did not buy milk",
+        "put milk on the shopping list. i didnt get the milk",
+        "milk on my shopping list pls, but i havent bought milk",
+        "Add milk to my shopping list. Turns out I didn't buy milk.",
+        "add milk to my list, i never bought milk",
+        "add milk to my shopping list. nope, didnt buy the milk",
+        "add milk to my shopping list. i still didn't buy milk",
+        "Add milk to my shopping list. I did NOT buy milk.",
+        "add milk to shopping list, i didnt buy any milk",
+        "add milk to my shopping list, but I didn't buy it"
+      ]
+    },
+    {
+      "id": "kids.tasks.h5.t6",
+      "goal": "Check whether an item is done",
+      "canonical": "Add homework to my to-do list. I finished my homework. Did I finish my homework?",
+      "variants": [
+        "add homework to my to-do list, i finished my homework, did i finish it?",
+        "homework to my to-do list. i finished my homework. so did i finish my homework?",
+        "put homework on my to do list, done with my homework? did i finish it",
+        "Add homework to my to-do list. Then I finished my homework. Have I finished my homework?",
+        "add homework to the to-do list. i finished homework. did i?",
+        "to-do: homework. I finished my homework. did i finish my homework ya or na",
+        "Add homework to my to-do list. I finished my homework. Am I done with my homework?",
+        "add homework to my to-do list, i finished my homework, is my homework finished",
+        "Add homework to my to-do list. I finished my homework. Is my homework done?",
+        "pls add homework to my to-do list. i finished my homework. have i finished it yet"
+      ]
+    },
+    {
+      "id": "kids.tasks.h5.t7",
+      "goal": "Show everything on a list",
+      "canonical": "Add milk and bread to my shopping list. Show me my shopping list.",
+      "variants": [
+        "add milk and bread to my shopping list, then show me the list",
+        "put milk and bread on my shopping list. show me my shopping list pls",
+        "Add milk and bread to my shopping list. Let me see what's on my shopping list.",
+        "milk and bread on my shopping list, now show it to me",
+        "add milk + bread to shopping list. show shopping list",
+        "i need milk and bread on my shopping list. can u show me the whole list",
+        "Add milk and bread to my shopping list. Read my shopping list back to me.",
+        "add milk and bread to my shopping list, then list everything on it",
+        "um add milk and bread to my shopping list and like show me what's on it",
+        "Add milk and bread to my shopping list. Show my shopping list, please."
+      ]
+    },
+    {
+      "id": "kids.tasks.h5.t8",
+      "goal": "Count the items still not done",
+      "canonical": "Add milk and eggs to my shopping list. I bought eggs. How many things are left on my shopping list?",
+      "variants": [
+        "add milk and eggs to my shopping list, i bought eggs. how many things are left on it",
+        "Put milk and eggs on my shopping list. I bought the eggs. How many things still need buying?",
+        "milk and eggs on shopping list. bought eggs. how many left",
+        "Add milk and eggs to my shopping list. I got the eggs. Count what's left on the list.",
+        "add milk + eggs to shopping list, eggs are bought. how many items remain?",
+        "so i need milk and eggs on my shopping list and i bought eggs... how many things are still left",
+        "Add milk and eggs to my shopping list. I bought eggs already. How many are left?",
+        "eggs bought, milk and eggs on shopping list, how many things r left",
+        "Add milk and eggs to my shopping list. I bought eggs. How many things do I have left to buy?",
+        "pls add milk and eggs to my shopping list, then i bought eggs. how many things still open on my list"
+      ]
+    },
+    {
+      "id": "kids.tasks.h5.t9",
+      "goal": "Count the items on a list",
+      "canonical": "Add milk and eggs to my shopping list. How many things are on my shopping list?",
+      "variants": [
+        "add milk and eggs to my shopping list, how many things are on it",
+        "Put milk and eggs on my shopping list. How many items are on my shopping list?",
+        "milk and eggs on my shopping list. how many things on the list",
+        "Add milk and eggs to my shopping list. Count the things on my shopping list.",
+        "add milk & eggs to shopping list. how many things r on there",
+        "Add milk and eggs to my shopping list. How many things do I have on it?",
+        "So add milk and eggs to my shopping list and tell me how many things there are",
+        "Add milk and eggs to my shopping list. Whats the number of things on my list?",
+        "pls add milk and eggs to my shopping list. how many things are on the shopping list now",
+        "two things, milk and eggs, go on my shopping list. how many things are on my shopping list?"
+      ]
+    },
+    {
+      "id": "kids.tasks.h5.t10",
+      "goal": "Check whether an item is on a list",
+      "canonical": "Add milk to my shopping list. Is milk on my shopping list?",
+      "variants": [
+        "add milk to my shopping list, is there milk on it",
+        "milk to my shopping list pls. is milk on the list?",
+        "Put milk on my shopping list. Do I have milk on my shopping list?",
+        "add milk to shopping list. u see milk on there?",
+        "Add milk to my shopping list. Is milk in the list?",
+        "add milk to my shopping list, then check if milk is on the list",
+        "I want milk on my shopping list. Is milk on my shopping list now?",
+        "Add milk to my shopping list. Tell me if milk is on the shopping list.",
+        "add milk to my list, and is milk on my list? yes or no",
+        "Add milk to my shopping list. Has milk been put on my shopping list?"
+      ]
+    },
+    {
+      "id": "kids.tasks.h5.t11",
+      "goal": "List which lists exist and their sizes",
+      "canonical": "Add milk to my shopping list. What lists do I have?",
+      "variants": [
+        "add milk to my shopping list, what lists do i have",
+        "Put milk on my shopping list. Which lists do I have?",
+        "milk to the shopping list. what lists r there",
+        "Add milk to my shopping list. Show me all my lists.",
+        "add milk to shopping list. list all my lists pls",
+        "add milk to my shopping list and then tell me what lists I have",
+        "Add milk to my shopping list. Which of my lists have stuff on them?",
+        "Add milk to my shopping list. Name every list I've got.",
+        "so add milk to my shopping list and whats the names of my lists",
+        "add milk to my shopping list. what lists do u see for me"
+      ]
+    },
+    {
+      "id": "kids.tasks.h5.t12",
+      "goal": "Clear every item from a list",
+      "canonical": "Add milk to my shopping list. Clear my shopping list.",
+      "variants": [
+        "add milk to my shopping list, then clear the list",
+        "put milk on my shopping list, then wipe my shopping list clean",
+        "Add milk to my shopping list. Empty my shopping list.",
+        "add milk to shopping list. clear shopping list pls",
+        "milk on my shopping list and then erase the whole shopping list",
+        "Add milk to my shopping list, and afterwards remove everything from it",
+        "add milk to my shopping list and then clean out the shopping list",
+        "Add milk to my shopping list. Now wipe it all off the list.",
+        "add milk to my shopping list then empty the whole list, thx",
+        "Add milk to my shopping list. Delete all the items on my shopping list."
+      ]
+    }
+  ]
+}

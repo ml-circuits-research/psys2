@@ -1,0 +1,212 @@
+{
+  "world": "kids.shapes",
+  "tab": "robot",
+  "author": "haiku",
+  "batch": "h5",
+  "tasks": [
+    {
+      "id": "kids.shapes.h5.t1",
+      "goal": "Number of sides of a shape",
+      "canonical": "How many sides does a hexagon have?",
+      "variants": [
+        "hexagon sides how many?",
+        "how many sides on a hexagon",
+        "a hexagon has how many sides?",
+        "Count the sides of a hexagon.",
+        "tell me the number of sides a hexagon has",
+        "hexagons, how many sides they got",
+        "how many sides do hexagons have",
+        "sides of a hexagon: how many?",
+        "um how many sides does like a hexagon have",
+        "hexagon - how many sides pls"
+      ]
+    },
+    {
+      "id": "kids.shapes.h5.t2",
+      "goal": "Which shape has a given number of sides",
+      "canonical": "Which shape has 3 sides?",
+      "variants": [
+        "what shape has three sides",
+        "name a shape that has 3 sides",
+        "a shape with 3 sides is which one?",
+        "which shapes have 3 sides",
+        "3 sides, which shape is that",
+        "what shape has 3 sides pls",
+        "tell me a shape with three sides",
+        "i need the shape that has 3 sides, which is it",
+        "which one has 3 sides, a shape",
+        "so which shape has exactly 3 sides?"
+      ]
+    },
+    {
+      "id": "kids.shapes.h5.t3",
+      "goal": "Describe a shape",
+      "canonical": "What is a hexagon?",
+      "variants": [
+        "whats a hexagon",
+        "what's a hexagon, explain",
+        "tell me what a hexagon is",
+        "hexagon - what is it",
+        "explain what a hexagon is pls",
+        "what is a hexagon shape",
+        "can u tell me about a hexagon",
+        "define hexagon",
+        "i dont get what a hexagon is, whats one",
+        "a hexagon is what exactly?"
+      ]
+    },
+    {
+      "id": "kids.shapes.h5.t4",
+      "goal": "Yes: a square is a rectangle",
+      "canonical": "Is a square a rectangle?",
+      "variants": [
+        "square = rectangle?",
+        "is a square a kind of rectangle",
+        "would a square count as a rectangle",
+        "can a square be called a rectangle",
+        "a square is a rectangle right?",
+        "is square a rectangle",
+        "so is a square a rectangle or nah",
+        "Do squares count as rectangles?",
+        "is a square also a rectangle",
+        "pls tell me is a square a rectangle"
+      ]
+    },
+    {
+      "id": "kids.shapes.h5.t5",
+      "goal": "No: a circle is not a polygon",
+      "canonical": "Is a circle a polygon?",
+      "variants": [
+        "is a circle a polygon",
+        "would you call a circle a polygon",
+        "can a circle be a polygon",
+        "is a circle a type of polygon?",
+        "circle = polygon?",
+        "do circles count as polygons",
+        "polygon or not, a circle?",
+        "a circle, is it a polygon",
+        "um is a circle like a polygon",
+        "pls say if a circle is a polygon"
+      ]
+    },
+    {
+      "id": "kids.shapes.h5.t6",
+      "goal": "Usual color of a thing",
+      "canonical": "What color is a banana?",
+      "variants": [
+        "banana color?",
+        "what colour is a banana",
+        "whats the usual color of a banana",
+        "a banana is what color",
+        "tell me the color of a banana",
+        "color of a banana?",
+        "what color are bananas",
+        "bananas are what color usually",
+        "what color do bananas usually have",
+        "u know what color a banana is?"
+      ]
+    },
+    {
+      "id": "kids.shapes.h5.t7",
+      "goal": "Yes: a banana is usually yellow",
+      "canonical": "Is a banana yellow?",
+      "variants": [
+        "banana yellow?",
+        "is a banana yellow or nah",
+        "are bananas yellow",
+        "so a banana is yellow right",
+        "would you say a banana is yellow",
+        "is it true a banana is yellow",
+        "banana = yellow?",
+        "is a banana usually yellow",
+        "do bananas tend to be yellow",
+        "pls confirm: a banana is yellow"
+      ]
+    },
+    {
+      "id": "kids.shapes.h5.t8",
+      "goal": "No: a banana is not red",
+      "canonical": "Is a banana red?",
+      "variants": [
+        "banana red?",
+        "is a banana red or no",
+        "are bananas red",
+        "could a banana be red",
+        "is a banana colored red",
+        "a banana is red, true?",
+        "is a banana a red thing",
+        "bananas are red right?",
+        "red banana?",
+        "pls tell me if a banana is red"
+      ]
+    },
+    {
+      "id": "kids.shapes.h5.t9",
+      "goal": "Yes: red is a primary color",
+      "canonical": "Is red a primary color?",
+      "variants": [
+        "is red a primary colour",
+        "red is primary, right?",
+        "is red one of the primary colors",
+        "red a primary color?",
+        "would red count as a primary color",
+        "primary color: is red one?",
+        "so red is primary?",
+        "u think red is a primary color",
+        "pls, is red primary",
+        "is red a primary color, yes or no"
+      ]
+    },
+    {
+      "id": "kids.shapes.h5.t10",
+      "goal": "No: orange is not a primary color",
+      "canonical": "Is orange a primary color?",
+      "variants": [
+        "orange a primary colour?",
+        "is orange primary",
+        "is orange one of the primary colors",
+        "would you say orange is a primary color",
+        "orange: primary color or no",
+        "is orange a primary colour pls",
+        "can orange be a primary color",
+        "do u think orange is primary",
+        "is orange primary or not",
+        "orange primary?"
+      ]
+    },
+    {
+      "id": "kids.shapes.h5.t11",
+      "goal": "What two colors make when mixed",
+      "canonical": "What do red and yellow make?",
+      "variants": [
+        "red and yellow make what",
+        "mixing red and yellow gives what",
+        "whats red + yellow",
+        "red mixed with yellow is what color",
+        "if u mix red and yellow what color u get",
+        "red and yellow together make what color",
+        "what color is red and yellow mixed",
+        "if i mix red and yellow, what color do i get",
+        "color from mixing red and yellow?",
+        "pls tell me what red and yellow make"
+      ]
+    },
+    {
+      "id": "kids.shapes.h5.t12",
+      "goal": "Which colors make a given color",
+      "canonical": "How do I make purple?",
+      "variants": [
+        "how to make purple",
+        "how do u make purple",
+        "what do i mix to get purple",
+        "which colors make purple",
+        "how can i get purple",
+        "purple - how do i make it",
+        "what should i mix to make purple",
+        "i want purple, how do i make it",
+        "how do you get purple by mixing",
+        "tell me how to make purple"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,213 @@
+{
+  "world": "docs.reader",
+  "tab": "documents",
+  "author": "haiku",
+  "batch": "h5",
+  "tasks": [
+    {
+      "id": "docs.reader.h5.t1",
+      "goal": "Get an introduction to the file",
+      "canonical": "Describe the file.",
+      "variants": [
+        "describe this file pls",
+        "can u describe the file",
+        "i want a description of the file",
+        "give me an intro to the file",
+        "so um describe the file",
+        "describe the doc",
+        "introduce the file to me",
+        "could u describe the file for me thx",
+        "file description pls",
+        "tell me what the file is like, describe it"
+      ]
+    },
+    {
+      "id": "docs.reader.h5.t2",
+      "goal": "Summarize the story in two sentences",
+      "canonical": "Summarize the story in 2 sentences.",
+      "variants": [
+        "summarize the story in two sentences",
+        "can u sum up the story in 2 sentences",
+        "2 sentence summary of the story pls",
+        "give me a summary of the story in 2 sentences",
+        "i want the story summed up in two sentences",
+        "short summary, 2 sentences, of the story",
+        "um summarize the story in 2 sentences i guess",
+        "could you do a 2-sentence summary of the story",
+        "tldr of the story in two sentences",
+        "the story in 2 sentences summary please"
+      ]
+    },
+    {
+      "id": "docs.reader.h5.t3",
+      "goal": "Find out who the main character is",
+      "canonical": "Who is the main character?",
+      "variants": [
+        "main character?",
+        "who's the main character",
+        "which character is the main one",
+        "who is the lead character",
+        "tell me who the main character is",
+        "um who's the main character i think",
+        "who is the main character in this",
+        "main character pls",
+        "who would you say the main character is",
+        "whos the main char"
+      ]
+    },
+    {
+      "id": "docs.reader.h5.t4",
+      "goal": "Count the sentences in the story",
+      "canonical": "How many sentences are there in the story?",
+      "variants": [
+        "sentences in the story how many?",
+        "can u count the sentences in the story",
+        "how many sentences does the story have",
+        "how many sentences in the story",
+        "number of sentences in the story pls",
+        "i wanna know how many sentences the story has",
+        "um how many sentences are in the story",
+        "count how many sentences the story got",
+        "how many sentences r in the story",
+        "could you tell me the number of sentences in the story"
+      ]
+    },
+    {
+      "id": "docs.reader.h5.t5",
+      "goal": "Learn about the stepmother",
+      "canonical": "Tell me about the stepmother.",
+      "variants": [
+        "stepmother pls, tell me about her",
+        "can u tell me about the stepmother",
+        "i want to know about the stepmother",
+        "what can you tell me about the stepmother",
+        "um tell me about the stepmother",
+        "could you give me info on the stepmother",
+        "the stepmother, tell me about her",
+        "so what's the deal with the stepmother",
+        "stepmother info pls",
+        "tell me about the stepmother please"
+      ]
+    },
+    {
+      "id": "docs.reader.h5.t6",
+      "goal": "Find out what the witch did",
+      "canonical": "What did the witch do?",
+      "variants": [
+        "what did the witch do",
+        "can u tell me what the witch did",
+        "what did the witch do in the story",
+        "what actions did the witch take",
+        "i want to know what the witch did",
+        "what did the witch do, pls",
+        "um what did the witch do i wonder",
+        "what has the witch done",
+        "so what did the witch do then",
+        "tell me what the witch did"
+      ]
+    },
+    {
+      "id": "docs.reader.h5.t7",
+      "goal": "Find when the witch locked Hansel in a cage",
+      "canonical": "When did the witch lock Hansel in a cage?",
+      "variants": [
+        "when did the witch lock hansel in a cage",
+        "can u tell me when the witch locked Hansel in a cage",
+        "when was Hansel locked in a cage by the witch",
+        "i want to know when the witch locked hansel in a cage",
+        "when did that witch lock hansel in a cage pls",
+        "um when did the witch lock hansel in a cage",
+        "hansel got locked in a cage by the witch, when was that",
+        "could you tell me when the witch locked hansel in a cage thx",
+        "at what point did the witch lock hansel in a cage",
+        "when did the witch lock hansel in a cage, roughly"
+      ]
+    },
+    {
+      "id": "docs.reader.h5.t8",
+      "goal": "Find who said Fatten him up",
+      "canonical": "Who said \"Fatten him up\"?",
+      "variants": [
+        "who said \"Fatten him up\"",
+        "can u tell me who said \"Fatten him up\"?",
+        "\"Fatten him up\" - who said that?",
+        "who was it that said \"Fatten him up\"",
+        "i want to know who said \"Fatten him up\"",
+        "who said fatten him up",
+        "um who said \"Fatten him up\" i wonder",
+        "who is the one who said \"Fatten him up\"",
+        "could you find who said \"Fatten him up\" thx",
+        "who said \"Fatten him up\" in the story"
+      ]
+    },
+    {
+      "id": "docs.reader.h5.t9",
+      "goal": "Learn what happens at the beginning",
+      "canonical": "What happens at the beginning?",
+      "variants": [
+        "what happens at the start",
+        "can u tell me what happens at the beginning",
+        "what goes on at the beginning",
+        "i want to know what happens at the beginning",
+        "um what happens at the beginning i think",
+        "what happens in the beginning of the story",
+        "could you say what happens at the beginning",
+        "what happens right at the start",
+        "beginning pls, what happens",
+        "so what happens at the very beginning"
+      ]
+    },
+    {
+      "id": "docs.reader.h5.t10",
+      "goal": "Search the story for the word oven",
+      "canonical": "Search the story for oven.",
+      "variants": [
+        "search oven pls",
+        "can u search the story for oven",
+        "find oven in the story",
+        "look for oven in the story",
+        "i want to search the story for oven",
+        "search for oven in it",
+        "um search the story for the word oven",
+        "could you look up oven in the story",
+        "find the word oven in the story thx",
+        "oven search in the story"
+      ]
+    },
+    {
+      "id": "docs.reader.h5.t11",
+      "goal": "Jump to the next search result",
+      "setup": ["Search the story for oven."],
+      "canonical": "Show the next result.",
+      "variants": [
+        "next result pls",
+        "can u show the next result",
+        "go to the next search result",
+        "next hit please",
+        "i want the next result",
+        "show me the next match",
+        "um next result i guess",
+        "could you go to the next result",
+        "next one please",
+        "give me the next result thx"
+      ]
+    },
+    {
+      "id": "docs.reader.h5.t12",
+      "goal": "Find which documents mention oven",
+      "canonical": "Which documents mention oven?",
+      "variants": [
+        "which docs mention oven",
+        "can u tell me which documents mention oven",
+        "what documents talk about oven",
+        "in which documents is oven mentioned",
+        "list the documents that mention oven",
+        "i want to know which documents mention the word oven",
+        "um which documents mention oven i guess",
+        "is oven mentioned in any document, which ones",
+        "which of my files mention oven",
+        "find the documents that mention oven thx"
+      ]
+    }
+  ]
+}

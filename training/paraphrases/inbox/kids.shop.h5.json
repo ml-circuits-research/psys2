@@ -1,0 +1,212 @@
+{
+  "world": "kids.shop",
+  "tab": "robot",
+  "author": "haiku",
+  "batch": "h5",
+  "tasks": [
+    {
+      "id": "kids.shop.h5.t1",
+      "goal": "Price of one item",
+      "canonical": "How much does a ball cost?",
+      "variants": [
+        "ball cost?",
+        "whats the price of a ball",
+        "how much is a ball",
+        "price of a ball pls",
+        "how much r balls",
+        "what does a ball cost",
+        "how much money is a ball",
+        "how much for a ball",
+        "tell me the cost of a ball",
+        "ball costs how much?"
+      ]
+    },
+    {
+      "id": "kids.shop.h5.t2",
+      "goal": "Cost of several of one item",
+      "canonical": "How much do 3 pencils cost?",
+      "variants": [
+        "3 pencils cost what",
+        "how much for 3 pencils",
+        "whats the total for three pencils",
+        "price for 3 pencils?",
+        "how much do three pencils cost",
+        "3 pencils how much",
+        "what do 3 pencils cost me",
+        "how much would 3 pencils be",
+        "pencils x3 how much",
+        "if i buy 3 pencils how much do they cost"
+      ]
+    },
+    {
+      "id": "kids.shop.h5.t3",
+      "goal": "Cost of two kinds of items together",
+      "canonical": "How much does a ball and 2 pencils cost?",
+      "variants": [
+        "ball and 2 pencils cost how much",
+        "a ball plus 2 pencils, whats the total",
+        "total for a ball and two pencils?",
+        "how much is a ball and 2 pencils together",
+        "what would a ball and 2 pencils cost",
+        "ball and 2 pencils how much",
+        "cost of a ball and two pencils altogether?",
+        "how much do i pay for a ball and 2 pencils",
+        "um whats a ball and 2 pencils cost",
+        "1 ball + 2 pencils = how much"
+      ]
+    },
+    {
+      "id": "kids.shop.h5.t4",
+      "goal": "Price the user stated earlier in the conversation",
+      "canonical": "A rocket costs 50 lei. How much does a rocket cost?",
+      "variants": [
+        "rocket costs 50 lei, how much does a rocket cost?",
+        "a rocket is 50 lei. whats the rocket price",
+        "if a rocket costs 50 lei, how much is a rocket",
+        "rocket = 50 lei. how much does it cost",
+        "the price of a rocket is 50 lei, what is it?",
+        "rockets cost 50 lei, so how much is a rocket",
+        "a rocket is priced at 50 lei. what does a rocket cost",
+        "50 lei for a rocket, how much does a rocket cost",
+        "pls remember a rocket costs 50 lei. how much does a rocket cost?",
+        "so a rocket costs 50 lei, how much is one rocket"
+      ]
+    },
+    {
+      "id": "kids.shop.h5.t5",
+      "goal": "Money left after buying two kinds of items",
+      "canonical": "I have 20 lei. I buy a ball and 2 pencils. How much money do I have left?",
+      "variants": [
+        "i have 20 lei, i buy a ball and 2 pencils. how much money do i have left",
+        "I've got 20 lei. I buy a ball and two pencils. How much money is left for me?",
+        "ok so i got 20 lei, then i buy a ball and 2 pencils... how much is left",
+        "How much money will I have left if I have 20 lei and buy a ball and 2 pencils?",
+        "20 lei to start. buy a ball and 2 pencils. whats left",
+        "I have twenty lei and I buy a ball plus 2 pencils. How much money do I have left?",
+        "i got 20 lei, bought a ball and 2 pencils, how much cash do i have left",
+        "pls: 20 lei, i buy 1 ball and 2 pencils. how much money do i have left?",
+        "u know how much money i have left? i had 20 lei and i buy a ball and 2 pencils",
+        "I have 20 lei. I'm buying a ball and 2 pencils. How much do I have left?"
+      ]
+    },
+    {
+      "id": "kids.shop.h5.t6",
+      "goal": "Money after receiving some (income)",
+      "canonical": "I have 3 lei. My mom gives me 10 lei. How much money do I have?",
+      "variants": [
+        "i have 3 lei, my mom gives me 10 lei. how much money do i have",
+        "I've got 3 lei. Mom gives me 10 lei. How much money do I have now?",
+        "3 lei + 10 lei from mom, how much money i have",
+        "so i have 3 lei and then my mom gives me 10 lei, how much money do i have?",
+        "My mom gives me 10 lei after I have 3 lei. How much money do I have?",
+        "How much money do I have if I have 3 lei and my mom gives me 10?",
+        "i got 3 lei. mum gives me 10 lei more. how much do i have",
+        "pls tell me how much money i have. i have 3 lei, mom gives me 10 lei",
+        "I have 3 lei, and my mom gives me 10 lei. What's my money now?",
+        "I have 3 lei and my mom hands me 10 lei. Total money?"
+      ]
+    },
+    {
+      "id": "kids.shop.h5.t7",
+      "goal": "Money left after spending",
+      "canonical": "I have 30 lei. I spent 5 lei. How much money do I have left?",
+      "variants": [
+        "i have 30 lei and i spent 5 lei. how much money do i have left",
+        "I got 30 lei, spent 5 lei, how much is left",
+        "30 lei, i spent 5, whats left of my money",
+        "Start with 30 lei, then I spent 5 lei. How much money is left for me?",
+        "um so i have 30 lei, i spend 5 lei, how much do i have left",
+        "How much money do I have left, if I had 30 lei and spent 5?",
+        "I had 30 lei, I spent 5 lei. How much money is left?",
+        "pls: i have 30 lei, spent 5 lei. how much money do i have left?",
+        "After spending 5 lei from my 30 lei, how much money do I have left?",
+        "I have 30 lei. I spent 5 lei of it. How much cash do I have left?"
+      ]
+    },
+    {
+      "id": "kids.shop.h5.t8",
+      "goal": "Yes: can afford an item",
+      "canonical": "I have 11 lei. Can I buy a notebook?",
+      "variants": [
+        "i have 11 lei, can i buy a notebook",
+        "Can I buy a notebook? I have 11 lei.",
+        "with 11 lei can i get a notebook",
+        "i got 11 lei. is there enough to buy a notebook?",
+        "I have 11 lei. Do I have enough money for a notebook?",
+        "could i afford a notebook with 11 lei",
+        "11 lei, can i buy a notebook pls",
+        "I have eleven lei. Am I able to buy a notebook?",
+        "u think i can buy a notebook with 11 lei?",
+        "i have 11 lei... can i get a notebook or not"
+      ]
+    },
+    {
+      "id": "kids.shop.h5.t9",
+      "goal": "No: cannot afford an item",
+      "canonical": "I have 11 lei. Can I buy a book?",
+      "variants": [
+        "i have 11 lei, can i buy a book",
+        "with 11 lei, can i afford a book?",
+        "Can I buy a book? I have 11 lei.",
+        "i got 11 lei. is a book affordable for me?",
+        "I have 11 lei. Do I have enough money to buy a book?",
+        "i have 11 lei, could i get a book",
+        "11 lei. can i buy a book or nah",
+        "Do I have enough lei for a book? I have 11.",
+        "pls tell me if i can buy a book with 11 lei",
+        "I have eleven lei. Could I buy a book?"
+      ]
+    },
+    {
+      "id": "kids.shop.h5.t10",
+      "goal": "Change from a payment for one item",
+      "canonical": "What is the change from 50 lei if I buy a book?",
+      "variants": [
+        "if i pay 50 lei for a book, what is my change",
+        "change from 50 lei if i buy a book?",
+        "How much change will I get from 50 lei if I buy a book?",
+        "if i give 50 lei for a book whats my change",
+        "50 lei and a book, what change do i get",
+        "what's my change if i pay 50 lei for a book",
+        "I buy a book and pay 50 lei. What is my change?",
+        "how much change from 50 lei for a book",
+        "if a book is bought with 50 lei, whats left over as change?",
+        "pls tell me the change from 50 lei if I buy a book"
+      ]
+    },
+    {
+      "id": "kids.shop.h5.t11",
+      "goal": "Change when the payment is not enough",
+      "canonical": "If I pay 10 lei for a puzzle, what is my change?",
+      "variants": [
+        "if i pay 10 lei for a puzzle whats my change",
+        "I pay 10 lei for a puzzle. What change do I get?",
+        "puzzle, i pay 10 lei, how much change",
+        "what change would i get paying 10 lei for a puzzle",
+        "if I give 10 lei for a puzzle, how much change do I get back?",
+        "10 lei for a puzzle, what's the change",
+        "How much change if I pay 10 lei for a puzzle?",
+        "so i hand over 10 lei for a puzzle, whats my change",
+        "pls: paying 10 lei for a puzzle, how much change do i get",
+        "I want a puzzle and I pay 10 lei. What is the change?"
+      ]
+    },
+    {
+      "id": "kids.shop.h5.t12",
+      "goal": "Money left with a decimal amount",
+      "canonical": "I have 2.5 lei. I buy a pencil. How much money do I have left?",
+      "variants": [
+        "i have 2.5 lei, i buy a pencil. how much money do i have left",
+        "I've got 2.5 lei. I buy a pencil. How much is left?",
+        "2.5 lei, buy a pencil, whats left",
+        "How much money is left if I have 2.5 lei and buy a pencil?",
+        "I have two point five lei. I buy a pencil. How much money do I have left?",
+        "so i have 2.5 lei and i buy 1 pencil, how much do i got left",
+        "i got 2.5 lei, bought a pencil, how much money left",
+        "pls tell me how much money i have left. i had 2.5 lei and i buy a pencil",
+        "I have 2.5 lei and then I buy a pencil. How much do I have left?",
+        "After buying a pencil with my 2.5 lei, how much money do I have left?"
+      ]
+    }
+  ]
+}

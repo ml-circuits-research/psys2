@@ -1,0 +1,217 @@
+{
+  "world": "art.draw",
+  "tab": "draw",
+  "author": "haiku",
+  "batch": "h5",
+  "tasks": [
+    {
+      "id": "art.draw.h5.t1",
+      "goal": "Draw a blue car",
+      "canonical": "Draw a blue car.",
+      "variants": [
+        "blue car pls",
+        "um can u draw a blue car",
+        "i want u to draw a car in blue",
+        "could you sketch a blue car for me",
+        "draw me a car, make it blue",
+        "a blue car would be nice, draw one",
+        "pls draw a bloo car",
+        "draw a car colored blue thx",
+        "so like draw a blue car yeah",
+        "car in blue, draw it"
+      ]
+    },
+    {
+      "id": "art.draw.h5.t2",
+      "goal": "Put sand on the ground",
+      "canonical": "Add sand.",
+      "variants": [
+        "sand pls",
+        "can u put sand on the ground",
+        "ground should be sandy, add sand",
+        "throw some sand down there",
+        "sprinkle sand on the ground pls",
+        "I want sand on the ground",
+        "add sand to the bottom of the picture",
+        "put sum sand on the floor",
+        "it needs sand, add it",
+        "sand on the ground would look good, do that"
+      ]
+    },
+    {
+      "id": "art.draw.h5.t3",
+      "goal": "Change the scene to sunset",
+      "canonical": "Make it sunset.",
+      "variants": [
+        "sunset pls",
+        "can u make it sunset",
+        "i want it to be sunset now",
+        "make the picture a sunset, thx",
+        "it should look like a sunset",
+        "turn it into sunset time",
+        "um make it sunset ish",
+        "sunset mode pls",
+        "could u switch it to a sunset",
+        "change it so its sunset"
+      ]
+    },
+    {
+      "id": "art.draw.h5.t4",
+      "goal": "Paint the sky dark blue",
+      "canonical": "Make the sky dark blue.",
+      "variants": [
+        "dark blue sky pls",
+        "can u make the sky dark blue",
+        "sky should be dark blue",
+        "color the sky dark blue",
+        "i want the sky dark blue",
+        "turn the sky dk blue",
+        "sky = dark blue",
+        "um so make the sky like dark blue",
+        "paint the sky dark blue plz",
+        "dark blue for the sky, ok?"
+      ]
+    },
+    {
+      "id": "art.draw.h5.t5",
+      "goal": "Make the door of the house green",
+      "setup": ["Draw a house."],
+      "canonical": "Give the house a green door.",
+      "variants": [
+        "house door green pls",
+        "can u give the house a green door",
+        "the house needs a green door",
+        "make the house door green",
+        "i want the door on the house to be green",
+        "green door for the house thx",
+        "paint the door of the house green",
+        "house should have a green door, ok",
+        "could u make its door green",
+        "give the house a grn door"
+      ]
+    },
+    {
+      "id": "art.draw.h5.t6",
+      "goal": "Set the cat size to huge",
+      "setup": ["Draw a cat."],
+      "canonical": "Make the cat huge.",
+      "variants": [
+        "cat = huge",
+        "huge cat pls",
+        "can u make the cat huge",
+        "the cat should be huge",
+        "i want the cat to be huge",
+        "blow the cat up to huge size",
+        "um make the cat hugee",
+        "cat needs to be huge ok",
+        "make it so the cat is huge",
+        "make that cat huge thx"
+      ]
+    },
+    {
+      "id": "art.draw.h5.t7",
+      "goal": "Put the cat under the tree",
+      "setup": ["Draw a tree.", "Draw a cat."],
+      "canonical": "Move the cat under the tree.",
+      "variants": [
+        "cat under the tree pls",
+        "can u move the cat under the tree",
+        "put the cat under the tree",
+        "i want the cat under the tree",
+        "the cat should go under the tree",
+        "um move the cat so its under the tree",
+        "slide the cat under that tree",
+        "cat goes under the tree, ok",
+        "could you put the cat under the tree thx",
+        "under the tree is where the cat goes, move it"
+      ]
+    },
+    {
+      "id": "art.draw.h5.t8",
+      "goal": "Turn the cat around",
+      "setup": ["Draw a cat."],
+      "canonical": "Turn the cat around.",
+      "variants": [
+        "turn cat around pls",
+        "can u turn the cat around",
+        "flip the cat around",
+        "i want the cat turned around",
+        "turn the cat round",
+        "um turn that cat around",
+        "can you spin the cat around",
+        "cat turn around thx",
+        "turn around the cat, please",
+        "so turn the cat around, yeah"
+      ]
+    },
+    {
+      "id": "art.draw.h5.t9",
+      "goal": "Fill in with solid color",
+      "canonical": "Use solid fill.",
+      "variants": [
+        "solid fill pls",
+        "can u fill things in solid",
+        "make the fill solid color",
+        "switch the fill to solid",
+        "use solid colour for filling",
+        "fill them in with solid colors ok",
+        "um so the filling should be solid",
+        "solid colour fill plz",
+        "let things be filled solid, thx",
+        "solid fill for everything pls"
+      ]
+    },
+    {
+      "id": "art.draw.h5.t10",
+      "goal": "Ask how many trees are in the picture",
+      "setup": ["Draw three trees."],
+      "canonical": "How many trees are there?",
+      "variants": [
+        "trees count?",
+        "how many trees u got",
+        "count the trees pls",
+        "tell me how many trees there are",
+        "number of trees in the picture?",
+        "i wanna know how many trees there are",
+        "so um how many trees are there",
+        "how many tree are in it",
+        "can u count the trees",
+        "trees how many?"
+      ]
+    },
+    {
+      "id": "art.draw.h5.t11",
+      "goal": "Ask which colors can be used",
+      "canonical": "Which colors can I use?",
+      "variants": [
+        "what colors can i use",
+        "colors?",
+        "which colours are there",
+        "what colour options do i have",
+        "list the colors i can use pls",
+        "u got which colors",
+        "tell me the colors i can paint with",
+        "um what colors are allowed",
+        "which colours can i draw with, thx",
+        "what paint colors do i get"
+      ]
+    },
+    {
+      "id": "art.draw.h5.t12",
+      "goal": "Download the drawing as a PNG picture",
+      "canonical": "Save my drawing as PNG.",
+      "variants": [
+        "save drawing png",
+        "can u save my drawing as a png",
+        "download my picture as png",
+        "i want to save it as a png file",
+        "save the picture, png format pls",
+        "export my drawing to png",
+        "save it as png thx",
+        "um save my drawing as a png i guess",
+        "make a png of the drawing and save it",
+        "png of my picture, save pls"
+      ]
+    }
+  ]
+}

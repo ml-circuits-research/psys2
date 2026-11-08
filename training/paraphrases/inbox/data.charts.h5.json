@@ -1,0 +1,223 @@
+{
+  "world": "data.charts",
+  "tab": "charts",
+  "author": "haiku",
+  "batch": "h5",
+  "tasks": [
+    {
+      "id": "data.charts.h5.t1",
+      "goal": "Build a chart from apples, pears and plums",
+      "canonical": "Make a chart: apples 5, pears 3, plums 8.",
+      "variants": [
+        "chart: apples 5, pears 3, plums 8 pls",
+        "can u make a chart with apples 5, pears 3 and plums 8",
+        "make me a chart of apples 5 pears 3 plums 8",
+        "um so make a chart, apples five, pears three, plums eight",
+        "i want a chart showing apples 5, pears 3, plums 8",
+        "chart pls: apples 5 pears 3 plums 8",
+        "apples 5, pears 3, plums 8 - make it a chart",
+        "could you draw a chart for apples 5, pears 3 and plums 8",
+        "chart these: apples 5, pears 3, plums 8 thx",
+        "give me a chart with apples at 5, pears at 3 and plums at 8"
+      ]
+    },
+    {
+      "id": "data.charts.h5.t2",
+      "goal": "Change the number of pears to six",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Change pears to 6.",
+      "variants": [
+        "pears 6 pls",
+        "can u change pears to 6",
+        "set pears to six",
+        "pears should be 6 not 3",
+        "make the pears 6",
+        "update pears to 6 please",
+        "i want pears at 6 now",
+        "um change the pears to six",
+        "pears -> 6",
+        "wait, pears are 6 not 3, fix it"
+      ]
+    },
+    {
+      "id": "data.charts.h5.t3",
+      "goal": "Double the number of bananas",
+      "setup": ["Make a chart: bananas 4, kiwis 2."],
+      "canonical": "Double the bananas.",
+      "variants": [
+        "bananas x2 pls",
+        "can u double the bananas",
+        "make the bananas twice as many",
+        "bananas doubled pls",
+        "i want the bananas times two",
+        "double bananas thx",
+        "um so double the number of bananas",
+        "bananas should be doubled",
+        "make bananas double",
+        "could you double the banana count"
+      ]
+    },
+    {
+      "id": "data.charts.h5.t4",
+      "goal": "Switch the chart to a doughnut",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Make it a doughnut chart.",
+      "variants": [
+        "doughnut chart pls",
+        "can u make it a doughnut",
+        "switch it to a doughnut chart",
+        "i want a donut chart instead",
+        "turn it into a doughnut",
+        "make the chart a doughnut thx",
+        "doughnut instead of bars",
+        "show it as doughnut",
+        "could it be a doughnut chart",
+        "um make it a doughnut chart i think"
+      ]
+    },
+    {
+      "id": "data.charts.h5.t5",
+      "goal": "Stack the bars on top of each other",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Stack the bars.",
+      "variants": [
+        "stack them pls",
+        "can u stack the bars",
+        "make the bars stacked",
+        "i want the bars stacked on top of each other",
+        "stacked bars please",
+        "put the bars on top of each other",
+        "um stack the bars I guess",
+        "could you make it stacked",
+        "bars stacked, thx",
+        "stacking the bars would be nice, do it"
+      ]
+    },
+    {
+      "id": "data.charts.h5.t6",
+      "goal": "Set the chart title to Fruit stand",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Change the chart title to Fruit stand.",
+      "variants": [
+        "title: Fruit stand",
+        "can u change the title to Fruit stand",
+        "call the chart Fruit stand",
+        "name it Fruit stand pls",
+        "the title should be Fruit stand",
+        "i want the title to say Fruit stand",
+        "um rename the chart to Fruit stand",
+        "set the title to Fruit stand thx",
+        "make the title Fruit stand",
+        "fruit stand as the title pls"
+      ]
+    },
+    {
+      "id": "data.charts.h5.t7",
+      "goal": "Use the rainbow palette",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Use rainbow colors.",
+      "variants": [
+        "rainbow pls",
+        "can u make it rainbow colored",
+        "i want rainbow colors",
+        "make the colors rainbow",
+        "switch to the rainbow palette",
+        "rainbow palette please",
+        "um use rainbow colours",
+        "give it rainbow colors thx",
+        "could you do rainbow colors",
+        "rainbow colors, go"
+      ]
+    },
+    {
+      "id": "data.charts.h5.t8",
+      "goal": "Sort the items from biggest to smallest",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Sort from biggest to smallest.",
+      "variants": [
+        "biggest first pls",
+        "can u sort it biggest to smallest",
+        "sort the bars biggest first",
+        "order them from biggest to smallest",
+        "i want it sorted big to small",
+        "sort big to small pls",
+        "um sort from the biggest down to the smallest",
+        "largest to smallest order please",
+        "could you sort them, biggest to smallest",
+        "biggest to smallest, sort it"
+      ]
+    },
+    {
+      "id": "data.charts.h5.t9",
+      "goal": "Show the percentages on the chart",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Show the percentages.",
+      "variants": [
+        "percentages pls",
+        "can u show the percentages",
+        "i want to see percentages on the chart",
+        "show percent on the chart",
+        "write the percentages on it",
+        "turn on the percentages",
+        "um show the percentages i guess",
+        "could you show percentages thx",
+        "display percentages on the chart",
+        "percentages on the chart please"
+      ]
+    },
+    {
+      "id": "data.charts.h5.t10",
+      "goal": "Ask how many more kiwis there are than pears",
+      "setup": ["Make a chart: kiwis 7, pears 3."],
+      "canonical": "How many more kiwis than pears?",
+      "variants": [
+        "kiwis vs pears how many more?",
+        "can u tell me how many more kiwis than pears",
+        "how much more kiwis are there than pears",
+        "kiwis minus pears?",
+        "i want to know how many more kiwis than pears there are",
+        "so um how many more kiwis than pears",
+        "how much bigger are the kiwis than the pears",
+        "difference between kiwis and pears?",
+        "kiwis more than pears by how much",
+        "whats the gap, kiwis over pears"
+      ]
+    },
+    {
+      "id": "data.charts.h5.t11",
+      "goal": "Ask which item has the biggest number",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Which is the biggest?",
+      "variants": [
+        "biggest one?",
+        "can u tell me which is the biggest",
+        "which one is biggest pls",
+        "whats the biggest",
+        "which one has the most",
+        "what's the biggest thing on the chart",
+        "um which is the biggest one",
+        "the biggest is which?",
+        "which bar is the biggest, thx",
+        "which one's the largest"
+      ]
+    },
+    {
+      "id": "data.charts.h5.t12",
+      "goal": "Download the chart as a picture",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Download the chart as an image.",
+      "variants": [
+        "download chart pls",
+        "can u save the chart as a picture",
+        "i want the chart as a picture file",
+        "save the chart as an image",
+        "export the chart to a picture",
+        "give me the chart as an image to download",
+        "um download the chart as image i guess",
+        "could u save it as an image thx",
+        "chart image download pls",
+        "make the chart downloadable as a picture"
+      ]
+    }
+  ]
+}
