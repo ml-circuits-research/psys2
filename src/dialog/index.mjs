@@ -179,7 +179,7 @@ export class DialogSession {
     const modalWorld = Object.keys(st).find((id) => st[id]?.inputMode) ?? null;
     const gameWorld = st['ui.shell']?.activeGame ?? null;
     const recentWorlds = [...(this._recentWorlds ?? [])];
-    return { activeTab, tabWorld, modalWorld, gameWorld, recentWorlds, lastWorld: recentWorlds[0] ?? null };
+    return { activeTab, tabWorld, modalWorld, gameWorld, recentWorlds, lastWorld: recentWorlds[0] ?? null, states: st };
   }
 
   /** Legacy focus map derived from the context: +3 for the tab world, +1 for each recent world. */
@@ -367,6 +367,7 @@ export class DialogSession {
       if (!pre && !meta) {
         if (pend?.type === 'fill') pre = await disc.fill(pend, english, sid);
         if (!pre) pre = await disc.ellipsis(english, sid);
+        if (!pre) pre = await disc.pronoun(english, sid);
       }
     }
     let formal = icpt || meta?.reply != null ? { segments: [], wires: [] } : pre ? { ...pre.res, dispatch: null } : await this._formalize(formalText, sid, formalizer ?? this.formalizer, { spell: spell ?? this.spell, partial: partial ?? this.partial });
@@ -382,7 +383,7 @@ export class DialogSession {
     if (meta?.reply != null) lines.push([T(meta.reply)]);
     else if (meta?.prefix) lines.push([T(meta.prefix)]);
     const answers = [];
-    const statuses = icpt || meta?.reply != null ? ['supported'] : [];
+    const statuses = icpt || meta?.reply != null ? [meta?.status ?? 'supported'] : [];
     const ops = [];
     const answerWires = [];
     let followTab = null;   // tab of the last world that gave a supported answer (tab follow, spec 07 section 6)

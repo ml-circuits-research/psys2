@@ -485,6 +485,11 @@
     expectState="charts.1.datasets.0.label=To do"
     session=e
 
+@t.data.charts.n88z core.test
+    input="Open the charts tab."
+    expectState="ui.shell:activeTab=charts"
+    session=f
+
 @t.data.charts.n89 core.test
     input="What is the total?"
     expectStatus=missing
@@ -1283,6 +1288,11 @@
     session=ch2
     input="i do not want the letter F"
     expectStatus=unparsed
+
+@t.data.charts.x202z core.test
+    input="Open the charts tab."
+    expectState="ui.shell:activeTab=charts"
+    session=ch3
 
 @t.data.charts.x203 core.test
     session=ch3

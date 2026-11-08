@@ -33,6 +33,7 @@
     emit="@{_} core.request action=chart.refresh"
     kind=request
     priority=12
+    needsState=charts
     example="Update the chart."
 
 @pat.data.charts.create.duplicate core.pattern
@@ -40,6 +41,7 @@
     emit="@{_} core.request action=chart.duplicate"
     kind=request
     priority=12
+    needsState=charts
     example="Duplicate the chart."
 
 @pat.data.charts.create.duplicate2 core.pattern
@@ -47,6 +49,7 @@
     emit="@{_} core.request action=chart.duplicate"
     kind=request
     priority=12
+    needsState=charts
     example="Make a copy of the chart."
 
 @pat.data.charts.create.holdings core.pattern
@@ -157,6 +160,7 @@
     emit="@{_} core.request action=chart.addPoint arg.text=\"{l} {n}\""
     kind=request
     priority=11
+    needsState=charts
     example="Add bananas 4."
 
 @pat.data.charts.data.add.chart core.pattern
@@ -164,6 +168,7 @@
     emit="@{_} core.request action=chart.addPoint arg.text=\"{d}\""
     kind=request
     priority=12
+    needsState=charts
     example="Add 4 bananas to the chart."
     example="Add kiwis 2 and figs 7 to the chart."
 
@@ -172,6 +177,7 @@
     emit="@{_} core.request action=chart.addPoint arg.text=\"{n} {l}\""
     kind=request
     priority=8
+    needsState=charts
     example="Add 4 bananas."
 
 @pat.data.charts.data.remove.chart core.pattern
@@ -179,6 +185,7 @@
     emit="@{_} core.request action=chart.removePoint arg.l=\"{l}\""
     kind=request
     priority=12
+    needsState=charts
     example="Delete plums from the chart."
 
 @pat.data.charts.data.remove.take core.pattern
@@ -186,6 +193,7 @@
     emit="@{_} core.request action=chart.removePoint arg.l=\"{l}\""
     kind=request
     priority=12
+    needsState=charts
     example="Take plums off the chart."
 
 @pat.data.charts.data.remove core.pattern
@@ -193,6 +201,7 @@
     emit="@{_} core.request action=chart.removePoint arg.l=\"{l}\""
     kind=request
     priority=7
+    needsState=charts
     example="Remove plums."
 
 @pat.data.charts.data.set core.pattern
@@ -200,6 +209,7 @@
     emit="@{_} core.request action=chart.setPoint arg.l=\"{l}\" arg.n={n}"
     kind=request
     priority=10
+    needsState=charts
     example="Change pears to 6."
 
 @pat.data.charts.data.set.make core.pattern
@@ -207,6 +217,7 @@
     emit="@{_} core.request action=chart.setPoint arg.l=\"{l}\" arg.n={n}"
     kind=request
     priority=9
+    needsState=charts
     example="Make the pears 6."
 
 @pat.data.charts.data.set.should core.pattern
@@ -214,6 +225,7 @@
     emit="@{_} core.request action=chart.setPoint arg.l=\"{l}\" arg.n={n}"
     kind=request
     priority=10
+    needsState=charts
     example="Plums should be 9."
 
 @pat.data.charts.data.up core.pattern
@@ -221,6 +233,7 @@
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.by={n} arg.dir=up"
     kind=request
     priority=13
+    needsState=charts
     example="Increase apples by 2."
 
 @pat.data.charts.data.down core.pattern
@@ -228,6 +241,7 @@
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.by={n} arg.dir=down"
     kind=request
     priority=13
+    needsState=charts
     example="Decrease plums by 3."
 
 @pat.data.charts.data.up.to core.pattern
@@ -235,6 +249,7 @@
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.by={n} arg.dir=up"
     kind=request
     priority=12
+    needsState=charts
     example="Add 2 to apples."
 
 @pat.data.charts.data.down.from core.pattern
@@ -242,6 +257,7 @@
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.by={n} arg.dir=down"
     kind=request
     priority=12
+    needsState=charts
     example="Take 2 from plums."
 
 @pat.data.charts.data.double core.pattern
@@ -249,6 +265,7 @@
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.factor=2"
     kind=request
     priority=9
+    needsState=charts
     example="Double the apples."
 
 @pat.data.charts.data.triple core.pattern
@@ -256,6 +273,7 @@
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.factor=3"
     kind=request
     priority=9
+    needsState=charts
     example="Triple the pears."
 
 @pat.data.charts.data.halve core.pattern
@@ -263,6 +281,7 @@
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.factor=0.5"
     kind=request
     priority=9
+    needsState=charts
     example="Halve the plums."
 
 @pat.data.charts.data.rename core.pattern
@@ -270,6 +289,7 @@
     emit="@{_} core.request action=chart.renamePoint arg.l=\"{a}\" arg.to=\"{b}\""
     kind=request
     priority=10
+    needsState=charts
     example="Rename pears to cherries."
 
 @pat.data.charts.data.clear core.pattern
@@ -277,6 +297,7 @@
     emit="@{_} core.request action=chart.clearData"
     kind=request
     priority=11
+    needsState=charts
     example="Clear the chart."
 
 @pat.data.charts.type.set core.pattern
@@ -284,6 +305,7 @@
     emit="@{_} core.request action=chart.setType arg.type={t}"
     kind=request
     priority=15
+    needsState=charts
     example="Make it a pie chart."
     example="Show it as a line."
     example="Turn it into a doughnut chart."
@@ -294,6 +316,7 @@
     emit="@{_} core.request action=chart.setType arg.type={t}"
     kind=request
     priority=6
+    needsState=charts
     example="Pie chart."
 
 @pat.data.charts.type.stacked core.pattern
@@ -301,6 +324,7 @@
     emit="@{_} core.request action=chart.setType arg.type={t} arg.stacked=true"
     kind=request
     priority=12
+    needsState=charts
     example="Make it a stacked bar chart."
     example="Make it stacked."
 
@@ -309,6 +333,7 @@
     emit="@{_} core.request action=chart.setStacked arg.on=true"
     kind=request
     priority=11
+    needsState=charts
     example="Stack the bars."
 
 @pat.data.charts.type.unstack core.pattern
@@ -316,6 +341,7 @@
     emit="@{_} core.request action=chart.setStacked arg.on=false"
     kind=request
     priority=11
+    needsState=charts
     example="Unstack the bars."
 
 @pat.data.charts.type.group core.pattern
@@ -323,6 +349,7 @@
     emit="@{_} core.request action=chart.setStacked arg.on=false"
     kind=request
     priority=11
+    needsState=charts
     example="Put the bars side by side."
 
 @pat.data.charts.title.call core.pattern
@@ -330,6 +357,7 @@
     emit="@{_} core.request action=chart.setTitle arg.t=\"{t}\""
     kind=request
     priority=11
+    needsState=charts
     example="Call it Fruit."
     example="Call the chart Pets at home."
 
@@ -338,6 +366,7 @@
     emit="@{_} core.request action=chart.setTitle arg.t=\"{t}\""
     kind=request
     priority=12
+    needsState=charts
     example="Change the chart title to Fruit."
 
 @pat.data.charts.title.of core.pattern
@@ -345,6 +374,7 @@
     emit="@{_} core.request action=chart.setTitle arg.t=\"{t}\""
     kind=request
     priority=12
+    needsState=charts
     example="Set the title of the chart to Fruit."
 
 @pat.data.charts.title.give core.pattern
@@ -352,6 +382,7 @@
     emit="@{_} core.request action=chart.setTitle arg.t=\"{t}\""
     kind=request
     priority=12
+    needsState=charts
     example="Give it the title Fruit."
 
 @pat.data.charts.title.remove core.pattern
@@ -359,6 +390,7 @@
     emit="@{_} core.request action=chart.removeTitle"
     kind=request
     priority=12
+    needsState=charts
     example="Remove the chart title."
 
 @pat.data.charts.title.remove2 core.pattern
@@ -366,6 +398,7 @@
     emit="@{_} core.request action=chart.removeTitle"
     kind=request
     priority=12
+    needsState=charts
     example="Remove the title from the chart."
 
 @pat.data.charts.color.all core.pattern
@@ -373,6 +406,7 @@
     emit="@{_} core.request action=chart.setColor arg.c={c} arg.shade={s}"
     kind=request
     priority=12
+    needsState=charts
     example="Make the bars green."
     example="Color it light blue."
     example="Paint the chart orange."
@@ -382,6 +416,7 @@
     emit="@{_} core.request action=chart.setColor arg.c={c} arg.shade={s}"
     kind=request
     priority=11
+    needsState=charts
     example="Use dark green."
 
 @pat.data.charts.color.label core.pattern
@@ -389,6 +424,7 @@
     emit="@{_} core.request action=chart.setColor arg.c={c} arg.shade={s} arg.label=\"{l}\""
     kind=request
     priority=12
+    needsState=charts
     example="Make the apples bar red."
     example="Color the plums slice light orange."
 
@@ -397,6 +433,7 @@
     emit="@{_} core.request action=chart.setPalette arg.p={p}"
     kind=request
     priority=12
+    needsState=charts
     example="Use rainbow colors."
     example="Make it pastel colors."
     example="Use the default colors."
@@ -406,6 +443,7 @@
     emit="@{_} core.request action=chart.setPalette arg.p={p}"
     kind=request
     priority=11
+    needsState=charts
     example="Make it rainbow."
 
 @pat.data.charts.color.colorful core.pattern
@@ -413,6 +451,7 @@
     emit="@{_} core.request action=chart.setPalette arg.p=rainbow"
     kind=request
     priority=11
+    needsState=charts
     example="Make it colorful."
 
 @pat.data.charts.color.each core.pattern
@@ -420,6 +459,7 @@
     emit="@{_} core.request action=chart.setPalette arg.p=different"
     kind=request
     priority=11
+    needsState=charts
     example="Color each bar differently."
 
 @pat.data.charts.color.reset core.pattern
@@ -427,6 +467,7 @@
     emit="@{_} core.request action=chart.setPalette arg.p=default"
     kind=request
     priority=11
+    needsState=charts
     example="Reset the chart colors."
 
 @pat.data.charts.sort.by core.pattern
@@ -434,6 +475,7 @@
     emit="@{_} core.request action=chart.setSort arg.from={a}"
     kind=request
     priority=12
+    needsState=charts
     example="Sort from biggest to smallest."
     example="Sort from smallest to biggest."
     example="Sort in descending order."
@@ -443,6 +485,7 @@
     emit="@{_} core.request action=chart.setSort arg.mode=desc"
     kind=request
     priority=12
+    needsState=charts
     example="Sort by value."
 
 @pat.data.charts.sort.alpha core.pattern
@@ -450,6 +493,7 @@
     emit="@{_} core.request action=chart.setSort arg.mode=alpha"
     kind=request
     priority=12
+    needsState=charts
     example="Sort alphabetically."
 
 @pat.data.charts.sort.none core.pattern
@@ -457,6 +501,7 @@
     emit="@{_} core.request action=chart.setSort arg.mode=none"
     kind=request
     priority=12
+    needsState=charts
     example="Stop sorting."
 
 @pat.data.charts.sort.none2 core.pattern
@@ -464,6 +509,7 @@
     emit="@{_} core.request action=chart.setSort arg.mode=none"
     kind=request
     priority=12
+    needsState=charts
     example="Restore the original order."
 
 @pat.data.charts.sort.bare core.pattern
@@ -471,6 +517,7 @@
     emit="@{_} core.request action=chart.setSort"
     kind=request
     priority=8
+    needsState=charts
     example="Sort the chart."
 
 @pat.data.charts.orient.set core.pattern
@@ -478,6 +525,7 @@
     emit="@{_} core.request action=chart.setOrientation arg.o={o}"
     kind=request
     priority=15
+    needsState=charts
     example="Make it horizontal."
     example="Make the bars vertical."
 
@@ -486,6 +534,7 @@
     emit="@{_} core.request action=chart.setOrientation arg.o={o}"
     kind=request
     priority=10
+    needsState=charts
     example="Horizontal bars."
 
 @pat.data.charts.values.show core.pattern
@@ -493,6 +542,7 @@
     emit="@{_} core.request action=chart.setValues arg.mode=on"
     kind=request
     priority=11
+    needsState=charts
     example="Show the values."
 
 @pat.data.charts.values.label core.pattern
@@ -500,6 +550,7 @@
     emit="@{_} core.request action=chart.setValues arg.mode=on"
     kind=request
     priority=11
+    needsState=charts
     example="Label the bars with the numbers."
 
 @pat.data.charts.values.hide core.pattern
@@ -507,6 +558,7 @@
     emit="@{_} core.request action=chart.setValues arg.mode=off"
     kind=request
     priority=11
+    needsState=charts
     example="Hide the numbers."
 
 @pat.data.charts.values.percent core.pattern
@@ -514,6 +566,7 @@
     emit="@{_} core.request action=chart.setValues arg.mode=percent"
     kind=request
     priority=11
+    needsState=charts
     example="Show the percentages."
 
 @pat.data.charts.legend.show core.pattern
@@ -549,6 +602,7 @@
     emit="@{_} core.request action=chart.extreme arg.w={w}"
     kind=request
     priority=12
+    needsState=charts
     example="Which is the biggest?"
     example="What is the smallest?"
 
@@ -557,6 +611,7 @@
     emit="@{_} core.request action=chart.extreme arg.w={w}"
     kind=request
     priority=12
+    needsState=charts
     example="Which has the most?"
     example="Which one is the lowest?"
 
@@ -565,6 +620,7 @@
     emit="@{_} core.request action=chart.total"
     kind=request
     priority=12
+    needsState=charts
     example="What is the total?"
 
 @pat.data.charts.q.total.up core.pattern
@@ -572,6 +628,7 @@
     emit="@{_} core.request action=chart.total"
     kind=request
     priority=12
+    needsState=charts
     example="Add them up."
 
 @pat.data.charts.q.total.many core.pattern
@@ -579,6 +636,7 @@
     emit="@{_} core.request action=chart.total"
     kind=request
     priority=11
+    needsState=charts
     example="How many altogether?"
 
 @pat.data.charts.q.average core.pattern
@@ -586,6 +644,7 @@
     emit="@{_} core.request action=chart.average"
     kind=request
     priority=12
+    needsState=charts
     example="What is the average?"
 
 @pat.data.charts.q.diff core.pattern
@@ -593,6 +652,7 @@
     emit="@{_} core.request action=chart.difference arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=8
+    needsState=charts
     example="How many more apples than pears?"
 
 @pat.data.charts.q.diff.much core.pattern
@@ -600,6 +660,7 @@
     emit="@{_} core.request action=chart.difference arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=8
+    needsState=charts
     example="How much more is plums than apples?"
 
 @pat.data.charts.q.diff.between core.pattern
@@ -607,6 +668,7 @@
     emit="@{_} core.request action=chart.difference arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=12
+    needsState=charts
     example="What is the difference between apples and pears?"
 
 @pat.data.charts.q.compare core.pattern
@@ -614,6 +676,7 @@
     emit="@{_} core.request action=chart.compare arg.w={w} arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=8
+    needsState=charts
     example="Which is bigger, apples or pears?"
 
 @pat.data.charts.q.percent core.pattern
@@ -621,6 +684,7 @@
     emit="@{_} core.request action=chart.percent arg.l=\"{l}\""
     kind=request
     priority=12
+    needsState=charts
     example="What percentage are apples?"
 
 @pat.data.charts.q.percent.of core.pattern
@@ -628,6 +692,7 @@
     emit="@{_} core.request action=chart.percent arg.l=\"{l}\""
     kind=request
     priority=12
+    needsState=charts
     example="What share of the chart do plums take?"
 
 @pat.data.charts.q.percent.much core.pattern
@@ -635,6 +700,7 @@
     emit="@{_} core.request action=chart.percent arg.l=\"{l}\""
     kind=request
     priority=12
+    needsState=charts
     example="How much of the chart is apples?"
 
 @pat.data.charts.q.percent.does core.pattern
@@ -642,6 +708,7 @@
     emit="@{_} core.request action=chart.percent arg.l=\"{l}\""
     kind=request
     priority=12
+    needsState=charts
     example="What percent does apples make up?"
 
 @pat.data.charts.q.value core.pattern
@@ -649,6 +716,7 @@
     emit="@{_} core.request action=chart.valueOf arg.l=\"{l}\""
     kind=request
     priority=12
+    needsState=charts
     example="What is the value of apples?"
 
 @pat.data.charts.q.value.big core.pattern
@@ -656,6 +724,7 @@
     emit="@{_} core.request action=chart.valueOf arg.l=\"{l}\""
     kind=request
     priority=11
+    needsState=charts
     example="How big is the plums bar?"
 
 @pat.data.charts.q.count core.pattern
@@ -663,6 +732,7 @@
     emit="@{_} core.request action=chart.countItems"
     kind=request
     priority=12
+    needsState=charts
     example="How many bars are there?"
 
 @pat.data.charts.q.describe core.pattern
@@ -670,6 +740,7 @@
     emit="@{_} core.request action=chart.describe"
     kind=request
     priority=12
+    needsState=charts
     example="Describe the chart."
 
 @pat.data.charts.q.describe2 core.pattern
@@ -677,6 +748,7 @@
     emit="@{_} core.request action=chart.describe"
     kind=request
     priority=12
+    needsState=charts
     example="What does the chart show?"
 
 @pat.data.charts.q.read core.pattern
@@ -684,6 +756,7 @@
     emit="@{_} core.request action=chart.read"
     kind=request
     priority=12
+    needsState=charts
     example="Read the chart aloud."
 
 @pat.data.charts.nav.ordinal core.pattern
@@ -691,6 +764,7 @@
     emit="@{_} core.request action=chart.switchChart arg.ord={o}"
     kind=request
     priority=12
+    needsState=charts
     example="Go back to the first chart."
     example="Show the last chart."
 
@@ -699,6 +773,7 @@
     emit="@{_} core.request action=chart.switchChart arg.n={n}"
     kind=request
     priority=12
+    needsState=charts
     example="Go to chart 2."
 
 @pat.data.charts.nav.next core.pattern
@@ -706,6 +781,7 @@
     emit="@{_} core.request action=chart.switchChart arg.dir=next"
     kind=request
     priority=12
+    needsState=charts
     example="Show the next chart."
 
 @pat.data.charts.nav.prev core.pattern
@@ -713,6 +789,7 @@
     emit="@{_} core.request action=chart.switchChart arg.dir=prev"
     kind=request
     priority=12
+    needsState=charts
     example="Go to the previous chart."
 
 @pat.data.charts.nav.title core.pattern
@@ -720,6 +797,7 @@
     emit="@{_} core.request action=chart.switchChart arg.t=\"{t}\""
     kind=request
     priority=7
+    needsState=charts
     example="Show the fruit chart."
 
 @pat.data.charts.nav.delete core.pattern
@@ -727,6 +805,7 @@
     emit="@{_} core.request action=chart.deleteChart"
     kind=request
     priority=13
+    needsState=charts
     example="Delete this chart."
 
 @pat.data.charts.nav.delete.ord core.pattern
@@ -734,6 +813,7 @@
     emit="@{_} core.request action=chart.deleteChart arg.ord={o}"
     kind=request
     priority=13
+    needsState=charts
     example="Delete the second chart."
 
 @pat.data.charts.nav.delete.num core.pattern
@@ -741,6 +821,7 @@
     emit="@{_} core.request action=chart.deleteChart arg.n={n}"
     kind=request
     priority=13
+    needsState=charts
     example="Delete chart 2."
 
 @pat.data.charts.nav.delete.all core.pattern
@@ -748,6 +829,7 @@
     emit="@{_} core.request action=chart.deleteChart arg.all=true"
     kind=request
     priority=13
+    needsState=charts
     example="Delete all the charts."
 
 @pat.data.charts.nav.list core.pattern
@@ -805,6 +887,7 @@
     emit="@{_} core.request action=chart.copyData"
     kind=request
     priority=12
+    needsState=charts
     example="Copy the chart data."
 
 @pat.data.charts.export.doc core.pattern
@@ -812,6 +895,7 @@
     emit="@{_} core.request action=chart.toDocument"
     kind=request
     priority=12
+    needsState=charts
     example="Put the chart in the document."
 
 @pat.data.charts.export.doc.data core.pattern
@@ -819,6 +903,7 @@
     emit="@{_} core.request action=chart.toDocumentData"
     kind=request
     priority=12
+    needsState=charts
     example="Put the chart data in the document."
 
 
@@ -856,6 +941,7 @@
     emit="@{_} core.request action=chart.duplicate"
     kind=request
     priority=9
+    needsState=charts
     example="Make a duplicate of it."
     example="I want a second copy of this chart."
 
@@ -864,6 +950,7 @@
     emit="@{_} core.request action=chart.duplicate"
     kind=request
     priority=12
+    needsState=charts
     example="Dupe the chart."
     example="Can you duplicate this one?"
 
@@ -872,6 +959,7 @@
     emit="@{_} core.request action=chart.duplicate"
     kind=request
     priority=12
+    needsState=charts
     example="Two of this chart please."
 
 @pat.data.charts.x.refresh2 core.pattern
@@ -879,6 +967,7 @@
     emit="@{_} core.request action=chart.refresh"
     kind=request
     priority=11
+    needsState=charts
     example="Redraw it."
     example="Reload the chart."
     example="Refresh it pls."
@@ -888,6 +977,7 @@
     emit="@{_} core.request action=chart.addPoint arg.text=\"{n} {l}\""
     kind=request
     priority=2
+    needsState=charts
     example="Add 4 bananas."
     example="Include 4 bananas in the chart."
 
@@ -896,6 +986,7 @@
     emit="@{_} core.request action=chart.addPoint arg.text=\"{l} {n}\""
     kind=request
     priority=2
+    needsState=charts
     example="Stick bananas on there with 4."
     example="Put bananas in with 4."
 
@@ -904,6 +995,7 @@
     emit="@{_} core.request action=chart.removePoint arg.l=\"{l}\""
     kind=request
     priority=2
+    needsState=charts
     example="No more plums."
     example="Lose the plums bar."
     example="Plums out of the chart."
@@ -913,6 +1005,7 @@
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.by={n} arg.dir=up"
     kind=request
     priority=2
+    needsState=charts
     example="Bump apples up 2."
     example="Give apples 2 more."
 
@@ -921,6 +1014,7 @@
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.by={n} arg.dir=down"
     kind=request
     priority=2
+    needsState=charts
     example="Lower apples by 2."
 
 @pat.data.charts.x.rename2 core.pattern
@@ -928,6 +1022,7 @@
     emit="@{_} core.request action=chart.renamePoint arg.l=\"{a}\" arg.to=\"{b}\""
     kind=request
     priority=2
+    needsState=charts
     example="Relabel pears as cherries."
     example="Label pears as cherries pls."
 
@@ -936,6 +1031,7 @@
     emit="@{_} core.request action=chart.clearData"
     kind=request
     priority=9
+    needsState=charts
     example="Wipe the numbers off."
     example="Reset the chart data."
     example="Clear it pls."
@@ -946,6 +1042,7 @@
     emit="@{_} core.request action=chart.setType arg.type={t}"
     kind=request
     priority=11
+    needsState=charts
     example="Line graph instead."
     example="Line please."
     example="I want it as a line."
@@ -956,6 +1053,7 @@
     emit="@{_} core.request action=chart.setType arg.type={t}"
     kind=request
     priority=12
+    needsState=charts
     example="Bars to line."
     example="Switch the bars to a line."
 
@@ -964,6 +1062,7 @@
     emit="@{_} core.request action=chart.setStacked arg.on=true"
     kind=request
     priority=11
+    needsState=charts
     example="Stacked please."
     example="Make the bars stacked."
     example="Stacked bars."
@@ -975,6 +1074,7 @@
     emit="@{_} core.request action=chart.setStacked arg.on=true"
     kind=request
     priority=11
+    needsState=charts
     example="Pile the bars on top of each other."
 
 @pat.data.charts.x.title2 core.pattern
@@ -982,6 +1082,7 @@
     emit="@{_} core.request action=chart.setTitle arg.t=\"{t}\""
     kind=request
     priority=8
+    needsState=charts
     example="Label the whole chart Fruit."
     example="Give the chart a name, Fruit."
     example="Title this Fruit."
@@ -991,6 +1092,7 @@
     emit="@{_} core.request action=chart.removeTitle"
     kind=request
     priority=12
+    needsState=charts
     example="No title please."
     example="Untitle the chart."
     example="Title off."
@@ -1001,6 +1103,7 @@
     emit="@{_} core.request action=chart.removeTitle"
     kind=request
     priority=12
+    needsState=charts
     example="Title off."
 
 @pat.data.charts.x.color2 core.pattern
@@ -1008,6 +1111,7 @@
     emit="@{_} core.request action=chart.setColor arg.c={c} arg.shade={s}"
     kind=request
     priority=11
+    needsState=charts
     example="Green bars."
     example="Bars in green pls."
     example="Colour the bars green."
@@ -1019,6 +1123,7 @@
     emit="@{_} core.request action=chart.setColor arg.c={c} arg.shade={s}"
     kind=request
     priority=11
+    needsState=charts
     example="Bars in green pls."
     example="Bars should be green."
 
@@ -1027,6 +1132,7 @@
     emit="@{_} core.request action=chart.setPalette arg.p={p}"
     kind=request
     priority=11
+    needsState=charts
     example="Rainbow please."
     example="Make it a rainbow."
     example="All the colours of the rainbow."
@@ -1037,6 +1143,7 @@
     emit="@{_} core.request action=chart.setPalette arg.p=different"
     kind=request
     priority=11
+    needsState=charts
     example="Each bar a different colour."
 
 @pat.data.charts.x.pal4 core.pattern
@@ -1044,6 +1151,7 @@
     emit="@{_} core.request action=chart.setPalette arg.p=rainbow"
     kind=request
     priority=10
+    needsState=charts
     example="Multicolour bars."
     example="Bright colours for each bar."
 
@@ -1052,6 +1160,7 @@
     emit="@{_} core.request action=chart.setSort arg.from={a}"
     kind=request
     priority=9
+    needsState=charts
     example="Biggest bar first."
     example="Sort desc."
     example="Descending please."
@@ -1061,6 +1170,7 @@
     emit="@{_} core.request action=chart.setOrientation arg.o={o}"
     kind=request
     priority=11
+    needsState=charts
     example="Sideways bars."
     example="Horizontal please."
     example="Make the bars go across."
@@ -1071,6 +1181,7 @@
     emit="@{_} core.request action=chart.setOrientation arg.o=horizontal"
     kind=request
     priority=11
+    needsState=charts
     example="Lay the bars flat."
 
 @pat.data.charts.x.orient4 core.pattern
@@ -1078,6 +1189,7 @@
     emit="@{_} core.request action=chart.setOrientation arg.o=horizontal"
     kind=request
     priority=11
+    needsState=charts
     example="Make the bars go across."
 
 @pat.data.charts.x.legend2 core.pattern
@@ -1085,6 +1197,7 @@
     emit="@{_} core.request action=chart.setLegend arg.on=false"
     kind=request
     priority=12
+    needsState=charts
     example="No legend please."
     example="I don't need the legend."
     example="Hide the labels box."
@@ -1095,6 +1208,7 @@
     emit="@{_} core.request action=chart.setLegend arg.on=false"
     kind=request
     priority=12
+    needsState=charts
     example="Legend off."
     example="Legend away pls."
 
@@ -1103,6 +1217,7 @@
     emit="@{_} core.request action=chart.countItems"
     kind=question
     priority=9
+    needsState=charts
     example="Number of bars?"
     example="Count the bars."
     example="How many things are in the chart?"
@@ -1112,6 +1227,7 @@
     emit="@{_} core.request action=chart.switchChart arg.ord={o}"
     kind=request
     priority=11
+    needsState=charts
     example="First chart please."
     example="Show the first one again."
     example="Return to the very first chart."
@@ -1121,6 +1237,7 @@
     emit="@{_} core.request action=chart.switchChart arg.n={n}"
     kind=request
     priority=11
+    needsState=charts
     example="Show me chart number one."
 
 @pat.data.charts.x.nav.del2 core.pattern
@@ -1128,6 +1245,7 @@
     emit="@{_} core.request action=chart.deleteChart arg.n={n}"
     kind=request
     priority=13
+    needsState=charts
     example="Bin chart 2."
 
 @pat.data.charts.x.export.csv2 core.pattern
@@ -1158,6 +1276,7 @@
     emit="@{_} core.request action=chart.toDocumentData"
     kind=request
     priority=9
+    needsState=charts
     example="Paste the figures in the doc."
     example="Numbers into the document please."
     example="Insert the chart figures in the document."
@@ -1167,6 +1286,7 @@
     emit="@{_} core.request action=chart.setValues arg.mode=on"
     kind=request
     priority=11
+    needsState=charts
     example="I want to see the figures."
     example="Label the bars with their numbers."
 
@@ -1175,6 +1295,7 @@
     emit="@{_} core.request action=chart.setValues arg.mode=on"
     kind=request
     priority=11
+    needsState=charts
     example="Numbers on please."
 
 @pat.data.charts.r2.create.new.data core.pattern
@@ -1378,6 +1499,7 @@
     emit="@{_} core.request action=chart.addPoint arg.text=\"{l} {n}\""
     kind=request
     priority=8
+    needsState=charts
     example="Add bananas at 4."
 
 @pat.data.charts.r2.add.b core.pattern
@@ -1385,6 +1507,7 @@
     emit="@{_} core.request action=chart.addPoint arg.text=\"{n} {l}\""
     kind=request
     priority=8
+    needsState=charts
     example="Add 4 bananas."
 
 @pat.data.charts.r2.add.c core.pattern
@@ -1392,6 +1515,7 @@
     emit="@{_} core.request action=chart.addPoint arg.text=\"{l} {n}\""
     kind=request
     priority=8
+    needsState=charts
     example="Throw in bananas, 4 of them."
 
 @pat.data.charts.r2.add.d core.pattern
@@ -1399,6 +1523,7 @@
     emit="@{_} core.request action=chart.addPoint arg.text=\"{l} {n}\""
     kind=request
     priority=4
+    needsState=charts
     example="Bananas 4."
 
 @pat.data.charts.r2.add.e core.pattern
@@ -1406,6 +1531,7 @@
     emit="@{_} core.request action=chart.addPoint arg.text=\"{l} {n}\""
     kind=request
     priority=5
+    needsState=charts
     example="New item bananas 4."
 
 @pat.data.charts.r2.set.a core.pattern
@@ -1413,6 +1539,7 @@
     emit="@{_} core.request action=chart.setPoint arg.l=\"{l}\" arg.n={n}"
     kind=request
     priority=8
+    needsState=charts
     example="Update pears, 6."
 
 @pat.data.charts.r2.set.b core.pattern
@@ -1420,6 +1547,7 @@
     emit="@{_} core.request action=chart.setPoint arg.l=\"{l}\" arg.n={n}"
     kind=request
     priority=8
+    needsState=charts
     example="The pears are 6 now."
 
 @pat.data.charts.r2.up.a core.pattern
@@ -1427,6 +1555,7 @@
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.by={n} arg.dir=up"
     kind=request
     priority=8
+    needsState=charts
     example="Apples plus 2."
 
 @pat.data.charts.r2.up.b core.pattern
@@ -1434,6 +1563,7 @@
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.by={n} arg.dir=up"
     kind=request
     priority=8
+    needsState=charts
     example="2 more apples please."
 
 @pat.data.charts.r2.up.c core.pattern
@@ -1441,6 +1571,7 @@
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.by={n} arg.dir=up"
     kind=request
     priority=8
+    needsState=charts
     example="More apples, 2 more."
 
 @pat.data.charts.r2.down.a core.pattern
@@ -1448,6 +1579,7 @@
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.by={n} arg.dir=down"
     kind=request
     priority=8
+    needsState=charts
     example="Apples minus 2."
 
 @pat.data.charts.r2.down.b core.pattern
@@ -1455,6 +1587,7 @@
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.by={n} arg.dir=down"
     kind=request
     priority=8
+    needsState=charts
     example="2 fewer apples please."
 
 @pat.data.charts.r2.times.a core.pattern
@@ -1462,6 +1595,7 @@
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.factor={n}"
     kind=request
     priority=8
+    needsState=charts
     example="Multiply apples by 3."
 
 @pat.data.charts.r2.times.b core.pattern
@@ -1469,6 +1603,7 @@
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.factor={n}"
     kind=request
     priority=8
+    needsState=charts
     example="Apples times 3."
 
 @pat.data.charts.r2.div.a core.pattern
@@ -1476,6 +1611,7 @@
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.div={n}"
     kind=request
     priority=8
+    needsState=charts
     example="Divide plums by two."
 
 @pat.data.charts.r2.half.a core.pattern
@@ -1483,6 +1619,7 @@
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.factor=0.5"
     kind=request
     priority=13
+    needsState=charts
     example="Cut the plums by half."
 
 @pat.data.charts.r2.half.b core.pattern
@@ -1490,6 +1627,7 @@
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.factor=0.5"
     kind=request
     priority=8
+    needsState=charts
     example="Half the plums number."
 
 @pat.data.charts.r2.half.c core.pattern
@@ -1497,6 +1635,7 @@
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.factor=0.5"
     kind=request
     priority=8
+    needsState=charts
     example="Halve plums pls."
 
 @pat.data.charts.r2.double.b core.pattern
@@ -1504,6 +1643,7 @@
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.factor=2"
     kind=request
     priority=8
+    needsState=charts
     example="Double apples pls."
 
 @pat.data.charts.r2.double.c core.pattern
@@ -1511,6 +1651,7 @@
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.factor=2"
     kind=request
     priority=8
+    needsState=charts
     example="Make apples twice as big."
 
 @pat.data.charts.r2.triple.b core.pattern
@@ -1518,6 +1659,7 @@
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.factor=3"
     kind=request
     priority=8
+    needsState=charts
     example="Triple apples pls."
 
 @pat.data.charts.r2.rem.a core.pattern
@@ -1525,6 +1667,7 @@
     emit="@{_} core.request action=chart.removePoint arg.l=\"{l}\""
     kind=request
     priority=3
+    needsState=charts
     example="Remove plums pls."
 
 @pat.data.charts.r2.rem.b core.pattern
@@ -1532,6 +1675,7 @@
     emit="@{_} core.request action=chart.removePoint arg.l=\"{l}\""
     kind=request
     priority=8
+    needsState=charts
     example="Take the plums out."
 
 @pat.data.charts.r2.rem.c core.pattern
@@ -1539,6 +1683,7 @@
     emit="@{_} core.request action=chart.removePoint arg.l=\"{l}\""
     kind=request
     priority=8
+    needsState=charts
     example="Plums off the chart."
 
 @pat.data.charts.r2.rem.d core.pattern
@@ -1546,6 +1691,7 @@
     emit="@{_} core.request action=chart.removePoint arg.l=\"{l}\""
     kind=request
     priority=8
+    needsState=charts
     example="No more plums."
 
 @pat.data.charts.r2.clr.a core.pattern
@@ -1553,6 +1699,7 @@
     emit="@{_} core.request action=chart.clearData"
     kind=request
     priority=14
+    needsState=charts
     example="Remove all the bars."
 
 @pat.data.charts.r2.clr.b core.pattern
@@ -1560,6 +1707,7 @@
     emit="@{_} core.request action=chart.clearData"
     kind=request
     priority=14
+    needsState=charts
     example="Take all the values out."
 
 @pat.data.charts.r2.clr.c core.pattern
@@ -1567,6 +1715,7 @@
     emit="@{_} core.request action=chart.clearData"
     kind=request
     priority=14
+    needsState=charts
     example="Wipe it clean."
 
 @pat.data.charts.r2.ren.a core.pattern
@@ -1574,6 +1723,7 @@
     emit="@{_} core.request action=chart.renamePoint arg.l=\"{a}\" arg.to=\"{b}\""
     kind=request
     priority=5
+    needsState=charts
     example="Change the name pears to cherries."
 
 @pat.data.charts.r2.ren.b core.pattern
@@ -1581,6 +1731,7 @@
     emit="@{_} core.request action=chart.renamePoint arg.l=\"{a}\" arg.to=\"{b}\""
     kind=request
     priority=5
+    needsState=charts
     example="Swap pears for cherries in the name."
 
 @pat.data.charts.r2.ren.c core.pattern
@@ -1588,6 +1739,7 @@
     emit="@{_} core.request action=chart.renamePoint arg.l=\"{a}\" arg.to=\"{b}\""
     kind=request
     priority=5
+    needsState=charts
     example="Pears are cherries now."
 
 @pat.data.charts.r2.ren.d core.pattern
@@ -1595,6 +1747,7 @@
     emit="@{_} core.request action=chart.renamePoint arg.l=\"{a}\" arg.to=\"{b}\""
     kind=request
     priority=5
+    needsState=charts
     example="Cherries not pears."
 
 @pat.data.charts.r2.ren.e core.pattern
@@ -1602,6 +1755,7 @@
     emit="@{_} core.request action=chart.renamePoint arg.l=\"{a}\" arg.to=\"{b}\""
     kind=request
     priority=5
+    needsState=charts
     example="Rename the pears to cherries."
 
 @pat.data.charts.r2.type.a core.pattern
@@ -1609,6 +1763,7 @@
     emit="@{_} core.request action=chart.setType arg.type={t}"
     kind=request
     priority=12
+    needsState=charts
     example="Line graph instead."
 
 @pat.data.charts.r2.type.b core.pattern
@@ -1616,6 +1771,7 @@
     emit="@{_} core.request action=chart.setType arg.type={t}"
     kind=request
     priority=13
+    needsState=charts
     example="Can you make the graph a line one."
 
 @pat.data.charts.r2.type.c core.pattern
@@ -1623,6 +1779,7 @@
     emit="@{_} core.request action=chart.setType arg.type={t}"
     kind=request
     priority=13
+    needsState=charts
     example="Make it a line."
 
 @pat.data.charts.r2.type.d core.pattern
@@ -1630,6 +1787,7 @@
     emit="@{_} core.request action=chart.setType arg.type=pie"
     kind=request
     priority=13
+    needsState=charts
     example="Slices please."
 
 @pat.data.charts.r2.type.e core.pattern
@@ -1637,6 +1795,7 @@
     emit="@{_} core.request action=chart.setType arg.type=bar"
     kind=request
     priority=13
+    needsState=charts
     example="Columns instead."
 
 @pat.data.charts.r2.orient.c core.pattern
@@ -1644,6 +1803,7 @@
     emit="@{_} core.request action=chart.setOrientation arg.o={o}"
     kind=request
     priority=13
+    needsState=charts
     example="Sideways bars."
 
 @pat.data.charts.r2.stack.c core.pattern
@@ -1651,6 +1811,7 @@
     emit="@{_} core.request action=chart.setStacked arg.on=true"
     kind=request
     priority=12
+    needsState=charts
     example="Stacked version pls."
 
 @pat.data.charts.r2.stack.d core.pattern
@@ -1658,6 +1819,7 @@
     emit="@{_} core.request action=chart.setStacked arg.on=false"
     kind=request
     priority=12
+    needsState=charts
     example="No stacking."
 
 @pat.data.charts.r2.title.a core.pattern
@@ -1665,6 +1827,7 @@
     emit="@{_} core.request action=chart.setTitle arg.t=\"{t}\""
     kind=request
     priority=14
+    needsState=charts
     example="Make the title Fruit."
 
 @pat.data.charts.r2.title.a2 core.pattern
@@ -1672,6 +1835,7 @@
     emit="@{_} core.request action=chart.setTitle arg.t=\"{t}\""
     kind=request
     priority=5
+    needsState=charts
     example="Make the title Fruit."
 
 @pat.data.charts.r2.title.b core.pattern
@@ -1679,6 +1843,7 @@
     emit="@{_} core.request action=chart.setTitle arg.t=\"{t}\""
     kind=request
     priority=14
+    needsState=charts
     example="Chart title: Fruit."
 
 @pat.data.charts.r2.title.c core.pattern
@@ -1686,6 +1851,7 @@
     emit="@{_} core.request action=chart.setTitle arg.t=\"{t}\""
     kind=request
     priority=5
+    needsState=charts
     example="The title should be Fruit."
 
 @pat.data.charts.r2.title.d core.pattern
@@ -1693,6 +1859,7 @@
     emit="@{_} core.request action=chart.setTitle arg.t=\"{t}\""
     kind=request
     priority=5
+    needsState=charts
     example="Use Fruit as the title."
 
 @pat.data.charts.r2.title.e core.pattern
@@ -1700,6 +1867,7 @@
     emit="@{_} core.request action=chart.setTitle arg.t=\"{t}\""
     kind=request
     priority=5
+    needsState=charts
     example="I want the title to be Fruit."
 
 @pat.data.charts.r2.title.f core.pattern
@@ -1707,6 +1875,7 @@
     emit="@{_} core.request action=chart.setTitle arg.t=\"{t}\""
     kind=request
     priority=14
+    needsState=charts
     example="Title it Fruit."
 
 @pat.data.charts.r2.title.rm core.pattern
@@ -1714,6 +1883,7 @@
     emit="@{_} core.request action=chart.removeTitle"
     kind=request
     priority=9
+    needsState=charts
     example="Drop the title."
 
 @pat.data.charts.r2.title.rm2 core.pattern
@@ -1721,6 +1891,7 @@
     emit="@{_} core.request action=chart.removeTitle"
     kind=request
     priority=9
+    needsState=charts
     example="Take the title off."
 
 @pat.data.charts.r2.title.rm3 core.pattern
@@ -1728,6 +1899,7 @@
     emit="@{_} core.request action=chart.removeTitle"
     kind=request
     priority=10
+    needsState=charts
     example="Chart without a title."
 
 @pat.data.charts.r2.col.a core.pattern
@@ -1735,6 +1907,7 @@
     emit="@{_} core.request action=chart.setColor arg.c={c} arg.shade={s}"
     kind=request
     priority=12
+    needsState=charts
     example="Paint the bars a nice green."
 
 @pat.data.charts.r2.col.b core.pattern
@@ -1742,6 +1915,7 @@
     emit="@{_} core.request action=chart.setColor arg.c={c} arg.shade={s}"
     kind=request
     priority=12
+    needsState=charts
     example="The bars should be green."
 
 @pat.data.charts.r2.col.d core.pattern
@@ -1749,6 +1923,7 @@
     emit="@{_} core.request action=chart.setColor arg.c={c} arg.shade={s}"
     kind=request
     priority=12
+    needsState=charts
     example="The bars are green now."
 
 @pat.data.charts.r2.col.e core.pattern
@@ -1756,6 +1931,7 @@
     emit="@{_} core.request action=chart.setColor arg.c={c} arg.shade={s} arg.label=\"{l}\""
     kind=request
     priority=12
+    needsState=charts
     example="Paint the apples bar red."
 
 @pat.data.charts.r2.pal.a core.pattern
@@ -1763,6 +1939,7 @@
     emit="@{_} core.request action=chart.setPalette arg.p={p}"
     kind=request
     priority=13
+    needsState=charts
     example="Colour it like a rainbow."
 
 @pat.data.charts.r2.pal.b core.pattern
@@ -1770,6 +1947,7 @@
     emit="@{_} core.request action=chart.setPalette arg.p={p}"
     kind=request
     priority=12
+    needsState=charts
     example="All the colours of the rainbow."
 
 @pat.data.charts.r2.pal.c core.pattern
@@ -1777,6 +1955,7 @@
     emit="@{_} core.request action=chart.setPalette arg.p={p}"
     kind=request
     priority=12
+    needsState=charts
     example="Rainbow theme for the chart."
 
 @pat.data.charts.r2.sort.c core.pattern
@@ -1784,6 +1963,7 @@
     emit="@{_} core.request action=chart.setSort arg.from={a}"
     kind=request
     priority=8
+    needsState=charts
     example="Put the biggest on the left."
 
 @pat.data.charts.r2.sort.desc core.pattern
@@ -1791,6 +1971,7 @@
     emit="@{_} core.request action=chart.setSort arg.mode=desc"
     kind=request
     priority=13
+    needsState=charts
     example="Sort desc."
 
 @pat.data.charts.r2.sort.asc core.pattern
@@ -1798,6 +1979,7 @@
     emit="@{_} core.request action=chart.setSort arg.mode=asc"
     kind=request
     priority=13
+    needsState=charts
     example="Sort asc."
 
 @pat.data.charts.r2.sort.size core.pattern
@@ -1805,6 +1987,7 @@
     emit="@{_} core.request action=chart.setSort arg.mode=desc"
     kind=request
     priority=13
+    needsState=charts
     example="Order by size."
 
 @pat.data.charts.r2.sort.letters core.pattern
@@ -1812,6 +1995,7 @@
     emit="@{_} core.request action=chart.setSort arg.mode=alpha"
     kind=request
     priority=13
+    needsState=charts
     example="Alphabetically please."
 
 @pat.data.charts.r2.val.a core.pattern
@@ -1819,6 +2003,7 @@
     emit="@{_} core.request action=chart.setValues arg.mode=on"
     kind=request
     priority=11
+    needsState=charts
     example="Show me how much each one is on the chart."
 
 @pat.data.charts.r2.val.b core.pattern
@@ -1826,6 +2011,7 @@
     emit="@{_} core.request action=chart.setValues arg.mode=on"
     kind=request
     priority=11
+    needsState=charts
     example="Numbers on please."
 
 @pat.data.charts.r2.val.c core.pattern
@@ -1833,6 +2019,7 @@
     emit="@{_} core.request action=chart.setValues arg.mode=off"
     kind=request
     priority=12
+    needsState=charts
     example="No numbers on the bars."
 
 @pat.data.charts.r2.val.pct core.pattern
@@ -1840,6 +2027,7 @@
     emit="@{_} core.request action=chart.setValues arg.mode=percent"
     kind=request
     priority=11
+    needsState=charts
     example="Show percentages."
 
 @pat.data.charts.r2.leg.a core.pattern
@@ -1847,6 +2035,7 @@
     emit="@{_} core.request action=chart.setLegend arg.on=true"
     kind=request
     priority=11
+    needsState=charts
     example="Legend on please."
 
 @pat.data.charts.r2.leg.b core.pattern
@@ -1854,6 +2043,7 @@
     emit="@{_} core.request action=chart.setLegend arg.on=false"
     kind=request
     priority=12
+    needsState=charts
     example="Take the legend off."
 
 @pat.data.charts.r2.leg.c core.pattern
@@ -1861,6 +2051,7 @@
     emit="@{_} core.request action=chart.setLegend arg.on=false"
     kind=request
     priority=12
+    needsState=charts
     example="Legend away pls."
 
 @pat.data.charts.r2.ext.a core.pattern
@@ -1868,6 +2059,7 @@
     emit="@{_} core.request action=chart.extreme arg.w={w}"
     kind=request
     priority=8
+    needsState=charts
     example="Which one is largest."
 
 @pat.data.charts.r2.ext.bare core.pattern
@@ -1875,6 +2067,7 @@
     emit="@{_} core.request action=chart.extreme arg.w={w}"
     kind=request
     priority=10
+    needsState=charts
     example="Biggest."
 
 @pat.data.charts.r2.ext.b core.pattern
@@ -1882,6 +2075,7 @@
     emit="@{_} core.request action=chart.extreme arg.w={w}"
     kind=request
     priority=8
+    needsState=charts
     example="The max, which is it."
 
 @pat.data.charts.r2.ext.c core.pattern
@@ -1889,6 +2083,7 @@
     emit="@{_} core.request action=chart.extreme arg.w=top"
     kind=request
     priority=8
+    needsState=charts
     example="What is on top."
 
 @pat.data.charts.r2.tot.a core.pattern
@@ -1896,6 +2091,7 @@
     emit="@{_} core.request action=chart.total"
     kind=request
     priority=8
+    needsState=charts
     example="Grand total."
 
 @pat.data.charts.r2.tot.b core.pattern
@@ -1903,6 +2099,7 @@
     emit="@{_} core.request action=chart.total"
     kind=request
     priority=8
+    needsState=charts
     example="What do they add up to."
 
 @pat.data.charts.r2.tot.c core.pattern
@@ -1910,6 +2107,7 @@
     emit="@{_} core.request action=chart.total"
     kind=request
     priority=8
+    needsState=charts
     example="How much is it all together."
 
 @pat.data.charts.r2.tot.d core.pattern
@@ -1917,6 +2115,7 @@
     emit="@{_} core.request action=chart.total"
     kind=request
     priority=8
+    needsState=charts
     example="Add them all up."
 
 @pat.data.charts.r2.tot.d2 core.pattern
@@ -1924,6 +2123,7 @@
     emit="@{_} core.request action=chart.total"
     kind=request
     priority=8
+    needsState=charts
     example="Sum up."
 
 @pat.data.charts.r2.tot.e core.pattern
@@ -1931,6 +2131,7 @@
     emit="@{_} core.request action=chart.total"
     kind=request
     priority=8
+    needsState=charts
     example="All together how many."
 
 @pat.data.charts.r2.avg.a core.pattern
@@ -1938,6 +2139,7 @@
     emit="@{_} core.request action=chart.average"
     kind=request
     priority=8
+    needsState=charts
     example="The average number."
 
 @pat.data.charts.r2.avg.b core.pattern
@@ -1945,6 +2147,7 @@
     emit="@{_} core.request action=chart.average"
     kind=request
     priority=8
+    needsState=charts
     example="On average?"
 
 @pat.data.charts.r2.avg.c core.pattern
@@ -1952,6 +2155,7 @@
     emit="@{_} core.request action=chart.average"
     kind=request
     priority=8
+    needsState=charts
     example="Whats the typical value."
 
 @pat.data.charts.r2.dif.a core.pattern
@@ -1959,6 +2163,7 @@
     emit="@{_} core.request action=chart.difference arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=8
+    needsState=charts
     example="Gap between apples and pears."
 
 @pat.data.charts.r2.dif.b core.pattern
@@ -1966,6 +2171,7 @@
     emit="@{_} core.request action=chart.difference arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=7
+    needsState=charts
     example="Difference apples pears."
 
 @pat.data.charts.r2.dif.c core.pattern
@@ -1973,6 +2179,7 @@
     emit="@{_} core.request action=chart.difference arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=8
+    needsState=charts
     example="Apples minus pears."
 
 @pat.data.charts.r2.dif.d core.pattern
@@ -1980,6 +2187,7 @@
     emit="@{_} core.request action=chart.difference arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=8
+    needsState=charts
     example="How much bigger are apples than pears."
 
 @pat.data.charts.r2.dif.e core.pattern
@@ -1987,6 +2195,7 @@
     emit="@{_} core.request action=chart.difference arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=8
+    needsState=charts
     example="Apples beat pears by how much."
 
 @pat.data.charts.r2.dif.f core.pattern
@@ -1994,6 +2203,7 @@
     emit="@{_} core.request action=chart.difference arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=8
+    needsState=charts
     example="How far ahead is apples over pears."
 
 @pat.data.charts.r2.dif.g core.pattern
@@ -2001,6 +2211,7 @@
     emit="@{_} core.request action=chart.difference arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=8
+    needsState=charts
     example="Apples vs pears how much more."
 
 @pat.data.charts.r2.dif.h core.pattern
@@ -2008,6 +2219,7 @@
     emit="@{_} core.request action=chart.difference arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=8
+    needsState=charts
     example="Pears how many less than apples."
 
 @pat.data.charts.r2.cmp.a core.pattern
@@ -2015,6 +2227,7 @@
     emit="@{_} core.request action=chart.compare arg.w={w} arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=8
+    needsState=charts
     example="Is apples bigger than pears."
 
 @pat.data.charts.r2.cmp.a.more core.pattern
@@ -2022,6 +2235,7 @@
     emit="@{_} core.request action=chart.compare arg.w=bigger arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=8
+    needsState=charts
     example="Is apples bigger than pears."
 
 @pat.data.charts.r2.cmp.a.less core.pattern
@@ -2029,6 +2243,7 @@
     emit="@{_} core.request action=chart.compare arg.w=smaller arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=8
+    needsState=charts
     example="Is apples bigger than pears."
 
 @pat.data.charts.r2.cmp.a2 core.pattern
@@ -2036,6 +2251,7 @@
     emit="@{_} core.request action=chart.compare arg.w=bigger arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=8
+    needsState=charts
     example="Do apples beat pears."
 
 @pat.data.charts.r2.cmp.c core.pattern
@@ -2043,6 +2259,7 @@
     emit="@{_} core.request action=chart.compare arg.w={w} arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=8
+    needsState=charts
     example="Apples or pears, which is more."
 
 @pat.data.charts.r2.cmp.c.more core.pattern
@@ -2050,6 +2267,7 @@
     emit="@{_} core.request action=chart.compare arg.w=bigger arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=8
+    needsState=charts
     example="Apples or pears, which is more."
 
 @pat.data.charts.r2.cmp.c.less core.pattern
@@ -2057,6 +2275,7 @@
     emit="@{_} core.request action=chart.compare arg.w=smaller arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=8
+    needsState=charts
     example="Apples or pears, which is more."
 
 @pat.data.charts.r2.cmp.c2 core.pattern
@@ -2064,6 +2283,7 @@
     emit="@{_} core.request action=chart.compare arg.w=bigger arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=8
+    needsState=charts
     example="Apples vs pears who wins."
 
 @pat.data.charts.r2.cmp.e core.pattern
@@ -2071,6 +2291,7 @@
     emit="@{_} core.request action=chart.compare arg.w={w} arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=8
+    needsState=charts
     example="Which has the bigger number, pears or apples."
 
 @pat.data.charts.r2.cmp.e.more core.pattern
@@ -2078,6 +2299,7 @@
     emit="@{_} core.request action=chart.compare arg.w=bigger arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=8
+    needsState=charts
     example="Which has the bigger number, pears or apples."
 
 @pat.data.charts.r2.cmp.e.less core.pattern
@@ -2085,6 +2307,7 @@
     emit="@{_} core.request action=chart.compare arg.w=smaller arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=8
+    needsState=charts
     example="Which has the bigger number, pears or apples."
 
 @pat.data.charts.r2.cmp.g core.pattern
@@ -2092,6 +2315,7 @@
     emit="@{_} core.request action=chart.compare arg.w={w} arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=8
+    needsState=charts
     example="More apples or more pears."
 
 @pat.data.charts.r2.cmp.g.more core.pattern
@@ -2099,6 +2323,7 @@
     emit="@{_} core.request action=chart.compare arg.w=bigger arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=8
+    needsState=charts
     example="More apples or more pears."
 
 @pat.data.charts.r2.cmp.g.less core.pattern
@@ -2106,6 +2331,7 @@
     emit="@{_} core.request action=chart.compare arg.w=smaller arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=8
+    needsState=charts
     example="More apples or more pears."
 
 @pat.data.charts.r2.cmp.h core.pattern
@@ -2113,6 +2339,7 @@
     emit="@{_} core.request action=chart.compare arg.w={w} arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=8
+    needsState=charts
     example="Is it apples or pears that is larger."
 
 @pat.data.charts.r2.cmp.h.more core.pattern
@@ -2120,6 +2347,7 @@
     emit="@{_} core.request action=chart.compare arg.w=bigger arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=8
+    needsState=charts
     example="Is it apples or pears that is larger."
 
 @pat.data.charts.r2.cmp.h.less core.pattern
@@ -2127,6 +2355,7 @@
     emit="@{_} core.request action=chart.compare arg.w=smaller arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=8
+    needsState=charts
     example="Is it apples or pears that is larger."
 
 @pat.data.charts.r2.cmp.i core.pattern
@@ -2134,6 +2363,7 @@
     emit="@{_} core.request action=chart.compare arg.w=bigger arg.a=\"{a}\" arg.b=\"{b}\""
     kind=request
     priority=8
+    needsState=charts
     example="Compare apples and pears."
 
 @pat.data.charts.r2.pct.a core.pattern
@@ -2141,6 +2371,7 @@
     emit="@{_} core.request action=chart.percent arg.l=\"{l}\""
     kind=request
     priority=6
+    needsState=charts
     example="Apples as a percent."
 
 @pat.data.charts.r2.pct.b core.pattern
@@ -2148,6 +2379,7 @@
     emit="@{_} core.request action=chart.percent arg.l=\"{l}\""
     kind=request
     priority=6
+    needsState=charts
     example="Percent apples."
 
 @pat.data.charts.r2.pct.c core.pattern
@@ -2155,6 +2387,7 @@
     emit="@{_} core.request action=chart.percent arg.l=\"{l}\""
     kind=request
     priority=8
+    needsState=charts
     example="What portion are apples."
 
 @pat.data.charts.r2.val.q1 core.pattern
@@ -2162,6 +2395,7 @@
     emit="@{_} core.request action=chart.valueOf arg.l=\"{l}\""
     kind=request
     priority=5
+    needsState=charts
     example="Apples value."
 
 @pat.data.charts.r2.val.q2 core.pattern
@@ -2169,6 +2403,7 @@
     emit="@{_} core.request action=chart.valueOf arg.l=\"{l}\""
     kind=request
     priority=8
+    needsState=charts
     example="How many apples."
 
 @pat.data.charts.r2.cnt.q core.pattern
@@ -2176,6 +2411,7 @@
     emit="@{_} core.request action=chart.countItems"
     kind=request
     priority=13
+    needsState=charts
     example="How many bars are there."
 
 @pat.data.charts.r2.desc.a core.pattern
@@ -2183,6 +2419,7 @@
     emit="@{_} core.request action=chart.describe"
     kind=request
     priority=13
+    needsState=charts
     example="Describe it pls."
 
 @pat.data.charts.r2.desc.b core.pattern
@@ -2190,6 +2427,7 @@
     emit="@{_} core.request action=chart.describe"
     kind=request
     priority=13
+    needsState=charts
     example="Give me a description of the graph."
 
 @pat.data.charts.r2.desc.c core.pattern
@@ -2197,6 +2435,7 @@
     emit="@{_} core.request action=chart.describe"
     kind=request
     priority=13
+    needsState=charts
     example="Whats this chart about."
 
 @pat.data.charts.r2.desc.d core.pattern
@@ -2204,6 +2443,7 @@
     emit="@{_} core.request action=chart.describe"
     kind=request
     priority=13
+    needsState=charts
     example="What does this graph show me."
 
 @pat.data.charts.r2.desc.e core.pattern
@@ -2211,6 +2451,7 @@
     emit="@{_} core.request action=chart.describe"
     kind=request
     priority=13
+    needsState=charts
     example="What am I looking at in the chart."
 
 @pat.data.charts.r2.desc.f core.pattern
@@ -2218,6 +2459,7 @@
     emit="@{_} core.request action=chart.describe"
     kind=request
     priority=13
+    needsState=charts
     example="Tell me what the chart looks like."
 
 @pat.data.charts.r2.read.a core.pattern
@@ -2225,6 +2467,7 @@
     emit="@{_} core.request action=chart.read"
     kind=request
     priority=13
+    needsState=charts
     example="Say the numbers out loud."
 
 @pat.data.charts.r2.read.b core.pattern
@@ -2232,6 +2475,7 @@
     emit="@{_} core.request action=chart.read"
     kind=request
     priority=13
+    needsState=charts
     example="Read it out."
 
 @pat.data.charts.r2.read.c core.pattern
@@ -2239,6 +2483,7 @@
     emit="@{_} core.request action=chart.read"
     kind=request
     priority=13
+    needsState=charts
     example="Read out what the chart says."
 
 @pat.data.charts.r2.read.d core.pattern
@@ -2246,6 +2491,7 @@
     emit="@{_} core.request action=chart.read"
     kind=request
     priority=13
+    needsState=charts
     example="Aloud please."
 
 @pat.data.charts.r2.nav.o core.pattern
@@ -2253,6 +2499,7 @@
     emit="@{_} core.request action=chart.switchChart arg.ord={o}"
     kind=request
     priority=8
+    needsState=charts
     example="First chart please."
 
 @pat.data.charts.r2.nav.n core.pattern
@@ -2260,6 +2507,7 @@
     emit="@{_} core.request action=chart.switchChart arg.n={n}"
     kind=request
     priority=13
+    needsState=charts
     example="Chart number 2."
 
 @pat.data.charts.r2.nav.n2 core.pattern
@@ -2267,6 +2515,7 @@
     emit="@{_} core.request action=chart.switchChart arg.n={n}"
     kind=request
     priority=13
+    needsState=charts
     example="Go to number 2."
 
 @pat.data.charts.r2.nav.dir core.pattern
@@ -2274,6 +2523,7 @@
     emit="@{_} core.request action=chart.switchChart arg.dir=next"
     kind=request
     priority=13
+    needsState=charts
     example="The next one."
 
 @pat.data.charts.r2.nav.dir2 core.pattern
@@ -2281,6 +2531,7 @@
     emit="@{_} core.request action=chart.switchChart arg.dir=prev"
     kind=request
     priority=13
+    needsState=charts
     example="The previous one."
 
 @pat.data.charts.r2.del.o core.pattern
@@ -2288,6 +2539,7 @@
     emit="@{_} core.request action=chart.deleteChart arg.ord={o}"
     kind=request
     priority=14
+    needsState=charts
     example="Get rid of the second one."
 
 @pat.data.charts.r2.del.n core.pattern
@@ -2295,6 +2547,7 @@
     emit="@{_} core.request action=chart.deleteChart arg.n={n}"
     kind=request
     priority=14
+    needsState=charts
     example="Chart two, delete it."
 
 @pat.data.charts.r2.del.n2 core.pattern
@@ -2302,6 +2555,7 @@
     emit="@{_} core.request action=chart.deleteChart arg.n={n}"
     kind=request
     priority=14
+    needsState=charts
     example="Delete number 2."
 
 @pat.data.charts.r2.del.t core.pattern
@@ -2309,6 +2563,7 @@
     emit="@{_} core.request action=chart.deleteChart"
     kind=request
     priority=14
+    needsState=charts
     example="Close this chart."
 
 @pat.data.charts.r2.list.q1 core.pattern
@@ -2372,6 +2627,7 @@
     emit="@{_} core.request action=chart.copyData"
     kind=request
     priority=13
+    needsState=charts
     example="Put the numbers on my clipboard."
 
 @pat.data.charts.r2.exp.copy2 core.pattern
@@ -2379,6 +2635,7 @@
     emit="@{_} core.request action=chart.copyData"
     kind=request
     priority=13
+    needsState=charts
     example="Clipboard the figures."
 
 @pat.data.charts.r2.exp.copy3 core.pattern
@@ -2386,6 +2643,7 @@
     emit="@{_} core.request action=chart.copyData"
     kind=request
     priority=13
+    needsState=charts
     example="Grab the numbers and copy them."
 
 @pat.data.charts.r2.doc.a core.pattern
@@ -2393,6 +2651,7 @@
     emit="@{_} core.request action=chart.toDocument"
     kind=request
     priority=12
+    needsState=charts
     example="Send the chart to my document."
 
 @pat.data.charts.r2.doc.b core.pattern
@@ -2400,6 +2659,7 @@
     emit="@{_} core.request action=chart.toDocument"
     kind=request
     priority=12
+    needsState=charts
     example="Document please, add the chart."
 
 @pat.data.charts.r2.doc.c core.pattern
@@ -2407,6 +2667,7 @@
     emit="@{_} core.request action=chart.toDocument"
     kind=request
     priority=12
+    needsState=charts
     example="Chart into the doc pls."
 
 @pat.data.charts.r2.docd.a core.pattern
@@ -2414,6 +2675,7 @@
     emit="@{_} core.request action=chart.toDocumentData"
     kind=request
     priority=14
+    needsState=charts
     example="Drop the data table in the doc."
 
 @pat.data.charts.r2.col.c core.pattern
@@ -2421,6 +2683,7 @@
     emit="@{_} core.request action=chart.setColor arg.c={c} arg.shade={s}"
     kind=request
     priority=12
+    needsState=charts
     example="Green would be nicer."
 
 @pat.data.charts.r2.opt.a core.pattern
@@ -2428,6 +2691,7 @@
     emit="@{_} core.request action=chart.options"
     kind=request
     priority=13
+    needsState=charts
     example="What chart types can I use."
 
 @pat.data.charts.r2.opt.b core.pattern
@@ -2435,6 +2699,7 @@
     emit="@{_} core.request action=chart.options"
     kind=request
     priority=13
+    needsState=charts
     example="What can you do with charts."
 
 @pat.data.charts.r2.opt.c core.pattern
@@ -2442,6 +2707,7 @@
     emit="@{_} core.request action=chart.options"
     kind=request
     priority=13
+    needsState=charts
     example="List the chart types."
 
 @pat.data.charts.r2.pct.d core.pattern
@@ -2449,6 +2715,7 @@
     emit="@{_} core.request action=chart.percent arg.l=\"{l}\""
     kind=request
     priority=8
+    needsState=charts
     example="How much of it is apples in %."
 
 @pat.data.charts.r2.pct.e core.pattern
@@ -2456,6 +2723,7 @@
     emit="@{_} core.request action=chart.percent arg.l=\"{l}\""
     kind=request
     priority=8
+    needsState=charts
     example="What percentage are apples."
 
 @pat.data.charts.r2.refresh.c core.pattern
@@ -2463,6 +2731,7 @@
     emit="@{_} core.request action=chart.refresh"
     kind=request
     priority=12
+    needsState=charts
     example="Chart needs an update."
 
 @pat.data.charts.r2.refresh.d core.pattern
@@ -2470,6 +2739,7 @@
     emit="@{_} core.request action=chart.refresh"
     kind=request
     priority=12
+    needsState=charts
     example="Re-draw the chart."
 
 @pat.data.charts.r2.legs.e core.pattern
@@ -2491,6 +2761,7 @@
     emit="@{_} core.request action=chart.copyData"
     kind=request
     priority=13
+    needsState=charts
     example="Copy the data from the chart."
 
 @pat.data.charts.r2.dup.c core.pattern
@@ -2498,6 +2769,7 @@
     emit="@{_} core.request action=chart.duplicate"
     kind=request
     priority=12
+    needsState=charts
     example="Can you duplicate this one."
 
 @pat.data.charts.r2.div.half core.pattern
@@ -2505,6 +2777,7 @@
     emit="@{_} core.request action=chart.adjustPoint arg.l=\"{l}\" arg.factor=0.5"
     kind=request
     priority=8
+    needsState=charts
     example="Divide plums by two."
 
 @pat.data.charts.r2.nav.n3 core.pattern
@@ -2512,6 +2785,7 @@
     emit="@{_} core.request action=chart.switchChart arg.n={n}"
     kind=request
     priority=13
+    needsState=charts
     example="Go to the 2nd chart."
 
 @pat.data.charts.r2.del.n3 core.pattern
@@ -2519,6 +2793,7 @@
     emit="@{_} core.request action=chart.deleteChart arg.n={n}"
     kind=request
     priority=14
+    needsState=charts
     example="Take out the 2nd chart."
 
 @pat.data.charts.r2.leg.d core.pattern
@@ -2526,6 +2801,7 @@
     emit="@{_} core.request action=chart.setLegend arg.on=false"
     kind=request
     priority=15
+    needsState=charts
     example="Take the legend off."
 
 @pat.data.charts.r2.new.b core.pattern
@@ -2547,6 +2823,7 @@
     emit="@{_} core.request action=chart.clearData"
     kind=request
     priority=14
+    needsState=charts
     example="Start the data over."
 
 @pat.data.charts.r2.col.f core.pattern
@@ -2554,6 +2831,7 @@
     emit="@{_} core.request action=chart.setColor arg.c={c} arg.shade={s}"
     kind=request
     priority=12
+    needsState=charts
     example="The colour of the bars should be pink."
 
 @pat.data.charts.r2.orient.d core.pattern
@@ -2561,6 +2839,7 @@
     emit="@{_} core.request action=chart.setOrientation arg.o=horizontal"
     kind=request
     priority=13
+    needsState=charts
     example="Make it lie down."
 
 @pat.data.charts.r2.sort.order core.pattern
@@ -2568,6 +2847,7 @@
     emit="@{_} core.request action=chart.setSort"
     kind=request
     priority=12
+    needsState=charts
     example="Put them in order."
 
 @pat.data.charts.r2.ext.win core.pattern
@@ -2575,6 +2855,7 @@
     emit="@{_} core.request action=chart.extreme arg.w=biggest"
     kind=request
     priority=6
+    needsState=charts
     example="Which one wins."
 
 @pat.data.charts.r2.tot.f core.pattern
@@ -2582,6 +2863,7 @@
     emit="@{_} core.request action=chart.total"
     kind=request
     priority=8
+    needsState=charts
     example="So what is it all together."
 
 @pat.data.charts.r2.title.g core.pattern
@@ -2589,6 +2871,7 @@
     emit="@{_} core.request action=chart.setTitle arg.t=\"{t}\""
     kind=request
     priority=5
+    needsState=charts
     example="Title: My fruit."
 
 @pat.data.charts.r2.leg.e core.pattern
@@ -2596,6 +2879,7 @@
     emit="@{_} core.request action=chart.setLegend arg.on=true"
     kind=request
     priority=12
+    needsState=charts
     example="Legend on."
 
 @pat.data.charts.r2.val.d core.pattern
@@ -2603,6 +2887,7 @@
     emit="@{_} core.request action=chart.setValues arg.mode=off"
     kind=request
     priority=12
+    needsState=charts
     example="Numbers off."
 
 @pat.data.charts.r2.opt.d core.pattern
@@ -2610,6 +2895,7 @@
     emit="@{_} core.request action=chart.options"
     kind=request
     priority=9
+    needsState=charts
     example="What options are there."
 
 @pat.data.charts.r2.ren.c2 core.pattern
@@ -2617,6 +2903,7 @@
     emit="@{_} core.request action=chart.renamePoint arg.l=\"{a}\" arg.to=\"{b}\""
     kind=request
     priority=5
+    needsState=charts
     example="Pears are cherries now."
 
 @pat.data.charts.r2.val.q3 core.pattern
@@ -2624,6 +2911,7 @@
     emit="@{_} core.request action=chart.valueOf arg.l=\"{l}\""
     kind=request
     priority=8
+    needsState=charts
     example="What number is plums."
 
 @pat.data.charts.r2.val.q4 core.pattern
@@ -2631,6 +2919,7 @@
     emit="@{_} core.request action=chart.valueOf arg.l=\"{l}\""
     kind=request
     priority=8
+    needsState=charts
     example="What does apples say."
 
 @pat.data.charts.x2.undo core.pattern
@@ -2638,6 +2927,7 @@
     emit="@{_} core.request action=chart.undo"
     kind=request
     priority=9
+    needsState=charts
     example="Undo."
     example="Undo that."
 
@@ -2646,6 +2936,7 @@
     emit="@{_} core.request action=chart.redo"
     kind=request
     priority=9
+    needsState=charts
     example="Redo."
 
 @pat.data.charts.x2.create.of core.pattern
@@ -2660,6 +2951,7 @@
     emit="@{_} core.request action=chart.setType arg.type={t}"
     kind=request
     priority=14
+    needsState=charts
     example="I would rather see it as a pie."
     example="I prefer a line chart."
 
@@ -2668,5 +2960,6 @@
     emit="@{_} core.request action=chart.setPoint arg.l=\"{l}\" arg.n={n}"
     kind=request
     priority=14
+    needsState=charts
     example="Pears are 6 not 3."
     example="Wait, pears are 6 not 3, fix it."

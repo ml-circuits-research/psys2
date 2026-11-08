@@ -19,6 +19,7 @@ const FEEDBACK = [
   /^(?:no |oh no |nope |hmm |ugh )?(?:wrong|incorrect|not right|bad answer|wrong answer|thats not it|that is not it|not what i (?:asked|wanted|meant|said)(?: for)?|not what i asked for)$/,
   /^(?:no )?(?:you got (?:it|that) wrong|you misunderstood(?: me)?|you did it wrong|you made a mistake|you are wrong|you were wrong|thats not what i (?:asked|wanted|meant|said)(?: for)?|that is not what i (?:asked|wanted|meant|said)(?: for)?|that was not what i (?:asked|wanted|meant|said)(?: for)?|that was wrong|that was not right|that did not work|that didnt work)$/,
 ];
+const BACKCHANNEL = /^(?:lol|lmao|rofl|haha+|hehe+|heh|hmm+|hm+|mm+|mhm|um+|uh+|uhh+|er+|eh|ah+|oh+|ooh|huh|meh|wow|ok|okay|k|kk|ugh|whoa|oops)$/;
 const TOPIC_RESUME = /^(?:where were we(?: again)?|where did we stop|where did we leave off|what were we (?:doing|talking about|working on)|continue|carry on|go on|resume|lets (?:continue|carry on|go on|resume)|keep going)$/;
 const TOPIC_BACK = /^(?:lets |let us |please |can we |could we )?(?:go |get |switch |come |jump |take me |bring me )?(?:back|return) to (?:the |my |our )?(.+?)$/;
 const LIST_START = /^(?:lets|let us|i want to|i would like to|id like to|can we|could we|we should|time to|i need to|please)? ?(?:make|start|write|create|begin|build|do|set up) (?:a |my |the |another |a new |our )?(?:new )?([a-z\- ]*?) ?list$/;
@@ -47,9 +48,10 @@ export function classify(text, ctx = {}) {
   }
   if (CANCEL.test(t)) return { intent: 'cancel' };
   for (const re of FEEDBACK) if (re.test(t)) return { intent: 'feedback' };
+  if (BACKCHANNEL.test(t)) return { intent: 'backchannel' };
   if (REPEAT.test(t)) return { intent: 'repeat' };
   if (EXPLAIN.test(t)) return { intent: 'explain' };
-  if (TOPIC_RESUME.test(t)) return { intent: 'topic', target: null };
+  if (TOPIC_RESUME.test(t)) return { intent: 'topic', target: null, digression: /^(?:where|what were we)/.test(t) };
   let m = t.match(TOPIC_BACK);
   if (m) return { intent: 'topic', target: m[1].replace(/^(?:the |my )/, '') };
   m = t.match(LIST_START);

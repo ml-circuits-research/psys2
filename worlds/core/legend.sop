@@ -450,6 +450,11 @@
     card=many
     ask="Which world does a tier 2b setting give way to when that world is the tab or a recent world?"
 
+@core.pattern.needsState core.key
+    value=atom
+    card=one
+    ask="Which state path of its world must be non-empty for the pattern to apply (unless the world's tab is active)?"
+
 @core.pattern.example core.key
     value=string
     card=many
