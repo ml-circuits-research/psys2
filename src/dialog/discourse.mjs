@@ -63,6 +63,8 @@ export function splitFragment(text) {
   return { kind: all.length ? 'marker' : 'bare', content, marker: all.join(' ') || null };
 }
 
+const BARE_YES_NO = { yes: 'yes', yeah: 'yes', yep: 'yes', yup: 'yes', no: 'no', nope: 'no', nah: 'no' };
+
 export class Discourse {
   constructor(dialog) {
     this.dialog = dialog;
@@ -313,6 +315,11 @@ export class Discourse {
       if (y === 'no') return { reply: 'OK, I will leave it as it is.', info: { kind: 'offer', declined: true } };
     }
     if (pend?.type === 'repair') { const r = await this._repair({ ...pend, content: plain(text) }, sid); if (r) return r; }
+    // 1b. a bare yes/no that answers nothing: no pending question here, no list mode and no game that asks yes/no questions
+    if (!pend && !this.list) {
+      const bare = BARE_YES_NO[t];
+      if (bare && !this._gameAsksYesNo()) return { reply: `${bare === 'yes' ? 'Yes' : 'No'} to what? You can ask me a question, give me a command, or say "help" to see what I can do.`, info: { kind: 'bare', answer: bare } };
+    }
     const c = classify(text, { hasAction: !!this._recentAction(), listMode: !!this.list });
     // 2. list-entry mode: every plain item is added to the list until "that's all"
     if (this.list) {
@@ -343,6 +350,13 @@ export class Discourse {
       }
     }
     return this._references(text, sid);
+  }
+
+  /** True while a game that asks or expects yes/no is on: the guessing game in progress, or a game that is the active game or tab of the host. */
+  _gameAsksYesNo() {
+    const st = this.dialog.isession.state, ctx = this.dialog.context();
+    if (['asking', 'guessing', 'learning'].includes(st['games.guess']?.phase)) return true;
+    return !!ctx.gameWorld || ['guess', 'tictactoe', 'hangman', 'chess'].includes(ctx.activeTab);
   }
 
   _cancel(pend) {
