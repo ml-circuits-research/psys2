@@ -203,7 +203,7 @@ Also report the size and CPU latency of the shared encoder (int8 ONNX, T8 method
 Tasks, in order:
 
 1. **T0, T1, T2** as written. T2 is the baseline: rules only, with the current rule router.
-2. **D1 — dispatcher model.** One encoder (ModernBERT-base; DistilBERT as the comparison, same data) with three heads:
+2. **D1 — dispatcher model.** One encoder with three heads. **Train DistilBERT first** (`distilbert-base-uncased`): it is the fast, robust baseline, about 67 MB as int8, with no special attention kernels needed on aarch64. **Then train ModernBERT-base** on exactly the same data, seeds and heads. If DistilBERT already meets the Stage 1 targets, ModernBERT must justify its size with a clear gain. The heads:
    - **segmentation:** a boundary probability per token. It cuts messages into small pieces (commands, clauses);
    - **world candidates:** for each piece, a ranked list of the **top-k worlds with scores** (k = 3), using the context (active tab, recent worlds);
    - **simplification (optional head):** KEEP / DELETE / REPLACE edit tags as in Round 1. It produces a cleaner variant of each piece. The original piece is always kept as a candidate too.
