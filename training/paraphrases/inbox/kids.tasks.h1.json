@@ -1,0 +1,68 @@
+{
+  "world": "kids.tasks",
+  "tab": "editor",
+  "author": "haiku",
+  "batch": "h1",
+  "tasks": [
+    {
+      "id": "kids.tasks.h1.t1",
+      "goal": "Put milk on my list",
+      "canonical": "Add milk to my list.",
+      "variants": ["add milk to list", "milk on my list pls", "can u put milk on my list", "add milk 2 my list", "I need milk on the list", "put milk on the list", "milk to my list", "add milk to my shopping list", "pls add milk", "hey add milk to the list thx"]
+    },
+    {
+      "id": "kids.tasks.h1.t2",
+      "goal": "Add bread to one list and a book to another",
+      "canonical": "Add bread to my shopping list and add a book to my homework list.",
+      "variants": ["bread on shopping, book on homework", "add bread to the shopping list and a book to homework", "put bread on my shopping and add book to my homework list", "add bread shopping list and add book homework list", "bread to shopping list, book to homework list pls", "can you add bread to my shopping and also a book to homework", "add a book to homework and bread to shopping", "add bread to my list and a book to my homework", "bread for shopping, book for homework", "add bread and add a book on separate lists"]
+    },
+    {
+      "id": "kids.tasks.h1.t3",
+      "goal": "Have the system remind me to feed the cat",
+      "canonical": "Remind me to feed the cat.",
+      "variants": ["remind me to feed the cat", "reminder: feed the cat", "remind me feed cat", "dont let me forget to feed the cat", "set a remindr to feed the cat", "ping me to feed the cat later", "I should feed the cat, remind me", "remind me about feeding the cat", "feed cat reminder pls", "can u remind me to feed kitty"]
+    },
+    {
+      "id": "kids.tasks.h1.t4",
+      "goal": "Tell the system I did not buy the milk",
+      "canonical": "I didn't buy milk.",
+      "variants": ["i didnt buy milk", "no I did not buy the milk", "I forgot the milk, didn't get it", "not bought milk yet", "I never bought milk", "still no milk, I didnt buy it", "nope didn't buy milk", "I haven't bought the milk", "milk wasn't bought", "didnt get milk"]
+    },
+    {
+      "id": "kids.tasks.h1.t5",
+      "goal": "Take milk off my list",
+      "canonical": "Remove milk from my list.",
+      "variants": ["remove milk from list", "delete milk off my list", "milk off the list", "take milk away from my list", "drop milk from my list", "erase milk on the list", "milk should not be on my list, remove it", "rm milk from list", "can u take milk off my list", "get milk off the list please"]
+    },
+    {
+      "id": "kids.tasks.h1.t6",
+      "goal": "Record that I finished my homework",
+      "canonical": "I finished my homework.",
+      "variants": ["finished my homework", "i finished homework", "homework is done", "done with my homework", "I did my homework", "homework finished!", "I completed my homework", "all done with homework", "yay finished homework", "my homework's done"]
+    },
+    {
+      "id": "kids.tasks.h1.t7",
+      "goal": "Ask what is on my list right now",
+      "canonical": "What is on my list?",
+      "variants": ["whats on my list", "what's on the list", "tell me my list", "what do I have on my list", "list pls", "anything on my list?", "read my list to me", "what items are on the list", "what is on the list right now", "whats in my list"]
+    },
+    {
+      "id": "kids.tasks.h1.t8",
+      "goal": "Ask what I still have to do",
+      "canonical": "What do I still have to do?",
+      "variants": ["what do i still have to do", "whats left to do", "what do I need to do still", "things I still have to do?", "what's still on my to do", "what's left for me to do", "remaining tasks?", "what do I have left to do", "what's still open for me", "what do i got left todo"]
+    },
+    {
+      "id": "kids.tasks.h1.t9",
+      "goal": "Find out how many things are on my list",
+      "canonical": "How many things are on my list?",
+      "variants": ["how many things on my list", "count my list", "how many items on my list", "number of things on the list?", "how many on my list", "how much stuff is on my list", "how long is my list", "how many things r on my list", "list count", "hw many things on my list"]
+    },
+    {
+      "id": "kids.tasks.h1.t10",
+      "goal": "Wipe my list clean",
+      "canonical": "Clear my list.",
+      "variants": ["clear the list", "empty my list", "erase my list", "wipe my list", "clean out my list", "delete everything on my list", "clear my to-do list", "reset my list pls", "make my list empty", "clr my list"]
+    }
+  ]
+}

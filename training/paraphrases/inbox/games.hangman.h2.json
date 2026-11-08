@@ -1,0 +1,18 @@
+{
+  "world": "games.hangman",
+  "tab": "hangman",
+  "author": "haiku",
+  "batch": "h2",
+  "tasks": [
+    {"id": "games.hangman.h2.t1", "goal": "See the word with blanks filled in so far", "setup": ["Play hangman."], "canonical": "Show me the word.", "variants": ["show word", "what does the word look like", "whats the word so far", "display the word", "show the blanks", "current word?", "word so far please", "let me see the word", "show progress", "how much of the word is solved"]},
+    {"id": "games.hangman.h2.t2", "goal": "Ask if there is an A in the word", "setup": ["Play hangman.", "Try S."], "canonical": "Does it have an A?", "variants": ["is there an a", "a in it?", "does the word contain a", "got an a?", "is a in there", "a?", "word has an a?", "is the letter a in it", "is there any a", "does it contain an a"]},
+    {"id": "games.hangman.h2.t3", "goal": "Ask if the letter R is in the word", "setup": ["Play hangman."], "canonical": "Is there a letter R?", "variants": ["r in it?", "is there an r", "does it have r", "got an r?", "r?", "is r in there", "any r in the word", "is there a letter r in it", "r in the word?", "is the r in there"]},
+    {"id": "games.hangman.h2.t4", "goal": "Guess the letter E", "setup": ["Play hangman."], "canonical": "E.", "variants": ["e", "E please", "e!", "letter e", "the letter e", "e it is", "I guess e", "e?", "e pls", "take e"]},
+    {"id": "games.hangman.h2.t5", "goal": "Guess the word as owl", "setup": ["Play hangman."], "canonical": "Is it an owl?", "variants": ["owl?", "is it owl", "an owl?", "maybe an owl", "could it be an owl", "its an owl", "owl", "is the answer owl", "i say owl", "owl right?"]},
+    {"id": "games.hangman.h2.t6", "goal": "Guess zebra as the hidden word once more", "setup": ["Play hangman."], "canonical": "I think it is a zebra.", "variants": ["a zebra?", "zebra it is", "it might be zebra", "i guess it's zebra", "zebra, I hope", "is the word a zebra", "hm zebra", "my answer is zebra", "I'd say zebra", "it's probably zebra"]},
+    {"id": "games.hangman.h2.t7", "goal": "Begin a new round after the last one ended", "setup": ["Play hangman."], "canonical": "Start a new hangman game.", "variants": ["new hangman game", "another hangman round", "start hangman over", "hangman again", "play hangman once more", "hangman restart please", "new round", "fresh start hangman", "restart the hangman game", "hangman new one pls"]},
+    {"id": "games.hangman.h2.t8", "goal": "Get something to go on about the hidden word", "setup": ["Play hangman."], "canonical": "Tell me something about it.", "variants": ["any clue?", "give me something to go on", "can u give a hint", "hint please", "tell me something", "what can you tell me about it", "little hint pls", "help me with a clue", "give a clue", "how about a hint"]},
+    {"id": "games.hangman.h2.t9", "goal": "Quit the round and reveal the word", "setup": ["Play hangman."], "canonical": "I give up.", "variants": ["give up pls", "i'm out, give up", "i quit the word", "giving up", "stop the round i give up", "i give", "quit", "forget it, i give up", "i surrender this word", "i'll give up now"]},
+    {"id": "games.hangman.h2.t10", "goal": "Ask how many attempts are left", "setup": ["Play hangman."], "canonical": "How many guesses are left?", "variants": ["how many guesses i have", "guesses left?", "how many tries are left", "how many lives left", "tries left", "how many misses can i still make", "how many attempts remain", "how many chances left", "guess count left?", "how many wrong guesses left"]}
+  ]
+}

@@ -68,20 +68,6 @@
     status=missing
     text="{note}"
 
-@tpl.ui.shell.ui_help core.template
-    for=action.ui.help
-    text="{value}"
-
-@tpl.ui.shell.ui_help.unsupported core.template
-    for=action.ui.help
-    status=unsupported
-    text="{note}"
-
-@tpl.ui.shell.ui_help.missing core.template
-    for=action.ui.help
-    status=missing
-    text="{note}"
-
 @tpl.ui.shell.ui_speaker core.template
     for=action.ui.speaker
     text="{value}"

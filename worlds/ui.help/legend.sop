@@ -1,0 +1,16 @@
+@legend.ui.help core.legend
+    namespace=ui.help
+    version=0.1.0
+    imports=core
+    imports=kids.common
+    doc="Help state: the rotating example cursor per world and the last sentence that was not understood"
+
+@ui.help.topic core.type
+    extends=core.state
+    doc="A help topic. The world state holds pos (next example index per world id), lastUnparsed ({ text, world, suggestions }) and lastHelp."
+    example="What can I say here?"
+
+@ui.help.topic.id core.key
+    value=atom
+    card=one
+    ask="Which help topic is it?"

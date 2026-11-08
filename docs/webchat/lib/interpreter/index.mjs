@@ -285,6 +285,8 @@ export class Interpreter {
         try { return this._runOp(session, target, { wire: null, action, args, where: {}, mode: 'value' }, {}, st, { ...args }); }
         finally { st.depth--; }
       },
+      /** Read-only copy of another world's state (null when it has none); lets help and status worlds look at the app. */
+      peek: (worldId) => { const st0 = session.state[worldId]; return st0 ? structuredClone(st0) : null; },
       /** Pattern examples of a loaded world: [{ id, kind, priority, examples }] (read-only). */
       patterns: (worldId) => (this.set.get(worldId)?.patterns ?? []).map((p) => ({ id: p.id, kind: p.kind, priority: p.priority, examples: [...p.examples] })),
       /** Words of a lexicon (by lexicon id, e.g. 'lex.kids.animals.names'); [] when unknown. */
@@ -352,6 +354,17 @@ export class Interpreter {
   }
 
   // ---- requests --------------------------------------------------------
+
+  /**
+   * Run an action operation on behalf of the host or the dialog layer (no wire, no answer record), for example
+   * `ui.openTab` when a tool world answered while its tab was hidden. Returns the envelope.
+   */
+  runAction(session, action, args = {}) {
+    const op = this._actionOp(action);
+    if (!op) return { status: 'unsupported', note: `no operation for action '${action}'` };
+    const st = { depth: 0, visited: 0, ops: [] };
+    return this._runOp(session, op, { wire: null, action, args, where: {}, mode: 'value' }, {}, st, { ...args });
+  }
 
   _resolveRequest(session, wire) {
     const action = get(wire, 'core.request.action')?.v;

@@ -1,0 +1,36 @@
+{
+  "world": "docs.editor",
+  "retry": [
+    {
+      "batch": "h3",
+      "task": "docs.editor.h3.t4",
+      "goal": "Turn dictation off again",
+      "tried": [
+        {
+          "attempt": 1,
+          "text": "Stop dictation.",
+          "reply": "OK, dictation is off.",
+          "label": "canonical-failed"
+        },
+        {
+          "attempt": 2,
+          "text": "Stop the dictation.",
+          "reply": "Added.",
+          "label": "canonical-failed"
+        },
+        {
+          "attempt": 3,
+          "text": "Stop dictating.",
+          "reply": "OK, dictation is off.",
+          "label": "canonical-failed"
+        },
+        {
+          "attempt": 4,
+          "text": "Stop the dictation mode.",
+          "reply": "Added.",
+          "label": "canonical-failed"
+        }
+      ]
+    }
+  ]
+}

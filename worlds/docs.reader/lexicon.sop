@@ -1,0 +1,40 @@
+@lex.docs.reader.cast core.lexicon
+    class=noun
+    doc="The cast of the bundled sample story (so questions about them are recognised on any tab)"
+    word=hansel word=gretel word=witch word=father word=stepmother word=children word=woodcutter word=duck word=bird
+
+@lex.docs.reader.docs core.lexicon
+    class=noun
+    doc="Words for a document"
+    word=story word=tale word=file word=text word=book word=article word=passage word=document word=doc word=essay word=paper word=fairy_tale word=reading word=novel word=report word=pdf word=chapter_file
+
+@lex.docs.reader.kin core.lexicon
+    class=noun
+    doc="Kinship words"
+    word=sister word=brother word=mother word=father word=stepmother word=stepfather word=son word=daughter word=husband word=wife word=grandmother word=grandfather word=uncle word=aunt word=cousin word=friend word=parent word=child word=dad word=mom word=mum
+    plural=child:children
+
+@lex.docs.reader.units core.lexicon
+    class=noun
+    doc="Things to count in a document"
+    word=sentence word=word word=paragraph word=section word=chapter word=heading word=character
+
+@lex.docs.reader.ordinals core.lexicon
+    class=noun
+    doc="Ordinal words"
+    word=first word=second word=third word=fourth word=fifth word=sixth word=seventh word=eighth word=ninth word=tenth word=last
+
+@lex.docs.reader.parts core.lexicon
+    class=noun
+    doc="Parts of a document that can be read aloud"
+    word=paragraph word=sentence word=section word=chapter word=line
+
+@lex.docs.reader.ends core.lexicon
+    class=noun
+    doc="Ends of a document"
+    word=beginning word=start word=ending word=end
+
+@lex.docs.reader.verbs core.lexicon
+    class=verb
+    doc="Transitive verbs people ask about (who helped X, who did X lock); base and past forms"
+    word=help word=helped word=save word=saved word=rescue word=rescued word=free word=freed word=carry word=carried word=love word=loved word=hate word=hated word=kill word=killed word=eat word=ate word=lead word=led word=follow word=followed word=push word=pushed word=lock word=locked word=burn word=burned word=catch word=caught word=find word=found word=meet word=met word=see word=saw word=hug word=hugged word=guide word=guided word=protect word=protected word=feed word=fed word=teach word=taught word=visit word=visited word=invite word=invited word=marry word=married word=thank word=thanked word=warn word=warned word=trap word=trapped word=chase word=chased word=attack word=attacked word=hit word=bite word=bit word=beat word=punish word=punished word=leave word=left word=take word=took word=bring word=brought word=send word=sent word=welcome word=welcomed word=blame word=blamed word=fear word=feared word=kiss word=kissed word=shelter word=sheltered

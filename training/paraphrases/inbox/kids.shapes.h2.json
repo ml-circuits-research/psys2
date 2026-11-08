@@ -1,0 +1,68 @@
+{
+  "world": "kids.shapes",
+  "tab": "robot",
+  "author": "haiku",
+  "batch": "h2",
+  "tasks": [
+    {
+      "id": "kids.shapes.h2.t1",
+      "goal": "Check that a circle is round",
+      "canonical": "Is a circle round?",
+      "variants": ["circle round?", "is a circle round or no", "round, is a circle?", "a circle is round right", "does a circle have a round shape", "is it round, a circle", "circles are round, yeah?", "is a circle a round thing", "circle = round?", "would you say a circle is round"]
+    },
+    {
+      "id": "kids.shapes.h2.t2",
+      "goal": "Check that a triangle is not a square",
+      "canonical": "Is a triangle a square?",
+      "variants": ["triangle a square?", "is a triangle the same as a square", "could a triangle be a square", "triangle square yes or no", "is a triangle a square shape", "tri is square?", "a triangle is a square, right?", "is a three-sided shape a square", "is triangle square", "can a triangle count as a square"]
+    },
+    {
+      "id": "kids.shapes.h2.t3",
+      "goal": "Get a description of a circle",
+      "canonical": "Tell me about a circle.",
+      "variants": ["about circles pls", "what is a circle like", "describe a circle", "circle info?", "tell me stuff about circles", "what's a circle", "explain the circle shape", "how is a circle different from other shapes", "circles, what are they like", "tell me the circle facts"]
+    },
+    {
+      "id": "kids.shapes.h2.t4",
+      "goal": "Find out what color a tomato usually is",
+      "canonical": "What color is a tomato?",
+      "variants": ["tomato colour?", "what color are tomatoes", "a tomato is which color", "usual color of a tomato", "tomatoes are what color usually", "tomato - color?", "whats the color of a tomato", "tell me what color tomatoes are", "colour of tomatoes", "what colour is a ripe tomato"]
+    },
+    {
+      "id": "kids.shapes.h2.t5",
+      "goal": "Check that a banana is yellow",
+      "canonical": "Is a banana yellow?",
+      "variants": ["banana yellow right?", "are bananas yellow", "is a banana a yellow thing", "banana - yellow?", "yellow banana, correct?", "bananas are yellow, yeah?", "is it yellow, a banana", "would a banana be yellow", "a banana is yellow isnt it", "is banana yellow or not"]
+    },
+    {
+      "id": "kids.shapes.h2.t6",
+      "goal": "Check that a banana is not purple",
+      "canonical": "Is a banana purple?",
+      "variants": ["banana purple?", "could a banana be purple", "are bananas purple", "purple banana, true?", "is a banana usually purple", "banana - purple?", "a banana is purple right", "would a banana be purple", "bananas purple or no", "is the banana purple"]
+    },
+    {
+      "id": "kids.shapes.h2.t7",
+      "goal": "Check that green is a secondary color",
+      "canonical": "Is green a secondary color?",
+      "variants": ["green secondary?", "is green a secondary colour", "green - secondary yes?", "secondary color green right?", "is green one of the secondary colors", "green is secondary, correct", "would green count as secondary", "is green secondary or primary", "secondary: green?", "green a secondary one?"]
+    },
+    {
+      "id": "kids.shapes.h2.t8",
+      "goal": "Check whether purple is a primary color",
+      "canonical": "Is purple a primary color?",
+      "variants": ["purple primary?", "is purple a primary colour", "purple - primary?", "is purple one of the primary colors", "primary colors include purple?", "purple primary or not", "would purple be primary", "is the color purple primary", "purple: primary, yes or no", "purple a primary color right?"]
+    },
+    {
+      "id": "kids.shapes.h2.t9",
+      "goal": "Find out what blue and white make",
+      "canonical": "What color do blue and white make?",
+      "variants": ["blue and white make what", "blue plus white is?", "blue + white = ?", "mix blue with white what do i get", "what color if blue and white combine", "if i mix blue and white what happens", "blue white mix result", "blue mixed with white gives what", "what does blue white mixing give", "blue and white together make?"]
+    },
+    {
+      "id": "kids.shapes.h2.t10",
+      "goal": "Find out which two colors make brown",
+      "canonical": "Which colors make brown?",
+      "variants": ["how to get brown", "what makes brown", "which two colors make brown", "brown from what colors", "how can i make brown paint", "what do i mix for brown", "brown = mix what", "how do u get the color brown", "which colours combine to brown", "i need brown, what do i mix"]
+    }
+  ]
+}

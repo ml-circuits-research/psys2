@@ -1,0 +1,12 @@
+@world.ui.help core.world
+    namespace=ui.help
+    version=0.1.0
+    legend=$legend.ui.help
+    imports=world.core
+    imports=world.kids.common
+    formalization=rules
+    language=en
+    status=fixture
+    title="Contextual help"
+    summary=""
+    doc="Help that knows the app: what can be said on the active tab (varied pattern examples of the tab world, rotating on repeat), how to do something (a search over the examples of all worlds), the rules and current state of the active game, why the last sentence was not understood, and the capabilities answer. Also exports didYouMean(), used by the dialog layer to suggest the closest known commands after a failed sentence (spec 07 section 8). State lives in ctx.state. Hand-built platform fixture, not produced by the C1 workflow."

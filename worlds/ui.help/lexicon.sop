@@ -1,0 +1,12 @@
+@lex.ui.help.games core.lexicon
+    class=noun
+    word=hangman
+    word=tic_tac_toe
+    word=tictactoe
+    word=tic-tac-toe
+    word=noughts_and_crosses
+    word=chess
+    word=twenty_questions
+    word=guess_the_animal
+    word=guessing_game
+    word=animal_game

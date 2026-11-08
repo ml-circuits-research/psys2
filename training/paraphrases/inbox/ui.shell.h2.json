@@ -1,0 +1,18 @@
+{
+  "world": "ui.shell",
+  "tab": "robot",
+  "author": "haiku",
+  "batch": "h2",
+  "tasks": [
+    {"id": "ui.shell.h2.t1", "goal": "Turn hands-free mode on", "canonical": "Turn on hands-free mode.", "variants": ["hands free on", "go hands free", "hands-free pls", "handsfree", "let me talk without typing", "hands free mode on please", "turn hands free on", "no keyboard mode on", "hands free yes", "activate hands free"]},
+    {"id": "ui.shell.h2.t2", "goal": "Turn hands-free mode off and go back to typing", "canonical": "Turn off hands-free mode.", "variants": ["hands free off", "back to typing", "no hands free", "stop hands-free", "turn hands free off pls", "typing again please", "hands free mode off", "hands-free no more", "end hands free", "i'll type now, hands free off"]},
+    {"id": "ui.shell.h2.t3", "goal": "Make the spoken answers slower", "canonical": "Speak slower.", "variants": ["slower", "slow down a bit", "less fast please", "talk slower", "slower voice", "too fast, slow it", "speak more slowly pls", "slow it down", "lower the speed", "can u go slower"]},
+    {"id": "ui.shell.h2.t4", "goal": "Make the spoken answers faster", "canonical": "Speak faster.", "variants": ["faster", "speed up please", "talk quicker", "faster voice", "too slow, speed it up", "hurry the voice", "quicker please", "go faster", "increase the speed", "less slow pls"]},
+    {"id": "ui.shell.h2.t5", "goal": "Set the speech rate to a specific number", "canonical": "Set the speech rate to 1.5.", "variants": ["speech rate 1.5", "rate 1.5", "make the rate 1.5", "set speed to one point five", "voice speed 1.5", "1.5 speed pls", "change rate to 1.5", "speed 1.5", "talk at rate one and a half", "rate one point five"]},
+    {"id": "ui.shell.h2.t6", "goal": "Change the interface language to Romanian", "canonical": "Switch to Romanian.", "variants": ["romanian please", "change language to romanian", "speak romanian", "romana", "in romanian pls", "use romanian", "romanian language", "can you talk romanian", "switch lang to romanian", "romanian mode"]},
+    {"id": "ui.shell.h2.t7", "goal": "Begin a new game after the last one", "setup": ["Play hangman."], "canonical": "New game.", "variants": ["new game", "another round", "restart", "start over", "one more round", "again!", "new one", "play again", "let's go again", "replay"]},
+    {"id": "ui.shell.h2.t8", "goal": "Give up the current game", "setup": ["Play hangman."], "canonical": "I give up.", "variants": ["give up", "i quit", "quit the game", "i surrender", "give up pls", "i'm done with this", "stop the game", "end it", "i surrender the round", "i quit this round"]},
+    {"id": "ui.shell.h2.t9", "goal": "Ask for a hint in the current game", "setup": ["Play hangman."], "canonical": "Give me a hint.", "variants": ["hint", "another hint?", "hint pls", "need a hint", "can you give me a hint", "one more hint", "hint please", "hint me", "i need help, hint", "clue?"]},
+    {"id": "ui.shell.h2.t10", "goal": "Open the phrase log of what I have said", "canonical": "Show my phrase log.", "variants": ["phrase log", "open the phrase log", "my phrases please", "show phrase log", "download my phrase log", "export my phrases", "how many phrases have i said", "log of what i said", "list what i've said", "phrase history"]}
+  ]
+}

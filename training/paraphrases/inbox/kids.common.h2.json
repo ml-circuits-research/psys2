@@ -1,0 +1,71 @@
+{
+  "world": "kids.common",
+  "tab": "robot",
+  "author": "haiku",
+  "batch": "h2",
+  "tasks": [
+    {
+      "id": "kids.common.h2.t1",
+      "goal": "Greet the assistant again",
+      "canonical": "Hi!",
+      "variants": ["hi again", "hey!", "hello again, it's me", "good afternoon", "heya", "hi buddy", "hey hey", "morning!", "hiii", "oi, hello"]
+    },
+    {
+      "id": "kids.common.h2.t2",
+      "goal": "Ask what the assistant is called",
+      "canonical": "What are you called?",
+      "variants": ["what do i call u", "name pls", "your name is?", "how should i name you", "what do u go by", "whats ur name?", "tell me ur name bot", "what's your name, friend", "name of yours?", "how u called"]
+    },
+    {
+      "id": "kids.common.h2.t3",
+      "goal": "Tell the assistant your name is Mia Lee",
+      "canonical": "My name is Mia Lee.",
+      "variants": ["im mia lee", "mia lee here", "the name's Mia Lee", "you can know me as mia lee", "mia lee is me", "i'm Mia, last name Lee", "call me mia lee, im new", "name: mia lee", "hey im mia lee", "mia lee, nice to meet you"]
+    },
+    {
+      "id": "kids.common.h2.t4",
+      "goal": "Ask the assistant for your name after you told it",
+      "setup": ["My name is Mia Lee."],
+      "canonical": "Who am I?",
+      "variants": ["do u know who i am", "what's my name?", "remember me?", "my name is what again", "name i told u?", "whats my name again", "tell me my name pls", "so who am i to you", "you remember my name right", "what was i called"]
+    },
+    {
+      "id": "kids.common.h2.t5",
+      "goal": "Ask the assistant to explain who it is",
+      "canonical": "Who is this?",
+      "canonical_retries": ["Who are you, exactly?"],
+      "variants": ["what r u", "who am i chatting with", "explain who you are", "so what are you exactly", "who you be", "what are you, a robot?", "your identity?", "tell me who you are please", "who is talking to me", "whos this"]
+    },
+    {
+      "id": "kids.common.h2.t6",
+      "goal": "Thank the assistant warmly",
+      "canonical": "Thanks a lot!",
+      "variants": ["thank you very much", "thx a ton", "great, thanks", "ty ty", "appreciate it", "thanks, you helped", "tanks", "thank ya", "cheers mate", "thnks"]
+    },
+    {
+      "id": "kids.common.h2.t7",
+      "goal": "Say bye and leave",
+      "canonical": "See you, bye!",
+      "variants": ["ok bye", "bye!!", "gotta go now bye", "later", "talk later", "see ya", "cya bot", "bye have a good day", "i'm off, bye", "goodnight bye"]
+    },
+    {
+      "id": "kids.common.h2.t8",
+      "goal": "Tell the assistant to call you Lee",
+      "canonical": "Call me Lee.",
+      "variants": ["lee is fine", "you may call me lee", "call me lee pls", "lee, call me that", "name's lee", "pls call me lee", "i'm known as lee", "lee would be good", "call me lee from now on", "lee is my name"]
+    },
+    {
+      "id": "kids.common.h2.t9",
+      "goal": "Ask the assistant for your name when you never gave it",
+      "canonical": "Do you know my name?",
+      "variants": ["do u know my name", "my name, do you remember it", "remind me, what is my name", "did u learn my name yet", "who said they are me, do u know", "guess my name lol, do u know it", "can u tell my name", "name of mine you know?", "what name do u have for me", "do you have my name saved"]
+    },
+    {
+      "id": "kids.common.h2.t10",
+      "goal": "Ask the assistant to say its name",
+      "canonical": "Say your name, please.",
+      "canonical_retries": ["Tell me your name, please."],
+      "variants": ["say ur name", "what's the bot's name", "name of the helper?", "tell me what you're called please", "your name pls", "who's the name behind this chat", "name you go by?", "so what do i call you", "could you say your name", "what do i call the assistant"]
+    }
+  ]
+}

@@ -1,0 +1,538 @@
+@t.docs.reader.n01 core.test
+    input="Describe the file."
+    expect="\"Hansel and Gretel\" has 685 words"
+    expect="4 sections"
+    expectState="active=doc_hansel_and_gretel"
+    session=a
+
+@t.docs.reader.n02 core.test
+    input="What is the story about?"
+    expect="In short:"
+    expect="poor woodcutter"
+    expectState="focus.sentences.0=0"
+    session=a
+
+@t.docs.reader.n03 core.test
+    input="Summarize the story in 2 sentences."
+    expect="In short:"
+    expectState="focus.sentences.length=2"
+    session=a
+
+@t.docs.reader.n04 core.test
+    input="Give me a short summary of the story."
+    expect="In short:"
+    session=a
+
+@t.docs.reader.n05 core.test
+    input="Summarize section 2."
+    expect="Section 2, \"Lost in the Forest\""
+    session=a
+
+@t.docs.reader.n06 core.test
+    input="What is the last section about?"
+    expect="Section 4, \"Home Again\""
+    session=a
+
+@t.docs.reader.n07 core.test
+    input="Summarize section 9."
+    expect="has only 4 sections"
+    expectStatus=missing
+    session=a
+
+@t.docs.reader.n08 core.test
+    input="Who are the characters?"
+    expect="Hansel ("
+    expect="Gretel ("
+    expect="the witch ("
+    expect="the father ("
+    session=a
+
+@t.docs.reader.n09 core.test
+    input="Which characters are there?"
+    expect="The characters are"
+    session=a
+
+@t.docs.reader.n10 core.test
+    input="Who is the main character?"
+    expect="Hansel"
+    expect="mentioned"
+    session=a
+
+@t.docs.reader.n11 core.test
+    input="Who is mentioned the most?"
+    expect="Hansel"
+    session=a
+
+@t.docs.reader.n12 core.test
+    input="Which places are mentioned?"
+    expect="the house"
+    expect="the forest"
+    session=a
+
+@t.docs.reader.n13 core.test
+    input="Which objects are mentioned?"
+    expect="The things that come up most"
+    expect="pebble"
+    session=a
+
+@t.docs.reader.n14 core.test
+    input="What are the key words?"
+    expect="witch"
+    session=a
+
+@t.docs.reader.n15 core.test
+    input="Show me the outline."
+    expect="4 sections"
+    expect="The Poor Woodcutter"
+    expect="Home Again"
+    session=a
+
+@t.docs.reader.n16 core.test
+    input="What sections does the story have?"
+    expect="Lost in the Forest"
+    session=a
+
+@t.docs.reader.n17 core.test
+    input="How many sentences are there in the story?"
+    expect="66 sentences"
+    session=a
+
+@t.docs.reader.n18 core.test
+    input="How many words does the story have?"
+    expect="685 words"
+    session=a
+
+@t.docs.reader.n19 core.test
+    input="How many sections does the story have?"
+    expect="4 sections"
+    session=a
+
+@t.docs.reader.n20 core.test
+    input="How long is the story?"
+    expect="685 words"
+    expect="minutes"
+    session=a
+
+@t.docs.reader.n21 core.test
+    input="Who is the witch?"
+    expect="witch"
+    expect="first in sentence 32"
+    expectState="focus.entities.0=e.witch"
+    session=a
+
+@t.docs.reader.n22 core.test
+    input="Who is Hansel?"
+    expect="boy"
+    expect="Hansel's sister is Gretel"
+    session=a
+
+@t.docs.reader.n23 core.test
+    input="Tell me about the stepmother."
+    expect="stepmother"
+    expect="furious"
+    session=a
+
+@t.docs.reader.n24 core.test
+    input="Who was the father?"
+    expect="woodcutter"
+    session=a
+
+@t.docs.reader.n25 core.test
+    input="What did the witch do?"
+    expect="locked Hansel in a small cage"
+    expect="built her house of bread"
+    session=a
+
+@t.docs.reader.n26 core.test
+    input="What did Gretel do?"
+    expect="walked for three days"
+    expect="There are"
+    session=a
+
+@t.docs.reader.n27 core.test
+    input="tell me more"
+    expect="Gretel:"
+    expect="more"
+    session=a
+
+@t.docs.reader.n28 core.test
+    input="What happened to Hansel?"
+    expect="The witch locked Hansel in a small cage"
+    session=a
+
+@t.docs.reader.n29 core.test
+    input="What happens to the witch?"
+    expect="pushed her"
+    session=a
+
+@t.docs.reader.n30 core.test
+    input="What did Hansel say?"
+    expect="\"Do not cry, Gretel,\""
+    expect="\"I will find a way.\""
+    session=a
+
+@t.docs.reader.n31 core.test
+    input="What did Gretel say?"
+    expect="\"I do not know how,\""
+    expect="\"Show me first.\""
+    session=a
+
+@t.docs.reader.n32 core.test
+    input="Who said \"I do not know how\"?"
+    expect="Gretel said"
+    expect="sentence 49"
+    session=a
+
+@t.docs.reader.n33 core.test
+    input="Who said \"Fatten him up\"?"
+    expect="witch said"
+    expect="sentence 40"
+    session=a
+
+@t.docs.reader.n34 core.test
+    input="Who said \"Nibble nibble little mouse\"?"
+    expect="A voice said"
+    session=a
+
+@t.docs.reader.n35 core.test
+    input="Who said \"the moon is made of cheese\" in the story?"
+    expect="I did not find anyone"
+    expectStatus=missing
+    session=a
+
+@t.docs.reader.n36 core.test
+    input="Where does the father live?"
+    expect="lived at"
+    expect="forest"
+    expect="sentence 1"
+    session=a
+
+@t.docs.reader.n37 core.test
+    input="Where did Hansel go?"
+    expect="then"
+    session=a
+
+@t.docs.reader.n38 core.test
+    input="Where did Hansel find the pearls?"
+    expect="witch's house"
+    expect="sentence 57"
+    session=a
+
+@t.docs.reader.n39 core.test
+    input="Where did the witch put her head?"
+    expect="oven"
+    session=a
+
+@t.docs.reader.n40 core.test
+    input="Where is the witch?"
+    expect="oven"
+    session=a
+
+@t.docs.reader.n41 core.test
+    input="When did the witch lock Hansel in a cage?"
+    expect="Early the next morning"
+    expect="sentence 38"
+    session=a
+
+@t.docs.reader.n42 core.test
+    input="When did the father lead the children into the forest?"
+    expect="In the morning"
+    session=a
+
+@t.docs.reader.n43 core.test
+    input="When did Gretel push the witch?"
+    expect="no exact time"
+    session=a
+
+@t.docs.reader.n44 core.test
+    input="Who helped Hansel?"
+    expect="freed her brother"
+    expect="duck carried"
+    session=a
+
+@t.docs.reader.n45 core.test
+    input="Who did the witch lock?"
+    expect="locked Hansel"
+    session=a
+
+@t.docs.reader.n46 core.test
+    input="Whom did Gretel free?"
+    expect="freed her brother"
+    session=a
+
+@t.docs.reader.n47 core.test
+    input="Who hated the children?"
+    expect="stepmother hated"
+    session=a
+
+@t.docs.reader.n48 core.test
+    input="Who is Hansel's sister?"
+    expect="Gretel is Hansel's sister"
+    expect="sentence 2"
+    session=a
+
+@t.docs.reader.n49 core.test
+    input="Who is the sister of Hansel?"
+    expect="Gretel is Hansel's sister"
+    session=a
+
+@t.docs.reader.n50 core.test
+    input="Who is Gretel's brother?"
+    expect="Hansel is Gretel's brother"
+    session=a
+
+@t.docs.reader.n51 core.test
+    input="Who is Hansel's father?"
+    expect="does not say"
+    session=a
+
+@t.docs.reader.n52 core.test
+    input="How are Hansel and Gretel related?"
+    expect="sister"
+    session=a
+
+@t.docs.reader.n53 core.test
+    input="What happens at the beginning?"
+    expect="At the beginning:"
+    expect="poor woodcutter"
+    session=a
+
+@t.docs.reader.n54 core.test
+    input="How does the story start?"
+    expect="At the beginning:"
+    session=a
+
+@t.docs.reader.n55 core.test
+    input="How does it end?"
+    expect="At the end:"
+    expect="never poor again"
+    session=a
+
+@t.docs.reader.n56 core.test
+    input="What happens in the middle?"
+    expect="In the middle"
+    session=a
+
+@t.docs.reader.n57 core.test
+    input="What happens in section 3?"
+    expect="The Witch's Oven"
+    session=a
+
+@t.docs.reader.n58 core.test
+    input="What happens in the second section?"
+    expect="Lost in the Forest"
+    session=a
+
+@t.docs.reader.n59 core.test
+    input="Show me sentence 12."
+    expect="Sentence 12"
+    expect="Do not cry"
+    expectState="focus.sentences.0=11"
+    session=a
+
+@t.docs.reader.n60 core.test
+    input="Show me sentence 999."
+    expect="no sentence 999"
+    expectStatus=missing
+    session=a
+
+@t.docs.reader.n61 core.test
+    input="How many times is Hansel mentioned?"
+    expect="Hansel is mentioned"
+    expect="times"
+    session=a
+
+@t.docs.reader.n62 core.test
+    input="How many times does the witch appear?"
+    expect="The witch is mentioned"
+    session=a
+
+@t.docs.reader.n63 core.test
+    input="Find witch in the story."
+    expect="results for \"witch\""
+    expectState="search.pos=0"
+    session=a
+
+@t.docs.reader.n64 core.test
+    input="Next result."
+    expect="Result 2 of"
+    session=a
+
+@t.docs.reader.n65 core.test
+    input="Show the next result."
+    expect="Result 3 of"
+    session=a
+
+@t.docs.reader.n66 core.test
+    input="Previous result."
+    expect="Result 2 of"
+    session=a
+
+@t.docs.reader.n67 core.test
+    input="Show the first result."
+    expect="Result 1 of"
+    session=a
+
+@t.docs.reader.n68 core.test
+    input="Show the last result."
+    expect="of 13"
+    session=a
+
+@t.docs.reader.n69 core.test
+    input="Clear the search."
+    expect="highlights are cleared"
+    expectState="focus.sentences.length=0"
+    session=a
+
+@t.docs.reader.n70 core.test
+    input="Search the story for oven."
+    expect="results for \"oven\""
+    session=a
+
+@t.docs.reader.n71 core.test
+    input="Where does it mention the cage?"
+    expect="cage"
+    session=a
+
+@t.docs.reader.n72 core.test
+    input="Find \"golden dragon\" in the file."
+    expect="I found nothing"
+    expectStatus=missing
+    session=a
+
+@t.docs.reader.n73 core.test
+    input="Read the first paragraph."
+    expect="Reading paragraph 1"
+    expectEffect=speech.say
+    session=a
+
+@t.docs.reader.n74 core.test
+    input="Read section 2."
+    expect="Reading section 2"
+    expectEffect=speech.say
+    session=a
+
+@t.docs.reader.n75 core.test
+    input="Read the story aloud."
+    expect="Reading \"Hansel and Gretel\""
+    expectEffect=speech.say
+    session=a
+
+@t.docs.reader.n76 core.test
+    input="Read me the ending."
+    expect="Reading the ending"
+    expectEffect=speech.say
+    session=a
+
+@t.docs.reader.n77 core.test
+    input="Read sentence 3."
+    expect="Reading sentence 3"
+    expectEffect=speech.say
+    session=a
+
+@t.docs.reader.n78 core.test
+    input="Which documents do I have?"
+    expect="You have 1 document"
+    expect="Hansel and Gretel"
+    expect="sample"
+    session=a
+
+@t.docs.reader.n79 core.test
+    input="Which documents mention the oven?"
+    expect="Hansel and Gretel"
+    expect="mentions"
+    session=a
+
+@t.docs.reader.n80 core.test
+    input="Which documents mention the spaceship?"
+    expect="None of the"
+    expectStatus=missing
+    session=a
+
+@t.docs.reader.n81 core.test
+    input="Why did the witch lock Hansel in a cage?"
+    expect="locked Hansel in a small cage"
+    session=a
+
+@t.docs.reader.n82 core.test
+    input="Why is the sky blue?"
+    expect="I did not understand"
+    expectStatus=unparsed
+    session=a
+
+@t.docs.reader.n83 core.test
+    input="Why is the sky blue according to the story?"
+    expect="does not say"
+    expectStatus=missing
+    session=a
+
+@t.docs.reader.n84 core.test
+    input="Does the story mention a dragon?"
+    expect="does not say"
+    expectStatus=missing
+    session=a
+
+@t.docs.reader.n85 core.test
+    input="Who is Mr Smith?"
+    expect="I did not understand"
+    expectStatus=unparsed
+    session=a
+
+@t.docs.reader.n86 core.test
+    input="What command do you recognise?"
+    expect="I can chat"
+    expectStatus=supported
+    session=a
+
+@t.docs.reader.n87 core.test
+    input="open the reader tab"
+    expect="Documents tab"
+    session=a
+
+@t.docs.reader.n88 core.test
+    input="Load the sample story."
+    expect="sample"
+    expect="is open"
+    session=a
+
+@t.docs.reader.n89 core.test
+    input="Open the fairy tale story."
+    expect="is open"
+    session=a
+
+@t.docs.reader.n90 core.test
+    input="Open the bees file."
+    expect="no document called"
+    expectStatus=missing
+    session=a
+
+@t.docs.reader.n91 core.test
+    input="Close the file."
+    expect="I closed"
+    expect="no documents left"
+    expectState="docs.length=0"
+    expectState="active=null"
+    session=a
+
+@t.docs.reader.n92 core.test
+    input="Describe the file."
+    expect="no document open"
+    expectStatus=missing
+    session=a
+
+@t.docs.reader.n93 core.test
+    input="Who is the witch?"
+    expect="no document open"
+    expectStatus=missing
+    session=a
+
+@t.docs.reader.n94 core.test
+    input="Load the sample story."
+    expect="is open"
+    expectState="docs.length=1"
+    session=a
+
+@t.docs.reader.n95 core.test
+    input="Who are the characters?"
+    expect="Hansel"
+    session=a

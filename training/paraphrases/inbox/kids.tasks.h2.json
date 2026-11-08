@@ -1,0 +1,77 @@
+{
+  "world": "kids.tasks",
+  "tab": "editor",
+  "author": "haiku",
+  "batch": "h2",
+  "tasks": [
+    {
+      "id": "kids.tasks.h2.t1",
+      "goal": "Find out how many things I still need to do",
+      "setup": ["Add milk to my list.", "Add eggs to my list."],
+      "canonical": "How many things do I still have to do?",
+      "variants": ["how many things do i still have to do", "how many left to do?", "how many things remain for me", "how many tasks still todo", "how much do I still have to do", "count what's left to do", "how many more things do I need to do", "how many things still open", "things left to do how many", "how many do i still need to do"]
+    },
+    {
+      "id": "kids.tasks.h2.t2",
+      "goal": "Check whether milk is on my shopping list",
+      "setup": ["Add milk to my shopping list."],
+      "canonical": "Is milk on my shopping list?",
+      "variants": ["milk on my shopping list?", "is there milk on the shopping list", "do we have milk on the list", "is milk listed", "milk on my list or not", "is milk in my shopping list", "am I getting milk? its on the list right", "check if milk is on my list", "is the list got milk on it", "milk there?"]
+    },
+    {
+      "id": "kids.tasks.h2.t3",
+      "goal": "Ask whether I already finished my homework",
+      "setup": ["Write call grandma on my to-do list.", "I finished my homework."],
+      "canonical": "Did I finish my homework?",
+      "variants": ["did i finish homework", "is my homework finished?", "did i do my homework yet", "have i done homework", "homework done or not", "did I complete my homework", "was my homework finished", "finished homework?", "did i get my homework done", "is the homework done, did i finish it"]
+    },
+    {
+      "id": "kids.tasks.h2.t4",
+      "goal": "See which lists I have",
+      "setup": ["Add milk to my shopping list.", "Add a book to my homework list."],
+      "canonical": "What lists do I have?",
+      "variants": ["which lists do i have", "what lists are there", "show my lists", "list all my lists", "how many lists do I have, what are they", "what list names do i have", "tell me my lists", "lists i got?", "which lists exist", "what kinds of lists do I have"]
+    },
+    {
+      "id": "kids.tasks.h2.t5",
+      "goal": "Set a reminder to water the plants",
+      "canonical": "Set a reminder to water the plants.",
+      "variants": ["set a reminder to water plants", "remind me to water the plants", "water the plants reminder", "reminder: water plants", "dont let me forget to water the plants", "set reminder water the plants pls", "alarm me to water plants", "I have to water the plants, remind me", "ping me about the plants watering", "can you set a remindr for watering plants"]
+    },
+    {
+      "id": "kids.tasks.h2.t6",
+      "goal": "Take milk off my shopping list again",
+      "setup": ["Add milk to my shopping list."],
+      "canonical": "Take milk off my shopping list.",
+      "variants": ["remove milk from shopping list", "milk off the shopping list", "take milk off my list", "drop milk from the shopping list", "delete milk from shopping", "milk is not needed, take it off the list", "rm milk shopping", "take off milk from shopping pls", "get milk off my shopping list", "pull milk off the shopping list"]
+    },
+    {
+      "id": "kids.tasks.h2.t7",
+      "goal": "Mark milk as bought on my shopping list",
+      "setup": ["Add milk to my shopping list."],
+      "canonical": "Cross milk off my shopping list.",
+      "variants": ["mark milk done on shopping list", "milk is bought, cross it off", "tick milk off the shopping list", "check milk off my list", "milk done on shopping", "i got the milk so cross it off", "cross off milk shopping", "strike milk from the shopping list", "check off milk on the list pls", "milk bought, mark it done"]
+    },
+    {
+      "id": "kids.tasks.h2.t8",
+      "goal": "See my reminders",
+      "setup": ["Remind me to feed the cat."],
+      "canonical": "Show me my reminders.",
+      "variants": ["show my reminders", "what reminders do I have", "list my reminders", "whats my reminders", "do i have any reminders", "reminders please", "what do you remind me of", "tell me my reminders", "any reminders for me?", "show reminders"]
+    },
+    {
+      "id": "kids.tasks.h2.t9",
+      "goal": "Find out what is still left on my shopping list",
+      "setup": ["Add milk to my shopping list.", "Add eggs to my shopping list.", "I bought milk."],
+      "canonical": "What is still left on my shopping list?",
+      "variants": ["whats left on my shopping list", "what is still on the shopping list", "what's left to buy", "what am i still missing from the shopping list", "remaining items on shopping list?", "what else do i need from the shop list", "still to buy?", "what hasn't been bought yet on the list", "whats not crossed off my shopping list", "what's still on the list to get"]
+    },
+    {
+      "id": "kids.tasks.h2.t10",
+      "goal": "Throw away my whole shopping list",
+      "setup": ["Add milk to my shopping list."],
+      "canonical": "Delete my shopping list.",
+      "variants": ["delete the shopping list", "remove my shopping list", "get rid of my shopping list", "erase the shopping list", "throw away my shopping list", "clear the shopping list", "shopping list delete pls", "I dont need the shopping list anymore, delete it", "can u delete shopping list", "kill my shopping list"]
+    }
+  ]
+}

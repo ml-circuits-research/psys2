@@ -1,0 +1,261 @@
+@t.ui.help.n01 core.test
+    input="What can I say here?"
+    expect="On the Avatar tab"
+    expect="you can say, for example"
+    expectEffect=chat.suggest
+    session=a
+
+@t.ui.help.n02 core.test
+    input="What can I say here?"
+    expect="On the Avatar tab"
+    expectState="lastHelp.tab=robot"
+    session=a
+
+@t.ui.help.n03 core.test
+    input="More examples"
+    expect="more things you can say on the Avatar tab"
+    session=a
+
+@t.ui.help.n04 core.test
+    input="Give me an example"
+    expect="for example: \""
+    session=a
+
+@t.ui.help.n05 core.test
+    input="What else can I say?"
+    expect="more things"
+    session=a
+
+@t.ui.help.n06 core.test
+    input="Help"
+    expect="The Avatar tab lets you change my face"
+    expect="You can say"
+    session=a
+
+@t.ui.help.n07 core.test
+    input="I am lost"
+    expect="Avatar tab"
+    session=a
+
+@t.ui.help.n08 core.test
+    input="What does this tab do?"
+    expect="The Avatar tab lets you change my face"
+    session=a
+
+@t.ui.help.n09 core.test
+    input="What commands do you recognise?"
+    expect="I can chat"
+    session=a
+
+@t.ui.help.n10 core.test
+    input="What commands do you understand?"
+    expect="change my face"
+    session=a
+
+@t.ui.help.n11 core.test
+    input="What can you do?"
+    expect="I can chat"
+    expect="what can I say here?"
+    session=a
+
+@t.ui.help.n12 core.test
+    input="How do I change the eyes?"
+    expect="You can try"
+    expect="eye"
+    expectEffect=chat.suggest
+    session=a
+
+@t.ui.help.n13 core.test
+    input="How do I add a table?"
+    expect="table"
+    expect="Add a table"
+    session=a
+
+@t.ui.help.n14 core.test
+    input="How to draw a circle?"
+    expect="circle"
+    session=a
+
+@t.ui.help.n15 core.test
+    input="What do I say to change the eyes?"
+    expect="eye"
+    session=a
+
+@t.ui.help.n16 core.test
+    input="How do I play?"
+    expect="There is no game open on the Avatar tab"
+    expect="hangman"
+    session=a
+
+@t.ui.help.n17 core.test
+    input="How do I play chess?"
+    expect="Chess:"
+    expect="knight to f3"
+    session=a
+
+@t.ui.help.n18 core.test
+    input="What are the rules of tic tac toe?"
+    expect="Tic-tac-toe:"
+    expect="Three in a row"
+    session=a
+
+@t.ui.help.n19 core.test
+    input="Why did you not understand?"
+    expect="I have understood everything"
+    session=a
+
+@t.ui.help.n20 core.test
+    input="Zorb flimbles quickly"
+    expectStatus=unparsed
+    session=a
+
+@t.ui.help.n21 core.test
+    input="Why didn't you understand?"
+    expect="I did not understand \"Zorb flimbles quickly\""
+    expect="none of the commands I know matches"
+    session=a
+
+@t.ui.help.n22 core.test
+    input="Hangmn"
+    expect="Did you mean \"Play hangman.\""
+    expectStatus=unparsed
+    expectState="lastUnparsed.text=Hangmn"
+    expectEffect=chat.suggest
+    session=a
+
+@t.ui.help.n23 core.test
+    input="What did I do wrong?"
+    expect="Did you mean"
+    session=a
+
+@t.ui.help.n24 core.test
+    input="Open the editor"
+    expectState="ui.shell:activeTab=editor"
+    session=b
+
+@t.ui.help.n25 core.test
+    input="What can I say here?"
+    expect="On the Editor tab"
+    session=b
+
+@t.ui.help.n26 core.test
+    input="What can I do on this tab?"
+    expect="On the Editor tab"
+    session=b
+
+@t.ui.help.n27 core.test
+    input="What does this tab do?"
+    expect="The Editor tab lets you edit documents"
+    session=b
+
+@t.ui.help.n28 core.test
+    input="Help me"
+    expect="The Editor tab lets you edit documents"
+    session=b
+
+@t.ui.help.n29 core.test
+    input="How do I change the eyes?"
+    expect="eye"
+    session=b
+
+@t.ui.help.n30 core.test
+    input="Open the hangman tab"
+    expectState="ui.shell:activeTab=hangman"
+    session=c
+
+@t.ui.help.n31 core.test
+    input="How do I play?"
+    expect="Hangman:"
+    expect="No game is running yet"
+    session=c
+
+@t.ui.help.n32 core.test
+    input="Play hangman with the word zebra"
+    expect="Hangman"
+    expectState="games.hangman:word=zebra"
+    session=c
+
+@t.ui.help.n33 core.test
+    input="Is there an E?"
+    expect="Yes"
+    session=c
+
+@t.ui.help.n34 core.test
+    input="How do I play?"
+    expect="Hangman:"
+    expect="Right now the word looks like"
+    expect="- e - - -"
+    expect="6 wrong guesses left"
+    session=c
+
+@t.ui.help.n35 core.test
+    input="What can I say here?"
+    expect="On the Hangman tab"
+    session=c
+
+@t.ui.help.n36 core.test
+    input="What does this tab do?"
+    expect="The Hangman tab lets you play hangman"
+    expect="Right now the word looks like"
+    session=c
+
+@t.ui.help.n37 core.test
+    input="How do I play tic tac toe?"
+    expect="Tic-tac-toe:"
+    session=c
+
+@t.ui.help.n38 core.test
+    input="What are the rules?"
+    expect="Hangman:"
+    session=c
+
+@t.ui.help.n39 core.test
+    input="Open the tic tac toe tab"
+    expectState="ui.shell:activeTab=tictactoe"
+    session=d
+
+@t.ui.help.n40 core.test
+    input="What can I say here?"
+    expect="On the Tic-tac-toe tab"
+    session=d
+
+@t.ui.help.n41 core.test
+    input="How do I play?"
+    expect="Tic-tac-toe:"
+    expect="You play X"
+    session=d
+
+@t.ui.help.n42 core.test
+    input="Open the guess tab"
+    expectState="ui.shell:activeTab=guess"
+    session=d
+
+@t.ui.help.n43 core.test
+    input="How do I play?"
+    expect="twenty yes/no questions"
+    session=d
+
+@t.ui.help.n44 core.test
+    input="What can I say here?"
+    expect="On the Guess the animal tab"
+    session=d
+
+@t.ui.help.n45 core.test
+    input="Open the chess board"
+    expectState="ui.shell:activeTab=chess"
+    session=e
+
+@t.ui.help.n46 core.test
+    input="What can I say here?"
+    expect="On the Chess tab"
+    session=e
+
+@t.ui.help.n47 core.test
+    input="How do I play?"
+    expect="Chess:"
+    session=e
+
+@t.ui.help.n48 core.test
+    input="What does this tab do?"
+    expect="The Chess tab lets you play chess"
+    session=e

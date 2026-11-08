@@ -1,0 +1,73 @@
+{
+  "world": "media.music",
+  "tab": "music",
+  "author": "haiku",
+  "batch": "h1",
+  "tasks": [
+    {
+      "id": "media.music.h1.t1",
+      "goal": "Hear a single note, middle C",
+      "canonical": "Play middle C.",
+      "variants": ["pls play middle c", "can u play a high G on the flute", "play F sharp 4", "let me hear a B flat", "hey play me a low E", "could u play the note C sharp", "play note A on the piano", "play a middle c for me", "i wanna hear a G 4", "play D on the bells please"]
+    },
+    {
+      "id": "media.music.h1.t2",
+      "goal": "Hear a chord played",
+      "canonical": "Play a C major chord.",
+      "variants": ["c major chord pls", "play me an E minor", "strum a g7 chord", "can u play a d minor seventh", "play a chord, A minor, on the organ", "hit a C chord", "let me hear F major", "play Bb major chord", "play the chord of D minor", "strum an A minor 7 on the strings"]
+    },
+    {
+      "id": "media.music.h1.t3",
+      "goal": "Hear a scale played",
+      "canonical": "Play the D major scale.",
+      "variants": ["d major scale pls", "play a g minor scale on the flute", "run the c major scale up and down", "can u play a blues scale", "play the scale of E flat major", "play me a pentatonic scale in A", "play D dorian mode", "let me hear the a minor scale descending", "scale of F major please", "could you go through the scale of G major"]
+    },
+    {
+      "id": "media.music.h1.t4",
+      "goal": "Play a named song from the library",
+      "canonical": "Play the song Ode to Joy.",
+      "variants": ["ode to joy pls", "play Twinkle Twinkle little star", "can u play jingle bells", "I want to hear Happy Birthday", "put on Frere Jacques", "row row row your boat plz", "play london bridge is falling down", "play me mary had a little lamb", "old macdonald please", "play brahms lullaby on the flute"]
+    },
+    {
+      "id": "media.music.h1.t5",
+      "goal": "Get a surprise song from the library",
+      "canonical": "Play me a song.",
+      "variants": ["play me a song", "play something", "surprise me with some music", "play another tune", "next song pls", "hit me with a random tune", "play anything you like", "can u play me a nursery rhyme", "sing me something", "play a song on the bells"]
+    },
+    {
+      "id": "media.music.h1.t6",
+      "goal": "Hear the last thing again",
+      "setup": ["Play Ode to Joy."],
+      "canonical": "Play it again.",
+      "variants": ["again", "one more time", "do that again pls", "repeat it", "play it once more", "encore!", "can u replay that", "hear it again", "play the same thing again", "play that again"]
+    },
+    {
+      "id": "media.music.h1.t7",
+      "goal": "Hear the melody the user composed",
+      "setup": ["Start a new melody.", "Add the notes C D E."],
+      "canonical": "Play my melody.",
+      "variants": ["play my tune i made", "play back what i composed", "let me hear what i just wrote", "play the melody i wrote", "can u play back my song", "replay my composition", "hear my notes back", "play my creation pls", "let me hear my tune", "play back my notes on the flute"]
+    },
+    {
+      "id": "media.music.h1.t8",
+      "goal": "Stop the music",
+      "setup": ["Play Ode to Joy."],
+      "canonical": "Stop the music.",
+      "variants": ["stop", "pause it", "hold on, stop please", "that's enough", "silence", "halt!", "can you stop playing", "cut the music", "stop the song", "turn off the sound"]
+    },
+    {
+      "id": "media.music.h1.t9",
+      "goal": "Keep the song repeating",
+      "setup": ["Play Twinkle Twinkle."],
+      "canonical": "Keep repeating the song.",
+      "variants": ["loop it", "put it on repeat", "play on loop pls", "keep looping that", "repeat forever", "make it loop over and over", "turn the loop on", "let it repeat endlessly", "loop this song", "keep playing it in a loop"]
+    },
+    {
+      "id": "media.music.h1.t10",
+      "goal": "Make the playing faster",
+      "setup": ["Play Ode to Joy."],
+      "canonical": "Make it faster.",
+      "variants": ["faster pls", "speed it up a bit", "can u make it quicker", "go faster", "bump the tempo up", "a little quicker please", "make it zippier", "speed up the song", "higher tempo?", "play it a tad faster"]
+    }
+  ]
+}

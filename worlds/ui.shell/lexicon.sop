@@ -28,6 +28,10 @@
     word=drawing
     word=drawing_board
     word=paint
+    word=reader
+    word=document_reader
+    word=my_documents
+    word=library
     word=picture
     word=canvas
     word=chart

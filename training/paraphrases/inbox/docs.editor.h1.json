@@ -1,0 +1,74 @@
+{
+  "world": "docs.editor",
+  "tab": "editor",
+  "author": "haiku",
+  "batch": "h1",
+  "tasks": [
+    {
+      "id": "docs.editor.h1.t1",
+      "goal": "Put a heading called Shopping on the page",
+      "canonical": "Add a heading Shopping.",
+      "variants": ["heading: Shopping, pls", "can u add a header that says Shopping", "make a heading called Shopping", "add heding Shoping", "new heading: Shopping", "I want a heading that reads Shopping", "add shopping as a heading", "heading Shopping", "could you insert a header named Shopping", "put in a title line Shopping as heading"]
+    },
+    {
+      "id": "docs.editor.h1.t2",
+      "goal": "Type a sentence about a cat into a new paragraph",
+      "canonical": "Add a paragraph The cat sat on the mat.",
+      "variants": ["type the cat sat on the mat", "add a line: the cat sat on the mat", "can you put in a sentence saying the cat sat on the mat", "write the cat sat on teh mat in a new paragraph", "append a note that the cat sat on the mat", "one more paragraph, the cat sat on the mat", "pls add paragraph with text the cat sat on the mat", "the cat is sitting on the mat, add that", "put down the cat sat on the mat", "add another para: the cat sat on the mat"]
+    },
+    {
+      "id": "docs.editor.h1.t3",
+      "goal": "Make a bullet list with milk, eggs and bread",
+      "setup": ["Add a heading Shopping."],
+      "canonical": "Add a list with milk, eggs and bread.",
+      "variants": ["list: milk, eggs, bread", "make a bullet list of milk, eggs and bread", "can you add milk eggs and bread as a list", "new list containing milk, eggs and bread", "add a bulleted list with eggs, milk and bread", "add the items milk, eggs and bread in a list", "put milk, eggs and bread into a list pls", "add list milk eggs bread", "I need a list with milk, eggs, and bread on it", "make a list of stuff: milk, eggs and bread"]
+    },
+    {
+      "id": "docs.editor.h1.t4",
+      "goal": "Get rid of the last paragraph I wrote",
+      "setup": ["Add a paragraph Buy milk today.", "Add a paragraph Call grandma."],
+      "canonical": "Delete the last paragraph.",
+      "variants": ["delete the last para", "remove the final paragraph", "get rid of the last paragraph pls", "drop the bottom paragraph", "delete paragraph at the end", "can you remove the last paragraph", "kill the last paragraph", "remove the paragraph that is last", "delete last paragraph", "throw out the final paragraph"]
+    },
+    {
+      "id": "docs.editor.h1.t5",
+      "goal": "Remove only the final sentence of the text",
+      "setup": ["Add a paragraph We went to the park. It was sunny."],
+      "canonical": "Delete the last sentence.",
+      "variants": ["remove the last sentence", "delete last sentence pls", "erase the final sentence", "take out the last sentence", "cut the last sentence", "can u delete the previous sentence", "get rid of the last sentence please", "lose the last sentence", "remove that last sentence", "delete the sentence at the end"]
+    },
+    {
+      "id": "docs.editor.h1.t6",
+      "goal": "Empty the whole document so I can start again",
+      "setup": ["Add a heading Shopping.", "Add a paragraph Milk and eggs."],
+      "canonical": "Clear the document.",
+      "variants": ["empty the whole doc", "wipe the document", "start over, clear everything", "delete everything in the document", "reset the page pls", "clear all the text", "make the doc blank", "wipe everything off the page", "erase the document text", "clear it all"]
+    },
+    {
+      "id": "docs.editor.h1.t7",
+      "goal": "Change every cat to a dog in the text",
+      "setup": ["Add a paragraph The cat sat on the mat."],
+      "canonical": "Replace cat with dog.",
+      "variants": ["change cat to dog", "swap cat for dog", "replace all cat with dog", "change the word cat to dog everywhere", "switch cat with dog", "replace cat by dog pls", "cat should be dog, change it", "can u swap every cat for a dog", "change cat into dog", "replace the word cat with the word dog"]
+    },
+    {
+      "id": "docs.editor.h1.t8",
+      "goal": "Bring the most recent paragraph up to the very top",
+      "setup": ["Add a paragraph First I woke up.", "Add a paragraph Then I ate."],
+      "canonical": "Move the last paragraph to the top.",
+      "variants": ["put the last paragraph at the top", "bring the final para to the top", "send the last paragraph to the start of the doc", "move the bottom paragraph up to the top", "last paragraph to the top pls", "make the last paragraph the first one", "can u shift the last paragraph to the very top", "move the newest paragraph to the front", "the last para goes on top, move it", "move last paragraph top"]
+    },
+    {
+      "id": "docs.editor.h1.t9",
+      "goal": "Name the document Our Trip",
+      "canonical": "Make the title Our Trip.",
+      "variants": ["title it Our Trip", "rename the document to Our Trip", "set the title as Our Trip", "call the doc Our Trip", "change the title to Our Trip please", "give the document the title Our Trip", "our trip is the new title", "the title should be Our Trip", "can you set title to Our Trip", "name this doc Our Trip"]
+    },
+    {
+      "id": "docs.editor.h1.t10",
+      "goal": "Open a fresh, empty document",
+      "canonical": "Start a new document.",
+      "variants": ["new doc", "start a fresh document", "open a blank doc", "create a new page", "can u start a new doc", "make a new file", "begin a new document please", "new document pls", "I want to start over in a new doc", "open another document"]
+    }
+  ]
+}

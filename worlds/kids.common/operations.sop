@@ -39,9 +39,3 @@
     semantics=action
     action=chat.bye
     doc="Says goodbye."
-
-@op.kids.common.capabilities core.operation
-    impl=capabilities
-    semantics=action
-    action=chat.capabilities
-    doc="A short spoken answer built from the summary= phrase of every loaded world (the title when a world has none), grouped by leading verb (uses ctx.worlds())."

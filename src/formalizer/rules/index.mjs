@@ -5,7 +5,7 @@
  * `worlds` is a WorldSet; `session` is a FormSession or any object with a `.form` FormSession.
  */
 import { lexIndex } from '../../worlds/lexicon.mjs';
-import { analyze, QUESTION_WORDS } from './normalize.mjs';
+import { analyze, QUESTION_WORDS, correctTokens } from './normalize.mjs';
 import { compilePattern, matchTokens, BUILTIN_CLASSES, PatternError } from './matcher.mjs';
 import { buildWires, substituteEmit, dummySlots } from './emit.mjs';
 import { routeScores } from './router.mjs';
@@ -15,7 +15,7 @@ import { parse, serialize } from '../../soplang/index.mjs';
 
 export { FormSession } from './session.mjs';
 export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs';
-export { analyze, splitSentences, tokenize } from './normalize.mjs';
+export { analyze, splitSentences, tokenize, editDistance, correctTokens } from './normalize.mjs';
 export { compilePattern, matchTokens } from './matcher.mjs';
 export { singularLemma, pluralize } from './lemma.mjs';
 
@@ -59,6 +59,29 @@ export function checkPattern(p, set) {
 
 function allPatterns(set) {
   return set.memo('patterns', () => set.list().flatMap((w) => w.patterns).map((p, order) => ({ p, order })));
+}
+
+/**
+ * Every word the loaded worlds know: literals of all patterns (and alternatives) and the words of all lexicons
+ * (multi-word entries split into words), with plural forms. Used for typo correction (spec 03 section 1b).
+ */
+export function vocabularyOf(set) {
+  return set.memo('vocabulary', () => {
+    const vocab = new Set();
+    const add = (w) => { if (w) vocab.add(w.toLowerCase()); };
+    for (const { p } of allPatterns(set)) {
+      const c = compiled(p).compiled;
+      if (!c) continue;
+      for (const el of c.elements) {
+        if (el.t === 'lit') el.words.forEach(add);
+        else if (el.t === 'alt') el.alts.forEach((alt) => alt.forEach(add));
+      }
+    }
+    const lex = lexIndex(set);
+    for (const l of lex.lexicons.values()) for (const w of l.words) for (const part of w.split('_')) add(part);
+    for (const [s, pl] of lex.plurals) { add(s); add(pl); }
+    return vocab;
+  });
 }
 
 /** Split a token list into clauses at `,`, `and`, `then`, `but` (one level). */
@@ -200,19 +223,40 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     return seg;
   };
 
-  for (const s of analyze(text)) {
-    let seg = readGroup(s.tokens, s.isQuestion);
-    if (!seg.unparsed) { segments.push({ ...seg, span: s.span, text: s.text }); continue; }
-    const clauses = splitClauses(s.tokens);
+  /** Read a sentence as a whole, else clause by clause; returns the segments or null when nothing was understood. */
+  const readSentence = (s, tokens) => {
+    const whole = readGroup(tokens, s.isQuestion);
+    if (!whole.unparsed) return { done: [{ ...whole, span: s.span, text: s.text }], fallback: null };
+    const clauses = splitClauses(tokens);
     if (clauses.length > 1) {
       const parts = clauses.map((c, idx) => {
         const q = QUESTION_WORDS.has(c[0].lower) || (s.isQuestion && idx === clauses.length - 1 && /\?/.test(text.slice(s.span[1], s.span[1] + 3)));
         return readGroup(c, q);
       });
-      if (parts.some((p) => !p.unparsed)) { segments.push(...parts); continue; }
+      if (parts.some((p) => !p.unparsed)) return { done: parts, fallback: null };
     }
-    seg = { ...seg, span: s.span, text: s.text };
-    segments.push(seg);
+    return { done: null, fallback: { ...whole, span: s.span, text: s.text } };
+  };
+
+  const vocab = () => vocabularyOf(set);
+  const known = (w) => vocab().has(w) || vocab().has(lex.lemma(w)) || lex.names.has(w);
+  for (const s of analyze(text)) {
+    const first = readSentence(s, s.tokens);
+    if (first.done) { segments.push(...first.done); continue; }
+    // nothing matched: retry once with unknown words corrected to the closest known word (typo tolerance)
+    const fix = correctTokens(s.tokens, text, vocab(), known);
+    if (fix.corrections.length) {
+      const second = readSentence(s, fix.tokens);
+      if (second.done) {
+        for (const seg of second.done) {
+          const mine = fix.corrections.filter((c) => c.span[0] >= seg.span[0] && c.span[1] <= seg.span[1]);
+          if (!seg.unparsed && mine.length) seg.corrections = mine;
+        }
+        segments.push(...second.done);
+        continue;
+      }
+    }
+    segments.push(first.fallback);
   }
   for (const seg of segments) wires.push(...seg.wires);
   return { segments, wires };

@@ -163,3 +163,63 @@ export function analyze(text) {
   }
   return out;
 }
+
+// ---- typo tolerance (spec 03 section 1b) ---------------------------------------------------------------------
+
+/** Damerau-Levenshtein distance (optimal string alignment: insert, delete, substitute, swap neighbours); `max` stops early. */
+export function editDistance(a, b, max = Infinity) {
+  if (a === b) return 0;
+  if (Math.abs(a.length - b.length) > max) return max + 1;
+  const prev2 = new Array(b.length + 1).fill(0);
+  let prev = Array.from({ length: b.length + 1 }, (_, j) => j);
+  for (let i = 1; i <= a.length; i++) {
+    const cur = [i];
+    let rowMin = i;
+    for (let j = 1; j <= b.length; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      let v = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + cost);
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) v = Math.min(v, prev2[j - 2] + 1);
+      cur[j] = v;
+      if (v < rowMin) rowMin = v;
+    }
+    if (rowMin > max) return max + 1;
+    for (let j = 0; j <= b.length; j++) prev2[j] = prev[j];
+    prev = cur;
+  }
+  return prev[b.length];
+}
+
+/** Allowed edit distance for a word: none below 4 letters, 1 for 4 to 7 letters, 2 for 8 and more. */
+export const typoBudget = (word) => (word.length >= 8 ? 2 : word.length >= 4 ? 1 : 0);
+
+const QUOTE_RE = /"[^"]*"|\u201c[^\u201d]*\u201d/g;
+
+/**
+ * Correct unknown words to the closest word of `vocab` (a Set of lowercase words; `known(lower)` tells whether a word
+ * is understood as it is). Numbers, quoted text, capitalized names (not at the start of the sentence), words with
+ * digits, apostrophes or hyphens, known words and ambiguous words (two candidates at the same distance) are left alone.
+ * @returns {{ tokens: object[], corrections: {from:string,to:string,span:[number,number]}[] }}
+ */
+export function correctTokens(tokens, text, vocab, known = (w) => vocab.has(w), { maxCorrections = 3 } = {}) {
+  const quoted = [...text.matchAll(QUOTE_RE)].map((m) => [m.index, m.index + m[0].length]);
+  const corrections = [];
+  const firstWord = tokens.findIndex((t) => t.kind === 'word');
+  const out = tokens.map((t, i) => {
+    if (corrections.length >= maxCorrections || t.kind !== 'word' || !/^[a-z]+$/.test(t.lower)) return t;
+    if (i !== firstWord && /^[A-ZÀ-Þ]/.test(t.raw)) return t;
+    if (quoted.some(([a, b]) => t.start >= a && t.end <= b)) return t;
+    const budget = typoBudget(t.lower);
+    if (!budget || known(t.lower)) return t;
+    let best = null, bestD = budget + 1, tie = false;
+    for (const w of vocab) {
+      if (w.length < 3 || Math.abs(w.length - t.lower.length) > budget || !/^[a-z]+$/.test(w)) continue;
+      const d = editDistance(t.lower, w, bestD);
+      if (d > budget) continue;
+      if (d < bestD) { best = w; bestD = d; tie = false; } else if (d === bestD && w !== best) tie = true;
+    }
+    if (!best || tie) return t;
+    corrections.push({ from: t.raw, to: best, span: [t.start, t.end] });
+    return { ...t, raw: best, lower: best };
+  });
+  return { tokens: out, corrections };
+}

@@ -1,0 +1,23 @@
+@world.docs.reader core.world
+    namespace=docs.reader
+    version=0.1.0
+    legend=$legend.docs.reader
+    imports=world.core
+    imports=world.kids.common
+    formalization=rules
+    language=en
+    status=fixture
+    tab=documents
+    tabTitle="Documents"
+    tabAlias=documents
+    tabAlias=reader
+    tabAlias=document_reader
+    tabAlias=my_documents
+    tabAlias=library
+    tabAlias=files
+    tabAlias=my_files
+    tabOrder=80
+    tabKind=tool
+    title="Document reader"
+    summary="answer questions about your documents"
+    doc="Ask questions about documents you add in the browser (.md, .txt, .pdf, .docx) or the bundled fairy tale. Each document is formalized into sections, sentences, an entity index with mentions and simple co-reference, events (agent, verb, object, place), dialogue with speakers, relations, TF-IDF keywords and a BM25 index; answers cite the sentences and the Documents tab highlights them. No LLM. State lives in ctx.state; the tab renders it. Hand-built platform fixture, not produced by the C1 workflow."

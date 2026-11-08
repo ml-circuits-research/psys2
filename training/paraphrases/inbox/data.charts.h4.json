@@ -1,0 +1,74 @@
+{
+  "world": "data.charts",
+  "tab": "charts",
+  "author": "haiku",
+  "batch": "h4",
+  "tasks": [
+    {
+      "id": "data.charts.h4.t1",
+      "goal": "Have the chart read out loud",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Read the chart aloud.",
+      "variants": ["read it out", "read the chart to me", "say the numbers out loud", "read the graph", "speak the chart please", "can you read the chart", "read me the values", "read it aloud pls", "tell me the chart out loud", "read out what the chart says"]
+    },
+    {
+      "id": "data.charts.h4.t2",
+      "goal": "Go back to the first chart I made",
+      "setup": ["Make a pie chart of cats 4, dogs 6 and fish 2.", "Chart apples 5, pears 3 and plums 8."],
+      "canonical": "Go back to the first chart.",
+      "variants": ["first chart please", "show the first one again", "back to chart one", "the first chart, show it", "go to my first graph", "return to the very first chart", "show me chart number one", "first chart pls", "bring back the first chart", "can you open the first chart again"]
+    },
+    {
+      "id": "data.charts.h4.t3",
+      "goal": "See the list of charts I have",
+      "setup": ["Make a pie chart of cats 4, dogs 6 and fish 2.", "Chart apples 5, pears 3 and plums 8."],
+      "canonical": "What charts do I have?",
+      "variants": ["list my charts", "show all my charts", "which charts are there", "what charts have I made", "my charts?", "give me the list of graphs", "how many charts and what are they", "show the chart list", "what graphs do i have saved", "list the charts pls"]
+    },
+    {
+      "id": "data.charts.h4.t4",
+      "goal": "Remove the second chart from my list",
+      "setup": ["Make a pie chart of cats 4, dogs 6 and fish 2.", "Chart apples 5, pears 3 and plums 8."],
+      "canonical": "Delete the second chart.",
+      "variants": ["remove chart 2", "get rid of the second one", "delete number two chart", "drop the second graph", "bin chart 2", "erase the second chart please", "chart two, delete it", "take out the 2nd chart", "remove the second graph", "can u delete chart number 2"]
+    },
+    {
+      "id": "data.charts.h4.t5",
+      "goal": "Chart how much the toys cost",
+      "canonical": "Chart the prices of the toys.",
+      "variants": ["toy prices as a chart", "graph the toy prices", "chart toys prices pls", "make a bar chart of the toy costs", "how much do the toys cost, chart it", "toys price chart", "plot the cost of the toys", "show me toy prices in a chart", "can you chart what the toys cost", "toy costs graph"]
+    },
+    {
+      "id": "data.charts.h4.t6",
+      "goal": "Compare how many legs some animals have",
+      "canonical": "Chart the legs of a dog, a spider and a bee.",
+      "variants": ["legs of a dog spider and bee as a chart", "chart dog spider bee legs", "how many legs do a dog, a spider and a bee have, chart it", "graph the legs of a dog, spider, bee", "bar chart legs dog spider bee", "animal legs chart: dog, spider, bee", "chart how many legs a dog spider and a bee have", "legs chart for a dog a spider and a bee pls", "make a chart of legs for dog spider and bee", "plot the legs of the dog, the spider and the bee"]
+    },
+    {
+      "id": "data.charts.h4.t7",
+      "goal": "Chart the items on my shopping list",
+      "canonical": "Make a pie chart of my shopping list.",
+      "variants": ["shopping list as a pie chart", "pie of my shopping list", "chart my shopping", "graph the shopping list", "can you chart my shopping list", "show my groceries list in a pie", "shopping list chart pls", "make a chart of what's on my shopping list", "turn my shopping list into a chart", "pie chart the shopping list"]
+    },
+    {
+      "id": "data.charts.h4.t8",
+      "goal": "Save the chart data to a spreadsheet file",
+      "setup": ["Download the chart as an image."],
+      "canonical": "Download the chart data as a spreadsheet.",
+      "variants": ["save the data as a spreadsheet", "export the numbers to a spreadsheet", "chart data to excel please", "download the data as a csv", "get the chart numbers as a spreadsheet", "spreadsheet of the chart data", "give me the data file", "export chart data pls", "can I download the values as a sheet", "save the numbers in a spreadsheet file"]
+    },
+    {
+      "id": "data.charts.h4.t9",
+      "goal": "Paste the chart copy into my document",
+      "setup": ["Copy the chart data."],
+      "canonical": "Put the chart in the document.",
+      "variants": ["add the chart to my doc", "insert the chart into the document", "paste the chart in the doc", "put the graph in my document", "drop the chart into the document", "chart into the doc pls", "can you add it to the document", "send the chart to my document", "insert the graph in the doc", "document please, add the chart"]
+    },
+    {
+      "id": "data.charts.h4.t10",
+      "goal": "Put the numbers behind the chart into the document",
+      "canonical": "Put the chart data in the document.",
+      "variants": ["add the chart numbers to the doc", "insert the data into my document", "paste the figures in the doc", "put the values in the document", "numbers into the document please", "drop the data table in the doc", "can you add the chart data to the document", "chart values into the doc pls", "send the data to my document", "insert the chart figures in the document"]
+    }
+  ]
+}

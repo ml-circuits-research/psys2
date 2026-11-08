@@ -183,11 +183,18 @@ export async function mountPsys2(element, options = {}) {
 
   // ---------- effects (allow-list) ----------
   const toast = (text) => { const t = h('div', { class: 'p2-toast', role: 'status' }, text); chat.append(t); setTimeout(() => t.remove(), 2600); };
+  let currentBot = null; // the bot message of the reply being processed (chat.suggest adds chips to it)
   const ALLOW = {
     'speech.say': async ({ text, lang }) => {
       if (!speechSupport.synthesis || !speech) return { ok: false, detail: 'speech synthesis is not supported by this browser' };
       if (!String(text ?? '').trim()) return { ok: false, detail: 'no text' };
       speech.speak(String(text), lang ? { lang: LANG_TAGS[lang] ?? lang } : undefined);
+      return { ok: true };
+    },
+    'chat.suggest': async ({ items }) => {
+      const list = (Array.isArray(items) ? items : []).slice(0, 5).map(String).filter(Boolean);
+      if (!list.length || !currentBot) return { ok: false, detail: 'nothing to suggest' };
+      currentBot.bubble.append(h('div', { class: 'p2-chips-row' }, list.map((ex) => h('button', { class: 'p2-example', type: 'button', onclick: () => { send(ex, 'chip'); input.focus(); } }, ex))));
       return { ok: true };
     },
     'clipboard.copy': async ({ text }) => {
@@ -300,6 +307,7 @@ export async function mountPsys2(element, options = {}) {
     const usage = translator.usage.map((u) => ({ ...u }));
     const answer = (reply.text ?? '').trim() || '(no answer)';
     const botMsg = addMessage('bot', answer);
+    currentBot = botMsg;
     if (reply.lang && reply.lang !== 'en') user.meta.prepend(h('span', { class: 'p2-lang' }, `${reply.lang.toUpperCase()} → EN`));
 
     const avatarChanged = !!reply.state?.['ui.avatar'];

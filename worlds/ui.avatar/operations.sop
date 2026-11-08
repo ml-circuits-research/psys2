@@ -183,3 +183,21 @@
     semantics=action
     action=avatar.describe
     doc="Describes the whole avatar in words. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+
+@op.ui.avatar.undo core.operation
+    impl=undo
+    semantics=action
+    action=avatar.undo
+    doc="Goes back to the look before the last change (also a change of character). Keeps up to 20 steps in the state. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+
+@op.ui.avatar.explainSwitch core.operation
+    impl=explainSwitch
+    semantics=action
+    action=avatar.explainSwitch
+    doc="Apologises and explains a change of character, and says how to go back. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+
+@op.ui.avatar.setPartColored core.operation
+    impl=setPartColored
+    semantics=action
+    action=avatar.setPartColored
+    doc="Sets a component and colors it when the character can color it (a red hat). Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."

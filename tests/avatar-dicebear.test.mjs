@@ -99,11 +99,14 @@ test('a glow is never the same color as the body', async () => {
   const c = s.state('ui.avatar').robot.colors; assert.notEqual(c.glow, c.body);
 });
 
-test('only another character can do it: the avatar turns into that character and says so', async () => {
+test('only another character can do it: the avatar offers to become that character and waits for yes', async () => {
   const s = engine.createSession();
   const r = await s.send('Wear a medical mask.');
+  assert.equal(s.state('ui.avatar').character, 'robot');
+  assert.match(r.text, /Say "yes" to become the person/);
+  await s.send('yes');
   assert.equal(s.state('ui.avatar').character, 'person');
-  assert.match(r.text, /turned into a person/);
+  assert.equal(s.state('ui.avatar').person.mask !== 'none', true);
   const q = engine.createSession();
   assert.match((await q.send('Make the background pink.')).text, /pink|closest|background/);
   await q.send('Become a person.');

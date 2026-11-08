@@ -417,3 +417,45 @@
     for=action.avatar.describe
     status=missing
     text="{note}"
+
+@tpl.ui.avatar.undo core.template
+    for=action.avatar.undo
+    text="{value}"
+
+@tpl.ui.avatar.undo.unsupported core.template
+    for=action.avatar.undo
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.avatar.undo.missing core.template
+    for=action.avatar.undo
+    status=missing
+    text="{note}"
+
+@tpl.ui.avatar.explainSwitch core.template
+    for=action.avatar.explainSwitch
+    text="{value}"
+
+@tpl.ui.avatar.explainSwitch.unsupported core.template
+    for=action.avatar.explainSwitch
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.avatar.explainSwitch.missing core.template
+    for=action.avatar.explainSwitch
+    status=missing
+    text="{note}"
+
+@tpl.ui.avatar.setPartColored core.template
+    for=action.avatar.setPartColored
+    text="{value}"
+
+@tpl.ui.avatar.setPartColored.unsupported core.template
+    for=action.avatar.setPartColored
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.avatar.setPartColored.missing core.template
+    for=action.avatar.setPartColored
+    status=missing
+    text="{note}"

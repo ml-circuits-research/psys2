@@ -1,0 +1,68 @@
+{
+  "world": "ui.avatar",
+  "tab": "robot",
+  "author": "haiku",
+  "batch": "h3",
+  "tasks": [
+    {
+      "id": "ui.avatar.h3.t1",
+      "goal": "Turn the avatar into an emoji",
+      "canonical": "Turn into an emoji.",
+      "variants": ["become an emoji", "emoji face pls", "be an emoji now", "make yourself an emoji", "switch to emoji mode", "emoji version of you please", "can u be an emoji", "use an emoji for your face", "emoji!", "go emoji"]
+    },
+    {
+      "id": "ui.avatar.h3.t2",
+      "goal": "Find out which character is showing",
+      "canonical": "Which character are you?",
+      "variants": ["what character r u", "what are you right now", "which one are you", "what kind are you rn", "are you the robot or what", "what type of avatar is showing", "current character?", "what character is on screen", "u a robot or a person", "what's showing, a robot or what"]
+    },
+    {
+      "id": "ui.avatar.h3.t3",
+      "goal": "See the list of characters the avatar can be",
+      "canonical": "Which characters are there?",
+      "variants": ["list characters", "what characters can i pick", "who can you be, list them", "show me the characters", "what are the character choices", "what kinds of you exist", "characters list pls", "which ones can you turn into", "options for characters?", "what other forms can you take"]
+    },
+    {
+      "id": "ui.avatar.h3.t4",
+      "goal": "Make the face look surprised",
+      "canonical": "Look surprised.",
+      "variants": ["look surprised", "surprised face pls", "make ur face surprised", "be surprised", "can you look shocked", "show surprise", "give me a surprised expression", "make a shocked face", "look amazed please", "surprise face!"]
+    },
+    {
+      "id": "ui.avatar.h3.t5",
+      "goal": "Check whether the face looks happy",
+      "canonical": "Are you happy?",
+      "variants": ["r u happy", "you look happy right", "are u smiling?", "happy face or nah?", "do you look happy rn", "is your face happy", "would you say you look happy", "you happy?", "happy right now?", "does this look like a happy face"]
+    },
+    {
+      "id": "ui.avatar.h3.t6",
+      "goal": "Ask what mood the face shows",
+      "canonical": "How do you feel?",
+      "variants": ["how r u feeling", "wat's ur mood", "what mood are you in", "feeling?", "what's your vibe rn", "mood?", "what emotion is your face showing", "how do u look inside", "are you feeling ok, what face is that", "mood of your face pls"]
+    },
+    {
+      "id": "ui.avatar.h3.t7",
+      "goal": "Give the avatar the name Bolt",
+      "canonical": "Call yourself Robi.",
+      "variants": ["new name for you, Bolt", "call urself Bolt", "name yourself Bolt", "i'll call you Bolt", "you're named Bolt now", "from now on, Bolt is your name", "name u Bolt", "Bolt is ur name", "i wanna call you Bolt pls", "let's name you Bolt"]
+    },
+    {
+      "id": "ui.avatar.h3.t8",
+      "goal": "Ask what the avatar is called",
+      "canonical": "What are you called?",
+      "variants": ["what's ur name again", "do u have a name", "whats ur name", "wat r u called", "name?", "how do i call you", "so what's your name?", "what's the name you go by", "tell me ur name", "remind me what you're called"]
+    },
+    {
+      "id": "ui.avatar.h3.t9",
+      "goal": "Go back to the default look",
+      "canonical": "Go back to normal.",
+      "variants": ["back to normal", "reset urself pls", "default look please", "normal again?", "revert to the original you", "undo all your changes", "put yourself back to how you started", "reset to default", "restore your original look", "start fresh with the default you"]
+    },
+    {
+      "id": "ui.avatar.h3.t10",
+      "goal": "Reset every character, the robot included",
+      "canonical": "Reset everything.",
+      "variants": ["reset all the characters", "reset every character you have", "clear everything back to start, all of you", "reset all of your looks", "set everything back for all characters", "reset the robot and the person too", "all characters back to default pls", "reset all", "full reset for every character", "reset everyone"]
+    }
+  ]
+}

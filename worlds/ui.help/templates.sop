@@ -1,0 +1,111 @@
+@tpl.ui.help.capabilities core.template
+    for=action.chat.capabilities
+    text="I can {value}. Ask me \"what can I say here?\" for examples."
+
+@tpl.ui.help.capabilities.unsupported core.template
+    for=action.chat.capabilities
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.help.capabilities.missing core.template
+    for=action.chat.capabilities
+    status=missing
+    text="{note}"
+
+@tpl.ui.help.help core.template
+    for=action.ui.help
+    text="{value}"
+
+@tpl.ui.help.help.unsupported core.template
+    for=action.ui.help
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.help.help.missing core.template
+    for=action.ui.help
+    status=missing
+    text="{note}"
+
+@tpl.ui.help.helpMe core.template
+    for=action.ui.helpMe
+    text="{value}"
+
+@tpl.ui.help.helpMe.unsupported core.template
+    for=action.ui.helpMe
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.help.helpMe.missing core.template
+    for=action.ui.helpMe
+    status=missing
+    text="{note}"
+
+@tpl.ui.help.helpMore core.template
+    for=action.ui.helpMore
+    text="{value}"
+
+@tpl.ui.help.helpMore.unsupported core.template
+    for=action.ui.helpMore
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.help.helpMore.missing core.template
+    for=action.ui.helpMore
+    status=missing
+    text="{note}"
+
+@tpl.ui.help.helpAbout core.template
+    for=action.ui.helpAbout
+    text="{value}"
+
+@tpl.ui.help.helpAbout.unsupported core.template
+    for=action.ui.helpAbout
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.help.helpAbout.missing core.template
+    for=action.ui.helpAbout
+    status=missing
+    text="{note}"
+
+@tpl.ui.help.helpGame core.template
+    for=action.ui.helpGame
+    text="{value}"
+
+@tpl.ui.help.helpGame.unsupported core.template
+    for=action.ui.helpGame
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.help.helpGame.missing core.template
+    for=action.ui.helpGame
+    status=missing
+    text="{note}"
+
+@tpl.ui.help.helpHow core.template
+    for=action.ui.helpHow
+    text="{value}"
+
+@tpl.ui.help.helpHow.unsupported core.template
+    for=action.ui.helpHow
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.help.helpHow.missing core.template
+    for=action.ui.helpHow
+    status=missing
+    text="{note}"
+
+@tpl.ui.help.helpWhy core.template
+    for=action.ui.helpWhy
+    text="{value}"
+
+@tpl.ui.help.helpWhy.unsupported core.template
+    for=action.ui.helpWhy
+    status=unsupported
+    text="{note}"
+
+@tpl.ui.help.helpWhy.missing core.template
+    for=action.ui.helpWhy
+    status=missing
+    text="{note}"

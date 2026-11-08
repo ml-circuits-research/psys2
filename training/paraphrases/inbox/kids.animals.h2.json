@@ -1,0 +1,69 @@
+{
+  "world": "kids.animals",
+  "tab": "robot",
+  "author": "haiku",
+  "batch": "h2",
+  "tasks": [
+    {
+      "id": "kids.animals.h2.t1",
+      "goal": "Find out whether a duck can fly",
+      "canonical": "Can a duck fly?",
+      "variants": ["duck fly?", "can ducks fly", "do ducks fly", "is a duck able to fly", "ducks flying yes or no", "can a duck take off", "can duck fly pls", "does a duck know how to fly", "fly duck?", "can a mallard fly"]
+    },
+    {
+      "id": "kids.animals.h2.t2",
+      "goal": "Find out whether a cow can fly",
+      "setup": ["A zebra cannot fly."],
+      "canonical": "Can a cow fly?",
+      "variants": ["cow fly?", "can cows fly", "do cows fly", "is a cow able to fly", "cows flying yes or no", "can a cow take off", "can cow fly pls", "does a cow know how to fly", "fly cow?", "could a cow ever fly"]
+    },
+    {
+      "id": "kids.animals.h2.t3",
+      "goal": "Find out whether ducks can swim",
+      "canonical": "Do ducks swim?",
+      "variants": ["ducks swim?", "can ducks swim", "do ducks swim in water", "are ducks good swimmers", "duck swim yes or no", "can a duck go swimming", "ducks can swim right", "is swimming something ducks do", "do ducks like to swim", "swim ducks?"]
+    },
+    {
+      "id": "kids.animals.h2.t4",
+      "goal": "Find out whether a giraffe can swim",
+      "canonical": "Can a giraffe swim?",
+      "variants": ["giraffe swim?", "can giraffes swim", "do giraffes swim", "is a giraffe able to swim", "giraffe swimming yes or no", "can a giraffe go in water", "can giraffe swim pls", "could a giraffe swim in a lake", "swim giraffe?", "does a giraffe know how to swim"]
+    },
+    {
+      "id": "kids.animals.h2.t5",
+      "goal": "Check whether a dolphin is a mammal",
+      "canonical": "Is a dolphin a mammal?",
+      "variants": ["dolphin a mammal?", "is a dolphin mammal", "dolphins are mammals right", "is a dolphin classed as a mammal", "dolphin mammal yes or no", "would you call a dolphin a mammal", "are dolphins mammals", "is dolphin a type of mammal", "dolphin in the mammal group?", "dolphin = mammal?"]
+    },
+    {
+      "id": "kids.animals.h2.t6",
+      "goal": "Check whether a bat is a bird",
+      "canonical": "Is a bat a bird?",
+      "variants": ["bat a bird?", "is a bat a bird", "bats are birds right", "is a bat classed as a bird", "bat bird yes or no", "would you call a bat a bird", "are bats birds", "is bat a type of bird", "bat in the bird group?", "bat = bird?"]
+    },
+    {
+      "id": "kids.animals.h2.t7",
+      "goal": "Find where I can see a camel",
+      "canonical": "Where can I find a camel?",
+      "variants": ["where to find a camel", "where do i see camels", "where can camels be found", "where would i meet a camel", "camel location?", "where are camels to be seen", "which place has camels", "where could i spot a camel", "where do camels hang out", "camels where pls"]
+    },
+    {
+      "id": "kids.animals.h2.t8",
+      "goal": "Find out what covers a duck",
+      "canonical": "What covering does a duck have?",
+      "variants": ["duck covering?", "what covers a duck", "what does a duck have on its body", "duck is covered in what", "what is a duck's outer covering", "what's on a duck's skin", "is a duck covered in feathers", "covering of a duck?", "duck body covered with what", "what covers the duck"]
+    },
+    {
+      "id": "kids.animals.h2.t9",
+      "goal": "Find out what dolphins are like",
+      "canonical": "What are dolphins like?",
+      "variants": ["what's dolphins like", "dolphin personality?", "are dolphins friendly", "what kind of animal are dolphins like", "how are dolphins", "dolphins what are they like", "describe dolphins for me", "what's the character of dolphins", "are dolphins smart and fun", "dolphins like what?"]
+    },
+    {
+      "id": "kids.animals.h2.t10",
+      "goal": "Find a bird that can swim",
+      "canonical": "Name a bird that can swim.",
+      "variants": ["bird that swims?", "which bird can swim", "give me a swimming bird", "a bird that swims, name one", "name a swimming bird", "what bird swims", "any birds that can swim?", "tell me a bird that is good at swimming", "swimming bird please", "name a bird which swims well"]
+    }
+  ]
+}

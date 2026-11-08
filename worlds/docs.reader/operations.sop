@@ -1,0 +1,203 @@
+@op.docs.reader.describe core.operation
+    impl=describe
+    semantics=action
+    action=docr.describe
+    doc="Introduces the active document: size, sections, main characters, places and key words."
+
+@op.docs.reader.summary core.operation
+    impl=summary
+    semantics=action
+    action=docr.summary
+    doc="Extractive summary: the top-scoring sentences (TF-IDF weights), optionally of one section."
+
+@op.docs.reader.characters core.operation
+    impl=characters
+    semantics=action
+    action=docr.characters
+    doc="Lists the characters by number of mentions."
+
+@op.docs.reader.mainCharacter core.operation
+    impl=mainCharacter
+    semantics=action
+    action=docr.mainCharacter
+    doc="The most mentioned character."
+
+@op.docs.reader.places core.operation
+    impl=places
+    semantics=action
+    action=docr.places
+    doc="Places (or things with kind=things) by number of mentions."
+
+@op.docs.reader.keywords core.operation
+    impl=keywords
+    semantics=action
+    action=docr.keywords
+    doc="TF-IDF key words."
+
+@op.docs.reader.outline core.operation
+    impl=outline
+    semantics=action
+    action=docr.outline
+    doc="Headings of the document with their sentence counts."
+
+@op.docs.reader.stats core.operation
+    impl=stats
+    semantics=action
+    action=docr.stats
+    doc="Counts of sentences, words, paragraphs, sections or characters."
+
+@op.docs.reader.who core.operation
+    impl=who
+    semantics=action
+    action=docr.who
+    doc="Describes a character, place or thing: roles, relations, attributes, mentions."
+
+@op.docs.reader.did core.operation
+    impl=did
+    semantics=action
+    action=docr.did
+    doc="What an entity does: its events (agent - verb - object - place)."
+
+@op.docs.reader.happened core.operation
+    impl=happened
+    semantics=action
+    action=docr.happened
+    doc="What happens to an entity: events where it is the object, and how it ends."
+
+@op.docs.reader.where core.operation
+    impl=where
+    semantics=action
+    action=docr.where
+    doc="Where an entity lives, goes or is, from event places."
+
+@op.docs.reader.whereDid core.operation
+    impl=whereDid
+    semantics=action
+    action=docr.whereDid
+    doc="Where an event happened, found by agent, verb and object words."
+
+@op.docs.reader.whenDid core.operation
+    impl=whenDid
+    semantics=action
+    action=docr.whenDid
+    doc="When an event happened: its time phrase, else its position in the text."
+
+@op.docs.reader.whoV core.operation
+    impl=whoV
+    semantics=action
+    action=docr.whoV
+    doc="Who did a verb to an entity (helped, loved, ate...), from events."
+
+@op.docs.reader.didV core.operation
+    impl=didV
+    semantics=action
+    action=docr.didV
+    doc="Whom an entity did a verb to."
+
+@op.docs.reader.said core.operation
+    impl=said
+    semantics=action
+    action=docr.said
+    doc="Who said the quoted words (dialogue lines with speakers)."
+
+@op.docs.reader.saying core.operation
+    impl=saying
+    semantics=action
+    action=docr.saying
+    doc="What an entity says."
+
+@op.docs.reader.part core.operation
+    impl=part
+    semantics=action
+    action=docr.part
+    doc="What happens at the beginning, middle or end, or in section N."
+
+@op.docs.reader.sentence core.operation
+    impl=sentence
+    semantics=action
+    action=docr.sentence
+    doc="Shows one sentence by number."
+
+@op.docs.reader.count core.operation
+    impl=count
+    semantics=action
+    action=docr.count
+    doc="How many times an entity or word is mentioned."
+
+@op.docs.reader.search core.operation
+    impl=search
+    semantics=action
+    action=docr.search
+    doc="BM25 search over sentences; the hits are highlighted in the tab."
+
+@op.docs.reader.searchStep core.operation
+    impl=searchStep
+    semantics=action
+    action=docr.searchStep
+    doc="Next, previous, first or last search result."
+
+@op.docs.reader.clearSearch core.operation
+    impl=clearSearch
+    semantics=action
+    action=docr.clearSearch
+    doc="Clears search highlights."
+
+@op.docs.reader.across core.operation
+    impl=across
+    semantics=action
+    action=docr.across
+    doc="Which documents mention something."
+
+@op.docs.reader.relation core.operation
+    impl=relation
+    semantics=action
+    action=docr.relation
+    doc="Who is X's sister, brother, father... from relations found in the text."
+
+@op.docs.reader.isRelated core.operation
+    impl=isRelated
+    semantics=action
+    action=docr.isRelated
+    doc="How two characters are related."
+
+@op.docs.reader.read core.operation
+    impl=read
+    semantics=action
+    action=docr.read
+    doc="Reads a part of the document aloud (speech.say effect)."
+
+@op.docs.reader.list core.operation
+    impl=list
+    semantics=action
+    action=docr.list
+    doc="Lists the documents."
+
+@op.docs.reader.open core.operation
+    impl=open
+    semantics=action
+    action=docr.open
+    doc="Opens a document by title, tag, format or position."
+
+@op.docs.reader.close core.operation
+    impl=close
+    semantics=action
+    action=docr.close
+    doc="Closes (removes) a document."
+
+@op.docs.reader.loadSample core.operation
+    impl=loadSample
+    semantics=action
+    action=docr.loadSample
+    doc="Opens the bundled sample document."
+
+@op.docs.reader.more core.operation
+    impl=more
+    semantics=action
+    action=docr.more
+    doc="Continues the last answer."
+
+@op.docs.reader.ask core.operation
+    impl=ask
+    semantics=action
+    action=docr.ask
+    doc="Catch-all for questions about the document: closest passage or an honest \"does not say\"."

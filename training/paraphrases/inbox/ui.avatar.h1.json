@@ -1,0 +1,69 @@
+{
+  "world": "ui.avatar",
+  "tab": "robot",
+  "author": "haiku",
+  "batch": "h1",
+  "tasks": [
+    {
+      "id": "ui.avatar.h1.t1",
+      "goal": "Give the avatar visor eyes",
+      "canonical": "Give yourself visor eyes.",
+      "variants": ["visor eyes pls", "can u give urself visor eyes", "make me visor eyes", "put visor eyes on yourself", "could you switch your eyes to visor ones", "give urself goggle eyes lol", "visor eyes for the robot please", "I'd like you to have visor eyes", "eyes to visor, go", "try visor eyes on yourself"]
+    },
+    {
+      "id": "ui.avatar.h1.t2",
+      "goal": "Ask for a part the avatar has no variant for, and hear what is possible",
+      "canonical": "Give yourself a unicorn horn.",
+      "canonical_retries": ["Put a unicorn horn on your head."],
+      "variants": ["give urself a unicorn horn", "can you get a unicorn horn", "i want a unicorn horn on ur head", "unicorn horn pls", "could u put a unicorn horn on", "add a unicorn horn to yourself", "may I have a unicorn horn on you", "unicorn horn on top of you plz", "hey can you wear a unicorn horn", "gimme a unicorn horn"]
+    },
+    {
+      "id": "ui.avatar.h1.t3",
+      "goal": "See the next style of the eyes",
+      "canonical": "Next eyes.",
+      "variants": ["next eyes", "eyes next pls", "go to the next eyes", "show me the next eyes", "switch eyes to the next one", "nxt eyes", "can u do the next eyes", "next one for the eyes please", "eyes: next", "what's the next eye style you have"]
+    },
+    {
+      "id": "ui.avatar.h1.t4",
+      "goal": "Go back one mouth style",
+      "canonical": "Previous mouth.",
+      "variants": ["previous mouth", "back one for the mouth", "go to the mouth before this one", "earlier mouth please", "prev mouth", "mouth previous one pls", "can you go back to the last mouth", "mouth one step back", "previus mouth", "the mouth from before, please"]
+    },
+    {
+      "id": "ui.avatar.h1.t5",
+      "goal": "Try a different hairstyle",
+      "canonical": "Different hair.",
+      "variants": ["different hair", "change my hair to something else", "new hairdo pls", "try another hair", "hair something different", "give me a different hairstyle", "can u swap the hair for another one", "hair, but a different one", "switch the hair up", "any other hair you got?"]
+    },
+    {
+      "id": "ui.avatar.h1.t6",
+      "goal": "Make the eyes bigger",
+      "canonical": "Make your eyes bigger.",
+      "variants": ["make ur eyes bigger", "bigger eyes plz", "eyes bigger", "can you make your peepers larger", "larger eyes for you?", "big eyes pls", "could you make your eyes a bit larger", "eyes should be bigger", "let your eyes get bigger", "eyes bigger lol"]
+    },
+    {
+      "id": "ui.avatar.h1.t7",
+      "goal": "Make the eyes smaller",
+      "canonical": "I want smaller eyes.",
+      "variants": ["smaller eyes pls", "make ur eyes a little less big", "eyes smaller plz", "tiny eyes please", "can your eyes be smaller", "make ur eyes small", "eyes need to be smaller", "less big eyes, pls", "make the eyes a teeny bit smaller", "could you reduce your eyes down a bit"]
+    },
+    {
+      "id": "ui.avatar.h1.t8",
+      "goal": "Ask the avatar's name",
+      "canonical": "What is your name?",
+      "variants": ["whats ur name", "what's your name", "do you have a name?", "name?", "so what do people call you", "what name do you go by", "tell me your name", "how should i address you", "ur name pls", "may I know your name"]
+    },
+    {
+      "id": "ui.avatar.h1.t9",
+      "goal": "Put the eyes back to the default",
+      "canonical": "Reset your eyes.",
+      "variants": ["reset ur eyes", "eyes back to normal", "default eyes please", "restore the eyes", "eyes to default pls", "can u put your eyes back how they were", "back to the normal eyes", "undo the eye change", "eyes reset", "return the eyes to the standard look"]
+    },
+    {
+      "id": "ui.avatar.h1.t10",
+      "goal": "Take the hat off",
+      "canonical": "Take off your hat.",
+      "variants": ["take off ur hat", "remove the hat", "hat off pls", "no more hat", "can you lose the hat", "hat remove", "drop the hat", "get rid of the hat", "could you take your hat off please", "take the hat off, I dont like it"]
+    }
+  ]
+}

@@ -56,7 +56,7 @@ export const TAB_ACTIONS = new Set(['ui.openTab', 'ui.playGame']);
 /** `ui.shell` game controls: handled by whichever game the active tab shows. */
 export const GAME_CONTROL_ACTIONS = new Set(['ui.newGame', 'ui.giveUp', 'ui.hint']);
 export const SETTING_ACTIONS = new Set([
-  'ui.back', 'ui.whichTab', 'ui.help', 'ui.speaker', 'ui.listening', 'ui.handsFree', 'ui.rate', 'ui.language', 'ui.phraseLog',
+  'ui.back', 'ui.whichTab', 'ui.help', 'ui.helpMe', 'ui.helpMore', 'ui.helpAbout', 'ui.helpGame', 'ui.helpWhy', 'ui.speaker', 'ui.listening', 'ui.handsFree', 'ui.rate', 'ui.language', 'ui.phraseLog',
 ]);
 
 /** Is this a `ui.shell` game-control match (new game, give up, hint)? */
@@ -73,7 +73,7 @@ export function wildTokens(m) {
 
 /** Navigation class of a match: 'tab' (2a), 'setting' (2b) or null. Wildcard captures never count as explicit. */
 export function navigationKind(m) {
-  if (m.pattern.worldId !== 'ui.shell' || wildTokens(m) > 0) return null;
+  if ((m.pattern.worldId !== 'ui.shell' && m.pattern.worldId !== 'ui.help') || wildTokens(m) > 0) return null;
   const action = /action=([\w.]+)/.exec(m.pattern.emit ?? '')?.[1];
   return TAB_ACTIONS.has(action) ? 'tab' : SETTING_ACTIONS.has(action) ? 'setting' : null;
 }

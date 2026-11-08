@@ -5,15 +5,17 @@
  * `worlds` is a WorldSet; `session` is a FormSession or any object with a `.form` FormSession.
  */
 import { lexIndex } from '../../worlds/lexicon.mjs';
-import { analyze, QUESTION_WORDS } from './normalize.mjs';
+import { analyze, QUESTION_WORDS, correctTokens } from './normalize.mjs';
 import { compilePattern, matchTokens, BUILTIN_CLASSES, PatternError } from './matcher.mjs';
 import { buildWires, substituteEmit, dummySlots } from './emit.mjs';
 import { routeScores } from './router.mjs';
+import { createRouter, contextFromFocus, normalizeContext, defaultRouter } from '../routing.mjs';
 import { FormSession, STOP_WORDS, isPronoun } from './session.mjs';
 import { parse, serialize } from '../../soplang/index.mjs';
 
 export { FormSession } from './session.mjs';
-export { analyze, splitSentences, tokenize } from './normalize.mjs';
+export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs';
+export { analyze, splitSentences, tokenize, editDistance, correctTokens } from './normalize.mjs';
 export { compilePattern, matchTokens } from './matcher.mjs';
 export { singularLemma, pluralize } from './lemma.mjs';
 
@@ -59,6 +61,29 @@ function allPatterns(set) {
   return set.memo('patterns', () => set.list().flatMap((w) => w.patterns).map((p, order) => ({ p, order })));
 }
 
+/**
+ * Every word the loaded worlds know: literals of all patterns (and alternatives) and the words of all lexicons
+ * (multi-word entries split into words), with plural forms. Used for typo correction (spec 03 section 1b).
+ */
+export function vocabularyOf(set) {
+  return set.memo('vocabulary', () => {
+    const vocab = new Set();
+    const add = (w) => { if (w) vocab.add(w.toLowerCase()); };
+    for (const { p } of allPatterns(set)) {
+      const c = compiled(p).compiled;
+      if (!c) continue;
+      for (const el of c.elements) {
+        if (el.t === 'lit') el.words.forEach(add);
+        else if (el.t === 'alt') el.alts.forEach((alt) => alt.forEach(add));
+      }
+    }
+    const lex = lexIndex(set);
+    for (const l of lex.lexicons.values()) for (const w of l.words) for (const part of w.split('_')) add(part);
+    for (const [s, pl] of lex.plurals) { add(s); add(pl); }
+    return vocab;
+  });
+}
+
 /** Split a token list into clauses at `,`, `and`, `then`, `but` (one level). */
 export function splitClauses(tokens) {
   const clauses = [[]];
@@ -91,8 +116,8 @@ export function makeEnv(text, set, form, lex) {
   return { text, lex, resolveAgent, recentItem: (lexId, agentId) => form.recentItem(lexId, agentId) };
 }
 
-/** Ranked full matches of every pattern against `tokens` (commas removed). */
-function rankMatches(tokens, isQuestion, set, env, lex, focus = {}) {
+/** Ranked full matches of every pattern against `tokens` (commas removed), ordered by the routing policy. */
+function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
   const toks = tokens.filter((t) => t.kind !== 'punct');
   const matches = [];
   for (const { p, order } of allPatterns(set)) {
@@ -104,12 +129,10 @@ function rankMatches(tokens, isQuestion, set, env, lex, focus = {}) {
   }
   const worlds = routeScores(toks, set, lex, new Set(matches.map((m) => m.pattern.worldId)));
   const score = (id) => worlds.find((w) => w.id === id)?.score ?? 0;
-  // Dialogue context (spec 03 §4): the world of the active tab and recently used worlds get a small priority bonus,
-  // so "B2" means a tic-tac-toe move on the tic-tac-toe tab and a chess square on the chess tab.
-  for (const m of matches) { m.score = score(m.pattern.worldId); m.rank = m.pattern.priority + (focus[m.pattern.worldId] ?? 0); }
-  matches.sort((a, b) => b.rank - a.rank || b.literals - a.literals || a.skips - b.skips
-    || b.score - a.score || a.order - b.order);
-  return { matches, worlds };
+  for (const m of matches) { m.score = score(m.pattern.worldId); m.rank = m.pattern.priority; }
+  // The router (src/formalizer/routing.mjs, spec 03 section 4) orders the candidates using the application context.
+  const routed = router.route({ matches, context, scores: worlds, tokens: toks });
+  return { matches: routed.matches, worlds, decision: routed.decision };
 }
 
 const plainSlots = (slots) => Object.fromEntries(Object.entries(slots).map(([k, s]) => [k, { class: s.class, value: s.value, text: s.text, span: s.span }]));
@@ -127,7 +150,8 @@ function signature(m) {
  * Formalize `text` (English) into wires.
  * @returns {{ segments: object[], wires: object[] }}
  */
-export function formalize(text, { worlds, session, source = 'input', focus = {} } = {}) {
+export function formalize(text, { worlds, session, source = 'input', focus = null, context = null, router = defaultRouter } = {}) {
+  const ctx = normalizeContext(context ?? (focus ? contextFromFocus(focus) : null));
   const set = worlds;
   const form = session instanceof FormSession ? session : session.form;
   const lex = lexIndex(set);
@@ -140,8 +164,8 @@ export function formalize(text, { worlds, session, source = 'input', focus = {} 
     const first = tokens[0], last = tokens[tokens.length - 1];
     const span = [first.start, last.end];
     const segText = text.slice(span[0], span[1]);
-    const { matches, worlds: scores } = rankMatches(tokens, isQuestion, set, env, lex, focus);
-    const seg = { text: segText, span, isQuestion, worlds: scores, match: null, wires: [], unparsed: true, alternatives: [], errors: [] };
+    const { matches, worlds: scores, decision } = rankMatches(tokens, isQuestion, set, env, lex, ctx, router);
+    const seg = { text: segText, span, isQuestion, worlds: scores, routing: decision, match: null, wires: [], unparsed: true, alternatives: [], errors: [] };
     const sourceRef = `${source}#${span[0]}-${span[1]}`;
     for (const m of matches) {
       try {
@@ -186,7 +210,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = {} 
         const bestSig = signature(m);
         for (const o of matches) {
           if (o === m || o.pattern.worldId === m.pattern.worldId) continue;
-          if (o.rank === m.rank && o.literals === m.literals && o.skips === m.skips && o.score === m.score
+          if (o.tier === m.tier && o.sub === m.sub && o.rank === m.rank && o.literals === m.literals && o.skips === m.skips && o.score === m.score
             && signature(o) !== bestSig) {
             seg.alternatives.push({ patternId: o.pattern.id, worldId: o.pattern.worldId, kind: o.pattern.kind, slots: plainSlots(o.slots) });
           }
@@ -199,19 +223,40 @@ export function formalize(text, { worlds, session, source = 'input', focus = {} 
     return seg;
   };
 
-  for (const s of analyze(text)) {
-    let seg = readGroup(s.tokens, s.isQuestion);
-    if (!seg.unparsed) { segments.push({ ...seg, span: s.span, text: s.text }); continue; }
-    const clauses = splitClauses(s.tokens);
+  /** Read a sentence as a whole, else clause by clause; returns the segments or null when nothing was understood. */
+  const readSentence = (s, tokens) => {
+    const whole = readGroup(tokens, s.isQuestion);
+    if (!whole.unparsed) return { done: [{ ...whole, span: s.span, text: s.text }], fallback: null };
+    const clauses = splitClauses(tokens);
     if (clauses.length > 1) {
       const parts = clauses.map((c, idx) => {
         const q = QUESTION_WORDS.has(c[0].lower) || (s.isQuestion && idx === clauses.length - 1 && /\?/.test(text.slice(s.span[1], s.span[1] + 3)));
         return readGroup(c, q);
       });
-      if (parts.some((p) => !p.unparsed)) { segments.push(...parts); continue; }
+      if (parts.some((p) => !p.unparsed)) return { done: parts, fallback: null };
     }
-    seg = { ...seg, span: s.span, text: s.text };
-    segments.push(seg);
+    return { done: null, fallback: { ...whole, span: s.span, text: s.text } };
+  };
+
+  const vocab = () => vocabularyOf(set);
+  const known = (w) => vocab().has(w) || vocab().has(lex.lemma(w)) || lex.names.has(w);
+  for (const s of analyze(text)) {
+    const first = readSentence(s, s.tokens);
+    if (first.done) { segments.push(...first.done); continue; }
+    // nothing matched: retry once with unknown words corrected to the closest known word (typo tolerance)
+    const fix = correctTokens(s.tokens, text, vocab(), known);
+    if (fix.corrections.length) {
+      const second = readSentence(s, fix.tokens);
+      if (second.done) {
+        for (const seg of second.done) {
+          const mine = fix.corrections.filter((c) => c.span[0] >= seg.span[0] && c.span[1] <= seg.span[1]);
+          if (!seg.unparsed && mine.length) seg.corrections = mine;
+        }
+        segments.push(...second.done);
+        continue;
+      }
+    }
+    segments.push(first.fallback);
   }
   for (const seg of segments) wires.push(...seg.wires);
   return { segments, wires };

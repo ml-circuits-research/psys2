@@ -1,0 +1,69 @@
+{
+  "world": "kids.common",
+  "tab": "robot",
+  "author": "haiku",
+  "batch": "h1",
+  "tasks": [
+    {
+      "id": "kids.common.h1.t1",
+      "goal": "Say hello to the assistant",
+      "canonical": "Hello!",
+      "variants": ["hi", "hey there", "helo", "hello friend", "hiya", "good morning!", "hey, how are you", "hi hi", "yo", "hello there, nice to see you"]
+    },
+    {
+      "id": "kids.common.h1.t2",
+      "goal": "Ask the assistant's name",
+      "canonical": "What is your name?",
+      "variants": ["whats ur name", "what should i call you", "name?", "tell me your name", "what do people call you", "u got a name?", "how are you called", "what is ur name pls", "may i know your name", "who do i talk to, what name"]
+    },
+    {
+      "id": "kids.common.h1.t3",
+      "goal": "Tell the assistant your name is Ben",
+      "canonical": "Hi, my name is Ben.",
+      "variants": ["im ben", "my name's ben", "ben here!", "call me ben", "ben is my name", "i'm called Ben", "name is ben", "Ben, that's me", "hey it's ben", "this is ben talking"]
+    },
+    {
+      "id": "kids.common.h1.t4",
+      "goal": "Ask whether the assistant remembers your name, after you gave it",
+      "setup": ["Hi, my name is Ben."],
+      "canonical": "What is my name?",
+      "variants": ["whats my name", "do you know my name", "remember my name?", "who am i again", "my name?", "tell me my name", "u know my name?", "what did i tell u my name was", "what name did i give you", "can u say my name"]
+    },
+    {
+      "id": "kids.common.h1.t5",
+      "goal": "Ask who the assistant is",
+      "canonical": "Who are you?",
+      "variants": ["who r u", "what are you", "tell me about you", "who is this", "wat r u", "u r who?", "who are u exactly", "introduce yourself", "what kind of thing are you", "so who is talking to me"]
+    },
+    {
+      "id": "kids.common.h1.t6",
+      "goal": "Say thank you",
+      "canonical": "Thank you!",
+      "variants": ["thanks", "thx", "thank u so much", "tysm", "cheers", "ty", "much appreciated", "thanks a lot friend", "thnx", "that was helpful, thanks"]
+    },
+    {
+      "id": "kids.common.h1.t7",
+      "goal": "Say goodbye",
+      "canonical": "Goodbye!",
+      "variants": ["bye", "bye bye", "see you later", "gotta go, bye", "cya", "later!", "good night", "ok bye now", "goodbye for now", "bye for now, have a nice day"]
+    },
+    {
+      "id": "kids.common.h1.t8",
+      "goal": "Tell the assistant to call you Sam",
+      "canonical": "Call me Sam.",
+      "variants": ["sam", "you can call me sam", "my nickname is sam", "pls call me sam", "name's sam", "sam is fine for me", "just call me sam", "i go by sam", "sam, call me that", "call me Sam please"]
+    },
+    {
+      "id": "kids.common.h1.t9",
+      "goal": "Ask the assistant for your name when you never said it",
+      "canonical": "Do you remember what my name is?",
+      "variants": ["do you remember my name", "do u remember who i am", "what was my name again", "remember my name?", "what's my name, do u recall", "you know my name right?", "did i tell you my name", "name remember?", "forgot my name lol, do you know it", "u remember what i am called?"]
+    },
+    {
+      "id": "kids.common.h1.t10",
+      "goal": "Ask the assistant to tell you its name",
+      "canonical": "Tell me your name.",
+      "variants": ["your name?", "say your name", "how do i address you", "what are you named", "name of the assistant?", "tell me what you're called", "wat is ur name", "your name please", "so you are called what", "whats the name of this bot"]
+    }
+  ]
+}

@@ -11,6 +11,7 @@ Each library is bundled into one file (or one folder for multi-file assets) with
 | `map/` | Leaflet; Natural Earth outlines; GeoNames places | 1.9.4 | BSD-2 / public domain / CC BY 4.0 | Map tab (OSM tiles online: ODbL, attributed) |
 | `charts/` | Chart.js, @kurkle/color | 4.6.1 / 0.3.4 | MIT | Charts tab |
 | `draw/` | rough.js | 4.6.6 | MIT | Drawing tab |
+| `documents/` | PDF.js (`pdf.mjs` + its worker `pdf.worker.mjs`, two files), mammoth.js (`mammoth.mjs`) | 6.5.438 / 1.13.0 | Apache-2.0 / BSD-2 | Documents tab (lazy: only for .pdf and .docx) |
 
 Rule libraries vendored inside worlds (so C2 reasoning stays deterministic and testable): `worlds/games.chess/vendor/chess.mjs` (chess.js, BSD-2), `worlds/media.music/vendor/tonal.mjs` (tonal, MIT). World data: `worlds/geo.map` (GeoNames CC BY 4.0, world-countries ODbL, country-json MIT; see its data README).
 

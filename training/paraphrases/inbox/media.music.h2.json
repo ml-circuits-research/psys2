@@ -1,0 +1,77 @@
+{
+  "world": "media.music",
+  "tab": "music",
+  "author": "haiku",
+  "batch": "h2",
+  "tasks": [
+    {
+      "id": "media.music.h2.t1",
+      "goal": "Make the sound louder",
+      "setup": ["Play Ode to Joy."],
+      "canonical": "Make it louder.",
+      "variants": ["louder", "turn it up pls", "can u make it a bit louder", "too quiet, boost it", "volume up", "more volume please", "crank it up a little", "i cant hear it, louder", "raise the volume", "bit louder plz"]
+    },
+    {
+      "id": "media.music.h2.t2",
+      "goal": "Switch the instrument sound",
+      "setup": ["Play Twinkle Twinkle."],
+      "canonical": "Change the instrument to flute.",
+      "variants": ["switch to the flute", "flute please", "can it be the organ instead", "use bells", "make it sound like a marimba", "i want a violin sound", "change the sound to piano", "let it play on the xylophone", "how about the cello", "swap the instrument for strings"]
+    },
+    {
+      "id": "media.music.h2.t3",
+      "goal": "Move the melody up an octave",
+      "setup": ["Play middle C."],
+      "canonical": "Play it an octave higher.",
+      "variants": ["an octave up pls", "higher, one octave", "move it up an octave", "shift it up 1 octave", "play it 2 octaves lower", "drop it an octave", "bring it down one octave", "lower it by an octave please", "octave up", "up one octave, can u"]
+    },
+    {
+      "id": "media.music.h2.t4",
+      "goal": "Shift the tune up by a number of steps",
+      "setup": ["Play C D E F G."],
+      "canonical": "Transpose up two steps.",
+      "variants": ["transpose it up 2 steps", "move it up a fifth", "shift it up a semitone", "raise it by a minor third", "transpose it down a fifth", "up a whole tone pls", "take it up a step", "transpose down 3 semitones", "move the tune up a third", "transpose it upwards by a fourth"]
+    },
+    {
+      "id": "media.music.h2.t5",
+      "goal": "Move the whole tune into a new key",
+      "setup": ["Play Twinkle Twinkle."],
+      "canonical": "Transpose it to D major.",
+      "variants": ["put it in d major", "move it into a minor", "make it play in G", "transpose to A minor", "shift it into E flat", "play it in the key of F", "move it to the key of B minor", "transpose it to c", "make this in D major please", "shift the whole thing to D major"]
+    },
+    {
+      "id": "media.music.h2.t6",
+      "goal": "Set the key",
+      "setup": ["Play Ode to Joy."],
+      "canonical": "Set the key to D major.",
+      "variants": ["key of d major pls", "set the key to A minor", "change key to e minor", "the key is G major", "we're in F major now", "let's use the key of B flat", "switch key to c minor", "key = D major", "set key to g major please", "make the key E major"]
+    },
+    {
+      "id": "media.music.h2.t7",
+      "goal": "Start a new melody from some notes",
+      "canonical": "Write a melody: C D E F G.",
+      "variants": ["compose a melody with C D E F G", "make up a tune: c d e f g", "start a melody with G G A G", "my melody is C E G E C", "new tune E E F G", "record these notes: C C G G", "let me write a tune, D E F#", "start my song with C D F", "melody: A A B A", "put down a melody E D C B"]
+    },
+    {
+      "id": "media.music.h2.t8",
+      "goal": "Add more notes to the melody",
+      "setup": ["Write a melody: C D E F G."],
+      "canonical": "Add the notes G G A G.",
+      "variants": ["add G G A G", "tack on g g a g", "append the notes E D C", "add a rest", "continue with E D C", "also add a pause", "add some more notes: F F E", "keep going with D C", "add on A B C", "and then add c d e"]
+    },
+    {
+      "id": "media.music.h2.t9",
+      "goal": "Empty the melody",
+      "setup": ["Write a melody: C D E F G."],
+      "canonical": "Clear my melody.",
+      "variants": ["clear the melody", "delete my tune", "wipe my song", "erase my melody pls", "empty the melody", "get rid of my notes", "reset my tune", "throw my melody away", "clean up my melody", "clear my composition"]
+    },
+    {
+      "id": "media.music.h2.t10",
+      "goal": "Take back the last note of the melody",
+      "setup": ["Write a melody: C D E F G."],
+      "canonical": "Remove the last note.",
+      "variants": ["undo the last note", "take off the last note", "delete the final note", "remove the last one", "oops, undo that note", "drop the last note pls", "back off the last note", "backspace the last note", "undo last note of my melody", "take the last note away"]
+    }
+  ]
+}

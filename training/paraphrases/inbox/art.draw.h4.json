@@ -1,0 +1,77 @@
+{
+  "world": "art.draw",
+  "tab": "draw",
+  "author": "haiku",
+  "batch": "h4",
+  "tasks": [
+    {
+      "id": "art.draw.h4.t1",
+      "goal": "Open the drawing tab",
+      "canonical": "Go to the paint tab.",
+      "variants": ["open the drawing board", "show me the drawing tab", "switch to the paint tab", "take me to the canvas", "bring up the art board", "go to the drawing screen", "open the sketch pad", "show the easel", "switch to drawing", "i wanna go to the paint page"]
+    },
+    {
+      "id": "art.draw.h4.t2",
+      "goal": "Make the sun much bigger after drawing it",
+      "setup": ["Draw a sun."],
+      "canonical": "Make the sun twice as big.",
+      "variants": ["sun twice the size pls", "double the sun's size", "can u make the sun bigger a lot", "bigger sun, like twice", "make the sun way bigger", "make the sun larger", "enlarge it a lot", "make the sun taller", "sun needs to be a lot bigger", "grow the sun by a bit"]
+    },
+    {
+      "id": "art.draw.h4.t3",
+      "goal": "Go back to the day picture after a mood change",
+      "setup": ["Draw a red house.", "Make it night."],
+      "canonical": "Take that back.",
+      "variants": ["undo the night", "go back to the day picture", "revert the last change", "take it back", "undo that change", "bring back the day", "oops, reverse that", "can u undo the mood change", "undo the sky change", "back to how it was"]
+    },
+    {
+      "id": "art.draw.h4.t4",
+      "goal": "Put the cat beside the house",
+      "setup": ["Draw a red house.", "Draw a cat."],
+      "canonical": "Put the cat next to the house.",
+      "variants": ["cat next to the house pls", "move the cat beside the house", "put the cat near the house", "cat should be right by the house", "can u place the cat next to the house", "shift the cat close to the house", "put the cat under the house", "drag the cat over next to the house", "cat by the house please", "move the cat so it's beside the house"]
+    },
+    {
+      "id": "art.draw.h4.t5",
+      "goal": "Move the sun to the top right",
+      "setup": ["Draw a sun."],
+      "canonical": "Move it to the top right corner.",
+      "variants": ["sun to the top right", "put it in the top right corner", "move it up to the top right", "send it to the upper right corner", "top right corner for it please", "place it at the top right", "can u move that to the top right", "shove it to the top right corner", "bring it to top right", "move it to the upper right"]
+    },
+    {
+      "id": "art.draw.h4.t6",
+      "goal": "Count everything in the picture",
+      "setup": ["Draw me a nice picture."],
+      "canonical": "How many things are in my picture?",
+      "variants": ["how many items are on the page", "count everything", "how many objects do i have", "how many shapes in there", "number of things i drew", "how many things are drawn", "whats the total count of things", "how many bits are in the picture", "how many items do i have", "how many things are on my canvas"]
+    },
+    {
+      "id": "art.draw.h4.t7",
+      "goal": "Change the sky color of a night picture",
+      "setup": ["Draw me a nice picture.", "Make it night."],
+      "canonical": "Make the sky dark blue.",
+      "variants": ["sky dark blue pls", "color the sky navy", "paint the sky light blue", "change the sky to pink", "can u make the sky purple", "sky should be bright orange", "turn the sky grey", "sky color: deep blue", "fill the sky with gold", "make the sky cyan please"]
+    },
+    {
+      "id": "art.draw.h4.t8",
+      "goal": "Remove the grass from the ground",
+      "setup": ["Draw me something.", "Add grass."],
+      "canonical": "Remove the grass.",
+      "variants": ["get rid of the grass", "no more grass pls", "delete the grass", "remove grass", "take out the grass", "clear the grass away", "erase the lawn", "i don't want grass anymore", "throw away the grass", "rub out the grass"]
+    },
+    {
+      "id": "art.draw.h4.t9",
+      "goal": "Delete the shape that is currently selected",
+      "setup": ["Draw a red star.", "Select the star."],
+      "canonical": "Delete the selected thing.",
+      "variants": ["delete what's selected", "delete the chosen one", "get rid of the thing i selected", "delete the highlighted one", "trash the selected shape", "erase whatever is selected", "delete the one i picked", "remove the highlighted thing", "delete selected", "kill the selected item"]
+    },
+    {
+      "id": "art.draw.h4.t10",
+      "goal": "Move the red house to the left side of the picture",
+      "setup": ["Draw a red house."],
+      "canonical": "Put the red house on the left.",
+      "variants": ["red house to the left pls", "shift the house over to the left side", "move the house left", "can u put the house on the left side", "house goes on the left", "slide the red house to the left", "left side for the house please", "move the house to the left of the picture", "put the house left", "the house needs to be on the left"]
+    }
+  ]
+}

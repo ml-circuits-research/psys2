@@ -60,34 +60,6 @@
     priority=10
     example="Where am I?"
 
-@pat.ui.shell.help core.pattern
-    match="what [can|could] [i|we] [say|do|ask|tell_you|tell_it] [here|now|on_this_tab|on_this_page|to_you]?"
-    emit="@{_} core.request action=ui.help"
-    kind=request
-    priority=11
-    example="What can I say here?"
-
-@pat.ui.shell.help2 core.pattern
-    match="[what_commands|what_options|what_examples] [are_there|can_i_use|do_you_know|are_available|can_i_try|can_i_say]?"
-    emit="@{_} core.request action=ui.help"
-    kind=request
-    priority=10
-    example="What commands are there?"
-
-@pat.ui.shell.help3 core.pattern
-    match="[show_me|give_me|tell_me] [the|some|a_few]? [commands|examples|options|ideas|what_you_understand|what_you_can_do]"
-    emit="@{_} core.request action=ui.help"
-    kind=request
-    priority=10
-    example="Give me some examples."
-
-@pat.ui.shell.help4 core.pattern
-    match="[help_me|i_need_help|how_do_i_use_this|what_should_i_say|what_do_i_say|how_does_this_work|how_can_i_use_this_app|what_are_the_commands|how_do_i_use_this_app|what_can_you_understand|what_are_the_options]"
-    emit="@{_} core.request action=ui.help"
-    kind=request
-    priority=10
-    example="What should I say?"
-
 @pat.ui.shell.spk.on core.pattern
     match="[can_you|could_you|will_you|would_you|please_can_you]? [turn_on|switch_on|enable|activate|unmute|put_on] [the|your]? [speaker|sound|voice|speech|audio]"
     emit="@{_} core.request action=ui.speaker arg.on=true"

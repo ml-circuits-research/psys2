@@ -83,7 +83,6 @@ const ACTS = {
   who: { forms: ['Who are you'], ends: ['?', ''] },
   thanks: { forms: ['Thanks', 'Thank you', 'Thank you very much', 'Thanks a lot', 'Thank you a lot', 'Thanks very much'], ends: ['!', '.', ''] },
   bye: { forms: ['Goodbye', 'Bye', 'See you'], ends: ['!', '.', ''] },
-  capabilities: { forms: ['What can you do', 'Help'], ends: ['?', '!', '.', ''] },
 };
 const req = (act) => E(['core.request', { action: 'chat.' + act }]);
 const say = (r, act) => {
@@ -110,7 +109,7 @@ add('common.myname.after-meet', 'coreference', (r, x) => {
 add('common.sequence', 'multi-entity', (r) => {
   const acts = Object.keys(ACTS), k = 2 + Math.floor(r() * 2), seq = [];
   for (let i = 0; i < k; i++) seq.push(pick(r, acts));
-  const text = seq.map((a) => { let s = say(r, a); if (!/[.!?]$/.test(s)) s += a === 'name' || a === 'who' || a === 'capabilities' ? '?' : '.'; return s; }).join(' ');
+  const text = seq.map((a) => { let s = say(r, a); if (!/[.!?]$/.test(s)) s += a === 'name' || a === 'who' ? '?' : '.'; return s; }).join(' ');
   return { text, expect: E(...seq.map((a) => ['core.request', { action: 'chat.' + a }])) };
 }, { noise: false });
 add('common.neg.near-miss', 'near-miss', (r, x) => {

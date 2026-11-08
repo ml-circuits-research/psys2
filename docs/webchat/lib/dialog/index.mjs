@@ -10,6 +10,7 @@
  */
 import { loadWorlds } from '../worlds/index.mjs';
 import { validateWorldSet } from '../worlds/validate.mjs';
+import { defaultRouter } from '../formalizer/routing.mjs';
 import { createInterpreter } from '../interpreter/index.mjs';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs';
@@ -18,8 +19,8 @@ import { splitSentences } from '../formalizer/rules/normalize.mjs';
 export { runWorldTests } from './test-runner.mjs';
 
 const plainSegment = (s) => ({
-  text: s.text, span: s.span, isQuestion: s.isQuestion, worlds: s.worlds, match: s.match,
-  unparsed: s.unparsed, alternatives: s.alternatives, errors: s.errors, strategy: s.strategy,
+  text: s.text, span: s.span, isQuestion: s.isQuestion, worlds: s.worlds, routing: s.routing, match: s.match,
+  unparsed: s.unparsed, alternatives: s.alternatives, errors: s.errors, strategy: s.strategy, corrections: s.corrections ?? [],
   wires: s.wires.map((w) => w.id),
 });
 
@@ -91,6 +92,9 @@ export async function translateParts(parts, translator, lang) {
   return out;
 }
 
+/** Tabs of worlds that do not declare one in their manifest (the built-in tabs of the demo page). */
+const BUILTIN_TAB = { 'ui.avatar': 'robot', 'docs.editor': 'editor', 'games.tictactoe': 'tictactoe', 'games.guess': 'guess', 'games.hangman': 'hangman' };
+
 const langOf = (r) => (typeof r === 'string' ? r : r?.lang) ?? 'en';
 const textOf = (r) => (typeof r === 'string' ? r : r?.text);
 
@@ -153,18 +157,28 @@ export class DialogSession {
   }
 
   /**
-   * Dialogue focus for ranking readings (spec 03 §4): +3 for the world that owns the active tab (ui.shell state),
-   * +1 for each of the last three worlds that produced a reading. Ties between worlds are then decided by context.
+   * Routing context (spec 03 section 4, ADR-004): what the application state says about where a command belongs.
+   * `{ activeTab, tabWorld, modalWorld, gameWorld, recentWorlds, lastWorld }`. The tab owner comes from the `tab=` of a
+   * world or the built-in tabs; `gameWorld` is `ui.shell` state `activeGame` (set by the host); `modalWorld` is the
+   * world whose state has an open `inputMode`.
    */
-  focus() {
-    const focus = {};
+  context() {
     const BUILTIN = { robot: 'ui.avatar', avatar: 'ui.avatar', editor: 'docs.editor', tictactoe: 'games.tictactoe', guess: 'games.guess', hangman: 'games.hangman' };
-    for (const w of this._recentWorlds ?? []) focus[w] = (focus[w] ?? 0) + 1;
-    const tab = this.isession.state['ui.shell']?.activeTab;
-    if (tab) {
-      const owner = this.engine.set.list().find((w) => w.tab?.id === tab)?.id ?? BUILTIN[tab];
-      if (owner) focus[owner] = (focus[owner] ?? 0) + 3;
-    }
+    const st = this.isession.state;
+    const activeTab = st['ui.shell']?.activeTab ?? null;
+    const tabWorld = activeTab ? (this.engine.set.list().find((w) => w.tab?.id === activeTab)?.id ?? BUILTIN[activeTab] ?? null) : null;
+    const modalWorld = Object.keys(st).find((id) => st[id]?.inputMode) ?? null;
+    const gameWorld = st['ui.shell']?.activeGame ?? null;
+    const recentWorlds = [...(this._recentWorlds ?? [])];
+    return { activeTab, tabWorld, modalWorld, gameWorld, recentWorlds, lastWorld: recentWorlds[0] ?? null };
+  }
+
+  /** Legacy focus map derived from the context: +3 for the tab world, +1 for each recent world. */
+  focus() {
+    const c = this.context();
+    const focus = {};
+    for (const w of c.recentWorlds) focus[w] = (focus[w] ?? 0) + 1;
+    if (c.tabWorld) focus[c.tabWorld] = (focus[c.tabWorld] ?? 0) + 3;
     return focus;
   }
 
@@ -179,7 +193,7 @@ export class DialogSession {
    */
   async _formalize(english, sid, preferred = this.formalizer) {
     const { set, formalizers } = this.engine;
-    const opts = { worlds: set, session: this.isession, source: sid, focus: this.focus() };
+    const opts = { worlds: set, session: this.isession, source: sid, context: this.context(), router: this.engine.router };
     const rules = formalizers.rules;
     const enc = preferred === 'encoder' ? formalizers.encoder : null;
     let usable = false;
@@ -228,11 +242,17 @@ export class DialogSession {
     const statuses = icpt ? ['supported'] : [];
     const ops = [];
     const answerWires = [];
+    let followTab = null;   // tab of the last world that gave a supported answer (tab follow, spec 07 section 6)
     for (const seg of segments) {
       if (seg.unparsed) {
         // examples from the world of the open tab first: the router's word-overlap guess can point anywhere
         const routed = seg.worlds.map((w) => w.id), here = Object.entries(this.focus()).find(([, n]) => n >= 3)?.[0];
         let ex = examplesFor(set, here ? [here, ...routed.filter((w) => w !== here)] : routed);
+        // ui.help: "Did you mean ...?" (closest examples of all worlds) and a note of what failed for "why not?"
+        const helpW = set.get('ui.help');
+        const dym = helpW?.ops?.didYouMean?.({ text: seg.text, worlds: set.list(), tabWorld: here, recentWorlds: this._recentWorlds ?? [] }) ?? [];
+        if (helpW) (this.isession.state['ui.help'] ??= {}).lastUnparsed = { text: seg.text, world: here ?? routed[0] ?? null, suggestions: dym };
+        if (dym.length) { ex = dym; this.isession.effects.push({ name: 'chat.suggest', args: { items: dym }, world: 'ui.help' }); }
         // the user's own words are quoted verbatim and never back-translated
         const quoted = lang === 'en' ? seg.text : originalSentence(text, seg, translation?.alignment);
         const line = [T('I did not understand '), { text: `"${quoted}"`, translate: false, quote: true }, { text: '.', translate: false }];
@@ -248,11 +268,12 @@ export class DialogSession {
           ex = done;
         }
         if (ex.length) {
-          line.push(T(' For example: ', { fallback: ' You can say: ' }));
+          line.push(dym.length ? T(' Did you mean ', { fallback: ' You can say: ' }) : T(' For example: ', { fallback: ' You can say: ' }));
           ex.forEach((e, k) => {
             if (k) line.push(T(' or '));
             line.push({ text: `"${e}"`, translate: false, quote: true, example: true });
           });
+          if (dym.length) line.push({ text: '?', translate: false });
         }
         lines.push(line);
         statuses.push('unparsed');
@@ -266,6 +287,7 @@ export class DialogSession {
         const rendered = interp.render(this.isession, r);
         lines.push([T(rendered)]);
         statuses.push(r.status);
+        if (r.status === 'supported') { const wid = seg.match?.worldId; const t = set.get(wid)?.tab?.id ?? BUILTIN_TAB[wid]; if (t) followTab = t; }
         ops.push(...r.ops);
         answerWires.push(r.answer);
         answers.push({
@@ -280,6 +302,21 @@ export class DialogSession {
         const used = set.get(seg.match.worldId)?.title ?? seg.match.worldId;
         lines.push([T(`This could also be read in another way (${titles.join(', ')}); I used the `), { text: `"${used}"`, translate: false, quote: true }, T(' reading.')]);
       }
+    }
+    for (const seg of segments) {
+      if (!seg.corrections?.length || seg.unparsed) continue;
+      const line = [T('(I read ')];
+      seg.corrections.forEach((c, k) => {
+        if (k) line.push(T(k === seg.corrections.length - 1 ? ' and ' : ', '));
+        line.push({ text: `"${c.from.toLowerCase()}"`, translate: false, quote: true }, T(' as '), { text: `"${c.to}"`, translate: false, quote: true });
+      });
+      line.push(T(')'));
+      lines.push(line);
+    }
+    // Tab follow: a world with a tab answered, but its tab is hidden: bring it forward (the existing ui.openTab action).
+    const shown = this.isession.state['ui.shell']?.activeTab;
+    if (followTab && shown && shown !== followTab && !this.isession.effects.some((e) => e.name === 'ui.openTab')) {
+      try { interp.runAction(this.isession, 'ui.openTab', { tab: followTab }); } catch { /* the shell may be absent */ }
     }
     if (translation?.unknown?.length && segments.some((s) => s.unparsed)) {
       lines.push([T(`I did not know the word${translation.unknown.length > 1 ? 's' : ''}: `), { text: translation.unknown.map((u) => u.word).join(', '), translate: false, quote: true }, { text: '.', translate: false }]);
@@ -305,6 +342,7 @@ export class DialogSession {
         intercepted: icpt?.worldId ?? null, effects, formalizer: { preferred: formalizer ?? this.formalizer, used: [...new Set(segments.map((s) => s.strategy))] },
         source: sid, language: lang, original: text, english, replyEnglish: englishReply,
         segments: segments.map(plainSegment), router: segments.map((s) => s.worlds),
+        routing: icpt ? [{ router: 'policy', tier: 1, tierName: 'modal', reason: `modal input of ${icpt.worldId}`, contested: false, winner: { worldId: icpt.worldId }, runnerUp: null }] : segments.map((s) => s.routing ?? null),
         patterns: segments.filter((s) => s.match).map((s) => s.match.patternId),
         operations: icpt ? [...ops, ...icpt.ops] : ops, statuses, wires: [...wires, ...answerWires].map((w) => w.id),
       },
@@ -317,7 +355,7 @@ export async function createEngine({ loader, translator = null, options = {}, fo
   const set = await loadWorlds(loader);
   const interp = createInterpreter(set, options);
   const engine = {
-    set, interp, translator, loader,
+    set, interp, translator, loader, router: options.router ?? defaultRouter,
     /** Formalizer strategies by id (spec 06); `formalizers` overrides them (tests, an encoder endpoint). */
     formalizers: { rules: createRulesFormalizer(), encoder: createEncoderFormalizer({ endpoint: options.encoderEndpoint ?? null }), ...formalizers },
     /** Problems found at load time and by static validation (empty when everything is consistent). */

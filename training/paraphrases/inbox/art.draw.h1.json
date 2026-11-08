@@ -1,0 +1,74 @@
+{
+  "world": "art.draw",
+  "tab": "draw",
+  "author": "haiku",
+  "batch": "h1",
+  "tasks": [
+    {
+      "id": "art.draw.h1.t1",
+      "goal": "Draw a red house",
+      "canonical": "Draw a red house.",
+      "variants": ["red house pls", "can u draw a little red house", "draw me 3 trees", "put a big yellow sun in the top right corner", "throw in a couple of stars", "make a tiny green tree", "i want a yellow balloon", "draw a fish in blue", "add 5 flowers", "sketch me a boat next to the house"]
+    },
+    {
+      "id": "art.draw.h1.t2",
+      "goal": "Put grass on the ground",
+      "canonical": "Add grass.",
+      "variants": ["grass pls", "can u put some grass on the ground", "add sand to the bottom", "draw some snow", "put water on the ground", "a bit of grass would be nice", "make the ground snowy", "add lawn to it", "some sand please", "throw some water on the ground"]
+    },
+    {
+      "id": "art.draw.h1.t3",
+      "goal": "Get a surprise scene drawn for me",
+      "canonical": "Draw something.",
+      "variants": ["draw me something", "surprise me with a picture", "paint a landscape", "make a random scene", "can you draw a pretty picture", "give me a nice drawing", "sketch anything you like", "make me a sunny scene", "draw a happy picture", "paint me a masterpiece"]
+    },
+    {
+      "id": "art.draw.h1.t4",
+      "goal": "Change the picture to night",
+      "canonical": "Make it night.",
+      "variants": ["night time pls", "turn it into nighttime", "let it be night already", "it's sunset now, make it a sunset", "change the scene to day", "switch to daytime", "can u make it a sunny day", "make it dawn", "turn the picture into evening", "set it to midnight"]
+    },
+    {
+      "id": "art.draw.h1.t5",
+      "goal": "Color the house blue",
+      "setup": ["Draw a red house."],
+      "canonical": "Paint the house blue.",
+      "variants": ["make the house blue", "house should be blue pls", "color the house green", "turn the house purple", "can u paint the house pink", "colour the house brown", "make it blue", "change the house to navy", "fill the house with yellow", "house in teal please"]
+    },
+    {
+      "id": "art.draw.h1.t6",
+      "goal": "Give the house a blue door",
+      "setup": ["Draw a house."],
+      "canonical": "Give the house a blue door.",
+      "variants": ["house gets a blue door", "blue door on the house pls", "make the door of the house red", "give the house a green roof", "paint the roof brown on the house", "could the house have a yellow door", "the house needs a pink door", "add a black door to the house", "give the car black wheels", "make the house's roof orange"]
+    },
+    {
+      "id": "art.draw.h1.t7",
+      "goal": "Make the house bigger",
+      "setup": ["Draw a red house."],
+      "canonical": "Make the house bigger.",
+      "variants": ["bigger house pls", "can u make the house larger", "enlarge the house a bit", "house a little bigger", "make it much bigger", "blow up the house a lot", "make the house twice as big", "grow the house", "increase the house size a bit", "make the house taller"]
+    },
+    {
+      "id": "art.draw.h1.t8",
+      "goal": "Set the house to a given size word",
+      "setup": ["Draw a red house."],
+      "canonical": "Make the house huge.",
+      "variants": ["house = huge", "make the house enormous", "can u make the house giant", "I want the house massive", "make it really big, like huge", "shrink the house to tiny", "make the house small", "turn the house into a tiny one", "house should be medium size", "make the house teeny"]
+    },
+    {
+      "id": "art.draw.h1.t9",
+      "goal": "Move the tree to the left",
+      "setup": ["Draw a tree.", "Draw a red house."],
+      "canonical": "Move the tree to the left.",
+      "variants": ["tree to the left pls", "shift the tree left", "slide the tree over to the right", "can u move the tree a bit to the right", "move the house to the top right corner", "put the house next to the tree", "bring the tree closer to the house", "send the tree under the house", "move it to the bottom left", "push the tree to the left side"]
+    },
+    {
+      "id": "art.draw.h1.t10",
+      "goal": "Nudge the sun a bit higher",
+      "setup": ["Draw a sun."],
+      "canonical": "Make the sun higher.",
+      "variants": ["sun up a bit", "raise the sun a little", "nudge the sun higher", "lower the sun a bit pls", "move the sun down slightly", "sun a tiny bit to the left", "can u push the sun up", "the sun needs to go up a bit", "bring the sun lower please", "shift the sun a little to the right"]
+    }
+  ]
+}

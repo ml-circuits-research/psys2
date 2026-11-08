@@ -75,7 +75,7 @@ test('unparsed sentences are reported with up to two examples from the closest w
   assert.match(r.text, /OK, Tom has 2 pears\.$/);
   assert.deepEqual(r.statuses, ['unparsed']);
   const closest = await s.send('Tom has some apples');
-  assert.match(closest.text, /I did not understand "Tom has some apples"\. For example: "Tom has 5 apples\./); // test.counting is closest (trigger + noun)
+  assert.match(closest.text, /I did not understand "Tom has some apples"\. Did you mean "Tom has 5 apples\./); // ui.help: the closest example of test.counting (word overlap)
   assert.equal(closest.segments[0].unparsed, true);
 });
 
@@ -148,8 +148,8 @@ test('without a translator everything is treated as English', async () => {
 
 test('engine.worlds() lists manifests', () => {
   const ids = engine.worlds().map((w) => w.id);
-  assert.deepEqual(ids, ['core', 'kids.common', 'test.counting']);
-  assert.equal(engine.worlds()[2].status, 'fixture');
+  assert.deepEqual(ids, ['core', 'kids.common', 'ui.help', 'test.counting']);
+  assert.equal(engine.worlds()[3].status, 'fixture');
 });
 
 // ---- world tests runner -----------------------------------------------------------------
@@ -159,7 +159,7 @@ test('runWorldTests: the shipped worlds pass; sessions group; expectations are c
     const r = await runWorldTests(engine, id);
     assert.deepEqual(r.failed, [], id);
     assert.equal(r.passed, r.total);
-    assert.ok(r.total >= 8);
+    assert.ok(r.total >= 7);
   }
 });
 
@@ -218,8 +218,8 @@ test('server: health, worlds, sessions, messages, memory, 501 for learning', asy
   });
   try {
     const health = JSON.parse((await call('GET', '/v1/health')).body);
-    assert.deepEqual([health.ok, health.worlds], [true, 3]);
-    assert.equal(JSON.parse((await call('GET', '/v1/worlds')).body).length, 3);
+    assert.deepEqual([health.ok, health.worlds], [true, 4]);
+    assert.equal(JSON.parse((await call('GET', '/v1/worlds')).body).length, 4);
     const w = JSON.parse((await call('GET', '/v1/worlds/test.counting')).body);
     assert.equal(w.manifest.id, 'test.counting');
     assert.ok(w.legend.types.length >= 4);
@@ -257,7 +257,7 @@ test('server: idle sessions expire', async () => {
 
 test('CLI: test-world all passes; parse reports errors; formalize prints wires', () => {
   const run = (...args) => execFileSync('node', [path.join(ROOT, 'src/cli.mjs'), ...args], { encoding: 'utf8' });
-  assert.match(run('test-world', 'all'), /kids\.common: 8\/8 passed/);
+  assert.match(run('test-world', 'all'), /kids\.common: 7\/7 passed/);
   assert.match(run('--root', path.join(ROOT, 'tests/fixtures/worlds'), 'test-world', 'test.counting'), /test\.counting: 10\/10 passed/);
   assert.match(run('--root', path.join(ROOT, 'tests/fixtures/worlds'), 'formalize', 'Tom has 5 apples'), /@w1 test\.counting\.holding/);
   assert.throws(() => run('test-world', 'nope'), (e) => /unknown world/.test(e.stdout));

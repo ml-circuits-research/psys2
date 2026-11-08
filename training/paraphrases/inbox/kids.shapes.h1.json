@@ -1,0 +1,68 @@
+{
+  "world": "kids.shapes",
+  "tab": "robot",
+  "author": "haiku",
+  "batch": "h1",
+  "tasks": [
+    {
+      "id": "kids.shapes.h1.t1",
+      "goal": "Check that a square counts as a rectangle",
+      "canonical": "Is a square a rectangle?",
+      "variants": ["is a square a rectangle", "square is a kind of rectangle?", "is a sqaure a rectangle", "a square counts as a rectangle right", "is a square also a rectangle", "could a square be called a rectangle", "square = rectangle?", "is every square a rectangle", "ok so a square is a rectangle?", "tell me if a square is a rectangle"]
+    },
+    {
+      "id": "kids.shapes.h1.t2",
+      "goal": "Check that a circle is not a rectangle",
+      "canonical": "Is a circle a rectangle?",
+      "variants": ["is a circle a rectangle", "circle rectangle?", "could a circle be a rectangle", "is a round shape a rectangle", "is a circle a kind of rectangle", "circles arent rectangles right?", "a circle is a rectangle, true?", "is circle a rectangle or no", "is the circle a rectangle too", "could a circle count as a rectangle"]
+    },
+    {
+      "id": "kids.shapes.h1.t3",
+      "goal": "Get a short description of a hexagon",
+      "canonical": "What is a hexagon?",
+      "variants": ["what's a hexagon", "hexagon what is it", "explain hexagon", "tell me what a hexagon is like", "what kind of shape is a hexagon", "hexagon?", "describe a hexagon pls", "hexagons, what are they", "what is a hexagon like anyway", "can u say what a hexagon is"]
+    },
+    {
+      "id": "kids.shapes.h1.t4",
+      "goal": "Find the usual color of a banana",
+      "canonical": "What is the color of a banana?",
+      "variants": ["banana color?", "what colour is a banana", "whats a banana's color", "a banana is which color", "what color are bananas usually", "colour of a banana pls", "banana - what color", "tell me the usual color of bananas", "bananas are what color", "what color do bananas usually have"]
+    },
+    {
+      "id": "kids.shapes.h1.t5",
+      "goal": "Check that the sky is blue",
+      "canonical": "Is the sky blue?",
+      "variants": ["sky blue right?", "is the sky usually blue", "sky is blue, yes?", "the sky is blue?", "is it blue, the sky", "blue sky, correct?", "sky = blue?", "is sky blue or nah", "would you say the sky is blue", "is a sky normally blue"]
+    },
+    {
+      "id": "kids.shapes.h1.t6",
+      "goal": "Check that the sky is not green",
+      "canonical": "Is the sky green?",
+      "variants": ["sky green?", "is the sky green", "could the sky be green", "the sky is green, right?", "is a sky green", "green sky?", "is the sky supposed to be green", "sky colour green yes or no", "would the sky be green", "is the sky a green color"]
+    },
+    {
+      "id": "kids.shapes.h1.t7",
+      "goal": "Check that red is a primary color",
+      "canonical": "Is red a primary color?",
+      "variants": ["red is primary?", "is red a primary colour", "red - primary yes?", "red counts as primary right", "is red one of the primary colors", "is red primary", "red a primary color or not", "primary color red?", "red is a primary one, correct", "would you call red a primary color"]
+    },
+    {
+      "id": "kids.shapes.h1.t8",
+      "goal": "Check whether orange is a primary color",
+      "canonical": "Is orange a primary color?",
+      "variants": ["orange primary?", "is orange a primary colour", "orange - primary?", "is orange in the primary colors", "primary colors include orange?", "orange primary or not", "would orange be a primary color", "is the color orange primary", "primary: orange, yes or no", "orange a primary color right?"]
+    },
+    {
+      "id": "kids.shapes.h1.t9",
+      "goal": "Find out what red and yellow make when mixed",
+      "canonical": "What do red and yellow make?",
+      "variants": ["red and yellow make what", "red plus yellow is?", "red + yellow = ?", "mix red with yellow, what happens", "what color if red and yellow combine", "if i mix red and yellow what do i get", "red yellow mix result", "red mixed up with yellow gives what", "what does red yellow mixing give", "red and yellow together make?"]
+    },
+    {
+      "id": "kids.shapes.h1.t10",
+      "goal": "Find out which two colors make green",
+      "canonical": "How do I make green?",
+      "variants": ["how to get green", "what makes green", "which two colors make green", "green from what colors", "how can i make green paint", "what do i mix for green", "green = mix what", "how do u get the color green", "which colours combine to green", "i need green, what do i mix"]
+    }
+  ]
+}

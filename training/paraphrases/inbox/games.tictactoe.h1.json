@@ -1,0 +1,18 @@
+{
+  "world": "games.tictactoe",
+  "tab": "tictactoe",
+  "author": "haiku",
+  "batch": "h1",
+  "tasks": [
+    {"id": "games.tictactoe.h1.t1", "goal": "Take the center square", "setup": ["Play tic tac toe."], "canonical": "Center.", "variants": ["middle", "center pls", "the middle square", "i'll take the center", "center square", "um middle", "e... center", "play middle", "center one", "I want the middle"]},
+    {"id": "games.tictactoe.h1.t2", "goal": "Place my mark at row 2, column 3", "setup": ["Play tic tac toe."], "canonical": "Row 2 column 3.", "variants": ["row two column three", "r2 c3", "row 2, col 3", "second row third column", "2 3", "row 2 col 3 pls", "row2 column3", "put it at row two col three", "row 2 colum 3", "second row, third one"]},
+    {"id": "games.tictactoe.h1.t3", "goal": "Place my mark on B2", "setup": ["Play tic tac toe."], "canonical": "B2.", "variants": ["b2", "B two", "b 2", "square b2", "play b2", "go b2", "b-2", "b two pls", "i pick b2", "bee two"]},
+    {"id": "games.tictactoe.h1.t4", "goal": "Take the bottom right corner", "setup": ["Play tic tac toe."], "canonical": "Play the bottom right corner.", "variants": ["bottom right", "bottom right corner pls", "the corner bottom right", "c3", "lower right corner", "bottom-right", "bottom right corner please", "down right corner", "bottom right spot", "br corner"]},
+    {"id": "games.tictactoe.h1.t5", "goal": "Start a new tic tac toe game", "setup": ["Play tic tac toe."], "canonical": "Start a new tic tac toe game.", "variants": ["new game", "fresh game", "clear the board", "restart tic tac toe", "reset the board", "let's do a new one", "again please, new board", "start over", "new tic tac toe", "play again from scratch"]},
+    {"id": "games.tictactoe.h1.t6", "goal": "Say that I want to move first", "setup": ["Play tic tac toe."], "canonical": "Let me go first.", "variants": ["I go first", "me first", "can I start?", "let me start", "i want to go first", "ill go first", "first for me", "i'd like to play first", "let me go 1st", "I start"]},
+    {"id": "games.tictactoe.h1.t7", "goal": "Let the system move first", "setup": ["Play tic tac toe."], "canonical": "You go first.", "variants": ["you start", "u go first", "you can go first", "your move first", "you start pls", "go ahead and go first", "machine goes first", "let the computer start", "you first", "you should start"]},
+    {"id": "games.tictactoe.h1.t8", "goal": "Ask who moves first", "setup": ["Play tic tac toe."], "canonical": "Who goes first?", "variants": ["who starts", "who goes first", "who's first", "whos going first?", "who plays first", "who moves first", "who starts the game", "first to move?", "who has the first turn", "who's up first"]},
+    {"id": "games.tictactoe.h1.t9", "goal": "Find out who is winning", "setup": ["Play tic tac toe.", "Center."], "canonical": "Who is winning?", "variants": ["whos winning", "am i winning", "who's ahead", "winning?", "am i ahead", "who's winning now", "how's the game looking", "am I beating you", "who has the edge", "who's winning rn"]},
+    {"id": "games.tictactoe.h1.t10", "goal": "Hear what the board looks like", "setup": ["Play tic tac toe.", "Center."], "canonical": "What is on the board?", "variants": ["board?", "describe it", "what's on the board right now", "read the board", "what does the board look like", "tell me the board", "whats on it", "where are the x's and o's", "show me the board in words", "describe board pls"]}
+  ]
+}

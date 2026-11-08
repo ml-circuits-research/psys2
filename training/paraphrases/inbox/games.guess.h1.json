@@ -1,0 +1,18 @@
+{
+  "world": "games.guess",
+  "tab": "guess",
+  "author": "haiku",
+  "batch": "h1",
+  "tasks": [
+    {"id": "games.guess.h1.t1", "goal": "Ask the system to guess the animal I am thinking of", "setup": ["Play twenty questions."], "canonical": "Guess my animal.", "variants": ["guess my animal", "try to guess my animal", "ok guess what animal im thinking of", "u try to guess my animal", "animal guessing time", "guess the animal i got", "go on, guess my animal", "can u guess my animal", "let's go guess my animal", "i picked an animal guess it"]},
+    {"id": "games.guess.h1.t2", "goal": "Tell the system I have picked an animal", "setup": ["Play twenty questions."], "canonical": "I have an animal in mind.", "variants": ["i got an animal", "got an animal in mind", "i'm thinking of one", "i picked an animal", "pick an animal done", "animal chosen", "i have one in my head", "im thinking of an animal", "ok i chose one", "animal's ready"]},
+    {"id": "games.guess.h1.t3", "goal": "Answer yes to a question", "setup": ["Play twenty questions.", "Guess my animal."], "canonical": "Yes.", "variants": ["yeah", "yep", "yes it does", "y", "uh yeah", "yes", "affirmative lol", "true", "yup", "da"]},
+    {"id": "games.guess.h1.t4", "goal": "Answer no to a question", "setup": ["Play twenty questions.", "Guess my animal."], "canonical": "No.", "variants": ["nope", "no", "n", "nah it doesn't", "no it is not", "not that", "nope never", "no way", "negative", "no, it isn't"]},
+    {"id": "games.guess.h1.t5", "goal": "Say I do not know the answer", "setup": ["Play twenty questions.", "Guess my animal."], "canonical": "I don't know.", "variants": ["idk", "dunno", "no idea", "i'm not sure what that is", "don't know", "hmm no clue", "unsure", "not sure", "I cannot tell", "maybe? i dont know"]},
+    {"id": "games.guess.h1.t6", "goal": "Answer that it depends on the time", "setup": ["Play twenty questions.", "Guess my animal."], "canonical": "Sometimes.", "variants": ["sometimes yes", "it depends sometimes", "sometimes", "kinda sometimes", "at times", "occasionally", "now and then", "depends", "sometimes, not always", "some of the time"]},
+    {"id": "games.guess.h1.t7", "goal": "Answer yes with a condition about Sundays", "setup": ["Play twenty questions.", "Guess my animal."], "canonical": "Yes, but only on Sundays.", "variants": ["yes only sometimes like sundays", "yeah but just on sundays", "only on sundays", "yes unless it is not sunday", "well only on weekends", "yes, but only at night", "yes if it's sunday", "only when it's a sunday", "kinda yes but only certain days", "yes but limited"]},
+    {"id": "games.guess.h1.t8", "goal": "Answer maybe to a question", "setup": ["Play twenty questions.", "Guess my animal."], "canonical": "Maybe.", "variants": ["perhaps", "might be", "possibly", "maybe?", "could be", "eh maybe", "mayb", "I guess maybe", "maybe, who knows", "possibly yes"]},
+    {"id": "games.guess.h1.t9", "goal": "Reveal that my animal was a zebra", "setup": ["Play twenty questions.", "Guess my animal."], "canonical": "It was a zebra.", "variants": ["it was a zebra", "zebra", "the animal was a zebra", "it's a zebra", "i was thinking zebra", "the answer is zebra", "a zebra", "zebra i picked", "it was zebra lol", "I had a zebra in mind"]},
+    {"id": "games.guess.h1.t10", "goal": "Reveal that I was thinking of a giraffe", "setup": ["Play twenty questions.", "Guess my animal."], "canonical": "I was thinking of a giraffe.", "variants": ["giraffe", "it was a giraffe", "i meant the giraffe", "it's a giraffe", "the giraffe, that was it", "i had a giraffe", "giraffe the whole time", "was a giraffe", "it was the tall one, a giraffe", "my animal was a giraffe"]}
+  ]
+}

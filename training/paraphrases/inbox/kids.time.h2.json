@@ -1,0 +1,71 @@
+{
+  "world": "kids.time",
+  "tab": "robot",
+  "author": "haiku",
+  "batch": "h2",
+  "tasks": [
+    {
+      "id": "kids.time.h2.t1",
+      "goal": "Find out tomorrow's day when today is Friday",
+      "setup": ["Today is Friday."],
+      "canonical": "What day is tomorrow?",
+      "variants": ["tomorrow what day", "tmrw is what day", "day tomorrow?", "whats tomorrow", "which day is coming up tomorrow", "friday today so tomorrow is what", "tomorrow's day please", "next day after today?", "after today, what day?", "what weekday will it be tmrw"]
+    },
+    {
+      "id": "kids.time.h2.t2",
+      "goal": "Find out yesterday's day when today is Friday",
+      "setup": ["Today is Friday."],
+      "canonical": "What day was yesterday?",
+      "variants": ["yesterday what day", "ystrdy was which day", "day before today?", "what day was it yesterday", "yesterday's day?", "which day was yesterday", "back a day from today, what is it", "the day before friday?", "yesterday weekday pls", "what day was yday"]
+    },
+    {
+      "id": "kids.time.h2.t3",
+      "goal": "Find the month three months after May",
+      "canonical": "What month is 3 months after May?",
+      "variants": ["3 months after may is what", "may plus three months", "which month comes 3 months later than may", "may + 3 months = ?", "count three months past may", "after 3 months from may, what month", "what month is 3 months on from may", "months: may then add 3", "three months after may?", "may then 3 months later, which month"]
+    },
+    {
+      "id": "kids.time.h2.t4",
+      "goal": "Find the season that comes before summer",
+      "canonical": "What season comes before summer?",
+      "variants": ["before summer what season", "season prior to summer?", "whats the season right before summer", "summer's previous season?", "what season is before summer", "one season back from summer?", "season before summer pls", "which season is just before summer", "what's before summer season", "season that comes earlier than summer?"]
+    },
+    {
+      "id": "kids.time.h2.t5",
+      "goal": "Count the days until Saturday when today is Monday",
+      "setup": ["Today is Monday."],
+      "canonical": "How many days until Saturday?",
+      "variants": ["days till saturday?", "how many days to saturday", "monday, saturday is how many days away", "countdown to saturday in days", "how long until saturday", "days left until sat", "saturday is how many days from now", "how many days until saturday comes", "from today how far to saturday in days", "sat is how many days off"]
+    },
+    {
+      "id": "kids.time.h2.t6",
+      "goal": "Count the hours left until 7 o'clock when it is 3 o'clock",
+      "canonical": "How many hours until 7 o'clock if it is 3 o'clock?",
+      "variants": ["if its 3, how many hrs till 7", "hours from now till 7 if it's 3 o'clock", "3 oclock to 7 how many hours left", "how long until 7 o'clock when it's 3", "hours between 3 and 7 o clock from now", "countdown in hours from 3 to 7", "its 3 now, how many hours to 7", "how many hours until seven if now is three", "3 to 7 hours to go?", "hours before 7 o'clock from 3"]
+    },
+    {
+      "id": "kids.time.h2.t7",
+      "goal": "Count the hours in one day",
+      "canonical": "How many hours does a day have?",
+      "variants": ["hours in a day", "how many hrs in a day", "day has how many hours", "24 hours?", "count hours in one day", "a day is how many hours long", "how long is a day in hours", "hours per day pls", "how many hours make a day", "hours in one day quickly"]
+    },
+    {
+      "id": "kids.time.h2.t8",
+      "goal": "Find the time 30 minutes before 5 o'clock",
+      "canonical": "What time was it 30 minutes ago if it is 5 o'clock?",
+      "variants": ["if 5 oclock, time 30 min ago?", "what was the time half an hour before 5 o clock", "5 oclock minus 30 mins", "30 minutes earlier than 5 o'clock is what", "its 5, what time was 30 minutes back", "time 30 min before 5 pm", "thirty minutes before five o'clock?", "5 o clock - 30 min = ?", "what time was 30 mins ago when clock says 5", "clock 5, 30 mins back is when"]
+    },
+    {
+      "id": "kids.time.h2.t9",
+      "goal": "Find the time 2 hours before 5 o'clock",
+      "canonical": "What time was it 2 hours ago if it is 5 o'clock?",
+      "variants": ["5 o'clock, what was it 2 hrs ago", "2 hours before 5 oclock is what time", "if its 5 now, time two hours back?", "back 2 hours from 5 o'clock", "5 minus two hours, what time", "time 2 hours earlier than 5", "two hours ago from five o clock, what time", "5 o clock minus 2 hrs", "what hour was it 2 hours before 5", "if it's five, what time was it two hours back"]
+    },
+    {
+      "id": "kids.time.h2.t10",
+      "goal": "Find how many days April has",
+      "canonical": "How many days has April?",
+      "variants": ["April how many days", "days in april?", "april days count", "how many days is april", "how long is april in days", "april has how many days?", "number of days april", "april days pls", "how many days in april", "april, days?"]
+    }
+  ]
+}

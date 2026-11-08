@@ -1,0 +1,77 @@
+{
+  "world": "data.charts",
+  "tab": "charts",
+  "author": "haiku",
+  "batch": "h3",
+  "tasks": [
+    {
+      "id": "data.charts.h3.t1",
+      "goal": "Hide the legend box from the chart",
+      "canonical": "Hide the legend.",
+      "variants": ["no legend please", "get rid of the legend box", "remove the key", "take the legend off", "legend off", "I don't need the legend", "hide the labels box", "turn off the legend", "can you hide that legend thing", "legend away pls"]
+    },
+    {
+      "id": "data.charts.h3.t2",
+      "goal": "Find out which item is the biggest in the chart",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Which is the biggest?",
+      "variants": ["what's the biggest one", "biggest?", "which one is largest", "which has the highest number", "the max, which is it", "what's on top", "which one's the biggest bar", "highest one?", "which fruit is the most", "tell me the biggest"]
+    },
+    {
+      "id": "data.charts.h3.t3",
+      "goal": "Add up all the numbers in the chart",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "What is the total?",
+      "variants": ["total?", "whats the total", "sum of everything", "add all of it up", "how much in total", "total of the chart please", "what do they add up to", "grand total", "how much is it all together", "sum it up"]
+    },
+    {
+      "id": "data.charts.h3.t4",
+      "goal": "Find the average value in the chart",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "What is the average?",
+      "variants": ["avg?", "average please", "what's the mean value", "the average number", "average of them", "whats the typical value", "mean of the bars", "what's the average amount", "average value pls", "give me the average"]
+    },
+    {
+      "id": "data.charts.h3.t5",
+      "goal": "Find how many more apples there are than pears",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "How many more apples than pears?",
+      "variants": ["apples minus pears?", "how much bigger are apples than pears", "difference apples pears", "apples beat pears by how much", "how far ahead is apples over pears", "gap between apples and pears", "apples vs pears how much more", "by how many are apples ahead", "how much more apples are there", "pears how many less than apples"]
+    },
+    {
+      "id": "data.charts.h3.t6",
+      "goal": "Find out whether apples or pears is bigger",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Which is bigger, apples or pears?",
+      "variants": ["apples or pears, which is more", "is apples bigger than pears", "apples vs pears who wins", "more apples or more pears?", "which one has more, apples or pears", "pears or apples bigger", "is it apples or pears that's larger", "compare apples and pears", "apples v pears which is higher", "which has the bigger number, pears or apples"]
+    },
+    {
+      "id": "data.charts.h3.t7",
+      "goal": "Find what share of the chart is apples",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "What percentage are apples?",
+      "variants": ["apples percent?", "what share is apples", "how much of it is apples in %", "apples as a percent", "what portion are apples", "percent apples", "apples share of the total", "what % is apples", "how much of the whole is apples", "apples percentage pls"]
+    },
+    {
+      "id": "data.charts.h3.t8",
+      "goal": "Look up how many apples the chart shows",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "What is the value of apples?",
+      "variants": ["apples value?", "how many apples", "apples number", "what number is apples", "what does apples say", "apples amount?", "how much is apples", "read me the apples number", "apples = ?", "what's the apples figure"]
+    },
+    {
+      "id": "data.charts.h3.t9",
+      "goal": "Count how many bars the chart has",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "How many bars are there?",
+      "variants": ["number of bars?", "how many bars on the chart", "count the bars", "how many things are in the chart", "how many items?", "how many columns", "count of bars pls", "how many bars does it have", "how many entries are there", "number of items in it"]
+    },
+    {
+      "id": "data.charts.h3.t10",
+      "goal": "Have the chart described in words",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Describe the chart.",
+      "variants": ["what's in the chart", "tell me what the chart looks like", "explain the chart", "what's this chart about", "describe it pls", "summarise the chart", "what am I looking at in the chart", "give me a description of the graph", "what does this graph show me", "say what the chart is"]
+    }
+  ]
+}

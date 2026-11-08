@@ -1,0 +1,657 @@
+@pat.docs.reader.describe core.pattern
+    match="[can_you|could_you|please_can_you]? [describe|introduce|analyse|analyze|profile|inspect] [the|this|that|my]? {d:lex.docs.reader.docs}"
+    emit="@{_} core.request action=docr.describe"
+    kind=request
+    priority=15
+    example="Describe the story."
+    example="Analyze the file."
+
+@pat.docs.reader.describe.know core.pattern
+    match="what do you know about [the|this|that|my] {d:lex.docs.reader.docs}"
+    emit="@{_} core.request action=docr.describe"
+    kind=question
+    priority=15
+    example="What do you know about the file?"
+
+@pat.docs.reader.summary.about core.pattern
+    match="what is [the|this|that|my] {d:lex.docs.reader.docs} [all_about|about]"
+    emit="@{_} core.request action=docr.summary"
+    kind=question
+    priority=15
+    example="What is the story about?"
+
+@pat.docs.reader.summary.do core.pattern
+    match="[can_you|could_you|please_can_you]? [summarize|summarise|recap|sum_up] [the|this|that|my]? {d:lex.docs.reader.docs?} [for_me]?"
+    emit="@{_} core.request action=docr.summary"
+    kind=request
+    priority=12
+    example="Summarize the story."
+
+@pat.docs.reader.summary.k core.pattern
+    match="[can_you|could_you|please_can_you]? [summarize|summarise|recap] [the|this|that|my]? {d:lex.docs.reader.docs?} in {k:number} [sentences|sentence]"
+    emit="@{_} core.request action=docr.summary arg.k={k}"
+    kind=request
+    priority=12
+    example="Summarize the story in 3 sentences."
+
+@pat.docs.reader.summary.give core.pattern
+    match="[can_you|could_you|please_can_you]? [give_me|show_me|tell_me|write] [a|the]? [short|brief|quick]? [summary|recap|gist|synopsis] [of]? [the|this|that|my]? {d:lex.docs.reader.docs?}"
+    emit="@{_} core.request action=docr.summary"
+    kind=request
+    priority=12
+    example="Give me a short summary of the story."
+
+@pat.docs.reader.summary.sec core.pattern
+    match="[can_you|could_you|please_can_you]? [summarize|summarise|recap] [the]? [section|chapter] {n:number}"
+    emit="@{_} core.request action=docr.summary arg.n={n}"
+    kind=request
+    priority=12
+    example="Summarize section 2."
+
+@pat.docs.reader.summary.sec.ord core.pattern
+    match="[can_you|could_you|please_can_you]? [summarize|summarise|recap] [the]? {o:lex.docs.reader.ordinals} [section|chapter]"
+    emit="@{_} core.request action=docr.summary arg.ord={o}"
+    kind=request
+    priority=12
+    example="Summarize the last section."
+
+@pat.docs.reader.summary.sec.about core.pattern
+    match="what is [section|chapter] {n:number} about"
+    emit="@{_} core.request action=docr.summary arg.n={n}"
+    kind=question
+    priority=12
+    example="What is section 3 about?"
+
+@pat.docs.reader.summary.sec.about.ord core.pattern
+    match="what is the {o:lex.docs.reader.ordinals} [section|chapter] about"
+    emit="@{_} core.request action=docr.summary arg.ord={o}"
+    kind=question
+    priority=12
+    example="What is the first section about?"
+
+@pat.docs.reader.characters core.pattern
+    match="who are [all]? [the]? [main|important|key]? [characters|people|persons] [in|of]? [the|this]? {d:lex.docs.reader.docs?}"
+    emit="@{_} core.request action=docr.characters"
+    kind=question
+    priority=12
+    example="Who are the characters?"
+
+@pat.docs.reader.characters.list core.pattern
+    match="[can_you|could_you|please_can_you]? [list|name] [all]? [the]? [main]? characters [in|of]? [the|this]? {d:lex.docs.reader.docs?}"
+    emit="@{_} core.request action=docr.characters"
+    kind=request
+    priority=12
+    example="List the characters."
+
+@pat.docs.reader.characters.which core.pattern
+    match="which characters [are_there|appear|are_mentioned|are_in_it|are_in_the_story|come_up]"
+    emit="@{_} core.request action=docr.characters"
+    kind=question
+    priority=12
+    example="Which characters are there?"
+
+@pat.docs.reader.characters.in core.pattern
+    match="who [is_in|appears_in|is_mentioned_in] [the|this|that] {d:lex.docs.reader.docs}"
+    emit="@{_} core.request action=docr.characters"
+    kind=question
+    priority=15
+    example="Who is in the story?"
+
+@pat.docs.reader.main core.pattern
+    match="who is [the|our]? [main|central|principal|leading] [character|person|hero|heroine|protagonist] [of|in]? [the|this]? {d:lex.docs.reader.docs?}"
+    emit="@{_} core.request action=docr.mainCharacter"
+    kind=question
+    priority=12
+    example="Who is the main character?"
+
+@pat.docs.reader.main.hero core.pattern
+    match="who is the [protagonist|hero|heroine]"
+    emit="@{_} core.request action=docr.mainCharacter"
+    kind=question
+    priority=12
+    example="Who is the protagonist?"
+
+@pat.docs.reader.main.most core.pattern
+    match="who is [the]? [most_mentioned|mentioned_most|mentioned_the_most|most_important|most_common|most_frequent] [character|person]?"
+    emit="@{_} core.request action=docr.mainCharacter"
+    kind=question
+    priority=12
+    example="Who is mentioned the most?"
+
+@pat.docs.reader.places core.pattern
+    match="[what|which] [places|locations|settings] [are_there|are_mentioned|appear|come_up|are_named|does_it_mention|are_in_it|are_in_the_story]"
+    emit="@{_} core.request action=docr.places"
+    kind=question
+    priority=12
+    example="Which places are mentioned?"
+
+@pat.docs.reader.places.where core.pattern
+    match="where does [the|this|that]? {d:lex.docs.reader.docs} [take_place|happen]"
+    emit="@{_} core.request action=docr.places"
+    kind=question
+    priority=15
+    example="Where does the story take place?"
+
+@pat.docs.reader.places.list core.pattern
+    match="[can_you|could_you|please_can_you]? [list|name] [all]? [the]? [places|locations]"
+    emit="@{_} core.request action=docr.places"
+    kind=request
+    priority=12
+    example="List the places."
+
+@pat.docs.reader.things core.pattern
+    match="[what|which] [objects|things|items] [are_there|are_mentioned|appear|come_up|are_named|does_it_mention|are_in_it|are_in_the_story]"
+    emit="@{_} core.request action=docr.places arg.kind=things"
+    kind=question
+    priority=12
+    example="Which objects are mentioned?"
+
+@pat.docs.reader.keywords core.pattern
+    match="[what|which] are the [key|main|top]? [words|terms|topics|keywords|themes] [of|in]? [the|this]? {d:lex.docs.reader.docs?}"
+    emit="@{_} core.request action=docr.keywords"
+    kind=question
+    priority=12
+    example="What are the key words?"
+
+@pat.docs.reader.keywords.give core.pattern
+    match="[can_you|could_you|please_can_you]? [give_me|show_me|list|tell_me] the [keywords|key_words|topics|themes|main_topics] [of|in]? [the|this]? {d:lex.docs.reader.docs?}"
+    emit="@{_} core.request action=docr.keywords"
+    kind=request
+    priority=12
+    example="Show me the keywords."
+
+@pat.docs.reader.outline core.pattern
+    match="[can_you|could_you|please_can_you]? [show|give|list|tell] [me]? [the|an]? [outline|table_of_contents|contents|headings|structure|sections|chapters] [of]? [the|this]? {d:lex.docs.reader.docs?}"
+    emit="@{_} core.request action=docr.outline"
+    kind=request
+    priority=12
+    example="Show me the outline."
+    example="List the sections."
+
+@pat.docs.reader.outline.have core.pattern
+    match="what [sections|chapters|headings] does [the|this]? {d:lex.docs.reader.docs} have"
+    emit="@{_} core.request action=docr.outline"
+    kind=question
+    priority=15
+    example="What sections does the story have?"
+
+@pat.docs.reader.outline.how core.pattern
+    match="how is [the|this]? {d:lex.docs.reader.docs} [structured|organized|organised]"
+    emit="@{_} core.request action=docr.outline"
+    kind=question
+    priority=15
+    example="How is the story structured?"
+
+@pat.docs.reader.stats.in core.pattern
+    match="how many {u:lex.docs.reader.units} [are_there|are]? in [the|this|that]? {d:lex.docs.reader.docs}"
+    emit="@{_} core.request action=docr.stats arg.u={u}"
+    kind=question
+    priority=15
+    example="How many sentences are there in the story?"
+    example="How many words are in the file?"
+
+@pat.docs.reader.stats.have core.pattern
+    match="how many {u:lex.docs.reader.units} does [the|this|that]? {d:lex.docs.reader.docs} have"
+    emit="@{_} core.request action=docr.stats arg.u={u}"
+    kind=question
+    priority=15
+    example="How many sections does the story have?"
+
+@pat.docs.reader.stats.long core.pattern
+    match="how [long|big] is [the|this|that]? {d:lex.docs.reader.docs}"
+    emit="@{_} core.request action=docr.stats"
+    kind=question
+    priority=15
+    example="How long is the story?"
+
+@pat.docs.reader.who core.pattern
+    match="who [is|was|are|were] [the]? {x:lex.docs.reader.cast}"
+    emit="@{_} core.request action=docr.who arg.x=\"{x}\""
+    kind=question
+    priority=5
+    example="Who is the witch?"
+    example="Who is Gretel?"
+
+@pat.docs.reader.who.tell core.pattern
+    match="tell me about [the]? {x:lex.docs.reader.cast}"
+    emit="@{_} core.request action=docr.who arg.x=\"{x}\""
+    kind=request
+    priority=5
+    example="Tell me about Hansel."
+
+@pat.docs.reader.who.know core.pattern
+    match="what do you know about [the]? {x:lex.docs.reader.cast}"
+    emit="@{_} core.request action=docr.who arg.x=\"{x}\""
+    kind=question
+    priority=5
+    example="What do you know about the stepmother?"
+
+@pat.docs.reader.did core.pattern
+    match="what [did|does|do] [the]? {x:lex.docs.reader.cast} do [in_the_story|in_the_text|next|then|after_that]?"
+    emit="@{_} core.request action=docr.did arg.x=\"{x}\""
+    kind=question
+    priority=12
+    example="What did the witch do?"
+
+@pat.docs.reader.did.done core.pattern
+    match="what [has|have] [the]? {x:lex.docs.reader.cast} done"
+    emit="@{_} core.request action=docr.did arg.x=\"{x}\""
+    kind=question
+    priority=12
+    example="What has Gretel done?"
+
+@pat.docs.reader.did.tell core.pattern
+    match="tell me what [the]? {x:lex.docs.reader.cast} [did|does]"
+    emit="@{_} core.request action=docr.did arg.x=\"{x}\""
+    kind=request
+    priority=12
+    example="Tell me what Hansel did."
+
+@pat.docs.reader.happened core.pattern
+    match="what [happens|happened] to [the]? {x:lex.docs.reader.cast}"
+    emit="@{_} core.request action=docr.happened arg.x=\"{x}\""
+    kind=question
+    priority=12
+    example="What happened to Hansel?"
+
+@pat.docs.reader.happened.fate core.pattern
+    match="[what_is|what_was|whats] the [fate|story] of [the]? {x:lex.docs.reader.cast}"
+    emit="@{_} core.request action=docr.happened arg.x=\"{x}\""
+    kind=question
+    priority=12
+    example="What was the fate of the witch?"
+
+@pat.docs.reader.happened.became core.pattern
+    match="what became of [the]? {x:lex.docs.reader.cast}"
+    emit="@{_} core.request action=docr.happened arg.x=\"{x}\""
+    kind=question
+    priority=12
+    example="What became of the stepmother?"
+
+@pat.docs.reader.where.live core.pattern
+    match="where [does|did|do] [the]? {x:lex.docs.reader.cast} [live|stay|dwell|reside|sleep]"
+    emit="@{_} core.request action=docr.where arg.x=\"{x}\" arg.mode=live"
+    kind=question
+    priority=12
+    example="Where does the father live?"
+
+@pat.docs.reader.where.go core.pattern
+    match="where [does|did|do] [the]? {x:lex.docs.reader.cast} [go|travel|walk|run|come|head|end_up]"
+    emit="@{_} core.request action=docr.where arg.x=\"{x}\" arg.mode=go"
+    kind=question
+    priority=12
+    example="Where did Hansel go?"
+
+@pat.docs.reader.where.be core.pattern
+    match="where [is|was|are|were] [the]? {x:lex.docs.reader.cast}"
+    emit="@{_} core.request action=docr.where arg.x=\"{x}\" arg.mode=be"
+    kind=question
+    priority=4
+    example="Where is the witch?"
+
+@pat.docs.reader.whov core.pattern
+    match="who {v:lex.docs.reader.verbs} [the]? {x:lex.docs.reader.cast}"
+    emit="@{_} core.request action=docr.whoV arg.v={v} arg.x=\"{x}\""
+    kind=question
+    priority=6
+    example="Who helped Hansel?"
+    example="Who ate the roof?"
+
+@pat.docs.reader.didv core.pattern
+    match="who [did|does] [the]? {x:lex.docs.reader.cast} {v:lex.docs.reader.verbs}"
+    emit="@{_} core.request action=docr.didV arg.x=\"{x}\" arg.v={v}"
+    kind=question
+    priority=12
+    example="Who did the witch lock?"
+
+@pat.docs.reader.didv.whom core.pattern
+    match="whom [did|does] [the]? {x:lex.docs.reader.cast} {v:lex.docs.reader.verbs}"
+    emit="@{_} core.request action=docr.didV arg.x=\"{x}\" arg.v={v}"
+    kind=question
+    priority=12
+    example="Whom did Gretel free?"
+
+@pat.docs.reader.saying core.pattern
+    match="what [did|does|do] [the]? {x:lex.docs.reader.cast} [say|ask|reply|answer|cry|shout|whisper|exclaim]"
+    emit="@{_} core.request action=docr.saying arg.x=\"{x}\""
+    kind=question
+    priority=12
+    example="What did Gretel say?"
+
+@pat.docs.reader.part.begin core.pattern
+    match="what [happens|happened] [at|in] the [beginning|start|opening] [of]? [the|this]? {d:lex.docs.reader.docs?}"
+    emit="@{_} core.request action=docr.part arg.at=begin"
+    kind=question
+    priority=12
+    example="What happens at the beginning?"
+
+@pat.docs.reader.part.begin.how core.pattern
+    match="how does [the|this|that]? {d:lex.docs.reader.docs?} [begin|start]"
+    emit="@{_} core.request action=docr.part arg.at=begin"
+    kind=question
+    priority=12
+    example="How does the story begin?"
+
+@pat.docs.reader.part.begin.it core.pattern
+    match="how does it [begin|start]"
+    emit="@{_} core.request action=docr.part arg.at=begin"
+    kind=question
+    priority=12
+    example="How does it start?"
+
+@pat.docs.reader.part.end core.pattern
+    match="what [happens|happened] [at|in|towards] the [end|ending|finish|conclusion] [of]? [the|this]? {d:lex.docs.reader.docs?}"
+    emit="@{_} core.request action=docr.part arg.at=end"
+    kind=question
+    priority=12
+    example="What happens at the end?"
+
+@pat.docs.reader.part.end.how core.pattern
+    match="how does [the|this|that]? {d:lex.docs.reader.docs?} [end|finish]"
+    emit="@{_} core.request action=docr.part arg.at=end"
+    kind=question
+    priority=12
+    example="How does the story end?"
+
+@pat.docs.reader.part.end.it core.pattern
+    match="how does it [end|finish]"
+    emit="@{_} core.request action=docr.part arg.at=end"
+    kind=question
+    priority=12
+    example="How does it end?"
+
+@pat.docs.reader.part.middle core.pattern
+    match="what [happens|happened] in the middle [of]? [the|this]? {d:lex.docs.reader.docs?}"
+    emit="@{_} core.request action=docr.part arg.at=middle"
+    kind=question
+    priority=12
+    example="What happens in the middle?"
+
+@pat.docs.reader.part.sec core.pattern
+    match="what [happens|happened] in [the]? [section|chapter] {n:number}"
+    emit="@{_} core.request action=docr.part arg.n={n}"
+    kind=question
+    priority=12
+    example="What happens in section 2?"
+
+@pat.docs.reader.part.sec.ord core.pattern
+    match="what [happens|happened] in the {o:lex.docs.reader.ordinals} [section|chapter]"
+    emit="@{_} core.request action=docr.part arg.ord={o}"
+    kind=question
+    priority=12
+    example="What happens in the second section?"
+
+@pat.docs.reader.sentence core.pattern
+    match="[show|display] [me]? sentence {n:number}"
+    emit="@{_} core.request action=docr.sentence arg.n={n}"
+    kind=request
+    priority=12
+    example="Show me sentence 12."
+
+@pat.docs.reader.sentence.what core.pattern
+    match="what [is|does] sentence {n:number} [say]?"
+    emit="@{_} core.request action=docr.sentence arg.n={n}"
+    kind=question
+    priority=12
+    example="What is sentence 5?"
+
+@pat.docs.reader.count.times core.pattern
+    match="how many times [is|was|are|were] [the]? {x:lex.docs.reader.cast} [mentioned|named|said|used]"
+    emit="@{_} core.request action=docr.count arg.x=\"{x}\""
+    kind=question
+    priority=12
+    example="How many times is Hansel mentioned?"
+
+@pat.docs.reader.count.appear core.pattern
+    match="how many times [does|do|did] [the]? {x:lex.docs.reader.cast} [appear|occur|come_up|show_up|get_mentioned]"
+    emit="@{_} core.request action=docr.count arg.x=\"{x}\""
+    kind=question
+    priority=12
+    example="How many times does the witch appear?"
+
+@pat.docs.reader.count.often core.pattern
+    match="how often [is|are|does|do] [the]? {x:lex.docs.reader.cast} [mentioned|appear|occur]"
+    emit="@{_} core.request action=docr.count arg.x=\"{x}\""
+    kind=question
+    priority=12
+    example="How often is Gretel mentioned?"
+
+@pat.docs.reader.search.in core.pattern
+    match="[can_you|could_you|please_can_you]? [find|search_for|look_for|locate] {q:words(10)} in [the|this|that|my] {d:lex.docs.reader.docs}"
+    emit="@{_} core.request action=docr.search arg.q=\"{q}\""
+    kind=request
+    priority=15
+    example="Find \"witch\" in the story."
+
+@pat.docs.reader.search.for core.pattern
+    match="[can_you|could_you|please_can_you]? search [the|this|that|my] {d:lex.docs.reader.docs} for {q:rest}"
+    emit="@{_} core.request action=docr.search arg.q=\"{q}\""
+    kind=request
+    priority=15
+    example="Search the file for oven."
+
+@pat.docs.reader.search.where core.pattern
+    match="where [does|do] [it|the_story|the_text|the_file|the_book|the_tale] [say|mention|talk_about] {q:rest}"
+    emit="@{_} core.request action=docr.search arg.q=\"{q}\""
+    kind=question
+    priority=12
+    example="Where does it mention the oven?"
+
+@pat.docs.reader.search.sentences core.pattern
+    match="[can_you|could_you|please_can_you]? [show|find|list] [me]? [all]? [the]? sentences [about|with|containing|mentioning] {q:rest}"
+    emit="@{_} core.request action=docr.search arg.q=\"{q}\""
+    kind=request
+    priority=12
+    example="Show me the sentences about bread."
+
+@pat.docs.reader.step.next core.pattern
+    match="[show|go_to] [me]? [the]? next [result|match|hit|occurrence|one]"
+    emit="@{_} core.request action=docr.searchStep arg.dir=next"
+    kind=request
+    priority=12
+    example="Show the next result."
+
+@pat.docs.reader.step.next2 core.pattern
+    match="next [result|match|hit|occurrence]"
+    emit="@{_} core.request action=docr.searchStep arg.dir=next"
+    kind=request
+    priority=12
+    example="Next result."
+
+@pat.docs.reader.step.prev core.pattern
+    match="[show|go_to] [me]? [the]? [previous|prior] [result|match|hit|occurrence|one]"
+    emit="@{_} core.request action=docr.searchStep arg.dir=prev"
+    kind=request
+    priority=12
+    example="Show the previous result."
+
+@pat.docs.reader.step.prev2 core.pattern
+    match="[previous|prior] [result|match|hit|occurrence]"
+    emit="@{_} core.request action=docr.searchStep arg.dir=prev"
+    kind=request
+    priority=12
+    example="Previous result."
+
+@pat.docs.reader.step.first core.pattern
+    match="[show|go_to] [me]? the first [result|match|hit|occurrence]"
+    emit="@{_} core.request action=docr.searchStep arg.dir=first"
+    kind=request
+    priority=12
+    example="Show the first result."
+
+@pat.docs.reader.step.last core.pattern
+    match="[show|go_to] [me]? the last [result|match|hit|occurrence]"
+    emit="@{_} core.request action=docr.searchStep arg.dir=last"
+    kind=request
+    priority=12
+    example="Show the last result."
+
+@pat.docs.reader.clear core.pattern
+    match="[can_you|could_you|please_can_you]? [clear|remove|reset|hide|stop] [the]? [search|highlights|highlighting|highlight|results|search_results]"
+    emit="@{_} core.request action=docr.clearSearch"
+    kind=request
+    priority=12
+    example="Clear the search."
+    example="Stop highlighting."
+
+@pat.docs.reader.across core.pattern
+    match="which [documents|files|stories|texts|books] [mention|contain|talk_about|are_about|include|say|discuss] {q:words(10)}"
+    emit="@{_} core.request action=docr.across arg.q=\"{q}\""
+    kind=question
+    priority=12
+    example="Which documents mention the witch?"
+
+@pat.docs.reader.across.in core.pattern
+    match="in which {d:lex.docs.reader.docs} [is|are|do|does]? {q:words(10)} [mentioned|appear|appears|occur]"
+    emit="@{_} core.request action=docr.across arg.q=\"{q}\""
+    kind=question
+    priority=15
+    example="In which file is the oven mentioned?"
+
+@pat.docs.reader.relation core.pattern
+    match="who [is|was] [the]? {x:lex.docs.reader.cast} 's {r:lex.docs.reader.kin}"
+    emit="@{_} core.request action=docr.relation arg.x=\"{x}\" arg.r={r}"
+    kind=question
+    priority=12
+    example="Who is Hansel's sister?"
+
+@pat.docs.reader.relation.of core.pattern
+    match="who [is|was] the {r:lex.docs.reader.kin} of [the]? {x:lex.docs.reader.cast}"
+    emit="@{_} core.request action=docr.relation arg.x=\"{x}\" arg.r={r}"
+    kind=question
+    priority=12
+    example="Who is the sister of Hansel?"
+
+@pat.docs.reader.relation.plural core.pattern
+    match="who [are|were] [the]? {x:lex.docs.reader.cast} 's {r:lex.docs.reader.kin}"
+    emit="@{_} core.request action=docr.relation arg.x=\"{x}\" arg.r={r}"
+    kind=question
+    priority=12
+    example="Who are Gretel's parents?"
+
+@pat.docs.reader.related core.pattern
+    match="how [are|is] [the]? {x:lex.docs.reader.cast} and [the]? {y:lex.docs.reader.cast} related"
+    emit="@{_} core.request action=docr.isRelated arg.x=\"{x}\" arg.y=\"{y}\""
+    kind=question
+    priority=12
+    example="How are Hansel and Gretel related?"
+
+@pat.docs.reader.related.rel core.pattern
+    match="what is the relation between [the]? {x:lex.docs.reader.cast} and [the]? {y:lex.docs.reader.cast}"
+    emit="@{_} core.request action=docr.isRelated arg.x=\"{x}\" arg.y=\"{y}\""
+    kind=question
+    priority=12
+    example="What is the relation between Hansel and Gretel?"
+
+@pat.docs.reader.read.ord core.pattern
+    match="[can_you|could_you|please_can_you]? read [me]? [the]? {o:lex.docs.reader.ordinals} {u:lex.docs.reader.parts} [aloud|out_loud]?"
+    emit="@{_} core.request action=docr.read arg.ord={o} arg.u={u}"
+    kind=request
+    priority=12
+    example="Read the first paragraph."
+
+@pat.docs.reader.read.n core.pattern
+    match="[can_you|could_you|please_can_you]? read [me]? [the]? {u:lex.docs.reader.parts} {n:number} [aloud|out_loud]?"
+    emit="@{_} core.request action=docr.read arg.u={u} arg.n={n}"
+    kind=request
+    priority=12
+    example="Read section 2."
+
+@pat.docs.reader.read.all core.pattern
+    match="[can_you|could_you|please_can_you]? read [me]? [the]? [whole|entire|full]? {d:lex.docs.reader.docs} [aloud|out_loud|to_me]?"
+    emit="@{_} core.request action=docr.read arg.all=true"
+    kind=request
+    priority=15
+    example="Read the story aloud."
+
+@pat.docs.reader.read.ends core.pattern
+    match="[can_you|could_you|please_can_you]? read [me]? [the]? {u:lex.docs.reader.ends} [aloud|out_loud]?"
+    emit="@{_} core.request action=docr.read arg.u={u}"
+    kind=request
+    priority=12
+    example="Read me the ending."
+
+@pat.docs.reader.list core.pattern
+    match="[can_you|could_you|please_can_you]? [what|which] {d:lex.docs.reader.docs} [do_i_have|have_i_added|are_open|are_loaded|do_you_have|are_there]"
+    emit="@{_} core.request action=docr.list"
+    kind=question
+    priority=15
+    example="Which documents do I have?"
+
+@pat.docs.reader.list.show core.pattern
+    match="[can_you|could_you|please_can_you]? [list|show] [me]? [my|all]? [the]? {d:lex.docs.reader.docs}"
+    emit="@{_} core.request action=docr.list"
+    kind=request
+    priority=15
+    example="List my documents."
+
+@pat.docs.reader.open.title core.pattern
+    match="[can_you|could_you|please_can_you]? [switch_to|work_with|talk_about|let_us_talk_about|go_to|open|pick|choose|select|use] [the|my]? {t:words(8)} [file|story|document|text|book|tale]"
+    emit="@{_} core.request action=docr.open arg.t=\"{t}\""
+    kind=request
+    priority=12
+    example="Open the fairy tale story."
+    example="Switch to the second document."
+
+@pat.docs.reader.open.called core.pattern
+    match="[can_you|could_you|please_can_you]? [open|switch_to|go_to|use|pick] [the]? {d:lex.docs.reader.docs} [called|named|titled] {t:words(8)}"
+    emit="@{_} core.request action=docr.open arg.t=\"{t}\""
+    kind=request
+    priority=15
+    example="Open the file called Bees."
+
+@pat.docs.reader.close.title core.pattern
+    match="[can_you|could_you|please_can_you]? [close|remove|delete|discard|unload] [the]? {t:words(8)} [file|story|document|text|book|tale]"
+    emit="@{_} core.request action=docr.close arg.t=\"{t}\""
+    kind=request
+    priority=6
+    example="Close the bees file."
+
+@pat.docs.reader.close core.pattern
+    match="[can_you|could_you|please_can_you]? [close|remove|delete|discard|unload] [the|this|that]? [current|open]? {d:lex.docs.reader.docs}"
+    emit="@{_} core.request action=docr.close"
+    kind=request
+    priority=15
+    example="Close the file."
+
+@pat.docs.reader.sample core.pattern
+    match="[can_you|could_you|please_can_you]? [load|open|add|use|restore|show|start_with] [me]? [the|a]? [sample|example|demo|test|bundled] [story|document|file|text|tale|book]?"
+    emit="@{_} core.request action=docr.loadSample"
+    kind=request
+    priority=12
+    example="Load the sample story."
+
+@pat.docs.reader.ask.say core.pattern
+    match="what does [the|this|that]? {d:lex.docs.reader.docs} [say|tell|mention] [about]? {q:rest}"
+    emit="@{_} core.request action=docr.ask arg.q=\"{q}\""
+    kind=question
+    priority=15
+    example="What does the story say about the moon?"
+
+@pat.docs.reader.ask.does core.pattern
+    match="[does|did] [the|this|that]? {d:lex.docs.reader.docs} [say|mention|state|explain|tell] {q:rest}"
+    emit="@{_} core.request action=docr.ask arg.q=\"{q}\""
+    kind=question
+    priority=15
+    example="Does the story mention a dragon?"
+
+@pat.docs.reader.ask.according.end core.pattern
+    match="{q:words(20)} according to [the|this|that]? {d:lex.docs.reader.docs}"
+    emit="@{_} core.request action=docr.ask arg.q=\"{q}\""
+    kind=question
+    priority=15
+    example="Why is the sky blue according to the story?"
+
+@pat.docs.reader.ask.according core.pattern
+    match="according to [the|this|that]? {d:lex.docs.reader.docs} {q:rest}"
+    emit="@{_} core.request action=docr.ask arg.q=\"{q}\""
+    kind=question
+    priority=15
+    example="According to the story, why did the father weep?"
+
+@pat.docs.reader.said.in core.pattern
+    match="who [said|says|asked|replied|cried|whispered|shouted|exclaimed|answered|ordered|called] {q:words(30)} in [the|this|that]? {d:lex.docs.reader.docs}"
+    emit="@{_} core.request action=docr.said arg.q=\"{q}\""
+    kind=question
+    priority=15
+    example="Who said \"Show me first\" in the story?"

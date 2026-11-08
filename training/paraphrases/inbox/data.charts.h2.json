@@ -1,0 +1,79 @@
+{
+  "world": "data.charts",
+  "tab": "charts",
+  "author": "haiku",
+  "batch": "h2",
+  "tasks": [
+    {
+      "id": "data.charts.h2.t1",
+      "goal": "Empty the chart of all its numbers but keep it",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Clear the chart.",
+      "variants": ["clear the data", "empty the chart", "wipe the numbers off", "delete all the data in it", "reset the chart data", "clean out the chart", "remove all the bars", "clear it pls", "take all the values out", "empty it out"]
+    },
+    {
+      "id": "data.charts.h2.t2",
+      "goal": "Show the same numbers as a line instead of bars",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Show it as a line.",
+      "variants": ["make it a line chart", "line graph instead", "switch the bars to a line", "turn it into a line", "line please", "I want it as a line", "change to line", "can you make this a line graph", "bars to line", "lines not bars"]
+    },
+    {
+      "id": "data.charts.h2.t3",
+      "goal": "Stack the bars so the parts sit on top of each other",
+      "setup": ["Make a bar chart of what everyone has."],
+      "canonical": "Make it a stacked bar chart.",
+      "variants": ["stack the bars", "stacked please", "can you stack them", "make the bars stacked", "pile the bars on top of each other", "stacked version pls", "switch on stacking", "make it stack", "stacked bars", "turn stacking on"]
+    },
+    {
+      "id": "data.charts.h2.t4",
+      "goal": "Give the chart a new title",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Change the chart title to Fruit.",
+      "variants": ["title it Fruit", "call the chart Fruit", "name the chart fruit", "make the title Fruit", "rename the chart to Fruit", "chart title: Fruit", "label the whole chart Fruit", "give the chart a name, Fruit", "set the heading to Fruit", "can u title this Fruit"]
+    },
+    {
+      "id": "data.charts.h2.t5",
+      "goal": "Get rid of the chart title",
+      "setup": ["Change the chart title to Fruit."],
+      "canonical": "Remove the chart title.",
+      "variants": ["no title please", "drop the title", "take the title off", "untitle the chart", "delete the heading", "title off", "I don't want a title on it", "get rid of the name on top", "remove the header of the chart", "chart without a title"]
+    },
+    {
+      "id": "data.charts.h2.t6",
+      "goal": "Make the bars a green colour",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Make the bars green.",
+      "canonical_retries": ["Paint the chart orange.", "Use dark green.", "Color the bars green."],
+      "variants": ["green bars", "bars in green pls", "colour the bars green", "can you make them green", "turn the bars green", "bars should be green", "green please", "paint the bars a nice green", "change bar colour to green", "make everything green"]
+    },
+    {
+      "id": "data.charts.h2.t7",
+      "goal": "Give each bar its own bright colour",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Use rainbow colors.",
+      "variants": ["rainbow please", "make it a rainbow", "each bar a different colour", "all the colours of the rainbow", "make it colourful", "bright colours for each bar", "multicolour bars", "colour it like a rainbow", "can you do rainbow colours", "rainbow palette pls"]
+    },
+    {
+      "id": "data.charts.h2.t8",
+      "goal": "Order the bars from largest to smallest",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Sort from biggest to smallest.",
+      "variants": ["sort it big to small", "order the bars largest first", "descending please", "biggest bar first", "sort the bars high to low", "put the biggest on the left", "sort desc", "arrange from most to least", "can you sort them, biggest first", "order them big to small"]
+    },
+    {
+      "id": "data.charts.h2.t9",
+      "goal": "Turn the bars sideways",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Make it horizontal.",
+      "variants": ["sideways bars", "horizontal please", "lay the bars flat", "flip it on its side", "rotate the bars sideways", "make the bars go across", "turn them horizontal", "can you lay it out horizontally", "bars horizontal pls", "make it sideways"]
+    },
+    {
+      "id": "data.charts.h2.t10",
+      "goal": "Print the numbers on top of the bars",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Show the values.",
+      "variants": ["show the numbers", "put the numbers on the bars", "I want to see the figures", "numbers on please", "display the amounts", "label the bars with their numbers", "show me how much each one is on the chart", "turn on the value labels", "can you show the figures", "add the numbers"]
+    }
+  ]
+}

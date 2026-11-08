@@ -352,9 +352,9 @@
 
 @t.ui.avatar.n68 core.test
     input="Change your antenna to a dish."
-    expect="turned into a robot"
-    expectState="character=robot"
-    expectState="robot.top=dish"
+    expect="An emoji has no dish antenna, but the robot does"
+    expectState="character=emoji"
+    expectState="robot.top=antenna"
     session=e
 
 @t.ui.avatar.n69 core.test
@@ -676,3 +676,203 @@
 @t.ui.avatar.charchange2 core.test
     input="I want an emoji avatar"
     expect="Now I am an emoji"
+
+@t.ui.avatar.u01 core.test
+    input="I want a human as avatar"
+    expectState="character=person"
+    session=u
+
+@t.ui.avatar.u02 core.test
+    input="Use the cyclops eye"
+    expect="has no cyclops eyes, but the robot does"
+    expect="Say \"yes\" to become the robot"
+    expectState="character=person"
+    expectState="robot.eyes=round"
+    session=u
+
+@t.ui.avatar.u03 core.test
+    input="yes"
+    expect="Now I am a robot"
+    expectState="character=robot"
+    expectState="robot.eyes=cyclops"
+    session=u
+
+@t.ui.avatar.u04 core.test
+    input="why you turned it in a robot, this ia wrong"
+    expect="sorry"
+    expect="become a person"
+    expect="undo"
+    expectState="character=robot"
+    session=u
+
+@t.ui.avatar.u05 core.test
+    input="turn it in a human again"
+    expectState="character=person"
+    session=u
+
+@t.ui.avatar.u06 core.test
+    input="make blue eyes"
+    expect="A person has no eye color, but the robot does"
+    expectState="character=person"
+    session=u
+
+@t.ui.avatar.u07 core.test
+    input="yes"
+    expect="My eyes glow"
+    expectState="character=robot"
+    session=u
+
+@t.ui.avatar.u08 core.test
+    input="undo"
+    expect="I am a person again"
+    expectState="character=person"
+    session=u
+
+@t.ui.avatar.u09 core.test
+    input="make bigger yes and a red had"
+    expect="beanie"
+    expectState="person.head=hatBeanie"
+    session=u
+
+@t.ui.avatar.u10 core.test
+    input="look suprised"
+    expect="Now I look surprised"
+    expectState="person.expression=awe"
+    session=u
+
+@t.ui.avatar.u11 core.test
+    input="give tourself a random look"
+    expect="Surprise!"
+    session=u
+
+@t.ui.avatar.u12 core.test
+    input="go back to how you were"
+    expect="I went back to how I was"
+    expectState="person.expression=awe"
+    session=u
+
+@t.ui.avatar.v01 core.test
+    input="make a human"
+    expectState="character=person"
+    session=v
+
+@t.ui.avatar.v02 core.test
+    input="change to emoji"
+    expect="Now I am an emoji"
+    expectState="character=emoji"
+    session=v
+
+@t.ui.avatar.v03 core.test
+    input="undo"
+    expect="I am a person again"
+    expectState="character=person"
+    session=v
+
+@t.ui.avatar.v04 core.test
+    input="make me a human avatar"
+    expect="already"
+    expectState="character=person"
+    session=v
+
+@t.ui.avatar.v05 core.test
+    input="make yourself a robot"
+    expect="Now I am a robot"
+    expectState="character=robot"
+    session=v
+
+@t.ui.avatar.v06 core.test
+    input="can you be a girl"
+    expect="Now I am a person"
+    expectState="character=person"
+    session=v
+
+@t.ui.avatar.v07 core.test
+    input="go back to how you were"
+    expect="I am a robot again"
+    expectState="character=robot"
+    session=v
+
+@t.ui.avatar.v08 core.test
+    input="Please undo."
+    expect="I am a person again"
+    expectState="character=person"
+    session=v
+
+@t.ui.avatar.v09 core.test
+    input="make yourself a human"
+    expect="already"
+    expectState="character=person"
+    session=v
+
+@t.ui.avatar.w01 core.test
+    input="wear a red hat"
+    expect="A robot has no hat, but the person does"
+    expect="Say \"yes\" to become the person"
+    expectState="character=robot"
+    session=w
+
+@t.ui.avatar.w02 core.test
+    input="no"
+    expect="I stay a robot"
+    expectState="character=robot"
+    session=w
+
+@t.ui.avatar.w03 core.test
+    input="wear a red had"
+    expect="has no hat"
+    expectState="character=robot"
+    session=w
+
+@t.ui.avatar.w04 core.test
+    input="yes please"
+    expect="Now I am a person"
+    expect="beanie"
+    expectState="character=person"
+    expectState="person.head=hatBeanie"
+    session=w
+
+@t.ui.avatar.w05 core.test
+    input="make blue eyes"
+    expect="no eye color"
+    expectState="character=person"
+    session=w
+
+@t.ui.avatar.w06 core.test
+    input="Make the eyes blue."
+    expect="no eye color"
+    expectState="character=person"
+    session=w
+
+@t.ui.avatar.w07 core.test
+    input="Show me a robot."
+    expect="Now I am a robot"
+    expectState="character=robot"
+    session=w
+
+@t.ui.avatar.w08 core.test
+    input="make bigger"
+    expect="I took that to mean my eyes"
+    session=w
+
+@t.ui.avatar.w09 core.test
+    input="undo"
+    expect="nothing to undo"
+    expectState="character=robot"
+    session=y
+
+@t.ui.avatar.x01 core.test
+    input="Look surprized."
+    expect="Now I look surprised"
+    expectState="robot.mouth=speaker"
+    session=x
+
+@t.ui.avatar.x02 core.test
+    input="Become a persan."
+    expect="Now I am a person"
+    expectState="character=person"
+    session=x
+
+@t.ui.avatar.x03 core.test
+    input="Make your eyes wobbly."
+    expect="do not know"
+    session=x

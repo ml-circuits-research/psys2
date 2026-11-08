@@ -1,0 +1,70 @@
+{
+  "world": "media.music",
+  "tab": "music",
+  "author": "haiku",
+  "batch": "h4",
+  "tasks": [
+    {
+      "id": "media.music.h4.t1",
+      "goal": "Find which key has a given number of sharps or flats",
+      "canonical": "What key has 3 flats?",
+      "variants": ["which key has three flats", "a key with 4 sharps?", "what major key uses 2 flats", "which key has one sharp", "key with 5 sharps pls", "which key signature has 6 flats", "what major key has no sharps or flats", "tell me the key that has 3 sharps", "a major key with two flats?", "which key has seven sharps"]
+    },
+    {
+      "id": "media.music.h4.t2",
+      "goal": "Find the distance between two notes",
+      "canonical": "What is the interval between C and G?",
+      "variants": ["interval from c to g?", "how far apart are C and G", "what interval is E to B", "how many semitones between c and g", "how many steps from C up to E", "distance between F and A", "interval C to E pls", "what's the gap from B to F sharp", "how far is G from D", "C to A interval?"]
+    },
+    {
+      "id": "media.music.h4.t3",
+      "goal": "Find the note an interval above or below a note",
+      "canonical": "What note is a fifth above D?",
+      "variants": ["a fifth above d?", "whats a third up from C", "E flat plus a major third?", "one octave above A is?", "which note is a minor third below A", "down a fourth from G, what note", "what's 2 semitones above B", "third below E please", "a sixth up from C is what", "a fourth under D?"]
+    },
+    {
+      "id": "media.music.h4.t4",
+      "goal": "Find the relative major or minor of a key",
+      "canonical": "What is the relative minor of C major?",
+      "variants": ["relative minor of c major?", "which minor goes with C major", "what's the relative key for D major", "relative major of A minor pls", "what minor key matches G major", "what's the relative minor for F major, quick", "which major is A minor related to", "relative minor for E flat major", "c major's relative minor is what", "whats the relative of G major, minor?"]
+    },
+    {
+      "id": "media.music.h4.t5",
+      "goal": "List the chords that belong to a key",
+      "canonical": "What chords are in the key of C major?",
+      "variants": ["chords in C major?", "which chords belong to A minor", "list the chords of D major", "what chords go with the key of a minor", "chords for E flat major pls", "what triads does F major have", "show me the chords in the key of B", "which chords fit in A minor", "what can i play in G major, chords?", "chords of the key of D?"]
+    },
+    {
+      "id": "media.music.h4.t6",
+      "goal": "Find the frequency of a note in hertz",
+      "canonical": "What is the frequency of middle C?",
+      "variants": ["hz of middle c?", "how many hertz is A 4", "frequency of A4 pls", "what hertz is middle C", "freq of G 3", "how many cycles per second is C 4", "the pitch in hz of F sharp 4", "what's the hz for low E", "tell me the frequency of concert A", "middle C hertz?"]
+    },
+    {
+      "id": "media.music.h4.t7",
+      "goal": "Find the other name of a note",
+      "canonical": "What is another name for C sharp?",
+      "variants": ["C sharp another name?", "enharmonic of A flat", "whats the other name for D flat", "what's C sharp called in flats", "same note as F sharp, different name?", "alternative name for B flat", "what is G sharp also called", "enharmonic equivalent of E sharp", "name another way to write A flat", "C# is also what?"]
+    },
+    {
+      "id": "media.music.h4.t8",
+      "goal": "Find the current tempo",
+      "setup": ["Play Ode to Joy.", "Set the tempo to 120."],
+      "canonical": "What is the tempo?",
+      "variants": ["how fast is it going", "tempo?", "what bpm are we at", "what speed is this at", "current bpm?", "is it slow or fast right now", "how quick is the beat", "what's the tempo at", "tell me the bpm", "beats per minute now?"]
+    },
+    {
+      "id": "media.music.h4.t9",
+      "goal": "Learn who composed a song and some facts about it",
+      "canonical": "Who wrote Ode to Joy?",
+      "variants": ["ode to joy composer?", "who composed brahms lullaby", "who made twinkle twinkle", "composer of jingle bells pls", "who wrote happy birthday", "what key is twinkle twinkle in?", "how long is ode to joy", "tell me about frere jacques", "what do you know about london bridge", "song info for mary had a little lamb"]
+    },
+    {
+      "id": "media.music.h4.t10",
+      "goal": "Stop the loop so the song plays once",
+      "setup": ["Play Twinkle Twinkle.", "Loop it."],
+      "canonical": "Stop looping.",
+      "variants": ["stop the loop", "no more looping", "turn the loop off", "don't repeat it anymore", "play it just once", "unloop it", "end the repeat", "i don't want it looping", "loop off pls", "stop repeating it"]
+    }
+  ]
+}

@@ -278,6 +278,7 @@
     word=curly
     word=hat
     word=cap
+    word=had
     word=hip_hop_hat
     word=veil
     word=knot
@@ -1005,6 +1006,7 @@
     word=hat:hatBeanie:beanie
     word=cap:hatHip:wide-brimmed_hat
     word=hat:hatHip:wide-brimmed_hat
+    word=had:hatBeanie:beanie
     word=hip_hop_hat:hatHip:wide-brimmed_hat
     word=headscarf:hijab:hijab
     word=veil:hijab:hijab

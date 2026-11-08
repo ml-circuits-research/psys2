@@ -9,7 +9,7 @@
 //   ctx.request('ui.openTab', { tab: 'editor' })
 
 const TABS = {
-  robot: { title: 'Robot', world: 'ui.avatar' },
+  robot: { title: 'Avatar', world: 'ui.avatar' },
   editor: { title: 'Editor', world: 'docs.editor' },
   tictactoe: { title: 'Tic-tac-toe', world: 'games.tictactoe' },
   guess: { title: 'Guess the animal', world: 'games.guess' },
@@ -100,24 +100,6 @@ export function whichTab(ctx) {
   return ok(`You are on the ${TABS[ctx.state.activeTab].title} tab.`);
 }
 
-/** 4-6 example commands for the active tab, from the pattern examples of the world that owns the tab. */
-export function help(ctx) {
-  refresh(ctx);
-  const tab = ctx.state.activeTab;
-  const seen = new Set();
-  const all = [];
-  for (const p of ctx.patterns(TABS[tab].world)) {
-    const ex = p.examples[0];
-    if (ex && !seen.has(ex)) { seen.add(ex); all.push(ex); }
-  }
-  if (!all.length) return no('missing', `I have no examples for the ${TABS[tab].title} tab yet.`);
-  const n = Math.min(5, all.length);
-  const picked = [];
-  for (let i = 0; i < n; i++) picked.push(all[Math.floor((i * all.length) / n)]);
-  const quoted = picked.map((e) => `"${e.replace(/\.$/, '')}"`);
-  return ok(`On the ${TABS[tab].title} tab you can say, for example: ${quoted.slice(0, -1).join(', ')} or ${quoted.at(-1)}.`, { values: picked });
-}
-
 export function speaker(ctx, { on }) {
   const s = ctx.state;
   s.speaker = on === 'true';
@@ -172,3 +154,12 @@ const relay = (r) => (r.status === 'supported' ? ok(text(r)) : no(r.status, text
 export const newGame = (ctx) => relay(gameAction(ctx, 'new'));
 export const giveUp = (ctx) => relay(gameAction(ctx, 'giveUp'));
 export const hint = (ctx) => relay(gameAction(ctx, 'hint'));
+
+/** Phrase log commands; the host owns the log (localStorage) and carries out the effect. */
+export function phraseLog(ctx, { what }) {
+  if (!['show', 'export', 'count'].includes(what)) return no('unsupported', 'I can show, export or count your phrase log.');
+  ctx.effect('phraselog', { what });
+  if (what === 'show') return ok('OK, here is your phrase log in the settings.');
+  if (what === 'export') return ok('OK, I am exporting your phrases as a JSONL file.');
+  return ok('Let me count your phrases.');
+}

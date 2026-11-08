@@ -1,0 +1,68 @@
+{
+  "world": "kids.animals",
+  "tab": "robot",
+  "author": "haiku",
+  "batch": "h1",
+  "tasks": [
+    {
+      "id": "kids.animals.h1.t1",
+      "goal": "Find out whether an owl can fly",
+      "canonical": "Can an owl fly?",
+      "variants": ["owl fly?", "can owls fly", "do owls fly", "is an owl able to fly", "can a owl flyy", "owls can fly right", "tell me can an owl fly", "flying owl yes or no?", "can the owl fly pls", "does an owl know how to fly"]
+    },
+    {
+      "id": "kids.animals.h1.t2",
+      "goal": "Find out whether a penguin can fly",
+      "canonical": "Can a penguin fly?",
+      "variants": ["penguin fly?", "can penguins fly", "can a penguin take off and fly", "penguins fly or no", "is a penguin able to fly", "do penguins fly at all", "can pengiun fly", "penguin flying yes or no", "can a penguin flap up into the air", "fly penguin?"]
+    },
+    {
+      "id": "kids.animals.h1.t3",
+      "goal": "Find out whether a dolphin can swim",
+      "canonical": "Can a dolphin swim?",
+      "variants": ["dolphin swim?", "can dolphins swim", "do dolphins swim", "is a dolphin good at swimming", "can a dolphin go swimming", "dolphins swim yes?", "can the dolphin swim pls", "swimming dolphin, can it?", "does a dolphin know how to swim", "can a dolphin swim in the sea"]
+    },
+    {
+      "id": "kids.animals.h1.t4",
+      "goal": "Find out whether a rabbit can swim",
+      "canonical": "Can a rabbit swim?",
+      "variants": ["rabbit swim?", "can rabbits swim", "do rabbits swim", "is a rabbit able to swim", "bunny swim or no", "can a bunny go in water and swim", "can rabit swim", "rabbits swimming, yes or no", "can a rabbit swim in a pool", "swim rabbit?"]
+    },
+    {
+      "id": "kids.animals.h1.t5",
+      "goal": "Check whether a spider is a kind of insect",
+      "canonical": "Is a spider a kind of insect?",
+      "variants": ["spider an insect?", "is a spider an insect", "spiders are insects right", "is a spider classed as an insect", "spider insect yes or no", "would you call a spider an insect", "are spiders insects", "is spider a bug type insect", "is a spider in the insect group", "spider = insect?"]
+    },
+    {
+      "id": "kids.animals.h1.t6",
+      "goal": "Check whether a whale is a fish",
+      "canonical": "Is a whale a fish?",
+      "variants": ["whale a fish?", "is a whale a fish", "whales are fish right", "is a whale classed as a fish", "whale fish yes or no", "would you call a whale a fish", "are whales fish", "is whale a type of fish", "is a whale in the fish group", "whale = fish?"]
+    },
+    {
+      "id": "kids.animals.h1.t7",
+      "goal": "Find out where a camel lives",
+      "canonical": "Where does a camel live?",
+      "variants": ["camel home?", "where do camels live", "where is a camel's home", "which place is a camel from", "where would i see a camel living", "camels live where", "where's the camel's habitat", "where do camels stay", "what's a camel's home place", "where does the camel live pls"]
+    },
+    {
+      "id": "kids.animals.h1.t8",
+      "goal": "Find out what covers the skin of a cow",
+      "canonical": "What is a cow covered in?",
+      "variants": ["what's a cow covered in", "cow covering?", "what covers a cow", "what is on a cows body", "what does a cow have on its skin", "cow skin is covered in what", "is a cow covered in fur", "what's the outside of a cow made of", "cow covered with what", "what covers the cow"]
+    },
+    {
+      "id": "kids.animals.h1.t9",
+      "goal": "Learn about dolphins in general",
+      "canonical": "Tell me about a dolphin.",
+      "variants": ["dolphin info", "what's a dolphin", "info on dolphins pls", "describe a dolphin", "tell me stuff about dolphins", "dolphins, tell me", "what do you know about dolphins", "give me facts about a dolphin", "what is a dolphin like", "explain dolphins to me"]
+    },
+    {
+      "id": "kids.animals.h1.t10",
+      "goal": "Find which animals live in the sea",
+      "canonical": "Which animals live in the sea?",
+      "variants": ["sea animals?", "animals in the sea list", "what lives in the ocean", "which animals are found in the sea", "name the sea animals", "list animals that live in water in the sea", "what animals live underwater in the sea", "animals of the ocean pls", "which creatures live in the sea", "sea animals please"]
+    }
+  ]
+}

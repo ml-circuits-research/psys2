@@ -1,0 +1,77 @@
+{
+  "world": "docs.editor",
+  "tab": "editor",
+  "author": "haiku",
+  "batch": "h4",
+  "tasks": [
+    {
+      "id": "docs.editor.h4.t1",
+      "goal": "Add a cat row with 4 legs and fish to the table",
+      "setup": ["Add a table with 3 columns: animal, legs, food."],
+      "canonical": "Add a row: cat, 4, fish.",
+      "variants": ["add row cat, 4, fish", "new row: cat, 4, fish", "put a row in the table with cat, 4 and fish", "add cat, 4, fish as a row", "insert a row cat 4 fish", "can u add a row for cat with 4 and fish", "table row: cat, 4, fish", "add another row cat four fish", "row please: cat, 4, fish", "put cat, 4 and fish in the table as a new row"]
+    },
+    {
+      "id": "docs.editor.h4.t2",
+      "goal": "Add a weight column to the table",
+      "setup": ["Add a table with 3 columns: animal, legs, food."],
+      "canonical": "Add a column weight.",
+      "variants": ["add a weight column", "new column called weight", "put a column for weight in the table", "add column weight pls", "can u add a column named weight", "table needs another column, weight", "insert weight as a column", "one more column: weight", "add a column titled weight to the table", "weight column please"]
+    },
+    {
+      "id": "docs.editor.h4.t3",
+      "goal": "Remove the cat row from the table",
+      "setup": ["Add a table with 3 columns: animal, legs, food.", "Add a row: cat, 4, fish."],
+      "canonical": "Remove the row cat.",
+      "variants": ["delete the cat row", "get rid of the row with cat", "drop the cat row from the table", "remove cat row", "erase the row cat", "delete row cat pls", "take out the cat row", "the cat row has to go, delete it", "remove the row that has cat in it", "cat row remove"]
+    },
+    {
+      "id": "docs.editor.h4.t4",
+      "goal": "Delete the food column from the table",
+      "setup": ["Add a table with 3 columns: animal, legs, food."],
+      "canonical": "Delete the column food.",
+      "variants": ["remove the food column", "get rid of food column", "drop the food column", "delete column food pls", "take the food column out", "erase the column called food", "food column delete", "can u remove the food column from the table", "column food, remove it", "the food column needs to go"]
+    },
+    {
+      "id": "docs.editor.h4.t5",
+      "goal": "Change the legs value in row 1 of the table",
+      "setup": ["Add a table with 3 columns: animal, legs, food.", "Add a row: cat, 4, fish."],
+      "canonical": "Set the cell in row 1 column 2 to 4 legs.",
+      "variants": ["change row 1 column 2 to 4 legs", "put 4 legs in row 1, column 2", "cell row 1 col 2 = 4 legs", "make row 1 column 2 say 4 legs", "set row one column two to 4 legs", "update the cell at row 1 col 2 to 4 legs", "in row 1, column 2, write 4 legs", "row 1 column 2 becomes 4 legs", "fix the table, row 1 col 2 should be 4 legs", "type 4 legs into row 1 column 2"]
+    },
+    {
+      "id": "docs.editor.h4.t6",
+      "goal": "Fill the empty table with sea animals",
+      "setup": ["Add a table with 3 columns: animal, legs, food."],
+      "canonical": "Fill the table with sea animals.",
+      "variants": ["fill the table with ocean animals", "put sea animals in the table", "add sea creatures to the table", "populate the table with sea animals", "fill up the table with animals from the sea", "table should have sea animals in it, fill it", "can u fill the table with sea animals", "sea animals into the table pls", "fill table sea animals", "make the table full of sea animals"]
+    },
+    {
+      "id": "docs.editor.h4.t7",
+      "goal": "Add a to-do item to buy bread",
+      "canonical": "Add a task buy bread.",
+      "variants": ["add task: buy bread", "new to-do: buy bread", "put buy bread on the task list", "task to buy bread please", "add a checkbox task buy bread", "I need a task called buy bread", "add buy bread to the to do list", "can u add a task to buy bread", "task buy bread", "make a task, buy bread"]
+    },
+    {
+      "id": "docs.editor.h4.t8",
+      "goal": "Tick off the first task on the list",
+      "setup": ["Add a task buy bread.", "Add a task call Ana."],
+      "canonical": "Check the first task.",
+      "variants": ["tick the first task", "mark the first task done", "check off task 1", "tick off the first to-do", "the first task is done, check it", "check task one", "check the top task", "first task checked pls", "can u tick the first one", "mark number 1 as finished"]
+    },
+    {
+      "id": "docs.editor.h4.t9",
+      "goal": "Find out how many tasks are finished",
+      "setup": ["Add a task buy bread.", "Add a task call Ana.", "Check the first task."],
+      "canonical": "How many tasks are done?",
+      "variants": ["how many tasks are finished", "how many to-dos are done", "number of completed tasks?", "how many tasks did I finish", "tasks done count?", "how many of the tasks are checked", "how many tasks are complete so far", "count the done tasks", "how many tasks are checked off", "how many tasks have I done"]
+    },
+    {
+      "id": "docs.editor.h4.t10",
+      "goal": "See which tasks are done and which are still open",
+      "setup": ["Add a task buy bread.", "Add a task call Ana.", "Check the first task."],
+      "canonical": "Which tasks are done?",
+      "variants": ["which tasks are finished", "list the done tasks", "what tasks are checked", "show me the completed tasks", "which to-dos are complete", "what have I completed on the list", "list the open tasks", "what tasks are still open", "done tasks, which ones?", "which tasks are left"]
+    }
+  ]
+}

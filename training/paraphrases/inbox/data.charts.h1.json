@@ -1,0 +1,78 @@
+{
+  "world": "data.charts",
+  "tab": "charts",
+  "author": "haiku",
+  "batch": "h1",
+  "tasks": [
+    {
+      "id": "data.charts.h1.t1",
+      "goal": "Make a chart from a list of fruit counts typed in",
+      "canonical": "Make a chart: apples 5, pears 3, plums 8.",
+      "variants": ["chart: apples 5 pears 3 plums 8", "apples 5, pears 3, plums 8 as a chart", "can u make a chart of apples 5 pears 3 plums 8", "graph apples 5 pears 3 plums 8", "chart apples five pears three plums eight", "make me a chart apples=5 pears=3 plums=8", "so apples 5 pears 3 and plums 8 chart it", "bar chart please: apples 5, pears 3, plums 8", "plot apples 5 pears 3 plums 8", "apples: 5, pears: 3, plums: 8, chart"]
+    },
+    {
+      "id": "data.charts.h1.t2",
+      "goal": "Chart what Tom and Ana each have",
+      "setup": ["Tom has 5 apples.", "Ana has 3 apples."],
+      "canonical": "Make a bar chart of what everyone has.",
+      "variants": ["bar chart of what everybody has", "chart what everyone has pls", "show everyones stuff as bars", "bars of what all of them have", "graph what each person has", "make a bar graph of everyone's stuff", "everyone has what, as a bar chart", "chart what the kids have, bars", "can you show what everyone owns in a bar chart", "bar chart everyone"]
+    },
+    {
+      "id": "data.charts.h1.t3",
+      "goal": "Start an empty chart to work on",
+      "canonical": "Start a new chart.",
+      "variants": ["new chart", "make a fresh chart", "start over with a new chart", "open a blank chart", "I want a new chart pls", "create a chart from scratch", "new graph please", "begin a new chart", "can we start a new chart", "fresh chart plz"]
+    },
+    {
+      "id": "data.charts.h1.t4",
+      "goal": "Make a copy of the current chart",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Duplicate the chart.",
+      "variants": ["copy this chart", "make a duplicate of it", "clone the chart", "dupe the chart", "I want a second copy of this chart", "can you duplicate this one", "make another copy of the chart", "copy the chart pls", "duplicate that chart for me", "two of this chart please"]
+    },
+    {
+      "id": "data.charts.h1.t5",
+      "goal": "Refresh the chart after the numbers changed",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Update the chart.",
+      "variants": ["refresh the chart", "redraw it", "update the graph", "reload the chart", "refresh it pls", "redo the chart with the new numbers", "re-draw the chart", "update it", "can you refresh the graph", "chart needs an update"]
+    },
+    {
+      "id": "data.charts.h1.t6",
+      "goal": "Add a new fruit to the chart",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Add bananas 4.",
+      "canonical_retries": ["Add 4 bananas to the chart.", "Add bananas."],
+      "variants": ["bananas 4", "put bananas in with 4", "add 4 bananas", "throw in bananas, 4 of them", "new item bananas 4", "add bananas at 4", "can you add bananas 4 to it", "bananas = 4", "include 4 bananas in the chart", "stick bananas on there with 4"]
+    },
+    {
+      "id": "data.charts.h1.t7",
+      "goal": "Take one fruit out of the chart",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Delete plums from the chart.",
+      "canonical_retries": ["Remove plums.", "Take plums off the chart."],
+      "variants": ["no more plums", "drop plums from it", "get rid of the plums", "remove plums pls", "take the plums out", "plums off the chart", "delete plums", "can u remove plums from the graph", "lose the plums bar", "plums out of the chart please"]
+    },
+    {
+      "id": "data.charts.h1.t8",
+      "goal": "Set the pears to a new number",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Change pears to 6.",
+      "variants": ["pears 6", "make pears six", "pears should be 6 now", "set pears to 6", "update pears, 6", "pears = 6", "can you change the pears to 6", "the pears are 6 now", "edit pears to six", "pears -> 6"]
+    },
+    {
+      "id": "data.charts.h1.t9",
+      "goal": "Raise the apples number by two",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Increase apples by 2.",
+      "variants": ["apples plus 2", "add 2 to the apples", "bump apples up 2", "apples +2", "more apples, 2 more", "raise apples by two", "give apples 2 more", "apples go up by 2", "can you increase the apples by 2", "2 more apples please"]
+    },
+    {
+      "id": "data.charts.h1.t10",
+      "goal": "Rename the pears bar to cherries",
+      "setup": ["Make a chart: apples 5, pears 3, plums 8."],
+      "canonical": "Rename pears to cherries.",
+      "variants": ["pears are cherries now", "call pears cherries instead", "change the name pears to cherries", "relabel pears as cherries", "swap pears for cherries in the name", "cherries not pears", "rename the pears", "pears -> cherries label", "can u rename pears to cherries", "label pears as cherries pls"]
+    }
+  ]
+}

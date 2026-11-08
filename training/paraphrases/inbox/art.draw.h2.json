@@ -1,0 +1,78 @@
+{
+  "world": "art.draw",
+  "tab": "draw",
+  "author": "haiku",
+  "batch": "h2",
+  "tasks": [
+    {
+      "id": "art.draw.h2.t1",
+      "goal": "Turn the car around",
+      "setup": ["Draw a red car."],
+      "canonical": "Turn the car around.",
+      "variants": ["car around pls", "flip the car over", "can u turn the car upside down", "make the car face left", "rotate the car 45 degrees", "turn the car to the right", "spin the car round", "mirror the car", "the car should look the other way", "tilt the car a little"]
+    },
+    {
+      "id": "art.draw.h2.t2",
+      "goal": "Delete the car",
+      "setup": ["Draw a car.", "Draw a tree."],
+      "canonical": "Delete the car.",
+      "variants": ["get rid of the car", "remove the tree pls", "erase the car", "take the tree out", "can u delete the tree for me", "throw away the car", "remove everything except the car", "clear out the tree", "rub out the car", "trash the tree"]
+    },
+    {
+      "id": "art.draw.h2.t3",
+      "goal": "Delete the thing that was just drawn or selected",
+      "setup": ["Draw a red star."],
+      "canonical": "Delete it.",
+      "variants": ["delete that", "remove this", "get rid of it", "erase it", "trash it", "throw it away", "oops, delete it", "take it out", "remove that one", "destroy it"]
+    },
+    {
+      "id": "art.draw.h2.t4",
+      "goal": "Wipe the whole picture",
+      "setup": ["Draw a house.", "Draw a tree."],
+      "canonical": "Clear the picture.",
+      "variants": ["clear the whole picture", "wipe the canvas", "erase everything", "clean the drawing board", "empty the paper", "delete everything in my picture", "wipe it all off", "clear all", "clean up my drawing", "erase the whole page"]
+    },
+    {
+      "id": "art.draw.h2.t5",
+      "goal": "Begin with a blank sheet",
+      "setup": ["Draw a house."],
+      "canonical": "Start a new drawing.",
+      "variants": ["new drawing pls", "can i have a fresh sheet of paper", "give me a blank canvas", "begin a new picture", "clean sheet please", "new picture plz", "i want a fresh drawing", "open a blank drawing", "let's start a new painting", "make a new sheet"]
+    },
+    {
+      "id": "art.draw.h2.t6",
+      "goal": "Undo the last change",
+      "setup": ["Draw a red house.", "Draw a sun."],
+      "canonical": "Undo.",
+      "variants": ["undo that", "oops take that back", "go back one step", "ctrl z", "undo the last thing i drew", "revert that please", "undo my last drawing", "wait, undo", "can you undo", "back up, undo it"]
+    },
+    {
+      "id": "art.draw.h2.t7",
+      "goal": "Bring back what was undone",
+      "setup": ["Draw a red house.", "Undo."],
+      "canonical": "Redo.",
+      "variants": ["redo that", "bring it back", "put it back pls", "do it again", "restore the house", "redo the last step", "undo the undo", "can u redo", "get that back please", "redo please"]
+    },
+    {
+      "id": "art.draw.h2.t8",
+      "goal": "Select the house",
+      "setup": ["Draw a house.", "Draw a tree.", "Draw a red car."],
+      "canonical": "Select the house.",
+      "variants": ["select the tree", "highlight the house", "click on the house", "pick the tree", "choose the house", "tap the house", "select my red car", "highlight the house pls", "touch the tree", "focus on the house"]
+    },
+    {
+      "id": "art.draw.h2.t9",
+      "goal": "Clear the current selection",
+      "setup": ["Draw a house.", "Select the house."],
+      "canonical": "Clear the selection.",
+      "variants": ["unselect everything", "deselect", "deselect it", "clear my selection pls", "unhighlight that", "drop the selection", "nothing selected please", "unpick everything", "remove the selection", "deselect all"]
+    },
+    {
+      "id": "art.draw.h2.t10",
+      "goal": "Make the star an outline only",
+      "setup": ["Draw a star."],
+      "canonical": "Make the star an outline.",
+      "variants": ["star outline only", "make the star hollow", "fill the star in with crayon", "color the star solid", "make the star solid pls", "leave the star as an outline", "crayon the star", "fill in the star", "make the star filled", "star should be just an outline"]
+    }
+  ]
+}

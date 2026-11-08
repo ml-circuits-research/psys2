@@ -176,13 +176,26 @@ function slots(ctx, s, keys) {
 }
 const spoken = (ch) => SPOKEN_CHARACTER[ch];
 function switchNote(from, to) { return from === to ? '' : ` (I turned into ${spoken(to)} for that.)`; }
-/** Pick the target of a command: the active character first; one other character only when it is the only one that can do it. */
+/** The operation being run by the wrapper (name and arguments), so that an offer can repeat it after "yes". */
+let CURRENT = null;
+const cap = (x) => x.replace(/^./, (c) => c.toUpperCase());
+const the = (ch) => spoken(ch).replace(/^an? /, 'the ');
+/**
+ * Offer another character instead of switching silently: remember it as pending (inputMode 'confirm', answered by
+ * interceptInput) and say what is missing and how to get it.
+ */
+function offer(s, ch, what, verb = 'has') {
+  s.pending = { character: ch, replay: CURRENT ? { fn: CURRENT.fn, args: structuredClone(CURRENT.args ?? {}) } : null };
+  s.inputMode = 'confirm';
+  return `${cap(spoken(s.character))} ${verb === 'has' ? 'has no' : 'does not have'} ${what}, but ${the(ch)} does. Say "yes" to become ${the(ch)}${s.pending.replay ? ' and do that' : ''}.`;
+}
+/** Pick the target of a command: the active character first; another character only when asked (never silently). */
 function pickSlot(s, candidates, whatForError) {
   const mine = candidates.filter((c) => c.ch === s.character);
   if (mine.length) return { slot: mine[0] };
   const chars = [...new Set(candidates.map((c) => c.ch))];
-  if (chars.length === 1) return { slot: candidates[0] };
-  return { error: `${whatForError} I could do that as ${orList(chars.map(spoken))}; tell me to become one of them first.` };
+  if (chars.length === 1) return { error: offer(s, chars[0], whatForError) };
+  return { error: `${cap(spoken(s.character))} has no ${whatForError}. I could do that as ${orList(chars.map(spoken))}; tell me to become one of them first.` };
 }
 
 function chooseEntry(list, { n, text }) {
@@ -218,7 +231,7 @@ function resolveVariant(ctx, s, { part, value, n, text }) {
     if (list.length) found.push({ ...sl, list });
   }
   if (!found.length) return { error: null, none: true };
-  const { slot, error } = pickSlot(s, found, `Only other characters know "${String(value).replace(/_/g, ' ')}".`);
+  const { slot, error } = pickSlot(s, found, `${(() => { const d = String(found[0].list[0].display ?? ''); const v = String(value).replace(/_/g, ' '); return d.replace(/s$/, '') === v ? d : v === 'had' ? 'hat' : v; })()}${part ? ` ${part === 'eye' ? 'eyes' : String(part).replace(/_/g, ' ')}` : ''}`);
   if (error) return { error };
   const pick = chooseEntry(slot.list, { n, text });
   if (pick.error) return { error: pick.error };
@@ -233,7 +246,7 @@ function apply(ctx, s, r) {
 }
 
 // ---- operations: setting parts ----------------------------------------------------------------------------------
-export function setPart(ctx, { part, value, n, text }) {
+function _setPart(ctx, { part, value, n, text }) {
   const s = ensure(ctx);
   const r = resolveVariant(ctx, s, { part, value, n, text });
   if (r.error) return no(r.error);
@@ -247,7 +260,7 @@ export function setPart(ctx, { part, value, n, text }) {
 }
 
 /** A part named with words that are not a known variant: tell what is possible. */
-export function setPartUnknown(ctx, { part, words }) {
+function _setPartUnknown(ctx, { part, words }) {
   const s = ensure(ctx);
   const keys = PART_KEYS[part];
   if (!keys) return no(`I do not know what my ${String(part).replace(/_/g, ' ')} is.`);
@@ -262,11 +275,11 @@ function partSlot(ctx, s, part) {
   if (!keys) return { error: `I do not know what my ${String(part).replace(/_/g, ' ')} is.` };
   const cand = slots(ctx, s, keys);
   if (!cand.length) return { error: 'I do not have that part.' };
-  const { slot, error } = pickSlot(s, cand, `That part belongs to other characters.`);
+  const { slot, error } = pickSlot(s, cand, `${part === 'eye' ? 'eyes of that kind' : String(part).replace(/_/g, ' ')}`);
   return error ? { error } : { slot };
 }
 
-export function step(ctx, { part, dir }) {
+function _step(ctx, { part, dir }) {
   const s = ensure(ctx);
   const { slot, error } = partSlot(ctx, s, part);
   if (error) return no(error);
@@ -291,8 +304,13 @@ const BIGGER = new Set(['bigger', 'larger', 'wider', 'huger', 'rounder']);
 const EMOJI_EYE_SIZE = ['small', 'pupils', 'bigPupils'];
 /** Robot eyes: styles, not sizes. Square, visor and cyclops fill more of the screen than round and plus. */
 const ROBOT_EYES_BIGGER = ['square', 'visor', 'cyclops'], ROBOT_EYES_SMALLER = ['round', 'plus'];
-export function resizePart(ctx, { part, dir }) {
+function _resizePart(ctx, { part, dir, assumed }) {
   const s = ensure(ctx);
+  if (assumed) {
+    const r = _resizePart(ctx, { part: 'eye', dir });
+    const lead = 'I took that to mean my eyes. ';
+    return { ...r, ...(r.value ? { value: lead + r.value } : {}), ...(r.note ? { note: lead + r.note } : {}) };
+  }
   const grow = BIGGER.has(String(dir));
   const word = grow ? 'bigger' : 'smaller';
   const keys = PART_KEYS[part];
@@ -322,7 +340,7 @@ export function resizePart(ctx, { part, dir }) {
   return ok(`I cannot change the size of my ${LABEL[key]}, but I can change its style. My ${LABEL[key]} can be ${orList(listOptionsText(ctx, ch, key, 12).split(', '))}.`);
 }
 
-export function resetPart(ctx, { part }) {
+function _resetPart(ctx, { part }) {
   const s = ensure(ctx);
   const { slot, error } = partSlot(ctx, s, part);
   if (error) return no(error);
@@ -342,7 +360,7 @@ function takeOff(ctx, s, ch, key) {
   }
   return { cannot: true };
 }
-export function removePart(ctx, { part, value, text }) {
+function _removePart(ctx, { part, value, text }) {
   const s = ensure(ctx);
   let ch, key, id;
   if (value) {
@@ -368,7 +386,7 @@ export function removePart(ctx, { part, value, text }) {
   if (t.cannot) return no(`I cannot take off my ${LABEL[key]}, but I can change it. Ask me for a different one.`);
   return done(ctx, 'off' + key, t.result === 'none' ? `I took off ${phraseOf(ctx, ch, key, t.taken)}.` : `I took off ${phraseOf(ctx, ch, key, t.taken)}. Now I have ${phraseOf(ctx, ch, key, t.result)}.`);
 }
-export function removeAll(ctx) {
+function _removeAll(ctx) {
   const s = ensure(ctx), ch = s.character;
   let n = 0;
   for (const key of components(ctx, ch)) if (s[ch][key] !== 'none' && (optional(ctx, ch).includes(key) ? (s[ch][key] = 'none', true) : takeOff(ctx, s, ch, key).taken)) n++;
@@ -381,14 +399,17 @@ function colorSlot(s, ctx, part) {
   if (!map) return { error: `I do not know what my ${String(part).replace(/_/g, ' ')} color is.` };
   if (map[s.character]) return { ch: s.character, key: map[s.character] };
   const chars = CHARACTERS.filter((c) => map[c]);
-  if (chars.length === 1) return { ch: chars[0], key: map[chars[0]] };
+  if (chars.length === 1) {
+    const what = part === 'eye' ? 'eye color' : `${String(part).replace(/_/g, ' ')} color`;
+    return { error: offer(s, chars[0], what).replace(/ does\./, part === 'eye' ? ' does: its eyes glow in any color.' : ' does.') };
+  }
   return { error: `${spoken(s.character).replace(/^an? /, 'A ')} has no ${String(part).replace(/_/g, ' ')} color. ${chars.length ? `${orList(chars.map(spoken)).replace(/^./, (c) => c.toUpperCase())} does.` : ''}`.trim() };
 }
 const colorSentence = (ctx, key, part, name) => {
   const [label, verb] = COLOR_SAY[key] ?? [key, 'is'];
   return part === 'eye' ? `My eyes glow ${name} now.` : `My ${label} ${verb} ${name} now.`;
 };
-export function setColor(ctx, { part, color }) {
+function _setColor(ctx, { part, color }) {
   const s = ensure(ctx);
   const target = hexOfName(ctx, color);
   if (!target) return no(`I do not know the color ${String(color).replace(/_/g, ' ')}.`);
@@ -409,7 +430,7 @@ export function setColor(ctx, { part, color }) {
   if (was === hex && from === ch && !close) return ok(`That color is already my ${COLOR_SAY[key]?.[0] ?? key} color.`);
   return done(ctx, key + hex, `${colorSentence(ctx, key, part, name)}${close}${switchNote(from, ch)}`);
 }
-export function shiftColor(ctx, { part, dir }) {
+function _shiftColor(ctx, { part, dir }) {
   const s = ensure(ctx);
   const cs = colorSlot(s, ctx, part);
   if (cs.error) return no(cs.error);
@@ -425,7 +446,7 @@ export function shiftColor(ctx, { part, dir }) {
   s.character = ch; s[ch].colors[key] = hex;
   return done(ctx, key + hex, `${colorSentence(ctx, key, part, nameOfHex(ctx, hex, key))}${switchNote(from, ch)}`);
 }
-export function askColor(ctx, { part }) {
+function _askColor(ctx, { part }) {
   const s = ensure(ctx);
   const map = COLOR_KEYS[part];
   if (!map) return no(`I do not know what my ${String(part).replace(/_/g, ' ')} color is.`);
@@ -435,7 +456,7 @@ export function askColor(ctx, { part }) {
   const [label, verb] = COLOR_SAY[key] ?? [key, 'is'];
   return ok(part === 'eye' ? `My eyes glow ${name}.` : `My ${label} ${verb} ${name}.`);
 }
-export function listColors(ctx, { part }) {
+function _listColors(ctx, { part }) {
   const s = ensure(ctx);
   if (!part) {
     const keys = colorKeys(ctx, s.character);
@@ -468,14 +489,14 @@ function randomize(ctx, s, ch, seed, differ) {
   }
 }
 const newSeed = () => Math.random().toString(36).slice(2, 8);
-export function surprise(ctx, { mode }) {
+function _surprise(ctx, { mode }) {
   const s = ensure(ctx);
   const seed = newSeed();
   s.seed = seed;
   randomize(ctx, s, s.character, seed, mode === 'everything');
   return done(ctx, 'surprise' + seed, mode === 'everything' ? `I changed everything. My seed is ${seed}.` : `Surprise! My new look has the seed ${seed}.`);
 }
-export function setSeed(ctx, { seed }) {
+function _setSeed(ctx, { seed }) {
   const s = ensure(ctx);
   const text = String(seed ?? '').trim().replace(/[.!?]+$/, '');
   if (!text) return no('Which seed should I use?');
@@ -483,10 +504,10 @@ export function setSeed(ctx, { seed }) {
   randomize(ctx, s, s.character, text, false);
   return done(ctx, 'seed' + text, `I used the seed ${text} to draw myself. The same seed always gives the same look.`);
 }
-export function askSeed(ctx) { return ok(`My seed is ${ensure(ctx).seed}.`); }
+function _askSeed(ctx) { return ok(`My seed is ${ensure(ctx).seed}.`); }
 
 // ---- characters, mood, name, reset, animation -------------------------------------------------------------------
-export function setCharacter(ctx, { who }) {
+function _setCharacter(ctx, { who }) {
   const s = ensure(ctx);
   const hit = ctx.lexicon(`${DATA}characters`).map((w) => w.split(':')).find(([w]) => w === who);
   if (!hit) return no(`I can become a robot, a person or an emoji, but not ${String(who).replace(/_/g, ' ')}.`);
@@ -495,7 +516,7 @@ export function setCharacter(ctx, { who }) {
   s.character = ch;
   return done(ctx, 'become' + ch, `Now I am ${spoken(ch)}. ${describeShort(ctx, s)}`);
 }
-export function askCharacter(ctx, { who } = {}) {
+function _askCharacter(ctx, { who } = {}) {
   const s = ensure(ctx);
   if (who) {
     const hit = ctx.lexicon(`${DATA}characters`).map((w) => w.split(':')).find(([w]) => w === who);
@@ -504,12 +525,12 @@ export function askCharacter(ctx, { who } = {}) {
   const others = CHARACTERS.filter((c) => c !== s.character).map(spoken);
   return ok(`I am ${spoken(s.character)}, drawn by the DiceBear library. I can also become ${orList(others)}.`);
 }
-export function listCharacters(ctx) {
+function _listCharacters(ctx) {
   const s = ensure(ctx);
   return ok(`I can be ${andList(CHARACTERS.map(spoken))}. Right now I am ${spoken(s.character)}. Say "become a person" to change.`);
 }
 function moodSpec(s, mood) { return MOODS[MOOD_OF[mood]]?.[s.character]; }
-export function setMood(ctx, { mood }) {
+function _setMood(ctx, { mood }) {
   const s = ensure(ctx);
   const m = MOOD_OF[mood];
   if (!m) return no(`I do not know how to look ${String(mood).replace(/_/g, ' ')}.`);
@@ -517,7 +538,7 @@ export function setMood(ctx, { mood }) {
   if (ch === 'person') s.person.expression = spec; else Object.assign(s[ch], spec);
   return done(ctx, 'mood' + m, `Now I look ${String(mood).replace(/_/g, ' ')}.`);
 }
-export function checkMood(ctx, { mood }) {
+function _checkMood(ctx, { mood }) {
   const s = ensure(ctx);
   const m = MOOD_OF[mood];
   if (!m) return no(`I do not know what ${String(mood).replace(/_/g, ' ')} looks like.`);
@@ -528,27 +549,28 @@ export function checkMood(ctx, { mood }) {
   const mine = Object.keys(MOODS).filter((k) => { const sp = MOODS[k][s.character]; return s.character === 'person' ? now.expression === sp : now.eyes === sp.eyes && now.mouth === sp.mouth; });
   return ok(`No, I do not look ${word}${mine.length ? `; I look ${mine[0]}` : ''}.`);
 }
-export function askMood(ctx) {
+function _askMood(ctx) {
   const s = ensure(ctx), now = s[s.character];
   const mine = Object.keys(MOODS).filter((k) => { const sp = MOODS[k][s.character]; return s.character === 'person' ? now.expression === sp : now.eyes === sp.eyes && now.mouth === sp.mouth; });
   if (mine.length) return ok(`I feel ${mine[0]}.`);
   return ok(`I have ${s.character === 'person' ? phraseOf(ctx, 'person', 'expression', now.expression) : `${phraseOf(ctx, s.character, 'eyes', now.eyes)} and ${phraseOf(ctx, s.character, 'mouth', now.mouth)}`}.`);
 }
-export function setName(ctx, { name }) {
+function _setName(ctx, { name }) {
   const n = String(name ?? '').trim().replace(/[.!?]+$/, '');
   if (!n) return no('What should my name be?');
   if (n.length > 40) return no('That name is too long for me.');
   ensure(ctx).name = n;
   return ok(`Nice! From now on my name is ${n}.`);
 }
-export function askName(ctx) { return ok(`My name is ${ensure(ctx).name}.`); }
+function _askName(ctx) { return ok(`My name is ${ensure(ctx).name}.`); }
 /** The bare name: the assistant and the avatar are one character, so kids.common reads it through ctx.request('avatar.nameOf'). */
 export function nameOf(ctx) { return ok(ensure(ctx).name); }
-export function reset(ctx, { scope }) {
-  const s = ensure(ctx), keep = s.name, d = initialState();
+function _reset(ctx, { scope }) {
+  const s = ensure(ctx), keep = s.name, d = initialState(), undo = s.undo;
   if (scope === 'all') {
     for (const k of Object.keys(s)) delete s[k];
     Object.assign(s, d, { name: keep });
+    if (undo) s.undo = undo;
     return done(ctx, 'resetall', 'I started over as the robot.');
   }
   const ch = s.character;
@@ -556,7 +578,7 @@ export function reset(ctx, { scope }) {
   s.seed = d.seed;
   return done(ctx, 'reset' + ch, `I am back to my normal look as ${spoken(ch)}.`);
 }
-export function animate(ctx, { anim }) {
+function _animate(ctx, { anim }) {
   const name = ANIM_OF[anim];
   if (!name) return no(`I do not know how to ${String(anim).replace(/_/g, ' ')}.`);
   ctx.effect('avatar.animate', { name });
@@ -565,7 +587,7 @@ export function animate(ctx, { anim }) {
 }
 
 // ---- questions ---------------------------------------------------------------------------------------------------
-export function askParts(ctx) {
+function _askParts(ctx) {
   const s = ensure(ctx), ch = s.character;
   const comps = components(ctx, ch).map((k) => LABEL[k] ?? k);
   const cols = colorKeys(ctx, ch).map((k) => COLOR_SAY[k]?.[0] ?? k);
@@ -573,7 +595,7 @@ export function askParts(ctx) {
     + `Ask "what eyes can you have?" for the choices, say "next ${PART_EXAMPLE[ch]}" or "surprise me", or tell me to become ${orList(CHARACTERS.filter((c) => c !== ch).map(spoken))}.`);
 }
 const PART_EXAMPLE = { robot: 'eyes', person: 'hair', emoji: 'mouth' };
-export function listOptions(ctx, { part }) {
+function _listOptions(ctx, { part }) {
   const s = ensure(ctx);
   const keys = PART_KEYS[part];
   if (!keys) return no(`I do not know what my ${String(part).replace(/_/g, ' ')} is.`);
@@ -589,7 +611,7 @@ export function listOptions(ctx, { part }) {
   const who = [...new Set(cand.map((c) => spoken(c.ch)))].map((x) => `${x}'s`);
   return ok(`${orList(who).replace(/^./, (c) => c.toUpperCase())} ${LABEL[first.key]} can be ${orList(listOptionsText(ctx, first.ch, first.key).split(', '))}. I am ${spoken(s.character)}, so tell me to become ${spoken(first.ch)} first.`);
 }
-export function askPart(ctx, { part }) {
+function _askPart(ctx, { part }) {
   const s = ensure(ctx);
   const keys = PART_KEYS[part];
   if (!keys) return no(`I do not know what my ${String(part).replace(/_/g, ' ')} is.`);
@@ -601,7 +623,7 @@ export function askPart(ctx, { part }) {
   const id = s[s.character][key];
   return ok(`I have ${phraseOf(ctx, s.character, key, id)}.`);
 }
-export function hasThing(ctx, { part, value, text }) {
+function _hasThing(ctx, { part, value, text }) {
   const s = ensure(ctx), ch = s.character;
   if (value) {
     const word = String(value).replace(/_/g, ' ');
@@ -619,7 +641,7 @@ export function hasThing(ctx, { part, value, text }) {
   const cur = s[ch][key];
   return cur === 'none' ? ok(`No, I have ${phraseOf(ctx, ch, key, 'none')}.`) : ok(`Yes, I have ${phraseOf(ctx, ch, key, cur)}.`);
 }
-export function askWearing(ctx) {
+function _askWearing(ctx) {
   const s = ensure(ctx), ch = s.character;
   if (ch === 'person') {
     const p = s.person, bits = [];
@@ -641,7 +663,7 @@ function describeShort(ctx, s) {
   const bits = components(ctx, ch).filter((k) => v[k] !== 'none').map((k) => phraseOf(ctx, ch, k, v[k]));
   return `I have ${andList(bits)}.`;
 }
-export function describe(ctx) {
+function _describe(ctx) {
   const s = ensure(ctx), ch = s.character, v = s[ch];
   const name = (hex, k) => nameOfHex(ctx, hex, k);
   const bits = components(ctx, ch).filter((k) => v[k] !== 'none').map((k) => phraseOf(ctx, ch, k, v[k]));
@@ -650,3 +672,124 @@ export function describe(ctx) {
   const first = `I am ${s.name}, ${spoken(ch)}. I have ${andList(bits)}${nones.length ? `, and ${andList(nones)}` : ''}.`;
   return ok(`${first} ${colors.join(', ').replace(/^./, (c) => c.toUpperCase())}.`);
 }
+
+// ---- undo, confirmation and history -----------------------------------------------------------------------------
+// Every operation below is wrapped: when it changes the avatar, the state before it is pushed on `undo` (max 20).
+// An operation that cannot do something for the active character but another character can does not switch silently:
+// it sets `pending` + inputMode 'confirm' and tells the user to say yes; interceptInput then switches (and repeats the command).
+const snap = (s) => structuredClone({ character: s.character, seed: s.seed, robot: s.robot, person: s.person, emoji: s.emoji });
+const record = (s, pre) => {
+  if (JSON.stringify(pre) === JSON.stringify(snap(s))) return;
+  (s.undo ??= []).push(pre);
+  if (s.undo.length > 20) s.undo.shift();
+};
+const W = (fn, name) => (ctx, args = {}) => {
+  const s = ensure(ctx), pre = snap(s), prev = CURRENT;
+  CURRENT = { fn: name, args };
+  try { return fn(ctx, args); } finally { CURRENT = prev; record(s, pre); }
+};
+
+/** Go back to the look before the last change (also when that change was a switch of character). */
+export function undo(ctx) {
+  const s = ensure(ctx);
+  const before = s.undo?.pop();
+  if (!before) return { status: 'missing', note: 'There is nothing to undo.' };
+  const was = s.character;
+  Object.assign(s, structuredClone(before));
+  return done(ctx, 'undo', `I went back to how I was before${was !== s.character ? `: I am ${spoken(s.character)} again` : ''}.`);
+}
+
+/** "Why did you turn into a robot?": apologise, say why, and offer the way back. */
+export function explainSwitch(ctx, { who } = {}) {
+  const s = ensure(ctx);
+  const before = [...(s.undo ?? [])].reverse().find((x) => x.character !== s.character);
+  const hit = who ? ctx.lexicon(`${DATA}characters`).map((w) => w.split(':')).find(([w]) => w === who) : null;
+  if (hit && hit[1] !== s.character) return ok(`I am ${spoken(s.character)} now, not ${spoken(hit[1])}.`);
+  if (!before) return ok(`I did not change my character: I am ${spoken(s.character)}. Say "become a person", "become a robot" or "become an emoji" if you want another one.`);
+  return ok(`I am sorry about that! I turned into ${spoken(s.character)} because I thought you wanted something only ${the(s.character)} has, and I should have asked first. `
+    + `To go back, say "become ${spoken(before.character)}" or just "undo". From now on I will ask before I change my character.`);
+}
+
+/** Color key a colored variant ("a red hat") can take, per character and component: [spoken part, color key]. */
+const PAINT = { person: { head: ['hair', 'headContrast'] }, robot: { eyes: ['eye', 'glow'] } };
+function _setPartColored(ctx, { part, value, color, n, text }) {
+  const s = ensure(ctx);
+  const target = hexOfName(ctx, color);
+  if (!target) return no(`I do not know the color ${String(color).replace(/_/g, ' ')}.`);
+  const r = resolveVariant(ctx, s, { part, value, n, text });
+  if (r.error) return no(r.error);
+  if (r.none) return no(`I do not know ${String(value).replace(/_/g, ' ')} like that. Ask me what I can have.`);
+  const before = JSON.stringify([s[r.ch][r.key], s[r.ch].colors, s.character]);
+  const note = apply(ctx, s, r);
+  const paint = PAINT[r.ch]?.[r.key];
+  const want = String(color).replace(/_/g, ' ');
+  if (!paint) return done(ctx, r.key + r.id, `I have ${phraseOf(ctx, r.ch, r.key, r.id)} now, but I cannot color it ${want} on its own.${note}`);
+  const ckey = paint[1];
+  const avoid = NOT_EQUAL[ckey] ? s[r.ch].colors[NOT_EQUAL[ckey]] : undefined;
+  const hex = nearest(ctx, r.ch, ckey, target, avoid);
+  s[r.ch].colors[ckey] = hex;
+  const near = dist(hex, target) < 4000;
+  const shown = near ? want : nameOfHex(ctx, hex, ckey);
+  const close = near ? '' : ` I do not have ${want} for that; ${shown} is the closest.`;
+  if (before === JSON.stringify([s[r.ch][r.key], s[r.ch].colors, s.character])) return ok(`I already have ${say(r.key, `${shown} ${displayOf(ctx, r.ch, r.key, r.id)}`)}.`);
+  return done(ctx, r.key + r.id + hex, `I have ${say(r.key, `${shown} ${displayOf(ctx, r.ch, r.key, r.id)}`)} now.${close}${note}`);
+}
+
+const REPLAY = { setPart: _setPart, step: _step, resetPart: _resetPart, removePart: _removePart, setColor: _setColor, shiftColor: _shiftColor, setPartColored: _setPartColored, resizePart: _resizePart };
+const YES = /^(yes|yeah|yep|yup|sure|ok|okay|please|yes please|sure thing|of course|why not|alright|do it|go ahead|yes do it|yes go ahead)[.!\s]*$/i;
+const NO = /^(no|nope|no thanks|no thank you|never ?mind|cancel|do not|don't|stay|stay as you are|leave it)[.!\s]*$/i;
+
+/** Modal input (spec 07 section 2): answers "yes" or "no" to an offer to become another character. */
+export function interceptInput(ctx, text) {
+  const s = ctx.state;
+  if (s.inputMode !== 'confirm') return { handled: false };
+  const p = s.pending;
+  s.pending = null; s.inputMode = null;
+  const t = String(text).trim();
+  if (!p) return { handled: false };
+  if (NO.test(t)) return { handled: true, reply: `OK, I stay ${spoken(s.character)}.` };
+  if (!YES.test(t)) return { handled: false };
+  ensure(ctx);
+  const pre = snap(s);
+  s.character = p.character;
+  const fn = p.replay && REPLAY[p.replay.fn];
+  const strip = (x) => String(x ?? '').replace(/^(Done|Okay|Sure|Ta-da|There you go)! /, '');
+  const reply = fn
+    ? `Now I am ${spoken(p.character)}. ${strip((r => r.value ?? r.note)(fn(ctx, p.replay.args)))}`
+    : `Now I am ${spoken(p.character)}. ${describeShort(ctx, s)}`;
+  if (!fn) { ensure(ctx); caption(ctx); ctx.request('ui.openTab', { tab: 'robot' }); }
+  record(s, pre);
+  return { handled: true, reply: reply.trim() };
+}
+
+export const setPart = W(_setPart, 'setPart');
+export const setPartUnknown = W(_setPartUnknown, 'setPartUnknown');
+export const step = W(_step, 'step');
+export const resizePart = W(_resizePart, 'resizePart');
+export const resetPart = W(_resetPart, 'resetPart');
+export const removePart = W(_removePart, 'removePart');
+export const removeAll = W(_removeAll, 'removeAll');
+export const setColor = W(_setColor, 'setColor');
+export const shiftColor = W(_shiftColor, 'shiftColor');
+export const surprise = W(_surprise, 'surprise');
+export const setSeed = W(_setSeed, 'setSeed');
+export const setCharacter = W(_setCharacter, 'setCharacter');
+export const setMood = W(_setMood, 'setMood');
+export const reset = W(_reset, 'reset');
+export const askColor = _askColor;
+export const listColors = _listColors;
+export const askSeed = _askSeed;
+export const askCharacter = _askCharacter;
+export const listCharacters = _listCharacters;
+export const checkMood = _checkMood;
+export const askMood = _askMood;
+export const setName = _setName;
+export const askName = _askName;
+export const animate = _animate;
+export const askParts = _askParts;
+export const listOptions = _listOptions;
+export const askPart = _askPart;
+export const hasThing = _hasThing;
+export const askWearing = _askWearing;
+export const describe = _describe;
+export const setPartColored = W(_setPartColored, 'setPartColored');

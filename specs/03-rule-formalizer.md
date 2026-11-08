@@ -19,6 +19,10 @@ formalize(text, { worlds, session, source }) -> {
 4. Number words to digits: `zero`…`twenty`, tens, `hundred`, `thousand`, combinations (`twenty-one`, `one hundred and five`), `half` → `0.5`, `a dozen` → `12`.
 5. Drop filler tokens anywhere: `please`, `ok`, `okay`, `well`, `so` (sentence-initial), `um`; drop sentence-initial `and`, `then`, `after that`.
 
+### 1b. Typo tolerance
+
+When no pattern matches a sentence (and no clause of it), the formalizer retries **once** with the unknown words corrected to the closest known word. The vocabulary is every literal of every pattern plus every word of every lexicon of the loaded worlds (multi-word entries split into words, plural forms included). Distance is Damerau-Levenshtein (insert, delete, substitute, swap neighbours): 1 for words of 4 to 7 letters, 2 for words of 8 or more, none below 4. Never corrected: numbers, text in quotes, capitalized names (except the first word), words with digits, apostrophes or hyphens, words that are already known (also by lemma), and words with two equally close candidates. At most three words per sentence. The corrections are recorded as `segment.corrections = [{ from, to, span }]` (also in the trace) and the dialog appends `(I read "suprised" as "surprised")` to the reply. A sentence that matched without correction is never touched.
+
 ## 2. Patterns
 ```
 @pat.arith.has core.pattern

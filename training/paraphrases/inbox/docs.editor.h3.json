@@ -1,0 +1,73 @@
+{
+  "world": "docs.editor",
+  "tab": "editor",
+  "author": "haiku",
+  "batch": "h3",
+  "tasks": [
+    {
+      "id": "docs.editor.h3.t1",
+      "goal": "Check whether milk is written somewhere in the document",
+      "setup": ["Add a list with milk, eggs and bread."],
+      "canonical": "Does the document mention milk?",
+      "variants": ["does the doc mention eggs", "is milk in the document?", "is there any mention of bread in the doc", "does my document say bread", "does it contain milk", "eggs mentioned in here?", "is eggs written anywhere in the doc", "does the text include bread", "did I write milk in the document", "does the doc have the word eggs"]
+    },
+    {
+      "id": "docs.editor.h3.t2",
+      "goal": "Find out whether the document has any content yet",
+      "canonical": "Is the document empty?",
+      "variants": ["is the doc empty", "anything in the document yet?", "is the page blank", "empty doc?", "is there nothing in the document", "is it empty right now", "does the document have anything in it", "is this doc empty or not", "is my doc empty", "blank page?"]
+    },
+    {
+      "id": "docs.editor.h3.t3",
+      "goal": "Switch on dictation so my speech goes into the document",
+      "canonical": "Start dictation.",
+      "variants": ["let me dictate something", "I want to dictate", "begin taking dictation", "turn on dictation", "dictation on please", "I'd like to talk and have it typed", "start dictating", "switch on the dictation mode", "can u take what I say down", "ok start writing down what I say"]
+    },
+    {
+      "id": "docs.editor.h3.t4",
+      "goal": "Turn dictation off again",
+      "setup": ["Start dictation."],
+      "canonical": "Stop dictation.",
+      "canonical_retries": ["Stop the dictation.", "Stop dictating.", "Stop the dictation mode."],
+      "variants": ["stop dictating", "dictation off", "turn off dictation pls", "I'm done dictating", "that's all for dictation, stop", "end the dictation", "quit dictation now", "finish dictating", "ok stop the dictation mode", "disable dictation"]
+    },
+    {
+      "id": "docs.editor.h3.t5",
+      "goal": "Turn my shopping list into a new document",
+      "setup": ["Add milk to my shopping list.", "Add eggs to my shopping list."],
+      "canonical": "Make a document from my shopping list.",
+      "variants": ["make a doc from my shopping list", "change my shopping list into a doc", "create a document out of my shopping list", "shopping list to doc please", "can u make a doc with my shopping list", "write my shopping list up as a document", "put my shopping list in a document", "I want my shopping list as a doc", "doc from the shopping list pls", "make me a note from my shopping list"]
+    },
+    {
+      "id": "docs.editor.h3.t6",
+      "goal": "Get a short report about sea animals written up",
+      "canonical": "Write a report about sea animals.",
+      "variants": ["make a report on sea animals", "report about ocean animals please", "I need a document about sea creatures", "can you do a report on animals of the sea", "write something about sea animals in a doc", "sea animals report pls", "prepare a summary on sea animals", "a doc about the animals in the ocean", "report on sea animals for my homework", "make me a page about sea animals"]
+    },
+    {
+      "id": "docs.editor.h3.t7",
+      "goal": "Record what Tom and Ana each have in the document",
+      "setup": ["Tom has 4 apples.", "Ana has 2 pears."],
+      "canonical": "Write down what Tom and Ana have.",
+      "variants": ["note down what Tom and Ana got", "make a document of what everyone has", "put down what everybody has", "what do Tom and Ana have? write it down", "make a note of what Tom owns", "record what Tom and Ana have got", "write what each kid has in the doc", "document what the kids have", "jot down everything Tom and Ana have", "list what Ana has in the document"]
+    },
+    {
+      "id": "docs.editor.h3.t8",
+      "goal": "Add a block quote with a line about animals",
+      "canonical": "Add a quote Be kind to every animal.",
+      "variants": ["quote: be kind to every animal", "put in a quote saying be kind to every animal", "add a block quote, be kind to every animal", "insert the quote be kind to every animal", "add quote be kind to every animal pls", "I want a quotation: be kind to every animal", "add a quotation that says be kind to every animal", "quote block with be kind to every animal", "add a quote - be kind to every animal", "can u add a quote be kind to every animal"]
+    },
+    {
+      "id": "docs.editor.h3.t9",
+      "goal": "Put a divider line between two sections",
+      "canonical": "Add a horizontal rule.",
+      "variants": ["add a divider line", "put a line across the page", "insert a separator", "draw a horizontal line", "add a rule", "throw in a horizontal line pls", "add a dash line to split sections", "put in a dividing line", "add hr", "I need a line to split the sections"]
+    },
+    {
+      "id": "docs.editor.h3.t10",
+      "goal": "Create a table with animal, legs and food columns",
+      "canonical": "Add a table with 3 columns: animal, legs, food.",
+      "variants": ["make a table with columns animal, legs and food", "table with 3 cols: animal, legs, food", "new table animal legs food", "add a grid with animal, legs and food as headers", "can u make a table with animal legs food columns", "insert a table, columns are animal, legs, food", "build a table for animals, with legs and food", "table: animal, legs, food", "I need a table of animal legs food", "put a table in with animal legs and food"]
+    }
+  ]
+}

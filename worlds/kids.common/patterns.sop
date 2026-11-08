@@ -77,10 +77,3 @@
     kind=chat
     priority=10
     example="Goodbye!"
-
-@pat.kids.common.can core.pattern
-    match="[what_can_you_do|help]"
-    emit="@{_} core.request action=chat.capabilities"
-    kind=chat
-    priority=10
-    example="What can you do?"

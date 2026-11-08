@@ -1,0 +1,68 @@
+{
+  "world": "ui.avatar",
+  "tab": "robot",
+  "author": "haiku",
+  "batch": "h2",
+  "tasks": [
+    {
+      "id": "ui.avatar.h2.t1",
+      "goal": "Take everything off the avatar",
+      "canonical": "Take off everything.",
+      "variants": ["take everything off", "remove all of it", "strip all accessories off", "off with everything", "no accessories please, all of them off", "take all the extras off", "clear all the stuff on you", "remove everything you can", "naked version pls", "can u drop all the add-ons"]
+    },
+    {
+      "id": "ui.avatar.h2.t2",
+      "goal": "Make the body blue",
+      "canonical": "Make your body blue.",
+      "variants": ["body blue", "make ur body blue", "turn ur body blue pls", "blue body?", "can your body be blue", "could you make the body colour blue", "I want the body blue", "body to blue please", "blue for the body", "bodie blue plz"]
+    },
+    {
+      "id": "ui.avatar.h2.t3",
+      "goal": "Make the body a shade lighter",
+      "canonical": "Make your body lighter.",
+      "variants": ["lighter body", "body lighter pls", "make ur body a bit lighter", "lighten the body up", "can you make the body paler", "body a little brighter please", "lighter for the body?", "not darker, lighter for the body", "make the body lighter a bit", "bdy lighter"]
+    },
+    {
+      "id": "ui.avatar.h2.t4",
+      "goal": "Find out what color the body is",
+      "canonical": "What color is your body?",
+      "variants": ["body color?", "what colour is ur body", "whats ur body colour", "what color is the body", "tell me your body color", "your body is what color", "which color is your body right now", "what shade is your body", "body colour pls", "color of ur body?"]
+    },
+    {
+      "id": "ui.avatar.h2.t5",
+      "goal": "See which colors the hair can have",
+      "canonical": "Which colors can your hair have?",
+      "variants": ["what colors can ur hair be", "hair colors list?", "which colours can the hair be", "list the hair colors", "what hair colors do you have", "hair color options?", "what can the hair color be", "name the colors for hair please", "hair colours you can do", "can you show the hair color choices"]
+    },
+    {
+      "id": "ui.avatar.h2.t6",
+      "goal": "Get a random look for the avatar",
+      "canonical": "Surprise me.",
+      "variants": ["surprise me", "random look plz", "random look for u pls", "surprise me with a new look", "random please", "do something random to yourself", "pick a random look for yourself", "mix it up randomly", "go random", "show me something random"]
+    },
+    {
+      "id": "ui.avatar.h2.t7",
+      "goal": "Change the whole look at once",
+      "canonical": "Change everything.",
+      "variants": ["change everything about you", "new everything pls", "make everything different", "totally new look please", "switch all of it to something else", "can u change all of your parts", "redo the whole look", "everything different now", "change the whole thing", "all new you"]
+    },
+    {
+      "id": "ui.avatar.h2.t8",
+      "goal": "Draw the avatar from seed 42",
+      "canonical": "Set your seed to 42.",
+      "variants": ["seed 42", "use seed 42", "can you use the number 42 as your seed", "seed = 42 pls", "make your look from seed 42", "try seed forty two", "set seed to 42 please", "seed 42 for you", "change the seed to 42", "draw yourself with seed 42"]
+    },
+    {
+      "id": "ui.avatar.h2.t9",
+      "goal": "Find out the seed of the current look",
+      "canonical": "What is your seed?",
+      "variants": ["whats ur seed", "seed?", "which seed are you", "what seed is this look from", "tell me your seed number", "what's the seed you're using", "seed number pls", "what number is ur seed", "which seed gave you this look", "your seed value?"]
+    },
+    {
+      "id": "ui.avatar.h2.t10",
+      "goal": "Turn the avatar into a person",
+      "canonical": "Become a person.",
+      "variants": ["be a human", "turn into a person", "switch to a human", "be a man", "become human pls", "can you be a person instead", "change into a real person", "u should be a person now", "i'd like you as a human", "person please"]
+    }
+  ]
+}

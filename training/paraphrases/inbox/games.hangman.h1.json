@@ -1,0 +1,18 @@
+{
+  "world": "games.hangman",
+  "tab": "hangman",
+  "author": "haiku",
+  "batch": "h1",
+  "tasks": [
+    {"id": "games.hangman.h1.t1", "goal": "Start a new hangman game", "setup": ["Play hangman."], "canonical": "Start a new hangman game.", "variants": ["new hangman game", "hangman new", "let's play hangman again", "restart hangman", "start hangman", "new round hangman", "hangman please, new one", "fresh hangman", "play hangman", "new word pls"]},
+    {"id": "games.hangman.h1.t2", "goal": "Start a round where the hidden word is zebra", "setup": ["Play hangman."], "canonical": "Play hangman with the word zebra.", "variants": ["hangman word zebra", "use zebra as the word", "make the word zebra", "zebra is the word, start", "start hangman with zebra", "word is zebra new game", "new hangman, the word is zebra", "hangman zebra", "let's use zebra", "pick zebra for the hidden word"]},
+    {"id": "games.hangman.h1.t3", "goal": "Ask if the word has an E in it", "setup": ["Play hangman."], "canonical": "Is there an E?", "variants": ["any e?", "e in it?", "is there an e", "got an e?", "does the word have e", "e?", "is e in there", "e in the word?", "is there a letter e", "hey is there an e"]},
+    {"id": "games.hangman.h1.t4", "goal": "Guess the letter R", "setup": ["Play hangman."], "canonical": "The letter R.", "variants": ["R", "r", "letter r", "the letter r", "r pls", "how about r", "r is the letter", "let me try r", "r please", "i pick r"]},
+    {"id": "games.hangman.h1.t5", "goal": "Try the letter S", "setup": ["Play hangman."], "canonical": "Try S.", "variants": ["try s", "guess s", "s?", "try the letter s", "I'll try s", "s is my guess", "trying s", "let's try s", "try ess", "pick s"]},
+    {"id": "games.hangman.h1.t6", "goal": "Guess the whole word as elephant", "setup": ["Play hangman."], "canonical": "Is it elephant?", "variants": ["is it elephant?", "elephant?", "maybe elephant", "guess elephant", "could it be elephant", "i think elephant", "is the word elephant", "its elephant right", "elephant", "word is elephant?"]},
+    {"id": "games.hangman.h1.t7", "goal": "Guess the whole word as zebra", "setup": ["Play hangman."], "canonical": "I think it is a zebra.", "variants": ["zebra", "i think its a zebra", "is it a zebra?", "it's a zebra i bet", "zebra?", "my guess is zebra", "maybe a zebra", "word could be zebra", "its zebra", "a zebra I think"]},
+    {"id": "games.hangman.h1.t8", "goal": "Ask for a clue about the word", "setup": ["Play hangman."], "canonical": "Tell me something about it.", "variants": ["give me a hint", "hint pls", "clue?", "anything about the word", "tell me a clue", "what's a hint", "help me out", "hint please", "tell me sth about it", "any clue at all"]},
+    {"id": "games.hangman.h1.t9", "goal": "Ask how many wrong guesses I have left", "setup": ["Play hangman.", "Try S."], "canonical": "How many guesses are left?", "variants": ["guesses left?", "how many tries left", "how many lives do i have", "how many misses left", "tries left?", "how many mistakes can i make", "guesses remaining", "how much life do i have left", "how many more wrong guesses allowed", "wrong guesses left?"]},
+    {"id": "games.hangman.h1.t10", "goal": "Give up the round", "setup": ["Play hangman."], "canonical": "I give up.", "variants": ["give up", "i quit", "i give up the word", "end the game", "i surrender", "stop, i give up", "i'm done", "quit the game", "ok give up pls", "i quit this round"]}
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "world": "ui.avatar",
+  "tab": "robot",
+  "author": "haiku",
+  "batch": "h4",
+  "tasks": [
+    {
+      "id": "ui.avatar.h4.t1",
+      "goal": "Make the avatar wave",
+      "canonical": "Wave at me.",
+      "variants": ["wave pls", "can u wave", "hi wave!", "wave hello", "do a little wave", "wave to me please", "wave for me", "wave at u", "could you wave hi at me?", "a wave would be nice"]
+    },
+    {
+      "id": "ui.avatar.h4.t2",
+      "goal": "Make the avatar wink",
+      "canonical": "Wink.",
+      "variants": ["wink", "do a wink", "can u wink at me", "winky face", "wink pls", "one wink", "wink for me", "quick wink please", "gimme ur wink", "wink wink"]
+    },
+    {
+      "id": "ui.avatar.h4.t3",
+      "goal": "Find out what can be changed",
+      "canonical": "What can I change?",
+      "variants": ["what am i allowed to change", "what can i customize", "which bits can i change on you", "what can be changed", "what stuff can i change", "can i change anything?", "what things can I modify about you", "options to change?", "which parts are changeable", "what can i tweak"]
+    },
+    {
+      "id": "ui.avatar.h4.t4",
+      "goal": "See the eye styles",
+      "canonical": "Show me all the eye options.",
+      "variants": ["eye options list", "what eye types are there", "all the eye choices pls", "list the eye styles", "which eyes can u wear", "eyes to choose from?", "show eye options", "what kinds of eyes are available", "could you list your eye variants", "what eye options exist"]
+    },
+    {
+      "id": "ui.avatar.h4.t5",
+      "goal": "Find out the hairstyle the avatar has now",
+      "canonical": "What is your hairstyle?",
+      "variants": ["what hair do u have", "hairstyle rn?", "whats ur hair like now", "your hair is what style?", "what style is ur hair", "current hair?", "tell me about your hairdo", "what's on your head hair-wise", "which hairstyle are you wearing", "hair style pls"]
+    },
+    {
+      "id": "ui.avatar.h4.t6",
+      "goal": "Check whether the avatar has glasses on",
+      "canonical": "Do you have glasses?",
+      "variants": ["u wearing glasses?", "glasses on you?", "are u wearing specs", "you got glasses or nah", "do you have any eyewear on", "is there anything on your eyes like glasses", "got glasses?", "r u wearing shades", "do you have glasses on right now", "u got specs?"]
+    },
+    {
+      "id": "ui.avatar.h4.t7",
+      "goal": "Find out what the avatar is wearing",
+      "canonical": "What are you wearing?",
+      "variants": ["what r u wearing", "wat clothes u got on", "whats on u", "outfit?", "what do you have on", "what are u dressed in", "describe what you're wearing", "any stuff on u rn", "what items do you have on your body", "tell me what's on you"]
+    },
+    {
+      "id": "ui.avatar.h4.t8",
+      "goal": "Get a description of the whole avatar in words",
+      "canonical": "Describe yourself.",
+      "variants": ["describe urself", "tell me what u look like", "how would u describe yourself", "give me a description of you", "your full look in words please", "describe the whole you", "what do u look like overall", "describe ur look", "can you give me the full description", "describe how you look"]
+    },
+    {
+      "id": "ui.avatar.h4.t9",
+      "goal": "Paint the avatar pink",
+      "canonical": "Paint yourself pink.",
+      "variants": ["pink!", "make yourself pink", "pink pls", "turn urself pink", "go pink", "change your color to pink", "pink you, please", "make the main color pink", "i want u pink", "could you color yourself pink"]
+    },
+    {
+      "id": "ui.avatar.h4.t10",
+      "goal": "Give the avatar short hair, style number 3",
+      "canonical": "Give yourself short hair 3.",
+      "variants": ["short hair 3 pls", "hair number 3, short one", "short hairstyle #3", "try the third short hair", "give me short hair option three", "can u switch to short hair number 3", "short hair version 3 plz", "could you use short hair style 3", "hair short 3", "make ur hair short 3"]
+    }
+  ]
+}

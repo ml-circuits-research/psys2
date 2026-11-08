@@ -1,0 +1,69 @@
+{
+  "world": "kids.time",
+  "tab": "robot",
+  "author": "haiku",
+  "batch": "h1",
+  "tasks": [
+    {
+      "id": "kids.time.h1.t1",
+      "goal": "Find out how many days March has",
+      "canonical": "How many days are in March?",
+      "variants": ["days in march?", "how many days march has", "march how many days", "number of days in march pls", "how long is march in days", "march - days count?", "is march 31 days", "how many days does march have", "days in march", "in march how many days are there"]
+    },
+    {
+      "id": "kids.time.h1.t2",
+      "goal": "Find the weekday that comes after Monday",
+      "canonical": "What day comes after Monday?",
+      "variants": ["day after monday?", "monday then what day", "what day is next after monday", "which weekday is after monday", "after monday comes what", "next day after monday pls", "mon -> ?", "tell me the day that comes after monday", "monday's next day is?", "what day goes after monday"]
+    },
+    {
+      "id": "kids.time.h1.t3",
+      "goal": "Find the month that comes before May",
+      "canonical": "What month comes before May?",
+      "variants": ["month before may?", "which month is before may", "may minus one month is?", "what month was before may", "the month just before may", "before may which month", "month prior to may?", "what month is right before may", "may's previous month?", "what's the month ahead of may going back"]
+    },
+    {
+      "id": "kids.time.h1.t4",
+      "goal": "Find the season that comes after winter",
+      "canonical": "Which season comes after winter?",
+      "variants": ["season after winter?", "after winter what season", "winter then which season", "what season is next after winter", "whats the season following winter", "season that follows winter", "after winter comes which season", "next season after winter pls", "winter next season?", "which season do we get after winter"]
+    },
+    {
+      "id": "kids.time.h1.t5",
+      "goal": "Count the days from Monday to Friday",
+      "canonical": "How many days from Monday to Friday?",
+      "variants": ["days from monday to friday", "monday to friday how many days", "count the days between mon and fri", "how far is friday from monday in days", "monday -> friday days?", "days until friday counting from monday", "how many days to get from monday to friday", "from mon to fri, how many days", "days from monday until friday", "how long from monday to friday in days"]
+    },
+    {
+      "id": "kids.time.h1.t6",
+      "goal": "Count the hours from 3 o'clock to 7 o'clock",
+      "canonical": "How many hours from 3 o'clock to 7 o'clock?",
+      "variants": ["hours from 3 to 7 o clock", "3 o'clock to 7 o'clock how many hours", "how many hours between 3 and 7 oclock", "hours from three to seven", "how long is it from 3 to 7 in hours", "count the hours from 3 o'clock till 7", "3pm to 7pm, how many hours", "how many hrs from 3 to 7 o'clock", "3 to 7 o clock hours?", "time from 3 o'clock to 7 o'clock in hours"]
+    },
+    {
+      "id": "kids.time.h1.t7",
+      "goal": "Count the days in two weeks",
+      "canonical": "How many days are in 2 weeks?",
+      "variants": ["days in 2 weeks", "2 weeks is how many days", "how many days in a fortnight", "two weeks = how many days", "count days in 2 weeks pls", "how many days are two weeks", "14 days?", "how many days in 2 wks", "how long are 2 weeks in days", "days inside two weeks"]
+    },
+    {
+      "id": "kids.time.h1.t8",
+      "goal": "Find the time two hours after 3 o'clock",
+      "canonical": "What time will it be in 2 hours if it is 3 o'clock?",
+      "variants": ["3 o'clock plus 2 hours is?", "if its 3 oclock whats the time in 2 hrs", "2 hours from now if it's 3", "time in two hours, it's 3 now", "its 3 o'clock, what is it in 2 hours", "what's 2 hours after 3", "3 o'clock + 2 hrs", "in 2 hours from 3 oclock it will be what", "clock in 2 hours from now, currently 3", "two hours later than 3 o'clock?"]
+    },
+    {
+      "id": "kids.time.h1.t9",
+      "goal": "Ask the time, after the clock was said to show 4 o'clock",
+      "setup": ["The clock says 4 o'clock."],
+      "canonical": "What time is it?",
+      "variants": ["time?", "tell me the time", "what time is it now", "time pls", "whats the time rn", "could you tell me what time it is", "clock time?", "current time", "what hour is it now", "what time r we at"]
+    },
+    {
+      "id": "kids.time.h1.t10",
+      "goal": "Find how many days February has",
+      "canonical": "How many days does February have?",
+      "variants": ["feb how many days", "days in february", "february days count?", "how many days has february", "is february 28 days", "how long is feb", "how many days in feb", "number of days in february", "february has how many days", "feb days?"]
+    }
+  ]
+}

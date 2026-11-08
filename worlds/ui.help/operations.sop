@@ -1,0 +1,47 @@
+@op.ui.help.capabilities core.operation
+    impl=capabilities
+    semantics=action
+    action=chat.capabilities
+    doc="A short spoken answer built from the summary= phrase of every loaded world (the title when a world has none), grouped by leading verb (uses ctx.worlds())."
+
+@op.ui.help.help core.operation
+    impl=help
+    semantics=action
+    action=ui.help
+    doc="Five varied example commands for the active tab, from the pattern examples of the world that owns the tab (ctx.patterns); repeating the request, or asking for more, gives the next five. With arg.count=1 gives a single example."
+
+@op.ui.help.helpMe core.operation
+    impl=helpMe
+    semantics=action
+    action=ui.helpMe
+    doc="Contextual orientation: which tab is open, what it is for, and three examples."
+
+@op.ui.help.helpMore core.operation
+    impl=helpMore
+    semantics=action
+    action=ui.helpMore
+    doc="The next five examples for the active tab."
+
+@op.ui.help.helpAbout core.operation
+    impl=helpAbout
+    semantics=action
+    action=ui.helpAbout
+    doc="What the active tab is for (from the world summary), and the state of its game."
+
+@op.ui.help.helpGame core.operation
+    impl=helpGame
+    semantics=action
+    action=ui.helpGame
+    doc="Rules and current state of the active game (or the game named by arg.game)."
+
+@op.ui.help.helpHow core.operation
+    impl=helpHow
+    semantics=action
+    action=ui.helpHow
+    doc="Searches the pattern examples of all loaded worlds for the words of the question and answers with the best matching example commands."
+
+@op.ui.help.helpWhy core.operation
+    impl=helpWhy
+    semantics=action
+    action=ui.helpWhy
+    doc="Explains the last sentence that was not understood and suggests the closest commands."

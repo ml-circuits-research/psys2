@@ -10,7 +10,7 @@ import { tokenize } from '../src/formalizer/rules/normalize.mjs';
 import { singularLemma, pluralize } from '../src/formalizer/rules/lemma.mjs';
 import { compilePattern, matchTokens } from '../src/formalizer/rules/matcher.mjs';
 import { withArticle } from '../src/interpreter/render.mjs';
-import { capabilities } from '../worlds/kids.common/ops.mjs';
+import { capabilities } from '../worlds/ui.help/ops.mjs';
 
 const real = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }), translator: createTranslator() });
 const say = async (lines, lang = 'en') => {

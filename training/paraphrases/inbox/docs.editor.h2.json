@@ -1,0 +1,78 @@
+{
+  "world": "docs.editor",
+  "tab": "editor",
+  "author": "haiku",
+  "batch": "h2",
+  "tasks": [
+    {
+      "id": "docs.editor.h2.t1",
+      "goal": "Take back the last thing I typed",
+      "setup": ["Add a paragraph Hello there."],
+      "canonical": "Undo that.",
+      "variants": ["undo", "oops, undo that", "take that back", "revert the last change", "undo the last edit pls", "go back one step", "cancel what you just did", "hmm undo it", "can you undo my last change", "reverse that"]
+    },
+    {
+      "id": "docs.editor.h2.t2",
+      "goal": "Bring back the change I just undid",
+      "setup": ["Add a paragraph Hello there.", "Undo that."],
+      "canonical": "Redo.",
+      "variants": ["redo", "put it back", "redo that please", "bring it back", "do that again", "undo the undo", "can u redo the last change", "restore what I undid", "redo it", "oops I undid too much, redo"]
+    },
+    {
+      "id": "docs.editor.h2.t3",
+      "goal": "Hear the whole document read out loud",
+      "setup": ["Add a heading Weekend.", "Add a paragraph We will hike."],
+      "canonical": "Read the document.",
+      "variants": ["read the doc out loud", "read it to me", "read me everything", "say the whole document out loud", "read back the text", "can u read my doc", "speak the document please", "read out the page", "read the whole thing to me", "read out everything I wrote"]
+    },
+    {
+      "id": "docs.editor.h2.t4",
+      "goal": "Save the document as a markdown file",
+      "setup": ["Add a heading Notes."],
+      "canonical": "Download the document as markdown.",
+      "variants": ["download the doc as md", "save it as markdown", "export the document as text", "download as a text file", "can I get the doc as a markdown file", "save the document to my computer", "export it as txt", "download this", "get a copy of the doc as markdown", "save as md pls"]
+    },
+    {
+      "id": "docs.editor.h2.t5",
+      "goal": "Find out how many paragraphs the document has",
+      "setup": ["Add a paragraph One two three.", "Add a paragraph Four five."],
+      "canonical": "How many paragraphs are there?",
+      "variants": ["how many paragraphs in the doc", "number of paragraphs?", "count the paragraphs", "how many paras are there", "how many paragraphs does it have", "paragraph count pls", "tell me the number of paragraphs", "how many paragraphs do I have", "how many para in here", "what's the paragraph total"]
+    },
+    {
+      "id": "docs.editor.h2.t6",
+      "goal": "Ask what the document is called",
+      "setup": ["Make the title Weekend Plans."],
+      "canonical": "What is the title?",
+      "variants": ["what's the title", "what is the title of the document", "tell me the title", "what's the doc title?", "what is it called", "whats the name of this document", "what did we call the doc", "title?", "which title does it have", "could you tell me the title pls"]
+    },
+    {
+      "id": "docs.editor.h2.t7",
+      "goal": "Hear what the first paragraph says",
+      "setup": ["Add a paragraph The sun is hot.", "Add a paragraph Dogs bark."],
+      "canonical": "What does the first paragraph say?",
+      "variants": ["what's in the first paragraph", "what does paragraph one say", "read me what the first para says", "what is the first paragraph", "first paragraph says what?", "what did I write in the first paragraph", "tell me the text of the first paragraph", "what's the first para about", "what is the first para saying", "content of paragraph 1?"]
+    },
+    {
+      "id": "docs.editor.h2.t8",
+      "goal": "Make the word milk bold",
+      "setup": ["Add a paragraph Buy milk today."],
+      "canonical": "Make the word milk bold.",
+      "variants": ["bold the word milk", "milk should be bold", "make milk bold pls", "can u bold milk", "put bold on milk", "embolden the word milk", "bolden milk", "make the word milk stand out in bold", "milk in bold please", "bold milk"]
+    },
+    {
+      "id": "docs.editor.h2.t9",
+      "goal": "Strip all bold and italics off the text",
+      "setup": ["Add a paragraph Buy milk today.", "Make the word milk bold."],
+      "canonical": "Clear the formatting.",
+      "variants": ["remove the formatting", "plain text please, no bold", "unformat everything", "strip all the styling off", "clear all the formatting here", "make it plain again", "remove formatting from the text", "get rid of the bold and italics", "reset the styles", "take away all formatting"]
+    },
+    {
+      "id": "docs.editor.h2.t10",
+      "goal": "Select the second paragraph so I can act on it",
+      "setup": ["Add a paragraph One.", "Add a paragraph Two.", "Add a paragraph Three."],
+      "canonical": "Select the second paragraph.",
+      "variants": ["select paragraph 2", "pick the second paragraph", "choose the second paragraph", "select para two", "I want the second paragraph selected", "grab the second paragraph", "select 2nd para", "can you select the second paragraph pls", "selekt the second paragraph", "make a selection of the second paragraph"]
+    }
+  ]
+}

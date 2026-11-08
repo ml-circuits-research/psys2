@@ -28,12 +28,6 @@
     action=ui.whichTab
     doc="Says which tab is open."
 
-@op.ui.shell.help core.operation
-    impl=help
-    semantics=action
-    action=ui.help
-    doc="Lists 4-6 example commands for the active tab, taken from the pattern examples of the world that owns the tab (ctx.patterns)."
-
 @op.ui.shell.speaker core.operation
     impl=speaker
     semantics=action

@@ -1,0 +1,78 @@
+{
+  "world": "kids.shop",
+  "tab": "robot",
+  "author": "haiku",
+  "batch": "h1",
+  "tasks": [
+    {
+      "id": "kids.shop.h1.t1",
+      "goal": "Find out what a ball costs",
+      "setup": ["A ball costs 7 lei."],
+      "canonical": "How much does a ball cost?",
+      "variants": ["how much is a ball", "ball price?", "whats the cost of a ball", "how much for a ball", "cost of the ball pls", "how much do balls cost", "price of a ball?", "what does a ball go for", "how much money is a ball", "hey how much is the ball"]
+    },
+    {
+      "id": "kids.shop.h1.t2",
+      "goal": "Add up the cost of 2 balls and 3 pencils",
+      "setup": ["A ball costs 7 lei.", "The pencil is 3 lei."],
+      "canonical": "How much do 2 balls and 3 pencils cost?",
+      "variants": ["2 balls and 3 pencils cost how much", "total for 2 balls and 3 pencils?", "how much are 2 balls + 3 pencils", "what do 2 balls and 3 pencils come to", "2 balls 3 pencils how much", "can u tell me the cost of 2 balls and 3 pencils", "how much would 2 balls and 3 pencils be", "price for two balls and three pencils?", "2 balls and 3 pencils, how much money", "how much is that for 2 balls and 3 pencils"]
+    },
+    {
+      "id": "kids.shop.h1.t3",
+      "goal": "Know how much money I have left after spending",
+      "setup": ["I start with 30 lei.", "I spent 5 lei."],
+      "canonical": "How much money do I have left?",
+      "variants": ["how much money i have left", "money left?", "how much do I have now", "whats my money left", "how much do i got left", "how much cash left", "how much is left of my money", "how much money i still have", "left money?", "how much do I have left over"]
+    },
+    {
+      "id": "kids.shop.h1.t4",
+      "goal": "Check if I can afford a ball and 2 pencils",
+      "setup": ["I have 20 lei.", "A ball costs 7 lei.", "The pencil is 3 lei."],
+      "canonical": "Can I buy a ball and 2 pencils?",
+      "variants": ["can i buy a ball and 2 pencils", "can I afford a ball and two pencils", "is a ball and 2 pencils affordable", "could i get a ball and 2 pencils", "ball and 2 pencils, can I get them", "am i able to buy a ball and 2 pencils?", "do I have enough for a ball and 2 pencils?", "can i get a ball plus 2 pencils", "is it ok to buy a ball and 2 pencils", "enough money for ball + 2 pencils?"]
+    },
+    {
+      "id": "kids.shop.h1.t5",
+      "goal": "Figure out the change from 50 lei after buying a ball",
+      "setup": ["A ball costs 7 lei."],
+      "canonical": "What is the change from 50 lei if I buy a ball?",
+      "variants": ["change from 50 lei if i buy a ball", "if I buy a ball with 50 lei whats my change", "50 lei minus a ball, what's left", "how much back from 50 lei for a ball", "change for a ball from 50 lei?", "i pay 50 lei for a ball, change?", "how much change if I buy a ball with 50", "whats the change if i buy a ball from 50", "ball, 50 lei, change how much", "give 50 lei for a ball how much back"]
+    },
+    {
+      "id": "kids.shop.h1.t6",
+      "goal": "Find out the price of a doll",
+      "setup": ["The doll costs 12 lei."],
+      "canonical": "What is the price of a doll?",
+      "variants": ["whats the price of a doll", "price of the doll?", "doll price pls", "how much is the doll", "what does the doll cost", "doll cost?", "how much does a doll cost", "what do dolls cost", "how much is a doll", "doll costs how much"]
+    },
+    {
+      "id": "kids.shop.h1.t7",
+      "goal": "Work out what 3 pencils would cost me",
+      "setup": ["The pencil is 3 lei."],
+      "canonical": "How much will I pay for 3 pencils?",
+      "variants": ["how much will i pay for 3 pencils", "what will 3 pencils cost me", "total for 3 pencils?", "how much do i pay for three pencils", "3 pencils, how much will i pay", "pay how much for 3 pencils", "how much would 3 pencils be for me", "pencils x3 how much will I pay", "what i will pay for 3 pencils", "cost to me for 3 pencils?"]
+    },
+    {
+      "id": "kids.shop.h1.t8",
+      "goal": "Know if I can buy 3 pencils with my money",
+      "setup": ["I have 20 lei.", "The pencil is 3 lei."],
+      "canonical": "Can I buy 3 pencils?",
+      "variants": ["can i buy 3 pencils", "can I get 3 pencils", "could i buy three pencils", "i want 3 pencils, can i", "do i have enough to buy 3 pencils", "is 3 pencils something i can buy", "can i afford 3 pencils", "can u check if I can buy 3 pencils", "3 pencils possible for me?", "enough for 3 pencils?"]
+    },
+    {
+      "id": "kids.shop.h1.t9",
+      "goal": "Know the price of a notebook",
+      "setup": ["The notebook is 6 lei."],
+      "canonical": "How much is the notebook?",
+      "variants": ["how much is the notebook", "notebook price", "whats a notebook cost", "cost of the notebook?", "notebook how much", "how much does the notebook cost", "price of notebook pls", "notebook costs what", "how much for the notebook?", "what do notebooks cost"]
+    },
+    {
+      "id": "kids.shop.h1.t10",
+      "goal": "Find out how much change I get for a ball and a pencil",
+      "setup": ["A ball costs 7 lei.", "The pencil is 3 lei."],
+      "canonical": "How much change do I get from 50 lei if I buy a ball and a pencil?",
+      "variants": ["change from 50 lei if i buy a ball and a pencil", "50 lei for a ball and a pencil, how much change", "if i buy a ball and a pencil with 50 lei how much back", "how much change for a ball and a pencil out of 50 lei", "ball and pencil, i give 50 lei, change?", "from 50 lei, what change for a ball and a pencil", "change left if i pay 50 for a ball and pencil", "what do i get back from 50 lei for ball and pencil", "50 lei ball and pencil change pls", "change from fifty lei for a ball and a pencil"]
+    }
+  ]
+}

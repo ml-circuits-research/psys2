@@ -1,6 +1,6 @@
 @t.ui.shell.n01 core.test
     input="Which tab am I on?"
-    expect="Robot"
+    expect="Avatar"
     expectState="activeTab=robot"
     session=s
 
@@ -13,7 +13,7 @@
 
 @t.ui.shell.n03 core.test
     input="Go back."
-    expect="Robot"
+    expect="Avatar"
     expectState="activeTab=robot"
     expectState="previousTab=editor"
     session=s
@@ -110,30 +110,14 @@
     expectState="language=en"
     session=s2
 
-@t.ui.shell.n20 core.test
-    input="What can I say here?"
-    expect="On the Robot tab"
-    expect="you can say"
-    session=s3
-
 @t.ui.shell.n21 core.test
     input="Open the editor"
     expectState="activeTab=editor"
     session=s3
 
-@t.ui.shell.n22 core.test
-    input="What can I say here?"
-    expect="On the Editor tab"
-    session=s3
-
 @t.ui.shell.n23 core.test
     input="Open the hangman tab"
     expectState="activeTab=hangman"
-    session=s3
-
-@t.ui.shell.n24 core.test
-    input="What commands are there?"
-    expect="On the Hangman tab"
     session=s3
 
 @t.ui.shell.n25 core.test

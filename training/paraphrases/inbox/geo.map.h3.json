@@ -1,0 +1,68 @@
+{
+  "world": "geo.map",
+  "tab": "map",
+  "author": "haiku",
+  "batch": "h3",
+  "tasks": [
+    {
+      "id": "geo.map.h3.t1",
+      "goal": "Find the population of Tokyo",
+      "canonical": "How many people live in Tokyo?",
+      "variants": ["how many ppl live in Tokyo", "how many inhabitants does Tokyo have", "tokyo population?", "how many folks are in Tokyo", "how many residents does tokyo have", "how many citizens live in Tokyo", "Tokyo has how many people?", "tell me how many people are in tokyo", "how many people live in tokyo, roughly", "roughly how many people are in Tokyo"]
+    },
+    {
+      "id": "geo.map.h3.t2",
+      "goal": "Find out how big France is",
+      "canonical": "What is the area of France?",
+      "variants": ["area of france?", "how big is France", "how large is France in size", "france size?", "how much land does France cover", "what's the area of Poland", "how big is Poland", "france area in km2", "tell me the size of France", "how large is the area of Spain"]
+    },
+    {
+      "id": "geo.map.h3.t3",
+      "goal": "Compare Spain and Italy side by side",
+      "canonical": "Compare Spain and Italy.",
+      "variants": ["spain vs italy", "compare spain with italy pls", "Spain versus Italy", "what's the difference between Spain and Italy", "spain and italy side by side", "match up spain against italy", "can you compare Italy and Spain", "spain italy comparison", "how do spain and italy stack up", "compare germany and france"]
+    },
+    {
+      "id": "geo.map.h3.t4",
+      "goal": "Check whether Brazil is bigger than Canada",
+      "canonical": "Is Brazil bigger than Canada?",
+      "variants": ["is brazil bigger than canada", "brazil bigger then canada?", "Is Canada larger than Brazil", "is Japan smaller than Italy?", "is brazil > canada", "true or false, Brazil is bigger than Canada", "Is Germany bigger than Poland?", "does brazil beat canada in size", "is Canada bigger than Brazil?", "would Brazil be bigger than Canada"]
+    },
+    {
+      "id": "geo.map.h3.t5",
+      "goal": "List the countries that share a border with Hungary",
+      "canonical": "Which countries border Hungary?",
+      "variants": ["countries bordering Hungary", "what borders hungary", "which nations touch Hungary's border", "which states share a border with Austria?", "list countries touching Austria", "Austria borders what countries", "who are austria's land neighbours", "which countries does Hungary share a border with", "what countries are bordering Romania", "countries next to Romania?"]
+    },
+    {
+      "id": "geo.map.h3.t6",
+      "goal": "Count how many neighbouring countries Hungary has",
+      "canonical": "How many neighbours does Hungary have?",
+      "variants": ["how many neighbors does hungary have", "number of countries bordering hungary", "count hungary's neighbours", "how many countries border Austria?", "hungary neighbour count", "how many land neighbours does Germany have", "how many countries touch Poland's border", "how many countries share a border with Italy", "how many bordering countries does Romania have", "count the neighbours of Spain"]
+    },
+    {
+      "id": "geo.map.h3.t7",
+      "goal": "Check whether France and Spain share a border",
+      "canonical": "Does France border Spain?",
+      "variants": ["does france border spain?", "france and spain share a border?", "is france next to spain", "do france and spain touch", "france borders spain yes or no", "spain bordering france?", "is spain next door to france", "do spain and france have a border", "can you tell me if france borders spain", "france touches spain?"]
+    },
+    {
+      "id": "geo.map.h3.t8",
+      "goal": "Find out whether Hungary has a coastline",
+      "canonical": "Is Hungary landlocked?",
+      "variants": ["hungary landlocked?", "does hungary have a coastline", "is hungary surrounded by land", "no sea access for hungary?", "is Austria landlocked", "does Switzerland have a coast", "is switzerland without a coastline", "hungary has access to sea?", "is mongolia landlocked", "landlocked hungary yes or no?"]
+    },
+    {
+      "id": "geo.map.h3.t9",
+      "goal": "Find which continent Egypt belongs to",
+      "canonical": "What continent is Egypt in?",
+      "variants": ["egypt continent?", "which continent is egypt on", "Egypt is in which continent", "what continent does egypt belong to", "continent of egypt", "tell me the continent Egypt is on", "egypt's continent pls", "what part of the world is egypt", "which continent has egypt", "can you say what continent Egypt is in"]
+    },
+    {
+      "id": "geo.map.h3.t10",
+      "goal": "Check whether Osaka is inside Japan",
+      "canonical": "Is Paris in France?",
+      "variants": ["is osaka in japan", "osaka in japan?", "is Lyon in France", "is Milan in Italy", "is Kyoto in Japan?", "Osaka's in Japan right?", "is kyoto located in japan", "is Munich part of Germany", "Munich in Germany true or false", "is Seville in Spain?"]
+    }
+  ]
+}

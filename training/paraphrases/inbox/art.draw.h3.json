@@ -1,0 +1,76 @@
+{
+  "world": "art.draw",
+  "tab": "draw",
+  "author": "haiku",
+  "batch": "h3",
+  "tasks": [
+    {
+      "id": "art.draw.h3.t1",
+      "goal": "Copy a tree so there are two",
+      "setup": ["Draw a tree."],
+      "canonical": "Duplicate the tree.",
+      "variants": ["copy the tree", "clone the tree pls", "make a copy of the tree", "double the tree", "can u duplicate the tree", "another tree just like it", "one more of those trees", "copy that tree and paste it", "tree copy please", "get me a second copy of the tree"]
+    },
+    {
+      "id": "art.draw.h3.t2",
+      "goal": "Hear what is in the picture",
+      "setup": ["Draw a house.", "Draw a sun.", "Draw a tree."],
+      "canonical": "Describe my picture.",
+      "variants": ["describe the picture", "what's in my drawing", "tell me about my picture", "what did i draw", "what can u see in my picture", "explain what's on the page", "describe my art", "what's in the picture right now", "what do you see on my canvas", "tell me what i made"]
+    },
+    {
+      "id": "art.draw.h3.t3",
+      "goal": "Count how many trees are drawn",
+      "setup": ["Draw three trees.", "Draw a red balloon."],
+      "canonical": "How many trees are there?",
+      "variants": ["how many trees", "trees count?", "count the trees pls", "number of trees in the picture", "how many trees have i drawn", "can u count my trees", "how many red balloons do i have", "tree count", "how many things are in my picture", "how many balloons are on there"]
+    },
+    {
+      "id": "art.draw.h3.t4",
+      "goal": "Find where the cat is",
+      "setup": ["Draw a cat.", "Draw a tree."],
+      "canonical": "Where is the cat?",
+      "variants": ["where's the cat", "location of the cat?", "where is my cat right now", "find the cat", "where can i see the tree", "where are the trees", "where did the cat go", "cat where?", "which spot is the cat in", "where's the tree at"]
+    },
+    {
+      "id": "art.draw.h3.t5",
+      "goal": "Check whether a house is in the picture",
+      "setup": ["Draw a house.", "Draw a sun."],
+      "canonical": "Is there a house in my picture?",
+      "variants": ["is there a house", "got a house in the drawing?", "any sun in my picture?", "is there a sun on the page", "do i have a cloud in my drawing?", "are there any dogs in my picture", "is a boat in there", "is there a tree", "does my picture have a house", "any flowers in there?"]
+    },
+    {
+      "id": "art.draw.h3.t6",
+      "goal": "Find out the color of the house",
+      "setup": ["Draw a red house."],
+      "canonical": "What color is my house?",
+      "variants": ["color of my house?", "house color?", "what colour is the house", "which colour is my house", "what color is the roof", "what's the house painted", "tell me the color of the house", "is the house red", "colour of the house please", "what color is the door"]
+    },
+    {
+      "id": "art.draw.h3.t7",
+      "goal": "Find what sits next to the sun",
+      "setup": ["Draw a sun.", "Draw a cloud next to the sun."],
+      "canonical": "What is next to the sun?",
+      "variants": ["whats near the sun", "what's beside the sun", "anything next to the cloud?", "what is close to the sun", "what's by the sun", "what's near the cloud", "things next to the sun?", "what's right by the sun", "is anything beside the cloud", "what's close to the sun in my picture"]
+    },
+    {
+      "id": "art.draw.h3.t8",
+      "goal": "Ask which things can be drawn",
+      "canonical": "What can I draw?",
+      "variants": ["what can i draw", "what things can i draw?", "what shapes can you draw", "list the things i can draw", "what can i add to my picture", "which animals can i draw", "what kinds of pictures can i make", "what things can we paint", "what can u draw", "show me what i can draw"]
+    },
+    {
+      "id": "art.draw.h3.t9",
+      "goal": "Ask which colors are available",
+      "canonical": "What colors can I use?",
+      "variants": ["which colours can i use", "what crayons do you have", "what paints can i use", "list the colors", "what colors do you know", "which colors are available", "what color options do i have", "which crayons can i pick", "colour list pls", "what paints are there"]
+    },
+    {
+      "id": "art.draw.h3.t10",
+      "goal": "Save the drawing to a file",
+      "setup": ["Draw a house.", "Draw a sun."],
+      "canonical": "Save my drawing.",
+      "variants": ["save it", "save the picture", "download my drawing", "export the picture as a png", "can i have the drawing as a file", "save this as svg", "print my picture", "i want to keep my drawing", "save my art as an image", "download it as png please"]
+    }
+  ]
+}

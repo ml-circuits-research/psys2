@@ -1,0 +1,74 @@
+{
+  "world": "kids.arith",
+  "tab": "robot",
+  "author": "haiku",
+  "batch": "h1",
+  "tasks": [
+    {
+      "id": "kids.arith.h1.t1",
+      "goal": "Find out how many marbles Ben has after buying more",
+      "setup": ["Ben has 9 marbles.", "Ben buys 4 more."],
+      "canonical": "How many marbles has Ben got?",
+      "variants": ["how many marbles ben got", "ben's marbles?", "how many marbles does Ben have now", "marbles ben has how many", "count ben's marbles", "how many marbles is ben holding", "ben marble count pls", "how many marbles does ben own", "tell me how many marbles ben has", "how many does ben have, marbles"]
+    },
+    {
+      "id": "kids.arith.h1.t2",
+      "goal": "Find out how many stickers Lily and Sam have together",
+      "setup": ["Lily has 6 stickers.", "Sam has 4 stickers."],
+      "canonical": "How many stickers do Lily and Sam have together?",
+      "variants": ["stickers lily and sam have together?", "how many stickers do they have all together", "lily + sam stickers?", "total stickers for lily and sam", "how many stickers between lily and sam", "lily and sam, how many stickers combined", "how many stikers do lily and sam have", "what's lily and sam's sticker total", "how many do lily n sam have together", "sticker total of the two of them?"]
+    },
+    {
+      "id": "kids.arith.h1.t3",
+      "goal": "Find out who has the most stickers",
+      "setup": ["Lily has 6 stickers.", "Sam has 4 stickers."],
+      "canonical": "Who has the most stickers?",
+      "variants": ["who has most stickers?", "whose got the most stickers", "which kid has the biggest pile of stickers", "who has the largest number of stickers", "most stickers belongs to who", "who has the highest stickers count", "who's got the most stickers pls", "tell me who has the most stickers", "who has more stickers than the other", "which one has the biggest sticker count"]
+    },
+    {
+      "id": "kids.arith.h1.t4",
+      "goal": "Find out how many fewer stickers Sam has than Lily",
+      "setup": ["Lily has 6 stickers.", "Sam has 4 stickers."],
+      "canonical": "How many fewer stickers does Sam have than Lily?",
+      "variants": ["how many less stickers does sam have than lily", "lily has how many more stickers than sam?", "difference in stickers between sam and lily", "how many stickers behind is sam", "sam is short how many stickers vs lily", "by how many does sam trail lily in stickers", "how many fewer stickers sam got", "stickers gap, sam vs lily", "how much less sticker does sam have than lily", "how far behind lily is sam in stickers"]
+    },
+    {
+      "id": "kids.arith.h1.t5",
+      "goal": "Check if Lily has more stickers than Sam",
+      "setup": ["Lily has 6 stickers.", "Sam has 4 stickers."],
+      "canonical": "Has Lily got more stickers than Sam?",
+      "variants": ["does lily have more stickers than sam", "lily more stickers than sam?", "is lily ahead of sam on stickers", "does lily beat sam in stickers", "has lily more stickers than sam, yes or no", "lily > sam stickers?", "is it true lily has more stickers than sam", "more stickers for lily than sam?", "does lily have a bigger number of stickers than sam", "lily got more stickers, right?"]
+    },
+    {
+      "id": "kids.arith.h1.t6",
+      "goal": "Ask whether Ben has any marbles at all",
+      "setup": ["Ben has no marbles."],
+      "canonical": "Does Ben have any marbles?",
+      "variants": ["does ben have any marbles", "ben got any marbles?", "does ben own marbles at all", "does ben have some marbles", "any marbles for ben?", "is ben holding any marbles", "has ben got a marble", "does ben have zero marbles or what", "ben have marbles?", "are there any marbles with ben"]
+    },
+    {
+      "id": "kids.arith.h1.t7",
+      "goal": "Add 9 and 6 together",
+      "canonical": "What is the sum of 9 and 6?",
+      "variants": ["what is the sum of 9 and 6", "sum of 9 and 6?", "9 + 6", "whats 9 plus 6", "9 and 6 added up", "what do 9 and 6 add up to", "add 9 to 6", "what is nine plus six", "9+6 =?", "tell me 9 and 6 summed"]
+    },
+    {
+      "id": "kids.arith.h1.t8",
+      "goal": "Divide 18 into 3 equal parts",
+      "canonical": "Divide 18 by 3.",
+      "variants": ["18 divided by 3", "what is 18 divided by 3", "18 / 3?", "split 18 into 3 equal parts", "how much is 18 over 3", "18 divided 3", "divide eighteen by three", "whats 18 divide by 3", "how many 3s in 18", "quotient of 18 and 3?"]
+    },
+    {
+      "id": "kids.arith.h1.t9",
+      "goal": "Find out half of 14",
+      "canonical": "What is half of 14?",
+      "variants": ["half of 14?", "whats half of 14", "14 halved", "what is 14 divided in two", "half 14", "how much is half of fourteen", "split 14 in half, what's one half", "what's 14 / 2", "cut 14 in half, how much", "14 half?"]
+    },
+    {
+      "id": "kids.arith.h1.t10",
+      "goal": "Find out double 9",
+      "canonical": "What is double 9?",
+      "variants": ["double 9?", "whats double 9", "9 doubled", "what is 9 times two", "twice 9?", "double nine is what", "9 x2 what", "what do you get doubling 9", "double of 9", "9 doubled equals?"]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "world": "games.chess",
+  "tab": "chess",
+  "author": "haiku",
+  "batch": "h3",
+  "tasks": [
+    {"id": "games.chess.h3.t1", "goal": "Hear the board described", "setup": ["Play chess."], "canonical": "Describe the board.", "variants": ["describe board", "read the board to me", "what's on the board", "tell me the board", "describe the position pls", "whats on the board right now", "board description please", "read me the position", "describe the pieces", "what does it look like"]},
+    {"id": "games.chess.h3.t2", "goal": "Find where my king is", "setup": ["Play chess."], "canonical": "Where is my king?", "variants": ["where's my king", "my king where", "king location?", "where is the king", "wheres my king at", "find my king", "which square is my king on", "tell me where my king sits", "king where", "where my king is pls"]},
+    {"id": "games.chess.h3.t3", "goal": "Count how many pieces I have left", "setup": ["Play chess."], "canonical": "How many pieces do I have?", "variants": ["how many pieces i got", "count my pieces", "pieces left for me?", "how many pieces do i have left", "my piece count", "how many pieces u have", "count the pieces", "how many pawns do you have", "how many pieces are left", "pieces count pls"]},
+    {"id": "games.chess.h3.t4", "goal": "See which of my pieces were taken", "setup": ["Play chess.", "e4."], "canonical": "Which pieces did I lose?", "variants": ["what did i lose", "my lost pieces?", "which of my pieces are gone", "what have i lost so far", "captured pieces of mine?", "list my losses", "which pieces did i lose", "show the captured pieces", "what got taken from me", "which of my pieces got captured"]},
+    {"id": "games.chess.h3.t5", "goal": "Find out whose move it is", "setup": ["Play chess."], "canonical": "Whose turn is it?", "variants": ["whose turn", "my turn?", "whose move", "is it my move", "who moves now", "who's to play", "whos move is it", "turn?", "whose go is it", "its my turn right"]},
+    {"id": "games.chess.h3.t6", "goal": "Read the list of moves so far", "setup": ["Play chess.", "e4."], "canonical": "Show the move list.", "variants": ["move list", "all moves so far", "read me the moves", "what moves have we played", "history of moves", "list the moves", "gimme the moves so far", "moves played till now", "game moves please", "what's the move history"]},
+    {"id": "games.chess.h3.t7", "goal": "Set the playing level to 3", "setup": ["Play chess."], "canonical": "Set the level to 3.", "variants": ["level 3", "lvl 3 pls", "difficulty three", "make it level 3", "change difficulty to 3", "set difficulty 3", "switch to level three", "let's go with level 3", "level three please", "set lvl to 3"]},
+    {"id": "games.chess.h3.t8", "goal": "Get the board position in FEN", "setup": ["Play chess.", "e4."], "canonical": "What is the FEN?", "variants": ["fen?", "give me the fen string", "fen please", "position in fen", "show the fen", "whats the fen", "could you give the FEN notation", "fen code of the board", "fen for this position", "i need the fen"]},
+    {"id": "games.chess.h3.t9", "goal": "Find out what stands on e4", "setup": ["Play chess.", "e4."], "canonical": "What is on e4?", "variants": ["whats on e4", "e4?", "what's at e4", "is anything on e4", "what piece is on e four", "which piece sits on e4", "e4 whats there", "what stands on e4", "is e4 empty", "piece on e4?"]},
+    {"id": "games.chess.h3.t10", "goal": "Ask the engine to make its move now", "setup": ["Play chess.", "e4."], "canonical": "Make your move.", "variants": ["your move", "ur move", "go ahead, play", "hurry up", "its your turn to move", "move pls", "play your move", "go on, your move", "thinking too long, move", "ok engine move now"]}
+  ]
+}

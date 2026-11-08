@@ -1,0 +1,70 @@
+{
+  "world": "geo.map",
+  "tab": "map",
+  "author": "haiku",
+  "batch": "h1",
+  "tasks": [
+    {
+      "id": "geo.map.h1.t1",
+      "goal": "See Bucharest on the map",
+      "canonical": "Show me Bucharest.",
+      "variants": ["bucharest pls", "lemme see bucharest on the map", "can u show bucarest", "pull up Bucharest for me", "bucharest", "I'd like to see Bucharest", "zoom me over to Bucharest", "where's bucharest on this thing, show it", "could you bring up Bucharest", "show bucharest real quick"]
+    },
+    {
+      "id": "geo.map.h1.t2",
+      "goal": "Find out where Paris is located in the world",
+      "setup": ["Where is Atlantis?"],
+      "canonical": "Where is Paris?",
+      "variants": ["where's lyon", "where is Nairobi exactly", "wher is Kyoto", "do you know where Nairobi is?", "tell me where Lyon is located", "where can I find Kyoto", "kyoto location?", "yo where's Lyon", "could you tell me where Nairobi is situated", "I need to know where Lyon is on the map"]
+    },
+    {
+      "id": "geo.map.h1.t3",
+      "goal": "Move the map to a specific latitude and longitude",
+      "canonical": "Go to coordinates 45.5 25.3.",
+      "variants": ["coordinates 47.2, 21.9 pls", "go to lat 47.2 lon 21.9", "take the map to 47.2 and 21.9", "latitude 47.2 longitude 21.9 please", "centre on 47.2 21.9", "lat 47.2 lng 21.9", "can you go to the coords 47.2 21.9", "map to 47.2, 21.9", "jump to lat 47.2 and long 21.9", "go to 47.2 comma 21.9"]
+    },
+    {
+      "id": "geo.map.h1.t4",
+      "goal": "Zoom in a good amount on the map",
+      "canonical": "Zoom in a lot.",
+      "variants": ["zoom in alot", "zoom in more", "closer please", "make it bigger, zoom in", "get closer to it", "zoom in big time", "magnify the map quite a bit", "can u zoom in a whole lot", "enlarge the map a lot", "move in closer on the map, a lot"]
+    },
+    {
+      "id": "geo.map.h1.t5",
+      "goal": "Set the map to a specific zoom level",
+      "canonical": "Zoom to level 5.",
+      "variants": ["zoom to level 7", "set zoom level 3", "zoom level 9 pls", "change the zoom to 4", "zoom 6", "put zoom level at 2", "can you set zoom level to 8", "zoom lvl 4", "zoom 10 please", "set the zoom to 6"]
+    },
+    {
+      "id": "geo.map.h1.t6",
+      "goal": "Move the map view north",
+      "canonical": "Go north.",
+      "variants": ["go up north a bit", "move north", "pan north pls", "north a little", "shift the map northwards", "move map nort", "go northward", "slide the view north", "head north for a bit", "could you move the map north please"]
+    },
+    {
+      "id": "geo.map.h1.t7",
+      "goal": "See the whole planet on the map",
+      "canonical": "Show the whole world.",
+      "variants": ["show the whole world", "zoom out to see everything", "full world view pls", "show me the entire globe", "the whole planet on the map", "world view", "back to whole world", "see the earth all of it", "zoom out to the whole world map", "show the global map"]
+    },
+    {
+      "id": "geo.map.h1.t8",
+      "goal": "Put the map view back to its normal position",
+      "canonical": "Reset the view.",
+      "variants": ["reset the view", "restore the view pls", "recenter the map", "reset camera", "undo my zoom and pan", "put the view back to normal", "reset the position", "recentre the view", "go back to the default view", "re-center the map please"]
+    },
+    {
+      "id": "geo.map.h1.t9",
+      "goal": "Remove everything from the map",
+      "canonical": "Clear the map.",
+      "variants": ["clear the whole thing", "wipe everything off the map", "erase it all", "clear everything", "empty the map", "clean the map up", "wipe the whole map", "get rid of everything", "clear all of it off the map", "blank the map out"]
+    },
+    {
+      "id": "geo.map.h1.t10",
+      "goal": "Find out how many markers are on the map",
+      "setup": ["Mark Paris and Rome."],
+      "canonical": "How many markers are there?",
+      "variants": ["how many markers r there", "count the pins on the map", "number of markers?", "how many pins are on the map", "how many flags do i have up", "how many markers have i placed", "markers count pls", "how many spots are marked", "how many marks are on there", "what's the number of markers"]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "world": "ui.shell",
+  "tab": "robot",
+  "author": "haiku",
+  "batch": "h1",
+  "tasks": [
+    {"id": "ui.shell.h1.t1", "goal": "Open the document editor tab", "canonical": "Open the editor.", "variants": ["open editor", "editor pls", "go to the editor tab", "show editor", "i want the editor", "open the docs editor", "editor page please", "bring up the editor", "open that editor thing", "take me to the editor"]},
+    {"id": "ui.shell.h1.t2", "goal": "Open the robot tab", "canonical": "Show me the robot.", "variants": ["robot tab", "where's the robot", "show the robot", "bring back the robot", "open the robot page", "robot please", "i wanna see the robot", "show robot", "robot tab pls", "go to robot"]},
+    {"id": "ui.shell.h1.t3", "goal": "Start playing tic tac toe from the robot tab", "canonical": "Let's play tic tac toe.", "variants": ["play tic tac toe", "tic tac toe pls", "tic-tac-toe time", "i wanna play noughts and crosses", "lets do tic tac toe", "tic tac toe game", "can we play tic tac toe", "start tic tac toe", "tictactoe", "ok tic tac toe now"]},
+    {"id": "ui.shell.h1.t4", "goal": "Ask what games are available to choose", "canonical": "Let's play a game.", "variants": ["what games can we play", "pick a game", "i want to play something", "games?", "let's play", "choose a game for me", "show me the games", "game time", "which game", "let me choose a game"]},
+    {"id": "ui.shell.h1.t5", "goal": "Go back to the previous tab", "canonical": "Go back.", "variants": ["back", "previous tab", "go back please", "return", "last tab", "back one", "take me back", "back to the last page", "undo the tab", "previous page"]},
+    {"id": "ui.shell.h1.t6", "goal": "Find out which tab I am on", "canonical": "Which tab am I on?", "variants": ["what tab is this", "where am i", "which page", "what page am i on", "current tab?", "tab name?", "which screen is this", "where are we", "what tab", "am i on the robot tab"]},
+    {"id": "ui.shell.h1.t7", "goal": "Turn the spoken answers on", "canonical": "Turn on the speaker.", "variants": ["speaker on", "unmute", "talk to me please", "speak to me", "turn the voice on", "unmute pls", "sound on", "let me hear you", "turn voice on", "speaker on pls"]},
+    {"id": "ui.shell.h1.t8", "goal": "Turn the spoken answers off", "canonical": "Mute the voice.", "variants": ["mute", "quiet please", "no voice", "stop talking", "silence please", "turn off voice", "mute yourself", "voice off", "be silent now", "speaker off"]},
+    {"id": "ui.shell.h1.t9", "goal": "Turn the microphone on so the system listens", "canonical": "Start listening.", "variants": ["listen", "mic on", "start the mic", "listen to me", "i'm going to talk now, listen", "open the mic", "microphone on pls", "start listening now", "turn on listening", "ready to hear me"]},
+    {"id": "ui.shell.h1.t10", "goal": "Turn the microphone off", "canonical": "Stop listening.", "variants": ["mic off", "stop the mic", "stop hearing me", "no more listening", "close the mic", "microphone off", "listening off", "ok stop listening", "don't listen anymore", "stop listening pls"]}
+  ]
+}

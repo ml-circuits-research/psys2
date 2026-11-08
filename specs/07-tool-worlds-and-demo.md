@@ -16,7 +16,7 @@ All are `status=fixture`, English, `formalization=rules`, with tests that assert
 
 ### `ui.shell` — app control and voice settings
 State: `{ activeTab: 'robot'|'editor'|'tictactoe'|'guess'|'hangman', speaker: bool, listening: bool, handsFree: bool, rate: number, language: 'en'|'ro' }`.
-Commands: "open the editor", "show me the robot", "let's play tic tac toe", "go back"; "turn on/off the speaker", "speak slower/faster", "stop listening", "hands-free mode on", "switch to Romanian"; "what can I say here?" (help for the active tab, from the active tab world's pattern examples).
+Commands: "open the editor", "show me the robot", "let's play tic tac toe", "go back"; "turn on/off the speaker", "speak slower/faster", "stop listening", "hands-free mode on", "switch to Romanian"; "what can I say here?" (moved to `ui.help`, section 8).
 
 ### `ui.avatar` — a DiceBear avatar (default tab, "Avatar")
 The avatar is a robot, a person or an emoji drawn by the open-source DiceBear library (`@dicebear/core` 10.7.0, MIT, vendored in `docs/webchat/vendor/`; styles voxel-bot, open-peeps and moods, all CC0). **The library's style definitions become the world's legend**: `scripts/legend-from-dicebear.mjs` reads `docs/webchat/vendor/dicebear-styles/*.json` and generates `legend.sop` (type `ui.avatar.character` with `active`, `name`, `seed`; one type per character, `ui.avatar.robot|person|emoji`; one key per component and one `<color>Color` key per palette, each with an `ask`) and `lexicon.sop` (the variant names split into words, `angryWithFang` becomes "angry with fang"; last word singular; color names with `light_` and `dark_` variants; plus data lexicons that `ops.mjs` reads with `ctx.lexicon`, because it imports nothing). Generated files start with a `core.note` wire saying so; hand-written language lives in `patterns.sop`, `operations.sop`, `templates.sop`, `ops.mjs` and `lexicon.extra.sop` (synonyms and word lists, appended verbatim to `lexicon.sop` by the generator, since the loader reads fixed file names). The script is a small worked example of C1 building a legend from a tool's documentation.
@@ -30,6 +30,14 @@ Language layer (all by name and synonym, in the active character; a part that on
 - Questions: "what can I change?", "what eyes can you have?", "what kinds of masks are there?", "what are you wearing?", "do you have glasses?", "what color is your body?", "what colors can your screen be?", "describe yourself", "what is your seed?".
 - Character, name, expression: "become a person", "turn into an emoji", "be a robot again"; "your name is Robi"; "look happy", "look surprised", "be calm" (each mood maps to an open-peeps expression, to eyes and mouth of the emoji, and to eyes and mouth of the robot); "take off your mask", "take off everything", "reset yourself", "start over"; moments "wave", "dance", "nod", "shake your head", "spin" as the effect `avatar.animate { name }`.
 Host (`docs/webchat/ui/avatar.mjs`): maps the state to DiceBear options (`<component>Variant`, `<component>Probability` for optional components, `<color>Color`), draws it large and centered with a cross-fade on every change, pulses while speech synthesis speaks, shows a short mood from the reply status (smile for supported, surprised for missing) without changing stored state, and lists the current parts in a caption. If the vendored files fail to load, the hand-drawn robot of `robot.mjs` is used.
+
+### Tab follow (dialog layer)
+
+When a world that declares a tab (manifest `tab=`, or one of the built-in tabs: avatar, editor, games) gives a **supported** answer to a sentence and that tab is not the active one, the dialog runs the existing `ui.openTab` action after the message (`interp.runAction`), so the host switches tabs from the `ui.shell` state as usual. Worlds without a tab (`ui.shell`, `core`, `ui.help`, `kids.*`) never trigger it, and neither do clarification (`missing`, `ambiguous`) or `unsupported` answers.
+
+### Avatar: offers and undo
+
+`ui.avatar` never switches character silently. When only another character can do what was asked ("use the cyclops eye" as a person), the answer says so and sets `pending` with `inputMode: 'confirm'`; the next message is offered to `interceptInput`: "yes" switches and repeats the command, "no" stays, anything else cancels the offer and is read normally. Every change of the avatar pushes the previous look on `undo` (20 steps); "undo" / "go back to how you were" pops it.
 
 ### `docs.editor` — a professional document editor you talk to
 The tab is a TipTap (ProseMirror) editor (MIT, vendored in `docs/webchat/vendor/editor/`, licences in `LICENSES.md`); the world owns the document and its language layer.
@@ -91,3 +99,24 @@ Principle: pick a well-made, recognizable open-source library, let what the libr
 | Charts | `data.charts` | Chart.js | MIT |
 | Drawing | `art.draw` | rough.js | MIT |
 | Tic-tac-toe, Guess the animal, Hangman | `games.*` | own code | — |
+
+## 8. Contextual help (`ui.help`)
+`ui.help` owns every help and capabilities phrase; the earlier help patterns of `ui.shell` and `kids.common` moved here (their other behaviour is unchanged). State `{ pos, lastUnparsed, lastHelp }`; it reads the app with `ctx.peek` (spec 04): the active tab and game from `ui.shell`, the game worlds' states, and `ctx.worlds()` for tab info and summaries. Worlds that declare a tab need nothing: their pattern examples and `summary` are used automatically.
+
+| Phrase | Action | Answer |
+| --- | --- | --- |
+| "what can you do?", "what commands do you recognise / understand?" | `chat.capabilities` | the grouped summary sentence of all worlds |
+| "help", "help me", "I am lost" | `ui.helpMe` | the open tab and what it is for, three examples |
+| "what can I say here?", "what can I do on this tab?", "what should I say?" | `ui.help` | five varied examples from the active tab world (one first example per pattern, spread over the pattern kinds); repeating the request advances a per-world cursor, so the next five come, wrapping at the end |
+| "give me an example" | `ui.help count=1` | one example (cursor advances) |
+| "more examples", "what else can I say?" | `ui.helpMore` | the next five |
+| "what does this tab do?" | `ui.helpAbout` | "The <Tab> tab lets you <summary>." plus the state of its game |
+| "how do I play?", "what are the rules?", "how do I play hangman?" | `ui.helpGame` | rules and current state of the active (or named) game: hangman masked word and wrong guesses left, tic-tac-toe marks and turn, twenty-questions progress; on a non-game tab it lists the games |
+| "how do I <X>?", "how to <X>", "what do I say to <X>?" | `ui.helpHow` | search over the pattern examples of all worlds: query words are stemmed, generic verbs (change, make, add...) weigh 0.4 and nouns 1, an example must contain a noun of the query, the open tab's world gets a small bonus; up to three examples ("how do I change the eyes?" gives examples of `ui.avatar`) |
+| "why did you not understand?", "what did I do wrong?" | `ui.helpWhy` | quotes the last unparsed sentence, explains that no pattern matched the whole sentence, and suggests the closest commands |
+
+Routing: help actions of `ui.help` without wildcard captures are tier 2b (meta) like the former `ui.shell` help; `how do I <X>` has a wildcard and routes by priority (6), so a world's own `how ...` patterns win.
+
+**Did you mean.** `ui.help` exports the pure function `didYouMean({ text, worlds, tabWorld, recentWorlds, limit })`. When a sentence stays unparsed, the dialog layer (`src/dialog/index.mjs`, unparsed branch) calls it: each pattern example of every world is compared with the sentence by meaningful words (stop words dropped, plural stemming, typo tolerance of one or two edits); an example needs at least two matching words (one for a one-word sentence) and a score `2m/(|q|+|e|) >= 0.4`, plus a bonus of 0.2 for the tab world and 0.1 for recent worlds. At most two examples are returned. The reply becomes `I did not understand "..." . Did you mean "A" or "B"?` and carries the effect `chat.suggest { items }`; with no close example the old `For example: ...` answer stays. The dialog also records `{ text, world, suggestions }` as `ui.help` state `lastUnparsed`, which `ui.helpWhy` reads.
+
+**Host.** `chat.suggest { items }` (allow-list of `docs/webchat/app.mjs`) adds the items to the bot message as clickable chips (`p2-example` buttons, the same as the welcome examples); a click sends the item as a typed command. Every help answer that lists examples queues it.

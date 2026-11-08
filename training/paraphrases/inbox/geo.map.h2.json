@@ -1,0 +1,73 @@
+{
+  "world": "geo.map",
+  "tab": "map",
+  "author": "haiku",
+  "batch": "h2",
+  "tasks": [
+    {
+      "id": "geo.map.h2.t1",
+      "goal": "Drop a marker on the spot I am looking at",
+      "setup": ["Show me Bucharest."],
+      "canonical": "Put a marker here.",
+      "variants": ["marker here pls", "drop a pin right here", "pin this spot", "mark this place", "place a pin here on the map", "can you mark where I'm looking", "add a marker in the middle", "stick a flag right here", "mark here", "drop a marker at the center of the view"]
+    },
+    {
+      "id": "geo.map.h2.t2",
+      "goal": "Put markers on all the European capital cities",
+      "canonical": "Mark the capitals of Europe.",
+      "variants": ["mark all european capitals", "show the capital cities of Europe with pins", "pins on every capital in Europe", "put markers on the capitals in Africa", "europe capitals markers", "show me all capitals of South America on the map", "drop pins on capitals of Asia", "label all the capital cities of Oceania", "mark capitals of Africa pls", "put a marker on each capital of Europe"]
+    },
+    {
+      "id": "geo.map.h2.t3",
+      "goal": "Take off the marker I put down last",
+      "setup": ["Mark Paris and Rome."],
+      "canonical": "Remove the last marker.",
+      "variants": ["undo the last marker", "delete the newest pin", "take off the latest marker", "remove the most recent pin", "get rid of last marker", "erase the last one I placed", "remove the last flag", "delete the last marker pls", "take the last pin away", "clear the previous marker"]
+    },
+    {
+      "id": "geo.map.h2.t4",
+      "goal": "Ask which countries are currently highlighted",
+      "setup": ["Highlight France and Spain."],
+      "canonical": "Which countries are highlighted?",
+      "variants": ["what countries are highlighted", "which ones are lit up on the map", "list the highlighted countries", "which countries have the colour on", "what's highlighted right now", "are any countries highlighted, which", "show me what is highlighted", "highlighted countries?", "which nations did I highlight", "which countries are shaded at the moment"]
+    },
+    {
+      "id": "geo.map.h2.t5",
+      "goal": "Turn off all the country highlighting",
+      "setup": ["Highlight Romania."],
+      "canonical": "Remove the highlights.",
+      "variants": ["clear the highlights", "unhighlight everything", "turn off the highlighting", "no more highlights pls", "remove all highlighted countries", "take the highlights off", "clear highlighting", "turn off all the highlighting on the map", "get rid of the coloured countries", "undo the highlights"]
+    },
+    {
+      "id": "geo.map.h2.t6",
+      "goal": "Erase the measurement line I drew on the map",
+      "setup": ["Draw a line from Cluj to Bucharest."],
+      "canonical": "Clear the distances.",
+      "variants": ["clear the lines", "delete the measurement line", "get rid of the route line", "remove the ruler", "wipe the distance lines off the map", "erase the drawn line", "hide the paths", "clear the measurement", "remove the lines pls", "take off the rulers"]
+    },
+    {
+      "id": "geo.map.h2.t7",
+      "goal": "Change the map to the simple style",
+      "canonical": "Use the simple map.",
+      "variants": ["switch to the offline map", "go to the simple map", "change to street view", "use the plain map pls", "bring up the street map", "switch the map style to simple", "i want the offline version of the map", "map style simple please", "can you change the map to street", "go back to the simple one"]
+    },
+    {
+      "id": "geo.map.h2.t8",
+      "goal": "Find the capital city of Japan",
+      "canonical": "What is the capital of Japan?",
+      "variants": ["capital of japan?", "whats the capital of japan", "japan capital city?", "Japan's capital?", "name the capital of Japan", "which city is japan's capital", "tell me japan's capital city", "do you know the capital of Japan", "hey what's the capital city of japn", "capital of japan pls"]
+    },
+    {
+      "id": "geo.map.h2.t9",
+      "goal": "Find out which country has Madrid as its capital",
+      "canonical": "Which country has Madrid as its capital?",
+      "variants": ["madrid is capital of which country", "what country has Lima as capital", "which country's capital is Ottawa", "lima is capital of what country", "which nation is Madrid the capital of", "what country has Tokyo as its capital city", "name the country where Ottawa is capital", "Madrid capital of what country?", "which country is Ottawa the capital of", "which country has madrid as the capital"]
+    },
+    {
+      "id": "geo.map.h2.t10",
+      "goal": "Check whether Paris is the capital of France",
+      "canonical": "Is Paris the capital of France?",
+      "variants": ["is paris the capital of france", "paris capital of france?", "is Berlin the capital of Germany", "isn't Rome the capital of Italy?", "is Ottawa the capital of Canada right", "true that Berlin is capital of Germany?", "is Lisbon the capital of portugal", "Rome capital of Italy yes or no", "Is Madrid the capital of Spain?", "is oslo the capital of norway"]
+    }
+  ]
+}

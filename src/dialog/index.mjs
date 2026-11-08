@@ -20,7 +20,7 @@ export { runWorldTests } from './test-runner.mjs';
 
 const plainSegment = (s) => ({
   text: s.text, span: s.span, isQuestion: s.isQuestion, worlds: s.worlds, routing: s.routing, match: s.match,
-  unparsed: s.unparsed, alternatives: s.alternatives, errors: s.errors, strategy: s.strategy,
+  unparsed: s.unparsed, alternatives: s.alternatives, errors: s.errors, strategy: s.strategy, corrections: s.corrections ?? [],
   wires: s.wires.map((w) => w.id),
 });
 
@@ -91,6 +91,9 @@ export async function translateParts(parts, translator, lang) {
   }
   return out;
 }
+
+/** Tabs of worlds that do not declare one in their manifest (the built-in tabs of the demo page). */
+const BUILTIN_TAB = { 'ui.avatar': 'robot', 'docs.editor': 'editor', 'games.tictactoe': 'tictactoe', 'games.guess': 'guess', 'games.hangman': 'hangman' };
 
 const langOf = (r) => (typeof r === 'string' ? r : r?.lang) ?? 'en';
 const textOf = (r) => (typeof r === 'string' ? r : r?.text);
@@ -239,11 +242,17 @@ export class DialogSession {
     const statuses = icpt ? ['supported'] : [];
     const ops = [];
     const answerWires = [];
+    let followTab = null;   // tab of the last world that gave a supported answer (tab follow, spec 07 section 6)
     for (const seg of segments) {
       if (seg.unparsed) {
         // examples from the world of the open tab first: the router's word-overlap guess can point anywhere
         const routed = seg.worlds.map((w) => w.id), here = Object.entries(this.focus()).find(([, n]) => n >= 3)?.[0];
         let ex = examplesFor(set, here ? [here, ...routed.filter((w) => w !== here)] : routed);
+        // ui.help: "Did you mean ...?" (closest examples of all worlds) and a note of what failed for "why not?"
+        const helpW = set.get('ui.help');
+        const dym = helpW?.ops?.didYouMean?.({ text: seg.text, worlds: set.list(), tabWorld: here, recentWorlds: this._recentWorlds ?? [] }) ?? [];
+        if (helpW) (this.isession.state['ui.help'] ??= {}).lastUnparsed = { text: seg.text, world: here ?? routed[0] ?? null, suggestions: dym };
+        if (dym.length) { ex = dym; this.isession.effects.push({ name: 'chat.suggest', args: { items: dym }, world: 'ui.help' }); }
         // the user's own words are quoted verbatim and never back-translated
         const quoted = lang === 'en' ? seg.text : originalSentence(text, seg, translation?.alignment);
         const line = [T('I did not understand '), { text: `"${quoted}"`, translate: false, quote: true }, { text: '.', translate: false }];
@@ -259,11 +268,12 @@ export class DialogSession {
           ex = done;
         }
         if (ex.length) {
-          line.push(T(' For example: ', { fallback: ' You can say: ' }));
+          line.push(dym.length ? T(' Did you mean ', { fallback: ' You can say: ' }) : T(' For example: ', { fallback: ' You can say: ' }));
           ex.forEach((e, k) => {
             if (k) line.push(T(' or '));
             line.push({ text: `"${e}"`, translate: false, quote: true, example: true });
           });
+          if (dym.length) line.push({ text: '?', translate: false });
         }
         lines.push(line);
         statuses.push('unparsed');
@@ -277,6 +287,7 @@ export class DialogSession {
         const rendered = interp.render(this.isession, r);
         lines.push([T(rendered)]);
         statuses.push(r.status);
+        if (r.status === 'supported') { const wid = seg.match?.worldId; const t = set.get(wid)?.tab?.id ?? BUILTIN_TAB[wid]; if (t) followTab = t; }
         ops.push(...r.ops);
         answerWires.push(r.answer);
         answers.push({
@@ -291,6 +302,21 @@ export class DialogSession {
         const used = set.get(seg.match.worldId)?.title ?? seg.match.worldId;
         lines.push([T(`This could also be read in another way (${titles.join(', ')}); I used the `), { text: `"${used}"`, translate: false, quote: true }, T(' reading.')]);
       }
+    }
+    for (const seg of segments) {
+      if (!seg.corrections?.length || seg.unparsed) continue;
+      const line = [T('(I read ')];
+      seg.corrections.forEach((c, k) => {
+        if (k) line.push(T(k === seg.corrections.length - 1 ? ' and ' : ', '));
+        line.push({ text: `"${c.from.toLowerCase()}"`, translate: false, quote: true }, T(' as '), { text: `"${c.to}"`, translate: false, quote: true });
+      });
+      line.push(T(')'));
+      lines.push(line);
+    }
+    // Tab follow: a world with a tab answered, but its tab is hidden: bring it forward (the existing ui.openTab action).
+    const shown = this.isession.state['ui.shell']?.activeTab;
+    if (followTab && shown && shown !== followTab && !this.isession.effects.some((e) => e.name === 'ui.openTab')) {
+      try { interp.runAction(this.isession, 'ui.openTab', { tab: followTab }); } catch { /* the shell may be absent */ }
     }
     if (translation?.unknown?.length && segments.some((s) => s.unparsed)) {
       lines.push([T(`I did not know the word${translation.unknown.length > 1 ? 's' : ''}: `), { text: translation.unknown.map((u) => u.word).join(', '), translate: false, quote: true }, { text: '.', translate: false }]);

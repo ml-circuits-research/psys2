@@ -1,0 +1,71 @@
+{
+  "world": "media.music",
+  "tab": "music",
+  "author": "haiku",
+  "batch": "h3",
+  "tasks": [
+    {
+      "id": "media.music.h3.t1",
+      "goal": "See the user's melody as notes",
+      "setup": ["Write a melody: C D E F G."],
+      "canonical": "Show my melody.",
+      "variants": ["show my tune", "display my melody please", "let me see my notes", "what did i write? show it", "can u show the melody i made", "show me my melody as sheet music", "what does my song look like", "open my melody", "view my tune", "show my notes"]
+    },
+    {
+      "id": "media.music.h3.t2",
+      "goal": "Name the notes of the song that is playing",
+      "setup": ["Play Twinkle Twinkle."],
+      "canonical": "Name the notes.",
+      "variants": ["which notes are these", "name the notes pls", "tell me what notes it plays", "label the notes on the keyboard", "show the notes on the keys", "what notes is it using", "list the notes you're playing", "highlight the notes", "what are the notes?", "name each note"]
+    },
+    {
+      "id": "media.music.h3.t3",
+      "goal": "See the sheet music of the current tune",
+      "setup": ["Play Ode to Joy."],
+      "canonical": "Show the score.",
+      "variants": ["show sheet music", "can i see the music notation", "display the score pls", "show me the staff", "where's the sheet music for this", "let me see the notes on the staff", "show the music sheet", "open the score", "notation please", "i want to read the music"]
+    },
+    {
+      "id": "media.music.h3.t4",
+      "goal": "Find out which songs are in the library",
+      "canonical": "List the songs.",
+      "variants": ["what songs do you know", "list all songs", "which tunes can you play", "show me the song list", "what can you play for me, songs?", "songs you know?", "give me the library", "how many tunes are there, list them", "what's in your song library", "name the songs you have"]
+    },
+    {
+      "id": "media.music.h3.t5",
+      "goal": "Find out which instruments can be chosen",
+      "canonical": "List the instruments.",
+      "variants": ["what instruments are there", "which sounds can i pick", "instruments?", "show the instrument options", "what can i play it on", "list the sounds", "what instruments can i use", "which instrument choices", "options for instruments pls", "tell me the sound presets"]
+    },
+    {
+      "id": "media.music.h3.t6",
+      "goal": "Find out which scale and chord types exist",
+      "canonical": "What scales do you know?",
+      "variants": ["which scale types exist", "list the chord types", "what kinds of chords can you play", "what scale types are available", "chord kinds pls", "show me the list of scale types", "which modes can i use", "what chord qualities are there", "name the scale types", "list the chord types and scales"]
+    },
+    {
+      "id": "media.music.h3.t7",
+      "goal": "See the notes that make up a scale",
+      "canonical": "Show me the G major scale.",
+      "variants": ["notes in g major?", "what notes make up the d dorian scale", "spell the e flat major scale", "list the notes of a minor scale starting on A", "which notes are in C blues", "tell me the pitches in D major", "what's in the pentatonic scale of G", "notes of F major pls", "spell out a b flat major scale", "which tones does the A harmonic minor scale have"]
+    },
+    {
+      "id": "media.music.h3.t8",
+      "goal": "See the notes that make up a chord",
+      "canonical": "Show me a D minor chord.",
+      "variants": ["what notes are in a d minor chord", "spell an A7 chord", "which notes make up G major chord", "notes of E minor chord?", "tell me the tones in a C major 7", "what's inside a D seventh chord", "list the notes of a B diminished chord", "chord notes for F# minor pls", "what pitches are in an Am", "which notes does a G dominant 7 chord have"]
+    },
+    {
+      "id": "media.music.h3.t9",
+      "goal": "Name a chord from the notes played",
+      "canonical": "What chord is C E G?",
+      "variants": ["what chord do C E G make", "name the chord C E G B", "which chord is A C E", "identify the chord D F# A", "C E G, what chord is that", "what chord has notes G B D", "tell me the chord from notes F A C", "which chord is made of E G# B", "name this chord: C Eb G Bb", "is C E G a chord, which one"]
+    },
+    {
+      "id": "media.music.h3.t10",
+      "goal": "Find the key signature of a key",
+      "canonical": "What is the key signature of E flat major?",
+      "variants": ["key signature for E flat major?", "how many flats are in F major", "sharps in A major?", "how many accidentals does B flat major have", "flats in E flat major please", "what's the key sig of G major", "how many sharps in E major", "signature of C# major?", "how many flats does Eb major have", "sharps count for E major?"]
+    }
+  ]
+}

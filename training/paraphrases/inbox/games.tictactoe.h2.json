@@ -1,0 +1,18 @@
+{
+  "world": "games.tictactoe",
+  "tab": "tictactoe",
+  "author": "haiku",
+  "batch": "h2",
+  "tasks": [
+    {"id": "games.tictactoe.h2.t1", "goal": "Set the difficulty to the highest level", "setup": ["Play tic tac toe."], "canonical": "Set the level to perfect.", "variants": ["perfect level", "make it perfect", "level perfect", "perfect mode", "go to the highest level", "set level perfect", "max difficulty", "perfect difficulty pls", "perfect please", "unbeatable mode"]},
+    {"id": "games.tictactoe.h2.t2", "goal": "Make the game easier", "setup": ["Play tic tac toe."], "canonical": "Give me an easy game.", "variants": ["easy", "easy mode", "make it easy please", "easy game", "make it simple", "give me easy", "go easy", "easy level", "let me win easy", "lighter game pls"]},
+    {"id": "games.tictactoe.h2.t3", "goal": "Ask where I should play next", "setup": ["Play tic tac toe.", "Center."], "canonical": "Where should I play?", "variants": ["where do i go", "suggest a spot", "where should i go", "help me pick a square", "best spot?", "hint", "where to play next", "any hints", "what's a good square", "suggest where"]},
+    {"id": "games.tictactoe.h2.t4", "goal": "Find out which square you just played", "setup": ["Play tic tac toe.", "Center."], "canonical": "Where did you play?", "variants": ["where did u go", "your last move", "which square did you take", "where'd you play", "what square did you pick", "your last spot", "where did you put your o", "what was your last play", "last move?", "which cell did you use"]},
+    {"id": "games.tictactoe.h2.t5", "goal": "Count how many moves have been made", "setup": ["Play tic tac toe.", "Center.", "Top left."], "canonical": "How many moves have we made?", "variants": ["how many moves so far", "moves count?", "how many turns", "how many moves played", "number of moves", "how many tries have i had", "how many turns have we had", "count the moves", "how many moves are there now", "moves so far?"]},
+    {"id": "games.tictactoe.h2.t6", "goal": "Give up this round", "setup": ["Play tic tac toe."], "canonical": "I give up.", "variants": ["give up", "i quit", "resign the game", "i surrender", "quit this game", "i give", "ok i give up", "forfeit", "let's stop, i give up", "i'm done, i give up"]},
+    {"id": "games.tictactoe.h2.t7", "goal": "Place my mark in the middle row on the left", "setup": ["Play tic tac toe.", "Center."], "canonical": "Middle row left.", "variants": ["mid left", "middle left side", "the middle left spot", "middle row, left", "the left square in the middle row", "left middle", "middle row on the left", "mid row left", "i take middle left", "middle left one"]},
+    {"id": "games.tictactoe.h2.t8", "goal": "Play the square A1", "setup": ["Play tic tac toe."], "canonical": "I play A1.", "variants": ["a1", "I'll play a1", "a one", "me a1", "i go a1", "A1 please", "play a one", "i'll take a1", "a1 pls", "ok a1"]},
+    {"id": "games.tictactoe.h2.t9", "goal": "Take the top left corner", "setup": ["Play tic tac toe."], "canonical": "Top left.", "variants": ["top left", "upper left", "top-left corner", "the top left one", "top left spot", "tl", "up left corner", "the corner at top left", "top left please", "top left square"]},
+    {"id": "games.tictactoe.h2.t10", "goal": "Clear the board to start again", "setup": ["Play tic tac toe.", "Center."], "canonical": "Clear the board.", "variants": ["clear board", "reset", "wipe the board", "empty the board", "clear it", "start again", "fresh board", "new board please", "clean board", "reset the game"]}
+  ]
+}

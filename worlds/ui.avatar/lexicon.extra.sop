@@ -196,6 +196,7 @@
     word=hat:hat_beanie
     word=cap:hat_hip
     word=hat:hat_hip
+    word=had:hat_beanie
     word=hip_hop_hat:hat_hip
     word=headscarf:hijab
     word=veil:hijab

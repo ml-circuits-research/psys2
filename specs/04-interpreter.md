@@ -72,6 +72,7 @@ export function currentCount(ctx, args) {
 | `ctx.name(id)` | display name of an entity |
 | `ctx.effect(name, args)` | queue a client-side effect (actions only); returned by `session.send()` as `effects` (spec 07) |
 | `ctx.request(action, args)` | call another world's action operation by action name or operation id (actions only); returns its envelope; its effects carry that world's id; depth-limited. Example: `ctx.request('ui.openTab', { tab: 'editor' })` |
+| `ctx.peek(worldId)` | read-only copy of another world's state (`null` when it has none), for help and status worlds |
 | `ctx.patterns(worldId)` | `[{ id, kind, priority, examples }]` of a loaded world (read-only) |
 | `ctx.lexicon(lexiconId)` | the words of a lexicon, `[]` when unknown |
 `ctx.ask` and `ctx.find` already see every loaded world (a world may ask another one); `ctx.state` is only ever the calling world's own state. An `ops.mjs` may also export `initialState()` (seeds `ctx.state` at session start) and `interceptInput(ctx, text)` (spec 06).

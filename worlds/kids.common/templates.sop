@@ -25,7 +25,3 @@
 @tpl.kids.common.bye core.template
     for=action.chat.bye
     text="{value}!"
-
-@tpl.kids.common.capabilities core.template
-    for=action.chat.capabilities
-    text="I can {value}. Ask me \"what can I say here?\" for examples."

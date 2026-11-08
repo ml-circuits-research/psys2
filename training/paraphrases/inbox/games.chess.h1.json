@@ -1,0 +1,18 @@
+{
+  "world": "games.chess",
+  "tab": "chess",
+  "author": "haiku",
+  "batch": "h1",
+  "tasks": [
+    {"id": "games.chess.h1.t1", "goal": "Move the knight to f3", "setup": ["Play chess."], "canonical": "Knight to f3.", "variants": ["knight f3 pls", "um knight to f three", "can u move my knight to f3", "kngt to f3", "knight goes to f3 now", "move knight f three", "my knight should go to f3", "knight to f3 please", "nf3 with the knight", "knight hop to f3 ok"]},
+    {"id": "games.chess.h1.t2", "goal": "Move the pawn from e2 to e4", "setup": ["Play chess."], "canonical": "e2 to e4.", "variants": ["e2e4", "pawn from e2 to e4", "move e2 to e4 yeah", "e two to e four", "move the thing on e2 to e4", "play e2 e4", "from e2 to e4 please", "mov e2 to e4", "uh e2 e4", "I'd like to move e2 to e4"]},
+    {"id": "games.chess.h1.t3", "goal": "Play the knight move Nf3 in standard notation", "setup": ["Play chess."], "canonical": "Nf3.", "variants": ["N f3", "play nf3 now", "nf three", "n f3 ok", "Nf3 please", "ok nf3", "nf3, go", "knight f3 notation", "play Nf3", "nf3 for me"]},
+    {"id": "games.chess.h1.t4", "goal": "Ask whether my knight may go to f3", "setup": ["Play chess."], "canonical": "Can I move my knight to f3?", "variants": ["can i move knight to f3", "is it ok if my knight goes f3", "could i play knight f3?", "may i move my knight to f3", "can knight go to f3 for me", "is knight to f3 allowed", "can i play the knight to f3", "is it legal for my knight to go to f3", "knight to f3 possible for me?", "am i able to move the knight to f3"]},
+    {"id": "games.chess.h1.t5", "goal": "Start a fresh chess game", "setup": ["Play chess."], "canonical": "Start a new chess game.", "variants": ["new chess game", "fresh chess game pls", "restart chess", "start over with a new board", "new game of chess", "reset the chess board", "chess again from the start", "set up a new board", "let's go again, new chess", "new chess"]},
+    {"id": "games.chess.h1.t6", "goal": "Start a new game playing black", "setup": ["Play chess."], "canonical": "Start a new game as black.", "variants": ["new game black", "i wanna be black", "let me play black", "black please, new game", "i play black", "play as black", "new chess game i'm black", "give me black", "black side pls", "I want black this time"]},
+    {"id": "games.chess.h1.t7", "goal": "Turn the board around", "setup": ["Play chess."], "canonical": "Flip the board.", "variants": ["flip board", "turn the board around", "rotate it", "show it from black's side", "can u flip the board", "board upside down pls", "spin the board", "turn it round", "flip it", "show the board from the other side"]},
+    {"id": "games.chess.h1.t8", "goal": "Take back my last move", "setup": ["Play chess.", "e4."], "canonical": "Undo my move.", "variants": ["undo", "take back that move", "oops undo", "undo that please", "go back one move", "take it back", "i blundered, undo", "can I take my move back", "undo last move", "let me redo that move"]},
+    {"id": "games.chess.h1.t9", "goal": "Propose a draw to the engine", "setup": ["Play chess.", "e4."], "canonical": "Offer a draw.", "variants": ["draw?", "want a draw?", "how about a draw", "let's call it a draw", "can we agree to draw", "draw offer", "i offer a draw", "draw pls", "do you want to draw", "is a draw ok with you"]},
+    {"id": "games.chess.h1.t10", "goal": "Castle on the king side", "setup": ["Play chess.", "e4.", "Nf3."], "canonical": "Castle kingside.", "variants": ["o-o", "castle short pls", "castle king side", "short castle", "king side castle", "castle on the short side", "castle king's side", "do the kingside castle", "castle the short way", "castle kingside now"]}
+  ]
+}

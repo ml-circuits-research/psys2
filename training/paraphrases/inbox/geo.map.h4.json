@@ -1,0 +1,71 @@
+{
+  "world": "geo.map",
+  "tab": "map",
+  "author": "haiku",
+  "batch": "h4",
+  "tasks": [
+    {
+      "id": "geo.map.h4.t1",
+      "goal": "Find out which country Cluj is in",
+      "setup": ["Show me Cluj."],
+      "canonical": "Which country is Cluj in?",
+      "variants": ["cluj is in what country", "what country is cluj in", "cluj country?", "which country is Lyon in", "in what country is Lyon", "what country does cluj belong to", "country of Cluj?", "cluj is in which nation", "which country is Cluj located in", "tell me which country cluj is in"]
+    },
+    {
+      "id": "geo.map.h4.t2",
+      "goal": "Find the biggest city in Romania",
+      "canonical": "Which is the largest city in Romania?",
+      "variants": ["biggest city in romania?", "largest city in Romania", "which romanian city is the biggest", "what's the biggest city in Romania", "romania's largest city", "which is the most populous city in Romania", "the biggest town in romania?", "top city in Romania by size", "Romanias biggest city?", "which city in romania is the largest one"]
+    },
+    {
+      "id": "geo.map.h4.t3",
+      "goal": "Get a short list of the three biggest cities in Japan",
+      "canonical": "List the 3 largest cities in Japan.",
+      "variants": ["top 3 biggest cities in japan", "give me the three largest cities of Japan", "list 3 biggest japanese cities", "name 3 largest cities in japan pls", "what are the 3 largest cities in Japan", "3 biggest cities japan list", "list the five largest cities in Japan", "show the top three cities in japan by size", "japan's 3 biggest cities", "which 3 cities in japan are the largest"]
+    },
+    {
+      "id": "geo.map.h4.t4",
+      "goal": "Find out how many countries are in Europe",
+      "canonical": "How many countries are in Europe?",
+      "variants": ["number of countries in europe", "count the countries in Europe", "how many nations are in Europe", "how many countries does europe have", "europe country count", "how many countries in europe?", "total countries europe", "how many states in europe", "countries in europe how many", "tell me the number of countries in Europe"]
+    },
+    {
+      "id": "geo.map.h4.t5",
+      "goal": "Find out what money Japan uses",
+      "canonical": "What currency does Japan use?",
+      "variants": ["japan currency?", "what money does japan use", "which currency is used in japan", "japan's money?", "what's the currency in Japan", "what do they pay with in japan", "currency of japan pls", "what's japans money called", "which currency do japanese people use", "japan currency name"]
+    },
+    {
+      "id": "geo.map.h4.t6",
+      "goal": "Find out what language people speak in Brazil",
+      "canonical": "What language do they speak in Brazil?",
+      "variants": ["language in brazil?", "what do people speak in Brazil", "brazil language?", "which languages are spoken in brazil", "what language is spoken in brazil", "what's the official language of brazil", "what do brazilians speak?", "which language is used in Brazil", "brazil lang", "what tongue do they speak in brazil"]
+    },
+    {
+      "id": "geo.map.h4.t7",
+      "goal": "Get a general overview of Romania",
+      "setup": ["What is on the map?"],
+      "canonical": "Tell me about Romania.",
+      "variants": ["info on romania", "what do you know about Romania", "romania facts pls", "tell me something about romania", "give me info about Romania", "romania overview", "what's romania like", "facts about Romania?", "romania info pls", "I want to know about Romania"]
+    },
+    {
+      "id": "geo.map.h4.t8",
+      "goal": "Find out how far apart Paris and Rome are",
+      "canonical": "How far is Paris from Rome?",
+      "variants": ["distance paris to rome?", "how far is rome from paris", "paris to rome how many km", "how far apart are paris and rome", "km between Paris and Rome?", "rome paris distance", "how far is it from paris to rome", "how far away is Rome from Paris?", "what's the distance from paris to rome", "gap between paris and rome in km"]
+    },
+    {
+      "id": "geo.map.h4.t9",
+      "goal": "Find out how far Rome is from my current location",
+      "canonical": "How far is Rome from me?",
+      "variants": ["how far am i from rome", "distance from my location to rome", "how far is rome from where i am", "how far is Berlin from here", "how far away is rome from me", "how far is tokyo from my spot", "distance to rome from me?", "am I far from Rome", "how far is Lima from where I'm standing", "how far is berlin from me"]
+    },
+    {
+      "id": "geo.map.h4.t10",
+      "goal": "Find out what is at my current position on the map",
+      "setup": ["Locate me."],
+      "canonical": "What is here?",
+      "variants": ["whats here", "what's at this spot", "what place is this", "tell me what's around me", "what is this place on the map", "which place am I looking at", "name the spot i'm on", "what's here on the map", "what is around this point", "what am i looking at right now"]
+    }
+  ]
+}
