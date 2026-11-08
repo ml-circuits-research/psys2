@@ -117,6 +117,16 @@ The reviewer is implementing dialogue continuity in a new `src/dialog/discourse.
 
 Avoid conflicting edits there. Pull and rebase often. Add messages of these kinds to the operational set once it lands.
 
+### DLG — multi-turn dialogue data and tests (new, parallel)
+
+The operational set and the paraphrase batches are single messages. Real use is dialogue. Generate **multi-turn dialogues** with Haiku subagents: 3–8 turns each, with an initial state and the expected state/answer after every turn. Cover:
+- pronouns, ellipsis ("and Ana?", "now bigger"), clarifications ("Draw" → question → "a cat");
+- corrections ("no, the tree"), cancellations, ordinal and attribute references ("the red one", "the second");
+- comparatives ("a bit more"), choice clarification, list-entry mode;
+- repeat/explain ("what did you do?"), negative feedback ("that's wrong"), topic returns ("back to chess"), world switches mid-dialogue.
+
+Store them in `training/eval/dialogues.jsonl`, at least 30 per world group. Extend `scripts/eval-operational.mjs` to run them turn by turn and report the share of turns right and the share of whole dialogues right. Add this as a second headline next to the operational set. The reviewer's discourse agent implements the mechanisms, so expect the numbers to rise as it lands.
+
 ### Review fixes F1–F8 (from the external review of 6b0db7c, accepted by the reviewer 16:00)
 
 The review's claims were checked: the music labels (`a key with 4 sharps?` labelled `n=3, acc=flat`), `Make your eyes and body blue` → unknown eyes "and body blue", and `itertools.cycle(sl)` in `dispatcher.py`. **F1 and F2 are P0:** they corrupt labels and metrics, so do them before the next dataset rebuild and retraining. Continue R2 in parallel: it touches the rules, not the labels.
