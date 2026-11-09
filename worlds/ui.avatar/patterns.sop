@@ -211,6 +211,14 @@
     example="Look a little sad."
     example="Get angry."
 
+@pat.ui.avatar.mood.eyes core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [your|ur|the|my]? [eyes|eye] [should|must|will|can|could]? [express|show|convey|display|look|seem|feel|appear|get|turn|become] [a_little|a_bit|very|so|really|quite|more]? {m:lex.ui.avatar.moods} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.setMood arg.mood={m}"
+    kind=request
+    priority=11
+    example="Your eyes express fear."
+    example="Eyes look sad."
+
 @pat.ui.avatar.mood.face core.pattern
     canonical="Show me a surprised face."
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|pull|do|show|put_on|give_yourself|give_me|show_me|gimme] [a|an|your|ur]? {m:lex.ui.avatar.moods} [face|expression|look] [$lang.tail.filler]?"

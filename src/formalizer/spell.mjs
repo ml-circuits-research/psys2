@@ -50,6 +50,12 @@ function isKnown(w, keep) {
   return false;
 }
 
+/** True when the lowercase word `w` is known anywhere: a function word, a number word, a word of `vocab` (any world), a lexicon noun, or an inflection of one. */
+export const isKnownWord = (w, vocab) => FUNCTION_WORDS.has(w) || !!vocab.nouns?.has(w) || isKnown(w, vocab);
+
+/** True when one word is an inflection of the other (move/moves, color/colors): not a typo of it. */
+export const sameWordForm = (a, b) => isKnown(a, new Set([b])) || isKnown(b, new Set([a]));
+
 /** Words (letters only) of a free-text name, lowercase. */
 const wordsOf = (s) => String(s).toLowerCase().match(/[a-z]{3,}/g) ?? [];
 
@@ -176,6 +182,40 @@ export function spellCorrect(text, { vocab, maxCorrections = 6, abbreviations = 
   }
   out += text.slice(last);
   return { text: corrections.length ? out : text, corrections };
+}
+
+/**
+ * Every typo candidate of the words of `text` that `vocab` does not know, ranked as `spellCorrect` ranks them (distance, own vocabulary, same
+ * letters, then frequency), not only the single best: the caller tries them against the rules and the interpreter ("nect to a house" is
+ * "next" and "neat" at the same distance; only one of them is a position). `protect`, quoted text, numbers, names and function words stay.
+ * @returns {{ from: string, span: [number, number], options: string[] }[]}
+ */
+export function spellCandidates(text, { vocab, protect = null, maxPerWord = 5 } = {}) {
+  const quoted = [...text.matchAll(QUOTE_RE)].map((m) => [m.index, m.index + m[0].length]);
+  const keep = new Set([...FUNCTION_WORDS, ...vocab]);
+  const cands = [...vocab].filter((w) => w.length >= 2 && /^[a-z]+$/.test(w) && !Object.hasOwn(ABBREVIATIONS, w));
+  for (const w of FUNCTION_WORDS) if (w.length >= 2 && !vocab.has(w)) cands.push(w);
+  const out = [];
+  let first = true;
+  for (const m of text.matchAll(WORD_RE)) {
+    const raw = m[0], start = m.index, end = start + raw.length, lower = raw.toLowerCase();
+    const isFirst = first; first = false;
+    if (quoted.some(([a, b]) => start >= a && end <= b) || !/^[a-z]+$/.test(lower) || (!isFirst && /^[A-Z]/.test(raw))) continue;
+    if (isKnown(lower, keep) || protect?.has(lower) || (lower.length >= 4 && vocab.world && !vocab.has(lower) && vocab.nouns?.has(lower))) continue;
+    const budget = spellBudget(lower);
+    if (!budget) continue;
+    const letters = [...lower].sort().join('');
+    const ranked = [];
+    for (const w of cands) {
+      if (Math.abs(w.length - lower.length) > budget) continue;
+      const d = editDistance(lower, w, budget);
+      if (d > budget) continue;
+      ranked.push({ w, rank: d * 4 + (vocab.has(w) ? 0 : 2) + ([...w].sort().join('') === letters ? 0 : 1), f: vocab.freq?.get(w) ?? 0 });
+    }
+    ranked.sort((a, b) => a.rank - b.rank || b.f - a.f || a.w.localeCompare(b.w));
+    if (ranked.length) out.push({ from: raw, span: [start, end], options: ranked.slice(0, maxPerWord).map((x) => matchCase(raw, x.w)) });
+  }
+  return out;
 }
 
 /**

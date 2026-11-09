@@ -2,7 +2,6 @@
     class=noun
     plural=antenna:antennae
     plural=eye:yes
-    plural=eye:eys
     doc="Names of the components people can talk about. ops.mjs maps each word to a component of the active character."
     word=eye
     word=mouth
@@ -80,6 +79,9 @@
     word=astonished
     word=scared
     word=afraid
+    word=fear
+    word=fearful
+    word=terrified
     word=frightened
     word=angry
     word=mad
