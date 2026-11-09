@@ -599,3 +599,10 @@ Per group (encoder+n1 right): baseline kids 99.8, ase 97.9, mdmc 97.3, games 96.
 Latency (shipped config, quiet machine, load 16 from other agents): `--jobs 1 --limit 200`: cold start 641 ms (dispatcher 111, normalizer 204), first message 612 ms, steady p50 192 / p95 574 ms, warm cache p50 20 ms; sharded 20 jobs (CPU contended): cold 4.1 s, steady p50 1.07 s.
 Decision: v3 fails right >= baseline (97.8 vs 98.2), wrong +0.1 pt; the long-bucket gain (exact .205 -> .56) is real but invisible in the operational set (few long messages) and costs avatar/shell/editor. Not published. New N1 with the v2 dispatcher: right/wrong equal on operational, better on the fallback distribution and the dialogues, so published (docs/webchat/models/normalizer, files_sha256 in its meta.json). published.json from the full encoder+n1 run of the shipped config. v3 export kept at training/runs/export/dispatcher-distilbert-v3 (not in git).
 Gates after rebase on bf226f4: `npm test` 825/825, test-world all 0 FAIL.
+
+## Dispatcher v3 published (user decision 2026-11-09)
+User decision: long messages must be supported; a small drop on short messages is acceptable. So dispatcher v3 (R3, ckpt 2448, sha256 19dd054b) replaces v2 although it misses the D4b right >= baseline rule on the mostly-short operational set.
+- `node scripts/build-webchat.mjs --models training/runs/export/dispatcher-distilbert-v3`; normalizer v3 unchanged.
+- `node scripts/eval-operational.mjs --mode encoder+n1 --ort <onnxruntime-node> --jobs 20`: right 97.8 / partly 0.2 / wrong 0.7 / not understood 1.2 (v2 was 98.2 / 0.2 / 0.6 / 1.0); published.json updated.
+- multicmd test, exact segmentation / final correct, v2 -> v3: 6-8 commands .702/.385 -> .779/.399; long .205/.083 -> .560/.185 (omissions 668 -> 56; duplicates 13 -> 129, to fix in the next retrain together with the 2-3 and 4-5 bucket dip and avatar/shell/editor wrong 0.9 -> 1.7).
+- Dialogues (R3, at 493ab23): v3 + N1 v3 96.1% turns / 87.0% dialogues vs v2 + N1 v3 95.8 / 86.5.
