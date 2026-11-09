@@ -133,7 +133,7 @@
     "worlds/games.tictactoe/ops.mjs": "1f598055dba19156",
     "worlds/geo.map/datagen.mjs": "7bdabe28b74dfa9e",
     "worlds/geo.map/ops.mjs": "551366a4f0a969fb",
-    "worlds/index.json": "87c183ae12ed67a0",
+    "worlds/index.json": "924b955a690ee9e8",
     "worlds/kids.animals/datagen.mjs": "6ad9f00ea4316ed7",
     "worlds/kids.animals/ops.mjs": "644e845de473918a",
     "worlds/kids.arith/datagen.mjs": "eaddc6e69e6c0b20",
@@ -161,8 +161,8 @@
     "worlds/ui.shell/ops.mjs": "78ddc6f080baff88",
     "worlds/user.profile/cv.mjs": "a1aa32d0f33cffe1",
     "worlds/user.profile/datagen.mjs": "b5072a56e9ba2dd9",
-    "worlds/user.profile/ops.mjs": "58e16e9e2fe9f5f2",
-    "worlds/user.profile/understand.mjs": "a971dcc2294fd749"
+    "worlds/user.profile/ops.mjs": "8385add167932b48",
+    "worlds/user.profile/understand.mjs": "5782a91a5bd8e949"
   },
-  "builtAt": "2026-11-09T16:52:16.231Z"
+  "builtAt": "2026-11-09T17:23:17.840Z"
 }
