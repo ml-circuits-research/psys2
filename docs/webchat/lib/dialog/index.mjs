@@ -15,7 +15,7 @@ import { createInterpreter } from '../interpreter/index.mjs';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs';
 import { splitSentences } from '../formalizer/rules/normalize.mjs';
-import { spellCorrect, spellAlternates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, FUNCTION_WORDS } from '../formalizer/spell.mjs';
+import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs';
 import { perf } from '../formalizer/perf.mjs';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs';
 import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs';
@@ -186,6 +186,27 @@ export class DialogSession {
     out.effects = this.isession.effects;
     this.isession.effects = [];
     out.text = res?.reply ?? null;
+    return out;
+  }
+
+  /**
+   * Headless host (RD8): in the CLI and in scripts no browser executes the effects of a reply, so a world that waits for an observation
+   * (the chess engine move) would wait for ever and answer "I am still thinking" to the next command. This reports every effect of `reply`
+   * that a world observes as failed ("no host"); the world then uses its own fallback (the built-in chess player). Returns the texts the
+   * worlds answer, in order. A browser host does not call it: it runs the effects and calls `observe` with the real outcome.
+   */
+  settleHeadless(reply) {
+    const out = [];
+    const run = (effects, depth) => {
+      for (const e of effects ?? []) {
+        const world = e.world;
+        if (!world || typeof this.engine.set.get(world)?.ops?.onObservation !== 'function') continue;
+        const f = this.observe({ effect: e.name, ok: false, detail: 'no host', world });
+        if (f.text) out.push(f.text);
+        if (f.effects.length && depth < 5) run(f.effects, depth + 1);
+      }
+    };
+    run(reply?.effects, 0);
     return out;
   }
 
@@ -386,6 +407,66 @@ export class DialogSession {
     return { segments: res.segments, wires: res.segments.flatMap((s) => s.wires), dispatch: null, fast: true };
   }
 
+  /**
+   * Active world first (RD1, spec 03 section 7.9a): a message the rules read completely can still carry a typo that another world's free slot
+   * swallowed ("bugger house pls" read as "where do buggers live") or that the active world's own free tail hides ("nect to a house").
+   * The text is spell-corrected against the vocabulary of the OPEN TAB's world only. The corrected reading replaces the original when
+   * (1) every corrected word is unknown to every world (a real word of any world is never "corrected"), (2) the corrected text is read
+   * completely, with nothing ignored, by the active world's own rules, and (3) the original reading is weaker: it belongs to another world,
+   * or the world refused it (unsupported). Returns the segments of the corrected reading, or null (keep the original).
+   */
+  async _activeSpell(english, res, opts, lenient) {
+    if (!lenient.spell || !res.segments.length || res.segments.some((x) => x.unparsed)) return null;
+    const { set, formalizers, interp } = this.engine;
+    const ctx = opts.context ?? this.context();
+    const world = ctx.tabWorld;
+    if (!world || !set.get(world)?.patterns?.length) return null;   // an open modal input that did not consume the message does not matter here
+    const global = spellVocabulary(set);
+    let words;
+    try { words = spellCandidates(english, { vocab: worldVocabulary(set, world), protect: protectedWordsOf(set, world) }); } catch { return null; }
+    // the dry run of a reading on a copy of the session: the interpreter's statuses (supported, missing, unsupported, error ...)
+    const statusesOf = (segments) => {
+      const out = [];
+      try {
+        const f = this.forkForValidation();
+        for (const seg of segments) {
+          f.isession.add(seg.wires);
+          for (const w of seg.wires) { const r = interp.resolve(f.isession, w); if (r?.status) out.push(r.status); }
+        }
+      } catch { /* no dry run: no statuses */ }
+      return out;
+    };
+    const refused = (segments) => statusesOf(segments).some((x) => x === 'unsupported' || x === 'error');
+    // is the original weaker? another world read it, or the interpreter refused it
+    const origStatuses = statusesOf(res.segments);
+    const wasRefused = origStatuses.some((x) => x === 'unsupported' || x === 'error');
+    const unhappy = origStatuses.some((x) => x !== 'supported');   // missing, refused, failed: the reading did not do what it said
+    const weak = wasRefused || res.segments.some((x) => x.match?.worldId && x.match.worldId !== world && x.match.worldId !== 'ui.shell');
+    if (!weak) return null;
+    // a word some world knows ("yes" for "eyes") is changed only when another world read the original and did not carry it out, or the interpreter refused it; a word nobody knows is a typo whenever the original is weak
+    const otherWorld = res.segments.some((x) => x.match?.worldId && x.match.worldId !== world && x.match.worldId !== 'ui.shell');
+    const knownToo = otherWorld && (wasRefused || unhappy);   // the wrong world read it and did not carry it out
+    if (!knownToo) words = words.filter((c) => !isKnownWord(c.from.toLowerCase(), global));
+    else if (!(otherWorld && wasRefused)) words = words.filter((c) => c.from.length < 4 || !isKnownWord(c.from.toLowerCase(), global));   // a content word some world knows ("shape") is never swapped; only short ones ("yes")
+    // candidate texts: the best neighbour of every unknown word, then each word's other neighbours one at a time
+    const replace = (text, picks) => { let out = text; for (const [c, w] of [...picks].sort((x, y) => y[0].span[0] - x[0].span[0])) out = out.slice(0, c.span[0]) + w + out.slice(c.span[1]); return out; };
+    const texts = [];
+    if (words.length) texts.push({ text: replace(english, words.map((c) => [c, c.options[0]])), picks: words.map((c) => ({ from: c.from, to: c.options[0], span: c.span })) });
+    for (const c of words) for (const w of c.options.slice(1)) texts.push({ text: replace(english, [[c, w]]), picks: [{ from: c.from, to: w, span: c.span }] });
+    // a refused reading may hide a typo that spells another word of the active world ("yes" for "eyes"): one known word swapped for a neighbour
+    if (knownToo) for (const v of spellAlternates(english, { vocab: worldVocabulary(set, world), protect: protectedWordsOf(set, world) })) { if (!v.corrections.some((c) => sameWordForm(c.from.toLowerCase(), c.to.toLowerCase()) || (!(otherWorld && wasRefused) && c.from.length >= 4 && isKnownWord(c.from.toLowerCase(), global)))) texts.push({ text: v.text, picks: v.corrections }); };
+    if (!texts.length) return null;
+    for (const t of texts.slice(0, 12)) {
+      let fixed;
+      try { fixed = await formalizers.rules.formalize(t.text, { ...opts, worlds: set, session: this.isession, source: opts.source, context: ctx, router: this.engine.router }); } catch { continue; }
+      if (!fixed.segments.length || fixed.segments.some((x) => x.unparsed || x.partial || x.ignored?.length)) continue;
+      if (!fixed.segments.some((x) => x.match?.worldId === world) || refused(fixed.segments)) continue;
+      const segments = fixed.segments.map((x) => ({ ...x, strategy: 'rules', corrections: [...(x.corrections ?? []), ...t.picks.map((p) => ({ ...p, kind: 'spell' }))], activeSpell: true }));
+      return { segments, wires: segments.flatMap((x) => x.wires) };
+    }
+    return null;
+  }
+
   async _formalize(english, sid, preferred = this.formalizer, lenient = { spell: this.spell, partial: this.partial, fastPath: this.fastPath }) {
     const { set, formalizers } = this.engine;
     const opts = { worlds: set, session: this.isession, source: sid, context: this.context(), router: this.engine.router };
@@ -404,6 +485,8 @@ export class DialogSession {
           const shift = seg.span[0];
           for (const s of sub.segments) segments.push({ ...s, span: [s.span[0] + shift, s.span[1] + shift], strategy: 'rules' });
         }
+        const active = await this._activeSpell(english, { segments, wires: [] }, opts, lenient);
+        if (active) return { segments: active.segments, wires: active.segments.flatMap((s) => s.wires), dispatch: res.dispatch ?? null };
         const done = await this._withLeniency({ segments, wires: [] }, opts, lenient);
         return { segments: done.segments, wires: done.segments.flatMap((s) => s.wires), dispatch: res.dispatch ?? null };
       } catch (e) { encoderError = e?.message ?? String(e); /* the encoder failed: fall through to the rules */ }
@@ -411,6 +494,8 @@ export class DialogSession {
     const res = await perf.time('rules', () => rules.formalize(english, opts));
     for (const s of res.segments) s.strategy = 'rules';
     if (encoderError) res.encoderError = encoderError;
+    const active = await this._activeSpell(english, res, opts, lenient);
+    if (active) { active.segments.forEach((s) => { s.strategy ??= 'rules'; }); if (encoderError) active.encoderError = encoderError; return active; }
     const done = await this._withLeniency(res, opts, lenient);
     done.segments.forEach((s) => { s.strategy ??= 'rules'; });
     if (encoderError) done.encoderError = encoderError;

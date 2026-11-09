@@ -85,7 +85,7 @@ export const MOODS = {
 const MOOD_OF = {
   happy: 'happy', glad: 'happy', smiling: 'happy', smiley: 'happy', cheerful: 'cheerful', joyful: 'cheerful', excited: 'cheerful', delighted: 'cheerful', laughing: 'laughing',
   sad: 'sad', unhappy: 'sad', upset: 'sad', worried: 'worried', concerned: 'worried', surprised: 'surprised', shocked: 'surprised', amazed: 'surprised', astonished: 'surprised',
-  scared: 'scared', afraid: 'scared', frightened: 'scared', angry: 'angry', mad: 'angry', annoyed: 'angry', furious: 'furious', calm: 'calm', relaxed: 'calm', peaceful: 'calm',
+  scared: 'scared', afraid: 'scared', frightened: 'scared', fear: 'scared', fearful: 'scared', terrified: 'scared', angry: 'angry', mad: 'angry', annoyed: 'angry', furious: 'furious', calm: 'calm', relaxed: 'calm', peaceful: 'calm',
   serious: 'serious', neutral: 'serious', cute: 'cute', sleepy: 'sleepy', tired: 'sleepy', suspicious: 'suspicious', cheeky: 'cheeky', bored: 'bored', blank: 'bored',
   smug: 'smug', stressed: 'stressed', in_love: 'loving', loving: 'loving',
 };
