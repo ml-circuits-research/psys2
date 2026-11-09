@@ -19,7 +19,7 @@ All patterns are in `patterns.sop` (older families first, the rule-sweep familie
 ## Questions
 | Operation | Request shape | Example | Status |
 | --- | --- | --- | --- |
-| count (holding) | standard | How many apples does Tom have? | S (n3) |
+| count (holding) | standard | How many apples does Tom have? | S (n3); shape `kids.arith.holding` (ask.count with the agent as `cont`) generates the question, imperative, wish, indirect and "Tom has how many apples" forms (tests sh01 to sh03) |
 | count | noun-first, fillers, "is at", number-of, possessive count, after-event, ellipsis of the item | Leo stickers how many / Uh Leo has how many stickers / How many stickers is Leo at now / What is Leo's sticker number | S: "holding question ..." |
 | count | typo ("hs", "hass", "stikers") | mia hs 7 marbles | S via the typo corrector when the sentence is otherwise known; otherwise U (engine typo budget, three words per sentence) |
 | has | do/does/has, "any ... for X", "is there ... with X", "do u know if", "still" | Any pears for Ben? / Do u know if Ben has pears? | S: "has-any question" |
@@ -47,3 +47,5 @@ All patterns are in `patterns.sop` (older families first, the rule-sweep familie
 * "give me double 13" in no-tab sessions: `ui.avatar` (`give me ...`) outranks it by priority; routing, not rules.
 * a statement and a question in one run-on sentence ("tom got 5 apples and ana gave him 3 more, how many apples does tom have now"): dispatcher splitting.
 * more than two people in "total" / "who has more".
+
+**L7 (macros, shapes).** `patterns.sop` was migrated with `scripts/migrate-macros.mjs` (lead-ins, suffixes and 40 repeated lists are macros). One shape (`kids.arith.holding`, 5 generated patterns) replaced four hand patterns. The statements (holding, buy, eat, give, ...), total, leader, gap, verdict and calc questions take one or two agents, items and numbers in many orders and are not one of the shape families; they stay hand-written.

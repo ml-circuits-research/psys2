@@ -1014,3 +1014,18 @@
     input="quick one: what is 6 plus 7"
     expect="6 plus 7 is 13."
     doc="filler: quick one"
+
+@t.arith.sh01 core.test
+    input="Tom has 5 apples. Tell me how many apples Tom has."
+    expect="Tom has 5 apples."
+    session=ash1
+
+@t.arith.sh02 core.test
+    input="Ana has 4 pears. I want to know how many pears Ana has."
+    expect="Ana has 4 pears."
+    session=ash2
+
+@t.arith.sh03 core.test
+    input="Ben has 3 plums. Ben has how many plums"
+    expect="Ben has 3 plums."
+    session=ash3

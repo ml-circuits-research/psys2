@@ -17,7 +17,8 @@
  *   link     words between object and value in the imperative of `set` (default `to|into|be|as`, followed by an optional a|an|the)
  *   objdet   `none`: no determiner before the object of an `ask.value` shape ("the day after Monday", not "the Monday")
  *   rel      (`ask.value`) relation words between the noun and the object (`after|comes_after|follows`: "what day comes after Monday"); the relation is then mandatory
- *   cont     (`ask.count`) container slot `name:class`: "how many days are in a week" (obj = the counted part, cont = the whole)
+ *   cont     (`ask.count`) container slot `name:class`: "how many days are in a week" (obj = the counted part, cont = the whole), "how many apples does Tom have"
+ *            (`verb` then lists the trailing verbs, default `have|has|got`; the `order` form "a week has how many days" exists only with `cont`)
  *   pron     (noun-only `ask.value`) pronouns that may follow the verb in the question (default `it|this|that|we|you|u|i`)
  *   mod      optional modifier group before the value, alternatives and `$macro` ids (`$ui.avatar.g11_a_bit` for "a bit", "much")
  *   objmod   optional modifier group before the object (`whole|entire`)
@@ -33,7 +34,7 @@ export const FAMILY_FORMS = {
   set: ['imp', 'order', 'wish', 'ind', 'q', 'short', 'state', 'opts'],
   do: ['imp', 'wish', 'ind', 'q', 'short'],
   'ask.value': ['q', 'imp', 'wish', 'ind', 'order', 'short', 'opts'],
-  'ask.count': ['q', 'imp', 'wish', 'ind', 'short'],
+  'ask.count': ['q', 'imp', 'wish', 'ind', 'order', 'short'],
   'ask.exists': ['q', 'imp', 'wish', 'ind', 'short'],
   list: ['imp', 'q', 'wish', 'ind', 'short', 'opts'],
 };
@@ -128,11 +129,12 @@ const NOOBJ_ASK_VALUE = {
  * The templates of the family are replaced by these.
  */
 const CONT_ASK_COUNT = {
-  q: [['', AND('<L>', '[$lang.shape.howmany]', '<O>', '[are|is|does|do|fit|go|make|per]?', '[there]?', '[in|per|inside|within|of|make_up]?', '<D>', '<C>', '[have|has|got]?', '<T>')]],
-  imp: [['', AND('<L>', '[$lang.shape.tellme|count|name]', '[$lang.shape.howmany]?', '<D>', '<O>', '[are|is|does|do|fit|go|make]?', '[there]?', '[in|per|inside|within]?', '<D>', '<C>', '[have|has]?', '<T>')]],
-  wish: [['', AND('<L>', '[$lang.shape.know]', '[$lang.shape.howmany]', '<O>', '[are|is|does|do|fit|go|make]?', '[there]?', '[in|per|inside|within]?', '<D>', '<C>', '[have|has]?', '<T>')]],
-  ind: [['', AND('[$lang.shape.indask]', '[$lang.shape.howmany]', '<O>', '[are|is|does|do|fit|go|make]?', '[there]?', '[in|per|inside|within]?', '<D>', '<C>', '[have|has]?', '<T>')]],
-  short: [['', AND('<L>', '<O>', '[in|per]', '<D>', '<C>', '<T>')]],
+  q: [['', AND('<L>', '[$lang.shape.howmany]', '<O>', '[are|is|does|do|did|will|has|have|fit|go|make|per]?', '[there]?', '[in|per|inside|within|of|make_up]?', '<DO>', '<C>', '<CV>', '<T>')]],
+  imp: [['', AND('<L>', '[$lang.shape.tellme|count|name]', '[$lang.shape.howmany]?', '<D>', '<O>', '[are|is|does|do|did|will|has|have|fit|go|make]?', '[there]?', '[in|per|inside|within]?', '<DO>', '<C>', '<CV>', '<T>')]],
+  wish: [['', AND('<L>', '[$lang.shape.know]', '[$lang.shape.howmany]', '<O>', '[are|is|does|do|did|will|has|have|fit|go|make]?', '[there]?', '[in|per|inside|within]?', '<DO>', '<C>', '<CV>', '<T>')]],
+  ind: [['', AND('[$lang.shape.indask]', '[$lang.shape.howmany]', '<O>', '[are|is|does|do|did|will|has|have|fit|go|make]?', '[there]?', '[in|per|inside|within]?', '<DO>', '<C>', '<CV>', '<T>')]],
+  order: [['', AND('<L>', '<DO>', '<C>', '[has|have|is|contains|equals|lasts|are|make|have_got]?', '[how_many|many]', '<O>', '<T>')]],
+  short: [['', AND('<L>', '<O>', '[in|per]', '<DO>', '<C>', '<T>')]],
 };
 
 const slotText = (spec, optional = false) => (spec ? `{${spec.replace(/\?$/, '')}${optional || spec.endsWith('?') ? '?' : ''}}` : '');
@@ -172,6 +174,7 @@ export function expandShape(shape, { phrases = null, lexicons = null } = {}) {
     '<DO>': shape.objdet === 'none' ? '' : (shape.obj || shape.noun ? group(shape.det ?? DEFAULTS.det, true) : ''),
     '<R>': shape.rel ? group(shape.rel) : '', '<OFM>': shape.rel ? group(shape.rel) : OF, '<OFO>': shape.rel ? group(shape.rel) : OF + '?',
     '<C>': slotText(shape.cont),
+    '<CV>': group(shape.verb ?? 'have|has|got', true),
     '<PR>': group(shape.pron ?? 'it|this|that|we|you|u|i', true),
     '<L>': LEAD, '<T>': TAIL,
   };
@@ -199,7 +202,7 @@ export function expandShape(shape, { phrases = null, lexicons = null } = {}) {
         priority: short ? basePriority - SHORT_PENALTY : basePriority,
         example: [],
       };
-      p.example = exampleSentences(match, { phrases, lexicons, sample, det: shape.obj || noObj ? (shape.det ?? DEFAULTS.det) : null, objdet: shape.objdet, noun: nounAlts, link: shape.link ?? DEFAULTS.link });
+      p.example = exampleSentences(match, { phrases, lexicons, sample, det: shape.obj || noObj ? (shape.det ?? DEFAULTS.det) : null, objdet: shape.objdet, noun: nounAlts, link: shape.link ?? DEFAULTS.link, cv: shape.cont ? (shape.verb ?? 'have|has|got') : null });
       out.push(p);
     }
   }
@@ -222,7 +225,7 @@ function sampleWord(cls, lexicons) {
  * Natural example sentences of a generated match string: first the sentence with the determiner before the object ("Make your eyes blue."),
  * (the shortest one, all optionals omitted, when the sentence has no determiner). Other optional words (links, nouns, lead-ins) are never added: they make unnatural sentences.
  */
-export function exampleSentences(match, { phrases = null, lexicons = null, sample = {}, det = null, noun = null, link = null } = {}) {
+export function exampleSentences(match, { phrases = null, lexicons = null, sample = {}, det = null, noun = null, link = null, cv = null } = {}) {
   const parts = match.split(/\s+/);
   const make = (withDet) => {
     const words = [];
@@ -242,6 +245,7 @@ export function exampleSentences(match, { phrases = null, lexicons = null, sampl
           else if (withDet && det && m[1] === det && noun && parts[k + 1] === `[${noun}]`) words.push('the');
           else if (m[1] === OF_ALTS) words.push('of');
           else if (withDet && link && m[1] === link) words.push(alts[0]);
+          else if (cv && m[1] === cv) words.push(alts[0]);
           continue;
         }
         let first = alts[0];

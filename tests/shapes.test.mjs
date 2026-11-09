@@ -121,7 +121,7 @@ test('the test world loads without errors and every family generates its forms',
   assert.deepEqual([...forms('paint')].sort(), [...FAMILY_FORMS.set].sort());
   assert.deepEqual([...forms('reset')].sort(), [...FAMILY_FORMS.do].filter((f) => f !== 'opts').sort());
   assert.deepEqual([...forms('askcolour')].sort(), [...FAMILY_FORMS['ask.value']].sort());
-  assert.deepEqual([...forms('count')].sort(), [...FAMILY_FORMS['ask.count']].sort());
+  assert.deepEqual([...forms('count')].sort(), [...FAMILY_FORMS['ask.count']].filter((f) => f !== 'order').sort());
   assert.deepEqual([...forms('exists')].sort(), [...FAMILY_FORMS['ask.exists']].sort());
   assert.deepEqual([...forms('list')].sort(), [...FAMILY_FORMS.list].sort());
 });

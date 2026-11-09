@@ -606,3 +606,9 @@ User decision: long messages must be supported; a small drop on short messages i
 - `node scripts/eval-operational.mjs --mode encoder+n1 --ort <onnxruntime-node> --jobs 20`: right 97.8 / partly 0.2 / wrong 0.7 / not understood 1.2 (v2 was 98.2 / 0.2 / 0.6 / 1.0); published.json updated.
 - multicmd test, exact segmentation / final correct, v2 -> v3: 6-8 commands .702/.385 -> .779/.399; long .205/.083 -> .560/.185 (omissions 668 -> 56; duplicates 13 -> 129, to fix in the next retrain together with the 2-3 and 4-5 bucket dip and avatar/shell/editor wrong 0.9 -> 1.7).
 - Dialogues (R3, at 493ab23): v3 + N1 v3 96.1% turns / 87.0% dialogues vs v2 + N1 v3 95.8 / 86.5.
+## L7 kids.arith (2026-11-09, on origin/main bf226f4 = L6 + media.music + shop + time on PERF)
+- **migrate-macros**: `patterns.sop` 465,443 -> 126,283 bytes; hand patterns 247 -> 243 (+ 1 shape, 5 generated); match text 408,239 -> 69,600 bytes (-83 %); inline groups repeated verbatim 84 (940 occurrences) -> 44 (270). 40 world-local phrases.
+- **extends**: none qualifies.
+- **Shape** `kids.arith.holding` (`ask.count` with the agent as `cont`, new: the trailing verbs come from `verb`, an `order` form "Tom has how many apples", `objdet=none`); 4 hand patterns with 100 % coverage deleted (`q.count q.count.got q.count.own w.cnt.f1`). The other operations (statements with an agent, an item and a number; total, leader, gap, verdict; calc) are not one of the families and stay hand-written (coverage.md).
+- **Tests**: kids.arith 210 -> 213 (sh01..sh03).
+- **Gates** vs the baseline: operational 95.0% right / 7 wrong unchanged; dialogues 96.6% / 87.7% unchanged; eval-rules identical in every row. `npm test` 825 pass / 0 fail, `test-world all` 0 FAIL.
