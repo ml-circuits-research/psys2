@@ -189,7 +189,12 @@ Export must include every typed or spoken message by default. Add a webchat test
 
 Measure after RD1–RD8: the real dialogue right turn by turn, the dialogue set, the operational set (wrong must not rise).
 
-### PERF — the webchat is very slow on mobile (user report 23:46; reviewer measurements at 06280ae) — TOP PRIORITY together with D-FIX
+### PERF — the webchat is very slow on mobile (user report 23:46; reviewer measurements at 06280ae) — TOP PRIORITY
+
+**Reviewer re-measurement at 2500e81 (same script, 4× throttle):**
+- per message: hello 434 ms, 3 plus 4 195 ms, multi-command 2.2 s, eyes square 158 ms, paris 408 ms, hello 84 ms. Much better, but the multi-command message is still over the target.
+- **page ready got worse: 29 s.** Targets still open: page usable ≤ 5 s, models after first paint, multi-command ≤ 800 ms.
+- The thinking timer is not there yet.
 
 Reviewer measurements (headless Chrome, 390×844 mobile viewport, 4× CPU throttling as a mid-range phone, localhost):
 - page ready: **25 s** (9.1 MB `worlds/index.json` + 67 MB model);
@@ -654,3 +659,4 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
 - D-FIX round 1 (3713860 … d05647d): 797 tests pass. Operational rules: 94.8% right / 0.6% wrong / 2.8% not understood. Dialogues (rules): 92.6% of turns, 77.5% of dialogues, both reproduced.
 - L8 — `ctx.lang` backed by `lang.common`; `src/dialog/lang.mjs` absorbed; avatar, docs.reader and games.guess use it (a745938): 797 tests pass. Operational 94.8% / 0.6% wrong; dialogues 77.6%. No regression.
 - D-FIX rounds 2–5 (0276ef9 … 493ab23): 809 tests pass. **Dialogues (rules): 96.6% of turns, 87.7% of whole dialogues right**; every group ≥ 85% (kids 86, avatar/shell/editor 88, music/draw/map/charts 86.4, games 94.7, documents 87.2, other 86). Operational 95.0% right / 0.6% wrong. Next: PERF (top priority), BEST-EFFORT, then G4/G5 retrain and the encoder modes.
+- R3 (dbcfba2 … 2500e81): N1 v3 published, bound to dataset/rules/policy hashes; dispatcher v3 rejected by the operational rule (97.8 vs 98.2); `published.json` written from the shipped config. **Shipped config (encoder + N1): 98.2% right, 0.6% wrong, 1.0% not understood** on 1,240 messages; rules only 95.0%. 825 tests pass. L7 kids.time migrated (match text −82%).
