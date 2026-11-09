@@ -72,15 +72,18 @@
     "lib/legends/index.mjs": "10a7d7b11ff70524",
     "lib/loaders/bundle-loader.mjs": "aa736793c7dc54c1",
     "lib/soplang/index.mjs": "23faedc659219643",
-    "lib/translate/en-ro.mjs": "5f661193d67a1df4",
-    "lib/translate/index.mjs": "c93087335db4c374",
+    "lib/translate/canonical.en-ro.mjs": "e8ac6d4a2fe6d734",
+    "lib/translate/en-ro.mjs": "d03cf9e6bfcd91e2",
+    "lib/translate/index.mjs": "8835ba84acf343a0",
     "lib/translate/inflect.en.mjs": "c54249cec2789d10",
-    "lib/translate/lexicon.ro-en.mjs": "b4e4a505c40ca5b6",
-    "lib/translate/morphology.ro.mjs": "16355de7d35414a7",
-    "lib/translate/normalize.mjs": "69456c68b0c7feef",
-    "lib/translate/phrases.commands.ro-en.mjs": "5228f939e0f2a148",
-    "lib/translate/phrases.ro-en.mjs": "06eb2b6fba55a48a",
-    "lib/translate/ro-en.mjs": "9d7922603e9e0760",
+    "lib/translate/lexicon.ro-en.mjs": "98f2d916ed8b5c72",
+    "lib/translate/morphology.ro.mjs": "a5b522b6b346361b",
+    "lib/translate/normalize.mjs": "a6d4d30f95434cd8",
+    "lib/translate/phrases.commands.ro-en.mjs": "4372f26091530e39",
+    "lib/translate/phrases.ro-en.mjs": "538c8191beea1051",
+    "lib/translate/places.ro-en.mjs": "94650384878ada19",
+    "lib/translate/replies.en-ro.mjs": "8613f1665b27016b",
+    "lib/translate/ro-en.mjs": "28201057d5325184",
     "lib/worlds/canonical.mjs": "af52a3eb9bd5d16b",
     "lib/worlds/index.mjs": "c426d60b0b17219a",
     "lib/worlds/lexicon.mjs": "6b1220d04c142850",
@@ -142,5 +145,5 @@
     "worlds/user.profile/ops.mjs": "58e16e9e2fe9f5f2",
     "worlds/user.profile/understand.mjs": "a971dcc2294fd749"
   },
-  "builtAt": "2026-11-09T02:34:00.965Z"
+  "builtAt": "2026-11-09T03:36:53.501Z"
 }

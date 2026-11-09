@@ -116,6 +116,11 @@ tricou,tricouri|T-shirt|n
 rochie,rochii|dress|f
 cheie,chei|key|f
 ușă,uși|door|f
+acoperiș,acoperișuri|roof|n
+nord,nord|north|n mass
+sud,sud|south|n mass
+est,est|east|n mass
+vest,vest|west|n mass
 fereastră,ferestre|window|f
 casă,case|house|f
 cameră,camere|room|f
@@ -153,7 +158,7 @@ elev,elevi|student|m anim
 lecție,lecții|lesson|f
 temă,teme|homework|f mass
 test,teste|test|n
-notă,note|grade|f
+notă,note|note|f
 răspuns,răspunsuri|answer|n
 întrebare,întrebări|question|f
 problemă,probleme|problem|f
@@ -439,7 +444,13 @@ abțibild,abțibilduri|sticker|n
 raport,rapoarte|report|n
 document,documente|document|n
 paragraf,paragrafe|paragraph|n
-titlu,titluri|title|n
+titlu,titluri|heading|n
+grad,grade|degree|n
+excursie,excursii|trip|f
+rețetă,rețete|recipe|f
+notiță,notițe|note|f
+plan,planuri|plan|n
+alimente|groceries|f mass pl
 propoziție,propoziții|sentence|f
 editor,editoare|editor|m
 difuzor,difuzoare|speaker|n
@@ -539,12 +550,12 @@ plan,planuri|plan|n
 structură,structuri|structure|f
 mască,măști|mask|f
 mustață,mustăți|mustache|f
-strălucire,strălucirii|brightness|f
+strălucire,strălucirii|glow|f
 cadran,cadrane|dial|n
 ventilație,ventilații|vent|f
 rachetă,rachete|rocket|f
 fundal,fundaluri|background|n
-sirenă,sirene|mermaid|f anim
+sirenă,sirene|siren|f
 covor,covoare|carpet|n
 contur,contururi|outline|n
 text,texte|text|n
@@ -607,7 +618,7 @@ ordine,ordini|order|f
 
 const VERB_ROWS = `
 avea|have/had/had|am ai are avem aveți au|avut|t sj=aibă
-fi|be/was/been|sunt ești este suntem sunteți sunt|fost|i sj=fie alt3=e
+fi|be/was/been|sunt ești este suntem sunteți sunt|fost|i sj=fie alt3=e imp imp=fii,fiți
 da|give/gave/given|dau dai dă dăm dați dau|dat|d imp=dă,dați sj=dea
 primi|receive/received|is:prim|primit|t
 lua|take/took/taken|iau iei ia luăm luați iau|luat|t imp=ia,luați
@@ -640,7 +651,7 @@ spune|say/said/said|spun spui spune spunem spuneți spun|spus|d imp
 vrea|want|vreau vrei vrea vrem vreți vor|vrut|t comp=to
 putea|can|pot poți poate putem puteți pot|putut|i mod=can comp=modal
 trebui|must|trebuie trebuie trebuie trebuie trebuie trebuie|trebuit|i mod=must comp=modal
-merge|go/went/gone|merg mergi merge mergem mergeți merg|mers|i motion imp sj=meargă
+merge|go/went/gone|merg mergi merge mergem mergeți merg|mers|i motion imp imp=mergi,mergeți sj=meargă
 veni|come/came/come|vin vii vine venim veniți vin|venit|i motion imp vs imp=vino,veniți
 alerga|run/ran/run|alerg alergi aleargă alergăm alergați aleargă|alergat|i
 zbura|fly/flew/flown|zbor zbori zboară zburăm zburați zboară|zburat|i
@@ -648,7 +659,7 @@ zbura|fly/flew/flown|zbor zbori zboară zburăm zburați zboară|zburat|i
 trăi|live|trăiesc trăiești trăiește trăim trăiți trăiesc|trăit|i
 locui|live|locuiesc locuiești locuiește locuim locuiți locuiesc|locuit|i
 sări|jump|sar sari sare sărim săriți sar|sărit|i
-cânta|sing/sang/sung|a:cânt|cântat|t
+cânta|sing/sang/sung|a:cânt|cântat|t imp
 dansa|dance|az:dans|dansat|i
 juca|play|joc joci joacă jucăm jucați joacă|jucat|t
 lucra|work|az:lucr|lucrat|i
@@ -682,7 +693,9 @@ arăta|show|arăt arăți arată arătăm arătați arată|arătat|d imp
 compara|compare|a:compar|comparat|t imp
 alege|choose/chose/chosen|aleg alegi alege alegem alegeți aleg|ales|t imp
 desena|draw/drew/drawn|az:desen|desenat|t imp
-picta|paint|az:pict|pictat|t
+picta|paint|az:pict|pictat|t imp
+colora|color|az:color|colorat|t imp
+vopsi|paint|is:vops|vopsit|t imp
 tăia|cut/cut/cut|tai tai taie tăiem tăiați taie|tăiat|t
 coace|bake|coc coci coace coacem coaceți coc|copt|t
 găti|cook|is:găt|gătit|t
@@ -696,7 +709,7 @@ ninge|snow|- - ninge - - -|nins|i imps
 străluci|shine/shone/shone|is:străluc|strălucit|i
 crește|grow/grew/grown|cresc crești crește creștem creșteți cresc|crescut|i
 muri|die|mor mori moare murim muriți mor|murit|i
-vorbi|talk|is:vorb|vorbit|i
+vorbi|speak/spoke/spoken|is:vorb|vorbit|i imp
 striga|shout|a:strig|strigat|i
 saluta|greet|a:salut|salutat|t
 mulțumi|thank|is:mulțum|mulțumit|t
@@ -736,12 +749,17 @@ obține|get/got/got|obțin obții obține obținem obțineți obțin|obținut|t 
 urma|follow|az:urm|urmat|t
 schimba|change|a:schimb|schimbat|t imp
 anula|undo|az:anul|anulat|t imp
+renunța|give up/gave up/given up|a:renunț|renunțat|i imp
+încetini|slow down/slowed down/slowed down|is:încetin|încetinit|t imp
+micșora|shrink/shrank/shrunk|az:micșor|micșorat|t imp
+reseta|reset/reset/reset|az:reset|resetat|t imp
+întoarce|turn around/turned around/turned around|întorc întorci întoarce întoarcem întoarceți întorc|întors|t imp
 seta|set/set/set|az:set|setat|t imp
 trece|pass|trec treci trece trecem treceți trec|trecut|i imp
 apărea|appear|apar apari apare apărem apăreți apar|apărut|i
 exista|exist|a:exist|existat|i
 rezulta|result|az:rezult|rezultat|i
-marca|mark|a:marc|marcat|t imp
+marca|mark|az:march|marcat|t imp
 muta|move|a:mut|mutat|t imp
 amesteca|mix|a:amestec|amestecat|t imp
 repeta|repeat|az:repet|repetat|t imp
@@ -753,7 +771,10 @@ menționa|mention|az:mențion|menționat|t
 descărca|download|a:descarc|descărcat|t imp
 dicta|dictate|a:dict|dictat|t imp
 scoate|remove|scot scoți scoate scoatem scoateți scot|scos|t imp
-elimina|remove|az:elimin|eliminat|t imp
+elimina|remove|a:elimin|eliminat|t imp
+enumera|list|az:enumer|enumerat|t imp
+întâlni|meet/met/met|is:întâln|întâlnit|t recip
+
 transforma|turn|az:transform|transformat|t imp
 insera|insert|az:insert|inserat|t imp
 evidenția|highlight|az:evidenți|evidențiat|t imp
@@ -769,7 +790,7 @@ ascunde|hide/hid/hidden|ascund ascunzi ascunde ascundem ascundeți ascund|ascuns
 ghici|guess|is:ghic|ghicit|t
 verifica|check|a:verific|verificat|t imp
 porni|start|is:porn|pornit|t imp
-deveni|become|devin devii devine devenim deveniți devin|devenit|i
+deveni|become/became/become|devin devii devine devenim deveniți devin|devenit|i imp imp=devino,deveniți
 depăși|exceed|is:depăș|depășit|t
 ocupa|occupy|a:ocup|ocupat|t
 reprezenta|represent|az:reprezent|reprezentat|t
@@ -887,6 +908,8 @@ perfect,perfectă,perfecți,perfecte|perfect
 major,majoră,majori,majore|major
 minor,minoră,minori,minore|minor
 ultim,ultimă,ultimi,ultime|last
+îngroșat,îngroșată,îngroșați,îngroșate|bold
+numerotat,numerotată,numerotați,numerotate|numbered
 relativ,relativă,relativi,relative|relative
 principal,principală,principali,principale|main
 numerotat,numerotată,numerotați,numerotate|numbered
@@ -905,7 +928,7 @@ posibil,posibilă,posibili,posibile|possible
 comun,comună,comuni,comune|common
 spart,spartă,sparți,sparte|broken
 vecin,vecină,vecini,vecine|neighboring
-circular,circulară,circulari,circulare|circular
+circular,circulară,circulari,circulare|pie
 prim,primă,primi,prime|first
 vertical,verticală,verticali,verticale|vertical
 orizontal,orizontală,orizontali,orizontale|horizontal
@@ -953,6 +976,8 @@ când|when|conj sub
 că|that|conj sub
 deoarece,fiindcă|because|conj sub
 deci|so|conj
+hm,hmm,hmmm,mm,mmm,mmmm,ăă,ăăă,ee,eee|um|interj lead
+chiar|really|adv
 decât|than|conj than
 deși|although|conj sub
 atunci|then|adv lead
@@ -972,6 +997,9 @@ acum|now|adv time
 azi,astăzi|today|adv time
 mâine|tomorrow|adv time
 ieri|yesterday|adv time
+stai|wait|interj lead
+posimâine|the day after tomorrow|adv time
+deasupra|on top|adv
 devreme|early|adv time
 târziu|late|adv time
 aici|here|adv
@@ -983,6 +1011,8 @@ aproape|near|adv
 împreună|together|adv
 repede|quickly|adv
 încet|slowly|adv
+primul,prima,primii,primele|the first|det
+ultimul,ultima,ultimii,ultimele|the last|det
 bine|well|adv
 așa|like this|adv
 cam,aproximativ|about|adv
@@ -1014,7 +1044,7 @@ minus|minus|op
 ori|times|op
 egal|equals|op
 ce|what|wh
-să|-|sa
+să,s|-|sa
 cine|who|wh
 care|which|wh
 unde|where|wh
@@ -1031,7 +1061,8 @@ orice,oricare|any|det quant
 vreun,vreo,vreunii,vreunele|any|det quant
 toți,toate,toată|all|det quant
 mulți,multe,multă|many|det quant
-puțini,puține,puțină|few|det quant
+puțini,puține|few|det quant
+puțin,puțină|some|det quant
 câțiva,câteva|some|det quant
 ambii,ambele|both|det quant
 alt,altă,alți,alte|other|det
@@ -1056,7 +1087,7 @@ vostru,voastră,voștri,voastre|your|poss
 lor|their|poss
 luni|Monday|day
 marți|Tuesday|day
-miercuri|Wednesday|day
+miercuri,miercurii|Wednesday|day
 joi|Thursday|day
 vineri|Friday|day
 sâmbătă|Saturday|day

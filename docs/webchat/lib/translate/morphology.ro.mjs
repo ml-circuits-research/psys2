@@ -2,6 +2,7 @@
 // diacritic-insensitive key, so analysis is a table lookup (browser-safe).
 import { nouns, verbs, adjectives, words, names, numberWords } from './lexicon.ro-en.mjs';
 import { foldKey } from './normalize.mjs';
+import { places } from './places.ro-en.mjs';
 import { pluralEn, pastEn } from './inflect.en.mjs';
 
 const index = new Map();
@@ -24,6 +25,7 @@ export function defSingular(sg, g) {
   if (/ă$/.test(sg)) return g === 'm' ? sg + 'l' : sg.slice(0, -1) + 'a';
   if (/ea$/.test(sg)) return sg + 'ua';
   if (/a$/.test(sg)) return sg;
+  if (/ie$/.test(sg) && g === 'f') return sg.slice(0, -1) + 'a';   // excursie -> excursia
   if (/e$/.test(sg)) return g === 'f' ? sg + 'a' : sg + 'le';
   if (/u$/.test(sg)) return sg + 'l';
   return sg + 'ul';
@@ -48,7 +50,7 @@ function genSingular(sg, g) {
   } else if (/ea$/.test(sg)) {
     out.push(sg.slice(0, -1) + 'ei');
   } else if (/ie$/.test(sg) && g === 'f') {
-    out.push(sg.slice(0, -1) + 'i');
+    out.push(sg.slice(0, -1) + 'i', sg + 'i');   // excursii, excursiei
   } else if (/e$/.test(sg)) {
     out.push(g === 'f' ? sg.slice(0, -1) + 'ii' : sg + 'lui');
   } else if (/u$/.test(sg)) out.push(sg + 'lui');
@@ -87,6 +89,7 @@ function presentForms(v) {
   if (m) {
     const s = m[2];
     if (m[1] === 'a') return [s, s + 'i', s + 'ă', s + 'ăm', s + 'ați', s + 'ă'];
+    if (m[1] === 'az' && /i$/.test(s)) return [s + 'ez', s + 'ezi', s + 'ază', s + 'em', s + 'ați', s + 'ază'];   // evidenția: evidențiez, evidențiază
     if (m[1] === 'az') return [s + 'ez', s + 'ezi', s + 'ează', s + 'ăm', s + 'ați', s + 'ează'];
     return [s + 'esc', s + 'ești', s + 'ește', s + 'im', s + 'iți', s + 'esc'];
   }
@@ -138,8 +141,9 @@ function indexVerb(v) {
   // imperative
   if (v.flags.imp) {
     const f3 = forms[2];
-    if (f3 && f3 !== '-') add(f3, { pos: 'verb', entry: v, tense: 'imp', person: 2, number: 'sg' });
-    if (forms[4] && forms[4] !== '-') add(forms[4], { pos: 'verb', entry: v, tense: 'imp', person: 2, number: 'pl' });
+    const own = v.inf === 'fi' || v.inf === 'deveni';   // their imperatives (fii, devino) are listed in imp=; "este" is never an order
+    if (f3 && f3 !== '-' && !own) add(f3, { pos: 'verb', entry: v, tense: 'imp', person: 2, number: 'sg' });
+    if (forms[4] && forms[4] !== '-' && !own) add(forms[4], { pos: 'verb', entry: v, tense: 'imp', person: 2, number: 'pl' });
     if (typeof v.flags.imp === 'string') {
       v.flags.imp.split(',').forEach((f, i) => add(f, { pos: 'verb', entry: v, tense: 'imp', person: 2, number: i === 0 ? 'sg' : 'pl' }));
     }
@@ -235,6 +239,14 @@ export function analyzeRaw(raw, diaFree = false) {
 
 export function nameEntry(key) { return nameIndex.get(key) || null; }
 export function isKnownName(key) { return nameIndex.has(key); }
+
+const placeIndex = new Map();
+for (const pl of places) {
+  for (const f of pl.nom) placeIndex.set(foldKey(f), { en: pl.en, gen: false });
+  for (const f of pl.gen) placeIndex.set(foldKey(f), { en: pl.en, gen: true });
+}
+/** A place name (country, continent, city) in any Romanian form: { en, gen } or null. */
+export function placeOf(key) { return placeIndex.get(key) || null; }
 
 /** Noun lemma from any definite/plural/case form: mărul, merele, merelor, mere -> măr. */
 export function lemmaOfNoun(word) {

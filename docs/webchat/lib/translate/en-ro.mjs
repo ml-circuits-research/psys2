@@ -4,6 +4,9 @@ import { tokenize, splitSentences, foldKey } from './normalize.mjs';
 import * as M from './morphology.ro.mjs';
 import * as L from './lexicon.ro-en.mjs';
 import * as E from './inflect.en.mjs';
+import { placeRo, MULTIWORD_EN } from './places.ro-en.mjs';
+import { translateReplySentence } from './replies.en-ro.mjs';
+import { CANONICAL_RO } from './canonical.en-ro.mjs';
 
 // ------------------------------------------------------------------ reverse lexicon
 
@@ -312,7 +315,7 @@ function realizeNP(np, ctx, opts = {}) {
   const h = np.head;
   if (!h && np.num) return [piece(np.num.val, np.num.tok)];
   if (!h) return [];
-  if (h.kind === 'name') return [piece(h.text, h.tok)];
+  if (h.kind === 'name') return [piece(placeRo(h.text) ?? h.text, h.tok)];
   if (h.kind === 'unknown') return [piece(h.text, h.tok)];
   const e = h.entry;
   const plural = np.number === 'pl';
@@ -797,9 +800,29 @@ function assembleRo(sentences) {
   return { text, alignment };
 }
 
-export function translateEnRo(original) {
+/** Merge the words of a multi-word place name ("South America") into one capitalised name token. */
+function mergePlaces(toks) {
+  const out = [];
+  for (let i = 0; i < toks.length; i++) {
+    let merged = false;
+    if (toks[i].kind === 'word' && toks[i].isCap) {
+      for (const name of MULTIWORD_EN) {
+        const ws = name.split(' ');
+        if (ws.every((w, k) => toks[i + k] && toks[i + k].kind === 'word' && toks[i + k].raw === w)) {
+          const last = toks[i + ws.length - 1];
+          out.push({ ...toks[i], raw: name, key: foldKey(name), end: last.end });
+          i += ws.length - 1; merged = true; break;
+        }
+      }
+    }
+    if (!merged) out.push(toks[i]);
+  }
+  return out;
+}
+
+function translateEnRoGrammar(original) {
   const source = String(original ?? '');
-  const toks = tokenize(source);
+  const toks = mergePlaces(tokenize(source));
   const sents = splitSentences(toks);
   const ctx = { unknown: [], notes: [], content: 0, mapped: 0 };
   const results = [];
@@ -831,7 +854,7 @@ export function englishLeftovers(text) {
   for (const t of tokenize(String(text ?? ''))) {
     if (t.kind !== 'word') continue;
     const k = t.key;
-    if (k.length < 3 || !isEnglishWord(k)) continue;
+    if ((k.length < 3 && !/^(is|it|of|be|my|we|he|if)$/.test(k)) || !isEnglishWord(k)) continue;
     if (M.analyze(k).length || M.isKnownName(k) || /^(sau|plus|minus|pot|mai|are|de|la|cu|pe|din|nu|da)$/.test(k)) continue;
     out.push(t.raw);
   }
@@ -861,4 +884,45 @@ function editDistLe(a, b, max) {
     prev = cur;
   }
   return prev[n] <= max;
+}
+
+/** Split a reply into sentences (quote aware: a full stop inside "..." does not end the sentence). */
+function splitReply(text) {
+  const out = [];
+  let cur = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    cur += ch;
+    if (ch === '"') q = !q;
+    if (!q && /[.!?]/.test(ch) && (i + 1 === text.length || /\s/.test(text[i + 1])) && !/^\d+\.$/.test(cur.trim())) { out.push(cur); cur = ''; }
+  }
+  if (cur) out.push(cur);
+  return out;
+}
+
+/**
+ * English -> Romanian: canonical examples (authored Romanian), then the reply phrase table sentence by sentence, then the grammar.
+ * Sentences the table does not know go to the grammar; the caller keeps the whole reply in English if any piece fails (RD5).
+ */
+export function translateEnRo(original) {
+  const source = String(original ?? '');
+  const t = source.trim();
+  if (CANONICAL_RO[t]) return { text: source.replace(t, CANONICAL_RO[t]), alignment: [], unknown: [], notes: ['canonical example'], confidence: 1 };
+  const sentences = splitReply(source);
+  if (sentences.length <= 1 && !sentences.some((x) => translateReplySentence(x, () => null))) return translateEnRoGrammar(source);
+  const sub = (x) => { const r = translateEnRoGrammar(x.replace(/^(.)/, (c, a) => (/[A-Z]/.test(a) ? a.toLowerCase() : a))); return r.text && !r.unknown.length && !r.untranslatable?.length ? r.text.replace(/[.!?]$/, '') : null; };
+  const unknown = [], notes = [];
+  let text = '';
+  for (const sen of sentences) {
+    const lead = /^\s*/.exec(sen)[0], trail = /\s*$/.exec(sen)[0];
+    const core = sen.trim();
+    let ro = core ? (CANONICAL_RO[core] ?? translateReplySentence(core, sub)) : '';
+    if (ro == null) {
+      const r = translateEnRoGrammar(core);
+      unknown.push(...r.unknown); notes.push(...r.notes);
+      ro = r.text;
+    }
+    text += lead + ro + trail;
+  }
+  return { text, alignment: [], unknown, notes, confidence: unknown.length ? 0.5 : 1 };
 }
