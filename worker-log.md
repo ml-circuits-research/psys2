@@ -789,3 +789,34 @@ Per bucket, encoder+n1 (right / partly / wrong / nu): kids 100 / 0 / 0 / 0 -> 10
 - **Shapes added**: `ui.avatar.reset` (do) and `ui.avatar.has` (ask.exists with the new use of `pron` for its subject pronouns); `part.reset` and `q.has` deleted. Gate finding: with the default pronouns the has shape read "Do I have a cat?" (kids.animals n67); `pron="you|u|ya"` fixes it.
 - **Numbers (hand patterns / file)**: ui.avatar L4 pilot started at 159 patterns / 45,674 bytes of match text; now 148 hand patterns + 7 shapes (about 60 generated), 44,6 KB of match text and 3 more groups repeated verbatim than the 17 of the L6 pilot (23: more shapes bring more macro uses).
 - **Tests**: ui.avatar 263 -> 266 (sh14..sh16). **Gates**: operational 95.1% / 6 wrong unchanged; dialogues unchanged; eval-rules and long set identical.
+
+## L6 + L7 summary table (2026-11-09; rebased on origin/main f85ffb7)
+Match text of the hand-written patterns (`pattern-stats --world W --hand`), before -> after; repeated groups = inline groups of 3+ alternatives that occur more than once verbatim in the match text (occurrences in brackets); shapes = shapes (generated patterns).
+
+| world | hand patterns | match text bytes | repeated groups | patterns.sop bytes | shapes (generated) |
+| --- | --- | --- | --- | --- | --- |
+| ui.avatar (L4+L6+L7) | 159 -> 148 | 45,674 -> 44,660 | 24 (111) -> 23 (100) | 105,565 (pre-L4) -> 84,413 | 7 (about 60) |
+| media.music | 384 -> 375 | 886,971 -> 165,685 | 172 (2,195) -> 82 (307) | 991,819 -> 270,868 | 8 (48) |
+| kids.shop | 480 -> 477 | 1,086,562 -> 161,445 | 186 (3,413) -> 63 (1,152) | 1,210,786 -> 285,281 | 1 (8) |
+| kids.time | 383 -> 351 | 594,221 -> 109,737 | 175 (1,787) -> 68 (497) | 686,854 -> 197,699 | 8 (49) |
+| kids.arith | 247 -> 243 | 408,239 -> 69,600 | 84 (940) -> 44 (270) | 465,443 -> 126,283 | 1 (5) |
+| kids.tasks | 219 -> 219 | 617,554 -> 63,594 | 109 (1,086) -> 36 (219) | 664,361 -> 111,079 | 2 (7) |
+| docs.editor | 387 -> 376 | 482,977 -> 87,193 | 115 (1,613) -> 56 (199) | 566,240 -> 172,057 | 12 (48) |
+| geo.map | 341 -> 329 | 493,811 -> 148,735 | 143 (1,772) -> 60 (543) | 567,349 -> 221,415 | 5 (40) |
+| data.charts | 370 -> 365 | 309,728 -> 131,180 | 148 (1,099) -> 82 (450) | 391,220 -> 213,388 | 5 (21) |
+| docs.reader | 397 -> 386 | 134,911 -> 70,112 | 169 (1,026) -> 81 (346) | 214,462 -> 149,260 | 6 (25) |
+| games.chess | 235 -> 234 | 116,003 -> 75,662 | 110 (942) -> 64 (291) | 171,092 -> 130,956 | 1 (3) |
+| kids.animals | 259 -> 254 | 205,687 -> 52,969 | 115 (957) -> 44 (355) | 264,443 -> 111,310 | 2 (11) |
+| art.draw | 191 -> 187 | 174,437 -> 55,004 | 55 (700) -> 35 (101) | 217,627 -> 98,185 | 2 (8) |
+| kids.shapes | 147 -> 144 | 124,178 -> 43,738 | 53 (449) -> 24 (155) | 158,642 -> 77,947 | 1 (8) |
+| kids.common | 97 -> 97 | 94,895 -> 31,428 | - -> 17 (60) | 114,941 -> 51,474 | 0 |
+| ui.shell | 101 -> 100 | 86,329 -> 34,081 | - -> 22 (69) | 108,471 -> 56,633 | 2 (8) |
+| games.tictactoe | 99 -> 99 | 64,784 -> 41,696 | 42 (386) -> 25 (169) | 85,726 -> 63,013 | 1 (4) |
+| games.hangman | 95 -> 95 | 43,805 -> 24,822 | - -> 16 (82) | 62,162 -> 43,510 | 1 (4) |
+| games.guess | 67 -> 67 | 35,893 -> 29,646 | - -> 18 (41) | 49,577 -> 43,330 | 0 |
+| ui.help | 56 -> 56 | 32,221 -> 22,156 | 31 (88) -> 15 (42) | 45,258 -> 35,193 | 0 |
+| user.profile | 65 -> 65 | 6,328 -> 5,437 | 11 (30) -> 6 (16) | 20,774 -> 19,883 | 0 |
+| **all worlds** | 4,750 -> 4,670 | 6,041,268 -> 1,865,942 (-69 %) | 1,798 (19,779) -> 920 (6,618) | 7,124,242 -> 2,987,859 | 65 (about 450) |
+
+- **The L7 size target (total `patterns.sop` <= 2 MB) is NOT met**: 2.99 MB. The match text is 1.87 MB after the migration and the rest is examples, emit templates, kinds and ids that macros cannot touch (about 1.1 MB). Shapes cut copies but did not shrink the file much; they added forms. Remaining big files: kids.shop 285 KB, media.music 271 KB, geo.map 221 KB, data.charts 213 KB, kids.time 198 KB.
+- **Headline** (rules mode, the same code at origin/main f85ffb7 before and after L7): operational 95.4% -> 95.4% right / 0.5% wrong (6) / 2.3% not understood, 1240 messages, never lower at any commit; dialogues 96.3% turns / 87.7% dialogues -> 96.4% / 88.0% (408 dialogues; dlg.gms#028 fixed); eval-rules positives restricted 4642 -> 4643, routed 4491 -> 4492, negatives 309/317 -> 309/317, routing 4572 -> 4573, heldout unchanged; long set (154) 58.4% right / 20.8% wrong unchanged. `npm test` 871 pass / 0 fail, `test-world all` 0 FAIL.
