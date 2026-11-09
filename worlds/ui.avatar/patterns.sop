@@ -1246,3 +1246,32 @@
     sample="p=antenna;v=dish"
     priority=12
     example="Change your antenna to a dish."
+
+@shape.ui.avatar.gender core.shape
+    family=set
+    verb="make|turn|transform|change|convert|morph|switch|set|turn_into|change_into|transform_into"
+    obj="o:lex.ui.avatar.self"
+    val="g:lex.ui.avatar.gender"
+    link="to|into|be|as|in|like|to_be"
+    emit="@{_} core.request action=avatar.setCharacter arg.who=person arg.kind={g}"
+    det="the|your|my|ur|this"
+    forms="imp,wish,ind"
+    sample="o=avatar;g=woman"
+    priority=15
+    example="Make the avatar a woman."
+
+@pat.ui.avatar.gender.be core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [become|be|turn_into|change_into|transform_into|switch_to|morph_into|look_like|i_want_to_be|i_wanna_be|i_want_you_to_be|you_should_be|be_like|show_me|i_want_to_see|make_me|make_yourself|give_me|i_want] [a|an|the]? {m:lex.ui.avatar.moods?} {g:lex.ui.avatar.gender} [avatar|face|character|look|version]? [$lang.tail.filler|instead|again]? [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.setCharacter arg.who=person arg.kind={g} arg.mood={m}"
+    kind=request
+    priority=15
+    example="Become a woman."
+    example="I want to be a happy man."
+
+@pat.ui.avatar.gender.make core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|create|build|give|get|turn|show|let_me_see] [me|us|yourself|the_avatar|my_avatar]? [a|an|the|my|your|ur]? {m:lex.ui.avatar.moods?} {g:lex.ui.avatar.gender} [avatar|face|character|version|one]? [$lang.tail.filler|instead]? [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.setCharacter arg.who=person arg.kind={g} arg.mood={m}"
+    kind=request
+    priority=15
+    tabOnly=true
+    example="Make a happy man."

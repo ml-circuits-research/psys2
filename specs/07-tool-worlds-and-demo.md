@@ -35,6 +35,14 @@ Host (`docs/webchat/ui/avatar.mjs`): maps the state to DiceBear options (`<compo
 
 When a world that declares a tab (manifest `tab=`, or one of the built-in tabs: avatar, editor, games) gives a **supported** answer to a sentence and that tab is not the active one, the dialog runs the existing `ui.openTab` action after the message (`interp.runAction`), so the host switches tabs from the `ui.shell` state as usual. Worlds without a tab (`ui.shell`, `core`, `ui.help`, `kids.*`) never trigger it, and neither do clarification (`missing`, `ambiguous`) or `unsupported` answers.
 
+### Avatar: capability map (descriptors instead of refusals)
+
+`ops.mjs` keeps a per-character capability map (`CAPABILITY`): when the active character lacks the part a command names (or lacks that variant of it), the command maps to the closest thing the character has and the answer says what was done; the character is offered only when nothing close exists.
+- **Person**: eyes and mouth follow the expression ("make eyes sleepy" -> tired, "make bigger eyes" -> awe, "make eyes happy" -> smile, "make the mouth sad" -> solemn). Answer: "A person's eyes follow the expression, so I made it wide-eyed." "Make your eyes smaller/bigger" uses the same map (tired / awe). A mood word as an expression ("make your expression sad") maps to the person's expression of that mood.
+- **Robot, emoji**: "expression" and "face" set eyes and mouth together from the mood table.
+- **Kinds of person** (`lex.ui.avatar.gender`, with misspellings such as women, wmoan): man, woman, girl and boy set hair and facial hair presets (man: short neat hair and a short beard; woman: long hair; girl: twin buns; boy: short spiky hair), with an optional mood ("make a happy man"), and switch to the person when needed. Phrasing: the L6 shape `shape.ui.avatar.gender` ("make/transform the avatar a woman", "make it a girl", "make me a boy"), `pat.ui.avatar.gender.be` ("become a woman") and the tab-only `pat.ui.avatar.gender.make` ("make a happy man" while the avatar tab is active, so that the drawing tab keeps "make a man" for `art.draw`).
+- Robot or emoji parts a person lacks (a robot's antenna, chest) keep the offer: "Say yes to become the robot".
+
 ### Avatar: offers and undo
 
 `ui.avatar` never switches character silently. When only another character can do what was asked ("use the cyclops eye" as a person), the answer says so and sets `pending` with `inputMode: 'confirm'`; the next message is offered to `interceptInput`: "yes" switches and repeats the command, "no" stays, anything else cancels the offer and is read normally. Every change of the avatar pushes the previous look on `undo` (20 steps); "undo" / "go back to how you were" pops it.

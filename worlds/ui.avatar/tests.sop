@@ -583,12 +583,12 @@
 
 @t.ui.avatar.n110 core.test
     input="Make your eyes smaller."
-    expect="narrower eyes try tired"
+    expect="sleepy-eyed"
     session=h
 
 @t.ui.avatar.n111 core.test
     input="Make your eyes bigger."
-    expect="wider eyes try awe"
+    expect="wide-eyed"
     session=h
 
 @t.ui.avatar.n112 core.test
@@ -1317,3 +1317,97 @@
     input="is it possible to wear sunglasses on your face"
     expect="glasses"
     session=sh13
+
+@t.ui.avatar.rd01 core.test
+    input="Become a person."
+    expectState="character=person"
+    session=rd
+
+@t.ui.avatar.rd02 core.test
+    input="make bigger eyes"
+    expect="wide-eyed"
+    expectState="person.expression=awe"
+    session=rd
+
+@t.ui.avatar.rd03 core.test
+    input="make eyes sleepy"
+    expect="sleepy-eyed"
+    expectState="person.expression=tired"
+    session=rd
+
+@t.ui.avatar.rd04 core.test
+    input="make eyes happy"
+    expect="smiling"
+    expectState="person.expression=smile"
+    session=rd
+
+@t.ui.avatar.rd05 core.test
+    input="make eyes wide"
+    expect="wide-eyed"
+    expectState="person.expression=awe"
+    session=rd
+
+@t.ui.avatar.rd06 core.test
+    input="make the mouth sad"
+    expect="follows the expression"
+    expectState="person.expression=solemn"
+    session=rd
+
+@t.ui.avatar.rd07 core.test
+    input="transform the avatar in a man"
+    expect="short neat hair"
+    expectState="person.head=short2"
+    expectState="person.facialHair=full"
+    expectState="character=person"
+    session=rd
+
+@t.ui.avatar.rd08 core.test
+    input="make the avatar a women"
+    expect="long hair"
+    expectState="person.head=long"
+    expectState="person.facialHair=none"
+    session=rd
+
+@t.ui.avatar.rd09 core.test
+    input="make it a girl"
+    expect="twin buns"
+    expectState="person.head=buns"
+    session=rd
+
+@t.ui.avatar.rd10 core.test
+    input="make me a boy"
+    expect="spiky"
+    expectState="person.head=short5"
+    session=rd
+
+@t.ui.avatar.rd11 core.test
+    input="make a happy man"
+    expect="short beard"
+    expectState="person.head=short2"
+    expectState="person.expression=smile"
+    session=rd
+
+@t.ui.avatar.rd12 core.test
+    input="make a sad woman"
+    expect="long hair"
+    expectState="person.head=long"
+    expectState="person.expression=solemn"
+    session=rd
+
+@t.ui.avatar.rd13 core.test
+    input="Become a robot."
+    expectState="character=robot"
+    session=rd
+
+@t.ui.avatar.rd14 core.test
+    input="make your expression sad"
+    expect="eyes and mouth"
+    expectState="robot.eyes=sleepy"
+    session=rd
+
+@t.ui.avatar.rd15 core.test
+    input="make the avatar a women"
+    expect="Now I am a person"
+    expectState="character=person"
+    expectState="person.head=long"
+    session=rd

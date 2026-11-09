@@ -1627,3 +1627,39 @@
     alt=hairdo
     alt=haircut
     alt=hairstyle
+
+@lex.ui.avatar.gender core.lexicon
+    class=noun
+    doc="Kinds of person (with common misspellings); ops.mjs maps each to man, woman, girl or boy and gives the person hair and facial-hair presets (the capability map: a person has no gender setting)."
+    word=man
+    word=men
+    word=guy
+    word=gentleman
+    word=male
+    word=dude
+    word=woman
+    word=women
+    word=womans
+    word=lady
+    word=female
+    word=wmoan
+    word=girl
+    word=gal
+    word=boy
+    word=lad
+
+@lex.ui.avatar.self core.lexicon
+    class=noun
+    doc="Words that mean the avatar itself as the object of a command (make the avatar a woman, make it a man, make me a boy)."
+    word=avatar
+    word=face
+    word=character
+    word=yourself
+    word=you
+    word=it
+    word=me
+    word=myself
+    word=urself
+    word=u
+    word=this
+    word=picture
