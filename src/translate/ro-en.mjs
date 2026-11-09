@@ -92,10 +92,20 @@ function prepareTokens(toksIn) {
   const toks = splitClitics(toksIn);
   const keys = toks.map((t) => (t.kind === 'word' ? t.key : null));
   const out = [];
+  const isNoteLetter = (t) => t && t.kind === 'word' && /^[A-G]$/.test(t.raw);
   for (let i = 0; i < toks.length; i++) {
     const t = toks[i];
+    // a run of note letters ("C D E F G", "A4"): one fixed piece, never read as words ("E" is not "is")
+    if (isNoteLetter(t) && (isNoteLetter(toks[i + 1]) || (toks[i + 1]?.kind === 'num' && toks[i + 1].start === t.end))) {
+      let j = i, txt = '';
+      while (j < toks.length && (isNoteLetter(toks[j]) || (toks[j].kind === 'num' && toks[j - 1] && toks[j].start === toks[j - 1].end && isNoteLetter(toks[j - 1])))) { txt += (isNoteLetter(toks[j]) && txt ? ' ' : '') + toks[j].raw; j++; }
+      out.push({ kind: 'fixed', raw: txt, start: t.start, end: toks[j - 1].end, pieces: [{ en: txt, src: [t.start, toks[j - 1].end] }] });
+      i = j - 1;
+      continue;
+    }
     if (t.kind === 'word') {
       const r = M.parseNumberAt(keys, i);
+      if (r && (t.key === 'una' || t.key === 'unul') && keys[i + 1] && M.analyze(keys[i + 1]).some((a) => a.pos === 'adj')) { out.push(t); continue; }   // "una roșie" = a red one, not 1 tomato
       if (r) {
         const last = toks[i + r.len - 1];
         out.push({ kind: 'num', raw: String(r.value), value: String(r.value), key: String(r.value), start: t.start, end: last.end, fromWords: true });
@@ -128,7 +138,7 @@ function matchFrame(f, toks, p, info) {
     if (k > 0 && el.slot !== 'rest' && toks[pos] && toks[pos].kind === 'punct' && toks[pos].raw === ',') pos++;
     const t = toks[pos];
     if (el.alts) {
-      if (!t || (t.kind !== 'word' && t.kind !== 'num') || t.synth || !el.alts.includes(t.key)) return -1;
+      if (!t || (t.kind !== 'word' && t.kind !== 'num' && !(t.kind === 'punct' && el.alts.includes(t.raw))) || t.synth || !el.alts.includes(t.key)) return -1;
       if (k === 0) alt0 = t.key;
       return rec(k + 1, pos + 1);
     }
@@ -279,7 +289,7 @@ function makeFixed(f, m, first, last, info) {
     } else if (name === 'np') { flush(); pieces.push(...sl.pieces); }
     else if (name === 'rest') {
       flush();
-      if (mod === 'raw') pieces.push(...sl.toks.map((t) => pc(t.raw, t)));
+      if (mod === 'raw') pieces.push(...sl.toks.map((t) => pc(t.raw, t, t.kind === 'punct' ? { punct: true } : {})));
       else if (mod === 'inf' || mod === 'binf') {
         // "să ud plantele" -> "to water the plants": translate as "vreau să ..." and drop the main clause
         const s0 = sl.toks[0];

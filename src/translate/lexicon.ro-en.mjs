@@ -116,6 +116,11 @@ tricou,tricouri|T-shirt|n
 rochie,rochii|dress|f
 cheie,chei|key|f
 ușă,uși|door|f
+acoperiș,acoperișuri|roof|n
+nord,nord|north|n mass
+sud,sud|south|n mass
+est,est|east|n mass
+vest,vest|west|n mass
 fereastră,ferestre|window|f
 casă,case|house|f
 cameră,camere|room|f
@@ -153,7 +158,7 @@ elev,elevi|student|m anim
 lecție,lecții|lesson|f
 temă,teme|homework|f mass
 test,teste|test|n
-notă,note|grade|f
+notă,note|note|f
 răspuns,răspunsuri|answer|n
 întrebare,întrebări|question|f
 problemă,probleme|problem|f
@@ -640,7 +645,7 @@ spune|say/said/said|spun spui spune spunem spuneți spun|spus|d imp
 vrea|want|vreau vrei vrea vrem vreți vor|vrut|t comp=to
 putea|can|pot poți poate putem puteți pot|putut|i mod=can comp=modal
 trebui|must|trebuie trebuie trebuie trebuie trebuie trebuie|trebuit|i mod=must comp=modal
-merge|go/went/gone|merg mergi merge mergem mergeți merg|mers|i motion imp sj=meargă
+merge|go/went/gone|merg mergi merge mergem mergeți merg|mers|i motion imp imp=mergi,mergeți sj=meargă
 veni|come/came/come|vin vii vine venim veniți vin|venit|i motion imp vs imp=vino,veniți
 alerga|run/ran/run|alerg alergi aleargă alergăm alergați aleargă|alergat|i
 zbura|fly/flew/flown|zbor zbori zboară zburăm zburați zboară|zburat|i
@@ -740,6 +745,9 @@ schimba|change|a:schimb|schimbat|t imp
 anula|undo|az:anul|anulat|t imp
 renunța|give up/gave up/given up|a:renunț|renunțat|i imp
 încetini|slow down/slowed down/slowed down|is:încetin|încetinit|t imp
+micșora|shrink/shrank/shrunk|az:micșor|micșorat|t imp
+reseta|reset/reset/reset|az:reset|resetat|t imp
+întoarce|turn around/turned around/turned around|întorc întorci întoarce întoarcem întoarceți întorc|întors|t imp
 seta|set/set/set|az:set|setat|t imp
 trece|pass|trec treci trece trecem treceți trec|trecut|i imp
 apărea|appear|apar apari apare apărem apăreți apar|apărut|i
@@ -909,7 +917,7 @@ posibil,posibilă,posibili,posibile|possible
 comun,comună,comuni,comune|common
 spart,spartă,sparți,sparte|broken
 vecin,vecină,vecini,vecine|neighboring
-circular,circulară,circulari,circulare|circular
+circular,circulară,circulari,circulare|pie
 prim,primă,primi,prime|first
 vertical,verticală,verticali,verticale|vertical
 orizontal,orizontală,orizontali,orizontale|horizontal
@@ -1037,7 +1045,8 @@ orice,oricare|any|det quant
 vreun,vreo,vreunii,vreunele|any|det quant
 toți,toate,toată|all|det quant
 mulți,multe,multă|many|det quant
-puțini,puține,puțină|few|det quant
+puțini,puține|few|det quant
+puțin,puțină|some|det quant
 câțiva,câteva|some|det quant
 ambii,ambele|both|det quant
 alt,altă,alți,alte|other|det

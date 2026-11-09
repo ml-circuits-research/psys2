@@ -88,6 +88,7 @@ function presentForms(v) {
   if (m) {
     const s = m[2];
     if (m[1] === 'a') return [s, s + 'i', s + 'ă', s + 'ăm', s + 'ați', s + 'ă'];
+    if (m[1] === 'az' && /i$/.test(s)) return [s + 'ez', s + 'ezi', s + 'ază', s + 'em', s + 'ați', s + 'ază'];   // evidenția: evidențiez, evidențiază
     if (m[1] === 'az') return [s + 'ez', s + 'ezi', s + 'ează', s + 'ăm', s + 'ați', s + 'ează'];
     return [s + 'esc', s + 'ești', s + 'ește', s + 'im', s + 'iți', s + 'esc'];
   }
