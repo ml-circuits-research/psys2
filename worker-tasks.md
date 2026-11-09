@@ -100,12 +100,59 @@ The same session shows wrong worlds and missed corrections. Treat each item as a
 - the two real dialogues turn by turn;
 - the operational and dialogue sets (wrong must not rise).
 
+### DIAG — a Diagram world and tab, imported from diagram-vss-demo (user, 13:40 local)
+
+The user wants a world and a tab for drawing diagrams, built from everything reusable in
+https://github.com/ml-circuits-research/diagram-vss-demo: its data, texts, rules and examples. **Do not take its fine-tuned BERT or its VSS models;** our dispatcher reads this world like any other.
+
+The reviewer copied what is reusable into **`imports/diagram-vss-demo/`** (staging, not loaded; commit 0514456). Read its `README.md` and `PROVENANCE.md` first. It holds:
+- the source engine, unchanged (`engine/logic.js` + layout, templates, help answers, clarify, spell; runs in Node with `require('./engine/logic.js').createSystem()`);
+- the SVG renderer for reference (`engine/ui.js`);
+- 49,746 labelled training messages and 4,374 labelled test messages with exact spans and args;
+- the bench sets, the example sessions, the labelling specs and the scorers;
+- drafts in our format: `world.sop`, `legend.sop`, `lexicon.sop` (27 lexicons from the 46 legend questions), `operations.sop` (32 actions, 18 question kinds) and `legend.json`.
+
+**Steps:**
+1. **World `worlds/diagram.sketch/`.**
+   - Start from `world-draft/`.
+   - **`ops.mjs` wraps the source engine** instead of rewriting it. Each operation builds the SOP node `{type, args}`, runs `engine.execute`, and turns its reply, `Clarify` or `SOPError` into our reply, clarification or refusal.
+   - The world state is the engine's `DiagramWorld` state.
+   - Convert the engine to an ES module only as far as our bundler needs: browser-safe, no `require`.
+   - Keep the file headers and provenance.
+   - Map `$new` and `mention(...)` to our discourse referents.
+2. **Patterns.**
+   - Write `core.shape` declarations and patterns from the legend cue words and from the source rules reader (`makeFormalizer` in `logic.js`, its cue keys and normalizer).
+   - Use the most frequent short spans per act in `data/train` as `example=` / canonical sentences.
+   - Use L-library macros, no inline common phrasing.
+3. **Tests.**
+   - `tests.sop` from `data/bench/*.json` (gold args → expected request args and state), at least 5 per action and per ask.
+   - The example sessions as dialogue tests.
+4. **Diagram tab.**
+   - Port the SVG drawing of shapes, edges, labels, groups and zones from `engine/ui.js` into `docs/webchat/ui/tabs/diagram.mjs`.
+   - Pan or zoom when the diagram grows past one cell; export SVG/PNG like the drawing tab.
+   - Tab follow, help examples (canonical only), SURPRISE pool entries.
+5. **Data and the dispatcher.**
+   - Convert `data/train` to our training format as `README.md` "Conversion of the data" says: one message = one example, the wire spans give the segments, the world is `diagram.sketch`, each wire gives a canonical request.
+   - Retrain the dispatcher with this world included (all data, by the data principle).
+   - Keep `data/test` and `data/bench` as this world's first measurement before training on them.
+6. **Routing.**
+   - "draw a rectangle called Api" goes to diagram.sketch on the Diagram tab, and to art.draw on the Drawing tab, unless the message has clear diagram signals: named shapes, arrows between names, flowchart / org chart / layout words.
+   - Add those cases to the routing tests.
+7. **Measure and report in RESULTS.md:**
+   - the source test set (`data/test`) scored with the `reference/bench-canon.js` logic: right act, right args, extras, wrong;
+   - the bench sets;
+   - the operational and dialogue sets before / after (wrong must not rise in the other worlds);
+   - PERF (load the diagram engine lazily, when the tab opens or the world is first chosen; the page must not get slower).
+
+**Licence:** the source is AGPL-3.0 and we are GPL-3.0. Keep the copied files' provenance headers; the user decides on relicensing (PROVENANCE.md).
+
 **Order from now on:**
 1. HANG + STOP
 2. RD10 together with RD1b and RD2 (they share the mechanism)
-3. RD5, RD9
-4. PERF round 3
-5. SURPRISE, AV, ASTRA
+3. DIAG
+4. RD5, RD9
+5. PERF round 3
+6. SURPRISE, AV, ASTRA
 
 ### Final review of "READY FOR REVIEW" (744c3d5) — reviewer, 2026-11-09 09:20 UTC.
 
