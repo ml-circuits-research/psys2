@@ -136,6 +136,102 @@ What this means for your tasks:
 - **Language detection (new task L-RO):** Romanian typed without diacritics now stays English ("cat face 3 plus 4"). Improve the evidence, for example Romanian function words and word endings, so diacritic-less Romanian is still detected, without breaking short English input. Test both directions.
 - From now on, new phrasing and shared vocabulary go into `lang.common` (L8 absorbs `src/dialog/lang.mjs`).
 
+### SURPRISE — a "try something" button (user, 02:33)
+
+A discreet button next to the input (a die icon, with a tooltip "Try an example"). Each click:
+- picks a random example request and puts it into the chat as if typed, marked as an example in the phrase log (not human phrasing);
+- shows the answer; when the request belongs to a world with a tab, that tab opens (tab follow).
+
+Details:
+- Examples come from the canonical examples (RD6) of **all worlds except the games** (chess, tic-tac-toe, hangman, guess): game moves depend on game state and make no sense out of the blue. Include tab-less worlds (kids.*, help, profile questions that need no state).
+- Prefer examples that work from a fresh state. Validate the pool at build time: each example must give a supported answer in a fresh session; drop the ones that don't.
+- No immediate repeats; rotate across worlds so consecutive clicks show variety.
+- The voice equivalents "surprise me with an example" / "give me an example command" do the same (ui.help).
+- Test: 50 clicks in headless Chrome → 0 console errors, all answers supported, the tab switches when expected.
+
+### ASTRA — persistent discussions and state management as a reusable core library (user, 02:33; from the attached architecture note)
+
+Goal: one core library manages discussions, world instances, the information state, expectations, focus, history and plans, so that no world re-implements dialogue or state handling ad hoc. Today these live in pieces:
+- `src/dialog/discourse.mjs` (frames, pending expectations, repairs, undo snapshots);
+- world `interceptInput` modal modes, which capture input globally;
+- one state object per world per session, with no instances;
+- `ctx.referents` / `summary` hooks;
+- dispatcher candidates in `dispatch-validate.mjs`;
+- the avatar's own yes/no offers.
+
+Consolidate them following established patterns. Keep SOP Lang as the state and event language: facts, events and plans are wires.
+
+Write `specs/13-discussions.md` and ADR-008 first: concepts, data model and migration, mapped to the existing code. Then implement in stages. **Each stage keeps `npm test`, the operational set (right must not drop, wrong must not rise), the dialogue set and the PERF targets.** Each stage adds its own scenario tests to `training/eval/dialogues.jsonl` (new family `discussion`).
+
+**A1 — identities: Chat, Discussion, WorldInstance.**
+- A `Discussion` has: id, title, goal, status (active / suspended / completed / abandoned), linked world instances, context, open questions, plan, revision.
+- A `WorldInstance` is the state of one concrete activity (a chess game, a drawing, a document) with its own id and version. One world can have many instances, and two discussions use separate instances unless explicitly linked.
+- Every interpreted act keeps its message id and discussion id.
+- Session state moves from "one state per world" to "instances per discussion", with a compatibility layer so worlds keep working unchanged.
+- The user profile and global preferences live in a separate scope (user scope), not in a discussion.
+
+Acceptance: two independent chess games and one drawing can be suspended and resumed correctly.
+
+**A2 — Information State + dialogue moves (TRINDI style).**
+- Every turn becomes typed moves (`inform`, `ask`, `answer`, `request`, `correct`, `cancel`, `confirm`, `resume`, `switch`), applied to the discussion's information state by one update function.
+- A proposed interpretation becomes a fact or a command only after validation.
+- Move recognisers come from `lang.common` and `discourse.mjs`; worlds do not parse yes/no/cancel themselves.
+
+**A3 — task frames + expectation agenda (RavenClaw style).**
+- Generalise pending expectations and the world modal modes (dictation, games, profile interview) into **frames owned by a world instance**: typed parameters, completion conditions, the current question and its admissible answers.
+- An interruption suspends the frame; resuming reactivates it. The agenda decides which frame an answer belongs to (most recent, then most compatible).
+- A mode belongs to the active instance and never captures every message globally; switch/help/cancel commands always pass.
+- Migrate `interceptInput` users (docs.editor dictation, games, user.profile) to frames.
+
+**A4 — focus stack + entity registry.**
+- Each discussion has stable ids, aliases and recent references, generalising `ctx.referents`.
+- "this", "the other one", "bigger" resolve in the active discussion. Ambiguity keeps the candidates and asks one short question.
+- Switching discussion restores that discussion's focus.
+
+**A5 — declared statecharts.** Worlds declare states and transitions in their manifest or SOP (start, user turn, finished; dictating; exercise, hint, check), including suspend/resume. Allowed moves per state come from the chart, not from ad-hoc flags in ops.
+
+**A6 — event sourcing + snapshots; command/undo.**
+- An append-only event log per discussion, with indexed current state.
+- Snapshots allow resuming without re-interpreting the chat.
+- Reversible commands declare their inverse; external effects (export, speak, download) keep their execution id and are never repeated on restore.
+- Persist in the browser (IndexedDB or localStorage with versioned schema migration).
+
+Acceptance: reopening the demo restores discussions and suspended activities without running old effects. Undo works the same in every world through the core, not through per-world hooks.
+
+**A7 — provenance + truth maintenance.**
+- Facts keep source, validity and justifications.
+- Correcting a premise invalidates dependent conclusions and marks affected steps. Example: in kids.arith, changing a quantity recomputes the answer.
+- A correction is distinguished from a real change over time. Example: in user.profile, "actually I live in Iași" is a correction; "I moved to Iași" is a change.
+
+**A8 — HTN methods for multi-step and cross-world tasks.**
+- Reusable methods decompose a goal into steps. Operations declare preconditions and expected effects.
+- The plan keeps dependencies, results and blockers; observations drive continuation or replanning.
+- Typed references between worlds, e.g. `chartId → docs.insertChart(documentId, chartId)`.
+- Changing a shared resource makes dependent plans re-check their preconditions.
+- A simple command is a one-step plan.
+- Start with three real tasks: prepare data → make a chart → insert it into a document; a kids.tasks activity plan; draw-then-describe.
+
+**A9 — one blackboard of hypotheses.**
+- The parser, dispatcher candidates, reference resolution, discourse alternatives and the planner write to one typed state.
+- Alternative interpretations stay hypotheses until there is enough evidence, and model scores never become facts automatically.
+- Context reduces ambiguity before asking the user.
+- This replaces the separate candidate lists in `dispatch-validate.mjs` and `discourse.mjs`.
+
+**A10 — world contract + migration.**
+- Document the reusable world contract: state schema and version, operations, typed parameters, preconditions, effects, completion questions, applicable planning methods, and a short user-facing state projection.
+- Migrate worlds one per commit, with the L-library rules: nothing dialogue-related stays in a world.
+- Each world's `coverage.md` states which patterns it reuses and which domain rules it adds.
+- Measure the removed ad-hoc code (lines, interceptors, per-world yes/no and undo).
+
+**A11 — demo UI.**
+- A **Discussions** panel lists every discussion with its title, worlds, status and last progress, with filtering and one-click resume.
+- A **discussion card** shows the goal, relevant objects, established facts, the open question and the next step; technical details are expandable.
+- Common commands: "new discussion", "continue the drawing", "where were we?", "what is missing?", "correct …", "undo the last step".
+- Routing: a message continues the active discussion by default, and a clear reference selects another one. Detecting another world does not create a new discussion by itself. A multi-intent message can produce acts for several discussions.
+- Demo scenario as an automated test: start a drawing, open a chess game, then "continue the drawing and make the circle bigger" (the drawing's focus is restored, the game untouched), then "put the drawing into a document" (a docs.editor instance joins the discussion plus a small cross-world plan).
+
+Order: A1, A2, A3, A4, A6 and A11 first; the verification is two games plus a drawing suspended and resumed correctly, also after reloading. Then A7, A8, A10. A5 and A9 come when the observed ambiguity justifies them. **No probabilistic machinery unless the dialogue set shows ambiguities that need it.**
+
 ### RD — a real user dialogue (user, 02:14) replayed by the reviewer at f48c450: what still breaks, and the general fixes
 
 The user's 49-message session (avatar, map, chess/tic-tac-toe, chart, drawing; English with typos plus Romanian) is in `training/eval/real-dialogue-2026-11-09.txt`. Replayed in the CLI, about 20 of the 49 turns are wrong or not understood. Add it to `dialogues.jsonl` with the right tabs, expected states and answers, and treat each item below as a **general** fix with tests across worlds, not a patch for one sentence.
