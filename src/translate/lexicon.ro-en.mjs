@@ -539,12 +539,12 @@ plan,planuri|plan|n
 structură,structuri|structure|f
 mască,măști|mask|f
 mustață,mustăți|mustache|f
-strălucire,strălucirii|brightness|f
+strălucire,strălucirii|glow|f
 cadran,cadrane|dial|n
 ventilație,ventilații|vent|f
 rachetă,rachete|rocket|f
 fundal,fundaluri|background|n
-sirenă,sirene|mermaid|f anim
+sirenă,sirene|siren|f
 covor,covoare|carpet|n
 contur,contururi|outline|n
 text,texte|text|n
@@ -607,7 +607,7 @@ ordine,ordini|order|f
 
 const VERB_ROWS = `
 avea|have/had/had|am ai are avem aveți au|avut|t sj=aibă
-fi|be/was/been|sunt ești este suntem sunteți sunt|fost|i sj=fie alt3=e
+fi|be/was/been|sunt ești este suntem sunteți sunt|fost|i sj=fie alt3=e imp imp=fii,fiți
 da|give/gave/given|dau dai dă dăm dați dau|dat|d imp=dă,dați sj=dea
 primi|receive/received|is:prim|primit|t
 lua|take/took/taken|iau iei ia luăm luați iau|luat|t imp=ia,luați
@@ -682,7 +682,9 @@ arăta|show|arăt arăți arată arătăm arătați arată|arătat|d imp
 compara|compare|a:compar|comparat|t imp
 alege|choose/chose/chosen|aleg alegi alege alegem alegeți aleg|ales|t imp
 desena|draw/drew/drawn|az:desen|desenat|t imp
-picta|paint|az:pict|pictat|t
+picta|paint|az:pict|pictat|t imp
+colora|color|az:color|colorat|t imp
+vopsi|paint|is:vops|vopsit|t imp
 tăia|cut/cut/cut|tai tai taie tăiem tăiați taie|tăiat|t
 coace|bake|coc coci coace coacem coaceți coc|copt|t
 găti|cook|is:găt|gătit|t
@@ -736,12 +738,14 @@ obține|get/got/got|obțin obții obține obținem obțineți obțin|obținut|t 
 urma|follow|az:urm|urmat|t
 schimba|change|a:schimb|schimbat|t imp
 anula|undo|az:anul|anulat|t imp
+renunța|give up/gave up/given up|a:renunț|renunțat|i imp
+încetini|slow down/slowed down/slowed down|is:încetin|încetinit|t imp
 seta|set/set/set|az:set|setat|t imp
 trece|pass|trec treci trece trecem treceți trec|trecut|i imp
 apărea|appear|apar apari apare apărem apăreți apar|apărut|i
 exista|exist|a:exist|existat|i
 rezulta|result|az:rezult|rezultat|i
-marca|mark|a:marc|marcat|t imp
+marca|mark|az:march|marcat|t imp
 muta|move|a:mut|mutat|t imp
 amesteca|mix|a:amestec|amestecat|t imp
 repeta|repeat|az:repet|repetat|t imp
@@ -769,7 +773,7 @@ ascunde|hide/hid/hidden|ascund ascunzi ascunde ascundem ascundeți ascund|ascuns
 ghici|guess|is:ghic|ghicit|t
 verifica|check|a:verific|verificat|t imp
 porni|start|is:porn|pornit|t imp
-deveni|become|devin devii devine devenim deveniți devin|devenit|i
+deveni|become/became/become|devin devii devine devenim deveniți devin|devenit|i imp imp=devino,deveniți
 depăși|exceed|is:depăș|depășit|t
 ocupa|occupy|a:ocup|ocupat|t
 reprezenta|represent|az:reprezent|reprezentat|t
@@ -953,6 +957,8 @@ când|when|conj sub
 că|that|conj sub
 deoarece,fiindcă|because|conj sub
 deci|so|conj
+hm,hmm,hmmm,mm,mmm,mmmm,ăă,ăăă,ee,eee|um|interj lead
+chiar|really|adv
 decât|than|conj than
 deși|although|conj sub
 atunci|then|adv lead

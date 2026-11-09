@@ -28,8 +28,8 @@ const PRON = {
 const CLITIC = {
   ma: { acc: 'me', subj: 'I', person: 1, number: 'sg' }, m: { acc: 'me', subj: 'I', person: 1, number: 'sg' },
   te: { acc: 'you', subj: 'you', person: 2, number: 'sg' }, t: { acc: 'you', subj: 'you', person: 2, number: 'sg' },
-  il: { acc: 'him', person: 3, number: 'sg' }, l: { acc: 'him', person: 3, number: 'sg' },
-  o: { acc: 'her', person: 3, number: 'sg' },
+  il: { acc: 'it', person: 3, number: 'sg' }, l: { acc: 'it', person: 3, number: 'sg' },
+  o: { acc: 'it', person: 3, number: 'sg' },
   ne: { acc: 'us', dat: 'us', subj: 'we', person: 1, number: 'pl' },
   va: { acc: 'you', dat: 'you', subj: 'you', person: 2, number: 'pl' },
   le: { acc: 'them', dat: 'them', subj: 'they', person: 3, number: 'pl' },
@@ -158,8 +158,18 @@ function matchFrame(f, toks, p, info) {
     if (el.slot === 'fw') {
       if (!t || t.kind !== 'word' || t.synth) return -1;
       const a = analysesOf(t).find((x) => x.pos === 'func' && /^(day|month|season)$/.test(x.fpos));
-      if (!a) return -1;
-      slots[el.tag] = { tok: t, en: a.entry.en };
+      const sn = a ? null : analysesOf(t).find((x) => x.pos === 'noun' && /^(winter|spring|summer|autumn)$/.test(x.entry.en));   // seasons are nouns
+      if (!a && !sn) return -1;
+      slots[el.tag] = { tok: t, en: (a || sn).entry.en };
+      return rec(k + 1, pos + 1);
+    }
+    if (el.slot === 'col') {   // a colour word, with or without its article: roșu, roșul, galbenul, verdele
+      if (!t || t.kind !== 'word' || t.synth) return -1;
+      const base = [t.key, t.key.replace(/(ul|le|a)$/, ''), t.key.replace(/ul$/, 'u')];
+      let en = null;
+      for (const b of base) { const a = M.analyze(b).find((x) => x.pos === 'adj' && x.entry.group === 'colour') || M.analyze(b).find((x) => x.pos === 'adj' && COLOURS.has(x.entry.en)); if (a) { en = a.entry.en; break; } }
+      if (!en) return -1;
+      slots[el.tag] = { tok: t, en };
       return rec(k + 1, pos + 1);
     }
     if (el.slot === 'v' || el.slot === 'adj') {
@@ -265,26 +275,28 @@ function makeFixed(f, m, first, last, info) {
       pieces.push(pc(txt, sl.tok));
     } else if (name === 'name') {
       flush();
-      pieces.push(pc(sl.tok.raw, sl.tok));
+      pieces.push(pc(mod === 'cap' ? sl.tok.raw[0].toUpperCase() + sl.tok.raw.slice(1) : sl.tok.raw, sl.tok));
     } else if (name === 'np') { flush(); pieces.push(...sl.pieces); }
     else if (name === 'rest') {
       flush();
       if (mod === 'raw') pieces.push(...sl.toks.map((t) => pc(t.raw, t)));
-      else if (mod === 'inf') {
+      else if (mod === 'inf' || mod === 'binf') {
         // "să ud plantele" -> "to water the plants": translate as "vreau să ..." and drop the main clause
         const s0 = sl.toks[0];
         const fake = { kind: 'word', raw: 'vreau', key: 'vreau', start: s0.start, end: s0.start, isCap: false };
         const out = processTokens([fake, ...sl.toks], { ...info, frag: true, q: false, excl: false });
         const wi = out.findIndex((x) => /\bwant\b/.test(x.en));
-        pieces.push(...(wi >= 0 ? out.slice(wi + 1) : out));
+        const after = wi >= 0 ? out.slice(wi + 1) : out;
+        if (mod === 'binf' && after.length && /^to$/i.test(after[0].en)) after.shift();   // "can you {delete the house}": no "to"
+        pieces.push(...after);
       }
       else pieces.push(...processTokens(sl.toks, { ...info, frag: true, q: false, excl: false }));
-    } else if (name === 'w') { flush(); pieces.push(pc(sl.tok.raw, sl.tok)); }
-    else if (name === 'v' || name === 'adj' || name === 'fw') { flush(); pieces.push(pc(sl.en, sl.tok)); }
+    } else if (name === 'w') { flush(); pieces.push(pc(mod === 'cap' ? sl.tok.raw[0].toUpperCase() + sl.tok.raw.slice(1) : sl.tok.raw, sl.tok)); }
+    else if (name === 'v' || name === 'adj' || name === 'fw' || name === 'col') { flush(); pieces.push(pc(sl.en, sl.tok)); }
   }
   flush();
   if (/\bas (many|much)\b/.test(out)) info.useAs = true;
-  return { kind: 'fixed', raw: '', start: first.start, end: last.end, pieces };
+  return { kind: 'fixed', raw: '', start: first.start, end: last.end, pieces, verbal: !!f.verbal };
 }
 
 // ------------------------------------------------------------------ noun phrases
@@ -303,6 +315,16 @@ function detEn(entry, key) {
     case 'that/those': return /^(acei|acele)$/.test(key) ? 'those' : 'that';
     default: return entry.en;
   }
+}
+
+/** English word for a Romanian word used as a modifier (noun, adjective or operator word), else the word itself. */
+function wordEn(tok) {
+  const n = nounsOf(tok)[0];
+  if (n) return n.entry.en;
+  const a = adjOf(tok);
+  if (a) return a.entry.en;
+  const f = funcOf(tok);
+  return f ? f.entry.en : tok.raw;
 }
 
 function dativeName(raw) {
@@ -325,7 +347,7 @@ function looksFeminineDative(tok) {
  */
 function parseNP(toks, i, info, prev) {
   let j = i;
-  const np = { t: 'np', det: null, num: null, quant: null, adjs: [], head: null, number: null, def: false, poss: null, possessor: null, dat: false, forceDef: false };
+  const np = { t: 'np', det: null, num: null, quant: null, adjs: [], pre: [], head: null, number: null, def: false, poss: null, possessor: null, dat: false, forceDef: false };
   const spanOf = [toks[i].start, toks[i].end];
   const grow = (tok) => { spanOf[0] = Math.min(spanOf[0], tok.start); spanOf[1] = Math.max(spanOf[1], tok.end); };
   let sawPrefix = false;
@@ -392,7 +414,10 @@ function parseNP(toks, i, info, prev) {
 
   // head
   const t = toks[j];
-  if (t && isWord(t)) {
+  if (t && isWord(t) && t.raw.length === 1 && np.det && /^(a|an)$/.test(np.det.en) && !np.num && /^\p{L}$/u.test(t.raw)) {   // "există un E": a letter
+    np.head = { kind: 'name', tok: t, text: t.raw.toUpperCase() };
+    j++; grow(t);
+  } else if (t && isWord(t)) {
     const an = analysesOf(t);
     let cands = an.filter((a) => a.pos === 'noun');
     if (cands.length) {
@@ -408,6 +433,17 @@ function parseNP(toks, i, info, prev) {
     if (cands.length && dayLike && !np.num && !np.quant) cands = [];
     if (cands.length && isAdjToo && (prevBe || prevAdv) && !np.num && !np.det) cands = [];
     if (cands.length && !sawPrefix && func && func.fpos === 'month') cands = [];
+    if (cands.length > 1 && cands.every((c) => c.entry === cands[0].entry) && new Set(cands.map((c) => c.number)).size > 1 && !np.num) {
+      // a noun with one form for singular and plural ("ochi"): the next adjective's number decides, else "un" = singular, else plural
+      const nxA = toks[j + 1] && toks[j + 1].kind === 'word' ? analysesOf(toks[j + 1]).filter((a) => a.pos === 'adj') : [];
+      let want = null;
+      if (!nxA.length && toks[j + 1] && funcOf(toks[j + 1], 'poss')) want = /^(tai|tale|mei|mele|sai|sale|nostri|noastre|vostri|voastre)$/.test(toks[j + 1].key) ? 'pl' : 'sg';
+      else if (nxA.length && new Set(nxA.map((a) => a.number)).size === 1) want = nxA[0].number;
+      else if (np.det && /^(a|an|this|that|each)$/.test(np.det.en)) want = 'sg';
+      else if (!np.det && !np.quant) want = 'pl';
+      const pick = want && cands.find((c) => c.number === want);
+      if (pick) cands = [pick, ...cands.filter((c) => c !== pick)];
+    }
     if (cands.length && cands[0]) {
       const c = cands[0];
       np.head = { kind: 'noun', entry: c.entry, tok: t, number: c.number, def: c.def, gen: c.gen };
@@ -415,6 +451,9 @@ function parseNP(toks, i, info, prev) {
       j++; grow(t);
     } else if (M.isKnownName(t.key) && t.isCap && !t.synth) {
       np.head = { kind: 'name', tok: t, text: t.raw };
+      j++; grow(t);
+    } else if (M.placeOf(t.key) && !t.synth && !cands.length) {
+      np.head = { kind: 'name', tok: t, text: M.placeOf(t.key).en };
       j++; grow(t);
     } else if (looksFeminineDative(t) && !sawPrefix) {
       np.head = { kind: 'name', tok: t, text: dativeName(t.raw) };
@@ -454,6 +493,11 @@ function parseNP(toks, i, info, prev) {
           continue;
         }
       }
+      // "ochi tip vizor" = visor eyes; "ochi în formă de plus" = plus shaped eyes
+      if (np.head.kind === 'noun' && x.key === 'tip' && nx && isWord(nx)) { np.pre.push({ en: wordEn(nx), tok: x }); j += 2; grow(nx); continue; }
+      if (np.head.kind === 'noun' && x.key === 'in' && toks[j + 1]?.key === 'forma' && toks[j + 2]?.key === 'de' && toks[j + 3] && isWord(toks[j + 3])) {
+        np.pre.push({ en: `${wordEn(toks[j + 3])} shaped`, tok: x }); j += 4; grow(toks[j - 1]); continue;
+      }
       const pf = funcOf(x, 'poss');
       if (pf && np.head.kind === 'noun') { np.poss = { en: pf.entry.en, tok: x }; j++; grow(x); continue; }
       if (x.key === 'lui' && np.head.kind === 'noun' && np.head.def && !info.dativeContext && startsNP(toks, j + 1) && toks[j + 1].kind === 'word') {
@@ -477,6 +521,11 @@ function parseNP(toks, i, info, prev) {
         const bareOf = hn && /^(spring|summer|autumn|winter)$/.test(hn.en);
         if (hn && (bareOf || (!hn.flags.has('anim') && !hn.flags.has('time') && !hn.flags.has('kin')))) { r.np.dat = false; r.np.ofTok = r.np.head.tok; r.np.noArtForced = bareOf; np.ofNP = r.np; j = r.next; grow(toks[j - 1]); continue; }
         if (r && r.np.head && r.np.head.kind === 'noun') { r.np.dat = false; np.possessor = r.np; j = r.next; grow(toks[j - 1]); continue; }
+      }
+      const place = M.placeOf(x.key);
+      if (place && place.gen && np.head.kind === 'noun') {   // "capitala Japoniei" -> "the capital of Japan"
+        np.ofNP = { t: 'np', det: null, num: null, quant: null, adjs: [], head: { kind: 'name', tok: x, text: place.en }, number: 'sg', def: false, poss: null, possessor: null, dat: false, forceDef: false, ofTok: x };
+        j++; grow(x); continue;
       }
       if (x.isCap && np.head.kind === 'noun' && np.head.def && looksFeminineDative(x)) {
         np.possessor = { t: 'np', head: { kind: 'name', tok: x, text: dativeName(x.raw) }, adjs: [], number: 'sg' }; j++; grow(x); continue;
@@ -564,6 +613,7 @@ function renderNP(np, o = {}) {
     if (a.tok0) pcA.src = [Math.min(a.tok0.start, a.tok.start), Math.max(a.tok0.end, a.tok.end)];
     out.push(pcA);
   }
+  for (const m of np.pre || []) out.push(pc(m.en, m.tok));
   if (head) {
     if (isNoun) {
       const e = head.entry;
@@ -573,6 +623,7 @@ function renderNP(np, o = {}) {
     } else if (head.kind === 'text') out.push(pc(head.text, head.tok));
     else out.push(pc(head.text, head.tok, { name: head.kind === 'name' }));
   }
+  if (np.after) out.push(...np.after.map((a) => pc(a.en, a.tok)));   // resultative adjective: "make the house blue"
   return out;
 }
 
@@ -684,7 +735,7 @@ function buildItems(toks, info) {
 
   while (i < toks.length) {
     const t = toks[i];
-    if (t.kind === 'fixed') { items.push({ t: 'fixed', pieces: t.pieces, start: t.start, end: t.end }); i++; continue; }
+    if (t.kind === 'fixed') { items.push({ t: 'fixed', pieces: t.pieces, start: t.start, end: t.end, verbal: t.verbal }); i++; continue; }
     if (t.kind === 'punct') {
       if (t.raw === ',' || t.raw === ';' || t.raw === ':') items.push({ t: 'comma', tok: t });
       else items.push({ t: 'punct', tok: t });
@@ -918,8 +969,8 @@ function prepEn(pp, verb) {
   const key = p.tok && p.tok.key;
   const obj = pp.obj;
   if (p.implicit) return p.en;
-  if (obj && (obj.t === 'day')) return 'on';
-  if (obj && obj.t === 'month') return 'in';
+  if (obj && obj.t === 'day' && /^(at|in|on)$/.test(p.en)) return 'on';
+  if (obj && obj.t === 'month' && /^(at|in|on)$/.test(p.en)) return 'in';
   const headRo = obj && obj.head && obj.head.kind === 'noun' ? obj.head.entry.ro : null;
   if (key === 'pe' && headRo === 'listă' && verb && SPECIAL_LISTVERBS.has(verb.inf)) return 'to';
   if (key === 'la' && verb && verb.flags.motion) return 'to';
@@ -1017,6 +1068,9 @@ function subjectInfo(items) {
   return { person: 3, number: h.number === 'pl' ? 'pl' : 'sg' };
 }
 
+const COLOURS = new Set(['red', 'yellow', 'blue', 'green', 'orange', 'purple', 'pink', 'brown', 'black', 'white', 'gray', 'grey', 'violet', 'turquoise']);
+const RESULT_VERBS = new Set(['face', 'colora', 'vopsi', 'picta', 'transforma', 'schimba', 'deveni']);
+const STATIVE_VERBS = new Set(['fi', 'avea', 'putea', 'trebui', 'vrea', 'ști', 'costa', 'exista', 'însemna', 'rămâne', 'plăcea', 'părea', 'merita', 'conține', 'face', 'costa', 'dura']);
 const PRONOUN_BY_PERSON = {
   '1sg': 'I', '2sg': 'you', '3sg': 'he', '1pl': 'we', '2pl': 'you', '3pl': 'they',
 };
@@ -1058,6 +1112,11 @@ function translateClause(items, info, c) {
   const preNP = pre.filter(isNPLike);
   const postNP = post.filter(isNPLike);
   const datNPs = items.filter(isDat);
+  // "Fă casa albastră" = make the house blue: after a make/color/paint verb a definite object followed by an adjective takes it as the result
+  if (RESULT_VERBS.has(entry.inf) && postNP.length && postNP[0].def && postNP[0].head?.kind === 'noun' && !postNP[0].num && postNP[0].adjs.length && postNP[0].adjs[postNP[0].adjs.length - 1].post) {
+    const np0 = postNP[0];
+    np0.after = [np0.adjs.pop()];
+  }
   const isBe = entry.inf === 'fi';
   const vgOpts = vg.options;
   const hasImpOpt = vgOpts.some((o) => o.raw === 'imp');
@@ -1067,6 +1126,10 @@ function translateClause(items, info, c) {
   let imperative = false;
   if (!isQ && !c.sub && !c.emb && !vg.aux && !whItem && !(c.reuse && c.prevSubj) && hasImpOpt && (entry.flags.imp || vg.clit.some((x) => x.enc)) && preNP.length === 0) imperative = true;
   if (vg.clit.some((x) => x.enc) && !isQ && !c.sub) imperative = true;
+  // a sentence-initial 3rd person present with no subject, said to the assistant, is an order ("Cântă Twinkle", "Vorbește mai repede")
+  if (!imperative && !isQ && !c.sub && !c.emb && !vg.aux && !vg.neg && !whItem && !info.frag && !(c.reuse && c.prevSubj) && preNP.length === 0 && !isBe && !comp2
+    && !entry.flags.mod && !entry.flags.exp && !entry.flags.imps && !STATIVE_VERBS.has(entry.inf) && vgOpts.length && vgOpts.every((o) => (o.raw === 'pres' || o.raw === 'subj') && o.person === 3) && vgOpts.some((o) => o.raw === 'pres' && o.number === 'sg')
+    && items.slice(0, vgIdx).every((x) => ['conj', 'interj', 'comma', 'adv', 'fixed'].includes(x.t))) imperative = true;
 
   // ---- who is the subject?
   let whIsSubject = false;
@@ -1225,9 +1288,13 @@ function translateClause(items, info, c) {
   // ---- objects: dative, accusative clitics, remaining items
   const ioPieces = [];
   const doPronPieces = [];
+  const imperativeIsGive = false;
   if (!(entry.flags.exp && experiencerSubj)) {
     for (const { x, info: ci } of clitInfo) {
       if (ci.refl) continue;
+      if (x.enc && /^(ti|iti)$/.test(x.key) && !entry.flags.d && postNP.length && postNP[0].def && !postNP[0].poss && !postNP[0].possessor && !imperativeIsGive) { postNP[0].poss = { en: 'your', tok: x }; continue; }   // "Fă-ți corpul verde" = make your body green
+      if (x.enc && x.key === 'te' && imperative) { doPronPieces.push(pspan('yourself', x.start, x.end)); continue; }   // "Resetează-te" = reset yourself
+      if (x.enc && /^(i|ii)$/.test(x.key) && imperative && !entry.flags.d) { doPronPieces.push(pspan('them', x.start, x.end)); continue; }   // "Fă-i pătrați" = make them square
       const wantDat = ci.dat && (DAT_CLITICS.has(x.key) && (entry.flags.d || datNPs.length || x.enc || !ci.acc || imperative || /^(mi|ti|imi|iti|i)$/.test(x.key)));
       if (wantDat) {
         if (datNPs.length && /^(ii|i|le)$/.test(x.key)) continue;
@@ -1316,7 +1383,7 @@ function translateClause(items, info, c) {
 
 function splitClauses(items) {
   const vgIdx = [];
-  items.forEach((x, k) => { if (x.t === 'vg') vgIdx.push(k); });
+  items.forEach((x, k) => { if (x.t === 'vg' || (x.t === 'fixed' && x.verbal)) vgIdx.push(k); });
   if (vgIdx.length <= 1) return [{ items, lead: [] }];
   const cuts = [];
   for (let n = 1; n < vgIdx.length; n++) {
@@ -1352,7 +1419,92 @@ function splitClauses(items) {
 
 // ------------------------------------------------------------------ sentence / text level
 
+
+// ------------------------------------------------------------------ segmentation of composite messages
+// "adaugă lapte pe lista mea și ce obții din roșu și galben?" is two requests. Command and question frames cover a whole
+// sentence, so a message with several requests is cut at "," / "și" / "iar" / "apoi" when that lets whole-segment frames
+// (or the verbal "what is {num}" frame) match; each segment is then translated alone and the pieces are joined again.
+const SEG_WORDS = new Set(['si', 'iar', 'apoi']);
+const WH_START = new Set(['ce', 'cat', 'cate', 'cati', 'cata', 'care', 'cine', 'unde', 'cum', 'cand', 'cui', 'cati']);
+const SEG_EN = { si: 'and', iar: 'and', apoi: 'then' };
+function frameMatchesAll(seg, info) {
+  if (!seg.length || (seg[0].kind !== 'word' && seg[0].kind !== 'num')) return false;
+  const q = segmentIsQuestion(seg, info, true);
+  const inf = { ...info, q };
+  for (const f of COMPILED) {
+    if (!(f.full || f.verbal) || f.token) continue;
+    if (matchFrame(f, seg, 0, inf) && matchFrame(f, seg, 0, inf).end === seg.length) return true;
+  }
+  return false;
+}
+function segmentIsQuestion(seg, info, last) {
+  const w = seg.find((t) => t.kind === 'word');
+  return (last && info.q) || !!(w && WH_START.has(w.key));
+}
+function segmentedPieces(toks, info0) {
+  const info = { ...info0, noSeg: true };
+  const cuts = [];   // [from, to) token ranges of separators
+  for (let i = 1; i < toks.length - 1; i++) {
+    const t = toks[i];
+    const isComma = t.kind === 'punct' && t.raw === ',';
+    const isW = t.kind === 'word' && !t.synth && SEG_WORDS.has(t.key);
+    if (!isComma && !isW) continue;
+    let j = i + 1;
+    while (j < toks.length - 1 && toks[j].kind === 'word' && SEG_WORDS.has(toks[j].key) && !(isW && false)) j++;
+    if (isComma || isW) { cuts.push([i, j]); i = j - 1; }
+  }
+  if (!cuts.length || cuts.length > 8) return null;
+  // dynamic programme over the cut points: maximise the number of segments that match a whole-segment frame
+  const n = cuts.length;
+  const segOf = (a, b) => toks.slice(a === 0 ? 0 : cuts[a - 1][1], b === n ? toks.length : cuts[b][0]);
+  const best = new Array(n + 1).fill(null);   // best[b] = best partition of segments ending before cut b ("b = n" is the end)
+  const score = (seg) => (frameMatchesAll(seg, info) ? 1 : 0);
+  const memo = new Map();
+  const solve = (a) => {   // best partition from segment start a
+    if (memo.has(a)) return memo.get(a);
+    let bestRes = null;
+    for (let b = a; b <= n; b++) {
+      const seg = segOf(a, b);
+      if (!seg.length) continue;
+      const sc = score(seg);
+      const rest = b === n ? { sc: 0, segs: [] } : solve(b + 1);
+      if (!rest) continue;
+      const total = sc + rest.sc - (b === n ? 0 : 0.001);   // fewer cuts on a tie
+      const segs = [[a, b, sc], ...rest.segs];
+      if (!bestRes || total > bestRes.sc) bestRes = { sc: total, segs };
+    }
+    memo.set(a, bestRes);
+    return bestRes;
+  };
+  void best;
+  const res = solve(0);
+  if (!res || res.segs.length < 2 || !res.segs.some((x) => x[2] > 0)) return null;
+  const out = [];
+  res.segs.forEach(([a, b], k) => {
+    const seg = segOf(a, b);
+    const last = k === res.segs.length - 1;
+    const sInfo = { ...info, q: segmentIsQuestion(seg, info, last), addQ: false };
+    if (k > 0) {
+      const [cs, ce] = cuts[a - 1];
+      const sep = toks.slice(cs, ce);
+      if (!(sep.length === 1 && sep[0].raw === ',')) {
+        const words = sep.filter((t) => t.kind === 'word').map((t) => SEG_EN[t.key]).filter((x, i, arr) => arr.indexOf(x) === i);
+        const hasComma = sep.some((t) => t.kind === 'punct');
+        if (hasComma) out.push(pc(',', sep[0], { punct: true }));
+        out.push(pc(words.join(' '), sep[hasComma ? 1 : 0] || sep[0]));
+      } else out.push(pc(',', sep[0], { punct: true }));
+    }
+    out.push(...processTokens(seg, sInfo));
+    if (sInfo.fullFrame) info0.fullFrame = true;
+  });
+  return out;
+}
+
 function processTokens(toks, info) {
+  if (!info.noSeg && !info.frag) {
+    const seg = segmentedPieces(toks, info);
+    if (seg) return seg;
+  }
   const t1 = applyFrames(toks, info);
   const items = buildItems(t1, info);
   if (info.useAs) for (const it of items) if (it.t === 'conj' && it.than) it.en = 'as';
@@ -1395,6 +1547,8 @@ function assemble(sentences) {
   let text = '';
   const alignment = [];
   let capNext = true;
+  let afterOpen = false;
+  let quoteOpen = false;
   for (const sent of sentences) {
     const pieces = sent.pieces;
     for (let k = 0; k < pieces.length; k++) {
@@ -1408,8 +1562,12 @@ function assemble(sentences) {
       if (en === 'i') en = 'I';
       if (capNext && /^\p{Ll}/u.test(en)) en = en[0].toUpperCase() + en.slice(1);
       capNext = false;
-      const attach = p.punct;
-      if (text && !attach) text += ' ';
+      const isQuote = p.punct && en === '"';
+      if (isQuote) quoteOpen = !quoteOpen;
+      const isOpen = p.punct && (/^[(\[{]$/.test(en) || (isQuote && quoteOpen)), isOp = p.punct && /^[-+*\/=<>×÷^%]$/.test(en);
+      const attach = p.punct && !isOpen && !isOp;
+      if (text && !attach && !afterOpen) text += ' ';
+      afterOpen = isOpen;
       const ts = text.length;
       text += en;
       if (p.src) alignment.push({ src: [p.src[0], p.src[1]], tgt: [ts, text.length] });
@@ -1448,7 +1606,7 @@ function splitHyphens(text) {
   return text
     .replace(new RegExp(`${L}(s[ăa]|nu)-(mi|ți|ti|l|o|i|ne|vă|va|le|se)${R}`, 'giu'), (m, a, b) => `${a} ${b}`)
     .replace(new RegExp(`${L}(mi)-(ai|ați)${R}`, 'giu'), (m, a, b) => `${a} ${b}`)
-    .replace(new RegExp(`${L}(într|dintr|printr)-(o|un|una|unul)${R}`, 'giu'), (m, a, b) => `${a.slice(0, -2)}${' '.repeat(m.length - b.length - (a.length - 2))}${b}`)
+    .replace(new RegExp(`${L}([iî]ntr|dintr|printr)-(o|un|una|unul)${R}`, 'giu'), (m, a, b) => `${a.slice(0, -2)}${' '.repeat(m.length - b.length - (a.length - 2))}${b}`)
     .replace(new RegExp(`${L}(\\p{L}{3,})-(ul|a|le|lui)${R}`, 'giu'), (m, a, b) => `${a}${' '.repeat(b.length + 1)}`);
 }
 

@@ -4,6 +4,7 @@ import { tokenize, splitSentences, foldKey } from './normalize.mjs';
 import * as M from './morphology.ro.mjs';
 import * as L from './lexicon.ro-en.mjs';
 import * as E from './inflect.en.mjs';
+import { placeRo, MULTIWORD_EN } from './places.ro-en.mjs';
 
 // ------------------------------------------------------------------ reverse lexicon
 
@@ -312,7 +313,7 @@ function realizeNP(np, ctx, opts = {}) {
   const h = np.head;
   if (!h && np.num) return [piece(np.num.val, np.num.tok)];
   if (!h) return [];
-  if (h.kind === 'name') return [piece(h.text, h.tok)];
+  if (h.kind === 'name') return [piece(placeRo(h.text) ?? h.text, h.tok)];
   if (h.kind === 'unknown') return [piece(h.text, h.tok)];
   const e = h.entry;
   const plural = np.number === 'pl';
@@ -797,9 +798,29 @@ function assembleRo(sentences) {
   return { text, alignment };
 }
 
+/** Merge the words of a multi-word place name ("South America") into one capitalised name token. */
+function mergePlaces(toks) {
+  const out = [];
+  for (let i = 0; i < toks.length; i++) {
+    let merged = false;
+    if (toks[i].kind === 'word' && toks[i].isCap) {
+      for (const name of MULTIWORD_EN) {
+        const ws = name.split(' ');
+        if (ws.every((w, k) => toks[i + k] && toks[i + k].kind === 'word' && toks[i + k].raw === w)) {
+          const last = toks[i + ws.length - 1];
+          out.push({ ...toks[i], raw: name, key: foldKey(name), end: last.end });
+          i += ws.length - 1; merged = true; break;
+        }
+      }
+    }
+    if (!merged) out.push(toks[i]);
+  }
+  return out;
+}
+
 export function translateEnRo(original) {
   const source = String(original ?? '');
-  const toks = tokenize(source);
+  const toks = mergePlaces(tokenize(source));
   const sents = splitSentences(toks);
   const ctx = { unknown: [], notes: [], content: 0, mapped: 0 };
   const results = [];
@@ -831,7 +852,7 @@ export function englishLeftovers(text) {
   for (const t of tokenize(String(text ?? ''))) {
     if (t.kind !== 'word') continue;
     const k = t.key;
-    if (k.length < 3 || !isEnglishWord(k)) continue;
+    if ((k.length < 3 && !/^(is|it|of|be|my|we|he|if)$/.test(k)) || !isEnglishWord(k)) continue;
     if (M.analyze(k).length || M.isKnownName(k) || /^(sau|plus|minus|pot|mai|are|de|la|cu|pe|din|nu|da)$/.test(k)) continue;
     out.push(t.raw);
   }

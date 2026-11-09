@@ -2,6 +2,7 @@
 // diacritic-insensitive key, so analysis is a table lookup (browser-safe).
 import { nouns, verbs, adjectives, words, names, numberWords } from './lexicon.ro-en.mjs';
 import { foldKey } from './normalize.mjs';
+import { places } from './places.ro-en.mjs';
 import { pluralEn, pastEn } from './inflect.en.mjs';
 
 const index = new Map();
@@ -138,8 +139,9 @@ function indexVerb(v) {
   // imperative
   if (v.flags.imp) {
     const f3 = forms[2];
-    if (f3 && f3 !== '-') add(f3, { pos: 'verb', entry: v, tense: 'imp', person: 2, number: 'sg' });
-    if (forms[4] && forms[4] !== '-') add(forms[4], { pos: 'verb', entry: v, tense: 'imp', person: 2, number: 'pl' });
+    const own = v.inf === 'fi' || v.inf === 'deveni';   // their imperatives (fii, devino) are listed in imp=; "este" is never an order
+    if (f3 && f3 !== '-' && !own) add(f3, { pos: 'verb', entry: v, tense: 'imp', person: 2, number: 'sg' });
+    if (forms[4] && forms[4] !== '-' && !own) add(forms[4], { pos: 'verb', entry: v, tense: 'imp', person: 2, number: 'pl' });
     if (typeof v.flags.imp === 'string') {
       v.flags.imp.split(',').forEach((f, i) => add(f, { pos: 'verb', entry: v, tense: 'imp', person: 2, number: i === 0 ? 'sg' : 'pl' }));
     }
@@ -235,6 +237,14 @@ export function analyzeRaw(raw, diaFree = false) {
 
 export function nameEntry(key) { return nameIndex.get(key) || null; }
 export function isKnownName(key) { return nameIndex.has(key); }
+
+const placeIndex = new Map();
+for (const pl of places) {
+  for (const f of pl.nom) placeIndex.set(foldKey(f), { en: pl.en, gen: false });
+  for (const f of pl.gen) placeIndex.set(foldKey(f), { en: pl.en, gen: true });
+}
+/** A place name (country, continent, city) in any Romanian form: { en, gen } or null. */
+export function placeOf(key) { return placeIndex.get(key) || null; }
 
 /** Noun lemma from any definite/plural/case form: mărul, merele, merelor, mere -> măr. */
 export function lemmaOfNoun(word) {

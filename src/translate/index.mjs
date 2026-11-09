@@ -8,7 +8,7 @@
 // A sentence whose negation or question word could not be mapped is not translated: it is omitted from
 // `text` and reported in the extra field `untranslatable: [{span, reason}]` (confidence 0).
 import { tokenize, foldKey } from './normalize.mjs';
-import { analyze } from './morphology.ro.mjs';
+import { analyze, placeOf } from './morphology.ro.mjs';
 import { translateRoEn } from './ro-en.mjs';
 import { translateEnRo, isEnglishWord, englishLeftovers, nearEnglishWord } from './en-ro.mjs';
 
@@ -69,7 +69,9 @@ export function languageEvidence(text) {
   const toks = tokenize(String(text ?? '')).filter((t) => t.kind === 'word');
   const d = scoreLanguage(text);
   const dia = toks.some((t) => /[ăâîșț]/i.test(t.raw.normalize('NFC')));
-  const strongRo = dia || (d.ro >= 3 && d.ro - d.en >= 2);
+  // a short message made only of Romanian lexicon words, none of them English ("Joc nou.", "anuleaza", "renunt"), is Romanian
+  const allRo = onlyRomanianWords(text);
+  const strongRo = dia || (d.ro >= 3 && d.ro - d.en >= 2) || (allRo && d.ro >= 1 && d.en === 0);
   let exact = 0, near = 0, other = 0;
   for (const t of toks) {
     const k = t.key;
@@ -80,6 +82,14 @@ export function languageEvidence(text) {
   }
   const strongEn = toks.length >= 2 && !dia && d.ro < 0.5 && exact + near >= 1 && (exact >= 1 || near >= 1) && other <= Math.max(1, toks.length - 1);
   return { ro: d.ro, en: d.en, words: toks.length, exact, near, strongRo, strongEn: strongEn && !strongRo };
+}
+
+// Short Romanian words of the game and assistant commands that English does not use ("Joc nou", "calul la f3", "nu stiu"): with the rest of the message Romanian they are strong evidence
+const APP_RO = new Set(['joc', 'joaca', 'calul', 'pionul', 'turnul', 'nebunul', 'regele', 'regina', 'stiu', 'renunt', 'chiar', 'nou', 'noua']);
+/** True for a short text whose every word is a Romanian lexicon word that English does not use. */
+function onlyRomanianWords(text) {
+  const content = tokenize(String(text ?? '')).filter((t) => t.kind === 'word' && t.key.length >= 2);
+  return content.length > 0 && content.length <= 6 && content.some((t) => t.key.length >= 6 || APP_RO.has(t.key)) && content.every((t) => !EN_STOP.has(t.key) && !isEnglishWord(t.key) && (analyze(t.key).length > 0 || RO_W.has(t.key) || !!placeOf(t.key)));
 }
 
 function scoreLanguage(text) {
@@ -95,6 +105,8 @@ function scoreLanguage(text) {
     if (AMBIGUOUS.has(key)) continue;
     const w = RO_W.get(key);
     if (w) { if (!(solfege && SOLFEGE.has(key))) ro += w; continue; }
+    const pl = placeOf(key);
+    if (pl && key !== foldKey(pl.en) && !isEnglishWord(key)) { ro += 2; continue; }   // "Japoniei", "Egiptul", "Parisul": a Romanian form of a place name
     const roHit = analyze(key).length > 0;
     const enHit = EN_STOP.has(key) || isEnglishWord(key);
     if (roHit && enHit) continue;
@@ -110,6 +122,7 @@ function scoreLanguage(text) {
 
 export function detectLanguage(text) {
   const { ro, en } = scoreLanguage(text);
+  if (en === 0 && ro >= 1 && ro < 2 && onlyRomanianWords(text)) return { lang: 'ro', confidence: 0.6 };
   // Romanian is claimed on at least 2 points that beat the English evidence by 1: a diacritic, two function words, a function word and a Romanian-looking word or ending...
   // A single short or ambiguous token ("e", "da", "cat", "face", "la la la") stays below that: the caller then keeps its session language (default English).
   if (ro >= 2 && ro - en >= 1) {

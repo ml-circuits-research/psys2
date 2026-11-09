@@ -3,7 +3,7 @@
 
 const CHAR_MAP = {
   'ş': 'ș', 'Ş': 'Ș', 'ţ': 'ț', 'Ţ': 'Ț',
-  '’': "'", '‘': "'", '“': '"', '”': '"', ' ': ' ',
+  '−': '-', '„': '"', '«': '"', '»': '"', '’': "'", '‘': "'", '“': '"', '”': '"', ' ': ' ',
 };
 
 const MARK = /\p{M}/u;
@@ -40,7 +40,7 @@ export function foldKey(word) {
   return normalizeText(word).toLowerCase().normalize('NFD').replace(/\p{M}/gu, '');
 }
 
-const TOKEN_RE = /\p{L}+(?:['\-]\p{L}+)*|\d+(?:[.,]\d+)?|\S/gu;
+const TOKEN_RE = /\p{L}+(?:['\-]\p{L}+)*|(?<![\p{L}\d])-\d+(?:[.,]\d+)?|\d+(?:[.,]\d+)?|\S/gu;
 
 /** Tokenize text; spans refer to the original string. */
 export function tokenize(original) {
@@ -54,7 +54,7 @@ export function tokenize(original) {
     const raw = m[0];
     let kind = 'punct';
     if (/^\p{L}/u.test(raw)) kind = 'word';
-    else if (/^\d/.test(raw)) kind = 'num';
+    else if (/^-?\d/.test(raw)) kind = 'num';
     const tok = {
       raw,
       start: nm.starts[s],
