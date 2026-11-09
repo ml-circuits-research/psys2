@@ -409,6 +409,7 @@ Clicks on the avatar (gallery, presets, parts) run late, after the spoken answer
 - 0 page errors.
 
 **FAIL:** main-thread busy, **70% average, 86% worst minute** (your 30-minute run: 56% / 75%). Over 12 minutes there were 106 user messages: the soak's 67 real messages plus room talk. The UI stays responsive at the end, but a phone at this load heats up, which is what the user felt.
+**Update after b4aa31d** (only idle restarts count): the reviewer's 7-minute rerun gives busy 57% on average and 78% in the worst minute (was 70 / 86); everything else passes. Your 3-minute run: 26%. The difference between the hosts is large, so profile on a throttled run that matches the reviewer's (`--throttle 6` on your machine is closer to a 2-vCPU host at 4×).
 1. **Profile it.** Record a CPU profile (CDP `Profiler`) for 2 minutes in the middle of a soak and list the top 10 self-time functions with their share.
 2. **Fix the biggest causes.** Likely candidates:
    - per-turn rules formalization on the main thread;
