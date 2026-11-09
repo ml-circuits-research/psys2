@@ -226,6 +226,28 @@ The user is right that we lost function compared with the source.
    - Report the table in RESULTS.md (source rules vs ours: act right, args right, wrong, unread).
 7. **Tests:** the 15 expectations as dialogue tests (family `real`) on the Diagram tab, in the CLI and headless webchat with screenshots of the ids and arrows.
 
+### BUSY — tabs are grey and not clickable while a turn runs (user, 17:09 local)
+
+Clicks on the avatar (gallery, presets, parts) run late, after the spoken answer: they queue behind the speech and the effects. The rule from now on:
+
+- **A turn lasts until everything it started has finished:** formalize and run, host effects (tab animations, map fly-to, chess engine move, music start), and the spoken answer when "read aloud" is on.
+- **During that time every tab's interactive area is visibly busy:**
+  - a light grey veil over the tab content;
+  - pointer events off;
+  - `aria-busy="true"` and `inert` on the tab panel;
+  - a small spinner in the tab header.
+  Clicks there do nothing; no silent queue of clicks.
+- **The chat input stays usable** for typing and listening. Messages go to the visible queue of MIC2.
+- **Stop (and the mute / "be quiet" commands) end the turn at once:** they cut the speech, cancel pending effects with an AbortSignal and lift the veil.
+- **Exceptions that stay clickable:** the Stop button, the tab switcher (switching only shows the other tab, which is also veiled), scrolling and zoom/pan of maps and diagrams (view-only actions that change no state), and Settings.
+- **One source of truth:** the turn guard's state (`busy` from HANG + STOP) extended with `effectsPending` and `speaking`. Tab plugins call `host.isBusy()` / subscribe to it instead of each having its own flags.
+- **Tests (headless):**
+  - send a message with read-aloud on (fake `speechSynthesis` taking 2 s), click the avatar gallery during the speech: no state change, the veil is visible;
+  - after the speech ends the same click works;
+  - Stop during the speech lifts the veil at once;
+  - the same for a chess move while the engine thinks;
+  - 0 console errors.
+
 ### HANG2 — the model worker stops answering; the watchdog hides it (reviewer at 1375718, 15:50 local) — P0, DO FIRST
 
 The HANG + STOP work is good: the Stop button, one message at a time, the 8 s watchdog and 918/921 tests passing (3 skipped). The chat no longer freezes forever. **But the turns that froze still do not get answered: they now end at 8 s with "That took too long, so I stopped."** That also happens **without throttling, on a fast machine**, and it repeats on every try. So the user will still see it all the time.
@@ -556,7 +578,7 @@ The reviewer copied what is reusable into **`imports/diagram-vss-demo/`** (stagi
 **Licence:** settled. The project is now AGPL-3.0-only, the same as the source (user decision 14:10); keep the copied files' provenance headers.
 
 **Order from now on:**
-1. HANG2 (model worker stops answering), MIC2 + EOT2 (always-open mic, queue, reliable button, end of turn), then DIAG2 + DIAG3 (Diagram world in the webchat, retrain, short ids, edges, rendering, parity), FB (thumbs up / down + feedback, remove Copy as text), then RP3 (phrase-log failures), then DBG (debug view per tab)
+1. HANG2 (model worker stops answering), MIC2 + EOT2 + BUSY (always-open mic, queue, reliable button, end of turn, tabs grey while a turn runs), then DIAG2 + DIAG3 (Diagram world in the webchat, retrain, short ids, edges, rendering, parity), FB (thumbs up / down + feedback, remove Copy as text), then RP3 (phrase-log failures), then DBG (debug view per tab)
 2. SET (settings modal with tabs) + UI1 (one mic, tooltips) + DOC (greeting and docs), then VOICE (end of turn)
 3. ED (document editor commands)
 4. RD10 together with RD1b and RD2 (they share the mechanism)
