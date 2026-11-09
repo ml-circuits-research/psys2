@@ -9,14 +9,16 @@
  * Shape fields (all strings, as read from the wire):
  *   family   set | do | ask.value | ask.count | ask.exists | list
  *   verb     alternatives `a|b|c` (`_` joins words): imperative verbs (set, do, list), have-verbs (ask.count, ask.exists)
- *   obj      object slot `name:class` (the thing: a part, an item, a lexicon of things); optional for `do`
+ *   obj      object slot `name:class` (the thing: a part, an item, a lexicon of things); optional for `do`; for `set` and `ask.value` it may be left
+ *            out when `noun` names the thing itself ("set the tempo to 90", "what is the key")
  *   val      value slot `name:class` (set only)
  *   noun     property noun alternatives (`color|colour`): optional in `set`, required by `ask.value`
  *   det      determiners before the object (default `the|your|ur|my`)
  *   link     words between object and value in the imperative of `set` (default `to|into|be|as`, followed by an optional a|an|the)
+ *   pron     (noun-only `ask.value`) pronouns that may follow the verb in the question (default `it|this|that|we|you|u|i`)
  *   mod      optional modifier group before the value, alternatives and `$macro` ids (`$ui.avatar.g11_a_bit` for "a bit", "much")
  *   objmod   optional modifier group before the object (`whole|entire`)
- *   extra    one more optional slot after the value or object, e.g. `n:number?`
+ *   extra    one more optional element after the value or object: a slot `n:number?` or a group `[percent|per_cent]?`
  *   emit     emit template; `emitOpts` the emit of the `opts` form (without it `opts` is not generated)
  *   forms    comma list of forms to generate (default: every form of the family); `skip` comma list of forms to leave out
  *   sample   example words per slot, `p=eyes;c=blue` (default: the first word of the slot's lexicon)
@@ -105,6 +107,19 @@ export const TEMPLATES = {
   },
 };
 
+/**
+ * Shapes without an object slot (`obj` absent, `noun` given): the noun IS the thing ("set the tempo to 90", "what is the key"). `set` uses its
+ * own templates with `<O>` = the noun group (word order and the first short form are left out); `ask.value` has the templates below.
+ */
+const NOOBJ_ASK_VALUE = {
+  q: [['', AND('<L>', '[$lang.shape.what]', '<N>', '[are|r|is|do|does|did]?', '<PR>', NOW, '<T>')],
+    ['.2', AND('<L>', '[$lang.shape.whatis]', '<D>', '<N>', NOW, '<T>')]],
+  imp: [['', AND('<L>', '[$lang.shape.tellme]', '[what|which]?', '<D>', '<N>', '[is|are]?', '<T>')]],
+  wish: [['', AND('<L>', '[$lang.shape.know]', '[what|which]?', '<D>', '<N>', '[is|are]?', '<T>')]],
+  ind: [['', AND('[$lang.shape.indask]', '[what|which]?', '<D>', '<N>', '[is|are]?', '<T>')]],
+  short: [['', AND('<L>', '<N>', '<T>')]],
+};
+
 const slotText = (spec, optional = false) => (spec ? `{${spec.replace(/\?$/, '')}${optional || spec.endsWith('?') ? '?' : ''}}` : '');
 const group = (alts, optional) => `[${alts.split('|').map((a) => a.trim()).filter(Boolean).join('|')}]${optional ? '?' : ''}`;
 const trimWords = (s) => s.split(/\s+/).filter(Boolean).join(' ');
@@ -126,28 +141,31 @@ export function expandShape(shape, { phrases = null, lexicons = null } = {}) {
   const skip = new Set((shape.skip ?? '').split(',').map((s) => s.trim()).filter(Boolean));
   for (const f of [...want, ...skip]) if (!known.includes(f)) throw new Error(`shape '${shape.id}': form '${f}' does not exist in family '${family}' (${known.join(', ')})`);
   if (!shape.emit) throw new Error(`shape '${shape.id}': no emit`);
+  const noObj = !shape.obj && !!shape.noun && (family === 'set' || family === 'ask.value');
   const verbs = shape.verb ? group(shape.verb) : null;
   const nounAlts = shape.noun ?? null;
   const nounPlural = nounAlts ? [...new Set(nounAlts.split('|').flatMap((n) => [n, n + 's']))].join('|') : null;
   const fields = {
     '<V>': verbs, '<V?>': verbs ? group(shape.verb, true) : null,
     '<VL>': shape.verb ? shape.verb.split('|').join('|') : null,
-    '<D>': shape.obj ? group(shape.det ?? DEFAULTS.det, true) : '',
-    '<O>': shape.obj ? (shape.objmod ? group(shape.objmod, true) + ' ' : '') + slotText(shape.obj) : '',
+    '<D>': shape.obj || shape.noun ? group(shape.det ?? DEFAULTS.det, true) : '',
+    '<O>': shape.obj ? (shape.objmod ? group(shape.objmod, true) + ' ' : '') + slotText(shape.obj) : (noObj ? group(shape.noun) : ''),
     '<X>': shape.val ? (shape.mod ? group(shape.mod, true) + ' ' : '') + slotText(shape.val) : '',
-    '<N>': nounAlts ? group(nounAlts) : null, '<N?>': nounAlts ? group(nounAlts, true) : '',
+    '<N>': nounAlts ? group(nounAlts) : null, '<N?>': nounAlts && !noObj ? group(nounAlts, true) : '',
     '<NP>': nounPlural ? group(nounPlural) : null,
-    '<K>': group(shape.link ?? DEFAULTS.link, true) + ' [a|an|the]?', '<E>': shape.extra ? ' ' + slotText(shape.extra, true) : '',
+    '<K>': group(shape.link ?? DEFAULTS.link, true) + ' [a|an|the]?', '<E>': shape.extra ? ' ' + (shape.extra.startsWith('[') ? shape.extra : slotText(shape.extra, true)) : '',
+    '<PR>': group(shape.pron ?? 'it|this|that|we|you|u|i', true),
     '<L>': LEAD, '<T>': TAIL,
   };
   const needs = { set: ['verb', 'obj', 'val'], do: ['verb'], 'ask.value': ['obj', 'noun'], 'ask.count': ['obj'], 'ask.exists': ['obj', 'verb'], list: ['obj', 'verb'] }[family];
-  for (const k of needs) if (!shape[k]) throw new Error(`shape '${shape.id}': family '${family}' needs '${k}'`);
+  for (const k of needs) if (!shape[k] && !(noObj && k === 'obj')) throw new Error(`shape '${shape.id}': family '${family}' needs '${k}'`);
   const sample = Object.fromEntries((shape.sample ?? '').split(/[;,]/).map((x) => x.trim().split('=')).filter((x) => x.length === 2).map(([k, v]) => [k.trim(), v.trim()]));
   const out = [];
   for (const form of want) {
     if (skip.has(form)) continue;
-    if (form === 'opts' && !shape.emitOpts) continue;
-    for (const [suffix, tpl] of table[form] ?? []) {
+    if (form === 'opts' && (!shape.emitOpts || noObj)) continue;
+    for (const [suffix, tpl] of (noObj && family === 'ask.value' ? NOOBJ_ASK_VALUE[form] : table[form]) ?? []) {
+      if (noObj && family === 'set' && (form === 'order' || (form === 'short' && suffix === ''))) continue;
       const tokens = [...new Set(tpl.match(/<\w+\??>/g) ?? [])];
       if (tokens.some((t) => fields[t] === null)) continue;
       if (!shape.obj && form === 'short' && family === 'do') continue;
@@ -162,7 +180,7 @@ export function expandShape(shape, { phrases = null, lexicons = null } = {}) {
         priority: short ? basePriority - SHORT_PENALTY : basePriority,
         example: [],
       };
-      p.example = exampleSentences(match, { phrases, lexicons, sample, det: shape.obj ? (shape.det ?? DEFAULTS.det) : null, noun: nounAlts });
+      p.example = exampleSentences(match, { phrases, lexicons, sample, det: shape.obj || noObj ? (shape.det ?? DEFAULTS.det) : null, noun: nounAlts, link: shape.link ?? DEFAULTS.link });
       out.push(p);
     }
   }
@@ -185,7 +203,7 @@ function sampleWord(cls, lexicons) {
  * Natural example sentences of a generated match string: first the sentence with the determiner before the object ("Make your eyes blue."),
  * (the shortest one, all optionals omitted, when the sentence has no determiner). Other optional words (links, nouns, lead-ins) are never added: they make unnatural sentences.
  */
-export function exampleSentences(match, { phrases = null, lexicons = null, sample = {}, det = null, noun = null } = {}) {
+export function exampleSentences(match, { phrases = null, lexicons = null, sample = {}, det = null, noun = null, link = null } = {}) {
   const parts = match.split(/\s+/);
   const make = (withDet) => {
     const words = [];
@@ -204,6 +222,7 @@ export function exampleSentences(match, { phrases = null, lexicons = null, sampl
           if (withDet && before && det && m[1] === det) words.push(alts[0]);
           else if (withDet && det && m[1] === det && noun && parts[k + 1] === `[${noun}]`) words.push('the');
           else if (m[1] === OF_ALTS) words.push('of');
+          else if (withDet && link && m[1] === link) words.push(alts[0]);
           continue;
         }
         let first = alts[0];

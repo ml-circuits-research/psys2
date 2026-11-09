@@ -539,6 +539,11 @@
     card=one
     ask="Which optional modifier group may precede the object (whole, entire)?"
 
+@core.shape.pron core.key
+    value=string
+    card=one
+    ask="Which pronouns may follow the verb in the question of a noun-only ask.value shape?"
+
 @core.shape.sample core.key
     value=string
     card=one

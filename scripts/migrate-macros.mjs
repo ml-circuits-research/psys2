@@ -36,7 +36,8 @@ for (const x of parse(readFileSync(join(ROOT, 'lang.common', 'lexicon.sop'), 'ut
   if (x.type !== 'core.phrase') continue;
   macros.set(x.id.replace(/^phrase\./, ''), new Set(getAll(x, 'alt').map((v) => v.v)));
 }
-const ROLE_MACROS = { lead: [...macros.keys()].filter((k) => k.startsWith('lang.lead.')), tail: [...macros.keys()].filter((k) => k.startsWith('lang.tail.')) };
+// only the frame groups seeded for patterns: `lang.lead.ask` (and the other L8 groups) are lists for ctx.lang.stripLead and say more than a pattern lead-in may
+const ROLE_MACROS = { lead: ['lang.lead.polite', 'lang.lead.question', 'lang.lead.filler'].filter((k) => macros.has(k)), tail: [...macros.keys()].filter((k) => k.startsWith('lang.tail.')) };
 
 const stats = { patterns: 0, changed: 0, groups: 0, mapped: 0, dropped: 0, droppedGroups: 0, leftover: 0, local: 0, localUses: 0 };
 const unmapped = new Map();
@@ -56,7 +57,7 @@ function mapGroup(part, role) {
   }
   let macrosUsed = [...existing], inline = reachable;
   if (role !== 'body' && g.optional && alts.length >= MIN_GROUP) {
-    const cover = ROLE_MACROS[role].map((id) => ({ id, hit: reachable.filter((a) => macros.get(id).has(a)) })).filter((c) => c.hit.length);
+    const cover = ROLE_MACROS[role].map((id) => ({ id, hit: reachable.filter((a) => macros.get(id).has(a)) })).filter((c) => c.hit.length >= Math.max(1, MACRO_SHARE * reachable.length));   // a macro that covers only a few alternatives of the group would add all its other alternatives: widening
     const covered = new Set(cover.flatMap((c) => c.hit));
     if (covered.size >= 1 && covered.size >= reachable.length / 2) {
       cover.sort((a, b) => b.hit.length - a.hit.length);
@@ -72,6 +73,7 @@ function mapGroup(part, role) {
   return { macros: macrosUsed, inline, optional: g.optional, role, orig: part };
 }
 
+const MACRO_SHARE = 0.3;   // a macro is used for a group only when it holds at least this share of the group's alternatives
 const LOCAL_MIN_ALTS = 3, LOCAL_MIN_BYTES = 40;
 const localPhrases = new Map();   // inline key -> { id, alts, frame, uses }
 
@@ -107,6 +109,7 @@ for (const { elements } of mapped) for (const e of elements) {
   if (typeof e === 'string' || e.inline.length < LOCAL_MIN_ALTS) continue;
   const key = e.inline.join('|');
   if (key.length < LOCAL_MIN_BYTES) continue;
+  if (e.inline.some((a) => !/^[A-Za-z0-9_.'-]+$/.test(a))) continue;   // a punctuation alternative (`:`, `=`) is not a SOP atom: the group stays inline
   const c = counts.get(key) ?? { n: 0, frame: true };
   c.n++; if (e.role === 'body') c.frame = false;
   counts.set(key, c);

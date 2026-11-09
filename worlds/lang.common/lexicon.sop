@@ -1231,8 +1231,8 @@
 @phrase.lang.shape.want core.phrase
     frame=false
     doc="Wish leads before a thing (\"i want\", \"give me\", \"how about\"): the object-first and value-first forms of request shapes."
-    alt=give_me
     alt=i_want
+    alt=give_me
     alt=i_would_like
     alt=i_would_love
     alt=i_d_like
@@ -1520,6 +1520,9 @@
     alt=are
     alt=is
     alt=be
+    alt=using
+    alt=playing
+    alt=in
     alt=now
     alt=rn
 

@@ -163,7 +163,7 @@ function buildWorld(id, files, ops) {
     const t = (k) => txt(x, k);
     return {
       id: x.id.replace(/^shape\./, ''), wireId: x.id, wire: x, worldId: id, family: t('family'), verb: t('verb'), obj: t('obj'), val: t('val'), noun: t('noun'),
-      det: t('det'), link: t('link'), extra: t('extra'), emit: t('emit'), emitOpts: t('emitOpts'), forms: t('forms'), skip: t('skip'), sample: t('sample'), mod: t('mod'), objmod: t('objmod'),
+      det: t('det'), link: t('link'), extra: t('extra'), emit: t('emit'), emitOpts: t('emitOpts'), forms: t('forms'), skip: t('skip'), sample: t('sample'), mod: t('mod'), objmod: t('objmod'), pron: t('pron'),
       priority: t('priority') == null ? undefined : Number(t('priority')), kind: t('kind'), example: getAll(x, 'example').map((v) => v.v),
     };
   });

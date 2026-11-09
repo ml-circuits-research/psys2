@@ -2021,3 +2021,48 @@
     session=mu2
     input="undo"
     expect="Removed"
+
+@t.media.music.sh01 core.test
+    input="could you maybe set the tempo to 100"
+    expectState="tempo=100"
+    session=msh1
+
+@t.media.music.sh02 core.test
+    input="can the volume be 40"
+    expect="the volume is 40 percent"
+    session=msh2
+
+@t.media.music.sh03 core.test
+    input="i want the key to be D major"
+    expect="the key is D major"
+    session=msh3
+
+@t.media.music.sh04 core.test
+    input="could you maybe switch the instrument to flute"
+    expectState="instrument=flute"
+    session=msh4
+
+@t.media.music.sh05 core.test
+    input="set the tempo to 90"
+    expectState="tempo=90"
+    session=msh5
+
+@t.media.music.sh06 core.test
+    input="tell me the tempo"
+    expect="beats per minute"
+    session=msh6
+
+@t.media.music.sh07 core.test
+    input="do you know the volume"
+    expect="percent"
+    session=msh7
+
+@t.media.music.sh08 core.test
+    input="which sound is it"
+    expect="I am playing"
+    session=msh8
+
+@t.media.music.sh09 core.test
+    input="what key are we in"
+    expect="The key is"
+    session=msh9

@@ -70,9 +70,25 @@ const SHAPES = `@shape.t.paint core.shape
     emitOpts="${EMIT('listOptions')}"
     priority=12
 `;
+const NOOBJ = `@shape.t.tempo core.shape
+    family=set
+    verb="set|change"
+    noun="tempo|speed"
+    val="n:number"
+    link="to|at"
+    extra="[bpm|beats_per_minute]?"
+    emit="@{_} core.request action=t.tempo arg.n={n}"
+    priority=12
+@shape.t.status core.shape
+    family=ask.value
+    noun="tempo|speed"
+    pron="we|you"
+    emit="@{_} core.request action=t.status arg.what=tempo"
+    priority=12
+`;
 const set = await bundleSet({
   'lang.common': langCommon,
-  t: mini('t', { imports: ['core', 'lang.common'], files: { 'lexicon.sop': LEX, 'patterns.sop': SHAPES } }),
+  t: mini('t', { imports: ['core', 'lang.common'], files: { 'lexicon.sop': LEX, 'patterns.sop': SHAPES + NOOBJ } }),
 });
 const lex = lexIndex(set);
 const world = set.get('t');
@@ -85,7 +101,7 @@ const matches = (p, text) => {
 
 test('the test world loads without errors and every family generates its forms', () => {
   assert.deepEqual(world.errors, []);
-  assert.equal(world.shapes.length, 6);
+  assert.equal(world.shapes.length, 8);
   const forms = (shape) => new Set(world.patterns.filter((p) => p.shape === `shape.t.${shape}`).map((p) => p.form));
   assert.deepEqual([...forms('paint')].sort(), [...FAMILY_FORMS.set].sort());
   assert.deepEqual([...forms('reset')].sort(), [...FAMILY_FORMS.do].filter((f) => f !== 'opts').sort());
@@ -249,4 +265,19 @@ test('ui.avatar: every generated form of its colour, size and part shapes reads 
     const t = tokenize(text, 0).filter((x) => x.kind !== 'punct' && !x.filler);
     assert.ok(matchTokens(c, t, makeEnv(text, rs, new FormSession(), rl)), `${id}: "${text}"`);
   }
+});
+
+test('shapes without an object slot: the noun is the thing (set and ask.value)', () => {
+  const forms = (shape) => world.patterns.filter((p) => p.shape === `shape.t.${shape}`).map((p) => p.id.replace('pat.t.', ''));
+  assert.ok(!forms('tempo').includes('tempo.order') && !forms('tempo').includes('tempo.short'), 'no word order, no value-first short form without an object');
+  assert.ok(forms('tempo').includes('tempo.short.2'));
+  const cases = [
+    ['tempo.imp', 'set the tempo to 90 bpm'], ['tempo.imp', 'change speed 120'], ['tempo.wish', 'i want the tempo to be 90'], ['tempo.ind', 'could you maybe set the speed to 90'],
+    ['tempo.q', 'can the tempo be 90'], ['tempo.state', 'the tempo should be 90'], ['tempo.short.2', 'tempo 90'],
+    ['status.q', 'what tempo are we at'.replace(' at', '')], ['status.q.2', 'what is the tempo'], ['status.imp', 'tell me the speed'], ['status.wish', 'i wonder what tempo it is'.replace(' it is', '')],
+    ['status.ind', 'do you know the tempo'], ['status.short', 'tempo'],
+  ];
+  for (const [id, text] of cases) { const p = byId(id); assert.ok(p, id); assert.ok(matches(p, text), `${id}: "${text}"`); }
+  assert.ok(!matches(byId('status.q'), 'what tempo is it'), 'pron excludes it');
+  for (const p of world.patterns.filter((x) => /^pat\.t\.(tempo|status)\./.test(x.id))) for (const ex of p.examples) assert.ok(matches(p, ex), `${p.id}: ${ex}`);
 });

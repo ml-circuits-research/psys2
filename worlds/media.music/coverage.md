@@ -164,6 +164,8 @@ Shared by every pattern: polite and filler prefixes (can u, could you maybe, hey
 
 ## music.status
 
+**Shape.** `media.music.status.tempo`, `.key`, `.instrument`, `.volume` (ask.value family, noun-only) generate the question, imperative (`tell me the tempo`), wish, indirect (`do you know the volume`) and short forms (tests sh06 to sh09); the key shape excludes `it` so that `what key is it in` stays the song-info question.
+
 | shape | example | status | test |
 | --- | --- | --- | --- |
 | state | Is it looping? | supported | r098 |
@@ -176,6 +178,8 @@ Shared by every pattern: polite and filler prefixes (can u, could you maybe, hey
 | opts | Whats playing now? | supported | r166 |
 
 ## music.tempo
+
+**Shape.** `media.music.tempo` (set family, noun-only) generates imperative, wish, indirect, question, state and short forms of "set the tempo to N": `could you maybe set the tempo to 100`, `can the tempo be 90`, `the tempo should be 90`, `I want the tempo 90` (tests sh01, sh05). The hand-written faster/slower/factor patterns stay (comparatives and factors are not a value slot).
 
 | shape | example | status | test |
 | --- | --- | --- | --- |
@@ -197,6 +201,8 @@ Shared by every pattern: polite and filler prefixes (can u, could you maybe, hey
 
 ## music.volume
 
+**Shape.** `media.music.volume` (set family, noun-only, extra `percent`) generates the same forms for "set the volume to N" (test sh02); loud/quiet comparatives, too-loud statements and max/min words stay hand-written.
+
 | shape | example | status | test |
 | --- | --- | --- | --- |
 | coord | Make it louder and then stop. | supported | r112 |
@@ -216,6 +222,8 @@ Shared by every pattern: polite and filler prefixes (can u, could you maybe, hey
 | num | Mute the volume. | supported | r128 |
 
 ## music.instrument
+
+**Shape.** `media.music.instrument` (set family, noun-only) generates "change/switch/set the instrument|sound|voice to X" in all forms (test sh04); `use X`, `make it sound like X`, `flute pls` and `can it be X` stay hand-written.
 
 | shape | example | status | test |
 | --- | --- | --- | --- |
@@ -262,6 +270,8 @@ Shared by every pattern: polite and filler prefixes (can u, could you maybe, hey
 | order | Shift the whole thing to D major. | supported | r155 |
 
 ## music.key
+
+**Shape.** `media.music.key` (set family, noun-only, extra slot for major/minor) generates "set the key to D major" in all forms (test sh03); `we are in G`, `key = D` stay hand-written.
 
 | shape | example | status | test |
 | --- | --- | --- | --- |
@@ -476,3 +486,5 @@ Shared by every pattern: polite and filler prefixes (can u, could you maybe, hey
 - coord: three or more commands in one run-on message are cut into pieces by the dispatcher (DistilBERT); the rules take one clause level at a time (spec 03 section 4.3), each piece is covered above
 
 Totals: 258 supported lines (each with a test), 9 unsupported lines (with the reason).
+
+**L7 (macros, extends, shapes).** `patterns.sop` was migrated with `scripts/migrate-macros.mjs` (lead-ins, suffixes and 80 repeated lists are macros) and the degree lexicon extends `lex.lang.degree`. Eight shapes (tempo, volume, key, instrument and four status asks; 48 generated patterns) cover the operations named above; nine hand patterns whose examples a shape covered completely were deleted (`tempo.set volume.set inst.change key.set s.tempo s.inst s.key s.key2 r2.status.key`). The unguarded `{notes:rest}` captures now use `rest(notes)`: the migrated lead-ins are wider than the copied lists and a bare `rest` read "show my lists" as notes.
