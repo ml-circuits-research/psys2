@@ -38,3 +38,8 @@
     class=verb
     doc="Transitive verbs people ask about (who helped X, who did X lock); base and past forms"
     word=help word=helped word=save word=saved word=rescue word=rescued word=free word=freed word=carry word=carried word=love word=loved word=hate word=hated word=kill word=killed word=eat word=ate word=lead word=led word=follow word=followed word=push word=pushed word=lock word=locked word=burn word=burned word=catch word=caught word=find word=found word=meet word=met word=see word=saw word=hug word=hugged word=guide word=guided word=protect word=protected word=feed word=fed word=teach word=taught word=visit word=visited word=invite word=invited word=marry word=married word=thank word=thanked word=warn word=warned word=trap word=trapped word=chase word=chased word=attack word=attacked word=hit word=bite word=bit word=beat word=punish word=punished word=leave word=left word=take word=took word=bring word=brought word=send word=sent word=welcome word=welcomed word=blame word=blamed word=fear word=feared word=kiss word=kissed word=shelter word=sheltered
+
+@lex.docs.reader.extremes core.lexicon
+    class=noun
+    doc="Superlatives for comparing the sections of a document"
+    word=longest word=shortest

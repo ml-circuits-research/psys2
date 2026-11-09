@@ -3185,3 +3185,11 @@
     priority=12
     example="What is middle C?"
     example="Whats a high G?"
+
+@pat.media.music.ask.instrument core.pattern
+    match="[change|switch|set|pick|choose] [the|my]? instrument"
+    emit="@{_} core.request action=chat.ask arg.q=\"Which instrument?\" arg.template=\"change the instrument to <x>\" arg.world=\"media.music\""
+    kind=request
+    priority=11
+    example="Change the instrument."
+    doc="Clarification (spec 11 section 3): the instrument is missing; asks for it and completes the sentence with the next utterance."

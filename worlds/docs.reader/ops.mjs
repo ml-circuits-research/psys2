@@ -9,7 +9,7 @@
 // Effects: speech.say { text } (read aloud). Cross-world: ctx.request('ui.openTab', { tab: 'documents' }) after every answer.
 import { analyzeDocument, toSop, kinOfDoc } from './analyze.mjs';
 import { SAMPLE } from './sample.mjs';
-import { buildBm25, bm25Search, contentStems, stem, words, tfidfKeywords } from './text.mjs';
+import { buildBm25, bm25Search, correctQuery, contentStems, stem, words, tfidfKeywords } from './text.mjs';
 import { verbForm, ORDINALS, ROLES, KIN, KIN_INVERSE, singular, cap, plural, STOP, PRONOUNS } from './lang.mjs';
 
 const TAB = 'documents';
@@ -262,10 +262,24 @@ export function outline(ctx) {
   return answer(ctx, d, only ? `"${d.title}" has no headings; it is one section of ${d.sentences.length} sentences.` : `"${d.title}" has ${d.sections.length} sections: ${lines.join('; ')}.`, { cite: d.sections.filter((s) => s.last >= s.first).map((s) => s.first), note: false, last: { op: 'outline' } });
 }
 
-export function stats(ctx, { u } = {}) {
+/** Words and sentences of one section (1-based). */
+const sectionCounts = (d, idx) => { const [a, b] = sectionRange(d, idx - 1); let w = 0; for (let i = a; i <= b; i++) w += words(d.sentences[i].text).length; return { sentence: b - a + 1, word: w }; };
+
+export function stats(ctx, { u, n } = {}) {
   const r = need(ctx); if (r.env) return r.env;
   const d = r.d;
   const unit = singular(String(u ?? '').toLowerCase());
+  if (n !== undefined && n !== '') {
+    // a section: "how many words are in section 2", "how many words in that one" (n = 0: the section being read)
+    const s0 = st(ctx);
+    const idx = Number(n) || (s0.sectionDoc === d.id && Number.isInteger(s0.section) ? s0.section : null);
+    if (!idx) return no('missing', 'Which section do you mean? Say for example "section 2".');
+    if (!d.sections[idx - 1]) return no('missing', `"${d.title}" has only ${d.sections.length} ${d.sections.length === 1 ? 'section' : 'sections'}.`);
+    const c = sectionCounts(d, idx);
+    if (!(unit in c)) return no('missing', `I can count words and sentences in a section, not ${plural(unit)}.`);
+    s0.section = idx; s0.sectionDoc = d.id; s0.ctx = 'section';
+    return answer(ctx, d, `Section ${idx}, "${d.sections[idx - 1].title}", has ${c[unit]} ${c[unit] === 1 ? unit : plural(unit)}.`, { note: false, last: { op: 'stats' } });
+  }
   const parts = { sentence: d.sentences.length, word: d.words, paragraph: d.paras.length, section: d.sections.length, chapter: d.sections.length, heading: d.sections.length, character: d.entities.filter((e) => e.kind === 'character' && !e.minor).length, line: d.dialogue.length };
   if (unit in parts) {
     const n = parts[unit];
@@ -592,10 +606,12 @@ function notSaid(ctx, d, text, near = [], entity = null, query = '', soft = fals
 export function search(ctx, { q } = {}) {
   const r = need(ctx); if (r.env) return r.env;
   const d = r.d;
-  const query = String(q ?? '').replace(/[“”"]/g, '').trim();
+  let query = String(q ?? '').replace(/[“”"]/g, '').trim();
   if (!query) { ctx.state.awaiting = 'search'; return no('missing', 'What should I look for? For example: find "witch".'); }
   ctx.state.awaiting = null; ctx.state.ctx = 'result';
-  const res = bm25Search(bm(d), query, { limit: 60 });
+  let res = bm25Search(bm(d), query, { limit: 60 });
+  let fixed = null;
+  if (!res.hits.length) { const c = correctQuery(bm(d), query); if (c) { const r2 = bm25Search(bm(d), c, { limit: 60 }); if (r2.hits.length) { res = r2; fixed = c; query = c; } } }   // "srch fr bred": the closest word of the document
   const lc = norm(query);
   // an exact phrase that occurs in the text goes first
   if (lc.split(' ').length > 1) {
@@ -941,4 +957,16 @@ export function topicSummary(ctx) {
   if (sec) parts.push(`You were reading section ${s.section}, "${sec.title}".`);
   if (s.search?.hits?.length) parts.push(`The search for "${s.search.query}" has ${s.search.hits.length} ${s.search.hits.length === 1 ? 'result' : 'results'}.`);
   return parts.join(' ');
+}
+
+/** "Which section is the longest?": by words; the section becomes the one being read ("how many words in that one?"). */
+export function sectionExtreme(ctx, { e } = {}) {
+  const r = need(ctx); if (r.env) return r.env;
+  const d = r.d;
+  if (d.sections.length < 2) return no('missing', `"${d.title}" has only one section.`);
+  const sizes = d.sections.map((_, i) => sectionCounts(d, i + 1).word);
+  const want = String(e).toLowerCase() === 'shortest' ? Math.min(...sizes) : Math.max(...sizes);
+  const idx = sizes.indexOf(want) + 1;
+  const s = st(ctx); s.section = idx; s.sectionDoc = d.id; s.ctx = 'section';
+  return answer(ctx, d, `The ${String(e).toLowerCase()} section is section ${idx}, "${d.sections[idx - 1].title}", with ${want} words.`, { note: false, last: { op: 'stats' } });
 }

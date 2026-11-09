@@ -1242,7 +1242,7 @@
     example="How many words"
 
 @pat.docs.reader.sw.stats.long core.pattern
-    match="how [long|big|large|short|lengthy] is [the|this|that|my]? {d:lex.docs.reader.docs?} in {u:lex.docs.reader.units} [pls|plz|now|for_me|to_me|here|again|thanks|thx]?"
+    match="how [long|big|large|short|lengthy] is [the|this|that|my|it]? {d:lex.docs.reader.docs?} in {u:lex.docs.reader.units} [pls|plz|now|for_me|to_me|here|again|thanks|thx]?"
     emit="@{_} core.request action=docr.stats arg.u={u}"
     kind=question
     priority=13
@@ -2824,3 +2824,32 @@
     kind=request
     priority=12
     example="Read a section aloud."
+
+@pat.docs.reader.ext.which core.pattern
+    match="which section is the {e:lex.docs.reader.extremes}"
+    emit="@{_} core.request action=docr.sectionExtreme arg.e={e}"
+    kind=question
+    priority=15
+    example="Which section is the longest?"
+
+@pat.docs.reader.ext.what core.pattern
+    match="what is the {e:lex.docs.reader.extremes} section"
+    emit="@{_} core.request action=docr.sectionExtreme arg.e={e}"
+    kind=question
+    priority=15
+    example="What is the longest section?"
+
+@pat.docs.reader.stats.sec core.pattern
+    match="how many {u:lex.docs.reader.units} [are_there|are|does]? [in|has|have]? [section|chapter] {n:number} [have]?"
+    emit="@{_} core.request action=docr.stats arg.u={u} arg.n={n}"
+    kind=question
+    priority=15
+    example="How many words are in section 2?"
+    example="How many sentences does section 3 have?"
+
+@pat.docs.reader.stats.that core.pattern
+    match="how many {u:lex.docs.reader.units} [are_there|are]? in [that|this|the_same] [one|section]"
+    emit="@{_} core.request action=docr.stats arg.u={u} arg.n=0"
+    kind=question
+    priority=15
+    example="How many words in that one?"

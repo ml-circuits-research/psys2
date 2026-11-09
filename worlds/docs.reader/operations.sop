@@ -207,3 +207,9 @@
     semantics=action
     action=docr.pick
     doc="\"the last one\", \"the one before that\": a search result when a search was shown last, else a section."
+
+@op.docs.reader.sectionExtreme core.operation
+    impl=sectionExtreme
+    semantics=action
+    action=docr.sectionExtreme
+    doc="The longest or shortest section of the open document (by words); it becomes the section being read."

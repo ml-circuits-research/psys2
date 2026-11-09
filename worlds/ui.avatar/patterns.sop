@@ -1295,3 +1295,11 @@
     priority=14
     example="Put your eyes back like they were."
     example="Change your mouth back to how it was."
+
+@pat.ui.avatar.ask.name core.pattern
+    match="[call_yourself|rename_yourself|name_yourself|change_your_name|give_yourself_a_name|pick_a_name_for_yourself|set_your_name]"
+    emit="@{_} core.request action=chat.ask arg.q=\"What should my name be?\" arg.template=\"rename yourself to <x>\" arg.world=\"ui.avatar\""
+    kind=request
+    priority=15
+    example="Call yourself."
+    doc="Clarification (spec 11 section 3): the new name is missing; asks for it and completes the sentence with the next utterance."

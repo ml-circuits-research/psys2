@@ -2757,3 +2757,35 @@
     kind=request
     priority=13
     example="Undo it 4 times."
+
+@pat.docs.editor.ask.heading core.pattern
+    match="[add|insert|make|write|create|put_in] [a|an|new]? [new]? heading"
+    emit="@{_} core.request action=chat.ask arg.q=\"What should the heading say?\" arg.template=\"add a heading <x>\" arg.world=\"docs.editor\""
+    kind=request
+    priority=11
+    example="Add a heading."
+    doc="Clarification (spec 11 section 3): the text of the new block is missing; asks for it and completes the sentence with the next utterance."
+
+@pat.docs.editor.ask.quote core.pattern
+    match="[add|insert|make|write|create|put_in] [a|an|new]? [new]? quote"
+    emit="@{_} core.request action=chat.ask arg.q=\"What should the quote say?\" arg.template=\"add a quote <x>\" arg.world=\"docs.editor\""
+    kind=request
+    priority=11
+    example="Add a quote."
+    doc="Clarification (spec 11 section 3): the text of the new block is missing; asks for it and completes the sentence with the next utterance."
+
+@pat.docs.editor.ask.task core.pattern
+    match="[add|insert|make|write|create|put_in] [a|an|new]? [new]? task"
+    emit="@{_} core.request action=chat.ask arg.q=\"What should the task say?\" arg.template=\"add a task <x>\" arg.world=\"docs.editor\""
+    kind=request
+    priority=11
+    example="Add a task."
+    doc="Clarification (spec 11 section 3): the text of the new block is missing; asks for it and completes the sentence with the next utterance."
+
+@pat.docs.editor.ask.paragraph core.pattern
+    match="[add|insert|make|write|create|put_in] [a|an|new]? [new]? paragraph"
+    emit="@{_} core.request action=chat.ask arg.q=\"What should the paragraph say?\" arg.template=\"add a paragraph <x>\" arg.world=\"docs.editor\""
+    kind=request
+    priority=11
+    example="Add a paragraph."
+    doc="Clarification (spec 11 section 3): the text of the new block is missing; asks for it and completes the sentence with the next utterance."
