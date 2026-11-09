@@ -10,6 +10,10 @@
     for=action.ui.helpMe
     text="{value}"
 
+@tpl.ui.help.surprise core.template
+    for=action.ui.surprise
+    text="{value}"
+
 @tpl.ui.help.helpMore core.template
     for=action.ui.helpMore
     text="{value}"

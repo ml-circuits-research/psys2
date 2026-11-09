@@ -16,6 +16,12 @@
     action=ui.helpMe
     doc="Contextual orientation: which tab is open, what it is for, and three examples."
 
+@op.ui.help.surprise core.operation
+    impl=surprise
+    semantics=action
+    action=ui.surprise
+    doc="Asks the host to pick an example command (a canonical example of any non-game world), send it as if typed and show its answer; the same as the die button (effect chat.surprise)."
+
 @op.ui.help.helpMore core.operation
     impl=helpMore
     semantics=action

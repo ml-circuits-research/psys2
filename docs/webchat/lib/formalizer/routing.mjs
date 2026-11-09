@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /**
  * Routing policy (spec 03 section 4, ADR-004). Browser-safe, deterministic and explainable.
  *
@@ -121,7 +122,7 @@ export function gameControlAction(pattern, tab) {
   return tab?.[GAME_CONTROL_KEYS[shellAction]] ?? null;
 }
 export const SETTING_ACTIONS = new Set([
-  'ui.back', 'ui.whichTab', 'ui.help', 'ui.helpMe', 'ui.helpMore', 'ui.helpAbout', 'ui.helpGame', 'ui.helpWhy', 'ui.speaker', 'ui.listening', 'ui.handsFree', 'ui.rate', 'ui.language', 'ui.phraseLog',
+  'ui.back', 'ui.whichTab', 'ui.help', 'ui.helpMe', 'ui.helpMore', 'ui.surprise', 'ui.helpAbout', 'ui.helpGame', 'ui.helpWhy', 'ui.speaker', 'ui.listening', 'ui.handsFree', 'ui.rate', 'ui.language', 'ui.phraseLog',
 ]);
 
 /**

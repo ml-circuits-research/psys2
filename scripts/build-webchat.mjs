@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// SPDX-License-Identifier: AGPL-3.0-only
 // Builds the static browser demo (spec 06 "Webchat", spec 07 §4).
 //
 //   node scripts/build-webchat.mjs [--out <dir>] [--models [<export dir>] [--meta-only]]      (default out: docs/webchat)
@@ -11,6 +12,7 @@
 //   build-info.json         { worlds, files: { path: sha256 }, builtAt }  (no commit ids)
 //   models/dispatcher/      (only with --models [dir], default dir training/runs/export/dispatcher-distilbert) the Encoder formalizer's model:
 //                           model.int8.onnx, vocab.txt, meta.json. Copied only when changed, never removed; meta.json carries a `version` block. --meta-only regenerates meta.json without touching the model.
+//   surprise-pool.json      (CLI: when missing or with --surprise; `surprise: true` in code; takes about 25 minutes) the SURPRISE button's pool: canonical examples validated in fresh sessions and in click walks [{ text, world, tab }]. Left alone otherwise; tests/surprise.test.mjs flags stale entries.
 // Idempotent: lib/, worlds/ and build-info.json are removed and recreated on every run.
 import { readFile, writeFile, readdir, mkdir, rm, cp, stat } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
@@ -116,7 +118,7 @@ async function writeEarlyLoad({ outDir, tabFiles, ids }) {
   if (next !== html) await writeFile(file, next);
 }
 
-export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs/webchat'), models = null, metaOnly = false, log = () => {} } = {}) {
+export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs/webchat'), models = null, metaOnly = false, surprise = false, log = () => {} } = {}) {
   const src = path.join(root, 'src');
   const worldsRoot = path.join(root, 'worlds');
   await mkdir(outDir, { recursive: true });
@@ -167,6 +169,14 @@ export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs
   // 3b. dispatcher model for the Encoder formalizer (optional)
   const modelFiles = models ? await copyDispatcherModel({ root, outDir, exportDir: typeof models === 'string' ? models : DEFAULT_MODEL_EXPORT, metaOnly, log }) : null;
 
+  // 3c. SURPRISE pool: validated against the source worlds with the rules formalizer
+  if (surprise) {
+    const [{ createFsLoader }, { createEngine }, { buildSurprisePool }] = await Promise.all([import('../src/loaders/fs-loader.mjs'), import('../src/dialog/index.mjs'), import('../src/dialog/surprise.mjs')]);
+    const { pool, dropped } = await buildSurprisePool(await createEngine({ loader: createFsLoader({ roots: [worldsRoot] }) }));
+    await writeFile(path.join(outDir, 'surprise-pool.json'), JSON.stringify(pool) + '\n');
+    log(`webchat: surprise pool ${pool.length} examples (${dropped.length} dropped)`);
+  }
+
   // 4. build info
   const files = {};
   for (const sub of ['lib', 'worlds']) {
@@ -183,5 +193,5 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   const outDir = i > 0 ? path.resolve(process.argv[i + 1]) : undefined;
   const m = process.argv.indexOf('--models');
   const models = m > 0 ? (process.argv[m + 1] && !process.argv[m + 1].startsWith('--') ? process.argv[m + 1] : true) : null;
-  await buildWebchat({ outDir, models, metaOnly: process.argv.includes('--meta-only'), log: console.log });
+  await buildWebchat({ outDir, models, metaOnly: process.argv.includes('--meta-only'), surprise: process.argv.includes('--surprise') || !(await exists(path.join(outDir ?? path.join(REPO, 'docs/webchat'), 'surprise-pool.json'))), log: console.log });
 }

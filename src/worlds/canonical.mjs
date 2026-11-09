@@ -19,7 +19,7 @@ const STARTERS = new Set(('what how which who whom whose where why when is are a
   'lower reset restart resign create compare search close keep speak sketch paint fill erase rotate flip duplicate insert join split replace align justify promote castle capture drop ' +
   'enlarge shrink wear hide swap spread divide multiply subtract mute unmute loop pause continue compose transpose sing hit press choose forget introduce teach ask repeat help guess ' +
   'run begin quit stack label title use name wipe jump undo reload refresh load analyze extract narrate suggest recommend evaluate assess offer concede unhighlight uncheck check tick ' +
-  'thank thanks goodbye giving confirm black follow open import print share send stick pin deselect finish simplify rewrite fix locate measure magnify wait come hear listen').split(/\s+/));
+  'surprise thank thanks goodbye giving confirm black follow open import print share send stick pin deselect finish simplify rewrite fix locate measure magnify wait come hear listen').split(/\s+/));
 const SECOND = new Set(['is', 'are', 'was', 'were', 'has', 'have', 'had', 'got', 'can', 'could', 'will', 'would', 'does', 'did', 'do', 'am', 'needs', 'wants', 'likes', 'lost', 'gave', 'bought', 'ate', 'sold', 'spent', 'found', 'paid', 'saved', 'picked', 'put']);
 
 /** True when `s` is a clean natural sentence: capitalised, punctuated, 2-14 words, no slang or typos, and it starts like a sentence. */

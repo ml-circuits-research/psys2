@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 // Operations of ui.help: contextual help (spec 07 section 8). Browser-safe: no imports.
 //
 // State (ctx.state): { pos, lastUnparsed, lastHelp }
@@ -165,6 +166,12 @@ export function help(ctx, { count } = {}) {
   const q = r.items.map(quote);
   const tail = r.total > BATCH ? ' Say "more examples" for others.' : '';
   return ok(`On the ${t.title} tab you can say, for example: ${q.slice(0, -1).join(', ')} or ${q.at(-1)}.${tail}`, { values: r.items });
+}
+
+/** SURPRISE: the host picks a random canonical example and sends it (effect chat.surprise). */
+export function surprise(ctx) {
+  ctx.effect('chat.surprise', {});
+  return ok('Here is an example to try.', { values: [] });
 }
 
 /** The next five examples. */

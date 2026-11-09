@@ -23,7 +23,7 @@ export function segmentOutcomes(reply) {
 }
 
 /** Builds one log record. `mode` is typed | voice | chip; `tab` the active tab id; `reply` may be null (failed send). */
-export function buildRecord({ text, mode = 'typed', language = 'en', tab = null, reply = null, now = Date.now(), id = null, endType = null, waitMs = null }) {
+export function buildRecord({ text, mode = 'typed', language = 'en', tab = null, reply = null, now = Date.now(), id = null, endType = null, waitMs = null, example = false }) {
   let segments = [];
   try { segments = segmentOutcomes(reply); } catch { segments = []; }   // a reply with an unexpected shape must never lose the phrase
   let formalizer = null;
@@ -34,13 +34,14 @@ export function buildRecord({ text, mode = 'typed', language = 'en', tab = null,
     source: mode === 'chip' ? 'chip' : 'human', lang: reply?.lang ?? language, english, tab, segments,
     unparsed: segments.some((s) => s.unparsed), formalizer,
     feedback: reply?.feedback ?? reply?.trace?.feedback ?? null,   // 'negative' when the person said the last answer was wrong (spec 11 section 13)
+    ...(example ? { example: true } : {}),   // SURPRISE: the text came from the die button (a canonical example), not from the person; source stays 'chip'
     ...(endType ? { endType, waitMs: waitMs ?? null } : {}),   // VOICE: how a spoken message ended: final | pause-plausible | pause-timeout | mic-stop, and how long the app waited (ms)
   };
 }
 
 /** Fills a record written at send time with the outcome of the reply (the phrase is logged before it is answered). */
 export function completeRecord(rec, reply, { language = 'en' } = {}) {
-  const full = buildRecord({ text: rec.text, mode: rec.mode, language, tab: rec.tab, reply, now: Date.parse(rec.time) || Date.now(), id: rec.id, endType: rec.endType ?? null, waitMs: rec.waitMs ?? null });
+  const full = buildRecord({ text: rec.text, mode: rec.mode, language, tab: rec.tab, reply, now: Date.parse(rec.time) || Date.now(), id: rec.id, endType: rec.endType ?? null, waitMs: rec.waitMs ?? null, example: rec.example === true });
   return full;
 }
 

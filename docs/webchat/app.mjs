@@ -58,6 +58,7 @@ const ICON = {
   gear: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.4 13a7.5 7.5 0 0 0 0-2l2-1.6-2-3.4-2.4 1a7.6 7.6 0 0 0-1.7-1L15 3.4h-4l-.4 2.6a7.6 7.6 0 0 0-1.7 1l-2.4-1-2 3.4 2 1.6a7.5 7.5 0 0 0 0 2l-2 1.6 2 3.4 2.4-1a7.6 7.6 0 0 0 1.7 1l.4 2.6h4l.4-2.6a7.6 7.6 0 0 0 1.7-1l2.4 1 2-3.4-2-1.6ZM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z"/></svg>',
   send: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20.5 22 12 3 3.5v6.6l11 1.9-11 1.9v6.6Z"/></svg>',
   close: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.4 5 12 10.6 17.6 5 19 6.4 13.4 12 19 17.6 17.6 19 12 13.4 6.4 19 5 17.6 10.6 12 5 6.4 6.4 5Z"/></svg>',
+  die: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm3 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Zm8 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Zm-4 3.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3ZM8 14a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Zm8 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z"/></svg>',
   stop: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h12v12H6Z"/></svg>',
 };
 const icon = (name) => { const s = document.createElement('span'); s.className = 'p2-icon'; s.innerHTML = ICON[name]; return s; };
@@ -106,6 +107,7 @@ export async function mountPsys2(element, options = {}) {
   const ringEl = (() => { const NS = 'http://www.w3.org/2000/svg'; const svg = document.createElementNS(NS, 'svg'); svg.setAttribute('viewBox', '0 0 40 40'); svg.setAttribute('class', 'p2-ring'); svg.setAttribute('aria-hidden', 'true'); const c = document.createElementNS(NS, 'circle'); c.setAttribute('cx', '20'); c.setAttribute('cy', '20'); c.setAttribute('r', '18'); svg.append(c); return svg; })();
   micBtn.append(ringEl);
   const speakerBtn = h('button', { class: 'p2-btn p2-speaker', type: 'button', 'aria-pressed': 'false', 'aria-label': 'Read answers aloud: off', title: 'Read answers aloud: off' }, icon('speaker'));
+  const dieBtn = h('button', { class: 'p2-btn p2-die', type: 'button', 'aria-label': 'Try an example', title: 'Try an example' }, icon('die'));
   const sendBtn = h('button', { class: 'p2-btn p2-send', type: 'submit', 'aria-label': 'Send', title: 'Send' }, icon('send'));
   const dictText = h('span', { class: 'p2-dict-text' }, 'Dictating into: Untitled document');
   const dictStop = h('button', { class: 'p2-btn-text p2-dict-stop', type: 'button', 'aria-label': 'Stop dictation', title: 'Stop dictation' }, 'Stop');
@@ -118,7 +120,7 @@ export async function mountPsys2(element, options = {}) {
   const setBody = h('div', { class: 'p2-modal-body', role: 'tabpanel', id: 'p2-set-panel', tabindex: '0' });
   const settingsEl = h('div', { class: 'p2-modal', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'p2-set-title', hidden: true },
     h('div', { class: 'p2-modal-head' }, h('h2', { class: 'p2-modal-title', id: 'p2-set-title' }, 'Settings'), setClose), setTabsEl, setBody);
-  const form = h('form', { class: 'p2-form' }, micBtn, speakerBtn, input, sendBtn);
+  const form = h('form', { class: 'p2-form' }, micBtn, speakerBtn, input, dieBtn, sendBtn);
   const chat = h('section', { class: 'p2-chat', 'aria-label': 'Chat' },
     h('header', { class: 'p2-head' },
       h('div', { class: 'p2-title' }, h('strong', {}, options.title ?? 'PSys2'), h('span', {}, TAGLINE)),
@@ -299,6 +301,12 @@ export async function mountPsys2(element, options = {}) {
     },
     'settings': async ({ action, tab }) => { if (action === 'close') closeSettings(); else openSettings(tab); return { ok: true }; },
     'avatar.animate': async (args) => { robotUI()?.animate?.(args); return { ok: !!robotUI() }; },
+    'chat.surprise': async () => {   // the voice equivalent of the die button; waits for the current turn (the one that carries this effect) to end
+      let tries = 0;
+      const fire = () => { if (turn && tries++ < 100) setTimeout(fire, 30); else if (!turn) dieBtn.click(); };   // not awaited: the effect must not hold its own turn
+      setTimeout(fire, 0);
+      return { ok: true };
+    },
     'ui.focus': async ({ target, element: el }) => {
       const t = String(target ?? el ?? 'input');
       if (t === 'input' || t === 'chat') input.focus();
@@ -486,7 +494,7 @@ export async function mountPsys2(element, options = {}) {
   /** A phrase is logged the moment it is sent (RD7), so it counts even if the answer is slow, fails or the page closes; the reply fills the outcome later. */
   function logPhraseStart(text, mode, voice = {}) {
     if (!settings.logPhrases) return null;
-    try { const rec = buildRecord({ text, mode, language: settings.language, tab: view, reply: null, endType: voice.endType ?? null, waitMs: voice.waitMs ?? null }); phrases.add(rec); if (!settingsEl.hidden) renderPhraseLog(); return rec.id; } catch (e) { console.warn('phrase log failed', e); return null; }
+    try { const rec = buildRecord({ text, mode, language: settings.language, tab: view, reply: null, endType: voice.endType ?? null, waitMs: voice.waitMs ?? null, example: voice.example === true }); phrases.add(rec); if (!settingsEl.hidden) renderPhraseLog(); return rec.id; } catch (e) { console.warn('phrase log failed', e); return null; }
   }
   function recordPhrase(text, mode, reply, recId = null) {
     if (!settings.logPhrases) return;
@@ -527,6 +535,14 @@ export async function mountPsys2(element, options = {}) {
   // typing or tapping the field cancels a pending spoken send; the text stays for editing
   on(input, 'input', () => { if (speech?.hasPending()) speech.cancelPending(input.value); });
   on(input, 'pointerdown', () => { if (speech?.hasPending()) speech.cancelPending(input.value || undefined); });
+  // SURPRISE: the die button sends a canonical example as if typed (logged as a button example, not human phrasing); the tab follows through the shell state.
+  let surprisePicker = null;
+  on(dieBtn, 'click', () => {
+    if (turn) { flashHint(BUSY_HINT); return; }
+    const ex = surprisePicker?.next();
+    if (!ex) { flashHint('No examples are available yet.'); return; }
+    send(ex.text, 'chip', { example: true });
+  });
   on(sendBtn, 'click', (e) => { if (turn) { e.preventDefault(); stopTurn(); } });
 
   // ---------- speech ----------
@@ -964,10 +980,19 @@ export async function mountPsys2(element, options = {}) {
     console.error(e);
     statusEl.textContent = 'Could not start';
     note(`PSys2 could not start: ${e?.message ?? e}. If you opened this page from disk, serve it over HTTP instead; if lib/ or worlds/ are missing, run "npm run build:webchat".`);
-    input.disabled = sendBtn.disabled = true;
+    input.disabled = sendBtn.disabled = dieBtn.disabled = true;
     return { settings, destroy() {} };
   }
   if (destroyed) return { settings, destroy() {} };
+
+  // the pool loads in the background; the die button is ready a moment after the page
+  (async () => {
+    try {
+      const [{ candidateExamples, createSurprisePicker }, pool] = await Promise.all([import(new URL('lib/dialog/surprise.mjs', base).href),
+        fetch(new URL('surprise-pool.json', base)).then((r) => (r.ok ? r.json() : null)).catch(() => null)]);
+      surprisePicker = createSurprisePicker(Array.isArray(pool) && pool.length ? pool : candidateExamples(engine));   // unvalidated fallback: the build writes the validated pool
+    } catch (e) { console.warn('surprise pool unavailable', e); }
+  })();
 
   const loaded = new Set(engine.worlds().map((w) => w.id));
   for (const t of tabDefs) {

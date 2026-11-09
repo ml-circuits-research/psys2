@@ -11,6 +11,23 @@
     expectState="lastHelp.tab=robot"
     session=a
 
+@t.ui.help.sp01 core.test
+    input="Surprise me with an example"
+    expect="Here is an example to try"
+    expectEffect=chat.surprise
+    session=sp1
+
+@t.ui.help.sp02 core.test
+    input="Give me an example command."
+    expect="Here is an example to try"
+    expectEffect=chat.surprise
+    session=sp2
+
+@t.ui.help.sp03 core.test
+    input="Give me an example"
+    expect="for example: \""
+    session=sp3
+
 @t.ui.help.n03 core.test
     input="More examples"
     expect="more things you can say on the Avatar tab"

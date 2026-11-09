@@ -7,9 +7,10 @@
  *              voice and text commands, 0 console errors, one screenshot per tab
  *   ui1        one microphone and one "read aloud" toggle in the input bar, nothing in the header or the tabs, a tooltip on every icon
  *              button, the dictation state, screenshots of the header, the input bar and the editor
+ *   surprise   the die button ("Try an example"): 50 clicks, 0 console errors, every answer supported, the tab follows, no immediate repeats, logged as an example
  *   doc        greeting, header line, title and About page wording, help answers
  *
- *   node scripts/test-webchat-ui.mjs [--only settings,ui1,doc] [--chrome /usr/bin/chromium] [--shots docs/webchat/screenshots]
+ *   node scripts/test-webchat-ui.mjs [--only settings,ui1,doc,surprise] [--chrome /usr/bin/chromium] [--shots docs/webchat/screenshots]
  *
  * puppeteer-core is NOT a dependency: set PUPPETEER_CORE to a scratch install (see scripts/perf-webchat.mjs).
  */
@@ -161,7 +162,7 @@ async function ui1For(name, viewport, o) {
     const head = await pg.evaluate(() => ({ buttons: [...document.querySelectorAll('.p2-head button')].map((b) => b.getAttribute('aria-label')), select: !!document.querySelector('.p2-head select[aria-label="Language"]'), title: document.querySelector('.p2-title')?.innerText }));
     check(`${tag}: the header keeps only the language selector and the gear`, head.select && JSON.stringify(head.buttons) === JSON.stringify(['Settings']), head.buttons.join(' | '));
     const bar = await pg.evaluate(() => [...document.querySelector('.p2-form').children].map((e) => `${e.tagName.toLowerCase()}.${[...e.classList].filter((x) => x !== 'p2-btn').join('.')}`));
-    check(`${tag}: input bar = one mic, one read-aloud toggle, the text box, Send`, JSON.stringify(bar) === JSON.stringify(['button.p2-mic', 'button.p2-speaker', 'input.p2-text', 'button.p2-send']), bar.join(' '));
+    check(`${tag}: input bar = one mic, one read-aloud toggle, the text box, the die, Send`, JSON.stringify(bar) === JSON.stringify(['button.p2-mic', 'button.p2-speaker', 'input.p2-text', 'button.p2-die', 'button.p2-send']), bar.join(' '));
     const voiceButtons = await pg.evaluate(() => [...document.querySelectorAll('button')].filter((b) => /microphone|speak a message|hands-free|dictat|read answers aloud/i.test(`${b.getAttribute('aria-label')} ${b.title}`)).map((b) => b.getAttribute('aria-label')));
     check(`${tag}: exactly one mic and one read-aloud toggle on the page (dictation only has Stop)`, voiceButtons.filter((l) => /^(Microphone|Speak a message)/.test(l)).length === 1 && voiceButtons.filter((l) => /^Read answers aloud/.test(l)).length === 1, voiceButtons.join(' | '));
     // read-aloud toggle
@@ -240,7 +241,61 @@ async function docFor(name, viewport, o) {
   } finally { await c.close(); }
 }
 
+/** SURPRISE: 50 clicks on the die in a real browser (rules formalizer). */
+async function surpriseFor(name, viewport, o, clicks = 50) {
+  const c = await openChat({ ...o, throttle: 1, viewport });
+  const { pg } = c;
+  const tag = name;
+  try {
+    const pool = JSON.parse(await pg.evaluate(async () => JSON.stringify(await (await fetch('surprise-pool.json')).json())));
+    const byText = new Map(pool.map((p) => [p.text, p]));
+    const btn = await pg.evaluate(() => { const b = document.querySelector('.p2-form .p2-die'); return b && { label: b.getAttribute('aria-label'), title: b.title, disabled: b.disabled }; });
+    check(`${tag}: a die button next to the input, tooltip = aria-label "Try an example"`, btn?.label === 'Try an example' && btn.title === btn.label && !btn.disabled, JSON.stringify(btn));
+    await pg.waitForFunction(() => document.querySelector('.p2-die'), { timeout: 5000 });
+    await sleep(500);
+    const picked = [], bad = [], tabMiss = [];
+    let prevWorld = null, sameWorldTwice = 0, repeats = 0;
+    for (let i = 0; i < clicks; i++) {
+      const before = await pg.$$eval('.p2-msg.is-user', (e) => e.length);
+      await pg.click('.p2-die');
+      const done = await pg.waitForFunction((n) => !window.psys2.busy && !document.querySelector('.p2-msg.is-typing') && document.querySelectorAll('.p2-msg.is-user').length > n, { timeout: 20000, polling: 20 }, before).then(() => true).catch(() => false);
+      const rec = await c.lastPhrase();
+      const text = rec?.text ?? '';
+      if (!done || !rec) { bad.push(`${i}: no answer to "${text}"`); continue; }
+      const ex = byText.get(text);
+      if (!ex) bad.push(`${i}: "${text}" is not in the pool`);
+      if (picked.at(-1) === text) repeats++;
+      if (ex && ex.world === prevWorld) sameWorldTwice++;
+      prevWorld = ex?.world ?? null;
+      picked.push(text);
+      if (!(rec.source === 'chip' && rec.example === true)) bad.push(`${i}: "${text}" not logged as an example (${rec.source}, ${rec.example})`);
+      if (rec.unparsed || !rec.segments.length || rec.segments.some((s) => s.status !== 'supported')) bad.push(`${i}: "${text}" -> ${rec.segments.map((s) => s.status).join(',') || 'no segments'}`);
+      const tab = await pg.evaluate(() => document.querySelector('.p2-tab[aria-selected="true"]')?.id?.replace('p2-tab-', '') ?? null);
+      if (ex?.tab && ex.tab !== 'robot' && tab !== ex.tab) tabMiss.push(`${i}: "${text}" expected tab ${ex.tab}, on ${tab}`);
+    }
+    check(`${tag}: ${clicks} clicks, every answer supported and logged as an example`, bad.length === 0, bad.slice(0, 5).join(' | '));
+    check(`${tag}: no immediate repeats`, repeats === 0);
+    check(`${tag}: consecutive clicks come from different worlds (${sameWorldTwice} same-world pairs)`, sameWorldTwice === 0);
+    check(`${tag}: ${new Set(picked.map((t) => byText.get(t)?.world)).size} different worlds in ${clicks} clicks`, new Set(picked.map((t) => byText.get(t)?.world)).size >= 10);
+    check(`${tag}: the tab switches when expected`, tabMiss.length === 0, tabMiss.slice(0, 5).join(' | '));
+    const phrases = await pg.evaluate(() => JSON.parse(localStorage.getItem('psys2.webchat.phrases') ?? '[]'));
+    check(`${tag}: examples stay out of the human phrase count`, phrases.every((r) => r.source === 'chip'));
+    // the voice equivalents press the same button
+    for (const phrase of ['surprise me with an example', 'give me an example command']) {
+      const n = await pg.$$eval('.p2-msg.is-user', (e) => e.length);
+      await pg.type('input.p2-text', phrase, { delay: 0 }); await pg.keyboard.press('Enter');
+      const ok = await pg.waitForFunction((n) => !window.psys2.busy && document.querySelectorAll('.p2-msg.is-user').length >= n + 2 && !document.querySelector('.p2-msg.is-typing'), { timeout: 20000, polling: 20 }, n).then(() => true).catch(() => false);
+      const last = await c.lastPhrase();
+      check(`${tag}: "${phrase}" sends an example`, ok && last?.example === true && byText.has(last.text), `${last?.text}`);
+    }
+    check(`${tag}: 0 console errors`, c.errors.length === 0 && c.consoleErrors.length === 0, [...c.errors, ...c.consoleErrors].slice(0, 3).join(' | '));
+    await shot(c, o, `surprise-${name}`);
+  } finally { await c.close(); }
+}
+
 export const SCENARIOS = {
+  async surprise(o) { for (const [name, vp] of Object.entries(VIEWPORTS)) await surpriseFor(name, vp, o); },
+
   async doc(o) { for (const [name, vp] of Object.entries(VIEWPORTS)) await docFor(name, vp, o); },
 
   async ui1(o) { for (const [name, vp] of Object.entries(VIEWPORTS)) await ui1For(name, vp, o); },

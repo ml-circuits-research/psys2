@@ -54,11 +54,21 @@
     example="Give me some examples."
 
 @pat.ui.help.one core.pattern
-    match="[give_me|show_me|tell_me|let_me_see|i_want|i_need|can_i_have|can_you_give_me] [an|one|1|a] [example|sample|example_command|example_sentence|example_phrase]"
+    match="[give_me|show_me|tell_me|let_me_see|i_want|i_need|can_i_have|can_you_give_me] [an|one|1|a] [example|sample|example_sentence|example_phrase]"
     emit="@{_} core.request action=ui.help arg.count=1"
     kind=request
     priority=12
     example="Give me an example."
+
+@pat.ui.help.surprise core.pattern
+    canonical="Surprise me with an example."
+    canonical="Give me an example command."
+    match="[$lang.lead.polite|please]? [$lang.ask.surprise] [please]?"
+    emit="@{_} core.request action=ui.surprise"
+    kind=request
+    priority=13
+    example="Surprise me with an example."
+    example="Give me an example command."
 
 @pat.ui.help.one2 core.pattern
     match="[an_example|one_example|an_example_please|example_please|show_an_example]"
