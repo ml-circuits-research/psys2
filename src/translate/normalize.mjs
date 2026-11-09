@@ -40,7 +40,7 @@ export function foldKey(word) {
   return normalizeText(word).toLowerCase().normalize('NFD').replace(/\p{M}/gu, '');
 }
 
-const TOKEN_RE = /\p{L}+(?:['\-]\p{L}+)*|(?<![\p{L}\d])-\d+(?:[.,]\d+)?|\d+(?:[.,]\d+)?|\S/gu;
+const TOKEN_RE = /\p{L}+(?:['\-]\p{L}+)*|(?<![\p{L}\d])-\d+(?:[.,]\d+)?|\d{1,2}:\d{2}|\d+(?:[.,]\d+)?|\S/gu;
 
 /** Tokenize text; spans refer to the original string. */
 export function tokenize(original) {

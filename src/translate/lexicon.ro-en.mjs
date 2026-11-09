@@ -444,7 +444,13 @@ abțibild,abțibilduri|sticker|n
 raport,rapoarte|report|n
 document,documente|document|n
 paragraf,paragrafe|paragraph|n
-titlu,titluri|title|n
+titlu,titluri|heading|n
+grad,grade|degree|n
+excursie,excursii|trip|f
+rețetă,rețete|recipe|f
+notiță,notițe|note|f
+plan,planuri|plan|n
+alimente|groceries|f mass pl
 propoziție,propoziții|sentence|f
 editor,editoare|editor|m
 difuzor,difuzoare|speaker|n
@@ -703,7 +709,7 @@ ninge|snow|- - ninge - - -|nins|i imps
 străluci|shine/shone/shone|is:străluc|strălucit|i
 crește|grow/grew/grown|cresc crești crește creștem creșteți cresc|crescut|i
 muri|die|mor mori moare murim muriți mor|murit|i
-vorbi|talk|is:vorb|vorbit|i
+vorbi|speak/spoke/spoken|is:vorb|vorbit|i imp
 striga|shout|a:strig|strigat|i
 saluta|greet|a:salut|salutat|t
 mulțumi|thank|is:mulțum|mulțumit|t
@@ -765,7 +771,10 @@ menționa|mention|az:mențion|menționat|t
 descărca|download|a:descarc|descărcat|t imp
 dicta|dictate|a:dict|dictat|t imp
 scoate|remove|scot scoți scoate scoatem scoateți scot|scos|t imp
-elimina|remove|az:elimin|eliminat|t imp
+elimina|remove|a:elimin|eliminat|t imp
+enumera|list|az:enumer|enumerat|t imp
+întâlni|meet/met/met|is:întâln|întâlnit|t recip
+
 transforma|turn|az:transform|transformat|t imp
 insera|insert|az:insert|inserat|t imp
 evidenția|highlight|az:evidenți|evidențiat|t imp
@@ -899,6 +908,8 @@ perfect,perfectă,perfecți,perfecte|perfect
 major,majoră,majori,majore|major
 minor,minoră,minori,minore|minor
 ultim,ultimă,ultimi,ultime|last
+îngroșat,îngroșată,îngroșați,îngroșate|bold
+numerotat,numerotată,numerotați,numerotate|numbered
 relativ,relativă,relativi,relative|relative
 principal,principală,principali,principale|main
 numerotat,numerotată,numerotați,numerotate|numbered
@@ -1000,6 +1011,8 @@ aproape|near|adv
 împreună|together|adv
 repede|quickly|adv
 încet|slowly|adv
+primul,prima,primii,primele|the first|det
+ultimul,ultima,ultimii,ultimele|the last|det
 bine|well|adv
 așa|like this|adv
 cam,aproximativ|about|adv

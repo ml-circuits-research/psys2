@@ -233,6 +233,12 @@ const BASE_FRAMES = [
   { p: 'ce animale au mai rămas', out: 'which animals are left' },
   { p: 'plec acum', out: 'I am leaving now' },
   { p: 'ne vedem', out: 'see you' },
+  // ---- comparative adverbs
+  { p: 'puțin mai repede|rapid', token: { fpos: 'adv', en: 'a bit faster' } },
+  { p: 'puțin mai încet|rar', token: { fpos: 'adv', en: 'a bit slower' } },
+  { p: 'mai repede|rapid', token: { fpos: 'adv', en: 'faster' } },
+  { p: 'mai încet|rar', token: { fpos: 'adv', en: 'slower' } },
+  { p: 'mai tare', token: { fpos: 'adv', en: 'louder' } },
   // ---- lists
   { p: 'de pe', token: { fpos: 'prep', en: 'from' } },
   { p: 'de la', token: { fpos: 'prep', en: 'from' } },

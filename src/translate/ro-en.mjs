@@ -305,6 +305,13 @@ function makeFixed(f, m, first, last, info) {
     else if (name === 'rest') {
       flush();
       if (mod === 'raw') pieces.push(...sl.toks.map((t) => pc(t.raw, t, t.kind === 'punct' ? { punct: true } : {})));
+      else if (mod === 'cont') {   // text the user wants written down: translated, keeping the capital letter of its first word
+        const toks2 = sl.toks.map((t, i) => (i === 0 && t.key === 'salut' ? { ...t, an: undefined, synth: [{ pos: 'func', fpos: 'interj', entry: { pos: 'interj', en: 'hello', keys: ['salut'], flags: new Set(), ro: 'salut' } }] } : t));
+        const ps = processTokens(toks2, { ...info, frag: true, q: false, excl: false });
+        const cap = /^\p{Lu}/u.test(sl.toks[0].raw);
+        if (ps.length && ps[0].en) ps[0] = { ...ps[0], en: cap ? ps[0].en[0].toUpperCase() + ps[0].en.slice(1) : ps[0].en[0].toLowerCase() + ps[0].en.slice(1) };
+        pieces.push(...ps.filter((x, i) => !(x.art && ps[i + 1] && ps[i + 1].src && x.src && x.src[0] === ps[i + 1].src[0] && x.src[1] === ps[i + 1].src[1])));   // no article for a bare noun
+      }
       else if (mod === 'inf' || mod === 'binf') {
         // "să ud plantele" -> "to water the plants": translate as "vreau să ..." and drop the main clause
         const s0 = sl.toks[0];
@@ -1319,6 +1326,7 @@ function translateClause(items, info, c) {
     for (const { x, info: ci } of clitInfo) {
       if (ci.refl) continue;
       if (x.enc && /^(ti|iti|mi|imi)$/.test(x.key) && !entry.flags.d && postNP.length && postNP[0].def && !postNP[0].poss && !postNP[0].possessor && !imperativeIsGive) { postNP[0].poss = { en: /^i?m/.test(x.key) ? 'my' : 'your', tok: x }; continue; }   // "Fă-ți corpul verde" = make your body green
+      if (x.key === 'ne' && entry.flags.recip) continue;   // "ne întâlnim" = we meet
       if (x.enc && x.key === 'te' && imperative) { doPronPieces.push(pspan('yourself', x.start, x.end)); continue; }   // "Resetează-te" = reset yourself
       if (x.enc && /^(i|ii)$/.test(x.key) && imperative && !entry.flags.d) { doPronPieces.push(pspan('them', x.start, x.end)); continue; }   // "Fă-i pătrați" = make them square
       const wantDat = ci.dat && (DAT_CLITICS.has(x.key) && (entry.flags.d || datNPs.length || x.enc || !ci.acc || imperative || /^(mi|ti|imi|iti|i)$/.test(x.key)));
@@ -1479,6 +1487,12 @@ function segmentedPieces(toks, info0) {
     while (j < toks.length - 1 && toks[j].kind === 'word' && SEG_WORDS.has(toks[j].key) && !(isW && false)) j++;
     if (isComma || isW) { cuts.push([i, j]); i = j - 1; }
   }
+  // politeness at either end ("te rog", "mulțumesc", "salut") is a segment of its own, so it never blocks a whole-segment frame
+  const polite = (a) => { const k0 = toks[a]?.key, k1 = toks[a + 1]?.key; return k0 === 'te' && k1 === 'rog' ? 2 : (k0 === 'va' && k1 === 'rog') ? 2 : /^(multumesc|salut|hei|buna|ok|deci|pls)$/.test(k0 ?? '') ? 1 : 0; };
+  const lead = polite(0);
+  if (lead && lead < toks.length) { const e = lead + (toks[lead]?.kind === 'punct' && toks[lead].raw === ',' ? 1 : 0); if (e < toks.length && !cuts.some((c) => c[0] <= e && c[1] > lead)) cuts.unshift([lead, e]); }
+  for (let a = Math.max(1, toks.length - 3); a < toks.length; a++) { const L = polite(a); if (L && a + L === toks.length && !cuts.some((c) => c[1] > a - 1 && c[0] < toks.length)) { cuts.push([a, a]); break; } }
+  cuts.sort((x, y) => x[0] - y[0]);
   if (!cuts.length || cuts.length > 8) return null;
   // dynamic programme over the cut points: maximise the number of segments that match a whole-segment frame
   const n = cuts.length;

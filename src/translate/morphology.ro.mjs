@@ -25,6 +25,7 @@ export function defSingular(sg, g) {
   if (/ă$/.test(sg)) return g === 'm' ? sg + 'l' : sg.slice(0, -1) + 'a';
   if (/ea$/.test(sg)) return sg + 'ua';
   if (/a$/.test(sg)) return sg;
+  if (/ie$/.test(sg) && g === 'f') return sg.slice(0, -1) + 'a';   // excursie -> excursia
   if (/e$/.test(sg)) return g === 'f' ? sg + 'a' : sg + 'le';
   if (/u$/.test(sg)) return sg + 'l';
   return sg + 'ul';
@@ -49,7 +50,7 @@ function genSingular(sg, g) {
   } else if (/ea$/.test(sg)) {
     out.push(sg.slice(0, -1) + 'ei');
   } else if (/ie$/.test(sg) && g === 'f') {
-    out.push(sg.slice(0, -1) + 'i');
+    out.push(sg.slice(0, -1) + 'i', sg + 'i');   // excursii, excursiei
   } else if (/e$/.test(sg)) {
     out.push(g === 'f' ? sg.slice(0, -1) + 'ii' : sg + 'lui');
   } else if (/u$/.test(sg)) out.push(sg + 'lui');
