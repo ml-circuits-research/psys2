@@ -1,0 +1,312 @@
+{
+ "checkpoint": "runs/dispatcher-v5bd-c3918",
+ "model": "distilbert-base-uncased",
+ "export_dir": "/home/salboaie/work/psys2/training/runs/export/dispatcher-v5bd-c3918",
+ "command": "python -m psys2_train.export_onnx --ckpt runs/dispatcher-v5bd-c3918",
+ "sizes_mb": {
+  "fp32": 253.75210189819336,
+  "int8": 63.98818874359131
+ },
+ "targets": {
+  "max_size_mb": 150,
+  "max_ms_per_message": 50,
+  "min_agreement": 0.995
+ },
+ "gold_top1_lenient_on_gold_segments_of_sample": {
+  "n": 398,
+  "torch": 0.9547738693467337,
+  "fp32": 0.9547738693467337,
+  "int8": 0.9547738693467337
+ },
+ "agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "reference": "PyTorch CUDA fp32",
+  "onnx_fp32": {
+   "items": 200,
+   "world_same": 398,
+   "world_n": 398,
+   "boundary_same": 2904,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 200,
+   "max_abs_prob_diff_world": 1.817941665649414e-06,
+   "max_abs_prob_diff_seg": 7.867813110351562e-06,
+   "top3_same": 398,
+   "world_agreement": 1.0,
+   "boundary_agreement": 1.0,
+   "message_boundary_agreement": 1.0
+  },
+  "onnx_int8": {
+   "items": 200,
+   "world_same": 396,
+   "world_n": 398,
+   "boundary_same": 2900,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 197,
+   "max_abs_prob_diff_world": 0.5707149505615234,
+   "max_abs_prob_diff_seg": 0.4989001452922821,
+   "top3_same": 292,
+   "world_agreement": 0.9949748743718593,
+   "boundary_agreement": 0.9986225895316805,
+   "message_boundary_agreement": 0.985
+  },
+  "int8_vs_fp32": {
+   "items": 200,
+   "world_same": 396,
+   "world_n": 398,
+   "boundary_same": 2900,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 197,
+   "max_abs_prob_diff_world": 0.5707139372825623,
+   "max_abs_prob_diff_seg": 0.49889877438545227,
+   "top3_same": 292,
+   "world_agreement": 0.9949748743718593,
+   "boundary_agreement": 0.9986225895316805,
+   "message_boundary_agreement": 0.985
+  },
+  "disagreements": [
+   {
+    "cmp": "onnx_int8",
+    "text": "Is an oval a kind of hexagon?",
+    "world_a": "kids.shapes",
+    "world_b": "diagram.sketch",
+    "p_a": 0.9183679819107056,
+    "p_b": 0.5683692097663879
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Is an oval a kind of hexagon?",
+    "world_a": "kids.shapes",
+    "world_b": "diagram.sketch",
+    "p_a": 0.9183679819107056,
+    "p_b": 0.5683692097663879
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "draw a pink boat and then a green circle",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.7013957500457764,
+    "p_b": 0.8692803978919983
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "draw a pink boat and then a green circle",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.7013947367668152,
+    "p_b": 0.8692803978919983
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Add my homework to my list, Mark bread as completed, then Make the house and cloud pink, and Add water the plants to the list, Add a new notebook, cat food and apples to my shopping list, please color the sun and the circle purple. Delete practice piano from the chores list.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Add my homework to my list, Mark bread as completed, then Make the house and cloud pink, and Add water the plants to the list, Add a new notebook, cat food and apples to my shopping list, please color the sun and the circle purple. Delete practice piano from the chores list.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "go slower could you jump to my document window then what games do you have then speak slower then well slower display my guessing game window speak more slowly and can you jump to the tictactoe page i want to play hangman can u turn on the speaker and then well slower then i want a new game could you open guessing game panel then will you view your doc",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "go slower could you jump to my document window then what games do you have then speak slower then well slower display my guessing game window speak more slowly and can you jump to the tictactoe page i want to play hangman can u turn on the speaker and then well slower then i want a new game could you open guessing game panel then will you view your doc",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Is Planet beneath Sun? Sun in the center. Planet beneath Sun in the bottom left corner please.",
+    "boundary_flips": 2
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Is Planet beneath Sun? Sun in the center. Planet beneath Sun in the bottom left corner please.",
+    "boundary_flips": 2
+   }
+  ]
+ },
+ "edit_agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "rewritten_by_torch": 0.41,
+  "onnx_fp32": {
+   "n": 200,
+   "simplified_same": 200,
+   "tags_same": 200,
+   "words": 996,
+   "word_tags_same": 996,
+   "top1_world_same": 200,
+   "simplified_agreement": 1.0,
+   "tag_sequence_agreement": 1.0,
+   "word_tag_agreement": 1.0
+  },
+  "onnx_int8": {
+   "n": 200,
+   "simplified_same": 177,
+   "tags_same": 177,
+   "words": 996,
+   "word_tags_same": 972,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.885,
+   "tag_sequence_agreement": 0.885,
+   "word_tag_agreement": 0.9759036144578314
+  },
+  "int8_vs_fp32": {
+   "n": 200,
+   "simplified_same": 177,
+   "tags_same": 177,
+   "words": 996,
+   "word_tags_same": 972,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.885,
+   "tag_sequence_agreement": 0.885,
+   "word_tag_agreement": 0.9759036144578314
+  },
+  "examples_differing": [
+   {
+    "text": "how many on my list",
+    "torch": "how many on list?",
+    "int8": "how many on my list?"
+   },
+   {
+    "text": "c major's relative minor is what",
+    "torch": null,
+    "int8": "c major's relative minor is"
+   },
+   {
+    "text": "start over",
+    "torch": null,
+    "int8": "start"
+   },
+   {
+    "text": "duck body covered with what",
+    "torch": null,
+    "int8": "duck body covered what"
+   },
+   {
+    "text": "could it be a tiger",
+    "torch": "it tiger",
+    "int8": "tiger"
+   },
+   {
+    "text": "could you transpose up 2 steps",
+    "torch": "transpose up two steps.",
+    "int8": "transpose up two steps"
+   },
+   {
+    "text": "start a melody with G G A G",
+    "torch": "melody with G G A G",
+    "int8": "start melody with G G A G"
+   },
+   {
+    "text": "can u swap the hair for another one",
+    "torch": "u swap the hair for another",
+    "int8": "u swap the hair another"
+   },
+   {
+    "text": "make a hangman round with giraffe pls",
+    "torch": "hangman giraffe pls",
+    "int8": "hangman round giraffe pls"
+   },
+   {
+    "text": "top left spot",
+    "torch": "top left.",
+    "int8": "top left. spot"
+   },
+   {
+    "text": "easy mode pls",
+    "torch": "easy",
+    "int8": "easy pls"
+   },
+   {
+    "text": "is a banana usually yellow",
+    "torch": "is banana yellow?",
+    "int8": "is a banana yellow?"
+   },
+   {
+    "text": "paint the roof green",
+    "torch": "roof= green",
+    "int8": "paint roof= green"
+   },
+   {
+    "text": "how many more apples does tom have than ana",
+    "torch": null,
+    "int8": "how many more apples does tom have than ana?"
+   },
+   {
+    "text": "next letter, n",
+    "torch": "letter, n",
+    "int8": ", n"
+   }
+  ]
+ },
+ "latency_cpu_batch1": {
+  "fp32_threads1": {
+   "encoder_pass_ms": {
+    "p50": 13.05796300584916,
+    "p95": 39.885891994345,
+    "mean": 17.41482195138815
+   },
+   "dispatch_message_ms": {
+    "p50": 128.9568659994984,
+    "p95": 235.58568098815158,
+    "mean": 143.84720328002004
+   },
+   "avg_distinct_segments_per_message": 7.39,
+   "n": 100
+  },
+  "int8_threads1": {
+   "encoder_pass_ms": {
+    "p50": 3.588003004551865,
+    "p95": 9.828601003391668,
+    "mean": 4.708079530100804
+   },
+   "dispatch_message_ms": {
+    "p50": 34.782382994308136,
+    "p95": 64.05674500274472,
+    "mean": 38.72133578086505
+   },
+   "avg_distinct_segments_per_message": 7.38,
+   "n": 100
+  },
+  "fp32_threads4": {
+   "encoder_pass_ms": {
+    "p50": 4.53281999216415,
+    "p95": 11.27000999986194,
+    "mean": 5.608711040113121
+   },
+   "dispatch_message_ms": {
+    "p50": 43.51431000395678,
+    "p95": 77.56606899783947,
+    "mean": 47.61734137049643
+   },
+   "avg_distinct_segments_per_message": 7.39,
+   "n": 100
+  },
+  "int8_threads4": {
+   "encoder_pass_ms": {
+    "p50": 1.9588490104069933,
+    "p95": 3.926099991076626,
+    "mean": 2.2729818196967244
+   },
+   "dispatch_message_ms": {
+    "p50": 18.494433010346256,
+    "p95": 31.541051997919567,
+    "mean": 20.222191409848165
+   },
+   "avg_distinct_segments_per_message": 7.38,
+   "n": 100
+  }
+ },
+ "cpu": "Grace aarch64 (DGX Spark)",
+ "versions": {
+  "torch": "2.14.1+cu130",
+  "onnx": "1.23.2",
+  "onnxruntime": "1.31.1",
+  "opset": 17
+ }
+}

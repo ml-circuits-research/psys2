@@ -39,7 +39,7 @@ from transformers import AutoModel, AutoTokenizer, get_linear_schedule_with_warm
 from .data import DATASET, read_jsonl, routing_text, data_hash, leak_count, norm_text
 from .model import LORA_TARGETS
 from .metrics import world_metrics, boundary_prf
-from .multicmd import load_multicmd, trim_segment, build_mix, MULTICMD
+from .multicmd import load_multicmd, trim_segment, build_mix, build_split, MULTICMD
 from .sampling import EpochSampler, Budget, ShownLog
 from .selection import select, eval_stub, load_stub, run_script, script_available, export_ckpt, DEFAULT_CMD, TAUS
 from . import edit as ed
@@ -492,6 +492,7 @@ def main(argv=None):
     ap.add_argument("--select-cmd", default=None, help="operational evaluator command template (see selection.py); default scripts/eval-operational.mjs when it exists, else the local stub set")
     ap.add_argument("--seg-extra", default="", help="jsonl of extra segmentation messages (e.g. diagram/segments-train.jsonl); --seg-extra-n of them are sampled anew every pass")
     ap.add_argument("--seg-extra-n", type=int, default=6000)
+    ap.add_argument("--seg-long-extra", type=int, default=0, help="R5b: extra long messages (14-40 routing sentences, family long) generated anew each segmentation pass, on top of the mix")
     ap.add_argument("--multicmd", default=str(MULTICMD), help="directory with the multicmd train/dev/test jsonl (python -m psys2_train.multicmd --out ...)")
     ap.add_argument("--seg-b-weight", type=float, default=2.0, help="loss weight of the boundary (B) class of the segmentation head (R4: 2.0 over-segments long messages; lower it to trade omissions for duplicates)")
     ap.add_argument("--no-select", action="store_true", help="skip the operational selection: use the best dev-score checkpoint and tau 0.5")
@@ -571,6 +572,9 @@ def main(argv=None):
         while True:
             ep = state["seg_epoch"]; state["seg_epoch"] += 1
             msgs = mc["train"] if a.no_regen else build_mix(sp["train"], "train", seg_n, a.seg_seed, ep)   # new combinations every pass
+            if a.seg_long_extra:
+                lrng = random.Random(f"{a.seed}-longextra-{ep}")
+                msgs = list(msgs) + build_split(sp["train"], a.seg_long_extra, lrng, k_range=(14, 40))
             if seg_extra:
                 msgs = list(msgs) + random.Random(a.seed + 500 + ep).sample(seg_extra, min(a.seg_extra_n, len(seg_extra)))
             items = encode_seg(tok, msgs, 192)

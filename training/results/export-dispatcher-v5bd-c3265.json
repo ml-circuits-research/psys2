@@ -1,0 +1,326 @@
+{
+ "checkpoint": "runs/dispatcher-v5bd-c3265",
+ "model": "distilbert-base-uncased",
+ "export_dir": "/home/salboaie/work/psys2/training/runs/export/dispatcher-v5bd-c3265",
+ "command": "python -m psys2_train.export_onnx --ckpt runs/dispatcher-v5bd-c3265",
+ "sizes_mb": {
+  "fp32": 253.75210189819336,
+  "int8": 63.98818874359131
+ },
+ "targets": {
+  "max_size_mb": 150,
+  "max_ms_per_message": 50,
+  "min_agreement": 0.995
+ },
+ "gold_top1_lenient_on_gold_segments_of_sample": {
+  "n": 398,
+  "torch": 0.9547738693467337,
+  "fp32": 0.9547738693467337,
+  "int8": 0.957286432160804
+ },
+ "agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "reference": "PyTorch CUDA fp32",
+  "onnx_fp32": {
+   "items": 200,
+   "world_same": 398,
+   "world_n": 398,
+   "boundary_same": 2904,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 200,
+   "max_abs_prob_diff_world": 2.5033950805664062e-06,
+   "max_abs_prob_diff_seg": 3.635883331298828e-06,
+   "top3_same": 398,
+   "world_agreement": 1.0,
+   "boundary_agreement": 1.0,
+   "message_boundary_agreement": 1.0
+  },
+  "onnx_int8": {
+   "items": 200,
+   "world_same": 397,
+   "world_n": 398,
+   "boundary_same": 2896,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 194,
+   "max_abs_prob_diff_world": 0.2842993140220642,
+   "max_abs_prob_diff_seg": 0.6639574766159058,
+   "top3_same": 292,
+   "world_agreement": 0.9974874371859297,
+   "boundary_agreement": 0.9972451790633609,
+   "message_boundary_agreement": 0.97
+  },
+  "int8_vs_fp32": {
+   "items": 200,
+   "world_same": 397,
+   "world_n": 398,
+   "boundary_same": 2896,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 194,
+   "max_abs_prob_diff_world": 0.2842981219291687,
+   "max_abs_prob_diff_seg": 0.6639538407325745,
+   "top3_same": 292,
+   "world_agreement": 0.9974874371859297,
+   "boundary_agreement": 0.9972451790633609,
+   "message_boundary_agreement": 0.97
+  },
+  "disagreements": [
+   {
+    "cmp": "onnx_int8",
+    "text": "what is on hotel five?",
+    "world_a": "kids.shop",
+    "world_b": "games.chess",
+    "p_a": 0.563262403011322,
+    "p_b": 0.4760882258415222
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "what is on hotel five?",
+    "world_a": "kids.shop",
+    "world_b": "games.chess",
+    "p_a": 0.5632622838020325,
+    "p_b": 0.4760882258415222
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Add my homework to my list, Mark bread as completed, then Make the house and cloud pink, and Add water the plants to the list, Add a new notebook, cat food and apples to my shopping list, please color the sun and the circle purple. Delete practice piano from the chores list.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Add my homework to my list, Mark bread as completed, then Make the house and cloud pink, and Add water the plants to the list, Add a new notebook, cat food and apples to my shopping list, please color the sun and the circle purple. Delete practice piano from the chores list.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "go slower could you jump to my document window then what games do you have then speak slower then well slower display my guessing game window speak more slowly and can you jump to the tictactoe page i want to play hangman can u turn on the speaker and then well slower then i want a new game could you open guessing game panel then will you view your doc",
+    "boundary_flips": 2
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "go slower could you jump to my document window then what games do you have then speak slower then well slower display my guessing game window speak more slowly and can you jump to the tictactoe page i want to play hangman can u turn on the speaker and then well slower then i want a new game could you open guessing game panel then will you view your doc",
+    "boundary_flips": 2
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Is Planet beneath Sun? Sun in the center. Planet beneath Sun in the bottom left corner please.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Is Planet beneath Sun? Sun in the center. Planet beneath Sun in the bottom left corner please.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "are Vera and Wes linked and name Reef Coral. Please draw a heart and then add a square below it; which one is more connected, i mean who has the most links, are Butte and Knoll linked directly. Launch is gold. Make circles big; create a dashed pink link from Timeline to Pricing. How many lines are there and Reposition Banner and Modal left side of Menu, pop a magenta triangle, spread Search & Toolbar horizontally evenly.",
+    "boundary_flips": 2
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "are Vera and Wes linked and name Reef Coral. Please draw a heart and then add a square below it; which one is more connected, i mean who has the most links, are Butte and Knoll linked directly. Launch is gold. Make circles big; create a dashed pink link from Timeline to Pricing. How many lines are there and Reposition Banner and Modal left side of Menu, pop a magenta triangle, spread Search & Toolbar horizontally evenly.",
+    "boundary_flips": 2
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "hey! trying to lay out a camp site. Tent goes in the top left, next to Fire and above Lake. Canoe goes beneath Lake but left of Pier. Also give Fire a red color, and what is in the bottom right, right of Pier? One more thing: add a brown rectangle called Hut between Tent and Fire, near the top.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "hey! trying to lay out a camp site. Tent goes in the top left, next to Fire and above Lake. Canoe goes beneath Lake but left of Pier. Also give Fire a red color, and what is in the bottom right, right of Pier? One more thing: add a brown rectangle called Hut between Tent and Fire, near the top.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "new chart: kiwis 9 tue 2 dogs 10 then rename deal to opportunity and label the arrow from lead to opportunity \"qualify\" can you draw a yellow star put it next to the sun. how much change will i receive from 70 lei if i buy two bananas and then draw a purple tree and then a pink star",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "new chart: kiwis 9 tue 2 dogs 10 then rename deal to opportunity and label the arrow from lead to opportunity \"qualify\" can you draw a yellow star put it next to the sun. how much change will i receive from 70 lei if i buy two bananas and then draw a purple tree and then a pink star",
+    "boundary_flips": 1
+   }
+  ]
+ },
+ "edit_agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "rewritten_by_torch": 0.415,
+  "onnx_fp32": {
+   "n": 200,
+   "simplified_same": 200,
+   "tags_same": 200,
+   "words": 996,
+   "word_tags_same": 996,
+   "top1_world_same": 200,
+   "simplified_agreement": 1.0,
+   "tag_sequence_agreement": 1.0,
+   "word_tag_agreement": 1.0
+  },
+  "onnx_int8": {
+   "n": 200,
+   "simplified_same": 173,
+   "tags_same": 172,
+   "words": 996,
+   "word_tags_same": 964,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.865,
+   "tag_sequence_agreement": 0.86,
+   "word_tag_agreement": 0.9678714859437751
+  },
+  "int8_vs_fp32": {
+   "n": 200,
+   "simplified_same": 173,
+   "tags_same": 172,
+   "words": 996,
+   "word_tags_same": 964,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.865,
+   "tag_sequence_agreement": 0.86,
+   "word_tag_agreement": 0.9678714859437751
+  },
+  "examples_differing": [
+   {
+    "text": "how many on my list",
+    "torch": "how many on list",
+    "int8": null
+   },
+   {
+    "text": "change sides",
+    "torch": null,
+    "int8": "change sides."
+   },
+   {
+    "text": "c major's relative minor is what",
+    "torch": "c major's relative minor is",
+    "int8": null
+   },
+   {
+    "text": "play hangman once more",
+    "torch": "hangman once more",
+    "int8": null
+   },
+   {
+    "text": "make ur body blue",
+    "torch": "ur body blue.",
+    "int8": "body blue."
+   },
+   {
+    "text": "which continent is chile in",
+    "torch": "what continent is chile",
+    "int8": "what continent chile"
+   },
+   {
+    "text": "could you transpose up 2 steps",
+    "torch": "transpose up two steps.",
+    "int8": "transpose up two steps"
+   },
+   {
+    "text": "show kyoto pls",
+    "torch": "show me kyoto",
+    "int8": "show me kyoto."
+   },
+   {
+    "text": "is there socks on my garden list",
+    "torch": "is socks on the garden list?",
+    "int8": "is socks on the garden list"
+   },
+   {
+    "text": "smallest at the start",
+    "torch": null,
+    "int8": "smallest start"
+   },
+   {
+    "text": "can u swap the hair for another one",
+    "torch": "u swap the hair for another one",
+    "int8": "u swap the hair for another"
+   },
+   {
+    "text": "could you shift the second paragraph up",
+    "torch": "shift the second paragraph up",
+    "int8": "shift the second paragraph"
+   },
+   {
+    "text": "make a hangman round with giraffe pls",
+    "torch": "hangman round giraffe pls",
+    "int8": "hangman round with giraffe pls"
+   },
+   {
+    "text": "can u search for oven",
+    "torch": null,
+    "int8": "can u search for for oven"
+   },
+   {
+    "text": "paint the roof green",
+    "torch": "roof= green",
+    "int8": "paint roof= green"
+   }
+  ]
+ },
+ "latency_cpu_batch1": {
+  "fp32_threads1": {
+   "encoder_pass_ms": {
+    "p50": 13.286035013152286,
+    "p95": 39.62642699480057,
+    "mean": 17.59433415805688
+   },
+   "dispatch_message_ms": {
+    "p50": 129.4614220096264,
+    "p95": 246.71163299353793,
+    "mean": 145.59946430003038
+   },
+   "avg_distinct_segments_per_message": 7.4,
+   "n": 100
+  },
+  "int8_threads1": {
+   "encoder_pass_ms": {
+    "p50": 3.606701997341588,
+    "p95": 9.856260992819443,
+    "mean": 4.731873860000633
+   },
+   "dispatch_message_ms": {
+    "p50": 35.155190009390935,
+    "p95": 64.45806898409501,
+    "mean": 38.95594510016963
+   },
+   "avg_distinct_segments_per_message": 7.36,
+   "n": 100
+  },
+  "fp32_threads4": {
+   "encoder_pass_ms": {
+    "p50": 4.555073013762012,
+    "p95": 11.346970975864679,
+    "mean": 5.6857232880429365
+   },
+   "dispatch_message_ms": {
+    "p50": 43.76397401210852,
+    "p95": 77.89118800428696,
+    "mean": 48.48991877050139
+   },
+   "avg_distinct_segments_per_message": 7.4,
+   "n": 100
+  },
+  "int8_threads4": {
+   "encoder_pass_ms": {
+    "p50": 1.9299749983474612,
+    "p95": 3.8496139750350267,
+    "mean": 2.2386174678104
+   },
+   "dispatch_message_ms": {
+    "p50": 18.36307701887563,
+    "p95": 31.165684020379558,
+    "mean": 19.846283111546654
+   },
+   "avg_distinct_segments_per_message": 7.36,
+   "n": 100
+  }
+ },
+ "cpu": "Grace aarch64 (DGX Spark)",
+ "versions": {
+  "torch": "2.14.1+cu130",
+  "onnx": "1.23.2",
+  "onnxruntime": "1.31.1",
+  "opset": 17
+ }
+}

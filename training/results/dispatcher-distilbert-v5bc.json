@@ -1,0 +1,1506 @@
+{
+ "model": "distilbert-base-uncased",
+ "name": "distilbert-v5bc",
+ "lora": false,
+ "context": true,
+ "lr": 5e-05,
+ "params": {
+  "trainable": 66490534,
+  "total": 66490534
+ },
+ "train_seconds": 8421.226679086685,
+ "steps": 3918,
+ "gpu": "NVIDIA GB10",
+ "gpu_peak_mem_gb": 9.613280773162842,
+ "command": "python -m psys2_train.dispatcher --model distilbert-base-uncased --no-lora --lr 5e-5 --epochs 6 --no-select --keep-ckpts 3 --seg-b-weight 2.0 --seed 3 --seg-extra diagram/segments-train.jsonl --seg-extra-n 1000 --seg-long-extra 1500 --out runs/dispatcher-distilbert-v5bc",
+ "data_hash": "7e1249b3b0f2bb54",
+ "edit": {
+  "enabled": true,
+  "tags": 143,
+  "heldout_in_training": true,
+  "heldout_world_rows": 2237,
+  "edit_batch": 48,
+  "identity_ratio": 3.0,
+  "edit_weight": 1.0,
+  "aligned_train": 10411
+ },
+ "seed": 3,
+ "routing_train_overlap_with_dev_test": 576,
+ "routing_train_rows": 58542,
+ "versions": {
+  "python": "3.12.3",
+  "torch": "2.14.1+cu130"
+ },
+ "budgets": {
+  "routing": {
+   "budget": 3918,
+   "used": 3918
+  },
+  "seg": {
+   "budget": 3918,
+   "used": 3918
+  },
+  "edit": {
+   "budget": 3918,
+   "used": 3918
+  }
+ },
+ "shown": {
+  "routing": {
+   "kind:base": 362143,
+   "kind:contrastive": 27982,
+   "kind:failure": 55163,
+   "kind:floor": 22154,
+   "kind:replay": 33845,
+   "source:generator": 193869,
+   "source:heldout": 15064,
+   "source:imported": 154800,
+   "source:paraphrase": 73701,
+   "source:rule-derived": 63853,
+   "tag:before_after": 8193,
+   "tag:command": 80556,
+   "tag:number_words": 12644,
+   "tag:question": 156165,
+   "tag:set_increase": 7885,
+   "total": 501287,
+   "world:art.draw": 24012,
+   "world:data.charts": 27587,
+   "world:diagram.sketch": 154800,
+   "world:docs.editor": 18916,
+   "world:docs.reader": 16313,
+   "world:games.chess": 20855,
+   "world:games.guess": 11466,
+   "world:games.hangman": 14052,
+   "world:games.tictactoe": 17466,
+   "world:geo.map": 19827,
+   "world:kids.animals": 16116,
+   "world:kids.arith": 16141,
+   "world:kids.common": 16653,
+   "world:kids.shapes": 16325,
+   "world:kids.shop": 14296,
+   "world:kids.tasks": 15201,
+   "world:kids.time": 15007,
+   "world:media.music": 21113,
+   "world:ui.avatar": 16711,
+   "world:ui.help": 13218,
+   "world:ui.shell": 15212
+  },
+  "seg": {
+   "kind:?": 13793,
+   "kind:chain_long": 22793,
+   "kind:concat": 129409,
+   "kind:ellipsis": 23836,
+   "kind:long": 70688,
+   "kind:mid": 55681,
+   "kind:ref_created": 35326,
+   "kind:repeat_undo": 23921,
+   "kind:self_correct": 23370,
+   "kind:shared_arg": 23614,
+   "kind:single": 43129,
+   "kind:world_switch": 35251,
+   "tag:n_segments:1": 122072,
+   "tag:n_segments:10": 429,
+   "tag:n_segments:11": 420,
+   "tag:n_segments:12": 420,
+   "tag:n_segments:13": 410,
+   "tag:n_segments:14": 1732,
+   "tag:n_segments:15": 1874,
+   "tag:n_segments:16": 1870,
+   "tag:n_segments:17": 1995,
+   "tag:n_segments:18": 2039,
+   "tag:n_segments:19": 2065,
+   "tag:n_segments:2": 178747,
+   "tag:n_segments:20": 2221,
+   "tag:n_segments:21": 2394,
+   "tag:n_segments:22": 2524,
+   "tag:n_segments:23": 2737,
+   "tag:n_segments:24": 2807,
+   "tag:n_segments:25": 3039,
+   "tag:n_segments:26": 3143,
+   "tag:n_segments:27": 3362,
+   "tag:n_segments:28": 3600,
+   "tag:n_segments:29": 3787,
+   "tag:n_segments:3": 49387,
+   "tag:n_segments:30": 3806,
+   "tag:n_segments:31": 4061,
+   "tag:n_segments:32": 4146,
+   "tag:n_segments:33": 4416,
+   "tag:n_segments:34": 4552,
+   "tag:n_segments:35": 4404,
+   "tag:n_segments:36": 4903,
+   "tag:n_segments:37": 4937,
+   "tag:n_segments:38": 4938,
+   "tag:n_segments:39": 5230,
+   "tag:n_segments:4": 11635,
+   "tag:n_segments:40": 4942,
+   "tag:n_segments:5": 11482,
+   "tag:n_segments:6": 11330,
+   "tag:n_segments:7": 11187,
+   "tag:n_segments:8": 11300,
+   "tag:n_segments:9": 468,
+   "total": 500811
+  },
+  "edit": {
+   "kind:canonical": 1867,
+   "kind:generator": 64221,
+   "kind:rule-derived": 63750,
+   "kind:synthetic": 36126,
+   "kind:variant": 10866,
+   "kind:variant-identity": 11154,
+   "total": 187984
+  }
+ },
+ "selection": null,
+ "sampler": {
+  "focus_frac": 0.15,
+  "source_floor": {
+   "paraphrase": 0.15,
+   "rule-derived": 0.05,
+   "heldout": 0.02
+  },
+  "near_miss_pool": 3134,
+  "routing_epochs_started": 6,
+  "seg_passes_started": 14,
+  "regen": true
+ },
+ "dev": {
+  "world": {
+   "n": 8719,
+   "top1": 0.9747677485950224,
+   "top3": 0.9944947815116413,
+   "top1_strict": 0.9739649042321367,
+   "top3_strict": 0.994036013304278,
+   "macro_f1": 0.9621079273650491,
+   "macro_f1_strict": 0.9612072090732676,
+   "by_group": {
+    "avatar/shell/editor": {
+     "n": 612,
+     "top1": 0.9264705882352942,
+     "top3": 0.9738562091503268
+    },
+    "documents": {
+     "n": 258,
+     "top1": 0.9883720930232558,
+     "top3": 1.0
+    },
+    "games": {
+     "n": 915,
+     "top1": 0.9530054644808743,
+     "top3": 0.9934426229508196
+    },
+    "kids": {
+     "n": 1760,
+     "top1": 0.9965909090909091,
+     "top3": 1.0
+    },
+    "music/draw/map/charts": {
+     "n": 1214,
+     "top1": 0.9316309719934102,
+     "top3": 0.9802306425041186
+    },
+    "other": {
+     "n": 3960,
+     "top1": 0.98989898989899,
+     "top3": 0.9994949494949495
+    }
+   },
+   "by_source": {
+    "generator": {
+     "n": 3156,
+     "top1": 0.9664131812420785,
+     "top3": 0.9917617237008872
+    },
+    "imported": {
+     "n": 3781,
+     "top1": 0.9933879925945517,
+     "top3": 1.0
+    },
+    "paraphrase": {
+     "n": 913,
+     "top1": 0.9791894852135816,
+     "top3": 0.9989047097480832
+    },
+    "rule-derived": {
+     "n": 869,
+     "top1": 0.9194476409666283,
+     "top3": 0.9758342922899885
+    }
+   },
+   "by_world": {
+    "art.draw": {
+     "n": 307,
+     "top1": 0.8794788273615635,
+     "top3": 0.9674267100977199
+    },
+    "data.charts": {
+     "n": 294,
+     "top1": 0.9659863945578231,
+     "top3": 0.9897959183673469
+    },
+    "diagram.sketch": {
+     "n": 3781,
+     "top1": 0.9933879925945517,
+     "top3": 1.0
+    },
+    "docs.editor": {
+     "n": 165,
+     "top1": 0.9636363636363636,
+     "top3": 1.0
+    },
+    "docs.reader": {
+     "n": 258,
+     "top1": 0.9883720930232558,
+     "top3": 1.0
+    },
+    "games.chess": {
+     "n": 304,
+     "top1": 0.9473684210526315,
+     "top3": 0.993421052631579
+    },
+    "games.guess": {
+     "n": 173,
+     "top1": 0.9710982658959537,
+     "top3": 1.0
+    },
+    "games.hangman": {
+     "n": 231,
+     "top1": 0.9393939393939394,
+     "top3": 0.987012987012987
+    },
+    "games.tictactoe": {
+     "n": 207,
+     "top1": 0.961352657004831,
+     "top3": 0.9951690821256038
+    },
+    "geo.map": {
+     "n": 307,
+     "top1": 0.9706840390879479,
+     "top3": 0.990228013029316
+    },
+    "kids.animals": {
+     "n": 288,
+     "top1": 0.9965277777777778,
+     "top3": 1.0
+    },
+    "kids.arith": {
+     "n": 273,
+     "top1": 0.9963369963369964,
+     "top3": 1.0
+    },
+    "kids.common": {
+     "n": 281,
+     "top1": 0.99644128113879,
+     "top3": 1.0
+    },
+    "kids.shapes": {
+     "n": 194,
+     "top1": 0.9896907216494846,
+     "top3": 1.0
+    },
+    "kids.shop": {
+     "n": 270,
+     "top1": 0.9962962962962963,
+     "top3": 1.0
+    },
+    "kids.tasks": {
+     "n": 261,
+     "top1": 1.0,
+     "top3": 1.0
+    },
+    "kids.time": {
+     "n": 193,
+     "top1": 1.0,
+     "top3": 1.0
+    },
+    "media.music": {
+     "n": 306,
+     "top1": 0.9117647058823529,
+     "top3": 0.9738562091503268
+    },
+    "ui.avatar": {
+     "n": 267,
+     "top1": 0.8801498127340824,
+     "top3": 0.9400749063670412
+    },
+    "ui.help": {
+     "n": 179,
+     "top1": 0.9162011173184358,
+     "top3": 0.9888268156424581
+    },
+    "ui.shell": {
+     "n": 180,
+     "top1": 0.9611111111111111,
+     "top3": 1.0
+    }
+   },
+   "unseen_text": {
+    "n": 8176,
+    "top1": 0.9766389432485323,
+    "top3": 0.9949853228962818
+   },
+   "top_confusions": [
+    {
+     "gold": "diagram.sketch",
+     "pred": "art.draw",
+     "count": 17
+    },
+    {
+     "gold": "media.music",
+     "pred": "ui.shell",
+     "count": 11
+    },
+    {
+     "gold": "ui.avatar",
+     "pred": "games.tictactoe",
+     "count": 11
+    },
+    {
+     "gold": "art.draw",
+     "pred": "ui.avatar",
+     "count": 10
+    },
+    {
+     "gold": "art.draw",
+     "pred": "diagram.sketch",
+     "count": 9
+    },
+    {
+     "gold": "games.hangman",
+     "pred": "games.guess",
+     "count": 7
+    },
+    {
+     "gold": "media.music",
+     "pred": "docs.editor",
+     "count": 7
+    },
+    {
+     "gold": "ui.avatar",
+     "pred": "docs.reader",
+     "count": 5
+    },
+    {
+     "gold": "ui.avatar",
+     "pred": "ui.shell",
+     "count": 5
+    },
+    {
+     "gold": "ui.help",
+     "pred": "diagram.sketch",
+     "count": 5
+    },
+    {
+     "gold": "art.draw",
+     "pred": "geo.map",
+     "count": 4
+    },
+    {
+     "gold": "games.chess",
+     "pred": "diagram.sketch",
+     "count": 4
+    },
+    {
+     "gold": "geo.map",
+     "pred": "diagram.sketch",
+     "count": 4
+    },
+    {
+     "gold": "media.music",
+     "pred": "kids.tasks",
+     "count": 4
+    },
+    {
+     "gold": "ui.avatar",
+     "pred": "diagram.sketch",
+     "count": 4
+    }
+   ]
+  },
+  "segmentation": {
+   "n": 3000,
+   "boundary": {
+    "precision": 0.8605003790750568,
+    "recall": 0.9734133790737565,
+    "f1": 0.9134808853118711,
+    "tp": 6810,
+    "fp": 1104,
+    "fn": 186
+   },
+   "exact_segmentation": 0.7846666666666666,
+   "end_to_end_exact": 0.6686666666666666,
+   "exact_by_variant": {
+    "clean": 0.7904721753794266,
+    "plain": 0.7627388535031847
+   },
+   "exact_by_n_segments": {
+    "1": 0.9101717305151915,
+    "2": 0.8412698412698413,
+    "3": 0.7282913165266106,
+    "4": 0.7580645161290323,
+    "5": 0.6231884057971014,
+    "6": 0.5777777777777777,
+    "7": 0.58,
+    "8": 0.47297297297297297,
+    "9": 0.6,
+    "10": 1.0,
+    "11": 0.42857142857142855,
+    "12": 0.6666666666666666,
+    "13": 0.42857142857142855,
+    "14": 0.47058823529411764,
+    "15": 0.07692307692307693,
+    "16": 0.3333333333333333,
+    "17": 0.2,
+    "18": 0.18181818181818182,
+    "19": 0.21052631578947367,
+    "20": 0.3076923076923077,
+    "21": 0.25,
+    "22": 0.28,
+    "23": 0.09090909090909091,
+    "24": 0.15384615384615385
+   },
+   "exact_by_family": {
+    "chain_long": 0.33,
+    "concat": 0.7427083333333333,
+    "ellipsis": 1.0,
+    "long": 0.26,
+    "mid": 0.6,
+    "ref_created": 0.922360248447205,
+    "repeat_undo": 0.8597560975609756,
+    "self_correct": 1.0,
+    "shared_arg": 1.0,
+    "single": 0.8,
+    "world_switch": 0.9259259259259259
+   },
+   "end_to_end_by_family": {
+    "chain_long": 0.03,
+    "concat": 0.6375,
+    "ellipsis": 0.9925925925925926,
+    "long": 0.14,
+    "mid": 0.31,
+    "ref_created": 0.8291925465838509,
+    "repeat_undo": 0.6463414634146342,
+    "self_correct": 0.9779005524861878,
+    "shared_arg": 0.9603960396039604,
+    "single": 0.7735294117647059,
+    "world_switch": 0.8080808080808081
+   },
+   "n_by_family": {
+    "chain_long": 100,
+    "concat": 960,
+    "ellipsis": 135,
+    "long": 100,
+    "mid": 300,
+    "ref_created": 322,
+    "repeat_undo": 164,
+    "self_correct": 181,
+    "shared_arg": 101,
+    "single": 340,
+    "world_switch": 297
+   },
+   "by_bucket": {
+    "1": {
+     "n": 757,
+     "segments": 757,
+     "exact_segmentation": 0.9101717305151915,
+     "final_correct": 0.8863936591809776,
+     "omitted_segments": 0,
+     "messages_with_omission": 0,
+     "omission_rate": 0.0,
+     "duplicate_segments": 122,
+     "messages_with_duplicate": 62,
+     "extra_segments": 0,
+     "dependencies": 0,
+     "lost_dependencies": 0
+    },
+    "2-3": {
+     "n": 1743,
+     "segments": 3843,
+     "exact_segmentation": 0.8181296615031555,
+     "final_correct": 0.7028112449799196,
+     "omitted_segments": 19,
+     "messages_with_omission": 19,
+     "omission_rate": 0.004944054124381993,
+     "duplicate_segments": 373,
+     "messages_with_duplicate": 211,
+     "extra_segments": 0,
+     "dependencies": 0,
+     "lost_dependencies": 0
+    },
+    "4-5": {
+     "n": 131,
+     "segments": 593,
+     "exact_segmentation": 0.6870229007633588,
+     "final_correct": 0.4580152671755725,
+     "omitted_segments": 9,
+     "messages_with_omission": 9,
+     "omission_rate": 0.01517706576728499,
+     "duplicate_segments": 27,
+     "messages_with_duplicate": 21,
+     "extra_segments": 0,
+     "dependencies": 61,
+     "lost_dependencies": 0
+    },
+    "6-8": {
+     "n": 169,
+     "segments": 1212,
+     "exact_segmentation": 0.5325443786982249,
+     "final_correct": 0.1952662721893491,
+     "omitted_segments": 12,
+     "messages_with_omission": 12,
+     "omission_rate": 0.009900990099009901,
+     "duplicate_segments": 100,
+     "messages_with_duplicate": 55,
+     "extra_segments": 0,
+     "dependencies": 122,
+     "lost_dependencies": 2
+    },
+    "long": {
+     "n": 200,
+     "segments": 3591,
+     "exact_segmentation": 0.295,
+     "final_correct": 0.085,
+     "omitted_segments": 52,
+     "messages_with_omission": 38,
+     "omission_rate": 0.014480646059593427,
+     "duplicate_segments": 388,
+     "messages_with_duplicate": 126,
+     "extra_segments": 0,
+     "dependencies": 180,
+     "lost_dependencies": 4
+    }
+   }
+  },
+  "edit": {
+   "n": 8676,
+   "words": 89967,
+   "tag_accuracy": 0.9855613725032512,
+   "edit_precision": 0.22348484848484848,
+   "edit_recall": 0.3232876712328767,
+   "edit_f1": 0.2642777155655095,
+   "exact_sentences": 0.9216228676809589,
+   "recovered_misled_broken": {
+    "recovered": 35,
+    "misled": 99,
+    "not_recovered_unchanged": 132,
+    "kept_ok": 7961,
+    "broken": 449
+   },
+   "exact_by_kind": {
+    "canonical": 1.0,
+    "generator": 0.9524714828897338,
+    "rule-derived": 0.9565591397849462,
+    "variant": 0.13157894736842105,
+    "variant-identity": 0.8127413127413128
+   },
+   "n_by_kind": {
+    "canonical": 86,
+    "generator": 3156,
+    "rule-derived": 4650,
+    "variant": 266,
+    "variant-identity": 518
+   }
+  },
+  "edit_aligned_only": {
+   "n": 266,
+   "words": 1308,
+   "tag_accuracy": 0.5940366972477065,
+   "edit_precision": 0.8216783216783217,
+   "edit_recall": 0.3219178082191781,
+   "edit_f1": 0.46259842519685046,
+   "exact_sentences": 0.12781954887218044,
+   "recovered_misled_broken": {
+    "recovered": 34,
+    "misled": 100,
+    "not_recovered_unchanged": 132,
+    "kept_ok": 0,
+    "broken": 0
+   },
+   "exact_by_kind": {
+    "variant": 0.12781954887218044
+   },
+   "n_by_kind": {
+    "variant": 266
+   }
+  }
+ },
+ "test": {
+  "world": {
+   "n": 7584,
+   "top1": 0.9716508438818565,
+   "top3": 0.9936708860759493,
+   "top1_strict": 0.9715189873417721,
+   "top3_strict": 0.9936708860759493,
+   "macro_f1": 0.9617785400535523,
+   "macro_f1_strict": 0.9616913833508395,
+   "by_group": {
+    "avatar/shell/editor": {
+     "n": 621,
+     "top1": 0.9227053140096618,
+     "top3": 0.9790660225442834
+    },
+    "documents": {
+     "n": 258,
+     "top1": 0.9922480620155039,
+     "top3": 1.0
+    },
+    "games": {
+     "n": 837,
+     "top1": 0.972520908004779,
+     "top3": 0.994026284348865
+    },
+    "kids": {
+     "n": 1651,
+     "top1": 0.984251968503937,
+     "top3": 0.9969715324046032
+    },
+    "music/draw/map/charts": {
+     "n": 1239,
+     "top1": 0.9620661824051655,
+     "top3": 0.9870863599677159
+    },
+    "other": {
+     "n": 2978,
+     "top1": 0.9768300873069174,
+     "top3": 0.9969778374748153
+    }
+   },
+   "by_source": {
+    "generator": {
+     "n": 3218,
+     "top1": 0.9714108141702921,
+     "top3": 0.9931634555624611
+    },
+    "imported": {
+     "n": 2823,
+     "top1": 0.9773290825363089,
+     "top3": 0.9971661353170386
+    },
+    "paraphrase": {
+     "n": 873,
+     "top1": 0.9713631156930126,
+     "top3": 0.9942726231386025
+    },
+    "rule-derived": {
+     "n": 670,
+     "top1": 0.9492537313432836,
+     "top3": 0.9805970149253731
+    }
+   },
+   "by_world": {
+    "art.draw": {
+     "n": 331,
+     "top1": 0.9093655589123867,
+     "top3": 0.9546827794561934
+    },
+    "data.charts": {
+     "n": 290,
+     "top1": 0.9827586206896551,
+     "top3": 1.0
+    },
+    "diagram.sketch": {
+     "n": 2823,
+     "top1": 0.9773290825363089,
+     "top3": 0.9971661353170386
+    },
+    "docs.editor": {
+     "n": 174,
+     "top1": 0.9425287356321839,
+     "top3": 0.9885057471264368
+    },
+    "docs.reader": {
+     "n": 258,
+     "top1": 0.9922480620155039,
+     "top3": 1.0
+    },
+    "games.chess": {
+     "n": 334,
+     "top1": 0.9700598802395209,
+     "top3": 0.9970059880239521
+    },
+    "games.guess": {
+     "n": 133,
+     "top1": 0.9699248120300752,
+     "top3": 0.9924812030075187
+    },
+    "games.hangman": {
+     "n": 198,
+     "top1": 0.9797979797979798,
+     "top3": 0.9949494949494949
+    },
+    "games.tictactoe": {
+     "n": 172,
+     "top1": 0.9709302325581395,
+     "top3": 0.9883720930232558
+    },
+    "geo.map": {
+     "n": 310,
+     "top1": 0.9903225806451613,
+     "top3": 0.9967741935483871
+    },
+    "kids.animals": {
+     "n": 269,
+     "top1": 0.9962825278810409,
+     "top3": 1.0
+    },
+    "kids.arith": {
+     "n": 254,
+     "top1": 0.9960629921259843,
+     "top3": 1.0
+    },
+    "kids.common": {
+     "n": 95,
+     "top1": 0.9263157894736842,
+     "top3": 0.9894736842105263
+    },
+    "kids.shapes": {
+     "n": 265,
+     "top1": 0.9886792452830189,
+     "top3": 1.0
+    },
+    "kids.shop": {
+     "n": 253,
+     "top1": 0.9960474308300395,
+     "top3": 1.0
+    },
+    "kids.tasks": {
+     "n": 261,
+     "top1": 0.9501915708812261,
+     "top3": 0.9846743295019157
+    },
+    "kids.time": {
+     "n": 254,
+     "top1": 1.0,
+     "top3": 1.0
+    },
+    "media.music": {
+     "n": 308,
+     "top1": 0.9707792207792207,
+     "top3": 1.0
+    },
+    "ui.avatar": {
+     "n": 224,
+     "top1": 0.9330357142857143,
+     "top3": 0.96875
+    },
+    "ui.help": {
+     "n": 155,
+     "top1": 0.967741935483871,
+     "top3": 0.9935483870967742
+    },
+    "ui.shell": {
+     "n": 223,
+     "top1": 0.8968609865470852,
+     "top3": 0.9820627802690582
+    }
+   },
+   "unseen_text": {
+    "n": 7197,
+    "top1": 0.9715159094066972,
+    "top3": 0.9936084479644296
+   },
+   "top_confusions": [
+    {
+     "gold": "diagram.sketch",
+     "pred": "art.draw",
+     "count": 15
+    },
+    {
+     "gold": "ui.shell",
+     "pred": "ui.avatar",
+     "count": 10
+    },
+    {
+     "gold": "diagram.sketch",
+     "pred": "docs.editor",
+     "count": 10
+    },
+    {
+     "gold": "diagram.sketch",
+     "pred": "kids.shapes",
+     "count": 10
+    },
+    {
+     "gold": "kids.tasks",
+     "pred": "docs.editor",
+     "count": 9
+    },
+    {
+     "gold": "diagram.sketch",
+     "pred": "data.charts",
+     "count": 9
+    },
+    {
+     "gold": "games.chess",
+     "pred": "diagram.sketch",
+     "count": 6
+    },
+    {
+     "gold": "art.draw",
+     "pred": "data.charts",
+     "count": 5
+    },
+    {
+     "gold": "ui.shell",
+     "pred": "games.tictactoe",
+     "count": 5
+    },
+    {
+     "gold": "diagram.sketch",
+     "pred": "geo.map",
+     "count": 5
+    },
+    {
+     "gold": "art.draw",
+     "pred": "games.hangman",
+     "count": 4
+    },
+    {
+     "gold": "art.draw",
+     "pred": "kids.animals",
+     "count": 4
+    },
+    {
+     "gold": "art.draw",
+     "pred": "kids.shapes",
+     "count": 4
+    },
+    {
+     "gold": "kids.common",
+     "pred": "ui.avatar",
+     "count": 4
+    },
+    {
+     "gold": "ui.avatar",
+     "pred": "kids.common",
+     "count": 4
+    }
+   ]
+  },
+  "segmentation": {
+   "n": 4000,
+   "boundary": {
+    "precision": 0.9244562251500741,
+    "recall": 0.9751644736842106,
+    "f1": 0.9491335494457117,
+    "tp": 11858,
+    "fp": 969,
+    "fn": 302
+   },
+   "exact_segmentation": 0.80575,
+   "end_to_end_exact": 0.667,
+   "exact_by_variant": {
+    "clean": 0.8206334274067105,
+    "plain": 0.7472256473489519
+   },
+   "exact_by_n_segments": {
+    "1": 0.9557625145518044,
+    "2": 0.8756660746003553,
+    "3": 0.8030973451327433,
+    "4": 0.7086614173228346,
+    "5": 0.7647058823529411,
+    "6": 0.6829268292682927,
+    "7": 0.7037037037037037,
+    "8": 0.6422764227642277,
+    "9": 0.7333333333333333,
+    "10": 0.7333333333333333,
+    "11": 0.5625,
+    "12": 0.42857142857142855,
+    "13": 0.375,
+    "14": 0.4666666666666667,
+    "15": 0.36363636363636365,
+    "16": 0.41379310344827586,
+    "17": 0.44,
+    "18": 0.15151515151515152,
+    "19": 0.2,
+    "20": 0.17391304347826086,
+    "21": 0.23529411764705882,
+    "22": 0.32,
+    "23": 0.2903225806451613,
+    "24": 0.25806451612903225
+   },
+   "exact_by_family": {
+    "chain_long": 0.4,
+    "concat": 0.830101569713758,
+    "ellipsis": 1.0,
+    "long": 0.3,
+    "mid": 0.7,
+    "ref_created": 0.9215686274509803,
+    "repeat_undo": 0.8444444444444444,
+    "self_correct": 1.0,
+    "shared_arg": 1.0,
+    "single": 0.8801261829652997,
+    "world_switch": 0.8870588235294118
+   },
+   "end_to_end_by_family": {
+    "chain_long": 0.055,
+    "concat": 0.7211449676823638,
+    "ellipsis": 0.9885714285714285,
+    "long": 0.14,
+    "mid": 0.36833333333333335,
+    "ref_created": 0.8480392156862745,
+    "repeat_undo": 0.6177777777777778,
+    "self_correct": 0.9656488549618321,
+    "shared_arg": 0.9523809523809523,
+    "single": 0.8738170347003155,
+    "world_switch": 0.7976470588235294
+   },
+   "n_by_family": {
+    "chain_long": 200,
+    "concat": 1083,
+    "ellipsis": 175,
+    "long": 200,
+    "mid": 600,
+    "ref_created": 408,
+    "repeat_undo": 225,
+    "self_correct": 262,
+    "shared_arg": 105,
+    "single": 317,
+    "world_switch": 425
+   },
+   "by_bucket": {
+    "1": {
+     "n": 859,
+     "segments": 859,
+     "exact_segmentation": 0.9557625145518044,
+     "final_correct": 0.9348079161816065,
+     "omitted_segments": 0,
+     "messages_with_omission": 0,
+     "omission_rate": 0.0,
+     "duplicate_segments": 67,
+     "messages_with_duplicate": 38,
+     "extra_segments": 0,
+     "dependencies": 0,
+     "lost_dependencies": 0
+    },
+    "2-3": {
+     "n": 2141,
+     "segments": 4734,
+     "exact_segmentation": 0.860345632881831,
+     "final_correct": 0.7496496964035497,
+     "omitted_segments": 38,
+     "messages_with_omission": 37,
+     "omission_rate": 0.008027038445289396,
+     "duplicate_segments": 214,
+     "messages_with_duplicate": 147,
+     "extra_segments": 0,
+     "dependencies": 0,
+     "lost_dependencies": 0
+    },
+    "4-5": {
+     "n": 246,
+     "segments": 1103,
+     "exact_segmentation": 0.7357723577235772,
+     "final_correct": 0.44715447154471544,
+     "omitted_segments": 13,
+     "messages_with_omission": 12,
+     "omission_rate": 0.011786038077969175,
+     "duplicate_segments": 54,
+     "messages_with_duplicate": 38,
+     "extra_segments": 0,
+     "dependencies": 110,
+     "lost_dependencies": 3
+    },
+    "6-8": {
+     "n": 354,
+     "segments": 2478,
+     "exact_segmentation": 0.6751412429378532,
+     "final_correct": 0.3135593220338983,
+     "omitted_segments": 33,
+     "messages_with_omission": 30,
+     "omission_rate": 0.013317191283292978,
+     "duplicate_segments": 91,
+     "messages_with_duplicate": 61,
+     "extra_segments": 0,
+     "dependencies": 255,
+     "lost_dependencies": 11
+    },
+    "long": {
+     "n": 400,
+     "segments": 6986,
+     "exact_segmentation": 0.35,
+     "final_correct": 0.0975,
+     "omitted_segments": 136,
+     "messages_with_omission": 105,
+     "omission_rate": 0.019467506441454337,
+     "duplicate_segments": 461,
+     "messages_with_duplicate": 192,
+     "extra_segments": 0,
+     "dependencies": 360,
+     "lost_dependencies": 8
+    }
+   }
+  },
+  "edit": {
+   "n": 7600,
+   "words": 70181,
+   "tag_accuracy": 0.977999743520326,
+   "edit_precision": 0.23328785811732605,
+   "edit_recall": 0.43073047858942065,
+   "edit_f1": 0.30265486725663715,
+   "exact_sentences": 0.9019736842105263,
+   "recovered_misled_broken": {
+    "recovered": 49,
+    "misled": 132,
+    "not_recovered_unchanged": 96,
+    "kept_ok": 6806,
+    "broken": 517
+   },
+   "exact_by_kind": {
+    "canonical": 0.9883720930232558,
+    "generator": 0.9275947793660658,
+    "rule-derived": 0.9559118236472945,
+    "variant": 0.17689530685920576,
+    "variant-identity": 0.7547528517110266
+   },
+   "n_by_kind": {
+    "canonical": 86,
+    "generator": 3218,
+    "rule-derived": 3493,
+    "variant": 277,
+    "variant-identity": 526
+   }
+  },
+  "edit_aligned_only": {
+   "n": 277,
+   "words": 1454,
+   "tag_accuracy": 0.6382393397524071,
+   "edit_precision": 0.7633928571428571,
+   "edit_recall": 0.43073047858942065,
+   "edit_f1": 0.5507246376811594,
+   "exact_sentences": 0.17689530685920576,
+   "recovered_misled_broken": {
+    "recovered": 49,
+    "misled": 132,
+    "not_recovered_unchanged": 96,
+    "kept_ok": 0,
+    "broken": 0
+   },
+   "exact_by_kind": {
+    "variant": 0.17689530685920576
+   },
+   "n_by_kind": {
+    "variant": 277
+   }
+  },
+  "world_inference_without_context": {
+   "top1": 0.9075685654008439,
+   "top3": 0.9741561181434599,
+   "macro_f1": 0.8762733778615971
+  }
+ },
+ "heldout_edit": {
+  "trained_on": true,
+  "all": {
+   "n": 2168,
+   "words": 10985,
+   "tag_accuracy": 0.9299954483386436,
+   "edit_precision": 0.7523983554134308,
+   "edit_recall": 0.8672985781990521,
+   "edit_f1": 0.8057729941291585,
+   "exact_sentences": 0.7624538745387454,
+   "recovered_misled_broken": {
+    "recovered": 396,
+    "misled": 230,
+    "not_recovered_unchanged": 77,
+    "kept_ok": 1257,
+    "broken": 208
+   },
+   "exact_by_kind": {
+    "canonical": 0.98,
+    "variant": 0.5633001422475107,
+    "variant-identity": 0.8387351778656127
+   },
+   "n_by_kind": {
+    "canonical": 200,
+    "variant": 703,
+    "variant-identity": 1265
+   }
+  }
+ },
+ "history": [
+  {
+   "epoch": 1,
+   "step": 653,
+   "world_loss": 0.5015218888122766,
+   "seg_loss": 0.10988915310587853,
+   "dev_top1": 0.96306915930726,
+   "dev_top3": 0.9927744007340291,
+   "dev_seg_f1": 0.9061528059499662,
+   "dev_exact_seg": 0.7663333333333333,
+   "dev_seg_by_family": {
+    "chain_long": 0.21,
+    "concat": 0.7104166666666667,
+    "ellipsis": 1.0,
+    "long": 0.21,
+    "mid": 0.5466666666666666,
+    "ref_created": 0.922360248447205,
+    "repeat_undo": 0.8597560975609756,
+    "self_correct": 1.0,
+    "shared_arg": 1.0,
+    "single": 0.8264705882352941,
+    "world_switch": 0.9259259259259259
+   },
+   "dev_seg_by_bucket": {
+    "1": {
+     "final": 0.904887714663144,
+     "exact": 0.9220607661822986,
+     "n": 757
+    },
+    "2-3": {
+     "final": 0.6500286861732645,
+     "exact": 0.8003442340791739,
+     "n": 1743
+    },
+    "4-5": {
+     "final": 0.3282442748091603,
+     "exact": 0.5877862595419847,
+     "n": 131
+    },
+    "6-8": {
+     "final": 0.14792899408284024,
+     "exact": 0.514792899408284,
+     "n": 169
+    },
+    "long": {
+     "final": 0.07,
+     "exact": 0.21,
+     "n": 200
+    }
+   },
+   "probe_failures": 156,
+   "probe_solved": 19844,
+   "dev_score": 2.0387694765694433,
+   "edit_loss": 0.4496501476759202,
+   "dev_edit_f1": 0.1990950226244344,
+   "dev_tag_acc": 0.98432758678182,
+   "dev_edit_exact": 0.9066390041493776,
+   "dev_edit_rmb": {
+    "recovered": 17,
+    "misled": 103,
+    "not_recovered_unchanged": 146,
+    "kept_ok": 7849,
+    "broken": 561
+   }
+  },
+  {
+   "epoch": 2,
+   "step": 1306,
+   "world_loss": 0.03585707763075161,
+   "seg_loss": 0.032438716712831356,
+   "dev_top1": 0.9713269870397981,
+   "dev_top3": 0.9941507053561188,
+   "dev_seg_f1": 0.9142236699239956,
+   "dev_exact_seg": 0.7763333333333333,
+   "dev_seg_by_family": {
+    "chain_long": 0.3,
+    "concat": 0.7229166666666667,
+    "ellipsis": 1.0,
+    "long": 0.22,
+    "mid": 0.59,
+    "ref_created": 0.922360248447205,
+    "repeat_undo": 0.8597560975609756,
+    "self_correct": 1.0,
+    "shared_arg": 1.0,
+    "single": 0.8117647058823529,
+    "world_switch": 0.9259259259259259
+   },
+   "dev_seg_by_bucket": {
+    "1": {
+     "final": 0.892998678996037,
+     "exact": 0.9154557463672391,
+     "n": 757
+    },
+    "2-3": {
+     "final": 0.6873207114170969,
+     "exact": 0.8072289156626506,
+     "n": 1743
+    },
+    "4-5": {
+     "final": 0.42748091603053434,
+     "exact": 0.6793893129770993,
+     "n": 131
+    },
+    "6-8": {
+     "final": 0.15384615384615385,
+     "exact": 0.5207100591715976,
+     "n": 169
+    },
+    "long": {
+     "final": 0.085,
+     "exact": 0.26,
+     "n": 200
+    }
+   },
+   "probe_failures": 39,
+   "probe_solved": 19961,
+   "dev_score": 2.084802249320482,
+   "edit_loss": 0.12571454181793684,
+   "dev_edit_f1": 0.22850318471337577,
+   "dev_tag_acc": 0.9786032656418464,
+   "dev_edit_exact": 0.8747118487782388,
+   "dev_edit_rmb": {
+    "recovered": 30,
+    "misled": 144,
+    "not_recovered_unchanged": 92,
+    "kept_ok": 7559,
+    "broken": 851
+   }
+  },
+  {
+   "epoch": 3,
+   "step": 1959,
+   "world_loss": 0.01594734512669552,
+   "seg_loss": 0.025409108275978344,
+   "dev_top1": 0.9733914439729326,
+   "dev_top3": 0.9938066292005964,
+   "dev_seg_f1": 0.9162282476730068,
+   "dev_exact_seg": 0.785,
+   "dev_seg_by_family": {
+    "chain_long": 0.31,
+    "concat": 0.7375,
+    "ellipsis": 1.0,
+    "long": 0.24,
+    "mid": 0.6133333333333333,
+    "ref_created": 0.922360248447205,
+    "repeat_undo": 0.8597560975609756,
+    "self_correct": 1.0,
+    "shared_arg": 1.0,
+    "single": 0.8176470588235294,
+    "world_switch": 0.9259259259259259
+   },
+   "dev_seg_by_bucket": {
+    "1": {
+     "final": 0.9009247027741083,
+     "exact": 0.9180977542932629,
+     "n": 757
+    },
+    "2-3": {
+     "final": 0.6976477337923122,
+     "exact": 0.8152610441767069,
+     "n": 1743
+    },
+    "4-5": {
+     "final": 0.4198473282442748,
+     "exact": 0.7022900763358778,
+     "n": 131
+    },
+    "6-8": {
+     "final": 0.1952662721893491,
+     "exact": 0.5443786982248521,
+     "n": 169
+    },
+    "long": {
+     "final": 0.105,
+     "exact": 0.275,
+     "n": 200
+    }
+   },
+   "probe_failures": 11,
+   "probe_solved": 19989,
+   "dev_score": 2.1044809589875215,
+   "edit_loss": 0.09633054178219523,
+   "dev_edit_f1": 0.2197225346831646,
+   "dev_tag_acc": 0.9770249091333489,
+   "dev_edit_exact": 0.8743660673121254,
+   "dev_edit_rmb": {
+    "recovered": 34,
+    "misled": 145,
+    "not_recovered_unchanged": 87,
+    "kept_ok": 7552,
+    "broken": 858
+   }
+  },
+  {
+   "epoch": 4,
+   "step": 2612,
+   "world_loss": 0.010731785335673582,
+   "seg_loss": 0.021939112505323582,
+   "dev_top1": 0.9707535267805941,
+   "dev_top3": 0.994036013304278,
+   "dev_seg_f1": 0.9102100896560953,
+   "dev_exact_seg": 0.7746666666666666,
+   "dev_seg_by_family": {
+    "chain_long": 0.32,
+    "concat": 0.7125,
+    "ellipsis": 1.0,
+    "long": 0.26,
+    "mid": 0.5966666666666667,
+    "ref_created": 0.922360248447205,
+    "repeat_undo": 0.8597560975609756,
+    "self_correct": 1.0,
+    "shared_arg": 1.0,
+    "single": 0.8029411764705883,
+    "world_switch": 0.9259259259259259
+   },
+   "dev_seg_by_bucket": {
+    "1": {
+     "final": 0.8903566710700133,
+     "exact": 0.9114927344782034,
+     "n": 757
+    },
+    "2-3": {
+     "final": 0.6655192197360872,
+     "exact": 0.8014916810097533,
+     "n": 1743
+    },
+    "4-5": {
+     "final": 0.4198473282442748,
+     "exact": 0.6870229007633588,
+     "n": 131
+    },
+    "6-8": {
+     "final": 0.1834319526627219,
+     "exact": 0.5266272189349113,
+     "n": 169
+    },
+    "long": {
+     "final": 0.085,
+     "exact": 0.29,
+     "n": 200
+    }
+   },
+   "probe_failures": 3,
+   "probe_solved": 19997,
+   "dev_score": 2.0874535877833944,
+   "edit_loss": 0.06851380004705847,
+   "dev_edit_f1": 0.24297994269340972,
+   "dev_tag_acc": 0.9854279902630965,
+   "dev_edit_exact": 0.9173582295988935,
+   "dev_edit_rmb": {
+    "recovered": 28,
+    "misled": 101,
+    "not_recovered_unchanged": 137,
+    "kept_ok": 7931,
+    "broken": 479
+   }
+  },
+  {
+   "epoch": 5,
+   "step": 3265,
+   "world_loss": 0.0048294074064882606,
+   "seg_loss": 0.019901409833642098,
+   "dev_top1": 0.9740795962839776,
+   "dev_top3": 0.9944947815116413,
+   "dev_seg_f1": 0.9130376524185985,
+   "dev_exact_seg": 0.7826666666666666,
+   "dev_seg_by_family": {
+    "chain_long": 0.32,
+    "concat": 0.7333333333333333,
+    "ellipsis": 1.0,
+    "long": 0.26,
+    "mid": 0.61,
+    "ref_created": 0.922360248447205,
+    "repeat_undo": 0.8597560975609756,
+    "self_correct": 1.0,
+    "shared_arg": 1.0,
+    "single": 0.8029411764705883,
+    "world_switch": 0.9259259259259259
+   },
+   "dev_seg_by_bucket": {
+    "1": {
+     "final": 0.8877146631439894,
+     "exact": 0.9114927344782034,
+     "n": 757
+    },
+    "2-3": {
+     "final": 0.6982214572576019,
+     "exact": 0.8129661503155479,
+     "n": 1743
+    },
+    "4-5": {
+     "final": 0.4198473282442748,
+     "exact": 0.6870229007633588,
+     "n": 131
+    },
+    "6-8": {
+     "final": 0.20710059171597633,
+     "exact": 0.5502958579881657,
+     "n": 169
+    },
+    "long": {
+     "final": 0.085,
+     "exact": 0.29,
+     "n": 200
+    }
+   },
+   "probe_failures": 2,
+   "probe_solved": 19998,
+   "dev_score": 2.1019056992457434,
+   "edit_loss": 0.055511272044932246,
+   "dev_edit_f1": 0.259576901086335,
+   "dev_tag_acc": 0.9857503306768037,
+   "dev_edit_exact": 0.9220839096357769,
+   "dev_edit_rmb": {
+    "recovered": 31,
+    "misled": 99,
+    "not_recovered_unchanged": 136,
+    "kept_ok": 7969,
+    "broken": 441
+   }
+  },
+  {
+   "epoch": 6,
+   "step": 3918,
+   "world_loss": 0.004000871714020389,
+   "seg_loss": 0.019014370415194295,
+   "dev_top1": 0.9747677485950224,
+   "dev_top3": 0.9944947815116413,
+   "dev_seg_f1": 0.9134808853118711,
+   "dev_exact_seg": 0.7846666666666666,
+   "dev_seg_by_family": {
+    "chain_long": 0.33,
+    "concat": 0.7427083333333333,
+    "ellipsis": 1.0,
+    "long": 0.26,
+    "mid": 0.6,
+    "ref_created": 0.922360248447205,
+    "repeat_undo": 0.8597560975609756,
+    "self_correct": 1.0,
+    "shared_arg": 1.0,
+    "single": 0.8,
+    "world_switch": 0.9259259259259259
+   },
+   "dev_seg_by_bucket": {
+    "1": {
+     "final": 0.8863936591809776,
+     "exact": 0.9101717305151915,
+     "n": 757
+    },
+    "2-3": {
+     "final": 0.7028112449799196,
+     "exact": 0.8181296615031555,
+     "n": 1743
+    },
+    "4-5": {
+     "final": 0.4580152671755725,
+     "exact": 0.6870229007633588,
+     "n": 131
+    },
+    "6-8": {
+     "final": 0.1952662721893491,
+     "exact": 0.5325443786982249,
+     "n": 169
+    },
+    "long": {
+     "final": 0.085,
+     "exact": 0.295,
+     "n": 200
+    }
+   },
+   "probe_failures": 1,
+   "probe_solved": 19999,
+   "dev_score": 2.1053874916896484,
+   "edit_loss": 0.0435944462621479,
+   "dev_edit_f1": 0.2642777155655095,
+   "dev_tag_acc": 0.9855613725032512,
+   "dev_edit_exact": 0.9216228676809589,
+   "dev_edit_rmb": {
+    "recovered": 35,
+    "misled": 99,
+    "not_recovered_unchanged": 132,
+    "kept_ok": 7961,
+    "broken": 449
+   }
+  }
+ ]
+}

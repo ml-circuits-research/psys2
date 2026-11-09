@@ -1,0 +1,380 @@
+{
+ "checkpoint": "runs/dispatcher-v5bc-c3918",
+ "model": "distilbert-base-uncased",
+ "export_dir": "/home/salboaie/work/psys2/training/runs/export/dispatcher-v5bc-c3918",
+ "command": "python -m psys2_train.export_onnx --ckpt runs/dispatcher-v5bc-c3918",
+ "sizes_mb": {
+  "fp32": 253.75210189819336,
+  "int8": 63.98818874359131
+ },
+ "targets": {
+  "max_size_mb": 150,
+  "max_ms_per_message": 50,
+  "min_agreement": 0.995
+ },
+ "gold_top1_lenient_on_gold_segments_of_sample": {
+  "n": 398,
+  "torch": 0.9371859296482412,
+  "fp32": 0.9371859296482412,
+  "int8": 0.9422110552763819
+ },
+ "agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "reference": "PyTorch CUDA fp32",
+  "onnx_fp32": {
+   "items": 200,
+   "world_same": 398,
+   "world_n": 398,
+   "boundary_same": 2904,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 200,
+   "max_abs_prob_diff_world": 3.3974647521972656e-06,
+   "max_abs_prob_diff_seg": 2.175569534301758e-06,
+   "top3_same": 398,
+   "world_agreement": 1.0,
+   "boundary_agreement": 1.0,
+   "message_boundary_agreement": 1.0
+  },
+  "onnx_int8": {
+   "items": 200,
+   "world_same": 393,
+   "world_n": 398,
+   "boundary_same": 2898,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 195,
+   "max_abs_prob_diff_world": 0.678803563117981,
+   "max_abs_prob_diff_seg": 0.430093914270401,
+   "top3_same": 274,
+   "world_agreement": 0.9874371859296482,
+   "boundary_agreement": 0.9979338842975206,
+   "message_boundary_agreement": 0.975
+  },
+  "int8_vs_fp32": {
+   "items": 200,
+   "world_same": 393,
+   "world_n": 398,
+   "boundary_same": 2898,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 195,
+   "max_abs_prob_diff_world": 0.6788040995597839,
+   "max_abs_prob_diff_seg": 0.4300943911075592,
+   "top3_same": 274,
+   "world_agreement": 0.9874371859296482,
+   "boundary_agreement": 0.9979338842975206,
+   "message_boundary_agreement": 0.975
+  },
+  "disagreements": [
+   {
+    "cmp": "onnx_int8",
+    "text": "put a circle next to it",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.8142150640487671,
+    "p_b": 0.583419680595398
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Draw a purple triangle, a green sun",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.7586296200752258,
+    "p_b": 0.9200682044029236
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "put a circle next to it",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.8142154812812805,
+    "p_b": 0.583419680595398
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Draw a purple triangle, a green sun",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.758630096912384,
+    "p_b": 0.9200682044029236
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Hey, move it right twice",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.6336066722869873,
+    "p_b": 0.6017056107521057
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Hey, move it right twice",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.6336064338684082,
+    "p_b": 0.6017056107521057
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "go slower could you jump to my document window then what games do you have then speak slower then well slower display my guessing game window speak more slowly and can you jump to the tictactoe page i want to play hangman can u turn on the speaker and then well slower then i want a new game could you open guessing game panel then will you view your doc",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "go slower could you jump to my document window then what games do you have then speak slower then well slower display my guessing game window speak more slowly and can you jump to the tictactoe page i want to play hangman can u turn on the speaker and then well slower then i want a new game could you open guessing game panel then will you view your doc",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Reshape Metro as a star. Add Metro to Lines. List the groups. Duplicate Lines.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Reshape Metro as a star. Add Metro to Lines. List the groups. Duplicate Lines.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Is X above Y and right of Z? Is Y below Z and left of X? Is Z in the top left, left of Y?",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Is X above Y and right of Z? Is Y below Z and left of X? Is Z in the top left, left of Y?",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "well, Let us play perfect",
+    "world_a": "games.tictactoe",
+    "world_b": "media.music",
+    "p_a": 0.5343870520591736,
+    "p_b": 0.6952930688858032
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "well, Let us play perfect",
+    "world_a": "games.tictactoe",
+    "world_b": "media.music",
+    "p_a": 0.5343877673149109,
+    "p_b": 0.6952930688858032
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "um, This is too hard for me",
+    "world_a": "games.tictactoe",
+    "world_b": "ui.help",
+    "p_a": 0.35234734416007996,
+    "p_b": 0.4080568253993988
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "um, This is too hard for me",
+    "world_a": "games.tictactoe",
+    "world_b": "ui.help",
+    "p_a": 0.35234534740448,
+    "p_b": 0.4080568253993988
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "hey! trying to lay out a camp site. Tent goes in the top left, next to Fire and above Lake. Canoe goes beneath Lake but left of Pier. Also give Fire a red color, and what is in the bottom right, right of Pier? One more thing: add a brown rectangle called Hut between Tent and Fire, near the top.",
+    "boundary_flips": 2
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "hey! trying to lay out a camp site. Tent goes in the top left, next to Fire and above Lake. Canoe goes beneath Lake but left of Pier. Also give Fire a red color, and what is in the bottom right, right of Pier? One more thing: add a brown rectangle called Hut between Tent and Fire, near the top.",
+    "boundary_flips": 2
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Is Venus right of Mercury and above Earth? Is Earth in the bottom right, below Venus? Count the shapes left of Earth and above Mercury, please.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Is Venus right of Mercury and above Earth? Is Earth in the bottom right, below Venus? Count the shapes left of Earth and above Mercury, please.",
+    "boundary_flips": 1
+   }
+  ]
+ },
+ "edit_agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "rewritten_by_torch": 0.405,
+  "onnx_fp32": {
+   "n": 200,
+   "simplified_same": 200,
+   "tags_same": 200,
+   "words": 996,
+   "word_tags_same": 996,
+   "top1_world_same": 200,
+   "simplified_agreement": 1.0,
+   "tag_sequence_agreement": 1.0,
+   "word_tag_agreement": 1.0
+  },
+  "onnx_int8": {
+   "n": 200,
+   "simplified_same": 185,
+   "tags_same": 185,
+   "words": 996,
+   "word_tags_same": 980,
+   "top1_world_same": 199,
+   "simplified_agreement": 0.925,
+   "tag_sequence_agreement": 0.925,
+   "word_tag_agreement": 0.9839357429718876
+  },
+  "int8_vs_fp32": {
+   "n": 200,
+   "simplified_same": 185,
+   "tags_same": 185,
+   "words": 996,
+   "word_tags_same": 980,
+   "top1_world_same": 199,
+   "simplified_agreement": 0.925,
+   "tag_sequence_agreement": 0.925,
+   "word_tag_agreement": 0.9839357429718876
+  },
+  "examples_differing": [
+   {
+    "text": "i need a hint",
+    "torch": "hint?",
+    "int8": "hint"
+   },
+   {
+    "text": "duck body covered with what",
+    "torch": null,
+    "int8": "duck body covered what"
+   },
+   {
+    "text": "it was a penguin, add it",
+    "torch": "it was penguin",
+    "int8": "it was a penguin"
+   },
+   {
+    "text": "is there socks on my garden list",
+    "torch": "is socks on garden list?",
+    "int8": "is socks on garden list"
+   },
+   {
+    "text": "can u swap the hair for another one",
+    "torch": "swap the hair for another one",
+    "int8": "swap the hair for another"
+   },
+   {
+    "text": "is my money enough for the puzzle",
+    "torch": "enough for a puzzle?",
+    "int8": "is money enough for a puzzle?"
+   },
+   {
+    "text": "paint the roof green",
+    "torch": "paint the roof= green",
+    "int8": null
+   },
+   {
+    "text": "next letter, n",
+    "torch": "letter n",
+    "int8": "letter, n"
+   },
+   {
+    "text": "it's a zebra",
+    "torch": "zebra",
+    "int8": "zebra?"
+   },
+   {
+    "text": "halve the plums",
+    "torch": "halve the the plums",
+    "int8": null
+   },
+   {
+    "text": "my guess is elephant",
+    "torch": "my guess elephant",
+    "int8": null
+   },
+   {
+    "text": "can u give examples",
+    "torch": "u give examples",
+    "int8": null
+   },
+   {
+    "text": "pears should be 6 not 3",
+    "torch": null,
+    "int8": "pears should be 6 3"
+   },
+   {
+    "text": "body to blue please",
+    "torch": "body to blue",
+    "int8": "body blue"
+   },
+   {
+    "text": "can u make the computer easy",
+    "torch": "make it easy",
+    "int8": "make it easy."
+   }
+  ]
+ },
+ "latency_cpu_batch1": {
+  "fp32_threads1": {
+   "encoder_pass_ms": {
+    "p50": 12.549370992928743,
+    "p95": 39.06273799657356,
+    "mean": 16.884484699985478
+   },
+   "dispatch_message_ms": {
+    "p50": 124.10479800018948,
+    "p95": 229.4699310004944,
+    "mean": 138.14568240981316
+   },
+   "avg_distinct_segments_per_message": 7.33,
+   "n": 100
+  },
+  "int8_threads1": {
+   "encoder_pass_ms": {
+    "p50": 3.4243870031787083,
+    "p95": 9.67458399827592,
+    "mean": 4.569765420455951
+   },
+   "dispatch_message_ms": {
+    "p50": 33.344748997478746,
+    "p95": 61.455399001715705,
+    "mean": 37.118713370291516
+   },
+   "avg_distinct_segments_per_message": 7.33,
+   "n": 100
+  },
+  "fp32_threads4": {
+   "encoder_pass_ms": {
+    "p50": 4.583123998600058,
+    "p95": 11.238905994105153,
+    "mean": 5.62764963004156
+   },
+   "dispatch_message_ms": {
+    "p50": 43.067511011031456,
+    "p95": 78.18987799691968,
+    "mean": 47.48559043975547
+   },
+   "avg_distinct_segments_per_message": 7.33,
+   "n": 100
+  },
+  "int8_threads4": {
+   "encoder_pass_ms": {
+    "p50": 1.558673000545241,
+    "p95": 3.494099000818096,
+    "mean": 1.884706120181363
+   },
+   "dispatch_message_ms": {
+    "p50": 15.409677987918258,
+    "p95": 26.798904000315815,
+    "mean": 16.696804410748882
+   },
+   "avg_distinct_segments_per_message": 7.33,
+   "n": 100
+  }
+ },
+ "cpu": "Grace aarch64 (DGX Spark)",
+ "versions": {
+  "torch": "2.14.1+cu130",
+  "onnx": "1.23.2",
+  "onnxruntime": "1.31.1",
+  "opset": 17
+ }
+}

@@ -1,0 +1,454 @@
+{
+ "checkpoint": "runs/dispatcher-v5bc-c3265",
+ "model": "distilbert-base-uncased",
+ "export_dir": "/home/salboaie/work/psys2/training/runs/export/dispatcher-v5bc-c3265",
+ "command": "python -m psys2_train.export_onnx --ckpt runs/dispatcher-v5bc-c3265",
+ "sizes_mb": {
+  "fp32": 253.75210189819336,
+  "int8": 63.98818874359131
+ },
+ "targets": {
+  "max_size_mb": 150,
+  "max_ms_per_message": 50,
+  "min_agreement": 0.995
+ },
+ "gold_top1_lenient_on_gold_segments_of_sample": {
+  "n": 398,
+  "torch": 0.9246231155778895,
+  "fp32": 0.9246231155778895,
+  "int8": 0.9346733668341709
+ },
+ "agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "reference": "PyTorch CUDA fp32",
+  "onnx_fp32": {
+   "items": 200,
+   "world_same": 398,
+   "world_n": 398,
+   "boundary_same": 2904,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 200,
+   "max_abs_prob_diff_world": 3.6954879760742188e-06,
+   "max_abs_prob_diff_seg": 4.112720489501953e-06,
+   "top3_same": 398,
+   "world_agreement": 1.0,
+   "boundary_agreement": 1.0,
+   "message_boundary_agreement": 1.0
+  },
+  "onnx_int8": {
+   "items": 200,
+   "world_same": 387,
+   "world_n": 398,
+   "boundary_same": 2893,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 190,
+   "max_abs_prob_diff_world": 0.5857971906661987,
+   "max_abs_prob_diff_seg": 0.4174952507019043,
+   "top3_same": 279,
+   "world_agreement": 0.9723618090452262,
+   "boundary_agreement": 0.9962121212121212,
+   "message_boundary_agreement": 0.95
+  },
+  "int8_vs_fp32": {
+   "items": 200,
+   "world_same": 387,
+   "world_n": 398,
+   "boundary_same": 2893,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 190,
+   "max_abs_prob_diff_world": 0.5857978463172913,
+   "max_abs_prob_diff_seg": 0.41749516129493713,
+   "top3_same": 279,
+   "world_agreement": 0.9723618090452262,
+   "boundary_agreement": 0.9962121212121212,
+   "message_boundary_agreement": 0.95
+  },
+  "disagreements": [
+   {
+    "cmp": "onnx_int8",
+    "text": "Is an oval a kind of hexagon?",
+    "world_a": "diagram.sketch",
+    "world_b": "kids.shapes",
+    "p_a": 0.5740687847137451,
+    "p_b": 0.7512505054473877
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Is an oval a kind of hexagon?",
+    "world_a": "diagram.sketch",
+    "world_b": "kids.shapes",
+    "p_a": 0.5740678906440735,
+    "p_b": 0.7512505054473877
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "put a circle next to it",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.8235938549041748,
+    "p_b": 0.7523121237754822
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Draw a purple triangle, a green sun",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.8420947790145874,
+    "p_b": 0.6830621361732483
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "put a circle next to it",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.8235945105552673,
+    "p_b": 0.7523121237754822
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Draw a purple triangle, a green sun",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.8420941233634949,
+    "p_b": 0.6830621361732483
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "every arrow coming out of Router should be dashed and blue, and the Router\u2192Tv one should be labelled \"ethernet\"",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "every arrow coming out of Router should be dashed and blue, and the Router\u2192Tv one should be labelled \"ethernet\"",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Could you draw a pink triangle, actually, green.",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.685275137424469,
+    "p_b": 0.7139809727668762
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Could you draw a pink triangle, actually, green.",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.6852715015411377,
+    "p_b": 0.7139809727668762
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "undo it",
+    "world_a": "ui.avatar",
+    "world_b": "art.draw",
+    "p_a": 0.5347467064857483,
+    "p_b": 0.527301013469696
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "undo it",
+    "world_a": "ui.avatar",
+    "world_b": "art.draw",
+    "p_a": 0.5347465872764587,
+    "p_b": 0.527301013469696
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Add my homework to my list, Mark bread as completed, then Make the house and cloud pink, and Add water the plants to the list, Add a new notebook, cat food and apples to my shopping list, please color the sun and the circle purple. Delete practice piano from the chores list.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Add my homework to my list, Mark bread as completed, then Make the house and cloud pink, and Add water the plants to the list, Add a new notebook, cat food and apples to my shopping list, please color the sun and the circle purple. Delete practice piano from the chores list.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "go slower could you jump to my document window then what games do you have then speak slower then well slower display my guessing game window speak more slowly and can you jump to the tictactoe page i want to play hangman can u turn on the speaker and then well slower then i want a new game could you open guessing game panel then will you view your doc",
+    "boundary_flips": 2
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "go slower could you jump to my document window then what games do you have then speak slower then well slower display my guessing game window speak more slowly and can you jump to the tictactoe page i want to play hangman can u turn on the speaker and then well slower then i want a new game could you open guessing game panel then will you view your doc",
+    "boundary_flips": 2
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Reshape Metro as a star. Add Metro to Lines. List the groups. Duplicate Lines.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Reshape Metro as a star. Add Metro to Lines. List the groups. Duplicate Lines.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Undo it",
+    "world_a": "ui.avatar",
+    "world_b": "art.draw",
+    "p_a": 0.5347467064857483,
+    "p_b": 0.527301013469696
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Undo it",
+    "world_a": "ui.avatar",
+    "world_b": "art.draw",
+    "p_a": 0.5347465872764587,
+    "p_b": 0.527301013469696
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "The sound should be piano.",
+    "world_a": "media.music",
+    "world_b": "ui.shell",
+    "p_a": 0.8442792892456055,
+    "p_b": 0.6653897762298584
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "The sound should be piano.",
+    "world_a": "media.music",
+    "world_b": "ui.shell",
+    "p_a": 0.8442778587341309,
+    "p_b": 0.6653897762298584
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "My friend is Andrei.",
+    "world_a": "kids.animals",
+    "world_b": "games.hangman",
+    "p_a": 0.41716477274894714,
+    "p_b": 0.7148033380508423
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "My friend is Andrei.",
+    "world_a": "kids.animals",
+    "world_b": "games.hangman",
+    "p_a": 0.4171638786792755,
+    "p_b": 0.7148033380508423
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Is X above Y and right of Z? Is Y below Z and left of X? Is Z in the top left, left of Y?",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Is X above Y and right of Z? Is Y below Z and left of X? Is Z in the top left, left of Y?",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "turn Hull orange",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.9788747429847717,
+    "p_b": 0.5314533114433289
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "turn Hull orange",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.9788745045661926,
+    "p_b": 0.5314533114433289
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Is Planet beneath Sun? Sun in the center. Planet beneath Sun in the bottom left corner please.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Is Planet beneath Sun? Sun in the center. Planet beneath Sun in the bottom left corner please.",
+    "boundary_flips": 1
+   }
+  ]
+ },
+ "edit_agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "rewritten_by_torch": 0.385,
+  "onnx_fp32": {
+   "n": 200,
+   "simplified_same": 200,
+   "tags_same": 200,
+   "words": 996,
+   "word_tags_same": 996,
+   "top1_world_same": 200,
+   "simplified_agreement": 1.0,
+   "tag_sequence_agreement": 1.0,
+   "word_tag_agreement": 1.0
+  },
+  "onnx_int8": {
+   "n": 200,
+   "simplified_same": 182,
+   "tags_same": 182,
+   "words": 996,
+   "word_tags_same": 974,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.91,
+   "tag_sequence_agreement": 0.91,
+   "word_tag_agreement": 0.9779116465863453
+  },
+  "int8_vs_fp32": {
+   "n": 200,
+   "simplified_same": 182,
+   "tags_same": 182,
+   "words": 996,
+   "word_tags_same": 974,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.91,
+   "tag_sequence_agreement": 0.91,
+   "word_tag_agreement": 0.9779116465863453
+  },
+  "examples_differing": [
+   {
+    "text": "play happy birthday, bells please",
+    "torch": "happy birthday with bells",
+    "int8": "birthday with bells"
+   },
+   {
+    "text": "i need a hint",
+    "torch": "hint?",
+    "int8": "hint"
+   },
+   {
+    "text": "make ur body blue",
+    "torch": "body blue.",
+    "int8": "body blue"
+   },
+   {
+    "text": "could it be a tiger",
+    "torch": "it tiger",
+    "int8": "is it tiger"
+   },
+   {
+    "text": "can u swap the hair for another one",
+    "torch": "u swap the hair for another one",
+    "int8": "can u swap the hair for another"
+   },
+   {
+    "text": "e in the word?",
+    "torch": "e in",
+    "int8": "e in?"
+   },
+   {
+    "text": "a hexagon is what exactly?",
+    "torch": "a hexagon exactly?",
+    "int8": "hexagon?"
+   },
+   {
+    "text": "i say penguin",
+    "torch": "penguin?",
+    "int8": "penguin"
+   },
+   {
+    "text": "next letter, n",
+    "torch": "letter n",
+    "int8": "letter, n"
+   },
+   {
+    "text": "it's a zebra",
+    "torch": "zebra! !",
+    "int8": "zebra"
+   },
+   {
+    "text": "can you tell me what a calf is",
+    "torch": "can you tell me what is a calf is",
+    "int8": null
+   },
+   {
+    "text": "top-left corner",
+    "torch": null,
+    "int8": "top-left"
+   },
+   {
+    "text": "is there an e",
+    "torch": "is there e?",
+    "int8": "is there an e?"
+   },
+   {
+    "text": "halve the plums",
+    "torch": null,
+    "int8": "halve the the plums"
+   },
+   {
+    "text": "can u give examples",
+    "torch": "give examples",
+    "int8": "u give examples."
+   }
+  ]
+ },
+ "latency_cpu_batch1": {
+  "fp32_threads1": {
+   "encoder_pass_ms": {
+    "p50": 13.867531990399584,
+    "p95": 40.41692797909491,
+    "mean": 17.873548829520587
+   },
+   "dispatch_message_ms": {
+    "p50": 131.6692359978333,
+    "p95": 238.51543298223987,
+    "mean": 146.8022381773335
+   },
+   "avg_distinct_segments_per_message": 7.33,
+   "n": 100
+  },
+  "int8_threads1": {
+   "encoder_pass_ms": {
+    "p50": 3.7259200180415064,
+    "p95": 10.219802992651239,
+    "mean": 4.867581540311221
+   },
+   "dispatch_message_ms": {
+    "p50": 36.21807400486432,
+    "p95": 60.91473999549635,
+    "mean": 39.9887383703026
+   },
+   "avg_distinct_segments_per_message": 7.31,
+   "n": 100
+  },
+  "fp32_threads4": {
+   "encoder_pass_ms": {
+    "p50": 4.682658996898681,
+    "p95": 11.527121008839458,
+    "mean": 5.791840509918984
+   },
+   "dispatch_message_ms": {
+    "p50": 44.76010799407959,
+    "p95": 78.43860099092126,
+    "mean": 49.124771489878185
+   },
+   "avg_distinct_segments_per_message": 7.33,
+   "n": 100
+  },
+  "int8_threads4": {
+   "encoder_pass_ms": {
+    "p50": 1.9911929848603904,
+    "p95": 4.081088991370052,
+    "mean": 2.3326588483178057
+   },
+   "dispatch_message_ms": {
+    "p50": 18.778254016069695,
+    "p95": 30.871569004375488,
+    "mean": 20.45828454894945
+   },
+   "avg_distinct_segments_per_message": 7.31,
+   "n": 100
+  }
+ },
+ "cpu": "Grace aarch64 (DGX Spark)",
+ "versions": {
+  "torch": "2.14.1+cu130",
+  "onnx": "1.23.2",
+  "onnxruntime": "1.31.1",
+  "opset": 17
+ }
+}

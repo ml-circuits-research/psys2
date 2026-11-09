@@ -1,0 +1,436 @@
+{
+ "checkpoint": "runs/dispatcher-v5bb-c3918",
+ "model": "distilbert-base-uncased",
+ "export_dir": "/home/salboaie/work/psys2/training/runs/export/dispatcher-v5bb-c3918",
+ "command": "python -m psys2_train.export_onnx --ckpt runs/dispatcher-v5bb-c3918",
+ "sizes_mb": {
+  "fp32": 253.75210189819336,
+  "int8": 63.98818874359131
+ },
+ "targets": {
+  "max_size_mb": 150,
+  "max_ms_per_message": 50,
+  "min_agreement": 0.995
+ },
+ "gold_top1_lenient_on_gold_segments_of_sample": {
+  "n": 398,
+  "torch": 0.9472361809045227,
+  "fp32": 0.9472361809045227,
+  "int8": 0.9472361809045227
+ },
+ "agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "reference": "PyTorch CUDA fp32",
+  "onnx_fp32": {
+   "items": 200,
+   "world_same": 398,
+   "world_n": 398,
+   "boundary_same": 2904,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 200,
+   "max_abs_prob_diff_world": 3.337860107421875e-06,
+   "max_abs_prob_diff_seg": 3.0994415283203125e-06,
+   "top3_same": 398,
+   "world_agreement": 1.0,
+   "boundary_agreement": 1.0,
+   "message_boundary_agreement": 1.0
+  },
+  "onnx_int8": {
+   "items": 200,
+   "world_same": 392,
+   "world_n": 398,
+   "boundary_same": 2895,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 191,
+   "max_abs_prob_diff_world": 0.6372164487838745,
+   "max_abs_prob_diff_seg": 0.3535747826099396,
+   "top3_same": 285,
+   "world_agreement": 0.9849246231155779,
+   "boundary_agreement": 0.996900826446281,
+   "message_boundary_agreement": 0.955
+  },
+  "int8_vs_fp32": {
+   "items": 200,
+   "world_same": 392,
+   "world_n": 398,
+   "boundary_same": 2895,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 191,
+   "max_abs_prob_diff_world": 0.637217104434967,
+   "max_abs_prob_diff_seg": 0.35357192158699036,
+   "top3_same": 285,
+   "world_agreement": 0.9849246231155779,
+   "boundary_agreement": 0.996900826446281,
+   "message_boundary_agreement": 0.955
+  },
+  "disagreements": [
+   {
+    "cmp": "onnx_int8",
+    "text": "Draw a boat and put a circle next to it then relocate Pail below Well, what is on h6; Is Light left of Lens and over Actor? Is Actor in the middle, below Lens? Make Light white, Is it octopus, then play the note d what time is it switch to the draw tab. please make your body pink make that purple, Draw a purple triangle, a green sun then Top left. put a small teal rectangle called Intern above Dev and between Cto and Qa. Then rename Intern to Ops.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Draw a boat and put a circle next to it then relocate Pail below Well, what is on h6; Is Light left of Lens and over Actor? Is Actor in the middle, below Lens? Make Light white, Is it octopus, then play the note d what time is it switch to the draw tab. please make your body pink make that purple, Draw a purple triangle, a green sun then Top left. put a small teal rectangle called Intern above Dev and between Cto and Qa. Then rename Intern to Ops.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "every arrow coming out of Router should be dashed and blue, and the Router\u2192Tv one should be labelled \"ethernet\"",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "every arrow coming out of Router should be dashed and blue, and the Router\u2192Tv one should be labelled \"ethernet\"",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Hey, make the text bold",
+    "world_a": "docs.editor",
+    "world_b": "ui.avatar",
+    "p_a": 0.8924145102500916,
+    "p_b": 0.7312204241752625
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Hey, make the text bold",
+    "world_a": "docs.editor",
+    "world_b": "ui.avatar",
+    "p_a": 0.8924150466918945,
+    "p_b": 0.7312204241752625
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "even out Harp and Lyre vertically",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "even out Harp and Lyre vertically",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "recipe for black",
+    "world_a": "art.draw",
+    "world_b": "kids.shapes",
+    "p_a": 0.3602256774902344,
+    "p_b": 0.3858746290206909
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "recipe for black",
+    "world_a": "art.draw",
+    "world_b": "kids.shapes",
+    "p_a": 0.36022451519966125,
+    "p_b": 0.3858746290206909
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Please move the boat up two times.",
+    "world_a": "art.draw",
+    "world_b": "ui.avatar",
+    "p_a": 0.4093104302883148,
+    "p_b": 0.40649181604385376
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Please move the boat up two times.",
+    "world_a": "art.draw",
+    "world_b": "ui.avatar",
+    "p_a": 0.4093096852302551,
+    "p_b": 0.40649181604385376
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "the Plant is under the Lamp and left of the Desk. The Lamp is at the top right, above the Desk. oh and the Desk is gray",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "the Plant is under the Lamp and left of the Desk. The Lamp is at the top right, above the Desk. oh and the Desk is gray",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Is X above Y and right of Z? Is Y below Z and left of X? Is Z in the top left, left of Y?",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Is X above Y and right of Z? Is Y below Z and left of X? Is Z in the top left, left of Y?",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Drop the title",
+    "world_a": "docs.editor",
+    "world_b": "data.charts",
+    "p_a": 0.4943174123764038,
+    "p_b": 0.5844900608062744
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Drop the title",
+    "world_a": "docs.editor",
+    "world_b": "data.charts",
+    "p_a": 0.4943184554576874,
+    "p_b": 0.5844900608062744
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "are Vera and Wes linked and name Reef Coral. Please draw a heart and then add a square below it; which one is more connected, i mean who has the most links, are Butte and Knoll linked directly. Launch is gold. Make circles big; create a dashed pink link from Timeline to Pricing. How many lines are there and Reposition Banner and Modal left side of Menu, pop a magenta triangle, spread Search & Toolbar horizontally evenly.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "are Vera and Wes linked and name Reef Coral. Please draw a heart and then add a square below it; which one is more connected, i mean who has the most links, are Butte and Knoll linked directly. Launch is gold. Make circles big; create a dashed pink link from Timeline to Pricing. How many lines are there and Reposition Banner and Modal left side of Menu, pop a magenta triangle, spread Search & Toolbar horizontally evenly.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Hey, make the text bold",
+    "world_a": "docs.editor",
+    "world_b": "ui.avatar",
+    "p_a": 0.8924145102500916,
+    "p_b": 0.7312204241752625
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Hey, make the text bold",
+    "world_a": "docs.editor",
+    "world_b": "ui.avatar",
+    "p_a": 0.8924150466918945,
+    "p_b": 0.7312204241752625
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Can you jump to your avatar panel.",
+    "world_a": "ui.avatar",
+    "world_b": "ui.shell",
+    "p_a": 0.640859842300415,
+    "p_b": 0.5288256406784058
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Can you jump to your avatar panel.",
+    "world_a": "ui.avatar",
+    "world_b": "ui.shell",
+    "p_a": 0.6408613920211792,
+    "p_b": 0.5288256406784058
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "hey! trying to lay out a camp site. Tent goes in the top left, next to Fire and above Lake. Canoe goes beneath Lake but left of Pier. Also give Fire a red color, and what is in the bottom right, right of Pier? One more thing: add a brown rectangle called Hut between Tent and Fire, near the top.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "hey! trying to lay out a camp site. Tent goes in the top left, next to Fire and above Lake. Canoe goes beneath Lake but left of Pier. Also give Fire a red color, and what is in the bottom right, right of Pier? One more thing: add a brown rectangle called Hut between Tent and Fire, near the top.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Quick review of the board before the meeting. Is Q2 right of Q1 and below Q3? Is Q4 above Q3 and left of Q1? Also bring Q3 to the front, it's half hidden.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Quick review of the board before the meeting. Is Q2 right of Q1 and below Q3? Is Q4 above Q3 and left of Q1? Also bring Q3 to the front, it's half hidden.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Is Venus right of Mercury and above Earth? Is Earth in the bottom right, below Venus? Count the shapes left of Earth and above Mercury, please.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Is Venus right of Mercury and above Earth? Is Earth in the bottom right, below Venus? Count the shapes left of Earth and above Mercury, please.",
+    "boundary_flips": 1
+   }
+  ]
+ },
+ "edit_agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "rewritten_by_torch": 0.4,
+  "onnx_fp32": {
+   "n": 200,
+   "simplified_same": 200,
+   "tags_same": 200,
+   "words": 996,
+   "word_tags_same": 996,
+   "top1_world_same": 200,
+   "simplified_agreement": 1.0,
+   "tag_sequence_agreement": 1.0,
+   "word_tag_agreement": 1.0
+  },
+  "onnx_int8": {
+   "n": 200,
+   "simplified_same": 181,
+   "tags_same": 181,
+   "words": 996,
+   "word_tags_same": 976,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.905,
+   "tag_sequence_agreement": 0.905,
+   "word_tag_agreement": 0.9799196787148594
+  },
+  "int8_vs_fp32": {
+   "n": 200,
+   "simplified_same": 181,
+   "tags_same": 181,
+   "words": 996,
+   "word_tags_same": 976,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.905,
+   "tag_sequence_agreement": 0.905,
+   "word_tag_agreement": 0.9799196787148594
+  },
+  "examples_differing": [
+   {
+    "text": "how many on my list",
+    "torch": "how many on my list?",
+    "int8": null
+   },
+   {
+    "text": "can u add a column named weight",
+    "torch": "u add a column named weight",
+    "int8": "add a column named weight"
+   },
+   {
+    "text": "play hangman once more",
+    "torch": null,
+    "int8": "hangman once more"
+   },
+   {
+    "text": "make ur body blue",
+    "torch": "body blue.",
+    "int8": "body blue"
+   },
+   {
+    "text": "what type of assistant are you",
+    "torch": "what assistant",
+    "int8": "what assistant are"
+   },
+   {
+    "text": "is there socks on my garden list",
+    "torch": "is socks on garden list?",
+    "int8": "is socks on the garden list?"
+   },
+   {
+    "text": "can u swap the hair for another one",
+    "torch": "u swap the hair for another one",
+    "int8": "swap the hair for another one"
+   },
+   {
+    "text": "make a hangman round with giraffe pls",
+    "torch": "hangman giraffe pls",
+    "int8": "hangman giraffe"
+   },
+   {
+    "text": "is a leaf blue",
+    "torch": "is leaf blue?",
+    "int8": "leaf blue?"
+   },
+   {
+    "text": "play the E minor pentatonic",
+    "torch": "play E minor pentatonic.",
+    "int8": "play the E minor pentatonic."
+   },
+   {
+    "text": "is a shark a mammal",
+    "torch": null,
+    "int8": "is a shark a mammal?"
+   },
+   {
+    "text": "can you tell me what a calf is",
+    "torch": "what is a calf",
+    "int8": "tell what is a calf"
+   },
+   {
+    "text": "can u make ur body a little darker",
+    "torch": "ur body darker.",
+    "int8": "body darker."
+   },
+   {
+    "text": "which game",
+    "torch": null,
+    "int8": "game"
+   },
+   {
+    "text": "my guess is elephant",
+    "torch": "my elephant",
+    "int8": "elephant"
+   }
+  ]
+ },
+ "latency_cpu_batch1": {
+  "fp32_threads1": {
+   "encoder_pass_ms": {
+    "p50": 13.223275993368588,
+    "p95": 40.139219010598026,
+    "mean": 17.585496079118457
+   },
+   "dispatch_message_ms": {
+    "p50": 130.46043600479607,
+    "p95": 240.6093659956241,
+    "mean": 143.66122947947588
+   },
+   "avg_distinct_segments_per_message": 7.32,
+   "n": 100
+  },
+  "int8_threads1": {
+   "encoder_pass_ms": {
+    "p50": 3.6247550015104935,
+    "p95": 9.850296992226504,
+    "mean": 4.748780470108613
+   },
+   "dispatch_message_ms": {
+    "p50": 35.5189919937402,
+    "p95": 66.26805900305044,
+    "mean": 38.78306430982775
+   },
+   "avg_distinct_segments_per_message": 7.3,
+   "n": 100
+  },
+  "fp32_threads4": {
+   "encoder_pass_ms": {
+    "p50": 4.547188000287861,
+    "p95": 11.42551499651745,
+    "mean": 5.670143279712647
+   },
+   "dispatch_message_ms": {
+    "p50": 43.696934008039534,
+    "p95": 79.14203799737152,
+    "mean": 47.57365252968157
+   },
+   "avg_distinct_segments_per_message": 7.32,
+   "n": 100
+  },
+  "int8_threads4": {
+   "encoder_pass_ms": {
+    "p50": 1.8010899948421866,
+    "p95": 4.08285201410763,
+    "mean": 2.164739549771184
+   },
+   "dispatch_message_ms": {
+    "p50": 17.762256000423804,
+    "p95": 31.575323999277316,
+    "mean": 19.091821119945962
+   },
+   "avg_distinct_segments_per_message": 7.3,
+   "n": 100
+  }
+ },
+ "cpu": "Grace aarch64 (DGX Spark)",
+ "versions": {
+  "torch": "2.14.1+cu130",
+  "onnx": "1.23.2",
+  "onnxruntime": "1.31.1",
+  "opset": 17
+ }
+}

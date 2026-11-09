@@ -1,0 +1,398 @@
+{
+ "checkpoint": "runs/dispatcher-v5ba-c3924",
+ "model": "distilbert-base-uncased",
+ "export_dir": "/home/salboaie/work/psys2/training/runs/export/dispatcher-v5ba-c3924",
+ "command": "python -m psys2_train.export_onnx --ckpt runs/dispatcher-v5ba-c3924",
+ "sizes_mb": {
+  "fp32": 253.75210189819336,
+  "int8": 63.98818874359131
+ },
+ "targets": {
+  "max_size_mb": 150,
+  "max_ms_per_message": 50,
+  "min_agreement": 0.995
+ },
+ "gold_top1_lenient_on_gold_segments_of_sample": {
+  "n": 398,
+  "torch": 0.9346733668341709,
+  "fp32": 0.9346733668341709,
+  "int8": 0.9346733668341709
+ },
+ "agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "reference": "PyTorch CUDA fp32",
+  "onnx_fp32": {
+   "items": 200,
+   "world_same": 398,
+   "world_n": 398,
+   "boundary_same": 2904,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 200,
+   "max_abs_prob_diff_world": 3.0994415283203125e-06,
+   "max_abs_prob_diff_seg": 3.471970558166504e-06,
+   "top3_same": 398,
+   "world_agreement": 1.0,
+   "boundary_agreement": 1.0,
+   "message_boundary_agreement": 1.0
+  },
+  "onnx_int8": {
+   "items": 200,
+   "world_same": 395,
+   "world_n": 398,
+   "boundary_same": 2892,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 190,
+   "max_abs_prob_diff_world": 0.41401076316833496,
+   "max_abs_prob_diff_seg": 0.3865865468978882,
+   "top3_same": 292,
+   "world_agreement": 0.992462311557789,
+   "boundary_agreement": 0.9958677685950413,
+   "message_boundary_agreement": 0.95
+  },
+  "int8_vs_fp32": {
+   "items": 200,
+   "world_same": 395,
+   "world_n": 398,
+   "boundary_same": 2892,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 190,
+   "max_abs_prob_diff_world": 0.414010226726532,
+   "max_abs_prob_diff_seg": 0.3865830898284912,
+   "top3_same": 292,
+   "world_agreement": 0.992462311557789,
+   "boundary_agreement": 0.9958677685950413,
+   "message_boundary_agreement": 0.95
+  },
+  "disagreements": [
+   {
+    "cmp": "onnx_int8",
+    "text": "Draw a boat and put a circle next to it then relocate Pail below Well, what is on h6; Is Light left of Lens and over Actor? Is Actor in the middle, below Lens? Make Light white, Is it octopus, then play the note d what time is it switch to the draw tab. please make your body pink make that purple, Draw a purple triangle, a green sun then Top left. put a small teal rectangle called Intern above Dev and between Cto and Qa. Then rename Intern to Ops.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Draw a boat and put a circle next to it then relocate Pail below Well, what is on h6; Is Light left of Lens and over Actor? Is Actor in the middle, below Lens? Make Light white, Is it octopus, then play the note d what time is it switch to the draw tab. please make your body pink make that purple, Draw a purple triangle, a green sun then Top left. put a small teal rectangle called Intern above Dev and between Cto and Qa. Then rename Intern to Ops.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Could you draw a pink triangle, actually, green.",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.5036396384239197,
+    "p_b": 0.6443374752998352
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Could you draw a pink triangle, actually, green.",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.5036365389823914,
+    "p_b": 0.6443374752998352
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "recipe for black",
+    "world_a": "diagram.sketch",
+    "world_b": "kids.arith",
+    "p_a": 0.6176413893699646,
+    "p_b": 0.3436816930770874
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "recipe for black",
+    "world_a": "diagram.sketch",
+    "world_b": "kids.arith",
+    "p_a": 0.6176415681838989,
+    "p_b": 0.3436816930770874
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "align the circles horizontally then is there a red shape under lamp and next to easel is there a blue one in the bottom right right of stool and neighbours of lynx the sixth section in short then draw a pink boat and then a green circle",
+    "boundary_flips": 2
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "align the circles horizontally then is there a red shape under lamp and next to easel is there a blue one in the bottom right right of stool and neighbours of lynx the sixth section in short then draw a pink boat and then a green circle",
+    "boundary_flips": 2
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Let me see. Rename the last square as Pixel2 and then sketch me three dots between Customs and Dock that says \"step 2\". Perfect.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Let me see. Rename the last square as Pixel2 and then sketch me three dots between Customs and Dock that says \"step 2\". Perfect.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Add my homework to my list, Mark bread as completed, then Make the house and cloud pink, and Add water the plants to the list, Add a new notebook, cat food and apples to my shopping list, please color the sun and the circle purple. Delete practice piano from the chores list.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Add my homework to my list, Mark bread as completed, then Make the house and cloud pink, and Add water the plants to the list, Add a new notebook, cat food and apples to my shopping list, please color the sun and the circle purple. Delete practice piano from the chores list.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "go slower could you jump to my document window then what games do you have then speak slower then well slower display my guessing game window speak more slowly and can you jump to the tictactoe page i want to play hangman can u turn on the speaker and then well slower then i want a new game could you open guessing game panel then will you view your doc",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "go slower could you jump to my document window then what games do you have then speak slower then well slower display my guessing game window speak more slowly and can you jump to the tictactoe page i want to play hangman can u turn on the speaker and then well slower then i want a new game could you open guessing game panel then will you view your doc",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Reshape Metro as a star. Add Metro to Lines. List the groups. Duplicate Lines.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Reshape Metro as a star. Add Metro to Lines. List the groups. Duplicate Lines.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "read me the moves",
+    "world_a": "games.chess",
+    "world_b": "games.tictactoe",
+    "p_a": 0.6493942737579346,
+    "p_b": 0.5057037472724915
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "read me the moves",
+    "world_a": "games.chess",
+    "world_b": "games.tictactoe",
+    "p_a": 0.6493929028511047,
+    "p_b": 0.5057037472724915
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Is Planet beneath Sun? Sun in the center. Planet beneath Sun in the bottom left corner please.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Is Planet beneath Sun? Sun in the center. Planet beneath Sun in the bottom left corner please.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "are Vera and Wes linked and name Reef Coral. Please draw a heart and then add a square below it; which one is more connected, i mean who has the most links, are Butte and Knoll linked directly. Launch is gold. Make circles big; create a dashed pink link from Timeline to Pricing. How many lines are there and Reposition Banner and Modal left side of Menu, pop a magenta triangle, spread Search & Toolbar horizontally evenly.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "are Vera and Wes linked and name Reef Coral. Please draw a heart and then add a square below it; which one is more connected, i mean who has the most links, are Butte and Knoll linked directly. Launch is gold. Make circles big; create a dashed pink link from Timeline to Pricing. How many lines are there and Reposition Banner and Modal left side of Menu, pop a magenta triangle, spread Search & Toolbar horizontally evenly.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "from Intake, where can the flow go",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "from Intake, where can the flow go",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "hey! trying to lay out a camp site. Tent goes in the top left, next to Fire and above Lake. Canoe goes beneath Lake but left of Pier. Also give Fire a red color, and what is in the bottom right, right of Pier? One more thing: add a brown rectangle called Hut between Tent and Fire, near the top.",
+    "boundary_flips": 2
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "hey! trying to lay out a camp site. Tent goes in the top left, next to Fire and above Lake. Canoe goes beneath Lake but left of Pier. Also give Fire a red color, and what is in the bottom right, right of Pier? One more thing: add a brown rectangle called Hut between Tent and Fire, near the top.",
+    "boundary_flips": 2
+   }
+  ]
+ },
+ "edit_agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "rewritten_by_torch": 0.42,
+  "onnx_fp32": {
+   "n": 200,
+   "simplified_same": 200,
+   "tags_same": 200,
+   "words": 996,
+   "word_tags_same": 996,
+   "top1_world_same": 200,
+   "simplified_agreement": 1.0,
+   "tag_sequence_agreement": 1.0,
+   "word_tag_agreement": 1.0
+  },
+  "onnx_int8": {
+   "n": 200,
+   "simplified_same": 183,
+   "tags_same": 183,
+   "words": 996,
+   "word_tags_same": 976,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.915,
+   "tag_sequence_agreement": 0.915,
+   "word_tag_agreement": 0.9799196787148594
+  },
+  "int8_vs_fp32": {
+   "n": 200,
+   "simplified_same": 183,
+   "tags_same": 183,
+   "words": 996,
+   "word_tags_same": 976,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.915,
+   "tag_sequence_agreement": 0.915,
+   "word_tag_agreement": 0.9799196787148594
+  },
+  "examples_differing": [
+   {
+    "text": "bolivia landlockd?",
+    "torch": "is bolivia landlockd?",
+    "int8": null
+   },
+   {
+    "text": "i need a hint",
+    "torch": "need a hint",
+    "int8": "hint"
+   },
+   {
+    "text": "could it be a tiger",
+    "torch": "is it tiger",
+    "int8": "it tiger"
+   },
+   {
+    "text": "which continent is chile in",
+    "torch": "continent chile",
+    "int8": "continent is chile"
+   },
+   {
+    "text": "show kyoto pls",
+    "torch": "show me kyoto",
+    "int8": "show me kyoto."
+   },
+   {
+    "text": "can u swap the hair for another one",
+    "torch": "swap the hair for another",
+    "int8": "swap the hair for another one"
+   },
+   {
+    "text": "show me all the queen moves pls",
+    "torch": "queen moves?",
+    "int8": "queen moves"
+   },
+   {
+    "text": "is red one of the primary colors",
+    "torch": "is red primary?",
+    "int8": "is red primary"
+   },
+   {
+    "text": "can you tell me what a calf is",
+    "torch": "you what is a calf",
+    "int8": "you tell me what is a calf"
+   },
+   {
+    "text": "can u make ur body a little darker",
+    "torch": "body little darker.",
+    "int8": "ur body a little darker."
+   },
+   {
+    "text": "my guess is elephant",
+    "torch": "my guess elephant",
+    "int8": null
+   },
+   {
+    "text": "i have to go now, bye for now",
+    "torch": null,
+    "int8": "i have to go, bye for now"
+   },
+   {
+    "text": "how much stuff is on my list",
+    "torch": "how much stuff is on list?",
+    "int8": "how much is on list?"
+   },
+   {
+    "text": "pears should be 6 not 3",
+    "torch": null,
+    "int8": "pears should 6 not 3"
+   },
+   {
+    "text": "body to blue please",
+    "torch": "body blue",
+    "int8": "body to blue"
+   }
+  ]
+ },
+ "latency_cpu_batch1": {
+  "fp32_threads1": {
+   "encoder_pass_ms": {
+    "p50": 14.21915800892748,
+    "p95": 40.959959995234385,
+    "mean": 18.25351664912887
+   },
+   "dispatch_message_ms": {
+    "p50": 136.77708199247718,
+    "p95": 238.34512699977495,
+    "mean": 148.88153660023818
+   },
+   "avg_distinct_segments_per_message": 7.3,
+   "n": 100
+  },
+  "int8_threads1": {
+   "encoder_pass_ms": {
+    "p50": 3.972803009673953,
+    "p95": 10.27924899244681,
+    "mean": 5.05323265097104
+   },
+   "dispatch_message_ms": {
+    "p50": 38.05357500095852,
+    "p95": 63.770737004233524,
+    "mean": 41.420575660304166
+   },
+   "avg_distinct_segments_per_message": 7.28,
+   "n": 100
+  },
+  "fp32_threads4": {
+   "encoder_pass_ms": {
+    "p50": 5.673083011060953,
+    "p95": 13.137422007275745,
+    "mean": 6.776985920732841
+   },
+   "dispatch_message_ms": {
+    "p50": 52.55154400947504,
+    "p95": 91.62020700750872,
+    "mean": 57.20593502162956
+   },
+   "avg_distinct_segments_per_message": 7.3,
+   "n": 100
+  },
+  "int8_threads4": {
+   "encoder_pass_ms": {
+    "p50": 1.8189850088674575,
+    "p95": 3.9797629870008677,
+    "mean": 2.2043888206826523
+   },
+   "dispatch_message_ms": {
+    "p50": 17.875043995445594,
+    "p95": 29.990459996042773,
+    "mean": 19.371499310655054
+   },
+   "avg_distinct_segments_per_message": 7.28,
+   "n": 100
+  }
+ },
+ "cpu": "Grace aarch64 (DGX Spark)",
+ "versions": {
+  "torch": "2.14.1+cu130",
+  "onnx": "1.23.2",
+  "onnxruntime": "1.31.1",
+  "opset": 17
+ }
+}
