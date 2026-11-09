@@ -901,6 +901,15 @@ function splitReply(text) {
 }
 
 /**
+ * A sentence with an example in quotes ("Try "draw a red house".") is only translated by an authored entry: the grammar would translate the quoted
+ * English words as a sentence and leave broken quotes (RD5). Without an entry the sentence counts as untranslated and the reply stays in English.
+ */
+function withQuoteGuard(sentence, r) {
+  if (!/"[^"]+"/.test(sentence)) return r;
+  return { ...r, unknown: [...r.unknown, { word: sentence.trim(), span: [0, sentence.length] }], confidence: 0 };
+}
+
+/**
  * English -> Romanian: canonical examples (authored Romanian), then the reply phrase table sentence by sentence, then the grammar.
  * Sentences the table does not know go to the grammar; the caller keeps the whole reply in English if any piece fails (RD5).
  */
@@ -909,8 +918,8 @@ export function translateEnRo(original) {
   const t = source.trim();
   if (CANONICAL_RO[t]) return { text: source.replace(t, CANONICAL_RO[t]), alignment: [], unknown: [], notes: ['canonical example'], confidence: 1 };
   const sentences = splitReply(source);
-  if (sentences.length <= 1 && !sentences.some((x) => translateReplySentence(x, () => null))) return translateEnRoGrammar(source);
-  const sub = (x) => { const r = translateEnRoGrammar(x.replace(/^(.)/, (c, a) => (/[A-Z]/.test(a) ? a.toLowerCase() : a))); return r.text && !r.unknown.length && !r.untranslatable?.length ? r.text.replace(/[.!?]$/, '') : null; };
+  if (sentences.length <= 1 && !sentences.some((x) => translateReplySentence(x, () => null))) return withQuoteGuard(source, translateEnRoGrammar(source));
+  const sub = (x) => { const r = translateEnRoGrammar(x.replace(/^(.)/, (c, a) => (/[A-Z]/.test(a) ? a.toLowerCase() : a))); return r.text && !r.unknown.length && !r.untranslatable?.length ? r.text.replace(/[.!?]$/, '').replace(/^\p{Lu}/u, (c) => (/^[A-Z]/.test(x) ? c : c.toLowerCase())) : null; };
   const unknown = [], notes = [];
   let text = '';
   for (const sen of sentences) {
@@ -918,7 +927,7 @@ export function translateEnRo(original) {
     const core = sen.trim();
     let ro = core ? (CANONICAL_RO[core] ?? translateReplySentence(core, sub)) : '';
     if (ro == null) {
-      const r = translateEnRoGrammar(core);
+      const r = withQuoteGuard(core, translateEnRoGrammar(core));
       unknown.push(...r.unknown); notes.push(...r.notes);
       ro = r.text;
     }

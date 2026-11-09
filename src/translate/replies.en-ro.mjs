@@ -52,12 +52,52 @@ const SLOTS = {
   pos: ['(top left|top middle|top right|middle left|middle right|bottom left|bottom middle|bottom right|the center|center|the middle)', mapper(POS)],
   piece: ['(pawn|knight|bishop|rook|queen|king)', mapper(PIECES)],
   lvl: ['(casual|easy|intermediate|club player|expert|beginner|hard)', mapper(LEVELS)],
+  eyelist: ['([a-z]+(?:, [a-z]+)*(?: or [a-z]+)?)', (v) => { const w = v.split(/, | or /); const r = w.map((x) => EYE_STYLE_RO[x]); return r.every(Boolean) ? (r.length > 1 ? `${r.slice(0, -1).join(', ')} sau ${r.at(-1)}` : r[0]) : null; }],
+  eye: ['([a-z]+)', (v) => EYE_STYLE_RO[v] ?? null],
+  cmp: ['(bigger|smaller|wider|narrower)', (v) => ({ bigger: 'mai mari', smaller: 'mai mici', wider: 'mai mari', narrower: 'mai mici' })[v]],
+  mood: ['([a-z]+(?: [a-z]+)?)', (v) => MOOD_RO[v] ?? null],
   np: ['((?:an? |the |\\d+ )?[a-z][a-z \\-\']*?)', (v, sub) => sub(v)],
   t: ['(.+?)', (v, sub) => sub(v)],
 };
 
+// ---- avatar capability replies (worlds/ui.avatar/ops.mjs: CAPABILITY, EXPRESSION_SAY, MOODS, PERSON_PRESET) ----
+const CAP_NOTES = { "A person's eyes follow the expression": 'Ochii unei persoane urmează expresia', "A person's mouth follows the expression": 'Gura unei persoane urmează expresia', 'A person shows a mood with the expression': 'O persoană arată o stare prin expresie' };
+const CAP_SAY = { 'wide-eyed': 'cu ochii mari', 'sleepy-eyed': 'cu ochii somnoroși', smiling: 'zâmbitoare', beaming: 'radiantă', laughing: 'râzând', sad: 'tristă', 'calm and dreamy': 'liniștită și visătoare', 'closed-eyed': 'cu ochii închiși', angry: 'supărată', furious: 'furioasă', scared: 'speriată', worried: 'îngrijorată', cheeky: 'obraznică', sparkling: 'strălucitoare', suspicious: 'bănuitoare', 'wild-eyed': 'cu privirea sălbatică', serious: 'serioasă', blank: 'fără expresie', cute: 'drăguță', grinning: 'rânjind' };
+const MOOD_RO = { happy: 'fericit', glad: 'bucuros', cheerful: 'vesel', joyful: 'vesel', excited: 'entuziasmat', delighted: 'încântat', smiling: 'zâmbitor', smiley: 'zâmbitor', laughing: 'râzând', sad: 'trist', unhappy: 'nefericit', upset: 'supărat', worried: 'îngrijorat', concerned: 'îngrijorat', surprised: 'surprins', shocked: 'șocat', amazed: 'uimit', astonished: 'uluit', scared: 'speriat', afraid: 'speriat', fearful: 'înfricoșat', terrified: 'îngrozit', frightened: 'speriat', angry: 'supărat', mad: 'furios', furious: 'furios', annoyed: 'iritat', calm: 'calm', relaxed: 'relaxat', peaceful: 'liniștit', serious: 'serios', neutral: 'neutru', cute: 'drăguț', sleepy: 'somnoros', tired: 'obosit', suspicious: 'bănuitor', cheeky: 'obraznic', bored: 'plictisit', blank: 'fără expresie', smug: 'mulțumit de sine', stressed: 'stresat', 'in love': 'îndrăgostit', loving: 'îndrăgostit' };
+const PRESET_RO = { 'short neat hair and a short beard': 'păr scurt și îngrijit și o barbă scurtă', 'long hair and no beard': 'păr lung și fără barbă', 'twin buns and no beard': 'două coade împletite sus și fără barbă', 'short spiky hair and no beard': 'păr scurt zburlit și fără barbă' };
+const GENDER_RO = { man: 'bărbat', woman: 'femeie', girl: 'fată', boy: 'băiat' };
+const EYE_STYLE_RO = { round: 'rotunzi', square: 'pătrați', visor: 'cu vizieră', cyclops: 'de ciclop', happy: 'fericiți', sleepy: 'somnoroși', plus: 'în formă de plus' };
+const CAP_ENTRIES = [];
+for (const [n, nr] of Object.entries(CAP_NOTES)) for (const [x, xr] of Object.entries(CAP_SAY)) CAP_ENTRIES.push([`${n}, so I made it ${x}.`, `${nr}, așa că am făcut-o ${xr}.`]);
+for (const who of [['A robot', 'Un robot', 'ochii și gura'], ['An emoji', 'Un emoji', 'ochii și gura']]) CAP_ENTRIES.push([`${who[0]} shows its expression with its eyes and mouth, so I set both to look {mood}.`, `${who[1]} își arată expresia prin ${who[2]}, așa că le-am făcut pe amândouă să arate {mood}.`]);
+for (const g of Object.keys(GENDER_RO)) for (const [pe, pr] of Object.entries(PRESET_RO)) {
+  const art = g === 'man' || g === 'boy' ? ['un', 'ca'] : ['o', 'ca'];
+  CAP_ENTRIES.push([`A person shows being ${/^[aeiou]/.test(g) ? 'an' : 'a'} ${g} through hair, so I gave myself ${pe}.`, `O persoană arată că e ${art[0]} ${GENDER_RO[g]} prin păr, așa că mi-am dat ${pr}.`]);
+  CAP_ENTRIES.push([`A person shows being ${/^[aeiou]/.test(g) ? 'an' : 'a'} ${g} through hair, so I gave myself ${pe} and look {mood}.`, `O persoană arată că e ${art[0]} ${GENDER_RO[g]} prin păr, așa că mi-am dat ${pr} și arăt {mood}.`]);
+}
+CAP_ENTRIES.push(['My eyes can be {eyelist}.', 'Ochii mei pot fi {eyelist}.']);
+CAP_ENTRIES.push(['For {cmp} eyes try {eyelist}; say "make your eyes {eye}".', 'Pentru ochi {cmp} încearcă {eyelist}; spune "fă-ți ochii {eye}".']);
+const EXAMPLE_ENTRIES = [
+  ['You can say, for example, "in the top right corner", "next to the sun" or "under the tree".', 'Poți spune, de exemplu, "în colțul din dreapta sus", "lângă soare" sau "sub copac".'],
+  ['Try "draw a red house".', 'Încearcă "desenează o casă roșie".'],
+  ['Say "new game" to play again.', 'Spune "joc nou" ca să joci din nou.'], ['Say "new game" to start a fresh game.', 'Spune "joc nou" ca să începi un joc nou.'], ['Say "new game" to try again.', 'Spune "joc nou" ca să încerci din nou.'],
+  ['Say "more examples" for others.', 'Spune "mai multe exemple" pentru altele.'],
+  ['Say "play hangman" to start.', 'Spune "joacă spânzurătoarea" ca să începi.'],
+  ['Say a move such as "knight to f3" or "e2 to e4", or ask "what can my knight do?".', 'Spune o mutare, de exemplu "calul la f3" sau "e2 la e4", sau întreabă "ce poate face calul meu?".'],
+  ['Ask "what is the best move?" for a hint, "undo" to take a move back, or "resign" to give up.', 'Întreabă "care este cea mai bună mutare?" pentru un indiciu, spune "anulează" ca să retragi o mutare sau "renunț" ca să te dai bătut.'],
+  ['Say, for example: "make a chart: apples 5, pears 3, plums 8".', 'Spune, de exemplu: "fă un grafic: mere 5, pere 3, prune 8".'],
+  ['Ask "what can you do?" for the whole list, "more examples" for others, or "how do I ...?" to find a command.', 'Întreabă "ce poți face?" pentru lista întreagă, "mai multe exemple" pentru altele sau "cum fac ...?" ca să găsești o comandă.'],
+  ['Ask me "what can I say here?" for examples.', 'Întreabă-mă "ce pot spune aici?" pentru exemple.'],
+  ['Your old picture is still there if you say "undo".', 'Desenul tău vechi este încă acolo dacă spui "anulează".'],
+  ['Say "draw a red house", "put a big yellow sun in the top right corner" or "make it night".', 'Spune "desenează o casă roșie", "pune un soare galben mare în colțul din dreapta sus" sau "fă să fie noapte".'],
+];
+CAP_ENTRIES.push(...EXAMPLE_ENTRIES);
+CAP_ENTRIES.push(['I cannot scale my eyes, but I can change their style.', 'Nu îmi pot schimba mărimea ochilor, dar le pot schimba stilul.']);
+CAP_ENTRIES.push(['Now I look {mood}.', 'Acum arăt {mood}.'], ['Yes, I look {mood}.', 'Da, arăt {mood}.']);
+
 // [English pattern, Romanian template]
 const TABLE = [
+  ...CAP_ENTRIES,
   // ---- openers and small talk
   ['Ta-da!', 'Gata!'], ['Nice!', 'Frumos!'], ['Done!', 'Gata!'], ['Okay!', 'Bine!'], ['Sure!', 'Sigur!'], ['Good luck!', 'Mult noroc!'],
   ['There you go!', 'Poftim!'], ['Here you go!', 'Poftim!'], ['There!', 'Gata!'], ['Good game!', 'Joc frumos!'], ['Good.', 'Bine.'],

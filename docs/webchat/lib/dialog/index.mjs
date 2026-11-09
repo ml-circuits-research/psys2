@@ -610,7 +610,7 @@ export class DialogSession {
     const { set, interp, translator } = engine;
     const sid = `msg${++this._msg}`;
     const wanted = language ?? this.language;
-    let lang = 'en', translation = null, english = text;
+    let lang = 'en', translation = null, english = text, switchedLanguage = null;
     if (translator) {
       lang = wanted === 'auto' ? langOf(await perf.time('detect', () => guard.abortable(translator.detectLanguage(text), 'detect'))) : wanted;
       // RD5: the language comes from strong evidence. English with a typo ("eys express fear") is never read as Romanian, and a weak Romanian reading
@@ -625,6 +625,8 @@ export class DialogSession {
         } else if (lang === 'unknown') lang = this._sessionLang ?? 'en';
         else { this._sessionLang = lang; this._weakRo = 0; }
       }
+      // RD5: a host set to English still switches on strong Romanian evidence (clitics, diacritics, several Romanian content words); the host moves its dropdown
+      if (wanted === 'en' && lang === 'en' && ev?.strongRo && !ev.strongEn) { lang = 'ro'; switchedLanguage = 'ro'; }
       if (lang !== 'en' && lang !== 'unknown') {
         translation = await perf.time('translate', () => guard.abortable(translator.translate(text, { from: lang, to: 'en' }), 'translate'));
         english = textOf(translation) ?? text;
@@ -741,7 +743,9 @@ export class DialogSession {
         const r = interp.resolve(this.isession, w);
         if (!r) { statements.push(w); continue; }
         const rendered = interp.render(this.isession, r);
-        lines.push([T(rendered)]);
+        // RD9: a loose word that reads as "open this tab" ("robot" in "square eyes robot pls") must not add "You are already on the Avatar tab." to the real answer
+        const idleTab = seg.match?.worldId === 'ui.shell' && /\.bare/.test(seg.match.patternId ?? '') && /^You are already on the .+ tab\.$/.test(rendered) && segments.some((x) => x !== seg && !x.unparsed && x.match?.worldId && x.match.worldId !== 'ui.shell');
+        if (!idleTab) lines.push([T(rendered)]);
         statuses.push(r.status);
         if (r.status === 'supported') { const wid = seg.match?.worldId; const t = set.get(wid)?.tab?.id ?? BUILTIN_TAB[wid]; if (wid === 'ui.shell') followTab = null; else if (t) followTab = t; }   // an explicit navigation later in the message wins over the tab of an earlier segment
         ops.push(...r.ops);
@@ -811,7 +815,7 @@ export class DialogSession {
     const effects = this.isession.effects;
     this.isession.effects = [];
     return {
-      text: reply, parts, lang, translation, segments, wires: [...wires, ...answerWires], answers, statuses, state, effects, ...(feedback ? { feedback } : {}),
+      text: reply, parts, lang, ...(switchedLanguage ? { switchedLanguage } : {}), translation, segments, wires: [...wires, ...answerWires], answers, statuses, state, effects, ...(feedback ? { feedback } : {}),
       trace: {
         intercepted: icpt?.worldId ?? null, effects, formalizer: { preferred: formalizer ?? this.formalizer, used: [...new Set(segments.map((s) => s.strategy))], ...(encoderError ? { error: encoderError } : {}) },
         dispatch: dispatch ?? null,

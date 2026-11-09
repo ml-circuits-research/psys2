@@ -89,6 +89,9 @@ const MOOD_OF = {
   serious: 'serious', neutral: 'serious', cute: 'cute', sleepy: 'sleepy', tired: 'sleepy', suspicious: 'suspicious', cheeky: 'cheeky', bored: 'bored', blank: 'bored',
   smug: 'smug', stressed: 'stressed', in_love: 'loving', loving: 'loving',
 };
+/** Mood words that are nouns in the lexicon, with the adjective that goes after "look" ("express fear" -> "look scared"). */
+const MOOD_ADJ = { fear: 'scared' };
+const moodWord = (mood) => { const w = String(mood).replace(/_/g, ' '); return MOOD_ADJ[w] ?? w; };
 const ANIM_OF = { wink: 'wink', nod: 'nod', dance: 'dance', wave: 'wave', spin: 'spin', jump: 'jump', bounce: 'bounce', wiggle: 'wiggle', blink: 'blink', shake: 'shake' };
 const ANIM_SAY = { wink: 'Wink wink!', nod: 'Yes, yes! I am nodding.', dance: 'Watch me dance!', wave: 'Hello there! I am waving at you.', spin: 'Wheee, here I spin!', jump: 'Up I go!', bounce: 'Boing, boing!', wiggle: 'Wiggle wiggle!', blink: 'Blink blink!', shake: 'No, no! I am shaking my head.' };
 const OPENERS = ['Done!', 'Okay!', 'Sure!', 'Ta-da!', 'There you go!'];
@@ -591,7 +594,7 @@ function setPersonLook(ctx, s, gender, mood) {
   s.person.facialHair = preset.facialHair;
   const m = mood && MOOD_OF[mood];
   if (m) s.person.expression = MOODS[m].person;
-  const face = m ? ` and look ${String(mood).replace(/_/g, ' ')}` : '';
+  const face = m ? ` and look ${moodWord(mood)}` : '';
   const turned = was === 'person' ? '' : 'Now I am a person. ';
   return done(ctx, 'look' + gender + (m ?? ''), `${turned}A person shows being ${a(gender)} ${gender} through hair, so I gave myself ${preset.say}${face}.`);
 }
@@ -615,7 +618,7 @@ function _setMood(ctx, { mood }) {
   if (!m) return no(`I do not know how to look ${String(mood).replace(/_/g, ' ')}.`);
   const spec = MOODS[m][s.character], ch = s.character;
   if (ch === 'person') s.person.expression = spec; else Object.assign(s[ch], spec);
-  return done(ctx, 'mood' + m, `Now I look ${String(mood).replace(/_/g, ' ')}.`);
+  return done(ctx, 'mood' + m, `Now I look ${moodWord(mood)}.`);
 }
 function _checkMood(ctx, { mood }) {
   const s = ensure(ctx);
@@ -623,7 +626,7 @@ function _checkMood(ctx, { mood }) {
   if (!m) return no(`I do not know what ${String(mood).replace(/_/g, ' ')} looks like.`);
   const spec = MOODS[m][s.character], now = s[s.character];
   const same = s.character === 'person' ? now.expression === spec : now.eyes === spec.eyes && now.mouth === spec.mouth;
-  const word = String(mood).replace(/_/g, ' ');
+  const word = moodWord(mood);
   if (same) return ok(`Yes, I look ${word}.`);
   const mine = Object.keys(MOODS).filter((k) => { const sp = MOODS[k][s.character]; return s.character === 'person' ? now.expression === sp : now.eyes === sp.eyes && now.mouth === sp.mouth; });
   return ok(`No, I do not look ${word}${mine.length ? `; I look ${mine[0]}` : ''}.`);

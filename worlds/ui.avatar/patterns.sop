@@ -43,6 +43,13 @@
     priority=4
     example="Make your eyes wobbly."
 
+@pat.ui.avatar.setpart.unknown.prenominal core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|give_yourself|give|get|set|turn] [me|your|the|ur|my|yourself]? [a|an]? {w:lex.ui.avatar.featureadj} {p:lex.ui.avatar.parts} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.setPartUnknown arg.part={p} arg.words=\"{w}\""
+    kind=request
+    priority=3
+    example="Make dreamy eyes."
+
 @pat.ui.avatar.step.next core.pattern
     canonical="Try the next mouth."
     canonical="Show me the next hairstyle."

@@ -71,7 +71,7 @@ const SUPERLATIVE = { biggest: 'big', largest: 'big', hugest: 'big', tallest: 'b
 const ORDINALS = { first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6, seventh: 7, eighth: 8, ninth: 9, tenth: 10, last: -1, final: -1 };
 const ORDINAL_WORD = ['', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth'];
 const NUMBERS = { zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16, seventeen: 17, eighteen: 18, nineteen: 19, twenty: 20, thirty: 30, forty: 40, fifty: 50, hundred: 100 };
-const QUANTITY = { some: 3, few: 3, several: 4, couple: 2, many: 6, lots: 7, loads: 7, bunch: 5, plenty: 6 };
+const QUANTITY = { more: 3, some: 3, few: 3, several: 4, couple: 2, many: 6, lots: 7, loads: 7, bunch: 5, plenty: 6 };
 const PLURAL_DEFAULT = { star: 8, flower: 4, fish: 4, balloon: 4, bird: 3, cloud: 3, tree: 3, person: 3 };
 const MAX_COUNT = 12, MAX_STARS = 30;
 const OPENERS = ['Ta-da!', 'Here you go!', 'There!', 'Done!', 'Look at that!', 'Nice!', 'Voila!'];
@@ -735,15 +735,16 @@ function readSpec(args, tailWords) {
   let color = colorFrom(colorWords, kind ? defaultColor(kind) : null);
   const explicitN = args.n !== undefined ? numberOf(String(args.n)) : null;
   const q = args.q ? String(args.q).toLowerCase().split('_').find((x) => QUANTITY[x]) ?? null : null;
-  const plural = /s$|ple$|ish$|ren$/.test(String(args.kindText ?? '').toLowerCase()) && k?.plural === true || k?.plural === true;
-  let count = explicitN ?? (q ? QUANTITY[q] : plural ? PLURAL_DEFAULT[kind] ?? 3 : 1);
+  const plural = /s$|ple$|ish$|ren$/.test(String(args.kindText ?? '').toLowerCase()) && k?.plural === true || k?.plural === true || kindOfWord(args.kt)?.plural === true;
+  // "more clouds" adds a few (2 or 3, alternating with what is already there); "more cloud" adds one
+  let count = explicitN ?? (q === 'more' ? (plural ? 2 + (args.have ?? 0) % 2 : 1) : q ? QUANTITY[q] : plural ? PLURAL_DEFAULT[kind] ?? 3 : 1);
   const factor = sizeWords.length ? SIZE_WORDS[sizeWords.at(-1)] : 1;
   return { kind, count, color, factor, comp, who, mood, tail: tailWords, mods, plural, explicit: explicitN !== null };
 }
 
 export const add = guard((ctx, args, s) => {
   const words0 = toks(args.where ?? '');
-  const spec0 = readSpec(args);
+  const spec0 = readSpec({ ...args, have: sameKind(s, kindOfWord(args.kind)?.kind).length });
   if (!spec0.kind || spec0.kind === '*') return no('I can draw a house, a tree, a sun, a cloud, a car, a flower, a cat, a dog, a fish, a bird, a boat, a mountain, a rainbow, a person, a balloon, a rocket, a moon and shapes like a circle, a square, a star or a heart. What would you like?');
   // a tail with more things: "... and a tree"
   const withParts0 = parseWith(spec0.kind, words0);

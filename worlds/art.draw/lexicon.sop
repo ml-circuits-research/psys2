@@ -251,6 +251,7 @@
     class=modifier
     doc="How many, in words"
     word=some
+    word=more
     word=few
     word=several
     word=couple
