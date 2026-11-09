@@ -56,7 +56,7 @@ function mapGroup(part, role) {
     return part;   // a required group of only unreachable alternatives: leave for review
   }
   let macrosUsed = [...existing], inline = reachable;
-  if (role !== 'body' && g.optional && alts.length >= MIN_GROUP) {
+  if (role !== 'body' && g.optional && alts.length >= MACRO_MIN_ALTS) {
     const cover = ROLE_MACROS[role].map((id) => ({ id, hit: reachable.filter((a) => macros.get(id).has(a)) })).filter((c) => c.hit.length >= Math.max(1, MACRO_SHARE * reachable.length));   // a macro that covers only a few alternatives of the group would add all its other alternatives: widening
     const covered = new Set(cover.flatMap((c) => c.hit));
     if (covered.size >= 1 && covered.size >= reachable.length / 2) {
@@ -73,6 +73,7 @@ function mapGroup(part, role) {
   return { macros: macrosUsed, inline, optional: g.optional, role, orig: part };
 }
 
+const MACRO_MIN_ALTS = 10;   // a short list (please|pls|plz|thanks|now ...) is not replaced by a macro: the macro would add every other tail word (then, ...) for a few bytes saved
 const MACRO_SHARE = 0.3;   // a macro is used for a group only when it holds at least this share of the group's alternatives
 const LOCAL_MIN_ALTS = 3, LOCAL_MIN_BYTES = 40;
 const localPhrases = new Map();   // inline key -> { id, alts, frame, uses }

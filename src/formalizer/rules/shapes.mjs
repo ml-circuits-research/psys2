@@ -21,8 +21,8 @@
  *            (`verb` then lists the trailing verbs, default `have|has|got`; the `order` form "a week has how many days" exists only with `cont`)
  *   pron     (noun-only `ask.value`) pronouns that may follow the verb in the question (default `it|this|that|we|you|u|i`)
  *   mod      optional modifier group before the value, alternatives and `$macro` ids (`$ui.avatar.g11_a_bit` for "a bit", "much")
- *   objmod   optional modifier group before the object (`whole|entire`)
- *   extra    one more optional element after the value or object: a slot `n:number?` or a group `[percent|per_cent]?`
+ *   objmod   optional modifier group before the object (`whole|entire`), or a slot `ord:lex.x` (mandatory; `ord:lex.x?` optional): "delete the LAST paragraph"
+ *   extra    one more optional element after the value or object: a slot (`n:number` mandatory, `n:number?` optional) or a group `[percent|per_cent]?`
  *   emit     emit template; `emitOpts` the emit of the `opts` form (without it `opts` is not generated)
  *   forms    comma list of forms to generate (default: every form of the family); `skip` comma list of forms to leave out
  *   sample   example words per slot, `p=eyes;c=blue` (default: the first word of the slot's lexicon)
@@ -166,11 +166,11 @@ export function expandShape(shape, { phrases = null, lexicons = null } = {}) {
     '<V>': verbs, '<V?>': verbs ? group(shape.verb, true) : null,
     '<VL>': shape.verb ? shape.verb.split('|').join('|') : null,
     '<D>': shape.obj || shape.noun ? group(shape.det ?? DEFAULTS.det, true) : '',
-    '<O>': shape.obj ? (shape.objmod ? group(shape.objmod, true) + ' ' : '') + slotText(shape.obj) : (noObj ? group(shape.noun) : ''),
+    '<O>': shape.obj ? (shape.objmod ? (shape.objmod.includes(':') ? slotText(shape.objmod) : group(shape.objmod, true)) + ' ' : '') + slotText(shape.obj) : (noObj ? group(shape.noun) : ''),
     '<X>': shape.val ? (shape.mod ? group(shape.mod, true) + ' ' : '') + slotText(shape.val) : '',
     '<N>': nounAlts ? group(nounAlts) : null, '<N?>': nounAlts && !noObj ? group(nounAlts, true) : '',
     '<NP>': nounPlural ? group(nounPlural) : null,
-    '<K>': group(shape.link ?? DEFAULTS.link, true) + ' [a|an|the]?', '<E>': shape.extra ? ' ' + (shape.extra.startsWith('[') ? shape.extra : slotText(shape.extra, true)) : '',
+    '<K>': group(shape.link ?? DEFAULTS.link, true) + ' [a|an|the]?', '<E>': shape.extra ? ' ' + (shape.extra.startsWith('[') ? shape.extra : slotText(shape.extra)) : '',
     '<DO>': shape.objdet === 'none' ? '' : (shape.obj || shape.noun ? group(shape.det ?? DEFAULTS.det, true) : ''),
     '<R>': shape.rel ? group(shape.rel) : '', '<OFM>': shape.rel ? group(shape.rel) : OF, '<OFO>': shape.rel ? group(shape.rel) : OF + '?',
     '<C>': slotText(shape.cont),

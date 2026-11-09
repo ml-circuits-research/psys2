@@ -767,3 +767,23 @@
     session=eq2
     input="add a heading Notes and how many headings do i have"
     expectState="blocks.0.text=Notes"
+
+@t.docs.editor.sh01 core.test
+    input="Type hello world. Could you maybe read the first paragraph?"
+    expect="Hello world"
+    session=esh1
+
+@t.docs.editor.sh02 core.test
+    input="Type hello world. I want to delete paragraph 1."
+    expect="I deleted the first paragraph."
+    session=esh2
+
+@t.docs.editor.sh03 core.test
+    input="Type hello world. Can i copy the first paragraph?"
+    expect="I copied the first paragraph"
+    session=esh3
+
+@t.docs.editor.sh04 core.test
+    input="Type hello world. I want to go to the first paragraph."
+    expect="I went to the first paragraph"
+    session=esh4
