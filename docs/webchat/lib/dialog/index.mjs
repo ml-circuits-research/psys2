@@ -131,6 +131,8 @@ const QUESTION_WORD = /^(?:what|who|whom|whose|where|when|why|how|which)\b/i;
 
 /** Time budget of the leniency stage (spelling variants and partial windows) of one message, in ms; past it the best reading so far stands (turn guard, spec 06). */
 import { LIMITS } from './time-limits.mjs';
+/** A voice dry run is skipped for texts longer than this many words (room talk, not a command). */
+export const DRY_MAX_WORDS = 25;
 export const LENIENT_BUDGET_MS = 3000;   // default only; the live value is LIMITS.lenientMs (time-limits.mjs)
 
 const FAST_SEGMENT_MARGIN = 0;   // nats of log-probability between the model's best segmentation and the runner-up for the multi-clause fast path
@@ -184,34 +186,59 @@ export class DialogSession {
   /**
    * Dry-run reading for the voice end-of-turn detector (spec 06 "Spoken messages"): do the rules find a complete reading of the whole text?
    * Side-effect free: works on a fork of the session, never executes anything on the real session, never touches the session language,
-   * the discourse memory or the message counter. Bounded by its own short turn guard (`deadlineMs`); while a real turn runs it declines.
-   * Returns { complete, segments, reason }.
+   * the discourse memory or the message counter. Bounded and cancellable (FREEZE 4):
+   *   - its own turn guard with `deadlineMs` and the caller's `signal` (honoured at every cancellation point inside the rules);
+   *   - at most one in flight per session: a newer call cancels the older (which answers `cancelled`) and waits for it to unwind;
+   *   - no leniency (spelling variants, partial windows, best effort), no browser-API translation (the rules translator only);
+   *   - skipped without any work for more than DRY_MAX_WORDS words, and for text with no word of any world's vocabulary.
+   * While a real turn runs it declines (`busy`). Returns { complete, segments, reason }; `reason` is one of
+   * ok, incomplete, refused, missing, ambiguous, empty, busy, cancelled, deadline, too-long, no-vocabulary, error.
    */
-  async dryRead(text, { language, deadlineMs = 400, detail = false } = {}) {
+  async dryRead(text, { language, deadlineMs = 400, detail = false, signal = null } = {}) {
+    const prev = this._dry;
+    if (prev) { prev.ctl.abort(); try { await prev.done; } catch { /* the older run reports for itself */ } }
+    if (signal?.aborted) return { complete: false, segments: 0, reason: 'cancelled' };
+    const ctl = new AbortController();
+    const onAbort = () => ctl.abort();
+    signal?.addEventListener?.('abort', onAbort, { once: true });
+    const run = { ctl, done: null };
+    run.done = this._dryRun(text, { language, deadlineMs, detail, signal: ctl.signal });
+    this._dry = run;
+    try { return await run.done; } finally { signal?.removeEventListener?.('abort', onAbort); if (this._dry === run) this._dry = null; }
+  }
+
+  async _dryRun(text, { language, deadlineMs, detail, signal }) {
     const { set, formalizers, interp, translator } = this.engine;
-    const token = guard.install({ hardMs: deadlineMs, softMs: deadlineMs * 0.7 });
+    const raw = String(text ?? '').trim();
+    if (!raw) return { complete: false, segments: 0, reason: 'empty' };
+    if (raw.split(/\s+/).length > DRY_MAX_WORDS) return { complete: false, segments: 0, reason: 'too-long', ...(detail ? { detail: { english: raw, language: language ?? this.language, readings: [], skipped: 'more than ' + DRY_MAX_WORDS + ' words' } } : {}) };
+    const token = guard.install({ signal, hardMs: deadlineMs, softMs: deadlineMs * 0.7 });
     if (!token) return { complete: false, segments: 0, reason: 'busy' };   // a real turn owns the guard
     try {
       const f = this.forkForValidation();
-      let english = String(text ?? '').trim();
-      if (!english) return { complete: false, segments: 0, reason: 'empty' };
+      let english = raw;
       const lang = language ?? this.language;
       const quick = translator?.rules ?? translator;   // the rules translator when there is one: the dry run never waits for a browser translator
-      if (quick && lang === 'ro') english = textOf(await quick.translate(english, { from: 'ro', to: 'en' })) ?? english;
+      if (quick && lang === 'ro') { guard.check('dry-translate'); english = textOf(await quick.translate(english, { from: 'ro', to: 'en' })) ?? english; }
       english = splitAnswerList(interp.lang.stripFiller(english) || english);
+      guard.check('dry-vocabulary');
+      const vocab = spellVocabulary(set);
+      if (!(english.toLowerCase().match(/[a-z']+/g) ?? []).some((w) => vocab.has(w) && !FUNCTION_WORDS.has(w))) return { complete: false, segments: 0, reason: 'no-vocabulary', ...(detail ? { detail: { english, language: lang, readings: [], skipped: 'no word of any world' } } : {}) };
       const res = await formalizers.rules.formalize(english, { worlds: set, session: f.isession, source: 'dry', context: f.context(), router: this.engine.router });
+      guard.check('dry-read');
       const segs = res.segments ?? [];
       // DBG: with `detail` the answer also says how the text was read (the readings, their wires, the candidate worlds), still without executing anything
       const det = () => (detail ? { detail: { english, language: lang, readings: segs.map((x) => ({ text: x.text ?? '', world: x.match?.worldId ?? null, pattern: x.match?.patternId ?? null, strategy: x.strategy ?? null, unparsed: !!x.unparsed, partial: !!x.partial, ignored: x.ignored ?? [], candidates: (x.worlds ?? []).slice(0, 4), wires: x.wires ?? [] })) } } : {});
       if (!segs.length || segs.some((x) => x.unparsed || x.partial || x.ignored?.length)) return { complete: false, segments: segs.length, reason: 'incomplete', ...det() };
       for (const seg of segs) {
+        guard.check('dry-resolve');
         f.isession.add(seg.wires);
         for (const w of seg.wires) { const r = interp.resolve(f.isession, w); if (r && (r.status === 'unsupported' || r.status === 'error')) return { complete: false, segments: segs.length, reason: 'refused', ...det() };
           if (r && (r.status === 'missing' || r.status === 'ambiguous')) return { complete: false, segments: segs.length, reason: r.status, ...det() }; }   // EOT2: a reading that still needs an argument ("play" -> what?) is not a whole message
       }
       return { complete: true, segments: segs.length, reason: 'ok', ...det() };
     } catch (e) {
-      return { complete: false, segments: 0, reason: e instanceof TurnAborted ? 'deadline' : 'error' };
+      return { complete: false, segments: 0, reason: e instanceof TurnAborted ? (e.reason === 'stopped' ? 'cancelled' : 'deadline') : 'error' };
     } finally { guard.release(token); }
   }
 

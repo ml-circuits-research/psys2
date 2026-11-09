@@ -628,3 +628,23 @@ Bench: ours is at or above the source on act, equal on args (the remaining right
 **Other worlds**: operational set rules 95.5 % right / 0.5 % wrong on 1296 (as on origin/main); encoder+n1 98.5 % right / 0.3 % wrong (origin/main: 98.6 / 0.4 on its 1240 cases); dialogues rules 96.9 % turns, 89.5 % dialogues. data.charts#001-003 and media.music#068 are "partly" with encoder+n1 also on the unchanged tier T (checked on `data.charts`), so they are not from this change.
 
 **Tier T for several clauses** (`src/dialog/dispatch-validate.mjs` tabFirst): a message of several clauses goes to the active tab's world when every clause is read by that world through a pattern with an explicit signal (named shape, arrow between names, diagram form); "draw a blue rectangle called Api and a green circle called Db" on an empty Diagram tab is the diagram's (`tests/dispatch-validate.test.mjs`, `scripts/test-webchat-diagram.mjs`).
+
+
+## FREEZE 4-5: voice soak test, dry run and ORT budget (2026-11-09)
+
+Harness: `scripts/soak-webchat.mjs` (headless Chrome, 390x844, CPU 4x, fake always-on recogniser, the 67 real messages of `training/eval/real-phrases-2026-11-09e.jsonl` in order with their real gaps clamped to 4-45 s and scaled to the duration, plus random Romanian/English room talk every 2.5-6.5 s, encoder + normalizer models, a second tab opened at the midpoint). The 30-minute run was done through `heavy.sh` on commit `bf91173` (worktree branch, rebased on `ddd378b`). The speech.mjs rewrite (persisted mic removed, cross-tab lock, hidden-tab pause, recognizer reuse) and the NOISE task had NOT landed on main at that time, so the numbers below are the "before" picture for those two items; the two checks that depend on them fail, as expected.
+
+| measure (30 min, 4x, 475 voice turns: 67 real + 408 room-talk utterances) | value | gate | result |
+| --- | --- | --- | --- |
+| heap (forced GC each 15 s), second quarter / last quarter | 117 MB / 138 MB (81 MB at 17 s, 141 MB at the end; about +2 MB per minute, the chat DOM holds 475 turns) | last <= 1.35 x second + 25 MB | pass, but a visible slope |
+| page workers | 4 at the first sample and 4 at the end | not growing | pass |
+| main-thread busy (CPU task time per wall second) | average 56 %, worst minute 75 %, worst 15 s sample 84 % | average and worst minute < 50 % | FAIL (room talk is still processed as full turns: ~16 turns a minute at 4x; fixed by NOISE) |
+| watchdog endings ("That took too long") | 0 | 0 | pass |
+| ORT restarts / pauses | 0 / 0 (5996 requests, 0 timeouts, 0 aborts) | <= 2 | pass |
+| input echo at the end (key event to second paint) | median 22 ms (17 / 25 / 21 / 31 / 22) | < 100 ms | pass |
+| first tab kept receiving while the second tab was open | 238 turns at the midpoint, 475 at the end | grows | pass |
+| second tab never started listening | the second tab's recogniser DID start and its mic showed listening | never | FAIL (the always-on state is persisted; fixed by the speech.mjs rewrite) |
+
+3-minute versions (`--minutes 3`, the same 67 messages squeezed into 3 minutes, so about ten times denser than reality): 93 % busy, echo 39 ms, 0 restarts, same second-tab failure. Run the gate version with `bash -c 'PUPPETEER_CORE=... node scripts/soak-webchat.mjs --minutes 3'`; `--rules` runs without the models.
+
+**Dry run** (`scripts/measure-dryread.mjs`, 16 Romanian and English room-talk lines x 3 rounds, Node, unthrottled, one main thread): before 48.4 ms mean, p95 226 ms, max 545 ms (total 2324 ms for 48 calls); after 49.5 ms mean, p95 244 ms, max 457 ms (total 2378 ms). The unthrottled mean did not change: the rules reading itself is not shorter. What changed is the bound: a newer call or the caller's signal stops an older run at its next guard check (it no longer runs on after the 400 ms wait), at most one runs at a time, and long or vocabulary-free text costs under 2 ms (`unchiul`, `voi`, `faci tu`, `scuze` went from 5-24 ms to 0.5-1.4 ms). The saturation the user saw came from many overlapping runs; with one in flight and cancellation the dry-run load is at most one run at a time.

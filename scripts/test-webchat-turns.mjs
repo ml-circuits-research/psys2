@@ -19,18 +19,18 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { collectMessages, addNoise, rng } from './fuzz-turns.mjs';
 
-const DOCS = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', 'docs');
-const TYPES = { '.html': 'text/html', '.mjs': 'text/javascript', '.js': 'text/javascript', '.json': 'application/json', '.wasm': 'application/wasm', '.css': 'text/css', '.svg': 'image/svg+xml', '.txt': 'text/plain' };
+export const DOCS = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', 'docs');
+export const TYPES = { '.html': 'text/html', '.mjs': 'text/javascript', '.js': 'text/javascript', '.json': 'application/json', '.wasm': 'application/wasm', '.css': 'text/css', '.svg': 'image/svg+xml', '.txt': 'text/plain' };
 export const REPRO_LINES = ['make it liek a girl', 'make a house and a man', 'draw a some clouds and 2 suns', 'show Bern city', 'get me to New Youk'];
 const LIMIT_MS = 8000;
 
-async function loadPuppeteer() {
+export async function loadPuppeteer() {
   const core = process.env.PUPPETEER_CORE;
   if (!core) throw new Error('set PUPPETEER_CORE to a scratch puppeteer-core install');
   const pp = await import(pathToFileURL(path.join(core, 'lib/puppeteer/puppeteer-core.js')).href);
   return pp.default ?? pp;
 }
-async function findChrome(given) {
+export async function findChrome(given) {
   for (const c of [given, process.env.CHROME, '/usr/bin/chromium', '/usr/bin/chromium-browser', '/usr/bin/google-chrome'].filter(Boolean)) { try { await access(c); return c; } catch { /* next */ } }
   throw new Error('no Chrome/Chromium found');
 }

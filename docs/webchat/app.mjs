@@ -958,6 +958,7 @@ export async function mountPsys2(element, options = {}) {
     try { const r = await fetch(new URL('build-info.json', base), { cache: 'no-cache' }); buildInfo = r.ok ? await r.json() : { error: `HTTP ${r.status}` }; } catch (e) { buildInfo = { error: String(e?.message ?? e) }; }
     if (!settingsEl.hidden) renderSettings();
   }
+  globalThis.addEventListener?.('psys2-ort-paused', () => { toast('Models paused after repeated worker restarts; the rules answer (Settings > Models).'); if (!settingsEl.hidden) renderSettings(); });
   async function refreshModelsInfo() {
     const info = { usage: null, quota: null, cached: {}, dispatcherMB: modelsInfo.dispatcherMB };
     try { const est = await navigator.storage?.estimate?.(); info.usage = est?.usage ?? null; info.quota = est?.quota ?? null; } catch { /* not available */ }
@@ -1012,7 +1013,13 @@ export async function mountPsys2(element, options = {}) {
     const nzMB = normalizerHost ? Math.round(Object.values(normalizerHost.meta.sizes_MB ?? {}).reduce((a, b) => a + b, 0)) : null;
     const loadBtn = (host, what) => textBtn(host.status.state === 'ready' ? 'Loaded' : host.status.state === 'loading' ? 'Loading…' : 'Load now',
       () => { host.prepare().catch(() => {}).then(refreshModelsInfo); renderSettings(); }, { disabled: host.status.state === 'ready' || host.status.state === 'loading', title: `Load the ${what} model now` });
+    const ortc = globalThis.__psys2Ort;   // FREEZE 5: the models pause after 2 worker restarts in 5 minutes; the rules answer meanwhile
+    const pausedNote = ortc?.paused ? h('div', { class: 'p2-model', role: 'status' }, h('strong', {}, 'Models paused'),
+      h('p', {}, `The models were paused because the worker had to be restarted too often (${ortc.paused.reason}). The rules answer meanwhile; nothing else changes.`),
+      h('div', { class: 'p2-plog-actions' }, textBtn('Resume models', () => { ortc.resume(); renderSettings(); toast('Models resumed.'); }))) : null;
+    const speedNote = ortc ? h('small', {}, `Device speed factor for model deadlines: ${ortc.speed} (measured at load). Worker restarts: ${ortc.restarts}.`) : null;
     return [
+      pausedNote,
       h('p', { class: 'p2-lead' }, 'Two small neural models run in your browser (ONNX Runtime, WASM, no server). They only propose; the rules and the worlds decide. They are cached in this browser, so they download once per version.'),
       modelCard({
         title: 'Dispatcher', model: 'DistilBERT (distilbert-base-uncased), int8: cuts a message into parts and proposes which worlds fit', version: dispatcherEnc ? dispatcherLabel : '',
@@ -1028,6 +1035,7 @@ export async function mountPsys2(element, options = {}) {
       h('div', { class: 'p2-field' }, h('strong', {}, 'Cache'),
         h('p', {}, modelsInfo.usage == null ? 'The browser did not report how much storage this site uses.' : `This site uses ${mb(modelsInfo.usage)} of browser storage${modelsInfo.quota ? ` (limit about ${mb(modelsInfo.quota)})` : ''}; the models are most of it.`),
         h('div', { class: 'p2-plog-actions' }, textBtn('Remove the models from the cache', removeModelCaches, { title: 'Delete the cached model files; they download again when needed', disabled: !(modelsInfo.cached.dispatcher || modelsInfo.cached.normalizer) }))),
+      speedNote,
     ];
   }
   function buildInfoLines() {

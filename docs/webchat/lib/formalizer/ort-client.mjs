@@ -33,12 +33,37 @@ class Tensor {
   constructor(type, data, dims) { this.type = type; this.data = data; this.dims = dims ?? [data.length]; }
 }
 
-export function createOrtClient({ spawn, graceMs = 1500, defaultDeadlineMs = 3000, log = null, now = () => globalThis.performance?.now?.() ?? Date.now() } = {}) {
+export class OrtPaused extends Error {
+  constructor(reason) { super(`models paused: ${reason}`); this.name = 'OrtPaused'; this.reason = reason; }
+}
+
+/**
+ * Quick device-speed calibration (FREEZE 5): times a fixed amount of arithmetic on the calling thread and returns a factor >= 1 (1 = a fast desktop core,
+ * 4 = a 4x slower or 4x throttled one). The client multiplies its deadlines and grace by it, so a slow or loaded device is not mistaken for a hung worker.
+ * The best of three runs is taken (a transient hiccup should not inflate it); the result is clamped to [1, 8].
+ */
+export const CALIBRATION_REFERENCE_MS = 12;   // time of the loop below on the reference device (about the aarch64 dev machine; a typical desktop core is faster, so it measures 1)
+export function measureDeviceSpeed({ now = () => globalThis.performance?.now?.() ?? Date.now(), reference = CALIBRATION_REFERENCE_MS } = {}) {
+  let best = Infinity, sink = 0;
+  for (let r = 0; r < 3; r++) {
+    const t0 = now();
+    for (let i = 1; i < 1500000; i++) sink += Math.sqrt(i) % 7;
+    best = Math.min(best, now() - t0);
+  }
+  if (sink < 0) return 1;   // keeps the loop alive
+  return Math.min(8, Math.max(1, Math.round((best / reference) * 10) / 10));
+}
+
+export function createOrtClient({ spawn, graceMs = 1500, defaultDeadlineMs = 3000, log = null, restartBudget = { max: 2, windowMs: 5 * 60 * 1000 }, speed = 1, onPause = null, now = () => globalThis.performance?.now?.() ?? Date.now() } = {}) {
   if (typeof spawn !== 'function') throw new Error('createOrtClient needs spawn(lane)');
   let seq = 0, sidSeq = 0;
+  let paused = null;                   // { reason, at } while the restart budget is spent: no model call is made, the rules answer
+  const restartTimes = [];             // times of the restarts inside the budget window
+  let speedFactor = speed;             // device-speed factor (measureDeviceSpeed); a number or a function
+  const scale = () => Math.max(1, Number(typeof speedFactor === 'function' ? speedFactor() : speedFactor) || 1);
   const lanes = new Map();             // lane name -> { name, worker, generation, pending: Map(id -> { resolve, reject, label, t0, timer, graceTimer, zombie }) }
   const sessions = new Map();          // sid -> { sid, lane, name, source, opts, deadlineMs, ready }
-  const stats = { requests: 0, responses: 0, timeouts: 0, aborts: 0, restarts: 0, cancelled: 0, byLabel: {} };
+  const stats = { requests: 0, responses: 0, timeouts: 0, aborts: 0, restarts: 0, pauses: 0, cancelled: 0, byLabel: {} };
   const emit = (...a) => { if (log) try { log(...a); } catch { /* logging must not break a call */ } };
   const laneOf = (name) => { let l = lanes.get(name); if (!l) lanes.set(name, l = { name, worker: null, generation: 0, pending: new Map() }); return l; };
 
@@ -65,15 +90,19 @@ export function createOrtClient({ spawn, graceMs = 1500, defaultDeadlineMs = 300
 
   /** Terminates the worker of a lane, fails every call in flight on it and starts loading its sessions again in the background. */
   const restart = (lane, why) => {
-    stats.restarts++;
-    emit('restart', lane.name, why);
+    const t = now();
+    while (restartTimes.length && t - restartTimes[0] > restartBudget.windowMs) restartTimes.shift();
+    const over = restartTimes.length >= restartBudget.max;   // FREEZE 5: a third restart inside the window is a restart spiral; stop reloading ~160 MB of sessions
+    if (over) { paused = { reason: `${restartBudget.max} worker restarts within ${Math.round(restartBudget.windowMs / 60000)} minutes (${why})`, at: t }; stats.pauses++; emit('pause', lane.name, paused.reason); try { onPause?.(paused); } catch { /* a listener must not break recovery */ } }
+    else { restartTimes.push(t); stats.restarts++; emit('restart', lane.name, why); }
     try { lane.worker?.terminate?.(); } catch { /* already gone */ }
     lane.worker = null; lane.generation++;
-    for (const [id, p] of lane.pending) { clearTimeout(p.timer); clearTimeout(p.graceTimer); if (!p.zombie) p.reject(new Error('ORT worker restarted')); lane.pending.delete(id); }
-    for (const s of sessions.values()) if (s.lane === lane) { s.ready = null; if (typeof s.source === 'function') s.ready = load(s).catch(() => {}); }
+    for (const [id, p] of lane.pending) { clearTimeout(p.timer); clearTimeout(p.graceTimer); if (!p.zombie) p.reject(over ? new OrtPaused(paused.reason) : new Error('ORT worker restarted')); lane.pending.delete(id); }
+    for (const s of sessions.values()) if (s.lane === lane) { s.ready = null; if (!over && typeof s.source === 'function') s.ready = load(s).catch(() => {}); }
   };
 
   const request = (lane, label, msg, { deadlineMs, signal, transfer } = {}) => new Promise((resolve, reject) => {
+    if (paused) { reject(new OrtPaused(paused.reason)); return; }
     const id = ++seq;
     const t0 = now();
     stats.requests++; stats.byLabel[label] = (stats.byLabel[label] ?? 0) + 1;
@@ -86,13 +115,13 @@ export function createOrtClient({ spawn, graceMs = 1500, defaultDeadlineMs = 300
       emit('cancel', id, label, Math.round(now() - t0), kind);
       reject(err);
       try { post(lane, { op: 'cancel', id }); } catch { /* worker already dead */ }
-      const grace = typeof graceMs === 'function' ? graceMs() : graceMs;
+      const grace = Math.round((typeof graceMs === 'function' ? graceMs() : graceMs) * scale());
       p.graceTimer = setTimeout(() => { if (lane.pending.has(id)) { lane.pending.delete(id); restart(lane, `${label} #${id} did not stop within ${grace} ms`); } }, grace);
     };
     p.cancel = cancel;
     if (signal?.aborted) { cancel(new OrtAborted(label), 'aborts'); return; }
     signal?.addEventListener?.('abort', () => cancel(new OrtAborted(label), 'aborts'), { once: true });
-    const ms = typeof deadlineMs === 'function' ? deadlineMs() : (deadlineMs ?? defaultDeadlineMs);
+    const ms = (typeof deadlineMs === 'function' ? deadlineMs() : (deadlineMs ?? defaultDeadlineMs)) * scale();
     if (Number.isFinite(ms)) p.timer = setTimeout(() => cancel(new OrtTimeout(label, ms), 'timeouts'), ms);
     emit('req', id, label);
     try { post(lane, { ...msg, id }, transfer); } catch (e) { lane.pending.delete(id); clearTimeout(p.timer); reject(e); }
@@ -110,6 +139,7 @@ export function createOrtClient({ spawn, graceMs = 1500, defaultDeadlineMs = 300
     Tensor,
     InferenceSession: {
       async create(source, opts = {}) {
+        if (paused) throw new OrtPaused(paused.reason);
         const { name = `session${sidSeq + 1}`, deadlineMs, lane = 'default', ...ortOpts } = opts;
         const s = { sid: ++sidSeq, lane: laneOf(lane), name, source, opts: ortOpts, deadlineMs, ready: null };
         sessions.set(s.sid, s);
@@ -118,6 +148,7 @@ export function createOrtClient({ spawn, graceMs = 1500, defaultDeadlineMs = 300
         return {
           name,
           async run(feeds, { signal = null, deadlineMs: d } = {}) {
+            if (paused) throw new OrtPaused(paused.reason);
             if (!s.ready) s.ready = load(s);              // after a restart without a source function it loads from the bytes it kept
             await s.ready;
             const f = {};
@@ -136,6 +167,13 @@ export function createOrtClient({ spawn, graceMs = 1500, defaultDeadlineMs = 300
   return {
     ort, stats, sessions, lanes,
     get restarts() { return stats.restarts; },
+    /** Null, or { reason, at } while the restart budget is spent (models paused, rules answer). */
+    get paused() { return paused; },
+    /** Lifts the pause (the person asked for the models again) and clears the restart history. */
+    resume() { paused = null; restartTimes.length = 0; },
+    /** Device-speed factor applied to every deadline and grace period. */
+    get speed() { return scale(); },
+    set speed(v) { speedFactor = v; },
     /** Calls in flight (all lanes). */
     get inFlight() { let n = 0; for (const l of lanes.values()) for (const p of l.pending.values()) if (!p.zombie) n++; return n; },
     /** Rejects every call in flight; a worker that does not finish its job within the grace period is restarted. */
