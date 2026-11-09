@@ -101,3 +101,5 @@ Chat acts are `core.request action=chat.<act>`; the operations are `greet`, `nam
 | politeness | please / pls / could you / would you / can u in front of every question (S) |
 | questions about the state | what is my name (S) |
 | questions about the options ("what can you do") | U here: answered by `ui.help` |
+
+**L7 (macros).** `patterns.sop` was migrated with `scripts/migrate-macros.mjs` (lead-ins, suffixes and 19 repeated lists are macros). No shape: greetings, thanks, goodbyes, small talk, name and profile statements are fixed phrases or free-text captures, not a family with an object and a value. Three patterns keep their original inline lists because the macros widen them: `x.bye2` (the whole "time to go, bye for now" read as one goodbye instead of two), `x.name.ent1` and `x.name.goby` ("what name do u have for me" is the question about the user's own name, `x.myname.haveforme`).
