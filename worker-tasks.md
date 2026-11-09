@@ -36,6 +36,74 @@ The working hypothesis: on small worlds, **rules plus a small learned front-end*
 
 ## 2. Current state, answers and corrections (reviewer, 11:00)
 
+### MIC2 — an always-open microphone, a visible command queue, a reliable mic button (user, 16:57 local; the user also told you directly — this is the reviewer's precise version)
+
+**1. The microphone stays open once switched on.**
+- A click turns listening on, and it stays on (what is called hands-free today becomes the only mode). The first click is the user's permission for this.
+- It goes off only with a click on the same icon or a **mute command**. Accept many synonyms and keep them in `lang.common` as one phrase group (`lang.mic.off`):
+  - English: "mute", "mute the mic", "stop listening", "microphone off", "mic off", "turn off the mic", "pause listening", "stop the microphone", "close the microphone", "go to sleep", "that's all for now";
+  - Romanian: "oprește microfonul", "închide microfonul", "pune pe mute", "nu mai asculta", "taci din ascultat", "gata cu ascultatul", "microfon oprit".
+- "Be quiet" / "stop talking" / "taci" stop the voice output, not the microphone.
+- There is no voice command to switch it on: a muted mic cannot hear. The icon, the push-to-talk key and the Settings switch turn it on.
+- Long press is no longer needed. Remove it: it is one cause of lost clicks (below).
+
+**2. Commands queue up and run when they can.** This replaces the "no queue" rule of HANG + STOP, now that turns are bounded.
+- While a turn runs, spoken and typed messages go to a **visible queue** above the input: one chip per message, in order, each with an × to drop it. A counter on the mic says how many are waiting.
+- They run one by one as soon as the current turn ends. Only *sending* waits; listening and typing never stop.
+- Stop ends the current turn and asks "Drop the 2 waiting messages too?" (default: keep them).
+- A queued message that only made sense before (a yes/no to a question that the current turn already closed) is shown greyed with "skipped: the question was already answered".
+- The phrase log keeps each message's queue wait.
+
+**3. The mic button often ignores clicks ("I have to insist until it works").** Causes found by reading `app.mjs` at 413669e, all to fix:
+- A tap longer than 600 ms (common on phones, or a slow mouse press) toggles hands-free in `pointerdown` and then swallows the `click`. Remove the long press (point 1).
+- **Stop is not immediate.** `stopListening()` calls `rec.stop()`, and the UI stays "listening" until Chrome fires `onend`, which can take seconds. Meanwhile further clicks call `stop` again and do nothing. Fix:
+  - flip the UI state on click at once (optimistic);
+  - call `rec.abort()` if `onend` has not come within 300 ms;
+  - ignore clicks for 250 ms after a state flip (no double toggles).
+- **Start can also be slow.** `listenOnce()` before `onstart` leaves `mic.listening` false, so a second click starts again (no-op) or stops. Treat "starting" as its own state, shown with a spinner ring.
+- While the answer is read aloud, `start()` returns early. A click during speech must stop the speech and start listening (barge-in), not do nothing.
+- Log every mic click with the state before and after (Developer tab), so the next report is precise.
+- **Test:** a headless fake recogniser with slow `onstart` / `onend` (1–2 s); 50 random clicks with random delays; the UI state always equals the recogniser state after 300 ms, and no click is lost.
+
+### EOT2 — end-of-turn detection cuts "play little star" after "play" (user, 16:57; phrase log rows 63–68)
+
+The phrase log shows "play" sent four times with `endType: pause-plausible`, `waitMs ≈ 710`: the detector thought "play" was a whole command. It is a reading with **status `missing`** (it needs an argument: "What should I play?"). Fix in `speech.mjs` / `dryRead`:
+- **Plausible requires a complete reading with every required argument.** `missing` / `ambiguous` mean not plausible: wait the long pause (1.8 s, hands-free 2.5 s).
+- A one-word utterance that is a verb, or any utterance whose last word is a verb, a determiner or a number ("play", "draw a", "add 3"), waits the long pause.
+- If the long pause still sends a bare "play" and the next utterance comes within 3 s, read it as the continuation: "little star" answers "What should I play?". This already works, keep it.
+- Data: replay the phrase log rows 61–68 through the fake recogniser with their timings; "play little star" with a 900 ms gap after "play" must be one message.
+
+### RP3 — the user's phrase log of 2026-11-09 afternoon (68 messages): failures and the general fixes
+
+Files (committed by the reviewer):
+- the log: `training/eval/real-phrases-2026-11-09c.jsonl`;
+- the expected behaviour per failing case: `training/eval/expectations-2026-11-09c.jsonl` (24 cases, with the tab and the previous messages).
+
+Rechecked in the CLI at 413669e: still wrong are rp3-01..06, 07 (makes a heading called "Two chapters"), 08 (adds the words "add text" as a paragraph), 09–16, 17–18 (music "play" and "play a random song") and 21–24 (profile interview slot alignment).
+
+Turn every case into a dialogue test (`dialogues.jsonl`, family `real`) and fix each as a **general** mechanism:
+1. **Voice garble repair on the active tab** (rp3-01, 09, 10, 11):
+   - a sound-alike and split/merge-word correction pass against the active world's vocabulary ("mcdavatara" → "make avatar a", "are/on the new" → "add the new", "Chester" → "chapter?");
+   - only for `mode=voice`, after normal spelling, and never across worlds (RD1b safety);
+   - ask before acting when the match is weak.
+2. **Voice stutter and send words** (rp3-02, 06): drop an immediately repeated word or phrase ("the the", "avatarul o persoană avatarul o persoană"); strip trailing send words ("send", "trimite", "over", "gata") in voice mode.
+3. **Avatar expressions as loose words** (rp3-03..05): "big smile", "make a big smile", "get a big smile" map to the widest smile on every character; also "small smile", "frown", "wink", "open mouth", "tongue out".
+4. **Editor multi-structure requests** (rp3-07, 08): "a header, two chapters and a paragraph" creates each part. "Add text" without the text asks for it. Never write the command words into the document.
+5. **Games** (rp3-12..14):
+   - an answer plus extra information ("yes, it eats meat") answers the question and keeps the information as evidence;
+   - "new game" restarts the game of the active tab;
+   - "X and 0", "x și 0", "noughts and crosses", "x and o" are tic-tac-toe.
+6. **Arithmetic word problems with typos** (rp3-15): "flyes away", "How many bee Tom has" read as 10 − 1 = 9. Add common verbs of leaving (flies / runs / swims / walks away, leaves, goes home) to the minus frames.
+7. **Drawing with heavy typos** (rp3-16): "the un si up not udner clouds" moves the sun above the clouds. Typo correction inside the active world must handle 2–3 typos when the rest of the sentence fixes the reading.
+8. **Music** (rp3-17, 18):
+   - "play" on the Music tab plays the selected or last song, else a random one;
+   - "play a random song / something / any song / surprise me" picks a random known song and names it.
+9. **Profile interview** (rp3-20..24):
+   - **Phrase log status.** The webchat logs every interview answer as `unknown` with no world (rows 40–52), while the CLI handles them. Answers taken by a world's frame / modal mode must be logged with that world and status `supported`; this is also why the learning loop would learn nothing from them.
+   - **Slot alignment.** A non-yes/no answer to a confirmation question answers what it fits (a proper name → company); "R&D" is a field or department, not a hobby; a bare number answers the last numeric question.
+   - **Resume.** "coming back to knowing me, what questions do you have?" resumes the interview.
+10. **Report.** The 68 phrases and 24 expectations turn by turn, before / after, plus the operational and dialogue sets (wrong must not rise).
+
 ### HANG2 — the model worker stops answering; the watchdog hides it (reviewer at 1375718, 15:50 local) — P0, DO FIRST
 
 The HANG + STOP work is good: the Stop button, one message at a time, the 8 s watchdog and 918/921 tests passing (3 skipped). The chat no longer freezes forever. **But the turns that froze still do not get answered: they now end at 8 s with "That took too long, so I stopped."** That also happens **without throttling, on a fast machine**, and it repeats on every try. So the user will still see it all the time.
@@ -366,7 +434,7 @@ The reviewer copied what is reusable into **`imports/diagram-vss-demo/`** (stagi
 **Licence:** settled. The project is now AGPL-3.0-only, the same as the source (user decision 14:10); keep the copied files' provenance headers.
 
 **Order from now on:**
-1. HANG2 (model worker stops answering), then DIAG2 (Diagram world in the webchat, dispatcher retrain)
+1. HANG2 (model worker stops answering), MIC2 + EOT2 (always-open mic, queue, reliable button, end of turn), then DIAG2 (Diagram world in the webchat, dispatcher retrain), then RP3 (phrase-log failures)
 2. SET (settings modal with tabs) + UI1 (one mic, tooltips) + DOC (greeting and docs), then VOICE (end of turn)
 3. ED (document editor commands)
 4. RD10 together with RD1b and RD2 (they share the mechanism)

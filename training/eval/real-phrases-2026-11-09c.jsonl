@@ -1,0 +1,68 @@
+{"text":"hello","lang":"en","english":"hello","mode":"voice","tab":"robot","worlds":["kids.common"],"status":"supported","time":"2026-11-09T13:54:03.254Z"}
+{"text":"mcdavatara human","lang":"en","english":"mcdavatara human","mode":"voice","tab":"robot","worlds":[],"status":"unparsed","time":"2026-11-09T13:54:11.320Z"}
+{"text":"fă avatarul o persoană avatarul o persoană trimite","lang":"ro","english":"fă avatarul o persoană avatarul o persoană trimite","mode":"voice","tab":"robot","worlds":[],"status":"unknown","time":"2026-11-09T13:54:43.437Z"}
+{"text":"now be a human","lang":"en","english":"now be a human","mode":"typed","tab":"robot","worlds":["ui.avatar"],"status":"supported","time":"2026-11-09T13:55:19.403Z"}
+{"text":"a women","lang":"en","english":"a women","mode":"typed","tab":"robot","worlds":["ui.avatar"],"status":"supported","time":"2026-11-09T13:55:24.538Z"}
+{"text":"become a women","lang":"en","english":"become a women","mode":"typed","tab":"robot","worlds":["ui.avatar"],"status":"supported","time":"2026-11-09T13:55:28.178Z"}
+{"text":"big eyes","lang":"en","english":"big eyes","mode":"typed","tab":"robot","worlds":["ui.avatar"],"status":"supported","time":"2026-11-09T13:55:35.900Z"}
+{"text":"make a big smile","lang":"en","english":"make a big smile","mode":"typed","tab":"robot","worlds":["art.draw","ui.avatar"],"status":"missing","time":"2026-11-09T13:57:34.300Z"}
+{"text":"make the avatar to geta big smile","lang":"en","english":"make the avatar to geta big smile","mode":"typed","tab":"robot","worlds":[],"status":"unknown","time":"2026-11-09T13:57:47.133Z"}
+{"text":"smile","lang":"en","english":"smile","mode":"typed","tab":"robot","worlds":["ui.avatar"],"status":"supported","time":"2026-11-09T13:57:56.548Z"}
+{"text":"big smile","lang":"en","english":"big smile","mode":"typed","tab":"robot","worlds":[],"status":"unparsed","time":"2026-11-09T13:58:00.917Z"}
+{"text":"the the next mouth","lang":"en","english":"the the next mouth","mode":"typed","tab":"robot","worlds":[],"status":"unknown","time":"2026-11-09T13:58:10.013Z"}
+{"text":"add a header, two chapters and a paragraph","lang":"en","english":"add a header, two chapters and a paragraph","mode":"typed","tab":"editor","worlds":["docs.editor"],"status":"missing","time":"2026-11-09T13:58:56.494Z"}
+{"text":"add 2 new chapters","lang":"en","english":"add 2 new chapters","mode":"typed","tab":"editor","worlds":["docs.editor"],"status":"supported","time":"2026-11-09T13:59:08.166Z"}
+{"text":"add text","lang":"en","english":"add text","mode":"typed","tab":"editor","worlds":["docs.reader"],"status":"missing","time":"2026-11-09T13:59:13.702Z"}
+{"text":"let’s play guess the animal","lang":"en","english":"let’s play guess the animal","mode":"typed","tab":"guess","worlds":["ui.shell"],"status":"supported","time":"2026-11-09T14:01:20.936Z"}
+{"text":"yes","lang":"en","english":"yes","mode":"typed","tab":"guess","worlds":["games.guess"],"status":"supported","time":"2026-11-09T14:01:27.136Z"}
+{"text":"no","lang":"en","english":"no","mode":"typed","tab":"guess","worlds":["games.guess"],"status":"supported","time":"2026-11-09T14:01:30.448Z"}
+{"text":"yes","lang":"en","english":"yes","mode":"typed","tab":"guess","worlds":["games.guess"],"status":"supported","time":"2026-11-09T14:01:33.464Z"}
+{"text":"no","lang":"en","english":"no","mode":"typed","tab":"guess","worlds":["games.guess"],"status":"supported","time":"2026-11-09T14:01:37.648Z"}
+{"text":"no","lang":"en","english":"no","mode":"typed","tab":"guess","worlds":["games.guess"],"status":"supported","time":"2026-11-09T14:01:43.384Z"}
+{"text":"no","lang":"en","english":"no","mode":"typed","tab":"guess","worlds":["games.guess"],"status":"supported","time":"2026-11-09T14:01:45.073Z"}
+{"text":"yes","lang":"en","english":"yes","mode":"typed","tab":"guess","worlds":["games.guess"],"status":"supported","time":"2026-11-09T14:01:53.817Z"}
+{"text":"new game","lang":"en","english":"new game","mode":"typed","tab":"guess","worlds":["ui.shell"],"status":"supported","time":"2026-11-09T14:02:00.041Z"}
+{"text":"no","lang":"en","english":"no","mode":"typed","tab":"tictactoe","worlds":["games.guess"],"status":"supported","time":"2026-11-09T14:02:08.873Z"}
+{"text":"draw a sun and a house","lang":"en","english":"draw a sun and a house","mode":"typed","tab":"tictactoe","worlds":["art.draw"],"status":"supported","time":"2026-11-09T14:02:19.714Z"}
+{"text":"yes, it eats meat","lang":"en","english":"yes, it eats meat","mode":"typed","tab":"draw","worlds":["games.guess"],"status":"unparsed","time":"2026-11-09T14:02:36.065Z"}
+{"text":"start x and 0","lang":"en","english":"start x and 0","mode":"typed","tab":"tictactoe","worlds":[],"status":"unknown","time":"2026-11-09T14:02:46.466Z"}
+{"text":"Tom has 15 apples. He gives 12 to Ana. How many apples does Tom have?","lang":"en","english":"Tom has 15 apples. He gives 12 to Ana. How many apples does Tom have?","mode":"typed","tab":"robot","worlds":["kids.arith"],"status":"supported","time":"2026-11-09T14:03:11.842Z"}
+{"text":"Tom has 5 apples. He gives 8 to Ana. How many apples does Tom have?","lang":"en","english":"Tom has 5 apples. He gives 8 to Ana. How many apples does Tom have?","mode":"typed","tab":"robot","worlds":["kids.arith"],"status":"conflicting","time":"2026-11-09T14:03:22.586Z"}
+{"text":"add a new paragraph","lang":"en","english":"add a new paragraph","mode":"voice","tab":"editor","worlds":[],"status":"unknown","time":"2026-11-09T14:04:12.755Z"}
+{"text":"are the new paragraph","lang":"en","english":"are the new paragraph","mode":"voice","tab":"editor","worlds":[],"status":"unknown","time":"2026-11-09T14:04:25.906Z"}
+{"text":"add new line","lang":"en","english":"add new line","mode":"voice","tab":"editor","worlds":[],"status":"unknown","time":"2026-11-09T14:04:34.725Z"}
+{"text":"on the new chapter","lang":"en","english":"on the new chapter","mode":"voice","tab":"editor","worlds":[],"status":"unparsed","time":"2026-11-09T14:05:11.180Z"}
+{"text":"Chester","lang":"en","english":"Chester","mode":"voice","tab":"editor","worlds":[],"status":"unknown","time":"2026-11-09T14:07:55.706Z"}
+{"text":"Tom has 10 bees. One flyes away. How many bee Tom has ?","lang":"en","english":"Tom has 10 bees. One flyes away. How many bee Tom has ?","mode":"typed","tab":"robot","worlds":[],"status":"unknown","time":"2026-11-09T14:09:58.936Z"}
+{"text":"make the sky dark blue","lang":"en","english":"make the sky dark blue","mode":"typed","tab":"draw","worlds":["art.draw"],"status":"supported","time":"2026-11-09T14:10:34.056Z"}
+{"text":"make 5 clouds and one sun","lang":"en","english":"make 5 clouds and one sun","mode":"typed","tab":"draw","worlds":["art.draw"],"status":"supported","time":"2026-11-09T14:10:41.192Z"}
+{"text":"the un si up not udner clouds","lang":"en","english":"the un si up not udner clouds","mode":"typed","tab":"draw","worlds":[],"status":"unknown","time":"2026-11-09T14:10:51.449Z"}
+{"text":"Sînică","lang":"en","english":"Sînică","mode":"typed","tab":"profile","worlds":[],"status":"unknown","time":"2026-11-09T14:13:15.035Z"}
+{"text":"Reseaercher","lang":"en","english":"Reseaercher","mode":"typed","tab":"profile","worlds":[],"status":"unknown","time":"2026-11-09T14:13:31.267Z"}
+{"text":"Axiologic","lang":"en","english":"Axiologic","mode":"typed","tab":"profile","worlds":[],"status":"unknown","time":"2026-11-09T14:13:38.235Z"}
+{"text":"R&D","lang":"en","english":"R&D","mode":"typed","tab":"profile","worlds":[],"status":"unknown","time":"2026-11-09T14:13:43.211Z"}
+{"text":"Reading","lang":"en","english":"Reading","mode":"typed","tab":"profile","worlds":[],"status":"unknown","time":"2026-11-09T14:13:50.100Z"}
+{"text":"No way","lang":"en","english":"No way","mode":"typed","tab":"profile","worlds":[],"status":"unknown","time":"2026-11-09T14:13:58.276Z"}
+{"text":"20","lang":"en","english":"20","mode":"typed","tab":"profile","worlds":[],"status":"unknown","time":"2026-11-09T14:14:05.772Z"}
+{"text":"Research","lang":"en","english":"Research","mode":"typed","tab":"profile","worlds":[],"status":"unknown","time":"2026-11-09T14:14:15.420Z"}
+{"text":"Startship Navigation","lang":"en","english":"Startship Navigation","mode":"typed","tab":"profile","worlds":[],"status":"unknown","time":"2026-11-09T14:14:35.205Z"}
+{"text":"Nothing","lang":"en","english":"Nothing","mode":"typed","tab":"profile","worlds":[],"status":"unknown","time":"2026-11-09T14:14:43.189Z"}
+{"text":"What?","lang":"en","english":"What?","mode":"typed","tab":"profile","worlds":[],"status":"unknown","time":"2026-11-09T14:14:53.709Z"}
+{"text":"Hello","lang":"en","english":"Hello","mode":"typed","tab":"profile","worlds":[],"status":"unknown","time":"2026-11-09T14:14:56.718Z"}
+{"text":"Yes","lang":"en","english":"Yes","mode":"typed","tab":"profile","worlds":[],"status":"unknown","time":"2026-11-09T14:15:01.901Z"}
+{"text":"What is your name?","lang":"en","english":"What is your name?","mode":"typed","tab":"profile","worlds":["kids.common"],"status":"supported","time":"2026-11-09T14:15:11.422Z"}
+{"text":"What are you?","lang":"en","english":"What are you?","mode":"typed","tab":"profile","worlds":["ui.avatar"],"status":"supported","time":"2026-11-09T14:15:17.094Z"}
+{"text":"Become an emoji","lang":"en","english":"Become an emoji","mode":"typed","tab":"robot","worlds":["ui.avatar"],"status":"supported","time":"2026-11-09T14:15:26.574Z"}
+{"text":"smile","lang":"en","english":"smile","mode":"typed","tab":"robot","worlds":["ui.avatar"],"status":"supported","time":"2026-11-09T14:15:30.973Z"}
+{"text":"big eyes","lang":"en","english":"big eyes","mode":"typed","tab":"robot","worlds":["ui.avatar"],"status":"supported","time":"2026-11-09T14:15:38.838Z"}
+{"text":"red face","lang":"en","english":"red face","mode":"typed","tab":"robot","worlds":["ui.avatar"],"status":"supported","time":"2026-11-09T14:15:42.846Z"}
+{"text":"cool","lang":"en","english":"cool","mode":"typed","tab":"robot","worlds":["kids.common"],"status":"supported","time":"2026-11-09T14:15:46.422Z"}
+{"text":"coming back to knowning me, what auestions do you have ?","lang":"en","english":"coming back to knowning me, what auestions do you have ?","mode":"typed","tab":"robot","worlds":[],"status":"unknown","time":"2026-11-09T14:16:05.583Z"}
+{"text":"set title to Title 1","lang":"en","english":"set title to Title 1","mode":"voice","tab":"editor","worlds":["docs.editor"],"status":"supported","time":"2026-11-09T15:49:35.384Z","endType":"final","waitMs":220}
+{"text":"create chapter one","lang":"en","english":"create chapter one","mode":"voice","tab":"editor","worlds":["docs.editor"],"status":"supported","time":"2026-11-09T15:49:53.105Z","endType":"final","waitMs":469}
+{"text":"play","lang":"en","english":"play","mode":"voice","tab":"music","worlds":["media.music"],"status":"missing","time":"2026-11-09T15:51:13.239Z","endType":"pause-plausible","waitMs":714}
+{"text":"play a random song","lang":"en","english":"play a random song","mode":"voice","tab":"music","worlds":["media.music"],"status":"missing","time":"2026-11-09T15:51:26.774Z","endType":"final","waitMs":216}
+{"text":"play","lang":"en","english":"play","mode":"voice","tab":"music","worlds":["media.music"],"status":"missing","time":"2026-11-09T15:51:34.241Z","endType":"pause-plausible","waitMs":709}
+{"text":"play","lang":"en","english":"play","mode":"voice","tab":"music","worlds":["media.music"],"status":"missing","time":"2026-11-09T15:51:39.837Z","endType":"pause-plausible","waitMs":712}
+{"text":"play","lang":"en","english":"play","mode":"voice","tab":"music","worlds":["media.music"],"status":"missing","time":"2026-11-09T15:51:48.367Z","endType":"pause-plausible","waitMs":710}
+{"text":"Little Star","lang":"en","english":"Little Star","mode":"voice","tab":"music","worlds":["media.music"],"status":"supported","time":"2026-11-09T15:52:06.273Z","endType":"final","waitMs":106}
