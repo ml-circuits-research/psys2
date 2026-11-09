@@ -21,7 +21,7 @@ import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mj
 import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs';
 import { checkValues } from './value-check.mjs';
 import { Discourse } from './discourse.mjs';
-import { correctMessage } from '../formalizer/rules/expand.mjs';
+import { correctMessage, splitAnswerList } from '../formalizer/rules/expand.mjs';
 
 export { runWorldTests } from './test-runner.mjs';
 
@@ -454,7 +454,7 @@ export class DialogSession {
     this.sources.set(sid, { original: text, english, lang, alignment: translation?.alignment });
     // Correction phase (spec 03 section 1c, review G2): "knight to f3, no, knight to c3" is resolved on the whole message, before the
     // modal interceptors, discourse, segmentation and routing, so the abandoned variant never has an effect.
-    english = engine.interp.lang.stripFiller(english) || english;   // "lol ok and ...", "uhh and a pig?": leading hesitation never reaches a world
+    english = splitAnswerList(engine.interp.lang.stripFiller(english) || english);   // "lol ok and ...", "uhh and a pig?": leading hesitation never reaches a world
     const selfCorrections = await perf.time('correct', () => this._correct(english));
     if (selfCorrections.corrections.length) english = selfCorrections.text;
 
@@ -560,7 +560,7 @@ export class DialogSession {
         const rendered = interp.render(this.isession, r);
         lines.push([T(rendered)]);
         statuses.push(r.status);
-        if (r.status === 'supported') { const wid = seg.match?.worldId; const t = set.get(wid)?.tab?.id ?? BUILTIN_TAB[wid]; if (t) followTab = t; }
+        if (r.status === 'supported') { const wid = seg.match?.worldId; const t = set.get(wid)?.tab?.id ?? BUILTIN_TAB[wid]; if (wid === 'ui.shell') followTab = null; else if (t) followTab = t; }   // an explicit navigation later in the message wins over the tab of an earlier segment
         ops.push(...r.ops);
         disc.noteTurn(seg, rendered, this._msg);
         if (r.status === 'supported') { const fr = disc.recordFrame(seg, this._msg); if (fr) { fr.reply = rendered; fr.value = r.envelope?.value ?? null; fr.opId = r.ops[0]?.op ?? null; } }

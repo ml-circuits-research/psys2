@@ -35,6 +35,8 @@ Host (`docs/webchat/ui/avatar.mjs`): maps the state to DiceBear options (`<compo
 
 When a world that declares a tab (manifest `tab=`, or one of the built-in tabs: avatar, editor, games) gives a **supported** answer to a sentence and that tab is not the active one, the dialog runs the existing `ui.openTab` action after the message (`interp.runAction`), so the host switches tabs from the `ui.shell` state as usual. Worlds without a tab (`ui.shell`, `core`, `ui.help`, `kids.*`) never trigger it, and neither do clarification (`missing`, `ambiguous`) or `unsupported` answers.
 
+**Several segments in one message.** The tab to bring forward is that of the *last* segment of the message that gave a supported answer. A supported `ui.shell` segment ("open the music tab", "show me the charts") is an explicit navigation: it clears the follow, so "draw a sun and then open the music tab" ends on the Music tab, not back on Draw. A segment of a tab world after the navigation ("open the map and draw a house") still brings its own tab forward. Tests: `tests/long-messages.test.mjs`.
+
 ### Avatar: capability map (descriptors instead of refusals)
 
 `ops.mjs` keeps a per-character capability map (`CAPABILITY`): when the active character lacks the part a command names (or lacks that variant of it), the command maps to the closest thing the character has and the answer says what was done; the character is offered only when nothing close exists.
