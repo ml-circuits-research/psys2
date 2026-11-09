@@ -264,7 +264,7 @@ export function exampleSentences(match, { phrases = null, lexicons = null, sampl
       } else if (part === "'s" && words.length) words[words.length - 1] += "'s";
       else words.push(part.replace(/_/g, ' '));
     }
-    return words.filter((w) => w !== '').join(' ');
+    return words.filter((w) => w !== '').map((w) => w.replace(/_/g, ' ')).join(' ');
   };
   const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
   const out = [];

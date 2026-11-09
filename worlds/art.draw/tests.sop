@@ -3952,3 +3952,18 @@
     input="Draw a sun, a cloud and a man."
     expect="a man"
     expectState="objects.length=3"
+
+@t.art.draw.sh01 core.test
+    input="could you maybe draw some grass on the ground"
+    expect="I added grass to the ground."
+    session=dsh1
+
+@t.art.draw.sh02 core.test
+    input="i want to add sand"
+    expect="I added sand to the ground."
+    session=dsh2
+
+@t.art.draw.sh03 core.test
+    input="could you maybe make it into night"
+    expect="It is night now"
+    session=dsh3
