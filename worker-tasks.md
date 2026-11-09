@@ -327,32 +327,6 @@ The spoken "that's wrong" / "nu asta am vrut" (spec 11 negative feedback) sets t
 
 **Copy as text in the phrase log does not work (user): remove it.** Keep **Export JSON** with every detail: the record, readings, wires, timings, feedback and endType. Make sure the export is complete and opens with one click on a phone (share sheet when available, a download otherwise).
 
-### DIAG3b — fixes from the reviewer's browser check of 9383474 (21:55 local)
-
-**Validated at 9383474:** `scripts/test-webchat-diagram3.mjs` 14/14 in real Chrome, 0 page errors (short ids, a1/a2 replies, "label the previous link", "label link" asks, thicker and dashed, a bit bigger, column layout, select, delete). SMALL 3 and 4 validated (fresh page, Diagram tab: "draw a blue rectangle called Api and a green circle called Db" → "Drew Api and Db."; "connect them with a dashed arrow" → "Connected Api → Db (a1).").
-
-**Your test covers 11 of the 15 expectations; it skips rp4-03, 06, 09 and 10, the typo and template cases. Those fail.** Reviewer probe (`/home/claude/shot/diag3x.mjs`, real Chrome, 0 errors). Add all 15 rows to the test, in the user's order and context, and fix:
-
-1. **rp4-03, "add to the diagram a tree liek shape"** (asked right after "Keep the current one or start empty?").
-   - Today: it drew a *picture* of a tree, with a trunk, 5 green ellipse "Branch" nodes and 3 root dots (group Tree1), and silently dropped the pending question. A following "start empty" then answers "There is nothing to confirm right now".
-   - Expected: the **hierarchy / tree template** (the source reader gives `template=tree`). It answers the pending question as "keep" (or asks again), and says which template it used.
-2. **Template shapes must use short ids in replies.**
-   - Today the replies show internal names: "Connected c1 → Tree1-trunk (a9)", "Arrow a1 (Tree1-trunk — Branch1)", "Tree1-trunk connects to Branch1, …, Tree1-root1".
-   - Shapes created by a template get ids like any other shape (r1, e1…). Replies use the ids (or the user-visible label), never `Group-part` names.
-3. **rp4-06 / 09 / 10, old names.**
-   - "connect circle1 and rectangle1" resolved rectangle1 → the tree trunk, because the trunk is r1. That is acceptable only if r1 really is the first rectangle the user drew. With a template present, "rectangle1" must mean the first rectangle the user drew. If that is ambiguous, ask.
-   - Rerun 06, 09 and 10 on the user's exact context (no template), where they must give c1 → r1, a1, "label1".
-4. **Spelling: "lable" was read as "able".** Edge and diagram words must win the correction: lable → label (the trace said `I read "lable" as "able"`).
-5. **Arrow geometry on the tree.** The screenshot (`/home/claude/shot/diag3x.png`) shows:
-   - the 5 branch arrows and c1 → trunk all converging on one point near the trunk's top-left corner, with their id tags stacked ("a1a2");
-   - new shapes (r2, r3, c2) placed on top of existing arrows.
-
-   Spread the attachment points along the side (your 14 px spread does not apply here), keep id tags apart, and place new shapes in free space. Add the tree template to the geometry test (minimum entry angle, clearance, no two attachment points closer than 10 px, no shape over an edge).
-6. **Halos.** After the template, every template shape shows a blue selection box, and the boxes stay after later commands. Only the selection (or the last-created group, briefly) should show halos.
-7. **State field.** `diagram.sketch.shapes[].kind` is undefined in `chat.state()` (I read `kind`). If the field is named differently, ignore this. Otherwise expose `kind` for tests.
-
-Done when all 15 expectation rows pass in `test-webchat-diagram3.mjs` and the tree probe screenshot shows no stacked attachments and no shape over an edge.
-
 ### DIAG3 — Diagram: short ids, clear arrows, arrows as first-class objects, and parity with the source (user, 17:06 local)
 
 Data:
@@ -422,6 +396,27 @@ Clicks on the avatar (gallery, presets, parts) run late, after the spoken answer
   - Stop during the speech lifts the veil at once;
   - the same for a chess move while the engine thinks;
   - 0 console errors.
+
+### FREEZE-6 — main-thread load during a long voice session (reviewer soak at 2f7cb36, 23:50 local)
+
+**Run:** `scripts/soak-webchat.mjs --minutes 12` (4× throttle, 2-vCPU host), after the speech rewrite landed. **8/10 pass:**
+- heap flat (97 → 103 MB);
+- workers flat (4);
+- 0 watchdog endings, 0 ORT restarts;
+- echo 22 ms;
+- the second tab never listens, and the first keeps receiving;
+- 0 page errors.
+
+**FAIL:** main-thread busy, **70% average, 86% worst minute** (your 30-minute run: 56% / 75%). Over 12 minutes there were 106 user messages: the soak's 67 real messages plus room talk. The UI stays responsive at the end, but a phone at this load heats up, which is what the user felt.
+1. **Profile it.** Record a CPU profile (CDP `Profiler`) for 2 minutes in the middle of a soak and list the top 10 self-time functions with their share.
+2. **Fix the biggest causes.** Likely candidates:
+   - per-turn rules formalization on the main thread;
+   - phrase-log or history re-rendering of the whole list on every message;
+   - trace building when the trace is hidden;
+   - interim-result DOM updates (throttle them to animation frames);
+   - noise-classified talk still running a full turn.
+3. **If formalization dominates** (more than 300 ms per turn at 4×), move `DialogSession` into a module worker, the way ORT already runs in one. The UI thread keeps only rendering and speech.
+4. **Gate:** soak busy < 50% on average and < 70% in the worst minute, on your machine **and** in the reviewer's 12-minute run.
 
 ### MOBILE-VOICE / FREEZE 1–3 / NOISE — review of f15e2da + 5f56daa (23:05 local)
 
@@ -1892,3 +1887,7 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
 - DIAG3 (9383474), files match the log: `test-webchat-diagram3.mjs` 14/14 in real Chrome. The four skipped expectation rows fail; see DIAG3b. SMALL 3 and 4 validated.
 - SMALL 1–2 (4e128a6, files match the log): the surprise pool keeps only requests and questions (tests); "fa ochi visatori" now answers in Romanian, "Gata! Acum am ochi somnoroși." (real Chrome). SMALL is closed.
 - RP5 (cc78918, files match the log): validated in part (see RP5b for what is validated and what still fails).
+- DIAG3b (3efde88, files match the log): `test-webchat-diagram3.mjs` 15/15 in real Chrome, 0 page errors. Reviewer tree probe: hierarchy template ("Keeping the current diagram."), short ids in every reply, rectangle1 = the first rectangle the user drew, lable→label, attachments fanned out, new shapes placed in free space, `kind` exposed. DIAG3 is closed except the act parity gap (81.0 vs 82.5).
+- FREEZE 4–5 (a8f55bb, files match the log): the cancellable dry run, ORT restart budget and device-speed deadlines are in (unit tests). Reviewer 12-minute soak: 8/10 pass; main-thread busy fails, see FREEZE-6.
+- TIER-T-LONG (1160540) and R5b (3e0ac18), files match the log: accepted on the logged numbers. Long set 80.5 → 94.2 right, 1296 set 98.6 / 0.3; v5 is not published, v4e stays. The reviewer did not rerun them (2-vCPU host).
+- NX1 (5956e32): the label format in `training/nx/README.md` is good: spans relative to the segment, BIO loss masked for `partial`, synthesized `ask` marked.
