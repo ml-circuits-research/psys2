@@ -40,6 +40,20 @@ test('a session set to Romanian still reads an English message with a typo as En
   assert.doesNotMatch(r.text, /Nu am înțeles/);
 });
 
+test('avatar refusals are answered in Romanian, and "dreamy" eyes map to the closest robot eyes (sleepy)', async () => {
+  const e = await engineWith();
+  const s = e.createSession({ language: 'auto' });
+  s.setWorldState('ui.shell', { activeTab: 'avatar' });
+  await s.send('fa-i ochii mari');   // strong Romanian: the session switches
+  const refusal = await s.send('fa ochi cubici');
+  assert.equal(refusal.lang, 'ro');
+  assert.match(refusal.text, /^Nu cunosc niciun fel de ochi/);
+  assert.doesNotMatch(refusal.text, /I do not know|My eyes/);
+  const dreamy = await s.send('fa ochi visatori');
+  assert.equal(dreamy.lang, 'ro');
+  assert.match(dreamy.text, /somnoroși/);
+});
+
 test('translateParts: all or nothing', async () => {
   const parts = [{ text: 'Ta-da! ', translate: true }, { text: 'I drew a house.', translate: true }];
   const ok = await translateParts([{ text: 'I drew a house.', translate: true }], rules, 'ro');

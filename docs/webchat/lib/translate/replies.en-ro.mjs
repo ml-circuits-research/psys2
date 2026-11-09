@@ -76,6 +76,13 @@ for (const g of Object.keys(GENDER_RO)) for (const [pe, pr] of Object.entries(PR
   CAP_ENTRIES.push([`A person shows being ${/^[aeiou]/.test(g) ? 'an' : 'a'} ${g} through hair, so I gave myself ${pe}.`, `O persoană arată că e ${art[0]} ${GENDER_RO[g]} prin păr, așa că mi-am dat ${pr}.`]);
   CAP_ENTRIES.push([`A person shows being ${/^[aeiou]/.test(g) ? 'an' : 'a'} ${g} through hair, so I gave myself ${pe} and look {mood}.`, `O persoană arată că e ${art[0]} ${GENDER_RO[g]} prin păr, așa că mi-am dat ${pr} și arăt {mood}.`]);
 }
+// refusals of the avatar world (ops.mjs: _setPart, _setPartUnknown): "I do not know eyes like "x". My eyes can be ..."
+const LABEL_RO = { hairstyle: ['coafură', 'coafuri'], eyebrows: ['sprâncene', 'sprâncene'], nose: ['nas', 'nasuri'], beard: ['barbă', 'bărbi'], glasses: ['ochelari', 'ochelari'], eyes: ['ochi', 'ochi'], mouth: ['gură', 'guri'], hat: ['pălărie', 'pălării'], expression: ['expresie', 'expresii'] };
+for (const [en, [sg, pl]] of Object.entries(LABEL_RO)) {
+  CAP_ENTRIES.push([`I do not know ${en} like "{q}".`, `Nu cunosc niciun fel de ${sg} precum "{q}".`]);
+  CAP_ENTRIES.push([`Ask me what ${en} I can have.`, `Întreabă-mă ce ${pl} pot avea.`]);
+}
+CAP_ENTRIES.push(['I do not have that part.', 'Nu am această parte.'], ['I do not know how to look like that.', 'Nu știu cum să arăt așa.']);
 CAP_ENTRIES.push(['My eyes can be {eyelist}.', 'Ochii mei pot fi {eyelist}.']);
 CAP_ENTRIES.push(['For {cmp} eyes try {eyelist}; say "make your eyes {eye}".', 'Pentru ochi {cmp} încearcă {eyelist}; spune "fă-ți ochii {eye}".']);
 const EXAMPLE_ENTRIES = [

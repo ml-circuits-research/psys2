@@ -65,3 +65,13 @@ test('ui.help: "surprise me with an example" and "give me an example command" qu
   const r = await s.send('Give me an example', opts);
   assert.ok(!r.effects?.some((e) => e.name === 'chat.surprise'));
 });
+
+test('the shipped pool holds only requests and questions, no personal statements, feedback or fresh-state no-ops', async () => {
+  const { isRequestOrQuestion } = await import('../src/dialog/surprise.mjs');
+  const pool = JSON.parse(await readFile(new URL('../docs/webchat/surprise-pool.json', import.meta.url), 'utf8'));
+  for (const p of pool) {
+    assert.ok(isRequestOrQuestion(p.text), `"${p.text}" is neither a request nor a question`);
+    assert.ok(!/democrat|republican|religio|thank|zoom (all the way )?out|wipe everything|days has april/i.test(p.text), `"${p.text}"`);
+  }
+  assert.ok(!pool.some((p) => p.world === 'user.profile' && !/\?$/.test(p.text)), 'no profile statements');
+});

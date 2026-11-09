@@ -54,7 +54,7 @@
     "lib/dialog/meta.mjs": "3f42a3f2e5d70d71",
     "lib/dialog/normalizer-runtime.mjs": "55aef6e847b477c6",
     "lib/dialog/runtime-config.mjs": "0f2c990dffd716e7",
-    "lib/dialog/surprise.mjs": "b858f1d88d2ccb7c",
+    "lib/dialog/surprise.mjs": "bd76e5f4d59d803e",
     "lib/dialog/test-runner.mjs": "3338d6d08f4f428f",
     "lib/dialog/time-limits.mjs": "08cd77efb6cfee18",
     "lib/dialog/value-check.mjs": "36dcb282b4e9c9f6",
@@ -99,7 +99,7 @@
     "lib/translate/phrases.commands.ro-en.mjs": "2377fead98ea1a2a",
     "lib/translate/phrases.ro-en.mjs": "538c8191beea1051",
     "lib/translate/places.ro-en.mjs": "94650384878ada19",
-    "lib/translate/replies.en-ro.mjs": "c40a41d2150ba691",
+    "lib/translate/replies.en-ro.mjs": "808fad60dab9442a",
     "lib/translate/ro-en.mjs": "28201057d5325184",
     "lib/worlds/canonical.mjs": "331dd143a11d8880",
     "lib/worlds/index.mjs": "c975471e7f8cd8dc",
@@ -176,7 +176,7 @@
     "worlds/media.music/vendor/tonal.mjs": "331490751dea871a",
     "worlds/ui.avatar/coverage.md": "7f8a2b93f4fd3dea",
     "worlds/ui.avatar/datagen.mjs": "7b6d8141609ea71b",
-    "worlds/ui.avatar/ops.mjs": "dc0d4bbdb8cacd2f",
+    "worlds/ui.avatar/ops.mjs": "6895bc6563a5258a",
     "worlds/ui.help/coverage.md": "c104d6620e1078d4",
     "worlds/ui.help/datagen.mjs": "2a566dd11e1a621a",
     "worlds/ui.help/ops.mjs": "6958216627e3d23e",
@@ -189,5 +189,5 @@
     "worlds/user.profile/ops.mjs": "8385add167932b48",
     "worlds/user.profile/understand.mjs": "5782a91a5bd8e949"
   },
-  "builtAt": "2026-11-09T20:32:36.009Z"
+  "builtAt": "2026-11-09T20:43:58.521Z"
 }

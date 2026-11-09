@@ -352,6 +352,8 @@ const CAPABILITY = {
   robot: { expression: MOOD_RULE('A robot'), face: MOOD_RULE('A robot') },
   emoji: { expression: MOOD_RULE('An emoji'), face: MOOD_RULE('An emoji') },
 };
+/** Descriptive eye words -> the style word of the lexicon they are closest to (used only when the character has no style of that name). */
+const EYE_STYLE_SYNONYM = { dreamy: 'sleepy', dreamlike: 'sleepy', droopy: 'sleepy', tired: 'sleepy' };
 /** Apply a capability mapping when the character lacks the part (or lacks that variant of it); null when nothing close exists. */
 function viaCapability(ctx, s, part, value) {
   const rule = CAPABILITY[s.character]?.[part];
@@ -410,8 +412,10 @@ function _setPart(ctx, { part, value, n, text }) {
   if (!value && part && n !== undefined && n !== '') return setPartByNumber(ctx, s, part, n);
   const lacks = PART_KEYS[part] && !PART_KEYS[part].some((k) => components(ctx, s.character).includes(k));
   if (lacks) { const via = viaCapability(ctx, s, part, value); if (via) return via; }
-  const r = resolveVariant(ctx, s, { part, value, n, text });
+  let r = resolveVariant(ctx, s, { part, value, n, text });
   if (r.error) return no(r.error);
+  // RD3: a descriptive eye word the character has no style for maps to the closest style it has ("dreamy" -> sleepy)
+  if (r.none && /^eyes?$/.test(String(part ?? '')) && EYE_STYLE_SYNONYM[value]) { const r2 = resolveVariant(ctx, s, { part, value: EYE_STYLE_SYNONYM[value], n, text }); if (!r2.error && !r2.none) r = r2; }
   if (r.none) {
     const via = viaCapability(ctx, s, part, value); if (via) return via;
     const label = String(part ?? value).replace(/_/g, ' ');
@@ -441,6 +445,8 @@ function _setPartUnknown(ctx, { part, words }) {
   const keys = PART_KEYS[part];
   if (!keys) return no(`I do not know what my ${String(part).replace(/_/g, ' ')} is.`);
   const via = viaCapability(ctx, s, part, String(words ?? '').trim().replace(/ +/g, '_')); if (via) return via;
+  const syn = /^eyes?$/.test(String(part)) && EYE_STYLE_SYNONYM[String(words ?? '').trim().toLowerCase()];
+  if (syn) { const r = _setPart(ctx, { part, value: syn }); if (r?.status === 'supported') return r; }
   const cand = slots(ctx, s, keys);
   if (!cand.length) return no(`I do not have that part.`);
   const sl = cand[0];
