@@ -34,12 +34,12 @@
     "music.mjs",
     "profile.mjs"
   ],
-  "dispatcherModel": true,
+  "dispatcherModel": false,
   "files": {
     "lib/dialog/discourse.mjs": "025ed4691b2868fa",
     "lib/dialog/dispatch-validate.mjs": "d543c74fba62b064",
-    "lib/dialog/encoder-dispatch.mjs": "58859fbda70130ca",
-    "lib/dialog/index.mjs": "0eec9ab3701019ba",
+    "lib/dialog/encoder-dispatch.mjs": "626a317618579564",
+    "lib/dialog/index.mjs": "336209508fbe1906",
     "lib/dialog/meta.mjs": "3f42a3f2e5d70d71",
     "lib/dialog/normalizer-runtime.mjs": "76d3ed03f9126aba",
     "lib/dialog/runtime-config.mjs": "a5d7c345c0db05af",
@@ -54,7 +54,7 @@
     "lib/formalizer/routing.mjs": "56739e76fc58541b",
     "lib/formalizer/rules/emit.mjs": "e9d664e518aac9d6",
     "lib/formalizer/rules/expand.mjs": "2cc7d6d796f1d3cb",
-    "lib/formalizer/rules/index.mjs": "c5313f34d4eafbec",
+    "lib/formalizer/rules/index.mjs": "f9a7957c3356b414",
     "lib/formalizer/rules/lemma.mjs": "459e515e4394aead",
     "lib/formalizer/rules/matcher.mjs": "4c86e6e254510d17",
     "lib/formalizer/rules/normalize.mjs": "16feab5d70064639",
@@ -145,5 +145,5 @@
     "worlds/user.profile/ops.mjs": "58e16e9e2fe9f5f2",
     "worlds/user.profile/understand.mjs": "a971dcc2294fd749"
   },
-  "builtAt": "2026-11-09T06:44:43.026Z"
+  "builtAt": "2026-11-09T07:26:55.842Z"
 }

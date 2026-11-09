@@ -84,6 +84,38 @@ export async function copyDispatcherModel({ root = REPO, outDir, exportDir = DEF
   return Object.keys(files).concat('meta.json');
 }
 
+const EARLY_BEGIN = '<!-- early-load:begin (written by scripts/build-webchat.mjs) -->', EARLY_END = '<!-- early-load:end -->';
+const IMPORT_RE = /(?:import|export)\s[^'"`;]*?from\s*['"](\.{1,2}\/[^'"]+)['"]|(?:^|[;\n])\s*import\s*['"](\.{1,2}\/[^'"]+)['"]/g;
+/** Static import graph (relative specifiers only) reachable from `roots`, as paths relative to outDir. */
+async function importGraph(outDir, roots) {
+  const seen = new Set(); const stack = [...roots];
+  while (stack.length) {
+    const rel = stack.pop(); if (seen.has(rel)) continue;
+    let text; try { text = await readFile(path.join(outDir, rel), 'utf8'); } catch { continue; }
+    seen.add(rel);
+    for (const m of text.matchAll(IMPORT_RE)) {
+      const spec = m[1] ?? m[2]; if (!spec.endsWith('.mjs') && !spec.endsWith('.js')) continue;
+      stack.push(path.posix.normalize(path.posix.join(path.posix.dirname(rel), spec)));
+    }
+  }
+  return [...seen].sort();
+}
+async function writeEarlyLoad({ outDir, tabFiles, ids }) {
+  const file = path.join(outDir, 'index.html');
+  if (!(await exists(file))) return;
+  const html = await readFile(file, 'utf8');
+  const roots = ['app.mjs', 'lib/dialog/index.mjs', 'lib/loaders/bundle-loader.mjs', 'lib/translate/index.mjs', 'lib/soplang/index.mjs', 'lib/dialog/runtime-config.mjs', 'lib/formalizer/wordpiece.mjs',
+    ...tabFiles.map((f) => `ui/tabs/${f}`), ...ids.map((id) => `worlds/${id}/ops.mjs`)];
+  const mods = await importGraph(outDir, roots);
+  const block = [EARLY_BEGIN,
+    ...mods.map((m) => `<link rel="modulepreload" href="${m}">`),
+    `<script>window.__psys2Early = { worlds: fetch('worlds/index.json'), dispatcherMeta: fetch('models/dispatcher/meta.json', { cache: 'no-cache' }).catch(() => null) };</script>`,
+    EARLY_END].join('\n  ');
+  const a = html.indexOf(EARLY_BEGIN), b = html.indexOf(EARLY_END);
+  const next = a >= 0 && b > a ? html.slice(0, a) + block + html.slice(b + EARLY_END.length) : html.replace('</head>', () => `  ${block}\n</head>`);
+  if (next !== html) await writeFile(file, next);
+}
+
 export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs/webchat'), models = null, metaOnly = false, log = () => {} } = {}) {
   const src = path.join(root, 'src');
   const worldsRoot = path.join(root, 'worlds');
@@ -127,6 +159,10 @@ export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs
   const tabFiles = (await exists(tabsSrc)) ? (await readdir(tabsSrc)).filter((f) => f.endsWith('.mjs')).sort() : [];
   await mkdir(path.join(outDir, 'ui/tabs'), { recursive: true });
   await writeFile(path.join(outDir, 'ui/tabs/index.json'), JSON.stringify(tabFiles) + '\n');
+
+  // 3a. early loading (PERF round 2): index.html gets modulepreload links for the whole module graph (app, lib, tabs, world ops) so that a
+  // high-latency link fetches them in parallel instead of one import round trip at a time, and an early fetch of worlds/index.json and the model meta file.
+  await writeEarlyLoad({ outDir, tabFiles, ids });
 
   // 3b. dispatcher model for the Encoder formalizer (optional)
   const modelFiles = models ? await copyDispatcherModel({ root, outDir, exportDir: typeof models === 'string' ? models : DEFAULT_MODEL_EXPORT, metaOnly, log }) : null;

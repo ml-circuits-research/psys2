@@ -17,7 +17,7 @@
  *   enc.onStatus((s) => ...);   // { state: 'idle' | 'loading' | 'ready' | 'error', message, ms? }
  */
 import { formalize } from '../formalizer/rules/index.mjs';
-import { createDispatcherRuntime } from '../formalizer/dispatcher-runtime.mjs';
+import { createDispatcherRuntime, candidateSegmentations } from '../formalizer/dispatcher-runtime.mjs';
 import { perf } from '../formalizer/perf.mjs';
 import { createDispatchValidator } from './dispatch-validate.mjs';
 
@@ -73,6 +73,22 @@ export function createDispatcherFormalizer({ load, getPolicy = () => ENCODER_DEF
     ready: () => status.state === 'ready',
     /** With `waitForModel: false` (the webchat loads the model in the background) the strategy is unavailable, so the rules answer, until the model is ready. */
     available: () => typeof load === 'function' && status.state !== 'error' && (waitForModel || status.state === 'ready'),
+    /**
+     * The model's best segmentation of `text` and the top world of each piece, or null while the model is not ready: one segmentation pass plus
+     * one routing pass per piece (the full path runs one per distinct piece of the 4 best segmentations, about 8). `margin` is how far the best
+     * segmentation is ahead of the runner-up (log-probability). Used by the fast path for multi-clause messages (PERF round 2).
+     */
+    async quickSegmentation(text, { session, context } = {}) {
+      if (!runtime) return null;
+      const { enc, probs } = await runtime.segment(text);
+      const c = candidateSegmentations(text, enc.offsets, probs, 2, 6);
+      if (!c.length) return null;
+      const past = history.get(session) ?? [];
+      const ctx = { tab: context?.activeTab ?? null, recent_worlds: context?.recentWorlds ?? [], session: past.slice(-historyLimit) };
+      const pieces = [];
+      for (const [x, y] of c[0].segments) { const t = text.slice(x, y); pieces.push({ text: t, world: (await runtime.rank(t, ctx))[0]?.world ?? null }); }
+      return { pieces, margin: c[0].score - (c[1]?.score ?? -Infinity) };
+    },
     supports: (world) => (runtime ? runtime.worlds.includes(world?.id) : true),
 
     async formalize(text, { worlds: set, session, source = 'input', context } = {}) {

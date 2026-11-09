@@ -71,6 +71,24 @@ function allPatterns(set) {
 }
 
 /**
+ * Compiles every pattern and builds the typo vocabulary ahead of the first message, in slices: after `budgetMs` of work it awaits `yieldFn`
+ * (default a macrotask), so a page stays responsive while this runs (PERF round 2). The same memoized state the first `formalize` would
+ * build lazily, so readings do not change. Returns the number of patterns compiled.
+ */
+export async function precompile(set, { budgetMs = 10, yieldFn = () => new Promise((r) => setTimeout(r, 0)) } = {}) {
+  const clock = () => globalThis.performance?.now?.() ?? Date.now();
+  lexIndex(set);
+  let t = clock(), n = 0;
+  for (const { p } of allPatterns(set)) {
+    compiled(p, set); n++;
+    if (clock() - t > budgetMs) { await yieldFn(); t = clock(); }
+  }
+  await yieldFn();
+  vocabularyOf(set);
+  return n;
+}
+
+/**
  * Every word the loaded worlds know: literals of all patterns (and alternatives) and the words of all lexicons
  * (multi-word entries split into words), with plural forms. Used for typo correction (spec 03 section 1b).
  */
@@ -82,6 +100,10 @@ export function vocabularyOf(set) {
     const add = (w) => { if (w) { const l = w.toLowerCase(); vocab.add(l); freq.set(l, (freq.get(l) ?? 0) + 1); } };
     const lex = lexIndex(set);
     const usedPhrases = new Set();
+    // PERF round 2: the joined keys of a macro's alternatives are built once per macro (not once per pattern that uses it: 350 alternatives x 300 patterns)
+    const EMPTY_SET = new Set(), altKeys = new WeakMap(), macroKeyCache = new Map(); let unioned = false;
+    const altKey = (a) => { let k = altKeys.get(a); if (k === undefined) { k = a.join('_'); altKeys.set(a, k); } return k; };
+    const macroKeys = (id) => { let k = macroKeyCache.get(id); if (!k) { k = new Set((lex.phrases.get(id)?.alts ?? []).map(altKey)); macroKeyCache.set(id, k); } return k; };
     for (const { p } of allPatterns(set)) {
       const c = compiled(p, set).compiled;
       if (!c) continue;
@@ -90,9 +112,14 @@ export function vocabularyOf(set) {
         else if (el.t === 'alt') {
           // the words of a phrase macro count ONCE per phrase (below), not once per pattern that uses it: a 350-alternative lead-in used by 300
           // patterns would otherwise make every word in it (try, sry ...) look 300 times as frequent as the world's own nouns (typo tie-breaks)
-          const inMacro = new Set();
-          for (const id of el.macros ?? []) { usedPhrases.add(id); for (const a of lex.phrases.get(id)?.alts ?? []) inMacro.add(a.join('_')); }
-          for (const alt of el.alts) if (!inMacro.has(alt.join('_'))) alt.forEach(add);
+          let inMacro = EMPTY_SET;
+          for (const id of el.macros ?? []) {
+            usedPhrases.add(id);
+            const keys = macroKeys(id);
+            if (inMacro === EMPTY_SET) inMacro = keys; else { if (inMacro === keys) continue; if (!unioned) { inMacro = new Set(inMacro); unioned = true; } for (const k of keys) inMacro.add(k); }
+          }
+          unioned = false;
+          for (const alt of el.alts) if (!inMacro.has(altKey(alt))) alt.forEach(add);
         }
       }
     }

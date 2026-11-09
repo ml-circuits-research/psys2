@@ -103,7 +103,7 @@ export function createNormalizerHost({ base, meta, lib, onStatus = () => {} }) {
         const ort = await import(new URL('vendor/onnxruntime/ort.wasm.bundle.min.mjs', base).href);
         ort.env.wasm.wasmPaths = new URL('vendor/onnxruntime/', base).href;
         ort.env.wasm.numThreads = 1;
-        ort.env.wasm.proxy = false;
+        ort.env.wasm.proxy = true;   // ORT runs in its own worker: session creation and inference no longer block the page (PERF round 2)
         const { files, source } = await getNormalizerFiles({ base, meta, onProgress: (m) => set({ state: 'loading', message: m }) });
         set({ state: 'loading', message: 'starting the normalizer' });
         const opts = { executionProviders: ['wasm'], graphOptimizationLevel: 'all' };

@@ -34,12 +34,9 @@ export const TABS = [
 async function loadTabPlugins(base) {
   let list = [];
   try { const r = await fetch(new URL('ui/tabs/index.json', base)); if (r.ok) list = await r.json(); } catch { return []; }
-  const out = [];
-  for (const file of Array.isArray(list) ? list : []) {
-    try { const m = await import(new URL(`ui/tabs/${file}`, base).href); if (m.default?.id && m.default?.make) out.push(m.default); }
-    catch (e) { console.warn(`tab plugin ${file} failed to load`, e); }
-  }
-  return out;
+  // in parallel (PERF round 2): one round trip, not one per tab
+  const mods = await Promise.all((Array.isArray(list) ? list : []).map((file) => import(new URL(`ui/tabs/${file}`, base).href).catch((e) => { console.warn(`tab plugin ${file} failed to load`, e); return null; })));
+  return mods.filter((m) => m?.default?.id && m.default?.make).map((m) => m.default);
 }
 const SHELL = 'ui.shell';
 const EXAMPLES = [
@@ -580,13 +577,14 @@ export async function mountPsys2(element, options = {}) {
   renderSettings();
   setStatus();
 
-  let lib;
+  let lib, rulesReady = Promise.resolve();
   try {
     const [dialog, loaders, translate, soplang] = await Promise.all([
       import(new URL('lib/dialog/index.mjs', base).href), import(new URL('lib/loaders/bundle-loader.mjs', base).href),
       import(new URL('lib/translate/index.mjs', base).href), import(new URL('lib/soplang/index.mjs', base).href),
     ]);
-    const res = await fetch(new URL('worlds/index.json', base));
+    const early = globalThis.__psys2Early?.worlds; if (early) delete globalThis.__psys2Early.worlds;   // started by index.html before the module graph was loaded
+    const res = await (early ?? fetch(new URL('worlds/index.json', base))).catch(() => fetch(new URL('worlds/index.json', base)));
     if (!res.ok) throw new Error(`worlds/index.json: HTTP ${res.status}`);
     const bundle = await res.json();
     for (const [id, w] of Object.entries(bundle.worlds)) {
@@ -596,9 +594,9 @@ export async function mountPsys2(element, options = {}) {
     lib = { serialize: soplang.serialize };
     translator = createSwitchTranslator({ rules: translate.createTranslator(), getStrategy: () => settings.translation, getDetectStrategy: () => settings.languageDetection });
     engine = await dialog.createEngine({ loader: loaders.createBundleLoader(bundle), translator });
+    rulesReady = engine.precompile?.({ budgetMs: 8 }).catch(() => {}) ?? Promise.resolve();   // starts at once, in slices that yield: it overlaps the rest of the boot (network waits, tab modules), so a first message finds the rules compiled
     try {   // Encoder formalizer (the default): only when this build ships the dispatcher model; the model is fetched at once, in the background, and cached by version
-      const meta = await findDispatcherModel(base);
-      const nzMeta = await findNormalizerModel(base);
+      const [meta, nzMeta] = await Promise.all([findDispatcherModel(base), findNormalizerModel(base)]);
       if (meta) {
         if (nzMeta) {
           const nzrt = await import(new URL('lib/dialog/normalizer-runtime.mjs', base).href);
@@ -669,8 +667,9 @@ export async function mountPsys2(element, options = {}) {
   const warm = async () => {
     const opts = { language: 'en', formalizer: 'rules', spell: true, partial: true, fastPath: false };
     try {
+      await rulesReady;
       const s = engine.createSession({ language: 'en' });
-      for (const m of ['hello', 'zzq flarb wug', 'spider legs and 3 plus 4']) await s.send(m, opts);
+      for (const m of ['hello', 'zzq flarb wug', 'spider legs and 3 plus 4']) { await s.send(m, opts); await sleep(0); }
       if (destroyed) return;
       modelsAllowed = true;   // now the models: the dispatcher first, then the normalizer (about 95 MB, cached by sha256)
       if (dispatcherEnc && settings.formalizer === 'encoder') {

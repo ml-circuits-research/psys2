@@ -100,7 +100,7 @@ export function dispatcherLoader({ base, meta, lib, onProgress = () => {}, onSou
     const ort = await import(new URL('vendor/onnxruntime/ort.wasm.bundle.min.mjs', base).href);
     ort.env.wasm.wasmPaths = new URL('vendor/onnxruntime/', base).href;
     ort.env.wasm.numThreads = 1;
-    ort.env.wasm.proxy = false;
+    ort.env.wasm.proxy = true;   // ORT runs in its own worker: session creation and inference no longer block the page (PERF round 2)
     const { bytes, vocab, source } = await getModelFiles({ base, meta, onProgress });
     onSource(source);
     let editTags = null;   // rephraser (edit-tag head): its tag vocabulary sits next to the model

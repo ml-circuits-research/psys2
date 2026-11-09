@@ -8,6 +8,7 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
+import { precompile as precompileRules } from '../formalizer/rules/index.mjs';
 import { loadWorlds } from '../worlds/index.mjs';
 import { validateWorldSet } from '../worlds/validate.mjs';
 import { defaultRouter } from '../formalizer/routing.mjs';
@@ -111,6 +112,8 @@ const langOf = (r) => (typeof r === 'string' ? r : r?.lang) ?? 'en';
 const textOf = (r) => (typeof r === 'string' ? r : r?.text);
 
 const QUESTION_WORD = /^(?:what|who|whom|whose|where|when|why|how|which)\b/i;
+
+const FAST_SEGMENT_MARGIN = 0;   // nats of log-probability between the model's best segmentation and the runner-up for the multi-clause fast path
 
 export class DialogSession {
   constructor(engine, { language = 'auto', formalizer = 'rules', spell = true, partial = false, fastPath = false, bestEffort = false } = {}) {
@@ -390,11 +393,18 @@ export class DialogSession {
    */
   async _quickRules(english, opts) {
     const { formalizers, interp } = this.engine;
-    if (/[,;:\n]|\b(?:and|then|also|but|or|next|after|before|while|so|because|if)\b/i.test(english)) return null;   // several clauses: the model segments, the rules alone may cut wrongly
+    const clauses = /[,;:\n]|\b(?:and|then|also|but|or|next|after|before|while|so|because|if)\b/i.test(english);   // several clauses: the model segments, the rules alone may cut wrongly
+    const encoder = formalizers.encoder;
+    if (clauses && !(typeof encoder?.quickSegmentation === 'function' && encoder.ready?.())) return null;
     let f;
     try { f = this.forkForValidation(); } catch { return null; }
     const probe = await perf.time('fast.probe', () => formalizers.rules.formalize(english, { ...opts, session: f.isession, context: f.context(), source: 'fast' }));
-    if (probe.segments.length !== 1 || probe.segments.some((s) => s.unparsed || s.corrections?.length || s.ignored?.length || s.partial)) return null;
+    if (probe.segments.length < 1 || probe.segments.length > (clauses ? 4 : 1) || probe.segments.some((s) => s.unparsed || s.corrections?.length || s.ignored?.length || s.partial)) return null;
+    if (clauses) {   // multi-clause (PERF round 2): one model pass for the segmentation; the fast path holds only when the model cuts exactly where the rules cut and is clearly sure
+      const top = await perf.time('fast.segment', () => encoder.quickSegmentation(english, { session: this.isession, context: this.context() }));
+      const norm = (t) => t.toLowerCase().replace(/^[\s,;:.!?]*(?:(?:and|then|also|but|so|next|after that)\b[\s,;:]*)*/, '').replace(/[\s,;:.!?]+$/, '').trim();
+      if (!top || top.margin < FAST_SEGMENT_MARGIN || top.pieces.length !== probe.segments.length || top.pieces.some((p, i) => norm(p.text) !== norm(probe.segments[i].text) || p.world !== probe.segments[i].routing?.winner?.worldId)) return null;
+    }
     try {
       for (const seg of probe.segments) {
         f.isession.add(seg.wires);
@@ -758,6 +768,8 @@ export async function createEngine({ loader, translator = null, options = {}, fo
     problems: () => validateWorldSet(set),
     worlds: () => set.list().map((w) => w.summary()),
     createSession: (opts) => new DialogSession(engine, opts),
+    /** Compiles every pattern and builds the vocabularies in slices that yield to the host (the webchat warm-up, PERF round 2). */
+    precompile: (opts) => precompileRules(set, opts),
   };
   return engine;
 }
