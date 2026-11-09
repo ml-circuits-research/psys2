@@ -264,13 +264,13 @@ Build a spelling vocabulary per world from its patterns, lexicons and phrase mac
 
 A message that names a world's object or tab (avatar, chart, map, drawing, document, chess…) must route to that world whatever the active tab is. Bare words ("next", "more", "b1") follow the active tab, and the music world claims "next" only on its tab or while a song plays. Generalise this as a routing rule (ADR-004 tier) with tests.
 
-**RD3 — descriptors map to what the character can do instead of refusing.**
+**RD3 — descriptors map to what the character can do instead of refusing — DONE and validated (61dc8ff).**
 - "make bigger eyes", "make eyes sleepy", "fa ochi mari/visători" on the person: refused.
 - "transform the avatar in a man" and "make the avatar a women" (typo for woman): "I am a person already".
 
 Add a per-character capability map. A requested attribute the character lacks maps to the closest available one: eye size or mood → the person's expression; man/woman/girl/boy → hair and facial-hair presets; happy/sad → expression. Say what was done ("A person's eyes follow the expression, so I made it wide-eyed"). Offer switching the character only when nothing close exists. Accept common misspellings (women→woman).
 
-**RD4 — comparatives that create.**
+**RD4 — comparatives that create — DONE and validated (cdfd06a).**
 - "draw another house" → "a bigger house" / "draw a bigger house" failed.
 - "draw a girl" drew a "blue person"; "a man" went to kids.common ("A has no common second name"); "make a happy man" was not understood.
 
@@ -771,3 +771,4 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
 - L8 — `ctx.lang` backed by `lang.common`; `src/dialog/lang.mjs` absorbed; avatar, docs.reader and games.guess use it (a745938): 797 tests pass. Operational 94.8% / 0.6% wrong; dialogues 77.6%. No regression.
 - D-FIX rounds 2–5 (0276ef9 … 493ab23): 809 tests pass. **Dialogues (rules): 96.6% of turns, 87.7% of whole dialogues right**; every group ≥ 85% (kids 86, avatar/shell/editor 88, music/draw/map/charts 86.4, games 94.7, documents 87.2, other 86). Operational 95.0% right / 0.6% wrong. Next: PERF (top priority), BEST-EFFORT, then G4/G5 retrain and the encoder modes.
 - R3 (dbcfba2 … 2500e81): N1 v3 published, bound to dataset/rules/policy hashes; dispatcher v3 rejected by the operational rule (97.8 vs 98.2); `published.json` written from the shipped config. **Shipped config (encoder + N1): 98.2% right, 0.6% wrong, 1.0% not understood** on 1,240 messages; rules only 95.0%. 825 tests pass. L7 kids.time migrated (match text −82%).
+- RD3 + RD4 + G6b long/medium operational set (2abee55, 61dc8ff, cdfd06a): 830 tests pass. CLI: "make bigger eyes" → wide-eyed expression; "make eyes sleepy" → sleepy-eyed; "transform the avatar in a man" / "make the avatar a women" → hair/beard presets; "draw a bigger house" → bigger than the existing one; "draw a girl", "a man", "make a happy man" draw people.
