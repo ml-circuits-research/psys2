@@ -6,6 +6,7 @@
  *   - training/data/*.jsonl              generators + rule-derived (run `node scripts/export-training.mjs` first; done
  *                                        automatically when the directory has no jsonl)
  *   - training/paraphrases/out/*.jsonl   paraphrase records (spec 10)
+ *   - training/diagram/train.jsonl       the labelled messages of diagram-vss-demo for the world diagram.sketch (scripts/convert-diagram-data.mjs; DIAG)
  *   - training/phrase-logs/labelled/*.jsonl  self-validated rows of the learning loop (D5, scripts/learn-from-logs.mjs): dataset-format records
  *                                        (label_status self-validated, weight 0.8), one per segment, with a circuit; they also feed routing.jsonl
  *   - training/phrase-logs/*.jsonl       optional phrase-log exports of the webchat (docs/webchat/ui/phrase-log.mjs):
@@ -93,7 +94,8 @@ function ingest(file, requireWorld) {
 }
 for (const f of listJsonl(join(SRC, 'data'))) ingest(f);
 for (const f of listJsonl(join(SRC, 'paraphrases/out'))) ingest(f);
-for (const f of listJsonl(join(ROOT, 'training/phrase-logs/labelled'))) ingest(f);   // D5 self-validated rows (dataset-record format, one per segment)
+for (const f of listJsonl(join(ROOT, 'training/phrase-logs/labelled'))) ingest(f);
+for (const f of listJsonl(join(ROOT, 'training/diagram')).filter((x) => x.endsWith('/train.jsonl'))) ingest(f);   // DIAG: the labelled messages of diagram-vss-demo, one record per message (scripts/convert-diagram-data.mjs; test.jsonl stays out: it is the first measurement)   // D5 self-validated rows (dataset-record format, one per segment)
 
 // ---- dedupe by normalized text (+ context) per world; keep the most trustworthy ----------------------------------------
 const rank = (r) => (r._review ? -1 : r.weight) * 10 + (r.source === 'paraphrase' ? 2 : r.source === 'generator' ? 1 : 0) + (r.negative ? -0.5 : 0);

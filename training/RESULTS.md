@@ -529,3 +529,63 @@ Commands to rebuild everything derived from these labels (not run here): `node s
 
 ## Dialogue set audit (rules mode)
 Audit of `training/eval/dialogues.jsonl` and the fixes of the system gaps it found: see `worker-log.md` ("Dialogue audit and system gaps") for the audit counts and the before / after numbers on the same audited set (395 dialogues).
+
+## DIAG: the world `diagram.sketch` and the Diagram tab (2026-11-09)
+
+Imported from diagram-vss-demo (commit 9900d34, AGPL-3.0, `imports/diagram-vss-demo/`); not its BERT or VSS models. The engine of the source (`engine/logic.js`, layout, templates) is the
+state and the execution of the world (`worlds/diagram.sketch/engine/`, converted by `scripts/convert-diagram-engine.mjs`); 72 patterns (cue words of the legend through lang.common
+lead macros and 40 world-local cue phrases, `scripts/build-diagram-patterns.mjs`) recognise the act and hand the sentence to the engine's own rules reader (`{segment}` emit
+placeholder); `ops.mjs` wraps the engine (node, reply, Clarify / SOPError, `$new` / `mention(...)` through the shape made last). Tab: `docs/webchat/ui/tabs/diagram.mjs`.
+
+**First measurement with the rules (no model), `node scripts/eval-diagram.mjs --jobs 20 --name first`, file `training/results/diagram/rules-first.json`.**
+Scoring with the logic of `reference/bench-canon.js`: act = the act of the pattern that read the sentence against the gold act; args = the engine's reader against the gold args; right = both;
+extras = args the reader adds beyond the gold (rows with the right act); wrong = another act or another world read it; unread = no request.
+
+| bench set (single sentences) | n | right | act right | right act, wrong args | extras | wrong | unread | engine reader alone |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| hand | 40 | 95.0 | 97.5 | 2.5 | 5.0 | 2.5 | 0 | 97.5 |
+| blind | 60 | 86.7 | 98.3 | 11.7 | 8.3 | 0 | 1.7 | 88.3 |
+| broad | 118 | 95.8 | 96.6 | 0.8 | 0.8 | 3.4 | 0 | 98.3 |
+| seen | 300 | 99.7 | 99.7 | 0 | 1.3 | 0.3 | 0 | 100 |
+| new_identities | 300 | 100 | 100 | 0 | 1.7 | 0 | 0 | 100 |
+| heldout_formulations | 300 | 99.7 | 100 | 0.3 | 0.7 | 0 | 0 | 99.7 |
+| total | 1119 | 98.4 | 99.3 | 0.9 | 1.7 | 0.5 | 0.1 | 98.9 |
+
+(Percent. `seen`, `new_identities` and `heldout_formulations` are generated from templates, so they are the easy sets; `hand`, `blind`, `broad` were written by people. The 10 multi-clause
+rows of `broad` count with the messages. The patterns were tuned while looking at the bench sets, so bench is "seen" data.) Per act: `bench_per_act` in the result file.
+
+| `data/test` (4,323 labelled messages, 17,560 wires, 12,675 wires with an exact span) | |
+| --- | --- |
+| wire level, act of the segment that covers the wire's span: right | 68.6% |
+| wrong act (another diagram act) | 8.7% |
+| another world read it | 4.1% |
+| unread (no segment covers it as a request) | 18.6% |
+| message level: every wire read exactly as gold by the engine's rules reader (their own reader, no segmentation of ours) | 29.4% (1,269 / 4,323) |
+
+The test messages are long (1-20 sentences, typos, self-corrections, text that is not a request); the haiku / sonnet batches have no spans (4,885 wires), and the source reader alone gets
+23 / 500 of the sonnet messages exactly: that is the engine's own limit, not the patterns'. These numbers are the first measurement before any training on `data/test`; no pattern was tuned on it.
+
+**Other worlds (wrong must not rise).** Rules mode, before (main without the world) / after (with the world), same commands as the baseline:
+operational set 1240: 95.4 / 1.8 / 0.5 / 2.3 -> 95.4 / 1.8 / 0.5 / 2.3 (right / partly / wrong / not understood, identical);
+dialogue set 408 dialogues, 1961 turns: 96.4% / 88.0% -> 96.4% / 88.0%. Two lessons are in the code: world-local catch-alls poison the candidate-world scoring of the dialog layer ("hey can u search for oven pls" lost
+its world to a diagram `Is ...` catch-all), so every yes/no pattern needs a diagram word (`checkword` lexicon); and `needsState=shapes` keeps the generic cue patterns out of other tabs' way (without it wrong rose
+0.5 -> 1.6 on the operational set), except for connections and named shapes (`signal=true`, ungated).
+
+**Routing.** `signal=true` (new pattern key, spec 03 section 4): "draw a rectangle called Api", "draw an arrow from A to B", "make an org chart with ..." go to the diagram on any tab and bring the Diagram tab forward;
+"draw a rectangle" stays with the Drawing board on the Drawing tab and with no tab, and goes to the diagram on the Diagram tab. Tests: `tests/routing.test.mjs` (DIAG) and `tests/diagram.test.mjs`.
+
+**Tests.** `worlds/diagram.sketch/tests.sop`: 775 tests (`scripts/build-diagram-tests.mjs`): 6 sentences per act / ask from the bench (gold args, checked when written; spans of the labelled training messages fill
+acts the bench does not have), and the 11 reviewed example sessions of `data/examples/manual.json` turn by turn (shapes and connections after every turn must equal the reference program's; 10 of 11 scenarios
+reproduce in full, `login` for 2 of 8 turns). `tests/diagram.test.mjs`: the gold args run the same operation as the sentence (at least 5 per kind, 28+ kinds).
+
+**PERF.** The engine (470 KB source) is loaded when the Diagram tab is first shown or when the first state with shapes arrives, and by `prepare()` (new optional ops hook, awaited by the dialog layer) before the
+first operation of the world, not at start-up; the page does not preload it (no modulepreload). `scripts/perf-webchat.mjs --runs 3 --mode rules`, localhost, 4x CPU, h2, cold, pairs run back to back
+on the same machine (before = HEAD build, after = this build): ready 1792 / 1683 ms -> 1777 / 1771 ms, first answer 823 / 825 ms -> 799 / 782 ms; per-message medians unchanged (about 100 ms). `worlds/index.json`
+grows by 125 KB (20 KB gzip: the lexicons and patterns of the world).
+
+**Data for the dispatcher (not retrained: one combined run later).** `node scripts/convert-diagram-data.mjs` -> `training/diagram/`: `train.jsonl` 41,273 messages / 76,637 wires (301 files; 8,473 further lines of
+the source are unlabelled message texts and were skipped), `test.jsonl` 4,314 messages / 17,548 wires (60 lines skipped, 17 pending-only wires dropped; kept as the first measurement), `segments-train.jsonl` /
+`segments-test.jsonl` (multicmd format: 76,620 / 12,683 segments, every segment world `diagram.sketch`), `top-spans.json`, `report.json` (committed; the jsonl files are gitignored and reproducible).
+`scripts/build-dataset.mjs` now ingests `training/diagram/train.jsonl` (verified with `--out-dir`, 13 minutes including `export-training`): world `diagram.sketch` 27,890 records after dedupe (train 21,192 / dev 3,834 /
+test 2,864; 27,476 imported + 414 rule-derived from the pattern examples), routing 27,798 rows; 22 worlds in all. The dispatcher v4 does not know the world: in the browser a multi-clause diagram message
+("Start, Check and Done") cannot take the fast path and goes through the model and the normalizer (6 s on localhost without throttle) until the retrain; single-clause messages and every message read by the rules in the candidate worlds (the open tab's world is always one) are fast.
