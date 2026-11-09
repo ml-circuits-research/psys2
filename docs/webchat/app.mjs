@@ -63,7 +63,11 @@ const ICON = {
 };
 const icon = (name) => { const s = document.createElement('span'); s.className = 'p2-icon'; s.innerHTML = ICON[name]; return s; };
 const time = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+const NORMALIZER_IDLE_MS = 30000;   // idle time before the normalizer is fetched on a fast link
+const QUIET_MS = 500;   // background work (rule compilation, warm-up, model loading) waits this long after a turn
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+/** Start-up milestones for the performance harness: performance.getEntriesByName('psys2:<name>'). */
+const mark = (name) => { try { performance.mark(`psys2:${name}`); } catch { /* no User Timing */ } };
 
 /**
  * Mounts the chat (and the tool tabs) into `element`.
@@ -382,6 +386,9 @@ export async function mountPsys2(element, options = {}) {
     const shaped = wires.map((w) => ({ ...w, entries: w.entries.map((e) => ({ key: L.shortKey?.(w.type, e.key) ?? e.key, value: e.value })) }));
     return lib.serialize(shaped);
   }
+  /** Background work (rule compilation, warm-up) steps aside while a turn runs: the person's message always comes first (PERF round 3). */
+  let lastTurnEnd = 0;
+  const userFirst = async () => { while ((turn || performance.now() - lastTurnEnd < QUIET_MS) && !destroyed) await sleep(50); };   // a short quiet period after a turn: a long synchronous chunk must not start right behind an answer
   const fmtDur = (ms) => (ms < 1000 ? `${Math.max(1, Math.round(ms))} ms` : `${(ms / 1000).toFixed(1)} s`);
   /** Resolves after the browser painted the current DOM (so the typed message and the thinking bubble show before the heavy work blocks the thread). */
   const afterPaint = () => new Promise((r) => { const t = setTimeout(r, 60); if (typeof requestAnimationFrame === 'function') requestAnimationFrame(() => setTimeout(() => { clearTimeout(t); r(); }, 0)); });
@@ -420,7 +427,7 @@ export async function mountPsys2(element, options = {}) {
     } finally {
       clearTimeout(watchdog); clearTimeout(backstopTimer); clearInterval(ticker);
       if (typing.msg.isConnected) typing.msg.remove();
-      if (turn === tn) turn = null;
+      if (turn === tn) { turn = null; lastTurnEnd = performance.now(); }
       busy = Math.max(0, busy - 1); setStatus(); scrollDown();
       queueMicrotask(() => { if (!turn && !destroyed) drainQueue(); });   // the next waiting message runs now
     }
@@ -805,7 +812,7 @@ export async function mountPsys2(element, options = {}) {
       : d.state === 'ready' ? `loaded (${src(modelSource)}, ${Math.round((d.ms ?? 0) / 100) / 10} s)` : d.state === 'loading' ? `loading, ${d.message}` : d.state === 'error' ? `not available (${d.message})` : 'not loaded yet; the rules answer meanwhile';
     const nState = !normalizerHost ? 'this build has no normalizer model'
       : nz.state === 'ready' ? `loaded (${src(nz.source)}, ${Math.round((nz.ms ?? 0) / 100) / 10} s)` : nz.state === 'loading' ? `loading, ${nz.message}` : nz.state === 'error' ? `not available (${nz.message})`
-        : settings.normalizer === false ? 'not loaded (simplifying phrasing is switched off)' : 'not loaded: the helper model loads when needed';
+        : settings.normalizer === false ? 'not loaded (simplifying phrasing is switched off)' : slowLink() ? 'not loaded: the helper model loads when needed (not downloaded in the background on this connection)' : 'not loaded: the helper model loads when needed (or after 30 s idle)';
     const nzMB = normalizerHost ? Math.round(Object.values(normalizerHost.meta.sizes_MB ?? {}).reduce((a, b) => a + b, 0)) : null;
     const loadBtn = (host, what) => textBtn(host.status.state === 'ready' ? 'Loaded' : host.status.state === 'loading' ? 'Loading…' : 'Load now',
       () => { host.prepare().catch(() => {}).then(refreshModelsInfo); renderSettings(); }, { disabled: host.status.state === 'ready' || host.status.state === 'loading', title: `Load the ${what} model now` });
@@ -1009,7 +1016,7 @@ export async function mountPsys2(element, options = {}) {
     lib = { serialize: soplang.serialize };
     translator = createSwitchTranslator({ rules: translate.createTranslator(), getStrategy: () => settings.translation, getDetectStrategy: () => settings.languageDetection });
     engine = await dialog.createEngine({ loader: loaders.createBundleLoader(bundle), translator });
-    rulesReady = engine.precompile?.({ budgetMs: 8 }).catch(() => {}) ?? Promise.resolve();   // starts at once, in slices that yield: it overlaps the rest of the boot (network waits, tab modules), so a first message finds the rules compiled
+    rulesReady = (engine.precompile?.({ budgetMs: 8, yieldFn: async () => { await sleep(0); await userFirst(); } }) ?? Promise.resolve()).catch(() => {}).then(() => mark('rules-compiled'));   // starts at once, in slices that yield: it overlaps the rest of the boot (network waits, tab modules), so a first message finds the rules compiled
     try {   // Encoder formalizer (the default): only when this build ships the dispatcher model; the model is fetched at once, in the background, and cached by version
       const [meta, nzMeta] = await Promise.all([findDispatcherModel(base), findNormalizerModel(base)]);
       if (meta) {
@@ -1033,7 +1040,7 @@ export async function mountPsys2(element, options = {}) {
     if (!settingsEl.hidden) renderSettings();
     const problems = engine.problems?.() ?? [];
     if (problems.length) console.warn('PSys2 world problems:', problems);
-    session = engine.createSession({ language: settings.language });
+    session = engine.createSession({ language: settings.language }); mark('session');
   } catch (e) {
     console.error(e);
     statusEl.textContent = 'Could not start';
@@ -1089,22 +1096,49 @@ export async function mountPsys2(element, options = {}) {
     destroy() { destroyed = true; cleanups.forEach((f) => f()); modalHost.remove(); robotUI()?.destroy?.(); speech.destroy(); element.replaceChildren(); element.classList.remove('p2-box'); },
   };
   if (settings.handsFree && speechSupport.recognition) setHandsFree(true, false);
-  element.dataset.ready = 'true';
+  element.dataset.ready = 'true'; mark('hint');
   { const t = hashTab(location.hash); if (t !== null) { try { history.replaceState(null, '', location.pathname + location.search); } catch { /* no history */ } openSettings(t || undefined); } }   // deep link #settings/<tab>
   // Warm-up after first paint (PERF): the first message used to pay for compiling every pattern and building the vocabularies, and the
   // first model run for the ORT start-up. A scratch session reads two sentences now, while the user is still looking at the page.
+  /**
+   * The ~95 MB normalizer is never fetched at page load (reviewer decision f). It loads (1) the first time a message fails validation and would use it
+   * (the provider starts the load itself), (2) after 30 s of idle time on a fast link, or (3) when the person asks (Settings > Models, or switching it on).
+   * Not on a metered or slow link (Save-Data, effectiveType below 4g): there it only loads when needed.
+   */
+  const slowLink = () => { const c = globalThis.navigator?.connection; return !!c && (c.saveData === true || (typeof c.effectiveType === 'string' && c.effectiveType !== '4g')); };
+  const scheduleNormalizerIdle = () => {
+    if (!normalizerHost || settings.normalizer === false || slowLink()) return;
+    setTimeout(async () => {
+      if (destroyed || slowLink() || settings.normalizer === false || normalizerHost.status.state !== 'idle') return;
+      await userFirst();
+      if (!destroyed) normalizerHost.prepare().catch(() => {});
+    }, NORMALIZER_IDLE_MS);
+  };
   const warm = async () => {
+    mark('warm-start');
     const opts = { language: 'en', formalizer: 'rules', spell: true, partial: true, fastPath: false };
     try {
       await rulesReady;
       const s = engine.createSession({ language: 'en' });
-      for (const m of ['hello', 'zzq flarb wug', 'spider legs and 3 plus 4']) { await s.send(m, opts); await sleep(0); }
+      for (const m of ['hello', 'zzq flarb wug', 'spider legs and 3 plus 4']) { await userFirst(); await s.send(m, opts); await sleep(0); }
+      mark('warm-rules');
+      try {   // the Romanian rules translator (lexicons, phrase tables) and the English-to-Romanian reply tables: a cold first Romanian message took 5-9 s at 4x CPU
+        await userFirst();
+        const tr = translator?.rules;
+        if (tr) {
+          tr.detectLanguage?.('repede: câte zile are iunie?');
+          const out = tr.translate('repede: câte zile are iunie?', { from: 'ro', to: 'en' });
+          await sleep(0); await userFirst();
+          tr.translate('There are 30 days in June.', { from: 'en', to: 'ro' });
+        }
+      } catch { /* best effort */ }
+      mark('warm-translator');
       if (destroyed) return;
       modelsAllowed = true;   // now the models: the dispatcher first, then the normalizer (about 95 MB, cached by sha256)
       if (dispatcherEnc && settings.formalizer === 'encoder') {
-        await dispatcherEnc.prepare();
+        await dispatcherEnc.prepare(); mark('dispatcher-ready');
         if (!destroyed) await s.send('what is 3 plus 4', { ...opts, formalizer: 'encoder' });
-        if (normalizerHost && settings.normalizer !== false && !destroyed) normalizerHost.prepare().catch(() => {});
+        scheduleNormalizerIdle();
       }
     } catch { /* warm-up is best effort */ }
   };

@@ -118,6 +118,22 @@ PERF round 2 (worker-log "PERF round 2", commit 57b28bf; same script, now with `
 
 Fast 4G, cold: rules usable 14.5 s -> 3.8 s; encoder model ready 94.5 s -> 81.2 s (64 MB dispatcher + about 95 MB normalizer download; rules answer meanwhile). Evals unchanged (operational encoder+n1 98.6 / 0.4, 0 diffs; long 94.2 / 1.9). Open: model download size on slow links.
 
+### PERF round 3 (2026-11-09)
+
+`node scripts/perf-webchat.mjs --runs 3` (headless Chrome, 390x844, 4x CPU throttle, h2, cold cache; medians). Per message: hello / what is 3 plus 4 / spider legs and 3 plus 4 / pls make ur eyes square / show me paris / hello / **how many legs does a spider have and what is 3 plus 4**. Measured at host load about 7 (earlier runs at load 40-70 gave 2-6x slower numbers; load-noisy runs are not reported).
+
+| mode | input | ready | first answer | model ready | per message (ms) | p50 | p95 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| rules | 1003 | 3228 | 1013 | n/a | 140 / 170 / 356 / 210 / 696 / 169 / 454 | 210 | 696 |
+| encoder | 1039 | 3428 | 1036 | 10454 | 186 / 206 / 651 / 219 / 657 / 162 / 773 | 219 | 773 |
+| encoder+n1 | 996 | 3378 | 1067 | 10616 | 200 / 223 / 710 / 250 / 665 / 149 / 721 | 250 | 721 |
+
+Fast 4G (9 Mbit/s, 170 ms RTT), cold, encoder+n1, one run: ready 4.7 s, first answer 1.2 s, dispatcher "model ready" 85.5 s (the normalizer is no longer downloaded at load).
+
+What changed: fast path on for multi-clause messages (already coded; contested routing and long no-connective messages now go to the model); background work (rule compilation, warm-up) yields to a turn and for 500 ms after it; the precompile builds the prefilter sets and the vocabulary faster (same vocabulary, hash checked); `_activeSpell` and `_nameRepair` build their vocabularies only when needed; normalizer deferred (decision f); Romanian translator warm-up; HANG3 (browser translator, commit 9879564) removed a 4 s wait per Romanian message; user bubble CSS and a screenshot test.
+
+Readings (eval-operational, `--ort ... --jobs 20 --no-write` equivalents, host loaded): 1296 set encoder+n1 98.4 / 0.6 wrong; encoder+n1+fast 98.5 / 0.6: 1 diff (kids.tasks#013 not_understood to right). Long set (154): encoder+n1 94.8 / 1.3 wrong, +fast identical, 0 diffs. Rules mode 95.5 / 0.5 before and after (one case, kids.animals#029, flips with the time-based leniency budget under load). An earlier +fast run showed art.draw#082 turning wrong ("put it in the top right corner" read by tictactoe): fixed by the contested-routing rule.
+
 ## 6. Sizes
 
 | item | measured | target | status | source |

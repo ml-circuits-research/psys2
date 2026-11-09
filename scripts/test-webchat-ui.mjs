@@ -291,8 +291,29 @@ async function surpriseFor(name, viewport, o, clicks = 50) {
   } finally { await c.close(); }
 }
 
+/** PERF round 3: a long user bubble (spaces, an unbroken word, a URL, Romanian) wraps and stays inside the screen at 390, 360 and 320 px; screenshot of the 390 px case. */
+async function bubbleFor(width, o) {
+  const c = await openChat({ ...o, throttle: 1, viewport: { width, height: 844, deviceScaleFactor: 1, isMobile: true, hasTouch: true } });
+  try {
+    const lines = ['how many legs does a spider have and what is 3 plus 4 and what is the capital of France and show me a house and a man please',
+      'a'.repeat(90), `https://example.com/${'a'.repeat(70)}/${'b'.repeat(40)}`, 'Spune-mi câte picioare are un păianjen și cât face 3 plus 4 și care este capitala Franței și desenează o casă și un om te rog frumos'];
+    for (const t of lines) {
+      await c.say(t);
+      const m = await c.pg.evaluate(() => {
+        const u = [...document.querySelectorAll('.p2-msg.is-user')].at(-1); const rect = (e) => e.getBoundingClientRect();
+        return { vw: innerWidth, sw: document.documentElement.scrollWidth, log: document.querySelector('.p2-log').scrollWidth - document.querySelector('.p2-log').clientWidth,
+          bubble: [rect(u.querySelector('.p2-bubble')).left, rect(u.querySelector('.p2-bubble')).right], meta: [...u.querySelectorAll('.p2-meta > *')].map((e) => rect(e).right) };
+      });
+      check(`bubble ${width}px: "${t.slice(0, 24)}..." stays inside the screen (bubble ${Math.round(m.bubble[1])} of ${m.vw}, text and time visible)`,
+        m.bubble[0] >= 0 && m.bubble[1] <= m.vw && m.meta.every((r) => r <= m.vw) && m.sw <= m.vw && m.log <= 0, JSON.stringify(m));
+    }
+    if (width === 390) await shot(c, o, 'long-user-bubble-390');
+  } finally { await c.close(); }
+}
+
 export const SCENARIOS = {
   async surprise(o) { for (const [name, vp] of Object.entries(VIEWPORTS)) await surpriseFor(name, vp, o); },
+  async bubble(o) { for (const w of [390, 360, 320]) await bubbleFor(w, o); },
 
   async doc(o) { for (const [name, vp] of Object.entries(VIEWPORTS)) await docFor(name, vp, o); },
 

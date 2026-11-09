@@ -96,7 +96,7 @@ async function runOnce(puppeteer, chrome, port, mode, scheme) {
     if (THROTTLE > 1) await cdp.send('Emulation.setCPUThrottlingRate', { rate: THROTTLE });
     const settings = { settingsVersion: 2, formalizer: mode === 'rules' ? 'rules' : 'encoder', normalizer: mode === 'encoder+n1', showTrace: false };
     await pg.evaluateOnNewDocument((s) => { try { localStorage.setItem('psys2.webchat.settings', JSON.stringify(s)); } catch { /* ignore */ } }, settings);
-    pg.on('pageerror', (e) => console.error('pageerror', String(e).slice(0, 200)));
+    pg.on('console', (m) => { if (/VOCAB/.test(m.text())) console.log(m.text().slice(0, 700)); }); pg.on('pageerror', (e) => console.error('pageerror', String(e).slice(0, 200)));
     const t0 = Date.now();
     await pg.goto(`${scheme}://localhost:${port}/webchat/index.html`, { waitUntil: 'domcontentloaded' });
     await pg.waitForSelector('input.p2-text');
@@ -105,10 +105,17 @@ async function runOnce(puppeteer, chrome, port, mode, scheme) {
     await pg.waitForFunction(() => document.querySelector('.p2-msg.is-hint'), { timeout: 180000, polling: 50 });
     const ready = Date.now() - t0;
     // first answer: send a message right away, while the warm-up and the model load are running
+    if (opt('first-delay')) await new Promise((r) => setTimeout(r, Number(opt('first-delay'))));
+    if (args.includes('--profile')) { await cdp.send('Profiler.enable'); await cdp.send('Profiler.setSamplingInterval', { interval: 500 }); await cdp.send('Profiler.start'); }
     const nb = await pg.$$eval('.p2-msg:not(.is-typing)', (e) => e.length);
     await pg.type('input.p2-text', 'hello', { delay: 0 }); const tf = Date.now(); await pg.keyboard.press('Enter');
     await pg.waitForFunction((n) => document.querySelectorAll('.p2-msg:not(.is-typing)').length >= n + 2 && !document.querySelector('.p2-msg.is-typing'), { timeout: 180000, polling: 10 }, nb);
     const firstAnswerMs = Date.now() - tf;
+    if (args.includes('--profile')) {   // top self-time functions between ready and the first answer (CPU already throttled, so times are x THROTTLE)
+      const { profile } = await cdp.send('Profiler.stop'); const self = new Map(); const byId = new Map(profile.nodes.map((n) => [n.id, n]));
+      profile.samples.forEach((id, i) => { const n = byId.get(id); const k = `${n.callFrame.functionName || '(anon)'} ${n.callFrame.url.split('/').slice(-2).join('/')}:${n.callFrame.lineNumber}`; self.set(k, (self.get(k) ?? 0) + profile.timeDeltas[i] / 1000); });
+      console.log('  profile (ms, self):\n' + [...self].sort((a, b) => b[1] - a[1]).slice(0, 25).map(([k, v]) => `    ${v.toFixed(0).padStart(6)} ${k}`).join('\n'));
+    }
     const modelReady = mode === 'rules' ? null : await pg.waitForFunction(() => /model v/.test(document.querySelector('.p2-status')?.textContent ?? '') || /could not/.test(document.body.innerText), { timeout: 180000, polling: 100 }).then(() => Date.now() - t0).catch(() => null);
     const out = { mode, inputMs: tInput, readyMs: ready, modelReadyMs: modelReady, firstAnswerMs, usableMs: ready + firstAnswerMs, messages: [] };
     for (const msg of MESSAGES) {
@@ -122,6 +129,7 @@ async function runOnce(puppeteer, chrome, port, mode, scheme) {
       out.messages.push({ msg, ms, ...info });
       await new Promise((r) => setTimeout(r, 300));
     }
+    out.marks = await pg.evaluate(() => performance.getEntriesByType('mark').filter((m) => m.name.startsWith('psys2:')).map((m) => `${m.name.slice(6)} ${Math.round(m.startTime)}`).join(', ')).catch(() => null);
     out.stages = await pg.evaluate(() => globalThis.__psys2Perf ?? null).catch(() => null);
     return out;
   } finally { await browser.close(); await rm(profile, { recursive: true, force: true }).catch(() => {}); }
@@ -134,6 +142,7 @@ try {
     const r = await runOnce(puppeteer, chrome, port, mode, scheme); results.push(r);
     console.log(`\n== ${mode} (cpu ${THROTTLE}x, net ${NET}, ${HTTP}, cache ${CACHE}) input ${r.inputMs} ms, ready ${r.readyMs} ms, first answer ${r.firstAnswerMs} ms (usable ${r.usableMs} ms), model ready ${r.modelReadyMs ?? 'n/a'} ms`);
     for (const m of r.messages) console.log(`  ${String(m.ms).padStart(6)} ms  ${m.msg.padEnd(30)} -> ${JSON.stringify(m.reply)}${m.took ? ` [${m.took}]` : ''}`);
+    if (r.marks) console.log(`  marks (ms since navigation): ${r.marks}`);
     const ts = r.messages.map((m) => m.ms); console.log(`  p50 ${pct(ts, 0.5)} ms  p95 ${pct(ts, 0.95)} ms`);
     if (r.stages && args.includes('--stages')) for (const x of r.stages) console.log(`  [${x.text}] engine ${x.engineMs} render ${x.render} effects ${x.effects}: ` + Object.entries(x.stages ?? {}).map(([k, v]) => `${k} ${v.n}x/${v.ms}`).join(', '));
   }

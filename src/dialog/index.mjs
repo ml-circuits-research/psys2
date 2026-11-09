@@ -464,13 +464,13 @@ export class DialogSession {
    */
   async _quickRules(english, opts) {
     const { formalizers, interp } = this.engine;
-    const clauses = /[,;:\n]|\b(?:and|then|also|but|or|next|after|before|while|so|because|if)\b/i.test(english);   // several clauses: the model segments, the rules alone may cut wrongly
+    const clauses = /[,;:\n]|\b(?:and|then|also|but|or|next|after|before|while|so|because|if)\b/i.test(english) || (english.match(/\S+/g)?.length ?? 0) > 8;   // a long message without a connective ("draw a blue house what sound does a duck make ...") is several clauses too   // several clauses: the model segments, the rules alone may cut wrongly
     const encoder = formalizers.encoder;
     if (clauses && !(typeof encoder?.quickSegmentation === 'function' && encoder.ready?.())) return null;
     let f;
     try { f = this.forkForValidation(); } catch { return null; }
     const probe = await perf.time('fast.probe', () => formalizers.rules.formalize(english, { ...opts, session: f.isession, context: f.context(), source: 'fast' }));
-    if (probe.segments.length < 1 || probe.segments.length > (clauses ? 4 : 1) || probe.segments.some((s) => s.unparsed || s.corrections?.length || s.ignored?.length || s.partial)) return null;
+    if (probe.segments.length < 1 || probe.segments.length > (clauses ? 4 : 1) || probe.segments.some((s) => s.unparsed || s.corrections?.length || s.ignored?.length || s.partial || (s.routing?.contested && s.routing.runnerUp?.worldId && s.routing.runnerUp.worldId !== s.routing.winner?.worldId))) return null;   // a contested routing (another world read it too: "put it in the top right corner" on the Drawing tab) is the model's to decide
     if (clauses) {   // multi-clause (PERF round 2): one model pass for the segmentation; the fast path holds only when the model cuts exactly where the rules cut and is clearly sure
       const top = await perf.time('fast.segment', () => encoder.quickSegmentation(english, { session: this.isession, context: this.context() }));
       const norm = (t) => t.toLowerCase().replace(/^[\s,;:.!?]*(?:(?:and|then|also|but|so|next|after that)\b[\s,;:]*)*/, '').replace(/[\s,;:.!?]+$/, '').trim();
@@ -502,9 +502,6 @@ export class DialogSession {
     const ctx = opts.context ?? this.context();
     const world = ctx.tabWorld;
     if (!world || !set.get(world)?.patterns?.length) return null;   // an open modal input that did not consume the message does not matter here
-    const global = spellVocabulary(set);
-    let words;
-    try { words = spellCandidates(english, { vocab: worldVocabulary(set, world), protect: protectedWordsOf(set, world) }); } catch { return null; }
     // the dry run of a reading on a copy of the session: the interpreter's statuses (supported, missing, unsupported, error ...)
     const statusesOf = (segments) => {
       const out = [];
@@ -523,10 +520,17 @@ export class DialogSession {
     const wasRefused = origStatuses.some((x) => x === 'unsupported' || x === 'error');
     const unhappy = origStatuses.some((x) => x !== 'supported');   // missing, refused, failed: the reading did not do what it said
     const weak = wasRefused || res.segments.some((x) => x.match?.worldId && x.match.worldId !== world && x.match.worldId !== 'ui.shell');
-    if (!weak) return null;
+    if (!weak) return null;   // (PERF round 3: the vocabularies below are only built for a weak reading, not for every message)
     // a word some world knows ("yes" for "eyes") is changed only when another world read the original and did not carry it out, or the interpreter refused it; a word nobody knows is a typo whenever the original is weak
     const otherWorld = res.segments.some((x) => x.match?.worldId && x.match.worldId !== world && x.match.worldId !== 'ui.shell');
     const knownToo = otherWorld && (wasRefused || unhappy);   // the wrong world read it and did not carry it out
+    // a typo can only hide in a free-text slot (noun, word, words, rest, agent, recent), in a corrected or an ignored word: a reading whose words all matched literals
+    // or lexicon entries has no unknown word to repair (PERF round 3: "hello" no longer builds the spelling vocabularies of the first message)
+    const FREE = new Set(['noun', 'word', 'words', 'rest', 'agent', 'recent']);
+    if (!knownToo && !res.segments.some((x) => x.corrections?.length || x.ignored?.length || x.partial || !x.match || Object.values(x.match.slots ?? {}).some((sl) => FREE.has(sl?.class)))) return null;
+    const global = spellVocabulary(set);
+    let words;
+    try { words = spellCandidates(english, { vocab: worldVocabulary(set, world), protect: protectedWordsOf(set, world) }); } catch { return null; }
     if (!knownToo) words = words.filter((c) => !isKnownWord(c.from.toLowerCase(), global));
     else if (!(otherWorld && wasRefused)) words = words.filter((c) => c.from.length < 4 || !isKnownWord(c.from.toLowerCase(), global));   // a content word some world knows ("shape") is never swapped; only short ones ("yes")
     // candidate texts: the best neighbour of every unknown word, then each word's other neighbours one at a time
@@ -598,9 +602,10 @@ export class DialogSession {
       } catch { /* no dry run */ }
       return out;
     };
+    if (!dry(res.segments).includes('missing')) return null;   // (PERF round 3: the cheap test first; the name vocabulary is built only when something is missing)
     let cands;
     try { cands = nameCandidates(english, { set, vocab: spellVocabulary(set), worldOrder: [...new Set([ctx.tabWorld, ...(ctx.recentWorlds ?? [])].filter(Boolean).flatMap((w) => set.available(w)))] }); } catch { return null; }
-    if (!cands.length || !dry(res.segments).includes('missing')) return null;
+    if (!cands.length) return null;
     const t0 = Date.now();
     for (const cand of cands.slice(0, 3)) {
       if (Date.now() - t0 > 300) break;

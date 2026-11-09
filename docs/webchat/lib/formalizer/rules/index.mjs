@@ -9,7 +9,7 @@ import { guard } from '../guard.mjs';
 import { perf } from '../perf.mjs';
 import { lexIndex } from '../../worlds/lexicon.mjs';
 import { analyze, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs';
-import { compilePattern, matchTokens, wordBag, prefilterPasses, BUILTIN_CLASSES, PatternError } from './matcher.mjs';
+import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs';
 import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs';
 import { routeScores } from './router.mjs';
 import { createRouter, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs';
@@ -82,7 +82,7 @@ export async function precompile(set, { budgetMs = 10, yieldFn = () => new Promi
   lexIndex(set);
   let t = clock(), n = 0;
   for (const { p } of allPatterns(set)) {
-    compiled(p, set); n++;
+    const c = compiled(p, set).compiled; if (c) prefilterNeeds(c); n++;   // the prefilter sets are built now too, not by the first message
     if (clock() - t > budgetMs) { await yieldFn(); t = clock(); }
   }
   await yieldFn();
@@ -99,7 +99,7 @@ export function vocabularyOf(set) {
     const vocab = new Set();
     const freq = new Map();   // how often each word occurs in the patterns and lexicons: the last tie-break of typo correction
     vocab.freq = freq;
-    const add = (w) => { if (w) { const l = w.toLowerCase(); vocab.add(l); freq.set(l, (freq.get(l) ?? 0) + 1); } };
+    const add = (w) => { if (w) { const l = w.toLowerCase(); freq.set(l, (freq.get(l) ?? 0) + 1); } };   // the vocabulary Set is filled from `freq` at the end (same words, same insertion order, one Set operation per distinct word instead of per occurrence)
     const lex = lexIndex(set);
     const usedPhrases = new Set();
     // PERF round 2: the joined keys of a macro's alternatives are built once per macro (not once per pattern that uses it: 350 alternatives x 300 patterns)
@@ -121,6 +121,10 @@ export function vocabularyOf(set) {
             if (inMacro === EMPTY_SET) inMacro = keys; else { if (inMacro === keys) continue; if (!unioned) { inMacro = new Set(inMacro); unioned = true; } for (const k of keys) inMacro.add(k); }
           }
           unioned = false;
+          let fromMacros = 0;
+          for (const id of el.macros ?? []) fromMacros += lex.phrases.get(id)?.alts.length ?? 0;
+          if (el.alts.length === fromMacros && fromMacros > 0) continue;   // every alternative came from a macro (counted once below): no inline literals to add (PERF round 3: skips 1.2M key lookups)
+          if (inMacro === EMPTY_SET) { for (const alt of el.alts) alt.forEach(add); continue; }
           for (const alt of el.alts) if (!inMacro.has(altKey(alt))) alt.forEach(add);
         }
       }
@@ -128,6 +132,7 @@ export function vocabularyOf(set) {
     for (const id of usedPhrases) for (const alt of lex.phrases.get(id)?.alts ?? []) alt.forEach(add);
     for (const l of lex.lexicons.values()) for (const w of l.words) for (const part of w.split('_')) add(part);
     for (const [s, pl] of lex.plurals) { add(s); add(pl); }
+    for (const w of freq.keys()) vocab.add(w);
     return vocab;
   });
 }
