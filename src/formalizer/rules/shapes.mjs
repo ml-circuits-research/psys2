@@ -9,7 +9,7 @@
  * Shape fields (all strings, as read from the wire):
  *   family   set | do | ask.value | ask.count | ask.exists | list
  *   verb     alternatives `a|b|c` (`_` joins words): imperative verbs (set, do, list), have-verbs (ask.count, ask.exists)
- *   obj      object slot `name:class` (the thing: a part, an item, a lexicon of things); optional for `do`; for `set` and `ask.value` it may be left
+ *   obj      object slot `name:class` (the thing: a part, an item, a lexicon of things); optional for `do`;  for `set`, `do` and `ask.value` it may be left
  *            out when `noun` names the thing itself ("set the tempo to 90", "what is the key")
  *   val      value slot `name:class` (set only)
  *   noun     property noun alternatives (`color|colour`): optional in `set`, required by `ask.value`
@@ -21,7 +21,8 @@
  *   cont     (`ask.count`) container slot `name:class`: "how many days are in a week" (obj = the counted part, cont = the whole), "how many apples does Tom have"
  *            (`verb` then lists the trailing verbs, default `have|has|got`; the `order` form "a week has how many days" exists only with `cont`)
  *   pron     (noun-only `ask.value`) pronouns that may follow the verb in the question (default `it|this|that|we|you|u|i`)
- *   mod      optional modifier group before the value, alternatives and `$macro` ids (`$ui.avatar.g11_a_bit` for "a bit", "much")
+ *   mod      optional modifier group before the value, alternatives and `$macro` ids (`$ui.avatar.g11_a_bit` for "a bit", "much"), or a slot
+ *            (`s:lex.x?`: "make the bars LIGHT green")
  *   objmod   optional modifier group before the object (`whole|entire`), or a slot `ord:lex.x` (mandatory; `ord:lex.x?` optional): "delete the LAST paragraph"
  *   extra    one more optional element after the value or object: a slot (`n:number` mandatory, `n:number?` optional) or a group `[percent|per_cent]?`
  *   emit     emit template; `emitOpts` the emit of the `opts` form (without it `opts` is not generated)
@@ -160,7 +161,7 @@ export function expandShape(shape, { phrases = null, lexicons = null } = {}) {
   const skip = new Set((shape.skip ?? '').split(',').map((s) => s.trim()).filter(Boolean));
   for (const f of [...want, ...skip]) if (!known.includes(f)) throw new Error(`shape '${shape.id}': form '${f}' does not exist in family '${family}' (${known.join(', ')})`);
   if (!shape.emit) throw new Error(`shape '${shape.id}': no emit`);
-  const noObj = !shape.obj && !!shape.noun && (family === 'set' || family === 'ask.value');
+  const noObj = !shape.obj && !!shape.noun && (family === 'set' || family === 'ask.value' || family === 'do');
   const verbs = shape.verb ? group(shape.verb) : null;
   const nounAlts = shape.noun ?? null;
   const nounPlural = nounAlts ? [...new Set(nounAlts.split('|').flatMap((n) => [n, n + 's']))].join('|') : null;
@@ -169,7 +170,7 @@ export function expandShape(shape, { phrases = null, lexicons = null } = {}) {
     '<VL>': shape.verb ? shape.verb.split('|').join('|') : null,
     '<D>': shape.obj || shape.noun ? group(shape.det ?? DEFAULTS.det, true) : '',
     '<O>': shape.obj ? (shape.objmod ? (shape.objmod.includes(':') ? slotText(shape.objmod) : group(shape.objmod, true)) + ' ' : '') + slotText(shape.obj) : (noObj ? group(shape.noun) : ''),
-    '<X>': shape.val ? (shape.mod ? group(shape.mod, true) + ' ' : '') + slotText(shape.val) : '',
+    '<X>': shape.val ? (shape.mod ? (shape.mod.includes(':') ? slotText(shape.mod) : group(shape.mod, true)) + ' ' : '') + slotText(shape.val) : '',
     '<N>': nounAlts ? group(nounAlts) : null, '<N?>': nounAlts && !noObj ? group(nounAlts, true) : '',
     '<NP>': nounPlural ? group(nounPlural) : null,
     '<K>': group(shape.link ?? DEFAULTS.link, true) + ' [a|an|the]?', '<E>': shape.extra ? ' ' + (shape.extra.startsWith('[') ? shape.extra : slotText(shape.extra)) : '',
@@ -180,7 +181,7 @@ export function expandShape(shape, { phrases = null, lexicons = null } = {}) {
     '<PR>': group(shape.pron ?? 'it|this|that|we|you|u|i', true),
     '<L>': LEAD, '<T>': TAIL,
   };
-  const needs = { set: ['verb', 'obj', 'val'], do: ['verb'], 'ask.value': ['obj', 'noun'], 'ask.count': ['obj'], 'ask.exists': ['obj', 'verb'], list: ['obj', 'verb'] }[family];
+  const needs = { set: ['verb', 'obj', 'val'], do: ['verb', 'obj'], 'ask.value': ['obj', 'noun'], 'ask.count': ['obj'], 'ask.exists': ['obj', 'verb'], list: ['obj', 'verb'] }[family];
   for (const k of needs) if (!shape[k] && !(noObj && k === 'obj')) throw new Error(`shape '${shape.id}': family '${family}' needs '${k}'`);
   const sample = Object.fromEntries((shape.sample ?? '').split(/[;,]/).map((x) => x.trim().split('=')).filter((x) => x.length === 2).map(([k, v]) => [k.trim(), v.trim()]));
   const out = [];
@@ -205,7 +206,7 @@ export function expandShape(shape, { phrases = null, lexicons = null } = {}) {
         priority: short ? basePriority - SHORT_PENALTY : basePriority,
         example: [],
       };
-      p.example = exampleSentences(match, { phrases, lexicons, sample, det: shape.obj || noObj ? (shape.det ?? DEFAULTS.det) : null, objdet: shape.objdet, noun: nounAlts, link: shape.link ?? DEFAULTS.link, extra: shape.extra?.startsWith('[') ? shape.extra.slice(1, -2) : null, cv: shape.cont ? (shape.verb ?? 'have|has|got') : null });
+      p.example = exampleSentences(match, { phrases, lexicons, sample, det: shape.obj || noObj ? (shape.det ?? DEFAULTS.det) : null, objdet: shape.objdet, noun: nounAlts && (family !== 'set' || noObj) && !(noObj && /^(it|them|this|that|these|those)(\||$)/.test(nounAlts)) ? nounAlts : null, nounDet: noObj ? 'det' : 'the', link: shape.link ?? DEFAULTS.link, extra: shape.extra?.startsWith('[') ? shape.extra.slice(1, -2) : null, cv: shape.cont ? (shape.verb ?? 'have|has|got') : null });
       out.push(p);
     }
   }
@@ -228,7 +229,7 @@ function sampleWord(cls, lexicons) {
  * Natural example sentences of a generated match string: first the sentence with the determiner before the object ("Make your eyes blue."),
  * (the shortest one, all optionals omitted, when the sentence has no determiner). Other optional words (links, nouns, lead-ins) are never added: they make unnatural sentences.
  */
-export function exampleSentences(match, { phrases = null, lexicons = null, sample = {}, det = null, noun = null, link = null, cv = null, extra = null } = {}) {
+export function exampleSentences(match, { phrases = null, lexicons = null, sample = {}, det = null, noun = null, link = null, cv = null, extra = null, nounDet = 'the' } = {}) {
   const parts = match.split(/\s+/);
   const make = (withDet) => {
     const words = [];
@@ -245,7 +246,7 @@ export function exampleSentences(match, { phrases = null, lexicons = null, sampl
         if (m[2]) {
           const before = /^\{\w+:/.test(parts[k + 1] ?? '');
           if (withDet && before && det && m[1] === det) words.push(alts[0]);
-          else if (withDet && det && m[1] === det && noun && parts[k + 1] === `[${noun}]`) words.push('the');
+          else if (withDet && det && m[1] === det && noun && parts[k + 1] === `[${noun}]`) words.push(nounDet === 'the' ? 'the' : alts[0]);
           else if (m[1] === OF_ALTS) words.push('of');
           else if (withDet && link && m[1] === link) words.push(alts[0]);
           else if (cv && m[1] === cv) words.push(alts[0]);

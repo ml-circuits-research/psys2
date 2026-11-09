@@ -663,3 +663,9 @@ Baseline re-measured at d3704b3 with the unmigrated geo.map (operational 95.0% r
 - **Shapes**: `geo.map.capital/.population/.currency/.continent/.country` (ask.value with the new key `poss=true` for "Japan's capital", `objdet=none`, `skip=short`). 12 covered hand patterns deleted. Gate finding: `name the capital city of Italy` (geo.map#093) was read by the deleted `cap1` through `[$lang.lead.question|name|give_me]`; `name` is now an alternative of `lang.shape.tellme`.
 - **Tests**: geo.map 436 -> 441 (sh01..sh05).
 - **Gates**: operational 95.0% / 7 wrong unchanged, dialogues unchanged, eval-rules identical in every row. (Run at the end of the commit: npm test and test-world all.)
+
+## L7 data.charts (2026-11-09, on origin/main 6ca6bf2 + geo.map)
+- **migrate-lexicons + migrate-macros**: `patterns.sop` 391,220 -> 213,388 bytes (the smallest gain: 45 % after the first pass; the chart patterns are mostly free-text labels and number lists, not copied lead-ins); hand patterns 370 -> 365 (+ 5 shapes, 21 generated); match text 309,728 -> 131,180 bytes (-58 %); inline groups repeated verbatim 148 (1,099 occurrences) -> 82 (450). 56 world-local phrases. `lex.data.charts.ordinals` extends `lex.lang.ordinal`.
+- **Shapes**: `data.charts.type` (set, noun-only), `data.charts.color` (set, noun-only, `mod` as a slot for the shade), `data.charts.legend.show/.hide`, `data.charts.delete` (do, noun-only). Engine: `do` may be noun-only, `mod` may be a slot. 5 hand patterns deleted (`color.all legend.show legend.hide nav.delete r2.type.c`).
+- **Tests**: data.charts 261 -> 267 (sh00..sh05, one session: a chart sentence and a command in ONE message is split differently by the segmenter, so the chart is created in its own test).
+- **Gates**: operational 95.0% / 7 wrong unchanged; dialogues 96.6% / 87.7% unchanged; eval-rules: routed positives +1 (4491 -> 4492, "Add bananas 4 and pears 3" in data.charts), routing +1 (4571 -> 4572), nothing worse.

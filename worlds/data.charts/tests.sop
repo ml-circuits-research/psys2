@@ -1364,3 +1364,33 @@
     session=cc1
     input="plums are 2 not 8"
     expectState="charts.0.datasets.0.data.2=2"
+
+@t.charts.sh00 core.test
+    input="make a chart: apples 5, pears 3"
+    expect="here is a bar chart"
+    session=csh
+
+@t.charts.sh01 core.test
+    input="i want the bars green"
+    expect="OK, the chart is green now."
+    session=csh
+
+@t.charts.sh02 core.test
+    input="could you maybe make it into a pie chart"
+    expect="OK, it is a pie chart now."
+    session=csh
+
+@t.charts.sh03 core.test
+    input="can i hide the legend"
+    expect="OK, the legend is hidden."
+    session=csh
+
+@t.charts.sh04 core.test
+    input="could you maybe show the legend"
+    expect="OK, the legend is on."
+    session=csh
+
+@t.charts.sh05 core.test
+    input="i want to delete this chart"
+    expect="There are no charts left."
+    session=csh
