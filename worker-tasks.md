@@ -36,6 +36,59 @@ The working hypothesis: on small worlds, **rules plus a small learned front-end*
 
 ## 2. Current state, answers and corrections (reviewer, 11:00)
 
+### Final review of "READY FOR REVIEW" (744c3d5) — reviewer, 2026-11-09 09:20 UTC. READ THIS FIRST.
+
+**What I reran and what matched.**
+- `npm test`: 885 tests, 884 pass, 0 fail, 1 skipped.
+- Operational set, rules mode: 95.4% right / 0.5% wrong (1183 / 6 of 1240). Matches RESULTS.md.
+- Dialogue set, rules mode: 96.4% of turns / 88.0% of dialogues (1890 / 1961 turns, 359 / 408 dialogues). You report 96.6 / 87.7; the small gap is 4 turns. Rerun it and record the exact command and hash so the numbers agree.
+- Encoder modes in Node: not rerun. onnxruntime-node cannot install here because its post-install download is blocked. In the browser, dispatcher v4 (6c41eb24) loads in headless Chrome with 0 console errors, so the published models load.
+- Real dialogue replayed in the CLI and the webchat; results below.
+
+**PERF: your explanation stands.** My 33.6 s came from `networkidle0`, which includes the full model download over HTTP/1.1. It was my definition, not page ready. At 744c3d5 I reran `node scripts/perf-webchat.mjs --runs 3` (2-CPU host, 4× CPU throttle, h2, cold cache). Medians:
+
+| mode | ready | first answer | model ready | p50 | p95 |
+| --- | --- | --- | --- | --- | --- |
+| rules | 3.9 s | 1.7 s | n/a | 260 ms | 625 ms |
+| encoder | 4.4 s | 2.2 s | 12.7 s | 200 ms | 784 ms |
+| encoder+n1 | 4.1 s | 2.2 s | 11.9 s | 186 ms | 958 ms |
+
+- Thinking timer and "answered in 1.0 s": present and working. Validated.
+- Ready ≤ 5 s and p50 ≤ 300 ms: met.
+- **Still missed:**
+  - first answer (1.7–2.2 s against 1.5 s);
+  - p95 in encoder+n1 (958 ms against 800 ms);
+  - longer multi-command phrasings: "how many legs does a spider have and what is 3 plus 4" takes 2.85 s (my perf.mjs, encoder+n1 default). The multi-clause fast path is **off by default** (`settings.fastPath === true`).
+
+**Answers to the open decisions (questions.md "Review request").**
+- **(a) Accept 4.51 MB `worlds/index.json`.** Gzip transfer is 0.64 MB and ready is under 5 s. The 2.5 MB target is retired. The real target is time: ready ≤ 5 s and first answer ≤ 1.5 s at 4× throttle, plus rules usable ≤ 5 s on Fast 4G. Do lazy per-world loading only if it is what gets first answer under 1.5 s.
+- **(b) Accept 2.99 MB `patterns.sop`.** The 2 MB target is retired; the match-text reduction was the useful part.
+- **(c) "Where were we?" means the most recent unfinished activity that the user left for a digression.** It is not the last thing said, and not the oldest topic.
+  - If the digression came out of a story, the answer is the story; if out of the avatar, the avatar.
+  - Relabel `dlg.avt#040`, `dlg.mpc#009` and `dlg.doc#045` under this one definition and make the runtime follow it.
+  - ASTRA A11 will own this later; keep the same definition there.
+- **(d) Relabel "What colour is the sky?"** kids.shapes answering is right for the user.
+- **(e) Drop the S1 edit head from the shipped pipeline:** 3 recovered against 7 misled. Keep the code behind a flag that is off by default. Spend no more time on it.
+- **(f) Shrink the slow-link cost by deferring the normalizer.**
+  - Never auto-download the ~95 MB normalizer at page load. Load it the first time a message fails validation, or after 30 s idle on a fast link.
+  - Skip the automatic download when `navigator.connection.saveData` is set or `effectiveType` is slower than 4g, and show "the helper model loads when needed".
+  - The dispatcher stays as it is.
+
+**Do next, in this order:**
+1. **RD1b, RD2, RD5, RD9**: rewritten in the RD section below.
+2. **PERF round 3** (below).
+3. **SURPRISE**, then **AV**, then **ASTRA**. None of them is started: no die button, and still three DiceBear styles.
+
+**PERF round 3.**
+1. **Fast path on by default.** You report 0 reading diffs, so turn it on (keep the setting so the user can turn it off). Extend it to longer clauses joined by "and", "then", commas: "how many legs does a spider have and what is 3 plus 4" ≤ 800 ms at 4× throttle.
+2. **First answer ≤ 1.5 s.**
+   - Measure where the 1.7–2.2 s goes: the first-message lazy compile, the worker start, the warm-up competing with the first message.
+   - Make the first message preempt the warm-up.
+3. **Encoder+n1 p95 ≤ 800 ms.** The normalizer must never run for messages that a complete reading already validated.
+4. **Normalizer deferral, as in (f).** Report Fast 4G cold "model ready" for the dispatcher alone.
+5. **Mobile layout bug.** A long user bubble overflows the right edge on a 390 px viewport (text and time cut off). Wrap it and add a screenshot test.
+6. Rerun the same table (3 runs, the same 6 messages plus the long multi-command one) and record it in RESULTS.md.
+
 **T0, T1 and T2 passed review.** I reran `scripts/eval-rules.mjs` at c95e250: all 818 numbers were identical. See "Validated".
 
 **New baseline: c989cd1 (my error, sorry).** The reviewer pushed a rule-widening commit after you had recorded 055fbeb, breaking the freeze. The commit widens rules in 18 worlds, fixes dictation stop, the avatar apology and chess moves on the Music tab, and relabels the paraphrases. These rules are what the validation layer will use, so take c989cd1 as the baseline. `worlds/` and `src/` are frozen from now on.
@@ -251,7 +304,50 @@ Order: A1, A2, A3, A4, A6 and A11 first; the verification is two games plus a dr
 
 The user's 49-message session (avatar, map, chess/tic-tac-toe, chart, drawing; English with typos plus Romanian) is in `training/eval/real-dialogue-2026-11-09.txt`. Replayed in the CLI, about 20 of the 49 turns are wrong or not understood. Add it to `dialogues.jsonl` with the right tabs, expected states and answers, and treat each item below as a **general** fix with tests across worlds, not a patch for one sentence.
 
-**RD1 — spell checking per world, active world first (user request).**
+**Status after the final review at 744c3d5 (09:20).** RD3, RD4, RD6, RD7 and RD8 pass. RD8 was rechecked: tic-tac-toe "b1 / c3 / c1" and chess "b1 / c3" follow the active game and the engine answers. RD1, RD2 and RD5 fail; they are rewritten below. RD9 is new. Replay commands: `node src/cli.mjs chat < training/eval/real-dialogue-2026-11-09.txt`, and the same messages typed in the webchat (language dropdown left on English, as the user had it).
+
+**RD1b — never "correct" a word that is valid in some world (FAILS; it replaces RD1).** Each of these was misled:
+
+| message | tab | what happened |
+| --- | --- | --- |
+| "red house big" | Avatar | "There is nothing to redo. (I read "red" as "redo")". It should draw a big red house: BEST-EFFORT plus a valid art.draw reading. |
+| "next" | CLI, after drawing | "You are welcome. (I read "next" as "neat")" |
+| "fa-i ochii mari" | webchat | "I read "mari" as "mark"". The search then ran in Documents and **the tab switched to Documents**. |
+| "eys express fear" | | Now read right. |
+
+Rules:
+- A word that is exact in any world's vocabulary or in lang.common is never corrected. The active world gets first try at *reading* it; if that fails, other worlds may read it exactly before any correction is tried.
+- Correction only applies to tokens unknown to every world. Then the active world goes first, as RD1 said.
+- A correction must never cause a tab switch on its own.
+
+Tests: the three messages above, plus a set of valid-word inputs per world. Report misled corrections on the typo sets (target 0 misled on valid words).
+
+**RD2 — naming a world wins (FAILS; not fixed).** CLI and webchat at 744c3d5, after "make a chart: apples 5, pears 3" (Charts tab):
+- "now in a women" answers "I do not see in a women in the chart". The previous avatar frame is lost.
+- "the avatar should be a women" answers "I do not see avatar in the chart".
+- "make the avatar look scared" answers "I did not understand", even on a fresh session, while "look scared" works.
+
+The task text above (the original RD2) stands. Add these three as dialogue tests with the Charts tab active.
+
+**RD5 — Romanian sessions (FAILS).**
+- *CLI* (language auto): replies are now Romanian, good. But:
+  - "fa-mi avatarul ca om" and "fa avatarul ca om" are not understood ("Ai vrut să spui «Fă avatarul o femeie»?" — *om* means person/human, not woman);
+  - "fa ochi visatori" is not understood;
+  - "fa-i ochii mari" goes to the drawing ("Nu pot găsi un ochi în tabloul tău") on the Avatar context;
+  - "fa ochii mari" works but the reply is in **English**;
+  - the Romanian reply contains a broken quote and grammar: `Încearcă" desena o casă roșie"`.
+- *Webchat* with the dropdown on English (the default, and what the user had): Romanian is not detected at all. "fa ochi visatori" is not understood in English, and "fa-i ochii mari" switches to Documents.
+  - Strong Romanian evidence must switch the session language (and the dropdown) the same way the CLI does: clitics like fa-mi / fa-i, diacritics, two or more Romanian content words.
+  - A single English word with a typo must not switch it.
+- Acceptance:
+  - all seven Romanian lines of the real dialogue give the right action with a Romanian reply, in both the CLI and the webchat;
+  - a Romanian reply-quality check (no mixed language, no broken quotes) over the Romanian set's replies.
+
+**RD9 — small reply and quantity bugs from the replay (new).**
+- "eys express fear" answers "Now I look fear". The mood noun must turn into the adjective (scared / afraid); check every mood the avatar accepts as a noun.
+- "add more clouds" draws one cloud. A plural "more X" adds a few (2–3) and says how many.
+- "square eyes robot pls" works, but the reply ends with "You are already on the Avatar tab.": a loose word must not trigger a second tab reply.
+
 - "bugger house pls" became kids.animals ("where buggers live").
 - "nect to a house" was not corrected inside the position slot.
 - "eys express fear" was not read as "eyes express fear".
@@ -785,3 +881,4 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
 - **L6 + L7 complete** (request shapes, all 21 worlds migrated; summary 6f041a1): hand-written match text 6.04 MB → 1.87 MB (−69%), patterns.sop 7.1 → 3.0 MB, repeated groups 1,798 → 920, 65 shapes generating about 450 patterns. 871 tests pass; operational rules 95.4% right / 0.5% wrong / 2.3% not understood; dialogues 96.4% of turns, 88.0% of dialogues. Left in L: L9 (frame literals in routing, measured) and L10 (docs + AGENTS note).
 - D5 learning loop (d203be9), L9 frame literals measured and rejected (a975872), L10 docs (d7fe3f0): 882 tests pass. **The L library is complete.**
 - R4 dispatcher v4 published (d667609; sha 6c41eb24, safe S1 edit head) + T9 RESULTS summary (64e259a): 882 tests pass. **Shipped config 98.6% right, 0.4% wrong, 1.0% not understood** (1,240); long set 94.2%; dialogues 86.3% (encoder+n1); Romanian 84.8% right / 2.7% wrong. Browser check: answers correct, 0 console errors. PERF unchanged: page 32 s, multi-command 4.2 s (PERF round 2 in progress per T9).
+- Final review of the batch (744c3d5, 09:20): 884/885 tests pass (1 skipped); rules operational 95.4 / 0.5 reproduced; rules dialogues 96.4 / 88.0 (claim 96.6 / 87.7, 4-turn gap to reconcile). **PERF round 2 (57b28bf) validated in part:** ready ≤ 5 s in all modes, p50 ≤ 300 ms, thinking timer and "answered in X ms" work, v4 loads in headless Chrome with 0 console errors; first answer, encoder+n1 p95 and long multi-command remain (PERF round 3). RD8 validated (game coordinates follow the active game). BEST-EFFORT validated in part ("square eyes robot pls" works; "red house big" misled → RD1b). Decisions (a)–(f) answered in §2. RD1b, RD2, RD5, RD9 open; SURPRISE, AV, ASTRA not started.
