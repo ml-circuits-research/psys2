@@ -17,6 +17,12 @@ Three files coordinate the worker and the reviewer:
 
 **Role split (user decision 21:40): from now on the reviewer does not commit code.** The reviewer only reviews, writes and answers tasks, and validates. All code changes are the worker's. The last reviewer code commits (review-2 small fixes) are listed with merge instructions in §2 under "Merge from the reviewer".
 
+**Agents and tests (user decision 18:53): at most 3–4 agents in parallel.** Your machine reached load average 60 with many agents each running the full test suite, and progress slowed down.
+- Group several related fixes into one agent: one agent per area, not per bug.
+- Each agent runs only the **fast suite** plus the tests of the files it touched.
+- The coordinator (you) merges a batch, then runs the **full suite once**.
+- Only one full-suite run at a time on the machine; use a lock file (`/tmp/psys2-full-tests.lock`).
+
 Working rules:
 
 1. Everything written to disk is in English (AGENTS.md). Read `AGENTS.md`, `training/README.md`, `specs/08-training-data.md` and `specs/10-paraphrase-data.md` before starting.
@@ -247,6 +253,50 @@ Clicks on the avatar (gallery, presets, parts) run late, after the spoken answer
   - Stop during the speech lifts the veil at once;
   - the same for a chess move while the engine thinks;
   - 0 console errors.
+
+### TEST-SPLIT — two test suites: a fast mandatory one and a full one a few times a day (user, 18:53 local; reviewer measurement)
+
+**Measured** on the reviewer's run at c0c4cf8: 1,002 tests, 1,226 s of test time in total. **Ten exhaustive sweeps take about 950 s (77%).**
+
+| s | file | test |
+| --- | --- | --- |
+| 185 | dialog.test.mjs | CLI: `test-world all` passes (runs every world's tests.sop) |
+| 169 | tools.test.mjs | every pattern example of a tool world is understood |
+| 165 | (generated per world) | world kids.shop / kids.arith / kids.time …: every pattern example is read by its own pattern without ambiguity |
+| 155 | datagen.test.mjs | datagen agreement with the rule formalizer and export consistency |
+| 65 | translate-equivalence.test.mjs | Romanian twins formalize to the same wires |
+| 43 | matcher-prefilter.test.mjs | prefilter fuzz over all pattern examples |
+| 38 | canonical-examples.test.mjs | every canonical example on its own tab |
+| 37 + 30 | translate-session / ro-sessions | Romanian reply quality over the Romanian set |
+| 29 | tools.test.mjs | expectState / expectEffect runner |
+
+There is also **duplication**:
+- `test-world all` (dialog.test) runs every world's tests.sop;
+- the per-world files (draw, music, map, charts, chess, kids.*, editor, avatar …) run the same world tests again, about 120 s;
+- your gates then run `test-world all` a third time.
+
+Do this:
+1. **`npm test` = the fast mandatory suite.** Target ≤ 90 s on your machine with 4 jobs.
+   - Every unit and behaviour test stays.
+   - The exhaustive sweeps run on a **deterministic sample**: about 10% of the pattern examples / sets, with a seed that changes daily (`PSYS2_SAMPLE_SEED`, default the date). Each day covers a different slice, and a failure is reproducible with the printed seed.
+   - Exception: the worlds touched by the diff against `origin/main` (worlds, lexicons, patterns, ops) run their sweeps in full (`--changed`).
+2. **`npm run test:full` = everything.**
+   - all sweeps in full;
+   - `test-world all` once;
+   - the datagen agreement;
+   - the Romanian equivalence and reply-quality sets;
+   - the fuzz tests;
+   - **the browser tests** (`webchat-turns`, `webchat-voice`, `webchat-ui`, `webchat-phrase-export`, with puppeteer-core).
+
+   Run it 2–3 times a day, always before a model publication or a READY FOR REVIEW, and after merging a batch of agents. Write the result in the log.
+3. **`npm run test:browser`** for the browser tests alone. Required before any push that touches `docs/webchat/` (see BUSY-LOST).
+4. **Remove the duplication.**
+   - The per-world "loads and its tests pass" tests and `test-world all` must not both run the same tests.sop in one suite: keep the per-world files in the fast suite (sampled where large) and `test-world all` only in full.
+   - Drop `test-world all` from your gate list when `npm test` already covers it.
+5. **Mechanics.** Mark full-only tests with a file suffix (`*.full.test.mjs`) or a `{ full: true }` helper that `run-tests.mjs` reads. `run-tests.mjs` gets `--full`, `--changed`, `--browser` and prints the suite name, the sample seed and the wall time.
+6. **Report.**
+   - wall time of each suite on your machine (4 jobs) and on 2 cores;
+   - proof that the full suite still contains every test of today (count before = count after).
 
 ### BUSY-LOST — the BUSY code is not on main (reviewer at 79c5ba7, 18:30 local) — fix now
 
@@ -606,7 +656,7 @@ The reviewer copied what is reusable into **`imports/diagram-vss-demo/`** (stagi
 **Licence:** settled. The project is now AGPL-3.0-only, the same as the source (user decision 14:10); keep the copied files' provenance headers.
 
 **Order from now on:**
-1. BUSY-LOST (land the missing app.mjs part), HANG3 (browser translator off the critical path), MIC2 + EOT2 + BUSY (always-open mic, queue, reliable button, end of turn, tabs grey while a turn runs), then DIAG2 + DIAG3 (Diagram world in the webchat, retrain, short ids, edges, rendering, parity), FB (thumbs up / down + feedback, remove Copy as text), then RP3 (phrase-log failures), then DBG (debug view per tab)
+1. TEST-SPLIT (fast / full suites, max 3–4 agents), BUSY-LOST (land the missing app.mjs part), HANG3 (browser translator off the critical path), MIC2 + EOT2 + BUSY (always-open mic, queue, reliable button, end of turn, tabs grey while a turn runs), then DIAG2 + DIAG3 (Diagram world in the webchat, retrain, short ids, edges, rendering, parity), FB (thumbs up / down + feedback, remove Copy as text), then RP3 (phrase-log failures), then DBG (debug view per tab)
 2. SET (settings modal with tabs) + UI1 (one mic, tooltips) + DOC (greeting and docs), then VOICE (end of turn)
 3. ED (document editor commands)
 4. RD10 together with RD1b and RD2 (they share the mechanism)
