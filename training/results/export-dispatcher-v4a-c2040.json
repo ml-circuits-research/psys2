@@ -1,0 +1,450 @@
+{
+ "checkpoint": "runs/dispatcher-v4a-c2040",
+ "model": "distilbert-base-uncased",
+ "export_dir": "/home/salboaie/work/psys2/training/runs/export/dispatcher-v4a-c2040",
+ "command": "python -m psys2_train.export_onnx --ckpt runs/dispatcher-v4a-c2040",
+ "sizes_mb": {
+  "fp32": 253.7491683959961,
+  "int8": 63.98744773864746
+ },
+ "targets": {
+  "max_size_mb": 150,
+  "max_ms_per_message": 50,
+  "min_agreement": 0.995
+ },
+ "gold_top1_lenient_on_gold_segments_of_sample": {
+  "n": 584,
+  "torch": 0.898972602739726,
+  "fp32": 0.898972602739726,
+  "int8": 0.8972602739726028
+ },
+ "agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "reference": "PyTorch CUDA fp32",
+  "onnx_fp32": {
+   "items": 200,
+   "world_same": 584,
+   "world_n": 584,
+   "boundary_same": 3576,
+   "boundary_n": 3576,
+   "msgs_all_boundaries_same": 200,
+   "max_abs_prob_diff_world": 5.453824996948242e-06,
+   "max_abs_prob_diff_seg": 3.4570693969726562e-06,
+   "top3_same": 584,
+   "world_agreement": 1.0,
+   "boundary_agreement": 1.0,
+   "message_boundary_agreement": 1.0
+  },
+  "onnx_int8": {
+   "items": 200,
+   "world_same": 574,
+   "world_n": 584,
+   "boundary_same": 3568,
+   "boundary_n": 3576,
+   "msgs_all_boundaries_same": 196,
+   "max_abs_prob_diff_world": 0.5373510122299194,
+   "max_abs_prob_diff_seg": 0.37817350029945374,
+   "top3_same": 378,
+   "world_agreement": 0.9828767123287672,
+   "boundary_agreement": 0.9977628635346756,
+   "message_boundary_agreement": 0.98
+  },
+  "int8_vs_fp32": {
+   "items": 200,
+   "world_same": 574,
+   "world_n": 584,
+   "boundary_same": 3568,
+   "boundary_n": 3576,
+   "msgs_all_boundaries_same": 196,
+   "max_abs_prob_diff_world": 0.5373531579971313,
+   "max_abs_prob_diff_seg": 0.37817662954330444,
+   "top3_same": 378,
+   "world_agreement": 0.9828767123287672,
+   "boundary_agreement": 0.9977628635346756,
+   "message_boundary_agreement": 0.98
+  },
+  "disagreements": [
+   {
+    "cmp": "onnx_int8",
+    "text": "where did you put the fish",
+    "world_a": "art.draw",
+    "world_b": "games.hangman",
+    "p_a": 0.5827537178993225,
+    "p_b": 0.6723026037216187
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "where is a parrot found",
+    "world_a": "games.hangman",
+    "world_b": "kids.animals",
+    "p_a": 0.6582407355308533,
+    "p_b": 0.5937912464141846
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "where did you put the fish",
+    "world_a": "art.draw",
+    "world_b": "games.hangman",
+    "p_a": 0.5827538371086121,
+    "p_b": 0.6723026037216187
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "where is a parrot found",
+    "world_a": "games.hangman",
+    "world_b": "kids.animals",
+    "p_a": 0.6582368612289429,
+    "p_b": 0.5937912464141846
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Switch to the draw tab",
+    "world_a": "art.draw",
+    "world_b": "geo.map",
+    "p_a": 0.6570816040039062,
+    "p_b": 0.538425862789154
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Switch to the draw tab",
+    "world_a": "art.draw",
+    "world_b": "geo.map",
+    "p_a": 0.6570813059806824,
+    "p_b": 0.538425862789154
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "who thanked the father?",
+    "world_a": "kids.arith",
+    "world_b": "docs.reader",
+    "p_a": 0.7032173275947571,
+    "p_b": 0.8254521489143372
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "who thanked the father?",
+    "world_a": "kids.arith",
+    "world_b": "docs.reader",
+    "p_a": 0.7032197713851929,
+    "p_b": 0.8254521489143372
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "where should i go",
+    "world_a": "ui.help",
+    "world_b": "ui.shell",
+    "p_a": 0.5858890414237976,
+    "p_b": 0.6280652284622192
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "where should i go",
+    "world_a": "ui.help",
+    "world_b": "ui.shell",
+    "p_a": 0.5858889222145081,
+    "p_b": 0.6280652284622192
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "move the rock on d six to b3 and then what day comes 6 days before sunday how much change would i receive from 70 lei when i buy three stickers italy or canada which is bigger and what was the time 2 hours before 2 oclock then make your eyes red and please 150 bpm please then cows are covered in what and drop the title and guess my pick and what season is it in november then i'd like you to have visor eyes and then what do you call a baby crocodile and then how do i change ur eyes then what is section 4 in short list the games giraffe is the word then remove bring my umbrella from birthday list octave down twice then okay how many hours are in 4 days and then highlight the last heading in purple",
+    "boundary_flips": 4
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "move the rock on d six to b3 and then what day comes 6 days before sunday how much change would i receive from 70 lei when i buy three stickers italy or canada which is bigger and what was the time 2 hours before 2 oclock then make your eyes red and please 150 bpm please then cows are covered in what and drop the title and guess my pick and what season is it in november then i'd like you to have visor eyes and then what do you call a baby crocodile and then how do i change ur eyes then what is section 4 in short list the games giraffe is the word then remove bring my umbrella from birthday list octave down twice then okay how many hours are in 4 days and then highlight the last heading in purple",
+    "boundary_flips": 4
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "switch sides",
+    "world_a": "games.chess",
+    "world_b": "geo.map",
+    "p_a": 0.6804112792015076,
+    "p_b": 0.6917366981506348
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "colors",
+    "world_a": "art.draw",
+    "world_b": "data.charts",
+    "p_a": 0.8321319222450256,
+    "p_b": 0.6093361973762512
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "which country in europe has the smallest area and give yourself visor eyes and is my money enough for 5 notebooks and 1 apple what was the time 7 hours before 2 oclock mark butter as completed on our school list then okay is the word a donkey guess my name lol do u know it and okay make it 140 beats per minute what are the rules of chess how can i make white paint hi everyone i am going to buy a toy car and where is a donkey found and then the house needs to be on the left then switch sides then show the document page then colors then navigate to the end please",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "switch sides",
+    "world_a": "games.chess",
+    "world_b": "geo.map",
+    "p_a": 0.680410623550415,
+    "p_b": 0.6917366981506348
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "colors",
+    "world_a": "art.draw",
+    "world_b": "data.charts",
+    "p_a": 0.8321322798728943,
+    "p_b": 0.6093361973762512
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "which country in europe has the smallest area and give yourself visor eyes and is my money enough for 5 notebooks and 1 apple what was the time 7 hours before 2 oclock mark butter as completed on our school list then okay is the word a donkey guess my name lol do u know it and okay make it 140 beats per minute what are the rules of chess how can i make white paint hi everyone i am going to buy a toy car and where is a donkey found and then the house needs to be on the left then switch sides then show the document page then colors then navigate to the end please",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "how many countries border spain france or hungary which is smaller which asian country is the biggest",
+    "boundary_flips": 2
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "how many countries border spain france or hungary which is smaller which asian country is the biggest",
+    "boundary_flips": 2
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "What options are available",
+    "world_a": "ui.help",
+    "world_b": "ui.avatar",
+    "p_a": 0.5126568078994751,
+    "p_b": 0.5489043593406677
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "What options are available",
+    "world_a": "ui.help",
+    "world_b": "ui.avatar",
+    "p_a": 0.512651801109314,
+    "p_b": 0.5489043593406677
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Is it tortoise?",
+    "world_a": "kids.animals",
+    "world_b": "games.hangman",
+    "p_a": 0.7611691355705261,
+    "p_b": 0.6087512373924255
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Is it tortoise?",
+    "world_a": "kids.animals",
+    "world_b": "games.hangman",
+    "p_a": 0.7611658573150635,
+    "p_b": 0.6087512373924255
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Switch to the draw tab",
+    "world_a": "art.draw",
+    "world_b": "geo.map",
+    "p_a": 0.6570816040039062,
+    "p_b": 0.538425862789154
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Switch to the draw tab",
+    "world_a": "art.draw",
+    "world_b": "geo.map",
+    "p_a": 0.6570813059806824,
+    "p_b": 0.538425862789154
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "give me the change, 30 lei, puzzle and 2 kites",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "give me the change, 30 lei, puzzle and 2 kites",
+    "boundary_flips": 1
+   }
+  ]
+ },
+ "edit_agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "rewritten_by_torch": 0.39,
+  "onnx_fp32": {
+   "n": 200,
+   "simplified_same": 200,
+   "tags_same": 200,
+   "words": 994,
+   "word_tags_same": 994,
+   "top1_world_same": 200,
+   "simplified_agreement": 1.0,
+   "tag_sequence_agreement": 1.0,
+   "word_tag_agreement": 1.0
+  },
+  "onnx_int8": {
+   "n": 200,
+   "simplified_same": 178,
+   "tags_same": 178,
+   "words": 994,
+   "word_tags_same": 966,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.89,
+   "tag_sequence_agreement": 0.89,
+   "word_tag_agreement": 0.971830985915493
+  },
+  "int8_vs_fp32": {
+   "n": 200,
+   "simplified_same": 178,
+   "tags_same": 178,
+   "words": 994,
+   "word_tags_same": 966,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.89,
+   "tag_sequence_agreement": 0.89,
+   "word_tag_agreement": 0.971830985915493
+  },
+  "examples_differing": [
+   {
+    "text": "number of days in march pls",
+    "torch": "days in march pls",
+    "int8": "of days in march pls"
+   },
+   {
+    "text": "is the answer tiger",
+    "torch": "is tiger",
+    "int8": "tiger"
+   },
+   {
+    "text": "it was tiger",
+    "torch": "it tiger",
+    "int8": null
+   },
+   {
+    "text": "so yeah, a zebra cannot swim",
+    "torch": ", a zebra cannot swim",
+    "int8": "yeah, a zebra cannot swim"
+   },
+   {
+    "text": "any o?",
+    "torch": "o",
+    "int8": "o?"
+   },
+   {
+    "text": "i need a hint",
+    "torch": "hint",
+    "int8": "a hint"
+   },
+   {
+    "text": "tell me 15 minus 8",
+    "torch": "15- minus 8?",
+    "int8": "15- minus 8"
+   },
+   {
+    "text": "hm zebra",
+    "torch": "zebra?",
+    "int8": null
+   },
+   {
+    "text": "dolphin mammal yes or no",
+    "torch": "dolphin= mammal?",
+    "int8": "dolphin= mammal"
+   },
+   {
+    "text": "could you explain what this tab does",
+    "torch": "what is this tab",
+    "int8": "you explain what this tab does"
+   },
+   {
+    "text": "you win, i quit",
+    "torch": "win, i quit",
+    "int8": ", i quit"
+   },
+   {
+    "text": "the one i picked was a tiger",
+    "torch": "tiger",
+    "int8": "picked tiger"
+   },
+   {
+    "text": "whats a fact about the mystery animal",
+    "torch": "whats fact? about mystery animal",
+    "int8": "whats a fact about mystery animal"
+   },
+   {
+    "text": "it does have one",
+    "torch": null,
+    "int8": "it does one"
+   },
+   {
+    "text": "pentagon info",
+    "torch": "pentagon? info",
+    "int8": null
+   }
+  ]
+ },
+ "latency_cpu_batch1": {
+  "fp32_threads1": {
+   "encoder_pass_ms": {
+    "p50": 12.326664000283927,
+    "p95": 65.92329299019184,
+    "mean": 20.079605369537603
+   },
+   "dispatch_message_ms": {
+    "p50": 124.11676600459032,
+    "p95": 358.6636280087987,
+    "mean": 154.92906563027645
+   },
+   "avg_distinct_segments_per_message": 8.04,
+   "n": 100
+  },
+  "int8_threads1": {
+   "encoder_pass_ms": {
+    "p50": 3.5077350039500743,
+    "p95": 17.08529698953498,
+    "mean": 5.548320140369469
+   },
+   "dispatch_message_ms": {
+    "p50": 33.696063997922465,
+    "p95": 98.5792430001311,
+    "mean": 41.884560989565216
+   },
+   "avg_distinct_segments_per_message": 8.07,
+   "n": 100
+  },
+  "fp32_threads4": {
+   "encoder_pass_ms": {
+    "p50": 4.254167986800894,
+    "p95": 18.281969998497516,
+    "mean": 6.2986094296502415
+   },
+   "dispatch_message_ms": {
+    "p50": 41.47268600354437,
+    "p95": 114.63063300470822,
+    "mean": 50.72912678064313
+   },
+   "avg_distinct_segments_per_message": 8.04,
+   "n": 100
+  },
+  "int8_threads4": {
+   "encoder_pass_ms": {
+    "p50": 1.853459994890727,
+    "p95": 6.178076000651345,
+    "mean": 2.4702071197680198
+   },
+   "dispatch_message_ms": {
+    "p50": 17.835393999121152,
+    "p95": 48.51917900668923,
+    "mean": 21.455046070186654
+   },
+   "avg_distinct_segments_per_message": 8.07,
+   "n": 100
+  }
+ },
+ "cpu": "Grace aarch64 (DGX Spark)",
+ "versions": {
+  "torch": "2.14.1+cu130",
+  "onnx": "1.23.2",
+  "onnxruntime": "1.31.1",
+  "opset": 17
+ }
+}

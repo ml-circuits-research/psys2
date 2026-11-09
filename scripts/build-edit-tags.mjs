@@ -68,6 +68,36 @@ export const isOk = (r, tkey) => r.parsed > 0 && r.unparsed === 0 && sopKey(r.so
 const norm = (w) => w.toLowerCase().replace(/\u2019/g, "'");
 const MAX_TAG_WORDS = 3;
 
+// ---- S1 safe tag set (worker-tasks S1 steps 3-4) ------------------------------------------------------------------------
+// DELETE is always allowed. R: only towards NORMALIZATIONS (number word <-> digits, contraction expansions, listed abbreviations, typo repairs of
+// a word the clean data never uses), P:/A: only for function words and punctuation. Content R: tags (make, add, left, 2, ...) are not in the vocabulary.
+export const FUNCTION_WORDS = new Set('a an the to of is are am was do does did me my you your i it its that this what how can could would will there in on at for with please'.split(' '));
+const NUMBER_WORDS = { zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16, seventeen: 17, eighteen: 18, nineteen: 19, twenty: 20, thirty: 30, forty: 40, fifty: 50, sixty: 60, seventy: 70, eighty: 80, ninety: 90, hundred: 100 };
+const ABBREVIATIONS = { u: 'you', ur: 'your', r: 'are', pls: 'please', plz: 'please', thx: 'thanks', hrs: 'hours', hr: 'hour', mins: 'minutes', min: 'minute', secs: 'seconds', sec: 'second', b4: 'before', cuz: 'because', bc: 'because', abt: 'about', msg: 'message', msgs: 'messages', info: 'information', pic: 'picture', pics: 'pictures', num: 'number', nr: 'number', btw: 'by the way', gonna: 'going to', wanna: 'want to', gotta: 'have to', lemme: 'let me', gimme: 'give me', km: 'kilometers', kms: 'kilometers', cm: 'centimeters', ok: 'okay' };
+const CONTRACTION_RE = /^(?:[a-z]+'[a-z]+|dont|cant|wont|isnt|arent|doesnt|didnt|whats|hows|wheres|whos|thats|im|ive|id|ill|youre|theres|lets|wasnt|couldnt|wouldnt|shouldnt)$/;
+export const isPunctTag = (g) => isPunctWord(g);
+const levenshtein = (a, b) => {
+  const d = Array.from({ length: a.length + 1 }, (_, i) => [i, ...Array(b.length).fill(0)]);
+  for (let j = 1; j <= b.length; j++) d[0][j] = j;
+  for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+  return d[a.length][b.length];
+};
+/** Is replacing source word `src` by `tgt` (one or more words) a normalization? `known` = words of the clean (generator / rule-derived) texts. */
+export function safeReplacement(src, tgt, known) {
+  const tw = tgt.split(' ');
+  if (NUMBER_WORDS[src] !== undefined && tgt === String(NUMBER_WORDS[src])) return true;
+  if (NUMBER_WORDS[tgt] !== undefined && src === String(NUMBER_WORDS[tgt])) return true;
+  if (ABBREVIATIONS[src] === tgt) return true;
+  if (tw.length > 1 && tw.every((x) => FUNCTION_WORDS.has(x) || x === 'not') && CONTRACTION_RE.test(src) && src[0] === tw[0][0]) return true;
+  if (tw.length === 1 && /^[a-z]{3,}$/.test(src) && /^[a-z]{3,}$/.test(tgt) && src !== tgt && !known.has(src) && known.has(tgt) && !FUNCTION_WORDS.has(tgt)) {
+    const d = levenshtein(src, tgt);
+    return d <= 2 && d <= Math.ceil(tgt.length / 3) && (d === 1 || src[0] === tgt[0]);
+  }
+  return false;
+}
+/** Tag allowed in the S1 vocabulary: A:/P: only function words and punctuation. (R: needs the source word, checked per pair.) */
+export const safeInsertTag = (g) => g.slice(2).split(' ').every((x) => FUNCTION_WORDS.has(x) || isPunctWord(x));
+
 /**
  * Word-level edit alignment of variant words `a` to reference words `b` -> { tags, cost } (null when no valid tagging).
  * Substitutions are only allowed for pairs accepted by `pairOk(src, tgt)` (always allowed when `pairOk` is null: vocabulary discovery);
@@ -242,6 +272,9 @@ async function main() {
       for (const r of readJsonl(join(REPO, dir, f))) if (!r.needs_review && (!onlyWorld || r.world === onlyWorld)) recs.push({ ...r, set });
     }
   }
+  const known = new Set();   // words of the clean texts (generator, rule-derived, canonical): a source word in here is a real word, never a typo
+  for (const row of routing) if (row.source === 'generator' || row.source === 'rule-derived') for (const m of row.text.toLowerCase().matchAll(/[a-z]+/g)) known.add(m[0]);
+  for (const r of recs) if (r.lineage?.role === 'canonical') for (const m of r.text.toLowerCase().matchAll(/[a-z]+/g)) known.add(m[0]);
   const idToGroup = new Map(recs.filter((r) => r.set === 'out').map((r) => [r.example_id, r.group]));
   for (const row of routing) {
     const id = row.provenance?.example_id;
@@ -290,7 +323,9 @@ async function main() {
       if (al.tags.every((g) => g === 'KEEP')) { if (count) diag.all_keep++; continue; }
       out.push({ ref: o.text, ...al });
     }
-    return out.sort((x, y) => x.cost - y.cost || x.ref.length - y.ref.length);
+    // S1 minimal edit: fewest non-delete edits first, then cost, then the shorter reference
+    const nonDel = (c) => c.tags.filter((g) => /^[RAP]:/.test(g)).length;
+    return out.sort((x, y) => nonDel(x) - nonDel(y) || x.cost - y.cost || x.ref.length - y.ref.length);
   };
 
   // pass 1: vocabulary (tags backed by >= 3 distinct tasks; R: tags per (source word, tag) pair)
@@ -319,9 +354,13 @@ async function main() {
   fillers = new Set([...delTasks].filter(([w, t]) => t.size >= 6 && t.size / occTasks.get(w).size >= Number(opt('--filler-ratio', '0.8'))).map(([w]) => w));
   for (const w of 'please pls plz thanks thx lol um uh hm hmm hey ok okay yeah yo kinda gonna'.split(' ')) fillers.add(w);
   console.log('fillers', fillers.size, [...fillers].slice(0, 40).join(' '));
-  const goodPairs = new Set([...pairTasks.entries()].filter(([, s]) => s.size >= MIN_TASKS).map(([k]) => k));
+  const delWords = new Set([...fillers, ...[...delTasks].filter(([, t]) => t.size >= 3).map(([w]) => w)]);
+  let r_del = 0;
+  const goodPairs = new Set([...pairTasks.entries()].filter(([k, s]) => { const [src, g] = k.split('\u0001'); return s.size >= MIN_TASKS && safeReplacement(src, g.slice(2), known); }).map(([k]) => k));
+  const dropped = [...pairTasks.entries()].filter(([k, s]) => s.size >= MIN_TASKS && !goodPairs.has(k)).length;
+  console.log(`S1 safe tag set: ${goodPairs.size} safe R: pairs kept, ${dropped} content / unsafe R: pairs dropped`);
   for (const [k, s] of pairTasks) if (s.size >= MIN_TASKS) { const g = k.split('\u0001')[1]; const u = tagTasks.get(g) ?? new Set(); for (const x of s) u.add(x); tagTasks.set(g, u); }
-  const vocabTags = [...tagTasks.entries()].filter(([g, s]) => s.size >= MIN_TASKS && (g[0] !== 'R' || [...goodPairs].some((k) => k.endsWith(`\u0001${g}`))))
+  const vocabTags = [...tagTasks.entries()].filter(([g, s]) => s.size >= MIN_TASKS && (g[0] === 'R' ? [...goodPairs].some((k) => k.endsWith(`\u0001${g}`)) : safeInsertTag(g)))
     .sort((x, y) => y[1].size - x[1].size || (x[0] < y[0] ? -1 : 1)).slice(0, vocabCap).map(([g]) => g);
   const vocab = new Set(vocabTags);
   const pairOk = (src, tgt) => goodPairs.has(`${src}\u0001R:${tgt}`);
@@ -340,7 +379,21 @@ async function main() {
     const cands = candidates(v, pairOk, insOk, vocab, true);
     const ctx = ctxOfRec(v.it.rec);
     let done = null;
-    for (const c of cands.slice(0, 8)) {
+    // S1 minimal edit, step 1: for a failing variant, the smallest set of deletions (fillers, politeness, hesitations, punctuation) that makes the rules give the target
+    if (!v.it.ok) {
+      const words = W(v.it.text);
+      const pos = words.map((x, i) => [x, i]).filter(([x]) => delWords.has(norm(x.w)) || isPunctWord(x.w)).map(([, i]) => i).slice(0, 9);
+      search: for (let size = 1; size <= Math.min(3, pos.length); size++) {
+        const pick = (start, left, acc) => {
+          if (!left) { const tags = words.map((_, i) => (acc.includes(i) ? 'DELETE' : 'KEEP')); const rw = applyEditTags(v.it.text, words, tags).trim(); return rw && isOk(run(v.task.world, v.it.rec.tab, v.it.rec.setup ?? [], rw), v.it.tkey) ? { kind: 'variant', tags, cost: size, ref: null, rewrite: rw } : null; }
+          for (let k = start; k < pos.length; k++) { const r = pick(k + 1, left - 1, [...acc, pos[k]]); if (r) return r; }
+          return null;
+        };
+        const r = pick(0, size, []);
+        if (r) { done = r; r_del++; break search; }
+      }
+    }
+    for (const c of done ? [] : cands.slice(0, 8)) {
       const words = W(v.it.text);
       const rewrite = applyEditTags(v.it.text, words, c.tags).trim();
       if (!rewrite || rewrite === v.it.text.trim()) continue;
@@ -390,6 +443,7 @@ async function main() {
   };
   writeFileSync(join(outDir, 'edit-vocab.json'), JSON.stringify({ tags: vocabTags, word_regex: WORD_RE.source, note: 'KEEP and DELETE are implicit; R:<text> replaces the word, A:<text> appends after it' }, null, 1));
   writeFileSync(join(outDir, 'report.json'), JSON.stringify(report, null, 1));
+  console.log('failing variants repaired by the deletion search:', r_del);
   console.log('diag (ref-level)', JSON.stringify(diag));
   console.log(JSON.stringify(report.totals), JSON.stringify(report.by_split), JSON.stringify(tagHist));
   for (const [w, r] of Object.entries(rep)) if (r.variants) console.log(w.padEnd(16), `variants ${r.variants} orig_ok ${r.orig_ok} aligned ${r.aligned} identity-only ${r.identity_only} failing ${r.failing_aligned}/${r.failing} dropped ${r.no_alignment} (no ref ${r.no_verified_ref}, rules-rejected ${r.rejected_by_rules})`);

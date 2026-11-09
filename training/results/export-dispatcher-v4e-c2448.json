@@ -1,0 +1,484 @@
+{
+ "checkpoint": "runs/dispatcher-v4e-c2448",
+ "model": "distilbert-base-uncased",
+ "export_dir": "/home/salboaie/work/psys2/training/runs/export/dispatcher-v4e-c2448",
+ "command": "python -m psys2_train.export_onnx --ckpt runs/dispatcher-v4e-c2448",
+ "sizes_mb": {
+  "fp32": 253.7491683959961,
+  "int8": 63.98744773864746
+ },
+ "targets": {
+  "max_size_mb": 150,
+  "max_ms_per_message": 50,
+  "min_agreement": 0.995
+ },
+ "gold_top1_lenient_on_gold_segments_of_sample": {
+  "n": 584,
+  "torch": 0.9041095890410958,
+  "fp32": 0.9041095890410958,
+  "int8": 0.9023972602739726
+ },
+ "agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "reference": "PyTorch CUDA fp32",
+  "onnx_fp32": {
+   "items": 200,
+   "world_same": 584,
+   "world_n": 584,
+   "boundary_same": 3576,
+   "boundary_n": 3576,
+   "msgs_all_boundaries_same": 200,
+   "max_abs_prob_diff_world": 5.245208740234375e-06,
+   "max_abs_prob_diff_seg": 4.291534423828125e-06,
+   "top3_same": 584,
+   "world_agreement": 1.0,
+   "boundary_agreement": 1.0,
+   "message_boundary_agreement": 1.0
+  },
+  "onnx_int8": {
+   "items": 200,
+   "world_same": 569,
+   "world_n": 584,
+   "boundary_same": 3572,
+   "boundary_n": 3576,
+   "msgs_all_boundaries_same": 196,
+   "max_abs_prob_diff_world": 0.6075069904327393,
+   "max_abs_prob_diff_seg": 0.3297959566116333,
+   "top3_same": 395,
+   "world_agreement": 0.9743150684931506,
+   "boundary_agreement": 0.9988814317673378,
+   "message_boundary_agreement": 0.98
+  },
+  "int8_vs_fp32": {
+   "items": 200,
+   "world_same": 569,
+   "world_n": 584,
+   "boundary_same": 3572,
+   "boundary_n": 3576,
+   "msgs_all_boundaries_same": 196,
+   "max_abs_prob_diff_world": 0.6075056195259094,
+   "max_abs_prob_diff_seg": 0.3297954797744751,
+   "top3_same": 395,
+   "world_agreement": 0.9743150684931506,
+   "boundary_agreement": 0.9988814317673378,
+   "message_boundary_agreement": 0.98
+  },
+  "disagreements": [
+   {
+    "cmp": "onnx_int8",
+    "text": "Hey, what is 4 plus 4, sorry, 4 plus 6",
+    "world_a": "kids.arith",
+    "world_b": "data.charts",
+    "p_a": 0.6483314037322998,
+    "p_b": 0.7918468713760376
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Hey, what is 4 plus 4, sorry, 4 plus 6",
+    "world_a": "kids.arith",
+    "world_b": "data.charts",
+    "p_a": 0.6483318209648132,
+    "p_b": 0.7918468713760376
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "wipe it all off",
+    "world_a": "ui.avatar",
+    "world_b": "art.draw",
+    "p_a": 0.44654563069343567,
+    "p_b": 0.30451318621635437
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "wipe it all off",
+    "world_a": "ui.avatar",
+    "world_b": "art.draw",
+    "p_a": 0.44654449820518494,
+    "p_b": 0.30451318621635437
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "is anything selected? what is it",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "is anything selected? what is it",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "eye back to normal",
+    "world_a": "ui.avatar",
+    "world_b": "geo.map",
+    "p_a": 0.6270076036453247,
+    "p_b": 0.7340079545974731
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "eye back to normal",
+    "world_a": "ui.avatar",
+    "world_b": "geo.map",
+    "p_a": 0.627007782459259,
+    "p_b": 0.7340079545974731
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Please, Games!",
+    "world_a": "games.tictactoe",
+    "world_b": "ui.shell",
+    "p_a": 0.5491614937782288,
+    "p_b": 0.4769100844860077
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Please, Games!",
+    "world_a": "games.tictactoe",
+    "world_b": "ui.shell",
+    "p_a": 0.5491613745689392,
+    "p_b": 0.4769100844860077
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Is the word an owl",
+    "world_a": "games.hangman",
+    "world_b": "kids.shapes",
+    "p_a": 0.5303764343261719,
+    "p_b": 0.7101041674613953
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Is the word an owl",
+    "world_a": "games.hangman",
+    "world_b": "kids.shapes",
+    "p_a": 0.5303760766983032,
+    "p_b": 0.7101041674613953
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "undo that",
+    "world_a": "ui.avatar",
+    "world_b": "art.draw",
+    "p_a": 0.6437010765075684,
+    "p_b": 0.48321568965911865
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "undo that",
+    "world_a": "ui.avatar",
+    "world_b": "art.draw",
+    "p_a": 0.6437010765075684,
+    "p_b": 0.48321568965911865
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "undo that",
+    "world_a": "ui.avatar",
+    "world_b": "art.draw",
+    "p_a": 0.6437008380889893,
+    "p_b": 0.48321568965911865
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "undo that",
+    "world_a": "ui.avatar",
+    "world_b": "art.draw",
+    "p_a": 0.6437008380889893,
+    "p_b": 0.48321568965911865
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "drop the title",
+    "world_a": "data.charts",
+    "world_b": "docs.editor",
+    "p_a": 0.573933482170105,
+    "p_b": 0.6971835494041443
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "drop the title",
+    "world_a": "data.charts",
+    "world_b": "docs.editor",
+    "p_a": 0.5739344358444214,
+    "p_b": 0.6971835494041443
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "btw Max gobbled 3 toy cars now",
+    "world_a": "kids.shop",
+    "world_b": "kids.arith",
+    "p_a": 0.7599964141845703,
+    "p_b": 0.6782589554786682
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "btw Max gobbled 3 toy cars now",
+    "world_a": "kids.shop",
+    "world_b": "kids.arith",
+    "p_a": 0.7599950432777405,
+    "p_b": 0.6782589554786682
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "look suprised",
+    "world_a": "ui.avatar",
+    "world_b": "docs.editor",
+    "p_a": 0.7175707221031189,
+    "p_b": 0.6319140195846558
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "look suprised",
+    "world_a": "ui.avatar",
+    "world_b": "docs.editor",
+    "p_a": 0.7175685167312622,
+    "p_b": 0.6319140195846558
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "colors",
+    "world_a": "kids.shapes",
+    "world_b": "data.charts",
+    "p_a": 0.7601296305656433,
+    "p_b": 0.7292799353599548
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "colors",
+    "world_a": "kids.shapes",
+    "world_b": "data.charts",
+    "p_a": 0.7601292729377747,
+    "p_b": 0.7292799353599548
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Make the text bold",
+    "world_a": "docs.editor",
+    "world_b": "geo.map",
+    "p_a": 0.7024399638175964,
+    "p_b": 0.6576802730560303
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Make the text bold",
+    "world_a": "docs.editor",
+    "world_b": "geo.map",
+    "p_a": 0.7024411559104919,
+    "p_b": 0.6576802730560303
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "move it down once more",
+    "world_a": "media.music",
+    "world_b": "games.guess",
+    "p_a": 0.5347549915313721,
+    "p_b": 0.7275292277336121
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "move it down once more",
+    "world_a": "media.music",
+    "world_b": "games.guess",
+    "p_a": 0.5347578525543213,
+    "p_b": 0.7275292277336121
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Can you move the heart down",
+    "world_a": "games.chess",
+    "world_b": "art.draw",
+    "p_a": 0.46095842123031616,
+    "p_b": 0.44540026783943176
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Can you move the heart down",
+    "world_a": "games.chess",
+    "world_b": "art.draw",
+    "p_a": 0.4609587788581848,
+    "p_b": 0.44540026783943176
+   }
+  ]
+ },
+ "edit_agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "rewritten_by_torch": 0.355,
+  "onnx_fp32": {
+   "n": 200,
+   "simplified_same": 200,
+   "tags_same": 200,
+   "words": 994,
+   "word_tags_same": 994,
+   "top1_world_same": 200,
+   "simplified_agreement": 1.0,
+   "tag_sequence_agreement": 1.0,
+   "word_tag_agreement": 1.0
+  },
+  "onnx_int8": {
+   "n": 200,
+   "simplified_same": 184,
+   "tags_same": 184,
+   "words": 994,
+   "word_tags_same": 978,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.92,
+   "tag_sequence_agreement": 0.92,
+   "word_tag_agreement": 0.9839034205231388
+  },
+  "int8_vs_fp32": {
+   "n": 200,
+   "simplified_same": 184,
+   "tags_same": 184,
+   "words": 994,
+   "word_tags_same": 978,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.92,
+   "tag_sequence_agreement": 0.92,
+   "word_tag_agreement": 0.9839034205231388
+  },
+  "examples_differing": [
+   {
+    "text": "name of the helper?",
+    "torch": "name the helper?",
+    "int8": null
+   },
+   {
+    "text": "can u add a column named weight",
+    "torch": "add a column named weight.",
+    "int8": "add a column named weight"
+   },
+   {
+    "text": "so yeah, a zebra cannot swim",
+    "torch": "yeah, a zebra cannot swim",
+    "int8": null
+   },
+   {
+    "text": "whats my balance now",
+    "torch": "whats my balance",
+    "int8": null
+   },
+   {
+    "text": "does it have an O",
+    "torch": "is there an O",
+    "int8": "an O"
+   },
+   {
+    "text": "so whats a cow covered in",
+    "torch": "whats a cow covered in?",
+    "int8": "whats a cow covered in"
+   },
+   {
+    "text": "how much is 20 split by 4",
+    "torch": "20/ 4?",
+    "int8": "20 4?"
+   },
+   {
+    "text": "let me try the letter n",
+    "torch": "try n",
+    "int8": "try letter n"
+   },
+   {
+    "text": "could you explain what this tab does",
+    "torch": "what this tab does",
+    "int8": "explain what this tab does"
+   },
+   {
+    "text": "can u describe the board row by row",
+    "torch": "describe the board row row",
+    "int8": "describe the board row"
+   },
+   {
+    "text": "bye bye",
+    "torch": "bye",
+    "int8": "bye! !"
+   },
+   {
+    "text": "is red a primary color, yes or no",
+    "torch": "is red a primary",
+    "int8": "is red primary"
+   },
+   {
+    "text": "spent 2 lei just now",
+    "torch": null,
+    "int8": "spent 2 lei now"
+   },
+   {
+    "text": "start a new game",
+    "torch": "a new game",
+    "int8": null
+   },
+   {
+    "text": "no, thats wrong",
+    "torch": "no thats wrong",
+    "int8": null
+   }
+  ]
+ },
+ "latency_cpu_batch1": {
+  "fp32_threads1": {
+   "encoder_pass_ms": {
+    "p50": 12.54307599447202,
+    "p95": 66.5159189957194,
+    "mean": 20.304223660496064
+   },
+   "dispatch_message_ms": {
+    "p50": 125.5530079943128,
+    "p95": 359.8340989992721,
+    "mean": 157.50520342990058
+   },
+   "avg_distinct_segments_per_message": 8.13,
+   "n": 100
+  },
+  "int8_threads1": {
+   "encoder_pass_ms": {
+    "p50": 3.591412998503074,
+    "p95": 17.242368005099706,
+    "mean": 5.6255737294850405
+   },
+   "dispatch_message_ms": {
+    "p50": 34.42499300581403,
+    "p95": 99.73370899388101,
+    "mean": 42.662397690000944
+   },
+   "avg_distinct_segments_per_message": 8.14,
+   "n": 100
+  },
+  "fp32_threads4": {
+   "encoder_pass_ms": {
+    "p50": 4.243802992277779,
+    "p95": 18.400218003080226,
+    "mean": 6.3014803192345425
+   },
+   "dispatch_message_ms": {
+    "p50": 41.41911199258175,
+    "p95": 115.14015999273397,
+    "mean": 51.147391939739464
+   },
+   "avg_distinct_segments_per_message": 8.13,
+   "n": 100
+  },
+  "int8_threads4": {
+   "encoder_pass_ms": {
+    "p50": 1.810721994843334,
+    "p95": 6.20326200441923,
+    "mean": 2.4905485205817968
+   },
+   "dispatch_message_ms": {
+    "p50": 17.92443700833246,
+    "p95": 48.62751500331797,
+    "mean": 21.67162668032688
+   },
+   "avg_distinct_segments_per_message": 8.14,
+   "n": 100
+  }
+ },
+ "cpu": "Grace aarch64 (DGX Spark)",
+ "versions": {
+  "torch": "2.14.1+cu130",
+  "onnx": "1.23.2",
+  "onnxruntime": "1.31.1",
+  "opset": 17
+ }
+}

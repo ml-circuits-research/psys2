@@ -491,6 +491,7 @@ def main(argv=None):
     ap.add_argument("--keep-ckpts", type=int, default=3, help="best dev-score checkpoints kept for the operational selection (F7)")
     ap.add_argument("--select-cmd", default=None, help="operational evaluator command template (see selection.py); default scripts/eval-operational.mjs when it exists, else the local stub set")
     ap.add_argument("--multicmd", default=str(MULTICMD), help="directory with the multicmd train/dev/test jsonl (python -m psys2_train.multicmd --out ...)")
+    ap.add_argument("--seg-b-weight", type=float, default=2.0, help="loss weight of the boundary (B) class of the segmentation head (R4: 2.0 over-segments long messages; lower it to trade omissions for duplicates)")
     ap.add_argument("--no-select", action="store_true", help="skip the operational selection: use the best dev-score checkpoint and tau 0.5")
     a = ap.parse_args(argv)
     dev = require_cuda()
@@ -595,7 +596,7 @@ def main(argv=None):
     heads = [p for n, p in model.named_parameters() if p.requires_grad and not n.startswith("backbone.")]
     opt = torch.optim.AdamW([{"params": body, "lr": lr}, {"params": heads, "lr": a.head_lr}], weight_decay=0.01)
     sched = get_linear_schedule_with_warmup(opt, int(0.06 * total), total)
-    seg_w = torch.tensor([1.0, 2.0], device=dev)
+    seg_w = torch.tensor([1.0, a.seg_b_weight], device=dev)
     edit_w = torch.tensor([1.0] + [2.0] * (len(edit_tags) - 1), device=dev) if use_edit else None
 
     def dev_score():

@@ -1,8 +1,8 @@
 {
- "file": "training/results/operational/encoder+n1-19dd054b-2026-11-09.json",
+ "file": "training/results/operational/encoder+n1-6c41eb24-2026-11-09.json",
  "mode": "encoder+n1",
  "date": "2026-11-09",
- "dispatcher_sha256": "19dd054b7b4540793953d2bcbcde281ebec074ac5fc1141e1496eb924129fd46",
+ "dispatcher_sha256": "6c41eb2434646b988e8936f1a2a82e1490465ca023a0d5b2be6987daedcac2be",
  "normalizer_sha256": "1171020a228ce078baccd4ca7038c6e3141ceca5377aebe5f59f1f3b0b06fda2",
  "policy": {
   "formalizer": "encoder",
@@ -10,12 +10,13 @@
   "partialUnderstanding": true,
   "normalizer": true,
   "spellcheck": true,
+  "bestEffort": true,
   "fastPath": false
  },
  "headline": {
   "n": 1240,
-  "right_pct": 97.8,
-  "wrong_pct": 0.7,
-  "not_understood_pct": 1.2
+  "right_pct": 98.6,
+  "wrong_pct": 0.4,
+  "not_understood_pct": 1
  }
 }

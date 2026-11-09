@@ -1,0 +1,101 @@
+{
+ "ckpt": "runs/dispatcher-distilbert-v4a",
+ "weights": "ckpt-step1632.pt",
+ "split": "test",
+ "n": 4000,
+ "boundary": {
+  "precision": 0.9820433951284396,
+  "recall": 0.9811461794019933,
+  "f1": 0.9815945822427189,
+  "tp": 11813,
+  "fp": 216,
+  "fn": 227
+ },
+ "exact_segmentation": 0.88025,
+ "end_to_end_exact": 0.71275,
+ "exact_by_family": {
+  "chain_long": 0.51,
+  "concat": 0.938945420906568,
+  "ellipsis": 1.0,
+  "long": 0.6,
+  "mid": 0.8016666666666666,
+  "ref_created": 0.9215686274509803,
+  "repeat_undo": 0.8444444444444444,
+  "self_correct": 1.0,
+  "shared_arg": 1.0,
+  "single": 0.9968652037617555,
+  "world_switch": 0.8870588235294118
+ },
+ "by_bucket": {
+  "1": {
+   "n": 861,
+   "segments": 861,
+   "exact_segmentation": 0.9988385598141696,
+   "final_correct": 0.9825783972125436,
+   "omitted_segments": 0,
+   "messages_with_omission": 0,
+   "omission_rate": 0.0,
+   "duplicate_segments": 1,
+   "messages_with_duplicate": 1,
+   "extra_segments": 0,
+   "dependencies": 0,
+   "lost_dependencies": 0
+  },
+  "2-3": {
+   "n": 2139,
+   "segments": 4696,
+   "exact_segmentation": 0.9153810191678354,
+   "final_correct": 0.788218793828892,
+   "omitted_segments": 37,
+   "messages_with_omission": 36,
+   "omission_rate": 0.007879045996592844,
+   "duplicate_segments": 26,
+   "messages_with_duplicate": 26,
+   "extra_segments": 0,
+   "dependencies": 0,
+   "lost_dependencies": 0
+  },
+  "4-5": {
+   "n": 242,
+   "segments": 1094,
+   "exact_segmentation": 0.8305785123966942,
+   "final_correct": 0.5289256198347108,
+   "omitted_segments": 17,
+   "messages_with_omission": 15,
+   "omission_rate": 0.015539305301645339,
+   "duplicate_segments": 5,
+   "messages_with_duplicate": 5,
+   "extra_segments": 0,
+   "dependencies": 95,
+   "lost_dependencies": 2
+  },
+  "6-8": {
+   "n": 358,
+   "segments": 2488,
+   "exact_segmentation": 0.7821229050279329,
+   "final_correct": 0.3659217877094972,
+   "omitted_segments": 19,
+   "messages_with_omission": 19,
+   "omission_rate": 0.007636655948553055,
+   "duplicate_segments": 20,
+   "messages_with_duplicate": 20,
+   "extra_segments": 0,
+   "dependencies": 262,
+   "lost_dependencies": 9
+  },
+  "long": {
+   "n": 400,
+   "segments": 6901,
+   "exact_segmentation": 0.555,
+   "final_correct": 0.15,
+   "omitted_segments": 86,
+   "messages_with_omission": 61,
+   "omission_rate": 0.012461962034487755,
+   "duplicate_segments": 96,
+   "messages_with_duplicate": 75,
+   "extra_segments": 0,
+   "dependencies": 363,
+   "lost_dependencies": 10
+  }
+ }
+}

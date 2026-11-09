@@ -1,0 +1,3481 @@
+{
+ "config": {
+  "mode": "encoder+n1",
+  "jobs": 20,
+  "formalizer": "encoder",
+  "policy": {
+   "formalizer": "encoder",
+   "encoderAcceptRefused": true,
+   "partialUnderstanding": true,
+   "normalizer": true,
+   "spellcheck": true,
+   "bestEffort": true,
+   "fastPath": false
+  },
+  "hashes": {
+   "dispatcher": {
+    "file": "model.int8.onnx",
+    "sha256": "6c41eb2434646b988e8936f1a2a82e1490465ca023a0d5b2be6987daedcac2be",
+    "meta_sha256": null,
+    "match": false,
+    "export_date": null
+   },
+   "normalizer": {
+    "files": {
+     "encoder.int8.onnx": {
+      "sha256": "ba3d74f4f439f15feff95071df72589942bf20086023bc033321b2a4e3009bab",
+      "meta_sha256": "ba3d74f4f439f15feff95071df72589942bf20086023bc033321b2a4e3009bab"
+     },
+     "decoder.int8.onnx": {
+      "sha256": "8121e19677eb8f1640fda0e306cbad1e120d80a5d7f635ed90538af1d15ad92c",
+      "meta_sha256": "8121e19677eb8f1640fda0e306cbad1e120d80a5d7f635ed90538af1d15ad92c"
+     }
+    },
+    "meta_sha256": "1171020a228ce078baccd4ca7038c6e3141ceca5377aebe5f59f1f3b0b06fda2",
+    "match": true,
+    "export_date": "2026-11-08",
+    "policy": {
+     "normalizerBeam": 3,
+     "normalizerMinScore": -0.3,
+     "valueStrictness": "strict"
+    }
+   }
+  },
+  "set": "training/eval/operational-long.jsonl",
+  "cases": 154,
+  "full_set": true,
+  "date": "2026-11-09"
+ },
+ "headline": {
+  "n": 154,
+  "right": 145,
+  "partly": 5,
+  "wrong": 3,
+  "not_understood": 1,
+  "right_pct": 94.2,
+  "partly_pct": 3.2,
+  "wrong_pct": 1.9,
+  "not_understood_pct": 0.6
+ },
+ "excluding_known_gaps": {
+  "n": 154,
+  "right": 145,
+  "partly": 5,
+  "wrong": 3,
+  "not_understood": 1,
+  "right_pct": 94.2,
+  "partly_pct": 3.2,
+  "wrong_pct": 1.9,
+  "not_understood_pct": 0.6
+ },
+ "known_gap_only": {
+  "n": 0,
+  "right": 0,
+  "partly": 0,
+  "wrong": 0,
+  "not_understood": 0,
+  "right_pct": 0,
+  "partly_pct": 0,
+  "wrong_pct": 0,
+  "not_understood_pct": 0
+ },
+ "by_tag": {
+  "mid": {
+   "n": 118,
+   "right": 113,
+   "partly": 2,
+   "wrong": 2,
+   "not_understood": 1,
+   "right_pct": 95.8,
+   "partly_pct": 1.7,
+   "wrong_pct": 1.7,
+   "not_understood_pct": 0.8,
+   "items": 454,
+   "items_missed": 11,
+   "items_missed_pct": 2.4
+  },
+  "long": {
+   "n": 36,
+   "right": 32,
+   "partly": 3,
+   "wrong": 1,
+   "not_understood": 0,
+   "right_pct": 88.9,
+   "partly_pct": 8.3,
+   "wrong_pct": 2.8,
+   "not_understood_pct": 0,
+   "items": 268,
+   "items_missed": 8,
+   "items_missed_pct": 3
+  }
+ },
+ "by_group": {
+  "kids": {
+   "n": 26,
+   "right": 26,
+   "partly": 0,
+   "wrong": 0,
+   "not_understood": 0,
+   "right_pct": 100,
+   "partly_pct": 0,
+   "wrong_pct": 0,
+   "not_understood_pct": 0
+  },
+  "avatar/shell/editor": {
+   "n": 34,
+   "right": 32,
+   "partly": 1,
+   "wrong": 1,
+   "not_understood": 0,
+   "right_pct": 94.1,
+   "partly_pct": 2.9,
+   "wrong_pct": 2.9,
+   "not_understood_pct": 0
+  },
+  "music/draw/map/charts": {
+   "n": 70,
+   "right": 64,
+   "partly": 3,
+   "wrong": 2,
+   "not_understood": 1,
+   "right_pct": 91.4,
+   "partly_pct": 4.3,
+   "wrong_pct": 2.9,
+   "not_understood_pct": 1.4
+  },
+  "games": {
+   "n": 24,
+   "right": 23,
+   "partly": 1,
+   "wrong": 0,
+   "not_understood": 0,
+   "right_pct": 95.8,
+   "partly_pct": 4.2,
+   "wrong_pct": 0,
+   "not_understood_pct": 0
+  }
+ },
+ "by_world": {
+  "art.draw": {
+   "n": 32,
+   "right": 29,
+   "partly": 3,
+   "wrong": 0,
+   "not_understood": 0,
+   "right_pct": 90.6,
+   "partly_pct": 9.4,
+   "wrong_pct": 0,
+   "not_understood_pct": 0
+  },
+  "data.charts": {
+   "n": 12,
+   "right": 9,
+   "partly": 0,
+   "wrong": 2,
+   "not_understood": 1,
+   "right_pct": 75,
+   "partly_pct": 0,
+   "wrong_pct": 16.7,
+   "not_understood_pct": 8.3
+  },
+  "docs.editor": {
+   "n": 12,
+   "right": 11,
+   "partly": 0,
+   "wrong": 1,
+   "not_understood": 0,
+   "right_pct": 91.7,
+   "partly_pct": 0,
+   "wrong_pct": 8.3,
+   "not_understood_pct": 0
+  },
+  "games.chess": {
+   "n": 5,
+   "right": 5,
+   "partly": 0,
+   "wrong": 0,
+   "not_understood": 0,
+   "right_pct": 100,
+   "partly_pct": 0,
+   "wrong_pct": 0,
+   "not_understood_pct": 0
+  },
+  "games.guess": {
+   "n": 6,
+   "right": 6,
+   "partly": 0,
+   "wrong": 0,
+   "not_understood": 0,
+   "right_pct": 100,
+   "partly_pct": 0,
+   "wrong_pct": 0,
+   "not_understood_pct": 0
+  },
+  "games.hangman": {
+   "n": 7,
+   "right": 7,
+   "partly": 0,
+   "wrong": 0,
+   "not_understood": 0,
+   "right_pct": 100,
+   "partly_pct": 0,
+   "wrong_pct": 0,
+   "not_understood_pct": 0
+  },
+  "games.tictactoe": {
+   "n": 6,
+   "right": 5,
+   "partly": 1,
+   "wrong": 0,
+   "not_understood": 0,
+   "right_pct": 83.3,
+   "partly_pct": 16.7,
+   "wrong_pct": 0,
+   "not_understood_pct": 0
+  },
+  "geo.map": {
+   "n": 12,
+   "right": 12,
+   "partly": 0,
+   "wrong": 0,
+   "not_understood": 0,
+   "right_pct": 100,
+   "partly_pct": 0,
+   "wrong_pct": 0,
+   "not_understood_pct": 0
+  },
+  "kids.animals": {
+   "n": 5,
+   "right": 5,
+   "partly": 0,
+   "wrong": 0,
+   "not_understood": 0,
+   "right_pct": 100,
+   "partly_pct": 0,
+   "wrong_pct": 0,
+   "not_understood_pct": 0
+  },
+  "kids.arith": {
+   "n": 4,
+   "right": 4,
+   "partly": 0,
+   "wrong": 0,
+   "not_understood": 0,
+   "right_pct": 100,
+   "partly_pct": 0,
+   "wrong_pct": 0,
+   "not_understood_pct": 0
+  },
+  "kids.common": {
+   "n": 2,
+   "right": 2,
+   "partly": 0,
+   "wrong": 0,
+   "not_understood": 0,
+   "right_pct": 100,
+   "partly_pct": 0,
+   "wrong_pct": 0,
+   "not_understood_pct": 0
+  },
+  "kids.shapes": {
+   "n": 3,
+   "right": 3,
+   "partly": 0,
+   "wrong": 0,
+   "not_understood": 0,
+   "right_pct": 100,
+   "partly_pct": 0,
+   "wrong_pct": 0,
+   "not_understood_pct": 0
+  },
+  "kids.shop": {
+   "n": 4,
+   "right": 4,
+   "partly": 0,
+   "wrong": 0,
+   "not_understood": 0,
+   "right_pct": 100,
+   "partly_pct": 0,
+   "wrong_pct": 0,
+   "not_understood_pct": 0
+  },
+  "kids.tasks": {
+   "n": 5,
+   "right": 5,
+   "partly": 0,
+   "wrong": 0,
+   "not_understood": 0,
+   "right_pct": 100,
+   "partly_pct": 0,
+   "wrong_pct": 0,
+   "not_understood_pct": 0
+  },
+  "kids.time": {
+   "n": 3,
+   "right": 3,
+   "partly": 0,
+   "wrong": 0,
+   "not_understood": 0,
+   "right_pct": 100,
+   "partly_pct": 0,
+   "wrong_pct": 0,
+   "not_understood_pct": 0
+  },
+  "media.music": {
+   "n": 14,
+   "right": 14,
+   "partly": 0,
+   "wrong": 0,
+   "not_understood": 0,
+   "right_pct": 100,
+   "partly_pct": 0,
+   "wrong_pct": 0,
+   "not_understood_pct": 0
+  },
+  "ui.avatar": {
+   "n": 17,
+   "right": 16,
+   "partly": 1,
+   "wrong": 0,
+   "not_understood": 0,
+   "right_pct": 94.1,
+   "partly_pct": 5.9,
+   "wrong_pct": 0,
+   "not_understood_pct": 0
+  },
+  "ui.shell": {
+   "n": 5,
+   "right": 5,
+   "partly": 0,
+   "wrong": 0,
+   "not_understood": 0,
+   "right_pct": 100,
+   "partly_pct": 0,
+   "wrong_pct": 0,
+   "not_understood_pct": 0
+  }
+ },
+ "by_family": {
+  "dependency": {
+   "n": 47,
+   "right": 43,
+   "partly": 3,
+   "wrong": 1,
+   "not_understood": 0,
+   "right_pct": 91.5,
+   "partly_pct": 6.4,
+   "wrong_pct": 2.1,
+   "not_understood_pct": 0
+  },
+  "long": {
+   "n": 115,
+   "right": 106,
+   "partly": 5,
+   "wrong": 3,
+   "not_understood": 1,
+   "right_pct": 92.2,
+   "partly_pct": 4.3,
+   "wrong_pct": 2.6,
+   "not_understood_pct": 0.9
+  },
+  "messy": {
+   "n": 42,
+   "right": 37,
+   "partly": 3,
+   "wrong": 2,
+   "not_understood": 0,
+   "right_pct": 88.1,
+   "partly_pct": 7.1,
+   "wrong_pct": 4.8,
+   "not_understood_pct": 0
+  },
+  "multi": {
+   "n": 154,
+   "right": 145,
+   "partly": 5,
+   "wrong": 3,
+   "not_understood": 1,
+   "right_pct": 94.2,
+   "partly_pct": 3.2,
+   "wrong_pct": 1.9,
+   "not_understood_pct": 0.6
+  },
+  "no-connective": {
+   "n": 14,
+   "right": 13,
+   "partly": 0,
+   "wrong": 0,
+   "not_understood": 1,
+   "right_pct": 92.9,
+   "partly_pct": 0,
+   "wrong_pct": 0,
+   "not_understood_pct": 7.1
+  },
+  "repeat-undo": {
+   "n": 4,
+   "right": 3,
+   "partly": 1,
+   "wrong": 0,
+   "not_understood": 0,
+   "right_pct": 75,
+   "partly_pct": 25,
+   "wrong_pct": 0,
+   "not_understood_pct": 0
+  },
+  "typo": {
+   "n": 37,
+   "right": 33,
+   "partly": 2,
+   "wrong": 2,
+   "not_understood": 0,
+   "right_pct": 89.2,
+   "partly_pct": 5.4,
+   "wrong_pct": 5.4,
+   "not_understood_pct": 0
+  },
+  "world-switch": {
+   "n": 64,
+   "right": 60,
+   "partly": 3,
+   "wrong": 1,
+   "not_understood": 0,
+   "right_pct": 93.8,
+   "partly_pct": 4.7,
+   "wrong_pct": 1.6,
+   "not_understood_pct": 0
+  }
+ },
+ "latency_ms": {
+  "mean": 1230,
+  "p50": 983,
+  "p95": 3028,
+  "max": 5257
+ },
+ "latency": {
+  "jobs": 20,
+  "workers": 20,
+  "cold_start_ms": 2964,
+  "cold_start_ms_max": 3407,
+  "model_load_ms": {
+   "dispatcher": 204,
+   "normalizer": 1445,
+   "note": "first worker; per worker in per_worker"
+  },
+  "first_message_ms": 1794,
+  "steady_state": {
+   "n": 134,
+   "mean": 1145,
+   "p50": 879,
+   "p95": 3057,
+   "max": 5257
+  },
+  "warm_cache": null,
+  "normalizer_propose": null,
+  "contention": "per-message latency includes CPU contention of the other workers; use --jobs 1 for single-thread latency",
+  "per_worker": [
+   {
+    "cold_start_ms": 2325,
+    "load_ms": {
+     "dispatcher": 204,
+     "normalizer": 1445
+    },
+    "first_message_ms": 1771
+   },
+   {
+    "cold_start_ms": 2408,
+    "load_ms": {
+     "dispatcher": 189,
+     "normalizer": 1477
+    },
+    "first_message_ms": 1393
+   },
+   {
+    "cold_start_ms": 2418,
+    "load_ms": {
+     "dispatcher": 230,
+     "normalizer": 1518
+    },
+    "first_message_ms": 1631
+   },
+   {
+    "cold_start_ms": 2390,
+    "load_ms": {
+     "dispatcher": 147,
+     "normalizer": 1438
+    },
+    "first_message_ms": 1358
+   },
+   {
+    "cold_start_ms": 2377,
+    "load_ms": {
+     "dispatcher": 189,
+     "normalizer": 1464
+    },
+    "first_message_ms": 1415
+   },
+   {
+    "cold_start_ms": 2409,
+    "load_ms": {
+     "dispatcher": 218,
+     "normalizer": 1449
+    },
+    "first_message_ms": 1448
+   },
+   {
+    "cold_start_ms": 2514,
+    "load_ms": {
+     "dispatcher": 203,
+     "normalizer": 1479
+    },
+    "first_message_ms": 1539
+   },
+   {
+    "cold_start_ms": 2596,
+    "load_ms": {
+     "dispatcher": 196,
+     "normalizer": 1492
+    },
+    "first_message_ms": 421
+   },
+   {
+    "cold_start_ms": 3056,
+    "load_ms": {
+     "dispatcher": 288,
+     "normalizer": 1448
+    },
+    "first_message_ms": 1535
+   },
+   {
+    "cold_start_ms": 3133,
+    "load_ms": {
+     "dispatcher": 243,
+     "normalizer": 1483
+    },
+    "first_message_ms": 654
+   },
+   {
+    "cold_start_ms": 3263,
+    "load_ms": {
+     "dispatcher": 402,
+     "normalizer": 1419
+    },
+    "first_message_ms": 2681
+   },
+   {
+    "cold_start_ms": 3299,
+    "load_ms": {
+     "dispatcher": 380,
+     "normalizer": 1397
+    },
+    "first_message_ms": 2165
+   },
+   {
+    "cold_start_ms": 3338,
+    "load_ms": {
+     "dispatcher": 429,
+     "normalizer": 1431
+    },
+    "first_message_ms": 2592
+   },
+   {
+    "cold_start_ms": 3378,
+    "load_ms": {
+     "dispatcher": 404,
+     "normalizer": 1439
+    },
+    "first_message_ms": 2269
+   },
+   {
+    "cold_start_ms": 3371,
+    "load_ms": {
+     "dispatcher": 435,
+     "normalizer": 1396
+    },
+    "first_message_ms": 2367
+   },
+   {
+    "cold_start_ms": 3407,
+    "load_ms": {
+     "dispatcher": 387,
+     "normalizer": 1412
+    },
+    "first_message_ms": 2429
+   },
+   {
+    "cold_start_ms": 3393,
+    "load_ms": {
+     "dispatcher": 407,
+     "normalizer": 1424
+    },
+    "first_message_ms": 1468
+   },
+   {
+    "cold_start_ms": 3398,
+    "load_ms": {
+     "dispatcher": 356,
+     "normalizer": 1477
+    },
+    "first_message_ms": 2636
+   },
+   {
+    "cold_start_ms": 3406,
+    "load_ms": {
+     "dispatcher": 348,
+     "normalizer": 1446
+    },
+    "first_message_ms": 1883
+   },
+   {
+    "cold_start_ms": 3400,
+    "load_ms": {
+     "dispatcher": 412,
+     "normalizer": 1416
+    },
+    "first_message_ms": 2218
+   }
+  ]
+ },
+ "cases": [
+  {
+   "id": "long.kids#001",
+   "world": "kids.arith",
+   "outcome": "right",
+   "reply": "7 plus 5 is 12. The day after Monday is Tuesday. A spider has 8 legs. 9 times 3 is 27.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 1771
+  },
+  {
+   "id": "long.kids#002",
+   "world": "kids.tasks",
+   "outcome": "right",
+   "reply": "Done! I added milk to your shopping list. A hexagon has 6 sides. 4 times 6 is 24. 10 minus 3 is 7.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 5,
+   "strategy": "encoder",
+   "ms": 1393
+  },
+  {
+   "id": "long.kids#003",
+   "world": "kids.shop",
+   "outcome": "right",
+   "reply": "OK, one ball costs 5 lei. 3 balls cost 15 lei. OK, one kite costs 4 lei. 2 kites cost 8 lei. 18 divided by 3 is 6.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 3,
+   "strategy": "encoder",
+   "ms": 1631
+  },
+  {
+   "id": "long.kids#004",
+   "world": "kids.time",
+   "outcome": "right",
+   "reply": "The season after winter is spring. The month after May is June. There are 7 days in a week. The day after Friday is Saturday.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 1358
+  },
+  {
+   "id": "long.kids#005",
+   "world": "kids.animals",
+   "outcome": "right",
+   "reply": "A spider has 8 legs. A cow goes moo. No, a penguin cannot fly. An ant has 6 legs.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 1415
+  },
+  {
+   "id": "long.kids#006",
+   "world": "kids.shapes",
+   "outcome": "right",
+   "reply": "A triangle has 3 corners. Blue and yellow make green. A hexagon has 6 sides. Yes, a banana is usually yellow.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 1448
+  },
+  {
+   "id": "long.kids#007",
+   "world": "kids.common",
+   "outcome": "right",
+   "reply": "Nice to meet you, Ben! 6 times 7 is 42. 20 minus 9 is 11. Goodbye! (I read \"wat\" as \"what\")",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 1539
+  },
+  {
+   "id": "long.kids#008",
+   "world": "kids.tasks",
+   "outcome": "right",
+   "reply": "Done! I added eggs to your shopping list. Done! I added bread to your shopping list. On your shopping list: milk, eggs and bread.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 5,
+   "strategy": "encoder",
+   "ms": 421
+  },
+  {
+   "id": "long.kids#009",
+   "world": "kids.shop",
+   "outcome": "right",
+   "reply": "3 kites cost 12 lei. 4 kites cost 16 lei. Double 7 is 14. 9 minus 4 is 5.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 1535
+  },
+  {
+   "id": "long.kids#010",
+   "world": "kids.arith",
+   "outcome": "right",
+   "reply": "OK, Tom got 3 apples. Tom has 8 apples. Double 8 is 16. 15 minus 6 is 9.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 3,
+   "strategy": "encoder",
+   "ms": 654
+  },
+  {
+   "id": "long.kids#011",
+   "world": "kids.time",
+   "outcome": "right",
+   "reply": "The day after Friday is Saturday. The day before Friday is Thursday. There are 12 months in a year. There are 24 hours in a day. (I read \"aftr\" as \"after\") (I read \"yaer\" as \"year\")",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 2681
+  },
+  {
+   "id": "long.kids#012",
+   "world": "kids.animals",
+   "outcome": "right",
+   "reply": "A spider has 8 legs. A cow goes moo. Yes, a dolphin is a mammal. A cow has 4 legs. (I read \"meny\" as \"many\" and \"spidr\" as \"spider\")",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 2165
+  },
+  {
+   "id": "long.kids#013",
+   "world": "kids.animals",
+   "outcome": "right",
+   "reply": "A spider has 8 legs. A cow goes moo. No, a penguin cannot fly. An ant has 6 legs.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 2592
+  },
+  {
+   "id": "long.kids#014",
+   "world": "kids.tasks",
+   "outcome": "right",
+   "reply": "Done! I added milk to your shopping list. A cow goes moo. No, a penguin cannot fly. 3 plus 9 is 12. (I read \"teh\" as \"the\") (I read \"wat\" as \"what\")",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 5,
+   "strategy": "encoder",
+   "ms": 2269
+  },
+  {
+   "id": "long.kids#015",
+   "world": "kids.arith",
+   "outcome": "right",
+   "reply": "56 divided by 8 is 7. 25 minus 9 is 16. 6 times 6 is 36. 4 plus 13 is 17.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 2367
+  },
+  {
+   "id": "long.kids#016",
+   "world": "kids.shapes",
+   "outcome": "right",
+   "reply": "A square has 4 sides. A triangle has 3 corners. The sky is usually blue. A hexagon has 6 sides.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 2429
+  },
+  {
+   "id": "long.kids#017",
+   "world": "kids.time",
+   "outcome": "right",
+   "reply": "The day before Friday is Thursday. There are 14 days in 2 weeks. The season after autumn is winter.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 3,
+   "strategy": "encoder",
+   "ms": 1468
+  },
+  {
+   "id": "long.kids#018",
+   "world": "kids.shop",
+   "outcome": "right",
+   "reply": "OK, you have 20 lei. OK, one kite costs 4 lei. OK, one pencil costs 2 lei. You would have 12 lei left. 3 pencils cost 6 lei.",
+   "statuses": [
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 2,
+   "strategy": "encoder",
+   "ms": 2636
+  },
+  {
+   "id": "long.kids#019",
+   "world": "kids.tasks",
+   "outcome": "right",
+   "reply": "Done! I added socks to your shopping list. 9 times 9 is 81. Done! I added hat to your shopping list. 7 minus 2 is 5. (I read \"wat\" as \"what\")",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 6,
+   "strategy": "encoder",
+   "ms": 1883
+  },
+  {
+   "id": "long.kids#020",
+   "world": "kids.animals",
+   "outcome": "right",
+   "reply": "An ant has 6 legs. Yes, a bat can fly. A dog goes woof. A spider has 8 legs.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 2218
+  },
+  {
+   "id": "long.kids#021",
+   "world": "kids.arith",
+   "outcome": "right",
+   "reply": "7 plus 5 is 12. The day after Monday is Tuesday. A spider has 8 legs. 9 times 3 is 27. The season after winter is spring. There are 7 days in a week. 56 divided by 8 is 7. A cow goes moo. 15 minus 7 is 8.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 7,
+   "strategy": "encoder",
+   "ms": 1568
+  },
+  {
+   "id": "long.kids#022",
+   "world": "kids.tasks",
+   "outcome": "right",
+   "reply": "Done! I added milk to your shopping list. Done! I added eggs to your shopping list. Done! I added bread to your shopping list. On your shopping list: milk, eggs and bread. You have 3 things on your shopping list. 6 times 7 is 42. A hexagon ",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 8,
+   "strategy": "encoder",
+   "ms": 1307
+  },
+  {
+   "id": "long.kids#023",
+   "world": "kids.shop",
+   "outcome": "right",
+   "reply": "OK, one ball costs 5 lei. OK, one kite costs 4 lei. OK, one pencil costs 2 lei. 3 balls cost 15 lei. 2 kites cost 8 lei. 5 pencils cost 10 lei. A kite costs 4 lei. 2 balls and a kite cost 14 lei. 21 divided by 3 is 7. A ball costs 5 lei.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 6,
+   "strategy": "encoder",
+   "ms": 2814
+  },
+  {
+   "id": "long.kids#024",
+   "world": "kids.animals",
+   "outcome": "right",
+   "reply": "A spider has 8 legs. A cow goes moo. No, a penguin cannot fly. An ant has 6 legs. Yes, a bat can fly. A cow has 4 legs. No, a whale is not a fish. It is a mammal. A dog goes woof. No, a spider is not an insect. It is an arachnid.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 7,
+   "strategy": "encoder",
+   "ms": 1352
+  },
+  {
+   "id": "long.kids#025",
+   "world": "kids.shapes",
+   "outcome": "right",
+   "reply": "A hexagon is a flat shape with 6 sides and 6 corners. A hexagon has 6 sides. A triangle has 3 corners. Blue and yellow make green. Yes, a banana is usually yellow. A square has 4 sides. Yes, a circle is a round shape. A square has 4 corners",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 5,
+   "strategy": "encoder",
+   "ms": 1533
+  },
+  {
+   "id": "long.kids#026",
+   "world": "kids.common",
+   "outcome": "right",
+   "reply": "Nice to meet you, Ben! Done! I added socks to your shopping list. The day after Friday is Saturday. 12 plus 15 is 27. 9 times 4 is 36. The season after autumn is winter. There are 14 days in 2 weeks. There are 7 days in a week. Goodbye!",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 9,
+   "strategy": "encoder",
+   "ms": 2094
+  },
+  {
+   "id": "long.draw#001",
+   "world": "art.draw",
+   "outcome": "right",
+   "reply": "Ta-da! I drew an orange cat. Here you go! The cat is red now. There! I moved the cat left. Done! I made the cat bigger.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 614
+  },
+  {
+   "id": "long.draw#002",
+   "world": "art.draw",
+   "outcome": "right",
+   "reply": "Here you go! I drew a red house and a green tree. There! I made the tree bigger. Done! I moved the house right. Look at that! I drew a yellow sun.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 6,
+   "strategy": "encoder",
+   "ms": 925
+  },
+  {
+   "id": "long.draw#003",
+   "world": "art.draw",
+   "outcome": "right",
+   "reply": "Ta-da! I drew a yellow sun. Here you go! I took away the yellow sun. There! I drew a cloud. Done! The cloud is blue now. Look at that! I drew a red boat.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 615
+  },
+  {
+   "id": "long.draw#004",
+   "world": "art.draw",
+   "outcome": "right",
+   "reply": "Ta-da! I drew a blue car. Here you go! The car is yellow now. OK, I undid it (colored it yellow). There! I drew a green tree. Done! I moved the tree up.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 910
+  },
+  {
+   "id": "long.draw#005",
+   "world": "art.draw",
+   "outcome": "right",
+   "reply": "Ta-da! I drew a red boat. Here you go! The sky is dark blue now. There! I drew a yellow sun. Done! The boat is red now.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 406
+  },
+  {
+   "id": "long.draw#006",
+   "world": "art.draw",
+   "outcome": "right",
+   "reply": "Here you go! I drew a green tree and a pink flower. There! The flower is purple now. Done! I took away the green tree.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 3,
+   "strategy": "encoder",
+   "ms": 266
+  },
+  {
+   "id": "long.draw#007",
+   "world": "art.draw",
+   "outcome": "right",
+   "reply": "Ta-da! I drew a yellow house. OK, I undid it (drew a yellow house). Here you go! I drew a red car. There! The car is green now.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 3,
+   "strategy": "encoder",
+   "ms": 339
+  },
+  {
+   "id": "long.draw#008",
+   "world": "art.draw",
+   "outcome": "right",
+   "reply": "Ta-da! I drew a red circle. Here you go! I made the circle bigger. There! The circle is blue now. Done! I moved the circle up.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 930
+  },
+  {
+   "id": "long.draw#009",
+   "world": "art.draw",
+   "outcome": "right",
+   "reply": "Here you go! I drew a green tree and a blue house. There! I moved the tree left. Done! I made the house bigger. OK, I undid it (made it bigger).",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 5,
+   "strategy": "encoder",
+   "ms": 525
+  },
+  {
+   "id": "long.draw#010",
+   "world": "art.draw",
+   "outcome": "right",
+   "reply": "Ta-da! I drew a red house. Red and yellow make orange. Here you go! I moved the house right. There! I drew a cloud.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 1346
+  },
+  {
+   "id": "long.draw#011",
+   "world": "art.draw",
+   "outcome": "right",
+   "reply": "Here is a fresh sheet of paper. What shall we draw? Here you go! I drew a red boat and a green tree. There are 2 things in your picture.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 3,
+   "strategy": "encoder",
+   "ms": 1058
+  },
+  {
+   "id": "long.draw#012",
+   "world": "art.draw",
+   "outcome": "partly",
+   "reply": "Done! My background is lavender now. I do not have blue for that; lavender is the closest. Ta-da! I drew a yellow sun in the top right corner. Here you go! The sun is orange now. OK, here is the Music tab.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [
+    "state:background=blue (got white)"
+   ],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 674
+  },
+  {
+   "id": "long.draw#013",
+   "world": "art.draw",
+   "outcome": "right",
+   "reply": "Here you go! I drew a brown dog and a green tree. There! I moved the tree left. Done! I took away the brown dog.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 866
+  },
+  {
+   "id": "long.draw#014",
+   "world": "art.draw",
+   "outcome": "right",
+   "reply": "Ta-da! I drew a red house. Here you go! It is night now: a dark sky, a moon and lots of stars. There! I moved the house up. Done! I added sand to the ground.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 226
+  },
+  {
+   "id": "long.draw#015",
+   "world": "art.draw",
+   "outcome": "right",
+   "reply": "Ta-da! I drew a brown dog. Here you go! The dog is brown now. There! I turned the dog around. Done! I made the dog bigger.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 992
+  },
+  {
+   "id": "long.draw#016",
+   "world": "art.draw",
+   "outcome": "right",
+   "reply": "Ta-da! I drew an orange cat. Here you go! The cat is red now. There! I moved the cat left. Done! I drew a yellow sun. (I read \"teh\" as \"the\") (I read \"mak\" as \"make\")",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 591
+  },
+  {
+   "id": "long.draw#017",
+   "world": "art.draw",
+   "outcome": "partly",
+   "reply": "Ta-da! I drew an orange triangle. Here you go! The triangle is green now. There! I moved the triangle right. A cow goes moo. (I read \"tre\" as \"tri\") (I read \"grenn\" as \"green\")",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [
+    "state:objects[kind=tree].color=green (got undefined)",
+    "state:objects[kind=tree].x>500 (got undefined)"
+   ],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 2045
+  },
+  {
+   "id": "long.draw#018",
+   "world": "art.draw",
+   "outcome": "right",
+   "reply": "Ta-da! I drew a yellow house. Here you go! I drew a cloud. There! The cloud is white now. Done! I took away the yellow house. A cloud is usually white. (I read \"hous\" as \"house\", \"whte\" as \"white\" and \"hous\" as \"house\") (I read \"hous\" as \"h",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "rules",
+   "ms": 1873
+  },
+  {
+   "id": "long.draw#019",
+   "world": "art.draw",
+   "outcome": "right",
+   "reply": "Ta-da! I drew a red sun. Here you go! I made the sun smaller. The sun is usually yellow. There! I drew a green tree.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 5,
+   "strategy": "encoder",
+   "ms": 844
+  },
+  {
+   "id": "long.draw#020",
+   "world": "art.draw",
+   "outcome": "right",
+   "reply": "Ta-da! I drew a blue car. Here you go! I drew a yellow star. There! I moved the star left. Done! I made the car bigger. (I read \"bleu\" as \"blue\") (I read \"yelow\" as \"yellow\") (I read \"teh\" as \"the\")",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 5,
+   "strategy": "encoder",
+   "ms": 2620
+  },
+  {
+   "id": "long.draw#021",
+   "world": "art.draw",
+   "outcome": "right",
+   "reply": "Ta-da! I drew a red house. Here you go! I drew a green tree next to the red house. There! I drew a yellow sun in the top right corner. Done! I made the sun bigger. Look at that! I moved the tree left. Nice! The house is blue now. Voila! I t",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 7,
+   "strategy": "encoder",
+   "ms": 1845
+  },
+  {
+   "id": "long.draw#022",
+   "world": "art.draw",
+   "outcome": "right",
+   "reply": "Ta-da! I drew a blue car. Here you go! I drew a green tree. There! I moved the car right. Done! I made the tree bigger. Look at that! I drew a brown dog. Nice! The dog is brown now. Voila! I moved the dog left. Ta-da! I turned the car aroun",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 8,
+   "strategy": "encoder",
+   "ms": 860
+  },
+  {
+   "id": "long.draw#023",
+   "world": "art.draw",
+   "outcome": "partly",
+   "reply": "Ta-da! I drew a red house. Here you go! I drew a green triangle next to the red house. There! I drew a yellow sun. Done! The sun is yellow now. I can not find a tree in your picture. Look at that! I moved the house left. Nice! I took away t",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "missing",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [
+    "state:objects[kind=tree].color=green (got undefined)",
+    "state:objects[kind=tree].size>170 (got undefined)"
+   ],
+   "trivial": 0,
+   "n_items": 10,
+   "strategy": "encoder",
+   "ms": 4505
+  },
+  {
+   "id": "long.draw#024",
+   "world": "art.draw",
+   "outcome": "right",
+   "reply": "Ta-da! I drew a brown dog. Here you go! I drew a green tree. There! The tree is green now. A cow goes moo. Done! I moved the dog right. Look at that! I drew a yellow sun. Nice! The sun is red now. There are 7 days in a week. Voila! I took a",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 7,
+   "strategy": "encoder",
+   "ms": 1756
+  },
+  {
+   "id": "long.draw#025",
+   "world": "art.draw",
+   "outcome": "right",
+   "reply": "Here you go! I drew a yellow house and a green tree. Done! My background is lavender now. I do not have blue for that; lavender is the closest. There! The house is red now. OK, I undid it (colored it red). OK, I undid it (drew a green tree)",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "missing"
+   ],
+   "failing": [],
+   "trivial": 1,
+   "n_items": 5,
+   "strategy": "encoder",
+   "ms": 1313
+  },
+  {
+   "id": "long.draw#026",
+   "world": "art.draw",
+   "outcome": "right",
+   "reply": "Ta-da! I drew a purple tree. Here you go! I made the tree bigger. There! I moved the tree up. Done! The sky is dark blue now. Look at that! I drew a pink flower. Nice! The flower is white now. There are 2 things in your picture. Voila! I to",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 8,
+   "strategy": "encoder",
+   "ms": 1086
+  },
+  {
+   "id": "long.ui#001",
+   "world": "ui.avatar",
+   "outcome": "right",
+   "reply": "Ta-da! I have cyclops eyes now. Done! I have a zigzag mouth now. Okay! I have a siren on top now. Ta-da! I have a heart on my chest now. Sure! My body is light violet now. I do not have purple for that; light violet is the closest. Nice! Fr",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 1,
+   "n_items": 6,
+   "strategy": "encoder",
+   "ms": 999
+  },
+  {
+   "id": "long.ui#002",
+   "world": "ui.avatar",
+   "outcome": "right",
+   "reply": "Okay! Now I am a person. I have a smile expression and short side-parted hair. Ta-da! I have a beanie now. Done! I have thin square glasses now. Done! I have a thin moustache now. Ta-da! Now I am a robot. I have buttons on my chest, round e",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 1,
+   "n_items": 9,
+   "strategy": "encoder",
+   "ms": 2729
+  },
+  {
+   "id": "long.ui#003",
+   "world": "ui.shell",
+   "outcome": "right",
+   "reply": "OK, the speaker is on. I will read my answers aloud. OK, I switched to Romanian. OK, I switched to English. OK, my speech rate is now 1.5. OK, here is the Music tab. OK, here is the Editor tab. OK, I added the heading \"Plans\". There is 1 he",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 1,
+   "n_items": 5,
+   "strategy": "encoder",
+   "ms": 1884
+  },
+  {
+   "id": "long.ui#004",
+   "world": "docs.editor",
+   "outcome": "wrong",
+   "reply": "OK, I added the heading \"Shopping\". OK, I added a paragraph (2 words). OK, I added a list with 3 items: milk, eggs and bread. OK, the first paragraph is now bold. You do not have any lists yet. You can say: Add milk to my shopping list. OK,",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "missing",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [
+    "state:blocks.length=4 (got 5)",
+    "state:blocks.2.text==Plans (got undefined)",
+    "state:blocks.3.text==see you soon (got Plans)",
+    "answer:1 list"
+   ],
+   "trivial": 0,
+   "n_items": 7,
+   "strategy": "encoder",
+   "ms": 1950
+  },
+  {
+   "id": "long.ui#005",
+   "world": "ui.avatar",
+   "outcome": "partly",
+   "reply": "Okay! I have happy eyes now. Ta-da! I have a twin on top now. Done! I have an antenna on top now. Done! My body is yellow now. Sure! I have vents on my chest now. Nice! From now on my name is Ziggy. Okay! Now I am a person. I have a smile e",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [
+    "state:robot.top=twin (got antenna)"
+   ],
+   "trivial": 0,
+   "n_items": 9,
+   "strategy": "encoder",
+   "ms": 1436
+  },
+  {
+   "id": "long.ui#006",
+   "world": "docs.editor",
+   "outcome": "right",
+   "reply": "OK, I added the heading \"Weekly plan\". OK, I added the heading \"Monday\". OK, I added a paragraph (3 words). OK, the paragraph is now italic. There is 1 paragraph. OK, here is the Avatar tab. Ta-da! I have cyclops eyes now. Done! My body is ",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 9,
+   "strategy": "encoder",
+   "ms": 3445
+  },
+  {
+   "id": "long.ui#007",
+   "world": "ui.avatar",
+   "outcome": "right",
+   "reply": "Ta-da! I have cyclops eyes now. Done! I have a zigzag mouth now. Okay! I have a siren on top now. Done! My body is light red now. I do not have red for that; light red is the closest.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 577
+  },
+  {
+   "id": "long.ui#008",
+   "world": "ui.avatar",
+   "outcome": "right",
+   "reply": "Done! I have sleepy eyes now. Done! My body is yellow now. Ta-da! I have a heart on my chest now. Nice! From now on my name is Bolt.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 393
+  },
+  {
+   "id": "long.ui#009",
+   "world": "ui.avatar",
+   "outcome": "right",
+   "reply": "Done! I have visor eyes now. There you go! I have square eyes now. Sure! I have a line mouth now. I have square eyes.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 3,
+   "strategy": "encoder",
+   "ms": 641
+  },
+  {
+   "id": "long.ui#010",
+   "world": "ui.avatar",
+   "outcome": "right",
+   "reply": "Ta-da! I am back to my normal look as a robot. Okay! I have a dish on top now. Okay! I have happy eyes now. Okay! My body is light green now. I do not have green for that; light green is the closest.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 1,
+   "n_items": 3,
+   "strategy": "encoder",
+   "ms": 494
+  },
+  {
+   "id": "long.ui#011",
+   "world": "ui.avatar",
+   "outcome": "right",
+   "reply": "Sure! I have plus eyes now. OK, here is the Editor tab. OK, I added the heading \"Shopping\". OK, I added a paragraph (2 words).",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder,rules",
+   "ms": 1894
+  },
+  {
+   "id": "long.ui#012",
+   "world": "docs.editor",
+   "outcome": "right",
+   "reply": "OK, I added the heading \"Shopping\". OK, I added a paragraph (2 words). OK, the first paragraph is now bold. OK, I added a list with 2 items: milk and eggs.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 1615
+  },
+  {
+   "id": "long.ui#013",
+   "world": "docs.editor",
+   "outcome": "right",
+   "reply": "OK, I added the heading \"Shopping\". OK, I added a paragraph (2 words). OK, I added a list with 2 items: milk and eggs. OK, I turned the list into a numbered list.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 5,
+   "strategy": "encoder",
+   "ms": 1150
+  },
+  {
+   "id": "long.ui#014",
+   "world": "docs.editor",
+   "outcome": "right",
+   "reply": "OK, I added the heading \"Shopping\". OK, I added a paragraph (2 words). OK, I undid the last change. OK, I added the heading \"Plans\".",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 3,
+   "strategy": "encoder",
+   "ms": 1330
+  },
+  {
+   "id": "long.ui#015",
+   "world": "docs.editor",
+   "outcome": "right",
+   "reply": "The document is already empty. OK, I added the heading \"Notes\". OK, I added a paragraph (2 words). There is 1 paragraph.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 698
+  },
+  {
+   "id": "long.ui#016",
+   "world": "ui.shell",
+   "outcome": "right",
+   "reply": "OK, the speaker is on. I will read my answers aloud. OK, my speech rate is now 1.5. OK, here is the Chess tab. OK, I switched to Romanian.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 783
+  },
+  {
+   "id": "long.ui#017",
+   "world": "ui.shell",
+   "outcome": "right",
+   "reply": "OK, here is the Editor tab. OK, I added the heading \"Shopping\". OK, back to the Avatar tab. OK, my speech rate is slower: 0.75.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 1,
+   "n_items": 2,
+   "strategy": "encoder",
+   "ms": 960
+  },
+  {
+   "id": "long.ui#018",
+   "world": "ui.shell",
+   "outcome": "right",
+   "reply": "OK, here is the Music tab. Okay! I have happy eyes now. OK, here is the Map tab. OK, my speech rate is faster: 1.25.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 3,
+   "strategy": "encoder",
+   "ms": 879
+  },
+  {
+   "id": "long.ui#019",
+   "world": "ui.avatar",
+   "outcome": "right",
+   "reply": "Okay! Now I am a person. I have a smile expression and short side-parted hair. Ta-da! I have a beanie now. Done! I have thin square glasses now. Nice! From now on my name is Ada.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 232
+  },
+  {
+   "id": "long.ui#020",
+   "world": "ui.avatar",
+   "outcome": "right",
+   "reply": "There you go! Now I am an emoji. I have a circle face, blush cheeks, round eyes with pupils and a smile mouth. Ta-da! I have sparkling eyes now. Ta-da! Now I am a robot. I have buttons on my chest, round eyes, a smile mouth and an antenna o",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 1,
+   "n_items": 2,
+   "strategy": "encoder",
+   "ms": 207
+  },
+  {
+   "id": "long.ui#021",
+   "world": "ui.avatar",
+   "outcome": "right",
+   "reply": "Done! I have a zigzag mouth now. Okay! I have a dish on top now. Done! I have a dial on my chest now. Sure! My body is light violet now. I do not have purple for that; light violet is the closest. (I read \"teh\" as \"the\")",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 1458
+  },
+  {
+   "id": "long.ui#022",
+   "world": "ui.avatar",
+   "outcome": "right",
+   "reply": "Okay! My body is light green now. I do not have green for that; light green is the closest. There you go! I have square eyes now. Ta-da! I have a heart on my chest now. My name is PSys2. (I read \"pls\" as \"please\" and \"mke\" as \"make\") (I rea",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 1012
+  },
+  {
+   "id": "long.ui#023",
+   "world": "ui.shell",
+   "outcome": "right",
+   "reply": "OK, here is the Chess tab. OK, my speech rate is slower: 0.75. OK, the speaker is on. I will read my answers aloud. OK, I switched to Romanian. (I read \"opn\" as \"open\") (I read \"speek\" as \"speak\") (I read \"teh\" as \"the\" and \"pls\" as \"please",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 492
+  },
+  {
+   "id": "long.ui#024",
+   "world": "docs.editor",
+   "outcome": "right",
+   "reply": "OK, I added the heading \"Groceries\". OK, I added a paragraph (2 words). OK, I added a list with 2 items: eggs and bread. (I read \"headng\" as \"heading\") (I read \"paragrph\" as \"paragraph\" and \"milk\" as \"milo\") (I read \"lst\" as \"list\")",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 3028
+  },
+  {
+   "id": "long.ui#025",
+   "world": "docs.editor",
+   "outcome": "right",
+   "reply": "OK, I added the heading \"My trip\". OK, I undid the last change. OK, I added the heading \"Plans\". There is 1 heading.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 3,
+   "strategy": "encoder",
+   "ms": 1235
+  },
+  {
+   "id": "long.ui#026",
+   "world": "ui.avatar",
+   "outcome": "right",
+   "reply": "There you go! I have square eyes now. Hello! What would you like to talk about? There is nothing to undo. Okay! I have a siren on top now. My name is PSys2.",
+   "statuses": [
+    "supported",
+    "supported",
+    "missing",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 1,
+   "n_items": 2,
+   "strategy": "encoder",
+   "ms": 447
+  },
+  {
+   "id": "long.media#001",
+   "world": "media.music",
+   "outcome": "right",
+   "reply": "OK, the tempo is now 110 beats per minute (it was 100). OK, I will play on the flute. OK, the volume is 50 percent. Playing middle C (C4), 261.6 Hz, on the flute.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 598
+  },
+  {
+   "id": "long.media#002",
+   "world": "media.music",
+   "outcome": "right",
+   "reply": "OK, the tempo is now 96 beats per minute (it was 100). OK, the volume is 30 percent. Playing the C major scale upwards: C D E F G A B C, on the piano. Stopped.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 1,
+   "n_items": 2,
+   "strategy": "encoder",
+   "ms": 325
+  },
+  {
+   "id": "long.media#003",
+   "world": "media.music",
+   "outcome": "right",
+   "reply": "OK, I will play on the organ. 9 times 3 is 27. OK, the tempo is now 72 beats per minute (it was 100). OK, the volume is 40 percent.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 922
+  },
+  {
+   "id": "long.media#004",
+   "world": "media.music",
+   "outcome": "right",
+   "reply": "OK, the tempo is now 84 beats per minute (it was 100). OK, I will play on the flute. OK, the volume is 60 percent. Playing middle C (C4), 261.6 Hz, on the flute. (I read \"tempoo\" as \"tempo\") (I read \"flut\" as \"flute\")",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 1111
+  },
+  {
+   "id": "long.media#005",
+   "world": "media.music",
+   "outcome": "right",
+   "reply": "OK, the key is D major: D E F# G A B C#. It has 2 sharps: F# C#. Playing the D major scale upwards: D E F# G A B C# D, on the piano. Playing again at 100 beats per minute. OK, the volume is 50 percent.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 1,
+   "n_items": 3,
+   "strategy": "encoder",
+   "ms": 641
+  },
+  {
+   "id": "long.media#006",
+   "world": "media.music",
+   "outcome": "right",
+   "reply": "OK, the volume is 45 percent. OK, I will play on the piano. Playing middle C (C4), 261.6 Hz, on the piano. Playing again at 90 beats per minute (it was 100).",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 1,
+   "n_items": 3,
+   "strategy": "encoder",
+   "ms": 592
+  },
+  {
+   "id": "long.media#007",
+   "world": "media.music",
+   "outcome": "right",
+   "reply": "Playing the D major scale upwards: D E F# G A B C# D, on the organ. 6 times 7 is 42. Playing again at 90 beats per minute (it was 100). OK, the volume is 40 percent. (I read \"wat\" as \"what\")",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 5,
+   "strategy": "encoder",
+   "ms": 522
+  },
+  {
+   "id": "long.media#008",
+   "world": "media.music",
+   "outcome": "right",
+   "reply": "OK, the tempo is now 100 beats per minute. OK, looping is on. It will repeat the next thing you play. OK, the volume is 25 percent. A4 is 440 Hz. Its MIDI number is 69.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 1,
+   "n_items": 3,
+   "strategy": "encoder",
+   "ms": 989
+  },
+  {
+   "id": "long.media#009",
+   "world": "media.music",
+   "outcome": "right",
+   "reply": "Hello! What would you like to talk about? There is nothing to choose between right now. Tell me a move, for example \"knight to f3\". OK, the tempo is now 120 beats per minute (it was 100). OK, I will play on the flute. OK, the volume is 35 p",
+   "statuses": [
+    "supported",
+    "missing",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 1,
+   "n_items": 5,
+   "strategy": "encoder",
+   "ms": 5257
+  },
+  {
+   "id": "long.media#010",
+   "world": "media.music",
+   "outcome": "right",
+   "reply": "OK, the key is C major: C D E F G A B. It has no sharps or flats. Playing the C major scale upwards: C D E F G A B C, on the piano. Playing again at 88 beats per minute (it was 100). OK, the volume is 40 percent. Playing middle C (C4), 261.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 2,
+   "n_items": 5,
+   "strategy": "encoder",
+   "ms": 778
+  },
+  {
+   "id": "long.media#011",
+   "world": "geo.map",
+   "outcome": "right",
+   "reply": "OK, I put markers on Paris and Rome. OK, I highlighted Italy. Zoom is now 5.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 5,
+   "strategy": "encoder",
+   "ms": 665
+  },
+  {
+   "id": "long.media#012",
+   "world": "geo.map",
+   "outcome": "right",
+   "reply": "Here is Berlin: capital of Germany · 3.4 million people. OK, I put a marker on Berlin. Zoomed in to zoom 10. OK, I highlighted Germany.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 3,
+   "strategy": "encoder",
+   "ms": 552
+  },
+  {
+   "id": "long.media#013",
+   "world": "geo.map",
+   "outcome": "right",
+   "reply": "OK, I put a marker on Madrid. OK, I highlighted Spain and Portugal. Zoom is now 4. The capital of Japan is Tokyo. (I read \"mrk\" as \"mark\")",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 482
+  },
+  {
+   "id": "long.media#014",
+   "world": "geo.map",
+   "outcome": "right",
+   "reply": "OK, I put a marker on Paris. OK, I highlighted Italy. Zoom is now 8. The map is reset: the whole world, with no markers, highlights or lines.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 4,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 533
+  },
+  {
+   "id": "long.media#015",
+   "world": "geo.map",
+   "outcome": "right",
+   "reply": "I did not understand \"shw me Pariss\". For example: \"Show latitude 48.8 longitude 2.3.\" or \"Is Paris the capital of France?\" Zoom is now 6. Yes, Egypt is in Africa. OK, I highlighted Spain.",
+   "statuses": [
+    "unparsed",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "rules,encoder",
+   "ms": 879
+  },
+  {
+   "id": "long.media#016",
+   "world": "geo.map",
+   "outcome": "right",
+   "reply": "OK, I put a marker on Oslo. OK, I highlighted Norway. Zoom is now 3. 9 times 3 is 27.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 652
+  },
+  {
+   "id": "long.media#017",
+   "world": "geo.map",
+   "outcome": "right",
+   "reply": "Hello! What would you like to talk about? There is nothing to choose between right now. Tell me a move, for example \"knight to f3\". Here is Paris: capital of France · 2.1 million people. OK, I put markers on Rome and Berlin. OK, I highlight",
+   "statuses": [
+    "supported",
+    "missing",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 5,
+   "strategy": "encoder",
+   "ms": 1345
+  },
+  {
+   "id": "long.media#018",
+   "world": "geo.map",
+   "outcome": "right",
+   "reply": "I did not understand \"so first mark Lima\". For example: \"Show latitude 48.8 longitude 2.3.\" or \"Is Paris the capital of France?\" OK, I put a marker on Cairo. OK, I highlighted Brazil and Egypt. Zoom is now 3. Zoomed in to zoom 4. The map is",
+   "statuses": [
+    "unparsed",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 5,
+   "strategy": "rules,encoder",
+   "ms": 1597
+  },
+  {
+   "id": "long.media#019",
+   "world": "data.charts",
+   "outcome": "right",
+   "reply": "OK, here is a bar chart with 3 items: apples 5, pears 3 and plums 8. OK, it is a pie chart now. OK, the chart is called \"Fruit\". OK, the numbers are hidden.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 834
+  },
+  {
+   "id": "long.media#020",
+   "world": "data.charts",
+   "outcome": "right",
+   "reply": "OK, here is a bar chart with 2 items: cats 2 and dogs 7. OK, the chart is called \"Pets\". OK, it is a line chart now. OK, I added bananas (4).",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 5,
+   "strategy": "encoder",
+   "ms": 2371
+  },
+  {
+   "id": "long.media#021",
+   "world": "data.charts",
+   "outcome": "not_understood",
+   "reply": "I could not find numbers in \"apples 5 pears 3 add bananas 4 remove pears\". Say it like this: \"make a chart: apples 5, pears 3, plums 8\". There is no chart yet. Say, for example: \"make a chart: apples 5, pears 3, plums 8\".",
+   "statuses": [
+    "missing",
+    "missing"
+   ],
+   "failing": [
+    "state:charts.0.labels.length=2 (got undefined)",
+    "state:charts.0.labels.1=Bananas (got undefined)",
+    "state:charts.0.datasets.0.data.1=4 (got undefined)",
+    "state:charts.0.datasets.0.data.0=6 (got undefined)"
+   ],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 728
+  },
+  {
+   "id": "long.media#022",
+   "world": "data.charts",
+   "outcome": "right",
+   "reply": "OK, here is a bar chart with 4 items: red 4, green 6, blue 10 and pink 1. OK, blue is now 12 (it was 10). OK, the chart is green now. OK, I added orange (2).",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 1099
+  },
+  {
+   "id": "long.media#023",
+   "world": "data.charts",
+   "outcome": "wrong",
+   "reply": "OK, here is a bar chart with 3 items: apples 5, pears 3 and plums 8. I could not find numbers in \"mak it a pie\". Say it like this: \"make a chart: apples 5, pears 3, plums 8\". OK, the chart is called \"Fruit\". OK, I added bananas (4). (I read",
+   "statuses": [
+    "supported",
+    "missing",
+    "supported",
+    "supported"
+   ],
+   "failing": [
+    "state:charts.0.type=pie (got bar)"
+   ],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 1927
+  },
+  {
+   "id": "long.media#024",
+   "world": "data.charts",
+   "outcome": "wrong",
+   "reply": "OK, here is a bar chart with 4 items: cats 2, dogs 7, what 8 and plus 4. I skipped \"how many days are in a week\", \"then make it a pie chart\" because I found no number. (I read \"mak\" as \"make\", \"mak\" as \"make\" and \"chrt\" as \"chart\")",
+   "statuses": [
+    "supported"
+   ],
+   "failing": [
+    "state:charts.0.type=pie (got bar)",
+    "state:charts.0.labels.length=2 (got 4)",
+    "answer:12"
+   ],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "rules",
+   "ms": 3057
+  },
+  {
+   "id": "long.media#025",
+   "world": "data.charts",
+   "outcome": "right",
+   "reply": "OK, here is a bar chart with 3 items: apples 5, pears 3 and plums 8. OK, I added bananas (4). OK, plums is now 10 (it was 8). OK, it is a line chart now. OK, the chart is called \"Fruit\". OK, the numbers are hidden. OK, I removed pears from ",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 8,
+   "strategy": "encoder",
+   "ms": 3624
+  },
+  {
+   "id": "long.media#026",
+   "world": "data.charts",
+   "outcome": "right",
+   "reply": "OK, here is a bar chart with 3 items: cats 2, dogs 7 and birds 4. OK, I added fish (9). It is already a bar chart. OK, it is a line chart now. OK, the numbers are hidden. OK, the legend is on. OK, I removed birds from the chart. OK, dogs is",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 8,
+   "strategy": "encoder",
+   "ms": 3478
+  },
+  {
+   "id": "long.games#001",
+   "world": "games.tictactoe",
+   "outcome": "right",
+   "reply": "New game of tic-tac-toe. You are X and you go first. I play at the easy level. Say a place like \"center\" or \"top left\", or a coordinate like B2 (letter for the column, number for the row). You took the center. I took top right. Your move. Y",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "unsupported"
+   ],
+   "failing": [],
+   "trivial": 1,
+   "n_items": 2,
+   "strategy": "encoder",
+   "ms": 1380
+  },
+  {
+   "id": "long.games#002",
+   "world": "games.tictactoe",
+   "outcome": "right",
+   "reply": "New game of tic-tac-toe. You are X and you go first. I play at the easy level. Say a place like \"center\" or \"top left\", or a coordinate like B2 (letter for the column, number for the row). You took the center. I took top right. Your move. Y",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "unsupported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 3,
+   "strategy": "encoder",
+   "ms": 794
+  },
+  {
+   "id": "long.games#003",
+   "world": "games.tictactoe",
+   "outcome": "right",
+   "reply": "I do not know a game called a. You took top right. I took the center. Your move. You took middle left. I took middle right. Your move. You took bottom middle. I took top middle. Your move.",
+   "statuses": [
+    "unsupported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 3,
+   "strategy": "rules,encoder",
+   "ms": 593
+  },
+  {
+   "id": "long.games#004",
+   "world": "games.tictactoe",
+   "outcome": "right",
+   "reply": "New game of tic-tac-toe. You are X and you go first. I play at the easy level. Say a place like \"center\" or \"top left\", or a coordinate like B2 (letter for the column, number for the row). You took the center. I took top right. Your move. Y",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 3,
+   "strategy": "encoder",
+   "ms": 495
+  },
+  {
+   "id": "long.games#005",
+   "world": "games.tictactoe",
+   "outcome": "right",
+   "reply": "New game of tic-tac-toe. You are X and you go first. I play at the easy level. Say a place like \"center\" or \"top left\", or a coordinate like B2 (letter for the column, number for the row). You took bottom right. I took the center. Your move",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 3,
+   "strategy": "encoder",
+   "ms": 481
+  },
+  {
+   "id": "long.games#006",
+   "world": "games.tictactoe",
+   "outcome": "partly",
+   "reply": "I did not understand \"new game center top left\". Did you mean \"Start a new chess game.\" or \"Start a new hangman game.\"? You took bottom right. I took the center. Your move. New game of tic-tac-toe. You are X and you go first. I play at the ",
+   "statuses": [
+    "unparsed",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "unparsed"
+   ],
+   "failing": [
+    "state:board.0=X (got )"
+   ],
+   "trivial": 1,
+   "n_items": 3,
+   "strategy": "rules,encoder",
+   "ms": 4718
+  },
+  {
+   "id": "long.games#007",
+   "world": "games.hangman",
+   "outcome": "right",
+   "reply": "Hangman! I have chosen a word of 4 letters: - - - -. You can make 6 wrong guesses. Guess a letter, or the whole word. No, there is no E. 5 wrong guesses left. - - - - Yes, there is one O! - - o - No, there is no Z. 4 wrong guesses left. - -",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 6,
+   "strategy": "encoder",
+   "ms": 247
+  },
+  {
+   "id": "long.games#008",
+   "world": "games.hangman",
+   "outcome": "right",
+   "reply": "Hangman! I have chosen a word of 4 letters: - - - -. You can make 6 wrong guesses. Guess a letter, or the whole word. Yes, there is one L! l - - - Yes, there is one I! l i - - No, there is no T. 5 wrong guesses left. l i - - (I read \"hangmn",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 5,
+   "strategy": "encoder",
+   "ms": 430
+  },
+  {
+   "id": "long.games#009",
+   "world": "games.hangman",
+   "outcome": "right",
+   "reply": "Hangman! I have chosen a word of 4 letters: - - - -. You can make 6 wrong guesses. Guess a letter, or the whole word. Yes, there is one L! l - - - Yes, there is one N! l - - n No, there is no Q. 5 wrong guesses left. l - - n",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 5,
+   "strategy": "encoder",
+   "ms": 693
+  },
+  {
+   "id": "long.games#010",
+   "world": "games.hangman",
+   "outcome": "right",
+   "reply": "Hangman! I have chosen a word of 4 letters: - - - -. You can make 6 wrong guesses. Guess a letter, or the whole word. No, there is no A. 5 wrong guesses left. - - - - Yes, there is one L! l - - - Yes! The word is lion. You won!",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 3,
+   "strategy": "encoder",
+   "ms": 193
+  },
+  {
+   "id": "long.games#011",
+   "world": "games.hangman",
+   "outcome": "right",
+   "reply": "Hangman! I have chosen a word of 4 letters: - - - -. You can make 6 wrong guesses. Guess a letter, or the whole word. No, there is no E. 5 wrong guesses left. - - - - Yes, there is one L! l - - - No, there is no A. 4 wrong guesses left. l -",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 8,
+   "strategy": "encoder",
+   "ms": 685
+  },
+  {
+   "id": "long.games#012",
+   "world": "games.hangman",
+   "outcome": "right",
+   "reply": "Hangman! I have chosen a word of 4 letters: - - - -. You can make 6 wrong guesses. Guess a letter, or the whole word. No, there is no Q. 5 wrong guesses left. - - - - Yes, there is one O! - - o - Yes, there is one N! - - o n 3 plus 3 is 6. ",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 5,
+   "strategy": "rules",
+   "ms": 1268
+  },
+  {
+   "id": "long.games#013",
+   "world": "games.chess",
+   "outcome": "right",
+   "reply": "Let us play chess! You are white and you move first. I play at level 3 (casual). Say a move such as \"knight to f3\" or \"e2 to e4\", or ask \"what can my knight do?\". You play pawn to e4. Meanwhile I play knight to c6. You play pawn to d4. Mean",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 1,
+   "n_items": 3,
+   "strategy": "encoder",
+   "ms": 501
+  },
+  {
+   "id": "long.games#014",
+   "world": "games.chess",
+   "outcome": "right",
+   "reply": "OK, let's play chess! Let us play chess! You are white and you move first. I play at level 3 (casual). Say a move such as \"knight to f3\" or \"e2 to e4\", or ask \"what can my knight do?\". You play pawn to e4. Meanwhile I play knight to c6. You",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 3,
+   "strategy": "encoder",
+   "ms": 350
+  },
+  {
+   "id": "long.games#015",
+   "world": "games.chess",
+   "outcome": "right",
+   "reply": "Let us play chess! You are white and you move first. I play at level 3 (casual). Say a move such as \"knight to f3\" or \"e2 to e4\", or ask \"what can my knight do?\". You play pawn to e4. Meanwhile I play knight to c6. You play pawn to d4. Mean",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 3,
+   "strategy": "encoder",
+   "ms": 498
+  },
+  {
+   "id": "long.games#016",
+   "world": "games.chess",
+   "outcome": "right",
+   "reply": "Let us play chess! You are white and you move first. I play at level 3 (casual). Say a move such as \"knight to f3\" or \"e2 to e4\", or ask \"what can my knight do?\". You play pawn to e4. Meanwhile I play knight to c6. You play knight to f3. 7 ",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 3,
+   "strategy": "encoder",
+   "ms": 530
+  },
+  {
+   "id": "long.games#017",
+   "world": "games.chess",
+   "outcome": "right",
+   "reply": "Let us play chess! You are white and you move first. I play at level 3 (casual). Say a move such as \"knight to f3\" or \"e2 to e4\", or ask \"what can my knight do?\". OK, I now play at level 2 (easy). I will go easier on you. You play pawn to a",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 7,
+   "strategy": "encoder",
+   "ms": 1697
+  },
+  {
+   "id": "long.games#018",
+   "world": "games.guess",
+   "outcome": "right",
+   "reply": "Good. Question 2: Does it eat only plants? OK. Question 3: Can it swim? No problem, I will ask something else. Question 4: Does it eat only meat? Hmm, then I will not count on that one. Question 5: Does it eat both plants and meat?",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 380
+  },
+  {
+   "id": "long.games#019",
+   "world": "games.guess",
+   "outcome": "right",
+   "reply": "Good. Question 2: Does it eat only plants? OK. Question 3: Can it swim? No problem, I will ask something else. Question 4: Does it eat only meat? Hmm, then I will not count on that one. Question 5: Does it eat both plants and meat? (I read ",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 452
+  },
+  {
+   "id": "long.games#020",
+   "world": "games.guess",
+   "outcome": "right",
+   "reply": "Good. Question 2: Does it eat only plants? OK. Question 3: Can it swim? Hmm, then I will not count on that one. Question 4: Does it eat only meat? No problem, I will ask something else. Question 5: Does it eat both plants and meat?",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 289
+  },
+  {
+   "id": "long.games#021",
+   "world": "games.guess",
+   "outcome": "right",
+   "reply": "Good. Question 2: Does it eat only plants? OK. Question 3: Can it swim? No problem, I will ask something else. Question 4: Does it eat only meat? I have asked 3 questions so far, so I have 17 left.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 2,
+   "strategy": "encoder",
+   "ms": 398
+  },
+  {
+   "id": "long.games#022",
+   "world": "games.guess",
+   "outcome": "right",
+   "reply": "I am still thinking of 68 animals: dog, cat, rabbit, hamster, guinea pig, goldfish, parrot, tortoise, cow, pig, sheep and horse and more. Good. Question 2: Does it eat only plants? OK. Question 3: Can it swim? Hmm, then I will not count on ",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 9,
+   "strategy": "encoder",
+   "ms": 1007
+  },
+  {
+   "id": "long.games#023",
+   "world": "games.guess",
+   "outcome": "right",
+   "reply": "Good. Question 2: Does it eat only plants? OK. Question 3: Can it swim? 2 plus 2 is 4. Hmm, then I will not count on that one. Question 4: Does it eat only meat? No problem, I will ask something else. Question 5: Does it eat both plants and",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 5,
+   "strategy": "encoder",
+   "ms": 310
+  },
+  {
+   "id": "long.games#024",
+   "world": "games.hangman",
+   "outcome": "right",
+   "reply": "Hangman! I have chosen a word of 4 letters: - - - -. You can make 6 wrong guesses. Guess a letter, or the whole word. No, there is no E. 5 wrong guesses left. - - - - No, there is no A. 4 wrong guesses left. - - - - No, there is no S. 3 wro",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 7,
+   "strategy": "encoder",
+   "ms": 640
+  },
+  {
+   "id": "long.mixed#001",
+   "world": "art.draw",
+   "outcome": "right",
+   "reply": "Ta-da! I drew a red house. Red and yellow make orange. OK, the tempo is now 90 beats per minute (it was 100). OK, I put a marker on Paris.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 366
+  },
+  {
+   "id": "long.mixed#002",
+   "world": "ui.avatar",
+   "outcome": "right",
+   "reply": "Done! I have visor eyes now. A cow goes moo. OK, the tempo is now 80 beats per minute (it was 100). Done! My body is yellow now.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 302
+  },
+  {
+   "id": "long.mixed#003",
+   "world": "geo.map",
+   "outcome": "right",
+   "reply": "OK, I put a marker on Berlin. The capital of Italy is Rome. OK, here is a bar chart with 2 items: apples 5 and pears 3. 20 minus 8 is 12.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 993
+  },
+  {
+   "id": "long.mixed#004",
+   "world": "media.music",
+   "outcome": "right",
+   "reply": "OK, the tempo is now 120 beats per minute (it was 100). Yes, Egypt is in Africa. Ta-da! I drew a blue tree. Red and yellow make orange.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 738
+  },
+  {
+   "id": "long.mixed#005",
+   "world": "data.charts",
+   "outcome": "right",
+   "reply": "OK, here is a bar chart with 2 items: apples 5 and pears 3. OK, I added kiwis (6). Ta-da! I drew a red house. A spider has 8 legs.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 903
+  },
+  {
+   "id": "long.mixed#006",
+   "world": "docs.editor",
+   "outcome": "right",
+   "reply": "OK, I added the heading \"Shopping\". OK, I added a paragraph (2 words). Ta-da! I drew a green tree. The day after Monday is Tuesday.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 815
+  },
+  {
+   "id": "long.mixed#007",
+   "world": "art.draw",
+   "outcome": "right",
+   "reply": "Ta-da! I drew a blue house. A duck goes quack. OK, the tempo is now 90 beats per minute (it was 100). OK, I put a marker on Rome.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 724
+  },
+  {
+   "id": "long.mixed#008",
+   "world": "geo.map",
+   "outcome": "right",
+   "reply": "Yes, Egypt is in Africa. OK, the tempo is now 90 beats per minute (it was 100). A dog goes woof. OK, I put a marker on Madrid.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 640
+  },
+  {
+   "id": "long.mixed#009",
+   "world": "art.draw",
+   "outcome": "right",
+   "reply": "Ta-da! I drew 3 yellow stars. Red and yellow make orange. OK, I will play on the flute. 7 plus 5 is 12.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 626
+  },
+  {
+   "id": "long.mixed#010",
+   "world": "media.music",
+   "outcome": "right",
+   "reply": "OK, the tempo is now 95 beats per minute (it was 100). Ta-da! I drew a yellow house. 30 plus 12 is 42. OK, I put a marker on Oslo.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 676
+  },
+  {
+   "id": "long.mixed#011",
+   "world": "ui.avatar",
+   "outcome": "right",
+   "reply": "Okay! My body is light green now. I do not have green for that; light green is the closest. There you go! I have square eyes now. Red and yellow make orange. Ta-da! I drew a blue tree.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 602
+  },
+  {
+   "id": "long.mixed#012",
+   "world": "docs.editor",
+   "outcome": "right",
+   "reply": "OK, I added the heading \"Notes\". 20 minus 8 is 12. OK, the tempo is now 110 beats per minute (it was 100). A cat goes meow.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 604
+  },
+  {
+   "id": "long.mixed#013",
+   "world": "data.charts",
+   "outcome": "right",
+   "reply": "OK, here is a bar chart with 2 items: apples 5 and pears 3. Red and yellow make orange. OK, I put a marker on Lima. 9 times 3 is 27.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 1981
+  },
+  {
+   "id": "long.mixed#014",
+   "world": "art.draw",
+   "outcome": "right",
+   "reply": "Ta-da! I drew a blue car. 5 plus 4 is 9. OK, the tempo is now 115 beats per minute (it was 100). OK, I put a marker on Oslo. (I read \"wat\" as \"what\" and \"pls\" as \"please\") (I read \"teh\" as \"the\") (I read \"teh\" as \"the\")",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 1365
+  },
+  {
+   "id": "long.mixed#015",
+   "world": "geo.map",
+   "outcome": "right",
+   "reply": "OK, I put a marker on Rome. The capital of Japan is Tokyo. A cat goes meow. Yes, Cairo is in Africa. (I read \"pls\" as \"please\" and \"teh\" as \"the\") (I read \"wat\" as \"what\")",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 1300
+  },
+  {
+   "id": "long.mixed#016",
+   "world": "ui.avatar",
+   "outcome": "right",
+   "reply": "There you go! I have a grill mouth now. 6 times 7 is 42. Sure! I have vents on my chest now. The day after Friday is Saturday. (I read \"wat\" as \"what\")",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 983
+  },
+  {
+   "id": "long.mixed#017",
+   "world": "docs.editor",
+   "outcome": "right",
+   "reply": "OK, I added the heading \"Groceries\". Ta-da! I drew a purple tree. A horse goes neigh. The capital of Italy is Rome.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 881
+  },
+  {
+   "id": "long.mixed#018",
+   "world": "media.music",
+   "outcome": "right",
+   "reply": "OK, I will play on the flute. The day after Friday is Saturday. OK, I put a marker on London. There are 7 days in a week. (I read \"teh\" as \"the\") (I read \"teh\" as \"the\") (I read \"teh\" as \"the\") (I read \"teh\" as \"the\")",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "rules",
+   "ms": 1055
+  },
+  {
+   "id": "long.mixed#019",
+   "world": "data.charts",
+   "outcome": "right",
+   "reply": "OK, here is a bar chart with 2 items: apples 5 and pears 3. A triangle has 3 sides. OK, I put a marker on Oslo. 9 times 3 is 27. (I read \"wat\" as \"what\")",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 4,
+   "strategy": "encoder",
+   "ms": 1325
+  },
+  {
+   "id": "long.mixed#020",
+   "world": "art.draw",
+   "outcome": "right",
+   "reply": "Ta-da! I drew a red house. Here you go! I drew a blue tree. 6 times 7 is 42. OK, the tempo is now 90 beats per minute (it was 100). OK, I put a marker on Paris. A dog goes woof. The day after Monday is Tuesday. OK, I put a marker on Berlin.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 9,
+   "strategy": "encoder",
+   "ms": 786
+  },
+  {
+   "id": "long.mixed#021",
+   "world": "media.music",
+   "outcome": "right",
+   "reply": "OK, the tempo is now 120 beats per minute (it was 100). Yes, Egypt is in Africa. 7 plus 5 is 12. Ta-da! I drew a yellow house. A cow goes moo. The capital of Japan is Tokyo. OK, I will play on the flute. Red and yellow make orange. OK, I pu",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 9,
+   "strategy": "encoder",
+   "ms": 751
+  },
+  {
+   "id": "long.mixed#022",
+   "world": "geo.map",
+   "outcome": "right",
+   "reply": "OK, I put a marker on Berlin. OK, I put a marker on Madrid. The capital of Italy is Rome. Yes, Cairo is in Africa. 20 minus 8 is 12. OK, here is a bar chart with 2 items: apples 5 and pears 3. Ta-da! I drew a red house. OK, the tempo is now",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 9,
+   "strategy": "encoder",
+   "ms": 1517
+  },
+  {
+   "id": "long.mixed#023",
+   "world": "data.charts",
+   "outcome": "right",
+   "reply": "OK, here is a bar chart with 3 items: apples 5, pears 3 and plums 8. OK, I added kiwis (6). OK, I removed pears from the chart. There are 7 days in a week. A cat goes meow. Ta-da! I drew a blue car. OK, the tempo is now 96 beats per minute ",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 9,
+   "strategy": "encoder",
+   "ms": 2181
+  },
+  {
+   "id": "long.mixed#024",
+   "world": "ui.avatar",
+   "outcome": "right",
+   "reply": "Done! I have visor eyes now. There you go! I have a grill mouth now. Done! My body is yellow now. Sure! I have vents on my chest now. 6 times 7 is 42. The day after Monday is Tuesday. OK, I put a marker on Paris. OK, the tempo is now 90 bea",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 11,
+   "strategy": "encoder",
+   "ms": 1586
+  },
+  {
+   "id": "long.mixed#025",
+   "world": "docs.editor",
+   "outcome": "right",
+   "reply": "OK, I added the heading \"Shopping\". OK, I added a paragraph (2 words). 12 times 3 is 36. Ta-da! I drew a green tree. A horse goes neigh. OK, I put a marker on Oslo. The capital of France is Paris. OK, the tempo is now 88 beats per minute (i",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 10,
+   "strategy": "encoder",
+   "ms": 1532
+  },
+  {
+   "id": "long.mixed#026",
+   "world": "art.draw",
+   "outcome": "right",
+   "reply": "Ta-da! I drew a blue house. A duck goes quack. A spider has 8 legs. A hexagon has 6 sides. Red and yellow make orange. The day after Sunday is Monday. 9 times 3 is 27. The capital of Japan is Tokyo. OK, I put a marker on Rome.",
+   "statuses": [
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported",
+    "supported"
+   ],
+   "failing": [],
+   "trivial": 0,
+   "n_items": 9,
+   "strategy": "encoder",
+   "ms": 993
+  }
+ ]
+}

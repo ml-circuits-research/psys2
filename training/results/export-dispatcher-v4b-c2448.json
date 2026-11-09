@@ -1,0 +1,446 @@
+{
+ "checkpoint": "runs/dispatcher-v4b-c2448",
+ "model": "distilbert-base-uncased",
+ "export_dir": "/home/salboaie/work/psys2/training/runs/export/dispatcher-v4b-c2448",
+ "command": "python -m psys2_train.export_onnx --ckpt runs/dispatcher-v4b-c2448",
+ "sizes_mb": {
+  "fp32": 253.7491683959961,
+  "int8": 63.98744773864746
+ },
+ "targets": {
+  "max_size_mb": 150,
+  "max_ms_per_message": 50,
+  "min_agreement": 0.995
+ },
+ "gold_top1_lenient_on_gold_segments_of_sample": {
+  "n": 584,
+  "torch": 0.8938356164383562,
+  "fp32": 0.8938356164383562,
+  "int8": 0.8904109589041096
+ },
+ "agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "reference": "PyTorch CUDA fp32",
+  "onnx_fp32": {
+   "items": 200,
+   "world_same": 584,
+   "world_n": 584,
+   "boundary_same": 3576,
+   "boundary_n": 3576,
+   "msgs_all_boundaries_same": 200,
+   "max_abs_prob_diff_world": 6.198883056640625e-06,
+   "max_abs_prob_diff_seg": 1.9073486328125e-06,
+   "top3_same": 584,
+   "world_agreement": 1.0,
+   "boundary_agreement": 1.0,
+   "message_boundary_agreement": 1.0
+  },
+  "onnx_int8": {
+   "items": 200,
+   "world_same": 573,
+   "world_n": 584,
+   "boundary_same": 3573,
+   "boundary_n": 3576,
+   "msgs_all_boundaries_same": 197,
+   "max_abs_prob_diff_world": 0.44216933846473694,
+   "max_abs_prob_diff_seg": 0.4059032201766968,
+   "top3_same": 381,
+   "world_agreement": 0.9811643835616438,
+   "boundary_agreement": 0.9991610738255033,
+   "message_boundary_agreement": 0.985
+  },
+  "int8_vs_fp32": {
+   "items": 200,
+   "world_same": 573,
+   "world_n": 584,
+   "boundary_same": 3573,
+   "boundary_n": 3576,
+   "msgs_all_boundaries_same": 197,
+   "max_abs_prob_diff_world": 0.4421703517436981,
+   "max_abs_prob_diff_seg": 0.4059039354324341,
+   "top3_same": 381,
+   "world_agreement": 0.9811643835616438,
+   "boundary_agreement": 0.9991610738255033,
+   "message_boundary_agreement": 0.985
+  },
+  "disagreements": [
+   {
+    "cmp": "onnx_int8",
+    "text": "Make the text bold",
+    "world_a": "docs.editor",
+    "world_b": "art.draw",
+    "p_a": 0.8776258826255798,
+    "p_b": 0.5639855265617371
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Make the text bold",
+    "world_a": "docs.editor",
+    "world_b": "art.draw",
+    "p_a": 0.877626895904541,
+    "p_b": 0.5639855265617371
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Please, tiger, my answer",
+    "world_a": "games.guess",
+    "world_b": "games.hangman",
+    "p_a": 0.5537915229797363,
+    "p_b": 0.5406837463378906
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Please, tiger, my answer",
+    "world_a": "games.guess",
+    "world_b": "games.hangman",
+    "p_a": 0.553790807723999,
+    "p_b": 0.5406837463378906
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Please make the circle and square yellow.",
+    "world_a": "art.draw",
+    "world_b": "kids.shapes",
+    "p_a": 0.624275267124176,
+    "p_b": 0.6867755055427551
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Please make the circle and square yellow.",
+    "world_a": "art.draw",
+    "world_b": "kids.shapes",
+    "p_a": 0.6242756843566895,
+    "p_b": 0.6867755055427551
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Is the word an owl",
+    "world_a": "games.hangman",
+    "world_b": "kids.animals",
+    "p_a": 0.5482344627380371,
+    "p_b": 0.49143996834754944
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Is the word an owl",
+    "world_a": "games.hangman",
+    "world_b": "kids.animals",
+    "p_a": 0.5482375025749207,
+    "p_b": 0.49143996834754944
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Move it down",
+    "world_a": "art.draw",
+    "world_b": "kids.shapes",
+    "p_a": 0.34058913588523865,
+    "p_b": 0.3007969856262207
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Move it down",
+    "world_a": "art.draw",
+    "world_b": "kids.shapes",
+    "p_a": 0.3405892550945282,
+    "p_b": 0.3007969856262207
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "move the rock on d six to b3 and then what day comes 6 days before sunday how much change would i receive from 70 lei when i buy three stickers italy or canada which is bigger and what was the time 2 hours before 2 oclock then make your eyes red and please 150 bpm please then cows are covered in what and drop the title and guess my pick and what season is it in november then i'd like you to have visor eyes and then what do you call a baby crocodile and then how do i change ur eyes then what is section 4 in short list the games giraffe is the word then remove bring my umbrella from birthday list octave down twice then okay how many hours are in 4 days and then highlight the last heading in purple",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "move the rock on d six to b3 and then what day comes 6 days before sunday how much change would i receive from 70 lei when i buy three stickers italy or canada which is bigger and what was the time 2 hours before 2 oclock then make your eyes red and please 150 bpm please then cows are covered in what and drop the title and guess my pick and what season is it in november then i'd like you to have visor eyes and then what do you call a baby crocodile and then how do i change ur eyes then what is section 4 in short list the games giraffe is the word then remove bring my umbrella from birthday list octave down twice then okay how many hours are in 4 days and then highlight the last heading in purple",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "make your body blue no wait pink",
+    "world_a": "ui.avatar",
+    "world_b": "art.draw",
+    "p_a": 0.7944284081459045,
+    "p_b": 0.546104907989502
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "make your body blue no wait pink",
+    "world_a": "ui.avatar",
+    "world_b": "art.draw",
+    "p_a": 0.7944291830062866,
+    "p_b": 0.546104907989502
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "jump to the end",
+    "world_a": "ui.shell",
+    "world_b": "ui.avatar",
+    "p_a": 0.7235187888145447,
+    "p_b": 0.660386860370636
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "jump to the end",
+    "world_a": "ui.shell",
+    "world_b": "ui.avatar",
+    "p_a": 0.7235198616981506,
+    "p_b": 0.660386860370636
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "look suprised",
+    "world_a": "docs.editor",
+    "world_b": "ui.avatar",
+    "p_a": 0.5357967019081116,
+    "p_b": 0.7821707129478455
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "look suprised",
+    "world_a": "docs.editor",
+    "world_b": "ui.avatar",
+    "p_a": 0.5357981324195862,
+    "p_b": 0.7821707129478455
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "how many countries border spain france or hungary which is smaller which asian country is the biggest",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "how many countries border spain france or hungary which is smaller which asian country is the biggest",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "move it down once more",
+    "world_a": "data.charts",
+    "world_b": "art.draw",
+    "p_a": 0.46125370264053345,
+    "p_b": 0.7194474935531616
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "move it down once more",
+    "world_a": "data.charts",
+    "world_b": "art.draw",
+    "p_a": 0.4612511694431305,
+    "p_b": 0.7194474935531616
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "place it below the triangle.",
+    "world_a": "kids.shapes",
+    "world_b": "art.draw",
+    "p_a": 0.5126073956489563,
+    "p_b": 0.49382689595222473
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "place it below the triangle.",
+    "world_a": "kids.shapes",
+    "world_b": "art.draw",
+    "p_a": 0.5126072764396667,
+    "p_b": 0.49382689595222473
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "give me the change, 30 lei, puzzle and 2 kites",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "give me the change, 30 lei, puzzle and 2 kites",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Okay, tiger, my answer",
+    "world_a": "games.hangman",
+    "world_b": "games.guess",
+    "p_a": 0.7002743482589722,
+    "p_b": 0.571837842464447
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Okay, tiger, my answer",
+    "world_a": "games.hangman",
+    "world_b": "games.guess",
+    "p_a": 0.7002735137939453,
+    "p_b": 0.571837842464447
+   }
+  ]
+ },
+ "edit_agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "rewritten_by_torch": 0.36,
+  "onnx_fp32": {
+   "n": 200,
+   "simplified_same": 200,
+   "tags_same": 200,
+   "words": 994,
+   "word_tags_same": 994,
+   "top1_world_same": 200,
+   "simplified_agreement": 1.0,
+   "tag_sequence_agreement": 1.0,
+   "word_tag_agreement": 1.0
+  },
+  "onnx_int8": {
+   "n": 200,
+   "simplified_same": 187,
+   "tags_same": 187,
+   "words": 994,
+   "word_tags_same": 979,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.935,
+   "tag_sequence_agreement": 0.935,
+   "word_tag_agreement": 0.9849094567404426
+  },
+  "int8_vs_fp32": {
+   "n": 200,
+   "simplified_same": 187,
+   "tags_same": 187,
+   "words": 994,
+   "word_tags_same": 979,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.935,
+   "tag_sequence_agreement": 0.935,
+   "word_tag_agreement": 0.9849094567404426
+  },
+  "examples_differing": [
+   {
+    "text": "green the roof pls",
+    "torch": null,
+    "int8": "green the roof"
+   },
+   {
+    "text": "it was tiger",
+    "torch": "tiger",
+    "int8": "it tiger"
+   },
+   {
+    "text": "examples pls",
+    "torch": null,
+    "int8": "examples"
+   },
+   {
+    "text": "does it have an O",
+    "torch": "is there an O?",
+    "int8": "is there an O"
+   },
+   {
+    "text": "start fresh with the default you",
+    "torch": "start fresh with",
+    "int8": "fresh with"
+   },
+   {
+    "text": "tell me 15 minus 8",
+    "torch": "15- minus 8?",
+    "int8": "15 minus 8"
+   },
+   {
+    "text": "hello friend how are u",
+    "torch": "hello! friend how",
+    "int8": "hello! how"
+   },
+   {
+    "text": "bye bye",
+    "torch": "bye! !",
+    "int8": "bye"
+   },
+   {
+    "text": "it does have one",
+    "torch": null,
+    "int8": "it does one"
+   },
+   {
+    "text": "say that again",
+    "torch": "again.",
+    "int8": "say again"
+   },
+   {
+    "text": "can u show the next eyes",
+    "torch": "next eyes.",
+    "int8": "show next eyes."
+   },
+   {
+    "text": "bot type?",
+    "torch": "bot?",
+    "int8": null
+   },
+   {
+    "text": "a cow is a herbivore right?",
+    "torch": "cow a herbivore?",
+    "int8": "a cow a herbivore?"
+   }
+  ]
+ },
+ "latency_cpu_batch1": {
+  "fp32_threads1": {
+   "encoder_pass_ms": {
+    "p50": 12.264293996850029,
+    "p95": 66.11191100091673,
+    "mean": 19.97502205107594
+   },
+   "dispatch_message_ms": {
+    "p50": 122.91223800275475,
+    "p95": 355.0933079968672,
+    "mean": 154.85900894054794
+   },
+   "avg_distinct_segments_per_message": 8.11,
+   "n": 100
+  },
+  "int8_threads1": {
+   "encoder_pass_ms": {
+    "p50": 3.5183099971618503,
+    "p95": 17.075391006073914,
+    "mean": 5.560612161498284
+   },
+   "dispatch_message_ms": {
+    "p50": 33.63786899717525,
+    "p95": 98.44667199649848,
+    "mean": 42.10677267954452
+   },
+   "avg_distinct_segments_per_message": 8.14,
+   "n": 100
+  },
+  "fp32_threads4": {
+   "encoder_pass_ms": {
+    "p50": 4.304007001337595,
+    "p95": 18.256432987982407,
+    "mean": 6.346368319937028
+   },
+   "dispatch_message_ms": {
+    "p50": 41.79929099336732,
+    "p95": 115.77455700899009,
+    "mean": 51.567034200852504
+   },
+   "avg_distinct_segments_per_message": 8.11,
+   "n": 100
+  },
+  "int8_threads4": {
+   "encoder_pass_ms": {
+    "p50": 1.812690999940969,
+    "p95": 6.181226999615319,
+    "mean": 2.488974749285262
+   },
+   "dispatch_message_ms": {
+    "p50": 17.952560010598972,
+    "p95": 48.77295100595802,
+    "mean": 21.73513551999349
+   },
+   "avg_distinct_segments_per_message": 8.14,
+   "n": 100
+  }
+ },
+ "cpu": "Grace aarch64 (DGX Spark)",
+ "versions": {
+  "torch": "2.14.1+cu130",
+  "onnx": "1.23.2",
+  "onnxruntime": "1.31.1",
+  "opset": 17
+ }
+}

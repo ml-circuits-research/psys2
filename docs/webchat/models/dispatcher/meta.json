@@ -39,17 +39,17 @@
  },
  "edit_threshold": 0.7,
  "version": {
-  "checkpoint": "../../../../../../home/salboaie/work/psys2/training/runs/dispatcher-distilbert-v3",
+  "checkpoint": "training/runs/dispatcher-v4e-c2448",
   "model": "distilbert-base-uncased",
   "dataset_baseline_commit": "c989cd1",
-  "dataset_hash": "aa68d416c0bbcee8",
-  "export_date": "2026-11-08",
-  "sha256": "19dd054b7b4540793953d2bcbcde281ebec074ac5fc1141e1496eb924129fd46",
+  "dataset_hash": null,
+  "export_date": "2026-11-09",
+  "sha256": "6c41eb2434646b988e8936f1a2a82e1490465ca023a0d5b2be6987daedcac2be",
   "metrics": {
    "split": "test",
-   "world_top1": 0.972,
-   "world_top3": 0.994,
-   "seg_f1": 0.979
+   "world_top1": null,
+   "world_top3": null,
+   "seg_f1": null
   }
  }
 }
