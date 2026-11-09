@@ -334,7 +334,7 @@ export class Interpreter {
       /** Read-only copy of another world's state (null when it has none); lets help and status worlds look at the app. */
       peek: (worldId) => { const st0 = session.state[worldId]; return st0 ? structuredClone(st0) : null; },
       /** Pattern examples of a loaded world: [{ id, kind, priority, examples }] (read-only). */
-      patterns: (worldId) => (this.set.get(worldId)?.patterns ?? []).map((p) => ({ id: p.id, kind: p.kind, priority: p.priority, examples: [...p.examples] })),
+      patterns: (worldId) => (this.set.get(worldId)?.patterns ?? []).map((p) => ({ id: p.id, kind: p.kind, priority: p.priority, examples: [...p.examples], canonical: [...(p.canonical ?? [])] })),
       /** Words of a lexicon (by lexicon id, e.g. 'lex.kids.animals.names'); [] when unknown. */
       lexicon: (id) => { const l = this.set.list().flatMap((w) => w.lexicons).find((x) => x.id === id); return l ? [...l.words] : []; },
       /** Shared vocabulary of lang.common: yesNo, unsure, cancel, stripLead, ordinal, degree, colour, size, position ... */

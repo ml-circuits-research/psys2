@@ -6,6 +6,7 @@
     example="How many sides does a hexagon have?"
 
 @pat.kids.shapes.sides2 core.pattern
+    canonical="How many corners has a square?"
     match="how_many {p:lex.kids.shapes.parts} [has|have] [a|an|the]? {s:lex.kids.shapes.shapes}"
     emit="@{_} core.question type=kids.shapes.shape seek={p}s where.name={s}"
     kind=question
@@ -27,6 +28,7 @@
     example="How many corners does a trapezium have?"
 
 @pat.kids.shapes.sides4 core.pattern
+    canonical="Does a pentagon have 5 sides?"
     match="[does|do] [a|an|the]? {s:lex.kids.shapes.shapes} have {n:number} {p:lex.kids.shapes.parts}"
     emit="@{_} core.question type=kids.shapes.shape seek={p}s mode=exists where.name={s} where.{p}s={n}"
     kind=question
@@ -34,6 +36,7 @@
     example="Does a pentagon have 5 sides?"
 
 @pat.kids.shapes.which1 core.pattern
+    canonical="Which shape has 3 sides?"
     match="[which|what] [shape|shapes] [has|have] {n:number} {p:lex.kids.shapes.parts}"
     emit="@{_} core.question type=kids.shapes.shape seek=name mode=list where.{p}s={n}"
     kind=question
@@ -41,6 +44,7 @@
     example="Which shape has 3 sides?"
 
 @pat.kids.shapes.which2 core.pattern
+    canonical="Name a shape with 4 corners."
     match="name [a|an|some]? [shape|shapes] [with|that_has|that_have] {n:number} {p:lex.kids.shapes.parts}"
     emit="@{_} core.question type=kids.shapes.shape seek=name mode=list where.{p}s={n}"
     kind=question
@@ -62,6 +66,7 @@
     example="What is a hexagon?"
 
 @pat.kids.shapes.desc2 core.pattern
+    canonical="Tell me about a circle."
     match="[tell_me_about|describe] [a|an|the]? {s:lex.kids.shapes.shapes}"
     emit="@{_} core.question type=kids.shapes.shape seek=summary where.name={s}"
     kind=question
@@ -69,6 +74,7 @@
     example="Tell me about a circle."
 
 @pat.kids.shapes.desc3 core.pattern
+    canonical="What is an octagon like?"
     match="what [is|are] [a|an|the]? {s:lex.kids.shapes.shapes} like"
     emit="@{_} core.question type=kids.shapes.shape seek=summary where.name={s}"
     kind=question
@@ -76,6 +82,7 @@
     example="What is an octagon like?"
 
 @pat.kids.shapes.fam1 core.pattern
+    canonical="Is a square a rectangle?"
     match="[is|are] [a|an|the]? {s:noun} [a|an]? {k:lex.kids.shapes.kinds}"
     emit="@{_} core.question type=kids.shapes.family seek=holds where.shape={s} where.kind={k}"
     kind=question
@@ -90,6 +97,7 @@
     example="Is a square a kind of rhombus?"
 
 @pat.kids.shapes.fam3 core.pattern
+    canonical="Is a circle round?"
     match="[is|are] [a|an|the]? {s:noun} round"
     emit="@{_} core.question type=kids.shapes.family seek=holds where.shape={s} where.kind=round_shape"
     kind=question
@@ -111,6 +119,7 @@
     example="Does a square count as a rectangle?"
 
 @pat.kids.shapes.look1 core.pattern
+    canonical="What shape is a stop sign?"
     match="what shape [is|are] [a|an|the]? {t:noun}"
     emit="@{_} core.question type=kids.shapes.thing seek=shape where.name={t}"
     kind=question
@@ -118,6 +127,7 @@
     example="What shape is a stop sign?"
 
 @pat.kids.shapes.look2 core.pattern
+    canonical="What is shaped like a circle?"
     match="what [is|are] shaped_like [a|an|the]? {s:lex.kids.shapes.shapes}"
     emit="@{_} core.question type=kids.shapes.thing seek=name mode=list where.shape={s}"
     kind=question
@@ -125,6 +135,7 @@
     example="What is shaped like a circle?"
 
 @pat.kids.shapes.look3 core.pattern
+    canonical="Where do we see a circle?"
     match="[where|what] [do|can] [we|i|you] [see|find] [a|an|the]? {s:lex.kids.shapes.shapes}"
     emit="@{_} core.question type=kids.shapes.thing seek=name mode=list where.shape={s}"
     kind=question
@@ -132,6 +143,7 @@
     example="Where do we see a circle?"
 
 @pat.kids.shapes.col1 core.pattern
+    canonical="What color is the sky?"
     match="what [color|colour] [is|are] [a|an|the]? {t:lex.kids.shapes.things}"
     emit="@{_} core.question type=kids.shapes.thing seek=color where.name={t}"
     kind=question
@@ -174,6 +186,7 @@
     example="Which things have the color green?"
 
 @pat.kids.shapes.ck1 core.pattern
+    canonical="Is red a primary color?"
     match="[is|are] {c:lex.kids.shapes.colors} [a|an] {k:lex.kids.shapes.colorkinds} [color|colour]"
     emit="@{_} core.question type=kids.shapes.color seek=is_kind where.name={c} where.is_kind={k}"
     kind=question
@@ -181,6 +194,7 @@
     example="Is red a primary color?"
 
 @pat.kids.shapes.ck2 core.pattern
+    canonical="What kind of color is orange?"
     match="what [kind_of|type_of|sort_of] [color|colour] [is|are] {c:lex.kids.shapes.colors}"
     emit="@{_} core.question type=kids.shapes.color seek=kind where.name={c}"
     kind=question
@@ -188,6 +202,7 @@
     example="What kind of color is orange?"
 
 @pat.kids.shapes.ck3 core.pattern
+    canonical="Which colors are primary?"
     match="[which|what] [color|colour|colors|colours] [is|are] [a|an|the]? {k:lex.kids.shapes.colorkinds} [color|colour|colors|colours]?"
     emit="@{_} core.question type=kids.shapes.color seek=name mode=list where.kind={k}"
     kind=question
@@ -195,6 +210,7 @@
     example="Which colors are primary?"
 
 @pat.kids.shapes.ck4 core.pattern
+    canonical="What are the primary colors?"
     match="what [is|are] the {k:lex.kids.shapes.colorkinds} [colors|colours]"
     emit="@{_} core.question type=kids.shapes.color seek=name mode=list where.kind={k}"
     kind=question
@@ -216,6 +232,7 @@
     example="How many primary colors are there?"
 
 @pat.kids.shapes.mix1 core.pattern
+    canonical="What do red and yellow make?"
     match="what [do|does] {a:lex.kids.shapes.colors} and {b:lex.kids.shapes.colors} make"
     emit="@{_} core.question type=kids.shapes.mix seek=result where.first={a} where.second={b}"
     kind=question
@@ -223,6 +240,7 @@
     example="What do red and yellow make?"
 
 @pat.kids.shapes.mix2 core.pattern
+    canonical="What color do blue and yellow make?"
     match="what [color|colour] [do|does] {a:lex.kids.shapes.colors} and {b:lex.kids.shapes.colors} make"
     emit="@{_} core.question type=kids.shapes.mix seek=result where.first={a} where.second={b}"
     kind=question
@@ -272,6 +290,7 @@
     example="What color is made by mixing red and green?"
 
 @pat.kids.shapes.rec1 core.pattern
+    canonical="How do I make green?"
     match="how [do|can|could] [i|you|we] make {c:lex.kids.shapes.colors}"
     emit="@{_} core.question type=kids.shapes.mix seek=recipe where.result={c}"
     kind=question
@@ -279,6 +298,7 @@
     example="How do I make green?"
 
 @pat.kids.shapes.rec2 core.pattern
+    canonical="Which colors make purple?"
     match="which colors make {c:lex.kids.shapes.colors}"
     emit="@{_} core.question type=kids.shapes.mix seek=recipe where.result={c}"
     kind=question
@@ -300,6 +320,7 @@
     example="What should I mix to make pink?"
 
 @pat.kids.shapes.tsides core.pattern
+    canonical="A rhombus has 4 sides."
     match="[remember|fyi|note|note_that|btw|just_so_you_know|just_so_u_know|remember_that|did_you_know|you_should_know|learn_that|know_that|so|ok|okay|hey|please|listen|by_the_way|for_your_info|for_your_information|i_learned|i_heard|guess_what|oh_and|also|and|look|um|well|hmm|ah|oh|yo|dont_forget|dont_forget_that|keep_in_mind|keep_in_mind_that|make_a_note|note_this|write_this_down|save_this|save_that|store_this|store_that|memorize|memorize_this|please_remember|please_note|pls_remember|pls_note|u_should_know|you_need_to_know|heres_a_fact|here_is_a_fact|fun_fact|fact|true_fact|another_fact|one_more_thing|teach_you|let_me_teach_you|i_will_teach_you|i_can_tell_you|let_me_tell_you|lemme_tell_you]? [a|an|the]? {s:noun} [has|have] {n:number} {p:lex.kids.shapes.parts}"
     emit="@{_} kids.shapes.shape name={s} {p}s={n}"
     kind=statement
@@ -314,6 +335,7 @@
     example="A strawberry is red."
 
 @pat.kids.shapes.tcol2 core.pattern
+    canonical="Zebras are black and white."
     match="[remember|fyi|note|note_that|btw|just_so_you_know|just_so_u_know|remember_that|did_you_know|you_should_know|learn_that|know_that|so|ok|okay|hey|please|listen|by_the_way|for_your_info|for_your_information|i_learned|i_heard|guess_what|oh_and|also|and|look|um|well|hmm|ah|oh|yo|dont_forget|dont_forget_that|keep_in_mind|keep_in_mind_that|make_a_note|note_this|write_this_down|save_this|save_that|store_this|store_that|memorize|memorize_this|please_remember|please_note|pls_remember|pls_note|u_should_know|you_need_to_know|heres_a_fact|here_is_a_fact|fun_fact|fact|true_fact|another_fact|one_more_thing|teach_you|let_me_teach_you|i_will_teach_you|i_can_tell_you|let_me_tell_you|lemme_tell_you]? [a|an|the]? {t:noun} [is|are] {c:lex.kids.shapes.colors} and {d:lex.kids.shapes.colors}"
     emit="@{_} kids.shapes.thing name={t} color={c}\n@{_1} kids.shapes.thing name={t} color={d}"
     kind=statement
@@ -321,6 +343,7 @@
     example="Zebras are black and white."
 
 @pat.kids.shapes.tshape core.pattern
+    canonical="A ruler is a rectangle."
     match="[remember|fyi|note|note_that|btw|just_so_you_know|just_so_u_know|remember_that|did_you_know|you_should_know|learn_that|know_that|so|ok|okay|hey|please|listen|by_the_way|for_your_info|for_your_information|i_learned|i_heard|guess_what|oh_and|also|and|look|um|well|hmm|ah|oh|yo|dont_forget|dont_forget_that|keep_in_mind|keep_in_mind_that|make_a_note|note_this|write_this_down|save_this|save_that|store_this|store_that|memorize|memorize_this|please_remember|please_note|pls_remember|pls_note|u_should_know|you_need_to_know|heres_a_fact|here_is_a_fact|fun_fact|fact|true_fact|another_fact|one_more_thing|teach_you|let_me_teach_you|i_will_teach_you|i_can_tell_you|let_me_tell_you|lemme_tell_you]? [a|an|the]? {t:noun} [is|are] [a|an|the]? {s:lex.kids.shapes.shapes}"
     emit="@{_} kids.shapes.thing name={t} shape={s}"
     kind=statement
@@ -328,6 +351,7 @@
     example="A ruler is a rectangle."
 
 @pat.kids.shapes.tmix core.pattern
+    canonical="Black and red make brown."
     match="[remember|fyi|note|note_that|btw|just_so_you_know|just_so_u_know|remember_that|did_you_know|you_should_know|learn_that|know_that|so|ok|okay|hey|please|listen|by_the_way|for_your_info|for_your_information|i_learned|i_heard|guess_what|oh_and|also|and|look|um|well|hmm|ah|oh|yo|dont_forget|dont_forget_that|keep_in_mind|keep_in_mind_that|make_a_note|note_this|write_this_down|save_this|save_that|store_this|store_that|memorize|memorize_this|please_remember|please_note|pls_remember|pls_note|u_should_know|you_need_to_know|heres_a_fact|here_is_a_fact|fun_fact|fact|true_fact|another_fact|one_more_thing|teach_you|let_me_teach_you|i_will_teach_you|i_can_tell_you|let_me_tell_you|lemme_tell_you]? {a:lex.kids.shapes.colors} and {b:lex.kids.shapes.colors} make {r:lex.kids.shapes.colors}"
     emit="@{_} kids.shapes.mix first={a} second={b} result={r}"
     kind=statement
@@ -405,6 +429,7 @@
     example="Whats the usual colour of a lemon?"
 
 @pat.kids.shapes.w.thingcolor.f2 core.pattern
+    canonical="A lemon is which colour?"
     match="[a|an|the|every|any|all|each]? {t:lex.kids.shapes.things} [is|are]? [what|which] [color|colour] [usually|usual|normally|normal|typically|typical|generally|mostly]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
     emit="@{_} core.question type=kids.shapes.thing seek=color where.name={t}"
     kind=question
@@ -419,6 +444,7 @@
     example="What colour would a lemon usually be?"
 
 @pat.kids.shapes.w.iscol.aux core.pattern
+    canonical="Could the grass be red?"
     match="[tell_me|show_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also|u_know|you_know|ya_know|dya_know|do_u_know|i_dont_get|i_dont_know|i_dont_understand|idk|dunno|confirm|pls_confirm|please_confirm|pls_say_if|pls_say|um|uh|er|erm]? [is|are|was|could|would|can|will|does|do|if|whether|tell_me_if]? [a|an|the|every|any|all|each]? {t:lex.kids.shapes.things} [be|is|are|usually|normally|typically|always|generally|colored|coloured]? [usually|usual|normally|normal|typically|typical|generally|mostly]? [colour|color]? [a|an]? {c:lex.kids.shapes.colors} [color|colour]? [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no|true|true_or_false|y_n]? [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
     emit="@{_} core.question type=kids.shapes.thing seek=is_color where.name={t} where.is_color={c}"
     kind=question
@@ -426,6 +452,7 @@
     example="Could the grass be red?"
 
 @pat.kids.shapes.w.iscol.tag core.pattern
+    canonical="The grass is green right?"
     match="[a|an|the|every|any|all|each]? {t:lex.kids.shapes.things} [be|is|are|usually|normally|typically|always|generally|colored|coloured]? [usually|usual|normally|normal|typically|typical|generally|mostly]? [colour|color]? [a|an]? {c:lex.kids.shapes.colors} [color|colour]? [right|yes|no|yeah|correct|or_no|or_not|or_nah|or_what|yes_or_no|right_or_not|yes_no|true_or_false] [pls|plz|please|thanks|anyway|quickly|lol|haha|for_me|to_me|real_quick|btw|thx|ty|please_tell_me|if_you_know|do_you_know|you_know|hmm|just_curious|rn|now|again|ok|okay|exactly|actually]?"
     emit="@{_} core.question type=kids.shapes.thing seek=is_color where.name={t} where.is_color={c}"
     kind=question

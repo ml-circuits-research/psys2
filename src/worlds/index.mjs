@@ -157,14 +157,15 @@ function buildWorld(id, files, ops) {
     tabOnly: txt(x, 'tabOnly') === 'true', tabPriority: txt(x, 'tabPriority') == null ? null : Number(txt(x, 'tabPriority')),
     yieldsTo: getAll(x, 'yieldsTo').map((v) => v.v),
     needsState: txt(x, 'needsState') ?? null,
-    examples: getAll(x, 'example').map((v) => v.v),
+    examples: [...new Set([...getAll(x, 'example').map((v) => v.v), ...getAll(x, 'canonical').map((v) => v.v)])],
+    canonical: [...new Set(getAll(x, 'canonical').map((v) => v.v))],   // canonical examples (src/worlds/canonical.mjs): what help and "Did you mean" may show
   }));
   w.shapes = wires['patterns.sop'].filter((x) => x.type === 'core.shape').map((x) => {
     const t = (k) => txt(x, k);
     return {
       id: x.id.replace(/^shape\./, ''), wireId: x.id, wire: x, worldId: id, family: t('family'), verb: t('verb'), obj: t('obj'), val: t('val'), noun: t('noun'),
       det: t('det'), link: t('link'), extra: t('extra'), emit: t('emit'), emitOpts: t('emitOpts'), forms: t('forms'), skip: t('skip'), sample: t('sample'), mod: t('mod'), objmod: t('objmod'), pron: t('pron'), rel: t('rel'), objdet: t('objdet'), poss: t('poss'), cont: t('cont'),
-      priority: t('priority') == null ? undefined : Number(t('priority')), kind: t('kind'), example: getAll(x, 'example').map((v) => v.v),
+      priority: t('priority') == null ? undefined : Number(t('priority')), kind: t('kind'), example: getAll(x, 'example').map((v) => v.v), canonical: getAll(x, 'canonical').map((v) => v.v),
     };
   });
   w.operations = wires['operations.sop'].filter((x) => x.type === 'core.operation').map((x) => ({
@@ -280,7 +281,10 @@ function expandShapes(set) {
         const p = {
           id: `pat.${g.id}`, wire: null, worldId: w.id, match: g.match, emit: g.emit, kind: g.kind, priority: g.priority,
           tabOnly: false, tabPriority: null, yieldsTo: [], needsState: null, examples: g.example, form: g.form, shape: shape.wireId,
+          // canonical: the explicit examples of the shape (on the first generated pattern) and the generated sentences the shape marks canonical
+          canonical: [...new Set([...(list[0] === g ? shape.example ?? [] : []), ...(shape.canonical ?? []).filter((e) => g.example.includes(e))])],
         };
+        for (const e of p.canonical) if (!p.examples.includes(e)) p.examples = [...p.examples, e];
         for (const problem of checkPattern(p, set)) w.errors.push({ file: 'patterns.sop', message: `shape ${shape.id}: ${problem}` });
         w.patterns.push(p);
       }

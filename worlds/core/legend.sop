@@ -464,6 +464,11 @@
     card=many
     ask="Which sentence is an example?"
 
+@core.pattern.canonical core.key
+    value=string
+    card=many
+    ask="Which sentence is a canonical example (a clean natural sentence that help and \"Did you mean\" may offer; it is also an example of the pattern)?"
+
 @core.pattern.doc core.key
     value=string
     card=one
@@ -583,6 +588,11 @@
     value=string
     card=many
     ask="Which sentence is an extra example (put on the first generated pattern)?"
+
+@core.shape.canonical core.key
+    value=string
+    card=many
+    ask="Which generated sentence is canonical (offered by help)? Explicit shape examples are canonical too."
 
 @core.shape.doc core.key
     value=string

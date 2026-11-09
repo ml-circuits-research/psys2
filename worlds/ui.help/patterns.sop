@@ -1,4 +1,5 @@
 @pat.ui.help.capabilities core.pattern
+    canonical="What are you good at?"
     match="[what_can_you_do|what_do_you_do|what_are_you_able_to_do|what_are_your_abilities|what_are_you_good_at|what_are_your_skills|what_can_you_help_me_with|what_are_you_capable_of]"
     emit="@{_} core.request action=chat.capabilities"
     kind=chat
@@ -7,6 +8,7 @@
     example="What are you good at?"
 
 @pat.ui.help.commands core.pattern
+    canonical="Which phrases can you recognise?"
     match="[what|which] [command|commands|words|phrases|sentences|things|instructions] [do|can] [you|tou|u|ya] [recognise|recognize|understand|know|accept|follow|obey]"
     emit="@{_} core.request action=chat.capabilities"
     kind=chat
@@ -15,6 +17,8 @@
     example="Which phrases can you recognise?"
 
 @pat.ui.help.me core.pattern
+    canonical="Help me."
+    canonical="I am lost."
     match="[help|help_me|help_please|please_help|please_help_me|help_me_please|can_you_help|can_you_help_me|could_you_help_me|i_need_help|i_need_some_help|i_am_lost|i_am_totally_lost|i_am_confused|i_do_not_know_what_to_do|i_do_not_know_what_to_say|i_do_not_understand|i_do_not_get_it|where_do_i_start|how_do_i_start]"
     emit="@{_} core.request action=ui.helpMe"
     kind=request
@@ -24,6 +28,7 @@
     example="I am lost."
 
 @pat.ui.help.here core.pattern
+    canonical="What can I say here?"
     match="what [can|could] [i|we] [say|do|ask|tell_you|tell_it|type|try] [here|now|on_this_tab|on_this_page|on_this_screen|to_you|in_this_tab]?"
     emit="@{_} core.request action=ui.help"
     kind=request
@@ -32,6 +37,7 @@
     example="What can I do on this tab?"
 
 @pat.ui.help.here2 core.pattern
+    canonical="What should I say?"
     match="[what_commands|what_options|what_examples|what_commands_are_there|what_commands_can_i_use|what_can_i_say|what_should_i_say|what_do_i_say|what_should_i_try|what_could_i_try|how_does_this_work|how_do_i_use_this|how_do_i_use_this_app|how_can_i_use_this_app|what_are_the_commands|what_are_the_options|what_can_you_understand] [are_there|can_i_use|do_you_know|are_available|can_i_try|can_i_say]?"
     emit="@{_} core.request action=ui.help"
     kind=request
@@ -62,6 +68,7 @@
     example="An example, please."
 
 @pat.ui.help.more core.pattern
+    canonical="Give me more examples."
     match="[show|give_me|show_me|tell_me|i_want|i_need|can_i_have|can_you_give_me|what_about] [more|some_more|more_examples|more_commands|more_ideas|more_options|more_help|another_few|the_next_ones|the_next_examples|other_examples|different_examples]"
     emit="@{_} core.request action=ui.helpMore"
     kind=request
@@ -70,6 +77,7 @@
     example="Show me more."
 
 @pat.ui.help.more2 core.pattern
+    canonical="What else can I say?"
     match="[more_examples|more_commands|more_ideas|more_options|next_examples|other_examples|different_examples|what_else|what_else_can_i_say|what_else_can_i_do|what_else_can_you_do|what_other_commands_are_there|anything_else|any_other_examples|any_more_examples|any_other_commands|show_more_examples|show_more|next_ones] [please]?"
     emit="@{_} core.request action=ui.helpMore"
     kind=request
@@ -78,6 +86,7 @@
     example="What else can I say?"
 
 @pat.ui.help.tab core.pattern
+    canonical="What does this tab do?"
     match="[what_does_this_tab_do|what_is_this_tab_for|what_is_this_tab|what_is_this_tab_about|what_is_this_page_for|what_does_this_page_do|what_can_this_tab_do|what_is_this_for|what_is_this_used_for|explain_this_tab|explain_this_page|tell_me_about_this_tab|tell_me_about_this_page|describe_this_tab|what_is_this_tab_good_for]"
     emit="@{_} core.request action=ui.helpAbout"
     kind=request
@@ -104,6 +113,7 @@
     example="Explain the rules."
 
 @pat.ui.help.game3 core.pattern
+    canonical="How do I play hangman?"
     match="how [do|can|would|should] [i|we|you] play [the|a|some|an]? {g:lex.ui.help.games} [game]?"
     emit="@{_} core.request action=ui.helpGame arg.game={g}"
     kind=question
@@ -113,6 +123,7 @@
     example="How can I play chess?"
 
 @pat.ui.help.game4 core.pattern
+    canonical="Explain the rules of chess."
     match="[what_are|tell_me|explain|show_me|what_is_the_goal_of|how_does_it_work_in] [the]? [rules|rules_of|rules_for|goal_of|game] [of|for]? [the]? {g:lex.ui.help.games} [game]?"
     emit="@{_} core.request action=ui.helpGame arg.game={g}"
     kind=question
@@ -121,6 +132,7 @@
     example="Explain the rules of chess."
 
 @pat.ui.help.how core.pattern
+    canonical="How do I change the eyes?"
     match="how [do|can|could|would|should|will] [i|we|you] {what:words(8)}"
     emit="@{_} core.request action=ui.helpHow arg.what=\"{what}\""
     kind=question
@@ -129,6 +141,7 @@
     example="How can I add a table?"
 
 @pat.ui.help.how2 core.pattern
+    canonical="How to draw a circle?"
     match="how to {what:words(8)}"
     emit="@{_} core.request action=ui.helpHow arg.what=\"{what}\""
     kind=question
@@ -143,6 +156,7 @@
     example="What do I say to change the eyes?"
 
 @pat.ui.help.why core.pattern
+    canonical="Why did you not understand?"
     match="[why|what_made_you_think_that_you] [did|do|could|can|would] you not [understand|get|follow|know] [that|it|me|what_i_said|what_i_meant|my_sentence|the_sentence]?"
     emit="@{_} core.request action=ui.helpWhy"
     kind=question
@@ -151,6 +165,7 @@
     example="Why did you not understand that?"
 
 @pat.ui.help.why2 core.pattern
+    canonical="What did you not understand?"
     match="[what_did_you_not_understand|what_did_you_not_get|what_did_i_do_wrong|what_did_i_say_wrong|what_was_wrong|what_was_wrong_with_that|what_went_wrong|what_is_wrong_with_my_sentence|what_was_wrong_with_my_sentence|what_did_you_not_understand_about_that|why_is_that_wrong|why_was_that_wrong|what_did_you_not_understand_about_it|what_did_i_do_wrong_there]"
     emit="@{_} core.request action=ui.helpWhy"
     kind=question
@@ -231,6 +246,7 @@
     example="Any other ideas"
 
 @pat.ui.help.tab2 core.pattern
+    canonical="Tell me about this page?"
     match="[can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|tell_me|please_tell_me|i_want_to_know|i_wanna_know|i_would_like_to_know|let_me_know|hey|so|ok_so|can_you|could_you|can_u|could_u|just]? [what_does_this|what_does_the|what_is_this|what_is_the|whats_this|whats_the|what_is_the_point_of_this|what_is_the_purpose_of_this|what_is_the_use_of_this|what_is_the_use_of_the|explain_what_this|explain_what_the|explain_this|explain_the|describe_this|describe_the|tell_me_about_this|tell_me_about_the|what_about_this|what_about_the|what_is_on_this|whats_on_this|what_am_i_looking_at_on_this] [current|active|open]? [tab|page|screen|panel|view|section|window] [for|do|does_it_do|does_it_do_here|is_for|is_about|is_used_for|does|is|about|good_for|used_for|mean|is_it_for|is_it_about|is_it|is_it_used_for|is_here|offers|offer|has|show|contain|contains|here|means|can_do|can_it_do|is_meant_for]? [for|do|does_it_do|is_for|is_about|is_used_for|does|is|about|good_for|used_for|exactly|actually|again|anyway|now|here|for_me|to_me|even|please|pls|plz]?"
     emit="@{_} core.request action=ui.helpAbout"
     kind=request

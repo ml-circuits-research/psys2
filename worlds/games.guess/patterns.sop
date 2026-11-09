@@ -15,6 +15,7 @@
     example="It is not."
 
 @pat.games.guess.dontknow core.pattern
+    canonical="I don't know."
     match="[uh|um|hm|hmm|ah|oh|well|so|hey|eh|er|meh|ok|i_guess|i_think|i_suppose|lol|haha]? [$lang.unsure|i_am_not_certain|i_can_not_say|skip|pass|next_question|i_am_not_sure_about_that|i_really_do_not_know|i_forgot|hard_to_say|i_can_not_remember|i_do_not_remember|i_really_am_not_sure|idunno|i_dunno|unknown|i_can_not_tell|can_not_say|can_not_tell|i_am_clueless|no_clue_at_all|dk|i_would_not_know|could_not_say|i_could_not_say|not_a_clue|i_do_not_have_a_clue|do_not_have_a_clue|search_me|how_should_i_know|donno|i_donno|not_really_sure|not_too_sure|not_that_sure|not_100_sure|not_entirely_sure|not_totally_sure|i_am_not_really_sure|i_am_not_too_sure|im_unsure|i_do_not_really_know|dont_know_for_sure|do_not_know_for_sure|not_sure_at_all|not_so_sure|i_have_no_idea_really] [about_that|about_it|what_that_is|what_it_is|what_that_means|what_you_mean|what_this_is|what_you_are_asking|really|actually|sorry|lol|pls|plz|honestly|at_all|to_be_honest|tbh|either_way|myself|sadly|here|rn|now|that_1|that|it|for_sure|for_certain|sure|exactly|100]?"
     emit="@{_} core.request action=guess.answer arg.answer=dontknow"
     kind=request
@@ -31,6 +32,7 @@
     example="Sometimes."
 
 @pat.games.guess.start core.pattern
+    canonical="I am thinking of an animal."
     match="[i_am_thinking_of|i_am_thinking_about|i_thought_of|i_have_thought_of|i_have_picked|i_have_chosen|i_picked|i_chose] [an|a|my]? [animal|secret_animal]"
     emit="@{_} core.request action=guess.start"
     kind=request
@@ -67,6 +69,7 @@
     example="Can you guess which animal I picked?"
 
 @pat.games.guess.learn core.pattern
+    canonical="I was thinking of a giraffe."
     match="[it_was|the_animal_was|the_answer_was|the_answer_is|my_animal_was|i_was_thinking_of|i_was_thinking_about|i_thought_of|the_animal_is|it_was_really|it_is_actually|it_was_just|it_really_was] [actually|really|just]? [a|an|the]? {x:words}"
     emit="@{_} core.request action=guess.reveal arg.animal=\"{x}\""
     kind=request
@@ -75,6 +78,7 @@
     example="I was thinking of a giraffe."
 
 @pat.games.guess.why core.pattern
+    canonical="Why did you ask that?"
     match="[why_did_you_ask_that|why_are_you_asking_that|why_that_question|why_do_you_ask|why_did_you_ask|why_do_you_ask_that|why_this_question|why_are_you_asking_this|why_are_you_asking|what_is_that_question_for|why_do_you_want_to_know|what_for|why_are_you_asking_me_that|what_is_this_question_for|why_do_you_need_to_know]"
     emit="@{_} core.request action=guess.why"
     kind=request
@@ -82,6 +86,7 @@
     example="Why did you ask that?"
 
 @pat.games.guess.left core.pattern
+    canonical="Which animals are left?"
     match="[which_animals_are_left|what_animals_are_left|which_animals_remain|which_animals_do_you_still_consider|what_are_you_considering|which_animals_are_you_thinking_of|which_animals_are_still_possible|what_animals_are_still_possible|which_animals_are_still_in_the_game|what_animals_could_it_be|which_animals_could_it_be|which_animals_are_still_in_play|what_animals_are_you_considering|which_animals_are_left_in_the_game]"
     emit="@{_} core.request action=guess.remaining"
     kind=request
@@ -126,6 +131,7 @@
     example="Animal guessing time."
 
 @pat.games.guess.start7 core.pattern
+    canonical="I got an animal."
     match="[uh|um|hm|hmm|ah|oh|well|so|hey|ok|alright|right|go_on|go_ahead|u|you]? [i|i_have|i_have_got|i_got|im|i_am|ive|i_ve|i_already|i_just|i_will|i_have_already|i_have_just|i_am_thinking_of|i_am_thinking_about|im_thinking_of|i_thought_of|i_have_thought_of|i_have_picked|i_have_chosen|i_picked|i_chose|i_pick|i_choose|i_decided_on|i_have_decided_on|i_already_have|i_already_picked|i_already_chose|i_just_picked|i_just_chose|i_got_1|i_think_of|i_can_think_of|got|picked|chosen|chose|have|thinking_of|decided_on|thought_of|already_picked|already_chose|already_have|i_selected|selected|i_have_selected|ive_picked|ive_chosen|ive_got|ive_thought_of|i_have_come_up_with|i_came_up_with|came_up_with] [just|already|got|picked|chosen|chose|decided_on|thought_of|picked_out|selected|thinking_of|a_secret|secret|thought_about|come_up_with]? [an|a|my|1|the|1]? [animal|1|secret_animal|creature|animals] [in_mind|in_my_mind|in_my_head|in_the_head|chosen|picked|ready|done|set|selected|decided|now|ok|go|lol|pls|plz|already|in_head|in_my_brain|for_you|for_you_to_guess|for_you_to_find|to_guess|that_you_can_guess|you_can_guess]?"
     emit="@{_} core.request action=guess.start"
     kind=request
@@ -150,6 +156,7 @@
     example="Pick an animal done."
 
 @pat.games.guess.learn2 core.pattern
+    canonical="I meant the giraffe."
     match="[uh|um|hm|hmm|ah|oh|well|so|hey|ok|no|nope|nah|wrong|oops|haha|lol]? [it_was|it_is|its|the_animal_was|the_animal_is|the_answer_was|the_answer_is|my_animal_was|my_animal_is|i_was_thinking_of|i_was_thinking_about|i_was_thinking|i_meant|i_had|i_had_in_mind|i_picked|i_chose|i_chose_a|i_had_picked|i_had_chosen|i_was_picturing|i_was_imagining|was|that_was|that_is|thats|the_1_was|the_1_i_had_was|i_had_a|it_was_a|it_was_the|i_was_going_for|i_thought_of|it_would_be|it_would_have_been|i_meant_the|i_wanted|i_had_thought_of|i_was_after|my_pick_was|my_pick_is|my_choice_was|the_secret_was|the_secret_is|the_secret_animal_was|the_secret_animal_is|i_picked_a|it_actually_was|it_actually_is|it_really_was|the_animal_i_picked_was|the_animal_i_chose_was|the_animal_i_had_was|the_animal_i_had_in_mind_was] [actually|really|just|the|a|an]? {x:lex.kids.animals.names} [the_whole_time|all_along|lol|haha|obviously|of_course|i_bet|i_picked|i_chose|i_had|i_got|pls|plz|duh|all_the_time|the_entire_time|from_the_start|right_from_the_start|was_it|that_was_it|that_is_it|it_was|i_had_in_mind|i_was_thinking_of|i_chose_it|i_picked_it]?"
     emit="@{_} core.request action=guess.reveal arg.animal=\"{x}\""
     kind=request
@@ -165,6 +172,7 @@
     example="Giraffe."
 
 @pat.games.guess.giveup core.pattern
+    canonical="Giving up."
     match="[uh|um|hm|hmm|ah|oh|well|so|hey|ok]? [i|we]? [give|giving|gave|quit|quitting|surrender|surrendering|am_done|am_giving|will_give] [up]? [now|pls|plz|the_animal|the_round|this_round|this_game|the_game|it|then]? [now|pls|plz|then]?"
     emit="@{_} core.request action=guess.giveup"
     kind=request
@@ -194,6 +202,7 @@
     example="What is the reason for that question?"
 
 @pat.games.guess.left2 core.pattern
+    canonical="List the remaining animals."
     match="[uh|um|hm|hmm|ah|oh|well|so|hey|ok]? [can_you|could_you|will_you|would_you|can_u|could_u|can_i|may_i|let_me]? [list|show|tell|name|give|say|read|display|show_me|tell_me|give_me|list_me|name_me|what_are|whats|what_is|which_are|which_is|any|how_about|got_any|do_you_have|have_you_got]? [me|us]? [the|all|all_the|what|which|any]? [remaining|left|possible|candidate|other|still_possible]? [animals|animal|ones|options|candidates|possibilities|choices|creatures] [that_are|that_is|which_are|you_have|you_still_have|you_know|you_are_considering|you_consider|you_think|could_be_it|it_could_be|it_can_be]? [still|currently|now|so_far|even]? [possible|left|remaining|remain|in_the_running|in_play|on_the_list|on_your_list|in_the_game|in_the_race|in_the_pool|in_mind|in_your_mind|to_pick|to_choose|to_guess|there|available|on_the_table|to_go|still_possible|could_be|can_be|might_be|may_be] [pls|plz|please|now|then]?"
     emit="@{_} core.request action=guess.remaining"
     kind=request
@@ -260,6 +269,7 @@
     example="Which animals are still in the running?"
 
 @pat.games.guess.count4 core.pattern
+    canonical="How many have you asked?"
     match="[how_many] [have_you|did_you|are_you|have_we|are_you_up_to] [asked|used|done|on|got]"
     emit="@{_} core.request action=guess.count"
     kind=request
@@ -422,6 +432,7 @@
     example="Which are left in the list?"
 
 @pat.games.guess.sw.repeat3 core.pattern
+    canonical="Could you repeat your question?"
     match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [sorry|pardon|excuse_me|oops|hm|huh|what|wait|hold_on|one_moment|just_a_sec]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [repeat|say|ask|read|tell|state|give|spell_out|replay|rephrase|restate|reread] [me]? [your|ur|the|that|this|the_last|the_previous|that_last|your_last|your_previous] [last|previous]? [question|1|it|that|this] [again|once_more|1_more_time|once_again|please|pls|plz|for_me|to_me|thanks|thank_you]?"
     emit="@{_} core.request action=guess.repeat"
     kind=request
@@ -436,6 +447,7 @@
     example="Sorry, say that again."
 
 @pat.games.guess.sw.repeat4 core.pattern
+    canonical="What was the question?"
     match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [i_missed_it|i_missed_that|i_didnt_catch_that|i_did_not_catch_that|i_didnt_hear|i_did_not_hear|i_didnt_get_that|i_did_not_get_that|i_didnt_understand|i_did_not_understand|i_dont_understand|i_do_not_understand|i_didnt_see_it|i_did_not_see_it|i_missed_the_question|i_didnt_catch_the_question|i_didnt_get_the_question|what_was_that|what_was_the_question|what_did_you_ask|what_did_you_say|what_was_it|come_again|say_what|huh|sorry|pardon|excuse_me|wat|wut|come_again_please|come_again_pls|one_more_time|once_more|again|say_it_again|say_again|again_please|1_more_time|1_more_time_please|what_did_you_just_ask|what_did_you_just_say|what_were_you_asking|what_are_you_asking|what_is_the_question|what_is_your_question|whats_the_question|whats_your_question|what_s_the_question|what_s_your_question|what_do_you_want_to_know|what_do_you_want|what_are_you_saying|what_you_say] [please|pls|plz|again|once_more|1_more_time|could_you_repeat|can_you_repeat|can_u_repeat|could_u_repeat|can_you_say_it_again|could_you_say_it_again|say_it_again|say_again|say_that_again|repeat_that|repeat_it|repeat_please|ask_again|again_please|once_again|1_more_time_please]? [please|pls|plz|again|once_more]?"
     emit="@{_} core.request action=guess.repeat"
     kind=request
@@ -444,6 +456,7 @@
     example="What was the question?"
 
 @pat.games.guess.sw.count6 core.pattern
+    canonical="What question number is this?"
     match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [how_many|what_number|which_number|how_much|what] [question|questions|q_s|qs] [number]? [are_you_on|are_we_on|am_i_on|have_you_asked|did_you_ask|have_we_had|have_we_done|are_we_at|are_you_at|have_i_answered|did_i_answer|have_i_had|do_you_have_left|are_there|are_left|are_left_to_go|do_i_have|remain|are_remaining|you_got_left|you_asked|you_have_asked|youve_asked|you_have_left|we_have_left|is_this|is_that|is_it|was_that|was_this|are_we_up_to|are_you_up_to|you_up_to|you_at|you_on|is_this_1|is_that_1|are_you_asking|did_you_just_ask]? [so_far|now|already|until_now|yet|up_to_now|in_total|altogether|total|left|remaining|still|to_go|please|pls|plz|today|here|this_time|this_round|this_game]? [please|pls|plz|so_far|now]?"
     emit="@{_} core.request action=guess.count"
     kind=request
@@ -478,6 +491,7 @@
     example="Time to guess, start."
 
 @pat.games.guess.correct.yes core.pattern
+    canonical="Wait, I meant yes."
     match="[wait|sorry|oops|actually|hmm|uh|um|er|oh|ah|hold_on|wait_a_second|wait_a_sec|my_bad|my_mistake|sorry_wait|oh_wait|wait_wait|ok_wait|um_wait|uh_wait|oops_sorry|sorry_my_bad]? [wait|sorry|oops|actually|hold_on|my_bad]? [i_meant|i_mean|i_said|i_wanted_to_say|i_wanted_to_answer|make_that|change_that_to|change_it_to|change_my_answer_to|my_answer_is|my_answer_was|it_should_be|that_should_be|should_be|let_me_say|i_should_have_said|i_meant_to_say|i_meant_to_answer|i_ment|i_meant_to_say_it_was|correction|rather|make_it|change_it|change_that|make_that_a|i_meant_it_is|i_meant_it_does|i_meant_it_can|i_meant_it_has] [yes|yeah|yep|yup|sure|correct|right|true|it_does|it_is|it_can|it_has|yes_it_does|yes_it_is|yes_it_can|yes_it_has]"
     emit="@{_} core.request action=guess.correct arg.answer=yes"
     kind=request

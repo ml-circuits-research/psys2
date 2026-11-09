@@ -6,6 +6,7 @@
     example="How many legs does a spider have?"
 
 @pat.kids.animals.legs2 core.pattern
+    canonical="How many legs has a dog?"
     match="how_many legs [has|have] [a|an|the]? {a:noun}"
     emit="@{_} core.question type=kids.animals.animal seek=legs where.name={a}"
     kind=question
@@ -20,6 +21,7 @@
     example="Tell me how many legs a spider has."
 
 @pat.kids.animals.legs4 core.pattern
+    canonical="Does a dog have 4 legs?"
     match="[does|do|did] [a|an|the]? {a:noun} have {n:number} legs"
     emit="@{_} core.question type=kids.animals.animal seek=legs mode=exists where.name={a} where.legs={n}"
     kind=question
@@ -27,6 +29,7 @@
     example="Does a dog have 4 legs?"
 
 @pat.kids.animals.food1 core.pattern
+    canonical="What does a rabbit eat?"
     match="what [does|do] [a|an|the]? {a:noun} [eat|like_to_eat]"
     emit="@{_} core.question type=kids.animals.animal seek=food mode=list where.name={a}"
     kind=question
@@ -48,6 +51,7 @@
     example="Tell me what a rabbit eats."
 
 @pat.kids.animals.food4 core.pattern
+    canonical="Does a rabbit eat carrots?"
     match="[does|do|did] [a|an|the]? {a:noun} eat {f:word}"
     emit="@{_} core.question type=kids.animals.animal seek=food mode=exists where.name={a} where.food={f}"
     kind=question
@@ -55,6 +59,7 @@
     example="Does a rabbit eat carrots?"
 
 @pat.kids.animals.isa1 core.pattern
+    canonical="Is a whale a fish?"
     match="[is|are] [a|an|the]? {a:noun} [a|an]? {k:lex.kids.animals.kinds}"
     emit="@{_} core.question type=kids.animals.animal seek=is_a where.name={a} where.is_a={k}"
     kind=question
@@ -69,6 +74,7 @@
     example="Is a spider a kind of insect?"
 
 @pat.kids.animals.kind1 core.pattern
+    canonical="What kind of animal is a shark?"
     match="what [kind_of|type_of|sort_of|class_of] animal [is|are] [a|an|the]? {a:noun}"
     emit="@{_} core.question type=kids.animals.animal seek=class where.name={a}"
     kind=question
@@ -104,6 +110,7 @@
     example="What is a dolphin?"
 
 @pat.kids.animals.desc2 core.pattern
+    canonical="Tell me about a dolphin."
     match="[tell_me_about|describe] [a|an|the]? {a:lex.kids.animals.names}"
     emit="@{_} core.question type=kids.animals.animal seek=summary where.name={a}"
     kind=question
@@ -125,6 +132,7 @@
     example="What are dolphins like?"
 
 @pat.kids.animals.cov1 core.pattern
+    canonical="What is a cow covered in?"
     match="what [is|are] [a|an|the]? {a:noun} covered_in"
     emit="@{_} core.question type=kids.animals.animal seek=covered where.name={a}"
     kind=question
@@ -139,6 +147,7 @@
     example="What covering does a duck have?"
 
 @pat.kids.animals.live1 core.pattern
+    canonical="Where does a camel live?"
     match="where [does|do|did] [a|an|the]? {a:noun} live"
     emit="@{_} core.question type=kids.animals.animal seek=lives where.name={a}"
     kind=question
@@ -146,6 +155,7 @@
     example="Where does a camel live?"
 
 @pat.kids.animals.live2 core.pattern
+    canonical="Where can I find a camel?"
     match="where [can|could] [i|we|you] [find|see|meet] [a|an|the]? {a:noun}"
     emit="@{_} core.question type=kids.animals.animal seek=lives where.name={a}"
     kind=question
@@ -167,6 +177,7 @@
     example="What sound does a cow make?"
 
 @pat.kids.animals.sound2 core.pattern
+    canonical="What does a cow say?"
     match="what [does|do|did] [a|an|the]? {a:noun} say"
     emit="@{_} core.question type=kids.animals.animal seek=sound where.name={a}"
     kind=question
@@ -181,6 +192,7 @@
     example="What noise does a duck make?"
 
 @pat.kids.animals.sound4 core.pattern
+    canonical="How does a lion sound?"
     match="how [does|do|did] [a|an|the]? {a:noun} sound"
     emit="@{_} core.question type=kids.animals.animal seek=sound where.name={a}"
     kind=question
@@ -188,6 +200,7 @@
     example="How does a lion sound?"
 
 @pat.kids.animals.baby1 core.pattern
+    canonical="What is a baby cat called?"
     match="what [is|are] [a|an|the]? baby [of]? [a|an|the]? {a:noun} called"
     emit="@{_} core.question type=kids.animals.animal seek=baby where.name={a}"
     kind=question
@@ -195,6 +208,7 @@
     example="What is a baby cat called?"
 
 @pat.kids.animals.baby2 core.pattern
+    canonical="What do you call a baby cow?"
     match="what [do|does] you call [a|an|the]? baby [of]? [a|an|the]? {a:noun}"
     emit="@{_} core.question type=kids.animals.animal seek=baby where.name={a}"
     kind=question
@@ -209,6 +223,7 @@
     example="What is the name of a baby sheep?"
 
 @pat.kids.animals.baby4 core.pattern
+    canonical="What is a calf?"
     match="what [is|are] [a|an|the]? {b:lex.kids.animals.babies}"
     emit="@{_} core.question type=kids.animals.animal seek=name mode=list where.baby={b}"
     kind=question
@@ -216,6 +231,7 @@
     example="What is a calf?"
 
 @pat.kids.animals.baby5 core.pattern
+    canonical="Which animals have a baby called a cub?"
     match="[which|what] [animal|animals] [has|have] [a|an|the]? baby called [a|an|the]? {b:lex.kids.animals.babies}"
     emit="@{_} core.question type=kids.animals.animal seek=name mode=list where.baby={b}"
     kind=question
@@ -251,6 +267,7 @@
     example="Which birds live on a farm?"
 
 @pat.kids.animals.sl1 core.pattern
+    canonical="Which animals have 6 legs?"
     match="[which|what] [animal|animals] [has|have] {n:number} legs"
     emit="@{_} core.question type=kids.animals.animal seek=matching where.legs={n}"
     kind=question
@@ -377,6 +394,7 @@
     example="Which animals have feathers?"
 
 @pat.kids.animals.tl core.pattern
+    canonical="A zebra has 4 legs."
     match="[remember|fyi|note|note_that|btw|just_so_you_know|just_so_u_know|remember_that|did_you_know|you_should_know|learn_that|know_that|so|ok|okay|hey|please|listen|by_the_way|for_your_info|for_your_information|i_learned|i_heard|guess_what|oh_and|also|and|look|um|well|hmm|ah|oh|yo|dont_forget|dont_forget_that|keep_in_mind|keep_in_mind_that|make_a_note|note_this|write_this_down|save_this|save_that|store_this|store_that|memorize|memorize_this|please_remember|please_note|pls_remember|pls_note|u_should_know|you_need_to_know|heres_a_fact|here_is_a_fact|fun_fact|fact|true_fact|another_fact|one_more_thing|teach_you|let_me_teach_you|i_will_teach_you|i_can_tell_you|let_me_tell_you|lemme_tell_you|so_yeah|yeah|yes|yep|oh_yeah|alright|anyway|anyways|basically|well_yeah|ok_so|okay_so|oh_ok|oh_okay|okay_listen|ok_listen|you_know_what|did_u_know|u_know_what|heres_the_thing|truth_is|the_truth_is|actually|in_fact|honestly|seriously|trust_me|believe_me|its_true|its_a_fact|thats_a_fact|learn_this|learn_it|learn|study_this|read_this|take_note|take_note_that|add_this|add_that|add_to_your_notes|you_must_know|you_ought_to_know|i_say|i_tell_you|i_know|i_know_that|ive_learned|ive_learnt|i_read_that|my_teacher_said|my_teacher_says|my_mom_says|my_mom_said|my_dad_says|my_dad_said|someone_told_me|they_say|people_say|everyone_knows|everybody_knows|we_all_know|its_known_that|apparently|supposedly|note]? [a|an|the]? {a:noun} [has|have] {n:number} legs"
     emit="@{_} kids.animals.animal name={a} legs={n}"
     kind=statement
@@ -419,6 +437,7 @@
     example="A zebra lives on the savanna."
 
 @pat.kids.animals.tab core.pattern
+    canonical="A zebra can swim."
     match="[remember|fyi|note|note_that|btw|just_so_you_know|just_so_u_know|remember_that|did_you_know|you_should_know|learn_that|know_that|so|ok|okay|hey|please|listen|by_the_way|for_your_info|for_your_information|i_learned|i_heard|guess_what|oh_and|also|and|look|um|well|hmm|ah|oh|yo|dont_forget|dont_forget_that|keep_in_mind|keep_in_mind_that|make_a_note|note_this|write_this_down|save_this|save_that|store_this|store_that|memorize|memorize_this|please_remember|please_note|pls_remember|pls_note|u_should_know|you_need_to_know|heres_a_fact|here_is_a_fact|fun_fact|fact|true_fact|another_fact|one_more_thing|teach_you|let_me_teach_you|i_will_teach_you|i_can_tell_you|let_me_tell_you|lemme_tell_you|so_yeah|yeah|yes|yep|oh_yeah|alright|anyway|anyways|basically|well_yeah|ok_so|okay_so|oh_ok|oh_okay|okay_listen|ok_listen|you_know_what|did_u_know|u_know_what|heres_the_thing|truth_is|the_truth_is|actually|in_fact|honestly|seriously|trust_me|believe_me|its_true|its_a_fact|thats_a_fact|learn_this|learn_it|learn|study_this|read_this|take_note|take_note_that|add_this|add_that|add_to_your_notes|you_must_know|you_ought_to_know|i_say|i_tell_you|i_know|i_know_that|ive_learned|ive_learnt|i_read_that|my_teacher_said|my_teacher_says|my_mom_says|my_mom_said|my_dad_says|my_dad_said|someone_told_me|they_say|people_say|everyone_knows|everybody_knows|we_all_know|its_known_that|apparently|supposedly|note]? [a|an|the]? {a:noun} can {ab:lex.kids.animals.abilities}"
     emit="@{_} kids.animals.animal name={a} can_{ab}=true"
     kind=statement
@@ -461,6 +480,7 @@
     example="A zebra is covered in fur."
 
 @pat.kids.animals.pet1 core.pattern
+    canonical="My dog is called Rex."
     match="my {k:noun} is [called|named] {n:agent}"
     emit="@{_} kids.animals.pet owner=$e.user kind={k} called={n}"
     kind=statement
@@ -468,6 +488,7 @@
     example="My dog is called Rex."
 
 @pat.kids.animals.pet2 core.pattern
+    canonical="I have a cat called Tom."
     match="i [have|got] [a|an]? {k:noun} [called|named] {n:agent}"
     emit="@{_} kids.animals.pet owner=$e.user kind={k} called={n}"
     kind=statement
@@ -482,6 +503,7 @@
     example="My dog's name is Rex."
 
 @pat.kids.animals.petq1 core.pattern
+    canonical="What is my dog called?"
     match="what [is|are] my {k:noun} called"
     emit="@{_} core.question type=kids.animals.pet seek=called where.owner=$e.user where.kind={k}"
     kind=question
@@ -510,6 +532,7 @@
     example="What is my pet called?"
 
 @pat.kids.animals.petq5 core.pattern
+    canonical="What pets do I have?"
     match="[what|which] pets [do|did] i have"
     emit="@{_} core.question type=kids.animals.pet seek=kind mode=list where.owner=$e.user"
     kind=question
@@ -524,6 +547,7 @@
     example="Who is Rex?"
 
 @pat.kids.animals.petq7 core.pattern
+    canonical="Do I have a dog?"
     match="[do|did] i have [a|an|any]? {k:noun}"
     emit="@{_} core.question type=kids.animals.pet seek=kind mode=exists where.owner=$e.user where.kind={k}"
     kind=question
@@ -531,6 +555,7 @@
     example="Do I have a dog?"
 
 @pat.kids.animals.w.ab.aux core.pattern
+    canonical="Could a hen possibly swim?"
     match="[tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|can_u_check_if|could_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|show_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also]? [can|could|does|do|will|is|are|would|did|if|whether|tell_me_if|check_if] [a|an|the|every|any|all|each]? {a:noun} [be|even|really|actually|possibly|know_how_to|able_to|capable_of|manage_to|learn_to|go|ever|often|usually|normally]? {ab:lex.kids.animals.abilities} [in_water|in_the_air|a_lot|well|too]? [right|yes|no|yeah|correct|or_no|or_not|or_nah|yes_or_no|right_or_not|yes_no|true_or_false|too|at_all]? [pls|plz|please|thanks|exactly|anyway|lol]?"
     emit="@{_} core.question type=kids.animals.animal seek=can_{ab} where.name={a}"
     kind=question
@@ -538,6 +563,7 @@
     example="Could a hen possibly swim?"
 
 @pat.kids.animals.w.ab.tag core.pattern
+    canonical="A hen can swim right?"
     match="[a|an|the|every|any|all|each]? {a:noun} [can|could|does|do|will|is|are|even|really|actually|possibly|know_how_to|able_to|capable_of|go|ever|often|usually|normally]? {ab:lex.kids.animals.abilities} [right|yes|no|yeah|correct|or_no|or_not|or_nah|yes_or_no|right_or_not|yes_no|true_or_false] [pls|plz|please|thanks|exactly|anyway|lol]?"
     emit="@{_} core.question type=kids.animals.animal seek=can_{ab} where.name={a}"
     kind=question
@@ -643,6 +669,7 @@
     example="The hen body covering?"
 
 @pat.kids.animals.w.cov.f4 core.pattern
+    canonical="What coats a hen?"
     match="[tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|can_u_check_if|could_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|show_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also]? what [covers|coats|wraps] [a|an|the|every|any|all|each]? {a:noun} [pls|plz|please|thanks|exactly|anyway|lol]?"
     emit="@{_} core.question type=kids.animals.animal seek=covered where.name={a}"
     kind=question
@@ -650,6 +677,7 @@
     example="What coats a hen?"
 
 @pat.kids.animals.w.desc.f1 core.pattern
+    canonical="Teach me about a dolphin."
     match="[tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|can_u_check_if|could_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|show_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also]? [tell_me|show_me|give_me|say|explain|describe|define|talk_about|talk_to_me_about|info_on|facts_about|about|what_do_you_know_about|tell_me_more_about|tell_me_something_about|tell_me_stuff_about|tell_me_all_about|what_can_you_say_about|share_facts_about|give_me_info_on|give_me_facts_about|i_want_to_know_about|teach_me_about|tell_me_facts_about] [stuff|something|more|facts|info|all|everything]? [about|on]? [a|an|the|some]? {a:lex.kids.animals.names} [to_me|for_me]? [pls|plz|please|thanks|exactly|anyway|lol]?"
     emit="@{_} core.question type=kids.animals.animal seek=summary where.name={a}"
     kind=question
@@ -678,6 +706,7 @@
     example="What kind of animal are dolphins like?"
 
 @pat.kids.animals.w.hab.f1 core.pattern
+    canonical="List animals around the pond."
     match="[tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|can_u_check_if|could_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|show_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also]? [list|show|name|give_me|find|tell_me]? [all|some|the]? [animal|animals] [of|in|from|near|living_in|found_in|that_live_in|that_live_on|that_live_near|that_live|living_on|who_live_in|who_live_on|which_live_in|which_live_on|found_on|on|at|around|in_the|are_found_in|are_found_on|are_found_near|are_found] [the|a]? {h:word} [list|pls|plz|please]?"
     emit="@{_} core.question type=kids.animals.animal seek=matching where.habitat={h}"
     kind=question
@@ -1061,6 +1090,7 @@
     example="Pets name"
 
 @pat.kids.animals.x.petq.cg core.pattern
+    canonical="Name of my pet?"
     match="[tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|can_u_check_if|could_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|show_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also]? [name|names|nickname|nick_name] [of|for] [my|our] [pet|pets|friend|companion|furry_friend|furry_pal|animal|little_friend] [pls|plz|please|thanks|exactly|anyway|lol|real_quick|quickly|btw|thx|ty|or_not|please_tell_me|if_you_know|do_you_know|you_know|haha|hmm|just_curious|rn|now|again|ok|okay]?"
     emit="@{_} core.question type=kids.animals.pet seek=called where.owner=$e.user"
     kind=question
@@ -1660,6 +1690,7 @@
     example="U think a dolphin's a mammal"
 
 @pat.kids.animals.x3.isa.tag2 core.pattern
+    canonical="Whales are fish, true?"
     match="[tell_me|can_you_tell_me|could_you_tell_me|can_u_tell_me|could_u_tell_me|can_you_say|can_u_say|could_you_say|can_you_find|can_you_check|can_you_check_if|can_u_check_if|could_you_check_if|do_you_know|hey|quick_question|ok|so|please|pls|plz|remind_me|show_me|i_wanna_know|i_want_to_know|i_wonder|let_me_know|just_wondering|hmm|tell|say|find_out|find_me|can_you_show_me|can_u|could_you|can_you|could_u|yo|hi|hello|bot|robot|btw|and|also]? [a|an|the|every|any|all|each|some]? {a:noun} ['s]? [is|are|be|counts_as|count_as|as]? [a|an|the]? [kind_of|type_of|sort_of]? {k:lex.kids.animals.kinds} [true|right|correct|yes|no|yeah|yep|ok|okay|huh|eh|isnt_it|arent_they|doesnt_it|rite|tru|true_or_not|true_or_false|is_that_right|is_that_true|is_that_correct|am_i_right|thats_right|right_or_wrong|yes_or_no|y_or_n|y_n|or_not|or_no|or_what|or_nah|or_nope|real|for_real|really|no_way|seriously|fr|hmm|idk|i_think|i_guess|i_believe|lol] [pls|plz|please|thanks|exactly|anyway|lol|real_quick|quickly|btw|thx|ty|or_not|please_tell_me|if_you_know|do_you_know|you_know|haha|hmm|just_curious|rn|now|again|ok|okay]?"
     emit="@{_} core.question type=kids.animals.animal seek=is_a where.name={a} where.is_a={k}"
     kind=question
@@ -1811,6 +1842,7 @@
     example="Wheres home for a camel"
 
 @pat.kids.animals.x2.alt.breathe core.pattern
+    canonical="Do dolphins breathe air or are they fish?"
     match="[do|does|did] [a|an|the]? {a:noun} [breathe|breath|breathe_in|breath_in|live_on_land|have_gills|have_lungs|have_fur|have_feathers|lay_eggs] [air|water|under_water|underwater]? or [are|is|do|does] [they|it|he|she|a|an]? [a|an]? {c1:lex.kids.animals.classes}"
     emit="@{_} core.question type=kids.animals.animal seek=class where.name={a}"
     kind=question

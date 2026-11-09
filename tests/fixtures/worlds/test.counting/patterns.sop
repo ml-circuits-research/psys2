@@ -4,6 +4,7 @@
     kind=statement
     priority=10
     example="Tom has 5 apples."
+    canonical="Tom has 5 apples."
 
 @pat.test.counting.give core.pattern
     match="{giver:agent} [gives|gave|give] {receiver:agent} {n:number} {item:noun}"

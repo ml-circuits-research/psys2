@@ -6,6 +6,7 @@
     example="I have 20 lei."
 
 @pat.kids.shop.money.start core.pattern
+    canonical="I start with 30 lei."
     match="i [start|started|begin|began] with {n:number} [lei|leu]"
     emit="@{_} kids.shop.money count={n} unit=leu"
     kind=statement
@@ -13,6 +14,7 @@
     example="I start with 30 lei."
 
 @pat.kids.shop.money.wallet core.pattern
+    canonical="My wallet has 15 lei."
     match="my [wallet|piggy_bank|purse|money_box] [has|had|holds|contains] {n:number} [lei|leu]"
     emit="@{_} kids.shop.money count={n} unit=leu"
     kind=statement
@@ -34,6 +36,7 @@
     example="Ana gives me 10 lei."
 
 @pat.kids.shop.expense core.pattern
+    canonical="I spent 5 lei."
     match="i [spend|spent|lose|lost|pay|paid|give_away|gave_away] {n:number} [lei|leu]"
     emit="@{_} kids.shop.expense count={n} unit=leu"
     kind=statement
@@ -41,6 +44,7 @@
     example="I spent 5 lei."
 
 @pat.kids.shop.buy.a core.pattern
+    canonical="I buy 3 pencils."
     match="i [$kids.shop.g95_buy] {n1:number} {i1:lex.kids.shop.items}"
     emit="@{_} kids.shop.purchase item={i1} count={n1}"
     kind=statement
@@ -90,6 +94,7 @@
     example="A ball costs 7 lei."
 
 @pat.kids.shop.price.is core.pattern
+    canonical="The pencil is 3 lei."
     match="[a|an|the|one|1]? {item:lex.kids.shop.items} [is|are] {n:number} [lei|leu] [$lang.tail.filler|each]?"
     emit="@{_} kids.shop.price item={item} cost={n}"
     kind=statement
@@ -97,6 +102,7 @@
     example="The pencil is 3 lei."
 
 @pat.kids.shop.price.of core.pattern
+    canonical="The price of a kite is 9 lei."
     match="the [price|cost] of [a|an|the|one|1]? {item:noun} is {n:number} [lei|leu]"
     emit="@{_} kids.shop.price item={item} cost={n}"
     kind=statement
@@ -132,6 +138,7 @@
     example="How much money does a kite cost?"
 
 @pat.kids.shop.q.total.cost.a core.pattern
+    canonical="How much do 3 pencils cost?"
     match="how_much [do|does|will|would] {n1:number} {i1:lex.kids.shop.items} cost [together|altogether|in_total]?"
     emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1}"
     kind=question
@@ -202,6 +209,7 @@
     example="How much are a ball and a pencil altogether?"
 
 @pat.kids.shop.q.total.what.a core.pattern
+    canonical="What do 3 pencils cost?"
     match="what [do|does|will|would] {n1:number} {i1:lex.kids.shop.items} cost [together|altogether|in_total]?"
     emit="@{_} core.question type=kids.shop.total seek=total where.item={i1} where.count={n1}"
     kind=question
@@ -335,6 +343,7 @@
     example="How many lei do I have now?"
 
 @pat.kids.shop.q.balance.d core.pattern
+    canonical="How much money is left?"
     match="how_much money [is|are] left [for_me]?"
     emit="@{_} core.question type=kids.shop.balance seek=amount"
     kind=question
@@ -356,6 +365,7 @@
     example="How much is left?"
 
 @pat.kids.shop.q.can.buy.a core.pattern
+    canonical="Can I buy 3 pencils?"
     match="[can|could|may] i [buy|get|have|afford] {n1:number} {i1:lex.kids.shop.items}"
     emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1}"
     kind=question
@@ -776,6 +786,7 @@
     example="Am I able to afford 2 balls?"
 
 @pat.kids.shop.w.aff.af2.n core.pattern
+    canonical="Is 2 balls affordable?"
     match="[$lang.lead.question|$lang.lead.filler|hi]? [is|are|would|will|does|do]? {n1:number} {i1:lex.kids.shop.items} [$kids.shop.g46_affordable] [$lang.tail.filler|exactly]?"
     emit="@{_} core.question type=kids.shop.affordability seek=answer where.item={i1} where.count={n1}"
     kind=question
@@ -818,6 +829,7 @@
     example="What change out of 5 lei if I take 2 balls?"
 
 @pat.kids.shop.w.chg.o2.n core.pattern
+    canonical="Change for 2 balls with 5 lei?"
     match="[$lang.lead.question|$lang.lead.filler|hi]? [$kids.shop.g64_what]? [is|will_be|would_be]? [my|the]? [$kids.shop.g42_change] [$kids.shop.g53_do_i_get]? [$kids.shop.g105_for] {n1:number} {i1:lex.kids.shop.items} [$kids.shop.g54_from] {m:number} [lei|leu]? [$lang.tail.filler|exactly]?"
     emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1}"
     kind=question
@@ -1686,6 +1698,7 @@
     example="Show me my balance."
 
 @pat.kids.shop.w.bal.f5 core.pattern
+    canonical="Show me my cash total."
     match="[$lang.lead.question|$lang.lead.filler|hi]? [how_much|what|whats|what_is|show|show_me|tell_me|check|how_much_money_is|how_much_is] [is|do_i_have|have_i_got|i_have|do_i_have_in]? [in|on]? [my]? [wallet|piggy_bank|pocket|purse|money_box|money|cash] [amount|now|total|in_total|altogether]? [$lang.tail.filler|exactly]?"
     emit="@{_} core.question type=kids.shop.balance seek=amount"
     kind=question
@@ -2688,6 +2701,7 @@
     example="Kite change from 20?"
 
 @pat.kids.shop.sw.chg.paid.first.v0 core.pattern
+    canonical="Change from thirty lei, puzzle and 2 kites."
     match="[$kids.shop.g1_i_need_to_find_out]? [$kids.shop.g1_i_need_to_find_out]? [$kids.shop.g51_can_i_get]? [the|my]? [$kids.shop.g2_how_much_money_do_i_have_left] [$kids.shop.g52_if_i_pay_with]? {m:number} [lei_each|lei|leu|ron]? [if_i_buy|after_i_buy|when_i_buy|if_i_get|after_i_get|if_i_take|after_i_take|to_buy|to_get|and_buy|and_get|,|:|for|on|buying|getting|and|then|plus|with]? {n1:number} {i1:lex.kids.shop.items} [pls|then|exactly|really|actually]? [$lang.tail.filler|$kids.shop.g4_exactly]? [$lang.tail.filler|$kids.shop.g4_exactly]?"
     emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1}"
     kind=question
@@ -2983,6 +2997,7 @@
     example="My purse 40 lei."
 
 @pat.kids.shop.sw.st.expense.verb core.pattern
+    canonical="I paid 2 lei for a sweet."
     match="[$kids.shop.g1_i_need_to_find_out]? [$kids.shop.g1_i_need_to_find_out]? [$kids.shop.g22_just_so_you_know]? [i|we]? [$kids.shop.g93_just]? [handed_over|hand_over|forked_out|fork_out|shelled_out|shell_out|put_down|put_out|laid_out|lay_out|dished_out|dish_out|coughed_up|cough_up|parted_with|part_with|have_spent|have_paid|have_used|have_given|have_lost|have_wasted|have_blown|ve_spent|ve_paid|ve_used|ve_given|ve_lost|ve_wasted|ve_blown|just_spent|just_paid|just_used|just_gave|just_lost|just_wasted|just_blew|already_spent|already_paid|already_used|already_gave|already_lost|already_wasted|already_blew|did_spend|did_pay|did_use|did_give|did_lose|did_waste|did_blow|paid|pay|spent|spend|used|use|gave|give|lost|lose|wasted|waste|blew|blow|dropped|drop|handed|splurged|splurge|burned|burn] {n:number} [lei|leu] [at_the_shop|at_the_store|in_the_shop|in_the_store|at_the_canteen|at_the_kiosk|at_the_market|to_the_shop|to_the_store|to_the_shopkeeper|to_the_cashier|to_the_seller|to_the_canteen|to_the_kiosk|to_the_market|to_buy|when_buying|while_buying|by_buying|just_now|after_school|at_school|on|for|to|at|in|towards|toward|buying|today|now|earlier|already|too|more|extra|again|then]? ... [$lang.tail.filler|$kids.shop.g4_exactly]? [$lang.tail.filler|$kids.shop.g4_exactly]?"
     emit="@{_} kids.shop.expense count={n} unit=leu"
     kind=statement
@@ -3008,6 +3023,7 @@
     example="Minus 2 lei, i bought candy."
 
 @pat.kids.shop.sw.st.income.giver core.pattern
+    canonical="Mom gave me 5 lei."
     match="[$kids.shop.g1_i_need_to_find_out]? [$kids.shop.g1_i_need_to_find_out]? [$kids.shop.g22_just_so_you_know]? [the_tooth_fairy|my_mom|my_dad|my_grandma|my_grandpa|my_aunt|my_uncle|a_friend|my_friend|my_teacher|my_brother|my_sister|my_mother|my_father|my_parents|my_auntie|my_grandmother|my_grandfather|my_grandparents|a_kid|a_classmate|my_classmate|the_teacher|a_neighbor|my_neighbor|the_neighbor|the_bank|mom|dad|grandma|grandpa|mum|mommy|daddy|auntie|uncle|teacher|someone|granny|nana|papa|mother|father|parents|aunt|grandmother|grandfather|grandparents|santa] [has_given|have_given|just_gave|just_gives|just_handed|just_sent|just_lent|just_paid|just_donated|just_offered|just_slipped|just_passed|just_brought|just_gifted|just_awarded|just_left|just_put|just_dropped|just_added|also_gave|also_gives|also_handed|also_sent|also_lent|also_paid|also_donated|also_offered|also_slipped|also_passed|also_brought|also_gifted|also_awarded|also_left|also_put|also_dropped|also_added|gave|gives|give|handed|hands|sent|sends|lent|lends|paid|pays|donated|donates|offered|offers|tossed|threw|throws|slipped|slips|passed|passes|brought|brings|gifted|gifts|awarded|awards|left|leaves|put|puts|dropped|drops|added|adds] [to_me|to_us|me|us]? [$kids.shop.g109_an_extra]? {n:number} [lei|leu] [$kids.shop.g32_at_the_moment]? [for_the_shop|as_a_gift|as_pocket_money|for_my_birthday|for_shopping|for_school|for_lunch|for_sweets|just_now|again|too|more|extra|today|now]? [$lang.tail.filler|$kids.shop.g4_exactly]? [$lang.tail.filler|$kids.shop.g4_exactly]?"
     emit="@{_} kids.shop.income count={n} unit=leu"
     kind=statement
@@ -3015,6 +3031,7 @@
     example="Mom gave me 5 lei."
 
 @pat.kids.shop.sw.st.income.verb core.pattern
+    canonical="I just found 5 lei."
     match="[$kids.shop.g1_i_need_to_find_out]? [$kids.shop.g1_i_need_to_find_out]? [$kids.shop.g22_just_so_you_know]? [i|we] [just|also|then|now|today|again|even|already|finally|only]? [pick_up|picked_up|take_in|took_in|am_given|was_given|am_gifted|was_gifted|got_given|have_received|have_got|have_earned|have_found|have_won|have_made|have_collected|ve_received|ve_earned|ve_found|ve_won|ve_made|ve_collected|did_get|did_receive|did_earn|did_find|did_win|did_make|did_collect|get|got|receive|received|earn|earned|find|found|win|won|make|made|collect|collected|gain|gained] [$kids.shop.g109_an_extra]? {n:number} [lei|leu] [from_my_mom|from_my_dad|from_my_grandma|from_my_grandpa|as_a_gift|as_pocket_money|for_my_birthday|just_now|from_mom|from_dad|from_grandma|from_grandpa|more|extra|today|now|again|too]? ... [$lang.tail.filler|$kids.shop.g4_exactly]? [$lang.tail.filler|$kids.shop.g4_exactly]?"
     emit="@{_} kids.shop.income count={n} unit=leu"
     kind=statement
@@ -3046,6 +3063,7 @@
     example="4 lei for a kite."
 
 @pat.kids.shop.sw.st.buy.n core.pattern
+    canonical="I just bought 3 pencils."
     match="[$kids.shop.g1_i_need_to_find_out]? [$kids.shop.g1_i_need_to_find_out]? [$kids.shop.g22_just_so_you_know]? [i|we]? [$kids.shop.g93_just]? [$kids.shop.g23_am_going_to_buy] {n1:number} {i1:lex.kids.shop.items} [$kids.shop.g19_from_the_shop]? [$kids.shop.g19_from_the_shop]? [$lang.tail.filler|$kids.shop.g4_exactly]? [$lang.tail.filler|$kids.shop.g4_exactly]?"
     emit="@{_} kids.shop.purchase item={i1} count={n1}"
     kind=statement
@@ -3190,6 +3208,7 @@
 
 
 @pat.kids.shop.la.n0 core.pattern
+    canonical="How much money do I have left after I buy 2 pencils?"
     match="how_much [money|lei|leu]? [do|will|would|shall] i [still]? have [$kids.shop.g80_left]? [$kids.shop.g68_after] [i]? [$kids.shop.g28_buy] {n1:number} {i1:lex.kids.shop.items} [$lang.tail.filler|exactly]?"
     emit="@{_} core.question type=kids.shop.leftafter seek=amount where.item={i1} where.count={n1}"
     kind=question

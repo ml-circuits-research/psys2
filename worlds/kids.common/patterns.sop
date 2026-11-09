@@ -14,6 +14,7 @@
     example="What are you called?"
 
 @pat.kids.common.name.call core.pattern
+    canonical="What should I call you?"
     match="[what_do_i_call_you|what_should_i_call_you|what_can_i_call_you|tell_me_your_name|may_i_ask_your_name|can_i_ask_your_name|can_you_tell_me_your_name]"
     emit="@{_} core.request action=chat.name"
     kind=chat
@@ -21,6 +22,7 @@
     example="What should I call you?"
 
 @pat.kids.common.meet core.pattern
+    canonical="My name is Mia Lee."
     match="[hello|hi|hey]? [there]? my name is {n:words(3)}"
     emit="@{_} core.request action=chat.meet arg.name=\"{n|cap}\""
     kind=chat
@@ -29,6 +31,7 @@
     example="My name is Mia Lee."
 
 @pat.kids.common.meet.call core.pattern
+    canonical="You can call me Ana."
     match="[hello|hi|hey]? [there]? [call_me|you_can_call_me|please_call_me|everybody_calls_me|i_am_called|i_am_named] {n:words(3)}"
     emit="@{_} core.request action=chat.meet arg.name=\"{n|cap}\""
     kind=chat
@@ -37,6 +40,7 @@
     example="You can call me Ana."
 
 @pat.kids.common.myname core.pattern
+    canonical="What is my name?"
     match="[what_is|what_was] [my_name|my_name_again]"
     emit="@{_} core.request action=chat.myname"
     kind=chat
@@ -65,6 +69,7 @@
     example="Who are you?"
 
 @pat.kids.common.thanks core.pattern
+    canonical="Thank you!"
     match="[thanks|thank_you] [very_much|a_lot]?"
     emit="@{_} core.request action=chat.thanks"
     kind=chat
@@ -72,6 +77,7 @@
     example="Thank you!"
 
 @pat.kids.common.bye core.pattern
+    canonical="Goodbye!"
     match="[goodbye|bye|see_you]"
     emit="@{_} core.request action=chat.bye"
     kind=chat
@@ -128,6 +134,7 @@
     example="How should I refer to you?"
 
 @pat.kids.common.w.name.f7 core.pattern
+    canonical="Who am I chatting with?"
     match="[hey|so|um|ok|okay|hi|hello|yo|hmm|oh|tell_me|can_you_tell_me|could_you_tell_me|quick_question|remind_me|can_u_tell_me|could_u_tell_me|can_you_say|could_you_say|can_u_say|could_u_say|can_you|could_you|can_u|could_u|will_you|would_you|pls|plz|just|i_wanna_know|i_want_to_know|i_wonder|let_me_know|bot|robot|buddy|friend|hey_bot|yo_bot|anyway|btw|great|cool|nice|awesome|oh_ok|oh_okay|ok_so|okay_so|yes|yeah|sure|alright|right|tell|say|hey_there|hi_there|hello_there|so_tell_me|ok_tell_me|quick_q|wait|hold_on|hold_up|wait_a_sec|wait_a_second|hmm_ok|hey_wait|oh_wait|um_ok|ok_wait|ok_so_um|pls_tell_me|plz_tell_me]? who [am_i|do_i|should_i|can_i] [talk|talking|speak|speaking|chat|chatting] [to|with] [what_name]? [what|whats]? [name]? [pls|plz|please|thanks|lol|haha|again|rn|now|then|exactly|actually]?"
     emit="@{_} core.request action=chat.name"
     kind=question
@@ -177,6 +184,7 @@
     example="This is Zed talking."
 
 @pat.kids.common.w.myname.f1 core.pattern
+    canonical="Can you still recall my name?"
     match="[hey|so|um|ok|okay|hi|hello|yo|hmm|oh|tell_me|can_you_tell_me|could_you_tell_me|quick_question|remind_me|can_u_tell_me|could_u_tell_me|can_you_say|could_you_say|can_u_say|could_u_say|can_you|could_you|can_u|could_u|will_you|would_you|pls|plz|just|i_wanna_know|i_want_to_know|i_wonder|let_me_know|bot|robot|buddy|friend|hey_bot|yo_bot|anyway|btw|great|cool|nice|awesome|oh_ok|oh_okay|ok_so|okay_so|yes|yeah|sure|alright|right|tell|say|hey_there|hi_there|hello_there|so_tell_me|ok_tell_me|quick_q|wait|hold_on|hold_up|wait_a_sec|wait_a_second|hmm_ok|hey_wait|oh_wait|um_ok|ok_wait|ok_so_um|pls_tell_me|plz_tell_me]? [do|did|can|could|will|would]? [you|u]? [still]? [remember|know|recall|tell_me|remember_what|know_what|say|tell]? [what|whats|what_is|what_was|what_s]? [is|was]? my_name [is|was]? [what]? [again|now|pls|plz|please|lol|to_you|it|right|ok|huh|eh|or_not]?"
     emit="@{_} core.request action=chat.myname"
     kind=question
@@ -247,6 +255,7 @@
     example="Can I get your name?"
 
 @pat.kids.common.w.who.f5 core.pattern
+    canonical="Who is speaking to me?"
     match="[hey|so|um|ok|okay|hi|hello|yo|hmm|oh|tell_me|can_you_tell_me|could_you_tell_me|quick_question|remind_me|can_u_tell_me|could_u_tell_me|can_you_say|could_you_say|can_u_say|could_u_say|can_you|could_you|can_u|could_u|will_you|would_you|pls|plz|just|i_wanna_know|i_want_to_know|i_wonder|let_me_know|bot|robot|buddy|friend|hey_bot|yo_bot|anyway|btw|great|cool|nice|awesome|oh_ok|oh_okay|ok_so|okay_so|yes|yeah|sure|alright|right|tell|say|hey_there|hi_there|hello_there|so_tell_me|ok_tell_me|quick_q|wait|hold_on|hold_up|wait_a_sec|wait_a_second|hmm_ok|hey_wait|oh_wait|um_ok|ok_wait|ok_so_um|pls_tell_me|plz_tell_me]? [explain|tell_me|say]? [who|whos] [is]? [this|that|you|u|r|talking_to_me|speaking|there|youre|you_are|talking|speaking_to_me]? [u|you|r|are|be|is]? [talking_to_me|speaking|there|this|talking|speaking_to_me]? [to_me]? [pls|plz|please|thanks|lol|haha|again|rn|now|then|exactly|actually]?"
     emit="@{_} core.request action=chat.who"
     kind=question
@@ -296,6 +305,7 @@
     example="Call me Zed please."
 
 @pat.kids.common.w.who.f1 core.pattern
+    canonical="Who are you exactly?"
     match="[hey|so|um|ok|okay|hi|hello|yo|hmm|oh|tell_me|can_you_tell_me|could_you_tell_me|quick_question|remind_me|can_u_tell_me|could_u_tell_me|can_you_say|could_you_say|can_u_say|could_u_say|can_you|could_you|can_u|could_u|will_you|would_you|pls|plz|just|i_wanna_know|i_want_to_know|i_wonder|let_me_know|bot|robot|buddy|friend|hey_bot|yo_bot|anyway|btw|great|cool|nice|awesome|oh_ok|oh_okay|ok_so|okay_so|yes|yeah|sure|alright|right|tell|say|hey_there|hi_there|hello_there|so_tell_me|ok_tell_me|quick_q|wait|hold_on|hold_up|wait_a_sec|wait_a_second|hmm_ok|hey_wait|oh_wait|um_ok|ok_wait|ok_so_um|pls_tell_me|plz_tell_me]? [who|what|wat|whos|whats] [are|r|is|re]? [you|u|ya] [exactly|then|really|actually|anyway|pls|again|even|supposed_to_be]?"
     emit="@{_} core.request action=chat.who"
     kind=question
@@ -324,6 +334,7 @@
     example="Introduce yourself."
 
 @pat.kids.common.w.thanks core.pattern
+    canonical="Thanks a ton buddy."
     match="[thanks|thank_you|thank_ya|tanks|ty_ty|thx|tysm|ty|thank_yous|thank_u|thankyou|thnx|thanx|cheers|ta|many_thanks|thanks_so_much|thank_you_so_much|thank_you_very_much|thanks_a_lot|thanks_a_ton|thanks_a_bunch|much_appreciated|appreciate_it|i_appreciate_it|thankss|thanksss|tyvm|thx_a_lot|thanks_a_million] [a_lot|so_much|very_much|a_ton|a_bunch|lots|loads|heaps|a_million|again]? [friend|buddy|pal|robot|mate|assistant|bot]?"
     emit="@{_} core.request action=chat.thanks"
     kind=question
@@ -348,6 +359,7 @@
     example="Hey, are you there?"
 
 @pat.kids.common.x.hello3 core.pattern
+    canonical="Can we talk?"
     match="[are_you_there|are_u_there|r_u_there|r_you_there|you_there|u_there|anyone_there|anybody_there|is_anyone_there|is_anybody_there|can_we_talk|can_we_chat|lets_chat|lets_talk|wanna_chat|want_to_chat] [bot|robot|friend|buddy|pal|mate|today|doing|my_friend|dear|there]?"
     emit="@{_} core.request action=chat.greet"
     kind=question
@@ -712,6 +724,8 @@
     example="Could you tell me what your name is"
 
 @pat.kids.common.howru core.pattern
+    canonical="How are you?"
+    canonical="How are you doing today?"
     match="[how_are_you|how_are_you_doing|how_are_you_today|how_are_u|how_r_u|how_do_you_do|how_is_it_going|how_s_it_going|hows_it_going|how_you_doing|how_have_you_been|how_are_things|how_are_you_feeling|are_you_ok|are_you_okay|are_you_well|are_you_fine|are_you_alright|how_is_your_day|how_was_your_day|what_s_up|whats_up|sup|wassup]"
     emit="@{_} core.request action=chat.howru"
     kind=chat

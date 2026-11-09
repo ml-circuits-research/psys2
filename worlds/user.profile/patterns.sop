@@ -7,6 +7,7 @@
     example="I work as a nurse for the city hospital."
 
 @pat.user.profile.role core.pattern
+    canonical="I work as a designer."
     match="[i_am|i_work_as|i_am_working_as|my_job_is|my_role_is|my_profession_is] [a|an]? {r:lex.user.profile.roles}"
     emit="@{_} core.request action=prof.tell arg.kind=role arg.role={r}"
     kind=request
@@ -126,6 +127,7 @@
     example="I use Python, SQL and Docker."
 
 @pat.user.profile.name core.pattern
+    canonical="My name is Andy Lee."
     match="[call_me|you_can_call_me|just_call_me|please_call_me|my_name_is|i_am_called|people_call_me|everyone_calls_me|i_go_by] {n:words(2)}"
     emit="@{_} core.request action=prof.tell arg.kind=name arg.name=\"{n}\""
     kind=request
@@ -157,6 +159,7 @@
     example="Delete everything."
 
 @pat.user.profile.where core.pattern
+    canonical="Where do I live?"
     match="[where_do_i_live|where_do_i_stay|where_am_i_from|where_do_i_come_from|where_is_my_home|what_city_do_i_live_in|which_city_do_i_live_in]"
     emit="@{_} core.request action=prof.fieldOf arg.field=location"
     kind=question
@@ -232,6 +235,7 @@
     example="No, I live in Berlin."
 
 @pat.user.profile.start core.pattern
+    canonical="Let us get to know me."
     match="[interview_me|ask_me_something|ask_me_a_question|ask_me_anything|ask_me_some_questions|get_to_know_me|let_us_get_to_know_me|lets_get_to_know_me|start_the_interview|begin_the_interview|resume_the_interview|continue_the_interview|quiz_me_about_myself|do_you_want_to_get_to_know_me|start_the_profile_interview|ask_me_more]"
     emit="@{_} core.request action=prof.start"
     kind=request
@@ -248,6 +252,7 @@
     example="Let us play get to know me."
 
 @pat.user.profile.start.can core.pattern
+    canonical="Can you interview me?"
     match="[can_you|could_you|please_can_you]? [interview|quiz] me [about_myself]?"
     emit="@{_} core.request action=prof.start"
     kind=request
@@ -255,6 +260,8 @@
     example="Can you interview me?"
 
 @pat.user.profile.pause core.pattern
+    canonical="Stop the game."
+    canonical="Pause the interview."
     match="[pause|stop|end|finish] [the|this]? [interview|game|questions]"
     emit="@{_} core.request action=prof.pause"
     kind=request
@@ -270,6 +277,7 @@
     example="No more questions."
 
 @pat.user.profile.know core.pattern
+    canonical="What do you know about me?"
     match="what [do_you_know|have_you_learned|did_you_learn|have_you_found_out|did_i_tell_you] about me"
     emit="@{_} core.request action=prof.know"
     kind=question
@@ -285,6 +293,7 @@
     example="Tell me what you know about me."
 
 @pat.user.profile.know.profile core.pattern
+    canonical="What is in my profile?"
     match="what is in my profile"
     emit="@{_} core.request action=prof.know"
     kind=question
@@ -299,6 +308,7 @@
     example="Tell me about myself."
 
 @pat.user.profile.progress core.pattern
+    canonical="How well do you know me?"
     match="how [much]? do you know [about]? me"
     emit="@{_} core.request action=prof.progress"
     kind=question
@@ -306,6 +316,7 @@
     example="How well do you know me?"
 
 @pat.user.profile.progress.left core.pattern
+    canonical="How far are we?"
     match="[how_far_are_we|how_many_questions_are_left|how_many_questions_left]"
     emit="@{_} core.request action=prof.progress"
     kind=question
@@ -313,6 +324,8 @@
     example="How far are we?"
 
 @pat.user.profile.forget core.pattern
+    canonical="Delete my hobbies."
+    canonical="Forget my job."
     match="[forget|delete|remove|erase|clear] [about]? [my|the] {w:lex.user.profile.fieldwords}"
     emit="@{_} core.request action=prof.forget arg.w={w}"
     kind=request
@@ -335,6 +348,7 @@
     example="Delete my profile."
 
 @pat.user.profile.delete.now core.pattern
+    canonical="Delete my profile for good."
     match="[delete|erase|wipe|clear|remove|reset] [all]? [of]? [my|the]? profile [for_good|now|permanently|right_now|completely]"
     emit="@{_} core.request action=prof.delete arg.now=true"
     kind=request
@@ -342,6 +356,7 @@
     example="Delete my profile for good."
 
 @pat.user.profile.delete.all core.pattern
+    canonical="Forget everything about me."
     match="[forget_everything|forget_everything_about_me|forget_me|erase_everything_about_me]"
     emit="@{_} core.request action=prof.delete"
     kind=request
@@ -349,6 +364,7 @@
     example="Forget everything about me."
 
 @pat.user.profile.export.json core.pattern
+    canonical="Export my profile as JSON."
     match="[export|download|save|get] [my|the]? profile [as|in]? [a]? json [file]?"
     emit="@{_} core.request action=prof.export arg.fmt=json"
     kind=request
@@ -356,6 +372,7 @@
     example="Export my profile as JSON."
 
 @pat.user.profile.export.cv core.pattern
+    canonical="Export my profile as a CV."
     match="[export|download|save|get] [my|the]? [profile|cv|resume] [as|in]? [a|an]? [markdown|md|cv|resume|text]"
     emit="@{_} core.request action=prof.export arg.fmt=md"
     kind=request
@@ -385,6 +402,7 @@
     example="Export my profile as both."
 
 @pat.user.profile.confirm core.pattern
+    canonical="Confirm my field."
     match="[confirm|yes_that_is_right_about|that_is_right_about] my {w:lex.user.profile.fieldwords}"
     emit="@{_} core.request action=prof.confirm arg.w={w}"
     kind=request
@@ -392,6 +410,7 @@
     example="Confirm my field."
 
 @pat.user.profile.mention core.pattern
+    canonical="Ask me about my hobbies."
     match="[ask_me_about|quiz_me_about|ask_me_about_my|let_me_tell_you_about_my] [my]? {w:lex.user.profile.fieldwords}"
     emit="@{_} core.request action=prof.mention arg.w={w}"
     kind=request
@@ -399,6 +418,7 @@
     example="Ask me about my hobbies."
 
 @pat.user.profile.sens.age core.pattern
+    canonical="I am 34 years old."
     match="[i_am|im] {n:number} [years_old|year_old]"
     emit="@{_} core.request action=prof.sensitive arg.cat=age arg.text=\"{n}\""
     kind=request
@@ -441,6 +461,7 @@
     example="Remember that i am Christian."
 
 @pat.user.profile.sens.politics core.pattern
+    canonical="I am a democrat."
     match="[i_am|i_vote|i_voted] [a|an]? {s:lex.user.profile.sensitive.politics}"
     emit="@{_} core.request action=prof.sensitive arg.cat=politics arg.text=\"{s}\""
     kind=request

@@ -10,6 +10,7 @@
     example="Could you play a B flat?"
 
 @pat.media.music.note.explicit core.pattern
+    canonical="Play the note B 2."
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g3_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g8_play] [a|an|the|some|that|this|my|your]? {reg:lex.media.music.registers?} note {note:lex.media.music.notes} {oct:number?} [$media.music.g23_on]? {inst:lex.media.music.instruments?} [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.playNote arg.reg={reg} arg.note={note} arg.oct={oct} arg.inst={inst} arg.explicit=true"
     kind=request
@@ -18,6 +19,7 @@
     example="Play note E."
 
 @pat.media.music.note.sounds core.pattern
+    canonical="How does middle C sound?"
     match="[how_does|what_does] [a|an|the|some|that|this|my|your]? {reg:lex.media.music.registers?} {note:lex.media.music.notes} [note]? sound [like]? [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.playNote arg.reg={reg} arg.note={note}"
     kind=request
@@ -26,6 +28,7 @@
     example="What does an A sound like?"
 
 @pat.media.music.chord core.pattern
+    canonical="Play a C major chord."
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g3_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g8_play]? [a|an|the|some|that|this|my|your]? {root:lex.media.music.notes} {q:lex.media.music.qualities?} {n:number?} [chord|chords|triad] [$media.music.g23_on]? {inst:lex.media.music.instruments?} [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.playChord arg.root={root} arg.q={q} arg.n={n} arg.inst={inst}"
     kind=request
@@ -86,6 +89,7 @@
     example="Play the notes D F A at once."
 
 @pat.media.music.scale core.pattern
+    canonical="Play the D major scale."
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g3_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g8_play] [a|an|the|some|that|this|my|your]? {root:lex.media.music.notes?} {st:lex.media.music.scaletypes?} [scale|scales] {dir:lex.media.music.directions?} [$media.music.g23_on]? {inst:lex.media.music.instruments?} [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.playScale arg.root={root} arg.st={st} arg.dir={dir} arg.inst={inst}"
     kind=request
@@ -145,6 +149,7 @@
     example="Play Jingle Bells at 140 bpm."
 
 @pat.media.music.random core.pattern
+    canonical="Play something on the flute."
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g3_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [play_a_song|play_me_a_song|play_a_tune|play_some_music|play_something|play_me_something|play_anything|play_music|put_on_some_music|put_on_a_song|play_a_random_song|play_another_song|play_the_next_song|play_another_one|play_me_a_tune|play_something_nice|another_song|next_song|play_a_melody|play_me_some_music|play_me_a_melody|play_a_nursery_rhyme|sing_me_a_song|sing_something|sing_a_song|play_another_1] [$media.music.g23_on]? {inst:lex.media.music.instruments?} [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.random arg.inst={inst}"
     kind=request
@@ -154,6 +159,7 @@
     example="Play another song."
 
 @pat.media.music.replay core.pattern
+    canonical="Play it again."
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g3_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [play_it_again|play_that_again|play_it_back|play_it|play_that|play_this|play_the_music_again|play_the_song_again|play_the_tune_again|play_the_melody_again|once_more|one_more_time|repeat_that|repeat_it|replay_it|replay|replay_that|encore|play_it_once_more|play_that_once_more|play_it_one_more_time|play_that_one_more_time|hear_it_again|hear_that_again|let_me_hear_it_again|let_me_hear_that_again|do_that_once_more|1_more_time|play_it_1_more_time|play_that_1_more_time] [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.replay"
     kind=request
@@ -172,6 +178,7 @@
     example="Play that again with the bells."
 
 @pat.media.music.mymelody core.pattern
+    canonical="Play back what I wrote."
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g3_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [play|hear|play_back|replay|let_me_hear|listen_to|perform] [back]? [my_melody|my_tune|my_song|my_composition|my_piece|my_creation|the_melody_i_wrote|the_melody_i_made|the_melody_i_composed|the_tune_i_wrote|what_i_wrote|what_i_composed|what_i_made|what_i_just_wrote|what_i_just_made|the_song_i_wrote|the_composition|my_music|the_notes_i_wrote|my_notes] [$media.music.g23_on]? {inst:lex.media.music.instruments?} [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.playMelody arg.inst={inst}"
     kind=request
@@ -181,6 +188,7 @@
     example="Let me hear the melody I wrote."
 
 @pat.media.music.stop core.pattern
+    canonical="Stop the music."
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g3_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [stop|stop_it|stop_that|stop_playing|stop_the_music|stop_the_song|stop_the_sound|stop_the_tune|stop_the_melody|stop_the_piano|pause|pause_the_music|pause_it|pause_the_song|halt|enough|that_is_enough|that_will_do|silence|end_the_music|turn_off_the_music|shut_off_the_music|cut_the_music] [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.stop"
     kind=request
@@ -190,6 +198,7 @@
     example="Pause the music."
 
 @pat.media.music.loop.on core.pattern
+    canonical="Keep repeating the song."
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g3_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [loop|repeat|keep_playing|play_on_repeat|play_in_a_loop|play_continuously|keep_repeating|put_it_on_repeat|play_over_and_over|turn_on_the_loop|turn_the_loop_on|loop_on|set_the_loop|start_the_loop] [$media.music.g56_it]? [forever|continuously|endlessly|in_a_loop|on_repeat|over_and_over]? [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.loop arg.on=true"
     kind=request
@@ -199,6 +208,7 @@
     example="Play on repeat."
 
 @pat.media.music.loop.off core.pattern
+    canonical="Turn off the loop."
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g3_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [stop_looping|stop_the_loop|turn_off_the_loop|turn_the_loop_off|do_not_loop|no_loop|loop_off|stop_repeating|play_it_once|play_it_only_once|do_not_repeat|do_not_repeat_it|unloop|no_repeat|stop_the_repeat] [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.loop arg.on=false"
     kind=request
@@ -381,6 +391,7 @@
     example="An octave higher."
 
 @pat.media.music.octave.dirfirst core.pattern
+    canonical="Transpose up two octaves."
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g3_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [shift|move|transpose|go|play|raise|lift|take|pitch|put] [$media.music.g11_it]? {dir:lex.media.music.dirs} [by]? [an|one|a]? {n:number?} [octave|octaves] [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.octave arg.dir={dir} arg.n={n}"
     kind=request
@@ -411,6 +422,7 @@
     example="Make it a lot lower."
 
 @pat.media.music.transpose.by core.pattern
+    canonical="Transpose up two steps."
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g3_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [transpose|shift|move|raise|lift|lower|drop|take|put|go|pitch|play|try|sing] [$media.music.g11_it]? {dir:lex.media.music.dirs} [by|a|an|one|the_interval_of]? {n:number?} {unit:lex.media.music.intervals} [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.transpose arg.dir={dir} arg.n={n} arg.unit={unit}"
     kind=request
@@ -469,6 +481,8 @@
     example="Continue with the notes E D C."
 
 @pat.media.music.melody.add.bare core.pattern
+    canonical="Continue with E D C."
+    canonical="Add G G A G."
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g3_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [add|append|continue_with|follow_with|extend_it_with|extend_my_melody_with|extend_the_melody_with|then_add] {notes:rest(notes)}"
     emit="@{_} core.request action=music.melodyAdd arg.notes=\"{notes}\""
     kind=request
@@ -485,6 +499,7 @@
     example="Add a pause."
 
 @pat.media.music.melody.clear core.pattern
+    canonical="Clear my melody."
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g3_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [clear|delete|erase|reset|forget|throw_away|remove|discard|wipe|empty|scrap] [my|the|this]? [melody|tune|composition|recording|notes] [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.melodyClear"
     kind=request
@@ -493,6 +508,7 @@
     example="Delete the melody."
 
 @pat.media.music.melody.new core.pattern
+    canonical="Start a new melody."
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g3_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [start|begin|create|make|open] [a|my]? new [melody|tune|composition] [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.melodyClear"
     kind=request
@@ -500,6 +516,7 @@
     example="Start a new melody."
 
 @pat.media.music.melody.undo core.pattern
+    canonical="Remove the last note."
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g3_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [remove|delete|erase|undo|take_away|drop|cut] [the]? [last|final|previous] note [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.melodyUndo"
     kind=request
@@ -508,6 +525,7 @@
     example="Undo the last note."
 
 @pat.media.music.melody.show core.pattern
+    canonical="What is my melody?"
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g3_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [show|read|tell|display|list|let_me_see|what_is|what_are|what_was] [me]? [my|the]? [melody|tune|composition|melody_so_far] [so_far|i_wrote|i_made|that_i_wrote]? [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.melodyShow"
     kind=request
@@ -524,6 +542,7 @@
     example="How many notes are in my melody?"
 
 @pat.media.music.show.notes core.pattern
+    canonical="Show me the notes."
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g3_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [show|tell|display|list|name|read|let_me_see|what_are|which_are|what_were|which_were|what_are_all|what_notes_are|which_notes_are] [me]? [the|these|those|those_are|these_are]? [notes|notes_playing|notes_you_played|notes_you_are_playing|notes_you_just_played|notes_in_it|notes_in_this|notes_of_it|notes_of_this] [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.showNotes"
     kind=request
@@ -532,6 +551,7 @@
     example="Name the notes."
 
 @pat.media.music.show.notes2 core.pattern
+    canonical="What notes did you play?"
     match="[what|which] [notes|notes_did_you_play|notes_are_you_playing|notes_are_playing|notes_are_in_it|notes_are_in_this|notes_were_those|notes_are_those|notes_are_these|notes_are_there|notes_does_it_use|notes_does_it_have] [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.showNotes"
     kind=request
@@ -548,6 +568,8 @@
     example="Show the score."
 
 @pat.media.music.list.songs core.pattern
+    canonical="What tunes can you play?"
+    canonical="Which songs do you know?"
     match="[which|what] [songs|tunes|melodies|pieces|nursery_rhymes|music] [do_you_know|can_you_play|do_you_have|are_there|are_available|are_in_your_library|can_i_hear|do_you_remember|can_you_sing|do_you_play|can_i_ask_for|can_i_choose] [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.listSongs"
     kind=request
@@ -571,6 +593,8 @@
     example="How many songs do you know?"
 
 @pat.media.music.list.inst core.pattern
+    canonical="Which sounds can I choose?"
+    canonical="What instruments do you have?"
     match="[which|what] [instruments|sounds|voices] [do_you_have|can_you_play|can_you_use|are_there|are_available|can_i_use|can_i_choose|do_you_know|can_you_imitate|can_i_pick|can_i_try] [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.listInstruments"
     kind=request
@@ -586,6 +610,8 @@
     example="List the instruments."
 
 @pat.media.music.list.types core.pattern
+    canonical="Which chords can you play?"
+    canonical="What scales do you know?"
     match="[which|what] {what:lex.media.music.things} [do_you_know|can_you_play|are_there|can_i_play|are_available|can_you_do|can_i_ask_for] [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.listTypes arg.what={what}"
     kind=request
@@ -602,6 +628,7 @@
     example="Show me the chords."
 
 @pat.media.music.q.scale.in core.pattern
+    canonical="What notes are in C major?"
     match="[what|which] [notes|tones|pitches] [are|is] [in|there_in|found_in|part_of|contained_in|used_in] [the|a]? {root:lex.media.music.notes} {st:lex.media.music.scaletypes?} [scale|key]? [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.scaleNotes arg.root={root} arg.st={st}"
     kind=request
@@ -618,6 +645,7 @@
     example="Tell me the notes in G major."
 
 @pat.media.music.q.scale.spell core.pattern
+    canonical="Show me the G major scale."
     match="[spell|spell_out|show|show_me|display|write|write_out|name|list] [me]? [the|a]? {root:lex.media.music.notes} {st:lex.media.music.scaletypes?} scale [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.scaleNotes arg.root={root} arg.st={st}"
     kind=request
@@ -641,6 +669,7 @@
     example="What are the notes of a G major chord?"
 
 @pat.media.music.q.chord.spell core.pattern
+    canonical="Show me a D minor chord."
     match="[spell|spell_out|show|show_me|display|write_out|name] [me]? [the|a|an]? {root:lex.media.music.notes} {q:lex.media.music.qualities?} {n:number?} [chord|triad] [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.chordNotes arg.root={root} arg.q={q} arg.n={n}"
     kind=request
@@ -649,6 +678,8 @@
     example="Show me a D minor chord."
 
 @pat.media.music.q.chord.name core.pattern
+    canonical="Which chord is A C E?"
+    canonical="What chord is C E G?"
     match="[what|which] chord [is|are|do|does|would|will] {notes:words(10)} [make|form|together|make_up|spell|give|produce|together_make]? [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.chordName arg.notes=\"{notes}\""
     kind=request
@@ -697,6 +728,8 @@
     example="Which notes are sharp in G major?"
 
 @pat.media.music.q.sig.rev core.pattern
+    canonical="Which major key has two sharps?"
+    canonical="What key has 3 flats?"
     match="[which|what] {m:lex.media.music.modes?} [key|keys|scale] [has|have|uses|use|contains|contain|with] {n:number} {acc:lex.media.music.accs} [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.keyWith arg.m={m} arg.n={n} arg.acc={acc}"
     kind=request
@@ -713,6 +746,7 @@
     example="What is the interval from E to B?"
 
 @pat.media.music.q.interval.is core.pattern
+    canonical="What interval is C to E?"
     match="[what|which] interval [is|are|do|does] {a:lex.media.music.notes} {oa:number?} [to|and|from] {b:lex.media.music.notes} {ob:number?} [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.interval arg.a={a} arg.oa={oa} arg.b={b} arg.ob={ob}"
     kind=request
@@ -727,6 +761,7 @@
     example="How many semitones are between C and G?"
 
 @pat.media.music.q.interval.far core.pattern
+    canonical="How far is C from E?"
     match="[how_far_is|what_is_the_distance_from|what_is_the_distance_between] {a:lex.media.music.notes} {oa:number?} [from|to|and] {b:lex.media.music.notes} {ob:number?} [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.interval arg.a={a} arg.oa={oa} arg.b={b} arg.ob={ob}"
     kind=request
@@ -751,6 +786,7 @@
     example="What is the relative major of A minor?"
 
 @pat.media.music.q.keychords core.pattern
+    canonical="Which chords fit in G major?"
     match="[what|which] chords [are|can_i_play|can_i_use|belong|fit|do_you_get|are_there] [in|to|of|from|for|belong_to|fit_in] [the]? [key_of|scale_of|key|scale]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [key|scale]? [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.keyChords arg.root={root} arg.m={m}"
     kind=request
@@ -774,6 +810,7 @@
     example="What is the frequency of middle C?"
 
 @pat.media.music.q.freq2 core.pattern
+    canonical="How many hertz is middle C?"
     match="how_many [hertz|hz] [is|does] [the|a]? {reg:lex.media.music.registers?} [note]? {note:lex.media.music.notes} {oct:number?} [have]? [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.frequency arg.reg={reg} arg.note={note} arg.oct={oct}"
     kind=request
@@ -781,6 +818,7 @@
     example="How many hertz is middle C?"
 
 @pat.media.music.q.enh core.pattern
+    canonical="What is another name for C sharp?"
     match="[what_is|what_are|tell_me] [another|the_other|an_alternative|the_enharmonic|the_alternate|the_equivalent|an_other] [name|names|spelling|note]? [for|of] {note:lex.media.music.notes} [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.enharmonic arg.note={note}"
     kind=request
@@ -826,6 +864,7 @@
     example="Is the loop on?"
 
 @pat.media.music.song.who core.pattern
+    canonical="Who wrote Ode to Joy?"
     match="[who_wrote|who_composed|who_is_the_composer_of|who_is_the_author_of|who_made|who_created|who_is_the_writer_of|who_came_up_with|who_composed_the_music_of|who_wrote_the_music_for|who_is_the_composer_of_the_song|who_wrote_the_song] [the|this|that|a|an]? [song|tune|melody|piece]? {title:words(8)}"
     emit="@{_} core.request action=music.songInfo arg.title=\"{title}\" arg.what=composer"
     kind=request
@@ -850,6 +889,7 @@
     example="What is the tempo of Jingle Bells?"
 
 @pat.media.music.song.about core.pattern
+    canonical="Tell me about Happy Birthday."
     match="[tell_me_about|what_do_you_know_about|describe|info_about|tell_me_more_about|what_can_you_tell_me_about|tell_me_something_about] [the|this|that]? [song|tune|melody]? {title:words(8)}"
     emit="@{_} core.request action=music.songInfo arg.title=\"{title}\" arg.what=about"
     kind=request
@@ -1048,6 +1088,8 @@
     example="Up a whole tone."
 
 @pat.media.music.x.transpose.to2 core.pattern
+    canonical="Let's use the key of B flat."
+    canonical="Make this in D major please."
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g3_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [make|play|put|do|have|set|get|take|shift|move|change|switch|use|sing|go|transpose|let_us_use|lets_use|let_us_play|lets_play|we_are|we_re|we_are_in] [it|this|that|the_song|the_tune|the_melody|the_music|everything]? [play|sound|be|go|run]? [in|into|to|in_the_key_of|to_the_key_of|to_key|in_key|into_the_key_of|the_key_of|in_the]? [the]? [key]? [of]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [now|major|key|instead]? [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.transposeTo arg.root={root} arg.m={m}"
     kind=request
@@ -1105,6 +1147,7 @@
     example="Undo last note of my melody."
 
 @pat.media.music.x.melody.show2 core.pattern
+    canonical="Let me see my notes."
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g3_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [let_me_see|can_i_see|may_i_see|show|show_me|let_me_view|display|open|view|see|read|read_out|play_back|bring_up|pull_up|what_does|what_do|what_did] [me]? [my|the|our|a]? [melody|tune|song|notes|composition|piece|creation] [i|that_i|you|we]? [made|wrote|wrote_down|have|composed|entered|did|look_like|looks_like|as_sheet_music|as_notation|so_far|back]? [as|in|on|with]? [sheet_music|notation|the_staff|a_staff]? [look_like|looks_like]? [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.melodyShow"
     kind=request
@@ -1114,6 +1157,8 @@
     example="What does my song look like?"
 
 @pat.media.music.x.score.show2 core.pattern
+    canonical="I want to read the music."
+    canonical="Can I see the music notation?"
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g3_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [show|display|open|let_me_see|can_i_see|bring_up|put_up|give_me|i_want_to_see|i_want_to_read|let_me_read|i_want_to_look_at|can_you_show|see|view|read|pull_up|write_out|need|want] [me]? [the|my|your|some|a]? [sheet_music|score|notation|staff|stave|music_sheet|sheet|music_score|written_music|music_notation|the_music|the_notes_on_the_staff|notes_on_the_staff|music_on_the_staff] [on_the_staff|on_a_staff|as_notation|on_the_stave]? [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.showScore"
     kind=request
@@ -1220,6 +1265,7 @@
     example="What's the key sig of G major?"
 
 @pat.media.music.x.q.sig3 core.pattern
+    canonical="How many sharps in E major?"
     match="how_many {acc:lex.media.music.accs} [are|does|do|has|have|in|is|are_there] [there]? [in|has|have|does|for]? [the]? [key_of|scale_of|key|scale]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [key|scale|have|contain|use|need]? [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.keySig arg.acc={acc} arg.root={root} arg.m={m}"
     kind=question
@@ -1245,6 +1291,7 @@
     example="C to A interval?"
 
 @pat.media.music.x.q.above2 core.pattern
+    canonical="What's a third up from C?"
     match="[what|which|whats|what_s|tell_me|name]? [note|pitch|tone|is]? [$media.music.g77_is]? [a|an|the|one]? {iv:lex.media.music.intervals} {dir:lex.media.music.dirs} [from|than|on|of]? {note:lex.media.music.notes} [is|is_what|what_note]? [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.above arg.iv={iv} arg.dir={dir} arg.note={note}"
     kind=question
@@ -1261,6 +1308,7 @@
     example="Relative minor of C major?"
 
 @pat.media.music.x.q.keychords2 core.pattern
+    canonical="What triads does F major have?"
     match="[$media.music.g33_what]? [the]? [chords|triads] [are]? [in|of|for|from|go_with|fit|belong_to|does|do|can_i_play_in|are_in|in_the_key_of|of_the_key_of|for_the_key_of] [the]? [key_of|scale_of|key|scale]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [key|scale|have|has|use|include]? [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.keyChords arg.root={root} arg.m={m}"
     kind=question
@@ -1279,6 +1327,7 @@
     example="Middle C hertz?"
 
 @pat.media.music.x.q.freq3 core.pattern
+    canonical="What hertz is middle C?"
     match="[what|which|how_many] [hertz|hz|cycles_per_second|cycles] [is|are|does|do|per_second]? [the|a]? {reg:lex.media.music.registers?} [note]? {note:lex.media.music.notes} {oct:number?} [have|has|vibrate_at|per_second]? [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.frequency arg.reg={reg} arg.note={note} arg.oct={oct}"
     kind=question
@@ -1454,6 +1503,7 @@
     doc="Rule sweep R2 (generated by the coverage work): see coverage.md."
 
 @pat.media.music.r2.arp.end core.pattern
+    canonical="Spread the G chord out."
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g1_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g4_play]? [a|an|the]? {root:lex.media.music.notes} {q:lex.media.music.qualities?} {n:number?} [chord|triad]? [$media.music.g78_but]? [$media.music.g12_as_an_arpeggio] [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.playChord arg.root={root} arg.q={q} arg.n={n} arg.mode=arpeggio"
     kind=request
@@ -1503,6 +1553,7 @@
     doc="Rule sweep R2 (generated by the coverage work): see coverage.md."
 
 @pat.media.music.r2.scale.bare core.pattern
+    canonical="Do a G major scale."
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g1_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g6_play]? [a|an|the|some|my|your|that]? {root:lex.media.music.notes?} {st:lex.media.music.scaletypes?} scale {dir:lex.media.music.directions?} [$media.music.g10_on]? {inst:lex.media.music.instruments?} [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.playScale arg.root={root} arg.st={st} arg.dir={dir} arg.inst={inst}"
     kind=request
@@ -1615,6 +1666,7 @@
     doc="Rule sweep R2 (generated by the coverage work): see coverage.md."
 
 @pat.media.music.r2.song.bare core.pattern
+    canonical="How about some jingle bells?"
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g1_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g9_how_about]? [$media.music.g44_a]? [song|tune|melody|piece|nursery_rhyme|version_of|rendition_of|cover_of|bit_of]? {title:lex.media.music.songtitles} [song|tune|melody|version]? [$media.music.g15_for_me]? [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.playAny arg.title=\"{title}\""
     kind=request
@@ -1860,6 +1912,7 @@
     doc="Rule sweep R2 (generated by the coverage work): see coverage.md."
 
 @pat.media.music.r2.random.any core.pattern
+    canonical="Pick a song for me."
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g1_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [play|hear|listen_to|play_me|give_me|sound|perform|let_me_hear|can_i_hear|could_i_hear|put_on|throw_on|sing|sing_me|pick|choose|select|find|get|queue|queue_up|cue_up|come_up_with|i_want_to_hear|i_would_like_to_hear|i_wanna_hear|hum|whistle|surprise_me_with|do|show_me|bring_up|start|start_playing|go_with|try] [a_song|a_tune|a_piece|a_melody|a_nursery_rhyme|a_rhyme|a_track|a_jingle|another|some|any|the_next|one_more|a_different|a_new|a_random|another_random|a_nice|a_cool|a_fun|a_good|a_happy|a_surprise|any_old|whatever|whichever|something|anything|something_else|something_nice|something_cool|something_different|something_fun|anything_you_like|anything_you_want|whatever_you_like|whatever_you_want|your_favorite|your_favourite|one_you_like|any_one|random|1_more|1_you_like|any_1] [random|nice|new|different|other|cool|good|happy|calm|fun|funny|pretty|beautiful|lovely|favorite|favourite|old]? [song|tune|music|melody|piece|songs|tunes|rhyme|nursery_rhyme|track|jingle|one|thing|1]? [you_like|you_want|you_know|you_choose|you_pick|of_your_choice|at_random|for_me|then|already|else|you_think_of]? [$media.music.g10_on]? {inst:lex.media.music.instruments?} [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.random arg.inst={inst}"
     kind=request
@@ -1913,6 +1966,7 @@
     doc="Rule sweep R2 (generated by the coverage work): see coverage.md."
 
 @pat.media.music.r2.mymelody.x core.pattern
+    canonical="Hear my notes back."
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g1_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g4_play] [back]? [my|our|the] [melody|tune|song|composition|piece|creation|notes|music|work|recording|notes_i_wrote|notes_i_entered|notes_i_made|notes_i_added|notes_i_typed|tune_i_made|tune_i_wrote|song_i_made|song_i_wrote|melody_i_made|melody_i_wrote|melody_i_entered|stuff_i_wrote|stuff_i_made|thing_i_made|thing_i_wrote|piece_i_wrote|piece_i_made] [i|that_i|which_i]? [wrote|made|composed|entered|typed|recorded|created|added|input|just_made|just_wrote|just_entered|just_added|wrote_down]? [back|again|so_far]? [to_me|for_me]? [$media.music.g10_on]? {inst:lex.media.music.instruments?} [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.playMelody arg.inst={inst}"
     kind=request
@@ -1950,6 +2004,7 @@
     doc="Rule sweep R2 (generated by the coverage work): see coverage.md."
 
 @pat.media.music.r2.stop.off2 core.pattern
+    canonical="Turn off the sound."
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g1_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [turn|switch|shut|power|kill|cut|take] off [$media.music.g50_it] [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.stop"
     kind=request
@@ -2457,6 +2512,7 @@
     doc="Rule sweep R2 (generated by the coverage work): see coverage.md."
 
 @pat.media.music.r2.mel.marker core.pattern
+    canonical="Here is my tune: E E E."
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g1_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g7_put_down]? [down]? [$media.music.g65_a]? [new]? [$media.music.g25_melody] [:|is|are|goes|goes_like|sounds_like|looks_like|like|=|with|of|made_of|using|from|containing|saying|that_goes|called|starting_with|beginning_with|that_starts_with|that_begins_with|that_goes_like|that_sounds_like|as_follows|as|follows|equals|go|reads|reads_as|runs|says|plays|played_as|being|namely|this_way|should_be|will_be|to_be|should_go]? {n1:lex.media.music.notes} {n2:lex.media.music.notes?} {more:rest?}"
     emit="@{_} core.request action=music.melodySet arg.notes=\"{n1} {n2} {more}\""
     kind=request
@@ -2484,6 +2540,7 @@
     doc="Rule sweep R2 (generated by the coverage work): see coverage.md."
 
 @pat.media.music.r2.mel.composeN core.pattern
+    canonical="Compose C D E C."
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g1_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g55_compose] {n1:lex.media.music.notes} {n2:lex.media.music.notes} {more:rest?}"
     emit="@{_} core.request action=music.melodySet arg.notes=\"{n1} {n2} {more}\""
     kind=request
@@ -2557,6 +2614,7 @@
     doc="Rule sweep R2 (generated by the coverage work): see coverage.md."
 
 @pat.media.music.r2.mel.undo1 core.pattern
+    canonical="Take the last note away."
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g1_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [$lang.lead.filler|no|wait|hold_on|uh_oh]? [$media.music.g30_undo] [that|the|this|my|our|it]? [last|final|previous|latest|most_recent|newest|end|ending|latter|one_before|1_before] [$media.music.g47_added]? [note|tone|pitch|one|bit|thing|entry|addition|input|1] [$media.music.g58_away]? [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.melodyUndo"
     kind=request
@@ -2762,6 +2820,7 @@
     doc="Rule sweep R2 (generated by the coverage work): see coverage.md."
 
 @pat.media.music.r2.chordnotes.sym core.pattern
+    canonical="What pitches are in an Am?"
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g1_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [what|which|whats|what_is|tell_me|show_me|list|name] [notes|tones|pitches] [are|is|does|do]? [in|inside|within|found_in|part_of|contained_in|used_in|make_up|form|has|have|are_in] [a|an|the]? {sym:lex.media.music.chordsyms} {n:number?} [chord]? [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.chordNotes arg.sym={sym} arg.n={n}"
     kind=request
@@ -2868,6 +2927,7 @@
     doc="Rule sweep R2 (generated by the coverage work): see coverage.md."
 
 @pat.media.music.r2.keysig.which core.pattern
+    canonical="Which sharps are in D major?"
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g1_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [which|what] {acc:lex.media.music.accs} [are|does|do|is|has|have]? [there]? [in|does|has|have|for|of|are_in]? [the]? [key_of|scale_of|key|scale]? {root:lex.media.music.notes} {m:lex.media.music.modes?} [key|scale|have|contain|use|need]? [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.keySig arg.acc={acc} arg.root={root} arg.m={m}"
     kind=request
@@ -2908,6 +2968,7 @@
     doc="Rule sweep R2 (generated by the coverage work): see coverage.md."
 
 @pat.media.music.r2.above.num core.pattern
+    canonical="What's 2 semitones above B?"
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g1_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [what|which|whats|what_s|what_is|which_is|tell_me]? [note|pitch|tone]? [$media.music.g77_is]? [a|an|the|one|1]? {n:number?} {iv:lex.media.music.intervals} {dir:lex.media.music.dirs} {note:lex.media.music.notes} [is|is_what|is_which_note|equals|what_note|which_note|gives|makes|is_what_note]? [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.above arg.n={n} arg.iv={iv} arg.dir={dir} arg.note={note}"
     kind=request
@@ -2942,6 +3003,8 @@
     doc="Rule sweep R2 (generated by the coverage work): see coverage.md."
 
 @pat.media.music.r2.relative.goes core.pattern
+    canonical="What minor key matches G major?"
+    canonical="Which minor goes with C major?"
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g1_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [which|what] {kind:lex.media.music.modes} [key|scale]? [is|are|does|do]? [$media.music.g19_goes_with] {root:lex.media.music.notes} {m:lex.media.music.modes?} [key]? [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.relative arg.kind={kind} arg.root={root} arg.m={m}"
     kind=request
@@ -3009,6 +3072,7 @@
     doc="Rule sweep R2 (generated by the coverage work): see coverage.md."
 
 @pat.media.music.r2.enh.calledin core.pattern
+    canonical="What's C sharp called in flats?"
     match="[$lang.lead.filler|you_know|right|kindly|and_also|also]? [$media.music.g1_can_you]? [$lang.lead.filler|you_know|right|kindly|and_also|also]? [what|whats|what_is|what_s|how_is|how_do_you_call|how_do_i_call|how_do_you_write|how_do_you_spell|how_do_i_write|how_do_i_spell|how_would_you_write|how_would_you_spell|how_do_you_say|how_do_you_name] {note:lex.media.music.notes} [called|written|spelled|named|known|said|noted|notated|referred_to|described|labelled|labeled|also_called|also_written|also_spelled|otherwise_called|otherwise_written] [in|with|using|as|when_using|when_in]? [flats|sharps|flat|sharp|other_notation|the_other_way|another_way|a_different_way|the_enharmonic_way|flat_notation|sharp_notation|flat_form|sharp_form|the_flat_way|the_sharp_way]? [$lang.tail.filler|$media.music.g2_would_be_nice]? [$lang.tail.filler|$media.music.g2_would_be_nice]?"
     emit="@{_} core.request action=music.enharmonic arg.note={note}"
     kind=request
@@ -3065,6 +3129,7 @@
     doc="A play command with nothing to play: asks what to play and expects the answer as the next utterance (discourse pending, spec 11). On other tabs a game may claim a bare play."
 
 @pat.media.music.song.weak core.pattern
+    canonical="Give me Ode to Joy."
     match="{pre:lex.media.music.polite?} {v:lex.media.music.playverbs.weak} [a|an|the|some|that|this|my|your]? [song|tune|melody|piece|nursery_rhyme]? {title:lex.media.music.songtitles}"
     emit="@{_} core.request action=music.playAny arg.title=\"{title}\""
     kind=request

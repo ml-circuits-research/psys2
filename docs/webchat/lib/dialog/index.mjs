@@ -36,10 +36,10 @@ export function examplesFor(set, worldIds) {
   const pick = (patterns) => {
     const out = [];
     const kinds = new Set();
-    for (const p of patterns) for (const ex of p.examples.slice(0, 1)) {
+    for (const p of patterns) for (const ex of (p.canonical ?? []).slice(0, 1)) {   // canonical examples only (RD6)
       if (!kinds.has(p.kind) && out.length < 2) { kinds.add(p.kind); out.push(ex); }
     }
-    for (const p of patterns) for (const ex of p.examples) if (out.length < 2 && !out.includes(ex)) out.push(ex);
+    for (const p of patterns) for (const ex of p.canonical ?? []) if (out.length < 2 && !out.includes(ex)) out.push(ex);
     return out;
   };
   for (const id of worldIds) {

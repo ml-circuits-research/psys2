@@ -45,7 +45,7 @@ function tabInfo(ctx) {
 
 /** The pattern examples of a world: one per pattern first (spread over the pattern kinds), then the further examples. */
 function exampleList(ctx, worldId) {
-  const pats = ctx.patterns(worldId).filter((p) => p.examples.length);
+  const pats = ctx.patterns(worldId).map((p) => ({ ...p, examples: p.canonical ?? [] })).filter((p) => p.examples.length);   // canonical examples only (RD6)
   const kinds = [...new Set(pats.map((p) => p.kind))];
   const firsts = [];
   const byKind = kinds.map((k) => pats.filter((p) => p.kind === k));
@@ -257,7 +257,7 @@ export function didYouMean({ text, worlds = [], tabWorld = null, recentWorlds = 
   for (const w of worlds) {
     if (w.id === 'ui.help' || w.id === 'core') continue;
     const bonus = w.id === tabWorld ? 0.2 : recentWorlds.includes(w.id) ? 0.1 : 0;
-    for (const p of w.patterns ?? []) for (const ex of p.examples ?? []) {
+    for (const p of w.patterns ?? []) for (const ex of p.canonical ?? []) {
       if (seen.has(ex) || words(ex).join(' ') === norm) continue;
       seen.add(ex);
       const e = meaningful(ex);
@@ -292,7 +292,7 @@ export function helpHow(ctx, { what } = {}) {
   for (const w of worlds) {
     if (w.id === 'ui.help' || w.id === 'core') continue;
     const bonus = w.id === t.world ? 0.15 : 0;
-    for (const p of ctx.patterns(w.id)) for (const ex of p.examples) {
+    for (const p of ctx.patterns(w.id)) for (const ex of p.canonical ?? []) {
       if (seen.has(ex)) continue;
       seen.add(ex);
       const e = meaningful(ex);

@@ -13,6 +13,7 @@
     example="Today it is Monday."
 
 @pat.kids.time.today.c core.pattern
+    canonical="We are on Tuesday."
     match="we are on [a|an]? {d:lex.kids.time.days}"
     emit="@{_} kids.time.today day={d}"
     kind=statement
@@ -20,6 +21,7 @@
     example="We are on Tuesday."
 
 @pat.kids.time.month.now core.pattern
+    canonical="This month is May."
     match="[this_month|it|now|the_month] is {m:lex.kids.time.months}"
     emit="@{_} kids.time.thismonth month={m}"
     kind=statement
@@ -27,6 +29,7 @@
     example="This month is May."
 
 @pat.kids.time.month.now.b core.pattern
+    canonical="We are in March."
     match="we are in {m:lex.kids.time.months}"
     emit="@{_} kids.time.thismonth month={m}"
     kind=statement
@@ -41,6 +44,7 @@
     example="It is 3 o'clock."
 
 @pat.kids.time.clockset.b core.pattern
+    canonical="The clock says 4 o'clock."
     match="the clock [shows|says|reads] {h:number} o'clock"
     emit="@{_} kids.time.clockset hour={h}"
     kind=statement
@@ -209,6 +213,7 @@
     example="What season is it in December?"
 
 @pat.kids.time.q.season.months core.pattern
+    canonical="Which months are in summer?"
     match="[which|what] months are [in|part_of|the]? {s:lex.kids.time.seasons} [months]?"
     emit="@{_} core.question type=kids.time.monthinfo seek=name mode=list where.season={s}"
     kind=question
@@ -223,6 +228,7 @@
     example="Which months belong to winter?"
 
 @pat.kids.time.q.season.months.c core.pattern
+    canonical="Name the months of spring."
     match="name the months of {s:lex.kids.time.seasons}"
     emit="@{_} core.question type=kids.time.monthinfo seek=name mode=list where.season={s}"
     kind=question
@@ -279,6 +285,7 @@
     example="What are the days of the week?"
 
 @pat.kids.time.q.list.weekend core.pattern
+    canonical="Which days are the weekend?"
     match="[what|which] days are [the]? [weekend|weekend_days|in_the_weekend]"
     emit="@{_} core.question type=kids.time.dayinfo seek=name mode=list where.kind=weekend"
     kind=question
@@ -286,6 +293,7 @@
     example="Which days are the weekend?"
 
 @pat.kids.time.q.list.weekend.b core.pattern
+    canonical="What are the weekend days?"
     match="[what|which] are the weekend days"
     emit="@{_} core.question type=kids.time.dayinfo seek=name mode=list where.kind=weekend"
     kind=question
@@ -307,6 +315,7 @@
     example="What are the months of the year?"
 
 @pat.kids.time.q.list.seasons core.pattern
+    canonical="What are the seasons?"
     match="[what|which] are the seasons [of_the_year]?"
     emit="@{_} core.question type=kids.time.seasoninfo seek=name mode=list"
     kind=question
@@ -335,6 +344,7 @@
     example="How many days does February have?"
 
 @pat.kids.time.q.len.month.c core.pattern
+    canonical="How many days has April?"
     match="how_many days [has|have]? {m:lex.kids.time.months}"
     emit="@{_} core.question type=kids.time.monthinfo seek=days where.name={m}"
     kind=question
@@ -356,6 +366,7 @@
     example="How many days from Monday to Friday?"
 
 @pat.kids.time.q.gap.today core.pattern
+    canonical="How many days until Saturday?"
     match="how_many days [are_there|is_it|are|is]? [until|till|to|before] {to:lex.kids.time.days}"
     emit="@{_} core.question type=kids.time.gap seek=count where.from=today where.to={to}"
     kind=question
@@ -398,6 +409,7 @@
     example="What time will it be in 2 hours if it is 3 o'clock?"
 
 @pat.kids.time.q.clock.from.a core.pattern
+    canonical="What time is 2 hours after 3 o'clock?"
     match="what time [is|is_it|will_it_be] {k:number} [hour|hours] after {h:number} o'clock"
     emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.shift={k}"
     kind=question
@@ -510,6 +522,7 @@
     example="What time will it be in half an hour if it is 3 o'clock?"
 
 @pat.kids.time.q.clock.from.c core.pattern
+    canonical="What time is half an hour after 3 o'clock?"
     match="what time [is|is_it|will_it_be] 0.5 an hour after {h:number} o'clock"
     emit="@{_} core.question type=kids.time.clock seek=result where.at={h} where.minutes=30"
     kind=question
@@ -615,6 +628,7 @@
     example="What time is it?"
 
 @pat.kids.time.q.time.now.b core.pattern
+    canonical="What is the time?"
     match="what is the time [now|right_now]?"
     emit="@{_} core.question type=kids.time.reading seek=time"
     kind=question
@@ -622,6 +636,7 @@
     example="What is the time?"
 
 @pat.kids.time.q.time.now.c core.pattern
+    canonical="Can you tell me the time?"
     match="[do_you_know|can_you_tell_me|tell_me] [what_time_it_is|the_time]"
     emit="@{_} core.question type=kids.time.reading seek=time"
     kind=question
@@ -1035,6 +1050,7 @@
     example="Number of days in April?"
 
 @pat.kids.time.w.mlen.f2 core.pattern
+    canonical="April has how many days?"
     match="[$lang.lead.question|count|show_me|give_me|name|hey]? {x:lex.kids.time.months} [has|have|have_got|got|is|contains|lasts]? [how_many|many]? [days|day] [count|total|long|in_total]? [$lang.tail.filler]?"
     emit="@{_} core.question type=kids.time.monthinfo seek=days where.name={x}"
     kind=question
@@ -1147,6 +1163,7 @@
     example="Days left until Friday?"
 
 @pat.kids.time.w.gaptoday.f2 core.pattern
+    canonical="Friday is how many days away?"
     match="{b:lex.kids.time.days} [is|comes|arrives]? [how_many|in] [days|day] [away|from_now|off|to_go|left]? [$lang.tail.filler]?"
     emit="@{_} core.question type=kids.time.gap seek=count where.from=today where.to={b}"
     kind=question
@@ -1175,6 +1192,7 @@
     example="From today how far to Friday?"
 
 @pat.kids.time.w.hgap.f1 core.pattern
+    canonical="Count the hours between 2 and 6."
     match="[$lang.lead.question|count|show_me|give_me|name|hey]? [how_many|count_the|number_of|count]? [hours|hour|hrs|hr] [are_there|is_it|are|is]? [from|between] {a:number} [o'clock|oclock|o_clock|pm|am]? [to|and|till|until] {b:number} [o'clock|oclock|o_clock|pm|am]? [in_hours|apart]? [$lang.tail.filler]?"
     emit="@{_} core.question type=kids.time.hoursgap seek=count where.from={a} where.to={b}"
     kind=question
@@ -1769,6 +1787,7 @@
     example="Friday today so yesterday was what?"
 
 @pat.kids.time.sw.today.say core.pattern
+    canonical="We are on Friday today."
     match="[$kids.time.g1_i_need_to_find_out]? [$kids.time.g1_i_need_to_find_out]? [just_so_you_know|by_the_way|did_you_know|guess_what|remember_that|know_that|fyi|btw|note|remember|update|news|look|listen|so|hey|oh|yes|yay|phew|hi|hmm|uh]? [the_day_right_now_is|right_now_it_is|the_day_today_is|the_day_now_is|it_is_a|we_are_on|we_are_in|it_is_now|right_now_its|now_it_is|currently_it_is|the_day_is|the_date_is|i_am_on|we_are_having|we_are_at|it_s_a|it_is_actually|actually_it_is|actually_today_is|today_is_actually|today_is_a|today_s_a|today_its_a|today_is_still|today_is_again|today_is_already|today_is_finally|it_is_still|it_is_already|it_is_finally|still_it_is|already_it_is|finally_it_is|so_it_is|so_today_is|yes_it_is|yes_today_is|oh_it_is|oh_today_is|hey_it_is|hey_today_is|hi_it_is|hi_today_is|yay_it_is|yay_today_is|phew_it_is|phew_today_is|it_is|its_a|today_is|today_'s|today_its|were_on|were_in|its_now|now_its|currently_its|this_is|that_is|im_on|we_have|we_got|were_having|were_at|it_s|its_actually|actually_its|actually_todays|todays_a|its_still|its_already|its_finally|still_its|already_its|finally_its|so_its|so_todays|yes_its|yes_todays|oh_its|oh_todays|hey_its|hey_todays|hi_its|hi_todays|yay_its|yay_todays|phew_its|phew_todays|today|its|todays|thats] [a]? {d:lex.kids.time.days} [$lang.tail.filler|by_the_way|so_far|you_know|y_know|fyi|yay|here|currently|still|finally|guys|robot|bot|really|actually]? [$lang.tail.filler|fyi]? [$lang.tail.filler|$kids.time.g3_exactly]? [$lang.tail.filler|$kids.time.g3_exactly]?"
     emit="@{_} kids.time.today day={d}"
     kind=statement
@@ -1923,6 +1942,7 @@
     example="3 oclock to 7 how many hours left?"
 
 @pat.kids.time.sw.hours.gap.d core.pattern
+    canonical="Count hours 9 to 12."
     match="[$kids.time.g1_i_need_to_find_out]? [$kids.time.g1_i_need_to_find_out]? [count_the_hours_from|count_the_hours_between|countdown_in_hours|hours_from_now|hours_to_go|count_the_hours|count_hours_from|count_hours_between|number_of_hours|how_many_hours|count_hours|hour_count|hours_countdown|hours_left|hours_till|hours_until|hours_between|hours_gap|hour_gap|hours_difference|hour_difference|time_gap|time_difference|hours_apart|hours_away|clock_gap|clock_difference|in_hours|hours|countdown] [from_now_till|from_now_until|from_now_to|starting_from|starting_at|from|between|since|till|until|to|at|on|of|with|in|for]? {a:number} [$kids.time.g6_on_the_dot]? [from_there_to|from_there_until|from_there_till|up_to|up_until|up_till|and_then|to|and|until|till|through|thru|into|before|toward|towards|->|-|then|vs|versus|against]? {b:number} [$kids.time.g6_on_the_dot]? [$lang.tail.filler|$kids.time.g3_exactly]? [$lang.tail.filler|$kids.time.g3_exactly]?"
     emit="@{_} core.question type=kids.time.hoursgap seek=count where.from={a} where.to={b}"
     kind=question
@@ -2105,6 +2125,7 @@
     example="Months of the year pls."
 
 @pat.kids.time.sw.list.seasons core.pattern
+    canonical="Name all the seasons of the year."
     match="[$kids.time.g1_i_need_to_find_out]? [$kids.time.g1_i_need_to_find_out]? [$kids.time.g4_can_u_tell_me] [the]? [all]? [4|four|every|each]? [names_of_the_seasons|season_names|seasons_names|seasons|season] [of|in|within|for|during] [the|a|one|1|each|every]? [$kids.time.g97_whole_year] [$lang.tail.filler|$kids.time.g89_in_a_row]? [$lang.tail.filler|$kids.time.g3_exactly]? [$lang.tail.filler|$kids.time.g3_exactly]?"
     emit="@{_} core.question type=kids.time.seasoninfo seek=name mode=list"
     kind=question
