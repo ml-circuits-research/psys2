@@ -15,6 +15,7 @@
  *   noun     property noun alternatives (`color|colour`): optional in `set`, required by `ask.value`
  *   det      determiners before the object (default `the|your|ur|my`)
  *   link     words between object and value in the imperative of `set` (default `to|into|be|as`, followed by an optional a|an|the)
+ *   poss     `true` (`ask.value`): also generate the possessive order form "what is Japan's capital" (`L [$lang.shape.whatis]? O 's N T`)
  *   objdet   `none`: no determiner before the object of an `ask.value` shape ("the day after Monday", not "the Monday")
  *   rel      (`ask.value`) relation words between the noun and the object (`after|comes_after|follows`: "what day comes after Monday"); the relation is then mandatory
  *   cont     (`ask.count`) container slot `name:class`: "how many days are in a week" (obj = the counted part, cont = the whole), "how many apples does Tom have"
@@ -80,7 +81,8 @@ export const TEMPLATES = {
     wish: [['', AND('<L>', '[$lang.shape.know]', '[what|which]?', '<D>', '<N>', '<OFO>', '<DO>', '<O>', '[is|are]?', '<T>')]],
     ind: [['', AND('[$lang.shape.indask]', '[what|which]?', '<D>', '<N>', '<OFO>', '<DO>', '<O>', '[is|are]?', '<T>')]],
     order: [['', AND('<L>', '<D>', '<N>', '<OFM>', '<DO>', '<O>', NOW, '<T>')],
-      ['.2', AND('<L>', '<DO>', '<O>', '[is|are]?', '[what|which|wat]', '<N>', '<T>')]],
+      ['.2', AND('<L>', '<DO>', '<O>', '[is|are]?', '[what|which|wat]', '<N>', '<T>')],
+      ['.poss', AND('<L>', '[$lang.shape.whatis]?', '<O>', "'s", '<N>', '<T>')]],
     short: [['', AND('<L>', '<O>', '<N>', '<T>')]],
     opts: [['', AND('<L>', '[what|which|wat]', '<NP>', '[can|could|may|might|do|does|are|is]', '<DO>', '<O>', '[$lang.shape.be|have|take]', '<T>')]],
   },
@@ -186,6 +188,7 @@ export function expandShape(shape, { phrases = null, lexicons = null } = {}) {
     if (skip.has(form)) continue;
     if (form === 'opts' && (!shape.emitOpts || noObj)) continue;
     for (const [suffix, tpl] of (noObj && family === 'ask.value' ? NOOBJ_ASK_VALUE[form] : shape.cont && family === 'ask.count' ? CONT_ASK_COUNT[form] : table[form]) ?? []) {
+      if (suffix === '.poss' && shape.poss !== 'true') continue;
       if (noObj && family === 'set' && (form === 'order' || (form === 'short' && suffix === ''))) continue;
       if (shape.rel && family === 'ask.value' && ((form === 'order' && suffix === '.2') || form === 'short' || form === 'opts')) continue;
       const tokens = [...new Set(tpl.match(/<\w+\??>/g) ?? [])];
@@ -256,7 +259,8 @@ export function exampleSentences(match, { phrases = null, lexicons = null, sampl
           first = ph.alts[0].join('_');
         }
         words.push(first.replace(/_/g, ' '));
-      } else words.push(part.replace(/_/g, ' '));
+      } else if (part === "'s" && words.length) words[words.length - 1] += "'s";
+      else words.push(part.replace(/_/g, ' '));
     }
     return words.join(' ');
   };

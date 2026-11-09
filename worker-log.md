@@ -655,3 +655,11 @@ Gates on the tip rebased onto ae3f935: `npm test` 825/825, `test-world all` 0 FA
 - **RD4 (art.draw).** Comparatives in `lex.art.draw.mods` (`COMPARATIVES`): a creation with bigger/smaller/taller/... sizes the new X by 1.4 or 1/1.4 against the newest existing X and says so; with none it is a plain big/small one and says so. Ellipsis after a draw on the Drawing tab: `pat.art.draw.add.again` (comparative or mood word required) and `pat.art.draw.add.person` ("a man"); a bare noun alone stays unread so comma lists keep working. People: man/woman/girl/boy (+ plurals) have size, hair, shirt/pants (dress) presets (`WHO_PRESET`, `object.who`), happy/sad set `object.mood` and `partsOf` turns the smile curve. 17 new tests. Spec 07.
 - **Gates** vs the same tree without these commits: `npm test` 825 pass / 0 fail; `test-world all` 0 FAIL; operational (rules, no-write) 95.0% right / 0.6% wrong unchanged; dialogues (rules) 96.6% turns / 87.7% dialogues unchanged; eval-rules identical in every row (no cross-world stealing).
 - **Not done here.** The Romanian side ("fa ochi mari/visatori") depends on RD5's lexicon; "next" on the drawing tab and routing of "the avatar should be a women" on the chart tab are RD2.
+
+
+## L7 geo.map (2026-11-09, on origin/main d3704b3)
+Baseline re-measured at d3704b3 with the unmigrated geo.map (operational 95.0% right / 7 wrong, dialogues 96.6% / 87.7%, eval-rules as before).
+- **migrate-macros**: `patterns.sop` 567,349 -> 221,415 bytes; hand patterns 341 -> 329 (+ 5 shapes, 40 generated); match text 493,811 -> 148,735 bytes (-70 %); inline groups repeated verbatim 143 (1,772 occurrences) -> 60 (543). 75 world-local phrases. No lexicon qualifies for `extends`.
+- **Shapes**: `geo.map.capital/.population/.currency/.continent/.country` (ask.value with the new key `poss=true` for "Japan's capital", `objdet=none`, `skip=short`). 12 covered hand patterns deleted. Gate finding: `name the capital city of Italy` (geo.map#093) was read by the deleted `cap1` through `[$lang.lead.question|name|give_me]`; `name` is now an alternative of `lang.shape.tellme`.
+- **Tests**: geo.map 436 -> 441 (sh01..sh05).
+- **Gates**: operational 95.0% / 7 wrong unchanged, dialogues unchanged, eval-rules identical in every row. (Run at the end of the commit: npm test and test-world all.)

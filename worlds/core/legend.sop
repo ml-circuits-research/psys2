@@ -559,6 +559,11 @@
     card=one
     ask="none when no determiner may stand before the object of an ask.value shape?"
 
+@core.shape.poss core.key
+    value=atom
+    card=one
+    ask="true to also generate the possessive form of an ask.value shape (Japan's capital)?"
+
 @core.shape.sample core.key
     value=string
     card=one

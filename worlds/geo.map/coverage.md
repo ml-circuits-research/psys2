@@ -536,3 +536,5 @@ Routing, driving directions, travel time, weather, time zones, elevation, popula
 
 
 Totals: 304 catalogue lines; 293 supported with tests; 11 unsupported (listed above).
+
+**L7 (macros, shapes).** `patterns.sop` was migrated with `scripts/migrate-macros.mjs` (lead-ins, suffixes and 75 repeated lists are macros). Five `ask.value` shapes with the possessive form (`poss=true`) cover the one-place questions: `geo.map.capital`, `.population`, `.currency`, `.continent`, `.country` (40 generated patterns): "what is the capital of Japan", "i want to know the capital of Japan", "can you tell me the population of Brazil", "do you know the currency of Japan", "what is Peru's continent", "name the capital city of Italy" (tests sh01 to sh05). Twelve hand patterns whose examples a shape covered completely were deleted. Superlatives, zoom, compare, markers, distances, borders, counts and highlights have several slots or special wording and stay hand-written.

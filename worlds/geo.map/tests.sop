@@ -2249,3 +2249,28 @@
     session=gu2
     input="undo that"
     expectState="zoom=2"
+
+@t.geo.map.sh01 core.test
+    input="i want to know the capital of Japan"
+    expect="The capital of Japan is Tokyo."
+    session=gsh1
+
+@t.geo.map.sh02 core.test
+    input="can you tell me the population of Brazil"
+    expect="Brazil has about 209.5 million people"
+    session=gsh2
+
+@t.geo.map.sh03 core.test
+    input="do you know the currency of Japan"
+    expect="Japan uses the Japanese yen."
+    session=gsh3
+
+@t.geo.map.sh04 core.test
+    input="what is Peru's continent"
+    expect="Peru is in South America."
+    session=gsh4
+
+@t.geo.map.sh05 core.test
+    input="tell me the country of Paris"
+    expect="Paris is in France."
+    session=gsh5
