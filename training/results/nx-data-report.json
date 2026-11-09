@@ -1,0 +1,809 @@
+{
+ "generated_by": "node scripts/export-nx.mjs",
+ "dataset": "training/dataset",
+ "seconds": 138,
+ "protected": {
+  "files": [
+   "dialogues.jsonl",
+   "expectations-2026-11-09c.jsonl",
+   "expectations-2026-11-09d.jsonl",
+   "expectations-2026-11-09e.jsonl",
+   "operational-long.jsonl",
+   "operational-ro.jsonl",
+   "operational-stub.jsonl",
+   "operational.jsonl",
+   "real-dialogue-2026-11-09.txt",
+   "real-dialogue-2026-11-09b.txt",
+   "real-phrases-2026-11-09c.jsonl",
+   "real-phrases-2026-11-09d.jsonl",
+   "real-phrases-2026-11-09e.jsonl",
+   "real-phrases-2026-11-09f-mobile.json"
+  ],
+  "texts": 11821
+ },
+ "protected_dropped": 4608,
+ "worker_errors": 0,
+ "second_pass_recovered": 21702,
+ "second_pass_surfaces": 370,
+ "duplicates": 27586,
+ "invalid_dropped": 0,
+ "phrase_logs": {
+  "files": 0,
+  "records": 0,
+  "note": "training/phrase-logs holds no .jsonl yet (gitignored, filled by the app export); no feedback records in the repo"
+ },
+ "diagram_source": {
+  "files": 301,
+  "messages": 44273,
+  "skipped": 5473
+ },
+ "files": {
+  "free-rules.jsonl": 47802,
+  "free-diagram.jsonl": 74320
+ },
+ "totals": {
+  "records": 122122,
+  "by_status": {
+   "complete": 91936,
+   "partial": 9919,
+   "filler": 20267
+  },
+  "by_split": {
+   "train": 97700,
+   "dev": 15075,
+   "test": 9347
+  },
+  "by_label_source": {
+   "rule-derived": 6171,
+   "rules-own": 810,
+   "canonical-ok": 492,
+   "generator-backed": 31114,
+   "rules-agree": 5063,
+   "negative": 1390,
+   "generator-disagrees": 1293,
+   "relabelled": 259,
+   "needs_review": 306,
+   "rules-fail": 853,
+   "rules-differ": 39,
+   "rules-unverified": 2,
+   "canonical-failed": 10,
+   "imported-diagram": 74320
+  },
+  "by_span_source": {
+   "rules": 56692,
+   "dup": 1894,
+   "aligned": 97520,
+   "none": 21805,
+   "lexicon": 14650
+  },
+  "slots": 192561,
+  "slots_spanned": 168862,
+  "ops": 498
+ },
+ "worlds": {
+  "art.draw": {
+   "records": 3088,
+   "by_status": {
+    "complete": 2807,
+    "partial": 128,
+    "filler": 153
+   },
+   "by_split": {
+    "train": 2447,
+    "dev": 316,
+    "test": 325
+   },
+   "by_label_source": {
+    "rule-derived": 622,
+    "rules-own": 145,
+    "canonical-ok": 35,
+    "generator-backed": 1787,
+    "rules-agree": 321,
+    "negative": 94,
+    "generator-disagrees": 46,
+    "relabelled": 15,
+    "needs_review": 10,
+    "rules-fail": 10,
+    "rules-unverified": 2,
+    "canonical-failed": 1
+   },
+   "by_span_source": {
+    "rules": 4243,
+    "dup": 1460,
+    "aligned": 489,
+    "none": 128,
+    "lexicon": 45
+   },
+   "slots": 6365,
+   "slots_spanned": 4777,
+   "ops": 34
+  },
+  "data.charts": {
+   "records": 2789,
+   "by_status": {
+    "partial": 52,
+    "complete": 2713,
+    "filler": 24
+   },
+   "by_split": {
+    "train": 2224,
+    "dev": 280,
+    "test": 285
+   },
+   "by_label_source": {
+    "rule-derived": 444,
+    "canonical-ok": 33,
+    "generator-backed": 1733,
+    "rules-agree": 386,
+    "relabelled": 13,
+    "generator-disagrees": 49,
+    "rules-own": 89,
+    "rules-fail": 18,
+    "needs_review": 14,
+    "negative": 6,
+    "canonical-failed": 4
+   },
+   "by_span_source": {
+    "none": 53,
+    "rules": 2745,
+    "lexicon": 398,
+    "aligned": 125,
+    "dup": 2
+   },
+   "slots": 3323,
+   "slots_spanned": 3268,
+   "ops": 51
+  },
+  "docs.editor": {
+   "records": 1668,
+   "by_status": {
+    "complete": 1425,
+    "partial": 123,
+    "filler": 120
+   },
+   "by_split": {
+    "train": 1332,
+    "dev": 172,
+    "test": 164
+   },
+   "by_label_source": {
+    "rule-derived": 420,
+    "canonical-ok": 57,
+    "generator-backed": 379,
+    "rules-agree": 323,
+    "rules-fail": 252,
+    "rules-own": 93,
+    "relabelled": 18,
+    "rules-differ": 11,
+    "needs_review": 103,
+    "negative": 5,
+    "generator-disagrees": 4,
+    "canonical-failed": 3
+   },
+   "by_span_source": {
+    "rules": 1182,
+    "aligned": 782,
+    "lexicon": 224,
+    "none": 129,
+    "dup": 2
+   },
+   "slots": 2319,
+   "slots_spanned": 2188,
+   "ops": 66
+  },
+  "docs.reader": {
+   "records": 2469,
+   "by_status": {
+    "complete": 2429,
+    "partial": 19,
+    "filler": 21
+   },
+   "by_split": {
+    "train": 1960,
+    "dev": 255,
+    "test": 254
+   },
+   "by_label_source": {
+    "rule-derived": 397,
+    "generator-backed": 1877,
+    "rules-agree": 58,
+    "generator-disagrees": 60,
+    "negative": 11,
+    "relabelled": 5,
+    "rules-fail": 43,
+    "canonical-ok": 8,
+    "rules-own": 8,
+    "rules-differ": 1,
+    "canonical-failed": 1
+   },
+   "by_span_source": {
+    "aligned": 187,
+    "lexicon": 107,
+    "rules": 2097,
+    "none": 19
+   },
+   "slots": 2410,
+   "slots_spanned": 2391,
+   "ops": 32
+  },
+  "games.chess": {
+   "records": 2920,
+   "by_status": {
+    "complete": 2300,
+    "partial": 586,
+    "filler": 34
+   },
+   "by_split": {
+    "train": 2287,
+    "dev": 297,
+    "test": 336
+   },
+   "by_label_source": {
+    "rule-derived": 525,
+    "generator-backed": 1934,
+    "negative": 10,
+    "generator-disagrees": 29,
+    "rules-agree": 300,
+    "rules-fail": 38,
+    "rules-own": 26,
+    "canonical-ok": 29,
+    "relabelled": 2,
+    "needs_review": 24,
+    "rules-differ": 3
+   },
+   "by_span_source": {
+    "rules": 6219,
+    "lexicon": 166,
+    "none": 596,
+    "aligned": 80
+   },
+   "slots": 7061,
+   "slots_spanned": 6465,
+   "ops": 26
+  },
+  "games.guess": {
+   "records": 1558,
+   "by_status": {
+    "partial": 431,
+    "complete": 1083,
+    "filler": 44
+   },
+   "by_split": {
+    "train": 1248,
+    "dev": 159,
+    "test": 151
+   },
+   "by_label_source": {
+    "rule-derived": 79,
+    "generator-backed": 1133,
+    "canonical-ok": 21,
+    "rules-agree": 219,
+    "negative": 39,
+    "generator-disagrees": 10,
+    "rules-fail": 34,
+    "rules-own": 15,
+    "rules-differ": 1,
+    "needs_review": 5,
+    "relabelled": 2
+   },
+   "by_span_source": {
+    "none": 431,
+    "rules": 347,
+    "aligned": 93,
+    "lexicon": 30
+   },
+   "slots": 901,
+   "slots_spanned": 470,
+   "ops": 11
+  },
+  "games.hangman": {
+   "records": 2172,
+   "by_status": {
+    "complete": 1943,
+    "partial": 43,
+    "filler": 186
+   },
+   "by_split": {
+    "train": 1741,
+    "dev": 218,
+    "test": 213
+   },
+   "by_label_source": {
+    "rule-derived": 135,
+    "generator-backed": 1505,
+    "negative": 186,
+    "generator-disagrees": 32,
+    "rules-fail": 32,
+    "rules-agree": 245,
+    "canonical-ok": 15,
+    "relabelled": 15,
+    "rules-own": 5,
+    "rules-differ": 2
+   },
+   "by_span_source": {
+    "rules": 1555,
+    "none": 43,
+    "lexicon": 15,
+    "aligned": 8
+   },
+   "slots": 1621,
+   "slots_spanned": 1578,
+   "ops": 10
+  },
+  "games.tictactoe": {
+   "records": 2028,
+   "by_status": {
+    "complete": 1822,
+    "partial": 55,
+    "filler": 151
+   },
+   "by_split": {
+    "train": 1622,
+    "dev": 205,
+    "test": 201
+   },
+   "by_label_source": {
+    "rule-derived": 107,
+    "generator-backed": 1092,
+    "rules-agree": 264,
+    "generator-disagrees": 356,
+    "negative": 143,
+    "relabelled": 12,
+    "canonical-ok": 22,
+    "rules-fail": 20,
+    "needs_review": 6,
+    "rules-own": 6
+   },
+   "by_span_source": {
+    "lexicon": 403,
+    "rules": 1356,
+    "none": 62,
+    "aligned": 30
+   },
+   "slots": 1851,
+   "slots_spanned": 1789,
+   "ops": 12
+  },
+  "geo.map": {
+   "records": 2964,
+   "by_status": {
+    "complete": 2906,
+    "partial": 46,
+    "filler": 12
+   },
+   "by_split": {
+    "train": 2365,
+    "dev": 295,
+    "test": 304
+   },
+   "by_label_source": {
+    "rule-derived": 530,
+    "canonical-ok": 33,
+    "generator-backed": 1908,
+    "rules-own": 96,
+    "rules-agree": 378,
+    "rules-fail": 2,
+    "needs_review": 12,
+    "relabelled": 4,
+    "rules-differ": 1
+   },
+   "by_span_source": {
+    "rules": 3832,
+    "lexicon": 123,
+    "aligned": 177,
+    "none": 47
+   },
+   "slots": 4179,
+   "slots_spanned": 4132,
+   "ops": 46
+  },
+  "kids.animals": {
+   "records": 2571,
+   "by_status": {
+    "complete": 2420,
+    "partial": 55,
+    "filler": 96
+   },
+   "by_split": {
+    "train": 2018,
+    "dev": 290,
+    "test": 263
+   },
+   "by_label_source": {
+    "rule-derived": 317,
+    "rules-agree": 270,
+    "generator-backed": 1856,
+    "canonical-ok": 18,
+    "negative": 94,
+    "rules-own": 2,
+    "needs_review": 2,
+    "rules-fail": 10,
+    "relabelled": 1,
+    "generator-disagrees": 1
+   },
+   "by_span_source": {
+    "none": 550,
+    "rules": 3183,
+    "aligned": 80,
+    "lexicon": 189,
+    "dup": 35
+   },
+   "slots": 4037,
+   "slots_spanned": 3452,
+   "ops": 18
+  },
+  "kids.arith": {
+   "records": 2807,
+   "by_status": {
+    "complete": 2355,
+    "partial": 357,
+    "filler": 95
+   },
+   "by_split": {
+    "train": 2260,
+    "dev": 272,
+    "test": 275
+   },
+   "by_label_source": {
+    "rule-derived": 364,
+    "canonical-ok": 34,
+    "rules-agree": 245,
+    "generator-backed": 1940,
+    "negative": 82,
+    "generator-disagrees": 10,
+    "rules-fail": 111,
+    "rules-differ": 3,
+    "needs_review": 8,
+    "relabelled": 7,
+    "rules-own": 3
+   },
+   "by_span_source": {
+    "rules": 6680,
+    "none": 438,
+    "aligned": 518,
+    "lexicon": 125,
+    "dup": 120
+   },
+   "slots": 7881,
+   "slots_spanned": 7323,
+   "ops": 17
+  },
+  "kids.common": {
+   "records": 1945,
+   "by_status": {
+    "complete": 1687,
+    "filler": 257,
+    "partial": 1
+   },
+   "by_split": {
+    "train": 1409,
+    "dev": 280,
+    "test": 256
+   },
+   "by_label_source": {
+    "rule-derived": 148,
+    "rules-agree": 169,
+    "generator-backed": 1270,
+    "rules-own": 31,
+    "canonical-ok": 11,
+    "negative": 255,
+    "relabelled": 50,
+    "rules-fail": 9,
+    "needs_review": 2
+   },
+   "by_span_source": {
+    "rules": 638,
+    "aligned": 65,
+    "none": 1
+   },
+   "slots": 704,
+   "slots_spanned": 703,
+   "ops": 8
+  },
+  "kids.shapes": {
+   "records": 2411,
+   "by_status": {
+    "complete": 2218,
+    "filler": 127,
+    "partial": 66
+   },
+   "by_split": {
+    "train": 1875,
+    "dev": 260,
+    "test": 276
+   },
+   "by_label_source": {
+    "generator-backed": 1780,
+    "rule-derived": 171,
+    "rules-agree": 289,
+    "negative": 125,
+    "rules-fail": 5,
+    "generator-disagrees": 20,
+    "canonical-ok": 18,
+    "relabelled": 1,
+    "needs_review": 2
+   },
+   "by_span_source": {
+    "none": 320,
+    "rules": 3643,
+    "dup": 78,
+    "lexicon": 43,
+    "aligned": 35
+   },
+   "slots": 4119,
+   "slots_spanned": 3721,
+   "ops": 18
+  },
+  "kids.shop": {
+   "records": 2590,
+   "by_status": {
+    "complete": 2018,
+    "partial": 432,
+    "filler": 140
+   },
+   "by_split": {
+    "train": 2031,
+    "dev": 298,
+    "test": 261
+   },
+   "by_label_source": {
+    "rule-derived": 231,
+    "canonical-ok": 32,
+    "rules-agree": 307,
+    "generator-backed": 1842,
+    "negative": 118,
+    "relabelled": 11,
+    "rules-fail": 25,
+    "needs_review": 22,
+    "generator-disagrees": 2
+   },
+   "by_span_source": {
+    "rules": 4665,
+    "aligned": 769,
+    "lexicon": 182,
+    "none": 462,
+    "dup": 3
+   },
+   "slots": 6081,
+   "slots_spanned": 5616,
+   "ops": 13
+  },
+  "kids.tasks": {
+   "records": 2598,
+   "by_status": {
+    "complete": 2034,
+    "partial": 478,
+    "filler": 86
+   },
+   "by_split": {
+    "train": 2035,
+    "dev": 297,
+    "test": 266
+   },
+   "by_label_source": {
+    "rule-derived": 249,
+    "canonical-ok": 23,
+    "rules-agree": 215,
+    "generator-backed": 1898,
+    "rules-own": 40,
+    "negative": 63,
+    "generator-disagrees": 6,
+    "rules-differ": 6,
+    "relabelled": 39,
+    "rules-fail": 38,
+    "needs_review": 21
+   },
+   "by_span_source": {
+    "rules": 3186,
+    "lexicon": 67,
+    "none": 573,
+    "aligned": 39,
+    "dup": 16
+   },
+   "slots": 3881,
+   "slots_spanned": 3292,
+   "ops": 15
+  },
+  "kids.time": {
+   "records": 2508,
+   "by_status": {
+    "partial": 564,
+    "complete": 1867,
+    "filler": 77
+   },
+   "by_split": {
+    "train": 2003,
+    "dev": 254,
+    "test": 251
+   },
+   "by_label_source": {
+    "rule-derived": 282,
+    "canonical-ok": 21,
+    "rules-agree": 292,
+    "generator-backed": 1817,
+    "negative": 70,
+    "rules-fail": 5,
+    "rules-own": 2,
+    "needs_review": 7,
+    "relabelled": 6,
+    "rules-differ": 2,
+    "generator-disagrees": 4
+   },
+   "by_span_source": {
+    "aligned": 1036,
+    "none": 664,
+    "rules": 3302,
+    "lexicon": 269
+   },
+   "slots": 5271,
+   "slots_spanned": 4607,
+   "ops": 17
+  },
+  "media.music": {
+   "records": 2928,
+   "by_status": {
+    "complete": 2793,
+    "partial": 111,
+    "filler": 24
+   },
+   "by_split": {
+    "train": 2348,
+    "dev": 286,
+    "test": 294
+   },
+   "by_label_source": {
+    "rule-derived": 757,
+    "generator-backed": 1593,
+    "canonical-ok": 34,
+    "rules-own": 185,
+    "rules-agree": 288,
+    "generator-disagrees": 41,
+    "relabelled": 4,
+    "needs_review": 12,
+    "negative": 12,
+    "rules-differ": 1,
+    "rules-fail": 1
+   },
+   "by_span_source": {
+    "aligned": 196,
+    "rules": 3372,
+    "lexicon": 437,
+    "none": 117
+   },
+   "slots": 4122,
+   "slots_spanned": 4005,
+   "ops": 40
+  },
+  "ui.avatar": {
+   "records": 2511,
+   "by_status": {
+    "complete": 2316,
+    "partial": 153,
+    "filler": 42
+   },
+   "by_split": {
+    "train": 1992,
+    "dev": 250,
+    "test": 269
+   },
+   "by_label_source": {
+    "rule-derived": 259,
+    "rules-agree": 264,
+    "canonical-ok": 32,
+    "rules-own": 44,
+    "generator-backed": 1273,
+    "negative": 5,
+    "generator-disagrees": 455,
+    "rules-fail": 126,
+    "rules-differ": 8,
+    "relabelled": 8,
+    "needs_review": 36,
+    "canonical-failed": 1
+   },
+   "by_span_source": {
+    "rules": 3409,
+    "aligned": 863,
+    "lexicon": 277,
+    "dup": 141,
+    "none": 164
+   },
+   "slots": 4854,
+   "slots_spanned": 4549,
+   "ops": 37
+  },
+  "ui.help": {
+   "records": 1367,
+   "by_status": {
+    "complete": 1349,
+    "filler": 17,
+    "partial": 1
+   },
+   "by_split": {
+    "train": 1035,
+    "dev": 178,
+    "test": 154
+   },
+   "by_label_source": {
+    "rule-derived": 42,
+    "canonical-ok": 7,
+    "generator-backed": 1128,
+    "rules-agree": 78,
+    "relabelled": 11,
+    "generator-disagrees": 61,
+    "negative": 14,
+    "rules-own": 12,
+    "rules-fail": 11,
+    "needs_review": 3
+   },
+   "by_span_source": {
+    "rules": 342,
+    "aligned": 156,
+    "lexicon": 5,
+    "none": 1
+   },
+   "slots": 504,
+   "slots_spanned": 503,
+   "ops": 10
+  },
+  "ui.shell": {
+   "records": 1910,
+   "by_status": {
+    "complete": 1593,
+    "partial": 242,
+    "filler": 75
+   },
+   "by_split": {
+    "train": 1485,
+    "dev": 182,
+    "test": 243
+   },
+   "by_label_source": {
+    "rule-derived": 92,
+    "generator-backed": 1369,
+    "canonical-ok": 9,
+    "rules-agree": 152,
+    "negative": 58,
+    "relabelled": 35,
+    "generator-disagrees": 107,
+    "rules-fail": 63,
+    "rules-own": 8,
+    "needs_review": 17
+   },
+   "by_span_source": {
+    "rules": 696,
+    "lexicon": 448,
+    "none": 242,
+    "aligned": 103,
+    "dup": 2
+   },
+   "slots": 1491,
+   "slots_spanned": 1247,
+   "ops": 17
+  },
+  "diagram.sketch": {
+   "records": 74320,
+   "by_status": {
+    "complete": 49858,
+    "partial": 5976,
+    "filler": 18486
+   },
+   "by_split": {
+    "train": 59983,
+    "test": 4306,
+    "dev": 10031
+   },
+   "by_label_source": {
+    "imported-diagram": 74320
+   },
+   "by_span_source": {
+    "aligned": 91689,
+    "lexicon": 11097,
+    "none": 16765,
+    "dup": 35
+   },
+   "slots": 119586,
+   "slots_spanned": 102786,
+   "ops": 53
+  }
+ }
+}
