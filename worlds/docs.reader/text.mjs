@@ -118,7 +118,7 @@ export function stem(w) {
   if (/ed$/.test(s) && s.length > 4) { s = s.slice(0, -2); if (/(.)\1$/.test(s) && !/(ll|ss|zz)$/.test(s)) s = s.slice(0, -1); return s; }
   if (/(ch|sh|x|ss|zz)es$/.test(s)) return s.slice(0, -2);
   if (/ly$/.test(s) && s.length > 5) return s.slice(0, -2);
-  if (/s$/.test(s)) return s.slice(0, -1);
+  if (/s$/.test(s)) { s = s.slice(0, -1); return /e$/.test(s) && s.length > 4 ? s.slice(0, -1) : s; }   // plural and singular meet on the same stem (pebbles, pebble)
   if (/e$/.test(s) && s.length > 4) return s.slice(0, -1);
   return s;
 }

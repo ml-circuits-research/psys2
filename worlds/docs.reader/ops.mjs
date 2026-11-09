@@ -877,6 +877,7 @@ export function interceptInput(ctx, text) {
   let t = norm(String(text).replace(/[“”]/g, '"')).replace(/\s+/g, ' ');
   const raw = String(text).trim().replace(/[?.!]+$/, '').replace(/^(?:please,? )/i, '');
   t = ctx.lang.stripLead(t).trim();   // asking words (please, can you, tell me ...) from lang.common
+  t = t.replace(/^(?:and|ok|okay|so|then|now) (?=(?:what|who|where|when|how|why|which)\b)/, '').replace(/^(what (?:happens|happened) to (?:him|her|them|it)) (?:in|at) the end$/, '$1');
   let m;
   if (/^(?:tell me more|more|go on|continue|keep going|what else|anything else|show more|and what else)$/.test(t) && s.last?.op) return reply(more(ctx));
   if ((m = t.match(/^who (?:is|was|are|were) (.+?)(?: in (?:the )?(?:story|file|text|document|book|tale))?$/))) {
@@ -930,3 +931,14 @@ export function interceptInput(ctx, text) {
   return { handled: false };
 }
 export const stemWord = stem;
+
+/** Topic return (spec 11 section 7): the open document, the section being read and the search in progress. */
+export function topicSummary(ctx) {
+  const s = st(ctx), d = current(ctx);
+  if (!d) return null;
+  const sec = s.sectionDoc === d.id && Number.isInteger(s.section) ? d.sections[s.section - 1] : null;
+  const parts = [`"${d.title}" is open.`];
+  if (sec) parts.push(`You were reading section ${s.section}, "${sec.title}".`);
+  if (s.search?.hits?.length) parts.push(`The search for "${s.search.query}" has ${s.search.hits.length} ${s.search.hits.length === 1 ? 'result' : 'results'}.`);
+  return parts.join(' ');
+}
