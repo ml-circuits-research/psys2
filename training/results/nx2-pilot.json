@@ -1,0 +1,187 @@
+{
+ "labelers": {
+  "sonnet": {
+   "n": 300,
+   "op_accuracy": 0.95,
+   "slot_f1": 0.9216,
+   "slot_precision": 0.934,
+   "slot_recall": 0.9095,
+   "span_validity": 0.9929,
+   "abstain_rate": 0.0333,
+   "invalid_items": 0,
+   "by_subset": {
+    "rules": {
+     "n": 150,
+     "op_accuracy": 0.98,
+     "slot_f1": 0.9299
+    },
+    "para": {
+     "n": 100,
+     "op_accuracy": 0.95,
+     "slot_f1": 0.9061
+    },
+    "real": {
+     "n": 50,
+     "op_accuracy": 0.86,
+     "slot_f1": 0.9204
+    }
+   },
+   "json_validity": 1,
+   "batches": {
+    "total": 22,
+    "missing": [],
+    "invalid": []
+   },
+   "output_chars": 34937,
+   "input_chars": 286815,
+   "seconds": 185.5,
+   "items_per_minute": 97,
+   "est_input_tokens": 71704,
+   "est_output_tokens": 8734,
+   "usd_per_1000_items": 1.15,
+   "agent_tokens_measured": 216700
+  },
+  "haiku": {
+   "n": 300,
+   "op_accuracy": 0.9533,
+   "slot_f1": 0.8598,
+   "slot_precision": 0.8508,
+   "slot_recall": 0.869,
+   "span_validity": 1,
+   "abstain_rate": 0.0233,
+   "invalid_items": 0,
+   "by_subset": {
+    "rules": {
+     "n": 150,
+     "op_accuracy": 0.96,
+     "slot_f1": 0.8889
+    },
+    "para": {
+     "n": 100,
+     "op_accuracy": 0.96,
+     "slot_f1": 0.8617
+    },
+    "real": {
+     "n": 50,
+     "op_accuracy": 0.92,
+     "slot_f1": 0.7395
+    }
+   },
+   "json_validity": 1,
+   "batches": {
+    "total": 22,
+    "missing": [],
+    "invalid": []
+   },
+   "output_chars": 34419,
+   "input_chars": 286815,
+   "seconds": 319.6,
+   "items_per_minute": 56.3,
+   "est_input_tokens": 71704,
+   "est_output_tokens": 8605,
+   "usd_per_1000_items": 0.38,
+   "agent_tokens_measured": 304000
+  },
+  "qwen30": {
+   "n": 300,
+   "op_accuracy": 0.8767,
+   "slot_f1": 0.7694,
+   "slot_precision": 0.7722,
+   "slot_recall": 0.7667,
+   "span_validity": 0.9364,
+   "abstain_rate": 0.0067,
+   "invalid_items": 9,
+   "by_subset": {
+    "rules": {
+     "n": 150,
+     "op_accuracy": 0.9133,
+     "slot_f1": 0.8034
+    },
+    "para": {
+     "n": 100,
+     "op_accuracy": 0.88,
+     "slot_f1": 0.872
+    },
+    "real": {
+     "n": 50,
+     "op_accuracy": 0.76,
+     "slot_f1": 0.4202
+    }
+   },
+   "json_validity": 0.9545,
+   "batches": {
+    "total": 22,
+    "missing": [],
+    "invalid": [
+     "games.chess.0"
+    ]
+   },
+   "output_chars": 34638,
+   "input_chars": 286815,
+   "seconds": 312.9,
+   "items_per_minute": 57.5,
+   "est_input_tokens": 71704,
+   "est_output_tokens": 8660,
+   "usd_per_1000_items": 0,
+   "agent_tokens_measured": null
+  }
+ },
+ "judges": {
+  "sonnet": {
+   "judge": "sonnet",
+   "n": 600,
+   "wrong_labels": 114,
+   "recall_of_wrong": 0.2895,
+   "precision": 0.8049,
+   "false_alarms": 8,
+   "missed": 81,
+   "missing_calls": 0,
+   "bad_items": 0,
+   "per_labeler": {
+    "sonnet": {
+     "n": 300,
+     "wrong": 45,
+     "caught": 9,
+     "flagged": 12
+    },
+    "haiku": {
+     "n": 300,
+     "wrong": 69,
+     "caught": 24,
+     "flagged": 29
+    }
+   },
+   "seconds": 210.7
+  },
+  "haiku": {
+   "judge": "haiku",
+   "n": 600,
+   "wrong_labels": 114,
+   "recall_of_wrong": 0.1667,
+   "precision": 0.5938,
+   "false_alarms": 13,
+   "missed": 95,
+   "missing_calls": 0,
+   "bad_items": 0,
+   "per_labeler": {
+    "sonnet": {
+     "n": 300,
+     "wrong": 45,
+     "caught": 9,
+     "flagged": 18
+    },
+    "haiku": {
+     "n": 300,
+     "wrong": 69,
+     "caught": 10,
+     "flagged": 14
+    }
+   },
+   "seconds": 316.4
+  }
+ },
+ "selection": {
+  "labeler": "sonnet",
+  "judge": "sonnet (none qualifies)"
+ }
+}

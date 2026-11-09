@@ -1,0 +1,534 @@
+[
+ {
+  "id": "real#rp3-01",
+  "world": "ui.avatar",
+  "tab": "robot",
+  "context": [],
+  "text": "mcdavatara human",
+  "orig": "mcdavatara human",
+  "expect": "ui.avatar: become a person (voice garble of 'make avatar a human'; fuzzy-join split/merged words against world vocabulary)"
+ },
+ {
+  "id": "real#rp3-02",
+  "world": "ui.avatar",
+  "tab": "robot",
+  "context": [],
+  "text": "make the avatar a person make the avatar a person send",
+  "orig": "fă avatarul o persoană avatarul o persoană trimite",
+  "expect": "ui.avatar: become a person, Romanian reply. The repeated phrase is one request (voice stutter dedupe); trailing 'trimite' / 'send' is a send command word, dropped"
+ },
+ {
+  "id": "real#rp3-03",
+  "world": "ui.avatar",
+  "tab": "robot",
+  "context": [],
+  "text": "make a big smile",
+  "orig": "make a big smile",
+  "expect": "ui.avatar: the widest smile (mouth) on the current character; on the Drawing tab it may draw a smiley, on the Avatar tab it is the avatar"
+ },
+ {
+  "id": "real#rp3-04",
+  "world": "ui.avatar",
+  "tab": "robot",
+  "context": [],
+  "text": "make the avatar to geta big smile",
+  "orig": "make the avatar to geta big smile",
+  "expect": "ui.avatar: big smile ('geta' = 'get a')"
+ },
+ {
+  "id": "real#rp3-05",
+  "world": "ui.avatar",
+  "tab": "robot",
+  "context": [],
+  "text": "big smile",
+  "orig": "big smile",
+  "expect": "ui.avatar: big smile (loose words on the Avatar tab)"
+ },
+ {
+  "id": "real#rp3-06",
+  "world": "ui.avatar",
+  "tab": "robot",
+  "context": [],
+  "text": "the the next mouth",
+  "orig": "the the next mouth",
+  "expect": "ui.avatar: next mouth (repeated word dropped)"
+ },
+ {
+  "id": "real#rp3-07",
+  "world": "docs.editor",
+  "tab": "editor",
+  "context": [
+   "open the editor"
+  ],
+  "text": "add a header, two chapters and a paragraph",
+  "orig": "add a header, two chapters and a paragraph",
+  "expect": "docs.editor: a heading (asks for its text or uses a placeholder), two chapters (Chapter 1, Chapter 2), one empty paragraph; NOT a heading called 'Two chapters'"
+ },
+ {
+  "id": "real#rp3-08",
+  "world": "docs.editor",
+  "tab": "editor",
+  "context": [
+   "open the editor"
+  ],
+  "text": "add text",
+  "orig": "add text",
+  "expect": "docs.editor: asks 'What text should I add?' (must not add a paragraph with the words 'add text' or 2 words)"
+ },
+ {
+  "id": "real#rp3-09",
+  "world": "docs.editor",
+  "tab": "editor",
+  "context": [
+   "open the editor"
+  ],
+  "text": "are the new paragraph",
+  "orig": "are the new paragraph",
+  "expect": "docs.editor: new paragraph (voice garble 'add'->'are'; on the Editor tab the active world reads it)"
+ },
+ {
+  "id": "real#rp3-10",
+  "world": "docs.editor",
+  "tab": "editor",
+  "context": [
+   "open the editor"
+  ],
+  "text": "on the new chapter",
+  "orig": "on the new chapter",
+  "expect": "docs.editor: new chapter (voice garble 'add'->'on')"
+ },
+ {
+  "id": "real#rp3-11",
+  "world": "docs.editor",
+  "tab": "editor",
+  "context": [
+   "open the editor"
+  ],
+  "text": "Chester",
+  "orig": "Chester",
+  "expect": "docs.editor: 'chapter'? -> ask 'Did you mean a new chapter?' (sound-alike of an editor word on the Editor tab)"
+ },
+ {
+  "id": "real#rp3-12",
+  "world": "games.guess",
+  "tab": "guess",
+  "context": [
+   "lets play guess the animal"
+  ],
+  "text": "yes, it eats meat",
+  "orig": "yes, it eats meat",
+  "expect": "games.guess: yes to the current question, and use 'eats meat' as extra evidence (no 'I did not understand' tail)"
+ },
+ {
+  "id": "real#rp3-13",
+  "world": "games.guess",
+  "tab": "guess",
+  "context": [
+   "lets play guess the animal",
+   "yes"
+  ],
+  "text": "new game",
+  "orig": "new game",
+  "expect": "games.guess restarts (the Guess tab stays; must not switch to tic-tac-toe)"
+ },
+ {
+  "id": "real#rp3-14",
+  "world": "games.tictactoe",
+  "tab": "tictactoe",
+  "context": [],
+  "text": "start x and 0",
+  "orig": "start x and 0",
+  "expect": "games.tictactoe: new game ('X and 0' / 'x si 0' is the Romanian name; also 'noughts and crosses', 'x and o')"
+ },
+ {
+  "id": "real#rp3-15",
+  "world": "kids.arith",
+  "tab": "robot",
+  "context": [],
+  "text": "Tom has 10 bees. One flyes away. How many bee Tom has ?",
+  "orig": "Tom has 10 bees. One flyes away. How many bee Tom has ?",
+  "expect": "kids.arith: 9 bees (typos 'flyes', 'bee', question word order; 'flies away' = minus)"
+ },
+ {
+  "id": "real#rp3-16",
+  "world": "art.draw",
+  "tab": "draw",
+  "context": [
+   "draw 5 clouds and one sun"
+  ],
+  "text": "the un si up not udner clouds",
+  "orig": "the un si up not udner clouds",
+  "expect": "art.draw: move the sun up, above the clouds ('un'->'sun', 'si'->'is', 'udner'->'under'; 'up, not under the clouds' = move above)"
+ },
+ {
+  "id": "real#rp3-17",
+  "world": "media.music",
+  "tab": "music",
+  "context": [
+   "open the music tab"
+  ],
+  "text": "play",
+  "orig": "play",
+  "expect": "media.music: plays the selected / last song, or a random song when none (no 'What should I play?' when the tab shows a song list)"
+ },
+ {
+  "id": "real#rp3-18",
+  "world": "media.music",
+  "tab": "music",
+  "context": [
+   "open the music tab"
+  ],
+  "text": "play a random song",
+  "orig": "play a random song",
+  "expect": "media.music: plays a random known song and names it (must not look for a song called 'play a random song')"
+ },
+ {
+  "id": "real#rp4-01",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [],
+  "text": "draw a red circle",
+  "orig": "draw a red circle",
+  "expect": "diagram.sketch: a red circle c1 (on the Diagram tab the diagram world reads it, not art.draw; today art.draw in the webchat, DIAG2)"
+ },
+ {
+  "id": "real#rp4-02",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [
+   "draw a red circle"
+  ],
+  "text": "create a diagram",
+  "orig": "create a diagram",
+  "expect": "diagram.sketch: start a new diagram (ask 'Keep the current one or start empty?' when shapes exist) and offer the templates (process, cycle, tree, pyramid ...); must NOT draw a circle"
+ },
+ {
+  "id": "real#rp4-03",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [
+   "draw a red circle",
+   "create a diagram"
+  ],
+  "text": "add to the diagram a tree liek shape",
+  "orig": "add to the diagram a tree liek shape",
+  "expect": "diagram.sketch: a tree / hierarchy template (the source reader gives template=tree); 'liek' -> 'like'"
+ },
+ {
+  "id": "real#rp4-04",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [
+   "draw a red circle"
+  ],
+  "text": "add a box",
+  "orig": "add a box",
+  "expect": "diagram.sketch: a rectangle r1"
+ },
+ {
+  "id": "real#rp4-05",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [
+   "draw a red circle",
+   "add a box",
+   "add a box"
+  ],
+  "text": "connect all elements",
+  "orig": "connect all elements",
+  "expect": "diagram.sketch: chain c1 -> r1 -> r2, arrows a1, a2, reply names the arrow ids"
+ },
+ {
+  "id": "real#rp4-06",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [
+   "draw a red circle",
+   "add a box"
+  ],
+  "text": "connect circle1 and rectangle1",
+  "orig": "connect circle1 and rectangle1",
+  "expect": "diagram.sketch: arrow c1 -> r1 named a1; the old long ids (circle1, rectangle1) still resolve as aliases"
+ },
+ {
+  "id": "real#rp4-07",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [
+   "draw a red circle",
+   "add a box",
+   "connect circle1 and rectangle1"
+  ],
+  "text": "label the previous link as label1",
+  "orig": "label the previous link as label1",
+  "expect": "diagram.sketch: the last created arrow (a1) gets the label 'label1'; 'previous / last / that link / arrow / connection / line' refer to the most recent edge"
+ },
+ {
+  "id": "real#rp4-08",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [
+   "draw a red circle",
+   "add a box",
+   "connect circle1 and rectangle1"
+  ],
+  "text": "label link",
+  "orig": "label link",
+  "expect": "diagram.sketch: one edge exists (or the last edge is in focus) -> ask 'What should the label of a1 (c1 -> r1) say?'"
+ },
+ {
+  "id": "real#rp4-09",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [
+   "draw a red circle",
+   "add a box",
+   "connect circle1 and rectangle1"
+  ],
+  "text": "lable arraw between circle1 and rectangle1",
+  "orig": "lable arraw between circle1 and rectangle1",
+  "expect": "diagram.sketch: the edge c1 -> r1 is the target ('lable'->label, 'arraw'->arrow); no text given -> ask for the label text; must NOT label the shapes with 'and'"
+ },
+ {
+  "id": "real#rp4-10",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [
+   "draw a red circle",
+   "add a box",
+   "connect circle1 and rectangle1"
+  ],
+  "text": "label the arraw between circle1 and reactanle1 as \"label1\"",
+  "orig": "label the arraw between circle1 and reactanle1 as \"label1\"",
+  "expect": "diagram.sketch: edge c1 -> r1 labeled 'label1' ('reactanle1'->rectangle1 by name fuzzy match); the source reader gives action=label from=A to=B label=..."
+ },
+ {
+  "id": "real#rp4-11",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [
+   "draw a red circle",
+   "add a box",
+   "connect circle1 and rectangle1"
+  ],
+  "text": "label a1 as uses",
+  "orig": "label a1 as uses",
+  "expect": "diagram.sketch: arrow a1 labeled 'uses' (short ids for arrows)"
+ },
+ {
+  "id": "real#rp4-12",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [
+   "draw a red circle",
+   "add a box",
+   "connect circle1 and rectangle1"
+  ],
+  "text": "make a1 thicker and dashed",
+  "orig": "make a1 thicker and dashed",
+  "expect": "diagram.sketch: arrow a1 thicker (stroke width step) and dashed; reply says what changed"
+ },
+ {
+  "id": "real#rp4-13",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [
+   "draw a red circle",
+   "add a box"
+  ],
+  "text": "make c1 a bit bigger",
+  "orig": "make c1 a bit bigger",
+  "expect": "diagram.sketch: c1 one size step up (a bit = one step, much = two)"
+ },
+ {
+  "id": "real#rp4-14",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [
+   "draw a red circle",
+   "add a box",
+   "add a box",
+   "connect all elements"
+  ],
+  "text": "change the layout to a column",
+  "orig": "change the layout to a column",
+  "expect": "diagram.sketch: arrange all in a column; 'change the layout to ...' / 'switch to a grid / circle / layers / tree' all work"
+ },
+ {
+  "id": "real#rp4-15",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [
+   "draw a red circle",
+   "add a box",
+   "connect circle1 and rectangle1"
+  ],
+  "text": "delete a1",
+  "orig": "delete a1",
+  "expect": "diagram.sketch: remove arrow a1, the shapes stay"
+ },
+ {
+  "id": "real#rp5-01",
+  "world": "ui.avatar",
+  "tab": "robot",
+  "context": [],
+  "text": "becoming emoji",
+  "orig": "becoming emoji",
+  "expect": "ui.avatar: become the emoji character (voice inflection 'becoming' -> become)"
+ },
+ {
+  "id": "real#rp5-02",
+  "world": "ui.avatar",
+  "tab": "robot",
+  "context": [],
+  "text": "make the Roboto person",
+  "orig": "make the Roboto person",
+  "expect": "ui.avatar: become a person ('Roboto' = robot? ask, or read as 'make the robot a person' -> person)"
+ },
+ {
+  "id": "real#rp5-03",
+  "world": "ui.avatar",
+  "tab": "robot",
+  "context": [],
+  "text": "Be bucuros",
+  "orig": "fii bucuros",
+  "expect": "ui.avatar: happy expression, Romanian reply (also: fii vesel, fii trist, fii supărat, fii nervos -> angry, fii surprins, fii speriat)"
+ },
+ {
+  "id": "real#rp5-04",
+  "world": "ui.avatar",
+  "tab": "robot",
+  "context": [],
+  "text": "Be nervos",
+  "orig": "fii nervos",
+  "expect": "ui.avatar: angry expression"
+ },
+ {
+  "id": "real#rp5-07",
+  "world": "ui.avatar",
+  "tab": "robot",
+  "context": [],
+  "text": "Fiind a child",
+  "orig": "fiind copil",
+  "expect": "ui.avatar: the kid character ('fiind' = voice of 'fii')"
+ },
+ {
+  "id": "real#rp5-08",
+  "world": "games.tictactoe",
+  "tab": "tictactoe",
+  "context": [],
+  "text": "Turn on tic tac toe",
+  "orig": "pornește x și zero",
+  "expect": "games.tictactoe: new game ('x și zero', 'x și 0', 'X și O')"
+ },
+ {
+  "id": "real#rp5-09",
+  "world": "games.tictactoe",
+  "tab": "tictactoe",
+  "context": [
+   "pornește x și zero"
+  ],
+  "text": "I play a 1",
+  "orig": "joc a unu",
+  "expect": "games.tictactoe: play A1 (today supported; keep)"
+ },
+ {
+  "id": "real#rp5-10",
+  "world": "art.draw",
+  "tab": "draw",
+  "context": [],
+  "text": "Draw a salt",
+  "orig": "desenează un sare",
+  "expect": "art.draw: a sun ('sare' is a sound-alike of 'soare' on the Drawing tab; ask 'un soare?' if weak) — must not go to hangman"
+ },
+ {
+  "id": "real#rp5-12",
+  "world": "art.draw",
+  "tab": "draw",
+  "context": [],
+  "text": "Draw liniuță",
+  "orig": "desenează liniuță",
+  "expect": "art.draw: a line / short dash"
+ },
+ {
+  "id": "real#rp5-13",
+  "world": "art.draw",
+  "tab": "draw",
+  "context": [],
+  "text": "Draw a small fish and blue",
+  "orig": "desenează un pește mic și albastru",
+  "expect": "art.draw: a small blue fish (the English 'Draw a small blue fish.' works; the translation gives 'a small fish and blue': coordinated adjectives after the noun)"
+ },
+ {
+  "id": "real#rp5-14",
+  "world": "art.draw",
+  "tab": "draw",
+  "context": [
+   "desenează apă",
+   "desenează pește"
+  ],
+  "text": "mută peștele în apă",
+  "orig": "mută peștele în apă",
+  "expect": "art.draw: move the fish into the water (today 'mută peștele de aer în apă', 'peștele din aer să fie în apă', 'peștele stă în apă', 'mută peștele' are all unsupported)"
+ },
+ {
+  "id": "real#rp5-15",
+  "world": "art.draw",
+  "tab": "draw",
+  "context": [
+   "desenează pește"
+  ],
+  "text": "Move the fish",
+  "orig": "mută peștele",
+  "expect": "art.draw: ask 'Where should I move the fish?' (missing place), not unsupported"
+ },
+ {
+  "id": "real#rp5-16",
+  "world": "art.draw",
+  "tab": "draw",
+  "context": [
+   "desenează trei pești în apă"
+  ],
+  "text": "delete the fish",
+  "orig": "șterge peștii",
+  "expect": "art.draw: delete the fish (today the translation returned the Romanian text unchanged: 'unknown')"
+ },
+ {
+  "id": "real#rp5-17",
+  "world": "ui.avatar",
+  "tab": "robot",
+  "context": [],
+  "text": "make a big mouth",
+  "orig": "Fă o gură mare",
+  "expect": "ui.avatar: big mouth / widest smile (today the translation returned the text unchanged: 'unknown')"
+ },
+ {
+  "id": "real#rp5-18",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [],
+  "text": "Draw 3 circles",
+  "orig": "desenează trei cercuri",
+  "expect": "diagram.sketch: three circles c1, c2, c3 on the Diagram tab (today art.draw: tier T must also hold for translated Romanian)"
+ },
+ {
+  "id": "real#rp5-19",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [],
+  "text": "Draw 3 circles in the chart",
+  "orig": "desenează trei cercuri în diagramă",
+  "expect": "diagram.sketch: three circles ('în diagramă' names the world)"
+ },
+ {
+  "id": "real#rp5-20",
+  "world": "art.draw",
+  "tab": "draw",
+  "context": [
+   "desenează trei cercuri"
+  ],
+  "text": "Delete all the red circles",
+  "orig": "Șterge toate cercurile roșii",
+  "expect": "art.draw: delete all red circles (today supported; keep)"
+ }
+]

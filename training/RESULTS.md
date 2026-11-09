@@ -658,3 +658,27 @@ Published dispatcher v4e + N1 (`eval-operational --mode encoder+n1`). Tier T (AD
 | long set (154) right / partly / wrong | 80.5 / 3.2 / 13.0 | 94.2 / 3.2 / 1.9 |
 | 1296 operational right / wrong | 98.4 / 0.6 | 98.6 / 0.3 |
 | eval-diagram test set, wire-level act right | 81.0 | 81.0 |
+
+## NX2 (2026-11-10): model pilot, which labeler and which judge are good enough
+
+Gold: `training/nx/gold/pilot-300.jsonl` = 150 rules-verified (operational / operational-long cases with outcome `right` in the rules run `rules-nomodel-2026-11-09-r3h-shipped`, 8 of them diagram.sketch pattern examples because diagram has no operational set), 100 paraphrase items (`rules-fail` / `rules-differ` with an inherited canonical target, spec 10) and 50 real phrases (09c, d, e; Romanian ones in their English translation). The 50 real labels are Sonnet's output checked by hand against the expectation lines; 9 were corrected (`scripts/build-nx-real50.mjs`), so Sonnet's real-subset score is slightly flattered. Batch mode: one request = one world, up to 25 sentences (the gold has 11-25 per world, 22 requests), system prompt = the world's operations with keys and their `ask`, fixed constants, lexicon heads and solved examples (`scripts/lib/nx-prompt.mjs`). `op` = wire type, `?type` for questions, the action name for requests; a slot is scored as (key, canonical value) after lowercasing and removing `$e.`.
+
+| labeler | op acc | slot F1 | real subset op / F1 | span valid | JSON valid (batches) | invalid items | abstain | items/min | est. $ / 1000 items |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Claude Haiku 5.5 (subagent) | 95.3 % | 0.860 | 92 % / 0.74 | 100 % | 100 % | 0 | 2.3 % | 56 | 0.38 |
+| Claude Sonnet 5.5 (subagent) | 95.0 % | 0.922 | 86 % / 0.92 | 99.3 % | 100 % | 0 | 3.3 % | 97 | 1.15 |
+| Qwen3-30B-A3B-Instruct-2507-FP8 (vLLM 0.33, GB10, temp 0) | 87.7 % | 0.769 | 76 % / 0.42 | 93.6 % | 95.5 % (1 of 22 invalid) | 9 | 0.7 % | 57 generation only (model load 805 s) | 0 (GPU) |
+| 70-120B quantized | not run: the disk had 49 GB free after the 30B download (a 120B MXFP4 checkpoint is about 65 GB) | | | | | | | | |
+
+Cost is an estimate: tokens = characters / 4 (prompt + batch in, JSON out), list prices assumed at $3 / $15 (Sonnet) and $1 / $5 (Haiku) per million tokens, no batch discount (no API key). The subagent sessions themselves used 217k (Sonnet) and 304k (Haiku) total tokens for the 300 items.
+
+| judge (on the 600 proposed labels of Sonnet and Haiku, 50 items per call) | recall of wrong labels | precision of its flags | false alarms | missed |
+| --- | --- | --- | --- | --- |
+| Haiku | 16.7 % | 59.4 % | 13 | 95 |
+| Sonnet | 28.9 % | 80.5 % | 8 | 81 |
+
+"Wrong" means the label differs from the single gold reading (114 of 600). Many of those are alternative valid readings (a key given twice as `arg.kt` and `arg.kind`, `kids.time` constants, `count=1` for "a", phrase vs split arguments for draw.move) that the judges rightly accept, so recall against this gold is a lower bound and precision the more meaningful number.
+
+**Selection (rule applied, not reviewed):** labeler = **Claude Sonnet 5.5**: Haiku has op 95.3 % but slot F1 0.86 < 0.92; Qwen30 fails every threshold; Sonnet is the cheapest model with op >= 95 % (95.0), F1 >= 0.92 (0.922) and 0 invalid output. Both margins are thin (the gold is small: 300 items; one item is 0.33 points). Judge = **Sonnet, none qualifies** (no judge reaches 90 % recall at 80 % precision; Sonnet is the better of the two). Files: `training/results/nx2-pilot.json`, code `scripts/nx-pilot.mjs`, `scripts/build-nx-gold.mjs`, `scripts/build-nx-real50.mjs`, `training/nx/vllm_label.py`. Raw outputs are in `training/dataset/nx/pilot/` (outside git).
+
+vLLM notes: `python3 -m venv training/.venv-vllm && pip install vllm` works on the GB10 (vllm 0.33.0, torch 2.14 cu130, 9 GB). Two environment fixes were needed: Triton compiles a C stub, so Python.h must be on `C_INCLUDE_PATH` (no root: the headers of `libpython3.12-dev` were unpacked with `dpkg -x` into `training/dataset/nx/pydev`), and `ninja` must be on `PATH` (the venv `bin`). Loading 29 GB took 805 s while the disk was busy.

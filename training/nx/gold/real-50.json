@@ -1,0 +1,1088 @@
+[
+ {
+  "id": "real#rp4-01",
+  "subset": "real",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [],
+  "text": "draw a red circle",
+  "op": "diagram.create",
+  "slots": [
+   {
+    "key": "arg.text",
+    "span": null,
+    "text": null,
+    "value": "draw a red circle"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "diagram.sketch: a red circle c1 (on the Diagram tab the diagram world reads it, not art.draw; today art.draw in the webchat, DIAG2)"
+ },
+ {
+  "id": "real#rp4-02",
+  "subset": "real",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [
+   "draw a red circle"
+  ],
+  "text": "create a diagram",
+  "op": "diagram.new",
+  "slots": [
+   {
+    "key": "arg.text",
+    "span": null,
+    "text": null,
+    "value": "create a diagram"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "diagram.sketch: start a new diagram (ask 'Keep the current one or start empty?' when shapes exist) and offer the templates (process, cycle, tree, pyramid ...); must NOT draw a circle"
+ },
+ {
+  "id": "real#rp4-03",
+  "subset": "real",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [
+   "draw a red circle",
+   "create a diagram"
+  ],
+  "text": "add to the diagram a tree liek shape",
+  "op": "diagram.create",
+  "slots": [
+   {
+    "key": "arg.text",
+    "span": null,
+    "text": null,
+    "value": "add to the diagram a tree like shape"
+   }
+  ],
+  "source": "sonnet+hand-fix",
+  "expect": "diagram.sketch: a tree / hierarchy template (the source reader gives template=tree); 'liek' -> 'like'"
+ },
+ {
+  "id": "real#rp4-04",
+  "subset": "real",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [
+   "draw a red circle"
+  ],
+  "text": "add a box",
+  "op": "diagram.create",
+  "slots": [
+   {
+    "key": "arg.text",
+    "span": null,
+    "text": null,
+    "value": "add a box"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "diagram.sketch: a rectangle r1"
+ },
+ {
+  "id": "real#rp4-05",
+  "subset": "real",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [
+   "draw a red circle",
+   "add a box",
+   "add a box"
+  ],
+  "text": "connect all elements",
+  "op": "diagram.connect",
+  "slots": [
+   {
+    "key": "arg.text",
+    "span": null,
+    "text": null,
+    "value": "connect all elements"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "diagram.sketch: chain c1 -> r1 -> r2, arrows a1, a2, reply names the arrow ids"
+ },
+ {
+  "id": "real#rp4-06",
+  "subset": "real",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [
+   "draw a red circle",
+   "add a box"
+  ],
+  "text": "connect circle1 and rectangle1",
+  "op": "diagram.connect",
+  "slots": [
+   {
+    "key": "arg.text",
+    "span": null,
+    "text": null,
+    "value": "connect circle1 and rectangle1"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "diagram.sketch: arrow c1 -> r1 named a1; the old long ids (circle1, rectangle1) still resolve as aliases"
+ },
+ {
+  "id": "real#rp4-07",
+  "subset": "real",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [
+   "draw a red circle",
+   "add a box",
+   "connect circle1 and rectangle1"
+  ],
+  "text": "label the previous link as label1",
+  "op": "diagram.label",
+  "slots": [
+   {
+    "key": "arg.text",
+    "span": null,
+    "text": null,
+    "value": "label the previous link as label1"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "diagram.sketch: the last created arrow (a1) gets the label 'label1'; 'previous / last / that link / arrow / connection / line' refer to the most recent edge"
+ },
+ {
+  "id": "real#rp4-08",
+  "subset": "real",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [
+   "draw a red circle",
+   "add a box",
+   "connect circle1 and rectangle1"
+  ],
+  "text": "label link",
+  "op": "diagram.label",
+  "slots": [
+   {
+    "key": "arg.text",
+    "span": null,
+    "text": null,
+    "value": "label link"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "diagram.sketch: one edge exists (or the last edge is in focus) -> ask 'What should the label of a1 (c1 -> r1) say?'"
+ },
+ {
+  "id": "real#rp4-09",
+  "subset": "real",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [
+   "draw a red circle",
+   "add a box",
+   "connect circle1 and rectangle1"
+  ],
+  "text": "lable arraw between circle1 and rectangle1",
+  "op": "diagram.label",
+  "slots": [
+   {
+    "key": "arg.text",
+    "span": null,
+    "text": null,
+    "value": "label arrow between circle1 and rectangle1"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "diagram.sketch: the edge c1 -> r1 is the target ('lable'->label, 'arraw'->arrow); no text given -> ask for the label text; must NOT label the shapes with 'and'"
+ },
+ {
+  "id": "real#rp4-10",
+  "subset": "real",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [
+   "draw a red circle",
+   "add a box",
+   "connect circle1 and rectangle1"
+  ],
+  "text": "label the arraw between circle1 and reactanle1 as \"label1\"",
+  "op": "diagram.label",
+  "slots": [
+   {
+    "key": "arg.text",
+    "span": null,
+    "text": null,
+    "value": "label the arrow between circle1 and rectangle1 as label1"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "diagram.sketch: edge c1 -> r1 labeled 'label1' ('reactanle1'->rectangle1 by name fuzzy match); the source reader gives action=label from=A to=B label=..."
+ },
+ {
+  "id": "real#rp4-11",
+  "subset": "real",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [
+   "draw a red circle",
+   "add a box",
+   "connect circle1 and rectangle1"
+  ],
+  "text": "label a1 as uses",
+  "op": "diagram.label",
+  "slots": [
+   {
+    "key": "arg.text",
+    "span": null,
+    "text": null,
+    "value": "label a1 as uses"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "diagram.sketch: arrow a1 labeled 'uses' (short ids for arrows)"
+ },
+ {
+  "id": "real#rp4-12",
+  "subset": "real",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [
+   "draw a red circle",
+   "add a box",
+   "connect circle1 and rectangle1"
+  ],
+  "text": "make a1 thicker and dashed",
+  "op": "diagram.set",
+  "slots": [
+   {
+    "key": "arg.text",
+    "span": null,
+    "text": null,
+    "value": "make a1 thicker and dashed"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "diagram.sketch: arrow a1 thicker (stroke width step) and dashed; reply says what changed"
+ },
+ {
+  "id": "real#rp4-13",
+  "subset": "real",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [
+   "draw a red circle",
+   "add a box"
+  ],
+  "text": "make c1 a bit bigger",
+  "op": "diagram.resize",
+  "slots": [
+   {
+    "key": "arg.text",
+    "span": null,
+    "text": null,
+    "value": "make c1 a bit bigger"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "diagram.sketch: c1 one size step up (a bit = one step, much = two)"
+ },
+ {
+  "id": "real#rp4-14",
+  "subset": "real",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [
+   "draw a red circle",
+   "add a box",
+   "add a box",
+   "connect all elements"
+  ],
+  "text": "change the layout to a column",
+  "op": "diagram.arrange",
+  "slots": [
+   {
+    "key": "arg.text",
+    "span": null,
+    "text": null,
+    "value": "change the layout to a column"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "diagram.sketch: arrange all in a column; 'change the layout to ...' / 'switch to a grid / circle / layers / tree' all work"
+ },
+ {
+  "id": "real#rp4-15",
+  "subset": "real",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [
+   "draw a red circle",
+   "add a box",
+   "connect circle1 and rectangle1"
+  ],
+  "text": "delete a1",
+  "op": "diagram.delete",
+  "slots": [
+   {
+    "key": "arg.text",
+    "span": null,
+    "text": null,
+    "value": "delete a1"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "diagram.sketch: remove arrow a1, the shapes stay"
+ },
+ {
+  "id": "real#rp5-18",
+  "subset": "real",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [],
+  "text": "Draw 3 circles",
+  "op": "diagram.create",
+  "slots": [
+   {
+    "key": "arg.text",
+    "span": null,
+    "text": null,
+    "value": "draw 3 circles"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "diagram.sketch: three circles c1, c2, c3 on the Diagram tab (today art.draw: tier T must also hold for translated Romanian)"
+ },
+ {
+  "id": "real#rp5-19",
+  "subset": "real",
+  "world": "diagram.sketch",
+  "tab": "diagram",
+  "context": [],
+  "text": "Draw 3 circles in the chart",
+  "op": "diagram.create",
+  "slots": [
+   {
+    "key": "arg.text",
+    "span": null,
+    "text": null,
+    "value": "draw 3 circles in the chart"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "diagram.sketch: three circles ('în diagramă' names the world)"
+ },
+ {
+  "id": "real#rp3-01",
+  "subset": "real",
+  "world": "ui.avatar",
+  "tab": "robot",
+  "context": [],
+  "text": "mcdavatara human",
+  "op": "avatar.setCharacter",
+  "slots": [
+   {
+    "key": "arg.who",
+    "span": null,
+    "text": "human",
+    "value": "person"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "ui.avatar: become a person (voice garble of 'make avatar a human'; fuzzy-join split/merged words against world vocabulary)"
+ },
+ {
+  "id": "real#rp3-02",
+  "subset": "real",
+  "world": "ui.avatar",
+  "tab": "robot",
+  "context": [],
+  "text": "make the avatar a person make the avatar a person send",
+  "op": "avatar.setCharacter",
+  "slots": [
+   {
+    "key": "arg.who",
+    "span": null,
+    "text": "person",
+    "value": "person"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "ui.avatar: become a person, Romanian reply. The repeated phrase is one request (voice stutter dedupe); trailing 'trimite' / 'send' is a send command word, dropped"
+ },
+ {
+  "id": "real#rp3-03",
+  "subset": "real",
+  "world": "ui.avatar",
+  "tab": "robot",
+  "context": [],
+  "text": "make a big smile",
+  "op": "avatar.setPart",
+  "slots": [
+   {
+    "key": "arg.part",
+    "span": null,
+    "text": "mouth",
+    "value": "mouth"
+   },
+   {
+    "key": "arg.value",
+    "span": null,
+    "text": "big smile",
+    "value": "big_smile"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "ui.avatar: the widest smile (mouth) on the current character; on the Drawing tab it may draw a smiley, on the Avatar tab it is the avatar"
+ },
+ {
+  "id": "real#rp3-04",
+  "subset": "real",
+  "world": "ui.avatar",
+  "tab": "robot",
+  "context": [],
+  "text": "make the avatar to geta big smile",
+  "op": "avatar.setPart",
+  "slots": [
+   {
+    "key": "arg.part",
+    "span": null,
+    "text": "mouth",
+    "value": "mouth"
+   },
+   {
+    "key": "arg.value",
+    "span": null,
+    "text": "big smile",
+    "value": "big_smile"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "ui.avatar: big smile ('geta' = 'get a')"
+ },
+ {
+  "id": "real#rp3-05",
+  "subset": "real",
+  "world": "ui.avatar",
+  "tab": "robot",
+  "context": [],
+  "text": "big smile",
+  "op": "avatar.setPart",
+  "slots": [
+   {
+    "key": "arg.part",
+    "span": null,
+    "text": null,
+    "value": "mouth"
+   },
+   {
+    "key": "arg.value",
+    "span": null,
+    "text": "big smile",
+    "value": "big_smile"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "ui.avatar: big smile (loose words on the Avatar tab)"
+ },
+ {
+  "id": "real#rp3-06",
+  "subset": "real",
+  "world": "ui.avatar",
+  "tab": "robot",
+  "context": [],
+  "text": "the the next mouth",
+  "op": "avatar.step",
+  "slots": [
+   {
+    "key": "arg.part",
+    "span": null,
+    "text": "mouth",
+    "value": "mouth"
+   },
+   {
+    "key": "arg.dir",
+    "span": null,
+    "text": "next",
+    "value": "next"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "ui.avatar: next mouth (repeated word dropped)"
+ },
+ {
+  "id": "real#rp5-01",
+  "subset": "real",
+  "world": "ui.avatar",
+  "tab": "robot",
+  "context": [],
+  "text": "becoming emoji",
+  "op": "avatar.setCharacter",
+  "slots": [
+   {
+    "key": "arg.who",
+    "span": null,
+    "text": "emoji",
+    "value": "emoji"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "ui.avatar: become the emoji character (voice inflection 'becoming' -> become)"
+ },
+ {
+  "id": "real#rp5-02",
+  "subset": "real",
+  "world": "ui.avatar",
+  "tab": "robot",
+  "context": [],
+  "text": "make the Roboto person",
+  "op": "avatar.setCharacter",
+  "slots": [
+   {
+    "key": "arg.who",
+    "span": null,
+    "text": "person",
+    "value": "person"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "ui.avatar: become a person ('Roboto' = robot? ask, or read as 'make the robot a person' -> person)"
+ },
+ {
+  "id": "real#rp5-03",
+  "subset": "real",
+  "world": "ui.avatar",
+  "tab": "robot",
+  "context": [],
+  "text": "Be bucuros",
+  "op": "avatar.setMood",
+  "slots": [
+   {
+    "key": "arg.mood",
+    "span": null,
+    "text": "bucuros",
+    "value": "happy"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "ui.avatar: happy expression, Romanian reply (also: fii vesel, fii trist, fii supărat, fii nervos -> angry, fii surprins, fii speriat)"
+ },
+ {
+  "id": "real#rp5-04",
+  "subset": "real",
+  "world": "ui.avatar",
+  "tab": "robot",
+  "context": [],
+  "text": "Be nervos",
+  "op": "avatar.setMood",
+  "slots": [
+   {
+    "key": "arg.mood",
+    "span": null,
+    "text": "Be nervos",
+    "value": "angry"
+   }
+  ],
+  "source": "sonnet+hand-fix",
+  "expect": "ui.avatar: angry expression"
+ },
+ {
+  "id": "real#rp5-07",
+  "subset": "real",
+  "world": "ui.avatar",
+  "tab": "robot",
+  "context": [],
+  "text": "Fiind a child",
+  "op": "avatar.setCharacter",
+  "slots": [
+   {
+    "key": "arg.kind",
+    "span": null,
+    "text": "child",
+    "value": "kid"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "ui.avatar: the kid character ('fiind' = voice of 'fii')"
+ },
+ {
+  "id": "real#rp3-16",
+  "subset": "real",
+  "world": "art.draw",
+  "tab": "draw",
+  "context": [
+   "draw 5 clouds and one sun"
+  ],
+  "text": "the un si up not udner clouds",
+  "op": "draw.move",
+  "slots": [
+   {
+    "key": "arg.phrase",
+    "span": null,
+    "text": null,
+    "value": "the sun above the clouds"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "art.draw: move the sun up, above the clouds ('un'->'sun', 'si'->'is', 'udner'->'under'; 'up, not under the clouds' = move above)"
+ },
+ {
+  "id": "real#rp5-10",
+  "subset": "real",
+  "world": "art.draw",
+  "tab": "draw",
+  "context": [],
+  "text": "Draw a salt",
+  "op": "draw.add",
+  "slots": [
+   {
+    "key": "arg.kind",
+    "span": null,
+    "text": null,
+    "value": "sun"
+   },
+   {
+    "key": "arg.kt",
+    "span": null,
+    "text": null,
+    "value": "sun"
+   }
+  ],
+  "source": "sonnet+hand-fix",
+  "expect": "art.draw: a sun ('sare' is a sound-alike of 'soare' on the Drawing tab; ask 'un soare?' if weak) — must not go to hangman"
+ },
+ {
+  "id": "real#rp5-12",
+  "subset": "real",
+  "world": "art.draw",
+  "tab": "draw",
+  "context": [],
+  "text": "Draw liniuță",
+  "op": "draw.add",
+  "slots": [
+   {
+    "key": "arg.kind",
+    "span": null,
+    "text": null,
+    "value": "line"
+   },
+   {
+    "key": "arg.kt",
+    "span": null,
+    "text": null,
+    "value": "line"
+   }
+  ],
+  "source": "sonnet+hand-fix",
+  "expect": "art.draw: a line / short dash"
+ },
+ {
+  "id": "real#rp5-13",
+  "subset": "real",
+  "world": "art.draw",
+  "tab": "draw",
+  "context": [],
+  "text": "Draw a small fish and blue",
+  "op": "draw.add",
+  "slots": [
+   {
+    "key": "arg.m1",
+    "span": null,
+    "text": "small",
+    "value": "small"
+   },
+   {
+    "key": "arg.m2",
+    "span": null,
+    "text": "blue",
+    "value": "blue"
+   },
+   {
+    "key": "arg.kind",
+    "span": null,
+    "text": "fish",
+    "value": "fish"
+   },
+   {
+    "key": "arg.kt",
+    "span": null,
+    "text": "fish",
+    "value": "fish"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "art.draw: a small blue fish (the English 'Draw a small blue fish.' works; the translation gives 'a small fish and blue': coordinated adjectives after the noun)"
+ },
+ {
+  "id": "real#rp5-14",
+  "subset": "real",
+  "world": "art.draw",
+  "tab": "draw",
+  "context": [
+   "desenează apă",
+   "desenează pește"
+  ],
+  "text": "mută peștele în apă",
+  "op": "draw.move",
+  "slots": [
+   {
+    "key": "arg.phrase",
+    "span": null,
+    "text": null,
+    "value": "the fish into the water"
+   }
+  ],
+  "source": "sonnet+hand-fix",
+  "expect": "art.draw: move the fish into the water (today 'mută peștele de aer în apă', 'peștele din aer să fie în apă', 'peștele stă în apă', 'mută peștele' are all unsupported)"
+ },
+ {
+  "id": "real#rp5-15",
+  "subset": "real",
+  "world": "art.draw",
+  "tab": "draw",
+  "context": [
+   "desenează pește"
+  ],
+  "text": "Move the fish",
+  "op": "draw.move",
+  "slots": [
+   {
+    "key": "arg.phrase",
+    "span": null,
+    "text": "the fish",
+    "value": "the fish"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "art.draw: ask 'Where should I move the fish?' (missing place), not unsupported"
+ },
+ {
+  "id": "real#rp5-16",
+  "subset": "real",
+  "world": "art.draw",
+  "tab": "draw",
+  "context": [
+   "desenează trei pești în apă"
+  ],
+  "text": "delete the fish",
+  "op": "draw.remove",
+  "slots": [
+   {
+    "key": "arg.phrase",
+    "span": null,
+    "text": "the fish",
+    "value": "the fish"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "art.draw: delete the fish (today the translation returned the Romanian text unchanged: 'unknown')"
+ },
+ {
+  "id": "real#rp5-20",
+  "subset": "real",
+  "world": "art.draw",
+  "tab": "draw",
+  "context": [
+   "desenează trei cercuri"
+  ],
+  "text": "Delete all the red circles",
+  "op": "draw.remove",
+  "slots": [
+   {
+    "key": "arg.phrase",
+    "span": null,
+    "text": "all the red circles",
+    "value": "all the red circles"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "art.draw: delete all red circles (today supported; keep)"
+ },
+ {
+  "id": "real#rp3-07",
+  "subset": "real",
+  "world": "docs.editor",
+  "tab": "editor",
+  "context": [
+   "open the editor"
+  ],
+  "text": "add a header, two chapters and a paragraph",
+  "op": "doc.addStructure",
+  "slots": [
+   {
+    "key": "arg.spec",
+    "span": null,
+    "text": "a header, two chapters and a paragraph",
+    "value": "a header, two chapters and a paragraph"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "docs.editor: a heading (asks for its text or uses a placeholder), two chapters (Chapter 1, Chapter 2), one empty paragraph; NOT a heading called 'Two chapters'"
+ },
+ {
+  "id": "real#rp3-08",
+  "subset": "real",
+  "world": "docs.editor",
+  "tab": "editor",
+  "context": [
+   "open the editor"
+  ],
+  "text": "add text",
+  "op": "chat.ask",
+  "slots": [
+   {
+    "key": "arg.q",
+    "span": null,
+    "text": null,
+    "value": "What text should I add?"
+   },
+   {
+    "key": "arg.template",
+    "span": null,
+    "text": null,
+    "value": "write <x>"
+   },
+   {
+    "key": "arg.world",
+    "span": null,
+    "text": null,
+    "value": "docs.editor"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "docs.editor: asks 'What text should I add?' (must not add a paragraph with the words 'add text' or 2 words)"
+ },
+ {
+  "id": "real#rp3-09",
+  "subset": "real",
+  "world": "docs.editor",
+  "tab": "editor",
+  "context": [
+   "open the editor"
+  ],
+  "text": "are the new paragraph",
+  "op": "doc.newBlank",
+  "slots": [
+   {
+    "key": "arg.kind",
+    "span": null,
+    "text": "paragraph",
+    "value": "paragraph"
+   }
+  ],
+  "source": "sonnet+hand-fix",
+  "expect": "docs.editor: new paragraph (voice garble 'add'->'are'; on the Editor tab the active world reads it)"
+ },
+ {
+  "id": "real#rp3-10",
+  "subset": "real",
+  "world": "docs.editor",
+  "tab": "editor",
+  "context": [
+   "open the editor"
+  ],
+  "text": "on the new chapter",
+  "op": "doc.newBlank",
+  "slots": [
+   {
+    "key": "arg.kind",
+    "span": null,
+    "text": "chapter",
+    "value": "chapter"
+   }
+  ],
+  "source": "sonnet+hand-fix",
+  "expect": "docs.editor: new chapter (voice garble 'add'->'on')"
+ },
+ {
+  "id": "real#rp3-11",
+  "subset": "real",
+  "world": "docs.editor",
+  "tab": "editor",
+  "context": [
+   "open the editor"
+  ],
+  "text": "Chester",
+  "op": null,
+  "slots": [],
+  "source": "sonnet+hand-fix",
+  "expect": "docs.editor: 'chapter'? -> ask 'Did you mean a new chapter?' (sound-alike of an editor word on the Editor tab)"
+ },
+ {
+  "id": "real#rp3-12",
+  "subset": "real",
+  "world": "games.guess",
+  "tab": "guess",
+  "context": [
+   "lets play guess the animal"
+  ],
+  "text": "yes, it eats meat",
+  "op": "guess.evidence",
+  "slots": [
+   {
+    "key": "arg.kind",
+    "span": null,
+    "text": null,
+    "value": "eats"
+   },
+   {
+    "key": "arg.value",
+    "span": null,
+    "text": "meat",
+    "value": "meat"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "games.guess: yes to the current question, and use 'eats meat' as extra evidence (no 'I did not understand' tail)"
+ },
+ {
+  "id": "real#rp3-13",
+  "subset": "real",
+  "world": "games.guess",
+  "tab": "guess",
+  "context": [
+   "lets play guess the animal",
+   "yes"
+  ],
+  "text": "new game",
+  "op": "guess.start",
+  "slots": [],
+  "source": "sonnet+hand-checked",
+  "expect": "games.guess restarts (the Guess tab stays; must not switch to tic-tac-toe)"
+ },
+ {
+  "id": "real#rp3-14",
+  "subset": "real",
+  "world": "games.tictactoe",
+  "tab": "tictactoe",
+  "context": [],
+  "text": "start x and 0",
+  "op": "ttt.new",
+  "slots": [],
+  "source": "sonnet+hand-checked",
+  "expect": "games.tictactoe: new game ('X and 0' / 'x si 0' is the Romanian name; also 'noughts and crosses', 'x and o')"
+ },
+ {
+  "id": "real#rp5-08",
+  "subset": "real",
+  "world": "games.tictactoe",
+  "tab": "tictactoe",
+  "context": [],
+  "text": "Turn on tic tac toe",
+  "op": "ttt.new",
+  "slots": [],
+  "source": "sonnet+hand-checked",
+  "expect": "games.tictactoe: new game ('x și zero', 'x și 0', 'X și O')"
+ },
+ {
+  "id": "real#rp5-09",
+  "subset": "real",
+  "world": "games.tictactoe",
+  "tab": "tictactoe",
+  "context": [
+   "pornește x și zero"
+  ],
+  "text": "I play a 1",
+  "op": "ttt.move",
+  "slots": [
+   {
+    "key": "arg.col",
+    "span": null,
+    "text": "a",
+    "value": 1
+   },
+   {
+    "key": "arg.row",
+    "span": null,
+    "text": "1",
+    "value": 1
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "games.tictactoe: play A1 (today supported; keep)"
+ },
+ {
+  "id": "real#rp3-15",
+  "subset": "real",
+  "world": "kids.arith",
+  "tab": "robot",
+  "context": [],
+  "text": "Tom has 10 bees. One flyes away. How many bee Tom has ?",
+  "op": "?kids.arith.holding",
+  "slots": [
+   {
+    "key": "kids.arith.holding.owner",
+    "span": null,
+    "text": "Tom",
+    "value": "tom"
+   },
+   {
+    "key": "kids.arith.holding.item",
+    "span": null,
+    "text": "bee",
+    "value": "bee"
+   },
+   {
+    "key": "seek",
+    "span": null,
+    "text": null,
+    "value": "count"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "kids.arith: 9 bees (typos 'flyes', 'bee', question word order; 'flies away' = minus)"
+ },
+ {
+  "id": "real#rp3-17",
+  "subset": "real",
+  "world": "media.music",
+  "tab": "music",
+  "context": [
+   "open the music tab"
+  ],
+  "text": "play",
+  "op": "music.replay",
+  "slots": [],
+  "source": "sonnet+hand-fix",
+  "expect": "media.music: plays the selected / last song, or a random song when none (no 'What should I play?' when the tab shows a song list)"
+ },
+ {
+  "id": "real#rp3-18",
+  "subset": "real",
+  "world": "media.music",
+  "tab": "music",
+  "context": [
+   "open the music tab"
+  ],
+  "text": "play a random song",
+  "op": "music.random",
+  "slots": [],
+  "source": "sonnet+hand-checked",
+  "expect": "media.music: plays a random known song and names it (must not look for a song called 'play a random song')"
+ },
+ {
+  "id": "real#rp5-17",
+  "subset": "real",
+  "world": "ui.avatar",
+  "tab": "robot",
+  "context": [],
+  "text": "make a big mouth",
+  "op": "avatar.resizePart",
+  "slots": [
+   {
+    "key": "arg.part",
+    "span": null,
+    "text": "mouth",
+    "value": "mouth"
+   },
+   {
+    "key": "arg.dir",
+    "span": null,
+    "text": "big",
+    "value": "bigger"
+   }
+  ],
+  "source": "sonnet+hand-checked",
+  "expect": "ui.avatar: big mouth / widest smile (today the translation returned the text unchanged: 'unknown')"
+ }
+]
