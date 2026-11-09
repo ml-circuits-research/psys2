@@ -119,9 +119,10 @@ export function createMicLock({ name = 'psys2-mic', onLost, wait = 120 } = {}) {
     else if (m.type === 'takeover' && owned) { drop(); onLost?.(); }
   };
   const hold = (opts) => new Promise((resolve) => {
-    let settled = false;
+    let settled = false, granted = false;
     const done = (v) => { if (!settled) { settled = true; resolve(v); } };
-    Promise.resolve(locks.request(name, opts, (l) => { if (!l) { done(false); return undefined; } return new Promise((r) => { releaseLock = r; done(true); }); })).catch(() => done(false));
+    // a stolen lock rejects the request: the old owner learns it lost the microphone even when the channel message is late (a slow device)
+    Promise.resolve(locks.request(name, opts, (l) => { if (!l) { done(false); return undefined; } granted = true; return new Promise((r) => { releaseLock = r; done(true); }); })).catch(() => { done(false); if (granted && owned) { owned = false; releaseLock = null; onLost?.(); } });
   });
   return {
     owned: () => owned,

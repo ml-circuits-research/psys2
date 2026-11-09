@@ -419,8 +419,8 @@ export const SCENARIOS = {
       await useHere.asElement().click();
       await p2.waitForFunction(() => window.__sr.live(), { timeout: 5000, polling: 50 }).catch(() => {});
       check('a click on "Use it here" takes over', await p2.evaluate(() => !!window.__sr.live()));
-      await sleep(400);
-      check('the first tab stopped listening', !(await c.pg.evaluate(() => !!window.__sr.live())));
+      const stopped = await c.pg.waitForFunction(() => !window.__sr.live(), { timeout: 2000, polling: 30 }).then(() => true).catch(() => false);
+      check('the first tab stopped listening within 2 s', stopped);
     } finally { await p2?.close().catch(() => {}); await c.close(); }
   },
   /** NOISE: room talk in the always-open mic is ignored (greyed, tap to send anyway); real commands run. */
@@ -457,6 +457,47 @@ export const SCENARIOS = {
         const last = await c.pg.$$eval('.p2-msg.is-user', (e) => e.at(-1)?.classList.contains('is-ignored'));
         check(`real command executed: ${t}`, got !== null && !last);
       }
+    } finally { await c.close(); }
+  },
+  /** MOBILE-VOICE: the phone export (108 records) through the fake Android cumulative-final recognizer, real timings (gaps over 6 s cut to 6 s). */
+  async replay(o) {
+    const { readFileSync } = await import('node:fs');
+    const data = JSON.parse(readFileSync(new URL('../training/eval/real-phrases-2026-11-09f-mobile.json', import.meta.url), 'utf8'));
+    const rows = data.records.map((r) => ({ text: r.text, t: Date.parse(r.time) })).sort((a, b) => a.t - b.t);
+    const c = await open(o, { language: 'ro' });
+    try {
+      await c.pg.evaluate(() => {
+        window.__rp = { viol: 0, busyAt: 0, maxQueue: 0, tabs: [], sent: [], base: document.querySelector('.p2-tab[aria-selected="true"]')?.id ?? null };
+        let last = window.__rp.base;
+        setInterval(() => {
+          const m = window.__rp, b = window.psys2.isBusy();
+          m.maxQueue = Math.max(m.maxQueue, window.psys2.queue.length);
+          if (!b) m.busyAt = 0; else { m.busyAt ||= performance.now(); if (performance.now() - m.busyAt > 150 && window.__sr.live()) m.viol++; }
+          const tab = document.querySelector('.p2-tab[aria-selected="true"]')?.id ?? null;
+          if (tab !== last) { last = tab; m.tabs.push({ tab, msg: [...document.querySelectorAll('.p2-msg.is-user .p2-bubble')].at(-1)?.textContent ?? '' }); }
+        }, 20);
+      });
+      await c.pg.click('button.p2-mic'); await waitRec(c);
+      let prev = rows[0].t, fed = 0, paused = 0;
+      for (const r of rows) {
+        await sleep(Math.min(Math.max(0, r.t - prev), 6000)); prev = r.t;
+        if (await c.pg.evaluate((t) => window.__sr.final(t), r.text)) fed++; else paused++;
+      }
+      await sleep(4000); await idle(c);
+      const rp = await c.pg.evaluate(() => window.__rp);
+      const msgs = await c.pg.$$eval('.p2-msg.is-user:not(.is-ignored) .p2-bubble', (e) => e.map((x) => x.textContent.replace(/\s*ignored.*$/, '')));
+      const groups = rows.slice(1).filter((r, i) => r.t - rows[i].t > 2000).length + 1;
+      console.log(`  replay: ${rows.length} records, ${fed} heard, ${paused} while paused, ${msgs.length} messages, ${groups} utterance gaps, tab switches ${JSON.stringify(rp.tabs)}`);
+      check('at most one message per utterance', msgs.length <= groups, `${msgs.length} messages / ${groups} utterances`);
+      check('queue stayed 0', rp.maxQueue === 0 && (await c.pg.evaluate(() => window.psys2.queue.length)) === 0);
+      check('the microphone was never live during a turn', rp.viol === 0, String(rp.viol));
+      const frag = new Set(['o', 'ce', 'de', 'asta', 'mare', 'face', 'tata', 'mama', 'ia']);
+      check('no fragment was sent', !msgs.some((m) => frag.has(m.trim().toLowerCase())), msgs.filter((m) => frag.has(m.trim().toLowerCase())).join(','));
+      check('no tab switch caused by a fragment', !rp.tabs.some((x) => frag.has(x.msg.trim().toLowerCase().replace(/\s*ro\s*→.*$/, ''))), JSON.stringify(rp.tabs.filter((x) => x.msg.trim().split(/\s+/).length < 2)));
+      const st = await c.pg.evaluate(() => JSON.stringify(window.psys2.session.state()));
+      check('the heart is drawn', /heart|inim/i.test(st));
+      check('the house is drawn', /house|cas/i.test(st));
+      check('replay: no page errors', c.errors.length === 0, c.errors[0] ?? '');
     } finally { await c.close(); }
   },
 };

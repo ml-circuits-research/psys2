@@ -241,10 +241,12 @@ test('NOISE: room talk is ignored, real commands, questions to the assistant and
   assert.equal((await classifyVoice('desenează o maimuță', { dryRead: longMissing })).ignore, false, 'a short one is a command lacking an argument');
   assert.equal((await classifyVoice('desenează un pește mic și albastru', { dryRead: async () => ({ complete: false, reason: 'refused', detail: { readings: [{ world: 'draw' }] } }) })).ignore, false, 'understood but unsupported');
   // the dry run cannot tell: pass; the wake word setting ignores everything not addressed
-  assert.equal((await classifyVoice('blah blah', { dryRead: async () => ({ complete: false, reason: 'busy' }) })).ignore, false);
+  assert.equal((await classifyVoice('deschide muzica', { dryRead: async () => ({ complete: false, reason: 'busy' }) })).ignore, false);
+  assert.equal((await classifyVoice('blah blah', { dryRead: async () => ({ complete: false, reason: 'busy' }) })).ignore, true, 'cheap signals when the dry run cannot tell');
   assert.equal((await classifyVoice('deschide muzica', { dryRead, wake: true })).ignore, true);
   assert.equal((await classifyVoice('robotule deschide muzica', { dryRead, wake: true })).ignore, false);
-  assert.equal((await classifyVoice('blah blah', { dryRead, slow: true })).ignore, false, 'slow device: no dry run, no ignoring');
+  for (const l of lines) assert.equal((await classifyVoice(l, { slow: true })).ignore, true, `slow device, cheap signals: ${l}`);
+  for (const l of ['draw a heart', 'desenează o casă', 'desenează trei nori', 'deschide muzica', 'make a house', 'how many legs has a cow', 'ce pot să zic?']) assert.equal((await classifyVoice(l, { slow: true })).ignore, false, `slow device: ${l}`);
 });
 
 test('settings: a saved handsFree no longer starts the microphone', () => {

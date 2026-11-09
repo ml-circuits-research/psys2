@@ -24,7 +24,7 @@ export async function classifyVoice(text, { dryRead, language, wake = false, wak
   if (isAddressed(t, wakeWords)) return { ignore: false, reason: 'addressed' };
   if (wake) return { ignore: true, reason: 'wake word' };
   if (isAssistantQuestion(t)) return { ignore: false, reason: 'question' };
-  if (slow || !dryRead) return { ignore: false, reason: 'unchecked' };
+  if (slow || !dryRead) return cheap(t);
   // the session language may still be the other one (the first Romanian sentence of an English session): the text is read in both and passes when either reads it
   const langs = [language, language === 'ro' ? 'en' : 'ro'].filter((x, k, a) => x && a.indexOf(x) === k);
   let verdict = { ignore: true, reason: 'no reading' };
@@ -35,14 +35,28 @@ export async function classifyVoice(text, { dryRead, language, wake = false, wak
   }
   return verdict;
 }
+/** Cheap signals, no dry run (slow device, busy, late): a command verb or a domain word near the start, or a question word first, makes a command; anything else is room talk. */
+const VERBS = new Set(['draw', 'make', 'add', 'put', 'move', 'delete', 'remove', 'show', 'open', 'close', 'play', 'start', 'set', 'change', 'turn', 'go', 'find', 'search', 'tell', 'give', 'create', 'write', 'rename', 'select', 'undo', 'redo', 'clear', 'erase', 'paint', 'color', 'colour', 'fill', 'rotate', 'resize', 'zoom', 'list', 'display', 'become', 'be', 'sing', 'stop', 'next', 'help', 'cancel', 'please', 'let', 'switch', 'pick', 'choose', 'guess', 'read', 'say', 'fa', 'fac', 'pun', 'mut', 'fii']);
+const VERB_STEMS = ['desen', 'deschid', 'arat', 'cant', 'sterg', 'adaug', 'schimb', 'scri', 'caut', 'alege', 'porne', 'opre', 'inchid', 'selecteaz', 'creeaz', 'redenum', 'afis', 'marest', 'micsor', 'rotest', 'colorea', 'vopse', 'joac', 'incep', 'devin', 'transform', 'spune-', 'redau', 'reda', 'anulea', 'inapoi', 'urmator', 'ajutor', 'ghicest', 'citest', 'alatur', 'muta', 'pune', 'fa-'];
+const QWORDS = new Set(['what', 'how', 'who', 'where', 'when', 'which', 'why', 'is', 'are', 'does', 'do', 'can', 'could', 'ce', 'cum', 'cine', 'unde', 'cand', 'care', 'cate', 'cati', 'cat', 'de', 'cati']);
+const NOUN_STEMS = ['cas', 'house', 'inim', 'heart', 'copac', 'tree', 'soare', 'sun', 'cloud', 'nor', 'pest', 'fish', 'flor', 'flower', 'hart', 'map', 'muzic', 'music', 'song', 'sah', 'chess', 'joc', 'game', 'hangman', 'diagram', 'chart', 'grafic', 'document', 'titl', 'chapter', 'capitol', 'robot', 'avatar', 'emoji', 'cerc', 'circle', 'square', 'patrat', 'triang', 'animal', 'vaca', 'cow', 'legs'];
+export function cheap(text) {
+  const w = fold(text).split(' ').filter(Boolean);
+  if (w.length < 2 && !VERBS.has(w[0]) && !VERB_STEMS.some((s) => w[0]?.startsWith(s))) return { ignore: true, reason: 'cheap: one word' };
+  const head = w.slice(0, 3);
+  const verb = head.some((x) => VERBS.has(x) || (x.length >= 4 && VERB_STEMS.some((s) => x.startsWith(s))));
+  const noun = w.some((x) => x.length >= 3 && NOUN_STEMS.some((s) => x.startsWith(s)));
+  if (verb || (QWORDS.has(w[0]) && w.length >= 3) || (noun && w.length <= 6)) return { ignore: false, reason: 'cheap: command shape' };
+  return { ignore: true, reason: 'cheap: no command shape' };
+}
 async function judge(t, dryRead, language) {
   let r = null;
   try { r = await dryRead(t, { language, detail: true }); } catch { r = null; }
-  if (!r) return { ignore: false, reason: 'unchecked' };
+  if (!r) return cheap(t);
   if (r.complete) return { ignore: false, reason: 'complete' };
-  if (['busy', 'deadline', 'error', 'empty'].includes(r.reason)) return { ignore: false, reason: 'unchecked' };
+  if (['busy', 'deadline', 'error', 'empty'].includes(r.reason)) return cheap(t);
   const readings = r.detail?.readings;
-  if (!Array.isArray(readings)) return { ignore: false, reason: 'unchecked' };
+  if (!Array.isArray(readings)) return cheap(t);
   if (r.reason === 'refused') return { ignore: false, reason: 'understood' };   // understood but unsupported: the person gets the answer
   const worldWord = readings.some((x) => x?.world && !x.unparsed);
   // a world word in a long text that still has no complete reading ("tata ce pot sa zic") is room talk that happens to contain one; a short one ("play") is a command that lacks an argument
