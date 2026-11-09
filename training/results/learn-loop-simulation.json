@@ -1,0 +1,521 @@
+{
+ "date": "2026-11-09",
+ "mode": "encoder+n1",
+ "rules": {
+  "minWorldScore": 0.8,
+  "minPieceMargin": 2,
+  "minSegGap": 1,
+  "allowSpell": false
+ },
+ "inputs": {
+  "messages": 2621
+ },
+ "labelled": {
+  "messages": 1992,
+  "rows": 2013,
+  "by_world": {
+   "art.draw": 109,
+   "data.charts": 101,
+   "docs.editor": 108,
+   "docs.reader": 151,
+   "games.chess": 98,
+   "games.guess": 103,
+   "games.hangman": 107,
+   "games.tictactoe": 88,
+   "geo.map": 111,
+   "kids.animals": 86,
+   "kids.arith": 95,
+   "kids.common": 105,
+   "kids.shapes": 111,
+   "kids.shop": 75,
+   "kids.tasks": 87,
+   "kids.time": 105,
+   "media.music": 104,
+   "ui.avatar": 84,
+   "ui.help": 109,
+   "ui.shell": 76
+  },
+  "precision": {
+   "world": {
+    "n": 1971,
+    "ok": 1968,
+    "pct": 99.8
+   },
+   "circuit": {
+    "n": 1981,
+    "ok": 1946,
+    "pct": 98.2
+   },
+   "wrong": [
+    {
+     "text": "evening sunset look pls",
+     "world": "art.draw,art.draw",
+     "gold_world": "art.draw",
+     "circuit_ok": false,
+     "world_ok": null
+    },
+    {
+     "text": "hey make the second one bold",
+     "world": "docs.editor",
+     "gold_world": "docs.editor",
+     "circuit_ok": false,
+     "world_ok": true
+    },
+    {
+     "text": "my docs?",
+     "world": "docs.reader",
+     "gold_world": "docs.reader",
+     "circuit_ok": false,
+     "world_ok": true
+    },
+    {
+     "text": "show me my documents",
+     "world": "docs.reader",
+     "gold_world": "docs.reader",
+     "circuit_ok": false,
+     "world_ok": true
+    },
+    {
+     "text": "where does the story happen, list places",
+     "world": "docs.reader,docs.reader",
+     "gold_world": "docs.reader",
+     "circuit_ok": false,
+     "world_ok": null
+    },
+    {
+     "text": "show my documents",
+     "world": "docs.reader",
+     "gold_world": "docs.reader",
+     "circuit_ok": false,
+     "world_ok": true
+    },
+    {
+     "text": "where are my castles (rooks)",
+     "world": "games.chess",
+     "gold_world": "games.chess",
+     "circuit_ok": false,
+     "world_ok": true
+    },
+    {
+     "text": "make the engine stronger, level five",
+     "world": "games.chess,games.chess",
+     "gold_world": "games.chess",
+     "circuit_ok": false,
+     "world_ok": null
+    },
+    {
+     "text": "Let's start the guessing game.",
+     "world": "games.guess",
+     "gold_world": "games.guess",
+     "circuit_ok": false,
+     "world_ok": true
+    },
+    {
+     "text": "lets start the guessing game",
+     "world": "games.guess",
+     "gold_world": "games.guess",
+     "circuit_ok": false,
+     "world_ok": true
+    },
+    {
+     "text": "start twenty questions",
+     "world": "games.guess",
+     "gold_world": "games.guess",
+     "circuit_ok": false,
+     "world_ok": true
+    },
+    {
+     "text": "lets play 20 questions",
+     "world": "games.guess",
+     "gold_world": "games.guess",
+     "circuit_ok": false,
+     "world_ok": true
+    },
+    {
+     "text": "begin the guess game pls",
+     "world": "games.guess",
+     "gold_world": "games.guess",
+     "circuit_ok": false,
+     "world_ok": true
+    },
+    {
+     "text": "can we start the guessing game",
+     "world": "games.guess",
+     "gold_world": "games.guess",
+     "circuit_ok": false,
+     "world_ok": true
+    },
+    {
+     "text": "you got it wrong, it was a tiger",
+     "world": "games.guess,games.guess",
+     "gold_world": "games.guess",
+     "circuit_ok": false,
+     "world_ok": null
+    },
+    {
+     "text": "new hangman, it's giraffe",
+     "world": "games.hangman,games.hangman",
+     "gold_world": "games.hangman",
+     "circuit_ok": false,
+     "world_ok": null
+    },
+    {
+     "text": "i can't guess it, give up",
+     "world": "games.hangman",
+     "gold_world": "games.hangman",
+     "circuit_ok": false,
+     "world_ok": true
+    },
+    {
+     "text": "x goes first, that's me",
+     "world": "kids.common",
+     "gold_world": "games.tictactoe",
+     "circuit_ok": true,
+     "world_ok": false
+    },
+    {
+     "text": "dumb it down, easy level",
+     "world": "games.tictactoe,games.tictactoe",
+     "gold_world": "games.tictactoe",
+     "circuit_ok": false,
+     "world_ok": null
+    },
+    {
+     "text": "you win, i quit",
+     "world": "games.tictactoe,games.tictactoe",
+     "gold_world": "games.tictactoe",
+     "circuit_ok": false,
+     "world_ok": null
+    },
+    {
+     "text": "can you highlight italy, portugal",
+     "world": "geo.map,geo.map",
+     "gold_world": "geo.map",
+     "circuit_ok": false,
+     "world_ok": null
+    },
+    {
+     "text": "name's zed by the way",
+     "world": "kids.common",
+     "gold_world": "kids.common",
+     "circuit_ok": false,
+     "world_ok": true
+    },
+    {
+     "text": "what is your nickname",
+     "world": "kids.common",
+     "gold_world": "kids.common",
+     "circuit_ok": false,
+     "world_ok": true
+    },
+    {
+     "text": "thanks buddy, you are great",
+     "world": "kids.common,kids.common",
+     "gold_world": "kids.common",
+     "circuit_ok": false,
+     "world_ok": null
+    },
+    {
+     "text": "can u put socks on my garden list",
+     "world": "kids.tasks",
+     "gold_world": "kids.tasks",
+     "circuit_ok": false,
+     "world_ok": true
+    },
+    {
+     "text": "can you play happy birthday using the bells sound",
+     "world": "media.music,media.music",
+     "gold_world": "media.music",
+     "circuit_ok": false,
+     "world_ok": null
+    },
+    {
+     "text": "play happy birthday, bells please",
+     "world": "media.music,media.music",
+     "gold_world": "media.music",
+     "circuit_ok": false,
+     "world_ok": null
+    },
+    {
+     "text": "Show the sheet music.",
+     "world": "media.music",
+     "gold_world": "media.music",
+     "circuit_ok": false,
+     "world_ok": true
+    },
+    {
+     "text": "show the sheet music",
+     "world": "media.music",
+     "gold_world": "media.music",
+     "circuit_ok": false,
+     "world_ok": true
+    },
+    {
+     "text": "sheet music pls",
+     "world": "media.music",
+     "gold_world": "media.music",
+     "circuit_ok": false,
+     "world_ok": true
+    },
+    {
+     "text": "what could i say, give examples",
+     "world": "ui.help,ui.help",
+     "gold_world": "ui.help",
+     "circuit_ok": false,
+     "world_ok": null
+    },
+    {
+     "text": "draw a circle how",
+     "world": "ui.help",
+     "gold_world": "ui.help",
+     "circuit_ok": false,
+     "world_ok": true
+    },
+    {
+     "text": "i want to draw a circle, how",
+     "world": "ui.help",
+     "gold_world": "ui.help",
+     "circuit_ok": false,
+     "world_ok": true
+    },
+    {
+     "text": "I am lost.",
+     "world": "ui.help",
+     "gold_world": "ui.help",
+     "circuit_ok": false,
+     "world_ok": true
+    },
+    {
+     "text": "i am lost",
+     "world": "ui.help",
+     "gold_world": "ui.help",
+     "circuit_ok": false,
+     "world_ok": true
+    },
+    {
+     "text": "i am lost pls",
+     "world": "ui.help",
+     "gold_world": "ui.help",
+     "circuit_ok": false,
+     "world_ok": true
+    },
+    {
+     "text": "Delete the last list",
+     "world": "kids.tasks",
+     "gold_world": "docs.editor",
+     "circuit_ok": null,
+     "world_ok": false
+    },
+    {
+     "text": "Delete the last list",
+     "world": "kids.tasks",
+     "gold_world": "docs.editor",
+     "circuit_ok": null,
+     "world_ok": false
+    }
+   ]
+  }
+ },
+ "queued": {
+  "messages": 629,
+  "by_world_candidate": {
+   "ui.avatar": 73,
+   "ui.shell": 59,
+   "art.draw": 49,
+   "kids.tasks": 49,
+   "kids.animals": 40,
+   "docs.reader": 37,
+   "kids.shop": 34,
+   "kids.common": 30,
+   "games.tictactoe": 29,
+   "games.chess": 27,
+   "unknown": 25,
+   "docs.editor": 22,
+   "games.guess": 22,
+   "kids.arith": 22,
+   "media.music": 20,
+   "kids.shapes": 20,
+   "games.hangman": 18,
+   "data.charts": 16,
+   "geo.map": 16,
+   "kids.time": 11,
+   "ui.help": 10
+  },
+  "top_groups": [
+   [
+    "kids.common::none",
+    12
+   ],
+   [
+    "games.guess::none",
+    12
+   ],
+   [
+    "ui.avatar::none",
+    10
+   ],
+   [
+    "art.draw::pat.art.draw.add",
+    8
+   ],
+   [
+    "kids.animals::pat.kids.animals.tl",
+    7
+   ],
+   [
+    "kids.arith::pat.kids.arith.sw.buy.mod",
+    7
+   ],
+   [
+    "kids.shop::pat.kids.shop.money",
+    6
+   ],
+   [
+    "ui.avatar::pat.ui.avatar.step.next",
+    6
+   ],
+   [
+    "ui.shell::pat.ui.shell.hint3",
+    6
+   ],
+   [
+    "ui.shell::pat.ui.shell.giveup.v3b",
+    6
+   ],
+   [
+    "ui.shell::pat.ui.shell.back",
+    6
+   ],
+   [
+    "kids.shop::pat.kids.shop.sw.st.expense.verb",
+    5
+   ],
+   [
+    "ui.avatar::pat.ui.avatar.setpart",
+    5
+   ],
+   [
+    "unknown::pat.media.music.replay",
+    4
+   ],
+   [
+    "kids.common::pat.kids.common.w.bye",
+    4
+   ],
+   [
+    "kids.shop::pat.kids.shop.expense",
+    4
+   ],
+   [
+    "kids.shop::pat.kids.shop.sw.st.price.bare",
+    4
+   ],
+   [
+    "kids.shop::pat.kids.shop.sw.st.price.verb",
+    4
+   ],
+   [
+    "kids.tasks::pat.kids.tasks.sw.lists",
+    4
+   ],
+   [
+    "ui.avatar::pat.ui.avatar.setpart.on",
+    4
+   ],
+   [
+    "ui.avatar::pat.ui.avatar.x2.next.hair",
+    4
+   ],
+   [
+    "ui.shell::pat.media.music.x.q.above2",
+    4
+   ],
+   [
+    "games.chess::pat.games.chess.cap.square",
+    4
+   ],
+   [
+    "games.tictactoe::pat.games.tictactoe.move",
+    4
+   ],
+   [
+    "art.draw::pat.art.draw.recolor",
+    4
+   ],
+   [
+    "unknown::pat.docs.reader.sw.search.word",
+    3
+   ],
+   [
+    "games.chess::pat.games.chess.sw.can_ok",
+    3
+   ],
+   [
+    "kids.common::pat.kids.common.x.meet.iam",
+    3
+   ],
+   [
+    "kids.tasks::pat.kids.tasks.w.show.lists",
+    3
+   ],
+   [
+    "kids.tasks::pat.kids.tasks.w.chk.f1",
+    3
+   ]
+  ],
+  "reasons": {
+   "status_not_supported": 540,
+   "not_dispatcher_reading": 305,
+   "generated_or_invalid_reading": 300,
+   "no_observable_effect": 298,
+   "not_understood": 284,
+   "unparsed_piece": 266,
+   "not_top_world": 71,
+   "untranslated_text": 59,
+   "low_world_score": 55,
+   "partial_reading": 49,
+   "not_original_text": 49,
+   "ignored_words": 35,
+   "piece_not_in_trace": 35,
+   "small_segmentation_gap": 28,
+   "discourse_or_modal": 24,
+   "spelling_correction": 14,
+   "normalizer_reading": 12,
+   "best_effort": 4,
+   "small_world_margin": 4,
+   "simplified_reading": 4,
+   "no_pieces": 1
+  },
+  "gold_in_queue": {
+   "world": {
+    "n": 509,
+    "ok": 221
+   },
+   "circuit": {
+    "n": 256,
+    "ok": 191
+   }
+  }
+ },
+ "skipped": {
+  "feedback": 0,
+  "errors": 0
+ },
+ "by_source": {
+  "gold": {
+   "messages": 2237,
+   "labelled": 1981,
+   "queued": 256
+  },
+  "simlong": {
+   "messages": 8,
+   "labelled": 0,
+   "queued": 8
+  },
+  "simro": {
+   "messages": 376,
+   "labelled": 11,
+   "queued": 365
+  }
+ }
+}

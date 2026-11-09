@@ -6,6 +6,8 @@
  *   - training/data/*.jsonl              generators + rule-derived (run `node scripts/export-training.mjs` first; done
  *                                        automatically when the directory has no jsonl)
  *   - training/paraphrases/out/*.jsonl   paraphrase records (spec 10)
+ *   - training/phrase-logs/labelled/*.jsonl  self-validated rows of the learning loop (D5, scripts/learn-from-logs.mjs): dataset-format records
+ *                                        (label_status self-validated, weight 0.8), one per segment, with a circuit; they also feed routing.jsonl
  *   - training/phrase-logs/*.jsonl       optional phrase-log exports of the webchat (docs/webchat/ui/phrase-log.mjs):
  *                                        they carry no circuit, so they go to unlabelled.jsonl; records routed to exactly one
  *                                        world also feed routing.jsonl
@@ -60,6 +62,7 @@ function classify(r) {
   if (!circuit || (out.source === 'paraphrase' && r.target_from == null)) { out.unlabelled = 'no_target'; return out; }
   if (status === 'generator-disagrees') { out.weight = 0.5; out.flagged = true; }
   else if (out.source === 'paraphrase' && r.target_from === 'canonical') out.weight = 0.8;
+  else if (status === 'self-validated') out.weight = 0.8;   // D5: the validation layer's own reading of a real phrase (scripts/learn-from-logs.mjs)
   return out;
 }
 
@@ -90,6 +93,7 @@ function ingest(file, requireWorld) {
 }
 for (const f of listJsonl(join(SRC, 'data'))) ingest(f);
 for (const f of listJsonl(join(SRC, 'paraphrases/out'))) ingest(f);
+for (const f of listJsonl(join(ROOT, 'training/phrase-logs/labelled'))) ingest(f);   // D5 self-validated rows (dataset-record format, one per segment)
 
 // ---- dedupe by normalized text (+ context) per world; keep the most trustworthy ----------------------------------------
 const rank = (r) => (r._review ? -1 : r.weight) * 10 + (r.source === 'paraphrase' ? 2 : r.source === 'generator' ? 1 : 0) + (r.negative ? -0.5 : 0);
@@ -156,7 +160,7 @@ for (const [f, lines] of files) writeFileSync(f, lines.join('\n') + '\n');
 
 // ---- phrase logs ----------------------------------------------------------------------------------------------------------------
 const phraseRouted = [];
-for (const f of listJsonl(join(ROOT, 'training/phrase-logs'))) {
+for (const f of listJsonl(join(ROOT, 'training/phrase-logs')).filter((x) => !x.endsWith('/review.jsonl'))) {   // review.jsonl is the D5 queue, not a log
   const recs = readJsonl(f).filter((r) => r && typeof r.text === 'string' && r.source !== 'chip' && r.mode !== 'chip')
     .sort((a, b) => String(a.time ?? '').localeCompare(String(b.time ?? '')));
   const recent = [];
