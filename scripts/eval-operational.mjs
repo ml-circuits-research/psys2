@@ -80,6 +80,7 @@ export async function runCase(engine, settings, c) {
     reply: replyText.slice(0, 240), statuses: reply.statuses,
     failing: items.filter((x) => !x.ok && !(x.trivial && items.some((y) => !y.trivial))).map((x) => `${x.kind}:${x.spec}${x.actual !== undefined ? ` (got ${String(x.actual).slice(0, 60)})` : ''}`),
     trivial: items.filter((x) => x.trivial).length,
+    n_items: items.filter((x) => !(x.trivial && items.some((y) => !y.trivial))).length,
     strategy: [...new Set(reply.segments.map((x) => x.strategy))].join(','),
     ...(last ? {} : {}),
   };
@@ -92,6 +93,13 @@ function tally(rows) {
   return { ...t, right_pct: pct(t.right, t.n), partly_pct: pct(t.partly, t.n), wrong_pct: pct(t.wrong, t.n), not_understood_pct: pct(t.not_understood, t.n) };
 }
 const quant = (a, q) => { const s = [...a].sort((x, y) => x - y); return s.length ? Math.round(s[Math.min(s.length - 1, Math.floor(q * s.length))]) : 0; };
+
+/** Bucket tally for the length tags (mid = 4-8 commands, long = 9-15): the outcome counts plus the expectation items kept/missed (omissions: an item of the gold that did not hold). */
+function tagTally(rows) {
+  const t = tally(rows);
+  const items = rows.reduce((a, r) => a + (r.n_items ?? 0), 0), missed = rows.reduce((a, r) => a + (r.failing?.length ?? 0), 0);
+  return { ...t, items, items_missed: missed, items_missed_pct: pct(missed, items) };
+}
 
 export function summarize(cases, rows) {
   const byId = new Map(cases.map((c) => [c.id, c]));
@@ -108,6 +116,7 @@ export function summarize(cases, rows) {
     headline: tally(joined),
     excluding_known_gaps: tally(joined.filter((r) => !r.c.known_gap)),
     known_gap_only: tally(joined.filter((r) => r.c.known_gap)),
+    by_tag: Object.fromEntries(['mid', 'long'].filter((t) => joined.some((r) => (r.c.tags ?? []).includes(t))).map((t) => [t, tagTally(joined.filter((r) => (r.c.tags ?? []).includes(t)))])),
     by_group: group((r) => groupOf(r.world), GROUP_ORDER),
     by_world: group((r) => r.world),
     by_family: Object.fromEntries(Object.entries(families).sort().map(([k, v]) => [k, tally(v)])),
@@ -168,6 +177,7 @@ async function main() {
   if (!flag('json')) {
     console.log(`mode ${mode}: ${h.n} messages  right ${h.right_pct}%  partly ${h.partly_pct}%  wrong ${h.wrong_pct}%  not understood ${h.not_understood_pct}%`);
     console.log(`  latency: cold start ${latency.cold_start_ms} ms${jobs > 1 ? ` (mean of ${latency.workers} workers)` : ''} (dispatcher load ${latency.model_load_ms.dispatcher ?? '-'} ms, normalizer load ${latency.model_load_ms.normalizer ?? '-'} ms)  first message ${latency.first_message_ms} ms  steady p50 ${latency.steady_state.p50} / p95 ${latency.steady_state.p95} ms  warm cache ${latency.warm_cache ? `p50 ${latency.warm_cache.p50} / p95 ${latency.warm_cache.p95} ms` : 'n/a (sharded)'}`);
+    for (const [g, t] of Object.entries(summary.by_tag ?? {})) console.log(`  [${g}] n=${t.n}  right ${t.right_pct}%  partly(omissions) ${t.partly_pct}%  wrong ${t.wrong_pct}%  nu ${t.not_understood_pct}%  gold items missed ${t.items_missed}/${t.items} (${t.items_missed_pct}%)`);
     for (const [g, t] of Object.entries(summary.by_group)) console.log(`  ${g.padEnd(24)} n=${String(t.n).padStart(4)}  right ${String(t.right_pct).padStart(5)}%  partly ${String(t.partly_pct).padStart(5)}%  wrong ${String(t.wrong_pct).padStart(5)}%  nu ${String(t.not_understood_pct).padStart(5)}%`);
   }
   if (!flag('no-write')) {
