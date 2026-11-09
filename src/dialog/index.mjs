@@ -18,6 +18,8 @@ import { splitSentences } from '../formalizer/rules/normalize.mjs';
 import { spellCorrect, spellAlternates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, FUNCTION_WORDS } from '../formalizer/spell.mjs';
 import { perf } from '../formalizer/perf.mjs';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs';
+import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs';
+import { checkValues } from './value-check.mjs';
 import { Discourse } from './discourse.mjs';
 import { correctMessage } from '../formalizer/rules/expand.mjs';
 
@@ -106,8 +108,10 @@ const textOf = (r) => (typeof r === 'string' ? r : r?.text);
 const QUESTION_WORD = /^(?:what|who|whom|whose|where|when|why|how|which)\b/i;
 
 export class DialogSession {
-  constructor(engine, { language = 'auto', formalizer = 'rules', spell = true, partial = false, fastPath = false } = {}) {
+  constructor(engine, { language = 'auto', formalizer = 'rules', spell = true, partial = false, fastPath = false, bestEffort = false } = {}) {
     this.engine = engine;
+    /** Best effort with loose words (spec 03 section 7.15): after everything else failed, execute the most sensible reading of the content words (off in the library, on in the shipped settings). */
+    this.bestEffort = bestEffort;
     /** Encoder fast path (PERF): when the rules read the whole message and the interpreter accepts every reading, skip the model. */
     this.fastPath = fastPath;
     /** Leniency (spec 03 sections 7.9 and 7.10): spell-correct unparsed text (on by default), accept the readable part of a message (off by default; the webchat turns it on). */
@@ -290,6 +294,55 @@ export class DialogSession {
     return null;
   }
 
+  /**
+   * Best effort with loose words (spec 03 section 7.15), the very last resort for a segment nobody read: candidate sentences are built from the
+   * pattern examples of the candidate worlds with the input's own values, read by the rules and checked by the value checker (nothing invented,
+   * nothing numeric or coloured dropped). Returns { segments } (executed) or { suggestions } (Did you mean) or null.
+   */
+  async _bestEffortSeg(seg, opts) {
+    const { set, formalizers, interp } = this.engine;
+    const P = BEST_EFFORT_POLICY;
+    const ctx = this.context();
+    const worlds = [ctx.tabWorld, ctx.modalWorld, ctx.gameWorld, ...ctx.recentWorlds, ...(seg.worlds ?? []).slice(0, 3).map((w) => w.id)]
+      .filter((w, i, a) => w && a.indexOf(w) === i && set.get(w)?.patterns?.length);
+    const cands = looseCandidates(set, seg.text, { worlds, tabWorld: ctx.tabWorld });
+    if (!cands.length) return null;
+    const norm = (wires) => JSON.stringify(wires.map((w) => [w.type, w.entries.filter((e) => !/^core\.(?:via|source|seq|span|in)$/.test(e.key)).map((e) => [e.key, e.value])]));   // what is asked, not how it was phrased
+    const verified = [];
+    for (const c of cands.slice(0, P.maxVerify)) {
+      const vc = checkValues(seg.text, c.text);
+      if (!vc.ok) continue;
+      let res;
+      try { res = await formalizers.rules.formalize(c.text, { ...opts, worlds: restrictedSet(set, [c.world]) }); } catch { continue; }
+      if (!res.segments.length || res.segments.some((x) => x.unparsed)) continue;
+      let refused = false;
+      try {
+        const f = this.forkForValidation();
+        for (const sg of res.segments) { f.isession.add(sg.wires); for (const w of sg.wires) { const r = interp.resolve(f.isession, w); if (r && (r.status === 'unsupported' || r.status === 'error')) refused = true; } }
+      } catch { /* cannot fork: accept */ }
+      if (refused) continue;
+      verified.push({ c, res, sop: norm(res.segments.flatMap((x) => x.wires)) });
+      if (verified.length >= 3) break;
+    }
+    if (!verified.length) return null;   // nothing the rules read: the usual "Did you mean" of ui.help
+    const best = verified[0];
+    const rival = verified.find((v) => v.sop !== best.sop);
+    if (rival && best.c.score - rival.c.score < P.margin) return { suggestions: [best.c.text, rival.c.text] };
+    const real = await formalizers.rules.formalize(best.c.text, { ...opts, worlds: restrictedSet(set, [best.c.world]) });
+    const segments = real.segments.map((x, k) => ({ ...x, span: seg.span, strategy: 'rules', corrections: [], ignored: [], ...(k === 0 ? { bestEffort: { took: best.c.text, ignored: best.c.ignored, world: best.c.world } } : {}) }));
+    return { segments };
+  }
+
+  async _withBestEffort(formal, opts) {
+    const segments = [];
+    for (const seg of formal.segments) {
+      const r = seg.unparsed ? await perf.time('bestEffort', () => this._bestEffortSeg(seg, opts)) : null;
+      if (r?.segments) segments.push(...r.segments);
+      else segments.push(r?.suggestions ? { ...seg, suggestions: r.suggestions } : seg);
+    }
+    return { ...formal, segments, wires: segments.flatMap((x) => x.wires) };
+  }
+
   async _withLeniency(res, opts, o) {
     if (!res.segments.some((x) => x.unparsed) || !(o.spell || o.partial)) return res;
     const segments = [];
@@ -381,7 +434,7 @@ export class DialogSession {
     } finally { if (own) perf.end(); }
   }
 
-  async _send(text, { language, formalizer, spell, partial, fastPath } = {}) {
+  async _send(text, { language, formalizer, spell, partial, fastPath, bestEffort } = {}) {
     const { engine } = this;
     const { set, interp, translator } = engine;
     const sid = `msg${++this._msg}`;
@@ -439,6 +492,9 @@ export class DialogSession {
       const bare = engine.interp.lang.stripTrailing(formalText);
       if (bare && bare !== formalText) { const f2 = await this._formalize(bare, sid, formalizer ?? this.formalizer, { spell: spell ?? this.spell, partial: partial ?? this.partial }); if (f2.segments.length && f2.segments.every((x) => !x.unparsed)) formal = f2; }
     }
+    if (!icpt && !pre && !meta && (bestEffort ?? this.bestEffort) && formal.segments.length === 1 && formal.segments[0].unparsed) {   // one unparsed clause: a fragment of a longer message is never guessed
+      formal = await this._withBestEffort(formal, { worlds: set, session: this.isession, source: sid, context: this.context(), router: this.engine.router });
+    }
     const { segments, wires, dispatch, encoderError } = formal;
     this._noteWorlds(segments);
     const tInterp = perf.active ? performance.now() : 0;
@@ -455,14 +511,20 @@ export class DialogSession {
     for (const seg of segments) {
       // a leftover made only of filler words ("also", "and", "please") next to something that was understood is not worth an error
       if (seg.unparsed && (partial ?? this.partial) && fillerOnly(seg.text) && segments.some((x) => !x.unparsed)) continue;
+      if (seg.bestEffort) {
+        const line = [T('I took that as: '), { text: `"${seg.bestEffort.took}"`, translate: false, quote: true }];
+        if (seg.bestEffort.ignored?.length) { line.push(T(' (I did not use ')); seg.bestEffort.ignored.forEach((x, k) => { if (k) line.push(T(' and ')); line.push({ text: `"${x}"`, translate: false, quote: true }); }); line.push(T(')')); }
+        lines.push(line);
+      }
       if (seg.unparsed) {
         // examples from the world of the open tab first: the router's word-overlap guess can point anywhere
         const routed = seg.worlds.map((w) => w.id), here = Object.entries(this.focus()).find(([, n]) => n >= 3)?.[0];
         let ex = examplesFor(set, here ? [here, ...routed.filter((w) => w !== here)] : routed);
         // ui.help: "Did you mean ...?" (closest examples of all worlds) and a note of what failed for "why not?"
         const helpW = set.get('ui.help');
-        const dym = helpW?.ops?.didYouMean?.({ text: seg.text, worlds: set.list(), tabWorld: here, recentWorlds: this._recentWorlds ?? [] }) ?? [];
+        const dym = [...(helpW?.ops?.didYouMean?.({ text: seg.text, worlds: set.list(), tabWorld: here, recentWorlds: this._recentWorlds ?? [] }) ?? [])];
         if (helpW) (this.isession.state['ui.help'] ??= {}).lastUnparsed = { text: seg.text, world: here ?? routed[0] ?? null, suggestions: dym };
+        if (seg.suggestions?.length) dym.splice(0, dym.length, ...seg.suggestions);   // best effort: the two best readings of the loose words
         if (dym.length) { ex = dym; this.isession.effects.push({ name: 'chat.suggest', args: { items: dym }, world: 'ui.help' }); }
         // the user's own words are quoted verbatim and never back-translated
         const quoted = lang === 'en' ? seg.text : originalSentence(text, seg, translation?.alignment);

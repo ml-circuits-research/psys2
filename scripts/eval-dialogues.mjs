@@ -93,9 +93,9 @@ export function validateDialogue(d, stateOf) {
 }
 
 // ---- pipeline ------------------------------------------------------------------------------------------------------------------
-async function buildPipeline({ mode, ortPath, modelDir, normalizerDir, editTau, ortThreads }) {
+async function buildPipeline({ mode, ortPath, modelDir, normalizerDir, editTau, ortThreads, overrides }) {
   const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT) });
-  const rt = await openNodeRuntime({ engine, mode, ortPath, dispatcherDir: modelDir, normalizerDir, editTau, ortThreads });
+  const rt = await openNodeRuntime({ engine, mode, ortPath, dispatcherDir: modelDir, normalizerDir, editTau, ortThreads, overrides });
   return { engine, ...rt };
 }
 
@@ -185,7 +185,7 @@ async function main() {
   if (!MODES[mode]) throw new Error(`--mode must be one of ${Object.keys(MODES).join(' | ')}`);
   const modelDir = arg('model-dir', join(REPO, 'docs/webchat/models/dispatcher'));
   const normalizerDir = arg('normalizer-dir', join(REPO, 'docs/webchat/models/normalizer'));
-  const popts = { mode, ortPath: arg('ort'), modelDir, normalizerDir, editTau: arg('edit-tau') !== undefined ? Number(arg('edit-tau')) : undefined };
+  const popts = { mode, ortPath: arg('ort'), modelDir, normalizerDir, editTau: arg('edit-tau') !== undefined ? Number(arg('edit-tau')) : undefined, overrides: arg('best-effort') ? { bestEffort: arg('best-effort') !== 'off' } : {} };   // --best-effort on|off: A/B of spec 03 7.15
   const jobs = Math.max(1, Math.min(parseJobs(), ds.length || 1));
   let rows, info;
   if (jobs === 1) {
@@ -195,7 +195,7 @@ async function main() {
     for (const d of ds) rows.push(await runDialogue(pipe.engine, pipe.settings, d));
   } else {
     rows = await runSharded({ file: SELF, items: ds, jobs, workerData: { ...popts, ortThreads: mode === 'rules' ? 0 : 1 }, chunk: 2 });
-    info = { mode, settings: runtimeSettings(settingsForMode(mode)), hashes: mode === 'rules' ? null : modelHashes({ dispatcherDir: resolve(modelDir), normalizerDir: resolve(normalizerDir), withNormalizer: settingsForMode(mode).normalizer !== false }) };
+    info = { mode, settings: runtimeSettings({ ...settingsForMode(mode), ...popts.overrides }), hashes: mode === 'rules' ? null : modelHashes({ dispatcherDir: resolve(modelDir), normalizerDir: resolve(normalizerDir), withNormalizer: settingsForMode(mode).normalizer !== false }) };
   }
   if (flag('verbose') && !flag('json')) {
     for (const r of rows) for (const t of r.turns) if (t.outcome !== 'right') console.log(`${t.outcome.padEnd(14)} ${r.id} turn ${t.i + 1} "${ds.find((d) => d.id === r.id).turns[t.i].message}" -> ${t.reply ?? t.error}  [${(t.failing ?? []).join('; ')}]`);

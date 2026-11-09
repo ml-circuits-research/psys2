@@ -15,6 +15,7 @@ export const RUNTIME_DEFAULTS = Object.freeze({
   partialUnderstanding: true,     // execute what was understood and say what was ignored (7.10)
   normalizer: true,               // seq2seq phrasing normalizer, a fallback only (7.12, 7.13)
   spellcheck: true,               // spell correction against the worlds' vocabulary (7.9)
+  bestEffort: true,               // after everything else failed, execute the most sensible reading of loose words and say what was understood (7.15)
   fastPath: false,                // encoder only: skip the model when the rules read the whole message and the interpreter accepts it (PERF; the webchat turns it on)
 });
 
@@ -51,7 +52,7 @@ export function policyFromSettings(settings) {
 
 /** Options of `engine.createSession` for a settings object. */
 export function sessionOptions(settings, extra = {}) {
-  return { formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, ...(settings.fastPath === true ? { fastPath: true } : {}), ...extra };
+  return { formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, ...(settings.fastPath === true ? { fastPath: true } : {}), ...extra };
 }
 
 /**

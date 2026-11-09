@@ -7,6 +7,8 @@ test('the webchat defaults are the runtime defaults, and the shipped mode is enc
   // fastPath is the one documented webchat override: the webchat answers at once when the rules read a whole clause (spec 06 Performance)
   for (const k of Object.keys(RUNTIME_DEFAULTS).filter((x) => x !== 'fastPath')) assert.equal(DEFAULT_SETTINGS[k], RUNTIME_DEFAULTS[k], k);
   assert.equal(DEFAULT_MODE, 'encoder+n1');
+  assert.equal(RUNTIME_DEFAULTS.bestEffort, true);   // best effort with loose words is on by default (spec 03 7.15)
+  assert.equal(sessionOptions({ ...RUNTIME_DEFAULTS, bestEffort: false }).bestEffort, false);
   assert.deepEqual(settingsForMode(DEFAULT_MODE), { ...RUNTIME_DEFAULTS });
 });
 
@@ -23,5 +25,5 @@ test('policy and session options follow the settings', () => {
   const live = { ...RUNTIME_DEFAULTS };
   live.spellcheck = false;
   assert.equal(policyFromSettings(live).trySpell, false);
-  assert.deepEqual(sessionOptions(settingsForMode('rules'), { language: 'en' }), { formalizer: 'rules', spell: true, partial: true, language: 'en' });
+  assert.deepEqual(sessionOptions(settingsForMode('rules'), { language: 'en' }), { formalizer: 'rules', spell: true, partial: true, bestEffort: true, language: 'en' });
 });

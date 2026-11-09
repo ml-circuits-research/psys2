@@ -45,9 +45,9 @@ export function loadCases(file) {
 }
 
 // ---- pipeline construction (the one place that differs per mode; the settings come from src/dialog/runtime-config.mjs) -------------
-async function buildPipeline({ mode, ortPath, modelDir, normalizerDir, editTau, ortThreads }) {
+async function buildPipeline({ mode, ortPath, modelDir, normalizerDir, editTau, ortThreads, overrides }) {
   const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT) });
-  const rt = await openNodeRuntime({ engine, mode, ortPath, dispatcherDir: modelDir, normalizerDir, editTau, ortThreads });
+  const rt = await openNodeRuntime({ engine, mode, ortPath, dispatcherDir: modelDir, normalizerDir, editTau, ortThreads, overrides });
   return { engine, ...rt };
 }
 
@@ -128,7 +128,7 @@ async function main() {
   if (!MODES[mode]) throw new Error(`--mode must be one of ${Object.keys(MODES).join(' | ')}`);
   const modelDir = arg('model-dir', arg('model', join(REPO, 'docs/webchat/models/dispatcher')));
   const normalizerDir = arg('normalizer-dir', join(REPO, 'docs/webchat/models/normalizer'));
-  const popts = { mode, ortPath: arg('ort'), modelDir, normalizerDir, editTau: arg('edit-tau') !== undefined ? Number(arg('edit-tau')) : undefined };
+  const popts = { mode, ortPath: arg('ort'), modelDir, normalizerDir, editTau: arg('edit-tau') !== undefined ? Number(arg('edit-tau')) : undefined, overrides: arg('best-effort') ? { bestEffort: arg('best-effort') !== 'off' } : {} };   // --best-effort on|off: A/B of spec 03 7.15
   const jobs = Math.max(1, Math.min(parseJobs(), cases.length || 1));
   const note = (c, r) => {
     if (flag('replies') && !flag('json')) console.log(`${c.id}\t${r.outcome}\t${JSON.stringify(r.reply ?? r.error ?? null)}`);
@@ -156,7 +156,7 @@ async function main() {
     const firstIds = new Set(rows.filter((r) => r._load).map((r) => r.id));
     for (const r of rows) delete r._load;
     const dDir = resolve(modelDir);
-    info = { mode, settings: runtimeSettings(settingsForMode(mode)), hashes: mode === 'rules' ? null : modelHashes({ dispatcherDir: dDir, normalizerDir: resolve(normalizerDir), withNormalizer: settingsForMode(mode).normalizer !== false }) };
+    info = { mode, settings: runtimeSettings({ ...settingsForMode(mode), ...popts.overrides }), hashes: mode === 'rules' ? null : modelHashes({ dispatcherDir: dDir, normalizerDir: resolve(normalizerDir), withNormalizer: settingsForMode(mode).normalizer !== false }) };
     const mean = (k) => Math.round(loads.reduce((x, l) => x + l[k], 0) / (loads.length || 1));
     latency = { jobs, workers: loads.length, cold_start_ms: mean('cold_start_ms'), cold_start_ms_max: Math.max(0, ...loads.map((l) => l.cold_start_ms)), model_load_ms: { dispatcher: loads[0]?.load_ms.dispatcher ?? null, normalizer: loads[0]?.load_ms.normalizer ?? null, note: 'first worker; per worker in per_worker' }, first_message_ms: mean('first_message_ms'), steady_state: lat(rows.filter((r) => !firstIds.has(r.id)).map((r) => r.ms)), warm_cache: null, normalizer_propose: null, contention: 'per-message latency includes CPU contention of the other workers; use --jobs 1 for single-thread latency', per_worker: loads };
   }

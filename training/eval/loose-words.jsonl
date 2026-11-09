@@ -1,0 +1,670 @@
+{"world":"kids.arith","tab":null,"setup":[],"message":"apples tom how many pls","intent":"How many apples does Tom have?","kind":"recover"}
+{"world":"kids.arith","tab":null,"setup":[],"message":"4 8 add pls","intent":"Add 4 and 8.","kind":"recover"}
+{"world":"kids.arith","tab":null,"setup":[],"message":"7 plus 5 ok","intent":"What is 7 plus 5?","kind":"recover"}
+{"world":"kids.arith","tab":"draw","setup":[],"message":"3 times 4 yo","intent":"What is 3 times 4?","kind":"recover"}
+{"world":"kids.arith","tab":null,"setup":[],"message":"12 minus 5 thx","intent":"What is 12 minus 5?","kind":"recover"}
+{"world":"kids.arith","tab":null,"setup":[],"message":"divide 20 4","intent":"Divide 20 by 4.","kind":"recover"}
+{"world":"kids.arith","tab":null,"setup":[],"message":"half 10 pls","intent":"What is half of 10?","kind":"recover"}
+{"world":"kids.arith","tab":"robot","setup":[],"message":"double 6","intent":"What is double 6?","kind":"recover"}
+{"world":"kids.arith","tab":null,"setup":[],"message":"pears tom ana more","intent":"Does Tom have more pears than Ana?","kind":"recover"}
+{"world":"kids.arith","tab":null,"setup":[],"message":"ben ana apples most","intent":"Who has more apples, Ben or Ana?","kind":"recover"}
+{"world":"kids.arith","tab":null,"setup":[],"message":"marbles mia lost 3","intent":"Mia lost 3 marbles.","kind":"recover"}
+{"world":"kids.arith","tab":null,"setup":[],"message":"tom apples 3 gives ana","intent":"Tom gives Ana 3 apples.","kind":"recover"}
+{"world":"kids.arith","tab":"music","setup":[],"message":"sam pencils broke 2","intent":"Sam broke 2 pencils.","kind":"recover"}
+{"world":"kids.arith","tab":null,"setup":[],"message":"ben buys 4 pencils pls","intent":"Ben buys 4 pencils.","kind":"recover"}
+{"world":"kids.arith","tab":null,"setup":[],"message":"ana ate apple","intent":"Ana ate an apple.","kind":"recover"}
+{"world":"kids.arith","tab":null,"setup":[],"message":"stickers lily 8 start","intent":"Lily starts with 8 stickers.","kind":"recover"}
+{"world":"kids.arith","tab":null,"setup":[],"message":"tom apples 4 pears 3","intent":"Tom has 4 apples and 3 pears.","kind":"recover"}
+{"world":"kids.arith","tab":"map","setup":[],"message":"marbles tom finds 2","intent":"Tom finds 2 marbles.","kind":"recover"}
+{"world":"kids.arith","tab":null,"setup":[],"message":"coins mia ben total","intent":"How many coins do Mia and Ben have altogether?","kind":"recover"}
+{"world":"kids.arith","tab":null,"setup":[],"message":"3 4 plus","intent":"What is 3 plus 4?","kind":"recover"}
+{"world":"kids.arith","tab":null,"setup":[],"message":"ana apples gave tom 3 pls","intent":"Ana gives Tom 3 apples.","kind":"recover"}
+{"world":"kids.arith","tab":null,"setup":[],"message":"sum 9 and 6 thx","intent":"What is the sum of 9 and 6?","kind":"recover"}
+{"world":"kids.arith","tab":null,"setup":[],"message":"subtract 5 12 ok","intent":"Subtract 5 from 12.","kind":"recover"}
+{"world":"kids.arith","tab":null,"setup":[],"message":"multiply 3 4 yo","intent":"Multiply 3 by 4.","kind":"recover"}
+{"world":"kids.arith","tab":null,"setup":[],"message":"ana eats 1 pls","intent":"Ana eats 1.","kind":"recover"}
+{"world":"kids.arith","tab":null,"setup":[],"message":"lemons ben 2 bought","intent":"Ben bought 2 lemons.","kind":"recover"}
+{"world":"kids.arith","tab":null,"setup":[],"message":"tuesday 4 apples minus pls","intent":"","kind":"junk"}
+{"world":"kids.arith","tab":null,"setup":[],"message":"cake 3 ben lost gives sum","intent":"","kind":"junk"}
+{"world":"kids.arith","tab":"draw","setup":[],"message":"big 5 purple","intent":"","kind":"junk"}
+{"world":"kids.arith","tab":null,"setup":[],"message":"sweet times lemon 7 ana half","intent":"","kind":"junk"}
+{"world":"kids.time","tab":null,"setup":[],"message":"monday after pls","intent":"What day comes after Monday?","kind":"recover"}
+{"world":"kids.time","tab":null,"setup":[],"message":"friday before ok","intent":"What day comes before Friday?","kind":"recover"}
+{"world":"kids.time","tab":"draw","setup":[],"message":"tomorrow friday","intent":"If today is Friday, what day is tomorrow?","kind":"recover"}
+{"world":"kids.time","tab":null,"setup":[],"message":"yesterday sunday","intent":"What day was yesterday if today is Sunday?","kind":"recover"}
+{"world":"kids.time","tab":null,"setup":[],"message":"may after month","intent":"What month comes after May?","kind":"recover"}
+{"world":"kids.time","tab":"map","setup":[],"message":"june before pls","intent":"What month comes before June?","kind":"recover"}
+{"world":"kids.time","tab":null,"setup":[],"message":"summer after season","intent":"What is the season after summer?","kind":"recover"}
+{"world":"kids.time","tab":null,"setup":[],"message":"winter before","intent":"What is the season before winter?","kind":"recover"}
+{"world":"kids.time","tab":"robot","setup":[],"message":"clock 4 o'clock pls","intent":"The clock says 4 o'clock.","kind":"recover"}
+{"world":"kids.time","tab":null,"setup":[],"message":"july season","intent":"Which season is July in?","kind":"recover"}
+{"world":"kids.time","tab":null,"setup":[],"message":"december season pls","intent":"What season is it in December?","kind":"recover"}
+{"world":"kids.time","tab":null,"setup":[],"message":"monday friday days how many","intent":"How many days from Monday to Friday?","kind":"recover"}
+{"world":"kids.time","tab":null,"setup":[],"message":"days february","intent":"How many days does February have?","kind":"recover"}
+{"world":"kids.time","tab":"music","setup":[],"message":"april days how many","intent":"How many days has April?","kind":"recover"}
+{"world":"kids.time","tab":null,"setup":[],"message":"2 weeks days","intent":"How many days are in 2 weeks?","kind":"recover"}
+{"world":"kids.time","tab":null,"setup":[],"message":"hours day how many","intent":"How many hours does a day have?","kind":"recover"}
+{"world":"kids.time","tab":null,"setup":[],"message":"minutes hour make","intent":"How many minutes make an hour?","kind":"recover"}
+{"world":"kids.time","tab":null,"setup":[],"message":"3 months after may","intent":"What month is 3 months after May?","kind":"recover"}
+{"world":"kids.time","tab":null,"setup":[],"message":"3 days friday what day","intent":"What day is 3 days after Friday?","kind":"recover"}
+{"world":"kids.time","tab":"draw","setup":[],"message":"2 hours 3 o'clock","intent":"What time will it be in 2 hours if it is 3 o'clock?","kind":"recover"}
+{"world":"kids.time","tab":null,"setup":[],"message":"30 minutes 5 o'clock ago","intent":"If it is 5 o'clock, what time was it 30 minutes ago?","kind":"recover"}
+{"world":"kids.time","tab":null,"setup":[],"message":"half hour 3 o'clock later","intent":"If it is 3 o'clock, what time will it be in half an hour?","kind":"recover"}
+{"world":"kids.time","tab":null,"setup":[],"message":"spring months","intent":"Name the months of spring.","kind":"recover"}
+{"world":"kids.time","tab":null,"setup":[],"message":"weekend days","intent":"What are the weekend days?","kind":"recover"}
+{"world":"kids.time","tab":null,"setup":[],"message":"week days how many","intent":"How many days are in a week?","kind":"recover"}
+{"world":"kids.time","tab":"charts","setup":[],"message":"october after","intent":"What month comes after October?","kind":"recover"}
+{"world":"kids.time","tab":null,"setup":[],"message":"tuesday 3 plus spring","intent":"","kind":"junk"}
+{"world":"kids.time","tab":null,"setup":[],"message":"winter o'clock weekend 7 ok","intent":"","kind":"junk"}
+{"world":"kids.time","tab":"draw","setup":[],"message":"purple banana 5 sunday","intent":"","kind":"junk"}
+{"world":"kids.time","tab":null,"setup":[],"message":"tomorrow 2 cake sum","intent":"","kind":"junk"}
+{"world":"kids.shop","tab":null,"setup":[],"message":"ball cost how much","intent":"How much does a ball cost?","kind":"recover"}
+{"world":"kids.shop","tab":null,"setup":[],"message":"3 pencils cost how much","intent":"How much do 3 pencils cost?","kind":"recover"}
+{"world":"kids.shop","tab":null,"setup":[],"message":"pencils 3 price pls","intent":"What is the price of 3 pencils?","kind":"recover"}
+{"world":"kids.shop","tab":null,"setup":[],"message":"2 balls 3 pencils cost","intent":"How much do 2 balls and 3 pencils cost?","kind":"recover"}
+{"world":"kids.shop","tab":null,"setup":[],"message":"kite price pls","intent":"What is the price of a kite?","kind":"recover"}
+{"world":"kids.shop","tab":null,"setup":[],"message":"50 lei ball pencil change","intent":"What is the change from 50 lei if I buy a ball and a pencil?","kind":"recover"}
+{"world":"kids.shop","tab":null,"setup":[],"message":"change 50 lei 3 pencils","intent":"How much change do I get from 50 lei if I buy 3 pencils?","kind":"recover"}
+{"world":"kids.shop","tab":"map","setup":[],"message":"buy 3 pencils can","intent":"Can I buy 3 pencils?","kind":"recover"}
+{"world":"kids.shop","tab":null,"setup":[],"message":"enough money 3 pencils","intent":"Do I have enough money for 3 pencils?","kind":"recover"}
+{"world":"kids.shop","tab":null,"setup":[],"message":"money left how much","intent":"How much money do I have left?","kind":"recover"}
+{"world":"kids.shop","tab":null,"setup":[],"message":"lei now how many","intent":"How many lei do I have now?","kind":"recover"}
+{"world":"kids.shop","tab":null,"setup":[],"message":"bananas 2 cost how much","intent":"How much do 2 bananas cost?","kind":"recover"}
+{"world":"kids.shop","tab":null,"setup":[],"message":"kite 9 lei price","intent":"The price of a kite is 9 lei.","kind":"recover"}
+{"world":"kids.shop","tab":"robot","setup":[],"message":"ball 7 lei cost","intent":"A ball costs 7 lei.","kind":"recover"}
+{"world":"kids.shop","tab":null,"setup":[],"message":"pen 3 lei price","intent":"The pen is 3 lei.","kind":"recover"}
+{"world":"kids.shop","tab":null,"setup":[],"message":"wallet 15 lei have","intent":"My wallet has 15 lei.","kind":"recover"}
+{"world":"kids.shop","tab":null,"setup":[],"message":"20 lei have pls","intent":"I have 20 lei.","kind":"recover"}
+{"world":"kids.shop","tab":null,"setup":[],"message":"found 5 lei","intent":"I found 5 lei.","kind":"recover"}
+{"world":"kids.shop","tab":null,"setup":[],"message":"ana 10 lei gives me","intent":"Ana gives me 10 lei.","kind":"recover"}
+{"world":"kids.shop","tab":null,"setup":[],"message":"spent 5 lei","intent":"I spent 5 lei.","kind":"recover"}
+{"world":"kids.shop","tab":null,"setup":[],"message":"buy 2 balls 3 pencils","intent":"I buy 2 balls and 3 pencils.","kind":"recover"}
+{"world":"kids.shop","tab":null,"setup":[],"message":"3 pencils ball how much","intent":"How much do 3 pencils and a ball cost?","kind":"recover"}
+{"world":"kids.shop","tab":null,"setup":[],"message":"2 balls money pay","intent":"How much will I pay for 2 balls?","kind":"recover"}
+{"world":"kids.shop","tab":null,"setup":[],"message":"kite money tuesday 4","intent":"","kind":"junk"}
+{"world":"kids.shop","tab":null,"setup":[],"message":"biscuit 8 sunday squared","intent":"","kind":"junk"}
+{"world":"kids.shop","tab":null,"setup":[],"message":"blue 7 orange lei tall","intent":"","kind":"junk"}
+{"world":"kids.shop","tab":null,"setup":[],"message":"milk jump cloud 3 leu","intent":"","kind":"junk"}
+{"world":"kids.animals","tab":null,"setup":[],"message":"spider legs how many pls","intent":"How many legs does a spider have?","kind":"recover"}
+{"world":"kids.animals","tab":"robot","setup":[],"message":"cat legs how many","intent":"How many legs has a cat?","kind":"recover"}
+{"world":"kids.animals","tab":null,"setup":[],"message":"rabbit carrots eat?","intent":"Does a rabbit eat carrots?","kind":"recover"}
+{"world":"kids.animals","tab":"hangman","setup":[],"message":"dolphin fish yes no","intent":"Is a dolphin a fish?","kind":"recover"}
+{"world":"kids.animals","tab":null,"setup":[],"message":"camel live where","intent":"Where does a camel live?","kind":"recover"}
+{"world":"kids.animals","tab":"draw","setup":[],"message":"cow sound what yo","intent":"What sound does a cow make?","kind":"recover"}
+{"world":"kids.animals","tab":null,"setup":[],"message":"duck covering feathers","intent":"What covering does a duck have?","kind":"recover"}
+{"world":"kids.animals","tab":"charts","setup":[],"message":"baby cat called thx","intent":"What is a baby cat called?","kind":"recover"}
+{"world":"kids.animals","tab":null,"setup":[],"message":"6 legs animals pls","intent":"Which animals have 6 legs?","kind":"recover"}
+{"world":"kids.animals","tab":"map","setup":[],"message":"desert animals","intent":"Which animals can be found in the desert?","kind":"recover"}
+{"world":"kids.animals","tab":null,"setup":[],"message":"sea animals live","intent":"Which animals live in the sea?","kind":"recover"}
+{"world":"kids.animals","tab":"robot","setup":[],"message":"penguin fly can plz","intent":"Can a penguin fly?","kind":"recover"}
+{"world":"kids.animals","tab":null,"setup":[],"message":"swim penguins do","intent":"Do penguins swim?","kind":"recover"}
+{"world":"kids.animals","tab":"music","setup":[],"message":"lion sound yo","intent":"What sound does a lion make?","kind":"recover"}
+{"world":"kids.animals","tab":null,"setup":[],"message":"bat mammal?","intent":"Is a bat a mammal?","kind":"recover"}
+{"world":"kids.animals","tab":null,"setup":[],"message":"zebra grass eat what","intent":"What does a zebra eat?","kind":"recover"}
+{"world":"kids.animals","tab":"editor","setup":[],"message":"pond animals pls","intent":"Which animals are seen near the pond?","kind":"recover"}
+{"world":"kids.animals","tab":null,"setup":[],"message":"8 legs spider yes?","intent":"Does a spider have 8 legs?","kind":"recover"}
+{"world":"kids.animals","tab":"chess","setup":[],"message":"rabbit habitat where","intent":"Where does a rabbit live?","kind":"recover"}
+{"world":"kids.animals","tab":null,"setup":[],"message":"rex dog name","intent":"My dog is called Rex.","kind":"recover"}
+{"world":"kids.animals","tab":null,"setup":[],"message":"cat tom called","intent":"I have a cat called Tom.","kind":"recover"}
+{"world":"kids.animals","tab":"tictactoe","setup":[],"message":"dolphin traits","intent":"What are dolphins like?","kind":"recover"}
+{"world":"kids.animals","tab":null,"setup":[],"message":"hen where live","intent":"Where can hens be found?","kind":"recover"}
+{"world":"kids.animals","tab":"guess","setup":[],"message":"whale mammal yes","intent":"Is a whale a mammal?","kind":"recover"}
+{"world":"kids.animals","tab":null,"setup":[],"message":"giraffe food what","intent":"What does a giraffe eat?","kind":"recover"}
+{"world":"kids.animals","tab":null,"setup":[],"message":"purple spider tuesday wings","intent":"","kind":"junk"}
+{"world":"kids.animals","tab":"robot","setup":[],"message":"tortoise cloud 9 happy","intent":"","kind":"junk"}
+{"world":"kids.animals","tab":null,"setup":[],"message":"owl wings 4 4 4","intent":"","kind":"junk"}
+{"world":"kids.animals","tab":"draw","setup":[],"message":"bat ocean pancake seventeen","intent":"","kind":"junk"}
+{"world":"kids.shapes","tab":null,"setup":[],"message":"hexagon corners how many pls","intent":"How many corners has a hexagon?","kind":"recover"}
+{"world":"kids.shapes","tab":"chess","setup":[],"message":"pentagon 5 sides yes?","intent":"Does a pentagon have 5 sides?","kind":"recover"}
+{"world":"kids.shapes","tab":null,"setup":[],"message":"3 sides shape which","intent":"Which shape has 3 sides?","kind":"recover"}
+{"world":"kids.shapes","tab":"robot","setup":[],"message":"4 corners shape name","intent":"Name a shape with 4 corners.","kind":"recover"}
+{"world":"kids.shapes","tab":null,"setup":[],"message":"circle round yes","intent":"Is a circle round?","kind":"recover"}
+{"world":"kids.shapes","tab":"hangman","setup":[],"message":"square rectangle? yo","intent":"Is a square a rectangle?","kind":"recover"}
+{"world":"kids.shapes","tab":null,"setup":[],"message":"stop sign shape","intent":"What shape is a stop sign?","kind":"recover"}
+{"world":"kids.shapes","tab":"draw","setup":[],"message":"octagon like what","intent":"What is an octagon like?","kind":"recover"}
+{"world":"kids.shapes","tab":null,"setup":[],"message":"sky colour pls","intent":"What color is the sky?","kind":"recover"}
+{"world":"kids.shapes","tab":"music","setup":[],"message":"banana colour ok","intent":"What is the color of a banana?","kind":"recover"}
+{"world":"kids.shapes","tab":null,"setup":[],"message":"red yellow mix whats","intent":"What do red and yellow make?","kind":"recover"}
+{"world":"kids.shapes","tab":"charts","setup":[],"message":"blue white mix thx","intent":"What do blue and white make?","kind":"recover"}
+{"world":"kids.shapes","tab":null,"setup":[],"message":"purple make which colors","intent":"Which colors make purple?","kind":"recover"}
+{"world":"kids.shapes","tab":null,"setup":[],"message":"orange mix what","intent":"What do I mix to get orange?","kind":"recover"}
+{"world":"kids.shapes","tab":"editor","setup":[],"message":"pink mix make","intent":"What should I mix to make pink?","kind":"recover"}
+{"world":"kids.shapes","tab":null,"setup":[],"message":"primary colours which","intent":"Which colors are primary?","kind":"recover"}
+{"world":"kids.shapes","tab":"guess","setup":[],"message":"secondary colours name","intent":"Name the secondary colors.","kind":"recover"}
+{"world":"kids.shapes","tab":null,"setup":[],"message":"red primary yes","intent":"Is red a primary color?","kind":"recover"}
+{"world":"kids.shapes","tab":null,"setup":[],"message":"lemon colour usual","intent":"What is the usual color of a lemon?","kind":"recover"}
+{"world":"kids.shapes","tab":"robot","setup":[],"message":"grass green yes or no","intent":"Is the grass green?","kind":"recover"}
+{"world":"kids.shapes","tab":null,"setup":[],"message":"ball round yes","intent":"Would you say a ball is round?","kind":"recover"}
+{"world":"kids.shapes","tab":null,"setup":[],"message":"rhombus 4 sides how many","intent":"How many sides does a rhombus have?","kind":"recover"}
+{"world":"kids.shapes","tab":"tictactoe","setup":[],"message":"rhombus square counts?","intent":"Does a rhombus count as a square?","kind":"recover"}
+{"world":"kids.shapes","tab":null,"setup":[],"message":"octagon facts pls","intent":"Give me some octagon facts.","kind":"recover"}
+{"world":"kids.shapes","tab":"map","setup":[],"message":"strawberry red colour","intent":"What color is a strawberry?","kind":"recover"}
+{"world":"kids.shapes","tab":null,"setup":[],"message":"zebra black white colours","intent":"What colors are zebras?","kind":"recover"}
+{"world":"kids.shapes","tab":null,"setup":[],"message":"trapezium corners how many","intent":"How many corners does a trapezium have?","kind":"recover"}
+{"world":"kids.shapes","tab":"music","setup":[],"message":"no corners shapes which","intent":"Which shapes have no corners?","kind":"recover"}
+{"world":"kids.shapes","tab":null,"setup":[],"message":"brown red black mix","intent":"What do black and red make?","kind":"recover"}
+{"world":"kids.shapes","tab":null,"setup":[],"message":"tricycle purple 7 sides","intent":"","kind":"junk"}
+{"world":"kids.shapes","tab":"chess","setup":[],"message":"green cloud sixteen octagon sad","intent":"","kind":"junk"}
+{"world":"kids.shapes","tab":null,"setup":[],"message":"zebra 3 corners pink bus","intent":"","kind":"junk"}
+{"world":"kids.shapes","tab":"hangman","setup":[],"message":"sky hexagon yes blue no thanks banana 12","intent":"","kind":"junk"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"milk shopping list add pls","intent":"Add milk to my shopping list.","kind":"recover"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"socks garden list","intent":"Add socks to my garden list.","kind":"recover"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"bread list put","intent":"Put bread on my list.","kind":"recover"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"reminder water plants","intent":"Set a reminder to water the plants.","kind":"recover"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"homework done pls","intent":"Mark homework as done.","kind":"recover"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"shopping list show me","intent":"Show me my shopping list.","kind":"recover"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"how many shopping things","intent":"How many things are on my shopping list?","kind":"recover"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"milk shopping list on?","intent":"Is milk on my shopping list?","kind":"recover"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"clear shopping list","intent":"Clear my shopping list.","kind":"recover"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"milk cross off list","intent":"Cross milk off my list.","kind":"recover"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"homework still left","intent":"What do I still have to do on my homework list?","kind":"recover"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"dishes reminder","intent":"Add a reminder about the dishes.","kind":"recover"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"bought milk","intent":"I bought milk.","kind":"recover"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"socks remove list pls","intent":"Remove socks from my list.","kind":"recover"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"garden list display","intent":"Display the garden list now.","kind":"recover"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"lists which exist","intent":"Which lists exist?","kind":"recover"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"homework finished did?","intent":"Did I finish my homework?","kind":"recover"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"chores unfinished","intent":"Which chores do I still need to do?","kind":"recover"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"bread eggs shopping list add","intent":"Add bread and eggs to my shopping list.","kind":"recover"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"tick homework off","intent":"Tick off homework.","kind":"recover"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"milk off list take","intent":"Take milk off my list.","kind":"recover"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"grandma call remind","intent":"Remind me to call grandma.","kind":"recover"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"homework done?","intent":"Is homework done?","kind":"recover"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"garden list clear pls","intent":"Clear my garden list.","kind":"recover"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"reminders what pls","intent":"What are my reminders?","kind":"recover"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"shopping left how many","intent":"How many things are left on my shopping list?","kind":"recover"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"socks cross garden list","intent":"Cross socks off my garden list.","kind":"recover"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"bananas remind milk garden sorry tomorrow 3 blue","intent":"","kind":"junk"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"clear add remove shopping homework","intent":"","kind":"junk"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"oceans pizza bread tuesday","intent":"","kind":"junk"}
+{"world":"kids.tasks","tab":null,"setup":[],"message":"finished garden zebra reminders 47","intent":"","kind":"junk"}
+{"world": "kids.common", "tab": null, "setup": [], "message": "ben hi name", "intent": "Hi, my name is Ben.", "kind": "recover"}
+{"world": "kids.common", "tab": null, "setup": [], "message": "lily my name", "intent": "My name is Lily.", "kind": "recover"}
+{"world": "kids.common", "tab": null, "setup": [], "message": "sam call me pls", "intent": "Call me Sam please.", "kind": "recover"}
+{"world": "kids.common", "tab": null, "setup": [], "message": "name helper pls", "intent": "What is the helper's name?", "kind": "recover"}
+{"world": "kids.common", "tab": null, "setup": [], "message": "robot type what", "intent": "What type of robot are you?", "kind": "recover"}
+{"world": "kids.common", "tab": null, "setup": [], "message": "robot you yo", "intent": "Are you a robot?", "kind": "recover"}
+{"world": "kids.common", "tab": null, "setup": [], "message": "me who pls", "intent": "Who am I?", "kind": "recover"}
+{"world": "kids.common", "tab": null, "setup": [], "message": "remember name my", "intent": "Do you remember what my name is?", "kind": "recover"}
+{"world": "kids.common", "tab": null, "setup": [], "message": "hello friend pls", "intent": "Hello friend.", "kind": "recover"}
+{"world": "kids.common", "tab": null, "setup": [], "message": "intro yourself pls", "intent": "Introduce yourself.", "kind": "recover"}
+{"world": "kids.common", "tab": null, "setup": [], "message": "thx buddy helpful", "intent": "Thanks buddy, that was helpful.", "kind": "recover"}
+{"world": "kids.common", "tab": null, "setup": [], "message": "ana name", "intent": "My name is Ana.", "kind": "recover"}
+{"world": "kids.common", "tab": null, "setup": [], "message": "zed call me ok", "intent": "Call me Zed please.", "kind": "recover"}
+{"world": "kids.common", "tab": null, "setup": [], "message": "nickname which prefer", "intent": "Which nickname do you prefer?", "kind": "recover"}
+{"world": "kids.common", "tab": null, "setup": [], "message": "addressed how u", "intent": "How are you addressed?", "kind": "recover"}
+{"world": "kids.common", "tab": null, "setup": [], "message": "recognise me you yo", "intent": "Do you recognise me?", "kind": "recover"}
+{"world": "kids.common", "tab": null, "setup": [], "message": "nickname ur pls", "intent": "Give me your name.", "kind": "recover"}
+{"world": "kids.common", "tab": null, "setup": [], "message": "thx ton buddy", "intent": "Thanks a ton buddy.", "kind": "recover"}
+{"world": "kids.common", "tab": null, "setup": [], "message": "your name say", "intent": "Say your name please.", "kind": "recover"}
+{"world": "kids.common", "tab": null, "setup": [], "message": "zoe here talking", "intent": "This is Zoe talking.", "kind": "recover"}
+{"world": "kids.common", "tab": null, "setup": [], "message": "name is kate", "intent": "Kate is my name.", "kind": "recover"}
+{"world": "kids.common", "tab": null, "setup": [], "message": "who u bot which", "intent": "Which bot are you?", "kind": "recover"}
+{"world": "kids.common", "tab": null, "setup": [], "message": "bot name what helper", "intent": "What is the helper's name?", "kind": "recover"}
+{"world": "kids.common", "tab": null, "setup": [], "message": "bye later see", "intent": "See you later, bye.", "kind": "recover"}
+{"world": "kids.common", "tab": null, "setup": [], "message": "ben lily robot hello", "intent": "", "kind": "junk"}
+{"world": "kids.common", "tab": null, "setup": [], "message": "bye hello purple", "intent": "", "kind": "junk"}
+{"world": "kids.common", "tab": null, "setup": [], "message": "pizza ben thursday", "intent": "", "kind": "junk"}
+{"world": "kids.common", "tab": null, "setup": [], "message": "zoe tractor helper bye", "intent": "", "kind": "junk"}
+{"world": "user.profile", "tab": null, "setup": [], "message": "engineer software acme", "intent": "I am a software engineer at Acme.", "kind": "recover"}
+{"world": "user.profile", "tab": null, "setup": [], "message": "nurse pls", "intent": "I am a nurse.", "kind": "recover"}
+{"world": "user.profile", "tab": null, "setup": [], "message": "designer work", "intent": "I work as a designer.", "kind": "recover"}
+{"world": "user.profile", "tab": null, "setup": [], "message": "law degree bucharest", "intent": "I graduated in law from the University of Bucharest.", "kind": "recover"}
+{"world": "user.profile", "tab": null, "setup": [], "message": "biology degree", "intent": "I have a degree in biology.", "kind": "recover"}
+{"world": "user.profile", "tab": null, "setup": [], "message": "cluj physics studied", "intent": "I studied physics at Cluj.", "kind": "recover"}
+{"world": "user.profile", "tab": null, "setup": [], "message": "hiking jazz chess", "intent": "I like hiking, jazz and chess.", "kind": "recover"}
+{"world": "user.profile", "tab": null, "setup": [], "message": "python sql mostly", "intent": "Mostly Python and SQL.", "kind": "recover"}
+{"world": "user.profile", "tab": null, "setup": [], "message": "excel tableau use", "intent": "I use Excel and Tableau.", "kind": "recover"}
+{"world": "user.profile", "tab": null, "setup": [], "message": "berlin live", "intent": "I live in Berlin.", "kind": "recover"}
+{"world": "user.profile", "tab": null, "setup": [], "message": "bucharest moved", "intent": "I moved to Bucharest.", "kind": "recover"}
+{"world": "user.profile", "tab": null, "setup": [], "message": "rust learn want", "intent": "I want to learn Rust.", "kind": "recover"}
+{"world": "user.profile", "tab": null, "setup": [], "message": "short answers pls", "intent": "I prefer short answers.", "kind": "recover"}
+{"world": "user.profile", "tab": null, "setup": [], "message": "romanian answers", "intent": "I prefer answers in Romanian.", "kind": "recover"}
+{"world": "user.profile", "tab": null, "setup": [], "message": "casual be", "intent": "Be casual.", "kind": "recover"}
+{"world": "user.profile", "tab": null, "setup": [], "message": "34 age", "intent": "I am 34 years old.", "kind": "recover"}
+{"world": "user.profile", "tab": null, "setup": [], "message": "diabetes remember", "intent": "Remember that I have diabetes.", "kind": "recover"}
+{"world": "user.profile", "tab": null, "setup": [], "message": "export json profile", "intent": "Export my profile as JSON.", "kind": "recover"}
+{"world": "user.profile", "tab": null, "setup": [], "message": "cv export profile", "intent": "Export my profile as a CV.", "kind": "recover"}
+{"world": "user.profile", "tab": null, "setup": [], "message": "hobbies delete", "intent": "Delete my hobbies.", "kind": "recover"}
+{"world": "user.profile", "tab": null, "setup": [], "message": "job forget pls", "intent": "Forget my job.", "kind": "recover"}
+{"world": "user.profile", "tab": null, "setup": [], "message": "pause interview stop", "intent": "Pause the interview.", "kind": "recover"}
+{"world": "user.profile", "tab": null, "setup": [], "message": "know me what", "intent": "What do you know about me?", "kind": "recover"}
+{"world": "user.profile", "tab": null, "setup": ["I have 12 years of experience."], "message": "actually 10 years", "intent": "Actually 10 years.", "kind": "recover"}
+{"world": "user.profile", "tab": null, "setup": ["I am a designer."], "message": "nurse actually", "intent": "Actually I am a nurse.", "kind": "recover"}
+{"world": "user.profile", "tab": null, "setup": [], "message": "andrew actually call", "intent": "Actually call me Andrew.", "kind": "recover"}
+{"world": "user.profile", "tab": null, "setup": [], "message": "12 years experience", "intent": "I have 12 years of experience.", "kind": "recover"}
+{"world": "user.profile", "tab": null, "setup": [], "message": "berlin bucharest cluj 34", "intent": "", "kind": "junk"}
+{"world": "user.profile", "tab": null, "setup": [], "message": "delete export profile", "intent": "", "kind": "junk"}
+{"world": "user.profile", "tab": null, "setup": [], "message": "tomato bicycle tuesday", "intent": "", "kind": "junk"}
+{"world": "user.profile", "tab": null, "setup": [], "message": "nurse python lawyer diabetes", "intent": "", "kind": "junk"}
+{"world": "ui.help", "tab": "robot", "setup": [], "message": "chess rules pls", "intent": "What are the rules of chess?", "kind": "recover"}
+{"world": "ui.help", "tab": "robot", "setup": [], "message": "hangman rules", "intent": "What are the rules of hangman?", "kind": "recover"}
+{"world": "ui.help", "tab": "robot", "setup": [], "message": "tic tac toe how pls", "intent": "How do I play tic tac toe?", "kind": "recover"}
+{"world": "ui.help", "tab": "robot", "setup": [], "message": "twenty questions play how", "intent": "How do I play twenty questions?", "kind": "recover"}
+{"world": "ui.help", "tab": "robot", "setup": [], "message": "circle draw how", "intent": "How do I draw a circle?", "kind": "recover"}
+{"world": "ui.help", "tab": "robot", "setup": [], "message": "table add pls", "intent": "How can I add a table?", "kind": "recover"}
+{"world": "ui.help", "tab": "robot", "setup": [], "message": "eyes change how", "intent": "How do I change the eyes?", "kind": "recover"}
+{"world": "ui.help", "tab": "robot", "setup": [], "message": "change eyes say what", "intent": "What do I say to change the eyes?", "kind": "recover"}
+{"world": "ui.help", "tab": "robot", "setup": [], "message": "examples more pls", "intent": "Give me more examples.", "kind": "recover"}
+{"world": "ui.help", "tab": "robot", "setup": [], "message": "different ideas", "intent": "Different ideas.", "kind": "recover"}
+{"world": "ui.help", "tab": "robot", "setup": [], "message": "tab does what this", "intent": "What does this tab do?", "kind": "recover"}
+{"world": "ui.help", "tab": "robot", "setup": [], "message": "lost help im", "intent": "Help i am lost.", "kind": "recover"}
+{"world": "ui.help", "tab": "robot", "setup": [], "message": "understand not why", "intent": "Why did you not understand that?", "kind": "recover"}
+{"world": "ui.help", "tab": "robot", "setup": [], "message": "wrong said what i", "intent": "What did I say wrong?", "kind": "recover"}
+{"world": "ui.help", "tab": "robot", "setup": [], "message": "do can what you", "intent": "What can you do?", "kind": "recover"}
+{"world": "ui.help", "tab": "chess", "setup": [], "message": "chess moves how", "intent": "How do I move in chess?", "kind": "recover"}
+{"world": "ui.help", "tab": "hangman", "setup": [], "message": "rules hangman pls", "intent": "Explain the rules of hangman.", "kind": "recover"}
+{"world": "ui.help", "tab": "editor", "setup": [], "message": "table add how", "intent": "How can I add a table?", "kind": "recover"}
+{"world": "ui.help", "tab": "map", "setup": [], "message": "this tab what", "intent": "What does this tab do?", "kind": "recover"}
+{"world": "ui.help", "tab": "robot", "setup": [], "message": "say can i here what", "intent": "What can I say here?", "kind": "recover"}
+{"world": "ui.help", "tab": "robot", "setup": [], "message": "ideas other any", "intent": "Any other ideas.", "kind": "recover"}
+{"world": "ui.help", "tab": "robot", "setup": [], "message": "so lost im", "intent": "I am so lost right now.", "kind": "recover"}
+{"world": "ui.help", "tab": "robot", "setup": [], "message": "explain how pls tab", "intent": "Explain this tab.", "kind": "recover"}
+{"world": "ui.help", "tab": "robot", "setup": [], "message": "twenty questions rules", "intent": "What are the rules of twenty questions?", "kind": "recover"}
+{"world": "ui.help", "tab": "robot", "setup": [], "message": "eyes hangman circle pizza", "intent": "", "kind": "junk"}
+{"world": "ui.help", "tab": "robot", "setup": [], "message": "table lost chess twenty", "intent": "", "kind": "junk"}
+{"world": "ui.help", "tab": "robot", "setup": [], "message": "elephant rules spoon", "intent": "", "kind": "junk"}
+{"world": "ui.help", "tab": "robot", "setup": [], "message": "tab 3 purple monday", "intent": "", "kind": "junk"}
+{"world":"ui.avatar","tab":"robot","setup":[],"message":"square eyes pls","intent":"Make your eyes square.","kind":"recover"}
+{"world":"ui.avatar","tab":"robot","setup":[],"message":"eyes cyclops plz","intent":"Use the cyclops eye.","kind":"recover"}
+{"world":"ui.avatar","tab":"robot","setup":[],"message":"visor eyes thx","intent":"Give yourself visor eyes.","kind":"recover"}
+{"world":"ui.avatar","tab":"robot","setup":[],"message":"body red yo","intent":"Make your body red.","kind":"recover"}
+{"world":"ui.avatar","tab":"robot","setup":[],"message":"gray background dark pls","intent":"I want a dark gray background.","kind":"recover"}
+{"world":"ui.avatar","tab":"robot","setup":[],"message":"green screen light","intent":"Give yourself a light green screen.","kind":"recover"}
+{"world":"ui.avatar","tab":"robot","setup":[],"message":"pink body ok","intent":"Make your body pink.","kind":"recover"}
+{"world":"ui.avatar","tab":"robot","setup":[],"message":"bigger eyes ok","intent":"Make your eyes bigger.","kind":"recover"}
+{"world":"ui.avatar","tab":"robot","setup":[],"message":"eyes much larger pls","intent":"Make your eyes much larger.","kind":"recover"}
+{"world":"ui.avatar","tab":"robot","setup":[],"message":"smaller eyes a bit yo","intent":"Make your eyes a bit smaller.","kind":"recover"}
+{"world":"ui.avatar","tab":"robot","setup":[],"message":"eyes shrink pls","intent":"Shrink your eyes.","kind":"recover"}
+{"world":"ui.avatar","tab":"robot","setup":[],"message":"afro hair plz","intent":"Make your hair an afro.","kind":"recover"}
+{"world":"ui.avatar","tab":"robot","setup":[],"message":"curly hair short ok","intent":"Give yourself short curly hair.","kind":"recover"}
+{"world":"ui.avatar","tab":"robot","setup":[],"message":"glasses 3 plz","intent":"Give yourself glasses 3.","kind":"recover"}
+{"world":"ui.avatar","tab":"robot","setup":[],"message":"sunglasses pls","intent":"Wear sunglasses.","kind":"recover"}
+{"world":"ui.avatar","tab":"robot","setup":[],"message":"mask medical yo","intent":"Wear a medical mask.","kind":"recover"}
+{"world":"ui.avatar","tab":"robot","setup":[],"message":"heart chest ok","intent":"Try a heart on your chest.","kind":"recover"}
+{"world":"ui.avatar","tab":"robot","setup":[],"message":"dish top pls","intent":"I want a dish on top.","kind":"recover"}
+{"world":"ui.avatar","tab":"robot","setup":[],"message":"robot again pls","intent":"Be a robot again.","kind":"recover"}
+{"world":"ui.avatar","tab":"robot","setup":[],"message":"emoji face plz","intent":"Turn the face into an emoji.","kind":"recover"}
+{"world":"ui.avatar","tab":"robot","setup":[],"message":"human avatar thx","intent":"I want a human avatar.","kind":"recover"}
+{"world":"ui.avatar","tab":"robot","setup":[],"message":"expression calm pls","intent":"Switch your expression to calm.","kind":"recover"}
+{"world":"ui.avatar","tab":"robot","setup":[],"message":"mouth next pls","intent":"Try the next mouth.","kind":"recover"}
+{"world":"ui.avatar","tab":"robot","setup":[],"message":"eyes reset yo","intent":"Reset your eyes.","kind":"recover"}
+{"world":"ui.avatar","tab":"robot","setup":[],"message":"eyes wobbly pls","intent":"Make your eyes wobbly.","kind":"recover"}
+{"world":"ui.avatar","tab":"robot","setup":[],"message":"pizza eyes tuesday","intent":"","kind":"junk"}
+{"world":"ui.avatar","tab":"robot","setup":[],"message":"banana wobbly hat ok","intent":"","kind":"junk"}
+{"world":"ui.avatar","tab":"robot","setup":[],"message":"square round eyes pls","intent":"","kind":"junk"}
+{"world":"ui.avatar","tab":"robot","setup":[],"message":"lemon glasses river","intent":"","kind":"junk"}
+{"world":"ui.shell","tab":"robot","setup":[],"message":"editor open pls","intent":"Open the editor.","kind":"recover"}
+{"world":"ui.shell","tab":"robot","setup":[],"message":"hangman tab","intent":"Go to the hangman tab.","kind":"recover"}
+{"world":"ui.shell","tab":"robot","setup":[],"message":"tic tac toe play pls","intent":"Let's play tic tac toe.","kind":"recover"}
+{"world":"ui.shell","tab":"robot","setup":[],"message":"twenty questions yo","intent":"Can we play twenty questions?","kind":"recover"}
+{"world":"ui.shell","tab":"robot","setup":[],"message":"hangman plz","intent":"Play hangman.","kind":"recover"}
+{"world":"ui.shell","tab":"robot","setup":[],"message":"speaker on thx","intent":"Turn on the speaker.","kind":"recover"}
+{"world":"ui.shell","tab":"robot","setup":[],"message":"sound mute pls","intent":"Mute the voice.","kind":"recover"}
+{"world":"ui.shell","tab":"robot","setup":[],"message":"microphone on ok","intent":"Turn on the microphone.","kind":"recover"}
+{"world":"ui.shell","tab":"robot","setup":[],"message":"hands-free on pls","intent":"Hands-free mode on.","kind":"recover"}
+{"world":"ui.shell","tab":"robot","setup":[],"message":"speak faster yo","intent":"Speak faster.","kind":"recover"}
+{"world":"ui.shell","tab":"robot","setup":[],"message":"rate 1.5 set","intent":"Set the speech rate to 1.5.","kind":"recover"}
+{"world":"ui.shell","tab":"robot","setup":[],"message":"romanian switch pls","intent":"Switch to Romanian.","kind":"recover"}
+{"world":"ui.shell","tab":"robot","setup":[],"message":"english speak thx","intent":"Speak English.","kind":"recover"}
+{"world":"ui.shell","tab":"robot","setup":[],"message":"new game yo","intent":"New game.","kind":"recover"}
+{"world":"ui.shell","tab":"robot","setup":[],"message":"hint pls","intent":"Give me a hint.","kind":"recover"}
+{"world":"ui.shell","tab":"robot","setup":[],"message":"hint another ok","intent":"Can I have another hint?","kind":"recover"}
+{"world":"ui.shell","tab":"robot","setup":[],"message":"quit game plz","intent":"Quit the game.","kind":"recover"}
+{"world":"ui.shell","tab":"robot","setup":[],"message":"talking stop pls","intent":"Stop talking.","kind":"recover"}
+{"world":"ui.shell","tab":"robot","setup":[],"message":"tab where pls","intent":"Which tab am I on?","kind":"recover"}
+{"world":"ui.shell","tab":"robot","setup":[],"message":"back tab ok","intent":"Go back.","kind":"recover"}
+{"world":"ui.shell","tab":"robot","setup":[],"message":"hands-free off thx","intent":"Hands-free mode off.","kind":"recover"}
+{"world":"ui.shell","tab":"robot","setup":[],"message":"slow down yo","intent":"Slow down.","kind":"recover"}
+{"world":"ui.shell","tab":"robot","setup":[],"message":"mic off pls","intent":"Turn off the microphone.","kind":"recover"}
+{"world":"ui.shell","tab":"robot","setup":[],"message":"hangman quit play","intent":"","kind":"junk"}
+{"world":"ui.shell","tab":"robot","setup":[],"message":"tuesday ladder speaker banana","intent":"","kind":"junk"}
+{"world":"ui.shell","tab":"robot","setup":[],"message":"moon sandwich three pls","intent":"","kind":"junk"}
+{"world":"ui.shell","tab":"robot","setup":[],"message":"purple avatar hello monday","intent":"","kind":"junk"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"red house pls","intent":"Draw a red house.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"three trees plz","intent":"Draw three trees.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"cat tree under","intent":"Draw a cat under the tree.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"big yellow sun top right","intent":"Put a big yellow sun in the top right corner.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"cloud next sun","intent":"Add a cloud next to the sun.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"5 stars yo","intent":"Add 5 stars.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"small blue fish thx","intent":"Draw a small blue fish.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"sand pls","intent":"Draw some sand.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"snow ground ok","intent":"Add some snow to the ground.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"water pls","intent":"Put water on the ground.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"sunset pls","intent":"Turn it into sunset.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"sunny day pls","intent":"Make it a sunny day.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"sun orange color","intent":"Color the sun orange.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"roof green house","intent":"Make the roof of the house green.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"brown door pls","intent":"Color the door brown.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"house blue door","intent":"Give the house a blue door.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"black wheels car yo","intent":"Give the car black wheels.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"sun twice big","intent":"Make the sun twice as big.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"tree bit smaller pls","intent":"Make the tree a bit smaller.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"tree left move","intent":"Move the tree to the left.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"cat next house","intent":"Put the cat next to the house.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"sun higher ok","intent":"Make the sun higher.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"dog face left","intent":"Turn the dog to face left.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"house 45 degrees","intent":"Rotate the house 45 degrees.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"star spin pls","intent":"Spin the star.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"clear picture yo","intent":"Clear the picture.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"undo pls","intent":"Undo.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"car delete plz","intent":"Delete the car.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"remove grass ok","intent":"Remove the grass.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"redo ok","intent":"Redo.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"house upside down thx","intent":"Make the house upside down.","kind":"recover"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"night day sun","intent":"","kind":"junk"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"spaghetti tuesday yellow ladder","intent":"","kind":"junk"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"clock minus bicycle","intent":"","kind":"junk"}
+{"world":"art.draw","tab":"draw","setup":[],"message":"seven sandwich river thx","intent":"","kind":"junk"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "tokyo map pls", "intent": "Show me Tokyo.", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "paris rome pin pls", "intent": "Mark Paris and Rome.", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "brazil zoom", "intent": "Zoom to Brazil.", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "europe big", "intent": "Show Europe.", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "romania map", "intent": "Romania on the map.", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "cluj center", "intent": "Center on Cluj.", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "zoom 3 in", "intent": "Zoom in 3 times.", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "2 times zoom out", "intent": "Zoom out 2 times.", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "level 5 zoom", "intent": "Zoom to level 5.", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "miles 100 east", "intent": "Go 100 miles east.", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "north 200 kilometres", "intent": "Go 200 kilometres north.", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "map reset pls", "intent": "Reset the map.", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "cluj marker", "intent": "Put a marker on Cluj.", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "rome marker thx", "intent": "Add a marker for Rome.", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "capitals europe", "intent": "Mark the capitals of Europe.", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "japan 3 largest cities", "intent": "List the 3 largest cities in Japan.", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "france spain highlight", "intent": "Highlight France and Spain.", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "hungary neighbours highlight", "intent": "Highlight the neighbours of Hungary.", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "spain highlight remove", "intent": "Remove the highlight from Spain.", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "capital japan", "intent": "What is the capital of Japan?", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "canada population ok", "intent": "What is the population of Canada?", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "brazil canada bigger", "intent": "Which is bigger, Brazil or Canada?", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "paris rome distance", "intent": "What is the distance between Paris and Rome?", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "spain italy compare", "intent": "Compare Spain and Italy.", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "hungary neighbours how many", "intent": "How many neighbours does Hungary have?", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "egypt continent", "intent": "What continent is Egypt in?", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "cluj country which", "intent": "Which country is Cluj in?", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "japan currency", "intent": "What currency does Japan use?", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "switzerland languages", "intent": "What languages are spoken in Switzerland?", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "romania biggest city", "intent": "Which is the largest city in Romania?", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "lat 47.2 long 21.9", "intent": "Show latitude 47.2 longitude 21.9.", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "whole world", "intent": "Show the whole world.", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "street map", "intent": "Switch to the street map.", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "tokyo where", "intent": "Where is Tokyo?", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "markers how many", "intent": "How many markers are there?", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "location me", "intent": "Where am I?", "kind": "recover"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "pickle orbit 42 waffle", "intent": "", "kind": "junk"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "tuesday spoon 9 cloud", "intent": "", "kind": "junk"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "banana 7 river thunder", "intent": "", "kind": "junk"}
+{"world": "geo.map", "tab": "map", "setup": [], "message": "lemon 3 kettle purple", "intent": "", "kind": "junk"}
+{"world": "data.charts", "tab": "charts", "setup": [], "message": "apples 5 pears 3 plums 8 chart pls", "intent": "Apples 5, pears 3, plums 8 as a chart.", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": [], "message": "cats 4 dogs 6 fish 2 pie", "intent": "Make a pie chart of cats 4, dogs 6 and fish 2.", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": [], "message": "bar pears 3 apples 5 thx", "intent": "Bar chart please: apples 5, pears 3.", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": ["make a chart: apples 5, pears 3, plums 8"], "message": "plums 9 yo", "intent": "Plums should be 9.", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": ["make a chart: apples 5, pears 3, plums 8"], "message": "6 pears pls", "intent": "Make the pears 6.", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": ["make a chart: apples 5, pears 3, plums 8"], "message": "apples up 2 ok", "intent": "Increase apples by 2.", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": ["make a chart: apples 5, pears 3, plums 8"], "message": "plums 3 less pls", "intent": "Decrease plums by 3.", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": ["make a chart: apples 5, pears 3, plums 8"], "message": "apples double ok", "intent": "Double the apples.", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": ["make a chart: apples 5, pears 3, plums 8"], "message": "pears triple thx", "intent": "Triple the pears.", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": ["make a chart: apples 5, pears 3, plums 8"], "message": "plums halve", "intent": "Halve the plums.", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": ["make a chart: apples 5, pears 3, plums 8"], "message": "pears cherries rename", "intent": "Rename pears to cherries.", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": [], "message": "pie yo", "intent": "Make it a pie chart.", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": [], "message": "doughnut pls", "intent": "Turn it into a doughnut chart.", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": [], "message": "radar pls", "intent": "Switch to a radar chart.", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": [], "message": "stacked bars pls", "intent": "Stacked bars.", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": [], "message": "fruit title", "intent": "Change the chart title to Fruit.", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": [], "message": "pets at home title", "intent": "Call the chart Pets at home.", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": [], "message": "title off pls", "intent": "Remove the chart title.", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": [], "message": "bars green pls", "intent": "Make the bars green.", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": [], "message": "light blue ok", "intent": "Color it light blue.", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": ["make a chart: apples 5, pears 3, plums 8"], "message": "apples red", "intent": "Make the apples bar red.", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": ["make a chart: apples 5, pears 3, plums 8"], "message": "plums light orange", "intent": "Color the plums slice light orange.", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": [], "message": "rainbow colours thx", "intent": "Use rainbow colors.", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": ["make a chart: apples 5, pears 3, plums 8"], "message": "descending order yo", "intent": "Sort in descending order.", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": ["make a chart: apples 5, pears 3, plums 8"], "message": "biggest which pls", "intent": "Which is the biggest?", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": ["make a chart: apples 5, pears 3, plums 8"], "message": "apples pears difference", "intent": "What is the difference between apples and pears?", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": ["make a chart: apples 5, pears 3, plums 8"], "message": "apples percentage", "intent": "What percentage are apples?", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": ["make a chart: apples 5, pears 3, plums 8"], "message": "chart image pls", "intent": "Download the chart as an image.", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": ["make a chart: apples 5, pears 3, plums 8"], "message": "bananas 4 pls", "intent": "Add 4 bananas to the chart.", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": ["make a chart: apples 5, pears 3, plums 8"], "message": "kiwis 2 figs 7 yo", "intent": "Add kiwis 2 and figs 7 to the chart.", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": [], "message": "chart 2 yo", "intent": "Go to chart 2.", "kind": "recover"}
+{"world": "data.charts", "tab": "charts", "setup": [], "message": "purple tuesday 45 umbrella", "intent": "", "kind": "junk"}
+{"world": "data.charts", "tab": "charts", "setup": [], "message": "elephant pie 8 sock", "intent": "", "kind": "junk"}
+{"world": "data.charts", "tab": "charts", "setup": [], "message": "tuesday 9 wrench kettle", "intent": "", "kind": "junk"}
+{"world": "data.charts", "tab": "charts", "setup": [], "message": "cheese 11 cloud pie tuesday", "intent": "", "kind": "junk"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "middle C pls", "intent": "Play middle C.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "c sharp", "intent": "Play C sharp.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "high G flute", "intent": "Play a high G on the flute.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "note B 2", "intent": "Play the note B 2.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "F sharp 4", "intent": "Play F sharp 4.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "A minor chord organ", "intent": "Play an A minor chord on the organ.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "D minor seventh", "intent": "Play a D minor seventh chord.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "G 7 chord pls", "intent": "Play a G 7 chord.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "Dm chord pls", "intent": "Play Dm chord.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "E minor arpeggio organ", "intent": "Play an E minor arpeggio on the organ.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "D minor arpeggio pls", "intent": "Arpeggiate a D minor chord.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "G major chord broken up", "intent": "Break up a G major chord.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "C E G together", "intent": "Play C E G together.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "notes D F A at once", "intent": "Play the notes D F A at once.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "D major scale", "intent": "Play the D major scale.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "A minor scale flute", "intent": "Play an A minor scale on the flute.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "C major scale up down", "intent": "Play a C major scale up and down.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "pentatonic G", "intent": "Play the pentatonic scale in G.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "C blues pls", "intent": "Play the C blues.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "E minor pentatonic", "intent": "Play E minor pentatonic.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "C major scale 120 bpm", "intent": "Play the C major scale at 120 bpm.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "Ode to Joy organ", "intent": "Play Ode to Joy on the organ.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "Jingle Bells 140 bpm", "intent": "Play Jingle Bells at 140 bpm.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "Happy Birthday bells", "intent": "Play Happy Birthday with the bells.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "C D E F G thx", "intent": "Play C D E F G.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "again pls", "intent": "Play it again.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "loop yo", "intent": "Loop it.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "loop off pls", "intent": "Turn off the loop.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "a bit slower", "intent": "Play it a bit slower.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "tempo 80 bpm", "intent": "Change the tempo to 80 bpm.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "volume 30 thx", "intent": "Set the volume to 30.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "louder pls", "intent": "Make it louder.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "flute sound pls", "intent": "Change the instrument to flute.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "bells yo", "intent": "Switch the sound to the bells.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "octave higher", "intent": "An octave higher.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "lower two octaves", "intent": "Lower it two octaves.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "key D major", "intent": "Set the key to D major.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "A minor key pls", "intent": "Change the key to A minor.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "fifth down", "intent": "Transpose it down a fifth.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "semitone up", "intent": "Play it up a semitone.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "melody C D E F G", "intent": "Write a melody: C D E F G.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "rest yo", "intent": "Add a rest.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "stop music pls", "intent": "Stop the music.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "pause pls", "intent": "Pause the music.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "half speed", "intent": "Play it at half speed.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "twice as fast", "intent": "Play it twice as fast.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "reset tempo", "intent": "Reset the tempo.", "kind": "recover"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "purple ocean 17 tuesday", "intent": "", "kind": "junk"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "waffle hat 3 cloud", "intent": "", "kind": "junk"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "pizza thunder 12 mirror", "intent": "", "kind": "junk"}
+{"world": "media.music", "tab": "music", "setup": [], "message": "giraffe 6 spoon monday", "intent": "", "kind": "junk"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "heading Shopping pls", "intent": "Add a heading Shopping.", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "milk eggs list plz", "intent": "Add a list with milk and eggs.", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "cats dogs bullet list", "intent": "Add a list with cats and dogs.", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "undo that pls", "intent": "Undo that.", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "redo ok", "intent": "Redo.", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "clear document pls", "intent": "Clear the document.", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "paragraph 2 delete", "intent": "Delete paragraph 2.", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "last sentence delete", "intent": "Delete the last sentence.", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "last paragraph remove pls", "intent": "Delete the last paragraph.", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "second list top move", "intent": "Move the second list to the top.", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "paragraph 3 bottom", "intent": "Move paragraph 3 to the end.", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "paragraph 2 up pls", "intent": "Move paragraph 2 up.", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "first heading down", "intent": "Move the first heading down.", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "title Our Trip pls", "intent": "Make the title Our Trip.", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "rename doc Weekend Plans", "intent": "Call the document Weekend Plans.", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "new doc Holiday", "intent": "Create a new document called Holiday.", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "first paragraph bold", "intent": "Make the first paragraph bold.", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "milk bold word", "intent": "Make the word milk bold.", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "heading underline pls", "intent": "Underline the heading.", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "cat dog swap", "intent": "Replace cat with dog.", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "tomato potato swap ok", "intent": "Replace tomato with potato.", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "paragraph hello world add", "intent": "Add a paragraph hello world.", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "cat sat paragraph", "intent": "Add a paragraph the cat sat.", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "document empty?", "intent": "Is the document empty?", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "paragraphs how many doc", "intent": "How many paragraphs are there?", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "words count doc pls", "intent": "How many words does the document have?", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "milk mention doc", "intent": "Does the document mention milk?", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "first paragraph say", "intent": "What does the first paragraph say?", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "paragraph 2 copy pls", "intent": "Copy paragraph 2.", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "markdown download doc", "intent": "Download the document as markdown.", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "second paragraph read", "intent": "Read the second paragraph.", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "shopping list doc", "intent": "Make a document from my shopping list.", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "sea animals report", "intent": "Write a report about sea animals.", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "farm animals doc", "intent": "Make a document about farm animals.", "kind": "recover"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "purple banana 7 tuesday", "intent": "", "kind": "junk"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "stapler cloud 42 river", "intent": "", "kind": "junk"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "bold redo 1812 banana", "intent": "", "kind": "junk"}
+{"world": "docs.editor", "tab": "editor", "setup": [], "message": "undo mountain 300 pickle", "intent": "", "kind": "junk"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "hansel sister who", "intent": "Who is Hansel's sister?", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "gretel parents who", "intent": "Who are Gretel's parents?", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "witch mentioned times how many", "intent": "How many times is the witch mentioned?", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "gretel mentioned often", "intent": "How often is Gretel mentioned?", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "oven search story", "intent": "Search the file for oven.", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "bread sentences show", "intent": "Show me the sentences about bread.", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "sentence 12 show pls", "intent": "Show me sentence 12.", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "section 2 summary pls", "intent": "Section 2 summary please.", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "story 2 sentences summarize pls", "intent": "Summarize the story in 2 sentences.", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "beginning story how", "intent": "How does the story begin?", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "ending story tell pls", "intent": "Tell me the ending.", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "middle story tell", "intent": "Tell me the middle.", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "section 2 cover what", "intent": "What does section 2 cover?", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "characters story pls", "intent": "Who appears in the story?", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "main character story", "intent": "Who is the main character?", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "most mentioned character who", "intent": "Who appears the most?", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "places mentioned pls", "intent": "Which places are mentioned?", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "towns mentioned story", "intent": "What towns are mentioned?", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "headings chapters show", "intent": "What are the headings?", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "outline story pls", "intent": "Show me the outline.", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "key terms story", "intent": "Extract the key terms.", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "word count story", "intent": "What is the word count of the story?", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "sentences story how many", "intent": "How many sentences are there in the story?", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "sections story how many", "intent": "How many sections does the story have?", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "witch lock who did", "intent": "Who did the witch lock?", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "helped hansel who", "intent": "Who helped Hansel?", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "gretel free who did", "intent": "Who did Gretel free?", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "witch do what", "intent": "What did the witch do?", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "hansel happened what", "intent": "What happened to Hansel?", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "father live where", "intent": "Where does the father live?", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "gretel say what", "intent": "What did Gretel say?", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "dragon story mention", "intent": "Does the story mention a dragon?", "kind": "recover"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "sailboat 12 tangerine lamp", "intent": "", "kind": "junk"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "hansel quartz 99 umbrella", "intent": "", "kind": "junk"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "dragon sentence 3 puddle", "intent": "", "kind": "junk"}
+{"world": "docs.reader", "tab": "documents", "setup": [], "message": "oven zebra seven ok", "intent": "", "kind": "junk"}
+{"world": "games.chess", "tab": "chess", "setup": ["Let's play chess."], "message": "knight f3 pls", "intent": "Knight to f3.", "kind": "recover"}
+{"world": "games.chess", "tab": "chess", "setup": ["Let's play chess."], "message": "queen d5 yo", "intent": "Queen to d5.", "kind": "recover"}
+{"world": "games.chess", "tab": "chess", "setup": ["Let's play chess."], "message": "rook a4 thx", "intent": "Rook to a4.", "kind": "recover"}
+{"world": "games.chess", "tab": "chess", "setup": ["Let's play chess."], "message": "c6 bishop takes", "intent": "Bishop takes c6.", "kind": "recover"}
+{"world": "games.chess", "tab": "chess", "setup": ["Let's play chess."], "message": "pawn e5 takes ok", "intent": "Pawn takes e5.", "kind": "recover"}
+{"world": "games.chess", "tab": "chess", "setup": ["Let's play chess."], "message": "takes queen d5", "intent": "Queen takes d5.", "kind": "recover"}
+{"world": "games.chess", "tab": "chess", "setup": ["Let's play chess."], "message": "castle queenside pls", "intent": "Castle queenside.", "kind": "recover"}
+{"world": "games.chess", "tab": "chess", "setup": ["Let's play chess."], "message": "kingside castle", "intent": "Castle kingside.", "kind": "recover"}
+{"world": "games.chess", "tab": "chess", "setup": ["Let's play chess."], "message": "0-0 pls", "intent": "0-0.", "kind": "recover"}
+{"world": "games.chess", "tab": "chess", "setup": ["Let's play chess."], "message": "promote e8 queen", "intent": "Move the pawn to e8 and promote to a queen.", "kind": "recover"}
+{"world": "games.chess", "tab": "chess", "setup": ["Let's play chess."], "message": "e4 pawn", "intent": "Pawn to e4.", "kind": "recover"}
+{"world": "games.chess", "tab": "chess", "setup": ["Let's play chess."], "message": "e2 e4 play", "intent": "e2 to e4.", "kind": "recover"}
+{"world": "games.chess", "tab": "chess", "setup": ["Let's play chess."], "message": "rock a1 a4 thx", "intent": "Rook from a1 to a4.", "kind": "recover"}
+{"world": "games.chess", "tab": "chess", "setup": ["Let's play chess."], "message": "horse c3 plz", "intent": "Knight to c3.", "kind": "recover"}
+{"world": "games.chess", "tab": "chess", "setup": ["Let's play chess."], "message": "nf3 pls", "intent": "Nf3.", "kind": "recover"}
+{"world": "games.chess", "tab": "chess", "setup": ["Let's play chess."], "message": "knight g1 f3 yo", "intent": "Knight from g1 to f3.", "kind": "recover"}
+{"world": "games.chess", "tab": "chess", "setup": ["Let's play chess."], "message": "is knight f3 legal", "intent": "Is knight to f3 a legal move?", "kind": "recover"}
+{"world": "games.chess", "tab": "chess", "setup": ["Let's play chess."], "message": "bishop b5 can", "intent": "Can I play the bishop to b5?", "kind": "recover"}
+{"world": "games.chess", "tab": "chess", "setup": ["Let's play chess."], "message": "charlie six bishop", "intent": "Bishop to charlie six.", "kind": "recover"}
+{"world": "games.chess", "tab": "chess", "setup": ["Let's play chess."], "message": "d4 pawn hey", "intent": "Pawn to d4.", "kind": "recover"}
+{"world": "games.chess", "tab": "chess", "setup": ["Let's play chess."], "message": "knight takes c6 ok", "intent": "Knight takes c6.", "kind": "recover"}
+{"world": "games.chess", "tab": "chess", "setup": ["Let's play chess."], "message": "echo four pawn pls", "intent": "Pawn to echo four.", "kind": "recover"}
+{"world": "games.chess", "tab": "chess", "setup": ["Let's play chess."], "message": "queen capture d5 thx", "intent": "Queen captures on d5.", "kind": "recover"}
+{"world": "games.chess", "tab": "chess", "setup": ["Let's play chess."], "message": "king castle short", "intent": "Short castle.", "kind": "recover"}
+{"world": "games.chess", "tab": "chess", "setup": ["Let's play chess."], "message": "purple sandwich rook tuesday", "intent": "", "kind": "junk"}
+{"world": "games.chess", "tab": "chess", "setup": ["Let's play chess."], "message": "knight e9 pls", "intent": "", "kind": "junk"}
+{"world": "games.chess", "tab": "chess", "setup": ["Let's play chess."], "message": "cloud banana seven castle", "intent": "", "kind": "junk"}
+{"world": "games.chess", "tab": "chess", "setup": ["Let's play chess."], "message": "sofa queen bicycle", "intent": "", "kind": "junk"}
+{"world": "games.tictactoe", "tab": "tictactoe", "setup": ["Start a new tic tac toe game."], "message": "left top pls", "intent": "Top left.", "kind": "recover"}
+{"world": "games.tictactoe", "tab": "tictactoe", "setup": ["Start a new tic tac toe game."], "message": "bottom right corner yo", "intent": "Play the bottom right corner.", "kind": "recover"}
+{"world": "games.tictactoe", "tab": "tictactoe", "setup": ["Start a new tic tac toe game."], "message": "row 2 column 3 thx", "intent": "Row 2 column 3.", "kind": "recover"}
+{"world": "games.tictactoe", "tab": "tictactoe", "setup": ["Start a new tic tac toe game."], "message": "r2 c3 pls", "intent": "Row 2 column 3.", "kind": "recover"}
+{"world": "games.tictactoe", "tab": "tictactoe", "setup": ["Start a new tic tac toe game."], "message": "middle row left ok", "intent": "Middle row left.", "kind": "recover"}
+{"world": "games.tictactoe", "tab": "tictactoe", "setup": ["Start a new tic tac toe game."], "message": "level perfect plz", "intent": "Set the level to perfect.", "kind": "recover"}
+{"world": "games.tictactoe", "tab": "tictactoe", "setup": ["Start a new tic tac toe game."], "message": "hard mode yo", "intent": "Make it hard.", "kind": "recover"}
+{"world": "games.tictactoe", "tab": "tictactoe", "setup": ["Start a new tic tac toe game."], "message": "easy game pls", "intent": "Give me an easy game.", "kind": "recover"}
+{"world": "games.tictactoe", "tab": "tictactoe", "setup": ["Start a new tic tac toe game."], "message": "winning who", "intent": "Who is winning?", "kind": "recover"}
+{"world": "games.tictactoe", "tab": "tictactoe", "setup": ["Start a new tic tac toe game."], "message": "moves how many", "intent": "How many moves have we made?", "kind": "recover"}
+{"world": "games.tictactoe", "tab": "tictactoe", "setup": ["Start a new tic tac toe game."], "message": "board describe pls", "intent": "Describe the board.", "kind": "recover"}
+{"world": "games.tictactoe", "tab": "tictactoe", "setup": ["Start a new tic tac toe game."], "message": "tic tac toe new game", "intent": "Start a new tic tac toe game.", "kind": "recover"}
+{"world": "games.tictactoe", "tab": "tictactoe", "setup": ["Start a new tic tac toe game."], "message": "center pls", "intent": "Center.", "kind": "recover"}
+{"world": "games.tictactoe", "tab": "tictactoe", "setup": ["Start a new tic tac toe game."], "message": "bottom middle yo", "intent": "Bottom middle.", "kind": "recover"}
+{"world": "games.tictactoe", "tab": "tictactoe", "setup": ["Start a new tic tac toe game."], "message": "top middle thanks", "intent": "Top middle.", "kind": "recover"}
+{"world": "games.tictactoe", "tab": "tictactoe", "setup": ["Start a new tic tac toe game."], "message": "first me pls", "intent": "Let me go first.", "kind": "recover"}
+{"world": "games.tictactoe", "tab": "tictactoe", "setup": ["Start a new tic tac toe game."], "message": "second me", "intent": "Let me go second.", "kind": "recover"}
+{"world": "games.tictactoe", "tab": "tictactoe", "setup": ["Start a new tic tac toe game."], "message": "your last spot", "intent": "Your last spot.", "kind": "recover"}
+{"world": "games.tictactoe", "tab": "tictactoe", "setup": ["Start a new tic tac toe game."], "message": "board clear", "intent": "Clear the board.", "kind": "recover"}
+{"world": "games.tictactoe", "tab": "tictactoe", "setup": ["Start a new tic tac toe game."], "message": "forfeit ok", "intent": "Forfeit.", "kind": "recover"}
+{"world": "games.tictactoe", "tab": "tictactoe", "setup": ["Start a new tic tac toe game."], "message": "mode easy ok", "intent": "Easy mode.", "kind": "recover"}
+{"world": "games.tictactoe", "tab": "tictactoe", "setup": ["Start a new tic tac toe game."], "message": "top right pls", "intent": "Top right.", "kind": "recover"}
+{"world": "games.tictactoe", "tab": "tictactoe", "setup": ["Start a new tic tac toe game."], "message": "bottom left thx", "intent": "Bottom left.", "kind": "recover"}
+{"world": "games.tictactoe", "tab": "tictactoe", "setup": ["Start a new tic tac toe game."], "message": "banana cloud seven pls", "intent": "", "kind": "junk"}
+{"world": "games.tictactoe", "tab": "tictactoe", "setup": ["Start a new tic tac toe game."], "message": "row 9 column 8", "intent": "", "kind": "junk"}
+{"world": "games.tictactoe", "tab": "tictactoe", "setup": ["Start a new tic tac toe game."], "message": "left right center top", "intent": "", "kind": "junk"}
+{"world": "games.tictactoe", "tab": "tictactoe", "setup": ["Start a new tic tac toe game."], "message": "purple sofa tuesday", "intent": "", "kind": "junk"}
+{"world": "games.guess", "tab": "guess", "setup": ["I am thinking of an animal"], "message": "zebra it was", "intent": "It was a zebra.", "kind": "recover"}
+{"world": "games.guess", "tab": "guess", "setup": ["I am thinking of an animal"], "message": "giraffe I meant", "intent": "I meant the giraffe.", "kind": "recover"}
+{"world": "games.guess", "tab": "guess", "setup": ["I am thinking of an animal"], "message": "tiger in mind had", "intent": "I had a tiger in mind.", "kind": "recover"}
+{"world": "games.guess", "tab": "guess", "setup": ["I am thinking of an animal"], "message": "penguin add it", "intent": "It was a penguin, add it.", "kind": "recover"}
+{"world": "games.guess", "tab": "guess", "setup": ["I am thinking of an animal"], "message": "owl thinking was", "intent": "I was thinking of an owl.", "kind": "recover"}
+{"world": "games.guess", "tab": "guess", "setup": ["I am thinking of an animal"], "message": "remaining animals list", "intent": "List the remaining animals.", "kind": "recover"}
+{"world": "games.guess", "tab": "guess", "setup": ["I am thinking of an animal"], "message": "animals left which", "intent": "Which animals are left?", "kind": "recover"}
+{"world": "games.guess", "tab": "guess", "setup": ["I am thinking of an animal"], "message": "questions how many asked", "intent": "How many questions have you asked?", "kind": "recover"}
+{"world": "games.guess", "tab": "guess", "setup": ["I am thinking of an animal"], "message": "why that question lol", "intent": "Why did you ask that?", "kind": "recover"}
+{"world": "games.guess", "tab": "guess", "setup": ["I am thinking of an animal"], "message": "repeat question pls", "intent": "Repeat the question.", "kind": "recover"}
+{"world": "games.guess", "tab": "guess", "setup": ["I am thinking of an animal"], "message": "yes sometimes", "intent": "Sometimes.", "kind": "recover"}
+{"world": "games.guess", "tab": "guess", "setup": ["I am thinking of an animal"], "message": "no wrong thats", "intent": "No, thats wrong.", "kind": "recover"}
+{"world": "games.guess", "tab": "guess", "setup": ["I am thinking of an animal"], "message": "giving up pls", "intent": "Giving up.", "kind": "recover"}
+{"world": "games.guess", "tab": "guess", "setup": ["I am thinking of an animal"], "message": "guess animal my", "intent": "Guess my animal.", "kind": "recover"}
+{"world": "games.guess", "tab": "guess", "setup": ["I am thinking of an animal"], "message": "penguin new animal", "intent": "A penguin, new animal for you.", "kind": "recover"}
+{"world": "games.guess", "tab": "guess", "setup": ["I am thinking of an animal"], "message": "zebra its a", "intent": "Its a zebra.", "kind": "recover"}
+{"world": "games.guess", "tab": "guess", "setup": ["I am thinking of an animal"], "message": "possible maybe yes", "intent": "Its possible.", "kind": "recover"}
+{"world": "games.guess", "tab": "guess", "setup": ["I am thinking of an animal"], "message": "really dont know i", "intent": "I really dont know.", "kind": "recover"}
+{"world": "games.guess", "tab": "guess", "setup": ["I am thinking of an animal"], "message": "reason question the", "intent": "What is the reason for that question?", "kind": "recover"}
+{"world": "games.guess", "tab": "guess", "setup": ["I am thinking of an animal"], "message": "number questions asked", "intent": "Number of questions asked?", "kind": "recover"}
+{"world": "games.guess", "tab": "guess", "setup": ["I am thinking of an animal"], "message": "options left", "intent": "Options left?", "kind": "recover"}
+{"world": "games.guess", "tab": "guess", "setup": ["I am thinking of an animal"], "message": "mind reading pls", "intent": "Mind reading time.", "kind": "recover"}
+{"world": "games.guess", "tab": "guess", "setup": ["I am thinking of an animal"], "message": "pardon come again", "intent": "Come again?", "kind": "recover"}
+{"world": "games.guess", "tab": "guess", "setup": ["I am thinking of an animal"], "message": "animal ready pick", "intent": "Animal is ready.", "kind": "recover"}
+{"world": "games.guess", "tab": "guess", "setup": ["I am thinking of an animal"], "message": "zebra tuesday purple pls", "intent": "", "kind": "junk"}
+{"world": "games.guess", "tab": "guess", "setup": ["I am thinking of an animal"], "message": "giraffe maybe no yes", "intent": "", "kind": "junk"}
+{"world": "games.guess", "tab": "guess", "setup": ["I am thinking of an animal"], "message": "sofa penguin bicycle", "intent": "", "kind": "junk"}
+{"world": "games.guess", "tab": "guess", "setup": ["I am thinking of an animal"], "message": "owl 42 blue", "intent": "", "kind": "junk"}
+{"world": "games.hangman", "tab": "hangman", "setup": ["Play hangman with the word lion."], "message": "e pls is there", "intent": "Is there an E?", "kind": "recover"}
+{"world": "games.hangman", "tab": "hangman", "setup": ["Play hangman with the word lion."], "message": "r letter the", "intent": "The letter R.", "kind": "recover"}
+{"world": "games.hangman", "tab": "hangman", "setup": ["Play hangman with the word lion."], "message": "try s thx", "intent": "Try S.", "kind": "recover"}
+{"world": "games.hangman", "tab": "hangman", "setup": ["Play hangman with the word lion."], "message": "z guess", "intent": "Guessing z.", "kind": "recover"}
+{"world": "games.hangman", "tab": "hangman", "setup": ["Play hangman with the word lion."], "message": "any n pls", "intent": "Any n?", "kind": "recover"}
+{"world": "games.hangman", "tab": "hangman", "setup": ["Play hangman with the word lion."], "message": "o is there", "intent": "O is there?", "kind": "recover"}
+{"world": "games.hangman", "tab": "hangman", "setup": ["Play hangman with the word lion."], "message": "elephant word is it", "intent": "Is it elephant?", "kind": "recover"}
+{"world": "games.hangman", "tab": "hangman", "setup": ["Play hangman with the word lion."], "message": "tiger guess maybe", "intent": "Could it be a tiger?", "kind": "recover"}
+{"world": "games.hangman", "tab": "hangman", "setup": ["Play hangman with the word lion."], "message": "zebra think i", "intent": "I think it is a zebra.", "kind": "recover"}
+{"world": "games.hangman", "tab": "hangman", "setup": ["Play hangman with the word lion."], "message": "owl is it", "intent": "Is it an owl?", "kind": "recover"}
+{"world": "games.hangman", "tab": "hangman", "setup": ["Play hangman with the word lion."], "message": "hangman zebra new", "intent": "Play hangman with the word zebra.", "kind": "recover"}
+{"world": "games.hangman", "tab": "hangman", "setup": ["Play hangman with the word lion."], "message": "word zebra hangman", "intent": "Hangman word zebra.", "kind": "recover"}
+{"world": "games.hangman", "tab": "hangman", "setup": ["Play hangman with the word lion."], "message": "tiger word use pls", "intent": "Use tiger as the word.", "kind": "recover"}
+{"world": "games.hangman", "tab": "hangman", "setup": ["Play hangman with the word lion."], "message": "elephant hangman new", "intent": "Play hangman with the word elephant.", "kind": "recover"}
+{"world": "games.hangman", "tab": "hangman", "setup": ["Play hangman with the word lion."], "message": "hint little pls", "intent": "Little hint please.", "kind": "recover"}
+{"world": "games.hangman", "tab": "hangman", "setup": ["Play hangman with the word lion."], "message": "word show me", "intent": "Show me the word.", "kind": "recover"}
+{"world": "games.hangman", "tab": "hangman", "setup": ["Play hangman with the word lion."], "message": "guesses left how many", "intent": "How many guesses are left?", "kind": "recover"}
+{"world": "games.hangman", "tab": "hangman", "setup": ["Play hangman with the word lion."], "message": "dashes display", "intent": "Display the dashes.", "kind": "recover"}
+{"world": "games.hangman", "tab": "hangman", "setup": ["Play hangman with the word lion."], "message": "letters hidden how many", "intent": "How many letters are hidden?", "kind": "recover"}
+{"world": "games.hangman", "tab": "hangman", "setup": ["Play hangman with the word lion."], "message": "fun fact say", "intent": "Say a fun fact.", "kind": "recover"}
+{"world": "games.hangman", "tab": "hangman", "setup": ["Play hangman with the word lion."], "message": "giving up", "intent": "Giving up.", "kind": "recover"}
+{"world": "games.hangman", "tab": "hangman", "setup": ["Play hangman with the word lion."], "message": "n next letter", "intent": "Next letter, n.", "kind": "recover"}
+{"world": "games.hangman", "tab": "hangman", "setup": ["Play hangman with the word lion."], "message": "e another one", "intent": "Another one: e.", "kind": "recover"}
+{"world": "games.hangman", "tab": "hangman", "setup": ["Play hangman with the word lion."], "message": "z appear does", "intent": "Does z appear?", "kind": "recover"}
+{"world": "games.hangman", "tab": "hangman", "setup": ["Play hangman with the word lion."], "message": "misses how many left", "intent": "How many misses can I still make?", "kind": "recover"}
+{"world": "games.hangman", "tab": "hangman", "setup": ["Play hangman with the word lion."], "message": "tuesday hangman purple thx", "intent": "", "kind": "junk"}
+{"world": "games.hangman", "tab": "hangman", "setup": ["Play hangman with the word lion."], "message": "letter 42 fish", "intent": "", "kind": "junk"}
+{"world": "games.hangman", "tab": "hangman", "setup": ["Play hangman with the word lion."], "message": "orange guess bicycle", "intent": "", "kind": "junk"}
+{"world": "games.hangman", "tab": "hangman", "setup": ["Play hangman with the word lion."], "message": "dashes banana sunday", "intent": "", "kind": "junk"}
