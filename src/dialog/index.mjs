@@ -102,6 +102,8 @@ const BUILTIN_TAB = { 'ui.avatar': 'robot', 'docs.editor': 'editor', 'games.tict
 const langOf = (r) => (typeof r === 'string' ? r : r?.lang) ?? 'en';
 const textOf = (r) => (typeof r === 'string' ? r : r?.text);
 
+const QUESTION_WORD = /^(?:what|who|whom|whose|where|when|why|how|which)\b/i;
+
 export class DialogSession {
   constructor(engine, { language = 'auto', formalizer = 'rules', spell = true, partial = false } = {}) {
     this.engine = engine;
@@ -349,12 +351,14 @@ export class DialogSession {
     this.sources.set(sid, { original: text, english, lang, alignment: translation?.alignment });
     // Correction phase (spec 03 section 1c, review G2): "knight to f3, no, knight to c3" is resolved on the whole message, before the
     // modal interceptors, discourse, segmentation and routing, so the abandoned variant never has an effect.
+    english = engine.interp.lang.stripFiller(english) || english;   // "lol ok and ...", "uhh and a pig?": leading hesitation never reaches a world
     const selfCorrections = await this._correct(english);
     if (selfCorrections.corrections.length) english = selfCorrections.text;
 
     const stateBefore = Object.fromEntries(Object.entries(this.isession.state).map(([k, v]) => [k, JSON.stringify(v)]));
     this.isession.effects = [];
     const disc = this.discourse;
+    const tabBefore = this.isession.state['ui.shell']?.activeTab;
     const pend = disc.takePending();   // an expectation lives for one turn (spec 11)
     const icpt = interp.intercept(this.isession, english);   // modal input (spec 07 section 2)
     let pre = null;   // discourse resolution (spec 11): the reply fills a pending argument, or a fragment is an ellipsis of an earlier frame
@@ -368,6 +372,8 @@ export class DialogSession {
         if (pend?.type === 'fill') pre = await disc.fill(pend, english, sid);
         if (!pre) pre = await disc.ellipsis(english, sid);
         if (!pre) pre = await disc.pronoun(english, sid);
+        // "and how many days are in a week?" with nothing to continue: the connective joins nothing, the question stands on its own
+        if (!pre) { const bare = engine.interp.lang.stripConnective(english); if (bare !== english && QUESTION_WORD.test(bare)) formalText = bare; }
       }
     }
     let formal = icpt || meta?.reply != null ? { segments: [], wires: [] } : pre ? { ...pre.res, dispatch: null } : await this._formalize(formalText, sid, formalizer ?? this.formalizer, { spell: spell ?? this.spell, partial: partial ?? this.partial });
@@ -437,7 +443,7 @@ export class DialogSession {
         if (r.status === 'supported') { const wid = seg.match?.worldId; const t = set.get(wid)?.tab?.id ?? BUILTIN_TAB[wid]; if (t) followTab = t; }
         ops.push(...r.ops);
         disc.noteTurn(seg, rendered, this._msg);
-        if (r.status === 'supported') { const fr = disc.recordFrame(seg, this._msg); if (fr) { fr.reply = rendered; fr.opId = r.ops[0]?.op ?? null; } }
+        if (r.status === 'supported') { const fr = disc.recordFrame(seg, this._msg); if (fr) { fr.reply = rendered; fr.value = r.envelope?.value ?? null; fr.opId = r.ops[0]?.op ?? null; } }
         else if (r.status === 'missing' && r.envelope?.pending) disc.openFill(seg, r.envelope, rendered, this._msg);
         answerWires.push(r.answer);
         answers.push({
@@ -489,8 +495,10 @@ export class DialogSession {
         reply = parts.map((p) => p.text).join('');
       } catch { parts = englishParts.map(({ join, fallback, ...p }) => p); reply = englishReply; }
     }
+    if (icpt?.reply) { disc.icptTurn = { turn: this._msg, text: english, reply: icpt.reply, world: icpt.worldId }; disc.noteWorld(icpt.worldId, english, icpt.reply, this._msg); }
     if (!disc.pending) disc.openConfirm(englishReply, this._msg);
     disc.commitTurn({ turn: this._msg, text: english, before: stateBefore });
+    disc.noteNavigation({ text: english, tabBefore: tabBefore, tabAfter: this.isession.state['ui.shell']?.activeTab, turn: this._msg });
     if (meta?.info?.kind !== 'repeat' && meta?.info?.kind !== 'explain') disc.lastAnswer = { text: englishReply, turn: this._msg };
     const feedback = meta?.feedback ?? null;
     const state = {};

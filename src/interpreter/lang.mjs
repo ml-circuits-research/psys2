@@ -2,7 +2,7 @@
  * Shared dialogue vocabulary: yes/no/unsure/cancel, ordinals, colours, sizes, positions, degree words. Browser-safe, no imports.
  *
  * The words live in `worlds/lang.common` (phrase groups `lang.yes`, `lang.assent`, `lang.no`, `lang.decline`, `lang.unsure`, `lang.cancel`,
- * `lang.degree.*`, `lang.comparative`, `lang.shade`, `lang.size.*`, `lang.position.*`, `lang.ordinal.last`, `lang.lead.ask`, and the
+ * `lang.degree.*`, `lang.comparative`, `lang.shade`, `lang.size.*`, `lang.position.*`, `lang.ordinal.last`, `lang.lead.ask`, `lang.filler`, `lang.connective`, and the
  * lexicons `lex.lang.colour` and `lex.lang.ordinal`). `makeLang({ phrase, lexicon })` turns them into the function table that worlds
  * see as `ctx.lang` (spec 04) and that the discourse layer reads through `interp.lang` (spec 11). Nothing here holds a word list:
  * with an empty source every function answers "nothing".
@@ -35,6 +35,16 @@ export function makeLang(source) {
   const LEAD = askAlts.length ? new RegExp(`^(?:(?:${askAlts.map(esc).join('|')}) )+`) : null;
   /** Drop leading asking words ("please", "can you", "tell me", "i want to know"). */
   const stripLead = (text) => (LEAD ? String(text ?? '').replace(LEAD, '') : String(text ?? ''));
+
+  const fillerAlts = [...new Set(phrase('lang.filler'))].sort((a, b) => b.length - a.length);
+  const FILLER = fillerAlts.length ? new RegExp(`^(?:(?:${fillerAlts.map(esc).join('|')})[\\s,.!?-]+)+(?=\\S)`, 'i') : null;
+  /** Drop leading hesitation and backchannel words ("lol ok", "uhh", "hmm,") when something else follows; a message of fillers only stays as it is. */
+  const stripFiller = (text) => (FILLER ? String(text ?? '').replace(FILLER, '') : String(text ?? ''));
+
+  const connAlts = [...new Set(phrase('lang.connective'))].sort((a, b) => b.length - a.length);
+  const CONNECTIVE = connAlts.length ? new RegExp(`^(?:${connAlts.map(esc).join('|')})[\\s,]+(?=\\S)`, 'i') : null;
+  /** Drop a leading connective ("and", "also", "but", "so") that joins nothing; the caller decides when the rest stands on its own. */
+  const stripConnective = (text) => (CONNECTIVE ? String(text ?? '').replace(CONNECTIVE, '') : String(text ?? ''));
 
   // ---- ordinals: the order of lex.lang.ordinal is the value (first = 1 ... tenth = 10); "last" and its synonyms are -1 ---------
   const ORDINAL_WORDS = ['', ...source.lexicon('lex.lang.ordinal').map((w) => String(w).toLowerCase()).filter((w) => w !== 'last')];
@@ -105,7 +115,7 @@ export function makeLang(source) {
     return null;
   };
 
-  return { yesNo, unsure, cancel, stripLead, ordinal, ordinalWord, colour, size, position, degree, splitAdverb, COLOURS, SHADES, COMPARATIVES, DEGREE_ADVERBS };
+  return { yesNo, unsure, cancel, stripLead, stripFiller, stripConnective, ordinal, ordinalWord, colour, size, position, degree, splitAdverb, COLOURS, SHADES, COMPARATIVES, DEGREE_ADVERBS };
 }
 
 export default makeLang;

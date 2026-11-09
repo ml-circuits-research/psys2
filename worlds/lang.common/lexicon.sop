@@ -519,7 +519,6 @@
     alt=uh
     alt=uhh
     alt=uhm
-    alt=umm
     alt=whoops
     alt=wow
     alt=yay
@@ -1185,3 +1184,30 @@
     alt=will_you
     alt=tell_me
     alt=please
+
+@phrase.lang.filler core.phrase
+    frame=false
+    doc="Leading hesitation and backchannel words dropped by ctx.lang.stripFiller when a real request follows (lol ok and ..., uhh and a pig)."
+    alt=lol
+    alt=haha
+    alt=hehe
+    alt=hmm
+    alt=hmmm
+    alt=um
+    alt=uh
+    alt=uhh
+    alt=er
+    alt=erm
+    alt=ok
+    alt=okay
+
+@phrase.lang.connective core.phrase
+    frame=false
+    doc="Leading connectives dropped by ctx.lang.stripConnective when nothing earlier can be continued (and how many days are in a week)."
+    alt=and
+    alt=and_then
+    alt=and_also
+    alt=also
+    alt=but
+    alt=so
+    alt=then
