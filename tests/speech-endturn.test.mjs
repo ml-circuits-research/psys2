@@ -115,3 +115,20 @@ test('refreshLang restarts an idle hands-free recognizer with the new language',
   await sleep(30); assert.notEqual(rec(), r0); assert.equal(rec().lang, 'ro-RO'); assert.ok(rec().started);
   sp.destroy();
 });
+
+test('EOT2: "play" waits the long pause, and "play little star" after a gap is one message (phrase log rows 63-68)', async () => {
+  const { sp, log, rec } = make({ plausible: async (t) => t === 'play little star' });
+  sp.listenOnce(); rec().say(['play']);
+  await sleep(120); assert.equal(log.sent.length, 0, 'a bare verb is not sent after the short pause');
+  rec().say(['play little star']);   // the continuation after a gap longer than the short pause
+  await sleep(150);
+  assert.deepEqual(log.sent.map((m) => m.text), ['play little star']);
+  const b = make({ plausible: async () => false });
+  b.sp.listenOnce(); b.rec().say(['play']);
+  await sleep(300); assert.deepEqual(b.log.sent.map((m) => [m.text, m.how]), [['play', 'pause-timeout']]);
+});
+
+test('EOT2: a trailing verb, determiner or number waits; a lone number or a full command does not', () => {
+  for (const t of ['play', 'draw a', 'add 3', 'add my', 'make it two', 'cântă', 'adaugă 5']) assert.ok(endsOpen(t), t);
+  for (const t of ['3', 'two', 'play little star', 'make a house', 'yes', 'da']) assert.ok(!endsOpen(t), t);
+});

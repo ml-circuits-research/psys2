@@ -182,7 +182,8 @@ export class DialogSession {
       if (!segs.length || segs.some((x) => x.unparsed || x.partial || x.ignored?.length)) return { complete: false, segments: segs.length, reason: 'incomplete' };
       for (const seg of segs) {
         f.isession.add(seg.wires);
-        for (const w of seg.wires) { const r = interp.resolve(f.isession, w); if (r && (r.status === 'unsupported' || r.status === 'error')) return { complete: false, segments: segs.length, reason: 'refused' }; }
+        for (const w of seg.wires) { const r = interp.resolve(f.isession, w); if (r && (r.status === 'unsupported' || r.status === 'error')) return { complete: false, segments: segs.length, reason: 'refused' };
+          if (r && (r.status === 'missing' || r.status === 'ambiguous')) return { complete: false, segments: segs.length, reason: r.status }; }   // EOT2: a reading that still needs an argument ("play" -> what?) is not a whole message
       }
       return { complete: true, segments: segs.length, reason: 'ok' };
     } catch (e) {

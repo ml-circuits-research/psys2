@@ -875,7 +875,7 @@
 
 @pat.ui.shell.lis.off5 core.pattern
     canonical="Stop microphone."
-    match="[$lang.lead.filler|pls|plz]? [$ui.shell.g5_can_u]? [$lang.stop.mic] [$ui.shell.g4_pls]?"
+    match="[$lang.lead.filler|pls|plz]? [$ui.shell.g5_can_u]? [$lang.mic.off] [$ui.shell.g4_pls]?"
     emit="@{_} core.request action=ui.listening arg.on=false"
     kind=request
     priority=12

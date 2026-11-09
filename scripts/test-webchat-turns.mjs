@@ -113,7 +113,7 @@ export const SCENARIOS = {
   async enter(o) {
     const c = await openChat(o);
     try {
-      await c.slowSend(2500);
+      await c.slowSend(8000);
       const users = () => c.pg.$$eval('.p2-msg.is-user', (e) => e.length);
       await c.pg.type('input.p2-text', 'make a house and a man');
       await c.pg.keyboard.press('Enter');
@@ -122,16 +122,12 @@ export const SCENARIOS = {
       await c.pg.type('input.p2-text', 'second message');
       await c.pg.keyboard.press('Enter');
       await new Promise((r) => setTimeout(r, 300));
-      const status = await c.pg.$eval('.p2-status', (e) => e.textContent);
-      check('enter: nothing was sent during a turn', (await users()) === n);
-      check('enter: the hint is shown', /Wait for the answer or press Stop/.test(status), status);
-      check('enter: the typed text stays in the input', (await c.pg.$eval('input.p2-text', (e) => e.value)) === 'second message');
-      check('enter: the input stays editable', await c.pg.$eval('input.p2-text', (e) => !e.disabled));
-      await c.pg.waitForFunction(() => !window.psys2.busy, { timeout: 12000 });
-      await c.realSend();
-      await c.pg.keyboard.press('Enter');   // idle: now it sends
-      await c.pg.waitForFunction(() => !window.psys2.busy && document.querySelectorAll('.p2-msg.is-user').length >= 2, { timeout: 12000 });
-      check('enter: after the answer the same text is sent', (await users()) === n + 1);
+      check('enter: during a turn the message is not sent yet', (await users()) === n);
+      check('enter: it waits as a chip above the input (MIC2 queue)', (await c.pg.$$eval('.p2-queue .p2-qchip', (e) => e.map((x) => x.textContent))).join('|').startsWith('second message'));
+      check('enter: the input is empty and stays editable', (await c.pg.$eval('input.p2-text', (e) => e.value === '' && !e.disabled)));
+      await c.realSend();   // the waiting message runs at normal speed once the slow turn ends
+      await c.pg.waitForFunction(() => !window.psys2.busy && document.querySelectorAll('.p2-msg.is-user').length >= 2, { timeout: 40000, polling: 50 });
+      check('enter: after the answer the waiting message is sent', (await users()) >= n + 1 && (await c.pg.$$eval('.p2-queue .p2-qchip', (e) => e.length)) === 0);
     } finally { await c.close(); }
   },
   async watchdog(o) {

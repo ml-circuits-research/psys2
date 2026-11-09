@@ -87,6 +87,7 @@ export async function mountPsys2(element, options = {}) {
   const panelUI = {};          // tab id -> { ui, present }
   let engine = null, session = null, translator = null, speech = null;
   let view = tabDefs[0]?.id ?? null, lastShellTab = null, lastShell = {};
+  const queue = [], micLog = [];   // MIC2: waiting messages { id, text, mode, voice, queuedAt }; the mic click log
   let busy = 0, turn = null, flash = null, flashTimer = null, interim = '', mic = { listening: false, speaking: false, mode: null };
   let destroyed = false, shellSeen = false;
   const phrases = createStore(options.persist !== false ? globalThis.localStorage : null);
@@ -105,10 +106,12 @@ export async function mountPsys2(element, options = {}) {
   const label = (btn, text) => { btn.setAttribute('aria-label', text); btn.title = text; };
   const micBtn = h('button', { class: 'p2-btn p2-mic', type: 'button', 'aria-pressed': 'false', 'aria-label': 'Speak a message', title: 'Speak a message' }, icon('mic'));
   const ringEl = (() => { const NS = 'http://www.w3.org/2000/svg'; const svg = document.createElementNS(NS, 'svg'); svg.setAttribute('viewBox', '0 0 40 40'); svg.setAttribute('class', 'p2-ring'); svg.setAttribute('aria-hidden', 'true'); const c = document.createElementNS(NS, 'circle'); c.setAttribute('cx', '20'); c.setAttribute('cy', '20'); c.setAttribute('r', '18'); svg.append(c); return svg; })();
-  micBtn.append(ringEl);
+  const micCount = h('span', { class: 'p2-mic-count', 'aria-hidden': 'true', hidden: true });
+  micBtn.append(ringEl, micCount);
   const speakerBtn = h('button', { class: 'p2-btn p2-speaker', type: 'button', 'aria-pressed': 'false', 'aria-label': 'Read answers aloud: off', title: 'Read answers aloud: off' }, icon('speaker'));
   const dieBtn = h('button', { class: 'p2-btn p2-die', type: 'button', 'aria-label': 'Try an example', title: 'Try an example' }, icon('die'));
   const sendBtn = h('button', { class: 'p2-btn p2-send', type: 'submit', 'aria-label': 'Send', title: 'Send' }, icon('send'));
+  const queueEl = h('div', { class: 'p2-queue', role: 'list', 'aria-label': 'Waiting messages', hidden: true });   // MIC2: messages that wait for the running turn
   const dictText = h('span', { class: 'p2-dict-text' }, 'Dictating into: Untitled document');
   const dictStop = h('button', { class: 'p2-btn-text p2-dict-stop', type: 'button', 'aria-label': 'Stop dictation', title: 'Stop dictation' }, 'Stop');
   const dictBar = h('div', { class: 'p2-dictbar', role: 'status', hidden: true }, h('i', { class: 'p2-rec', 'aria-hidden': 'true' }), dictText, dictStop);
@@ -125,7 +128,7 @@ export async function mountPsys2(element, options = {}) {
     h('header', { class: 'p2-head' },
       h('div', { class: 'p2-title' }, h('strong', {}, options.title ?? 'PSys2'), h('span', {}, TAGLINE)),
       h('div', { class: 'p2-tools' }, langSel, gearBtn)),
-    statusEl, log, dictBar, form,
+    statusEl, log, queueEl, dictBar, form,
     h('footer', { class: 'p2-foot' }, h('a', { href: SOURCE_URL, target: '_blank', rel: 'noopener', 'data-source-link': 'footer' }, 'Source code (AGPL-3.0)')));
   const tabsEl = h('div', { class: 'p2-tabs', role: 'tablist', 'aria-label': 'Tools' });
   const panelsEl = h('div', { class: 'p2-panels' });
@@ -215,16 +218,18 @@ export async function mountPsys2(element, options = {}) {
   function syncMic() {
     if (micBtn.disabled) return;
     const dict = dictDoc !== null;
-    const paused = !!mic.paused;
+    const paused = !!mic.paused, q = queue.length ? `; ${queue.length} message${queue.length > 1 ? 's' : ''} waiting` : '';
     const state = paused ? `Microphone paused — tap to resume (${mic.paused.reason})`
-      : settings.handsFree ? `Microphone on, ${mic.listening ? 'listening' : mic.speaking ? 'waiting while I speak' : 'starting'}. Say "stop microphone" or click to turn it off`
+      : settings.handsFree ? `Microphone on, ${mic.starting ? 'starting…' : mic.listening ? 'listening' : mic.speaking ? 'waiting while I speak (click to talk now)' : 'restarting…'}. Say "stop microphone" or click to turn it off${q}`
+      : mic.starting ? 'Microphone starting…; click to cancel'
       : mic.listening ? 'Microphone: listening to one message; click to stop'
       : settings.keepListening === false ? 'Microphone off: click to speak one message' : 'Microphone off: click to turn it on; it keeps listening until you say "stop microphone" or click again';
-    label(micBtn, dict ? `${state}. Dictating into: ${dictDoc}` : state);
+    label(micBtn, dict ? `${state}. Dictating into: ${dictDoc}` : (settings.handsFree || paused ? state : `${state}${q}`));
     micBtn.setAttribute('aria-pressed', String(!!settings.handsFree || mic.listening));
     micBtn.classList.toggle('is-on', mic.listening);
     micBtn.classList.toggle('is-paused', paused);
-    micBtn.dataset.mic = paused ? 'paused' : settings.handsFree ? (mic.listening ? 'listening' : 'waiting') : mic.listening ? 'once' : 'off';
+    micBtn.dataset.mic = paused ? 'paused' : mic.starting ? 'starting' : settings.handsFree ? (mic.listening ? 'listening' : 'waiting') : mic.listening ? 'once' : 'off';
+    micBtn.classList.toggle('is-starting', !!mic.starting && !paused);
     micBtn.classList.toggle('is-handsfree', !!settings.handsFree);
     micBtn.classList.toggle('is-dictating', dict);
   }
@@ -417,7 +422,7 @@ export async function mountPsys2(element, options = {}) {
       if (typing.msg.isConnected) typing.msg.remove();
       if (turn === tn) turn = null;
       busy = Math.max(0, busy - 1); setStatus(); scrollDown();
-      queueMicrotask(() => { if (!turn && !destroyed) speech?.turnEnded?.(); });   // a spoken message that waited in the field is sent now
+      queueMicrotask(() => { if (!turn && !destroyed) drainQueue(); });   // the next waiting message runs now
     }
     return reply;
   }
@@ -501,7 +506,7 @@ export async function mountPsys2(element, options = {}) {
   /** A phrase is logged the moment it is sent (RD7), so it counts even if the answer is slow, fails or the page closes; the reply fills the outcome later. */
   function logPhraseStart(text, mode, voice = {}) {
     if (!settings.logPhrases) return null;
-    try { const rec = buildRecord({ text, mode, language: settings.language, tab: view, reply: null, endType: voice.endType ?? null, waitMs: voice.waitMs ?? null, example: voice.example === true }); phrases.add(rec); if (!settingsEl.hidden) renderPhraseLog(); return rec.id; } catch (e) { console.warn('phrase log failed', e); return null; }
+    try { const rec = { ...buildRecord({ text, mode, language: settings.language, tab: view, reply: null, endType: voice.endType ?? null, waitMs: voice.waitMs ?? null, example: voice.example === true }), ...(voice.queueMs != null ? { queueMs: voice.queueMs } : {}) }; phrases.add(rec); if (!settingsEl.hidden) renderPhraseLog(); return rec.id; } catch (e) { console.warn('phrase log failed', e); return null; }
   }
   function recordPhrase(text, mode, reply, recId = null) {
     if (!settings.logPhrases) return;
@@ -521,22 +526,65 @@ export async function mountPsys2(element, options = {}) {
     const st = Object.entries(rec.stages ?? {}).map(([k, v]) => `${k.padEnd(18)} ${String(v.n).padStart(4)}x ${String(v.ms).padStart(8)} ms`);
     perfEl.textContent = [`${rec.text}`, `total ${rec.totalMs} ms (engine ${rec.engineMs}, render ${rec.render}, effects ${rec.effects})`, ...st].join('\n');
   }
-  /** Sends one message. One at a time: while a turn runs the message is not sent and not queued, the person gets a hint (Stop ends the turn). */
-  const send = (text, mode = 'typed', voice = {}) => {
-    const t = String(text ?? '').trim();
-    if (!t || !session) return Promise.resolve(null);
-    if (turn) { flashHint(BUSY_HINT); return Promise.resolve(null); }
+  // ---------- queue (MIC2) ----------
+  // One turn runs at a time, but typing and speaking never wait: a message that arrives during a turn becomes a chip above the input and is sent when the turn ends.
+  let queueSeq = 0, dropAsk = null, dropAskTimer = 0;
+  const YESNO = /^(yes|yeah|yep|yup|no|nope|ok|okay|sure|da|nu|bine)[.!\s]*$/i;
+  const lastBotAsks = () => { const b = [...log.querySelectorAll('.p2-msg.is-bot:not(.is-typing):not(.is-note) .p2-bubble')].at(-1); return /\?\s*$/.test(b?.textContent ?? ''); };
+  function renderQueue() {
+    const chips = queue.map((it) => h('span', { class: 'p2-qchip', role: 'listitem' },
+      h('span', { class: 'p2-qtext' }, it.text),
+      h('button', { class: 'p2-qdrop', type: 'button', 'aria-label': `Drop the waiting message: ${it.text}`, title: `Drop the waiting message: ${it.text}`, onclick: () => dropQueued(it.id) }, '×')));
+    queueEl.replaceChildren(...chips, ...(dropAsk ? [dropAsk] : []));
+    queueEl.hidden = !queue.length && !dropAsk;
+    micCount.textContent = String(queue.length); micCount.hidden = !queue.length;
+    syncMic();
+  }
+  function enqueue(text, mode, voice) {
+    queue.push({ id: ++queueSeq, text, mode, voice, queuedAt: performance.now() });
+    renderQueue();
+  }
+  function dropQueued(id) { const i = queue.findIndex((q) => q.id === id); if (i >= 0) queue.splice(i, 1); renderQueue(); if (!turn) drainQueue(); }
+  function clearQueue() { queue.length = 0; renderQueue(); }
+  /** Stop ended the turn: ask whether the waiting messages go too (default: keep; they run after the timeout). */
+  function askDrop() {
+    if (!queue.length || dropAsk) return;
+    const n = queue.length;
+    const done = (drop) => { clearTimeout(dropAskTimer); dropAsk = null; if (drop) queue.length = 0; renderQueue(); if (!turn) drainQueue(); };
+    dropAsk = h('span', { class: 'p2-qask', role: 'alert' }, `Drop the ${n} waiting message${n > 1 ? 's' : ''} too? `,
+      h('button', { class: 'p2-btn-text', type: 'button', onclick: () => done(false) }, 'Keep'), h('button', { class: 'p2-btn-text p2-qdrop-all', type: 'button', onclick: () => done(true) }, 'Drop'));
+    clearTimeout(dropAskTimer); dropAskTimer = setTimeout(() => done(false), 6000);
+    renderQueue();
+  }
+  /** The turn ended: the next waiting message runs. A bare yes/no whose question the previous turn already closed is shown greyed and skipped. */
+  function drainQueue() {
+    while (!turn && !destroyed && !dropAsk && queue.length) {
+      const it = queue.shift(); renderQueue();
+      if (YESNO.test(it.text.trim()) && !lastBotAsks()) {
+        addMessage('user', h('span', {}, it.text, h('small', { class: 'p2-skipped-note' }, ' skipped: the question was already answered')), { className: 'is-skipped' });
+        continue;
+      }
+      dispatch(it.text, it.mode, { ...it.voice, queueMs: Math.round(performance.now() - it.queuedAt) });
+    }
+  }
+  const dispatch = (t, mode, voice) => {
     const tPress = performance.now();
     const user = addMessage('user', t);
     const recId = logPhraseStart(t, mode, voice);
     return process(t, mode, user, recId, tPress);
+  };
+  /** Sends one message; while a turn runs (or others wait) it joins the visible queue and runs in order. */
+  const send = (text, mode = 'typed', voice = {}) => {
+    const t = String(text ?? '').trim();
+    if (!t || !session) return Promise.resolve(null);
+    if (turn || queue.length || dropAsk) { enqueue(t, mode, voice); if (!turn) drainQueue(); return Promise.resolve(null); }
+    return dispatch(t, mode, voice);
   };
   /** A spoken message (VOICE): logged with how it ended (final | pause-plausible | pause-timeout | mic-stop) and the wait in ms. */
   const sendVoice = (text, how, waitMs) => send(text, 'voice', { endType: how, waitMs: Math.round(waitMs ?? 0) });
   const stopTurn = () => { if (turn && !turn.ctl.signal.aborted) { turn.reason = 'stopped'; turn.ctl.abort(new DOMException('stopped by the user', 'AbortError')); } };
   on(form, 'submit', (e) => {
     e.preventDefault();
-    if (turn) { flashHint(BUSY_HINT); return; }   // the text stays in the input
     const t = input.value; input.value = ''; send(t);
   });
   // typing or tapping the field cancels a pending spoken send; the text stays for editing
@@ -550,7 +598,7 @@ export async function mountPsys2(element, options = {}) {
     if (!ex) { flashHint('No examples are available yet.'); return; }
     send(ex.text, 'chip', { example: true });
   });
-  on(sendBtn, 'click', (e) => { if (turn) { e.preventDefault(); stopTurn(); } });
+  on(sendBtn, 'click', (e) => { if (turn) { e.preventDefault(); stopTurn(); askDrop(); } });
 
   // ---------- speech ----------
   // VOICE: "automatic" (default; the older 'follow' means the same) follows the session language: the language of the last reply (RD5 detection), else the language setting
@@ -573,10 +621,8 @@ export async function mountPsys2(element, options = {}) {
   function disable(btn, why) { btn.disabled = true; label(btn, `${btn.getAttribute('aria-label')} (unavailable: ${why})`); }
   speech = createSpeech({
     getLang: speechLangTag, getVoiceName: () => settings.voice, getRate: () => settings.rate,
-    isBusy: () => !!turn,
     plausible: async (t) => !!(await session?.dryRead?.(t, { language: sessionLang ?? settings.language }))?.complete,   // dry run: no effects, bounded
     onSend: ({ text, how, waitMs }) => { input.value = ''; shown = ''; sendVoice(text, how, waitMs); },
-    onHold: (t) => { input.value = t; shown = t; flashHint('Heard you. Sending when the answer is done.'); },
     onCancel: (t) => { input.value = t; shown = ''; try { input.focus(); } catch { /* ignore */ } flashHint('Cancelled. The text is in the box for editing.'); },
     onPending: ({ active, ms, phase }) => { micBtn.classList.toggle('is-pending', !!active); micBtn.style.setProperty('--ring-ms', `${Math.round(ms)}ms`); micBtn.dataset.phase = phase ?? ''; if (active) { ringEl.classList.remove('run'); void ringEl.getBoundingClientRect(); ringEl.classList.add('run'); } else ringEl.classList.remove('run'); },
     onInterim: (t) => {   // the heard text appears in the field, unless the person has changed the field meanwhile
@@ -587,7 +633,7 @@ export async function mountPsys2(element, options = {}) {
     },
     onStopCommand: () => {   // "stop microphone": handled here, never sent to the chat
       const ro = speechLangTag().startsWith('ro'), msg = ro ? 'Am oprit microfonul.' : 'Microphone off.';
-      setHandsFree(false); speech.stopListening(); flashHint(msg);
+      const before = speech.snapshot(); setHandsFree(false); speech.stopListening(); logMic('voice-command', { action: 'off', before, after: speech.snapshot() }); flashHint(msg);
       if (settings.speaker && speechSupport.synthesis) speech.speak(msg, { lang: speechLangTag() });
     },
     onState: (s) => { mic = s; robotUI()?.setSpeaking(s.speaking); setStatus(); },
@@ -598,15 +644,17 @@ export async function mountPsys2(element, options = {}) {
     disable(micBtn, why);
   }
   if (!speechSupport.synthesis) disable(speakerBtn, 'Speech synthesis is not supported by this browser');
-  // one microphone: one click = conversation mode (listens until "stop microphone" or a second click, restarts itself); Settings > Voice can make a click a single message
-  on(micBtn, 'click', () => {
-    if (micBtn.disabled) return;
-    if (mic.paused) speech.resume();
-    else if (settings.handsFree) setHandsFree(false);
-    else if (mic.listening) speech.stopListening();
-    else if (settings.keepListening === false) speech.listenOnce();
-    else setHandsFree(true);
-  });
+  // one microphone: one click = conversation mode (listens until "stop microphone" or a second click, restarts itself). Every click acts at once (optimistic state, abort after 300 ms,
+  // 250 ms debounce, barge-in during read-aloud, see speech.toggle) and is logged with the state before and after (Settings > Developer).
+  const logMic = (via, r) => { micLog.push({ t: new Date().toISOString().slice(11, 23), via, action: r.action, before: r.before, after: r.after }); if (micLog.length > 100) micLog.shift(); };
+  function micClick(via = 'click') {
+    const r = speech.toggle({ single: settings.keepListening === false });
+    if (r.after.on !== settings.handsFree) { settings.handsFree = r.after.on; save(); session?.setWorldState?.(SHELL, { handsFree: r.after.on, listening: r.after.on }); renderSettings(); }
+    logMic(via, r); setStatus();
+    return r;
+  }
+  on(micBtn, 'click', () => { if (!micBtn.disabled) micClick('click'); });
+  on(micBtn, 'contextmenu', (e) => e.preventDefault());
   on(speakerBtn, 'click', () => setSpeaker(!settings.speaker));
   const setLanguage = (v) => { settings.language = v; langSel.value = v; sessionLang = null; speech?.refreshLang(); save(); renderSettings(); session?.setWorldState?.(SHELL, { language: settings.language }); };
   on(langSel, 'change', () => setLanguage(langSel.value));
@@ -810,6 +858,7 @@ export async function mountPsys2(element, options = {}) {
       check('Show the trace of every answer (which part was read by which rule, model and validator)', settings.showTrace, (v) => { settings.showTrace = v; save(); }),
       check('Show the per-stage timing overlay of the last message (also with ?perf=1 in the page address)', settings.showPerf === true, (v) => { settings.showPerf = v; save(); if (!v) perfEl?.remove(); }),
       timeLimitsGroup(),
+      h('div', { class: 'p2-field' }, h('strong', {}, 'Microphone clicks'), h('pre', { class: 'p2-miclog', tabindex: '0' }, micLog.length ? micLog.slice(-40).map((e) => `${e.t} ${e.via} ${e.action}: ${JSON.stringify(e.before)} -> ${JSON.stringify(e.after)}`).join('\n') : 'No clicks yet.')),
       h('div', { class: 'p2-field' }, h('strong', {}, 'Build'), buildInfoLines()),
     ];
   }
@@ -1033,6 +1082,10 @@ export async function mountPsys2(element, options = {}) {
   }
   const handle = {
     engine, session, settings, send, stop: stopTurn, applyState, showTab, get busy() { return !!turn; },
+    /** The queue of waiting messages (MIC2) and the turn state flags, in one place for other features (BUSY veil): `turnState()` says what is running and what waits. */
+    queue: { list: () => queue.map((q) => ({ id: q.id, text: q.text, mode: q.mode })), drop: dropQueued, clear: clearQueue, get length() { return queue.length; } },
+    turnState: () => ({ running: !!turn, queued: queue.length, speaking: !!mic.speaking, mic: micBtn.dataset.mic }),
+    get micLog() { return micLog; }, micClick,
     destroy() { destroyed = true; cleanups.forEach((f) => f()); modalHost.remove(); robotUI()?.destroy?.(); speech.destroy(); element.replaceChildren(); element.classList.remove('p2-box'); },
   };
   if (settings.handsFree && speechSupport.recognition) setHandsFree(true, false);
