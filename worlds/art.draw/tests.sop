@@ -3846,3 +3846,109 @@
     input="a purple tree please"
     expectStatus=unparsed
     doc="a bare noun phrase is a drawing request only on the drawing tab"
+
+@t.art.draw.rd01 core.test
+    session=rd1
+    input="draw a house"
+    expectState="objects.length=1"
+
+@t.art.draw.rd02 core.test
+    session=rd1
+    input="draw a girl"
+    expect="I drew a girl"
+    expectState="objects.1.kind=person"
+    expectState="objects.1.who=girl"
+    expectState="objects.1.parts.hair=yellow"
+    expectState="objects.1.parts.shirt=pink"
+
+@t.art.draw.rd03 core.test
+    session=rd1
+    input="a man"
+    expect="I drew a man"
+    expectState="objects.2.who=man"
+    expectState="objects.2.parts.shirt=blue"
+
+@t.art.draw.rd04 core.test
+    session=rd1
+    input="draw 2 people"
+    expect="2 blue people"
+    expectState="objects.length=5"
+
+@t.art.draw.rd05 core.test
+    session=rd1
+    input="draw another house"
+    expect="I drew a yellow house"
+    expectState="objects.length=6"
+
+@t.art.draw.rd06 core.test
+    session=rd1
+    input="a bigger house"
+    expect="bigger than the house"
+    expectState="objects.length=7"
+
+@t.art.draw.rd07 core.test
+    session=rd1
+    input="draw a bigger house"
+    expect="bigger than the house"
+    expectState="objects.length=8"
+
+@t.art.draw.rd08 core.test
+    session=rd1
+    input="make a happy man"
+    expect="happy man"
+    expectState="objects.8.mood=happy"
+    expectState="objects.8.who=man"
+
+@t.art.draw.rd09 core.test
+    session=rd1
+    input="make a sad woman"
+    expect="sad woman"
+    expectState="objects.9.mood=sad"
+    expectState="objects.9.who=woman"
+
+@t.art.draw.rd10 core.test
+    session=rd1
+    input="draw 2 boys"
+    expect="2 boys"
+    expectState="objects.length=12"
+
+@t.art.draw.rd11 core.test
+    session=rd1
+    input="draw a red girl"
+    expect="I drew a girl"
+    expectState="objects.12.parts.shirt=red"
+
+@t.art.draw.rd12 core.test
+    session=rd2
+    input="draw a tree"
+    expectState="objects.length=1"
+
+@t.art.draw.rd13 core.test
+    session=rd2
+    input="add a smaller tree"
+    expect="smaller than the tree"
+    expectState="objects.length=2"
+
+@t.art.draw.rd14 core.test
+    session=rd2
+    input="a taller tree"
+    expect="bigger than the tree"
+    expectState="objects.length=3"
+
+@t.art.draw.rd15 core.test
+    session=rd2
+    input="draw a bigger cat"
+    expect="no cat to compare"
+    expectState="objects.length=4"
+
+@t.art.draw.rd16 core.test
+    session=rd2
+    input="a smaller cat"
+    expect="smaller than the cat"
+    expectState="objects.length=5"
+
+@t.art.draw.rd17 core.test
+    session=rd3
+    input="Draw a sun, a cloud and a man."
+    expect="a man"
+    expectState="objects.length=3"

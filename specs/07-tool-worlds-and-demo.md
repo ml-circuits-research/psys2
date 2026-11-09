@@ -108,6 +108,11 @@ Principle: pick a well-made, recognizable open-source library, let what the libr
 | Drawing | `art.draw` | rough.js | MIT |
 | Tic-tac-toe, Guess the animal, Hangman | `games.*` | own code | — |
 
+### Drawing: comparatives and people (`art.draw`)
+- **Comparatives that create.** A creation with a comparative before the thing ("a bigger house", "draw a smaller tree", "add a taller tree"; words in `lex.art.draw.mods` and `COMPARATIVES` of `ops.mjs`) sizes the new X relative to the newest existing X (x1.4 or /1.4) and says so ("bigger than the house I had"); when there is no X yet it is a plain big (1.5) or small (0.65) one and the answer says there was nothing to compare with.
+- **Ellipsis after a draw.** On the Drawing tab (`tabOnly`) a noun phrase with a comparative or mood ("a bigger house", "a happy girl", `lex.art.draw.relmods`) or a person ("a man", "another girl", `lex.art.draw.people`) repeats the draw (`pat.art.draw.add.again`, `pat.art.draw.add.person`). A bare noun alone ("a cloud") is deliberately not read, because a comma list ("a sun, a cloud and a bird") must stay one command.
+- **People.** man, woman, girl and boy (and plurals) draw a person with presets (`WHO_PRESET`: size, hair color, shirt and pants or dress colors; `object.who`). A colour word before the person colors the dress or shirt. happy and sad before a person set `object.mood`; the host turns the smile curve down (sad) or draws it thicker (happy) in `partsOf`. Descriptions say "a girl", "a happy man", "2 boys".
+
 ## 8. Contextual help (`ui.help`)
 `ui.help` owns every help and capabilities phrase; the earlier help patterns of `ui.shell` and `kids.common` moved here (their other behaviour is unchanged). State `{ pos, lastUnparsed, lastHelp }`; it reads the app with `ctx.peek` (spec 04): the active tab and game from `ui.shell`, the game worlds' states, and `ctx.worlds()` for tab info and summaries. Worlds that declare a tab need nothing: their pattern examples and `summary` are used automatically.
 

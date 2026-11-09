@@ -404,6 +404,11 @@ export function partsOf(obj) {
     let hex = colorHex(color);
     if (p.sh) hex = shadeHex(hex, p.sh);
     const { c, m, alt, sh, ...rest } = p;
+    // a person's mood turns the smile curve: sad flips it, happy draws it thicker
+    if (obj.mood && kind === 'person' && p.n === 'smile' && rest.pts) {
+      if (obj.mood === 'sad') rest.pts = rest.pts.map(([x, y]) => [x, -1.4 - y]);
+      else rest.t = (rest.t ?? 0.015) * 2;
+    }
     return { ...rest, color: canonColor(color) ?? String(color), hex };
   });
 }

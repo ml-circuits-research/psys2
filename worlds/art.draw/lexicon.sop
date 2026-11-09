@@ -241,6 +241,26 @@
     word=brn
     word=dk
     word=lt
+    word=bigger
+    word=larger
+    word=taller
+    word=huger
+    word=wider
+    word=longer
+    word=smaller
+    word=tinier
+    word=littler
+    word=shorter
+    word=narrower
+    word=happy
+    word=glad
+    word=smiling
+    word=cheerful
+    word=sad
+    word=unhappy
+    word=crying
+    word=upset
+
 @lex.art.draw.ordinals core.lexicon
     class=modifier
     doc="Which one: first, second, ... last"
@@ -787,3 +807,40 @@
     word=dawn
     word=evening
     word=twilight
+
+@lex.art.draw.relmods core.lexicon
+    class=modifier
+    doc="Comparatives (bigger, smaller ...) and moods (happy, sad ...): they make a bare noun phrase on the Drawing tab a draw command (a bigger house, a happy girl). The same words are in lex.art.draw.mods."
+    word=bigger
+    word=larger
+    word=taller
+    word=huger
+    word=wider
+    word=longer
+    word=smaller
+    word=tinier
+    word=littler
+    word=shorter
+    word=narrower
+    word=happy
+    word=glad
+    word=smiling
+    word=cheerful
+    word=sad
+    word=unhappy
+    word=crying
+    word=upset
+
+@lex.art.draw.people core.lexicon
+    class=thing
+    doc="People as things to draw: man, woman, girl, boy (plural forms are matched through the plural entries of lex.art.draw.things)."
+    word=man
+    word=woman
+    word=girl
+    word=boy
+    word=men
+    word=women
+    word=girls
+    word=boys
+    word=person
+    word=people

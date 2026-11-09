@@ -1433,3 +1433,23 @@
     priority=9
     tabOnly=true
     example="A boat please."
+
+@pat.art.draw.add.again core.pattern
+    match="[$lang.lead.filler|pls|plz]? [a|an|another|one_more] {m1:lex.art.draw.relmods} {m2:lex.art.draw.mods?} {m3:lex.art.draw.mods?} {k:lex.art.draw.things} [pls|plz|please|thanks|thx]?"
+    emit="@{_} core.request action=draw.add arg.m1={m1} arg.m2={m2} arg.m3={m3} arg.kind={k} arg.kt=\"{k}\" arg.where=\"\""
+    kind=request
+    priority=12
+    tabOnly=true
+    example="A bigger house."
+    example="A smaller tree."
+    doc="Ellipsis after a draw on the Drawing tab: a comparative or a mood before the thing repeats the draw (a bigger house, a happy girl). A bare noun alone is not read: a comma list (a sun, a cloud and a bird) must stay one command."
+
+@pat.art.draw.add.person core.pattern
+    match="[$lang.lead.filler|pls|plz]? [a|an|another|one_more] {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {k:lex.art.draw.people} [pls|plz|please|thanks|thx]?"
+    emit="@{_} core.request action=draw.add arg.m1={m1} arg.m2={m2} arg.kind={k} arg.kt=\"{k}\" arg.where=\"\""
+    kind=request
+    priority=12
+    tabOnly=true
+    example="A man."
+    example="Another happy girl."
+    doc="Ellipsis after a draw on the Drawing tab for people (a man, a girl): repeats the draw with the person presets."
