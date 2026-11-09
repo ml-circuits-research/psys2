@@ -36,6 +36,35 @@ The working hypothesis: on small worlds, **rules plus a small learned front-end*
 
 ## 2. Current state, answers and corrections (reviewer, 11:00)
 
+### HANG2 — the model worker stops answering; the watchdog hides it (reviewer at 1375718, 15:50 local) — P0, DO FIRST
+
+The HANG + STOP work is good: the Stop button, one message at a time, the 8 s watchdog and 918/921 tests passing (3 skipped). The chat no longer freezes forever. **But the turns that froze still do not get answered: they now end at 8 s with "That took too long, so I stopped."** That also happens **without throttling, on a fast machine**, and it repeats on every try. So the user will still see it all the time.
+
+Reproduction (headless Chrome, default settings or `formalizer: rules`, `languageDetection: rules`, `translation: rules`; throttle 1× or 4×; the models load from localhost in 7 s):
+- after "make it liek a girl" / "make a house and a man" / "draw a some clouds and 2 suns" / "show Bern city", **"get me to New Youk" → 8.0 s timeout, twice in a row**; on a fresh page the same message takes 4.4 s, then 1.2 s;
+- **"fa ochi visatori" → 8.0 s timeout, three times in a row**, on a fresh page with the models loaded;
+- **"fa-i ochii mari" → 8.0 s timeout**;
+- "hello" right after works in 66 ms (rules fast path, no model).
+
+What the phrase log says:
+- the timed-out records carry **`stage: "ort"`** (rules mode) and **`stage: "encoder"`** (default mode);
+- the turn is waiting on the onnxruntime proxy worker;
+- the main thread is idle;
+- no worker console errors.
+
+Likely mechanism, to check:
+- One ORT call never returns. Candidates: a normalizer decode with no step cap or no EOS, an encoder run on an input the worker rejects silently, or a deadlock between two runs in the single proxy worker.
+- Every later ORT call then queues behind it.
+- The watchdog abort ends the turn but not the worker's job, so the queue never clears.
+- Also, `formalizer: rules` still calls ORT. Rules mode must never touch the models.
+
+Fix:
+1. **Find the stuck call.** Log every ORT request and response in the worker with an id and a time; add a test that replays these three messages.
+2. **Cap every model call.** Normalizer: max decode steps (input length × 1.5 + 8) and a per-call deadline. Encoder: a per-call deadline.
+3. **Recover the worker.** On timeout or abort, cancel the job in the worker. If it does not stop within 300 ms, terminate and re-create the ORT worker (sessions reload from the Cache API), so the next turn works.
+4. **Rules mode makes zero ORT calls.** Assert it in a test.
+5. **No turn may end in the watchdog answer for any message in the operational, Romanian, real-dialogue and fuzz sets** (browser, models loaded, 1× and 4×). Report the count of watchdog endings; the target is 0.
+
 ### HANG + STOP — the chat stays "thinking" forever (user report 10:14 local, reproduced by the reviewer at 4e75163) — P0, DO FIRST
 
 **User session** (webchat; save it as `training/eval/real-dialogue-2026-11-09b.txt` and add it to `dialogues.jsonl` with the right tabs):
@@ -310,7 +339,7 @@ The reviewer copied what is reusable into **`imports/diagram-vss-demo/`** (stagi
 **Licence:** settled. The project is now AGPL-3.0-only, the same as the source (user decision 14:10); keep the copied files' provenance headers.
 
 **Order from now on:**
-1. HANG + STOP (with LIC)
+1. HANG2 (model worker stops answering)
 2. SET (settings modal with tabs) + UI1 (one mic, tooltips) + DOC (greeting and docs), then VOICE (end of turn)
 3. ED (document editor commands)
 4. RD10 together with RD1b and RD2 (they share the mechanism)
@@ -1174,3 +1203,9 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
 - R4 dispatcher v4 published (d667609; sha 6c41eb24, safe S1 edit head) + T9 RESULTS summary (64e259a): 882 tests pass. **Shipped config 98.6% right, 0.4% wrong, 1.0% not understood** (1,240); long set 94.2%; dialogues 86.3% (encoder+n1); Romanian 84.8% right / 2.7% wrong. Browser check: answers correct, 0 console errors. PERF unchanged: page 32 s, multi-command 4.2 s (PERF round 2 in progress per T9).
 - Final review of the batch (744c3d5, 09:20): 884/885 tests pass (1 skipped); rules operational 95.4 / 0.5 reproduced; rules dialogues 96.4 / 88.0 (claim 96.6 / 87.7, 4-turn gap to reconcile). **PERF round 2 (57b28bf) validated in part:** ready ≤ 5 s in all modes, p50 ≤ 300 ms, thinking timer and "answered in X ms" work, v4 loads in headless Chrome with 0 console errors; first answer, encoder+n1 p95 and long multi-command remain (PERF round 3). RD8 validated (game coordinates follow the active game). BEST-EFFORT validated in part ("square eyes robot pls" works; "red house big" misled → RD1b). Decisions (a)–(f) answered in §2. RD1b, RD2, RD5, RD9 open; SURPRISE, AV, ASTRA not started.
 - Review decisions c/d/e + dialogue recount (658acae): 890/891 tests pass (1 skipped); "where were we?" follows the one definition; sky label fixed; S1 edit head behind `editHead`, off by default; rules dialogues 96.4 / 88.0 reconciled with the reviewer.
+- HANG + STOP + LIC (dc6f310), VOICE (b482a83), RD5 + RD9 (ed13089), ED (4310363): `npm test` 918 pass / 0 fail / 3 skipped at 1375718.
+  - Stop, one message at a time and the watchdog work: the reproduction no longer freezes. The root cause is NOT fixed, though: the model worker hangs → HANG2.
+  - RD5: "fa-mi avatarul ca om" works with a Romanian reply in the webchat (dropdown on English); "fa ochi visatori" and "fa-i ochii mari" hit HANG2.
+  - RD9 works: "Now I look scared", "I drew 2 clouds".
+  - ED works in the CLI: new line, new chapter, write, bold, read the document. Webchat check pending.
+  - VOICE: validated by the worker's tests (fake recognizer); a real-microphone check needs the user.
