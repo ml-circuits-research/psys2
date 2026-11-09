@@ -449,6 +449,11 @@
     card=one
     ask="Is this a bare reading (a coordinate) that only the world of the active tab, the active game or a recently used world may claim?"
 
+@core.pattern.signal core.key
+    value=boolean
+    card=one
+    ask="Does the pattern carry an explicit signal of its world (a named shape, an arrow between names, a flowchart word), so it beats the active tab's own matches?"
+
 @core.pattern.tabPriority core.key
     value=integer
     card=one

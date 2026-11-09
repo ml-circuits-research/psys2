@@ -164,3 +164,24 @@ test('the session context reports tab world, recent and last answered world', as
   assert.equal(c.tabWorld, 'art.draw'); assert.equal(c.activeTab, 'draw');
   assert.equal(c.lastWorld, 'art.draw'); assert.deepEqual(c.recentWorlds, ['art.draw']);
 });
+
+// ---- DIAG: the Drawing tab and the Diagram tab share "draw a rectangle"; named shapes, arrows between names and diagram forms are diagram signals
+test('DIAG: "draw a rectangle called Api" goes to the Diagram on the Drawing tab (signal), "draw a rectangle" stays with the Drawing board', async () => {
+  const named = await onTab('draw', 'draw a rectangle called Api');
+  assert.equal(named.d.winner.worldId, 'diagram.sketch');
+  assert.match(named.d.reason, /explicit signal/);
+  assert.equal(named.s.state('ui.shell').activeTab, 'diagram');
+  const plain = await onTab('draw', 'draw a rectangle');
+  assert.equal(plain.d.winner.worldId, 'art.draw');
+  const noTab = await onTab(null, 'draw a rectangle');
+  assert.equal(noTab.d.winner.worldId, 'art.draw');
+  const onDiagram = await onTab('diagram', 'draw a rectangle');
+  assert.equal(onDiagram.d.winner.worldId, 'diagram.sketch');
+});
+
+test('DIAG: an arrow between names and a flowchart word are diagram signals on any tab', async () => {
+  for (const tab of ['draw', 'robot', 'editor']) {
+    assert.equal((await onTab(tab, 'draw an arrow from Api to Db')).d.winner.worldId, 'diagram.sketch', tab);
+    assert.equal((await onTab(tab, 'make an org chart with Ann, Bob and Cy')).d.winner.worldId, 'diagram.sketch', tab);
+  }
+});

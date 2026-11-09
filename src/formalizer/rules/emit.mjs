@@ -3,6 +3,8 @@ import { parse, atom, ref, str } from '../../soplang/index.mjs';
 
 const OPT_ENTRY = /(\s)([A-Za-z_][\w.-]*)=("?)\{([A-Za-z_]\w*)(?:\|\w+)?\}\3(?=\s|$|@)/g;
 const FRESH = /^_\d*$/;
+/** Reserved emit placeholder `{segment}`: the text of the sentence the pattern matched (for worlds that hand a sentence to their own reader). */
+export const SEGMENT_SLOT = 'segment';
 
 const jsonInner = (s) => JSON.stringify(s).slice(1, -1);
 
@@ -38,7 +40,7 @@ export function substituteEmit(template, slots, fresh) {
       out += ids.get(name);
       continue;
     }
-    const slot = slots[name];
+    const slot = slots[name] ?? (name === SEGMENT_SLOT ? { value: '', text: '' } : undefined);
     if (!slot) throw new Error(`emit uses slot '${name}' that was not captured`);
     const f = filter ? EMIT_FILTERS[filter] : (x) => x;
     out += inStr ? jsonInner(f(slot.text)) : slot.value.startsWith('$') ? slot.value : f(slot.value);

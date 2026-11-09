@@ -1,0 +1,11 @@
+@legend.diagram.sketch core.legend
+    namespace=diagram.sketch
+    version=0.1.0
+    imports=core
+    imports=lang.common
+    doc="The diagram: named shapes, connections, groups, facts and rules on an 800 x 500 canvas (cells of 880 x 580 when it grows)"
+
+@diagram.sketch.diagram core.type
+    extends=core.state
+    doc="The diagram. The world state is the source engine's DiagramWorld state: shapes (name, shape, x, y, size, w, h, color, outline, fill, layer, label, font, order), edges (id, from, to, style, arrow, color, label), groups (name, members), rules (shape, size, color, outline), facts, plus last (names the last command made or named), undo / redo (engine snapshots) and rev. The 46 legend questions of the source (imports/diagram-vss-demo/world-draft/legend.json) are the arguments the engine reads from a sentence, not state keys."
+    example="Draw a red circle called Start."
