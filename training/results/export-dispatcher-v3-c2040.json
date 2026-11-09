@@ -1,0 +1,466 @@
+{
+ "checkpoint": "runs/dispatcher-v3-c2040",
+ "model": "distilbert-base-uncased",
+ "export_dir": "runs/export/dispatcher-v3-c2040",
+ "command": "python -m psys2_train.export_onnx --ckpt runs/dispatcher-v3-c2040 --out runs/export/dispatcher-v3-c2040",
+ "sizes_mb": {
+  "fp32": 254.80229568481445,
+  "int8": 64.2534704208374
+ },
+ "targets": {
+  "max_size_mb": 150,
+  "max_ms_per_message": 50,
+  "min_agreement": 0.995
+ },
+ "gold_top1_lenient_on_gold_segments_of_sample": {
+  "n": 584,
+  "torch": 0.8972602739726028,
+  "fp32": 0.8972602739726028,
+  "int8": 0.8972602739726028
+ },
+ "agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "reference": "PyTorch CUDA fp32",
+  "onnx_fp32": {
+   "items": 200,
+   "world_same": 584,
+   "world_n": 584,
+   "boundary_same": 3576,
+   "boundary_n": 3576,
+   "msgs_all_boundaries_same": 200,
+   "max_abs_prob_diff_world": 4.0531158447265625e-06,
+   "max_abs_prob_diff_seg": 2.9206275939941406e-06,
+   "top3_same": 584,
+   "world_agreement": 1.0,
+   "boundary_agreement": 1.0,
+   "message_boundary_agreement": 1.0
+  },
+  "onnx_int8": {
+   "items": 200,
+   "world_same": 569,
+   "world_n": 584,
+   "boundary_same": 3568,
+   "boundary_n": 3576,
+   "msgs_all_boundaries_same": 192,
+   "max_abs_prob_diff_world": 0.36811473965644836,
+   "max_abs_prob_diff_seg": 0.42439037561416626,
+   "top3_same": 376,
+   "world_agreement": 0.9743150684931506,
+   "boundary_agreement": 0.9977628635346756,
+   "message_boundary_agreement": 0.96
+  },
+  "int8_vs_fp32": {
+   "items": 200,
+   "world_same": 569,
+   "world_n": 584,
+   "boundary_same": 3568,
+   "boundary_n": 3576,
+   "msgs_all_boundaries_same": 192,
+   "max_abs_prob_diff_world": 0.3681159019470215,
+   "max_abs_prob_diff_seg": 0.4243910312652588,
+   "top3_same": 376,
+   "world_agreement": 0.9743150684931506,
+   "boundary_agreement": 0.9977628635346756,
+   "message_boundary_agreement": 0.96
+  },
+  "disagreements": [
+   {
+    "cmp": "onnx_int8",
+    "text": "wipe it all off",
+    "world_a": "art.draw",
+    "world_b": "ui.avatar",
+    "p_a": 0.4375973343849182,
+    "p_b": 0.45268774032592773
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "What is the difference in eggs between Diana and Fluffy",
+    "world_a": "kids.arith",
+    "world_b": "data.charts",
+    "p_a": 0.5737884640693665,
+    "p_b": 0.6497564911842346
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "wipe it all off",
+    "world_a": "art.draw",
+    "world_b": "ui.avatar",
+    "p_a": 0.43759775161743164,
+    "p_b": 0.45268774032592773
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "What is the difference in eggs between Diana and Fluffy",
+    "world_a": "kids.arith",
+    "world_b": "data.charts",
+    "p_a": 0.5737887024879456,
+    "p_b": 0.6497564911842346
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "is anything selected? what is it",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "is anything selected? what is it",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "I am going to buy a toy car.",
+    "world_a": "kids.shop",
+    "world_b": "kids.tasks",
+    "p_a": 0.5221129059791565,
+    "p_b": 0.6578025221824646
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "I am going to buy a toy car.",
+    "world_a": "kids.shop",
+    "world_b": "kids.tasks",
+    "p_a": 0.5221160054206848,
+    "p_b": 0.6578025221824646
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "undo that",
+    "world_a": "ui.avatar",
+    "world_b": "art.draw",
+    "p_a": 0.7027526497840881,
+    "p_b": 0.4824336767196655
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "undo that",
+    "world_a": "ui.avatar",
+    "world_b": "art.draw",
+    "p_a": 0.7027526497840881,
+    "p_b": 0.4824336767196655
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "undo that",
+    "world_a": "ui.avatar",
+    "world_b": "art.draw",
+    "p_a": 0.7027517557144165,
+    "p_b": 0.4824336767196655
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "undo that",
+    "world_a": "ui.avatar",
+    "world_b": "art.draw",
+    "p_a": 0.7027517557144165,
+    "p_b": 0.4824336767196655
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "drop the title",
+    "world_a": "docs.editor",
+    "world_b": "data.charts",
+    "p_a": 0.6171509623527527,
+    "p_b": 0.5967726111412048
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "move the rock on d six to b3 and then what day comes 6 days before sunday how much change would i receive from 70 lei when i buy three stickers italy or canada which is bigger and what was the time 2 hours before 2 oclock then make your eyes red and please 150 bpm please then cows are covered in what and drop the title and guess my pick and what season is it in november then i'd like you to have visor eyes and then what do you call a baby crocodile and then how do i change ur eyes then what is section 4 in short list the games giraffe is the word then remove bring my umbrella from birthday list octave down twice then okay how many hours are in 4 days and then highlight the last heading in purple",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "drop the title",
+    "world_a": "docs.editor",
+    "world_b": "data.charts",
+    "p_a": 0.6171497702598572,
+    "p_b": 0.5967726111412048
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "move the rock on d six to b3 and then what day comes 6 days before sunday how much change would i receive from 70 lei when i buy three stickers italy or canada which is bigger and what was the time 2 hours before 2 oclock then make your eyes red and please 150 bpm please then cows are covered in what and drop the title and guess my pick and what season is it in november then i'd like you to have visor eyes and then what do you call a baby crocodile and then how do i change ur eyes then what is section 4 in short list the games giraffe is the word then remove bring my umbrella from birthday list octave down twice then okay how many hours are in 4 days and then highlight the last heading in purple",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "how many have you asked me yet",
+    "world_a": "ui.shell",
+    "world_b": "games.guess",
+    "p_a": 0.7298539280891418,
+    "p_b": 0.5060856938362122
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "how many have you asked me yet",
+    "world_a": "ui.shell",
+    "world_b": "games.guess",
+    "p_a": 0.729856014251709,
+    "p_b": 0.5060856938362122
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Add a list with milk, eggs and bread",
+    "world_a": "kids.tasks",
+    "world_b": "docs.editor",
+    "p_a": 0.5368437170982361,
+    "p_b": 0.7590344548225403
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Add a list with milk, eggs and bread",
+    "world_a": "kids.tasks",
+    "world_b": "docs.editor",
+    "p_a": 0.5368425846099854,
+    "p_b": 0.7590344548225403
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "well vlad gave 10 biscuits to elena and then hey make the tree and circle purple Add milk to my shopping list. Play the note D and Please move the cloud down and then move it down again then hey color the cloud and the house red then b2 pls tell me how many pears luke has Draw a triangle and then paint it yellow so i am going to buy 8 sandwiches then make your body blue no wait pink",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "well vlad gave 10 biscuits to elena and then hey make the tree and circle purple Add milk to my shopping list. Play the note D and Please move the cloud down and then move it down again then hey color the cloud and the house red then b2 pls tell me how many pears luke has Draw a triangle and then paint it yellow so i am going to buy 8 sandwiches then make your body blue no wait pink",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Remove bring my umbrella from our homework list and then Add cat food, some stickers and eggs to my shopping list. Add read my book to the list.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Remove bring my umbrella from our homework list and then Add cat food, some stickers and eggs to my shopping list. Add read my book to the list.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "btw Max gobbled 3 toy cars now",
+    "world_a": "kids.shop",
+    "world_b": "ui.avatar",
+    "p_a": 0.5658640265464783,
+    "p_b": 0.528217077255249
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "btw Max gobbled 3 toy cars now",
+    "world_a": "kids.shop",
+    "world_b": "ui.avatar",
+    "p_a": 0.5658648014068604,
+    "p_b": 0.528217077255249
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "place it next to the car",
+    "world_a": "art.draw",
+    "world_b": "docs.editor",
+    "p_a": 0.5362221002578735,
+    "p_b": 0.6421217322349548
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "place it next to the car",
+    "world_a": "art.draw",
+    "world_b": "docs.editor",
+    "p_a": 0.5362180471420288,
+    "p_b": 0.6421217322349548
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "colors",
+    "world_a": "art.draw",
+    "world_b": "data.charts",
+    "p_a": 0.49172234535217285,
+    "p_b": 0.47701096534729004
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "colors",
+    "world_a": "art.draw",
+    "world_b": "data.charts",
+    "p_a": 0.4917216897010803,
+    "p_b": 0.47701096534729004
+   }
+  ]
+ },
+ "edit_agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "rewritten_by_torch": 0.355,
+  "onnx_fp32": {
+   "n": 200,
+   "simplified_same": 200,
+   "tags_same": 200,
+   "words": 994,
+   "word_tags_same": 994,
+   "top1_world_same": 200,
+   "simplified_agreement": 1.0,
+   "tag_sequence_agreement": 1.0,
+   "word_tag_agreement": 1.0
+  },
+  "onnx_int8": {
+   "n": 200,
+   "simplified_same": 181,
+   "tags_same": 181,
+   "words": 994,
+   "word_tags_same": 975,
+   "top1_world_same": 199,
+   "simplified_agreement": 0.905,
+   "tag_sequence_agreement": 0.905,
+   "word_tag_agreement": 0.9808853118712274
+  },
+  "int8_vs_fp32": {
+   "n": 200,
+   "simplified_same": 181,
+   "tags_same": 181,
+   "words": 994,
+   "word_tags_same": 975,
+   "top1_world_same": 199,
+   "simplified_agreement": 0.905,
+   "tag_sequence_agreement": 0.905,
+   "word_tag_agreement": 0.9808853118712274
+  },
+  "examples_differing": [
+   {
+    "text": "how's the game looking",
+    "torch": null,
+    "int8": "how's the game"
+   },
+   {
+    "text": "give up, what was it",
+    "torch": "give up",
+    "int8": "give quit"
+   },
+   {
+    "text": "it does, yep",
+    "torch": "it does yep",
+    "int8": "does yep"
+   },
+   {
+    "text": "is the answer tiger",
+    "torch": "it tiger?",
+    "int8": "it tiger"
+   },
+   {
+    "text": "is Ottawa the capital of Canada right",
+    "torch": "is Ottawa the capital of Canada",
+    "int8": "is Ottawa the capital of Canada?"
+   },
+   {
+    "text": "whats ur seed",
+    "torch": null,
+    "int8": "whats your seed"
+   },
+   {
+    "text": "any o?",
+    "torch": null,
+    "int8": "any o"
+   },
+   {
+    "text": "start fresh with the default you",
+    "torch": "start new",
+    "int8": "start new you"
+   },
+   {
+    "text": "i need a hint",
+    "torch": "give need a hint",
+    "int8": null
+   },
+   {
+    "text": "chores remaining?",
+    "torch": "number of chores remaining?",
+    "int8": null
+   },
+   {
+    "text": "I want the body blue",
+    "torch": "I want the body blue.",
+    "int8": "I want ur body blue."
+   },
+   {
+    "text": "bye bye",
+    "torch": "later",
+    "int8": "bye"
+   },
+   {
+    "text": "days until sunday, today thursday",
+    "torch": "days until sunday thursday",
+    "int8": "days until sunday, thursday"
+   },
+   {
+    "text": "grab the numbers and copy them",
+    "torch": "copy the numbers copy them",
+    "int8": "copy the numbers copy"
+   },
+   {
+    "text": "i have to go now, bye for now",
+    "torch": null,
+    "int8": "i have to go now bye for now"
+   }
+  ]
+ },
+ "latency_cpu_batch1": {
+  "fp32_threads1": {
+   "encoder_pass_ms": {
+    "p50": 44.07535099744564,
+    "p95": 170.18781699880492,
+    "mean": 59.53270877020259
+   },
+   "dispatch_message_ms": {
+    "p50": 396.34948399907444,
+    "p95": 1367.4121370058856,
+    "mean": 508.26785610035586
+   },
+   "avg_distinct_segments_per_message": 8.13,
+   "n": 100
+  },
+  "int8_threads1": {
+   "encoder_pass_ms": {
+    "p50": 17.24296100292122,
+    "p95": 55.08952499803854,
+    "mean": 23.265949120250298
+   },
+   "dispatch_message_ms": {
+    "p50": 158.75448900624178,
+    "p95": 423.895416999585,
+    "mean": 193.70043061018805
+   },
+   "avg_distinct_segments_per_message": 8.1,
+   "n": 100
+  },
+  "fp32_threads4": {
+   "encoder_pass_ms": {
+    "p50": 38.62120700068772,
+    "p95": 182.21450399869354,
+    "mean": 59.66692146008427
+   },
+   "dispatch_message_ms": {
+    "p50": 398.8521080027567,
+    "p95": 1064.750820005429,
+    "mean": 502.59441519054235
+   },
+   "avg_distinct_segments_per_message": 8.13,
+   "n": 100
+  },
+  "int8_threads4": {
+   "encoder_pass_ms": {
+    "p50": 7.7847920038038865,
+    "p95": 29.319246001250576,
+    "mean": 11.288527789656655
+   },
+   "dispatch_message_ms": {
+    "p50": 78.95961699978216,
+    "p95": 225.5085209981189,
+    "mean": 97.70772641953954
+   },
+   "avg_distinct_segments_per_message": 8.1,
+   "n": 100
+  }
+ },
+ "cpu": "Grace aarch64 (DGX Spark)",
+ "versions": {
+  "torch": "2.14.1+cu130",
+  "onnx": "1.23.2",
+  "onnxruntime": "1.31.1",
+  "opset": 17
+ }
+}

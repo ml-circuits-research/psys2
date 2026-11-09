@@ -14,10 +14,10 @@
   "config.json"
  ],
  "sizes_MB": {
-  "encoder.int8.onnx": 39.0,
+  "encoder.int8.onnx": 39,
   "decoder.int8.onnx": 55.5,
   "tokenizer.json": 2.4,
-  "config.json": 0.0
+  "config.json": 0
  },
  "policy": {
   "normalizerBeam": 3,
@@ -25,21 +25,25 @@
   "valueStrictness": "strict"
  },
  "version": {
-  "checkpoint": "/home/salboaie/work/psys2/training/runs/n1/flan-t5-small-v2",
+  "checkpoint": "runs/n1/flan-t5-small-v3",
   "export_date": "2026-11-08",
-  "sha256": "af99dd2e68d326765dadc708868a95f39bc807f1533129c7707909040baa655d",
+  "sha256": "1171020a228ce078baccd4ca7038c6e3141ceca5377aebe5f59f1f3b0b06fda2",
   "files_sha256": {
-   "encoder.int8.onnx": "4f509d87ae13735d275d902f0b66b5eef9114531d13b17ce890d21ae59bcd397",
-   "decoder.int8.onnx": "8b97b2a05d97939b29e330961d8c1f17f7db1bf06b4f28b344bf8a2d9ed279e4",
+   "encoder.int8.onnx": "ba3d74f4f439f15feff95071df72589942bf20086023bc033321b2a4e3009bab",
+   "decoder.int8.onnx": "8121e19677eb8f1640fda0e306cbad1e120d80a5d7f635ed90538af1d15ad92c",
    "tokenizer.json": "422313e620b8888d251769794affbd278faf06c129df653708bc82d053673a1d",
    "config.json": "1a8523e3f53ac38784a045bd9509e092811f60048c5be33b1804e3214514541c"
   },
   "metrics": {
-   "fresh_recovered": 37,
-   "fresh_misled": 11,
-   "dev_recovered": 7,
-   "dev_misled": 1,
-   "note": "int8, strict value check, min score -0.3, rules of 2026-11-08 (bc240b2)"
+   "fallback_distribution_eval": "scripts/eval-dispatch.mjs on v3-dispatcher predictions (test + held-out, 11303 messages), Bp realistic: no N1 92.9/3.6/3.5 right/fallback/wrong, old N1 93.3/3.2/3.5, this N1 93.4/3.1/3.5",
+   "operational_encoder_n1_with_v2_dispatcher": "right 1208, wrong 8 (old N1: 1208, 7)",
+   "note": "int8, strict value check, min score -0.3, rules at d05647d-era; G4 retrain R3"
   }
+ },
+ "binding": {
+  "dataset_sha256": "886cf9e1573ea120ca7d51c1797cdfdd0d31d3fad2106d746f94218eab7f0c62",
+  "rules_sha256": "77d5e0c240fda8cd9cbb45121c8a7a468fffcdbc12a72ac550230d580acad105",
+  "acceptance_policy_sha256": "1370f81c989806b89dde75b99c788bc25f5274be0c48419ea72f6302b94c4e61",
+  "note": "dataset = training/dataset-normalizer train+dev; rules = worlds/**/*.sop|mjs + src/legends; acceptance policy = policy numbers + src/dialog/value-check.mjs"
  }
 }

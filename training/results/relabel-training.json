@@ -1,7 +1,7 @@
 {
  "generated_by": "scripts/relabel-training.mjs",
- "data_root": "/home/salboaie/work/psys2/training",
- "seconds": 70,
+ "data_root": "training",
+ "seconds": 69,
  "before": {
   "records": 57515,
   "by_cause": {
@@ -43,7 +43,7 @@
   "relabelled": {
    "label_says_rules_differ": 62,
    "gold_value_not_in_text": 4,
-   "gold_target_from_another_world": 187
+   "gold_target_from_another_world": 189
   },
   "needs_review": {
    "gold_value_not_in_text": 1,
@@ -54,7 +54,7 @@
   },
   "promoted": 6,
   "inherited_from_canonical": {
-   "gold_target_from_another_world": 351
+   "gold_target_from_another_world": 349
   }
  },
  "after": {
@@ -175,8 +175,8 @@
  "conflicting_duplicates": {
   "texts": 165,
   "records": 545,
-  "true_ambiguity": 147,
-  "generator_or_label_bug": 18,
+  "true_ambiguity": 144,
+  "generator_or_label_bug": 21,
   "examples_ambiguous": [
    {
     "text": "Color from mixing red and yellow",
@@ -318,6 +318,36 @@
     ],
     "bad_worlds": [
      "data.charts"
+    ]
+   },
+   {
+    "text": "Help me out",
+    "worlds": [
+     "games.chess",
+     "ui.help"
+    ],
+    "bad_worlds": [
+     "games.chess"
+    ]
+   },
+   {
+    "text": "Help me",
+    "worlds": [
+     "games.chess",
+     "ui.help"
+    ],
+    "bad_worlds": [
+     "games.chess"
+    ]
+   },
+   {
+    "text": "I am lost",
+    "worlds": [
+     "games.chess",
+     "ui.help"
+    ],
+    "bad_worlds": [
+     "games.chess"
     ]
    },
    {
@@ -498,6 +528,7 @@
   "bug_by_world_pair": {
    "ui.avatar": 1,
    "data.charts": 1,
+   "games.chess": 3,
    "games.guess": 6,
    "ui.shell": 2,
    "games.hangman": 7,

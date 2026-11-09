@@ -1,0 +1,478 @@
+{
+ "checkpoint": "runs/dispatcher-v3-c2448",
+ "model": "distilbert-base-uncased",
+ "export_dir": "runs/export/dispatcher-v3-c2448",
+ "command": "python -m psys2_train.export_onnx --ckpt runs/dispatcher-v3-c2448 --out runs/export/dispatcher-v3-c2448",
+ "sizes_mb": {
+  "fp32": 254.80229568481445,
+  "int8": 64.2534704208374
+ },
+ "targets": {
+  "max_size_mb": 150,
+  "max_ms_per_message": 50,
+  "min_agreement": 0.995
+ },
+ "gold_top1_lenient_on_gold_segments_of_sample": {
+  "n": 584,
+  "torch": 0.898972602739726,
+  "fp32": 0.898972602739726,
+  "int8": 0.8904109589041096
+ },
+ "agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "reference": "PyTorch CUDA fp32",
+  "onnx_fp32": {
+   "items": 200,
+   "world_same": 584,
+   "world_n": 584,
+   "boundary_same": 3576,
+   "boundary_n": 3576,
+   "msgs_all_boundaries_same": 200,
+   "max_abs_prob_diff_world": 3.0994415283203125e-06,
+   "max_abs_prob_diff_seg": 2.2649765014648438e-06,
+   "top3_same": 584,
+   "world_agreement": 1.0,
+   "boundary_agreement": 1.0,
+   "message_boundary_agreement": 1.0
+  },
+  "onnx_int8": {
+   "items": 200,
+   "world_same": 567,
+   "world_n": 584,
+   "boundary_same": 3573,
+   "boundary_n": 3576,
+   "msgs_all_boundaries_same": 197,
+   "max_abs_prob_diff_world": 0.40698468685150146,
+   "max_abs_prob_diff_seg": 0.32163286209106445,
+   "top3_same": 376,
+   "world_agreement": 0.9708904109589042,
+   "boundary_agreement": 0.9991610738255033,
+   "message_boundary_agreement": 0.985
+  },
+  "int8_vs_fp32": {
+   "items": 200,
+   "world_same": 567,
+   "world_n": 584,
+   "boundary_same": 3573,
+   "boundary_n": 3576,
+   "msgs_all_boundaries_same": 197,
+   "max_abs_prob_diff_world": 0.4069819152355194,
+   "max_abs_prob_diff_seg": 0.3216334283351898,
+   "top3_same": 376,
+   "world_agreement": 0.9708904109589042,
+   "boundary_agreement": 0.9991610738255033,
+   "message_boundary_agreement": 0.985
+  },
+  "disagreements": [
+   {
+    "cmp": "onnx_int8",
+    "text": "where is a parrot found",
+    "world_a": "kids.animals",
+    "world_b": "games.hangman",
+    "p_a": 0.627806544303894,
+    "p_b": 0.6533524990081787
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "where is a parrot found",
+    "world_a": "kids.animals",
+    "world_b": "games.hangman",
+    "p_a": 0.6278079152107239,
+    "p_b": 0.6533524990081787
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "I am going to buy a toy car.",
+    "world_a": "kids.shop",
+    "world_b": "kids.tasks",
+    "p_a": 0.5096608996391296,
+    "p_b": 0.6308280825614929
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "I am going to buy a toy car.",
+    "world_a": "kids.shop",
+    "world_b": "kids.tasks",
+    "p_a": 0.5096621513366699,
+    "p_b": 0.6308280825614929
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Please, Games!",
+    "world_a": "games.guess",
+    "world_b": "ui.shell",
+    "p_a": 0.5058639049530029,
+    "p_b": 0.7343973517417908
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Please, Games!",
+    "world_a": "games.guess",
+    "world_b": "ui.shell",
+    "p_a": 0.5058642029762268,
+    "p_b": 0.7343973517417908
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "can you make the heart orange",
+    "world_a": "kids.shapes",
+    "world_b": "art.draw",
+    "p_a": 0.4891757667064667,
+    "p_b": 0.7771744728088379
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "can you make the heart orange",
+    "world_a": "kids.shapes",
+    "world_b": "art.draw",
+    "p_a": 0.4891766607761383,
+    "p_b": 0.7771744728088379
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "how many have you asked me yet",
+    "world_a": "games.guess",
+    "world_b": "ui.shell",
+    "p_a": 0.6124788522720337,
+    "p_b": 0.528168261051178
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "how many have you asked me yet",
+    "world_a": "games.guess",
+    "world_b": "ui.shell",
+    "p_a": 0.6124767065048218,
+    "p_b": 0.528168261051178
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Remove bring my umbrella from our homework list and then Add cat food, some stickers and eggs to my shopping list. Add read my book to the list.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Remove bring my umbrella from our homework list and then Add cat food, some stickers and eggs to my shopping list. Add read my book to the list.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "is the word lizard",
+    "world_a": "ui.shell",
+    "world_b": "ui.avatar",
+    "p_a": 0.431367427110672,
+    "p_b": 0.5256580114364624
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "btw Max gobbled 3 toy cars now",
+    "world_a": "kids.shop",
+    "world_b": "ui.avatar",
+    "p_a": 0.4954458177089691,
+    "p_b": 0.6077267527580261
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "What is the difference in pencils between Coco and Luke?",
+    "world_a": "kids.arith",
+    "world_b": "data.charts",
+    "p_a": 0.5202136039733887,
+    "p_b": 0.5928027629852295
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "is the word lizard",
+    "world_a": "ui.shell",
+    "world_b": "ui.avatar",
+    "p_a": 0.4313680827617645,
+    "p_b": 0.5256580114364624
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "btw Max gobbled 3 toy cars now",
+    "world_a": "kids.shop",
+    "world_b": "ui.avatar",
+    "p_a": 0.4954451024532318,
+    "p_b": 0.6077267527580261
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "What is the difference in pencils between Coco and Luke?",
+    "world_a": "kids.arith",
+    "world_b": "data.charts",
+    "p_a": 0.5202121138572693,
+    "p_b": 0.5928027629852295
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Im thinking of one",
+    "world_a": "games.guess",
+    "world_b": "games.chess",
+    "p_a": 0.36831194162368774,
+    "p_b": 0.3174843192100525
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Im thinking of one",
+    "world_a": "games.guess",
+    "world_b": "games.chess",
+    "p_a": 0.3683115541934967,
+    "p_b": 0.3174843192100525
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "colors",
+    "world_a": "data.charts",
+    "world_b": "art.draw",
+    "p_a": 0.45527443289756775,
+    "p_b": 0.42782941460609436
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "colors",
+    "world_a": "data.charts",
+    "world_b": "art.draw",
+    "p_a": 0.4552757143974304,
+    "p_b": 0.42782941460609436
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Make your eyes pink",
+    "world_a": "ui.avatar",
+    "world_b": "art.draw",
+    "p_a": 0.5612355470657349,
+    "p_b": 0.7820665836334229
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Make your eyes pink",
+    "world_a": "ui.avatar",
+    "world_b": "art.draw",
+    "p_a": 0.5612386465072632,
+    "p_b": 0.7820665836334229
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Um, how does a d sound?",
+    "world_a": "media.music",
+    "world_b": "ui.help",
+    "p_a": 0.44555190205574036,
+    "p_b": 0.3137435019016266
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Um, how does a d sound?",
+    "world_a": "media.music",
+    "world_b": "ui.help",
+    "p_a": 0.4455500543117523,
+    "p_b": 0.3137435019016266
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "can u wave",
+    "world_a": "ui.avatar",
+    "world_b": "ui.shell",
+    "p_a": 0.40628525614738464,
+    "p_b": 0.42592939734458923
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "can u wave",
+    "world_a": "ui.avatar",
+    "world_b": "ui.shell",
+    "p_a": 0.40628570318222046,
+    "p_b": 0.42592939734458923
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "How much do apples cost? The apple costs seven lei and how much change would I get from 100 after I buy 8 biscuits and then I buy a pear, and I spent twenty lei, Well, I spent two lei! I spent sixteen lei. left money then I spent fifteen lei, then how much change would I expect from 40 lei when I buy a notebook; How much change would I receive from 10 after I buy 4 toy cars and 8 backpacks, then how much change will I expect from 60 lei after I buy five balls? I have 11 lei. Do I have enough money for a notebook and then is my money enough for 3 rulers, and I will buy 6 stickers. whats my money left",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "How much do apples cost? The apple costs seven lei and how much change would I get from 100 after I buy 8 biscuits and then I buy a pear, and I spent twenty lei, Well, I spent two lei! I spent sixteen lei. left money then I spent fifteen lei, then how much change would I expect from 40 lei when I buy a notebook; How much change would I receive from 10 after I buy 4 toy cars and 8 backpacks, then how much change will I expect from 60 lei after I buy five balls? I have 11 lei. Do I have enough money for a notebook and then is my money enough for 3 rulers, and I will buy 6 stickers. whats my money left",
+    "boundary_flips": 1
+   }
+  ]
+ },
+ "edit_agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "rewritten_by_torch": 0.465,
+  "onnx_fp32": {
+   "n": 200,
+   "simplified_same": 200,
+   "tags_same": 200,
+   "words": 994,
+   "word_tags_same": 994,
+   "top1_world_same": 200,
+   "simplified_agreement": 1.0,
+   "tag_sequence_agreement": 1.0,
+   "word_tag_agreement": 1.0
+  },
+  "onnx_int8": {
+   "n": 200,
+   "simplified_same": 175,
+   "tags_same": 175,
+   "words": 994,
+   "word_tags_same": 967,
+   "top1_world_same": 199,
+   "simplified_agreement": 0.875,
+   "tag_sequence_agreement": 0.875,
+   "word_tag_agreement": 0.9728370221327968
+  },
+  "int8_vs_fp32": {
+   "n": 200,
+   "simplified_same": 175,
+   "tags_same": 175,
+   "words": 994,
+   "word_tags_same": 967,
+   "top1_world_same": 199,
+   "simplified_agreement": 0.875,
+   "tag_sequence_agreement": 0.875,
+   "word_tag_agreement": 0.9728370221327968
+  },
+  "examples_differing": [
+   {
+    "text": "what did the witch do, pls",
+    "torch": "what did the witch do",
+    "int8": "what did the witch do,"
+   },
+   {
+    "text": "maybe not sure",
+    "torch": "not sure",
+    "int8": null
+   },
+   {
+    "text": "can you put the cat between them trees",
+    "torch": null,
+    "int8": "can put the cat between them trees"
+   },
+   {
+    "text": "find my location",
+    "torch": "me location",
+    "int8": "my location"
+   },
+   {
+    "text": "how many km from madrid to lisbon",
+    "torch": "how many far from madrid from lisbon",
+    "int8": "how many km madrid from lisbon"
+   },
+   {
+    "text": "is the answer tiger",
+    "torch": "it tiger?",
+    "int8": "is it tiger?"
+   },
+   {
+    "text": "does it have an O",
+    "torch": "does it there an O?",
+    "int8": "does it there an O"
+   },
+   {
+    "text": "so whats a cow covered in",
+    "torch": "whats a cow covered in?",
+    "int8": "whats a cow covered in"
+   },
+   {
+    "text": "any o?",
+    "torch": "o",
+    "int8": "any o"
+   },
+   {
+    "text": "start fresh with the default you",
+    "torch": "start new",
+    "int8": "new"
+   },
+   {
+    "text": "chores remaining?",
+    "torch": "number of chores left",
+    "int8": "chores left"
+   },
+   {
+    "text": "hello friend how are u",
+    "torch": "hello friend u",
+    "int8": "hello friend"
+   },
+   {
+    "text": "could you tell me if the story mentions a dragon",
+    "torch": "could tell me if the story mentions a dragon",
+    "int8": null
+   },
+   {
+    "text": "the one i picked was a tiger",
+    "torch": null,
+    "int8": "the i picked was a tiger"
+   },
+   {
+    "text": "letter n",
+    "torch": null,
+    "int8": "try n"
+   }
+  ]
+ },
+ "latency_cpu_batch1": {
+  "fp32_threads1": {
+   "encoder_pass_ms": {
+    "p50": 47.82607800007099,
+    "p95": 165.60229699825868,
+    "mean": 63.10859733064717
+   },
+   "dispatch_message_ms": {
+    "p50": 421.63843200250994,
+    "p95": 1434.6653620013967,
+    "mean": 546.5936297296867
+   },
+   "avg_distinct_segments_per_message": 8.13,
+   "n": 100
+  },
+  "int8_threads1": {
+   "encoder_pass_ms": {
+    "p50": 15.15614299569279,
+    "p95": 75.08445699932054,
+    "mean": 23.991880230241804
+   },
+   "dispatch_message_ms": {
+    "p50": 144.03738700639224,
+    "p95": 464.1252820001682,
+    "mean": 198.11584375973325
+   },
+   "avg_distinct_segments_per_message": 8.11,
+   "n": 100
+  },
+  "fp32_threads4": {
+   "encoder_pass_ms": {
+    "p50": 43.32591599813895,
+    "p95": 146.42273599747568,
+    "mean": 55.604906960215885
+   },
+   "dispatch_message_ms": {
+    "p50": 431.60999499377795,
+    "p95": 914.7186119953403,
+    "mean": 485.3180400900601
+   },
+   "avg_distinct_segments_per_message": 8.13,
+   "n": 100
+  },
+  "int8_threads4": {
+   "encoder_pass_ms": {
+    "p50": 7.405783995636739,
+    "p95": 18.928819001303054,
+    "mean": 8.867703750001965
+   },
+   "dispatch_message_ms": {
+    "p50": 67.36227800138295,
+    "p95": 161.6390950002824,
+    "mean": 79.27615039989178
+   },
+   "avg_distinct_segments_per_message": 8.11,
+   "n": 100
+  }
+ },
+ "cpu": "Grace aarch64 (DGX Spark)",
+ "versions": {
+  "torch": "2.14.1+cu130",
+  "onnx": "1.23.2",
+  "onnxruntime": "1.31.1",
+  "opset": 17
+ }
+}
