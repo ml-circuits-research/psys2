@@ -676,3 +676,10 @@ Baseline re-measured at d3704b3 with the unmigrated geo.map (operational 95.0% r
 - **Shapes**: `docs.reader.stats`, `.read.ord`, `.read.n`, `.summary.doc`, `.summary.sec.ord`, `.summary.sec.n` (noun-only `do` with an ordinal slot as `objmod` is new). 11 hand patterns deleted (`summary.do summary.sec summary.sec.ord stats.in stats.have read.ord read.n sw.sum.sec.ord sw.stats.embedded ind.stats.in ind.stats.have`).
 - **Tests**: docs.reader 203 -> 209 (sh00..sh05, one session).
 - **Gates**: operational 95.0% / 7 wrong unchanged; dialogues 96.6% / 87.7% unchanged; eval-rules identical in every row.
+
+## L7 games.chess (2026-11-09, on docs.reader commit)
+- **migrate-macros**: `patterns.sop` 171,092 -> 130,956 bytes; hand patterns 235 -> 234 (+ 1 shape, 3 generated); match text 116,003 -> 75,662 bytes (-35 %); inline groups repeated verbatim 110 (942 occurrences) -> 64 (291). 41 world-local phrases. No lexicon for `extends`.
+- **Gate findings**: after the migration the `move.*` / `castle.*` patterns read "can I castle?" and "may I play queen h5" through `lang.lead.polite` (4 restricted + 2 routed rows and 2 world tests, n057 and sw013b); the legality patterns `chess.can` now have priority 14 (they were tied at 13 with the move patterns and lost on pattern order).
+- **Engine**: `extra` may be a raw match fragment with spaces (`[to|on]? {tf:lex.x} {tr:number}`); examples drop empty sample words.
+- **Shape**: `games.chess.move.piece` (do; imp, wish, ind); hand pattern `move.piece.polite` deleted. **Tests**: games.chess 254 -> 257 (sh01..sh03).
+- **Gates**: operational 95.0% / 7 wrong unchanged; dialogues 96.6% / 87.7% unchanged; eval-rules identical in every row.

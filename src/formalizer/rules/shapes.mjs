@@ -24,7 +24,7 @@
  *   mod      optional modifier group before the value, alternatives and `$macro` ids (`$ui.avatar.g11_a_bit` for "a bit", "much"), or a slot
  *            (`s:lex.x?`: "make the bars LIGHT green")
  *   objmod   optional modifier group before the object (`whole|entire`), or a slot `ord:lex.x` (mandatory; `ord:lex.x?` optional): "delete the LAST paragraph"
- *   extra    one more optional element after the value or object: a slot (`n:number` mandatory, `n:number?` optional) or a group `[percent|per_cent]?`
+ *   extra    one more optional element after the value or object: a slot (`n:number` mandatory, `n:number?` optional), a group, or a raw match fragment with spaces (`[to|at]? {tf:lex.files} {tr:number}`) `[percent|per_cent]?`
  *   emit     emit template; `emitOpts` the emit of the `opts` form (without it `opts` is not generated)
  *   forms    comma list of forms to generate (default: every form of the family); `skip` comma list of forms to leave out
  *   sample   example words per slot, `p=eyes;c=blue` (default: the first word of the slot's lexicon)
@@ -173,7 +173,7 @@ export function expandShape(shape, { phrases = null, lexicons = null } = {}) {
     '<X>': shape.val ? (shape.mod ? (shape.mod.includes(':') ? slotText(shape.mod) : group(shape.mod, true)) + ' ' : '') + slotText(shape.val) : '',
     '<N>': nounAlts ? group(nounAlts) : null, '<N?>': nounAlts && !noObj ? group(nounAlts, true) : '',
     '<NP>': nounPlural ? group(nounPlural) : null,
-    '<K>': group(shape.link ?? DEFAULTS.link, true) + ' [a|an|the]?', '<E>': shape.extra ? ' ' + (shape.extra.startsWith('[') ? shape.extra : slotText(shape.extra)) : '',
+    '<K>': group(shape.link ?? DEFAULTS.link, true) + ' [a|an|the]?', '<E>': shape.extra ? ' ' + (shape.extra.startsWith('[') || shape.extra.includes(' ') ? shape.extra : slotText(shape.extra)) : '',
     '<DO>': shape.objdet === 'none' ? '' : (shape.obj || shape.noun ? group(shape.det ?? DEFAULTS.det, true) : ''),
     '<R>': shape.rel ? group(shape.rel) : '', '<OFM>': shape.rel ? group(shape.rel) : OF, '<OFO>': shape.rel ? group(shape.rel) : OF + '?',
     '<C>': slotText(shape.cont),
@@ -206,7 +206,7 @@ export function expandShape(shape, { phrases = null, lexicons = null } = {}) {
         priority: short ? basePriority - SHORT_PENALTY : basePriority,
         example: [],
       };
-      p.example = exampleSentences(match, { phrases, lexicons, sample, det: shape.obj || noObj ? (shape.det ?? DEFAULTS.det) : null, objdet: shape.objdet, noun: nounAlts && (family !== 'set' || noObj) && !(noObj && /^(it|them|this|that|these|those)(\||$)/.test(nounAlts)) ? nounAlts : null, nounDet: noObj ? 'det' : 'the', link: shape.link ?? DEFAULTS.link, extra: shape.extra?.startsWith('[') ? shape.extra.slice(1, -2) : null, cv: shape.cont ? (shape.verb ?? 'have|has|got') : null });
+      p.example = exampleSentences(match, { phrases, lexicons, sample, det: shape.obj || noObj ? (shape.det ?? DEFAULTS.det) : null, objdet: shape.objdet, noun: nounAlts && (family !== 'set' || noObj) && !(noObj && /^(it|them|this|that|these|those)(\||$)/.test(nounAlts)) ? nounAlts : null, nounDet: noObj ? 'det' : 'the', link: shape.link ?? DEFAULTS.link, extra: shape.extra?.startsWith('[') && !shape.extra.includes(' ') ? shape.extra.slice(1, -2) : null, cv: shape.cont ? (shape.verb ?? 'have|has|got') : null });
       out.push(p);
     }
   }
@@ -263,7 +263,7 @@ export function exampleSentences(match, { phrases = null, lexicons = null, sampl
       } else if (part === "'s" && words.length) words[words.length - 1] += "'s";
       else words.push(part.replace(/_/g, ' '));
     }
-    return words.join(' ');
+    return words.filter((w) => w !== '').join(' ');
   };
   const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
   const out = [];

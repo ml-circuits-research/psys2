@@ -1395,3 +1395,19 @@
     session=cw1
     input="where is my castle"
     expect="rook"
+
+@t.games.chess.sh01 core.test
+    input="i want to move the knight to f3"
+    expect="You play knight to f3"
+    expectState="history.0=Nf3"
+    session=chsh1
+
+@t.games.chess.sh02 core.test
+    input="could you maybe move the pawn to e4"
+    expect="You play pawn to e4"
+    session=chsh2
+
+@t.games.chess.sh03 core.test
+    input="can i castle"
+    expect="castle"
+    session=chsh3

@@ -308,3 +308,627 @@
     word=r
     word=q
     word=k
+
+@phrase.games.chess.g1_i core.phrase
+    doc="World-local group used by 31 patterns (made by scripts/migrate-macros.mjs)."
+    alt=i
+    alt=i_will
+    alt=i_wish_to
+    alt=i_am_going_to
+    alt=i_am_gonna
+    alt=my_move_is
+    alt=my_move
+    alt=my_turn
+    alt=next
+    alt=now
+
+@phrase.games.chess.g2_i core.phrase
+    doc="World-local group used by 16 patterns (made by scripts/migrate-macros.mjs)."
+    alt=i
+    alt=i_will
+    alt=i_ll
+    alt=i_would
+    alt=i_want_to
+    alt=i_wanna
+    alt=let_me
+    alt=lets
+    alt=let_us
+    alt=first
+    alt=now
+    alt=next
+    alt=then
+
+@phrase.games.chess.g3_to core.phrase
+    frame=false
+    doc="World-local group used by 10 patterns (made by scripts/migrate-macros.mjs)."
+    alt=to
+    alt=2
+    alt=too
+    alt=on
+    alt=at
+    alt=onto
+    alt=into
+    alt=towards
+    alt=over_to
+    alt=up_to
+    alt=down_to
+    alt=forward_to
+    alt=back_to
+    alt=goes_to
+    alt=go_to
+    alt=moves_to
+    alt=move_to
+    alt=should_go_to
+    alt=for
+    alt=in
+
+@phrase.games.chess.g4_open core.phrase
+    doc="World-local group used by 16 patterns (made by scripts/migrate-macros.mjs)."
+    alt=open
+    alt=start
+    alt=begin
+    alt=play
+    alt=move
+    alt=push
+    alt=advance
+    alt=go
+    alt=opening
+    alt=starting
+    alt=beginning
+
+@phrase.games.chess.g5_takes core.phrase
+    frame=false
+    doc="World-local group used by 8 patterns (made by scripts/migrate-macros.mjs)."
+    alt=takes
+    alt=take
+    alt=taking
+    alt=captures
+    alt=capture
+    alt=capturing
+    alt=eats
+    alt=eat
+    alt=kills
+    alt=kill
+    alt=beats
+    alt=beat
+    alt=snatches
+    alt=grabs
+    alt=grab
+    alt=wins
+    alt=x
+    alt=trades_for
+    alt=swaps_for
+    alt=exchanges_for
+
+@phrase.games.chess.g6_promote core.phrase
+    frame=false
+    doc="World-local group used by 7 patterns (made by scripts/migrate-macros.mjs)."
+    alt=promote
+    alt=promoting
+    alt=promotes
+    alt=promoted
+    alt=queening
+    alt=underpromote
+    alt=underpromoting
+    alt=upgrade
+    alt=upgrading
+    alt=becomes
+    alt=becoming
+    alt=become
+    alt=equals
+    alt=promote_to
+    alt=promoting_to
+
+@phrase.games.chess.g7_can_i core.phrase
+    frame=false
+    doc="World-local group used by 5 patterns (made by scripts/migrate-macros.mjs)."
+    alt=can_i
+    alt=could_i
+    alt=may_i
+    alt=can_we
+    alt=am_i_allowed_to
+    alt=am_i_able_to
+    alt=am_i_permitted_to
+    alt=is_it_possible_to
+    alt=is_it_legal_to
+    alt=would_it_be_legal_to
+    alt=is_it_allowed_to
+    alt=is_it_possible_for_me_to
+
+@phrase.games.chess.g8_with core.phrase
+    doc="World-local group used by 16 patterns (made by scripts/migrate-macros.mjs)."
+    alt=with
+    alt=by_moving
+    alt=by_pushing
+    alt=by_playing
+    alt=by_advancing
+
+@phrase.games.chess.g9_squares core.phrase
+    frame=false
+    doc="World-local group used by 16 patterns (made by scripts/migrate-macros.mjs)."
+    alt=squares
+    alt=steps
+    alt=spaces
+    alt=square
+    alt=step
+    alt=space
+    alt=ranks
+    alt=rank
+
+@phrase.games.chess.g10_moves core.phrase
+    frame=false
+    doc="World-local group used by 5 patterns (made by scripts/migrate-macros.mjs)."
+    alt=moves
+    alt=squares
+    alt=options
+    alt=targets
+    alt=destinations
+    alt=places
+    alt=spots
+    alt=choices
+    alt=possibilities
+    alt=possible_squares
+    alt=legal_moves
+    alt=possible_moves
+    alt=available_moves
+    alt=valid_moves
+
+@phrase.games.chess.g11_castle core.phrase
+    frame=false
+    doc="World-local group used by 6 patterns (made by scripts/migrate-macros.mjs)."
+    alt=castle
+    alt=castles
+    alt=castling
+    alt=do_a_castle
+    alt=do_castling
+    alt=castle_my_king
+    alt=castle_the_king
+    alt=play_castle
+    alt=make_a_castle
+    alt=do_the_castle
+
+@phrase.games.chess.g12_move core.phrase
+    frame=false
+    doc="World-local group used by 7 patterns (made by scripts/migrate-macros.mjs)."
+    alt=move
+    alt=play
+    alt=go
+    alt=put
+    alt=push
+    alt=advance
+    alt=bring
+    alt=shift
+    alt=slide
+    alt=jump
+    alt=send
+    alt=run
+    alt=place
+    alt=develop
+    alt=retreat
+    alt=plays
+    alt=moves
+    alt=goes
+
+@phrase.games.chess.g13_now core.phrase
+    doc="World-local group used by 12 patterns (made by scripts/migrate-macros.mjs)."
+    alt=now
+    alt=there
+    alt=here
+    alt=next
+    alt=then
+    alt=again
+    alt=for_me
+    alt=first
+
+@phrase.games.chess.g14_on core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=on
+    alt=at
+    alt=in
+    alt=standing_on
+    alt=sitting_on
+    alt=located_on
+    alt=over_on
+    alt=from
+    alt=with_the_piece_on
+    alt=the_piece_on
+    alt=whatever_is_on
+    alt=whatever_is_at
+    alt=what_is_on
+    alt=what_is_at
+    alt=that_is_on
+    alt=which_is_on
+
+@phrase.games.chess.g15_describe core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=describe
+    alt=read
+    alt=read_out
+    alt=read_me
+    alt=say
+    alt=say_what
+    alt=tell_me
+    alt=tell_me_only
+    alt=list
+    alt=show
+    alt=show_me
+    alt=name
+    alt=whats
+    alt=what_is
+    alt=what
+    alt=what_does
+    alt=where_are
+    alt=just
+    alt=only
+    alt=describe_just
+    alt=read_just
+    alt=read_only
+    alt=describe_only
+    alt=tell_me_just
+    alt=list_just
+    alt=list_only
+    alt=show_just
+    alt=show_only
+
+@phrase.games.chess.g16_pls core.phrase
+    doc="World-local group used by 6 patterns (made by scripts/migrate-macros.mjs)."
+    alt=pls
+    alt=u_can
+    alt=you_can
+    alt=you_could
+    alt=go_on_and
+    alt=ill
+    alt=i_will
+    alt=my_move_is
+    alt=my_move
+    alt=next
+    alt=now
+
+@phrase.games.chess.g17_from core.phrase
+    frame=false
+    doc="World-local group used by 7 patterns (made by scripts/migrate-macros.mjs)."
+    alt=from
+    alt=on
+    alt=at
+    alt=in
+    alt=standing_on
+    alt=sitting_on
+    alt=that_is_on
+    alt=which_is_on
+
+@phrase.games.chess.g18_kingside core.phrase
+    frame=false
+    doc="World-local group used by 5 patterns (made by scripts/migrate-macros.mjs)."
+    alt=kingside
+    alt=king_side
+    alt=king_'s_side
+    alt=short
+    alt=short_side
+    alt=shortside
+    alt=short_way
+    alt=king_s_side
+
+@phrase.games.chess.g19_queenside core.phrase
+    frame=false
+    doc="World-local group used by 5 patterns (made by scripts/migrate-macros.mjs)."
+    alt=queenside
+    alt=queen_side
+    alt=queen_'s_side
+    alt=long
+    alt=long_side
+    alt=longside
+    alt=long_way
+    alt=queen_s_side
+
+@phrase.games.chess.g20_on core.phrase
+    frame=false
+    doc="World-local group used by 4 patterns (made by scripts/migrate-macros.mjs)."
+    alt=on
+    alt=to
+    alt=towards
+    alt=at
+    alt=with
+    alt=using
+    alt=by
+    alt=in
+    alt=in_the
+    alt=on_the
+    alt=to_the
+    alt=at_the
+    alt=towards_the
+    alt=with_the
+    alt=using_the
+
+@phrase.games.chess.g21_can_i core.phrase
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=can_i
+    alt=may_i
+    alt=could_i
+    alt=can_we
+    alt=am_i_able_to
+    alt=am_i_allowed_to
+    alt=is_it_possible_to
+    alt=is_it_legal_to
+    alt=is_it_allowed_to
+    alt=do_i_have_the_right_to
+    alt=is
+    alt=can
+
+@phrase.games.chess.g22_pieces core.phrase
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=pieces
+    alt=side
+    alt=forces
+    alt=army
+    alt=men
+    alt=position
+    alt=pieces_on_the_board
+    alt=on_the_board
+    alt=side_out_loud
+    alt=out_loud
+    alt=aloud
+    alt=description
+    alt=desc
+    alt=pls
+    alt=plz
+    alt=now
+    alt=has
+
+@phrase.games.chess.g23_the core.phrase
+    frame=false
+    doc="World-local group used by 6 patterns (made by scripts/migrate-macros.mjs)."
+    alt=the
+    alt=that
+    alt=their
+    alt=his
+    alt=your
+    alt=enemy
+    alt=opposing
+    alt=a
+    alt=an
+
+@phrase.games.chess.g24_do core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=do
+    alt=go
+    alt=move
+    alt=jump
+    alt=capture
+    alt=take
+    alt=reach
+    alt=get_to
+    alt=get
+    alt=land
+    alt=be_moved
+    alt=slide
+    alt=retreat
+    alt=advance
+    alt=step
+
+@phrase.games.chess.g25_can_i core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=can_i
+    alt=could_i
+    alt=may_i
+    alt=am_i_allowed_to
+    alt=am_i_able_to
+    alt=is_it_possible_to
+    alt=is_it_legal_to
+
+@phrase.games.chess.g26_around core.phrase
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=around
+    alt=over
+    alt=upside_down
+    alt=the_other_way
+    alt=to_the_other_side
+    alt=round
+    alt=now
+    alt=again
+    alt=the_other_way_round
+    alt=the_other_way_around
+
+@phrase.games.chess.g27_describe core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=describe
+    alt=read
+    alt=list
+    alt=show
+    alt=say
+    alt=tell_me
+    alt=name
+    alt=describe_them
+    alt=read_them
+    alt=describe_it
+    alt=read_it
+    alt=list_them
+    alt=show_them
+
+@phrase.games.chess.g28_legal core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=legal
+    alt=possible
+    alt=allowed
+    alt=fine
+    alt=valid
+    alt=doable
+    alt=available
+    alt=an_option
+    alt=for_me
+    alt=for_us
+    alt=now
+    alt=yet
+    alt=here
+    alt=rn
+    alt=pls
+    alt=plz
+    alt=then
+
+@phrase.games.chess.g29_to core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=to
+    alt=2
+    alt=too
+    alt=onto
+    alt=towards
+    alt=up_to
+    alt=down_to
+    alt=over_to
+    alt=forward_to
+    alt=back_to
+    alt=goes_to
+    alt=moves_to
+    alt=move_to
+    alt=go_to
+    alt=then
+
+@phrase.games.chess.g30_go core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=go
+    alt=move
+    alt=reach
+    alt=jump
+    alt=do
+    alt=capture
+    alt=take
+    alt=get_to
+    alt=land_on
+    alt=step_to
+    alt=advance
+
+@phrase.games.chess.g31_on core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=on
+    alt=at
+    alt=in
+    alt=standing_on
+    alt=sitting_on
+    alt=on_the_square
+    alt=at_the_square
+    alt=in_the_square
+    alt=on_square
+    alt=at_square
+
+@phrase.games.chess.g32_show_me core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=show_me
+    alt=show
+    alt=list
+    alt=give_me
+    alt=tell_me
+    alt=name
+    alt=read
+    alt=read_me
+    alt=display
+    alt=highlight
+    alt=what_are
+
+@phrase.games.chess.g33_board core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=board
+    alt=chessboard
+    alt=view
+    alt=position
+    alt=screen
+    alt=perspective
+    alt=orientation
+    alt=side
+    alt=sides
+
+@phrase.games.chess.g34_has core.phrase
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=has
+    alt=have
+    alt=got
+    alt=has_got
+    alt=own
+    alt=owns
+    alt=keeps
+    alt=has_on_the_board
+    alt=has_on_it
+    alt=has_left
+
+@phrase.games.chess.g35_where core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=where
+    alt=what
+    alt=which_squares
+    alt=what_squares
+    alt=which_moves
+    alt=what_moves
+
+@phrase.games.chess.g36_out_loud core.phrase
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=out_loud
+    alt=aloud
+    alt=description
+    alt=pls
+    alt=plz
+    alt=now
+    alt=for_me
+    alt=on_the_board
+
+@phrase.games.chess.g37_have core.phrase
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=have
+    alt=make
+    alt=go_to
+    alt=reach
+    alt=move_to
+    alt=go
+    alt=get_to
+    alt=jump_to
+    alt=take
+    alt=play
+
+@phrase.games.chess.g38_till_now core.phrase
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=till_now
+    alt=until_now
+    alt=so_far
+    alt=up_to_now
+    alt=to_date
+    alt=pls
+    alt=plz
+
+@phrase.games.chess.g39_show core.phrase
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=show
+    alt=list
+    alt=tell_me
+    alt=give_me
+    alt=display
+    alt=what_are
+    alt=whats
+
+@phrase.games.chess.g40_on core.phrase
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=on
+    alt=to
+    alt=the
+    alt=on_the
+    alt=to_the
+    alt=at_the
+    alt=towards_the
+
+@phrase.games.chess.g41_level core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=level
+    alt=lvl
+    alt=lv
+    alt=strength
+    alt=difficulty
+    alt=setting

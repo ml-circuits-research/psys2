@@ -173,3 +173,5 @@ Every line is either supported (with the example that has a test in `tests.sop`,
 | Shape | Example | Status |
 | --- | --- | --- |
 | negation ("do not move there") | no, not that | unsupported: a refusal of the last move needs the engine to ask something first |
+
+**L7 (macros, shapes).** `patterns.sop` was migrated with `scripts/migrate-macros.mjs` (lead-ins, suffixes and 41 repeated lists are macros). The question forms `can.*` (priority 13 -> 14): the migrated `move.*` and `castle.*` patterns accept the lead-in "can I" through `lang.lead.polite`, and "can I castle?" / "may I play queen h5" must stay the ability question. One shape, `games.chess.move.piece` (do family with the target square as a raw `extra` fragment), adds the wish and indirect forms of "move the knight to f3" ("I want to move the knight to f3", "could you maybe move the pawn to e4"; tests sh01 to sh03) and replaced the hand pattern `move.piece.polite`. Chess moves, captures, castling, promotions, SAN, legality questions, piece lists, levels and sides are many-slot or notation phrasings and stay hand-written: the world already holds its repeated lists as local phrases.
