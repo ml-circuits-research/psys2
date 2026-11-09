@@ -167,7 +167,7 @@ export const SCENARIOS = {
     const fake = () => {
       const timers = [];
       const synth = { speaking: false, getVoices: () => [], cancel() { timers.splice(0).forEach(clearTimeout); synth.speaking = false; window.__cancelled = (window.__cancelled ?? 0) + 1; },
-        speak(u) { synth.speaking = true; timers.push(setTimeout(() => { synth.speaking = false; u.onend?.({}); }, 2000)); } };
+        speak(u) { synth.speaking = true; timers.push(setTimeout(() => { synth.speaking = false; u.onend?.({}); }, 4000)); } };
       Object.defineProperty(window, 'speechSynthesis', { value: synth, configurable: true });
       window.SpeechSynthesisUtterance = class { constructor(t) { this.text = t; } };
     };
@@ -189,7 +189,7 @@ export const SCENARIOS = {
       await new Promise((r) => setTimeout(r, 300));
       check('busy: clicking the avatar gallery during the speech does nothing (veil visible)', (await users()) === n0 && (await veiled()).veil, `${n0} -> ${await users()}`);
       check('busy: typing stays possible', await c.pg.$eval('input.p2-text', (i) => !i.disabled && !i.closest('[inert]')));
-      await c.pg.waitForFunction(() => !window.psys2.isBusy(), { timeout: 6000, polling: 50 });
+      await c.pg.waitForFunction(() => !window.psys2.isBusy(), { timeout: 12000, polling: 50 });
       const after = await veiled();
       check('busy: the veil is gone after the speech', !after.veil && !after.inert && after.busy === null && !after.spin, JSON.stringify(after));
       await c.pg.mouse.click(rect.x, rect.y);

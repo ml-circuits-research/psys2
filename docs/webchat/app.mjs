@@ -19,7 +19,7 @@ import { DEFAULT_SETTINGS, SETTINGS_KEY, loadSettings } from './ui/settings.mjs'
 import { guard, TurnAborted, withDeadline } from './lib/formalizer/guard.mjs';
 import { LIMITS, TIME_LIMIT_SPECS, TIME_LIMIT_DEFAULTS, applyTimeLimits, clampLimit } from './lib/dialog/time-limits.mjs';
 import { CREDITS, ABOUT_SECTIONS, ACCURACY, TAGLINE, GREETING } from './ui/about.mjs';
-import { buildRecord, completeRecord, completeStopped, createStore, filterRecords, toJSON, exportFilename, summaryStatus, summaryWorlds, hashState, buildDetail, nextFeedback, voteOf } from './ui/phrase-log.mjs';
+import { buildRecord, completeRecord, completeStopped, createStore, filterRecords, toJSON, exportFilename, summaryStatus, summaryWorlds, hashState, buildDetail, nextFeedback, voteOf, exportRecord } from './ui/phrase-log.mjs';
 import { createFeedback } from './ui/feedback.mjs';
 
 const HERE = new URL('.', import.meta.url);
@@ -142,7 +142,10 @@ export async function mountPsys2(element, options = {}) {
   const tabsEl = h('div', { class: 'p2-tabs', role: 'tablist', 'aria-label': 'Tools' });
   const panelsEl = h('div', { class: 'p2-panels' });
   root.append(chat);
-  const paneEl = tabDefs.length ? h('section', { class: 'p2-pane', 'aria-label': 'Tools' }, tabsEl, panelsEl) : null;
+  // DBG: in developer mode a thin header row under the tab strip carries the Debug button of the tab that is open (one button per tab: it follows the selected tab)
+  const dbgBtn = h('button', { class: 'p2-btn-text p2-dbg-open', type: 'button', id: 'p2-dbg-open', 'aria-haspopup': 'dialog' }, h('span', { class: 'p2-dbg-ico', 'aria-hidden': 'true' }, '🐞'), ' Debug');
+  const dbgRow = h('div', { class: 'p2-dbgrow', hidden: true }, dbgBtn);
+  const paneEl = tabDefs.length ? h('section', { class: 'p2-pane', 'aria-label': 'Tools' }, tabsEl, dbgRow, panelsEl) : null;
   if (paneEl) root.append(paneEl); else root.classList.add('p2-chat-only');
   const modalHost = h('div', { class: 'p2 p2-modal-host' }, settingsEl);   // in <body>, so that "full screen" is the viewport even when the page stacks the chat and the tools
   document.body.append(modalHost);
@@ -169,6 +172,7 @@ export async function mountPsys2(element, options = {}) {
       btn.setAttribute('aria-selected', String(active)); btn.tabIndex = active ? 0 : -1; panel.hidden = !active;
       if (active) ui?.show?.();
     }
+    syncDebugButton();
   }
 
   // ---------- chat ----------
@@ -462,7 +466,7 @@ export async function mountPsys2(element, options = {}) {
     return reply;
   }
   /** The turn ended without an answer: Stop or the watchdog. Restores the session and tells the person. */
-  function endAborted(tn, e, { text, recId, typing, ticker, tStart }) {
+  function endAborted(tn, e, { text, mode, recId, typing, ticker, tStart }) {
     clearInterval(ticker);
     typing.msg.remove();
     const reason = tn.reason ?? e?.reason ?? 'timeout';
@@ -472,6 +476,7 @@ export async function mountPsys2(element, options = {}) {
     if (recId) {
       try { phrases.update(recId, (r) => completeStopped(r, { reason, stage, ms })); if (!settingsEl.hidden) renderPhraseLog(); } catch (err) { console.warn('phrase log failed', err); }
     }
+    if (dbg) { try { dbg.record({ text, mode, tab: view, outcome: reason, stage, ms, recId, stateBefore: tn.stateBefore ?? null, stateAfter: null, endType: voiceEnd(recId) }); } catch (err) { console.warn('debug record failed', err); } }
     const msg = addMessage('bot', reason === 'stopped' ? 'Stopped.' : TOO_LONG, { className: 'is-stopped' });
     const info = h('div', { class: 'p2-trace-slot', hidden: !settings.showTrace }, h('pre', { class: 'p2-trace' }, `Turn ${reason === 'stopped' ? 'stopped by the user' : 'stopped by the time limit'} after ${fmtDur(ms)} in stage "${stage}"; the session was restored to the state before this message.`));
     const toggle = h('button', { class: 'p2-linkbtn', type: 'button', 'aria-expanded': String(!!settings.showTrace) }, 'Trace');
@@ -485,7 +490,7 @@ export async function mountPsys2(element, options = {}) {
     if (tn.ctl.signal.aborted) throw new TurnAborted(tn.reason ?? 'stopped', 'start');
     tn.undo = session.snapshot?.() ?? null;
     const remaining = Math.max(1, limit - (performance.now() - tStart));
-    try { tn.stateBefore = hashState(session.state?.() ?? null); } catch { tn.stateBefore = null; }   // FB: the state hash before the turn, stored with the record
+    try { tn.stateBefore = dbg ? dbg.beforeTurn() : hashState(session.state?.() ?? null); } catch { tn.stateBefore = null; }   // FB: the state hash before the turn, stored with the record
     let reply;
     try {
       reply = await withDeadline(session.send(text, { mode: mode === 'voice' ? 'voice' : undefined, language: settings.language, formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, fastPath: settings.fastPath === true,
@@ -526,6 +531,7 @@ export async function mountPsys2(element, options = {}) {
     try { stateAfter = hashState(session.state?.() ?? null); } catch { /* ignore */ }
     const detail = recId && settings.logPhrases ? buildDetail(reply, { serialize: serializeWires, tab: view, state: { before: tn.stateBefore ?? null, after: stateAfter } }) : null;
     recordPhrase(text, mode, reply, recId, detail);
+    if (dbg) { try { dbg.record({ text, mode, tab: view, reply, usage, detection, effects, recId, stateBefore: tn.stateBefore ?? null, stateAfter, endType: voiceEnd(recId) }); } catch (e) { console.warn('debug record failed', e); } }
     // FB: the next accepted phrasing after a thumbs-down is its correction; a spoken complaint rates the previous answer
     if (reply.feedback === 'negative') {
       if (prevAnswer) { const fb = rateAnswer(prevAnswer, { vote: 'down' }); prevAnswer.ui.set(fb, { open: true }); prevAnswer.botMsg.msg.scrollIntoView?.({ block: 'nearest' }); }
@@ -558,6 +564,60 @@ export async function mountPsys2(element, options = {}) {
     if (!settings.logPhrases) return null;
     try { const rec = { ...buildRecord({ text, mode, language: settings.language, tab: view, reply: null, endType: voice.endType ?? null, waitMs: voice.waitMs ?? null, example: voice.example === true }), ...(voice.queueMs != null ? { queueMs: voice.queueMs } : {}) }; phrases.add(rec); if (!settingsEl.hidden) renderPhraseLog(); return rec.id; } catch (e) { console.warn('phrase log failed', e); return null; }
   }
+  // ---------- developer mode and the debug view (DBG) ----------
+  // Off: nothing of it is loaded, recorded or kept. On: ui/debug.mjs is imported once and keeps a ring buffer of the last 200 turns.
+  let dbg = null, dbgLoading = null;
+  const voiceEnd = (recId) => { try { return (recId && phrases.all().find((r) => r.id === recId)?.endType) || null; } catch { return null; } };
+  async function saveFile(name, text, mime = 'application/json') {
+    const download = () => {
+      const url = URL.createObjectURL(new Blob([text], { type: mime }));
+      const a = h('a', { href: url, download: name, hidden: true }); document.body.append(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 5000); toast(`Downloaded ${name}`);
+    };
+    let file = null;
+    try { file = typeof File === 'function' ? new File([text], name, { type: mime }) : null; } catch { file = null; }
+    if (file && navigator.canShare?.({ files: [file] }) && navigator.share) navigator.share({ files: [file], title: name }).then(() => toast(`Shared ${name}`), (e) => { if (e?.name !== 'AbortError') download(); });   // cancelled sheet: nothing more
+    else download();
+  }
+  function syncDebugButton() {
+    const on = settings.devMode === true && !!tabBtns[view];
+    dbgRow.hidden = !on;
+    if (!on) return;
+    const t = tabDefs.find((x) => x.id === view);
+    dbgBtn.dataset.tab = view;
+    label(dbgBtn, `Debug this world (${t?.label ?? view})`);
+    dbgBtn.replaceChildren(h('span', { class: 'p2-dbg-ico', 'aria-hidden': 'true' }, '🐞'), ` Debug ${t?.label ?? ''}`);
+  }
+  async function loadDebug() {
+    if (dbg) return dbg;
+    dbgLoading ??= import('./ui/debug.mjs').then((m) => {
+      if (destroyed || settings.devMode !== true) return null;
+      dbg = m.createDebug({
+        session: () => session, engine: () => engine, tabs: tabDefs.map((t) => ({ id: t.id, label: t.label, world: t.world })), serializeWires, settings: () => settings, modalHost,
+        inertOthers: (on) => { chat.inert = on; if (paneEl) paneEl.inert = on; },
+        tryText: (text) => { input.value = text; try { input.focus(); } catch { /* ignore */ } syncSendButton(); },
+        copy: (text) => ALLOW['clipboard.copy']({ text }), saveFile, toast, language: () => settings.language,
+        fetchText: async (path) => { const r = await fetch(new URL(path, base)); return r.ok ? r.text() : null; },
+        models: () => ({
+          formalizer: settings.formalizer,
+          dispatcher: { label: dispatcherLabel, status: { ...dispatcherStatus }, source: modelSource, version: dispatcherVersion },
+          normalizer: normalizerHost ? { label: normalizerHost.label, model: normalizerHost.meta?.model ?? null, status: { ...normalizerHost.status } } : null,
+        }),
+      });
+      return dbg;
+    }).catch((e) => { console.warn('debug view failed to load', e); dbgLoading = null; return null; });
+    return dbgLoading;
+  }
+  async function setDevMode(on, { save: persist = true } = {}) {
+    settings.devMode = on === true;
+    if (persist) save();
+    if (settings.devMode) await loadDebug();
+    else { dbg?.close?.(); dbg?.destroy?.(); dbg = null; dbgLoading = null; }
+    syncDebugButton();
+    if (!settingsEl.hidden) renderSettings();
+  }
+  on(dbgBtn, 'click', async () => { const d = await loadDebug(); d?.open(view, dbgBtn); });
+
   // ---------- feedback (FB): thumbs up / down under every answer ----------
   let lastAnswer = null, pendingCorrection = null;
   /** Stores a feedback patch in the record of the answer (or locally when the log is off) and returns the new feedback object. */
@@ -947,6 +1007,7 @@ export async function mountPsys2(element, options = {}) {
   function developerBody() {
     return [
       check('Show the trace of every answer (which part was read by which rule, model and validator)', settings.showTrace, (v) => { settings.showTrace = v; save(); }),
+      check('Developer mode: a Debug button on every tab (commands, last turns with their SOP Lang wires, dry run, state, world, models); records the last 200 turns while on', settings.devMode === true, (v) => { setDevMode(v); }),
       check('Show the per-stage timing overlay of the last message (also with ?perf=1 in the page address)', settings.showPerf === true, (v) => { settings.showPerf = v; save(); if (!v) perfEl?.remove(); }),
       timeLimitsGroup(),
       h('div', { class: 'p2-field' }, h('strong', {}, 'Microphone clicks'), h('pre', { class: 'p2-miclog', tabindex: '0' }, micLog.length ? micLog.slice(-40).map((e) => `${e.t} ${e.via} ${e.action}: ${JSON.stringify(e.before)} -> ${JSON.stringify(e.after)}`).join('\n') : 'No clicks yet.')),
@@ -1029,17 +1090,7 @@ export async function mountPsys2(element, options = {}) {
     const body = toJSON(phrases.all(), { includeChips: settings.exportButtons === true });
     const n = JSON.parse(body).count;
     if (!n) { toast('No phrases to export yet'); return 0; }
-    const name = exportFilename();
-    const download = () => {
-      const url = URL.createObjectURL(new Blob([body], { type: 'application/json' }));
-      const a = h('a', { href: url, download: name, hidden: true }); document.body.append(a); a.click(); a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 5000); toast(`Downloaded ${name}`);
-    };
-    let file = null;
-    try { file = typeof File === 'function' ? new File([body], name, { type: 'application/json' }) : null; } catch { file = null; }
-    if (file && navigator.canShare?.({ files: [file] }) && navigator.share) {
-      navigator.share({ files: [file], title: 'PSys2 phrase log' }).then(() => toast(`Shared ${name}`), (e) => { if (e?.name !== 'AbortError') download(); });   // cancelled sheet: nothing more
-    } else download();
+    saveFile(exportFilename(), body);
     return n;
   }
   function renderPhraseLog() {
@@ -1053,6 +1104,7 @@ export async function mountPsys2(element, options = {}) {
         h('span', { class: 'p2-plog-mode', title: MODE_NAME[r.mode], role: 'img', 'aria-label': MODE_NAME[r.mode] }, MODE_ICON[r.mode]),
         h('span', { class: 'p2-plog-body' }, h('span', { class: 'p2-plog-text' }, r.text),
           h('small', {}, vote ? h('b', { class: `p2-plog-vote v-${vote}`, title: vote === 'up' ? 'Good answer' : 'Not what I wanted', 'aria-label': vote === 'up' ? 'Good answer' : 'Not what I wanted' }, vote === 'up' ? '▲ ' : '▼ ') : null, `${worlds || 'no world'} · `, h('b', { class: `p2-plog-status s-${status}` }, status), r.lang && r.lang !== 'en' ? ` · ${r.lang}` : '', vote === 'down' && r.feedback.wanted ? ` · wanted: ${r.feedback.wanted}` : '')),
+        settings.devMode === true ? h('button', { class: 'p2-linkbtn p2-plog-dump', type: 'button', 'aria-label': `Debug dump: ${r.text}`, title: 'Download a debug dump of this message', onclick: () => saveFile(`psys2-debug-dump-${r.id}.json`, `${JSON.stringify({ record: exportRecord(r), turn: dbg?.turnFor?.(r.id) ?? null }, null, 1)}\n`) }, 'debug dump') : null,
         h('button', { class: 'p2-linkbtn', type: 'button', 'aria-label': `Delete: ${r.text}`, title: `Delete: ${r.text}`, onclick: () => { phrases.remove(r.id); renderPhraseLog(); } }, 'Delete'));
     }));
     const btn = (label, fn, cls = 'p2-btn-text') => h('button', { class: cls, type: 'button', onclick: fn }, label);
@@ -1177,14 +1229,15 @@ export async function mountPsys2(element, options = {}) {
     addMessage('bot', GREETING, { children: chips, className: 'is-hint' });
   }
   const handle = {
-    engine, session, settings, send, stop: stopTurn, applyState, showTab, get busy() { return !!turn; }, isBusy, get veiled() { return veiled; },
+    engine, session, settings, send, stop: stopTurn, applyState, showTab, get busy() { return !!turn; }, get debug() { return dbg; }, isBusy, get veiled() { return veiled; },
     /** The queue of waiting messages (MIC2) and the turn state flags, in one place for other features (BUSY veil): `turnState()` says what is running and what waits. */
     queue: { list: () => queue.map((q) => ({ id: q.id, text: q.text, mode: q.mode })), drop: dropQueued, clear: clearQueue, get length() { return queue.length; } },
     turnState: () => ({ running: !!turn, queued: queue.length, speaking: !!mic.speaking, mic: micBtn.dataset.mic }),
     get micLog() { return micLog; }, micClick,
-    destroy() { destroyed = true; cleanups.forEach((f) => f()); modalHost.remove(); robotUI()?.destroy?.(); speech.destroy(); element.replaceChildren(); element.classList.remove('p2-box'); },
+    destroy() { destroyed = true; cleanups.forEach((f) => f()); modalHost.remove(); dbg?.destroy?.(); robotUI()?.destroy?.(); speech.destroy(); element.replaceChildren(); element.classList.remove('p2-box'); },
   };
   if (settings.handsFree && speechSupport.recognition) setHandsFree(true, false);
+  if (settings.devMode === true) { syncDebugButton(); loadDebug(); }   // DBG: developer mode is remembered
   element.dataset.ready = 'true'; mark('hint');
   { const t = hashTab(location.hash); if (t !== null) { try { history.replaceState(null, '', location.pathname + location.search); } catch { /* no history */ } openSettings(t || undefined); } }   // deep link #settings/<tab>
   // Warm-up after first paint (PERF): the first message used to pay for compiling every pattern and building the vocabularies, and the

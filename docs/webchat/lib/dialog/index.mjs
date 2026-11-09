@@ -179,7 +179,7 @@ export class DialogSession {
    * the discourse memory or the message counter. Bounded by its own short turn guard (`deadlineMs`); while a real turn runs it declines.
    * Returns { complete, segments, reason }.
    */
-  async dryRead(text, { language, deadlineMs = 400 } = {}) {
+  async dryRead(text, { language, deadlineMs = 400, detail = false } = {}) {
     const { set, formalizers, interp, translator } = this.engine;
     const token = guard.install({ hardMs: deadlineMs, softMs: deadlineMs * 0.7 });
     if (!token) return { complete: false, segments: 0, reason: 'busy' };   // a real turn owns the guard
@@ -193,13 +193,15 @@ export class DialogSession {
       english = splitAnswerList(interp.lang.stripFiller(english) || english);
       const res = await formalizers.rules.formalize(english, { worlds: set, session: f.isession, source: 'dry', context: f.context(), router: this.engine.router });
       const segs = res.segments ?? [];
-      if (!segs.length || segs.some((x) => x.unparsed || x.partial || x.ignored?.length)) return { complete: false, segments: segs.length, reason: 'incomplete' };
+      // DBG: with `detail` the answer also says how the text was read (the readings, their wires, the candidate worlds), still without executing anything
+      const det = () => (detail ? { detail: { english, language: lang, readings: segs.map((x) => ({ text: x.text ?? '', world: x.match?.worldId ?? null, pattern: x.match?.patternId ?? null, strategy: x.strategy ?? null, unparsed: !!x.unparsed, partial: !!x.partial, ignored: x.ignored ?? [], candidates: (x.worlds ?? []).slice(0, 4), wires: x.wires ?? [] })) } } : {});
+      if (!segs.length || segs.some((x) => x.unparsed || x.partial || x.ignored?.length)) return { complete: false, segments: segs.length, reason: 'incomplete', ...det() };
       for (const seg of segs) {
         f.isession.add(seg.wires);
-        for (const w of seg.wires) { const r = interp.resolve(f.isession, w); if (r && (r.status === 'unsupported' || r.status === 'error')) return { complete: false, segments: segs.length, reason: 'refused' };
-          if (r && (r.status === 'missing' || r.status === 'ambiguous')) return { complete: false, segments: segs.length, reason: r.status }; }   // EOT2: a reading that still needs an argument ("play" -> what?) is not a whole message
+        for (const w of seg.wires) { const r = interp.resolve(f.isession, w); if (r && (r.status === 'unsupported' || r.status === 'error')) return { complete: false, segments: segs.length, reason: 'refused', ...det() };
+          if (r && (r.status === 'missing' || r.status === 'ambiguous')) return { complete: false, segments: segs.length, reason: r.status, ...det() }; }   // EOT2: a reading that still needs an argument ("play" -> what?) is not a whole message
       }
-      return { complete: true, segments: segs.length, reason: 'ok' };
+      return { complete: true, segments: segs.length, reason: 'ok', ...det() };
     } catch (e) {
       return { complete: false, segments: 0, reason: e instanceof TurnAborted ? 'deadline' : 'error' };
     } finally { guard.release(token); }

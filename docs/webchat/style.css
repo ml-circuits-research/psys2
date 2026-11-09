@@ -288,3 +288,28 @@
 .p2-fb-note { color: var(--muted); }
 .p2-plog-vote.v-up { color: var(--accent); }
 .p2-plog-vote.v-down { color: #c0392b; }
+
+/* DBG: developer mode, the debug view (a modal like Settings) */
+.p2-dbgrow { display: flex; justify-content: flex-end; padding: 2px 8px; border-bottom: 1px solid var(--line); background: var(--surface-2, var(--surface)); }
+.p2-dbgrow[hidden] { display: none; }
+.p2-dbg-open { font-size: 12px; padding: 2px 8px; }
+.p2-dbg-body { overflow-x: hidden; }
+.p2-dbg .p2-code { white-space: pre-wrap; overflow-wrap: anywhere; overflow-x: auto; max-width: 100%; }
+.p2-dbg-tools { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; }
+.p2-dbg-sum { font-size: 13px; color: var(--muted); }
+.p2-dbg-search { width: 100%; box-sizing: border-box; }
+.p2-dbg-op > summary, .p2-dbg-turn > summary, .p2-jt > summary, .p2-dbg-full > summary { cursor: pointer; }
+.p2-dbg-pat { margin: 6px 0 8px 8px; padding-left: 8px; border-left: 2px solid var(--line); }
+.p2-dbg-ex { margin: 4px 0; padding-left: 18px; }
+.p2-dbg-turn { border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; margin: 4px 0; }
+.p2-dbg-reading { margin: 6px 0; }
+.p2-dbg-dry-in { width: 100%; box-sizing: border-box; }
+.p2-dbg .p2-table { display: block; overflow-x: auto; max-width: 100%; }
+.p2-jtree { font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; overflow-x: auto; overflow-wrap: anywhere; }
+.p2-jrow { margin-left: 14px; }
+.p2-jkey { color: var(--muted); }
+.p2-j-string { color: #2a7f4f; } .p2-j-number { color: #1c6ea4; } .p2-j-boolean { color: #a0522d; } .p2-j-null { color: var(--muted); }
+.p2-j.is-changed, .p2-jt.is-changed > summary { background: rgba(240, 180, 40, .35); border-radius: 3px; }
+.sop-id { color: #b04a8a; font-weight: 600; } .sop-type { color: #1c6ea4; } .sop-key { color: #8a5a00; } .sop-str { color: #2a7f4f; } .sop-num { color: #a0522d; } .sop-note { color: var(--muted); }
+:root[data-theme="dark"] .sop-id, .p2-dark .sop-id { color: #e58fc4; }
+@media (prefers-color-scheme: dark) { .sop-id { color: #e58fc4; } .sop-type { color: #6fb7ee; } .sop-key { color: #e0b457; } .sop-str { color: #7fd1a0; } .sop-num { color: #e0997a; } .p2-j-string { color: #7fd1a0; } .p2-j-number { color: #6fb7ee; } }

@@ -142,6 +142,11 @@ export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs
     const dir = path.join(worldsRoot, id);
     const entry = { files: {} };
     for (const f of await walk(dir)) {
+      if (f === 'coverage.md') {   // not in index.json; the debug view (developer mode) fetches it on demand
+        await mkdir(path.join(outDir, 'worlds', id), { recursive: true });
+        await cp(path.join(dir, f), path.join(outDir, 'worlds', id, f));
+        continue;
+      }
       if (BROWSER_SKIP.has(f)) continue;
       if (WORLD_TEXT.test(f)) entry.files[f] = await readFile(path.join(dir, f), 'utf8');
       else if (f.endsWith('.mjs')) {

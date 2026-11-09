@@ -10,6 +10,27 @@ function kv(rows) {
   return h('dl', { class: 'p2-kv' }, rows.filter(([, v]) => v !== undefined && v !== null && v !== '').flatMap(([k, v]) => [h('dt', {}, k), h('dd', {}, v)]));
 }
 const code = (text) => h('pre', { class: 'p2-code' }, h('code', {}, text));
+/** SOP Lang text with syntax colouring: wire ids, types, keys, strings, numbers, notes (DBG). Returns a DocumentFragment. */
+export function colorSop(text) {
+  const frag = document.createDocumentFragment();
+  const re = /(@[\w.$#-]+)|("(?:[^"\\]|\\.)*")|([\w.-]+)(=)|(\bcore\.[\w.]+)|(\b\d+(?:\.\d+)?\b)|(#[^\n]*)/g;
+  const span = (cls, t) => { const e = document.createElement('span'); e.className = cls; e.textContent = t; return e; };
+  const src = String(text ?? '');
+  let last = 0, m;
+  while ((m = re.exec(src))) {
+    if (m.index > last) frag.append(src.slice(last, m.index));
+    if (m[1]) frag.append(span('sop-id', m[1]));
+    else if (m[2]) frag.append(span('sop-str', m[2]));
+    else if (m[3]) frag.append(span('sop-key', m[3]), '=');
+    else if (m[5]) frag.append(span('sop-type', m[5]));
+    else if (m[6]) frag.append(span('sop-num', m[6]));
+    else frag.append(span('sop-note', m[7]));
+    last = re.lastIndex;
+  }
+  if (last < src.length) frag.append(src.slice(last));
+  return frag;
+}
+const sopCode = (text) => h('pre', { class: 'p2-code p2-sop' }, h('code', {}, colorSop(text)));
 
 const variantNote = (a) => (a.variant === 'spell' ? `spelling: ${(a.corrections ?? []).map((c) => `${c.to} ← ${c.from}`).join(', ')}`
   : a.variant === 'partial' ? `partial ${Math.round((a.partial?.coverage ?? 0) * 100)}%, ignored ${(a.partial?.ignored ?? []).map((x) => `“${x.text}”`).join(', ') || 'nothing'}${a.corrections?.length ? `, spelling: ${a.corrections.map((c) => `${c.to} ← ${c.from}`).join(', ')}` : ''}`
@@ -81,7 +102,7 @@ export function renderTrace(reply, extra = {}) {
 
   let sop = '';
   try { sop = extra.serializeWires ? extra.serializeWires(reply.wires ?? []) : ''; } catch (e) { sop = `(could not serialize wires: ${e.message})`; }
-  root.append(section('Wires (SOP Lang)', sop ? code(sop.trim()) : h('p', { class: 'p2-muted' }, 'No wires.')));
+  root.append(section('Wires (SOP Lang)', sop ? sopCode(sop.trim()) : h('p', { class: 'p2-muted' }, 'No wires.')));
 
   const ops = t.operations ?? [];
   root.append(section('Operations', ops.length ? h('table', { class: 'p2-table' },

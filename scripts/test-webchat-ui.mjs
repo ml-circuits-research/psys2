@@ -367,7 +367,106 @@ async function feedbackFor(name, viewport, o) {
   } finally { await c.close(); }
 }
 
+
+/** DBG: the debug view per tab in developer mode (and its zero cost when off). */
+async function debugFor(name, viewport, o) {
+  const tag = `dbg ${name}`;
+  // off: nothing is loaded, no button
+  const off = await openChat({ ...o, throttle: 1, viewport, settings: { formalizer: 'rules', normalizer: false, showTrace: false } });
+  try {
+    const r = await off.pg.evaluate(() => ({ row: document.querySelector('.p2-dbgrow')?.hidden, loaded: performance.getEntriesByType('resource').some((e) => /ui\/debug\.mjs/.test(e.name)), dbg: !!window.psys2.debug }));
+    check(`${tag}: developer mode off: no Debug button, debug.mjs not loaded, nothing recorded`, r.row === true && !r.loaded && !r.dbg, JSON.stringify(r));
+    await off.say('make the eyes blue');
+    await off.pg.click('button[aria-label="Settings"]'); await off.pg.click('#p2-st-developer');
+    await off.pg.evaluate(() => [...document.querySelectorAll('.p2-modal-body label.p2-check')].find((l) => /Developer mode/.test(l.textContent)).querySelector('input').click());
+    await off.pg.waitForFunction(() => !!window.psys2.debug, { timeout: 8000 }).catch(() => {});
+    const on = await off.pg.evaluate(() => ({ dbg: !!window.psys2.debug, row: document.querySelector('.p2-dbgrow')?.hidden, loaded: performance.getEntriesByType('resource').some((e) => /ui\/debug\.mjs/.test(e.name)), saved: JSON.parse(localStorage.getItem('psys2.webchat.settings')).devMode }));
+    check(`${tag}: the Developer mode switch loads the module lazily, shows the button and is remembered`, on.dbg && on.loaded && on.saved === true, JSON.stringify(on));
+    check(`${tag}: a turn before the switch is not recorded`, (await off.pg.evaluate(() => window.psys2.debug.ring.length)) === 0);
+  } finally { await off.close(); }
+
+  const c = await openChat({ ...o, throttle: 1, viewport, settings: { formalizer: 'rules', normalizer: false, showTrace: false, devMode: true } });
+  const pg = c.pg;
+  try {
+    await pg.waitForFunction(() => !!window.psys2.debug, { timeout: 8000 });
+    await pg.evaluate(() => { window.__blobs = []; const orig = URL.createObjectURL.bind(URL); URL.createObjectURL = (b) => { window.__blobs.push(b); return orig(b); }; });
+    const tabs = await pg.$$eval('.p2-tabs .p2-tab', (b) => b.map((x) => x.id.replace('p2-tab-', '')));
+    const dbgOpen = () => pg.evaluate(() => { const m = document.querySelector('.p2-dbg'); return !!m && !m.hidden; });
+    const section = (id) => pg.evaluate((id) => document.querySelector(`#p2-dt-${id}`).click(), id);
+    let bad = [];
+    for (const t of tabs) {
+      await pg.evaluate((t) => window.psys2.showTab(t), t);
+      const vis = await pg.evaluate(() => { const b = document.querySelector('#p2-dbg-open'); const r = b.getBoundingClientRect(); return { tab: b.dataset.tab, shown: !b.closest('[hidden]') && r.width > 0 }; });
+      await pg.click('#p2-dbg-open');
+      await pg.waitForSelector('.p2-dbg:not([hidden])');
+      const info = await pg.evaluate(() => ({ title: document.querySelector('#p2-dbg-title').textContent, n: Number(document.querySelector('.p2-dbg-sum')?.dataset.count ?? 0), sec: document.querySelector('.p2-dbg-body').dataset.section }));
+      if (!(vis.shown && vis.tab === t && info.n > 0 && info.sec === 'commands' && info.title.includes('Debug'))) bad.push(`${t}: ${JSON.stringify({ vis, info })}`);
+      await pg.keyboard.press('Escape');
+      if (await dbgOpen()) bad.push(`${t}: Esc did not close`);
+    }
+    check(`${tag}: every tab (${tabs.length}) shows the Debug button, opens the modal, Commands is not empty, Esc closes`, bad.length === 0, bad.join(' | '));
+
+    // Commands: search and Try
+    await pg.evaluate(() => window.psys2.showTab('robot'));
+    await pg.click('#p2-dbg-open'); await pg.waitForSelector('.p2-dbg:not([hidden])');
+    await pg.type('.p2-dbg-search', 'glasses');
+    const found = await pg.$$eval('.p2-dbg-pat', (e) => e.length);
+    check(`${tag}: the search narrows the commands (${found} patterns for "glasses")`, found > 0 && found < 200);
+    await pg.evaluate(() => document.querySelector('.p2-dbg-try').click());
+    const tried = await pg.$eval('input.p2-text', (i) => i.value);
+    check(`${tag}: "Try" puts the example in the input and closes the view`, tried.length > 3 && !(await dbgOpen()), tried);
+    await pg.evaluate(() => { document.querySelector('input.p2-text').value = ''; });
+
+    // dry run executes nothing
+    const stateBefore = await c.state();
+    await pg.click('#p2-dbg-open'); await pg.waitForSelector('.p2-dbg:not([hidden])'); await section('dry');
+    await pg.type('.p2-dbg-dry-in', 'make the eyes blue');
+    await pg.click('.p2-dbg-tools [data-act="run"]');
+    await pg.waitForSelector('.p2-dbg-dry-out [data-state]', { timeout: 8000 });
+    const dry = await pg.evaluate(() => ({ state: document.querySelector('.p2-dbg-dry-out [data-state]').dataset.state, text: document.querySelector('.p2-dbg-dry-out').innerText, wires: !!document.querySelector('.p2-dbg-dry-out .sop-id') }));
+    check(`${tag}: the dry run reads the phrase, shows readings and colored wires, and the state hash is unchanged`, dry.state === 'unchanged' && /Complete reading\s*yes/.test(dry.text) && dry.wires && (await c.state()) === stateBefore, dry.text.slice(0, 160));
+    await pg.keyboard.press('Escape');
+
+    // last turns with the wires of a command just sent
+    await c.say('make the eyes blue');
+    await pg.click('#p2-dbg-open'); await pg.waitForSelector('.p2-dbg:not([hidden])'); await section('turns');
+    const first = await pg.evaluate(() => { const d = document.querySelector('.p2-dbg-turn'); d.open = true; d.dispatchEvent(new Event('toggle')); return d.querySelector('summary').textContent; });
+    await pg.waitForSelector('.p2-dbg-turn .p2-dbg-wires .sop-id', { timeout: 5000 });
+    const turn = await pg.evaluate(() => { const d = document.querySelector('.p2-dbg-turn'); return { wires: d.querySelector('.p2-dbg-wires pre').innerText, text: d.innerText }; });
+    check(`${tag}: Last turns shows the command just sent with its SOP Lang wires, reading, operations and timing`, /make the eyes blue/.test(first) && /core\.request|action=/.test(turn.wires) && /Readings tried/i.test(turn.text) && /Operations executed/i.test(turn.text) && /Timing/i.test(turn.text), `${first} | ${turn.wires.slice(0, 100)}`);
+    await shot(c, o, `debug-turns-${name}`);
+    // Copy / Export JSON of the section
+    await pg.evaluate(() => document.querySelector('.p2-dbg-tools [data-act="export"]').click());
+    const exp = JSON.parse(await pg.evaluate(() => window.__blobs.at(-1).text()));
+    check(`${tag}: Export JSON of Last turns carries the turns and the wires`, exp.section === 'turns' && exp.data.length >= 1 && exp.data[0].readings?.[0]?.wires, JSON.stringify(exp).slice(0, 120));
+
+    // state with the diff of the last turn
+    await section('state');
+    const st = await pg.evaluate(() => ({ changed: Number(document.querySelector('.p2-dbg-sum').dataset.changed), hl: document.querySelectorAll('.p2-jtree[data-view="state"] .is-changed').length, astra: !!document.querySelector('.p2-jtree[data-view="astra"]'), text: document.querySelector('.p2-dbg-sum').textContent }));
+    check(`${tag}: State shows the world state as a tree with the last turn's change highlighted, plus the ASTRA view`, st.changed > 0 && st.hl > 0 && st.astra, JSON.stringify(st));
+    await section('world');
+    await pg.waitForFunction(() => /coverage|Operation/.test(document.querySelector('.p2-dbg-cov')?.innerText ?? ''), { timeout: 8000 }).catch(() => {});
+    const wd = await pg.evaluate(() => ({ sections: [...document.querySelectorAll('.p2-dbg-body h4')].map((e) => e.textContent), cov: document.querySelector('.p2-dbg-cov')?.innerText.slice(0, 80) }));
+    check(`${tag}: World shows manifest, legend, lexicons, operations, templates and coverage`, ['Manifest (world.sop)', 'Imports', 'Counts', 'Coverage (coverage.md)'].every((x) => wd.sections.includes(x)) && wd.sections.some((x) => /^Lexicons/.test(x)) && wd.sections.some((x) => /^Operations/.test(x)) && /ui\.avatar rule coverage/.test(wd.cov ?? ''), JSON.stringify(wd).slice(0, 200));
+    await section('models');
+    const md = await pg.evaluate(() => ({ sections: [...document.querySelectorAll('.p2-dbg-body h4')].map((e) => e.textContent) }));
+    check(`${tag}: Models shows dispatcher, normalizer and ORT worker status`, ['Dispatcher', 'Normalizer', 'ORT worker (onnxruntime-web)'].every((x) => md.sections.includes(x)), md.sections.join('|'));
+    check(`${tag}: no horizontal overflow in the modal`, await pg.evaluate(() => { const b = document.querySelector('.p2-dbg-body'); return b.scrollWidth <= b.clientWidth + 1 && document.documentElement.scrollWidth <= innerWidth; }));
+    await pg.keyboard.press('Escape');
+
+    // ring buffer of 200
+    const ringLen = await pg.evaluate(() => { const d = window.psys2.debug; for (let i = 0; i < 250; i++) d.record({ text: `t${i}`, mode: 'typed', tab: 'robot' }); return d.ring.length; });
+    check(`${tag}: the ring buffer keeps 200 turns`, ringLen === 200, String(ringLen));
+    // the phrase log's debug dump link
+    await pg.click('button[aria-label="Settings"]'); await pg.click('#p2-st-phrases'); await pg.waitForSelector('.p2-plog-item');
+    const dumpLinks = await pg.$$eval('.p2-plog-dump', (e) => e.length);
+    check(`${tag}: the phrase log has a debug dump link per message`, dumpLinks >= 1, String(dumpLinks));
+    check(`${tag}: 0 console errors`, c.consoleErrors.length === 0 && c.errors.length === 0, [...c.consoleErrors, ...c.errors][0] ?? '');
+  } finally { await c.close(); }
+}
+
 export const SCENARIOS = {
+  async debug(o) { await debugFor('phone', VIEWPORTS.phone, o); await debugFor('desktop', VIEWPORTS.desktop, o); },
   async feedback(o) { await feedbackFor('phone', VIEWPORTS.phone ?? Object.values(VIEWPORTS)[0], o); await feedbackFor('desktop', VIEWPORTS.desktop ?? Object.values(VIEWPORTS).at(-1), o); },
   async surprise(o) { for (const [name, vp] of Object.entries(VIEWPORTS)) await surpriseFor(name, vp, o); },
   async bubble(o) { for (const w of [390, 360, 320]) await bubbleFor(w, o); },
