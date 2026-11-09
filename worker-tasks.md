@@ -36,7 +36,78 @@ The working hypothesis: on small worlds, **rules plus a small learned front-end*
 
 ## 2. Current state, answers and corrections (reviewer, 11:00)
 
-### Final review of "READY FOR REVIEW" (744c3d5) — reviewer, 2026-11-09 09:20 UTC. READ THIS FIRST.
+### HANG + STOP — the chat stays "thinking" forever (user report 10:14 local, reproduced by the reviewer at 4e75163) — P0, DO FIRST
+
+**User session** (webchat; save it as `training/eval/real-dialogue-2026-11-09b.txt` and add it to `dialogues.jsonl` with the right tabs):
+```
+make it liek a girl
+make a house and a man
+draw a some clouds and 2 suns
+show Bern city
+get me to New Youk
+get me to New York'
+lets visit New York
+B1
+start game tic tac toe
+B2
+C2
+change vatar to a man
+change avatar to a man
+transfrom the avatar to a man
+```
+
+**Reproduction.** Headless Chrome, 390×844, 4× CPU throttle, settings `formalizer: rules` (it also happens with encoder). Send the first five lines in order. "get me to New Youk" never gets an answer: "thinking… 450 s" and counting.
+- Every later message queues behind it, so the chat is dead until reload.
+- Without throttling the same message answers in about 1 s ("I did not understand"). In Node rules mode it answers in 218 ms.
+- During the hang the **main thread is idle**: a CPU profile shows 2.9 s idle out of 4 s, and script time is 10 ms. So it is a promise that never settles, not a loop.
+- It is not geolocation: granting the permission changes nothing. There are no console errors and no page errors.
+- Strong suspect: the interpreter's time budget (`opTimeoutMs`, `BudgetError` in `src/interpreter/index.mjs`) fires only on a slow CPU. Somewhere on the path that raises it (host effect, observation loop, best effort, tab apply), a promise is left unresolved instead of rejecting to the caller. Find it with per-stage logs, fix the root cause, and add the reproduction as a headless test with 4× throttle.
+
+**Make the chat robust whatever the cause (user request):**
+1. **A Stop button.** While a message is being processed, the Send button turns into Stop (■). Stop cancels the turn through an `AbortSignal` passed down the whole pipeline: dispatcher, normalizer, rules, interpreter, effects. It answers "Stopped." and leaves the session state as it was before the message (undo snapshot). The phrase log records the message as stopped.
+2. **One message at a time.** While a turn runs, the input stays editable but Send and Enter are disabled; voice input waits. Show "wait for the answer or press Stop" on Enter. No silent queue behind a stuck turn.
+3. **A watchdog.** Every turn has a hard limit: 8 s at most, measured from Enter. When it trips, the turn is aborted as with Stop and the user gets a useful answer: the best reading found so far, or "That took too long, so I stopped. Try a shorter request." The watchdog also logs the stage it was in to the trace and the phrase log, so we see such cases in real use.
+4. **Tests:**
+   - the reproduction above answers in ≤ 8 s at 4× throttle;
+   - Stop during a slow turn restores state;
+   - Enter during a turn sends nothing;
+   - 200 random messages from all sets at 4× throttle → no turn without an answer.
+
+### RD10 — spell checking and "what each world can do" are still weak (user, 10:14; reviewer probes at 4e75163)
+
+The same session shows wrong worlds and missed corrections. Treat each item as a general mechanism with tests across worlds.
+
+**Place names are not corrected at all** (CLI and webchat):
+- "show Pariss", "show New Youk", "get me to New Youk" → not understood.
+- Proper names from lexicons (the gazetteer, people's names, animal names, songs, documents) must be in the correction vocabulary. Use fuzzy matching on the whole value, multi-word included: Pariss → Paris, New Youk → New York, Bucuresti → Bucharest. Prefer the active world's values.
+- Apply the RD1b safety rule: never move away from a value that already exists.
+
+**Natural wrappers around values:**
+- "show Bern city" and "show the city of Bern" → not understood, while "show Bern" works.
+- Accept the common wrappers around a lexicon value in the world's request shapes or `lang.common`: "X city", "the city of X", "the town of X", "X country", "the X song", "the document X".
+
+**A world claims a sentence only if it can actually do it (capability check before claiming):**
+- On the Tic-tac-toe tab, "change avatar to a man" and "change vatar to a man" answer "I could not find "avatar" in the document". docs.editor's "change X to Y" grabbed it although there is no "avatar" in the document, and the user named the avatar.
+- Before a reading wins, the world's precondition must hold: the object exists, the value is known, the game is running. Otherwise the reading drops and the next candidate is tried: the named world (RD2), then the active tab, then the dispatcher's candidates.
+- "change X to Y" belongs to the editor only when X is in the document or the Editor tab is open.
+- Correct "vatar" → avatar, with world names and tab names in the vocabulary with high priority.
+
+**Bare game coordinates with no game running:**
+- "B1" on the Map tab → "I did not understand". It should offer: "B1 looks like a game move. Do you want to play tic-tac-toe or chess?" With yes, start the game and play B1.
+
+**Reports:**
+- recovered / misled on a new typo set of proper names, at least 300 lines from the gazetteer and other lexicons;
+- the two real dialogues turn by turn;
+- the operational and dialogue sets (wrong must not rise).
+
+**Order from now on:**
+1. HANG + STOP
+2. RD10 together with RD1b and RD2 (they share the mechanism)
+3. RD5, RD9
+4. PERF round 3
+5. SURPRISE, AV, ASTRA
+
+### Final review of "READY FOR REVIEW" (744c3d5) — reviewer, 2026-11-09 09:20 UTC.
 
 **What I reran and what matched.**
 - `npm test`: 885 tests, 884 pass, 0 fail, 1 skipped.
