@@ -4,7 +4,8 @@
  *                path = dot path into the world state (array indexes and `length` work) with an optional selector
  *                `objects[kind=circle]` (first element whose field equals the value) or `objects[last]`.
  *                The world defaults to the case's world. Values compare as strings (numbers numerically for < > <= >=).
- *   answer item  a substring that must appear (case-insensitive) in the reply text of the message.
+ *   relative value `$+N` / `$-N`: the value of the path before the message plus N (`objects.length>=$+1`).
+ *   answer item  a substring that must appear (case-insensitive) in the reply text of the message; `forbid_answer` lists substrings that must NOT appear.
  *   effect item  the name of an effect the message must have produced.
  *   status       the status of the last answer ("supported", "unsupported", ...).
  * Pure functions, no imports (browser-safe).
@@ -70,6 +71,9 @@ export function evaluateCase(c, { before, after, replyText, effects, statuses, u
   for (const spec of c.expect?.state ?? []) {
     const it = parseStateItem(spec, c.world);
     if (!it) { items.push({ kind: 'state', spec, ok: false, bad: true }); continue; }
+    // "$+N": N more than the value before the message ("objects.length>=$+2": at least two objects were added), so a long dialogue does not cascade one miss into later counts
+    const rel = it.value.match(/^\$([+-]\d+)$/);
+    if (rel) it.value = String(Number(statePath(before[it.world] ?? {}, it.path) ?? 0) + Number(rel[1]));
     const pre = checkState(before, it), post = checkState(after, it);
     items.push({ kind: 'state', spec, ok: post.ok, trivial: pre.ok, actual: post.actual, changed: pre.actual !== post.actual });
   }
@@ -88,6 +92,7 @@ export function evaluateCase(c, { before, after, replyText, effects, statuses, u
   };
   for (const sub of c.expect?.answer ?? []) items.push({ kind: 'answer', spec: sub, ok: has(sub) });
   for (const sub of c.expect?.answer_any ? [c.expect.answer_any] : []) items.push({ kind: 'answer', spec: sub.join(' | '), ok: sub.some(has) });
+  for (const sub of c.expect?.forbid_answer ?? []) items.push({ kind: 'forbid', spec: `answer without "${sub}"`, ok: !low.includes(String(sub).trim().toLowerCase()) });
   for (const name of c.expect?.effects ?? []) items.push({ kind: 'effect', spec: name, ok: effects.some((e) => e.name === name) });
   if (c.expect?.status) items.push({ kind: 'status', spec: c.expect.status, ok: statuses.at(-1) === c.expect.status });
   return items;

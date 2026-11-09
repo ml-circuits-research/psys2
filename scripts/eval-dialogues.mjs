@@ -11,7 +11,8 @@
  *   node scripts/eval-dialogues.mjs --validate [--set file]     schema + state-field validation only (no pipeline)
  *   options: --jobs N  --family F  --group G  --tag T  --world W  --limit N  --set <file>  --model-dir --normalizer-dir --edit-tau --no-write --verbose --json
  *
- * Dialogue record: { id, world, group?, tab, init: { <world>: patch }, families: [], tags: [], turns: [ { message, expect } ] }, 3-8 turns.
+ * Dialogue record: { id, world, group?, tab, init: { <world>: patch }, families: [], tags: [], turns: [ { message, expect, tab? } ] }, 3-8 turns
+ * (a turn may carry `tab` to switch the active tab first; tag `rd` allows a longer real session).
  * Writes training/results/dialogues/<mode>-<dispatcher sha8>-<date>.json.
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
@@ -32,7 +33,7 @@ const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 &
 const flag = (k) => process.argv.includes(`--${k}`);
 
 export const FAMILIES = ['reference', 'ellipsis', 'clarification', 'correction', 'degree', 'multistep', 'confirmation', 'explain', 'feedback', 'topic', 'userfacts', 'noise'];
-const EXPECT_KEYS = new Set(['state', 'forbid_state', 'answer', 'answer_any', 'effects', 'status', 'none']);
+const EXPECT_KEYS = new Set(['state', 'forbid_state', 'answer', 'answer_any', 'forbid_answer', 'effects', 'status', 'none']);
 
 export function loadDialogues(file) {
   return readFileSync(file, 'utf8').split('\n').filter((l) => l.trim()).map((l) => JSON.parse(l));
@@ -61,7 +62,7 @@ export function validateDialogue(d, stateOf) {
   const err = [];
   if (!/^[\w.#-]+$/.test(d.id ?? '')) err.push('id');
   if (typeof d.world !== 'string') err.push('world');
-  if (!Array.isArray(d.turns) || d.turns.length < 3 || d.turns.length > 8) err.push(`turns ${d.turns?.length} (3-8 required)`);
+  if (!Array.isArray(d.turns) || d.turns.length < 3 || (d.turns.length > 8 && !(d.tags ?? []).includes('rd'))) err.push(`turns ${d.turns?.length} (3-8 required)`);
   if (!Array.isArray(d.families) || !d.families.length) err.push('families empty');
   for (const f of d.families ?? []) if (!FAMILIES.includes(f)) err.push(`unknown family ${f}`);
   if (d.tab != null && typeof d.tab !== 'string') err.push('tab');
@@ -74,7 +75,7 @@ export function validateDialogue(d, stateOf) {
     if (!isObj(t.expect)) { err.push(`${at}: expect`); continue; }
     for (const k of Object.keys(t.expect)) if (!EXPECT_KEYS.has(k)) err.push(`${at}: unknown expect key ${k}`);
     const e = t.expect;
-    if (!(e.none || e.state?.length || e.answer?.length || e.answer_any?.length || e.effects?.length || e.status || e.forbid_state?.length)) err.push(`${at}: empty expectation`);
+    if (!(e.none || e.state?.length || e.answer?.length || e.answer_any?.length || e.effects?.length || e.status || e.forbid_state?.length || e.forbid_answer?.length)) err.push(`${at}: empty expectation`);
     for (const k of ['state', 'forbid_state', 'answer', 'effects']) if (e[k] !== undefined && !(Array.isArray(e[k]) && e[k].every((x) => typeof x === 'string' && x.length))) err.push(`${at}: ${k} must be a list of strings`);
     if (e.answer_any !== undefined && !(Array.isArray(e.answer_any) && e.answer_any.every((x) => typeof x === 'string'))) err.push(`${at}: answer_any`);
     for (const spec of [...(e.state ?? []), ...(e.forbid_state ?? [])]) {
@@ -112,6 +113,7 @@ export async function runDialogue(engine, settings, d) {
   const s = newSession(engine, settings, d);
   const turns = [];
   for (const [i, t] of d.turns.entries()) {
+    if (t.tab) s.setWorldState('ui.shell', { activeTab: t.tab });   // a turn may switch the active tab first (a real session moves between tabs)
     const c = { world: d.world, expect: t.expect };
     const before = s.state();
     const t0 = performance.now();
