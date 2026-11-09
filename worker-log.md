@@ -1070,3 +1070,48 @@ Three commits on top of 9f68fb5 (HANG + STOP + LIC): SET, UI1, DOC, one each, in
 - `scripts/test-webchat-ui.mjs` (headless Chrome, 390x844 and 1280x800): 118 checks, all pass, 0 console errors. Run: `PUPPETEER_CORE=<scratch>/node_modules/puppeteer-core node scripts/test-webchat-ui.mjs [--only settings,ui1,doc]`; also `tests/webchat-ui.test.mjs` when PUPPETEER_CORE is set.
 - Screenshots (small PNGs): `docs/webchat/screenshots/` (`settings-<tab>-<phone|desktop>.png`, `ui1-header-inputbar-*`, `ui1-editor-dictation-*`, `doc-about-*`, `doc-help-*`).
 - Not run: encoder and normalizer loaded in the browser (headless runs use the rules formalizer); the long press for hands-free is checked only up to the switch (headless Chrome has no microphone, so recognition then reports "Microphone access was denied").
+## RD10 + RD1b + RD2 (2026-11-09)
+
+One mechanism-level piece of work on spelling, routing and capability checks (spec 03 sections 7.9b and 7.9c). Rules mode only, no training.
+
+**What changed**
+- `src/formalizer/names.mjs`: lexicon values (places, people, animals, songs ...) as whole values in the correction vocabulary. Multi-word windows ("New Youk" to New York), capitalized or not, active world first, never moving away from an existing value. Wrappers ("X city", "the city of X", "the town of X", "X country", the song and document wrappers) are the `lang.wrap.<kind>.before|after` phrases of `lang.common`, removed next to a value of that kind. Bounded: length-bucketed index with a letter-count prefilter, caps on windows (16), values per window (3), texts (6), 30 ms budget; the dialog tries at most 4 candidates in at most 3 worlds within 120 ms.
+- `DialogSession._nameRepair`: a free-text slot that swallowed a misspelt name ("Play Little Almb") is read again with the closest value when the first reading found nothing to act on.
+- `DialogSession._capability`: a world claims a sentence only if it can do it (dry run on a copy of the session; `missing` drops the reading), then the message is read again without that world (exact, leniency, best effort); accepted only if the new world is named (also after correction: vatar to avatar), owns the tab or answered recently, and no known word or inflection was "corrected". The editor no longer grabs "change avatar to a man" / "change vatar to a man".
+- RD1b: a word valid in any world is never corrected (`vocab.global`, first names and the short-typo table excepted); a lone valid word is never swapped for a neighbour ("next" no longer becomes "neat"); a spelling correction never opens another world's tab when a catch-all slot swallows most of the sentence ("fa-i ochii mari" no longer becomes a document search for "mark").
+- World and tab names are in every world's spelling vocabulary ("vatar" to avatar).
+- RD2: new patterns `pat.ui.avatar.mood.subject` ("make the avatar look scared"), `gender.subject` ("the avatar should be a women"), `gender.now` ("now in a women"); all three Charts-tab sentences work, with and without best effort.
+- Bare game coordinates with no game: "B1" offers "B1 looks like a game move. Do you want to play tic-tac-toe or chess?" (chess only for e4 and the like); yes starts the game and plays the move, no leaves everything as it is.
+- Tests: `tests/rd10-names-capability.test.mjs` (30 tests, including two bounded-time tests with 60 words of noise); spec 03 7.9b / 7.9c; webchat rebuilt; `scripts/gen-name-typos.mjs` and `training/eval/typos/proper-names.jsonl` (362 lines: geo.map 230, kids.animals 92, media.music 40).
+
+**Gates:** `npm test` 914 pass / 0 fail; `node src/cli.mjs test-world all` 0 FAIL.
+
+**Proper-name typo set (362 lines; baseline = the code before this work, originals the baseline cannot read are skipped by the scorer)**
+
+| world | baseline recovered / misled / missed (scored) | now recovered / misled / missed (scored) |
+| --- | --- | --- |
+| geo.map (230) | 0 / 16 / 123 (139 scored; the 91 wrapper originals were not understood) | 218 / 1 / 11 (230) |
+| kids.animals (92) | 92 / 0 / 0 | 92 / 0 / 0 |
+| media.music (40) | 0 / 40 / 0 | 26 / 14 / 0 (the 14 misled are titles whose typo reads as another song; open) |
+| total | 92 / 56 / 123 of 271 scored (33.9 percent recovered) | 336 / 15 / 11 of 362 (92.8 percent recovered, 4.1 percent misled) |
+
+Old typo sets (17 worlds, 1032 lines): nonword recovered 684/804 to 705/804, misled 110 to 93, missed 10 to 6; realword recovered 129 to 128 (of 219), misled 53 to 53 (no rise in wrong).
+
+**Operational and dialogue sets (rules mode)**
+
+| set | baseline | now |
+| --- | --- | --- |
+| operational 1240 (`--mode rules --jobs 20 --no-write`): right / partly / wrong / not understood | 95.4 / 1.8 / 0.5 / 2.3 | 95.4 / 1.8 / 0.5 / 2.3 |
+| dialogues 408: turns / dialogues | 96.4 / 88.0 | 96.4 / 88.0 |
+
+**Real dialogue 2026-11-09 (49 turns), dialogue set turns that still fail (rd#001)**: baseline 15, 16, 17, 19, 20, 41, 42, 46, 48; now 15, 16, 17, 19, 20, 28, 41, 42.
+- fixed: 46 "now in a women", 48 "the avatar should be a women" (Charts tab); 17 and 19 no longer "found nothing in Hansel and Gretel" with a "mari" to "mark" correction and a tab switch (in the English-only rules run they are now honestly "not understood"; the Romanian replies belong to RD5).
+- 28 "next" on the drawing tab: no longer "You are welcome (I read next as neat)", now "I did not understand ... Did you mean ..."; the dialogue label forbids "did not understand", so the turn counts as failing until the label or a bare-"next" reply is decided (dialogue relabels are another agent's task).
+- still open, not in this task: 15, 16, 20 (Romanian, RD5), 41, 42 (RD9: "bugger house" makes the house bigger instead of drawing a new one).
+- CLI replay (`node src/cli.mjs chat < training/eval/real-dialogue-2026-11-09.txt`): b1, c3, c1 on the avatar tab give the game offer; "eys express fear" still says "Now I look fear" (RD9).
+
+**Spell-stage latency (1394 typo lines, warm engine)**: name stage p50 0.5 ms, p95 1.2 to 4 ms, max 3 ms after the one-time index build (the first call also builds the shared spelling vocabulary, 300 to 1400 ms once; `engine.precompile` now warms the name index); whole message p50 30 ms, p95 about 330 ms. Worst case whole message 2.4 to 3.2 s on "If I pay 50 lei for a hall and 2 pencils, what is my change?" (kids.shop), which is the same as the baseline (2.3 to 3.2 s on the same line; a load spike once showed 10.9 s while other agents ran evals). 60 words of noise with repeated place-name typos: 0.3 to 1.2 s end to end, name stage under 2 ms.
+
+**Questions / notes**
+- Documents have no lexicon of names (they come from the user's files), so the "the document X" wrapper phrase is defined (`lang.wrap.document.before`) but only applies once a `*.docs` lexicon holds names; song wrappers apply to `*songtitles`.
+- A few realword slips (tictactoe, art.draw, docs.reader) moved by one line each in both directions; totals unchanged.

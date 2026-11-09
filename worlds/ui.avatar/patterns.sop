@@ -210,6 +210,16 @@
     example="Look a little sad."
     example="Get angry."
 
+@pat.ui.avatar.mood.subject core.pattern
+    canonical="Make the avatar look scared."
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|let|have|get|help] [the|my|your|ur]? [avatar|yourself|robot|character|face] [look|be|feel|seem|appear|become|get|act|sound] [a_little|a_bit|very|so|really|quite|more]? {m:lex.ui.avatar.moods} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.setMood arg.mood={m}"
+    kind=request
+    priority=12
+    example="Make the avatar look scared."
+    example="Make yourself look happy."
+    doc="RD2: a message that names the avatar and a mood (\"make the avatar look scared\") works whatever the active tab is."
+
 @pat.ui.avatar.mood.eyes core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [your|ur|the|my]? [eyes|eye] [should|must|will|can|could]? [express|show|convey|display|look|seem|feel|appear|get|turn|become] [a_little|a_bit|very|so|really|quite|more]? {m:lex.ui.avatar.moods} [$lang.tail.filler]?"
     emit="@{_} core.request action=avatar.setMood arg.mood={m}"
@@ -1316,6 +1326,24 @@
     priority=15
     example="Become a woman."
     example="I want to be a happy man."
+
+@pat.ui.avatar.gender.subject core.pattern
+    canonical="The avatar should be a woman."
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [now|then|and_now]? [the|my|your|ur] [avatar|character|robot|face] [should|must|can|could|will|shall|has_to|needs_to]? [be|become|turn_into|change_into|transform_into|look_like|be_like] [a|an|the]? {m:lex.ui.avatar.moods?} {g:lex.ui.avatar.gender} [avatar|face|character|version|one]? [now]? [$lang.tail.filler|instead|again]? [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.setCharacter arg.who=person arg.kind={g} arg.mood={m}"
+    kind=request
+    priority=15
+    example="The avatar should be a woman."
+    example="Now the avatar should be a happy man."
+    doc="RD2: a sentence that names the avatar and a kind of person works whatever the active tab is."
+
+@pat.ui.avatar.gender.now core.pattern
+    match="[now|then|and_now|and] [in|into|as|like] [a|an|the]? {m:lex.ui.avatar.moods?} {g:lex.ui.avatar.gender} [avatar|face|character|version|one]?"
+    emit="@{_} core.request action=avatar.setCharacter arg.who=person arg.kind={g} arg.mood={m}"
+    kind=request
+    priority=14
+    example="Now in a woman."
+    doc="RD2: the follow-up of an avatar change (\"now in a woman\"); it has literal words, so it is read in any tab."
 
 @pat.ui.avatar.gender.make core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|create|build|give|get|turn|show|let_me_see] [me|us|yourself|the_avatar|my_avatar]? [a|an|the|my|your|ur]? {m:lex.ui.avatar.moods?} {g:lex.ui.avatar.gender} [avatar|face|character|version|one]? [$lang.tail.filler|instead]? [$lang.tail.filler]?"

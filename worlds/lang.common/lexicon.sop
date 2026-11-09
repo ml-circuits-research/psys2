@@ -1649,3 +1649,59 @@
     alt=speak
     alt=narrate
     alt=read
+@phrase.lang.wrap.place.before core.phrase
+    frame=false
+    doc="Wrappers before a place name (\"the city of Bern\", \"the town of Bern\"). Removed next to a place value by the name stage of the spelling layer (RD10, spec 03 section 7.9b); not used in patterns."
+    alt=city_of
+    alt=the_city_of
+    alt=town_of
+    alt=the_town_of
+    alt=village_of
+    alt=the_village_of
+    alt=country_of
+    alt=the_country_of
+    alt=capital_of
+    alt=the_capital_of
+    alt=island_of
+    alt=the_island_of
+    alt=state_of
+    alt=province_of
+    alt=region_of
+
+@phrase.lang.wrap.place.after core.phrase
+    frame=false
+    doc="Wrappers after a place name (\"Bern city\", \"Brazil country\")."
+    alt=city
+    alt=town
+    alt=village
+    alt=country
+    alt=capital
+    alt=island
+    alt=state
+    alt=province
+    alt=region
+
+@phrase.lang.wrap.song.before core.phrase
+    frame=false
+    doc="Wrappers before a song title (\"the song Yankee Doodle\")."
+    alt=the_song
+    alt=the_tune
+    alt=song
+    alt=tune
+
+@phrase.lang.wrap.song.after core.phrase
+    frame=false
+    doc="Wrappers after a song title (\"Yankee Doodle song\", \"the Yankee Doodle tune\")."
+    alt=song
+    alt=tune
+    alt=melody
+
+@phrase.lang.wrap.document.before core.phrase
+    frame=false
+    doc="Wrappers before a document name (\"the document X\", \"the file X\")."
+    alt=the_document
+    alt=document
+    alt=the_doc
+    alt=the_file
+    alt=the_story
+    alt=the_text

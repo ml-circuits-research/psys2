@@ -12,6 +12,8 @@
 import { vocabularyOf, lexiconWordsOf, editDistance, SHORT_TYPOS } from './rules/index.mjs';
 import { isNumberWord } from './rules/numbers.mjs';
 import { guard } from './guard.mjs';
+import { namingTables } from './routing.mjs';
+import { lexIndex } from '../worlds/lexicon.mjs';
 
 /** Common English function words: never corrected, and valid correction targets (typos of "the", "and", "with" ...). */
 export const FUNCTION_WORDS = new Set((
@@ -32,6 +34,7 @@ export const ABBREVIATIONS = {
   colour: 'color', colours: 'colors', grey: 'gray',
   ...SHORT_TYPOS,
 };
+
 
 /** Allowed edit distance for a word: none below 3 letters, 1 for 3 to 6 letters, 2 for 7 and more. */
 export const spellBudget = (word) => (word.length >= 7 ? 2 : word.length >= 3 ? 1 : 0);
@@ -75,7 +78,9 @@ export function spellVocabulary(set) {
   return set.memo('spell-vocabulary', () => {
     const rv = vocabularyOf(set);
     const vocab = new Set(rv);
-    vocab.freq = rv.freq;
+    vocab.freq = new Map(rv.freq ?? []);
+    // world and tab names (avatar, chart, map, drawing, document, chess ...) are the words a user names a world with; they are in every world vocabulary, so they rank as own-world words ("vatar" -> avatar)
+    for (const phrases of namingTables(set).names.values()) for (const ph of phrases) for (const x of ph.split(' ')) if (/^[a-z]{3,}$/.test(x)) { vocab.add(x); }
     vocab.nouns = lexiconWordsOf(set);   // content nouns of all worlds
     for (const w of set.list()) {
       for (const lw of w.legendWires ?? []) for (const part of String(lw.id ?? '').split(/[.\s]/)) for (const x of wordsOf(part.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/_/g, ' '))) vocab.add(x);
@@ -94,9 +99,12 @@ export function worldVocabulary(set, worldId) {
     const all = spellVocabulary(set);
     const own = vocabularyOf(restrictedSet(set, [worldId]));
     const vocab = new Set(own);
-    vocab.freq = own.freq;
+    vocab.freq = new Map(own.freq ?? []);
+    for (const phrases of namingTables(set).names.values()) for (const ph of phrases) for (const x of ph.split(' ')) if (/^[a-z]{3,}$/.test(x)) { vocab.add(x); }
     vocab.nouns = all.nouns;   // content nouns of every world: one known only elsewhere is not "fixed" into this world
     vocab.world = true;
+    const personal = lexIndex(set).names;   // first names are words too, but a lowercase "liv" for "live" is a typo, not a person
+    vocab.global = { has: (w) => all.has(w) && !personal.has(w) && !Object.hasOwn(SHORT_TYPOS, w) };   // RD1b: a word of any world's vocabulary is never "corrected" into this world's word
     // legend and kb words of this world only: keep the ones that are also in the global vocabulary and appear in this world's files
     for (const id of set.available(worldId)) {
       const w = set.get(id);
@@ -152,7 +160,7 @@ export function spellCorrect(text, { vocab, maxCorrections = 6, abbreviations = 
   const keep = new Set([...FUNCTION_WORDS, ...vocab]);
   // Context anchoring: a word the active world (`protect`, the open tab's vocabulary) knows is never changed, and a content word (4+ letters)
   // that another world knows is not "corrected" into a word of this world: that would change both the world and the noun ("boat" -> "coat").
-  const known = (w) => !!protect?.has(w) || (w.length >= 4 && !!vocab.world && !vocab.has(w) && !!vocab.nouns?.has(w));
+  const known = (w) => !!protect?.has(w) || (w.length >= 3 && !!vocab.global?.has(w)) || (w.length >= 4 && !!vocab.world && !vocab.has(w) && !!vocab.nouns?.has(w));
   const cands = [...vocab].filter((w) => w.length >= 2 && /^[a-z]+$/.test(w) && !Object.hasOwn(ABBREVIATIONS, w));
   for (const w of FUNCTION_WORDS) if (w.length >= 2 && !vocab.has(w)) cands.push(w);
   const corrections = [];
@@ -213,7 +221,7 @@ export function spellCandidates(text, { vocab, protect = null, maxPerWord = 5 } 
     const raw = m[0], start = m.index, end = start + raw.length, lower = raw.toLowerCase();
     const isFirst = first; first = false;
     if (quoted.some(([a, b]) => start >= a && end <= b) || !/^[a-z]+$/.test(lower) || (!isFirst && /^[A-Z]/.test(raw))) continue;
-    if (isKnown(lower, keep) || protect?.has(lower) || (lower.length >= 4 && vocab.world && !vocab.has(lower) && vocab.nouns?.has(lower))) continue;
+    if (isKnown(lower, keep) || protect?.has(lower) || (lower.length >= 3 && vocab.global?.has(lower)) || (lower.length >= 4 && vocab.world && !vocab.has(lower) && vocab.nouns?.has(lower))) continue;
     const budget = spellBudget(lower);
     if (!budget) continue;
     const letters = [...lower].sort().join('');

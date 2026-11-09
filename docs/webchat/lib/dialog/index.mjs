@@ -12,12 +12,14 @@
 import { precompile as precompileRules } from '../formalizer/rules/index.mjs';
 import { loadWorlds } from '../worlds/index.mjs';
 import { validateWorldSet } from '../worlds/validate.mjs';
-import { defaultRouter } from '../formalizer/routing.mjs';
+import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs';
 import { createInterpreter } from '../interpreter/index.mjs';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs';
 import { splitSentences } from '../formalizer/rules/normalize.mjs';
+import { nameCandidates, nameIndex } from '../formalizer/names.mjs';
 import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs';
+import { lexIndex } from '../worlds/lexicon.mjs';
 import { perf } from '../formalizer/perf.mjs';
 import { guard, TurnAborted } from '../formalizer/guard.mjs';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs';
@@ -302,9 +304,9 @@ export class DialogSession {
     const rules = formalizers.rules;
     const ctx = this.context();
     const ids = [ctx.tabWorld, ctx.modalWorld, ctx.gameWorld, ...ctx.recentWorlds, ...(seg.worlds ?? []).slice(0, 3).map((w) => w.id)]
-      .filter((w, i, a) => w && a.indexOf(w) === i && set.get(w)?.patterns?.length).slice(0, 5);
+      .filter((w, i, a) => w && a.indexOf(w) === i && set.get(w)?.patterns?.length && !(opts.excluded ?? []).includes(w)).slice(0, 5);
     ids.push('*');   // finally every world together (a clause of a longer message may belong to a world the whole message did not suggest)
-    const setOf = (world) => (world === '*' ? set : restrictedSet(set, [world]));
+    const setOf = (world) => (world === '*' ? (opts.worlds ?? set) : restrictedSet(set, [world]));
     const vocabOf = (world) => (world === '*' ? spellVocabulary(set) : worldVocabulary(set, world));
     const protect = protectedWordsOf(set, ctx.tabWorld);   // words the open tab knows are never changed
     const parse = async (world, text) => {
@@ -312,23 +314,41 @@ export class DialogSession {
       try { res = await rules.formalize(text, { ...opts, worlds: setOf(world) }); } catch { return null; }
       return res.segments.length && res.segments.every((x) => !x.unparsed) ? res : null;
     };
+    const crossTabOk = (res, corrections) => this._crossTabOk(res.segments, corrections, ctx, seg.text);
     const wrap = (res, extra) => res.segments.map((x, k) => ({ ...x, span: seg.span, strategy: 'rules', ...extra, ...(extra.ignored && k > 0 ? { ignored: [] } : {}) }));
     if (depth > 0) { const direct = await parse('*', seg.text); if (direct) return wrap(direct, { corrections: [] }); }   // a clause on its own
     const spelled = new Map();
     if (spell) {
+      // proper names and their wrappers (RD10): whole-value matching against the lexicons, bounded in candidates and time
+      try { nameIndex(set); } catch { /* none */ }   // built once per world set (not counted in the budget)
+      const t0 = Date.now(), NAME_BUDGET_MS = 120;
+      const order = [...new Set(ids.filter((w) => w !== '*').flatMap((w) => set.available(w)))];
+      let named = [];
+      try { named = perf.timeSync ? perf.timeSync('names', () => nameCandidates(seg.text, { set, vocab: spellVocabulary(set), worldOrder: order })) : nameCandidates(seg.text, { set, vocab: spellVocabulary(set), worldOrder: order }); } catch { named = []; }
+      for (const cand of named.slice(0, 4)) {
+        // the worlds that own the value first (and are candidates), then the usual order; every world together is tried before the rest
+        const own = ids.filter((w) => w !== '*' && cand.worlds.some((cw) => set.available(w).includes(cw)));
+        for (const world of [...new Set([...own.slice(0, 2), '*'])]) {
+          if (Date.now() - t0 > NAME_BUDGET_MS) break;
+          const res = await parse(world, cand.text);
+          if (res) return wrap(res, { corrections: cand.corrections });
+        }
+      }
       for (const world of ids) {
         if (late()) return null;
         const sp = spellCorrect(seg.text, { vocab: vocabOf(world), protect });
         spelled.set(world, sp);
         if (!sp.corrections.length) continue;
         const res = await parse(world, sp.text);
-        if (res) return wrap(res, { corrections: sp.corrections });
+        if (res && crossTabOk(res, sp.corrections)) return wrap(res, { corrections: sp.corrections });
       }
-      for (const world of ids) {
+      // RD1b: a lone word that is valid somewhere ("next") is never swapped for a neighbour ("neat"): there is nothing around it to confirm the guess
+      const lone = (seg.text.match(/[\p{L}\p{N}]+/gu) ?? []).length < 2;
+      for (const world of lone ? [] : ids) {
         for (const v of spellAlternates(seg.text, { vocab: vocabOf(world), protect })) {
           if (late()) return null;
           const res = await parse(world, v.text);
-          if (res) return wrap(res, { corrections: v.corrections });
+          if (res && crossTabOk(res, v.corrections)) return wrap(res, { corrections: v.corrections });
         }
       }
     }
@@ -380,7 +400,7 @@ export class DialogSession {
     const P = BEST_EFFORT_POLICY;
     const ctx = this.context();
     const worlds = [ctx.tabWorld, ctx.modalWorld, ctx.gameWorld, ...ctx.recentWorlds, ...(seg.worlds ?? []).slice(0, 3).map((w) => w.id)]
-      .filter((w, i, a) => w && a.indexOf(w) === i && set.get(w)?.patterns?.length);
+      .filter((w, i, a) => w && a.indexOf(w) === i && set.get(w)?.patterns?.length && !(opts.excluded ?? []).includes(w));
     const cands = looseCandidates(set, seg.text, { worlds, tabWorld: ctx.tabWorld });
     if (!cands.length) return null;
     const norm = (wires) => JSON.stringify(wires.map((w) => [w.type, w.entries.filter((e) => !/^core\.(?:via|source|seq|span|in)$/.test(e.key)).map((e) => [e.key, e.value])]));   // what is asked, not how it was phrased
@@ -526,6 +546,135 @@ export class DialogSession {
     return null;
   }
 
+
+  /**
+   * RD1b: a spelling correction never opens another world's tab on its own. A reading of a world other than the open tab's that owns a tab is
+   * rejected when a free-text slot of that world (a catch-all) swallows most of the sentence, unless the message names the world.
+   */
+  /** Worlds whose name (tab or object: avatar, chart, map ...) occurs anywhere in `text` (no determiner needed, unlike routing's `namedWorlds`). */
+  _worldsNamedIn(text) {
+    const padded = ` ${text.toLowerCase().match(/[a-z0-9]+/g)?.join(' ') ?? ''} `;
+    return new Set([...namingTables(this.engine.set).names].filter(([, list]) => list.some((n) => padded.includes(` ${n} `))).map(([w]) => w));
+  }
+
+  _crossTabOk(segments, corrections, ctx, text) {
+    if (!ctx.tabWorld || !corrections?.length) return true;
+    const { set } = this.engine;
+    const fixedText = corrections.reduce((t, c) => t.replace(c.from, c.to), text);   // a world named through the correction ("vatar" -> avatar) is named
+    const namedNow = this._worldsNamedIn(`${text} ${fixedText}`);
+    return segments.every((x) => {
+      const w = x.match?.worldId;
+      if (!w || w === ctx.tabWorld || w === 'ui.shell' || w === 'ui.help' || namedNow.has(w) || !(set.get(w)?.tab || BUILTIN_TAB[w])) return true;
+      // the world "read" the sentence only if a catch-all does not swallow most of it (a search query, a name sink taking a typo for text)
+      const free = Object.values(x.match?.slots ?? {}).filter((sl) => sl.class === 'rest' || sl.class === 'words').reduce((n, sl) => n + (String(sl.text ?? sl.value ?? '').match(/[\p{L}\p{N}]+/gu)?.length ?? 0), 0);
+      const total = (x.text ?? text).match(/[\p{L}\p{N}]+/gu)?.length ?? 1;
+      return !(corrections.some((c) => (c.kind ?? 'spell') === 'spell') && free * 2 > total);
+    });
+  }
+
+  /**
+   * Capability check (RD10, spec 03 section 7.9c): a world claims a sentence only if it can do it. A reading of a world other than the open
+   * tab's (or, when the message names another world, of the tab's world too) whose dry run on a copy of the session is refused or finds nothing
+   * to act on ("change avatar to a man" read by the editor when "avatar" is not in the document) drops, and the message is read again without
+   * that world: exactly, then with the spelling stage (so "change vatar to a man" reaches the avatar). When nothing else reads it, the original
+   * reading stays (its answer explains what is missing). Returns the segments of the new reading, or null.
+   */
+  /**
+   * Name repair (RD10): a free-text slot read a misspelt proper name as an unknown value ("Play Little Almb": "I do not know a song called ...").
+   * When a reading found nothing to act on (`missing`) and a lexicon value is close to a window of the message, the message is read again with the
+   * value; the new reading must be read completely and carried out (no `missing`, no refusal). Returns the segments, or null.
+   */
+  async _nameRepair(english, res, opts, lenient) {
+    if (!lenient.spell || !res.segments.length || res.segments.some((x) => x.unparsed)) return null;
+    const { set, formalizers, interp } = this.engine;
+    const ctx = opts.context ?? this.context();
+    const dry = (segments) => {
+      const out = [];
+      try {
+        const f = this.forkForValidation();
+        for (const seg of segments) { f.isession.add(seg.wires); for (const w of seg.wires) { const r = interp.resolve(f.isession, w); if (r?.status) out.push(r.status); } }
+      } catch { /* no dry run */ }
+      return out;
+    };
+    let cands;
+    try { cands = nameCandidates(english, { set, vocab: spellVocabulary(set), worldOrder: [...new Set([ctx.tabWorld, ...(ctx.recentWorlds ?? [])].filter(Boolean).flatMap((w) => set.available(w)))] }); } catch { return null; }
+    if (!cands.length || !dry(res.segments).includes('missing')) return null;
+    const t0 = Date.now();
+    for (const cand of cands.slice(0, 3)) {
+      if (Date.now() - t0 > 300) break;
+      let fixed;
+      try { fixed = await formalizers.rules.formalize(cand.text, { ...opts, worlds: set, session: this.isession, source: opts.source, context: ctx, router: this.engine.router }); } catch { continue; }
+      if (!fixed.segments.length || fixed.segments.some((x) => x.unparsed || x.partial || x.ignored?.length)) continue;
+      if (dry(fixed.segments).some((x) => x !== 'supported')) continue;
+      const segments = fixed.segments.map((x) => ({ ...x, strategy: 'rules', corrections: [...(x.corrections ?? []), ...cand.corrections] }));
+      return { segments, wires: segments.flatMap((x) => x.wires) };
+    }
+    return null;
+  }
+
+  async _capability(english, res, opts, lenient) {
+    const rep = await this._nameRepair(english, res, opts, lenient);
+    if (rep) return rep;
+    const r = await this._capabilityRead(english, res, opts, lenient);
+    if (r || !res.segments.length) return r;
+    // nothing else read the message and the only reading rests on a correction that would open another world's tab: it is not understood
+    const ctx = opts.context ?? this.context();
+    const cross = res.segments.filter((x) => !x.unparsed && x.corrections?.length && !this._crossTabOk([x], x.corrections, ctx, english));
+    if (!cross.length) return null;
+    const segments = res.segments.map((x) => (cross.includes(x) ? { ...x, unparsed: true, wires: [], match: null, alternatives: [], errors: [], corrections: [], ignored: [] } : x));
+    return { segments, wires: segments.flatMap((x) => x.wires) };
+  }
+
+  async _capabilityRead(english, res, opts, lenient) {
+    if (!res.segments.length || res.segments.some((x) => x.unparsed)) return null;
+    const { set, formalizers, interp } = this.engine;
+    const ctx = opts.context ?? this.context();
+    const named = namedWorlds((english.toLowerCase().match(/[a-z0-9]+/g) ?? []).map((w) => ({ kind: 'word', lower: w, raw: w })), namingTables(set).names);
+    const SKIP = new Set(['ui.shell', 'ui.help', 'core', 'lang.common']);
+    const suspect = res.segments.filter((x) => { const w = x.match?.worldId; return w && !SKIP.has(w) && (w !== ctx.tabWorld || (named.size > 0 && !named.has(w)) || (!!ctx.lastWorld && ctx.lastWorld !== w && !SKIP.has(ctx.lastWorld))); });
+    const crossBad = res.segments.filter((x) => x.corrections?.length && !this._crossTabOk([x], x.corrections, ctx, english)).map((x) => x.match.worldId);
+    if (!suspect.length && !crossBad.length) return null;
+    const bad = new Set(crossBad);
+    try {
+      const f = this.forkForValidation();
+      for (const seg of res.segments) {
+        f.isession.add(seg.wires);
+        if (!suspect.includes(seg)) continue;
+        for (const w of seg.wires) { const r = interp.resolve(f.isession, w); if (r?.status === 'missing') bad.add(seg.match.worldId); }
+      }
+    } catch { return null; }
+    if (!bad.size) return null;
+    const excluded = [...bad];
+    const all = set.list().filter((w) => !excluded.includes(w.id));
+    const view = Object.create(set);
+    view._cache = new Map();
+    view.parent = set.parent ?? set;
+    view.list = () => all;
+    const o2 = { ...opts, worlds: view, excluded };
+    let r2;
+    try { r2 = await formalizers.rules.formalize(english, o2); } catch { return null; }
+    r2.segments.forEach((s) => { s.strategy = 'rules'; });
+    if (r2.segments.some((x) => x.unparsed) && (lenient.spell || lenient.partial)) {
+      try { r2 = await this._withLeniency(r2, o2, lenient); } catch { return null; }
+    }
+    if (r2.segments.length === 1 && r2.segments[0].unparsed && this._beNow) { try { r2 = await this._withBestEffort(r2, o2); } catch { return null; } }
+    if (!r2.segments.length || r2.segments.some((x) => x.unparsed)) return null;
+    // a word some world knows, or an inflection of its correction ("move" -> "moves"), is never a typo here
+    const gv = spellVocabulary(set);
+    if (r2.segments.some((x) => (x.corrections ?? []).some((c) => c.kind !== 'abbreviation' && (sameWordForm(c.from.toLowerCase(), c.to.toLowerCase()) || isKnownWord(c.from.toLowerCase(), gv))))) return null;
+    // the new reading must be the one the user meant: its world is named in the message (also after the corrections: "vatar" -> avatar), owns the open tab, or answered recently
+    let fixedText = english;
+    for (const sg of r2.segments) for (const c of sg.corrections ?? []) fixedText = fixedText.replace(c.from, c.to);
+    const meant = new Set([...named, ...this._worldsNamedIn(`${fixedText} ${r2.segments.map((x) => x.bestEffort?.took ?? '').join(' ')}`), ctx.tabWorld, ...(ctx.recentWorlds ?? [])]);
+    if (!r2.segments.every((x) => !x.match?.worldId || x.match.worldId === 'ui.shell' || x.match.worldId === 'ui.help' || meant.has(x.match.worldId))) return null;
+    try {
+      const f = this.forkForValidation();
+      for (const seg of r2.segments) { f.isession.add(seg.wires); for (const w of seg.wires) { const r = interp.resolve(f.isession, w); if (r?.status === 'unsupported' || r?.status === 'error') return null; } }
+    } catch { return null; }
+    r2.segments.forEach((s) => { s.strategy ??= 'rules'; });
+    return { segments: r2.segments, wires: r2.segments.flatMap((s) => s.wires) };
+  }
+
   async _formalize(english, sid, preferred = this.formalizer, lenient = { spell: this.spell, partial: this.partial, fastPath: this.fastPath }) {
     const { set, formalizers } = this.engine;
     const opts = { worlds: set, session: this.isession, source: sid, context: this.context(), router: this.engine.router };
@@ -544,6 +693,8 @@ export class DialogSession {
           const shift = seg.span[0];
           for (const s of sub.segments) segments.push({ ...s, span: [s.span[0] + shift, s.span[1] + shift], strategy: 'rules' });
         }
+        const cap = await this._capability(english, { segments, wires: [] }, opts, lenient);
+        if (cap) return { ...cap, dispatch: res.dispatch ?? null };
         const active = await this._activeSpell(english, { segments, wires: [] }, opts, lenient);
         if (active) return { segments: active.segments, wires: active.segments.flatMap((s) => s.wires), dispatch: res.dispatch ?? null };
         const done = await this._withLeniency({ segments, wires: [] }, opts, lenient);
@@ -553,6 +704,8 @@ export class DialogSession {
     const res = await perf.time('rules', () => rules.formalize(english, opts));
     for (const s of res.segments) s.strategy = 'rules';
     if (encoderError) res.encoderError = encoderError;
+    const cap = await this._capability(english, res, opts, lenient);
+    if (cap) { if (encoderError) cap.encoderError = encoderError; return cap; }
     const active = await this._activeSpell(english, res, opts, lenient);
     if (active) { active.segments.forEach((s) => { s.strategy ??= 'rules'; }); if (encoderError) active.encoderError = encoderError; return active; }
     const done = await this._withLeniency(res, opts, lenient);
@@ -638,6 +791,7 @@ export class DialogSession {
     const { engine } = this;
     const { set, interp, translator } = engine;
     const sid = `msg${++this._msg}`;
+    this._beNow = bestEffort ?? this.bestEffort;
     const wanted = language ?? this.language;
     let lang = 'en', translation = null, english = text, switchedLanguage = null;
     if (translator) {
@@ -696,6 +850,19 @@ export class DialogSession {
     if (!icpt && !pre && !meta && formal.segments.length === 1 && formal.segments[0].unparsed) {
       pre = await disc.ellipsis(english, sid, { bare: true });
       if (pre) formal = { ...pre.res, dispatch: null };
+    }
+    if (!icpt && !pre && !meta && formal.segments.length === 1 && formal.segments[0].unparsed) {
+      // RD10: a bare coordinate ("B1") with no game running and no game tab open is a game move without a game: offer to start one
+      const cm = /^\s*(?:play\s+)?([a-h])\s*([1-8])\s*[.!]?\s*$/i.exec(english);
+      const gctx = this.context();
+      if (cm && !gctx.gameWorld && !String(gctx.tabWorld ?? '').startsWith('games.')) {
+        const sq = `${cm[1]}${cm[2]}`, label = sq.toUpperCase();
+        const ttt = /^[a-c][1-3]$/i.test(sq);
+        const question = ttt ? 'Do you want to play tic-tac-toe or chess?' : 'Do you want to play chess?';
+        disc.pending = { type: 'offer', accept: 'rewrite', rewrite: ttt ? `play tic tac toe and ${sq}` : `play chess and play ${sq}`, world: ttt ? 'games.tictactoe' : 'games.chess', expected: 'yes/no', question, turn: this._msg };
+        formal = { segments: [], wires: [] };
+        meta = { reply: `${label} looks like a game move. ${question}`, status: 'unparsed', info: { kind: 'offer', offer: 'game', coordinate: label } };
+      }
     }
     if (!icpt && !pre && !meta && formal.segments.length === 1 && formal.segments[0].unparsed) {
       // "open the music tab instead": a trailing softener the command does not need
@@ -874,7 +1041,7 @@ export async function createEngine({ loader, translator = null, options = {}, fo
     worlds: () => set.list().map((w) => w.summary()),
     createSession: (opts) => new DialogSession(engine, opts),
     /** Compiles every pattern and builds the vocabularies in slices that yield to the host (the webchat warm-up, PERF round 2). */
-    precompile: (opts) => precompileRules(set, opts),
+    precompile: async (opts) => { const r = await precompileRules(set, opts); try { nameIndex(set); } catch { /* built lazily */ } return r; },
   };
   return engine;
 }
