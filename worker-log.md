@@ -765,3 +765,8 @@ Per bucket, encoder+n1 (right / partly / wrong / nu): kids 100 / 0 / 0 / 0 -> 10
 - **migrate-macros**: `patterns.sop` 85,726 -> 63,013 bytes; hand patterns 99 (+ 1 shape, 4 generated); match text 64,784 -> 41,696 bytes (-36 %); inline groups repeated verbatim 42 (386 occurrences) -> 25 (169). 13 world-local phrases. No lexicon for `extends`.
 - **Shape**: `games.tictactoe.move` (do; imp, wish, ind, q); nothing deleted (the hand patterns have an optional verb, which a shape cannot say: a bare "center" must keep its tier 5 reach).
 - **Tests**: games.tictactoe 156 -> 158 (sh01, sh02). **Gates**: operational 95.1% / 6 wrong unchanged; dialogues unchanged; eval-rules and long set identical.
+
+## L7 games.hangman (2026-11-09)
+- **migrate-macros**: `patterns.sop` 62,162 -> 43,510 bytes; hand patterns 95 (+ 1 shape, 4 generated); match text 43,805 -> 24,822 bytes (-43 %); inline groups repeated verbatim 16 (82 occurrences) after. No lexicon for `extends`.
+- **Shape**: `games.hangman.letter` (do with `objmod=letter`); nothing deleted. **Gate finding**: `hint2` (lead `lang.lead.polite` has "i want to play") read "i want to play something" on a recent hangman world (routing paraphrase of ui.shell lost): it keeps its original match; dlg.gms#028 turns 3 and 4 improved.
+- **Tests**: games.hangman 135 -> 137 (sh01, sh02). **Gates**: operational 95.1% / 6 wrong unchanged; dialogues 96.6% / 87.7% (two fewer failing turns); eval-rules identical; long set identical.

@@ -688,3 +688,13 @@
     session=hg2
     input="i cannot solve it anymore, i quit"
     expect="lion"
+
+@t.games.hangman.sh01 core.test
+    input="Let's play hangman."
+    expect="hangman"
+    session=hsh
+
+@t.games.hangman.sh02 core.test
+    input="could you maybe guess the letter e"
+    expect="Yes, there are 2 Es!"
+    session=hsh

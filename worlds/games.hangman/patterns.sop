@@ -1,6 +1,6 @@
 @pat.games.hangman.letter core.pattern
     canonical="Is there an E?"
-    match="[uh|hm|hmm|hey|ah|oh|wait|yeah|um|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh|ok]? [is_there|was_there|any|got|got_any|do_you_have|have_you_got|is|are_there|does_it_have|does_the_word_have|does_the_word_contain|does_it_contain|do_you_see|there_is]? [a|an|any|the]? [letter]? {l:lex.games.hangman.letters} [in_it|in_the_word|in_there|in_that|in_this|there|in_this_word]? [right|then|pls|plz|lol|rn|now]?"
+    match="[$lang.lead.filler|wait|umm|right|ooh]? [is_there|was_there|any|got|got_any|do_you_have|have_you_got|is|are_there|does_it_have|does_the_word_have|does_the_word_contain|does_it_contain|do_you_see|there_is]? [a|an|any|the]? [letter]? {l:lex.games.hangman.letters} [in_it|in_the_word|in_there|in_that|in_this|there|in_this_word]? [right|then|pls|plz|lol|rn|now]?"
     emit="@{_} core.request action=hm.letter arg.letter={l}"
     kind=request
     priority=12
@@ -24,7 +24,7 @@
     example="Word has an a?"
 
 @pat.games.hangman.letter2 core.pattern
-    match="[uh|hm|hmm|hey|ah|oh|wait|yeah|ok|um|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh]? [the_letter|letter|guess|try|trying|i_guess|i_try|how_about|what_about|guess_the_letter|try_the_letter|i_guess_the_letter|let_me_try|let_us_try|how_about_the_letter|what_about_the_letter|is_it_the_letter|pick|i_pick|i_choose|choose|take|i_take|i_will_try|i_will_guess|i_will_pick|i_will_take|i_will_go_with|go_with|i_say|say|use|my_guess_is|my_pick_is|my_letter_is|my_choice_is|i_will_say|how_about_an|let_me_guess|let_me_pick|give_me|i_would_like|i_want|i_would_try|can_i_try|can_i_guess|can_i_have|may_i_try|may_i_guess|let_me_have|ill_try|try_with|guess_with|go_for|i_go_for] [the_letter|letter]? [a|an]? {l:lex.games.hangman.letters} [please|pls|plz|then|now|lol|ok]?"
+    match="[$lang.lead.filler|wait|umm|right|ooh]? [the_letter|letter|guess|try|trying|i_guess|i_try|how_about|what_about|guess_the_letter|try_the_letter|i_guess_the_letter|let_me_try|let_us_try|how_about_the_letter|what_about_the_letter|is_it_the_letter|pick|i_pick|i_choose|choose|take|i_take|i_will_try|i_will_guess|i_will_pick|i_will_take|i_will_go_with|go_with|i_say|say|use|my_guess_is|my_pick_is|my_letter_is|my_choice_is|i_will_say|how_about_an|let_me_guess|let_me_pick|give_me|i_would_like|i_want|i_would_try|can_i_try|can_i_guess|can_i_have|may_i_try|may_i_guess|let_me_have|ill_try|try_with|guess_with|go_for|i_go_for] [the_letter|letter]? [a|an]? {l:lex.games.hangman.letters} [pls|plz|then|now|lol]?"
     emit="@{_} core.request action=hm.letter arg.letter={l}"
     kind=request
     priority=12
@@ -66,7 +66,7 @@
 
 @pat.games.hangman.word2 core.pattern
     canonical="My answer is zebra."
-    match="[uh|hm|hmm|hey|ah|oh|wait|yeah|um|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh|ok]? [the_word_is|my_guess_is|i_guess_it_is|i_think_it_is|i_think_the_word_is|it_might_be|maybe_it_is|the_word_might_be|i_think|i_say|i_would_say|i_guess|i_bet_it_is|i_bet|maybe|perhaps|probably|guess|my_answer_is|word_is|word_could_be|the_word_could_be|word_may_be|it_could_be|could_be|its_probably|it_is_probably|its|it_is|i_think_its|i_think_it_might_be|maybe_its|maybe_it_could_be|i_would_guess|i_will_say|i_will_guess|i_choose|my_final_answer_is|is_the_word|is_the_answer|i_have_it_it_is] [a|an|the]? {w:word} [it_is|i_think|i_hope|i_bet|i_guess|maybe|right|then|pls|plz|lol|perhaps]?"
+    match="[$lang.lead.filler|wait|umm|right|ooh]? [the_word_is|my_guess_is|i_guess_it_is|i_think_it_is|i_think_the_word_is|it_might_be|maybe_it_is|the_word_might_be|i_think|i_say|i_would_say|i_guess|i_bet_it_is|i_bet|maybe|perhaps|probably|guess|my_answer_is|word_is|word_could_be|the_word_could_be|word_may_be|it_could_be|could_be|its_probably|it_is_probably|its|it_is|i_think_its|i_think_it_might_be|maybe_its|maybe_it_could_be|i_would_guess|i_will_say|i_will_guess|i_choose|my_final_answer_is|is_the_word|is_the_answer|i_have_it_it_is] [a|an|the]? {w:word} [$games.hangman.g6_it_is]?"
     emit="@{_} core.request action=hm.word arg.word={w}"
     kind=request
     priority=10
@@ -75,7 +75,7 @@
     example="My answer is zebra."
 
 @pat.games.hangman.word3 core.pattern
-    match="[a|an] {w:word} [it_is|i_think|i_hope|i_bet|i_guess|maybe|right|then|pls|plz|lol|perhaps]?"
+    match="[a|an] {w:word} [$games.hangman.g6_it_is]?"
     emit="@{_} core.request action=hm.word arg.word={w}"
     kind=request
     priority=8
@@ -83,7 +83,7 @@
 
 @pat.games.hangman.new core.pattern
     canonical="Start a new hangman game."
-    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|um|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh|ok]? [can_we|can_you|could_we|let_us|i_want_to|i_would_like_to|i_want|i_wanna|lets|please_can_we]? [start|play|begin|have|do|restart|reset|try|go_for|another|new|fresh|next|fresh_start|a_new|a_fresh|1_more|one_more] [a|another|1_more|the|1]? [new|fresh|next|another|fresh_start]? [round_of|game_of|round|game]? hangman [new|fresh|again|once_more|over|restart|from_scratch|start_over|another|next|fresh_start]? [game|round|1|word|start|a_new_1|new_1|new_round|new_game|new_word|another_1|another_round]? [pls|plz|now|then|please]?"
+    match="[$lang.lead.filler|wait|umm|right|ooh]? [$lang.lead.polite]? [start|play|begin|have|do|restart|reset|try|go_for|another|new|fresh|next|fresh_start|a_new|a_fresh|1_more|one_more] [a|another|1_more|the|1]? [new|fresh|next|another|fresh_start]? [round_of|game_of|round|game]? hangman [$games.hangman.g5_new]? [$games.hangman.g4_game]? [pls|plz|now|then]?"
     emit="@{_} core.request action=hm.new"
     kind=request
     priority=12
@@ -92,7 +92,7 @@
     example="Fresh start hangman."
 
 @pat.games.hangman.new.after core.pattern
-    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|um|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh|ok]? hangman [new|fresh|again|once_more|over|restart|from_scratch|start_over|another|next|fresh_start] [game|round|1|word|start|a_new_1|new_1|new_round|new_game|new_word|another_1|another_round]? [pls|plz|now|then|please]?"
+    match="[$lang.lead.filler|wait|umm|right|ooh]? hangman [$games.hangman.g5_new] [$games.hangman.g4_game]? [pls|plz|now|then]?"
     emit="@{_} core.request action=hm.new"
     kind=request
     priority=12
@@ -100,7 +100,7 @@
     example="Hangman new one pls."
 
 @pat.games.hangman.newround core.pattern
-    match="[uh|hm|hmm|hey|ah|oh|wait|yeah|um|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh|ok]? [a|another|1_more|1_more]? [new|fresh|next|another] [word|round|animal] [pls|plz|now|then|please]?"
+    match="[$lang.lead.filler|wait|umm|right|ooh]? [a|another|1_more|1_more]? [new|fresh|next|another] [word|round|animal] [pls|plz|now|then]?"
     emit="@{_} core.request action=hm.new"
     kind=request
     priority=11
@@ -148,7 +148,7 @@
 
 @pat.games.hangman.giveup core.pattern
     canonical="Giving up."
-    match="[uh|hm|hmm|hey|ah|oh|wait|yeah|ok|um|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh]? [i|we]? [give|giving|gave|quit|quitting|surrender|surrendering|forfeit|forfeiting|am_done|am_giving|will_give|am_quitting] [up]? [now|pls|plz|the_word|the_round|this_round|this_word|this_game|the_game|it|then]? [now|pls|plz|then]?"
+    match="[$lang.lead.filler|wait|umm|right|ooh]? [i|we]? [give|giving|gave|quit|quitting|surrender|surrendering|forfeit|forfeiting|am_done|am_giving|will_give|am_quitting] [up]? [now|pls|plz|the_word|the_round|this_round|this_word|this_game|the_game|it|then]? [now|pls|plz|then]?"
     emit="@{_} core.request action=hm.giveup"
     kind=request
     priority=8
@@ -190,7 +190,7 @@
     example="Show me the word."
 
 @pat.games.hangman.status.left core.pattern
-    match="[uh|hm|hmm|hey|ah|oh|wait|yeah|um|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh|ok]? [how_many|how_much] [more]? [wrong|incorrect|bad]? [guesses|tries|misses|lives|chances|attempts|mistakes|life|errors|goes|turns|strikes] [more]? [do_i_have|did_i_have|have_i_got|i_have|can_i_make|can_i_still_make|can_i_get|can_i_miss|are_left|are_there|are_allowed|do_i_still_have|remain|remaining|left|are_remaining|are_still_left|do_i_have_left|can_i_still_get|allowed|more_allowed|am_i_allowed|have_i_left|do_i_get|do_i_still_get|i_still_have|are_still_allowed|can_i_still_miss]? [left|remaining|still|more|allowed|to_go|now|so_far|pls|plz|please]?"
+    match="[$lang.lead.filler|wait|umm|right|ooh]? [how_many|how_much] [more]? [wrong|incorrect|bad]? [guesses|tries|misses|lives|chances|attempts|mistakes|life|errors|goes|turns|strikes] [more]? [do_i_have|did_i_have|have_i_got|i_have|can_i_make|can_i_still_make|can_i_get|can_i_miss|are_left|are_there|are_allowed|do_i_still_have|remain|remaining|left|are_remaining|are_still_left|do_i_have_left|can_i_still_get|allowed|more_allowed|am_i_allowed|have_i_left|do_i_get|do_i_still_get|i_still_have|are_still_allowed|can_i_still_miss]? [left|remaining|still|more|allowed|to_go|now|so_far|pls|plz]?"
     emit="@{_} core.request action=hm.status"
     kind=request
     priority=12
@@ -199,7 +199,7 @@
     example="How much life do I have left?"
 
 @pat.games.hangman.status.left2 core.pattern
-    match="[wrong|incorrect|bad]? [guess|guesses|tries|misses|lives|chances|attempts|mistakes|errors|life|guess_count|try_count|miss_count] [are]? [left|remaining|remain|still_left|to_go|count] [pls|plz|please|now]?"
+    match="[wrong|incorrect|bad]? [guess|guesses|tries|misses|lives|chances|attempts|mistakes|errors|life|guess_count|try_count|miss_count] [are]? [left|remaining|remain|still_left|to_go|count] [pls|plz|now]?"
     emit="@{_} core.request action=hm.status"
     kind=request
     priority=11
@@ -208,7 +208,7 @@
 
 @pat.games.hangman.status.word core.pattern
     canonical="Let me see the word."
-    match="[uh|hm|hmm|hey|ah|oh|wait|yeah|um|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh|ok]? [can_you|could_you|will_you|would_you|can_u|could_u|can_i|may_i|let_me]? [show|display|see|give|tell|read|print|let_me_see|show_me|give_me|tell_me|say|what_is|whats|how_is|read_me|display_me|let_me_see] [me|us]? [the|my|current|this]? [current|hidden|masked]? [word|progress|blanks|letters|masked_word|hidden_word|word_so_far|status] [so_far|now|currently|again|pls|plz|please|is_solved|solved]?"
+    match="[$lang.lead.filler|wait|umm|right|ooh]? [can_you|could_you|will_you|would_you|can_u|could_u|can_i|may_i|let_me]? [show|display|see|give|tell|read|print|let_me_see|show_me|give_me|tell_me|say|what_is|whats|how_is|read_me|display_me|let_me_see] [me|us]? [the|my|current|this]? [current|hidden|masked]? [word|progress|blanks|letters|masked_word|hidden_word|word_so_far|status] [so_far|now|currently|again|pls|plz|is_solved|solved]?"
     emit="@{_} core.request action=hm.status"
     kind=request
     priority=12
@@ -246,14 +246,14 @@
     example="Hangman zebra."
 
 @pat.games.hangman.sw.isit core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [is_it|its|it_is|is_it_the_letter|could_it_be|can_it_be|might_it_be|is_the_letter|is_the_answer|is_the_next_letter] [a|an|the|the_letter|letter]? {l:lex.games.hangman.letters} [then|please|pls|plz|maybe|right|perhaps|lol|rn]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [is_it|its|it_is|is_it_the_letter|could_it_be|can_it_be|might_it_be|is_the_letter|is_the_answer|is_the_next_letter] [a|an|the|the_letter|letter]? {l:lex.games.hangman.letters} [then|pls|plz|maybe|right|perhaps|lol|rn]?"
     emit="@{_} core.request action=hm.letter arg.letter={l}"
     kind=request
     priority=12
     example="Is it n?"
 
 @pat.games.hangman.sw.next core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [next_letter|the_next_letter|next_1|the_next_1|next_try|next_guess|next_pick|another_letter|another_1|another_try|another_guess|my_next_guess|my_next_letter|my_next_pick|my_next_try|my_next_1|one_more|1_more|another|then|now|and_now|ok_now|and|how_about|what_about] [is|would_be|will_be|should_be|could_be|can_be]? [a|an|the|letter|the_letter]? {l:lex.games.hangman.letters} [then|please|pls|plz|maybe|right|perhaps|lol|rn|is_it|is_my_guess|is_my_pick]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [next_letter|the_next_letter|next_1|the_next_1|next_try|next_guess|next_pick|another_letter|another_1|another_try|another_guess|my_next_guess|my_next_letter|my_next_pick|my_next_try|my_next_1|one_more|1_more|another|then|now|and_now|ok_now|and|how_about|what_about] [is|would_be|will_be|should_be|could_be|can_be]? [a|an|the|letter|the_letter]? {l:lex.games.hangman.letters} [then|pls|plz|maybe|right|perhaps|lol|rn|is_it|is_my_guess|is_my_pick]?"
     emit="@{_} core.request action=hm.letter arg.letter={l}"
     kind=request
     priority=11
@@ -261,7 +261,7 @@
     example="Another one: e."
 
 @pat.games.hangman.sw.letterq core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [a|an|the]? {l:lex.games.hangman.letters} [is_there|is_it_there|is_it_in_there|is_it_in_it|appear|appears|show_up|shows_up|exist|exists|occur|occurs|is_in_it|is_in_the_word|is_in_there|is_present|is_there_in_it|in_there|in_it|in_the_word|anywhere|at_all|too|also|as_well|then|any_good|any_use]"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [a|an|the]? {l:lex.games.hangman.letters} [is_there|is_it_there|is_it_in_there|is_it_in_it|appear|appears|show_up|shows_up|exist|exists|occur|occurs|is_in_it|is_in_the_word|is_in_there|is_present|is_there_in_it|in_there|in_it|in_the_word|anywhere|at_all|too|also|as_well|then|any_good|any_use]"
     emit="@{_} core.request action=hm.letter arg.letter={l}"
     kind=request
     priority=12
@@ -269,14 +269,14 @@
     example="Does z appear?"
 
 @pat.games.hangman.sw.appear core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [does|do|did|will|would|can|could|may|might|is|are|was|were]? [the]? [letter|letters|word|answer|animal|it|1|that]? {l:lex.games.hangman.letters} [appear|appears|show_up|shows_up|exist|exists|occur|occurs|feature|features|come_up|comes_up|turn_up|turns_up|figure|figures|count|counts|belong|belongs|fit|fits|work|works|go_in|goes_in|get_in|gets_in|exist_in_it|appear_in_it|appear_in_the_word|appear_in_there|occur_in_it|occur_in_the_word|be_there|be_in_it|be_in_the_word|be_in_there|be_present|be_used|be_included|be_part_of_it]"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [does|do|did|will|would|can|could|may|might|is|are|was|were]? [the]? [letter|letters|word|answer|animal|it|1|that]? {l:lex.games.hangman.letters} [appear|appears|show_up|shows_up|exist|exists|occur|occurs|feature|features|come_up|comes_up|turn_up|turns_up|figure|figures|count|counts|belong|belongs|fit|fits|work|works|go_in|goes_in|get_in|gets_in|exist_in_it|appear_in_it|appear_in_the_word|appear_in_there|occur_in_it|occur_in_the_word|be_there|be_in_it|be_in_the_word|be_in_there|be_present|be_used|be_included|be_part_of_it]"
     emit="@{_} core.request action=hm.letter arg.letter={l}"
     kind=request
     priority=12
     example="Does z appear?"
 
 @pat.games.hangman.sw.guessing core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [i_am|im|i_m|i_will_be|ill_be|gonna_be|going_to_be|let_me_be|lets_be|we_are|were|we_re]? [guessing|trying|picking|choosing|going_with|going_for|saying|betting_on|betting|voting_for|voting|selecting|taking|using|testing|checking|asking_about|asking_for|asking|looking_for|looking_at|looking|searching_for|searching|hunting_for|hunting|seeking|chasing|aiming_for|aiming_at|aiming|shooting_for|shooting_at|shooting|going] [the]? [letter]? {l:lex.games.hangman.letters} [now|then|please|pls|plz|maybe|perhaps|next|first|again|too|also|as_well|lol|rn|for_now|for_the_moment|this_time|here|there|in_it|in_there|in_the_word]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [i_am|im|i_m|i_will_be|ill_be|gonna_be|going_to_be|let_me_be|lets_be|we_are|were|we_re]? [guessing|trying|picking|choosing|going_with|going_for|saying|betting_on|betting|voting_for|voting|selecting|taking|using|testing|checking|asking_about|asking_for|asking|looking_for|looking_at|looking|searching_for|searching|hunting_for|hunting|seeking|chasing|aiming_for|aiming_at|aiming|shooting_for|shooting_at|shooting|going] [the]? [letter]? {l:lex.games.hangman.letters} [now|then|pls|plz|maybe|perhaps|next|first|again|too|also|lol|rn|for_now|for_the_moment|this_time|here|there|in_it|in_there|in_the_word]?"
     emit="@{_} core.request action=hm.letter arg.letter={l}"
     kind=request
     priority=12
@@ -284,7 +284,7 @@
     example="Im trying e."
 
 @pat.games.hangman.sw.anyl core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [any|got_any|have_any|has_it_got_any|does_it_have_any|do_you_have_any|is_there_any|are_there_any|any_chance_of|any_chance_for|any_luck_with|any_luck_for|how_many|got_a|have_a|has_a|a_chance_of|a_chance_for] {l:lex.games.hangman.letters} [s|es|in_it|in_there|in_the_word|in_this|in_this_word|at_all|anywhere|please|pls|plz]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [any|got_any|have_any|has_it_got_any|does_it_have_any|do_you_have_any|is_there_any|are_there_any|any_chance_of|any_chance_for|any_luck_with|any_luck_for|how_many|got_a|have_a|has_a|a_chance_of|a_chance_for] {l:lex.games.hangman.letters} [s|es|in_it|in_there|in_the_word|in_this|in_this_word|at_all|anywhere|pls|plz]?"
     emit="@{_} core.request action=hm.letter arg.letter={l}"
     kind=request
     priority=11
@@ -292,7 +292,7 @@
     example="Got any s in it?"
 
 @pat.games.hangman.sw.gimme core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [i_would_like|i_d_like|id_like|i_want|i_need|i_wish|may_i_have|can_i_get|can_i_have|could_i_get|could_i_have|give_me|gimme|get_me|let_me_have|let_me_get|let_me_try|i_ll_have|ill_have|ill_take|i_ll_take|ill_try|i_ll_try|ill_go_with|i_ll_go_with|ill_pick|ill_choose|lets_try|let_us_try|lets_go_with|let_us_go_with|lets_pick|lets_choose|lets_guess] [a|an|the|letter|the_letter]? {l:lex.games.hangman.letters} [then|please|pls|plz|maybe|perhaps|first|next|lol|rn|for_now|for_me]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [i_would_like|i_d_like|id_like|i_want|i_need|i_wish|may_i_have|can_i_get|can_i_have|could_i_get|could_i_have|give_me|gimme|get_me|let_me_have|let_me_get|let_me_try|i_ll_have|ill_have|ill_take|i_ll_take|ill_try|i_ll_try|ill_go_with|i_ll_go_with|ill_pick|ill_choose|lets_try|let_us_try|lets_go_with|let_us_go_with|lets_pick|lets_choose|lets_guess] [a|an|the|letter|the_letter]? {l:lex.games.hangman.letters} [$lang.tail.filler|maybe|perhaps|first|next]?"
     emit="@{_} core.request action=hm.letter arg.letter={l}"
     kind=request
     priority=11
@@ -301,7 +301,7 @@
 
 @pat.games.hangman.sw.fact core.pattern
     canonical="Say a fun fact."
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [tell_me|give_me|gimme|say|share|show_me|i_want|i_need|i_d_like|id_like|whats|what_is|what_s|got|any|have_you_got|do_you_have|how_about|can_i_have|can_i_get|let_me_have|1] [a|an|any|some|1|another|1_more|the_next|1]? [little|small|quick|fun|cool|interesting|random|new|good|useful]? [fact|facts|detail|details|info|information|thing|something|anything|trivia|description|characteristic|feature|property|trait|idea|snippet|bit] [about|on|regarding|of|for]? [it|the_word|the_animal|the_mystery_animal|this_animal|that_animal|this|that|the_answer|the_mystery|the_mystery_word|this_word|the_hidden_word|the_secret_word|the_secret|the_creature|this_creature|the_hidden_animal|the_secret_animal|the_unknown_animal|the_mystery_creature]? [not_a_letter|please|pls|plz|thanks|now|then|for_me|to_help|to_help_me|rn|first|next|again]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [tell_me|give_me|gimme|say|share|show_me|i_want|i_need|i_d_like|id_like|whats|what_is|what_s|got|any|have_you_got|do_you_have|how_about|can_i_have|can_i_get|let_me_have|1] [a|an|any|some|1|another|1_more|the_next|1]? [little|small|quick|fun|cool|interesting|random|new|good|useful]? [fact|facts|detail|details|info|information|thing|something|anything|trivia|description|characteristic|feature|property|trait|idea|snippet|bit] [about|on|regarding|of|for]? [it|the_word|the_animal|the_mystery_animal|this_animal|that_animal|this|that|the_answer|the_mystery|the_mystery_word|this_word|the_hidden_word|the_secret_word|the_secret|the_creature|this_creature|the_hidden_animal|the_secret_animal|the_unknown_animal|the_mystery_creature]? [$lang.tail.filler|not_a_letter|to_help|to_help_me|first|next]?"
     emit="@{_} core.request action=hm.hint"
     kind=request
     priority=11
@@ -310,7 +310,7 @@
     example="Give me something about it, not a letter."
 
 @pat.games.hangman.sw.fact2 core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [fact|facts|trivia|info|fun_fact|a_fact|any_fact|a_fun_fact|something_about_it|something_about_the_animal|anything_about_it|something_about_the_word|a_fact_about_it|fact_about_it|fact_about_the_word|fact_about_the_animal|something_about_the_animal_pls|anything_about_the_animal] [please|pls|plz|now|then|about_it|about_the_word|about_the_animal|about_this_animal|first|next|again|for_me|about_this|about_that]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [fact|facts|trivia|info|fun_fact|a_fact|any_fact|a_fun_fact|something_about_it|something_about_the_animal|anything_about_it|something_about_the_word|a_fact_about_it|fact_about_it|fact_about_the_word|fact_about_the_animal|something_about_the_animal_pls|anything_about_the_animal] [pls|plz|now|then|about_it|about_the_word|about_the_animal|about_this_animal|first|next|again|for_me|about_this|about_that]?"
     emit="@{_} core.request action=hm.hint"
     kind=request
     priority=10
@@ -318,21 +318,21 @@
     example="Something about the animal pls."
 
 @pat.games.hangman.sw.fact3 core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [what|what_is|whats|what_s|what_does|what_do|how_is|how_s|hows] [it|the_animal|this_animal|the_word|that|the_creature|the_answer|this] [known_for|famous_for|special|unique|interesting|notable|remarkable|distinctive|peculiar|characteristic|typical|good_at|used_for|useful_for|special_about|unique_about|interesting_about|known_as|called|famous|known] [for|about|as|by]? [please|pls|plz|now|then]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [what|what_is|whats|what_s|what_does|what_do|how_is|how_s|hows] [it|the_animal|this_animal|the_word|that|the_creature|the_answer|this] [known_for|famous_for|special|unique|interesting|notable|remarkable|distinctive|peculiar|characteristic|typical|good_at|used_for|useful_for|special_about|unique_about|interesting_about|known_as|called|famous|known] [for|about|as|by]? [pls|plz|now|then]?"
     emit="@{_} core.request action=hm.hint"
     kind=request
     priority=11
     example="What is it known for?"
 
 @pat.games.hangman.sw.fact4 core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [tell_me|give_me|gimme|say|share|show_me|i_want|i_need|whats|what_is|got|any|how_about|1|a|an|some] [1|one_thing|1_thing|a_thing|some_thing|a_detail|a_clue|a_hint|a_fact|a_piece_of_info|a_bit_of_info|a_bit_of_information|a_piece_of_information] [about|on|regarding|of|for] [it|the_word|the_animal|the_mystery_animal|this_animal|that_animal|this|that|the_answer|the_mystery|the_hidden_word|the_secret_word|the_creature|this_creature] [please|pls|plz|thanks|now|then|for_me|to_help_me|rn]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [tell_me|give_me|gimme|say|share|show_me|i_want|i_need|whats|what_is|got|any|how_about|1|a|an|some] [1|one_thing|1_thing|a_thing|some_thing|a_detail|a_clue|a_hint|a_fact|a_piece_of_info|a_bit_of_info|a_bit_of_information|a_piece_of_information] [about|on|regarding|of|for] [it|the_word|the_animal|the_mystery_animal|this_animal|that_animal|this|that|the_answer|the_mystery|the_hidden_word|the_secret_word|the_creature|this_creature] [pls|plz|thanks|now|then|for_me|to_help_me|rn]?"
     emit="@{_} core.request action=hm.hint"
     kind=request
     priority=11
     example="Tell me one thing about this animal."
 
 @pat.games.hangman.sw.status6 core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [how_many|what|which|show|show_me|display|tell_me|give_me|let_me_see|read|say|list|print|whats|what_is|what_s|view|check|count|reveal] [me]? [the|my|this|all_the|all|any]? [letters|spaces|blanks|dashes|underscores|slots|boxes|gaps|mask|masked_word|hidden_word|word_view|hidden_letters|missing_letters|unknown_letters|remaining_letters|guessed_letters|used_letters|tried_letters|wrong_letters|letters_left|progress|board|display|status|view|word] [are|is|do|does|have|has|still|there|left|remaining|missing|hidden|unknown|so_far|now|look_like|looks_like|in_the_word|are_hidden|are_missing|are_left|are_still_hidden|are_still_missing|are_still_left|still_missing|still_hidden|have_i_guessed|have_i_tried|did_i_guess|did_i_try|in_it|in_there|are_there|there_are|are_in_the_word|are_in_it]? [hidden|missing|left|remaining|now|currently|so_far|yet|still|right_now|please|pls|plz|again|for_me|thanks|in_the_word|in_it|view|look_like_now|now_please]? [now|so_far|please|pls|plz|left|still|currently|in_the_word]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [how_many|what|which|show|show_me|display|tell_me|give_me|let_me_see|read|say|list|print|whats|what_is|what_s|view|check|count|reveal] [me]? [the|my|this|all_the|all|any]? [letters|spaces|blanks|dashes|underscores|slots|boxes|gaps|mask|masked_word|hidden_word|word_view|hidden_letters|missing_letters|unknown_letters|remaining_letters|guessed_letters|used_letters|tried_letters|wrong_letters|letters_left|progress|board|display|status|view|word] [are|is|do|does|have|has|still|there|left|remaining|missing|hidden|unknown|so_far|now|look_like|looks_like|in_the_word|are_hidden|are_missing|are_left|are_still_hidden|are_still_missing|are_still_left|still_missing|still_hidden|have_i_guessed|have_i_tried|did_i_guess|did_i_try|in_it|in_there|are_there|there_are|are_in_the_word|are_in_it]? [hidden|missing|left|remaining|now|currently|so_far|yet|still|right_now|pls|plz|again|for_me|thanks|in_the_word|in_it|view|look_like_now]? [now|so_far|pls|plz|left|still|currently|in_the_word]?"
     emit="@{_} core.request action=hm.status"
     kind=request
     priority=11
@@ -341,7 +341,7 @@
     example="Display the dashes."
 
 @pat.games.hangman.sw.status7 core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [what_does_the_word_look_like|what_does_it_look_like|what_do_the_dashes_look_like|how_does_the_word_look|how_does_it_look|how_does_the_word_look_like|what_is_the_word_now|whats_the_word_now|where_am_i|where_are_we|whats_the_situation|what_is_the_situation|how_is_it_going|hows_it_going|how_are_we_doing|how_s_it_going|what_s_the_state|whats_the_state|what_is_the_state|state_of_the_game|game_status|the_game_status|the_status|status|hidden_word_view|word_view|the_mask|the_dashes|the_blanks|the_underscores|the_masked_word|the_hidden_word|my_progress|the_progress|progress|letters_still_missing|letters_missing|letters_hidden|letters_left|letters_remaining|how_many_spaces_left_in_the_word|how_many_spaces_are_left|how_many_blanks_left|how_many_dashes_left|how_many_letters_left|how_many_letters_remain|how_many_left] [now|currently|so_far|yet|still|right_now|please|pls|plz|again|for_me|thanks|in_the_word|in_it|view|at_the_moment|at_this_point|in_the_word_now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [what_does_the_word_look_like|what_does_it_look_like|what_do_the_dashes_look_like|how_does_the_word_look|how_does_it_look|how_does_the_word_look_like|what_is_the_word_now|whats_the_word_now|where_am_i|where_are_we|whats_the_situation|what_is_the_situation|how_is_it_going|hows_it_going|how_are_we_doing|how_s_it_going|what_s_the_state|whats_the_state|what_is_the_state|state_of_the_game|game_status|the_game_status|the_status|status|hidden_word_view|word_view|the_mask|the_dashes|the_blanks|the_underscores|the_masked_word|the_hidden_word|my_progress|the_progress|progress|letters_still_missing|letters_missing|letters_hidden|letters_left|letters_remaining|how_many_spaces_left_in_the_word|how_many_spaces_are_left|how_many_blanks_left|how_many_dashes_left|how_many_letters_left|how_many_letters_remain|how_many_left] [$lang.tail.filler|currently|so_far|still|in_the_word|in_it|view|in_the_word_now]?"
     emit="@{_} core.request action=hm.status"
     kind=request
     priority=11
@@ -350,14 +350,14 @@
     example="How many spaces left in the word?"
 
 @pat.games.hangman.sw.giveup5 core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [end|stop|finish|close|quit|leave|abort|cancel|terminate|exit] [the|this|my|our|that]? [game|round|word|hangman|match|session|thing|it] [please|pls|plz|now|here|already|then|for_me]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [end|stop|finish|close|quit|leave|abort|cancel|terminate|exit] [the|this|my|our|that]? [game|round|word|hangman|match|session|thing|it] [pls|plz|now|here|already|then|for_me]?"
     emit="@{_} core.request action=hm.giveup"
     kind=request
     priority=6
     example="End the game pls."
 
 @pat.games.hangman.sw.again core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [i_want_to|i_wanna|i_would_like_to|i_d_like_to|i_need_to|let_me|lets|let_us|we_should|we_could|can_we|could_we|shall_we|how_about_we|id_like_to|i_gotta|i_have_to|im_going_to|im_gonna|gonna]? [play|start|go|do|begin|try|have|run|restart|redo|replay|reset] [it|the_game|another|a_new|1_more|a|the|that]? [again|over|anew|once_more]? [hangman] [again|over|anew|once_more|1_more_time|from_scratch|from_the_start|round_2|round_two|another_round|new_round|next_round|second_round|please|pls|plz|now|then|with_a_new_animal|with_a_new_word|with_another_word|with_another_animal]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|$games.hangman.g3_we_should]? [$games.hangman.g7_play] [$games.hangman.g8_it]? [again|over|anew|once_more]? [hangman] [again|over|anew|once_more|1_more_time|from_scratch|from_the_start|round_2|round_two|another_round|new_round|next_round|second_round|pls|plz|now|then|with_a_new_animal|with_a_new_word|with_another_word|with_another_animal]?"
     emit="@{_} core.request action=hm.new"
     kind=request
     priority=12
@@ -365,42 +365,42 @@
     example="Start over hangman."
 
 @pat.games.hangman.sw.again2 core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [i_want_to|i_wanna|i_would_like_to|i_d_like_to|i_need_to|let_me|lets|let_us|we_should|we_could|can_we|could_we|shall_we|how_about_we|id_like_to|i_gotta|i_have_to|im_going_to|im_gonna|gonna]? [play|start|go|do|begin|try|have|run|restart|redo|replay|reset] [it|the_game|another|a_new|1_more|a|the|that]? [again|over|anew|once_more|1_more_time|from_scratch|from_the_start|round_2|round_two|another_round|new_round|next_round|second_round]? [with|using|on|for]? [a|an|another|the|1_more|1]? [new|fresh|different|other|next|another|random] [animal|word]"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|$games.hangman.g3_we_should]? [$games.hangman.g7_play] [$games.hangman.g8_it]? [again|over|anew|once_more|1_more_time|from_scratch|from_the_start|round_2|round_two|another_round|new_round|next_round|second_round]? [with|using|on|for]? [a|an|another|the|1_more|1]? [new|fresh|different|other|next|another|random] [animal|word]"
     emit="@{_} core.request action=hm.new"
     kind=request
     priority=11
     example="Lets go again with a new animal."
 
 @pat.games.hangman.sw.round core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [i_want_to|i_wanna|i_would_like_to|i_d_like_to|i_need_to|let_me|lets|let_us|we_should|we_could|can_we|could_we|shall_we|how_about_we|id_like_to|i_gotta|i_have_to|im_going_to|im_gonna|gonna]? [hangman|the_game|it] [round|game|match|attempt|try|go|turn|number|no] [2|two|number_2|second|another|next|new|again|3|three|third|1_more|more]"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|$games.hangman.g3_we_should]? [hangman|the_game|it] [round|game|match|attempt|try|go|turn|number|no] [2|two|number_2|second|another|next|new|again|3|three|third|1_more|more]"
     emit="@{_} core.request action=hm.new"
     kind=request
     priority=12
     example="Hangman round two."
 
 @pat.games.hangman.sw.nw9 core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? {w:lex.kids.animals.names} [is|will_be|shall_be|should_be|can_be|be] [the|my|our|a]? [hidden|secret|mystery|new|next]? [word|answer|animal|1|pick|choice]"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? {w:lex.kids.animals.names} [is|will_be|shall_be|should_be|can_be|be] [the|my|our|a]? [hidden|secret|mystery|new|next]? [word|answer|animal|1|pick|choice]"
     emit="@{_} core.request action=hm.new arg.word={w}"
     kind=request
     priority=11
     example="Giraffe is the word."
 
 @pat.games.hangman.sw.nw8 core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [the|my]? [hidden|secret|mystery] [word|answer|animal] [:|is|will_be|be]? {w:word} [pls|plz|please|now|then]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [the|my]? [hidden|secret|mystery] [word|answer|animal] [:|is|will_be|be]? {w:word} [pls|plz|now|then]?"
     emit="@{_} core.request action=hm.new arg.word={w}"
     kind=request
     priority=10
     example="Hidden word: giraffe."
 
 @pat.games.hangman.sw.nw10 core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [set|change|switch|make|use|pick|choose|select|take|put|go_with] [the]? [hidden|secret|mystery|new]? [word|answer|animal] [to|as|be|with]? {w:word} [for|in|on|of|with] [hangman|the_game|this_game|the_round|this_round|the_next_round] [pls|plz|please|now|then]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [set|change|switch|make|use|pick|choose|select|take|put|go_with] [the]? [hidden|secret|mystery|new]? [word|answer|animal] [to|as|be|with]? {w:word} [for|in|on|of|with] [hangman|the_game|this_game|the_round|this_round|the_next_round] [pls|plz|now|then]?"
     emit="@{_} core.request action=hm.new arg.word={w}"
     kind=request
     priority=11
     example="Can u set the word to giraffe for hangman?"
 
 @pat.games.hangman.sw.nw11 core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [make|start|begin|do|play|set_up|create|open|run|launch|new|a_new|another] [me]? [a|an|another|the|1_more|1]? [new|fresh|next]? [hangman] [round|game|match|word|1]? [with|using|where_the_word_is|where_the_answer_is|the_word_is|word_is|and_the_word_is|its|it_is|it_s|and_use|and_pick|and_choose|and_make_it|about|on|for|that_has|that_uses|that_is]? [the|a|an]? [hidden|secret|mystery]? [word|answer|animal]? [is|will_be|:]? {w:lex.kids.animals.names} [pls|plz|please|now|then]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [make|start|begin|do|play|set_up|create|open|run|launch|new|a_new|another] [me]? [a|an|another|the|1_more|1]? [new|fresh|next]? [hangman] [round|game|match|word|1]? [with|using|where_the_word_is|where_the_answer_is|the_word_is|word_is|and_the_word_is|its|it_is|it_s|and_use|and_pick|and_choose|and_make_it|about|on|for|that_has|that_uses|that_is]? [the|a|an]? [hidden|secret|mystery]? [word|answer|animal]? [is|will_be|:]? {w:lex.kids.animals.names} [pls|plz|now|then]?"
     emit="@{_} core.request action=hm.new arg.word={w}"
     kind=request
     priority=11
@@ -408,7 +408,7 @@
     example="Ok new hangman, its giraffe."
 
 @pat.games.hangman.sw.wordb core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [is|could_it_be|could_it_be_a|is_it|its|it_is|is_the_word|is_the_answer]? [a|an|the]? {w:lex.kids.animals.names} [right|correct|then|pls|plz|my_answer|final_answer|my_guess|my_final_answer|is_my_answer|is_my_guess|is_the_answer|is_my_final_answer|thats_my_answer|thats_my_guess|thats_it|for_sure|i_think|i_bet|i_guess|maybe|perhaps|probably|lol|rn|is_it|is_that_it|is_that_right|am_i_right|yes_or_no|or_not|or_no]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [is|could_it_be|could_it_be_a|is_it|its|it_is|is_the_word|is_the_answer]? [a|an|the]? {w:lex.kids.animals.names} [right|correct|then|pls|plz|my_answer|final_answer|my_guess|my_final_answer|is_my_answer|is_my_guess|is_the_answer|is_my_final_answer|thats_my_answer|thats_my_guess|thats_it|for_sure|i_think|i_bet|i_guess|maybe|perhaps|probably|lol|rn|is_it|is_that_it|is_that_right|am_i_right|yes_or_no|or_not|or_no]?"
     emit="@{_} core.request action=hm.word arg.word={w}"
     kind=request
     priority=9
@@ -418,294 +418,294 @@
 
 @pat.games.hangman.sw.wordc core.pattern
     canonical="My final answer is tiger."
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [i_think_it_is|i_think_its|i_think_the_word_is|i_think_the_answer_is|i_say|i_guess|my_guess_is|my_answer_is|my_final_answer_is|final_answer|the_answer_is|the_word_is|it_must_be|it_has_to_be|it_has_got_to_be|it_is_probably|its_probably|it_might_be|it_could_be|must_be|has_to_be|got_to_be|perhaps_its|maybe_its|surely_its|surely_it_is|gotta_be|has_gotta_be|guess_the_word|guess_the_animal|the_animal_is|the_animal_must_be|is_the_animal|is_it_the|how_about_the|what_about_the|how_about|what_about|lets_say|let_us_say|ill_say|ill_guess|ill_go_with|ill_try|ill_take|ill_pick|ill_choose|go_with|try|pick|choose|take|guess|say|answer|answering|final|solve|solving|solution|the_solution_is] [a|an|the]? {w:lex.kids.animals.names} [right|correct|then|pls|plz|is_it|lol|rn]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [i_think_it_is|i_think_its|i_think_the_word_is|i_think_the_answer_is|i_say|i_guess|my_guess_is|my_answer_is|my_final_answer_is|final_answer|the_answer_is|the_word_is|it_must_be|it_has_to_be|it_has_got_to_be|it_is_probably|its_probably|it_might_be|it_could_be|must_be|has_to_be|got_to_be|perhaps_its|maybe_its|surely_its|surely_it_is|gotta_be|has_gotta_be|guess_the_word|guess_the_animal|the_animal_is|the_animal_must_be|is_the_animal|is_it_the|how_about_the|what_about_the|how_about|what_about|lets_say|let_us_say|ill_say|ill_guess|ill_go_with|ill_try|ill_take|ill_pick|ill_choose|go_with|try|pick|choose|take|guess|say|answer|answering|final|solve|solving|solution|the_solution_is] [a|an|the]? {w:lex.kids.animals.names} [right|correct|then|pls|plz|is_it|lol|rn]?"
     emit="@{_} core.request action=hm.word arg.word={w}"
     kind=request
     priority=11
     example="My final answer is tiger."
 
 @pat.games.hangman.sw.name_a core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [letter|the_letter|try|try_the_letter|guess|guess_the_letter|guessing|i_guess|i_guess_the_letter|pick|choose|i_say|how_about|what_about|how_about_the_letter|is_there_a|is_there_an|any|got_any|do_you_have_a|do_you_have_an|does_it_have_a|does_it_have_an|my_guess_is|my_letter_is|next|next_letter|the_next_letter_is|gimme|give_me|can_i_get|can_i_have|i_d_like|id_like|is_it_the_letter|how_about_a|how_about_an] [a|an|the|letter]? [ay] [in_it|in_there|in_the_word|then|please|pls|plz|maybe|perhaps|next|first|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [$games.hangman.g1_letter] [a|an|the|letter]? [ay] [$games.hangman.g2_in_it]?"
     emit="@{_} core.request action=hm.letter arg.letter=a"
     kind=request
     priority=11
     example="Try ay."
 
 @pat.games.hangman.sw.name_b core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [letter|the_letter|try|try_the_letter|guess|guess_the_letter|guessing|i_guess|i_guess_the_letter|pick|choose|i_say|how_about|what_about|how_about_the_letter|is_there_a|is_there_an|any|got_any|do_you_have_a|do_you_have_an|does_it_have_a|does_it_have_an|my_guess_is|my_letter_is|next|next_letter|the_next_letter_is|gimme|give_me|can_i_get|can_i_have|i_d_like|id_like|is_it_the_letter|how_about_a|how_about_an] [a|an|the|letter]? [bee] [in_it|in_there|in_the_word|then|please|pls|plz|maybe|perhaps|next|first|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [$games.hangman.g1_letter] [a|an|the|letter]? [bee] [$games.hangman.g2_in_it]?"
     emit="@{_} core.request action=hm.letter arg.letter=b"
     kind=request
     priority=11
     example="Try bee."
 
 @pat.games.hangman.sw.name_c core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [letter|the_letter|try|try_the_letter|guess|guess_the_letter|guessing|i_guess|i_guess_the_letter|pick|choose|i_say|how_about|what_about|how_about_the_letter|is_there_a|is_there_an|any|got_any|do_you_have_a|do_you_have_an|does_it_have_a|does_it_have_an|my_guess_is|my_letter_is|next|next_letter|the_next_letter_is|gimme|give_me|can_i_get|can_i_have|i_d_like|id_like|is_it_the_letter|how_about_a|how_about_an] [a|an|the|letter]? [cee|see|sea] [in_it|in_there|in_the_word|then|please|pls|plz|maybe|perhaps|next|first|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [$games.hangman.g1_letter] [a|an|the|letter]? [cee|see|sea] [$games.hangman.g2_in_it]?"
     emit="@{_} core.request action=hm.letter arg.letter=c"
     kind=request
     priority=11
     example="Try cee."
 
 @pat.games.hangman.sw.name_d core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [letter|the_letter|try|try_the_letter|guess|guess_the_letter|guessing|i_guess|i_guess_the_letter|pick|choose|i_say|how_about|what_about|how_about_the_letter|is_there_a|is_there_an|any|got_any|do_you_have_a|do_you_have_an|does_it_have_a|does_it_have_an|my_guess_is|my_letter_is|next|next_letter|the_next_letter_is|gimme|give_me|can_i_get|can_i_have|i_d_like|id_like|is_it_the_letter|how_about_a|how_about_an] [a|an|the|letter]? [dee] [in_it|in_there|in_the_word|then|please|pls|plz|maybe|perhaps|next|first|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [$games.hangman.g1_letter] [a|an|the|letter]? [dee] [$games.hangman.g2_in_it]?"
     emit="@{_} core.request action=hm.letter arg.letter=d"
     kind=request
     priority=11
     example="Try dee."
 
 @pat.games.hangman.sw.name_e core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [letter|the_letter|try|try_the_letter|guess|guess_the_letter|guessing|i_guess|i_guess_the_letter|pick|choose|i_say|how_about|what_about|how_about_the_letter|is_there_a|is_there_an|any|got_any|do_you_have_a|do_you_have_an|does_it_have_a|does_it_have_an|my_guess_is|my_letter_is|next|next_letter|the_next_letter_is|gimme|give_me|can_i_get|can_i_have|i_d_like|id_like|is_it_the_letter|how_about_a|how_about_an] [a|an|the|letter]? [ee] [in_it|in_there|in_the_word|then|please|pls|plz|maybe|perhaps|next|first|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [$games.hangman.g1_letter] [a|an|the|letter]? [ee] [$games.hangman.g2_in_it]?"
     emit="@{_} core.request action=hm.letter arg.letter=e"
     kind=request
     priority=11
     example="Try ee."
 
 @pat.games.hangman.sw.name_f core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [letter|the_letter|try|try_the_letter|guess|guess_the_letter|guessing|i_guess|i_guess_the_letter|pick|choose|i_say|how_about|what_about|how_about_the_letter|is_there_a|is_there_an|any|got_any|do_you_have_a|do_you_have_an|does_it_have_a|does_it_have_an|my_guess_is|my_letter_is|next|next_letter|the_next_letter_is|gimme|give_me|can_i_get|can_i_have|i_d_like|id_like|is_it_the_letter|how_about_a|how_about_an] [a|an|the|letter]? [eff|ef] [in_it|in_there|in_the_word|then|please|pls|plz|maybe|perhaps|next|first|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [$games.hangman.g1_letter] [a|an|the|letter]? [eff|ef] [$games.hangman.g2_in_it]?"
     emit="@{_} core.request action=hm.letter arg.letter=f"
     kind=request
     priority=11
     example="Try eff."
 
 @pat.games.hangman.sw.name_g core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [letter|the_letter|try|try_the_letter|guess|guess_the_letter|guessing|i_guess|i_guess_the_letter|pick|choose|i_say|how_about|what_about|how_about_the_letter|is_there_a|is_there_an|any|got_any|do_you_have_a|do_you_have_an|does_it_have_a|does_it_have_an|my_guess_is|my_letter_is|next|next_letter|the_next_letter_is|gimme|give_me|can_i_get|can_i_have|i_d_like|id_like|is_it_the_letter|how_about_a|how_about_an] [a|an|the|letter]? [gee|jee] [in_it|in_there|in_the_word|then|please|pls|plz|maybe|perhaps|next|first|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [$games.hangman.g1_letter] [a|an|the|letter]? [gee|jee] [$games.hangman.g2_in_it]?"
     emit="@{_} core.request action=hm.letter arg.letter=g"
     kind=request
     priority=11
     example="Try gee."
 
 @pat.games.hangman.sw.name_h core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [letter|the_letter|try|try_the_letter|guess|guess_the_letter|guessing|i_guess|i_guess_the_letter|pick|choose|i_say|how_about|what_about|how_about_the_letter|is_there_a|is_there_an|any|got_any|do_you_have_a|do_you_have_an|does_it_have_a|does_it_have_an|my_guess_is|my_letter_is|next|next_letter|the_next_letter_is|gimme|give_me|can_i_get|can_i_have|i_d_like|id_like|is_it_the_letter|how_about_a|how_about_an] [a|an|the|letter]? [aitch|haitch] [in_it|in_there|in_the_word|then|please|pls|plz|maybe|perhaps|next|first|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [$games.hangman.g1_letter] [a|an|the|letter]? [aitch|haitch] [$games.hangman.g2_in_it]?"
     emit="@{_} core.request action=hm.letter arg.letter=h"
     kind=request
     priority=11
     example="Try aitch."
 
 @pat.games.hangman.sw.name_i core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [letter|the_letter|try|try_the_letter|guess|guess_the_letter|guessing|i_guess|i_guess_the_letter|pick|choose|i_say|how_about|what_about|how_about_the_letter|is_there_a|is_there_an|any|got_any|do_you_have_a|do_you_have_an|does_it_have_a|does_it_have_an|my_guess_is|my_letter_is|next|next_letter|the_next_letter_is|gimme|give_me|can_i_get|can_i_have|i_d_like|id_like|is_it_the_letter|how_about_a|how_about_an] [a|an|the|letter]? [eye] [in_it|in_there|in_the_word|then|please|pls|plz|maybe|perhaps|next|first|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [$games.hangman.g1_letter] [a|an|the|letter]? [eye] [$games.hangman.g2_in_it]?"
     emit="@{_} core.request action=hm.letter arg.letter=i"
     kind=request
     priority=11
     example="Try eye."
 
 @pat.games.hangman.sw.name_j core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [letter|the_letter|try|try_the_letter|guess|guess_the_letter|guessing|i_guess|i_guess_the_letter|pick|choose|i_say|how_about|what_about|how_about_the_letter|is_there_a|is_there_an|any|got_any|do_you_have_a|do_you_have_an|does_it_have_a|does_it_have_an|my_guess_is|my_letter_is|next|next_letter|the_next_letter_is|gimme|give_me|can_i_get|can_i_have|i_d_like|id_like|is_it_the_letter|how_about_a|how_about_an] [a|an|the|letter]? [jay] [in_it|in_there|in_the_word|then|please|pls|plz|maybe|perhaps|next|first|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [$games.hangman.g1_letter] [a|an|the|letter]? [jay] [$games.hangman.g2_in_it]?"
     emit="@{_} core.request action=hm.letter arg.letter=j"
     kind=request
     priority=11
     example="Try jay."
 
 @pat.games.hangman.sw.name_k core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [letter|the_letter|try|try_the_letter|guess|guess_the_letter|guessing|i_guess|i_guess_the_letter|pick|choose|i_say|how_about|what_about|how_about_the_letter|is_there_a|is_there_an|any|got_any|do_you_have_a|do_you_have_an|does_it_have_a|does_it_have_an|my_guess_is|my_letter_is|next|next_letter|the_next_letter_is|gimme|give_me|can_i_get|can_i_have|i_d_like|id_like|is_it_the_letter|how_about_a|how_about_an] [a|an|the|letter]? [kay] [in_it|in_there|in_the_word|then|please|pls|plz|maybe|perhaps|next|first|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [$games.hangman.g1_letter] [a|an|the|letter]? [kay] [$games.hangman.g2_in_it]?"
     emit="@{_} core.request action=hm.letter arg.letter=k"
     kind=request
     priority=11
     example="Try kay."
 
 @pat.games.hangman.sw.name_l core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [letter|the_letter|try|try_the_letter|guess|guess_the_letter|guessing|i_guess|i_guess_the_letter|pick|choose|i_say|how_about|what_about|how_about_the_letter|is_there_a|is_there_an|any|got_any|do_you_have_a|do_you_have_an|does_it_have_a|does_it_have_an|my_guess_is|my_letter_is|next|next_letter|the_next_letter_is|gimme|give_me|can_i_get|can_i_have|i_d_like|id_like|is_it_the_letter|how_about_a|how_about_an] [a|an|the|letter]? [ell|el] [in_it|in_there|in_the_word|then|please|pls|plz|maybe|perhaps|next|first|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [$games.hangman.g1_letter] [a|an|the|letter]? [ell|el] [$games.hangman.g2_in_it]?"
     emit="@{_} core.request action=hm.letter arg.letter=l"
     kind=request
     priority=11
     example="Try ell."
 
 @pat.games.hangman.sw.name_m core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [letter|the_letter|try|try_the_letter|guess|guess_the_letter|guessing|i_guess|i_guess_the_letter|pick|choose|i_say|how_about|what_about|how_about_the_letter|is_there_a|is_there_an|any|got_any|do_you_have_a|do_you_have_an|does_it_have_a|does_it_have_an|my_guess_is|my_letter_is|next|next_letter|the_next_letter_is|gimme|give_me|can_i_get|can_i_have|i_d_like|id_like|is_it_the_letter|how_about_a|how_about_an] [a|an|the|letter]? [em] [in_it|in_there|in_the_word|then|please|pls|plz|maybe|perhaps|next|first|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [$games.hangman.g1_letter] [a|an|the|letter]? [em] [$games.hangman.g2_in_it]?"
     emit="@{_} core.request action=hm.letter arg.letter=m"
     kind=request
     priority=11
     example="Try em."
 
 @pat.games.hangman.sw.name_n core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [letter|the_letter|try|try_the_letter|guess|guess_the_letter|guessing|i_guess|i_guess_the_letter|pick|choose|i_say|how_about|what_about|how_about_the_letter|is_there_a|is_there_an|any|got_any|do_you_have_a|do_you_have_an|does_it_have_a|does_it_have_an|my_guess_is|my_letter_is|next|next_letter|the_next_letter_is|gimme|give_me|can_i_get|can_i_have|i_d_like|id_like|is_it_the_letter|how_about_a|how_about_an] [a|an|the|letter]? [en] [in_it|in_there|in_the_word|then|please|pls|plz|maybe|perhaps|next|first|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [$games.hangman.g1_letter] [a|an|the|letter]? [en] [$games.hangman.g2_in_it]?"
     emit="@{_} core.request action=hm.letter arg.letter=n"
     kind=request
     priority=11
     example="Try en."
 
 @pat.games.hangman.sw.name_o core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [letter|the_letter|try|try_the_letter|guess|guess_the_letter|guessing|i_guess|i_guess_the_letter|pick|choose|i_say|how_about|what_about|how_about_the_letter|is_there_a|is_there_an|any|got_any|do_you_have_a|do_you_have_an|does_it_have_a|does_it_have_an|my_guess_is|my_letter_is|next|next_letter|the_next_letter_is|gimme|give_me|can_i_get|can_i_have|i_d_like|id_like|is_it_the_letter|how_about_a|how_about_an] [a|an|the|letter]? [oh] [in_it|in_there|in_the_word|then|please|pls|plz|maybe|perhaps|next|first|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [$games.hangman.g1_letter] [a|an|the|letter]? [oh] [$games.hangman.g2_in_it]?"
     emit="@{_} core.request action=hm.letter arg.letter=o"
     kind=request
     priority=11
     example="Try oh."
 
 @pat.games.hangman.sw.name_p core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [letter|the_letter|try|try_the_letter|guess|guess_the_letter|guessing|i_guess|i_guess_the_letter|pick|choose|i_say|how_about|what_about|how_about_the_letter|is_there_a|is_there_an|any|got_any|do_you_have_a|do_you_have_an|does_it_have_a|does_it_have_an|my_guess_is|my_letter_is|next|next_letter|the_next_letter_is|gimme|give_me|can_i_get|can_i_have|i_d_like|id_like|is_it_the_letter|how_about_a|how_about_an] [a|an|the|letter]? [pee] [in_it|in_there|in_the_word|then|please|pls|plz|maybe|perhaps|next|first|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [$games.hangman.g1_letter] [a|an|the|letter]? [pee] [$games.hangman.g2_in_it]?"
     emit="@{_} core.request action=hm.letter arg.letter=p"
     kind=request
     priority=11
     example="Try pee."
 
 @pat.games.hangman.sw.name_q core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [letter|the_letter|try|try_the_letter|guess|guess_the_letter|guessing|i_guess|i_guess_the_letter|pick|choose|i_say|how_about|what_about|how_about_the_letter|is_there_a|is_there_an|any|got_any|do_you_have_a|do_you_have_an|does_it_have_a|does_it_have_an|my_guess_is|my_letter_is|next|next_letter|the_next_letter_is|gimme|give_me|can_i_get|can_i_have|i_d_like|id_like|is_it_the_letter|how_about_a|how_about_an] [a|an|the|letter]? [queue|cue|kyu] [in_it|in_there|in_the_word|then|please|pls|plz|maybe|perhaps|next|first|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [$games.hangman.g1_letter] [a|an|the|letter]? [queue|cue|kyu] [$games.hangman.g2_in_it]?"
     emit="@{_} core.request action=hm.letter arg.letter=q"
     kind=request
     priority=11
     example="Try queue."
 
 @pat.games.hangman.sw.name_r core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [letter|the_letter|try|try_the_letter|guess|guess_the_letter|guessing|i_guess|i_guess_the_letter|pick|choose|i_say|how_about|what_about|how_about_the_letter|is_there_a|is_there_an|any|got_any|do_you_have_a|do_you_have_an|does_it_have_a|does_it_have_an|my_guess_is|my_letter_is|next|next_letter|the_next_letter_is|gimme|give_me|can_i_get|can_i_have|i_d_like|id_like|is_it_the_letter|how_about_a|how_about_an] [a|an|the|letter]? [are|ar] [in_it|in_there|in_the_word|then|please|pls|plz|maybe|perhaps|next|first|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [$games.hangman.g1_letter] [a|an|the|letter]? [are|ar] [$games.hangman.g2_in_it]?"
     emit="@{_} core.request action=hm.letter arg.letter=r"
     kind=request
     priority=11
     example="Try are."
 
 @pat.games.hangman.sw.name_s core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [letter|the_letter|try|try_the_letter|guess|guess_the_letter|guessing|i_guess|i_guess_the_letter|pick|choose|i_say|how_about|what_about|how_about_the_letter|is_there_a|is_there_an|any|got_any|do_you_have_a|do_you_have_an|does_it_have_a|does_it_have_an|my_guess_is|my_letter_is|next|next_letter|the_next_letter_is|gimme|give_me|can_i_get|can_i_have|i_d_like|id_like|is_it_the_letter|how_about_a|how_about_an] [a|an|the|letter]? [ess] [in_it|in_there|in_the_word|then|please|pls|plz|maybe|perhaps|next|first|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [$games.hangman.g1_letter] [a|an|the|letter]? [ess] [$games.hangman.g2_in_it]?"
     emit="@{_} core.request action=hm.letter arg.letter=s"
     kind=request
     priority=11
     example="Try ess."
 
 @pat.games.hangman.sw.name_t core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [letter|the_letter|try|try_the_letter|guess|guess_the_letter|guessing|i_guess|i_guess_the_letter|pick|choose|i_say|how_about|what_about|how_about_the_letter|is_there_a|is_there_an|any|got_any|do_you_have_a|do_you_have_an|does_it_have_a|does_it_have_an|my_guess_is|my_letter_is|next|next_letter|the_next_letter_is|gimme|give_me|can_i_get|can_i_have|i_d_like|id_like|is_it_the_letter|how_about_a|how_about_an] [a|an|the|letter]? [tee] [in_it|in_there|in_the_word|then|please|pls|plz|maybe|perhaps|next|first|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [$games.hangman.g1_letter] [a|an|the|letter]? [tee] [$games.hangman.g2_in_it]?"
     emit="@{_} core.request action=hm.letter arg.letter=t"
     kind=request
     priority=11
     example="Try tee."
 
 @pat.games.hangman.sw.name_u core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [letter|the_letter|try|try_the_letter|guess|guess_the_letter|guessing|i_guess|i_guess_the_letter|pick|choose|i_say|how_about|what_about|how_about_the_letter|is_there_a|is_there_an|any|got_any|do_you_have_a|do_you_have_an|does_it_have_a|does_it_have_an|my_guess_is|my_letter_is|next|next_letter|the_next_letter_is|gimme|give_me|can_i_get|can_i_have|i_d_like|id_like|is_it_the_letter|how_about_a|how_about_an] [a|an|the|letter]? [you|yu] [in_it|in_there|in_the_word|then|please|pls|plz|maybe|perhaps|next|first|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [$games.hangman.g1_letter] [a|an|the|letter]? [you|yu] [$games.hangman.g2_in_it]?"
     emit="@{_} core.request action=hm.letter arg.letter=u"
     kind=request
     priority=11
     example="Try you."
 
 @pat.games.hangman.sw.name_v core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [letter|the_letter|try|try_the_letter|guess|guess_the_letter|guessing|i_guess|i_guess_the_letter|pick|choose|i_say|how_about|what_about|how_about_the_letter|is_there_a|is_there_an|any|got_any|do_you_have_a|do_you_have_an|does_it_have_a|does_it_have_an|my_guess_is|my_letter_is|next|next_letter|the_next_letter_is|gimme|give_me|can_i_get|can_i_have|i_d_like|id_like|is_it_the_letter|how_about_a|how_about_an] [a|an|the|letter]? [vee] [in_it|in_there|in_the_word|then|please|pls|plz|maybe|perhaps|next|first|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [$games.hangman.g1_letter] [a|an|the|letter]? [vee] [$games.hangman.g2_in_it]?"
     emit="@{_} core.request action=hm.letter arg.letter=v"
     kind=request
     priority=11
     example="Try vee."
 
 @pat.games.hangman.sw.name_w core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [letter|the_letter|try|try_the_letter|guess|guess_the_letter|guessing|i_guess|i_guess_the_letter|pick|choose|i_say|how_about|what_about|how_about_the_letter|is_there_a|is_there_an|any|got_any|do_you_have_a|do_you_have_an|does_it_have_a|does_it_have_an|my_guess_is|my_letter_is|next|next_letter|the_next_letter_is|gimme|give_me|can_i_get|can_i_have|i_d_like|id_like|is_it_the_letter|how_about_a|how_about_an] [a|an|the|letter]? [double_you|doubleu|dub] [in_it|in_there|in_the_word|then|please|pls|plz|maybe|perhaps|next|first|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [$games.hangman.g1_letter] [a|an|the|letter]? [double_you|doubleu|dub] [$games.hangman.g2_in_it]?"
     emit="@{_} core.request action=hm.letter arg.letter=w"
     kind=request
     priority=11
     example="Try double_you."
 
 @pat.games.hangman.sw.name_x core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [letter|the_letter|try|try_the_letter|guess|guess_the_letter|guessing|i_guess|i_guess_the_letter|pick|choose|i_say|how_about|what_about|how_about_the_letter|is_there_a|is_there_an|any|got_any|do_you_have_a|do_you_have_an|does_it_have_a|does_it_have_an|my_guess_is|my_letter_is|next|next_letter|the_next_letter_is|gimme|give_me|can_i_get|can_i_have|i_d_like|id_like|is_it_the_letter|how_about_a|how_about_an] [a|an|the|letter]? [ex] [in_it|in_there|in_the_word|then|please|pls|plz|maybe|perhaps|next|first|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [$games.hangman.g1_letter] [a|an|the|letter]? [ex] [$games.hangman.g2_in_it]?"
     emit="@{_} core.request action=hm.letter arg.letter=x"
     kind=request
     priority=11
     example="Try ex."
 
 @pat.games.hangman.sw.name_y core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [letter|the_letter|try|try_the_letter|guess|guess_the_letter|guessing|i_guess|i_guess_the_letter|pick|choose|i_say|how_about|what_about|how_about_the_letter|is_there_a|is_there_an|any|got_any|do_you_have_a|do_you_have_an|does_it_have_a|does_it_have_an|my_guess_is|my_letter_is|next|next_letter|the_next_letter_is|gimme|give_me|can_i_get|can_i_have|i_d_like|id_like|is_it_the_letter|how_about_a|how_about_an] [a|an|the|letter]? [why|wye] [in_it|in_there|in_the_word|then|please|pls|plz|maybe|perhaps|next|first|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [$games.hangman.g1_letter] [a|an|the|letter]? [why|wye] [$games.hangman.g2_in_it]?"
     emit="@{_} core.request action=hm.letter arg.letter=y"
     kind=request
     priority=11
     example="Try why."
 
 @pat.games.hangman.sw.name_z core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_you|could_you|can_u|could_u|would_you|will_you|would_u|will_u|please|pls|plz|kindly|just]? [letter|the_letter|try|try_the_letter|guess|guess_the_letter|guessing|i_guess|i_guess_the_letter|pick|choose|i_say|how_about|what_about|how_about_the_letter|is_there_a|is_there_an|any|got_any|do_you_have_a|do_you_have_an|does_it_have_a|does_it_have_an|my_guess_is|my_letter_is|next|next_letter|the_next_letter_is|gimme|give_me|can_i_get|can_i_have|i_d_like|id_like|is_it_the_letter|how_about_a|how_about_an] [a|an|the|letter]? [zed|zee] [in_it|in_there|in_the_word|then|please|pls|plz|maybe|perhaps|next|first|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [$games.hangman.g1_letter] [a|an|the|letter]? [zed|zee] [$games.hangman.g2_in_it]?"
     emit="@{_} core.request action=hm.letter arg.letter=z"
     kind=request
     priority=11
     example="Try zed."
 
 @pat.games.hangman.sw.bare_b core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [bee] [please|pls|plz|then|maybe|perhaps|next|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [bee] [pls|plz|then|maybe|perhaps|next|now]?"
     emit="@{_} core.request action=hm.letter arg.letter=b"
     kind=request
     priority=8
     example="Bee."
 
 @pat.games.hangman.sw.bare_c core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [cee|see|sea] [please|pls|plz|then|maybe|perhaps|next|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [cee|see|sea] [pls|plz|then|maybe|perhaps|next|now]?"
     emit="@{_} core.request action=hm.letter arg.letter=c"
     kind=request
     priority=8
     example="Cee."
 
 @pat.games.hangman.sw.bare_d core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [dee] [please|pls|plz|then|maybe|perhaps|next|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [dee] [pls|plz|then|maybe|perhaps|next|now]?"
     emit="@{_} core.request action=hm.letter arg.letter=d"
     kind=request
     priority=8
     example="Dee."
 
 @pat.games.hangman.sw.bare_f core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [eff|ef] [please|pls|plz|then|maybe|perhaps|next|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [eff|ef] [pls|plz|then|maybe|perhaps|next|now]?"
     emit="@{_} core.request action=hm.letter arg.letter=f"
     kind=request
     priority=8
     example="Eff."
 
 @pat.games.hangman.sw.bare_g core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [gee|jee] [please|pls|plz|then|maybe|perhaps|next|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [gee|jee] [pls|plz|then|maybe|perhaps|next|now]?"
     emit="@{_} core.request action=hm.letter arg.letter=g"
     kind=request
     priority=8
     example="Gee."
 
 @pat.games.hangman.sw.bare_h core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [aitch|haitch] [please|pls|plz|then|maybe|perhaps|next|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [aitch|haitch] [pls|plz|then|maybe|perhaps|next|now]?"
     emit="@{_} core.request action=hm.letter arg.letter=h"
     kind=request
     priority=8
     example="Aitch."
 
 @pat.games.hangman.sw.bare_j core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [jay] [please|pls|plz|then|maybe|perhaps|next|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [jay] [pls|plz|then|maybe|perhaps|next|now]?"
     emit="@{_} core.request action=hm.letter arg.letter=j"
     kind=request
     priority=8
     example="Jay."
 
 @pat.games.hangman.sw.bare_k core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [kay] [please|pls|plz|then|maybe|perhaps|next|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [kay] [pls|plz|then|maybe|perhaps|next|now]?"
     emit="@{_} core.request action=hm.letter arg.letter=k"
     kind=request
     priority=8
     example="Kay."
 
 @pat.games.hangman.sw.bare_p core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [pee] [please|pls|plz|then|maybe|perhaps|next|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [pee] [pls|plz|then|maybe|perhaps|next|now]?"
     emit="@{_} core.request action=hm.letter arg.letter=p"
     kind=request
     priority=8
     example="Pee."
 
 @pat.games.hangman.sw.bare_q core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [queue|cue|kyu] [please|pls|plz|then|maybe|perhaps|next|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [queue|cue|kyu] [pls|plz|then|maybe|perhaps|next|now]?"
     emit="@{_} core.request action=hm.letter arg.letter=q"
     kind=request
     priority=8
     example="Queue."
 
 @pat.games.hangman.sw.bare_s core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [ess] [please|pls|plz|then|maybe|perhaps|next|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [ess] [pls|plz|then|maybe|perhaps|next|now]?"
     emit="@{_} core.request action=hm.letter arg.letter=s"
     kind=request
     priority=8
     example="Ess."
 
 @pat.games.hangman.sw.bare_t core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [tee] [please|pls|plz|then|maybe|perhaps|next|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [tee] [pls|plz|then|maybe|perhaps|next|now]?"
     emit="@{_} core.request action=hm.letter arg.letter=t"
     kind=request
     priority=8
     example="Tee."
 
 @pat.games.hangman.sw.bare_v core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [vee] [please|pls|plz|then|maybe|perhaps|next|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [vee] [pls|plz|then|maybe|perhaps|next|now]?"
     emit="@{_} core.request action=hm.letter arg.letter=v"
     kind=request
     priority=8
     example="Vee."
 
 @pat.games.hangman.sw.bare_z core.pattern
-    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [zed|zee] [please|pls|plz|then|maybe|perhaps|next|now]?"
+    match="[$lang.lead.filler|umm|ooh|wait|right]? [zed|zee] [pls|plz|then|maybe|perhaps|next|now]?"
     emit="@{_} core.request action=hm.letter arg.letter=z"
     kind=request
     priority=8
     example="Zed."
 
 @pat.games.hangman.x2.length core.pattern
-    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just|and]? [how_many_letters|how_many_letters_are_there|how_many_letters_in_it|how_long_is|how_long_is_the_word|how_long_is_it|how_long|what_is_the_length_of|whats_the_length_of|the_length_of|word_length|letter_count|number_of_letters|how_many_characters|how_many_characters_in] [does|do|is|in|has|are|of]? [the|this|my|your]? [word|secret_word|secret|answer|puzzle|it|there|hidden_word]? [have|has|contain|contains|include|in_it|in_total|long|there|hidden]? [please|pls|plz|thanks|now]?"
+    match="[$lang.lead.filler|pls|plz]? [how_many_letters|how_many_letters_are_there|how_many_letters_in_it|how_long_is|how_long_is_the_word|how_long_is_it|how_long|what_is_the_length_of|whats_the_length_of|the_length_of|word_length|letter_count|number_of_letters|how_many_characters|how_many_characters_in] [does|do|is|in|has|are|of]? [the|this|my|your]? [word|secret_word|secret|answer|puzzle|it|there|hidden_word]? [have|has|contain|contains|include|in_it|in_total|long|there|hidden]? [pls|plz|thanks|now]?"
     emit="@{_} core.request action=hm.status"
     kind=request
     priority=11
@@ -714,8 +714,20 @@
 
 @pat.games.hangman.x2.giveup.cant core.pattern
     canonical="I cannot guess it, I give up."
-    match="[i|we] [can|could|cannot|can_not|can_t|cant|couldn_t|couldnt|am_not_able_to|am_unable_to|just_cant|just_can_t] [not|never]? [guess|get|solve|figure_out|find|work_out|do|crack|think_of]? [it|this|the_word|that|any_of_it|the_letters]? [anymore|any_more|at_all|now|today|either]? [,]? [so|ok|okay|well|just]? [i]? [give_up|i_give_up|quit|i_quit|forget_it|i_surrender|i_am_done|im_done|show_me_the_word|tell_me_the_word|reveal_it|let_me_quit|stop|enough]"
+    match="[i|we] [can|could|cannot|can_not|can_t|cant|couldn_t|couldnt|am_not_able_to|am_unable_to|just_cant|just_can_t] [not|never]? [guess|get|solve|figure_out|find|work_out|do|crack|think_of]? [it|this|the_word|that|any_of_it|the_letters]? [anymore|any_more|at_all|now|today|either]? [,]? [so|just]? [i]? [give_up|i_give_up|quit|i_quit|forget_it|i_surrender|i_am_done|im_done|show_me_the_word|tell_me_the_word|reveal_it|let_me_quit|stop|enough]"
     emit="@{_} core.request action=hm.giveup"
     kind=request
     priority=12
     example="I cannot guess it, I give up."
+
+@shape.games.hangman.letter core.shape
+    family=do
+    verb="guess|try|pick|choose|say|go_with|call"
+    obj="l:lex.games.hangman.letters"
+    det="the|a"
+    objmod="letter"
+    forms=imp,wish,ind,q
+    sample="l=e"
+    emit="@{_} core.request action=hm.letter arg.letter={l}"
+    priority=12
+    example="Guess the letter e."

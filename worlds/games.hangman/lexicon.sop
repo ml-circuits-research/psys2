@@ -32,3 +32,141 @@
     word=hangman
     word=letter
     word=guess
+
+@phrase.games.hangman.g1_letter core.phrase
+    frame=false
+    doc="World-local group used by 26 patterns (made by scripts/migrate-macros.mjs)."
+    alt=letter
+    alt=the_letter
+    alt=try
+    alt=try_the_letter
+    alt=guess
+    alt=guess_the_letter
+    alt=guessing
+    alt=i_guess
+    alt=i_guess_the_letter
+    alt=pick
+    alt=choose
+    alt=i_say
+    alt=how_about
+    alt=what_about
+    alt=how_about_the_letter
+    alt=is_there_a
+    alt=is_there_an
+    alt=any
+    alt=got_any
+    alt=do_you_have_a
+    alt=do_you_have_an
+    alt=does_it_have_a
+    alt=does_it_have_an
+    alt=my_guess_is
+    alt=my_letter_is
+    alt=next
+    alt=next_letter
+    alt=the_next_letter_is
+    alt=gimme
+    alt=give_me
+    alt=can_i_get
+    alt=can_i_have
+    alt=i_d_like
+    alt=id_like
+    alt=is_it_the_letter
+    alt=how_about_a
+    alt=how_about_an
+
+@phrase.games.hangman.g2_in_it core.phrase
+    doc="World-local group used by 26 patterns (made by scripts/migrate-macros.mjs)."
+    alt=in_it
+    alt=in_there
+    alt=in_the_word
+    alt=then
+    alt=pls
+    alt=plz
+    alt=maybe
+    alt=perhaps
+    alt=next
+    alt=first
+    alt=now
+
+@phrase.games.hangman.g3_we_should core.phrase
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=we_should
+    alt=we_could
+    alt=i_gotta
+    alt=i_have_to
+    alt=im_going_to
+    alt=im_gonna
+    alt=gonna
+
+@phrase.games.hangman.g4_game core.phrase
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=game
+    alt=round
+    alt=1
+    alt=word
+    alt=start
+    alt=a_new_1
+    alt=new_1
+    alt=new_round
+    alt=new_game
+    alt=new_word
+    alt=another_1
+    alt=another_round
+
+@phrase.games.hangman.g5_new core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=new
+    alt=fresh
+    alt=again
+    alt=once_more
+    alt=over
+    alt=restart
+    alt=from_scratch
+    alt=start_over
+    alt=another
+    alt=next
+    alt=fresh_start
+
+@phrase.games.hangman.g6_it_is core.phrase
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=it_is
+    alt=i_think
+    alt=i_hope
+    alt=i_bet
+    alt=i_guess
+    alt=maybe
+    alt=right
+    alt=then
+    alt=pls
+    alt=plz
+    alt=lol
+    alt=perhaps
+
+@phrase.games.hangman.g7_play core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=play
+    alt=start
+    alt=go
+    alt=do
+    alt=begin
+    alt=try
+    alt=have
+    alt=run
+    alt=restart
+    alt=redo
+    alt=replay
+    alt=reset
+
+@phrase.games.hangman.g8_it core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=it
+    alt=the_game
+    alt=another
+    alt=a_new
+    alt=1_more
+    alt=a
+    alt=the
+    alt=that

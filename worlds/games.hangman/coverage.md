@@ -89,3 +89,5 @@ Every line is either supported (with the example that has a test in `tests.sop`,
 | statement | I give up the word. | supported (test sw049) |
 | imperative | end the game pls | supported (test sw050) |
 | "I give up", "I quit", "forget it" | I give up | unsupported: ui.shell game control wins by priority and runs hm.giveup; the hangman patterns cover the longer forms |
+
+**L7 (macros, shapes).** `patterns.sop` was migrated with `scripts/migrate-macros.mjs`. One shape, `games.hangman.letter` (do over `lex.games.hangman.letters` with the optional word "letter" before the letter, 4 generated patterns), adds the imperative, wish, indirect and question forms of a guess ("could you maybe guess the letter e", "i want to guess e"; test sh02); the hand patterns (`is there an e`, `e in the word`, `try s`) stay because they have an optional verb or other wording. Gate finding: the migrated hint pattern `hint2` read "i want to play something" on a recent hangman world through the polite lead-in ("i want to play"), so it keeps its original list.
