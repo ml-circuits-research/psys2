@@ -139,6 +139,40 @@ Tests (headless, 390×844 and 1280×800):
 - 0 console errors;
 - screenshots of each tab for the reviewer.
 
+### VOICE — natural end of turn for spoken messages (user, 14:57 local: in Romanian the message was never sent)
+
+**Why it fails today** (`docs/webchat/ui/speech.mjs`, reviewer reading at 06d226d):
+- A spoken message is sent only when the browser marks a result `isFinal`. The app has no end-of-turn logic of its own.
+- In hands-free mode (`continuous = true`), and often for `ro-RO`, Chrome's recogniser keeps the result interim for a long time or never finalises it. The text then stays in "Listening: …" and is never sent.
+- Stopping the mic does not send the interim text either.
+- `rec.lang` is fixed when listening starts, from the language setting. Romanian speech with the dropdown on English is recognised as English.
+
+**What to build** (one module, same behaviour for every language):
+1. **Own end-of-turn detector on the interim text.** On every interim update, restart a pause timer. When the text has not changed for the pause, decide:
+   - **Plausible complete sentence → send after a short pause (≈ 700 ms).** Plausible means the rules (dry run: formalize + validate, no execution, no effects) find a *complete* reading of the whole text (the G1 hierarchy), and the text does not end in a connector or a preposition ("and", "then", "to", "with", "și", "apoi", "la", "cu", "pe"…).
+   - **Not plausible yet → wait longer (≈ 1.8 s), then send anyway.** Hands-free: ≈ 2.5 s. The user may still be thinking.
+   - **The browser's `isFinal` → send at once.** Deduplicate it with the timer path, so one utterance is never sent twice.
+   - **Stopping the mic → send what was heard.** If no final result arrives within 300 ms, send the interim text.
+2. **Visible and cancellable.**
+   - Show the interim text in the input field, with a small countdown ring on the mic while a send is pending.
+   - Typing, tapping the field, or saying "stop" / "cancel" / "anulează" keeps the text for editing instead of sending it.
+   - Respect HANG/STOP: while a turn runs, the spoken text waits in the field and is sent when the turn ends.
+3. **Recognition language follows the session.**
+   - A new "Speech language: automatic" option, the default, switches `rec.lang` to `ro-RO` when the session language turns Romanian (RD5 detection), and back to English.
+   - Restart the recogniser on a switch. The explicit choices stay available.
+4. **Hands-free comfort.**
+   - Keep pausing recognition while the answer is read aloud.
+   - Resume right after it, with no 350 ms dead zone when the answer ends a question ("Say yes to …").
+5. **Phrase log.** Record for each spoken message how its turn ended: `final` / `pause-plausible` / `pause-timeout` / `mic-stop`, plus the wait in ms. This lets us tune the pauses on real use.
+6. **Tests.** A fake `SpeechRecognition` in headless Chrome that streams interim events with timings:
+   - an English and a Romanian plausible sentence are sent after the short pause;
+   - "draw a red house and" waits for the rest;
+   - a never-final stream is still sent;
+   - stopping the mic sends;
+   - "cancel" keeps the text;
+   - no double sends;
+   - the language switches to `ro-RO` after Romanian input.
+
 ### DIAG — a Diagram world and tab, imported from diagram-vss-demo (user, 13:40 local)
 
 The user wants a world and a tab for drawing diagrams, built from everything reusable in
@@ -187,7 +221,7 @@ The reviewer copied what is reusable into **`imports/diagram-vss-demo/`** (stagi
 
 **Order from now on:**
 1. HANG + STOP (with LIC)
-2. SET (settings modal with tabs)
+2. SET (settings modal with tabs) and VOICE (end of turn)
 3. RD10 together with RD1b and RD2 (they share the mechanism)
 4. DIAG
 5. RD5, RD9
@@ -457,6 +491,14 @@ Acceptance: reopening the demo restores discussions and suspended activities wit
 - Demo scenario as an automated test: start a drawing, open a chess game, then "continue the drawing and make the circle bigger" (the drawing's focus is restored, the game untouched), then "put the drawing into a document" (a docs.editor instance joins the discussion plus a small cross-world plan).
 
 Order: A1, A2, A3, A4, A6 and A11 first; the verification is two games plus a drawing suspended and resumed correctly, also after reloading. Then A7, A8, A10. A5 and A9 come when the observed ambiguity justifies them. **No probabilistic machinery unless the dialogue set shows ambiguities that need it.**
+
+**Per tab and per world (user question 14:57: "can each tab have dialogues that can be continued, per world and per tab?").** Not built yet. Today the discourse layer keeps frames per world inside one session, "where were we?" returns to the last unfinished activity (658acae), and nothing survives a reload. ASTRA must deliver this explicitly:
+- each tab shows its own discussions: a small "Discussions" list in the tab header, with the active one first;
+- switching tabs resumes that tab's active discussion: its focus, open question and world instance;
+- "continue the chess game from before" or "back to the second drawing" pick the right one;
+- every discussion survives a reload (A6).
+
+Acceptance: the A11 demo scenario plus a per-tab one, all after a reload: two drawings and a chess game, switch tabs, reload, continue each.
 
 ### RD — a real user dialogue (user, 02:14) replayed by the reviewer at f48c450: what still breaks, and the general fixes
 
