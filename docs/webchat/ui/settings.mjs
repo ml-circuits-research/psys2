@@ -13,7 +13,7 @@ export const DEFAULT_SETTINGS = {
   ...RUNTIME_DEFAULTS,            // formalizer, encoderAcceptRefused, partialUnderstanding, normalizer, spellcheck: one definition shared with the evaluators (src/dialog/runtime-config.mjs)
   timeLimits: { ...TIME_LIMIT_DEFAULTS },   // ms; clamped on use (src/dialog/time-limits.mjs)
   fastPath: true,                 // webchat: the rules answer at once when they read the whole message (PERF); the model is for the rest
-  translation: 'auto', languageDetection: 'auto', speechLang: 'auto', voice: '', rate: 1, handsFree: false, keepListening: true, speaker: false, showTrace: false, showPerf: false, devMode: false, logPhrases: true, exportButtons: false,
+  translation: 'auto', languageDetection: 'auto', speechLang: 'auto', voice: '', rate: 1, handsFree: false, keepListening: true, wakeWord: false, speaker: false, showTrace: false, showPerf: false, devMode: false, logPhrases: true, exportButtons: false,
 };
 
 /**
@@ -31,6 +31,7 @@ export function migrateSettings(saved) {
     migrated = true;
   }
   s.settingsVersion = SETTINGS_VERSION;
+  s.handsFree = false;   // FREEZE: the listening state is never persisted; every page load starts with the microphone off (an older saved `true` no longer starts it)
   if (s.formalizer !== 'rules' && s.formalizer !== 'encoder') s.formalizer = DEFAULT_SETTINGS.formalizer;
   return { settings: s, migrated };
 }

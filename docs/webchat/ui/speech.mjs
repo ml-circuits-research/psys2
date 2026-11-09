@@ -61,7 +61,88 @@ export function splitCancel(text) {
   return { rest: w.slice(0, -1).join(' '), word: last };
 }
 /** Pauses of the end-of-turn detector (ms): plausible sentence, not plausible yet, not plausible in hands-free, after the mic was stopped; the dry run's own deadline. */
-export const VOICE_TIMING = { plausibleMs: 700, waitMs: 1800, handsFreeMs: 2500, micStopMs: 300, dryRunMs: 400, restartMs: 150, backoffMaxMs: 5000, maxFailures: 6, quickMs: 500, abortMs: 300, debounceMs: 250, startingMs: 4000 };
+export const VOICE_TIMING = { plausibleMs: 700, waitMs: 1800, handsFreeMs: 2500, micStopMs: 300, dryRunMs: 400, restartMs: 150, backoffMaxMs: 5000, maxFailures: 6, quickMs: 500, abortMs: 300, debounceMs: 250, startingMs: 4000,
+  finalSettleMs: 700, dupMs: 10000, dupDist: 0.2, rateMs: 2000, fragMax: 4, fragWindowMs: 10000, restartCap: 30, restartWindowMs: 60000, maxWords: 25, slowDryStrikes: 2 };
+
+/** Folded (no diacritics) one-word fragments: articles, pronouns, prepositions, fillers, and words the recogniser cuts out of a longer phrase. */
+export const FRAGMENT_WORDS = new Set(['a', 'an', 'the', 'this', 'that', 'these', 'those', 'it', 'he', 'she', 'we', 'they', 'you', 'i', 'me', 'my', 'is', 'are', 'was', 'be', 'do', 'does', 'did', 'to', 'of', 'in', 'on', 'at', 'for', 'and', 'or', 'but', 'so', 'if', 'what', 'who', 'why', 'how', 'when', 'where', 'which', 'there', 'here', 'uh', 'um', 'er', 'ah', 'oh', 'hm', 'hmm', 'mm', 'yeah', 'yes', 'no', 'ok', 'okay', 'yep', 'nope', 'sure',
+  'o', 'un', 'nista', 'ce', 'de', 'da', 'nu', 'asta', 'aceasta', 'acesta', 'acela', 'aia', 'eu', 'tu', 'el', 'ea', 'noi', 'voi', 'ei', 'ele', 'ma', 'te', 'se', 'si', 'sau', 'dar', 'ca', 'cu', 'la', 'pe', 'din', 'in', 'pentru', 'fi', 'e', 'este', 'sunt', 'am', 'ai', 'au', 'face', 'fac', 'faci', 'mama', 'tata', 'bine', 'hai', 'pai', 'aha', 'uite', 'cum', 'cand', 'unde', 'care', 'cine', 'mai', 'tot', 'foarte', 'scuze', 'enervant']);
+/** One-word commands that are never fragments. */
+export const KNOWN_ONE_WORD = new Set(['stop', 'undo', 'redo', 'help', 'next', 'back', 'again', 'cancel', 'reset', 'clear', 'pause', 'resume', 'ajutor', 'anuleaza', 'inapoi', 'urmatorul', 'opreste', 'refa', 'sterge']);
+/** True for a one- or two-word voice message that is only fragment words (see FRAGMENT_WORDS). `allowShort(text)` says the word answers an open question or a game move. */
+export function isFragment(text, { allowShort } = {}) {
+  const w = fold(text).split(' ').filter(Boolean);
+  if (w.length < 1 || w.length > 2) return false;
+  if (w.some((x) => KNOWN_ONE_WORD.has(x))) return false;
+  if (!w.every((x) => FRAGMENT_WORDS.has(x) || x.length <= 2)) return false;   // one or two words, all of them articles, pronouns, fillers ("o ce", "de asta")
+  return !allowShort?.(text);
+}
+/** Android returns growing prefixes as separate finals. `next` replaces `prev` when it extends, contains or repeats it (or is a piece of it); otherwise it is appended. */
+export function mergeFinal(prev, next) {
+  const a = String(prev ?? '').trim(), b = String(next ?? '').trim();
+  if (!a) return b;
+  if (!b) return a;
+  const na = norm(a), nb = norm(b);
+  if (na === nb || na.startsWith(nb) || (na.endsWith(nb) && (nb.includes(' ') || nb.length >= 4))) return a.length >= b.length ? a : b;   // a repeat or a piece of what is pending
+  if (nb.startsWith(na) || nb.includes(na)) return b;   // an extension
+  return `${a} ${b}`;
+}
+/** Normalised edit distance of two normalised texts (0 equal ... 1 different). */
+export const editRatio = (a, b) => (a === b ? 0 : lev(a, b) / Math.max(a.length, b.length, 1));
+/** A voice message that equals or nearly equals an earlier one (`m`), or is a prefix or suffix of it. Both normalised. */
+export const isNearDuplicate = (n, m, dist = 0.2) => !!n && (n === m || m.startsWith(n) || m.endsWith(n) || editRatio(n, m) <= dist);
+/** A few milliseconds of fixed work: a slow device (or a CPU throttle) measures several times slower than a desktop. */
+export function measureSpeed() {
+  const clock = () => (typeof performance !== 'undefined' ? performance.now() : Date.now());
+  const t0 = clock();
+  let x = 0;
+  for (let i = 1; i < 2.5e6; i++) x += Math.sqrt(i) % 3;
+  return { ms: clock() - t0, x };
+}
+
+/**
+ * One microphone for all tabs of the demo (FREEZE): Chrome serves recognition from one browser-level service, so two tabs that listen abort each other for ever.
+ * navigator.locks decides who listens (steal on an explicit take-over); a BroadcastChannel tells the old owner it lost the microphone. Without navigator.locks the channel alone decides.
+ */
+export function createMicLock({ name = 'psys2-mic', onLost, wait = 120 } = {}) {
+  const id = Math.random().toString(36).slice(2);
+  let ch = null, owned = false, releaseLock = null;
+  const waiters = new Set();
+  try { ch = typeof BroadcastChannel === 'function' ? new BroadcastChannel(name) : null; ch?.unref?.(); } catch { ch = null; }
+  const locks = typeof navigator !== 'undefined' ? navigator.locks : undefined;
+  const drop = () => { owned = false; const r = releaseLock; releaseLock = null; try { r?.(); } catch { /* ignore */ } };
+  if (ch) ch.onmessage = (e) => {
+    const m = e.data;
+    if (!m || m.from === id) return;
+    if (m.type === 'ping' && owned) ch.postMessage({ type: 'owner', from: id });
+    else if (m.type === 'owner') for (const w of [...waiters]) w();
+    else if (m.type === 'takeover' && owned) { drop(); onLost?.(); }
+  };
+  const hold = (opts) => new Promise((resolve) => {
+    let settled = false;
+    const done = (v) => { if (!settled) { settled = true; resolve(v); } };
+    Promise.resolve(locks.request(name, opts, (l) => { if (!l) { done(false); return undefined; } return new Promise((r) => { releaseLock = r; done(true); }); })).catch(() => done(false));
+  });
+  return {
+    owned: () => owned,
+    async acquire() {
+      if (owned) return true;
+      if (locks?.request) { owned = await hold({ ifAvailable: true }); return owned; }
+      if (!ch) { owned = true; return true; }
+      const other = await new Promise((resolve) => { const w = () => { clearTimeout(t); waiters.delete(w); resolve(true); }; const t = setTimeout(() => { waiters.delete(w); resolve(false); }, wait); waiters.add(w); ch.postMessage({ type: 'ping', from: id }); });
+      owned = !other;
+      return owned;
+    },
+    /** Explicit take-over (the person clicked "use it here"): the old owner is told to stop. */
+    async takeOver() {
+      ch?.postMessage({ type: 'takeover', from: id });
+      if (locks?.request) owned = await hold({ steal: true }); else { await new Promise((r) => setTimeout(r, 20)); owned = true; }
+      return owned;
+    },
+    release() { drop(); },
+    close() { drop(); try { ch?.close(); } catch { /* ignore */ } },
+  };
+}
 
 const sentences = (text) => String(text).split(/(?<=[.!?])\s+/).map((s) => s.trim()).filter(Boolean);
 const never = (ms) => new Promise((r) => setTimeout(() => r(false), ms));
@@ -70,12 +151,18 @@ const never = (ms) => new Promise((r) => setTimeout(() => r(false), ms));
  * Options: getLang, getVoiceName, getRate, onState, onError, onInterim (text heard so far)
  *   onSend({ text, how, waitMs })  a spoken message is ready; `how` is final | pause-plausible | pause-timeout | mic-stop. The older `onFinal(text)` still works.
  *   isBusy()                       true while a turn runs: the text is held (onHold) and sent by `turnEnded()` (one message at a time).
- *   plausible(text)                async dry run: do the rules read the whole text completely? (no effects; bounded by timing.dryRunMs)
+ *   plausible(text, { signal })    async dry run: do the rules read the whole text completely? (no effects; bounded by timing.dryRunMs; at most one in flight, a newer text aborts the older run)
  *   onStopCommand(text)            the utterance was a stop-microphone command (isStopMicCommand): it is not sent as a message; the host switches the microphone off.
  *   onHold(text), onCancel(text), onPending({ active, ms, phase })   field text, kept text, countdown ring.
+ *   onIgnored({ text, reason })    a voice message was dropped: fragment | duplicate | rate.
+ *   allowShort(text)               a one-word message answers an open question or a game move: it is not a fragment.
+ *   pauseWhileWorking              after a send the microphone pauses until `setWorking(false)` (MOBILE-VOICE: no listening while a request is processed).
+ *   cumulative                     the recogniser returns growing prefixes as separate finals (Android): a final waits `finalSettleMs` and replaces the pending text. Also switched on when seen.
+ *   slow                           true / () => boolean: a slow device; the per-pause dry run is off (the browser final and the text's plausibility end the turn).
+ *   lock                           createMicLock(): only one tab listens (the host builds it with onLost = () => speech.lost()). onBlocked() / onLost() tell the host.
  *   timing                         overrides of VOICE_TIMING.
  */
-export function createSpeech({ getLang, getVoiceName, getRate, onFinal, onSend, onInterim, onState, onError, onHold, onCancel, onPending, onStopCommand, isBusy, plausible, timing, now = () => Date.now() }) {
+export function createSpeech({ getLang, getVoiceName, getRate, onFinal, onSend, onInterim, onState, onError, onHold, onCancel, onPending, onStopCommand, onIgnored, onBlocked, onLost, allowShort, isBusy, plausible, timing, lock = null, pauseWhileWorking = false, cumulative = false, slow = false, now = () => Date.now() }) {
   const T = { ...VOICE_TIMING, ...(timing ?? {}) };
   let rec = null, mode = null /* 'ptt' | 'once' | 'hands-free' */, handsFree = false, speaking = 0, wantRestart = false, restartTimer = 0;
   // conversation mode keeps the recognizer alive: failures since the last result drive the backoff; `paused` is the visible give-up state
@@ -84,14 +171,44 @@ export function createSpeech({ getLang, getVoiceName, getRate, onFinal, onSend, 
   let starting = false, stopping = false, abortTimer = 0, startTimer = 0, lastFlip = 0;
   // end-of-turn detector: the interim text of the current utterance, when it last changed, the timers, a token that invalidates stale async decisions
   let text = '', lastChange = 0, timer = 0, stopTimer = 0, token = 0, held = null, sentNorm = '', sentAt = 0;   // sentNorm: the text just sent, kept for a short time (a late final may repeat it even after a restart)
+  // FREEZE: one recognizer object per page; a session id invalidates the events of an older start; our own aborts are not failures
+  let recObj = null, sess = 0, ownAbort = false, starts = [];
+  // MOBILE-VOICE: the pending final text (cumulative finals), filters, the working pause
+  let pendFin = '', cumulativeSeen = false, lastFinalNorm = '', working = false, recent = [], lastSendAt = 0, drops = [];
+  // lifecycle and cross-tab lock
+  let hidden = false, hiddenResume = false, acquiring = false, blocked = false;
+  // dry run: one in flight, a newer text aborts it; a device that misses the deadline twice is slow
+  let dryCtl = null, dryBusy = false, dryStrikes = 0;
+  const isSlow = () => (typeof slow === 'function' ? !!slow() : !!slow) || dryStrikes >= T.slowDryStrikes;
 
-  const emit = () => onState?.({ listening: !!rec && !stopping, starting: starting && !!rec && !stopping, stopping, speaking: speaking > 0, mode, handsFree, paused, pending: !!(timer || stopTimer) });
+  const emit = () => onState?.({ listening: !!rec && !stopping, starting: (starting && !!rec && !stopping) || acquiring, stopping, speaking: speaking > 0, mode, handsFree, paused, working: working && handsFree, hidden, blocked, pending: !!(timer || stopTimer) });
   const ring = (active, ms, phase) => { onPending?.({ active, ms, phase }); emit(); };
-  function clearTimers() { clearTimeout(timer); clearTimeout(stopTimer); timer = 0; stopTimer = 0; token++; }
-  function reset() { clearTimers(); text = ''; ring(false, 0, null); }
+  const abortRec = (r = rec) => { ownAbort = true; try { r?.abort(); } catch { /* ignore */ } };
+  const detach = (r) => { if (!r) return; for (const k of ['onstart', 'onresult', 'onerror', 'onend']) { try { r[k] = null; } catch { /* ignore */ } } };
+  function clearTimers() { clearTimeout(timer); clearTimeout(stopTimer); timer = 0; stopTimer = 0; token++; dryCtl?.abort(); }
+  function reset() { clearTimers(); text = ''; pendFin = ''; ring(false, 0, null); }
   const sendNow = (m) => (onSend ?? ((x) => onFinal?.(x.text)))(m);
+  const canListen = () => handsFree && !paused && !working && !hidden && !blocked && speaking === 0;
+  /** Stops the recognizer without a restart and drops what was pending (hidden tab, working, fragments). */
+  function stopForPause() {
+    clearTimeout(restartTimer); wantRestart = false;
+    clearTimers(); text = ''; pendFin = ''; ring(false, 0, null); onInterim?.('');
+    if (rec) abortRec();
+  }
+  function maybeRelease() { if (lock && !rec && !handsFree && !acquiring) lock.release(); }
 
-  /** One send per utterance. Returns false when the text is empty or only repeats what was just sent. */
+  function noteDrop(t, reason) {
+    onIgnored?.({ text: t, reason });
+    const tn = Date.now();
+    drops = drops.filter((x) => tn - x < T.fragWindowMs); drops.push(tn);
+    if (drops.length > T.fragMax && handsFree && !paused) {   // the recogniser is going wild: never loop, tell the person
+      drops = [];
+      paused = { reason: 'I am hearing fragments — tap the mic to continue' };
+      stopForPause(); emit();
+      onError?.('I am hearing fragments — tap the mic to continue.');
+    }
+  }
+  /** One send per utterance. Returns false when the text is empty, only repeats what was just sent, or is dropped by a filter. */
   function deliver(raw, how) {
     let t = String(raw ?? '').trim();
     if (!t) return false;
@@ -102,63 +219,95 @@ export function createSpeech({ getLang, getVoiceName, getRate, onFinal, onSend, 
       if (!t) return false;
       n = norm(t);
     }
+    const tn = Date.now();
+    if (isFragment(t, { allowShort })) { noteDrop(t, 'fragment'); return false; }
+    recent = recent.filter((r) => tn - r.at <= T.dupMs);
+    if (T.dupMs > 0 && recent.some((r) => isNearDuplicate(n, r.n, T.dupDist))) { noteDrop(t, 'duplicate'); return false; }
+    if (T.rateMs > 0 && lastSendAt && tn - lastSendAt < T.rateMs) { noteDrop(t, 'rate'); return false; }
     const waitMs = lastChange ? Math.max(0, now() - lastChange) : 0;
     if (isBusy?.()) {   // one message at a time: the spoken text waits in the field
       held = { text: held ? `${held.text} ${t}` : t, how, waitMs };
       onHold?.(held.text);
       return true;
     }
-    sentNorm = n; sentAt = Date.now();
+    sentNorm = n; sentAt = tn; lastSendAt = tn; recent.push({ n, at: tn });
+    if (pauseWhileWorking) { working = true; emit(); }
     sendNow({ text: t, how, waitMs });
     return true;
   }
-  const restartRec = () => { if (rec && mode === 'hands-free') { wantRestart = true; try { rec.abort(); } catch { /* ignore */ } } };
+  const restartRec = () => { if (rec && mode === 'hands-free') { wantRestart = true; abortRec(); } };
   function flush(how) {
     const t = text;
     reset();
     const sent = deliver(t, how);
-    if (sent) {   // the utterance is over: hands-free starts a fresh one at once (no dead zone, no merged text); a single-shot recognizer is done
-      if (mode === 'hands-free') restartRec(); else if (rec) { try { rec.abort(); } catch { /* ignore */ } }
-    }
+    if (mode === 'hands-free') { if (sent || t) { if (working) stopForPause(); else restartRec(); } }   // the utterance is over: a fresh recognition session starts at once (no dead zone, no merged text, a cumulative result list is reset)
+    else if (sent && rec) abortRec();   // a single-shot recognizer is done
     return sent;
   }
   /** A stop-microphone command is handled here, never sent: the text and the timers are dropped and the host is told. */
   function tryStop(t) {
     if (!onStopCommand || !isStopMicCommand(t)) return false;
-    clearTimers(); text = ''; ring(false, 0, null);
+    clearTimers(); text = ''; pendFin = ''; ring(false, 0, null);
     onInterim?.('');
     onStopCommand(String(t).trim());
     return true;
   }
-  async function decide(my) {
+  /** The dry run: one in flight, bounded, cancellable. Slow devices skip it. */
+  async function dry(x) {
+    if (!plausible || isSlow()) return true;   // slow device: the end of turn is the browser final plus the text's plausibility
+    if (x.split(/\s+/).length > T.maxWords) return false;
+    if (dryBusy) return false;
+    dryCtl?.abort();
+    const ctl = dryCtl = new AbortController();
+    dryBusy = true;
+    let ended = false;
+    const run = Promise.resolve().then(() => plausible(x, { signal: ctl.signal })).catch(() => false).finally(() => { ended = true; dryBusy = false; });
+    const r = await Promise.race([run, never(T.dryRunMs)]);
+    if (!ended) { ctl.abort(); dryStrikes++; return false; }
+    dryStrikes = 0;
+    return !!r;
+  }
+  async function decide(my, how = 'pause-plausible') {
     if (my !== token || !text) return;
     if (tryStop(text)) return;
     const t = text, cancel = splitCancel(t);
     if (cancel && !cancel.rest && held) { cancelPending(); return; }
     let ok = false;
-    const read = async (x) => !endsOpen(x) && (!plausible || !!(await Promise.race([plausible(x), never(T.dryRunMs)])));
+    const read = async (x) => !endsOpen(x) && await dry(x);
     try {
       if (cancel?.rest && !isBusy?.() && await read(cancel.rest)) { if (my === token) cancelPending(cancel.rest); return; }
       ok = !isBusy?.() && await read(t);
     } catch { ok = false; }
     if (my !== token || !text) return;
-    if (ok) { timer = 0; flush('pause-plausible'); return; }
+    if (ok) { timer = 0; flush(how); return; }
     const total = handsFree ? T.handsFreeMs : T.waitMs;
     const left = Math.max(0, total - (now() - lastChange));
     ring(true, left, 'timeout');
     timer = setTimeout(() => { timer = 0; if (my === token && text) flush('pause-timeout'); }, left);
   }
-  function schedule() {
-    clearTimeout(timer); const my = ++token;
-    ring(true, T.plausibleMs, 'plausible');
-    timer = setTimeout(() => { timer = 0; decide(my); }, T.plausibleMs);
+  function schedule(ms = T.plausibleMs, how = 'pause-plausible') {
+    clearTimeout(timer); dryCtl?.abort(); const my = ++token;
+    ring(true, ms, 'plausible');
+    timer = setTimeout(() => { timer = 0; decide(my, how); }, ms);
+  }
+  /** A cumulative final waits a short settle for the next, longer final of the same utterance, then ends like any other pause. */
+  function scheduleFinal() {
+    clearTimeout(timer); dryCtl?.abort(); const my = ++token;
+    ring(true, T.finalSettleMs, 'plausible');
+    timer = setTimeout(() => {
+      timer = 0;
+      if (my !== token || !text) return;
+      if (tryStop(text)) return;
+      if (!endsOpen(text) && !isBusy?.()) { flush('final'); return; }
+      decide(my, 'final');
+    }, T.finalSettleMs);
   }
   /** Typing, tapping the field, "stop": the text stays in the field for editing and nothing is sent. `keep` replaces the heard text (a trailing cancel word removed). */
   function cancelPending(keep) {
     const kept = keep ?? held?.text ?? text;
     const had = !!(text || held || timer);
     held = null; reset();
-    if (rec) { if (mode === 'hands-free') wantRestart = true; try { rec.abort(); } catch { /* ignore */ } }
+    if (rec) { if (mode === 'hands-free') wantRestart = true; abortRec(); }
     if (had && kept) onCancel?.(kept);
     return had;
   }
@@ -170,69 +319,115 @@ export function createSpeech({ getLang, getVoiceName, getRate, onFinal, onSend, 
     sendNow(m);
     return true;
   }
+  function getRecognizer(fresh) {
+    if (fresh || !recObj) { detach(recObj); recObj = new Recognition(); }
+    return recObj;
+  }
 
   function start(newMode, { barge = false } = {}) {
     if (!Recognition) return false;
-    if (rec && stopping) { const old = rec; rec = null; stopping = false; clearTimeout(abortTimer); try { old.abort(); } catch { /* ignore */ } }   // a recognizer that is still ending must not block the next start
+    if (hidden) { if (newMode === 'hands-free') hiddenResume = true; return true; }   // resumes when the tab is visible again
+    let fresh = false;
+    if (rec && stopping) { const old = rec; rec = null; stopping = false; clearTimeout(abortTimer); abortRec(old); detach(old); recObj = null; fresh = true; }   // a recognizer that is still ending must not block the next start
     if (rec) return true;
+    if (acquiring) return true;
     if (speaking > 0 && newMode === 'hands-free' && !barge) return true; // resumes when speech ends
+    if (lock && !lock.owned()) {   // FREEZE: only one tab of the demo listens
+      acquiring = true; blocked = false; emit();
+      lock.acquire().then((ok) => {
+        acquiring = false;
+        if (newMode === 'hands-free' && !handsFree) { emit(); return; }
+        if (ok) start(newMode, { barge });
+        else { blocked = true; if (newMode === 'hands-free') handsFree = false; emit(); onBlocked?.(); }
+      });
+      return true;
+    }
+    blocked = false;
     stopSpeaking();
     mode = newMode;
-    text = '';
-    startedAt = Date.now(); gotResult = false; lastErr = '';
-    rec = new Recognition();
-    const my = rec;
+    text = ''; pendFin = ''; lastFinalNorm = '';
+    startedAt = Date.now(); gotResult = false; lastErr = ''; ownAbort = false;
+    if (newMode === 'hands-free') {   // cap on restarts: 30 a minute, then a visible pause
+      const tn = Date.now();
+      starts = starts.filter((x) => tn - x < T.restartWindowMs); starts.push(tn);
+      if (starts.length > T.restartCap) {
+        starts = [];
+        paused = { reason: 'too many restarts in a minute' };
+        mode = null; emit();
+        onError?.(`Microphone paused — tap to resume (${paused.reason}).`);
+        return true;
+      }
+    }
+    rec = getRecognizer(fresh);
+    const my = rec, mySess = ++sess;
+    const live = () => mySess === sess && rec === my;
     starting = true; stopping = false; clearTimeout(startTimer);
-    startTimer = setTimeout(() => { if (rec === my && starting) { starting = false; emit(); } }, T.startingMs);
-    rec.onstart = () => { if (rec !== my) return; starting = false; clearTimeout(startTimer); emit(); };
+    startTimer = setTimeout(() => { if (live() && starting) { starting = false; emit(); } }, T.startingMs);
+    rec.onstart = () => { if (!live()) return; starting = false; clearTimeout(startTimer); emit(); };
     rec.lang = getLang();
     rec.continuous = newMode === 'hands-free';
     rec.interimResults = true;
     rec.maxAlternatives = 1;
     rec.onresult = (ev) => {
-      if (rec !== my) return;
+      if (!live()) return;
       if (starting) { starting = false; clearTimeout(startTimer); }
-      let interim = '', fin = '';
+      let interim = '', fin = '', finals = 0;
       for (let i = 0; i < ev.results.length; i++) {
         const r = ev.results[i];
         if (!r.isFinal) interim += r[0].transcript;
-        else if (i >= ev.resultIndex) fin += (fin ? ' ' : '') + r[0].transcript.trim();
+        else { finals++; if (i >= ev.resultIndex) fin += (fin ? ' ' : '') + r[0].transcript.trim(); }
       }
-      if (fin.trim()) {   // the browser decided: send at once (deduplicated against an earlier timer send)
+      if (finals > 1) cumulativeSeen = true;   // the result list keeps earlier finals: Android
+      if (fin.trim()) {   // the browser decided
         gotResult = true; failures = 0; paused = null;
         if (tryStop(fin)) return;
         const c = splitCancel(fin);
         if (c && !c.rest && (held || text)) { cancelPending(); return; }
-        const had = text; clearTimers(); text = '';
+        const nf = norm(fin);
+        if (lastFinalNorm && (nf.startsWith(lastFinalNorm) || nf.includes(lastFinalNorm) || lastFinalNorm.includes(nf))) cumulativeSeen = true;   // a final that extends or repeats the previous one: growing prefixes
+        lastFinalNorm = nf;
+        if (cumulative || cumulativeSeen) {   // one utterance = one message: the new final replaces the pending text, the end of the turn decides
+          pendFin = mergeFinal(pendFin, fin);
+          text = mergeFinal(text, pendFin); lastChange = now();
+          onInterim?.(text);
+          scheduleFinal();
+          return;
+        }
+        const had = text; clearTimers(); text = '';   // deduplicated against an earlier timer send
         if (!deliver(fin, 'final') && had) onInterim?.('');
         reset();
         return;
       }
       interim = interim.trim();
       if (interim) { gotResult = true; failures = 0; if (paused) { paused = null; emit(); } }
-      if (interim === text) return;
-      text = interim; lastChange = now();
+      if (!interim && pendFin) return;
+      const cand = pendFin && interim ? mergeFinal(pendFin, interim) : interim;
+      if (cand === text) return;
+      text = cand; lastChange = now();
       onInterim?.(text);
       if (text) schedule(); else reset();
     };
     rec.onerror = (ev) => {
+      if (!live()) return;
       if (ev.error === 'not-allowed' || ev.error === 'service-not-allowed') {
         handsFree = false; wantRestart = false;
         onError?.('Microphone access was denied. Allow it in the browser address bar to use speech input.');
-      } else if (ev.error !== 'no-speech' && ev.error !== 'aborted') {
-        lastErr = ev.error;
+      } else if (ev.error === 'aborted') {
+        if (!ownAbort) lastErr = 'aborted';   // another tab or the browser took the service: a failure, so the backoff applies
+      } else if (ev.error !== 'no-speech') {
+        lastErr = ev.error;   // audio-capture and the rest
         if (!(handsFree && mode === 'hands-free')) onError?.(`Speech recognition error: ${ev.error}`);   // conversation mode retries and reports only when it gives up
       }
     };
     rec.onend = () => {
-      if (rec !== my) return;
+      if (!live()) return;
       rec = null; starting = false; stopping = false; clearTimeout(abortTimer); clearTimeout(startTimer);
       const m = mode; mode = null;
       if (text && !stopTimer) { lastChange ||= now(); flush('mic-stop'); }   // the recognizer ended on interim text without a final: send what was heard
       else if (!text && !held) onInterim?.('');
       emit();
       const again = wantRestart; wantRestart = false;
-      if (!(handsFree && m === 'hands-free')) return;
+      if (!(handsFree && m === 'hands-free')) { maybeRelease(); return; }
       const failed = !!lastErr || (!gotResult && !again && Date.now() - startedAt < T.quickMs);
       if (failed) failures++; else failures = 0;
       if (failures >= T.maxFailures) {   // never give up silently: a visible paused state with the reason; a tap resumes
@@ -241,20 +436,20 @@ export function createSpeech({ getLang, getVoiceName, getRate, onFinal, onSend, 
         onError?.(`Microphone paused — tap to resume (${paused.reason}).`);
         return;
       }
-      if (speaking === 0) restartSoon(failures ? Math.min(T.restartMs * 2 ** failures, T.backoffMaxMs) : again ? 0 : T.restartMs);
+      if (canListen()) restartSoon(failures ? Math.min(T.restartMs * 2 ** failures, T.backoffMaxMs) : again ? 0 : T.restartMs);
     };
-    try { rec.start(); } catch (e) { rec = null; starting = false; onError?.(`Could not start the microphone: ${e.message}`); }
+    try { rec.start(); } catch (e) { detach(rec); rec = null; recObj = null; starting = false; onError?.(`Could not start the microphone: ${e.message}`); }
     emit();
     return true;
   }
   function restartSoon(ms = 0) {
     clearTimeout(restartTimer);
-    const go = () => { if (handsFree && !rec && speaking === 0 && !paused) start('hands-free'); };
+    const go = () => { if (canListen() && !rec) start('hands-free'); };
     if (ms <= 0) go(); else restartTimer = setTimeout(go, ms);
   }
   function stopListening() {
     clearTimeout(restartTimer);
-    if (!rec) return;
+    if (!rec) { maybeRelease(); return; }
     if (text && !stopTimer) {   // mic stop: send what was heard unless a final arrives within micStopMs
       clearTimeout(timer); timer = 0; const my = ++token;
       stopTimer = setTimeout(() => { stopTimer = 0; if (my === token && text) flush('mic-stop'); }, T.micStopMs);
@@ -263,10 +458,10 @@ export function createSpeech({ getLang, getVoiceName, getRate, onFinal, onSend, 
     const my = rec;
     try { rec.stop(); } catch { /* ignore */ }
     stopping = true; clearTimeout(abortTimer);
-    abortTimer = setTimeout(() => { if (rec === my && stopping) { try { my.abort(); } catch { /* ignore */ } } }, T.abortMs);   // Chrome's onend after stop() can take seconds: abort() ends it now
+    abortTimer = setTimeout(() => { if (rec === my && stopping) abortRec(my); }, T.abortMs);   // Chrome's onend after stop() can take seconds: abort() ends it now
     emit();
   }
-  const snapshot = () => ({ on: handsFree, rec: !!rec, starting: starting && !!rec, stopping, speaking: speaking > 0, paused: !!paused });
+  const snapshot = () => ({ on: handsFree, rec: !!rec, starting: starting && !!rec, stopping, speaking: speaking > 0, paused: !!paused, working: working && handsFree, blocked });
   /**
    * One click on the mic (MIC2): always acts at once. Returns { action, before, after } for the click log.
    * Paused: resume. Mic on while the answer is read aloud: barge-in (stop the speech, listen now). Mic on: off. One-shot listening: stop. Off: on
@@ -278,6 +473,7 @@ export function createSpeech({ getLang, getVoiceName, getRate, onFinal, onSend, 
     lastFlip = t;
     let action;
     if (paused) { api.resume(); action = 'resume'; }
+    else if (handsFree && working) { api.setHandsFree(false); action = 'off'; }
     else if (handsFree && speaking > 0) { stopSpeaking(); start('hands-free', { barge: true }); action = 'barge-in'; }
     else if (handsFree) { api.setHandsFree(false); action = 'off'; }
     else if (rec && !stopping) { stopListening(); action = 'stop-once'; }
@@ -289,7 +485,7 @@ export function createSpeech({ getLang, getVoiceName, getRate, onFinal, onSend, 
   function refreshLang() {
     if (!rec || rec.lang === getLang() || mode !== 'hands-free' || text) return false;
     wantRestart = true;
-    try { rec.abort(); } catch { /* ignore */ }
+    abortRec();
     return true;
   }
 
@@ -299,9 +495,9 @@ export function createSpeech({ getLang, getVoiceName, getRate, onFinal, onSend, 
     return (wanted && voices.find((v) => v.name === wanted)) || voices.find((v) => v.lang === lang) || voices.find((v) => v.lang?.startsWith(lang.slice(0, 2)));
   }
   function speak(text, { lang } = {}) {
-    if (!speechSupport.synthesis || !String(text).trim()) return Promise.resolve(false);
+    if (!speechSupport.synthesis || !String(text).trim() || hidden) return Promise.resolve(false);
     // recognition must not hear the speaker
-    if (rec) { wantRestart = handsFree; try { rec.abort(); } catch { /* ignore */ } }
+    if (rec) { wantRestart = handsFree; abortRec(); }
     const tag = lang ?? getLang();
     return new Promise((resolve) => {
       const parts = sentences(text);
@@ -316,7 +512,7 @@ export function createSpeech({ getLang, getVoiceName, getRate, onFinal, onSend, 
           speaking = Math.max(0, speaking - 1);
           if (--left === 0) resolve(true);
           emit();
-          if (speaking === 0 && handsFree) restartSoon(0);
+          if (speaking === 0 && canListen()) restartSoon(0);
         };
         u.onend = done; u.onerror = done;
         synth.speak(u);
@@ -333,18 +529,54 @@ export function createSpeech({ getLang, getVoiceName, getRate, onFinal, onSend, 
     pushToTalkStart: () => start('ptt'),
     pushToTalkStop: () => { if (mode === 'ptt') stopListening(); },
     setHandsFree(on, { barge = false } = {}) {
-      handsFree = !!on; paused = null; failures = 0;
-      if (on) start('hands-free', { barge }); else { if (mode === 'hands-free') stopListening(); clearTimeout(restartTimer); }
+      handsFree = !!on; paused = null; failures = 0; blocked = false;
+      if (on) { hiddenResume = hidden; start('hands-free', { barge }); }
+      else { hiddenResume = false; working = false; if (mode === 'hands-free') stopListening(); clearTimeout(restartTimer); maybeRelease(); }
       emit();
     },
-    resume() { if (!handsFree) return false; paused = null; failures = 0; clearTimeout(restartTimer); if (!rec) start('hands-free'); emit(); return true; },
+    resume() { if (!handsFree) return false; paused = null; failures = 0; starts = []; drops = []; clearTimeout(restartTimer); if (!rec) start('hands-free'); emit(); return true; },
+    /** MOBILE-VOICE: the host is processing a request (turn, effects, spoken answer): the microphone pauses; false resumes it (only if it was on). */
+    setWorking(b) {
+      b = !!b;
+      if (b === working) return;
+      working = b;
+      if (b) { if (handsFree && rec) { clearTimeout(restartTimer); wantRestart = false; if (!text) abortRec(); } }
+      else if (canListen() && !rec) restartSoon(0);
+      emit();
+    },
+    isWorking: () => working,
+    /** The person clicked "use it here": the other tab loses the microphone and this one listens. */
+    async takeOver() {
+      if (!lock) return false;
+      const ok = await lock.takeOver();
+      blocked = false;
+      if (ok) api.setHandsFree(true, { barge: true });
+      return ok;
+    },
+    /** The old owner of the microphone was told to stop (another tab took it over). */
+    lost() { handsFree = false; blocked = true; stopForPause(); stopSpeaking(); emit(); maybeRelease(); onLost?.(); },
+    /** FREEZE: a hidden tab neither listens nor speaks; visible again, it resumes only if the microphone was on. */
+    pageHidden() {
+      if (hidden) return;
+      hidden = true; hiddenResume = handsFree && !paused;
+      stopForPause(); stopSpeaking(); lock?.release(); emit();
+    },
+    pageVisible() {
+      if (!hidden) return;
+      hidden = false;
+      const again = hiddenResume && handsFree && !paused; hiddenResume = false;
+      emit();
+      if (again && canListen()) start('hands-free');
+    },
+    /** pagehide: release everything; nothing resumes by itself. */
+    pageHide() { hiddenResume = false; handsFree = false; working = false; stopForPause(); stopSpeaking(); lock?.release(); emit(); },
     isPaused: () => !!paused,
     isListening: () => !!rec,
     speak, stopSpeaking,
     isSpeaking: () => speaking > 0,
     voices: () => synth?.getVoices?.() ?? [],
     onVoicesChanged(fn) { synth?.addEventListener?.('voiceschanged', fn); },
-    destroy() { clearTimeout(restartTimer); clearTimeout(abortTimer); clearTimeout(startTimer); clearTimers(); handsFree = false; if (rec) try { rec.abort(); } catch { /* ignore */ } stopSpeaking(); },
+    destroy() { clearTimeout(restartTimer); clearTimeout(abortTimer); clearTimeout(startTimer); clearTimers(); handsFree = false; sess++; if (rec) abortRec(); detach(recObj); stopSpeaking(); lock?.close?.(); },
   };
   return api;
 }

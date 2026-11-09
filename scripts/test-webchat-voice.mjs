@@ -21,7 +21,7 @@ function fakeSpeech() {
   window.__srCfg = { startMs: 20, stopMs: 20 };
   class FakeSR {
     constructor() { this.started = false; this.lang = ''; all.push(this); }
-    start() { this.started = true; this.startedAt = performance.now(); const ms = window.__srCfg.startMs; setTimeout(() => { if (this.started && !this.dead) this.onstart?.(); }, ms); }
+    start() { this.started = true; this.dead = false; this.results = []; this.startedAt = performance.now(); const ms = window.__srCfg.startMs; setTimeout(() => { if (this.started && !this.dead) this.onstart?.(); }, ms); }
     stop() { setTimeout(() => this.end(), window.__srCfg.stopMs); }
     abort() { this.dead = true; setTimeout(() => this.end(), 0); }
     end() { if (this.started) { this.started = false; this.onend?.(); } }
@@ -34,6 +34,8 @@ function fakeSpeech() {
     live: () => all.filter((r) => r.started).at(-1) ?? null,
     say(texts, { final = false } = {}) { const r = this.live(); if (!r) return false; r.onresult({ resultIndex: 0, results: texts.map((t) => Object.assign([{ transcript: t }], { isFinal: final })) }); return true; },
     t0: 0,
+    /** Android: every final stays in the result list (cumulative); `resultIndex` points at the new one. A restart clears the list. */
+    final(t) { const r = this.live(); if (!r) return false; r.results.push(Object.assign([{ transcript: t }], { isFinal: true })); r.onresult({ resultIndex: r.results.length - 1, results: r.results }); return true; },
   };
 }
 
@@ -336,6 +338,123 @@ export const SCENARIOS = {
       await waitUser(c, n2, Date.now(), 4000); await idle(c);
       await c.pg.waitForFunction(() => window.__sr.live()?.lang === 'en-US', { timeout: 4000, polling: 50 }).catch(() => {});
       check('and back to en-US after English input', (await c.pg.evaluate(() => window.__sr.live()?.lang)) === 'en-US');
+    } finally { await c.close(); }
+  },
+  /** MOBILE-VOICE: Android cumulative finals ("draw", "draw a", "draw a heart" ...) are one message; fragments do nothing; the mic is paused during the turn; no queue. */
+  async mobile(o) {
+    const c = await open(o);
+    try {
+      await c.pg.evaluate(() => { window.__mon = { viol: 0, busyAt: 0 }; setInterval(() => { const b = window.psys2.isBusy(); const m = window.__mon; if (!b) { m.busyAt = 0; return; } m.busyAt ||= performance.now(); if (performance.now() - m.busyAt > 80 && window.__sr.live()) m.viol++; }, 5); });
+      await c.pg.click('button.p2-mic'); await waitRec(c);
+      const tab = () => c.pg.evaluate(() => document.querySelector('.p2-tab[aria-selected="true"]')?.id ?? null);
+      const tab0 = await tab();
+      const n = await users(c);
+      for (const f of ['o', 'asta']) { await c.pg.evaluate((t) => window.__sr.final(t), f); await sleep(500); }
+      await sleep(3200);
+      check('fragments ("o", "asta") send nothing and switch no tab', (await users(c)) === n && (await tab()) === tab0, `${(await users(c)) - n} messages`);
+      for (const f of ['draw', 'a', 'draw a', 'heart', 'draw a heart']) { await c.pg.evaluate((t) => window.__sr.final(t), f); await sleep(250); }
+      const ms = await waitUser(c, n, Date.now(), 12000);
+      check('growing finals become one message', ms !== null);
+      await sleep(300);
+      check('exactly one message for the utterance', (await users(c)) === n + 1, `${(await users(c)) - n}`);
+      check('no voice queue', (await c.pg.evaluate(() => window.psys2.queue.length)) === 0);
+      const msgs = await c.pg.$$eval('.p2-msg.is-user .p2-bubble', (e) => e.map((x) => x.textContent));
+      check('the sent text is the whole utterance', /draw a heart/i.test(msgs.at(-1) ?? ''), msgs.at(-1));
+      await idle(c);
+      await c.pg.waitForFunction(() => window.__sr.live(), { timeout: 8000, polling: 30 }).catch(() => {});
+      check('the microphone listens again after the turn', await c.pg.evaluate(() => !!window.__sr.live()));
+      check('the microphone was never live during the turn', (await c.pg.evaluate(() => window.__mon.viol)) === 0, String(await c.pg.evaluate(() => window.__mon.viol)));
+      const rec = await lastPhrase(c);
+      check('the heart request was understood', rec?.status !== 'unparsed' && !rec?.unparsed, JSON.stringify({ status: rec?.status, tab: rec?.tab }));
+      check('mobile: no page errors', c.errors.length === 0, c.errors[0] ?? '');
+    } finally { await c.close(); }
+  },
+  /** FREEZE: the listening state is never restored on load; a hidden tab stops listening and resumes only if it was on. */
+  async persist(o) {
+    const c = await open(o, { handsFree: true, keepListening: true });
+    try {
+      const vis = (v) => c.pg.evaluate((v) => { Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => v }); document.dispatchEvent(new Event('visibilitychange')); }, v);
+      const live = () => c.pg.evaluate(() => !!window.__sr.live());
+      await sleep(1500);
+      check('a saved handsFree no longer starts the microphone', !(await live()) && (await c.pg.evaluate(() => window.__sr.all.length)) === 0);
+      await c.pg.click('button.p2-mic'); await waitRec(c);
+      check('a click turns it on', await live());
+      check('the listening state is not saved', JSON.parse(await c.pg.evaluate(() => localStorage.getItem('psys2.webchat.settings'))).handsFree === false);
+      await vis('hidden'); await sleep(800);
+      check('a hidden tab does not listen', !(await live()));
+      await sleep(1500);
+      check('and does not restart while hidden', !(await live()));
+      await vis('visible');
+      await c.pg.waitForFunction(() => window.__sr.live(), { timeout: 5000, polling: 30 }).catch(() => {});
+      check('visible again it resumes (it was on)', await live());
+      check('one recognizer object for the page', (await c.pg.evaluate(() => window.__sr.all.length)) === 1, String(await c.pg.evaluate(() => window.__sr.all.length)));
+      await c.pg.click('button.p2-mic'); await sleep(600);
+      await vis('hidden'); await vis('visible'); await sleep(600);
+      check('a microphone that was off stays off after hide / show', !(await live()));
+    } finally { await c.close(); }
+  },
+  /** FREEZE: two tabs of the demo: the second does not listen by itself, shows the take-over prompt, and takes over only on a click. */
+  async twotabs(o) {
+    const c = await open(o);
+    let p2 = null;
+    try {
+      const alwaysVisible = () => { Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => 'visible' }); };   // a background tab would pause itself (FREEZE): both pages stay "visible" here
+      await c.pg.evaluate(alwaysVisible);
+      await c.pg.click('button.p2-mic'); await waitRec(c);
+      p2 = await c.pg.browser().newPage();
+      await p2.evaluateOnNewDocument(alwaysVisible);
+      await p2.setViewport({ width: 390, height: 844 });
+      await p2.evaluateOnNewDocument(fakeSpeech);
+      await p2.evaluateOnNewDocument((s) => { try { localStorage.setItem('psys2.webchat.settings', JSON.stringify({ settingsVersion: 2, ...s })); } catch { /* ignore */ } }, { formalizer: 'rules', normalizer: false, showTrace: false, language: 'en' });
+      await p2.goto(`http://localhost:${c.srvPort}/webchat/index.html`, { waitUntil: 'domcontentloaded' });
+      await p2.waitForFunction(() => document.querySelector('.p2-msg.is-hint'), { timeout: 120000, polling: 50 });
+      await p2.click('button.p2-mic');
+      await p2.waitForFunction(() => /in use in another tab/.test(document.body.innerText), { timeout: 5000, polling: 50 }).catch(() => {});
+      check('the second tab says the microphone is in use in another tab', await p2.evaluate(() => /in use in another tab/.test(document.body.innerText)), await p2.evaluate(() => document.querySelector('.p2-log, .p2-chat')?.innerText?.slice(-200) ?? document.body.innerText.slice(-200)));
+      check('and does not listen', !(await p2.evaluate(() => !!window.__sr.live())), await p2.evaluate(() => document.querySelector('button.p2-mic').dataset.mic + ' locks=' + typeof navigator.locks));
+      check('the first tab still listens', await c.pg.evaluate(() => !!window.__sr.live()));
+      const useHere = await p2.evaluateHandle(() => [...document.querySelectorAll('button')].find((b) => /Use it here/.test(b.textContent)));
+      await useHere.asElement().click();
+      await p2.waitForFunction(() => window.__sr.live(), { timeout: 5000, polling: 50 }).catch(() => {});
+      check('a click on "Use it here" takes over', await p2.evaluate(() => !!window.__sr.live()));
+      await sleep(400);
+      check('the first tab stopped listening', !(await c.pg.evaluate(() => !!window.__sr.live())));
+    } finally { await p2?.close().catch(() => {}); await c.close(); }
+  },
+  /** NOISE: room talk in the always-open mic is ignored (greyed, tap to send anyway); real commands run. */
+  async noise(o) {
+    const c = await open(o, { language: 'ro' });
+    try {
+      await c.pg.click('button.p2-mic'); await waitRec(c);
+      const talk = ['să mi spună domnul bujii lui tata', 'Dar cu cine vorbești ce vrei', 'tata ce pot să zic', 'unchiul', 'voi', 'faci tu', 'enervant da', 'scuze'];
+      const bots0 = await c.pg.$$eval('.p2-msg.is-bot:not(.is-note)', (e) => e.length);
+      for (const t of talk) {
+        await c.pg.waitForFunction(() => window.__sr.live(), { timeout: 8000, polling: 30 });
+        await sleep(2200);   // the rate guard: one voice message in 2 s
+        await say(c, [t], { final: true });
+        await sleep(1500);
+      }
+      const ignored = await c.pg.$$eval('.p2-msg.is-ignored', (e) => e.length);
+      const replies = await c.pg.$$eval('.p2-msg.is-bot:not(.is-note)', (e) => e.length);
+      const dropped = await c.pg.evaluate(() => (window.__psys2VoiceDrops ?? []).length);
+      check('room talk is ignored (greyed or dropped as fragments), never answered', ignored + dropped >= talk.length - 1 && ignored >= 3 && replies === bots0, `${ignored} greyed + ${dropped} fragments of ${talk.length}, ${replies - bots0} replies`);
+      const log = await c.pg.evaluate(() => JSON.parse(localStorage.getItem('psys2.webchat.phrases') ?? '[]').filter((r) => r.status === 'ignored').length);
+      check('the phrase log records `ignored`', log >= 3 && log === ignored, String(log));
+      check('no busy veil from the talk', await c.pg.evaluate(() => !window.psys2.veiled));
+      const n = await users(c);
+      await c.pg.evaluate(() => document.querySelector('.p2-msg.is-ignored button')?.click());
+      check('"tap to send anyway" sends it', (await waitUser(c, n, Date.now(), 4000)) !== null || (await users(c)) > n);
+      await idle(c);
+      for (const t of ['desenează o casă', 'desenează trei nori']) {
+        await c.pg.waitForFunction(() => window.__sr.live(), { timeout: 8000, polling: 30 });
+        await sleep(2200);
+        const k = await users(c);
+        await say(c, [t], { final: true });
+        const got = await waitUser(c, k, Date.now(), 5000);
+        await idle(c);
+        const last = await c.pg.$$eval('.p2-msg.is-user', (e) => e.at(-1)?.classList.contains('is-ignored'));
+        check(`real command executed: ${t}`, got !== null && !last);
+      }
     } finally { await c.close(); }
   },
 };

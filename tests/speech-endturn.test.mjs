@@ -15,7 +15,7 @@ class FakeRec {
 globalThis.window = { SpeechRecognition: FakeRec };
 const { createSpeech, endsOpen, splitCancel } = await import('../docs/webchat/ui/speech.mjs');
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const TIMING = { plausibleMs: 60, waitMs: 200, handsFreeMs: 300, micStopMs: 40, dryRunMs: 50 };
+const TIMING = { plausibleMs: 60, waitMs: 200, handsFreeMs: 300, micStopMs: 40, dryRunMs: 50, rateMs: 0, dupMs: 0 };   // the rate and duplicate filters have their own tests (voice-mobile.test.mjs)
 
 function make({ busy = false, plausible = async (t) => /^(draw a red house|desenează o casă roșie)$/i.test(t), lang = 'en-US' } = {}) {
   recs.length = 0;
@@ -64,7 +64,7 @@ test('a never-final stream is still sent (hands-free uses the longer wait)', asy
   sp.setHandsFree(true); rec().say(['open the']); rec().say(['open the music']);
   await sleep(220); assert.equal(log.sent.length, 0, 'hands-free waits longer');
   await sleep(200); assert.deepEqual(log.sent.map((m) => m.how), ['pause-timeout']);
-  await sleep(30); assert.ok(recs.length >= 2 && recs.at(-1).started, 'hands-free listens again at once');
+  await sleep(30); assert.ok(recs.at(-1).started, 'hands-free listens again at once (the same recognizer object is reused)');
   sp.destroy();
 });
 
@@ -112,7 +112,7 @@ test('refreshLang restarts an idle hands-free recognizer with the new language',
   const { sp, rec, setLang } = make();
   sp.setHandsFree(true); const r0 = rec(); assert.equal(r0.lang, 'en-US');
   setLang('ro-RO'); assert.equal(sp.refreshLang(), true);
-  await sleep(30); assert.notEqual(rec(), r0); assert.equal(rec().lang, 'ro-RO'); assert.ok(rec().started);
+  await sleep(30); assert.equal(recs.length, 1, 'one recognizer per page'); assert.equal(rec().lang, 'ro-RO'); assert.ok(rec().started);
   sp.destroy();
 });
 

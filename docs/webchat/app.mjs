@@ -9,7 +9,8 @@ import { h } from './ui/util.mjs';
 import { createAvatar } from './ui/avatar.mjs';
 import { createEditor } from './ui/editor.mjs';
 import { createTicTacToe, createGuess, createHangman } from './ui/games.mjs';
-import { createSpeech, speechSupport, LANG_TAGS } from './ui/speech.mjs';
+import { createSpeech, createMicLock, measureSpeed, speechSupport, LANG_TAGS } from './ui/speech.mjs';
+import { classifyVoice } from './ui/voice-noise.mjs';
 import { createSwitchTranslator, browserTranslatorKind, browserTranslatorAvailability, browserDetectorKind, browserDetectorAvailability } from './ui/translation.mjs';
 import { renderTrace } from './ui/trace.mjs';
 import { findDispatcherModel, dispatcherLoader, versionLabel } from './ui/dispatcher-host.mjs';
@@ -83,7 +84,7 @@ export async function mountPsys2(element, options = {}) {
   }
   const settings = { ...loadSettings(options.persist !== false), ...(options.language ? { language: options.language } : {}) };
   applyTimeLimits(settings);
-  const save = () => { if (options.persist !== false) try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch { /* storage unavailable */ } };
+  const save = () => { if (options.persist !== false) try { localStorage.setItem(SETTINGS_KEY, JSON.stringify({ ...settings, handsFree: false })); } catch { /* storage unavailable */ } };
   const plugins = await loadTabPlugins(base);
   const builtin = TABS.map((t, i) => ({ order: (i + 1) * 10, ...t }));
   const allTabs = [...builtin.filter((t) => !plugins.some((p) => p.id === t.id)), ...plugins].sort((a, b) => (a.order ?? 100) - (b.order ?? 100));
@@ -97,6 +98,7 @@ export async function mountPsys2(element, options = {}) {
   // A speech that never ends must not hold the tabs forever: the veil is lifted after a cap that grows with the text (the speech itself goes on).
   let effectsPending = 0, speakCapped = false, speakCapTimer = 0, lastAnswerLen = 0, veiled = false;
   const busyListeners = new Set();
+  let lastNU = null;   // the last not-understood voice reply { at, n, el, badge }
   let busy = 0, turn = null, flash = null, flashTimer = null, interim = '', mic = { listening: false, speaking: false, mode: null };
   let destroyed = false, shellSeen = false;
   const phrases = createStore(options.persist !== false ? globalThis.localStorage : null);
@@ -203,7 +205,8 @@ export async function mountPsys2(element, options = {}) {
   const isBusy = () => !!turn || effectsPending > 0 || (!!mic.speaking && !speakCapped);
   /** Veils every tab while the host is busy (grey layer, aria-busy, inert, spinner in the header); notifies subscribers on a change. */
   function updateBusy() {
-    const b = isBusy();
+    speech?.setWorking(isBusy());   // MOBILE-VOICE: the microphone pauses from the send until the turn, its effects and the spoken answer have finished
+    const b = (!!turn && turn.mode !== 'voice') || effectsPending > 0 || (!!mic.speaking && !speakCapped);   // a voice turn does not veil the tabs while it only thinks (noise must show no busy indicators)
     if (b === veiled) return;
     veiled = b;
     for (const [id, { btn, panel }] of Object.entries(tabBtns)) {
@@ -236,6 +239,7 @@ export async function mountPsys2(element, options = {}) {
     if (mic.speaking) parts.push('Speaking…');
     else if (mic.listening) parts.push(interim ? `Listening: “${interim}”` : mic.mode === 'ptt' ? 'Listening (hold space)…' : 'Listening…');
     else if (mic.paused) parts.push('Microphone paused — tap to resume');
+    else if (settings.handsFree && mic.working) parts.push('Working… (microphone paused)');
     else if (settings.handsFree && speech) parts.push('Microphone on: waiting…');
     const modelTail = !parts.length && dispatcherStatus.state === 'ready' ? ` · model ${dispatcherLabel}${modelSource === 'cache' ? ' (cached)' : ''}` : '';
     statusEl.textContent = (parts.join(' · ') || 'Ready') + modelTail;
@@ -250,6 +254,8 @@ export async function mountPsys2(element, options = {}) {
     const dict = dictDoc !== null;
     const paused = !!mic.paused, q = queue.length ? `; ${queue.length} message${queue.length > 1 ? 's' : ''} waiting` : '';
     const state = paused ? `Microphone paused — tap to resume (${mic.paused.reason})`
+      : settings.handsFree && mic.working ? 'Microphone on, working… it listens again when I have answered. Click to turn it off'
+      : settings.handsFree && mic.hidden ? 'Microphone paused while this tab is hidden'
       : settings.handsFree ? `Microphone on, ${mic.starting ? 'starting…' : mic.listening ? 'listening' : mic.speaking ? 'waiting while I speak (click to talk now)' : 'restarting…'}. Say "stop microphone" or click to turn it off${q}`
       : mic.starting ? 'Microphone starting…; click to cancel'
       : mic.listening ? 'Microphone: listening to one message; click to stop'
@@ -258,7 +264,7 @@ export async function mountPsys2(element, options = {}) {
     micBtn.setAttribute('aria-pressed', String(!!settings.handsFree || mic.listening));
     micBtn.classList.toggle('is-on', mic.listening);
     micBtn.classList.toggle('is-paused', paused);
-    micBtn.dataset.mic = paused ? 'paused' : mic.starting ? 'starting' : settings.handsFree ? (mic.listening ? 'listening' : 'waiting') : mic.listening ? 'once' : 'off';
+    micBtn.dataset.mic = paused ? 'paused' : mic.starting ? 'starting' : settings.handsFree && mic.working ? 'working' : settings.handsFree ? (mic.listening ? 'listening' : 'waiting') : mic.listening ? 'once' : 'off';
     micBtn.classList.toggle('is-starting', !!mic.starting && !paused);
     micBtn.classList.toggle('is-handsfree', !!settings.handsFree);
     micBtn.classList.toggle('is-dictating', dict);
@@ -431,7 +437,7 @@ export async function mountPsys2(element, options = {}) {
   async function process(text, mode = 'typed', user = null, recId = null, tPress = performance.now()) {
     user ??= addMessage('user', text);
     const ctl = new AbortController();
-    const tn = turn = { ctl, t0: tPress, text, reason: null, undo: null };
+    const tn = turn = { ctl, t0: tPress, text, reason: null, undo: null, mode };
     busy++; setStatus();
     const thinkingLabel = h('span', { class: 'p2-thinking-label' }, 'thinking… 0.0 s');
     const typing = addMessage('bot', h('span', { class: 'p2-thinking' }, h('span', { class: 'p2-dots', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')), thinkingLabel), { className: 'is-typing' });
@@ -507,7 +513,13 @@ export async function mountPsys2(element, options = {}) {
     const usage = translator.usage.map((u) => ({ ...u }));
     const detection = translator.detectUsage.map((u) => ({ ...u }));
     const answer = (reply.text ?? '').trim() || '(no answer)';
+    const notUnderstood = mode === 'voice' && (reply.statuses ?? []).length > 0 && !(reply.statuses ?? []).includes('supported') && (reply.segments ?? []).some((sg) => sg.unparsed);
     const botMsg = addMessage('bot', answer);
+    if (notUnderstood) {   // MOBILE-VOICE: repeated not-understood voice replies within 20 s are collapsed into one (the first gets a count)
+      const nowT = performance.now();
+      if (lastNU && nowT - lastNU.at < 20000 && lastNU.el.isConnected) { lastNU.n++; lastNU.at = nowT; lastNU.badge.textContent = ` ×${lastNU.n}`; botMsg.msg.hidden = true; botMsg.msg.classList.add('is-collapsed'); }
+      else lastNU = { at: nowT, n: 1, el: botMsg.msg, badge: botMsg.meta.appendChild(h('span', { class: 'p2-took' }, '')) };
+    }
     currentBot = botMsg;
     const prevAnswer = lastAnswer;   // FB: the answer a spoken "that is wrong" is about
     noteSessionLang(reply.lang);
@@ -515,7 +527,7 @@ export async function mountPsys2(element, options = {}) {
     if (reply.lang && reply.lang !== 'en') user.meta.prepend(h('span', { class: 'p2-lang' }, `${reply.lang.toUpperCase()} → EN`));
 
     const avatarChanged = !!reply.state?.['ui.avatar'];
-    applyState(reply.state);
+    if (!notUnderstood) applyState(reply.state);   // noise never switches the tab
     const expressions = reply.statuses ?? [];
     if (!avatarChanged && robotUI()) {
       if (expressions.includes('missing')) robotUI().express('surprised');
@@ -670,7 +682,7 @@ export async function mountPsys2(element, options = {}) {
   // One turn runs at a time, but typing and speaking never wait: a message that arrives during a turn becomes a chip above the input and is sent when the turn ends.
   let queueSeq = 0, dropAsk = null, dropAskTimer = 0;
   const YESNO = /^(yes|yeah|yep|yup|no|nope|ok|okay|sure|da|nu|bine)[.!\s]*$/i;
-  const lastBotAsks = () => { const b = [...log.querySelectorAll('.p2-msg.is-bot:not(.is-typing):not(.is-note) .p2-bubble')].at(-1); return /\?\s*$/.test(b?.textContent ?? ''); };
+  const lastBotAsks = () => { const b = [...log.querySelectorAll('.p2-msg.is-bot:not(.is-typing):not(.is-note):not(.is-hint):not(.is-collapsed) .p2-bubble')].at(-1); return /\?\s*$/.test(b?.textContent ?? ''); };
   function renderQueue() {
     const chips = queue.map((it) => h('span', { class: 'p2-qchip', role: 'listitem' },
       h('span', { class: 'p2-qtext' }, it.text),
@@ -717,11 +729,35 @@ export async function mountPsys2(element, options = {}) {
   const send = (text, mode = 'typed', voice = {}) => {
     const t = String(text ?? '').trim();
     if (!t || !session) return Promise.resolve(null);
+    if (mode === 'voice' && (turn || effectsPending > 0)) {   // MOBILE-VOICE: no voice queue; the microphone is paused while a request runs, so this is a late final: the text waits in the box
+      if (!input.value.trim()) { input.value = t; syncSendButton(); }
+      flashHint('Still working — the heard text is in the box; press Enter when I am done.');
+      return Promise.resolve(null);
+    }
     if (turn || queue.length || dropAsk) { enqueue(t, mode, voice); if (!turn) drainQueue(); return Promise.resolve(null); }
     return dispatch(t, mode, voice);
   };
   /** A spoken message (VOICE): logged with how it ended (final | pause-plausible | pause-timeout | mic-stop) and the wait in ms. */
   const sendVoice = (text, how, waitMs) => send(text, 'voice', { endType: how, waitMs: Math.round(waitMs ?? 0) });
+  // NOISE: a spoken message with no complete reading, no world word and no direct address is room talk: ignored, shown greyed, one tap sends it anyway
+  const slowDevice = (() => { try { const best = Math.min(measureSpeed().ms, measureSpeed().ms, measureSpeed().ms); return best > (options.slowMs ?? 45); } catch { return false; } })();   // about 10 ms on a desktop; a 6x throttle or a mid-range phone is well above 45
+  const throttled = () => slowDevice;
+  function showIgnored(text, how, waitMs) {
+    const sendAnyway = h('button', { class: 'p2-btn-text', type: 'button', 'aria-label': `Send anyway: ${text}`, onclick: () => { wrap.msg.classList.remove('is-ignored'); btnWrap.remove(); sendVoice(text, how, waitMs); } }, 'tap to send anyway');
+    const btnWrap = h('small', { class: 'p2-skipped-note' }, ' ignored (not a command) — ', sendAnyway);
+    const wrap = addMessage('user', h('span', {}, text, btnWrap), { className: 'is-skipped is-ignored' });
+    if (settings.logPhrases) { try { phrases.add({ ...buildRecord({ text, mode: 'voice', language: settings.language, tab: view, reply: null, endType: how ?? null, waitMs: waitMs ?? null }), status: 'ignored', ignored: true }); if (!settingsEl.hidden) renderPhraseLog(); } catch (e) { console.warn('phrase log failed', e); } }
+  }
+  async function routeVoice(text, how, waitMs) {
+    let verdict = { ignore: false };
+    try {
+      verdict = await classifyVoice(text, { dryRead: (t, o) => session?.dryRead?.(t, { ...o, signal: undefined }), language: sessionLang ?? settings.language, wake: settings.wakeWord === true, slow: throttled() });
+    } catch { verdict = { ignore: false }; }
+    if (destroyed) return;
+    if (verdict.ignore) { showIgnored(text, how, waitMs); speech?.setWorking(isBusy()); return; }
+    sendVoice(text, how, waitMs);
+    speech?.setWorking(isBusy());
+  }
   /** Stop ends everything at once: the turn (the AbortSignal reaches the effects), the speech, the veil. */
   const stopTurn = () => {
     if (turn && !turn.ctl.signal.aborted) { turn.reason = 'stopped'; turn.ctl.abort(new DOMException('stopped by the user', 'AbortError')); }
@@ -770,10 +806,22 @@ export async function mountPsys2(element, options = {}) {
     if (fromUser) session?.setWorldState?.(SHELL, { handsFree: on });
   }
   function disable(btn, why) { btn.disabled = true; label(btn, `${btn.getAttribute('aria-label')} (unavailable: ${why})`); }
+  const mobileUA = (() => { try { return navigator.userAgentData?.mobile === true || /Android|iPhone|iPad|Mobi/i.test(navigator.userAgent ?? ''); } catch { return false; } })();
+  const GAME_VIEWS = new Set(['hangman', 'chess', 'tictactoe', 'games', 'guess', 'arith', 'tasks']);
+  const micLock = options.micLock === false || options.persist === false && options.micLock !== true ? null : createMicLock({ onLost: () => speech?.lost() });   // FREEZE: only one tab listens; without storage (tests) no lock unless asked
+  function blockedNote() {
+    const m = note(h('span', {}, 'The microphone is in use in another tab — use it here? ', h('button', { class: 'p2-btn-text', type: 'button', onclick: () => { m.msg.remove(); speech.takeOver(); } }, 'Use it here')));
+  }
   speech = createSpeech({
     getLang: speechLangTag, getVoiceName: () => settings.voice, getRate: () => settings.rate,
-    plausible: async (t) => !!(await session?.dryRead?.(t, { language: sessionLang ?? settings.language }))?.complete,   // dry run: no effects, bounded
-    onSend: ({ text, how, waitMs }) => { input.value = ''; shown = ''; sendVoice(text, how, waitMs); },
+    plausible: async (t, { signal } = {}) => { if (signal?.aborted) return false; return !!(await session?.dryRead?.(t, { language: sessionLang ?? settings.language, signal }))?.complete; },   // dry run: no effects, bounded, cancellable, one in flight
+    pauseWhileWorking: true, slow: () => throttled(), cumulative: mobileUA,
+    lock: micLock,
+    allowShort: (t) => lastBotAsks() || GAME_VIEWS.has(view) || /^\d+$/.test(String(t).trim()),   // a one-word answer to an open question or a game move is not a fragment
+    onIgnored: ({ reason }) => { (globalThis.__psys2VoiceDrops ??= []).push({ reason, t: Date.now() }); },
+    onBlocked: () => { settings.handsFree = false; blockedNote(); syncMic(); },
+    onLost: () => { settings.handsFree = false; flashHint('The microphone moved to another tab.'); syncMic(); },
+    onSend: ({ text, how, waitMs }) => { input.value = ''; shown = ''; routeVoice(text, how, waitMs); },
     onCancel: (t) => { input.value = t; shown = ''; try { input.focus(); } catch { /* ignore */ } flashHint('Cancelled. The text is in the box for editing.'); },
     onPending: ({ active, ms, phase }) => { micBtn.classList.toggle('is-pending', !!active); micBtn.style.setProperty('--ring-ms', `${Math.round(ms)}ms`); micBtn.dataset.phase = phase ?? ''; if (active) { ringEl.classList.remove('run'); void ringEl.getBoundingClientRect(); ringEl.classList.add('run'); } else ringEl.classList.remove('run'); },
     onInterim: (t) => {   // the heard text appears in the field, unless the person has changed the field meanwhile
@@ -805,6 +853,10 @@ export async function mountPsys2(element, options = {}) {
     return r;
   }
   on(micBtn, 'click', () => { if (!micBtn.disabled) micClick('click'); });
+  // FREEZE: a hidden tab neither listens nor speaks; it resumes only if the microphone was on; pagehide releases everything
+  on(document, 'visibilitychange', () => { if (document.visibilityState === 'hidden') speech.pageHidden(); else speech.pageVisible(); });
+  on(window, 'pagehide', () => { speech.pageHide(); settings.handsFree = false; });
+  if (document.visibilityState === 'hidden') speech.pageHidden();
   on(micBtn, 'contextmenu', (e) => e.preventDefault());
   on(speakerBtn, 'click', () => setSpeaker(!settings.speaker));
   const setLanguage = (v) => { settings.language = v; langSel.value = v; sessionLang = null; speech?.refreshLang(); save(); renderSettings(); session?.setWorldState?.(SHELL, { language: settings.language }); };
@@ -1065,6 +1117,7 @@ export async function mountPsys2(element, options = {}) {
       field('Voice', select(voiceOpts, settings.voice, (v) => { settings.voice = v; save(); }), speechSupport.synthesis ? (voices.length ? null : 'Voices are still loading or none are installed.') : 'Speech synthesis is not supported by this browser.'),
       h('div', { class: 'p2-field' }, h('label', { for: 'p2-f-rate' }, 'Speech rate ', rateVal), rate),
       check('Keep listening until I say stop (say "stop microphone")', settings.keepListening !== false, (v) => { settings.keepListening = v; save(); syncMic(); }, speechSupport.recognition ? '' : 'speech recognition is not supported'),
+      check('Only respond when I say "PSys2" or "robotule" (ignore other talk)', settings.wakeWord === true, (v) => { settings.wakeWord = v; save(); }, speechSupport.recognition ? '' : 'speech recognition is not supported'),
       check('Read answers aloud', settings.speaker, (v) => setSpeaker(v), speechSupport.synthesis ? '' : 'speech synthesis is not supported'),
     ];
   }
@@ -1236,7 +1289,7 @@ export async function mountPsys2(element, options = {}) {
     get micLog() { return micLog; }, micClick,
     destroy() { destroyed = true; cleanups.forEach((f) => f()); modalHost.remove(); dbg?.destroy?.(); robotUI()?.destroy?.(); speech.destroy(); element.replaceChildren(); element.classList.remove('p2-box'); },
   };
-  if (settings.handsFree && speechSupport.recognition) setHandsFree(true, false);
+  // FREEZE: the listening state is never restored; the microphone starts only with a click
   if (settings.devMode === true) { syncDebugButton(); loadDebug(); }   // DBG: developer mode is remembered
   element.dataset.ready = 'true'; mark('hint');
   { const t = hashTab(location.hash); if (t !== null) { try { history.replaceState(null, '', location.pathname + location.search); } catch { /* no history */ } openSettings(t || undefined); } }   // deep link #settings/<tab>
