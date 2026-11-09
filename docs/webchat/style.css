@@ -64,6 +64,13 @@
 .p2-send { background: var(--accent); color: var(--accent-ink); }
 .p2-send:hover:not(:disabled) { background: var(--accent); color: var(--accent-ink); filter: brightness(1.08); }
 .p2-mic.is-on { animation: p2-pulse 1.4s infinite; }
+.p2-mic { position: relative; }
+.p2-ring { position: absolute; inset: -3px; width: calc(100% + 6px); height: calc(100% + 6px); pointer-events: none; opacity: 0; transform: rotate(-90deg); }
+.p2-ring circle { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 113; stroke-dashoffset: 113; }
+.p2-mic.is-pending .p2-ring { opacity: 1; }
+.p2-ring.run circle { animation: p2-ring var(--ring-ms, 700ms) linear forwards; }
+@keyframes p2-ring { from { stroke-dashoffset: 113; } to { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) { .p2-ring.run circle { animation-duration: 1ms; stroke-dashoffset: 56; } }
 @keyframes p2-pulse { 0% { box-shadow: 0 0 0 0 rgba(15, 118, 110, .5); } 100% { box-shadow: 0 0 0 12px rgba(15, 118, 110, 0); } }
 .p2-toast { position: absolute; bottom: 70px; left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 6px 14px; border-radius: 16px; font-size: 13px; z-index: 5; }
 

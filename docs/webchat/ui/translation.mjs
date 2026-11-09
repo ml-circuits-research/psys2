@@ -123,6 +123,7 @@ export function createSwitchTranslator({ rules, getStrategy, getDetectStrategy =
     return withDeadline((async () => (await cache.get(key)).translate(text))(), TRANSLATE_TIMEOUT_MS, { label: 'browser translation' });
   }
   const translator = {
+    rules,   // the synchronous rules translator: used by the voice dry run, which must not wait for a browser translator
     usage,
     detectUsage,
     resetUsage() { usage.length = 0; detectUsage.length = 0; },

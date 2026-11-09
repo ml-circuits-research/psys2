@@ -988,3 +988,15 @@ Base: 38b8d66 (origin/main).
 - Per-message latency after the change (perf-webchat, rules, 4x): hello 49 ms, 3 plus 4 68 ms, spider legs and 3 plus 4 162 ms, show me paris 251 ms (snapshot + guard cost is not visible).
 - Not run: encoder / normalizer modes in the browser (no model files in this worktree).
 - Scripts: `node scripts/fuzz-turns.mjs`, `PUPPETEER_CORE=<scratch>/node_modules/puppeteer-core node scripts/test-webchat-turns.mjs [--only ...]`.
+
+## VOICE (2026-11-09)
+- `docs/webchat/ui/speech.mjs`: own end-of-turn detector on the interim text (pause timer 700 ms when plausible, 1.8 s otherwise, 2.5 s hands-free; `isFinal` sends at once; mic stop sends interim after 300 ms; recognizer end on interim text sends too). Plausible = no trailing connector/preposition (EN+RO list) and `DialogSession.dryRead` (new, `src/dialog/index.mjs`) finds a complete reading: rules on a session fork, rules translator for Romanian (the browser translator took 2-4 s and made the dry run time out), own 400 ms turn guard, declines while a turn runs, no session state touched (checked by a test).
+- Exports stable (`createSpeech`, `speechSupport`, `LANG_TAGS`); additions: `onSend/onHold/onCancel/onPending/isBusy/plausible/timing` options, `cancelPending/turnEnded/refreshLang/hasPending/held` methods, `endsOpen`, `splitCancel`, `VOICE_TIMING`. `onFinal` still works.
+- One utterance, one send: after a timer send hands-free restarts the recognizer at once and a late final that repeats the sent text is dropped. No 350 ms dead zone after an answer is read aloud (resume at 0 ms).
+- Cancel: typing, tapping the field, or a trailing "stop"/"cancel"/"anulează" after a plausible sentence keeps the text in the field. While a turn runs the spoken text waits in the field and is sent when the turn ends (HANG/STOP rule kept).
+- Settings: new default `speechLang: 'auto'` (in `ui/settings.mjs`; the old value `'follow'` is treated the same, no version bump); auto follows the language of the last reply (`reply.lang`, RD5) else the language setting; `refreshLang()` restarts an idle hands-free recognizer. The select option text in app.mjs `renderSettings` changed; SET/UI1 moving it should keep key `speechLang` and the option values.
+- Countdown ring: SVG child `.p2-ring` appended to `micBtn` (style.css); if UI1 rebuilds the mic button it must keep that child (or `onPending` in app.mjs).
+- Phrase log: records of voice messages carry `endType` + `waitMs` (also in the JSONL export).
+- Fixed a latent bug: in app.mjs a comment had swallowed the `onInterim` option of `createSpeech`.
+- Tests: `tests/speech-endturn.test.mjs` (node, fake recognizer, 10 tests), `scripts/test-webchat-voice.mjs` + `tests/webchat-voice.test.mjs` (headless Chrome, fake SpeechRecognition, real timings, 23 checks: EN/RO plausible, "and" waits, never-final, mic stop, cancel, typing cancel, ring, no double send, busy hold, language switch). `openChat` in `scripts/test-webchat-turns.mjs` gained an `init` option.
+- Gates: `npm test` 911 pass / 0 fail, `test-world all` 0 FAIL, webchat rebuilt. Not tuned on real use yet: the phrase log's endType/waitMs is for that.

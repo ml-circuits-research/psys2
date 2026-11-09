@@ -20,7 +20,7 @@ export function segmentOutcomes(reply) {
 }
 
 /** Builds one log record. `mode` is typed | voice | chip; `tab` the active tab id; `reply` may be null (failed send). */
-export function buildRecord({ text, mode = 'typed', language = 'en', tab = null, reply = null, now = Date.now(), id = null }) {
+export function buildRecord({ text, mode = 'typed', language = 'en', tab = null, reply = null, now = Date.now(), id = null, endType = null, waitMs = null }) {
   let segments = [];
   try { segments = segmentOutcomes(reply); } catch { segments = []; }   // a reply with an unexpected shape must never lose the phrase
   let formalizer = null;
@@ -31,12 +31,13 @@ export function buildRecord({ text, mode = 'typed', language = 'en', tab = null,
     source: mode === 'chip' ? 'chip' : 'human', lang: reply?.lang ?? language, english, tab, segments,
     unparsed: segments.some((s) => s.unparsed), formalizer,
     feedback: reply?.feedback ?? reply?.trace?.feedback ?? null,   // 'negative' when the person said the last answer was wrong (spec 11 section 13)
+    ...(endType ? { endType, waitMs: waitMs ?? null } : {}),   // VOICE: how a spoken message ended: final | pause-plausible | pause-timeout | mic-stop, and how long the app waited (ms)
   };
 }
 
 /** Fills a record written at send time with the outcome of the reply (the phrase is logged before it is answered). */
 export function completeRecord(rec, reply, { language = 'en' } = {}) {
-  const full = buildRecord({ text: rec.text, mode: rec.mode, language, tab: rec.tab, reply, now: Date.parse(rec.time) || Date.now(), id: rec.id });
+  const full = buildRecord({ text: rec.text, mode: rec.mode, language, tab: rec.tab, reply, now: Date.parse(rec.time) || Date.now(), id: rec.id, endType: rec.endType ?? null, waitMs: rec.waitMs ?? null });
   return full;
 }
 
@@ -63,7 +64,7 @@ export const summaryWorlds = (r) => [...new Set(r.segments.map((s) => s.world).f
 
 /** Export record, in the spirit of the training records of spec 08. */
 export function exportRecord(r) {
-  return { text: r.text, lang: r.lang, english: r.english ?? r.text, mode: r.mode, tab: r.tab, worlds: summaryWorlds(r), status: worstStatus(r), time: r.time, ...(r.feedback ? { feedback: r.feedback } : {}), ...(r.outcome ? { outcome: r.outcome, stage: r.stage ?? null } : {}) };
+  return { text: r.text, lang: r.lang, english: r.english ?? r.text, mode: r.mode, tab: r.tab, worlds: summaryWorlds(r), status: worstStatus(r), time: r.time, ...(r.feedback ? { feedback: r.feedback } : {}), ...(r.endType ? { endType: r.endType, waitMs: r.waitMs ?? null } : {}), ...(r.outcome ? { outcome: r.outcome, stage: r.stage ?? null } : {}) };
 }
 /** Chips are not human phrasing: excluded unless includeChips. */
 export function toJSONL(list, { includeChips = false } = {}) {

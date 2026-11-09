@@ -151,6 +151,37 @@ export class DialogSession {
     return s;
   }
 
+  /**
+   * Dry-run reading for the voice end-of-turn detector (spec 06 "Spoken messages"): do the rules find a complete reading of the whole text?
+   * Side-effect free: works on a fork of the session, never executes anything on the real session, never touches the session language,
+   * the discourse memory or the message counter. Bounded by its own short turn guard (`deadlineMs`); while a real turn runs it declines.
+   * Returns { complete, segments, reason }.
+   */
+  async dryRead(text, { language, deadlineMs = 400 } = {}) {
+    const { set, formalizers, interp, translator } = this.engine;
+    const token = guard.install({ hardMs: deadlineMs, softMs: deadlineMs * 0.7 });
+    if (!token) return { complete: false, segments: 0, reason: 'busy' };   // a real turn owns the guard
+    try {
+      const f = this.forkForValidation();
+      let english = String(text ?? '').trim();
+      if (!english) return { complete: false, segments: 0, reason: 'empty' };
+      const lang = language ?? this.language;
+      const quick = translator?.rules ?? translator;   // the rules translator when there is one: the dry run never waits for a browser translator
+      if (quick && lang === 'ro') english = textOf(await quick.translate(english, { from: 'ro', to: 'en' })) ?? english;
+      english = splitAnswerList(interp.lang.stripFiller(english) || english);
+      const res = await formalizers.rules.formalize(english, { worlds: set, session: f.isession, source: 'dry', context: f.context(), router: this.engine.router });
+      const segs = res.segments ?? [];
+      if (!segs.length || segs.some((x) => x.unparsed || x.partial || x.ignored?.length)) return { complete: false, segments: segs.length, reason: 'incomplete' };
+      for (const seg of segs) {
+        f.isession.add(seg.wires);
+        for (const w of seg.wires) { const r = interp.resolve(f.isession, w); if (r && (r.status === 'unsupported' || r.status === 'error')) return { complete: false, segments: segs.length, reason: 'refused' }; }
+      }
+      return { complete: true, segments: segs.length, reason: 'ok' };
+    } catch (e) {
+      return { complete: false, segments: 0, reason: e instanceof TurnAborted ? 'deadline' : 'error' };
+    } finally { guard.release(token); }
+  }
+
   /** Session wires as SOP Lang (short keys where unambiguous). */
   memory() {
     const L = this.engine.set.legends;

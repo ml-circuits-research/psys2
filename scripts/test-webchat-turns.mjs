@@ -35,7 +35,7 @@ async function findChrome(given) {
   throw new Error('no Chrome/Chromium found');
 }
 
-export async function openChat({ throttle = 4, chrome, settings = { formalizer: 'rules', normalizer: false, showTrace: false } } = {}) {
+export async function openChat({ throttle = 4, chrome, init = null, settings = { formalizer: 'rules', normalizer: false, showTrace: false } } = {}) {
   const puppeteer = await loadPuppeteer();
   const srv = http.createServer(async (q, r) => {
     try { const p = path.join(DOCS, decodeURIComponent(q.url.split('?')[0])); const f = p.endsWith('/') ? `${p}index.html` : p; r.setHeader('content-type', TYPES[path.extname(f)] ?? 'application/octet-stream'); r.end(await readFile(f)); } catch { r.statusCode = 404; r.end('nf'); }
@@ -45,6 +45,7 @@ export async function openChat({ throttle = 4, chrome, settings = { formalizer: 
   await pg.setViewport({ width: 390, height: 844, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
   if (throttle > 1) await (await pg.createCDPSession()).send('Emulation.setCPUThrottlingRate', { rate: throttle });
   await pg.evaluateOnNewDocument((s) => { try { localStorage.setItem('psys2.webchat.settings', JSON.stringify({ settingsVersion: 2, ...s })); } catch { /* ignore */ } }, settings);
+  if (init) await pg.evaluateOnNewDocument(init);
   const errors = [];
   pg.on('pageerror', (e) => errors.push(String(e).slice(0, 200)));
   await pg.goto(`http://localhost:${srv.address().port}/webchat/index.html`, { waitUntil: 'domcontentloaded' });

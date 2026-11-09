@@ -98,6 +98,8 @@ export async function mountPsys2(element, options = {}) {
   const statusEl = h('p', { class: 'p2-status', 'aria-live': 'off' }, 'Loading…');
   const input = h('input', { class: 'p2-text', type: 'text', id: `p2-in-${Math.random().toString(36).slice(2, 7)}`, autocomplete: 'off', enterkeyhint: 'send', placeholder: 'Type a message…', 'aria-label': 'Message' });
   const micBtn = h('button', { class: 'p2-btn p2-mic', type: 'button', 'aria-pressed': 'false', 'aria-label': 'Speak a message' }, icon('mic'));
+  const ringEl = (() => { const NS = 'http://www.w3.org/2000/svg'; const svg = document.createElementNS(NS, 'svg'); svg.setAttribute('viewBox', '0 0 40 40'); svg.setAttribute('class', 'p2-ring'); svg.setAttribute('aria-hidden', 'true'); const c = document.createElementNS(NS, 'circle'); c.setAttribute('cx', '20'); c.setAttribute('cy', '20'); c.setAttribute('r', '18'); svg.append(c); return svg; })();
+  micBtn.append(ringEl);
   const sendBtn = h('button', { class: 'p2-btn p2-send', type: 'submit', 'aria-label': 'Send' }, icon('send'));
   const langSel = h('select', { class: 'p2-select', 'aria-label': 'Language' }, h('option', { value: 'en' }, 'English'), h('option', { value: 'ro' }, 'Română'));
   const speakerBtn = h('button', { class: 'p2-btn', type: 'button', 'aria-pressed': 'false', 'aria-label': 'Read answers aloud' }, icon('speaker'));
@@ -215,7 +217,7 @@ export async function mountPsys2(element, options = {}) {
     if (sh.handsFree !== undefined && sh.handsFree !== lastShell.handsFree) setHandsFree(!!sh.handsFree, false);
     if (sh.listening === false && lastShell.listening !== false) speech?.stopListening();
     if (typeof sh.rate === 'number' && sh.rate !== lastShell.rate) { settings.rate = sh.rate; save(); renderSettings(); }
-    if ((sh.language === 'en' || sh.language === 'ro') && sh.language !== lastShell.language) { settings.language = sh.language; langSel.value = sh.language; save(); renderSettings(); }
+    if ((sh.language === 'en' || sh.language === 'ro') && sh.language !== lastShell.language) { settings.language = sh.language; sessionLang = null; langSel.value = sh.language; speech?.refreshLang(); save(); renderSettings(); }
     lastShell = { ...sh };
   }
 
@@ -366,6 +368,7 @@ export async function mountPsys2(element, options = {}) {
       if (typing.msg.isConnected) typing.msg.remove();
       if (turn === tn) turn = null;
       busy = Math.max(0, busy - 1); setStatus(); scrollDown();
+      queueMicrotask(() => { if (!turn && !destroyed) speech?.turnEnded?.(); });   // a spoken message that waited in the field is sent now
     }
     return reply;
   }
@@ -411,6 +414,7 @@ export async function mountPsys2(element, options = {}) {
     const answer = (reply.text ?? '').trim() || '(no answer)';
     const botMsg = addMessage('bot', answer);
     currentBot = botMsg;
+    noteSessionLang(reply.lang);
     if (reply.lang && reply.lang !== 'en') user.meta.prepend(h('span', { class: 'p2-lang' }, `${reply.lang.toUpperCase()} → EN`));
 
     const avatarChanged = !!reply.state?.['ui.avatar'];
@@ -446,9 +450,9 @@ export async function mountPsys2(element, options = {}) {
     return reply;
   }
   /** A phrase is logged the moment it is sent (RD7), so it counts even if the answer is slow, fails or the page closes; the reply fills the outcome later. */
-  function logPhraseStart(text, mode) {
+  function logPhraseStart(text, mode, voice = {}) {
     if (!settings.logPhrases) return null;
-    try { const rec = buildRecord({ text, mode, language: settings.language, tab: view, reply: null }); phrases.add(rec); if (!settingsEl.hidden) renderPhraseLog(); return rec.id; } catch (e) { console.warn('phrase log failed', e); return null; }
+    try { const rec = buildRecord({ text, mode, language: settings.language, tab: view, reply: null, endType: voice.endType ?? null, waitMs: voice.waitMs ?? null }); phrases.add(rec); if (!settingsEl.hidden) renderPhraseLog(); return rec.id; } catch (e) { console.warn('phrase log failed', e); return null; }
   }
   function recordPhrase(text, mode, reply, recId = null) {
     if (!settings.logPhrases) return;
@@ -469,25 +473,34 @@ export async function mountPsys2(element, options = {}) {
     perfEl.textContent = [`${rec.text}`, `total ${rec.totalMs} ms (engine ${rec.engineMs}, render ${rec.render}, effects ${rec.effects})`, ...st].join('\n');
   }
   /** Sends one message. One at a time: while a turn runs the message is not sent and not queued, the person gets a hint (Stop ends the turn). */
-  const send = (text, mode = 'typed') => {
+  const send = (text, mode = 'typed', voice = {}) => {
     const t = String(text ?? '').trim();
     if (!t || !session) return Promise.resolve(null);
     if (turn) { flashHint(BUSY_HINT); return Promise.resolve(null); }
     const tPress = performance.now();
     const user = addMessage('user', t);
-    const recId = logPhraseStart(t, mode);
+    const recId = logPhraseStart(t, mode, voice);
     return process(t, mode, user, recId, tPress);
   };
+  /** A spoken message (VOICE): logged with how it ended (final | pause-plausible | pause-timeout | mic-stop) and the wait in ms. */
+  const sendVoice = (text, how, waitMs) => send(text, 'voice', { endType: how, waitMs: Math.round(waitMs ?? 0) });
   const stopTurn = () => { if (turn && !turn.ctl.signal.aborted) { turn.reason = 'stopped'; turn.ctl.abort(new DOMException('stopped by the user', 'AbortError')); } };
   on(form, 'submit', (e) => {
     e.preventDefault();
     if (turn) { flashHint(BUSY_HINT); return; }   // the text stays in the input
     const t = input.value; input.value = ''; send(t);
   });
+  // typing or tapping the field cancels a pending spoken send; the text stays for editing
+  on(input, 'input', () => { if (speech?.hasPending()) speech.cancelPending(input.value); });
+  on(input, 'pointerdown', () => { if (speech?.hasPending()) speech.cancelPending(input.value || undefined); });
   on(sendBtn, 'click', (e) => { if (turn) { e.preventDefault(); stopTurn(); } });
 
   // ---------- speech ----------
-  const speechLangTag = () => (settings.speechLang === 'follow' ? LANG_TAGS[settings.language] ?? 'en-US' : settings.speechLang);
+  // VOICE: "automatic" (default; the older 'follow' means the same) follows the session language: the language of the last reply (RD5 detection), else the language setting
+  let sessionLang = null;
+  let shown = '';   // what the speech detector last wrote into the input field
+  const speechLangTag = () => (!settings.speechLang || settings.speechLang === 'auto' || settings.speechLang === 'follow' ? LANG_TAGS[sessionLang ?? settings.language] ?? 'en-US' : settings.speechLang);
+  const noteSessionLang = (l) => { if ((l === 'en' || l === 'ro') && l !== sessionLang) { sessionLang = l; speech?.refreshLang(); } };
   function setSpeaker(on, fromUser = true) {
     settings.speaker = on; speakerBtn.setAttribute('aria-pressed', String(on)); speakerBtn.classList.toggle('is-on', on);
     if (!on) speech?.stopSpeaking();
@@ -503,7 +516,18 @@ export async function mountPsys2(element, options = {}) {
   function disable(btn, why) { btn.disabled = true; btn.title = why; btn.setAttribute('aria-label', `${btn.getAttribute('aria-label')} (unavailable: ${why})`); }
   speech = createSpeech({
     getLang: speechLangTag, getVoiceName: () => settings.voice, getRate: () => settings.rate,
-    onFinal: (t) => { if (turn) { input.value = t; flashHint(BUSY_HINT); } else send(t, 'voice'); },   // voice waits: while a turn runs the phrase goes to the input box onInterim: (t) => { interim = t; setStatus(); },
+    isBusy: () => !!turn,
+    plausible: async (t) => !!(await session?.dryRead?.(t, { language: sessionLang ?? settings.language }))?.complete,   // dry run: no effects, bounded
+    onSend: ({ text, how, waitMs }) => { input.value = ''; shown = ''; sendVoice(text, how, waitMs); },
+    onHold: (t) => { input.value = t; shown = t; flashHint('Heard you. Sending when the answer is done.'); },
+    onCancel: (t) => { input.value = t; shown = ''; try { input.focus(); } catch { /* ignore */ } flashHint('Cancelled. The text is in the box for editing.'); },
+    onPending: ({ active, ms, phase }) => { micBtn.classList.toggle('is-pending', !!active); micBtn.style.setProperty('--ring-ms', `${Math.round(ms)}ms`); micBtn.dataset.phase = phase ?? ''; if (active) { ringEl.classList.remove('run'); void ringEl.getBoundingClientRect(); ringEl.classList.add('run'); } else ringEl.classList.remove('run'); },
+    onInterim: (t) => {   // the heard text appears in the field, unless the person has changed the field meanwhile
+      interim = t; const h0 = speech.held?.() ?? '';
+      const want = `${h0} ${t}`.trim();
+      if (input.value === shown || !input.value) { input.value = want; shown = want; }
+      setStatus();
+    },
     onState: (s) => { mic = s; robotUI()?.setSpeaking(s.speaking); setStatus(); },
     onError: (msg) => { note(msg); if (!speech.isListening()) { settings.handsFree = false; handsBtn.setAttribute('aria-pressed', 'false'); handsBtn.classList.remove('is-on'); } },
   });
@@ -515,7 +539,7 @@ export async function mountPsys2(element, options = {}) {
   on(micBtn, 'click', () => { if (mic.listening) speech.stopListening(); else speech.listenOnce(); });
   on(speakerBtn, 'click', () => setSpeaker(!settings.speaker));
   on(handsBtn, 'click', () => setHandsFree(!settings.handsFree));
-  on(langSel, 'change', () => { settings.language = langSel.value; save(); renderSettings(); session?.setWorldState?.(SHELL, { language: settings.language }); });
+  on(langSel, 'change', () => { settings.language = langSel.value; sessionLang = null; speech?.refreshLang(); save(); renderSettings(); session?.setWorldState?.(SHELL, { language: settings.language }); });
   on(gearBtn, 'click', () => toggleSettings());
 
   if (options.pushToTalk !== false && speechSupport.recognition) {
@@ -591,7 +615,7 @@ export async function mountPsys2(element, options = {}) {
         `Used when the language is not English. Browser on-device translator: ${browserAvail}. Its output is checked and falls back to the rules translator.`),
       field('Language detection', select([['auto', 'Automatic'], ['browser-api', 'Browser API'], ['rules', 'Rules']], settings.languageDetection, (v) => { settings.languageDetection = v; save(); renderSettings(); }),
         `Decides whether a message is English or Romanian. Browser on-device language detector: ${detectAvail}. Uncertain or other-language results keep the current language; without the browser API, or while it downloads, the rules detector is used.`),
-      field('Speech language', select([['follow', 'Same as language'], ['en-US', 'English (US)'], ['en-GB', 'English (UK)'], ['ro-RO', 'Română']], settings.speechLang, (v) => { settings.speechLang = v; save(); renderSettings(); })),
+      field('Speech language', select([['auto', 'Automatic (follows the session language)'], ['en-US', 'English (US)'], ['en-GB', 'English (UK)'], ['ro-RO', 'Română']], settings.speechLang, (v) => { settings.speechLang = v; save(); renderSettings(); speech?.refreshLang(); })),
       field('Voice', select(voiceOpts, settings.voice, (v) => { settings.voice = v; save(); }), speechSupport.synthesis ? (voices.length ? null : 'Voices are still loading or none are installed.') : 'Speech synthesis is not supported by this browser.'),
       h('div', { class: 'p2-field' }, h('label', {}, 'Speech rate ', rateVal), rate),
       check('Hands-free mode (continuous listening)', settings.handsFree, (v) => setHandsFree(v), speechSupport.recognition ? '' : 'speech recognition is not supported'),
