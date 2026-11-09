@@ -1,5 +1,5 @@
 @pat.user.profile.role.org core.pattern
-    match="[i_am|i_work_as|i_am_working_as|my_job_is|my_role_is|my_profession_is] [a|an]? {r:lex.user.profile.roles} [at|for|with] {o:words(4)}"
+    match="[$user.profile.g4_i_am] [a|an]? {r:lex.user.profile.roles} [at|for|with] {o:words(4)}"
     emit="@{_} core.request action=prof.tell arg.kind=role arg.role={r} arg.org=\"{o}\""
     kind=request
     priority=10
@@ -8,7 +8,7 @@
 
 @pat.user.profile.role core.pattern
     canonical="I work as a designer."
-    match="[i_am|i_work_as|i_am_working_as|my_job_is|my_role_is|my_profession_is] [a|an]? {r:lex.user.profile.roles}"
+    match="[$user.profile.g4_i_am] [a|an]? {r:lex.user.profile.roles}"
     emit="@{_} core.request action=prof.tell arg.kind=role arg.role={r}"
     kind=request
     priority=10
@@ -83,7 +83,7 @@
     example="I have a degree in biology."
 
 @pat.user.profile.interests.one core.pattern
-    match="[i_love|i_like|i_enjoy|i_really_love|i_really_like|i_adore|i_am_into|i_am_a_fan_of|i_am_a_big_fan_of|my_hobbies_are|my_hobby_is|my_interests_are] {a:lex.user.profile.interests}"
+    match="[$user.profile.g1_i_love] {a:lex.user.profile.interests}"
     emit="@{_} core.request action=prof.tell arg.kind=interests arg.a={a}"
     kind=request
     priority=10
@@ -91,28 +91,28 @@
     example="I enjoy chess."
 
 @pat.user.profile.interests.two core.pattern
-    match="[i_love|i_like|i_enjoy|i_really_love|i_really_like|i_adore|i_am_into|i_am_a_fan_of|i_am_a_big_fan_of|my_hobbies_are|my_hobby_is|my_interests_are] {a:lex.user.profile.interests} and {b:lex.user.profile.interests}"
+    match="[$user.profile.g1_i_love] {a:lex.user.profile.interests} and {b:lex.user.profile.interests}"
     emit="@{_} core.request action=prof.tell arg.kind=interests arg.a={a} arg.b={b}"
     kind=request
     priority=10
     example="I love hiking and jazz."
 
 @pat.user.profile.interests.three core.pattern
-    match="[i_love|i_like|i_enjoy|i_really_love|i_really_like|i_adore|i_am_into|i_am_a_fan_of|i_am_a_big_fan_of|my_hobbies_are|my_hobby_is|my_interests_are] {a:lex.user.profile.interests} [and]? {b:lex.user.profile.interests} and {c:lex.user.profile.interests}"
+    match="[$user.profile.g1_i_love] {a:lex.user.profile.interests} [and]? {b:lex.user.profile.interests} and {c:lex.user.profile.interests}"
     emit="@{_} core.request action=prof.tell arg.kind=interests arg.a={a} arg.b={b} arg.c={c}"
     kind=request
     priority=10
     example="I like hiking, jazz and chess."
 
 @pat.user.profile.tools.one core.pattern
-    match="[mostly|mainly|i_use|i_mostly_use|i_mainly_use|i_work_with|i_code_in|i_program_in|my_stack_is|i_know] {a:lex.user.profile.tools}"
+    match="[$user.profile.g2_mostly] {a:lex.user.profile.tools}"
     emit="@{_} core.request action=prof.tell arg.kind=tools arg.a={a}"
     kind=request
     priority=10
     example="I use Python."
 
 @pat.user.profile.tools.two core.pattern
-    match="[mostly|mainly|i_use|i_mostly_use|i_mainly_use|i_work_with|i_code_in|i_program_in|my_stack_is|i_know] {a:lex.user.profile.tools} and {b:lex.user.profile.tools}"
+    match="[$user.profile.g2_mostly] {a:lex.user.profile.tools} and {b:lex.user.profile.tools}"
     emit="@{_} core.request action=prof.tell arg.kind=tools arg.a={a} arg.b={b}"
     kind=request
     priority=10
@@ -120,7 +120,7 @@
     example="I use Excel and Tableau."
 
 @pat.user.profile.tools.three core.pattern
-    match="[mostly|mainly|i_use|i_mostly_use|i_mainly_use|i_work_with|i_code_in|i_program_in|my_stack_is|i_know] {a:lex.user.profile.tools} [and]? {b:lex.user.profile.tools} and {c:lex.user.profile.tools}"
+    match="[$user.profile.g2_mostly] {a:lex.user.profile.tools} [and]? {b:lex.user.profile.tools} and {c:lex.user.profile.tools}"
     emit="@{_} core.request action=prof.tell arg.kind=tools arg.a={a} arg.b={b} arg.c={c}"
     kind=request
     priority=10
@@ -205,7 +205,7 @@
     example="I used to be a chef."
 
 @pat.user.profile.fix.role core.pattern
-    match="[no|actually|sorry|wait|i_mean|oops|make_that|correction] [i_am|i_work_as|my_job_is]? [a|an]? {r:lex.user.profile.roles}"
+    match="[$user.profile.g3_no] [i_am|i_work_as|my_job_is]? [a|an]? {r:lex.user.profile.roles}"
     emit="@{_} core.request action=prof.tell arg.kind=role arg.role={r} arg.fix=true"
     kind=request
     priority=12
@@ -213,7 +213,7 @@
     example="Actually I am a nurse."
 
 @pat.user.profile.fix.years core.pattern
-    match="[no|actually|sorry|wait|i_mean|oops|make_that|correction] [it_is|its|about|around|more_like]? {n:number} [years|year]"
+    match="[$user.profile.g3_no] [it_is|its|about|around|more_like]? {n:number} [years|year]"
     emit="@{_} core.request action=prof.tell arg.kind=years arg.n={n} arg.fix=true"
     kind=request
     priority=12
@@ -221,14 +221,14 @@
     example="No, it is 5 years."
 
 @pat.user.profile.fix.name core.pattern
-    match="[no|actually|sorry|wait|i_mean|oops|make_that|correction] [call_me|my_name_is] {n:words(2)}"
+    match="[$user.profile.g3_no] [call_me|my_name_is] {n:words(2)}"
     emit="@{_} core.request action=prof.tell arg.kind=name arg.name=\"{n}\" arg.fix=true"
     kind=request
     priority=12
     example="Actually call me Andrew."
 
 @pat.user.profile.fix.location core.pattern
-    match="[no|actually|sorry|wait|i_mean|oops|make_that|correction] i live in {c:words(3)}"
+    match="[$user.profile.g3_no] i live in {c:words(3)}"
     emit="@{_} core.request action=prof.tell arg.kind=location arg.city=\"{c}\" arg.fix=true"
     kind=request
     priority=12
@@ -253,7 +253,7 @@
 
 @pat.user.profile.start.can core.pattern
     canonical="Can you interview me?"
-    match="[can_you|could_you|please_can_you]? [interview|quiz] me [about_myself]?"
+    match="[can_you|could_you]? [interview|quiz] me [about_myself]?"
     emit="@{_} core.request action=prof.start"
     kind=request
     priority=14
@@ -433,14 +433,14 @@
     example="Remember that I am 34 years old."
 
 @pat.user.profile.sens.health core.pattern
-    match="[i_am|i_have|i_suffer_from|i_was_diagnosed_with] [a|an]? {s:lex.user.profile.sensitive.health}"
+    match="[$user.profile.g5_i_am] [a|an]? {s:lex.user.profile.sensitive.health}"
     emit="@{_} core.request action=prof.sensitive arg.cat=health arg.text=\"{s}\""
     kind=request
     priority=10
     example="I have diabetes."
 
 @pat.user.profile.sens.health.remember core.pattern
-    match="remember [that]? [i_am|i_have|i_suffer_from|i_was_diagnosed_with] [a|an]? {s:lex.user.profile.sensitive.health}"
+    match="remember [that]? [$user.profile.g5_i_am] [a|an]? {s:lex.user.profile.sensitive.health}"
     emit="@{_} core.request action=prof.sensitive arg.cat=health arg.text=\"{s}\" arg.remember=true"
     kind=request
     priority=12

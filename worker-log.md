@@ -779,3 +779,7 @@ Per bucket, encoder+n1 (right / partly / wrong / nu): kids 100 / 0 / 0 / 0 -> 10
 ## L7 ui.help (2026-11-09)
 - **migrate-macros**: `patterns.sop` 45,258 -> 35,193 bytes; patterns 56; match text 32,221 -> 22,156 bytes (-31 %); inline groups repeated verbatim 31 (88 occurrences) -> 15 (42). 12 world-local phrases. No shape, no `extends`.
 - **Gates**: operational 95.1% / 6 wrong unchanged; dialogues unchanged; eval-rules and long set identical; nothing put back. Tests: ui.help 69 (no new).
+
+## L7 user.profile (2026-11-09)
+- **migrate-macros**: `patterns.sop` 20,774 -> 19,883 bytes; patterns 65; match text 6,328 bytes before (the world is small: 11 groups repeated verbatim, 30 occurrences) -> see the stats line of the summary table; 5 world-local phrases. No shape, no `extends`.
+- **Gates**: operational 95.1% / 6 wrong unchanged; dialogues unchanged; eval-rules and long set identical. Tests: user.profile 124 (no new).

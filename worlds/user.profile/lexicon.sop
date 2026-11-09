@@ -300,3 +300,62 @@
     word=debt word=wage word=paycheck word=street word=road word=avenue word=boulevard word=apartment
     word=flat word=zip word=postcode
 
+@phrase.user.profile.g1_i_love core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=i_love
+    alt=i_like
+    alt=i_enjoy
+    alt=i_really_love
+    alt=i_really_like
+    alt=i_adore
+    alt=i_am_into
+    alt=i_am_a_fan_of
+    alt=i_am_a_big_fan_of
+    alt=my_hobbies_are
+    alt=my_hobby_is
+    alt=my_interests_are
+
+@phrase.user.profile.g2_mostly core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=mostly
+    alt=mainly
+    alt=i_use
+    alt=i_mostly_use
+    alt=i_mainly_use
+    alt=i_work_with
+    alt=i_code_in
+    alt=i_program_in
+    alt=my_stack_is
+    alt=i_know
+
+@phrase.user.profile.g3_no core.phrase
+    frame=false
+    doc="World-local group used by 4 patterns (made by scripts/migrate-macros.mjs)."
+    alt=no
+    alt=actually
+    alt=sorry
+    alt=wait
+    alt=i_mean
+    alt=oops
+    alt=make_that
+    alt=correction
+
+@phrase.user.profile.g4_i_am core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=i_am
+    alt=i_work_as
+    alt=i_am_working_as
+    alt=my_job_is
+    alt=my_role_is
+    alt=my_profession_is
+
+@phrase.user.profile.g5_i_am core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=i_am
+    alt=i_have
+    alt=i_suffer_from
+    alt=i_was_diagnosed_with
