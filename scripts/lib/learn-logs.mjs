@@ -27,17 +27,32 @@ const sha = (s) => createHash('sha256').update(s).digest('hex');
 export const idOf = (...parts) => sha(parts.join('\n')).slice(0, 14);
 export const normText = (t) => String(t ?? '').toLowerCase().replace(/[^\p{L}\p{N} ]+/gu, ' ').replace(/\s+/g, ' ').trim();
 const readJsonl = (f) => readFileSync(f, 'utf8').split('\n').filter((l) => l.trim()).map((l) => JSON.parse(l));
+/** The webchat's "Export JSON" ({ format, records: [...] } or a bare array) or the older JSONL export. */
+function readRecords(f) {
+  if (!f.endsWith('.json')) return readJsonl(f);
+  const v = JSON.parse(readFileSync(f, 'utf8'));
+  return Array.isArray(v) ? v : Array.isArray(v?.records) ? v.records : [];
+}
 
-/** *.jsonl files of a directory (not recursive: labelled/ and review.jsonl are outputs), or the file itself. */
+/** A message that is itself a complaint ("that is wrong"): the old flag `feedback: 'negative'` or `feedback.spoken` (FB). */
+export const isComplaintRecord = (r) => r?.feedback === 'negative' || (r?.feedback && typeof r.feedback === 'object' && r.feedback.spoken === true);
+/** The thumbs of a record (FB): { vote: 'up' | 'down' | null, wanted, correction (record id), reasons }. */
+export function thumbsOf(r) {
+  const f = r?.feedback && typeof r.feedback === 'object' ? r.feedback : null;
+  return { vote: f?.vote === 'up' || f?.vote === 'down' ? f.vote : null, wanted: typeof f?.wanted === 'string' ? f.wanted.trim() : '', correction: f?.correction ?? null, reasons: Array.isArray(f?.reasons) ? f.reasons : [] };
+}
+const MARGIN_REASONS = new Set(['low_world_score', 'small_world_margin', 'small_segmentation_gap', 'world_tie', 'not_top_world']);
+
+/** *.jsonl and *.json files of a directory (not recursive: labelled/ and review.jsonl are outputs), or the file itself. */
 export function listLogFiles(path) {
   if (!existsSync(path)) return [];
   if (statSync(path).isFile()) return [path];
-  return readdirSync(path).filter((f) => f.endsWith('.jsonl') && f !== 'review.jsonl').sort().map((f) => join(path, f));
+  return readdirSync(path).filter((f) => (f.endsWith('.jsonl') || f.endsWith('.json')) && f !== 'review.jsonl' && !f.endsWith('.report.json')).sort().map((f) => join(path, f));
 }
 
 /** Records of one export file. Chips and button presses are not human phrasing and never enter the loop. */
 export function loadLogRecords(file) {
-  return readJsonl(file).filter((r) => r && typeof r.text === 'string' && r.source !== 'chip' && r.mode !== 'chip')
+  return readRecords(file).filter((r) => r && typeof r.text === 'string' && r.source !== 'chip' && r.mode !== 'chip')
     .map((r, i) => ({ ...r, _file: file, _line: i + 1, _id: idOf(file, r.time ?? '', r.text) }));
 }
 
@@ -99,7 +114,7 @@ export const isCorrectionText = (t) => CORRECTION.test(String(t ?? ''));
 export function correctionSignals(session) {
   const live = session.map((r, i) => ({ r, i })).filter(({ r }) => !r.replayOnly);
   const sig = session.map(() => ({ feedback: false, correctedBy: -1, corrects: -1 }));
-  live.forEach(({ r, i }) => { sig[i].feedback = r.feedback === 'negative' || isCorrectionText(r.text); });
+  live.forEach(({ r, i }) => { sig[i].feedback = isComplaintRecord(r) || isCorrectionText(r.text); });
   live.forEach(({ i }, k) => {
     for (let d = 1; d <= 2 && k + d < live.length; d++) {
       const j = live[k + d].i;
@@ -162,7 +177,8 @@ export function decideSelfLabel(sum, signals = {}, opts = {}) {
   const o = { ...SELF_LABEL_RULES, ...opts };
   const why = [];
   if (signals.feedback) why.push('is_feedback');
-  if (signals.corrected) why.push('user_corrected');
+  if (signals.corrected && signals.vote !== 'up') why.push('user_corrected');   // a thumbs-up outranks a later correction-like phrase
+  if (signals.vote === 'down') why.push('user_thumbs_down');
   if (!sum.dispatch) why.push(sum.discourse ? 'discourse_or_modal' : 'no_dispatcher_trace');
   else {
     if (sum.status !== 'understood') why.push('not_understood');
@@ -189,7 +205,8 @@ export function decideSelfLabel(sum, signals = {}, opts = {}) {
   if (sum.untranslated) why.push('untranslated_text');
   if (sum.statuses.length === 0 || sum.statuses.some((s) => s !== 'supported')) why.push('status_not_supported');
   if (!sum.effect) why.push('no_observable_effect');
-  const reasons = [...new Set(why)];
+  // FB: a thumbs-up is the person's own validation, stronger than the margin rule: the margins are not asked, everything structural still is
+  const reasons = [...new Set(why)].filter((r) => !(signals.vote === 'up' && MARGIN_REASONS.has(r)));
   return { ok: reasons.length === 0, reasons };
 }
 
@@ -206,9 +223,12 @@ export function labelledRows({ rec, sum, sops, context = [], correctsId = null }
 }
 
 /** Review-queue row of a message that was not self-labelled (English only; the original text stays in the source record). */
-export function queueRow({ rec, text, reasons, sum, candidates, nearest }) {
+export function queueRow({ rec, text, reasons, sum, candidates, nearest, correctionText = null }) {
   const world = candidates[0]?.world ?? 'unknown';
+  const t = thumbsOf(rec);
+  const priority = t.vote === 'down' ? (t.wanted || t.correction ? 0 : 1) : 2;   // FB: a thumbs-down with a wanted text or a correction comes first
   return {
+    priority, ...(t.vote === 'down' ? { thumbs_down: { reasons: t.reasons, ...(t.wanted ? { wanted: t.wanted, wanted_lang: rec.lang ?? 'en' } : {}), ...(t.correction ? { correction_id: t.correction } : {}), ...(correctionText ? { correction_text: correctionText } : {}) } } : {}),
     id: rec._id, text, lang: rec.lang ?? 'en', tab: rec.tab ?? null, reasons, world_candidate: world, candidates: candidates.slice(0, 3),
     status: sum.status, tier: sum.tier, strategy: [...new Set(sum.pieces.map((p) => p.strategy).filter(Boolean))].join(',') || null,
     nearest: nearest ?? null, group: `${world}::${nearest?.pattern ?? 'none'}`, source_ref: { file: rec._file ?? null, id: rec._id, time: rec.time ?? null },

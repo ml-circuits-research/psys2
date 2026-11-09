@@ -19,7 +19,8 @@ import { DEFAULT_SETTINGS, SETTINGS_KEY, loadSettings } from './ui/settings.mjs'
 import { guard, TurnAborted, withDeadline } from './lib/formalizer/guard.mjs';
 import { LIMITS, TIME_LIMIT_SPECS, TIME_LIMIT_DEFAULTS, applyTimeLimits, clampLimit } from './lib/dialog/time-limits.mjs';
 import { CREDITS, ABOUT_SECTIONS, ACCURACY, TAGLINE, GREETING } from './ui/about.mjs';
-import { buildRecord, completeRecord, completeStopped, createStore, filterRecords, toJSONL, toText, exportFilename, summaryStatus, summaryWorlds } from './ui/phrase-log.mjs';
+import { buildRecord, completeRecord, completeStopped, createStore, filterRecords, toJSON, exportFilename, summaryStatus, summaryWorlds, hashState, buildDetail, nextFeedback, voteOf } from './ui/phrase-log.mjs';
+import { createFeedback } from './ui/feedback.mjs';
 
 const HERE = new URL('.', import.meta.url);
 
@@ -484,6 +485,7 @@ export async function mountPsys2(element, options = {}) {
     if (tn.ctl.signal.aborted) throw new TurnAborted(tn.reason ?? 'stopped', 'start');
     tn.undo = session.snapshot?.() ?? null;
     const remaining = Math.max(1, limit - (performance.now() - tStart));
+    try { tn.stateBefore = hashState(session.state?.() ?? null); } catch { tn.stateBefore = null; }   // FB: the state hash before the turn, stored with the record
     let reply;
     try {
       reply = await withDeadline(session.send(text, { mode: mode === 'voice' ? 'voice' : undefined, language: settings.language, formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, fastPath: settings.fastPath === true,
@@ -502,6 +504,7 @@ export async function mountPsys2(element, options = {}) {
     const answer = (reply.text ?? '').trim() || '(no answer)';
     const botMsg = addMessage('bot', answer);
     currentBot = botMsg;
+    const prevAnswer = lastAnswer;   // FB: the answer a spoken "that is wrong" is about
     noteSessionLang(reply.lang);
     if (reply.switchedLanguage && reply.switchedLanguage !== settings.language) setLanguage(reply.switchedLanguage);   // RD5: the English dropdown follows strong Romanian evidence
     if (reply.lang && reply.lang !== 'en') user.meta.prepend(h('span', { class: 'p2-lang' }, `${reply.lang.toUpperCase()} → EN`));
@@ -519,7 +522,17 @@ export async function mountPsys2(element, options = {}) {
     let effects;
     try { effects = await runEffects(reply.effects); } catch (e) { botMsg.msg.remove(); throw e; }   // stopped while the effects ran: the answer is withdrawn
     const effectsMs = performance.now() - tEffects;
-    recordPhrase(text, mode, reply, recId);
+    let stateAfter = null;
+    try { stateAfter = hashState(session.state?.() ?? null); } catch { /* ignore */ }
+    const detail = recId && settings.logPhrases ? buildDetail(reply, { serialize: serializeWires, tab: view, state: { before: tn.stateBefore ?? null, after: stateAfter } }) : null;
+    recordPhrase(text, mode, reply, recId, detail);
+    // FB: the next accepted phrasing after a thumbs-down is its correction; a spoken complaint rates the previous answer
+    if (reply.feedback === 'negative') {
+      if (prevAnswer) { const fb = rateAnswer(prevAnswer, { vote: 'down' }); prevAnswer.ui.set(fb, { open: true }); prevAnswer.botMsg.msg.scrollIntoView?.({ block: 'nearest' }); }
+    } else if (pendingCorrection && recId && (reply.statuses ?? []).length && reply.statuses.every((x) => x === 'supported') && !(reply.segments ?? []).some((sg) => sg.unparsed)) {
+      rateAnswer(pendingCorrection, { correction: recId }); pendingCorrection = null;
+    }
+    attachFeedback({ recId, botMsg, undo: tn.undo, track: reply.feedback !== 'negative' });
 
     const traceBox = h('div', { class: 'p2-trace-slot', hidden: !settings.showTrace });
     let built = false;
@@ -533,6 +546,7 @@ export async function mountPsys2(element, options = {}) {
     const totalMs = performance.now() - tStart;
     reply.perf = { ...(reply.perf ?? { total: engineMs, stages: {} }), engineMs: Math.round(engineMs), render: Math.round((performance.now() - tHost - effectsMs) * 10) / 10, effects: Math.round(effectsMs * 10) / 10, totalMs: Math.round(totalMs) };
     botMsg.meta.append(h('span', { class: 'p2-took', title: 'Time from sending to the answer on screen' }, `answered in ${fmtDur(totalMs)}`));
+    if (detail && recId) { try { phrases.update(recId, (r) => ({ detail: { ...(r.detail ?? detail), perf: { ...(r.detail?.perf ?? {}), totalMs: reply.perf.totalMs, engineMs: reply.perf.engineMs, render: reply.perf.render, effects: reply.perf.effects, stages: reply.perf.stages ?? null } } })); } catch { /* ignore */ } }
     const rec = { text, ...reply.perf, formalizer: settings.formalizer };
     (globalThis.__psys2Perf ??= []).push(rec);
     showPerfOverlay(rec);
@@ -544,10 +558,40 @@ export async function mountPsys2(element, options = {}) {
     if (!settings.logPhrases) return null;
     try { const rec = { ...buildRecord({ text, mode, language: settings.language, tab: view, reply: null, endType: voice.endType ?? null, waitMs: voice.waitMs ?? null, example: voice.example === true }), ...(voice.queueMs != null ? { queueMs: voice.queueMs } : {}) }; phrases.add(rec); if (!settingsEl.hidden) renderPhraseLog(); return rec.id; } catch (e) { console.warn('phrase log failed', e); return null; }
   }
-  function recordPhrase(text, mode, reply, recId = null) {
+  // ---------- feedback (FB): thumbs up / down under every answer ----------
+  let lastAnswer = null, pendingCorrection = null;
+  /** Stores a feedback patch in the record of the answer (or locally when the log is off) and returns the new feedback object. */
+  function rateAnswer(ref, patch) {
+    let next = null;
+    if (ref.recId && settings.logPhrases) { try { phrases.update(ref.recId, (r) => { next = nextFeedback(r.feedback, patch); return { feedback: next }; }); } catch (e) { console.warn('feedback not stored', e); } }
+    if (!next) { next = ref.local = nextFeedback(ref.local, patch); if (!ref.warned) { ref.warned = true; toast('Not saved: the phrase log is off (Settings > Phrases)'); } }
+    if (patch.vote === 'down') pendingCorrection = ref; else if (patch.vote !== undefined && pendingCorrection === ref) pendingCorrection = null;
+    if (!settingsEl.hidden && settingsTab === 'phrases') renderPhraseLog();
+    return next;
+  }
+  /** "Show me the right result": takes the turn back (state of the session before the message) and waits for the correction. */
+  function undoAnswer(ref) {
+    if (turn || !ref.undo) return;
+    try { session.restore(ref.undo); applyState(session.state?.()); } catch (e) { console.warn('undo failed', e); }
+    ref.undo = null;
+    rateAnswer(ref, { undone: true });
+    pendingCorrection = ref;
+    note('Taken back. Do it by hand or say it differently.');
+  }
+  function attachFeedback({ recId, botMsg, undo, track = true }) {
+    const ref = { recId, botMsg, undo, ui: null, local: null, warned: false };
+    ref.ui = createFeedback({
+      feedback: null, uid: recId ?? String(Math.random()).slice(2, 8),
+      onChange: (patch) => rateAnswer(ref, patch), canUndo: () => !!ref.undo && lastAnswer === ref && !turn, onUndo: () => undoAnswer(ref),
+    });
+    botMsg.meta.append(ref.ui.el); botMsg.msg.append(ref.ui.form);
+    if (track) { if (lastAnswer) lastAnswer.undo = null; lastAnswer = ref; }   // only the latest answer can be taken back (one snapshot is kept)
+    return ref;
+  }
+  function recordPhrase(text, mode, reply, recId = null, detail = null) {
     if (!settings.logPhrases) return;
     try {
-      if (recId) phrases.update(recId, (r) => completeRecord(r, reply, { language: settings.language }));
+      if (recId) phrases.update(recId, (r) => ({ ...completeRecord(r, reply, { language: settings.language }), ...(detail ? { detail } : {}) }));
       else phrases.add(buildRecord({ text, mode, language: settings.language, tab: view, reply }));
     } catch (e) { console.warn('phrase log failed', e); }
     if (!settingsEl.hidden) renderPhraseLog();
@@ -980,18 +1024,23 @@ export async function mountPsys2(element, options = {}) {
   const plogActions = h('div', { class: 'p2-plog-actions' });
   const MODE_ICON = { typed: '⌨', voice: '🎤', chip: '🔘' };
   const MODE_NAME = { typed: 'typed', voice: 'spoken', chip: 'button' };
+  /** One click: the share sheet where the browser offers one for files (phones), else a download. Returns the number of records. */
   function exportPhrases() {
-    const body = toJSONL(phrases.all(), { includeChips: settings.exportButtons === true });
-    if (!body) { toast('No phrases to export yet'); return 0; }
-    const url = URL.createObjectURL(new Blob([body], { type: 'application/x-ndjson' }));
-    const a = h('a', { href: url, download: exportFilename(), hidden: true }); document.body.append(a); a.click(); a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 5000); toast(`Downloaded ${exportFilename()}`);
-    return body.trim().split('\n').length;
-  }
-  async function copyPhrases() {
-    const body = toText(phrases.all(), { includeChips: settings.exportButtons === true });
-    if (!body) { toast('No phrases to copy yet'); return; }
-    await ALLOW['clipboard.copy']({ text: body });
+    const body = toJSON(phrases.all(), { includeChips: settings.exportButtons === true });
+    const n = JSON.parse(body).count;
+    if (!n) { toast('No phrases to export yet'); return 0; }
+    const name = exportFilename();
+    const download = () => {
+      const url = URL.createObjectURL(new Blob([body], { type: 'application/json' }));
+      const a = h('a', { href: url, download: name, hidden: true }); document.body.append(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 5000); toast(`Downloaded ${name}`);
+    };
+    let file = null;
+    try { file = typeof File === 'function' ? new File([body], name, { type: 'application/json' }) : null; } catch { file = null; }
+    if (file && navigator.canShare?.({ files: [file] }) && navigator.share) {
+      navigator.share({ files: [file], title: 'PSys2 phrase log' }).then(() => toast(`Shared ${name}`), (e) => { if (e?.name !== 'AbortError') download(); });   // cancelled sheet: nothing more
+    } else download();
+    return n;
   }
   function renderPhraseLog() {
     const all = phrases.all(), shown = filterRecords(all, logFilter).slice().reverse();
@@ -999,20 +1048,20 @@ export async function mountPsys2(element, options = {}) {
     plogCount.textContent = `${all.length} ${all.length === 1 ? 'entry' : 'entries'} (${human} typed or spoken by you, ${all.length - human} from buttons). ${settings.exportButtons === true ? 'Buttons are included in exports.' : 'Buttons are left out of exports unless you tick the box below.'}`;
     plogList.replaceChildren(...(shown.length ? shown : [null]).map((r) => {
       if (!r) return h('li', { class: 'p2-plog-empty' }, all.length ? 'Nothing matches this filter.' : settings.logPhrases ? 'Nothing logged yet. Say or type something.' : 'The log is switched off.');
-      const status = summaryStatus(r), worlds = summaryWorlds(r).join(', ');
-      return h('li', { class: `p2-plog-item is-${status}` },
+      const status = summaryStatus(r), worlds = summaryWorlds(r).join(', '), vote = voteOf(r);
+      return h('li', { class: `p2-plog-item is-${status}${vote ? ` has-vote-${vote}` : ''}` },
         h('span', { class: 'p2-plog-mode', title: MODE_NAME[r.mode], role: 'img', 'aria-label': MODE_NAME[r.mode] }, MODE_ICON[r.mode]),
         h('span', { class: 'p2-plog-body' }, h('span', { class: 'p2-plog-text' }, r.text),
-          h('small', {}, `${worlds || 'no world'} · `, h('b', { class: `p2-plog-status s-${status}` }, status), r.lang && r.lang !== 'en' ? ` · ${r.lang}` : '')),
+          h('small', {}, vote ? h('b', { class: `p2-plog-vote v-${vote}`, title: vote === 'up' ? 'Good answer' : 'Not what I wanted', 'aria-label': vote === 'up' ? 'Good answer' : 'Not what I wanted' }, vote === 'up' ? '▲ ' : '▼ ') : null, `${worlds || 'no world'} · `, h('b', { class: `p2-plog-status s-${status}` }, status), r.lang && r.lang !== 'en' ? ` · ${r.lang}` : '', vote === 'down' && r.feedback.wanted ? ` · wanted: ${r.feedback.wanted}` : '')),
         h('button', { class: 'p2-linkbtn', type: 'button', 'aria-label': `Delete: ${r.text}`, title: `Delete: ${r.text}`, onclick: () => { phrases.remove(r.id); renderPhraseLog(); } }, 'Delete'));
     }));
     const btn = (label, fn, cls = 'p2-btn-text') => h('button', { class: cls, type: 'button', onclick: fn }, label);
     plogActions.replaceChildren(...(confirmClear
       ? [h('span', { class: 'p2-plog-confirm', role: 'alert' }, `Delete all ${all.length} entries?`), btn('Yes, clear', () => { phrases.clear(); confirmClear = false; renderPhraseLog(); }, 'p2-btn-text is-danger'), btn('Keep them', () => { confirmClear = false; renderPhraseLog(); })]
-      : [btn('Export JSONL', exportPhrases), btn('Copy as text', copyPhrases), btn('Clear', () => { if (all.length) { confirmClear = true; renderPhraseLog(); } })]));
+      : [btn('Export JSON', exportPhrases), btn('Clear', () => { if (all.length) { confirmClear = true; renderPhraseLog(); } })]));
   }
   function phraseLogSection() {
-    const fsel = select([['all', 'All'], ['misses', 'Not understood only'], ['voice', 'Voice only']], logFilter, (v) => { logFilter = v; renderPhraseLog(); });
+    const fsel = select([['all', 'All'], ['misses', 'Not understood only'], ['voice', 'Voice only'], ['down', 'Not what I wanted'], ['up', 'Good answers']], logFilter, (v) => { logFilter = v; renderPhraseLog(); });
     fsel.setAttribute('aria-label', 'Filter phrases');
     confirmClear = false;
     renderPhraseLog();

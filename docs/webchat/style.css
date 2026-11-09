@@ -270,3 +270,21 @@
 .p2-msg.is-skipped { opacity: .5; }
 .p2-skipped-note { font-style: italic; }
 .p2-miclog { max-height: 180px; overflow: auto; font-size: 11px; white-space: pre-wrap; word-break: break-all; }
+
+/* FB: thumbs up / down under an answer, the inline form of the thumbs-down */
+.p2-fb-wrap { display: inline-flex; align-items: center; }
+.p2-fb { display: inline-flex; gap: 2px; }
+.p2-fb-btn { background: none; border: 1px solid transparent; border-radius: 8px; min-width: 26px; height: 24px; padding: 0 5px; font-size: 11px; line-height: 1; color: var(--muted); cursor: pointer; opacity: .75; }
+.p2-fb-btn:hover, .p2-fb-btn:focus-visible { opacity: 1; border-color: var(--line); color: var(--ink); }
+.p2-fb-btn[aria-pressed="true"] { opacity: 1; color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.p2-fb-btn[data-vote="down"][aria-pressed="true"] { color: #c0392b; border-color: #c0392b; }
+.p2-fb-form { max-width: 100%; margin: 6px 4px 2px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); display: flex; flex-direction: column; gap: 8px; }
+.p2-fb-form[hidden] { display: none; }
+.p2-fb-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.p2-fb-chip { border: 1px solid var(--line); background: transparent; color: var(--ink); border-radius: 14px; padding: 3px 10px; font-size: 12px; cursor: pointer; }
+.p2-fb-chip.is-on { background: var(--accent); border-color: var(--accent); color: #fff; }
+.p2-fb-wanted { width: 100%; box-sizing: border-box; resize: vertical; font: inherit; font-size: 13px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; background: transparent; color: var(--ink); }
+.p2-fb-actions { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; }
+.p2-fb-note { color: var(--muted); }
+.p2-plog-vote.v-up { color: var(--accent); }
+.p2-plog-vote.v-down { color: #c0392b; }

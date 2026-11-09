@@ -71,7 +71,7 @@ async function settingsFor(name, viewport, o) {
       check(`${tag}: tab ${t} renders its controls`, miss.length === 0 && (await activeTab(pg)) === t, miss.join(' | '));
       await shot(c, o, `settings-${t}-${name}`);
     }
-    check(`${tag}: phrase log tab has export, copy and clear`, await (async () => { await pg.click('#p2-st-phrases'); return pg.evaluate(() => { const t = [...document.querySelectorAll('.p2-plog-actions button')].map((b) => b.textContent); return t.includes('Export JSONL') && t.includes('Copy as text') && t.includes('Clear'); }); })());
+    check(`${tag}: phrase log tab has Export JSON and Clear, no Copy as text`, await (async () => { await pg.click('#p2-st-phrases'); return pg.evaluate(() => { const t = [...document.querySelectorAll('.p2-plog-actions button')].map((b) => b.textContent); return t.includes('Export JSON') && !t.includes('Copy as text') && t.includes('Clear'); }); })());
     check(`${tag}: Developer tab shows the build`, await (async () => { await pg.click('#p2-st-developer'); await sleep(300); return pg.evaluate(() => /Built:/.test(document.querySelector('.p2-modal-body').innerText)); })());
     check(`${tag}: Models tab shows the dispatcher and the normalizer status`, await (async () => { await pg.click('#p2-st-models'); await sleep(300); return pg.evaluate(() => { const t = document.querySelector('.p2-modal-body').innerText; return /Dispatcher/.test(t) && /Normalizer/.test(t) && /Status/.test(t) && /loads when needed|loaded|loading|not loaded/.test(t); }); })());
     // tabs by keyboard
@@ -311,7 +311,64 @@ async function bubbleFor(width, o) {
   } finally { await c.close(); }
 }
 
+
+/** FB: thumbs up / down under every answer, the form of the thumbs-down, undo + correction link, history, export, spoken complaint. */
+async function feedbackFor(name, viewport, o) {
+  const c = await openChat({ ...o, throttle: 1, viewport });
+  const pg = c.pg;
+  const tag = `fb ${name}`;
+  try {
+    await pg.evaluate(() => { window.__blobs = []; const orig = URL.createObjectURL.bind(URL); URL.createObjectURL = (b) => { window.__blobs.push(b); return orig(b); }; });
+    const rec = (i = -1) => pg.evaluate((i) => { const a = JSON.parse(localStorage.getItem('psys2.webchat.phrases') ?? '[]'); return a.at(i) ?? null; }, i);
+    await pg.evaluate(() => window.psys2.showTab('robot'));
+    const before = await c.state();
+    await c.say('make the eyes blue');
+    const btns = await pg.$$eval('.p2-msg.is-bot:not(.is-typing) .p2-fb-btn', (e) => e.map((b) => [b.dataset.vote, b.getAttribute('aria-label'), b.getAttribute('aria-pressed')]));
+    check(`${tag}: up and down buttons under the answer with labels`, btns.length >= 2 && btns.at(-2)[0] === 'up' && btns.at(-1)[0] === 'down' && btns.at(-1)[1] === 'Not what I wanted', JSON.stringify(btns.slice(-2)));
+    const clickVote = (vote) => pg.evaluate((v) => [...document.querySelectorAll('.p2-msg.is-bot:not(.is-typing)')].at(-1).querySelector(`.p2-fb-btn[data-vote="${v}"]`).click(), vote);
+    await clickVote('up');
+    check(`${tag}: up is stored in the phrase log record`, (await rec()).feedback?.vote === 'up', JSON.stringify((await rec()).feedback));
+    await clickVote('down');
+    const open = await pg.evaluate(() => { const f = [...document.querySelectorAll('.p2-msg.is-bot')].at(-1).querySelector('.p2-fb-form'); return { hidden: f.hidden, chips: f.querySelectorAll('.p2-fb-chip').length, ph: f.querySelector('textarea')?.placeholder, undo: !!f.querySelector('.p2-fb-undo') }; });
+    check(`${tag}: the vote changes to down and the form opens (9 reason chips, "What did you want?", undo offered)`, !open.hidden && open.chips === 9 && /What did you want/.test(open.ph) && open.undo, JSON.stringify(open));
+    await pg.evaluate(() => { const f = [...document.querySelectorAll('.p2-msg.is-bot')].at(-1).querySelector('.p2-fb-form'); f.querySelector('[data-reason="wrong-value"]').click(); });
+    await pg.evaluate(() => { const f = [...document.querySelectorAll('.p2-msg.is-bot')].at(-1).querySelector('.p2-fb-form'); const t = f.querySelector('textarea'); t.value = 'green eyes'; t.dispatchEvent(new Event('change')); });
+    const fb1 = (await rec()).feedback;
+    check(`${tag}: down stores the reasons and the wanted text`, fb1.vote === 'down' && fb1.reasons.join() === 'wrong-value' && fb1.wanted === 'green eyes' && !!fb1.time, JSON.stringify(fb1));
+    const d = (await rec()).detail;
+    check(`${tag}: the record has readings, SOP wires and state hashes before / after`, !!d && d.readings?.length >= 1 && /@/.test(d.readings[0].wires ?? '') && /^[0-9a-f]{8}$/.test(d.state?.before ?? '') && /^[0-9a-f]{8}$/.test(d.state?.after ?? '') && d.state.before !== d.state.after, JSON.stringify(d)?.slice(0, 200));
+    await shot(c, o, `feedback-form-${name}`);
+    await pg.evaluate(() => [...document.querySelectorAll('.p2-msg.is-bot')].at(-1).querySelector('.p2-fb-undo').click());
+    check(`${tag}: "Show me the right result" takes the turn back (state as before)`, (await c.state()) === before, '');
+    check(`${tag}: the undo is recorded`, (await rec()).feedback?.undone === true);
+    await c.say('make the eyes green');
+    const r1 = await rec();
+    check(`${tag}: the next accepted phrasing is linked as the correction`, !!r1.id && (await rec(-2)).feedback?.correction === r1.id, JSON.stringify((await rec(-2)).feedback));
+    await c.say("that's wrong");
+    const rated = await rec(-2);
+    const formsOpen = await pg.evaluate(() => { const bots = [...document.querySelectorAll('.p2-msg.is-bot:not(.is-typing)')]; const f = bots.at(-2).querySelector('.p2-fb-form'); return f && !f.hidden ? 1 : 0; });
+    check(`${tag}: spoken "that's wrong" sets down on the previous answer and opens its form`, rated.feedback?.vote === 'down' && formsOpen === 1, JSON.stringify(rated.feedback));
+    check(`${tag}: the complaint itself keeps its flag`, (await rec()).feedback === 'negative', JSON.stringify((await rec()).feedback));
+    await c.say('nu asta am vrut');
+    check(`${tag}: Romanian "nu asta am vrut" is the same complaint`, (await rec()).feedback === 'negative', JSON.stringify((await rec()).feedback));
+    await pg.click('button[aria-label="Settings"]'); await pg.click('#p2-st-phrases');
+    await pg.waitForSelector('.p2-plog-item');
+    await pg.evaluate(() => { const s = document.querySelector('select[aria-label="Filter phrases"]'); s.value = 'down'; s.dispatchEvent(new Event('change')); });
+    const hist = await pg.$$eval('.p2-plog-item', (e) => e.map((x) => [x.querySelector('.p2-plog-vote')?.textContent.trim(), x.textContent]));
+    check(`${tag}: history shows the down marks and the filter "Not what I wanted" keeps only those`, hist.length >= 1 && hist.every((x) => x[0] === '▼') && /wanted/.test(hist.map((x) => x[1]).join()), JSON.stringify(hist).slice(0, 200));
+    const labels = await pg.$$eval('.p2-plog-actions button', (b) => b.map((x) => x.textContent));
+    check(`${tag}: "Copy as text" is gone, "Export JSON" is there`, !labels.includes('Copy as text') && labels.includes('Export JSON'), labels.join('|'));
+    await pg.evaluate(() => [...document.querySelectorAll('.p2-plog-actions button')].find((b) => b.textContent === 'Export JSON').click());
+    const body = JSON.parse(await pg.evaluate(() => window.__blobs.at(-1).text()));
+    const downs = body.records.filter((x) => x.feedback?.vote === 'down');
+    check(`${tag}: the export is complete (feedback, correction, detail, segments, id, time)`, body.count === body.records.length && downs.length >= 1 && !!downs[0].feedback.correction && !!downs[0].detail?.readings && Array.isArray(downs[0].segments) && !!downs[0].time && !!downs[0].id, JSON.stringify(downs[0]?.feedback));
+    check(`${tag}: no horizontal overflow`, await pg.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+    check(`${tag}: 0 console errors`, c.consoleErrors.length === 0 && c.errors.length === 0, [...c.consoleErrors, ...c.errors][0] ?? '');
+  } finally { await c.close(); }
+}
+
 export const SCENARIOS = {
+  async feedback(o) { await feedbackFor('phone', VIEWPORTS.phone ?? Object.values(VIEWPORTS)[0], o); await feedbackFor('desktop', VIEWPORTS.desktop ?? Object.values(VIEWPORTS).at(-1), o); },
   async surprise(o) { for (const [name, vp] of Object.entries(VIEWPORTS)) await surpriseFor(name, vp, o); },
   async bubble(o) { for (const w of [390, 360, 320]) await bubbleFor(w, o); },
 

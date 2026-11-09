@@ -38,7 +38,7 @@ import { parseJobs, runSharded, serveShard } from './lib/shard.mjs';
 import { serialize, parse } from '../src/soplang/index.mjs';
 import { normalizedSop } from './collect-paraphrases.mjs';
 import {
-  listLogFiles, loadLogRecords, recordsFromGold, recordsFromEval, sessionsOf, correctionSignals, summarizeReply, decideSelfLabel, labelledRows, queueRow,
+  isComplaintRecord, thumbsOf, listLogFiles, loadLogRecords, recordsFromGold, recordsFromEval, sessionsOf, correctionSignals, summarizeReply, decideSelfLabel, labelledRows, queueRow,
   candidateWorlds, buildPatternIndex, nearestExample, SELF_LABEL_RULES,
 } from './lib/learn-logs.mjs';
 
@@ -154,13 +154,18 @@ async function main() {
 
     const labelled = new Map(), queue = [], reasons = {}, gold = { world_n: 0, world_ok: 0, circuit_n: 0, circuit_ok: 0, queued_world_n: 0, queued_world_ok: 0, queued_circuit_n: 0, queued_circuit_ok: 0, wrong: [] };
     const byWorld = {}, bySource = {}, skipped = { feedback: 0, errors: 0 };
+    const fbCounts = { up: 0, down: 0, down_with_wanted: 0, down_with_correction: 0, up_labelled: 0, down_queued: 0 };   // FB: thumbs in the logs
+    const textOfLogId = new Map(live.filter((r) => r.id).map((r) => [r.id, r.text]));
     sessions.forEach((session, si) => {
       const sig = correctionSignals(session);
       session.forEach((rec, i) => {
         if (rec.replayOnly) return;
         const res = replayed[si][i];
         if (!res?.sum) { skipped.errors++; return; }
-        const signals = { feedback: rec.feedback === 'negative', corrected: sig[i].correctedBy >= 0 };   // a message that is merely worded like a correction ("undo") may still be a clean command
+        const thumbs = thumbsOf(rec);
+        if (thumbs.vote === 'up') fbCounts.up++;
+        if (thumbs.vote === 'down') { fbCounts.down++; if (thumbs.wanted) fbCounts.down_with_wanted++; if (thumbs.correction) fbCounts.down_with_correction++; }
+        const signals = { feedback: isComplaintRecord(rec), corrected: sig[i].correctedBy >= 0, vote: thumbs.vote };   // a message that is merely worded like a correction ("undo") may still be a clean command
         const dec = decideSelfLabel(res.sum, signals, rules);
         const src = rec._file.startsWith('gold-') ? 'gold' : rec._file.startsWith('eval-') ? rec._file.replace(/^eval-/, '').replace(/^encoder\+n1-[0-9a-f]+-[\d-]+-/, '') : 'phrase-log';
         const bs = (bySource[src] ??= { messages: 0, labelled: 0, queued: 0 });
@@ -171,7 +176,7 @@ async function main() {
         const circuitOk = res.goldCircuitOk;
         const score = (key, ok) => { if (ok == null) return; gold[`${key}_n`]++; if (ok) gold[`${key}_ok`]++; };
         if (dec.ok) {
-          bs.labelled++;
+          bs.labelled++; if (thumbs.vote === 'up') fbCounts.up_labelled++;
           score('world', worldOk); score('circuit', circuitOk);
           if (worldOk === false || circuitOk === false) gold.wrong.push({ text: res.englishText, world: res.sum.pieces.map((p) => p.world).join(','), gold_world: rec.gold?.world, circuit_ok: circuitOk, world_ok: worldOk });
           const ctx = session.slice(Math.max(0, i - 3), i).map((x) => x.text).filter(Boolean);   // the turns the session had seen (the dataset's `context`)
@@ -188,7 +193,8 @@ async function main() {
           for (const r of dec.reasons) reasons[r] = (reasons[r] ?? 0) + 1;
           const candidates = res.candidates;
           const nearest = nearestExample(res.englishText, index, candidates.slice(0, 3).map((c) => c.world)) ?? nearestExample(res.englishText, index);
-          queue.push(queueRow({ rec, text: res.englishText, reasons: dec.reasons, sum: res.sum, candidates, nearest }));
+          if (thumbs.vote === 'down') fbCounts.down_queued++;
+          queue.push(queueRow({ rec, text: res.englishText, reasons: dec.reasons, sum: res.sum, candidates, nearest, correctionText: thumbs.correction ? textOfLogId.get(thumbs.correction) ?? null : null }));
         }
       });
     });
@@ -202,6 +208,8 @@ async function main() {
     report.queued = { messages: queue.length, by_world_candidate: Object.fromEntries(Object.entries(queuedByWorld).sort((a, b) => b[1] - a[1])), top_groups: Object.entries(groups).sort((a, b) => b[1] - a[1]).slice(0, 30), reasons: Object.fromEntries(Object.entries(reasons).sort((a, b) => b[1] - a[1])),
       gold_in_queue: { world: { n: gold.queued_world_n, ok: gold.queued_world_ok }, circuit: { n: gold.queued_circuit_n, ok: gold.queued_circuit_ok } } };
     report.skipped = skipped;
+    report.feedback = fbCounts;
+    if (fbCounts.up || fbCounts.down) console.log(`thumbs: ${fbCounts.up} up (${fbCounts.up_labelled} self-validated), ${fbCounts.down} down (${fbCounts.down_with_wanted} with a wanted text, ${fbCounts.down_with_correction} with a correction, ${fbCounts.down_queued} queued first)`);
     report.by_source = bySource;
     console.log(`self-labelled ${nMsgLab} of ${live.length} messages (${nLab} segment rows)  queued ${queue.length}  skipped ${skipped.feedback} feedback + ${skipped.errors} errors`);
     if (gold.world_n || gold.circuit_n) console.log(`precision of self-labelling vs gold: world ${gold.world_ok}/${gold.world_n} (${pct(gold.world_ok, gold.world_n)}%)  circuit ${gold.circuit_ok}/${gold.circuit_n} (${pct(gold.circuit_ok, gold.circuit_n)}%)`);
@@ -216,7 +224,7 @@ async function main() {
       const rf = join(outRoot, 'review.jsonl');
       const old = existsSync(rf) ? readJsonl(rf) : [];
       const fresh = new Set(queue.map((q) => q.id)), nowLabelled = new Set([...labelled.values()].flat().map((r) => r.source_ref.id));
-      const merged = [...old.filter((q) => !fresh.has(q.id) && !nowLabelled.has(q.id)), ...queue].sort((a, b) => a.group.localeCompare(b.group) || a.text.localeCompare(b.text));
+      const merged = [...old.filter((q) => !fresh.has(q.id) && !nowLabelled.has(q.id)), ...queue].sort((a, b) => (a.priority ?? 2) - (b.priority ?? 2) || a.group.localeCompare(b.group) || a.text.localeCompare(b.text));
       writeFileSync(rf, merged.map((q) => JSON.stringify(q)).join('\n') + (merged.length ? '\n' : ''));
       console.log(`wrote ${[...labelled.keys()].length} labelled file(s) and ${rf.replace(`${REPO}/`, '')} (${merged.length} rows)`);
     } else console.log('dry run: nothing written');

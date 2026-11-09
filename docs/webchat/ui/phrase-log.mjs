@@ -39,9 +39,63 @@ export function buildRecord({ text, mode = 'typed', language = 'en', tab = null,
   };
 }
 
+/** FNV-1a hash of a JSON value, 8 hex digits: the state before and after a turn, so that a reviewer can tell whether a replay reaches the same state. */
+export function hashState(value) {
+  let h = 0x811c9dc5, str = '';
+  try { str = JSON.stringify(value) ?? ''; } catch { str = ''; }
+  for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+  return h.toString(16).padStart(8, '0');
+}
+
+const clip = (v, n) => { const t = String(v ?? ''); return t.length > n ? `${t.slice(0, n)}…` : t; };
+/**
+ * What a reviewer needs to replay a turn (FB): the readings tried per segment, the SOP Lang wires that ran, the worlds, the state hashes before and after,
+ * the timings. Bounded (the log is kept in localStorage). `serialize(wires)` turns wires into SOP Lang text; `state` = { before, after } hashes.
+ */
+export function buildDetail(reply, { serialize = null, state = null, tab = null } = {}) {
+  if (!reply) return null;
+  const d = reply.trace?.dispatch ?? null;
+  const readings = (reply.segments ?? []).slice(0, 12).map((sg, i) => {
+    let wires = '';
+    try { wires = serialize ? clip(serialize((sg.wires ?? []).filter((w) => w.type !== 'core.agent')), 1500) : ''; } catch { wires = ''; }
+    const piece = d?.segmentations?.[d.winnerIndex ?? 0]?.pieces?.[i] ?? null;
+    return {
+      text: clip(sg.text, 300), world: sg.match?.worldId ?? null, pattern: sg.match?.patternId ?? null, strategy: sg.strategy ?? null, unparsed: !!sg.unparsed,
+      complete: sg.match ? !sg.partial : false, refusal: sg.refusal ?? sg.reason ?? null,
+      candidates: (piece?.attempts ?? []).slice(0, 4).map((a) => ({ world: a.world, score: a.worldScore != null ? +Number(a.worldScore).toFixed(3) : null, valid: !!a.valid, variant: a.variant ?? null })),
+      wires,
+    };
+  });
+  return {
+    tab, worlds: [...new Set(readings.map((r) => r.world).filter(Boolean))], status: d?.status ?? null, readings,
+    answer: clip(reply.text, 400), effects: (reply.effects ?? []).slice(0, 8).map((e) => ({ name: e.name ?? e.effect ?? null })),
+    state: state ?? null, perf: reply.perf ? { totalMs: reply.perf.totalMs ?? null, engineMs: reply.perf.engineMs ?? null, stages: reply.perf.stages ?? null } : null,
+  };
+}
+
+export const FEEDBACK_REASONS = [
+  ['wrong-action', 'wrong action'], ['wrong-object', 'wrong thing / object'], ['wrong-value', 'wrong place / value'], ['too-much', 'did too much'],
+  ['too-little', 'did too little'], ['wrong-tab', 'wrong tab / world'], ['misheard', 'misheard (voice)'], ['too-slow', 'too slow'], ['other', 'other'],
+];
+/** The vote of a record: 'up' | 'down' | null (the older spoken-feedback flag `feedback: 'negative'` belongs to the message that complained, not to a vote). */
+export const voteOf = (r) => (r?.feedback && typeof r.feedback === 'object' ? r.feedback.vote ?? null : null);
+/** True for a message that is itself a complaint ("that is wrong", spoken or typed), in either storage form. */
+export const isComplaint = (r) => r?.feedback === 'negative' || (r?.feedback && typeof r.feedback === 'object' && r.feedback.spoken === true);
+/** A new feedback object from the old one and a patch; `time` is set when the vote changes. A complaint's flag survives as `spoken: true`. */
+export function nextFeedback(old, patch, now = Date.now()) {
+  const base = old && typeof old === 'object' ? old : { vote: null, reasons: [], wanted: '', correction: null, ...(old === 'negative' ? { spoken: true } : {}) };
+  const fb = { ...base, ...patch };
+  fb.reasons = [...new Set((fb.reasons ?? []).filter((x) => FEEDBACK_REASONS.some(([k]) => k === x)))];
+  if (fb.vote !== 'down') { fb.reasons = []; fb.wanted = ''; fb.correction = null; }
+  if (patch.vote !== undefined && patch.vote !== base.vote) fb.time = new Date(now).toISOString(); else fb.time ??= new Date(now).toISOString();
+  return fb;
+}
+
 /** Fills a record written at send time with the outcome of the reply (the phrase is logged before it is answered). */
 export function completeRecord(rec, reply, { language = 'en' } = {}) {
   const full = buildRecord({ text: rec.text, mode: rec.mode, language, tab: rec.tab, reply, now: Date.parse(rec.time) || Date.now(), id: rec.id, endType: rec.endType ?? null, waitMs: rec.waitMs ?? null, example: rec.example === true });
+  if (rec.feedback && typeof rec.feedback === 'object') full.feedback = rec.feedback;   // a vote given before the record was completed survives
+  if (rec.queueMs != null) full.queueMs = rec.queueMs;
   return full;
 }
 
@@ -57,8 +111,9 @@ export function appendCapped(list, rec, cap = LOG_CAP) {
 }
 
 const worstStatus = (r) => (r.outcome ?? r.segments.find((s) => s.status !== 'supported')?.status ?? r.segments[0]?.status ?? 'unknown');
-/** Filters: all | misses (not understood: any segment not supported) | voice. */
+/** Filters: all | misses (not understood: any segment not supported) | voice | down (thumbs down: "Not what I wanted") | up. */
 export function filterRecords(list, filter = 'all') {
+  if (filter === 'down' || filter === 'up') return list.filter((r) => voteOf(r) === filter);
   if (filter === 'misses') return list.filter((r) => r.outcome || r.unparsed || r.segments.some((s) => s.status !== 'supported'));
   if (filter === 'voice') return list.filter((r) => r.mode === 'voice');
   return list;
@@ -66,18 +121,22 @@ export function filterRecords(list, filter = 'all') {
 export const summaryStatus = worstStatus;
 export const summaryWorlds = (r) => [...new Set(r.segments.map((s) => s.world).filter(Boolean))];
 
-/** Export record, in the spirit of the training records of spec 08. */
+/** Export record: every detail of the logged record (segments, readings and wires, timings, feedback, endType, outcome), plus the summary fields. */
 export function exportRecord(r) {
-  return { text: r.text, lang: r.lang, english: r.english ?? r.text, mode: r.mode, tab: r.tab, worlds: summaryWorlds(r), status: worstStatus(r), time: r.time, ...(r.feedback ? { feedback: r.feedback } : {}), ...(r.endType ? { endType: r.endType, waitMs: r.waitMs ?? null } : {}), ...(r.outcome ? { outcome: r.outcome, stage: r.stage ?? null } : {}) };
+  const { segments, ...rest } = r;
+  return { text: r.text, lang: r.lang, english: r.english ?? r.text, mode: r.mode, tab: r.tab, worlds: summaryWorlds(r), status: worstStatus(r), time: r.time, ...rest, segments };
 }
 /** Chips are not human phrasing: excluded unless includeChips. */
+export function selectForExport(list, { includeChips = false } = {}) { return list.filter((r) => includeChips || r.source !== 'chip'); }
+/** One JSON document: { format, exported, count, records } (the learning loop reads this and the older JSONL alike). */
+export function toJSON(list, { includeChips = false } = {}) {
+  const records = selectForExport(list, { includeChips }).map(exportRecord);
+  return `${JSON.stringify({ format: 'psys2-phrase-log/2', exported: new Date().toISOString(), count: records.length, records }, null, 1)}\n`;
+}
 export function toJSONL(list, { includeChips = false } = {}) {
-  return list.filter((r) => includeChips || r.source !== 'chip').map((r) => JSON.stringify(exportRecord(r))).join('\n') + (list.length ? '\n' : '');
+  return selectForExport(list, { includeChips }).map((r) => JSON.stringify(exportRecord(r))).join('\n') + (list.length ? '\n' : '');
 }
-export function toText(list, { includeChips = false } = {}) {
-  return list.filter((r) => includeChips || r.source !== 'chip').map((r) => r.text.replace(/\s*\n\s*/g, ' ')).join('\n');
-}
-export const exportFilename = (d = new Date()) => `psys2-phrases-${d.toISOString().slice(0, 10).replace(/-/g, '')}.jsonl`;
+export const exportFilename = (d = new Date()) => `psys2-phrases-${d.toISOString().slice(0, 10).replace(/-/g, '')}.json`;
 
 /** localStorage-backed store; every storage access is guarded. */
 export function createStore(storage = globalThis.localStorage, { cap = LOG_CAP, key = LOG_KEY } = {}) {

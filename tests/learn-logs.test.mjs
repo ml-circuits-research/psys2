@@ -7,7 +7,7 @@ import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import {
   summarizeReply, decideSelfLabel, correctionSignals, sessionsOf, recordsFromGold, recordsFromEval, labelledRows, queueRow, candidateWorlds,
-  buildPatternIndex, nearestExample, isCorrectionText, loadLogRecords,
+  buildPatternIndex, nearestExample, isCorrectionText, loadLogRecords, thumbsOf, isComplaintRecord, listLogFiles,
 } from '../scripts/lib/learn-logs.mjs';
 
 /** A reply shaped like session.send() with trace.dispatch (one or two pieces). Overrides patch piece 0 / the whole reply. */
@@ -161,4 +161,30 @@ test('CLI: --retrain --dry-run prints the R3 commands (labelled rows reach build
     assert.ok(r.stdout.includes(frag), `missing: ${frag}\n${r.stdout}`);
   }
   assert.equal([...r.stdout.matchAll(/\[dry-run\]/g)].length, 6);
+});
+
+test('FB: thumbs-up validates beyond the margin rule, thumbs-down never self-labels and is queued first, the JSON export loads', () => {
+  const rival = reply({ piece: { rivals: [{ world: 'kids.shop', rank: 3, worldScore: 0.2, variant: 'original', valid: true, score: -0.5 }] } });
+  assert.equal(decideSelfLabel(summarizeReply(rival)).ok, false);
+  assert.equal(decideSelfLabel(summarizeReply(rival), { vote: 'up' }).ok, true);                       // margin rule waived by the person
+  assert.equal(decideSelfLabel(summarizeReply(reply({ piece: { bestEffort: true } })), { vote: 'up' }).ok, false);   // structure still counts
+  assert.ok(decideSelfLabel(summarizeReply(reply()), { vote: 'down' }).reasons.includes('user_thumbs_down'));
+  assert.equal(decideSelfLabel(summarizeReply(reply()), { corrected: true, vote: 'up' }).ok, true);
+  assert.deepEqual(thumbsOf({ feedback: { vote: 'down', wanted: ' red ', correction: 'p2', reasons: ['wrong-value'] } }), { vote: 'down', wanted: 'red', correction: 'p2', reasons: ['wrong-value'] });
+  assert.equal(thumbsOf({ feedback: 'negative' }).vote, null);
+  assert.ok(isComplaintRecord({ feedback: 'negative' }) && isComplaintRecord({ feedback: { vote: null, spoken: true } }) && !isComplaintRecord({ feedback: { vote: 'down' } }));
+  const sum = summarizeReply(reply());
+  const q = queueRow({ rec: { _id: 'a', lang: 'en', feedback: { vote: 'down', wanted: 'a blue house', correction: 'p9', reasons: ['wrong-value'] } }, text: 'x', reasons: ['user_thumbs_down'], sum, candidates: [{ world: 'art.draw' }], nearest: null, correctionText: 'make a blue house' });
+  assert.equal(q.priority, 0);
+  assert.equal(q.thumbs_down.wanted, 'a blue house');
+  assert.equal(q.thumbs_down.correction_text, 'make a blue house');
+  assert.equal(queueRow({ rec: { _id: 'b', feedback: { vote: 'down' } }, text: 'x', reasons: [], sum, candidates: [], nearest: null }).priority, 1);
+  assert.equal(queueRow({ rec: { _id: 'c' }, text: 'x', reasons: [], sum, candidates: [], nearest: null }).priority, 2);
+  // the webchat's "Export JSON" ({ records }) is read like the JSONL export; a ▼ message is not a complaint but a correction signal
+  const dir = mkdtempSync(join(tmpdir(), 'learn-'));
+  writeFileSync(join(dir, 'p.json'), JSON.stringify({ format: 'psys2-phrase-log/2', count: 2, records: [{ id: 'p1', text: 'hello', time: 't1', source: 'human', feedback: { vote: 'up' } }, { id: 'p2', text: 'tap', source: 'chip' }] }));
+  assert.deepEqual(listLogFiles(dir).map((f) => f.slice(-6)), ['p.json']);
+  const recs = loadLogRecords(join(dir, 'p.json'));
+  assert.deepEqual(recs.map((x) => x.text), ['hello']);
+  assert.equal(thumbsOf(recs[0]).vote, 'up');
 });

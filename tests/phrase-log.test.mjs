@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { fileURLToPath } from 'node:url';
 import { createFsLoader } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
-import { buildRecord, completeRecord, appendCapped, filterRecords, toJSONL, toText, createStore, exportFilename } from '../docs/webchat/ui/phrase-log.mjs';
+import { buildRecord, completeRecord, appendCapped, filterRecords, toJSONL, toJSON, createStore, exportFilename, hashState, buildDetail, nextFeedback, voteOf, isComplaint } from '../docs/webchat/ui/phrase-log.mjs';
 
 const engine = await createEngine({ loader: createFsLoader() });
 const rec = async (text, extra = {}) => buildRecord({ text, tab: 'robot', reply: await engine.createSession().send(text, { language: 'en' }), ...extra });
@@ -28,11 +28,11 @@ test('cap drops the oldest, filters, JSONL and text', async () => {
   assert.deepEqual(filterRecords(all, 'voice'), [b]);
   const lines = toJSONL(all).trim().split('\n').map((x) => JSON.parse(x));
   assert.equal(lines.length, 2, 'chips excluded');
-  assert.deepEqual(Object.keys(lines[0]).sort(), ['english', 'lang', 'mode', 'status', 'tab', 'text', 'time', 'worlds']);
+  for (const k of ['english', 'lang', 'mode', 'status', 'tab', 'text', 'time', 'worlds', 'id', 'segments', 'source']) assert.ok(k in lines[0], k);   // the export is the complete record
   assert.equal(lines[1].status, 'unparsed');
   assert.equal(toJSONL(all, { includeChips: true }).trim().split('\n').length, 3);
-  assert.equal(toText(all), 'How many legs does a spider have?\nblah zorp quux');
-  assert.match(exportFilename(new Date('2026-11-08T10:00:00Z')), /^psys2-phrases-20261108\.jsonl$/);
+  assert.deepEqual(JSON.parse(toJSON(all)).records.map((r) => r.text), ['How many legs does a spider have?', 'blah zorp quux']);
+  assert.match(exportFilename(new Date('2026-11-08T10:00:00Z')), /^psys2-phrases-20261108\.json$/);
 });
 
 test('store survives broken storage', () => {
@@ -69,4 +69,40 @@ test('RD7: two pages of one browser do not overwrite each other\'s log', () => {
   b.add({ id: 'b1', text: 'two', time: '2026-01-01T00:00:02Z', segments: [] });
   a.add({ id: 'a2', text: 'three', time: '2026-01-01T00:00:03Z', segments: [] });
   assert.deepEqual(createStore(mem).all().map((r) => r.id), ['a1', 'b1', 'a2']);
+});
+
+test('FB: feedback object, state hash, detail, filters and the complete JSON export', () => {
+  const reply = { text: 'Done.', lang: 'en', statuses: ['supported'], effects: [{ name: 'x' }], perf: { totalMs: 50 },
+    segments: [{ text: 'make a house', match: { worldId: 'art.draw', patternId: 'draw.house' }, strategy: 'encoder', wires: [{ type: 'core.request', entries: [] }] }],
+    trace: { dispatch: { status: 'understood', winnerIndex: 0, segmentations: [{ pieces: [{ attempts: [{ world: 'art.draw', worldScore: 0.9, valid: true, variant: 'original' }] }] }] } } };
+  const d = buildDetail(reply, { serialize: (w) => `${w.length} wires`, state: { before: hashState({ a: 1 }), after: hashState({ a: 2 }) }, tab: 'draw' });
+  assert.equal(d.readings[0].wires, '1 wires');
+  assert.equal(d.readings[0].pattern, 'draw.house');
+  assert.deepEqual(d.worlds, ['art.draw']);
+  assert.notEqual(d.state.before, d.state.after);
+  assert.equal(hashState({ a: 1 }), hashState({ a: 1 }));
+  const rec = { ...buildRecord({ text: 'make a house', tab: 'draw', reply, id: 'p1' }), detail: d };
+  const down = nextFeedback(null, { vote: 'down' }, 1000);
+  assert.equal(down.vote, 'down');
+  const w = nextFeedback(down, { reasons: ['wrong-value', 'bogus'], wanted: 'a red house' });
+  assert.deepEqual(w.reasons, ['wrong-value']);
+  assert.equal(nextFeedback(w, { correction: 'p2' }).correction, 'p2');
+  const up = nextFeedback(w, { vote: 'up' });
+  assert.deepEqual([up.vote, up.reasons, up.wanted, up.correction], ['up', [], '', null]);   // changing the vote drops the details of the thumbs-down
+  assert.equal(nextFeedback('negative', { vote: 'down' }).spoken, true);
+  const rated = { ...rec, feedback: w };
+  const all = [rated, { ...rec, id: 'p3', feedback: up }, { ...rec, id: 'p4' }];
+  assert.deepEqual(filterRecords(all, 'down').map((r) => r.id), ['p1']);
+  assert.deepEqual(filterRecords(all, 'up').map((r) => r.id), ['p3']);
+  assert.equal(voteOf(rated), 'down');
+  assert.equal(isComplaint({ feedback: 'negative' }), true);
+  // a vote given before the reply was completed survives the completion
+  assert.equal(completeRecord({ ...rec, feedback: w }, reply).feedback.vote, 'down');
+  const out = JSON.parse(toJSON(all));
+  assert.equal(out.count, 3);
+  const e = out.records[0];
+  assert.equal(e.feedback.wanted, 'a red house');
+  assert.equal(e.detail.readings[0].wires, '1 wires');
+  assert.equal(e.segments[0].pattern, 'draw.house');
+  assert.ok(e.detail.state.before && e.detail.state.after);
 });

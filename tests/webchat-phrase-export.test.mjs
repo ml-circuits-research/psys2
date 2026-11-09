@@ -1,4 +1,4 @@
-// RD7: type N messages in the real webchat (headless Chrome) and check that the Settings count, the list and the JSONL export all have N records.
+// RD7: type N messages in the real webchat (headless Chrome) and check that the Settings count, the list and the JSON export all have N records.
 // puppeteer-core is not a dependency: the test runs only when PUPPETEER_CORE points to a scratch install (see scripts/perf-webchat.mjs) and a Chrome exists.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -37,9 +37,9 @@ test('RD7: typing N messages gives N entries in the count, the list and the JSON
     const count = await pg.$eval('.p2-plog-count', (e) => e.textContent);
     assert.match(count, new RegExp(`^${msgs.length} entries \\(${msgs.length} typed or spoken`));
     assert.equal((await pg.$$('.p2-plog-item')).length, msgs.length);
-    await pg.evaluate(() => [...document.querySelectorAll('.p2-plog-actions button')].find((b) => b.textContent === 'Export JSONL').click());
+    await pg.evaluate(() => [...document.querySelectorAll('.p2-plog-actions button')].find((b) => b.textContent === 'Export JSON').click());
     const body = await pg.evaluate(() => window.__blobs.at(-1).text());
-    const lines = body.trim().split('\n').map((l) => JSON.parse(l));
+    const lines = JSON.parse(body).records;
     assert.equal(lines.length, msgs.length);
     assert.deepEqual(lines.map((l) => l.text).sort(), [...msgs].sort());
   } finally { await browser.close(); srv.close(); }
