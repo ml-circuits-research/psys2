@@ -28,6 +28,8 @@ let cur = null;
 export const guard = {
   get active() { return cur !== null; },
   get stage() { return cur?.stage ?? null; },
+  /** The AbortSignal of the turn in progress (null outside a turn or without one). */
+  get signal() { return cur?.signal ?? null; },
   get tripped() { return cur?.tripped ?? null; },
   get trippedStage() { return cur?.trippedStage ?? null; },
   /**

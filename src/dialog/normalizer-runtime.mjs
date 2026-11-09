@@ -74,7 +74,7 @@ const logSoftmaxTop = (row, k) => {
   return top.map(([i, v]) => [i, v - lse]);
 };
 
-export function createNormalizerRuntime({ ort, encoder, decoder, tokenizer, config, maxNew = 48, maxSource = 160, makeInput = (w, t, x) => `${w} | ${t || '-'} | ${x}` }) {
+export function createNormalizerRuntime({ ort, encoder, decoder, tokenizer, config, maxNew = 48, maxSource = 160, deadlineMs = 4000, now = () => globalThis.performance?.now?.() ?? Date.now(), makeInput = (w, t, x) => `${w} | ${t || '-'} | ${x}` }) {
   const tok = tokenizer instanceof UnigramTokenizer ? tokenizer : new UnigramTokenizer(tokenizer);
   const { layers: NL, heads: H, dKv: D } = config;
   const crossNames = [];
@@ -85,6 +85,9 @@ export function createNormalizerRuntime({ ort, encoder, decoder, tokenizer, conf
   async function generate(input, beam = 3) {
     const ids = tok.encode(input).slice(0, maxSource);
     const s = ids.length;
+    // HANG2: a decode can never run away: at most input length x 1.5 + 8 steps (never above maxNew) and one deadline for the whole call
+    const maxSteps = Math.min(maxNew, Math.ceil(s * 1.5) + 8);
+    const tEnd = now() + deadlineMs;
     const enc = await encoder.run({ input_ids: i64(ids, [1, s]), attention_mask: i64(ids.map(() => 1), [1, s]) });
     // tile the cross attention keys / values to the beam width
     const cross = {};
@@ -100,7 +103,8 @@ export function createNormalizerRuntime({ ort, encoder, decoder, tokenizer, conf
     let alive = [{ toks: [], score: 0 }];                // the first step has one live hypothesis; the others start at -inf
     for (let b = 1; b < beam; b++) alive.push({ toks: [], score: -1e9 });
     const finished = [];
-    for (let step = 0; step < maxNew; step++) {
+    for (let step = 0; step < maxSteps; step++) {
+      if (now() > tEnd) throw new Error(`normalizer deadline of ${deadlineMs} ms passed after ${step} decode steps`);
       const feeds = { input_id: i64(alive.map((a) => (a.toks.length ? a.toks[a.toks.length - 1] : tok.pad)), [beam, 1]), step: new ort.Tensor('int64', BigInt64Array.from([BigInt(step)]), []), attention_mask: mask, ...cross };
       for (let i = 0; i < NL; i++) {
         feeds[`self_k.${i}`] = new ort.Tensor('float32', past[2 * i], [beam, H, step, D]);

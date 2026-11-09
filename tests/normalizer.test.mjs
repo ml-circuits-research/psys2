@@ -203,7 +203,7 @@ test('the real normalizer host: loading -> ready transition (stubbed onnxruntime
   try {
     const meta = { files: ['encoder.int8.onnx', 'decoder.int8.onnx', 'tokenizer.json'], config: {}, version: { export_date: '2026-11-08', sha256: 'abcdef012345' } };
     const states = [];
-    const host = createNormalizerHost({ base, meta, lib: { createNormalizerRuntime: () => ({ propose: async ({ text }) => (text === NOISY ? [CLEAN] : []) }) }, onStatus: (s) => states.push(s.state) });
+    const host = createNormalizerHost({ base, meta, getOrt: async () => ({ ort: { InferenceSession: { create: async () => ({}) } } }), lib: { createNormalizerRuntime: () => ({ propose: async ({ text }) => (text === NOISY ? [CLEAN] : []) }) }, onStatus: (s) => states.push(s.state) });
     const v = createDispatchValidator({ engine, normalizer: host.provider });
     const early = await v.validate(msg(NOISY, 'kids.arith'));       // starts loading; the model is not there yet
     assert.equal(early.status, 'not_understood');
