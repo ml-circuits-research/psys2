@@ -280,6 +280,33 @@ Clicks on the avatar (gallery, presets, parts) run late, after the spoken answer
   - the same for a chess move while the engine thinks;
   - 0 console errors.
 
+### MOBILE-VOICE / FREEZE 1–3 / NOISE — review of f15e2da + 5f56daa (23:05 local)
+
+Files match the log.
+
+**Validated:**
+- `tests/voice-mobile.test.mjs` 18/18, including the replay of the 108 phone records through the cumulative-final fake recognizer.
+- `scripts/test-webchat-voice.mjs --only mobile,persist,twotabs,noise`:
+  - at throttle 1: 11/11 for twotabs and noise;
+  - at `--throttle 6`: mobile 8/8 (one message per utterance, no queue, mic never live during the turn) and persist 8/8 (handsFree no longer starts the mic, hidden tab, one recognizer).
+
+**At `--throttle 6` (the phone case) 4 of 28 checks fail:**
+1. **twotabs:** after "Use it here" in the second tab, **the first tab keeps listening**. That is the cross-tab conflict the user hit. The handover must stop the first tab's recognizer within 2 s at 6×.
+2. **noise:**
+   - room talk → "0 greyed + 4 fragments of 8, **4 replies**";
+   - the phrase log records 0 `ignored`;
+   - "tap to send anyway" fails.
+
+   It passes at throttle 1, so the classifier probably relies on the dry run, which is off on slow devices. The noise decision must not depend on the dry run: use `classifyVoice` with the cheap signals (addressee, imperative/question shape, known-command prefix, language) when the dry run is off or late.
+3. **The 6× browser replay of the user's phone export is missing.** The `mobile` scenario has one utterance ("draw a heart"). Add a browser scenario that feeds `training/eval/real-phrases-2026-11-09f-mobile.json` through the fake Android cumulative-final recognizer at `--throttle 6`. It must pass:
+   - ≤ 1 message per utterance;
+   - queue 0;
+   - 0 tab switches caused by fragments;
+   - the heart and house drawn;
+   - 0 page errors.
+
+Still open from FREEZE: 4–5 (cancellable dryRead, ORT budget) and the 30-minute soak test.
+
 ### MOBILE-VOICE — on a phone, speech-to-text floods the chat with fragments and repeats (user, 21:36 local) — P0, with FREEZE
 
 **Data.** `training/eval/real-phrases-2026-11-09f-mobile.json` (the export from the user's phone: 108 voice records in 4.5 minutes, with full detail).
