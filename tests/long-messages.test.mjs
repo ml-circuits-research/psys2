@@ -125,6 +125,15 @@ test('validator: repairs never turn an unread message into a reading', async () 
   assert.equal(r.status, 'not_understood');
 });
 
+test('draw: "resize it bigger" makes the last thing bigger', async () => {
+  const s = session();
+  s.setWorldState('ui.shell', { activeTab: 'draw' });
+  await s.send('draw a red circle');
+  const before = s.state()['art.draw'].objects[0].size;
+  await s.send('resize it bigger');
+  assert.ok(s.state()['art.draw'].objects[0].size > before);
+});
+
 test('guess: a list of answers is applied in order', async () => {
   for (const msg of ['yes, no, I don\'t know, and then maybe', 'yes no I don\'t know maybe']) {
     const s = session();
