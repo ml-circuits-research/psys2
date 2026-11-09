@@ -46,6 +46,7 @@ The working hypothesis: on small worlds, **rules plus a small learned front-end*
 
 - **Track 1, CPU and browser, 2 agents at most:**
   1. the MOBILE-VOICE review fixes (two-tab handover at 6×, noise without the dry run, the browser replay of the phone export);
+  1b. FREEZE-6 (main-thread load in the soak: profile, then fix the top causes);
   2. BUSY-LOST;
   3. DIAG3b;
   4. RP5b.
