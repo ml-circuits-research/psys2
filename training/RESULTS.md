@@ -648,3 +648,13 @@ Harness: `scripts/soak-webchat.mjs` (headless Chrome, 390x844, CPU 4x, fake alwa
 3-minute versions (`--minutes 3`, the same 67 messages squeezed into 3 minutes, so about ten times denser than reality): 93 % busy, echo 39 ms, 0 restarts, same second-tab failure. Run the gate version with `bash -c 'PUPPETEER_CORE=... node scripts/soak-webchat.mjs --minutes 3'`; `--rules` runs without the models.
 
 **Dry run** (`scripts/measure-dryread.mjs`, 16 Romanian and English room-talk lines x 3 rounds, Node, unthrottled, one main thread): before 48.4 ms mean, p95 226 ms, max 545 ms (total 2324 ms for 48 calls); after 49.5 ms mean, p95 244 ms, max 457 ms (total 2378 ms). The unthrottled mean did not change: the rules reading itself is not shorter. What changed is the bound: a newer call or the caller's signal stops an older run at its next guard check (it no longer runs on after the 400 ms wait), at most one runs at a time, and long or vocabulary-free text costs under 2 ms (`unchiul`, `voi`, `faci tu`, `scuze` went from 5-24 ms to 0.5-1.4 ms). The saturation the user saw came from many overlapping runs; with one in flight and cancellation the dry-run load is at most one run at a time.
+
+## TIER-T-LONG (2026-11-09): tier T restricted for long multi-command messages
+
+Published dispatcher v4e + N1 (`eval-operational --mode encoder+n1`). Tier T (ADR-004) accepted long multi-command messages as one clause of the active tab; it now needs a `signal=true` pattern in every clause when the dispatcher cuts the message into several pieces, the message has more than 8 words and is not running text.
+
+| measure | before | after |
+| --- | --- | --- |
+| long set (154) right / partly / wrong | 80.5 / 3.2 / 13.0 | 94.2 / 3.2 / 1.9 |
+| 1296 operational right / wrong | 98.4 / 0.6 | 98.6 / 0.3 |
+| eval-diagram test set, wire-level act right | 81.0 | 81.0 |

@@ -57,6 +57,7 @@ export const DEFAULT_POLICY = {
   validFirst: true,           // G7: a piece's best reading is a valid one even when an invalid reading of a more probable world scores higher ("new game" read by the shell, not by the game the model named)
   splitRepair: 3,             // G7: a piece nobody reads is cut into 2 (or 3, when 3) parts that the rules read, in one world; 0 = off
   mergeRepair: 2,             // G7: how many merges of two pieces cut apart inside a clause (no punctuation or connective between) are tried as extra segmentations; 0 = off
+  tabTierLongWords: 8,        // ADR-004 tier T: above this many words, a message the dispatcher cuts into several pieces needs a signal pattern in every clause
   tabTier: true,              // ADR-004 tier T: the active tab's world wins whenever its rules read the whole message completely (no catch-all), whatever the dispatcher proposes
   intersegmentContext: true,  // pieces after the first run in a session where the earlier chosen pieces were committed
 };
@@ -425,6 +426,11 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
   const tabFirst = async (pred, o) => {
     const text = pred.text.trim();
     if (!o.tabTier || !pred.context.tab || !text) return null;
+    // TIER-T-LONG: when the dispatcher's best segmentation cuts the message into several pieces, it is a multi-command message; tier T then needs
+    // an explicit signal of the world in every clause (below), otherwise a tab pattern that swallows the whole text would hide the segmentation.
+    // Only for long messages that are not running text: a short message cut by the dispatcher by mistake ("delete the last word"), or sentences
+    // dictated to the editor ("write It was cold. The fox ..."), stay with the tab's world.
+    const dispatcherSplits = (pred.segmentations[0]?.segments.length ?? 0) > 1 && text.split(/\s+/).length > o.tabTierLongWords && !/[.!?]\s+\S/.test(text);
     const s = await seed(pred.context);
     const ctx = s.context();
     const tw = ctx.tabWorld;
@@ -433,7 +439,7 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
     if (res.segments.length < 1 || res.segments.some((x) => x.unparsed || !x.match)) return null;
     // several clauses: every clause must be read by the tab world itself (a clause of another world, or a catch-all, leaves the decision to the dispatcher)
     // and by a pattern that carries an explicit signal of the world (a named shape, an arrow between names, a diagram form): the catch-alls of a world (charts: 'how many ...') read half of any message
-    if (res.segments.length > 1 && res.segments.some((x) => x.match.worldId !== tw || !engine.set.get(tw).patterns.find((p) => p.id === x.match.patternId)?.signal)) return null;
+    if ((res.segments.length > 1 || dispatcherSplits) && res.segments.some((x) => x.match.worldId !== tw || !engine.set.get(tw).patterns.find((p) => p.id === x.match.patternId)?.signal)) return null;
     const ids = view([tw]).ids;
     if (res.segments.some((x) => !ids.includes(x.match.worldId) || x.match.worldId === 'ui.shell' || wildTokens(x.match) > x.match.literals)) return null;
     const r = await check(pred.context, [], tw, text, o);
