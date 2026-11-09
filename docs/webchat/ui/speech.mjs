@@ -200,6 +200,7 @@ export function createSpeech({ getLang, getVoiceName, getRate, onFinal, onSend, 
 
   function noteDrop(t, reason) {
     onIgnored?.({ text: t, reason });
+    if (reason === 'rate') return;   // a message that came too soon is not a recogniser gone wild
     const tn = Date.now();
     drops = drops.filter((x) => tn - x < T.fragWindowMs); drops.push(tn);
     if (drops.length > T.fragMax && handsFree && !paused) {   // the recogniser is going wild: never loop, tell the person
