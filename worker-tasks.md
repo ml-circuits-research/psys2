@@ -254,6 +254,16 @@ Clicks on the avatar (gallery, presets, parts) run late, after the spoken answer
   - the same for a chess move while the engine thinks;
   - 0 console errors.
 
+### SMALL — follow-ups from the reviewer's browser check at 91ce510 (19:40 local)
+
+1. **SURPRISE pool.** The die button offered "I am a democrat." (a user.profile statement about politics). The pool must contain only requests and questions that do something visible or answer something.
+   - Exclude personal statements about the user (profile facts, especially politics, religion, health, family), feedback phrases and meta commands like "zoom all the way out" on an empty map.
+   - Validate the pool by kind: request or question, a visible effect or answer.
+2. **Romanian reply language.** "fa ochi visatori" (robot avatar) now answers fast, but in **English**: "I do not know eyes like "dreamy"…". "fa-i ochii mari" in the same session answers in Romanian. The unsupported / refusal reply path must also go through the back-translation.
+   - Also, by RD3, map "dreamy" to the closest robot eyes (sleepy) instead of refusing.
+3. **Diagram references.** "connect them with a dashed arrow" right after "draw a red box called A and a yellow circle called B" → "A connection needs two ends". You noted it for DIAG3: "them / both / these / the two" refer to the shapes made or named last.
+4. **Diagram, first message.** On a fresh page with the Diagram tab open, the two-clause create "draw a blue rectangle called Api and a green circle called Db" went to art.draw at 413669e. Tier T covers one-clause messages only. Add this exact case (fresh page, empty diagram) to `scripts/test-webchat-diagram.mjs`. Extend tier T to multi-clause messages whose every clause the active tab's world reads completely.
+
 ### TEST-SPLIT — two test suites: a fast mandatory one and a full one a few times a day (user, 18:53 local; reviewer measurement)
 
 **Measured** on the reviewer's run at c0c4cf8: 1,002 tests, 1,226 s of test time in total. **Ten exhaustive sweeps take about 950 s (77%).**
@@ -1544,3 +1554,12 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
   - after "stop", the misspelled "coming back to knowning me…" resumes with the next question;
   - the summary is right.
   Small open point: the bare "20" answering "How did you get into it?" is not taken as years; the next question asks for years again.
+
+- At 91ce510, reviewer's real Chrome check:
+  - **HANG3** (205e28b): "fa ochi visatori" 1.4 s, "fa-i ochii mari" 0.9 s, no watchdog endings.
+  - **PERF round 3** (51a43f1), encoder+n1 at 4×, 2 runs: ready 3.7–4.2 s, first answer 0.9–1.2 s, the long multi-command 0.48–0.58 s (was 2.85 s), p95 ≤ 850 ms.
+  - **DIAG2** (10f9fd7): single-clause diagram commands work in the webchat on the Diagram tab ("Drew Api", "Connected Api → Db"), and a running game takes bare coordinates.
+  - **SURPRISE** (44eb6ec): the die button works.
+  - **MIC2 / EOT2** (ccca6a1): validated by your tests; the real microphone needs the user.
+  - **BUSY**: still not on main (BUSY-LOST).
+  - Follow-ups in SMALL.
