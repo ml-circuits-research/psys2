@@ -10,13 +10,31 @@
     canonical="Draw a red circle."
     canonical="Add a small blue square."
     example="Create a huge gold star in the center."
+    example="A triangle."
+    example="A hexagon."
+    example="A star."
+    example="An ellipse."
+    example="A diamond."
+    example="A rhombus."
+    example="A square."
+    example="An oval."
+    example="A rectangle."
+    example="A dot."
+    example="A golden triangle."
     example="Draw a square."
+    example="A navy hexagon."
+    example="A circle."
     example="Place a rhombus."
     example="Insert an ellipse."
+    example="A brown rhombus."
+    example="A rect."
+    example="A magenta triangle."
     example="Add an orange square."
+    example="A ball."
     example="Build an indigo dot."
     example="Draw a rect."
     example="Slap a square."
+    example="A yellow rhombus."
     example="Add a green ellipse."
     example="Place a diamond."
     example="Add a green triangle."
@@ -57,6 +75,7 @@
     tabPriority=18
     tabOnly=true
     example="A blue rectangle called Dad."
+    example="Under them I want a blue rectangle called Dad."
     example="A navy diamond named Fraud gets placed above Pay."
     doc="A named shape without a cue verb (\"a blue rectangle called Dad\"): the sentence names a new shape."
 
@@ -145,6 +164,9 @@
     example="Start over."
     example="Remove it."
     example="Delete it."
+    example="Reset the diagram."
+    example="Clear the diagram."
+    example="Clear the canvas."
     example="Wipe the canvas."
     doc="Reads a request to delete in the diagram."
 
@@ -159,6 +181,7 @@
     example="Move it to the left."
     example="Nudge it upwards."
     example="Put it in the center."
+    example="In the center."
     example="Move it there."
     example="Put it at the center."
     example="Move them to the left."
@@ -293,6 +316,8 @@
     example="Turn that one blue."
     example="Make the same one blue."
     example="Turn them pink."
+    example="Set it to huge."
+    example="Set it to tiny."
     example="Make it black."
     example="Make it purple."
     example="Make them white."
@@ -446,10 +471,12 @@
     example="Swap Vcc with Ground."
     example="Swap the positions of Proxy and Rack3."
     example="Exchange Stopped and Closed."
+    example="Card and Header trade places."
     example="Exchange Footer and the yellow triangle."
     example="Swap Volcano and Tower."
     example="Exchange Export with Monitor."
     example="Swap the positions of Studio and Pantry."
+    example="Toolbar and Menu switch places."
     example="Exchange Oven and Cream."
     example="Switch places of Tackle and Pivot."
     doc="Reads a request to swap in the diagram."
@@ -464,12 +491,16 @@
     canonical="Please group Api and Db as Backend."
     example="Group Climax and Chapter4 as Layer2."
     example="Bundle Branding and Metrics as Zone4."
+    example="Put Proxy, Lan and Firewall together."
     example="Group Chapter4, Hero and Villain."
     example="Bundle Support and Manager as Stage1."
     example="Group Scene3, Intro and Ending as Cluster."
+    example="Put Shark in Block7."
+    example="Put Uncle and Bob together."
     example="Group Lead and Manager into Pipeline."
     example="Group Moon and Sun as Cluster."
     example="Bundle Striker, Center and Winger into Cluster."
+    example="Move C2 into Unit5."
     doc="Reads a request to group in the diagram."
 
 @pat.diagram.sketch.ungroup core.pattern
@@ -486,6 +517,8 @@
     example="Split up Frontend."
     example="Split up Cluster."
     example="Dissolve Wing and Annex."
+    example="Remove Stop2 from Team1."
+    example="Take Metrics out of Frontend."
     example="Dissolve Bundle2."
     example="Split up Layer2."
     example="Break up the group Ring3."
@@ -562,6 +595,7 @@
     tabPriority=17
     tabOnly=true
     example="Arrow from Check to Retry."
+    example="A dashed line between Start and Done."
     doc="An arrow or line between two shapes without a cue verb (\"arrow from Check to Retry\")."
 
 @pat.diagram.sketch.connect.verb core.pattern
@@ -619,6 +653,7 @@
     example="Snip Retailer from Plant."
     example="Sever the link from Idea to Timeline."
     example="Unlink Supplier from Store."
+    example="Delete the wire from Header to Avatar."
     example="Detach Warehouse and Hub."
     doc="Reads a request to disconnect in the diagram."
 
@@ -636,6 +671,7 @@
     example="Align them in a row."
     example="Align all shapes in a row."
     example="Align every shape horizontal."
+    example="Line up everything in a column."
     example="Align them vertical."
     example="Align the diagram in a row."
     example="Align all of the shapes in a row."
@@ -657,6 +693,7 @@
     example="Arrange them as a grid."
     example="Arrange everything in a grid."
     example="Arrange them in a line."
+    example="Tidy up."
     example="Arrange everything in a circle."
     doc="Reads a request to arrange in the diagram."
 
@@ -723,7 +760,12 @@
     canonical="Forget the rules."
     example="Forget all rules."
     example="Forget every rule."
+    example="Drop the defaults."
+    example="Reset the defaults."
     example="Disregard the defaults."
+    example="Cancel the rules."
+    example="Remove the default rules."
+    example="Delete the default rules."
     example="Discard the rules."
     doc="Reads a request to forget in the diagram."
 
@@ -757,6 +799,7 @@
     needsState=shapes
     canonical="Please condense the diagram."
     example="Condense the diagram."
+    example="Spread them out more."
     example="Less space."
     example="Tighten it up."
     example="Compact the layout."
@@ -784,6 +827,8 @@
     example="Snap to the grid."
     example="Snap it to the grid."
     example="Snap them to the grid."
+    example="Align everything to the grid."
+    example="Put everything on the grid."
     example="Snap the boxes to the grid."
     example="Snap Start, Process and Check to the grid."
     doc="Reads a request to snap in the diagram."
@@ -797,6 +842,7 @@
     needsState=shapes
     canonical="Please flip the diagram vertically."
     example="Flip everything vertically."
+    example="Flip it upside down."
     example="Flip it all vertically."
     example="Flip the diagram vertically."
     example="Mirror it."
@@ -821,7 +867,14 @@
     example="Reverse all the arrows."
     example="Invert the line from Bedroom to Hallway."
     example="Reverse all arrows."
+    example="Invert the link from Prologue to Twist."
+    example="Invert the link from Bathroom to Kitchen."
+    example="Revetse the connection from Lambda to Ingress."
+    example="Reverse the connection from Footer to Navbar."
+    example="Invert the arrow from Icing to Yeast."
+    example="Reverse the connection from Garage to Hallway."
     example="Inevrt every arrow."
+    example="Reverse the arrow from Logo to Search."
     doc="Reads a request to reverse in the diagram."
 
 @pat.diagram.sketch.sort core.pattern
@@ -861,6 +914,8 @@
     example="Group everything by color."
     example="Cluster by colour."
     example="Cluster the shapes by color."
+    example="Put the same colours together."
+    example="Keep the same colours together."
     example="Cluster by kind."
     doc="Groups shapes by a property (shape, colour, size)."
 
@@ -876,7 +931,12 @@
     example="Unify the colors."
     example="Equalise the sizes."
     example="Equalize the colors."
+    example="Make all the shapes the same size."
+    example="Make all the shapes the same color."
+    example="Make them all the same size."
     example="Unify the colours."
+    example="Make everything the same size."
+    example="Make all the boxes the same size."
     example="Equakize the colors."
     doc="Reads a request to equalize in the diagram."
 
@@ -893,8 +953,13 @@
     example="Straighten the connections."
     example="Straighten the links."
     example="Straighten everything."
+    example="Make the lines straight."
+    example="Make the arrows straight."
     example="Straighten it out."
+    example="No diagonal lines."
+    example="No more diagonal arrows."
     example="Straigten the arrows."
+    example="Make all the lines straight."
     doc="Reads a request to straighten in the diagram."
 
 @pat.diagram.sketch.untangle core.pattern
@@ -928,11 +993,15 @@
     canonical="Please fit everything on the canvas."
     example="Fit everything on the canvas."
     example="Recenter everything."
+    example="Re-center everything."
     example="Fit it on the screen."
     example="Center it."
     example="Center the drawing."
     example="Recentre everything."
+    example="Re-centre everything."
     example="Recenter the diagram."
+    example="Re-center the diagram."
+    example="Re-centre the diagram."
     example="Recentre the diagram."
     doc="Reads a request to fit in the diagram."
 
@@ -961,18 +1030,30 @@
     canonical="Redo."
     example="Redo that."
     example="Redo the last change."
+    example="Re-apply."
     example="Reapply that."
     doc="Redoes the change that was undone (only on the Diagram tab)."
 
 @pat.diagram.sketch.fact.place core.pattern
-    match="{a:words(3)} [is|are|should_be|must_be] [to_the_left_of|to_the_right_of|left_of|right_of|above|below|under|over|beneath|on_top_of|next_to|near|beside|inside|within|between] {b:rest}"
+    match="{a:words(3)} [is|are] [to_the_left_of|to_the_right_of|left_of|right_of|above|below|under|over|beneath|on_top_of|next_to|near|beside|inside|within|between] {b:rest}"
     emit="@{_} core.request action=diagram.fact arg.text=\"{segment}\""
     kind=statement
-    priority=6
-    tabPriority=14
+    priority=12
+    tabPriority=20
     needsState=shapes
     example="Check is above Process."
+    example="Done is to the left of Check."
     doc="A statement about where a shape is ({A} is above {B}): the engine makes it true."
+
+@pat.diagram.sketch.move.should core.pattern
+    match="{a:words(3)} [should_be|must_be] [to_the_left_of|to_the_right_of|left_of|right_of|above|below|under|over|beneath|on_top_of|next_to|near|beside|inside|within|between] {b:rest}"
+    emit="@{_} core.request action=diagram.move arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    needsState=shapes
+    example="Earth should be left of the Sun."
+    doc="A shape that should be placed relative to another ({A} should be near {B}): it moves."
 
 @pat.diagram.sketch.fact core.pattern
     match="{a:words(3)} [is|are|should_be|must_be] [a|an]? {v:lex.diagram.sketch.setvalue} {u:rest?}"
@@ -991,6 +1072,7 @@
     example="Bathroom is between Garage and Closet."
     example="Kafka is a rect."
     example="Shrine is beside Dungeon."
+    example="Scene2 is on the left."
     example="Comet is a black square."
     doc="A statement about a shape (\"Mars is red\"): the engine makes it true."
 
@@ -1011,6 +1093,9 @@
     example="New triangles will be small."
     example="New hexagons must be golden."
     example="New triangles must be crimson."
+    example="In the future, ovals are gold."
+    example="Always make stars green."
+    example="Diamonds should be golden from now on."
     doc="A default for shapes drawn from now on (\"from now on all shapes are tiny\")."
 
 @pat.diagram.sketch.ask.count core.pattern
@@ -1023,6 +1108,7 @@
     canonical="How many shapes are there?"
     example="Count the links."
     example="How many connections are there?"
+    example="How many edges do we have?"
     example="How many lines are there?"
     example="How many arrows are there?"
     example="How many groups?"
@@ -1087,6 +1173,7 @@
     example="Which shapes are not white?"
     example="List the groups."
     example="Which shapes are not lime?"
+    example="What shapes are indigo?"
     example="Which shapes are brown right now?"
     example="Which shapes are green right now?"
     doc="Lists shapes, connections or groups."
@@ -1142,6 +1229,7 @@
     priority=8
     tabPriority=16
     needsState=shapes
+    example="Tell me the color of Done."
     example="What color is it?"
     example="What color is them?"
     example="What color is this one?"
@@ -1168,6 +1256,7 @@
     example="Describe the canvas."
     example="Overview of the diagram."
     example="Summarize the diagram."
+    example="Summarise the drawing."
     example="What is on the screen right now?"
     example="Summarize the canvas."
     doc="Describes the whole diagram or one shape."
@@ -1187,6 +1276,7 @@
     example="What is connected to Wr2?"
     example="What are the neighbors of the indigo rectangle?"
     example="What does the rect link to?"
+    example="Neighbours of the blue rhombus."
     example="What does Bucket point to?"
     example="Who is linked to Winger?"
     example="Which shapes are connected to the triangle?"
@@ -1209,6 +1299,7 @@
     example="What is connected to Wr2?"
     example="What are the neighbors of the indigo rectangle?"
     example="What does the rect link to?"
+    example="Neighbours of the blue rhombus."
     example="What does Bucket point to?"
     example="Who is linked to Winger?"
     example="Which shapes are connected to the triangle?"
@@ -1227,9 +1318,13 @@
     example="Are Db and Worker linked?"
     example="Is Atom connected to Nucleus?"
     example="Is Lan attached to Firewall?"
+    example="Does Fish connect to the gray triangle?"
+    example="Does Plant connect to Warehouse?"
     example="Does Venus link to the star?"
     example="Is Safety linked to Winger?"
+    example="Is there a connection between Vcc and Resistor?"
     example="Is Noah attached to Dad?"
+    example="Is there a connection between Worker and Billing?"
     example="Is Modem connected to Router?"
     example="Is Source connected to Parse?"
     doc="Whether two shapes are connected."
@@ -1244,13 +1339,62 @@
     canonical="Is Db red?"
     example="Is it white?"
     example="Is Validate an oval?"
+    example="Is that one orange?"
+    example="Is that one brown?"
     example="Is it pink?"
     example="Is it orange?"
     example="Is the hexagon pink?"
+    example="Is the same one black?"
     example="Is Tower white?"
     example="Is the new box at the bottom edge?"
     example="Is Scene3 smaller than Scene1?"
+    example="Is this one navy?"
     doc="Whether something about the diagram is true (\"is it red\", \"is A left of B\")."
+
+@pat.diagram.sketch.ask.check.place core.pattern
+    match="[$lang.lead.filler]? [$lang.lead.question]? [is|are|does|do] {a:words(3)} [to_the_left_of|to_the_right_of|left_of|right_of|above|below|under|over|beneath|on_top_of|next_to|near|beside|inside|within|between] {b:rest}"
+    emit="@{_} core.request action=diagram.ask.check arg.text=\"{segment}\""
+    kind=question
+    priority=12
+    tabPriority=20
+    needsState=shapes
+    example="Is Check to the right of Process?"
+    example="Is Api above Db?"
+    example="Is it white?"
+    example="Is that one orange?"
+    example="Is that one brown?"
+    example="Is it pink?"
+    example="Is it orange?"
+    example="Is Validate an oval?"
+    example="Is the hexagon pink?"
+    example="Is the same one black?"
+    example="Is Tower white?"
+    example="Is the new box at the bottom edge?"
+    example="Is Scene3 smaller than Scene1?"
+    example="Is this one navy?"
+    doc="Whether a shape is left of, above ... another."
+
+@pat.diagram.sketch.ask.extreme.conn core.pattern
+    match="[$lang.lead.filler]? [$lang.lead.question]? [which|what|who] ... [most_connected|least_connected|best_connected|least_linked|most_linked|more_connected] {t:rest?}"
+    emit="@{_} core.request action=diagram.ask.extreme arg.text=\"{segment}\""
+    kind=question
+    priority=12
+    tabPriority=20
+    needsState=shapes
+    example="Which shape is the most connected?"
+    example="Which shape is the leftmost?"
+    example="Which shape is the topmost?"
+    example="Which shape is the rightmost?"
+    example="Which shape is the smallest?"
+    example="Who has the most connections?"
+    example="Which shape is the biggest?"
+    example="Which is the smallest?"
+    example="What is the rightmost shape?"
+    example="Which node has the most connections?"
+    example="Which node is the rightmost?"
+    example="Which shape is the bottommost?"
+    example="Which is the topmost?"
+    doc="The most or least connected shape."
 
 @pat.diagram.sketch.ask.check.cmp core.pattern
     match="[$lang.lead.filler]? [$lang.lead.question]? [is|are|does|do|will|would]? [the]? {a:words(3)} [is|are|be]? [bigger|smaller|larger|taller|wider|shorter|higher|lower|closer|farther|further|longer|heavier|lighter] [than] {b:rest}"
@@ -1262,13 +1406,17 @@
     example="Is Hour bigger than Minute?"
     example="Is the Fiat smaller than the Ford?"
     example="Is it white?"
+    example="Is that one orange?"
+    example="Is that one brown?"
     example="Is it pink?"
     example="Is it orange?"
     example="Is Validate an oval?"
     example="Is the hexagon pink?"
+    example="Is the same one black?"
     example="Is Tower white?"
     example="Is the new box at the bottom edge?"
     example="Is Scene3 smaller than Scene1?"
+    example="Is this one navy?"
     doc="A comparison of two shapes (\"is Hour bigger than Minute\")."
 
 @pat.diagram.sketch.ask.degree.of core.pattern
@@ -1308,6 +1456,8 @@
     example="Is Milk downstream of Icing?"
     example="Is Begin downstream of Reject?"
     example="Can I get from Village to Shrine?"
+    example="Does Billing flow to Worker?"
+    example="Does the lilac triangle flow to Cfo?"
     example="Is there a path from Bug42 to Story?"
     example="Can Task7 reach Blocked?"
     example="Is Intern reachable from Hr?"
@@ -1328,6 +1478,7 @@
     example="What is connected to Wr2?"
     example="What are the neighbors of the indigo rectangle?"
     example="What does the rect link to?"
+    example="Neighbours of the blue rhombus."
     example="What does Bucket point to?"
     example="Who is linked to Winger?"
     example="Which shapes are connected to the triangle?"
@@ -1350,6 +1501,8 @@
     example="Does Courier lead to Factory?"
     example="Is Milk downstream of Icing?"
     example="Is Begin downstream of Reject?"
+    example="Does Billing flow to Worker?"
+    example="Does the lilac triangle flow to Cfo?"
     example="Is there a path from Bug42 to Story?"
     example="Can Task7 reach Blocked?"
     example="Is Intern reachable from Hr?"
@@ -1370,6 +1523,8 @@
     example="Is Milk downstream of Icing?"
     example="Is Begin downstream of Reject?"
     example="Can I get from Village to Shrine?"
+    example="Does Billing flow to Worker?"
+    example="Does the lilac triangle flow to Cfo?"
     example="Is there a path from Bug42 to Story?"
     example="Can Task7 reach Blocked?"
     example="Is Intern reachable from Hr?"
@@ -1393,6 +1548,7 @@
     example="What can I reach from Validate?"
     example="What is reachable from Pricing?"
     example="What can be reached from Algae?"
+    example="What can I get to from Wan?"
     example="Which shapes can be reached from Dough?"
     example="What can I reach from Review?"
     example="What can I reach from Prologue?"
@@ -1412,6 +1568,9 @@
     example="Is there a loop?"
     example="Are there any cycles?"
     example="Does the diagram have any cycles?"
+    example="Do the arrows form a loop?"
+    example="Is the graph circular?"
+    example="Do the arrows go in a loop?"
     example="Is there a cycle anywhere?"
     example="Is there a cycle now?"
     doc="Whether the arrows form a cycle."
@@ -1428,6 +1587,8 @@
     example="Which defaults are active?"
     example="What rules are there?"
     example="What default rules do we have?"
+    example="What defaults are set?"
+    example="List the defaults."
     doc="The default rules in force."
 
 @pat.diagram.sketch.ask.members core.pattern
@@ -1441,8 +1602,14 @@
     example="Which shapes are in Team1?"
     example="Which shapes are in Wing?"
     example="What are the members of Inatke?"
+    example="What does Ring3 contain?"
     example="What is in Ring3?"
+    example="What does Layer2 contain?"
     example="Which shapes are in Zone4?"
+    example="What does Frontend contain?"
+    example="What does Bundle2 contain?"
+    example="Who is in Pipelne?"
+    example="Who is in Wing?"
     doc="The members of a group."
 
 @pat.diagram.sketch.ask.groupOf core.pattern
@@ -1456,9 +1623,14 @@
     example="What group does Train belong to?"
     example="Is Lead in a group?"
     example="Is Heron in a group?"
+    example="Which group is Aunt in?"
     example="What group does Ending belong to?"
     example="Is Stop2 in a group?"
+    example="What group is Epic in?"
+    example="Which group is Marketing in?"
     example="Is Scene1 part of any group?"
+    example="What group is Waiting in?"
+    example="What group is Coo in?"
     example="Is Flour part of any group?"
     doc="Which group a shape belongs to."
 
@@ -1513,6 +1685,7 @@
     tabPriority=19
     needsState=shapes
     canonical="Save the diagram as SVG."
+    example="Export my diagram as a PNG."
     example="Download the diagram."
     doc="Saves the diagram as an SVG or PNG file."
 
@@ -1525,3 +1698,120 @@
     canonical="Start a new diagram."
     example="Clear the canvas."
     doc="Starts a clean canvas."
+
+@pat.diagram.sketch.new.diagram core.pattern
+    match="[$lang.connective]? [$lang.lead.filler]? [$lang.lead.polite]? [create|make|start|build|begin|give_me|i_want|i_need|let_s_make|let_s_start|let_s_create|i_would_like|i_d_like] [me|us]? [a|an|the|another|one|my]? [new|fresh|blank|empty|clean]? [diagram|sketch|diagrams] [please]? {t:rest?}"
+    emit="@{_} core.request action=diagram.new arg.text=\"{segment}\""
+    kind=request
+    priority=14
+    tabPriority=22
+    signal=true
+    example="Create a diagram."
+    example="Make a new diagram."
+    example="Start a new diagram."
+    doc="Starts a new diagram; with shapes on the canvas it asks whether to keep the current one, and offers the 24 templates."
+
+@pat.diagram.sketch.new.bare core.pattern
+    match="[$lang.connective]? [$lang.lead.filler]? [$lang.lead.polite]? [a|an|another]? [new|fresh|blank|empty|clean] [diagram|drawing|canvas|sketch] [please]?"
+    emit="@{_} core.request action=diagram.new arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    tabOnly=true
+    example="A new diagram."
+    example="New diagram please."
+    doc="A new diagram, said without a verb."
+
+@pat.diagram.sketch.new.keep core.pattern
+    match="[$lang.connective]? [$lang.lead.filler]? [$lang.lead.polite]? [keep|keep_it|keep_them|keep_the_current_one|keep_current|keep_the_current_diagram|keep_this_one|keep_what_i_have|keep_everything|the_current_one|current_one|keep_the_current] [please]? {t:rest?}"
+    emit="@{_} core.request action=diagram.answerNew arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    tabOnly=true
+    canonical="Keep the current one."
+    example="Keep it."
+    doc="Answers \"Keep the current one or start empty?\" with keep."
+
+@pat.diagram.sketch.new.empty core.pattern
+    match="[$lang.connective]? [$lang.lead.filler]? [$lang.lead.polite]? [start_empty|start_fresh|start_over|start_new|start_a_new_one|empty|fresh|blank|the_empty_one|empty_one|a_new_one|new_one|clear_it|start_with_an_empty_one|start_with_a_blank_one] [please]? {t:rest?}"
+    emit="@{_} core.request action=diagram.answerNew arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    tabOnly=true
+    example="Start empty."
+    example="Empty one."
+    doc="Answers \"Keep the current one or start empty?\" with start empty."
+
+@pat.diagram.sketch.select core.pattern
+    match="[$lang.connective]? [$lang.lead.filler]? [$lang.lead.polite]? [select|highlight|pick|choose|point_at|point_to|mark] {t:rest?}"
+    emit="@{_} core.request action=diagram.select arg.text=\"{segment}\""
+    kind=request
+    priority=9
+    tabPriority=17
+    needsState=shapes
+    tabOnly=true
+    canonical="Select Api."
+    example="Select a1."
+    example="Highlight the arrow between c1 and r1."
+    doc="Selects shapes or arrows (c1, a1, \"the arrow between c1 and r1\"): the tab draws a halo on them."
+
+@pat.diagram.sketch.resize.thicker core.pattern
+    match="[$lang.connective]? [$lang.lead.filler]? [$lang.lead.polite]? [make|turn|set|get|draw] {t:words(8)} [thicker|thinner|fatter|slimmer|heavier|lighter|thicker_please|thinner_please] {u:rest?}"
+    emit="@{_} core.request action=diagram.resize arg.text=\"{segment}\""
+    kind=request
+    priority=10
+    tabPriority=18
+    needsState=shapes
+    example="Make a1 thicker."
+    example="Make the arrows a bit thinner."
+    example="Make the arrow much thicker."
+    doc="Makes arrows thicker or thinner: a bit = one step, much = two."
+
+@pat.diagram.sketch.resize.thicken core.pattern
+    match="[$lang.connective]? [$lang.lead.filler]? [$lang.lead.polite]? [thicken|thin|thin_out] {t:rest?}"
+    emit="@{_} core.request action=diagram.resize arg.text=\"{segment}\""
+    kind=request
+    priority=10
+    tabPriority=18
+    needsState=shapes
+    tabOnly=true
+    example="Thicken a1."
+    doc="Thickens or thins arrows."
+
+@pat.diagram.sketch.arrange.layout core.pattern
+    match="[$lang.connective]? [$lang.lead.filler]? [$lang.lead.polite]? [change|switch|set|make|turn|convert|put|use] [the|this|my]? [diagram|whole]? [layout|arrangement] ... [to|into|as|a|an|the]? [row|column|grid|circle|tree|layers|radial|line|ring|hierarchy|stack] {u:rest?}"
+    emit="@{_} core.request action=diagram.arrange arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    needsState=shapes
+    signal=true
+    example="Change the layout to a column."
+    example="Switch the layout to a grid."
+    example="Make the layout a tree."
+    doc="Changes the layout of the whole diagram to a row, column, grid, circle, tree, layers or radial."
+
+@pat.diagram.sketch.arrange.switch core.pattern
+    match="[$lang.connective]? [$lang.lead.filler]? [$lang.lead.polite]? [switch|change|go|move] to [a|an|the]? [row|column|grid|circle|tree|layers|radial|ring|hierarchy|stack] [layout|arrangement]? [please]?"
+    emit="@{_} core.request action=diagram.arrange arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    needsState=shapes
+    tabOnly=true
+    example="Switch to a grid."
+    example="Go to a column layout."
+    doc="Switches the diagram to another layout."
+
+@pat.diagram.sketch.arrange.use core.pattern
+    match="[$lang.connective]? [$lang.lead.filler]? [$lang.lead.polite]? [use|try] [a|an|the]? [row|column|grid|circle|tree|layers|radial|ring|hierarchy|stack] [layout|arrangement]"
+    emit="@{_} core.request action=diagram.arrange arg.text=\"{segment}\""
+    kind=request
+    priority=12
+    tabPriority=20
+    needsState=shapes
+    tabOnly=true
+    example="Use a circle layout."
+    doc="Uses another layout."

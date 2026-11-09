@@ -308,7 +308,7 @@
     impl=newDiagram
     semantics=action
     action=diagram.new
-    doc="Starts a clean canvas."
+    doc="Starts a new diagram; with shapes on the canvas it asks whether to keep the current one and offers the 24 templates."
 
 @op.diagram.sketch.openTab core.operation
     impl=openTab
@@ -321,3 +321,15 @@
     semantics=action
     action=diagram.export
     doc="Saves the diagram as an SVG or PNG file (effect diagram.download)."
+
+@op.diagram.sketch.answerNew core.operation
+    impl=answerNew
+    semantics=action
+    action=diagram.answerNew
+    doc="The answer to \"Keep the current one or start empty?\" (keep it, start empty)."
+
+@op.diagram.sketch.select core.operation
+    impl=select
+    semantics=action
+    action=diagram.select
+    doc="Selects shapes or arrows by id, name or ends (\"select a1\"); the tab draws a halo on them."

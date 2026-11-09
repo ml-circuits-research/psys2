@@ -221,6 +221,13 @@ test('tab tier: a message naming another world is not claimed by the tab', async
   assert.equal(r.trace.segmentations[0].tabTier, undefined);
   assert.deepEqual(winnerWorlds(r), ['ui.avatar']);
 });
+test('tab tier: a two-clause create whose every clause the Diagram tab reads goes to the diagram, not to the drawing board (SMALL 4)', async () => {
+  const t = 'draw a blue rectangle called Api and a green circle called Db';
+  const r = await validator.validate(msg(t, [{ score: -0.1, segments: [piece(t, W(['art.draw', 0.9], ['diagram.sketch', 0.05]))] }], { tab: 'diagram' }));
+  assert.equal(r.status, 'understood');
+  assert.equal(r.trace.segmentations[0].tabTier, true);
+  assert.deepEqual(winnerWorlds(r), ['diagram.sketch']);
+});
 
 test('a running game takes bare coordinates even when another world spoke last', async () => {
   const s = engine.createSession({ language: 'en' });

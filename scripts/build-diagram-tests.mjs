@@ -92,6 +92,8 @@ for (const [act, list] of [...byAct].sort()) {
 // ---- 2. example sessions -------------------------------------------------------------------------------------------------------------
 const manual = JSON.parse(readFileSync(join(DATA, 'examples/manual.json'), 'utf8')).scenarios;
 const scen = {};
+const P = { circle: 'c', rectangle: 'r', square: 's', diamond: 'd', ellipse: 'e', triangle: 't', hexagon: 'h', star: 'k', text: 'x' };
+const short = (n) => n.replace(/^(circle|rectangle|square|diamond|ellipse|triangle|hexagon|star|text)(\d+)$/, (m, k, d) => P[k] + d);   // the source names an unnamed shape circle1, the world c1
 for (const [name, turns] of Object.entries(manual)) {
   const ref = K.createSystem();
   const s = engine.createSession({ language: 'en' });
@@ -101,7 +103,7 @@ for (const [name, turns] of Object.entries(manual)) {
   const lines = [];
   for (const [i, t] of turns.entries()) {
     try { ref.engine.run(K.parse(t.sop)); } catch { break; }
-    const want = { shapes: ref.world.state.shapes.length, edges: ref.world.state.edges.length, names: ref.world.state.shapes.map((x) => x.name).sort().join(',') };
+    const want = { shapes: ref.world.state.shapes.length, edges: ref.world.state.edges.length, names: ref.world.state.shapes.map((x) => short(x.name)).sort().join(',') };
     const reply = await s.send(t.text, { language: 'en' });
     const st = s.state(WORLD);
     const got = { shapes: st.shapes.length, edges: st.edges.length, names: st.shapes.map((x) => x.name).sort().join(',') };

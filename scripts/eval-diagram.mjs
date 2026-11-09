@@ -22,6 +22,7 @@ import { parseJobs, runSharded, serveShard } from './lib/shard.mjs';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { score, canon, canonWant } from '../imports/diagram-vss-demo/reference/bench-canon.js';
+import { createSourceSystem } from './lib/diagram-source.mjs';
 
 const SELF = fileURLToPath(import.meta.url);
 const REPO = resolve(dirname(SELF), '..');
@@ -69,7 +70,18 @@ async function setup() {
   const ops = await import('../worlds/diagram.sketch/ops.mjs');
   const actOf = new Map(engine.set.get(WORLD).patterns.map((p) => [p.id, /action=([\w.]+)/.exec(p.emit)?.[1]]));
   const allActs = new Map(engine.set.list().flatMap((w) => w.patterns.map((p) => [p.id, /action=([\w.]+)/.exec(p.emit ?? '')?.[1] ?? null])));
-  return { engine, ops, actOf, allActs };
+  const src = createSourceSystem();
+  return { engine, ops, actOf, allActs, src };
+}
+/** The act of a node of the source reader ("diagram.label", "diagram.ask.count" ...). */
+const nodeAct = (n) => actOfWire({ type: n.type, args: n.args });
+/** The source rules reader on the same row (DIAG3 item 6): its main nodes, scored with the same bench-canon logic. */
+function readSource(env, row, goldRow) {
+  const ctx = { names: (row.names ?? []).concat(Object.keys(row.groups ?? {})) };
+  let nodes = [];
+  try { nodes = env.src.formalize(row.text, ctx).nodes ?? []; } catch { nodes = []; }
+  const main = nodes.filter((n) => n.type !== 'mention');
+  return { nodes, acts: main.map(nodeAct), ok: score(nodes, goldRow).ok };
 }
 
 /** Scores one row. */
@@ -80,6 +92,8 @@ async function scoreRow(env, row) {
   const goldRow = row.wires ? { wires: row.wires, text: row.text } : { type: row.type, gold: row.gold };
   const s = score(nodes, goldRow);
   out.reader = s.ok;
+  const sr = readSource(env, row, goldRow);
+  out.srcOk = sr.ok; out.srcActs = sr.acts;
   out.readerFails = Object.entries(s.per).filter(([, p]) => !p.ok).map(([k, p]) => `${k}:${p.got}!=${p.want}`).slice(0, 4);
   const sess = engine.createSession({ language: 'en' });
   sess.setWorldState('ui.shell', { activeTab: 'diagram' });
@@ -117,6 +131,7 @@ async function scoreRow(env, row) {
     wires.push({ gold, got, world: seg.match.worldId, span: sp, outcome: seg.match.worldId === WORLD && got === gold ? 'right' : seg.match.worldId === WORLD ? 'wrong-act' : 'other-world' });
   }
   out.wires = wires;
+  out.fullSpan = wires.every((w) => w.outcome !== 'nospan');
   out.gold = rowActs(row);
   return out;
 }
@@ -156,8 +171,40 @@ else if (process.argv[1] && resolve(process.argv[1]) === SELF) {
     for (const r of test) { const b = (bySet[r.set] ??= { n: 0, reader: 0 }); b.n++; if (r.reader) b.reader++; }
     summary.test.by_set = bySet;
   }
+  // parity with the source rules reader (DIAG3 item 6): the same rows read by the source (createSystem().formalize) and by the world
+  const P = (a, b) => (b ? (100 * a / b).toFixed(1) : '-');
+  const parity = {};
+  {
+    const bn = bench.length, b = { n: bn, ours: { act: 0, args: 0, right: 0, wrong: 0, unread: 0 }, source: { act: 0, args: 0, right: 0, wrong: 0, unread: 0 } };
+    for (const r of bench) {
+      const o = b.ours, s = b.source, srcAct = r.srcActs.at(-1) === r.gold;
+      if (r.actRight) o.act++; if (r.reader) o.args++; if (r.outcome === 'right') o.right++; if (r.outcome === 'wrong') o.wrong++; if (r.outcome === 'unread') o.unread++;
+      if (srcAct) s.act++; if (r.srcOk) s.args++; if (srcAct && r.srcOk) s.right++; if (r.srcActs.length && !srcAct) s.wrong++; if (!r.srcActs.length) s.unread++;
+    }
+    parity.bench = b;
+    const full = test.filter((r) => r.fullSpan), m = { messages: test.length, args_messages: { ours: test.filter((r) => r.reader).length, source: test.filter((r) => r.srcOk).length }, full_span: { messages: full.length, wires: 0, ours: { act: 0, wrong: 0, unread: 0 }, source: { act: 0, wrong: 0, unread: 0 } } };
+    for (const r of full) {
+      const f = m.full_span, n = r.gold.length; f.wires += n;
+      for (const w of r.wires) { if (w.outcome === 'right') f.ours.act++; else if (w.outcome === 'unread') f.ours.unread++; else f.ours.wrong++; }
+      const pool = [...r.srcActs]; let right = 0;
+      for (const g of r.gold) { const i = pool.indexOf(g); if (i >= 0) { right++; pool.splice(i, 1); } }
+      const wrong = Math.min(pool.length, n - right);
+      f.source.act += right; f.source.wrong += wrong; f.source.unread += n - right - wrong;
+    }
+    parity.test = m;
+    if (bn || test.length) {
+      lines.push('', 'parity: source rules reader (imports/diagram-vss-demo/engine/logic.js createSystem().formalize) vs ours (world diagram.sketch through the dialog)');
+      lines.push('bench (single sentences)'.padEnd(34) + `n=${bn}`.padStart(8) + '  act right  args right  right (both)  wrong  unread');
+      for (const k of ['source', 'ours']) { const x = b[k]; lines.push(`  ${k}`.padEnd(34) + ''.padStart(8) + `  ${P(x.act, bn).padStart(9)}  ${P(x.args, bn).padStart(10)}  ${P(x.right, bn).padStart(12)}  ${P(x.wrong, bn).padStart(5)}  ${P(x.unread, bn).padStart(6)}`); }
+      const f = m.full_span;
+      lines.push(`messages: wires of ${f.messages} fully spanned messages (${f.wires} wires); args = all wires of the message read exactly (${test.length} messages)`.padEnd(34));
+      lines.push('  act right  wrong  unread  | args right (message)');
+      for (const k of ['source', 'ours']) { const x = f[k]; lines.push(`  ${k.padEnd(7)}${P(x.act, f.wires).padStart(9)}  ${P(x.wrong, f.wires).padStart(5)}  ${P(x.unread, f.wires).padStart(6)}  | ${P(m.args_messages[k], test.length)}`); }
+    }
+  }
+  summary.parity = parity;
   console.log(lines.join('\n'));
-  if (flag('verbose')) for (const r of res) if ((r.outcome && r.outcome !== 'right') || (r.wires && r.wires.some((x) => x.outcome !== 'right' && x.outcome !== 'nospan'))) console.log(`${r.outcome ?? 'msg'}\t${r.id}\t${JSON.stringify(r.text).slice(0, 110)}\t${r.gold}\t${JSON.stringify(r.got ?? r.wires?.filter((x) => x.outcome !== 'right').slice(0, 2))}`);
+  if (flag('verbose')) for (const r of res) if ((r.outcome && r.outcome !== 'right') || (r.wires && r.wires.some((x) => x.outcome !== 'right' && x.outcome !== 'nospan'))) console.log(`${r.outcome ?? "msg"}${r.srcOk === true && r.reader === false ? "/SRC-OK" : ""}\t${r.id}\t${JSON.stringify(r.text).slice(0, 110)}\t${r.gold}\t${JSON.stringify(r.got ?? r.wires?.filter((x) => x.outcome !== 'right').slice(0, 2))}`);
   if (!flag('no-write')) {
     const dir = join(REPO, 'training/results/diagram');
     mkdirSync(dir, { recursive: true });

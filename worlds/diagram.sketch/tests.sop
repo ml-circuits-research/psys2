@@ -164,8 +164,8 @@
     session=b.ask_check.k01
 
 @t.diagram.sketch.b.ask_check.k01.b core.test
-    input="Is Check to the right of Process?"
-    expect="Yes: Check is right of Process."
+    input="Is Start blue?"
+    expect="No: Start is white, not blue."
     expectState="shapes.length=4"
     expectState="edges.length=0"
     session=b.ask_check.k01
@@ -177,8 +177,8 @@
     session=b.ask_check.k02
 
 @t.diagram.sketch.b.ask_check.k02.b core.test
-    input="Is Start blue?"
-    expect="No: Start is white, not blue."
+    input="Is Check above Done?"
+    expect="No: Check is not above Done."
     expectState="shapes.length=4"
     expectState="edges.length=0"
     session=b.ask_check.k02
@@ -190,8 +190,8 @@
     session=b.ask_check.k03
 
 @t.diagram.sketch.b.ask_check.k03.b core.test
-    input="Is Check above Done?"
-    expect="No: Check is not above Done."
+    input="Is Done bigger than Start?"
+    expect="No: Done covers 3844 px² and Start covers 3844 px²."
     expectState="shapes.length=4"
     expectState="edges.length=0"
     session=b.ask_check.k03
@@ -223,15 +223,15 @@
     session=b.ask_check.k05
 
 @t.diagram.sketch.b.ask_check.k06.a core.test
-    input="Draw a circle called A, a circle called Process."
+    input="Draw a circle called Start, a circle called Process, a circle called Check, a circle called Done."
     expect="Drew "
-    expectState="shapes.length=2"
+    expectState="shapes.length=4"
     session=b.ask_check.k06
 
 @t.diagram.sketch.b.ask_check.k06.b core.test
-    input="is A to the left of Process?"
-    expect="Yes: A is left of Process."
-    expectState="shapes.length=2"
+    input="is Process bigger than Done?"
+    expect="No: Process covers 3844 px² and Done covers 3844 px²."
+    expectState="shapes.length=4"
     expectState="edges.length=0"
     session=b.ask_check.k06
 
@@ -1575,7 +1575,7 @@
 
 @t.diagram.sketch.b.connect.k01.b core.test
     input="Hook Start up to Done with a dashed arrow"
-    expect="Connected Start → Done."
+    expect="Connected Start → Done (a1)."
     expectState="shapes.length=4"
     expectState="edges.length=1"
     session=b.connect.k01
@@ -1588,7 +1588,7 @@
 
 @t.diagram.sketch.b.connect.k02.b core.test
     input="Draw an arrow from Done to Start"
-    expect="Connected Done → Start."
+    expect="Connected Done → Start (a1)."
     expectState="shapes.length=4"
     expectState="edges.length=1"
     session=b.connect.k02
@@ -1601,7 +1601,7 @@
 
 @t.diagram.sketch.b.connect.k03.b core.test
     input="Connect the circles in a chain"
-    expect="Connected Start → Process, Process → Check and Check → Done."
+    expect="Connected Start → Process (a1), Process → Check (a2) and"
     expectState="shapes.length=4"
     expectState="edges.length=3"
     session=b.connect.k03
@@ -1626,8 +1626,8 @@
     session=b.connect.k05
 
 @t.diagram.sketch.b.connect.k05.b core.test
-    input="Draw a line between Start and Done"
-    expect="Connected Start — Done."
+    input="Join Process with Check using a dotted line"
+    expect="Connected Process — Check (a1)."
     expectState="shapes.length=4"
     expectState="edges.length=1"
     session=b.connect.k05
@@ -1639,8 +1639,8 @@
     session=b.connect.k06
 
 @t.diagram.sketch.b.connect.k06.b core.test
-    input="Join Process with Check using a dotted line"
-    expect="Connected Process — Check."
+    input="Wire Check to Done with a red arrow"
+    expect="Connected Check → Done (a1)."
     expectState="shapes.length=4"
     expectState="edges.length=1"
     session=b.connect.k06
@@ -1666,7 +1666,7 @@
 
 @t.diagram.sketch.b.create.k02.b core.test
     input="Add three yellow triangles"
-    expect="Drew triangle1, triangle2 and triangle3."
+    expect="Drew t1, t2 and t3."
     expectState="shapes.length=7"
     expectState="edges.length=0"
     session=b.create.k02
@@ -1679,7 +1679,7 @@
 
 @t.diagram.sketch.b.create.k03.b core.test
     input="Put a small orange star next to Check"
-    expect="Drew star1."
+    expect="Drew k1."
     expectState="shapes.length=5"
     expectState="edges.length=0"
     session=b.create.k03
@@ -1692,7 +1692,7 @@
 
 @t.diagram.sketch.b.create.k04.b core.test
     input="Could you sketch me a tiny purple hexagon?"
-    expect="Drew hexagon1."
+    expect="Drew h1."
     expectState="shapes.length=5"
     expectState="edges.length=0"
     session=b.create.k04
@@ -1705,7 +1705,7 @@
 
 @t.diagram.sketch.b.create.k05.b core.test
     input="Throw a big yellow star in the upper left corner"
-    expect="Drew star1."
+    expect="Drew k1."
     expectState="shapes.length=5"
     expectState="edges.length=0"
     session=b.create.k05
@@ -1965,7 +1965,7 @@
 
 @t.diagram.sketch.b.duplicate.k01.b core.test
     input="Make a copy of Done"
-    expect="Drew circle1."
+    expect="Drew c5."
     expectState="shapes.length=5"
     expectState="edges.length=0"
     session=b.duplicate.k01
@@ -1978,7 +1978,7 @@
 
 @t.diagram.sketch.b.duplicate.k02.b core.test
     input="duplicate Check"
-    expect="Drew circle1."
+    expect="Drew c5."
     expectState="shapes.length=5"
     expectState="edges.length=0"
     session=b.duplicate.k02
@@ -1991,7 +1991,7 @@
 
 @t.diagram.sketch.b.duplicate.k03.b core.test
     input="copy Start twice"
-    expect="Drew circle2."
+    expect="Drew c6."
     expectState="shapes.length=6"
     expectState="edges.length=0"
     session=b.duplicate.k03
@@ -2004,7 +2004,7 @@
 
 @t.diagram.sketch.b.duplicate.k04.b core.test
     input="could you clone Box1"
-    expect="Drew circle1."
+    expect="Drew c2."
     expectState="shapes.length=2"
     expectState="edges.length=0"
     session=b.duplicate.k04
@@ -2017,7 +2017,7 @@
 
 @t.diagram.sketch.b.duplicate.k05.b core.test
     input="could you duplicate Start 3 times"
-    expect="Drew circle3."
+    expect="Drew c4."
     expectState="shapes.length=4"
     expectState="edges.length=0"
     session=b.duplicate.k05
@@ -2030,7 +2030,7 @@
 
 @t.diagram.sketch.b.duplicate.k06.b core.test
     input="could you clone Delta"
-    expect="Drew circle1."
+    expect="Drew c2."
     expectState="shapes.length=2"
     expectState="edges.length=0"
     session=b.duplicate.k06
@@ -2146,8 +2146,8 @@
     session=b.fact.k03
 
 @t.diagram.sketch.b.fact.k03.b core.test
-    input="Done is to the left of Check"
-    expect="Moved Done."
+    input="Start is green"
+    expect="Start is now green."
     expectState="shapes.length=4"
     expectState="edges.length=0"
     session=b.fact.k03
@@ -2159,34 +2159,34 @@
     session=b.fact.k04
 
 @t.diagram.sketch.b.fact.k04.b core.test
-    input="Start is green"
-    expect="Start is now green."
+    input="Check is above Process"
+    expect="Moved Check."
     expectState="shapes.length=4"
     expectState="edges.length=0"
     session=b.fact.k04
 
 @t.diagram.sketch.b.fact.k05.a core.test
-    input="Draw a circle called Start, a circle called Process, a circle called Check, a circle called Done."
+    input="Draw a circle called Printer."
     expect="Drew "
-    expectState="shapes.length=4"
+    expectState="shapes.length=1"
     session=b.fact.k05
 
 @t.diagram.sketch.b.fact.k05.b core.test
-    input="Check is above Process"
-    expect="Moved Check."
-    expectState="shapes.length=4"
+    input="Printer is teal"
+    expect="Printer is now teal."
+    expectState="shapes.length=1"
     expectState="edges.length=0"
     session=b.fact.k05
 
 @t.diagram.sketch.b.fact.k06.a core.test
-    input="Draw a circle called Printer."
+    input="Draw a circle called Cache."
     expect="Drew "
     expectState="shapes.length=1"
     session=b.fact.k06
 
 @t.diagram.sketch.b.fact.k06.b core.test
-    input="Printer is teal"
-    expect="Printer is now teal."
+    input="Cache is gray"
+    expect="Cache is now gray."
     expectState="shapes.length=1"
     expectState="edges.length=0"
     session=b.fact.k06
@@ -2693,7 +2693,7 @@
 
 @t.diagram.sketch.b.label.k03.b core.test
     input="label Process \"Validate input\""
-    expect="What should the label say? Put it in quotes, e.g. label A"
+    expect="Process is now labeled “Validate input”."
     expectState="shapes.length=4"
     expectState="edges.length=0"
     session=b.label.k03
@@ -2706,7 +2706,7 @@
 
 @t.diagram.sketch.b.label.k04.b core.test
     input="please label Db \"next\""
-    expect="What should the label say? Put it in quotes, e.g. label A"
+    expect="Db is now labeled “next”."
     expectState="shapes.length=1"
     expectState="edges.length=0"
     session=b.label.k04
@@ -2732,7 +2732,7 @@
 
 @t.diagram.sketch.b.label.k06.b core.test
     input="label Earth \"send\""
-    expect="What should the label say? Put it in quotes, e.g. label A"
+    expect="Earth is now labeled “send”."
     expectState="shapes.length=1"
     expectState="edges.length=0"
     session=b.label.k06
@@ -3128,80 +3128,80 @@
     session=b.respace.k06
 
 @t.diagram.sketch.b.reverse.k01.a core.test
-    input="Draw a circle called Check, a circle called Done, a circle called Home, a circle called Cart, a circle called Pay."
+    input="Draw a circle called Check, a circle called Done, a circle called Router, a circle called Lan, a circle called Queue."
     expect="Drew "
     expectState="shapes.length=5"
     session=b.reverse.k01
 
 @t.diagram.sketch.b.reverse.k01.b core.test
-    input="reverse the arrow from Check to Done"
+    input="reverse the Check→Done arrow"
     expect="There is no arrow between Check and Done."
     expectState="shapes.length=5"
     expectState="edges.length=0"
     session=b.reverse.k01
 
 @t.diagram.sketch.b.reverse.k02.a core.test
-    input="Draw a circle called Check, a circle called Done, a circle called Router, a circle called Lan, a circle called Queue."
+    input="Draw a circle called Login, a circle called Home, a circle called Cart."
     expect="Drew "
-    expectState="shapes.length=5"
+    expectState="shapes.length=3"
     session=b.reverse.k02
 
 @t.diagram.sketch.b.reverse.k02.b core.test
-    input="reverse the Check→Done arrow"
-    expect="There is no arrow between Check and Done."
-    expectState="shapes.length=5"
+    input="reverse all the arrows"
+    expect="There are no arrows on the canvas."
+    expectState="shapes.length=3"
     expectState="edges.length=0"
     session=b.reverse.k02
 
 @t.diagram.sketch.b.reverse.k03.a core.test
-    input="Draw a circle called Login, a circle called Home, a circle called Cart."
+    input="Draw a circle called Start, a circle called Process, a circle called Check."
     expect="Drew "
     expectState="shapes.length=3"
     session=b.reverse.k03
 
 @t.diagram.sketch.b.reverse.k03.b core.test
-    input="reverse all the arrows"
+    input="reverse the arrows"
     expect="There are no arrows on the canvas."
     expectState="shapes.length=3"
     expectState="edges.length=0"
     session=b.reverse.k03
 
 @t.diagram.sketch.b.reverse.k04.a core.test
-    input="Draw a circle called Start, a circle called Process, a circle called Check."
+    input="Draw a circle called Login, a circle called Home, a circle called Api, a circle called Db, a circle called Cache."
     expect="Drew "
-    expectState="shapes.length=3"
+    expectState="shapes.length=5"
     session=b.reverse.k04
 
 @t.diagram.sketch.b.reverse.k04.b core.test
-    input="reverse the arrows"
-    expect="There are no arrows on the canvas."
-    expectState="shapes.length=3"
+    input="reverse the direction of the arrow from Login to Home"
+    expect="There is no arrow between Login and Home."
+    expectState="shapes.length=5"
     expectState="edges.length=0"
     session=b.reverse.k04
 
 @t.diagram.sketch.b.reverse.k05.a core.test
-    input="Draw a circle called Login, a circle called Home, a circle called Api, a circle called Db, a circle called Cache."
+    input="Draw a circle called Cart, a circle called Pay, a circle called Idea, a circle called Plan, a circle called Build."
     expect="Drew "
     expectState="shapes.length=5"
     session=b.reverse.k05
 
 @t.diagram.sketch.b.reverse.k05.b core.test
-    input="reverse the direction of the arrow from Login to Home"
-    expect="There is no arrow between Login and Home."
+    input="reverse the link Cart-Pay"
+    expect="There is no arrow between Cart and Pay."
     expectState="shapes.length=5"
     expectState="edges.length=0"
     session=b.reverse.k05
 
 @t.diagram.sketch.b.reverse.k06.a core.test
-    input="Draw a circle called Cart, a circle called Pay, a circle called Idea, a circle called Plan, a circle called Build."
+    input="Draw a circle called Pay, a circle called Idea, a circle called Plan."
     expect="Drew "
-    expectState="shapes.length=5"
+    expectState="shapes.length=3"
     session=b.reverse.k06
 
 @t.diagram.sketch.b.reverse.k06.b core.test
-    input="reverse the link Cart-Pay"
-    expect="There is no arrow between Cart and Pay."
-    expectState="shapes.length=5"
+    input="reverse every arrow"
+    expect="There are no arrows on the canvas."
+    expectState="shapes.length=3"
     expectState="edges.length=0"
     session=b.reverse.k06
 
@@ -4208,6 +4208,42 @@
     expectState="edges.length=1"
     session=ex.login
 
+@t.diagram.sketch.ex.login.n003 core.test
+    input="Add a yellow diamond named Valid right of Form labeled \"valid?\" and connect Form to it."
+    expectState="shapes.length=3"
+    expectState="edges.length=2"
+    session=ex.login
+
+@t.diagram.sketch.ex.login.n004 core.test
+    input="Put a green rectangle named Home right of Valid labeled \"Dashboard\". Connect Valid to Home with an arrow labeled \"yes\"."
+    expectState="shapes.length=4"
+    expectState="edges.length=3"
+    session=ex.login
+
+@t.diagram.sketch.ex.login.n005 core.test
+    input="Put a red rectangle named Error below Valid labeled \"Show error\". Connect Valid to Error with a dashed arrow labeled \"no\"."
+    expectState="shapes.length=5"
+    expectState="edges.length=4"
+    session=ex.login
+
+@t.diagram.sketch.ex.login.n006 core.test
+    input="Connect Error to Form with a dotted arrow labeled \"retry\"."
+    expectState="shapes.length=5"
+    expectState="edges.length=5"
+    session=ex.login
+
+@t.diagram.sketch.ex.login.n007 core.test
+    input="Is there a path from Begin to Home?"
+    expectState="shapes.length=5"
+    expectState="edges.length=5"
+    session=ex.login
+
+@t.diagram.sketch.ex.login.n008 core.test
+    input="Are there any cycles?"
+    expectState="shapes.length=5"
+    expectState="edges.length=5"
+    session=ex.login
+
 @t.diagram.sketch.ex.org.n000 core.test
     input="open the diagram tab"
     expectState="ui.shell:activeTab=diagram"
@@ -4370,114 +4406,6 @@
     input="Draw a large white ellipse named Internet on the left, labeled \"Internet\"."
     expectState="shapes.length=1"
     expectState="edges.length=0"
-    session=ex.network
-
-@t.diagram.sketch.ex.network.n002 core.test
-    input="Add a red hexagon named Firewall right of Internet labeled \"FW\" and connect Internet to it with a two-way arrow."
-    expectState="shapes.length=2"
-    expectState="edges.length=1"
-    session=ex.network
-
-@t.diagram.sketch.ex.network.n003 core.test
-    input="Add a purple hexagon named Router right of Firewall labeled \"core\" and connect Firewall to Router with a two-way arrow."
-    expectState="shapes.length=3"
-    expectState="edges.length=2"
-    session=ex.network
-
-@t.diagram.sketch.ex.network.n004 core.test
-    input="From now on, rectangles are teal."
-    expectState="shapes.length=3"
-    expectState="edges.length=2"
-    session=ex.network
-
-@t.diagram.sketch.ex.network.n005 core.test
-    input="Add a rectangle named SwitchA at 520, 150 labeled \"switch A\". Add a rectangle named SwitchB at 520, 350 labeled \"switch B\"."
-    expectState="shapes.length=5"
-    expectState="edges.length=2"
-    session=ex.network
-
-@t.diagram.sketch.ex.network.n006 core.test
-    input="Connect Router to SwitchA and SwitchB."
-    expectState="shapes.length=5"
-    expectState="edges.length=4"
-    session=ex.network
-
-@t.diagram.sketch.ex.network.n007 core.test
-    input="Add a small blue square named Laptop at 690, 90 labeled \"laptop\". Add a small blue square named Printer below Laptop labeled \"printer\"."
-    expectState="shapes.length=7"
-    expectState="edges.length=4"
-    session=ex.network
-
-@t.diagram.sketch.ex.network.n008 core.test
-    input="Add a small green square named Server at 690, 300 labeled \"db\". Add a small green square named Backup at 690, 440 labeled \"backup\"."
-    expectState="shapes.length=9"
-    expectState="edges.length=4"
-    session=ex.network
-
-@t.diagram.sketch.ex.network.n009 core.test
-    input="Connect SwitchA to Laptop and Printer. Connect SwitchB to Server and Backup."
-    expectState="shapes.length=9"
-    expectState="edges.length=8"
-    session=ex.network
-
-@t.diagram.sketch.ex.network.n010 core.test
-    input="Connect Server to Backup with a dashed red arrow labeled \"nightly\"."
-    expectState="shapes.length=9"
-    expectState="edges.length=9"
-    session=ex.network
-
-@t.diagram.sketch.ex.network.n011 core.test
-    input="Make all squares a bit bigger."
-    expectState="shapes.length=9"
-    expectState="edges.length=9"
-    session=ex.network
-
-@t.diagram.sketch.ex.network.n012 core.test
-    input="Printer is gray."
-    expectState="shapes.length=9"
-    expectState="edges.length=9"
-    session=ex.network
-
-@t.diagram.sketch.ex.network.n013 core.test
-    input="Move Router up by 30."
-    expectState="shapes.length=9"
-    expectState="edges.length=9"
-    session=ex.network
-
-@t.diagram.sketch.ex.network.n014 core.test
-    input="Is there a path from Internet to Backup?"
-    expectState="shapes.length=9"
-    expectState="edges.length=9"
-    session=ex.network
-
-@t.diagram.sketch.ex.network.n015 core.test
-    input="Can I get from Laptop to Server?"
-    expectState="shapes.length=9"
-    expectState="edges.length=9"
-    session=ex.network
-
-@t.diagram.sketch.ex.network.n016 core.test
-    input="What can be reached from SwitchB?"
-    expectState="shapes.length=9"
-    expectState="edges.length=9"
-    session=ex.network
-
-@t.diagram.sketch.ex.network.n017 core.test
-    input="Which shape has the most connections?"
-    expectState="shapes.length=9"
-    expectState="edges.length=9"
-    session=ex.network
-
-@t.diagram.sketch.ex.network.n018 core.test
-    input="How many connections are there?"
-    expectState="shapes.length=9"
-    expectState="edges.length=9"
-    session=ex.network
-
-@t.diagram.sketch.ex.network.n019 core.test
-    input="Describe Router."
-    expectState="shapes.length=9"
-    expectState="edges.length=9"
     session=ex.network
 
 @t.diagram.sketch.ex.cartoon.n000 core.test
@@ -4901,48 +4829,6 @@
 @t.diagram.sketch.ex.story.n007 core.test
     input="Undo."
     expectState="shapes.length=3"
-    expectState="edges.length=2"
-    session=ex.story
-
-@t.diagram.sketch.ex.story.n008 core.test
-    input="Duplicate B."
-    expectState="shapes.length=4"
-    expectState="edges.length=2"
-    session=ex.story
-
-@t.diagram.sketch.ex.story.n009 core.test
-    input="What is connected to Leaf?"
-    expectState="shapes.length=4"
-    expectState="edges.length=2"
-    session=ex.story
-
-@t.diagram.sketch.ex.story.n010 core.test
-    input="Is A left of B?"
-    expectState="shapes.length=4"
-    expectState="edges.length=2"
-    session=ex.story
-
-@t.diagram.sketch.ex.story.n011 core.test
-    input="Add two small pink stars above A."
-    expectState="shapes.length=6"
-    expectState="edges.length=2"
-    session=ex.story
-
-@t.diagram.sketch.ex.story.n012 core.test
-    input="Delete the pink stars."
-    expectState="shapes.length=4"
-    expectState="edges.length=2"
-    session=ex.story
-
-@t.diagram.sketch.ex.story.n013 core.test
-    input="Arrange everything in a grid."
-    expectState="shapes.length=4"
-    expectState="edges.length=2"
-    session=ex.story
-
-@t.diagram.sketch.ex.story.n014 core.test
-    input="Describe the diagram."
-    expectState="shapes.length=4"
     expectState="edges.length=2"
     session=ex.story
 

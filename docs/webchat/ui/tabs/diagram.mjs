@@ -6,6 +6,7 @@
 // The engine (470 KB) is loaded lazily: when this tab is first shown, or when the first state with shapes arrives (PERF).
 // Pan (drag), zoom (buttons, ctrl + wheel, pinch, + - 0 keys), fit, SVG and PNG export (effect diagram.download).
 const ENGINE_ASSET = 'worlds/diagram.sketch/engine/logic.mjs';
+const ARROWS_ASSET = 'worlds/diagram.sketch/arrows.mjs';   // arrow geometry (DIAG3): sides, entry angles, spread, detours
 const NS = 'http://www.w3.org/2000/svg';
 const HINTS = ['draw a rectangle called Api', 'draw a red circle called Db', 'connect Api to Db', 'make Db huge', 'arrange them in a row', 'draw a flowchart with Start, Check and Done', 'how many connections are there?', 'undo'];
 const EMPTY = { shapes: [], edges: [], groups: [], frame: { x: 0, y: 0 } };
@@ -26,6 +27,9 @@ const CSS = `
 .dg-svg .ln { stroke: var(--pc-arrow); stroke-width: 2; fill: none; }
 .dg-svg .hd { fill: var(--pc-arrow); }
 .dg-svg .elbl { font: 600 12px system-ui, sans-serif; fill: var(--dg-ink); paint-order: stroke; stroke: var(--dg-bg); stroke-width: 4px; stroke-linejoin: round; }
+.dg-svg .idtag { font: 600 9px ui-monospace, monospace; fill: var(--dg-faint); opacity: .75; pointer-events: none; }
+.dg-svg .etag { font: 600 9px ui-monospace, monospace; fill: var(--dg-faint); opacity: .85; paint-order: stroke; stroke: var(--dg-bg); stroke-width: 3px; stroke-linejoin: round; pointer-events: none; }
+.dg-svg .selhalo { fill: none; stroke: var(--dg-accent); stroke-width: 8; opacity: .35; stroke-linecap: round; }
 .dg-svg .frame { fill: none; stroke: var(--dg-line); stroke-width: 1.5; stroke-dasharray: 3 5; }
 .dg-svg .ftitle { font: 600 13px system-ui, sans-serif; fill: var(--dg-faint); }
 .dg-svg .halo { fill: none; stroke: var(--dg-accent); stroke-width: 3; opacity: .55; }
@@ -84,16 +88,19 @@ function make(holder, host) {
   const zoomBox = html('span', 'dg-zoom'); zoomBox.append(zoomOut, pct, zoomIn, fit);
   const namesBtn = btn('Names', 'Hide the names above the shapes', () => { showNames = !showNames; namesBtn.setAttribute('aria-pressed', String(showNames)); redraw(); });
   namesBtn.setAttribute('aria-pressed', 'true');
-  tools.append(zoomBox, namesBtn, html('span', 'dg-spacer'), btn('Undo', 'Undo the last change', () => host.send('undo')), btn('Save SVG', 'Save the diagram as an SVG file', () => host.send('save the diagram as an SVG')), btn('Save PNG', 'Save the diagram as a PNG file', () => host.send('save the diagram as a PNG')));
+  const idsBtn = btn('Ids', 'Hide the short ids of the shapes and arrows (c1, r1, a1)', () => { showIds = !showIds; idsBtn.setAttribute('aria-pressed', String(showIds)); try { localStorage.setItem('p2-diagram-ids', showIds ? '1' : '0'); } catch { /* storage may be off */ } redraw(); });
+  tools.append(zoomBox, namesBtn, idsBtn, html('span', 'dg-spacer'), btn('Undo', 'Undo the last change', () => host.send('undo')), btn('Save SVG', 'Save the diagram as an SVG file', () => host.send('save the diagram as an SVG')), btn('Save PNG', 'Save the diagram as a PNG file', () => host.send('save the diagram as a PNG')));
 
-  let K = null, loading = null, state = EMPTY, destroyed = false, hintIndex = 0, showNames = true, tucked = new Set(), loadError = null, stagePanel = null;
+  let K = null, AR = null, loading = null, state = EMPTY, destroyed = false, hintIndex = 0, showNames = true, showIds = true, tucked = new Set(), loadError = null, stagePanel = null;
   const zv = { k: 1, dx: 0, dy: 0 };
   let vbBase = { x: 0, y: 0, w: 800, h: 500 }, vbNow = vbBase, fitKey = '';
+  try { showIds = localStorage.getItem('p2-diagram-ids') !== '0'; } catch { /* default on */ }
+  idsBtn.setAttribute('aria-pressed', String(showIds));
   const hintTimer = setInterval(() => { hintIndex++; if (!hint.hidden) showHint(); }, 4200);
 
   /** Loads the engine once (lazy: PERF). */
   function load() {
-    loading ??= import(host.asset(ENGINE_ASSET)).then((m) => { K = m.default; ensureCss(K); if (!destroyed) redraw(); }).catch((e) => { loadError = e; console.warn('diagram tab: engine failed to load', e); caption.textContent = 'The diagram engine could not be loaded. The commands still work.'; });
+    loading ??= Promise.all([import(host.asset(ENGINE_ASSET)), import(host.asset(ARROWS_ASSET))]).then(([m, a]) => { K = m.default; AR = a; ensureCss(K); if (!destroyed) redraw(); }).catch((e) => { loadError = e; console.warn('diagram tab: engine failed to load', e); caption.textContent = 'The diagram engine could not be loaded. The commands still work.'; });
     return loading;
   }
   ensureCss(null);
@@ -117,7 +124,8 @@ function make(holder, host) {
     for (const [s, b] of solid) if (solid.some(([o, c]) => o !== s && b.a * 2 <= c.a && b.x1 >= c.x1 - 1 && b.x2 <= c.x2 + 1 && b.y1 >= c.y1 - 1 && b.y2 <= c.y2 + 1)) out.add(s.name);
     return out;
   };
-  const tagShown = (s) => !s.layer && s.shape !== 'text' && !s.quiet && showNames && !tucked.has(s.name);
+  const tagShown = (s) => !s.layer && s.shape !== 'text' && !s.quiet && showNames && !tucked.has(s.name) && !(showIds && s.id && s.id === s.name);   // an unnamed shape shows its id instead (idShown)
+  const idShown = (s) => !s.layer && showIds && !!s.id && !s.quiet && !tucked.has(s.name);
   function outlinePts(s) {
     const { w, h } = K.dims(s), hw = w / 2, hh = h / 2;
     if (s.shape === 'triangle') return [[0, -hh], [hw, hh], [-hw, hh]];
@@ -144,6 +152,7 @@ function make(holder, host) {
     if (s.shape === 'text') {
       const t = el('text', { class: 'ftext', x: 0, y: 0, 'text-anchor': 'middle', 'dominant-baseline': 'central', 'font-size': K.fontOf(s), style: `fill: ${pc(s.color || 'black', 'line')}` }, grp);
       t.textContent = s.label || '';
+      if (idShown(s)) el('text', { class: 'idtag', x: -w / 2, y: -h / 2 - 2, 'text-anchor': 'start' }, grp).textContent = s.id;
       return;
     }
     const attrs = { class: `body${s.outline ? ' outlined' : ''}`, style: `fill: ${pc(s.color, 'fill')}; stroke: ${s.outline ? pc(s.outline, 'line') : pc(s.color, 'edge')}` };
@@ -156,6 +165,7 @@ function make(holder, host) {
     if (hl?.has(s.name)) el('rect', { class: 'halo', x: -w / 2 - 7, y: -h / 2 - 7, width: w + 14, height: h + 14, rx: 10 }, grp);
     if (s.layer === 'background' || s.layer === 'zone' || !tagShown(s)) el('title', {}, grp).textContent = s.name;
     if (tagShown(s)) el('text', { class: 'tag', x: 0, y: -h / 2 - 7, 'text-anchor': 'middle' }, grp).textContent = s.name;
+    if (idShown(s)) el('text', { class: 'idtag', x: -w / 2, y: -h / 2 - 3, 'text-anchor': 'start' }, grp).textContent = s.id;
     if (s.label) {
       const room = ['rectangle', 'square', 'ellipse', 'circle'].includes(s.shape) ? w * 0.84 : w * 0.56;
       let fs = s.w ? Math.max(10, Math.min(15, s.h / 2.8)) : Math.max(9, Math.min(14, s.size / 4.4)), txt = s.label;
@@ -165,37 +175,25 @@ function make(holder, host) {
       el('text', { class: 'lbl', x: 0, y: s.shape === 'triangle' ? h * 0.18 : 0, 'text-anchor': 'middle', 'dominant-baseline': 'central', 'font-size': fs.toFixed(1), style: `fill: ${pc(s.color, tint != null ? 'wash' : 'ink')}` }, grp).textContent = txt;
     }
   }
-  function drawArrow(g, e, a, b, { bends = [], lab = null, offset = 0, taken = [] } = {}) {
-    const P = [{ x: a.x, y: a.y }, ...bends, { x: b.x, y: b.y }];
-    const unit = (p, q) => { const dx = q.x - p.x, dy = q.y - p.y, L = Math.hypot(dx, dy) || 1; return [dx / L, dy / L]; };
-    const [ux0, uy0] = unit(P[0], P[1]), [ux1, uy1] = unit(P[P.length - 2], P[P.length - 1]);
-    const ox = bends.length ? 0 : -uy0 * offset, oy = bends.length ? 0 : ux0 * offset;
-    const ra = rayDist(a, ux0, uy0) + 3, rb = rayDist(b, -ux1, -uy1) + 3;
-    if (!bends.length && ra + rb >= Math.hypot(b.x - a.x, b.y - a.y) - 4) return;
-    const x1 = a.x + ux0 * ra + ox, y1 = a.y + uy0 * ra + oy, x2 = b.x - ux1 * rb + ox, y2 = b.y - uy1 * rb + oy;
-    const grp = el('g', { class: 'edge', 'data-edge': e.id }, g);
+  /** Draws one arrow along the route of arrows.mjs: sides, entry angles, spread, detours; the id on the line, the label off it with a halo. */
+  function drawArrow(g, e, r, selected) {
+    const pts = r.pts.map((p) => [...p]), n = pts.length;
     const col = e.color ? pc(e.color, 'line') : null;
-    const head = (tx, ty, vx, vy) => { const bx = tx - vx * 11, by = ty - vy * 11; el('polygon', { class: 'hd', points: `${tx},${ty} ${bx - vy * 5},${by + vx * 5} ${bx + vy * 5},${by - vx * 5}`, style: col ? `fill:${col}` : '' }, grp); };
-    const sx = e.arrow === 'both' ? x1 + ux0 * 9 : x1, sy = e.arrow === 'both' ? y1 + uy0 * 9 : y1;
-    const ex = e.arrow === 'none' ? x2 : x2 - ux1 * 9, ey = e.arrow === 'none' ? y2 : y2 - uy1 * 9;
-    const pts = [[sx, sy], ...bends.map((p) => [p.x, p.y]), [ex, ey]];
-    const ln = el('polyline', { class: 'ln', points: pts.map((p) => p.map((v) => (+v).toFixed(1)).join(',')).join(' '), 'stroke-linejoin': 'round', style: col ? `stroke:${col}` : '' }, grp);
+    const grp = el('g', { class: `edge${selected ? ' sel' : ''}`, 'data-edge': e.id }, g);
+    const [hx, hy] = r.headDir, [tx, ty] = r.tailDir, head0 = pts[n - 1], tail0 = pts[0];
+    const head = (px, py, vx, vy) => { const bx = px - vx * 11, by = py - vy * 11; el('polygon', { class: 'hd', points: `${px},${py} ${bx - vy * 5},${by + vx * 5} ${bx + vy * 5},${by - vx * 5}`, style: col ? `fill:${col}` : '' }, grp); };
+    if (e.arrow !== 'none') { pts[n - 1] = [head0[0] - hx * 9, head0[1] - hy * 9]; }
+    if (e.arrow === 'both') { pts[0] = [tail0[0] - tx * 9, tail0[1] - ty * 9]; }
+    const d = pts.map((p) => p.map((v) => (+v).toFixed(1)).join(',')).join(' ');
+    if (selected) el('polyline', { class: 'selhalo', points: d, 'stroke-linejoin': 'round' }, grp);
+    const ln = el('polyline', { class: 'ln', points: d, 'stroke-linejoin': 'round', style: col ? `stroke:${col}` : '' }, grp);
     if (e.style === 'dashed') ln.setAttribute('stroke-dasharray', '8 6');
     if (e.style === 'dotted') { ln.setAttribute('stroke-dasharray', '0.5 6'); ln.setAttribute('stroke-linecap', 'round'); ln.setAttribute('stroke-width', '2.6'); }
     if (e.width) ln.setAttribute('stroke-width', String(e.style === 'dotted' ? Math.max(2.6, e.width + 0.6) : e.width));
-    if (e.arrow !== 'none') head(x2, y2, ux1, uy1);
-    if (e.arrow === 'both') head(x1, y1, -ux0, -uy0);
-    if (e.label) {
-      let lx, ly;
-      if (lab) { lx = lab.x; ly = lab.y; } else {
-        const lw = String(e.label).length * 6.8 + 4, ux = ux0, uy = uy0;
-        const free = (cx, cy) => !taken.some((o) => Math.min(o.x2, cx + lw / 2) - Math.max(o.x1, cx - lw / 2) > 0.5 && Math.min(o.y2, cy + 8) - Math.max(o.y1, cy - 8) > 0.5);
-        const spots = [];
-        for (const f of [0.5, 0.38, 0.62, 0.26, 0.74]) for (const side of [1, -1]) { const off = side * (12 + Math.abs(uy) * lw / 2); spots.push([x1 + (x2 - x1) * f - uy * off, y1 + (y2 - y1) * f + ux * off]); }
-        [lx, ly] = spots.find(([cx, cy]) => free(cx, cy)) || spots[0];
-      }
-      el('text', { class: 'elbl', x: lx, y: ly, 'text-anchor': 'middle', 'dominant-baseline': 'central' }, grp).textContent = e.label;
-    }
+    if (e.arrow !== 'none') head(head0[0], head0[1], hx, hy);
+    if (e.arrow === 'both') head(tail0[0], tail0[1], tx, ty);
+    if (e.label) el('text', { class: 'elbl', x: (r.label ?? r.mid).x, y: (r.label ?? r.mid).y, 'text-anchor': 'middle', 'dominant-baseline': 'central' }, grp).textContent = e.label;
+    if (showIds && e.id) el('text', { class: 'etag', x: r.mid.x, y: r.mid.y, 'text-anchor': 'middle', 'dominant-baseline': 'central' }, grp).textContent = e.id;
   }
   function drawGroups(g, S) {
     const spots = new Map(K.groupLabels(S).map((q) => [q.name, q]));
@@ -253,17 +251,12 @@ function make(holder, host) {
     }
     const gg = el('g', {}, target.layer), pg = el('g', {}, target.layer), eg = el('g', {}, target.layer), sg = el('g', {}, target.layer);
     drawGroups(gg, S);
-    const taken = [];
-    for (const s of S.shapes) { if (s.layer) continue; taken.push(boxOf(s)); if (tagShown(s)) taken.push(K.tagBox(s)); }
-    const routes = K.edgeRoutes ? K.edgeRoutes(S) : {};
-    for (const e of S.edges) {
-      const a = by.get(e.from), b = by.get(e.to);
-      if (!a || !b) continue;
-      const pair = S.edges.some((o) => o !== e && o.from === e.to && o.to === e.from);
-      const via = pair ? null : routes[e.id];
-      drawArrow(eg, e, a, b, { bends: via?.points ?? [], lab: via?.label ?? null, offset: pair ? 6 : 0, taken });
-    }
-    for (const s of S.shapes) drawShape(s.layer === 'background' || s.layer === 'zone' ? pg : sg, s);
+    const tags = [];
+    for (const s of S.shapes) { if (s.layer) continue; if (tagShown(s)) tags.push(K.tagBox(s)); if (idShown(s)) { const d = K.dims(s); tags.push({ x1: s.x - d.w / 2, x2: s.x - d.w / 2 + 16, y1: s.y - d.h / 2 - 14, y2: s.y - d.h / 2 }); } }
+    const routes = AR.routeEdges(S.shapes, S.edges, (s) => K.dims(s), { tags });
+    const selE = new Set(S.selected?.edges ?? []), selS = new Set(S.selected?.shapes ?? []);
+    for (const e of S.edges) { const r = routes.get(e.id); if (r) drawArrow(eg, e, r, selE.has(e.id)); }
+    for (const s of S.shapes) drawShape(s.layer === 'background' || s.layer === 'zone' ? pg : sg, s, selS);
     return base;
   }
 
@@ -344,7 +337,7 @@ function make(holder, host) {
     tucked = keepTucked;
     paint(state);
     const css = `${paletteCss(K, 'svg')}svg { --dg-bg: #ffffff; --dg-ink: #1f2329; --dg-faint: #6a7480; --dg-accent: #356ac3; }
-.body { stroke-width: 2; } .body.outlined { stroke-width: 3; } .tag { font: 600 11px sans-serif; fill: #6a7480; } .lbl, .ftext { font-family: sans-serif; font-weight: 600; }
+.body { stroke-width: 2; } .body.outlined { stroke-width: 3; } .tag { font: 600 11px sans-serif; fill: #6a7480; } .idtag { font: 600 9px monospace; fill: #6a7480; opacity: .75; } .etag { font: 600 9px monospace; fill: #6a7480; paint-order: stroke; stroke: #fff; stroke-width: 3px; } .selhalo { fill: none; stroke: #356ac3; stroke-width: 8; opacity: .35; } .lbl, .ftext { font-family: sans-serif; font-weight: 600; }
 .ln { stroke: var(--pc-arrow); stroke-width: 2; fill: none; } .hd { fill: var(--pc-arrow); } .elbl { font: 600 12px sans-serif; fill: #1f2329; paint-order: stroke; stroke: #fff; stroke-width: 4px; } .frame { fill: none; stroke: #d5dae0; stroke-width: 1.5; stroke-dasharray: 3 5; } .ftitle { font: 600 13px sans-serif; fill: #6a7480; }`;
     const [x, y, w, h] = base;
     return { svg: `<svg xmlns="${NS}" viewBox="${x} ${y} ${w} ${h}" width="${Math.round(w)}" height="${Math.round(h)}"><style>${css.replace(/:root/g, 'svg').replace(/svg:not\(\[data-theme="light"\]\)/g, 'svg.never').replace(/svg\[data-theme="dark"\]/g, 'svg.never')}</style><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#ffffff"/>${f.innerHTML}${l.innerHTML}</svg>`, w, h };

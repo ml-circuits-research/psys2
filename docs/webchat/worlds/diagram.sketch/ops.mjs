@@ -16,6 +16,8 @@
 // Lazy loading (PERF): the engine is 470 KB of source. In a browser it is fetched when the Diagram tab is first shown or when an operation
 // first needs it (the dialog layer awaits `prepare()` before the world's operations run; a call that still finds no engine answers "getting ready"); under Node it is loaded at once (top-level await).
 
+import { fixTypos, rewriteRefs, rewriteLayout, rewriteMisc } from './refs.mjs';
+
 const TAB = 'diagram';
 const MAX_HISTORY = 30;
 let K = null, loading = null, sys = null, sysOf = null;
@@ -33,12 +35,13 @@ if (typeof process !== 'undefined' && process.versions?.node) await loadEngine()
 export function initialState() {
   return {
     shapes: [], edges: [], rules: [], seq: {}, edgeSeq: 0, ruleSeq: 0, order: 0, frame: { x: 0, y: 0 }, frames: [], groups: [],
-    last: [], selected: null, undo: [], redo: [], rev: 0,
+    last: [], selected: null, pending: null, undo: [], redo: [], rev: 0,
   };
 }
 function ensure(ctx) {
   const s = ctx.state, d = initialState();
   for (const k of Object.keys(d)) if (s[k] === undefined) s[k] = d[k];
+  if (s.shapes.some((x) => !x.id) || s.edges.some((e) => /^e\d+$/.test(e.id))) { assignIds(s); s.rev = (s.rev ?? 0) + 1; }
   return s;
 }
 
@@ -47,10 +50,59 @@ const no = (note, status = 'unsupported') => ({ status, note });
 const open = (ctx) => { try { ctx.request('ui.openTab', { tab: TAB }); } catch { /* the shell may not know the tab */ } };
 const WORLD_KEYS = ['shapes', 'edges', 'rules', 'seq', 'edgeSeq', 'ruleSeq', 'order', 'frame', 'frames', 'groups', 'facts'];
 
+// ---- short ids (DIAG3) ------------------------------------------------------------------------------------------------
+// Every shape has a short id by kind (c1 circle, r1 rectangle, s1 square, d1 diamond, e1 ellipse, t1 triangle, h1 hexagon, k1 star, x1 text) and every arrow
+// an id a1, a2. An unnamed shape is named by its id; a shape the user named keeps its name and carries the id in `id`. The old long names (circle1,
+// rectangle1, box1) stay aliases: they resolve to the shape of the same number and kind. The engine is patched here, not edited (patchWorld).
+export const PREFIX = { circle: 'c', rectangle: 'r', square: 's', diamond: 'd', ellipse: 'e', triangle: 't', hexagon: 'h', star: 'k', text: 'x' };
+const LONG_OF = { box: 'rectangle', rect: 'rectangle', oval: 'ellipse', rhombus: 'diamond', ...Object.fromEntries(Object.keys(PREFIX).map((k) => [k, k])) };
+const KIND_OF_PREFIX = Object.fromEntries(Object.entries(PREFIX).map(([k, v]) => [v, k]));
+const ID_RE = /^([crsdetxhk])(\d+)$/i;
+const LONG_RE = new RegExp(`^(${Object.keys(LONG_OF).join('|')})(\\d+)$`, 'i');
+/** The shape a token names: its name, its short id, or the old long name (circle1 = c1). */
+export function shapeOf(state, token) {
+  if (token == null) return null;
+  const l = String(token).toLowerCase(), ss = state.shapes ?? [];
+  const exact = ss.find((x) => x.name.toLowerCase() === l) ?? ss.find((x) => x.id && x.id.toLowerCase() === l);
+  if (exact) return exact;
+  const m = LONG_RE.exec(l);
+  if (m) { const id = `${PREFIX[LONG_OF[m[1].toLowerCase()]]}${m[2]}`; return ss.find((x) => (x.id ?? '').toLowerCase() === id || x.name.toLowerCase() === id) ?? null; }
+  return null;
+}
+export const idOf = (x) => x.id ?? (ID_RE.test(x.name) ? x.name.toLowerCase() : x.name);
+/** The next free short id of a kind; the counter is the engine's own `seq`. */
+function nextId(state, kind) {
+  const p = PREFIX[kind] ?? 'z';
+  const used = new Set((state.shapes ?? []).flatMap((x) => [x.name.toLowerCase(), (x.id ?? '').toLowerCase()]));
+  let id;
+  do { state.seq[kind] = (state.seq[kind] || 0) + 1; id = `${p}${state.seq[kind]}`; } while (used.has(id));
+  return id;
+}
+function patchWorld(w) {
+  const find0 = w.find.bind(w);
+  w.find = function (name) { return find0(name) ?? (name == null ? null : shapeOf(this.state, name)); };
+  w.nextName = function (shape) { return nextId(this.state, shape); };
+  w.newEdge = function (from, to, o) { return Object.assign({ id: `a${++this.state.edgeSeq}`, from, to, style: 'solid', arrow: 'forward', label: null, color: null }, o || {}); };
+}
+/** Gives every shape that has no id one (named shapes keep their names), and migrates old arrow ids (e1 -> a1). */
+function assignIds(s) {
+  for (const x of s.shapes) {
+    if (x.id) continue;
+    const m = ID_RE.exec(x.name);
+    x.id = m && KIND_OF_PREFIX[m[1].toLowerCase()] === x.shape ? x.name.toLowerCase() : nextId(s, x.shape);
+  }
+  const taken = new Set(s.edges.map((e) => e.id));
+  for (const e of s.edges) if (/^e\d+$/.test(e.id)) { let n = 0, id; do { id = `a${++n}`; } while (taken.has(id)); taken.add(id); e.id = id; s.edgeSeq = Math.max(s.edgeSeq ?? 0, n); }
+}
+const edgeOf = (s, id) => s.edges.find((e) => e.id.toLowerCase() === String(id).toLowerCase()) ?? null;
+/** "c1 → r1": the ends of an arrow (a named shape shows its name and its id). */
+const endName = (s, n) => n;
+const arrowText = (s, e) => `${endName(s, e.from)} ${e.arrow === 'forward' ? '→' : e.arrow === 'both' ? '↔' : '—'} ${endName(s, e.to)}`;
+
 // ---- the engine bound to a state --------------------------------------------------------------------------------------
 /** One engine system (the legend and plugins are built once); its world is loaded from `s` before and written back after each run. */
 function systemFor(s) {
-  if (!sys) sys = K.createSystem();
+  if (!sys) { sys = K.createSystem(); patchWorld(sys.world); }
   const w = sys.world;
   if (sysOf !== s || w.rev !== s.rev) {
     w.state = structuredClone(Object.fromEntries(WORLD_KEYS.filter((k) => s[k] !== undefined).map((k) => [k, s[k]])));
@@ -63,13 +115,17 @@ function writeBack(s) {
   const w = sys.world;
   for (const k of WORLD_KEYS) { if (w.state[k] === undefined) delete s[k]; else s[k] = w.state[k]; }
   s.undo = w.undoStack; s.redo = w.redoStack;
+  assignIds(s);
   while (s.undo.length > MAX_HISTORY) s.undo.shift();
   while (s.redo.length > MAX_HISTORY) s.redo.shift();
   s.rev = (s.rev ?? 0) + 1; w.rev = s.rev;
   w.state = structuredClone(Object.fromEntries(WORLD_KEYS.filter((k) => s[k] !== undefined).map((k) => [k, s[k]])));   // the state of the context is never aliased by the engine
 }
+/** Every token that names a shape: its name, its short id and its old long name (circle1 for c1). */
+const longName = (x) => { const m = ID_RE.exec(idOf(x)); return m ? `${KIND_OF_PREFIX[m[1].toLowerCase()]}${m[2]}` : null; };
+const nameTokens = (s) => [...new Set(s.shapes.flatMap((x) => [x.name, x.id, longName(x)]).filter(Boolean).concat((s.groups ?? []).map((g) => g.name)))];
 const readerCtx = (s) => ({
-  names: s.shapes.map((x) => x.name).concat((s.groups ?? []).map((g) => g.name)),
+  names: nameTokens(s),
   last: (s.last ?? []).length ? { ref: s.last[s.last.length - 1] } : undefined,
   texts: s.shapes.filter((x) => x.label != null && String(x.label).trim() !== '').map((x) => String(x.label)),
 });
@@ -124,28 +180,29 @@ export function nodesOf(kind, args, s, legend = null) {
 const listing = (a) => (a.length <= 1 ? a.join('') : `${a.slice(0, -1).join(', ')} and ${a[a.length - 1]}`);
 const few = (a, n) => (a.length > n ? listing([...a.slice(0, n), `${a.length - n} more`]) : listing(a));
 /** Turns the effects of a run into one or two plain sentences (ported from summarize() of engine/ui.js). */
-function summarize(result) {
-  const adds = [], links = [], unlinks = [], dels = [], moved = [], changed = [], renames = [], rules = [], said = [], answers = [];
+function summarize(result, s) {
+  const adds = [], links = [], unlinks = [], dels = [], moved = [], changed = [], renames = [], rules = [], said = [], answers = [], edgeSets = [];
   for (const st of result.steps) {
+    let ownAnswer = false;
     if (st.node.type === 'mention' || st.error || st.skipped) continue;
     if (st.node.args && st.node.args.template && st.answer) { answers.push(st.answer); continue; }
     for (const p of st.patches) {
       if (p.op === 'add') adds.push(`${p.shape.name}`);
-      else if (p.op === 'link') links.push(K.edgeText(p.edge).replace(/ \(.*$|\s+".*"$/, ''));
-      else if (p.op === 'unlink') unlinks.push(p.edge ? `${p.edge.from}–${p.edge.to}` : p.id);
+      else if (p.op === 'link') links.push(`${arrowText(s, p.edge)} (${p.edge.id})`);
+      else if (p.op === 'unlink') unlinks.push(p.edge ? `${p.edge.id} (${arrowText(s, p.edge)})` : p.id);
       else if (p.op === 'remove') dels.push(p.name);
       else if (p.op === 'rename') renames.push(`${p.from} to ${p.to}`);
       else if (p.op === 'rule') rules.push(p.rule);
       else if (p.op === 'forget') said.push('Forgot all default rules.');
       else if (p.op === 'reorder') said.push(p.to === 'front' ? `Brought ${p.name} to the front.` : `Sent ${p.name} to the back.`);
-      else if (p.op === 'edgeSet') { if (!st.answer && p.edge) said.push(`The arrow ${p.edge.from}–${p.edge.to} ${p.edge.label ? `now says “${p.edge.label}”` : 'has no label now'}.`); }
+      else if (p.op === 'edgeSet') { if (p.edge) { edgeSets.push(p); ownAnswer = true; } }
       else if (p.op === 'set') {
         if ('x' in p.props && !moved.includes(p.name)) moved.push(p.name);
         const ch = Object.entries(p.props).filter(([k]) => k !== 'x' && k !== 'y').map(([k, v]) => (k === 'size' ? K.sizeName(v) : k === 'label' ? `labeled “${v}”` : k === 'outline' ? (v ? `${v} outline` : 'no outline') : k === 'shape' ? `a ${v}` : String(v)));
         if (ch.length) changed.push(`${p.name} is now ${listing(ch)}`);
       }
     }
-    if (st.answer) answers.push(st.answer);
+    if (st.answer && !ownAnswer) answers.push(st.answer);
     for (const n of st.notes || []) if (/^(reverted|re-applied|there was nothing)|already/.test(n)) said.push(n.charAt(0).toUpperCase() + n.slice(1) + '.');
   }
   const out = [];
@@ -154,12 +211,92 @@ function summarize(result) {
   if (renames.length) out.push(`Renamed ${listing(renames)}.`);
   if (changed.length) out.push(changed.slice(0, 4).join('; ') + (changed.length > 4 ? `; and ${changed.length - 4} more.` : '.'));
   if (moved.length) out.push(`Moved ${few(moved, 5)}.`);
-  if (unlinks.length) out.push(`Removed the link${unlinks.length > 1 ? 's' : ''} ${few(unlinks, 4)}.`);
+  out.push(...edgeSentences(edgeSets, s));
+  if (unlinks.length) out.push(`Removed the arrow${unlinks.length > 1 ? 's' : ''} ${few(unlinks, 4)}.`);
   if (dels.length) out.push(`Deleted ${few(dels, 6)}.`);
   for (const r of rules) out.push(`From now on, new ${r.shape ? `${r.shape}s` : 'shapes'} will be ${['size', 'color'].filter((k) => r[k]).map((k) => r[k]).join(' ')}${r.outline ? ` with a ${r.outline} outline` : ''}.`);
   out.push(...said.map((x) => x.replace(/^Reverted 1 turn\.$/, 'Undid the last change.').replace(/^Re-applied 1 turn\.$/, 'Redid it.')));
   out.push(...answers);
   return out.join(' ') || 'Done.';
+}
+
+/** One sentence per changed arrow: "Arrow a1 (c1 → r1) now says “uses” and is now dashed and thicker (3 px)." */
+function edgeSentences(sets, s) {
+  const by = new Map();
+  for (const p of sets) { const m = by.get(p.edge.id) ?? { edge: p.edge, props: {}, before: {} }; Object.assign(m.props, p.props); for (const k of Object.keys(p.props)) if (!(k in m.before)) m.before[k] = p.before?.[k]; m.edge = p.edge; by.set(p.edge.id, m); }
+  const out = [];
+  const parts = (m) => {
+    const q = [], pr = m.props;
+    if ('label' in pr) q.push(pr.label ? `now says “${pr.label}”` : 'has no label now');
+    if ('from' in pr || 'to' in pr) q.push(`was reversed, it now goes ${arrowText(s, m.edge)}`);
+    const look = [];
+    if (pr.style) look.push(pr.style);
+    if (pr.color) look.push(pr.color);
+    if (pr.arrow) look.push(pr.arrow === 'both' ? 'two-way' : pr.arrow === 'none' ? 'without arrowheads' : 'one-way');
+    if ('width' in pr) { const was = m.before.width ?? 2; look.push(pr.width > was ? `thicker (${pr.width} px)` : `thinner (${pr.width} px)`); }
+    if (look.length) q.push(`is now ${listing(look)}`);
+    return q;
+  };
+  const all = [...by.values()];
+  if (all.length > 3) {
+    const kinds = [...new Set(all.flatMap((m) => parts(m).map((x) => x.replace(/ \(.*?\)/, ''))))];
+    return [`${all.length} arrows (${few(all.map((m) => m.edge.id), 6)}): ${kinds.join(', ')}.`];
+  }
+  for (const m of all) { const q = parts(m); if (q.length) out.push(`Arrow ${m.edge.id} (${arrowText(s, m.edge)}) ${q.join(' and ')}.`); }
+  return out;
+}
+
+// ---- reading a sentence: typos, ids, arrows, layouts (refs.mjs) and the arguments the engine could not read -------------------------------
+const EDGE_ACTS = new Set(['label', 'set', 'resize', 'reverse', 'disconnect']);
+const BIT = /\b(?:a\s+bit|a\s+little|slightly|somewhat|bit|little|just\s+a\s+bit)\b/i, MUCH = /\b(?:much|a\s+lot|way|far|really|very|lots|significantly|considerably)\b/i;
+/** The names of one argument made canonical: the name, the short id or the old long name of a shape all become its name. */
+function canonNames(s, v) {
+  const one = (x) => (typeof x === 'string' ? x.split(',').map((q) => { const t = q.trim(), sh = shapeOf(s, t); return sh ? sh.name : t; }).join(',') : x);
+  return Array.isArray(v) ? v.map(one) : one(v);
+}
+/** Prepares a sentence for the engine's reader. */
+function prepareText(text, s) {
+  let t = String(text);
+  if ((t.match(/"/g) ?? []).length % 2) t += '"';   // the pipeline drops a final closing quote with the sentence's punctuation
+  t = fixTypos(t, nameTokens(s));
+  t = rewriteMisc(t, s);
+  t = rewriteLayout(t);
+  return rewriteRefs(t, s);
+}
+/** Fixes the nodes the reader made: canonical names, the thickness step of an arrow ("a bit" / "much"), a missing label text asked for by name. */
+function fixNodes(nodes, text, s) {
+  const thick = /\b(thick(?:er|en)?|thin(?:ner)?|heavier|lighter)\b/i.exec(text);
+  const out = [];
+  for (const n of nodes) {
+    if (n.type === 'mention' || !n.args) { out.push(n); continue; }
+    for (const k of ['target', 'anchor', 'anchor2', 'linked', 'from', 'to', 'members']) if (n.args[k] != null && !(typeof n.args[k] === 'object' && !Array.isArray(n.args[k]))) n.args[k] = canonNames(s, n.args[k]);
+    const a = n.args, toEdge = (a.from != null || a.to != null || a.kind === 'edge');
+    if (a.action === 'connect' && a.from == null && a.to == null && a.target == null && a.members == null && a.pairing == null) {   // "connect them with a dashed arrow": the last two shapes
+      const last = s.shapes.filter((x) => !x.layer).slice().sort((p, q) => (p.order ?? 0) - (q.order ?? 0)).slice(-2);
+      if (last.length < 2) return { clarify: 'I need two shapes to connect. Draw them first, or name them, for example: connect c1 to r1.' };
+      a.from = last[0].name; a.to = last[1].name;
+    }
+    if (a.action === 'label' && toEdge && a.label == null) {
+      const es = edgeWords(s, a);
+      return { clarify: es.length === 1 ? `What should the label of ${es[0].id} (${arrowText(s, es[0])}) say?` : 'What should the label say? Put it in quotes, for example: label a1 as "uses".' };
+    }
+    if (thick && toEdge && (a.action === 'resize' || EDGE_ACTS.has(a.action))) {
+      const up = /^(thick|heavier)/i.test(thick[1]), f = BIT.test(text) ? 1.25 : MUCH.test(text) ? 2 : 1.5;
+      if (a.action === 'resize') { out.push({ ...n, args: { ...a, scale: up ? f : Math.round(100 / f) / 100 } }); continue; }
+      out.push(n);
+      if (!nodes.some((q) => q.args?.action === 'resize')) out.push({ id: `${n.id}w`, type: 'command', args: { action: 'resize', ...(a.from != null ? { from: a.from } : {}), ...(a.to != null ? { to: a.to } : {}), ...(a.kind ? { kind: a.kind } : {}), scale: up ? f : Math.round(100 / f) / 100 } });
+      continue;
+    }
+    out.push(n);
+  }
+  return { nodes: out };
+}
+/** The arrows a node's from / to name (for the messages). */
+function edgeWords(s, a) {
+  const F = [].concat(a.from ?? []).flatMap((x) => String(x).split(',')), T = [].concat(a.to ?? []).flatMap((x) => String(x).split(','));
+  const fit = (f, t) => s.edges.filter((e) => (!f.length || f.includes(e.from)) && (!t.length || t.includes(e.to)));
+  const es = fit(F, T);
+  return es.length || !(F.length && T.length) ? es : fit(T, F);
 }
 
 /** Runs nodes on the state; returns the reply envelope. `changesPicture` brings the tab forward. */
@@ -175,17 +312,19 @@ function execute(ctx, s, nodes) {
   for (const st of result.steps) { const v = st.value; if (v && st.node.type === 'mention') named.push(...[].concat(v).map(String)); }
   if (made.length) s.last = made; else if (named.length) s.last = [...new Set(named)];
   s.last = (s.last ?? []).filter((n) => s.shapes.some((x) => x.name === n));
+  const hl = [...result.steps].reverse().find((st) => st.highlight && !st.error)?.highlight;
+  s.selected = hl && (hl.shapes?.length || hl.edges?.length) ? { shapes: [...new Set(hl.shapes ?? [])], edges: [...new Set(hl.edges ?? [])] } : null;
   if (result.changed || s.shapes.length !== before) open(ctx);
   if (!result.ok) {
     const err = result.error;
-    const text = summarize({ steps: result.steps.filter((st) => !st.error) });
+    const text = summarize({ steps: result.steps.filter((st) => !st.error) }, s);
     const said = err?.message ?? 'I could not do that.';
     const clarify = err && err.name === 'Clarify';
     if (result.partial) return ok(`${text} But: ${said}`);
     return no(said, clarify ? 'missing' : 'unsupported');
   }
   open(ctx);
-  return ok(summarize(result));
+  return ok(summarize(result, s));
 }
 
 const NOT_READY = () => { loadEngine(); return no('The diagram engine is still loading. Please say that again in a moment.', 'missing'); };
@@ -194,14 +333,44 @@ const make = (kind) => (ctx, args = {}) => {
   if (!K) return NOT_READY();
   const s = ensure(ctx);
   const text = args.text != null ? String(args.text).trim() : '';
+  s.pending = null;
   if (text) {
-    const f = systemFor(s).formalize(text, readerCtx(s));
-    const nodes = f.nodes;
-    if (!nodes.length) return no(`I could not read "${text}" as something to do with the diagram.${(f.notes ?? []).length ? ` ${f.notes[0]}` : ''}`, 'missing');
-    return execute(ctx, s, nodes);
+    const prepared = prepareText(text, s);
+    if (typeof process !== 'undefined' && process.env?.DIAG_DEBUG) console.error('[diagram]', JSON.stringify(text), '->', JSON.stringify(prepared));
+    const sel = selectCommand(prepared, s, ctx);
+    if (sel) return sel;
+    const f = systemFor(s).formalize(prepared, readerCtx(s));
+    if (!f.nodes.length) return no(`I could not read "${text}" as something to do with the diagram.${(f.notes ?? []).length ? ` ${f.notes[0]}` : ''}`, 'missing');
+    const fx = fixNodes(f.nodes, prepared, s);
+    if (fx.clarify) return no(fx.clarify, 'missing');
+    return execute(ctx, s, fx.nodes);
   }
-  return execute(ctx, s, nodesOf(kind, args, s, systemFor(s).engine.legend));
+  const nodes = nodesOf(kind, args, s, systemFor(s).engine.legend);
+  for (const n of nodes) for (const k of NAME_ARGS) if (n.args?.[k] != null && typeof n.args[k] !== 'object') n.args[k] = canonNames(s, n.args[k]);
+  return execute(ctx, s, nodes);
 };
+
+/** "select a1", "highlight the arrow between c1 and r1", "select c1 and c2": marks shapes or arrows; the tab draws a halo on them. */
+function selectCommand(text, s, ctx) {
+  const m = /^(?:please\s+)?(?:select|highlight|pick|choose|mark|point\s+at|point\s+to|show\s+me)\s+(.+?)[.!?]*$/i.exec(text);
+  if (!m) return null;
+  const rest = m[1];
+  return (() => {
+    const edges = [], shapes = [];
+    const em = /the arrow(?: from| between) (\S+) (?:to|and) (\S+)/i.exec(rest), nm = (t) => shapeOf(s, t)?.name ?? t;
+    if (em) {
+      for (const e of s.edges.filter((x) => (x.from === nm(em[1]) && x.to === nm(em[2])) || (/between/i.test(rest) && x.from === nm(em[2]) && x.to === nm(em[1])))) edges.push(e.id);
+      if (!edges.length) return no(`There is no arrow between ${em[1]} and ${em[2]}.`, 'unsupported');
+    }
+    else if (/\b(arrows|links|connections)\b/i.test(rest) && /\b(all|every|the)\b/i.test(rest)) edges.push(...s.edges.map((e) => e.id));
+    else for (const tok of rest.split(/\s*(?:,|\band\b)\s*/i)) { const sh = shapeOf(s, tok.replace(/^(?:the|shape|box)\s+/i, '').trim()); if (sh) shapes.push(sh.name); }
+    if (!edges.length && !shapes.length) return null;
+    s.selected = { shapes, edges };
+    s.rev = (s.rev ?? 0) + 1;
+    open(ctx);
+    return ok(edges.length ? `Selected ${edges.length === 1 ? `arrow ${edges[0]} (${arrowText(s, s.edges.find((e) => e.id === edges[0]))})` : `${edges.length} arrows (${few(edges, 6)})`}.` : `Selected ${listing(shapes.map((n) => { const x = s.shapes.find((q) => q.name === n); return x.id && x.id !== x.name ? `${x.name} (${x.id})` : n; }))}.`);
+  })();
+}
 
 // ---- operations ------------------------------------------------------------------------------------------------------
 /** impl name -> kind. The names follow operations.sop. */
@@ -264,17 +433,44 @@ export const rule = make({ type: 'rule' });
 export function read(text, state = {}) {
   if (!K) return null;
   const s = { ...initialState(), ...state };
-  return systemFor(s).formalize(text, readerCtx(s));
+  assignIds(s);
+  const prepared = prepareText(text, s), f = systemFor(s).formalize(prepared, readerCtx(s));
+  const fx = fixNodes(f.nodes, prepared, s);
+  return fx.nodes ? { ...f, nodes: fx.nodes } : f;
 }
 export const kit = () => K;
 
-export const newDiagram = (ctx) => {
+/** The 24 diagram templates by name (the legend of the engine). */
+export const templateNames = (s) => [...new Set(systemFor(s).engine.legend.lexicon('template').values())];
+const offer = (s) => `Templates: ${listing(templateNames(s))}. Say for example "make a ${['tree', 'cycle', 'pyramid', 'flowchart'][s.shapes.length % 4]}" or just start drawing.`;
+const clear = (ctx, s) => { Object.assign(s, initialState()); sysOf = null; open(ctx); };
+
+/** "create / start / new diagram": with shapes on the canvas it asks whether to keep them; "clear the canvas" starts empty at once. */
+export const newDiagram = (ctx, args = {}) => {
+  if (!K) return NOT_READY();
   const s = ensure(ctx);
-  Object.assign(s, initialState());
-  sysOf = null;
-  open(ctx);
-  return ok('A clean canvas. What shall we draw?');
+  const text = String(args.text ?? '');
+  const explicitClear = /\b(clear|reset|empty|blank|wipe|erase)\b/i.test(text);
+  if (s.shapes.length && !explicitClear) {
+    s.pending = 'new';
+    open(ctx);
+    return ok(`The diagram has ${s.shapes.length} shape${s.shapes.length === 1 ? '' : 's'}. Keep the current one or start empty? ${offer(s)}`);
+  }
+  clear(ctx, s);
+  return ok(`A clean canvas. What shall we draw? ${offer(s)}`);
 };
+/** The answer to "Keep the current one or start empty?" ("keep it", "start empty"). */
+export const answerNew = (ctx, args = {}) => {
+  if (!K) return NOT_READY();
+  const s = ensure(ctx);
+  const text = String(args.text ?? '');
+  if (s.pending !== 'new') return no('There is nothing to confirm right now. Say "create a diagram" to start a new one.', 'unsupported');
+  s.pending = null;
+  if (/\b(keep|current|stay|continue|same|no)\b/i.test(text) && !/\b(empty|fresh|blank|new one|over|clear)\b/i.test(text)) { open(ctx); return ok(`OK, I keep the current diagram. ${offer(s)}`); }
+  clear(ctx, s);
+  return ok(`A clean canvas. What shall we draw? ${offer(s)}`);
+};
+export const select = make({ type: 'command', name: 'select' });
 export const openTab = (ctx) => {
   const r = ctx.request('ui.openTab', { tab: TAB });
   return r?.status === 'supported' ? ok('OK, here is the diagram editor.') : ok('The diagram editor is right here. Say what to draw, for example "draw a red circle called Start".');

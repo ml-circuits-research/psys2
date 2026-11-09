@@ -22,7 +22,11 @@ try {
   console.log(`open diagram tab: ${open.ms} ms  ${JSON.stringify(open.reply).slice(0, 120)}`);
   for (const [text, want, notWant] of PROBES) {
     const r = await chat.say(text);
-    const ok = r.ok && want.test(r.reply) && !notWant.test(r.reply);
+    let ok = r.ok && want.test(r.reply) && !notWant.test(r.reply);
+    if (text.startsWith('draw a blue rectangle called Api')) {   // SMALL 4: the two-clause create on a fresh page with an empty Diagram tab is the diagram's, not the drawing board's
+      const names = (JSON.parse(await chat.state())['diagram.sketch']?.shapes ?? []).map((s) => s.name);
+      ok = ok && names.includes('Api') && names.includes('Db');
+    }
     if (!ok) bad++;
     console.log(`${ok ? 'PASS' : 'FAIL'}  ${r.ms} ms  "${text}"  ->  ${JSON.stringify(r.reply).slice(0, 160)}`);
   }

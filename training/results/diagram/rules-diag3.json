@@ -1,0 +1,378 @@
+{
+ "date": "2026-11-09",
+ "mode": "rules",
+ "rows": 5442,
+ "seconds": 279,
+ "bench": {
+  "bench/hand": {
+   "n": 40,
+   "right": 38,
+   "actRight": 39,
+   "readerRight": 39,
+   "rightActWrongArgs": 1,
+   "wrong": 1,
+   "unread": 0,
+   "extras": 2,
+   "actRightN": 0
+  },
+  "bench/blind": {
+   "n": 60,
+   "right": 53,
+   "actRight": 60,
+   "readerRight": 53,
+   "rightActWrongArgs": 7,
+   "wrong": 0,
+   "unread": 0,
+   "extras": 5,
+   "actRightN": 0
+  },
+  "bench/broad": {
+   "n": 118,
+   "right": 114,
+   "actRight": 115,
+   "readerRight": 116,
+   "rightActWrongArgs": 1,
+   "wrong": 3,
+   "unread": 0,
+   "extras": 1,
+   "actRightN": 0
+  },
+  "bench/seen": {
+   "n": 300,
+   "right": 299,
+   "actRight": 299,
+   "readerRight": 300,
+   "rightActWrongArgs": 0,
+   "wrong": 1,
+   "unread": 0,
+   "extras": 4,
+   "actRightN": 0
+  },
+  "bench/new_identities": {
+   "n": 300,
+   "right": 299,
+   "actRight": 299,
+   "readerRight": 300,
+   "rightActWrongArgs": 0,
+   "wrong": 1,
+   "unread": 0,
+   "extras": 5,
+   "actRightN": 0
+  },
+  "bench/heldout_formulations": {
+   "n": 300,
+   "right": 298,
+   "actRight": 299,
+   "readerRight": 299,
+   "rightActWrongArgs": 1,
+   "wrong": 1,
+   "unread": 0,
+   "extras": 2,
+   "actRightN": 0
+  },
+  "test/fresh1": {
+   "n": 1,
+   "right": 0,
+   "actRight": 0,
+   "readerRight": 0,
+   "rightActWrongArgs": 0,
+   "wrong": 0,
+   "unread": 0,
+   "extras": 0,
+   "actRightN": 0
+  },
+  "total": {
+   "n": 1119,
+   "right": 1101,
+   "actRight": 1111,
+   "readerRight": 1107,
+   "rightActWrongArgs": 10,
+   "wrong": 7,
+   "unread": 0,
+   "extras": 19,
+   "actRightN": 0
+  }
+ },
+ "bench_per_act": {
+  "diagram.create": {
+   "n": 154,
+   "right": 148,
+   "actRight": 151
+  },
+  "diagram.delete": {
+   "n": 44,
+   "right": 43,
+   "actRight": 44
+  },
+  "diagram.move": {
+   "n": 84,
+   "right": 83,
+   "actRight": 84
+  },
+  "diagram.set": {
+   "n": 107,
+   "right": 106,
+   "actRight": 106
+  },
+  "diagram.resize": {
+   "n": 30,
+   "right": 30,
+   "actRight": 30
+  },
+  "diagram.rename": {
+   "n": 37,
+   "right": 37,
+   "actRight": 37
+  },
+  "diagram.label": {
+   "n": 18,
+   "right": 18,
+   "actRight": 18
+  },
+  "diagram.connect": {
+   "n": 169,
+   "right": 169,
+   "actRight": 169
+  },
+  "diagram.disconnect": {
+   "n": 18,
+   "right": 18,
+   "actRight": 18
+  },
+  "diagram.align": {
+   "n": 11,
+   "right": 11,
+   "actRight": 11
+  },
+  "diagram.arrange": {
+   "n": 22,
+   "right": 22,
+   "actRight": 22
+  },
+  "diagram.undo": {
+   "n": 10,
+   "right": 10,
+   "actRight": 10
+  },
+  "diagram.ask.count": {
+   "n": 53,
+   "right": 53,
+   "actRight": 53
+  },
+  "diagram.ask.exists": {
+   "n": 19,
+   "right": 17,
+   "actRight": 18
+  },
+  "diagram.ask.property": {
+   "n": 28,
+   "right": 27,
+   "actRight": 28
+  },
+  "diagram.ask.neighbors": {
+   "n": 19,
+   "right": 18,
+   "actRight": 18
+  },
+  "diagram.ask.path": {
+   "n": 30,
+   "right": 30,
+   "actRight": 30
+  },
+  "diagram.ask.reachable": {
+   "n": 20,
+   "right": 20,
+   "actRight": 20
+  },
+  "diagram.ask.cycle": {
+   "n": 13,
+   "right": 13,
+   "actRight": 13
+  },
+  "diagram.ask.extreme": {
+   "n": 4,
+   "right": 4,
+   "actRight": 4
+  },
+  "diagram.ask.nearest": {
+   "n": 3,
+   "right": 3,
+   "actRight": 3
+  },
+  "diagram.ask.check": {
+   "n": 25,
+   "right": 25,
+   "actRight": 25
+  },
+  "diagram.rule": {
+   "n": 19,
+   "right": 19,
+   "actRight": 19
+  },
+  "diagram.fact": {
+   "n": 31,
+   "right": 31,
+   "actRight": 31
+  },
+  "diagram.distribute": {
+   "n": 18,
+   "right": 18,
+   "actRight": 18
+  },
+  "diagram.tofront": {
+   "n": 11,
+   "right": 11,
+   "actRight": 11
+  },
+  "diagram.toback": {
+   "n": 18,
+   "right": 17,
+   "actRight": 18
+  },
+  "diagram.duplicate": {
+   "n": 21,
+   "right": 21,
+   "actRight": 21
+  },
+  "diagram.swap": {
+   "n": 12,
+   "right": 11,
+   "actRight": 12
+  },
+  "diagram.redo": {
+   "n": 9,
+   "right": 9,
+   "actRight": 9
+  },
+  "diagram.ask.list": {
+   "n": 39,
+   "right": 38,
+   "actRight": 39
+  },
+  "diagram.forget": {
+   "n": 10,
+   "right": 10,
+   "actRight": 10
+  },
+  "diagram.ask.describe": {
+   "n": 9,
+   "right": 8,
+   "actRight": 8
+  },
+  "diagram.ask.connected": {
+   "n": 1,
+   "right": 1,
+   "actRight": 1
+  },
+  "diagram.ask.degree": {
+   "n": 1,
+   "right": 1,
+   "actRight": 1
+  },
+  "diagram.ask.rules": {
+   "n": 1,
+   "right": 1,
+   "actRight": 1
+  },
+  "undefined": {
+   "n": 1,
+   "right": 0,
+   "actRight": 0
+  }
+ },
+ "test": {
+  "messages": 4323,
+  "wires": 17560,
+  "spanned": 12675,
+  "outcomes": {
+   "nospan": 4885,
+   "unread": 1078,
+   "right": 10269,
+   "wrong-act": 1015,
+   "other-world": 313
+  },
+  "reader_exact_messages": 1273,
+  "by_set": {
+   "bench/broad": {
+    "n": 10,
+    "reader": 9
+   },
+   "test/collected_1": {
+    "n": 40,
+    "reader": 13
+   },
+   "test/fresh1": {
+    "n": 994,
+    "reader": 324
+   },
+   "test/fresh2": {
+    "n": 599,
+    "reader": 236
+   },
+   "test/haiku": {
+    "n": 500,
+    "reader": 97
+   },
+   "test/haiku_spans": {
+    "n": 500,
+    "reader": 211
+   },
+   "test/scenes_test": {
+    "n": 162,
+    "reader": 82
+   },
+   "test/short3": {
+    "n": 518,
+    "reader": 255
+   },
+   "test/sonnet": {
+    "n": 500,
+    "reader": 23
+   },
+   "test/sonnet_spans": {
+    "n": 500,
+    "reader": 23
+   }
+  }
+ },
+ "parity": {
+  "bench": {
+   "n": 1119,
+   "ours": {
+    "act": 1111,
+    "args": 1107,
+    "right": 1101,
+    "wrong": 7,
+    "unread": 0
+   },
+   "source": {
+    "act": 1110,
+    "args": 1107,
+    "right": 1107,
+    "wrong": 5,
+    "unread": 4
+   }
+  },
+  "test": {
+   "messages": 4323,
+   "args_messages": {
+    "ours": 1273,
+    "source": 1281
+   },
+   "full_span": {
+    "messages": 3313,
+    "wires": 12675,
+    "ours": {
+     "act": 10269,
+     "wrong": 1328,
+     "unread": 1078
+    },
+    "source": {
+     "act": 10453,
+     "wrong": 1111,
+     "unread": 1111
+    }
+   }
+  }
+ }
+}

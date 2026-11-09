@@ -1,0 +1,30 @@
+# 14 — Diagram world: short ids, arrows as objects, arrow geometry (DIAG3)
+
+World `diagram.sketch`, tab `diagram`. The state and the execution are the engine of diagram-vss-demo (`worlds/diagram.sketch/engine/`, never edited by hand); `ops.mjs` wraps it. This spec covers what DIAG3 added on top.
+
+## 1. Short ids
+- Every shape has an id by kind: `c` circle, `r` rectangle (box), `s` square, `d` diamond, `e` ellipse, `t` triangle, `h` hexagon, `k` star, `x` text; numbered `c1, c2 ...` from the engine's own per-kind counter (`seq`). Every arrow has `a1, a2 ...` (`edgeSeq`).
+- An unnamed shape is *named* by its id (`name == id`). A shape the user named keeps its name and carries the id in `shape.id`.
+- Aliases: the id, the old long name (`circle1`, `rectangle1`, `box1`) and the name all resolve to the same shape (`shapeOf`). The engine's `find` is patched to resolve them, and the nodes of a request are canonicalised to names before they run.
+- Every reply uses ids: `Connected c1 → r1 (a1).`, `Arrow a1 (c1 → r1) now says “uses”.`
+- The tab draws ids small and grey at the top-left of a shape and on the middle of an arrow; the **Ids** toggle hides them (remembered per browser). Names stay as they are.
+
+## 2. Arrows as objects
+An arrow is referred to by its id (`a1`), its ends (`the arrow between c1 and r1`, `the link from A to B`), recency (`the previous / last / that link / arrow / connection / line`, also a bare `label link`), or its label (`the arrow labeled uses`). `refs.mjs` rewrites every form to `the arrow from X to Y`, which the engine's rules reader reads (`from=`, `to=`). Operations: label (a missing text asks `What should the label of a1 (c1 → r1) say?`), colour, style (solid, dashed, dotted), arrowheads (one-way, two-way, none), thickness (`thicker` / `thinner`: one step 1.5x, `a bit` 1.25x, `much` 2x, thinner is the inverse), reverse, delete, select (`select a1`, `highlight the arrow between c1 and r1`: the tab draws a halo; `state.selected = { shapes, edges }`). `thicker and dashed` runs both. Typos of the edge words (`arraw`, `lable`, `conection`) and of long aliases (`reactanle1`) are corrected before reading (`fixTypos`: known words only, one edit, never a name the person gave).
+
+## 3. Arrow geometry (`arrows.mjs`, drawn by the tab)
+- An arrow attaches to the side that faces the other end, at least 8 px from the corners of that side (CORNER); circles and ellipses take the point where the line between the centres meets the outline.
+- It enters a border at an angle of at least 30 degrees (MIN_ENTRY); otherwise the first and last segments are bent to leave and enter perpendicular (a stub of 14 px).
+- Parallel and opposite arrows between the same two shapes are spread 14 px apart (SPREAD).
+- A segment keeps 8 px from every other shape (CLEAR); a detour bend is tried, with stubs when the angle needs them. A crowded diagram may leave a smaller gap.
+- Labels sit off the line, with a halo in the background colour; the id sits on the line.
+- `tests/diagram-arrows.test.mjs` measures the minimum entry angle, the corner clearance and the clearance from other shapes over the 24 templates, the example sessions of the source and crafted fans.
+
+## 4. Sizes and layout by voice
+`make c1 a bit bigger / much bigger / the same size as r1`, `make the arrows thicker`, `change / switch the layout to a row / column / grid / circle / tree / layers / radial`, `space them out`, `tidy up`, `untangle`, `straighten the arrows`, `fit` all reach the engine's resize / equalize / arrange / distribute / improve / untangle / straighten / fit. Layout phrases are rewritten to `arrange everything in a X` (`rewriteLayout`).
+
+## 5. Create a diagram and templates
+`create / make / start a (new) diagram` with shapes on the canvas asks `Keep the current one or start empty?` and lists the 24 templates (process, cycle, hierarchy, pyramid, funnel, timeline, list, matrix, target, venn, hub, heart, burst, steps, bridge, mountain, spiral, wave, tree, road, balance, hourglass, sunrise, pillars); `keep it` / `start empty` answer it (`diagram.answerNew`, pending state `state.pending`). `clear the canvas` starts empty at once. `a tree-like shape`, `an org chart`, `a flowchart` (read as `process`), `a cycle`, `a pyramid`, `a funnel` build the template. `connect them with a dashed arrow` with no named ends connects the last two shapes drawn.
+
+## 6. Parity with the source
+`node scripts/eval-diagram.mjs` also reads every row of `data/test` and `data/bench` with the source rules reader (`imports/diagram-vss-demo/engine/logic.js`, `createSystem().formalize`, loaded by `scripts/lib/diagram-source.mjs`) and prints the parity table (act right, args right, wrong, unread; the table is in `training/RESULTS.md`).

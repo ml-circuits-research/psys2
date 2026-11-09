@@ -430,7 +430,10 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
     const tw = ctx.tabWorld;
     if (!tw || !engine.set.get(tw) || ctx.modalWorld) return null;
     const res = formalize(text, { worlds: engine.set, session: s.isession, source: 'tabtier', context: ctx, router: engine.router });
-    if (res.segments.length !== 1 || res.segments.some((x) => x.unparsed || !x.match)) return null;   // one clause only: a multi-clause message may belong to several worlds, the dispatcher's segmentation decides
+    if (res.segments.length < 1 || res.segments.some((x) => x.unparsed || !x.match)) return null;
+    // several clauses: every clause must be read by the tab world itself (a clause of another world, or a catch-all, leaves the decision to the dispatcher)
+    // and by a pattern that carries an explicit signal of the world (a named shape, an arrow between names, a diagram form): the catch-alls of a world (charts: 'how many ...') read half of any message
+    if (res.segments.length > 1 && res.segments.some((x) => x.match.worldId !== tw || !engine.set.get(tw).patterns.find((p) => p.id === x.match.patternId)?.signal)) return null;
     const ids = view([tw]).ids;
     if (res.segments.some((x) => !ids.includes(x.match.worldId) || x.match.worldId === 'ui.shell' || wildTokens(x.match) > x.match.literals)) return null;
     const r = await check(pred.context, [], tw, text, o);

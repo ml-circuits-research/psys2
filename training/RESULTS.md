@@ -605,3 +605,26 @@ the source are unlabelled message texts and were skipped), `test.jsonl` 4,314 me
 `scripts/build-dataset.mjs` now ingests `training/diagram/train.jsonl` (verified with `--out-dir`, 13 minutes including `export-training`): world `diagram.sketch` 27,890 records after dedupe (train 21,192 / dev 3,834 /
 test 2,864; 27,476 imported + 414 rule-derived from the pattern examples), routing 27,798 rows; 22 worlds in all. The dispatcher v4 does not know the world: in the browser a multi-clause diagram message
 ("Start, Check and Done") cannot take the fast path and goes through the model and the normalizer (6 s on localhost without throttle) until the retrain; single-clause messages and every message read by the rules in the candidate worlds (the open tab's world is always one) are fast.
+
+## DIAG3: short ids, arrows as objects, arrow geometry, parity with the source (2026-11-09)
+
+Spec: `specs/14-diagram.md`. Code: `worlds/diagram.sketch/ops.mjs` (ids, aliases, replies), `refs.mjs` (typos, arrow references, layout phrases), `arrows.mjs` (arrow geometry), tab `docs/webchat/ui/tabs/diagram.mjs` (ids, Ids toggle, selection halo). The engine of the source is unchanged.
+
+**Parity with the source rules reader** (`node scripts/eval-diagram.mjs --jobs 12 --name diag3`, file `training/results/diagram/rules-diag3.json`). The same rows are read by the source (`imports/diagram-vss-demo/engine/logic.js`, `createSystem().formalize`) and by the world through the dialog. Percent of rows (bench) or of gold wires (messages).
+
+| set | reader | act right | args right | right (both) | wrong | unread |
+| --- | --- | --- | --- | --- | --- | --- |
+| bench, 1119 single sentences | source rules | 99.2 | 98.9 | 98.9 | 0.4 | 0.4 |
+| | ours | 99.3 | 98.9 | 98.4 | 0.6 | 0.0 |
+| data/test, 12675 gold wires of 3313 fully spanned messages | source rules | 82.5 | 29.6 (message exact) | | 8.8 | 8.8 |
+| | ours | 81.0 | 29.4 (message exact) | | 10.5 | 8.5 |
+
+Bench: ours is at or above the source on act, equal on args (the remaining right-both gap, 0.5 point, are rows where both read the args alike but our act is another pattern: "Which things link to Process?" and "what is Done?"). Messages: ours is below the source by 1.5 points of act (the sample at stride 6 was at 81.8 vs 81.4 before the last fixes; the full set is not yet at parity): the largest groups left are `set` read as `move` (11 per 12,000 wires sample of 4/6), `connect` read as `create`, `label` read as `set`, `tofront / toback` read as `move`. Fixed in this task (groups of 10-15 wires per sample): "X should be left of Y" (move, not fact), "Is X to the right of Y?" (check, not move), "X is left of Y" (fact), "Which shape is the most connected" (extreme, not list), "a line between" no longer rewritten.
+
+**Arrow geometry** (`tests/diagram-arrows.test.mjs`, 142 arrows of the 24 templates, the example sessions and crafted fans): minimum entry angle 30 degrees or a perpendicular stub, corner clearance at least 8 px, clearance from other shapes at least 8 px for all but 3 % of arrows (crowded layouts), parallel and opposite arrows 14 px apart.
+
+**Dialogues** (family `real`, `training/eval/dialogues.jsonl`, `dlg.real#diag3-01..07`): the 15 expectations of `expectations-2026-11-09d.jsonl` plus "them / both / the two" and edge operations; 7/7 in the CLI (rules and encoder+n1). Headless webchat: `scripts/test-webchat-diagram3.mjs` (screenshots of ids, arrows, a column layout, a selected arrow).
+
+**Other worlds**: operational set rules 95.5 % right / 0.5 % wrong on 1296 (as on origin/main); encoder+n1 98.5 % right / 0.3 % wrong (origin/main: 98.6 / 0.4 on its 1240 cases); dialogues rules 96.9 % turns, 89.5 % dialogues. data.charts#001-003 and media.music#068 are "partly" with encoder+n1 also on the unchanged tier T (checked on `data.charts`), so they are not from this change.
+
+**Tier T for several clauses** (`src/dialog/dispatch-validate.mjs` tabFirst): a message of several clauses goes to the active tab's world when every clause is read by that world through a pattern with an explicit signal (named shape, arrow between names, diagram form); "draw a blue rectangle called Api and a green circle called Db" on an empty Diagram tab is the diagram's (`tests/dispatch-validate.test.mjs`, `scripts/test-webchat-diagram.mjs`).
