@@ -67,3 +67,1984 @@
 @lex.kids.time.triggers core.lexicon
     class=trigger
     word=tomorrow word=yesterday word=today word=o'clock word=season word=weekend word=week word=month word=year word=hour word=minute
+
+@phrase.kids.time.g1_i_need_to_find_out core.phrase
+    doc="World-local group used by 272 patterns (made by scripts/migrate-macros.mjs)."
+    alt=i_need_to_find_out
+    alt=id_like_to_find_out
+    alt=can_you_tell_me
+    alt=could_you_tell_me
+    alt=can_u_tell_me
+    alt=could_u_tell_me
+    alt=would_you_tell_me
+    alt=will_you_tell_me
+    alt=would_u_tell_me
+    alt=i_want_to_know
+    alt=i_need_to_know
+    alt=id_like_to_know
+    alt=i_have_a_question
+    alt=help_me_find_out
+    alt=can_you_tell
+    alt=could_you_tell
+    alt=can_u_tell
+    alt=could_u_tell
+    alt=pls_tell_me
+    alt=plz_tell_me
+    alt=do_you_know
+    alt=do_u_know
+    alt=i_wanna_know
+    alt=i_was_wondering
+    alt=can_i_know
+    alt=let_me_know
+    alt=let_me_see
+    alt=can_u_check
+    alt=can_you_check
+    alt=can_i_ask
+    alt=may_i_ask
+    alt=hey_so
+    alt=u_know
+    alt=ya_know
+    alt=y_know
+    alt=hold_on
+    alt=oh_wait
+    alt=hey_wait
+    alt=wait_wait
+    alt=oh_hey
+    alt=hey_hey
+    alt=yo_yo
+    alt=excuse_me
+    alt=oh_my
+    alt=oh_wow
+    alt=uh_so
+    alt=i_mean
+    alt=so_like
+    alt=you_see
+    alt=right_so
+    alt=all_right
+    alt=alright_so
+    alt=and_then
+    alt=tell_me
+    alt=you_know
+    alt=i_wonder
+    alt=im_wondering
+    alt=just_wondering
+    alt=one_question
+    alt=quick_question
+    alt=quick_q
+    alt=lemme_know
+    alt=lets_see
+    alt=show_me
+    alt=help_me
+    alt=find_out
+    alt=can_you
+    alt=could_you
+    alt=can_u
+    alt=could_u
+    alt=will_you
+    alt=would_you
+    alt=would_u
+    alt=will_u
+    alt=uh
+    alt=uhh
+    alt=uhm
+    alt=umm
+    alt=hmm
+    alt=hm
+    alt=yo
+    alt=oh
+    alt=ooh
+    alt=hi
+    alt=hello
+    alt=hiya
+    alt=hey
+    alt=so
+    alt=just
+    alt=btw
+    alt=also
+    alt=now
+    alt=pls
+    alt=plz
+    alt=plss
+    alt=wait
+    alt=sorry
+    alt=sry
+    alt=psst
+    alt=lol
+    alt=haha
+    alt=hehe
+    alt=oops
+    alt=wow
+    alt=cool
+    alt=nice
+    alt=great
+    alt=awesome
+    alt=sweet
+    alt=neat
+    alt=er
+    alt=eh
+    alt=ah
+    alt=aha
+    alt=ahh
+    alt=aah
+    alt=ahem
+    alt=mm
+    alt=mmm
+    alt=mhm
+    alt=huh
+    alt=gosh
+    alt=golly
+    alt=geez
+    alt=jeez
+    alt=dude
+    alt=bro
+    alt=man
+    alt=mate
+    alt=buddy
+    alt=pal
+    alt=friend
+    alt=robot
+    alt=bot
+    alt=ai
+    alt=assistant
+    alt=computer
+    alt=siri
+    alt=alexa
+    alt=google
+    alt=teacher
+    alt=miss
+    alt=sir
+    alt=maam
+    alt=mister
+    alt=mr
+    alt=mrs
+    alt=ms
+    alt=like
+    alt=basically
+    alt=literally
+    alt=totally
+    alt=kinda
+    alt=sorta
+    alt=maybe
+    alt=perhaps
+    alt=probably
+    alt=honestly
+    alt=seriously
+    alt=simply
+    alt=anyways
+    alt=see
+    alt=look
+    alt=listen
+    alt=alright
+    alt=then
+    alt=and
+    alt=but
+    alt=question
+    alt=qq
+    alt=check
+
+@phrase.kids.time.g2_would_it_be core.phrase
+    doc="World-local group used by 33 patterns (made by scripts/migrate-macros.mjs)."
+    alt=would_it_be
+    alt=will_it_be
+    alt=come_out_to
+    alt=that_would_be
+    alt=that_will_be
+    alt=do_i_get
+    alt=do_we_get
+    alt=do_you_get
+    alt=will_i_get
+    alt=would_i_get
+    alt=should_i_get
+    alt=ends_up_as
+    alt=is_it
+    alt=is_that
+    alt=lands_on
+    alt=falls_on
+    alt=is_which
+    alt=is_what
+    alt=which_is
+    alt=is_called
+    alt=would_be
+    alt=will_be
+    alt=that_is
+    alt=that_makes
+    alt=that_gives
+    alt=it_is
+    alt=we_get
+    alt=you_get
+    alt=i_get
+    alt=comes_out
+    alt=comes_to
+    alt=results_in
+    alt=ends_up
+    alt=ends_on
+    alt=stops_at
+    alt=stops_on
+    alt=finishes_on
+    alt=finishes_at
+    alt=comes
+    alt=be
+    alt=is
+    alt=then
+    alt=equal
+    alt=equals
+    alt=makes
+    alt=gives
+    alt=called
+    alt=what
+    alt=which
+    alt=thats
+    alt=its
+    alt=get
+    alt=got
+
+@phrase.kids.time.g3_exactly core.phrase
+    doc="World-local group used by 270 patterns (made by scripts/migrate-macros.mjs)."
+    alt=exactly
+    alt=right
+    alt=there
+    alt=here
+    alt=robot
+    alt=bot
+    alt=currently
+
+@phrase.kids.time.g4_can_u_tell_me core.phrase
+    frame=false
+    doc="World-local group used by 6 patterns (made by scripts/migrate-macros.mjs)."
+    alt=can_u_tell_me
+    alt=can_you_tell_me
+    alt=could_you_tell_me
+    alt=id_like_to_know
+    alt=i_want_to_know
+    alt=i_need_to_know
+    alt=tell_me_the
+    alt=show_me_the
+    alt=give_me_the
+    alt=which_are_the
+    alt=which_ones_are
+    alt=can_u_name
+    alt=can_you_name
+    alt=can_u_list
+    alt=can_you_list
+    alt=could_you_name
+    alt=could_you_list
+    alt=do_u_know
+    alt=do_you_know
+    alt=i_wanna_know
+    alt=tell_me_all
+    alt=give_me_all
+    alt=spell_out_all
+    alt=point_out_all
+    alt=tell_me
+    alt=give_me
+    alt=what_are
+    alt=what_is
+    alt=name_the
+    alt=list_the
+    alt=which_are
+    alt=u_know
+    alt=you_know
+    alt=read_me
+    alt=read_out
+    alt=spell_out
+    alt=count_the
+    alt=count_off
+    alt=point_out
+    alt=point_to
+    alt=show_all
+    alt=list_all
+    alt=name_all
+    alt=say_all
+    alt=read_all
+    alt=recite_all
+    alt=enumerate_all
+    alt=identify_all
+    alt=find_all
+    alt=what
+    alt=which
+    alt=name
+    alt=list
+    alt=tell
+    alt=show
+    alt=give
+    alt=say
+    alt=whats
+    alt=the
+    alt=read
+    alt=spell
+    alt=recite
+    alt=enumerate
+    alt=count
+    alt=sing
+    alt=identify
+    alt=pick
+    alt=choose
+    alt=select
+    alt=find
+
+@phrase.kids.time.g5_what_is core.phrase
+    frame=false
+    doc="World-local group used by 66 patterns (made by scripts/migrate-macros.mjs)."
+    alt=what_is
+    alt=what_s
+    alt=which_is
+    alt=which_one
+    alt=which_1
+    alt=what
+    alt=which
+    alt=whats
+
+@phrase.kids.time.g6_on_the_dot core.phrase
+    frame=false
+    doc="World-local group used by 28 patterns (made by scripts/migrate-macros.mjs)."
+    alt=on_the_dot
+    alt=o_clock
+    alt=a_m
+    alt=p_m
+    alt=o_clk
+    alt=o_cloc
+    alt=o_clok
+    alt=o'clock
+    alt=oclock
+    alt=sharp
+    alt=exactly
+    alt=hrs
+    alt=hr
+    alt=h
+    alt=am
+    alt=pm
+    alt=hour
+    alt=hours
+    alt=oclok
+    alt=oclck
+    alt=o'clk
+
+@phrase.kids.time.g7_in_total core.phrase
+    doc="World-local group used by 21 patterns (made by scripts/migrate-macros.mjs)."
+    alt=in_total
+    alt=in_all
+    alt=in_it
+    alt=in_one
+    alt=have
+    alt=has
+    alt=contain
+    alt=include
+    alt=last
+    alt=take
+    alt=make
+    alt=total
+    alt=altogether
+    alt=there
+    alt=long
+    alt=each
+    alt=got
+    alt=get
+    alt=gets
+
+@phrase.kids.time.g8_how_many_of core.phrase
+    frame=false
+    doc="World-local group used by 33 patterns (made by scripts/migrate-macros.mjs)."
+    alt=how_many_of
+    alt=how_many
+    alt=hw_many
+    alt=how_much
+    alt=how_mny
+    alt=howmany
+
+@phrase.kids.time.g9_season core.phrase
+    frame=false
+    doc="World-local group used by 33 patterns (made by scripts/migrate-macros.mjs)."
+    alt=season
+    alt=seasons
+    alt=step
+    alt=steps
+    alt=stage
+    alt=stages
+    alt=time
+    alt=times
+
+@phrase.kids.time.g10_make_up core.phrase
+    frame=false
+    doc="World-local group used by 23 patterns (made by scripts/migrate-macros.mjs)."
+    alt=make_up
+    alt=makes_up
+    alt=in
+    alt=within
+    alt=inside
+    alt=for
+    alt=during
+    alt=per
+    alt=over
+    alt=across
+    alt=of
+
+@phrase.kids.time.g11_right_now_it_is core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=right_now_it_is
+    alt=now_it_is
+    alt=it_is_now
+    alt=i_am_on
+    alt=we_are_on
+    alt=we_are_in
+    alt=we_are_at
+    alt=it_is_currently
+    alt=currently_it_is
+    alt=right_now_its
+    alt=this_month_is
+    alt=lets_say
+    alt=given_that
+    alt=so_if
+    alt=but_if
+    alt=and_if
+    alt=what_if
+    alt=what_when
+    alt=starting_from
+    alt=starting_at
+    alt=begin_at
+    alt=it_is
+    alt=today_is
+    alt=this_is
+    alt=now_its
+    alt=its_now
+    alt=im_on
+    alt=were_on
+    alt=were_in
+    alt=were_at
+    alt=its_currently
+    alt=currently_its
+    alt=if
+    alt=when
+    alt=say
+    alt=suppose
+    alt=assuming
+    alt=supposing
+    alt=imagine
+    alt=pretend
+    alt=at
+    alt=from
+    alt=starting
+    alt=its
+    alt=currently
+    alt=now
+    alt=today
+
+@phrase.kids.time.g12_right_now_it_is core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=right_now_it_is
+    alt=the_day_today_is
+    alt=now_it_is
+    alt=it_is_now
+    alt=i_am_on
+    alt=we_are_on
+    alt=we_are_in
+    alt=we_are_at
+    alt=it_is_currently
+    alt=currently_it_is
+    alt=right_now_its
+    alt=the_month_is
+    alt=the_season_is
+    alt=this_month_is
+    alt=this_season_is
+    alt=the_day_is
+    alt=it_is
+    alt=today_is
+    alt=this_is
+    alt=now_its
+    alt=its_now
+    alt=im_on
+    alt=were_on
+    alt=were_in
+    alt=were_at
+    alt=its_currently
+    alt=currently_its
+    alt=today_s
+    alt=today_is
+    alt=its
+    alt=currently
+    alt=now
+    alt=today
+    alt=todays
+
+@phrase.kids.time.g13_count_forward core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=count_forward
+    alt=go_forward
+    alt=count_on
+    alt=count_up
+    alt=go_ahead
+    alt=count_forwards
+    alt=counting_on
+    alt=counting_up
+    alt=going_forward
+    alt=going_forwards
+    alt=go_forwards
+    alt=stepping_forward
+    alt=stepping_on
+    alt=move_forward
+    alt=move_on
+    alt=jump_ahead
+    alt=skip_ahead
+    alt=hop_ahead
+    alt=count_ahead
+    alt=counting_ahead
+    alt=going_ahead
+    alt=fast_forward
+    alt=move
+    alt=jump
+    alt=skip
+    alt=advance
+    alt=go
+    alt=step
+    alt=hop
+    alt=walk
+    alt=travel
+    alt=forward
+
+@phrase.kids.time.g14_going_forward_from core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=going_forward_from
+    alt=going_on_from
+    alt=moving_on_from
+    alt=moving_forward_from
+    alt=moving_ahead_from
+    alt=moving_on_after
+    alt=moving_forward_after
+    alt=moving_ahead_after
+    alt=after_the
+    alt=following_the
+    alt=past_the
+    alt=from_the
+    alt=beyond_the
+    alt=forward_from
+    alt=to_the
+    alt=next_to
+    alt=on_from
+    alt=forward_of
+    alt=onward_from
+    alt=onwards_from
+    alt=after
+    alt=following
+    alt=past
+    alt=from
+    alt=to
+    alt=beyond
+    alt=since
+    alt=of
+    alt=than
+
+@phrase.kids.time.g15_back_from_the_start_of core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=back_from_the_start_of
+    alt=ahead_of_going_back
+    alt=earlier_than_the
+    alt=prior_to_the
+    alt=back_from_the
+    alt=counting_back_from
+    alt=going_back_from
+    alt=back_to_before
+    alt=going_back_before
+    alt=earlier_than
+    alt=prior_to
+    alt=back_from
+    alt=ago_from
+    alt=before_the
+    alt=back_before
+    alt=rewinding_from
+    alt=rewind_from
+    alt=minus_from
+    alt=backwards_from
+    alt=backward_from
+    alt=before
+    alt=preceding
+    alt=behind
+
+@phrase.kids.time.g16_time_it_will_be core.phrase
+    doc="World-local group used by 8 patterns (made by scripts/migrate-macros.mjs)."
+    alt=time_it_will_be
+    alt=time_will_it_be
+    alt=time_on_the_clock
+    alt=time_by_the_clock
+    alt=time_of_day
+    alt=clock_time
+    alt=the_time
+    alt=time
+    alt=hour
+    alt=clock
+
+@phrase.kids.time.g17_a_single core.phrase
+    frame=false
+    doc="World-local group used by 21 patterns (made by scripts/migrate-macros.mjs)."
+    alt=a_single
+    alt=a
+    alt=an
+    alt=1
+    alt=the
+    alt=one
+    alt=each
+    alt=every
+    alt=single
+
+@phrase.kids.time.g18_will_it_be core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=will_it_be
+    alt=would_it_be
+    alt=is_the_previous
+    alt=is_the_preceding
+    alt=has_to_be
+    alt=had_to_be
+    alt=need_to_be
+    alt=needs_to_be
+    alt=ought_to_be
+    alt=might_have_been
+    alt=is_it
+    alt=comes_before
+    alt=is_before
+    alt=it_is
+    alt=would_be
+    alt=will_be
+    alt=should_be
+    alt=must_be
+    alt=can_be
+    alt=could_be
+    alt=might_be
+    alt=may_be
+    alt=is
+    alt=comes
+    alt=precedes
+    alt=falls
+    alt=lands
+    alt=goes
+    alt=its
+    alt=then
+    alt=was
+    alt=came
+
+@phrase.kids.time.g19_will_we_be_on core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=will_we_be_on
+    alt=will_it_be
+    alt=would_it_be
+    alt=will_we_have
+    alt=will_it_come
+    alt=will_it_land
+    alt=would_it_come
+    alt=would_it_land
+    alt=do_we_get
+    alt=do_i_get
+    alt=will_i_get
+    alt=would_i_get
+    alt=should_i_get
+    alt=ends_up_as
+    alt=is_it
+    alt=lands_on
+    alt=falls_on
+    alt=ends_up
+    alt=ends_on
+    alt=stops_at
+    alt=stops_on
+    alt=finishes_on
+    alt=finishes_at
+    alt=comes
+    alt=is
+    alt=get
+    alt=got
+    alt=then
+
+@phrase.kids.time.g20_prior_to_the core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=prior_to_the
+    alt=ahead_of_the
+    alt=previous_to_the
+    alt=earlier_than_the
+    alt=back_from_the
+    alt=prior_to
+    alt=ahead_of
+    alt=previous_to
+    alt=earlier_than
+    alt=just_before
+    alt=right_before
+    alt=before_the
+    alt=preceding_the
+    alt=back_from
+    alt=back_before
+    alt=behind_the
+    alt=backwards_from
+    alt=backward_from
+    alt=before
+    alt=preceding
+    alt=from
+    alt=to
+    alt=of
+    alt=than
+    alt=behind
+
+@phrase.kids.time.g21_count_back core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=count_back
+    alt=go_back
+    alt=step_back
+    alt=roll_back
+    alt=count_backwards
+    alt=counting_back
+    alt=going_back
+    alt=go_backwards
+    alt=count_down
+    alt=move_back
+    alt=jump_back
+    alt=skip_back
+    alt=hop_back
+    alt=walk_back
+    alt=travel_back
+    alt=go_backward
+    alt=count_backward
+    alt=going_backwards
+    alt=stepping_back
+    alt=counting_backwards
+    alt=rewind
+    alt=back
+    alt=backtrack
+
+@phrase.kids.time.g22_in_total core.phrase
+    doc="World-local group used by 8 patterns (made by scripts/migrate-macros.mjs)."
+    alt=in_total
+    alt=in_all
+    alt=in_it
+    alt=have
+    alt=has
+    alt=contain
+    alt=include
+    alt=make
+    alt=total
+    alt=altogether
+    alt=there
+    alt=long
+    alt=each
+    alt=got
+    alt=get
+    alt=gets
+
+@phrase.kids.time.g23_can_u_tell_me core.phrase
+    frame=false
+    doc="World-local group used by 6 patterns (made by scripts/migrate-macros.mjs)."
+    alt=can_u_tell_me
+    alt=can_you_tell_me
+    alt=do_u_know
+    alt=do_you_know
+    alt=u_know
+    alt=you_know
+    alt=tell_me
+    alt=what_is
+    alt=what_s
+    alt=show_me
+    alt=whats
+    alt=what
+    alt=which
+    alt=name
+    alt=say
+    alt=show
+
+@phrase.kids.time.g24_can_u_tell_me core.phrase
+    doc="World-local group used by 8 patterns (made by scripts/migrate-macros.mjs)."
+    alt=can_u_tell_me
+    alt=can_you_tell_me
+    alt=what_is
+    alt=what_s
+    alt=tell_me
+    alt=give_me
+    alt=show_me
+    alt=whats
+    alt=what
+    alt=the
+    alt=which
+    alt=find
+
+@phrase.kids.time.g25_the_day_right_before core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=the_day_right_before
+    alt=the_month_right_before
+    alt=the_season_right_before
+    alt=the_one_before
+    alt=the_1_before
+    alt=the_day_before
+    alt=the_month_before
+    alt=the_season_before
+    alt=prior_to
+    alt=ahead_of
+    alt=previous_to
+    alt=earlier_than
+    alt=just_before
+    alt=right_before
+    alt=back_from
+    alt=before
+    alt=preceding
+    alt=behind
+
+@phrase.kids.time.g26_earlier_than_now core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=earlier_than_now
+    alt=earlier_than_today
+    alt=back_from_now
+    alt=ago_from_now
+    alt=ago_from_today
+    alt=back_from_today
+    alt=back_before_now
+    alt=back_before_today
+    alt=prior_to_now
+    alt=prior_to_today
+    alt=before_now
+    alt=before_today
+    alt=back_then
+    alt=ago
+    alt=earlier
+    alt=before
+    alt=back
+    alt=prior
+    alt=previously
+    alt=backwards
+
+@phrase.kids.time.g27_comes core.phrase
+    frame=false
+    doc="World-local group used by 6 patterns (made by scripts/migrate-macros.mjs)."
+    alt=comes
+    alt=come
+    alt=is
+    alt=goes
+    alt=follows
+    alt=will_be
+    alt=is_it
+    alt=do_we_get
+    alt=we_get
+    alt=get
+    alt=did_we_get
+    alt=was
+    alt=just
+    alt=right
+    alt=directly
+    alt=is_just
+    alt=is_right
+
+@phrase.kids.time.g28_from_the_start_of core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=from_the_start_of
+    alt=after_the_end_of
+    alt=later_than_the
+    alt=on_from_the
+    alt=later_than
+    alt=counting_from
+    alt=on_from
+    alt=forward_from
+    alt=starting_from
+    alt=starting_at
+    alt=from_the
+    alt=after_the
+    alt=past_the
+    alt=beyond_the
+    alt=following_the
+    alt=after
+    alt=from
+    alt=past
+    alt=following
+    alt=beyond
+    alt=since
+
+@phrase.kids.time.g29_when_we_wait core.phrase
+    frame=false
+    doc="World-local group used by 4 patterns (made by scripts/migrate-macros.mjs)."
+    alt=when_we_wait
+    alt=when_we_add
+    alt=when_we_move
+    alt=when_we_jump
+    alt=when_we_skip
+    alt=when_we_go
+    alt=when_we_count
+    alt=when_we_step
+    alt=when_we_hop
+    alt=when_we_walk
+    alt=when_we_travel
+    alt=in
+    alt=after
+    alt=within
+    alt=following
+
+@phrase.kids.time.g30_will_it_be core.phrase
+    doc="World-local group used by 6 patterns (made by scripts/migrate-macros.mjs)."
+    alt=will_it_be
+    alt=would_it_be
+    alt=did_it_fall
+    alt=did_it_land
+    alt=will_be
+    alt=would_be
+    alt=was_it
+    alt=is_it
+    alt=is
+    alt=comes
+    alt=was
+    alt=falls
+    alt=lands
+    alt=are
+    alt=be
+
+@phrase.kids.time.g31_the_one_before core.phrase
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=the_one_before
+    alt=the_1_before
+    alt=the_one_preceding
+    alt=the_1_preceding
+    alt=day_before
+    alt=month_before
+    alt=season_before
+    alt=one_before
+    alt=1_before
+    alt=day_preceding
+    alt=month_preceding
+    alt=season_preceding
+    alt=previous
+    alt=preceding
+    alt=last
+    alt=prior
+    alt=earlier
+
+@phrase.kids.time.g32_the_one_after core.phrase
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=the_one_after
+    alt=the_1_after
+    alt=the_one_following
+    alt=the_1_following
+    alt=day_after
+    alt=month_after
+    alt=season_after
+    alt=one_after
+    alt=1_after
+    alt=day_following
+    alt=month_following
+    alt=season_following
+    alt=next
+    alt=following
+    alt=coming
+    alt=upcoming
+    alt=subsequent
+
+@phrase.kids.time.g33_ahead_of_now core.phrase
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=ahead_of_now
+    alt=ahead_of_today
+    alt=from_the_start
+    alt=from_the_beginning
+    alt=from_now
+    alt=from_then
+    alt=after_that
+    alt=past_that
+    alt=from_that
+    alt=from_today
+    alt=from_this
+    alt=from_here
+    alt=from_there
+    alt=later
+    alt=away
+    alt=ahead
+    alt=hence
+    alt=forward
+    alt=on
+    alt=more
+
+@phrase.kids.time.g34_starting_from core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=starting_from
+    alt=starting_at
+    alt=from_the
+    alt=after_the
+    alt=beginning_at
+    alt=starting_with
+    alt=away_from
+    alt=forward_from
+    alt=ahead_from
+    alt=on_from
+    alt=on_past
+    alt=on_after
+    alt=onward_from
+    alt=onwards_from
+    alt=from
+    alt=since
+    alt=after
+    alt=with
+    alt=on
+    alt=off
+    alt=past
+
+@phrase.kids.time.g35_what_time_will_it_be core.phrase
+    doc="World-local group used by 4 patterns (made by scripts/migrate-macros.mjs)."
+    alt=what_time_will_it_be
+    alt=what_time_was
+    alt=what_time_is
+    alt=what_hour_was
+    alt=what_hour_is
+    alt=which_time_was
+    alt=which_time_is
+    alt=what_was
+    alt=what_is
+    alt=whats
+    alt=the
+    alt=what
+    alt=which
+
+@phrase.kids.time.g36_will_it_be core.phrase
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=will_it_be
+    alt=would_it_be
+    alt=comes_after_that
+    alt=is_the_next
+    alt=is_the_following
+    alt=is_it
+    alt=comes_next
+    alt=is_next
+    alt=is_after
+    alt=it_is
+    alt=follows_that
+    alt=comes_after
+    alt=is
+    alt=comes
+    alt=follows
+    alt=falls
+    alt=lands
+    alt=goes
+    alt=its
+    alt=then
+    alt=next
+    alt=after
+
+@phrase.kids.time.g37_it_is core.phrase
+    frame=false
+    doc="World-local group used by 8 patterns (made by scripts/migrate-macros.mjs)."
+    alt=it_is
+    alt=its
+    alt=now_is
+    alt=now
+    alt=it_says
+    alt=the_clock_says
+    alt=currently
+    alt=clock_says
+    alt=clock
+
+@phrase.kids.time.g38_make_up core.phrase
+    frame=false
+    doc="World-local group used by 8 patterns (made by scripts/migrate-macros.mjs)."
+    alt=make_up
+    alt=makes_up
+    alt=in
+    alt=within
+    alt=inside
+    alt=for
+    alt=during
+    alt=over
+    alt=across
+    alt=of
+    alt=does
+    alt=do
+
+@phrase.kids.time.g39_can_be_found core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=can_be_found
+    alt=hangs_out
+    alt=shows_up
+    alt=turns_up
+    alt=pops_up
+    alt=comes_up
+    alt=is_found
+    alt=is
+    alt=comes
+    alt=falls
+    alt=lands
+    alt=goes
+    alt=sits
+    alt=stands
+    alt=stays
+    alt=lives
+    alt=hangs
+    alt=sleeps
+    alt=rests
+    alt=waits
+    alt=hides
+    alt=appears
+    alt=follows
+    alt=precedes
+
+@phrase.kids.time.g40_can_be_found core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=can_be_found
+    alt=hangs_out
+    alt=shows_up
+    alt=turns_up
+    alt=pops_up
+    alt=comes_up
+    alt=is_found
+    alt=is
+    alt=comes
+    alt=falls
+    alt=lands
+    alt=goes
+    alt=sits
+    alt=stands
+    alt=stays
+    alt=lives
+    alt=hangs
+    alt=sleeps
+    alt=rests
+    alt=waits
+    alt=hides
+    alt=appears
+    alt=follows
+    alt=succeeds
+
+@phrase.kids.time.g41_the_clock_says core.phrase
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=the_clock_says
+    alt=the_clock_shows
+    alt=the_clock_reads
+    alt=starting_at
+    alt=starting_from
+    alt=begin_at
+    alt=beginning_at
+    alt=begins_at
+    alt=starts_at
+    alt=start_at
+    alt=it_is
+    alt=lets_say
+    alt=given_that
+    alt=clock_says
+    alt=clock_shows
+    alt=clock_reads
+    alt=if
+    alt=when
+    alt=given
+    alt=at
+    alt=from
+    alt=starting
+    alt=its
+    alt=say
+    alt=suppose
+    alt=assuming
+    alt=supposing
+
+@phrase.kids.time.g42_prior_to_the core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=prior_to_the
+    alt=earlier_than_the
+    alt=ahead_of_the
+    alt=back_from_the
+    alt=ago_from_the
+    alt=before_it_was
+    alt=before_it_is
+    alt=earlier_than
+    alt=prior_to
+    alt=ahead_of
+    alt=back_from
+    alt=ago_from
+    alt=previously_to
+    alt=back_before
+    alt=before_the
+    alt=before_its
+    alt=before
+    alt=prior
+    alt=preceding
+    alt=to
+    alt=till
+    alt=until
+    alt=of
+    alt=from
+
+@phrase.kids.time.g43_a_quarter_of_an_hour core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=a_quarter_of_an_hour
+    alt=quarter_of_an_hour
+    alt=quarter_of_an_hr
+    alt=a_quarter_hour
+    alt=quarter_of_hour
+    alt=1_quarter_hour
+    alt=a_quarter_hr
+    alt=quarter_hour
+    alt=15_minutes
+    alt=15_minute
+    alt=15_mins
+    alt=15_min
+    alt=15_m
+    alt=15_mn
+    alt=fifteen_minutes
+    alt=fifteen_mins
+    alt=fifteen_min
+    alt=a_quarter
+    alt=quarter_hr
+
+@phrase.kids.time.g44_now_it_is core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=now_it_is
+    alt=it_is_now
+    alt=i_am_on
+    alt=we_are_on
+    alt=the_month_is
+    alt=the_season_is
+    alt=the_day_is
+    alt=it_is
+    alt=today_is
+    alt=this_is
+    alt=now_its
+    alt=its_now
+    alt=im_on
+    alt=were_on
+    alt=today_s
+    alt=its
+    alt=todays
+    alt=today
+
+@phrase.kids.time.g45_add_up_to core.phrase
+    doc="World-local group used by 4 patterns (made by scripts/migrate-macros.mjs)."
+    alt=add_up_to
+    alt=adds_up_to
+    alt=in_total
+    alt=in_all
+    alt=are_there
+    alt=is_it
+    alt=make_up
+    alt=makes_up
+    alt=come_to
+    alt=comes_to
+    alt=total
+    alt=altogether
+    alt=pls
+    alt=equals
+
+@phrase.kids.time.g46_now_it_is core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=now_it_is
+    alt=it_is_now
+    alt=lets_say
+    alt=given_that
+    alt=so_if
+    alt=but_if
+    alt=and_if
+    alt=what_if
+    alt=today_is
+    alt=it_is
+    alt=now_its
+    alt=its_now
+    alt=if
+    alt=when
+    alt=say
+    alt=suppose
+    alt=assuming
+    alt=supposing
+    alt=imagine
+    alt=its
+
+@phrase.kids.time.g47_fast_forward core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=fast_forward
+    alt=go_forward
+    alt=move_forward
+    alt=jump_ahead
+    alt=skip_ahead
+    alt=count_on
+    alt=count_forward
+    alt=go
+    alt=move
+    alt=jump
+    alt=skip
+    alt=count
+    alt=step
+    alt=hop
+    alt=walk
+    alt=travel
+    alt=advance
+    alt=wait
+    alt=add
+
+@phrase.kids.time.g48_before core.phrase
+    frame=false
+    doc="World-local group used by 9 patterns (made by scripts/migrate-macros.mjs)."
+    alt=before
+    alt=prior_to
+    alt=ahead_of
+    alt=preceding
+    alt=earlier_than
+
+@phrase.kids.time.g49_05_of_an_hour core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=0.5_of_an_hour
+    alt=0.5_of_an_hour
+    alt=an_0.5_an_hour
+    alt=0.5_an_hour
+    alt=a_0.5_hour
+    alt=0.5_an_hour
+    alt=a_0.5_hour
+    alt=an_0.5_hour
+    alt=0.5_hour
+    alt=30_minutes
+    alt=30_minute
+    alt=thirty_minutes
+    alt=30_mins
+    alt=30_min
+    alt=0.5_hour
+    alt=30_m
+    alt=30_mn
+    alt=thirty_mins
+    alt=thirty_min
+
+@phrase.kids.time.g50_that_is core.phrase
+    doc="World-local group used by 6 patterns (made by scripts/migrate-macros.mjs)."
+    alt=that_is
+    alt=that_comes
+    alt=which_is
+    alt=which_comes
+    alt=that_s
+    alt=thats
+    alt=which
+
+@phrase.kids.time.g51_further_on core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=further_on
+    alt=later_than
+    alt=after_that
+    alt=past_that
+    alt=later
+    alt=after
+    alt=past
+    alt=beyond
+    alt=on
+    alt=forward
+    alt=ahead
+    alt=further
+    alt=more
+    alt=afterwards
+    alt=farther
+
+@phrase.kids.time.g52_in_total core.phrase
+    doc="World-local group used by 8 patterns (made by scripts/migrate-macros.mjs)."
+    alt=in_total
+    alt=right
+    alt=correct
+    alt=pls
+    alt=total
+    alt=altogether
+
+@phrase.kids.time.g53_ahead_back core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=ahead_back
+    alt=earlier_than
+    alt=before_that
+    alt=prior_to
+    alt=earlier
+    alt=before
+    alt=prior
+    alt=back
+    alt=behind
+    alt=previously
+    alt=backwards
+    alt=backward
+    alt=less
+
+@phrase.kids.time.g54_starting_from core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=starting_from
+    alt=starting_at
+    alt=from_the
+    alt=before_the
+    alt=beginning_at
+    alt=starting_with
+    alt=away_from
+    alt=from
+    alt=since
+    alt=before
+    alt=with
+    alt=on
+    alt=off
+
+@phrase.kids.time.g55_days_to_go core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=days_to_go
+    alt=number_of_days
+    alt=count_of_days
+    alt=waiting_time
+    alt=days_left
+    alt=day_count
+    alt=days_count
+    alt=day_gap
+    alt=days_gap
+    alt=days
+    alt=day
+    alt=sleeps
+    alt=nights
+    alt=time
+    alt=wait
+    alt=distance
+    alt=gap
+    alt=difference
+    alt=waiting
+
+@phrase.kids.time.g56_if core.phrase
+    frame=false
+    doc="World-local group used by 8 patterns (made by scripts/migrate-macros.mjs)."
+    alt=if
+    alt=when
+    alt=assuming
+    alt=given_that
+    alt=supposing
+    alt=say
+
+@phrase.kids.time.g57_from_now core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=from_now
+    alt=from_then
+    alt=from_that
+    alt=later
+    alt=after
+    alt=ahead
+    alt=forward
+    alt=on
+    alt=hence
+    alt=afterwards
+    alt=further
+    alt=more
+    alt=beyond
+    alt=past
+    alt=extra
+
+@phrase.kids.time.g58_will_it_be core.phrase
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=will_it_be
+    alt=would_it_be
+    alt=is_it
+    alt=goes_next
+    alt=comes_next
+    alt=is_next
+    alt=is_after
+    alt=is
+    alt=comes
+    alt=was
+    alt=falls
+    alt=lands
+    alt=follows
+    alt=goes
+
+@phrase.kids.time.g59_will_it_be core.phrase
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=will_it_be
+    alt=would_it_be
+    alt=is_it
+    alt=goes_before
+    alt=comes_before
+    alt=is_before
+    alt=is
+    alt=comes
+    alt=was
+    alt=falls
+    alt=lands
+    alt=precedes
+    alt=goes
+
+@phrase.kids.time.g60_later_than core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=later_than
+    alt=counting_from
+    alt=starting_from
+    alt=starting_at
+    alt=forward_from
+    alt=on_from
+    alt=after_the
+    alt=past_the
+    alt=from_the
+    alt=following_the
+    alt=after
+    alt=past
+    alt=beyond
+    alt=following
+    alt=since
+    alt=from
+
+@phrase.kids.time.g61_prior_to core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=prior_to
+    alt=ahead_of
+    alt=previous_to
+    alt=earlier_than
+    alt=just_before
+    alt=right_before
+    alt=back_from
+    alt=before
+    alt=preceding
+    alt=behind
+
+@phrase.kids.time.g62_earlier_than_that core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=earlier_than_that
+    alt=before_that
+    alt=ago
+    alt=before
+    alt=earlier
+    alt=back
+    alt=prior
+    alt=previously
+    alt=backwards
+    alt=backward
+    alt=behind
+
+@phrase.kids.time.g63_will_it_be core.phrase
+    doc="World-local group used by 6 patterns (made by scripts/migrate-macros.mjs)."
+    alt=will_it_be
+    alt=would_it_be
+    alt=is
+    alt=comes
+    alt=was
+    alt=falls
+    alt=lands
+
+@phrase.kids.time.g64_will_it_be core.phrase
+    doc="World-local group used by 4 patterns (made by scripts/migrate-macros.mjs)."
+    alt=will_it_be
+    alt=would_it_be
+    alt=it_would_be
+    alt=was_it
+    alt=is_it
+    alt=it_was
+    alt=it_is
+    alt=is
+    alt=was
+
+@phrase.kids.time.g65_assume_it_is core.phrase
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=assume_it_is
+    alt=suppose_it_is
+    alt=starting_at
+    alt=it_is
+    alt=lets_say
+    alt=assume_its
+    alt=suppose_its
+    alt=if
+    alt=when
+    alt=given
+    alt=at
+    alt=from
+    alt=its
+    alt=say
+    alt=suppose
+    alt=assume
+    alt=assuming
+
+@phrase.kids.time.g66_next_to core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=next_to
+    alt=next_after
+    alt=right_after
+    alt=just_after
+    alt=after
+    alt=following
+    alt=past
+    alt=beyond
+    alt=succeeding
+    alt=post
+
+@phrase.kids.time.g67_would_it_have_been core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=would_it_have_been
+    alt=did_we_have
+    alt=were_we_on
+    alt=was_it
+    alt=it_was
+    alt=that_was
+    alt=was
+    alt=were
+    alt=then
+
+@phrase.kids.time.g68_on_from core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=on_from
+    alt=forward_from
+    alt=ahead_from
+    alt=onward_from
+    alt=past
+    alt=after
+    alt=from
+    alt=beyond
+    alt=following
+
+@phrase.kids.time.g69_in_how_many core.phrase
+    frame=false
+    doc="World-local group used by 4 patterns (made by scripts/migrate-macros.mjs)."
+    alt=in_how_many
+    alt=how_many
+    alt=hw_many
+    alt=how_much
+    alt=howmany
+    alt=what
+    alt=in
+
+@phrase.kids.time.g70_would_it_have_been core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=would_it_have_been
+    alt=did_the_clock_say
+    alt=did_the_clock_show
+    alt=would_it_be
+    alt=did_it_say
+    alt=was_it
+    alt=is_it
+    alt=was
+    alt=is
+
+@phrase.kids.time.g71_the_day_after_tomorrow core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=the_day_after_tomorrow
+    alt=in_two_days
+    alt=in_2_days
+    alt=two_days_from_now
+    alt=2_days_from_now
+    alt=two_days_from_today
+
+@phrase.kids.time.g72_will_it_be core.phrase
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=will_it_be
+    alt=would_it_be
+    alt=it_will_be
+    alt=is_it
+    alt=is_that
+    alt=it_is
+    alt=that_is
+    alt=that_makes
+    alt=that_gives
+    alt=then
+    alt=now
+    alt=pls
+
+@phrase.kids.time.g73_days core.phrase
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=days
+    alt=day
+    alt=weekends
+    alt=dates
+    alt=are
+    alt=is
+    alt=count
+    alt=as
+    alt=pls
+    alt=names
+    alt=name
+    alt=tho
+    alt=though
+    alt=again
+    alt=ty
+    alt=thx
+    alt=thanks
+    alt=plz
+    alt=plss
+
+@phrase.kids.time.g74_min core.phrase
+    frame=false
+    doc="World-local group used by 4 patterns (made by scripts/migrate-macros.mjs)."
+    alt=min
+    alt=mins
+    alt=minutes
+    alt=minute
+    alt=m
+    alt=mn
+    alt=mns
+    alt=minits
+    alt=minuts
+
+@phrase.kids.time.g75_before core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=before
+    alt=earlier_than
+    alt=prior_to
+    alt=ahead_of
+    alt=back_from
+    alt=earlier_than
+
+@phrase.kids.time.g76_what_is_the core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=what_is_the
+    alt=how_many
+    alt=how_much
+    alt=hw_many
+    alt=how_long
+    alt=whats_the
+    alt=what_is
+    alt=the
+    alt=count
+    alt=time
+    alt=in
+    alt=whats
+
+@phrase.kids.time.g77_starting_at core.phrase
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=starting_at
+    alt=starting_from
+    alt=it_is
+    alt=lets_say
+    alt=if
+    alt=when
+    alt=given
+    alt=at
+    alt=from
+    alt=starting
+    alt=its
+    alt=say
+    alt=suppose
+
+@phrase.kids.time.g78_how_many core.phrase
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=how_many
+    alt=number_of
+    alt=the_number_of
+    alt=count_the
+    alt=count
+    alt=how_much
+
+@phrase.kids.time.g79_before_that core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=before_that
+    alt=before_now
+    alt=ago
+    alt=earlier
+    alt=before
+    alt=back
+    alt=backwards
+    alt=prior
+    alt=previously
+    alt=less
+    alt=away
+
+@phrase.kids.time.g80_after core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=after
+    alt=past
+    alt=later_than
+    alt=on_from
+    alt=from
+    alt=following
+    alt=later_than
+
+@phrase.kids.time.g81_is core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=is
+    alt=was
+    alt=will
+    alt=will_it_be
+    alt=is_it
+    alt=was_it
+    alt=be
+    alt=it_is
+    alt=it_was
+    alt=comes
+    alt=is_coming_up
+    alt=coming_up
+
+@phrase.kids.time.g82_tomorrow core.phrase
+    frame=false
+    doc="World-local group used by 4 patterns (made by scripts/migrate-macros.mjs)."
+    alt=tomorrow
+    alt=tmrw
+    alt=tmr
+    alt=tmw
+    alt=2moro
+    alt=the_next_day
+
+@phrase.kids.time.g83_at_the_moment core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=at_the_moment
+    alt=right_now
+    alt=today_is
+    alt=is_today
+    alt=is_now
+    alt=now_is
+    alt=today
+    alt=now
+    alt=currently
+    alt=atm
+
+@phrase.kids.time.g84_that_means core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=that_means
+    alt=which_means
+    alt=so
+    alt=then
+    alt=and
+    alt=therefore
+    alt=meaning
+    alt=means
+    alt=thus
+    alt=hence
+    alt=hmm
+
+@phrase.kids.time.g85_the_day_before_yesterday core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=the_day_before_yesterday
+    alt=two_days_ago
+    alt=2_days_ago
+    alt=two_days_before_today
+
+@phrase.kids.time.g86_then core.phrase
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=then
+    alt=next
+    alt=after
+    alt=following
+    alt=afterwards
+    alt=that
+    alt=now
+
+@phrase.kids.time.g87_how_many core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=how_many
+    alt=how_long
+    alt=how_much
+    alt=hw_many
+    alt=how_far
+    alt=what_is
+    alt=whats
+    alt=count
+    alt=the
+
+@phrase.kids.time.g88_lets_say core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=lets_say
+    alt=what_if
+    alt=if
+    alt=when
+    alt=say
+    alt=suppose
+    alt=imagine
+
+@phrase.kids.time.g89_in_a_row core.phrase
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=in_a_row
+    alt=one_by_one
+    alt=in_order
+    alt=all
+    alt=names
+    alt=list
+
+@phrase.kids.time.g90_after core.phrase
+    frame=false
+    doc="World-local group used by 3 patterns (made by scripts/migrate-macros.mjs)."
+    alt=after
+    alt=following
+    alt=past
+    alt=beyond
+    alt=once
+    alt=when
+    alt=post
+
+@phrase.kids.time.g91_tomorrow core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=tomorrow
+    alt=the_next_day
+    alt=the_day_after_today
+    alt=the_following_day
+
+@phrase.kids.time.g92_before core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=before
+    alt=earlier_than
+    alt=prior_to
+    alt=ahead_of
+    alt=back_from
+    alt=until
+
+@phrase.kids.time.g93_will_it_be core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=will_it_be
+    alt=is_it
+    alt=be
+    alt=is
+    alt=will_be
+    alt=is_it_going_to_be
+
+@phrase.kids.time.g94_yesterday core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=yesterday
+    alt=the_day_before_today
+    alt=the_previous_day
+
+@phrase.kids.time.g95_the_clock_says core.phrase
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=the_clock_says
+    alt=the_time_is
+    alt=it_is
+    alt=time_is
+    alt=its
+
+@phrase.kids.time.g96_after core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=after
+    alt=from
+    alt=past
+    alt=later_than
+    alt=beyond
+    alt=following
+
+@phrase.kids.time.g97_whole_year core.phrase
+    frame=false
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=whole_year
+    alt=entire_year
+    alt=full_year
+    alt=year
+    alt=years
+
+@phrase.kids.time.g98_days core.phrase
+    doc="World-local group used by 2 patterns (made by scripts/migrate-macros.mjs)."
+    alt=days
+    alt=day
+    alt=dates
+    alt=are
+    alt=is
+    alt=count
+    alt=as
+    alt=names
+    alt=name

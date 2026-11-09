@@ -79,6 +79,21 @@ const NOOBJ = `@shape.t.tempo core.shape
     extra="[bpm|beats_per_minute]?"
     emit="@{_} core.request action=t.tempo arg.n={n}"
     priority=12
+@shape.t.after core.shape
+    family=ask.value
+    obj="p:lex.t.things"
+    noun="day"
+    rel="comes_after|after|follows"
+    objdet=none
+    emit="${EMIT('after')}"
+    priority=10
+@shape.t.len core.shape
+    family=ask.count
+    obj="p:lex.t.things"
+    cont="c:lex.t.colours"
+    det="a|an|the"
+    emit="@{_} core.request action=t.len arg.part={p} arg.whole={c}"
+    priority=10
 @shape.t.status core.shape
     family=ask.value
     noun="tempo|speed"
@@ -101,7 +116,7 @@ const matches = (p, text) => {
 
 test('the test world loads without errors and every family generates its forms', () => {
   assert.deepEqual(world.errors, []);
-  assert.equal(world.shapes.length, 8);
+  assert.equal(world.shapes.length, 10);
   const forms = (shape) => new Set(world.patterns.filter((p) => p.shape === `shape.t.${shape}`).map((p) => p.form));
   assert.deepEqual([...forms('paint')].sort(), [...FAMILY_FORMS.set].sort());
   assert.deepEqual([...forms('reset')].sort(), [...FAMILY_FORMS.do].filter((f) => f !== 'opts').sort());
@@ -280,4 +295,18 @@ test('shapes without an object slot: the noun is the thing (set and ask.value)',
   for (const [id, text] of cases) { const p = byId(id); assert.ok(p, id); assert.ok(matches(p, text), `${id}: "${text}"`); }
   assert.ok(!matches(byId('status.q'), 'what tempo is it'), 'pron excludes it');
   for (const p of world.patterns.filter((x) => /^pat\.t\.(tempo|status)\./.test(x.id))) for (const ex of p.examples) assert.ok(matches(p, ex), `${p.id}: ${ex}`);
+});
+
+test('ask.value with a relation (rel, objdet) and ask.count with a container (cont)', () => {
+  const cases = [
+    ['after.q', 'what day comes after eyes'], ['after.q', 'what day is after hair'], ['after.q.2', 'what is the day after mouth'], ['after.imp', 'tell me the day after eyes'],
+    ['after.wish', 'i want to know the day that follows'.replace(' that follows', ' follows eyes')], ['after.ind', 'do you know the day after eyes'], ['after.order', 'the day after eyes'],
+    ['len.q', 'how many eyes are in a red'], ['len.q', 'how many hair does a green have'], ['len.imp', 'count the eyes in a red'], ['len.wish', 'i want to know how many eyes in a red'],
+    ['len.ind', 'can you tell me how many eyes are in a red'], ['len.short', 'eyes in a red'],
+  ];
+  for (const [id, text] of cases) { const p = byId(id); assert.ok(p, id); assert.ok(matches(p, text), `${id}: "${text}"`); }
+  const forms = (n) => world.patterns.filter((p) => p.shape === `shape.t.${n}`).map((p) => p.id.replace('pat.t.', ''));
+  assert.ok(!forms('after').some((f) => f.endsWith('short') || f === 'after.order.2' || f.endsWith('opts')), 'no short / second order / opts form with a relation');
+  assert.ok(!matches(byId('after.q.2'), 'what is the day after the eyes'), 'objdet=none: no determiner before the object');
+  assert.deepEqual(world.errors, []);
 });

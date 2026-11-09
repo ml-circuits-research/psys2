@@ -990,3 +990,43 @@
     input="Monday"
     expect="Sunday"
     session=ask2
+
+@t.time.sh01 core.test
+    input="tell me the day after Tuesday"
+    expect="The day after Tuesday is Wednesday."
+    session=tsh1
+
+@t.time.sh02 core.test
+    input="i want to know the month before May"
+    expect="The month before May is April."
+    session=tsh2
+
+@t.time.sh03 core.test
+    input="do you know the season after summer"
+    expect="The season after summer is autumn."
+    session=tsh3
+
+@t.time.sh04 core.test
+    input="can you tell me how many hours are in a day"
+    expect="There are 24 hours in a day."
+    session=tsh4
+
+@t.time.sh05 core.test
+    input="i wonder how many minutes make an hour"
+    expect="There are 60 minutes in an hour."
+    session=tsh5
+
+@t.time.sh06 core.test
+    input="tell me the season of July"
+    expect="July is in summer."
+    session=tsh6
+
+@t.time.sh07 core.test
+    input="which day follows Monday"
+    expect="The day after Monday is Tuesday."
+    session=tsh7
+
+@t.time.sh08 core.test
+    input="the season before winter"
+    expect="The season before winter is autumn."
+    session=tsh8

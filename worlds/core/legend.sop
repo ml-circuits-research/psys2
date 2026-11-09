@@ -544,6 +544,21 @@
     card=one
     ask="Which pronouns may follow the verb in the question of a noun-only ask.value shape?"
 
+@core.shape.rel core.key
+    value=string
+    card=one
+    ask="Which relation words stand between the noun and the object of an ask.value shape (after, comes_after, follows)?"
+
+@core.shape.cont core.key
+    value=string
+    card=one
+    ask="Which container slot (name:class) does an ask.count shape count in (how many days in a WEEK)?"
+
+@core.shape.objdet core.key
+    value=atom
+    card=one
+    ask="none when no determiner may stand before the object of an ask.value shape?"
+
 @core.shape.sample core.key
     value=string
     card=one

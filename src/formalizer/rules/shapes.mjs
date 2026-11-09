@@ -15,6 +15,9 @@
  *   noun     property noun alternatives (`color|colour`): optional in `set`, required by `ask.value`
  *   det      determiners before the object (default `the|your|ur|my`)
  *   link     words between object and value in the imperative of `set` (default `to|into|be|as`, followed by an optional a|an|the)
+ *   objdet   `none`: no determiner before the object of an `ask.value` shape ("the day after Monday", not "the Monday")
+ *   rel      (`ask.value`) relation words between the noun and the object (`after|comes_after|follows`: "what day comes after Monday"); the relation is then mandatory
+ *   cont     (`ask.count`) container slot `name:class`: "how many days are in a week" (obj = the counted part, cont = the whole)
  *   pron     (noun-only `ask.value`) pronouns that may follow the verb in the question (default `it|this|that|we|you|u|i`)
  *   mod      optional modifier group before the value, alternatives and `$macro` ids (`$ui.avatar.g11_a_bit` for "a bit", "much")
  *   objmod   optional modifier group before the object (`whole|entire`)
@@ -70,15 +73,15 @@ export const TEMPLATES = {
     short: [['', AND('<L>', '<D>', '<O><E>', '<V>', '<T>')]],
   },
   'ask.value': {
-    q: [['', AND('<L>', '[$lang.shape.what]', '<N>', '[are|r|is|do|does|did]?', '<D>', '<O>', NOW, '<T>')],
-      ['.2', AND('<L>', '[$lang.shape.whatis]', '<D>', '<N>', OF, '<D>', '<O>', NOW, '<T>')]],
-    imp: [['', AND('<L>', '[$lang.shape.tellme]', '[what|which]?', '<D>', '<N>', OF + '?', '<D>', '<O>', '[is|are]?', '<T>')]],
-    wish: [['', AND('<L>', '[$lang.shape.know]', '[what|which]?', '<D>', '<N>', OF + '?', '<D>', '<O>', '[is|are]?', '<T>')]],
-    ind: [['', AND('[$lang.shape.indask]', '[what|which]?', '<D>', '<N>', OF + '?', '<D>', '<O>', '[is|are]?', '<T>')]],
-    order: [['', AND('<L>', '<D>', '<N>', OF, '<D>', '<O>', NOW, '<T>')],
-      ['.2', AND('<L>', '<D>', '<O>', '[is|are]?', '[what|which|wat]', '<N>', '<T>')]],
+    q: [['', AND('<L>', '[$lang.shape.what]', '<N>', '[are|r|is|was|were|do|does|did]?', '<R>', '<DO>', '<O>', NOW, '<T>')],
+      ['.2', AND('<L>', '[$lang.shape.whatis]', '<D>', '<N>', '<OFM>', '<DO>', '<O>', NOW, '<T>')]],
+    imp: [['', AND('<L>', '[$lang.shape.tellme]', '[what|which]?', '<D>', '<N>', '<OFO>', '<DO>', '<O>', '[is|are]?', '<T>')]],
+    wish: [['', AND('<L>', '[$lang.shape.know]', '[what|which]?', '<D>', '<N>', '<OFO>', '<DO>', '<O>', '[is|are]?', '<T>')]],
+    ind: [['', AND('[$lang.shape.indask]', '[what|which]?', '<D>', '<N>', '<OFO>', '<DO>', '<O>', '[is|are]?', '<T>')]],
+    order: [['', AND('<L>', '<D>', '<N>', '<OFM>', '<DO>', '<O>', NOW, '<T>')],
+      ['.2', AND('<L>', '<DO>', '<O>', '[is|are]?', '[what|which|wat]', '<N>', '<T>')]],
     short: [['', AND('<L>', '<O>', '<N>', '<T>')]],
-    opts: [['', AND('<L>', '[what|which|wat]', '<NP>', '[can|could|may|might|do|does|are|is]', '<D>', '<O>', '[$lang.shape.be|have|take]', '<T>')]],
+    opts: [['', AND('<L>', '[what|which|wat]', '<NP>', '[can|could|may|might|do|does|are|is]', '<DO>', '<O>', '[$lang.shape.be|have|take]', '<T>')]],
   },
   'ask.count': {
     q: [['', AND('<L>', '[$lang.shape.howmany]', '<O>', '[do|does|are|is|can|could|did|have|has|will|would]?', '[you|u|ya|there|i|we|they]?', '<V?>', NOW, '<T>')],
@@ -120,6 +123,18 @@ const NOOBJ_ASK_VALUE = {
   short: [['', AND('<L>', '<N>', '<T>')]],
 };
 
+/**
+ * `ask.count` with a container slot (`cont`): "how many days are in a week" (object = the counted part, container = the whole it is counted in).
+ * The templates of the family are replaced by these.
+ */
+const CONT_ASK_COUNT = {
+  q: [['', AND('<L>', '[$lang.shape.howmany]', '<O>', '[are|is|does|do|fit|go|make|per]?', '[there]?', '[in|per|inside|within|of|make_up]?', '<D>', '<C>', '[have|has|got]?', '<T>')]],
+  imp: [['', AND('<L>', '[$lang.shape.tellme|count|name]', '[$lang.shape.howmany]?', '<D>', '<O>', '[are|is|does|do|fit|go|make]?', '[there]?', '[in|per|inside|within]?', '<D>', '<C>', '[have|has]?', '<T>')]],
+  wish: [['', AND('<L>', '[$lang.shape.know]', '[$lang.shape.howmany]', '<O>', '[are|is|does|do|fit|go|make]?', '[there]?', '[in|per|inside|within]?', '<D>', '<C>', '[have|has]?', '<T>')]],
+  ind: [['', AND('[$lang.shape.indask]', '[$lang.shape.howmany]', '<O>', '[are|is|does|do|fit|go|make]?', '[there]?', '[in|per|inside|within]?', '<D>', '<C>', '[have|has]?', '<T>')]],
+  short: [['', AND('<L>', '<O>', '[in|per]', '<D>', '<C>', '<T>')]],
+};
+
 const slotText = (spec, optional = false) => (spec ? `{${spec.replace(/\?$/, '')}${optional || spec.endsWith('?') ? '?' : ''}}` : '');
 const group = (alts, optional) => `[${alts.split('|').map((a) => a.trim()).filter(Boolean).join('|')}]${optional ? '?' : ''}`;
 const trimWords = (s) => s.split(/\s+/).filter(Boolean).join(' ');
@@ -154,6 +169,9 @@ export function expandShape(shape, { phrases = null, lexicons = null } = {}) {
     '<N>': nounAlts ? group(nounAlts) : null, '<N?>': nounAlts && !noObj ? group(nounAlts, true) : '',
     '<NP>': nounPlural ? group(nounPlural) : null,
     '<K>': group(shape.link ?? DEFAULTS.link, true) + ' [a|an|the]?', '<E>': shape.extra ? ' ' + (shape.extra.startsWith('[') ? shape.extra : slotText(shape.extra, true)) : '',
+    '<DO>': shape.objdet === 'none' ? '' : (shape.obj || shape.noun ? group(shape.det ?? DEFAULTS.det, true) : ''),
+    '<R>': shape.rel ? group(shape.rel) : '', '<OFM>': shape.rel ? group(shape.rel) : OF, '<OFO>': shape.rel ? group(shape.rel) : OF + '?',
+    '<C>': slotText(shape.cont),
     '<PR>': group(shape.pron ?? 'it|this|that|we|you|u|i', true),
     '<L>': LEAD, '<T>': TAIL,
   };
@@ -164,8 +182,9 @@ export function expandShape(shape, { phrases = null, lexicons = null } = {}) {
   for (const form of want) {
     if (skip.has(form)) continue;
     if (form === 'opts' && (!shape.emitOpts || noObj)) continue;
-    for (const [suffix, tpl] of (noObj && family === 'ask.value' ? NOOBJ_ASK_VALUE[form] : table[form]) ?? []) {
+    for (const [suffix, tpl] of (noObj && family === 'ask.value' ? NOOBJ_ASK_VALUE[form] : shape.cont && family === 'ask.count' ? CONT_ASK_COUNT[form] : table[form]) ?? []) {
       if (noObj && family === 'set' && (form === 'order' || (form === 'short' && suffix === ''))) continue;
+      if (shape.rel && family === 'ask.value' && ((form === 'order' && suffix === '.2') || form === 'short' || form === 'opts')) continue;
       const tokens = [...new Set(tpl.match(/<\w+\??>/g) ?? [])];
       if (tokens.some((t) => fields[t] === null)) continue;
       if (!shape.obj && form === 'short' && family === 'do') continue;
@@ -180,7 +199,7 @@ export function expandShape(shape, { phrases = null, lexicons = null } = {}) {
         priority: short ? basePriority - SHORT_PENALTY : basePriority,
         example: [],
       };
-      p.example = exampleSentences(match, { phrases, lexicons, sample, det: shape.obj || noObj ? (shape.det ?? DEFAULTS.det) : null, noun: nounAlts, link: shape.link ?? DEFAULTS.link });
+      p.example = exampleSentences(match, { phrases, lexicons, sample, det: shape.obj || noObj ? (shape.det ?? DEFAULTS.det) : null, objdet: shape.objdet, noun: nounAlts, link: shape.link ?? DEFAULTS.link });
       out.push(p);
     }
   }
