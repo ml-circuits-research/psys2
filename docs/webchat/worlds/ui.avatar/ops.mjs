@@ -246,12 +246,72 @@ function apply(ctx, s, r) {
   return switchNote(from, r.ch);
 }
 
+// ---- capability map (spec 07): what a character can do instead of what it lacks -------------------------------------
+/** Person: eye and mouth words -> the expression id that looks like it (the person has no eyes or mouth component). */
+const EYE_EXPRESSION = {
+  wide: 'awe', big: 'awe', bigger: 'awe', large: 'awe', huge: 'awe', open: 'awe', awake: 'awe', surprised: 'awe', amazed: 'awe', giant: 'awe',
+  sleepy: 'tired', tired: 'tired', droopy: 'tired', narrow: 'tired', small: 'tired', smaller: 'tired', heavy: 'tired',
+  happy: 'smile', smiling: 'smile', glad: 'smile', cheerful: 'smileBig', joyful: 'smileBig',
+  sad: 'solemn', unhappy: 'solemn', down: 'solemn', gloomy: 'solemn',
+  dreamy: 'calm', dreamlike: 'calm', calm: 'calm', peaceful: 'calm', relaxed: 'calm', gentle: 'calm',
+  closed: 'eyesClosed', shut: 'eyesClosed', asleep: 'eyesClosed',
+  angry: 'veryAngry', mad: 'veryAngry', furious: 'rage', cross: 'veryAngry',
+  scared: 'fear', afraid: 'fear', frightened: 'fear', worried: 'concerned',
+  wink: 'cheeky', winking: 'cheeky', cheeky: 'cheeky',
+  sparkling: 'lovingGrin1', sparkle: 'lovingGrin1', sparkly: 'lovingGrin1', shiny: 'lovingGrin1', loving: 'lovingGrin1', cute: 'cute',
+  suspicious: 'suspicious', squint: 'suspicious', squinting: 'suspicious', sharp: 'suspicious',
+  crazy: 'hectic', wild: 'hectic', stressed: 'hectic', blank: 'blank', serious: 'serious',
+};
+const MOUTH_EXPRESSION = {
+  smile: 'smile', smiling: 'smile', happy: 'smile', big: 'smileBig', grin: 'smileBig', bigger: 'smileBig', wide: 'smileBig', laugh: 'smileLOL', laughing: 'smileLOL',
+  sad: 'solemn', frown: 'solemn', frowning: 'solemn', down: 'solemn', line: 'serious', flat: 'serious', straight: 'serious', closed: 'serious', serious: 'serious',
+  teeth: 'smileTeethGap', open: 'awe', gasp: 'awe', surprised: 'awe', zigzag: 'concerned', wavy: 'concerned', tongue: 'cheeky',
+};
+/** What an expression is called when it describes the eyes or the mouth. */
+const EXPRESSION_SAY = { awe: 'wide-eyed', tired: 'sleepy-eyed', smile: 'smiling', smileBig: 'beaming', smileLOL: 'laughing', solemn: 'sad', calm: 'calm and dreamy', eyesClosed: 'closed-eyed', veryAngry: 'angry', rage: 'furious', fear: 'scared', concerned: 'worried', cheeky: 'cheeky', lovingGrin1: 'sparkling', suspicious: 'suspicious', hectic: 'wild-eyed', serious: 'serious', blank: 'blank', cute: 'cute', smileTeethGap: 'grinning' };
+/** The characters' capability map: character -> spoken part it lacks -> { note, find(value) -> what to set } (the closest thing it has). */
+const MOOD_RULE = (who) => ({ note: `${who} shows its expression with its eyes and mouth`, find: (v) => MOOD_OF[v] && { mood: MOOD_OF[v] } });
+const CAPABILITY = {
+  person: {
+    eye: { note: "A person's eyes follow the expression", find: (v) => EYE_EXPRESSION[v] && { expression: EYE_EXPRESSION[v] } },
+    expression: { note: 'A person shows a mood with the expression', find: (v) => MOOD_OF[v] && { expression: MOODS[MOOD_OF[v]].person } },
+    face: { note: 'A person shows a mood with the expression', find: (v) => MOOD_OF[v] && { expression: MOODS[MOOD_OF[v]].person } },
+    mouth: { note: "A person's mouth follows the expression", find: (v) => MOUTH_EXPRESSION[v] && { expression: MOUTH_EXPRESSION[v] } },
+    lip: { note: "A person's mouth follows the expression", find: (v) => MOUTH_EXPRESSION[v] && { expression: MOUTH_EXPRESSION[v] } },
+  },
+  robot: { expression: MOOD_RULE('A robot'), face: MOOD_RULE('A robot') },
+  emoji: { expression: MOOD_RULE('An emoji'), face: MOOD_RULE('An emoji') },
+};
+/** Apply a capability mapping when the character lacks the part (or lacks that variant of it); null when nothing close exists. */
+function viaCapability(ctx, s, part, value) {
+  const rule = CAPABILITY[s.character]?.[part];
+  const what = rule?.find(String(value ?? ''));
+  if (!what) return null;
+  if (what.expression) {
+    s.person.expression = what.expression;
+    return done(ctx, 'cap' + what.expression, `${rule.note}, so I made it ${EXPRESSION_SAY[what.expression] ?? displayOf(ctx, 'person', 'expression', what.expression)}.`);
+  }
+  Object.assign(s[s.character], MOODS[what.mood][s.character]);
+  return done(ctx, 'cap' + what.mood, `${rule.note}, so I set both to look ${what.mood}.`);
+}
+/** Gender words (with common misspellings) -> man | woman | girl | boy, and the hair and facial-hair presets of each. */
+const GENDER_OF = { man: 'man', men: 'man', mans: 'man', guy: 'man', gentleman: 'man', male: 'man', dude: 'man', woman: 'woman', women: 'woman', womans: 'woman', womens: 'woman', lady: 'woman', female: 'woman', wmoan: 'woman', girl: 'girl', girls: 'girl', gal: 'girl', boy: 'boy', boys: 'boy', lad: 'boy' };
+const PERSON_PRESET = {
+  man: { head: 'short2', facialHair: 'full', say: 'short neat hair and a short beard' },
+  woman: { head: 'long', facialHair: 'none', say: 'long hair and no beard' },
+  girl: { head: 'buns', facialHair: 'none', say: 'twin buns and no beard' },
+  boy: { head: 'short5', facialHair: 'none', say: 'short spiky hair and no beard' },
+};
+
 // ---- operations: setting parts ----------------------------------------------------------------------------------
 function _setPart(ctx, { part, value, n, text }) {
   const s = ensure(ctx);
+  const lacks = PART_KEYS[part] && !PART_KEYS[part].some((k) => components(ctx, s.character).includes(k));
+  if (lacks) { const via = viaCapability(ctx, s, part, value); if (via) return via; }
   const r = resolveVariant(ctx, s, { part, value, n, text });
   if (r.error) return no(r.error);
   if (r.none) {
+    const via = viaCapability(ctx, s, part, value); if (via) return via;
     const label = String(part ?? value).replace(/_/g, ' ');
     return no(part ? `I do not know ${label} like "${String(value).replace(/_/g, ' ')}". Ask me what ${label} I can have.` : `I do not know how to look like that.`);
   }
@@ -265,6 +325,7 @@ function _setPartUnknown(ctx, { part, words }) {
   const s = ensure(ctx);
   const keys = PART_KEYS[part];
   if (!keys) return no(`I do not know what my ${String(part).replace(/_/g, ' ')} is.`);
+  const via = viaCapability(ctx, s, part, String(words ?? '').trim().replace(/ +/g, '_')); if (via) return via;
   const cand = slots(ctx, s, keys);
   if (!cand.length) return no(`I do not have that part.`);
   const sl = cand[0];
@@ -334,6 +395,8 @@ function _resizePart(ctx, { part, dir, assumed }) {
     return ok(`I cannot scale my eyes, but I can change their style. My eyes can be ${orList(listOptionsText(ctx, 'robot', 'eyes').split(', '))}. For ${word} eyes try ${orList(pick)}; say "make your eyes ${pick[0]}".`);
   }
   if (keys.includes('eyes') && ch === 'person') {
+    const via = viaCapability(ctx, s, 'eye', grow ? 'bigger' : 'smaller');
+    if (via) return via;
     return ok(`My eyes come with my expression. For ${grow ? 'wider eyes try awe, hectic or fear' : 'narrower eyes try tired, contempt or eyes closed'}; say "make your expression ${grow ? 'awe' : 'tired'}".`);
   }
   const key = keys.find((k) => components(ctx, ch).includes(k));
@@ -508,14 +571,29 @@ function _setSeed(ctx, { seed }) {
 function _askSeed(ctx) { return ok(`My seed is ${ensure(ctx).seed}.`); }
 
 // ---- characters, mood, name, reset, animation -------------------------------------------------------------------
-function _setCharacter(ctx, { who }) {
+function _setCharacter(ctx, { who, kind, mood }) {
   const s = ensure(ctx);
+  const gender = kind && GENDER_OF[String(kind)];
+  if (gender) return setPersonLook(ctx, s, gender, mood);
   const hit = ctx.lexicon(`${DATA}characters`).map((w) => w.split(':')).find(([w]) => w === who);
   if (!hit) return no(`I can become a robot, a person or an emoji, but not ${String(who).replace(/_/g, ' ')}.`);
   const ch = hit[1];
   if (s.character === ch) return ok(`I am ${spoken(ch)} already.`);
   s.character = ch;
   return done(ctx, 'become' + ch, `Now I am ${spoken(ch)}. ${describeShort(ctx, s)}`);
+}
+/** "Make the avatar a woman": a person with the hair and facial hair of that kind of person, optionally with a mood. */
+function setPersonLook(ctx, s, gender, mood) {
+  const preset = PERSON_PRESET[gender];
+  const was = s.character;
+  s.character = 'person';
+  s.person.head = preset.head;
+  s.person.facialHair = preset.facialHair;
+  const m = mood && MOOD_OF[mood];
+  if (m) s.person.expression = MOODS[m].person;
+  const face = m ? ` and look ${String(mood).replace(/_/g, ' ')}` : '';
+  const turned = was === 'person' ? '' : 'Now I am a person. ';
+  return done(ctx, 'look' + gender + (m ?? ''), `${turned}A person shows being ${a(gender)} ${gender} through hair, so I gave myself ${preset.say}${face}.`);
 }
 function _askCharacter(ctx, { who } = {}) {
   const s = ensure(ctx);
@@ -746,7 +824,7 @@ function _setPartColored(ctx, { part, value, color, n, text }) {
   return done(ctx, r.key + r.id + hex, `I have ${say(r.key, `${shown} ${displayOf(ctx, r.ch, r.key, r.id)}`)} now.${close}${note}`);
 }
 
-const REPLAY = { setPart: _setPart, step: _step, resetPart: _resetPart, removePart: _removePart, setColor: _setColor, shiftColor: _shiftColor, setPartColored: _setPartColored, resizePart: _resizePart };
+const REPLAY = { setCharacter: _setCharacter, setPart: _setPart, step: _step, resetPart: _resetPart, removePart: _removePart, setColor: _setColor, shiftColor: _shiftColor, setPartColored: _setPartColored, resizePart: _resizePart };
 
 /** Modal input (spec 07 section 2): answers "yes" or "no" to an offer to become another character. */
 export function interceptInput(ctx, text) {

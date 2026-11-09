@@ -54,6 +54,19 @@ export const SIZE_WORDS = {
   tiny: 0.45, teeny: 0.4, mini: 0.5, itsy: 0.4, little: 0.6, small: 0.65, medium: 1, normal: 1, regular: 1, middle: 1,
   big: 1.5, large: 1.5, huge: 2.1, giant: 2.3, gigantic: 2.5, enormous: 2.4, massive: 2.3, great: 1.6,
 };
+/** Comparatives that size a new thing relative to the existing one of its kind (+1 bigger, -1 smaller). */
+export const COMPARATIVES = { bigger: 1, larger: 1, taller: 1, huger: 1, wider: 1, longer: 1, greater: 1, smaller: -1, tinier: -1, littler: -1, shorter: -1, narrower: -1, lesser: -1 };
+const COMPARATIVE_STEP = 1.4;
+/** People: the spoken kind of person -> preset (size factor, hair, dress or shirt and pants colors); plural forms. */
+export const WHO_PRESET = {
+  man: { factor: 1.15, hair: 'black', shirt: 'blue', pants: 'navy', plural: 'men' },
+  woman: { factor: 1.05, hair: 'brown', shirt: 'red', pants: 'red', plural: 'women' },
+  girl: { factor: 0.8, hair: 'yellow', shirt: 'pink', pants: 'pink', plural: 'girls' },
+  boy: { factor: 0.8, hair: 'brown', shirt: 'green', pants: 'navy', plural: 'boys' },
+};
+const WHO_OF_WORD = { man: 'man', men: 'man', woman: 'woman', women: 'woman', girl: 'girl', girls: 'girl', boy: 'boy', boys: 'boy' };
+/** Moods a drawn person can have: the smile curve turns up (happy) or down (sad). */
+export const MOOD_WORDS = { happy: 'happy', glad: 'happy', smiling: 'happy', cheerful: 'happy', sad: 'sad', unhappy: 'sad', crying: 'sad', upset: 'sad' };
 const SUPERLATIVE = { biggest: 'big', largest: 'big', hugest: 'big', tallest: 'big', smallest: 'small', tiniest: 'small', littlest: 'small' };
 const ORDINALS = { first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6, seventh: 7, eighth: 8, ninth: 9, tenth: 10, last: -1, final: -1 };
 const ORDINAL_WORD = ['', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth'];
@@ -187,8 +200,9 @@ export function describeObject(o, { article = 'a', size = true, color = true } =
   const words = [];
   if (size && sizeWord(o)) words.push(sizeWord(o));
   const c = effectiveColor(o);
-  if (color && c && !(o.kind === 'cloud' && c === 'white' && !o.color) && !(o.kind === 'moon' && !o.color)) words.push(o.color ?? c);
-  words.push(o.kind);
+  if (o.mood) words.push(o.mood);
+  if (color && c && !(o.kind === 'cloud' && c === 'white' && !o.color) && !(o.kind === 'moon' && !o.color) && !(o.who && !o.color)) words.push(o.color ?? c);
+  words.push(o.who ?? o.kind);
   const text = words.join(' ');
   return article === 'the' ? `the ${text}` : article === 'none' ? text : `${a_(text)} ${text}`;
 }
@@ -208,7 +222,7 @@ const placePhrase = (o) => {
 function groupPhrase(objs, { positions = false } = {}) {
   const groups = new Map();
   for (const o of objs) {
-    const key = `${o.kind}|${effectiveColor(o) ?? ''}|${sizeWord(o)}`;
+    const key = `${o.kind}|${o.who ?? ''}|${o.mood ?? ''}|${effectiveColor(o) ?? ''}|${sizeWord(o)}`;
     if (!groups.has(key)) groups.set(key, []);
     groups.get(key).push(o);
   }
@@ -217,8 +231,9 @@ function groupPhrase(objs, { positions = false } = {}) {
     const o = g[0], words = [];
     if (sizeWord(o)) words.push(sizeWord(o));
     const c = effectiveColor(o);
-    if (c && !(o.kind === 'cloud' && !o.color)) words.push(o.color ?? c);
-    words.push(pluralOfKind(o.kind, g.length));
+    if (o.mood) words.push(o.mood);
+    if (c && !(o.kind === 'cloud' && !o.color) && !(o.who && !o.color)) words.push(o.color ?? c);
+    words.push(o.who ? WHO_PRESET[o.who].plural : pluralOfKind(o.kind, g.length));
     return `${g.length} ${words.join(' ')}`;
   });
 }
@@ -648,7 +663,13 @@ function addThing(s, spec, ctxInfo) {
   const group = [];
   for (let i = 0; i < count; i++) {
     const factor = i === 0 ? spec.factor : spec.factor * (0.88 + rnd(s) * 0.28);
-    const o = makeObject(s, kind, { color: spec.color, factor });
+    const o = makeObject(s, kind, { color: spec.color, factor: spec.who && !spec.sized ? factor * WHO_PRESET[spec.who].factor : factor });
+    if (spec.who && kind === 'person') {
+      const pr = WHO_PRESET[spec.who];
+      o.who = spec.who;
+      Object.assign(o.parts, { hair: pr.hair, shirt: spec.dress ?? pr.shirt, pants: spec.dress ?? pr.pants });
+    }
+    if (spec.mood && kind === 'person') o.mood = spec.mood;
     Object.assign(o.parts, spec.parts);
     group.push(o);
   }
@@ -706,7 +727,10 @@ function readSpec(args, tailWords) {
   const mods = ['m1', 'm2', 'm3'].map((k) => args[k]).filter(Boolean).map((x) => String(x).toLowerCase());
   const k = kindOfWord(args.kind);
   const sizeWords = mods.filter((m) => Object.hasOwn(SIZE_WORDS, m));
-  const colorWords = mods.filter((m) => isShade(m) || isColorWord(m));
+  const comp = mods.filter((m) => Object.hasOwn(COMPARATIVES, m)).map((m) => COMPARATIVES[m]).at(-1) ?? 0;
+  const who = WHO_OF_WORD[String(args.kind ?? '').toLowerCase()] ?? null;
+  const mood = mods.map((m) => MOOD_WORDS[m]).filter(Boolean).at(-1) ?? null;
+  const colorWords = mods.filter((m) => !Object.hasOwn(MOOD_WORDS, m) && (isShade(m) || isColorWord(m)));
   const kind = k?.kind;
   let color = colorFrom(colorWords, kind ? defaultColor(kind) : null);
   const explicitN = args.n !== undefined ? numberOf(String(args.n)) : null;
@@ -714,7 +738,7 @@ function readSpec(args, tailWords) {
   const plural = /s$|ple$|ish$|ren$/.test(String(args.kindText ?? '').toLowerCase()) && k?.plural === true || k?.plural === true;
   let count = explicitN ?? (q ? QUANTITY[q] : plural ? PLURAL_DEFAULT[kind] ?? 3 : 1);
   const factor = sizeWords.length ? SIZE_WORDS[sizeWords.at(-1)] : 1;
-  return { kind, count, color, factor, tail: tailWords, mods, plural, explicit: explicitN !== null };
+  return { kind, count, color, factor, comp, who, mood, tail: tailWords, mods, plural, explicit: explicitN !== null };
 }
 
 export const add = guard((ctx, args, s) => {
@@ -757,7 +781,15 @@ export const add = guard((ctx, args, s) => {
   const cap = spec0.kind === 'star' ? MAX_STARS : MAX_COUNT;
   if (count > cap) { count = cap; capped = true; }
   if (count < 1) count = 1;
-  const made = addThing(s, { kind: spec0.kind, count, color, factor: spec0.factor, parts: withParts.parts, place: place.rel ? { rel: place.rel } : place.region ? { region: place.region } : null, refs }, null);
+  let factor = spec0.factor, sized = false, compNote = '';
+  if (spec0.comp) {
+    // "a bigger house": relative to the existing house (the newest one); without one, a plain big or small one
+    const ref = sameKind(s, spec0.kind).at(-1);
+    const base = KINDS[spec0.kind].size * (spec0.who ? WHO_PRESET[spec0.who].factor : 1);
+    if (ref) { factor = (ref.size / base) * (spec0.comp > 0 ? COMPARATIVE_STEP : 1 / COMPARATIVE_STEP); sized = true; compNote = ` (${spec0.comp > 0 ? 'bigger' : 'smaller'} than the ${ref.who ?? ref.kind} I had)`; }
+    else { factor = spec0.comp > 0 ? 1.5 : 0.65; compNote = ` (there was no ${spec0.kind} to compare with, so I made it ${spec0.comp > 0 ? 'big' : 'small'})`; }
+  }
+  const made = addThing(s, { kind: spec0.kind, who: spec0.who, mood: spec0.mood, sized, count, color: spec0.who ? null : color, dress: color, factor, parts: withParts.parts, place: place.rel ? { rel: place.rel } : place.region ? { region: place.region } : null, refs }, null);
   const all = [...drawnRefs, ...made];
   let extra = [];
   if (more.length) {
@@ -775,7 +807,7 @@ export const add = guard((ctx, args, s) => {
   if (partNote0 && firstGroup.length) firstGroup[firstGroup.length - 1] += partNote0;
   const phrase = andList([...firstGroup, ...groupPhrase(extras)]);
   const where = made.length && extras.length === 0 ? describePlacing(made[0], place, refs) : '';
-  const capNote = (capped ? ` (${cap} is plenty!)` : '') + fracNote;
+  const capNote = (capped ? ` (${cap} is plenty!)` : '') + fracNote + compNote;
   const partNote = '';
   return ok(`${opener(s)} I drew ${phrase}${partNote}${where}${capNote}.`, { data: { made: s.last.slice() } });
 });

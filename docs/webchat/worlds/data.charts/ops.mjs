@@ -48,7 +48,7 @@ const COLORS = {
 
 // ---- small helpers ----------------------------------------------------------------------------------
 const ok = (value, extra) => ({ status: 'supported', value, ...extra });
-const no = (status, note) => ({ status, note });
+const no = (status, note) => ({ status, note, ...(/^I do not see /.test(note) ? { reason: 'unknown_argument' } : {}) });
 const cap = (s) => (s ? s[0].toUpperCase() + s.slice(1) : s);
 const sp = (w) => String(w).replace(/_/g, ' ');
 const joinAnd = (a) => (a.length <= 1 ? a.join('') : `${a.slice(0, -1).join(', ')} and ${a.at(-1)}`);
@@ -542,7 +542,7 @@ function _setType(ctx, args) {
 function _setTitle(ctx, { t }) {
   const r = needChart(ctx);
   if (r.env) return r.env;
-  const title = String(t ?? '').trim().replace(/^["'“”]+|["'“”]+$/g, '');
+  const title = String(t ?? '').trim().replace(/[\s,]+(?:pls|plz|please|thanks|thank you|thx|for me|and also|then|too)\W*$/i, '').replace(/^["'“”]+|["'“”]+$/g, '');   // "call it Fruit pls": politeness is no part of the title
   if (!title) return no('unsupported', 'What should the chart be called?');
   r.c.title = cap(title);
   return done(ctx, `OK, the chart is called "${r.c.title}".`);
@@ -572,6 +572,8 @@ function _setColor(ctx, { c: name, shade, label }) {
   if (!hex) return no('unsupported', `I do not know the color ${sp(name)}. Try red, orange, yellow, green, blue, purple, pink, teal or gray.`);
   const c = r.c;
   const word = `${shade ? `${shade} ` : ''}${name}`;
+  // a structure word ("the bars", "the whole chart") named as the label: the whole chart, as when the charts world read the sentence itself
+  if (label && /^(?:the |my |all |all the )*(?:it|them|everything|all|bars?|columns?|lines?|chart|graph|pie|slices|points|dots)$/i.test(String(label).trim())) label = null;
   if (label) {
     const i = find(c, label);
     if (i < 0) return notThere(c, label);

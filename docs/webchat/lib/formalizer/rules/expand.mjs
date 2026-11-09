@@ -60,6 +60,29 @@ function align(A, B, whole) {
   return { from: n - k, to: n, scope: k > 1 ? 'object' : 'value', ambiguous: n <= 2 };
 }
 
+/** A bare answer to a yes/no question: a list of them ("yes, no, I don't know, maybe") is a sequence of answers, never "no" correcting "yes". */
+const BARE_ANSWER = /^(yes|yeah|yep|yup|yea|no|nope|nah|maybe|perhaps|probably|sometimes|idk|i dont know|i do not know|dont know|do not know|not sure|unsure|i am not sure|im not sure|i guess|sort of|kind of|kinda)$/;
+const isBareAnswer = (toks) => BARE_ANSWER.test(toks.map((t) => t.lower.replace(/'/g, '')).join(' '));
+
+const ANSWER_WORDS = ['i dont know', 'i do not know', 'dont know', 'do not know', 'i am not sure', 'im not sure', 'not sure', 'sort of', 'kind of', 'i guess',
+  'yes', 'yeah', 'yep', 'yup', 'yea', 'no', 'nope', 'nah', 'maybe', 'perhaps', 'probably', 'sometimes', 'idk', 'unsure', 'kinda'];
+
+/**
+ * A message made only of bare answers without separators ("yes no maybe idk") is a sequence of answers: the commas are put in.
+ * Anything else, and a single answer, is returned unchanged.
+ */
+export function splitAnswerList(text) {
+  const words = String(text).toLowerCase().replace(/'/g, '').replace(/[.!?]+$/g, '').trim().split(/\s+/).filter(Boolean);
+  if (words.length < 2 || words.some((w) => /[,;]/.test(w))) return text;
+  const out = [];
+  for (let i = 0; i < words.length;) {
+    const hit = ANSWER_WORDS.find((a) => { const n = a.split(' '); return n.every((x, k) => words[i + k] === x); });
+    if (!hit) return text;
+    out.push(hit); i += hit.split(' ').length;
+  }
+  return out.length > 1 ? out.join(', ') : text;
+}
+
 const LEAD_ONLY = new Set(['no', 'not', 'wait', 'sorry', 'oops', 'actually', 'hmm', 'hm', 'um', 'uh', 'er', 'oh', 'ah', 'hold', 'on', 'well', 'ok', 'okay', 'my', 'bad', 'mistake', 'a', 'second', 'sec', 'whoops', 'ugh']);
 
 /**
@@ -83,6 +106,7 @@ export function selfCorrect(tokens, { whole = false } = {}) {
     const before = toks.slice(0, found.i);
     while (before.length && before[before.length - 1].lower === ',') before.pop();
     let after = toks.slice(found.i + found.len);
+    if (found.len === 1 && ['and', 'then'].includes(after[0]?.lower) && isBareAnswer(before.filter(isWord).slice(-1))) return null;   // "yes, no and what is 2 plus 2": "no" is an answer joined by "and"
     while (after.length && (after[0].lower === ',' || after[0].lower === 'and')) after = after.slice(1);
     // the correction runs up to the next separator
     const cut = after.findIndex((t) => t.lower === ',' || t.lower === 'then');
@@ -102,6 +126,7 @@ export function selfCorrect(tokens, { whole = false } = {}) {
     if (A.every((t) => LEAD_ONLY.has(t.lower))) return null;
     const B = corr.filter(isWord);
     if (!B.length) return null;
+    if (found.len === 1 && isBareAnswer(A) && isBareAnswer(B)) return null;   // only the single word marker ("yes, no, maybe"); "no wait" and "I mean" always correct
     const al = align(A, B, whole);
     const gone = A.slice(al.from, al.to);
     const a0 = clause.indexOf(A[al.from]), a1 = clause.indexOf(A[al.to - 1]) + 1;

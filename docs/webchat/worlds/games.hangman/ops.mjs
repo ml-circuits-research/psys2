@@ -151,6 +151,6 @@ export function status(ctx) {
   if (s.status === 'idle') return no('missing', NOT_PLAYING);
   const letters = s.guessed.filter((x) => x.length === 1);
   const tried = letters.length ? ` Letters tried: ${letters.join(', ')}.` : '';
-  if (s.status !== 'playing') return ok(`The game is over: the word was ${s.word}.${tried}`);
+  if (s.status !== 'playing') return ok(`The game is over: the word was ${s.word}.${tried} ${s.wrongLeft} wrong ${s.wrongLeft === 1 ? 'guess' : 'guesses'} left.`);
   return ok(`${shown(s)} (${s.word.length} letters). ${s.wrongLeft} wrong ${s.wrongLeft === 1 ? 'guess' : 'guesses'} left.${tried}`);
 }

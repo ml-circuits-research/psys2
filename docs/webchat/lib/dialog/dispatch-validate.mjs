@@ -51,8 +51,17 @@ export const DEFAULT_POLICY = {
   normalizerMinScore: -0.3,   // rewrites whose provider score (length-normalized log-probability) is lower are not tried; null = no threshold (tuned on dev and the fresh batches, N1)
   valueLost: 'unknown',        // which unknown source words must survive a rewrite: 'unknown' (all words the world does not know: names, junk) or 'capitalized' (only capitalized ones)
   checkValues: true,          // a rewrite must also keep numbers, colours, negation, quoted text and the value words of the piece (src/dialog/value-check.mjs)
+  validFirst: true,           // G7: a piece's best reading is a valid one even when an invalid reading of a more probable world scores higher ("new game" read by the shell, not by the game the model named)
+  splitRepair: 3,             // G7: a piece nobody reads is cut into 2 (or 3, when 3) parts that the rules read, in one world; 0 = off
+  mergeRepair: 2,             // G7: how many merges of two pieces cut apart inside a clause (no punctuation or connective between) are tried as extra segmentations; 0 = off
   intersegmentContext: true,  // pieces after the first run in a session where the earlier chosen pieces were committed
 };
+
+/** Connectives that end a clause without belonging to it ("remove pears and also", "mark Rome, then"). */
+const TRAILING_CONNECTIVE = /[\s,;]+(?:and then|and also|and after that|and finally|then also|also then|after that|and|then|also|plus|afterwards|finally|but)[\s,;]*$/i;
+
+/** Words that start a continuation of the previous clause, never a command. */
+const CONTINUES_CLAUSE = /^(?:it|its|this|them|those|these|he|she|they|in|on|at|to|of|for|with|from|by|near|into|onto|than|as|that|which|who|about|after|before|under|over|between|inside|around)$/i;
 
 const clip = (s, n = 80) => (String(s).length > n ? String(s).slice(0, n - 1) + '…' : String(s));
 
@@ -79,9 +88,13 @@ export function normalizePrediction(pred) {
     return { world: String(w.world ?? w.id), score: toProb(w.score ?? w.p ?? w.prob ?? 0) };
   }).filter((w) => w.world && w.world !== 'undefined').sort((a, b) => b.score - a.score);
   const normSeg = (s) => {
-    const st = Number.isInteger(s.start) ? s.start : 0;
-    const en = Number.isInteger(s.end) ? s.end : text.length;
-    const piece = { start: st, end: en, text: typeof s.text === 'string' ? s.text : text.slice(st, en), worlds: normWorlds(s.worlds ?? s.candidates) };
+    let st = Number.isInteger(s.start) ? s.start : 0;
+    let en = Number.isInteger(s.end) ? s.end : text.length;
+    let ptext = typeof s.text === 'string' ? s.text : text.slice(st, en);
+    // a connective glued to the end of a piece ("remove pears and also") joins it to the next piece; it is never part of this piece's words
+    const tail = ptext.match(TRAILING_CONNECTIVE);
+    if (tail && ptext.slice(0, tail.index).trim()) { ptext = ptext.slice(0, tail.index); if (en - st >= ptext.length) en = st + ptext.length; }
+    const piece = { start: st, end: en, text: ptext, worlds: normWorlds(s.worlds ?? s.candidates) };
     if (typeof s.simplified === 'string' && s.simplified.trim() && s.simplified.trim() !== piece.text.trim()) piece.simplified = s.simplified.trim();
     return piece;
   };
@@ -181,7 +194,10 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
           if (!useInterpreter) continue;
           try {
             const r = engine.interp.resolve(session.isession, w);
-            if (r) { rec.statuses.push(r.status); if (r.status === 'unsupported' || r.status === 'error') { rec.notes.push(`${r.status}: ${r.envelope?.note ?? ''}`.trim()); rec.reasons.push(r.envelope?.reason ?? (r.status === 'error' ? 'execution_error' : 'unsupported_operation')); } }
+            if (r) { rec.statuses.push(r.status);
+              // an operation that names a thing it does not know ("I do not see tempo in the chart", status missing) marks a weak reading too, whatever its status
+              if (r.status === 'missing' && r.envelope?.reason === 'unknown_argument') { rec.notes.push(`missing: ${r.envelope?.note ?? ''}`.trim()); rec.reasons.push('unknown_argument'); }
+              if (r.status === 'unsupported' || r.status === 'error') { rec.notes.push(`${r.status}: ${r.envelope?.note ?? ''}`.trim()); rec.reasons.push(r.envelope?.reason ?? (r.status === 'error' ? 'execution_error' : 'unsupported_operation')); } }
           } catch (e) { rec.statuses.push('error'); rec.reasons.push('execution_error'); rec.notes.push(`error: ${e.message}`); }
         }
       }
@@ -365,7 +381,7 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
       }
       // best attempt: highest score; ties (within tieEps) between different worlds go to the routing policy
       let best = null;
-      const order = [...attempts].sort((a, b) => b.score - a.score || a.rank - b.rank || (a.variant === 'original' ? -1 : 1));
+      const order = [...attempts].sort((a, b) => (o.validFirst ? Number(!!b.valid) - Number(!!a.valid) : 0) || b.score - a.score || a.rank - b.rank || (a.variant === 'original' ? -1 : 1));
       best = order[0] ?? null;
       let tie = null;
       if (best?.valid) {
@@ -383,7 +399,9 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
       pieces.push({ index: pi, start: piece.start, end: piece.end, text: piece.text, simplified: piece.simplified ?? null, ...(normalizerStatus ? { normalizerStatus } : {}), attempts: attempts.map(({ wires, ...a }) => ({ ...a, wires: wires.length })),
         chosen: best ? { world: best.world, rank: best.rank, variant: best.variant, text: best.text, valid: best.valid, fallback: !!best.fallback, score: best.score, wires: best.wires, corrections: best.corrections, partial: best.partial } : null, valid: !!best?.valid, tie });
     }
-    return { index: seg.index, dispatcherScore: seg.score, score: total, tier: tierOf(pieces, pred.text), valid: pieces.length > 0 && pieces.every((p) => p.valid), nInvalid: pieces.filter((p) => !p.valid).length, pieces };
+    // a split repair was read part by part by the rules: the weak-cut class (3) does not apply to it
+    const tier = seg.split && pieces.every((p) => p.valid) ? Math.min(2, tierOf(pieces, pred.text)) : tierOf(pieces, pred.text);
+    return { index: seg.index, dispatcherScore: seg.score, score: total, tier, valid: pieces.length > 0 && pieces.every((p) => p.valid), nInvalid: pieces.filter((p) => !p.valid).length, pieces };
   };
 
   /** Validate one prediction. `override` replaces policy fields for this call only. */
@@ -396,6 +414,71 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
     for (const seg of segs) evals.push(await evalSegmentation(pred, seg, o, false));
     if (normalizer && o.tryNormalizer && evals.every((e) => e.tier > 1)) {
       for (const [i, seg] of segs.entries()) if (seg.index < o.normalizerSegmentations) evals[i] = await evalSegmentation(pred, seg, o, true);
+    }
+    // merge repair (G7): two pieces cut apart inside a clause ("play hangman word" | "lion") are also tried as one piece; the tier and the score then decide
+    const lead = [...evals].sort((a, b) => a.tier - b.tier || b.score - a.score || a.index - b.index)[0];
+    if (o.mergeRepair && lead && segs[lead.index]) {
+      const top = segs[lead.index];
+      let tried = 0;
+      for (let i = 0; i + 1 < top.segments.length && tried < o.mergeRepair; i++) {
+        const a = top.segments[i], b = top.segments[i + 1];
+        const gap = pred.text.slice(a.end, b.start);
+        if (DELIMITED.test(gap) || DELIMITED.test(a.text.slice(-1)) || /^(and|then|also|but|or|next)\b/i.test(b.text)) continue;
+        if (b.text.trim().split(/\s+/).length > 2) continue;   // only a short fragment is an argument cut off its command; a longer piece is a command of its own ("add a paragraph hello world")
+        const seen = new Map();
+        for (const w of [...a.worlds, ...b.worlds]) if (!seen.has(w.world) || seen.get(w.world).score < w.score) seen.set(w.world, w);
+        const merged = { start: a.start, end: b.end, text: pred.text.slice(a.start, b.end), worlds: [...seen.values()].sort((x, y) => y.score - x.score) };
+        const variant = { index: evals.length, score: lead.dispatcherScore ?? top.score, segments: [...top.segments.slice(0, i), merged, ...top.segments.slice(i + 2)], merged: true };
+        const ev = await evalSegmentation(pred, variant, o, false);
+        if (ev.valid) evals.push(ev);   // a repair only counts when every piece is read
+        tried++;
+      }
+    }
+    // split repair (G7): a piece nobody reads that is a run of commands without separators ("new game center top left") is cut into the fewest parts
+    // that the rules read, all in the same candidate world; the result competes as one more segmentation
+    const lead2 = [...evals].sort((a, b) => a.tier - b.tier || b.score - a.score || a.index - b.index)[0];
+    if (o.splitRepair && lead2 && lead2.tier >= 3 && lead2.pieces.some((p) => !p.valid) && segs[lead2.index > segs.length - 1 ? 0 : lead2.index]) {
+      const baseSeg = lead2.index < segs.length ? segs[lead2.index] : { ...segs[0], segments: lead2.pieces.map((p) => ({ start: p.start, end: p.end, text: p.text, worlds: segs[0].segments.find((q) => q.start <= p.start && q.end >= p.end)?.worlds ?? [] })) };
+      const bad = lead2.pieces.findIndex((p) => !p.valid);
+      const piece0 = baseSeg.segments[bad];
+      // candidate worlds of the parts: the piece's own, then those the model named for pieces of the other segmentations that overlap it (the shell reads "new game")
+      const pool = new Map();
+      for (const w of piece0?.worlds ?? []) pool.set(w.world, w);
+      for (const g of segs) for (const q of g.segments) if (piece0 && q.start < piece0.end && q.end > piece0.start) for (const w of q.worlds) if (!pool.has(w.world)) pool.set(w.world, w);
+      const piece = piece0 && { ...piece0, worlds: [...pool.values()] };
+      const words = [...String(piece?.text ?? '').matchAll(/\S+/g)].map((m) => ({ s: m.index, e: m.index + m[0].length }));
+      if (piece && words.length >= 2 && words.length <= 9 && !/[,;]/.test(piece.text)) {
+        const okPart = async (w, text) => { const r = await check(pred.context, [], w, text, o); return r.valid || (o.acceptRefused && r.refused); };
+        const partText = (a, b) => piece.text.slice(words[a].s, words[b].e);
+        let found = null;
+        const cutSets = [];
+        for (let i = 1; i < words.length; i++) cutSets.push([i]);
+        if (o.splitRepair >= 3) for (let i = 1; i < words.length; i++) for (let j = i + 1; j < words.length; j++) cutSets.push([i, j]);
+        for (const cs of cutSets) {
+          const bounds = [0, ...cs, words.length];
+          const parts = bounds.slice(0, -1).map((b, k) => [b, bounds[k + 1] - 1]);
+          // a part that starts with a preposition continues the clause before it ("what time is it" | "in London right now"), it is no command of its own
+          if (parts.slice(1).some(([a]) => CONTINUES_CLAUSE.test(piece.text.slice(words[a].s, words[a].e)))) continue;
+          const withWorld = [];
+          for (const [a, b] of parts) {
+            let hit = null;
+            for (const w of piece.worlds.slice(0, 6)) if (await okPart(w.world, partText(a, b))) { hit = w; break; }
+            if (!hit) break;
+            withWorld.push([a, b, hit]);
+          }
+          if (withWorld.length === parts.length) {
+            // prefer the cut in which most parts are read by the world the model named for the piece (a fragment read by another world is the weaker reading)
+            const own = withWorld.filter(([, , h]) => h.world === piece.worlds[0].world).length;
+            if (!found || own > found.own) found = { parts: withWorld, own };
+          }
+        }
+        if (found) {
+          const pieces2 = found.parts.map(([a, b, hit]) => ({ start: piece.start + words[a].s, end: piece.start + words[b].e, text: partText(a, b), worlds: [hit, ...piece.worlds.filter((x) => x.world !== hit.world)] }));
+          const variant = { index: evals.length, score: lead2.dispatcherScore ?? baseSeg.score, segments: [...baseSeg.segments.slice(0, bad), ...pieces2, ...baseSeg.segments.slice(bad + 1)], split: true };
+          const ev = await evalSegmentation(pred, variant, o, false);
+          if (ev.valid) evals.push(ev);
+        }
+      }
     }
     // winner: lowest validity class first (complete before partial, original/spell before generated); within a class the best total score; ties keep the dispatcher's order
     const ranked = [...evals].sort((a, b) => a.tier - b.tier || b.score - a.score || a.index - b.index);

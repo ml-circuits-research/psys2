@@ -80,15 +80,23 @@ export function vocabularyOf(set) {
     const freq = new Map();   // how often each word occurs in the patterns and lexicons: the last tie-break of typo correction
     vocab.freq = freq;
     const add = (w) => { if (w) { const l = w.toLowerCase(); vocab.add(l); freq.set(l, (freq.get(l) ?? 0) + 1); } };
+    const lex = lexIndex(set);
+    const usedPhrases = new Set();
     for (const { p } of allPatterns(set)) {
       const c = compiled(p, set).compiled;
       if (!c) continue;
       for (const el of c.elements) {
         if (el.t === 'lit') el.words.forEach(add);
-        else if (el.t === 'alt') el.alts.forEach((alt) => alt.forEach(add));
+        else if (el.t === 'alt') {
+          // the words of a phrase macro count ONCE per phrase (below), not once per pattern that uses it: a 350-alternative lead-in used by 300
+          // patterns would otherwise make every word in it (try, sry ...) look 300 times as frequent as the world's own nouns (typo tie-breaks)
+          const inMacro = new Set();
+          for (const id of el.macros ?? []) { usedPhrases.add(id); for (const a of lex.phrases.get(id)?.alts ?? []) inMacro.add(a.join('_')); }
+          for (const alt of el.alts) if (!inMacro.has(alt.join('_'))) alt.forEach(add);
+        }
       }
     }
-    const lex = lexIndex(set);
+    for (const id of usedPhrases) for (const alt of lex.phrases.get(id)?.alts ?? []) alt.forEach(add);
     for (const l of lex.lexicons.values()) for (const w of l.words) for (const part of w.split('_')) add(part);
     for (const [s, pl] of lex.plurals) { add(s); add(pl); }
     return vocab;
@@ -465,6 +473,68 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     return null;
   };
 
+  /**
+   * A free-text slot (rest, words) that swallowed "and a list: milk, eggs" / "and add a list ...": when the words after the connective are
+   * a command of another kind of the SAME world (read with its own verb, or with the verb of the head: verb ellipsis), the sentence is
+   * two commands (spec 03 section 1c, "A swallowing free-text slot"). The head must also parse without the tail. Same kind of command
+   * ("add a paragraph salt and a pinch of pepper": a second paragraph pattern) stays one text. Recursive for the rest of the sentence.
+   */
+  const splitSwallowedCommand = (tokens, whole) => {
+    if (!whole?.match) return null;
+    const worldId = whole.match.worldId;
+    const slots = Object.values(whole.match.slots ?? {}).filter((sl) => sl.class === 'words' || sl.class === 'rest');
+    const inSlot = (t) => slots.some((sl) => t.start >= sl.span[0] && t.end <= sl.span[1]);
+    const cuts = [];
+    tokens.forEach((t, i) => { if ((t.lower === 'and' || t.lower === 'then') && i > 0 && i < tokens.length - 1 && inSlot(t) && !(i > 0 && tokens[i - 1].lower === 'and' && t.lower === 'then')) cuts.push(i); });
+    if (!cuts.length) return null;
+    const trim = (ts) => { let a = ts; while (a.length > 1 && (a[0].lower === 'then' || a[0].lower === 'and' || a[0].lower === ',')) a = a.slice(1); while (a.length && a[a.length - 1].lower === ',') a = a.slice(0, -1); return a; };
+    const spanOf = (ts) => [ts[0].start, ts[ts.length - 1].end];
+    // each command must be read by a pattern at least as specific as the one that swallowed the connective (a typed "between X and Y" reading is never cut)
+    const read = (ts, copied) => {
+      const r = tryClauses([{ tokens: ts.filter((t) => t.kind !== 'punct' || t.lower === ':' || t.lower === ','), span: spanOf(ts), guard: true, info: { kind: 'swallowed-command', source: spanOf(tokens), copied } }], worldId);
+      return r && r.every((g) => g.match.priority >= whole.match.priority) ? r : null;
+    };
+    // clauses between the accepted cuts; a cut is accepted when the words after it are a command of this world
+    const actionOf = (id) => /action=(\S+)/.exec(patternById(set).get(id)?.emit ?? '')?.[1] ?? id;
+    const parts = [];   // { toks, seg }
+    let start = 0, prevPattern = null;
+    const snap0 = form.snapshot();
+    const fail = () => { form.restore(snap0); return null; };
+    const cutList = [...cuts, tokens.length];
+    for (let k = 0; k < cutList.length; k++) {
+      const end = cutList[k];
+      const here = trim(tokens.slice(start, end));
+      if (!here.some(isContent)) { start = end + 1; continue; }
+      let seg = null, snapHere = form.snapshot();
+      if (parts.length === 0) { seg = read(here, []); if (!seg) return fail(); }
+      else {
+        const snap = snapHere;
+        const variants = [{ ts: here, copied: [], own: true }, ...[...ellipsisPrefixes(parts[0].toks)].map((pre) => ({ ts: [...pre, ...here], copied: [[pre[0].start, pre[pre.length - 1].end]], own: false }))];
+        for (const v of variants) {
+          const r = read(v.ts, v.copied);
+          if (!r) { form.restore(snap); continue; }
+          if (!v.own && actionOf(r[0].match.patternId) === prevPattern) { form.restore(snap); continue; }   // the same kind of command by ellipsis: still one text ("salt and a pinch of pepper")
+          seg = r; break;
+        }
+        if (!seg) {   // this connective is part of the text: the words belong to the previous command, which is read again with them
+          const last = parts.pop();
+          form.restore(last.snap);
+          const merged = trim(tokens.slice(parts.length ? last.from : 0, end));
+          const again = read(merged, []);
+          if (!again) return fail();
+          parts.push({ toks: parts.length ? last.toks : merged, from: last.from, seg: again, snap: last.snap });
+          prevPattern = actionOf(again[0].match.patternId);
+          start = end + 1;
+          continue;
+        }
+      }
+      parts.push({ toks: here, from: start, seg, snap: snapHere });
+      prevPattern = actionOf(seg[0].match.patternId);
+      start = end + 1;
+    }
+    return parts.length > 1 ? parts.flatMap((p) => p.seg) : fail();
+  };
+
   const readSentencePlain = (s, tokens) => {
     const whole = readGroup(tokens, s.isQuestion);
     const clauses = splitClauses(tokens);
@@ -481,6 +551,8 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
         const trailingQuestions = clauses.slice(1).every((c) => QUESTION_WORDS.has(firstWord(c)));
         if (parts.every((p) => !p.unparsed && (p.match?.priority ?? 0) >= (whole.match?.priority ?? 0) && (sameWorld(p) || trailingQuestions)) && (parts.slice(1).every(sameWorld) || trailingQuestions)) return { done: parts, fallback: null };
       }
+      const cut = splitSwallowedCommand(tokens, whole);
+      if (cut) return { done: cut, fallback: null };
       return { done: [{ ...whole, span: s.span, text: s.text }], fallback: null };
     }
     // an indirect question ("tell me what is 3 plus 4"): read the bare question (the original was tried first)

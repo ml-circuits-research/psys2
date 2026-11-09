@@ -21,7 +21,7 @@ import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mj
 import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs';
 import { checkValues } from './value-check.mjs';
 import { Discourse } from './discourse.mjs';
-import { correctMessage } from '../formalizer/rules/expand.mjs';
+import { correctMessage, splitAnswerList } from '../formalizer/rules/expand.mjs';
 
 export { runWorldTests } from './test-runner.mjs';
 
@@ -454,7 +454,7 @@ export class DialogSession {
     this.sources.set(sid, { original: text, english, lang, alignment: translation?.alignment });
     // Correction phase (spec 03 section 1c, review G2): "knight to f3, no, knight to c3" is resolved on the whole message, before the
     // modal interceptors, discourse, segmentation and routing, so the abandoned variant never has an effect.
-    english = engine.interp.lang.stripFiller(english) || english;   // "lol ok and ...", "uhh and a pig?": leading hesitation never reaches a world
+    english = splitAnswerList(engine.interp.lang.stripFiller(english) || english);   // "lol ok and ...", "uhh and a pig?": leading hesitation never reaches a world
     const selfCorrections = await perf.time('correct', () => this._correct(english));
     if (selfCorrections.corrections.length) english = selfCorrections.text;
 
@@ -508,6 +508,7 @@ export class DialogSession {
     const answerWires = [];
     let followTab = null;   // tab of the last world that gave a supported answer (tab follow, spec 07 section 6)
     const fillerOnly = (t) => { const w = t.toLowerCase().match(/[\p{L}']+/gu) ?? []; return w.length > 0 && w.every((x) => FUNCTION_WORDS.has(x)); };
+    let segNo = 0;
     for (const seg of segments) {
       // a leftover made only of filler words ("also", "and", "please") next to something that was understood is not worth an error
       if (seg.unparsed && (partial ?? this.partial) && fillerOnly(seg.text) && segments.some((x) => !x.unparsed)) continue;
@@ -553,6 +554,7 @@ export class DialogSession {
         continue;
       }
       this.isession.add(seg.wires);
+      this.isession.batch = { index: segNo++, count: segments.length };   // ops see their place in the message (a game's host cannot answer between two commands of one message)
       const statements = [];
       for (const w of seg.wires) {
         const r = interp.resolve(this.isession, w);
@@ -560,7 +562,7 @@ export class DialogSession {
         const rendered = interp.render(this.isession, r);
         lines.push([T(rendered)]);
         statuses.push(r.status);
-        if (r.status === 'supported') { const wid = seg.match?.worldId; const t = set.get(wid)?.tab?.id ?? BUILTIN_TAB[wid]; if (t) followTab = t; }
+        if (r.status === 'supported') { const wid = seg.match?.worldId; const t = set.get(wid)?.tab?.id ?? BUILTIN_TAB[wid]; if (wid === 'ui.shell') followTab = null; else if (t) followTab = t; }   // an explicit navigation later in the message wins over the tab of an earlier segment
         ops.push(...r.ops);
         disc.noteTurn(seg, rendered, this._msg);
         if (r.status === 'supported') { const fr = disc.recordFrame(seg, this._msg); if (fr) { fr.reply = rendered; fr.value = r.envelope?.value ?? null; fr.opId = r.ops[0]?.op ?? null; } }
@@ -579,6 +581,7 @@ export class DialogSession {
         lines.push([T(`This could also be read in another way (${titles.join(', ')}); I used the `), { text: `"${used}"`, translate: false, quote: true }, T(' reading.')]);
       }
     }
+    this.isession.batch = null;
     for (const seg of segments) {
       if (!seg.corrections?.length || seg.unparsed) continue;
       const line = [T('(I read ')];
