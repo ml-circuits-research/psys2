@@ -118,7 +118,7 @@ export function stem(w) {
   if (/ed$/.test(s) && s.length > 4) { s = s.slice(0, -2); if (/(.)\1$/.test(s) && !/(ll|ss|zz)$/.test(s)) s = s.slice(0, -1); return s; }
   if (/(ch|sh|x|ss|zz)es$/.test(s)) return s.slice(0, -2);
   if (/ly$/.test(s) && s.length > 5) return s.slice(0, -2);
-  if (/s$/.test(s)) return s.slice(0, -1);
+  if (/s$/.test(s)) { s = s.slice(0, -1); return /e$/.test(s) && s.length > 4 ? s.slice(0, -1) : s; }   // plural and singular meet on the same stem (pebbles, pebble)
   if (/e$/.test(s) && s.length > 4) return s.slice(0, -1);
   return s;
 }
@@ -160,6 +160,40 @@ export function bm25Search(index, query, { limit = 10, only } = {}) {
   }
   hits.sort((a, b) => b.score - a.score || a.i - b.i);
   return { query: q, hits: hits.slice(0, limit), total: hits.length, all: hits };
+}
+
+/** Edit distance with a cap (insert, delete, replace, swap of neighbours). */
+function near(a, b, max) {
+  if (Math.abs(a.length - b.length) > max) return false;
+  const d = Array.from({ length: a.length + 1 }, (_, i) => [i, ...Array(b.length).fill(0)]);
+  for (let j = 1; j <= b.length; j++) d[0][j] = j;
+  for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) {
+    d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 1);
+  }
+  return d[a.length][b.length] <= max;
+}
+
+/**
+ * A query whose words are not in the document ("bred"): each unknown content word becomes the one word of the document within one edit
+ * (two for words of 7 letters or more); null when nothing changed or a word has no unique neighbour.
+ */
+export function correctQuery(index, query) {
+  let changed = false;
+  const out = [];
+  for (const w of words(query)) {
+    const s = stem(w);
+    if (STOP.has(w) || index.df.has(s) || w.length < 3) { out.push(w); continue; }
+    const max = w.length >= 7 ? 2 : 1;
+    // the closest word (one edit before two), then the most frequent one; a tie after that is no guess
+    let hits = [];
+    for (let m = 1; m <= max && !hits.length; m++) hits = [...index.df.keys()].filter((k) => k.length >= 3 && near(s, k, m));
+    const top = Math.max(0, ...hits.map((k) => index.df.get(k)));
+    hits = hits.filter((k) => index.df.get(k) === top);
+    if (hits.length !== 1) return null;
+    out.push(hits[0]); changed = true;
+  }
+  return changed ? out.join(' ') : null;
 }
 
 // ---- TF-IDF keywords (paragraphs are the documents) ------------------------------------------------------------

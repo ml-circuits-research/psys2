@@ -758,3 +758,10 @@ function settingChange(fn) {
     return r;
   };
 }
+
+/** Topic return (spec 11 section 7): what is going on in the music world. */
+export function topicSummary(ctx) {
+  const s = ctx.state, c = s.current;
+  if (!c) return `Nothing has been played yet; the instrument is ${instName(s.instrument)}.`;
+  return `${s.playing ? 'Now playing' : 'Last played'} ${c.title ?? c.kind} in ${c.key ?? s.key} on ${withThe(instName(s.instrument))}, at ${s.tempo} beats per minute.`;
+}

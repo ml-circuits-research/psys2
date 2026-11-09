@@ -15,12 +15,13 @@
  * Both return `{ res, info }`, where `res` has the shape of a formalizer result and `info` is the provenance for the trace.
  */
 import { restrictedSet } from '../formalizer/spell.mjs';
+import { SHORT_TYPOS } from '../formalizer/rules/normalize.mjs';
 import { classify, resolveReference, describeReferent, chooseOption, plain } from './meta.mjs';
 
 export const FRAME_LIMIT = 5;
 
 /** Worlds whose commands are never remembered as frames: navigation, help, games (own state machines), shared vocabulary. */
-const NO_FRAME = (w) => !w || w === 'ui.shell' || w === 'ui.help' || w === 'kids.common' || w === 'core' || w.startsWith('games.');
+const NO_FRAME = (w) => !w || w === 'ui.shell' || w === 'kids.common' || w === 'core' || w.startsWith('games.');
 
 /** Worlds that never count as a conversation topic and whose state changes are not "actions" (navigation, help, shared vocabulary). */
 const NO_TOPIC = new Set(['ui.shell', 'ui.help', 'kids.common', 'core']);
@@ -30,6 +31,12 @@ const BUILTIN_TAB = { 'ui.avatar': 'robot', 'docs.editor': 'editor', 'games.tict
 const META_SKIP = new Set(['add', 'remove', 'delete', 'show', 'open', 'what', 'who', 'where', 'when', 'why', 'how', 'undo', 'redo', 'draw', 'play', 'tell', 'is', 'are', 'can', 'do', 'does', 'please', 'make', 'go', 'clear', 'cross', 'check']);
 /** A modifying command that points at one thing by a bare noun ("make the house red", "delete the tree"). */
 const AMBIGUOUS_VERB = /^(?:please\s+|can you\s+|could you\s+|will you\s+)?(?:make|paint|colou?r|move|delete|remove|erase|resize|turn|flip|rotate|copy|duplicate|select|change|shrink|grow|enlarge)\s+(the|that|this)\s+([a-z]+)\b/i;
+
+const QUESTION_START = /^(?:what|who|whom|whose|where|when|why|how|which|is|are|was|were|does|do|did|can|could|will|would|should)\b/i;
+const IMPERATIVE_START = /^(?:please\s+)?(?!(?:i|we|you|my|the|a|an|no|nope|wait|sorry)\b)[a-z]+\b/i;
+
+/** Patterns that only ask for a missing subject (`pat.<world>.ask.*`, spec 11 section 3): not a reading of the sentence. */
+const CLARIFY_PATTERN = /\.ask\./;
 
 const ORDINAL_RE = /^the (?:first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|last) /;
 
@@ -78,6 +85,7 @@ export class Discourse {
     this.lastAnswer = null;   // { text, turn }: the last reply that was not itself a repeat or an explanation
     this.lastByWorld = {};    // world id -> { text, reply, turn } (topic return)
     this.topics = [];         // worlds the conversation was about, newest first
+    this.icptTurn = null;     // the newest turn a modal interceptor answered: { turn, text, reply, world } (explain)
     this.list = null;         // list-entry mode (spec 11 section 10): { list, world, n }; unlike `pending` it repeats until "that's all"
   }
 
@@ -117,7 +125,7 @@ export class Discourse {
   openFill(seg, envelope, question, turn) {
     const p = envelope?.pending;
     if (!p || !seg.match) return null;
-    this.pending = { type: 'fill', world: seg.match.worldId, patternId: seg.match.patternId, text: seg.text.trim().replace(/[?!.]+$/g, ''), key: p.key ?? null, expected: p.type ?? null, op: envelope.via ?? null, question, turn };
+    this.pending = { type: 'fill', world: p.world ?? seg.match.worldId, patternId: seg.match.patternId, text: seg.text.trim().replace(/[?!.]+$/g, ''), template: p.template ?? null, key: p.key ?? null, expected: p.type ?? null, op: envelope.via ?? null, question, turn };
     return this.pending;
   }
 
@@ -162,7 +170,9 @@ export class Discourse {
     const reply = String(text).trim().replace(/[?!.]+$/g, '');
     if (!reply) return null;
     const opts = this._opts(sid);
-    for (const candidate of [`${pending.text} ${reply}`, reply]) {
+    // `template` ("how many legs does <x> have"): the operation that asked says how the answer completes the sentence
+    const cands = [...(pending.template ? [pending.template.replace('<x>', reply)] : []), `${pending.text} ${reply}`, reply];
+    for (const candidate of cands) {
       const hit = await this._try(pending.world, candidate, opts);
       if (!hit || hit.res.segments[0].match.patternId === pending.patternId) { if (hit) this.dialog.isession.form.restore(hit.snap); continue; }
       return this._finish(hit, { kind: 'fill', of: pending.text, fragment: text, rewritten: candidate, world: pending.world, missing: pending.key, expected: pending.expected, question: pending.question });
@@ -177,6 +187,8 @@ export class Discourse {
     if (!frag || (frag.kind === 'bare' && !bare) || frag.content.length > 4) return null;
     if (frag.kind === 'bare' && SENTENCE_STARTERS.has(frag.content[0].toLowerCase())) return null;   // a full question or sentence, not a fragment
     const opts = this._opts(sid);
+    // a fragment that is a complete sentence of ANOTHER world ("now lets draw a house" after "open the story") is not a filler for a free-text slot
+    const own = frag.kind !== 'repeat' && frag.content.length >= 3 ? await this._readSeg(frag.content.join(' '), sid) : null;
     for (const frame of this.frames) {
       if (frag.kind === 'repeat') {
         const hit = await this._try(frame.world, frame.text, opts);
@@ -184,6 +196,8 @@ export class Discourse {
         continue;
       }
       for (const cand of this._candidates(frame, frag.content)) {
+        if (cand.wild && frag.kind === 'bare') continue;   // gibberish with no marker is no text for a free slot ("asdf qwer zxcv")
+        if (cand.wild && ((own && own.match?.worldId !== frame.world) || META_SKIP.has(frag.content[0].toLowerCase()) || /^lets?$/i.test(frag.content[0]))) continue;   // a command of its own is no text for a free slot
         const hit = await this._try(frame.world, cand.text, opts);
         if (!hit) continue;
         const seg = hit.res.segments[0];
@@ -202,10 +216,20 @@ export class Discourse {
    */
   async pronoun(text, sid) {
     if (!this.frames.length) return null;
+    text = String(text).replace(/[A-Za-z]+/g, (w) => SHORT_TYPOS[w.toLowerCase()] ?? w);   // chat spellings of short words ("mke it a siren")
     const m = String(text).match(/\b(it|that one|this one|that animal|this animal|that shape|this shape|that thing|this thing|them|those|these|that|this)\b/i);
     if (!m) return null;
-    if (await this._readSeg(text, sid)) return null;   // a sentence some world reads as it is stays as it is
+    const read = await this._readSeg(text, sid);
+    if (read && !CLARIFY_PATTERN.test(read.match?.patternId ?? '')) return null;   // a sentence some world reads as it is stays as it is (a clarification question lacking its subject is no reading)
     const opts = this._opts(sid);
+    // "what day comes after that?": "that" can be the answer just given ("5 days after Friday" is Wednesday)
+    if (/^(?:that|this|it)$/i.test(m[0]) && this.frames[0]?.value != null && !/^\d/.test(String(this.frames[0].value))) {
+      const frame = this.frames[0], np = String(frame.value);
+      const cand = String(text).slice(0, m.index) + np + String(text).slice(m.index + m[0].length);
+      const hit = await this._try(frame.world, cand, opts);
+      if (hit && hit.res.segments[0].match.patternId !== 'unknown' && !CLARIFY_PATTERN.test(hit.res.segments[0].match.patternId) && Object.values(hit.res.segments[0].match.slots ?? {}).some((sl) => String(sl.class).startsWith('lex.') && String(sl.text).toLowerCase() === np.toLowerCase())) return this._finish(hit, { kind: 'ellipsis', how: 'pronoun', pronoun: m[0], referent: np, of: frame.text, fragment: text, rewritten: cand, world: frame.world, frameTurn: frame.turn });
+      if (hit) this.dialog.isession.form.restore(hit.snap);
+    }
     for (const frame of this.frames) {
       for (const s of [...frame.slots].filter((x) => !['number', 'words', 'rest', 'recent'].includes(x.class)).sort((a, b) => b.start - a.start)) {
         const prev = wordsOf(frame.text.slice(0, s.start)).at(-1)?.toLowerCase();
@@ -226,6 +250,17 @@ export class Discourse {
     const lead = content[0].toLowerCase();
     const fragPrep = PREPOSITIONS.has(lead) && content.length > 1 ? lead : null;
     const wild = (s) => s.class === 'words' || s.class === 'rest';
+    // "the G major one" after "play the C major scale": "one" stands for the last noun of the request; the last noun phrase is replaced
+    if (!fragPrep && content.length >= 2 && /^ones?$/i.test(content.at(-1))) {
+      const fw = wordsOf(frame.text), noun = fw.at(-1);
+      let d = -1;
+      for (let i = fw.length - 2; i >= 0; i--) if (DETERMINERS.has(fw[i].toLowerCase())) { d = i; break; }
+      if (d >= 0 && noun) {
+        const np = [...content.slice(0, -1), noun].join(' ');
+        const out = [...fw.slice(0, d), np].join(' ') + (/\?$/.test(frame.text) ? '?' : '');
+        yield { text: out, slot: '*', cls: 'one', start: 0, end: out.length, wild: false, whole: true, direct: false };
+      }
+    }
     // A fragment that already is a complete sentence of the frame's world ("and the one before that", "and 9 minus 2") is tried on its own first.
     if (!fragPrep && content.length > 2) yield { text: content.join(' '), slot: '*', cls: 'sentence', start: 0, end: content.join(' ').length, wild: false, whole: true, direct: true };
     // A fragment that is itself a whole expression ("and 9 minus 2", "I meant 7 times 5", "half of 14") replaces the whole run of arguments
@@ -302,6 +337,36 @@ export class Discourse {
     const w = seg.match?.worldId;
     if (!w || seg.unparsed) return;
     this.lastByWorld[w] = { text: seg.text, reply: rendered, turn };
+    this.lastWorld = w;
+    if (!NO_TOPIC.has(w)) this.topics = [w, ...this.topics.filter((x) => x !== w)].slice(0, 6);
+  }
+
+  /**
+   * The world a tab belongs to (manifest `tab=` or the built-in tabs of the demo page).
+   */
+  tabWorld(tab) {
+    if (!tab) return null;
+    return this.dialog.engine.set.list().find((w) => (w.tab?.id ?? BUILTIN_TAB[w.id]) === tab && !NO_TOPIC.has(w.id))?.id ?? null;
+  }
+
+  /**
+   * Navigation is a conversation topic too: when a turn brought another tab forward, the world of that tab becomes the newest topic
+   * ("open the charts tab", "let's play hangman"), so "where were we?" can go back to it. A turn made of "back to <something>" that
+   * ended on another tab counts as an explicit return (a following "where were we?" stays there, spec 11 section 10).
+   */
+  noteNavigation({ text, tabBefore, tabAfter, turn }) {
+    if (!tabAfter || tabAfter === tabBefore) return;
+    const w = this.tabWorld(tabAfter);
+    if (!w) return;
+    this.topics = [w, ...this.topics.filter((x) => x !== w)].slice(0, 6);
+    if (!this.lastByWorld[w]) this.lastByWorld[w] = { text, reply: null, turn };
+    if (classify(text, { lang: this.lang })?.intent === 'topic') this.lastTopic = { world: w, turn };
+  }
+
+  /** A modal interceptor answered: the world is a topic and its last exchange is what a topic return summarises. */
+  noteWorld(w, text, reply, turn) {
+    if (!w) return;
+    this.lastByWorld[w] = { text, reply, turn };
     this.lastWorld = w;
     if (!NO_TOPIC.has(w)) this.topics = [w, ...this.topics.filter((x) => x !== w)].slice(0, 6);
   }
@@ -413,7 +478,9 @@ export class Discourse {
       const bare = BARE_YES_NO[t];
       if (bare && !this._gameAsksYesNo()) return { reply: `${bare === 'yes' ? 'Yes' : 'No'} to what? You can ask me a question, give me a command, or say "help" to see what I can do.`, info: { kind: 'bare', answer: bare } };
     }
-    const c = classify(text, { lang: this.lang, hasAction: !!this._repairable(), listMode: !!this.list });
+    // chat spellings of short words ("bk to the doc", "nxt") are read as the word for the recognizers; the sentence itself is passed on unchanged
+    const spelled = String(text).replace(/[A-Za-z]+/g, (w) => SHORT_TYPOS[w.toLowerCase()] ?? w);
+    const c = classify(spelled, { lang: this.lang, hasAction: !!this._repairable(), listMode: !!this.list });
     // a lone "lol" / "hmm" / "ok" is not a command and not a list item: nothing happens (no world gets to read it as a name, an item or a word)
     if (c?.intent === 'backchannel' && !pend && !this._gameAsksYesNo()) return { reply: 'Mm-hm. Tell me what you would like to do, or say "help".', status: 'unparsed', info: { kind: 'backchannel' } };
     // 2. list-entry mode: every plain item is added to the list until "that's all"
@@ -432,15 +499,15 @@ export class Discourse {
         case 'cancel': return this._cancel(pend);
         case 'feedback': return this._feedback(t);
         case 'repeat': return this._repeat();
-        case 'explain': return this._explain();
-        case 'topic': return this._topic(c.target, sid, c.digression);
+        case 'explain': return this._explain(t);
+        case 'topic': return this._topic(c.target, sid, c.digression) ?? await this._backTo(text, sid);
         case 'list.start': return this._listStart(c.list, sid);
         case 'degree': {
           // "a bit slower" may be a complete sentence of the open tab's world; only "more"/"less" and unread fragments continue the last frame
           if (c.degree.type !== 'more' && c.degree.type !== 'less') { const w = await this._tryAny(text, sid); const here = [d.context().tabWorld, d.context().lastWorld]; if (w && here.includes(w)) return null; }
           return this._degree(c.degree, sid);
         }
-        case 'repair': { const r = await this._repair({ how: c.how, content: c.content }, sid); if (r) return r; break; }
+        case 'repair': { const r = await this._repair({ how: c.how, content: c.content, restate: c.restate }, sid); if (r) return r; break; }
         default: break;
       }
     }
@@ -507,20 +574,32 @@ export class Discourse {
     return { reply: last.text, info: { kind: 'repeat', of: last.turn } };
   }
 
-  _explain() {
-    const a0 = this._repairable(6), a = a0?.readOnly ? null : a0;
+  _explain(t = '') {
+    // "what did you do?" asks about the last thing that CHANGED something (a question later on changed nothing); "why?" asks about the newest turn
+    const doing = /^what (?:did you|have you) (?:just )?(?:do|done|change)/.test(t);
+    const eff = (() => { const x = this._recentAction(6); return x && x.frames.some((fr) => !/\?$/.test(fr.text) && !QUESTION_START.test(fr.text)) ? x : null; })();
+    const a0 = doing && eff ? eff : this._repairable(6), a = a0?.readOnly ? null : a0;
     const f = a0?.frames[0] ?? this.frames[0];
+    const ic = this.icptTurn;
+    const sayText = (x) => String(x ?? '').trim().replace(/[.!\s]+$/, '');
+    // a modal interceptor answered the newest turn (docs.reader questions, avatar dictation ...): no frame, but the turn is explained the same way
+    if (ic && (!f || ic.turn > f.turn) && this.dialog._msg - ic.turn <= 6 && !(doing && eff && eff.turn > ic.turn)) {
+      const asked = sayText(ic.text);
+      const wasQuestion = /\?$/.test(ic.text) || QUESTION_START.test(asked);
+      const imperative = !wasQuestion && IMPERATIVE_START.test(asked);
+      const what = imperative ? `You asked me to ${asked.replace(/^please\s+/i, '').replace(/^(\w)/, (c) => c.toLowerCase())}` : `You said "${asked}"`;
+      return { reply: `${what}, so ${wasQuestion ? 'I answered it' : 'I did it'}. What I answered: ${ic.reply}`, info: { kind: 'explain', of: ic.text, world: ic.world, changed: [] } };
+    }
     if (!f) {
       // chat, navigation and games leave no frame: explain from the last thing this session said and answered
       const lw = this.lastByWorld[this.lastWorld];
       if (!lw) return null;
-      const said = String(lw.text ?? '').trim().replace(/[.!\s]+$/, '');
-      return { reply: `You said "${said}", so I answered it. What I answered: ${lw.reply}`, info: { kind: 'explain', of: lw.text, world: this.lastWorld, changed: [] } };
+      return { reply: `You said "${sayText(lw.text)}", so I answered it. What I answered: ${lw.reply}`, info: { kind: 'explain', of: lw.text, world: this.lastWorld, changed: [] } };
     }
     // plain wording for the user; ids (rule, operation) stay in info and the trace only
     const asked = String(f.text ?? '').trim().replace(/[.!\s]+$/, '');
-    const isQuestion = /\?$/.test(asked) || /^(?:what|who|whom|whose|where|when|why|how|which|is|are|was|were|does|do|did|can|could|will|would|should)\b/i.test(asked);
-    const imperative = !isQuestion && /^(?:please\s+)?[a-z]+\b/i.test(asked) && !/^(?:i|we|you|my|the|a|an)\b/i.test(asked);
+    const isQuestion = /\?$/.test(asked) || QUESTION_START.test(asked);
+    const imperative = !isQuestion && IMPERATIVE_START.test(asked);
     const what = imperative ? `You asked me to ${asked.replace(/^please\s+/i, '').replace(/^(\w)/, (c) => c.toLowerCase())}` : `You said "${asked}"`;
     const said = f.reply ? ` What I answered: ${f.reply}` : '';
     const reply = `${what}, so ${a ? 'I did it' : 'I answered it'}.${said}`;
@@ -559,15 +638,36 @@ export class Discourse {
     const w = set.get(world);
     const tab = w.tab?.id ?? BUILTIN_TAB[world] ?? null;
     if (tab && d.isession.state['ui.shell']?.activeTab !== tab) { try { interp.runAction(d.isession, 'ui.openTab', { tab }); } catch { /* the shell may be absent */ } }
-    const sum = interp.hook(d.isession, world, 'summary', {});
+    const sum = interp.hook(d.isession, world, 'topicSummary', {}) ?? interp.hook(d.isession, world, 'summary', {});
     const last = this.lastByWorld[world];
     const title = (w.title ?? world).replace(/\s*\(.*\)\s*$/, '');
     const parts = [`Back to ${title}.`];
     if (typeof sum === 'string' && sum) parts.push(sum);
+    else if (last && last.reply == null) parts.push('You were last here a moment ago.')
     else if (last) parts.push(`Last time you said "${last.text}" and I answered: ${last.reply}`);
     else parts.push('Nothing has happened there yet.');
     this.lastTopic = { world, turn: d._msg };
+    this.topics = [world, ...this.topics.filter((x) => x !== world)].slice(0, 6);
     return { reply: parts.join(' '), info: { kind: 'topic', world, target: target ?? null, tab } };
+  }
+
+  /**
+   * "back to the spider, how many legs does it have?" / "ok back to seasons, which season comes after summer": the words after "back to X," are the
+   * request; X names the subject ("it" means "the spider"), not a world. Tried in order: the request with the pronoun replaced, the request alone.
+   */
+  async _backTo(text, sid) {
+    const m = String(text).trim().match(/^(?:(?:ok|okay|so|and|now|well)[ ,]+)*(?:lets |let us )?(?:go |get |come )?back to (?:the |a |an |my )?([a-z][a-z -]*?)\s*[,:;-]\s*(.+?)[?.!]*$/i);
+    if (!m) return null;
+    const head = m[1].trim(), rest = m[2].trim();
+    const cands = [];
+    const pro = rest.match(/\b(it|that one|this one|that animal|this animal|that thing|this thing|them|those|these)\b/i);
+    if (pro) for (const det of ['a', 'the']) cands.push(rest.slice(0, pro.index) + `${det} ${head}` + rest.slice(pro.index + pro[0].length));
+    cands.push(rest);
+    for (const cand of cands) {
+      const seg = await this._readSeg(cand, sid);
+      if (seg && !CLARIFY_PATTERN.test(seg.match?.patternId ?? '')) return { rewrite: cand, info: { kind: 'topic.lead', head, rewritten: cand } };
+    }
+    return null;
   }
 
   // ---- list-entry mode ---------------------------------------------------------------------------------------------------------------
@@ -669,7 +769,7 @@ export class Discourse {
    * redo its sentence with the corrected argument. `how`: 'replace' (content replaces the argument slot that fits) or 'retarget'
    * (content is a reference such as "the other one"). Everything is undone again when no correction is understood.
    */
-  async _repair({ how, content, action = null, frame = null, undone = false }, sid) {
+  async _repair({ how, content, action = null, frame = null, undone = false, restate = false }, sid) {
     const d = this.dialog;
     const act = action ?? this._repairable();
     if (!act) return null;
@@ -700,7 +800,18 @@ export class Discourse {
     }
     if (!words.length) return giveUp();
     const opts = this._opts(sid);
-    for (const cand of this._candidates(f, words)) {
+    // a correction that changes the kind of request ("no, I meant the outline"): the words are a request of their own; tried after the slots
+    const restated = async () => {
+      if (how !== 'replace' || !content) return null;
+      const alone = await this._readSeg(String(content), sid);
+      if (!alone || CLARIFY_PATTERN.test(alone.match?.patternId ?? '')) return null;
+      if (!undone) { this.actions = this.actions.filter((x) => x !== act); this.frames = this.frames.filter((x) => x.turn !== act.turn); }
+      return { rewrite: content, prefix: act.readOnly ? 'OK.' : 'OK, I took that back.', info: { kind: 'repair', how: 'restate', of: f.text, fragment: content, undone: act.text } };
+    };
+    if (restate) { const r = await restated(); return r ?? giveUp(); }
+    const slotCands = [...this._candidates(f, words)];
+    slotCands.sort((a, b) => (a.direct ? 1 : 0) - (b.direct ? 1 : 0));   // a fragment replaces a slot of the old request before it is read as a request of its own
+    for (const cand of slotCands) {
       const hit = await this._try(f.world, cand.text, opts);
       if (!hit) continue;
       const seg = hit.res.segments[0];
@@ -709,7 +820,8 @@ export class Discourse {
       if (!undone) { this.actions = this.actions.filter((x) => x !== act); this.frames = this.frames.filter((x) => x.turn !== act.turn); }
       return { pre: this._finish(hit, { kind: 'repair', how, slot: cand.slot, of: f.text, fragment: content, rewritten: cand.text, world: f.world, frameTurn: f.turn, undone: act.text }), prefix: act.readOnly ? 'OK.' : 'OK, I took that back.' };
     }
-    return giveUp();
+    const r = await restated();
+    return r ?? giveUp();
   }
 
   // ---- references and choice questions ---------------------------------------------------------------------------------------------------
