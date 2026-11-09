@@ -254,6 +254,64 @@ Clicks on the avatar (gallery, presets, parts) run late, after the spoken answer
   - the same for a chess move while the engine thinks;
   - 0 console errors.
 
+### FREEZE — after a long voice session the fan spins, the tab freezes, and other tabs (even incognito) cannot use the mic (user, 21:18 local) — P0
+
+**What the user saw** (session `training/eval/real-phrases-2026-11-09e.jsonl`, 67 voice messages in about 10 minutes, mostly Romanian, with people talking in the room):
+- the system worked for a while, then slowed down;
+- the CPU fan started and the tab froze;
+- other tabs of the demo froze too;
+- the mic did not work even in a fresh incognito window;
+- the always-on state was remembered between sessions, so every newly opened tab started listening by itself.
+
+**Causes found by reading the code at ce60806.** Confirm each with a measurement and fix all of them.
+1. **The always-on mic is persisted** (`settings.handsFree` saved in localStorage). Every new tab of the demo starts continuous recognition on load.
+   - Chrome serves speech recognition from one browser-level service. Two tabs with continuous recognition abort each other.
+   - In `speech.mjs`, an `aborted` error is not counted as a failure (`lastErr` ignores `no-speech` and `aborted`), and an end after more than 500 ms is not "quick". So two tabs ping-pong forever: each restarts after 150 ms and aborts the other, with no backoff and no give-up.
+   - That keeps the browser's audio and speech service busy for all tabs and profiles, incognito included, which matches what the user saw.
+   - **Fix:**
+     - never persist the listening state; every page load starts with the mic off, and the user's click turns it on;
+     - count `aborted` and `audio-capture` as failures, so the backoff applies;
+     - use a cross-tab lock (`BroadcastChannel` + `navigator.locks`): only one tab of the demo may listen. A second tab shows "the microphone is in use in another tab — use it here?" and takes over only on a click.
+2. **Listening in a hidden tab.** There is no `visibilitychange` / `pagehide` handling. A background tab keeps listening and restarting.
+   - **Fix:** pause recognition and speech when the tab is hidden; resume only if it was on and the tab is visible again. Release everything on `pagehide`.
+3. **A new `SpeechRecognition` object on every restart** (`rec = new Recognition()`, every 150 ms to 5 s for the whole session).
+   - **Fix:** reuse one recognizer per page; remove all handlers from an old one before dropping it; cap restarts at 30 per minute, then pause with a visible reason.
+4. **The voice dry run is never cancelled.**
+   - `Promise.race([plausible(x), never(dryRunMs)])` stops waiting after 400 ms, but `dryRead` (translation plus full rule reading, synchronous on the main thread) keeps running.
+   - With an always-open mic and people talking in the room, every pause starts another one. Romanian noise takes seconds each, so the main thread saturates (fan, frozen tab).
+   - **Fix:** make `dryRead` cancellable and bounded (abort signal, leniency off, no translation through the browser API, at most one in flight, a newer interim text cancels the older run), or move it to a worker. Skip the dry run for texts longer than 25 words or with no world vocabulary.
+5. **A possible ORT restart spiral under load.** When the CPU is loaded, model calls miss their deadlines, the worker is terminated and its ~160 MB of sessions reload, which loads the CPU further. Check `__psys2Ort.stats.restarts` after the soak test below.
+   - **Fix:** a restart budget (at most 2 per 5 minutes, then the models pause and rules answer, shown in Settings › Models); deadlines scaled by measured device speed.
+
+**Soak test (required).** Headless Chrome at 4×, fake recogniser streaming a 30-minute mix: the user's 67 messages with their timings, plus random Romanian and English background talk every few seconds, the mic always on.
+- Assert flat memory (heap and worker count), main-thread busy below 50%, 0 watchdog endings, ORT restarts ≤ 2, and a responsive page (an input echo under 100 ms) at the end.
+- A second tab opened in the middle must not start listening and must not break the first.
+- Record the numbers in RESULTS.md.
+
+### NOISE — an always-open mic must ignore talk that is not for it (same session)
+
+With the mic always on, room talk reached the chat and got "I did not understand" replies: "să mi spună domnul bujii lui tata", "Dar cu cine vorbești ce vrei", "tata ce pot să zic", "unchiul", "voi", "faci tu", "enervant da", "scuze".
+- A spoken message with no complete reading, few or no world words, and no direct address is **ignored silently**. It is shown greyed in the queue as "ignored (not a command)", with a tap to send it anyway. The phrase log records `ignored`.
+- Typed messages are never ignored.
+- Questions to the assistant ("what can I say?", "ce pot să zic?") and messages with a world word go through normally.
+- Optional, in Settings › Voice: "Only respond when I say 'PSys2' / 'robotule'".
+- Tests: the room-talk lines above → ignored; every real command in the session → executed.
+
+### RP5 — Romanian voice failures from the same session
+
+Expected behaviour per case: `training/eval/expectations-2026-11-09e.jsonl` (21 cases). The main groups, as general fixes:
+- **Expressions:** "fii bucuros / vesel / trist / nervos / supărat / speriat / surprins" → the avatar's expression.
+- **Voice inflections:** "becoming emoji", "fiind copil" → become / be.
+- **Tic-tac-toe:** "x și zero" names it.
+- **Drawing:**
+  - "un sare" → soare (sound-alike on the Drawing tab);
+  - "un pește mic și albastru" (post-nominal coordinated adjectives);
+  - "mută peștele în apă" and its variants, plus "mută peștele" asking where;
+  - "desenează liniuță";
+  - "desenează o maimuță" → draw it or list the animals it can draw.
+- **Untranslated text.** The translation sometimes returns the Romanian text unchanged ("șterge peștii", "Fă o gură mare", "faci un robot pește" → status unknown). The rules translator must cover the app's own verbs and nouns, and an unchanged output must be retried through the rules translator.
+- **Diagram tab:** "desenează trei cercuri (în diagramă)" goes to art.draw. Tier T must apply after translation, and the words "diagramă" / "diagram" name the world.
+
 ### SMALL — follow-ups from the reviewer's browser check at 91ce510 (19:40 local)
 
 1. **SURPRISE pool.** The die button offered "I am a democrat." (a user.profile statement about politics). The pool must contain only requests and questions that do something visible or answer something.
@@ -666,7 +724,7 @@ The reviewer copied what is reusable into **`imports/diagram-vss-demo/`** (stagi
 **Licence:** settled. The project is now AGPL-3.0-only, the same as the source (user decision 14:10); keep the copied files' provenance headers.
 
 **Order from now on:**
-1. TEST-SPLIT (fast / full suites, max 3–4 agents), BUSY-LOST (land the missing app.mjs part), HANG3 (browser translator off the critical path), MIC2 + EOT2 + BUSY (always-open mic, queue, reliable button, end of turn, tabs grey while a turn runs), then DIAG2 + DIAG3 (Diagram world in the webchat, retrain, short ids, edges, rendering, parity), FB (thumbs up / down + feedback, remove Copy as text), then RP3 (phrase-log failures), then DBG (debug view per tab)
+1. FREEZE (mic persistence, cross-tab ping-pong, hidden tabs, dry-run CPU, ORT restart spiral; 30-minute soak test) + NOISE, then BUSY-LOST (land the missing app.mjs part), HANG3 (browser translator off the critical path), MIC2 + EOT2 + BUSY (always-open mic, queue, reliable button, end of turn, tabs grey while a turn runs), then DIAG2 + DIAG3 (Diagram world in the webchat, retrain, short ids, edges, rendering, parity), FB (thumbs up / down + feedback, remove Copy as text), then RP3 (phrase-log failures), then DBG (debug view per tab)
 2. SET (settings modal with tabs) + UI1 (one mic, tooltips) + DOC (greeting and docs), then VOICE (end of turn)
 3. ED (document editor commands)
 4. RD10 together with RD1b and RD2 (they share the mechanism)
