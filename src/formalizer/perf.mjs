@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /**
  * Per-message stage timing (PERF, spec 06 "Webchat" performance). Browser-safe: no `node:*` imports.
  *
@@ -7,6 +8,7 @@
  * Nested sends (the validator replays earlier messages in scratch sessions) do not open a record of their own; their time lands in the
  * `seed` stage. Outside a record every call is a no-op, so the cost when nobody looks is a null check.
  */
+import { guard } from './guard.mjs';
 const now = () => globalThis.performance?.now?.() ?? Date.now();
 let cur = null;
 
@@ -22,11 +24,13 @@ export const perf = {
   /** Counts an event without time. */
   count(stage, n = 1) { this.add(stage, 0, n); },
   async time(stage, fn) {
+    guard.check(stage);   // every timed stage is a cancellation point (turn guard)
     if (!cur) return fn();
     const t = now();
     try { return await fn(); } finally { this.add(stage, now() - t); }
   },
   timeSync(stage, fn) {
+    guard.check(stage);
     if (!cur) return fn();
     const t = now();
     try { return fn(); } finally { this.add(stage, now() - t); }

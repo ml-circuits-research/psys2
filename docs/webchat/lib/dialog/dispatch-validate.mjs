@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /**
  * Dispatcher validation layer (spec 03 section 7, ADR-005). Browser-safe: no `node:*` imports.
  *
@@ -15,6 +16,7 @@
  * Output: { id, text, status: 'understood' | 'not_understood', winner, produced, notUnderstood, why, trace }.
  */
 import { perf } from '../formalizer/perf.mjs';
+import { guard } from '../formalizer/guard.mjs';
 import { formalize, FormSession } from '../formalizer/index.mjs';
 import { serialize } from '../soplang/index.mjs';
 import { spellCorrect, spellAlternates, protectedWordsOf, worldVocabulary, spellVocabulary, ignorable } from '../formalizer/spell.mjs';
@@ -132,7 +134,7 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
     const key = JSON.stringify([world, tab, text, beam]);
     if (normCache.has(key)) return { status: 'ready', rewrites: normCache.get(key) };
     let out;
-    try { out = await perf.time('normalizer', () => (typeof normalizer === 'function' ? normalizer : normalizer.propose)({ world, tab, text, beam })); } catch { return { status: 'error', rewrites: [] }; }
+    try { out = await perf.time('normalizer', () => guard.abortable((typeof normalizer === 'function' ? normalizer : normalizer.propose)({ world, tab, text, beam }), 'normalizer')); } catch { return { status: 'error', rewrites: [] }; }
     const status = Array.isArray(out) || out == null ? 'ready' : out.status === 'not_ready' || out.status === 'error' ? out.status : 'ready';
     if (status !== 'ready') return { status, rewrites: [] };
     const rewrites = toRewrites(Array.isArray(out) ? out : out?.rewrites, beam);
@@ -287,6 +289,7 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
       const refs = [];             // attempts with their check records, for the partial pass
       // full parses: per world, original -> spell-corrected -> simplified
       for (const [rank, w] of worlds.entries()) {
+        if (guard.soft()) break;   // turn guard: out of time, keep the best reading found so far
         const variants = [{ kind: 'original', text: piece.text, corrections: [] }];
         if (o.trySpell) {
           let sp = null;
@@ -295,6 +298,7 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
           if (sp?.corrections.length) variants.push({ kind: 'spell', text: sp.text, corrections: sp.corrections });
         }
         for (const v of variants) {
+          if (guard.soft()) break;   // turn guard: out of time, keep the best reading found so far
           const r = await check(pred.context, ctxPrefix, w.world, v.text, o);
           const score = o.worldWeight * logpOf(w) - (v.kind === 'simplified' ? o.simplifiedPenalty : 0) - o.spellPenalty * v.corrections.length
             - rpen(r);
@@ -305,6 +309,7 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
       // simplified text of the edit-tag head (spec 03 sections 7.8 and 7.12): lexicographic preference, tried only when no original or spell-corrected reading validates in any candidate world, and only if the values survive
       if (o.trySimplified && piece.simplified && !attempts.some((a) => a.valid)) {
         for (const [rank, w] of worlds.entries()) {
+          if (guard.soft()) break;   // turn guard: out of time, keep the best reading found so far
           const vocab = worldVocabulary(engine.set, w.world);
           const vc = o.checkValues ? checkValues(piece.text, piece.simplified, { vocab, lost: o.valueLost, ...(o.valueStrictness === 'strict' ? { polarity: true, grounded: true, keepKnown: true } : {}) }) : { ok: true };
           if (!vc.ok) {
@@ -320,11 +325,13 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
       // normalizer (spec 03 section 7.12): only when nothing validates yet; the first rewrite that the rules read AND whose values are preserved wins
       if (useNormalizer && normalizer && o.tryNormalizer && seg.index < o.normalizerSegmentations && !attempts.some((a) => a.valid)) {
         for (const [rank, w] of worlds.entries()) {
+          if (guard.soft()) break;   // turn guard: out of time, keep the best reading found so far
           if (rank >= o.normalizerWorlds) break;
           const vocab = worldVocabulary(engine.set, w.world);
           const proposed = await proposeRewrites(w.world, pred.context.tab, piece.text, o.normalizerBeam);
           if (proposed.status !== 'ready') { normalizerStatus = proposed.status; break; }   // loading or failed: the rules answer, nothing is remembered
           for (const { text, score: nzScore } of proposed.rewrites) {
+            if (guard.soft()) break;   // turn guard: out of time, keep the best reading found so far
             if (text === piece.text.trim()) continue;
             if (o.normalizerMinScore != null && nzScore != null && nzScore < o.normalizerMinScore) continue;
             const vc = o.checkValues ? checkValues(piece.text, text, { vocab, lost: o.valueLost, ...(o.valueStrictness === 'strict' ? { polarity: true, grounded: true, keepKnown: true } : {}) }) : { ok: true };
@@ -343,9 +350,11 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
       // second chance: one known word changed to a close neighbour ("yes" -> "eyes"); only when nothing parses yet, kept only if the rules parse it
       if (o.trySpell && !attempts.some((a) => a.valid)) {
         for (const [rank, w] of worlds.entries()) {
+          if (guard.soft()) break;   // turn guard: out of time, keep the best reading found so far
           let alts = [];
           try { alts = spellAlternates(piece.text, { vocab: worldVocabulary(engine.set, w.world), protect: protectedWordsOf(engine.set, pred.context?.tab) }); } catch { alts = []; }
           for (const v of alts) {
+            if (guard.soft()) break;   // turn guard: out of time, keep the best reading found so far
             const r = await check(pred.context, ctxPrefix, w.world, v.text, o);
             const score = o.worldWeight * logpOf(w) - o.spellPenalty * 2 - rpen(r);
             const at = { world: w.world, rank: rank + 1, worldScore: w.score, variant: 'spell', text: v.text, valid: accepts(r), refused: r.refused, refusal: r.refusal, unknownArg: r.unknownArg, reason: r.reason, unparsed: r.unparsed, matchedWorlds: r.matchedWorlds, statuses: r.statuses, score, wires: r.wires, corrections: v.corrections, partial: null };
@@ -362,9 +371,11 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
         }
         if (!attempts.some((a) => a.valid)) {
           for (const [rank, w] of worlds.entries()) {
+            if (guard.soft()) break;   // turn guard: out of time, keep the best reading found so far
             const sp = spelled.get(w.world);
             const bases = sp?.corrections.length ? [{ text: sp.text, corrections: sp.corrections }, { text: piece.text, corrections: [] }] : [{ text: piece.text, corrections: [] }];
             for (const base of bases) {
+              if (guard.soft()) break;   // turn guard: out of time, keep the best reading found so far
               const win = await findPartialWindow(base.text, async (slice) => { const r = await check(pred.context, ctxPrefix, w.world, slice, o); return accepts(r) && !changesIntoQuestion(base.text, slice, r.kinds) ? r : null; }, { minCoverage: o.minCoverage, canIgnore: ignorable(worldVocabulary(engine.set, w.world), spellVocabulary(engine.set)) });
               if (!win) continue;
               const r = win.result;
@@ -421,6 +432,7 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
       const top = segs[lead.index];
       let tried = 0;
       for (let i = 0; i + 1 < top.segments.length && tried < o.mergeRepair; i++) {
+        if (guard.soft()) break;   // turn guard: out of time, keep the best reading found so far
         const a = top.segments[i], b = top.segments[i + 1];
         const gap = pred.text.slice(a.end, b.start);
         if (DELIMITED.test(gap) || DELIMITED.test(a.text.slice(-1)) || /^(and|then|also|but|or|next)\b/i.test(b.text)) continue;
@@ -455,12 +467,14 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
         for (let i = 1; i < words.length; i++) cutSets.push([i]);
         if (o.splitRepair >= 3) for (let i = 1; i < words.length; i++) for (let j = i + 1; j < words.length; j++) cutSets.push([i, j]);
         for (const cs of cutSets) {
+          if (guard.soft()) break;   // turn guard: out of time, keep the best reading found so far
           const bounds = [0, ...cs, words.length];
           const parts = bounds.slice(0, -1).map((b, k) => [b, bounds[k + 1] - 1]);
           // a part that starts with a preposition continues the clause before it ("what time is it" | "in London right now"), it is no command of its own
           if (parts.slice(1).some(([a]) => CONTINUES_CLAUSE.test(piece.text.slice(words[a].s, words[a].e)))) continue;
           const withWorld = [];
           for (const [a, b] of parts) {
+            if (guard.soft()) break;   // turn guard: out of time, keep the best reading found so far
             let hit = null;
             for (const w of piece.worlds.slice(0, 6)) if (await okPart(w.world, partText(a, b))) { hit = w; break; }
             if (!hit) break;

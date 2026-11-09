@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 // PSys2 browser demo (spec 06 "Webchat", spec 07 §4). Runs C2 entirely in the browser: no server, no LLM.
 //
 //   import { mountPsys2 } from './app.mjs';
@@ -15,7 +16,8 @@ import { findDispatcherModel, dispatcherLoader, versionLabel } from './ui/dispat
 import { findNormalizerModel, createNormalizerHost } from './ui/normalizer-host.mjs';
 import { sessionOptions } from './lib/dialog/runtime-config.mjs';
 import { DEFAULT_SETTINGS, SETTINGS_KEY, loadSettings } from './ui/settings.mjs';
-import { buildRecord, completeRecord, createStore, filterRecords, toJSONL, toText, exportFilename, summaryStatus, summaryWorlds } from './ui/phrase-log.mjs';
+import { guard, TurnAborted, withDeadline } from './lib/formalizer/guard.mjs';
+import { buildRecord, completeRecord, completeStopped, createStore, filterRecords, toJSONL, toText, exportFilename, summaryStatus, summaryWorlds } from './ui/phrase-log.mjs';
 
 const HERE = new URL('.', import.meta.url);
 
@@ -39,6 +41,11 @@ async function loadTabPlugins(base) {
   return mods.filter((m) => m?.default?.id && m.default?.make).map((m) => m.default);
 }
 const SHELL = 'ui.shell';
+/** Turn lifecycle (spec 06): one message at a time, a hard limit from Enter, every host effect bounded. */
+export const TURN_LIMITS = Object.freeze({ watchdogMs: 8000, softFraction: 0.65, effectMs: 3000, backstopMs: 1500 });
+export const TOO_LONG = 'That took too long, so I stopped. Try a shorter request.';
+export const SOURCE_URL = 'https://github.com/ml-circuits-research/psys2';
+export const BUSY_HINT = 'Wait for the answer or press Stop.';
 const EXAMPLES = [
   'Become a person', 'Let’s play tic tac toe', 'Open the editor and start dictation', 'How many legs does a spider have?',
   'Tom has 5 apples. He gives 2 to Ana. How many apples does Tom have?',
@@ -49,6 +56,7 @@ const ICON = {
   hands: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-9 9v5a3 3 0 0 0 3 3h1v-7H5v-1a7 7 0 0 1 14 0v1h-2v7h1a3 3 0 0 0 3-3v-5a9 9 0 0 0-9-9Z"/></svg>',
   gear: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.4 13a7.5 7.5 0 0 0 0-2l2-1.6-2-3.4-2.4 1a7.6 7.6 0 0 0-1.7-1L15 3.4h-4l-.4 2.6a7.6 7.6 0 0 0-1.7 1l-2.4-1-2 3.4 2 1.6a7.5 7.5 0 0 0 0 2l-2 1.6 2 3.4 2.4-1a7.6 7.6 0 0 0 1.7 1l.4 2.6h4l.4-2.6a7.6 7.6 0 0 0 1.7-1l2.4 1 2-3.4-2-1.6ZM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z"/></svg>',
   send: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20.5 22 12 3 3.5v6.6l11 1.9-11 1.9v6.6Z"/></svg>',
+  stop: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h12v12H6Z"/></svg>',
 };
 const icon = (name) => { const s = document.createElement('span'); s.className = 'p2-icon'; s.innerHTML = ICON[name]; return s; };
 const time = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -75,7 +83,7 @@ export async function mountPsys2(element, options = {}) {
   const panelUI = {};          // tab id -> { ui, present }
   let engine = null, session = null, translator = null, speech = null;
   let view = tabDefs[0]?.id ?? null, lastShellTab = null, lastShell = {};
-  let busy = 0, chain = Promise.resolve(), interim = '', mic = { listening: false, speaking: false, mode: null };
+  let busy = 0, turn = null, flash = null, flashTimer = null, interim = '', mic = { listening: false, speaking: false, mode: null };
   let destroyed = false, shellSeen = false;
   const phrases = createStore(options.persist !== false ? globalThis.localStorage : null);
   let logFilter = 'all', confirmClear = false;
@@ -101,7 +109,9 @@ export async function mountPsys2(element, options = {}) {
     h('header', { class: 'p2-head' },
       h('div', { class: 'p2-title' }, h('strong', {}, options.title ?? 'PSys2'), h('span', {}, 'no LLM · runs in your browser')),
       h('div', { class: 'p2-tools' }, langSel, speakerBtn, handsBtn, gearBtn)),
-    statusEl, log, form, settingsEl);
+    statusEl, log, form,
+    h('footer', { class: 'p2-foot' }, h('a', { href: SOURCE_URL, target: '_blank', rel: 'noopener', 'data-source-link': 'footer' }, 'Source code (AGPL-3.0)')),
+    settingsEl);
   const tabsEl = h('div', { class: 'p2-tabs', role: 'tablist', 'aria-label': 'Tools' });
   const panelsEl = h('div', { class: 'p2-panels' });
   root.append(chat);
@@ -156,8 +166,24 @@ export async function mountPsys2(element, options = {}) {
     note(`The Encoder model could not be loaded (${String(message).slice(0, 120)}); using the rules instead.`);
     if (!settingsEl.hidden) renderSettings();
   }
+  /** The Send button is the Stop button while a turn runs (type 'button' then, so that Enter, which submits the form, never presses Stop). */
+  function syncSendButton() {
+    const stop = !!turn;
+    sendBtn.type = stop ? 'button' : 'submit';
+    sendBtn.classList.toggle('is-stop', stop);
+    sendBtn.setAttribute('aria-label', stop ? 'Stop' : 'Send');
+    sendBtn.title = stop ? 'Stop (the message is cancelled and nothing changes)' : '';
+    sendBtn.replaceChildren(icon(stop ? 'stop' : 'send'));
+  }
+  /** A short hint in the status line (for example "Wait for the answer or press Stop." on Enter during a turn). */
+  function flashHint(msg) {
+    flash = msg; setStatus();
+    clearTimeout(flashTimer);
+    flashTimer = setTimeout(() => { flash = null; setStatus(); }, 3000);
+  }
   function setStatus() {
     const parts = [];
+    if (flash) parts.push(flash);
     if (busy) parts.push('Thinking…');
     if (dispatcherStatus.state === 'loading') parts.push(`Model loading… ${dispatcherStatus.message} (rules answer meanwhile)`);
     if (mic.speaking) parts.push('Speaking…');
@@ -166,6 +192,7 @@ export async function mountPsys2(element, options = {}) {
     const modelTail = !parts.length && dispatcherStatus.state === 'ready' ? ` · model ${dispatcherLabel}${modelSource === 'cache' ? ' (cached)' : ''}` : '';
     statusEl.textContent = (parts.join(' · ') || 'Ready') + modelTail;
     statusEl.classList.toggle('is-active', parts.length > 0);
+    syncSendButton();
     micBtn.setAttribute('aria-pressed', String(mic.listening && mic.mode === 'once'));
     micBtn.classList.toggle('is-on', mic.listening);
   }
@@ -246,7 +273,7 @@ export async function mountPsys2(element, options = {}) {
   };
   /** What tab plugins may use: send a command through the language layer, speak, read/patch world state, load assets. */
   const hostApi = {
-    send: (text) => send(String(text), 'chip'),
+    send: (text) => send(String(text), 'chip'),   // ignored (with a hint) while a turn runs
     speak: (text) => { if (speech && speechSupport.synthesis) speech.speak(String(text), { lang: speechLangTag() }); },
     state: (worldId) => states[worldId],
     setWorldState: (worldId, patch) => session?.setWorldState?.(worldId, patch),
@@ -264,6 +291,7 @@ export async function mountPsys2(element, options = {}) {
   async function observeAndFollow(obs, depth = 0) {
     let follow = null;
     try { follow = await session?.observe?.(obs); } catch (e) { console.warn('observe failed', e); }
+    if (turn?.ctl.signal.aborted) return [];
     if (!follow || typeof follow !== 'object') return [];
     if (follow.state && Object.keys(follow.state).length) applyState(follow.state);
     if (follow.text) {
@@ -282,7 +310,8 @@ export async function mountPsys2(element, options = {}) {
       let data = null;
       if (!fn) rec.detail = 'not in the host allow-list';
       else {
-        try { const r = await fn(args); rec.ok = r?.ok !== false; rec.detail = r?.detail ?? ''; data = r?.data ?? null; } catch (e) { rec.detail = e?.message ?? String(e); }
+        // every host effect is bounded: a promise that never settles (a map position, a model, a tab) must not hold the turn
+        try { const r = await withDeadline(Promise.resolve().then(() => fn(args)), TURN_LIMITS.effectMs, { signal: turn?.ctl.signal ?? null, label: `effect ${name}` }); rec.ok = r?.ok !== false; rec.detail = r?.detail ?? ''; data = r?.data ?? null; } catch (e) { if (e instanceof TurnAborted) throw e; rec.detail = e?.message ?? String(e); }
       }
       out.push(rec);
       out.push(...await observeAndFollow({ effect: name, ok: rec.ok, detail: rec.detail || (rec.ok ? 'executed' : 'failed'), data, world: raw?.world ?? null }, depth));
@@ -300,32 +329,83 @@ export async function mountPsys2(element, options = {}) {
   const fmtDur = (ms) => (ms < 1000 ? `${Math.max(1, Math.round(ms))} ms` : `${(ms / 1000).toFixed(1)} s`);
   /** Resolves after the browser painted the current DOM (so the typed message and the thinking bubble show before the heavy work blocks the thread). */
   const afterPaint = () => new Promise((r) => { const t = setTimeout(r, 60); if (typeof requestAnimationFrame === 'function') requestAnimationFrame(() => setTimeout(() => { clearTimeout(t); r(); }, 0)); });
-  async function process(text, mode = 'typed', user = null, recId = null) {
+  /**
+   * One turn (spec 06 "Turn lifecycle"). Exactly one runs at a time (`turn`). It ends in one of three ways, always: an answer, "Stopped." (Stop
+   * button, AbortSignal through the whole pipeline) or the watchdog answer (hard limit from Enter). Stop and the watchdog put the session back to
+   * the snapshot taken before the message, so the message leaves no trace in the worlds.
+   */
+  async function process(text, mode = 'typed', user = null, recId = null, tPress = performance.now()) {
     user ??= addMessage('user', text);
+    const ctl = new AbortController();
+    const tn = turn = { ctl, t0: tPress, text, reason: null, undo: null };
     busy++; setStatus();
     const thinkingLabel = h('span', { class: 'p2-thinking-label' }, 'thinking… 0.0 s');
     const typing = addMessage('bot', h('span', { class: 'p2-thinking' }, h('span', { class: 'p2-dots', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')), thinkingLabel), { className: 'is-typing' });
     typing.msg.removeAttribute('aria-live');
     translator.resetUsage();
-    const tStart = performance.now();
+    const limit = options.watchdogMs ?? TURN_LIMITS.watchdogMs;
+    const tStart = tPress;
     const ticker = setInterval(() => { thinkingLabel.textContent = `thinking… ${((performance.now() - tStart) / 1000).toFixed(1)} s`; }, 100);
+    const watchdog = setTimeout(() => { tn.reason ??= 'timeout'; ctl.abort(new DOMException('turn time limit', 'TimeoutError')); }, Math.max(0, limit - (performance.now() - tPress)));
+    let backstopTimer = null;
+    const backstop = new Promise((_, rej) => { backstopTimer = setTimeout(() => rej(new TurnAborted('timeout', 'host')), Math.max(0, limit + TURN_LIMITS.backstopMs - (performance.now() - tPress))); });
+    backstop.catch(() => {});
+    let reply = null;
+    try {
+      reply = await Promise.race([runTurn(tn, text, mode, user, recId, typing, ticker, tStart, limit), backstop]);
+    } catch (e) {
+      if (e instanceof TurnAborted || ctl.signal.aborted) endAborted(tn, e, { text, mode, recId, typing, ticker, tStart });
+      else {
+        console.error(e);
+        recordPhrase(text, mode, null, recId);
+        typing.msg.remove();
+        addMessage('bot', `Something went wrong while processing that: ${e?.message ?? e}`, { className: 'is-error' });
+      }
+    } finally {
+      clearTimeout(watchdog); clearTimeout(backstopTimer); clearInterval(ticker);
+      if (typing.msg.isConnected) typing.msg.remove();
+      if (turn === tn) turn = null;
+      busy = Math.max(0, busy - 1); setStatus(); scrollDown();
+    }
+    return reply;
+  }
+  /** The turn ended without an answer: Stop or the watchdog. Restores the session and tells the person. */
+  function endAborted(tn, e, { text, recId, typing, ticker, tStart }) {
+    clearInterval(ticker);
+    typing.msg.remove();
+    const reason = tn.reason ?? e?.reason ?? 'timeout';
+    const stage = e?.stage ?? guard.trippedStage ?? 'unknown';
+    const ms = Math.round(performance.now() - tStart);
+    try { if (tn.undo) session.restore(tn.undo); applyState(session.state?.()); } catch (err) { console.warn('restore after abort failed', err); }
+    if (recId) {
+      try { phrases.update(recId, (r) => completeStopped(r, { reason, stage, ms })); if (!settingsEl.hidden) renderPhraseLog(); } catch (err) { console.warn('phrase log failed', err); }
+    }
+    const msg = addMessage('bot', reason === 'stopped' ? 'Stopped.' : TOO_LONG, { className: 'is-stopped' });
+    const info = h('div', { class: 'p2-trace-slot', hidden: !settings.showTrace }, h('pre', { class: 'p2-trace' }, `Turn ${reason === 'stopped' ? 'stopped by the user' : 'stopped by the time limit'} after ${fmtDur(ms)} in stage "${stage}"; the session was restored to the state before this message.`));
+    const toggle = h('button', { class: 'p2-linkbtn', type: 'button', 'aria-expanded': String(!!settings.showTrace) }, 'Trace');
+    toggle.addEventListener('click', () => { const open = info.hidden; info.hidden = !open; toggle.setAttribute('aria-expanded', String(open)); });
+    msg.meta.append(toggle); msg.msg.append(info);
+    (globalThis.__psys2Perf ??= []).push({ text, stopped: reason, stage, totalMs: ms });
+    options.onStopped?.({ text, reason, stage, ms });
+  }
+  async function runTurn(tn, text, mode, user, recId, typing, ticker, tStart, limit) {
     await afterPaint();
+    if (tn.ctl.signal.aborted) throw new TurnAborted(tn.reason ?? 'stopped', 'start');
+    tn.undo = session.snapshot?.() ?? null;
+    const remaining = Math.max(1, limit - (performance.now() - tStart));
     let reply;
     try {
-      reply = await session.send(text, { language: settings.language, formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, fastPath: settings.fastPath === true });
+      reply = await withDeadline(session.send(text, { language: settings.language, formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, fastPath: settings.fastPath === true,
+        signal: tn.ctl.signal, hardMs: remaining, softMs: remaining * TURN_LIMITS.softFraction, undo: tn.undo }), remaining + 300, { signal: tn.ctl.signal, label: 'turn' });
     } catch (e) {
-      console.error(e);
-      clearInterval(ticker);
-      recordPhrase(text, mode, null, recId);
-      typing.msg.remove(); busy--; setStatus();
-      addMessage('bot', `Something went wrong while processing that: ${e?.message ?? e}`, { className: 'is-error' });
-      return;
+      if (e instanceof TurnAborted || tn.ctl.signal.aborted) throw e;
+      if (/timed out after/.test(e?.message ?? '')) throw new TurnAborted('timeout', guard.stage ?? 'engine');
+      throw e;
     }
     clearInterval(ticker);
     const engineMs = performance.now() - tStart;
     const tHost = performance.now();
     typing.msg.remove();
-    recordPhrase(text, mode, reply, recId);
     const usage = translator.usage.map((u) => ({ ...u }));
     const detection = translator.detectUsage.map((u) => ({ ...u }));
     const answer = (reply.text ?? '').trim() || '(no answer)';
@@ -342,8 +422,10 @@ export async function mountPsys2(element, options = {}) {
     }
     if (settings.speaker && speech && speechSupport.synthesis) speech.speak(answer, { lang: speechLangTag() });
     const tEffects = performance.now();
-    const effects = await runEffects(reply.effects);
+    let effects;
+    try { effects = await runEffects(reply.effects); } catch (e) { botMsg.msg.remove(); throw e; }   // stopped while the effects ran: the answer is withdrawn
     const effectsMs = performance.now() - tEffects;
+    recordPhrase(text, mode, reply, recId);
 
     const traceBox = h('div', { class: 'p2-trace-slot', hidden: !settings.showTrace });
     let built = false;
@@ -353,7 +435,6 @@ export async function mountPsys2(element, options = {}) {
     toggle.addEventListener('click', () => { const open = traceBox.hidden; traceBox.hidden = !open; toggle.setAttribute('aria-expanded', String(open)); if (open) build(); });
     botMsg.meta.append(toggle);
     botMsg.msg.append(traceBox);
-    busy--; setStatus(); scrollDown();
     // timing: engine stages come from the reply (formalizer/perf.mjs), the host adds render and effects
     const totalMs = performance.now() - tStart;
     reply.perf = { ...(reply.perf ?? { total: engineMs, stages: {} }), engineMs: Math.round(engineMs), render: Math.round((performance.now() - tHost - effectsMs) * 10) / 10, effects: Math.round(effectsMs * 10) / 10, totalMs: Math.round(totalMs) };
@@ -387,16 +468,23 @@ export async function mountPsys2(element, options = {}) {
     const st = Object.entries(rec.stages ?? {}).map(([k, v]) => `${k.padEnd(18)} ${String(v.n).padStart(4)}x ${String(v.ms).padStart(8)} ms`);
     perfEl.textContent = [`${rec.text}`, `total ${rec.totalMs} ms (engine ${rec.engineMs}, render ${rec.render}, effects ${rec.effects})`, ...st].join('\n');
   }
+  /** Sends one message. One at a time: while a turn runs the message is not sent and not queued, the person gets a hint (Stop ends the turn). */
   const send = (text, mode = 'typed') => {
     const t = String(text ?? '').trim();
     if (!t || !session) return Promise.resolve(null);
-    const user = addMessage('user', t);   // the message shows at once, even while an earlier one is still being answered
+    if (turn) { flashHint(BUSY_HINT); return Promise.resolve(null); }
+    const tPress = performance.now();
+    const user = addMessage('user', t);
     const recId = logPhraseStart(t, mode);
-    const run = chain.then(() => process(t, mode, user, recId));
-    chain = run.catch(() => {});
-    return run;
+    return process(t, mode, user, recId, tPress);
   };
-  on(form, 'submit', (e) => { e.preventDefault(); const t = input.value; input.value = ''; send(t); });
+  const stopTurn = () => { if (turn && !turn.ctl.signal.aborted) { turn.reason = 'stopped'; turn.ctl.abort(new DOMException('stopped by the user', 'AbortError')); } };
+  on(form, 'submit', (e) => {
+    e.preventDefault();
+    if (turn) { flashHint(BUSY_HINT); return; }   // the text stays in the input
+    const t = input.value; input.value = ''; send(t);
+  });
+  on(sendBtn, 'click', (e) => { if (turn) { e.preventDefault(); stopTurn(); } });
 
   // ---------- speech ----------
   const speechLangTag = () => (settings.speechLang === 'follow' ? LANG_TAGS[settings.language] ?? 'en-US' : settings.speechLang);
@@ -415,7 +503,7 @@ export async function mountPsys2(element, options = {}) {
   function disable(btn, why) { btn.disabled = true; btn.title = why; btn.setAttribute('aria-label', `${btn.getAttribute('aria-label')} (unavailable: ${why})`); }
   speech = createSpeech({
     getLang: speechLangTag, getVoiceName: () => settings.voice, getRate: () => settings.rate,
-    onFinal: (t) => send(t, 'voice'), onInterim: (t) => { interim = t; setStatus(); },
+    onFinal: (t) => { if (turn) { input.value = t; flashHint(BUSY_HINT); } else send(t, 'voice'); },   // voice waits: while a turn runs the phrase goes to the input box onInterim: (t) => { interim = t; setStatus(); },
     onState: (s) => { mic = s; robotUI()?.setSpeaking(s.speaking); setStatus(); },
     onError: (msg) => { note(msg); if (!speech.isListening()) { settings.handsFree = false; handsBtn.setAttribute('aria-pressed', 'false'); handsBtn.classList.remove('is-on'); } },
   });
@@ -510,6 +598,9 @@ export async function mountPsys2(element, options = {}) {
       check('Read answers aloud', settings.speaker, (v) => setSpeaker(v), speechSupport.synthesis ? '' : 'speech synthesis is not supported'),
       check('Show the trace of every answer', settings.showTrace, (v) => { settings.showTrace = v; save(); }),
       phraseLogSection(),
+      h('div', { class: 'p2-field p2-about' }, h('strong', {}, 'About'),
+        h('p', {}, 'PSys2 answers with explicit rules and small knowledge worlds, with no language model, and runs entirely in your browser. '),
+        h('p', {}, h('a', { href: SOURCE_URL, target: '_blank', rel: 'noopener', 'data-source-link': 'about' }, 'Source code (AGPL-3.0)'))),
     );
     if (prevFocus) settingsEl.querySelector(`#${CSS.escape(prevFocus)}`)?.focus();
   }
@@ -658,7 +749,7 @@ export async function mountPsys2(element, options = {}) {
     addMessage('bot', 'Hi, I am PSys2. I answer with explicit rules and small knowledge worlds, with no language model. You can talk to me or type. Try one of these:', { children: chips, className: 'is-hint' });
   }
   const handle = {
-    engine, session, settings, send, applyState, showTab,
+    engine, session, settings, send, stop: stopTurn, applyState, showTab, get busy() { return !!turn; },
     destroy() { destroyed = true; cleanups.forEach((f) => f()); robotUI()?.destroy?.(); speech.destroy(); element.replaceChildren(); element.classList.remove('p2-box'); },
   };
   if (settings.handsFree && speechSupport.recognition) setHandsFree(true, false);

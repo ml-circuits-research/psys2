@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /**
  * C2 dialog pipeline (spec 06). Browser-safe.
  *
@@ -18,6 +19,7 @@ import { serialize, makeWire, atom, str } from '../soplang/index.mjs';
 import { splitSentences } from '../formalizer/rules/normalize.mjs';
 import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs';
 import { perf } from '../formalizer/perf.mjs';
+import { guard, TurnAborted } from '../formalizer/guard.mjs';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs';
 import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs';
 import { checkValues } from './value-check.mjs';
@@ -91,9 +93,9 @@ export async function translateParts(parts, translator, lang) {
     const src = run.map((p) => p.text).join('');
     if (!src.trim()) { out.push({ text: src, translate: false }); continue; }
     let res = null;
-    try { res = await translator.translate(src, { from: 'en', to: lang }); } catch { res = null; }
+    try { res = await guard.abortable(translator.translate(src, { from: 'en', to: lang }), 'translate'); } catch { res = null; }
     if (res?.unknown?.length && run.length === 1 && run[0].fallback) {
-      try { res = await translator.translate(run[0].fallback, { from: 'en', to: lang }); } catch { res = null; }
+      try { res = await guard.abortable(translator.translate(run[0].fallback, { from: 'en', to: lang }), 'translate'); } catch { res = null; }
     }
     const t = textOf(res);
     if (!t || res?.unknown?.length || res?.untranslatable?.length || (typeof translator.leftovers === 'function' && translator.leftovers(t, lang).length)) complete = false;
@@ -112,6 +114,9 @@ const langOf = (r) => (typeof r === 'string' ? r : r?.lang) ?? 'en';
 const textOf = (r) => (typeof r === 'string' ? r : r?.text);
 
 const QUESTION_WORD = /^(?:what|who|whom|whose|where|when|why|how|which)\b/i;
+
+/** Time budget of the leniency stage (spelling variants and partial windows) of one message, in ms; past it the best reading so far stands (turn guard, spec 06). */
+export const LENIENT_BUDGET_MS = 3000;
 
 const FAST_SEGMENT_MARGIN = 0;   // nats of log-probability between the model's best segmentation and the runner-up for the multi-clause fast path
 
@@ -253,6 +258,8 @@ export class DialogSession {
   _lenient(seg, opts, o, depth = 0) { return perf.time('lenient', () => this._lenientRun(seg, opts, o, depth)); }
 
   async _lenientRun(seg, opts, o, depth = 0) {
+    const late = () => guard.soft() || (o.until != null && performance.now() > o.until);   // out of time: no further guessing
+    if (late()) return null;
     const { spell, partial } = o;
     const { set, formalizers } = this.engine;
     const rules = formalizers.rules;
@@ -273,6 +280,7 @@ export class DialogSession {
     const spelled = new Map();
     if (spell) {
       for (const world of ids) {
+        if (late()) return null;
         const sp = spellCorrect(seg.text, { vocab: vocabOf(world), protect });
         spelled.set(world, sp);
         if (!sp.corrections.length) continue;
@@ -281,6 +289,7 @@ export class DialogSession {
       }
       for (const world of ids) {
         for (const v of spellAlternates(seg.text, { vocab: vocabOf(world), protect })) {
+          if (late()) return null;
           const res = await parse(world, v.text);
           if (res) return wrap(res, { corrections: v.corrections });
         }
@@ -308,11 +317,12 @@ export class DialogSession {
         }
       }
       for (const world of ids) {
+        if (late()) return null;
         const sp = spelled.get(world);
         const bases = sp?.corrections.length ? [sp, { text: seg.text, corrections: [] }] : [{ text: seg.text, corrections: [] }];
         for (const base of bases) {
           const win = await findPartialWindow(base.text, async (slice) => { const r = await parse(world, slice); return r && !changesIntoQuestion(base.text, slice, r.segments.map((x) => x.match?.kind)) ? r : null; },
-            { minCoverage: depth ? 0.5 : 0.25, canIgnore: ignorable(vocabOf(world), spellVocabulary(set)) });
+            { stop: late, minCoverage: depth ? 0.5 : 0.25, canIgnore: ignorable(vocabOf(world), spellVocabulary(set)) });
           if (win) {
             const used = win.text.toLowerCase();
             return wrap(win.result, { corrections: base.corrections.filter((c) => used.includes(c.to.toLowerCase())), ignored: win.ignored.map((x) => x.text) });
@@ -339,6 +349,7 @@ export class DialogSession {
     const norm = (wires) => JSON.stringify(wires.map((w) => [w.type, w.entries.filter((e) => !/^core\.(?:via|source|seq|span|in)$/.test(e.key)).map((e) => [e.key, e.value])]));   // what is asked, not how it was phrased
     const verified = [];
     for (const c of cands.slice(0, P.maxVerify)) {
+      if (guard.soft()) break;   // turn guard: score what was verified so far
       const vc = checkValues(seg.text, c.text);
       if (!vc.ok) continue;
       let res;
@@ -375,6 +386,7 @@ export class DialogSession {
   async _withLeniency(res, opts, o) {
     if (!res.segments.some((x) => x.unparsed) || !(o.spell || o.partial)) return res;
     const segments = [];
+    o = { ...o, until: performance.now() + LENIENT_BUDGET_MS };   // the whole leniency stage of this message (spelling variants, partial windows) shares one time budget
     for (const seg of res.segments) {
       const fixed = seg.unparsed ? await this._lenient(seg, opts, o) : null;
       if (fixed) segments.push(...fixed); else segments.push(seg);
@@ -483,11 +495,11 @@ export class DialogSession {
     const rules = formalizers.rules;
     const enc = preferred === 'encoder' ? formalizers.encoder : null;
     let usable = false, encoderError = null;
-    try { usable = !!enc && !!(await perf.time('encoder.available', () => enc.available())) && set.list().some((w) => enc.supports(w)); } catch { usable = false; }
+    try { usable = !!enc && !!(await perf.time('encoder.available', () => guard.abortable(enc.available(), 'encoder.available'))) && set.list().some((w) => enc.supports(w)); } catch { usable = false; }
     if (usable && lenient.fastPath) { const quick = await this._quickRules(english, opts); if (quick) return quick; }
     if (usable) {
       try {
-        const res = await perf.time('encoder', () => enc.formalize(english, opts));
+        const res = await perf.time('encoder', () => guard.abortable(enc.formalize(english, opts), 'encoder'));
         const segments = [];
         for (const seg of res.segments) {
           if (!seg.unparsed) { segments.push({ ...seg, strategy: 'encoder' }); continue; }
@@ -527,11 +539,39 @@ export class DialogSession {
   /** One message in, one reply out. Opens the stage-timing record (`reply.perf`, see formalizer/perf.mjs) unless this is a nested replay. */
   async send(text, opts = {}) {
     const own = perf.start();
+    // Turn guard (spec 06 "Turn lifecycle"): the outermost send installs the abort signal and the deadlines; nested sends (validator replays) inherit them.
+    const g = guard.install({ signal: opts.signal ?? null, hardMs: opts.hardMs ?? Infinity, softMs: opts.softMs ?? Infinity, force: !!opts.signal });
+    const snap = g ? (opts.undo ?? this.snapshot()) : null;   // a host that passes `undo` (its own snapshot) restores the session itself
     try {
       const reply = await this._send(text, opts);
+      if (g) guard.check('end');   // (checks the shared guard)   // a stage that swallowed the abort must not let a half-done turn through
       if (own && reply && typeof reply === 'object') reply.perf = perf.end();
       return reply;
-    } finally { if (own) perf.end(); }
+    } catch (e) {
+      if (g && (e instanceof TurnAborted || guard.tripped)) {   // aborted: the session goes back to exactly where it was before the message
+        if (!opts.undo) this.restore(snap);
+        throw e instanceof TurnAborted ? e : new TurnAborted(guard.tripped, guard.trippedStage);
+      }
+      throw e;
+    } finally { if (own) perf.end(); guard.release(g); }
+  }
+
+  /** Undo snapshot of everything a turn can change (interpreter session, discourse memory, recent worlds, message counter). */
+  snapshot() {
+    const { dialog, ...dis } = this.discourse;
+    return {
+      isession: this.isession.clone(), msg: this._msg, recent: [...(this._recentWorlds ?? [])], lang: [this._sessionLang, this._weakRo],
+      discourse: { ...dis, frames: [...dis.frames], actions: [...dis.actions], topics: [...dis.topics], lastByWorld: { ...dis.lastByWorld } },
+      sources: new Set(this.sources.keys()),
+    };
+  }
+
+  /** Puts the session back to a snapshot taken by `snapshot()`. */
+  restore(snap) {
+    if (!snap) return;
+    this.isession = snap.isession; this._msg = snap.msg; this._recentWorlds = snap.recent; [this._sessionLang, this._weakRo] = snap.lang;
+    Object.assign(this.discourse, snap.discourse);
+    for (const k of [...this.sources.keys()]) if (!snap.sources.has(k)) this.sources.delete(k);
   }
 
   async _send(text, { language, formalizer, spell, partial, fastPath, bestEffort } = {}) {
@@ -541,10 +581,10 @@ export class DialogSession {
     const wanted = language ?? this.language;
     let lang = 'en', translation = null, english = text;
     if (translator) {
-      lang = wanted === 'auto' ? langOf(await perf.time('detect', () => translator.detectLanguage(text))) : wanted;
+      lang = wanted === 'auto' ? langOf(await perf.time('detect', () => guard.abortable(translator.detectLanguage(text), 'detect'))) : wanted;
       // RD5: the language comes from strong evidence. English with a typo ("eys express fear") is never read as Romanian, and a weak Romanian reading
       // (a browser guess, one ambiguous word) switches an automatic session only when it repeats; translators without `evidence` keep the plain rule.
-      const ev = typeof translator.evidence === 'function' ? await translator.evidence(text) : null;
+      const ev = typeof translator.evidence === 'function' ? await guard.abortable(translator.evidence(text), 'detect') : null;
       if (ev?.strongEn && lang !== 'en') { lang = 'en'; if (wanted === 'auto') { this._sessionLang = 'en'; this._weakRo = 0; } }
       else if (wanted === 'auto') {   // a short or ambiguous input ("e", "ok") keeps the language of the session (default English); a confident detection becomes the session language
         if (lang === 'ro' && ev && !ev.strongRo && this._sessionLang !== 'ro') {
@@ -555,7 +595,7 @@ export class DialogSession {
         else { this._sessionLang = lang; this._weakRo = 0; }
       }
       if (lang !== 'en' && lang !== 'unknown') {
-        translation = await perf.time('translate', () => translator.translate(text, { from: lang, to: 'en' }));
+        translation = await perf.time('translate', () => guard.abortable(translator.translate(text, { from: lang, to: 'en' }), 'translate'));
         english = textOf(translation) ?? text;
       } else lang = 'en';
     }
@@ -645,7 +685,7 @@ export class DialogSession {
           const done = [];
           for (const e of ex) {
             try {
-              const r = await translator.translate(e, { from: 'en', to: lang });
+              const r = await guard.abortable(translator.translate(e, { from: 'en', to: lang }), 'translate');
               if (textOf(r) && !r.unknown?.length && !r.untranslatable?.length && !(translator.leftovers?.(textOf(r), lang) ?? []).length) done.push(textOf(r).trim());
             } catch { /* this example stays untranslated */ }
           }

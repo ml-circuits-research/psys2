@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /**
  * Main interpreter (spec 04, rules profile). Browser-safe.
  *
@@ -12,6 +13,7 @@
  *  - `ctx.worlds()` lists the loaded worlds (used by the chat capability);
  *  - `ctx.emit` accepts `{_}` / `{_1}` fresh-id placeholders like pattern emit templates.
  */
+import { guard, TurnAborted } from '../formalizer/guard.mjs';
 import { parse, makeWire, atom, str, ref, get } from '../soplang/index.mjs';
 import { Memory, WireStore } from './memory.mjs';
 import { Renderer, fallbackText, listText } from './render.mjs';
@@ -226,6 +228,7 @@ export class Interpreter {
 
   _charge(st, n) {
     st.visited += n;
+    guard.check('interpreter');
     if (st.visited > this.maxVisited) throw new BudgetError(`visited more than ${this.maxVisited} wires`);
   }
 
@@ -258,6 +261,7 @@ export class Interpreter {
       res = fn(ctx, args);
       if (res && typeof res.then === 'function') throw new Error('operations must be synchronous');
     } catch (e) {
+      if (e instanceof TurnAborted) throw e;
       if (e instanceof BudgetError) return finish({ status: 'budget', note: e.message });
       return finish({ status: 'error', note: `${op.id} threw: ${e?.message ?? e}` });
     }
@@ -271,7 +275,7 @@ export class Interpreter {
   _makeCtx(session, op, st, budget) {
     const L = this.legends;
     const mem = session.memory;
-    const check = () => { if (performance.now() > budget.deadline) throw new BudgetError(`operation ${op.id} exceeded ${this.opTimeoutMs} ms`); };
+    const check = () => { guard.check('interpreter'); if (performance.now() > budget.deadline) throw new BudgetError(`operation ${op.id} exceeded ${this.opTimeoutMs} ms`); };
     const resolveWhere = (type, where = {}) => {
       const out = {};
       for (const [k, v] of Object.entries(where)) out[L.resolveKey(type, k)] = String(v).replace(/^\$/, '');

@@ -1,6 +1,9 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 // Translation strategies for the demo (ADR-002): `rules` (lib/translate), `browser-api` (on-device Translator) or auto.
 // The browser API output is generative, so every sentence passes a checker (numbers, names, negation, question form);
 // a failure falls back to the rules translator and is recorded in `usage` (shown in the trace).
+
+import { withDeadline } from '../lib/formalizer/guard.mjs';
 
 const NEG_SRC = /\b(nu|nici|niciun|nicio|fara|fără|nimic|niciodata|niciodată|not|no|never|n't)\b/i;
 const NEG_EN = /\b(not|no|never|none|nothing|nobody|without|neither|nor|cannot)\b|n't\b/i;
@@ -79,6 +82,8 @@ export async function browserDetectorAvailability() {
  */
 export const DETECT_MIN_CONFIDENCE = 0.5;
 export const MIN_LETTERS = 3;
+/** Every browser-API await on the turn path is bounded (a promise that never settles must not hold the chat). */
+const AVAILABILITY_TIMEOUT_MS = 1000, DETECT_TIMEOUT_MS = 1500, TRANSLATE_TIMEOUT_MS = 4000;
 /** Languages the session understands; any other detected language is 'unknown'. */
 const SUPPORTED = new Set(['en', 'ro']);
 
@@ -86,19 +91,26 @@ export function createSwitchTranslator({ rules, getStrategy, getDetectStrategy =
   const cache = new Map();
   const usage = [];
   const detectUsage = [];
-  let detectorPromise = null;
-  /** Cached detector instance; null while it is still downloading (a background create() starts the download). */
+  let detectorPromise = null, detectorInstance = null, detectorWait = false;
+  /**
+   * The detector instance when it is ready, else null. It NEVER waits for `create()`: while the on-device model downloads (which can take minutes, or
+   * stall) the rules detect the language. HANG task: an earlier version returned the pending `create()` promise to every later turn, so a download in
+   * progress blocked the chat ("thinking..." for ever).
+   */
   async function browserDetector() {
     const kind = browserDetectorKind();
     if (!kind) throw new Error('no browser language detector');
+    if (detectorInstance) return detectorInstance;
     if (!detectorPromise) {
-      const avail = await browserDetectorAvailability();
+      const avail = await withDeadline(browserDetectorAvailability(), AVAILABILITY_TIMEOUT_MS, { label: 'detector availability' });
       if (avail === 'unavailable' || avail === 'unsupported') throw new Error(`browser language detector ${avail}`);
       const make = kind === 'detector' ? self.LanguageDetector.create() : self.ai.languageDetector.create();
-      detectorPromise = Promise.resolve(make).catch((e) => { detectorPromise = null; throw e; });
-      if (avail !== 'available') { detectorPromise.catch(() => {}); return null; }
+      detectorPromise = Promise.resolve(make).then((d) => { detectorInstance = d; return d; }, (e) => { detectorPromise = null; throw e; });
+      detectorPromise.catch(() => {});
+      detectorWait = avail === 'available';   // a model on the device is created in a moment; one that has to be downloaded is never waited for
     }
-    return detectorPromise;
+    if (!detectorWait) return null;   // still being downloaded: the rules detect the language meanwhile
+    try { return await withDeadline(detectorPromise, DETECT_TIMEOUT_MS, { label: 'detector creation' }); } catch (e) { if (!detectorInstance) detectorWait = false; throw e; }   // stalled once: do not wait again
   }
   async function browserTranslate(text, from, to) {
     const kind = browserTranslatorKind();
@@ -108,7 +120,7 @@ export function createSwitchTranslator({ rules, getStrategy, getDetectStrategy =
       const opts = { sourceLanguage: from, targetLanguage: to };
       cache.set(key, (kind === 'translator' ? self.Translator.create(opts) : self.ai.translator.create(opts)).catch((e) => { cache.delete(key); throw e; }));
     }
-    return (await cache.get(key)).translate(text);
+    return withDeadline((async () => (await cache.get(key)).translate(text))(), TRANSLATE_TIMEOUT_MS, { label: 'browser translation' });
   }
   const translator = {
     usage,
@@ -123,7 +135,7 @@ export function createSwitchTranslator({ rules, getStrategy, getDetectStrategy =
           if ((String(text ?? '').match(/\p{L}/gu) ?? []).length < MIN_LETTERS) throw Object.assign(new Error('too short for the browser detector'), { quiet: true });
           const det = await browserDetector();
           if (!det) throw new Error('still downloading');
-          const top = (await det.detect(String(text)))?.[0];
+          const top = (await withDeadline(det.detect(String(text)), DETECT_TIMEOUT_MS, { label: 'language detection' }))?.[0];
           if (!top?.detectedLanguage) throw new Error('empty detection result');
           const code = String(top.detectedLanguage).toLowerCase().split(/[-_]/)[0];
           const confidence = Number(top.confidence) || 0;

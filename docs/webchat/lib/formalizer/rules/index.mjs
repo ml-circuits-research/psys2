@@ -1,9 +1,11 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /**
  * Rule-based formalizer (spec 03). Browser-safe.
  *
  * formalize(text, { worlds, session, source }) -> { segments, wires }
  * `worlds` is a WorldSet; `session` is a FormSession or any object with a `.form` FormSession.
  */
+import { guard } from '../guard.mjs';
 import { perf } from '../perf.mjs';
 import { lexIndex } from '../../worlds/lexicon.mjs';
 import { analyze, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs';
@@ -293,6 +295,7 @@ function signature(m) {
  * @returns {{ segments: object[], wires: object[] }}
  */
 export function formalize(text, { worlds, session, source = 'input', focus = null, context = null, router = defaultRouter } = {}) {
+  guard.check('rules');   // cancellation point (turn guard)
   const ctx = normalizeContext(context ?? (focus ? contextFromFocus(focus) : null));
   const set = worlds;
   const form = session instanceof FormSession ? session : session.form;
@@ -303,6 +306,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
 
   /** Try to turn one token group into a segment. */
   const readGroup = (tokens, isQuestion, expanded = null) => {
+    guard.check('rules');
     const body = tokens.filter(isContent);
     const ends = body.length ? body : tokens.filter((t) => t.kind !== 'qmark');
     const first = ends[0] ?? tokens[0], last = ends[ends.length - 1] ?? tokens[tokens.length - 1];

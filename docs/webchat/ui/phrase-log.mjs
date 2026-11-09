@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 // Phrase log (spec 06 "Phrase log"): pure functions that turn what a person typed or said, plus the reply of
 // session.send(), into records for training data, and a small localStorage-backed store. Browser-safe, no imports.
 
@@ -39,16 +40,21 @@ export function completeRecord(rec, reply, { language = 'en' } = {}) {
   return full;
 }
 
+/** Marks a record as ended without an answer: `reason` is 'stopped' (Stop button) or 'timeout' (watchdog), `stage` the pipeline stage it was in. */
+export function completeStopped(rec, { reason = 'stopped', stage = null, ms = null } = {}) {
+  return { ...rec, outcome: reason === 'stopped' ? 'stopped' : 'timeout', stage, ms, segments: [], unparsed: false };
+}
+
 /** Appends a record and drops the oldest entries beyond the cap. Returns a new array. */
 export function appendCapped(list, rec, cap = LOG_CAP) {
   const next = [...list, rec];
   return next.length > cap ? next.slice(next.length - cap) : next;
 }
 
-const worstStatus = (r) => (r.segments.find((s) => s.status !== 'supported')?.status ?? r.segments[0]?.status ?? 'unknown');
+const worstStatus = (r) => (r.outcome ?? r.segments.find((s) => s.status !== 'supported')?.status ?? r.segments[0]?.status ?? 'unknown');
 /** Filters: all | misses (not understood: any segment not supported) | voice. */
 export function filterRecords(list, filter = 'all') {
-  if (filter === 'misses') return list.filter((r) => r.unparsed || r.segments.some((s) => s.status !== 'supported'));
+  if (filter === 'misses') return list.filter((r) => r.outcome || r.unparsed || r.segments.some((s) => s.status !== 'supported'));
   if (filter === 'voice') return list.filter((r) => r.mode === 'voice');
   return list;
 }
@@ -57,7 +63,7 @@ export const summaryWorlds = (r) => [...new Set(r.segments.map((s) => s.world).f
 
 /** Export record, in the spirit of the training records of spec 08. */
 export function exportRecord(r) {
-  return { text: r.text, lang: r.lang, english: r.english ?? r.text, mode: r.mode, tab: r.tab, worlds: summaryWorlds(r), status: worstStatus(r), time: r.time, ...(r.feedback ? { feedback: r.feedback } : {}) };
+  return { text: r.text, lang: r.lang, english: r.english ?? r.text, mode: r.mode, tab: r.tab, worlds: summaryWorlds(r), status: worstStatus(r), time: r.time, ...(r.feedback ? { feedback: r.feedback } : {}), ...(r.outcome ? { outcome: r.outcome, stage: r.stage ?? null } : {}) };
 }
 /** Chips are not human phrasing: excluded unless includeChips. */
 export function toJSONL(list, { includeChips = false } = {}) {

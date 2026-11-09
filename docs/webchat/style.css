@@ -199,3 +199,9 @@
 .p2-thinking-label { color: var(--muted); font-size: .85em; font-variant-numeric: tabular-nums; }
 .p2-took { color: var(--muted); font-size: .8em; margin-left: 8px; font-variant-numeric: tabular-nums; }
 .p2-perf { position: fixed; right: 4px; bottom: 4px; z-index: 50; margin: 0; padding: 6px 8px; max-width: 95vw; max-height: 45vh; overflow: auto; font: 11px/1.3 monospace; background: rgba(0,0,0,.82); color: #cfe; border-radius: 6px; pointer-events: none; }
+
+/* turn lifecycle: Stop button, footer with the source link (AGPL section 13) */
+.p2-send.is-stop { background: var(--danger, #c0392b); color: #fff; }
+.p2-foot { padding: 2px 12px 6px; font-size: 11px; text-align: right; background: var(--surface); }
+.p2-foot a, .p2-about a { color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
+.p2-msg.is-stopped .p2-bubble { font-style: italic; opacity: .85; }

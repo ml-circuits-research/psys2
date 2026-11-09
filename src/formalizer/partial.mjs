@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /**
  * Partial understanding (spec 03 section 7.10). Browser-safe.
  *
@@ -7,6 +8,7 @@
  */
 
 import { QUESTION_WORDS } from './rules/normalize.mjs';
+import { guard } from './guard.mjs';
 
 /** True when `text` has a question cue (a question mark or a question word anywhere). */
 export const looksLikeQuestion = (text) => /\?/.test(text) || text.split(/\s+/).some((w) => QUESTION_WORDS.has(norm(w)));
@@ -24,7 +26,7 @@ const norm = (w) => w.toLowerCase().replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu,
  * @param {{ minCoverage?: number, maxTokens?: number, maxTries?: number }} opts
  * @returns {Promise<{ text: string, ignored: {text:string,start:number,end:number}[], coverage: number, result: any } | null>}
  */
-export async function findPartialWindow(text, tryParse, { minCoverage = 0.25, maxTokens = 18, maxTries = 80, minTokens = 3, canIgnore = () => true } = {}) {
+export async function findPartialWindow(text, tryParse, { minCoverage = 0.25, maxTokens = 18, maxTries = 80, minTokens = 3, canIgnore = () => true, stop = () => false } = {}) {
   const toks = [...text.matchAll(/\S+/g)].map((m) => ({ s: m.index, e: m.index + m[0].length, w: norm(m[0]) }));
   if (toks.length < 2 || toks.length > maxTokens) return null;
   const total = text.trim().length || 1;
@@ -43,7 +45,7 @@ export async function findPartialWindow(text, tryParse, { minCoverage = 0.25, ma
     const coverage = slice.length / total;
     if (coverage < minCoverage) continue;
     if (j < toks.length - 1 && tailPunct && !/[?!.]$/.test(slice)) slice += tailPunct;
-    if (++tries > maxTries) return null;
+    if (++tries > maxTries || guard.soft() || stop()) return null;
     const result = await tryParse(slice);
     if (!result) continue;
     const ignored = [];

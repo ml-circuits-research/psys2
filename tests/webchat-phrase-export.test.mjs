@@ -28,7 +28,8 @@ test('RD7: typing N messages gives N entries in the count, the list and the JSON
     await pg.goto(`http://localhost:${srv.address().port}/webchat/index.html`, { waitUntil: 'domcontentloaded' });
     await pg.waitForFunction(() => document.querySelector('.p2-msg.is-hint'), { timeout: 120000 });
     const msgs = ['hello', 'b1', 'fa ochii mari', 'make a chart: apples 5, pears 3', 'zzq flarb wug', 'add a cloud nect to a house', 'more', 'what can i say here', 'help', 'draw a girl', 'eys express fear', 'show me bucharest'];
-    for (const m of msgs) { await pg.type('input.p2-text', m, { delay: 0 }); await pg.keyboard.press('Enter'); }   // fast: no waiting for the answers
+    // one message at a time (turn lifecycle, spec 06): wait for each answer before the next one
+    for (const m of msgs) { await pg.type('input.p2-text', m, { delay: 0 }); await pg.keyboard.press('Enter'); await pg.waitForFunction(() => !window.psys2.busy && !document.querySelector('.p2-msg.is-typing'), { timeout: 30000, polling: 20 }); }
     await pg.waitForFunction((n) => document.querySelectorAll('.p2-msg.is-user').length >= n && !document.querySelector('.p2-msg.is-typing'), { timeout: 120000 }, msgs.length);
     await pg.click('button[aria-label="Settings"]');
     await pg.waitForSelector('.p2-plog-item');

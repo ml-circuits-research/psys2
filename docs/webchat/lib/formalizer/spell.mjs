@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 /**
  * Spell corrector and chat-abbreviation normalizer (spec 03 section 1b and 7.9). Browser-safe, no dependencies.
  *
@@ -10,6 +11,7 @@
  */
 import { vocabularyOf, lexiconWordsOf, editDistance, SHORT_TYPOS } from './rules/index.mjs';
 import { isNumberWord } from './rules/numbers.mjs';
+import { guard } from './guard.mjs';
 
 /** Common English function words: never corrected, and valid correction targets (typos of "the", "and", "with" ...). */
 export const FUNCTION_WORDS = new Set((
@@ -116,9 +118,17 @@ export function protectedWordsOf(set, worldOrTab) {
 }
 
 /** A view of the world set with only `ids` (and their imports); the legends are shared. Own memo cache. */
+const RESTRICTED = new WeakMap();   // set -> Map(ids key -> restricted view)
 export function restrictedSet(set, ids) {
   const all = [...new Set(ids.flatMap((w) => (set.get(w) ? set.available(w) : [])))];
+  // Memoized per (set, worlds): every restricted view has its own memo cache (vocabulary, lexicon index ...), so a fresh view per call rebuilt
+  // them for every candidate text of the leniency stage (HANG task: 3 s for a one-typo message, most of it vocabularyOf).
+  const key = [...all].sort().join('|');
+  let views = RESTRICTED.get(set);
+  if (!views) RESTRICTED.set(set, views = new Map());
+  if (views.has(key)) return views.get(key);
   const sub = Object.create(set);
+  views.set(key, sub);
   sub._cache = new Map();
   sub.parent = set.parent ?? set;   // the full set, for context-anchored spelling (a word another world knows is not corrected)
   sub.list = () => all.map((i) => set.get(i));
@@ -148,6 +158,7 @@ export function spellCorrect(text, { vocab, maxCorrections = 6, abbreviations = 
   const corrections = [];
   let out = '', last = 0, first = true;
   for (const m of text.matchAll(WORD_RE)) {
+    guard.check('spell');   // a long message times vocabulary size: a cancellation point per word
     const raw = m[0], start = m.index, end = start + raw.length, lower = raw.toLowerCase();
     const isFirst = first; first = false;
     if (corrections.length >= maxCorrections || quoted.some(([a, b]) => start >= a && end <= b)) continue;
@@ -198,6 +209,7 @@ export function spellCandidates(text, { vocab, protect = null, maxPerWord = 5 } 
   const out = [];
   let first = true;
   for (const m of text.matchAll(WORD_RE)) {
+    guard.check('spell');   // a long message times vocabulary size: a cancellation point per word
     const raw = m[0], start = m.index, end = start + raw.length, lower = raw.toLowerCase();
     const isFirst = first; first = false;
     if (quoted.some(([a, b]) => start >= a && end <= b) || !/^[a-z]+$/.test(lower) || (!isFirst && /^[A-Z]/.test(raw))) continue;
@@ -230,6 +242,7 @@ export function spellAlternates(text, { vocab, maxPerWord = 4, maxTexts = 12, pr
   const out = [];
   let first = true;
   for (const m of text.matchAll(WORD_RE)) {
+    guard.check('spell');   // a long message times vocabulary size: a cancellation point per word
     const raw = m[0], start = m.index, end = start + raw.length, lower = raw.toLowerCase();
     const isFirst = first; first = false;
     if (protect?.has(lower) || (lower.length >= 4 && vocab.nouns?.has(lower) && (!vocab.world || !vocab.has(lower)))) continue;   // known in the active tab / a content noun of another world
