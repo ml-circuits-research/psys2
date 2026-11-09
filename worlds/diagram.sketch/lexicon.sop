@@ -2026,11 +2026,14 @@
     frame=false
     doc="Ways to say the back of the z-order."
     alt=behind_all_the_others
+    alt=in_the_back
+    alt=at_the_back
     alt=to_the_back
     alt=to_the_bottom
     alt=behind_the_others
     alt=below_the_others
     alt=under_the_others
+    alt=in_back
     alt=to_back
     alt=behind_everything
     alt=beneath_everything

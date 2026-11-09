@@ -70,7 +70,7 @@ test('simplified text validates when the original does not', async () => {
 
 test('a tie between worlds is broken by the routing policy tiers (active tab)', async () => {
   const t = 'Play B3';
-  const run = (tab) => validator.validate(msg(t, [{ score: -0.1, segments: [piece(t, W(['games.tictactoe', 0.5], ['media.music', 0.5]))] }], { tab }));
+  const run = (tab) => validator.validate(msg(t, [{ score: -0.1, segments: [piece(t, W(['games.tictactoe', 0.5], ['media.music', 0.5]))] }], { tab }), { tabTier: false });   // this test is about the tie-break; tier T would settle it before
   const onMusic = await run('music'), onGame = await run('tictactoe');
   assert.deepEqual(winnerWorlds(onMusic), ['media.music']);
   assert.deepEqual(winnerWorlds(onGame), ['games.tictactoe']);
@@ -193,4 +193,43 @@ test('the validation layer is browser-safe (no node: imports)', async () => {
   const { readFile } = await import('node:fs/promises');
   const src = await readFile(new URL('../src/dialog/dispatch-validate.mjs', import.meta.url), 'utf8');
   assert.equal(/from\s+['"]node:/.test(src), false);
+});
+
+// ADR-004 tier T: the active tab's world wins whenever its rules read the whole message completely, whatever the dispatcher proposes
+const exampleOf = (w) => w.patterns.flatMap((p) => (p.wire?.entries ?? []).filter((e) => e.key === 'example').map((e) => e.value.v)).filter((t) => typeof t === 'string');
+for (const w of engine.set.list().filter((x) => x.tab)) {
+  test(`tab tier: ${w.id} wins its own readings against a hostile dispatcher (tab ${w.tab.id})`, async () => {
+    const wrong = w.id === 'kids.arith' ? 'kids.shapes' : 'kids.arith';
+    let fired = 0;
+    for (const t of exampleOf(w).slice(0, 40)) {
+      const r = await validator.validate(msg(t, [{ score: -0.1, segments: [piece(t, W([wrong, 0.9], ['games.chess', 0.05]))] }], { tab: w.tab.id }));
+      if (r.trace.segmentations[0]?.tabTier) { fired++; assert.equal(r.status, 'understood'); assert.deepEqual(winnerWorlds(r), [w.id], t); }
+    }
+    assert.ok(fired >= 1, `no example of ${w.id} used the tab tier`);
+  });
+}
+test('tab tier: the avatar tab (a built-in tab world) keeps its own reading against a hostile dispatcher', async () => {
+  const t = 'make the avatar blue';
+  const r = await validator.validate(msg(t, [{ score: -0.1, segments: [piece(t, W(['kids.arith', 0.9], ['kids.shapes', 0.05]))] }], { tab: 'avatar' }));
+  assert.equal(r.status, 'understood');
+  assert.deepEqual(winnerWorlds(r), ['ui.avatar']);
+  assert.equal(r.trace.segmentations[0].tabTier, true);
+});
+test('tab tier: a message naming another world is not claimed by the tab', async () => {
+  const t = 'make the avatar blue';
+  const r = await validator.validate(msg(t, [{ score: -0.1, segments: [piece(t, W(['ui.avatar', 0.9]))] }], { tab: 'diagram' }));
+  assert.equal(r.trace.segmentations[0].tabTier, undefined);
+  assert.deepEqual(winnerWorlds(r), ['ui.avatar']);
+});
+
+test('a running game takes bare coordinates even when another world spoke last', async () => {
+  const s = engine.createSession({ language: 'en' });
+  for (const m of ['lets play tic tac toe', 'make the avatar a girl', 'make the avatar blue']) await s.send(m);
+  assert.equal(s.context().gameWorld, 'games.tictactoe');
+  const r = await s.send('B1');
+  assert.doesNotMatch(String(r.reply ?? r.answer ?? r.text ?? JSON.stringify(Object.keys(r))), /looks like a game move/);
+  assert.match(String(r.reply ?? r.answer ?? r.text ?? JSON.stringify(Object.keys(r))), /took/i);
+  // no game was played: the offer stays
+  const f = engine.createSession({ language: 'en' });
+  assert.match(String(((x) => x.reply ?? x.answer ?? x.text)(await f.send('B1'))), /looks like a game move/);
 });

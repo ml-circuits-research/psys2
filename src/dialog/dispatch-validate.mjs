@@ -22,6 +22,7 @@ import { serialize } from '../soplang/index.mjs';
 import { spellCorrect, spellAlternates, protectedWordsOf, worldVocabulary, spellVocabulary, ignorable } from '../formalizer/spell.mjs';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs';
 import { checkValues } from './value-check.mjs';
+import { wildTokens } from '../formalizer/routing.mjs';
 
 /** Default policy; every weight is an option. */
 export const DEFAULT_POLICY = {
@@ -56,6 +57,7 @@ export const DEFAULT_POLICY = {
   validFirst: true,           // G7: a piece's best reading is a valid one even when an invalid reading of a more probable world scores higher ("new game" read by the shell, not by the game the model named)
   splitRepair: 3,             // G7: a piece nobody reads is cut into 2 (or 3, when 3) parts that the rules read, in one world; 0 = off
   mergeRepair: 2,             // G7: how many merges of two pieces cut apart inside a clause (no punctuation or connective between) are tried as extra segmentations; 0 = off
+  tabTier: true,              // ADR-004 tier T: the active tab's world wins whenever its rules read the whole message completely (no catch-all), whatever the dispatcher proposes
   intersegmentContext: true,  // pieces after the first run in a session where the earlier chosen pieces were committed
 };
 
@@ -415,14 +417,41 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
     return { index: seg.index, dispatcherScore: seg.score, score: total, tier, valid: pieces.length > 0 && pieces.every((p) => p.valid), nInvalid: pieces.filter((p) => !p.valid).length, pieces };
   };
 
+  /**
+   * ADR-004 tier T (tab first): when the active tab's world reads the whole message completely in the rule router's own order (every clause parsed, every
+   * winning match of the tab world, none a catch-all, the interpreter accepts), the dispatcher's candidates are not consulted. Returns a one-piece
+   * segmentation for the tab world, or null.
+   */
+  const tabFirst = async (pred, o) => {
+    const text = pred.text.trim();
+    if (!o.tabTier || !pred.context.tab || !text) return null;
+    const s = await seed(pred.context);
+    const ctx = s.context();
+    const tw = ctx.tabWorld;
+    if (!tw || !engine.set.get(tw) || ctx.modalWorld) return null;
+    const res = formalize(text, { worlds: engine.set, session: s.isession, source: 'tabtier', context: ctx, router: engine.router });
+    if (res.segments.length !== 1 || res.segments.some((x) => x.unparsed || !x.match)) return null;   // one clause only: a multi-clause message may belong to several worlds, the dispatcher's segmentation decides
+    const ids = view([tw]).ids;
+    if (res.segments.some((x) => !ids.includes(x.match.worldId) || x.match.worldId === 'ui.shell' || wildTokens(x.match) > x.match.literals)) return null;
+    const r = await check(pred.context, [], tw, text, o);
+    if (!r.valid) return null;
+    const start = pred.text.indexOf(text);
+    return { index: 0, score: 0, tabTier: true, segments: [{ start, end: start + text.length, text, worlds: [{ world: tw, score: 1 }] }] };
+  };
+
   /** Validate one prediction. `override` replaces policy fields for this call only. */
   const validate = async (prediction, override = {}) => {
     const o = { ...base, ...override };
     const pred = normalizePrediction(prediction);
-    const segs = pred.segmentations.slice(0, o.maxSegmentations);
+    let segs = pred.segmentations.slice(0, o.maxSegmentations);
     const evals = [];
+    const tabSeg = await tabFirst(pred, o);
+    if (tabSeg) {
+      const ev = await evalSegmentation(pred, tabSeg, o, false);
+      if (ev.valid && ev.tier === 0) { ev.tabTier = true; segs = [tabSeg]; evals.push(ev); }
+    }
     // phase 1: every segmentation without the normalizer; the normalizer only runs on residue that no segmentation reads completely (spec 03 section 7.13)
-    for (const seg of segs) evals.push(await evalSegmentation(pred, seg, o, false));
+    if (!evals.length) for (const seg of segs) evals.push(await evalSegmentation(pred, seg, o, false));
     if (normalizer && o.tryNormalizer && evals.every((e) => e.tier > 1)) {
       for (const [i, seg] of segs.entries()) if (seg.index < o.normalizerSegmentations) evals[i] = await evalSegmentation(pred, seg, o, true);
     }

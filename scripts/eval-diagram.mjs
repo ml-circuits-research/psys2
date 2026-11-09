@@ -3,7 +3,7 @@
 // The first measurement of the world diagram.sketch with the rules (task DIAG): the labelled sets of diagram-vss-demo scored with the logic of its
 // bench-canon.js (imports/diagram-vss-demo/reference/bench-canon.js): right act, right args, extras, wrong.
 //
-//   node scripts/eval-diagram.mjs [--set bench|test|all] [--jobs N] [--limit N] [--no-write] [--verbose]
+//   node scripts/eval-diagram.mjs [--set bench|test|all] [--jobs N] [--limit N] [--stride N] [--no-write] [--verbose]
 //
 // Sets: data/bench/*.json (single sentences with gold args) and data/test (labelled messages, one or several wires each).
 // For every row the world is loaded in a dialog session with the Diagram tab open and the shapes of the row on the canvas.
@@ -54,7 +54,9 @@ function loadRows(which, limit) {
       }
     }
   }
-  return limit ? rows.slice(0, limit) : rows;
+  const stride = Number(arg('stride', 1));   // --stride N keeps every Nth row (a quick, spread-out sample)
+  const kept = stride > 1 ? rows.filter((_, i) => i % stride === 0) : rows;
+  return limit ? kept.slice(0, limit) : kept;
 }
 
 const stateOf = (row) => ({
@@ -110,9 +112,9 @@ async function scoreRow(env, row) {
     const gold = actOfWire(w);
     if (at < 0) { wires.push({ gold, outcome: 'nospan' }); continue; }
     const seg = (r.segments ?? []).find((x) => x.span && x.span[0] < at + sp.length && at < x.span[1]);
-    if (!seg || !seg.match) { wires.push({ gold, outcome: 'unread' }); continue; }
+    if (!seg || !seg.match) { wires.push({ gold, outcome: 'unread', span: sp }); continue; }
     const got = acts(seg);
-    wires.push({ gold, got, world: seg.match.worldId, outcome: seg.match.worldId === WORLD && got === gold ? 'right' : seg.match.worldId === WORLD ? 'wrong-act' : 'other-world' });
+    wires.push({ gold, got, world: seg.match.worldId, span: sp, outcome: seg.match.worldId === WORLD && got === gold ? 'right' : seg.match.worldId === WORLD ? 'wrong-act' : 'other-world' });
   }
   out.wires = wires;
   out.gold = rowActs(row);

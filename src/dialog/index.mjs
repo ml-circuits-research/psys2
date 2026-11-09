@@ -126,6 +126,19 @@ export const LENIENT_BUDGET_MS = 3000;   // default only; the live value is LIMI
 
 const FAST_SEGMENT_MARGIN = 0;   // nats of log-probability between the model's best segmentation and the runner-up for the multi-clause fast path
 
+/**
+ * A game whose world state says it is still being played (a tic-tac-toe board with a free cell and no winner, chess or hangman with status "playing", the
+ * guessing game while it asks), whichever world spoke last: a bare coordinate ("B1") is its move. The host's `activeGame` wins when it is set.
+ */
+function runningGame(st, last) {
+  const g = last && st[last];
+  if (!g || typeof g !== 'object') return null;
+  const live = last === 'games.tictactoe' ? Array.isArray(g.board) && !g.winner && g.board.some((c) => !c)
+    : last === 'games.chess' || last === 'games.hangman' ? g.status === 'playing'
+    : last === 'games.guess' ? g.phase === 'asking' || g.phase === 'guessing' : false;
+  return live ? last : null;
+}
+
 export class DialogSession {
   constructor(engine, { language = 'auto', formalizer = 'rules', spell = true, partial = false, fastPath = false, bestEffort = false } = {}) {
     this.engine = engine;
@@ -155,7 +168,7 @@ export class DialogSession {
    */
   forkForValidation() {
     const s = Object.create(DialogSession.prototype);
-    s.engine = this.engine; s.isession = this.isession.clone(); s._recentWorlds = [...(this._recentWorlds ?? [])];
+    s.engine = this.engine; s.isession = this.isession.clone(); s._recentWorlds = [...(this._recentWorlds ?? [])]; s._lastGame = this._lastGame;
     return s;
   }
 
@@ -271,7 +284,8 @@ export class DialogSession {
     const activeTab = st['ui.shell']?.activeTab ?? null;
     const tabWorld = activeTab ? (this.engine.set.list().find((w) => w.tab?.id === activeTab)?.id ?? BUILTIN[activeTab] ?? null) : null;
     const modalWorld = Object.keys(st).find((id) => st[id]?.inputMode) ?? null;
-    const gameWorld = st['ui.shell']?.activeGame ?? null;
+    if (tabWorld?.startsWith('games.')) this._lastGame = tabWorld;   // opening a game tab ("lets play tic tac toe") makes it the game this session plays
+    const gameWorld = st['ui.shell']?.activeGame ?? runningGame(st, this._lastGame);
     const recentWorlds = [...(this._recentWorlds ?? [])];
     return { activeTab, tabWorld, modalWorld, gameWorld, recentWorlds, lastWorld: recentWorlds[0] ?? null, states: st };
   }
@@ -287,6 +301,8 @@ export class DialogSession {
 
   _noteWorlds(segments) {
     const ids = segments.map((s) => s.match?.worldId).filter((w) => w && w !== 'ui.shell' && w !== 'kids.common');
+    const game = ids.find((w) => w.startsWith('games.'));
+    if (game) this._lastGame = game;   // the last game this session played: while its state says it is running, bare coordinates are its moves (context().gameWorld)
     this._recentWorlds = [...new Set([...ids.reverse(), ...(this._recentWorlds ?? [])])].slice(0, 3);
   }
 
