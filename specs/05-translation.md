@@ -32,3 +32,10 @@ The rule translator above is the `rules` strategy. `mt-small` (a small CPU machi
 ## Open questions
 - Whether to keep this as a boundary step, or train language-specific encoder profiles later (vision §5 asks for an explicit profile per language).
 - How to evaluate meaning preservation: round-trip formalization equality (the Romanian test produces the same wires as its English twin) is the proposed metric.
+
+## Romanian voice additions (RP5, MOBILE-VOICE 4-5)
+- **Sound-alikes.** Before translation a Romanian message gets tab-aware corrections for words the recogniser confuses with a word of the open tab's world (`un sare` on the Drawing tab is `un soare`), and the game name `x și zero` is read as `x și 0` ("pornește" becomes "începe" before it). Implemented in `src/dialog/index.mjs` (`soundAlikes`).
+- **Unchanged output.** When the active translator returns the Romanian text unchanged and a rules translator is available (`translator.rules`), the message is retried through the rules translator.
+- **Grammar.** Coordinated post-nominal adjectives (`un pește mic și albastru` is "a small blue fish"); the definite plural of an invariant noun keeps its number (`peștii` is "all the fish").
+- **Vocabulary.** Mood adjectives (`bucuros`, `vesel`, `nervos`, `speriat`, `supărat`), `liniuță` (dash), and the diminutives `inimioară`, `căsuță`, `norișor`, `peștișor`, `șoricel`, `floricică`, `copăcel`, `pisicuță`, `păsărică`, `steluță`, `bărcuță`, `mașinuță` map to the base noun.
+- **Replies.** The interjections of the opener lists are in the phrase table ("Voila!" is "Poftim!", "Look at that!" is "Uite!"); the avatar refusals and the "cannot draw" reply have phrase entries; the Drawing world says which animals it can draw when it cannot draw the one asked for.

@@ -523,6 +523,10 @@ function parseNP(toks, i, info, prev) {
           // "noi" (we) is only an adjective directly after a noun when no verb follows
           if (x.key === 'noi' && nx && verbsOf(nx).length) break;
           np.adjs.push({ en: a.entry.en, tok: x, post: true }); j++; grow(x);
+          // coordinated adjectives after the noun: "un pește mic și albastru" = a small blue fish
+          while (toks[j] && toks[j].key === 'si' && toks[j + 1] && isWord(toks[j + 1]) && adjOf(toks[j + 1]) && (!nounsOf(toks[j + 1]).length || COLOURS.has(adjOf(toks[j + 1]).entry.en)) && !verbsOf(toks[j + 1]).length) {
+            np.adjs.push({ en: adjOf(toks[j + 1]).entry.en, tok: toks[j + 1], post: true }); j += 2; grow(toks[j - 1]);
+          }
           continue;
         }
       }
@@ -651,6 +655,8 @@ function renderNP(np, o = {}) {
     if (isNoun) {
       const e = head.entry;
       const txt = plural ? (e.enp || E.pluralEn(e.en)) : e.en;
+      // an invariant plural with the article ("peștii" = the fish) keeps its number for the worlds: "all the fish"
+      if (plural && np.def && !np.num && !np.quant && !np.possessor && !np.poss && !np.adjs.length && !np.pre?.length && txt === e.en && e.en === 'fish') { const di = out.findIndex((x) => x.en === 'the'); if (di >= 0) out.splice(di, 0, pc('all', head.tok)); }
       out.push(pc(txt, head.tok, { noun: true }));
       if (np.ofNP) { out.push(pc('of', np.ofNP.ofTok)); out.push(...renderNP(np.ofNP, { noArticle: false })); }
     } else if (head.kind === 'text') out.push(pc(head.text, head.tok));

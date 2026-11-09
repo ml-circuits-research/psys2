@@ -3982,3 +3982,13 @@
     input="The sun is up, not under the clouds."
     expect="above"
     session=rp3dr
+
+@t.art.draw.rp5a core.test
+    input="Draw a monkey."
+    expect="cannot draw a monkey"
+    expectStatus=unsupported
+
+@t.art.draw.rp5b core.test
+    input="Draw a dash."
+    expect="line"
+    expectStatus=supported

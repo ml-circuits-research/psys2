@@ -82,6 +82,7 @@ for (const [en, [sg, pl]] of Object.entries(LABEL_RO)) {
   CAP_ENTRIES.push([`I do not know ${en} like "{q}".`, `Nu cunosc niciun fel de ${sg} precum "{q}".`]);
   CAP_ENTRIES.push([`Ask me what ${en} I can have.`, `Întreabă-mă ce ${pl} pot avea.`]);
 }
+CAP_ENTRIES.push(['I cannot draw {np} yet.', 'Încă nu pot desena {np}.'], ['I can draw a cat, a dog, a fish or a bird.', 'Pot desena o pisică, un câine, un pește sau o pasăre.'], ['What would you like?', 'Ce ai vrea?']);
 CAP_ENTRIES.push(['I do not have that part.', 'Nu am această parte.'], ['I do not know how to look like that.', 'Nu știu cum să arăt așa.']);
 CAP_ENTRIES.push(['My eyes can be {eyelist}.', 'Ochii mei pot fi {eyelist}.']);
 CAP_ENTRIES.push(['For {cmp} eyes try {eyelist}; say "make your eyes {eye}".', 'Pentru ochi {cmp} încearcă {eyelist}; spune "fă-ți ochii {eye}".']);
@@ -107,7 +108,7 @@ CAP_ENTRIES.push(['Now I look {mood}.', 'Acum arăt {mood}.'], ['Yes, I look {mo
 const TABLE = [
   ...CAP_ENTRIES,
   // ---- openers and small talk
-  ['Ta-da!', 'Gata!'], ['Nice!', 'Frumos!'], ['Done!', 'Gata!'], ['Okay!', 'Bine!'], ['Sure!', 'Sigur!'], ['Good luck!', 'Mult noroc!'],
+  ['Voila!', 'Poftim!'], ['Look at that!', 'Uite!'], ['Look!', 'Uite!'], ['Ta-da!', 'Gata!'], ['Nice!', 'Frumos!'], ['Done!', 'Gata!'], ['Okay!', 'Bine!'], ['Sure!', 'Sigur!'], ['Good luck!', 'Mult noroc!'],
   ['There you go!', 'Poftim!'], ['Here you go!', 'Poftim!'], ['There!', 'Gata!'], ['Good game!', 'Joc frumos!'], ['Good.', 'Bine.'],
   ['What would you like to talk about?', 'Despre ce ai vrea să vorbim?'],
   ['I am fine, thank you!', 'Sunt bine, mulțumesc!'], ['I am doing well, thanks for asking!', 'Sunt bine, mulțumesc că ai întrebat!'],

@@ -41,9 +41,11 @@ export const KIND_WORDS = {
   person: 'person', man: 'person', woman: 'person', boy: 'person', girl: 'person', child: 'person', kid: 'person', balloon: 'balloon',
   rocket: 'rocket', spaceship: 'rocket', moon: 'moon', crescent: 'moon',
   circle: 'circle', ball: 'circle', dot: 'circle', square: 'square', box: 'square', rectangle: 'rectangle', triangle: 'triangle',
-  star: 'star', heart: 'heart', line: 'line', arrow: 'arrow', oval: 'oval', ellipse: 'oval',
+  star: 'star', heart: 'heart', line: 'line', dash: 'line', hyphen: 'line', arrow: 'arrow', oval: 'oval', ellipse: 'oval',
   thing: '*', object: '*', item: '*', shape: '*', bit: '*', piece: '*',
 };
+/** Animals people ask for that the canvas cannot draw (yet): the reply names what it can draw. */
+const UNDRAWABLE = new Set(['monkey', 'lion', 'tiger', 'elephant', 'horse', 'cow', 'pig', 'rabbit', 'bear', 'duck', 'frog', 'snake', 'giraffe', 'zebra', 'sheep', 'turtle', 'butterfly', 'mouse']);
 const IRREGULAR = { people: 'person', men: 'person', women: 'person', children: 'person', kids: 'person', mice: null, leaves: null, fishes: 'fish' };
 /** Ground cover words -> ground kind. */
 export const GROUND_WORDS = { grass: 'grass', lawn: 'grass', meadow: 'grass', sand: 'sand', beach: 'sand', snow: 'snow', water: 'sea', sea: 'sea', ocean: 'sea', lake: 'sea', sandy: 'sand', snowy: 'snow', grassy: 'grass', watery: 'sea', icy: 'snow', wet: 'sea', beachy: 'sand' };
@@ -745,6 +747,8 @@ function readSpec(args, tailWords) {
 export const add = guard((ctx, args, s) => {
   const words0 = toks(args.where ?? '');
   const spec0 = readSpec({ ...args, have: sameKind(s, kindOfWord(args.kind)?.kind).length });
+  const askedFor = String(args.kt ?? args.kind ?? '').toLowerCase().replace(/s$/, '');
+  if (!spec0.kind && UNDRAWABLE.has(askedFor)) return no(`I cannot draw ${/^[aeiou]/.test(askedFor) ? 'an' : 'a'} ${askedFor} yet. I can draw a cat, a dog, a fish or a bird. What would you like?`);
   if (!spec0.kind || spec0.kind === '*') return no('I can draw a house, a tree, a sun, a cloud, a car, a flower, a cat, a dog, a fish, a bird, a boat, a mountain, a rainbow, a person, a balloon, a rocket, a moon and shapes like a circle, a square, a star or a heart. What would you like?');
   // a tail with more things: "... and a tree"
   const withParts0 = parseWith(spec0.kind, words0);
@@ -1053,6 +1057,8 @@ export function parseDest(text) {
   const j = w.join(' ');
   if (/\b(to the front|forward|to the top of everything|in front of everything)\b/.test(j)) return { kind: 'z', dir: 'front' };
   if (/\b(to the back|backward|backwards|to the bottom of everything|behind everything)\b/.test(j)) return { kind: 'z', dir: 'back' };
+  // "in the water", "into the sea": the ground band (the water, sand, grass or snow the picture has)
+  if (/^(?:in|into|inside|on|onto|to)\s+(?:the\s+)?(?:water|sea|ocean|lake|sand|beach|snow)$/.test(j)) return { kind: 'region', region: 'ground' };
   const rel = parseRelation(w);
   if (rel) return { kind: 'rel', rel: rel.rel, refs: rel.refs, closer: /\bcloser\b/.test(j) };
   if (/\b(edge|far)\b/.test(j) || amount >= 20) {
@@ -1103,7 +1109,7 @@ export const move = guard((ctx, args, s) => {
   // "slide the house over to the right": "over to" is a direction, not the relation "over"
   phrase = phrase.replace(/\b(?:over|across|along) (to|towards|toward)\b/gi, '$1');
   const { target: tt, dest } = splitDest(phrase);
-  if (!dest) return no('Where should it go? You can say, for example, "move the tree to the left", "put the cat next to the house" or "move it to the top right corner".');
+  if (!dest) return no('Where should it go? You can say, for example, "move the tree to the left", "put the cat next to the house" or "move it to the top right corner".', 'missing');
   const t = target(s, tt || 'it', { many: true });
   if (t.error) return t.error;
   const { r } = t;

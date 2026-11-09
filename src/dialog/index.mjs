@@ -113,6 +113,14 @@ export async function translateParts(parts, translator, lang) {
   return out.map(({ src, en, ...p }) => p);
 }
 
+/** Romanian words the speech recogniser confuses with a word of the open tab's world (RP5): "un sare" on the Drawing tab is "un soare". */
+const SOUND_ALIKES = { 'art.draw': { sare: 'soare', soar: 'soare', soarele: 'soarele' } };
+function soundAlikes(text, tabWorld) {
+  text = text.replace(/\bx\s+(?:și|si|şi)\s+(?:zero|o|0)\b/gi, 'x și 0').replace(/\b(?:pornește|porneste|lansează|lanseaza|deschide)\s+(?=x și 0\b)/gi, 'începe ');   // the game's name: "x și zero" (the digit is how the world spells it)
+  const map = SOUND_ALIKES[tabWorld];
+  return map ? text.replace(/\p{L}+/gu, (w) => (Object.hasOwn(map, w.toLowerCase()) ? map[w.toLowerCase()] : w)) : text;
+}
+
 /** Tabs of worlds that do not declare one in their manifest (the built-in tabs of the demo page). */
 const BUILTIN_TAB = { 'ui.avatar': 'robot', 'docs.editor': 'editor', 'games.tictactoe': 'tictactoe', 'games.guess': 'guess', 'games.hangman': 'hangman' };
 
@@ -868,8 +876,14 @@ export class DialogSession {
       // RD5: a host set to English still switches on strong Romanian evidence (clitics, diacritics, several Romanian content words); the host moves its dropdown
       if (wanted === 'en' && lang === 'en' && ev?.strongRo && !ev.strongEn) { lang = 'ro'; switchedLanguage = 'ro'; }
       if (lang !== 'en' && lang !== 'unknown') {
-        translation = await perf.time('translate', () => guard.abortable(translator.translate(text, { from: lang, to: 'en' }), 'translate'));
+        const heard = lang === 'ro' ? soundAlikes(text, this.context().tabWorld) : text;
+        translation = await perf.time('translate', () => guard.abortable(translator.translate(heard, { from: lang, to: 'en' }), 'translate'));
         english = textOf(translation) ?? text;
+        // an engine that returns the Romanian text unchanged ("șterge peștii", "Fă o gură mare") is retried through the rules translator, which covers the app's own verbs and nouns
+        const rules = translator.rules;
+        if (rules && rules !== translator && lang === 'ro' && english.trim().toLowerCase() === text.trim().toLowerCase()) {
+          try { const again = await guard.abortable(rules.translate(heard, { from: lang, to: 'en' }), 'translate'); if (textOf(again) && textOf(again).trim().toLowerCase() !== text.trim().toLowerCase()) { translation = again; english = textOf(again); } } catch { /* keep the first reading */ }
+        }
       } else lang = 'en';
     }
     this.sources.set(sid, { original: text, english, lang, alignment: translation?.alignment });

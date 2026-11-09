@@ -295,6 +295,8 @@ export const COMMAND_FRAMES = [
   F('deschide larg ochii', 'open your eyes wide'),
   F('arată {adj}', 'look {adj}'),
   F('fii {adj}', 'be {adj}'),
+  F('fiind|devenind {np:bare}', 'be a {np}'),
+  F('fiind|devenind un|o {np:bare}', 'be a {np}'),
   F('fă o față {adj}', 'make a {adj} face'),
   F('dă-mi un zâmbet', 'give me a smile'),
   F('deschide gura', 'open your mouth'),

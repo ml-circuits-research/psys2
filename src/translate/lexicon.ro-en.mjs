@@ -343,6 +343,19 @@ deget,degete|finger|n
 ghiară,ghiare|claw|f
 corp,corpuri|body|n
 inimă,inimi|heart|f
+inimioară,inimioare|heart|f
+căsuță,căsuțe|house|f
+norișor,norișori|cloud|m
+peștișor,peștișori|fish/fish|m anim
+șoricel,șoricei|mouse/mice|m anim
+floricică,floricele|flower|f
+copăcel,copăcei|tree|m
+pisicuță,pisicuțe|cat|f anim
+căţel,căţei|dog|m anim
+păsărică,păsărici|bird|f anim
+steluță,steluțe|star|f
+bărcuță,bărcuțe|boat|f
+mașinuță,mașinuțe|car|f
 mamă,mame|mother|f anim kin
 tată,tați|father|m anim kin
 părinte,părinți|parent|m anim kin
@@ -385,6 +398,7 @@ dreptunghi,dreptunghiuri|rectangle|n
 romb,romburi|rhombus|n
 oval,ovaluri|oval|n
 linie,linii|line|f
+liniuță,liniuțe|dash|f
 lucru,lucruri|thing|n
 loc,locuri|place|n
 drum,drumuri|road|n
@@ -838,7 +852,11 @@ frumos,frumoasă,frumoși,frumoase|beautiful
 urât,urâtă,urâți,urâte|ugly
 fericit,fericită,fericiți,fericite|happy
 trist,tristă,triști,triste|sad
-supărat,supărată,supărați,supărate|upset
+supărat,supărată,supărați,supărate|angry
+bucuros,bucuroasă,bucuroși,bucuroase|glad
+vesel,veselă,veseli,vesele|cheerful
+nervos,nervoasă,nervoși,nervoase|angry
+speriat,speriată,speriați,speriate|scared
 obosit,obosită,obosiți,obosite|tired
 flămând,flămândă,flămânzi,flămânde|hungry
 însetat,însetată,însetați,însetate|thirsty
