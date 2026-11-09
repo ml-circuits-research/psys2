@@ -131,8 +131,11 @@ const QUESTION_WORD = /^(?:what|who|whom|whose|where|when|why|how|which)\b/i;
 
 /** Time budget of the leniency stage (spelling variants and partial windows) of one message, in ms; past it the best reading so far stands (turn guard, spec 06). */
 import { LIMITS } from './time-limits.mjs';
+/** A settled dry-run answer is reused for the same text and session state for this long (ms). */
+export const DRY_CACHE_MS = 5000;
+const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
 /** A voice dry run is skipped for texts longer than this many words (room talk, not a command). */
-export const DRY_MAX_WORDS = 25;
+const DRY_MAX_WORDS = 25;
 export const LENIENT_BUDGET_MS = 3000;   // default only; the live value is LIMITS.lenientMs (time-limits.mjs)
 
 const FAST_SEGMENT_MARGIN = 0;   // nats of log-probability between the model's best segmentation and the runner-up for the multi-clause fast path
@@ -201,11 +204,19 @@ export class DialogSession {
     const ctl = new AbortController();
     const onAbort = () => ctl.abort();
     signal?.addEventListener?.('abort', onAbort, { once: true });
+    // SOAK-BUSY: the end-of-turn check and the NOISE classifier read the same text a moment apart: a settled answer for the same text, language and session state is reused for DRY_CACHE_MS
+    const key = `${language ?? this.language}|${this._msg}|${this._rev ?? 0}|${this.isession.state?.['ui.shell']?.activeTab ?? ''}|${String(text ?? '').trim()}`;
+    const hit = this._dryCache;
+    if (hit && hit.key === key && Date.now() - hit.at < DRY_CACHE_MS) { await Promise.resolve(); if (signal?.aborted) return { complete: false, segments: 0, reason: 'cancelled' }; return detail ? hit.res : stripDetail(hit.res); }
     const run = { ctl, done: null };
-    run.done = this._dryRun(text, { language, deadlineMs, detail, signal: ctl.signal });
+    run.done = this._dryRun(text, { language, deadlineMs, detail: true, signal: ctl.signal }).then((res) => {
+      if (!['cancelled', 'deadline', 'busy', 'error'].includes(res.reason)) this._dryCache = { key, at: Date.now(), res };
+      return detail ? res : stripDetail(res);
+    });
     this._dry = run;
     try { return await run.done; } finally { signal?.removeEventListener?.('abort', onAbort); if (this._dry === run) this._dry = null; }
   }
+
 
   async _dryRun(text, { language, deadlineMs, detail, signal }) {
     const { set, formalizers, interp, translator } = this.engine;
@@ -259,6 +270,7 @@ export class DialogSession {
 
   /** Host-initiated state change (a click on a tab, a toggle): shallow-merges `patch` into the world's state. No reply, no effects. */
   setWorldState(worldId, patch = {}) {
+    this._rev = (this._rev ?? 0) + 1;
     const st = (this.isession.state[worldId] ??= {});
     Object.assign(st, structuredClone(patch));
     if (worldId === 'ui.shell' && patch.activeTab) this.astra?.onTabChange(patch.activeTab);   // the tab resumes its discussion (spec 13 section 1)
@@ -272,6 +284,7 @@ export class DialogSession {
    * The host renders a non-empty `text` as a new assistant message and applies `state` and `effects` like a reply.
    */
   observe({ effect, ok = true, detail = '', data = null, world = null } = {}) {
+    this._rev = (this._rev ?? 0) + 1;
     const id = this.isession.form.freshId('o');
     const pairs = [['core.observation.effect', atom(String(effect))], ['core.observation.ok', atom(ok ? 'true' : 'false')]];
     if (detail !== '' && detail != null) pairs.push(['core.observation.detail', str(String(detail))]);

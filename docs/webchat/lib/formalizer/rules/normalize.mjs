@@ -372,6 +372,25 @@ export const SHORT_TYPOS = {
   dw: 'draw', srch: 'search', nxt: 'next', bk: 'back', opn: 'open', mpa: 'map', fr: 'for', cn: 'can',
 };
 
+/** Closest words of `vocab` within `budget` edits (all ties). Memoized per vocabulary object and word (SOAK-BUSY: the same unknown words came back for every reading of room talk); the vocabularies are immutable once built, the size guards against growth. */
+const closestMemo = new WeakMap();
+function closest(vocab, word, budget) {
+  let m = closestMemo.get(vocab);
+  if (!m || m.size !== vocab.size) { m = { size: vocab.size, map: new Map() }; closestMemo.set(vocab, m); }
+  const hit = m.map.get(word);
+  if (hit) return [...hit];
+  let bestD = budget + 1, tied = [];
+  for (const w of vocab) {
+    if (w.length < 3 || Math.abs(w.length - word.length) > budget || !/^[a-z]+$/.test(w)) continue;
+    const d = editDistance(word, w, bestD);
+    if (d > budget) continue;
+    if (d < bestD) { tied = [w]; bestD = d; } else if (d === bestD) tied.push(w);
+  }
+  if (m.map.size > 5000) m.map.clear();
+  m.map.set(word, tied);
+  return [...tied];
+}
+
 const QUOTE_RE = /"[^"]*"|\u201c[^\u201d]*\u201d/g;
 
 /**
@@ -390,13 +409,7 @@ export function correctTokens(tokens, text, vocab, known = (w) => vocab.has(w), 
     if (quoted.some(([a, b]) => t.start >= a && t.end <= b)) return t;
     const budget = typoBudget(t.lower);
     if (!budget || known(t.lower)) return t;
-    let bestD = budget + 1, tied = [];
-    for (const w of vocab) {
-      if (w.length < 3 || Math.abs(w.length - t.lower.length) > budget || !/^[a-z]+$/.test(w)) continue;
-      const d = editDistance(t.lower, w, bestD);
-      if (d > budget) continue;
-      if (d < bestD) { tied = [w]; bestD = d; } else if (d === bestD) tied.push(w);
-    }
+    let tied = closest(vocab, t.lower, budget);
     // equally close candidates: the preferred (candidate world's) vocabulary first, then the most frequent word; never an arbitrary pick
     if (tied.length > 1 && preferred) {
       const pref = typeof preferred === 'function' ? preferred() : preferred;

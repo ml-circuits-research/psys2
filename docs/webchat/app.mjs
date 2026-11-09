@@ -114,7 +114,7 @@ export async function mountPsys2(element, options = {}) {
   const statusEl = h('p', { class: 'p2-status', 'aria-live': 'off' }, 'Loading…');
   const input = h('input', { class: 'p2-text', type: 'text', id: `p2-in-${Math.random().toString(36).slice(2, 7)}`, autocomplete: 'off', enterkeyhint: 'send', placeholder: 'Type a message…', 'aria-label': 'Message' });
   // Every icon button carries a tooltip (title) with the same text as its aria-label, saying what it does and what state it is in (UI1).
-  const label = (btn, text) => { btn.setAttribute('aria-label', text); btn.title = text; };
+  const label = (btn, text) => { if (btn._label === text) return; btn._label = text; btn.setAttribute('aria-label', text); btn.title = text; };   // SOAK-BUSY: no DOM write when nothing changed
   const micBtn = h('button', { class: 'p2-btn p2-mic', type: 'button', 'aria-pressed': 'false', 'aria-label': 'Speak a message', title: 'Speak a message' }, icon('mic'));
   const ringEl = (() => { const NS = 'http://www.w3.org/2000/svg'; const svg = document.createElementNS(NS, 'svg'); svg.setAttribute('viewBox', '0 0 40 40'); svg.setAttribute('class', 'p2-ring'); svg.setAttribute('aria-hidden', 'true'); const c = document.createElementNS(NS, 'circle'); c.setAttribute('cx', '20'); c.setAttribute('cy', '20'); c.setAttribute('r', '18'); svg.append(c); return svg; })();
   const micCount = h('span', { class: 'p2-mic-count', 'aria-hidden': 'true', hidden: true });
@@ -183,7 +183,8 @@ export async function mountPsys2(element, options = {}) {
   }
 
   // ---------- chat ----------
-  function scrollDown() { log.scrollTop = log.scrollHeight; }
+  let scrollQueued = false;
+  function scrollDown() { if (scrollQueued) return; scrollQueued = true; const go = () => { scrollQueued = false; log.scrollTop = log.scrollHeight; }; (typeof requestAnimationFrame === 'function' && document.visibilityState !== 'hidden') ? requestAnimationFrame(go) : go(); }   // one forced layout per frame, not one per message
   function addMessage(who, text, { children, className } = {}) {
     const bubble = h('div', { class: 'p2-bubble' }, text, children);
     const meta = h('div', { class: 'p2-meta' }, h('time', {}, time()));
@@ -225,6 +226,8 @@ export async function mountPsys2(element, options = {}) {
   }
   function syncSendButton() {
     const stop = !!turn || (isBusy() && !input.value.trim());
+    if (sendBtn._stop === stop) return;   // the icon is rebuilt only when it changes
+    sendBtn._stop = stop;
     sendBtn.type = stop ? 'button' : 'submit';
     sendBtn.classList.toggle('is-stop', stop);
     label(sendBtn, stop ? 'Stop' : 'Send');
@@ -236,6 +239,7 @@ export async function mountPsys2(element, options = {}) {
     clearTimeout(flashTimer);
     flashTimer = setTimeout(() => { flash = null; setStatus(); }, 3000);
   }
+  let ringGen = 0;
   function setStatus() {
     const parts = [];
     if (flash) parts.push(flash);
@@ -247,7 +251,8 @@ export async function mountPsys2(element, options = {}) {
     else if (settings.handsFree && mic.working && !mic.speaking) parts.push('Working… (microphone paused)');
     else if (settings.handsFree && speech) parts.push('Microphone on: waiting…');
     const modelTail = !parts.length && dispatcherStatus.state === 'ready' ? ` · model ${dispatcherLabel}${modelSource === 'cache' ? ' (cached)' : ''}` : '';
-    statusEl.textContent = (parts.join(' · ') || 'Ready') + modelTail;
+    const statusText = (parts.join(' · ') || 'Ready') + modelTail;
+    if (statusEl._text !== statusText) { statusEl._text = statusText; statusEl.textContent = statusText; }
     statusEl.classList.toggle('is-active', parts.length > 0);
     syncSendButton();
     syncMic();
@@ -266,7 +271,8 @@ export async function mountPsys2(element, options = {}) {
       : mic.listening ? 'Microphone: listening to one message; click to stop'
       : settings.keepListening === false ? 'Microphone off: click to speak one message' : 'Microphone off: click to turn it on; it keeps listening until you say "stop microphone" or click again';
     label(micBtn, dict ? `${state}. Dictating into: ${dictDoc}` : (settings.handsFree || paused ? state : `${state}${q}`));
-    micBtn.setAttribute('aria-pressed', String(!!settings.handsFree || mic.listening));
+    const pressed = String(!!settings.handsFree || mic.listening);
+    if (micBtn.getAttribute('aria-pressed') !== pressed) micBtn.setAttribute('aria-pressed', pressed);
     micBtn.classList.toggle('is-on', mic.listening);
     micBtn.classList.toggle('is-paused', paused);
     micBtn.dataset.mic = paused ? 'paused' : mic.starting ? 'starting' : settings.handsFree && mic.working && !mic.speaking ? 'working' : settings.handsFree ? (mic.listening ? 'listening' : 'waiting') : mic.listening ? 'once' : 'off';
@@ -828,7 +834,7 @@ export async function mountPsys2(element, options = {}) {
     onLost: () => { settings.handsFree = false; flashHint('The microphone moved to another tab.'); syncMic(); },
     onSend: ({ text, how, waitMs }) => { input.value = ''; shown = ''; routeVoice(text, how, waitMs); },
     onCancel: (t) => { input.value = t; shown = ''; try { input.focus(); } catch { /* ignore */ } flashHint('Cancelled. The text is in the box for editing.'); },
-    onPending: ({ active, ms, phase }) => { micBtn.classList.toggle('is-pending', !!active); micBtn.style.setProperty('--ring-ms', `${Math.round(ms)}ms`); micBtn.dataset.phase = phase ?? ''; if (active) { ringEl.classList.remove('run'); void ringEl.getBoundingClientRect(); ringEl.classList.add('run'); } else ringEl.classList.remove('run'); },
+    onPending: ({ active, ms, phase }) => { micBtn.classList.toggle('is-pending', !!active); micBtn.style.setProperty('--ring-ms', `${Math.round(ms)}ms`); micBtn.dataset.phase = phase ?? ''; if (active) { ringEl.classList.remove('run'); const k = ++ringGen; requestAnimationFrame(() => { if (k === ringGen) ringEl.classList.add('run'); }); } else { ringGen++; ringEl.classList.remove('run'); } },   // restart the ring animation on the next frame (no forced layout)
     onInterim: (t) => {   // the heard text appears in the field, unless the person has changed the field meanwhile
       interim = t; const h0 = speech.held?.() ?? '';
       const want = `${h0} ${t}`.trim();

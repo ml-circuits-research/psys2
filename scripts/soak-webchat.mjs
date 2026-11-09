@@ -184,6 +184,13 @@ async function main() {
     console.log(`\nprofile: total ${(total / 1e6).toFixed(0)}s, idle ${(idle / total * 100).toFixed(0)}%\n-- self\n${top(self, 25).join('\n')}\n-- inclusive\n${top(incl, 45).join('\n')}`);
     await writeFile(opt('profile-out', '/tmp/soak.cpuprofile'), JSON.stringify(profile));
   }
+  const turns = await pg.evaluate(() => (globalThis.__psys2Perf ?? []).map((r) => ({ totalMs: r.totalMs, engineMs: r.engineMs, render: r.render, effects: r.effects, stages: r.stages }))).catch(() => []);
+  if (turns.length) {
+    const agg = {}; for (const r of turns) for (const [k, v] of Object.entries(r.stages ?? {})) { const a = (agg[k] ??= { n: 0, ms: 0 }); a.n += v.n; a.ms += v.ms; }
+    const sum = (f) => turns.reduce((a, r) => a + (r[f] ?? 0), 0);
+    console.log(`\nturns: ${turns.length}, total ${(sum('totalMs') / 1000).toFixed(1)}s (engine ${(sum('engineMs') / 1000).toFixed(1)}s, render ${(sum('render') / 1000).toFixed(1)}s, effects ${(sum('effects') / 1000).toFixed(1)}s); mean ${(sum('totalMs') / turns.length).toFixed(0)} ms, max ${Math.max(...turns.map((r) => r.totalMs))} ms`);
+    console.log('stages (inclusive): ' + Object.entries(agg).sort((a, b) => b[1].ms - a[1].ms).slice(0, 12).map(([k, v]) => `${k} ${(v.ms / 1000).toFixed(1)}s/${v.n}`).join('  '));
+  }
   const usersAtEnd = samples.at(-1).users;
   const usersAtSecond = secondInfo ? (samples.filter((s) => s.t <= secondInfo.opened).at(-1)?.users ?? 0) : null;
   await browser.close(); srv.close();
