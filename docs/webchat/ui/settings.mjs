@@ -13,7 +13,7 @@ export const DEFAULT_SETTINGS = {
   ...RUNTIME_DEFAULTS,            // formalizer, encoderAcceptRefused, partialUnderstanding, normalizer, spellcheck: one definition shared with the evaluators (src/dialog/runtime-config.mjs)
   timeLimits: { ...TIME_LIMIT_DEFAULTS },   // ms; clamped on use (src/dialog/time-limits.mjs)
   fastPath: true,                 // webchat: the rules answer at once when they read the whole message (PERF); the model is for the rest
-  translation: 'auto', languageDetection: 'auto', speechLang: 'auto', voice: '', rate: 1, handsFree: false, speaker: false, showTrace: false, showPerf: false, logPhrases: true, exportButtons: false,
+  translation: 'auto', languageDetection: 'auto', speechLang: 'auto', voice: '', rate: 1, handsFree: false, keepListening: true, speaker: false, showTrace: false, showPerf: false, logPhrases: true, exportButtons: false,
 };
 
 /**

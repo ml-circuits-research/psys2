@@ -335,3 +335,13 @@
     expect="phrase log"
     expectEffect=phraselog
     session=uset4
+
+@t.ui.shell.vm1 core.test
+    input="Stop the microphone"
+    expectState="listening=false"
+    session=s2
+
+@t.ui.shell.vm2 core.test
+    input="that's all"
+    expectState="listening=false"
+    session=s2

@@ -25,6 +25,8 @@ function fakeSpeech() {
     abort() { setTimeout(() => this.end(), 0); }
     end() { if (this.started) { this.started = false; this.onend?.(); } }
   }
+  Object.defineProperty(window, 'speechSynthesis', { configurable: true, value: { speak(u) { window.__spoken = (window.__spoken || 0) + 1; setTimeout(() => u.onend?.(), 400); }, cancel() {}, getVoices: () => [], addEventListener() {} } });
+  window.SpeechSynthesisUtterance = class { constructor(t) { this.text = t; } };
   window.SpeechRecognition = FakeSR; window.webkitSpeechRecognition = FakeSR;
   window.__sr = {
     all,
@@ -110,8 +112,7 @@ export const SCENARIOS = {
       await idle(c);
       check('phrase log: final', (await lastPhrase(c))?.endType === 'final');
       // a hands-free timer send followed by the browser's own final: one message
-      await c.pg.evaluate(() => { document.querySelector('button[aria-label="Settings"]').click(); document.getElementById('p2-st-voice').click(); [...document.querySelectorAll('.p2-modal-body label')].find((l) => /Hands-free/.test(l.textContent)).querySelector('input').click(); document.querySelector('.p2-modal-close').click(); });
-      await waitRec(c);
+            await waitRec(c);
       const n2 = await users(c);
       await say(c, ['make a tree']);
       await waitUser(c, n2, Date.now(), 2500);
@@ -133,7 +134,6 @@ export const SCENARIOS = {
       check('"cancel" keeps the text in the field for editing', (await c.pg.$eval('input.p2-text', (e) => e.value)) === 'make a house', await c.pg.$eval('input.p2-text', (e) => e.value));
       // typing cancels a pending send
       await c.pg.evaluate(() => { document.querySelector('input.p2-text').value = ''; });
-      await c.pg.click('button.p2-mic').catch(() => {}); await sleep(100);
       await waitRec(c).catch(() => {});
       await say(c, ['make a tree']); await sleep(250);
       check('a countdown ring is shown while a send is pending', await c.pg.$eval('button.p2-mic', (b) => b.classList.contains('is-pending')));
@@ -158,11 +158,83 @@ export const SCENARIOS = {
       check('it is sent when the turn ends', (await users(c)) === n + 1);
     } finally { await c.close(); }
   },
+  async stayon(o) {
+    const c = await open(o, { speaker: true });
+    try {
+      const mic = () => c.pg.$eval('button.p2-mic', (b) => ({ s: b.dataset.mic, t: b.title, l: b.getAttribute('aria-label'), p: b.getAttribute('aria-pressed') }));
+      const count = () => c.pg.evaluate(() => window.__sr.all.length);
+      const live = () => c.pg.evaluate(() => !!window.__sr.live());
+      const waitNew = (n, ms = 3000) => c.pg.waitForFunction((n) => window.__sr.all.length > n && window.__sr.live(), { timeout: ms, polling: 20 }, n).then(() => true).catch(() => false);
+      await c.pg.click('button.p2-mic'); await waitRec(c);
+      let m = await mic();
+      check('one click turns the microphone on (conversation mode) with a state tooltip', m.s === 'listening' && m.p === 'true' && m.t === m.l && /stop microphone/.test(m.t), JSON.stringify(m));
+      let ok = true;
+      for (let i = 0; i < 4; i++) { await sleep(560); const n = await count(); await c.pg.evaluate(() => window.__sr.live().end()); ok = (await waitNew(n)) && ok; }
+      check('the recognizer ends by itself four times: it is restarted each time', ok && (await mic()).s === 'listening');
+      await sleep(560);
+      let n = await count();
+      await c.pg.evaluate(() => { const r = window.__sr.live(); r.onerror({ error: 'no-speech' }); r.end(); });
+      check('a no-speech error restarts it', await waitNew(n));
+      await sleep(560); n = await count();
+      await c.pg.evaluate(() => { const r = window.__sr.live(); r.onerror({ error: 'aborted' }); r.end(); });
+      check('an aborted error restarts it', await waitNew(n));
+      // utterances still go to the chat after restarts
+      const u0 = await users(c);
+      await say(c, ['make a house'], { final: true });
+      await waitUser(c, u0, Date.now(), 4000); await idle(c);
+      check('an utterance after the restarts is sent', (await users(c)) === u0 + 1);
+      // the answer is read aloud: the recognizer pauses, then resumes by itself
+      n = await count();
+      await c.pg.waitForFunction(() => (window.__spoken || 0) > 0, { timeout: 6000, polling: 30 }).catch(() => {}); await sleep(1200); await waitRec(c).catch(() => {});
+      check('the microphone listens again after the answer was read aloud', (await mic()).s === 'listening' && (await live()) && (await c.pg.evaluate(() => window.__spoken || 0)) > 0);
+      // stop phrases: nothing is sent, the microphone goes off
+      for (const phrase of ['stop microphone', 'stop the mic', 'mic off', 'turn off the microphone', 'stop listening', "that's all", 'close the mic', 'stop the microphon', 'oprește microfonul', 'opreste microfonul', 'stop microfon', 'închide microfonul', 'gata cu microfonul', 'nu mai asculta']) {
+        if (!(await live())) { await c.pg.click('button.p2-mic'); await waitRec(c); }
+        const before = await users(c);
+        await say(c, [phrase], { final: true });
+        await sleep(300);
+        const off = await c.pg.waitForFunction(() => document.querySelector('button.p2-mic').dataset.mic === 'off' && !window.__sr.live(), { timeout: 2500, polling: 30 }).then(() => true).catch(() => false);
+        check(`"${phrase}" turns the microphone off and is not sent`, off && (await users(c)) === before);
+      }
+      // a spoken (not final) stop phrase is recognized after the pause
+      await c.pg.click('button.p2-mic'); await waitRec(c);
+      const b2 = await users(c);
+      await say(c, ['stop the microphone']);
+      check('an interim stop phrase turns it off after the pause', await c.pg.waitForFunction(() => document.querySelector('button.p2-mic').dataset.mic === 'off', { timeout: 3000, polling: 30 }).then(() => true).catch(() => false) && (await users(c)) === b2);
+      check('"stop microphone" is not left in the field', (await c.pg.$eval('input.p2-text', (e) => e.value)) === '');
+      // a second click turns it off
+      await c.pg.click('button.p2-mic'); await waitRec(c);
+      await c.pg.click('button.p2-mic'); await sleep(200);
+      check('a second click turns the microphone off', (await mic()).s === 'off' && !(await live()));
+      // utterances during a turn wait (VOICE) even in conversation mode: covered by the busy scenario; here only the typed command
+      await c.pg.click('button.p2-mic'); await waitRec(c);
+      await c.pg.type('input.p2-text', 'stop microphone'); await c.pg.keyboard.press('Enter');
+      check('typing "stop microphone" turns it off too', await c.pg.waitForFunction(() => document.querySelector('button.p2-mic').dataset.mic === 'off', { timeout: 8000, polling: 50 }).then(() => true).catch(() => false));
+    } finally { await c.close(); }
+  },
+  async paused(o) {
+    const c = await open(o);
+    try {
+      await c.pg.click('button.p2-mic'); await waitRec(c);
+      let seen = 0;
+      for (let i = 0; i < 6; i++) {
+        const n = await c.pg.evaluate(() => window.__sr.all.length);
+        await c.pg.evaluate(() => { const r = window.__sr.live(); r.onerror({ error: 'network' }); r.end(); });
+        if (i < 5) { await c.pg.waitForFunction((n) => window.__sr.all.length > n && window.__sr.live(), { timeout: 8000, polling: 50 }, n).catch(() => {}); seen++; }
+      }
+      await sleep(300);
+      const m = await c.pg.$eval('button.p2-mic', (b) => ({ s: b.dataset.mic, t: b.title }));
+      check('repeated network errors: retried with backoff, then a visible paused state with the reason', seen === 5 && m.s === 'paused' && /tap to resume/.test(m.t) && /network/.test(m.t), JSON.stringify(m));
+      const n = await c.pg.evaluate(() => window.__sr.all.length);
+      await c.pg.click('button.p2-mic');
+      check('a tap on the paused microphone resumes listening', await c.pg.waitForFunction((n) => window.__sr.all.length > n && window.__sr.live(), { timeout: 3000, polling: 30 }, n).then(() => true).catch(() => false) && (await c.pg.$eval('button.p2-mic', (b) => b.dataset.mic)) === 'listening');
+    } finally { await c.close(); }
+  },
   async lang(o) {
     const c = await open(o, { language: 'auto', speechLang: 'auto' });
     try {
-      await c.pg.evaluate(() => { document.querySelector('button[aria-label="Settings"]').click(); document.getElementById('p2-st-voice').click(); [...document.querySelectorAll('.p2-modal-body label')].find((l) => /Hands-free/.test(l.textContent)).querySelector('input').click(); document.querySelector('.p2-modal-close').click(); });
-      await waitRec(c);
+      await c.pg.click('button.p2-mic');
+            await waitRec(c);
       check('speech language starts as en-US', (await c.pg.evaluate(() => window.__sr.live().lang)) === 'en-US');
       const n = await users(c);
       await say(c, ['desenează o casă și un copac'], { final: true });

@@ -203,7 +203,8 @@ export async function mountPsys2(element, options = {}) {
     if (dispatcherStatus.state === 'loading') parts.push(`Model loading… ${dispatcherStatus.message} (rules answer meanwhile)`);
     if (mic.speaking) parts.push('Speaking…');
     else if (mic.listening) parts.push(interim ? `Listening: “${interim}”` : mic.mode === 'ptt' ? 'Listening (hold space)…' : 'Listening…');
-    else if (settings.handsFree && speech) parts.push('Hands-free: waiting…');
+    else if (mic.paused) parts.push('Microphone paused — tap to resume');
+    else if (settings.handsFree && speech) parts.push('Microphone on: waiting…');
     const modelTail = !parts.length && dispatcherStatus.state === 'ready' ? ` · model ${dispatcherLabel}${modelSource === 'cache' ? ' (cached)' : ''}` : '';
     statusEl.textContent = (parts.join(' · ') || 'Ready') + modelTail;
     statusEl.classList.toggle('is-active', parts.length > 0);
@@ -214,10 +215,16 @@ export async function mountPsys2(element, options = {}) {
   function syncMic() {
     if (micBtn.disabled) return;
     const dict = dictDoc !== null;
-    const state = settings.handsFree ? 'Microphone: keeping listening (hands-free); click to stop' : mic.listening ? 'Microphone: listening; click to stop' : 'Speak a message (press and hold to keep listening)';
+    const paused = !!mic.paused;
+    const state = paused ? `Microphone paused — tap to resume (${mic.paused.reason})`
+      : settings.handsFree ? `Microphone on, ${mic.listening ? 'listening' : mic.speaking ? 'waiting while I speak' : 'starting'}. Say "stop microphone" or click to turn it off`
+      : mic.listening ? 'Microphone: listening to one message; click to stop'
+      : settings.keepListening === false ? 'Microphone off: click to speak one message' : 'Microphone off: click to turn it on; it keeps listening until you say "stop microphone" or click again';
     label(micBtn, dict ? `${state}. Dictating into: ${dictDoc}` : state);
     micBtn.setAttribute('aria-pressed', String(!!settings.handsFree || mic.listening));
     micBtn.classList.toggle('is-on', mic.listening);
+    micBtn.classList.toggle('is-paused', paused);
+    micBtn.dataset.mic = paused ? 'paused' : settings.handsFree ? (mic.listening ? 'listening' : 'waiting') : mic.listening ? 'once' : 'off';
     micBtn.classList.toggle('is-handsfree', !!settings.handsFree);
     micBtn.classList.toggle('is-dictating', dict);
   }
@@ -578,25 +585,27 @@ export async function mountPsys2(element, options = {}) {
       if (input.value === shown || !input.value) { input.value = want; shown = want; }
       setStatus();
     },
+    onStopCommand: () => {   // "stop microphone": handled here, never sent to the chat
+      const ro = speechLangTag().startsWith('ro'), msg = ro ? 'Am oprit microfonul.' : 'Microphone off.';
+      setHandsFree(false); speech.stopListening(); flashHint(msg);
+      if (settings.speaker && speechSupport.synthesis) speech.speak(msg, { lang: speechLangTag() });
+    },
     onState: (s) => { mic = s; robotUI()?.setSpeaking(s.speaking); setStatus(); },
-    onError: (msg) => { note(msg); if (!speech.isListening()) { settings.handsFree = false; syncMic(); } },
+    onError: (msg) => { note(msg); if (!speech.isListening() && !speech.isPaused()) { settings.handsFree = false; syncMic(); } },
   });
   if (!speechSupport.recognition) {
     const why = 'Speech recognition is not supported by this browser (try Chrome or Edge)';
     disable(micBtn, why);
   }
   if (!speechSupport.synthesis) disable(speakerBtn, 'Speech synthesis is not supported by this browser');
-  // one microphone: a click speaks one message (or stops), a long press keeps listening (hands-free); Settings > Voice has the same switch
-  let micHold = null, micHeld = false;
-  const micRelease = () => { clearTimeout(micHold); micHold = null; };
-  on(micBtn, 'pointerdown', (e) => { if (e.button > 0 || micBtn.disabled) return; micHeld = false; micRelease(); micHold = setTimeout(() => { micHold = null; micHeld = true; setHandsFree(!settings.handsFree); }, 600); });
-  for (const ev of ['pointerup', 'pointerleave', 'pointercancel']) on(micBtn, ev, micRelease);
-  on(micBtn, 'contextmenu', (e) => e.preventDefault());
+  // one microphone: one click = conversation mode (listens until "stop microphone" or a second click, restarts itself); Settings > Voice can make a click a single message
   on(micBtn, 'click', () => {
-    if (micHeld) { micHeld = false; return; }
-    if (settings.handsFree) setHandsFree(false);
+    if (micBtn.disabled) return;
+    if (mic.paused) speech.resume();
+    else if (settings.handsFree) setHandsFree(false);
     else if (mic.listening) speech.stopListening();
-    else speech.listenOnce();
+    else if (settings.keepListening === false) speech.listenOnce();
+    else setHandsFree(true);
   });
   on(speakerBtn, 'click', () => setSpeaker(!settings.speaker));
   const setLanguage = (v) => { settings.language = v; langSel.value = v; sessionLang = null; speech?.refreshLang(); save(); renderSettings(); session?.setWorldState?.(SHELL, { language: settings.language }); };
@@ -854,7 +863,7 @@ export async function mountPsys2(element, options = {}) {
       field('Speech language', select([['auto', 'Automatic (follows the session language)'], ['en-US', 'English (US)'], ['en-GB', 'English (UK)'], ['ro-RO', 'Română']], settings.speechLang, (v) => { settings.speechLang = v; save(); renderSettings(); speech?.refreshLang(); })),
       field('Voice', select(voiceOpts, settings.voice, (v) => { settings.voice = v; save(); }), speechSupport.synthesis ? (voices.length ? null : 'Voices are still loading or none are installed.') : 'Speech synthesis is not supported by this browser.'),
       h('div', { class: 'p2-field' }, h('label', { for: 'p2-f-rate' }, 'Speech rate ', rateVal), rate),
-      check('Hands-free mode (continuous listening)', settings.handsFree, (v) => setHandsFree(v), speechSupport.recognition ? '' : 'speech recognition is not supported'),
+      check('Keep listening until I say stop (say "stop microphone")', settings.keepListening !== false, (v) => { settings.keepListening = v; save(); syncMic(); }, speechSupport.recognition ? '' : 'speech recognition is not supported'),
       check('Read answers aloud', settings.speaker, (v) => setSpeaker(v), speechSupport.synthesis ? '' : 'speech synthesis is not supported'),
     ];
   }

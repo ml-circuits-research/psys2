@@ -1726,3 +1726,21 @@
     alt=pick_a_command_for_me
     alt=choose_an_example_for_me
     alt=let_s_try_an_example
+
+@phrase.lang.stop.mic core.phrase
+    frame=false
+    doc="Spoken or typed commands that switch the microphone off (conversation mode ends). The browser host also matches them locally on the recognizer's text before anything is sent."
+    alt=stop_microphone
+    alt=stop_the_microphone
+    alt=stop_my_microphone
+    alt=stop_the_mic
+    alt=stop_my_mic
+    alt=stop_mic
+    alt=mic_off
+    alt=microphone_off
+    alt=stop_recording
+    alt=thats_all
+    alt=that_is_all
+    alt=that_will_be_all
+    alt=end_voice_mode
+    alt=leave_voice_mode

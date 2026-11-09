@@ -255,3 +255,4 @@
 .p2-foot a, .p2-about a { color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
 .p2-msg.is-stopped .p2-bubble { font-style: italic; opacity: .85; }
 .p2-field > .p2-btn-text { align-self: flex-start; }
+.p2-mic.is-paused { background: var(--warn, #b45309); color: #fff; animation: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--warn, #b45309) 35%, transparent); }

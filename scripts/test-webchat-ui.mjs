@@ -177,11 +177,9 @@ async function ui1For(name, viewport, o) {
     // the mic: hands-free by long press (when the browser has speech recognition)
     const micDisabled = await pg.$eval('.p2-mic', (e) => e.disabled);
     if (!micDisabled) {
-      const box = await (await pg.$('.p2-mic')).boundingBox();
-      await pg.mouse.move(box.x + box.width / 2, box.y + box.height / 2); await pg.mouse.down(); await sleep(750);
+      await pg.click('.p2-mic'); await sleep(150);
       const hf = await pg.evaluate(() => window.psys2.settings.handsFree);
-      await pg.mouse.up();
-      check(`${tag}: a long press on the mic switches hands-free on (mic mode, not a header icon)`, hf === true);
+      check(`${tag}: one click on the mic switches conversation mode on (mic mode, not a header icon)`, hf === true);
       await sleep(300);
       await pg.evaluate(() => window.psys2.settings.handsFree && document.querySelector('.p2-mic').click());
     } else check(`${tag}: speech recognition is not available in this browser: the mic is disabled and says why`, /unavailable/.test(await pg.$eval('.p2-mic', (e) => e.title)));
