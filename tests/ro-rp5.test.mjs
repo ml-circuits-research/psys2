@@ -83,3 +83,70 @@ test('avatar refusals are Romanian and "dreamy" eyes become sleepy', async () =>
   const b = await s.send('fa ochi visatori');
   assert.match(b.text, /somnoroși/);
 });
+
+// ---- RP5b ----
+const english = /\b(the|you|your|with|could not|did not|Done|There you go|should|can say|numbers|Drew|I have|Now I am)\b/;
+
+test('RP5b: "diagramă" is the diagram, "în diagramă" names the Diagram world, on any tab', async () => {
+  assert.match((await rules.translate('diagramă', { from: 'ro', to: 'en' })).text, /diagram/i);
+  assert.match((await rules.translate('un grafic', { from: 'ro', to: 'en' })).text, /chart/);
+  for (const tab of ['draw', 'robot', 'diagram']) {
+    const { r, s } = await run(tab, ['desenează trei cercuri în diagramă']);
+    assert.equal(s.state()['ui.shell'].activeTab, 'diagram', tab);
+    assert.equal(s.state()['diagram.sketch'].shapes.length, 3, tab);
+    assert.equal(r.text, 'Am desenat c1, c2 și c3.', tab);
+  }
+  const en = await run('draw', ['draw three circles in the diagram'], { lang: 'en' });
+  assert.equal(en.s.state()['ui.shell'].activeTab, 'diagram');
+});
+
+test('RP5b: every tab opens by its Romanian name and the voice variants, with a Romanian reply', async () => {
+  const tabs = [['desen', 'draw'], ['desenat', 'draw'], ['diagramă', 'diagram'], ['diagrama', 'diagram'], ['grafic', 'charts'], ['grafice', 'charts'], ['hartă', 'map'], ['muzică', 'music'], ['editor', 'editor'],
+    ['șah', 'chess'], ['spânzurătoarea', 'hangman'], ['x și zero', 'tictactoe'], ['ghicește animalul', 'guess'], ['documente', 'documents'], ['avatar', 'robot'], ['profil', 'profile']];
+  for (const [name, id] of tabs) for (const form of [`deschide tabul ${name}`, `mergi la fila ${name}`]) {
+    const start = id === 'robot' ? 'draw' : 'robot';
+    const { r, s } = await run(start, [form]);
+    assert.equal(s.state()['ui.shell'].activeTab, id, form);
+    assert.match(r.text, /^Bine, iată fila \S/, form);
+    assert.ok(!/Am înțeles asta|open the/.test(r.text), form);
+  }
+  const already = await run('robot', ['deschide tabul avatar']);
+  assert.equal(already.r.text, 'Ești deja pe fila Avatar.');
+});
+
+test('RP5b: avatar become / describe / mouth-size refusal are Romanian', async () => {
+  for (const [msg, re] of [['fii un carton', /^\S+! Acum sunt un desen animat\. Am .+\./], ['fiind copil', /^\S+! Acum sunt un copil\. Am .+\./]]) {
+    const { r } = await run('robot', [msg]);
+    assert.match(r.text, re, msg); assert.ok(!english.test(r.text.replace(/\(.*\)/, '')), r.text);
+  }
+  const mouth = await run('robot', ['Fă o gură mare']);
+  assert.match(mouth.r.text, /^Nu pot schimba mărimea gurii, dar îi pot schimba stilul\. Gura mea poate fi .+\.$/);
+  assert.equal(mouth.r.lang, 'ro');
+  const grill = await run('robot', ['un grătar gură']);
+  assert.match(grill.r.text, /o gură grătar/);
+  for (const [en, ro] of [['collared clothes, attached ears and a curve nose', 'haine cu guler, urechi lipite și un nas curbat'], ['a moustache and goatee and a short beard', 'o mustață cu barbiță și o barbă scurtă'],
+    ['cheery eyes, bangs and a teeth smile mouth', 'ochi veseli, breton și o gură cu zâmbet cu dinți'], ['hair style 4 and eyes style 5', 'părul stil 4 și ochi stil 5']]) {
+    const t = await rules.translate(`I have ${en}.`, { from: 'en', to: 'ro' });
+    assert.equal(t.text, `Am ${ro}.`); assert.deepEqual(t.unknown ?? [], []);
+  }
+});
+
+test('RP5b: tic-tac-toe start, missing-place prompt and chart help are Romanian', async () => {
+  const ttt = await run('tictactoe', ['pornește x și zero']);
+  assert.match(ttt.r.text, /^Bine, hai să jucăm x și 0! Ești X și începi tu\. Joc la nivelul ușor\. Spune un loc/);
+  const where = await run('draw', ['desenează pește', 'mută peștele']);
+  assert.match(where.r.text, /^Unde ar trebui să meargă\? Poți spune, de exemplu, "mută copacul la stânga"/);
+  const chart = await rules.translate('I could not find numbers in "x". Say it like this: "make a chart: apples 5, pears 3, plums 8".', { from: 'en', to: 'ro' });
+  assert.equal(chart.text, 'Nu am găsit numere în "x". Spune-o așa: "fă un grafic: mere 5, pere 3, prune 8".');
+});
+
+test('RP5b: moving a thing into the water says "în apă" and adds the water when there is none', async () => {
+  const { r, s } = await run('draw', ['desenează pește', 'mută peștele în apă']);
+  assert.match(r.text, /Am mutat peștele în apă\./);
+  assert.match(r.text, /Nu era apă, așa că am adăugat-o pe pământ\./);
+  assert.equal(s.state()['art.draw'].ground, 'sea');
+  const again = await run('draw', ['desenează apă', 'desenează pește', 'mută peștele în apă']);
+  assert.doesNotMatch(again.r.text, /Nu era apă/);
+  const en = await run('draw', ['draw a fish', 'move the fish into the water'], { lang: 'en' });
+  assert.match(en.r.text, /I moved the fish into the water\. There was no water, so I added it to the ground\./);
+});

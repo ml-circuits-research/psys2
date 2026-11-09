@@ -84,7 +84,7 @@ test('rp3-02 Romanian voice stutter and send word', async () => {
   const s = session('robot', roEngine, 'ro');
   const r = await s.send('fă avatarul o persoană avatarul o persoană trimite', { mode: 'voice', language: 'ro' });
   assert.equal(s.state()['ui.avatar'].character, 'person', r.text);
-  assert.match(r.text, /Acum sunt un om/);
+  assert.match(r.text, /Acum sunt o persoană/);
 });
 
 test('rp3-03..06 avatar expressions as loose words, on every character', async () => {

@@ -54,6 +54,17 @@
     example="Create a diamond labeled Check."
     doc="Draws a named shape (\"a rectangle called Api\"): a name makes it a diagram request on any tab."
 
+@pat.diagram.sketch.create.in core.pattern
+    match="[$lang.connective]? [$lang.lead.filler]? [$lang.lead.polite]? [$diagram.sketch.v_create] [a|an|another|new|some|one_more|a_few]? ... {s:lex.diagram.sketch.shapenoun} [in|inside|on|into|to] [the|a|my|this]? [diagram|diagrams|sketchpad|flowchart]"
+    emit="@{_} core.request action=diagram.create arg.text=\"{segment}\""
+    kind=request
+    priority=13
+    tabPriority=21
+    signal=true
+    canonical="Draw three circles in the diagram."
+    example="Add a red square to the diagram."
+    doc="Draws shapes and says where: \"in the diagram\" names the Diagram world, so it is a diagram request on any tab (RP5b: the drawing tab would read it as a place)."
+
 @pat.diagram.sketch.template core.pattern
     match="[$lang.connective]? [$lang.lead.filler]? [$lang.lead.polite]? [$diagram.sketch.v_create|show|give_me|build|generate] ... {f:lex.diagram.sketch.diagramform} {t:rest?}"
     emit="@{_} core.request action=diagram.create arg.text=\"{segment}\""

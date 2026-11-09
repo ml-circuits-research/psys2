@@ -16,6 +16,36 @@ const EDIT_FRAMES = TARGETS_RO.flatMap(([ro, en, g]) => MARKS_RO.flatMap(([m, f,
   ...(mark === 'bold' ? [F(`pune ${ro} cu aldin`, `make ${en} bold`)] : []),
 ]));
 
+
+// ---- tabs by their Romanian names and the usual voice variants (RP5b): "deschide tabul diagramă", "mergi la fila grafice", "treci pe șah" ----
+const TAB_NAMES_RO = [
+  ['drawing', ['desen', 'desenul', 'desenat', 'desenele', 'desenare', 'desenarea', 'pictură', 'pictura']],
+  ['diagram', ['diagramă', 'diagrama', 'diagrame', 'diagramele', 'schemă', 'schema']],
+  ['charts', ['grafic', 'graficul', 'grafice', 'graficele']],
+  ['map', ['hartă', 'harta', 'hărți', 'hărțile']],
+  ['music', ['muzică', 'muzica', 'pian', 'pianul']],
+  ['editor', ['editor', 'editorul']],
+  ['chess', ['șah', 'șahul', 'sah', 'sahul']],
+  ['hangman', ['spânzurătoarea', 'spânzurătoare', 'spanzuratoarea']],
+  ['tic tac toe', ['x și zero', 'x și 0', 'x și o', 'x și zerou']],
+  ['guess the animal', ['ghicește animalul', 'ghici animalul', 'ghicitul animalului', 'ghicește animal']],
+  ['documents', ['documente', 'documentele', 'documentul']],
+  ['avatar', ['avatar', 'avatarul', 'robot', 'robotul']],
+  ['profile', ['profil', 'profilul']],
+];
+const TAB_NOUNS_RO = 'tabul|tab-ul|fila|pagina|panoul|secțiunea|ecranul';
+const TAB_FRAMES = TAB_NAMES_RO.flatMap(([en, names]) => names.flatMap((n) => [
+  F(`deschide|deschide-mi|arată|arată-mi|afișează ${TAB_NOUNS_RO} ${n}`, `open the ${en} tab`),
+  F(`deschide|deschide-mi|arată|arată-mi|afișează ${n}`, `open the ${en} tab`),
+  F(`mergi|treci|comută|du-mă|întoarce-te la|pe ${TAB_NOUNS_RO} ${n}`, `open the ${en} tab`),
+  F(`mergi|treci|comută|du-mă|întoarce-te la|pe ${n}`, `open the ${en} tab`),
+  F(`${TAB_NOUNS_RO} ${n}`, `open the ${en} tab`),
+])).concat([
+  // names the phrase table already turns into one noun ("x și zero" -> tic tac toe) or the lexicon knows
+  F(`deschide|deschide-mi|arată|arată-mi|afișează ${TAB_NOUNS_RO} {np:bare}`, 'open the {np} tab'),
+  F(`mergi|treci|comută|du-mă|întoarce-te la|pe ${TAB_NOUNS_RO} {np:bare}`, 'open the {np} tab'),
+]);
+
 export const COMMAND_FRAMES = [
   // ---- tasks and lists
   F('adaugă|pune {np:bare} pe lista mea de cumpărături', 'add {np} to my shopping list', { pune: 'put {np} on my shopping list' }),
@@ -391,6 +421,7 @@ export const COMMAND_FRAMES = [
   F('fila anterioară', 'previous tab'),
   F('oprește vocea', 'mute the voice'),
   F('treci pe fără mâini', 'go hands-free'),
+  ...TAB_FRAMES,
 ];
 
 export default COMMAND_FRAMES;

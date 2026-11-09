@@ -153,7 +153,7 @@ export function createTranslator() {
     evidence: (text) => languageEvidence(text),
     translate: (text, opts) => translate(text, opts),
     /** English words left in a Romanian output (RD5: the caller then keeps the whole reply in English). */
-    leftovers: (text, lang) => (lang === 'ro' ? englishLeftovers(text) : []),
+    leftovers: (text, lang) => (lang === 'ro' ? englishLeftovers(String(text ?? '').replace(/"[^"]*"|„[^”]*”|«[^»]*»/g, ' ')) : []),   // quoted text is the user's own words (or an example), never a leftover (same rule as ro-reply-quality)
     supports: (from, to) => (from === 'ro' && to === 'en') || (from === 'en' && to === 'ro'),
   };
 }

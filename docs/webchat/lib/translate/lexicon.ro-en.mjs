@@ -618,7 +618,7 @@ legendă,legende|legend|f
 medie,medii|average|f
 centru,centre|center|n
 coloană,coloane|column|f
-diagramă,diagrame|chart|f
+diagramă,diagrame|diagram|f
 încercare,încercări|attempt|f
 obiect,obiecte|object|n
 expresie,expresii|expression|f

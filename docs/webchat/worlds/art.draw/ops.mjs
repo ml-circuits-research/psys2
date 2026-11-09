@@ -1117,6 +1117,11 @@ export const move = guard((ctx, args, s) => {
   const d = parseDest(dest);
   if (!d) return no(`I did not understand where to move it ("${dest}"). Try "to the left", "a bit higher", "next to the sun" or "to the top right corner".`);
   remember(s, 'moved something');
+  // RP5b: "move the fish into the water": say "in the water" (not "on the ground") and add the water when the picture has none
+  const target_ = /^(?:in|into|inside|on|onto|to)\s+(?:the\s+)?(water|sea|ocean|lake|sand|beach|snow)$/.exec(toks(dest).join(' '))?.[1];
+  const wantGround = target_ ? GROUND_WORDS[target_] : null;
+  const addedGround = wantGround && s.ground !== wantGround ? wantGround : null;
+  if (addedGround) { s.ground = addedGround; s.groundColor = GROUND_COLOR[addedGround]; }
   const res = applyDest(s, r.objs, d);
   if (res.error) { s.history.pop(); return no(res.error, 'missing'); }
   s.last = r.objs.map((o) => o.id);
@@ -1125,6 +1130,7 @@ export const move = guard((ctx, args, s) => {
   const where = d.kind === 'abs' ? ` to ${d.x}, ${d.y}` : d.kind === 'step' ? ` ${d.label}` : d.kind === 'region' ? ` ${describePlacing(null, { region: d.region }, [])}`.replace(/\s+/g, ' ') : d.kind === 'z' ? ` to the ${d.dir}` : '';
   const relText = d.kind === 'rel' ? describePlacing(r.objs[0], { rel: d.rel }, d.refs.map((x) => resolveNP(s, parseNP(x)).objs[0] ?? r.objs[0])) : '';
   const regionText = d.kind === 'region' ? describePlacing(null, { region: d.region }, []) : '';
+  if (wantGround) return ok(withNote(`${opener(s)} I moved ${name} ${wantGround === 'sea' ? 'into the water' : wantGround === 'snow' ? 'onto the snow' : `onto the ${GROUND_NAME[wantGround]}`}.${addedGround ? ` There was no ${GROUND_NAME[wantGround]}, so I added it to the ground.` : ''}`, r));
   return ok(withNote(`${opener(s)} I moved ${name}${d.kind === 'abs' ? ` to ${d.x}, ${d.y}` : d.kind === 'step' ? ` ${d.label}` : d.kind === 'rel' ? relText : d.kind === 'region' ? regionText : d.kind === 'z' ? ` to the ${d.dir}` : ''}.`, r));
 });
 void 0;

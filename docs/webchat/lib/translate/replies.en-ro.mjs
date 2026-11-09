@@ -14,6 +14,7 @@
 // Entries are matched against the whole trimmed sentence; the order of the table does not matter (exact, most specific first).
 
 import { places as PLACE_LIST } from './places.ro-en.mjs';
+import { avatarListRo, avatarOptionsRo, AVATAR_PARTS, AVATAR_CHARACTER_RO, AVATAR_CHARACTER_EN } from './avatar.en-ro.mjs';
 const COLOURS = { red: 'roșu', yellow: 'galben', blue: 'albastru', green: 'verde', orange: 'portocaliu', purple: 'mov', violet: 'violet', pink: 'roz', brown: 'maro', black: 'negru', white: 'alb', gray: 'gri', grey: 'gri', turquoise: 'turcoaz', coral: 'coral', beige: 'bej', gold: 'auriu', silver: 'argintiu', tan: 'bronzat' };
 const DAYS = { Monday: 'luni', Tuesday: 'marți', Wednesday: 'miercuri', Thursday: 'joi', Friday: 'vineri', Saturday: 'sâmbătă', Sunday: 'duminică' };
 const MONTHS = { January: 'ianuarie', February: 'februarie', March: 'martie', April: 'aprilie', May: 'mai', June: 'iunie', July: 'iulie', August: 'august', September: 'septembrie', October: 'octombrie', November: 'noiembrie', December: 'decembrie' };
@@ -41,7 +42,11 @@ const placeRo = (v) => PL_NOM.get(v) ?? PLACES[v] ?? (/^[A-Z]/.test(v) ? v : nul
 const placeGen = (v) => PL_GEN.get(v) ?? PLACES[v] ?? (/^[A-Z]/.test(v) ? v : null);
 
 // slot type -> [regex source, converter(value, sub) -> string | null]
+const TAB_RO = { Avatar: 'Avatar', Editor: 'Editor', 'Tic-tac-toe': 'X și 0', 'Guess the animal': 'Ghicește animalul', Hangman: 'Spânzurătoarea', Drawing: 'Desen', Diagram: 'Diagramă', Charts: 'Grafice', Map: 'Hartă', Music: 'Muzică', Chess: 'Șah', Documents: 'Documente', Profile: 'Profil' };
 const SLOTS = {
+  ids: ['([a-z]\\d+(?:, [a-z]\\d+)*(?: and [a-z]\\d+)?)', (v) => v.replace(' and ', ' și ')],   // diagram ids (c1, r2 and a3)
+  tab: [`(${Object.keys(TAB_RO).join('|')})`, (v) => TAB_RO[v] ?? null],   // the title of a tab
+  ...Object.fromEntries(AVATAR_PARTS.map(([, key], i) => [`opt${String.fromCharCode(97 + i)}`, ['(.+?)', (v) => avatarOptionsRo(key, v)]])),   // the options of one avatar part
   n: ['(-?\\d[\\d,.]*)', (v) => v, (v) => (Number(String(v).replace(/,/g, '')) >= 20 ? `${v} de` : v)],
   w: ["([\\p{L}\\d'’\\-]+)", (v) => v],
   place: ['([A-Z][\\p{L}\\-]*(?: [A-Z][\\p{L}\\-]*)*)', placeRo],
@@ -58,6 +63,8 @@ const SLOTS = {
   mood: ['([a-z]+(?: [a-z]+)?)', (v) => MOOD_RO[v] ?? null],
   np: ['((?:an? |the |\\d+ )?[a-z][a-z \\-\']*?)', (v, sub) => sub(v)],
   t: ['(.+?)', (v, sub) => sub(v)],
+  avl: ['(.+?)', (v) => avatarListRo(v)],   // the avatar's own part phrases (avatar.en-ro.mjs)
+  chr: ['(a robot|a person|an emoji|a portrait|a cartoon|a kid|a pixel person|a pixel robot|a fun emoji)', (v) => AVATAR_CHARACTER_RO[AVATAR_CHARACTER_EN[v]] ?? null],
   q: ['(.+?)', (v) => v],   // the user's own words as stored, copied unchanged
 };
 
@@ -84,6 +91,10 @@ for (const [en, [sg, pl]] of Object.entries(LABEL_RO)) {
 }
 CAP_ENTRIES.push(['I cannot draw {np} yet.', 'Încă nu pot desena {np}.'], ['I can draw a cat, a dog, a fish or a bird.', 'Pot desena o pisică, un câine, un pește sau o pasăre.'], ['What would you like?', 'Ce ai vrea?']);
 CAP_ENTRIES.push(['I do not have that part.', 'Nu am această parte.'], ['I do not know how to look like that.', 'Nu știu cum să arăt așa.']);
+AVATAR_PARTS.forEach(([en, , gen, nom], i) => {
+  CAP_ENTRIES.push([`I cannot change the size of my ${en}, but I can change its style.`, `Nu pot schimba mărimea ${gen}, dar îi pot schimba stilul.`]);
+  CAP_ENTRIES.push([`My ${en} can be {opt${String.fromCharCode(97 + i)}}.`, `${nom} {opt${String.fromCharCode(97 + i)}}.`]);
+});
 CAP_ENTRIES.push(['My eyes can be {eyelist}.', 'Ochii mei pot fi {eyelist}.']);
 CAP_ENTRIES.push(['For {cmp} eyes try {eyelist}; say "make your eyes {eye}".', 'Pentru ochi {cmp} încearcă {eyelist}; spune "fă-ți ochii {eye}".']);
 const EXAMPLE_ENTRIES = [
@@ -94,6 +105,9 @@ const EXAMPLE_ENTRIES = [
   ['Say "play hangman" to start.', 'Spune "joacă spânzurătoarea" ca să începi.'],
   ['Say a move such as "knight to f3" or "e2 to e4", or ask "what can my knight do?".', 'Spune o mutare, de exemplu "calul la f3" sau "e2 la e4", sau întreabă "ce poate face calul meu?".'],
   ['Ask "what is the best move?" for a hint, "undo" to take a move back, or "resign" to give up.', 'Întreabă "care este cea mai bună mutare?" pentru un indiciu, spune "anulează" ca să retragi o mutare sau "renunț" ca să te dai bătut.'],
+  ['Say a place like "center" or "top left", or a coordinate like B2 (letter for the column, number for the row).', 'Spune un loc, de exemplu "centru" sau "sus în stânga", sau o coordonată ca B2 (litera pentru coloană, cifra pentru rând).'],
+  ['You can say, for example, "move the tree to the left", "put the cat next to the house" or "move it to the top right corner".', 'Poți spune, de exemplu, "mută copacul la stânga", "pune pisica lângă casă" sau "mută-l în colțul din dreapta sus".'],
+  ['Say it like this: "make a chart: apples 5, pears 3, plums 8".', 'Spune-o așa: "fă un grafic: mere 5, pere 3, prune 8".'],
   ['Say, for example: "make a chart: apples 5, pears 3, plums 8".', 'Spune, de exemplu: "fă un grafic: mere 5, pere 3, prune 8".'],
   ['Ask "what can you do?" for the whole list, "more examples" for others, or "how do I ...?" to find a command.', 'Întreabă "ce poți face?" pentru lista întreagă, "mai multe exemple" pentru altele sau "cum fac ...?" ca să găsești o comandă.'],
   ['Ask me "what can I say here?" for examples.', 'Întreabă-mă "ce pot spune aici?" pentru exemple.'],
@@ -151,6 +165,8 @@ const TABLE = [
   ['My screen is {c} now.', 'Ecranul meu este acum {c}.'], ['My background is {c} now.', 'Fundalul meu este acum {c}.'],
   ['My eyes glow {c} now.', 'Ochii mei strălucesc acum {c}.'], ['The sky is {c} now.', 'Cerul este acum {c}.'],
   ['I have {np} now.', 'Acum am {np}.'], ['Now I am {np}.', 'Acum sunt {np}.'],
+  ['Now I am {chr}.', 'Acum sunt {chr}.'], ['I have {avl}.', 'Am {avl}.'], ['I have {avl} now.', 'Acum am {avl}.'], ['I am wearing {avl}.', 'Port {avl}.'], ['I took off {avl}.', 'Mi-am scos {avl}.'],
+  ['I am not wearing anything special.', 'Nu port nimic deosebit.'], ['I have nothing extra on me.', 'Nu am nimic în plus pe mine.'],
   ['I took off {np}.', 'Mi-am scos {np}.'], ['I took away {np}.', 'Am șters {np}.'],
   ['I am wearing {np}.', 'Port {np}.'],
   ['I turned the cat around.', 'Am întors pisica.'],
@@ -162,6 +178,16 @@ const TABLE = [
   ['My mouth can be grill, speaker, line, smile or zigzag.', 'Gura mea poate fi grătar, difuzor, linie, zâmbet sau zigzag.'],
   ['I have a zigzag mouth now.', 'Acum am gura în zigzag.'],
   // ---- games
+  ['You are X and you go first.', 'Ești X și începi tu.'], ['You are O and I go first: I took {pos}.', 'Ești O și încep eu: am luat {pos}.'], ['I play perfectly.', 'Joc perfect.'],
+  ['OK, here is the {tab} tab.', 'Bine, iată fila {tab}.'], ['You are already on the {tab} tab.', 'Ești deja pe fila {tab}.'], ['There is no game open on the {tab} tab.', 'Nu este niciun joc deschis în fila {tab}.'],
+  ['I moved {np} into the water.', 'Am mutat {np} în apă.'], ['I moved {np} onto the sand.', 'Am mutat {np} pe nisip.'], ['I moved {np} onto the snow.', 'Am mutat {np} pe zăpadă.'], ['I moved {np} onto the grass.', 'Am mutat {np} pe iarbă.'],
+  ['There was no water, so I added it to the ground.', 'Nu era apă, așa că am adăugat-o pe pământ.'], ['There was no sand, so I added it to the ground.', 'Nu era nisip, așa că l-am adăugat pe pământ.'], ['There was no snow, so I added it to the ground.', 'Nu era zăpadă, așa că am adăugat-o pe pământ.'], ['There was no grass, so I added it to the ground.', 'Nu era iarbă, așa că am adăugat-o pe pământ.'],
+  ['I drew {np} at the bottom.', 'Am desenat {np} în partea de jos.'],
+  ['Drew {ids}.', 'Am desenat {ids}.'],
+  ['Here is a fresh sheet of paper!', 'Iată o foaie nouă de hârtie!'], ['Ta-da! It is night now: a dark sky, a moon and lots of stars.', 'Gata! Acum este noapte: un cer întunecat, o lună și o mulțime de stele.'],
+  ['New game of tic-tac-toe.', 'Joc nou de x și 0.'], ['"{q}" has {n} words.', '"{q}" are {n} cuvinte.'],
+  ['Where should it go?', 'Unde ar trebui să meargă?'], 
+  ['I could not find numbers in "{q}".', 'Nu am găsit numere în "{q}".'],
   ['You took {pos}.', 'Ai luat {pos}.'], ['I took {pos}.', 'Am luat {pos}.'], ['Your move.', 'E rândul tău.'], ['It is your move again.', 'E din nou rândul tău.'],
   ['You play {piece} to {w}.', 'Joci cu {piece} la {w}.'],
   ['I play at level {n} ({lvl}).', 'Joc la nivelul {n} ({lvl}).'], ['OK, I now play at level {n} ({lvl}).', 'Bine, acum joc la nivelul {n} ({lvl}).'],
@@ -231,7 +257,7 @@ const COMPILED = TABLE.map(([en, ro]) => {
     return SLOTS[type][0];
   }).join('');
   return { re: new RegExp(`^${src}$`, 'u'), keys, ro, lit: !keys.length ? en : null };
-}).sort((a, b) => b.re.source.length - a.re.source.length);
+}).sort((a, b) => (b.keys.includes('avl') - a.keys.includes('avl')) || b.re.source.length - a.re.source.length);   // the avatar's authored part phrases first, then the most specific
 
 /**
  * Translate one English sentence (or fragment) by the table.  `sub(text)` translates a free-text slot by the grammar and returns a string or

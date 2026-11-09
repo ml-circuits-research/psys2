@@ -155,7 +155,7 @@ export async function mountPsys2(element, options = {}) {
   const tabBtns = {};
   const VIEW_TABS = new Set(['map', 'diagram', 'charts']);   // pan / zoom / scroll stay usable while the host is busy
   for (const t of tabDefs) {
-    const btn = h('button', { class: 'p2-tab', role: 'tab', type: 'button', id: `p2-tab-${t.id}`, 'aria-controls': `p2-panel-${t.id}`, onclick: () => showTab(t.id) }, t.label);
+    const btn = h('button', { class: 'p2-tab', role: 'tab', type: 'button', id: `p2-tab-${t.id}`, 'aria-controls': `p2-panel-${t.id}`, onclick: () => userTab(t.id) }, t.label);
     const panel = h('div', { class: 'p2-panel', role: 'tabpanel', id: `p2-panel-${t.id}`, 'aria-labelledby': `p2-tab-${t.id}`, tabindex: '0' });
     tabBtns[t.id] = { btn, panel };
     tabsEl.append(btn); panelsEl.append(panel);
@@ -163,8 +163,13 @@ export async function mountPsys2(element, options = {}) {
   on(tabsEl, 'keydown', (e) => {
     const ids = tabDefs.map((t) => t.id), i = ids.indexOf(view);
     const next = e.key === 'ArrowRight' ? ids[(i + 1) % ids.length] : e.key === 'ArrowLeft' ? ids[(i - 1 + ids.length) % ids.length] : e.key === 'Home' ? ids[0] : e.key === 'End' ? ids.at(-1) : null;
-    if (next) { e.preventDefault(); showTab(next); tabBtns[next].btn.focus(); }
+    if (next) { e.preventDefault(); userTab(next); tabBtns[next].btn.focus(); }
   });
+  /** The user opened a tab (click or arrow keys): the dialog engine must know it too (routing tier T, tab-bound questions), RP5b. */
+  function userTab(id) {
+    showTab(id);
+    if (tabBtns[id] && lastShellTab !== id) { lastShellTab = id; session?.setWorldState?.(SHELL, { activeTab: id }); }
+  }
   function showTab(id) {
     if (!tabBtns[id]) return;
     view = id;

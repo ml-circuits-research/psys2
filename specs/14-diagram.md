@@ -39,3 +39,4 @@ An arrow is referred to by its id (`a1`), its ends (`the arrow between c1 and r1
 - The state exposes `kind` (circle, rectangle ...) of every shape.
 - Only a selection marks shapes: `select ...`, or the answer of a question; a template or a command that makes shapes marks nothing.
 - Spelling: among equally close candidates the one made of the same letters wins (`lable` is `label`, not `able`).
+- "in the diagram" / "on the diagram" after a shape request (`pat.diagram.sketch.create.in`, `signal=true`) names this world: "draw three circles in the diagram" is a diagram request on the Drawing tab too, not a place for the drawing world.
