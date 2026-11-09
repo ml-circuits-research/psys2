@@ -136,6 +136,59 @@ What this means for your tasks:
 - **Language detection (new task L-RO):** Romanian typed without diacritics now stays English ("cat face 3 plus 4"). Improve the evidence, for example Romanian function words and word endings, so diacritic-less Romanian is still detected, without breaking short English input. Test both directions.
 - From now on, new phrasing and shared vocabulary go into `lang.common` (L8 absorbs `src/dialog/lang.mjs`).
 
+### RD — a real user dialogue (user, 02:14) replayed by the reviewer at f48c450: what still breaks, and the general fixes
+
+The user's 49-message session (avatar, map, chess/tic-tac-toe, chart, drawing; English with typos plus Romanian) is in `training/eval/real-dialogue-2026-11-09.txt`. Replayed in the CLI, about 20 of the 49 turns are wrong or not understood. Add it to `dialogues.jsonl` with the right tabs, expected states and answers, and treat each item below as a **general** fix with tests across worlds, not a patch for one sentence.
+
+**RD1 — spell checking per world, active world first (user request).**
+- "bugger house pls" became kids.animals ("where buggers live").
+- "nect to a house" was not corrected inside the position slot.
+- "eys express fear" was not read as "eyes express fear".
+
+Build a spelling vocabulary per world from its patterns, lexicons and phrase macros. Correct first against the active tab's world, then the dispatcher candidates; correct inside slot phrases too. Never correct towards a word of another world when the active world reads the sentence. Report recovered/misled on typo sets per world.
+
+**RD2 — naming a world wins.**
+- "the avatar should be a women" and "now in a women" on the chart tab went to data.charts ("I do not see avatar in the chart").
+- "next" on the drawing tab played a song.
+
+A message that names a world's object or tab (avatar, chart, map, drawing, document, chess…) must route to that world whatever the active tab is. Bare words ("next", "more", "b1") follow the active tab, and the music world claims "next" only on its tab or while a song plays. Generalise this as a routing rule (ADR-004 tier) with tests.
+
+**RD3 — descriptors map to what the character can do instead of refusing.**
+- "make bigger eyes", "make eyes sleepy", "fa ochi mari/visători" on the person: refused.
+- "transform the avatar in a man" and "make the avatar a women" (typo for woman): "I am a person already".
+
+Add a per-character capability map. A requested attribute the character lacks maps to the closest available one: eye size or mood → the person's expression; man/woman/girl/boy → hair and facial-hair presets; happy/sad → expression. Say what was done ("A person's eyes follow the expression, so I made it wide-eyed"). Offer switching the character only when nothing close exists. Accept common misspellings (women→woman).
+
+**RD4 — comparatives that create.**
+- "draw another house" → "a bigger house" / "draw a bigger house" failed.
+- "draw a girl" drew a "blue person"; "a man" went to kids.common ("A has no common second name"); "make a happy man" was not understood.
+
+Creation with a comparative ("a bigger/smaller/taller X") sizes relative to the existing X. Ellipsis after a draw ("a man") repeats the draw. People get attributes: girl/boy/man/woman → size, hair and dress presets; happy/sad → face.
+
+**RD5 — Romanian sessions.**
+- "fa-mi avatarul ca om" and "fa avatarul ca om": unknown word "avatarul".
+- "fa ochi visatori": unknown "visatori".
+- Replies come back in mixed Romanian/English ("Ochii mei vin cu meu expression. Pentru wider ochi…").
+- "eys express fear" (English with a typo) was detected as Romanian.
+
+Fixes:
+- Translation lexicon coverage for the app's own vocabulary: avatar, ochi, mari, visători, om, femeie, bărbat, fată, desenează, casă, nor, soare, grafic…
+- Language decided per session from strong evidence; an English word with a typo must not flip it.
+- Back-translation of replies either fully Romanian or left in English, never mixed.
+- Haiku Romanian paraphrase batches per world, plus a Romanian column in the operational report.
+
+**RD6 — help examples must be canonical sentences.** "help" offered "Hair colors list" and "Bolt is ur name". Mark canonical examples (`example=` from the request-shape kernel or flagged `canonical=true`) and use only those in help and "Did you mean".
+
+**RD7 — phrase log export exports fewer messages than were typed (user report).** Reproduce with the 49-message session typed in the webchat:
+- compare the Settings count, the list and the JSONL lines;
+- check chips/host sends, the `source` filter, the 5,000 cap, translation, and messages sent while a modal (dictation, game) intercepted.
+
+Export must include every typed or spoken message by default. Add a webchat test that types N messages and checks N records.
+
+**RD8 — bare game coordinates and the engine.** "b1" answered "You already have a knight on b1"; "c1" answered "I am still thinking about my move". Check which tab the user was on: coordinates must follow the active game tab. Find out why the chess engine reply hangs, then fix both.
+
+Measure after RD1–RD8: the real dialogue right turn by turn, the dialogue set, the operational set (wrong must not rise).
+
 ### PERF — the webchat is very slow on mobile (user report 23:46; reviewer measurements at 06280ae) — TOP PRIORITY together with D-FIX
 
 Reviewer measurements (headless Chrome, 390×844 mobile viewport, 4× CPU throttling as a mid-range phone, localhost):
