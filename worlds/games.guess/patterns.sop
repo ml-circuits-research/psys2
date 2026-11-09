@@ -488,7 +488,7 @@
     kind=request
     priority=11
     example="Ask me questions."
-    example="Time to guess, start."
+    example="Time to guess."
 
 @pat.games.guess.correct.yes core.pattern
     canonical="Wait, I meant yes."

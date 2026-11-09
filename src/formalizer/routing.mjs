@@ -18,6 +18,13 @@
  *                          phrase log, help, which tab, go back) win over every other world's match of equal or
  *                          lower priority, so "Hurry up" or "Where am I?" still go to a world that claims them
  *                          with a higher priority.
+ *   3a named world        (RD2) a message that NAMES a world's object or tab (avatar, chart, map, drawing, document, chess ...) routes to that world
+ *                          whatever the active tab is: a match of the named world that is not a catch-all beats the active tab's matches, unless the
+ *                          active tab's own world is named too ("put a map on the picture" on the drawing tab stays there). Names come from the tab
+ *                          manifests (`tab`, `tabAlias`, `tabTitle`) and the built-in tabs (`worldNames`).
+ *   3b bare words          (RD2) a pattern with `tabFollow=true` (bare coordinates: "b1", "e4") is read only by the world of the active tab, the
+ *                          active game or a recently used world; from tier 5 it is dropped. Bare follow-ups of the music world and the document
+ *                          reader ("next", "another one") gate themselves with `needsState` (a song plays, a search is open).
  *   3  active tab          a match from the world that owns the active tab wins over every other world, unless another
  *                          world's match is clearly more specific: the tab's match is a catch-all (its wildcard
  *                          captures, `rest`, `words`, `...`, are more tokens than its literal words), the other match
@@ -48,6 +55,57 @@ export function contextFromFocus(focus = {}) {
     tabWorld: entries.find(([, n]) => n >= 3)?.[0] ?? null,
     recentWorlds: entries.filter(([, n]) => n % 3 === 1).sort((a, b) => b[1] - a[1]).map(([w]) => w),
   });
+}
+
+/** Tabs of worlds without a `tab=` manifest key (the host's built-in tabs). */
+export const BUILTIN_TAB_WORLDS = { 'ui.avatar': ['avatar', 'robot'], 'docs.editor': ['editor', 'document', 'doc'], 'games.tictactoe': ['tic tac toe', 'tictactoe', 'tic-tac-toe', 'noughts and crosses'], 'games.guess': ['twenty questions', '20 questions', 'guess the animal'], 'games.hangman': ['hangman'] };
+
+/**
+ * Naming tables of a world set (memoized): `names` world id -> phrases (lowercase) that name the world's object or tab, and `tabWorlds` the ids
+ * of the worlds that own a tab. A phrase gets its plural ("charts"). Phrases come from the manifest (`tab`, `tabAlias`, `tabTitle`) and
+ * `BUILTIN_TAB_WORLDS`.
+ */
+export function namingTables(set) {
+  const make = () => {
+    const names = new Map(), tabWorlds = new Set();
+    for (const w of set.list()) {
+      const tab = w.tab;
+      const phrases = new Set(BUILTIN_TAB_WORLDS[w.id] ?? []);
+      if (tab) {
+        tabWorlds.add(w.id);
+        phrases.add(tab.id);
+        for (const a of tab.aliases ?? []) phrases.add(a);
+        if (tab.title) phrases.add(tab.title);
+      } else if (BUILTIN_TAB_WORLDS[w.id]) tabWorlds.add(w.id);
+      const all = new Set();
+      for (const ph of phrases) { const l = String(ph).toLowerCase().replace(/_/g, ' ').trim(); if (l.length >= 3) { all.add(l); if (!/s$/.test(l)) all.add(`${l}s`); } }
+      if (all.size) names.set(w.id, [...all]);
+    }
+    return { names, tabWorlds };
+  };
+  return typeof set.memo === 'function' ? set.memo('routing-names', make) : make();
+}
+
+/** Words that introduce a noun: a name counts as naming a world only after one ("the avatar", "my chart"); a verb use ("paint yourself green") never names. */
+const DETERMINERS = new Set(['the', 'a', 'an', 'my', 'your', 'ur', 'this', 'that', 'our', 'its', 'his', 'her', 'their', 'new', 'another', 'some']);
+
+/** "as a picture", "like a chart": the name is a format or a comparison, not the object of the command. */
+const FORMAT_PREPOSITIONS = new Set(['as', 'like', 'into', 'resembling']);
+
+/** Worlds named in a token list (see `namingTables`): a name phrase right after a determiner (and not after "as", "like"). */
+export function namedWorlds(tokens, names) {
+  const words = tokens.filter((t) => t.kind === 'word' || t.kind === 'number').map((t) => t.lower ?? String(t.raw).toLowerCase());
+  const out = new Set();
+  for (const [w, list] of names ?? []) {
+    for (const n of list) {
+      const parts = n.split(' ');
+      for (let i = 1; i + parts.length <= words.length; i++) {
+        if (DETERMINERS.has(words[i - 1]) && !FORMAT_PREPOSITIONS.has(words[i - 2]) && parts.every((p, k) => words[i + k] === p)) { out.add(w); break; }
+      }
+      if (out.has(w)) break;
+    }
+  }
+  return out;
 }
 
 /** `ui.shell` actions that name a tab (tier 2a: always win). */
@@ -140,6 +198,7 @@ export function createRouter({ id = 'policy', model = null } = {}) {
     id,
     route({ matches, context, scores = [], tokens = [] } = {}) {
       const ctx = normalizeContext(context);
+      const named = ctx.names ? namedWorlds(tokens, ctx.names) : new Set();
       // tabOnly patterns apply only while their world's tab is active
       const list = matches.filter((m) => (!m.pattern.tabOnly || m.pattern.worldId === ctx.tabWorld) && populated(m.pattern, ctx));
       for (const m of list) m.rank = effectivePriority(m, ctx);
@@ -162,6 +221,7 @@ export function createRouter({ id = 'policy', model = null } = {}) {
       for (const m of list) {
         const w = m.pattern.worldId;
         if (isNav(m)) { m.tier = 2; m.sub = 0; reasons.set(m, 'explicit navigation or settings command'); }
+        else if (named.has(w) && w !== ctx.tabWorld && !(ctx.tabWorld && named.has(ctx.tabWorld)) && w !== 'ui.shell' && w !== 'ui.help' && wildTokens(m) <= m.literals) { m.tier = 3; m.sub = -1; reasons.set(m, 'the message names this world (RD2: naming a world wins over the active tab)'); }
         else if (overriding.includes(m)) { m.tier = 3; m.sub = 0; reasons.set(m, `more specific than the active tab's ${bestTab.pattern.id} (no wildcard, ${m.literals} vs ${bestTab.literals} literal words, tab match is a catch-all)`); }
         else if (ofTab(m)) { m.tier = 3; m.sub = 1; reasons.set(m, `match from the world of the active tab (${ctx.activeTab ?? w})`); }
         else if (w === ctx.gameWorld) { m.tier = 4; m.sub = 0; reasons.set(m, 'world with an active game'); }
@@ -171,6 +231,9 @@ export function createRouter({ id = 'policy', model = null } = {}) {
       // a `short` form of a request shape (spec 03 section 2b: "blue eyes", "sunglasses") is understood only inside a world the user is already in
       // (tiers 3 and 4); among everything else (tier 5) it would steal sentences from the long forms of other worlds
       for (let k = list.length - 1; k >= 0; k--) if (list[k].pattern.form === 'short' && list[k].tier === 5) list.splice(k, 1);
+      // bare readings follow the active tab (RD2, `tabFollow=true`): a bare coordinate ("b1", "e4") belongs to the active tab, the active game or a recently
+      // used world; from tier 5 (a world of another tab) it is dropped when the sentence has no literal word beside the coordinate ("Play B3" stays a candidate), so it never becomes a move of a game the user is not playing
+      if (ctx.tabWorld) for (let k = list.length - 1; k >= 0; k--) if (list[k].pattern.tabFollow && list[k].tier === 5 && list[k].literals === 0) list.splice(k, 1);
       list.sort((a, b) => a.tier - b.tier || a.sub - b.sub || inTier(wscore)(a, b));
       const win = list[0] ?? null;
       const runner = list.find((m) => m !== win && m.pattern.worldId !== win?.pattern.worldId) ?? list[1] ?? null;

@@ -10,7 +10,7 @@ import { analyze, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } fro
 import { compilePattern, matchTokens, wordBag, prefilterPasses, BUILTIN_CLASSES, PatternError } from './matcher.mjs';
 import { buildWires, substituteEmit, dummySlots } from './emit.mjs';
 import { routeScores } from './router.mjs';
-import { createRouter, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction } from '../routing.mjs';
+import { createRouter, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs';
 import { FormSession, STOP_WORDS, isPronoun } from './session.mjs';
 import { selfCorrect, sharedArgument, repetition, ellipsisPrefixes, joinText, MARKER_RE, SEP_RE } from './expand.mjs';
 import { parse, serialize } from '../../soplang/index.mjs';
@@ -236,7 +236,8 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
   const score = (id) => worlds.find((w) => w.id === id)?.score ?? 0;
   for (const m of matches) { m.score = score(m.pattern.worldId); m.rank = m.pattern.priority; }
   // The router (src/formalizer/routing.mjs, spec 03 section 4) orders the candidates using the application context.
-  const routed = router.route({ matches, context, scores: worlds, tokens: toks });
+  const tables = namingTables(set);
+  const routed = router.route({ matches, context: { ...(context ?? {}), names: tables.names, tabWorlds: [...tables.tabWorlds] }, scores: worlds, tokens: toks });
   // Game controls of ui.shell on a game tab emit the active game's own action (spec 03 section 4, Q5): one meaning, one label.
   const gameTab = context?.tabWorld && String(context.tabWorld).startsWith('games.') ? set.list().find((w) => w.id === context.tabWorld) : null;
   if (gameTab?.gameControls) {

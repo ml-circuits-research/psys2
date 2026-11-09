@@ -444,6 +444,11 @@
     card=one
     ask="Does the pattern apply only while its world's tab is active?"
 
+@core.pattern.tabFollow core.key
+    value=boolean
+    card=one
+    ask="Is this a bare reading (a coordinate) that only the world of the active tab, the active game or a recently used world may claim?"
+
 @core.pattern.tabPriority core.key
     value=integer
     card=one

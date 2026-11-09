@@ -157,6 +157,8 @@ function buildWorld(id, files, ops) {
     tabOnly: txt(x, 'tabOnly') === 'true', tabPriority: txt(x, 'tabPriority') == null ? null : Number(txt(x, 'tabPriority')),
     yieldsTo: getAll(x, 'yieldsTo').map((v) => v.v),
     needsState: txt(x, 'needsState') ?? null,
+    // tabFollow=true: a bare reading (a coordinate such as "b1") that only the world of the active tab, the active game or a recently used world may claim (RD2)
+    tabFollow: txt(x, 'tabFollow') === 'true',
     examples: [...new Set([...getAll(x, 'example').map((v) => v.v), ...getAll(x, 'canonical').map((v) => v.v)])],
     canonical: [...new Set(getAll(x, 'canonical').map((v) => v.v))],   // canonical examples (src/worlds/canonical.mjs): what help and "Did you mean" may show
   }));
@@ -280,7 +282,7 @@ function expandShapes(set) {
       for (const g of list) {
         const p = {
           id: `pat.${g.id}`, wire: null, worldId: w.id, match: g.match, emit: g.emit, kind: g.kind, priority: g.priority,
-          tabOnly: false, tabPriority: null, yieldsTo: [], needsState: null, examples: g.example, form: g.form, shape: shape.wireId,
+          tabOnly: false, tabPriority: null, yieldsTo: [], needsState: null, tabFollow: false, examples: g.example, form: g.form, shape: shape.wireId,
           // canonical: the explicit examples of the shape (on the first generated pattern) and the generated sentences the shape marks canonical
           canonical: [...new Set([...(list[0] === g ? shape.example ?? [] : []), ...(shape.canonical ?? []).filter((e) => g.example.includes(e))])],
         };
