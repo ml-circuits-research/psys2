@@ -139,7 +139,15 @@
 .p2-tab[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
 .p2-tab.is-soon { opacity: .6; }
 .p2-panels { flex: 1; min-height: 0; overflow: auto; }
-.p2-panel { min-height: 100%; padding: 18px; }
+.p2-panel { min-height: 100%; padding: 18px; position: relative; }
+/* BUSY: while a turn, its host effects or the spoken answer run, the tab content is veiled and does nothing (the tab switcher, Stop and Settings stay usable) */
+.p2-panel.is-busy::after { content: ''; position: absolute; inset: 0; z-index: 50; background: rgba(120, 128, 138, .28); cursor: progress; pointer-events: auto; }
+.p2-panel.is-busy[aria-busy] { user-select: none; }
+.p2-panel.is-busy:is(#p2-panel-map, #p2-panel-diagram, #p2-panel-charts)::after { pointer-events: none; }   /* view-only tabs keep pan, zoom and scroll */
+.p2-panel.is-busy:is(#p2-panel-map, #p2-panel-diagram, #p2-panel-charts) :is(button, input, select, textarea, a, [contenteditable]) { pointer-events: none; }
+.p2-tab.is-busy::after { content: ''; display: inline-block; width: 11px; height: 11px; margin-left: 7px; vertical-align: -1px; border: 2px solid var(--line, #ccc); border-top-color: var(--accent); border-radius: 50%; animation: p2-spin .8s linear infinite; }
+@keyframes p2-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .p2-tab.is-busy::after { animation-duration: 2.4s; } }
 .p2-tabbody { max-width: 720px; margin: 0 auto; }
 .p2-placeholder { max-width: 460px; margin: 60px auto; text-align: center; color: var(--muted); }
 .p2-placeholder h3 { color: var(--ink); }

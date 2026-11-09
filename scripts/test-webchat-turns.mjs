@@ -166,13 +166,75 @@ export const SCENARIOS = {
       check(`random: ${n} random messages, no turn without an answer`, bad === 0, `slowest ${slowest.ms} ms: ${JSON.stringify(slowest.text)}`);
     } finally { await c.close(); }
   },
+  async busy(o) {
+    // BUSY: a fake speechSynthesis that speaks for 2 s; the tabs are veiled during the turn and the speech, Stop lifts the veil at once.
+    const fake = () => {
+      const timers = [];
+      const synth = { speaking: false, getVoices: () => [], cancel() { timers.splice(0).forEach(clearTimeout); synth.speaking = false; window.__cancelled = (window.__cancelled ?? 0) + 1; },
+        speak(u) { synth.speaking = true; timers.push(setTimeout(() => { synth.speaking = false; u.onend?.({}); }, 2000)); } };
+      Object.defineProperty(window, 'speechSynthesis', { value: synth, configurable: true });
+      window.SpeechSynthesisUtterance = class { constructor(t) { this.text = t; } };
+    };
+    const c = await openChat({ ...o, init: fake, settings: { formalizer: 'rules', normalizer: false, showTrace: false, speaker: true } });
+    const veiled = () => c.pg.evaluate(() => { const p = document.querySelector('.p2-panel:not([hidden])'); return { veil: p.classList.contains('is-busy'), inert: p.inert || p.id.match(/map|diagram|charts/) != null, busy: p.getAttribute('aria-busy'), spin: !!document.querySelector('.p2-tab.is-busy'), host: window.psys2.isBusy() }; });
+    try {
+      await c.pg.evaluate(() => window.psys2.showTab('robot'));
+      await c.pg.evaluate(() => { window.psys2.settings.speaker = true; document.querySelector('.p2-speaker')?.getAttribute('aria-pressed') === 'true' || document.querySelector('.p2-speaker').click(); });
+      const say = async (t) => { await c.pg.type('input.p2-text', t, { delay: 0 }); await c.pg.keyboard.press('Enter'); };
+      await c.pg.waitForSelector('.p2-avatar-gallery button', { timeout: 15000 });
+      await say('hello');
+      await c.pg.waitForFunction(() => window.psys2.veiled, { timeout: 5000, polling: 20 });
+      const v = await veiled();
+      check('busy: veil, inert, aria-busy and spinner while the answer is spoken', v.veil && v.inert && v.busy === 'true' && v.spin && v.host, JSON.stringify(v));
+      const users = () => c.pg.$$eval('.p2-msg.is-user', (e) => e.length);
+      const n0 = await users();
+      const rect = await c.pg.evaluate(() => { const b = document.querySelector('.p2-avatar-gallery button:not([aria-pressed="true"])') ?? document.querySelector('.p2-avatar-chip'); b.scrollIntoView({ block: 'center', inline: 'center' }); const r = b.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; });
+      await c.pg.mouse.click(rect.x, rect.y);
+      await new Promise((r) => setTimeout(r, 300));
+      check('busy: clicking the avatar gallery during the speech does nothing (veil visible)', (await users()) === n0 && (await veiled()).veil, `${n0} -> ${await users()}`);
+      check('busy: typing stays possible', await c.pg.$eval('input.p2-text', (i) => !i.disabled && !i.closest('[inert]')));
+      await c.pg.waitForFunction(() => !window.psys2.isBusy(), { timeout: 6000, polling: 50 });
+      const after = await veiled();
+      check('busy: the veil is gone after the speech', !after.veil && !after.inert && after.busy === null && !after.spin, JSON.stringify(after));
+      await c.pg.mouse.click(rect.x, rect.y);
+      await c.pg.waitForFunction((n) => document.querySelectorAll('.p2-msg.is-user').length > n, { timeout: 4000 }, n0).then(() => check('busy: after the speech the same click works', true)).catch(() => check('busy: after the speech the same click works', false));
+      await c.pg.waitForFunction(() => !window.psys2.isBusy(), { timeout: 8000, polling: 50 });
+      // Stop during the speech lifts the veil at once
+      await say('hi there');
+      await c.pg.waitForFunction(() => window.psys2.veiled, { timeout: 5000, polling: 20 });
+      await c.pg.evaluate(() => window.psys2.stop());
+      await new Promise((r) => setTimeout(r, 120));
+      const st = await veiled();
+      check('busy: Stop lifts the veil at once and cuts the speech', !st.host && !st.veil && (await c.pg.evaluate(() => window.__cancelled)) >= 1, JSON.stringify(st));
+      // an effect that never ends: the turn is bounded, the veil does not stay
+      check('busy: 0 console errors', c.consoleErrors.length === 0 && c.errors.length === 0, [...c.consoleErrors, ...c.errors][0] ?? '');
+    } finally { await c.close(); }
+  },
+  async busyChess(o) {
+    const c = await openChat({ ...o, settings: { formalizer: 'rules', normalizer: false, showTrace: false } });
+    try {
+      await c.pg.evaluate(() => window.psys2.showTab('chess'));
+      // the engine thinks: a slow chess.engine.bestmove effect
+      await c.pg.type('input.p2-text', 'new chess game', { delay: 0 }); await c.pg.keyboard.press('Enter');
+      await c.pg.waitForFunction(() => !window.psys2.busy, { timeout: 12000, polling: 50 });
+      await c.pg.evaluate(() => { const s = window.psys2.session; if (!s.__orig) s.__orig = s.send.bind(s); s.send = async (...a) => { const r = await s.__orig(...a); await new Promise((x) => setTimeout(x, 1500)); return r; }; });
+      await c.pg.type('input.p2-text', 'e4', { delay: 0 }); await c.pg.keyboard.press('Enter');
+      await c.pg.waitForFunction(() => window.psys2.veiled, { timeout: 5000, polling: 20 });
+      const mid = await c.pg.evaluate(() => { const p = document.querySelector('#p2-panel-chess'); return { veil: p.classList.contains('is-busy'), inert: p.inert }; });
+      check('busy: chess panel is veiled and inert while the move is processed', mid.veil && mid.inert, JSON.stringify(mid));
+      await c.pg.evaluate(() => window.psys2.stop());
+      await new Promise((r) => setTimeout(r, 120));
+      check('busy: Stop lifts the chess veil at once', !(await c.pg.evaluate(() => window.psys2.veiled)));
+      check('busy: chess 0 console errors', c.consoleErrors.length === 0 && c.errors.length === 0, [...c.consoleErrors, ...c.errors][0] ?? '');
+    } finally { await c.close(); }
+  },
 };
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const argv = process.argv.slice(2);
   const opt = (k, d) => { const i = argv.indexOf(`--${k}`); return i >= 0 ? argv[i + 1] : d; };
   const o = { throttle: Number(opt('throttle', 4)), chrome: opt('chrome'), random: Number(opt('random', 200)), seed: Number(opt('seed', 7)) };
-  const only = opt('only', 'repro,stop,enter,watchdog,random').split(',');
+  const only = opt('only', 'repro,stop,enter,watchdog,random,busy,busyChess').split(',');
   for (const name of only) { console.log(`\n== ${name} (cpu ${o.throttle}x)`); try { await SCENARIOS[name](o); } catch (e) { check(`${name}: scenario ran`, false, e.message); } }
   const failed = results.filter((r) => !r.ok).length;
   console.log(`\n${results.length - failed}/${results.length} checks passed`);
