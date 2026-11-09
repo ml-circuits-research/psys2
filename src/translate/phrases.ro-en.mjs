@@ -11,6 +11,11 @@
 import { COMMAND_FRAMES } from './phrases.commands.ro-en.mjs';
 
 const BASE_FRAMES = [
+  // ---- polite request openers (RD5)
+  { p: 'poți|puteți să mi|îmi spui|spuneți|zici', out: 'can you tell me' },
+  { p: 'îmi poți|puteți spune|spui', out: 'can you tell me' },
+  { p: 'mi ai|ați putea spune', out: 'could you tell me' },
+  { p: 'jumătate din {num}', out: 'half of {num}' },
   // ---- greetings and chat
   { p: 'bună ziua', out: 'hello' },
   { p: 'bună dimineața', out: 'good morning' },

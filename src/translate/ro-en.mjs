@@ -1442,12 +1442,28 @@ function resolveDiaFree(toks) {
   });
 }
 
+/** Same-length rewrites of hyphenated clitics so that every token keeps its offsets: "să-mi" -> "să mi", "într-o" -> "în   o", "zoom-ul" -> "zoom   ". */
+function splitHyphens(text) {
+  const L = '(?<![\\p{L}])', R = '(?![\\p{L}])';
+  return text
+    .replace(new RegExp(`${L}(s[ăa]|nu)-(mi|ți|ti|l|o|i|ne|vă|va|le|se)${R}`, 'giu'), (m, a, b) => `${a} ${b}`)
+    .replace(new RegExp(`${L}(mi)-(ai|ați)${R}`, 'giu'), (m, a, b) => `${a} ${b}`)
+    .replace(new RegExp(`${L}(într|dintr|printr)-(o|un|una|unul)${R}`, 'giu'), (m, a, b) => `${a.slice(0, -2)}${' '.repeat(m.length - b.length - (a.length - 2))}${b}`)
+    .replace(new RegExp(`${L}(\\p{L}{3,})-(ul|a|le|lui)${R}`, 'giu'), (m, a, b) => `${a}${' '.repeat(b.length + 1)}`);
+}
+
 export function translateRoEn(original) {
-  const source = String(original ?? '');
+  const source = splitHyphens(String(original ?? ''));
   const toks = tokenize(source);
   const diaFree = !/[ăâîșțĂÂÎȘȚşţŞŢ]/.test(source);
   for (const t of toks) t.diaFree = diaFree;
   if (diaFree) resolveDiaFree(toks);
+  // names typed in lower case ("ben ii da lui zoe 7 bile"): a known name that Romanian does not also use as a word is a name
+  for (const t of toks) {
+    if (t.kind !== 'word' || t.isCap || t.key.length < 3 || !/^\p{Ll}/u.test(t.raw)) continue;
+    const asName = M.isKnownName(t.key) || (/(ei|ii)$/.test(t.raw) && M.isKnownName(foldKey(dativeName(t.raw))));
+    if (asName && M.analyze(t.key).length === 0) { t.isCap = true; t.raw = t.raw[0].toUpperCase() + t.raw.slice(1); }
+  }
   const sents = splitSentences(toks);
   const ctx = { unknown: [], notes: [], content: 0, mapped: 0 };
   const results = [];

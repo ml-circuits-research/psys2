@@ -467,6 +467,142 @@ semn,semne|sign|n
 jungla|jungle|f
 savană,savane|savanna|f
 muu|moo|n mass
+capitală,capitale|capital|f
+hexagon,hexagoane|hexagon|n
+pentagon,pentagoane|pentagon|n
+octogon,octogoane|octagon|n
+acord,acorduri|chord|n
+nivel,niveluri|level|n
+tonalitate,tonalități|key|f
+vrăjitoare,vrăjitoare|witch|f anim
+piesă,piese|piece|f
+flaut,flauturi|flute|n
+mutare,mutări|move|f
+șah,șahuri|chess|n mass
+diez,diezi|sharp|m
+bemol,bemoli|flat|m
+vizor,vizoare|visor|n
+tip,tipuri|type|n
+gamă,game|scale|f
+piept,piepturi|chest|n
+pion,pioni|pawn|m
+marcaj,marcaje|marker|n
+instrument,instrumente|instrument|n
+grătar,grătare|grill|n
+fișier,fișiere|file|n
+tempo,tempouri|tempo|n
+frază,fraze|phrase|f
+companie,companii|company|f
+ciclop,ciclopi|cyclops|m anim
+persoană,persoane|person|f anim
+regină,regine|queen|f anim
+melodie,melodii|melody|f
+parte,părți|part|f
+dragon,dragoni|dragon|m anim
+selecție,selecții|selection|f
+secțiune,secțiuni|section|f
+personaj,personaje|character|n
+vițel,vițeii|calf|m anim
+copie,copii|copy|f
+formatare,formatări|formatting|f
+basm,basme|fairy tale|n
+pământ,pământuri|ground|n
+rocadă,rocade|castling|f
+cuptor,cuptoare|oven|n
+material,materiale|material|n
+latitudine,latitudini|latitude|f
+longitudine,longitudini|longitude|f
+coordonată,coordonate|coordinate|f
+evidențiere,evidențieri|highlight|f
+distanță,distanțe|distance|f
+iaz,iazuri|pond|n
+scoică,scoici|shell|f
+octavă,octave|octave|f
+treaptă,trepte|step|f
+interval,intervale|interval|n
+hertz,hertzi|hertz|m
+aspect,aspecte|look|n
+accesoriu,accesorii|accessory|n
+barbă,bărbi|beard|f
+regulă,reguli|rule|f
+album,albume|album|n
+tabel,tabele|table|n
+grafic,grafice|chart|n
+peștișor,peștișori|little fish|m anim
+tablou,tablouri|picture|n
+mărime,mărimi|size|f
+modificare,modificări|change|f
+acțiune,acțiuni|action|f
+conținut,conținuturi|content|n
+locație,locații|location|f
+plan,planuri|plan|n
+structură,structuri|structure|f
+mască,măști|mask|f
+mustață,mustăți|mustache|f
+strălucire,strălucirii|brightness|f
+cadran,cadrane|dial|n
+ventilație,ventilații|vent|f
+rachetă,rachete|rocket|f
+fundal,fundaluri|background|n
+sirenă,sirene|mermaid|f anim
+covor,covoare|carpet|n
+contur,contururi|outline|n
+text,texte|text|n
+rege,regi|king|m anim
+turn,turnuri|rook|n
+dificultate,dificultăți|difficulty|f
+frontieră,frontiere|border|f
+duzină,duzini|dozen|f
+vreme|weather|f mass
+pian,piane|piano|n
+semiton,semitonuri|semitone|n
+cvintă,cvinte|fifth|f
+cvartă,cvarte|fourth|f
+volum,volume|volume|n
+avatar,avatare|avatar|m
+zoom,zoomuri|zoom|n
+mod,moduri|mode|n
+viteză,viteze|speed|f
+jurnal,jurnale|log|n
+partidă,partide|game|f
+acorduri,acorduri|chords|n pl
+tab,taburi|tab|n
+bucurie,bucurii|joy|f
+sfârșit,sfârșituri|end|n
+mijloc,mijloace|middle|n
+rezultat,rezultate|result|n
+expert,experți|expert|m anim
+computer,computere|computer|n
+cușcă,cuști|cage|f
+apus,apusuri|sunset|n
+bază,baze|base|f
+comandă,comenzi|command|f
+poziție,poziții|position|f
+deplasare,deplasări|movement|f
+suprafață,suprafețe|surface|f
+capăt,capete|end|n
+legătură,legături|link|f
+probă,probe|sample|f
+captură,capturi|capture|f
+balanță,balanțe|balance|f
+distribuție,distribuții|cast|f
+chestie,chestii|thing|f
+bară,bare|bar|f
+procent,procente|percent|n
+legendă,legende|legend|f
+medie,medii|average|f
+centru,centre|center|n
+coloană,coloane|column|f
+diagramă,diagrame|chart|f
+încercare,încercări|attempt|f
+obiect,obiecte|object|n
+expresie,expresii|expression|f
+stare,stări|state|f
+frecvență,frecvențe|frequency|f
+coafură,coafuri|hairstyle|f
+tunsoare,tunsori|haircut|f
+valoare,valori|value|f
+ordine,ordini|order|f
 `;
 
 const VERB_ROWS = `
@@ -596,6 +732,53 @@ zice|say/said/said|zic zici zice zicem ziceți zic|zis|d imp
 clipi|blink|clipesc clipești clipește clipim clipiți clipesc|clipit|i imp
 dansa|dance|az:dans|dansat|i imp
 zâmbi|smile|is:zâmb|zâmbit|i imp
+obține|get/got/got|obțin obții obține obținem obțineți obțin|obținut|t imp
+urma|follow|az:urm|urmat|t
+schimba|change|a:schimb|schimbat|t imp
+anula|undo|az:anul|anulat|t imp
+seta|set/set/set|az:set|setat|t imp
+trece|pass|trec treci trece trecem treceți trec|trecut|i imp
+apărea|appear|apar apari apare apărem apăreți apar|apărut|i
+exista|exist|a:exist|existat|i
+rezulta|result|az:rezult|rezultat|i
+marca|mark|a:marc|marcat|t imp
+muta|move|a:mut|mutat|t imp
+amesteca|mix|a:amestec|amestecat|t imp
+repeta|repeat|az:repet|repetat|t imp
+selecta|select|az:select|selectat|t imp
+copia|copy|az:copi|copiat|t imp
+întoarce|turn|întorc întorci întoarce întoarcem întoarceți întorc|întors|t imp
+menționa|mention|az:mențion|menționat|t
+încărca|load|a:încarc|încărcat|t imp
+descărca|download|a:descarc|descărcat|t imp
+dicta|dictate|a:dict|dictat|t imp
+scoate|remove|scot scoți scoate scoatem scoateți scot|scos|t imp
+elimina|remove|az:elimin|eliminat|t imp
+transforma|turn|az:transform|transformat|t imp
+insera|insert|az:insert|inserat|t imp
+evidenția|highlight|az:evidenți|evidențiat|t imp
+urmări|follow|is:urmăr|urmărit|t imp
+conține|contain|conțin conții conține conținem conțineți conțin|conținut|t
+cunoaște|know/knew/known|cunosc cunoști cunoaște cunoaștem cunoașteți cunosc|cunoscut|t
+permite|allow|permit permiți permite permitem permiteți permit|permis|t
+deplasa|move|az:deplas|deplasat|t imp
+acoperi|cover|acopăr acoperi acoperă acoperim acoperiți acoperă|acoperit|t
+recunoaște|recognize|recunosc recunoști recunoaște recunoaștem recunoașteți recunosc|recunoscut|t
+mări|enlarge|is:măr|mărit|t imp
+ascunde|hide/hid/hidden|ascund ascunzi ascunde ascundem ascundeți ascund|ascuns|t imp
+ghici|guess|is:ghic|ghicit|t
+verifica|check|a:verific|verificat|t imp
+porni|start|is:porn|pornit|t imp
+deveni|become|devin devii devine devenim deveniți devin|devenit|i
+depăși|exceed|is:depăș|depășit|t
+ocupa|occupy|a:ocup|ocupat|t
+reprezenta|represent|az:reprezent|reprezentat|t
+sorta|sort|az:sort|sortat|t imp
+dubla|double|az:dubl|dublat|t imp
+duplica|duplicate|a:duplic|duplicat|t imp
+respira|breathe|az:respir|respirat|i
+prefera|prefer|az:prefer|preferat|t
+asculta|listen|a:ascult|ascultat|t imp
 `;
 
 const ADJ_ROWS = `
@@ -613,6 +796,7 @@ gri|gray
 auriu,aurie,aurii,aurii|golden
 violet|violet
 mare,mari|big/bigger/biggest
+următor,următoare,următori,următoare|next
 dublat,dublată,dublați,dublate|doubled
 triplat,triplată,triplați,triplate|tripled
 înjumătățit,înjumătățită,înjumătățiți,înjumătățite|halved
@@ -700,6 +884,37 @@ anterior,anterioară,anteriori,anterioare|previous
 suficient,suficientă,suficienți,suficiente|enough
 acoperit,acoperită,acoperiți,acoperite|covered
 perfect,perfectă,perfecți,perfecte|perfect
+major,majoră,majori,majore|major
+minor,minoră,minori,minore|minor
+ultim,ultimă,ultimi,ultime|last
+relativ,relativă,relativi,relative|relative
+principal,principală,principali,principale|main
+numerotat,numerotată,numerotați,numerotate|numbered
+cursiv,cursivă,cursivi,cursive|italic
+simplu,simplă,simpli,simple|simple
+central,centrală,centrali,centrale|central
+uriaș,uriașă,uriași,uriașe|huge
+complet,completă,compleți,complete|complete
+medical,medicală,medicali,medicale|medical
+somnoros,somnoroasă,somnoroși,somnoroase|sleepy
+sclipitor,sclipitoare,sclipitori,sclipitoare|sparkling
+visător,visătoare,visători,visătoare|dreamy
+colorat,colorată,colorați,colorate|colored
+general,generală,generali,generale|general
+posibil,posibilă,posibili,posibile|possible
+comun,comună,comuni,comune|common
+spart,spartă,sparți,sparte|broken
+vecin,vecină,vecini,vecine|neighboring
+circular,circulară,circulari,circulare|circular
+prim,primă,primi,prime|first
+vertical,verticală,verticali,verticale|vertical
+orizontal,orizontală,orizontali,orizontale|horizontal
+implicit,implicită,impliciți,implicite|default
+disponibil,disponibilă,disponibili,disponibile|available
+luminos,luminoasă,luminoși,luminoase|bright
+uman,umană,umani,umane|human
+total,totală,totali,totale|total
+descrescător,descrescătoare,descrescători,descrescătoare|descending
 `;
 
 // Function words. flags: neg, freq, time, lead, drop, op
@@ -863,6 +1078,10 @@ bună|hello|interj lead
 salut|hi|interj lead
 mulțumesc|thank you|interj lead
 gata|done|interj lead
+puțin|a little|adv
+înapoi|back|adv
+mult|a lot|adv
+prea|too|adv
 `;
 
 const NAME_ROWS = `
@@ -919,6 +1138,20 @@ Lucian|m
 Emil|m
 Eva|f
 Ema|f
+Ben|m
+Zoe|f
+Sam|m
+Leo|m
+Lily|f
+Amy|f
+Jack|m
+Bill|m
+Rex|m
+Zed|m
+Bolt|m
+Eve|f
+Max|m
+Kim|f
 `;
 
 const NUMBER_ROWS = `

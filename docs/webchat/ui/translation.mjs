@@ -136,6 +136,9 @@ export function createSwitchTranslator({ rules, getStrategy, getDetectStrategy =
       entry.detected = r?.lang ?? null; entry.confidence = r?.confidence ?? null;
       return r;
     },
+    /** The rules evidence is used with either detector (RD5): the browser detector alone must not flip the session on English with a typo. */
+    evidence: (text) => rules.evidence?.(text) ?? null,
+    leftovers: (text, lang) => rules.leftovers?.(text, lang) ?? [],
     supports: (f, t) => rules.supports?.(f, t) ?? true,
     async translate(text, opts) {
       const { from, to } = opts;

@@ -27,6 +27,7 @@ import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
+import { createTranslator } from '../src/translate/index.mjs';
 import { DEFAULT_MODE, MODES, sessionOptions, settingsForMode, runtimeSettings } from '../src/dialog/runtime-config.mjs';
 import { openNodeRuntime, modelHashes } from './lib/runtime-node.mjs';
 import { isMainThread } from 'node:worker_threads';
@@ -46,7 +47,7 @@ export function loadCases(file) {
 
 // ---- pipeline construction (the one place that differs per mode; the settings come from src/dialog/runtime-config.mjs) -------------
 async function buildPipeline({ mode, ortPath, modelDir, normalizerDir, editTau, ortThreads, overrides }) {
-  const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT) });
+  const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT), translator: createTranslator() });   // the translator only acts on Romanian cases (English cases pass language 'en')
   const rt = await openNodeRuntime({ engine, mode, ortPath, dispatcherDir: modelDir, normalizerDir, editTau, ortThreads, overrides });
   return { engine, ...rt };
 }
@@ -64,20 +65,21 @@ export async function runCase(engine, settings, c) {
   const before = s.state();
   const t0 = performance.now();
   let reply, error = null;
-  try { reply = await s.send(c.message); } catch (e) { error = e.message; }
+  const ro = c.lang === 'ro';   // Romanian cases (training/eval/operational-ro.jsonl): language auto, the expectations are checked on the English reply
+  try { reply = await s.send(c.message, ro ? { language: 'auto' } : undefined); } catch (e) { error = e.message; }
   const ms = performance.now() - t0;
   if (!reply) return { id: c.id, world: c.world, outcome: 'wrong', error, ms };
   const after = s.state();
   const strip = (s) => { const { 'ui.help': _h, ...rest } = s; return JSON.stringify(rest); };   // ui.help only remembers the last unparsed text
   const stateChanged = strip(before) !== strip(after);
   const last = reply.answers.at(-1);
-  const replyText = reply.text;
+  const replyText = ro ? (reply.trace?.replyEnglish ?? reply.text) : reply.text;
   const unparsedAll = reply.segments.length === 0 || reply.segments.every((x) => x.unparsed);
   const items = evaluateCase(c, { before, after, replyText, effects: reply.effects, statuses: reply.statuses, unparsedAll, values: reply.answers.map((a) => a.value) });
   const outcome = classify(c, items, { statuses: reply.statuses, unparsedAll, stateChanged, effects: reply.effects.filter((e) => e.name !== 'chat.suggest') });
   return {
     id: c.id, world: c.world, outcome, ms,
-    reply: replyText.slice(0, 240), statuses: reply.statuses,
+    reply: replyText.slice(0, 240), ...(ro ? { reply_shown: reply.text.slice(0, 240), lang: reply.lang } : {}), statuses: reply.statuses,
     failing: items.filter((x) => !x.ok && !(x.trivial && items.some((y) => !y.trivial))).map((x) => `${x.kind}:${x.spec}${x.actual !== undefined ? ` (got ${String(x.actual).slice(0, 60)})` : ''}`),
     trivial: items.filter((x) => x.trivial).length,
     n_items: items.filter((x) => !(x.trivial && items.some((y) => !y.trivial))).length,
@@ -191,6 +193,26 @@ async function main() {
     if (fullSet && mode === DEFAULT_MODE && info.hashes?.dispatcher?.match && info.hashes?.normalizer?.match) {
       writeFileSync(join(dir, 'published.json'), `${JSON.stringify({ file: rel, mode, date: config.date, dispatcher_sha256: dsha, normalizer_sha256: info.hashes.normalizer.meta_sha256, policy: info.settings, headline: { n: h.n, right_pct: h.right_pct, wrong_pct: h.wrong_pct, not_understood_pct: h.not_understood_pct } }, null, 1)}\n`);
     }
+  }
+  if (flag('ro') && !flag('json')) {   // Romanian column: the same evaluator over training/eval/operational-ro.jsonl (build it with scripts/build-ro-eval.mjs)
+    const roFile = join(REPO, 'training/eval/operational-ro.jsonl');
+    if (existsSync(roFile)) {
+      const pipe = await buildPipeline(popts);
+      const roCases = loadCases(roFile);
+      const roRows = [];
+      for (const c of roCases) roRows.push(await runCase(pipe.engine, pipe.settings, c));
+      const bd = (rows, v) => tally(rows.filter((r, i) => roCases[i].variant === v));
+      const all = tally(roRows), dia = bd(roRows, 'diacritics'), cas = bd(roRows, 'casual');
+      const line = (n, t) => console.log(`  ${n.padEnd(24)} n=${String(t.n).padStart(4)}  right ${String(t.right_pct).padStart(5)}%  partly ${String(t.partly_pct).padStart(5)}%  wrong ${String(t.wrong_pct).padStart(5)}%  nu ${String(t.not_understood_pct).padStart(5)}%`);
+      console.log(`Romanian (language auto, English reply checked): ${all.n} messages  right ${all.right_pct}%  wrong ${all.wrong_pct}%`);
+      line('with diacritics', dia); line('casual, no diacritics', cas);
+      for (const [g, t] of Object.entries(summarize(roCases, roRows).by_group)) line(`ro ${g}`, t);
+      const unq = (t) => String(t).replace(/"[^"]*"/g, '');   // the user's own quoted words stay as typed
+      const mixed = roRows.filter((r) => r.reply_shown && unq(r.reply_shown) !== unq(r.reply) && /\b(the|you|your|is|my|I|did|could|can|what|how|and|with|have|has)\b/.test(unq(r.reply_shown)));
+      const keptEnglish = roRows.filter((r) => r.lang === 'ro' && r.reply_shown && unq(r.reply_shown) === unq(r.reply)).length;
+      console.log(`  replies: ${roRows.length - keptEnglish - mixed.length} in Romanian, ${keptEnglish} kept in English (could not be translated fully), ${mixed.length} mixed`);
+      if (!flag('no-write')) writeFileSync(join(REPO, `training/results/operational/ro-${mode}-${config.date}.json`), `${JSON.stringify({ config, all, diacritics: dia, casual: cas, by_world: summarize(roCases, roRows).by_world, cases: roRows.map(({ ms, ...r }) => r) }, null, 1)}\n`);
+    } else console.log('no Romanian set: run scripts/build-ro-eval.mjs');
   }
   // checkpoint-selection contract: exactly one JSON object on the last stdout line
   if (flag('json')) console.log(JSON.stringify({ n: h.n, right: h.right, partly_right: h.partly, wrong: h.wrong, not_understood: h.not_understood, latency_ms: summary.latency_ms.mean }));

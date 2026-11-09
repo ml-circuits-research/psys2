@@ -208,15 +208,18 @@ function parseItems(toks, ctx) {
     if (vf) { items.push({ t: 'verb', entry: vf.entry, form: vf.form, tok: t }); i++; continue; }
     const adj = adjMap.get(key);
     if (adj) { items.push({ t: 'adj', entry: adj, tok: t, comp: adj.comp === key }); i++; continue; }
-    if (PREP_EN[key] || key === 'next') {
-      if (key === 'next' && toks[i + 1] && toks[i + 1].key === 'to') { items.push({ t: 'prep', en: 'next to', tok: t, tok2: toks[i + 1] }); i += 2; continue; }
+    if (PREP_EN[key] || (key === 'next' && toks[i + 1] && toks[i + 1].key === 'to')) {
+      if (key === 'next') { items.push({ t: 'prep', en: 'next to', tok: t, tok2: toks[i + 1] }); i += 2; continue; }
       items.push({ t: 'prep', en: key, tok: t }); i++; continue;
     }
     const w = wordMap.get(key);
     if (w) { items.push({ t: w.pos === 'adv' ? 'adv' : 'word', ro: w.ro, tok: t, row: w }); i++; continue; }
     if (key === 'the' || key === 'a' || key === 'an') { i++; continue; }
     // names and unknown words
-    if (t.isCap) { items.push({ t: 'np', head: { kind: 'name', text: t.raw, tok: t }, number: 'sg', adjs: [], possessive: !!t.possessive, def: false, start: t.start, end: t.end }); i++; continue; }
+    // a capitalised word is a name unless it opens the sentence and is neither a known name nor followed by a verb ("Nice!", "Look at ..."): those are English words we cannot translate
+    const nx = toks[i + 1];
+    const nameLike = t.isCap && (i > 0 || L.names.some((x) => x.name === t.raw) || (nx && (nx.kind === 'num' || verbMap.has(nx.key) || AUX_ENS.has(nx.key) || nx.possessive)));
+    if (nameLike) { items.push({ t: 'np', head: { kind: 'name', text: t.raw, tok: t }, number: 'sg', adjs: [], possessive: !!t.possessive, def: false, start: t.start, end: t.end }); i++; continue; }
     unknown(t);
     items.push({ t: 'np', head: { kind: 'unknown', text: t.raw, tok: t }, number: 'sg', adjs: [], def: false, start: t.start, end: t.end, unknown: true });
     i++;
@@ -817,4 +820,45 @@ export function translateEnRo(original) {
 export function isEnglishWord(key) {
   return nounMap.has(key) || verbMap.has(key) || adjMap.has(key) || wordMap.has(key) || !!PRON_EN[key] || !!POSS_EN[key]
     || !!WH_EN[key] || AUX_ENS.has(key) || DET_EN.has(key) || !!PREP_EN[key] || key in NUM_UNITS;
+}
+
+/**
+ * English words that survived in a Romanian output (a word of the English lexicon that Romanian does not also know). A reply with such a word
+ * is mixed, so the caller keeps the whole reply in English instead.
+ */
+export function englishLeftovers(text) {
+  const out = [];
+  for (const t of tokenize(String(text ?? ''))) {
+    if (t.kind !== 'word') continue;
+    const k = t.key;
+    if (k.length < 3 || !isEnglishWord(k)) continue;
+    if (M.analyze(k).length || M.isKnownName(k) || /^(sau|plus|minus|pot|mai|are|de|la|cu|pe|din|nu|da)$/.test(k)) continue;
+    out.push(t.raw);
+  }
+  return out;
+}
+
+let vocab = null;
+/** True when `key` is one typo (an edit distance of 1, or 2 for words of 7+ letters) away from a word of the English lexicon. */
+export function nearEnglishWord(key) {
+  if (!vocab) vocab = [...new Set([...nounMap.keys(), ...verbMap.keys(), ...adjMap.keys(), ...wordMap.keys(), 'express', 'fear', 'look', 'give', 'turn', 'make', 'show', 'eyes', 'face'])].filter((w) => /^[a-z]+$/.test(w));
+  const max = key.length >= 7 ? 2 : 1;
+  for (const w of vocab) {
+    if (Math.abs(w.length - key.length) > max) continue;
+    if (w[0] !== key[0] && w[1] !== key[1]) continue;
+    if (editDistLe(w, key, max)) return true;
+  }
+  return false;
+}
+function editDistLe(a, b, max) {
+  const m = a.length, n = b.length;
+  let prev = Array.from({ length: n + 1 }, (_, j) => j);
+  for (let i = 1; i <= m; i++) {
+    const cur = [i];
+    let best = i;
+    for (let j = 1; j <= n; j++) { const v = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); cur.push(v); if (v < best) best = v; }
+    if (best > max) return false;
+    prev = cur;
+  }
+  return prev[n] <= max;
 }

@@ -78,10 +78,11 @@ function fitFragment(src, out) {
  */
 export async function translateParts(parts, translator, lang) {
   const flat = parts.map((p) => ({ ...p }));
+  let complete = true;   // RD5: a reply is either fully translated or left in English, never mixed
   for (let i = 0; i < flat.length; i++) if (flat[i].join) flat[i].translate = !!(flat[i - 1]?.translate && flat[i + 1]?.translate);
   const out = [];
   for (let i = 0; i < flat.length;) {
-    if (!flat[i].translate) { const { join, fallback, ...rest } = flat[i]; out.push(rest); i++; continue; }
+    if (!flat[i].translate) { const { join, fallback, incomplete, ...rest } = flat[i]; if (incomplete) complete = false; out.push(rest); i++; continue; }
     let j = i;
     while (j < flat.length && flat[j].translate) j++;
     const run = flat.slice(i, j);
@@ -94,9 +95,13 @@ export async function translateParts(parts, translator, lang) {
       try { res = await translator.translate(run[0].fallback, { from: 'en', to: lang }); } catch { res = null; }
     }
     const t = textOf(res);
-    out.push({ text: t ? fitFragment(src, t) : src, translate: true });
+    if (!t || res?.unknown?.length || res?.untranslatable?.length || (typeof translator.leftovers === 'function' && translator.leftovers(t, lang).length)) complete = false;
+    out.push({ text: t ? fitFragment(src, t) : src, translate: true, src });
   }
-  return out;
+  if (!complete) {   // keep the whole reply in English: translated runs and the examples (which carry their English text in `en`) revert; quoted user text stays as typed
+    return flat.map(({ join, fallback, en, src, incomplete, ...p }) => (join ? { text: p.text, translate: false } : { ...p, text: en ?? p.text }));
+  }
+  return out.map(({ src, en, ...p }) => p);
 }
 
 /** Tabs of worlds that do not declare one in their manifest (the built-in tabs of the demo page). */
@@ -442,9 +447,17 @@ export class DialogSession {
     let lang = 'en', translation = null, english = text;
     if (translator) {
       lang = wanted === 'auto' ? langOf(await perf.time('detect', () => translator.detectLanguage(text))) : wanted;
-      if (wanted === 'auto') {   // a short or ambiguous input ("e", "ok") keeps the language of the session (default English); a confident detection becomes the session language
-        if (lang === 'unknown') lang = this._sessionLang ?? 'en';
-        else this._sessionLang = lang;
+      // RD5: the language comes from strong evidence. English with a typo ("eys express fear") is never read as Romanian, and a weak Romanian reading
+      // (a browser guess, one ambiguous word) switches an automatic session only when it repeats; translators without `evidence` keep the plain rule.
+      const ev = typeof translator.evidence === 'function' ? await translator.evidence(text) : null;
+      if (ev?.strongEn && lang !== 'en') { lang = 'en'; if (wanted === 'auto') { this._sessionLang = 'en'; this._weakRo = 0; } }
+      else if (wanted === 'auto') {   // a short or ambiguous input ("e", "ok") keeps the language of the session (default English); a confident detection becomes the session language
+        if (lang === 'ro' && ev && !ev.strongRo && this._sessionLang !== 'ro') {
+          this._weakRo = (this._weakRo ?? 0) + 1;
+          lang = this._weakRo >= 2 ? 'ro' : (this._sessionLang ?? 'en');
+          if (lang === 'ro') { this._sessionLang = 'ro'; this._weakRo = 0; }
+        } else if (lang === 'unknown') lang = this._sessionLang ?? 'en';
+        else { this._sessionLang = lang; this._weakRo = 0; }
       }
       if (lang !== 'en' && lang !== 'unknown') {
         translation = await perf.time('translate', () => translator.translate(text, { from: lang, to: 'en' }));
@@ -530,22 +543,24 @@ export class DialogSession {
         // the user's own words are quoted verbatim and never back-translated
         const quoted = lang === 'en' ? seg.text : originalSentence(text, seg, translation?.alignment);
         const line = [T('I did not understand '), { text: `"${quoted}"`, translate: false, quote: true }, { text: '.', translate: false }];
+        const exEn = ex;
+        let exShown = ex;
         if (lang !== 'en' && translator) {
-          // every example is a simple English sentence: translate each one separately, drop those with unknown words
+          // every example is a simple English sentence: translate each one separately; all or none (a half translated list would mix the languages)
           const done = [];
           for (const e of ex) {
             try {
               const r = await translator.translate(e, { from: 'en', to: lang });
-              if (textOf(r) && !r.unknown?.length && !r.untranslatable?.length) done.push(textOf(r).trim());
-            } catch { /* omit this example */ }
+              if (textOf(r) && !r.unknown?.length && !r.untranslatable?.length && !(translator.leftovers?.(textOf(r), lang) ?? []).length) done.push(textOf(r).trim());
+            } catch { /* this example stays untranslated */ }
           }
-          ex = done;
+          exShown = done.length === ex.length ? done : ex;
         }
-        if (ex.length) {
+        if (exShown.length) {
           line.push(dym.length ? T(' Did you mean ', { fallback: ' You can say: ' }) : T(' For example: ', { fallback: ' You can say: ' }));
-          ex.forEach((e, k) => {
+          exShown.forEach((e, k) => {
             if (k) line.push(T(' or '));
-            line.push({ text: `"${e}"`, translate: false, quote: true, example: true });
+            line.push({ text: `"${e}"`, translate: false, quote: true, example: true, en: `"${exEn[k]}"`, ...(lang !== 'en' && translator && exShown === exEn ? { incomplete: true } : {}) });
           });
           if (dym.length) line.push({ text: '?', translate: false });
         }

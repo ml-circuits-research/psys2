@@ -1,0 +1,41 @@
+{"id": "games.chess#001", "ro": "Hai să jucăm șah.", "ro_casual": "hai sa jucam sah"}
+{"id": "games.chess#002", "ro": "Joc nou.", "ro_casual": "joc nou"}
+{"id": "games.chess#003", "ro": "Vreau să joc șah.", "ro_casual": "vreau sa joc sah"}
+{"id": "games.chess#004", "ro": "Hai să jucăm o partidă de șah, te rog.", "ro_casual": "hai sa jucam o partida de sah pls"}
+{"id": "games.chess#005", "ro": "e2 la e4.", "ro_casual": "e2 la e4"}
+{"id": "games.chess#006", "ro": "e4", "ro_casual": "e4"}
+{"id": "games.chess#007", "ro": "Pionul pe e4.", "ro_casual": "pionul pe e4"}
+{"id": "games.chess#008", "ro": "Mută pionul meu de pe e cu două case.", "ro_casual": "muta pionul meu de pe e cu doua case"}
+{"id": "games.chess#009", "ro": "Joacă d4.", "ro_casual": "joaca d4"}
+{"id": "games.chess#010", "ro": "d2 la d4, te rog.", "ro_casual": "d2 la d4 te rog"}
+{"id": "games.chess#011", "ro": "Calul la f3.", "ro_casual": "calul la f3"}
+{"id": "games.chess#012", "ro": "Calul la c3.", "ro_casual": "calul la c3"}
+{"id": "games.chess#013", "ro": "nf3", "ro_casual": "nf3"}
+{"id": "games.chess#014", "ro": "Setează nivelul la expert.", "ro_casual": "seteaza nivelul la expert"}
+{"id": "games.chess#015", "ro": "Setează nivelul la 5.", "ro_casual": "seteaza nivelul la 5"}
+{"id": "games.chess#016", "ro": "Fă computerul mai ușor.", "ro_casual": "fa computerul mai usor"}
+{"id": "games.chess#017", "ro": "Joacă la nivelul 2.", "ro_casual": "joaca la nivelul 2"}
+{"id": "games.chess#018", "ro": "Mă predau.", "ro_casual": "ma predau"}
+{"id": "games.chess#019", "ro": "Mă dau bătut.", "ro_casual": "ma dau batut"}
+{"id": "games.chess#020", "ro": "Renunț.", "ro_casual": "renunt"}
+{"id": "games.chess#021", "ro": "Anulează.", "ro_casual": "anuleaza"}
+{"id": "games.chess#022", "ro": "e4 și apoi anulează.", "ro_casual": "e4 si apoi anuleaza"}
+{"id": "games.chess#023", "ro": "e2 la e4 și setează nivelul la 4.", "ro_casual": "e2 la e4 si seteaza nivelul la 4"}
+{"id": "games.chess#024", "ro": "Setează nivelul la 4 și joacă e4.", "ro_casual": "seteaza nivelul la 4 si joaca e4"}
+{"id": "games.chess#025", "ro": "Calul la f3, nu, calul la c3.", "ro_casual": "calul la f3, nu, calul la c3"}
+{"id": "games.chess#026", "ro": "e4 e5 nf3", "ro_casual": "e4 e5 nf3"}
+{"id": "games.chess#027", "ro": "Fă rocada scurtă.", "ro_casual": "fa rocada scurta"}
+{"id": "games.chess#028", "ro": "Ia pionul de pe d5.", "ro_casual": "ia pionul de pe d5"}
+{"id": "games.chess#029", "ro": "e2 la e9.", "ro_casual": "e2 la e9"}
+{"id": "games.chess#030", "ro": "Ce culoare am?", "ro_casual": "ce culoare am"}
+{"id": "games.chess#031", "ro": "Ce culoare sunt eu?", "ro_casual": "ce culoare sunt eu"}
+{"id": "games.chess#032", "ro": "La ce nivel suntem?", "ro_casual": "la ce nivel suntem"}
+{"id": "games.chess#033", "ro": "Cum se joacă șahul?", "ro_casual": "cum se joaca sahul"}
+{"id": "games.chess#034", "ro": "Unde poate merge calul?", "ro_casual": "unde poate merge calul"}
+{"id": "games.chess#035", "ro": "Ce piese am pierdut?", "ro_casual": "ce piese am pierdut"}
+{"id": "games.chess#036", "ro": "Care este cea mai bună mutare?", "ro_casual": "care e cea mai buna mutare"}
+{"id": "games.chess#037", "ro": "e2 la e4 și cât fac 2 plus 2?", "ro_casual": "e2 la e4 si cat fac 2 plus 2"}
+{"id": "games.chess#038", "ro": "Elefantul mov dansează la miezul nopții.", "ro_casual": "elefantul mov danseaza la miezul noptii"}
+{"id": "games.chess#039", "ro": "Voi deschide cu pionul de rege, două case.", "ro_casual": "voi deschide cu pionul de rege doua case"}
+{"id": "games.chess#040", "ro": "Mută calul meu la c3.", "ro_casual": "muta calul meu la c3"}
+{"id": "games.chess#041", "ro": "Scade dificultatea la 2.", "ro_casual": "scade dificultatea la 2"}

@@ -10,7 +10,7 @@
 import { tokenize, foldKey } from './normalize.mjs';
 import { analyze } from './morphology.ro.mjs';
 import { translateRoEn } from './ro-en.mjs';
-import { translateEnRo, isEnglishWord } from './en-ro.mjs';
+import { translateEnRo, isEnglishWord, englishLeftovers, nearEnglishWord } from './en-ro.mjs';
 
 // Romanian evidence, in points (a rough log-odds of "Romanian" against "English"), for words typed with OR without diacritics.
 // Words that are also English words ("cat", "care", "la", "fa", "pune", "do"...) carry only a small weight by themselves;
@@ -59,7 +59,30 @@ function contextEvidence(ws) {
   return ro;
 }
 
-export function detectLanguage(text) {
+/**
+ * Evidence for the session language (RD5): the detector's points plus whether the text looks like English with typos.
+ *   strongRo: Romanian by a clear margin (a diacritic, or at least 3 points and 2 more than English)
+ *   strongEn: English with no Romanian evidence at all and at least one word of the English lexicon, exact or one typo away
+ * A message that is neither keeps the session language, and a weak Romanian reading only switches the session when it repeats.
+ */
+export function languageEvidence(text) {
+  const toks = tokenize(String(text ?? '')).filter((t) => t.kind === 'word');
+  const d = scoreLanguage(text);
+  const dia = toks.some((t) => /[ăâîșț]/i.test(t.raw.normalize('NFC')));
+  const strongRo = dia || (d.ro >= 3 && d.ro - d.en >= 2);
+  let exact = 0, near = 0, other = 0;
+  for (const t of toks) {
+    const k = t.key;
+    if (k.length < 2) continue;
+    if (EN_STOP.has(k) || isEnglishWord(k)) exact++;
+    else if (k.length >= 3 && nearEnglishWord(k) && analyze(k).length === 0 && !RO_W.has(k)) near++;
+    else other++;
+  }
+  const strongEn = toks.length >= 2 && !dia && d.ro < 0.5 && exact + near >= 1 && (exact >= 1 || near >= 1) && other <= Math.max(1, toks.length - 1);
+  return { ro: d.ro, en: d.en, words: toks.length, exact, near, strongRo, strongEn: strongEn && !strongRo };
+}
+
+function scoreLanguage(text) {
   const toks = tokenize(String(text ?? '')).filter((t) => t.kind === 'word' || t.kind === 'num');
   const words = toks.filter((t) => t.kind === 'word');
   let ro = 0;
@@ -82,6 +105,11 @@ export function detectLanguage(text) {
     else if (key.length >= 5 && RO_SUFFIX.test(key)) ro += RO_STRONG_SUFFIX.test(key) ? 2 : 1.5;
   }
   ro += contextEvidence(toks);
+  return { ro, en };
+}
+
+export function detectLanguage(text) {
+  const { ro, en } = scoreLanguage(text);
   // Romanian is claimed on at least 2 points that beat the English evidence by 1: a diacritic, two function words, a function word and a Romanian-looking word or ending...
   // A single short or ambiguous token ("e", "da", "cat", "face", "la la la") stays below that: the caller then keeps its session language (default English).
   if (ro >= 2 && ro - en >= 1) {
@@ -109,7 +137,10 @@ export function translate(text, opts = {}) {
 export function createTranslator() {
   return {
     detectLanguage: (text) => detectLanguage(text),
+    evidence: (text) => languageEvidence(text),
     translate: (text, opts) => translate(text, opts),
+    /** English words left in a Romanian output (RD5: the caller then keeps the whole reply in English). */
+    leftovers: (text, lang) => (lang === 'ro' ? englishLeftovers(text) : []),
     supports: (from, to) => (from === 'ro' && to === 'en') || (from === 'en' && to === 'ro'),
   };
 }

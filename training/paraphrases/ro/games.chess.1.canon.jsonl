@@ -1,0 +1,40 @@
+{"en": "Move my knight to f3.", "ro": ["Mută calul meu la f3.", "Mută-mi calul la f3.", "muta calul meu la f3"]}
+{"en": "Take the pawn on d5.", "ro": ["Ia pionul de pe d5.", "Capturează pionul de pe d5.", "ia pionul de pe d5"]}
+{"en": "Can I capture on e5?", "ro": ["Pot captura pe e5?", "Pot lua pe e5?", "pot lua pe e5?"]}
+{"en": "Am I allowed to castle?", "ro": ["Am voie să fac rocadă?", "Pot să fac rocadă?", "pot face rocada?"]}
+{"en": "Promote the pawn to a rook.", "ro": ["Promovează pionul la turn.", "Transformă pionul într-un turn.", "promoveaza pionul la turn"]}
+{"en": "Promote to a queen.", "ro": ["Promovează la regină.", "Transformă-l în regină.", "promoveaza la regina"]}
+{"en": "Where can the queen go?", "ro": ["Unde poate merge regina?", "Unde se poate muta regina?", "unde poate merge regina"]}
+{"en": "What can my knight do?", "ro": ["Ce poate face calul meu?", "Ce mutări are calul meu?", "ce poate face calul meu"]}
+{"en": "Tell me the best move.", "ro": ["Spune-mi cea mai bună mutare.", "Spune-mi care e cea mai bună mutare.", "spune-mi cea mai buna mutare"]}
+{"en": "What is the best move?", "ro": ["Care este cea mai bună mutare?", "Care e cea mai bună mutare acum?", "care e cea mai buna mutare"]}
+{"en": "How is the game going?", "ro": ["Cum merge jocul?", "Cum stăm în partidă?", "cum merge jocul"]}
+{"en": "What is the material count?", "ro": ["Cum stăm la material?", "Care e balanța de material?", "cum stam la material"]}
+{"en": "Am I in check?", "ro": ["Sunt în șah?", "Am șah?", "sunt in sah?"]}
+{"en": "Is my king in check?", "ro": ["Regele meu este în șah?", "Regele meu e în șah?", "regele meu e in sah?"]}
+{"en": "Which move did you make?", "ro": ["Ce mutare ai făcut?", "Ce mutare ai făcut tu?", "ce mutare ai facut"]}
+{"en": "What was your last move?", "ro": ["Care a fost ultima ta mutare?", "Care a fost ultima mutare pe care ai făcut-o?", "care a fost ultima ta mutare"]}
+{"en": "What is on the board?", "ro": ["Ce este pe tablă?", "Ce piese sunt pe tablă?", "ce e pe tabla"]}
+{"en": "Which pieces do you have?", "ro": ["Ce piese ai?", "Ce piese ai tu?", "ce piese ai"]}
+{"en": "Where is the white queen?", "ro": ["Unde este regina albă?", "Unde e regina albă?", "unde e regina alba"]}
+{"en": "How many pieces do I have?", "ro": ["Câte piese am?", "Câte piese mai am?", "cate piese am"]}
+{"en": "How many pieces are left?", "ro": ["Câte piese au mai rămas?", "Câte piese mai sunt pe tablă?", "cate piese au mai ramas"]}
+{"en": "What pieces have you lost?", "ro": ["Ce piese ai pierdut?", "Ce piese ai pierdut tu?", "ce piese ai pierdut"]}
+{"en": "Which pieces did I lose?", "ro": ["Ce piese am pierdut?", "Ce piese am pierdut eu?", "ce piese am pierdut"]}
+{"en": "Which side am I playing?", "ro": ["Ce culoare joc?", "Cu ce culoare joc?", "ce culoare joc"]}
+{"en": "What moves have been played?", "ro": ["Ce mutări s-au făcut până acum?", "Ce mutări s-au jucat?", "ce mutari s-au facut"]}
+{"en": "List the moves so far.", "ro": ["Enumeră mutările de până acum.", "Arată-mi mutările de până acum.", "arata-mi mutarile de pana acum"]}
+{"en": "Which level are we playing?", "ro": ["La ce nivel jucăm?", "Ce nivel avem?", "la ce nivel jucam"]}
+{"en": "Set the level to 3.", "ro": ["Setează nivelul la 3.", "Pune nivelul la 3.", "seteaza nivelul la 3"]}
+{"en": "Give me the FEN.", "ro": ["Dă-mi FEN-ul.", "Arată-mi FEN-ul.", "da-mi fen-ul"]}
+{"en": "What is the FEN?", "ro": ["Care este FEN-ul?", "Ce e FEN-ul?", "care e fen-ul"]}
+{"en": "Which piece is on g1?", "ro": ["Ce piesă este pe g1?", "Ce piesă e pe g1?", "ce piesa e pe g1"]}
+{"en": "Is there anything on d5?", "ro": ["Este ceva pe d5?", "E ceva pe d5?", "e ceva pe d5"]}
+{"en": "Are you thinking?", "ro": ["Te gândești?", "Încă te gândești?", "te gandesti?"]}
+{"en": "Make your move.", "ro": ["Fă-ți mutarea.", "Joacă mutarea ta.", "fa-ti mutarea"]}
+{"en": "Start a new chess game.", "ro": ["Începe o partidă nouă de șah.", "Pornește o partidă nouă de șah.", "incepe o partida noua de sah"]}
+{"en": "Let me play as black.", "ro": ["Lasă-mă să joc cu negrele.", "Vreau să joc cu negrele.", "lasa-ma sa joc cu negrele"]}
+{"en": "I want to play white.", "ro": ["Vreau să joc cu albele.", "Vreau să joc cu albul.", "vreau sa joc cu albele"]}
+{"en": "Turn the board around.", "ro": ["Întoarce tabla.", "Rotește tabla.", "intoarce tabla"]}
+{"en": "Can you flip the board?", "ro": ["Poți întoarce tabla?", "Poți răsturna tabla?", "poti intoarce tabla"]}
+{"en": "Undo the last move.", "ro": ["Anulează ultima mutare.", "Anulează ultima mutare, te rog.", "anuleaza ultima mutare"]}
