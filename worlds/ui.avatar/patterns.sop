@@ -79,14 +79,6 @@
     example="Change your hair."
     example="Randomize your eyes."
 
-@pat.ui.avatar.part.reset core.pattern
-    canonical="Reset your eyes."
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [reset|restore] [your|the|ur]? {p:lex.ui.avatar.parts} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.resetPart arg.part={p}"
-    kind=request
-    priority=12
-    example="Reset your eyes."
-
 @pat.ui.avatar.color.main core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|paint|color|colour|dye|turn] [yourself|urself] {c:lex.ui.avatar.colors} [$lang.tail.filler]?"
     emit="@{_} core.request action=avatar.setColor arg.part=main arg.color={c}"
@@ -547,15 +539,6 @@
     priority=12
     example="What do your eyes look like?"
 
-@pat.ui.avatar.q.has core.pattern
-    canonical="Do you have glasses?"
-    match="[$lang.lead.filler|pls|plz]? [$ui.avatar.g8_do_you_have] [a|an|any|some|your|ur]? {v:lex.ui.avatar.options} {n:number?} [$lang.tail.filler]?"
-    emit="@{_} core.request action=avatar.hasThing arg.value={v} arg.text=\"{v}\""
-    kind=request
-    priority=12
-    example="Do you have glasses?"
-    example="Are you wearing a medical mask?"
-
 @pat.ui.avatar.q.has.part core.pattern
     canonical="Do you have a beard?"
     match="[$lang.lead.filler|pls|plz]? [$ui.avatar.g8_do_you_have] [a|an|any|some|your|ur]? {p:lex.ui.avatar.parts} [$lang.tail.filler]?"
@@ -635,7 +618,7 @@
 
 @pat.ui.avatar.char.wrong core.pattern
     canonical="This is not what I wanted."
-    match="[$lang.lead.filler|pls|plz]? [$lang.lead.filler|no]? [that_is|that_s|thats|this_is|this_s|it_is|it_s|its|that|this|you_got_it|you_got_that|you_did_it|that_looks|this_looks|it_looks]? [wrong|not_right|incorrect|not_correct|not_what_i_wanted|not_what_i_asked|not_what_i_asked_for|not_what_i_meant|not_good|bad|a_mistake|a_mess|a_bad_change|not_like_that|not_how_i_wanted_it] [$lang.tail.filler|somehow]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [no|oh_no|hey|ugh|um]? [that_is|that_s|thats|this_is|this_s|it_is|it_s|its|that|this|you_got_it|you_got_that|you_did_it|that_looks|this_looks|it_looks]? [wrong|not_right|incorrect|not_correct|not_what_i_wanted|not_what_i_asked|not_what_i_asked_for|not_what_i_meant|not_good|bad|a_mistake|a_mess|a_bad_change|not_ok|not_okay|not_like_that|not_how_i_wanted_it] [please|pls|again|now|somehow]?"
     emit="@{_} core.request action=avatar.explainSwitch"
     kind=request
     priority=9
@@ -654,7 +637,7 @@
 
 @pat.ui.avatar.undo.bare core.pattern
     canonical="Undo."
-    match="[$lang.lead.filler|pls|plz]? [undo|undo_that|undo_it] [$lang.tail.filler]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|hmm|well|just]? [undo|undo_that|undo_it|undo_please] [please|pls|plz|thanks|thank_you|now|for_me|right_now]?"
     emit="@{_} core.request action=avatar.undo"
     kind=request
     priority=8
@@ -947,7 +930,7 @@
     example="Wear sunglasses right now thank you"
 
 @pat.ui.avatar.x2.bare core.pattern
-    match="[$lang.lead.filler|pls|plz|hi]? [$ui.avatar.g10_a]? {v:lex.ui.avatar.options} {n:number?} [pls|plz|thx|lol|asap|now_pls|now_plz|for_me|for_me_pls|on_pls|on_plz|on_you_pls|on_you|on_u|on_urself|on_yourself|on_me|on_for_me|thanks|thank_you|haha|hehe]"
+    match="[please|pls|plz|hey|ok|okay|so|um|uh|hmm|well|just|yo|oh|hi|and|then|now|ah]? [a|an|the|your|ur|my|some|new|a_pair_of|some_kind_of]? {v:lex.ui.avatar.options} {n:number?} [pls|plz|thx|lol|asap|now_pls|now_plz|for_me|for_me_pls|on_pls|on_plz|on_you_pls|on_you_please|on_you|on_u|on_urself|on_yourself|on_me|on_for_me|on_please|thanks|thank_you|haha|hehe]"
     emit="@{_} core.request action=avatar.setPart arg.value={v} arg.n={n} arg.text=\"{v}\""
     kind=request
     priority=9
@@ -1057,7 +1040,7 @@
     example="Back one for the mouth"
 
 @pat.ui.avatar.x2.prev3 core.pattern
-    match="[$lang.lead.filler|pls|plz|hi]? [$lang.lead.polite|$ui.avatar.g1_u_should]? [the|a|an|your|ur|my]? {p:lex.ui.avatar.parts} [previous|prev|last|before|prior|earlier|former|one_back|one_step_back|a_step_back|back_one|back_one_step|back_a_step|previous_one|the_previous_one|the_last_one|the_one_before|from_before|before_this|before_this_one|one_before|back|backwards|backward|go_back|step_back|1_back|1_step_back|before_that|before_that_one|the_one_from_before|the_previous|the_last|the_earlier_one|the_old_one|prev_one|last_one|former_one|prior_one|back_1|back_1_step|previous_1|the_previous_1|the_last_1|the_1_before|before_this_1|1_before|before_that_1|the_1_from_before|the_earlier_1|the_old_1|prev_1|last_1|former_1|prior_1] [$lang.tail.filler|one|1]? [$lang.tail.filler|$ui.avatar.g2_right_now_thank_you]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|uh|hmm|well|just|yo|oh|hi|and|then|now|ah]? [can_u|can_you|could_u|could_you|would_you|will_you|would_u|will_u|please_can_you|can_you_please|could_you_please|i_want_you_to|i_would_like_you_to|you_should|u_should|u_can|you_can|you_could|u_could|i_wanna|i_want_to|i_would_like_to|id_like_to|i_d_like_to|lets|let_us|let_me|can_i|could_i|may_i|can_we|could_we|go_ahead_and|try_to|i_need_you_to|do_you_mind|you_might_want_to|maybe_you_should|why_dont_you|why_not]? [the|a|an|your|ur|my]? {p:lex.ui.avatar.parts} [previous|prev|last|before|prior|earlier|former|one_back|one_step_back|a_step_back|back_one|back_one_step|back_a_step|previous_one|the_previous_one|the_last_one|the_one_before|from_before|before_this|before_this_one|one_before|back|backwards|backward|go_back|step_back|1_back|1_step_back|before_that|before_that_one|the_one_from_before|the_previous|the_last|the_earlier_one|the_old_one|previous_please|prev_one|last_one|former_one|prior_one|back_1|back_1_step|previous_1|the_previous_1|the_last_1|the_1_before|before_this_1|1_before|before_that_1|the_1_from_before|the_earlier_1|the_old_1|prev_1|last_1|former_1|prior_1] [one|please|pls|plz|now|for_me|1]? [please|pls|plz|thanks|thank_you|thx|ty|now|for_me|right_now|rn|asap|again|then|lol|haha|ok|okay|real_quick|quickly|if_you_can|for_now|too|already|right_now_thank_you|now_thank_you|please_thanks|pls_thx|plz_thx|thanks_a_lot|thank_you_very_much|pretty_please|for_me_please|for_me_now|right_away|at_once|immediately|today]?"
     emit="@{_} core.request action=avatar.step arg.part={p} arg.dir=previous"
     kind=request
     priority=12
@@ -1089,7 +1072,7 @@
     example="Previous hair please"
 
 @pat.ui.avatar.x2.next1 core.pattern
-    match="[$lang.lead.filler|pls|plz|hi]? [$lang.lead.polite|$ui.avatar.g1_u_should]? [the|a|an|your|ur|my]? {p:lex.ui.avatar.parts} [next|following|subsequent|next_one|one_forward|forward|step_forward|forwards|the_next_one|the_next|the_following_one|the_following|one_ahead|ahead|one_step_forward|a_step_forward|forward_one|forward_one_step|next_1|1_forward|the_next_1|the_following_1|1_ahead|1_step_forward|forward_1|forward_1_step] [$lang.tail.filler|one|1]? [$lang.tail.filler|$ui.avatar.g2_right_now_thank_you]?"
+    match="[please|pls|plz|hey|ok|okay|so|um|uh|hmm|well|just|yo|oh|hi|and|then|now|ah]? [can_u|can_you|could_u|could_you|would_you|will_you|would_u|will_u|please_can_you|can_you_please|could_you_please|i_want_you_to|i_would_like_you_to|you_should|u_should|u_can|you_can|you_could|u_could|i_wanna|i_want_to|i_would_like_to|id_like_to|i_d_like_to|lets|let_us|let_me|can_i|could_i|may_i|can_we|could_we|go_ahead_and|try_to|i_need_you_to|do_you_mind|you_might_want_to|maybe_you_should|why_dont_you|why_not]? [the|a|an|your|ur|my]? {p:lex.ui.avatar.parts} [next|following|subsequent|next_one|one_forward|forward|step_forward|forwards|the_next_one|the_next|the_following_one|the_following|one_ahead|ahead|one_step_forward|a_step_forward|forward_one|forward_one_step|next_please|next_1|1_forward|the_next_1|the_following_1|1_ahead|1_step_forward|forward_1|forward_1_step] [one|please|pls|plz|now|for_me|1]? [please|pls|plz|thanks|thank_you|thx|ty|now|for_me|right_now|rn|asap|again|then|lol|haha|ok|okay|real_quick|quickly|if_you_can|for_now|too|already|right_now_thank_you|now_thank_you|please_thanks|pls_thx|plz_thx|thanks_a_lot|thank_you_very_much|pretty_please|for_me_please|for_me_now|right_away|at_once|immediately|today]?"
     emit="@{_} core.request action=avatar.step arg.part={p} arg.dir=next"
     kind=request
     priority=12
@@ -1334,3 +1317,25 @@
     priority=15
     tabOnly=true
     example="Make a happy man."
+
+@shape.ui.avatar.reset core.shape
+    family=do
+    verb="reset|restore|clear"
+    obj="p:lex.ui.avatar.parts"
+    det="your|the|ur"
+    forms=imp,wish,ind,q
+    sample="p=eyes"
+    emit="@{_} core.request action=avatar.resetPart arg.part={p}"
+    priority=12
+    example="Reset your eyes."
+
+@shape.ui.avatar.has core.shape
+    family=ask.exists
+    verb="have|got|wearing|wear|sporting"
+    pron="you|u|ya"
+    obj="v:lex.ui.avatar.options"
+    sample="v=glasses"
+    emit="@{_} core.request action=avatar.hasThing arg.value={v} arg.text=\"{v}\""
+    priority=12
+    skip=short
+    example="Do you have glasses?"

@@ -1411,3 +1411,18 @@
     expectState="character=person"
     expectState="person.head=long"
     session=rd
+
+@t.ui.avatar.sh14 core.test
+    input="i want to know if you have a beard"
+    expect="No, I do not have a beard right now."
+    session=sh14
+
+@t.ui.avatar.sh15 core.test
+    input="could you maybe reset your eyes"
+    expect="I have round eyes again."
+    session=sh15
+
+@t.ui.avatar.sh16 core.test
+    input="tell me if you have glasses"
+    expect="I do not have a glass right now."
+    session=sh16

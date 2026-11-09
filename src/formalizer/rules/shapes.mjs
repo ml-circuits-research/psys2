@@ -20,6 +20,7 @@
  *   rel      (`ask.value`) relation words between the noun and the object (`after|comes_after|follows`: "what day comes after Monday"); the relation is then mandatory
  *   cont     (`ask.count`) container slot `name:class`: "how many days are in a week" (obj = the counted part, cont = the whole), "how many apples does Tom have"
  *            (`verb` then lists the trailing verbs, default `have|has|got`; the `order` form "a week has how many days" exists only with `cont`)
+ *   pron     (`ask.exists`) the subject pronouns of the question (default `you|u|ya|we|i|they`; "do I have a cat" is not the avatar's question: `you|u|ya`)
  *   pron     (noun-only `ask.value`) pronouns that may follow the verb in the question (default `it|this|that|we|you|u|i`)
  *   mod      optional modifier group before the value, alternatives and `$macro` ids (`$ui.avatar.g11_a_bit` for "a bit", "much"), or a slot
  *            (`s:lex.x?`: "make the bars LIGHT green")
@@ -97,12 +98,12 @@ export const TEMPLATES = {
     short: [['', AND('<L>', '<D>', '<O>', '[count|total|number|amount]', '<T>')]],
   },
   'ask.exists': {
-    q: [['', AND('<L>', '[do|does|did|have|has|can|could|r|are|is]', '[you|u|ya|we|i|they]', '<V>', '[a|an|any|some|the]?', '<O>', '[on|too|also|now|currently|right_now]?', '<T>')],
+    q: [['', AND('<L>', '[do|does|did|have|has|can|could|r|are|is]', '<PE>', '<V>', '[a|an|any|some|the]?', '<O>', '[on|too|also|now|currently|right_now]?', '<T>')],
       ['.2', AND('<L>', '[is|are|was|were]', 'there', '[a|an|any|some|the]?', '<O>', '[on|in|here|too|now|currently|right_now]?', '<T>')]],
-    imp: [['', AND('<L>', '[$lang.shape.tellme]', '[if|whether]', '[you|u|ya|there|we|i]', '[<VL>|is|are|has|have]', '[a|an|any|some|the]?', '<O>', '<T>')]],
-    wish: [['', AND('<L>', '[$lang.shape.know]', '[if|whether]', '[you|u|ya|there|we|i]', '[<VL>|is|are|has|have]', '[a|an|any|some|the]?', '<O>', '<T>')]],
-    ind: [['', AND('[$lang.shape.indask]', '[if|whether]?', '[you|u|ya|there|we|i]', '[<VL>|is|are|has|have]', '[a|an|any|some|the]?', '<O>', '<T>')]],
-    short: [['', AND('<L>', '[you|u|ya]?', '<V>', '[a|an|any|some]?', '<O>', '[or_not]', '<T>')]],
+    imp: [['', AND('<L>', '[$lang.shape.tellme]', '[if|whether]', '<PEL>', '[<VL>|is|are|has|have]', '[a|an|any|some|the]?', '<O>', '<T>')]],
+    wish: [['', AND('<L>', '[$lang.shape.know]', '[if|whether]', '<PEL>', '[<VL>|is|are|has|have]', '[a|an|any|some|the]?', '<O>', '<T>')]],
+    ind: [['', AND('[$lang.shape.indask]', '[if|whether]?', '<PEL>', '[<VL>|is|are|has|have]', '[a|an|any|some|the]?', '<O>', '<T>')]],
+    short: [['', AND('<L>', '<PE1>', '<V>', '[a|an|any|some]?', '<O>', '[or_not]', '<T>')]],
   },
   list: {
     imp: [['', AND('<L>', '<V>', '[me|us]?', '[all|every|each]?', '[of_the|of_your|of_ur]?', '<D>', '<O>', '<E>', '<T>')]],
@@ -179,6 +180,7 @@ export function expandShape(shape, { phrases = null, lexicons = null } = {}) {
     '<C>': slotText(shape.cont),
     '<CV>': group(shape.verb ?? 'have|has|got', true),
     '<NW>': shape.verb && family === 'ask.value' ? group(shape.verb, true) : NOW,
+    '<PE>': group(shape.pron ?? 'you|u|ya|we|i|they'), '<PEL>': group((shape.pron ?? 'you|u|ya|we|i') + '|there'), '<PE1>': group((shape.pron ?? 'you|u|ya').split('|').slice(0, 3).join('|'), true),
     '<PR>': group(shape.pron ?? 'it|this|that|we|you|u|i', true),
     '<L>': LEAD, '<T>': TAIL,
   };

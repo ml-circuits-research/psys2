@@ -783,3 +783,9 @@ Per bucket, encoder+n1 (right / partly / wrong / nu): kids 100 / 0 / 0 / 0 -> 10
 ## L7 user.profile (2026-11-09)
 - **migrate-macros**: `patterns.sop` 20,774 -> 19,883 bytes; patterns 65; match text 6,328 bytes before (the world is small: 11 groups repeated verbatim, 30 occurrences) -> see the stats line of the summary table; 5 world-local phrases. No shape, no `extends`.
 - **Gates**: operational 95.1% / 6 wrong unchanged; dialogues unchanged; eval-rules and long set identical. Tests: user.profile 124 (no new).
+
+## L7 ui.avatar, second pass (2026-11-09; the pilot of L4 and L6 plus RD3/RD4 are already in)
+- **Required-group fix**: 5 patterns that had an old-filler alternative in a required group got their original match line back (the L4 script had dropped it).
+- **Shapes added**: `ui.avatar.reset` (do) and `ui.avatar.has` (ask.exists with the new use of `pron` for its subject pronouns); `part.reset` and `q.has` deleted. Gate finding: with the default pronouns the has shape read "Do I have a cat?" (kids.animals n67); `pron="you|u|ya"` fixes it.
+- **Numbers (hand patterns / file)**: ui.avatar L4 pilot started at 159 patterns / 45,674 bytes of match text; now 148 hand patterns + 7 shapes (about 60 generated), 44,6 KB of match text and 3 more groups repeated verbatim than the 17 of the L6 pilot (23: more shapes bring more macro uses).
+- **Tests**: ui.avatar 263 -> 266 (sh14..sh16). **Gates**: operational 95.1% / 6 wrong unchanged; dialogues unchanged; eval-rules and long set identical.
