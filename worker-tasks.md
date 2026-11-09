@@ -136,6 +136,21 @@ What this means for your tasks:
 - **Language detection (new task L-RO):** Romanian typed without diacritics now stays English ("cat face 3 plus 4"). Improve the evidence, for example Romanian function words and word endings, so diacritic-less Romanian is still detected, without breaking short English input. Test both directions.
 - From now on, new phrasing and shared vocabulary go into `lang.common` (L8 absorbs `src/dialog/lang.mjs`).
 
+### AV — more avatars (user, 02:35: "only a robot and a man? that's too little")
+
+Today `ui.avatar` has three DiceBear characters: robot (voxel-bot), person (open-peeps) and emoji (moods). The person reads as a man by default, and there is no woman, child, older person or animal-like character.
+- **Vendor more DiceBear styles** the same way as now (`scripts/vendor-dicebear.mjs`, one JSON definition per style, `LICENSES.md`). Check every style's licence in its own `meta.license`. CC0 and CC BY 4.0 are GPL-compatible; for CC BY, show the attribution in the tab and in `vendor/README.md`. Candidates, use the ones whose licence checks out:
+  - illustrated people with clear female and male looks: lorelei, notionists, adventurer, micah, personas;
+  - children and friendly faces: big-smile, croodles;
+  - a second robot: bottts;
+  - pixel art: pixel-art;
+  - a funnier emoji: fun-emoji.
+- **Generate each new character's legend and lexicons** with `scripts/legend-from-dicebear.mjs`. Spoken names for the numbered variants, as was done for open-peeps, chosen by looking at the drawings.
+- **Presets as descriptions, across characters (with RD3):** woman, man, girl, boy, old man/woman, with or without glasses/beard, happy, sad, cool. "make the avatar a woman", "become a little girl", "I want a pixel robot", "show me other avatars" pick a fitting style and preset, or apply the preset to the current style when it can express it. Accept misspellings (women, girll).
+- **A visual gallery in the Avatar tab:** a strip of thumbnails, one per character, with a few presets each; click to switch. Voice and text do the same ("show me the characters", "the third one").
+- Keep payload in check: load style definitions lazily, only when the character is first used (PERF).
+- Tests: every character draws every variant; presets per character; ui.avatar world tests; 0 console errors in a headless run that cycles through all characters; screenshots for the reviewer.
+
 ### SURPRISE — a "try something" button (user, 02:33)
 
 A discreet button next to the input (a die icon, with a tooltip "Try an example"). Each click:
