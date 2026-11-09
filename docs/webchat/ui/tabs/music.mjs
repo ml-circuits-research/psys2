@@ -51,7 +51,7 @@ function make(holder, host) {
   const controls = h('section', { class: 'p2m-card p2m-controls', 'aria-label': 'Controls' },
     h('div', {}, h('h3', {}, 'Instrument'), h('div', { class: 'p2m-row' }, chips)),
     h('div', { class: 'p2m-row' },
-      h('div', { class: 'p2m-meter', title: 'Tempo' }, h('small', {}, 'Tempo'), h('button', { class: 'p2m-round', type: 'button', 'aria-label': 'Slower', onclick: () => host.send('make it slower') }, '−'), tempoVal, h('small', {}, 'bpm'), h('button', { class: 'p2m-round', type: 'button', 'aria-label': 'Faster', onclick: () => host.send('make it faster') }, '+')),
+      h('div', { class: 'p2m-meter', title: 'Tempo' }, h('small', {}, 'Tempo'), h('button', { class: 'p2m-round', type: 'button', 'aria-label': 'Slower', title: 'Slower', onclick: () => host.send('make it slower') }, '−'), tempoVal, h('small', {}, 'bpm'), h('button', { class: 'p2m-round', type: 'button', 'aria-label': 'Faster', title: 'Faster', onclick: () => host.send('make it faster') }, '+')),
       h('div', { class: 'p2m-meter', title: 'Volume' }, h('small', {}, 'Volume'), vol, volVal, h('small', {}, '%')),
       h('div', { class: 'p2m-meter', title: 'Key' }, h('small', {}, 'Key'), keyVal),
       h('div', { class: 'p2m-row', style: 'margin-left:auto' }, playBtn, stopBtn, loopBtn)));

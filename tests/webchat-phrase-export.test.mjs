@@ -32,6 +32,7 @@ test('RD7: typing N messages gives N entries in the count, the list and the JSON
     for (const m of msgs) { await pg.type('input.p2-text', m, { delay: 0 }); await pg.keyboard.press('Enter'); await pg.waitForFunction(() => !window.psys2.busy && !document.querySelector('.p2-msg.is-typing'), { timeout: 30000, polling: 20 }); }
     await pg.waitForFunction((n) => document.querySelectorAll('.p2-msg.is-user').length >= n && !document.querySelector('.p2-msg.is-typing'), { timeout: 120000 }, msgs.length);
     await pg.click('button[aria-label="Settings"]');
+    await pg.click('#p2-st-phrases');   // SET: one tab per topic
     await pg.waitForSelector('.p2-plog-item');
     const count = await pg.$eval('.p2-plog-count', (e) => e.textContent);
     assert.match(count, new RegExp(`^${msgs.length} entries \\(${msgs.length} typed or spoken`));

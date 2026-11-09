@@ -23,7 +23,7 @@ export function createPiano(container, { onKey } = {}) {
   const W = 100 / whites.length;
   whites.forEach((m, i) => {
     const oct = Math.floor(m / 12) - 1, pc = m % 12;
-    const k = h('button', { class: 'p2m-key is-white', type: 'button', style: `left:${i * W}%;width:${W}%`, 'aria-label': `${SPOKEN[pc]} ${oct}`, dataset: { midi: m } },
+    const k = h('button', { class: 'p2m-key is-white', type: 'button', style: `left:${i * W}%;width:${W}%`, 'aria-label': `${SPOKEN[pc]} ${oct}`, title: `${SPOKEN[pc]} ${oct}`, dataset: { midi: m } },
       h('span', { class: 'p2m-keyname' }, pc === 0 ? `C${oct}` : NAMES[pc]));
     keys.set(m, k); root.append(k);
   });
@@ -31,7 +31,7 @@ export function createPiano(container, { onKey } = {}) {
     if (!BLACK.has(m % 12)) continue;
     const left = (whites.indexOf(m - 1) + 1) * W;
     const oct = Math.floor(m / 12) - 1, pc = m % 12;
-    const k = h('button', { class: 'p2m-key is-black', type: 'button', style: `left:${left - W * 0.3}%;width:${W * 0.6}%`, 'aria-label': `${SPOKEN[pc]} ${oct}`, dataset: { midi: m } });
+    const k = h('button', { class: 'p2m-key is-black', type: 'button', style: `left:${left - W * 0.3}%;width:${W * 0.6}%`, 'aria-label': `${SPOKEN[pc]} ${oct}`, title: `${SPOKEN[pc]} ${oct}`, dataset: { midi: m } });
     keys.set(m, k); root.append(k);
   }
   root.addEventListener('pointerdown', (e) => {

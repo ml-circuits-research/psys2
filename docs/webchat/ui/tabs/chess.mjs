@@ -40,7 +40,7 @@ function make(holder, host) {
   };
   const top = mkStrip(), bottom = mkStrip();
   const status = h('div', { class: 'cx-status', role: 'status', 'aria-live': 'polite' });
-  const levelBtns = Array.from({ length: 8 }, (_, i) => h('button', { class: 'cx-lvl', type: 'button', 'aria-pressed': 'false', title: `Level ${i + 1}: ${LEVEL_NAME[i + 1]}`, onclick: () => host.send(`set level ${i + 1}`) }, String(i + 1)));
+  const levelBtns = Array.from({ length: 8 }, (_, i) => h('button', { class: 'cx-lvl', type: 'button', 'aria-pressed': 'false', title: `Level ${i + 1}: ${LEVEL_NAME[i + 1]}`, 'aria-label': `Level ${i + 1}: ${LEVEL_NAME[i + 1]}`, onclick: () => host.send(`set level ${i + 1}`) }, String(i + 1)));
   const lvlName = h('p', { class: 'cx-lvlname' });
   const engineInfo = h('p', { class: 'cx-engine' });
   const moves = h('ol', { class: 'cx-moves', 'aria-label': 'Moves' });

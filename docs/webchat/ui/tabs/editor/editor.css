@@ -32,8 +32,6 @@
 .pe-btn.is-on { background: #d3e3fd; color: #0b57d0; }
 .pe-btn.pe-caret { min-width: 14px; padding: 0; }
 .pe-btn.pe-wide { padding: 0 10px 0 6px; font-size: 13px; font-weight: 500; }
-.pe-btn.pe-dict.is-on { background: #d93025; color: #fff; }
-.pe-btn.pe-dict.is-on .pe-ico svg { animation: pe-pulse 1.1s ease-in-out infinite; }
 .pe-ico { display: inline-grid; place-items: center; width: 18px; height: 18px; }
 .pe-ico svg { width: 18px; height: 18px; fill: currentColor; }
 .pe-ico svg.pe-small { width: 14px; height: 14px; }

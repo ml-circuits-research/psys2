@@ -54,7 +54,6 @@ const EXAMPLES = [
 const ICON = {
   mic: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V22h2v-3.08A7 7 0 0 0 19 12h-2Z"/></svg>',
   speaker: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm12.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4Z"/></svg>',
-  hands: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-9 9v5a3 3 0 0 0 3 3h1v-7H5v-1a7 7 0 0 1 14 0v1h-2v7h1a3 3 0 0 0 3-3v-5a9 9 0 0 0-9-9Z"/></svg>',
   gear: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.4 13a7.5 7.5 0 0 0 0-2l2-1.6-2-3.4-2.4 1a7.6 7.6 0 0 0-1.7-1L15 3.4h-4l-.4 2.6a7.6 7.6 0 0 0-1.7 1l-2.4-1-2 3.4 2 1.6a7.5 7.5 0 0 0 0 2l-2 1.6 2 3.4 2.4-1a7.6 7.6 0 0 0 1.7 1l.4 2.6h4l.4-2.6a7.6 7.6 0 0 0 1.7-1l2.4 1 2-3.4-2-1.6ZM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z"/></svg>',
   send: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20.5 22 12 3 3.5v6.6l11 1.9-11 1.9v6.6Z"/></svg>',
   close: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.4 5 12 10.6 17.6 5 19 6.4 13.4 12 19 17.6 17.6 19 12 13.4 6.4 19 5 17.6 10.6 12 5 6.4 6.4 5Z"/></svg>',
@@ -99,13 +98,17 @@ export async function mountPsys2(element, options = {}) {
   const log = h('div', { class: 'p2-log', role: 'log', 'aria-live': 'polite', 'aria-relevant': 'additions', 'aria-label': 'Conversation', tabindex: '0' });
   const statusEl = h('p', { class: 'p2-status', 'aria-live': 'off' }, 'Loading…');
   const input = h('input', { class: 'p2-text', type: 'text', id: `p2-in-${Math.random().toString(36).slice(2, 7)}`, autocomplete: 'off', enterkeyhint: 'send', placeholder: 'Type a message…', 'aria-label': 'Message' });
-  const micBtn = h('button', { class: 'p2-btn p2-mic', type: 'button', 'aria-pressed': 'false', 'aria-label': 'Speak a message' }, icon('mic'));
+  // Every icon button carries a tooltip (title) with the same text as its aria-label, saying what it does and what state it is in (UI1).
+  const label = (btn, text) => { btn.setAttribute('aria-label', text); btn.title = text; };
+  const micBtn = h('button', { class: 'p2-btn p2-mic', type: 'button', 'aria-pressed': 'false', 'aria-label': 'Speak a message', title: 'Speak a message' }, icon('mic'));
   const ringEl = (() => { const NS = 'http://www.w3.org/2000/svg'; const svg = document.createElementNS(NS, 'svg'); svg.setAttribute('viewBox', '0 0 40 40'); svg.setAttribute('class', 'p2-ring'); svg.setAttribute('aria-hidden', 'true'); const c = document.createElementNS(NS, 'circle'); c.setAttribute('cx', '20'); c.setAttribute('cy', '20'); c.setAttribute('r', '18'); svg.append(c); return svg; })();
   micBtn.append(ringEl);
-  const sendBtn = h('button', { class: 'p2-btn p2-send', type: 'submit', 'aria-label': 'Send' }, icon('send'));
+  const speakerBtn = h('button', { class: 'p2-btn p2-speaker', type: 'button', 'aria-pressed': 'false', 'aria-label': 'Read answers aloud: off', title: 'Read answers aloud: off' }, icon('speaker'));
+  const sendBtn = h('button', { class: 'p2-btn p2-send', type: 'submit', 'aria-label': 'Send', title: 'Send' }, icon('send'));
+  const dictText = h('span', { class: 'p2-dict-text' }, 'Dictating into: Untitled document');
+  const dictStop = h('button', { class: 'p2-btn-text p2-dict-stop', type: 'button', 'aria-label': 'Stop dictation', title: 'Stop dictation' }, 'Stop');
+  const dictBar = h('div', { class: 'p2-dictbar', role: 'status', hidden: true }, h('i', { class: 'p2-rec', 'aria-hidden': 'true' }), dictText, dictStop);
   const langSel = h('select', { class: 'p2-select', 'aria-label': 'Language' }, h('option', { value: 'en' }, 'English'), h('option', { value: 'ro' }, 'Română'));
-  const speakerBtn = h('button', { class: 'p2-btn', type: 'button', 'aria-pressed': 'false', 'aria-label': 'Read answers aloud' }, icon('speaker'));
-  const handsBtn = h('button', { class: 'p2-btn', type: 'button', 'aria-pressed': 'false', 'aria-label': 'Hands-free mode' }, icon('hands'));
   const gearBtn = h('button', { class: 'p2-btn', type: 'button', 'aria-haspopup': 'dialog', 'aria-expanded': 'false', 'aria-label': 'Settings', title: 'Settings' }, icon('gear'));
   // Settings: a full-screen modal over the whole widget (SET). Built once; renderSettings() fills the active tab.
   const setClose = h('button', { class: 'p2-btn p2-modal-close', type: 'button', 'aria-label': 'Close settings', title: 'Close settings' }, icon('close'));
@@ -113,12 +116,12 @@ export async function mountPsys2(element, options = {}) {
   const setBody = h('div', { class: 'p2-modal-body', role: 'tabpanel', id: 'p2-set-panel', tabindex: '0' });
   const settingsEl = h('div', { class: 'p2-modal', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'p2-set-title', hidden: true },
     h('div', { class: 'p2-modal-head' }, h('h2', { class: 'p2-modal-title', id: 'p2-set-title' }, 'Settings'), setClose), setTabsEl, setBody);
-  const form = h('form', { class: 'p2-form' }, micBtn, input, sendBtn);
+  const form = h('form', { class: 'p2-form' }, micBtn, speakerBtn, input, sendBtn);
   const chat = h('section', { class: 'p2-chat', 'aria-label': 'Chat' },
     h('header', { class: 'p2-head' },
       h('div', { class: 'p2-title' }, h('strong', {}, options.title ?? 'PSys2'), h('span', {}, 'no LLM · runs in your browser')),
-      h('div', { class: 'p2-tools' }, langSel, speakerBtn, handsBtn, gearBtn)),
-    statusEl, log, form,
+      h('div', { class: 'p2-tools' }, langSel, gearBtn)),
+    statusEl, log, dictBar, form,
     h('footer', { class: 'p2-foot' }, h('a', { href: SOURCE_URL, target: '_blank', rel: 'noopener', 'data-source-link': 'footer' }, 'Source code (AGPL-3.0)')));
   const tabsEl = h('div', { class: 'p2-tabs', role: 'tablist', 'aria-label': 'Tools' });
   const panelsEl = h('div', { class: 'p2-panels' });
@@ -180,8 +183,7 @@ export async function mountPsys2(element, options = {}) {
     const stop = !!turn;
     sendBtn.type = stop ? 'button' : 'submit';
     sendBtn.classList.toggle('is-stop', stop);
-    sendBtn.setAttribute('aria-label', stop ? 'Stop' : 'Send');
-    sendBtn.title = stop ? 'Stop (the message is cancelled and nothing changes)' : '';
+    label(sendBtn, stop ? 'Stop' : 'Send');
     sendBtn.replaceChildren(icon(stop ? 'stop' : 'send'));
   }
   /** A short hint in the status line (for example "Wait for the answer or press Stop." on Enter during a turn). */
@@ -202,9 +204,30 @@ export async function mountPsys2(element, options = {}) {
     statusEl.textContent = (parts.join(' · ') || 'Ready') + modelTail;
     statusEl.classList.toggle('is-active', parts.length > 0);
     syncSendButton();
-    micBtn.setAttribute('aria-pressed', String(mic.listening && mic.mode === 'once'));
-    micBtn.classList.toggle('is-on', mic.listening);
+    syncMic();
   }
+  /** The microphone's label, tooltip and look follow its state: idle, listening once, hands-free (keeps listening), dictating. */
+  function syncMic() {
+    if (micBtn.disabled) return;
+    const dict = dictDoc !== null;
+    const state = settings.handsFree ? 'Microphone: keeping listening (hands-free); click to stop' : mic.listening ? 'Microphone: listening; click to stop' : 'Speak a message (press and hold to keep listening)';
+    label(micBtn, dict ? `${state}. Dictating into: ${dictDoc}` : state);
+    micBtn.setAttribute('aria-pressed', String(!!settings.handsFree || mic.listening));
+    micBtn.classList.toggle('is-on', mic.listening);
+    micBtn.classList.toggle('is-handsfree', !!settings.handsFree);
+    micBtn.classList.toggle('is-dictating', dict);
+  }
+  /** "Dictating into: <document>" with a Stop control, above the input, while the editor world is in dictation mode (UI1). */
+  let dictDoc = null;
+  function syncDictation() {
+    const ed = states['docs.editor'];
+    dictDoc = ed?.inputMode === 'dictation' ? (ed.title || 'Untitled document') : null;
+    dictBar.hidden = dictDoc === null;
+    form.classList.toggle('is-dictating', dictDoc !== null);
+    if (dictDoc !== null) dictText.textContent = `Dictating into: ${dictDoc}`;
+    syncMic();
+  }
+  on(dictStop, 'click', () => send('stop dictation', 'chip'));
   function note(text) { const m = addMessage('bot', text, { className: 'is-note' }); return m; }
 
   // ---------- state -> UI ----------
@@ -214,6 +237,7 @@ export async function mountPsys2(element, options = {}) {
     for (const [id, st] of Object.entries(snapshot)) { states[id] = st; changed.push(id); }
     for (const t of tabDefs) if (changed.includes(t.world)) panelUI[t.id]?.ui?.update(states[t.world]);
     if (changed.includes(SHELL)) applyShell(states[SHELL]);
+    if (changed.includes('docs.editor')) syncDictation();
     options.onState?.(states, changed);
   }
   function applyShell(sh) {
@@ -510,18 +534,18 @@ export async function mountPsys2(element, options = {}) {
   const speechLangTag = () => (!settings.speechLang || settings.speechLang === 'auto' || settings.speechLang === 'follow' ? LANG_TAGS[sessionLang ?? settings.language] ?? 'en-US' : settings.speechLang);
   const noteSessionLang = (l) => { if ((l === 'en' || l === 'ro') && l !== sessionLang) { sessionLang = l; speech?.refreshLang(); } };
   function setSpeaker(on, fromUser = true) {
-    settings.speaker = on; speakerBtn.setAttribute('aria-pressed', String(on)); speakerBtn.classList.toggle('is-on', on);
+    settings.speaker = on; speakerBtn.setAttribute('aria-pressed', String(on)); speakerBtn.classList.toggle('is-on', on); label(speakerBtn, `Read answers aloud: ${on ? 'on' : 'off'}`);
     if (!on) speech?.stopSpeaking();
     save();
     renderSettings();
   }
   function setHandsFree(on, fromUser = true) {
     if (on && !speechSupport.recognition) return;
-    settings.handsFree = on; handsBtn.setAttribute('aria-pressed', String(on)); handsBtn.classList.toggle('is-on', on);
+    settings.handsFree = on;
     speech?.setHandsFree(on); save(); setStatus(); renderSettings();
     if (fromUser) session?.setWorldState?.(SHELL, { handsFree: on });
   }
-  function disable(btn, why) { btn.disabled = true; btn.title = why; btn.setAttribute('aria-label', `${btn.getAttribute('aria-label')} (unavailable: ${why})`); }
+  function disable(btn, why) { btn.disabled = true; label(btn, `${btn.getAttribute('aria-label')} (unavailable: ${why})`); }
   speech = createSpeech({
     getLang: speechLangTag, getVoiceName: () => settings.voice, getRate: () => settings.rate,
     isBusy: () => !!turn,
@@ -537,16 +561,26 @@ export async function mountPsys2(element, options = {}) {
       setStatus();
     },
     onState: (s) => { mic = s; robotUI()?.setSpeaking(s.speaking); setStatus(); },
-    onError: (msg) => { note(msg); if (!speech.isListening()) { settings.handsFree = false; handsBtn.setAttribute('aria-pressed', 'false'); handsBtn.classList.remove('is-on'); } },
+    onError: (msg) => { note(msg); if (!speech.isListening()) { settings.handsFree = false; syncMic(); } },
   });
   if (!speechSupport.recognition) {
     const why = 'Speech recognition is not supported by this browser (try Chrome or Edge)';
-    disable(micBtn, why); disable(handsBtn, why);
+    disable(micBtn, why);
   }
   if (!speechSupport.synthesis) disable(speakerBtn, 'Speech synthesis is not supported by this browser');
-  on(micBtn, 'click', () => { if (mic.listening) speech.stopListening(); else speech.listenOnce(); });
+  // one microphone: a click speaks one message (or stops), a long press keeps listening (hands-free); Settings > Voice has the same switch
+  let micHold = null, micHeld = false;
+  const micRelease = () => { clearTimeout(micHold); micHold = null; };
+  on(micBtn, 'pointerdown', (e) => { if (e.button > 0 || micBtn.disabled) return; micHeld = false; micRelease(); micHold = setTimeout(() => { micHold = null; micHeld = true; setHandsFree(!settings.handsFree); }, 600); });
+  for (const ev of ['pointerup', 'pointerleave', 'pointercancel']) on(micBtn, ev, micRelease);
+  on(micBtn, 'contextmenu', (e) => e.preventDefault());
+  on(micBtn, 'click', () => {
+    if (micHeld) { micHeld = false; return; }
+    if (settings.handsFree) setHandsFree(false);
+    else if (mic.listening) speech.stopListening();
+    else speech.listenOnce();
+  });
   on(speakerBtn, 'click', () => setSpeaker(!settings.speaker));
-  on(handsBtn, 'click', () => setHandsFree(!settings.handsFree));
   const setLanguage = (v) => { settings.language = v; langSel.value = v; sessionLang = null; speech?.refreshLang(); save(); renderSettings(); session?.setWorldState?.(SHELL, { language: settings.language }); };
   on(langSel, 'change', () => setLanguage(langSel.value));
   on(gearBtn, 'click', () => openSettings());
@@ -829,7 +863,7 @@ export async function mountPsys2(element, options = {}) {
         h('span', { class: 'p2-plog-mode', title: MODE_NAME[r.mode], role: 'img', 'aria-label': MODE_NAME[r.mode] }, MODE_ICON[r.mode]),
         h('span', { class: 'p2-plog-body' }, h('span', { class: 'p2-plog-text' }, r.text),
           h('small', {}, `${worlds || 'no world'} · `, h('b', { class: `p2-plog-status s-${status}` }, status), r.lang && r.lang !== 'en' ? ` · ${r.lang}` : '')),
-        h('button', { class: 'p2-linkbtn', type: 'button', 'aria-label': `Delete: ${r.text}`, onclick: () => { phrases.remove(r.id); renderPhraseLog(); } }, 'Delete'));
+        h('button', { class: 'p2-linkbtn', type: 'button', 'aria-label': `Delete: ${r.text}`, title: `Delete: ${r.text}`, onclick: () => { phrases.remove(r.id); renderPhraseLog(); } }, 'Delete'));
     }));
     const btn = (label, fn, cls = 'p2-btn-text') => h('button', { class: cls, type: 'button', onclick: fn }, label);
     plogActions.replaceChildren(...(confirmClear

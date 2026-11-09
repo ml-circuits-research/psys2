@@ -20,7 +20,6 @@ const ICONS = {
   quote: P('M6 17h3l2-4V7H5v6h3l-2 4Zm8 0h3l2-4V7h-6v6h3l-2 4Z'),
   table: P('M3 3h18v18H3V3Zm2 4v3h6V7H5Zm8 0v3h6V7h-6Zm6 5h-6v3h6v-3Zm0 5h-6v2h6v-2Zm-8 2v-2H5v2h6Zm-6-4h6v-3H5v3Z'),
   rule: P('M3 11h18v2H3v-2Z'),
-  mic: P('M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V22h2v-3.08A7 7 0 0 0 19 12h-2Z'),
   read: P('M4 9v6h4l5 4V5L8 9H4Zm12.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4Z'),
   copy: P('M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1Zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Zm0 16H8V7h11v14Z'),
   down: P('M5 20h14v-2H5v2Zm14-9h-4V3H9v8H5l7 7 7-7Z'),
@@ -97,8 +96,6 @@ export function createToolbar({ send, say }) {
   dlBtn.addEventListener('mousedown', (e) => e.preventDefault());
   dlBtn.addEventListener('click', () => toggleMenu(dlBtn, dlMenu));
 
-  const dict = mk('dictation', 'Dictation', [svg(ICONS.mic), text('Dictate')], () => (info.dictating ? 'stop dictation' : 'start dictation'), { toggle: true, cls: 'pe-wide pe-dict' });
-
   const tableTools = h('span', { class: 'pe-group pe-table-tools', hidden: true, role: 'group', 'aria-label': 'Table' },
     sep(), mk('rowAdd', 'Add a row', svg(ICONS.rowAdd), 'add a row'), mk('colAdd', 'Add a column', svg(ICONS.colAdd), 'add a column'),
     mk('rowDel', 'Delete the last row', svg(ICONS.rowDel), 'delete the last row'), mk('colDel', 'Delete the last column', svg(ICONS.colDel), 'delete the last column'));
@@ -124,7 +121,7 @@ export function createToolbar({ send, say }) {
     h('span', { class: 'pe-group' }, mk('table', 'Insert a table', svg(ICONS.table), 'add a table'), mk('rule', 'Insert a line', svg(ICONS.rule), 'insert a line')),
     tableTools,
     h('span', { class: 'pe-spacer' }));
-  const actions = h('span', { class: 'pe-group pe-actions' }, dict, mk('read', 'Read aloud', svg(ICONS.read), () => (info.hasSelection ? 'read the selection' : 'read the document')),
+  const actions = h('span', { class: 'pe-group pe-actions' }, mk('read', 'Read the document aloud', svg(ICONS.read), () => (info.hasSelection ? 'read the selection' : 'read the document')),
       mk('copy', 'Copy', svg(ICONS.copy), () => (info.hasSelection ? 'copy the selection' : 'copy the document')), dlBtn);
   const root = h('div', { class: 'pe-toolbar-wrap' }, bar);
   void say;
@@ -137,8 +134,6 @@ export function createToolbar({ send, say }) {
       for (const m of ['bold', 'italic', 'underline', 'strike', 'code', 'highlight', 'link']) set(m, i.marks?.[m]);
       for (const a of ['left', 'center', 'right', 'justify']) set(a, (i.align ?? 'left') === a);
       set('bullets', i.listStyle === 'bullet'); set('numbers', i.listStyle === 'numbered'); set('tasks', i.listStyle === 'task'); set('quote', i.kind === 'quote');
-      set('dictation', i.dictating);
-      btns.dictation.querySelector('.pe-txt').textContent = i.dictating ? 'Stop' : 'Dictate';
       btns.undo.disabled = !i.canUndo; btns.redo.disabled = !i.canRedo;
       btns.bigger.disabled = btns.smaller.disabled = !i.sizePhrase;
       style.value = i.kind === 'title' ? 'title' : i.kind === 'heading' ? `h${i.level ?? 2}` : i.kind === 'quote' ? 'quote' : i.kind === 'paragraph' ? 'paragraph' : 'other';

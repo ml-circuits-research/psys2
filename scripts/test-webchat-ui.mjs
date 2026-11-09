@@ -153,7 +153,67 @@ async function settingsFor(name, viewport, o) {
   } finally { await d.close(); }
 }
 
+async function ui1For(name, viewport, o) {
+  const c = await openChat({ ...o, throttle: 1, viewport });
+  const { pg } = c;
+  const tag = name;
+  try {
+    const head = await pg.evaluate(() => ({ buttons: [...document.querySelectorAll('.p2-head button')].map((b) => b.getAttribute('aria-label')), select: !!document.querySelector('.p2-head select[aria-label="Language"]'), title: document.querySelector('.p2-title')?.innerText }));
+    check(`${tag}: the header keeps only the language selector and the gear`, head.select && JSON.stringify(head.buttons) === JSON.stringify(['Settings']), head.buttons.join(' | '));
+    const bar = await pg.evaluate(() => [...document.querySelector('.p2-form').children].map((e) => `${e.tagName.toLowerCase()}.${[...e.classList].filter((x) => x !== 'p2-btn').join('.')}`));
+    check(`${tag}: input bar = one mic, one read-aloud toggle, the text box, Send`, JSON.stringify(bar) === JSON.stringify(['button.p2-mic', 'button.p2-speaker', 'input.p2-text', 'button.p2-send']), bar.join(' '));
+    const voiceButtons = await pg.evaluate(() => [...document.querySelectorAll('button')].filter((b) => /microphone|speak a message|hands-free|dictat|read answers aloud/i.test(`${b.getAttribute('aria-label')} ${b.title}`)).map((b) => b.getAttribute('aria-label')));
+    check(`${tag}: exactly one mic and one read-aloud toggle on the page (dictation only has Stop)`, voiceButtons.filter((l) => /^(Microphone|Speak a message)/.test(l)).length === 1 && voiceButtons.filter((l) => /^Read answers aloud/.test(l)).length === 1, voiceButtons.join(' | '));
+    // read-aloud toggle
+    await pg.click('.p2-speaker');
+    const sp = await pg.evaluate(() => ({ p: document.querySelector('.p2-speaker').getAttribute('aria-pressed'), l: document.querySelector('.p2-speaker').getAttribute('aria-label'), t: document.querySelector('.p2-speaker').title, saved: JSON.parse(localStorage.getItem('psys2.webchat.settings')).speaker }));
+    check(`${tag}: the read-aloud toggle says its state and saves (${sp.l})`, sp.p === 'true' && sp.l === 'Read answers aloud: on' && sp.t === sp.l && sp.saved === true);
+    await pg.click('button[aria-label="Settings"]'); await pg.click('#p2-st-voice'); await sleep(100);
+    check(`${tag}: Settings > Voice shows the same switch`, await pg.$eval('#p2-c-read-answers-aloud', (e) => e.checked));
+    await pg.click('.p2-modal-close'); await waitModal(pg, false);
+    await pg.click('.p2-speaker');
+    check(`${tag}: toggled off again`, (await pg.$eval('.p2-speaker', (e) => e.getAttribute('aria-label'))) === 'Read answers aloud: off');
+    // the mic: hands-free by long press (when the browser has speech recognition)
+    const micDisabled = await pg.$eval('.p2-mic', (e) => e.disabled);
+    if (!micDisabled) {
+      const box = await (await pg.$('.p2-mic')).boundingBox();
+      await pg.mouse.move(box.x + box.width / 2, box.y + box.height / 2); await pg.mouse.down(); await sleep(750);
+      const hf = await pg.evaluate(() => window.psys2.settings.handsFree);
+      await pg.mouse.up();
+      check(`${tag}: a long press on the mic switches hands-free on (mic mode, not a header icon)`, hf === true);
+      await sleep(300);
+      await pg.evaluate(() => window.psys2.settings.handsFree && document.querySelector('.p2-mic').click());
+    } else check(`${tag}: speech recognition is not available in this browser: the mic is disabled and says why`, /unavailable/.test(await pg.$eval('.p2-mic', (e) => e.title)));
+    await shot(c, o, `ui1-header-inputbar-${name}`);
+    // the editor: no microphone, dictation is a mode of the chat mic
+    await c.say('open the editor');
+    await pg.waitForSelector('.pe-toolbar', { timeout: 15000 });
+    const tb = await pg.evaluate(() => ({ dict: !!document.querySelector('.pe-toolbar-wrap [data-cmd="dictation"]'), mics: [...document.querySelectorAll('.pe-toolbar-wrap button')].filter((b) => /dictat|microphone|\bmic\b/i.test(`${b.getAttribute('aria-label')} ${b.title} ${b.textContent}`)).length }));
+    check(`${tag}: the editor toolbar has no Dictate button or microphone`, !tb.dict && tb.mics === 0);
+    await c.say('start dictation');
+    await pg.waitForFunction(() => !document.querySelector('.p2-dictbar').hidden, { timeout: 5000 }).catch(() => {});
+    const dict = await pg.evaluate(() => ({ bar: !document.querySelector('.p2-dictbar').hidden, text: document.querySelector('.p2-dict-text').textContent, mic: document.querySelector('.p2-mic').classList.contains('is-dictating'), micLabel: document.querySelector('.p2-mic').getAttribute('aria-label'), stop: document.querySelector('.p2-dict-stop')?.getAttribute('aria-label') }));
+    check(`${tag}: dictation shows "Dictating into: <document>" with a Stop control and the mic marked`, dict.bar && /^Dictating into: .+/.test(dict.text) && dict.mic && /Dictating into/.test(dict.micLabel) && dict.stop === 'Stop dictation', `${dict.text} | ${dict.micLabel}`);
+    await shot(c, o, `ui1-editor-dictation-${name}`);
+    await c.say('hello world period');
+    await pg.click('.p2-dict-stop');
+    await pg.waitForFunction(() => !window.psys2.busy && document.querySelector('.p2-dictbar').hidden, { timeout: 8000 }).catch(() => {});
+    check(`${tag}: Stop ends dictation and the bar disappears`, await pg.$eval('.p2-dictbar', (e) => e.hidden) && !(await pg.$eval('.p2-mic', (e) => e.classList.contains('is-dictating'))));
+    // tooltips everywhere: every tab, then the settings modal
+    const problems = [];
+    const tabs = await pg.$$eval('.p2-tab[role=tab]:not(.p2-modal-tab)', (e) => e.map((x) => x.id));
+    for (const id of tabs) { await pg.evaluate((id) => document.getElementById(id).click(), id); await sleep(250); problems.push(...(await iconButtonProblems(pg))); }
+    await pg.click('button[aria-label="Settings"]');
+    for (const t of SETTINGS_TABS) { await pg.click(`#p2-st-${t}`); await sleep(100); problems.push(...(await iconButtonProblems(pg))); }
+    await pg.click('.p2-modal-close');
+    check(`${tag}: every icon button has a tooltip equal to its aria-label (${tabs.length} tabs and the settings checked)`, new Set(problems).size === 0, [...new Set(problems)].slice(0, 4).join(' || '));
+    check(`${tag}: no console errors`, c.consoleErrors.length === 0 && c.errors.length === 0, [...c.consoleErrors, ...c.errors][0] ?? '');
+  } finally { await c.close(); }
+}
+
 export const SCENARIOS = {
+  async ui1(o) { for (const [name, vp] of Object.entries(VIEWPORTS)) await ui1For(name, vp, o); },
+
   async settings(o) { for (const [name, vp] of Object.entries(VIEWPORTS)) await settingsFor(name, vp, o); },
 };
 

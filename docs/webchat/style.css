@@ -61,6 +61,14 @@
 .p2-example:hover { border-color: var(--accent); }
 .p2-form { display: flex; gap: 6px; align-items: center; padding: 8px; background: var(--surface); border-top: 1px solid var(--line); }
 .p2-text { flex: 1; min-width: 0; height: 40px; padding: 0 14px; border: 1px solid var(--line); border-radius: 20px; background: var(--surface-2); }
+.p2-form { gap: 4px; }
+.p2-form .p2-btn { flex: none; }
+.p2-mic.is-handsfree { background: var(--accent); color: var(--accent-ink); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 35%, transparent); }
+.p2-mic.is-dictating:not(.is-handsfree) { background: var(--bad); color: #fff; }
+.p2-dictbar { display: flex; align-items: center; gap: 8px; padding: 6px 12px; background: color-mix(in srgb, var(--bad) 14%, var(--surface)); border-top: 1px solid var(--line); font-size: 13px; font-weight: 600; }
+.p2-dict-text { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.p2-rec { width: 9px; height: 9px; border-radius: 50%; background: var(--bad); animation: p2-pulse 1.4s infinite; flex: none; }
+.p2-form.is-dictating .p2-text { border-color: var(--bad); }
 .p2-send { background: var(--accent); color: var(--accent-ink); }
 .p2-send:hover:not(:disabled) { background: var(--accent); color: var(--accent-ink); filter: brightness(1.08); }
 .p2-mic.is-on { animation: p2-pulse 1.4s infinite; }
