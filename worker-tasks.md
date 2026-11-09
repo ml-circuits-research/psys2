@@ -254,6 +254,42 @@ Clicks on the avatar (gallery, presets, parts) run late, after the spoken answer
   - the same for a chess move while the engine thinks;
   - 0 console errors.
 
+### MOBILE-VOICE — on a phone, speech-to-text floods the chat with fragments and repeats (user, 21:36 local) — P0, with FREEZE
+
+**Data.** `training/eval/real-phrases-2026-11-09f-mobile.json` (the export from the user's phone: 108 voice records in 4.5 minutes, with full detail).
+
+**What happened** (the reviewer analysed every record):
+- **The recogniser on the phone returns every growing prefix as a separate final result**, and the app sends each one. "desenează o inimioară desenează o inimă" arrived as "desenează", "o", "desenează o", "inimioară", "desenează o inimioară", "o inimioară desenează", "desenează o inimioară desenează o", …
+  - 50 of the 108 messages extend or contain the previous one;
+  - 45 are a single word ("o", "ce", "de", "asta", "mare", "face", "tata", "mama").
+- **Every fragment executed something:**
+  - "asta" → the map shows Asia;
+  - "o" → "We are not playing hangman";
+  - "inima" → a search in the Documents tab;
+  - "ia" → music.
+  The active tab switched 14 times. Tabs showed busy indicators while nearly everything failed: 56 unparsed, 22 missing, 10 unsupported, 18 supported.
+- **The queue grew to 105 s of waiting** (`queueMs` 104926). With turns taking a median of 1.8 s and up to 6.6 s on the phone, the user was talking to a backlog. Room talk ("ce hai ce îl înnebunești de cap săracul…") grew the same way, a prefix at a time.
+- Replies mixed languages ("Voila! I drew a red heart." in a Romanian session) and contained literal translations of interjections ("Aspect la că!").
+
+**User decisions (they replace the MIC2 queue):**
+1. **Stop listening while a request is processed.**
+   - The mic pauses from the moment a message is sent until the turn, its effects and the spoken answer have finished, with a visible "working…" state.
+   - Then it resumes automatically.
+   - Nothing is accumulated during processing: no queue for voice. Typed text stays in the box and is sent with Enter when the turn ends.
+2. **Protection against repetition and speech-to-text going wild:**
+   - **One utterance = one message.** Treat a new final that extends, contains or repeats the previous final of the same recognition session as a *replacement* of the pending text, not a new message. Send only at end of turn (EOT2). Reset the recogniser's result list after each send (Android keeps cumulative results).
+   - **Duplicate filter.** Drop a voice message equal or nearly equal (normalised edit distance ≤ 0.2) to one sent in the last 10 s, or a prefix or suffix of it.
+   - **Fragment filter.** A one-word voice message that is a stop word, an article, a pronoun or a filler ("o", "ce", "de", "asta", "da" outside a yes/no question, "face", "mama", "tata") is ignored, unless it answers an open question (yes / no, a number, a game move on a game tab, a choice) or is a known one-word command ("stop", "undo", "help", "next").
+   - **Rate guard.** At most one voice message per 2 s. If more than 4 fragments are dropped in 10 s, pause the mic with "I am hearing fragments — tap the mic to continue".
+   - **No action from noise.** A message that is ignored or not understood never switches the tab and never shows busy indicators on the tabs. Only the chat shows "not understood", once, and repeated not-understood voice replies within 20 s are collapsed into one.
+3. **Mobile timing.** Measure the turn time on a mid-range Android (or 6× CPU throttle). The always-on dry run (FREEZE item 4) must be off on slow devices: there, voice ends on the browser's final plus the plausibility of the text, without a full rule reading per pause.
+4. **Language of replies.** Every reply in a Romanian session is Romanian, including the template interjections ("Voila!", "Look at that!" → "Gata!", "Uite!"). Add the interjections to the phrase table instead of translating them word by word.
+5. **Vocabulary.** Diminutives: "inimioară" → inimă (heart), "căsuță", "norișor", "peștișor", "soricel", "floricică", "copăcel". "desenează o inimioară" draws a heart.
+
+**Tests:**
+- Replay the 108 records through the fake recogniser in the Android cumulative-final mode, with their timings, at 6× throttle. At most one message per real utterance, 0 queue, no tab switches from fragments, the mic paused during every turn, and the hearts and houses drawn.
+- Unit tests for the replacement, duplicate, fragment and rate filters.
+
 ### FREEZE — after a long voice session the fan spins, the tab freezes, and other tabs (even incognito) cannot use the mic (user, 21:18 local) — P0
 
 **What the user saw** (session `training/eval/real-phrases-2026-11-09e.jsonl`, 67 voice messages in about 10 minutes, mostly Romanian, with people talking in the room):
@@ -724,7 +760,7 @@ The reviewer copied what is reusable into **`imports/diagram-vss-demo/`** (stagi
 **Licence:** settled. The project is now AGPL-3.0-only, the same as the source (user decision 14:10); keep the copied files' provenance headers.
 
 **Order from now on:**
-1. FREEZE (mic persistence, cross-tab ping-pong, hidden tabs, dry-run CPU, ORT restart spiral; 30-minute soak test) + NOISE, then BUSY-LOST (land the missing app.mjs part), HANG3 (browser translator off the critical path), MIC2 + EOT2 + BUSY (always-open mic, queue, reliable button, end of turn, tabs grey while a turn runs), then DIAG2 + DIAG3 (Diagram world in the webchat, retrain, short ids, edges, rendering, parity), FB (thumbs up / down + feedback, remove Copy as text), then RP3 (phrase-log failures), then DBG (debug view per tab)
+1. MOBILE-VOICE (pause the mic while processing, one utterance = one message, duplicate / fragment / rate filters, no tab switching from noise) + FREEZE (mic persistence, cross-tab ping-pong, hidden tabs, dry-run CPU, ORT restart spiral; 30-minute soak test) + NOISE, then BUSY-LOST (land the missing app.mjs part), HANG3 (browser translator off the critical path), MIC2 + EOT2 + BUSY (always-open mic, queue, reliable button, end of turn, tabs grey while a turn runs), then DIAG2 + DIAG3 (Diagram world in the webchat, retrain, short ids, edges, rendering, parity), FB (thumbs up / down + feedback, remove Copy as text), then RP3 (phrase-log failures), then DBG (debug view per tab)
 2. SET (settings modal with tabs) + UI1 (one mic, tooltips) + DOC (greeting and docs), then VOICE (end of turn)
 3. ED (document editor commands)
 4. RD10 together with RD1b and RD2 (they share the mechanism)
