@@ -36,10 +36,19 @@
   ],
   "dispatcherModel": false,
   "files": {
-    "lib/dialog/discourse.mjs": "a4161c92cc12f3c7",
+    "lib/astra/focus.mjs": "1c3d01a9a408ffc6",
+    "lib/astra/frames.mjs": "791e3c6464e2803f",
+    "lib/astra/index.mjs": "f559b6c3a5f27333",
+    "lib/astra/log.mjs": "f744bfe619675772",
+    "lib/astra/moves.mjs": "3d2a8d9939317bb5",
+    "lib/astra/persist.mjs": "ebcf48ef20ddb28a",
+    "lib/astra/registry.mjs": "b141b5a294b1729b",
+    "lib/astra/session.mjs": "2d1dc2bce878b570",
+    "lib/astra/where.mjs": "50abedb5f0101fef",
+    "lib/dialog/discourse.mjs": "0f8b20a29e4f64bd",
     "lib/dialog/dispatch-validate.mjs": "309ede744c469270",
     "lib/dialog/encoder-dispatch.mjs": "626a317618579564",
-    "lib/dialog/index.mjs": "9afe6324f8068eb6",
+    "lib/dialog/index.mjs": "bd09e16676e52c75",
     "lib/dialog/meta.mjs": "3f42a3f2e5d70d71",
     "lib/dialog/normalizer-runtime.mjs": "76d3ed03f9126aba",
     "lib/dialog/runtime-config.mjs": "0f2c990dffd716e7",
@@ -146,5 +155,5 @@
     "worlds/user.profile/ops.mjs": "58e16e9e2fe9f5f2",
     "worlds/user.profile/understand.mjs": "a971dcc2294fd749"
   },
-  "builtAt": "2026-11-09T14:52:19.442Z"
+  "builtAt": "2026-11-09T15:01:59.122Z"
 }

@@ -4,7 +4,7 @@
 //   node scripts/build-webchat.mjs [--out <dir>] [--models [<export dir>] [--meta-only]]      (default out: docs/webchat)
 //
 // Output (only these paths are written; everything else in the out dir is left alone):
-//   lib/                    browser-safe copies of src/{soplang,legends,worlds,formalizer,interpreter,dialog,translate}
+//   lib/                    browser-safe copies of src/{soplang,legends,worlds,formalizer,interpreter,dialog,translate,astra}
 //                           and src/loaders/bundle-loader.mjs, relative imports preserved
 //   worlds/index.json       { worlds: { <id>: { files: { 'world.sop': text, ... }, opsUrl: 'worlds/<id>/ops.mjs' } } }
 //   worlds/<id>/*.mjs       the world's operation modules
@@ -18,7 +18,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const REPO = fileURLToPath(new URL('..', import.meta.url));
-const LIB_DIRS = ['soplang', 'legends', 'worlds', 'formalizer', 'interpreter', 'dialog', 'translate'];
+const LIB_DIRS = ['soplang', 'legends', 'worlds', 'formalizer', 'interpreter', 'dialog', 'translate', 'astra'];
 const LIB_FILES = ['loaders/bundle-loader.mjs'];
 const WORLD_TEXT = /\.(sop|json|txt|md)$/;
 // Files the browser never reads (the loader treats a missing tests.sop as empty; coverage.md is a human catalogue): left out of worlds/index.json to keep it small (L10).

@@ -32,7 +32,7 @@ const REPO = resolve(dirname(SELF), '..');
 const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 && !process.argv[i + 1]?.startsWith('--') ? process.argv[i + 1] : d; };
 const flag = (k) => process.argv.includes(`--${k}`);
 
-export const FAMILIES = ['reference', 'ellipsis', 'clarification', 'correction', 'degree', 'multistep', 'confirmation', 'explain', 'feedback', 'topic', 'userfacts', 'noise'];
+export const FAMILIES = ['reference', 'ellipsis', 'clarification', 'correction', 'degree', 'multistep', 'confirmation', 'explain', 'feedback', 'topic', 'userfacts', 'noise', 'discussion'];
 const EXPECT_KEYS = new Set(['state', 'forbid_state', 'answer', 'answer_any', 'forbid_answer', 'effects', 'status', 'none']);
 
 export function loadDialogues(file) {

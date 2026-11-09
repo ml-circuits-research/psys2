@@ -24,6 +24,9 @@ import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mj
 import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs';
 import { checkValues } from './value-check.mjs';
 import { Discourse } from './discourse.mjs';
+import { createSessionAstra, mirrorFrames } from '../astra/session.mjs';
+import { recognize } from '../astra/moves.mjs';
+import { panel } from '../astra/where.mjs';
 import { correctMessage, splitAnswerList } from '../formalizer/rules/expand.mjs';
 
 export { runWorldTests } from './test-runner.mjs';
@@ -136,6 +139,8 @@ export class DialogSession {
     this.isession = engine.interp.createSession();
     /** Discourse memory (spec 11, ADR-006): recent frames and the pending expectation. */
     this.discourse = new Discourse(this);
+    /** Persistent discussions and world instances (spec 13, ADR-008): bookkeeping around the turn, never changes a reading. */
+    this.astra = createSessionAstra(this);
     this.sources = new Map();
     this._msg = 0;
     this.isession.add(this.isession.form.initDefaults());
@@ -201,6 +206,7 @@ export class DialogSession {
   setWorldState(worldId, patch = {}) {
     const st = (this.isession.state[worldId] ??= {});
     Object.assign(st, structuredClone(patch));
+    if (worldId === 'ui.shell' && patch.activeTab) this.astra?.onTabChange(patch.activeTab);   // the tab resumes its discussion (spec 13 section 1)
     return structuredClone(st);
   }
 
@@ -567,6 +573,28 @@ export class DialogSession {
     return correctMessage(english, { probe });
   }
 
+  /** ASTRA bookkeeping at the end of a turn (spec 13): typed moves, attribution to a discussion, tab resume. Never throws, never reads. */
+  _astraTurn({ sid, english, meta, pre, pend, segments, state, stateBefore, tabBefore }) {
+    const a = this.astra;
+    if (!a) return;
+    try {
+      const moves = recognize({ text: english, meta: meta?.info, pre: pre?.info, consumed: pend, yesNo: pend?.type === 'confirm' ? this.engine.interp.lang.yesNo(english) : null, segments });
+      const open = this.discourse.pending;
+      if (open?.question) moves.push({ type: 'ask', text: open.question, world: open.world ?? null, source: 'system' });
+      const tabAfter = this.isession.state['ui.shell']?.activeTab ?? null;
+      a.afterTurn({ msgId: sid, text: english, changed: Object.keys(state), before: stateBefore, tab: tabAfter, moves });
+      mirrorFrames(this, { consumed: pend, open, turn: this._msg });
+      if (tabAfter && tabAfter !== tabBefore) a.onTabChange(tabAfter);
+    } catch { /* bookkeeping must never break a turn */ }
+  }
+
+  /** Discussions of this chat as panel data (spec 13 section 8): `{ tab, status, world }` filters. */
+  discussions(filter = {}) { return panel(this.astra, filter); }
+
+  /** Persist / restore the discussions through a localStorage-like backend (`new Storage(backend)` from src/astra). Restoring runs no effect. */
+  saveDiscussions(storage) { return storage.save(this.astra); }
+  loadDiscussions(storage) { return storage.load(this.astra); }
+
   /** One message in, one reply out. Opens the stage-timing record (`reply.perf`, see formalizer/perf.mjs) unless this is a nested replay. */
   async send(text, opts = {}) {
     const own = perf.start();
@@ -593,7 +621,7 @@ export class DialogSession {
     return {
       isession: this.isession.clone(), msg: this._msg, recent: [...(this._recentWorlds ?? [])], lang: [this._sessionLang, this._weakRo],
       discourse: { ...dis, frames: [...dis.frames], actions: [...dis.actions], topics: [...dis.topics], lastByWorld: { ...dis.lastByWorld } },
-      sources: new Set(this.sources.keys()),
+      sources: new Set(this.sources.keys()), astra: this.astra?.capture(),
     };
   }
 
@@ -602,6 +630,7 @@ export class DialogSession {
     if (!snap) return;
     this.isession = snap.isession; this._msg = snap.msg; this._recentWorlds = snap.recent; [this._sessionLang, this._weakRo] = snap.lang;
     Object.assign(this.discourse, snap.discourse);
+    this.astra?.rollback(snap.astra);
     for (const k of [...this.sources.keys()]) if (!snap.sources.has(k)) this.sources.delete(k);
   }
 
@@ -812,6 +841,7 @@ export class DialogSession {
     const feedback = meta?.feedback ?? null;
     const state = {};
     for (const [k, v] of Object.entries(this.isession.state)) if (JSON.stringify(v) !== stateBefore[k]) state[k] = structuredClone(v);
+    this._astraTurn({ sid, english, meta, pre, pend, segments, state, stateBefore, tabBefore });
     const effects = this.isession.effects;
     this.isession.effects = [];
     return {

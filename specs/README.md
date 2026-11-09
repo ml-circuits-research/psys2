@@ -18,3 +18,5 @@ The vision (`vision/PSys2-vision-v1.md`) defines the target architecture. These 
 | [08-training-data.md](08-training-data.md) | Training data from worlds: generators (datagen.mjs), rule-derived records, export and reports |
 | [11-discourse.md](11-discourse.md) | Discourse layer: frames, ellipsis, pending clarifications, coordination |
 | [decisions/ADR-006](decisions/ADR-006-discourse-layer.md) | Rule-based discourse layer |
+| [13-discussions.md](13-discussions.md) | ASTRA: discussions, world instances, dialogue moves, task frames, focus, event log and persistence |
+| [decisions/ADR-008](decisions/ADR-008-astra-discussions.md) | ASTRA as a core library with a compatibility layer over per-world state |

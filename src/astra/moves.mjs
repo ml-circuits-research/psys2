@@ -41,7 +41,7 @@ export function recognize({ text = '', meta = null, pre = null, consumed = null,
   for (const s of segments ?? []) {
     if (s.unparsed || !s.match) continue;
     const k = s.match.kind;
-    if (k === 'question') out.push(move('ask', { text: s.text, world: s.match.worldId }));
+    if (k === 'question') out.push(move('ask', { text: s.text, world: s.match.worldId, answered: true }));   // the system answers it in the same turn: nothing stays open
     else if (k === 'request') out.push(move('request', { text: s.text, world: s.match.worldId, pattern: s.match.patternId }));
     else if (k === 'statement' || k === 'fact') out.push(move('inform', { text: s.text, world: s.match.worldId, pattern: s.match.patternId }));
   }
@@ -65,7 +65,9 @@ export function applyMove(d, m, { validate = null } = {}) {
       break;
     }
     case 'ask':
+      if (m.answered) break;   // answered in the same turn: recorded in the move list only
       is.qud.unshift({ text: m.text ?? '', world: m.world ?? null, rev });
+      is.qud.length = Math.min(is.qud.length, 10);
       d.openQuestions = is.qud.map((q) => q.text);
       break;
     case 'answer': {

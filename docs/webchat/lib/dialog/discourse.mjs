@@ -16,6 +16,8 @@
  */
 import { restrictedSet } from '../formalizer/spell.mjs';
 import { SHORT_TYPOS } from '../formalizer/rules/normalize.mjs';
+import { lastUnfinished } from '../astra/where.mjs';
+import { runDiscussionCommand } from '../astra/session.mjs';
 import { classify, resolveReference, describeReferent, chooseOption, plain } from './meta.mjs';
 
 export const FRAME_LIMIT = 5;
@@ -482,6 +484,8 @@ export class Discourse {
       const bare = BARE_YES_NO[t];
       if (bare && !this._gameAsksYesNo()) return { reply: `${bare === 'yes' ? 'Yes' : 'No'} to what? You can ask me a question, give me a command, or say "help" to see what I can do.`, info: { kind: 'bare', answer: bare } };
     }
+    // discussion commands (spec 13 section 8): only "new discussion", "my discussions" and a reference that names an existing discussion
+    if (!this.list) { const ac = runDiscussionCommand(d, text, d._msg); if (ac) return ac; }
     // chat spellings of short words ("bk to the doc", "nxt") are read as the word for the recognizers; the sentence itself is passed on unchanged
     const spelled = String(text).replace(/[A-Za-z]+/g, (w) => SHORT_TYPOS[w.toLowerCase()] ?? w);
     const c = classify(spelled, { lang: this.lang, hasAction: !!this._repairable(), listMode: !!this.list });
@@ -617,10 +621,8 @@ export class Discourse {
     if (!target && !digression) return this.topics.find((w) => this.lastByWorld[w]) ?? null;   // "continue": the newest topic
     if (!target) {
       // "where were we?": the conversation before the current digression (the newest topic that is not the world of the open tab), else the newest
-      const here = this.dialog.context().tabWorld;
-      // after an explicit return to an earlier activity, the unfinished activity is that one, until the user digresses again (another tab opens)
-      if (this.lastTopic && (!here || this.lastTopic.world === here)) return this.lastTopic.world;
-      return this.topics.find((w) => this.lastByWorld[w] && w !== here) ?? this.topics.find((w) => this.lastByWorld[w]) ?? null;
+      // the definition lives in ASTRA (spec 13 section 8): the most recent unfinished activity left for a digression
+      return lastUnfinished({ topics: this.topics, lastByWorld: this.lastByWorld, here: this.dialog.context().tabWorld, lastTopic: this.lastTopic });
     }
     const asksGame = /\bgame\b/.test(target);   // "the animal game" is the guessing game, not the animals quiz
     const words = target.split(' ').filter((w) => !['game', 'tab', 'the', 'my', 'our', 'a', 'to', 'page', 'screen', 'window'].includes(w));

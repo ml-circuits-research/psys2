@@ -78,7 +78,7 @@ export function findDiscussion({ noun, ordinal = null }, astra, { tokensOf = () 
 /**
  * Execute a parsed command against the chat. Returns null when the text is not a command ASTRA handles (it falls through to the normal
  * pipeline), else `{ kind, discussion?, text, cards? }`. "back" is handled only when it resolves to an existing discussion that is not the
- * current one of its tab and either names an ordinal, or there are several candidates (the topic return of Discourse covers the rest).
+ * current one of its tab and at least two discussions answer to the noun (the topic return of Discourse covers the rest).
  */
 export function runCommand(cmd, astra, { tab = null, tabWorld = null, tokensOf = () => [] } = {}) {
   if (!cmd) return null;
@@ -95,12 +95,14 @@ export function runCommand(cmd, astra, { tab = null, tabWorld = null, tokensOf =
     return { kind: 'list', cards, text: `Your discussions: ${lines.join('; ')}.` };
   }
   if (cmd.kind === 'back') {
+    // a reference is a discussion command only when several discussions answer to the noun ("the first chart" with one chart discussion
+    // names an object inside the world: the normal pipeline reads it)
+    if (findDiscussion({ noun: cmd.noun }, astra, { tokensOf }).candidates.length < 2) return null;
     const r = findDiscussion(cmd, astra, { tokensOf });
     if (r.status === 'none') return null;
     const d = r.status === 'one' ? r.candidates[0] : r.candidates.filter((x) => x.id !== astra.active).at(-1) ?? r.candidates.at(-1);
     if (!d) return null;
     const current = d.tab != null && astra.tabs[d.tab] === d.id && astra.active === d.id;
-    if (cmd.ordinal == null && r.candidates.length < 2) return null;
     if (current && cmd.ordinal == null) return null;
     astra.activate(d.id);
     return { kind: 'back', discussion: d, text: `Back to ${d.title}.` };
@@ -113,7 +115,7 @@ export function runCommand(cmd, astra, { tab = null, tabWorld = null, tokensOf =
 /** The discussion card: goal, objects, established facts, the open question and the next step (technical details stay in the record). */
 export function card(d, astra) {
   const is = infoState(d);
-  const lastAct = astra.log.of(d.id).filter((e) => e.type === 'act').at(-1);
+  const lastAct = astra.log.of(d.id).filter((e) => e.type === 'act' && e.data.worlds?.length).at(-1);   // progress = the last turn that changed something
   const top = (d.agenda?.frames ?? []).find((f) => f.state === 'active');
   const insts = astra.instancesOf(d.id);
   return {
