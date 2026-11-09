@@ -896,7 +896,7 @@ export async function mountPsys2(element, options = {}) {
     return [
       field('Language', select([['en', 'English'], ['ro', 'Română']], settings.language, (v) => setLanguage(v)), 'The language you talk to me in and I answer in. The same as the selector in the header.'),
       field('Translation', select([['auto', 'Automatic'], ['browser-api', 'Browser API'], ['rules', 'Rules']], settings.translation, (v) => { settings.translation = v; save(); renderSettings(); }),
-        `Used when the language is not English. Browser on-device translator: ${browserAvail}. Its output is checked and falls back to the rules translator.`),
+        `Used when the language is not English. Browser on-device translator: ${translator?.translatorState?.() ?? (browserAvail === 'downloadable' || browserAvail === 'downloading' ? 'downloading… the rules translator is used meanwhile' : browserAvail)}. Its output is checked and falls back to the rules translator.`),
       field('Language detection', select([['auto', 'Automatic'], ['browser-api', 'Browser API'], ['rules', 'Rules']], settings.languageDetection, (v) => { settings.languageDetection = v; save(); renderSettings(); }),
         `Decides whether a message is English or Romanian. Browser on-device language detector: ${detectAvail}. Uncertain or other-language results keep the current language; without the browser API, or while it downloads, the rules detector is used.`),
     ];
@@ -1073,7 +1073,7 @@ export async function mountPsys2(element, options = {}) {
 
   // optional capabilities, checked once
   if (browserDetectorKind()) browserDetectorAvailability().then((a) => { detectAvail = a; renderSettings(); });
-  if (browserTranslatorKind()) browserTranslatorAvailability('ro', 'en').then((a) => { browserAvail = a; renderSettings(); });
+  if (browserTranslatorKind()) browserTranslatorAvailability('ro', 'en').then((a) => { browserAvail = a; if (a === 'downloadable' || a === 'downloading') translator.prepareTranslator?.('ro', 'en').then(renderSettings, () => {}); renderSettings(); });
   else browserAvail = 'not supported by this browser';
 
   if (options.onboarding !== false) {

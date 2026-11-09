@@ -83,12 +83,13 @@ export async function browserDetectorAvailability() {
 export const DETECT_MIN_CONFIDENCE = 0.5;
 export const MIN_LETTERS = 3;
 /** Every browser-API await on the turn path is bounded (a promise that never settles must not hold the chat). */
-const AVAILABILITY_TIMEOUT_MS = 1000, DETECT_TIMEOUT_MS = 1500, TRANSLATE_TIMEOUT_MS = 4000;
+const AVAILABILITY_TIMEOUT_MS = 1000, DETECT_TIMEOUT_MS = 400, TRANSLATE_TIMEOUT_MS = 400;   // HANG3: an available browser API gets 400 ms per call, then the rules answer
+/** A browser translator that failed or timed out is not tried again for this long (the rules translator answers meanwhile). */
+const COOLDOWN_MS = 60000;
 /** Languages the session understands; any other detected language is 'unknown'. */
 const SUPPORTED = new Set(['en', 'ro']);
 
 export function createSwitchTranslator({ rules, getStrategy, getDetectStrategy = () => 'auto' }) {
-  const cache = new Map();
   const usage = [];
   const detectUsage = [];
   let detectorPromise = null, detectorInstance = null, detectorWait = false;
@@ -112,17 +113,59 @@ export function createSwitchTranslator({ rules, getStrategy, getDetectStrategy =
     if (!detectorWait) return null;   // still being downloaded: the rules detect the language meanwhile
     try { return await withDeadline(detectorPromise, DETECT_TIMEOUT_MS, { label: 'detector creation' }); } catch (e) { if (!detectorInstance) detectorWait = false; throw e; }   // stalled once: do not wait again
   }
+  /**
+   * The browser translator, bounded like the detector (PERF round 3). A `create()` that has not settled (model downloading or stalled) is never awaited
+   * again by every later turn: each turn used to wait the whole TRANSLATE_TIMEOUT_MS (4 s) on it, so every Romanian message cost 4 s and
+   * a few ended in the watchdog. Now: only a translator the browser reports as 'available' is waited for (briefly); a pending, failed or timed-out one
+   * makes the turn use the rules translator at once, and a timed-out translator is not tried again for COOLDOWN_MS.
+   */
+  const instances = new Map(), pending = new Map(), cooldown = new Map(), waitedOnce = new Set();
   async function browserTranslate(text, from, to) {
     const kind = browserTranslatorKind();
     if (!kind) throw new Error('no browser translator');
     const key = `${from}>${to}`;
-    if (!cache.has(key)) {
-      const opts = { sourceLanguage: from, targetLanguage: to };
-      cache.set(key, (kind === 'translator' ? self.Translator.create(opts) : self.ai.translator.create(opts)).catch((e) => { cache.delete(key); throw e; }));
+    if ((cooldown.get(key) ?? 0) > Date.now()) throw new Error('browser translator timed out recently');
+    let inst = instances.get(key);
+    if (!inst) {
+      if (!pending.has(key)) {
+        const opts = { sourceLanguage: from, targetLanguage: to };
+        const avail = await withDeadline(browserTranslatorAvailability(from, to), AVAILABILITY_TIMEOUT_MS, { label: 'translator availability' }).catch(() => 'unavailable');
+        if (avail === 'unavailable' || avail === 'unsupported') { cooldown.set(key, Date.now() + COOLDOWN_MS); throw new Error(`browser translator ${avail}`); }
+        const make = kind === 'translator' ? self.Translator.create(opts) : self.ai.translator.create(opts);
+        const p = Promise.resolve(make).then((t) => { instances.set(key, t); pending.delete(key); return t; }, (e) => { pending.delete(key); cooldown.set(key, Date.now() + COOLDOWN_MS); throw e; });
+        p.catch(() => {});
+        pending.set(key, p);
+        if (avail !== 'available') throw new Error(`browser translator ${avail}: preparing in the background`);
+      }
+      if (waitedOnce.has(key)) throw new Error('browser translator still preparing');   // one turn waited for it already: later turns do not
+      waitedOnce.add(key);
+      inst = await withDeadline(pending.get(key), DETECT_TIMEOUT_MS, { label: 'translator creation' }).catch((e) => { throw new Error(`browser translator not ready (${e?.message ?? e})`); });
     }
-    return withDeadline((async () => (await cache.get(key)).translate(text))(), TRANSLATE_TIMEOUT_MS, { label: 'browser translation' });
+    try { return await withDeadline(Promise.resolve(inst.translate(text)), TRANSLATE_TIMEOUT_MS, { label: 'browser translation' }); } catch (e) { cooldown.set(key, Date.now() + COOLDOWN_MS); throw e; }
+  }
+  /** Starts the browser translator (ro > en) in the background when it is downloadable or downloading: never awaited by a turn (HANG3). */
+  async function prepareTranslator(from = 'ro', to = 'en') {
+    const kind = browserTranslatorKind(), key = `${from}>${to}`;
+    if (!kind || instances.has(key) || pending.has(key)) return;
+    const avail = await withDeadline(browserTranslatorAvailability(from, to), AVAILABILITY_TIMEOUT_MS, { label: 'translator availability' }).catch(() => 'unavailable');
+    if (avail === 'unavailable' || avail === 'unsupported' || pending.has(key) || instances.has(key)) return;
+    try {
+      const opts = { sourceLanguage: from, targetLanguage: to };
+      const p = Promise.resolve(kind === 'translator' ? self.Translator.create(opts) : self.ai.translator.create(opts)).then((t) => { instances.set(key, t); pending.delete(key); return t; }, (e) => { pending.delete(key); cooldown.set(key, Date.now() + COOLDOWN_MS); throw e; });
+      p.catch(() => {}); pending.set(key, p);
+    } catch { /* needs a user gesture or is not allowed: the rules are used */ }
+  }
+  /** What Settings > Language shows: the live state of the browser translator (ro > en), or null when nothing is known beyond availability. */
+  function translatorState(from = 'ro', to = 'en') {
+    const key = `${from}>${to}`;
+    if (!browserTranslatorKind()) return 'not supported by this browser';
+    if (instances.has(key)) return 'ready';
+    if (pending.has(key)) return 'preparing or downloading; the rules translator is used meanwhile';
+    if ((cooldown.get(key) ?? 0) > Date.now()) return 'not answering; the rules translator is used for now';
+    return null;
   }
   const translator = {
+    prepareTranslator, translatorState,
     rules,   // the synchronous rules translator: used by the voice dry run, which must not wait for a browser translator
     usage,
     detectUsage,

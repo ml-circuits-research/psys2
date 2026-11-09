@@ -63,3 +63,52 @@ test('very short input goes to the rules detector', async () => {
   await mk().detectLanguage('ok');
   assert.equal(rules.calls.length, 1);
 });
+
+test('PERF round 3: a browser translator whose create() never settles costs the turn nothing (rules answer at once), then a cooldown', async () => {
+  let creates2 = 0;
+  globalThis.self = { Translator: { availability: async () => 'available', create: () => { creates2++; return new Promise(() => {}); } } };
+  const rulesT = { ...rules, translate: (text) => ({ text: `rules:${text}`, alignment: [], unknown: [], notes: [], confidence: 1 }) };
+  const t = createSwitchTranslator({ rules: rulesT, getStrategy: () => 'auto' });
+  const t0 = Date.now();
+  const a = await t.translate('cate zile are iunie', { from: 'ro', to: 'en' });   // waits at most the creation deadline once
+  const b = await t.translate('cate zile are iulie', { from: 'ro', to: 'en' });   // pending: immediate
+  const c = await t.translate('cate zile are mai', { from: 'ro', to: 'en' });
+  assert.equal(a.strategy, 'rules'); assert.equal(b.strategy, 'rules'); assert.equal(c.strategy, 'rules');
+  assert.ok(Date.now() - t0 < 2500, `three translations took ${Date.now() - t0} ms`);
+  assert.equal(creates2, 1);
+});
+
+test('PERF round 3: a translator that is not downloaded yet is prepared in the background and the rules answer immediately', async () => {
+  globalThis.self = { Translator: { availability: async () => 'downloadable', create: async () => ({ translate: async (x) => `browser:${x}` }) } };
+  const t = createSwitchTranslator({ rules: { ...rules, translate: (text) => ({ text, alignment: [], unknown: [], notes: [], confidence: 1 }) }, getStrategy: () => 'auto' });
+  const t0 = Date.now();
+  const a = await t.translate('cate zile are iunie', { from: 'ro', to: 'en' });
+  assert.equal(a.strategy, 'rules');
+  assert.ok(Date.now() - t0 < 500);
+});
+
+test('HANG3: downloadable translator: prepareTranslator starts create() once in the background, turns use the rules meanwhile, state is shown', async () => {
+  let creates3 = 0;
+  globalThis.self = { Translator: { availability: async () => 'downloadable', create: () => { creates3++; return new Promise(() => {}); } } };
+  const t = createSwitchTranslator({ rules: { ...rules, translate: (text) => ({ text, alignment: [], unknown: [], notes: [], confidence: 1 }) }, getStrategy: () => 'auto' });
+  await t.prepareTranslator('ro', 'en'); await t.prepareTranslator('ro', 'en');
+  const t0 = Date.now();
+  const a = await t.translate('cate zile are iunie', { from: 'ro', to: 'en' });
+  const b = await t.translate('fa ochii mari', { from: 'ro', to: 'en' });
+  assert.equal(a.strategy, 'rules'); assert.equal(b.strategy, 'rules');
+  assert.ok(Date.now() - t0 < 2000);
+  assert.equal(creates3, 1);
+  assert.match(t.translatorState('ro', 'en'), /downloading; the rules translator is used meanwhile/);
+});
+
+test('HANG3: an available translator that answers slowly falls back to the rules within the 400 ms deadline', async () => {
+  globalThis.self = { Translator: { availability: async () => 'available', create: async () => ({ translate: () => new Promise(() => {}) }) } };
+  const t = createSwitchTranslator({ rules: { ...rules, translate: (text) => ({ text, alignment: [], unknown: [], notes: [], confidence: 1 }) }, getStrategy: () => 'auto' });
+  const t0 = Date.now();
+  const a = await t.translate('cate zile are iunie', { from: 'ro', to: 'en' });
+  assert.equal(a.strategy, 'rules');
+  assert.ok(Date.now() - t0 < 1500, `${Date.now() - t0} ms`);
+  const t1 = Date.now();
+  await t.translate('cate zile are iulie', { from: 'ro', to: 'en' });   // cooldown: immediate
+  assert.ok(Date.now() - t1 < 100);
+});
