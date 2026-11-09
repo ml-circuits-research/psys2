@@ -73,7 +73,7 @@
     "lib/formalizer/rules/index.mjs": "126e89d8e71bb45c",
     "lib/formalizer/rules/lemma.mjs": "459e515e4394aead",
     "lib/formalizer/rules/matcher.mjs": "8f5ab41454a04dd2",
-    "lib/formalizer/rules/normalize.mjs": "024ac0c460ca6169",
+    "lib/formalizer/rules/normalize.mjs": "84b40a02fe41d8ad",
     "lib/formalizer/rules/numbers.mjs": "9d8b00ef65eb3af8",
     "lib/formalizer/rules/router.mjs": "d9e1a4c0ecf3dd3e",
     "lib/formalizer/rules/session.mjs": "68ecf89edeaa15ef",
@@ -112,12 +112,12 @@
     "worlds/data.charts/coverage.md": "908ba75884fc997c",
     "worlds/data.charts/datagen.mjs": "fc1501bebb41ff64",
     "worlds/data.charts/ops.mjs": "e262572e30d0b5e0",
-    "worlds/diagram.sketch/arrows.mjs": "787d77795e7720a2",
+    "worlds/diagram.sketch/arrows.mjs": "5cef8333b1fdcb20",
     "worlds/diagram.sketch/engine/auto-layout.mjs": "698c3dab64fa9411",
     "worlds/diagram.sketch/engine/logic.mjs": "5a78aa1e96fbd1fc",
     "worlds/diagram.sketch/engine/templates.mjs": "b17267a852dd27c1",
-    "worlds/diagram.sketch/ops.mjs": "7e3a9cabb3a7850f",
-    "worlds/diagram.sketch/refs.mjs": "a9fd0660926bbc2a",
+    "worlds/diagram.sketch/ops.mjs": "bbff98effaf24f07",
+    "worlds/diagram.sketch/refs.mjs": "5d7c74441762a25e",
     "worlds/docs.editor/coverage.md": "532dde81b41608d7",
     "worlds/docs.editor/datagen.mjs": "5e2eb5732fc989b1",
     "worlds/docs.editor/model.mjs": "a9b6a941a832bb72",
@@ -189,5 +189,5 @@
     "worlds/user.profile/ops.mjs": "8385add167932b48",
     "worlds/user.profile/understand.mjs": "5782a91a5bd8e949"
   },
-  "builtAt": "2026-11-09T21:33:31.934Z"
+  "builtAt": "2026-11-09T22:00:41.010Z"
 }
