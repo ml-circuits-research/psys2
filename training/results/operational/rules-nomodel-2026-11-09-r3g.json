@@ -18,48 +18,48 @@
  },
  "headline": {
   "n": 1240,
-  "right": 1176,
+  "right": 1178,
   "partly": 22,
   "wrong": 7,
-  "not_understood": 35,
-  "right_pct": 94.8,
+  "not_understood": 33,
+  "right_pct": 95,
   "partly_pct": 1.8,
   "wrong_pct": 0.6,
-  "not_understood_pct": 2.8
+  "not_understood_pct": 2.7
  },
  "excluding_known_gaps": {
   "n": 1123,
-  "right": 1070,
+  "right": 1071,
   "partly": 22,
   "wrong": 4,
-  "not_understood": 27,
-  "right_pct": 95.3,
+  "not_understood": 26,
+  "right_pct": 95.4,
   "partly_pct": 2,
   "wrong_pct": 0.4,
-  "not_understood_pct": 2.4
+  "not_understood_pct": 2.3
  },
  "known_gap_only": {
   "n": 117,
-  "right": 106,
+  "right": 107,
   "partly": 0,
   "wrong": 3,
-  "not_understood": 8,
-  "right_pct": 90.6,
+  "not_understood": 7,
+  "right_pct": 91.5,
   "partly_pct": 0,
   "wrong_pct": 2.6,
-  "not_understood_pct": 6.8
+  "not_understood_pct": 6
  },
  "by_group": {
   "kids": {
    "n": 501,
-   "right": 481,
+   "right": 482,
    "partly": 16,
    "wrong": 0,
-   "not_understood": 4,
-   "right_pct": 96,
+   "not_understood": 3,
+   "right_pct": 96.2,
    "partly_pct": 3.2,
    "wrong_pct": 0,
-   "not_understood_pct": 0.8
+   "not_understood_pct": 0.6
   },
   "avatar/shell/editor": {
    "n": 235,
@@ -74,14 +74,14 @@
   },
   "music/draw/map/charts": {
    "n": 332,
-   "right": 305,
+   "right": 306,
    "partly": 6,
    "wrong": 3,
-   "not_understood": 18,
-   "right_pct": 91.9,
+   "not_understood": 17,
+   "right_pct": 92.2,
    "partly_pct": 1.8,
    "wrong_pct": 0.9,
-   "not_understood_pct": 5.4
+   "not_understood_pct": 5.1
   },
   "games": {
    "n": 148,
@@ -109,14 +109,14 @@
  "by_world": {
   "art.draw": {
    "n": 99,
-   "right": 87,
+   "right": 88,
    "partly": 0,
    "wrong": 1,
-   "not_understood": 11,
-   "right_pct": 87.9,
+   "not_understood": 10,
+   "right_pct": 88.9,
    "partly_pct": 0,
    "wrong_pct": 1,
-   "not_understood_pct": 11.1
+   "not_understood_pct": 10.1
   },
   "data.charts": {
    "n": 57,
@@ -274,14 +274,14 @@
   },
   "kids.time": {
    "n": 97,
-   "right": 92,
+   "right": 93,
    "partly": 3,
    "wrong": 0,
-   "not_understood": 2,
-   "right_pct": 94.8,
+   "not_understood": 1,
+   "right_pct": 95.9,
    "partly_pct": 3.1,
    "wrong_pct": 0,
-   "not_understood_pct": 2.1
+   "not_understood_pct": 1
   },
   "media.music": {
    "n": 82,
@@ -463,14 +463,14 @@
   },
   "paraphrase": {
    "n": 174,
-   "right": 163,
+   "right": 164,
    "partly": 0,
    "wrong": 1,
-   "not_understood": 10,
-   "right_pct": 93.7,
+   "not_understood": 9,
+   "right_pct": 94.3,
    "partly_pct": 0,
    "wrong_pct": 0.6,
-   "not_understood_pct": 5.7
+   "not_understood_pct": 5.2
   },
   "probe": {
    "n": 55,
@@ -485,14 +485,14 @@
   },
   "reference": {
    "n": 28,
-   "right": 26,
+   "right": 27,
    "partly": 0,
    "wrong": 0,
-   "not_understood": 2,
-   "right_pct": 92.9,
+   "not_understood": 1,
+   "right_pct": 96.4,
    "partly_pct": 0,
    "wrong_pct": 0,
-   "not_understood_pct": 7.1
+   "not_understood_pct": 3.6
   },
   "repeat-undo": {
    "n": 26,
@@ -584,99 +584,123 @@
   }
  },
  "latency_ms": {
-  "mean": 280,
-  "p50": 76,
-  "p95": 1548,
-  "max": 7706
+  "mean": 149,
+  "p50": 42,
+  "p95": 681,
+  "max": 7566
  },
  "latency": {
   "jobs": 20,
   "workers": 20,
-  "cold_start_ms": 1991,
-  "cold_start_ms_max": 2348,
+  "cold_start_ms": 1443,
+  "cold_start_ms_max": 1648,
   "model_load_ms": {
    "dispatcher": null,
    "normalizer": null,
    "note": "first worker; per worker in per_worker"
   },
-  "first_message_ms": 3191,
+  "first_message_ms": 1874,
   "steady_state": {
    "n": 1220,
-   "mean": 233,
-   "p50": 75,
-   "p95": 843,
-   "max": 7706
+   "mean": 120,
+   "p50": 40,
+   "p95": 385,
+   "max": 7566
   },
   "warm_cache": null,
   "normalizer_propose": null,
   "contention": "per-message latency includes CPU contention of the other workers; use --jobs 1 for single-thread latency",
   "per_worker": [
    {
-    "cold_start_ms": 1524,
+    "cold_start_ms": 1247,
     "load_ms": {
      "dispatcher": null,
      "normalizer": null
     },
-    "first_message_ms": 2265
+    "first_message_ms": 1992
    },
    {
-    "cold_start_ms": 1641,
+    "cold_start_ms": 1194,
     "load_ms": {
      "dispatcher": null,
      "normalizer": null
     },
-    "first_message_ms": 3356
+    "first_message_ms": 1767
    },
    {
-    "cold_start_ms": 1872,
+    "cold_start_ms": 1197,
     "load_ms": {
      "dispatcher": null,
      "normalizer": null
     },
-    "first_message_ms": 3303
+    "first_message_ms": 2085
    },
    {
-    "cold_start_ms": 1822,
+    "cold_start_ms": 1278,
     "load_ms": {
      "dispatcher": null,
      "normalizer": null
     },
-    "first_message_ms": 2824
+    "first_message_ms": 1993
    },
    {
-    "cold_start_ms": 1947,
+    "cold_start_ms": 1411,
     "load_ms": {
      "dispatcher": null,
      "normalizer": null
     },
-    "first_message_ms": 2992
+    "first_message_ms": 2065
    },
    {
-    "cold_start_ms": 1946,
+    "cold_start_ms": 1369,
     "load_ms": {
      "dispatcher": null,
      "normalizer": null
     },
-    "first_message_ms": 2237
+    "first_message_ms": 1849
    },
    {
-    "cold_start_ms": 1959,
+    "cold_start_ms": 1446,
     "load_ms": {
      "dispatcher": null,
      "normalizer": null
     },
-    "first_message_ms": 3369
+    "first_message_ms": 1208
    },
    {
-    "cold_start_ms": 1930,
+    "cold_start_ms": 1341,
     "load_ms": {
      "dispatcher": null,
      "normalizer": null
     },
-    "first_message_ms": 3083
+    "first_message_ms": 1746
    },
    {
-    "cold_start_ms": 1991,
+    "cold_start_ms": 1540,
+    "load_ms": {
+     "dispatcher": null,
+     "normalizer": null
+    },
+    "first_message_ms": 1857
+   },
+   {
+    "cold_start_ms": 1402,
+    "load_ms": {
+     "dispatcher": null,
+     "normalizer": null
+    },
+    "first_message_ms": 1994
+   },
+   {
+    "cold_start_ms": 1470,
+    "load_ms": {
+     "dispatcher": null,
+     "normalizer": null
+    },
+    "first_message_ms": 1865
+   },
+   {
+    "cold_start_ms": 1488,
     "load_ms": {
      "dispatcher": null,
      "normalizer": null
@@ -684,92 +708,68 @@
     "first_message_ms": 3423
    },
    {
-    "cold_start_ms": 1983,
+    "cold_start_ms": 1416,
     "load_ms": {
      "dispatcher": null,
      "normalizer": null
     },
-    "first_message_ms": 3233
+    "first_message_ms": 1809
    },
    {
-    "cold_start_ms": 1921,
+    "cold_start_ms": 1648,
     "load_ms": {
      "dispatcher": null,
      "normalizer": null
     },
-    "first_message_ms": 3031
+    "first_message_ms": 37
    },
    {
-    "cold_start_ms": 2070,
+    "cold_start_ms": 1477,
     "load_ms": {
      "dispatcher": null,
      "normalizer": null
     },
-    "first_message_ms": 6448
+    "first_message_ms": 1758
    },
    {
-    "cold_start_ms": 2044,
+    "cold_start_ms": 1526,
     "load_ms": {
      "dispatcher": null,
      "normalizer": null
     },
-    "first_message_ms": 3757
+    "first_message_ms": 1815
    },
    {
-    "cold_start_ms": 2027,
+    "cold_start_ms": 1636,
     "load_ms": {
      "dispatcher": null,
      "normalizer": null
     },
-    "first_message_ms": 204
+    "first_message_ms": 2031
    },
    {
-    "cold_start_ms": 2135,
+    "cold_start_ms": 1614,
     "load_ms": {
      "dispatcher": null,
      "normalizer": null
     },
-    "first_message_ms": 3839
+    "first_message_ms": 2068
    },
    {
-    "cold_start_ms": 2091,
+    "cold_start_ms": 1599,
     "load_ms": {
      "dispatcher": null,
      "normalizer": null
     },
-    "first_message_ms": 3266
+    "first_message_ms": 1886
    },
    {
-    "cold_start_ms": 2099,
+    "cold_start_ms": 1557,
     "load_ms": {
      "dispatcher": null,
      "normalizer": null
     },
-    "first_message_ms": 3015
-   },
-   {
-    "cold_start_ms": 2187,
-    "load_ms": {
-     "dispatcher": null,
-     "normalizer": null
-    },
-    "first_message_ms": 3511
-   },
-   {
-    "cold_start_ms": 2283,
-    "load_ms": {
-     "dispatcher": null,
-     "normalizer": null
-    },
-    "first_message_ms": 3298
-   },
-   {
-    "cold_start_ms": 2348,
-    "load_ms": {
-     "dispatcher": null,
-     "normalizer": null
-    },
-    "first_message_ms": 3369
+    "first_message_ms": 2224
    }
   ]
  },
@@ -785,7 +785,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 2265
+   "ms": 1992
   },
   {
    "id": "kids.arith#002",
@@ -798,7 +798,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 105
+   "ms": 72
   },
   {
    "id": "kids.arith#003",
@@ -811,7 +811,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 165
+   "ms": 92
   },
   {
    "id": "kids.arith#004",
@@ -824,7 +824,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 124
+   "ms": 67
   },
   {
    "id": "kids.arith#005",
@@ -837,7 +837,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 112
+   "ms": 59
   },
   {
    "id": "kids.arith#006",
@@ -850,7 +850,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 78
+   "ms": 59
   },
   {
    "id": "kids.arith#007",
@@ -863,7 +863,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 106
+   "ms": 46
   },
   {
    "id": "kids.arith#008",
@@ -876,7 +876,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 54
+   "ms": 37
   },
   {
    "id": "kids.arith#009",
@@ -889,7 +889,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 3356
+   "ms": 1767
   },
   {
    "id": "kids.arith#010",
@@ -902,7 +902,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 118
+   "ms": 70
   },
   {
    "id": "kids.arith#011",
@@ -915,7 +915,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 101
+   "ms": 53
   },
   {
    "id": "kids.arith#012",
@@ -928,7 +928,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 64
+   "ms": 29
   },
   {
    "id": "kids.arith#013",
@@ -941,7 +941,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 63
+   "ms": 30
   },
   {
    "id": "kids.arith#014",
@@ -954,7 +954,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 85
+   "ms": 46
   },
   {
    "id": "kids.arith#015",
@@ -967,7 +967,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 56
+   "ms": 26
   },
   {
    "id": "kids.arith#016",
@@ -980,7 +980,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 60
+   "ms": 30
   },
   {
    "id": "kids.arith#017",
@@ -993,7 +993,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 3303
+   "ms": 2085
   },
   {
    "id": "kids.arith#018",
@@ -1006,7 +1006,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 189
+   "ms": 74
   },
   {
    "id": "kids.arith#019",
@@ -1019,7 +1019,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 116
+   "ms": 50
   },
   {
    "id": "kids.arith#020",
@@ -1032,7 +1032,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 112
+   "ms": 45
   },
   {
    "id": "kids.arith#021",
@@ -1045,7 +1045,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 95
+   "ms": 45
   },
   {
    "id": "kids.arith#022",
@@ -1058,7 +1058,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 42
+   "ms": 30
   },
   {
    "id": "kids.arith#023",
@@ -1071,7 +1071,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 53
+   "ms": 34
   },
   {
    "id": "kids.arith#024",
@@ -1084,7 +1084,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 97
+   "ms": 35
   },
   {
    "id": "kids.arith#025",
@@ -1097,7 +1097,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 2824
+   "ms": 1993
   },
   {
    "id": "kids.arith#026",
@@ -1110,7 +1110,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 104
+   "ms": 47
   },
   {
    "id": "kids.arith#027",
@@ -1123,7 +1123,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 82
+   "ms": 20
   },
   {
    "id": "kids.arith#028",
@@ -1136,7 +1136,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 66
+   "ms": 45
   },
   {
    "id": "kids.arith#029",
@@ -1149,7 +1149,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 83
+   "ms": 51
   },
   {
    "id": "kids.arith#030",
@@ -1162,7 +1162,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 106
+   "ms": 45
   },
   {
    "id": "kids.arith#031",
@@ -1175,7 +1175,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 95
+   "ms": 45
   },
   {
    "id": "kids.arith#032",
@@ -1188,7 +1188,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 82
+   "ms": 35
   },
   {
    "id": "kids.arith#033",
@@ -1201,7 +1201,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 2992
+   "ms": 2065
   },
   {
    "id": "kids.arith#034",
@@ -1214,7 +1214,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 66
+   "ms": 55
   },
   {
    "id": "kids.arith#035",
@@ -1227,7 +1227,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 57
+   "ms": 42
   },
   {
    "id": "kids.arith#036",
@@ -1240,7 +1240,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 111
+   "ms": 46
   },
   {
    "id": "kids.arith#037",
@@ -1253,7 +1253,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 121
+   "ms": 55
   },
   {
    "id": "kids.arith#038",
@@ -1266,7 +1266,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 136
+   "ms": 72
   },
   {
    "id": "kids.arith#039",
@@ -1279,7 +1279,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 133
+   "ms": 72
   },
   {
    "id": "kids.arith#040",
@@ -1292,7 +1292,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 86
+   "ms": 44
   },
   {
    "id": "kids.arith#041",
@@ -1305,7 +1305,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 2237
+   "ms": 1849
   },
   {
    "id": "kids.arith#042",
@@ -1318,7 +1318,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 80
+   "ms": 63
   },
   {
    "id": "kids.arith#043",
@@ -1331,7 +1331,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 85
+   "ms": 54
   },
   {
    "id": "kids.arith#044",
@@ -1344,7 +1344,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 93
+   "ms": 50
   },
   {
    "id": "kids.arith#045",
@@ -1357,7 +1357,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 49
+   "ms": 35
   },
   {
    "id": "kids.arith#046",
@@ -1370,7 +1370,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 112
+   "ms": 44
   },
   {
    "id": "kids.arith#047",
@@ -1383,7 +1383,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 87
+   "ms": 45
   },
   {
    "id": "kids.arith#048",
@@ -1396,7 +1396,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 41
+   "ms": 26
   },
   {
    "id": "kids.arith#049",
@@ -1409,7 +1409,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 3369
+   "ms": 1208
   },
   {
    "id": "kids.arith#050",
@@ -1422,7 +1422,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 134
+   "ms": 35
   },
   {
    "id": "kids.arith#051",
@@ -1435,7 +1435,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 120
+   "ms": 39
   },
   {
    "id": "kids.arith#052",
@@ -1448,7 +1448,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 95
+   "ms": 40
   },
   {
    "id": "kids.arith#053",
@@ -1461,7 +1461,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 128
+   "ms": 47
   },
   {
    "id": "kids.arith#054",
@@ -1475,7 +1475,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 513
+   "ms": 157
   },
   {
    "id": "kids.arith#055",
@@ -1489,7 +1489,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 325
+   "ms": 145
   },
   {
    "id": "kids.arith#056",
@@ -1503,7 +1503,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 214
+   "ms": 67
   },
   {
    "id": "kids.arith#057",
@@ -1517,7 +1517,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 3083
+   "ms": 1746
   },
   {
    "id": "kids.arith#058",
@@ -1534,7 +1534,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 415
+   "ms": 198
   },
   {
    "id": "kids.arith#059",
@@ -1548,7 +1548,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 189
+   "ms": 56
   },
   {
    "id": "kids.arith#060",
@@ -1561,7 +1561,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 201
+   "ms": 85
   },
   {
    "id": "kids.arith#061",
@@ -1574,7 +1574,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 192
+   "ms": 60
   },
   {
    "id": "kids.arith#062",
@@ -1587,7 +1587,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 155
+   "ms": 48
   },
   {
    "id": "kids.arith#063",
@@ -1600,7 +1600,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 173
+   "ms": 49
   },
   {
    "id": "kids.arith#064",
@@ -1613,7 +1613,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 2200
+   "ms": 1822
   },
   {
    "id": "kids.arith#065",
@@ -1626,7 +1626,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 3423
+   "ms": 1857
   },
   {
    "id": "kids.arith#066",
@@ -1639,7 +1639,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 188
+   "ms": 110
   },
   {
    "id": "kids.arith#067",
@@ -1652,7 +1652,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 202
+   "ms": 93
   },
   {
    "id": "kids.arith#068",
@@ -1665,7 +1665,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 188
+   "ms": 95
   },
   {
    "id": "kids.arith#069",
@@ -1678,7 +1678,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 3988
+   "ms": 2482
   },
   {
    "id": "kids.arith#070",
@@ -1691,7 +1691,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 163
+   "ms": 73
   },
   {
    "id": "kids.arith#071",
@@ -1704,7 +1704,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 125
+   "ms": 74
   },
   {
    "id": "kids.arith#072",
@@ -1717,7 +1717,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 98
+   "ms": 79
   },
   {
    "id": "kids.arith#073",
@@ -1730,7 +1730,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 3233
+   "ms": 1994
   },
   {
    "id": "kids.arith#074",
@@ -1743,7 +1743,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 4237
+   "ms": 1851
   },
   {
    "id": "kids.arith#075",
@@ -1756,7 +1756,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 187
+   "ms": 64
   },
   {
    "id": "kids.arith#076",
@@ -1769,7 +1769,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 189
+   "ms": 95
   },
   {
    "id": "kids.arith#077",
@@ -1782,7 +1782,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 156
+   "ms": 73
   },
   {
    "id": "kids.arith#078",
@@ -1795,7 +1795,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 164
+   "ms": 73
   },
   {
    "id": "kids.arith#079",
@@ -1808,7 +1808,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 1566
+   "ms": 587
   },
   {
    "id": "kids.arith#080",
@@ -1821,7 +1821,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 121
+   "ms": 80
   },
   {
    "id": "kids.arith#081",
@@ -1834,7 +1834,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 3031
+   "ms": 1865
   },
   {
    "id": "kids.arith#082",
@@ -1847,7 +1847,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 228
+   "ms": 70
   },
   {
    "id": "kids.arith#083",
@@ -1860,7 +1860,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 247
+   "ms": 55
   },
   {
    "id": "kids.arith#084",
@@ -1873,7 +1873,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 3447
+   "ms": 1341
   },
   {
    "id": "kids.arith#085",
@@ -1886,7 +1886,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 227
+   "ms": 80
   },
   {
    "id": "kids.arith#086",
@@ -1899,7 +1899,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 230
+   "ms": 81
   },
   {
    "id": "kids.arith#087",
@@ -1912,7 +1912,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 197
+   "ms": 87
   },
   {
    "id": "kids.arith#088",
@@ -1925,7 +1925,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 169
+   "ms": 71
   },
   {
    "id": "kids.arith#089",
@@ -1938,7 +1938,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 6448
+   "ms": 3423
   },
   {
    "id": "kids.arith#090",
@@ -1951,7 +1951,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 186
+   "ms": 91
   },
   {
    "id": "kids.arith#091",
@@ -1964,7 +1964,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 266
+   "ms": 91
   },
   {
    "id": "kids.arith#092",
@@ -1977,7 +1977,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 160
+   "ms": 64
   },
   {
    "id": "kids.arith#093",
@@ -1990,7 +1990,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 166
+   "ms": 57
   },
   {
    "id": "kids.arith#094",
@@ -2003,7 +2003,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 1936
+   "ms": 1034
   },
   {
    "id": "kids.arith#095",
@@ -2016,7 +2016,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 96
+   "ms": 70
   },
   {
    "id": "kids.arith#096",
@@ -2029,7 +2029,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 114
+   "ms": 89
   },
   {
    "id": "kids.arith#097",
@@ -2042,7 +2042,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 3757
+   "ms": 1809
   },
   {
    "id": "kids.arith#098",
@@ -2055,7 +2055,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 221
+   "ms": 80
   },
   {
    "id": "kids.arith#099",
@@ -2068,7 +2068,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 4015
+   "ms": 1866
   },
   {
    "id": "kids.arith#100",
@@ -2081,7 +2081,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 60
+   "ms": 29
   },
   {
    "id": "kids.arith#101",
@@ -2094,7 +2094,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 83
+   "ms": 49
   },
   {
    "id": "kids.arith#102",
@@ -2107,7 +2107,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 57
+   "ms": 30
   },
   {
    "id": "kids.arith#103",
@@ -2120,7 +2120,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 36
+   "ms": 20
   },
   {
    "id": "kids.arith#104",
@@ -2133,7 +2133,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 38
+   "ms": 24
   },
   {
    "id": "kids.arith#105",
@@ -2146,7 +2146,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 204
+   "ms": 37
   },
   {
    "id": "kids.arith#106",
@@ -2159,7 +2159,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 177
+   "ms": 69
   },
   {
    "id": "kids.arith#107",
@@ -2172,7 +2172,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 191
+   "ms": 69
   },
   {
    "id": "kids.arith#108",
@@ -2185,7 +2185,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 367
+   "ms": 139
   },
   {
    "id": "kids.arith#109",
@@ -2198,7 +2198,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 5263
+   "ms": 2922
   },
   {
    "id": "ui.avatar#001",
@@ -2211,7 +2211,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 67
+   "ms": 36
   },
   {
    "id": "ui.avatar#002",
@@ -2224,7 +2224,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 64
+   "ms": 32
   },
   {
    "id": "ui.avatar#003",
@@ -2237,7 +2237,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 81
+   "ms": 43
   },
   {
    "id": "ui.avatar#004",
@@ -2250,7 +2250,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 3839
+   "ms": 1758
   },
   {
    "id": "ui.avatar#005",
@@ -2263,7 +2263,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 45
+   "ms": 38
   },
   {
    "id": "ui.avatar#006",
@@ -2276,7 +2276,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 75
+   "ms": 53
   },
   {
    "id": "ui.avatar#007",
@@ -2289,7 +2289,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 71
+   "ms": 50
   },
   {
    "id": "ui.avatar#008",
@@ -2302,7 +2302,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 109
+   "ms": 69
   },
   {
    "id": "ui.avatar#009",
@@ -2315,7 +2315,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 39
+   "ms": 24
   },
   {
    "id": "ui.avatar#010",
@@ -2328,7 +2328,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 86
+   "ms": 37
   },
   {
    "id": "ui.avatar#011",
@@ -2341,7 +2341,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 71
+   "ms": 46
   },
   {
    "id": "ui.avatar#012",
@@ -2354,7 +2354,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 3266
+   "ms": 1815
   },
   {
    "id": "ui.avatar#013",
@@ -2367,7 +2367,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 48
+   "ms": 78
   },
   {
    "id": "ui.avatar#014",
@@ -2380,7 +2380,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 56
+   "ms": 47
   },
   {
    "id": "ui.avatar#015",
@@ -2393,7 +2393,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 127
+   "ms": 77
   },
   {
    "id": "ui.avatar#016",
@@ -2406,7 +2406,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 58
+   "ms": 38
   },
   {
    "id": "ui.avatar#017",
@@ -2419,7 +2419,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 104
+   "ms": 52
   },
   {
    "id": "ui.avatar#018",
@@ -2432,7 +2432,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 64
+   "ms": 42
   },
   {
    "id": "ui.avatar#019",
@@ -2445,7 +2445,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 80
+   "ms": 38
   },
   {
    "id": "ui.avatar#020",
@@ -2458,7 +2458,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 3015
+   "ms": 2031
   },
   {
    "id": "ui.avatar#021",
@@ -2471,7 +2471,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 129
+   "ms": 85
   },
   {
    "id": "ui.avatar#022",
@@ -2484,7 +2484,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 92
+   "ms": 35
   },
   {
    "id": "ui.avatar#023",
@@ -2497,7 +2497,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 1609
+   "ms": 878
   },
   {
    "id": "ui.avatar#024",
@@ -2510,7 +2510,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 61
+   "ms": 58
   },
   {
    "id": "ui.avatar#025",
@@ -2523,7 +2523,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 100
+   "ms": 61
   },
   {
    "id": "ui.avatar#026",
@@ -2536,7 +2536,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 71
+   "ms": 48
   },
   {
    "id": "ui.avatar#027",
@@ -2549,7 +2549,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 72
+   "ms": 53
   },
   {
    "id": "ui.avatar#028",
@@ -2562,7 +2562,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 3511
+   "ms": 2068
   },
   {
    "id": "ui.avatar#029",
@@ -2575,7 +2575,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 101
+   "ms": 42
   },
   {
    "id": "ui.avatar#030",
@@ -2588,7 +2588,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 53
+   "ms": 31
   },
   {
    "id": "ui.avatar#031",
@@ -2601,7 +2601,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 40
+   "ms": 25
   },
   {
    "id": "ui.avatar#032",
@@ -2614,7 +2614,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 56
+   "ms": 36
   },
   {
    "id": "ui.avatar#033",
@@ -2627,7 +2627,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 98
+   "ms": 74
   },
   {
    "id": "ui.avatar#034",
@@ -2640,7 +2640,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 66
+   "ms": 48
   },
   {
    "id": "ui.avatar#035",
@@ -2653,7 +2653,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 76
+   "ms": 30
   },
   {
    "id": "ui.avatar#036",
@@ -2666,7 +2666,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 3298
+   "ms": 1886
   },
   {
    "id": "ui.avatar#037",
@@ -2679,7 +2679,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 142
+   "ms": 57
   },
   {
    "id": "ui.avatar#038",
@@ -2692,7 +2692,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 59
+   "ms": 29
   },
   {
    "id": "ui.avatar#039",
@@ -2705,7 +2705,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 33
+   "ms": 36
   },
   {
    "id": "ui.avatar#040",
@@ -2718,7 +2718,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 59
+   "ms": 35
   },
   {
    "id": "ui.avatar#041",
@@ -2731,7 +2731,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 57
+   "ms": 28
   },
   {
    "id": "ui.avatar#042",
@@ -2744,7 +2744,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 50
+   "ms": 28
   },
   {
    "id": "ui.avatar#043",
@@ -2757,7 +2757,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 73
+   "ms": 37
   },
   {
    "id": "ui.avatar#044",
@@ -2770,7 +2770,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 3369
+   "ms": 2224
   },
   {
    "id": "ui.avatar#045",
@@ -2783,7 +2783,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 92
+   "ms": 46
   },
   {
    "id": "ui.avatar#046",
@@ -2796,7 +2796,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 91
+   "ms": 32
   },
   {
    "id": "ui.avatar#047",
@@ -2809,7 +2809,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 124
+   "ms": 49
   },
   {
    "id": "ui.avatar#048",
@@ -2822,7 +2822,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 59
+   "ms": 37
   },
   {
    "id": "ui.avatar#049",
@@ -2835,7 +2835,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 62
+   "ms": 44
   },
   {
    "id": "ui.avatar#050",
@@ -2848,7 +2848,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 70
+   "ms": 35
   },
   {
    "id": "ui.avatar#051",
@@ -2861,7 +2861,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 41
+   "ms": 30
   },
   {
    "id": "ui.avatar#052",
@@ -2874,7 +2874,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 60
+   "ms": 26
   },
   {
    "id": "ui.avatar#053",
@@ -2887,7 +2887,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 59
+   "ms": 29
   },
   {
    "id": "ui.avatar#054",
@@ -2901,7 +2901,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 216
+   "ms": 83
   },
   {
    "id": "ui.avatar#055",
@@ -2914,7 +2914,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 63
+   "ms": 19
   },
   {
    "id": "ui.avatar#056",
@@ -2927,7 +2927,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 57
+   "ms": 21
   },
   {
    "id": "ui.avatar#057",
@@ -2940,7 +2940,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 87
+   "ms": 27
   },
   {
    "id": "ui.avatar#058",
@@ -2953,7 +2953,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 62
+   "ms": 19
   },
   {
    "id": "ui.avatar#059",
@@ -2966,7 +2966,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 44
+   "ms": 18
   },
   {
    "id": "ui.avatar#060",
@@ -2981,7 +2981,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 77
+   "ms": 44
   },
   {
    "id": "ui.avatar#061",
@@ -2994,7 +2994,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 68
+   "ms": 44
   },
   {
    "id": "ui.avatar#062",
@@ -3007,7 +3007,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 51
+   "ms": 43
   },
   {
    "id": "ui.avatar#063",
@@ -3020,7 +3020,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 54
+   "ms": 29
   },
   {
    "id": "ui.avatar#064",
@@ -3033,7 +3033,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 44
+   "ms": 27
   },
   {
    "id": "ui.avatar#065",
@@ -3046,7 +3046,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 47
+   "ms": 35
   },
   {
    "id": "ui.avatar#066",
@@ -3059,7 +3059,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 55
+   "ms": 39
   },
   {
    "id": "ui.avatar#067",
@@ -3072,7 +3072,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 58
+   "ms": 44
   },
   {
    "id": "ui.avatar#068",
@@ -3085,7 +3085,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 105
+   "ms": 37
   },
   {
    "id": "ui.avatar#069",
@@ -3098,7 +3098,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 115
+   "ms": 31
   },
   {
    "id": "ui.avatar#070",
@@ -3112,7 +3112,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 443
+   "ms": 165
   },
   {
    "id": "ui.avatar#071",
@@ -3126,7 +3126,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 364
+   "ms": 136
   },
   {
    "id": "ui.avatar#072",
@@ -3140,7 +3140,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 171
+   "ms": 65
   },
   {
    "id": "ui.avatar#073",
@@ -3154,7 +3154,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 175
+   "ms": 72
   },
   {
    "id": "ui.avatar#074",
@@ -3168,7 +3168,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 191
+   "ms": 64
   },
   {
    "id": "ui.avatar#075",
@@ -3182,7 +3182,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 228
+   "ms": 99
   },
   {
    "id": "ui.avatar#076",
@@ -3196,7 +3196,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 138
+   "ms": 72
   },
   {
    "id": "ui.avatar#077",
@@ -3210,7 +3210,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 155
+   "ms": 63
   },
   {
    "id": "ui.avatar#078",
@@ -3223,7 +3223,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 66
+   "ms": 29
   },
   {
    "id": "ui.avatar#079",
@@ -3236,7 +3236,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 1548
+   "ms": 629
   },
   {
    "id": "ui.avatar#080",
@@ -3249,7 +3249,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 38
+   "ms": 34
   },
   {
    "id": "ui.avatar#081",
@@ -3263,7 +3263,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 122
+   "ms": 98
   },
   {
    "id": "ui.avatar#082",
@@ -3276,7 +3276,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 218
+   "ms": 172
   },
   {
    "id": "ui.avatar#083",
@@ -3290,7 +3290,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 119
+   "ms": 94
   },
   {
    "id": "ui.avatar#084",
@@ -3304,7 +3304,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 170
+   "ms": 98
   },
   {
    "id": "ui.avatar#085",
@@ -3320,7 +3320,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 843
+   "ms": 540
   },
   {
    "id": "ui.avatar#086",
@@ -3333,7 +3333,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 1274
+   "ms": 666
   },
   {
    "id": "ui.avatar#087",
@@ -3346,7 +3346,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 587
+   "ms": 301
   },
   {
    "id": "ui.avatar#088",
@@ -3360,7 +3360,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 317
+   "ms": 156
   },
   {
    "id": "ui.avatar#089",
@@ -3373,7 +3373,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 2103
+   "ms": 866
   },
   {
    "id": "ui.avatar#090",
@@ -3386,7 +3386,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 693
+   "ms": 452
   },
   {
    "id": "kids.arith#110",
@@ -3399,7 +3399,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 72
+   "ms": 44
   },
   {
    "id": "kids.arith#111",
@@ -3412,7 +3412,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 83
+   "ms": 58
   },
   {
    "id": "kids.arith#112",
@@ -3425,7 +3425,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 68
+   "ms": 49
   },
   {
    "id": "kids.arith#113",
@@ -3438,7 +3438,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 86
+   "ms": 39
   },
   {
    "id": "kids.arith#114",
@@ -3451,7 +3451,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 101
+   "ms": 36
   },
   {
    "id": "kids.arith#115",
@@ -3464,7 +3464,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 82
+   "ms": 36
   },
   {
    "id": "kids.arith#116",
@@ -3477,7 +3477,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 86
+   "ms": 36
   },
   {
    "id": "kids.arith#117",
@@ -3490,7 +3490,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 82
+   "ms": 36
   },
   {
    "id": "kids.arith#118",
@@ -3503,7 +3503,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 58
+   "ms": 37
   },
   {
    "id": "kids.arith#119",
@@ -3516,7 +3516,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 54
+   "ms": 34
   },
   {
    "id": "kids.arith#120",
@@ -3529,7 +3529,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 57
+   "ms": 35
   },
   {
    "id": "kids.arith#121",
@@ -3542,7 +3542,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 73
+   "ms": 29
   },
   {
    "id": "kids.arith#122",
@@ -3555,7 +3555,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 74
+   "ms": 41
   },
   {
    "id": "kids.arith#123",
@@ -3568,7 +3568,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 92
+   "ms": 35
   },
   {
    "id": "kids.arith#124",
@@ -3581,7 +3581,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 66
+   "ms": 37
   },
   {
    "id": "kids.animals#001",
@@ -3594,7 +3594,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 83
+   "ms": 44
   },
   {
    "id": "kids.animals#002",
@@ -3607,7 +3607,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 76
+   "ms": 43
   },
   {
    "id": "kids.animals#003",
@@ -3620,7 +3620,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 134
+   "ms": 52
   },
   {
    "id": "kids.animals#004",
@@ -3633,7 +3633,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 91
+   "ms": 46
   },
   {
    "id": "kids.animals#005",
@@ -3646,7 +3646,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 140
+   "ms": 62
   },
   {
    "id": "kids.animals#006",
@@ -3659,7 +3659,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 90
+   "ms": 44
   },
   {
    "id": "kids.animals#007",
@@ -3672,7 +3672,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 84
+   "ms": 44
   },
   {
    "id": "kids.animals#008",
@@ -3685,7 +3685,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 79
+   "ms": 44
   },
   {
    "id": "kids.animals#009",
@@ -3698,7 +3698,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 133
+   "ms": 62
   },
   {
    "id": "kids.animals#010",
@@ -3711,7 +3711,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 75
+   "ms": 45
   },
   {
    "id": "kids.animals#011",
@@ -3724,7 +3724,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 80
+   "ms": 48
   },
   {
    "id": "kids.animals#012",
@@ -3737,7 +3737,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 60
+   "ms": 53
   },
   {
    "id": "kids.animals#013",
@@ -3750,7 +3750,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 67
+   "ms": 37
   },
   {
    "id": "kids.animals#014",
@@ -3763,7 +3763,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 74
+   "ms": 36
   },
   {
    "id": "kids.animals#015",
@@ -3776,7 +3776,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 90
+   "ms": 47
   },
   {
    "id": "kids.shapes#001",
@@ -3789,7 +3789,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 126
+   "ms": 49
   },
   {
    "id": "kids.shapes#002",
@@ -3802,7 +3802,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 158
+   "ms": 73
   },
   {
    "id": "kids.shapes#003",
@@ -3815,7 +3815,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 88
+   "ms": 60
   },
   {
    "id": "kids.shapes#004",
@@ -3828,7 +3828,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 96
+   "ms": 45
   },
   {
    "id": "kids.shapes#005",
@@ -3841,7 +3841,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 107
+   "ms": 43
   },
   {
    "id": "kids.shapes#006",
@@ -3854,7 +3854,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 140
+   "ms": 44
   },
   {
    "id": "kids.shapes#007",
@@ -3867,7 +3867,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 143
+   "ms": 56
   },
   {
    "id": "kids.shapes#008",
@@ -3880,7 +3880,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 96
+   "ms": 44
   },
   {
    "id": "kids.shapes#009",
@@ -3893,7 +3893,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 86
+   "ms": 45
   },
   {
    "id": "kids.shapes#010",
@@ -3906,7 +3906,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 115
+   "ms": 45
   },
   {
    "id": "kids.time#001",
@@ -3919,7 +3919,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 98
+   "ms": 44
   },
   {
    "id": "kids.time#002",
@@ -3932,7 +3932,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 72
+   "ms": 62
   },
   {
    "id": "kids.time#003",
@@ -3945,7 +3945,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 66
+   "ms": 47
   },
   {
    "id": "kids.time#004",
@@ -3958,7 +3958,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 63
+   "ms": 53
   },
   {
    "id": "kids.time#005",
@@ -3971,7 +3971,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 219
+   "ms": 80
   },
   {
    "id": "kids.time#006",
@@ -3984,7 +3984,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 75
+   "ms": 29
   },
   {
    "id": "kids.time#007",
@@ -3997,7 +3997,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 85
+   "ms": 36
   },
   {
    "id": "kids.time#008",
@@ -4010,7 +4010,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 84
+   "ms": 36
   },
   {
    "id": "kids.time#009",
@@ -4023,7 +4023,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 100
+   "ms": 37
   },
   {
    "id": "kids.time#010",
@@ -4036,7 +4036,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 39
+   "ms": 35
   },
   {
    "id": "kids.time#011",
@@ -4049,7 +4049,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 74
+   "ms": 58
   },
   {
    "id": "kids.time#012",
@@ -4062,7 +4062,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 85
+   "ms": 48
   },
   {
    "id": "kids.time#013",
@@ -4075,7 +4075,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 81
+   "ms": 60
   },
   {
    "id": "kids.time#014",
@@ -4088,7 +4088,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 79
+   "ms": 35
   },
   {
    "id": "kids.time#015",
@@ -4101,7 +4101,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 82
+   "ms": 43
   },
   {
    "id": "geo.map#001",
@@ -4114,7 +4114,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 201
+   "ms": 88
   },
   {
    "id": "geo.map#002",
@@ -4127,7 +4127,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 132
+   "ms": 47
   },
   {
    "id": "geo.map#003",
@@ -4140,7 +4140,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 140
+   "ms": 119
   },
   {
    "id": "geo.map#004",
@@ -4153,7 +4153,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 115
+   "ms": 106
   },
   {
    "id": "geo.map#005",
@@ -4166,7 +4166,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 92
+   "ms": 66
   },
   {
    "id": "geo.map#006",
@@ -4179,7 +4179,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 83
+   "ms": 61
   },
   {
    "id": "geo.map#007",
@@ -4192,7 +4192,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 68
+   "ms": 36
   },
   {
    "id": "geo.map#008",
@@ -4205,7 +4205,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 197
+   "ms": 107
   },
   {
    "id": "geo.map#009",
@@ -4218,7 +4218,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 68
+   "ms": 40
   },
   {
    "id": "geo.map#010",
@@ -4231,7 +4231,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 159
+   "ms": 101
   },
   {
    "id": "kids.shapes#011",
@@ -4248,7 +4248,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 3387
+   "ms": 467
   },
   {
    "id": "geo.map#011",
@@ -4262,7 +4262,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 381
+   "ms": 37
   },
   {
    "id": "geo.map#012",
@@ -4276,7 +4276,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 308
+   "ms": 37
   },
   {
    "id": "kids.shapes#012",
@@ -4290,7 +4290,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 313
+   "ms": 78
   },
   {
    "id": "kids.animals#016",
@@ -4304,7 +4304,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 296
+   "ms": 68
   },
   {
    "id": "kids.shapes#013",
@@ -4318,7 +4318,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 141
+   "ms": 24
   },
   {
    "id": "kids.animals#017",
@@ -4332,7 +4332,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 2596
+   "ms": 316
   },
   {
    "id": "kids.arith#125",
@@ -4346,7 +4346,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 525
+   "ms": 54
   },
   {
    "id": "kids.arith#126",
@@ -4360,7 +4360,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 346
+   "ms": 144
   },
   {
    "id": "kids.time#016",
@@ -4376,7 +4376,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 4850
+   "ms": 3437
   },
   {
    "id": "geo.map#013",
@@ -4390,7 +4390,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 217
+   "ms": 127
   },
   {
    "id": "kids.time#017",
@@ -4404,7 +4404,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 200
+   "ms": 141
   },
   {
    "id": "kids.arith#127",
@@ -4418,7 +4418,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 287
+   "ms": 211
   },
   {
    "id": "kids.animals#018",
@@ -4432,7 +4432,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 230
+   "ms": 109
   },
   {
    "id": "kids.time#018",
@@ -4446,7 +4446,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 201
+   "ms": 146
   },
   {
    "id": "kids.animals#019",
@@ -4460,7 +4460,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 282
+   "ms": 142
   },
   {
    "id": "kids.time#019",
@@ -4474,7 +4474,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 455
+   "ms": 143
   },
   {
    "id": "kids.shapes#014",
@@ -4491,7 +4491,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 4279
+   "ms": 2306
   },
   {
    "id": "kids.time#020",
@@ -4505,7 +4505,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 245
+   "ms": 85
   },
   {
    "id": "kids.time#021",
@@ -4519,7 +4519,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 200
+   "ms": 117
   },
   {
    "id": "kids.time#022",
@@ -4533,7 +4533,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 397
+   "ms": 165
   },
   {
    "id": "geo.map#014",
@@ -4547,7 +4547,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 187
+   "ms": 105
   },
   {
    "id": "kids.arith#128",
@@ -4561,7 +4561,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 204
+   "ms": 107
   },
   {
    "id": "kids.time#023",
@@ -4575,7 +4575,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 230
+   "ms": 110
   },
   {
    "id": "kids.time#024",
@@ -4589,7 +4589,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 347
+   "ms": 182
   },
   {
    "id": "geo.map#015",
@@ -4603,7 +4603,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 3588
+   "ms": 1665
   },
   {
    "id": "kids.arith#129",
@@ -4617,7 +4617,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 451
+   "ms": 129
   },
   {
    "id": "kids.animals#020",
@@ -4631,7 +4631,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 232
+   "ms": 32
   },
   {
    "id": "kids.animals#021",
@@ -4645,7 +4645,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 365
+   "ms": 37
   },
   {
    "id": "kids.arith#130",
@@ -4659,7 +4659,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 2834
+   "ms": 1466
   },
   {
    "id": "kids.animals#022",
@@ -4673,7 +4673,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 423
+   "ms": 138
   },
   {
    "id": "kids.time#025",
@@ -4687,7 +4687,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 1878
+   "ms": 870
   },
   {
    "id": "kids.arith#131",
@@ -4701,7 +4701,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 214
+   "ms": 146
   },
   {
    "id": "geo.map#016",
@@ -4715,7 +4715,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 486
+   "ms": 228
   },
   {
    "id": "geo.map#017",
@@ -4729,7 +4729,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 299
+   "ms": 196
   },
   {
    "id": "kids.animals#023",
@@ -4743,7 +4743,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 3075
+   "ms": 1201
   },
   {
    "id": "geo.map#018",
@@ -4757,7 +4757,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 317
+   "ms": 123
   },
   {
    "id": "kids.time#026",
@@ -4771,7 +4771,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 259
+   "ms": 111
   },
   {
    "id": "geo.map#019",
@@ -4785,7 +4785,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 171
+   "ms": 94
   },
   {
    "id": "kids.arith#132",
@@ -4799,7 +4799,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 172
+   "ms": 120
   },
   {
    "id": "kids.time#027",
@@ -4813,7 +4813,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 4779
+   "ms": 1553
   },
   {
    "id": "kids.time#028",
@@ -4827,7 +4827,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 527
+   "ms": 183
   },
   {
    "id": "kids.shapes#015",
@@ -4841,7 +4841,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 582
+   "ms": 267
   },
   {
    "id": "kids.arith#133",
@@ -4855,7 +4855,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 347
+   "ms": 94
   },
   {
    "id": "kids.time#029",
@@ -4869,7 +4869,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 1029
+   "ms": 343
   },
   {
    "id": "kids.time#030",
@@ -4883,7 +4883,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 213
+   "ms": 63
   },
   {
    "id": "kids.time#031",
@@ -4900,7 +4900,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 1596
+   "ms": 651
   },
   {
    "id": "kids.animals#024",
@@ -4917,7 +4917,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 1294
+   "ms": 591
   },
   {
    "id": "geo.map#020",
@@ -4931,7 +4931,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 152
+   "ms": 132
   },
   {
    "id": "kids.shapes#016",
@@ -4948,7 +4948,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 2618
+   "ms": 1266
   },
   {
    "id": "kids.time#032",
@@ -4962,7 +4962,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 448
+   "ms": 87
   },
   {
    "id": "kids.time#033",
@@ -4976,7 +4976,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 243
+   "ms": 122
   },
   {
    "id": "kids.animals#025",
@@ -4990,7 +4990,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 328
+   "ms": 139
   },
   {
    "id": "kids.time#034",
@@ -5004,7 +5004,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 402
+   "ms": 237
   },
   {
    "id": "kids.time#035",
@@ -5022,7 +5022,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 1304
+   "ms": 466
   },
   {
    "id": "kids.animals#026",
@@ -5037,7 +5037,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 415
+   "ms": 208
   },
   {
    "id": "geo.map#021",
@@ -5052,7 +5052,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 1695
+   "ms": 1313
   },
   {
    "id": "kids.time#036",
@@ -5067,7 +5067,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 425
+   "ms": 147
   },
   {
    "id": "kids.arith#134",
@@ -5082,7 +5082,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 434
+   "ms": 148
   },
   {
    "id": "kids.animals#027",
@@ -5097,7 +5097,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 587
+   "ms": 186
   },
   {
    "id": "geo.map#022",
@@ -5112,7 +5112,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 2090
+   "ms": 913
   },
   {
    "id": "geo.map#023",
@@ -5127,7 +5127,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 250
+   "ms": 104
   },
   {
    "id": "kids.animals#028",
@@ -5142,7 +5142,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 343
+   "ms": 153
   },
   {
    "id": "kids.animals#029",
@@ -5160,7 +5160,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 6146
+   "ms": 3589
   },
   {
    "id": "kids.animals#030",
@@ -5175,7 +5175,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 744
+   "ms": 252
   },
   {
    "id": "kids.arith#135",
@@ -5190,7 +5190,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 755
+   "ms": 234
   },
   {
    "id": "kids.animals#031",
@@ -5208,7 +5208,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 3690
+   "ms": 1424
   },
   {
    "id": "kids.shapes#017",
@@ -5223,7 +5223,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 434
+   "ms": 116
   },
   {
    "id": "kids.time#037",
@@ -5238,7 +5238,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 4189
+   "ms": 1451
   },
   {
    "id": "kids.time#038",
@@ -5253,7 +5253,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 357
+   "ms": 99
   },
   {
    "id": "kids.arith#136",
@@ -5268,7 +5268,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 522
+   "ms": 139
   },
   {
    "id": "geo.map#024",
@@ -5285,7 +5285,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 792
+   "ms": 223
   },
   {
    "id": "kids.time#039",
@@ -5300,7 +5300,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 299
+   "ms": 151
   },
   {
    "id": "geo.map#025",
@@ -5315,7 +5315,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 517
+   "ms": 211
   },
   {
    "id": "kids.shapes#018",
@@ -5333,7 +5333,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 3145
+   "ms": 1015
   },
   {
    "id": "kids.arith#137",
@@ -5350,7 +5350,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 726
+   "ms": 345
   },
   {
    "id": "ui.avatar#091",
@@ -5364,7 +5364,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 181
+   "ms": 66
   },
   {
    "id": "ui.avatar#092",
@@ -5378,7 +5378,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 2581
+   "ms": 1410
   },
   {
    "id": "ui.avatar#093",
@@ -5392,7 +5392,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 162
+   "ms": 61
   },
   {
    "id": "ui.avatar#094",
@@ -5406,7 +5406,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 206
+   "ms": 68
   },
   {
    "id": "ui.avatar#095",
@@ -5420,7 +5420,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 211
+   "ms": 172
   },
   {
    "id": "art.draw#001",
@@ -5436,7 +5436,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 269
+   "ms": 203
   },
   {
    "id": "art.draw#002",
@@ -5452,7 +5452,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 282
+   "ms": 231
   },
   {
    "id": "art.draw#003",
@@ -5468,7 +5468,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 257
+   "ms": 215
   },
   {
    "id": "art.draw#004",
@@ -5484,7 +5484,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 303
+   "ms": 232
   },
   {
    "id": "art.draw#005",
@@ -5500,7 +5500,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 75
+   "ms": 46
   },
   {
    "id": "media.music#001",
@@ -5514,7 +5514,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 223
+   "ms": 120
   },
   {
    "id": "media.music#002",
@@ -5528,7 +5528,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 238
+   "ms": 117
   },
   {
    "id": "media.music#003",
@@ -5542,7 +5542,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 197
+   "ms": 151
   },
   {
    "id": "media.music#004",
@@ -5558,7 +5558,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 149
+   "ms": 162
   },
   {
    "id": "media.music#005",
@@ -5572,7 +5572,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 129
+   "ms": 145
   },
   {
    "id": "media.music#006",
@@ -5588,7 +5588,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 187
+   "ms": 166
   },
   {
    "id": "geo.map#026",
@@ -5602,7 +5602,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 1576
+   "ms": 697
   },
   {
    "id": "geo.map#027",
@@ -5619,7 +5619,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 1445
+   "ms": 671
   },
   {
    "id": "geo.map#028",
@@ -5633,7 +5633,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 171
+   "ms": 80
   },
   {
    "id": "geo.map#029",
@@ -5647,7 +5647,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 185
+   "ms": 80
   },
   {
    "id": "geo.map#030",
@@ -5661,7 +5661,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 96
+   "ms": 90
   },
   {
    "id": "geo.map#031",
@@ -5675,7 +5675,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 77
+   "ms": 102
   },
   {
    "id": "data.charts#001",
@@ -5690,7 +5690,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 185
+   "ms": 138
   },
   {
    "id": "data.charts#002",
@@ -5705,7 +5705,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 277
+   "ms": 160
   },
   {
    "id": "data.charts#003",
@@ -5720,7 +5720,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 304
+   "ms": 135
   },
   {
    "id": "kids.tasks#001",
@@ -5737,7 +5737,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 1949
+   "ms": 894
   },
   {
    "id": "kids.tasks#002",
@@ -5753,7 +5753,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 104
+   "ms": 66
   },
   {
    "id": "kids.tasks#003",
@@ -5770,7 +5770,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 1705
+   "ms": 846
   },
   {
    "id": "ui.avatar#096",
@@ -5783,7 +5783,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 80
+   "ms": 11
   },
   {
    "id": "ui.avatar#097",
@@ -5796,7 +5796,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 139
+   "ms": 34
   },
   {
    "id": "ui.avatar#098",
@@ -5809,7 +5809,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 336
+   "ms": 92
   },
   {
    "id": "ui.avatar#099",
@@ -5822,7 +5822,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 86
+   "ms": 12
   },
   {
    "id": "ui.avatar#100",
@@ -5837,7 +5837,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 74
+   "ms": 12
   },
   {
    "id": "ui.avatar#101",
@@ -5852,7 +5852,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 100
+   "ms": 19
   },
   {
    "id": "ui.avatar#102",
@@ -5865,7 +5865,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 104
+   "ms": 26
   },
   {
    "id": "kids.arith#138",
@@ -5878,7 +5878,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 336
+   "ms": 56
   },
   {
    "id": "kids.arith#139",
@@ -5891,7 +5891,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 1527
+   "ms": 60
   },
   {
    "id": "kids.animals#032",
@@ -5904,7 +5904,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 472
+   "ms": 366
   },
   {
    "id": "kids.animals#033",
@@ -5917,7 +5917,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 60
+   "ms": 114
   },
   {
    "id": "kids.shapes#019",
@@ -5930,7 +5930,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 54
+   "ms": 112
   },
   {
    "id": "kids.shapes#020",
@@ -5943,7 +5943,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 785
+   "ms": 615
   },
   {
    "id": "kids.time#040",
@@ -5956,7 +5956,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 267
+   "ms": 90
   },
   {
    "id": "art.draw#006",
@@ -5969,7 +5969,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 196
+   "ms": 35
   },
   {
    "id": "art.draw#007",
@@ -5982,7 +5982,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 143
+   "ms": 22
   },
   {
    "id": "art.draw#008",
@@ -5995,7 +5995,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 328
+   "ms": 37
   },
   {
    "id": "geo.map#032",
@@ -6010,7 +6010,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 538
+   "ms": 93
   },
   {
    "id": "geo.map#033",
@@ -6023,7 +6023,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 55
+   "ms": 11
   },
   {
    "id": "data.charts#004",
@@ -6036,7 +6036,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 133
+   "ms": 22
   },
   {
    "id": "data.charts#005",
@@ -6051,7 +6051,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 412
+   "ms": 98
   },
   {
    "id": "media.music#007",
@@ -6064,7 +6064,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 194
+   "ms": 43
   },
   {
    "id": "media.music#008",
@@ -6079,7 +6079,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 73
+   "ms": 14
   },
   {
    "id": "media.music#009",
@@ -6094,7 +6094,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 162
+   "ms": 34
   },
   {
    "id": "games.tictactoe#001",
@@ -6107,7 +6107,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 88
+   "ms": 74
   },
   {
    "id": "games.tictactoe#002",
@@ -6120,7 +6120,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 46
+   "ms": 73
   },
   {
    "id": "games.hangman#001",
@@ -6133,7 +6133,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 65
+   "ms": 95
   },
   {
    "id": "games.hangman#002",
@@ -6146,7 +6146,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 101
+   "ms": 104
   },
   {
    "id": "docs.editor#001",
@@ -6159,7 +6159,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 220
+   "ms": 141
   },
   {
    "id": "docs.editor#002",
@@ -6172,7 +6172,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 406
+   "ms": 170
   },
   {
    "id": "ui.shell#001",
@@ -6185,7 +6185,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 2846
+   "ms": 216
   },
   {
    "id": "ui.shell#002",
@@ -6198,7 +6198,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 135
+   "ms": 59
   },
   {
    "id": "kids.tasks#004",
@@ -6211,7 +6211,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 72
+   "ms": 30
   },
   {
    "id": "kids.common#001",
@@ -6224,7 +6224,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 68
+   "ms": 22
   },
   {
    "id": "kids.common#002",
@@ -6237,7 +6237,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 71
+   "ms": 24
   },
   {
    "id": "games.chess#001",
@@ -6250,7 +6250,7 @@
    "failing": [],
    "trivial": 3,
    "strategy": "rules",
-   "ms": 75
+   "ms": 23
   },
   {
    "id": "games.chess#002",
@@ -6263,7 +6263,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 38
+   "ms": 17
   },
   {
    "id": "games.chess#003",
@@ -6276,7 +6276,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 91
+   "ms": 30
   },
   {
    "id": "games.chess#004",
@@ -6289,7 +6289,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 89
+   "ms": 28
   },
   {
    "id": "games.chess#005",
@@ -6302,7 +6302,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 54
+   "ms": 31
   },
   {
    "id": "games.chess#006",
@@ -6315,7 +6315,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 42
+   "ms": 30
   },
   {
    "id": "games.chess#007",
@@ -6328,7 +6328,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 48
+   "ms": 53
   },
   {
    "id": "games.chess#008",
@@ -6341,7 +6341,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 66
+   "ms": 38
   },
   {
    "id": "games.chess#009",
@@ -6354,7 +6354,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 49
+   "ms": 28
   },
   {
    "id": "games.chess#010",
@@ -6367,7 +6367,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 55
+   "ms": 32
   },
   {
    "id": "games.chess#011",
@@ -6380,7 +6380,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 55
+   "ms": 26
   },
   {
    "id": "games.chess#012",
@@ -6393,7 +6393,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 31
+   "ms": 23
   },
   {
    "id": "games.chess#013",
@@ -6406,7 +6406,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 36
+   "ms": 18
   },
   {
    "id": "games.chess#014",
@@ -6419,7 +6419,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 102
+   "ms": 45
   },
   {
    "id": "games.chess#015",
@@ -6432,7 +6432,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 88
+   "ms": 44
   },
   {
    "id": "games.chess#016",
@@ -6445,7 +6445,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 72
+   "ms": 36
   },
   {
    "id": "games.chess#017",
@@ -6458,7 +6458,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 53
+   "ms": 27
   },
   {
    "id": "games.chess#018",
@@ -6471,7 +6471,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 38
+   "ms": 18
   },
   {
    "id": "games.chess#019",
@@ -6484,7 +6484,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 37
+   "ms": 14
   },
   {
    "id": "games.chess#020",
@@ -6497,7 +6497,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 52
+   "ms": 17
   },
   {
    "id": "games.chess#021",
@@ -6510,7 +6510,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 37
+   "ms": 23
   },
   {
    "id": "games.chess#022",
@@ -6524,7 +6524,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 122
+   "ms": 68
   },
   {
    "id": "games.chess#023",
@@ -6538,7 +6538,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 166
+   "ms": 109
   },
   {
    "id": "games.chess#024",
@@ -6552,7 +6552,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 180
+   "ms": 92
   },
   {
    "id": "games.chess#025",
@@ -6565,7 +6565,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 59
+   "ms": 26
   },
   {
    "id": "games.chess#026",
@@ -6580,7 +6580,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 415
+   "ms": 169
   },
   {
    "id": "games.chess#027",
@@ -6593,7 +6593,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 30
+   "ms": 18
   },
   {
    "id": "games.chess#028",
@@ -6608,7 +6608,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 65
+   "ms": 35
   },
   {
    "id": "games.chess#029",
@@ -6621,7 +6621,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 62
+   "ms": 20
   },
   {
    "id": "games.chess#030",
@@ -6634,7 +6634,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 61
+   "ms": 47
   },
   {
    "id": "games.chess#031",
@@ -6647,7 +6647,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 53
+   "ms": 37
   },
   {
    "id": "games.chess#032",
@@ -6660,7 +6660,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 59
+   "ms": 29
   },
   {
    "id": "games.chess#033",
@@ -6673,7 +6673,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 75
+   "ms": 20
   },
   {
    "id": "games.chess#034",
@@ -6686,7 +6686,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 83
+   "ms": 36
   },
   {
    "id": "games.chess#035",
@@ -6699,7 +6699,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 42
+   "ms": 26
   },
   {
    "id": "games.chess#036",
@@ -6712,7 +6712,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 84
+   "ms": 35
   },
   {
    "id": "games.chess#037",
@@ -6726,7 +6726,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 181
+   "ms": 79
   },
   {
    "id": "games.chess#038",
@@ -6739,7 +6739,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 2060
+   "ms": 1870
   },
   {
    "id": "games.tictactoe#003",
@@ -6752,7 +6752,7 @@
    "failing": [],
    "trivial": 2,
    "strategy": "rules",
-   "ms": 61
+   "ms": 27
   },
   {
    "id": "games.tictactoe#004",
@@ -6765,7 +6765,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 77
+   "ms": 29
   },
   {
    "id": "games.tictactoe#005",
@@ -6778,7 +6778,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 45
+   "ms": 19
   },
   {
    "id": "games.tictactoe#006",
@@ -6791,7 +6791,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 46
+   "ms": 23
   },
   {
    "id": "games.tictactoe#007",
@@ -6804,7 +6804,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 46
+   "ms": 12
   },
   {
    "id": "games.tictactoe#008",
@@ -6817,7 +6817,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 86
+   "ms": 16
   },
   {
    "id": "games.tictactoe#009",
@@ -6830,7 +6830,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 46
+   "ms": 19
   },
   {
    "id": "games.tictactoe#010",
@@ -6843,7 +6843,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 37
+   "ms": 20
   },
   {
    "id": "games.tictactoe#011",
@@ -6856,7 +6856,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 30
+   "ms": 21
   },
   {
    "id": "games.tictactoe#012",
@@ -6869,7 +6869,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 31
+   "ms": 20
   },
   {
    "id": "games.tictactoe#013",
@@ -6882,7 +6882,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 33
+   "ms": 20
   },
   {
    "id": "games.tictactoe#014",
@@ -6895,7 +6895,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 81
+   "ms": 36
   },
   {
    "id": "games.tictactoe#015",
@@ -6908,7 +6908,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 71
+   "ms": 14
   },
   {
    "id": "games.tictactoe#016",
@@ -6923,7 +6923,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 1658
+   "ms": 924
   },
   {
    "id": "games.tictactoe#017",
@@ -6936,7 +6936,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 37
+   "ms": 18
   },
   {
    "id": "games.tictactoe#018",
@@ -6949,7 +6949,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 54
+   "ms": 32
   },
   {
    "id": "games.tictactoe#019",
@@ -6962,7 +6962,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 36
+   "ms": 31
   },
   {
    "id": "games.tictactoe#020",
@@ -6975,7 +6975,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 55
+   "ms": 26
   },
   {
    "id": "games.tictactoe#021",
@@ -6988,7 +6988,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 35
+   "ms": 27
   },
   {
    "id": "games.tictactoe#022",
@@ -7001,7 +7001,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 31
+   "ms": 26
   },
   {
    "id": "games.tictactoe#023",
@@ -7014,7 +7014,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 30
+   "ms": 19
   },
   {
    "id": "games.tictactoe#024",
@@ -7027,7 +7027,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 96
+   "ms": 45
   },
   {
    "id": "games.tictactoe#025",
@@ -7040,7 +7040,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 91
+   "ms": 48
   },
   {
    "id": "games.tictactoe#026",
@@ -7054,7 +7054,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 97
+   "ms": 76
   },
   {
    "id": "games.tictactoe#027",
@@ -7067,7 +7067,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 114
+   "ms": 83
   },
   {
    "id": "games.tictactoe#028",
@@ -7080,7 +7080,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 592
+   "ms": 397
   },
   {
    "id": "games.tictactoe#029",
@@ -7093,7 +7093,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 36
+   "ms": 18
   },
   {
    "id": "games.tictactoe#030",
@@ -7106,7 +7106,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 54
+   "ms": 30
   },
   {
    "id": "games.tictactoe#031",
@@ -7119,7 +7119,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 41
+   "ms": 18
   },
   {
    "id": "games.tictactoe#032",
@@ -7133,7 +7133,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 148
+   "ms": 68
   },
   {
    "id": "games.tictactoe#033",
@@ -7146,7 +7146,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 31
+   "ms": 22
   },
   {
    "id": "games.tictactoe#034",
@@ -7159,7 +7159,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 55
+   "ms": 22
   },
   {
    "id": "games.tictactoe#035",
@@ -7172,7 +7172,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 37
+   "ms": 16
   },
   {
    "id": "games.tictactoe#036",
@@ -7185,7 +7185,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 95
+   "ms": 34
   },
   {
    "id": "games.tictactoe#037",
@@ -7198,7 +7198,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 793
+   "ms": 307
   },
   {
    "id": "games.tictactoe#038",
@@ -7211,7 +7211,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 49
+   "ms": 16
   },
   {
    "id": "games.tictactoe#039",
@@ -7226,7 +7226,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 245
+   "ms": 67
   },
   {
    "id": "games.tictactoe#040",
@@ -7239,7 +7239,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 537
+   "ms": 385
   },
   {
    "id": "games.hangman#003",
@@ -7252,7 +7252,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 66
+   "ms": 71
   },
   {
    "id": "games.hangman#004",
@@ -7265,7 +7265,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 85
+   "ms": 46
   },
   {
    "id": "games.hangman#005",
@@ -7278,7 +7278,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 28
+   "ms": 26
   },
   {
    "id": "games.hangman#006",
@@ -7291,7 +7291,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 59
+   "ms": 37
   },
   {
    "id": "games.hangman#007",
@@ -7304,7 +7304,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 38
+   "ms": 26
   },
   {
    "id": "games.hangman#008",
@@ -7317,7 +7317,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 23
+   "ms": 18
   },
   {
    "id": "games.hangman#009",
@@ -7330,7 +7330,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 31
+   "ms": 22
   },
   {
    "id": "games.hangman#010",
@@ -7343,7 +7343,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 31
+   "ms": 19
   },
   {
    "id": "games.hangman#011",
@@ -7356,7 +7356,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 41
+   "ms": 18
   },
   {
    "id": "games.hangman#012",
@@ -7369,7 +7369,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 44
+   "ms": 18
   },
   {
    "id": "games.hangman#013",
@@ -7382,7 +7382,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 73
+   "ms": 38
   },
   {
    "id": "games.hangman#014",
@@ -7395,7 +7395,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 73
+   "ms": 37
   },
   {
    "id": "games.hangman#015",
@@ -7409,7 +7409,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 164
+   "ms": 70
   },
   {
    "id": "games.hangman#016",
@@ -7424,7 +7424,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 192
+   "ms": 50
   },
   {
    "id": "games.hangman#017",
@@ -7437,7 +7437,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 38
+   "ms": 12
   },
   {
    "id": "games.hangman#018",
@@ -7450,7 +7450,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 46
+   "ms": 15
   },
   {
    "id": "games.hangman#019",
@@ -7463,7 +7463,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 65
+   "ms": 18
   },
   {
    "id": "games.hangman#020",
@@ -7476,7 +7476,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 62
+   "ms": 28
   },
   {
    "id": "games.hangman#021",
@@ -7489,7 +7489,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 47
+   "ms": 19
   },
   {
    "id": "games.hangman#022",
@@ -7502,7 +7502,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 57
+   "ms": 17
   },
   {
    "id": "games.hangman#023",
@@ -7515,7 +7515,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 51
+   "ms": 24
   },
   {
    "id": "games.hangman#024",
@@ -7528,7 +7528,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 74
+   "ms": 24
   },
   {
    "id": "games.hangman#025",
@@ -7543,7 +7543,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 73
+   "ms": 24
   },
   {
    "id": "games.hangman#026",
@@ -7556,7 +7556,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 74
+   "ms": 44
   },
   {
    "id": "games.hangman#027",
@@ -7569,7 +7569,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 47
+   "ms": 18
   },
   {
    "id": "games.hangman#028",
@@ -7583,7 +7583,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 139
+   "ms": 44
   },
   {
    "id": "games.hangman#029",
@@ -7596,7 +7596,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 974
+   "ms": 491
   },
   {
    "id": "games.guess#001",
@@ -7609,7 +7609,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 59
+   "ms": 46
   },
   {
    "id": "games.guess#002",
@@ -7622,7 +7622,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 71
+   "ms": 40
   },
   {
    "id": "games.guess#003",
@@ -7635,7 +7635,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 44
+   "ms": 30
   },
   {
    "id": "games.guess#004",
@@ -7648,7 +7648,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 45
+   "ms": 25
   },
   {
    "id": "games.guess#005",
@@ -7661,7 +7661,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 55
+   "ms": 32
   },
   {
    "id": "games.guess#006",
@@ -7674,7 +7674,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 47
+   "ms": 32
   },
   {
    "id": "games.guess#007",
@@ -7687,7 +7687,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 55
+   "ms": 28
   },
   {
    "id": "games.guess#008",
@@ -7700,7 +7700,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 53
+   "ms": 26
   },
   {
    "id": "games.guess#009",
@@ -7713,7 +7713,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 54
+   "ms": 26
   },
   {
    "id": "games.guess#010",
@@ -7726,7 +7726,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 66
+   "ms": 26
   },
   {
    "id": "games.guess#011",
@@ -7739,7 +7739,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 62
+   "ms": 25
   },
   {
    "id": "games.guess#012",
@@ -7752,7 +7752,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 44
+   "ms": 25
   },
   {
    "id": "games.guess#013",
@@ -7765,7 +7765,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 46
+   "ms": 19
   },
   {
    "id": "games.guess#014",
@@ -7778,7 +7778,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 45
+   "ms": 19
   },
   {
    "id": "games.guess#015",
@@ -7791,7 +7791,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 73
+   "ms": 27
   },
   {
    "id": "games.guess#016",
@@ -7804,7 +7804,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 53
+   "ms": 19
   },
   {
    "id": "games.guess#017",
@@ -7817,7 +7817,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 60
+   "ms": 19
   },
   {
    "id": "games.guess#018",
@@ -7830,7 +7830,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 72
+   "ms": 19
   },
   {
    "id": "games.guess#019",
@@ -7844,7 +7844,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 148
+   "ms": 63
   },
   {
    "id": "games.guess#020",
@@ -7861,7 +7861,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 37
+   "ms": 20
   },
   {
    "id": "games.guess#021",
@@ -7874,7 +7874,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 53
+   "ms": 30
   },
   {
    "id": "games.guess#022",
@@ -7887,7 +7887,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 69
+   "ms": 21
   },
   {
    "id": "games.guess#023",
@@ -7900,7 +7900,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 45
+   "ms": 31
   },
   {
    "id": "games.guess#024",
@@ -7913,7 +7913,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 35
+   "ms": 26
   },
   {
    "id": "games.guess#025",
@@ -7926,7 +7926,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 47
+   "ms": 22
   },
   {
    "id": "games.guess#026",
@@ -7939,7 +7939,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 38
+   "ms": 21
   },
   {
    "id": "games.guess#027",
@@ -7952,7 +7952,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 55
+   "ms": 37
   },
   {
    "id": "games.guess#028",
@@ -7966,7 +7966,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 158
+   "ms": 97
   },
   {
    "id": "games.guess#029",
@@ -7979,7 +7979,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 1302
+   "ms": 525
   },
   {
    "id": "kids.shop#001",
@@ -7992,7 +7992,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 162
+   "ms": 65
   },
   {
    "id": "kids.shop#002",
@@ -8005,7 +8005,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 126
+   "ms": 57
   },
   {
    "id": "kids.shop#003",
@@ -8018,7 +8018,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 125
+   "ms": 55
   },
   {
    "id": "kids.shop#004",
@@ -8031,7 +8031,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 125
+   "ms": 51
   },
   {
    "id": "kids.shop#005",
@@ -8044,7 +8044,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 155
+   "ms": 55
   },
   {
    "id": "kids.shop#006",
@@ -8057,7 +8057,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 179
+   "ms": 64
   },
   {
    "id": "kids.shop#007",
@@ -8070,7 +8070,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 145
+   "ms": 66
   },
   {
    "id": "kids.shop#008",
@@ -8083,7 +8083,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 127
+   "ms": 86
   },
   {
    "id": "kids.shop#009",
@@ -8096,7 +8096,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 121
+   "ms": 59
   },
   {
    "id": "kids.shop#010",
@@ -8109,7 +8109,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 128
+   "ms": 64
   },
   {
    "id": "kids.shop#011",
@@ -8122,7 +8122,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 149
+   "ms": 36
   },
   {
    "id": "kids.shop#012",
@@ -8135,7 +8135,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 85
+   "ms": 42
   },
   {
    "id": "kids.shop#013",
@@ -8148,7 +8148,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 84
+   "ms": 36
   },
   {
    "id": "kids.shop#014",
@@ -8161,7 +8161,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 104
+   "ms": 35
   },
   {
    "id": "kids.shop#015",
@@ -8174,7 +8174,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 104
+   "ms": 36
   },
   {
    "id": "kids.shop#016",
@@ -8187,7 +8187,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 89
+   "ms": 40
   },
   {
    "id": "kids.shop#017",
@@ -8200,7 +8200,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 185
+   "ms": 71
   },
   {
    "id": "kids.shop#018",
@@ -8213,7 +8213,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 146
+   "ms": 111
   },
   {
    "id": "kids.shop#019",
@@ -8226,7 +8226,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 133
+   "ms": 97
   },
   {
    "id": "kids.shop#020",
@@ -8239,7 +8239,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 149
+   "ms": 112
   },
   {
    "id": "kids.shop#021",
@@ -8252,7 +8252,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 167
+   "ms": 98
   },
   {
    "id": "kids.shop#022",
@@ -8265,7 +8265,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 181
+   "ms": 130
   },
   {
    "id": "kids.shop#023",
@@ -8278,7 +8278,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 177
+   "ms": 97
   },
   {
    "id": "kids.shop#024",
@@ -8291,7 +8291,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 195
+   "ms": 91
   },
   {
    "id": "kids.shop#025",
@@ -8304,7 +8304,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 121
+   "ms": 68
   },
   {
    "id": "kids.shop#026",
@@ -8317,7 +8317,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 182
+   "ms": 50
   },
   {
    "id": "kids.shop#027",
@@ -8330,7 +8330,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 173
+   "ms": 49
   },
   {
    "id": "kids.shop#028",
@@ -8343,7 +8343,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 163
+   "ms": 48
   },
   {
    "id": "kids.shop#029",
@@ -8356,7 +8356,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 141
+   "ms": 47
   },
   {
    "id": "kids.shop#030",
@@ -8369,7 +8369,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 127
+   "ms": 80
   },
   {
    "id": "kids.shop#031",
@@ -8382,7 +8382,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 159
+   "ms": 82
   },
   {
    "id": "kids.shop#032",
@@ -8395,7 +8395,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 183
+   "ms": 91
   },
   {
    "id": "kids.shop#033",
@@ -8408,7 +8408,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 182
+   "ms": 104
   },
   {
    "id": "kids.shop#034",
@@ -8421,7 +8421,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 62
+   "ms": 37
   },
   {
    "id": "kids.shop#035",
@@ -8434,7 +8434,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 61
+   "ms": 43
   },
   {
    "id": "kids.shop#036",
@@ -8447,7 +8447,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 90
+   "ms": 47
   },
   {
    "id": "kids.shop#037",
@@ -8460,7 +8460,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 130
+   "ms": 69
   },
   {
    "id": "kids.shop#038",
@@ -8473,7 +8473,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 207
+   "ms": 117
   },
   {
    "id": "kids.shop#039",
@@ -8486,7 +8486,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 215
+   "ms": 146
   },
   {
    "id": "kids.shop#040",
@@ -8499,7 +8499,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 118
+   "ms": 80
   },
   {
    "id": "kids.shop#041",
@@ -8512,7 +8512,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 149
+   "ms": 127
   },
   {
    "id": "kids.time#041",
@@ -8525,7 +8525,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 60
+   "ms": 35
   },
   {
    "id": "kids.time#042",
@@ -8538,7 +8538,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 70
+   "ms": 29
   },
   {
    "id": "kids.time#043",
@@ -8551,7 +8551,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 72
+   "ms": 49
   },
   {
    "id": "kids.time#044",
@@ -8564,7 +8564,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 71
+   "ms": 28
   },
   {
    "id": "kids.time#045",
@@ -8577,7 +8577,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 72
+   "ms": 33
   },
   {
    "id": "kids.time#046",
@@ -8590,7 +8590,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 72
+   "ms": 35
   },
   {
    "id": "kids.time#047",
@@ -8603,7 +8603,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 75
+   "ms": 29
   },
   {
    "id": "kids.time#048",
@@ -8616,7 +8616,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 80
+   "ms": 31
   },
   {
    "id": "kids.time#049",
@@ -8629,7 +8629,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 66
+   "ms": 29
   },
   {
    "id": "kids.time#050",
@@ -8642,7 +8642,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 59
+   "ms": 29
   },
   {
    "id": "kids.time#051",
@@ -8655,7 +8655,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 61
+   "ms": 31
   },
   {
    "id": "kids.time#052",
@@ -8668,7 +8668,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 49
+   "ms": 25
   },
   {
    "id": "kids.time#053",
@@ -8681,7 +8681,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 49
+   "ms": 28
   },
   {
    "id": "kids.time#054",
@@ -8694,7 +8694,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 50
+   "ms": 29
   },
   {
    "id": "kids.time#055",
@@ -8707,7 +8707,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 77
+   "ms": 30
   },
   {
    "id": "kids.time#056",
@@ -8720,7 +8720,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 72
+   "ms": 26
   },
   {
    "id": "kids.time#057",
@@ -8733,7 +8733,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 63
+   "ms": 20
   },
   {
    "id": "kids.time#058",
@@ -8746,7 +8746,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 110
+   "ms": 38
   },
   {
    "id": "kids.time#059",
@@ -8759,7 +8759,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 73
+   "ms": 24
   },
   {
    "id": "kids.time#060",
@@ -8772,7 +8772,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 88
+   "ms": 29
   },
   {
    "id": "kids.time#061",
@@ -8785,7 +8785,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 62
+   "ms": 24
   },
   {
    "id": "kids.time#062",
@@ -8798,7 +8798,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 65
+   "ms": 25
   },
   {
    "id": "kids.time#063",
@@ -8811,7 +8811,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 70
+   "ms": 24
   },
   {
    "id": "kids.time#064",
@@ -8824,7 +8824,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 87
+   "ms": 25
   },
   {
    "id": "kids.time#065",
@@ -8837,7 +8837,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 60
+   "ms": 36
   },
   {
    "id": "kids.time#066",
@@ -8850,7 +8850,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 60
+   "ms": 36
   },
   {
    "id": "kids.time#067",
@@ -8863,7 +8863,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 68
+   "ms": 36
   },
   {
    "id": "kids.time#068",
@@ -8876,7 +8876,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 72
+   "ms": 36
   },
   {
    "id": "kids.time#069",
@@ -8889,7 +8889,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 65
+   "ms": 29
   },
   {
    "id": "kids.time#070",
@@ -8902,7 +8902,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 79
+   "ms": 35
   },
   {
    "id": "kids.time#071",
@@ -8915,7 +8915,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 80
+   "ms": 49
   },
   {
    "id": "kids.time#072",
@@ -8928,7 +8928,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 151
+   "ms": 54
   },
   {
    "id": "kids.time#073",
@@ -8941,7 +8941,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 78
+   "ms": 25
   },
   {
    "id": "kids.time#074",
@@ -8954,7 +8954,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 66
+   "ms": 24
   },
   {
    "id": "kids.time#075",
@@ -8967,7 +8967,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 87
+   "ms": 25
   },
   {
    "id": "kids.time#076",
@@ -8980,7 +8980,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 84
+   "ms": 25
   },
   {
    "id": "kids.time#077",
@@ -8993,7 +8993,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 94
+   "ms": 24
   },
   {
    "id": "kids.time#078",
@@ -9006,7 +9006,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 96
+   "ms": 24
   },
   {
    "id": "kids.time#079",
@@ -9019,7 +9019,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 111
+   "ms": 25
   },
   {
    "id": "kids.time#080",
@@ -9032,7 +9032,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 72
+   "ms": 28
   },
   {
    "id": "kids.time#081",
@@ -9045,7 +9045,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 89
+   "ms": 38
   },
   {
    "id": "kids.time#082",
@@ -9058,7 +9058,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 90
+   "ms": 44
   },
   {
    "id": "kids.time#083",
@@ -9071,7 +9071,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 70
+   "ms": 36
   },
   {
    "id": "kids.time#084",
@@ -9084,7 +9084,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 90
+   "ms": 40
   },
   {
    "id": "kids.time#085",
@@ -9097,7 +9097,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 103
+   "ms": 42
   },
   {
    "id": "kids.time#086",
@@ -9110,7 +9110,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 100
+   "ms": 36
   },
   {
    "id": "kids.time#087",
@@ -9123,7 +9123,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 140
+   "ms": 76
   },
   {
    "id": "kids.time#088",
@@ -9136,7 +9136,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 87
+   "ms": 38
   },
   {
    "id": "kids.time#089",
@@ -9149,22 +9149,20 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 57
+   "ms": 34
   },
   {
    "id": "kids.time#090",
    "world": "kids.time",
-   "outcome": "not_understood",
-   "reply": "I did not understand \"and the day after that\". Did you mean \"after Monday day?\" or \"The day after Monday?\"?",
+   "outcome": "right",
+   "reply": "The day after Wednesday is Thursday.",
    "statuses": [
-    "unparsed"
+    "supported"
    ],
-   "failing": [
-    "answer:Thursday"
-   ],
+   "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 6616
+   "ms": 156
   },
   {
    "id": "kids.time#091",
@@ -9178,7 +9176,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 140
+   "ms": 107
   },
   {
    "id": "kids.time#092",
@@ -9192,7 +9190,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 151
+   "ms": 130
   },
   {
    "id": "kids.time#093",
@@ -9205,7 +9203,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 1723
+   "ms": 3389
   },
   {
    "id": "kids.shapes#021",
@@ -9218,7 +9216,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 24
+   "ms": 12
   },
   {
    "id": "kids.shapes#022",
@@ -9231,7 +9229,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 28
+   "ms": 12
   },
   {
    "id": "kids.shapes#023",
@@ -9244,7 +9242,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 29
+   "ms": 12
   },
   {
    "id": "kids.shapes#024",
@@ -9257,7 +9255,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 73
+   "ms": 39
   },
   {
    "id": "kids.shapes#025",
@@ -9270,7 +9268,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 67
+   "ms": 36
   },
   {
    "id": "kids.shapes#026",
@@ -9283,7 +9281,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 65
+   "ms": 30
   },
   {
    "id": "kids.shapes#027",
@@ -9296,7 +9294,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 44
+   "ms": 22
   },
   {
    "id": "kids.shapes#028",
@@ -9309,7 +9307,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 37
+   "ms": 18
   },
   {
    "id": "kids.shapes#029",
@@ -9322,7 +9320,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 52
+   "ms": 18
   },
   {
    "id": "kids.shapes#030",
@@ -9335,7 +9333,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 74
+   "ms": 29
   },
   {
    "id": "kids.shapes#031",
@@ -9348,7 +9346,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 78
+   "ms": 24
   },
   {
    "id": "kids.shapes#032",
@@ -9361,7 +9359,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 50
+   "ms": 29
   },
   {
    "id": "kids.shapes#033",
@@ -9374,7 +9372,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 44
+   "ms": 33
   },
   {
    "id": "kids.shapes#034",
@@ -9387,7 +9385,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 63
+   "ms": 28
   },
   {
    "id": "kids.shapes#035",
@@ -9400,7 +9398,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 39
+   "ms": 27
   },
   {
    "id": "kids.shapes#036",
@@ -9413,7 +9411,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 58
+   "ms": 28
   },
   {
    "id": "kids.shapes#037",
@@ -9426,7 +9424,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 45
+   "ms": 27
   },
   {
    "id": "kids.shapes#038",
@@ -9439,7 +9437,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 39
+   "ms": 19
   },
   {
    "id": "kids.shapes#039",
@@ -9452,7 +9450,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 35
+   "ms": 27
   },
   {
    "id": "kids.shapes#040",
@@ -9465,7 +9463,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 65
+   "ms": 38
   },
   {
    "id": "kids.shapes#041",
@@ -9478,7 +9476,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 73
+   "ms": 37
   },
   {
    "id": "kids.shapes#042",
@@ -9491,7 +9489,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 81
+   "ms": 36
   },
   {
    "id": "kids.shapes#043",
@@ -9504,7 +9502,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 90
+   "ms": 48
   },
   {
    "id": "kids.shapes#044",
@@ -9517,7 +9515,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 52
+   "ms": 23
   },
   {
    "id": "kids.shapes#045",
@@ -9530,7 +9528,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 100
+   "ms": 62
   },
   {
    "id": "kids.shapes#046",
@@ -9543,7 +9541,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 72
+   "ms": 60
   },
   {
    "id": "kids.shapes#047",
@@ -9556,7 +9554,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 89
+   "ms": 70
   },
   {
    "id": "kids.shapes#048",
@@ -9569,7 +9567,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 84
+   "ms": 45
   },
   {
    "id": "kids.shapes#049",
@@ -9582,7 +9580,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 81
+   "ms": 37
   },
   {
    "id": "kids.shapes#050",
@@ -9595,7 +9593,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 79
+   "ms": 24
   },
   {
    "id": "kids.shapes#051",
@@ -9608,7 +9606,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 62
+   "ms": 22
   },
   {
    "id": "kids.shapes#052",
@@ -9621,7 +9619,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 64
+   "ms": 23
   },
   {
    "id": "kids.shapes#053",
@@ -9634,7 +9632,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 82
+   "ms": 26
   },
   {
    "id": "kids.shapes#054",
@@ -9647,7 +9645,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 80
+   "ms": 25
   },
   {
    "id": "kids.shapes#055",
@@ -9660,7 +9658,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 84
+   "ms": 29
   },
   {
    "id": "kids.shapes#056",
@@ -9674,7 +9672,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 1235
+   "ms": 297
   },
   {
    "id": "kids.shapes#057",
@@ -9691,7 +9689,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 1420
+   "ms": 946
   },
   {
    "id": "kids.shapes#058",
@@ -9704,7 +9702,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 47
+   "ms": 46
   },
   {
    "id": "kids.animals#034",
@@ -9717,7 +9715,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 65
+   "ms": 45
   },
   {
    "id": "kids.animals#035",
@@ -9730,7 +9728,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 65
+   "ms": 45
   },
   {
    "id": "kids.animals#036",
@@ -9743,7 +9741,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 56
+   "ms": 39
   },
   {
    "id": "kids.animals#037",
@@ -9756,7 +9754,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 57
+   "ms": 40
   },
   {
    "id": "kids.animals#038",
@@ -9769,7 +9767,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 71
+   "ms": 47
   },
   {
    "id": "kids.animals#039",
@@ -9782,7 +9780,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 86
+   "ms": 25
   },
   {
    "id": "kids.animals#040",
@@ -9795,7 +9793,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 52
+   "ms": 35
   },
   {
    "id": "kids.animals#041",
@@ -9808,7 +9806,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 65
+   "ms": 34
   },
   {
    "id": "kids.animals#042",
@@ -9821,7 +9819,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 72
+   "ms": 35
   },
   {
    "id": "kids.animals#043",
@@ -9834,7 +9832,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 61
+   "ms": 28
   },
   {
    "id": "kids.animals#044",
@@ -9847,7 +9845,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 121
+   "ms": 35
   },
   {
    "id": "kids.animals#045",
@@ -9860,7 +9858,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 78
+   "ms": 31
   },
   {
    "id": "kids.animals#046",
@@ -9873,7 +9871,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 82
+   "ms": 19
   },
   {
    "id": "kids.animals#047",
@@ -9886,7 +9884,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 59
+   "ms": 25
   },
   {
    "id": "kids.animals#048",
@@ -9899,7 +9897,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 60
+   "ms": 25
   },
   {
    "id": "kids.animals#049",
@@ -9912,7 +9910,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 50
+   "ms": 21
   },
   {
    "id": "kids.animals#050",
@@ -9925,7 +9923,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 57
+   "ms": 28
   },
   {
    "id": "kids.animals#051",
@@ -9938,7 +9936,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 76
+   "ms": 25
   },
   {
    "id": "kids.animals#052",
@@ -9951,7 +9949,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 38
+   "ms": 18
   },
   {
    "id": "kids.animals#053",
@@ -9964,7 +9962,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 54
+   "ms": 17
   },
   {
    "id": "kids.animals#054",
@@ -9977,7 +9975,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 73
+   "ms": 22
   },
   {
    "id": "kids.animals#055",
@@ -9990,7 +9988,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 67
+   "ms": 36
   },
   {
    "id": "kids.animals#056",
@@ -10003,7 +10001,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 54
+   "ms": 39
   },
   {
    "id": "kids.animals#057",
@@ -10016,7 +10014,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 71
+   "ms": 35
   },
   {
    "id": "kids.animals#058",
@@ -10029,7 +10027,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 74
+   "ms": 26
   },
   {
    "id": "kids.animals#059",
@@ -10042,7 +10040,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 81
+   "ms": 19
   },
   {
    "id": "kids.animals#060",
@@ -10055,7 +10053,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 71
+   "ms": 19
   },
   {
    "id": "kids.animals#061",
@@ -10068,7 +10066,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 71
+   "ms": 33
   },
   {
    "id": "kids.animals#062",
@@ -10081,7 +10079,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 71
+   "ms": 32
   },
   {
    "id": "kids.animals#063",
@@ -10094,7 +10092,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 49
+   "ms": 41
   },
   {
    "id": "kids.animals#064",
@@ -10107,7 +10105,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 45
+   "ms": 36
   },
   {
    "id": "kids.animals#065",
@@ -10120,7 +10118,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 45
+   "ms": 27
   },
   {
    "id": "kids.animals#066",
@@ -10133,7 +10131,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 45
+   "ms": 25
   },
   {
    "id": "kids.animals#067",
@@ -10146,7 +10144,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 74
+   "ms": 37
   },
   {
    "id": "kids.animals#068",
@@ -10159,7 +10157,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 74
+   "ms": 37
   },
   {
    "id": "kids.animals#069",
@@ -10172,7 +10170,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 65
+   "ms": 36
   },
   {
    "id": "kids.animals#070",
@@ -10185,7 +10183,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 62
+   "ms": 36
   },
   {
    "id": "kids.animals#071",
@@ -10199,7 +10197,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 214
+   "ms": 99
   },
   {
    "id": "kids.animals#072",
@@ -10213,7 +10211,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 307
+   "ms": 116
   },
   {
    "id": "kids.animals#073",
@@ -10226,7 +10224,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 105
+   "ms": 47
   },
   {
    "id": "kids.animals#074",
@@ -10240,7 +10238,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 319
+   "ms": 192
   },
   {
    "id": "kids.animals#075",
@@ -10253,7 +10251,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 1555
+   "ms": 948
   },
   {
    "id": "kids.tasks#005",
@@ -10279,7 +10277,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 92
+   "ms": 73
   },
   {
    "id": "kids.tasks#007",
@@ -10292,7 +10290,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 46
+   "ms": 38
   },
   {
    "id": "kids.tasks#008",
@@ -10305,7 +10303,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 72
+   "ms": 28
   },
   {
    "id": "kids.tasks#009",
@@ -10318,7 +10316,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 99
+   "ms": 31
   },
   {
    "id": "kids.tasks#010",
@@ -10331,7 +10329,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 58
+   "ms": 20
   },
   {
    "id": "kids.tasks#011",
@@ -10344,7 +10342,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 88
+   "ms": 51
   },
   {
    "id": "kids.tasks#012",
@@ -10357,7 +10355,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 57
+   "ms": 24
   },
   {
    "id": "kids.tasks#013",
@@ -10370,7 +10368,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 73
+   "ms": 31
   },
   {
    "id": "kids.tasks#014",
@@ -10383,7 +10381,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 105
+   "ms": 53
   },
   {
    "id": "kids.tasks#015",
@@ -10396,7 +10394,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 48
+   "ms": 25
   },
   {
    "id": "kids.tasks#016",
@@ -10409,7 +10407,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 63
+   "ms": 8
   },
   {
    "id": "kids.tasks#017",
@@ -10422,7 +10420,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 126
+   "ms": 29
   },
   {
    "id": "kids.tasks#018",
@@ -10435,7 +10433,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 85
+   "ms": 19
   },
   {
    "id": "kids.tasks#019",
@@ -10448,7 +10446,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 47
+   "ms": 8
   },
   {
    "id": "kids.tasks#020",
@@ -10461,7 +10459,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 44
+   "ms": 8
   },
   {
    "id": "kids.tasks#021",
@@ -10474,7 +10472,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 50
+   "ms": 33
   },
   {
    "id": "kids.tasks#022",
@@ -10487,7 +10485,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 62
+   "ms": 29
   },
   {
    "id": "kids.tasks#023",
@@ -10500,7 +10498,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 65
+   "ms": 26
   },
   {
    "id": "kids.tasks#024",
@@ -10513,7 +10511,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 91
+   "ms": 35
   },
   {
    "id": "kids.tasks#025",
@@ -10526,7 +10524,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 93
+   "ms": 35
   },
   {
    "id": "kids.tasks#026",
@@ -10539,7 +10537,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 46
+   "ms": 25
   },
   {
    "id": "kids.tasks#027",
@@ -10552,7 +10550,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 85
+   "ms": 24
   },
   {
    "id": "kids.tasks#028",
@@ -10565,7 +10563,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 589
+   "ms": 243
   },
   {
    "id": "kids.tasks#029",
@@ -10578,7 +10576,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 228
+   "ms": 108
   },
   {
    "id": "kids.tasks#030",
@@ -10592,7 +10590,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 166
+   "ms": 118
   },
   {
    "id": "kids.tasks#031",
@@ -10605,7 +10603,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 1329
+   "ms": 786
   },
   {
    "id": "kids.tasks#032",
@@ -10620,7 +10618,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 48
+   "ms": 50
   },
   {
    "id": "kids.tasks#033",
@@ -10633,7 +10631,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 48
+   "ms": 59
   },
   {
    "id": "kids.tasks#034",
@@ -10646,7 +10644,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 33
+   "ms": 62
   },
   {
    "id": "kids.tasks#035",
@@ -10659,7 +10657,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 770
+   "ms": 1024
   },
   {
    "id": "kids.common#003",
@@ -10672,7 +10670,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 23
+   "ms": 22
   },
   {
    "id": "kids.common#004",
@@ -10685,7 +10683,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 18
+   "ms": 24
   },
   {
    "id": "kids.common#005",
@@ -10698,7 +10696,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 35
+   "ms": 30
   },
   {
    "id": "kids.common#006",
@@ -10711,7 +10709,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 72
+   "ms": 41
   },
   {
    "id": "kids.common#007",
@@ -10724,7 +10722,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 35
+   "ms": 18
   },
   {
    "id": "kids.common#008",
@@ -10737,7 +10735,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 39
+   "ms": 11
   },
   {
    "id": "kids.common#009",
@@ -10750,7 +10748,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 34
+   "ms": 18
   },
   {
    "id": "kids.common#010",
@@ -10763,7 +10761,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 36
+   "ms": 19
   },
   {
    "id": "kids.common#011",
@@ -10776,7 +10774,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 62
+   "ms": 31
   },
   {
    "id": "kids.common#012",
@@ -10789,7 +10787,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 25
+   "ms": 17
   },
   {
    "id": "kids.common#013",
@@ -10802,7 +10800,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 25
+   "ms": 18
   },
   {
    "id": "kids.common#014",
@@ -10815,7 +10813,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 43
+   "ms": 19
   },
   {
    "id": "kids.common#015",
@@ -10829,7 +10827,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 159
+   "ms": 57
   },
   {
    "id": "kids.common#016",
@@ -10842,7 +10840,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 37
+   "ms": 19
   },
   {
    "id": "kids.common#017",
@@ -10855,7 +10853,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 74
+   "ms": 30
   },
   {
    "id": "kids.common#018",
@@ -10868,7 +10866,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 88
+   "ms": 30
   },
   {
    "id": "kids.common#019",
@@ -10881,7 +10879,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 89
+   "ms": 31
   },
   {
    "id": "kids.common#020",
@@ -10894,7 +10892,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 49
+   "ms": 20
   },
   {
    "id": "kids.common#021",
@@ -10907,7 +10905,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 66
+   "ms": 43
   },
   {
    "id": "kids.common#022",
@@ -10920,7 +10918,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 88
+   "ms": 36
   },
   {
    "id": "kids.common#023",
@@ -10933,7 +10931,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 50
+   "ms": 25
   },
   {
    "id": "kids.common#024",
@@ -10946,7 +10944,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 55
+   "ms": 21
   },
   {
    "id": "kids.common#025",
@@ -10959,7 +10957,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 61
+   "ms": 21
   },
   {
    "id": "kids.common#026",
@@ -10972,7 +10970,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 40
+   "ms": 14
   },
   {
    "id": "kids.common#027",
@@ -10985,7 +10983,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 41
+   "ms": 17
   },
   {
    "id": "kids.common#028",
@@ -10998,7 +10996,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 60
+   "ms": 31
   },
   {
    "id": "kids.common#029",
@@ -11011,7 +11009,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 56
+   "ms": 22
   },
   {
    "id": "kids.common#030",
@@ -11025,7 +11023,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 183
+   "ms": 60
   },
   {
    "id": "kids.common#031",
@@ -11039,7 +11037,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 106
+   "ms": 59
   },
   {
    "id": "kids.common#032",
@@ -11053,7 +11051,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 254
+   "ms": 119
   },
   {
    "id": "kids.common#033",
@@ -11066,7 +11064,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 36
+   "ms": 25
   },
   {
    "id": "kids.common#034",
@@ -11079,7 +11077,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 910
+   "ms": 373
   },
   {
    "id": "art.draw#009",
@@ -11092,7 +11090,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 36
+   "ms": 48
   },
   {
    "id": "art.draw#010",
@@ -11105,7 +11103,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 53
+   "ms": 75
   },
   {
    "id": "art.draw#011",
@@ -11118,7 +11116,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 37
+   "ms": 38
   },
   {
    "id": "art.draw#012",
@@ -11134,7 +11132,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 55
+   "ms": 70
   },
   {
    "id": "art.draw#013",
@@ -11147,7 +11145,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 82
+   "ms": 22
   },
   {
    "id": "art.draw#014",
@@ -11160,7 +11158,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 64
+   "ms": 34
   },
   {
    "id": "art.draw#015",
@@ -11173,7 +11171,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 63
+   "ms": 27
   },
   {
    "id": "art.draw#016",
@@ -11186,7 +11184,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 60
+   "ms": 45
   },
   {
    "id": "art.draw#017",
@@ -11199,7 +11197,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 36
+   "ms": 39
   },
   {
    "id": "art.draw#018",
@@ -11215,7 +11213,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 49
+   "ms": 53
   },
   {
    "id": "art.draw#019",
@@ -11228,7 +11226,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 34
+   "ms": 25
   },
   {
    "id": "art.draw#020",
@@ -11241,7 +11239,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 43
+   "ms": 28
   },
   {
    "id": "art.draw#021",
@@ -11254,7 +11252,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 55
+   "ms": 28
   },
   {
    "id": "art.draw#022",
@@ -11267,7 +11265,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 89
+   "ms": 43
   },
   {
    "id": "art.draw#023",
@@ -11280,7 +11278,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 54
+   "ms": 26
   },
   {
    "id": "art.draw#024",
@@ -11293,7 +11291,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 53
+   "ms": 20
   },
   {
    "id": "art.draw#025",
@@ -11306,7 +11304,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 52
+   "ms": 21
   },
   {
    "id": "art.draw#026",
@@ -11319,7 +11317,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 54
+   "ms": 26
   },
   {
    "id": "art.draw#027",
@@ -11332,7 +11330,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 56
+   "ms": 16
   },
   {
    "id": "art.draw#028",
@@ -11345,7 +11343,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 31
+   "ms": 19
   },
   {
    "id": "art.draw#029",
@@ -11358,7 +11356,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 55
+   "ms": 18
   },
   {
    "id": "art.draw#030",
@@ -11371,7 +11369,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 48
+   "ms": 15
   },
   {
    "id": "art.draw#031",
@@ -11384,7 +11382,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 50
+   "ms": 7
   },
   {
    "id": "art.draw#032",
@@ -11397,7 +11395,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 84
+   "ms": 11
   },
   {
    "id": "art.draw#033",
@@ -11410,7 +11408,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 77
+   "ms": 9
   },
   {
    "id": "art.draw#034",
@@ -11423,7 +11421,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 121
+   "ms": 12
   },
   {
    "id": "art.draw#035",
@@ -11436,7 +11434,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 51
+   "ms": 10
   },
   {
    "id": "art.draw#036",
@@ -11449,7 +11447,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 73
+   "ms": 12
   },
   {
    "id": "art.draw#037",
@@ -11462,7 +11460,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 89
+   "ms": 44
   },
   {
    "id": "art.draw#038",
@@ -11475,7 +11473,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 107
+   "ms": 57
   },
   {
    "id": "art.draw#039",
@@ -11488,7 +11486,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 63
+   "ms": 38
   },
   {
    "id": "art.draw#040",
@@ -11501,7 +11499,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 92
+   "ms": 44
   },
   {
    "id": "art.draw#041",
@@ -11514,7 +11512,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 65
+   "ms": 20
   },
   {
    "id": "art.draw#042",
@@ -11527,7 +11525,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 89
+   "ms": 29
   },
   {
    "id": "art.draw#043",
@@ -11540,7 +11538,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 84
+   "ms": 31
   },
   {
    "id": "art.draw#044",
@@ -11553,7 +11551,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 62
+   "ms": 22
   },
   {
    "id": "art.draw#045",
@@ -11566,7 +11564,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 122
+   "ms": 65
   },
   {
    "id": "art.draw#046",
@@ -11579,7 +11577,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 75
+   "ms": 72
   },
   {
    "id": "art.draw#047",
@@ -11592,7 +11590,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 122
+   "ms": 71
   },
   {
    "id": "art.draw#048",
@@ -11605,7 +11603,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 60
+   "ms": 42
   },
   {
    "id": "art.draw#049",
@@ -11618,7 +11616,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 72
+   "ms": 40
   },
   {
    "id": "art.draw#050",
@@ -11631,7 +11629,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 46
+   "ms": 35
   },
   {
    "id": "art.draw#051",
@@ -11644,7 +11642,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 55
+   "ms": 31
   },
   {
    "id": "art.draw#052",
@@ -11657,7 +11655,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 37
+   "ms": 20
   },
   {
    "id": "art.draw#053",
@@ -11670,7 +11668,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 75
+   "ms": 39
   },
   {
    "id": "art.draw#054",
@@ -11683,7 +11681,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 73
+   "ms": 36
   },
   {
    "id": "art.draw#055",
@@ -11696,7 +11694,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 57
+   "ms": 36
   },
   {
    "id": "art.draw#056",
@@ -11709,7 +11707,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 37
+   "ms": 23
   },
   {
    "id": "art.draw#057",
@@ -11722,7 +11720,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 63
+   "ms": 43
   },
   {
    "id": "art.draw#058",
@@ -11735,7 +11733,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 59
+   "ms": 37
   },
   {
    "id": "art.draw#059",
@@ -11748,7 +11746,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 74
+   "ms": 46
   },
   {
    "id": "art.draw#060",
@@ -11761,7 +11759,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 78
+   "ms": 38
   },
   {
    "id": "art.draw#061",
@@ -11774,7 +11772,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 70
+   "ms": 34
   },
   {
    "id": "art.draw#062",
@@ -11787,7 +11785,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 96
+   "ms": 29
   },
   {
    "id": "art.draw#063",
@@ -11800,7 +11798,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 106
+   "ms": 36
   },
   {
    "id": "art.draw#064",
@@ -11813,7 +11811,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 74
+   "ms": 34
   },
   {
    "id": "art.draw#065",
@@ -11826,7 +11824,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 274
+   "ms": 172
   },
   {
    "id": "art.draw#066",
@@ -11839,7 +11837,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 269
+   "ms": 173
   },
   {
    "id": "art.draw#067",
@@ -11853,7 +11851,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 119
+   "ms": 70
   },
   {
    "id": "art.draw#068",
@@ -11868,7 +11866,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 282
+   "ms": 153
   },
   {
    "id": "art.draw#069",
@@ -11882,7 +11880,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 387
+   "ms": 183
   },
   {
    "id": "art.draw#070",
@@ -11896,7 +11894,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 388
+   "ms": 178
   },
   {
    "id": "art.draw#071",
@@ -11910,7 +11908,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 89
+   "ms": 45
   },
   {
    "id": "art.draw#072",
@@ -11923,7 +11921,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 74
+   "ms": 38
   },
   {
    "id": "art.draw#073",
@@ -11939,7 +11937,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 590
+   "ms": 383
   },
   {
    "id": "art.draw#074",
@@ -11953,7 +11951,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 222
+   "ms": 95
   },
   {
    "id": "art.draw#075",
@@ -11968,7 +11966,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 218
+   "ms": 102
   },
   {
    "id": "art.draw#076",
@@ -11981,7 +11979,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 83
+   "ms": 39
   },
   {
    "id": "art.draw#077",
@@ -11994,7 +11992,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 179
+   "ms": 41
   },
   {
    "id": "art.draw#078",
@@ -12007,7 +12005,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 220
+   "ms": 51
   },
   {
    "id": "art.draw#079",
@@ -12021,7 +12019,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 341
+   "ms": 79
   },
   {
    "id": "art.draw#080",
@@ -12037,7 +12035,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 161
+   "ms": 37
   },
   {
    "id": "art.draw#081",
@@ -12050,7 +12048,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 52
+   "ms": 12
   },
   {
    "id": "art.draw#082",
@@ -12066,7 +12064,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 161
+   "ms": 60
   },
   {
    "id": "art.draw#083",
@@ -12079,7 +12077,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 162
+   "ms": 52
   },
   {
    "id": "art.draw#084",
@@ -12093,7 +12091,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 176
+   "ms": 53
   },
   {
    "id": "art.draw#085",
@@ -12108,7 +12106,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 328
+   "ms": 124
   },
   {
    "id": "art.draw#086",
@@ -12121,7 +12119,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 153
+   "ms": 74
   },
   {
    "id": "art.draw#087",
@@ -12134,7 +12132,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 709
+   "ms": 322
   },
   {
    "id": "geo.map#034",
@@ -12147,7 +12145,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 70
+   "ms": 35
   },
   {
    "id": "geo.map#035",
@@ -12160,7 +12158,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 54
+   "ms": 42
   },
   {
    "id": "geo.map#036",
@@ -12173,7 +12171,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 106
+   "ms": 58
   },
   {
    "id": "geo.map#037",
@@ -12186,7 +12184,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 89
+   "ms": 50
   },
   {
    "id": "geo.map#038",
@@ -12199,7 +12197,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 68
+   "ms": 49
   },
   {
    "id": "geo.map#039",
@@ -12212,7 +12210,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 38
+   "ms": 19
   },
   {
    "id": "geo.map#040",
@@ -12225,7 +12223,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 72
+   "ms": 26
   },
   {
    "id": "geo.map#041",
@@ -12238,7 +12236,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 61
+   "ms": 25
   },
   {
    "id": "geo.map#042",
@@ -12251,7 +12249,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 48
+   "ms": 18
   },
   {
    "id": "geo.map#043",
@@ -12264,7 +12262,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 75
+   "ms": 29
   },
   {
    "id": "geo.map#044",
@@ -12277,7 +12275,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 84
+   "ms": 32
   },
   {
    "id": "geo.map#045",
@@ -12290,7 +12288,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 84
+   "ms": 35
   },
   {
    "id": "geo.map#046",
@@ -12303,7 +12301,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 83
+   "ms": 30
   },
   {
    "id": "geo.map#047",
@@ -12316,7 +12314,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 168
+   "ms": 127
   },
   {
    "id": "geo.map#048",
@@ -12329,7 +12327,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 74
+   "ms": 64
   },
   {
    "id": "geo.map#049",
@@ -12342,7 +12340,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 74
+   "ms": 58
   },
   {
    "id": "geo.map#050",
@@ -12355,7 +12353,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 76
+   "ms": 54
   },
   {
    "id": "geo.map#051",
@@ -12368,7 +12366,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 78
+   "ms": 75
   },
   {
    "id": "geo.map#052",
@@ -12381,7 +12379,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 61
+   "ms": 38
   },
   {
    "id": "geo.map#053",
@@ -12394,7 +12392,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 62
+   "ms": 48
   },
   {
    "id": "geo.map#054",
@@ -12407,7 +12405,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 56
+   "ms": 27
   },
   {
    "id": "geo.map#055",
@@ -12420,7 +12418,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 151
+   "ms": 70
   },
   {
    "id": "geo.map#056",
@@ -12433,7 +12431,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 71
+   "ms": 26
   },
   {
    "id": "geo.map#057",
@@ -12446,7 +12444,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 95
+   "ms": 31
   },
   {
    "id": "geo.map#058",
@@ -12459,7 +12457,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 91
+   "ms": 30
   },
   {
    "id": "geo.map#059",
@@ -12472,7 +12470,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 72
+   "ms": 31
   },
   {
    "id": "geo.map#060",
@@ -12485,7 +12483,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 56
+   "ms": 30
   },
   {
    "id": "geo.map#061",
@@ -12498,7 +12496,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 54
+   "ms": 29
   },
   {
    "id": "geo.map#062",
@@ -12511,7 +12509,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 35
+   "ms": 30
   },
   {
    "id": "geo.map#063",
@@ -12524,7 +12522,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 120
+   "ms": 74
   },
   {
    "id": "geo.map#064",
@@ -12537,7 +12535,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 75
+   "ms": 43
   },
   {
    "id": "geo.map#065",
@@ -12550,7 +12548,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 45
+   "ms": 28
   },
   {
    "id": "geo.map#066",
@@ -12563,7 +12561,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 44
+   "ms": 26
   },
   {
    "id": "geo.map#067",
@@ -12576,7 +12574,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 75
+   "ms": 51
   },
   {
    "id": "geo.map#068",
@@ -12589,7 +12587,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 49
+   "ms": 38
   },
   {
    "id": "geo.map#069",
@@ -12602,7 +12600,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 53
+   "ms": 33
   },
   {
    "id": "geo.map#070",
@@ -12615,7 +12613,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 53
+   "ms": 21
   },
   {
    "id": "geo.map#071",
@@ -12628,7 +12626,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 32
+   "ms": 16
   },
   {
    "id": "geo.map#072",
@@ -12641,7 +12639,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 36
+   "ms": 18
   },
   {
    "id": "geo.map#073",
@@ -12654,7 +12652,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 36
+   "ms": 17
   },
   {
    "id": "geo.map#074",
@@ -12667,7 +12665,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 37
+   "ms": 17
   },
   {
    "id": "geo.map#075",
@@ -12680,7 +12678,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 49
+   "ms": 37
   },
   {
    "id": "geo.map#076",
@@ -12694,7 +12692,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 110
+   "ms": 82
   },
   {
    "id": "geo.map#077",
@@ -12707,7 +12705,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 42
+   "ms": 32
   },
   {
    "id": "geo.map#078",
@@ -12721,7 +12719,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 70
+   "ms": 42
   },
   {
    "id": "geo.map#079",
@@ -12738,7 +12736,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 197
+   "ms": 121
   },
   {
    "id": "geo.map#080",
@@ -12751,7 +12749,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 72
+   "ms": 33
   },
   {
    "id": "geo.map#081",
@@ -12764,7 +12762,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 70
+   "ms": 29
   },
   {
    "id": "geo.map#082",
@@ -12778,7 +12776,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 250
+   "ms": 200
   },
   {
    "id": "geo.map#083",
@@ -12792,7 +12790,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 238
+   "ms": 126
   },
   {
    "id": "geo.map#084",
@@ -12805,7 +12803,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 45
+   "ms": 29
   },
   {
    "id": "geo.map#085",
@@ -12818,7 +12816,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 64
+   "ms": 34
   },
   {
    "id": "geo.map#086",
@@ -12831,7 +12829,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 657
+   "ms": 497
   },
   {
    "id": "data.charts#006",
@@ -12844,7 +12842,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 219
+   "ms": 62
   },
   {
    "id": "data.charts#007",
@@ -12857,7 +12855,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 155
+   "ms": 49
   },
   {
    "id": "data.charts#008",
@@ -12870,7 +12868,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 123
+   "ms": 36
   },
   {
    "id": "data.charts#009",
@@ -12883,7 +12881,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 196
+   "ms": 125
   },
   {
    "id": "data.charts#010",
@@ -12896,7 +12894,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 196
+   "ms": 53
   },
   {
    "id": "data.charts#011",
@@ -12909,7 +12907,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 121
+   "ms": 33
   },
   {
    "id": "data.charts#012",
@@ -12922,7 +12920,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 120
+   "ms": 32
   },
   {
    "id": "data.charts#013",
@@ -12935,7 +12933,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 137
+   "ms": 42
   },
   {
    "id": "data.charts#014",
@@ -12948,7 +12946,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 88
+   "ms": 75
   },
   {
    "id": "data.charts#015",
@@ -12961,7 +12959,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 91
+   "ms": 72
   },
   {
    "id": "data.charts#016",
@@ -12974,7 +12972,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 104
+   "ms": 71
   },
   {
    "id": "data.charts#017",
@@ -12987,7 +12985,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 28
+   "ms": 27
   },
   {
    "id": "data.charts#018",
@@ -13013,7 +13011,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "",
-   "ms": 1
+   "ms": 10
   },
   {
    "id": "data.charts#020",
@@ -13026,7 +13024,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "",
-   "ms": 1
+   "ms": 0
   },
   {
    "id": "data.charts#021",
@@ -13052,7 +13050,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "",
-   "ms": 14
+   "ms": 1
   },
   {
    "id": "data.charts#023",
@@ -13065,7 +13063,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 58
+   "ms": 27
   },
   {
    "id": "data.charts#024",
@@ -13078,7 +13076,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 72
+   "ms": 29
   },
   {
    "id": "data.charts#025",
@@ -13091,7 +13089,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 42
+   "ms": 17
   },
   {
    "id": "data.charts#026",
@@ -13104,7 +13102,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 79
+   "ms": 33
   },
   {
    "id": "data.charts#027",
@@ -13117,7 +13115,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 77
+   "ms": 45
   },
   {
    "id": "data.charts#028",
@@ -13130,7 +13128,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 45
+   "ms": 19
   },
   {
    "id": "data.charts#029",
@@ -13143,7 +13141,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 58
+   "ms": 24
   },
   {
    "id": "data.charts#030",
@@ -13156,7 +13154,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 50
+   "ms": 33
   },
   {
    "id": "data.charts#031",
@@ -13169,7 +13167,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 57
+   "ms": 31
   },
   {
    "id": "data.charts#032",
@@ -13182,7 +13180,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 38
+   "ms": 18
   },
   {
    "id": "data.charts#033",
@@ -13195,7 +13193,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 164
+   "ms": 54
   },
   {
    "id": "data.charts#034",
@@ -13209,7 +13207,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 374
+   "ms": 326
   },
   {
    "id": "data.charts#035",
@@ -13222,7 +13220,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 121
+   "ms": 53
   },
   {
    "id": "data.charts#036",
@@ -13236,7 +13234,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 403
+   "ms": 225
   },
   {
    "id": "data.charts#037",
@@ -13250,7 +13248,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 135
+   "ms": 48
   },
   {
    "id": "data.charts#038",
@@ -13264,7 +13262,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 353
+   "ms": 310
   },
   {
    "id": "data.charts#039",
@@ -13277,7 +13275,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 120
+   "ms": 56
   },
   {
    "id": "data.charts#040",
@@ -13290,7 +13288,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 69
+   "ms": 34
   },
   {
    "id": "data.charts#041",
@@ -13303,7 +13301,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 25
+   "ms": 15
   },
   {
    "id": "data.charts#042",
@@ -13316,7 +13314,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 62
+   "ms": 36
   },
   {
    "id": "data.charts#043",
@@ -13329,7 +13327,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 49
+   "ms": 22
   },
   {
    "id": "data.charts#044",
@@ -13342,7 +13340,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 36
+   "ms": 20
   },
   {
    "id": "data.charts#045",
@@ -13355,7 +13353,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 85
+   "ms": 47
   },
   {
    "id": "data.charts#046",
@@ -13368,7 +13366,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 97
+   "ms": 85
   },
   {
    "id": "data.charts#047",
@@ -13381,7 +13379,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 90
+   "ms": 66
   },
   {
    "id": "data.charts#048",
@@ -13394,7 +13392,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 84
+   "ms": 72
   },
   {
    "id": "data.charts#049",
@@ -13407,7 +13405,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 193
+   "ms": 169
   },
   {
    "id": "data.charts#050",
@@ -13420,7 +13418,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 46
+   "ms": 37
   },
   {
    "id": "data.charts#051",
@@ -13433,7 +13431,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 2682
+   "ms": 1492
   },
   {
    "id": "media.music#010",
@@ -13446,7 +13444,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 44
+   "ms": 35
   },
   {
    "id": "media.music#011",
@@ -13459,7 +13457,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 20
+   "ms": 28
   },
   {
    "id": "media.music#012",
@@ -13472,7 +13470,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 49
+   "ms": 34
   },
   {
    "id": "media.music#013",
@@ -13485,7 +13483,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 55
+   "ms": 32
   },
   {
    "id": "media.music#014",
@@ -13498,7 +13496,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 145
+   "ms": 72
   },
   {
    "id": "media.music#015",
@@ -13511,7 +13509,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 37
+   "ms": 25
   },
   {
    "id": "media.music#016",
@@ -13524,7 +13522,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 46
+   "ms": 20
   },
   {
    "id": "media.music#017",
@@ -13537,7 +13535,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 46
+   "ms": 16
   },
   {
    "id": "media.music#018",
@@ -13550,7 +13548,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 36
+   "ms": 26
   },
   {
    "id": "media.music#019",
@@ -13563,7 +13561,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 37
+   "ms": 19
   },
   {
    "id": "media.music#020",
@@ -13576,7 +13574,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 108
+   "ms": 68
   },
   {
    "id": "media.music#021",
@@ -13589,7 +13587,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 103
+   "ms": 70
   },
   {
    "id": "media.music#022",
@@ -13602,7 +13600,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 91
+   "ms": 96
   },
   {
    "id": "media.music#023",
@@ -13615,7 +13613,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 84
+   "ms": 102
   },
   {
    "id": "media.music#024",
@@ -13628,7 +13626,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 79
+   "ms": 71
   },
   {
    "id": "media.music#025",
@@ -13641,7 +13639,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 44
+   "ms": 28
   },
   {
    "id": "media.music#026",
@@ -13654,7 +13652,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 73
+   "ms": 64
   },
   {
    "id": "media.music#027",
@@ -13667,7 +13665,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 56
+   "ms": 60
   },
   {
    "id": "media.music#028",
@@ -13680,7 +13678,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 71
+   "ms": 46
   },
   {
    "id": "media.music#029",
@@ -13693,7 +13691,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 62
+   "ms": 45
   },
   {
    "id": "media.music#030",
@@ -13706,7 +13704,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 44
+   "ms": 35
   },
   {
    "id": "media.music#031",
@@ -13719,7 +13717,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 36
+   "ms": 34
   },
   {
    "id": "media.music#032",
@@ -13732,7 +13730,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 50
+   "ms": 37
   },
   {
    "id": "media.music#033",
@@ -13745,7 +13743,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 96
+   "ms": 45
   },
   {
    "id": "media.music#034",
@@ -13758,7 +13756,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 95
+   "ms": 26
   },
   {
    "id": "media.music#035",
@@ -13773,7 +13771,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 83
+   "ms": 36
   },
   {
    "id": "media.music#036",
@@ -13786,7 +13784,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 48
+   "ms": 21
   },
   {
    "id": "media.music#037",
@@ -13799,7 +13797,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 50
+   "ms": 30
   },
   {
    "id": "media.music#038",
@@ -13812,7 +13810,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 48
+   "ms": 29
   },
   {
    "id": "media.music#039",
@@ -13825,7 +13823,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 35
+   "ms": 23
   },
   {
    "id": "media.music#040",
@@ -13838,7 +13836,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 45
+   "ms": 22
   },
   {
    "id": "media.music#041",
@@ -13851,7 +13849,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 27
+   "ms": 18
   },
   {
    "id": "media.music#042",
@@ -13864,7 +13862,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 27
+   "ms": 20
   },
   {
    "id": "media.music#043",
@@ -13877,7 +13875,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 37
+   "ms": 26
   },
   {
    "id": "media.music#044",
@@ -13890,7 +13888,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 56
+   "ms": 36
   },
   {
    "id": "media.music#045",
@@ -13903,7 +13901,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 56
+   "ms": 33
   },
   {
    "id": "media.music#046",
@@ -13916,7 +13914,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 48
+   "ms": 27
   },
   {
    "id": "media.music#047",
@@ -13929,7 +13927,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 60
+   "ms": 29
   },
   {
    "id": "media.music#048",
@@ -13942,7 +13940,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 29
+   "ms": 23
   },
   {
    "id": "media.music#049",
@@ -13955,7 +13953,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 61
+   "ms": 46
   },
   {
    "id": "media.music#050",
@@ -13968,7 +13966,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 48
+   "ms": 36
   },
   {
    "id": "media.music#051",
@@ -13981,7 +13979,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 48
+   "ms": 41
   },
   {
    "id": "media.music#052",
@@ -13994,7 +13992,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 69
+   "ms": 72
   },
   {
    "id": "media.music#053",
@@ -14007,7 +14005,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 76
+   "ms": 70
   },
   {
    "id": "media.music#054",
@@ -14020,7 +14018,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 47
+   "ms": 58
   },
   {
    "id": "media.music#055",
@@ -14033,7 +14031,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 39
+   "ms": 34
   },
   {
    "id": "media.music#056",
@@ -14047,7 +14045,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 109
+   "ms": 86
   },
   {
    "id": "media.music#057",
@@ -14060,7 +14058,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 45
+   "ms": 47
   },
   {
    "id": "media.music#058",
@@ -14073,7 +14071,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 32
+   "ms": 35
   },
   {
    "id": "media.music#059",
@@ -14086,7 +14084,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 31
+   "ms": 35
   },
   {
    "id": "media.music#060",
@@ -14099,7 +14097,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 79
+   "ms": 41
   },
   {
    "id": "media.music#061",
@@ -14113,7 +14111,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 235
+   "ms": 125
   },
   {
    "id": "media.music#062",
@@ -14127,7 +14125,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 264
+   "ms": 138
   },
   {
    "id": "media.music#063",
@@ -14140,7 +14138,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 75
+   "ms": 44
   },
   {
    "id": "media.music#064",
@@ -14154,7 +14152,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 346
+   "ms": 238
   },
   {
    "id": "media.music#065",
@@ -14168,7 +14166,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 236
+   "ms": 187
   },
   {
    "id": "media.music#066",
@@ -14182,7 +14180,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 121
+   "ms": 96
   },
   {
    "id": "media.music#067",
@@ -14195,7 +14193,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 17
+   "ms": 19
   },
   {
    "id": "media.music#068",
@@ -14210,7 +14208,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 180
+   "ms": 71
   },
   {
    "id": "media.music#069",
@@ -14223,7 +14221,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 73
+   "ms": 18
   },
   {
    "id": "media.music#070",
@@ -14236,7 +14234,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 108
+   "ms": 36
   },
   {
    "id": "media.music#071",
@@ -14250,7 +14248,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 237
+   "ms": 81
   },
   {
    "id": "media.music#072",
@@ -14263,7 +14261,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 971
+   "ms": 423
   },
   {
    "id": "ui.avatar#103",
@@ -14276,7 +14274,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 76
+   "ms": 37
   },
   {
    "id": "ui.avatar#104",
@@ -14289,7 +14287,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 59
+   "ms": 28
   },
   {
    "id": "ui.avatar#105",
@@ -14302,7 +14300,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 45
+   "ms": 19
   },
   {
    "id": "ui.avatar#106",
@@ -14315,7 +14313,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 73
+   "ms": 24
   },
   {
    "id": "ui.avatar#107",
@@ -14330,7 +14328,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 1303
+   "ms": 1220
   },
   {
    "id": "ui.avatar#108",
@@ -14343,7 +14341,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 36
+   "ms": 20
   },
   {
    "id": "ui.avatar#109",
@@ -14356,7 +14354,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 54
+   "ms": 31
   },
   {
    "id": "ui.avatar#110",
@@ -14369,7 +14367,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 54
+   "ms": 26
   },
   {
    "id": "ui.avatar#111",
@@ -14384,7 +14382,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 58
+   "ms": 30
   },
   {
    "id": "ui.avatar#112",
@@ -14397,7 +14395,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 45
+   "ms": 26
   },
   {
    "id": "ui.avatar#113",
@@ -14410,7 +14408,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 29
+   "ms": 20
   },
   {
    "id": "ui.avatar#114",
@@ -14423,7 +14421,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 16
+   "ms": 35
   },
   {
    "id": "ui.avatar#115",
@@ -14436,7 +14434,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 18
+   "ms": 35
   },
   {
    "id": "ui.avatar#116",
@@ -14449,7 +14447,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 16
+   "ms": 31
   },
   {
    "id": "ui.avatar#117",
@@ -14462,7 +14460,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 18
+   "ms": 34
   },
   {
    "id": "ui.avatar#118",
@@ -14477,7 +14475,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 807
+   "ms": 846
   },
   {
    "id": "ui.avatar#119",
@@ -14490,7 +14488,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 39
+   "ms": 22
   },
   {
    "id": "ui.avatar#120",
@@ -14503,7 +14501,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 54
+   "ms": 26
   },
   {
    "id": "ui.avatar#121",
@@ -14516,7 +14514,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 57
+   "ms": 25
   },
   {
    "id": "ui.avatar#122",
@@ -14529,7 +14527,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 70
+   "ms": 36
   },
   {
    "id": "ui.avatar#123",
@@ -14544,7 +14542,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 253
+   "ms": 108
   },
   {
    "id": "ui.avatar#124",
@@ -14558,7 +14556,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 120
+   "ms": 60
   },
   {
    "id": "art.draw#088",
@@ -14571,7 +14569,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 45
+   "ms": 25
   },
   {
    "id": "art.draw#089",
@@ -14584,7 +14582,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 88
+   "ms": 37
   },
   {
    "id": "art.draw#090",
@@ -14597,7 +14595,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 46
+   "ms": 34
   },
   {
    "id": "art.draw#091",
@@ -14610,7 +14608,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 59
+   "ms": 52
   },
   {
    "id": "art.draw#092",
@@ -14623,7 +14621,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 77
+   "ms": 69
   },
   {
    "id": "art.draw#093",
@@ -14636,22 +14634,20 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 87
+   "ms": 58
   },
   {
    "id": "art.draw#094",
    "world": "art.draw",
-   "outcome": "not_understood",
-   "reply": "I did not understand \"the house should be blue instead\". Did you mean \"Paint the house blue.\" or \"I want the house blue.\"?",
+   "outcome": "right",
+   "reply": "Here you go! The house is blue now.",
    "statuses": [
-    "unparsed"
+    "supported"
    ],
-   "failing": [
-    "state:objects[kind=house].color=blue (got red)"
-   ],
+   "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 962
+   "ms": 632
   },
   {
    "id": "art.draw#095",
@@ -14664,7 +14660,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 59
+   "ms": 48
   },
   {
    "id": "art.draw#096",
@@ -14677,7 +14673,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 60
+   "ms": 49
   },
   {
    "id": "art.draw#097",
@@ -14690,7 +14686,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 73
+   "ms": 47
   },
   {
    "id": "art.draw#098",
@@ -14703,7 +14699,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 45
+   "ms": 46
   },
   {
    "id": "art.draw#099",
@@ -14716,7 +14712,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 60
+   "ms": 47
   },
   {
    "id": "media.music#073",
@@ -14729,7 +14725,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 75
+   "ms": 49
   },
   {
    "id": "media.music#074",
@@ -14742,7 +14738,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 61
+   "ms": 64
   },
   {
    "id": "media.music#075",
@@ -14755,7 +14751,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 28
+   "ms": 37
   },
   {
    "id": "media.music#076",
@@ -14768,7 +14764,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 27
+   "ms": 35
   },
   {
    "id": "media.music#077",
@@ -14781,7 +14777,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 37
+   "ms": 46
   },
   {
    "id": "media.music#078",
@@ -14794,7 +14790,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 41
+   "ms": 38
   },
   {
    "id": "media.music#079",
@@ -14807,7 +14803,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 61
+   "ms": 63
   },
   {
    "id": "media.music#080",
@@ -14820,7 +14816,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 28
+   "ms": 29
   },
   {
    "id": "media.music#081",
@@ -14833,7 +14829,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 29
+   "ms": 28
   },
   {
    "id": "media.music#082",
@@ -14846,7 +14842,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 73
+   "ms": 64
   },
   {
    "id": "geo.map#087",
@@ -14859,7 +14855,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 44
+   "ms": 34
   },
   {
    "id": "geo.map#088",
@@ -14872,7 +14868,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 84
+   "ms": 63
   },
   {
    "id": "geo.map#089",
@@ -14885,7 +14881,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 54
+   "ms": 36
   },
   {
    "id": "geo.map#090",
@@ -14900,7 +14896,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 33
+   "ms": 21
   },
   {
    "id": "geo.map#091",
@@ -14913,7 +14909,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 58
+   "ms": 24
   },
   {
    "id": "geo.map#092",
@@ -14926,7 +14922,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 96
+   "ms": 38
   },
   {
    "id": "geo.map#093",
@@ -14939,7 +14935,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 71
+   "ms": 44
   },
   {
    "id": "geo.map#094",
@@ -14952,7 +14948,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 73
+   "ms": 37
   },
   {
    "id": "data.charts#052",
@@ -14965,7 +14961,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 241
+   "ms": 122
   },
   {
    "id": "data.charts#053",
@@ -14978,7 +14974,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 178
+   "ms": 100
   },
   {
    "id": "data.charts#054",
@@ -14991,7 +14987,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 39
+   "ms": 48
   },
   {
    "id": "data.charts#055",
@@ -15017,7 +15013,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 107
+   "ms": 46
   },
   {
    "id": "data.charts#057",
@@ -15030,7 +15026,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 88
+   "ms": 33
   },
   {
    "id": "kids.arith#140",
@@ -15043,7 +15039,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 60
+   "ms": 45
   },
   {
    "id": "kids.arith#141",
@@ -15056,7 +15052,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 5703
+   "ms": 4895
   },
   {
    "id": "kids.arith#142",
@@ -15069,7 +15065,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 8
+   "ms": 21
   },
   {
    "id": "kids.arith#143",
@@ -15082,7 +15078,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 27
+   "ms": 53
   },
   {
    "id": "kids.arith#144",
@@ -15095,7 +15091,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 61
+   "ms": 106
   },
   {
    "id": "kids.arith#145",
@@ -15108,7 +15104,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 40
+   "ms": 68
   },
   {
    "id": "kids.animals#076",
@@ -15121,7 +15117,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 16
+   "ms": 26
   },
   {
    "id": "kids.animals#077",
@@ -15134,7 +15130,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 15
+   "ms": 22
   },
   {
    "id": "kids.animals#078",
@@ -15147,7 +15143,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 10
+   "ms": 17
   },
   {
    "id": "kids.animals#079",
@@ -15160,7 +15156,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 135
+   "ms": 128
   },
   {
    "id": "kids.animals#080",
@@ -15173,7 +15169,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 44
+   "ms": 58
   },
   {
    "id": "kids.shapes#059",
@@ -15186,7 +15182,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 41
+   "ms": 48
   },
   {
    "id": "kids.shapes#060",
@@ -15201,7 +15197,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 7706
+   "ms": 7566
   },
   {
    "id": "kids.shapes#061",
@@ -15214,7 +15210,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 10
+   "ms": 26
   },
   {
    "id": "kids.shapes#062",
@@ -15227,7 +15223,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 9
+   "ms": 20
   },
   {
    "id": "kids.time#094",
@@ -15240,7 +15236,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 13
+   "ms": 30
   },
   {
    "id": "kids.time#095",
@@ -15253,7 +15249,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 12
+   "ms": 22
   },
   {
    "id": "kids.time#096",
@@ -15268,7 +15264,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 1837
+   "ms": 1240
   },
   {
    "id": "kids.time#097",
@@ -15281,7 +15277,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 61
+   "ms": 23
   },
   {
    "id": "kids.tasks#036",
@@ -15294,7 +15290,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 75
+   "ms": 38
   },
   {
    "id": "kids.tasks#037",
@@ -15307,7 +15303,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 240
+   "ms": 99
   },
   {
    "id": "kids.tasks#038",
@@ -15320,7 +15316,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 45
+   "ms": 26
   },
   {
    "id": "kids.shop#042",
@@ -15333,7 +15329,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 195
+   "ms": 76
   },
   {
    "id": "kids.shop#043",
@@ -15346,7 +15342,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 238
+   "ms": 52
   },
   {
    "id": "kids.common#035",
@@ -15359,7 +15355,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 35
+   "ms": 13
   },
   {
    "id": "kids.common#036",
@@ -15385,7 +15381,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 54
+   "ms": 64
   },
   {
    "id": "games.tictactoe#042",
@@ -15400,7 +15396,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 72
+   "ms": 43
   },
   {
    "id": "games.tictactoe#043",
@@ -15413,7 +15409,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 61
+   "ms": 31
   },
   {
    "id": "games.hangman#030",
@@ -15426,7 +15422,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 64
+   "ms": 26
   },
   {
    "id": "games.hangman#031",
@@ -15439,7 +15435,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 54
+   "ms": 33
   },
   {
    "id": "games.hangman#032",
@@ -15452,7 +15448,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 66
+   "ms": 26
   },
   {
    "id": "games.chess#039",
@@ -15465,7 +15461,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 80
+   "ms": 54
   },
   {
    "id": "games.chess#040",
@@ -15478,7 +15474,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 59
+   "ms": 49
   },
   {
    "id": "games.chess#041",
@@ -15491,7 +15487,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 48
+   "ms": 49
   },
   {
    "id": "docs.editor#003",
@@ -15517,7 +15513,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 47
+   "ms": 57
   },
   {
    "id": "docs.editor#005",
@@ -15530,7 +15526,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 111
+   "ms": 104
   },
   {
    "id": "docs.editor#006",
@@ -15543,7 +15539,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 91
+   "ms": 54
   },
   {
    "id": "docs.editor#007",
@@ -15556,7 +15552,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 53
+   "ms": 35
   },
   {
    "id": "ui.shell#003",
@@ -15569,7 +15565,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 62
+   "ms": 36
   },
   {
    "id": "ui.shell#004",
@@ -15582,7 +15578,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 73
+   "ms": 60
   },
   {
    "id": "ui.shell#005",
@@ -15595,7 +15591,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 76
+   "ms": 71
   },
   {
    "id": "ui.shell#006",
@@ -15608,7 +15604,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 36
+   "ms": 31
   },
   {
    "id": "ui.shell#007",
@@ -15634,7 +15630,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 50
+   "ms": 48
   },
   {
    "id": "docs.editor#008",
@@ -15647,7 +15643,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 48
+   "ms": 36
   },
   {
    "id": "docs.editor#009",
@@ -15660,7 +15656,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 48
+   "ms": 27
   },
   {
    "id": "docs.editor#010",
@@ -15673,7 +15669,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 71
+   "ms": 49
   },
   {
    "id": "docs.editor#011",
@@ -15686,7 +15682,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 69
+   "ms": 28
   },
   {
    "id": "docs.editor#012",
@@ -15699,7 +15695,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 51
+   "ms": 32
   },
   {
    "id": "docs.editor#013",
@@ -15712,7 +15708,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 114
+   "ms": 75
   },
   {
    "id": "docs.editor#014",
@@ -15725,7 +15721,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 103
+   "ms": 64
   },
   {
    "id": "docs.editor#015",
@@ -15738,7 +15734,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 104
+   "ms": 70
   },
   {
    "id": "docs.editor#016",
@@ -15751,7 +15747,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 59
+   "ms": 39
   },
   {
    "id": "docs.editor#017",
@@ -15764,7 +15760,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 32
+   "ms": 25
   },
   {
    "id": "docs.editor#018",
@@ -15777,7 +15773,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 45
+   "ms": 36
   },
   {
    "id": "docs.editor#019",
@@ -15790,7 +15786,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 62
+   "ms": 34
   },
   {
    "id": "docs.editor#020",
@@ -15803,7 +15799,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 74
+   "ms": 44
   },
   {
    "id": "docs.editor#021",
@@ -15816,7 +15812,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 47
+   "ms": 20
   },
   {
    "id": "docs.editor#022",
@@ -15829,7 +15825,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 66
+   "ms": 60
   },
   {
    "id": "docs.editor#023",
@@ -15842,7 +15838,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 44
+   "ms": 25
   },
   {
    "id": "docs.editor#024",
@@ -15855,7 +15851,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 62
+   "ms": 31
   },
   {
    "id": "docs.editor#025",
@@ -15868,7 +15864,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 45
+   "ms": 26
   },
   {
    "id": "docs.editor#026",
@@ -15881,7 +15877,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 54
+   "ms": 27
   },
   {
    "id": "docs.editor#027",
@@ -15894,7 +15890,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 90
+   "ms": 55
   },
   {
    "id": "docs.editor#028",
@@ -15908,7 +15904,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 177
+   "ms": 99
   },
   {
    "id": "docs.editor#029",
@@ -15923,7 +15919,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 200
+   "ms": 121
   },
   {
    "id": "docs.editor#030",
@@ -15937,7 +15933,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 93
+   "ms": 111
   },
   {
    "id": "docs.editor#031",
@@ -15950,7 +15946,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 36
+   "ms": 39
   },
   {
    "id": "docs.editor#032",
@@ -15963,7 +15959,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 49
+   "ms": 34
   },
   {
    "id": "docs.editor#033",
@@ -15976,7 +15972,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 36
+   "ms": 51
   },
   {
    "id": "docs.editor#034",
@@ -15990,7 +15986,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 114
+   "ms": 108
   },
   {
    "id": "docs.editor#035",
@@ -16004,7 +16000,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 165
+   "ms": 130
   },
   {
    "id": "docs.editor#036",
@@ -16017,7 +16013,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 45
+   "ms": 36
   },
   {
    "id": "docs.editor#037",
@@ -16030,7 +16026,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 43
+   "ms": 36
   },
   {
    "id": "docs.editor#038",
@@ -16043,7 +16039,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 43
+   "ms": 36
   },
   {
    "id": "docs.editor#039",
@@ -16056,7 +16052,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 37
+   "ms": 48
   },
   {
    "id": "docs.editor#040",
@@ -16069,7 +16065,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 37
+   "ms": 57
   },
   {
    "id": "docs.editor#041",
@@ -16082,7 +16078,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 35
+   "ms": 27
   },
   {
    "id": "docs.editor#042",
@@ -16096,7 +16092,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 119
+   "ms": 117
   },
   {
    "id": "docs.editor#043",
@@ -16109,7 +16105,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 902
+   "ms": 966
   },
   {
    "id": "docs.reader#001",
@@ -16122,7 +16118,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 36
+   "ms": 42
   },
   {
    "id": "docs.reader#002",
@@ -16135,7 +16131,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 28
+   "ms": 36
   },
   {
    "id": "docs.reader#003",
@@ -16148,20 +16144,20 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 88
+   "ms": 66
   },
   {
    "id": "docs.reader#004",
    "world": "docs.reader",
    "outcome": "right",
-   "reply": "\"Hansel and Gretel\" has 685 words in 4 sections (66 sentences). The main characters are Hansel, Gretel, the witch and the father. Places: the house, the forest and the path. Key words: witch, finger, nibble, oven and father. Ask me what it ",
+   "reply": "\"Hansel and Gretel\" has 685 words in 4 sections (66 sentences). The main characters are Hansel, Gretel, the witch and the father. Places: the house, the forest and the path. Key words: witch, finger, nibble, oven and pebble. Ask me what it ",
    "statuses": [
     "supported"
    ],
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 69
+   "ms": 59
   },
   {
    "id": "docs.reader#005",
@@ -16174,7 +16170,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 82
+   "ms": 77
   },
   {
    "id": "docs.reader#006",
@@ -16187,7 +16183,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 83
+   "ms": 66
   },
   {
    "id": "docs.reader#007",
@@ -16200,7 +16196,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 75
+   "ms": 49
   },
   {
    "id": "docs.reader#008",
@@ -16213,7 +16209,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 122
+   "ms": 60
   },
   {
    "id": "docs.reader#009",
@@ -16226,7 +16222,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 2393
+   "ms": 1089
   },
   {
    "id": "docs.reader#010",
@@ -16239,7 +16235,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 157
+   "ms": 76
   },
   {
    "id": "docs.reader#011",
@@ -16252,7 +16248,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 135
+   "ms": 69
   },
   {
    "id": "docs.reader#012",
@@ -16265,7 +16261,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 74
+   "ms": 76
   },
   {
    "id": "docs.reader#013",
@@ -16278,7 +16274,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 43
+   "ms": 37
   },
   {
    "id": "docs.reader#014",
@@ -16291,7 +16287,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 56
+   "ms": 37
   },
   {
    "id": "docs.reader#015",
@@ -16304,7 +16300,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 66
+   "ms": 47
   },
   {
    "id": "docs.reader#016",
@@ -16317,7 +16313,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 87
+   "ms": 54
   },
   {
    "id": "docs.reader#017",
@@ -16330,7 +16326,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 90
+   "ms": 55
   },
   {
    "id": "docs.reader#018",
@@ -16345,7 +16341,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 58
+   "ms": 45
   },
   {
    "id": "docs.reader#019",
@@ -16358,7 +16354,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 90
+   "ms": 72
   },
   {
    "id": "docs.reader#020",
@@ -16371,7 +16367,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 60
+   "ms": 45
   },
   {
    "id": "docs.reader#021",
@@ -16385,7 +16381,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 195
+   "ms": 159
   },
   {
    "id": "docs.reader#022",
@@ -16399,13 +16395,13 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 181
+   "ms": 194
   },
   {
    "id": "docs.reader#023",
    "world": "docs.reader",
    "outcome": "not_understood",
-   "reply": "I did not understand \"words in the sections\". For example: \"Describe the story.\" or \"What do you know about the file?\"",
+   "reply": "I did not understand \"words in the sections\". Did you mean \"How many words are in section 2?\"?",
    "statuses": [
     "unparsed"
    ],
@@ -16414,7 +16410,7 @@
    ],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 736
+   "ms": 681
   },
   {
    "id": "docs.reader#024",
@@ -16427,7 +16423,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 644
+   "ms": 301
   },
   {
    "id": "ui.shell#009",
@@ -16440,7 +16436,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 54
+   "ms": 28
   },
   {
    "id": "ui.shell#010",
@@ -16453,7 +16449,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 45
+   "ms": 36
   },
   {
    "id": "ui.shell#011",
@@ -16466,7 +16462,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 48
+   "ms": 37
   },
   {
    "id": "ui.shell#012",
@@ -16479,7 +16475,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 51
+   "ms": 35
   },
   {
    "id": "ui.shell#013",
@@ -16492,7 +16488,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 41
+   "ms": 30
   },
   {
    "id": "ui.shell#014",
@@ -16505,7 +16501,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 48
+   "ms": 33
   },
   {
    "id": "ui.shell#015",
@@ -16518,7 +16514,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 48
+   "ms": 37
   },
   {
    "id": "ui.shell#016",
@@ -16531,7 +16527,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 26
+   "ms": 19
   },
   {
    "id": "ui.shell#017",
@@ -16544,7 +16540,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 37
+   "ms": 40
   },
   {
    "id": "ui.shell#018",
@@ -16557,7 +16553,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "",
-   "ms": 11
+   "ms": 12
   },
   {
    "id": "ui.shell#019",
@@ -16570,7 +16566,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 24
+   "ms": 19
   },
   {
    "id": "ui.shell#020",
@@ -16583,7 +16579,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 53
+   "ms": 23
   },
   {
    "id": "ui.shell#021",
@@ -16596,7 +16592,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 70
+   "ms": 47
   },
   {
    "id": "ui.shell#022",
@@ -16609,7 +16605,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 36
+   "ms": 27
   },
   {
    "id": "ui.shell#023",
@@ -16622,7 +16618,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 35
+   "ms": 20
   },
   {
    "id": "ui.shell#024",
@@ -16635,7 +16631,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 89
+   "ms": 59
   },
   {
    "id": "ui.shell#025",
@@ -16648,7 +16644,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 44
+   "ms": 24
   },
   {
    "id": "ui.shell#026",
@@ -16661,7 +16657,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 91
+   "ms": 38
   },
   {
    "id": "ui.shell#027",
@@ -16674,7 +16670,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 96
+   "ms": 59
   },
   {
    "id": "ui.shell#028",
@@ -16700,7 +16696,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 38
+   "ms": 25
   },
   {
    "id": "ui.shell#030",
@@ -16713,7 +16709,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 61
+   "ms": 35
   },
   {
    "id": "ui.shell#031",
@@ -16726,7 +16722,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 33
+   "ms": 37
   },
   {
    "id": "ui.shell#032",
@@ -16739,7 +16735,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 27
+   "ms": 17
   },
   {
    "id": "ui.shell#033",
@@ -16753,7 +16749,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 115
+   "ms": 72
   },
   {
    "id": "ui.shell#034",
@@ -16766,7 +16762,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 36
+   "ms": 31
   },
   {
    "id": "ui.shell#035",
@@ -16780,7 +16776,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "rules",
-   "ms": 160
+   "ms": 76
   },
   {
    "id": "ui.shell#036",
@@ -16794,7 +16790,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 162
+   "ms": 67
   },
   {
    "id": "ui.shell#037",
@@ -16808,7 +16804,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 186
+   "ms": 79
   },
   {
    "id": "ui.shell#038",
@@ -16822,7 +16818,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 181
+   "ms": 78
   },
   {
    "id": "ui.shell#039",
@@ -16836,7 +16832,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 213
+   "ms": 91
   },
   {
    "id": "ui.shell#040",
@@ -16850,7 +16846,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 106
+   "ms": 101
   },
   {
    "id": "ui.shell#041",
@@ -16863,7 +16859,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 131
+   "ms": 80
   },
   {
    "id": "ui.shell#042",
@@ -16876,7 +16872,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 35
+   "ms": 9
   },
   {
    "id": "ui.shell#043",
@@ -16889,7 +16885,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 50
+   "ms": 10
   },
   {
    "id": "ui.shell#044",
@@ -16902,7 +16898,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 32
+   "ms": 9
   },
   {
    "id": "ui.shell#045",
@@ -16915,7 +16911,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 276
+   "ms": 75
   },
   {
    "id": "ui.help#001",
@@ -16928,7 +16924,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 46
+   "ms": 10
   },
   {
    "id": "ui.help#002",
@@ -16941,7 +16937,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 27
+   "ms": 9
   },
   {
    "id": "ui.help#003",
@@ -16954,7 +16950,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 44
+   "ms": 38
   },
   {
    "id": "ui.help#004",
@@ -16967,7 +16963,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 43
+   "ms": 25
   },
   {
    "id": "ui.help#005",
@@ -16980,7 +16976,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 71
+   "ms": 47
   },
   {
    "id": "ui.help#006",
@@ -16993,7 +16989,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 62
+   "ms": 42
   },
   {
    "id": "ui.help#007",
@@ -17006,7 +17002,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 76
+   "ms": 52
   },
   {
    "id": "ui.help#008",
@@ -17032,7 +17028,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 138
+   "ms": 108
   },
   {
    "id": "ui.help#010",
@@ -17045,7 +17041,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 65
+   "ms": 29
   },
   {
    "id": "ui.help#011",
@@ -17058,7 +17054,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 32
+   "ms": 21
   },
   {
    "id": "ui.help#012",
@@ -17071,7 +17067,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 56
+   "ms": 25
   },
   {
    "id": "ui.help#013",
@@ -17084,7 +17080,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 67
+   "ms": 35
   },
   {
    "id": "ui.help#014",
@@ -17097,7 +17093,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 47
+   "ms": 31
   },
   {
    "id": "ui.help#015",
@@ -17110,7 +17106,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 62
+   "ms": 31
   },
   {
    "id": "ui.help#016",
@@ -17123,7 +17119,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 49
+   "ms": 32
   },
   {
    "id": "ui.help#017",
@@ -17136,7 +17132,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 18
+   "ms": 20
   },
   {
    "id": "ui.help#018",
@@ -17149,7 +17145,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 84
+   "ms": 61
   },
   {
    "id": "ui.help#019",
@@ -17163,7 +17159,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 160
+   "ms": 110
   },
   {
    "id": "ui.help#020",
@@ -17176,7 +17172,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 873
+   "ms": 289
   },
   {
    "id": "ui.avatar#125",
@@ -17202,7 +17198,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "",
-   "ms": 0
+   "ms": 1
   },
   {
    "id": "ui.avatar#127",
@@ -17228,7 +17224,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 39
+   "ms": 14
   },
   {
    "id": "games.guess#031",
@@ -17241,7 +17237,7 @@
    "failing": [],
    "trivial": 0,
    "strategy": "rules",
-   "ms": 36
+   "ms": 16
   },
   {
    "id": "games.guess#032",
@@ -17254,7 +17250,7 @@
    "failing": [],
    "trivial": 1,
    "strategy": "",
-   "ms": 0
+   "ms": 3
   }
  ]
 }
