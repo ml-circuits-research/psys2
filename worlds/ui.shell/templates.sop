@@ -49,3 +49,7 @@
 @tpl.ui.shell.ui_hint core.template
     for=action.ui.hint
     text="{value}"
+
+@tpl.ui.shell.ui_settings core.template
+    for=action.ui.settings
+    text="{value}"

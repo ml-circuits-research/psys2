@@ -838,3 +838,37 @@
     emit="@{_} core.request action=ui.playGame arg.tab={tab}"
     priority=11
     example="Play hangman."
+
+@pat.ui.shell.settings.open core.pattern
+    canonical="Open settings."
+    match="[$lang.lead.filler|pls|plz]? [$ui.shell.g5_can_u]? [open|show|display|bring_up|show_me|go_to|take_me_to] [me]? [the|my]? [settings|preferences] [dialog|window|panel|screen|page]? [$ui.shell.g4_pls]?"
+    emit="@{_} core.request action=ui.settings arg.what=open"
+    kind=request
+    priority=14
+    example="Open settings."
+    example="Show me the settings please."
+
+@pat.ui.shell.settings.opentab core.pattern
+    canonical="Open the voice settings."
+    match="[$lang.lead.filler|pls|plz]? [$ui.shell.g5_can_u]? [open|show|display|bring_up|show_me|go_to|take_me_to] [me]? [the|my]? {tab:lex.ui.shell.settingstabs} [settings|preferences] [tab|dialog|window|panel|screen|page]? [$ui.shell.g4_pls]?"
+    emit="@{_} core.request action=ui.settings arg.what=open arg.tab={tab}"
+    kind=request
+    priority=14
+    example="Open the voice settings."
+    example="Show the models settings."
+
+@pat.ui.shell.settings.opentab2 core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$ui.shell.g5_can_u]? [open|show|display|bring_up|go_to] [me]? [the|my]? [settings|preferences] [for|on|at|to]? [the]? {tab:lex.ui.shell.settingstabs} [tab|page|panel]? [$ui.shell.g4_pls]?"
+    emit="@{_} core.request action=ui.settings arg.what=open arg.tab={tab}"
+    kind=request
+    priority=14
+    example="Open settings for voice."
+
+@pat.ui.shell.settings.close core.pattern
+    canonical="Close settings."
+    match="[$lang.lead.filler|pls|plz]? [$ui.shell.g5_can_u]? [close|hide|dismiss|exit|leave|shut|shut_down] [the|my]? [settings|preferences] [dialog|window|panel|screen|page]? [$ui.shell.g4_pls]?"
+    emit="@{_} core.request action=ui.settings arg.what=close"
+    kind=request
+    priority=14
+    example="Close settings."
+    example="Please close the settings window."

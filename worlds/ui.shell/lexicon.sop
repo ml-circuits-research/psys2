@@ -484,3 +484,19 @@
     alt=even
     alt=bit
     alt=little
+
+@lex.ui.shell.settingstabs core.lexicon
+    class=noun
+    doc="Names of the tabs of the host's Settings dialog (SET): understanding, language, voice, models, developer, about. The phrase log has its own operation."
+    word=understanding
+    word=language
+    word=translation
+    word=voice
+    word=speech
+    word=audio
+    word=sound
+    word=models
+    word=model
+    word=developer
+    word=dev
+    word=about

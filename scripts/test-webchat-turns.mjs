@@ -35,23 +35,25 @@ async function findChrome(given) {
   throw new Error('no Chrome/Chromium found');
 }
 
-export async function openChat({ throttle = 4, chrome, init = null, settings = { formalizer: 'rules', normalizer: false, showTrace: false } } = {}) {
+export async function openChat({ throttle = 4, chrome, init = null, settings = { formalizer: 'rules', normalizer: false, showTrace: false }, viewport = { width: 390, height: 844, deviceScaleFactor: 2, isMobile: true, hasTouch: true }, hash = '' } = {}) {
   const puppeteer = await loadPuppeteer();
   const srv = http.createServer(async (q, r) => {
     try { const p = path.join(DOCS, decodeURIComponent(q.url.split('?')[0])); const f = p.endsWith('/') ? `${p}index.html` : p; r.setHeader('content-type', TYPES[path.extname(f)] ?? 'application/octet-stream'); r.end(await readFile(f)); } catch { r.statusCode = 404; r.end('nf'); }
   }).listen(0);
   const browser = await puppeteer.launch({ executablePath: await findChrome(chrome), headless: true, args: ['--no-sandbox'] });
   const pg = await browser.newPage();
-  await pg.setViewport({ width: 390, height: 844, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
+  await pg.setViewport(viewport);
   if (throttle > 1) await (await pg.createCDPSession()).send('Emulation.setCPUThrottlingRate', { rate: throttle });
   await pg.evaluateOnNewDocument((s) => { try { localStorage.setItem('psys2.webchat.settings', JSON.stringify({ settingsVersion: 2, ...s })); } catch { /* ignore */ } }, settings);
   if (init) await pg.evaluateOnNewDocument(init);
   const errors = [];
+  const consoleErrors = [];
   pg.on('pageerror', (e) => errors.push(String(e).slice(0, 200)));
-  await pg.goto(`http://localhost:${srv.address().port}/webchat/index.html`, { waitUntil: 'domcontentloaded' });
+  pg.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text().slice(0, 200)); });
+  await pg.goto(`http://localhost:${srv.address().port}/webchat/index.html${hash}`, { waitUntil: 'domcontentloaded' });
   await pg.waitForFunction(() => document.querySelector('.p2-msg.is-hint'), { timeout: 120000, polling: 50 });
   const api = {
-    pg, errors,
+    pg, errors, consoleErrors, srvPort: srv.address().port,
     close: async () => { await browser.close(); srv.close(); },
     /** Types `text`, presses Enter, waits until the turn ended (no typing bubble, not busy); returns { ms, ok, reply }. */
     async say(text, { timeout = LIMIT_MS + 4000 } = {}) {

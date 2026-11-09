@@ -17,6 +17,7 @@ import { findNormalizerModel, createNormalizerHost } from './ui/normalizer-host.
 import { sessionOptions } from './lib/dialog/runtime-config.mjs';
 import { DEFAULT_SETTINGS, SETTINGS_KEY, loadSettings } from './ui/settings.mjs';
 import { guard, TurnAborted, withDeadline } from './lib/formalizer/guard.mjs';
+import { CREDITS } from './ui/about.mjs';
 import { buildRecord, completeRecord, completeStopped, createStore, filterRecords, toJSONL, toText, exportFilename, summaryStatus, summaryWorlds } from './ui/phrase-log.mjs';
 
 const HERE = new URL('.', import.meta.url);
@@ -56,6 +57,7 @@ const ICON = {
   hands: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-9 9v5a3 3 0 0 0 3 3h1v-7H5v-1a7 7 0 0 1 14 0v1h-2v7h1a3 3 0 0 0 3-3v-5a9 9 0 0 0-9-9Z"/></svg>',
   gear: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.4 13a7.5 7.5 0 0 0 0-2l2-1.6-2-3.4-2.4 1a7.6 7.6 0 0 0-1.7-1L15 3.4h-4l-.4 2.6a7.6 7.6 0 0 0-1.7 1l-2.4-1-2 3.4 2 1.6a7.5 7.5 0 0 0 0 2l-2 1.6 2 3.4 2.4-1a7.6 7.6 0 0 0 1.7 1l.4 2.6h4l.4-2.6a7.6 7.6 0 0 0 1.7-1l2.4 1 2-3.4-2-1.6ZM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z"/></svg>',
   send: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20.5 22 12 3 3.5v6.6l11 1.9-11 1.9v6.6Z"/></svg>',
+  close: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.4 5 12 10.6 17.6 5 19 6.4 13.4 12 19 17.6 17.6 19 12 13.4 6.4 19 5 17.6 10.6 12 5 6.4 6.4 5Z"/></svg>',
   stop: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h12v12H6Z"/></svg>',
 };
 const icon = (name) => { const s = document.createElement('span'); s.className = 'p2-icon'; s.innerHTML = ICON[name]; return s; };
@@ -105,21 +107,26 @@ export async function mountPsys2(element, options = {}) {
   const speakerBtn = h('button', { class: 'p2-btn', type: 'button', 'aria-pressed': 'false', 'aria-label': 'Read answers aloud' }, icon('speaker'));
   const handsBtn = h('button', { class: 'p2-btn', type: 'button', 'aria-pressed': 'false', 'aria-label': 'Hands-free mode' }, icon('hands'));
   const gearBtn = h('button', { class: 'p2-btn', type: 'button', 'aria-haspopup': 'dialog', 'aria-expanded': 'false', 'aria-label': 'Settings', title: 'Settings' }, icon('gear'));
-  const settingsEl = h('div', { class: 'p2-settings', role: 'dialog', 'aria-label': 'Settings', hidden: true });
+  // Settings: a full-screen modal over the whole widget (SET). Built once; renderSettings() fills the active tab.
+  const setClose = h('button', { class: 'p2-btn p2-modal-close', type: 'button', 'aria-label': 'Close settings', title: 'Close settings' }, icon('close'));
+  const setTabsEl = h('div', { class: 'p2-modal-tabs', role: 'tablist', 'aria-label': 'Settings topics' });
+  const setBody = h('div', { class: 'p2-modal-body', role: 'tabpanel', id: 'p2-set-panel', tabindex: '0' });
+  const settingsEl = h('div', { class: 'p2-modal', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'p2-set-title', hidden: true },
+    h('div', { class: 'p2-modal-head' }, h('h2', { class: 'p2-modal-title', id: 'p2-set-title' }, 'Settings'), setClose), setTabsEl, setBody);
   const form = h('form', { class: 'p2-form' }, micBtn, input, sendBtn);
   const chat = h('section', { class: 'p2-chat', 'aria-label': 'Chat' },
     h('header', { class: 'p2-head' },
       h('div', { class: 'p2-title' }, h('strong', {}, options.title ?? 'PSys2'), h('span', {}, 'no LLM · runs in your browser')),
       h('div', { class: 'p2-tools' }, langSel, speakerBtn, handsBtn, gearBtn)),
     statusEl, log, form,
-    h('footer', { class: 'p2-foot' }, h('a', { href: SOURCE_URL, target: '_blank', rel: 'noopener', 'data-source-link': 'footer' }, 'Source code (AGPL-3.0)')),
-    settingsEl);
+    h('footer', { class: 'p2-foot' }, h('a', { href: SOURCE_URL, target: '_blank', rel: 'noopener', 'data-source-link': 'footer' }, 'Source code (AGPL-3.0)')));
   const tabsEl = h('div', { class: 'p2-tabs', role: 'tablist', 'aria-label': 'Tools' });
   const panelsEl = h('div', { class: 'p2-panels' });
   root.append(chat);
-  if (tabDefs.length) {
-    root.append(h('section', { class: 'p2-pane', 'aria-label': 'Tools' }, tabsEl, panelsEl));
-  } else root.classList.add('p2-chat-only');
+  const paneEl = tabDefs.length ? h('section', { class: 'p2-pane', 'aria-label': 'Tools' }, tabsEl, panelsEl) : null;
+  if (paneEl) root.append(paneEl); else root.classList.add('p2-chat-only');
+  const modalHost = h('div', { class: 'p2 p2-modal-host' }, settingsEl);   // in <body>, so that "full screen" is the viewport even when the page stacks the chat and the tools
+  document.body.append(modalHost);
 
   const tabBtns = {};
   for (const t of tabDefs) {
@@ -255,7 +262,7 @@ export async function mountPsys2(element, options = {}) {
       setTimeout(() => URL.revokeObjectURL(url), 5000); toast(`Downloaded ${name}`); return { ok: true, detail: name };
     },
     'phraselog': async ({ what }) => {
-      if (what === 'show') { toggleSettings(true); settingsEl.querySelector('.p2-plog')?.scrollIntoView?.({ block: 'start' }); return { ok: true }; }
+      if (what === 'show') { openSettings('phrases'); return { ok: true }; }
       if (what === 'export') { const n = exportPhrases(); return n ? { ok: true } : { ok: false, detail: 'there are no phrases to export' }; }
       if (what === 'count') {
         if (!settings.logPhrases && !phrases.all().length) note('The phrase log is switched off, so I have not kept any phrases.');
@@ -264,6 +271,7 @@ export async function mountPsys2(element, options = {}) {
       }
       return { ok: false, detail: `unknown phrase log command "${what}"` };
     },
+    'settings': async ({ action, tab }) => { if (action === 'close') closeSettings(); else openSettings(tab); return { ok: true }; },
     'avatar.animate': async (args) => { robotUI()?.animate?.(args); return { ok: !!robotUI() }; },
     'ui.focus': async ({ target, element: el }) => {
       const t = String(target ?? el ?? 'input');
@@ -464,9 +472,9 @@ export async function mountPsys2(element, options = {}) {
   }
   // dev overlay (add ?perf=1 to the page URL): stage timings of the last message
   let perfEl = null;
-  const perfOn = (() => { try { return new URLSearchParams(globalThis.location?.search ?? '').has('perf'); } catch { return false; } })();
+  const perfParam = (() => { try { return new URLSearchParams(globalThis.location?.search ?? '').has('perf'); } catch { return false; } })();
   function showPerfOverlay(rec) {
-    if (!perfOn) return;
+    if (!perfParam && settings.showPerf !== true) return;
     perfEl ??= h('pre', { class: 'p2-perf', 'aria-hidden': 'true' });
     if (!perfEl.isConnected) document.body.append(perfEl);
     const st = Object.entries(rec.stages ?? {}).map(([k, v]) => `${k.padEnd(18)} ${String(v.n).padStart(4)}x ${String(v.ms).padStart(8)} ms`);
@@ -539,8 +547,9 @@ export async function mountPsys2(element, options = {}) {
   on(micBtn, 'click', () => { if (mic.listening) speech.stopListening(); else speech.listenOnce(); });
   on(speakerBtn, 'click', () => setSpeaker(!settings.speaker));
   on(handsBtn, 'click', () => setHandsFree(!settings.handsFree));
-  on(langSel, 'change', () => { settings.language = langSel.value; sessionLang = null; speech?.refreshLang(); save(); renderSettings(); session?.setWorldState?.(SHELL, { language: settings.language }); });
-  on(gearBtn, 'click', () => toggleSettings());
+  const setLanguage = (v) => { settings.language = v; langSel.value = v; sessionLang = null; speech?.refreshLang(); save(); renderSettings(); session?.setWorldState?.(SHELL, { language: settings.language }); };
+  on(langSel, 'change', () => setLanguage(langSel.value));
+  on(gearBtn, 'click', () => openSettings());
 
   if (options.pushToTalk !== false && speechSupport.recognition) {
     let held = false;
@@ -567,14 +576,93 @@ export async function mountPsys2(element, options = {}) {
     const pct = (x) => (typeof x === 'number' ? `${(x * 100).toFixed(1)}%` : '?');
     return `Model version: ${v.model ?? 'dispatcher'}, exported ${v.export_date ?? '?'}, sha256 ${String(v.sha256 ?? '').slice(0, 8)}, ${m.split ?? 'test'} world top-1 ${pct(m.world_top1)}, top-3 ${pct(m.world_top3)}, segmentation F1 ${pct(m.seg_f1)}. `;
   }
-  function toggleSettings(force) {
-    const open = force ?? settingsEl.hidden;
-    settingsEl.hidden = !open; gearBtn.setAttribute('aria-expanded', String(open));
-    if (open) { renderSettings(); settingsEl.querySelector('select,input,button')?.focus(); } else gearBtn.focus();
+  // ---- the Settings modal (SET): full screen, one tab per topic, closes with x, Esc and Back; deep link #settings/<tab> ----
+  const SETTINGS_TABS = [['understanding', 'Understanding'], ['language', 'Language'], ['voice', 'Voice'], ['phrases', 'Phrase log'], ['models', 'Models'], ['developer', 'Developer'], ['about', 'About']];
+  const SET_TAB_KEY = 'psys2.webchat.settingsTab';
+  const isSettingsTab = (id) => SETTINGS_TABS.some(([t]) => t === id);
+  let settingsTab = (() => { try { const t = options.persist !== false ? localStorage.getItem(SET_TAB_KEY) : null; return isSettingsTab(t) ? t : 'understanding'; } catch { return 'understanding'; } })();
+  let settingsPushed = false;
+  const settingsHash = () => `#settings/${settingsTab}`;
+  const hashTab = (hash) => { const m = /^#settings(?:\/([\w-]*))?$/.exec(hash ?? ''); return m ? (isSettingsTab(m[1]) ? m[1] : '') : null; };   // null: not a settings link; '' : settings without a (known) tab
+  for (const [id, label] of SETTINGS_TABS) {
+    setTabsEl.append(h('button', { class: 'p2-tab p2-modal-tab', role: 'tab', type: 'button', id: `p2-st-${id}`, 'aria-controls': 'p2-set-panel', 'data-tab': id, onclick: () => setSettingsTab(id) }, label));
   }
-  on(chat, 'keydown', (e) => { if (e.key === 'Escape' && !settingsEl.hidden) toggleSettings(false); });
+  function setSettingsTab(id, focus = false) {
+    if (!isSettingsTab(id)) return;
+    settingsTab = id;
+    if (options.persist !== false) try { localStorage.setItem(SET_TAB_KEY, id); } catch { /* storage unavailable */ }
+    if (!settingsEl.hidden) { try { history.replaceState(history.state, '', settingsHash()); } catch { /* no history */ } }
+    setBody.scrollTop = 0;
+    renderSettings();
+    if (id === 'models') refreshModelsInfo();
+    if (id === 'developer' || id === 'about') loadBuildInfo();
+    if (focus) setTabsEl.querySelector(`#p2-st-${id}`)?.focus();
+  }
+  on(setTabsEl, 'keydown', (e) => {
+    const ids = SETTINGS_TABS.map(([id]) => id), i = ids.indexOf(settingsTab);
+    const next = e.key === 'ArrowRight' ? ids[(i + 1) % ids.length] : e.key === 'ArrowLeft' ? ids[(i - 1 + ids.length) % ids.length] : e.key === 'Home' ? ids[0] : e.key === 'End' ? ids.at(-1) : null;
+    if (next) { e.preventDefault(); setSettingsTab(next, true); }
+  });
+  /** Opens the modal (on `tab`, else the last tab). One history entry is pushed so that the phone's Back button closes it. */
+  function openSettings(tab, { push = true } = {}) {
+    if (tab && isSettingsTab(tab)) settingsTab = tab;
+    const wasOpen = !settingsEl.hidden;
+    settingsEl.hidden = false; gearBtn.setAttribute('aria-expanded', 'true');
+    chat.inert = true; if (paneEl) paneEl.inert = true;
+    if (!wasOpen) {
+      if (push) { try { history.pushState({ p2settings: true }, '', settingsHash()); settingsPushed = true; } catch { /* no history */ } }
+      else settingsPushed = true;
+    }
+    setSettingsTab(settingsTab, !wasOpen);
+  }
+  function closeSettings({ fromPop = false } = {}) {
+    if (settingsEl.hidden) return;
+    settingsEl.hidden = true; gearBtn.setAttribute('aria-expanded', 'false');
+    chat.inert = false; if (paneEl) paneEl.inert = false;
+    if (settingsPushed) { settingsPushed = false; if (!fromPop) { try { history.back(); } catch { /* no history */ } } }
+    gearBtn.focus();
+  }
+  on(setClose, 'click', () => closeSettings());
+  on(settingsEl, 'keydown', (e) => {
+    if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); closeSettings(); return; }
+    if (e.key !== 'Tab') return;
+    const f = [...settingsEl.querySelectorAll('button, input, select, a[href], textarea, [tabindex]:not([tabindex="-1"])')].filter((n) => !n.disabled && n.tabIndex >= 0 && n.getClientRects().length);
+    if (!f.length) return;
+    const first = f[0], last = f.at(-1);
+    if (e.shiftKey && (document.activeElement === first || !settingsEl.contains(document.activeElement))) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && (document.activeElement === last || !settingsEl.contains(document.activeElement))) { e.preventDefault(); first.focus(); }
+  });
+  on(window, 'popstate', () => {
+    const t = hashTab(location.hash);
+    if (!settingsEl.hidden && t === null) closeSettings({ fromPop: true });
+    else if (settingsEl.hidden && t !== null) openSettings(t || undefined, { push: false });
+  });
+  on(window, 'hashchange', () => { const t = hashTab(location.hash); if (t !== null && (settingsEl.hidden || (t && t !== settingsTab))) openSettings(t || undefined, { push: false }); });
+
+  // ---- data shown in the Models, Developer and About tabs ----
+  let buildInfo = null, modelsInfo = { usage: null, quota: null, cached: {}, dispatcherMB: null };
+  async function loadBuildInfo() {
+    if (buildInfo) return;
+    try { const r = await fetch(new URL('build-info.json', base), { cache: 'no-cache' }); buildInfo = r.ok ? await r.json() : { error: `HTTP ${r.status}` }; } catch (e) { buildInfo = { error: String(e?.message ?? e) }; }
+    if (!settingsEl.hidden) renderSettings();
+  }
+  async function refreshModelsInfo() {
+    const info = { usage: null, quota: null, cached: {}, dispatcherMB: modelsInfo.dispatcherMB };
+    try { const est = await navigator.storage?.estimate?.(); info.usage = est?.usage ?? null; info.quota = est?.quota ?? null; } catch { /* not available */ }
+    try { for (const [id, name] of [['dispatcher', 'psys2-dispatcher-model'], ['normalizer', 'psys2-normalizer-model']]) info.cached[id] = (await caches.has(name)) ? (await (await caches.open(name)).keys()).filter((r) => !r.url.includes('meta.json')).length > 0 : false; } catch { /* no Cache API */ }
+    if (info.dispatcherMB == null && dispatcherEnc) {
+      try { const r = await fetch(new URL('models/dispatcher/model.int8.onnx', base), { method: 'HEAD' }); const n = Number(r.headers.get('content-length')); if (n) info.dispatcherMB = Math.round(n / 1048576); } catch { /* unknown */ }
+    }
+    modelsInfo = info;
+    if (!settingsEl.hidden && settingsTab === 'models') renderSettings();
+  }
+  async function removeModelCaches() {
+    try { for (const name of ['psys2-dispatcher-model', 'psys2-normalizer-model']) await caches.delete(name); } catch { /* no Cache API */ }
+    toast('Models removed from the cache. They download again when needed.');
+    refreshModelsInfo();
+  }
   function field(label, control, note) {
-    const id = `p2-f-${Math.random().toString(36).slice(2, 8)}`;
+    const id = `p2-f-${label.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 40)}`;
     control.id = id;
     return h('div', { class: 'p2-field' }, h('label', { for: id }, label), control, note ? h('small', {}, note) : null);
   }
@@ -583,21 +671,84 @@ export async function mountPsys2(element, options = {}) {
     s.value = value; s.addEventListener('change', () => onChange(s.value)); return s;
   }
   function check(label, value, onChange, disabledWhy) {
-    const c = h('input', { type: 'checkbox', disabled: disabledWhy ? true : null, title: disabledWhy || null });
+    const c = h('input', { type: 'checkbox', id: `p2-c-${label.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 40)}`, disabled: disabledWhy ? true : null, title: disabledWhy || null });
     c.checked = value; c.addEventListener('change', () => onChange(c.checked));
     return h('label', { class: 'p2-check', title: disabledWhy || null }, c, ' ', label, disabledWhy ? h('small', {}, ` (${disabledWhy})`) : null);
   }
-  function renderSettings() {
-    if (settingsEl.hidden && settingsEl.childElementCount) return;
-    const prevFocus = settingsEl.contains(document.activeElement) ? document.activeElement.id : null;
-    const voices = speech?.voices() ?? [];
-    const tag = speechLangTag().slice(0, 2);
-    const voiceOpts = [['', 'Automatic'], ...voices.filter((v) => v.lang?.startsWith(tag)).map((v) => [v.name, `${v.name} (${v.lang})`])];
-    const rateVal = h('output', {}, `${Number(settings.rate).toFixed(1)}×`);
-    const rate = h('input', { type: 'range', min: '0.5', max: '1.8', step: '0.1', value: String(settings.rate), disabled: speechSupport.synthesis ? null : true });
-    rate.addEventListener('input', () => { settings.rate = Number(rate.value); rateVal.textContent = `${settings.rate.toFixed(1)}×`; save(); });
-    settingsEl.replaceChildren(
-      h('div', { class: 'p2-settings-head' }, h('strong', {}, 'Settings'), h('button', { class: 'p2-linkbtn', type: 'button', onclick: () => toggleSettings(false) }, 'Close')),
+  const mb = (n) => (n == null ? '?' : n >= 1024 * 1048576 ? `${(n / 1073741824).toFixed(1)} GB` : `${Math.round(n / 1048576)} MB`);
+  /** One card of the Models tab: name, version, size, status, actions. */
+  function modelCard({ title, model, version, sizeText, statusText, cached, actions, note: more }) {
+    return h('div', { class: 'p2-model' }, h('strong', {}, title),
+      h('dl', {},
+        h('dt', {}, 'Model'), h('dd', {}, model),
+        h('dt', {}, 'Version'), h('dd', {}, version || 'unversioned'),
+        h('dt', {}, 'Size'), h('dd', {}, sizeText),
+        h('dt', {}, 'Status'), h('dd', { class: 'p2-model-status' }, statusText),
+        h('dt', {}, 'Cache'), h('dd', {}, cached == null ? 'checking…' : cached ? 'cached in this browser' : 'not cached')),
+      more ? h('small', {}, more) : null,
+      h('div', { class: 'p2-plog-actions' }, ...actions));
+  }
+  const textBtn = (label, fn, extra = {}) => h('button', { class: 'p2-btn-text', type: 'button', onclick: fn, ...extra }, label);
+  function modelsBody() {
+    const d = dispatcherStatus, nz = normalizerHost?.status;
+    const src = (s) => (s === 'cache' ? 'from the cache' : 'downloaded');
+    const dState = !dispatcherEnc ? (encoderChecked ? 'this build has no dispatcher model' : 'checking…')
+      : d.state === 'ready' ? `loaded (${src(modelSource)}, ${Math.round((d.ms ?? 0) / 100) / 10} s)` : d.state === 'loading' ? `loading, ${d.message}` : d.state === 'error' ? `not available (${d.message})` : 'not loaded yet; the rules answer meanwhile';
+    const nState = !normalizerHost ? 'this build has no normalizer model'
+      : nz.state === 'ready' ? `loaded (${src(nz.source)}, ${Math.round((nz.ms ?? 0) / 100) / 10} s)` : nz.state === 'loading' ? `loading, ${nz.message}` : nz.state === 'error' ? `not available (${nz.message})`
+        : settings.normalizer === false ? 'not loaded (simplifying phrasing is switched off)' : 'not loaded: the helper model loads when needed';
+    const nzMB = normalizerHost ? Math.round(Object.values(normalizerHost.meta.sizes_MB ?? {}).reduce((a, b) => a + b, 0)) : null;
+    const loadBtn = (host, what) => textBtn(host.status.state === 'ready' ? 'Loaded' : host.status.state === 'loading' ? 'Loading…' : 'Load now',
+      () => { host.prepare().catch(() => {}).then(refreshModelsInfo); renderSettings(); }, { disabled: host.status.state === 'ready' || host.status.state === 'loading', title: `Load the ${what} model now` });
+    return [
+      h('p', { class: 'p2-lead' }, 'Two small neural models run in your browser (ONNX Runtime, WASM, no server). They only propose; the rules and the worlds decide. They are cached in this browser, so they download once per version.'),
+      modelCard({
+        title: 'Dispatcher', model: 'DistilBERT (distilbert-base-uncased), int8: cuts a message into parts and proposes which worlds fit', version: dispatcherEnc ? dispatcherLabel : '',
+        sizeText: modelsInfo.dispatcherMB ? `${modelsInfo.dispatcherMB} MB` : 'about 64 MB', statusText: dState, cached: dispatcherEnc ? modelsInfo.cached.dispatcher ?? null : false,
+        actions: dispatcherEnc ? [loadBtn({ status: dispatcherStatus, prepare: () => dispatcherEnc.prepare() }, 'dispatcher')] : [],
+        note: dispatcherVersionText().trim() || null,
+      }),
+      modelCard({
+        title: 'Normalizer', model: 'FLAN-T5 small, int8: proposes a simpler wording only when nothing else reads a sentence; every rewrite is checked by the rules and the value checker', version: normalizerHost?.label ?? '',
+        sizeText: nzMB ? `${nzMB} MB` : 'about 95 MB', statusText: nState, cached: normalizerHost ? modelsInfo.cached.normalizer ?? null : false,
+        actions: normalizerHost ? [loadBtn(normalizerHost, 'normalizer')] : [],
+      }),
+      h('div', { class: 'p2-field' }, h('strong', {}, 'Cache'),
+        h('p', {}, modelsInfo.usage == null ? 'The browser did not report how much storage this site uses.' : `This site uses ${mb(modelsInfo.usage)} of browser storage${modelsInfo.quota ? ` (limit about ${mb(modelsInfo.quota)})` : ''}; the models are most of it.`),
+        h('div', { class: 'p2-plog-actions' }, textBtn('Remove the models from the cache', removeModelCaches, { title: 'Delete the cached model files; they download again when needed', disabled: !(modelsInfo.cached.dispatcher || modelsInfo.cached.normalizer) }))),
+    ];
+  }
+  function buildInfoLines() {
+    if (!buildInfo) return h('p', {}, 'Loading build information…');
+    if (buildInfo.error) return h('p', {}, `Build information is not available (${buildInfo.error}).`);
+    const files = buildInfo.files ? Object.keys(buildInfo.files).length : null;
+    return h('ul', { class: 'p2-buildinfo' },
+      h('li', {}, `Built: ${buildInfo.builtAt ?? 'unknown'}`),
+      h('li', {}, `${(buildInfo.worlds ?? []).length} worlds${files ? `, ${files} files` : ''}`),
+      h('li', {}, `Dispatcher model: ${dispatcherEnc ? dispatcherLabel : 'none in this build'}`),
+      h('li', {}, `Normalizer model: ${normalizerHost ? normalizerHost.label : 'none in this build'}`));
+  }
+  function developerBody() {
+    return [
+      check('Show the trace of every answer (which part was read by which rule, model and validator)', settings.showTrace, (v) => { settings.showTrace = v; save(); }),
+      check('Show the per-stage timing overlay of the last message (also with ?perf=1 in the page address)', settings.showPerf === true, (v) => { settings.showPerf = v; save(); if (!v) perfEl?.remove(); }),
+      h('div', { class: 'p2-field' }, h('strong', {}, 'Build'), buildInfoLines()),
+    ];
+  }
+  function aboutBody() {
+    return [
+      h('p', {}, 'PSys2 answers with explicit rules and small knowledge worlds, with no language model, and runs entirely in your browser.'),
+      h('div', { class: 'p2-field' }, h('strong', {}, 'Version and build'), buildInfoLines()),
+      h('div', { class: 'p2-field p2-about' }, h('strong', {}, 'Licence'),
+        h('p', {}, 'AGPL-3.0-only. Anyone who uses this page over a network can get the source code.'),
+        h('p', {}, h('a', { href: SOURCE_URL, target: '_blank', rel: 'noopener', 'data-source-link': 'about' }, 'Source code (AGPL-3.0)'))),
+      h('div', { class: 'p2-field' }, h('strong', {}, 'Credits'),
+        h('p', {}, 'Libraries and models bundled with this page, with their licences (all compatible with AGPL-3.0).'),
+        h('ul', { class: 'p2-credits' }, CREDITS.map(([name, version, licence, use]) => h('li', {}, h('b', {}, name), h('small', {}, ` ${version} · ${licence} · ${use}`))))),
+    ];
+  }
+  function understandingBody() {
+    return [
       field('Formalizer', select([['rules', 'Rules (deterministic)'], ['encoder', !encoderChecked ? 'Encoder (checking…)' : encoderOk() ? 'Encoder (dispatcher + rule validation)' : 'Encoder (not available)', encoderChecked && !encoderOk()]], settings.formalizer,
         (v) => { settings.formalizer = v; applyEngineSettings(); save(); renderSettings(); }),
         dispatcherVersionText() + (!encoderChecked ? 'Looking for the dispatcher model…'
@@ -611,22 +762,42 @@ export async function mountPsys2(element, options = {}) {
       ...(dispatcherEnc ? [check('Edit head (experimental, off by default): also try the dispatcher’s own simplified wording of a part when nothing else reads it; it recovers few messages and misleads more', settings.editHead === true, (v) => { settings.editHead = v; save(); })] : []),
       check('Partial understanding: do what I understood and say what I ignored', settings.partialUnderstanding, (v) => { settings.partialUnderstanding = v; applyEngineSettings(); save(); }),
       check('Best effort with loose words: when words do not form a sentence, do the most sensible reading and say how I took it (for example “square eyes robot” → “make your eyes square”)', settings.bestEffort !== false, (v) => { settings.bestEffort = v; applyEngineSettings(); save(); }),
+    ];
+  }
+  function languageBody() {
+    return [
+      field('Language', select([['en', 'English'], ['ro', 'Română']], settings.language, (v) => setLanguage(v)), 'The language you talk to me in and I answer in. The same as the selector in the header.'),
       field('Translation', select([['auto', 'Automatic'], ['browser-api', 'Browser API'], ['rules', 'Rules']], settings.translation, (v) => { settings.translation = v; save(); renderSettings(); }),
         `Used when the language is not English. Browser on-device translator: ${browserAvail}. Its output is checked and falls back to the rules translator.`),
       field('Language detection', select([['auto', 'Automatic'], ['browser-api', 'Browser API'], ['rules', 'Rules']], settings.languageDetection, (v) => { settings.languageDetection = v; save(); renderSettings(); }),
         `Decides whether a message is English or Romanian. Browser on-device language detector: ${detectAvail}. Uncertain or other-language results keep the current language; without the browser API, or while it downloads, the rules detector is used.`),
+    ];
+  }
+  function voiceBody() {
+    const voices = speech?.voices() ?? [];
+    const tag = speechLangTag().slice(0, 2);
+    const voiceOpts = [['', 'Automatic'], ...voices.filter((v) => v.lang?.startsWith(tag)).map((v) => [v.name, `${v.name} (${v.lang})`])];
+    const rateVal = h('output', {}, `${Number(settings.rate).toFixed(1)}×`);
+    const rate = h('input', { type: 'range', id: 'p2-f-rate', min: '0.5', max: '1.8', step: '0.1', value: String(settings.rate), disabled: speechSupport.synthesis ? null : true });
+    rate.addEventListener('input', () => { settings.rate = Number(rate.value); rateVal.textContent = `${settings.rate.toFixed(1)}×`; save(); });
+    return [
       field('Speech language', select([['auto', 'Automatic (follows the session language)'], ['en-US', 'English (US)'], ['en-GB', 'English (UK)'], ['ro-RO', 'Română']], settings.speechLang, (v) => { settings.speechLang = v; save(); renderSettings(); speech?.refreshLang(); })),
       field('Voice', select(voiceOpts, settings.voice, (v) => { settings.voice = v; save(); }), speechSupport.synthesis ? (voices.length ? null : 'Voices are still loading or none are installed.') : 'Speech synthesis is not supported by this browser.'),
-      h('div', { class: 'p2-field' }, h('label', {}, 'Speech rate ', rateVal), rate),
+      h('div', { class: 'p2-field' }, h('label', { for: 'p2-f-rate' }, 'Speech rate ', rateVal), rate),
       check('Hands-free mode (continuous listening)', settings.handsFree, (v) => setHandsFree(v), speechSupport.recognition ? '' : 'speech recognition is not supported'),
       check('Read answers aloud', settings.speaker, (v) => setSpeaker(v), speechSupport.synthesis ? '' : 'speech synthesis is not supported'),
-      check('Show the trace of every answer', settings.showTrace, (v) => { settings.showTrace = v; save(); }),
-      phraseLogSection(),
-      h('div', { class: 'p2-field p2-about' }, h('strong', {}, 'About'),
-        h('p', {}, 'PSys2 answers with explicit rules and small knowledge worlds, with no language model, and runs entirely in your browser. '),
-        h('p', {}, h('a', { href: SOURCE_URL, target: '_blank', rel: 'noopener', 'data-source-link': 'about' }, 'Source code (AGPL-3.0)'))),
-    );
-    if (prevFocus) settingsEl.querySelector(`#${CSS.escape(prevFocus)}`)?.focus();
+    ];
+  }
+  function renderSettings() {
+    if (settingsEl.hidden) return;
+    const prevFocus = setBody.contains(document.activeElement) ? document.activeElement.id : null;
+    const keep = setBody.scrollTop;
+    for (const btn of setTabsEl.children) { const active = btn.dataset.tab === settingsTab; btn.setAttribute('aria-selected', String(active)); btn.tabIndex = active ? 0 : -1; if (active) btn.scrollIntoView?.({ block: 'nearest', inline: 'nearest' }); }
+    setBody.setAttribute('aria-labelledby', `p2-st-${settingsTab}`);
+    const bodies = { understanding: understandingBody, language: languageBody, voice: voiceBody, phrases: () => [phraseLogSection()], models: modelsBody, developer: developerBody, about: aboutBody };
+    setBody.replaceChildren(...bodies[settingsTab]());
+    setBody.scrollTop = keep;
+    if (prevFocus) setBody.querySelector(`#${CSS.escape(prevFocus)}`)?.focus();
   }
   // ---------- phrase log ----------
   const plogList = h('ul', { class: 'p2-plog-list', 'aria-label': 'Logged phrases' });
@@ -774,10 +945,11 @@ export async function mountPsys2(element, options = {}) {
   }
   const handle = {
     engine, session, settings, send, stop: stopTurn, applyState, showTab, get busy() { return !!turn; },
-    destroy() { destroyed = true; cleanups.forEach((f) => f()); robotUI()?.destroy?.(); speech.destroy(); element.replaceChildren(); element.classList.remove('p2-box'); },
+    destroy() { destroyed = true; cleanups.forEach((f) => f()); modalHost.remove(); robotUI()?.destroy?.(); speech.destroy(); element.replaceChildren(); element.classList.remove('p2-box'); },
   };
   if (settings.handsFree && speechSupport.recognition) setHandsFree(true, false);
   element.dataset.ready = 'true';
+  { const t = hashTab(location.hash); if (t !== null) { try { history.replaceState(null, '', location.pathname + location.search); } catch { /* no history */ } openSettings(t || undefined); } }   // deep link #settings/<tab>
   // Warm-up after first paint (PERF): the first message used to pay for compiling every pattern and building the vocabularies, and the
   // first model run for the ORT start-up. A scratch session reads two sentences now, while the user is still looking at the page.
   const warm = async () => {

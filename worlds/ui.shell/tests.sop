@@ -311,3 +311,27 @@
     input="can i play a hangman game"
     expectState="activeTab=hangman"
     session=ush3
+
+@t.ui.shell.set01 core.test
+    input="open settings"
+    expect="settings"
+    expectEffect=settings
+    session=uset1
+
+@t.ui.shell.set02 core.test
+    input="open the voice settings"
+    expect="Voice settings"
+    expectEffect=settings
+    session=uset2
+
+@t.ui.shell.set03 core.test
+    input="close settings"
+    expect="closed"
+    expectEffect=settings
+    session=uset3
+
+@t.ui.shell.set04 core.test
+    input="show the phrase log"
+    expect="phrase log"
+    expectEffect=phraselog
+    session=uset4

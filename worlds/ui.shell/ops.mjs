@@ -163,3 +163,17 @@ export function phraseLog(ctx, { what }) {
   if (what === 'export') return ok('OK, I am exporting your phrases as a JSONL file.');
   return ok('Let me count your phrases.');
 }
+
+/** Settings modal commands (SET); the host owns the modal and carries out the effect settings { action: open | close, tab }. */
+const SETTINGS_TABS = {
+  understanding: 'understanding', formalizer: 'understanding', language: 'language', translation: 'language', voice: 'voice', speech: 'voice', audio: 'voice', sound: 'voice',
+  phrase_log: 'phrases', phrases: 'phrases', models: 'models', model: 'models', developer: 'developer', dev: 'developer', about: 'about', licence: 'about', license: 'about',
+};
+const SETTINGS_TITLES = { understanding: 'Understanding', language: 'Language', voice: 'Voice', phrases: 'Phrase log', models: 'Models', developer: 'Developer', about: 'About' };
+export function settings(ctx, { what, tab }) {
+  if (what === 'close') { ctx.effect('settings', { action: 'close' }); return ok('OK, the settings are closed.'); }
+  const id = tab === undefined ? null : SETTINGS_TABS[norm(tab)];
+  if (tab !== undefined && !id) return no('unsupported', `I do not have a settings tab called ${tab}. The tabs are Understanding, Language, Voice, Phrase log, Models, Developer and About.`);
+  ctx.effect('settings', { action: 'open', ...(id ? { tab: id } : {}) });
+  return ok(id ? `OK, here are the ${SETTINGS_TITLES[id]} settings.` : 'OK, here are the settings.');
+}

@@ -81,3 +81,9 @@
     semantics=action
     action=ui.phraseLog
     doc="Phrase log of the host (what the user typed or said, kept in the browser): shows it in Settings, exports it, or reports its size. Effect phraselog { what: show | export | count } is carried out by the host."
+
+@op.ui.shell.settings core.operation
+    impl=settings
+    semantics=action
+    action=ui.settings
+    doc="Opens the host's Settings dialog (optionally on one tab: understanding, language, voice, phrases, models, developer, about) or closes it. Effect settings { action: open | close, tab } is carried out by the host."

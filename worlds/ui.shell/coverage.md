@@ -48,6 +48,9 @@ Noise handled by the new patterns: fillers, modal and wish prefixes (`can u`, `c
 | | noun first | S | `game stop`, `game over`, `stop it, game over` |
 | `ui.hint` | imperative / short | S | existing (`give me a hint`) |
 | | `clue` forms | U | cross-world: the open game's own hint pattern owns `clue` in the labelled data |
+| `ui.settings` open | imperative | S | `open settings`, `show me the settings please` |
+| | one tab | S | `open the voice settings`, `open settings for models` (tabs: understanding, language, voice, models, developer, about; the phrase log has its own operation) |
+| `ui.settings` close | imperative | S | `close settings`, `please close the settings window` |
 | `ui.phraseLog` show | imperative | S | `show my phrase log`, `phrase log` |
 | `ui.phraseLog` export | imperative / wish | S | `download my phrase log`, `i want a copy of my phrase log`, `export phrase log` |
 | | very short / order | S | `phrase log download pls`, `phrase log to file please`, `download the phrases i said` |

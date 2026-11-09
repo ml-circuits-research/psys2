@@ -74,9 +74,30 @@
 @keyframes p2-pulse { 0% { box-shadow: 0 0 0 0 rgba(15, 118, 110, .5); } 100% { box-shadow: 0 0 0 12px rgba(15, 118, 110, 0); } }
 .p2-toast { position: absolute; bottom: 70px; left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 6px 14px; border-radius: 16px; font-size: 13px; z-index: 5; }
 
-/* settings */
-.p2-settings { position: absolute; inset: 49px 0 0 0; z-index: 4; overflow-y: auto; padding: 14px; background: var(--surface); display: flex; flex-direction: column; gap: 12px; }
-.p2-settings-head { display: flex; justify-content: space-between; align-items: center; }
+/* settings: a full-screen modal over the widget, one tab per topic (SET) */
+.p2.p2-modal-host { position: fixed; inset: 0; z-index: 1000; display: block; height: auto; min-height: 0; overflow: visible; background: transparent; pointer-events: none; }
+.p2-modal-host > .p2-modal { pointer-events: auto; }
+.p2-modal { position: absolute; inset: 0; z-index: 30; display: flex; flex-direction: column; background: var(--surface); color: var(--ink); }
+.p2-modal-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 8px 6px 16px; border-bottom: 1px solid var(--line); }
+.p2-modal-title { margin: 0; font-size: 18px; }
+.p2-modal-close { width: 44px; height: 44px; color: var(--ink); }
+.p2-modal-tabs { display: flex; gap: 2px; padding: 4px 10px 0; border-bottom: 1px solid var(--line); overflow-x: auto; flex: none; scrollbar-width: thin; }
+.p2-modal-tab { flex: none; }
+.p2-modal-body { flex: 1; min-height: 0; overflow-y: auto; padding: 14px 16px 24px; display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 760px; margin: 0 auto; align-self: stretch; }
+.p2-modal-body > * { flex: none; min-width: 0; max-width: 100%; }
+.p2-modal-body { overflow-x: hidden; overflow-wrap: anywhere; }
+.p2-modal-body .p2-select { width: 100%; min-width: 0; max-width: 100%; }
+.p2-lead { margin: 0; color: var(--muted); }
+.p2-model { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: var(--surface-2); display: flex; flex-direction: column; gap: 6px; }
+.p2-model dl { display: grid; grid-template-columns: max-content 1fr; gap: 2px 12px; margin: 0; }
+.p2-model dt { color: var(--muted); font-size: 13px; }
+.p2-model dd { margin: 0; overflow-wrap: anywhere; }
+.p2-model small { color: var(--muted); font-size: 12px; }
+.p2-buildinfo, .p2-credits { margin: 0; padding-left: 18px; }
+.p2-credits li { margin-bottom: 4px; }
+.p2-credits small { color: var(--muted); }
+.p2-btn-text { border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 8px; padding: 6px 10px; font-size: 13px; cursor: pointer; }
+.p2-btn-text:disabled { opacity: .5; cursor: not-allowed; }
 .p2-field { display: flex; flex-direction: column; gap: 4px; }
 .p2-field label { font-weight: 600; font-size: 13px; }
 .p2-field small, .p2-check small { color: var(--muted); font-size: 12px; }
@@ -168,7 +189,7 @@
 
 /* narrow: tabs stack under the chat */
 @container (max-width: 760px) {
-  .p2 { grid-template-columns: 1fr; grid-template-rows: auto auto; height: auto; overflow: visible; }
+  .p2 { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto; height: auto; overflow: visible; }
   .p2-chat { border-right: 0; border-bottom: 1px solid var(--line); height: min(70vh, 640px); min-height: 420px; }
   .p2-panel { min-height: 60vh; }
   .p2-pane { min-height: 80vh; }
