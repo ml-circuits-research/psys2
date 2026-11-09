@@ -1,109 +1,139 @@
 # Training results
 
-## Operational headline
+State of the PSys2 C2 pipeline after the 2026-11-08 / 2026-11-09 work batch (R3, R4, L6-L10, RD1-RD8, D5, PERF, BEST-EFFORT, L-RO and Romanian quality). Every number below comes from a committed JSON under `training/results/` (the path is cited next to each table) or from `worker-log.md` (cited as "worker-log"). Anything not found is marked "not measured". Older detail (T2 rule baselines, D3 dispatcher evaluation, F1, dialogue audit) is kept at the end under "Archive".
 
-The single measure of success: **the share of messages whose final state/answer is right**, through the pipeline in the webchat configuration (encoder formalizer = dispatcher via onnxruntime-node from the published `docs/webchat/models/dispatcher/`, spellcheck, partial understanding, acceptRefused). Fixed committed set `training/eval/operational.jsonl` (1234 messages, built from `training/eval/cases/*.mjs` by `scripts/build-operational.mjs`; expectations written by judgment of the correct outcome, not recorded from output; `known_gap` marks things the world cannot support yet: they still count). Runner: `node scripts/eval-operational.mjs [--mode rules|encoder|encoder+n1] --ort <onnxruntime-node entry> [--model-dir D] [--edit-tau T] [--json]` (default mode encoder+n1, the shipped configuration from `src/dialog/runtime-config.mjs`); versioned results in `training/results/operational/<mode>-<dispatcher sha8>-<date>.json`, the published one named in `training/results/operational/published.json`; older results in `training/results/operational/superseded/`. Outcomes: right / partly right / wrong action (it acted or answered, result wrong: worse) / not understood.
+## Who does what
 
-No real phrase-log messages were available (`training/phrase-logs/` is empty); the set is authored. Rules-only run: 1 min; full pipeline: 11.6 min (single thread).
+| component | role |
+| --- | --- |
+| DistilBERT dispatcher (v4: int8, sha256 `6c41eb2434646b988e8936f1a2a82e1490465ca023a0d5b2be6987daedcac2be`, run `v4e`, ckpt 2448) | splits a message into pieces and proposes the top-3 world candidates per piece (and carries the S1 edit head) |
+| per-world rules (`worlds/*/patterns.sop`) | the only formalizer: they turn a piece into an SOP circuit |
+| validation layer (`src/dialog/dispatch-validate.mjs`) | picks the candidate (segmentation and world) that the rules parse and the interpreter accepts |
+| N1 normalizer (FLAN-T5-small, int8, v3) | only proposes a simpler phrasing, which the rules must formalize and the value checker must accept; used when nothing validates |
+| best-effort (`src/formalizer/best-effort.mjs`) | answers a partially understood message ("I took that as: ...", or "Did you mean") from pattern examples and the input's own content words |
 
-| config | n | right % | partly % | wrong % | not understood % | latency mean / p50 / p95 ms |
-|---|---|---|---|---|---|---|
-| rules-only (spell+partial) | 1234 | 84.3 | 1.9 | 3.6 | 10.3 | 41 / 13 / 162 |
-| full pipeline (current main) | 1234 | 89 | 0.5 | 4.3 | 6.2 | 519 / 337 / 1566 |
+No generative model is used in C2 beyond the N1 normalizer (AGENTS.md).
 
-Excluding the 117 known-gap messages: rules-only right 87.5 %, full 92.5 % (wrong 2.1 / 2.7 %).
+## 1. Headline: main operational set (1240 messages)
 
-### By world group (rules-only | full)
+Set `training/eval/operational.jsonl`. Right / partly / wrong / not understood, in %. Sources: `training/results/operational/published.json` (points at `encoder+n1-6c41eb24-2026-11-09.json`), `rules-nomodel-2026-11-09-r4-v3base.json`, `encoder-19dd054b-2026-11-09-r4-v3base.json`, `encoder+n1-19dd054b-2026-11-09-r4-v3base.json`, `encoder+n1-6c41eb24-2026-11-09-r4-v4e.json`; the v4 three-mode table is in worker-log "R4".
 
-| group | n | right % rules | right % full | wrong % rules | wrong % full | not understood % rules | not understood % full | partly % rules | partly % full |
-|---|---|---|---|---|---|---|---|---|---|
-| kids | 501 | 89.2 | 93.2 | 1.6 | 2 | 6.6 | 4.6 | 2.6 | 0.2 |
-| avatar/shell/editor | 232 | 76.3 | 78.9 | 6.9 | 9.1 | 15.9 | 11.2 | 0.9 | 0.9 |
-| music/draw/map/charts | 332 | 81 | 89.8 | 3.3 | 3.6 | 13.3 | 5.7 | 2.4 | 0.9 |
-| games | 145 | 86.2 | 88.3 | 5.5 | 6.2 | 8.3 | 5.5 | 0 | 0 |
-| documents | 24 | 91.7 | 91.7 | 4.2 | 4.2 | 4.2 | 4.2 | 0 | 0 |
+| mode | v3 dispatcher (19dd054b) + N1 v3 | v4 dispatcher (6c41eb24) + N1 v3 (shipped) |
+| --- | --- | --- |
+| rules only (no model, same rules on both sides) | 95.4 / 1.8 / 0.5 / 2.3 | same |
+| encoder (dispatcher, no N1) | 98.4 / 0 / 0.6 / 1.0 | 98.6 / 0 / 0.4 / 1.0 |
+| encoder+n1 (shipped configuration) | 98.4 / 0 / 0.6 / 1.0 | 98.6 / 0 / 0.4 / 1.0 |
 
-### By world (right %, rules-only | full)
+Counts for the shipped run (`published.json` and its result file): 1223 right, 5 wrong, 12 not understood of 1240. N1 changes nothing on the main set in either configuration (it only fires on the fallback distribution; worker-log "R4"). Per group, encoder+n1 v4 (right %): kids 99.8, avatar/shell/editor 97.9, music/draw/map/charts 98.2, games 98.0, documents 91.7 (`encoder+n1-6c41eb24-2026-11-09.json`, `by_group`).
 
-| world | n | rules | full |
-|---|---|---|---|
-| art.draw | 99 | 71.7 | 82.8 |
-| data.charts | 57 | 82.5 | 89.5 |
-| docs.editor | 43 | 65.1 | 72.1 |
-| docs.reader | 24 | 91.7 | 91.7 |
-| games.chess | 41 | 87.8 | 87.8 |
-| games.guess | 29 | 96.6 | 96.6 |
-| games.hangman | 32 | 84.4 | 84.4 |
-| games.tictactoe | 43 | 79.1 | 86 |
-| geo.map | 94 | 88.3 | 94.7 |
-| kids.animals | 80 | 90 | 93.8 |
-| kids.arith | 145 | 90.3 | 91.7 |
-| kids.common | 36 | 94.4 | 94.4 |
-| kids.shapes | 62 | 87.1 | 96.8 |
-| kids.shop | 43 | 83.7 | 83.7 |
-| kids.tasks | 38 | 86.8 | 97.4 |
-| kids.time | 97 | 89.7 | 94.8 |
-| media.music | 82 | 82.9 | 92.7 |
-| ui.avatar | 124 | 69.4 | 73.4 |
-| ui.help | 20 | 95 | 90 |
-| ui.shell | 45 | 97.8 | 95.6 |
+Before-batch baselines (rules only, no model), on the older 1234-message set:
 
-### By family (right %, rules-only | full; families overlap)
+| point | right | wrong | source |
+| --- | --- | --- | --- |
+| L0 baseline at cff3f36 | 1066 / 1234 (86.4 %) | 38 / 1234 (3.1 %) | worker-log "L0" (counts; percentages computed here). worker-tasks.md quotes "86.5% right, 3.0% wrong" for the same baseline at a later commit. |
+| rules only, evaluator before G5 | 86.7 % | 2.9 % | `training/results/operational/superseded/operational-rules-only.json` |
+| full pipeline before G5 (old dispatcher, no N1) | 89.0 % | 4.3 % | `training/results/operational/superseded/operational-full.json` |
+| rules only, R3 baseline 2026-11-08 | 94.2 % | 0.6 % | `operational/rules-nomodel-2026-11-08-r3-baseline.json` |
 
-| family | n | rules | full |
-|---|---|---|---|
-| abbrev | 24 | 70.8 | 75 |
-| compare | 8 | 100 | 100 |
-| coordinates | 14 | 64.3 | 71.4 |
-| count | 6 | 100 | 100 |
-| decimal | 15 | 86.7 | 86.7 |
-| ellipsis | 8 | 75 | 75 |
-| messy | 231 | 93.5 | 97 |
-| multi | 197 | 71.6 | 92.9 |
-| negative | 21 | 95.2 | 95.2 |
-| negative-numbers | 1 | 100 | 100 |
-| number-words | 7 | 100 | 100 |
-| paraphrase | 174 | 77 | 78.7 |
-| probe | 55 | 74.5 | 76.4 |
-| reference | 28 | 71.4 | 75 |
-| repeat-undo | 26 | 65.4 | 61.5 |
-| self-correction | 20 | 20 | 30 |
-| shared-arg | 13 | 53.8 | 69.2 |
-| triple | 22 | 72.7 | 100 |
-| typo | 38 | 60.5 | 68.4 |
-| user-example | 7 | 100 | 100 |
-| word-problem | 86 | 87.2 | 87.2 |
-| world-switch | 188 | 80.3 | 99.5 |
+Rules-only went from 86.4 % (L0) to 95.4 % right on the 1240 set through the rule work (RD, L-series, dialogue fixes); the shipped full pipeline is at 98.6 % right / 0.4 % wrong (the pre-G5 full pipeline was 89.0 % / 4.3 %). The set is authored (no real phrase logs yet) and the rules were widened by reading it, so these numbers are optimistic for unseen users.
 
-Reading: the dispatcher mainly helps multi-command and world-switching messages (multi 71.6 to 92.9, world-switch 80.3 to 99.5) and draw/music/charts; self-correction (20 / 30 %), shared argument, typos, repeat-undo and the avatar world stay weak, and the full pipeline raises wrong actions slightly (3.6 to 4.3 %).
+Latency, shipped run (`encoder+n1-6c41eb24-2026-11-09-r4-v4e.json`, 20 parallel workers, loaded host): mean 256 ms, p50 179 ms, p95 711 ms. These are node-side numbers, not the phone page (see section 5).
 
+## 2. Long set, dialogues, Romanian, loose words, typos
 
-All numbers trace to `training/results/*.json`. Two rule baselines are kept side by side:
+**Long and medium set (154 messages: 118 mid, 36 long).** `training/eval/operational-long.jsonl`; `operational/encoder+n1-6c41eb24-2026-11-09-r4-v4e-long.json` (v4) and `encoder+n1-19dd054b-2026-11-09-r4-v3base-long.json` (v3). Right / partly / wrong / not understood %:
 
-- **before widening (055fbeb)**: `training/results/rules-055fbeb.json`. Its test splits come from the dataset built at that commit.
-- **c989cd1 (current baseline, B1)**: `training/results/rules.json`; worlds/ and src/ are unchanged since (only `src/dialog/dispatch-validate.mjs` was added by D2). Dataset rebuilt at c989cd1 in `training/dataset/` (40,748 records: train 31,442 / dev 4,684 / test 4,622), so the test splits differ from the 055fbeb ones (different record sets, hence the n columns).
+| config | all | mid | long |
+| --- | --- | --- | --- |
+| v3 + N1 v3 | 94.2 / 3.2 / 1.9 / 0.6 | 95.8 / 1.7 / 1.7 / 0.8 | 88.9 / 8.3 / 2.8 / 0 |
+| v4 + N1 v3 (shipped) | 94.2 / 3.2 / 1.9 / 0.6 | 95.8 / 1.7 / 1.7 / 0.8 | 88.9 / 8.3 / 2.8 / 0 |
 
-**Contamination.** The c989cd1 rules were widened by reading all paraphrase records, including the test split, so the c989cd1 paraphrase test numbers are optimistic. The clean paraphrase measure is the held-out set (below).
+Encoder-only (no N1): v3 94.2, v4 93.5 right (worker-log "R4": one case of 154; N1 recovers it, so the publish margin is one case). Gold items missed with v4 + N1: mid 11 of 454 (2.4 %), long 8 of 268 (3.0 %). Earlier in the batch (v2/v3 before the G7 fixes): rules 46.1, v3 encoder+n1 74.7 right on this set (worker-log "G6b").
 
-## Dialogue headline (second headline, next to the operational set)
+**Dialogues (408 dialogues, 1961 turns).** `training/eval/dialogues.jsonl`; `training/results/dialogues/*-2026-11-09.json`. Turns right % / dialogues right %:
 
-`training/eval/dialogues.jsonl`: 365 multi-turn dialogues (3-8 turns, 1709 turns), each with an initial state and the expected state / answer after EVERY turn in the operational check format. Families and worlds: `training/eval/dialogue-phenomena.md`. Includes the G7 cases (tag `g7`: 27 user.profile dialogues; 20 `long-return` dialogues with a return after more than 6 messages, checked against full state snapshots). The turns were written by Haiku subagents, the expectations validated mechanically (`node scripts/eval-dialogues.mjs --validate`: schema, turn count, every state item names a real world and state field). Worlds that create their state lazily (kids.tasks lists) are only checked for existence of the world, not the field path.
+| mode | v3 (19dd054b) | v4 (6c41eb24) |
+| --- | --- | --- |
+| encoder | 95.6 / 86.3 (`encoder-19dd054b-2026-11-09.json`) | 95.4 / 86.0 (`encoder-6c41eb24-2026-11-09.json`) |
+| encoder+n1 | 95.5 / 86.3 (`encoder+n1-19dd054b-2026-11-09.json`) | 95.5 / 86.3 (`encoder+n1-6c41eb24-2026-11-09.json`) |
+| rules only (407 dialogues, 1912 turns) | 96.6 / 87.7 (`rules-nomodel-2026-11-09.json`) | same |
 
-Run: `node scripts/eval-dialogues.mjs --mode rules|encoder|encoder+n1` (one session per dialogue, sharded by dialogue; options `--family --group --tag --world --verbose`). Reports turns right, dialogues right (every turn right), per family, group, world and tag; writes `training/results/dialogues/<mode>-<sha8>-<date>.json`.
+v4 encoder+n1 per group, dialogues right: kids 86.0, avatar/shell/editor 82.4, music/draw/map/charts 88.0, games 93.0 (`by_group`; documents and other not reproduced here). In encoder modes the dialogue set is slightly lower than in rules mode (turns 95.5 vs 96.6): the dispatcher path loses a few turns the rules read directly. The first rules baseline on the earlier 365-dialogue set was 90.3 % turns / 70.4 % dialogues (archive below).
 
-Rules-mode baseline (2026-11-08, the Haiku authors had the rules probe available to learn state paths and phrasing, so rule-friendly phrasings are over-represented; expectations were written as the correct outcome):
+**Romanian (2480 cases, two per English case; diacritics and casual).** `training/eval/operational-ro.jsonl`; run with `eval-operational.mjs --ro`. No Romanian result JSON is committed, so these come from worker-log "R4" (encoder+n1): v3 84.8 right / 2.7 wrong (diacritics 86.8, casual 82.7); v4 84.7 / 2.7 (diacritics 86.7, casual 82.7). History: rules mode 48.4 right / 7.3 wrong at the first Romanian run (worker-log "RD5"), 49.6 / 8.1 wrong at the RO-1..RO-5 baseline, and L-RO raised detection of diacritic-less Romanian from 327 to 387 of 413 twins (full pipeline right 314 to 377). Per-bucket Romanian numbers after the batch are not measured in a committed file; the last per-bucket numbers (rules mode, before RO-1..RO-5) were kids 55.5, avatar/shell/editor 44.5, music/draw/map/charts 41.0, games 49.7, documents 35.4.
 
-| group | dialogues right | turns right |
-|---|---|---|
-| kids | 49/90 (54.4%) | 349/419 (83.3%) |
-| avatar/shell/editor | 23/46 (50%) | 158/196 (80.6%) |
-| music/draw/map/charts | 100/124 (80.6%) | 557/585 (95.2%) |
-| games | 47/56 (83.9%) | 272/282 (96.5%) |
-| documents | 11/22 (50%) | 91/110 (82.7%) |
-| other (user.profile) | 27/27 (100%) | 117/117 (100%) |
-| **all** | **257/365 (70.4%)** | **1544/1709 (90.3%)** |
+**Loose words (best-effort).** `training/eval/loose-words.jsonl` (670 rows); `training/results/loose-words/rules-2026-11-09.json` (rules mode). Recover rows (581): best-effort off 228 recovered / 287 not understood / 66 misled; on 349 / 143 / 89 (121 gained, 0 lost). Junk rows (84, expect "do not guess"): misled 8 off, 12 on. Operational and dialogue replies were byte-identical with best-effort on and off (worker-log "BEST-EFFORT"). Encoder modes: not measured for this set.
 
-Worst families by dialogues right: clarification 43.6%, noise 54.3%, ellipsis 58.1%, correction 60%, explain 63.5%. Encoder modes: pending (models are being retrained).
+**Typos.** `scripts/eval-typos.mjs` over `training/eval/typos/*.jsonl` (1,023 records); no result JSON is committed, numbers from worker-log "RD1" (rules mode): non-word typos recovered 652/804 (81.1 %) to 683/804 (85.0 %), misled 142 to 111; real-word typos recovered 114/219 (52.1 %) unchanged, misled 56 to 49. Operational `typo` family (encoder+n1 v4): see `encoder+n1-6c41eb24-2026-11-09.json` `by_family`.
+
+## 3. Dispatcher per bucket: v3 vs v4
+
+Test multi-command set, 4,000 messages. Exact = exact segmentation; final = final answer correct; omitted / duplicate = segments omitted / duplicated. Sources: `training/results/g6-r4-v3-test-buckets.json` (v3, 19dd054b) and `g6-r4-v4e-ckpt-step2448-test-buckets.json` (v4, published). All 18 v4 checkpoints are in `g6-r4-v4?-ckpt-*-test-buckets.json`.
+
+| bucket (commands) | n | v3 exact / final | v3 omit / dup | v4 exact / final | v4 omit / dup |
+| --- | --- | --- | --- | --- | --- |
+| 1 | 861 | .999 / .990 | 0 / 1 | .998 / .983 | 0 / 2 |
+| 2-3 | 2139 | .914 / .808 | 14 / 51 | .924 / .814 | 14 / 32 |
+| 4-5 | 242 | .831 / .529 | 5 / 17 | .839 / .545 | 6 / 13 |
+| 6-8 | 358 | .768 / .380 | 11 / 36 | .793 / .397 | 11 / 23 |
+| long | 400 | .525 / .160 | 37 / 192 | .562 / .185 | 58 / 118 |
+
+Boundary F1 on this set: v3 .979, v4 .983. Test world top-1 for v4e: .9661 (v3 .9720 was measured on the older data; the run table is in worker-log "R4").
+
+**Finding on duplicates.** A duplicate is a gold command cut into pieces, not a repeated command. Re-measured on v3: 192 duplicates in the long bucket, 189 of them in messages that fit one 192-token window, so the overlapping-window merge is not the cause and was not changed (no runtime merge bug). The cause is the boundary class weight `seg_w = [1, 2]` (seg boundary weight 2.0): the head over-splits inner phrases of commands ("italy or canada | which is bigger"). Lowering the weight trades duplicates for omissions (W 1.0: long duplicates 82-96, omissions 80-87). The published run keeps W 2.0 with the new data: duplicates 192 to 118, but long omissions rose from 37 to 58. The pipeline punishes omissions (a merged pair is lost) more than duplicates, which is why W 2.0 was kept (worker-log "R4").
+
+Realistic-message headline for the D3 evaluation (`dispatch-r4-v3-c2448.json`, `dispatch-r4-v4e-c2448.json`, `headline.realistic_all`, n 4239, right / fallback / wrong): rules R 87.45 / 7.97 / 4.58; dispatcher + validation with acceptRefused (Br) v3 92.85 / 3.11 / 4.03, v4 93.04 / 3.28 / 3.68.
+
+## 4. S1 edit head: target not met
+
+The safe S1 edit head (`scripts/build-edit-tags.mjs`: DELETE, normalizing R:, function-word P:/A: only; vocabulary 500 to 141 tags) was trained jointly with v4. Pipeline level (`eval-dispatch`, test + held-out, 11,303 messages, original text only vs plus the simplified candidate; `dispatch-r4-v3-c2448.json`, `dispatch-r4-v4a-c2448.json`, `dispatch-r4-v4e-c2448.json`, summary in worker-log "R4"):
+
+| head | recovered | misled | broken | exact-SOP % B to C |
+| --- | --- | --- | --- | --- |
+| v3 | 3 | 7 | 1 | 89.4 to 89.5 |
+| v4a (safe head) | 3 | 7 | 0 | 89.4 to 89.5 |
+| v4e (published) | 3 | 7 | 1 | 89.5 to 89.6 |
+
+The S1 target "misled at most a quarter of recovered" is not met (7 misled against 3 recovered). The safe head halves the changed sentences and the rewrites that break the rules on the held-out set (147 to 77-88), but recovery stays at 3 because the rules now read almost everything. The head does not raise wrong answers; the value checker and the lexicographic preference stay the safety net, and the head ships inside the model (there is no separate switch in the exported model).
+
+## 5. Performance (PERF round 2 in progress)
+
+PERF round 1 (worker-log "PERF", headless Chromium 390x844, 4x CPU throttle, median of 3 runs, `node scripts/perf-webchat.mjs --runs 3`, host loaded, single numbers vary about 2x). Fixes: seed once per context and fork the session instead of replaying six messages per candidate; fast path for single clauses read completely by the rules (model skipped); warm-up after first paint; sample document analysed once.
+
+| mode | stage | page ready ms | p50 per message ms | p95 per message ms |
+| --- | --- | --- | --- | --- |
+| rules | before / after | 3349 / 3733 | 227 / 215 | 1057 / 450 |
+| encoder | before / after | 5593 / 3751 | 5698 / 410 | 26858 / 2510 |
+| encoder+n1 | before / after | 4364 / 3124 | 3650 / 485 | 8472 / 1871 |
+
+Reviewer re-measure at d7fe3f0 (worker-tasks.md, PERF entry, commit 538fc52): page ready 33.6 s (worse), hello 504 ms, 3 plus 4 203 ms, multi-command 3.96 s (worse), eyes square 202 ms, paris 637 ms, hello 154 ms. The gap between the worker's measurement (page ready about 3-4 s) and the reviewer's (33.6 s) is not explained in the files; PERF round 2 is open, so these numbers are not final. Not done in round 1: build-time compiled patterns and multi-thread WASM. Node-side latency of the shipped pipeline is in section 1.
+
+## 6. Sizes
+
+| item | measured | target | status | source |
+| --- | --- | --- | --- | --- |
+| total `worlds/*/patterns.sop` | 2,987,859 bytes (was 7,124,242) | <= 2 MB | missed | worker-log "L6 + L7 summary" |
+| match text of hand patterns | 1,865,942 bytes (was 6,041,268, -69 %) | not separate | n/a | same |
+| webchat `worlds/index.json` | 4,506,258 bytes (was 5,574,642; gzip 642,396) | <= 2.5 MB | missed | worker-log "L10" |
+
+What stays in the browser bundle (worker-log "L10"): patterns.sop 3.06 MB (match text 1.93 MB, emit 370 KB, examples 263 KB, ids 197 KB, other keys 194 KB, canonical 33 KB), lexicon.sop 0.70 MB, kb.sop 0.39 MB, other about 0.24 MB. The build already drops `tests.sop` (837 KB) and `coverage.md` (214 KB). Dispatcher model int8 63.9 MB (worker-log "D4", target <= 150 MB, met). Rule count: 4,750 hand patterns before L6/L7, 4,670 after.
+
+## 7. Known weaknesses and open items
+
+- **Clarification family.** Dialogue family clarification is 68.8 % dialogues right in rules mode and with the v3 encoder, 66.7 % with v4 encoder+n1 (`dialogues/*-2026-11-09.json`, `by_family`). Open cases: "what was the sum again?", "which paragraph did you make italic?", "Why did you say 209?", the shop's "how much does it cost?" with a pronoun (worker-log "D-FIX").
+- **Romanian.** Overall 84.7 % right / 2.7 % wrong; casual register 82.7 %. The documents, avatar and games buckets were the weakest in the last per-bucket measurement (rules mode, before RO-1..RO-5: documents 35.4, avatar/shell/editor 44.5, games 49.7); no later per-bucket number is committed (not measured). Known gaps: avatar "(I read ...)" fragments, long list sentences, docs.reader free-text questions.
+- **"Where were we?" contradiction.** `dlg.avt#040` and `dlg.mpc#009` expect the previous topic, `dlg.doc#045` expects the story, while spec 11 section 10 keeps the explicit "back to X" topic. The gold labels contradict each other (worker-log "D-FIX").
+- **Cross-world ambiguities** ("give me a clue", "not so fast", "what are you called"): named in the task as open; the files read here do not give a measured count (not measured).
+- **"What colour is the sky?"**: kids.shapes knows the sky, so answering is correct; the avatar gold label says negative. Probable gold-label issue (worker-log "Rules fixes, round 2").
+- **Long-message omissions rose 37 to 58** (long bucket, v3 to v4) as the price of halving duplicates (section 3).
+- **S1 edit head** gives no gain (section 4).
+- **Sizes** missed: patterns.sop 2.99 MB vs 2 MB, webchat bundle 4.51 MB vs 2.5 MB (section 6).
+- **Performance** gap on the phone (section 5, PERF round 2 open).
+- **Data caveats.** The operational, long, dialogue and Romanian sets are authored by agents; no real phrase logs exist yet (`training/phrase-logs/` is empty), so the learning loop (D5, simulated only: 1,992 of 2,621 simulated messages self-labelled, 629 queued, `training/results/learn-loop-simulation.json`) has not run on real traffic. Compute rule: no retraining was run for this document.
+
+## Archive (earlier sections, kept as recorded)
+
+The operational headline and dialogue baseline that used to open this file (1234 messages, old dispatcher; right 84.3 % rules-only, 89 % full) are superseded by sections 1-2 and by `training/results/operational/superseded/`. The sections below are unchanged historical records.
 
 ## T2 - Rule baseline on the test splits
 
