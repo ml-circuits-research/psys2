@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "PragmaticSystem2: explicit computational worlds, SOP Lang, deterministic C2 operation",
   "type": "module",
-  "license": "GPL-3.0-only",
+  "license": "AGPL-3.0-only",
   "engines": { "node": ">=20" },
   "scripts": {
     "test": "node scripts/run-tests.mjs",

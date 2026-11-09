@@ -1,9 +1,7 @@
 # Provenance
 
 Source: https://github.com/ml-circuits-research/diagram-vss-demo, commit `9900d34836bf3fc913a6549f3da4c444bfa11304` (2026-11-09).
-Licence of the source: **AGPL-3.0**. This repository is GPL-3.0. GPL-3.0 section 13 allows combining with AGPL-3.0 code, but the
-copied parts keep their AGPL-3.0 terms (including the network clause) unless the owner of both repositories relicenses them. Both
-repositories belong to ml-circuits-research; the owner should confirm the licence before release.
+Licence of the source: **AGPL-3.0**, the same as this repository (relicensed from GPL-3.0 to AGPL-3.0-only by user decision on 2026-11-09), so the copied files need no special handling beyond keeping this provenance.
 `engine/` files come from `docs/js/`; `docs/js/vss*` (MIT, copied there from vss-demo) was not copied.
 
 | here | source | notes |

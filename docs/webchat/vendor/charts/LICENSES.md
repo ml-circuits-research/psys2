@@ -1,6 +1,6 @@
 # Licences of the vendored charting code
 
-`chart.mjs` is one esbuild bundle (ES module, minified) of the libraries below. Both are MIT, which is compatible with GPL-3.0.
+`chart.mjs` is one esbuild bundle (ES module, minified) of the libraries below. Both are MIT, which is compatible with AGPL-3.0.
 
 ## Chart.js 4.6.1
 Source: https://github.com/chartjs/Chart.js (https://www.chartjs.org). Licence: MIT.

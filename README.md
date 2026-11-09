@@ -13,3 +13,7 @@ node src/cli.mjs chat            # terminal dialog (C2)
 node src/cli.mjs test-world all  # world competency tests
 node src/server/index.mjs        # HTTP API on :8080
 ```
+
+## Licence
+
+AGPL-3.0-only (see `LICENSE`; relicensed from GPL-3.0 on 2026-11-09). Vendored libraries keep their own licences, listed in `docs/webchat/vendor/README.md`; all are compatible with AGPL-3.0. Anyone who uses the demo over a network can get the source from this repository.

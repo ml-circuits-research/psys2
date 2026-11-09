@@ -2,7 +2,7 @@
 
 Everything in this folder is used by the chess tab only (`docs/webchat/ui/tabs/chess.mjs`). Game rules live in the world
 (`worlds/games.chess/`, chess.js); these files only draw the board and run the engine in a Web Worker. All licences are
-compatible with GPL-3.0 (the licence of this project).
+compatible with AGPL-3.0, the licence of this project (GPL-3.0 parts combine with it through section 13 of both licences and keep their own terms).
 
 | File | What | Version | Source | Licence |
 | --- | --- | --- | --- | --- |

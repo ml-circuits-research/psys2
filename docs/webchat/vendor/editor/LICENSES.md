@@ -1,6 +1,6 @@
 # Licences of the bundled editor libraries
 
-`tiptap.mjs` bundles the packages below. Every one is MIT licensed (compatible with GPL-3.0). The licence texts are reproduced from the packages.
+`tiptap.mjs` bundles the packages below. Every one is MIT licensed (compatible with AGPL-3.0). The licence texts are reproduced from the packages.
 
 | Package | Version | Licence |
 | --- | --- | --- |

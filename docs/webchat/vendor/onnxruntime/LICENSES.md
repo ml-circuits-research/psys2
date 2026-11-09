@@ -4,7 +4,7 @@
 - Files: `ort.wasm.bundle.min.mjs` (the package's `dist/ort.wasm.bundle.min.mjs`, header comment added), `ort-wasm-simd-threaded.mjs` (its Emscripten loader,
   imported at run time from the same folder) and `ort-wasm-simd-threaded.wasm` (CPU execution provider only, no JSEP/WebGPU). Otherwise unmodified.
 - Built/obtained with: `npm i onnxruntime-web@1.31.1` in a scratch directory (not added to the repository's package.json).
-- Licence: MIT, Copyright (c) Microsoft Corporation. Compatible with the project's GPL-3.0.
+- Licence: MIT, Copyright (c) Microsoft Corporation. Compatible with the project's AGPL-3.0.
 
 ```
 MIT License

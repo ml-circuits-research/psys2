@@ -1,6 +1,6 @@
 # Licences of the vendored music libraries
 
-Each library is bundled into one ES module with esbuild (built in a temporary directory, not added to package.json). All are MIT, which is compatible with GPL-3.0.
+Each library is bundled into one ES module with esbuild (built in a temporary directory, not added to package.json). All are MIT, which is compatible with AGPL-3.0.
 
 ## tonal 6.5.1
 

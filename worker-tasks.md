@@ -100,6 +100,13 @@ The same session shows wrong worlds and missed corrections. Treat each item as a
 - the two real dialogues turn by turn;
 - the operational and dialogue sets (wrong must not rise).
 
+### LIC — the project is now AGPL-3.0-only (user decision 14:10 local; the reviewer changed LICENSE, package.json, AGENTS.md, README and the vendor LICENSES notes)
+
+Small task, do it with HANG + STOP:
+- Add a discreet "Source code (AGPL-3.0)" link to the webchat: in Settings › About and in the page footer, pointing to https://github.com/ml-circuits-research/psys2. AGPL section 13 asks that network users can get the source.
+- Write `SPDX-License-Identifier: AGPL-3.0-only` in the header of the files you touch. Do not rewrite every file just for this.
+- From now on, vendored libraries must be compatible with AGPL-3.0 (AGENTS.md lists the accepted licences).
+
 ### DIAG — a Diagram world and tab, imported from diagram-vss-demo (user, 13:40 local)
 
 The user wants a world and a tab for drawing diagrams, built from everything reusable in
@@ -144,7 +151,7 @@ The reviewer copied what is reusable into **`imports/diagram-vss-demo/`** (stagi
    - the operational and dialogue sets before / after (wrong must not rise in the other worlds);
    - PERF (load the diagram engine lazily, when the tab opens or the world is first chosen; the page must not get slower).
 
-**Licence:** the source is AGPL-3.0 and we are GPL-3.0. Keep the copied files' provenance headers; the user decides on relicensing (PROVENANCE.md).
+**Licence:** settled. The project is now AGPL-3.0-only, the same as the source (user decision 14:10); keep the copied files' provenance headers.
 
 **Order from now on:**
 1. HANG + STOP
@@ -310,7 +317,7 @@ What this means for your tasks:
 ### AV — more avatars (user, 02:35: "only a robot and a man? that's too little")
 
 Today `ui.avatar` has three DiceBear characters: robot (voxel-bot), person (open-peeps) and emoji (moods). The person reads as a man by default, and there is no woman, child, older person or animal-like character.
-- **Vendor more DiceBear styles** the same way as now (`scripts/vendor-dicebear.mjs`, one JSON definition per style, `LICENSES.md`). Check every style's licence in its own `meta.license`. CC0 and CC BY 4.0 are GPL-compatible; for CC BY, show the attribution in the tab and in `vendor/README.md`. Candidates, use the ones whose licence checks out:
+- **Vendor more DiceBear styles** the same way as now (`scripts/vendor-dicebear.mjs`, one JSON definition per style, `LICENSES.md`). Check every style's licence in its own `meta.license`. CC0 and CC BY 4.0 are compatible with our AGPL-3.0; for CC BY, show the attribution in the tab and in `vendor/README.md`. Candidates, use the ones whose licence checks out:
   - illustrated people with clear female and male looks: lorelei, notionists, adventurer, micah, personas;
   - children and friendly faces: big-smile, croodles;
   - a second robot: bottts;
