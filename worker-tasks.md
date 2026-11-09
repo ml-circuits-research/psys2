@@ -248,6 +248,24 @@ Clicks on the avatar (gallery, presets, parts) run late, after the spoken answer
   - the same for a chess move while the engine thinks;
   - 0 console errors.
 
+### HANG3 — the browser translator stalls Romanian turns (reviewer at cbdca37, 17:58 local) — small, do first
+
+HANG2 is fixed: the user's session ("get me to New Youk" after the drawings) now answers in 1–3 s, rules mode makes no ORT calls, and the detached-buffer root cause is gone.
+
+The remaining 8 s endings are **stage `translate`**. Measured on a desktop Chrome that has the `Translator` / `LanguageDetector` APIs but **no downloaded on-device model**:
+- "fa ochi visatori", default settings → 8.0 s watchdog (phrase log `stage: translate`);
+- with `translation: auto` → 5.3 s;
+- with `translation: rules` → 1.6 s;
+- "fa-i ochii mari" → 112 ms with rules translation.
+
+Your own run found one more such ending ("repede: cate zile are iunie?").
+
+Fix:
+- The browser translation and language-detection APIs are used **only when `availability()` is `available`**. For `downloadable` / `downloading`, start the download in the background (once, never awaited by a turn) and use the rules translator and detector meanwhile.
+- When the browser API is available, give it a per-call deadline of 400 ms, then fall back to rules. Cache `create()` once per language pair.
+- Show the state in Settings › Language ("Browser translator: downloading… rules are used meanwhile").
+- **Test:** a fake `Translator` whose `create()` never resolves, and one with `availability: 'downloadable'`. A Romanian turn answers in under 2 s with the rules translator, and 0 watchdog endings over the Romanian set sample.
+
 ### HANG2 — the model worker stops answering; the watchdog hides it (reviewer at 1375718, 15:50 local) — P0, DO FIRST
 
 The HANG + STOP work is good: the Stop button, one message at a time, the 8 s watchdog and 918/921 tests passing (3 skipped). The chat no longer freezes forever. **But the turns that froze still do not get answered: they now end at 8 s with "That took too long, so I stopped."** That also happens **without throttling, on a fast machine**, and it repeats on every try. So the user will still see it all the time.
@@ -578,7 +596,7 @@ The reviewer copied what is reusable into **`imports/diagram-vss-demo/`** (stagi
 **Licence:** settled. The project is now AGPL-3.0-only, the same as the source (user decision 14:10); keep the copied files' provenance headers.
 
 **Order from now on:**
-1. HANG2 (model worker stops answering), MIC2 + EOT2 + BUSY (always-open mic, queue, reliable button, end of turn, tabs grey while a turn runs), then DIAG2 + DIAG3 (Diagram world in the webchat, retrain, short ids, edges, rendering, parity), FB (thumbs up / down + feedback, remove Copy as text), then RP3 (phrase-log failures), then DBG (debug view per tab)
+1. HANG3 (browser translator off the critical path), MIC2 + EOT2 + BUSY (always-open mic, queue, reliable button, end of turn, tabs grey while a turn runs), then DIAG2 + DIAG3 (Diagram world in the webchat, retrain, short ids, edges, rendering, parity), FB (thumbs up / down + feedback, remove Copy as text), then RP3 (phrase-log failures), then DBG (debug view per tab)
 2. SET (settings modal with tabs) + UI1 (one mic, tooltips) + DOC (greeting and docs), then VOICE (end of turn)
 3. ED (document editor commands)
 4. RD10 together with RD1b and RD2 (they share the mechanism)
@@ -1457,3 +1475,5 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
   - **AV:** 9 characters listed.
   - **ED:** works in the webchat (chapter, write).
   - **Open:** HANG2 (still reproduced at c0c4cf8), DIAG2, and the ASTRA review (next check-in).
+
+- HANG2 (22bb758) + time limits (cbdca37): the ORT worker has its own deadlines, cancel and restart, and rules mode makes no model calls. Real Chrome at 1×: the user's session answers every line in 1–3 s ("get me to New Youk" → New York City), with no watchdog endings in rules mode. The remaining 8 s endings are stage `translate` → HANG3.
