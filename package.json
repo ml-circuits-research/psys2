@@ -7,6 +7,8 @@
   "engines": { "node": ">=20" },
   "scripts": {
     "test": "node scripts/run-tests.mjs",
+    "test:full": "node scripts/run-tests.mjs --full",
+    "test:browser": "node scripts/run-tests.mjs --browser",
     "test:worlds": "node src/cli.mjs test-world all",
     "chat": "node src/cli.mjs chat",
     "serve": "node src/server/index.mjs",

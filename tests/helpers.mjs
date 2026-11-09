@@ -44,3 +44,25 @@ export const mini = (ns, { imports = ['core'], legend = '', files = {}, opsSrc }
   },
   opsUrl: opsSrc ? moduleUrl(opsSrc) : undefined,
 });
+
+// ---- fast / full suites (scripts/run-tests.mjs sets these variables) ---------------------------------------------
+// PSYS2_SUITE=fast: exhaustive sweeps run on a deterministic ~10% sample (seed PSYS2_SAMPLE_SEED, default the date);
+// PSYS2_SUITE=full (also the default when a file is run directly with `node --test`): everything in full.
+// PSYS2_CHANGED_WORLDS=a,b | all: worlds whose files differ from the main branch run their sweeps in full even in the fast suite.
+export const SUITE = process.env.PSYS2_SUITE === 'fast' ? 'fast' : 'full';
+export const SAMPLE_SEED = process.env.PSYS2_SAMPLE_SEED || new Date().toISOString().slice(0, 10);
+const CHANGED = (process.env.PSYS2_CHANGED_WORLDS || '').split(',').filter(Boolean);
+export const SAMPLE_RATE = 0.1;
+
+const fnv = (s) => { let h = 0x811c9dc5; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return h; };
+
+/** True when the sweep item `key` of `world` belongs to this run: always in the full suite and for changed worlds, else about 10% by seeded hash. */
+export const inSample = (key, world = '', rate = SAMPLE_RATE) =>
+  SUITE === 'full' || CHANGED.includes('all') || (world !== '' && CHANGED.includes(world)) || fnv(`${SAMPLE_SEED}|${key}`) / 4294967296 < rate;
+
+/** Items of a sweep that this suite runs (all of them in the full suite). `key(item, index)` names an item stably; `world` may be a string or `(item) => id`. */
+export const sampled = (items, { key = (x) => String(x), world = '' } = {}) =>
+  items.filter((x, i) => inSample(key(x, i), typeof world === 'function' ? world(x) : world));
+
+/** Test options for a test that belongs to the full suite only: `test(name, fullOnly({ timeout }), fn)`. */
+export const fullOnly = (opts = {}) => (SUITE === 'full' ? opts : { ...opts, skip: 'full suite only (npm run test:full)' });

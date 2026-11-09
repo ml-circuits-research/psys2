@@ -11,6 +11,7 @@ import { parseOrThrow } from '../src/soplang/index.mjs';
 import { createServer } from '../src/server/index.mjs';
 import { createBundleLoader } from '../src/loaders/bundle-loader.mjs';
 import { createFsLoader } from '../src/loaders/fs-loader.mjs';
+import { SUITE } from './helpers.mjs';
 
 const engine = await fixtureEngine();
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
@@ -257,7 +258,8 @@ test('server: idle sessions expire', async () => {
 
 test('CLI: test-world all passes; parse reports errors; formalize prints wires', () => {
   const run = (...args) => execFileSync('node', [path.join(ROOT, 'src/cli.mjs'), ...args], { encoding: 'utf8' });
-  assert.match(run('test-world', 'all'), /kids\.common: \d+\/\d+ passed/);
+  if (SUITE === 'full') assert.match(run('test-world', 'all'), /kids\.common: \d+\/\d+ passed/);   // every world once, in the full suite only (the per-world test files cover them in the fast one)
+  else assert.match(run('test-world', 'kids.common'), /kids\.common: \d+\/\d+ passed/);
   assert.match(run('--root', path.join(ROOT, 'tests/fixtures/worlds'), 'test-world', 'test.counting'), /test\.counting: 10\/10 passed/);
   assert.match(run('--root', path.join(ROOT, 'tests/fixtures/worlds'), 'formalize', 'Tom has 5 apples'), /@w1 test\.counting\.holding/);
   assert.throws(() => run('test-world', 'nope'), (e) => /unknown world/.test(e.stdout));

@@ -5,6 +5,7 @@ import { createEngine } from '../src/dialog/index.mjs';
 import { analyze, compilePattern, matchTokens, FormSession, makeEnv } from '../src/formalizer/rules/index.mjs';
 import { wordBag, prefilterPasses, prefilterNeeds } from '../src/formalizer/rules/matcher.mjs';
 import { lexIndex } from '../src/worlds/lexicon.mjs';
+import { inSample } from './helpers.mjs';
 
 const verdict = (match, text) => {
   const c = compilePattern(match);
@@ -38,12 +39,14 @@ test('prefilter never rejects a pattern that matchTokens matches (fuzz over all 
   const pats = set.list().flatMap((w) => w.patterns.map((p) => ({ p, c: compilePattern(p.match, lexIndex(set).phrases) })));
   const compiledOf = new Map(pats.map((x) => [x.p, x.c]));
   const own = [], sampled = [];
-  let k = 0;
+  let k = 0, found = 0;
   for (const w of set.list()) for (const p of w.patterns) for (const ex of p.examples ?? []) {
+    found++;
+    if (!inSample(`${p.id}|${ex}`, w.id)) { k++; continue; }   // fast suite: about 10% of the examples (worlds changed against the main branch in full)
     own.push({ p, ex });
     if (k++ % 40 === 0) sampled.push({ p, ex });
   }
-  assert.ok(own.length > 1000, 'pattern examples found');
+  assert.ok(found > 1000, 'pattern examples found');
   let matched = 0, rejected = 0, total = 0;
   const views = (text) => analyze(text).flatMap((s) => {
     const all = s.tokens.filter((t) => t.kind !== 'punct');
@@ -65,6 +68,6 @@ test('prefilter never rejects a pattern that matchTokens matches (fuzz over all 
     const env = makeEnv(ex, set, form, lex);
     for (const v of views(ex)) for (const { p, c } of pats) check(c, v, env, `${p.id} <- ${ex}`);
   }
-  assert.ok(matched > 500, `enough real matches exercised (${matched})`);
+  assert.ok(matched > 500 * (own.length / found), `enough real matches exercised (${matched})`);
   assert.ok(rejected > total / 2, `the prefilter rejects most non-matches (${rejected}/${total})`);
 });

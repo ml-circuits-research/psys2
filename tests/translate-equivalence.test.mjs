@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import { createEngine } from '../src/dialog/index.mjs';
 import { createFsLoader } from '../src/loaders/fs-loader.mjs';
 import { translate } from '../src/translate/index.mjs';
+import { sampled } from './helpers.mjs';
 
 // [English example from a world pattern, natural Romanian twin]
 const TWINS = [
@@ -450,10 +451,11 @@ async function formalize(engine, text) {
 test('Romanian twins formalize to the same wires as their English examples', async () => {
   const engine = await createEngine({ loader: createFsLoader() });
   assert.ok(TWINS.length >= 250, 'at least 250 twins');
+  const twins = sampled(TWINS, { key: ([en]) => en });
   const failures = [];
   let otherPattern = 0;
   const byWorld = new Map();
-  for (const [en, ro] of TWINS) {
+  for (const [en, ro] of twins) {
     const e = await formalize(engine, en);
     const world = (e.patterns[0] || '').split('.').slice(1, 3).join('.') || 'unknown';
     const t = translate(ro, { from: 'ro', to: 'en' });
@@ -467,8 +469,8 @@ test('Romanian twins formalize to the same wires as their English examples', asy
     byWorld.set(world, stat);
     if (!ok) failures.push({ world, en, ro, translated: t.text, expected: e.patterns.join(','), got: r.patterns.join(',') });
   }
-  const rate = (TWINS.length - failures.length) / TWINS.length;
-  console.log(`equivalence: ${TWINS.length - failures.length}/${TWINS.length} = ${(rate * 100).toFixed(1)}%`);
+  const rate = (twins.length - failures.length) / twins.length;
+  console.log(`equivalence: ${twins.length - failures.length}/${twins.length} = ${(rate * 100).toFixed(1)}%`);
   console.log(`  (${otherPattern} twins reach identical wires through a different pattern id)`);
   for (const [w, s] of [...byWorld].sort()) console.log(`  ${w}: ${s.ok}/${s.total}`);
   for (const f of failures) console.log(`  FAIL [${f.world}] ${f.en} | ${f.ro} -> ${f.translated} (${f.expected} vs ${f.got})`);

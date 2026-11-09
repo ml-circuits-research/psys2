@@ -6,6 +6,7 @@ import { createEngine, runWorldTests } from '../src/dialog/index.mjs';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createServer } from '../src/server/index.mjs';
 import { createRulesFormalizer, createEncoderFormalizer } from '../src/formalizer/strategy.mjs';
+import { sampled } from './helpers.mjs';
 
 // ---- an inline tool world: effects, state, modal input, cross-world requests ---------------------
 const LEGEND = '';
@@ -198,7 +199,7 @@ test('every pattern example of a tool world is understood', async () => {
   for (const id of TOOL_WORLDS) {
     for (const p of real.set.get(id).patterns) {
       assert.ok(p.examples.length >= 1, `${p.id} has no example`);
-      for (const ex of p.examples) {
+      for (const ex of sampled(p.examples, { key: (e) => `${p.id}|${e}`, world: id })) {
         const r = await real.createSession().send(ex);
         assert.ok(!r.statuses.includes('unparsed'), `${id}: "${ex}" is not understood`);
       }

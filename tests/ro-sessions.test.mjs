@@ -9,6 +9,7 @@ import { createTranslator } from '../src/translate/index.mjs';
 import { settingsForMode, sessionOptions } from '../src/dialog/runtime-config.mjs';
 import { checkReply } from '../scripts/lib/ro-reply-quality.mjs';
 import { checkRomanianReplies } from '../scripts/check-ro-replies.mjs';
+import { sampled } from './helpers.mjs';
 
 const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT), translator: createTranslator() });
 const settings = settingsForMode('rules');
@@ -65,9 +66,10 @@ test('RD5: the quote bug: a drawing hint in Romanian has well formed quotes or s
 
 test('RD5: reply quality over the Romanian set (no mixed language, no broken quotes), first 400 cases', async () => {
   const cases = readFileSync(new URL('../training/eval/operational-ro.jsonl', import.meta.url), 'utf8').split('\n').filter(Boolean).slice(0, 400).map((l) => JSON.parse(l));
-  const res = await checkRomanianReplies({ cases, engine, settings });
+  const run = sampled(cases, { key: (c, i) => c.id ?? c.message ?? i });
+  const res = await checkRomanianReplies({ cases: run, engine, settings });
   assert.deepEqual(res.bad.map((b) => `${b.id}: ${b.reply}`), []);
-  assert.ok(res.counts.romanian > 250, JSON.stringify(res.counts));
+  assert.ok(res.counts.romanian > 250 * (run.length / cases.length), JSON.stringify(res.counts));
 });
 
 test('reply quality checker: names the RD5 defects', () => {

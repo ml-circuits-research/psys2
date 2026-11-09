@@ -5,6 +5,7 @@ import { readFileSync } from 'node:fs';
 import { createFsLoader } from '../src/loaders/fs-loader.mjs';
 import { createEngine, translateParts } from '../src/dialog/index.mjs';
 import { createTranslator, languageEvidence } from '../src/translate/index.mjs';
+import { sampled } from './helpers.mjs';
 
 const rules = createTranslator();
 const engineWith = (detect) => createEngine({ loader: createFsLoader(), translator: { ...rules, detectLanguage: detect ?? rules.detectLanguage } });
@@ -51,7 +52,7 @@ test('translateParts: all or nothing', async () => {
 
 test('Romanian replies are never mixed (sample of the Romanian operational set)', async () => {
   const e = await engineWith();
-  const cases = readFileSync(new URL('../training/eval/operational-ro.jsonl', import.meta.url), 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l)).filter((_, i) => i % 6 === 0);
+  const cases = sampled(readFileSync(new URL('../training/eval/operational-ro.jsonl', import.meta.url), 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l)).filter((_, i) => i % 6 === 0), { key: (c) => c.message });
   const mixed = [];
   for (const c of cases) {
     const s = e.createSession({ language: 'auto' });

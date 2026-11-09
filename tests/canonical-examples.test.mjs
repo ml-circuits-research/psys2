@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import { createFsLoader } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { isCanonicalSentence, operationKey } from '../src/worlds/canonical.mjs';
+import { sampled } from './helpers.mjs';
 
 const engine = await createEngine({ loader: createFsLoader() });
 const worlds = engine.set.list().filter((w) => w.patterns.length);
@@ -43,7 +44,7 @@ test('every world has a canonical example for each of its main operations', () =
 test('every canonical example is understood by its own world on its own tab', async () => {
   const bad = [];
   for (const w of worlds) {
-    for (const c of new Set(w.patterns.flatMap((p) => p.canonical ?? []))) {
+    for (const c of sampled([...new Set(w.patterns.flatMap((p) => p.canonical ?? []))], { key: (x) => `${w.id}|${x}`, world: w.id })) {
       const s = engine.createSession({ language: 'en' });
       if (tabOf(w)) s.setWorldState('ui.shell', { activeTab: tabOf(w) });
       const r = await s.send(c, { language: 'en' });

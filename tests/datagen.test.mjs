@@ -5,6 +5,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import path from 'node:path';
 import { parse } from '../src/soplang/index.mjs';
 import { exportTraining, mulberry32, seedOf, splitOf, canonicalWires } from '../scripts/export-training.mjs';
+import { fullOnly } from './helpers.mjs';
 
 const ROOT = fileURLToPath(new URL('../worlds', import.meta.url));
 const WORLDS = ['kids.common', 'kids.arith', 'kids.shop', 'kids.time', 'kids.animals', 'kids.shapes', 'kids.tasks', 'games.tictactoe', 'games.guess', 'games.hangman', 'ui.shell', 'ui.help', 'user.profile'];
@@ -55,7 +56,7 @@ for (const id of WORLDS) {
   });
 }
 
-test('datagen: agreement with the rule formalizer and export consistency', async (t) => {
+test('datagen: agreement with the rule formalizer and export consistency', fullOnly(), async (t) => {
   const lines = [];
   for (const id of WORLDS) {
     const { records, report } = await exportTraining({ root: ROOT, world: id, count: 500, ruleDerived: false });

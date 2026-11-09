@@ -4,6 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine, runWorldTests } from '../src/dialog/index.mjs';
+import { inSample } from './helpers.mjs';
 
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
 const say = async (lines) => {
@@ -32,6 +33,7 @@ for (const id of ['kids.arith', 'kids.shop', 'kids.time']) {
     const bad = [];
     for (const p of engine.set.get(id).patterns) {
       assert.ok(p.examples.length >= 1, `${p.id} has no example`);
+      if (!inSample(p.id, id)) continue;
       const session = engine.createSession({ language: 'en' });
       // elliptic patterns (slot class recent) need an item mentioned before
       if (p.match.includes('recent(') || p.match.includes('lastagent')) await session.send('Tom has 5 apples.');
