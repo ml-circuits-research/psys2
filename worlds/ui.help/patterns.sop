@@ -479,3 +479,45 @@
     kind=request
     priority=12
     example="Help i am lost"
+
+@pat.ui.help.id.what core.pattern
+    canonical="What are you?"
+    match="[$lang.lead.filler|pls|plz|hey|so|ok]? [$ui.help.id_what] [$lang.tail.filler|then|exactly|really|pls|plz]?"
+    emit="@{_} core.request action=ui.helpIdentity arg.what=what"
+    kind=question
+    priority=14
+    doc="DOC: what PSys2 is. Beats the avatar's \"what are you\" (the character question stays reachable as \"which character are you\")."
+    example="What are you?"
+    example="What is PSys2?"
+    example="Tell me what you are."
+
+@pat.ui.help.id.how core.pattern
+    canonical="How do you work?"
+    match="[$lang.lead.filler|pls|plz|hey|so|ok|can_you|could_you]? [$ui.help.id_how] [then|exactly|really|pls|plz]?"
+    emit="@{_} core.request action=ui.helpIdentity arg.what=how"
+    kind=question
+    priority=14
+    example="How do you work?"
+    example="Explain how you work."
+    example="How were you built?"
+
+@pat.ui.help.id.ai core.pattern
+    canonical="Are you an AI?"
+    match="[$lang.lead.filler|pls|plz|hey|so|ok]? [are|r] [you|u|this] [a|an|some]? [real|actual|true]? [$ui.help.id_ai_noun] [or_what|or_not|really|for_real|exactly|pls|plz]?"
+    emit="@{_} core.request action=ui.helpIdentity arg.what=ai"
+    kind=question
+    priority=14
+    example="Are you an AI?"
+    example="Are you a neural network?"
+    example="r u artificial intelligence"
+
+@pat.ui.help.id.llm core.pattern
+    canonical="Do you use a language model?"
+    match="[$lang.lead.filler|pls|plz|hey|so|ok]? [do|does|did|are|is|r] [you|u|this|psys2|this_thing|this_system|this_assistant] [$ui.help.id_use_verb]? [a|an|the|any|some]? [$ui.help.id_llm_noun] [under_the_hood|behind_the_scenes|inside|underneath|really|for_real|or_not|pls|plz]?"
+    emit="@{_} core.request action=ui.helpIdentity arg.what=llm"
+    kind=question
+    priority=14
+    example="Do you use ChatGPT?"
+    example="Are you ChatGPT?"
+    example="Is this an LLM?"
+    example="Do you rely on a server?"

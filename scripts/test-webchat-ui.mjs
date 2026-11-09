@@ -211,7 +211,38 @@ async function ui1For(name, viewport, o) {
   } finally { await c.close(); }
 }
 
+async function docFor(name, viewport, o) {
+  const c = await openChat({ ...o, throttle: 1, viewport });
+  const { pg } = c;
+  const tag = name;
+  try {
+    const t = await pg.evaluate(() => ({
+      greeting: document.querySelector('.p2-msg.is-hint .p2-bubble')?.childNodes[0]?.textContent ?? '', header: document.querySelector('.p2-title span')?.textContent, title: document.title,
+      meta: document.querySelector('meta[name=description]')?.content,
+    }));
+    check(`${tag}: the greeting says neurosymbolic, in the browser, small neural models, symbolic worlds, formal rules`, /neurosymbolic assistant that runs entirely in your browser/.test(t.greeting) && /Small neural models/.test(t.greeting) && /symbolic worlds/.test(t.greeting) && /formal rules/.test(t.greeting) && !/explicit rules/.test(t.greeting), t.greeting.slice(0, 80));
+    check(`${tag}: header line "neurosymbolic · runs in your browser"`, t.header === 'neurosymbolic · runs in your browser', t.header);
+    check(`${tag}: page title and description`, /neurosymbolic assistant that runs in your browser, with no server and no large language model/.test(t.title) && /neurosymbolic/.test(t.meta) && !/no LLM/.test(t.title), t.title);
+    await pg.click('button[aria-label="Settings"]'); await pg.click('#p2-st-about'); await sleep(400);
+    const about = await pg.evaluate(() => document.querySelector('.p2-modal-body').innerText);
+    check(`${tag}: About explains neurosymbolic, why it is safe, model versions, accuracy, licence, credits`,
+      /neurosymbolic/i.test(about) && /Why the symbolic layer makes it safe/.test(about) && /Nothing runs unless a world validates it/.test(about) && /Dispatcher model: v\d{4}/.test(about) && /Normalizer model: v\d{4}/.test(about) && /Measured accuracy/.test(about) && /98\.6%/.test(about) && /AGPL-3\.0/.test(about) && /Credits/.test(about) && /ONNX Runtime/.test(about) && /DistilBERT/.test(about) && /FLAN-T5/.test(about), about.slice(0, 60));
+    check(`${tag}: About never claims to understand everything`, !/understands? everything|knows everything|any question/i.test(about));
+    await shot(c, o, `doc-about-${name}`);
+    await pg.click('.p2-modal-close'); await waitModal(pg, false);
+    const asks = [['what are you?', [/neurosymbolic/, /in your browser/, /no large language model/]], ['how do you work?', [/dispatcher/i, /formal rules/i, /value checker/, /validates/]], ['are you an AI?', [/neurosymbolic/, /not a chatbot built on a large language model/]], ['do you use ChatGPT?', [/^No\./, /large language model/, /server/]]];
+    for (const [q, res] of asks) {
+      const r = await c.say(q);
+      check(`${tag}: help answers "${q}"`, r.ok && res.every((re) => re.test(r.reply)) && !/understands? everything/i.test(r.reply), r.reply.slice(0, 90));
+    }
+    await shot(c, o, `doc-help-${name}`);
+    check(`${tag}: no console errors`, c.consoleErrors.length === 0 && c.errors.length === 0, [...c.consoleErrors, ...c.errors][0] ?? '');
+  } finally { await c.close(); }
+}
+
 export const SCENARIOS = {
+  async doc(o) { for (const [name, vp] of Object.entries(VIEWPORTS)) await docFor(name, vp, o); },
+
   async ui1(o) { for (const [name, vp] of Object.entries(VIEWPORTS)) await ui1For(name, vp, o); },
 
   async settings(o) { for (const [name, vp] of Object.entries(VIEWPORTS)) await settingsFor(name, vp, o); },

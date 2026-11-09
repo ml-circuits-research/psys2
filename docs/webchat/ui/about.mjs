@@ -19,3 +19,21 @@ export const CREDITS = [
   ['DistilBERT (distilbert-base-uncased), fine-tuned by this project', 'dispatcher', 'Apache-2.0', 'the dispatcher model'],
   ['FLAN-T5 small (google/flan-t5-small), fine-tuned by this project', 'normalizer', 'Apache-2.0', 'the phrasing normalizer'],
 ];
+
+/** The one-line description used in the header, the page title and the greeting (DOC). */
+export const TAGLINE = 'neurosymbolic · runs in your browser';
+export const PAGE_TITLE = 'PSys2: a neurosymbolic assistant that runs in your browser, with no server and no large language model';
+export const GREETING = 'Hi, I am PSys2, a neurosymbolic assistant that runs entirely in your browser. Small neural models split what you say and propose meanings; symbolic worlds check every meaning against formal rules before anything happens, so I do what I understood and tell you what I did not. Talk to me or type. Try one of these:';
+
+/** Settings > About: what PSys2 is and why it is safe, in short paragraphs ([heading, text]). Never claims more than we have. */
+export const ABOUT_SECTIONS = [
+  ['What PSys2 is', 'PSys2 is a neurosymbolic assistant that runs entirely in your browser. There is no server and no large language model: two small neural models (about 160 MB together, cached in your browser) work with formal rules and small knowledge worlds.'],
+  ['What neurosymbolic means here', 'The neural part reads: a DistilBERT dispatcher cuts your message into parts and proposes which world each part belongs to, and a small FLAN-T5 normalizer may propose a simpler wording when nothing else reads a sentence. The symbolic part decides: rules turn a part into formal wires (SOP Lang), the interpreter runs them on a world, and the answer is written from templates.'],
+  ['Why the symbolic layer makes it safe', 'The neural models only propose. A proposal is used only if the rules read it, a value checker confirms that its numbers, names and negations are the ones you said, and a world accepts it. Nothing runs unless a world validates it, so I do what I understood and tell you what I did not.'],
+];
+/** Measured accuracy (training/RESULTS.md, authored operational set of 1240 messages; Romanian set of 2480 cases). */
+export const ACCURACY = [
+  'English, 1240 authored messages: 98.6% answered correctly and 0.4% wrongly with the dispatcher and the normalizer (95.4% and 0.5% with the rules alone).',
+  'Romanian, 2480 cases: 84.7% correct and 2.7% wrong.',
+  'These sets were written by us and the rules were widened by reading them, so real users will see lower numbers; the phrase log is how we collect real phrasings.',
+];

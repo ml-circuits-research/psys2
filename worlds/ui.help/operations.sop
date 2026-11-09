@@ -45,3 +45,9 @@
     semantics=action
     action=ui.helpWhy
     doc="Explains the last sentence that was not understood and suggests the closest commands."
+
+@op.ui.help.helpIdentity core.operation
+    impl=helpIdentity
+    semantics=action
+    action=ui.helpIdentity
+    doc="Says what PSys2 is and how it works: a neurosymbolic assistant in the browser (small neural models propose, formal rules and symbolic worlds decide), with no server and no large language model. what = what | how | ai | llm."

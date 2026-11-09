@@ -1,6 +1,6 @@
 # PSys2 webchat
 
-A static page that runs PSys2 C2 (operation) entirely in the browser: no server, no language model. The same `src/` modules run here, copied to `lib/`; the worlds are bundled into `worlds/`.
+A static page that runs PSys2 C2 (operation) entirely in the browser: a neurosymbolic assistant, with no server and no large language model (two small neural models propose, formal rules and symbolic worlds decide). The same `src/` modules run here, copied to `lib/`; the worlds are bundled into `worlds/`.
 
 ## Build and serve
 ```sh

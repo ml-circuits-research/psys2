@@ -326,3 +326,115 @@
     alt=view
     alt=section
     alt=window
+
+@phrase.ui.help.id_what core.phrase
+    frame=false
+    doc="Ways to ask what PSys2 is (DOC)."
+    alt=what_are_you
+    alt=what_are_u
+    alt=what_exactly_are_you
+    alt=what_are_you_exactly
+    alt=what_are_you_really
+    alt=what_is_psys2
+    alt=whats_psys2
+    alt=what_is_psys_2
+    alt=what_is_pragmatic_system
+    alt=what_is_pragmaticsystem2
+    alt=what_kind_of_system_are_you
+    alt=what_kind_of_assistant_are_you
+    alt=what_kind_of_program_are_you
+    alt=what_kind_of_thing_are_you
+    alt=tell_me_what_you_are
+    alt=tell_me_about_psys2
+    alt=what_is_this_system
+    alt=what_is_this_assistant
+    alt=what_is_this_program
+    alt=what_is_this_thing
+
+@phrase.ui.help.id_how core.phrase
+    frame=false
+    doc="Ways to ask how PSys2 works (DOC)."
+    alt=how_do_you_work
+    alt=how_does_psys2_work
+    alt=how_does_this_system_work
+    alt=how_does_this_assistant_work
+    alt=how_are_you_built
+    alt=how_are_you_made
+    alt=how_were_you_built
+    alt=how_were_you_made
+    alt=how_do_you_understand_me
+    alt=how_do_you_understand_what_i_say
+    alt=how_do_you_understand
+    alt=how_do_you_think
+    alt=how_do_you_know_what_i_mean
+    alt=explain_how_you_work
+    alt=tell_me_how_you_work
+    alt=what_is_under_the_hood
+    alt=whats_under_the_hood
+    alt=what_is_your_architecture
+    alt=what_is_your_technology
+    alt=what_technology_do_you_use
+    alt=how_do_you_do_it
+    alt=how_do_you_do_this
+
+@phrase.ui.help.id_ai_noun core.phrase
+    frame=false
+    doc="What a user may ask whether PSys2 is, when the answer is the AI one (DOC)."
+    alt=ai
+    alt=a_i
+    alt=artificial_intelligence
+    alt=neural_network
+    alt=neural_net
+    alt=machine_learning_model
+    alt=ml_model
+    alt=machine_learning
+
+@phrase.ui.help.id_llm_noun core.phrase
+    frame=false
+    doc="Names of large language models and services that people ask about (DOC)."
+    alt=chatgpt
+    alt=chat_gpt
+    alt=gpt
+    alt=gpt4
+    alt=gpt_4
+    alt=gpt5
+    alt=gpt_5
+    alt=openai
+    alt=claude
+    alt=gemini
+    alt=llama
+    alt=copilot
+    alt=bard
+    alt=an_llm
+    alt=a_llm
+    alt=llm
+    alt=a_large_language_model
+    alt=large_language_model
+    alt=a_language_model
+    alt=language_model
+    alt=generative_ai
+    alt=a_generative_ai
+    alt=a_server
+    alt=the_cloud
+    alt=a_cloud_model
+    alt=the_internet
+
+@phrase.ui.help.id_use_verb core.phrase
+    frame=false
+    doc="Verbs of the question do you use X (DOC)."
+    alt=use
+    alt=run_on
+    alt=rely_on
+    alt=need
+    alt=work_with
+    alt=call
+    alt=have
+    alt=include
+    alt=contain
+    alt=employ
+    alt=run
+    alt=depend_on
+    alt=connect_to
+    alt=talk_to
+    alt=send_things_to
+    alt=send_messages_to

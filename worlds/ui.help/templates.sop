@@ -29,3 +29,7 @@
 @tpl.ui.help.helpWhy core.template
     for=action.ui.helpWhy
     text="{value}"
+
+@tpl.ui.help.helpIdentity core.template
+    for=action.ui.helpIdentity
+    text="{value}"

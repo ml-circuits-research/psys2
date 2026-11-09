@@ -365,3 +365,48 @@
     session=hp1
     input="help me"
     expect="tab"
+
+@t.ui.help.id01 core.test
+    input="What are you?"
+    expect="neurosymbolic"
+    session=hid1
+
+@t.ui.help.id02 core.test
+    input="How do you work?"
+    expect="dispatcher"
+    session=hid2
+
+@t.ui.help.id03 core.test
+    input="Are you an AI?"
+    expect="neurosymbolic"
+    session=hid3
+
+@t.ui.help.id04 core.test
+    input="Do you use ChatGPT?"
+    expect="large language model"
+    session=hid4
+
+@t.ui.help.id05 core.test
+    input="are you chatgpt"
+    expect="large language model"
+    session=hid5
+
+@t.ui.help.id06 core.test
+    input="what is psys2"
+    expect="neurosymbolic"
+    session=hid6
+
+@t.ui.help.id07 core.test
+    input="do you use an llm"
+    expect="browser"
+    session=hid7
+
+@t.ui.help.id08 core.test
+    input="are you a language model"
+    expect="large language model"
+    session=hid8
+
+@t.ui.help.id09 core.test
+    input="how were you built"
+    expect="dispatcher"
+    session=hid9

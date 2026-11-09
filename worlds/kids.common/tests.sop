@@ -323,22 +323,22 @@
 
 @t.kids.common.s055 core.test
     input="who are you"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep probe: action=chat.who"
 
 @t.kids.common.s056 core.test
     input="who r u"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep probe: action=chat.who"
 
 @t.kids.common.s057 core.test
     input="introduce yourself"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep probe: action=chat.who"
 
 @t.kids.common.s058 core.test
     input="who is this"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep probe: action=chat.who"
 
 @t.kids.common.s059 core.test
@@ -478,7 +478,7 @@
 
 @t.kids.common.s086 core.test
     input="your identity?"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep: paraphrase wording that the rules did not read before"
 
 @t.kids.common.s087 core.test
@@ -558,37 +558,37 @@
 
 @t.kids.common.s102 core.test
     input="intro yourself pls"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep: heldout wording that the rules did not read before"
 
 @t.kids.common.s103 core.test
     input="can u introduce urself?"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep: heldout wording that the rules did not read before"
 
 @t.kids.common.s104 core.test
     input="tell me about you, who are u"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep: heldout wording that the rules did not read before"
 
 @t.kids.common.s105 core.test
     input="introduce yourself to me please"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep: heldout wording that the rules did not read before"
 
 @t.kids.common.s106 core.test
     input="who r u, intro?"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep: heldout wording that the rules did not read before"
 
 @t.kids.common.s107 core.test
     input="could you introduce yourself to me?"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep: heldout wording that the rules did not read before"
 
 @t.kids.common.s108 core.test
     input="introduce urself"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep: heldout wording that the rules did not read before"
 
 @t.kids.common.s109 core.test
@@ -738,32 +738,32 @@
 
 @t.kids.common.s138 core.test
     input="which bot are you?"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep: heldout wording that the rules did not read before"
 
 @t.kids.common.s139 core.test
     input="bot type?"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep: heldout wording that the rules did not read before"
 
 @t.kids.common.s140 core.test
     input="what kind of robot program are you?"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep: heldout wording that the rules did not read before"
 
 @t.kids.common.s141 core.test
     input="what bot is this?"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep: heldout wording that the rules did not read before"
 
 @t.kids.common.s142 core.test
     input="what kinda bot u r?"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep: heldout wording that the rules did not read before"
 
 @t.kids.common.s143 core.test
     input="could you tell me what type of bot you are?"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep: heldout wording that the rules did not read before"
 
 @t.kids.common.s144 core.test
@@ -888,32 +888,32 @@
 
 @t.kids.common.s168 core.test
     input="tell me about you"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep probe: fresh-batch variant"
 
 @t.kids.common.s169 core.test
     input="wat r u"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep probe: fresh-batch variant"
 
 @t.kids.common.s170 core.test
     input="u r who?"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep probe: fresh-batch variant"
 
 @t.kids.common.s171 core.test
     input="who are u exactly"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep probe: fresh-batch variant"
 
 @t.kids.common.s172 core.test
     input="what kind of thing are you"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs"
     doc="rule sweep probe: fresh-batch variant"
 
 @t.kids.common.s173 core.test
     input="so who is talking to me"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep probe: fresh-batch variant"
 
 @t.kids.common.s174 core.test
@@ -1228,37 +1228,37 @@
 
 @t.kids.common.s236 core.test
     input="what r u"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep probe: fresh-batch variant"
 
 @t.kids.common.s237 core.test
     input="explain who you are"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep probe: fresh-batch variant"
 
 @t.kids.common.s238 core.test
     input="so what are you exactly"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs"
     doc="rule sweep probe: fresh-batch variant"
 
 @t.kids.common.s239 core.test
     input="who you be"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep probe: fresh-batch variant"
 
 @t.kids.common.s240 core.test
     input="tell me who you are please"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep probe: fresh-batch variant"
 
 @t.kids.common.s241 core.test
     input="who is talking to me"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep probe: fresh-batch variant"
 
 @t.kids.common.s242 core.test
     input="whos this"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep probe: fresh-batch variant"
 
 @t.kids.common.s243 core.test
@@ -1458,32 +1458,32 @@
 
 @t.kids.common.s282 core.test
     input="who are u"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep probe: fresh-batch variant"
 
 @t.kids.common.s283 core.test
     input="so who are you exactly"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep probe: fresh-batch variant"
 
 @t.kids.common.s284 core.test
     input="introduce yourself pls"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep probe: fresh-batch variant"
 
 @t.kids.common.s285 core.test
     input="wait who r u"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep probe: fresh-batch variant"
 
 @t.kids.common.s286 core.test
     input="Who is this?"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep probe: fresh-batch variant"
 
 @t.kids.common.s287 core.test
     input="um who are you"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep probe: fresh-batch variant"
 
 @t.kids.common.s288 core.test
@@ -1738,7 +1738,7 @@
 
 @t.kids.common.s338 core.test
     input="u got a name? who are u?"
-    expect="I am PSys2. I read what you tell me, remember it and answer only from what I know."
+    expect="I am PSys2, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
     doc="rule sweep probe: fresh-batch variant"
 
 @t.kids.common.s339 core.test

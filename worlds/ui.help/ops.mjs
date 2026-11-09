@@ -339,3 +339,20 @@ export function helpWhy(ctx) {
   return ok(`I did not understand ${quote(u.text)} because ${why}, and I found nothing close to it.${ex} You can also rephrase it with simpler words.`, { values: r.items });
 }
 void lowerFirst;
+
+/**
+ * Who and what PSys2 is (DOC): short, accurate answers for "what are you?", "how do you work?", "are you an AI?", "do you use ChatGPT?".
+ * Wording rules: neurosymbolic, small neural models, formal rules and symbolic worlds; no server and no large language model; never claim
+ * more than we have (no "understands everything"). The same story is in the README, Settings > About and the docs.
+ */
+const IDENTITY = {
+  what: 'I am PSys2, a neurosymbolic assistant that runs entirely in your browser. Small neural models split what you say and propose meanings; symbolic worlds check every meaning against formal rules before anything happens, so I do what I understood and tell you what I did not. There is no server and no large language model. Ask "what can you do?" to see what I know.',
+  how: 'In four steps, all in your browser. 1) A small neural dispatcher (DistilBERT) cuts your message into parts and proposes which world each part belongs to. 2) Formal rules read each part into SOP Lang wires, with spell checking and best-effort reading; when nothing reads a part, a small normalizer model (FLAN-T5 small) may propose a simpler wording, which the rules and a value checker (numbers, names, negation) must accept. 3) The interpreter runs the wires on the world; nothing happens unless a world validates it. 4) The answer is written from templates, so every value comes from a world. Settings, About has the details.',
+  ai: 'Yes, in the sense that two small neural models help me read what you say. But I am not a chatbot built on a large language model: I am neurosymbolic. The neural models only propose; formal rules and symbolic worlds decide what happens, and I only answer from what my worlds know. When no world validates a meaning, I say that I did not understand.',
+  llm: 'No. I do not use ChatGPT or any other large language model, and I do not call a server: everything runs in your browser. I use two small neural models (a DistilBERT dispatcher and a FLAN-T5 small normalizer, about 160 MB together, cached in your browser) with formal rules and symbolic worlds. I only know what my worlds know, so I will sometimes tell you that I did not understand.',
+};
+export function helpIdentity(ctx, { what } = {}) {
+  const key = Object.hasOwn(IDENTITY, what) ? what : 'what';
+  ctx.state.lastHelp = ctx.state.lastHelp ?? null;
+  return ok(IDENTITY[key]);
+}

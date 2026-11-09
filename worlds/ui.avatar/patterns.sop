@@ -148,7 +148,7 @@
 
 @pat.ui.avatar.char.q core.pattern
     canonical="Which character are you?"
-    match="[$lang.lead.filler|pls|plz]? [what_are_you|which_character_are_you|what_kind_of_avatar_are_you|what_character_do_you_have|which_avatar_are_you|what_avatar_are_you] [$lang.tail.filler]?"
+    match="[$lang.lead.filler|pls|plz]? [which_character_are_you|what_kind_of_avatar_are_you|what_character_do_you_have|which_avatar_are_you|what_avatar_are_you] [$lang.tail.filler]?"
     emit="@{_} core.request action=avatar.askCharacter"
     kind=request
     priority=12

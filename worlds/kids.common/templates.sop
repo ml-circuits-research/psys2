@@ -16,7 +16,7 @@
 
 @tpl.kids.common.who core.template
     for=action.chat.who
-    text="I am {value}. I read what you tell me, remember it and answer only from what I know."
+    text="I am {value}, a neurosymbolic assistant that runs in your browser. Small neural models help me read what you tell me; symbolic worlds with formal rules decide what happens, and I answer only from what they know."
 
 @tpl.kids.common.thanks core.template
     for=action.chat.thanks

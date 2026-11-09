@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-// PSys2 browser demo (spec 06 "Webchat", spec 07 §4). Runs C2 entirely in the browser: no server, no LLM.
+// PSys2 browser demo (spec 06 "Webchat", spec 07 §4). Runs C2 entirely in the browser: no server, no large language model.
 //
 //   import { mountPsys2 } from './app.mjs';
 //   const psys2 = await mountPsys2(document.querySelector('#chat'), { tabs: ['robot'], worlds: ['core', 'kids.common'] });
@@ -17,7 +17,7 @@ import { findNormalizerModel, createNormalizerHost } from './ui/normalizer-host.
 import { sessionOptions } from './lib/dialog/runtime-config.mjs';
 import { DEFAULT_SETTINGS, SETTINGS_KEY, loadSettings } from './ui/settings.mjs';
 import { guard, TurnAborted, withDeadline } from './lib/formalizer/guard.mjs';
-import { CREDITS } from './ui/about.mjs';
+import { CREDITS, ABOUT_SECTIONS, ACCURACY, TAGLINE, GREETING } from './ui/about.mjs';
 import { buildRecord, completeRecord, completeStopped, createStore, filterRecords, toJSONL, toText, exportFilename, summaryStatus, summaryWorlds } from './ui/phrase-log.mjs';
 
 const HERE = new URL('.', import.meta.url);
@@ -119,7 +119,7 @@ export async function mountPsys2(element, options = {}) {
   const form = h('form', { class: 'p2-form' }, micBtn, speakerBtn, input, sendBtn);
   const chat = h('section', { class: 'p2-chat', 'aria-label': 'Chat' },
     h('header', { class: 'p2-head' },
-      h('div', { class: 'p2-title' }, h('strong', {}, options.title ?? 'PSys2'), h('span', {}, 'no LLM · runs in your browser')),
+      h('div', { class: 'p2-title' }, h('strong', {}, options.title ?? 'PSys2'), h('span', {}, TAGLINE)),
       h('div', { class: 'p2-tools' }, langSel, gearBtn)),
     statusEl, log, dictBar, form,
     h('footer', { class: 'p2-foot' }, h('a', { href: SOURCE_URL, target: '_blank', rel: 'noopener', 'data-source-link': 'footer' }, 'Source code (AGPL-3.0)')));
@@ -771,7 +771,8 @@ export async function mountPsys2(element, options = {}) {
   }
   function aboutBody() {
     return [
-      h('p', {}, 'PSys2 answers with explicit rules and small knowledge worlds, with no language model, and runs entirely in your browser.'),
+      ...ABOUT_SECTIONS.map(([heading, text]) => h('div', { class: 'p2-field' }, h('strong', {}, heading), h('p', {}, text))),
+      h('div', { class: 'p2-field' }, h('strong', {}, 'Measured accuracy'), h('ul', { class: 'p2-credits' }, ACCURACY.map((t) => h('li', {}, t)))),
       h('div', { class: 'p2-field' }, h('strong', {}, 'Version and build'), buildInfoLines()),
       h('div', { class: 'p2-field p2-about' }, h('strong', {}, 'Licence'),
         h('p', {}, 'AGPL-3.0-only. Anyone who uses this page over a network can get the source code.'),
@@ -975,7 +976,7 @@ export async function mountPsys2(element, options = {}) {
 
   if (options.onboarding !== false) {
     const chips = h('div', { class: 'p2-chips-row' }, EXAMPLES.map((ex) => h('button', { class: 'p2-example', type: 'button', onclick: () => { send(ex, 'chip'); input.focus(); } }, ex)));
-    addMessage('bot', 'Hi, I am PSys2. I answer with explicit rules and small knowledge worlds, with no language model. You can talk to me or type. Try one of these:', { children: chips, className: 'is-hint' });
+    addMessage('bot', GREETING, { children: chips, className: 'is-hint' });
   }
   const handle = {
     engine, session, settings, send, stop: stopTurn, applyState, showTab, get busy() { return !!turn; },

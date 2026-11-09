@@ -2,6 +2,8 @@
 
 The vision (`vision/PSys2-vision-v1.md`) defines the target architecture. These specs define the contracts of what is being implemented now; where they narrow or amend the vision, an ADR in `decisions/` says so.
 
+PSys2 is a neurosymbolic assistant that runs entirely in the browser, with no server and no large language model: small neural models (the dispatcher, the normalizer) only propose, and formal rules and symbolic worlds, behind a value checker, decide what happens. The specs below describe both sides of that line; `README.md` at the repository root has the architecture in one diagram.
+
 | Spec | Scope |
 | --- | --- |
 | [01-soplang.md](01-soplang.md) | SOP Lang v1 syntax, parser API, canonical form, core keys |
