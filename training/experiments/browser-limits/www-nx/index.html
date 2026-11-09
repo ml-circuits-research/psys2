@@ -1,0 +1,18 @@
+<!doctype html><meta charset=utf-8><title>nx bench</title>
+<script type=module>
+// NX5 browser cost: the real exported NX model (heads A or A+) against the published dispatcher v4, single-threaded wasm like the webchat.
+import * as ort from './ort.wasm.bundle.min.mjs';
+ort.env.wasm.wasmPaths = new URL('./', location.href).href; ort.env.wasm.numThreads = 1;
+const med = (a) => { const s = [...a].sort((x, y) => x - y); return +s[s.length >> 1].toFixed(1); };
+const buf = async (u) => new Uint8Array(await (await fetch(u)).arrayBuffer());
+const S = {};
+async function load(name, file) { const t0 = performance.now(); const b = await buf(file); const t1 = performance.now(); S[name] = await ort.InferenceSession.create(b, { executionProviders: ['wasm'], graphOptimizationLevel: 'all' }); return { fetchMs: Math.round(t1 - t0), createMs: Math.round(performance.now() - t1), MB: +(b.length / 1e6).toFixed(1), outputs: S[name].outputNames }; }
+const feeds = (ids) => ({ input_ids: new ort.Tensor('int64', BigInt64Array.from(ids, (x) => BigInt(x)), [1, ids.length]), attention_mask: new ort.Tensor('int64', BigInt64Array.from(ids, () => 1n), [1, ids.length]) });
+const synth = (t) => Array.from({ length: t }, (_, i) => 1000 + (i * 7919) % 28000);
+async function time(fn, n = 8) { await fn(); await fn(); const r = []; for (let i = 0; i < n; i++) { const t = performance.now(); await fn(); r.push(performance.now() - t); } return med(r); }
+window.loadAll = async () => ({ nx: await load('nx', 'models/nx.int8.onnx'), disp: await load('disp', 'models/dispatcher_v4.int8.onnx') });
+window.bench = async (lens) => { const rows = []; for (const t of lens) { const f = feeds(synth(t)); rows.push({ tokens: t, nx: await time(() => S.nx.run(f)), dispatcherV4: await time(() => S.disp.run(f)) }); } return rows; };
+// parity: real tokenised inputs, the op argmax and the tag argmax of onnxruntime-node must come out the same in the browser
+window.parity = async (inputs) => { let ok = 0, tagOk = 0; const times = []; for (const { ids, op, tags } of inputs) { const t = performance.now(); const o = await S.nx.run(feeds(ids)); times.push(performance.now() - t); const d = o.op_logits.data; let b = 0; for (let i = 1; i < d.length; i++) if (d[i] > d[b]) b = i; if (b === op) ok++; const L = o.tag_logits.dims[2], T = ids.length; const got = []; for (let k = 0; k < T; k++) { let bb = 0; for (let i = 1; i < L; i++) if (o.tag_logits.data[k * L + i] > o.tag_logits.data[k * L + bb]) bb = i; got.push(bb); } if (JSON.stringify(got) === JSON.stringify(tags)) tagOk++; } return { n: inputs.length, opSame: ok, tagsSame: tagOk, medianMs: med(times) }; };
+window.ready = true;
+</script>

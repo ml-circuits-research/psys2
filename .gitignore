@@ -13,3 +13,6 @@ training/dataset-edit/*.jsonl
 training/dataset-edit/build.log
 training/dataset-normalizer/*.jsonl
 training/diagram/*.jsonl
+training/experiments/browser-limits/www-nx/*
+!training/experiments/browser-limits/www-nx/index.html
+!training/experiments/browser-limits/www-nx/lora.html
