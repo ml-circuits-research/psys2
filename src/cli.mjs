@@ -86,6 +86,7 @@ async function cmdChat(roots) {
     else {
       last = await session.send(line);
       console.log('psys2> ' + last.text);
+      for (const t of session.settleHeadless(last)) console.log('psys2> ' + t);   // the CLI is the host: engine moves fall back to the built-in player
     }
     if (process.stdin.isTTY) rl.prompt();
   }

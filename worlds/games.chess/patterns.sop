@@ -14,6 +14,7 @@
 @pat.games.chess.move.bare core.pattern
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [$lang.lead.polite|$games.chess.g1_i]? [move|go|put|push|advance|bring|shift|slide|jump|send|run|place|develop|retreat|moves|goes]? [$games.chess.g3_to]? [square]? {tf:lex.games.chess.files} {tr:number} [and|then|and_then]? [$games.chess.g6_promote]? [to|into|as|equals|a|becoming]? [a|an|the]? {pr:lex.games.chess.promos?} [$games.chess.g13_now]? [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.move arg.tf={tf} arg.tr={tr} arg.promo={pr}"
+    tabFollow=true
     kind=request
     priority=13
     example="e4."
@@ -307,6 +308,7 @@
 @pat.games.chess.pick.piece core.pattern
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [the|that|this|use|with|take|play|move|i_mean|i_meant|i_said|go_with|choose|pick|select|i_choose|i_pick|i_mean_the|use_the|the_one|that_one|this_one|with_the|take_the|play_the|move_the|the_1|that_1|this_1]? [the]? [1|piece]? {p:lex.games.chess.pieces?} [on|from|at|in|standing_on|that_is_on]? [square]? {ff:lex.games.chess.files} {fr:number} [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.pick arg.piece={p} arg.ff={ff} arg.fr={fr}"
+    tabFollow=true
     kind=request
     priority=11
     example="The one on g1."
@@ -1216,6 +1218,7 @@
 @pat.games.chess.pick.sq core.pattern
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [the|that|this|use|with|take|play|move|i_mean|i_meant|i_said|go_with|choose|pick|select|i_choose|i_pick|i_mean_the|use_the|that_1|this_1|the_1|its|it_is|its_the|it_is_the|the_1_on|the_1_at]? [the]? {p:lex.games.chess.pieces?} [on|from|at|in|standing_on|that_is_on|sitting_on]? [square]? {ff:lex.games.chess.files} {fr:number} [1|piece|guy|thing|man|pc]? [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.pick arg.piece={p} arg.ff={ff} arg.fr={fr}"
+    tabFollow=true
     kind=request
     priority=11
     example="The g1 one."

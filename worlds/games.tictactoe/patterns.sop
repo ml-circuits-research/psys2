@@ -13,9 +13,10 @@
     canonical="I play A1."
     match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|um|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh|ok]? [i|gonna|imma|im_gonna|i_am_gonna|im_going_to|i_am_going_to|going_to|i_ll|ill_just|i_just|let_me_just|lets_do|lets_try|let_us_try|id_say|i_d_say|i_say|my_choice_is|my_pick_is|how_bout|how_about_i_go|square|cell|spot|i_will|i_would|let_me|can_i|may_i|could_i|i_want|i_choose|i_take|i_play|i_pick|i_go|i_put|me|my_move_is|my_move|i_will_go|i_will_put|i_will_play|i_will_take|i_wanna_go|i_wanna_play|i_wanna_take|i_wanna_put|let_me_go|let_me_play|let_me_take|let_me_put|can_i_go|can_i_play|can_i_take|can_i_put|can_i_have|may_i_have|could_i_have|how_about|what_about|lets_go|let_us_go|go_for|i_go_for|i_will_go_for|then|ill_take|ill_go|ill_play|ill_put]? [play|go|put|place|take|mark|choose|pick|move|put_x|play_x|x|put_an_x|place_an_x|draw_an_x|want_to_go|want_to_play|want_to_take|will_take|will_play|will_go|put_my_x|put_it|place_it|play_it|move_it|mark_it|take_it|go_with|go_for|try|use|plant_an_x|drop_an_x|drop_x|my_x|my_x_goes|x_goes|x_on|x_at|x_in|an_x|x_to|set_x|set_an_x|draw_x|place_x|mark_x|mark_an_x|x_marks|choose_the|pick_the|put_it_in|put_it_on|put_it_at|play_in|play_on|play_at|go_in|go_on|go_at|go_to|put_x_in|put_x_on|put_x_at|put_an_x_in|put_an_x_on|put_an_x_at|put_an_x_on_the|put_my_x_in|put_my_x_on|put_my_x_at]? [at|in|on|to]? [the]? [square|cell|spot|position|tile]? {c:lex.games.tictactoe.cols} {r:number} [pls|plz|thanks|thx|then|now|lol|rn|yeah|maybe|i_guess|i_think|i_suppose|probably|for_me|for_now|please|okay|i_say|perhaps|i_guess_so|i_think_so|first|next|if_you_dont_mind|lets_see|and_see|just_to_see]?"
     emit="@{_} core.request action=ttt.move arg.col={c} arg.row={r}"
+    tabFollow=true
     kind=request
     priority=12
-    example="B2."
+    example="Play B2."
     example="I play A1."
 
 @pat.games.tictactoe.rowcol core.pattern
