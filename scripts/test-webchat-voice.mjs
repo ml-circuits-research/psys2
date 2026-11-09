@@ -21,7 +21,7 @@ function fakeSpeech() {
   window.__srCfg = { startMs: 20, stopMs: 20 };
   class FakeSR {
     constructor() { this.started = false; this.lang = ''; all.push(this); }
-    start() { this.started = true; this.dead = false; this.results = []; this.startedAt = performance.now(); const ms = window.__srCfg.startMs; setTimeout(() => { if (this.started && !this.dead) this.onstart?.(); }, ms); }
+    start() { this.nstarts = (this.nstarts || 0) + 1; this.started = true; this.dead = false; this.results = []; this.startedAt = performance.now(); const ms = window.__srCfg.startMs; setTimeout(() => { if (this.started && !this.dead) this.onstart?.(); }, ms); }
     stop() { setTimeout(() => this.end(), window.__srCfg.stopMs); }
     abort() { this.dead = true; setTimeout(() => this.end(), 0); }
     end() { if (this.started) { this.started = false; this.onend?.(); } }
@@ -30,7 +30,7 @@ function fakeSpeech() {
   window.SpeechSynthesisUtterance = class { constructor(t) { this.text = t; } };
   window.SpeechRecognition = FakeSR; window.webkitSpeechRecognition = FakeSR;
   window.__sr = {
-    all,
+    all, starts: () => all.reduce((a, r) => a + (r.nstarts || 0), 0),
     live: () => all.filter((r) => r.started).at(-1) ?? null,
     say(texts, { final = false } = {}) { const r = this.live(); if (!r) return false; r.onresult({ resultIndex: 0, results: texts.map((t) => Object.assign([{ transcript: t }], { isFinal: final })) }); return true; },
     t0: 0,
@@ -58,6 +58,7 @@ export const SCENARIOS = {
       const dry = await c.pg.evaluate(async () => [await window.psys2.session.dryRead('make a house', { language: 'en' }), await window.psys2.session.dryRead('fă o casă mare', { language: 'ro' }), await window.psys2.session.dryRead('make a house and', { language: 'en' })]);
       check('dry run: complete readings found, no side effects on the session', dry[0].complete && dry[1].complete && (await snap()) === before, JSON.stringify(dry.map((d) => d.reason)));
       for (const [label, text, settings] of [['English', 'make a house', {}], ['Romanian', 'desenează o casă', { language: 'ro' }]]) {
+        await sleep(2200);   // the rate guard: one voice message in 2 s
         if (settings.language) { await c.pg.select('select.p2-select', settings.language); }
         const n = await users(c);
         if (!(await c.pg.evaluate(() => !!window.__sr.live()))) await c.pg.click('button.p2-mic');   // conversation mode: the mic is still on from the first sentence
@@ -154,28 +155,27 @@ export const SCENARIOS = {
       await c.pg.type('input.p2-text', 'make a house'); await c.pg.keyboard.press('Enter');
       await c.pg.waitForFunction(() => window.psys2.busy, { timeout: 5000 });
       const n = await users(c);
-      await c.pg.click('button.p2-mic'); await waitRec(c);
-      await say(c, ['make a tree']);
-      await sleep(3400);   // while a turn runs the dry run declines, so the long pause (2.5 s in conversation mode) applies
-      check('a spoken message during a turn waits as a chip above the input', (await users(c)) === n && (await c.pg.$$eval('.p2-queue .p2-qchip', (e) => e.map((x) => x.textContent.replace('×', '')))).join('|') === 'make a tree');
+      await c.pg.click('button.p2-mic'); await sleep(800);
+      check('MOBILE-VOICE: the microphone does not listen while a turn runs ("working")', !(await c.pg.evaluate(() => !!window.__sr.live())) && (await c.pg.$eval('button.p2-mic', (b) => b.dataset.mic)) === 'working');
+      check('and nothing is queued', (await c.pg.$$eval('.p2-queue .p2-qchip', (e) => e.length)) === 0 && (await users(c)) === n);
       await c.realSend();
-      await c.pg.waitForFunction((n) => document.querySelectorAll('.p2-msg.is-user').length > n, { timeout: 15000, polling: 50 }, n).catch(() => {});
-      check('it is sent when the turn ends', (await users(c)) === n + 1);
+      await c.pg.waitForFunction(() => !window.psys2.busy && window.__sr.live(), { timeout: 15000, polling: 50 }).catch(() => {});
+      check('it listens again when the turn ends', await c.pg.evaluate(() => !!window.__sr.live()));
     } finally { await c.close(); }
   },
   async stayon(o) {
     const c = await open(o, { speaker: true });
     try {
       const mic = () => c.pg.$eval('button.p2-mic', (b) => ({ s: b.dataset.mic, t: b.title, l: b.getAttribute('aria-label'), p: b.getAttribute('aria-pressed') }));
-      const count = () => c.pg.evaluate(() => window.__sr.all.length);
+      const count = () => c.pg.evaluate(() => window.__sr.starts());
       const live = () => c.pg.evaluate(() => !!window.__sr.live());
-      const waitNew = (n, ms = 3000) => c.pg.waitForFunction((n) => window.__sr.all.length > n && window.__sr.live(), { timeout: ms, polling: 20 }, n).then(() => true).catch(() => false);
+      const waitNew = (n, ms = 3000) => c.pg.waitForFunction((n) => window.__sr.starts() > n && window.__sr.live(), { timeout: ms, polling: 20 }, n).then(() => true).catch(() => false);
       await c.pg.click('button.p2-mic'); await waitRec(c);
       let m = await mic();
       check('one click turns the microphone on (conversation mode) with a state tooltip', m.s === 'listening' && m.p === 'true' && m.t === m.l && /stop microphone/.test(m.t), JSON.stringify(m));
       let ok = true;
-      for (let i = 0; i < 4; i++) { await sleep(560); const n = await count(); await c.pg.evaluate(() => window.__sr.live().end()); ok = (await waitNew(n)) && ok; }
-      check('the recognizer ends by itself four times: it is restarted each time', ok && (await mic()).s === 'listening');
+      for (let i = 0; i < 4; i++) { await sleep(700); const n = await count(); await c.pg.evaluate(() => window.__sr.live().end()); const w = await waitNew(n); ok = w && ok; if (!w) console.log('  no restart at', i, JSON.stringify(await mic()), await count(), n); }
+      check('the recognizer ends by itself four times: it is restarted each time', ok && await c.pg.waitForFunction(() => document.querySelector('button.p2-mic').dataset.mic === 'listening', { timeout: 2000, polling: 30 }).then(() => true).catch(() => false));
       await sleep(560);
       let n = await count();
       await c.pg.evaluate(() => { const r = window.__sr.live(); r.onerror({ error: 'no-speech' }); r.end(); });
@@ -194,6 +194,7 @@ export const SCENARIOS = {
       check('the microphone listens again after the answer was read aloud', (await mic()).s === 'listening' && (await live()) && (await c.pg.evaluate(() => window.__spoken || 0)) > 0);
       // barge-in: a click while the answer is read aloud stops the speech and listens at once (it does not turn the mic off)
       await c.pg.evaluate(() => { window.__synthMs = 5000; window.__spoken = 0; });
+      await sleep(2200);   // the rate guard: one voice message in 2 s
       await say(c, ['make a tree'], { final: true });
       await c.pg.waitForFunction(() => window.__spoken > 0 && document.querySelector('button.p2-mic').dataset.mic === 'waiting', { timeout: 15000, polling: 30 }).catch(() => {});
       const waitingState = (await mic()).s;
@@ -218,9 +219,9 @@ export const SCENARIOS = {
       check('an interim stop phrase turns it off after the pause', await c.pg.waitForFunction(() => document.querySelector('button.p2-mic').dataset.mic === 'off', { timeout: 3000, polling: 30 }).then(() => true).catch(() => false) && (await users(c)) === b2);
       check('"stop microphone" is not left in the field', (await c.pg.$eval('input.p2-text', (e) => e.value)) === '');
       // a second click turns it off
-      await c.pg.click('button.p2-mic'); await waitRec(c); await sleep(300);
-      await c.pg.click('button.p2-mic'); await sleep(300);
-      check('a second click turns the microphone off', (await mic()).s === 'off' && !(await live()));
+      await sleep(400); await c.pg.click('button.p2-mic'); await c.pg.waitForFunction(() => document.querySelector('button.p2-mic').dataset.mic === 'listening', { timeout: 4000, polling: 30 }); await sleep(400);
+      await c.pg.click('button.p2-mic'); await sleep(400);
+      check('a second click turns the microphone off', (await mic()).s === 'off' && !(await live()), JSON.stringify([(await mic()).s, await live(), await c.pg.evaluate(() => window.psys2.micLog.slice(-4).map((x) => x.action + ':' + x.before.on + '>' + x.after.on))]));
       // utterances during a turn wait (VOICE) even in conversation mode: covered by the busy scenario; here only the typed command
       await c.pg.click('button.p2-mic'); await waitRec(c);
       await c.pg.type('input.p2-text', 'stop microphone'); await c.pg.keyboard.press('Enter');
@@ -233,16 +234,16 @@ export const SCENARIOS = {
       await c.pg.click('button.p2-mic'); await waitRec(c);
       let seen = 0;
       for (let i = 0; i < 6; i++) {
-        const n = await c.pg.evaluate(() => window.__sr.all.length);
+        const n = await c.pg.evaluate(() => window.__sr.starts());
         await c.pg.evaluate(() => { const r = window.__sr.live(); r.onerror({ error: 'network' }); r.end(); });
-        if (i < 5) { await c.pg.waitForFunction((n) => window.__sr.all.length > n && window.__sr.live(), { timeout: 8000, polling: 50 }, n).catch(() => {}); seen++; }
+        if (i < 5) { await c.pg.waitForFunction((n) => window.__sr.starts() > n && window.__sr.live(), { timeout: 8000, polling: 50 }, n).catch(() => {}); seen++; }
       }
       await sleep(300);
       const m = await c.pg.$eval('button.p2-mic', (b) => ({ s: b.dataset.mic, t: b.title }));
       check('repeated network errors: retried with backoff, then a visible paused state with the reason', seen === 5 && m.s === 'paused' && /tap to resume/.test(m.t) && /network/.test(m.t), JSON.stringify(m));
-      const n = await c.pg.evaluate(() => window.__sr.all.length);
+      const n = await c.pg.evaluate(() => window.__sr.starts());
       await c.pg.click('button.p2-mic');
-      check('a tap on the paused microphone resumes listening', await c.pg.waitForFunction((n) => window.__sr.all.length > n && window.__sr.live(), { timeout: 3000, polling: 30 }, n).then(() => true).catch(() => false) && (await c.pg.$eval('button.p2-mic', (b) => b.dataset.mic)) === 'listening');
+      check('a tap on the paused microphone resumes listening', await c.pg.waitForFunction((n) => window.__sr.starts() > n && window.__sr.live(), { timeout: 3000, polling: 30 }, n).then(() => true).catch(() => false) && await c.pg.waitForFunction(() => document.querySelector('button.p2-mic').dataset.mic === 'listening', { timeout: 2000, polling: 30 }).then(() => true).catch(() => false));
     } finally { await c.close(); }
   },
   async queue(o) {
@@ -334,6 +335,7 @@ export const SCENARIOS = {
       await c.pg.waitForFunction(() => window.__sr.live()?.lang === 'ro-RO', { timeout: 4000, polling: 50 }).catch(() => {});
       check('after Romanian input the recognizer restarts with ro-RO', (await c.pg.evaluate(() => window.__sr.live()?.lang)) === 'ro-RO', await c.pg.evaluate(() => window.__sr.live()?.lang));
       const n2 = await users(c);
+      await sleep(2200);   // the rate guard
       await say(c, ['make a house'], { final: true });
       await waitUser(c, n2, Date.now(), 4000); await idle(c);
       await c.pg.waitForFunction(() => window.__sr.live()?.lang === 'en-US', { timeout: 4000, polling: 50 }).catch(() => {});
@@ -376,7 +378,7 @@ export const SCENARIOS = {
       const vis = (v) => c.pg.evaluate((v) => { Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => v }); document.dispatchEvent(new Event('visibilitychange')); }, v);
       const live = () => c.pg.evaluate(() => !!window.__sr.live());
       await sleep(1500);
-      check('a saved handsFree no longer starts the microphone', !(await live()) && (await c.pg.evaluate(() => window.__sr.all.length)) === 0);
+      check('a saved handsFree no longer starts the microphone', !(await live()) && (await c.pg.evaluate(() => window.__sr.starts())) === 0);
       await c.pg.click('button.p2-mic'); await waitRec(c);
       check('a click turns it on', await live());
       check('the listening state is not saved', JSON.parse(await c.pg.evaluate(() => localStorage.getItem('psys2.webchat.settings'))).handsFree === false);

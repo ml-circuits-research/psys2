@@ -239,7 +239,7 @@ export async function mountPsys2(element, options = {}) {
     if (mic.speaking) parts.push('Speaking…');
     else if (mic.listening) parts.push(interim ? `Listening: “${interim}”` : mic.mode === 'ptt' ? 'Listening (hold space)…' : 'Listening…');
     else if (mic.paused) parts.push('Microphone paused — tap to resume');
-    else if (settings.handsFree && mic.working) parts.push('Working… (microphone paused)');
+    else if (settings.handsFree && mic.working && !mic.speaking) parts.push('Working… (microphone paused)');
     else if (settings.handsFree && speech) parts.push('Microphone on: waiting…');
     const modelTail = !parts.length && dispatcherStatus.state === 'ready' ? ` · model ${dispatcherLabel}${modelSource === 'cache' ? ' (cached)' : ''}` : '';
     statusEl.textContent = (parts.join(' · ') || 'Ready') + modelTail;
@@ -254,7 +254,7 @@ export async function mountPsys2(element, options = {}) {
     const dict = dictDoc !== null;
     const paused = !!mic.paused, q = queue.length ? `; ${queue.length} message${queue.length > 1 ? 's' : ''} waiting` : '';
     const state = paused ? `Microphone paused — tap to resume (${mic.paused.reason})`
-      : settings.handsFree && mic.working ? 'Microphone on, working… it listens again when I have answered. Click to turn it off'
+      : settings.handsFree && mic.working && !mic.speaking ? 'Microphone on, working… it listens again when I have answered. Click to turn it off'
       : settings.handsFree && mic.hidden ? 'Microphone paused while this tab is hidden'
       : settings.handsFree ? `Microphone on, ${mic.starting ? 'starting…' : mic.listening ? 'listening' : mic.speaking ? 'waiting while I speak (click to talk now)' : 'restarting…'}. Say "stop microphone" or click to turn it off${q}`
       : mic.starting ? 'Microphone starting…; click to cancel'
@@ -264,7 +264,7 @@ export async function mountPsys2(element, options = {}) {
     micBtn.setAttribute('aria-pressed', String(!!settings.handsFree || mic.listening));
     micBtn.classList.toggle('is-on', mic.listening);
     micBtn.classList.toggle('is-paused', paused);
-    micBtn.dataset.mic = paused ? 'paused' : mic.starting ? 'starting' : settings.handsFree && mic.working ? 'working' : settings.handsFree ? (mic.listening ? 'listening' : 'waiting') : mic.listening ? 'once' : 'off';
+    micBtn.dataset.mic = paused ? 'paused' : mic.starting ? 'starting' : settings.handsFree && mic.working && !mic.speaking ? 'working' : settings.handsFree ? (mic.listening ? 'listening' : 'waiting') : mic.listening ? 'once' : 'off';
     micBtn.classList.toggle('is-starting', !!mic.starting && !paused);
     micBtn.classList.toggle('is-handsfree', !!settings.handsFree);
     micBtn.classList.toggle('is-dictating', dict);

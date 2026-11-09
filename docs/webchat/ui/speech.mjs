@@ -331,6 +331,7 @@ export function createSpeech({ getLang, getVoiceName, getRate, onFinal, onSend, 
     if (rec && stopping) { const old = rec; rec = null; stopping = false; clearTimeout(abortTimer); abortRec(old); detach(old); recObj = null; fresh = true; }   // a recognizer that is still ending must not block the next start
     if (rec) return true;
     if (acquiring) return true;
+    if (newMode === 'hands-free' && working) { emit(); return true; }   // a request is being processed: listening starts when it is done
     if (speaking > 0 && newMode === 'hands-free' && !barge) return true; // resumes when speech ends
     if (lock && !lock.owned()) {   // FREEZE: only one tab of the demo listens
       acquiring = true; blocked = false; emit();
@@ -473,8 +474,7 @@ export function createSpeech({ getLang, getVoiceName, getRate, onFinal, onSend, 
     lastFlip = t;
     let action;
     if (paused) { api.resume(); action = 'resume'; }
-    else if (handsFree && working) { api.setHandsFree(false); action = 'off'; }
-    else if (handsFree && speaking > 0) { stopSpeaking(); start('hands-free', { barge: true }); action = 'barge-in'; }
+    else if (handsFree && speaking > 0) { stopSpeaking(); working = false; start('hands-free', { barge: true }); action = 'barge-in'; }
     else if (handsFree) { api.setHandsFree(false); action = 'off'; }
     else if (rec && !stopping) { stopListening(); action = 'stop-once'; }
     else if (single) { start('once'); action = 'once'; }

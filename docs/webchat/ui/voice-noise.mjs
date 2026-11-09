@@ -25,6 +25,17 @@ export async function classifyVoice(text, { dryRead, language, wake = false, wak
   if (wake) return { ignore: true, reason: 'wake word' };
   if (isAssistantQuestion(t)) return { ignore: false, reason: 'question' };
   if (slow || !dryRead) return { ignore: false, reason: 'unchecked' };
+  // the session language may still be the other one (the first Romanian sentence of an English session): the text is read in both and passes when either reads it
+  const langs = [language, language === 'ro' ? 'en' : 'ro'].filter((x, k, a) => x && a.indexOf(x) === k);
+  let verdict = { ignore: true, reason: 'no reading' };
+  for (const lang of langs.length ? langs : [undefined]) {
+    const v = await judge(t, dryRead, lang);
+    if (!v.ignore) return v;
+    verdict = v;
+  }
+  return verdict;
+}
+async function judge(t, dryRead, language) {
   let r = null;
   try { r = await dryRead(t, { language, detail: true }); } catch { r = null; }
   if (!r) return { ignore: false, reason: 'unchecked' };
