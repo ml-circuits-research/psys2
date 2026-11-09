@@ -599,3 +599,4 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
 - Label repair (790c41b, b29a8a0) + rule round 2 (47f5697, c471cd4, 9d8420f, e162b65): 772 tests pass. **Operational, rules only: 94.2% right, 0.6% wrong, 3.4% not understood.**
 - DLG + G7 (a5b686d): 365 multi-turn dialogues (1,709 turns, 45 for user.profile and long returns), 12 families, evaluator with the three modes. Reviewer rerun in rules mode: 90.3% of turns, 70.4% of dialogues right (identical).
 - D-FIX round 1 (3713860 … d05647d): 797 tests pass. Operational rules: 94.8% right / 0.6% wrong / 2.8% not understood. Dialogues (rules): 92.6% of turns, 77.5% of dialogues, both reproduced.
+- L8 — `ctx.lang` backed by `lang.common`; `src/dialog/lang.mjs` absorbed; avatar, docs.reader and games.guess use it (a745938): 797 tests pass. Operational 94.8% / 0.6% wrong; dialogues 77.6%. No regression.
