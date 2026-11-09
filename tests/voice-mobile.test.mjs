@@ -140,13 +140,20 @@ test('FREEZE: aborted by someone else and audio-capture count as failures (backo
   b.sp.destroy(); sp.destroy();
 });
 
-test('FREEZE: restarts are capped; then a visible pause', async () => {
-  const { sp, log, rec } = make({ pauseWhileWorking: false, timing: { restartCap: 5, rateMs: 0, dupMs: 0, restartMs: 1 } });
+test('FREEZE: idle restarts are capped; then a visible pause (restarts after a message do not count)', async () => {
+  const { sp, log, rec } = make({ pauseWhileWorking: false, timing: { restartCap: 5, rateMs: 0, dupMs: 0, restartMs: 1, quickMs: 0, maxFailures: 99 } });
   sp.setHandsFree(true);
-  for (let i = 0; i < 10 && !sp.isPaused(); i++) { rec().final(['deschide muzica', 'desenează o casă', 'arată harta', 'cântă ceva vesel', 'scrie un titlu', 'șterge totul', 'fă o floare', 'pune un soare', 'adaugă un nor', 'spune ceva'][i]); await sleep(60); }
+  for (let i = 0; i < 12 && !sp.isPaused(); i++) { await sleep(15); if (rec().started) rec().end(); }
   assert.ok(sp.isPaused());
   assert.ok(log.errors.some((e) => /too many restarts/.test(e)));
   sp.destroy();
+  const b = make({ pauseWhileWorking: false, timing: { restartCap: 3, rateMs: 0, dupMs: 0, restartMs: 1 } });
+  b.sp.setHandsFree(true);
+  const words = ['deschide muzica', 'desenează o casă', 'arată harta', 'cântă ceva vesel', 'scrie un titlu', 'șterge totul'];
+  for (const w of words) { b.rec().final(w); await sleep(70); }
+  assert.ok(!b.sp.isPaused(), 'messages are not idle restarts');
+  assert.equal(b.log.sent.length, words.length);
+  b.sp.destroy();
 });
 
 test('FREEZE: a hidden tab stops listening and speaking; visible again it resumes only if it was on; pagehide releases everything', async () => {

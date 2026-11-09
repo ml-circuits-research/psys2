@@ -66,7 +66,7 @@ export const VOICE_TIMING = { plausibleMs: 700, waitMs: 1800, handsFreeMs: 2500,
 
 /** Folded (no diacritics) one-word fragments: articles, pronouns, prepositions, fillers, and words the recogniser cuts out of a longer phrase. */
 export const FRAGMENT_WORDS = new Set(['a', 'an', 'the', 'this', 'that', 'these', 'those', 'it', 'he', 'she', 'we', 'they', 'you', 'i', 'me', 'my', 'is', 'are', 'was', 'be', 'do', 'does', 'did', 'to', 'of', 'in', 'on', 'at', 'for', 'and', 'or', 'but', 'so', 'if', 'what', 'who', 'why', 'how', 'when', 'where', 'which', 'there', 'here', 'uh', 'um', 'er', 'ah', 'oh', 'hm', 'hmm', 'mm', 'yeah', 'yes', 'no', 'ok', 'okay', 'yep', 'nope', 'sure',
-  'o', 'un', 'nista', 'ce', 'de', 'da', 'nu', 'asta', 'aceasta', 'acesta', 'acela', 'aia', 'eu', 'tu', 'el', 'ea', 'noi', 'voi', 'ei', 'ele', 'ma', 'te', 'se', 'si', 'sau', 'dar', 'ca', 'cu', 'la', 'pe', 'din', 'in', 'pentru', 'fi', 'e', 'este', 'sunt', 'am', 'ai', 'au', 'face', 'fac', 'faci', 'mama', 'tata', 'bine', 'hai', 'pai', 'aha', 'uite', 'cum', 'cand', 'unde', 'care', 'cine', 'mai', 'tot', 'foarte', 'scuze', 'enervant']);
+  'o', 'un', 'nista', 'ce', 'de', 'da', 'nu', 'asta', 'aceasta', 'acesta', 'acela', 'aia', 'eu', 'tu', 'el', 'ea', 'noi', 'voi', 'ei', 'ele', 'ma', 'te', 'se', 'si', 'sau', 'dar', 'ca', 'cu', 'la', 'pe', 'din', 'in', 'pentru', 'fi', 'e', 'este', 'sunt', 'am', 'ai', 'au', 'face', 'fac', 'faci', 'mama', 'tata', 'bine', 'hai', 'pai', 'aha', 'uite', 'cum', 'cand', 'unde', 'care', 'cine', 'mai', 'tot', 'foarte', 'scuze', 'enervant', 'mare']);
 /** One-word commands that are never fragments. */
 export const KNOWN_ONE_WORD = new Set(['stop', 'undo', 'redo', 'help', 'next', 'back', 'again', 'cancel', 'reset', 'clear', 'pause', 'resume', 'ajutor', 'anuleaza', 'inapoi', 'urmatorul', 'opreste', 'refa', 'sterge']);
 /** True for a one- or two-word voice message that is only fragment words (see FRAGMENT_WORDS). `allowShort(text)` says the word answers an open question or a game move. */
@@ -349,17 +349,6 @@ export function createSpeech({ getLang, getVoiceName, getRate, onFinal, onSend, 
     mode = newMode;
     text = ''; pendFin = ''; lastFinalNorm = '';
     startedAt = Date.now(); gotResult = false; lastErr = ''; ownAbort = false;
-    if (newMode === 'hands-free') {   // cap on restarts: 30 a minute, then a visible pause
-      const tn = Date.now();
-      starts = starts.filter((x) => tn - x < T.restartWindowMs); starts.push(tn);
-      if (starts.length > T.restartCap) {
-        starts = [];
-        paused = { reason: 'too many restarts in a minute' };
-        mode = null; emit();
-        onError?.(`Microphone paused — tap to resume (${paused.reason}).`);
-        return true;
-      }
-    }
     rec = getRecognizer(fresh);
     const my = rec, mySess = ++sess;
     const live = () => mySess === sess && rec === my;
@@ -430,6 +419,17 @@ export function createSpeech({ getLang, getVoiceName, getRate, onFinal, onSend, 
       emit();
       const again = wantRestart; wantRestart = false;
       if (!(handsFree && m === 'hands-free')) { maybeRelease(); return; }
+      if (!gotResult) {   // cap on idle restarts (a session that ended without a single result): 30 a minute, then a visible pause; restarts after a message do not count
+        const tn = Date.now();
+        starts = starts.filter((x) => tn - x < T.restartWindowMs); starts.push(tn);
+        if (starts.length > T.restartCap) {
+          starts = [];
+          paused = { reason: 'too many restarts in a minute' };
+          emit();
+          onError?.(`Microphone paused — tap to resume (${paused.reason}).`);
+          return;
+        }
+      }
       const failed = !!lastErr || (!gotResult && !again && Date.now() - startedAt < T.quickMs);
       if (failed) failures++; else failures = 0;
       if (failures >= T.maxFailures) {   // never give up silently: a visible paused state with the reason; a tap resumes
