@@ -60,6 +60,9 @@ export const DEFAULT_POLICY = {
 /** Connectives that end a clause without belonging to it ("remove pears and also", "mark Rome, then"). */
 const TRAILING_CONNECTIVE = /[\s,;]+(?:and then|and also|and after that|and finally|then also|also then|after that|and|then|also|plus|afterwards|finally|but)[\s,;]*$/i;
 
+/** Words that start a continuation of the previous clause, never a command. */
+const CONTINUES_CLAUSE = /^(?:it|its|this|them|those|these|he|she|they|in|on|at|to|of|for|with|from|by|near|into|onto|than|as|that|which|who|about|after|before|under|over|between|inside|around)$/i;
+
 const clip = (s, n = 80) => (String(s).length > n ? String(s).slice(0, n - 1) + '…' : String(s));
 
 /** Score of a world candidate as a probability: values in [0,1] are probabilities, negative values are natural-log probabilities. */
@@ -260,10 +263,8 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
     const clean = (x) => x.chosen.rank === 1 && x.chosen.variant === 'original';
     return !(clean(q) && clean(p));
   });
-  const o4 = 4;   // G7: a piece is not read at all: below a complete reading that only has a weak cut (3)
   const tierOf = (pieces, text = '') => {
-    if (!pieces.length || pieces.some((p) => !p.valid)) return o4;
-    if (weakCut(pieces, text)) return 3;
+    if (!pieces.length || pieces.some((p) => !p.valid) || weakCut(pieces, text)) return 3;
     if (pieces.some((p) => p.chosen.partial || p.chosen.variant === 'partial' || p.chosen.fallback)) return 2;
     if (pieces.some((p) => p.chosen.variant === 'simplified' || p.chosen.variant === 'normalized')) return 1;
     return 0;
@@ -398,7 +399,9 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
       pieces.push({ index: pi, start: piece.start, end: piece.end, text: piece.text, simplified: piece.simplified ?? null, ...(normalizerStatus ? { normalizerStatus } : {}), attempts: attempts.map(({ wires, ...a }) => ({ ...a, wires: wires.length })),
         chosen: best ? { world: best.world, rank: best.rank, variant: best.variant, text: best.text, valid: best.valid, fallback: !!best.fallback, score: best.score, wires: best.wires, corrections: best.corrections, partial: best.partial } : null, valid: !!best?.valid, tie });
     }
-    return { index: seg.index, dispatcherScore: seg.score, score: total, tier: tierOf(pieces, pred.text), valid: pieces.length > 0 && pieces.every((p) => p.valid), nInvalid: pieces.filter((p) => !p.valid).length, pieces };
+    // a split repair was read part by part by the rules: the weak-cut class (3) does not apply to it
+    const tier = seg.split && pieces.every((p) => p.valid) ? Math.min(2, tierOf(pieces, pred.text)) : tierOf(pieces, pred.text);
+    return { index: seg.index, dispatcherScore: seg.score, score: total, tier, valid: pieces.length > 0 && pieces.every((p) => p.valid), nInvalid: pieces.filter((p) => !p.valid).length, pieces };
   };
 
   /** Validate one prediction. `override` replaces policy fields for this call only. */
@@ -434,10 +437,15 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
     // split repair (G7): a piece nobody reads that is a run of commands without separators ("new game center top left") is cut into the fewest parts
     // that the rules read, all in the same candidate world; the result competes as one more segmentation
     const lead2 = [...evals].sort((a, b) => a.tier - b.tier || b.score - a.score || a.index - b.index)[0];
-    if (o.splitRepair && lead2 && !lead2.valid && segs[lead2.index > segs.length - 1 ? 0 : lead2.index]) {
+    if (o.splitRepair && lead2 && lead2.tier >= 3 && lead2.pieces.some((p) => !p.valid) && segs[lead2.index > segs.length - 1 ? 0 : lead2.index]) {
       const baseSeg = lead2.index < segs.length ? segs[lead2.index] : { ...segs[0], segments: lead2.pieces.map((p) => ({ start: p.start, end: p.end, text: p.text, worlds: segs[0].segments.find((q) => q.start <= p.start && q.end >= p.end)?.worlds ?? [] })) };
       const bad = lead2.pieces.findIndex((p) => !p.valid);
-      const piece = baseSeg.segments[bad];
+      const piece0 = baseSeg.segments[bad];
+      // candidate worlds of the parts: the piece's own, then those the model named for pieces of the other segmentations that overlap it (the shell reads "new game")
+      const pool = new Map();
+      for (const w of piece0?.worlds ?? []) pool.set(w.world, w);
+      for (const g of segs) for (const q of g.segments) if (piece0 && q.start < piece0.end && q.end > piece0.start) for (const w of q.worlds) if (!pool.has(w.world)) pool.set(w.world, w);
+      const piece = piece0 && { ...piece0, worlds: [...pool.values()] };
       const words = [...String(piece?.text ?? '').matchAll(/\S+/g)].map((m) => ({ s: m.index, e: m.index + m[0].length }));
       if (piece && words.length >= 2 && words.length <= 9 && !/[,;]/.test(piece.text)) {
         const okPart = async (w, text) => { const r = await check(pred.context, [], w, text, o); return r.valid || (o.acceptRefused && r.refused); };
@@ -449,10 +457,12 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
         for (const cs of cutSets) {
           const bounds = [0, ...cs, words.length];
           const parts = bounds.slice(0, -1).map((b, k) => [b, bounds[k + 1] - 1]);
+          // a part that starts with a preposition continues the clause before it ("what time is it" | "in London right now"), it is no command of its own
+          if (parts.slice(1).some(([a]) => CONTINUES_CLAUSE.test(piece.text.slice(words[a].s, words[a].e)))) continue;
           const withWorld = [];
           for (const [a, b] of parts) {
             let hit = null;
-            for (const w of piece.worlds.slice(0, 3)) if (await okPart(w.world, partText(a, b))) { hit = w; break; }
+            for (const w of piece.worlds.slice(0, 6)) if (await okPart(w.world, partText(a, b))) { hit = w; break; }
             if (!hit) break;
             withWorld.push([a, b, hit]);
           }
