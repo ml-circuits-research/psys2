@@ -45,3 +45,9 @@
     semantics=action
     action=chat.howru
     doc="Small talk: how the assistant is. A friendly fixed answer."
+
+@op.kids.common.ask core.operation
+    impl=ask
+    semantics=action
+    action=chat.ask
+    doc="Clarification for a question without its subject (\"How many legs?\", \"What day is after?\"): asks arg.q and leaves the answer pending; arg.template (with <x>) completes the sentence in arg.world (spec 11 section 3)."

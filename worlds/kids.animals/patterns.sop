@@ -1,5 +1,5 @@
 @pat.kids.animals.legs1 core.pattern
-    match="how_many legs [does|do] [a|an|the]? {a:noun} have"
+    match="how_many legs [does|do|did] [a|an|the]? {a:noun} have"
     emit="@{_} core.question type=kids.animals.animal seek=legs where.name={a}"
     kind=question
     priority=10
@@ -20,7 +20,7 @@
     example="Tell me how many legs a spider has."
 
 @pat.kids.animals.legs4 core.pattern
-    match="[does|do] [a|an|the]? {a:noun} have {n:number} legs"
+    match="[does|do|did] [a|an|the]? {a:noun} have {n:number} legs"
     emit="@{_} core.question type=kids.animals.animal seek=legs mode=exists where.name={a} where.legs={n}"
     kind=question
     priority=10
@@ -48,7 +48,7 @@
     example="Tell me what a rabbit eats."
 
 @pat.kids.animals.food4 core.pattern
-    match="[does|do] [a|an|the]? {a:noun} eat {f:word}"
+    match="[does|do|did] [a|an|the]? {a:noun} eat {f:word}"
     emit="@{_} core.question type=kids.animals.animal seek=food mode=exists where.name={a} where.food={f}"
     kind=question
     priority=10
@@ -139,7 +139,7 @@
     example="What covering does a duck have?"
 
 @pat.kids.animals.live1 core.pattern
-    match="where [does|do] [a|an|the]? {a:noun} live"
+    match="where [does|do|did] [a|an|the]? {a:noun} live"
     emit="@{_} core.question type=kids.animals.animal seek=lives where.name={a}"
     kind=question
     priority=10
@@ -160,28 +160,28 @@
     example="Where is a camel found?"
 
 @pat.kids.animals.sound1 core.pattern
-    match="what sound [does|do] [a|an|the]? {a:noun} make"
+    match="what sound [does|do|did] [a|an|the]? {a:noun} make"
     emit="@{_} core.question type=kids.animals.animal seek=sound where.name={a}"
     kind=question
     priority=10
     example="What sound does a cow make?"
 
 @pat.kids.animals.sound2 core.pattern
-    match="what [does|do] [a|an|the]? {a:noun} say"
+    match="what [does|do|did] [a|an|the]? {a:noun} say"
     emit="@{_} core.question type=kids.animals.animal seek=sound where.name={a}"
     kind=question
     priority=10
     example="What does a cow say?"
 
 @pat.kids.animals.sound3 core.pattern
-    match="what noise [does|do] [a|an|the]? {a:noun} make"
+    match="what noise [does|do|did] [a|an|the]? {a:noun} make"
     emit="@{_} core.question type=kids.animals.animal seek=sound where.name={a}"
     kind=question
     priority=10
     example="What noise does a duck make?"
 
 @pat.kids.animals.sound4 core.pattern
-    match="how [does|do] [a|an|the]? {a:noun} sound"
+    match="how [does|do|did] [a|an|the]? {a:noun} sound"
     emit="@{_} core.question type=kids.animals.animal seek=sound where.name={a}"
     kind=question
     priority=10
@@ -1839,7 +1839,7 @@
     example="How many legs is it that a spider walks on?"
 
 @pat.kids.animals.x2.legs.walkon core.pattern
-    match="how_many legs [does|do] [a|an|the]? {a:noun} [walk|stand|run|move|crawl|go] on"
+    match="how_many legs [does|do|did] [a|an|the]? {a:noun} [walk|stand|run|move|crawl|go] on"
     emit="@{_} core.question type=kids.animals.animal seek=legs where.name={a}"
     kind=question
     priority=11
@@ -1865,3 +1865,35 @@
     kind=question
     priority=11
     example="Tell me the number of legs a spider has."
+
+@pat.kids.animals.ask.legs core.pattern
+    match="how_many legs"
+    emit="@{_} core.request action=chat.ask arg.q=\"Which animal do you mean?\" arg.template=\"how many legs does <x> have\" arg.world=\"kids.animals\""
+    kind=request
+    priority=11
+    example="How many legs?"
+    doc="Clarification (spec 11 section 3): the question lacks its subject; asks for it and completes the sentence with the next utterance."
+
+@pat.kids.animals.ask.sound core.pattern
+    match="what sound [does|do|did] [it|that|that_one|this_one] make"
+    emit="@{_} core.request action=chat.ask arg.q=\"Which animal do you mean?\" arg.template=\"what sound does <x> make\" arg.world=\"kids.animals\""
+    kind=request
+    priority=11
+    example="What sound does it make?"
+    doc="Clarification (spec 11 section 3): the question lacks its subject; asks for it and completes the sentence with the next utterance."
+
+@pat.kids.animals.ask.eat core.pattern
+    match="what [does|do|did] [it|that|that_one|this_one] eat"
+    emit="@{_} core.request action=chat.ask arg.q=\"Which animal do you mean?\" arg.template=\"what does <x> eat\" arg.world=\"kids.animals\""
+    kind=request
+    priority=11
+    example="What does it eat?"
+    doc="Clarification (spec 11 section 3): the question lacks its subject; asks for it and completes the sentence with the next utterance."
+
+@pat.kids.animals.ask.live core.pattern
+    match="where [does|do|did] [it|that|that_one|this_one] live"
+    emit="@{_} core.request action=chat.ask arg.q=\"Which animal do you mean?\" arg.template=\"where does <x> live\" arg.world=\"kids.animals\""
+    kind=request
+    priority=11
+    example="Where does it live?"
+    doc="Clarification (spec 11 section 3): the question lacks its subject; asks for it and completes the sentence with the next utterance."

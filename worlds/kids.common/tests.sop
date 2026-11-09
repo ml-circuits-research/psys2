@@ -1785,3 +1785,13 @@
     input="what is my name?"
     expect="I do not know your name yet"
     session=dlg01
+
+@t.kids.common.ask1 core.test
+    input="my name is"
+    expect="What is your name"
+    session=ask1
+
+@t.kids.common.ask2 core.test
+    input="Ana"
+    expect="Nice to meet you, Ana"
+    session=ask1

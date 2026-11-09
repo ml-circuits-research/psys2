@@ -2706,3 +2706,19 @@
     priority=12
     example="If today is Monday what day is the day before yesterday?"
 
+
+@pat.kids.time.ask.day.after core.pattern
+    match="what day [comes|is|follows]? after"
+    emit="@{_} core.request action=chat.ask arg.q=\"Which day do you mean?\" arg.template=\"what day comes after <x>\" arg.world=\"kids.time\""
+    kind=request
+    priority=11
+    example="What day is after?"
+    doc="Clarification (spec 11 section 3): the question lacks its subject; asks for it and completes the sentence with the next utterance."
+
+@pat.kids.time.ask.day.before core.pattern
+    match="what day [comes|is|was]? before"
+    emit="@{_} core.request action=chat.ask arg.q=\"Which day do you mean?\" arg.template=\"what day comes before <x>\" arg.world=\"kids.time\""
+    kind=request
+    priority=11
+    example="What day is before?"
+    doc="Clarification (spec 11 section 3): the question lacks its subject; asks for it and completes the sentence with the next utterance."

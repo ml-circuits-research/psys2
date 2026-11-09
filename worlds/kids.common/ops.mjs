@@ -49,3 +49,11 @@ const HOWRU = ['I am fine, thank you!', 'I am doing well, thanks for asking!', '
 let howruTurn = 0;
 /** Small talk ("how are you"): a friendly answer, rotating a little so it does not repeat. */
 export function howAreYou() { return { status: 'supported', value: HOWRU[howruTurn++ % HOWRU.length] }; }
+
+/**
+ * A question that lacks its subject ("how many legs?", "what day is after"): asks for it and leaves the answer pending (spec 11 section 3).
+ * `template` completes the sentence with the reply (`<x>`), `world` is the world that reads the completed sentence.
+ */
+export function ask(ctx, { q, template, world, type, key }) {
+  return { status: 'missing', note: q, pending: { key: key || 'x', type: type || 'words', template, world: world || undefined } };
+}

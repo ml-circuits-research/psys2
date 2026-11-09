@@ -735,3 +735,11 @@
     priority=13
     example="Thanks, that is great."
     example="That's helpful."
+
+@pat.kids.common.ask.name core.pattern
+    match="[my_name_is|call_me|you_can_call_me]"
+    emit="@{_} core.request action=chat.ask arg.q=\"What is your name?\" arg.template=\"my name is <x>\" arg.world=\"kids.common\""
+    kind=chat
+    priority=15
+    example="My name is."
+    doc="Clarification (spec 11 section 3): the name is missing; asks for it and completes the sentence with the next utterance."

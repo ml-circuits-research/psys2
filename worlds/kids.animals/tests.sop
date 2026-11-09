@@ -2411,3 +2411,23 @@
 @t.animals.x29 core.test
     input="hw many legs does a spidr have"
     expect="8 legs"
+
+@t.animals.ask1 core.test
+    input="how many legs?"
+    expect="Which animal"
+    session=ask1
+
+@t.animals.ask2 core.test
+    input="a dog"
+    expect="4 legs"
+    session=ask1
+
+@t.animals.ask3 core.test
+    input="what sound does it make?"
+    expect="Which animal"
+    session=ask2
+
+@t.animals.ask4 core.test
+    input="a cow"
+    expect="moo"
+    session=ask2

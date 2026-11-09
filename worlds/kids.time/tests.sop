@@ -970,3 +970,23 @@
 @t.time.x27 core.test
     input="today is Tuesday, what day is the day after tomorrow"
     expect="Thursday"
+
+@t.time.ask1 core.test
+    input="what day is after"
+    expect="Which day"
+    session=ask1
+
+@t.time.ask2 core.test
+    input="Friday"
+    expect="Saturday"
+    session=ask1
+
+@t.time.ask3 core.test
+    input="what day comes before"
+    expect="Which day"
+    session=ask2
+
+@t.time.ask4 core.test
+    input="Monday"
+    expect="Sunday"
+    session=ask2
