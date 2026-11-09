@@ -358,9 +358,13 @@ export class Discourse {
     if (!tabAfter || tabAfter === tabBefore) return;
     const w = this.tabWorld(tabAfter);
     if (!w) return;
+    const knownBefore = this.topics.includes(w);
     this.topics = [w, ...this.topics.filter((x) => x !== w)].slice(0, 6);
     if (!this.lastByWorld[w]) this.lastByWorld[w] = { text, reply: null, turn };
-    if (classify(text, { lang: this.lang })?.intent === 'topic') this.lastTopic = { world: w, turn };
+    // "back to X" is a return (not a digression) only when X was already an activity of the conversation; the same turn may already have been
+    // handled by `_topic`. Any other navigation is a digression: the world we left is what "where were we?" goes back to (spec 11 section 10).
+    if (this._topicTurn === turn) return;
+    this.lastTopic = classify(text, { lang: this.lang })?.intent === 'topic' && knownBefore ? { world: w, turn } : null;
   }
 
   /** A modal interceptor answered: the world is a topic and its last exchange is what a topic return summarises. */
@@ -614,7 +618,8 @@ export class Discourse {
     if (!target) {
       // "where were we?": the conversation before the current digression (the newest topic that is not the world of the open tab), else the newest
       const here = this.dialog.context().tabWorld;
-      if (this.lastTopic && this.dialog._msg - this.lastTopic.turn <= 1) return this.lastTopic.world;   // right after an explicit return: where we just went
+      // after an explicit return to an earlier activity, the unfinished activity is that one, until the user digresses again (another tab opens)
+      if (this.lastTopic && (!here || this.lastTopic.world === here)) return this.lastTopic.world;
       return this.topics.find((w) => this.lastByWorld[w] && w !== here) ?? this.topics.find((w) => this.lastByWorld[w]) ?? null;
     }
     const asksGame = /\bgame\b/.test(target);   // "the animal game" is the guessing game, not the animals quiz
@@ -635,6 +640,7 @@ export class Discourse {
     const d = this.dialog, { set, interp } = d.engine;
     const world = this._topicWorld(target, digression);
     if (!world) return null;
+    const known = this.topics.includes(world);   // an earlier activity: going there is a return; a world never visited is a digression from the current one
     const w = set.get(world);
     const tab = w.tab?.id ?? BUILTIN_TAB[world] ?? null;
     if (tab && d.isession.state['ui.shell']?.activeTab !== tab) { try { interp.runAction(d.isession, 'ui.openTab', { tab }); } catch { /* the shell may be absent */ } }
@@ -646,7 +652,8 @@ export class Discourse {
     else if (last && last.reply == null) parts.push('You were last here a moment ago.')
     else if (last) parts.push(`Last time you said "${last.text}" and I answered: ${last.reply}`);
     else parts.push('Nothing has happened there yet.');
-    this.lastTopic = { world, turn: d._msg };
+    this.lastTopic = known ? { world, turn: d._msg } : null;
+    this._topicTurn = d._msg;
     this.topics = [world, ...this.topics.filter((x) => x !== world)].slice(0, 6);
     return { reply: parts.join(' '), info: { kind: 'topic', world, target: target ?? null, tab } };
   }

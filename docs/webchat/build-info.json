@@ -36,13 +36,13 @@
   ],
   "dispatcherModel": false,
   "files": {
-    "lib/dialog/discourse.mjs": "025ed4691b2868fa",
+    "lib/dialog/discourse.mjs": "a4161c92cc12f3c7",
     "lib/dialog/dispatch-validate.mjs": "d543c74fba62b064",
     "lib/dialog/encoder-dispatch.mjs": "626a317618579564",
     "lib/dialog/index.mjs": "336209508fbe1906",
     "lib/dialog/meta.mjs": "3f42a3f2e5d70d71",
     "lib/dialog/normalizer-runtime.mjs": "76d3ed03f9126aba",
-    "lib/dialog/runtime-config.mjs": "a5d7c345c0db05af",
+    "lib/dialog/runtime-config.mjs": "0f2c990dffd716e7",
     "lib/dialog/test-runner.mjs": "3338d6d08f4f428f",
     "lib/dialog/value-check.mjs": "36dcb282b4e9c9f6",
     "lib/formalizer/best-effort.mjs": "a3a403a44a6c41a1",
@@ -134,7 +134,7 @@
     "worlds/media.music/ops.mjs": "27ba78be0acb0062",
     "worlds/media.music/theory.mjs": "aee595e3c2bde999",
     "worlds/media.music/vendor/tonal.mjs": "331490751dea871a",
-    "worlds/ui.avatar/datagen.mjs": "cfe14093d9dc480c",
+    "worlds/ui.avatar/datagen.mjs": "7b6d8141609ea71b",
     "worlds/ui.avatar/ops.mjs": "1b4d3eaf30660260",
     "worlds/ui.help/datagen.mjs": "2a566dd11e1a621a",
     "worlds/ui.help/ops.mjs": "539e8a954202f283",
@@ -145,5 +145,5 @@
     "worlds/user.profile/ops.mjs": "58e16e9e2fe9f5f2",
     "worlds/user.profile/understand.mjs": "a971dcc2294fd749"
   },
-  "builtAt": "2026-11-09T07:26:55.842Z"
+  "builtAt": "2026-11-09T13:53:00.335Z"
 }

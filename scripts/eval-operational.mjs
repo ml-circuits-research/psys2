@@ -139,7 +139,7 @@ async function main() {
   if (!MODES[mode]) throw new Error(`--mode must be one of ${Object.keys(MODES).join(' | ')}`);
   const modelDir = arg('model-dir', arg('model', join(REPO, 'docs/webchat/models/dispatcher')));
   const normalizerDir = arg('normalizer-dir', join(REPO, 'docs/webchat/models/normalizer'));
-  const popts = { mode, ortPath: arg('ort'), modelDir, normalizerDir, editTau: arg('edit-tau') !== undefined ? Number(arg('edit-tau')) : undefined, overrides: arg('best-effort') ? { bestEffort: arg('best-effort') !== 'off' } : {} };   // --best-effort on|off: A/B of spec 03 7.15
+  const popts = { mode, ortPath: arg('ort'), modelDir, normalizerDir, editTau: arg('edit-tau') !== undefined ? Number(arg('edit-tau')) : undefined, overrides: { ...(arg('best-effort') ? { bestEffort: arg('best-effort') !== 'off' } : {}), ...(arg('edit-head') ? { editHead: arg('edit-head') !== 'off' } : {}) } };   // --edit-head on|off: the S1 edit head flag (off by default)   // --best-effort on|off: A/B of spec 03 7.15
   const jobs = Math.max(1, Math.min(parseJobs(), cases.length || 1));
   const note = (c, r) => {
     if (flag('replies') && !flag('json')) console.log(`${c.id}\t${r.outcome}\t${JSON.stringify(r.reply ?? r.error ?? null)}`);

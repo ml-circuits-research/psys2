@@ -16,6 +16,7 @@ export const RUNTIME_DEFAULTS = Object.freeze({
   normalizer: true,               // seq2seq phrasing normalizer, a fallback only (7.12, 7.13)
   spellcheck: true,               // spell correction against the worlds' vocabulary (7.9)
   bestEffort: true,               // after everything else failed, execute the most sensible reading of loose words and say what was understood (7.15)
+  editHead: false,                // the S1 edit head's simplified text as a candidate reading: OFF in the shipped pipeline (review decision e: 3 recovered against 7 misled); the code stays behind this flag
   fastPath: false,                // encoder only: skip the model when the rules read the whole message and the interpreter accepts it (PERF; the webchat turns it on)
 });
 
@@ -47,6 +48,7 @@ export function policyFromSettings(settings) {
     trySpell: settings.spellcheck !== false,
     acceptPartial: settings.partialUnderstanding !== false,
     tryNormalizer: settings.normalizer !== false,
+    trySimplified: settings.editHead === true,
   };
 }
 

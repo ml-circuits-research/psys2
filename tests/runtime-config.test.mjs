@@ -20,10 +20,16 @@ test('modes differ only in formalizer and normalizer', () => {
 });
 
 test('policy and session options follow the settings', () => {
-  assert.deepEqual(policyFromSettings(runtimeSettings()), { acceptRefused: true, trySpell: true, acceptPartial: true, tryNormalizer: true });
+  assert.deepEqual(policyFromSettings(runtimeSettings()), { acceptRefused: true, trySpell: true, acceptPartial: true, tryNormalizer: true, trySimplified: false });
   assert.equal(policyFromSettings(settingsForMode('encoder')).tryNormalizer, false);
   const live = { ...RUNTIME_DEFAULTS };
   live.spellcheck = false;
   assert.equal(policyFromSettings(live).trySpell, false);
   assert.deepEqual(sessionOptions(settingsForMode('rules'), { language: 'en' }), { formalizer: 'rules', spell: true, partial: true, bestEffort: true, language: 'en' });
+});
+
+test('the S1 edit head is off by default and a setting turns it on (review decision e)', () => {
+  assert.equal(RUNTIME_DEFAULTS.editHead, false);
+  assert.equal(policyFromSettings(runtimeSettings()).trySimplified, false);
+  assert.equal(policyFromSettings({ ...runtimeSettings(), editHead: true }).trySimplified, true);
 });

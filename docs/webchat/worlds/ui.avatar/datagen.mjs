@@ -122,7 +122,7 @@ add('avatar.ask.has', 'question', (r) => { const v = pick(r, ['glasses', 'a hat'
 add('avatar.ask.smiling', 'question', (r) => ({ text: pick(r, ['Are u smiling?', 'Are you smiling right now?', 'Are you grinning?']), expect: E(R('checkMood', { mood: 'happy' })) }));
 add('avatar.wear.sunglasses', 'request', (r) => ({ text: pick(r, ['Sunglasses pls.', 'U should wear sunglasses lol.', 'Wear sunglasses right now thank you.', 'Shades on you please.', 'Put some sunnies on.']), expect: E(R('setPart', { value: 'sunglass', text: q('sunglasses') })) }));
 add('avatar.wear.top', 'request', (r) => ({ text: pick(r, ['Can i have a dish on top of u.', 'Would like a dish on the top.', 'A dish on top would be nice.', 'I wanna see a dish on top.', 'Put a dish up top.']), expect: E(R('setPart', { part: 'top', value: 'dish', text: q('dish') })) }));
-add('avatar.neg', 'near-miss', (r) => ({ text: pick(r, ['My eyes are tired.', 'What colour is the sky?', 'The body of the car is red.', 'I like robots.', 'Is a human taller than a robot?']), negative: true }));
+add('avatar.neg', 'near-miss', (r) => ({ text: pick(r, ['My eyes are tired.', 'My robot toy is blue.', 'The body of the car is red.', 'I like robots.', 'Is a human taller than a robot?']), negative: true }));
 add('avatar.ood', 'out-of-domain', (r) => ({ text: pick(r, ['What is 7 plus 5?', 'Add milk to my shopping list.', 'How many legs does a spider have?', 'Hello!']), negative: true }));
 
 export function generate({ rng, count = 1500, context } = {}) {
