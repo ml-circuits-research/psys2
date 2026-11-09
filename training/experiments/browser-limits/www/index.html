@@ -1,0 +1,33 @@
+<!doctype html><meta charset=utf-8><title>bench</title>
+<script type=module>
+import * as ort from './ort.wasm.bundle.min.mjs';
+ort.env.wasm.wasmPaths = new URL('./', location.href).href; ort.env.wasm.numThreads = 1;
+const med = (a) => { const s = [...a].sort((x, y) => x - y); return +s[s.length >> 1].toFixed(1); };
+const buf = async (u) => new Uint8Array(await (await fetch(u)).arrayBuffer());
+const S = {}; const shapes = await (await fetch('models/lora-shapes.json')).json();
+async function load(name, file) { const t0 = performance.now(); const b = await buf('models/' + file); const t1 = performance.now(); S[name] = await ort.InferenceSession.create(b, { executionProviders: ['wasm'], graphOptimizationLevel: 'all' }); return { fetchMs: +(t1 - t0).toFixed(0), createMs: +(performance.now() - t1).toFixed(0), MB: +(b.length / 1e6).toFixed(1) }; }
+function feeds(b, t) { const n = b * t; const ids = new BigInt64Array(n); for (let i = 0; i < n; i++) ids[i] = BigInt(1000 + (i * 7919) % 28000); return { input_ids: new ort.Tensor('int64', ids, [b, t]), attention_mask: new ort.Tensor('int64', new BigInt64Array(n).fill(1n), [b, t]) }; }
+function loraFeeds(seed) { const f = {}; for (const [k, s] of Object.entries(shapes)) { const a = new Float32Array(s[0] * s[1]); for (let i = 0; i < a.length; i++) a[i] = Math.sin(i * 0.37 + seed) * 0.01; f[k] = new ort.Tensor('float32', a, s); } return f; }
+async function time(fn, n = 8) { await fn(); await fn(); const r = []; for (let i = 0; i < n; i++) { const t = performance.now(); await fn(); r.push(performance.now() - t); } return med(r); }
+window.loadAll = async () => ({ plain: await load('plain', 'enc_plain.int8.onnx'), heads24: await load('heads24', 'enc_24heads.int8.onnx'), lora: await load('lora', 'enc_lora.int8.onnx'), loraOv: await load('loraOv', 'enc_lora_overridable.int8.onnx'), disp: await load('disp', 'dispatcher_v4.int8.onnx'), head: await load('head', 'head200.onnx') });
+window.bench = async (shapesBT) => {
+  const out = [];
+  const L1 = loraFeeds(1), L2 = loraFeeds(2);
+  let ad1 = null, ad2 = null, adErr = null;
+  let adMs = null; try { const ab = await buf('models/world.onnx_adapter'); const ta = performance.now(); ad1 = await ort.LoraAdapter.create(ab); ad2 = await ort.LoraAdapter.create(ab.slice()); adMs = +(performance.now() - ta).toFixed(1); } catch (e) { adErr = String(e).slice(0, 200); }
+  for (const [b, t] of shapesBT) {
+    const f = feeds(b, t); const row = { b, t };
+    row.dispatcherV4 = await time(() => S.disp.run(f)); row.plain = await time(() => S.plain.run(f));
+    row.heads24 = await time(() => S.heads24.run(f));
+    row.loraInputs = await time(() => S.lora.run({ ...f, ...L1 }));
+    let k = 0; row.loraInputsSwitch = await time(() => S.lora.run({ ...f, ...((k++ & 1) ? L2 : L1) }));
+    if (ad1) { try { row.loraAdapter = await time(() => S.loraOv.run(f, { activeLoraAdapters: [ad1] })); row.loraOvNoAdapter = await time(() => S.loraOv.run(f)); let j = 0; row.loraAdapterSwitch = await time(() => S.loraOv.run(f, { activeLoraAdapters: [(j++ & 1) ? ad2 : ad1] })); } catch (e) { adErr = String(e).slice(0, 200); } }
+    const hs = new ort.Tensor('float32', new Float32Array(b * t * 768).fill(0.1), [b, t, 768]);
+    row.oneSeparateHead = await time(() => S.head.run({ hs }));
+    row.twentyFourSeparateHeads = await time(async () => { for (let i = 0; i < 24; i++) await S.head.run({ hs }); }, 4);
+    out.push(row);
+  }
+  return { rows: out, adErr, adapterCreateMsFor2: adMs };
+};
+window.ready = true;
+</script>

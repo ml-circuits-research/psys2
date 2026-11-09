@@ -1,0 +1,88 @@
+{
+ "throttle": 4,
+ "loads": {
+  "plain": {
+   "fetchMs": 650,
+   "createMs": 2083,
+   "MB": 67
+  },
+  "heads24": {
+   "fetchMs": 729,
+   "createMs": 603,
+   "MB": 70.7
+  },
+  "lora": {
+   "fetchMs": 553,
+   "createMs": 612,
+   "MB": 67
+  },
+  "loraOv": {
+   "fetchMs": 728,
+   "createMs": 690,
+   "MB": 69.7
+  },
+  "disp": {
+   "fetchMs": 482,
+   "createMs": 489,
+   "MB": 67.1
+  },
+  "head": {
+   "fetchMs": 23,
+   "createMs": 8,
+   "MB": 0.6
+  }
+ },
+ "rendererRssMB_afterLoadingAll4": 748,
+ "jsHeapMB": 4,
+ "rows": [
+  {
+   "b": 1,
+   "t": 16,
+   "dispatcherV4": 157.8,
+   "plain": 160.4,
+   "heads24": 166.4,
+   "loraInputs": 179,
+   "loraInputsSwitch": 173.8,
+   "loraAdapter": 175.4,
+   "loraOvNoAdapter": 177.8,
+   "loraAdapterSwitch": 186.2,
+   "oneSeparateHead": 1,
+   "twentyFourSeparateHeads": 24.4
+  },
+  {
+   "b": 1,
+   "t": 32,
+   "dispatcherV4": 347.8,
+   "plain": 263.9,
+   "heads24": 339.3,
+   "loraInputs": 338.1,
+   "loraInputsSwitch": 322.3,
+   "loraAdapter": 305.1,
+   "loraOvNoAdapter": 316.8,
+   "loraAdapterSwitch": 285.3,
+   "oneSeparateHead": 2.6,
+   "twentyFourSeparateHeads": 53.5
+  },
+  {
+   "b": 4,
+   "t": 32,
+   "dispatcherV4": 939.6,
+   "plain": 1047.4,
+   "heads24": 1086.3,
+   "loraInputs": 1061.2,
+   "loraInputsSwitch": 1106.2,
+   "loraAdapter": 1108.7,
+   "loraOvNoAdapter": 1110.1,
+   "loraAdapterSwitch": 1088.1,
+   "oneSeparateHead": 6.3,
+   "twentyFourSeparateHeads": 162
+  }
+ ],
+ "adErr": null,
+ "adapterCreateMsFor2": 19.8,
+ "errs": [
+  "Failed to load resource: the server responded with a status of 404 (File not found)",
+  "\u001b[0;93m2026-11-09 22:07:23.382500 [W:onnxruntime:, graph.cc:1462 Graph] Initializer L0.q_lin.A appears in graph inputs and will not be treated as constant value/weight. This may prevent some of the graph optimizations, like const folding. Move it out of graph inputs if there is no need to override it, by either re-generating the model with latest exporter/converter or with the tool onnxruntime/tools/python/remove_initializer_from_input.py.\u001b[m",
+  "\u001b[0;93m2026-11-09 22:07:23.386900 [W:onnxruntime:, graph.cc:1462 Graph] Initializer L0.k_lin.A appears in graph inputs and will not be treated as constant value/weight. This may prevent some of the graph optimizations, like const folding. Move it out of graph inputs if there is no need to override it, by either re-generating the model with latest exporter/converter or with the tool onnxruntime/tools/python/remove_initializer_from_input.py.\u001b[m"
+ ]
+}

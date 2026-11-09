@@ -1,0 +1,130 @@
+{
+ "throttle": 1,
+ "loads": {
+  "plain": {
+   "fetchMs": 215,
+   "createMs": 875,
+   "MB": 67
+  },
+  "heads24": {
+   "fetchMs": 348,
+   "createMs": 221,
+   "MB": 70.7
+  },
+  "lora": {
+   "fetchMs": 262,
+   "createMs": 186,
+   "MB": 67
+  },
+  "loraOv": {
+   "fetchMs": 230,
+   "createMs": 268,
+   "MB": 69.7
+  },
+  "disp": {
+   "fetchMs": 215,
+   "createMs": 154,
+   "MB": 67.1
+  },
+  "head": {
+   "fetchMs": 11,
+   "createMs": 3,
+   "MB": 0.6
+  }
+ },
+ "rendererRssMB_afterLoadingAll4": 815,
+ "jsHeapMB": 4,
+ "rows": [
+  {
+   "b": 1,
+   "t": 16,
+   "dispatcherV4": 55.6,
+   "plain": 46.4,
+   "heads24": 39.4,
+   "loraInputs": 38.8,
+   "loraInputsSwitch": 38.7,
+   "loraAdapter": 36.1,
+   "loraOvNoAdapter": 35.9,
+   "loraAdapterSwitch": 36.4,
+   "oneSeparateHead": 0.2,
+   "twentyFourSeparateHeads": 5.2
+  },
+  {
+   "b": 1,
+   "t": 32,
+   "dispatcherV4": 59,
+   "plain": 58.7,
+   "heads24": 107.7,
+   "loraInputs": 64.1,
+   "loraInputsSwitch": 82.5,
+   "loraAdapter": 100.5,
+   "loraOvNoAdapter": 63.9,
+   "loraAdapterSwitch": 62.1,
+   "oneSeparateHead": 0.4,
+   "twentyFourSeparateHeads": 9
+  },
+  {
+   "b": 1,
+   "t": 64,
+   "dispatcherV4": 127.7,
+   "plain": 153.5,
+   "heads24": 133.4,
+   "loraInputs": 124.3,
+   "loraInputsSwitch": 149.4,
+   "loraAdapter": 121.7,
+   "loraOvNoAdapter": 140.3,
+   "loraAdapterSwitch": 122.4,
+   "oneSeparateHead": 0.8,
+   "twentyFourSeparateHeads": 18.2
+  },
+  {
+   "b": 4,
+   "t": 32,
+   "dispatcherV4": 242.5,
+   "plain": 238.3,
+   "heads24": 318,
+   "loraInputs": 275.4,
+   "loraInputsSwitch": 231.7,
+   "loraAdapter": 227.3,
+   "loraOvNoAdapter": 303.3,
+   "loraAdapterSwitch": 232,
+   "oneSeparateHead": 1.5,
+   "twentyFourSeparateHeads": 35.9
+  },
+  {
+   "b": 8,
+   "t": 32,
+   "dispatcherV4": 486.8,
+   "plain": 484.1,
+   "heads24": 592.9,
+   "loraInputs": 513.1,
+   "loraInputsSwitch": 480.2,
+   "loraAdapter": 482.4,
+   "loraOvNoAdapter": 473.1,
+   "loraAdapterSwitch": 451,
+   "oneSeparateHead": 2.9,
+   "twentyFourSeparateHeads": 122.6
+  },
+  {
+   "b": 16,
+   "t": 32,
+   "dispatcherV4": 921.5,
+   "plain": 894.1,
+   "heads24": 996.6,
+   "loraInputs": 926.2,
+   "loraInputsSwitch": 934.1,
+   "loraAdapter": 920.3,
+   "loraOvNoAdapter": 955.9,
+   "loraAdapterSwitch": 942.7,
+   "oneSeparateHead": 5.9,
+   "twentyFourSeparateHeads": 138.2
+  }
+ ],
+ "adErr": null,
+ "adapterCreateMsFor2": 5.8,
+ "errs": [
+  "Failed to load resource: the server responded with a status of 404 (File not found)",
+  "\u001b[0;93m2026-11-09 22:04:21.894400 [W:onnxruntime:, graph.cc:1462 Graph] Initializer L0.q_lin.A appears in graph inputs and will not be treated as constant value/weight. This may prevent some of the graph optimizations, like const folding. Move it out of graph inputs if there is no need to override it, by either re-generating the model with latest exporter/converter or with the tool onnxruntime/tools/python/remove_initializer_from_input.py.\u001b[m",
+  "\u001b[0;93m2026-11-09 22:04:21.896399 [W:onnxruntime:, graph.cc:1462 Graph] Initializer L0.k_lin.A appears in graph inputs and will not be treated as constant value/weight. This may prevent some of the graph optimizations, like const folding. Move it out of graph inputs if there is no need to override it, by either re-generating the model with latest exporter/converter or with the tool onnxruntime/tools/python/remove_initializer_from_input.py.\u001b[m"
+ ]
+}

@@ -42,6 +42,149 @@ The working hypothesis: on small worlds, **rules plus a small learned front-end*
 
 ## 2. Current state, answers and corrections (reviewer, 11:00)
 
+### NIGHT PLAN (user, 23:05 local): two tracks in parallel, at most 4 agents in total
+
+- **Track 1, CPU and browser, 2 agents at most:**
+  1. the MOBILE-VOICE review fixes (two-tab handover at 6×, noise without the dry run, the browser replay of the phone export);
+  2. BUSY-LOST;
+  3. DIAG3b;
+  4. RP5b.
+- **Track 2, GPU and LLM APIs, 2 agents at most:** NX below.
+  - Labelling by API batches or by vLLM on the GPU loads neither the CPU nor the agent count.
+  - Do not run test suites from Track 2 agents, except the NX unit tests.
+- Start NX2 (the model pilot) and NX4-A (training on the labels we already have, which cost nothing) **at the same time**. While A trains, the LLM data is generated. Retrain at the end with everything.
+- Work carefully: every stage is resumable, logged with its command, and committed as soon as it is done. A crash must not cost the night.
+
+### NX — encoder formalizer experiment: learned heads vs the rule formalizer (user, 21:48–23:05 local) — experiment only, no webchat integration
+
+**Question.** Can a small encoder produce the SOP formalization (operation + the answer to each legend question as a span of the sentence) better than the rules? Measure it at the same browser cost as today.
+
+**The user decides on integration after seeing the numbers.** Do not change `docs/webchat`, `src/` or `worlds/` for NX.
+
+**Browser limits, already measured by the reviewer.** See `training/experiments/browser-limits/README.md`, with the harness and the results JSON. The facts that shape the variants:
+- One encoder pass is ~60 ms at 1× and ~300 ms at 4× on a 2-vCPU host, the same as dispatcher v4.
+- Heads inside the graph cost almost nothing: +3.7 MB for 24 tag heads plus a 600-op head.
+- Batching gives no gain (single-thread wasm), so N questions cost N passes.
+- `ort.LoraAdapter` works in onnxruntime-web 1.31: a 2.66 MB adapter, swapping it costs nothing. But each adapted world needs its own pass.
+- Every extra loaded session costs ~100–150 MB of RAM.
+
+**NX1 — the label format and the free labels (do first, small).**
+- One record per segment, world-agnostic:
+  `{ id, group, split, world, tab, context, text, lang, op, slots: [{ key, ask, span: [s,e] | null, text, value }], label_source, labeler, judge, status }`.
+  - `ask` is the key's `ask=` question from the legend (490 of 492 keys have one).
+  - `value` is the canonical value after the lexicon; the model only predicts spans and the operation, and canonicalisation stays deterministic.
+- Converter: extend `scripts/export-training.mjs`, or add `scripts/export-nx.mjs`. Wires already carry `core.source` and the slot spans.
+- Free labels, no LLM:
+  - rules-own readings of `training/paraphrases/out` and `heldout/out`, the datagen output, `training/phrase-logs`, and the ▲ feedback records;
+  - the diagram source corpus `imports/diagram-vss-demo/data/train` (~49.7k messages, wires with spans and args), converted through `world-draft` to our keys.
+- Data goes to `training/dataset/nx/` (outside git). Commit the code, `training/results/nx-data-report.json` (counts per world, source and status) and the tests.
+- **Protected, never in training:** `training/eval/real-phrases-2026-11-09*`, the `expectations-*` files, `operational*.jsonl`, `dialogues.jsonl`, and the diagram `data/test` and `data/bench`.
+
+**NX2 — model pilot: which labeler and which judge are good enough (first, about 1–2 h).**
+- **Gold set `training/nx/gold/pilot-300.jsonl` (commit it; it is small):**
+  - 150 items whose rules reading has a verified-correct outcome (operational and dialogue cases; the label = the rules' wires);
+  - 100 paraphrase items where the rules fail but the canonical label is inherited and checked (`rules-differ` / `rules-fail`, spec 10);
+  - 50 real phrases (09c, d, e and mobile; English translation for Romanian). Sonnet labels them, then you check each one against its expectation line by hand.
+  - Spread the 300 over all worlds, the diagram included.
+- **Labelers:**
+  - Claude Haiku 5.5 and Claude Sonnet 5.5;
+  - **two local models on the GB10 with vLLM**: one ~30B MoE and one 70–120B quantized, whatever is available or downloadable on the DGX. If no weights can be obtained, write that in the log and continue with the two Claude models.
+- **Batch mode for every candidate:**
+  - one request carries **25 sentences** of one world;
+  - the system prompt is the world's legend (keys with `ask`, types, lexicon heads), its operations with parameters, and 10 solved examples. The system prompt is cached.
+  - the output is a JSON array.
+- **Report:**
+  - operation accuracy;
+  - slot exact-match F1;
+  - span validity;
+  - JSON validity;
+  - abstain rate;
+  - items per minute;
+  - $ per 1,000 items.
+- **Judges:** Haiku and Sonnet judge the labelers' outputs on the pilot, 50 items per call, answering accept / reject / fix with a reason. Report each judge's recall of wrong labels and its precision.
+- **Selection rule (apply it yourself, do not wait for the reviewer):**
+  - **labeler:** the cheapest model with operation accuracy ≥ 95%, slot F1 ≥ 0.92 and ≤ 2% invalid output;
+  - **judge:** the cheapest model with ≥ 90% recall of wrong labels at ≥ 80% precision. If none qualifies, use Sonnet and say so.
+  - Write the table to `training/RESULTS.md` (NX2) and `training/results/nx2-pilot.json`.
+
+**NX3 — bulk generation, built for throughput (after NX2; runs while NX4-A trains).**
+- **Generate and label in one call.** For each world, the chosen model receives a shard of seeds (canonical examples, pattern examples, the rules' failures from the phrase logs). It writes **K = 20 varied phrasings per seed with their labels** in the same JSON output:
+  - voice-like text, typos, indirect requests, multi-command messages;
+  - Romanian-translation artifacts;
+  - and 20% Romanian phrasings, which go through our `ro-en` translator before labelling, so the formalizer sees English as in the app.
+- **Batching:**
+  - Use the **Message Batches API** when `ANTHROPIC_API_KEY` is available on the DGX: 50% cheaper, with the cached per-world system prompt.
+  - Otherwise use haiku or sonnet subagents, **each processing a shard file of 200–500 items in one session** (never one call per item), at most 2 at a time on Track 2.
+  - For the local model: vLLM offline batch generation over the whole shard list.
+  - Shard by world; resumable; content-hash ids; a finished shard is skipped on restart.
+- **Deterministic gate before any judge** (`scripts/nx-validate.mjs`, with unit tests):
+  - the JSON is valid;
+  - the operation exists in the world;
+  - the keys belong to the operation, and the required ones are present or explicitly null;
+  - every span equals the text at its offsets;
+  - values canonicalise through the lexicon;
+  - executing the wires on a fresh world state raises no error (interpreter dry run).
+  - A record failing the gate is dropped, and the reason is counted.
+- **Then the rules read every generated text:**
+  - same operation and values → `agreed`;
+  - otherwise → the judge, in batches of 50;
+  - plus a **3% audit sample of agreed items** to the judge, so we know the noise of `agreed`.
+- **Targets:**
+  - ≥ 2,000 accepted items for every world;
+  - the diagram from its converted corpus plus 2,000 generated items;
+  - about 50k in total.
+- **Splits by `group`:** the siblings of a seed stay in the same split.
+- **Budget:** a hard cap of **$60 of API for the whole night**, logged per stage. At the cap, stop generating and continue with what exists.
+- Commit the pipeline code, the reports (`nx3-generation.json`: per world counts, gate drops by reason, judge accept rate, audit error rate, $ and time per stage) and a 200-item sample.
+
+**NX4 — models (DGX).**
+- **A, heads on the frozen dispatcher v4 encoder (sha 6c41eb24).**
+  - Add a global operation head (sequence level, same input as the world head: `tab: .. ; recent: .. ;; <segment>`) and a BIO tag head over all `world.key` labels. Train only the heads.
+  - Export **one ONNX with the dispatcher heads and the new heads**, so one pass gives everything.
+  - Check that the dispatcher outputs are identical to v4 (frozen backbone ⇒ no forgetting).
+  - Start it now on the NX1 labels; retrain on NX1 + NX3 at the end.
+- **A+, forgetting check:** the same, with the top 2 layers unfrozen and dispatcher replay. Report the dispatcher metrics before and after.
+- **B, world-agnostic span extraction from the legend questions.**
+  - Input `<ask> [SEP] <segment>`, output start/end or no answer.
+  - The operation is scored with `<operation doc + example> [SEP] <segment>`.
+  - Train on all worlds except **kids.shop, games.hangman and kids.time**, held out to measure generalization to unseen worlds.
+  - Also report the number of passes per message, i.e. the browser cost.
+- **C, LoRA r=8** (q, k, v, out, lin1, lin2) **plus heads, per world.** Only for diagram.sketch, media.music and art.draw.
+  - Export `.onnx_adapter` files: the LoRA weights must be overridable initializers, see the README.
+  - Check one in the browser harness.
+- Seeds: 3 seeds for A and B when the difference to the rules is < 2 points.
+
+**NX5 — evaluation, the same way the rules are evaluated.**
+- **Pipeline:** model output → spans and operation → deterministic canonicalisation → SOP wires → validator → interpreter.
+- **Sets:**
+  - the operational sets;
+  - `dialogues.jsonl`;
+  - the real phrases 09c, d and e against their expectations, and the mobile export;
+  - the diagram bench with the source project's scorer (`imports/diagram-vss-demo/reference`);
+  - B's held-out worlds.
+- **Report correct / wrong / abstain per set and per world for:**
+  - the rules alone;
+  - A, A+, B and C;
+  - **D (hybrid):** the rules first, the model only when the rules have no complete reading, the validator always;
+  - and "model first, rules as fallback".
+- **Browser:** run `training/experiments/browser-limits` with the real exported A model (and B with its pass count) at 1× and 4×; report the size.
+- Write everything to `training/RESULTS.md` (section NX) and `training/results/nx-*.json`, with the commands. End with a short recommendation. **No webchat change.**
+
+**Cleanup (user, 23:05).**
+- **On the DGX, in `training/runs/`, which is not in git:**
+  - Keep:
+    - the published dispatcher v4 (6c41eb24) checkpoint;
+    - the best v5s1–v5s4 checkpoints (R5 is pending);
+    - the published normalizer (flan-t5-small v2);
+    - everything NX needs.
+  - Delete the other run directories: older dispatchers v2 and v3, the unpublished v4a–v4f, the ModernBERT runs, the unpublished normalizer runs, the smoke runs.
+  - Log the kept list and the freed GB.
+  - Do not delete datasets.
+- **Git:** the working tree already holds only the current models (dispatcher v4, normalizer v2). The old versions are only in history (3 old dispatchers and 2 old normalizers, ~400 MB uncompressed).
+  - The reviewer made a full backup bundle and will **not** rewrite history tonight: a force-push while your agents commit would risk losing commits.
+  - History is cleaned only at a quiet moment agreed with the user, and then every clone must be reset.
+  - Until then: never commit a model file except a deliberate publication.
+
 ### MIC2 — an always-open microphone, a visible command queue, a reliable mic button (user, 16:57 local; the user also told you directly — this is the reviewer's precise version)
 
 **1. The microphone stays open once switched on.**
