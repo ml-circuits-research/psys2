@@ -106,8 +106,10 @@ const textOf = (r) => (typeof r === 'string' ? r : r?.text);
 const QUESTION_WORD = /^(?:what|who|whom|whose|where|when|why|how|which)\b/i;
 
 export class DialogSession {
-  constructor(engine, { language = 'auto', formalizer = 'rules', spell = true, partial = false } = {}) {
+  constructor(engine, { language = 'auto', formalizer = 'rules', spell = true, partial = false, fastPath = false } = {}) {
     this.engine = engine;
+    /** Encoder fast path (PERF): when the rules read the whole message and the interpreter accepts every reading, skip the model. */
+    this.fastPath = fastPath;
     /** Leniency (spec 03 sections 7.9 and 7.10): spell-correct unparsed text (on by default), accept the readable part of a message (off by default; the webchat turns it on). */
     this.spell = spell;
     this.partial = partial;
@@ -302,13 +304,38 @@ export class DialogSession {
    * Formalize with the preferred strategy, per world falling back to the rule formalizer (spec 06).
    * Each returned segment carries `strategy`. Unparsed encoder segments are retried with the rules.
    */
-  async _formalize(english, sid, preferred = this.formalizer, lenient = { spell: this.spell, partial: this.partial }) {
+  /**
+   * Encoder fast path: the rules read every segment of `english` completely (no spelling correction, nothing ignored) and the interpreter
+   * accepts every reading (nothing unsupported or failing). Tried on a copy of the session, so a refusal leaves no trace; returns the
+   * segments read on the real session, or null.
+   */
+  async _quickRules(english, opts) {
+    const { formalizers, interp } = this.engine;
+    if (/[,;:\n]|\b(?:and|then|also|but|or|next|after|before|while|so|because|if)\b/i.test(english)) return null;   // several clauses: the model segments, the rules alone may cut wrongly
+    let f;
+    try { f = this.forkForValidation(); } catch { return null; }
+    const probe = await perf.time('fast.probe', () => formalizers.rules.formalize(english, { ...opts, session: f.isession, context: f.context(), source: 'fast' }));
+    if (probe.segments.length !== 1 || probe.segments.some((s) => s.unparsed || s.corrections?.length || s.ignored?.length || s.partial)) return null;
+    try {
+      for (const seg of probe.segments) {
+        f.isession.add(seg.wires);
+        for (const w of seg.wires) { const r = interp.resolve(f.isession, w); if (r && (r.status === 'unsupported' || r.status === 'error')) return null; }
+      }
+    } catch { return null; }
+    const res = await perf.time('fast.rules', () => formalizers.rules.formalize(english, opts));
+    for (const s of res.segments) s.strategy = 'rules';
+    perf.count('fast.path');
+    return { segments: res.segments, wires: res.segments.flatMap((s) => s.wires), dispatch: null, fast: true };
+  }
+
+  async _formalize(english, sid, preferred = this.formalizer, lenient = { spell: this.spell, partial: this.partial, fastPath: this.fastPath }) {
     const { set, formalizers } = this.engine;
     const opts = { worlds: set, session: this.isession, source: sid, context: this.context(), router: this.engine.router };
     const rules = formalizers.rules;
     const enc = preferred === 'encoder' ? formalizers.encoder : null;
     let usable = false, encoderError = null;
     try { usable = !!enc && !!(await perf.time('encoder.available', () => enc.available())) && set.list().some((w) => enc.supports(w)); } catch { usable = false; }
+    if (usable && lenient.fastPath) { const quick = await this._quickRules(english, opts); if (quick) return quick; }
     if (usable) {
       try {
         const res = await perf.time('encoder', () => enc.formalize(english, opts));
@@ -354,7 +381,7 @@ export class DialogSession {
     } finally { if (own) perf.end(); }
   }
 
-  async _send(text, { language, formalizer, spell, partial } = {}) {
+  async _send(text, { language, formalizer, spell, partial, fastPath } = {}) {
     const { engine } = this;
     const { set, interp, translator } = engine;
     const sid = `msg${++this._msg}`;
@@ -401,7 +428,7 @@ export class DialogSession {
         if (!pre) { const bare = engine.interp.lang.stripConnective(english); if (bare !== english && QUESTION_WORD.test(bare)) formalText = bare; }
       }
     }
-    let formal = icpt || meta?.reply != null ? { segments: [], wires: [] } : pre ? { ...pre.res, dispatch: null } : await perf.time('formalize', () => this._formalize(formalText, sid, formalizer ?? this.formalizer, { spell: spell ?? this.spell, partial: partial ?? this.partial }));
+    let formal = icpt || meta?.reply != null ? { segments: [], wires: [] } : pre ? { ...pre.res, dispatch: null } : await perf.time('formalize', () => this._formalize(formalText, sid, formalizer ?? this.formalizer, { spell: spell ?? this.spell, partial: partial ?? this.partial, fastPath: fastPath ?? this.fastPath }));
     if (meta?.rewrite && !pre) for (const sg of formal.segments) sg.discourse = meta.info;
     if (!icpt && !pre && !meta && formal.segments.length === 1 && formal.segments[0].unparsed) {
       pre = await disc.ellipsis(english, sid, { bare: true });

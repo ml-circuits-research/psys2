@@ -47,3 +47,23 @@ test('perf record: stages are counted inside a record and ignored outside', asyn
   assert.equal(r.perf.stages.outside, undefined);
   assert.equal(perf.active, false);
 });
+
+test('fast path: a single clause the rules read completely skips the model, anything else does not', async () => {
+  let calls = 0;
+  const rules = engine.formalizers.rules;
+  const encoder = { id: 'encoder', available: () => true, supports: () => true, formalize: async (text, opts) => { calls++; return { ...(await rules.formalize(text, opts)), dispatch: null }; } };
+  const saved = engine.formalizers.encoder;
+  engine.formalizers.encoder = encoder;
+  try {
+    const s = engine.createSession({ language: 'en', formalizer: 'encoder', fastPath: true });
+    const a = await s.send('What is 3 plus 4');
+    assert.match(a.text, /7/);
+    assert.equal(calls, 0, 'the model is not used');
+    assert.ok(a.perf.stages['fast.path']);
+    await s.send('What is 3 plus 4 and what is 5 plus 1');
+    assert.equal(calls, 1, 'two clauses go to the model');
+    const off = engine.createSession({ language: 'en', formalizer: 'encoder', fastPath: false });
+    await off.send('What is 3 plus 4');
+    assert.equal(calls, 2, 'without the fast path the model is used');
+  } finally { engine.formalizers.encoder = saved; }
+});

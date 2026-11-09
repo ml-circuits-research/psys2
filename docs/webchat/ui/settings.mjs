@@ -10,6 +10,7 @@ export const DEFAULT_SETTINGS = {
   settingsVersion: SETTINGS_VERSION,
   language: 'en',
   ...RUNTIME_DEFAULTS,            // formalizer, encoderAcceptRefused, partialUnderstanding, normalizer, spellcheck: one definition shared with the evaluators (src/dialog/runtime-config.mjs)
+  fastPath: true,                 // webchat: the rules answer at once when they read the whole message (PERF); the model is for the rest
   translation: 'auto', languageDetection: 'auto', speechLang: 'follow', voice: '', rate: 1, handsFree: false, speaker: false, showTrace: false, logPhrases: true,
 };
 

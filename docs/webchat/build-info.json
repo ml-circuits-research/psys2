@@ -39,11 +39,11 @@
     "lib/dialog/discourse.mjs": "037777921c1d9b61",
     "lib/dialog/dispatch-validate.mjs": "c7f32bdbb96af56d",
     "lib/dialog/encoder-dispatch.mjs": "58859fbda70130ca",
-    "lib/dialog/index.mjs": "283b680510537954",
+    "lib/dialog/index.mjs": "48b31830ddb70393",
     "lib/dialog/lang.mjs": "9521b53f37790854",
     "lib/dialog/meta.mjs": "43ee65abc753f44d",
     "lib/dialog/normalizer-runtime.mjs": "76d3ed03f9126aba",
-    "lib/dialog/runtime-config.mjs": "725759f827819ce1",
+    "lib/dialog/runtime-config.mjs": "fced595ab5b9476e",
     "lib/dialog/test-runner.mjs": "3338d6d08f4f428f",
     "lib/dialog/value-check.mjs": "36dcb282b4e9c9f6",
     "lib/formalizer/dispatcher-runtime.mjs": "ebb9cd90bd99cd0c",
@@ -94,7 +94,7 @@
     "worlds/docs.reader/analyze.mjs": "42cbb53bee0f07ae",
     "worlds/docs.reader/datagen.mjs": "e9137de9fda10a5c",
     "worlds/docs.reader/lang.mjs": "af8f8f415847a6e6",
-    "worlds/docs.reader/ops.mjs": "cccfbfafa9b3628d",
+    "worlds/docs.reader/ops.mjs": "6d4c375446c88332",
     "worlds/docs.reader/sample.mjs": "2c4854a926375f5c",
     "worlds/docs.reader/text.mjs": "7868d96bb1740c67",
     "worlds/games.chess/datagen.mjs": "04a453000a9d14fd",
@@ -139,5 +139,5 @@
     "worlds/user.profile/ops.mjs": "58e16e9e2fe9f5f2",
     "worlds/user.profile/understand.mjs": "a971dcc2294fd749"
   },
-  "builtAt": "2026-11-08T23:51:19.852Z"
+  "builtAt": "2026-11-08T23:59:57.855Z"
 }

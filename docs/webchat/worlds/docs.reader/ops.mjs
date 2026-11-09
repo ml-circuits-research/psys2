@@ -24,7 +24,8 @@ const slug = (s) => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(
 
 /** A new document object from text (used by the tab when a file is added and by the sample). */
 export function makeDocument(text, opts = {}) { return analyzeDocument(text, opts); }
-export function sampleDocument() { return analyzeDocument(SAMPLE.text, { name: SAMPLE.name, title: SAMPLE.title, format: SAMPLE.format, origin: SAMPLE.origin, tags: SAMPLE.tags, id: 'doc_hansel_and_gretel' }); }
+let sampleCache = null;   // PERF: every new session seeds this document; analysing it takes hundreds of ms on a phone, so analyse once and hand out copies
+export function sampleDocument() { sampleCache ??= analyzeDocument(SAMPLE.text, { name: SAMPLE.name, title: SAMPLE.title, format: SAMPLE.format, origin: SAMPLE.origin, tags: SAMPLE.tags, id: 'doc_hansel_and_gretel' }); return structuredClone(sampleCache); }
 /** State patch that adds (or replaces, same name) a document and makes it the active one; pure, used by the tab. */
 export function withDocument(state, doc) {
   const docs = [...(state?.docs ?? [])];

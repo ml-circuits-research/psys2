@@ -315,7 +315,7 @@ export async function mountPsys2(element, options = {}) {
     await afterPaint();
     let reply;
     try {
-      reply = await session.send(text, { language: settings.language, formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false });
+      reply = await session.send(text, { language: settings.language, formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, fastPath: settings.fastPath === true });
     } catch (e) {
       console.error(e);
       clearInterval(ticker);
@@ -489,6 +489,7 @@ export async function mountPsys2(element, options = {}) {
       ...(dispatcherEnc ? [check('Accept parses the interpreter refuses (for example “move the piece” when no game is on)', settings.encoderAcceptRefused, (v) => { settings.encoderAcceptRefused = v; save(); })] : []),
       check('Spellcheck: correct typos and chat abbreviations against the worlds’ vocabulary (for example “yes” → “eyes”)', settings.spellcheck, (v) => { settings.spellcheck = v; applyEngineSettings(); save(); }),
       check(`Simplify phrasing (normalizer): only when nothing else reads a sentence, a small model proposes a simpler wording that the rules must read and that keeps every number, name, colour and negation (${normalizerText()})`, settings.normalizer !== false, (v) => { settings.normalizer = v; if (v) normalizerHost?.prepare().catch(() => {}); save(); renderSettings(); }, normalizerHost ? null : 'no model in this build'),
+      ...(dispatcherEnc ? [check('Fast path: when the rules read the whole message and every part works, answer at once without running the model (much faster on a phone; the model still handles everything else)', settings.fastPath, (v) => { settings.fastPath = v; applyEngineSettings(); save(); })] : []),
       check('Partial understanding: do what I understood and say what I ignored', settings.partialUnderstanding, (v) => { settings.partialUnderstanding = v; applyEngineSettings(); save(); }),
       field('Translation', select([['auto', 'Automatic'], ['browser-api', 'Browser API'], ['rules', 'Rules']], settings.translation, (v) => { settings.translation = v; save(); renderSettings(); }),
         `Used when the language is not English. Browser on-device translator: ${browserAvail}. Its output is checked and falls back to the rules translator.`),
@@ -550,12 +551,13 @@ export async function mountPsys2(element, options = {}) {
       check('Keep a log of my phrases (stays in this browser)', settings.logPhrases, (v) => { settings.logPhrases = v; save(); renderPhraseLog(); }),
       plogCount, h('div', { class: 'p2-field' }, h('label', {}, 'Show '), fsel), plogList, plogActions);
   }
+  let modelsAllowed = false;   // the models load after the page is usable (PERF): the rules answer meanwhile
   function applyEngineSettings() {
     if (!session) return;
     Object.assign(session, sessionOptions(settings));
     if (session.settings && typeof session.settings === 'object') session.settings.formalizer = settings.formalizer;
     session.setOption?.('formalizer', settings.formalizer);
-    if (settings.formalizer === 'encoder' && dispatcherEnc) dispatcherEnc.prepare().catch(() => {});   // lazy: only now is the model fetched
+    if (settings.formalizer === 'encoder' && dispatcherEnc && modelsAllowed) dispatcherEnc.prepare().catch(() => {});   // lazy: only now is the model fetched
   }
   speech.onVoicesChanged(() => renderSettings());
 
@@ -602,8 +604,6 @@ export async function mountPsys2(element, options = {}) {
         dispatcherEnc.onStatus((st) => { if (st.state === 'error') encoderFailed(st.message); else if (st.state === 'ready') encoderNoticed = false; dispatcherStatus = { ...st, message: st.state === 'loading' ? dispatcherStatus.message || st.message : st.message }; setStatus(); if (!settingsEl.hidden) renderSettings(); });
       }
       encoderChecked = true;
-      if (dispatcherEnc && settings.formalizer === 'encoder') dispatcherEnc.prepare().catch(() => {});   // load the model in the background right away
-      if (normalizerHost && settings.normalizer !== false && settings.formalizer === 'encoder') dispatcherEnc?.prepare().then(() => normalizerHost.prepare()).catch(() => {});   // then the normalizer (about 95 MB, cached by sha256)
     } catch (e) { encoderChecked = true; console.warn('Encoder formalizer unavailable', e); }
     if (!settingsEl.hidden) renderSettings();
     const problems = engine.problems?.() ?? [];
@@ -652,5 +652,22 @@ export async function mountPsys2(element, options = {}) {
   };
   if (settings.handsFree && speechSupport.recognition) setHandsFree(true, false);
   element.dataset.ready = 'true';
+  // Warm-up after first paint (PERF): the first message used to pay for compiling every pattern and building the vocabularies, and the
+  // first model run for the ORT start-up. A scratch session reads two sentences now, while the user is still looking at the page.
+  const warm = async () => {
+    const opts = { language: 'en', formalizer: 'rules', spell: true, partial: true, fastPath: false };
+    try {
+      const s = engine.createSession({ language: 'en' });
+      for (const m of ['hello', 'zzq flarb wug', 'spider legs and 3 plus 4']) await s.send(m, opts);
+      if (destroyed) return;
+      modelsAllowed = true;   // now the models: the dispatcher first, then the normalizer (about 95 MB, cached by sha256)
+      if (dispatcherEnc && settings.formalizer === 'encoder') {
+        await dispatcherEnc.prepare();
+        if (!destroyed) await s.send('what is 3 plus 4', { ...opts, formalizer: 'encoder' });
+        if (normalizerHost && settings.normalizer !== false && !destroyed) normalizerHost.prepare().catch(() => {});
+      }
+    } catch { /* warm-up is best effort */ }
+  };
+  setTimeout(() => { if (!destroyed) warm(); }, 100);
   return handle;
 }

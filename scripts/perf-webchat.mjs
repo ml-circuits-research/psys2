@@ -93,4 +93,13 @@ try {
 if (opt('json')) await writeFile(opt('json'), JSON.stringify(results, null, 2));
 console.log('\n| mode | input | ready | model ready | p50 msg | p95 msg | per message (ms) |\n| --- | --- | --- | --- | --- | --- | --- |');
 for (const r of results) { const ts = r.messages.map((m) => m.ms); console.log(`| ${r.mode} | ${r.inputMs} | ${r.readyMs} | ${r.modelReadyMs ?? 'n/a'} | ${pct(ts, 0.5)} | ${pct(ts, 0.95)} | ${ts.join(' / ')} |`); }
+if (RUNS > 1) {
+  const med = (xs) => pct(xs, 0.5);
+  console.log(`\nMedian over ${RUNS} runs\n\n| mode | input | ready | model ready | per message (ms, median) | p50 | p95 |\n| --- | --- | --- | --- | --- | --- | --- |`);
+  for (const mode of MODES) {
+    const rs = results.filter((r) => r.mode === mode); if (!rs.length) continue;
+    const per = MESSAGES.map((_, i) => med(rs.map((r) => r.messages[i].ms)));
+    console.log(`| ${mode} | ${med(rs.map((r) => r.inputMs))} | ${med(rs.map((r) => r.readyMs))} | ${med(rs.map((r) => r.modelReadyMs ?? NaN).filter((x) => !Number.isNaN(x))) || 'n/a'} | ${per.join(' / ')} | ${pct(per, 0.5)} | ${pct(per, 0.95)} |`);
+  }
+}
 process.exit(0);

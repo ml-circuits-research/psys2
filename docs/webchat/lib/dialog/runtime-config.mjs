@@ -15,6 +15,7 @@ export const RUNTIME_DEFAULTS = Object.freeze({
   partialUnderstanding: true,     // execute what was understood and say what was ignored (7.10)
   normalizer: true,               // seq2seq phrasing normalizer, a fallback only (7.12, 7.13)
   spellcheck: true,               // spell correction against the worlds' vocabulary (7.9)
+  fastPath: false,                // encoder only: skip the model when the rules read the whole message and the interpreter accepts it (PERF; the webchat turns it on)
 });
 
 /** The named evaluation modes and the settings each one means. `encoder+n1` is the shipped default. */
@@ -22,6 +23,8 @@ export const MODES = Object.freeze({
   rules: { ...RUNTIME_DEFAULTS, formalizer: 'rules', normalizer: false },
   encoder: { ...RUNTIME_DEFAULTS, formalizer: 'encoder', normalizer: false },
   'encoder+n1': { ...RUNTIME_DEFAULTS },
+  'encoder+fast': { ...RUNTIME_DEFAULTS, normalizer: false, fastPath: true },
+  'encoder+n1+fast': { ...RUNTIME_DEFAULTS, fastPath: true },
 });
 export const DEFAULT_MODE = 'encoder+n1';
 
@@ -48,7 +51,7 @@ export function policyFromSettings(settings) {
 
 /** Options of `engine.createSession` for a settings object. */
 export function sessionOptions(settings, extra = {}) {
-  return { formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, ...extra };
+  return { formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, fastPath: settings.fastPath === true, ...extra };
 }
 
 /**
