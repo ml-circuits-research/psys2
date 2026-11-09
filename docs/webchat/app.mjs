@@ -17,6 +17,7 @@ import { findNormalizerModel, createNormalizerHost } from './ui/normalizer-host.
 import { sessionOptions } from './lib/dialog/runtime-config.mjs';
 import { DEFAULT_SETTINGS, SETTINGS_KEY, loadSettings } from './ui/settings.mjs';
 import { guard, TurnAborted, withDeadline } from './lib/formalizer/guard.mjs';
+import { LIMITS, TIME_LIMIT_SPECS, TIME_LIMIT_DEFAULTS, applyTimeLimits, clampLimit } from './lib/dialog/time-limits.mjs';
 import { CREDITS, ABOUT_SECTIONS, ACCURACY, TAGLINE, GREETING } from './ui/about.mjs';
 import { buildRecord, completeRecord, completeStopped, createStore, filterRecords, toJSONL, toText, exportFilename, summaryStatus, summaryWorlds } from './ui/phrase-log.mjs';
 
@@ -43,7 +44,7 @@ async function loadTabPlugins(base) {
 }
 const SHELL = 'ui.shell';
 /** Turn lifecycle (spec 06): one message at a time, a hard limit from Enter, every host effect bounded. */
-export const TURN_LIMITS = Object.freeze({ watchdogMs: 8000, softFraction: 0.65, effectMs: 3000, backstopMs: 1500 });
+export const TURN_LIMITS = Object.freeze({ watchdogMs: TIME_LIMIT_DEFAULTS.watchdogMs, softFraction: 0.65, effectMs: 3000, backstopMs: 1500 });
 export const TOO_LONG = 'That took too long, so I stopped. Try a shorter request.';
 export const SOURCE_URL = 'https://github.com/ml-circuits-research/psys2';
 export const BUSY_HINT = 'Wait for the answer or press Stop.';
@@ -75,6 +76,7 @@ export async function mountPsys2(element, options = {}) {
     document.head.append(h('link', { rel: 'stylesheet', href: new URL('style.css', base).href, 'data-psys2-css': '' }));
   }
   const settings = { ...loadSettings(options.persist !== false), ...(options.language ? { language: options.language } : {}) };
+  applyTimeLimits(settings);
   const save = () => { if (options.persist !== false) try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch { /* storage unavailable */ } };
   const plugins = await loadTabPlugins(base);
   const builtin = TABS.map((t, i) => ({ order: (i + 1) * 10, ...t }));
@@ -377,7 +379,7 @@ export async function mountPsys2(element, options = {}) {
     const typing = addMessage('bot', h('span', { class: 'p2-thinking' }, h('span', { class: 'p2-dots', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')), thinkingLabel), { className: 'is-typing' });
     typing.msg.removeAttribute('aria-live');
     translator.resetUsage();
-    const limit = options.watchdogMs ?? TURN_LIMITS.watchdogMs;
+    const limit = options.watchdogMs ?? LIMITS.watchdogMs;   // live: Settings › Developer › Time limits
     const tStart = tPress;
     const ticker = setInterval(() => { thinkingLabel.textContent = `thinking… ${((performance.now() - tStart) / 1000).toFixed(1)} s`; }, 100);
     const watchdog = setTimeout(() => { tn.reason ??= 'timeout'; ctl.abort(new DOMException('turn time limit', 'TimeoutError')); }, Math.max(0, limit - (performance.now() - tPress)));
@@ -762,10 +764,27 @@ export async function mountPsys2(element, options = {}) {
       h('li', {}, `Dispatcher model: ${dispatcherEnc ? dispatcherLabel : 'none in this build'}`),
       h('li', {}, `Normalizer model: ${normalizerHost ? normalizerHost.label : 'none in this build'}`));
   }
+  /** Settings › Developer › Time limits: seconds, clamped to the range of each limit, applied live (the next call or turn reads them). */
+  function timeLimitsGroup() {
+    const rows = Object.entries(TIME_LIMIT_SPECS).map(([key, s]) => {
+      const id = `p2-tl-${key}`;
+      const input = h('input', { type: 'number', class: 'p2-select p2-num', id, min: s.min / 1000, max: s.max / 1000, step: 0.1, inputmode: 'decimal' });
+      input.value = String((settings.timeLimits?.[key] != null ? clampLimit(key, settings.timeLimits[key]) : s.def) / 1000);
+      input.addEventListener('change', () => {
+        const ms = clampLimit(key, Number(input.value) * 1000);
+        input.value = String(ms / 1000);
+        settings.timeLimits = { ...(settings.timeLimits ?? {}), [key]: ms }; applyTimeLimits(settings); save();
+      });
+      return h('div', { class: 'p2-field p2-field-row' }, h('label', { for: id }, `${s.label} (s)`), input, h('small', {}, `${s.note}; ${s.min / 1000} to ${s.max / 1000} s, default ${s.def / 1000} s`));
+    });
+    const reset = textBtn('Reset time limits', () => { settings.timeLimits = { ...TIME_LIMIT_DEFAULTS }; applyTimeLimits(settings); save(); renderSettings(); });
+    return h('div', { class: 'p2-field', 'data-group': 'time-limits' }, h('strong', {}, 'Time limits'), ...rows, reset);
+  }
   function developerBody() {
     return [
       check('Show the trace of every answer (which part was read by which rule, model and validator)', settings.showTrace, (v) => { settings.showTrace = v; save(); }),
       check('Show the per-stage timing overlay of the last message (also with ?perf=1 in the page address)', settings.showPerf === true, (v) => { settings.showPerf = v; save(); if (!v) perfEl?.remove(); }),
+      timeLimitsGroup(),
       h('div', { class: 'p2-field' }, h('strong', {}, 'Build'), buildInfoLines()),
     ];
   }

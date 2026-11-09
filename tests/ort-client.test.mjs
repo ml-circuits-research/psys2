@@ -154,7 +154,7 @@ test('HANG2 replay: a model call that hangs in the worker never costs a turn; th
   for (const m of ['What is 2 plus 3', 'What is 20 divided by 4', 'What is 7 times 6', 'What is 9 minus 4', 'What is 1 plus 1']) {
     const t = Date.now(); out.push((await session.send(m)).text); times.push(Date.now() - t);
   }
-  await sleep(400);
+  for (let i = 0; i < 50 && c.restarts < 1; i++) await sleep(100);   // the grace timer may be late on a busy machine
   assert.match(out[2], /42/);                                 // the hung call: answered by the rules
   assert.ok(times.every((t) => t < 2000), `every turn answered quickly: ${times}`);
   assert.equal(c.restarts, 1);

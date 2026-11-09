@@ -102,13 +102,13 @@ export function createNormalizerHost({ base, meta, lib, onStatus = () => {}, get
       const t0 = performance.now();
       set({ state: 'loading', message: 'loading the phrasing normalizer' });
       loading = (async () => {
-        const { ort } = await getOrt();   // ORT runs in a dedicated worker we control (HANG2): deadlines, cancel, restart
+        const ortc = await getOrt(), { ort } = ortc;   // ORT runs in a dedicated worker we control (HANG2): deadlines, cancel, restart
         const { files, source } = await getNormalizerFiles({ base, meta, onProgress: (m) => set({ state: 'loading', message: m }) });
         set({ state: 'loading', message: 'starting the normalizer' });
         const again = async (name) => (await getNormalizerFiles({ base, meta })).files[name];   // after a worker restart: from the Cache API
         const src = (name) => { let first = files[name]; return async () => { if (first) { const b = first; first = null; return b; } return again(name); }; };
-        const encoder = await ort.InferenceSession.create(src('encoder.int8.onnx'), { name: 'normalizer.encoder', lane: 'normalizer', deadlineMs: 1500 });
-        const decoder = await ort.InferenceSession.create(src('decoder.int8.onnx'), { name: 'normalizer.decoder', lane: 'normalizer', deadlineMs: 1500 });
+        const encoder = await ort.InferenceSession.create(src('encoder.int8.onnx'), { name: 'normalizer.encoder', lane: 'normalizer', deadlineMs: () => ortc.limits?.normalizerMs ?? 3000 });
+        const decoder = await ort.InferenceSession.create(src('decoder.int8.onnx'), { name: 'normalizer.decoder', lane: 'normalizer', deadlineMs: () => ortc.limits?.normalizerMs ?? 3000 });
         const tokenizer = JSON.parse(new TextDecoder().decode(files['tokenizer.json']));
         runtime = lib.createNormalizerRuntime({ ort, encoder, decoder, tokenizer, config: meta.config });
         set({ state: 'ready', message: 'normalizer ready', ms: Math.round(performance.now() - t0), source });

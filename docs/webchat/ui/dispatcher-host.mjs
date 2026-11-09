@@ -99,7 +99,7 @@ export async function getModelFiles({ base, meta, onProgress = () => {} }) {
 export function dispatcherLoader({ base, meta, lib, onProgress = () => {}, onSource = () => {} }) {
   return async () => {
     onProgress('loading the runtime…');
-    const { ort } = await getOrtClient(base);   // ORT runs in a dedicated worker we control (HANG2): deadlines, cancel, restart
+    const ortc = await getOrtClient(base), { ort } = ortc;   // ORT runs in a dedicated worker we control (HANG2): deadlines, cancel, restart
     const { bytes, vocab, source } = await getModelFiles({ base, meta, onProgress });
     onSource(source);
     let editTags = null;   // rephraser (edit-tag head): its tag vocabulary sits next to the model
@@ -107,7 +107,7 @@ export function dispatcherLoader({ base, meta, lib, onProgress = () => {}, onSou
     onProgress('starting the model…');
     // the session reloads its bytes from the Cache API when the worker is re-created; the first load hands out the bytes already in memory
     let first = bytes;
-    const session = await ort.InferenceSession.create(async () => { if (first) { const b = first; first = null; return b; } return (await getModelFiles({ base, meta })).bytes; }, { name: 'dispatcher', lane: 'dispatcher', deadlineMs: 2500 });
+    const session = await ort.InferenceSession.create(async () => { if (first) { const b = first; first = null; return b; } return (await getModelFiles({ base, meta })).bytes; }, { name: 'dispatcher', lane: 'dispatcher', deadlineMs: () => ortc.limits?.dispatcherMs ?? 2500 });
     return { ort, session, tokenizer: lib.createWordPieceTokenizer(vocab), worlds: meta.worlds, editTags, editTau: meta.edit_threshold ?? 0.5, useContext: meta.context !== false };
   };
 }

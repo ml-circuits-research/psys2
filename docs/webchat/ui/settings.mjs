@@ -1,6 +1,7 @@
 // Webchat settings (spec 06 "Webchat settings"): defaults, the version bump and the one-time migration. Pure, no DOM, so node:test can import it.
 
 import { RUNTIME_DEFAULTS } from '../lib/dialog/runtime-config.mjs';
+import { TIME_LIMIT_DEFAULTS } from '../lib/dialog/time-limits.mjs';
 
 /** Bumped whenever a default changes in a way saved settings must follow once. */
 export const SETTINGS_VERSION = 2;
@@ -10,6 +11,7 @@ export const DEFAULT_SETTINGS = {
   settingsVersion: SETTINGS_VERSION,
   language: 'en',
   ...RUNTIME_DEFAULTS,            // formalizer, encoderAcceptRefused, partialUnderstanding, normalizer, spellcheck: one definition shared with the evaluators (src/dialog/runtime-config.mjs)
+  timeLimits: { ...TIME_LIMIT_DEFAULTS },   // ms; clamped on use (src/dialog/time-limits.mjs)
   fastPath: true,                 // webchat: the rules answer at once when they read the whole message (PERF); the model is for the rest
   translation: 'auto', languageDetection: 'auto', speechLang: 'auto', voice: '', rate: 1, handsFree: false, speaker: false, showTrace: false, showPerf: false, logPhrases: true, exportButtons: false,
 };

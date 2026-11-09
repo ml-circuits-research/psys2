@@ -121,7 +121,8 @@ const textOf = (r) => (typeof r === 'string' ? r : r?.text);
 const QUESTION_WORD = /^(?:what|who|whom|whose|where|when|why|how|which)\b/i;
 
 /** Time budget of the leniency stage (spelling variants and partial windows) of one message, in ms; past it the best reading so far stands (turn guard, spec 06). */
-export const LENIENT_BUDGET_MS = 3000;
+import { LIMITS } from './time-limits.mjs';
+export const LENIENT_BUDGET_MS = 3000;   // default only; the live value is LIMITS.lenientMs (time-limits.mjs)
 
 const FAST_SEGMENT_MARGIN = 0;   // nats of log-probability between the model's best segmentation and the runner-up for the multi-clause fast path
 
@@ -443,7 +444,7 @@ export class DialogSession {
   async _withLeniency(res, opts, o) {
     if (!res.segments.some((x) => x.unparsed) || !(o.spell || o.partial)) return res;
     const segments = [];
-    o = { ...o, until: performance.now() + LENIENT_BUDGET_MS };   // the whole leniency stage of this message (spelling variants, partial windows) shares one time budget
+    o = { ...o, until: performance.now() + LIMITS.lenientMs };   // the whole leniency stage of this message (spelling variants, partial windows) shares one time budget
     for (const seg of res.segments) {
       const fixed = seg.unparsed ? await this._lenient(seg, opts, o) : null;
       if (fixed) segments.push(...fixed); else segments.push(seg);

@@ -8,7 +8,7 @@
  * What this adds over the proxy:
  *   - inputs are copied (structured clone), never transferred, so a tensor can be fed again;
  *   - every call has a deadline and an optional abort signal; a call that passes either is rejected at once;
- *   - the worker is told to cancel the job; a queued job is dropped; when the running job does not stop within `graceMs` (300 ms) the worker is
+ *   - the worker is told to cancel the job; a queued job is dropped; when the running job does not stop within `graceMs` (1500 ms by default; a number or a function read at cancel time, so Settings applies live) the worker is
  *     terminated and re-created, and its sessions are loaded again from their sources (the host's `source()` reads the Cache API), so the next
  *     turn works;
  *   - every request and response is logged (id, time) when `log` is given, and counted in `stats`.
@@ -17,7 +17,7 @@
  *
  * The object `client.ort` has the part of the onnxruntime API that the runtimes use: `Tensor`, `InferenceSession.create(source, opts)` and
  * `session.run(feeds, { signal, deadlineMs })`. `source` is a Uint8Array or a function returning one (or a promise of one); with a function the
- * session survives a restart. `opts.deadlineMs` is the default deadline of the session's calls; `opts.name` labels the log.
+ * session survives a restart. `opts.deadlineMs` (a number or a function) is the default deadline of the session's calls; `opts.name` labels the log.
  */
 
 import { guard } from './guard.mjs';
@@ -33,7 +33,7 @@ class Tensor {
   constructor(type, data, dims) { this.type = type; this.data = data; this.dims = dims ?? [data.length]; }
 }
 
-export function createOrtClient({ spawn, graceMs = 300, defaultDeadlineMs = 3000, log = null, now = () => globalThis.performance?.now?.() ?? Date.now() } = {}) {
+export function createOrtClient({ spawn, graceMs = 1500, defaultDeadlineMs = 3000, log = null, now = () => globalThis.performance?.now?.() ?? Date.now() } = {}) {
   if (typeof spawn !== 'function') throw new Error('createOrtClient needs spawn(lane)');
   let seq = 0, sidSeq = 0;
   const lanes = new Map();             // lane name -> { name, worker, generation, pending: Map(id -> { resolve, reject, label, t0, timer, graceTimer, zombie }) }
@@ -86,12 +86,13 @@ export function createOrtClient({ spawn, graceMs = 300, defaultDeadlineMs = 3000
       emit('cancel', id, label, Math.round(now() - t0), kind);
       reject(err);
       try { post(lane, { op: 'cancel', id }); } catch { /* worker already dead */ }
-      p.graceTimer = setTimeout(() => { if (lane.pending.has(id)) { lane.pending.delete(id); restart(lane, `${label} #${id} did not stop within ${graceMs} ms`); } }, graceMs);
+      const grace = typeof graceMs === 'function' ? graceMs() : graceMs;
+      p.graceTimer = setTimeout(() => { if (lane.pending.has(id)) { lane.pending.delete(id); restart(lane, `${label} #${id} did not stop within ${grace} ms`); } }, grace);
     };
     p.cancel = cancel;
     if (signal?.aborted) { cancel(new OrtAborted(label), 'aborts'); return; }
     signal?.addEventListener?.('abort', () => cancel(new OrtAborted(label), 'aborts'), { once: true });
-    const ms = deadlineMs ?? defaultDeadlineMs;
+    const ms = typeof deadlineMs === 'function' ? deadlineMs() : (deadlineMs ?? defaultDeadlineMs);
     if (Number.isFinite(ms)) p.timer = setTimeout(() => cancel(new OrtTimeout(label, ms), 'timeouts'), ms);
     emit('req', id, label);
     try { post(lane, { ...msg, id }, transfer); } catch (e) { lane.pending.delete(id); clearTimeout(p.timer); reject(e); }
@@ -123,7 +124,7 @@ export function createOrtClient({ spawn, graceMs = 300, defaultDeadlineMs = 3000
             for (const [k, t] of Object.entries(feeds)) f[k] = { type: t.type, data: t.data, dims: t.dims };
             // inside a turn the call also ends with the turn: its abort signal and what is left of its hard deadline
             const left = guard.remaining();
-            const m = await request(s.lane, name, { op: 'run', sid: s.sid, feeds: f }, { deadlineMs: Math.min(d ?? s.deadlineMs ?? defaultDeadlineMs, Math.max(left, 1)), signal: signal ?? guard.signal });
+            const m = await request(s.lane, name, { op: 'run', sid: s.sid, feeds: f }, { deadlineMs: Math.min(d ?? (typeof s.deadlineMs === 'function' ? s.deadlineMs() : s.deadlineMs) ?? defaultDeadlineMs, Math.max(left, 1)), signal: signal ?? guard.signal });
             return wrapOut(m.outputs);
           },
           release() { sessions.delete(s.sid); try { post(s.lane, { op: 'release', sid: s.sid }); } catch { /* ignore */ } },
