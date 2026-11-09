@@ -249,8 +249,14 @@ export function createRouter({ id = 'policy', model = null } = {}) {
 }
 
 /** Order inside a tier: priority, literal words, fewer wildcard tokens, word-overlap score, pattern order. */
+/** L9 flag: rank by content literals first, then by frame (phrase macro) literals. Off by default; globalThis.PSYS_FRAME_RANK = true / env PSYS_FRAME_RANK=1 turns it on. */
+const frameRank = () => globalThis.PSYS_FRAME_RANK === true || (typeof process !== 'undefined' && process.env?.PSYS_FRAME_RANK === '1');
+const content = (m) => m.literals - (m.frameLiterals ?? 0);
 function inTier(wscore) {
-  return (a, b) => (b.rank ?? b.pattern.priority) - (a.rank ?? a.pattern.priority) || b.literals - a.literals || a.skips - b.skips
+  const byLiterals = frameRank()
+    ? (a, b) => content(b) - content(a) || (b.frameLiterals ?? 0) - (a.frameLiterals ?? 0)
+    : (a, b) => b.literals - a.literals;
+  return (a, b) => (b.rank ?? b.pattern.priority) - (a.rank ?? a.pattern.priority) || byLiterals(a, b) || a.skips - b.skips
     || wscore(b.pattern.worldId) - wscore(a.pattern.worldId) || a.order - b.order;
 }
 

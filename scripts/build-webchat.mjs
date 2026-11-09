@@ -21,6 +21,8 @@ const REPO = fileURLToPath(new URL('..', import.meta.url));
 const LIB_DIRS = ['soplang', 'legends', 'worlds', 'formalizer', 'interpreter', 'dialog', 'translate'];
 const LIB_FILES = ['loaders/bundle-loader.mjs'];
 const WORLD_TEXT = /\.(sop|json|txt|md)$/;
+// Files the browser never reads (the loader treats a missing tests.sop as empty; coverage.md is a human catalogue): left out of worlds/index.json to keep it small (L10).
+const BROWSER_SKIP = new Set(['tests.sop', 'coverage.md']);
 
 const exists = (p) => stat(p).then(() => true, () => false);
 
@@ -106,6 +108,7 @@ export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs
     const dir = path.join(worldsRoot, id);
     const entry = { files: {} };
     for (const f of await walk(dir)) {
+      if (BROWSER_SKIP.has(f)) continue;
       if (WORLD_TEXT.test(f)) entry.files[f] = await readFile(path.join(dir, f), 'utf8');
       else if (f.endsWith('.mjs')) {
         await mkdir(path.dirname(path.join(outDir, 'worlds', id, f)), { recursive: true });

@@ -24,6 +24,7 @@
 - No generative LLM is used in C2 (operation). LLMs may only be used by coding agents during C1/C3 authoring. Exception (user decision 2026-11-08): a small seq2seq **normalizer** (about 100M parameters at most, e.g. T5-small) may run in C2. It only proposes a simpler phrasing, which the world's rules must formalize and a value checker (numbers, names, negation) must accept; the rules stay the only formalizer.
 - Worlds marked `status=fixture` are hand-built platform fixtures and demos; they are not produced by the C1 workflow and must say so.
 - Tests: `npm test` must pass before committing. Every world ships `tests.sop` and must pass `node src/cli.mjs test-world <id>`.
+- New phrasing goes into `worlds/lang.common` (a `core.phrase` group) or a `core.shape`, never inline in a world's patterns (ADR-007).
 - Commits go directly to `main` (no pull requests for now). Small, descriptive commits.
 
 ## Data principle: industrial research, not fundamental research

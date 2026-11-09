@@ -845,3 +845,35 @@ Flag `PSYS_FRAME_RANK=1` makes `inTier` compare content literals (`literals - fr
 
 - eval-rules: only kids.arith (routed 107 -> 106) and kids.tasks (restricted 107 -> 106, routed 108 -> 107) differ. The `routing:` section of eval-rules is empty in this checkout (`training/dataset/routing.jsonl` is generated, not tracked), so "routing agreement" is the export-training agreement: kids.tasks 0.995 -> 0.9905, kids.shop 0.992 -> 0.9905, the other worlds equal.
 - Decision: rejected (agreement and held-out fall, nothing gains). The flag stays in the code, off by default. ADR-007 amended.
+
+## L10 rebuild and document (2026-11-09)
+- `scripts/build-webchat.mjs` rebuilt (docs/webchat/lib, worlds/index.json, build-info.json). `docs/formalizer-rules.html` (macros, lang.common, ctx.lang, shapes with every key of spec 03 section 2b, expand-patterns, routing keys tabOnly/tabFollow/tabPriority/yieldsTo/needsState, canonical marks RD6) and `docs/worlds.html` (shared phrasing section) updated; AGENTS.md rule added: new phrasing goes into `lang.common` or a shape, never inline.
+- **Webchat size: `worlds/index.json` 5,574,642 -> 4,506,258 bytes (gzip 642,396). The 2.5 MB target is NOT met.** The build now leaves out `tests.sop` (837 KB) and `coverage.md` (214 KB), which the browser never reads (a missing tests.sop loads as empty; no behaviour change). What is left in the bundle: patterns.sop 3.06 MB (match text 1.93 MB, emit 370 KB, examples 263 KB, ids 197 KB, other keys 194 KB, canonical 33 KB), lexicon.sop 0.70 MB, kb.sop 0.39 MB, operations/legend/templates about 0.24 MB. Stripping non-canonical examples would save only 0.26 MB and changes best-effort (it reads the first three examples), so it was not done. Reaching 2.5 MB needs compiled patterns (the macro-expanded form is larger, so it would need a dictionary/tokenized format and a loader change), shorter ids/emit templates, or lazy per-world files; gzip transfer is already 0.64 MB.
+
+### L summary (L6 + L7 numbers from the table above; headline = rules mode, operational set unless stated)
+| world | patterns before -> after | patterns.sop bytes | headline before -> after |
+| --- | --- | --- | --- |
+| ui.avatar | 159 -> 148 hand (+7 shapes, about 60 generated) | 105,565 -> 84,413 | per-world gates held |
+| media.music | 384 -> 375 | 991,819 -> 270,868 | held |
+| kids.shop | 480 -> 477 | 1,210,786 -> 285,281 | held |
+| kids.time | 383 -> 351 | 686,854 -> 197,699 | held |
+| kids.arith | 247 -> 243 | 465,443 -> 126,283 | held |
+| kids.tasks | 219 -> 219 | 664,361 -> 111,079 | held |
+| docs.editor | 387 -> 376 | 566,240 -> 172,057 | held |
+| geo.map | 341 -> 329 | 567,349 -> 221,415 | held |
+| data.charts | 370 -> 365 | 391,220 -> 213,388 | held |
+| docs.reader | 397 -> 386 | 214,462 -> 149,260 | held |
+| games.chess | 235 -> 234 | 171,092 -> 130,956 | held |
+| kids.animals | 259 -> 254 | 264,443 -> 111,310 | held |
+| art.draw | 191 -> 187 | 217,627 -> 98,185 | held |
+| kids.shapes | 147 -> 144 | 158,642 -> 77,947 | held |
+| kids.common | 97 -> 97 | 114,941 -> 51,474 | held |
+| ui.shell | 101 -> 100 | 108,471 -> 56,633 | held |
+| games.tictactoe | 99 -> 99 | 85,726 -> 63,013 | held |
+| games.hangman | 95 -> 95 | 62,162 -> 43,510 | held |
+| games.guess | 67 -> 67 | 49,577 -> 43,330 | held |
+| ui.help | 56 -> 56 | 45,258 -> 35,193 | held |
+| user.profile | 65 -> 65 | 20,774 -> 19,883 | held |
+| **all** | 4,750 -> 4,670 hand | 7,124,242 -> 2,987,859 (-58 %) | operational 95.4% -> 95.4% right, 6 wrong; dialogues 96.3% -> 96.4% turns; eval-rules restricted 4642 -> 4643; long set unchanged (58.4% right / 20.8% wrong) |
+
+- **L7 size target missed**: patterns.sop totals 2.99 MB against <= 2 MB. Match text fell 6.04 -> 1.87 MB (-69 %); what remains is outside macros' reach: examples (263 KB), emit templates (370 KB), ids (197 KB), other keys (194 KB) and the hand-written match text that is genuinely distinct (1.9 MB).
