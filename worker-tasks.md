@@ -359,6 +359,44 @@ With the mic always on, room talk reached the chat and got "I did not understand
 - Optional, in Settings › Voice: "Only respond when I say 'PSys2' / 'robotule'".
 - Tests: the room-talk lines above → ignored; every real command in the session → executed.
 
+### RP5b — what still fails after cc78918 (reviewer probe in real Chrome, Romanian session, 23:00 local)
+
+Probe: `/home/claude/shot/rp5.mjs` and `rp5b.mjs` (`openChat` with `settings: { language: 'ro' }`, throttle 1, 0 page errors). **Fixed and validated:**
+- fii bucuros / nervos → Romanian replies;
+- încearcă gura următoare;
+- fa ochi visatori → "ochi somnoroși";
+- joc a unu;
+- desenează un sare → a sun (Drawing tab);
+- desenează o maimuță → the Romanian list of animals it can draw;
+- desenează liniuță;
+- pește mic și albastru;
+- șterge peștii.
+
+Still failing:
+1. **Diagram tab (rp5-18, 19).** The Diagram tab was clicked and empty. "desenează trei cercuri" → art.draw "Am desenat 3 cercuri roșii", and the tab **switches to Drawing**. "desenează trei cercuri în diagramă" → "I did not understand where to put it ("in the chart")".
+   - **"diagramă" translates to "chart"**: map diagramă / diagrama / în diagramă → diagram, and keep grafic → chart.
+   - Run the case with the webchat's **default settings** (the encoder dispatch path), not only the rules formalizer. Your log says you could not check that path; this is that path, and it fails.
+2. **Tab names in Romanian.**
+   - "deschide tabul desen" → "Nu am înțeles … Ai vrut să spui „Deschide fila albumului foto”?" (and an English second line).
+   - "deschide tabul diagramă" → "I could not find numbers in "Open the tab a"" (broken translation, charts world).
+   - Every tab must open by its Romanian name and the usual voice variants: desen, desenat, diagramă, grafic / grafice, hartă, muzică, editor, șah, spânzurătoarea, x și zero, ghicește animalul, documente, avatar, profil.
+3. **Replies still in English in the Romanian session:**
+   - "fii un carton" / "fiind copil" → "Done! Now I am a cartoon. I have collared clothes…" / "There you go! Now I am a kid…";
+   - "Fă o gură mare" → "I cannot change the size of my mouth…";
+   - "pornește x și zero" → "OK, let's play tic-tac-toe! You are X…";
+   - "mută peștele" → "Where should it go? You can say…";
+   - the chart "could not find numbers" reply.
+
+   `check-ro-replies` reports 377 replies kept in English. Translate at least every reply family the user hit today (avatar become/describe, mouth-size refusal, game start, missing-place prompt, chart help), and make the check list the remaining English families by count.
+4. **Wording.**
+   - "mută peștele în apă" → "Am mutat peștele pe pământ" (on land). Say "în apă" when the target was water, and add water to the scene if there is none.
+   - "Ești deja pe avatar filă" → "Ești deja pe fila Avatar".
+   - "un grătar gură" → "o gură grătar".
+   - The tab-switch replies begin with "Am înțeles asta: "open the avatar tab"". Show the English reading only in the trace, not in the reply.
+5. **rp5-21 (background talk)** stays with NOISE / MOBILE-VOICE (speech filters).
+
+Done when all 21 rows of `expectations-2026-11-09e.jsonl` (except rp5-21) pass in a browser test with default settings and `language: 'ro'`; add that test (`scripts/test-webchat-ro-rp5.mjs`).
+
 ### RP5 — Romanian voice failures from the same session
 
 Expected behaviour per case: `training/eval/expectations-2026-11-09e.jsonl` (21 cases). The main groups, as general fixes:
@@ -373,17 +411,6 @@ Expected behaviour per case: `training/eval/expectations-2026-11-09e.jsonl` (21 
   - "desenează o maimuță" → draw it or list the animals it can draw.
 - **Untranslated text.** The translation sometimes returns the Romanian text unchanged ("șterge peștii", "Fă o gură mare", "faci un robot pește" → status unknown). The rules translator must cover the app's own verbs and nouns, and an unchanged output must be retried through the rules translator.
 - **Diagram tab:** "desenează trei cercuri (în diagramă)" goes to art.draw. Tier T must apply after translation, and the words "diagramă" / "diagram" name the world.
-
-### SMALL — follow-ups from the reviewer's browser check at 91ce510 (19:40 local)
-
-1. **SURPRISE pool.** The die button offered "I am a democrat." (a user.profile statement about politics). The pool must contain only requests and questions that do something visible or answer something.
-   - Exclude personal statements about the user (profile facts, especially politics, religion, health, family), feedback phrases and meta commands like "zoom all the way out" on an empty map.
-   - Validate the pool by kind: request or question, a visible effect or answer.
-2. **Romanian reply language.** "fa ochi visatori" (robot avatar) now answers fast, but in **English**: "I do not know eyes like "dreamy"…". "fa-i ochii mari" in the same session answers in Romanian. The unsupported / refusal reply path must also go through the back-translation.
-   - Also, by RD3, map "dreamy" to the closest robot eyes (sleepy) instead of refusing.
-*(3 and 4 validated at 9383474; 1 and 2 still open.)*
-3. **Diagram references.** "connect them with a dashed arrow" right after "draw a red box called A and a yellow circle called B" → "A connection needs two ends". You noted it for DIAG3: "them / both / these / the two" refer to the shapes made or named last.
-4. **Diagram, first message.** On a fresh page with the Diagram tab open, the two-clause create "draw a blue rectangle called Api and a green circle called Db" went to art.draw at 413669e. Tier T covers one-clause messages only. Add this exact case (fresh page, empty diagram) to `scripts/test-webchat-diagram.mjs`. Extend tier T to multi-clause messages whose every clause the active tab's world reads completely.
 
 ### TEST-SPLIT — two test suites: a fast mandatory one and a full one a few times a day (user, 18:53 local; reviewer measurement)
 
@@ -1693,3 +1720,5 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
   - `feedback-form-phone.png` shows the ▼ marked but not the open form; take the screenshot with the form open.
   - In that screenshot, "make the eyes blue" on the robot answers "I do not have blue for that; turquoise is the closest". Blue robot eyes should simply be blue: check the robot eye palette (RD3).
 - DIAG3 (9383474), files match the log: `test-webchat-diagram3.mjs` 14/14 in real Chrome. The four skipped expectation rows fail; see DIAG3b. SMALL 3 and 4 validated.
+- SMALL 1–2 (4e128a6, files match the log): the surprise pool keeps only requests and questions (tests); "fa ochi visatori" now answers in Romanian, "Gata! Acum am ochi somnoroși." (real Chrome). SMALL is closed.
+- RP5 (cc78918, files match the log): validated in part (see RP5b for what is validated and what still fails).
