@@ -1563,3 +1563,8 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
   - **MIC2 / EOT2** (ccca6a1): validated by your tests; the real microphone needs the user.
   - **BUSY**: still not on main (BUSY-LOST).
   - Follow-ups in SMALL.
+- TEST-SPLIT (d770679, files match the log):
+  - reviewer run here on 2 cores: `npm test` (fast) 201 s wall, 1,058 pass / 0 fail / 1 skipped, seed printed (before: about 12 min);
+  - your machine: fast 58 s, full 470 s;
+  - the full suite keeps the same 1,041 test names.
+  - Open: `webchat-ui` "How many days has April?" is flaky under load; make the random-click test deterministic (seeded) or fix the cause.
