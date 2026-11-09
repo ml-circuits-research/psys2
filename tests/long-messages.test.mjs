@@ -71,6 +71,26 @@ test('chess: a lone move right after another message still waits for the host (o
   assert.match(r.text, /still thinking/);
 });
 
+test('editor: a free-text slot does not swallow the next command ("and a list: milk, eggs")', async () => {
+  const s = session();
+  s.setWorldState('ui.shell', { activeTab: 'editor' });
+  await s.send('add a heading Shopping and a paragraph hello world and a list: milk, eggs then turn the list into a numbered list');
+  const blocks = s.state()['docs.editor'].blocks;
+  assert.deepEqual(blocks.map((b) => b.kind), ['heading', 'paragraph', 'list']);
+  assert.match(blocks[1].text, /^hello world\.?$/i);
+  assert.equal(blocks[2].items.length, 2);
+  assert.equal(blocks[2].style, 'numbered');
+});
+
+test('editor: the same kind of command stays one text ("salt and a pinch of pepper")', async () => {
+  const s = session();
+  s.setWorldState('ui.shell', { activeTab: 'editor' });
+  await s.send('add a paragraph salt and a pinch of pepper');
+  const blocks = s.state()['docs.editor'].blocks;
+  assert.equal(blocks.length, 1);
+  assert.match(blocks[0].text, /pinch of pepper/);
+});
+
 test('guess: a list of answers is applied in order', async () => {
   for (const msg of ['yes, no, I don\'t know, and then maybe', 'yes no I don\'t know maybe']) {
     const s = session();

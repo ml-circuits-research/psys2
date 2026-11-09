@@ -48,7 +48,7 @@ const COLORS = {
 
 // ---- small helpers ----------------------------------------------------------------------------------
 const ok = (value, extra) => ({ status: 'supported', value, ...extra });
-const no = (status, note) => ({ status, note });
+const no = (status, note) => ({ status, note, ...(/^I do not see /.test(note) ? { reason: 'unknown_argument' } : {}) });
 const cap = (s) => (s ? s[0].toUpperCase() + s.slice(1) : s);
 const sp = (w) => String(w).replace(/_/g, ' ');
 const joinAnd = (a) => (a.length <= 1 ? a.join('') : `${a.slice(0, -1).join(', ')} and ${a.at(-1)}`);

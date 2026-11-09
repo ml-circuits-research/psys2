@@ -125,7 +125,7 @@ export function selfCorrect(tokens, { whole = false } = {}) {
     if (A.every((t) => LEAD_ONLY.has(t.lower))) return null;
     const B = corr.filter(isWord);
     if (!B.length) return null;
-    if (isBareAnswer(A) && isBareAnswer(B)) return null;
+    if (found.len === 1 && isBareAnswer(A) && isBareAnswer(B)) return null;   // only the single word marker ("yes, no, maybe"); "no wait" and "I mean" always correct
     const al = align(A, B, whole);
     const gone = A.slice(al.from, al.to);
     const a0 = clause.indexOf(A[al.from]), a1 = clause.indexOf(A[al.to - 1]) + 1;

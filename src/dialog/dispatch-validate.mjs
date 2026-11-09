@@ -188,7 +188,10 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
           if (!useInterpreter) continue;
           try {
             const r = engine.interp.resolve(session.isession, w);
-            if (r) { rec.statuses.push(r.status); if (r.status === 'unsupported' || r.status === 'error') { rec.notes.push(`${r.status}: ${r.envelope?.note ?? ''}`.trim()); rec.reasons.push(r.envelope?.reason ?? (r.status === 'error' ? 'execution_error' : 'unsupported_operation')); } }
+            if (r) { rec.statuses.push(r.status);
+              // an operation that names a thing it does not know ("I do not see tempo in the chart", status missing) marks a weak reading too, whatever its status
+              if (r.status === 'missing' && r.envelope?.reason === 'unknown_argument') { rec.notes.push(`missing: ${r.envelope?.note ?? ''}`.trim()); rec.reasons.push('unknown_argument'); }
+              if (r.status === 'unsupported' || r.status === 'error') { rec.notes.push(`${r.status}: ${r.envelope?.note ?? ''}`.trim()); rec.reasons.push(r.envelope?.reason ?? (r.status === 'error' ? 'execution_error' : 'unsupported_operation')); } }
           } catch (e) { rec.statuses.push('error'); rec.reasons.push('execution_error'); rec.notes.push(`error: ${e.message}`); }
         }
       }
