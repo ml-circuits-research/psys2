@@ -104,6 +104,47 @@ Turn every case into a dialogue test (`dialogues.jsonl`, family `real`) and fix 
    - **Resume.** "coming back to knowing me, what questions do you have?" resumes the interview.
 10. **Report.** The 68 phrases and 24 expectations turn by turn, before / after, plus the operational and dialogue sets (wrong must not rise).
 
+### DBG — a debug view per tab, in developer mode (user, 16:59 local)
+
+**Switch.** A "Developer mode" switch in Settings › Developer, off by default and remembered. When it is on, every tab header gets a small **Debug** button (bug icon, tooltip "Debug this world").
+
+**The Debug button** opens a **full-screen modal** (the same component as SET: × on the right, Esc / Back close it) about the world behind that tab. Its sections are tabs:
+1. **Commands.** Everything this world understands, generated from the loaded world, not hand-written:
+   - the canonical examples and the request shapes;
+   - every pattern with its id, its examples and the operation it emits, grouped by operation;
+   - a search box;
+   - a "Try" button on each example that puts it in the input.
+2. **Last turns.** The last 20 turns that touched this world, newest first. Each one is expandable into the whole pipeline:
+   - the input;
+   - language detection and translation;
+   - spelling and voice corrections;
+   - the dispatcher's segments with candidate worlds and scores;
+   - the readings tried (pattern id, complete / partial, refusal reason, validation result);
+   - the **SOP Lang wires** that were run, pretty-printed with syntax colouring;
+   - the operations executed with their arguments;
+   - the reply;
+   - the timing per stage, and the watchdog / stop outcome if any.
+   Reuse `ui/trace.mjs`.
+3. **Dry run.** A text box: type a phrase and see how it would be read (segments, candidates, readings, wires, plausibility for voice end of turn) **without executing anything**. Uses `DialogSession.dryRead`.
+4. **State.** This world's state as a collapsible JSON tree, with the diff of the last turn highlighted, plus the ASTRA view for this tab: discussions, instances, focus and entities, open frames and expectations.
+5. **World.** The manifest (`world.sop`), legend keys, lexicons (word counts and words), operations, templates, imports, and the coverage summary (`coverage.md`).
+6. **Models.** The dispatcher and normalizer versions; the last calls to them for this world with inputs, outputs and ms; the ORT worker status (HANG2 logging).
+
+Every section has **Copy** and **Export JSON** buttons, so the user can attach a debug dump to a bug report. The phrase log gets a "debug dump" link per message when developer mode is on.
+
+**Constraints:**
+- Developer mode off means zero cost: the debug code is a lazily loaded module and nothing is recorded beyond what the trace already keeps.
+- On means a ring buffer of the last 200 turns.
+- Works on a phone: the sections scroll horizontally, and the wires and JSON wrap or scroll.
+
+**Tests:** headless, developer mode on:
+- every tab shows the button and opens the modal;
+- Commands is not empty for any world;
+- the dry run executes nothing (the state hash is unchanged);
+- Last turns shows the wires of a command just sent;
+- 0 console errors;
+- screenshots for the reviewer.
+
 ### HANG2 — the model worker stops answering; the watchdog hides it (reviewer at 1375718, 15:50 local) — P0, DO FIRST
 
 The HANG + STOP work is good: the Stop button, one message at a time, the 8 s watchdog and 918/921 tests passing (3 skipped). The chat no longer freezes forever. **But the turns that froze still do not get answered: they now end at 8 s with "That took too long, so I stopped."** That also happens **without throttling, on a fast machine**, and it repeats on every try. So the user will still see it all the time.
@@ -434,7 +475,7 @@ The reviewer copied what is reusable into **`imports/diagram-vss-demo/`** (stagi
 **Licence:** settled. The project is now AGPL-3.0-only, the same as the source (user decision 14:10); keep the copied files' provenance headers.
 
 **Order from now on:**
-1. HANG2 (model worker stops answering), MIC2 + EOT2 (always-open mic, queue, reliable button, end of turn), then DIAG2 (Diagram world in the webchat, dispatcher retrain), then RP3 (phrase-log failures)
+1. HANG2 (model worker stops answering), MIC2 + EOT2 (always-open mic, queue, reliable button, end of turn), then DIAG2 (Diagram world in the webchat, dispatcher retrain), then RP3 (phrase-log failures), then DBG (debug view per tab)
 2. SET (settings modal with tabs) + UI1 (one mic, tooltips) + DOC (greeting and docs), then VOICE (end of turn)
 3. ED (document editor commands)
 4. RD10 together with RD1b and RD2 (they share the mechanism)
