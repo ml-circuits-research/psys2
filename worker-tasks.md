@@ -308,6 +308,8 @@ Measure after RD1–RD8: the real dialogue right turn by turn, the dialogue set,
 
 ### PERF — the webchat is very slow on mobile (user report 23:46; reviewer measurements at 06280ae) — TOP PRIORITY
 
+**Reviewer re-measurement at d7fe3f0 (05:35):** page ready **33.6 s** (worse), hello 504 ms, 3 plus 4 203 ms, **multi-command 3.96 s** (worse), eyes square 202 ms, paris 637 ms, hello 154 ms. PERF has not been worked on yet; do it next, after RD1.
+
 **Reviewer re-measurement at 2500e81 (same script, 4× throttle):**
 - per message: hello 434 ms, 3 plus 4 195 ms, multi-command 2.2 s, eyes square 158 ms, paris 408 ms, hello 84 ms. Much better, but the multi-command message is still over the target.
 - **page ready got worse: 29 s.** Targets still open: page usable ≤ 5 s, models after first paint, multi-command ≤ 800 ms.
@@ -781,3 +783,4 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
 - L7 roll-out: geo.map (−70% match text), data.charts (−58%), docs.reader (−48%), games.chess (−35%), kids.time earlier (−82%), with request shapes (240239b, a3f8222, 0eda082, bd84b02): 830 tests pass; operational 95.0/0.6 and dialogues 87.7% unchanged.
 - RD6 canonical help examples, RD7 phrase-log export (5415b0d, 9809b52): 859 tests pass; help now offers "Try the next mouth", "What character is on screen", "Reset your eyes". RD5 is partial (see RD5).
 - **L6 + L7 complete** (request shapes, all 21 worlds migrated; summary 6f041a1): hand-written match text 6.04 MB → 1.87 MB (−69%), patterns.sop 7.1 → 3.0 MB, repeated groups 1,798 → 920, 65 shapes generating about 450 patterns. 871 tests pass; operational rules 95.4% right / 0.5% wrong / 2.3% not understood; dialogues 96.4% of turns, 88.0% of dialogues. Left in L: L9 (frame literals in routing, measured) and L10 (docs + AGENTS note).
+- D5 learning loop (d203be9), L9 frame literals measured and rejected (a975872), L10 docs (d7fe3f0): 882 tests pass. **The L library is complete.**
