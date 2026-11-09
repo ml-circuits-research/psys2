@@ -2,35 +2,35 @@
  "generated_by": "node scripts/build-edit-tags.mjs",
  "vocabulary_size": 141,
  "vocab_cap": 500,
- "examples": 56925,
+ "examples": 84591,
  "by_split": {
   "dev": {
-   "total": 4894,
-   "aligned": 265,
-   "identity": 4629
+   "total": 8676,
+   "aligned": 266,
+   "identity": 8410
   },
   "train": {
-   "total": 45096,
-   "aligned": 1661,
-   "identity": 43435
+   "total": 66147,
+   "aligned": 1708,
+   "identity": 64439
   },
   "test": {
-   "total": 4766,
-   "aligned": 264,
-   "identity": 4502
+   "total": 7600,
+   "aligned": 277,
+   "identity": 7323
   },
   "heldout": {
-   "total": 2169,
+   "total": 2168,
    "aligned": 703,
-   "identity": 1466
+   "identity": 1465
   }
  },
  "tag_counts": {
-  "KEEP": 337418,
-  "DELETE": 24366,
-  "A:": 2338,
+  "KEEP": 838467,
+  "DELETE": 24637,
+  "A:": 2328,
   "P:": 253,
-  "R:": 475
+  "R:": 482
  },
  "worlds": {
   "art.draw": {
@@ -62,17 +62,17 @@
    "generator_identity": 2310
   },
   "docs.editor": {
-   "variants": 707,
-   "with_target": 707,
-   "orig_ok": 426,
-   "failing": 281,
-   "failing_aligned": 43,
-   "aligned": 126,
-   "identity_only": 343,
-   "no_alignment": 238,
-   "no_verified_ref": 238,
+   "variants": 807,
+   "with_target": 807,
+   "orig_ok": 519,
+   "failing": 288,
+   "failing_aligned": 44,
+   "aligned": 186,
+   "identity_only": 377,
+   "no_alignment": 244,
+   "no_verified_ref": 244,
    "rejected_by_rules": 0,
-   "canonical_identity": 79,
+   "canonical_identity": 89,
    "generator_identity": 840
   },
   "docs.reader": {
@@ -274,16 +274,16 @@
   "ui.avatar": {
    "variants": 584,
    "with_target": 584,
-   "orig_ok": 431,
-   "failing": 153,
-   "failing_aligned": 59,
-   "aligned": 185,
-   "identity_only": 305,
-   "no_alignment": 94,
-   "no_verified_ref": 94,
+   "orig_ok": 422,
+   "failing": 162,
+   "failing_aligned": 60,
+   "aligned": 186,
+   "identity_only": 296,
+   "no_alignment": 102,
+   "no_verified_ref": 102,
    "rejected_by_rules": 0,
-   "canonical_identity": 61,
-   "generator_identity": 1980
+   "canonical_identity": 60,
+   "generator_identity": 1981
   },
   "ui.help": {
    "variants": 217,
@@ -300,38 +300,52 @@
    "generator_identity": 1260
   },
   "ui.shell": {
-   "variants": 400,
-   "with_target": 400,
+   "variants": 399,
+   "with_target": 399,
    "orig_ok": 313,
-   "failing": 87,
+   "failing": 86,
    "failing_aligned": 27,
    "aligned": 138,
    "identity_only": 202,
-   "no_alignment": 60,
-   "no_verified_ref": 58,
+   "no_alignment": 59,
+   "no_verified_ref": 57,
    "rejected_by_rules": 2,
    "canonical_identity": 41,
    "generator_identity": 1585
+  },
+  "diagram.sketch": {
+   "variants": 0,
+   "with_target": 0,
+   "orig_ok": 0,
+   "failing": 0,
+   "failing_aligned": 0,
+   "aligned": 0,
+   "identity_only": 0,
+   "no_alignment": 0,
+   "no_verified_ref": 0,
+   "rejected_by_rules": 0,
+   "canonical_identity": 0,
+   "generator_identity": 27570
   }
  },
  "totals": {
-  "variants": 9187,
-  "with_target": 9187,
-  "orig_ok": 8182,
-  "failing": 1005,
-  "failing_aligned": 324,
-  "aligned": 2893,
-  "identity_only": 5613,
-  "no_alignment": 681,
-  "no_verified_ref": 678,
+  "variants": 9286,
+  "with_target": 9286,
+  "orig_ok": 8266,
+  "failing": 1020,
+  "failing_aligned": 326,
+  "aligned": 2954,
+  "identity_only": 5638,
+  "no_alignment": 694,
+  "no_verified_ref": 691,
   "rejected_by_rules": 3,
-  "canonical_identity": 939,
-  "generator_identity": 39480
+  "canonical_identity": 948,
+  "generator_identity": 67051
  },
  "top_tags": [
   [
    "A:.",
-   453
+   461
   ],
   [
    "A:?",
@@ -339,19 +353,19 @@
   ],
   [
    "A:please",
-   117
-  ],
-  [
-   "A:the",
-   102
+   118
   ],
   [
    "R:please",
-   102
+   104
+  ],
+  [
+   "A:the",
+   100
   ],
   [
    "A:a",
-   74
+   75
   ],
   [
    "A:,",
@@ -406,6 +420,10 @@
    28
   ],
   [
+   "A::",
+   27
+  ],
+  [
    "A:how",
    27
   ],
@@ -422,10 +440,6 @@
    25
   ],
   [
-   "A::",
-   23
-  ],
-  [
    "A:of",
    21
   ],
@@ -434,12 +448,12 @@
    20
   ],
   [
-   "P:what",
+   "A:me",
    20
   ],
   [
-   "A:me",
-   19
+   "P:what",
+   20
   ],
   [
    "P:could you",

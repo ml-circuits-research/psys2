@@ -1,0 +1,364 @@
+{
+ "checkpoint": "runs/dispatcher-v5s4-c3265",
+ "model": "distilbert-base-uncased",
+ "export_dir": "runs/export/dispatcher-v5s4-c3265",
+ "command": "python -m psys2_train.export_onnx --ckpt runs/dispatcher-v5s4-c3265 --out runs/export/dispatcher-v5s4-c3265",
+ "sizes_mb": {
+  "fp32": 253.75210189819336,
+  "int8": 63.98818874359131
+ },
+ "targets": {
+  "max_size_mb": 150,
+  "max_ms_per_message": 50,
+  "min_agreement": 0.995
+ },
+ "gold_top1_lenient_on_gold_segments_of_sample": {
+  "n": 398,
+  "torch": 0.9472361809045227,
+  "fp32": 0.9472361809045227,
+  "int8": 0.9422110552763819
+ },
+ "agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "reference": "PyTorch CUDA fp32",
+  "onnx_fp32": {
+   "items": 200,
+   "world_same": 398,
+   "world_n": 398,
+   "boundary_same": 2904,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 200,
+   "max_abs_prob_diff_world": 4.291534423828125e-06,
+   "max_abs_prob_diff_seg": 2.562999725341797e-06,
+   "top3_same": 398,
+   "world_agreement": 1.0,
+   "boundary_agreement": 1.0,
+   "message_boundary_agreement": 1.0
+  },
+  "onnx_int8": {
+   "items": 200,
+   "world_same": 394,
+   "world_n": 398,
+   "boundary_same": 2898,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 195,
+   "max_abs_prob_diff_world": 0.5045324563980103,
+   "max_abs_prob_diff_seg": 0.33172860741615295,
+   "top3_same": 275,
+   "world_agreement": 0.9899497487437185,
+   "boundary_agreement": 0.9979338842975206,
+   "message_boundary_agreement": 0.975
+  },
+  "int8_vs_fp32": {
+   "items": 200,
+   "world_same": 394,
+   "world_n": 398,
+   "boundary_same": 2898,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 195,
+   "max_abs_prob_diff_world": 0.5045339465141296,
+   "max_abs_prob_diff_seg": 0.33172860741615295,
+   "top3_same": 275,
+   "world_agreement": 0.9899497487437185,
+   "boundary_agreement": 0.9979338842975206,
+   "message_boundary_agreement": 0.975
+  },
+  "disagreements": [
+   {
+    "cmp": "onnx_int8",
+    "text": "uh can you move the Star to the upper right corner next to the Moon and uh the Sun below the Moon but left of the Star",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "uh can you move the Star to the upper right corner next to the Moon and uh the Sun below the Moon but left of the Star",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "bridge between Me and You titled \"Long distance\", with Calls, Letters, Visits on my side and Games, Photos on yours",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "bridge between Me and You titled \"Long distance\", with Calls, Letters, Visits on my side and Games, Photos on yours",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Mark bread as completed",
+    "world_a": "kids.tasks",
+    "world_b": "docs.editor",
+    "p_a": 0.7745012640953064,
+    "p_b": 0.6134630441665649
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Mark bread as completed",
+    "world_a": "kids.tasks",
+    "world_b": "docs.editor",
+    "p_a": 0.7745038866996765,
+    "p_b": 0.6134630441665649
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "go slower could you jump to my document window then what games do you have then speak slower then well slower display my guessing game window speak more slowly and can you jump to the tictactoe page i want to play hangman can u turn on the speaker and then well slower then i want a new game could you open guessing game panel then will you view your doc",
+    "boundary_flips": 2
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "go slower could you jump to my document window then what games do you have then speak slower then well slower display my guessing game window speak more slowly and can you jump to the tictactoe page i want to play hangman can u turn on the speaker and then well slower then i want a new game could you open guessing game panel then will you view your doc",
+    "boundary_flips": 2
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "remove the lines pls",
+    "world_a": "geo.map",
+    "world_b": "diagram.sketch",
+    "p_a": 0.7425071597099304,
+    "p_b": 0.5775412321090698
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "remove the lines pls",
+    "world_a": "geo.map",
+    "world_b": "diagram.sketch",
+    "p_a": 0.7425075769424438,
+    "p_b": 0.5775412321090698
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "degree of the Gull",
+    "world_a": "diagram.sketch",
+    "world_b": "docs.editor",
+    "p_a": 0.7536207437515259,
+    "p_b": 0.42547541856765747
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "degree of the Gull",
+    "world_a": "diagram.sketch",
+    "world_b": "docs.editor",
+    "p_a": 0.7536205649375916,
+    "p_b": 0.42547541856765747
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Can you jump to your avatar panel.",
+    "world_a": "ui.avatar",
+    "world_b": "ui.shell",
+    "p_a": 0.5275900959968567,
+    "p_b": 0.6390027403831482
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Can you jump to your avatar panel.",
+    "world_a": "ui.avatar",
+    "world_b": "ui.shell",
+    "p_a": 0.5275905132293701,
+    "p_b": 0.6390027403831482
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Pls jot down socks onto the list",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Pls jot down socks onto the list",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Turn triangles into a massive blue dot! That's the main flow. Which shapes can be reached from Card? Move the ball to the right by 50 pixel and organize everything as a row.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Turn triangles into a massive blue dot! That's the main flow. Which shapes can be reached from Card? Move the ball to the right by 50 pixel and organize everything as a row.",
+    "boundary_flips": 1
+   }
+  ]
+ },
+ "edit_agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "rewritten_by_torch": 0.425,
+  "onnx_fp32": {
+   "n": 200,
+   "simplified_same": 200,
+   "tags_same": 200,
+   "words": 996,
+   "word_tags_same": 996,
+   "top1_world_same": 200,
+   "simplified_agreement": 1.0,
+   "tag_sequence_agreement": 1.0,
+   "word_tag_agreement": 1.0
+  },
+  "onnx_int8": {
+   "n": 200,
+   "simplified_same": 180,
+   "tags_same": 180,
+   "words": 996,
+   "word_tags_same": 972,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.9,
+   "tag_sequence_agreement": 0.9,
+   "word_tag_agreement": 0.9759036144578314
+  },
+  "int8_vs_fp32": {
+   "n": 200,
+   "simplified_same": 180,
+   "tags_same": 180,
+   "words": 996,
+   "word_tags_same": 972,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.9,
+   "tag_sequence_agreement": 0.9,
+   "word_tag_agreement": 0.9759036144578314
+  },
+  "examples_differing": [
+   {
+    "text": "play happy birthday, bells please",
+    "torch": "happy birthday with bells",
+    "int8": "happy birthday bells"
+   },
+   {
+    "text": "c major's relative minor is what",
+    "torch": "c major's relative minor is",
+    "int8": null
+   },
+   {
+    "text": "got an o?",
+    "torch": "is there an o",
+    "int8": "is there an o?"
+   },
+   {
+    "text": "start over",
+    "torch": "start",
+    "int8": null
+   },
+   {
+    "text": "could it be a tiger",
+    "torch": "tiger!",
+    "int8": "tiger"
+   },
+   {
+    "text": "what type of assistant are you",
+    "torch": "what assistant are you",
+    "int8": "what type assistant are you"
+   },
+   {
+    "text": "make a hangman round with giraffe pls",
+    "torch": "hangman giraffe",
+    "int8": "hangman giraffe pls"
+   },
+   {
+    "text": "could you tell me how to draw a circle",
+    "torch": "how to draw a circle?",
+    "int8": "tell me how to draw a circle"
+   },
+   {
+    "text": "is red one of the primary colors",
+    "torch": "is red primary",
+    "int8": "red primary"
+   },
+   {
+    "text": "top left spot",
+    "torch": "top left.",
+    "int8": null
+   },
+   {
+    "text": "is my money enough for the puzzle",
+    "torch": "is money enough for the puzzle?",
+    "int8": "money enough for the puzzle?"
+   },
+   {
+    "text": "paint the roof green",
+    "torch": "roof= green",
+    "int8": "roof green"
+   },
+   {
+    "text": "next letter, n",
+    "torch": "n",
+    "int8": "letter n"
+   },
+   {
+    "text": "ill go first",
+    "torch": "go first",
+    "int8": null
+   },
+   {
+    "text": "guess my pick",
+    "torch": null,
+    "int8": "guess my"
+   }
+  ]
+ },
+ "latency_cpu_batch1": {
+  "fp32_threads1": {
+   "encoder_pass_ms": {
+    "p50": 14.863378994050436,
+    "p95": 50.087270996300504,
+    "mean": 20.656836198613746
+   },
+   "dispatch_message_ms": {
+    "p50": 140.6819060066482,
+    "p95": 367.08436299522873,
+    "mean": 174.65594236040488
+   },
+   "avg_distinct_segments_per_message": 7.22,
+   "n": 100
+  },
+  "int8_threads1": {
+   "encoder_pass_ms": {
+    "p50": 4.418906988576055,
+    "p95": 15.884006003034301,
+    "mean": 6.424724899843568
+   },
+   "dispatch_message_ms": {
+    "p50": 41.41987500770483,
+    "p95": 101.30585599108599,
+    "mean": 49.613718079490354
+   },
+   "avg_distinct_segments_per_message": 7.23,
+   "n": 100
+  },
+  "fp32_threads4": {
+   "encoder_pass_ms": {
+    "p50": 8.044563001021743,
+    "p95": 28.74480400350876,
+    "mean": 11.251120749802794
+   },
+   "dispatch_message_ms": {
+    "p50": 82.94792400556616,
+    "p95": 161.96564699930605,
+    "mean": 91.0693189506128
+   },
+   "avg_distinct_segments_per_message": 7.22,
+   "n": 100
+  },
+  "int8_threads4": {
+   "encoder_pass_ms": {
+    "p50": 1.9619079976109788,
+    "p95": 4.700043995399028,
+    "mean": 2.4438755097799003
+   },
+   "dispatch_message_ms": {
+    "p50": 18.60940401093103,
+    "p95": 34.25169699767139,
+    "mean": 21.023945449705934
+   },
+   "avg_distinct_segments_per_message": 7.23,
+   "n": 100
+  }
+ },
+ "cpu": "Grace aarch64 (DGX Spark)",
+ "versions": {
+  "torch": "2.14.1+cu130",
+  "onnx": "1.23.2",
+  "onnxruntime": "1.31.1",
+  "opset": 17
+ }
+}

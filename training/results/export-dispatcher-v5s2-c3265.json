@@ -1,0 +1,354 @@
+{
+ "checkpoint": "runs/dispatcher-v5s2-c3265",
+ "model": "distilbert-base-uncased",
+ "export_dir": "runs/export/dispatcher-v5s2-c3265",
+ "command": "python -m psys2_train.export_onnx --ckpt runs/dispatcher-v5s2-c3265 --out runs/export/dispatcher-v5s2-c3265",
+ "sizes_mb": {
+  "fp32": 253.75210189819336,
+  "int8": 63.98818874359131
+ },
+ "targets": {
+  "max_size_mb": 150,
+  "max_ms_per_message": 50,
+  "min_agreement": 0.995
+ },
+ "gold_top1_lenient_on_gold_segments_of_sample": {
+  "n": 398,
+  "torch": 0.9396984924623115,
+  "fp32": 0.9396984924623115,
+  "int8": 0.9396984924623115
+ },
+ "agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "reference": "PyTorch CUDA fp32",
+  "onnx_fp32": {
+   "items": 200,
+   "world_same": 398,
+   "world_n": 398,
+   "boundary_same": 2904,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 200,
+   "max_abs_prob_diff_world": 2.4437904357910156e-06,
+   "max_abs_prob_diff_seg": 2.0265579223632812e-06,
+   "top3_same": 398,
+   "world_agreement": 1.0,
+   "boundary_agreement": 1.0,
+   "message_boundary_agreement": 1.0
+  },
+  "onnx_int8": {
+   "items": 200,
+   "world_same": 394,
+   "world_n": 398,
+   "boundary_same": 2899,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 196,
+   "max_abs_prob_diff_world": 0.5121268630027771,
+   "max_abs_prob_diff_seg": 0.37879249453544617,
+   "top3_same": 289,
+   "world_agreement": 0.9899497487437185,
+   "boundary_agreement": 0.9982782369146006,
+   "message_boundary_agreement": 0.98
+  },
+  "int8_vs_fp32": {
+   "items": 200,
+   "world_same": 394,
+   "world_n": 398,
+   "boundary_same": 2899,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 196,
+   "max_abs_prob_diff_world": 0.5121268630027771,
+   "max_abs_prob_diff_seg": 0.37879347801208496,
+   "top3_same": 289,
+   "world_agreement": 0.9899497487437185,
+   "boundary_agreement": 0.9982782369146006,
+   "message_boundary_agreement": 0.98
+  },
+  "disagreements": [
+   {
+    "cmp": "onnx_int8",
+    "text": "Draw a purple triangle, a green sun",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.7449975609779358,
+    "p_b": 0.7669551968574524
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Draw a purple triangle, a green sun",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.7449975609779358,
+    "p_b": 0.7669551968574524
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Hammer on top of Saw, right of Nail. Nail to the bottom right, below Saw. Then tell me which shapes are above Nail.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Hammer on top of Saw, right of Nail. Nail to the bottom right, below Saw. Then tell me which shapes are above Nail.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "align the circles horizontally then is there a red shape under lamp and next to easel is there a blue one in the bottom right right of stool and neighbours of lynx the sixth section in short then draw a pink boat and then a green circle",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "align the circles horizontally then is there a red shape under lamp and next to easel is there a blue one in the bottom right right of stool and neighbours of lynx the sixth section in short then draw a pink boat and then a green circle",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Reshape Metro as a star. Add Metro to Lines. List the groups. Duplicate Lines.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Reshape Metro as a star. Add Metro to Lines. List the groups. Duplicate Lines.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "My friend is Andrei.",
+    "world_a": "kids.common",
+    "world_b": "kids.arith",
+    "p_a": 0.5324078798294067,
+    "p_b": 0.7103927135467529
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "My friend is Andrei.",
+    "world_a": "kids.common",
+    "world_b": "kids.arith",
+    "p_a": 0.5324088931083679,
+    "p_b": 0.7103927135467529
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Drop the title",
+    "world_a": "docs.editor",
+    "world_b": "data.charts",
+    "p_a": 0.5270659327507019,
+    "p_b": 0.6593843102455139
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Drop the title",
+    "world_a": "docs.editor",
+    "world_b": "data.charts",
+    "p_a": 0.5270645022392273,
+    "p_b": 0.6593843102455139
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "are Vera and Wes linked and name Reef Coral. Please draw a heart and then add a square below it; which one is more connected, i mean who has the most links, are Butte and Knoll linked directly. Launch is gold. Make circles big; create a dashed pink link from Timeline to Pricing. How many lines are there and Reposition Banner and Modal left side of Menu, pop a magenta triangle, spread Search & Toolbar horizontally evenly.",
+    "boundary_flips": 2
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "are Vera and Wes linked and name Reef Coral. Please draw a heart and then add a square below it; which one is more connected, i mean who has the most links, are Butte and Knoll linked directly. Launch is gold. Make circles big; create a dashed pink link from Timeline to Pricing. How many lines are there and Reposition Banner and Modal left side of Menu, pop a magenta triangle, spread Search & Toolbar horizontally evenly.",
+    "boundary_flips": 2
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "make the text bold",
+    "world_a": "docs.editor",
+    "world_b": "ui.avatar",
+    "p_a": 0.6047177910804749,
+    "p_b": 0.6734969019889832
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "make the text bold",
+    "world_a": "docs.editor",
+    "world_b": "ui.avatar",
+    "p_a": 0.6047171950340271,
+    "p_b": 0.6734969019889832
+   }
+  ]
+ },
+ "edit_agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "rewritten_by_torch": 0.38,
+  "onnx_fp32": {
+   "n": 200,
+   "simplified_same": 200,
+   "tags_same": 200,
+   "words": 996,
+   "word_tags_same": 996,
+   "top1_world_same": 200,
+   "simplified_agreement": 1.0,
+   "tag_sequence_agreement": 1.0,
+   "word_tag_agreement": 1.0
+  },
+  "onnx_int8": {
+   "n": 200,
+   "simplified_same": 177,
+   "tags_same": 177,
+   "words": 996,
+   "word_tags_same": 972,
+   "top1_world_same": 199,
+   "simplified_agreement": 0.885,
+   "tag_sequence_agreement": 0.885,
+   "word_tag_agreement": 0.9759036144578314
+  },
+  "int8_vs_fp32": {
+   "n": 200,
+   "simplified_same": 177,
+   "tags_same": 177,
+   "words": 996,
+   "word_tags_same": 972,
+   "top1_world_same": 199,
+   "simplified_agreement": 0.885,
+   "tag_sequence_agreement": 0.885,
+   "word_tag_agreement": 0.9759036144578314
+  },
+  "examples_differing": [
+   {
+    "text": "how many on my list",
+    "torch": "how many on my list?",
+    "int8": "how many on list?"
+   },
+   {
+    "text": "c major's relative minor is what",
+    "torch": "c major's relative minor",
+    "int8": "c major's relative minor is"
+   },
+   {
+    "text": "i guess s",
+    "torch": "s?",
+    "int8": "s"
+   },
+   {
+    "text": "sunset mode pls",
+    "torch": null,
+    "int8": "sunset pls"
+   },
+   {
+    "text": "i need a hint",
+    "torch": "need a hint",
+    "int8": "a hint"
+   },
+   {
+    "text": "make ur body blue",
+    "torch": "ur body blue.",
+    "int8": "body blue."
+   },
+   {
+    "text": "which continent is chile in",
+    "torch": "which continent is chile",
+    "int8": "continent is chile"
+   },
+   {
+    "text": "back to normal",
+    "torch": null,
+    "int8": "back normal"
+   },
+   {
+    "text": "i want level 5 now",
+    "torch": null,
+    "int8": "i want level 5"
+   },
+   {
+    "text": "smallest at the start",
+    "torch": null,
+    "int8": "smallest the start"
+   },
+   {
+    "text": "make a hangman round with giraffe pls",
+    "torch": "hangman giraffe",
+    "int8": "hangman giraffe pls"
+   },
+   {
+    "text": "is my money enough for the puzzle",
+    "torch": "enough for a puzzle?",
+    "int8": "enough for puzzle?"
+   },
+   {
+    "text": "paint the roof green",
+    "torch": "paint the roof= green",
+    "int8": null
+   },
+   {
+    "text": "ill go first",
+    "torch": "go first",
+    "int8": null
+   },
+   {
+    "text": "do you know who i am",
+    "torch": "who am i am",
+    "int8": "you who am i am"
+   }
+  ]
+ },
+ "latency_cpu_batch1": {
+  "fp32_threads1": {
+   "encoder_pass_ms": {
+    "p50": 14.53135599149391,
+    "p95": 53.96236199885607,
+    "mean": 21.957215610309504
+   },
+   "dispatch_message_ms": {
+    "p50": 139.48509500187356,
+    "p95": 363.75059600686654,
+    "mean": 173.8668195201899
+   },
+   "avg_distinct_segments_per_message": 7.39,
+   "n": 100
+  },
+  "int8_threads1": {
+   "encoder_pass_ms": {
+    "p50": 3.7940030015306547,
+    "p95": 10.20786800654605,
+    "mean": 4.932416239607846
+   },
+   "dispatch_message_ms": {
+    "p50": 36.66721399349626,
+    "p95": 66.1396049981704,
+    "mean": 40.365508020768175
+   },
+   "avg_distinct_segments_per_message": 7.38,
+   "n": 100
+  },
+  "fp32_threads4": {
+   "encoder_pass_ms": {
+    "p50": 12.878114997874945,
+    "p95": 109.19858999841381,
+    "mean": 31.507471809600247
+   },
+   "dispatch_message_ms": {
+    "p50": 172.39749200234655,
+    "p95": 813.1518959999084,
+    "mean": 268.84027963969857
+   },
+   "avg_distinct_segments_per_message": 7.39,
+   "n": 100
+  },
+  "int8_threads4": {
+   "encoder_pass_ms": {
+    "p50": 6.294251012150198,
+    "p95": 21.399545003077947,
+    "mean": 8.58715573020163
+   },
+   "dispatch_message_ms": {
+    "p50": 56.85156999970786,
+    "p95": 154.1747960000066,
+    "mean": 71.00158558998373
+   },
+   "avg_distinct_segments_per_message": 7.38,
+   "n": 100
+  }
+ },
+ "cpu": "Grace aarch64 (DGX Spark)",
+ "versions": {
+  "torch": "2.14.1+cu130",
+  "onnx": "1.23.2",
+  "onnxruntime": "1.31.1",
+  "opset": 17
+ }
+}

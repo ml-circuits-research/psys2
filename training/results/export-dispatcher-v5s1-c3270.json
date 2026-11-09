@@ -1,0 +1,292 @@
+{
+ "checkpoint": "runs/dispatcher-v5s1-c3270",
+ "model": "distilbert-base-uncased",
+ "export_dir": "runs/export/dispatcher-v5s1-c3270",
+ "command": "python -m psys2_train.export_onnx --ckpt runs/dispatcher-v5s1-c3270 --out runs/export/dispatcher-v5s1-c3270",
+ "sizes_mb": {
+  "fp32": 253.75210189819336,
+  "int8": 63.98818874359131
+ },
+ "targets": {
+  "max_size_mb": 150,
+  "max_ms_per_message": 50,
+  "min_agreement": 0.995
+ },
+ "gold_top1_lenient_on_gold_segments_of_sample": {
+  "n": 398,
+  "torch": 0.9296482412060302,
+  "fp32": 0.9296482412060302,
+  "int8": 0.9296482412060302
+ },
+ "agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "reference": "PyTorch CUDA fp32",
+  "onnx_fp32": {
+   "items": 200,
+   "world_same": 398,
+   "world_n": 398,
+   "boundary_same": 2904,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 200,
+   "max_abs_prob_diff_world": 3.516674041748047e-06,
+   "max_abs_prob_diff_seg": 1.7583370208740234e-06,
+   "top3_same": 398,
+   "world_agreement": 1.0,
+   "boundary_agreement": 1.0,
+   "message_boundary_agreement": 1.0
+  },
+  "onnx_int8": {
+   "items": 200,
+   "world_same": 396,
+   "world_n": 398,
+   "boundary_same": 2902,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 198,
+   "max_abs_prob_diff_world": 0.6264167428016663,
+   "max_abs_prob_diff_seg": 0.3221352994441986,
+   "top3_same": 280,
+   "world_agreement": 0.9949748743718593,
+   "boundary_agreement": 0.9993112947658402,
+   "message_boundary_agreement": 0.99
+  },
+  "int8_vs_fp32": {
+   "items": 200,
+   "world_same": 396,
+   "world_n": 398,
+   "boundary_same": 2902,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 198,
+   "max_abs_prob_diff_world": 0.6264175176620483,
+   "max_abs_prob_diff_seg": 0.32213547825813293,
+   "top3_same": 280,
+   "world_agreement": 0.9949748743718593,
+   "boundary_agreement": 0.9993112947658402,
+   "message_boundary_agreement": 0.99
+  },
+  "disagreements": [
+   {
+    "cmp": "onnx_int8",
+    "text": "go slower could you jump to my document window then what games do you have then speak slower then well slower display my guessing game window speak more slowly and can you jump to the tictactoe page i want to play hangman can u turn on the speaker and then well slower then i want a new game could you open guessing game panel then will you view your doc",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "go slower could you jump to my document window then what games do you have then speak slower then well slower display my guessing game window speak more slowly and can you jump to the tictactoe page i want to play hangman can u turn on the speaker and then well slower then i want a new game could you open guessing game panel then will you view your doc",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "i'm explaining this to my team later send manager backwards right that's better align support and coo horizontally lead is a magenta rect is it fox",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "i'm explaining this to my team later send manager backwards right that's better align support and coo horizontally lead is a magenta rect is it fox",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Fresh tic tac toe",
+    "world_a": "games.tictactoe",
+    "world_b": "art.draw",
+    "p_a": 0.5809080004692078,
+    "p_b": 0.8855485320091248
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Fresh tic tac toe",
+    "world_a": "games.tictactoe",
+    "world_b": "art.draw",
+    "p_a": 0.5809085369110107,
+    "p_b": 0.8855485320091248
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Pls jot down socks onto the list",
+    "world_a": "diagram.sketch",
+    "world_b": "kids.tasks",
+    "p_a": 0.5811411142349243,
+    "p_b": 0.7572518587112427
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Pls jot down socks onto the list",
+    "world_a": "diagram.sketch",
+    "world_b": "kids.tasks",
+    "p_a": 0.5811411738395691,
+    "p_b": 0.7572518587112427
+   }
+  ]
+ },
+ "edit_agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "rewritten_by_torch": 0.385,
+  "onnx_fp32": {
+   "n": 200,
+   "simplified_same": 200,
+   "tags_same": 200,
+   "words": 996,
+   "word_tags_same": 996,
+   "top1_world_same": 200,
+   "simplified_agreement": 1.0,
+   "tag_sequence_agreement": 1.0,
+   "word_tag_agreement": 1.0
+  },
+  "onnx_int8": {
+   "n": 200,
+   "simplified_same": 187,
+   "tags_same": 187,
+   "words": 996,
+   "word_tags_same": 980,
+   "top1_world_same": 199,
+   "simplified_agreement": 0.935,
+   "tag_sequence_agreement": 0.935,
+   "word_tag_agreement": 0.9839357429718876
+  },
+  "int8_vs_fp32": {
+   "n": 200,
+   "simplified_same": 187,
+   "tags_same": 187,
+   "words": 996,
+   "word_tags_same": 980,
+   "top1_world_same": 199,
+   "simplified_agreement": 0.935,
+   "tag_sequence_agreement": 0.935,
+   "word_tag_agreement": 0.9839357429718876
+  },
+  "examples_differing": [
+   {
+    "text": "um highlight the word krill, yellow",
+    "torch": "highlight the word krill, yellow.",
+    "int8": "highlight the word krill, yellow"
+   },
+   {
+    "text": "c major's relative minor is what",
+    "torch": "c major's relative minor",
+    "int8": "c major's relative minor is"
+   },
+   {
+    "text": "switch the map style to simple",
+    "torch": null,
+    "int8": "switch the map style to simple."
+   },
+   {
+    "text": "could it be a tiger",
+    "torch": "it tiger",
+    "int8": "tiger"
+   },
+   {
+    "text": "is red one of the primary colors",
+    "torch": "is red primary?",
+    "int8": "is red primary"
+   },
+   {
+    "text": "is my money enough for the puzzle",
+    "torch": "enough for puzzle?",
+    "int8": "enough for a puzzle?"
+   },
+   {
+    "text": "ill go first",
+    "torch": "go first",
+    "int8": null
+   },
+   {
+    "text": "do you know who i am",
+    "torch": "who i am",
+    "int8": null
+   },
+   {
+    "text": "name of helper pls",
+    "torch": "name of the helper?",
+    "int8": "name of helper"
+   },
+   {
+    "text": "is a tri a polygon",
+    "torch": "is a tri a polygon?",
+    "int8": "is tri a polygon?"
+   },
+   {
+    "text": "read number two paragraph pls",
+    "torch": "read number 2 paragraph",
+    "int8": "read number two paragraph"
+   },
+   {
+    "text": "which colors make orange",
+    "torch": "how to make orange how",
+    "int8": "make orange how"
+   },
+   {
+    "text": "can u make the computer easy",
+    "torch": "make it computer easy",
+    "int8": "make computer easy"
+   }
+  ]
+ },
+ "latency_cpu_batch1": {
+  "fp32_threads1": {
+   "encoder_pass_ms": {
+    "p50": 14.40577999164816,
+    "p95": 41.76940998877399,
+    "mean": 18.543877800257178
+   },
+   "dispatch_message_ms": {
+    "p50": 135.9868770086905,
+    "p95": 244.41429699072614,
+    "mean": 149.36368196998956
+   },
+   "avg_distinct_segments_per_message": 7.3,
+   "n": 100
+  },
+  "int8_threads1": {
+   "encoder_pass_ms": {
+    "p50": 3.8731050008209422,
+    "p95": 10.373366007115692,
+    "mean": 5.044904959650012
+   },
+   "dispatch_message_ms": {
+    "p50": 37.68239000055473,
+    "p95": 72.2479120013304,
+    "mean": 41.21920584948384
+   },
+   "avg_distinct_segments_per_message": 7.32,
+   "n": 100
+  },
+  "fp32_threads4": {
+   "encoder_pass_ms": {
+    "p50": 6.860723995487206,
+    "p95": 27.486689999932423,
+    "mean": 10.620274919783697
+   },
+   "dispatch_message_ms": {
+    "p50": 72.75988000037614,
+    "p95": 174.0919110015966,
+    "mean": 87.18396936077625
+   },
+   "avg_distinct_segments_per_message": 7.3,
+   "n": 100
+  },
+  "int8_threads4": {
+   "encoder_pass_ms": {
+    "p50": 3.5487540008034557,
+    "p95": 12.00201699975878,
+    "mean": 5.080501770280534
+   },
+   "dispatch_message_ms": {
+    "p50": 39.63576200476382,
+    "p95": 69.53476399939973,
+    "mean": 44.65356433036504
+   },
+   "avg_distinct_segments_per_message": 7.32,
+   "n": 100
+  }
+ },
+ "cpu": "Grace aarch64 (DGX Spark)",
+ "versions": {
+  "torch": "2.14.1+cu130",
+  "onnx": "1.23.2",
+  "onnxruntime": "1.31.1",
+  "opset": 17
+ }
+}

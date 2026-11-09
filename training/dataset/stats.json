@@ -4,10 +4,10 @@
     "dev": 0.1,
     "test": 0.1
   },
-  "source_records_read": 57515,
+  "source_records_read": 98898,
   "dedupe": {
-    "duplicates": 8319,
-    "conflicting_targets": 2363
+    "duplicates": 21995,
+    "conflicting_targets": 2389
   },
   "worlds": {
     "art.draw": {
@@ -164,76 +164,76 @@
       "review": 24
     },
     "docs.editor": {
-      "total": 1528,
+      "total": 1635,
       "splits": {
-        "train": 1219,
-        "test": 163,
-        "dev": 146
+        "train": 1311,
+        "test": 170,
+        "dev": 154
       },
       "by_source": {
         "rule-derived": 450,
         "generator": 404,
-        "paraphrase": 792
+        "paraphrase": 899
       },
       "by_label": {
         "rule-derived": 450,
         "generator-backed": 388,
-        "canonical-ok": 70,
-        "rules-agree": 240,
+        "canonical-ok": 80,
+        "rules-agree": 335,
         "negative": 12,
         "generator-disagrees": 4,
         "rules-fail": 255,
         "relabelled": 17,
-        "rules-own": 92,
+        "rules-own": 94,
         "needs_review": 103,
         "rules-differ": 11,
         "canonical-failed": 4
       },
       "by_split_source": {
         "train": {
-          "rule-derived": 348,
+          "rule-derived": 354,
           "generator": 312,
-          "paraphrase": 559
+          "paraphrase": 645
         },
         "test": {
-          "rule-derived": 54,
-          "generator": 48,
-          "paraphrase": 61
+          "rule-derived": 52,
+          "generator": 46,
+          "paraphrase": 72
         },
         "dev": {
-          "rule-derived": 48,
-          "paraphrase": 56,
-          "generator": 42
+          "rule-derived": 44,
+          "paraphrase": 66,
+          "generator": 44
         }
       },
       "by_split_label": {
         "train": {
-          "rule-derived": 348,
+          "rule-derived": 354,
           "generator-backed": 299,
-          "canonical-ok": 58,
-          "rules-agree": 181,
+          "canonical-ok": 66,
+          "rules-agree": 257,
           "negative": 12,
           "generator-disagrees": 1,
           "rules-fail": 217,
           "relabelled": 17,
-          "rules-own": 77,
+          "rules-own": 79,
           "rules-differ": 9
         },
         "test": {
-          "rule-derived": 54,
-          "generator-backed": 48,
-          "rules-agree": 40,
-          "canonical-ok": 6,
+          "rule-derived": 52,
+          "generator-backed": 46,
+          "rules-agree": 54,
+          "canonical-ok": 7,
           "rules-own": 4,
-          "rules-fail": 11
+          "rules-fail": 7
         },
         "dev": {
-          "rule-derived": 48,
-          "canonical-ok": 6,
-          "generator-backed": 41,
+          "rule-derived": 44,
+          "canonical-ok": 7,
+          "generator-backed": 43,
           "generator-disagrees": 1,
-          "rules-agree": 19,
-          "rules-fail": 18,
+          "rules-agree": 24,
+          "rules-fail": 22,
           "rules-own": 11,
           "rules-differ": 2
         }
@@ -1263,11 +1263,11 @@
       "review": 12
     },
     "ui.avatar": {
-      "total": 2497,
+      "total": 2498,
       "splits": {
         "dev": 266,
         "train": 2004,
-        "test": 227
+        "test": 228
       },
       "by_source": {
         "rule-derived": 309,
@@ -1280,9 +1280,9 @@
         "rules-agree": 272,
         "generator-backed": 1278,
         "rules-own": 47,
-        "generator-disagrees": 457,
+        "generator-disagrees": 456,
         "negative": 9,
-        "relabelled": 8,
+        "relabelled": 9,
         "rules-fail": 128,
         "canonical-failed": 1,
         "needs_review": 37,
@@ -1302,7 +1302,7 @@
         "test": {
           "rule-derived": 73,
           "paraphrase": 88,
-          "generator": 66
+          "generator": 67
         }
       },
       "by_split_label": {
@@ -1333,13 +1333,13 @@
           "generator-backed": 61,
           "rules-agree": 54,
           "negative": 4,
-          "relabelled": 4,
+          "relabelled": 5,
           "rules-fail": 23,
           "rules-own": 2
         }
       },
       "negatives": 9,
-      "review": 101
+      "review": 100
     },
     "ui.help": {
       "total": 1408,
@@ -1409,9 +1409,9 @@
       "review": 6
     },
     "ui.shell": {
-      "total": 1978,
+      "total": 1977,
       "splits": {
-        "train": 1519,
+        "train": 1518,
         "dev": 208,
         "test": 251
       },
@@ -1423,20 +1423,20 @@
       "by_label": {
         "generator-backed": 1378,
         "rule-derived": 115,
-        "rules-agree": 176,
+        "rules-agree": 175,
         "canonical-ok": 22,
         "rules-own": 7,
         "generator-disagrees": 111,
         "negative": 66,
         "relabelled": 40,
         "rules-fail": 63,
-        "needs_review": 18
+        "needs_review": 19
       },
       "by_split_source": {
         "train": {
           "generator": 1235,
           "rule-derived": 80,
-          "paraphrase": 204
+          "paraphrase": 203
         },
         "dev": {
           "paraphrase": 51,
@@ -1454,7 +1454,7 @@
           "generator-backed": 1157,
           "rule-derived": 80,
           "canonical-ok": 15,
-          "rules-agree": 105,
+          "rules-agree": 104,
           "rules-own": 5,
           "generator-disagrees": 63,
           "negative": 15,
@@ -1484,19 +1484,57 @@
         }
       },
       "negatives": 66,
-      "review": 18
+      "review": 19
+    },
+    "diagram.sketch": {
+      "total": 27600,
+      "splits": {
+        "train": 20992,
+        "test": 2827,
+        "dev": 3781
+      },
+      "by_source": {
+        "imported": 27600
+      },
+      "by_label": {
+        "imported-labelled": 27600
+      },
+      "by_split_source": {
+        "train": {
+          "imported": 20992
+        },
+        "test": {
+          "imported": 2827
+        },
+        "dev": {
+          "imported": 3781
+        }
+      },
+      "by_split_label": {
+        "train": {
+          "imported-labelled": 20992
+        },
+        "test": {
+          "imported-labelled": 2827
+        },
+        "dev": {
+          "imported-labelled": 3781
+        }
+      },
+      "negatives": 0,
+      "review": 0
     }
   },
   "routing": {
     "by_split": {
-      "train": 37484,
-      "dev": 4930,
-      "test": 4753
+      "train": 58542,
+      "dev": 8719,
+      "test": 7584
     },
     "by_world": {
       "art.draw": 3110,
       "data.charts": 2859,
-      "docs.editor": 1577,
+      "docs.editor": 1684,
       "docs.reader": 2517,
       "games.chess": 2964,
       "games.guess": 1667,
@@ -1511,28 +1549,30 @@
       "kids.tasks": 2490,
       "kids.time": 2465,
       "media.music": 3008,
-      "ui.avatar": 2495,
+      "ui.avatar": 2496,
       "ui.help": 1389,
-      "ui.shell": 1905
+      "ui.shell": 1905,
+      "diagram.sketch": 27570
     },
     "by_source": {
       "rule-derived": 6802,
-      "paraphrase": 7687,
-      "generator": 32678
+      "paraphrase": 7794,
+      "generator": 32679,
+      "imported": 27570
     },
     "ambiguous_texts": {
-      "n": 76
+      "n": 104
     },
-    "total": 47167
+    "total": 74845
   },
   "unlabelled": {
     "total": 0
   },
   "totals": {
-    "records": 48731,
-    "train": 38476,
-    "dev": 5188,
-    "test": 5067,
-    "worlds": 20
+    "records": 76438,
+    "train": 59559,
+    "dev": 8977,
+    "test": 7902,
+    "worlds": 21
   }
 }

@@ -490,6 +490,8 @@ def main(argv=None):
     ap.add_argument("--seg-seed", type=int, default=1337); ap.add_argument("--no-regen", action="store_true", help="use multicmd/train.jsonl as is instead of regenerating the combinations")
     ap.add_argument("--keep-ckpts", type=int, default=3, help="best dev-score checkpoints kept for the operational selection (F7)")
     ap.add_argument("--select-cmd", default=None, help="operational evaluator command template (see selection.py); default scripts/eval-operational.mjs when it exists, else the local stub set")
+    ap.add_argument("--seg-extra", default="", help="jsonl of extra segmentation messages (e.g. diagram/segments-train.jsonl); --seg-extra-n of them are sampled anew every pass")
+    ap.add_argument("--seg-extra-n", type=int, default=6000)
     ap.add_argument("--multicmd", default=str(MULTICMD), help="directory with the multicmd train/dev/test jsonl (python -m psys2_train.multicmd --out ...)")
     ap.add_argument("--seg-b-weight", type=float, default=2.0, help="loss weight of the boundary (B) class of the segmentation head (R4: 2.0 over-segments long messages; lower it to trade omissions for duplicates)")
     ap.add_argument("--no-select", action="store_true", help="skip the operational selection: use the best dev-score checkpoint and tau 0.5")
@@ -561,11 +563,16 @@ def main(argv=None):
                 yield col([wtrain[i] for _, i in chunk])
 
     seg_n = a.seg_n or len(mc["train"])
+    seg_extra = read_jsonl(Path(a.seg_extra)) if a.seg_extra else []
+    if seg_extra:
+        print("seg extra pool", len(seg_extra), "sampled per pass", a.seg_extra_n, flush=True)
 
     def seg_stream():
         while True:
             ep = state["seg_epoch"]; state["seg_epoch"] += 1
             msgs = mc["train"] if a.no_regen else build_mix(sp["train"], "train", seg_n, a.seg_seed, ep)   # new combinations every pass
+            if seg_extra:
+                msgs = list(msgs) + random.Random(a.seed + 500 + ep).sample(seg_extra, min(a.seg_extra_n, len(seg_extra)))
             items = encode_seg(tok, msgs, 192)
             order = list(range(len(items))); random.Random(a.seed + 100 + ep).shuffle(order)
             for k in range(0, len(order), a.batch_size):

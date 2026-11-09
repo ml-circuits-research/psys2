@@ -1,66 +1,59 @@
 {
  "generated_by": "scripts/relabel-training.mjs",
  "data_root": "training",
- "seconds": 106,
+ "seconds": 99,
  "before": {
-  "records": 57515,
+  "records": 57625,
   "by_cause": {
-   "gold_value_not_in_text": 16,
-   "label_says_rules_differ": 46,
-   "gold_target_from_another_world": 4,
-   "needs_review_readable": 1
+   "label_says_rules_differ": 48,
+   "gold_value_not_in_text": 1,
+   "gold_target_from_another_world": 5
   },
   "by_cause_in_dataset_train": {
-   "gold_value_not_in_text": 12,
    "label_says_rules_differ": 35,
-   "gold_target_from_another_world": 4
+   "gold_target_from_another_world": 5
   },
   "by_cause_x_label_status": {
-   "gold_value_not_in_text": {
-    "rule-derived": 8,
-    "generator-backed": 4,
-    "generator-disagrees": 2,
-    "rules-agree": 2
-   },
    "label_says_rules_differ": {
-    "generator-disagrees": 35,
+    "generator-disagrees": 37,
     "rules-differ": 11
    },
-   "gold_target_from_another_world": {
-    "rules-fail": 4
+   "gold_value_not_in_text": {
+    "rule-derived": 1
    },
-   "needs_review_readable": {
-    "needs_review": 1
+   "gold_target_from_another_world": {
+    "rules-fail": 4,
+    "rules-agree": 1
    }
   },
-  "promotable_needs_review": 1,
-  "needs_review_total": 344,
+  "promotable_needs_review": 0,
+  "needs_review_total": 347,
   "needs_review_variants_read_completely": 0
  },
  "fixes": {
   "relabelled": {
-   "gold_value_not_in_text": 12
+   "gold_value_not_in_text": 1,
+   "label_says_rules_differ": 2
   },
   "needs_review": {
-   "gold_value_not_in_text": 4,
-   "gold_target_from_another_world": 0
+   "gold_target_from_another_world": 1
   },
   "kept": {
    "label_says_rules_differ": 46
   },
-  "promoted": 1,
+  "promoted": 0,
   "inherited_from_canonical": {
    "gold_target_from_another_world": 4
   }
  },
  "after": {
-  "records": 57515,
+  "records": 57625,
   "by_cause": {
    "label_says_rules_differ": 46,
    "gold_target_from_another_world": 4
   },
-  "needs_review_total": 347,
-  "quarantined_to_needs_review": 4,
+  "needs_review_total": 348,
+  "quarantined_to_needs_review": 1,
   "examples": [
    {
     "cause": "label_says_rules_differ",
@@ -171,8 +164,8 @@
  "conflicting_duplicates": {
   "texts": 165,
   "records": 545,
-  "true_ambiguity": 127,
-  "generator_or_label_bug": 38,
+  "true_ambiguity": 126,
+  "generator_or_label_bug": 39,
   "examples_ambiguous": [
    {
     "text": "Color from mixing red and yellow",
@@ -255,14 +248,6 @@
     "bad_worlds": []
    },
    {
-    "text": "Go back to normal",
-    "worlds": [
-     "art.draw",
-     "ui.avatar"
-    ],
-    "bad_worlds": []
-   },
-   {
     "text": "Show surprise",
     "worlds": [
      "art.draw",
@@ -293,6 +278,14 @@
      "ui.avatar"
     ],
     "bad_worlds": []
+   },
+   {
+    "text": "Undo the mouth change",
+    "worlds": [
+     "art.draw",
+     "ui.avatar"
+    ],
+    "bad_worlds": []
    }
   ],
   "examples_bug": [
@@ -304,6 +297,16 @@
     ],
     "bad_worlds": [
      "data.charts"
+    ]
+   },
+   {
+    "text": "Go back to normal",
+    "worlds": [
+     "art.draw",
+     "ui.avatar"
+    ],
+    "bad_worlds": [
+     "ui.avatar"
     ]
    },
    {
@@ -542,21 +545,11 @@
     "bad_worlds": [
      "media.music"
     ]
-   },
-   {
-    "text": "New heading Shopping",
-    "worlds": [
-     "media.music",
-     "docs.editor"
-    ],
-    "bad_worlds": [
-     "media.music"
-    ]
    }
   ],
   "bug_by_world_pair": {
    "data.charts": 12,
-   "ui.avatar": 1,
+   "ui.avatar": 2,
    "games.chess": 6,
    "games.guess": 6,
    "games.tictactoe": 6,
@@ -566,174 +559,40 @@
   }
  },
  "casing": {
-  "context_dependent_segments": 11087,
-  "segments": 106469,
-  "messages_with_context_dependent_segment": 6632,
-  "plain_segments": 12712,
-  "mismatching_before": 512,
+  "context_dependent_segments": 11052,
+  "segments": 106440,
+  "messages_with_context_dependent_segment": 6583,
+  "plain_segments": 12678,
+  "mismatching_before": 471,
   "mismatching_after": 0,
   "examples": [
    {
-    "text": "who did gretel invite",
-    "value": "\"Gretel\""
+    "text": "pls call me lee",
+    "value": "\"Lee\" \"msg1#4-15\""
    },
    {
-    "text": "kh8",
-    "value": "\"Kh\""
+    "text": "alina is my name pls",
+    "value": "\"Alina\""
    },
    {
-    "text": "how often does hansel come up",
-    "value": "\"Hansel\" \"msg1#0-29\""
+    "text": "irina is my name",
+    "value": "\"Irina\""
    },
    {
-    "text": "who did hansel hit",
-    "value": "\"Hansel\""
+    "text": "qxa6",
+    "value": "\"Qxa\""
    },
    {
-    "text": "who did gretel help",
-    "value": "\"Gretel\""
+    "text": "im bogdan",
+    "value": "\"Bogdan\""
    },
    {
-    "text": "okay who did hansel meet",
-    "value": "\"Hansel\""
+    "text": "play jingle bells at 140 bpm",
+    "value": "\"Jingle Bells\" \"msg1#0-28\""
    }
   ]
  },
  "examples": {
-  "gold_value_not_in_text": [
-   {
-    "world": "data.charts",
-    "status": "rule-derived",
-    "text": "Halve the plums",
-    "old": "core.request.action=chart.adjustPoint core.request.arg.l=\"plums\" core.request.arg.factor=0.5",
-    "fix": "relabel",
-    "new": "core.request.action=avatar.setPart core.request.arg.value=plus core.request.arg.text=\"plus\"",
-    "detail": [
-     "0.5"
-    ]
-   },
-   {
-    "world": "data.charts",
-    "status": "rule-derived",
-    "text": "Show me chart number one",
-    "old": "core.request.action=chart.switchChart core.request.arg.n=1",
-    "fix": "relabel",
-    "new": "core.request.action=chart.fromText core.request.arg.text=\"number one\"",
-    "detail": [
-     "1"
-    ]
-   },
-   {
-    "world": "data.charts",
-    "status": "rule-derived",
-    "text": "Halve plums pls",
-    "old": "core.request.action=chart.adjustPoint core.request.arg.l=\"plums\" core.request.arg.factor=0.5",
-    "fix": "relabel",
-    "new": "",
-    "detail": [
-     "0.5"
-    ]
-   },
-   {
-    "world": "data.charts",
-    "status": "rule-derived",
-    "text": "Triple apples pls",
-    "old": "core.request.action=chart.adjustPoint core.request.arg.l=\"apples\" core.request.arg.factor=3",
-    "fix": "relabel",
-    "new": "",
-    "detail": [
-     "3"
-    ]
-   },
-   {
-    "world": "data.charts",
-    "status": "rule-derived",
-    "text": "Do apples beat pears",
-    "old": "core.request.action=chart.compare core.request.arg.w=bigger core.request.arg.a=\"apples\" core.request.arg.b=\"pears\"",
-    "fix": "relabel",
-    "new": "",
-    "detail": [
-     "bigger"
-    ]
-   },
-   {
-    "world": "data.charts",
-    "status": "rule-derived",
-    "text": "Compare apples and pears",
-    "old": "core.request.action=chart.compare core.request.arg.w=bigger core.request.arg.a=\"apples\" core.request.arg.b=\"pears\"",
-    "fix": "relabel",
-    "new": "",
-    "detail": [
-     "bigger"
-    ]
-   },
-   {
-    "world": "data.charts",
-    "status": "generator-backed",
-    "text": "Triple the fish.",
-    "old": "action=chart.adjustPoint arg.l=\"fish\" arg.factor=3",
-    "fix": "relabel",
-    "new": "",
-    "detail": [
-     "3"
-    ]
-   },
-   {
-    "world": "data.charts",
-    "status": "generator-backed",
-    "text": "Okay, triple the fish.",
-    "old": "action=chart.adjustPoint arg.l=\"fish\" arg.factor=3",
-    "fix": "relabel",
-    "new": "",
-    "detail": [
-     "3"
-    ]
-   },
-   {
-    "world": "data.charts",
-    "status": "generator-backed",
-    "text": "Halve the fish.",
-    "old": "action=chart.adjustPoint arg.l=\"fish\" arg.factor=0.5",
-    "fix": "relabel",
-    "new": "",
-    "detail": [
-     "0.5"
-    ]
-   },
-   {
-    "world": "data.charts",
-    "status": "generator-disagrees",
-    "text": "Double mon.",
-    "old": "action=chart.adjustPoint arg.l=\"mon\" arg.factor=2",
-    "fix": "relabel",
-    "new": "core.request.action=avatar.setPart core.request.arg.value=double core.request.arg.text=\"Double\"",
-    "detail": [
-     "2"
-    ]
-   },
-   {
-    "world": "data.charts",
-    "status": "generator-disagrees",
-    "text": "Double fish.",
-    "old": "action=chart.adjustPoint arg.l=\"fish\" arg.factor=2",
-    "fix": "relabel",
-    "new": "",
-    "detail": [
-     "2"
-    ]
-   },
-   {
-    "world": "games.chess",
-    "status": "rule-derived",
-    "text": "Castle legal for me",
-    "old": "core.request.action=chess.can core.request.arg.castle=any",
-    "fix": "needs_review",
-    "new": "",
-    "detail": [
-     "any"
-    ]
-   }
-  ],
   "label_says_rules_differ": [
    {
     "world": "games.tictactoe",
@@ -844,6 +703,19 @@
     "detail": null
    }
   ],
+  "gold_value_not_in_text": [
+   {
+    "world": "kids.tasks",
+    "status": "rule-derived",
+    "text": "List pls",
+    "old": "core.request.action=tasks.show core.request.arg.list=to-do",
+    "fix": "relabel",
+    "new": "core.request.action=avatar.listCharacters",
+    "detail": [
+     "to-do"
+    ]
+   }
+  ],
   "gold_target_from_another_world": [
    {
     "world": "games.guess",
@@ -888,17 +760,17 @@
     "detail": [
      "ui.shell"
     ]
-   }
-  ],
-  "needs_review_readable": [
+   },
    {
-    "world": "games.guess",
-    "status": "needs_review",
-    "text": "yeah thats right",
-    "old": "",
-    "fix": "promote",
-    "new": "core.request.action=chat.thanks",
-    "detail": null
+    "world": "ui.shell",
+    "status": "rules-agree",
+    "text": "clue?",
+    "old": "core.request.action=hm.hint",
+    "fix": "needs_review",
+    "new": "",
+    "detail": [
+     "hm.hint"
+    ]
    }
   ]
  },

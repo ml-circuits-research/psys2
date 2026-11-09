@@ -1,0 +1,413 @@
+{
+ "checkpoint": "runs/dispatcher-v5s1-c3924",
+ "model": "distilbert-base-uncased",
+ "export_dir": "runs/export/dispatcher-v5s1-c3924",
+ "command": "python -m psys2_train.export_onnx --ckpt runs/dispatcher-v5s1-c3924 --out runs/export/dispatcher-v5s1-c3924",
+ "sizes_mb": {
+  "fp32": 253.75210189819336,
+  "int8": 63.98818874359131
+ },
+ "targets": {
+  "max_size_mb": 150,
+  "max_ms_per_message": 50,
+  "min_agreement": 0.995
+ },
+ "gold_top1_lenient_on_gold_segments_of_sample": {
+  "n": 398,
+  "torch": 0.9271356783919598,
+  "fp32": 0.9271356783919598,
+  "int8": 0.9321608040201005
+ },
+ "agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "reference": "PyTorch CUDA fp32",
+  "onnx_fp32": {
+   "items": 200,
+   "world_same": 398,
+   "world_n": 398,
+   "boundary_same": 2904,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 200,
+   "max_abs_prob_diff_world": 5.632638931274414e-06,
+   "max_abs_prob_diff_seg": 3.814697265625e-06,
+   "top3_same": 398,
+   "world_agreement": 1.0,
+   "boundary_agreement": 1.0,
+   "message_boundary_agreement": 1.0
+  },
+  "onnx_int8": {
+   "items": 200,
+   "world_same": 390,
+   "world_n": 398,
+   "boundary_same": 2900,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 196,
+   "max_abs_prob_diff_world": 0.40089112520217896,
+   "max_abs_prob_diff_seg": 0.5730423927307129,
+   "top3_same": 285,
+   "world_agreement": 0.9798994974874372,
+   "boundary_agreement": 0.9986225895316805,
+   "message_boundary_agreement": 0.98
+  },
+  "int8_vs_fp32": {
+   "items": 200,
+   "world_same": 390,
+   "world_n": 398,
+   "boundary_same": 2900,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 196,
+   "max_abs_prob_diff_world": 0.40089136362075806,
+   "max_abs_prob_diff_seg": 0.5730419754981995,
+   "top3_same": 285,
+   "world_agreement": 0.9798994974874372,
+   "boundary_agreement": 0.9986225895316805,
+   "message_boundary_agreement": 0.98
+  },
+  "disagreements": [
+   {
+    "cmp": "onnx_int8",
+    "text": "Draw a purple triangle, a green sun",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.6523723006248474,
+    "p_b": 0.5558308959007263
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Draw a purple triangle, a green sun",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.6523779034614563,
+    "p_b": 0.5558308959007263
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Could you draw a pink triangle, actually, green.",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.7460314631462097,
+    "p_b": 0.6265869140625
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Could you draw a pink triangle, actually, green.",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.7460272312164307,
+    "p_b": 0.6265869140625
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Hey, make the text bold",
+    "world_a": "docs.editor",
+    "world_b": "ui.avatar",
+    "p_a": 0.7407664060592651,
+    "p_b": 0.6262125968933105
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Hey, make the text bold",
+    "world_a": "docs.editor",
+    "world_b": "ui.avatar",
+    "p_a": 0.7407631874084473,
+    "p_b": 0.6262125968933105
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Hammer on top of Saw, right of Nail. Nail to the bottom right, below Saw. Then tell me which shapes are above Nail.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Hammer on top of Saw, right of Nail. Nail to the bottom right, below Saw. Then tell me which shapes are above Nail.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Add my homework to my list, Mark bread as completed, then Make the house and cloud pink, and Add water the plants to the list, Add a new notebook, cat food and apples to my shopping list, please color the sun and the circle purple. Delete practice piano from the chores list.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Add my homework to my list, Mark bread as completed, then Make the house and cloud pink, and Add water the plants to the list, Add a new notebook, cat food and apples to my shopping list, please color the sun and the circle purple. Delete practice piano from the chores list.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Please move the boat up two times.",
+    "world_a": "geo.map",
+    "world_b": "media.music",
+    "p_a": 0.3149397373199463,
+    "p_b": 0.293143093585968
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Please move the boat up two times.",
+    "world_a": "geo.map",
+    "world_b": "media.music",
+    "p_a": 0.31493833661079407,
+    "p_b": 0.293143093585968
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "add a square below it",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.5141344666481018,
+    "p_b": 0.5544493198394775
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "add a square below it",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.5141323208808899,
+    "p_b": 0.5544493198394775
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Hey, make the text bold",
+    "world_a": "docs.editor",
+    "world_b": "ui.avatar",
+    "p_a": 0.7407664060592651,
+    "p_b": 0.6262125968933105
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "draw a circle",
+    "world_a": "ui.help",
+    "world_b": "art.draw",
+    "p_a": 0.32112208008766174,
+    "p_b": 0.3588072657585144
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Hey, make the text bold",
+    "world_a": "docs.editor",
+    "world_b": "ui.avatar",
+    "p_a": 0.7407631874084473,
+    "p_b": 0.6262125968933105
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "draw a circle",
+    "world_a": "ui.help",
+    "world_b": "art.draw",
+    "p_a": 0.3211231231689453,
+    "p_b": 0.3588072657585144
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Bee",
+    "world_a": "art.draw",
+    "world_b": "games.guess",
+    "p_a": 0.5007473826408386,
+    "p_b": 0.7071746587753296
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Bee",
+    "world_a": "art.draw",
+    "world_b": "games.guess",
+    "p_a": 0.5007463097572327,
+    "p_b": 0.7071746587753296
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "hey! trying to lay out a camp site. Tent goes in the top left, next to Fire and above Lake. Canoe goes beneath Lake but left of Pier. Also give Fire a red color, and what is in the bottom right, right of Pier? One more thing: add a brown rectangle called Hut between Tent and Fire, near the top.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "hey! trying to lay out a camp site. Tent goes in the top left, next to Fire and above Lake. Canoe goes beneath Lake but left of Pier. Also give Fire a red color, and what is in the bottom right, right of Pier? One more thing: add a brown rectangle called Hut between Tent and Fire, near the top.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "new chart: kiwis 9 tue 2 dogs 10 then rename deal to opportunity and label the arrow from lead to opportunity \"qualify\" can you draw a yellow star put it next to the sun. how much change will i receive from 70 lei if i buy two bananas and then draw a purple tree and then a pink star",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "new chart: kiwis 9 tue 2 dogs 10 then rename deal to opportunity and label the arrow from lead to opportunity \"qualify\" can you draw a yellow star put it next to the sun. how much change will i receive from 70 lei if i buy two bananas and then draw a purple tree and then a pink star",
+    "boundary_flips": 1
+   }
+  ]
+ },
+ "edit_agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "rewritten_by_torch": 0.395,
+  "onnx_fp32": {
+   "n": 200,
+   "simplified_same": 200,
+   "tags_same": 200,
+   "words": 996,
+   "word_tags_same": 996,
+   "top1_world_same": 200,
+   "simplified_agreement": 1.0,
+   "tag_sequence_agreement": 1.0,
+   "word_tag_agreement": 1.0
+  },
+  "onnx_int8": {
+   "n": 200,
+   "simplified_same": 186,
+   "tags_same": 186,
+   "words": 996,
+   "word_tags_same": 979,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.93,
+   "tag_sequence_agreement": 0.93,
+   "word_tag_agreement": 0.9829317269076305
+  },
+  "int8_vs_fp32": {
+   "n": 200,
+   "simplified_same": 186,
+   "tags_same": 186,
+   "words": 996,
+   "word_tags_same": 979,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.93,
+   "tag_sequence_agreement": 0.93,
+   "word_tag_agreement": 0.9829317269076305
+  },
+  "examples_differing": [
+   {
+    "text": "how many on my list",
+    "torch": "how many on list?",
+    "int8": "how many on my list?"
+   },
+   {
+    "text": "sunset mode pls",
+    "torch": "sunset pls",
+    "int8": "sunset"
+   },
+   {
+    "text": "i need a hint",
+    "torch": "hint",
+    "int8": "hint?"
+   },
+   {
+    "text": "switch the map style to simple",
+    "torch": null,
+    "int8": "switch the map style to simple."
+   },
+   {
+    "text": "what type of assistant are you",
+    "torch": "what assistant are",
+    "int8": "what type assistant are"
+   },
+   {
+    "text": "e in the word?",
+    "torch": "e in there",
+    "int8": "e in there?"
+   },
+   {
+    "text": "make a hangman round with giraffe pls",
+    "torch": "hangman round giraffe pls",
+    "int8": "hangman round with giraffe pls"
+   },
+   {
+    "text": "is a leaf blue",
+    "torch": "is leaf blue?",
+    "int8": "leaf blue?"
+   },
+   {
+    "text": "hangman, the word is giraffe",
+    "torch": "hangman giraffe",
+    "int8": "hangman, word is giraffe"
+   },
+   {
+    "text": "a hexagon is what exactly?",
+    "torch": "is a hexagon?",
+    "int8": "a hexagon?"
+   },
+   {
+    "text": "can u remind me to feed the cat, thx",
+    "torch": "can u remind me to feed the cat,",
+    "int8": null
+   },
+   {
+    "text": "is there an e",
+    "torch": "is there e?",
+    "int8": "e?"
+   },
+   {
+    "text": "which game",
+    "torch": "game",
+    "int8": null
+   },
+   {
+    "text": "how much stuff is on my list",
+    "torch": null,
+    "int8": "how much stuff is on list"
+   }
+  ]
+ },
+ "latency_cpu_batch1": {
+  "fp32_threads1": {
+   "encoder_pass_ms": {
+    "p50": 14.868273006868549,
+    "p95": 42.819981987122446,
+    "mean": 19.338514000410214
+   },
+   "dispatch_message_ms": {
+    "p50": 141.97647900437005,
+    "p95": 255.08903800800908,
+    "mean": 156.56434926961083
+   },
+   "avg_distinct_segments_per_message": 7.31,
+   "n": 100
+  },
+  "int8_threads1": {
+   "encoder_pass_ms": {
+    "p50": 4.277823012671433,
+    "p95": 10.614883998641744,
+    "mean": 5.355688098934479
+   },
+   "dispatch_message_ms": {
+    "p50": 40.22119600267615,
+    "p95": 71.98839500779286,
+    "mean": 44.1081415208464
+   },
+   "avg_distinct_segments_per_message": 7.33,
+   "n": 100
+  },
+  "fp32_threads4": {
+   "encoder_pass_ms": {
+    "p50": 9.036315997946076,
+    "p95": 26.288662003935315,
+    "mean": 12.67197744018631
+   },
+   "dispatch_message_ms": {
+    "p50": 94.34389299713075,
+    "p95": 178.61738000647165,
+    "mean": 104.7132907701598
+   },
+   "avg_distinct_segments_per_message": 7.31,
+   "n": 100
+  },
+  "int8_threads4": {
+   "encoder_pass_ms": {
+    "p50": 2.5592540041543543,
+    "p95": 7.375298999249935,
+    "mean": 3.430533070350066
+   },
+   "dispatch_message_ms": {
+    "p50": 27.09637299994938,
+    "p95": 50.666055001784116,
+    "mean": 29.182731229957426
+   },
+   "avg_distinct_segments_per_message": 7.33,
+   "n": 100
+  }
+ },
+ "cpu": "Grace aarch64 (DGX Spark)",
+ "versions": {
+  "torch": "2.14.1+cu130",
+  "onnx": "1.23.2",
+  "onnxruntime": "1.31.1",
+  "opset": 17
+ }
+}

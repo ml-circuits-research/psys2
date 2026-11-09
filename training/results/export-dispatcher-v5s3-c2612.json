@@ -1,0 +1,442 @@
+{
+ "checkpoint": "runs/dispatcher-v5s3-c2612",
+ "model": "distilbert-base-uncased",
+ "export_dir": "runs/export/dispatcher-v5s3-c2612",
+ "command": "python -m psys2_train.export_onnx --ckpt runs/dispatcher-v5s3-c2612 --out runs/export/dispatcher-v5s3-c2612",
+ "sizes_mb": {
+  "fp32": 253.75210189819336,
+  "int8": 63.98818874359131
+ },
+ "targets": {
+  "max_size_mb": 150,
+  "max_ms_per_message": 50,
+  "min_agreement": 0.995
+ },
+ "gold_top1_lenient_on_gold_segments_of_sample": {
+  "n": 398,
+  "torch": 0.9246231155778895,
+  "fp32": 0.9246231155778895,
+  "int8": 0.9396984924623115
+ },
+ "agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "reference": "PyTorch CUDA fp32",
+  "onnx_fp32": {
+   "items": 200,
+   "world_same": 398,
+   "world_n": 398,
+   "boundary_same": 2904,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 200,
+   "max_abs_prob_diff_world": 4.0531158447265625e-06,
+   "max_abs_prob_diff_seg": 4.589557647705078e-06,
+   "top3_same": 398,
+   "world_agreement": 1.0,
+   "boundary_agreement": 1.0,
+   "message_boundary_agreement": 1.0
+  },
+  "onnx_int8": {
+   "items": 200,
+   "world_same": 387,
+   "world_n": 398,
+   "boundary_same": 2893,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 190,
+   "max_abs_prob_diff_world": 0.6718921065330505,
+   "max_abs_prob_diff_seg": 0.42414817214012146,
+   "top3_same": 258,
+   "world_agreement": 0.9723618090452262,
+   "boundary_agreement": 0.9962121212121212,
+   "message_boundary_agreement": 0.95
+  },
+  "int8_vs_fp32": {
+   "items": 200,
+   "world_same": 387,
+   "world_n": 398,
+   "boundary_same": 2893,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 190,
+   "max_abs_prob_diff_world": 0.671891450881958,
+   "max_abs_prob_diff_seg": 0.42415013909339905,
+   "top3_same": 258,
+   "world_agreement": 0.9723618090452262,
+   "boundary_agreement": 0.9962121212121212,
+   "message_boundary_agreement": 0.95
+  },
+  "disagreements": [
+   {
+    "cmp": "onnx_int8",
+    "text": "Is it octopus",
+    "world_a": "kids.animals",
+    "world_b": "games.hangman",
+    "p_a": 0.5915214419364929,
+    "p_b": 0.5265414118766785
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Is it octopus",
+    "world_a": "kids.animals",
+    "world_b": "games.hangman",
+    "p_a": 0.5915254950523376,
+    "p_b": 0.5265414118766785
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "uh can you move the Star to the upper right corner next to the Moon and uh the Sun below the Moon but left of the Star",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "uh can you move the Star to the upper right corner next to the Moon and uh the Sun below the Moon but left of the Star",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Thanks a lot and can you make eyes and body orange, guess my name lol, do u know it and remind me, what is my name and make the circle and house green and Move the triangle down twice; undo it, name of mine you know?",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Thanks a lot and can you make eyes and body orange, guess my name lol, do u know it and remind me, what is my name and make the circle and house green and Move the triangle down twice; undo it, name of mine you know?",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Hey, move it right twice",
+    "world_a": "diagram.sketch",
+    "world_b": "media.music",
+    "p_a": 0.5740350484848022,
+    "p_b": 0.928714394569397
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Hey, move it right twice",
+    "world_a": "diagram.sketch",
+    "world_b": "media.music",
+    "p_a": 0.5740366578102112,
+    "p_b": 0.928714394569397
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "bridge between Me and You titled \"Long distance\", with Calls, Letters, Visits on my side and Games, Photos on yours",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "bridge between Me and You titled \"Long distance\", with Calls, Letters, Visits on my side and Games, Photos on yours",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "show me shapes with 3 sides",
+    "world_a": "diagram.sketch",
+    "world_b": "kids.shapes",
+    "p_a": 0.6745202541351318,
+    "p_b": 0.8341659307479858
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "recipe for black",
+    "world_a": "diagram.sketch",
+    "world_b": "kids.shapes",
+    "p_a": 0.74428391456604,
+    "p_b": 0.45064353942871094
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "show me shapes with 3 sides",
+    "world_a": "diagram.sketch",
+    "world_b": "kids.shapes",
+    "p_a": 0.6745163202285767,
+    "p_b": 0.8341659307479858
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "recipe for black",
+    "world_a": "diagram.sketch",
+    "world_b": "kids.shapes",
+    "p_a": 0.7442799210548401,
+    "p_b": 0.45064353942871094
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "draw a pink boat and then a green circle",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.6899723410606384,
+    "p_b": 0.7436884045600891
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "draw a pink boat and then a green circle",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.6899713277816772,
+    "p_b": 0.7436884045600891
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "place it above the square",
+    "world_a": "diagram.sketch",
+    "world_b": "media.music",
+    "p_a": 0.9191539287567139,
+    "p_b": 0.7524109482765198
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "place it above the square",
+    "world_a": "diagram.sketch",
+    "world_b": "media.music",
+    "p_a": 0.9191532731056213,
+    "p_b": 0.7524109482765198
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Add my homework to my list, Mark bread as completed, then Make the house and cloud pink, and Add water the plants to the list, Add a new notebook, cat food and apples to my shopping list, please color the sun and the circle purple. Delete practice piano from the chores list.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Add my homework to my list, Mark bread as completed, then Make the house and cloud pink, and Add water the plants to the list, Add a new notebook, cat food and apples to my shopping list, please color the sun and the circle purple. Delete practice piano from the chores list.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "go slower could you jump to my document window then what games do you have then speak slower then well slower display my guessing game window speak more slowly and can you jump to the tictactoe page i want to play hangman can u turn on the speaker and then well slower then i want a new game could you open guessing game panel then will you view your doc",
+    "boundary_flips": 2
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "go slower could you jump to my document window then what games do you have then speak slower then well slower display my guessing game window speak more slowly and can you jump to the tictactoe page i want to play hangman can u turn on the speaker and then well slower then i want a new game could you open guessing game panel then will you view your doc",
+    "boundary_flips": 2
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Reshape Metro as a star. Add Metro to Lines. List the groups. Duplicate Lines.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Reshape Metro as a star. Add Metro to Lines. List the groups. Duplicate Lines.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "the Plant is under the Lamp and left of the Desk. The Lamp is at the top right, above the Desk. oh and the Desk is gray",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "the Plant is under the Lamp and left of the Desk. The Lamp is at the top right, above the Desk. oh and the Desk is gray",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "connect Lobby to Pool, label it \"towels\", make it dotted. then is Pool connected to Room?",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "connect Lobby to Pool, label it \"towels\", make it dotted. then is Pool connected to Room?",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "can you draw a pink triangle i mean orange",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.7977831959724426,
+    "p_b": 0.6565950512886047
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "can you draw a pink triangle i mean orange",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.7977832555770874,
+    "p_b": 0.6565950512886047
+   }
+  ]
+ },
+ "edit_agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "rewritten_by_torch": 0.43,
+  "onnx_fp32": {
+   "n": 200,
+   "simplified_same": 200,
+   "tags_same": 200,
+   "words": 996,
+   "word_tags_same": 996,
+   "top1_world_same": 200,
+   "simplified_agreement": 1.0,
+   "tag_sequence_agreement": 1.0,
+   "word_tag_agreement": 1.0
+  },
+  "onnx_int8": {
+   "n": 200,
+   "simplified_same": 179,
+   "tags_same": 179,
+   "words": 996,
+   "word_tags_same": 973,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.895,
+   "tag_sequence_agreement": 0.895,
+   "word_tag_agreement": 0.9769076305220884
+  },
+  "int8_vs_fp32": {
+   "n": 200,
+   "simplified_same": 179,
+   "tags_same": 179,
+   "words": 996,
+   "word_tags_same": 973,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.895,
+   "tag_sequence_agreement": 0.895,
+   "word_tag_agreement": 0.9769076305220884
+  },
+  "examples_differing": [
+   {
+    "text": "how many on my list",
+    "torch": "how many on list",
+    "int8": null
+   },
+   {
+    "text": "i guess s",
+    "torch": "s?",
+    "int8": "s"
+   },
+   {
+    "text": "switch the map style to simple",
+    "torch": null,
+    "int8": "switch the map style to simple."
+   },
+   {
+    "text": "its possible",
+    "torch": "possible",
+    "int8": null
+   },
+   {
+    "text": "make ur body blue",
+    "torch": "ur body blue.",
+    "int8": "ur body blue"
+   },
+   {
+    "text": "which continent is chile in",
+    "torch": "continent chile in",
+    "int8": "continent of chile"
+   },
+   {
+    "text": "it was a penguin, add it",
+    "torch": "was penguin",
+    "int8": "it was a penguin"
+   },
+   {
+    "text": "make a hangman round with giraffe pls",
+    "torch": null,
+    "int8": "make a hangman round with giraffe"
+   },
+   {
+    "text": "could you tell me how to draw a circle",
+    "torch": "me how to draw a circle",
+    "int8": "how to draw a circle"
+   },
+   {
+    "text": "is red one of the primary colors",
+    "torch": "red primary?",
+    "int8": "is red primary?"
+   },
+   {
+    "text": "how many more apples does tom have than ana",
+    "torch": "how many more apples does tom have than ana?",
+    "int8": null
+   },
+   {
+    "text": "i say penguin",
+    "torch": "penguin?",
+    "int8": "penguin"
+   },
+   {
+    "text": "do you know who i am",
+    "torch": "you who am i am",
+    "int8": "who am i am"
+   },
+   {
+    "text": "is a tri a polygon",
+    "torch": "is tri a polygon",
+    "int8": "tri a polygon"
+   },
+   {
+    "text": "can u make ur body a little darker",
+    "torch": "your body a little darker.",
+    "int8": "ur body a little darker."
+   }
+  ]
+ },
+ "latency_cpu_batch1": {
+  "fp32_threads1": {
+   "encoder_pass_ms": {
+    "p50": 14.693763994728215,
+    "p95": 49.891318994923495,
+    "mean": 20.69067661956069
+   },
+   "dispatch_message_ms": {
+    "p50": 137.26772199152038,
+    "p95": 370.0566419865936,
+    "mean": 174.0700271195965
+   },
+   "avg_distinct_segments_per_message": 7.25,
+   "n": 100
+  },
+  "int8_threads1": {
+   "encoder_pass_ms": {
+    "p50": 4.283210000721738,
+    "p95": 10.987531000864692,
+    "mean": 5.479048100096406
+   },
+   "dispatch_message_ms": {
+    "p50": 40.75500900216866,
+    "p95": 71.40332099515945,
+    "mean": 44.67049845974543
+   },
+   "avg_distinct_segments_per_message": 7.22,
+   "n": 100
+  },
+  "fp32_threads4": {
+   "encoder_pass_ms": {
+    "p50": 7.762049994198605,
+    "p95": 19.079132995102555,
+    "mean": 9.69250839058077
+   },
+   "dispatch_message_ms": {
+    "p50": 76.6537980089197,
+    "p95": 133.30647599650547,
+    "mean": 81.29910576026305
+   },
+   "avg_distinct_segments_per_message": 7.25,
+   "n": 100
+  },
+  "int8_threads4": {
+   "encoder_pass_ms": {
+    "p50": 3.042295007617213,
+    "p95": 6.454335001762956,
+    "mean": 3.431733380566584
+   },
+   "dispatch_message_ms": {
+    "p50": 25.815101005719043,
+    "p95": 51.28744900866877,
+    "mean": 29.871669520507567
+   },
+   "avg_distinct_segments_per_message": 7.22,
+   "n": 100
+  }
+ },
+ "cpu": "Grace aarch64 (DGX Spark)",
+ "versions": {
+  "torch": "2.14.1+cu130",
+  "onnx": "1.23.2",
+  "onnxruntime": "1.31.1",
+  "opset": 17
+ }
+}

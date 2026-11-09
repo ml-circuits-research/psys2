@@ -1,0 +1,422 @@
+{
+ "checkpoint": "runs/dispatcher-v5s3-c3918",
+ "model": "distilbert-base-uncased",
+ "export_dir": "runs/export/dispatcher-v5s3-c3918",
+ "command": "python -m psys2_train.export_onnx --ckpt runs/dispatcher-v5s3-c3918 --out runs/export/dispatcher-v5s3-c3918",
+ "sizes_mb": {
+  "fp32": 253.75210189819336,
+  "int8": 63.98818874359131
+ },
+ "targets": {
+  "max_size_mb": 150,
+  "max_ms_per_message": 50,
+  "min_agreement": 0.995
+ },
+ "gold_top1_lenient_on_gold_segments_of_sample": {
+  "n": 398,
+  "torch": 0.949748743718593,
+  "fp32": 0.949748743718593,
+  "int8": 0.9422110552763819
+ },
+ "agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "reference": "PyTorch CUDA fp32",
+  "onnx_fp32": {
+   "items": 200,
+   "world_same": 398,
+   "world_n": 398,
+   "boundary_same": 2904,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 200,
+   "max_abs_prob_diff_world": 4.410743713378906e-06,
+   "max_abs_prob_diff_seg": 2.2202730178833008e-06,
+   "top3_same": 398,
+   "world_agreement": 1.0,
+   "boundary_agreement": 1.0,
+   "message_boundary_agreement": 1.0
+  },
+  "onnx_int8": {
+   "items": 200,
+   "world_same": 391,
+   "world_n": 398,
+   "boundary_same": 2897,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 194,
+   "max_abs_prob_diff_world": 0.7651081085205078,
+   "max_abs_prob_diff_seg": 0.5814082026481628,
+   "top3_same": 263,
+   "world_agreement": 0.9824120603015075,
+   "boundary_agreement": 0.9975895316804407,
+   "message_boundary_agreement": 0.97
+  },
+  "int8_vs_fp32": {
+   "items": 200,
+   "world_same": 391,
+   "world_n": 398,
+   "boundary_same": 2897,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 194,
+   "max_abs_prob_diff_world": 0.7651088237762451,
+   "max_abs_prob_diff_seg": 0.5814101099967957,
+   "top3_same": 263,
+   "world_agreement": 0.9824120603015075,
+   "boundary_agreement": 0.9975895316804407,
+   "message_boundary_agreement": 0.97
+  },
+  "disagreements": [
+   {
+    "cmp": "onnx_int8",
+    "text": "undo it",
+    "world_a": "art.draw",
+    "world_b": "diagram.sketch",
+    "p_a": 0.43288829922676086,
+    "p_b": 0.2980295419692993
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "undo it",
+    "world_a": "art.draw",
+    "world_b": "diagram.sketch",
+    "p_a": 0.4328902065753937,
+    "p_b": 0.2980295419692993
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Hey, move it right twice",
+    "world_a": "art.draw",
+    "world_b": "media.music",
+    "p_a": 0.4646764099597931,
+    "p_b": 0.6165652275085449
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Hey, move it right twice",
+    "world_a": "art.draw",
+    "world_b": "media.music",
+    "p_a": 0.46467748284339905,
+    "p_b": 0.6165652275085449
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "recipe for black",
+    "world_a": "diagram.sketch",
+    "world_b": "kids.shapes",
+    "p_a": 0.5215616226196289,
+    "p_b": 0.43112969398498535
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "recipe for black",
+    "world_a": "diagram.sketch",
+    "world_b": "kids.shapes",
+    "p_a": 0.5215620398521423,
+    "p_b": 0.43112969398498535
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Add my homework to my list, Mark bread as completed, then Make the house and cloud pink, and Add water the plants to the list, Add a new notebook, cat food and apples to my shopping list, please color the sun and the circle purple. Delete practice piano from the chores list.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Add my homework to my list, Mark bread as completed, then Make the house and cloud pink, and Add water the plants to the list, Add a new notebook, cat food and apples to my shopping list, please color the sun and the circle purple. Delete practice piano from the chores list.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "go slower could you jump to my document window then what games do you have then speak slower then well slower display my guessing game window speak more slowly and can you jump to the tictactoe page i want to play hangman can u turn on the speaker and then well slower then i want a new game could you open guessing game panel then will you view your doc",
+    "boundary_flips": 2
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "go slower could you jump to my document window then what games do you have then speak slower then well slower display my guessing game window speak more slowly and can you jump to the tictactoe page i want to play hangman can u turn on the speaker and then well slower then i want a new game could you open guessing game panel then will you view your doc",
+    "boundary_flips": 2
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Reshape Metro as a star. Add Metro to Lines. List the groups. Duplicate Lines.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Reshape Metro as a star. Add Metro to Lines. List the groups. Duplicate Lines.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Undo it",
+    "world_a": "art.draw",
+    "world_b": "diagram.sketch",
+    "p_a": 0.43288829922676086,
+    "p_b": 0.2980295419692993
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Undo it",
+    "world_a": "art.draw",
+    "world_b": "diagram.sketch",
+    "p_a": 0.4328902065753937,
+    "p_b": 0.2980295419692993
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Okay, what does e sound like",
+    "world_a": "media.music",
+    "world_b": "games.hangman",
+    "p_a": 0.7685778141021729,
+    "p_b": 0.9950588941574097
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Okay, what does e sound like",
+    "world_a": "media.music",
+    "world_b": "games.hangman",
+    "p_a": 0.7685784697532654,
+    "p_b": 0.9950588941574097
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Is X above Y and right of Z? Is Y below Z and left of X? Is Z in the top left, left of Y?",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Is X above Y and right of Z? Is Y below Z and left of X? Is Z in the top left, left of Y?",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "are octagons triangles",
+    "world_a": "kids.shapes",
+    "world_b": "art.draw",
+    "p_a": 0.7973784804344177,
+    "p_b": 0.6344062089920044
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "are octagons triangles",
+    "world_a": "kids.shapes",
+    "world_b": "art.draw",
+    "p_a": 0.7973781824111938,
+    "p_b": 0.6344062089920044
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Wipe it all off",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.6019243597984314,
+    "p_b": 0.3192507326602936
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Wipe it all off",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.6019253730773926,
+    "p_b": 0.3192507326602936
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "new chart: kiwis 9 tue 2 dogs 10 then rename deal to opportunity and label the arrow from lead to opportunity \"qualify\" can you draw a yellow star put it next to the sun. how much change will i receive from 70 lei if i buy two bananas and then draw a purple tree and then a pink star",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "new chart: kiwis 9 tue 2 dogs 10 then rename deal to opportunity and label the arrow from lead to opportunity \"qualify\" can you draw a yellow star put it next to the sun. how much change will i receive from 70 lei if i buy two bananas and then draw a purple tree and then a pink star",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Quick review of the board before the meeting. Is Q2 right of Q1 and below Q3? Is Q4 above Q3 and left of Q1? Also bring Q3 to the front, it's half hidden.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Quick review of the board before the meeting. Is Q2 right of Q1 and below Q3? Is Q4 above Q3 and left of Q1? Also bring Q3 to the front, it's half hidden.",
+    "boundary_flips": 1
+   }
+  ]
+ },
+ "edit_agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "rewritten_by_torch": 0.385,
+  "onnx_fp32": {
+   "n": 200,
+   "simplified_same": 200,
+   "tags_same": 200,
+   "words": 996,
+   "word_tags_same": 996,
+   "top1_world_same": 200,
+   "simplified_agreement": 1.0,
+   "tag_sequence_agreement": 1.0,
+   "word_tag_agreement": 1.0
+  },
+  "onnx_int8": {
+   "n": 200,
+   "simplified_same": 181,
+   "tags_same": 181,
+   "words": 996,
+   "word_tags_same": 976,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.905,
+   "tag_sequence_agreement": 0.905,
+   "word_tag_agreement": 0.9799196787148594
+  },
+  "int8_vs_fp32": {
+   "n": 200,
+   "simplified_same": 181,
+   "tags_same": 181,
+   "words": 996,
+   "word_tags_same": 976,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.905,
+   "tag_sequence_agreement": 0.905,
+   "word_tag_agreement": 0.9799196787148594
+  },
+  "examples_differing": [
+   {
+    "text": "repeat that",
+    "torch": null,
+    "int8": "repeat that that"
+   },
+   {
+    "text": "is a leaf blue",
+    "torch": "is leaf blue?",
+    "int8": "is a leaf blue?"
+   },
+   {
+    "text": "is a banana usually yellow",
+    "torch": "is a banana yellow?",
+    "int8": "is banana yellow?"
+   },
+   {
+    "text": "uh leo has how many stickers",
+    "torch": "leo has how many stickers",
+    "int8": "leo has how many stickers?"
+   },
+   {
+    "text": "hey im zed",
+    "torch": null,
+    "int8": "im zed"
+   },
+   {
+    "text": "can u remind me to feed the cat, thx",
+    "torch": null,
+    "int8": "can u remind me to feed the cat,"
+   },
+   {
+    "text": "ill go first",
+    "torch": null,
+    "int8": "go first"
+   },
+   {
+    "text": "guess my pick",
+    "torch": "my pick",
+    "int8": null
+   },
+   {
+    "text": "do you know who i am",
+    "torch": "who am i am",
+    "int8": "who i am"
+   },
+   {
+    "text": "name of helper pls",
+    "torch": "name of the helper",
+    "int8": "name of helper"
+   },
+   {
+    "text": "can u make ur body a little darker",
+    "torch": "ur body little darker.",
+    "int8": "body darker."
+   },
+   {
+    "text": "can u tell me leos sticker number",
+    "torch": "u tell me leos sticker number",
+    "int8": "tell me leos sticker number"
+   },
+   {
+    "text": "top-left corner",
+    "torch": null,
+    "int8": "top-left"
+   },
+   {
+    "text": "which colors make orange",
+    "torch": "how to make orange how",
+    "int8": "make orange how"
+   },
+   {
+    "text": "is there an e",
+    "torch": "is there an e?",
+    "int8": "is there e?"
+   }
+  ]
+ },
+ "latency_cpu_batch1": {
+  "fp32_threads1": {
+   "encoder_pass_ms": {
+    "p50": 14.553155007888563,
+    "p95": 45.18145299516618,
+    "mean": 20.103633990656817
+   },
+   "dispatch_message_ms": {
+    "p50": 135.8268530020723,
+    "p95": 303.51707599766087,
+    "mean": 165.0835665492923
+   },
+   "avg_distinct_segments_per_message": 7.29,
+   "n": 100
+  },
+  "int8_threads1": {
+   "encoder_pass_ms": {
+    "p50": 4.323209999711253,
+    "p95": 13.656801005708985,
+    "mean": 5.874301159783499
+   },
+   "dispatch_message_ms": {
+    "p50": 41.129985998850316,
+    "p95": 93.9703830081271,
+    "mean": 47.37265029049013
+   },
+   "avg_distinct_segments_per_message": 7.25,
+   "n": 100
+  },
+  "fp32_threads4": {
+   "encoder_pass_ms": {
+    "p50": 6.270095007494092,
+    "p95": 14.52292999601923,
+    "mean": 7.3383924200607
+   },
+   "dispatch_message_ms": {
+    "p50": 56.431717006489635,
+    "p95": 101.39241599244997,
+    "mean": 61.55868450077833
+   },
+   "avg_distinct_segments_per_message": 7.29,
+   "n": 100
+  },
+  "int8_threads4": {
+   "encoder_pass_ms": {
+    "p50": 3.1089200056158006,
+    "p95": 8.652132004499435,
+    "mean": 3.970533869432984
+   },
+   "dispatch_message_ms": {
+    "p50": 29.94458300236147,
+    "p95": 54.46112100617029,
+    "mean": 32.53513326009852
+   },
+   "avg_distinct_segments_per_message": 7.25,
+   "n": 100
+  }
+ },
+ "cpu": "Grace aarch64 (DGX Spark)",
+ "versions": {
+  "torch": "2.14.1+cu130",
+  "onnx": "1.23.2",
+  "onnxruntime": "1.31.1",
+  "opset": 17
+ }
+}

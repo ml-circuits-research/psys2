@@ -1,0 +1,340 @@
+{
+ "checkpoint": "runs/dispatcher-v5s2-c3918",
+ "model": "distilbert-base-uncased",
+ "export_dir": "runs/export/dispatcher-v5s2-c3918",
+ "command": "python -m psys2_train.export_onnx --ckpt runs/dispatcher-v5s2-c3918 --out runs/export/dispatcher-v5s2-c3918",
+ "sizes_mb": {
+  "fp32": 253.75210189819336,
+  "int8": 63.98818874359131
+ },
+ "targets": {
+  "max_size_mb": 150,
+  "max_ms_per_message": 50,
+  "min_agreement": 0.995
+ },
+ "gold_top1_lenient_on_gold_segments_of_sample": {
+  "n": 398,
+  "torch": 0.9371859296482412,
+  "fp32": 0.9371859296482412,
+  "int8": 0.9422110552763819
+ },
+ "agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "reference": "PyTorch CUDA fp32",
+  "onnx_fp32": {
+   "items": 200,
+   "world_same": 398,
+   "world_n": 398,
+   "boundary_same": 2904,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 200,
+   "max_abs_prob_diff_world": 3.337860107421875e-06,
+   "max_abs_prob_diff_seg": 3.7550926208496094e-06,
+   "top3_same": 398,
+   "world_agreement": 1.0,
+   "boundary_agreement": 1.0,
+   "message_boundary_agreement": 1.0
+  },
+  "onnx_int8": {
+   "items": 200,
+   "world_same": 393,
+   "world_n": 398,
+   "boundary_same": 2903,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 199,
+   "max_abs_prob_diff_world": 0.6103330850601196,
+   "max_abs_prob_diff_seg": 0.28650325536727905,
+   "top3_same": 278,
+   "world_agreement": 0.9874371859296482,
+   "boundary_agreement": 0.9996556473829201,
+   "message_boundary_agreement": 0.995
+  },
+  "int8_vs_fp32": {
+   "items": 200,
+   "world_same": 393,
+   "world_n": 398,
+   "boundary_same": 2903,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 199,
+   "max_abs_prob_diff_world": 0.6103330850601196,
+   "max_abs_prob_diff_seg": 0.2865031361579895,
+   "top3_same": 278,
+   "world_agreement": 0.9874371859296482,
+   "boundary_agreement": 0.9996556473829201,
+   "message_boundary_agreement": 0.995
+  },
+  "disagreements": [
+   {
+    "cmp": "onnx_int8",
+    "text": "Draw a purple triangle, a green sun",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.7647584676742554,
+    "p_b": 0.8454814553260803
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Draw a purple triangle, a green sun",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.7647583484649658,
+    "p_b": 0.8454814553260803
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "move it left again",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.6451386213302612,
+    "p_b": 0.5357748866081238
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "move it left again",
+    "world_a": "diagram.sketch",
+    "world_b": "art.draw",
+    "p_a": 0.6451388597488403,
+    "p_b": 0.5357748866081238
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Hey, move it right twice",
+    "world_a": "diagram.sketch",
+    "world_b": "media.music",
+    "p_a": 0.6005027890205383,
+    "p_b": 0.5312020182609558
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Hey, move it right twice",
+    "world_a": "diagram.sketch",
+    "world_b": "media.music",
+    "p_a": 0.6005017161369324,
+    "p_b": 0.5312020182609558
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "My friend is Andrei.",
+    "world_a": "kids.common",
+    "world_b": "kids.arith",
+    "p_a": 0.5614756345748901,
+    "p_b": 0.47879138588905334
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "My friend is Andrei.",
+    "world_a": "kids.common",
+    "world_b": "kids.arith",
+    "p_a": 0.561476469039917,
+    "p_b": 0.47879138588905334
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "remove the lines pls",
+    "world_a": "diagram.sketch",
+    "world_b": "geo.map",
+    "p_a": 0.6275293827056885,
+    "p_b": 0.5429229736328125
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "remove the lines pls",
+    "world_a": "diagram.sketch",
+    "world_b": "geo.map",
+    "p_a": 0.6275267601013184,
+    "p_b": 0.5429229736328125
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Quick review of the board before the meeting. Is Q2 right of Q1 and below Q3? Is Q4 above Q3 and left of Q1? Also bring Q3 to the front, it's half hidden.",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Quick review of the board before the meeting. Is Q2 right of Q1 and below Q3? Is Q4 above Q3 and left of Q1? Also bring Q3 to the front, it's half hidden.",
+    "boundary_flips": 1
+   }
+  ]
+ },
+ "edit_agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "rewritten_by_torch": 0.39,
+  "onnx_fp32": {
+   "n": 200,
+   "simplified_same": 200,
+   "tags_same": 200,
+   "words": 996,
+   "word_tags_same": 996,
+   "top1_world_same": 200,
+   "simplified_agreement": 1.0,
+   "tag_sequence_agreement": 1.0,
+   "word_tag_agreement": 1.0
+  },
+  "onnx_int8": {
+   "n": 200,
+   "simplified_same": 176,
+   "tags_same": 176,
+   "words": 996,
+   "word_tags_same": 971,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.88,
+   "tag_sequence_agreement": 0.88,
+   "word_tag_agreement": 0.9748995983935743
+  },
+  "int8_vs_fp32": {
+   "n": 200,
+   "simplified_same": 176,
+   "tags_same": 176,
+   "words": 996,
+   "word_tags_same": 971,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.88,
+   "tag_sequence_agreement": 0.88,
+   "word_tag_agreement": 0.9748995983935743
+  },
+  "examples_differing": [
+   {
+    "text": "play happy birthday, bells please",
+    "torch": "happy birthday on the bells",
+    "int8": "happy birthday bells"
+   },
+   {
+    "text": "c major's relative minor is what",
+    "torch": "c major's relative minor is",
+    "int8": "c major's relative minor"
+   },
+   {
+    "text": "that one, the g1 one",
+    "torch": ", the g1 one",
+    "int8": "the g1 one"
+   },
+   {
+    "text": "why is that question being asked",
+    "torch": null,
+    "int8": "why is that question being asked?"
+   },
+   {
+    "text": "sunset mode pls",
+    "torch": null,
+    "int8": "sunset pls"
+   },
+   {
+    "text": "i need a hint",
+    "torch": "need a hint",
+    "int8": "a hint"
+   },
+   {
+    "text": "make ur body blue",
+    "torch": "ur body blue",
+    "int8": "body blue"
+   },
+   {
+    "text": "what type of assistant are you",
+    "torch": "what assistant are you",
+    "int8": "what assistant are"
+   },
+   {
+    "text": "start a melody with G G A G",
+    "torch": "melody with G G A G",
+    "int8": null
+   },
+   {
+    "text": "display the lists",
+    "torch": "display my lists.",
+    "int8": "display my the lists."
+   },
+   {
+    "text": "could you shift the second paragraph up",
+    "torch": "shift the second paragraph",
+    "int8": "shift the second paragraph up"
+   },
+   {
+    "text": "e in the word?",
+    "torch": "e in?",
+    "int8": "e?"
+   },
+   {
+    "text": "easy mode pls",
+    "torch": "easy mode",
+    "int8": "easy"
+   },
+   {
+    "text": "next letter, n",
+    "torch": "n",
+    "int8": "letter n"
+   },
+   {
+    "text": "it's a zebra",
+    "torch": "zebra! !",
+    "int8": "zebra"
+   }
+  ]
+ },
+ "latency_cpu_batch1": {
+  "fp32_threads1": {
+   "encoder_pass_ms": {
+    "p50": 15.320647988119163,
+    "p95": 52.89283400634304,
+    "mean": 20.939483730035136
+   },
+   "dispatch_message_ms": {
+    "p50": 145.51017798657995,
+    "p95": 300.2954980038339,
+    "mean": 166.498074279516
+   },
+   "avg_distinct_segments_per_message": 7.36,
+   "n": 100
+  },
+  "int8_threads1": {
+   "encoder_pass_ms": {
+    "p50": 4.000928995083086,
+    "p95": 10.34985200385563,
+    "mean": 5.114312011282891
+   },
+   "dispatch_message_ms": {
+    "p50": 38.08360900438856,
+    "p95": 70.92779599770438,
+    "mean": 41.98579071002314
+   },
+   "avg_distinct_segments_per_message": 7.37,
+   "n": 100
+  },
+  "fp32_threads4": {
+   "encoder_pass_ms": {
+    "p50": 25.217175993020646,
+    "p95": 126.49368500569835,
+    "mean": 37.032963809760986
+   },
+   "dispatch_message_ms": {
+    "p50": 233.8793090020772,
+    "p95": 762.721523991786,
+    "mean": 300.36928431974957
+   },
+   "avg_distinct_segments_per_message": 7.36,
+   "n": 100
+  },
+  "int8_threads4": {
+   "encoder_pass_ms": {
+    "p50": 3.52234099409543,
+    "p95": 12.499766002292745,
+    "mean": 5.471843080595136
+   },
+   "dispatch_message_ms": {
+    "p50": 35.80384900851641,
+    "p95": 103.12765899288934,
+    "mean": 46.06053340990911
+   },
+   "avg_distinct_segments_per_message": 7.37,
+   "n": 100
+  }
+ },
+ "cpu": "Grace aarch64 (DGX Spark)",
+ "versions": {
+  "torch": "2.14.1+cu130",
+  "onnx": "1.23.2",
+  "onnxruntime": "1.31.1",
+  "opset": 17
+ }
+}

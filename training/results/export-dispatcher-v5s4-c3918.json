@@ -1,0 +1,374 @@
+{
+ "checkpoint": "runs/dispatcher-v5s4-c3918",
+ "model": "distilbert-base-uncased",
+ "export_dir": "runs/export/dispatcher-v5s4-c3918",
+ "command": "python -m psys2_train.export_onnx --ckpt runs/dispatcher-v5s4-c3918 --out runs/export/dispatcher-v5s4-c3918",
+ "sizes_mb": {
+  "fp32": 253.75210189819336,
+  "int8": 63.98818874359131
+ },
+ "targets": {
+  "max_size_mb": 150,
+  "max_ms_per_message": 50,
+  "min_agreement": 0.995
+ },
+ "gold_top1_lenient_on_gold_segments_of_sample": {
+  "n": 398,
+  "torch": 0.9522613065326633,
+  "fp32": 0.9522613065326633,
+  "int8": 0.9472361809045227
+ },
+ "agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "reference": "PyTorch CUDA fp32",
+  "onnx_fp32": {
+   "items": 200,
+   "world_same": 398,
+   "world_n": 398,
+   "boundary_same": 2904,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 200,
+   "max_abs_prob_diff_world": 3.4868717193603516e-06,
+   "max_abs_prob_diff_seg": 4.172325134277344e-06,
+   "top3_same": 398,
+   "world_agreement": 1.0,
+   "boundary_agreement": 1.0,
+   "message_boundary_agreement": 1.0
+  },
+  "onnx_int8": {
+   "items": 200,
+   "world_same": 394,
+   "world_n": 398,
+   "boundary_same": 2897,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 194,
+   "max_abs_prob_diff_world": 0.6865940093994141,
+   "max_abs_prob_diff_seg": 0.37192416191101074,
+   "top3_same": 292,
+   "world_agreement": 0.9899497487437185,
+   "boundary_agreement": 0.9975895316804407,
+   "message_boundary_agreement": 0.97
+  },
+  "int8_vs_fp32": {
+   "items": 200,
+   "world_same": 394,
+   "world_n": 398,
+   "boundary_same": 2897,
+   "boundary_n": 2904,
+   "msgs_all_boundaries_same": 194,
+   "max_abs_prob_diff_world": 0.6865935325622559,
+   "max_abs_prob_diff_seg": 0.3719239830970764,
+   "top3_same": 292,
+   "world_agreement": 0.9899497487437185,
+   "boundary_agreement": 0.9975895316804407,
+   "message_boundary_agreement": 0.97
+  },
+  "disagreements": [
+   {
+    "cmp": "onnx_int8",
+    "text": "what is on hotel five?",
+    "world_a": "games.chess",
+    "world_b": "kids.shop",
+    "p_a": 0.5645407438278198,
+    "p_b": 0.5279911756515503
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "what is on hotel five?",
+    "world_a": "games.chess",
+    "world_b": "kids.shop",
+    "p_a": 0.5645411014556885,
+    "p_b": 0.5279911756515503
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Is it octopus",
+    "world_a": "games.hangman",
+    "world_b": "kids.animals",
+    "p_a": 0.4933988153934479,
+    "p_b": 0.3855404555797577
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Is it octopus",
+    "world_a": "games.hangman",
+    "world_b": "kids.animals",
+    "p_a": 0.493399053812027,
+    "p_b": 0.3855404555797577
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Thanks a lot and can you make eyes and body orange, guess my name lol, do u know it and remind me, what is my name and make the circle and house green and Move the triangle down twice; undo it, name of mine you know?",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Thanks a lot and can you make eyes and body orange, guess my name lol, do u know it and remind me, what is my name and make the circle and house green and Move the triangle down twice; undo it, name of mine you know?",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "bridge between Me and You titled \"Long distance\", with Calls, Letters, Visits on my side and Games, Photos on yours",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "bridge between Me and You titled \"Long distance\", with Calls, Letters, Visits on my side and Games, Photos on yours",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Is Chem under Physics and right of Math? Is Math in the top left, near Physics? Hmm, also: how many are below Math and left of Chem?",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Is Chem under Physics and right of Math? Is Math in the top left, near Physics? Hmm, also: how many are below Math and left of Chem?",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "go slower could you jump to my document window then what games do you have then speak slower then well slower display my guessing game window speak more slowly and can you jump to the tictactoe page i want to play hangman can u turn on the speaker and then well slower then i want a new game could you open guessing game panel then will you view your doc",
+    "boundary_flips": 2
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "go slower could you jump to my document window then what games do you have then speak slower then well slower display my guessing game window speak more slowly and can you jump to the tictactoe page i want to play hangman can u turn on the speaker and then well slower then i want a new game could you open guessing game panel then will you view your doc",
+    "boundary_flips": 2
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Well, give me the gist.",
+    "world_a": "ui.help",
+    "world_b": "docs.reader",
+    "p_a": 0.9023289084434509,
+    "p_b": 0.5398879647254944
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Well, give me the gist.",
+    "world_a": "ui.help",
+    "world_b": "docs.reader",
+    "p_a": 0.9023293852806091,
+    "p_b": 0.5398879647254944
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "Is X above Y and right of Z? Is Y below Z and left of X? Is Z in the top left, left of Y?",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "Is X above Y and right of Z? Is Y below Z and left of X? Is Z in the top left, left of Y?",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "How much change will I have from 10 lei after I buy 8 ice creams",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "How much change will I have from 10 lei after I buy 8 ice creams",
+    "boundary_flips": 1
+   },
+   {
+    "cmp": "onnx_int8",
+    "text": "degree of the Gull",
+    "world_a": "diagram.sketch",
+    "world_b": "docs.editor",
+    "p_a": 0.7007889747619629,
+    "p_b": 0.955579400062561
+   },
+   {
+    "cmp": "int8_vs_fp32",
+    "text": "degree of the Gull",
+    "world_a": "diagram.sketch",
+    "world_b": "docs.editor",
+    "p_a": 0.7007880806922913,
+    "p_b": 0.955579400062561
+   }
+  ]
+ },
+ "edit_agreement": {
+  "n_items": 200,
+  "seed": 7,
+  "rewritten_by_torch": 0.39,
+  "onnx_fp32": {
+   "n": 200,
+   "simplified_same": 200,
+   "tags_same": 200,
+   "words": 996,
+   "word_tags_same": 996,
+   "top1_world_same": 200,
+   "simplified_agreement": 1.0,
+   "tag_sequence_agreement": 1.0,
+   "word_tag_agreement": 1.0
+  },
+  "onnx_int8": {
+   "n": 200,
+   "simplified_same": 175,
+   "tags_same": 175,
+   "words": 996,
+   "word_tags_same": 962,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.875,
+   "tag_sequence_agreement": 0.875,
+   "word_tag_agreement": 0.9658634538152611
+  },
+  "int8_vs_fp32": {
+   "n": 200,
+   "simplified_same": 175,
+   "tags_same": 175,
+   "words": 996,
+   "word_tags_same": 962,
+   "top1_world_same": 200,
+   "simplified_agreement": 0.875,
+   "tag_sequence_agreement": 0.875,
+   "word_tag_agreement": 0.9658634538152611
+  },
+  "examples_differing": [
+   {
+    "text": "change sides",
+    "torch": null,
+    "int8": "change sides."
+   },
+   {
+    "text": "why is that question being asked",
+    "torch": "why is that question being asked?",
+    "int8": null
+   },
+   {
+    "text": "i need a hint",
+    "torch": "need a hint",
+    "int8": null
+   },
+   {
+    "text": "start over",
+    "torch": "start",
+    "int8": null
+   },
+   {
+    "text": "switch the map style to simple",
+    "torch": null,
+    "int8": "switch the map style to simple."
+   },
+   {
+    "text": "make ur body blue",
+    "torch": "body blue.",
+    "int8": "body blue"
+   },
+   {
+    "text": "could it be a tiger",
+    "torch": "tiger!",
+    "int8": "tiger"
+   },
+   {
+    "text": "could you transpose up 2 steps",
+    "torch": "transpose up two steps.",
+    "int8": "transpose up two steps"
+   },
+   {
+    "text": "what type of assistant are you",
+    "torch": "what assistant are",
+    "int8": "what assistant are you"
+   },
+   {
+    "text": "is there socks on my garden list",
+    "torch": "is socks on garden list?",
+    "int8": "is socks on garden list"
+   },
+   {
+    "text": "can u swap the hair for another one",
+    "torch": null,
+    "int8": "u swap the hair for another one"
+   },
+   {
+    "text": "could you tell me how to draw a circle",
+    "torch": "me how to draw a circle?",
+    "int8": null
+   },
+   {
+    "text": "top left spot",
+    "torch": "top left.",
+    "int8": null
+   },
+   {
+    "text": "is a banana usually yellow",
+    "torch": "is banana yellow?",
+    "int8": "is a banana yellow?"
+   },
+   {
+    "text": "paint the roof green",
+    "torch": "roof= green",
+    "int8": "roof green"
+   }
+  ]
+ },
+ "latency_cpu_batch1": {
+  "fp32_threads1": {
+   "encoder_pass_ms": {
+    "p50": 15.22840399411507,
+    "p95": 51.11271298665088,
+    "mean": 21.639593349245843
+   },
+   "dispatch_message_ms": {
+    "p50": 143.49141500133555,
+    "p95": 361.1241430044174,
+    "mean": 177.86177111032885
+   },
+   "avg_distinct_segments_per_message": 7.23,
+   "n": 100
+  },
+  "int8_threads1": {
+   "encoder_pass_ms": {
+    "p50": 4.919434999465011,
+    "p95": 11.205722999875434,
+    "mean": 6.03922269976465
+   },
+   "dispatch_message_ms": {
+    "p50": 45.385531993815675,
+    "p95": 78.239978000056,
+    "mean": 49.64766630961094
+   },
+   "avg_distinct_segments_per_message": 7.24,
+   "n": 100
+  },
+  "fp32_threads4": {
+   "encoder_pass_ms": {
+    "p50": 8.226083999034017,
+    "p95": 29.416566001600586,
+    "mean": 11.60210942136473
+   },
+   "dispatch_message_ms": {
+    "p50": 84.00176699797157,
+    "p95": 164.8079729930032,
+    "mean": 92.54876520033577
+   },
+   "avg_distinct_segments_per_message": 7.23,
+   "n": 100
+  },
+  "int8_threads4": {
+   "encoder_pass_ms": {
+    "p50": 2.280212996993214,
+    "p95": 5.61828599893488,
+    "mean": 2.8688780991069507
+   },
+   "dispatch_message_ms": {
+    "p50": 22.53918899805285,
+    "p95": 41.943283009459265,
+    "mean": 24.338738059304887
+   },
+   "avg_distinct_segments_per_message": 7.24,
+   "n": 100
+  }
+ },
+ "cpu": "Grace aarch64 (DGX Spark)",
+ "versions": {
+  "torch": "2.14.1+cu130",
+  "onnx": "1.23.2",
+  "onnxruntime": "1.31.1",
+  "opset": 17
+ }
+}
