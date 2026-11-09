@@ -790,3 +790,14 @@
     session=th1
     input="tip where do i play next"
     expectStatus=supported
+
+@t.games.tictactoe.sh01 core.test
+    input="Let's play tic tac toe."
+    expect="You are X"
+    session=tsh
+
+@t.games.tictactoe.sh02 core.test
+    input="i want to play the center"
+    expect="You took the center."
+    expectState="board.4=X"
+    session=tsh

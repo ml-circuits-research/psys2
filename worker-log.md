@@ -760,3 +760,8 @@ Per bucket, encoder+n1 (right / partly / wrong / nu): kids 100 / 0 / 0 / 0 -> 10
 - **migrate-macros**: `patterns.sop` 108,471 -> 56,633 bytes; hand patterns 101 -> 100 (+ 2 shapes, 8 generated); match text 86,329 -> 34,081 bytes (-61 %); inline groups repeated verbatim 22 (69 occurrences) after. No lexicon for `extends`.
 - **Shapes**: `ui.shell.open` and `ui.shell.play` (do over `lex.ui.shell.tabs`); `open` deleted. **Gate findings**: `rate.fast4` and `rate.slow4` (tier 2b settings) read "I want it faster / slower" through a macro lead-in and beat `media.music` tempo (3 routed rows lost, while "i want a new game" was gained): they keep their original match lines (net result +1 restricted and +1 routed). `x2.open.documents` stays (x201, x202).
 - **Tests**: ui.shell 55 -> 58 (sh01..sh03). **Gates**: operational 95.1% / 6 wrong unchanged; dialogues unchanged; eval-rules +1 restricted, +1 routed, nothing worse; long set identical.
+
+## L7 games.tictactoe (2026-11-09)
+- **migrate-macros**: `patterns.sop` 85,726 -> 63,013 bytes; hand patterns 99 (+ 1 shape, 4 generated); match text 64,784 -> 41,696 bytes (-36 %); inline groups repeated verbatim 42 (386 occurrences) -> 25 (169). 13 world-local phrases. No lexicon for `extends`.
+- **Shape**: `games.tictactoe.move` (do; imp, wish, ind, q); nothing deleted (the hand patterns have an optional verb, which a shape cannot say: a bare "center" must keep its tier 5 reach).
+- **Tests**: games.tictactoe 156 -> 158 (sh01, sh02). **Gates**: operational 95.1% / 6 wrong unchanged; dialogues unchanged; eval-rules and long set identical.

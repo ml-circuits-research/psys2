@@ -128,3 +128,5 @@ Every line is either supported (with the example that has a test in `tests.sop`,
 | --- | --- | --- |
 | statement-as-command | ugh I give up | supported (test sw062) |
 | "I give up", "quit" | I give up | unsupported: ui.shell game control wins by priority and runs ttt.giveup; the ttt pattern covers the longer forms |
+
+**L7 (macros, shapes).** `patterns.sop` was migrated with `scripts/migrate-macros.mjs` (lead-ins, suffixes and 13 repeated lists are macros). One shape, `games.tictactoe.move` (do over `lex.games.tictactoe.positions`, 4 generated patterns), adds the verb, wish, indirect and question forms of a move ("i want to play the center", "could you maybe play the center square"; test sh02). No hand pattern is deleted: the move patterns take an optional verb ("center", "top left", "B2", "row 2 column 3"), which is the `short` reading that a shape drops at tier 5; coordinates, rows and columns, levels, new game, undo and the state questions stay hand-written.
