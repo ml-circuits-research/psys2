@@ -19,15 +19,24 @@ export function segmentOutcomes(reply) {
 }
 
 /** Builds one log record. `mode` is typed | voice | chip; `tab` the active tab id; `reply` may be null (failed send). */
-export function buildRecord({ text, mode = 'typed', language = 'en', tab = null, reply = null, now = Date.now() }) {
-  const segments = segmentOutcomes(reply);
+export function buildRecord({ text, mode = 'typed', language = 'en', tab = null, reply = null, now = Date.now(), id = null }) {
+  let segments = [];
+  try { segments = segmentOutcomes(reply); } catch { segments = []; }   // a reply with an unexpected shape must never lose the phrase
+  let formalizer = null;
+  try { const used = reply?.trace?.formalizer?.used; formalizer = (Array.isArray(used) ? used.join('+') : used ? String(used) : null) ?? segments[0]?.strategy ?? null; } catch { formalizer = null; }
   const english = reply?.lang && reply.lang !== 'en' ? (reply.trace?.english ?? null) : null;
   return {
-    id: newId(now), time: new Date(now).toISOString(), text: String(text ?? ''), mode: MODES.includes(mode) ? mode : 'typed',
+    id: id ?? newId(now), time: new Date(now).toISOString(), text: String(text ?? ''), mode: MODES.includes(mode) ? mode : 'typed',
     source: mode === 'chip' ? 'chip' : 'human', lang: reply?.lang ?? language, english, tab, segments,
-    unparsed: segments.some((s) => s.unparsed), formalizer: reply?.trace?.formalizer?.used?.join('+') ?? segments[0]?.strategy ?? null,
+    unparsed: segments.some((s) => s.unparsed), formalizer,
     feedback: reply?.feedback ?? reply?.trace?.feedback ?? null,   // 'negative' when the person said the last answer was wrong (spec 11 section 13)
   };
+}
+
+/** Fills a record written at send time with the outcome of the reply (the phrase is logged before it is answered). */
+export function completeRecord(rec, reply, { language = 'en' } = {}) {
+  const full = buildRecord({ text: rec.text, mode: rec.mode, language, tab: rec.tab, reply, now: Date.parse(rec.time) || Date.now(), id: rec.id });
+  return full;
 }
 
 /** Appends a record and drops the oldest entries beyond the cap. Returns a new array. */
@@ -63,11 +72,21 @@ export const exportFilename = (d = new Date()) => `psys2-phrases-${d.toISOString
 export function createStore(storage = globalThis.localStorage, { cap = LOG_CAP, key = LOG_KEY } = {}) {
   let list = [];
   try { const v = JSON.parse(storage?.getItem(key) ?? '[]'); if (Array.isArray(v)) list = v.filter((r) => r && typeof r.text === 'string' && Array.isArray(r.segments)); } catch { list = []; }
+  const sync = () => {
+    try {
+      const v = JSON.parse(storage?.getItem(key) ?? '[]'); if (!Array.isArray(v)) return;
+      const have = new Set(list.map((r) => r.id));
+      const theirs = v.filter((r) => r && typeof r.text === 'string' && Array.isArray(r.segments) && !have.has(r.id));
+      if (theirs.length) list = [...list, ...theirs].sort((a, b) => String(a.time).localeCompare(String(b.time)));
+    } catch { /* keep what we have */ }
+  };
   const persist = () => { try { storage?.setItem(key, JSON.stringify(list)); } catch { /* storage unavailable or full */ } };
   return {
     all: () => list,
-    add(rec) { list = appendCapped(list, rec, cap); persist(); },
-    remove(id) { list = list.filter((r) => r.id !== id); persist(); },
+    // Several pages of the same browser share one storage key: merge with what the others wrote instead of overwriting it.
+    add(rec) { sync(); list = appendCapped(list, rec, cap); persist(); },
+    update(id, patch) { sync(); list = list.map((r) => (r.id === id ? { ...r, ...(typeof patch === 'function' ? patch(r) : patch) } : r)); persist(); },
+    remove(id) { sync(); list = list.filter((r) => r.id !== id); persist(); },
     clear() { list = []; persist(); },
   };
 }

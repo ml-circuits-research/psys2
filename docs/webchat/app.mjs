@@ -15,7 +15,7 @@ import { findDispatcherModel, dispatcherLoader, versionLabel } from './ui/dispat
 import { findNormalizerModel, createNormalizerHost } from './ui/normalizer-host.mjs';
 import { sessionOptions } from './lib/dialog/runtime-config.mjs';
 import { DEFAULT_SETTINGS, SETTINGS_KEY, loadSettings } from './ui/settings.mjs';
-import { buildRecord, createStore, filterRecords, toJSONL, toText, exportFilename, summaryStatus, summaryWorlds } from './ui/phrase-log.mjs';
+import { buildRecord, completeRecord, createStore, filterRecords, toJSONL, toText, exportFilename, summaryStatus, summaryWorlds } from './ui/phrase-log.mjs';
 
 const HERE = new URL('.', import.meta.url);
 
@@ -303,7 +303,7 @@ export async function mountPsys2(element, options = {}) {
   const fmtDur = (ms) => (ms < 1000 ? `${Math.max(1, Math.round(ms))} ms` : `${(ms / 1000).toFixed(1)} s`);
   /** Resolves after the browser painted the current DOM (so the typed message and the thinking bubble show before the heavy work blocks the thread). */
   const afterPaint = () => new Promise((r) => { const t = setTimeout(r, 60); if (typeof requestAnimationFrame === 'function') requestAnimationFrame(() => setTimeout(() => { clearTimeout(t); r(); }, 0)); });
-  async function process(text, mode = 'typed', user = null) {
+  async function process(text, mode = 'typed', user = null, recId = null) {
     user ??= addMessage('user', text);
     busy++; setStatus();
     const thinkingLabel = h('span', { class: 'p2-thinking-label' }, 'thinking… 0.0 s');
@@ -319,7 +319,7 @@ export async function mountPsys2(element, options = {}) {
     } catch (e) {
       console.error(e);
       clearInterval(ticker);
-      recordPhrase(text, mode, null);
+      recordPhrase(text, mode, null, recId);
       typing.msg.remove(); busy--; setStatus();
       addMessage('bot', `Something went wrong while processing that: ${e?.message ?? e}`, { className: 'is-error' });
       return;
@@ -328,7 +328,7 @@ export async function mountPsys2(element, options = {}) {
     const engineMs = performance.now() - tStart;
     const tHost = performance.now();
     typing.msg.remove();
-    recordPhrase(text, mode, reply);
+    recordPhrase(text, mode, reply, recId);
     const usage = translator.usage.map((u) => ({ ...u }));
     const detection = translator.detectUsage.map((u) => ({ ...u }));
     const answer = (reply.text ?? '').trim() || '(no answer)';
@@ -367,9 +367,17 @@ export async function mountPsys2(element, options = {}) {
     options.onReply?.(reply);
     return reply;
   }
-  function recordPhrase(text, mode, reply) {
+  /** A phrase is logged the moment it is sent (RD7), so it counts even if the answer is slow, fails or the page closes; the reply fills the outcome later. */
+  function logPhraseStart(text, mode) {
+    if (!settings.logPhrases) return null;
+    try { const rec = buildRecord({ text, mode, language: settings.language, tab: view, reply: null }); phrases.add(rec); if (!settingsEl.hidden) renderPhraseLog(); return rec.id; } catch (e) { console.warn('phrase log failed', e); return null; }
+  }
+  function recordPhrase(text, mode, reply, recId = null) {
     if (!settings.logPhrases) return;
-    try { phrases.add(buildRecord({ text, mode, language: settings.language, tab: view, reply })); } catch (e) { console.warn('phrase log failed', e); }
+    try {
+      if (recId) phrases.update(recId, (r) => completeRecord(r, reply, { language: settings.language }));
+      else phrases.add(buildRecord({ text, mode, language: settings.language, tab: view, reply }));
+    } catch (e) { console.warn('phrase log failed', e); }
     if (!settingsEl.hidden) renderPhraseLog();
   }
   // dev overlay (add ?perf=1 to the page URL): stage timings of the last message
@@ -386,7 +394,8 @@ export async function mountPsys2(element, options = {}) {
     const t = String(text ?? '').trim();
     if (!t || !session) return Promise.resolve(null);
     const user = addMessage('user', t);   // the message shows at once, even while an earlier one is still being answered
-    const run = chain.then(() => process(t, mode, user));
+    const recId = logPhraseStart(t, mode);
+    const run = chain.then(() => process(t, mode, user, recId));
     chain = run.catch(() => {});
     return run;
   };
@@ -513,7 +522,7 @@ export async function mountPsys2(element, options = {}) {
   const MODE_ICON = { typed: '⌨', voice: '🎤', chip: '🔘' };
   const MODE_NAME = { typed: 'typed', voice: 'spoken', chip: 'button' };
   function exportPhrases() {
-    const body = toJSONL(phrases.all());
+    const body = toJSONL(phrases.all(), { includeChips: settings.exportButtons === true });
     if (!body) { toast('No phrases to export yet'); return 0; }
     const url = URL.createObjectURL(new Blob([body], { type: 'application/x-ndjson' }));
     const a = h('a', { href: url, download: exportFilename(), hidden: true }); document.body.append(a); a.click(); a.remove();
@@ -521,14 +530,14 @@ export async function mountPsys2(element, options = {}) {
     return body.trim().split('\n').length;
   }
   async function copyPhrases() {
-    const body = toText(phrases.all());
+    const body = toText(phrases.all(), { includeChips: settings.exportButtons === true });
     if (!body) { toast('No phrases to copy yet'); return; }
     await ALLOW['clipboard.copy']({ text: body });
   }
   function renderPhraseLog() {
     const all = phrases.all(), shown = filterRecords(all, logFilter).slice().reverse();
     const human = all.filter((r) => r.source !== 'chip').length;
-    plogCount.textContent = `${all.length} ${all.length === 1 ? 'entry' : 'entries'} (${human} typed or spoken by you, ${all.length - human} from buttons). Buttons are left out of exports.`;
+    plogCount.textContent = `${all.length} ${all.length === 1 ? 'entry' : 'entries'} (${human} typed or spoken by you, ${all.length - human} from buttons). ${settings.exportButtons === true ? 'Buttons are included in exports.' : 'Buttons are left out of exports unless you tick the box below.'}`;
     plogList.replaceChildren(...(shown.length ? shown : [null]).map((r) => {
       if (!r) return h('li', { class: 'p2-plog-empty' }, all.length ? 'Nothing matches this filter.' : settings.logPhrases ? 'Nothing logged yet. Say or type something.' : 'The log is switched off.');
       const status = summaryStatus(r), worlds = summaryWorlds(r).join(', ');
@@ -550,6 +559,7 @@ export async function mountPsys2(element, options = {}) {
     renderPhraseLog();
     return h('div', { class: 'p2-plog' }, h('strong', {}, 'Phrase log'),
       check('Keep a log of my phrases (stays in this browser)', settings.logPhrases, (v) => { settings.logPhrases = v; save(); renderPhraseLog(); }),
+      check('Include button presses in exports', settings.exportButtons === true, (v) => { settings.exportButtons = v; save(); renderPhraseLog(); }),
       plogCount, h('div', { class: 'p2-field' }, h('label', {}, 'Show '), fsel), plogList, plogActions);
   }
   let modelsAllowed = false;   // the models load after the page is usable (PERF): the rules answer meanwhile
