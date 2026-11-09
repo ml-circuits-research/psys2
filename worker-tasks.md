@@ -69,6 +69,23 @@ The working hypothesis: on small worlds, **rules plus a small learned front-end*
 - `ort.LoraAdapter` works in onnxruntime-web 1.31: a 2.66 MB adapter, swapping it costs nothing. But each adapted world needs its own pass.
 - Every extra loaded session costs ~100–150 MB of RAM.
 
+**Reviewer notes at 45a5d03 (00:35 local): good, careful work. NX1, NX2 and NX4-A are accepted, with these follow-ups:**
+1. **The comparison must cover the cases where the rules fail; that is where a model can add value.** NX5-lite measures only the 829 cases whose rules outcome is `right`, where the rules win by construction. Add, with the same columns:
+   - operational cases whose rules outcome is `wrong`, `partly` or `not understood`;
+   - the `rules-fail` / `rules-differ` heldout paraphrases;
+   - the real phrases 09c, d and e and the mobile export (English translation).
+
+   For each: the model's operation and slots vs the expected reading. Then hybrid D on the whole set: rules first, model only when the rules have no complete reading, validator always. **D is the number the user will decide on.**
+2. **The judge.** Neither judge qualified, partly because the gold has a single reading. Keep Sonnet as the judge, but put the deterministic gate and rules agreement first, so the judge only sees disagreements. Add a second accepted reading to the gold items where the judges' "false alarms" were alternative valid readings (a key given twice, constants, count=1 for "a"), and report judge precision and recall again on that gold.
+3. **NX3 throughput.** Without an API key, generation runs through subagent sessions (Sonnet ~97 items/min each).
+   - Use **generate-and-label in one session per shard of 300–500 seeds × K variants**.
+   - Run 2 Sonnet sessions in parallel on Track 2.
+   - Haiku may *generate* phrasings, which is cheaper, with Sonnet labelling them in batches, if that is faster end to end.
+   - Log the items per hour, so we know by morning how much data the night produced.
+   - Priority: the weak worlds first (ui.avatar, docs.editor, ui.help, games.hangman, kids.arith operation pairs), then the rest.
+4. **A vs A+.** A is the only drop-in (identical v4 outputs, +0.9 MB). Retrain A on NX1 + NX3 at the end. A+ needs an operational-set rerun with its own seg/edit outputs before it could be compared as a replacement.
+5. **Cleanup.** Nothing in `training/runs` was deleted, and the DGX has 49 GB free. Do the cleanup from the task (keep list), and log the freed space.
+
 **NX1 — the label format and the free labels (do first, small).**
 - One record per segment, world-agnostic:
   `{ id, group, split, world, tab, context, text, lang, op, slots: [{ key, ask, span: [s,e] | null, text, value }], label_source, labeler, judge, status }`.
@@ -1893,3 +1910,4 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
 - FREEZE 4–5 (a8f55bb, files match the log): the cancellable dry run, ORT restart budget and device-speed deadlines are in (unit tests). Reviewer 12-minute soak: 8/10 pass; main-thread busy fails, see FREEZE-6.
 - TIER-T-LONG (1160540) and R5b (3e0ac18), files match the log: accepted on the logged numbers. Long set 80.5 → 94.2 right, 1296 set 98.6 / 0.3; v5 is not published, v4e stays. The reviewer did not rerun them (2-vCPU host).
 - NX1 (5956e32): the label format in `training/nx/README.md` is good: spans relative to the segment, BIO loss masked for `partial`, synthesized `ask` marked.
+- NX2 (5214a55), NX4-A (28c5077) and NX5-lite (45a5d03), files match the log: pilot table and selection rule applied (labeler Sonnet; judge Sonnet, none qualifies); A exported with outputs identical to v4 (+0.9 MB); A+ shows no accuracy forgetting but is not a drop-in; operation agreement with verified rules readings 85.4 / 88.5%. Follow-ups are in the NX reviewer notes.
