@@ -669,3 +669,23 @@
     input="I have 20 lei. A pencil costs 2 lei. How much money do I have left after I buy 2 pencils? How much money do I have left?"
     expect="You have 20 lei now."
     doc="question: a what-if does not spend the money"
+
+@t.kids.shop.sh01 core.test
+    input="tell me the cost of the pen"
+    expect="A pen costs 3 lei"
+    session=ssh1
+
+@t.kids.shop.sh02 core.test
+    input="i wonder what price the pen is"
+    expect="A pen costs 3 lei"
+    session=ssh2
+
+@t.kids.shop.sh03 core.test
+    input="do you know the price of a pen"
+    expect="A pen costs 3 lei"
+    session=ssh3
+
+@t.kids.shop.sh04 core.test
+    input="the price of a puzzle"
+    expect="A puzzle costs 18 lei"
+    session=ssh4
