@@ -211,6 +211,7 @@
     example="Can I move the rook on a1 to a4?"
 
 @pat.games.chess.can.cap core.pattern
+    canonical="Can I capture on e5?"
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [$games.chess.g7_can_i] [$games.chess.g5_takes] [$games.chess.g23_the]? [white|black]? {tp:lex.games.chess.pieces?} [$games.chess.g14_on]? [square]? {tf:lex.games.chess.files} {tr:number} [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.can arg.cap=true arg.tp={tp} arg.tf={tf} arg.tr={tr}"
     kind=request
@@ -287,6 +288,7 @@
     example="Is long castling legal?"
 
 @pat.games.chess.can.castle core.pattern
+    canonical="Am I allowed to castle?"
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [$games.chess.g25_can_i] [$games.chess.g11_castle] [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.can arg.castle=any"
     kind=request
@@ -330,6 +332,8 @@
     example="The one on the right side."
 
 @pat.games.chess.promote.reply core.pattern
+    canonical="Promote the pawn to a rook."
+    canonical="Promote to a queen."
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [$lang.lead.polite|$games.chess.g1_i]? [promote|promoting|promotes|underpromote|underpromoting|upgrade|upgrading|turn|turning|change|changing|make|making|choose|pick|take|get|want|go_with|with|as|queen_it|i_choose|i_want|i_will_take]? [it|the_pawn|my_pawn|that|that_pawn|this|this_pawn|pawn]? [to|into|as|for]? [a|an|the]? {pr:lex.games.chess.promos} [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.promote arg.piece={pr}"
     kind=request
@@ -341,6 +345,8 @@
     example="I want a bishop."
 
 @pat.games.chess.moves.can core.pattern
+    canonical="Where can the queen go?"
+    canonical="What can my knight do?"
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [what|where] [can|could|may|might|will] [the|my|our|that|this|a|an|your]? [white|black]? {p:lex.games.chess.pieces} [$games.chess.g24_do] [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.moves arg.piece={p}"
     kind=request
@@ -448,6 +454,8 @@
     example="How many moves are there?"
 
 @pat.games.chess.hint.best core.pattern
+    canonical="Tell me the best move."
+    canonical="What is the best move?"
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [what_is|what_s|which_is|tell_me|show_me|give_me|find] [the|my|a|a_good|the_best|my_best|a_better]? [best|good|better|strongest|right]? [move|move_for_me] [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.hint"
     kind=request
@@ -505,6 +513,7 @@
     example="Am I losing?"
 
 @pat.games.chess.status.how core.pattern
+    canonical="How is the game going?"
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [how_am_i_doing|how_are_we_doing|how_is_the_game_going|how_is_it_going|how_is_the_game|how_am_i_doing_here|how_are_things|how_is_the_position|how_does_the_position_look|how_do_i_stand|how_do_we_stand|who_has_more_pieces|who_has_more_material|who_has_the_advantage|who_has_the_better_position|who_is_in_front|who_will_win|who_is_going_to_win|who_has_won|who_won|did_i_win|did_you_win|is_it_a_draw|is_the_game_over|has_the_game_ended|is_it_over|who_is_winning_the_game|who_is_winning_now] [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.status"
     kind=request
@@ -514,6 +523,7 @@
     example="How is the game going?"
 
 @pat.games.chess.status.eval core.pattern
+    canonical="What is the material count?"
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [what_is|what_s|show_me|tell_me|give_me|evaluate|count|assess|check|compute|calculate] [the|my|our]? [material|score|material_count|material_balance|evaluation|balance|material_difference|points|advantage|material_score] [count|balance|difference|now|evaluation|right_now|here]? [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.status"
     kind=request
@@ -531,6 +541,8 @@
     example="Assess the game."
 
 @pat.games.chess.check.is core.pattern
+    canonical="Am I in check?"
+    canonical="Is my king in check?"
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [is|am|are|was] [it|that|this|the_king|my_king|your_king|the_white_king|the_black_king|i|you|we|the_game|the_position|my_position|there_a|there]? [in|under|giving|a]? {k:lex.games.chess.checkwords} [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.check arg.k={k}"
     kind=request
@@ -559,6 +571,8 @@
     example="Did I give checkmate?"
 
 @pat.games.chess.last.your core.pattern
+    canonical="Which move did you make?"
+    canonical="What was your last move?"
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [what|which|where] [was|is|were|did|has|have] [your|you|the|that] [last|latest|previous|recent|just|last_move|move]? [move|moves|play|played|go|move_to|take|make|made|moved|do|did|just_play|just_played|just_move|just_moved|just_make|just_made|just_do|just_did]? [just|last|now|then]? [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.last"
     kind=request
@@ -611,6 +625,7 @@
     example="Tell me the position."
 
 @pat.games.chess.describe.what core.pattern
+    canonical="What is on the board?"
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [what_is|what_s|what_are|what_does|what_pieces_are|which_pieces_are|where_are_all] [on|the|in|on_the|in_the|the_board|the_position|the_pieces]? [board|position|the_board|the_position|the_pieces|pieces|on_the_board|in_the_position|look_like|the_board_look_like|the_position_look_like|on_the_board_now|there|on_the_board_right_now] [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.describe"
     kind=request
@@ -630,6 +645,7 @@
     example="Describe white pieces."
 
 @pat.games.chess.describe.have core.pattern
+    canonical="Which pieces do you have?"
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [which|what] pieces [do|does|did|have|has] {w:lex.games.chess.subjects} [have|got|own|left|have_left|still_have|keep|remaining]? [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.describe arg.who={w}"
     kind=request
@@ -639,6 +655,7 @@
     example="What pieces does white have left?"
 
 @pat.games.chess.where.is core.pattern
+    canonical="Where is the white queen?"
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [where|where_exactly] [is|are|was|were|did_i_leave|did_i_put] {o:lex.games.chess.owners?} {p:lex.games.chess.pieces} [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.where arg.o={o} arg.piece={p}"
     kind=request
@@ -659,6 +676,7 @@
     example="Highlight your rooks."
 
 @pat.games.chess.count.have core.pattern
+    canonical="How many pieces do I have?"
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? how_many {p:lex.games.chess.pieces} [do|does|did|will|can] {w:lex.games.chess.subjects} [still|currently|now]? [have|got|own|left|keep|control|hold|have_left|have_now|have_on_the_board|still_have]? [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.count arg.piece={p} arg.who={w}"
     kind=request
@@ -668,6 +686,7 @@
     example="How many knights does white have left?"
 
 @pat.games.chess.count.left core.pattern
+    canonical="How many pieces are left?"
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? how_many {p:lex.games.chess.pieces} [are|is|remain|remains|exist] [there|left|remaining|still|on_the_board|in_play|alive|still_on_the_board|still_alive|still_in_play]? [left|remaining|on_the_board|in_play|alive|still_on_the_board|still_alive|still_in_play|now|here]? [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.count arg.piece={p}"
     kind=request
@@ -686,6 +705,8 @@
     example="Count your pawns."
 
 @pat.games.chess.lost.lose core.pattern
+    canonical="What pieces have you lost?"
+    canonical="Which pieces did I lose?"
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [which|what] [pieces|piece|pawns|material|men|things]? [did|have|has|do|had|will] {w:lex.games.chess.subjects} [lose|lost|sacrificed|given_up|been_losing|given_away] [so_far|already|until_now|by_now]? [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.lost arg.who={w}"
     kind=request
@@ -740,6 +761,7 @@
     example="Is it your move?"
 
 @pat.games.chess.turn.color core.pattern
+    canonical="Which side am I playing?"
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [what|which] [colour|color|side|colour_am_i|color_am_i|side_am_i|colour_do_i_have|color_do_i_have|side_do_i_have|colour_do_i_play|color_do_i_play|side_do_i_play] [am_i|do_i_have|do_i_play|am_i_playing|am_i_on|do_i_play_as|are_we_playing|is_mine|am_i_using|did_i_choose|have_i_got|am_i_playing_as|is_yours|are_you_playing|do_you_have|do_you_play|are_you]? [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.turn arg.q=color"
     kind=request
@@ -758,6 +780,7 @@
     example="Are you black?"
 
 @pat.games.chess.history.list core.pattern
+    canonical="What moves have been played?"
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [what|which] [moves|moves_have|moves_did|moves_were|moves_are] [been|we|you|i|have|been_played|played]? [been|played|made|so_far|we_played|we_made|been_played|been_made|been_played_so_far|played_so_far|made_so_far]? [so_far|played|made|already|until_now]? [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.history"
     kind=request
@@ -766,6 +789,7 @@
     example="Which moves have we played so far?"
 
 @pat.games.chess.history.read core.pattern
+    canonical="List the moves so far."
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [list|show|show_me|read|read_me|tell_me|give_me|say|recite|repeat] [me]? [the|all|all_the|our|my|the_whole]? [move|moves|move_list|move_history|game_so_far|game_history|history|notation|game|moves_so_far|moves_played|played_moves|record|score_sheet|scoresheet] [so_far|played|list|history|out_loud|aloud|again]? [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.history"
     kind=request
@@ -784,6 +808,7 @@
     example="How many moves did we play so far?"
 
 @pat.games.chess.level.ask core.pattern
+    canonical="Which level are we playing?"
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [what|which|how] [level|difficulty|strength|skill|hard|strong|good|level_is|level_are|strong_are|hard_are] [are_you|is_it|are_we_playing|is_the_game|is_this|is_the_engine|is_your_level|are_you_playing|is_the_computer|are_you_at|is_set|are_we_on|is_that|are_we_at|are_you_on|do_you_play|do_you_play_at|are_you_set_to|are_we_set_to]? [now|set|right_now|at|on|today|here|set_to|playing|playing_at]? [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.level"
     kind=request
@@ -794,6 +819,7 @@
     example="Which level are we playing?"
 
 @pat.games.chess.level.set core.pattern
+    canonical="Set the level to 3."
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [set|change|switch|put|adjust|use|play_at|play_on|go_to|go_up_to|go_down_to|choose|select|pick|make] [the|your|my|a]? [level|difficulty|strength|skill|rating|setting] [to|at|on|of|as]? {n:number} [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.level arg.n={n}"
     kind=request
@@ -867,6 +893,8 @@
     example="Use full strength."
 
 @pat.games.chess.fen.read core.pattern
+    canonical="Give me the FEN."
+    canonical="What is the FEN?"
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [what_is|what_s|give_me|show_me|show|read|tell_me|say|copy|export|get|display] [the|my|our|me_the]? [fen|fen_string|fen_code|fen_notation|position_in_fen|board_in_fen|position_as_fen|fen_position|current_fen] [now|string|code|notation|of_the_position|of_the_board|of_the_game]? [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.fen"
     kind=request
@@ -875,6 +903,7 @@
     example="Give me the FEN."
 
 @pat.games.chess.square.what core.pattern
+    canonical="Which piece is on g1?"
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [what_is|what_s|which_piece_is|what_piece_is|which_one_is|what_stands|what_sits|who_is|what_was|what_piece|which_piece|tell_me_what_is|tell_me_whats|which_1_is] [there|standing|sitting|located|placed|parked|found]? [$games.chess.g31_on]? [square]? {ff:lex.games.chess.files} {fr:number} [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.square arg.ff={ff} arg.fr={fr}"
     kind=request
@@ -885,6 +914,7 @@
     example="What is e2?"
 
 @pat.games.chess.square.is core.pattern
+    canonical="Is there anything on d5?"
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [is_there|is_there_a|is_there_any|is_there_a_piece|is_there_anything|is_anything|does_anything_stand|do_i_have_a_piece|do_you_have_a_piece|is_there_something|is_someone|is_something|is_any_piece|is_a_piece|is_a_pawn|is_there_a_pawn] [piece|anything|something|a_piece|a_pawn|there|standing|sitting|located|on]? [$games.chess.g31_on]? [square]? {ff:lex.games.chess.files} {fr:number} [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.square arg.ff={ff} arg.fr={fr} arg.q=piece"
     kind=request
@@ -902,6 +932,8 @@
     example="Is f3 free?"
 
 @pat.games.chess.engine.move core.pattern
+    canonical="Are you thinking?"
+    canonical="Make your move."
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [make_your_move|make_a_move|play_your_move|play_a_move|your_move|your_turn|it_is_your_move|it_is_your_turn|go_ahead|go_on|your_go|move_now|play_now|play_for_me|you_go|you_move|you_play|you_can_move|you_can_play|over_to_you|hurry_up|move_already|what_are_you_waiting_for|are_you_there|are_you_thinking|why_so_slow|what_is_taking_so_long|what_is_taking_you_so_long|come_on|do_you_have_a_move|any_move|are_you_going_to_move|when_will_you_move|when_do_you_move|did_you_move|have_you_moved] [now|already|then|next|again|quickly|fast]? [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.engineMove"
     kind=request
@@ -913,6 +945,7 @@
     example="Are you thinking?"
 
 @pat.games.chess.new.game core.pattern
+    canonical="Start a new chess game."
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [$lang.lead.polite|$games.chess.g1_i]? [start|begin|play|have|set_up|setup|do|play_another|start_another|begin_another|try|launch|create|play_one_more|start_one_more|play_a_new|start_a_new|begin_a_new|play_1_more|start_1_more]? [a|an|another|one_more|the|my|our|1_more]? [new|fresh|another|next|second|clean|different] chess [game|match|round|board|position|pieces|now|with_you|against_you|with_me|against_the_computer|against_the_engine]? [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.new"
     kind=request
@@ -965,6 +998,8 @@
     example="I want to start a new game playing white."
 
 @pat.games.chess.side.play core.pattern
+    canonical="Let me play as black."
+    canonical="I want to play white."
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [$lang.lead.polite|$games.chess.g1_i]? [play|take|choose|pick|have|want|use|am|play_as|be_the|take_the|play_the|am_the|will_play|will_take|will_be|am_playing|be|would_like|prefer|play_with|start_as|switch_to|swap_to|change_to|am_going_to_be|am_going_to_play|go_as|go_with] [as|the|with|a|to|for|playing|being]? {c:lex.games.chess.colors} [pieces|side|this_time|again|now|instead|for_me|from_now_on]? [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.side arg.color={c}"
     kind=request
@@ -1003,6 +1038,8 @@
     example="I take the opposite colour."
 
 @pat.games.chess.flip.board core.pattern
+    canonical="Turn the board around."
+    canonical="Can you flip the board?"
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [can_you|could_you|will_you|would_you|let_us|lets|let_me]? [flip|turn|rotate|reverse|invert|spin|switch|swap|mirror] [the|this|my|our]? [board|chessboard|view|position|chess_board|it|orientation|perspective|screen|game] [$games.chess.g26_around]? [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.flip"
     kind=request
@@ -1022,6 +1059,8 @@
     example="Orient the board for black."
 
 @pat.games.chess.undo.move core.pattern
+    canonical="Undo the last move."
+    canonical="Take back my last move."
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [$lang.lead.polite|i_will|you_must|you_can|we_should|we_can]? [undo|take_back|revert|retract|rewind|cancel|rollback|roll_back|unplay|withdraw|delete|erase|reverse|step_back|go_back|redo] [my|the|that|this|our|your|a]? [last|latest|previous|recent|final|whole|entire|very_last|one|1]? [move|turn|play|go|step|half_move|ply] [now|again|for_me]? [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.undo arg.n=1"
     kind=request
@@ -1066,6 +1105,8 @@
     example="That was a blunder."
 
 @pat.games.chess.resign.want core.pattern
+    canonical="Let me resign the game."
+    canonical="I would like to resign."
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [i_will|i_would_like_to|i_want_to|i_am_going_to|i_have_to|let_me|i_must|i_choose_to|i_decide_to|i_need_to|i_wish_to|i_should|i_think_i_will|i_think_i_should|i_am_ready_to|i_can_not_continue_so_i|we_should] [resign|concede] [the|this|my|our|now|here|the_game|this_game|the_match|the_round]? [game|match|round|now|here|to_you|to_the_computer|this_time|for_now|at_this_point]? [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.resign"
     kind=request
@@ -1100,6 +1141,8 @@
     example="I throw in the towel."
 
 @pat.games.chess.draw.offer core.pattern
+    canonical="I offer a draw."
+    canonical="Do you accept a draw?"
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [$lang.lead.polite|i|i_will|do_you|do_you_want_to|do_you_accept_a|i_propose_a]? [offer|propose|suggest|claim|ask_for|request|agree_to|accept|call|declare|take|want|have|draw|agree_on|agree_to_a|make|agree|go_for|settle_for|settle_on|take_a|offer_you|offer_you_a|propose_you|propose_you_a|propose_to_you] [you|to_you|us|a|the|an|for_a|for|a_draw_with_you|a_draw]? [a]? draw [now|here|with_you|to_you|with_me|then|offer|this_game|game|agreement|by_agreement]? [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.draw"
     kind=request
@@ -1459,6 +1502,7 @@
     example="Move pls."
 
 @pat.games.chess.new.q core.pattern
+    canonical="Set up a new board."
     match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [$lang.lead.polite|again|go_again]? [start|play|begin|have|do|restart|reset|try|go_for|set_up|setup|open|make|new|fresh|another|next|a_new|a_fresh|start_over_with] [a|another|1_more|the|1]? [new|fresh|clean|next|another|empty|blank]? [round_of|game_of|round|game|board|position]? [chess|board] [new|fresh|again|over|restart|1_more_time|once_more|from_scratch|start_over|another|next|from_the_start|from_the_beginning|from_the_top|from_move_1]? [game|round|1|board|start|a_new_1|new_1|new_round|new_game|from_the_start|from_the_beginning]? [$lang.tail.filler]?"
     emit="@{_} core.request action=chess.new"
     kind=request
@@ -1633,6 +1677,7 @@
     example="The knight on g one, where can it go?"
 
 @pat.games.chess.sw.col1 core.pattern
+    canonical="Tell me my colour please."
     match="[$lang.lead.filler|umm|ooh|wait|right]? [$lang.lead.polite|pls|plz|kindly|just]? [tell_me|show_me|say|what_is|whats|what_s|which_is|what|which|remind_me|check|give_me|name]? [is]? [my|our|your|ur] [colour|color|side] [is|am_i|in_this_game|pls|plz|now|again|for_me|do_i_have|am_i_playing|for_this_game|this_game]?"
     emit="@{_} core.request action=chess.turn arg.q=color"
     kind=request
@@ -1775,6 +1820,7 @@
     example="Wher my rooks?"
 
 @pat.games.chess.sw.wh_noun core.pattern
+    canonical="The rooks, where are they?"
     match="[$lang.lead.filler|umm|ooh|wait|right]? [the|my|our]? {p:lex.games.chess.pieces} ['s]? [where|wher|whr|where_are|where_is|where_r] [are|is|r]? [they|it|now|pls|plz]?"
     emit="@{_} core.request action=chess.where arg.o=my arg.piece={p}"
     kind=request

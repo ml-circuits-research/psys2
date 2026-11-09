@@ -1,4 +1,5 @@
 @pat.kids.tasks.add1 core.pattern
+    canonical="Add milk to my list."
     match="[$lang.lead.polite]? add {item:words} to [my|the|our]? list"
     emit="@{_} core.request action=tasks.add arg.item=\"{item}\" arg.list=to-do"
     kind=request
@@ -13,6 +14,7 @@
     example="Add milk to my shopping list."
 
 @pat.kids.tasks.add3 core.pattern
+    canonical="Put bread on my list."
     match="put {item:words} on [my|the|our]? list"
     emit="@{_} core.request action=tasks.add arg.item=\"{item}\" arg.list=to-do"
     kind=request
@@ -69,6 +71,7 @@
     example="Add bread to my shopping list and add a book to my homework list."
 
 @pat.kids.tasks.neg.done core.pattern
+    canonical="I didn't buy milk."
     match="i [did_not|have_not|had_not|never] [finish|finished|complete|completed|buy|bought|do|done] {item:words}"
     emit="@{_} core.request action=tasks.notDone arg.item=\"{item}\""
     kind=request
@@ -91,6 +94,7 @@
     example="Remind me about my swimming bag."
 
 @pat.kids.tasks.rem3 core.pattern
+    canonical="Set a reminder to water the plants."
     match="[set|make] a reminder [to|for|about] {item:words}"
     emit="@{_} core.request action=tasks.remind arg.item=\"{item}\""
     kind=request
@@ -112,6 +116,7 @@
     example="I must remember to bring my book."
 
 @pat.kids.tasks.del1 core.pattern
+    canonical="Remove milk from my list."
     match="[remove|delete] {item:words} from [my|the|our]? list"
     emit="@{_} core.request action=tasks.remove arg.item=\"{item}\""
     kind=request
@@ -126,6 +131,7 @@
     example="Delete milk from my shopping list."
 
 @pat.kids.tasks.del3 core.pattern
+    canonical="Take milk off my list."
     match="take {item:words} off [my|the|our]? list"
     emit="@{_} core.request action=tasks.remove arg.item=\"{item}\""
     kind=request
@@ -238,6 +244,7 @@
     example="Show me my reminders."
 
 @pat.kids.tasks.show7 core.pattern
+    canonical="What lists do I have?"
     match="[what|which] lists do i have"
     emit="@{_} core.request action=tasks.lists "
     kind=request
@@ -266,6 +273,7 @@
     example="What is still left on my shopping list?"
 
 @pat.kids.tasks.pend4 core.pattern
+    canonical="What is left to do?"
     match="what is [still]? left to do"
     emit="@{_} core.request action=tasks.pending arg.list=to-do"
     kind=request
@@ -336,6 +344,7 @@
     example="Delete my shopping list."
 
 @pat.kids.tasks.has1 core.pattern
+    canonical="Is homework on my list?"
     match="[is|are] {item:words} on [my|the|our]? list"
     emit="@{_} core.request action=tasks.has arg.item=\"{item}\" arg.list=to-do"
     kind=request
@@ -357,6 +366,7 @@
     example="Do I have milk on my shopping list?"
 
 @pat.kids.tasks.chk1 core.pattern
+    canonical="Did I finish my homework?"
     match="did i [finish|complete|do] {item:words}"
     emit="@{_} core.request action=tasks.check arg.item=\"{item}\""
     kind=request
@@ -364,6 +374,7 @@
     example="Did I finish my homework?"
 
 @pat.kids.tasks.chk2 core.pattern
+    canonical="Have I finished my homework?"
     match="have i [finished|completed|done] {item:words}"
     emit="@{_} core.request action=tasks.check arg.item=\"{item}\""
     kind=request
@@ -427,6 +438,7 @@
     example="Nudge me about the dishes later."
 
 @pat.kids.tasks.w.rem.f2 core.pattern
+    canonical="Add a reminder about the dishes."
     match="[$lang.lead.polite|pls|hey|just|so]? [set|make|create|add|new|put_a|write_a|need_a]? [a|an|the]? reminder [to|for|about|of]? {item:words(5)} [$lang.tail.filler|later|tomorrow]?"
     emit="@{_} core.request action=tasks.remind arg.item=\"{item}\""
     kind=request
@@ -511,6 +523,7 @@
     example="Display my lists."
 
 @pat.kids.tasks.w.show.lists2 core.pattern
+    canonical="Which list names exist?"
     match="[$lang.lead.polite|pls|hey|just|so]? [what|which] list [names|name] [do_i_have|exist|are_there|i_have|do_i_got]"
     emit="@{_} core.request action=tasks.lists"
     kind=request
@@ -560,6 +573,7 @@
     example="Whats still pending?"
 
 @pat.kids.tasks.w.cnt.p1 core.pattern
+    canonical="How many chores remain for us?"
     match="[$lang.lead.polite|pls|hey|just|so]? [how_many|count|count_the|number_of|the_number_of|tell_me_how_many] [things|tasks|items|stuff|chores|todos]? [do|are|is|have]? [i|we]? [still|yet]? [have_to|need_to|got_to|gotta|must|should|remain|remains|left|remaining|are_left|is_left|left_to_do|to_do|todo|have_left|got_left|still_left|are_remaining|remain_for_me|remain_for_us|remain_to_do] [do|todo|to_do|left|for_me|for_us]? [$lang.tail.filler]?"
     emit="@{_} core.request action=tasks.countPending arg.list=to-do"
     kind=request
@@ -581,6 +595,7 @@
     example="Chores remaining how many?"
 
 @pat.kids.tasks.w.cnt.l1 core.pattern
+    canonical="Count the stuff on the list."
     match="[$lang.lead.polite|pls|hey|just|so]? [how_many|how_much|count|number_of|count_the] [things|items|tasks|stuff|chores|todos]? [are|is|do_i_have|have_i_got|i_have|there_are|there_is|do_i_got]? [on|in|inside]? [my|the|our|a]? list [$lang.tail.filler]?"
     emit="@{_} core.request action=tasks.count arg.list=to-do"
     kind=request
@@ -828,6 +843,7 @@
     example="Rm milk shopping."
 
 @pat.kids.tasks.sw.done.i core.pattern
+    canonical="I just finished my reading."
     match="[$kids.tasks.g1_i_need_to_find_out]? [$kids.tasks.g1_i_need_to_find_out]? [oh_yes|yay|yes|hooray|woohoo|finally|phew|yippee|yeah|oh|so|and]? [i|we]? [just|already|finally|now|also|all]? [am_done_with|took_care_of|was_done_with|am_finished_with|am_through_with|done_with|have_finished|have_completed|just_finished|just_did|wrapped_up|got_done|ticked_off|crossed_off|checked_off|knocked_out|got_through|have_done|picked_up|got_the|have_bought|have_got|finished_with|completed_the|ive_finished|ive_done|ive_bought|ive_got|ive_completed|finished|completed|did|done|handled|sorted|nailed|managed|accomplished|bought|got|fetched] {item:words(5)} [at_last|just_now|now|today|already|finally|yay|yippee|all|too]? [$lang.tail.filler|$kids.tasks.g3_thx_a_lot]? [$lang.tail.filler|$kids.tasks.g8_exactly]?"
     emit="@{_} core.request action=tasks.done arg.item=\"{item}\""
     kind=statement
@@ -845,6 +861,7 @@
     example="Done with my reading."
 
 @pat.kids.tasks.sw.done.is core.pattern
+    canonical="Reading is over for me."
     match="[$kids.tasks.g1_i_need_to_find_out]? [$kids.tasks.g1_i_need_to_find_out]? {item:words(4)} [has_been|have_been|is_now|are_now|is_all|are_all|is_finally|is_already|is_just|are_finally|are_already|is|was|are|were|been|got|gets|get|am|im|s|'s]? [taken_care_of|done_and_dusted|over_for_me|done_for_me|finished_for_me|all_done|crossed_off|finished_up|done_now|done_already|all_finished|all_sorted|wrapped_up|checked_off|ticked_off|over_with|all_over|a_wrap|got_done|picked_up|done|finished|completed|complete|over|ticked|checked|sorted|handled|bought|purchased|ready|cleared|dusted|history|nailed|accomplished|packed|fetched|got] [$lang.tail.filler|at_last|yay|yippee|finally]? [$lang.tail.filler|yay]? [$lang.tail.filler|$kids.tasks.g3_thx_a_lot]? [$lang.tail.filler|$kids.tasks.g8_exactly]?"
     emit="@{_} core.request action=tasks.done arg.item=\"{item}\""
     kind=statement
@@ -967,6 +984,7 @@
     example="Milk done on shopping."
 
 @pat.kids.tasks.sw.notdone.i core.pattern
+    canonical="I didn't finish my homework."
     match="[$kids.tasks.g1_i_need_to_find_out]? [$kids.tasks.g1_i_need_to_find_out]? [$lang.lead.filler|still_no|not_yet|no|sadly|argh|damn|unfortunately]? [i|we]? [still|also|just|really|again|yet]? [never_got_around_to|didnt_get_around_to|havent_gotten_around_to|am_not_done_with|am_not_finished_with|did_not_pick_up|wasnt_able_to_get|wasnt_able_to_buy|still_have_not|still_did_not|still_dont_have|do_not_have|didnt_manage_to|wasnt_able_to|have_yet_to|am_yet_to|still_need_to|still_have_to|didnt_end_up|not_done_with|did_not_get|did_not_buy|forgot_to_buy|have_not_bought|have_not_got|have_not_done|have_not_finished|did_not_finish|did_not_do|not_even_started|did_not_start|did_not_complete|have_not_completed|didnt_pick_up|havent_picked_up|could_not_get|could_not_buy|could_not_finish|not_got_to|did_not|have_not|forgot_to|still_havent|still_didnt|dont_have|could_not|yet_to|havent_finished|didnt_finish|havent_done|havent_bought|didnt_do|didnt_get|didnt_buy|never_bought|never_got|forgot_about|forgot_the|havent_got|not_yet|still_not|havent_started|didnt_start|havent_touched|didnt_touch|didnt_complete|havent_completed|didnt_fetch|havent_fetched|couldnt_get|couldnt_buy|couldnt_finish|not_got|not_bought|not_finished|not_done|not_completed|didnt|havent|never|forgot|couldnt] [pick_up|get_to|got_to|buy|get|purchase|finish|complete|do|done|bought|got|finished|completed|fetch|handle|handled|manage|managed]? {item:words(4)} [$lang.tail.filler|so_far|just_yet|this_week|still|it|either|sadly|unfortunately]? [$lang.tail.filler|$kids.tasks.g3_thx_a_lot]? [$lang.tail.filler|$kids.tasks.g8_exactly]?"
     emit="@{_} core.request action=tasks.notDone arg.item=\"{item}\""
     kind=statement
@@ -1227,6 +1245,7 @@
     example="Remaining tasks?"
 
 @pat.kids.tasks.sw.pending.todo core.pattern
+    canonical="What's still open for me?"
     match="[$kids.tasks.g1_i_need_to_find_out]? [$kids.tasks.g1_i_need_to_find_out]? [$kids.tasks.g64_what_else] [things|items|tasks|chores|jobs|errands|stuff]? [$kids.tasks.g60_am_i_supposed_to]? [still|else|yet|even|now|next|also|left]? [$kids.tasks.g66_have_got]? [still|else|yet|even|now|next|also|left]? [on_my_to_do_list|on_the_to_do_list|to_take_care_of|on_my_to_do|to_do_next|to_get_done|to_work_on|left_to_do|on_my_plate|on_my_list|on_the_list|on_my_agenda|on_my_schedule|on_the_agenda|to_do|to_finish|to_complete|to_handle|to_fix|to_tackle|to_start|not_done|todo|left|open|pending|undone|unfinished|outstanding|remaining] [$lang.tail.filler|so_far|this_week|after_that|still|else|even|next|also|left]? [$lang.tail.filler|$kids.tasks.g3_thx_a_lot]? [$lang.tail.filler|$kids.tasks.g8_exactly]?"
     emit="@{_} core.request action=tasks.pending arg.list=to-do"
     kind=request
@@ -1266,6 +1285,7 @@
     example="How many things r on my list?"
 
 @pat.kids.tasks.sw.count.long.w core.pattern
+    canonical="How long is my list?"
     match="[$kids.tasks.g1_i_need_to_find_out]? [$kids.tasks.g1_i_need_to_find_out]? [$kids.tasks.g39_what_is_the_size_of] [is|are]? [the]? [$kids.tasks.g25_my]? {list:words(2)} list [$kids.tasks.g13_at_the_moment]? [$lang.tail.filler|$kids.tasks.g3_thx_a_lot]? [$lang.tail.filler|$kids.tasks.g8_exactly]?"
     emit="@{_} core.request action=tasks.count arg.list=\"{list}\""
     kind=request
@@ -1329,6 +1349,7 @@
     example="How many are left on my shopping list?"
 
 @pat.kids.tasks.sw.cp.todo core.pattern
+    canonical="How many things still open?"
     match="[$kids.tasks.g1_i_need_to_find_out]? [$kids.tasks.g1_i_need_to_find_out]? [$kids.tasks.g31_how_many_of] [more|else|other]? [$kids.tasks.g21_things]? [$kids.tasks.g34_am_i_supposed_to]? [$kids.tasks.g11_not_crossed_off]? [$kids.tasks.g11_not_crossed_off]? [$kids.tasks.g59_have_got]? [on_my_to_do_list|on_the_to_do_list|to_take_care_of|on_my_to_do|to_work_on|on_my_plate|on_my_list|on_the_list|left_to_do|still_to_do|to_do|to_finish|to_complete|to_go|to_tackle|to_handle|left_todo|todo] [$kids.tasks.g13_at_the_moment]? [$lang.tail.filler|$kids.tasks.g3_thx_a_lot]? [$lang.tail.filler|$kids.tasks.g8_exactly]?"
     emit="@{_} core.request action=tasks.countPending arg.list=to-do"
     kind=request
@@ -1514,6 +1535,7 @@
     priority=8
 
 @pat.kids.tasks.sw.has.list.w core.pattern
+    canonical="Does my list have milk?"
     match="[$kids.tasks.g1_i_need_to_find_out]? [$kids.tasks.g1_i_need_to_find_out]? [$kids.tasks.g61_does] [$kids.tasks.g25_my]? {list:words(2)} list [$kids.tasks.g32_have_got] [any|some]? {item:words(4)} [$kids.tasks.g50_on_it]? [$lang.tail.filler|$kids.tasks.g3_thx_a_lot]? [$lang.tail.filler|$kids.tasks.g8_exactly]?"
     emit="@{_} core.request action=tasks.has arg.item=\"{item}\" arg.list=\"{list}\""
     kind=request

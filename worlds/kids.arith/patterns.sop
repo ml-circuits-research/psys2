@@ -41,6 +41,7 @@
     example="Ana gives Tom 3 apples."
 
 @pat.kids.arith.give.direct.a core.pattern
+    canonical="Ana gave Tom an apple."
     match="{who:agent} [gives|gave|give] {to:agent} [a|an] {item:lex.kids.arith.items}"
     emit="@{_} kids.arith.give who={who} to={to} count=1 item={item}"
     kind=statement
@@ -55,6 +56,7 @@
     example="Ana gives 3 apples to Tom."
 
 @pat.kids.arith.give.to.a core.pattern
+    canonical="Ana gave an apple to Tom."
     match="{who:agent} [gives|gave|give] [a|an] {item:lex.kids.arith.items} to {to:agent}"
     emit="@{_} kids.arith.give who={who} to={to} count=1 item={item}"
     kind=statement
@@ -97,6 +99,7 @@
     example="Tom finds 2 marbles."
 
 @pat.kids.arith.get.a core.pattern
+    canonical="Mia found a coin."
     match="{who:agent} [gets|got|get|receives|received|finds|found|find|collects|collected|collect|wins|won] [a|an] [new]? {item:lex.kids.arith.items}"
     emit="@{_} kids.arith.receive who={who} count=1 item={item}"
     kind=statement
@@ -104,6 +107,7 @@
     example="Mia found a coin."
 
 @pat.kids.arith.eat core.pattern
+    canonical="Tom ate 2 apples."
     match="{who:agent} [eats|ate|eat] {n:number} [more]? {item:lex.kids.arith.items}"
     emit="@{_} kids.arith.eat who={who} count={n} item={item}"
     kind=statement
@@ -125,6 +129,7 @@
     example="Tom ate 2 of his apples."
 
 @pat.kids.arith.lose core.pattern
+    canonical="Mia lost 3 marbles."
     match="{who:agent} [loses|lost|lose|drops|dropped] {n:number} [more]? {item:lex.kids.arith.items}"
     emit="@{_} kids.arith.lose who={who} count={n} item={item}"
     kind=statement
@@ -153,6 +158,7 @@
     example="Ben buys 4 pencils."
 
 @pat.kids.arith.buy.a core.pattern
+    canonical="Ben bought a pencil."
     match="{who:agent} [buys|bought|buy|purchases|purchased] [a|an] {item:lex.kids.arith.items}"
     emit="@{_} kids.arith.buy who={who} count=1 item={item}"
     kind=statement
@@ -160,6 +166,7 @@
     example="Ben bought a pencil."
 
 @pat.kids.arith.buy.of core.pattern
+    canonical="Ana bought 3 of her sandwiches."
     match="{who:agent} [buys|bought|buy|purchases|purchased] {n:number} of [his|her|their|my|the]? {item:lex.kids.arith.items}"
     emit="@{_} kids.arith.buy who={who} count={n} item={item}"
     kind=statement
@@ -258,6 +265,7 @@
     example="What is the number of apples Tom has?"
 
 @pat.kids.arith.q.has core.pattern
+    canonical="Does Tom have any apples?"
     match="[does|do|did] {who:agent} have [any|a|an|some]? {item:lex.kids.arith.items}"
     emit="@{_} core.question type=kids.arith.has seek=answer where.owner={who} where.item={item}"
     kind=question
@@ -265,6 +273,7 @@
     example="Does Tom have any apples?"
 
 @pat.kids.arith.q.has.got core.pattern
+    canonical="Has Tom got any apples?"
     match="[has|have] {who:agent} got [any|a|an|some]? {item:lex.kids.arith.items}"
     emit="@{_} core.question type=kids.arith.has seek=answer where.owner={who} where.item={item}"
     kind=question
@@ -307,6 +316,7 @@
     example="What is the total number of apples?"
 
 @pat.kids.arith.q.total.altog core.pattern
+    canonical="How many apples in total?"
     match="how_many {item:lex.kids.arith.items} [altogether|in_total|in_all] [are_there]?"
     emit="@{_} core.question type=kids.arith.total seek=count where.item={item}"
     kind=question
@@ -314,6 +324,7 @@
     example="How many apples in total?"
 
 @pat.kids.arith.q.most core.pattern
+    canonical="Who has the most apples?"
     match="who [has|have|had|owns] the [most|largest_number_of|biggest_number_of] {item:lex.kids.arith.items}"
     emit="@{_} core.question type=kids.arith.leader seek=winner where.item={item}"
     kind=question
@@ -405,6 +416,7 @@
     example="Has Tom got more apples than Ana?"
 
 @pat.kids.arith.calc.plus core.pattern
+    canonical="What is 7 plus 5?"
     match="[$kids.arith.g3_what_is]? [$kids.arith.g2_uh]? {a:number} [plus|added_to|add|+] {b:number} [=]?"
     emit="@{_} core.question type=kids.arith.calc seek=result where.op=plus where.a={a} where.b={b}"
     kind=question
@@ -475,6 +487,7 @@
     example="Divide 20 by 4."
 
 @pat.kids.arith.calc.half core.pattern
+    canonical="What is half of 10?"
     match="[$kids.arith.g3_what_is]? [$kids.arith.g2_uh]? [the]? 0.5 [of]? {n:number}"
     emit="@{_} core.question type=kids.arith.half seek=result where.n={n}"
     kind=question
@@ -482,6 +495,7 @@
     example="What is half of 10?"
 
 @pat.kids.arith.calc.double core.pattern
+    canonical="What is double 6?"
     match="[$kids.arith.g3_what_is]? [$kids.arith.g2_uh]? [the]? [double|twice|doubled] [of]? {n:number}"
     emit="@{_} core.question type=kids.arith.double seek=result where.n={n}"
     kind=question
@@ -496,6 +510,7 @@
     example="What is 6 doubled?"
 
 @pat.kids.arith.calc.half.c core.pattern
+    canonical="What is 10 halved?"
     match="[$kids.arith.g3_what_is]? [$kids.arith.g2_uh]? {n:number} halved"
     emit="@{_} core.question type=kids.arith.half seek=result where.n={n}"
     kind=question
@@ -615,6 +630,7 @@
     example="How many extra apples does Ben own compared with Ana?"
 
 @pat.kids.arith.w.gap.f2 core.pattern
+    canonical="Ben has how many extra apples than Ana?"
     match="{who1:agent} [has|have|got|is_ahead_of|leads|beats]? [how_many|how_much] [more|extra] {item:lex.kids.arith.items} [$kids.arith.g17_than] {who2:agent} [$lang.tail.filler|$kids.arith.g6_exactly]? [$lang.tail.filler|$kids.arith.g6_exactly]?"
     emit="@{_} core.question type=kids.arith.gap seek=diff where.item={item} where.who1={who1} where.who2={who2}"
     kind=question
@@ -643,6 +659,7 @@
     example="Marbles gap, Ben vs Ana?"
 
 @pat.kids.arith.w.gap.f6 core.pattern
+    canonical="How much less apples has Ben than Ana?"
     match="[$kids.arith.g2_uh]? [$kids.arith.g2_uh]? [how_many|how_much|by_how_many|by_how_much] [fewer|less] {item:lex.kids.arith.items} [does|do|did|has|have|is]? {who1:agent} [have|has|got]? [$kids.arith.g17_than] {who2:agent} [$lang.tail.filler|$kids.arith.g6_exactly]? [$lang.tail.filler|$kids.arith.g6_exactly]?"
     emit="@{_} core.question type=kids.arith.gap seek=diff where.item={item} where.who1={who1} where.who2={who2}"
     kind=question
@@ -678,6 +695,7 @@
     example="More apples for Ben than Ana?"
 
 @pat.kids.arith.w.vd.f3 core.pattern
+    canonical="Is Ben beating Ana in apples?"
     match="[$kids.arith.g2_uh]? [$kids.arith.g2_uh]? [is|are] {who1:agent} [ahead_of|leading|beating|above|over|winning_against|in_front_of] {who2:agent} [on|in|for|with|at]? {item:lex.kids.arith.items} [$kids.arith.g25_right]? [$lang.tail.filler|$kids.arith.g6_exactly]? [$lang.tail.filler|$kids.arith.g6_exactly]?"
     emit="@{_} core.question type=kids.arith.verdict seek=answer where.item={item} where.who1={who1} where.who2={who2}"
     kind=question
@@ -769,6 +787,7 @@
     example="Whats 12 shared by 4?"
 
 @pat.kids.arith.w.div.f2 core.pattern
+    canonical="Spread 12 between 4 groups."
     match="[split|share|divide|cut|break|spread|distribute|separate|group|sort] {a:number} [into|between|among|by|in|over]? {b:number} [equal_parts|equal_groups|equal_piles|equal_shares|parts|groups|piles|each|ways|people|kids|friends]? [$lang.tail.filler|$kids.arith.g6_exactly]? [$lang.tail.filler|$kids.arith.g6_exactly]?"
     emit="@{_} core.question type=kids.arith.calc seek=result where.op=divided_by where.a={a} where.b={b}"
     kind=question
@@ -962,6 +981,7 @@
     example="Tom has just eaten 2 apples."
 
 @pat.kids.arith.sw.eat.mod.a core.pattern
+    canonical="Tom has eaten a cake."
     match="[$kids.arith.g7_just_so_you_know]? {who:agent} [$kids.arith.g8_just_now]? [$kids.arith.g8_just_now]? [has|have|had|did|will]? [just]? [$kids.arith.g23_has_eaten] [a|an|one|another] {item:lex.kids.arith.items} [$kids.arith.g5_from_the_shop]? [$kids.arith.g5_from_the_shop]?"
     emit="@{_} kids.arith.eat who={who} count=1 item={item}"
     kind=statement
@@ -990,6 +1010,7 @@
     example="An apple was eaten by Tom."
 
 @pat.kids.arith.sw.lose.mod core.pattern
+    canonical="Ben lost 3 marbles yesterday."
     match="[$kids.arith.g7_just_so_you_know]? {who:agent} [$kids.arith.g8_just_now]? [$kids.arith.g8_just_now]? [has|have|had|did|will]? [just]? [$kids.arith.g24_has_lost] {n:number} [more|extra]? {item:lex.kids.arith.items} [$kids.arith.g5_from_the_shop]? [$kids.arith.g5_from_the_shop]?"
     emit="@{_} kids.arith.lose who={who} count={n} item={item}"
     kind=statement
@@ -1025,6 +1046,7 @@
     example="A marble was lost by Ben."
 
 @pat.kids.arith.sw.break.mod core.pattern
+    canonical="Sam has broken 2 pencils."
     match="[$kids.arith.g7_just_so_you_know]? {who:agent} [$kids.arith.g8_just_now]? [$kids.arith.g8_just_now]? [has|have|had|did|will]? [just]? [$kids.arith.g22_has_broken] {n:number} [more|extra]? {item:lex.kids.arith.items} [$kids.arith.g5_from_the_shop]? [$kids.arith.g5_from_the_shop]?"
     emit="@{_} kids.arith.break who={who} count={n} item={item}"
     kind=statement
@@ -1053,6 +1075,7 @@
     example="2 pencils got broken by Sam."
 
 @pat.kids.arith.sw.break.passive.a core.pattern
+    canonical="A pencil was broken by Sam."
     match="[$kids.arith.g7_just_so_you_know]? [a|an|one] {item:lex.kids.arith.items} [has_been|just_got|was_just|was|got|is] [just|already]? [$kids.arith.g37_broken] [by|from|to|for] {who:agent} [$kids.arith.g5_from_the_shop]? [$kids.arith.g5_from_the_shop]?"
     emit="@{_} kids.arith.break who={who} count=1 item={item}"
     kind=statement
@@ -1060,6 +1083,7 @@
     example="A pencil was broken by Sam."
 
 @pat.kids.arith.sw.get.mod core.pattern
+    canonical="Amy has just found 4 shells."
     match="[$kids.arith.g7_just_so_you_know]? {who:agent} [$kids.arith.g8_just_now]? [$kids.arith.g8_just_now]? [$kids.arith.g26_has_just]? [just]? [$kids.arith.g14_has_received] {n:number} [more|new|extra|another]? {item:lex.kids.arith.items} [$kids.arith.g5_from_the_shop]? [$kids.arith.g5_from_the_shop]?"
     emit="@{_} kids.arith.receive who={who} count={n} item={item}"
     kind=statement
@@ -1109,6 +1133,7 @@
     example="Zoe got a kite from the shop."
 
 @pat.kids.arith.sw.has.mod core.pattern
+    canonical="Ana is holding 4 pears."
     match="[$kids.arith.g7_just_so_you_know]? {who:agent} [$kids.arith.g8_just_now]? [has_in_total|ends_up_with|ended_up_with|is_left_with|was_left_with|is_down_to|was_down_to|got_down_to|is_holding|is_carrying|is_having|has_got|have_got|is_keeping|has_collected|now_has|now_have|is_at|is_on|stands_at|ended_with|finishes_with|finished_with|holds|owns|keeps|carries|possesses] {n:number} {item:lex.kids.arith.items} [$kids.arith.g5_from_the_shop]?"
     emit="@{_} kids.arith.holding owner={who} count={n} item={item}"
     kind=statement
@@ -1124,6 +1149,7 @@
     example="Tom's got 5 apples."
 
 @pat.kids.arith.sw.has.noun.first core.pattern
+    canonical="Tom has 5 apples left."
     match="[$kids.arith.g7_just_so_you_know]? {who:agent} [has|have|got|had|owns]? {n:number} {item:lex.kids.arith.items} [in_total|so_far|left|now|still|altogether|today]"
     emit="@{_} kids.arith.holding owner={who} count={n} item={item}"
     kind=statement
@@ -1227,6 +1253,7 @@
     example="How many stickers in the whole group?"
 
 @pat.kids.arith.sw.q.total.addup core.pattern
+    canonical="Count up all the marbles."
     match="[$kids.arith.g1_i_need_to_find_out]? [$kids.arith.g1_i_need_to_find_out]? [add_up|sum_up|count_up|total_up|tally_up|put_together|count_all|add_all|add|sum|count|total|tally|combine|collect] [up]? [all]? [of]? [the]? [all]? {item:lex.kids.arith.items} [all]? [up_together|up|together|altogether]? [$lang.tail.filler|$kids.arith.g6_exactly]? [$lang.tail.filler|$kids.arith.g6_exactly]?"
     emit="@{_} core.question type=kids.arith.total seek=count where.item={item}"
     kind=question
@@ -1301,6 +1328,7 @@
     example="Person with the most apples?"
 
 @pat.kids.arith.sw.q.leader.whose core.pattern
+    canonical="Whose apples are the most?"
     match="[$kids.arith.g1_i_need_to_find_out]? [$kids.arith.g1_i_need_to_find_out]? [who_owns|who_has|whos_got|whose] {item:lex.kids.arith.items} [are|is|were|has|have|count]? [the]? [$kids.arith.g34_most] [$lang.tail.filler|$kids.arith.g6_exactly]? [$lang.tail.filler|$kids.arith.g6_exactly]?"
     emit="@{_} core.question type=kids.arith.leader seek=winner where.item={item}"
     kind=question
@@ -1366,6 +1394,7 @@
     example="Leo minus Zoe marbles?"
 
 @pat.kids.arith.sw.q.verdict.beat core.pattern
+    canonical="Does Lily beat Sam in stickers?"
     match="[$kids.arith.g1_i_need_to_find_out]? [$kids.arith.g1_i_need_to_find_out]? [does|did|will|can|do|would|could]? {w1:agent} [is_ahead_of|are_ahead_of|is_winning_against|have_more_than|has_more_than|win_against|wins_against|win_over|leads_over|is_beating|are_beating|out_scores|beat|beats|top|tops|outdo|outdoes|outnumber|outnumbers|lead|leads|outscores] {w2:agent} [when_it_comes_to|in|on|with|at|for|regarding]? [the]? {item:lex.kids.arith.items} [count|number|total|amount|tally|score]? [$lang.tail.filler|$kids.arith.g6_exactly]? [$lang.tail.filler|$kids.arith.g6_exactly]?"
     emit="@{_} core.question type=kids.arith.verdict seek=answer where.item={item} where.who1={w1} where.who2={w2}"
     kind=question
@@ -1449,6 +1478,7 @@
     example="Share 20 between 4 kids, how many does each get?"
 
 @pat.kids.arith.sw.calc.double.a core.pattern
+    canonical="What do I get doubling 13?"
     match="[$kids.arith.g1_i_need_to_find_out]? [$kids.arith.g1_i_need_to_find_out]? [$kids.arith.g4_what_do_u_get_if_u]? [$kids.arith.g4_what_do_u_get_if_u]? [the_double_of|the_doubling_of|double_of|twice_of|two_times|2_times|double|doubling|twice|twofold|2x|x2|doubled|dbl] [of]? [the]? [number]? {n:number} [what_do_i_get|what_do_you_get|how_much_is_that|how_much_is_it|what_does_it_make|what_does_it_equal|what_does_that_make|what_does_that_equal|what_is_the_answer|what_is_the_result|is_how_much|is_equal_to|is_the_answer|is_the_result|what_is_it|what_is_that|whats_the_answer|whats_the_result|is_what|comes_to|come_to|how_much|whats_that|how_many|which_is|the_answer|the_result|i_get|you_get|we_get|is|equals|equal|=|makes|make|gives|give|gets|get|answer|result|what]? [what_do_i_get|what_do_you_get|how_much_is_that|how_much_is_it|what_does_it_make|what_does_it_equal|what_does_that_make|what_does_that_equal|what_is_the_answer|what_is_the_result|is_how_much|is_equal_to|is_the_answer|is_the_result|what_is_it|what_is_that|whats_the_answer|whats_the_result|is_what|comes_to|come_to|how_much|whats_that|how_many|which_is|the_answer|the_result|i_get|you_get|we_get|is|equals|equal|=|makes|make|gives|give|gets|get|answer|result|what]? [$lang.tail.filler|$kids.arith.g6_exactly]? [$lang.tail.filler|$kids.arith.g6_exactly]?"
     emit="@{_} core.question type=kids.arith.double seek=result where.n={n}"
     kind=question

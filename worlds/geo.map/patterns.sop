@@ -33,6 +33,8 @@
     example="Where is Paris?"
 
 @pat.geo.map.coords core.pattern
+    canonical="Show latitude 48.8 longitude 2.3."
+    canonical="Go to coordinates 45.5 25.3."
     match="[$lang.lead.polite|$geo.map.g7_you_can]? [go_to|show|show_me|center_on|centre_on|fly_to|jump_to|zoom_to|take_me_to] [the]? [coordinates|latitude|lat] {la:number} [,|and|longitude|lon|lng|comma]? {lo:number} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.coords arg.la={la} arg.lo={lo}"
     kind=request
@@ -51,6 +53,7 @@
     example="Come closer."
 
 @pat.geo.map.zoomout core.pattern
+    canonical="Zoom all the way out."
     match="[$lang.lead.polite|$geo.map.g7_you_can]? [zoom_out|zoom_away|get_farther|go_farther|move_farther|move_away|go_further_away|farther|further|zoom_further_out|step_back|move_back|make_it_smaller|make_the_map_smaller|shrink] {amt:lex.geo.map.amounts?} [more|further|farther|again|on_the_map|the_map|on_it]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.zoom arg.dir=out arg.amt={amt}"
     kind=request
@@ -88,6 +91,7 @@
     example="Zoom out 2 times."
 
 @pat.geo.map.zoomto core.pattern
+    canonical="Zoom to level 5."
     match="[$lang.lead.polite|$geo.map.g7_you_can]? [zoom_to|zoom_level|set_the_zoom_to|set_zoom_to|set_the_zoom_level_to|set_zoom_level_to|change_the_zoom_to|zoom] [level]? {n:number} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.zoomTo arg.n={n}"
     kind=request
@@ -95,6 +99,7 @@
     example="Zoom to level 5."
 
 @pat.geo.map.pan core.pattern
+    canonical="Move a bit to the east."
     match="[$lang.lead.polite|$geo.map.g7_you_can]? [go|move|pan|scroll|head|look|shift|slide|travel|fly|navigate|move_the_map|pan_the_map|scroll_the_map|shift_the_map|show_me|take_me] {amt:lex.geo.map.amounts?} [further|farther|more]? [to_the|towards_the|toward_the|towards|toward|to|the]? {d:lex.geo.map.directions} {amt2:lex.geo.map.amounts?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.pan arg.d={d} arg.amt={amt} arg.amt2={amt2}"
     kind=request
@@ -119,6 +124,7 @@
     example="Go 100 miles east."
 
 @pat.geo.map.world core.pattern
+    canonical="Show the whole world."
     match="[$lang.lead.polite|$geo.map.g7_you_can]? [show|show_me|display|see|view|go_to|zoom_out_to_see|zoom_out_to_show|zoom_out_to|let_me_see|take_me_to|fly_to|open|bring_up|look_at]? [me]? [the|a]? [whole|entire|full|complete|global] [world|earth|globe|planet] [map|view]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.world"
     kind=request
@@ -149,6 +155,8 @@
     example="Wipe everything."
 
 @pat.geo.map.mark core.pattern
+    canonical="Add a marker for Rome."
+    canonical="Put a marker on Cluj."
     match="[$lang.lead.polite|$geo.map.g7_you_can]? [put|place|drop|add|set|stick|make|create] [a|an|the|some]? [marker|markers|pin|pins|flag|flags] [on|at|in|for|to|over|onto|next_to|near]? [the]? {a:lex.geo.map.places} [,|and|,_and]? {b:lex.geo.map.places?} [,|and|,_and]? {c:lex.geo.map.places?} [,|and|,_and]? {d:lex.geo.map.places?} [,|and|,_and]? {e:lex.geo.map.places?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.mark arg.a={a} arg.b={b} arg.c={c} arg.d={d} arg.e={e}"
     kind=request
@@ -166,6 +174,7 @@
     example="Pin Berlin."
 
 @pat.geo.map.markhere core.pattern
+    canonical="Put a marker here."
     match="[$lang.lead.polite|$geo.map.g7_you_can]? [put|place|drop|add|set|make] [a|an]? [marker|pin|flag] [here|there|right_here|on_the_map|in_the_middle|at_the_center|in_the_center|at_the_centre|in_the_centre|on_this_spot|on_this_place] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.markHere"
     kind=request
@@ -180,6 +189,7 @@
     example="Mark this place."
 
 @pat.geo.map.markcap core.pattern
+    canonical="Mark the capitals of Europe."
     match="[$lang.lead.polite|$geo.map.g7_you_can]? [$geo.map.g42_mark] [me]? [all]? [of]? [the|all_the]? [capitals|capital_cities] [of|in|across|from|for]? [the]? {r:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.markSet arg.what=capitals arg.r={r}"
     kind=request
@@ -211,6 +221,7 @@
     example="Delete all markers."
 
 @pat.geo.map.clearmark1 core.pattern
+    canonical="Remove the marker on Paris."
     match="[$lang.lead.polite|$geo.map.g7_you_can]? [remove|clear|delete|erase|get_rid_of|hide|take_off|take_away] [the|my]? [marker|pin|flag] [on|at|from|for|of|in]? [the]? {p:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.clearMarkers arg.p={p}"
     kind=request
@@ -232,6 +243,7 @@
     example="Remove the last marker."
 
 @pat.geo.map.hl core.pattern
+    canonical="Highlight France and Spain."
     match="[$lang.lead.polite|$geo.map.g7_you_can]? [$geo.map.g43_highlight] [the]? [country|countries|nation|nations]? [of|in|from]? [the]? {a:lex.geo.map.places} [,|and|,_and]? {b:lex.geo.map.places?} [,|and|,_and]? {c:lex.geo.map.places?} [,|and|,_and]? {d:lex.geo.map.places?} [,|and|,_and]? {e:lex.geo.map.places?} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.highlight arg.a={a} arg.b={b} arg.c={c} arg.d={d} arg.e={e}"
     kind=request
@@ -248,6 +260,7 @@
     example="Highlight Romania and its neighbours."
 
 @pat.geo.map.hlnb2 core.pattern
+    canonical="Highlight the neighbours of Hungary."
     match="[$lang.lead.polite|$geo.map.g7_you_can]? [$geo.map.g43_highlight] [the]? [neighbours|neighbors|neighbouring_countries|neighboring_countries|bordering_countries|countries_around|countries_next_to|countries_bordering|countries_that_border] [of|around|next_to|bordering|to]? [the]? {a:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.highlight arg.a={a} arg.nb=true arg.self=false"
     kind=request
@@ -277,6 +290,7 @@
     example="Stop highlighting France."
 
 @pat.geo.map.unhl2 core.pattern
+    canonical="Remove the highlight from Spain."
     match="[$lang.lead.polite|$geo.map.g7_you_can]? [remove|clear|delete|hide] [the]? highlight [on|from|of|for]? [the]? {p:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.clearHighlight arg.p={p}"
     kind=request
@@ -292,6 +306,8 @@
     example="Clear the distances."
 
 @pat.geo.map.layer core.pattern
+    canonical="Use the simple map."
+    canonical="Switch to the street map."
     match="[$lang.lead.polite|$geo.map.g7_you_can]? [switch|change|go|turn|set|swap|toggle|use|show|display|bring_up|give_me|let_me_see|view|put_on|open|enable|activate|switch_over|change_over] [me]? [to|back_to|over_to|on]? [the|a|an]? {l:lex.geo.map.layers} [map|view|layer|tiles|style|mode|version|maps|display]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.layer arg.l={l}"
     kind=request
@@ -322,6 +338,7 @@
     example="Which country has Madrid as its capital?"
 
 @pat.geo.map.iscap core.pattern
+    canonical="Is Paris the capital of France?"
     match="[is|was] [the]? {a:lex.geo.map.places} [the]? capital [city]? of [the]? {b:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.isCapital arg.a={a} arg.b={b}"
     kind=question
@@ -351,6 +368,7 @@
     example="How populous is India?"
 
 @pat.geo.map.area1 core.pattern
+    canonical="How big is Romania?"
     match="[$lang.lead.question|name|give_me]? [how_big|how_large|how_huge|how_small] [is|are]? [the]? {p:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.area arg.p={p}"
     kind=question
@@ -373,6 +391,7 @@
     example="Which city has more people, Paris or Rome?"
 
 @pat.geo.map.cmp2 core.pattern
+    canonical="Is Brazil bigger than Canada?"
     match="[is|was|are] [the]? {a:lex.geo.map.places} {m:lex.geo.map.measures} [than] [the]? {b:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.compareYN arg.a={a} arg.b={b} arg.m={m}"
     kind=question
@@ -451,6 +470,7 @@
     example="Does France border Spain?"
 
 @pat.geo.map.borYN2 core.pattern
+    canonical="Is Austria next to Italy?"
     match="[is|are] [the]? {a:lex.geo.map.places} [next_to|bordering|adjacent_to|a_neighbour_of|a_neighbor_of|neighbouring|neighboring] [the]? {b:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.borderYN arg.a={a} arg.b={b}"
     kind=question
@@ -494,6 +514,7 @@
     example="What part of the world is Chile in?"
 
 @pat.geo.map.isin core.pattern
+    canonical="Is Egypt in Africa?"
     match="[is|are|was] [the]? {p:lex.geo.map.places} [in|on|part_of|located_in|located_on|inside|within|a_part_of|a_member_of] [the]? {q:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.isIn arg.p={p} arg.q={q}"
     kind=question
@@ -524,6 +545,7 @@
     example="Which city in Japan is the biggest?"
 
 @pat.geo.map.sup3 core.pattern
+    canonical="Which country is the biggest?"
     match="[$lang.lead.question|name|give_me]? [which|what] {k:lex.geo.map.kinds} is [the]? {m:lex.geo.map.superlatives} [in_the_world|on_earth|overall|anywhere]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.superlative arg.m={m} arg.k={k}"
     kind=question
@@ -546,6 +568,7 @@
     example="Name the 5 largest countries in Africa."
 
 @pat.geo.map.list1 core.pattern
+    canonical="Which countries are in Africa?"
     match="[$lang.lead.question|name|give_me]? [$geo.map.g50_list] [all]? [the]? [countries|nations] [are|are_there|exist]? [there]? [in|of|within|across|from|on|that_are_in]? [the]? {p:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.listOp arg.k=countries arg.p={p}"
     kind=question
@@ -554,6 +577,7 @@
     example="Which countries are in Africa?"
 
 @pat.geo.map.list2 core.pattern
+    canonical="List the cities in Romania."
     match="[$lang.lead.question|name|give_me]? [$geo.map.g50_list] [all]? [the]? [cities|towns] [are|are_there|do_you_know|do_you_know_in|do_you_know_of|exist]? [there]? [in|of|within|across|from|on]? [the]? {p:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.listOp arg.k=cities arg.p={p}"
     kind=question
@@ -575,6 +599,8 @@
     example="How many cities do you know in Romania?"
 
 @pat.geo.map.cur1 core.pattern
+    canonical="Which currency is Poland using?"
+    canonical="What currency does Japan use?"
     match="[$lang.lead.question|name|give_me]? [what|which] [currency|money|currencies] [does|do|is|are]? [the]? {p:lex.geo.map.places} [use|using|have|used|accept|take]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.currency arg.p={p}"
     kind=question
@@ -612,6 +638,7 @@
     example="What do they speak in Austria?"
 
 @pat.geo.map.info core.pattern
+    canonical="Tell me about Romania."
     match="[$lang.lead.question|name|give_me]? [tell_me_about|tell_me_more_about|what_do_you_know_about|what_can_you_tell_me_about|describe|give_me_some_facts_about|give_me_facts_about|give_me_information_about|give_me_info_on|info_on|information_on|information_about|facts_about|tell_me_something_about|i_want_to_know_about|i_would_like_to_know_about|what_about|who_is|what_is|what_s|what_are] [the]? {p:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.info arg.p={p}"
     kind=question
@@ -620,6 +647,7 @@
     example="What do you know about Cluj?"
 
 @pat.geo.map.dist1 core.pattern
+    canonical="How far is Paris from Rome?"
     match="[$lang.lead.question|name|give_me]? how_far [is|are|apart_are|it_is|away_is|is_it|are_we|away_are]? [it]? [from|between]? [the]? {a:lex.geo.map.places} [from|to|and|away_from|apart_from|and_from]? [the]? {b:lex.geo.map.places} [apart|away]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.distance arg.a={a} arg.b={b}"
     kind=question
@@ -643,6 +671,7 @@
     example="How many kilometres are there between Paris and Rome?"
 
 @pat.geo.map.dist4 core.pattern
+    canonical="Draw a line from Cluj to Bucharest."
     match="[$lang.lead.polite|$geo.map.g7_you_can]? [measure|draw|trace|plot|connect|link|join|draw_me|measure_out] [me]? [a]? [the]? [line|distance|route|path|ruler|measurement]? [from|between]? [the]? {a:lex.geo.map.places} [to|and|with|from]? [the]? {b:lex.geo.map.places} [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.distance arg.a={a} arg.b={b}"
     kind=request
@@ -658,6 +687,7 @@
     example="Show the distance between Paris and Rome."
 
 @pat.geo.map.distf1 core.pattern
+    canonical="How far is Rome from me?"
     match="[$lang.lead.question|name|give_me]? how_far [is|is_it_to|is_it|away_is]? [it]? [to]? [the]? {b:lex.geo.map.places} [from_me|from_where_i_am|from_my_location] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.distanceFrom arg.b={b} arg.from=me"
     kind=question
@@ -695,6 +725,7 @@
     example="What am I looking at?"
 
 @pat.geo.map.describe core.pattern
+    canonical="What is on the map?"
     match="[what_is_on_the_map|what_s_on_the_map|describe_the_map|describe_the_view|what_do_i_have_on_the_map|what_is_marked|what_is_marked_on_the_map|what_have_i_marked|what_is_on_my_map|what_is_shown|what_is_shown_on_the_map|summarize_the_map|summarise_the_map|what_is_the_map_showing|what_is_the_map_showing_now|what_are_you_showing] [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.describe"
     kind=question
@@ -702,6 +733,7 @@
     example="What is on the map?"
 
 @pat.geo.map.markersq core.pattern
+    canonical="How many markers are there?"
     match="[$lang.lead.question|name|give_me]? [what|which|how_many] [markers|pins|flags|places] [do_i_have|are_there|have_i_set|are_on_the_map|have_i_marked|are_marked|did_i_mark|did_i_put|are_set] [on_the_map|there|now]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=geo.markers"
     kind=question
@@ -742,6 +774,7 @@
     example="I wanna see Kyoto."
 
 @pat.geo.map.w.show.pull core.pattern
+    canonical="Zoom me over to Bucharest."
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [pull_up|pull|bring|bring_me|zoom_me_over_to|zoom_over_to|zoom_me_to|zoom_me_in_on|take_me_over_to|fly_me_to|send_me_to|get_me_to|map|map_out|plot|chart|throw_up|display|get|load|load_up|go_over_to|check|check_out|look_up|open_up|pull_up_a_map_of|bring_up_a_map_of|show_a_map_of|show_me_a_map_of|pop_up|pop_open|put_up|jump_over_to|hop_over_to|teleport_to|teleport_me_to|beam_me_to|switch_to|navigate_me_to|point_me_to|put_me_in|put_me_at|drop_me_in|drop_me_at|drop_me_into] [me]? [up]? [over]? [to]? [on]? [the]? [map]? [of]? {a:lex.geo.map.places} [on_the_map|on_it|for_me|for_a_sec|real_quick|on_this_map|on_the_screen|on_screen|up|pronto|now]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.show arg.a={a}"
     kind=request
@@ -772,6 +805,7 @@
     example="Show Bucharest real quick."
 
 @pat.geo.map.w.show.onthis core.pattern
+    canonical="Where is Kyoto on this?"
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [where_is|where_are|where_s|wheres|show_me|show] [the]? {a:lex.geo.map.places} [on_this|on_the|on_my|on_that] [map|thing|globe|screen|one|1|atlas|here]? [,]? [show_it|show_me|show_it_to_me|show_me_it|show|point_to_it|point_it_out|highlight_it]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.show arg.a={a}"
     kind=request
@@ -788,6 +822,7 @@
     example="Yo where is Kyoto."
 
 @pat.geo.map.w.where.know core.pattern
+    canonical="Do you know where Nairobi is?"
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [where|wher] [the]? {p:lex.geo.map.places} [is|are|lies|sits|can_be_found|is_located|is_situated|is_found|is_at|is_on_the_map] [located|situated|exactly|on_the_map|on_this_map|on_the_globe|in_the_world|on_earth|at|roughly|even]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.where arg.p={p}"
     kind=request
@@ -803,6 +838,7 @@
     example="Kyoto location?"
 
 @pat.geo.map.w.where.find core.pattern
+    canonical="Where can I see Kyoto?"
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [where_can_i_find|where_do_i_find|where_could_i_find|where_would_i_find|where_can_i_see|where_do_i_see|where_to_find|where_can_i_locate|where_can_we_find|where_can_we_see|where_could_i_see|where_should_i_look_for|where_do_i_look_for|where_should_i_look_to_find|where_do_i_go_to_see|where_would_i_look_for] [the]? {p:lex.geo.map.places} [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.where arg.p={p}"
     kind=request
@@ -842,6 +878,7 @@
     example="Zoom in big time."
 
 @pat.geo.map.w.zin2 core.pattern
+    canonical="Enlarge the map a lot."
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [$geo.map.g10_zoom_in] [the]? [$geo.map.g32_on_the_map]? [,]? [by]? {amt:lex.geo.map.amounts?} [closer|more|in|further]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.zoom arg.dir=in arg.amt={amt}"
     kind=request
@@ -893,6 +930,7 @@
     example="Zoom in."
 
 @pat.geo.map.w.zto1 core.pattern
+    canonical="Put zoom level at 2."
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [set|put|change|make|adjust|switch|turn|move|go|bring|raise|lower|take|select|choose|pick|dial|crank|crank_up|crank_down|use|try|give_me|gimme|i_want|i_d_like|i_need|let_me_have] [the]? [my|the]? [zoom|zoom_level|zoom_lvl|zoom_lv|zoom_setting|zoom_value|level_of_zoom|magnification|magnification_level|mag|scale|zoom_factor] [level|lvl|lv|setting|value|factor]? [to|at|=|is|of|on|equal_to|equals|up_to|down_to|as|be|being]? [level|lvl|number|no|num|size|setting|value|step]? {n:number} [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.zoomTo arg.n={n}"
     kind=request
@@ -939,6 +977,7 @@
     example="See the earth all of it."
 
 @pat.geo.map.w.world2 core.pattern
+    canonical="Zoom out to see everything."
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [zoom_out|zoom_way_out|zoom_out_all_the_way|zoom_all_the_way_out|zoom_out_completely|zoom_out_fully|zoom_out_far|pull_back|pull_out|step_back|back_out|go_way_out|go_all_the_way_out|zoom_out_a_lot|zoom_out_max|zoom_out_to_the_max|zoom_out_as_far_as_possible|zoom_out_as_far_as_it_goes] [so_i_can|so_that_i_can|to|and]? [to]? [see|show|view|reveal|display|get|have]? [me]? [everything|it_all|all|the_whole_thing|the_whole_map|all_of_it|the_whole_world|the_world|the_entire_world|every_country|all_countries|all_the_countries|the_big_picture|the_whole_earth|the_planet] [at_once|at_a_glance|in_one_view|in_one_go|now]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.world"
     kind=request
@@ -968,6 +1007,7 @@
     example="Re-center the map please."
 
 @pat.geo.map.w.reset.undo core.pattern
+    canonical="Undo my zoom and pan."
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [undo|reset|revert|clear|forget|cancel|remove|get_rid_of|discard|drop|undo_all|undo_all_my|undo_all_of_my|revert_all_my|reset_all_my|reset_all_of_my|undo_every|take_back|roll_back|rollback|rewind|erase|ditch|lose|wipe] [all]? [of]? [my|the]? [zoom_and_pan|pan_and_zoom|zoom_and_move|move_and_zoom|zoom_and_scroll|scroll_and_zoom|zoom|pan|panning|zooming|scrolling|view_changes|view_change|view|movement|moves|map_view|camera|camera_changes|map_changes|navigation|zoom_changes|pan_changes|position|position_changes|zoom_level] [and_pan|and_zoom|and_zoom_and_pan|and_move|and_scroll|and_position|and_view|and_pan_and_zoom|and_scrolling|and_panning|and_zooming|changes]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.reset arg.all=false"
     kind=request
@@ -975,6 +1015,7 @@
     example="Undo my zoom and pan."
 
 @pat.geo.map.w.reset.back core.pattern
+    canonical="Put the view back to normal."
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [put|set|bring|take|get|go_back|back|return|restore|revert|send|move|switch|turn|change|reset|snap|jump|swing|flip|slide|put_it|put_the_view|put_the_map|set_the_view|set_the_map|bring_the_view|bring_the_map|take_the_view|take_the_map|get_the_view|get_the_map|return_the_view|return_the_map|restore_the_view|restore_the_map|revert_the_view|revert_the_map|send_the_view|send_the_map|move_the_view|move_the_map|reset_the_view|reset_the_map|snap_the_view|snap_the_map|jump_the_view|jump_the_map] [the|it|my]? [$geo.map.g68_view]? [all]? [back]? [to|to_the|into|into_the|in_the|at_the|at|on_the|on|as|like|as_it_was|like_it_was]? [the]? [normal|default|original|standard|initial|start|home|how_it_was|the_way_it_was|starting|first|usual|regular|basic|beginning|opening|base|factory|fresh|starting_point|home_position|default_position|original_position|initial_position|standard_position|first_position|opening_position|base_position|usual_position|regular_position|normal_position] [view|position|zoom|state|setting|settings|place|spot|one|1|map_view|camera|map|display|screen|picture|scale|level|look|mode|configuration|layout|location|point|state_again|again]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.reset arg.all=false"
     kind=request
@@ -990,6 +1031,8 @@
     example="Put the view back to normal."
 
 @pat.geo.map.w.clearall1 core.pattern
+    canonical="Clear the whole thing."
+    canonical="Wipe everything off the map."
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [clear|wipe|empty|clean|erase|blank|nuke|zap|remove|delete|get_rid_of|take_off|clear_off|wipe_off|clean_off|clear_out|wipe_out|clean_out|clear_up|clean_up|wipe_clean|tidy|tidy_up|strip|strip_off|dump|scrap|junk|trash|bin|purge|flush|sweep|sweep_off|sweep_away|sweep_clean|rub_out|rub_off|scrub|scrub_off|scrub_clean|scrub_out] [out|up|off]? [all|everything|the_whole_thing|the_entire_thing|it_all|all_of_it|every_single_thing|all_of_that|all_that|the_lot|the_whole_lot|all_of_the_stuff|all_the_stuff|all_of_this|all_this|whatever_is_on_it|whatever_is_on_there|whatever_is_there|anything_on_it|anything_on_there|anything_there|anything_and_everything|everything_here|everything_there|everything_on_it|everything_on_there|everything_on_the_map|everything_from_the_map|everything_off_the_map|the_whole_map|the_entire_map|the_complete_map] [off|from|on|away|out|up|off_of|of|in]? [the]? [map|screen|view|atlas|display|thing]? [off|away|out|up|clean|completely|entirely|all]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.clearAll"
     kind=request
@@ -1044,6 +1087,7 @@
     example="Put Cluj on the map with a marker."
 
 @pat.geo.map.w.markhere1 core.pattern
+    canonical="Stick a flag right here."
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [put|place|drop|add|set|make|stick|plant|pop|throw|plop|leave|create|give_me|gimme|get_me|slap|toss|insert|attach|pin|fix|use|have] [me]? [a|an|the|one|1|1|some]? [$geo.map.g29_marker] [right|just|exactly|over|down]? [$geo.map.g8_here] [on_the_map|on_it|on_this_spot|on_the_map_here|now]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.markHere"
     kind=request
@@ -1074,6 +1118,7 @@
     example="Can you mark where I'm looking?"
 
 @pat.geo.map.w.clearlast1 core.pattern
+    canonical="Get rid of last marker."
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [$geo.map.g13_remove] [the]? [$geo.map.g18_last] [one|1]? [$geo.map.g29_marker] [i_placed|i_put|i_added|i_made|i_set|i_dropped|i_marked|i_created|i_just_placed|i_just_put|i_just_added|i_just_made|i_just_set|i_just_dropped|i_just_marked|i_just_created|away|off|out|down|there|again]? [away|off|out|down]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.clearMarkers arg.last=true"
     kind=request
@@ -1140,6 +1185,7 @@
     example="I want the capitals of Europe marked."
 
 @pat.geo.map.w.markset.cap7 core.pattern
+    canonical="Pin every capital in Europe."
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [mark|pin|flag|label|show|display|plot|tag|bookmark|put_a_marker_on|put_a_pin_on|put_a_flag_on|drop_a_pin_on|place_a_marker_on|place_a_pin_on|add_a_pin_to|add_a_marker_to|stick_a_pin_in|stick_a_flag_in] [me]? [each|every|every_single|each_and_every|every_one_of_the|each_one_of_the] [$geo.map.g75_capital] [of|in|across|from|for|within|throughout|around|on]? [the]? {r:lex.geo.map.places} [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.markSet arg.what=capitals arg.r={r}"
     kind=request
@@ -1225,6 +1271,7 @@
     example="No more highlighted countries pls."
 
 @pat.geo.map.w.unhl3 core.pattern
+    canonical="Take the highlights off."
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [take|turn|switch|clear|remove|get_rid_of|wipe|strip|peel|pull|knock|rub|scrub|delete|hide|erase|reset|kill|stop|cancel|dismiss|ditch|lose|drop|clean|clean_up|take_down|undo|revert|turn_off|switch_off|shut_off|disable|deactivate|undo_the|clear_all|clear_all_the|remove_all|remove_all_the|delete_all|delete_all_the|get_rid_of_all|get_rid_of_all_the|take_off|take_off_all|take_off_all_the|wipe_off|wipe_off_all|wipe_off_all_the|erase_all|erase_all_the|hide_all|hide_all_the|reset_all|reset_all_the|kill_all|kill_all_the|stop_all|stop_all_the|cancel_all|cancel_all_the|dismiss_all|dismiss_all_the|ditch_all|ditch_all_the|lose_all|lose_all_the|drop_all|drop_all_the|clean_all|clean_all_the|undo_all|undo_all_the|revert_all|revert_all_the] [all]? [of]? [the|my|those|these|that|this]? [highlights|highlighting|highlight|colours|colors|coloured_countries|colored_countries|coloring|colouring|shading|shaded_countries|highlighted_countries|shaded|highlighted|coloured|colored|colours_on_the_map|colors_on_the_map|coloured_ones|colored_ones|lit_up_countries|lit_up_ones|selected_countries|emphasis|outlines|fills|tints|marks_on_countries|countries_highlighted|countries_coloured|countries_colored|countries_shaded] [off|away|out|from_the_map|on_the_map|off_the_map|from_everything|from_the_countries|of_the_map|on_it|now|again|up|there|here|altogether|entirely|completely|fully|totally|all_of_them|all_together|from_everywhere|from_all_countries|from_every_country|from_each_country|on_all_countries|on_every_country|on_each_country|on_all_the_countries|on_the_countries|off_the_countries|off_all_countries|off_every_country|off_each_country|off_all_the_countries]? [off|away|out]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.clearHighlight"
     kind=request
@@ -1234,6 +1281,7 @@
     example="Get rid of the coloured countries."
 
 @pat.geo.map.w.hlq1 core.pattern
+    canonical="What is highlighted right now?"
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [$geo.map.g23_which]? [me]? [all]? [the]? [ones|countries|nations|states|places|things|areas|regions|of_them|stuff|items|lands|territories|ones_that_are|countries_that_are|nations_that_are|states_that_are|places_that_are|things_that_are|areas_that_are|regions_that_are|stuff_that_is|items_that_are|lands_that_are|territories_that_are]? [are|is|have_i|did_i|were|have_you|did_you|do_i_have|i_have|have|have_been|are_currently|are_now|is_currently|got|have_got|are_still|was|has_been|did_we|have_we|we_have|do_we_have|that_i|that_we|that_you|which_i|which_we|which_you|i_did|we_did|you_did|i_have_got|we_have_got|you_have_got]? [currently|now|right_now|at_the_moment|so_far|already|still|just|there|at_this_moment|yet|currently_being|now_being|right_now_being|at_the_moment_being|so_far_being|already_being|still_being|just_being|there_being|at_this_moment_being|yet_being]? [$geo.map.g9_highlighted] [now|right_now|at_the_moment|on_the_map|on_it|currently|so_far|already|still|just|there|at_this_moment|yet|on_this_map|on_screen|on_the_screen]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.highlights"
     kind=request
@@ -1256,6 +1304,7 @@
     example="Which countries have the colour on?"
 
 @pat.geo.map.w.hlq4 core.pattern
+    canonical="Are any countries highlighted, which?"
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [are_any|are_there_any|is_any|is_there_any|do_i_have_any|do_we_have_any|have_i_got_any|have_we_got_any|have_i_any|have_we_any] [$geo.map.g56_countries] [$geo.map.g9_highlighted] [,]? [which|what|which_ones|what_ones|which_countries|what_countries|which_nations|what_nations|how_many|and_which|and_what|and_which_ones|and_what_ones|if_so|if_yes|if_any|if_there_are|if_there_is]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.highlights"
     kind=request
@@ -1277,6 +1326,7 @@
     example="Show me what is highlighted."
 
 @pat.geo.map.w.clearlines1 core.pattern
+    canonical="Delete the measurement line."
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [remove|clear|delete|erase|hide|get_rid_of|wipe|take_off|take_away|take_down|wipe_off|wipe_out|clean|clean_up|scrap|kill|ditch|lose|drop|cancel|undo|rub_out|dismiss|clear_off|clear_up|clear_out|clean_off|reset|discard|dump|zap|nuke|trash|bin|junk|purge|flush|strip|strip_off|sweep|sweep_off|sweep_away|rub_off|scrub|scrub_off|scrub_out|pull|pull_off|pull_down|pull_up|take_out] [all|every|each|any]? [of]? [the]? [drawn|measurement|measuring|route|distance|ruler|path|connecting|measured|straight|straight_line|distance_measuring|distance_measurement|line_between|connection|travel|trip|journey|way|tracing|traced|plotted|plot|sketched|marked_out|connected]? [lines|line|routes|route|measurements|measurement|distances|distance|paths|path|rulers|ruler|distance_lines|distance_line|measuring_lines|measuring_line|connections|connection|traces|trace|links|link|segments|segment|strokes|stroke|arrows|arrow|connectors|connector|tracks|track|trails|trail|ways|way|tapes|tape|measuring_tapes|measuring_tape|yardsticks|yardstick|scales|scale] [off|from|on|of|in|over|away|out|down|up]? [the]? [map|screen|view|globe|display|picture|atlas]? [away|off|out|down|up|now|again]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.clearLines"
     kind=request
@@ -1286,6 +1336,7 @@
     example="Take off the rulers."
 
 @pat.geo.map.w.clearlines2 core.pattern
+    canonical="Erase the line I drew."
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [remove|clear|delete|erase|hide|get_rid_of|wipe|take_off|take_away|take_down|wipe_off|scrap|kill|ditch|lose|drop|cancel|undo|dismiss|clear_off|reset|discard|dump|zap|nuke|trash|bin|junk|purge] [the]? [line|lines|ruler|rulers|route|routes] [i|we|you]? [drew|drawn|made|measured|added|put|placed|set|created|plotted|traced|sketched|just_drew|just_made|just_added] [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.clearLines"
     kind=request
@@ -1317,6 +1368,8 @@
     example="Map style simple please."
 
 @pat.geo.map.w.cap2 core.pattern
+    canonical="Tell me Japan's capital city."
+    canonical="Which city is Japan's capital?"
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [what_is|whats|what_s|which_city_is|which_town_is|what_city_is|what_town_is|which_one_is|which_is|which|what]? [the]? {c:lex.geo.map.places} ['s]? [$geo.map.g45_capital] [city]? [called|named|is|name|again|anyway|anyways|actually|really|now|then|there|here|these_days|currently|nowadays|today|right_now|at_the_moment]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.capital arg.c={c}"
     kind=request
@@ -1333,6 +1386,7 @@
     example="What city is the capital of Japan?"
 
 @pat.geo.map.w.capof1 core.pattern
+    canonical="Madrid is capital of which country?"
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [the]? {c:lex.geo.map.places} [is|was|be|being|as]? [the|a|its|their]? [capital|capital_city|capitol|capitol_city|capital_town] [city]? [of|for|in|to]? [which|what|whose|which_country|what_country|which_nation|what_nation|which_state|what_state|which_land|what_land|which_place|what_place] [country|nation|state|place|land]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.capitalOfWhich arg.c={c}"
     kind=request
@@ -1349,6 +1403,7 @@
     example="What country has Tokyo as its capital city?"
 
 @pat.geo.map.w.capof3 core.pattern
+    canonical="Which country's capital is Ottawa?"
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [which|what] [country|nation|state|place|land] 's [capital|capital_city|capitol] [is|city_is|would_be|must_be|was] [the]? {c:lex.geo.map.places} [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.capitalOfWhich arg.c={c}"
     kind=request
@@ -1380,6 +1435,7 @@
     example="Rome capital of Italy yes or no."
 
 @pat.geo.map.w.pop1 core.pattern
+    canonical="How many ppl live in Tokyo?"
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [$geo.map.g12_roughly]? [$geo.map.g66_how_many] [$geo.map.g38_people] [live|lives|are|are_there|dwell|reside|stay|are_living|living|can_live|is_there|inhabit|call|do_live|do_people_live|exist|are_in|live_in|reside_in|stay_in|dwell_in|inhabit_in|is_living|lives_in|call_home|live_there|is_there_in|are_there_in|are_residing|are_staying|are_dwelling|are_inhabiting|have_their_home|have_their_homes|make_their_home|make_their_homes|settle|have_settled|are_settled|are_based|are_located|are_found|can_be_found|can_one_find|could_one_find|would_one_find|will_one_find|one_can_find|you_can_find|you_could_find|you_would_find|you_will_find|do_you_find|do_we_find|do_i_find|did_you_find] [in|there_in|living_in|within|of|at|inside|throughout|across|around|over|on|from|for|to|into|near|by|in_the|within_the|of_the|at_the|inside_the|throughout_the|across_the|around_the|over_the|on_the|from_the|for_the|to_the|into_the|near_the|by_the]? [the]? {p:lex.geo.map.places} [$geo.map.g12_roughly]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.population arg.p={p}"
     kind=request
@@ -1389,6 +1445,7 @@
     example="How many people live in Tokyo, roughly?"
 
 @pat.geo.map.w.pop2 core.pattern
+    canonical="Tokyo has how many people?"
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [the]? {p:lex.geo.map.places} [has|have|holds|houses|contains|got|counts|hosts|boasts|supports|accommodates|shelters|keeps|carries|features|includes|sees|numbers|totals|amounts_to|comes_to|stands_at|is_home_to|is_the_home_of|is_the_home_to|is_inhabited_by|is_populated_by|is_settled_by|is_occupied_by|is_lived_in_by|is_resided_in_by|is_dwelt_in_by|is_peopled_by|is_filled_with|is_full_of|is_packed_with|is_crowded_with|is_busy_with|is_bustling_with|is_teeming_with|is_swarming_with|is_alive_with|is_buzzing_with] [$geo.map.g66_how_many] [$geo.map.g38_people]? [$geo.map.g12_roughly]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.population arg.p={p}"
     kind=request
@@ -1411,6 +1468,7 @@
     example="France area in km2."
 
 @pat.geo.map.w.area2 core.pattern
+    canonical="How large is France in size?"
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [how_large|how_big|how_huge|how_small|how_tiny|how_vast|how_extensive|how_wide|how_long|how_massive|how_enormous|how_giant|how_gigantic|how_immense|how_sizable|how_sizeable|how_spacious|how_expansive|how_great|how_mighty|how_grand|how_colossal|how_mammoth|how_titanic|how_monumental|how_humongous|how_ginormous|how_biiig|how_big_really|how_big_exactly|how_big_actually|how_big_overall|how_big_in_total] [is|are|would|will|could|can|might|does|do|did]? [the]? [area_of|size_of|surface_of|surface_area_of|land_area_of|area|size|surface|extent_of|extent|total_area_of|total_size_of|total_area|total_size|footprint_of|footprint|dimensions_of|dimensions|land_mass_of|landmass_of|land_mass|landmass|scale_of|scale|spread_of|spread|span_of|span]? [the]? {p:lex.geo.map.places} [in_size|in_area|in_km|in_km2|in_square_km|in_square_kilometres|in_square_kilometers|in_sq_km|in_terms_of_size|in_terms_of_area|really|actually|exactly|roughly|approximately|overall|in_total|altogether|at_all|then|anyway|anyways|by_area|by_size|km|in_square_miles|in_sq_miles|in_miles|in_kilometres|in_kilometers|in_kms|in_acres|in_hectares|in_surface_area|in_land_area|in_land_size|in_total_area|in_total_size|in_overall_size|in_overall_area|in_surface|in_extent|in_dimensions|in_scale|in_span|in_spread|in_footprint]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.area arg.p={p}"
     kind=request
@@ -1433,6 +1491,7 @@
     example="What is the size of France in km?"
 
 @pat.geo.map.w.cmp1 core.pattern
+    canonical="Can you compare Italy and Spain?"
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [compare|contrast|match_up|pit|stack_up|put|line_up|show|show_me|display|lay_out|set|measure|weigh|size_up|check|see|look_at|view|juxtapose|compare_and_contrast|put_side_by_side|show_side_by_side|display_side_by_side|set_side_by_side|lay_out_side_by_side|line_up_side_by_side|put_next_to_each_other|show_next_to_each_other|display_next_to_each_other|set_next_to_each_other|lay_out_next_to_each_other|line_up_next_to_each_other|compare_side_by_side|contrast_side_by_side|match_side_by_side|stack_side_by_side|pit_side_by_side|size_side_by_side] [me]? [the]? {a:lex.geo.map.places} [$geo.map.g16_vs] [the]? {b:lex.geo.map.places} [$lang.tail.filler|side_by_side|comparison|compared|head_to_head|face_to_face|one_on_one|stacked_up|together|in_size|by_size|also|fast|immediately|pronto]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.compare arg.a={a} arg.b={b}"
     kind=request
@@ -1479,6 +1538,7 @@
     example="Canada vs Brazil, who is bigger?"
 
 @pat.geo.map.w.cmpo2 core.pattern
+    canonical="Is Brazil or Canada bigger?"
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [is|are|was|does|do|which_is|which_one_is]? [the]? {a:lex.geo.map.places} [or|vs|versus|v|and|n] [the]? {b:lex.geo.map.places} [the]? {m:lex.geo.map.measures} [one|1|country|nation|place|city|town]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.compare arg.a={a} arg.b={b} arg.m={m}"
     kind=request
@@ -1501,6 +1561,7 @@
     example="Which is the bigger country, Brazil or Canada?"
 
 @pat.geo.map.w.cmpyn1 core.pattern
+    canonical="Would Brazil be bigger than Canada?"
     match="[$lang.lead.question|$geo.map.g17_hey]? [,]? [is|was|are|were|would|will|could|can|might|should|must|may|does|do|did|has|have|had]? [the]? {a:lex.geo.map.places} [is|are|was|were|be|being|get|got|gets|getting|become|becomes|became|becoming|seem|seems|seemed|seeming|look|looks|looked|looking|appear|appears|appeared|appearing|feel|feels|felt|feeling|sound|sounds|sounded|sounding]? {m:lex.geo.map.measures} [than|then|that|compared_to|vs|versus|over|as_compared_to|relative_to|when_compared_to|in_comparison_to|in_comparison_with|compared_with|against|beside|next_to|alongside|opposite|facing|by|and_the|or_the|with_the|to_the|as_opposed_to|in_contrast_to|in_contrast_with|contrasted_with|contrasted_to|measured_against|measured_with|matched_with|matched_against|matched_to|paired_with|paired_against|set_against|set_beside|set_next_to|put_against|put_beside|put_next_to|put_alongside|set_alongside|held_against|held_up_against|held_beside|held_next_to|stacked_against|stacked_up_against|stacked_beside|stacked_next_to|lined_up_with|lined_up_against|lined_up_beside|lined_up_next_to|up_against|up_with] [the]? {b:lex.geo.map.places} [in_size|in_area|in_population|by_size|by_area|by_population|really|actually|ya|eh|innit|huh|then|anyway|anyways|though|tho|overall|in_total|altogether|at_all|exactly|precisely|roughly|approximately|about|around|approx|now|today|these_days|currently|right_now|at_the_moment|at_present|presently]? [,]? [$geo.map.g28_yes_or_no]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.compareYN arg.a={a} arg.b={b} arg.m={m}"
     kind=request
@@ -1524,6 +1585,7 @@
     example="Does Brazil beat Canada in population?"
 
 @pat.geo.map.w.bor.a core.pattern
+    canonical="Which nations touch Hungary's border?"
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [$geo.map.g15_list]? [me]? [all]? [the]? [countries|nations|states|places|ones|neighbours|neighbors|land_neighbours|land_neighbors|neighbouring_countries|neighboring_countries|bordering_countries|bordering_nations|bordering_states|border_countries|adjacent_countries|surrounding_countries|countries_around|nations_around|states_around] [that_are|which_are|that|which|who|those_that_are|those_which_are|ones_that_are|ones_which_are]? [bordering|neighbouring|neighboring|touching|bordered_by|adjoining|next_to|beside|near|around|adjacent_to|surrounding|border|touch|surround|neighbour|neighbor|share_a_border_with|share_borders_with|sharing_a_border_with|sharing_borders_with|next_door_to|close_to|are_next_to|are_beside|abut|abutting|are_bordering|have_a_border_with|having_a_border_with|with_a_border_with|share_its_border|share_their_border|lie_next_to|lie_beside|lie_around|are_neighbours_of|are_neighbors_of|are_near] [the]? {p:lex.geo.map.places} ['s]? [$geo.map.g47_border]? [$lang.tail.filler|list|also]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.borders arg.p={p}"
     kind=request
@@ -1549,6 +1611,7 @@
     example="Austria borders what countries?"
 
 @pat.geo.map.w.bor.d core.pattern
+    canonical="Who are Austria's land neighbours?"
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [$geo.map.g15_list]? [me]? [all]? [the]? {p:lex.geo.map.places} ['s]? [land]? [neighbours|neighbors|neighbouring_countries|neighboring_countries|neighbour_countries|neighbor_countries|border_countries|bordering_countries|borders|land_neighbours|land_neighbors|adjacent_countries|surrounding_countries|countries_around|nations_around|states_around|neighbouring_nations|neighboring_nations|neighbouring_states|neighboring_states|border_neighbours|border_neighbors|bordering_nations|bordering_states|nearby_countries|nearby_nations|nearby_states|close_countries|close_nations|close_states|adjoining_countries|adjoining_nations|adjoining_states] [$lang.tail.filler|list|also]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.borders arg.p={p}"
     kind=request
@@ -1564,6 +1627,7 @@
     example="Land neighbours of Spain."
 
 @pat.geo.map.w.nc1 core.pattern
+    canonical="How many neighbours has Austria?"
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [$geo.map.g74_how_many] [land]? [neighbours|neighbors|neighbor_countries|neighbour_countries|neighbouring_countries|neighboring_countries|bordering_countries|borders|land_neighbours|land_neighbors|border_countries|adjacent_countries|surrounding_countries|neighbouring_nations|neighboring_nations|neighbouring_states|neighboring_states|bordering_nations|bordering_states] [does|do|did|will|would|can|could|has|have|had]? [$geo.map.g3_border]? [the]? {p:lex.geo.map.places} ['s]? [$geo.map.g47_border]? [$geo.map.g62_have]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.neighbourCount arg.p={p}"
     kind=request
@@ -1580,6 +1644,7 @@
     example="How many countries share a border with Italy?"
 
 @pat.geo.map.w.nc2 core.pattern
+    canonical="Count the neighbours of Spain."
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [count|number_of|the_number_of|total|total_number_of|count_the|count_all_the|tally|how_many|tally_up|sum_of|the_sum_of|the_total_of|the_count_of|the_tally_of|amount_of|the_amount_of] [the]? [countries|nations|states|land]? [neighbours|neighbors|neighbouring_countries|neighboring_countries|bordering_countries|borders|land_neighbours|land_neighbors] [of|around|for|bordering|neighbouring|next_to|beside|near|touching|adjacent_to|surrounding|that_border|that_touch|that_neighbour] [the]? {p:lex.geo.map.places} [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.neighbourCount arg.p={p}"
     kind=request
@@ -1625,6 +1690,7 @@
     example="Germany how many neighbors?"
 
 @pat.geo.map.w.byn1 core.pattern
+    canonical="Do France and Spain touch?"
     match="[$lang.lead.question|$geo.map.g17_hey]? [,]? [$geo.map.g69_does]? [the]? {a:lex.geo.map.places} [and|with|plus|n|and_the|with_the|plus_the]? [the]? {b:lex.geo.map.places} [share_a_border|share_borders|share_a_frontier|have_a_border|have_a_common_border|have_a_shared_border|touch|border_each_other|touch_each_other|neighbour_each_other|neighbor_each_other|are_neighbours|are_neighbors|are_next_to_each_other|are_adjacent|border|neighbour|neighbor|adjoin|abut|share_a_border_with_each_other|share_borders_with_each_other|have_a_border_in_common|have_borders_in_common|have_a_border_with_each_other|have_borders_with_each_other|are_next_door_to_each_other|are_next_door|are_beside_each_other|are_near_each_other|are_adjacent_to_each_other|are_bordering_each_other|are_touching_each_other|touch_borders|touch_at_the_border|meet_at_the_border|meet_at_a_border|meet_on_a_border|meet_along_a_border|join_at_the_border|join_at_a_border|connect_at_the_border|connect_at_a_border|are_connected|are_attached|are_joined|are_linked|are_tied|are_bound|are_glued|are_stuck|are_fused|are_merged|are_united|are_combined|are_coupled|are_paired|are_matched|are_twinned|are_doubled|are_duplicated|are_mirrored|are_reflected|are_echoed|are_repeated|are_replicated|are_copied|are_cloned|are_imitated|are_mimicked|are_aped|are_parroted|are_matched_up] [with_each_other|each_other|together|yes_or_no|right|or_not|true_or_false|correct|isnt_it|no|or_what|yes_no|innit|eh|huh|ya|yeah|yep]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.borderYN arg.a={a} arg.b={b}"
     kind=request
@@ -1645,6 +1711,7 @@
     example="France touches Spain?"
 
 @pat.geo.map.w.land1 core.pattern
+    canonical="Is Hungary surrounded by land?"
     match="[$lang.lead.question|$geo.map.g17_hey]? [,]? [is|are|was|were|does|do|did|can|could|would|will|has|have|had|am_i_right_that]? [the]? {p:lex.geo.map.places} [is|are|was|were|seems|looks|appears|remains|stays]? [also|really|actually|truly|just|even|perhaps|maybe|possibly|probably|presumably|supposedly|apparently|seemingly|evidently|obviously|clearly|definitely|certainly|surely|indeed]? [landlocked|land_locked|landlocked_or_not|a_landlocked_country|a_landlocked_nation|a_landlocked_state|without_a_coast|without_a_sea_coast|without_a_coastline|without_coast|without_sea_access|without_access_to_the_sea|without_a_sea|without_an_ocean|without_ocean_access|surrounded_by_land|enclosed_by_land|cut_off_from_the_sea|sealess|lacking_a_coast|lacking_sea_access|all_land|no_coast|no_coastline|no_sea|no_sea_access|no_ocean|no_seaside|no_port|no_sea_border|no_ocean_access|coastless|sealess|oceanless|portless|beachless|shoreless|without_a_port|without_a_beach|without_a_shore|without_a_seaside|without_a_sea_border|without_sea|without_ocean|without_a_harbour|without_a_harbor|without_harbour|without_harbor|without_a_coastal_area|without_coastal_access|no_coastal_access|no_access_to_the_sea|no_access_to_the_ocean|no_access_to_water|without_access_to_water|short_of_a_coast|short_of_sea_access|missing_a_coast|missing_sea_access|devoid_of_a_coast|devoid_of_sea_access|bereft_of_a_coast|bereft_of_sea_access|deprived_of_a_coast|deprived_of_sea_access|cut_off_from_the_ocean|isolated_from_the_sea|isolated_from_the_ocean|away_from_the_sea|away_from_the_ocean|far_from_the_sea|far_from_the_ocean|inland|inland_only|an_inland_country|an_inland_nation|an_inland_state|completely_inland|totally_inland|entirely_inland|fully_inland|purely_inland|solely_inland|only_inland|just_inland|merely_inland|simply_inland|surrounded_by_land_only|enclosed_by_land_only|hemmed_in_by_land|hemmed_in_by_other_countries|boxed_in_by_land|boxed_in_by_other_countries|locked_in_by_land|locked_in_by_other_countries|locked_in|land_enclosed|land_bound|landbound|sea_less|ocean_less|port_less|beach_less|shore_less|coast_less] [,]? [or_not|yes_or_no|right|true_or_false|or_what|or_is_it|isnt_it|no|correct|yeah|yep|ya|huh|eh|innit]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.landlocked arg.p={p}"
     kind=request
@@ -1663,6 +1730,7 @@
     example="No ocean for Bolivia?"
 
 @pat.geo.map.w.land3 core.pattern
+    canonical="Does Bolivia touch the sea?"
     match="[$lang.lead.question|$geo.map.g17_hey]? [,]? [does|do|did|can|could|would|will|has|have|had|is|are|was|were]? [the]? {p:lex.geo.map.places} [have|has|got|touch|touches|reach|reaches|border|borders|access|get_to|gets_to|see|sees|own|owns|possess|possesses|contain|contains|include|includes|enjoy|enjoys|boast|boasts|feature|features|offer|offers|provide|provides|support|supports|hold|holds|keep|keeps|carry|carries|bear|bears|bring|brings|give|gives|grant|grants|afford|affords|allow|allows|permit|permits|let|lets|enable|enables|empower|empowers|entitle|entitles|authorize|authorizes|license|licenses|sanction|sanctions|certify|certifies|approve|approves|accept|accepts|welcome|welcomes|receive|receives|take|takes|embrace|embraces|adopt|adopts|use|uses|utilize|utilizes|employ|employs|apply|applies|exploit|exploits|harness|harnesses|leverage|leverages|tap|taps|draw_on|draws_on|rely_on|relies_on|depend_on|depends_on|count_on|counts_on|bank_on|banks_on|lean_on|leans_on|fall_back_on|falls_back_on|resort_to|resorts_to|turn_to|turns_to|look_to|looks_to|go_to|goes_to|come_to|comes_to|get|gets|gain|gains|obtain|obtains|acquire|acquires|secure|secures|win|wins|earn|earns|achieve|achieves|attain|attains|reach_for|reaches_for|touch_on|touches_on|touch_upon|touches_upon|border_on|borders_on|abut_on|abuts_on|adjoin_on|adjoins_on|lie_on|lies_on|sit_on|sits_on|stand_on|stands_on|rest_on|rests_on|lean_on_the|leans_on_the|face|faces|look_onto|looks_onto|look_over|looks_over|overlook|overlooks|front|fronts|front_onto|fronts_onto|open_onto|opens_onto|open_to|opens_to|open_out_to|opens_out_to|open_out_onto|opens_out_onto|lead_to|leads_to|lead_onto|leads_onto|lead_out_to|leads_out_to|lead_out_onto|leads_out_onto|extend_to|extends_to|extend_onto|extends_onto|extend_out_to|extends_out_to|extend_out_onto|extends_out_onto|stretch_to|stretches_to|stretch_onto|stretches_onto|stretch_out_to|stretches_out_to|stretch_out_onto|stretches_out_onto] [access_to|access_to_the|access_to_a|access_to_an|access_to_any|access_to_its|access_to_their]? [a|an|any|the|some|its|their|his|her|our|your|my]? [coast|coastline|sea|seaside|sea_coast|sea_border|ocean|port|beach|shore|sea_access|access_to_the_sea|access_to_the_ocean|ocean_access|coastal_access|sea_view|seashore|harbor|harbour|water|waterfront|littoral|seaboard|coastal_area|coastal_region|coastal_zone|maritime_border|maritime_boundary|maritime_frontier|sea_boundary|sea_frontier|ocean_border|ocean_boundary|ocean_frontier|coastal_border|coastal_boundary|coastal_frontier|saltwater|salt_water|sea_water|seawater|ocean_water|open_water|open_sea|open_ocean|high_seas|deep_sea|deep_ocean|blue_water|blue_sea|blue_ocean|marine_access|maritime_access|naval_access|navy_access|port_access|harbour_access|harbor_access|shipping_access|shipping_lanes|trade_routes|sea_lanes|sea_routes|ocean_lanes|ocean_routes|water_access|water_routes|waterways|water_ways|sea_ways|ocean_ways|coastal_ways|coastal_routes|coastal_lanes|coastal_lines|coast_line|sea_line|ocean_line|shore_line|beach_line|port_line|harbour_line|harbor_line|water_line] [,]? [to_the_sea|to_the_ocean|to_water|at_all|really|actually|even|or_not|yes_or_no|right|true_or_false|or_what|or_is_it|isnt_it|no|correct|yeah|yep|ya|huh|eh|innit]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.landlocked arg.p={p}"
     kind=request
@@ -1687,6 +1755,8 @@
     example="Can you say what continent Egypt is in?"
 
 @pat.geo.map.w.cont2 core.pattern
+    canonical="Chile is in what continent?"
+    canonical="Egypt is in which continent?"
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [the]? {p:lex.geo.map.places} [is|lies|sits|belongs|is_located|is_situated|is_found|exists|can_be_found|can_be_located|falls|is_part|belongs_in|is_included|stands|rests|resides|lives|dwells|stays|remains|appears|shows_up|shows|turns_up|pops_up|comes_up|comes_in|goes_in|fits_in|fits_into|fits_under|goes_under|sits_under|lies_under|is_under|is_inside|is_within|is_on|is_in|are|lie|sit|belong|are_located|are_situated|are_found|exist|can_be_found|can_be_located|fall|are_part|belong_in|are_included|stand|rest|reside|live|dwell|stay|remain|appear|show_up|show|turn_up|pop_up|come_up|come_in|go_in|fit_in|fit_into|fit_under|go_under|sit_under|lie_under|are_under|are_inside|are_within|are_on|are_in]? [$geo.map.g5_in]? [$geo.map.g49_what] [$geo.map.g20_continent] [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.continent arg.p={p}"
     kind=request
@@ -1714,6 +1784,7 @@
     example="Can you tell me the continent for Chile?"
 
 @pat.geo.map.w.ctry2 core.pattern
+    canonical="Cluj is in what country?"
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [the]? {p:lex.geo.map.places} [is|lies|sits|belongs|is_located|is_situated|is_found|exists|can_be_found|can_be_located|falls|is_part|belongs_in|is_included|stands|rests|resides|lives|dwells|stays|remains|appears|shows_up|shows|turns_up|pops_up|comes_up|comes_in|goes_in|fits_in|fits_into|fits_under|goes_under|sits_under|lies_under|is_under|is_inside|is_within|is_on|is_in]? [$geo.map.g5_in]? [$geo.map.g49_what] [$geo.map.g21_country] [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.country arg.p={p}"
     kind=request
@@ -1737,6 +1808,7 @@
     example="Tell me which country Cluj is in."
 
 @pat.geo.map.w.ctry5 core.pattern
+    canonical="Which country Cluj is in?"
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [what|which] [$geo.map.g21_country] [the]? {p:lex.geo.map.places} [is|lies|sits|belongs|is_located|is_situated|is_found|exists|can_be_found|can_be_located|falls|is_part|belongs_in|is_included|stands|rests|resides|lives|dwells|stays|remains|appears] [$geo.map.g5_in]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.country arg.p={p}"
     kind=request
@@ -2065,6 +2137,7 @@
     example="Top 3 biggest cities in japan."
 
 @pat.geo.map.w.supl.dem core.pattern
+    canonical="List 3 biggest japanese cities."
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [$geo.map.g14_what_are]? [me]? [the]? {n:number?} {m:lex.geo.map.superlatives} {d:lex.geo.map.demonyms} [$geo.map.g25_cities] [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.superlative arg.m={m} arg.k=city arg.p={d} arg.n={n} arg.plural=true"
     kind=request
@@ -2114,6 +2187,8 @@
     example="Top city in Romania by size."
 
 @pat.geo.map.w.cnt1 core.pattern
+    canonical="How many states in europe?"
+    canonical="Count the countries in Europe."
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [number_of|the_number_of|count|count_the|count_all_the|total|total_number_of|the_total_number_of|amount_of|the_amount_of|how_many|tally|tally_up|sum_of|the_sum_of|the_total_of|the_count_of|the_tally_of] [all]? [the]? [countries|nations|states|sovereign_states|independent_countries|independent_nations|independent_states|lands|territories] [are]? [there]? [$geo.map.g48_in]? [the]? {p:lex.geo.map.places} [are_there|exist|are_there_in_total|in_total|total|altogether|all_together|in_all|overall|all_in_all|now|today|these_days|currently|right_now|at_the_moment|at_present|presently|exactly|precisely|roughly|approximately|about|around|approx]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.count arg.k=countries arg.p={p}"
     kind=request
@@ -2183,6 +2258,7 @@
     example="Brazil lang."
 
 @pat.geo.map.w.lang2 core.pattern
+    canonical="What do brazilians speak?"
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [what|which|whats|what_is] [do|does|did|would|will|can|could|should] {d:lex.geo.map.demonyms} [$geo.map.g70_people]? [speak|talk|use|say|write|understand|know|learn|study|teach|read|sing|chat_in|converse_in|communicate_in|communicate_with|use_to_talk|use_to_speak|use_to_communicate|speak_in|talk_in|say_it_in|write_in] [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.languages arg.p={d}"
     kind=request
@@ -2190,6 +2266,7 @@
     example="What do brazilians speak?"
 
 @pat.geo.map.w.lang3 core.pattern
+    canonical="What do people speak in Brazil?"
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [what|which|whats|what_is] [do|does|did|would|will|can|could|should] [$geo.map.g52_they] [speak|talk|use|say|write|understand|know|learn|study|teach|read|sing|chat_in|converse_in|communicate_in|speak_in|talk_in] [$geo.map.g59_in]? [the]? {p:lex.geo.map.places} [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.languages arg.p={p}"
     kind=request
@@ -2206,6 +2283,7 @@
     example="Romania info pls."
 
 @pat.geo.map.w.info2 core.pattern
+    canonical="Give me info about Romania."
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [give_me|gimme|show_me|get_me|i_want|i_need|got_any|any|let_me_have|let_me_see|lemme_see|lets_see|can_i_have|can_i_get|could_i_have|could_i_get|may_i_have|may_i_get|can_you_give_me|could_you_give_me|can_you_get_me|could_you_get_me|can_you_show_me|could_you_show_me|bring_me|fetch_me|pull_up|bring_up|look_up|find_me|dig_up|dig_out|fish_out|root_out|hunt_down|track_down|run_down|ferret_out|smoke_out|sniff_out|nose_out|scout_out|seek_out|search_out|hunt_out|find_out|check|check_out|look_into|dig_into|delve_into|probe_into|research|investigate|explore|examine|study|survey|scan|review|go_over|look_over|run_over|read_up_on|brush_up_on|swot_up_on|bone_up_on|cram_on|mug_up_on|learn|find_out_about|get_info_on|get_facts_on|get_details_on] [me]? [some|the|a|an|more|any|all|all_the|all_of_the|a_bit_of|a_little|a_few|few|several|lots_of|loads_of|tons_of|plenty_of|heaps_of|stacks_of|masses_of|piles_of|bags_of|oodles_of|scads_of|reams_of|gobs_of|slews_of|boatloads_of|truckloads_of|shedloads_of|ton_of|load_of|lot_of|bit_of|little|couple_of|handful_of|bunch_of|number_of|variety_of|range_of|selection_of|series_of|set_of|collection_of|batch_of|group_of|cluster_of|pile_of|stack_of|heap_of|mass_of|mound_of|mountain_of|ocean_of|sea_of|flood_of|stream_of|river_of|torrent_of|avalanche_of|barrage_of|volley_of|shower_of|hail_of|rain_of|storm_of|tempest_of|hurricane_of|tornado_of|cyclone_of|typhoon_of|whirlwind_of]? [$geo.map.g22_info] [about|on|for|regarding|of|around|concerning|to|with|re|abt|bout|upon|over|across|along|alongside|beside|by|near|next_to|close_to|nearby|in|inside|within|at|from|through|throughout|via|per|re_the]? [the]? {p:lex.geo.map.places} [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.info arg.p={p}"
     kind=request
@@ -2290,6 +2368,7 @@
     example="Distance to Rome from me?"
 
 @pat.geo.map.w.distf4 core.pattern
+    canonical="Am I far from Rome?"
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [am_i|are_we] [far|close|near|distant|away|so_far|very_far|really_far|too_far|far_away|far_off|far_out|far_from|close_to|near_to|distant_from|away_from] [from|to|away_from|close_to|near_to|distant_from]? [the]? {b:lex.geo.map.places} [,]? [$geo.map.g28_yes_or_no]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.distanceFrom arg.b={b} arg.from=me"
     kind=request
@@ -2297,6 +2376,7 @@
     example="Am I far from Rome?"
 
 @pat.geo.map.w.loc1 core.pattern
+    canonical="Where am I on the map?"
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [where|wher] [am_i|are_we|r_we|am_i_at|are_we_at|r_we_at|m_i|re_we|are_u|r_u] [located|now|right_now|exactly|at_the_moment|currently|on_the_map|on_this_map|on_the_globe|on_earth|in_the_world|at|standing|sitting|staying|living|even|actually|really|currently_located|geographically|just_now|at_present|presently|precisely|roughly|approximately|about|around|approx]? [$geo.map.g61_on_the_map]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.locate"
     kind=request
@@ -2305,6 +2385,7 @@
     example="Where r we?"
 
 @pat.geo.map.w.loc2 core.pattern
+    canonical="My location please."
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [my|our|the_user_s|current|show_my|show_our|get_my|get_our|find_my|find_our|use_my|use_our|locate_my|check_my|detect_my|display_my|where_is_my|where_s_my|wheres_my|whats_my|what_s_my|what_is_my|where_is_our|where_s_our|wheres_our|whats_our|what_s_our|what_is_our] [current|actual|exact|real|gps]? [location|position|spot|place|whereabouts|coordinates|gps|gps_location|gps_position|geolocation|geo_location|pin|dot|marker|point|address|bearings|latitude_and_longitude|lat_long|lat_lon|lat_lng|co_ordinates|coords|whereabouts_now|location_now|position_now|spot_now|place_now] [on_the_map|now|right_now|here|pls|at_the_moment|currently|at_present|presently|exactly|precisely|roughly|approximately|about|around|approx]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.locate"
     kind=request
@@ -2319,6 +2400,8 @@
     example="Can u find where i am?"
 
 @pat.geo.map.w.here1 core.pattern
+    canonical="What's here on the map?"
+    canonical="Tell me what's around me."
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [what_is|whats|what_s|what|whats_here|whats_this|whats_there|whats_that|what_is_here|what_s_here] [$geo.map.g19_here] [on_the_map|on_this_map|on_the_view|in_the_view|at_the_moment|right_now|now|currently|exactly|on_screen|on_the_screen]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.here"
     kind=request
@@ -2385,6 +2468,7 @@
     example="Markers count pls."
 
 @pat.geo.map.w.mkq3 core.pattern
+    canonical="What's the number of markers?"
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [what_s_the_number_of|whats_the_number_of|what_is_the_number_of|what_s_the_count_of|whats_the_count_of|what_is_the_count_of|the_number_of|the_count_of] [the]? [markers|pins|flags|marks|spots|points|dots|pushpins|bookmarks|tags|labels] [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.markers"
     kind=request
@@ -2392,6 +2476,7 @@
     example="What's the number of markers?"
 
 @pat.geo.map.w.pan1 core.pattern
+    canonical="Go up north a bit."
     match="[$lang.lead.filler|hi|hello]? [so|like|just|then|and|but]? [$lang.lead.filler]? [$geo.map.g1_uh]? [,]? [$geo.map.g11_go] [the]? [$geo.map.g63_map]? [up]? [over]? {amt:lex.geo.map.amounts?} [further|farther|more|a_bit_more|a_little_more]? [$geo.map.g41_to_the]? {d:lex.geo.map.directions} [direction|side|part|way|end]? {amt2:lex.geo.map.amounts?} [$geo.map.g24_for_a_bit]? [,]? [$lang.tail.filler|$geo.map.g2_lmao]?"
     emit="@{_} core.request action=geo.pan arg.d={d} arg.amt={amt} arg.amt2={amt2}"
     kind=request
@@ -2469,6 +2554,8 @@
     example="Show me 45.5 south 25 west."
 
 @pat.geo.map.x2.undo core.pattern
+    canonical="Undo."
+    canonical="Undo that."
     match="[$lang.lead.filler|pls|plz]? [undo|undo_that|undo_it|undo_the_last_change|undo_the_last_marker|take_that_back|take_it_back|revert|revert_that|go_back|step_back|cancel_that|reverse_that|put_it_back|change_it_back] [on_the_map|the_marker|that_change|pls|plz|thanks|now]?"
     emit="@{_} core.request action=geo.undo"
     kind=request
@@ -2477,6 +2564,7 @@
     example="Undo that."
 
 @pat.geo.map.x2.redo core.pattern
+    canonical="Redo."
     match="[$lang.lead.filler|pls|plz]? [redo|redo_that|redo_it|do_it_again|do_that_again]"
     emit="@{_} core.request action=geo.redo"
     kind=request

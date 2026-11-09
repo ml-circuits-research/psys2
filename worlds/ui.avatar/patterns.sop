@@ -174,7 +174,6 @@
     example="Make the avatar a robot again."
 
 @pat.ui.avatar.char.set3 core.pattern
-    canonical="I want a human avatar."
     match="[$lang.lead.filler|pls|plz]? [i_want|i_would_like|i_prefer|give_me|show_me|can_i_have|could_i_have|let_me_have|use|i_wanna|i_wana|gimme] [a|an|the]? {who:lex.ui.avatar.characters} [avatar|face|character|look] [$lang.tail.filler|instead]? [$lang.tail.filler]?"
     emit="@{_} core.request action=avatar.setCharacter arg.who={who}"
     kind=request
@@ -585,7 +584,6 @@
     example="Can you describe yourself?"
 
 @pat.ui.avatar.char.make core.pattern
-    canonical="Make me a human avatar."
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|create|build|give|get|show|let_me_see] [me|us|yourself|my_avatar|the_avatar|my_face|the_face|urself|ur_self]? [a|an|the|my|your|ur]? {who:lex.ui.avatar.characters} [avatar|face|character|version|one]? [$lang.tail.filler|instead]? [$lang.tail.filler]?"
     emit="@{_} core.request action=avatar.setCharacter arg.who={who}"
     kind=request

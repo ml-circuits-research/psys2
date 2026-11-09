@@ -1,4 +1,5 @@
 @pat.docs.editor.heading core.pattern
+    canonical="Add a heading Shopping."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [add|insert|create|write|put_in] [a|the|another]? [heading|header|subheading] [saying|called|named|that_says|reading]? {t:rest}"
     emit="@{_} core.request action=doc.addHeading arg.text=\"{t}\""
     kind=request
@@ -6,6 +7,7 @@
     example="Add a heading Shopping."
 
 @pat.docs.editor.paragraph core.pattern
+    canonical="Add a paragraph The cat sat on the mat."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [add|insert|type|write|put_in|append] [a|the|another|one_more|1_more]? [paragraph|line|sentence|note] [saying|that_says|reading|with_the_text|with]? {t:rest}"
     emit="@{_} core.request action=doc.addParagraph arg.text=\"{t}\""
     kind=request
@@ -27,6 +29,7 @@
     example="Type remember to buy milk."
 
 @pat.docs.editor.delsent core.pattern
+    canonical="Delete the last sentence."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [delete|remove|erase] [the]? [last|previous] sentence [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.deleteSentence"
     kind=request
@@ -34,6 +37,7 @@
     example="Delete the last sentence."
 
 @pat.docs.editor.clear core.pattern
+    canonical="Clear the document."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [clear|empty|erase|wipe|reset|delete|remove] [the|my]? [document|text|page|doc|everything] [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.clear"
     kind=request
@@ -41,6 +45,7 @@
     example="Clear the document."
 
 @pat.docs.editor.replace core.pattern
+    canonical="Replace cat with dog."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [replace|change|swap] [all]? {a:words} [with|to|by|for] {b:words}"
     emit="@{_} core.request action=doc.replace arg.from=\"{a}\" arg.to=\"{b}\""
     kind=request
@@ -55,6 +60,7 @@
     example="Move the last paragraph to the top."
 
 @pat.docs.editor.movetop.num core.pattern
+    canonical="Move paragraph 2 to the top."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [move|put|send] [the|my]? {kind:lex.docs.editor.kinds} {n:number} to [the]? [top|beginning|start|front] [of_the_document]? [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.move arg.n={n} arg.kind={kind} arg.where=top"
     kind=request
@@ -76,6 +82,7 @@
     example="Move paragraph 2 to the end."
 
 @pat.docs.editor.moveup.ord core.pattern
+    canonical="Move the second paragraph up."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? move [the|my]? {ord:lex.docs.editor.ordinals} {kind:lex.docs.editor.kinds} up [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.move arg.ord={ord} arg.kind={kind} arg.where=up"
     kind=request
@@ -104,6 +111,7 @@
     example="Move paragraph 2 down."
 
 @pat.docs.editor.title core.pattern
+    canonical="Make the title Our Trip."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [make|set|change|put] [the]? [title|document_title|name] [of_the_document]? [to|into|as]? {t:rest}"
     emit="@{_} core.request action=doc.setTitle arg.text=\"{t}\""
     kind=request
@@ -111,6 +119,7 @@
     example="Make the title Our Trip."
 
 @pat.docs.editor.title2 core.pattern
+    canonical="Call the document Weekend Plans."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [call|name|rename|title] [the|this]? [document|doc] [to|as]? {t:rest}"
     emit="@{_} core.request action=doc.setTitle arg.text=\"{t}\""
     kind=request
@@ -118,6 +127,7 @@
     example="Call the document Weekend Plans."
 
 @pat.docs.editor.newdoc core.pattern
+    canonical="Start a new document."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [start|create|make|open|begin]? [a|an|another]? new [document|doc|page|file] [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.newDoc"
     kind=request
@@ -125,6 +135,7 @@
     example="Start a new document."
 
 @pat.docs.editor.newdoc2 core.pattern
+    canonical="Create a new document called Holiday."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [start|create|make|open|begin]? [a|an|another]? new [document|doc|page|file] [called|named|titled|about] {t:rest}"
     emit="@{_} core.request action=doc.newDoc arg.text=\"{t}\""
     kind=request
@@ -140,6 +151,7 @@
     example="Undo that."
 
 @pat.docs.editor.redo core.pattern
+    canonical="Redo."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [redo|redo_that|redo_it|redo_the_last_change|do_that_again|put_it_back|bring_it_back] [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.redo"
     kind=request
@@ -147,6 +159,7 @@
     example="Redo."
 
 @pat.docs.editor.read core.pattern
+    canonical="Read me the document."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [read|read_me|read_out|read_aloud|speak] [me]? [the|my]? [document|doc|text|page|everything|whole_document|whole_text|whole_thing] [aloud|out_loud|back|back_to_me|to_me|out]? [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.read"
     kind=request
@@ -169,6 +182,8 @@
     example="Copy the document."
 
 @pat.docs.editor.download core.pattern
+    canonical="Download the document."
+    canonical="Download the document as markdown."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [download|save|export] [the|my]? [document|doc|text|file|it]? [as|to|in]? [a|an]? {f:lex.docs.editor.formats?} [file|format]? [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.download arg.format={f}"
     kind=request
@@ -177,6 +192,7 @@
     example="Download the document."
 
 @pat.docs.editor.q.count core.pattern
+    canonical="How many paragraphs are there?"
     match="[$lang.lead.filler|pls|plz]? [how_many|how_much] {kind:lex.docs.editor.kinds} [are|is] there [in_the_document|in_it|in_the_text|in_total]? [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.count arg.kind={kind}"
     kind=request
@@ -191,6 +207,7 @@
     example="How many words does the document have?"
 
 @pat.docs.editor.q.title core.pattern
+    canonical="What is the title?"
     match="[$lang.lead.filler|pls|plz]? [what|wat] [is|was] [the]? [title|name] [of_the_document|of_it|of_this_document]? [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.askTitle"
     kind=request
@@ -198,6 +215,7 @@
     example="What is the title?"
 
 @pat.docs.editor.q.title2 core.pattern
+    canonical="What is the document called?"
     match="[$lang.lead.filler|pls|plz]? [what_is_the_document_called|what_is_this_document_called|what_do_we_call_the_document] [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.askTitle"
     kind=request
@@ -205,6 +223,7 @@
     example="What is the document called?"
 
 @pat.docs.editor.q.block core.pattern
+    canonical="What does the first paragraph say?"
     match="[$lang.lead.filler|pls|plz]? [what|wat] [is|does] [the]? {ord:lex.docs.editor.ordinals} {kind:lex.docs.editor.kinds} [say]? [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.whatIs arg.ord={ord} arg.kind={kind}"
     kind=request
@@ -212,6 +231,7 @@
     example="What does the first paragraph say?"
 
 @pat.docs.editor.q.say core.pattern
+    canonical="What does the document say?"
     match="[$lang.lead.filler|pls|plz]? [what_is_in_the_document|what_does_the_document_say|what_have_i_written|what_is_written_in_the_document|what_does_it_say|what_is_in_it|what_is_in_the_text] [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.say"
     kind=request
@@ -219,6 +239,7 @@
     example="What does the document say?"
 
 @pat.docs.editor.q.mention core.pattern
+    canonical="Does the document mention milk?"
     match="[$lang.lead.filler|pls|plz]? [does|did] [the|my]? [document|text|doc|page|it] [mention|contain|say|include|have] {w:words}"
     emit="@{_} core.request action=doc.mentions arg.word=\"{w}\""
     kind=request
@@ -226,6 +247,7 @@
     example="Does the document mention milk?"
 
 @pat.docs.editor.q.empty core.pattern
+    canonical="Is the document empty?"
     match="[$lang.lead.filler|pls|plz]? [is|are] [the]? [document|doc|page|text] empty [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.isEmpty"
     kind=request
@@ -233,6 +255,7 @@
     example="Is the document empty?"
 
 @pat.docs.editor.dict.start core.pattern
+    canonical="Start dictation."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [start|begin|turn_on|enable|switch_on|activate|resume] [the]? [dictation|dictating|taking_dictation] [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.dictate"
     kind=request
@@ -240,6 +263,7 @@
     example="Start dictation."
 
 @pat.docs.editor.dict.start2 core.pattern
+    canonical="Let me dictate."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [dictate|let_me_dictate|take_dictation|i_want_to_dictate|i_will_dictate|take_down_what_i_say|dictation_mode] [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.dictate"
     kind=request
@@ -247,6 +271,7 @@
     example="Let me dictate."
 
 @pat.docs.editor.dict.stop core.pattern
+    canonical="Stop dictation."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [stop|end|finish|turn_off|disable|quit] [the]? [dictation|dictating] [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.dictateStop"
     kind=request
@@ -254,6 +279,7 @@
     example="Stop dictation."
 
 @pat.docs.editor.from.list core.pattern
+    canonical="Make a document from my shopping list."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [make|create|write|build|start|generate|prepare] [me]? [a|the]? [document|doc|page|note] [from|of|out_of|with|using] [my|the|our]? {list:words} list [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.fromList arg.list=\"{list}\""
     kind=request
@@ -261,6 +287,7 @@
     example="Make a document from my shopping list."
 
 @pat.docs.editor.from.list2 core.pattern
+    canonical="Turn my shopping list into a document."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [turn|make|put|write_down|write|note_down] [my|the|our]? {list:words} list [into|in|as]? [a|the]? [document|doc|page]? [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.fromList arg.list=\"{list}\""
     kind=request
@@ -268,6 +295,8 @@
     example="Turn my shopping list into a document."
 
 @pat.docs.editor.report core.pattern
+    canonical="Make a document about farm animals."
+    canonical="Write a report about sea animals."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [write|make|create|prepare|compose|build] [me]? [a|the]? [report|document|doc|summary|page] [about|on] {t:rest}"
     emit="@{_} core.request action=doc.report arg.topic=\"{t}\""
     kind=request
@@ -276,6 +305,8 @@
     example="Make a document about farm animals."
 
 @pat.docs.editor.holdings core.pattern
+    canonical="Write down what Tom and Ana have."
+    canonical="Write down what everyone has."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [write_down|note_down|put_down|make_a_note_of|list|record|write_a_document_of|make_a_document_of|write_a_document_with|make_a_document_with|make_a_document_from] [what|wat] {who:words} [has|have|got|owns|own] [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.holdings arg.who=\"{who}\""
     kind=request
@@ -291,6 +322,7 @@
     example="Make a document of what everyone has."
 
 @pat.docs.editor.fmt.make core.pattern
+    canonical="Make the second paragraph bold."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [make|set] {t:words} {m:lex.docs.editor.marks} [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.format arg.t=\"{t}\" arg.mark={m}"
     kind=request
@@ -300,6 +332,7 @@
     example="Make it italic."
 
 @pat.docs.editor.fmt.verb core.pattern
+    canonical="Italicize the first sentence."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? {m:lex.docs.editor.markverbs} {t:rest}"
     emit="@{_} core.request action=doc.format arg.t=\"{t}\" arg.mark={m}"
     kind=request
@@ -330,6 +363,7 @@
     example="Make it not bold."
 
 @pat.docs.editor.fmt.plain core.pattern
+    canonical="Make the title plain."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [make|set] {d:lex.docs.editor.determiners} {t:words} [normal|plain|regular] [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.clearFormat arg.t=\"{d} {t}\""
     kind=request
@@ -337,6 +371,7 @@
     example="Make the title plain."
 
 @pat.docs.editor.fmt.clear core.pattern
+    canonical="Clear the formatting of the second paragraph."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [clear|remove|reset] [the]? [formatting|styling] [from|of|on] {t:rest}"
     emit="@{_} core.request action=doc.clearFormat arg.t=\"{t}\""
     kind=request
@@ -373,6 +408,7 @@
     example="Add a link to example dot com on the word example."
 
 @pat.docs.editor.link.to core.pattern
+    canonical="Add a link to example dot com."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [add|insert|put|make|create] [a|the]? link to {u:rest}"
     emit="@{_} core.request action=doc.link arg.url=\"{u}\" arg.t=\"it\""
     kind=request
@@ -387,6 +423,7 @@
     example="Link the word cat to animals dot example dot org."
 
 @pat.docs.editor.link.make core.pattern
+    canonical="Make the word cat a link to example dot com."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? make {t:words} a link to {u:rest}"
     emit="@{_} core.request action=doc.link arg.url=\"{u}\" arg.t=\"{t}\""
     kind=request
@@ -415,6 +452,7 @@
     example="Center the title."
 
 @pat.docs.editor.align.justify core.pattern
+    canonical="Justify the first paragraph."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? justify {t:rest}"
     emit="@{_} core.request action=doc.align arg.t=\"{t}\" arg.how=justify"
     kind=request
@@ -429,6 +467,7 @@
     example="Align the second paragraph to the right."
 
 @pat.docs.editor.align.make core.pattern
+    canonical="Make the title centered."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? make {d:lex.docs.editor.determiners} {t:words} {a:lex.docs.editor.aligns} [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.align arg.t=\"{d} {t}\" arg.how={a}"
     kind=request
@@ -436,6 +475,8 @@
     example="Make the title centered."
 
 @pat.docs.editor.convert core.pattern
+    canonical="Make the list a task list."
+    canonical="Turn this paragraph into a quote."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [turn|change|convert|transform|make] {d:lex.docs.editor.determiners} {t:words} [into|to|as]? [a|an]? {k:lex.docs.editor.convert} {n:number?} [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.convert arg.t=\"{d} {t}\" arg.to={k} arg.n={n}"
     kind=request
@@ -452,6 +493,8 @@
     example="Turn it into a quote."
 
 @pat.docs.editor.select core.pattern
+    canonical="Select everything."
+    canonical="Select the second paragraph."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [select|pick_out] {t:rest}"
     emit="@{_} core.request action=doc.select arg.t=\"{t}\""
     kind=request
@@ -461,6 +504,7 @@
     example="Select everything."
 
 @pat.docs.editor.unselect core.pattern
+    canonical="Clear the selection."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [unselect|deselect|select_nothing|clear_the_selection|clear_selection|drop_the_selection] [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.unselect"
     kind=request
@@ -469,6 +513,8 @@
     example="Clear the selection."
 
 @pat.docs.editor.whatsel core.pattern
+    canonical="What is selected?"
+    canonical="What did I select?"
     match="[$lang.lead.filler|pls|plz]? [what|wat] [is|did_i|have_i] [selected|select] [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.whatSelected"
     kind=request
@@ -477,6 +523,7 @@
     example="What did I select?"
 
 @pat.docs.editor.delete.it core.pattern
+    canonical="Delete the selection."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [delete|remove|erase|cut|drop] [it|this|that|the_selection|selection|the_selected_text|the_selected_part] [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.deleteTarget arg.t=\"it\""
     kind=request
@@ -485,6 +532,7 @@
     example="Delete the selection."
 
 @pat.docs.editor.delete.word core.pattern
+    canonical="Delete the word milk."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [delete|remove|erase] [the]? [word|words|phrase] {w:rest}"
     emit="@{_} core.request action=doc.deleteTarget arg.t=\"the word {w}\""
     kind=request
@@ -492,6 +540,7 @@
     example="Delete the word milk."
 
 @pat.docs.editor.delete.row core.pattern
+    canonical="Remove the row cat."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [delete|remove] [the]? row {name:rest}"
     emit="@{_} core.request action=doc.deleteRow arg.name=\"{name}\""
     kind=request
@@ -499,6 +548,7 @@
     example="Remove the row cat."
 
 @pat.docs.editor.delete.column core.pattern
+    canonical="Delete the column food."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [delete|remove] [the]? column {name:rest}"
     emit="@{_} core.request action=doc.deleteColumn arg.name=\"{name}\""
     kind=request
@@ -520,6 +570,7 @@
     example="Read the selection."
 
 @pat.docs.editor.copy.as core.pattern
+    canonical="Copy the document as markdown."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? copy [the|my]? [document|doc|text|page|it] as {f:lex.docs.editor.formats} [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.copy arg.format={f}"
     kind=request
@@ -527,6 +578,7 @@
     example="Copy the document as markdown."
 
 @pat.docs.editor.go.pos core.pattern
+    canonical="Go to the end."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [go|jump|scroll|navigate] [to|down_to|up_to]? [the]? {w:lex.docs.editor.positions} [of_the_document|of_the_page|of_it]? [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.goto arg.where={w}"
     kind=request
@@ -535,6 +587,7 @@
     example="Go to the top."
 
 @pat.docs.editor.go.word core.pattern
+    canonical="Go to the word milk."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [go|jump|scroll|navigate] to [the]? [word|text|phrase] {w:rest}"
     emit="@{_} core.request action=doc.goto arg.w=\"{w}\""
     kind=request
@@ -542,6 +595,7 @@
     example="Go to the word milk."
 
 @pat.docs.editor.table.spec core.pattern
+    canonical="Add a table with 3 columns: animal, legs, food."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [add|insert|create|make|put_in] [a|an|another|one_more|1_more]? [new]? table [with|of|containing|that_has|having]? {t:rest}"
     emit="@{_} core.request action=doc.addTable arg.spec=\"{t}\""
     kind=request
@@ -550,6 +604,7 @@
     example="Add a table with 4 columns and 3 rows."
 
 @pat.docs.editor.table.bare core.pattern
+    canonical="Add a table."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [add|insert|create|make|put_in] [a|an|another|one_more|1_more]? [new]? table [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.addTable"
     kind=request
@@ -557,6 +612,7 @@
     example="Add a table."
 
 @pat.docs.editor.row.add core.pattern
+    canonical="Add a row: cat, 4, fish."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [add|insert|append|put_in] [a|another|one_more|a_new|1_more]? row [to_the_table|in_the_table|at_the_end]? [with|of|containing|saying]? {t:rest}"
     emit="@{_} core.request action=doc.addRow arg.t=\"{t}\""
     kind=request
@@ -564,6 +620,7 @@
     example="Add a row: cat, 4, fish."
 
 @pat.docs.editor.row.bare core.pattern
+    canonical="Add a row."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [add|insert|append|put_in] [a|another|one_more|a_new|1_more]? [empty]? row [to_the_table|in_the_table|at_the_end]? [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.addRow"
     kind=request
@@ -571,6 +628,7 @@
     example="Add a row."
 
 @pat.docs.editor.col.add core.pattern
+    canonical="Add a column weight."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [add|insert|append|put_in] [a|another|one_more|a_new|1_more]? column [called|named|titled|for|with_the_header]? {t:rest}"
     emit="@{_} core.request action=doc.addColumn arg.t=\"{t}\""
     kind=request
@@ -578,6 +636,7 @@
     example="Add a column weight."
 
 @pat.docs.editor.col.bare core.pattern
+    canonical="Add a column."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [add|insert|append|put_in] [a|another|one_more|a_new|1_more]? [empty]? column [to_the_table|in_the_table|at_the_end]? [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.addColumn"
     kind=request
@@ -585,6 +644,7 @@
     example="Add a column."
 
 @pat.docs.editor.table.fill core.pattern
+    canonical="Fill the table with sea animals."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [fill|populate|complete|fill_in|fill_up] [the]? table [in]? [with|using|from]? {t:rest}"
     emit="@{_} core.request action=doc.fillTable arg.topic=\"{t}\""
     kind=request
@@ -592,6 +652,7 @@
     example="Fill the table with sea animals."
 
 @pat.docs.editor.cell.set core.pattern
+    canonical="Set the cell in row 1 column 2 to 4 legs."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [set|change|put|write|make] [the]? cell [in]? row {r:number} column {c:number} [to|as|with|says]? {t:rest}"
     emit="@{_} core.request action=doc.setCell arg.r={r} arg.c={c} arg.t=\"{t}\""
     kind=request
@@ -599,6 +660,7 @@
     example="Set the cell in row 1 column 2 to 4 legs."
 
 @pat.docs.editor.task.add core.pattern
+    canonical="Add a task buy bread."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [add|insert|create|put_in|write] [a|the|another|one_more|a_new|1_more]? [task|todo|checkbox|checklist_item] [saying|called|named|to]? {t:rest}"
     emit="@{_} core.request action=doc.addTask arg.t=\"{t}\""
     kind=request
@@ -620,6 +682,7 @@
     example="Check task 2."
 
 @pat.docs.editor.task.check.text core.pattern
+    canonical="Check the task buy bread."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [check|tick|complete|finish|tick_off] [the]? [task|checkbox] {t:rest}"
     emit="@{_} core.request action=doc.checkTask arg.t=\"{t}\" arg.state=check"
     kind=request
@@ -648,6 +711,7 @@
     example="Uncheck task 2."
 
 @pat.docs.editor.task.uncheck.text core.pattern
+    canonical="Uncheck the task buy bread."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [uncheck|untick|unmark|reopen] [the]? [task|checkbox] {t:rest}"
     emit="@{_} core.request action=doc.checkTask arg.t=\"{t}\" arg.state=uncheck"
     kind=request
@@ -662,6 +726,7 @@
     example="Uncheck all tasks."
 
 @pat.docs.editor.task.count.done core.pattern
+    canonical="How many tasks are done?"
     match="[$lang.lead.filler|pls|plz]? [how_many] [tasks|items|checkboxes] [are|is] [done|checked|completed|finished|ticked] [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.countTasks arg.state=done"
     kind=request
@@ -676,6 +741,7 @@
     example="How many tasks are left?"
 
 @pat.docs.editor.task.count.notdone core.pattern
+    canonical="How many tasks are not done?"
     match="[$lang.lead.filler|pls|plz]? [how_many] [tasks|items|checkboxes] [are|is] not [done|checked|completed|finished|ticked] [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.countTasks arg.state=left"
     kind=request
@@ -683,6 +749,7 @@
     example="How many tasks are not done?"
 
 @pat.docs.editor.task.list.done core.pattern
+    canonical="Which tasks are done?"
     match="[$lang.lead.filler|pls|plz]? [what|which] [tasks|items] [are|is] [done|checked|completed|finished|ticked] [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.listTasks arg.state=done"
     kind=request
@@ -697,6 +764,8 @@
     example="Which tasks are left?"
 
 @pat.docs.editor.rule core.pattern
+    canonical="Insert a line."
+    canonical="Add a horizontal rule."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [insert|add|draw|put_in|create] [a|an]? [horizontal]? [line|rule|divider|separator|horizontal_line|horizontal_rule|dividing_line|page_break] [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.addRule"
     kind=request
@@ -705,6 +774,7 @@
     example="Add a horizontal rule."
 
 @pat.docs.editor.quote core.pattern
+    canonical="Add a quote Be kind to every animal."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [add|insert|write|put_in|create] [a|the|another]? [quote|block_quote|blockquote|quotation] [saying|that_says|reading|from|with]? {t:rest}"
     emit="@{_} core.request action=doc.addQuote arg.text=\"{t}\""
     kind=request
@@ -734,6 +804,7 @@
     example="How many tasks are there?"
 
 @pat.docs.editor.stats core.pattern
+    canonical="Give me the statistics."
     match="[$lang.lead.filler|pls|plz]? [what_is|whats|show_me|give_me|tell_me|wats|wat_is|gimme] [the]? [word_count|statistics|stats|document_statistics|document_stats|reading_time] [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.stats"
     kind=request
@@ -748,6 +819,7 @@
     example="Word count."
 
 @pat.docs.editor.stats.long core.pattern
+    canonical="How long is the document?"
     match="[$lang.lead.filler|pls|plz]? how_long [is|will_it_take_to_read] [the|my]? [document|doc|text|page|it]? [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.stats"
     kind=request
@@ -769,6 +841,7 @@
     example="Make it plain."
 
 @pat.docs.editor.size.make core.pattern
+    canonical="Make the title bigger."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [make|set] [the|this|that|my]? {k:lex.docs.editor.sizeables} [much|a_bit|a_little|a_lot|slightly]? {s:lex.docs.editor.sizes} [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.size arg.t=\"the {k}\" arg.how={s}"
     kind=request
@@ -777,6 +850,7 @@
     example="Make the heading smaller."
 
 @pat.docs.editor.size.ord core.pattern
+    canonical="Make the second heading bigger."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [make|set] [the|this|that|my]? {ord:lex.docs.editor.ordinals} {k:lex.docs.editor.sizeables} [much|a_bit|a_little|a_lot|slightly]? {s:lex.docs.editor.sizes} [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.size arg.t=\"the {ord} {k}\" arg.how={s}"
     kind=request
@@ -2552,6 +2626,7 @@
     example="Add we went to the park as a paragraph"
 
 @pat.docs.editor.s2.title core.pattern
+    canonical="Add a title Trip plan."
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [add|insert|create|write|put_in|put|place|type] [a|another|one|new] [title|headline|big_heading|top_heading] [$docs.editor.g53_saying]? {t:rest}"
     emit="@{_} core.request action=doc.addHeading arg.text=\"{t}\" arg.level=1"
     kind=request
@@ -2595,6 +2670,7 @@
     example="A list with milk and eggs."
 
 @pat.docs.editor.s2.list.empty core.pattern
+    canonical="Add a list."
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$docs.editor.g47_add] [a|the|another|one|new]? [new]? [empty|blank]? [list|bullet_list|bulleted_list] [$docs.editor.g60_pls]?"
     emit="@{_} core.request action=doc.addList arg.text=\"\" arg.empty=true"
     kind=request
@@ -2602,6 +2678,7 @@
     example="Add a list."
 
 @pat.docs.editor.s2.list.empty.numbered core.pattern
+    canonical="Add a numbered list."
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [$docs.editor.g47_add] [a|the|another|one|new]? [new]? [empty|blank]? [numbered_list|ordered_list|numbered|ordered] [list]? [$docs.editor.g60_pls]?"
     emit="@{_} core.request action=doc.addList arg.text=\"\" arg.style=numbered arg.empty=true"
     kind=request
@@ -2631,6 +2708,7 @@
     example="Make it checkable."
 
 @pat.docs.editor.s2.count.have core.pattern
+    canonical="How many headings do I have?"
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [how_many|how_much] {kind:lex.docs.editor.kinds} [do_i_have|have_i_got|do_we_have|did_i_add|did_i_write|did_i_make|have_i_added|have_i_written|have_i_made|are_in_my_document|are_in_my_doc|are_on_the_page|are_in_the_page|are_in_this_document|are_in_the_doc] [in_the_document|in_it|in_the_text|in_total|in_my_document|in_my_doc|so_far|now|right_now|here|currently]? [pls|plz|thanks|thank_you|for_me]?"
     emit="@{_} core.request action=doc.count arg.kind={kind}"
     kind=request
@@ -2639,6 +2717,7 @@
     example="How many paragraphs did I add?"
 
 @pat.docs.editor.s2.undo.scratch core.pattern
+    canonical="Take back the previous change."
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [scratch|scrap|take_back|cancel|revert|reverse|void|wipe|strike|erase|nix|trash|ditch|retract|withdraw|forget|remove|delete|get_rid_of] [the|my|that]? [last|previous|latest|most_recent|final] [thing|change|edit|addition|action|step|one|item|block|bit|piece|line] [that]? [i|you|we]? [added|did|made|wrote|typed|put|inserted|created|said|dictated]? [$docs.editor.g26_pls]?"
     emit="@{_} core.request action=doc.undo"
     kind=request
@@ -2668,6 +2747,7 @@
     example="Undo three times."
 
 @pat.docs.editor.s2.undo.n core.pattern
+    canonical="Undo the last 4 changes."
     match="[$lang.lead.filler|pls|plz]? [$docs.editor.g48_can_u]? [undo|take_back|revert|go_back] [the]? [last|previous|latest]? {n:number} [changes|edits|steps|things|actions|moves|times]"
     emit="@{_} core.request action=doc.undo arg.n={n}"
     kind=request
@@ -2714,6 +2794,7 @@
     doc="Clarification (spec 11 section 3): the text of the new block is missing; asks for it and completes the sentence with the next utterance."
 
 @shape.docs.editor.delete.ord core.shape
+    canonical="Delete the last paragraph."
     family=do
     verb="delete|remove|erase|drop|get_rid_of"
     obj="kind:lex.docs.editor.kinds"
@@ -2736,6 +2817,7 @@
     priority=12
 
 @shape.docs.editor.delete.bare core.shape
+    canonical="I want to delete the paragraph."
     family=do
     verb="delete|remove|erase|drop|get_rid_of"
     obj="kind:lex.docs.editor.kinds"
@@ -2768,6 +2850,7 @@
     priority=12
 
 @shape.docs.editor.read.bare core.shape
+    canonical="I want to read the paragraph."
     family=do
     verb="read|read_out|read_aloud"
     obj="kind:lex.docs.editor.kinds"
@@ -2778,6 +2861,7 @@
     priority=11
 
 @shape.docs.editor.copy.ord core.shape
+    canonical="Copy the last paragraph."
     family=do
     verb="copy"
     obj="kind:lex.docs.editor.kinds"
