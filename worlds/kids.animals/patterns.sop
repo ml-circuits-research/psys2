@@ -633,6 +633,7 @@
     example="The hen body covering?"
 
 @pat.kids.animals.w.cov.f4 core.pattern
+    canonical="What coats a hen?"
     match="[$kids.animals.g1_tell_me]? what [covers|coats|wraps] [a|an|the|every|any|all|each]? {a:noun} [pls|plz|thanks|exactly|anyway|lol]?"
     emit="@{_} core.question type=kids.animals.animal seek=covered where.name={a}"
     kind=question
@@ -640,6 +641,7 @@
     example="What coats a hen?"
 
 @pat.kids.animals.w.desc.f1 core.pattern
+    canonical="Teach me about a dolphin."
     match="[$kids.animals.g1_tell_me]? [tell_me|show_me|give_me|say|explain|describe|define|talk_about|talk_to_me_about|info_on|facts_about|about|what_do_you_know_about|tell_me_more_about|tell_me_something_about|tell_me_stuff_about|tell_me_all_about|what_can_you_say_about|share_facts_about|give_me_info_on|give_me_facts_about|i_want_to_know_about|teach_me_about|tell_me_facts_about] [stuff|something|more|facts|info|all|everything]? [about|on]? [a|an|the|some]? {a:lex.kids.animals.names} [to_me|for_me]? [pls|plz|thanks|exactly|anyway|lol]?"
     emit="@{_} core.question type=kids.animals.animal seek=summary where.name={a}"
     kind=question
@@ -668,6 +670,7 @@
     example="What kind of animal are dolphins like?"
 
 @pat.kids.animals.w.hab.f1 core.pattern
+    canonical="List animals around the pond."
     match="[$kids.animals.g1_tell_me]? [list|show|name|give_me|find|tell_me]? [all|some|the]? [animal|animals] [of|in|from|near|living_in|found_in|that_live_in|that_live_on|that_live_near|that_live|living_on|who_live_in|who_live_on|which_live_in|which_live_on|found_on|on|at|around|in_the|are_found_in|are_found_on|are_found_near|are_found] [the|a]? {h:word} [list|pls|plz]?"
     emit="@{_} core.question type=kids.animals.animal seek=matching where.habitat={h}"
     kind=question
@@ -1051,6 +1054,7 @@
     example="Pets name"
 
 @pat.kids.animals.x.petq.cg core.pattern
+    canonical="Name of my pet?"
     match="[$kids.animals.g1_tell_me]? [name|names|nickname|nick_name] [of|for] [my|our] [$kids.animals.g28_pet] [$lang.tail.filler|$kids.animals.g6_exactly]?"
     emit="@{_} core.question type=kids.animals.pet seek=called where.owner=$e.user"
     kind=question
@@ -1650,6 +1654,7 @@
     example="U think a dolphin's a mammal"
 
 @pat.kids.animals.x3.isa.tag2 core.pattern
+    canonical="Whales are fish, true?"
     match="[$kids.animals.g1_tell_me]? [a|an|the|every|any|all|each|some]? {a:noun} ['s]? [is|are|be|counts_as|count_as|as]? [a|an|the]? [kind_of|type_of|sort_of]? {k:lex.kids.animals.kinds} [$kids.animals.g18_true] [$lang.tail.filler|$kids.animals.g6_exactly]?"
     emit="@{_} core.question type=kids.animals.animal seek=is_a where.name={a} where.is_a={k}"
     kind=question

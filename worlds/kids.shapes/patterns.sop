@@ -1091,6 +1091,7 @@
     example="Um is a circle like a polygon"
 
 @pat.kids.shapes.w.thingcolor.f2 core.pattern
+    canonical="A lemon is which colour?"
     match="[a|an|the|every|any|all|each]? {t:lex.kids.shapes.things} [is|are]? [what|which] [color|colour] [$kids.shapes.g13_usually]? [$lang.tail.filler|$kids.shapes.g3_if_you_know]?"
     emit="@{_} core.question type=kids.shapes.thing seek=color where.name={t}"
     kind=question

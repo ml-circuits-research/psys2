@@ -467,6 +467,7 @@
     example="I want 5 stars added."
 
 @pat.art.draw.x.ground.on core.pattern
+    canonical="Put some sand down."
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [add|put|draw|make|give_me|throw|sprinkle|spread|lay|paint|pour|scatter|i_want|i_need|get|show_me|i_d_like]? [me]? [some|sum|the|a_bit_of|a_little|a_little_bit_of|more|a|a_lot_of|lots_of|plenty_of]? {g:lex.art.draw.ground} [on|to|onto|for|under|over|at|in|across|along|down|below|beneath|all_over] [the|my|all|every|everything|it]? [ground|floor|bottom|everything|picture|drawing|canvas|earth|land|scene|there|it|here|everywhere|below|part]? [of_the_picture|of_the_page|of_the_canvas|of_the_drawing|of_it|of_everything|of_the_scene|of_my_picture|of_my_drawing]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=draw.ground arg.g={g}"
     kind=request
@@ -527,6 +528,7 @@
     example="Sketch anything you like."
 
 @pat.art.draw.x.mood.want core.pattern
+    canonical="I want sunset."
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [i_want|i_d_like|give_me|show_me|let_it_be|let_there_be|have_it|set_it_to|put_it_in|switch_to|go_to|go_into|turn_to|change_to|change_it_to|be|i_need|i_would_like|i_like|it_should_be|it_should_look_like|how_about|what_about] [a|the|some|an]? {w:lex.art.draw.times} [mode|time|look|vibe|theme|sky|scene|picture|now|already|outside|there|pls]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=draw.mood arg.w={w}"
     kind=request
@@ -549,6 +551,7 @@
     example="It should look like sunset."
 
 @pat.art.draw.x.mood.set core.pattern
+    canonical="Set the mood to sunset."
     match="[$lang.lead.filler|right|also|hi|pls|plz]? [$lang.lead.filler|right|also|hi|pls|plz]? [$art.draw.g1_can_you]? [set|change|switch|put|turn|make] [the|my]? [mood|time|time_of_day|scene|theme|vibe|look|setting|lighting|ambience|atmosphere|sky] [to|into|as|be|a]? [a|the]? {w:lex.art.draw.times} [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
     emit="@{_} core.request action=draw.mood arg.w={w}"
     kind=request
@@ -1466,6 +1469,7 @@
     example="What color is the sky in my picture?"
 
 @pat.art.draw.color.of core.pattern
+    canonical="What is the color of my car?"
     match="what is the [color|colour] of my {t:words(5)}"
     emit="@{_} core.request action=draw.colorOf arg.t=\"{t}\""
     kind=request
