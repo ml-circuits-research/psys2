@@ -50,7 +50,7 @@
     "lib/dialog/discourse.mjs": "0f8b20a29e4f64bd",
     "lib/dialog/dispatch-validate.mjs": "309ede744c469270",
     "lib/dialog/encoder-dispatch.mjs": "626a317618579564",
-    "lib/dialog/index.mjs": "63bd1dc6f8e0bc66",
+    "lib/dialog/index.mjs": "04a27d0fd6bc9203",
     "lib/dialog/meta.mjs": "3f42a3f2e5d70d71",
     "lib/dialog/normalizer-runtime.mjs": "55aef6e847b477c6",
     "lib/dialog/runtime-config.mjs": "0f2c990dffd716e7",
@@ -95,7 +95,7 @@
     "lib/translate/lexicon.ro-en.mjs": "98f2d916ed8b5c72",
     "lib/translate/morphology.ro.mjs": "a5b522b6b346361b",
     "lib/translate/normalize.mjs": "a6d4d30f95434cd8",
-    "lib/translate/phrases.commands.ro-en.mjs": "a3088fb8b6b39003",
+    "lib/translate/phrases.commands.ro-en.mjs": "3b31148bc9760c33",
     "lib/translate/phrases.ro-en.mjs": "538c8191beea1051",
     "lib/translate/places.ro-en.mjs": "94650384878ada19",
     "lib/translate/replies.en-ro.mjs": "c40a41d2150ba691",
@@ -134,7 +134,7 @@
     "worlds/games.tictactoe/ops.mjs": "1f598055dba19156",
     "worlds/geo.map/datagen.mjs": "7bdabe28b74dfa9e",
     "worlds/geo.map/ops.mjs": "551366a4f0a969fb",
-    "worlds/index.json": "9537740644d7733a",
+    "worlds/index.json": "4bae930a89166172",
     "worlds/kids.animals/datagen.mjs": "6ad9f00ea4316ed7",
     "worlds/kids.animals/ops.mjs": "644e845de473918a",
     "worlds/kids.arith/datagen.mjs": "eaddc6e69e6c0b20",
@@ -165,5 +165,5 @@
     "worlds/user.profile/ops.mjs": "8385add167932b48",
     "worlds/user.profile/understand.mjs": "5782a91a5bd8e949"
   },
-  "builtAt": "2026-11-09T17:55:32.051Z"
+  "builtAt": "2026-11-09T18:07:41.084Z"
 }
