@@ -276,7 +276,13 @@ Add a per-character capability map. A requested attribute the character lacks ma
 
 Creation with a comparative ("a bigger/smaller/taller X") sizes relative to the existing X. Ellipsis after a draw ("a man") repeats the draw. People get attributes: girl/boy/man/woman → size, hair and dress presets; happy/sad → face.
 
-**RD5 — Romanian sessions.**
+**RD5 — Romanian sessions — PARTIAL (2e2846c), reviewer probes at 4e7f7ee:**
+- "fa-mi avatarul ca om" is still not understood ("Did you mean: make the avatar a woman": *om* = person/human, not woman);
+- "fa ochi visatori" is still not understood;
+- the replies to these Romanian inputs come back in English. Expected: Romanian replies whenever the session language is Romanian, which the clitic "fa-mi" and the words avatarul/ochi/visători should make clear;
+- "eys express fear" is still not understood (RD1).
+
+The original text of RD5 follows.
 - "fa-mi avatarul ca om" and "fa avatarul ca om": unknown word "avatarul".
 - "fa ochi visatori": unknown "visatori".
 - Replies come back in mixed Romanian/English ("Ochii mei vin cu meu expression. Pentru wider ochi…").
@@ -288,9 +294,9 @@ Fixes:
 - Back-translation of replies either fully Romanian or left in English, never mixed.
 - Haiku Romanian paraphrase batches per world, plus a Romanian column in the operational report.
 
-**RD6 — help examples must be canonical sentences.** "help" offered "Hair colors list" and "Bolt is ur name". Mark canonical examples (`example=` from the request-shape kernel or flagged `canonical=true`) and use only those in help and "Did you mean".
+**RD6 — help examples must be canonical sentences — DONE and validated (5415b0d).** "help" offered "Hair colors list" and "Bolt is ur name". Mark canonical examples (`example=` from the request-shape kernel or flagged `canonical=true`) and use only those in help and "Did you mean".
 
-**RD7 — phrase log export exports fewer messages than were typed (user report).** Reproduce with the 49-message session typed in the webchat:
+**RD7 — phrase log export exports fewer messages than were typed — DONE (9809b52; headless export test in npm test).** Reproduce with the 49-message session typed in the webchat:
 - compare the Settings count, the list and the JSONL lines;
 - check chips/host sends, the `source` filter, the 5,000 cap, translation, and messages sent while a modal (dictation, game) intercepted.
 
@@ -773,3 +779,4 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
 - R3 (dbcfba2 … 2500e81): N1 v3 published, bound to dataset/rules/policy hashes; dispatcher v3 rejected by the operational rule (97.8 vs 98.2); `published.json` written from the shipped config. **Shipped config (encoder + N1): 98.2% right, 0.6% wrong, 1.0% not understood** on 1,240 messages; rules only 95.0%. 825 tests pass. L7 kids.time migrated (match text −82%).
 - RD3 + RD4 + G6b long/medium operational set (2abee55, 61dc8ff, cdfd06a): 830 tests pass. CLI: "make bigger eyes" → wide-eyed expression; "make eyes sleepy" → sleepy-eyed; "transform the avatar in a man" / "make the avatar a women" → hair/beard presets; "draw a bigger house" → bigger than the existing one; "draw a girl", "a man", "make a happy man" draw people.
 - L7 roll-out: geo.map (−70% match text), data.charts (−58%), docs.reader (−48%), games.chess (−35%), kids.time earlier (−82%), with request shapes (240239b, a3f8222, 0eda082, bd84b02): 830 tests pass; operational 95.0/0.6 and dialogues 87.7% unchanged.
+- RD6 canonical help examples, RD7 phrase-log export (5415b0d, 9809b52): 859 tests pass; help now offers "Try the next mouth", "What character is on screen", "Reset your eyes". RD5 is partial (see RD5).
