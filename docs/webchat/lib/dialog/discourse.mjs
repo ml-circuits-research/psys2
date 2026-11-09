@@ -127,7 +127,7 @@ export class Discourse {
   openFill(seg, envelope, question, turn) {
     const p = envelope?.pending;
     if (!p || !seg.match) return null;
-    this.pending = { type: 'fill', world: p.world ?? seg.match.worldId, patternId: seg.match.patternId, text: seg.text.trim().replace(/[?!.]+$/g, ''), template: p.template ?? null, key: p.key ?? null, expected: p.type ?? null, op: envelope.via ?? null, question, turn };
+    this.pending = { type: 'fill', world: p.world ?? seg.match.worldId, patternId: seg.match.patternId, text: seg.text.trim().replace(/[?!.]+$/g, ''), template: p.template ?? null, key: p.key ?? null, expected: p.type ?? null, op: envelope.via ?? null, question, turn, tab: this.dialog.isession?.state?.['ui.shell']?.activeTab ?? null };   // the tab the question was asked on: the user leaving it ends the expectation
     return this.pending;
   }
 
@@ -169,6 +169,7 @@ export class Discourse {
   /** The reply completes the incomplete command of the pending expectation. */
   async fill(pending, text, sid) {
     if (pending?.type !== 'fill') return null;
+    if (pending.tab && pending.tab !== this.dialog.isession?.state?.['ui.shell']?.activeTab) return null;   // RP3: the answer to a question on another tab is a new request, not the missing text
     const reply = String(text).trim().replace(/[?!.]+$/g, '');
     if (!reply) return null;
     const opts = this._opts(sid);

@@ -382,6 +382,7 @@
     doc="Titles and nicknames of the songs in the library, at most three words each and with the last word in singular form (the lexicon matcher uses 3-word entries and the singular lemma): bare-title requests (Ode to Joy pls; happy birthday on the bells). Kept in step with kb.sop."
     word=twinkle_twinkle
     word=twinkle
+    word=little_star
     word=happy_birthday
     word=birthday_song
     word=happy_bday

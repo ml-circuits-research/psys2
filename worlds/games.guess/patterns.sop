@@ -518,3 +518,56 @@
     kind=request
     priority=15
     example="Actually I meant dont know."
+
+@pat.games.guess.evidence.eats core.pattern
+    canonical="It eats meat."
+    match="[$lang.lead.filler|pls|plz|and|but|also]? [it|she|he|the_animal|my_animal|they]? [eats|eat|is_eating|likes_to_eat|only_eats|always_eats|loves_to_eat|feeds_on|lives_on] [only|mostly|just]? [some|a|the]? {f:lex.games.guess.food}"
+    emit="@{_} core.request action=guess.evidence arg.kind=eats arg.value=\"{f}\""
+    kind=request
+    priority=12
+    example="It eats meat."
+    example="It eats grass."
+    doc="RP3: a clue the player volunteers while the system asks questions."
+
+@pat.games.guess.evidence.has core.pattern
+    match="[$lang.lead.filler|pls|plz|and|but|also]? [it|she|he|the_animal|my_animal|they]? [has|have|got|has_got|with] [a|an|some]? {f:lex.games.guess.trait}"
+    emit="@{_} core.request action=guess.evidence arg.kind=has arg.value=\"{f}\""
+    kind=request
+    priority=12
+    example="It has fur."
+    example="It has a shell."
+
+@pat.games.guess.evidence.legs core.pattern
+    match="[$lang.lead.filler|pls|plz|and|but|also]? [it|she|he|the_animal|my_animal|they]? [has|have|got|has_got|with] {n:number} [leg|legs]"
+    emit="@{_} core.request action=guess.evidence arg.kind=has arg.value=\"{n} legs\""
+    kind=request
+    priority=12
+    example="It has 4 legs."
+
+@pat.games.guess.evidence.can core.pattern
+    match="[$lang.lead.filler|pls|plz|and|but|also]? [it|she|he|the_animal|my_animal|they]? [can|could|is_able_to|likes_to] {f:lex.games.guess.ability}"
+    emit="@{_} core.request action=guess.evidence arg.kind=can arg.value=\"{f}\""
+    kind=request
+    priority=12
+    example="It can swim."
+
+@pat.games.guess.evidence.cannot core.pattern
+    match="[$lang.lead.filler|pls|plz|and|but|also]? [it|she|he|the_animal|my_animal|they]? [cannot|can_not|cant|can_not_even|is_not_able_to|does_not|doesnt|never] {f:lex.games.guess.ability}"
+    emit="@{_} core.request action=guess.evidence arg.kind=cannot arg.value=\"{f}\""
+    kind=request
+    priority=12
+    example="It cannot fly."
+
+@pat.games.guess.evidence.lives core.pattern
+    match="[$lang.lead.filler|pls|plz|and|but|also]? [it|she|he|the_animal|my_animal|they]? [lives|live|stays|is_found|can_be_found] [in|on|at|near|by]? [the|a]? {f:lex.games.guess.habitat}"
+    emit="@{_} core.request action=guess.evidence arg.kind=lives arg.value=\"{f}\""
+    kind=request
+    priority=12
+    example="It lives in the sea."
+
+@pat.games.guess.evidence.is core.pattern
+    match="[$lang.lead.filler|pls|plz|and|but|also]? [it|she|he|the_animal|my_animal|they]? [is|is_a|is_an|belongs_to|are] [a|an]? {f:lex.games.guess.kind}"
+    emit="@{_} core.request action=guess.evidence arg.kind=is arg.value=\"{f}\""
+    kind=request
+    priority=12
+    example="It is a mammal."

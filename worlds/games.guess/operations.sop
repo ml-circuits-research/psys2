@@ -57,3 +57,9 @@
     semantics=action
     action=guess.repeat
     doc="Repeats the current question or guess."
+
+@op.games.guess.evidence core.operation
+    impl=evidence
+    semantics=action
+    action=guess.evidence
+    doc="A fact the player volunteers (it eats meat, it can swim, it has 4 legs, it lives in the sea) narrows the candidates like an answer without counting as a question."

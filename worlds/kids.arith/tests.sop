@@ -1029,3 +1029,23 @@
     input="Ben has 3 plums. Ben has how many plums"
     expect="Ben has 3 plums."
     session=ash3
+
+@t.kids.arith.rp3a core.test
+    input="Tom has 10 bees."
+    expect="Tom has 10 bees"
+    session=rp3ar
+
+@t.kids.arith.rp3b core.test
+    input="One flies away."
+    expect="Tom lost 1 bee"
+    session=rp3ar
+
+@t.kids.arith.rp3c core.test
+    input="How many bee Tom has?"
+    expect="9"
+    session=rp3ar
+
+@t.kids.arith.rp3d core.test
+    input="Two of them flew away."
+    expect="Tom lost 2 bees"
+    session=rp3ar

@@ -152,10 +152,11 @@ const matchCase = (src, out) => (/^[A-Z]/.test(src) ? out[0].toUpperCase() + out
  * Candidates: words of `vocab` (the candidate world's) rank before function words; smaller distance first.
  * @param {string} text
  * `protect`: optional set of words of the active world (tab) that are never changed.
+ * `short`: also correct unknown two-letter words (distance 1); only for the open tab's own vocabulary.
  * @param {{ vocab: Set<string>, maxCorrections?: number, abbreviations?: boolean, spelling?: boolean, protect?: Set<string> }} opts
  * @returns {{ text: string, corrections: { from: string, to: string, span: [number, number], kind: 'abbreviation'|'spell' }[] }}
  */
-export function spellCorrect(text, { vocab, maxCorrections = 6, abbreviations = true, spelling = true, protect = null } = {}) {
+export function spellCorrect(text, { vocab, maxCorrections = 6, abbreviations = true, spelling = true, protect = null, short = false } = {}) {
   const quoted = [...text.matchAll(QUOTE_RE)].map((m) => [m.index, m.index + m[0].length]);
   const keep = new Set([...FUNCTION_WORDS, ...vocab]);
   // Context anchoring: a word the active world (`protect`, the open tab's vocabulary) knows is never changed, and a content word (4+ letters)
@@ -173,7 +174,8 @@ export function spellCorrect(text, { vocab, maxCorrections = 6, abbreviations = 
     let to = null, kind = null;
     if (abbreviations && Object.hasOwn(ABBREVIATIONS, lower)) { to = ABBREVIATIONS[lower]; kind = 'abbreviation'; }
     else if (spelling && /^[a-z]+$/.test(lower) && (isFirst || !/^[A-Z]/.test(raw)) && !isKnown(lower, keep) && !known(lower)) {
-      const budget = spellBudget(lower);
+      // `short` (the open tab's world only, RP3): a two-letter word that nothing knows is one edit from a word of this world ("un" -> "sun") or a function word ("si" -> "is")
+      const budget = short && lower.length === 2 ? 1 : spellBudget(lower);
       if (budget) {
         // rank: smaller distance, then a word of the world's own vocabulary, then the same letters (a swap such as "eyse")
         const letters = [...lower].sort().join('');
@@ -244,7 +246,7 @@ export function spellCandidates(text, { vocab, protect = null, maxPerWord = 5 } 
  * texts, each with its single correction; the caller keeps only those the rules parse. Numbers, names, quoted text and function words stay.
  * @returns {{ text: string, corrections: { from: string, to: string, span: [number, number], kind: 'spell' }[] }[]}
  */
-export function spellAlternates(text, { vocab, maxPerWord = 4, maxTexts = 12, protect = null } = {}) {
+export function spellAlternates(text, { vocab, maxPerWord = 4, maxTexts = 12, protect = null, short = false } = {}) {
   const quoted = [...text.matchAll(QUOTE_RE)].map((m) => [m.index, m.index + m[0].length]);
   const cands = [...vocab].filter((w) => w.length >= 3 && /^[a-z]+$/.test(w) && !FUNCTION_WORDS.has(w) && !Object.hasOwn(ABBREVIATIONS, w));
   const out = [];
@@ -254,7 +256,7 @@ export function spellAlternates(text, { vocab, maxPerWord = 4, maxTexts = 12, pr
     const raw = m[0], start = m.index, end = start + raw.length, lower = raw.toLowerCase();
     const isFirst = first; first = false;
     if (protect?.has(lower) || (lower.length >= 4 && vocab.nouns?.has(lower) && (!vocab.world || !vocab.has(lower)))) continue;   // known in the active tab / a content noun of another world
-    if (!/^[a-z]{3,}$/.test(lower) || FUNCTION_WORDS.has(lower) || isNumberWord(lower) || (!isFirst && /^[A-Z]/.test(raw)) || quoted.some(([a, b]) => start >= a && end <= b)) continue;
+    if (!(short ? /^[a-z]{2,}$/ : /^[a-z]{3,}$/).test(lower) || FUNCTION_WORDS.has(lower) || isNumberWord(lower) || (!isFirst && /^[A-Z]/.test(raw)) || quoted.some(([a, b]) => start >= a && end <= b)) continue;
     let n = 0;
     for (const w of cands) {
       if (w === lower || Math.abs(w.length - lower.length) > 1 || editDistance(lower, w, 1) > 1) continue;

@@ -581,3 +581,19 @@
     input="wait, I meant yes"
     expect="We are not playing"
     session=cor3
+
+@t.games.guess.rp3a core.test
+    input="Guess my animal."
+    expectStatus=supported
+    session=rp3g
+
+@t.games.guess.rp3b core.test
+    input="It eats meat."
+    expect="Noted: it eats meat."
+    expectState="evidence.0.feature=diet"
+    session=rp3g
+
+@t.games.guess.rp3c core.test
+    input="It can swim."
+    expect="Noted: it can swim."
+    session=rp3g

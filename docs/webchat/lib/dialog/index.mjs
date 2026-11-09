@@ -18,6 +18,7 @@ import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/st
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs';
 import { splitSentences } from '../formalizer/rules/normalize.mjs';
 import { nameCandidates, nameIndex } from '../formalizer/names.mjs';
+import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs';
 import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs';
 import { lexIndex } from '../worlds/lexicon.mjs';
 import { perf } from '../formalizer/perf.mjs';
@@ -354,11 +355,20 @@ export class DialogSession {
       }
       for (const world of ids) {
         if (late()) return null;
-        const sp = spellCorrect(seg.text, { vocab: vocabOf(world), protect });
+        const sp = spellCorrect(seg.text, { vocab: vocabOf(world), protect, short: world === ctx.tabWorld });
         spelled.set(world, sp);
         if (!sp.corrections.length) continue;
         const res = await parse(world, sp.text);
         if (res && crossTabOk(res, sp.corrections)) return wrap(res, { corrections: sp.corrections });
+        // several typos in the open tab's world ("the un si up not udner clouds"): after the sure corrections, one more word (also a two-letter one) swapped for a close
+        // word of the tab's vocabulary; the rest of the sentence decides, the world must read all of it (bounded: 12 candidate texts, the stage's time budget)
+        if (world === ctx.tabWorld) {
+          for (const v of spellAlternates(sp.text, { vocab: vocabOf(world), protect, short: true, maxTexts: 12 })) {
+            if (late()) return null;
+            const r2 = await parse(world, v.text);
+            if (r2 && crossTabOk(r2, [...sp.corrections, ...v.corrections])) return wrap(r2, { corrections: [...sp.corrections, ...v.corrections] });
+          }
+        }
       }
       // RD1b: a lone word that is valid somewhere ("next") is never swapped for a neighbour ("neat"): there is nothing around it to confirm the guess
       const lone = (seg.text.match(/[\p{L}\p{N}]+/gu) ?? []).length < 2;
@@ -368,6 +378,26 @@ export class DialogSession {
           const res = await parse(world, v.text);
           if (res && crossTabOk(res, v.corrections)) return wrap(res, { corrections: v.corrections });
         }
+      }
+    }
+    if (spell && this._voice && ctx.tabWorld && set.get(ctx.tabWorld)?.patterns?.length && depth === 0) {
+      // RP3: spoken garble ("mcdavatara human" for "make avatar a human"): split / merge / sound-alike words against the ACTIVE tab's vocabulary only
+      // (never another world: RD1b). Cheap matches are executed, weak ones (two sound-alike pieces) are offered as "Did you mean".
+      let cands = [];
+      try { cands = garbleCandidates(seg.text, { vocab: worldVocabulary(set, ctx.tabWorld), known: (w) => !!protect?.has(w) || !!spellVocabulary(set).has(w), functionWords: FUNCTION_WORDS }); } catch { cands = []; }
+      for (const c of cands) {
+        if (late()) return null;
+        const res = await parse(ctx.tabWorld, c.text);
+        if (!res) continue;
+        if (c.cost <= 1) return wrap(res, { corrections: c.corrections });
+        return [{ ...seg, suggestions: [c.text.replace(/^./, (x) => x.toUpperCase()) + '.'] }];
+      }
+      // a weak sound-alike of one of the tab's own words ("Chester" for "chapter"): never executed, offered with the tab's examples that use the word
+      let weak = [];
+      try { weak = weakSoundAlikes(seg.text, { vocab: worldVocabulary(set, ctx.tabWorld), functionWords: FUNCTION_WORDS, protect }); } catch { weak = []; }
+      for (const wk of weak) {
+        const ex = (set.get(ctx.tabWorld)?.patterns ?? []).flatMap((p) => p.canonical ?? []).filter((e) => new RegExp(`\\b${wk.to}s?\\b`, 'i').test(e)).sort((a, b) => Number(new RegExp(`\\b${wk.to}\\b`, 'i').test(b)) - Number(new RegExp(`\\b${wk.to}\\b`, 'i').test(a)) || a.length - b.length).slice(0, 2);
+        if (ex.length) return [{ ...seg, suggestions: ex }];
       }
     }
     if (partial) {
@@ -810,8 +840,10 @@ export class DialogSession {
     for (const k of [...this.sources.keys()]) if (!snap.sources.has(k)) this.sources.delete(k);
   }
 
-  async _send(text, { language, formalizer, spell, partial, fastPath, bestEffort } = {}) {
+  async _send(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode } = {}) {
     const { engine } = this;
+    this._voice = mode === 'voice';   // spoken input: stutter and send words are cleaned, garbled words repaired against the active tab's world (voice.mjs)
+    { const v = cleanVoice(text, { voice: this._voice }); if (v.corrections.length && v.text.trim()) text = v.text; }
     const { set, interp, translator } = engine;
     const sid = `msg${++this._msg}`;
     this._beNow = bestEffort ?? this.bestEffort;

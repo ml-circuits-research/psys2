@@ -112,13 +112,23 @@ export const MOODS = {
   stressed: { person: 'hectic', emoji: { eyes: 'bigPupils', mouth: 'teeth' }, robot: { eyes: 'plus', mouth: 'zigzag' } },
   cool: { person: 'smileTeethGap', emoji: { eyes: 'squint', mouth: 'smile' }, robot: { eyes: 'square', mouth: 'smile' } },
   loving: { person: 'lovingGrin1', emoji: { eyes: 'sparkle', mouth: 'bigSmile' }, robot: { eyes: 'happy', mouth: 'smile' } },
+  // RP3: expressions as loose words, the mouth only where the character has a mouth component
+  bigsmile: { person: 'smileBig', emoji: { eyes: 'happy', mouth: 'bigSmile' }, robot: { eyes: 'happy', mouth: 'smile' } },
+  smallsmile: { person: 'calm', emoji: { eyes: 'happy', mouth: 'smile' }, robot: { eyes: 'happy', mouth: 'smile' } },
+  frown: { person: 'solemn', emoji: { eyes: 'lookDown', mouth: 'frown' }, robot: { eyes: 'sleepy', mouth: 'line' } },
+  openmouth: { person: 'awe', emoji: { eyes: 'bigPupils', mouth: 'open' }, robot: { eyes: 'round', mouth: 'speaker' } },
+  tongueout: { person: 'cheeky', emoji: { eyes: 'wink', mouth: 'tongue' }, robot: { eyes: 'happy', mouth: 'zigzag' } },
 };
+/** RP3 expression moods and how the answer names them. */
+const LOOSE_EXPRESSION_SAY = { bigsmile: 'a big smile', smallsmile: 'a small smile', frown: 'a frown', openmouth: 'an open mouth', tongueout: 'my tongue out' };
 const MOOD_OF = {
   happy: 'happy', glad: 'happy', smiling: 'happy', smiley: 'happy', cheerful: 'cheerful', joyful: 'cheerful', excited: 'cheerful', delighted: 'cheerful', laughing: 'laughing',
   sad: 'sad', unhappy: 'sad', upset: 'sad', worried: 'worried', concerned: 'worried', surprised: 'surprised', shocked: 'surprised', amazed: 'surprised', astonished: 'surprised',
   scared: 'scared', afraid: 'scared', frightened: 'scared', fear: 'scared', fearful: 'scared', terrified: 'scared', angry: 'angry', mad: 'angry', annoyed: 'angry', furious: 'furious', calm: 'calm', relaxed: 'calm', peaceful: 'calm',
   serious: 'serious', neutral: 'serious', cute: 'cute', sleepy: 'sleepy', tired: 'sleepy', suspicious: 'suspicious', cheeky: 'cheeky', bored: 'bored', blank: 'bored',
   smug: 'smug', cool: 'cool', stressed: 'stressed', in_love: 'loving', loving: 'loving',
+  big_smile: 'bigsmile', wide_smile: 'bigsmile', broad_smile: 'bigsmile', huge_smile: 'bigsmile', small_smile: 'smallsmile', little_smile: 'smallsmile', tiny_smile: 'smallsmile', slight_smile: 'smallsmile',
+  frown: 'frown', open_mouth: 'openmouth', wide_open_mouth: 'openmouth', tongue_out: 'tongueout',
 };
 /** Mood words that are nouns in the lexicon, with the adjective that goes after "look" ("express fear" -> "look scared"). */
 const MOOD_ADJ = { fear: 'scared' };
@@ -375,15 +385,16 @@ const PRESETS = {
 const HAIR_COLOR = { person: 'headContrast', portrait: 'hair', cartoon: 'hair', kid: 'hair', pixel: 'hair' };
 /** Moods the AV characters can show, as { mood: { component: variant id } } (the named ids of the style definitions; the numbered styles only have happy and sad mouths). */
 const MOODS_X = {
-  portrait: { happy: { mouth: 'happy01' }, sad: { mouth: 'sad01' } },
-  cartoon: { happy: { eyes: 'smiling', mouth: 'smile' }, cheerful: { eyes: 'smiling', mouth: 'laughing' }, laughing: { eyes: 'smiling', mouth: 'laughing' }, sad: { eyes: 'round', mouth: 'sad' }, worried: { eyes: 'round', mouth: 'nervous' },
+  // RP3 expressions (mouth only): bigsmile, smallsmile, frown, openmouth, tongueout
+  portrait: { happy: { mouth: 'happy01' }, sad: { mouth: 'sad01' }, bigsmile: { mouth: 'happy09' }, smallsmile: { mouth: 'happy01' }, frown: { mouth: 'sad01' } },
+  cartoon: { bigsmile: { eyes: 'smiling', mouth: 'laughing' }, smallsmile: { eyes: 'smiling', mouth: 'smile' }, frown: { mouth: 'frown' }, openmouth: { mouth: 'surprised' }, happy: { eyes: 'smiling', mouth: 'smile' }, cheerful: { eyes: 'smiling', mouth: 'laughing' }, laughing: { eyes: 'smiling', mouth: 'laughing' }, sad: { eyes: 'round', mouth: 'sad' }, worried: { eyes: 'round', mouth: 'nervous' },
     surprised: { eyes: 'round', mouth: 'surprised' }, angry: { eyes: 'round', mouth: 'frown' }, cute: { eyes: 'smiling', mouth: 'pucker' }, smug: { eyes: 'round', mouth: 'smirk' }, suspicious: { eyes: 'round', mouth: 'smirk' }, cool: { eyes: 'smiling', mouth: 'smirk' } },
-  kid: { happy: { eyes: 'cheery', mouth: 'teethSmile' }, cheerful: { eyes: 'starstruck', mouth: 'openedSmile' }, laughing: { eyes: 'cheery', mouth: 'openedSmile' }, sad: { eyes: 'sad', mouth: 'openSad' }, worried: { eyes: 'confused', mouth: 'awkwardSmile' },
+  kid: { bigsmile: { mouth: 'openedSmile' }, smallsmile: { mouth: 'teethSmile' }, frown: { mouth: 'openSad' }, openmouth: { mouth: 'openedSmile' }, happy: { eyes: 'cheery', mouth: 'teethSmile' }, cheerful: { eyes: 'starstruck', mouth: 'openedSmile' }, laughing: { eyes: 'cheery', mouth: 'openedSmile' }, sad: { eyes: 'sad', mouth: 'openSad' }, worried: { eyes: 'confused', mouth: 'awkwardSmile' },
     surprised: { eyes: 'starstruck', mouth: 'openedSmile' }, angry: { eyes: 'angry', mouth: 'unimpressed' }, cute: { eyes: 'starstruck', mouth: 'kawaii' }, sleepy: { eyes: 'sleepy', mouth: 'unimpressed' }, cheeky: { eyes: 'winking', mouth: 'gapSmile' }, serious: { eyes: 'normal', mouth: 'unimpressed' }, cool: { eyes: 'normal', mouth: 'gapSmile' } },
-  pixel: { happy: { mouth: 'happy01' }, sad: { mouth: 'sad01' } },
-  pixelbot: { happy: { eyes: 'happy', mouth: 'smile' }, cheerful: { eyes: 'happy', mouth: 'bigSmile' }, laughing: { eyes: 'happy', mouth: 'open' }, sad: { eyes: 'soft', mouth: 'flat' }, surprised: { eyes: 'wide', mouth: 'open' }, calm: { eyes: 'soft', mouth: 'smile' },
+  pixel: { happy: { mouth: 'happy01' }, sad: { mouth: 'sad01' }, bigsmile: { mouth: 'happy06' }, smallsmile: { mouth: 'happy01' }, frown: { mouth: 'sad01' } },
+  pixelbot: { bigsmile: { mouth: 'bigSmile' }, smallsmile: { mouth: 'smile' }, frown: { mouth: 'flat' }, openmouth: { mouth: 'open' }, happy: { eyes: 'happy', mouth: 'smile' }, cheerful: { eyes: 'happy', mouth: 'bigSmile' }, laughing: { eyes: 'happy', mouth: 'open' }, sad: { eyes: 'soft', mouth: 'flat' }, surprised: { eyes: 'wide', mouth: 'open' }, calm: { eyes: 'soft', mouth: 'smile' },
     serious: { eyes: 'slim', mouth: 'flat' }, sleepy: { eyes: 'slim', mouth: 'tiny' }, cool: { eyes: 'slim', mouth: 'smile' } },
-  funemoji: { happy: { eyes: 'cute', mouth: 'lilSmile' }, cheerful: { eyes: 'stars', mouth: 'wideSmile' }, laughing: { eyes: 'closed2', mouth: 'smileLol' }, sad: { eyes: 'sad', mouth: 'sad' }, worried: { eyes: 'tearDrop', mouth: 'sad' },
+  funemoji: { bigsmile: { mouth: 'wideSmile' }, smallsmile: { mouth: 'lilSmile' }, frown: { mouth: 'sad' }, openmouth: { mouth: 'shout' }, tongueout: { mouth: 'tongueOut' }, happy: { eyes: 'cute', mouth: 'lilSmile' }, cheerful: { eyes: 'stars', mouth: 'wideSmile' }, laughing: { eyes: 'closed2', mouth: 'smileLol' }, sad: { eyes: 'sad', mouth: 'sad' }, worried: { eyes: 'tearDrop', mouth: 'sad' },
     surprised: { eyes: 'plain', mouth: 'shout' }, scared: { eyes: 'crying', mouth: 'shout' }, angry: { eyes: 'pissed', mouth: 'pissed' }, furious: { eyes: 'pissed', mouth: 'shout' }, calm: { eyes: 'closed', mouth: 'lilSmile' }, serious: { eyes: 'plain', mouth: 'plain' },
     cute: { eyes: 'cute', mouth: 'cute' }, sleepy: { eyes: 'sleepClose', mouth: 'plain' }, cheeky: { eyes: 'wink', mouth: 'tongueOut' }, bored: { eyes: 'plain', mouth: 'plain' }, smug: { eyes: 'shades', mouth: 'lilSmile' }, loving: { eyes: 'love', mouth: 'kissHeart' }, cool: { eyes: 'shades', mouth: 'lilSmile' } },
 };
@@ -767,6 +778,7 @@ function _setMood(ctx, { mood }) {
   const ch = s.character, spec = moodSpecOf(ch, m);
   if (!spec) return no(`${cap(spoken(ch))} cannot look ${moodWord(mood)}. It can look ${orList(Object.keys(MOODS_X[ch] ?? {}))}.`);
   applyMood(s, ch, spec);
+  if (LOOSE_EXPRESSION_SAY[m]) return done(ctx, 'mood' + m, `Now I have ${LOOSE_EXPRESSION_SAY[m]}.`);
   return done(ctx, 'mood' + m, `Now I look ${moodWord(mood)}.`);
 }
 function _checkMood(ctx, { mood }) {

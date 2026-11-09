@@ -34,7 +34,7 @@ for (const id of ['kids.arith', 'kids.shop', 'kids.time']) {
       assert.ok(p.examples.length >= 1, `${p.id} has no example`);
       const session = engine.createSession({ language: 'en' });
       // elliptic patterns (slot class recent) need an item mentioned before
-      if (p.match.includes('recent(')) await session.send('Tom has 5 apples.');
+      if (p.match.includes('recent(') || p.match.includes('lastagent')) await session.send('Tom has 5 apples.');
       const r = await session.send(p.examples[0]);
       if (!r.trace.patterns.includes(p.id) || /another way/.test(r.text)) {
         // a more specific pattern of the same world may legitimately win; it must still be understood

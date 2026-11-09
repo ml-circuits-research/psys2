@@ -327,3 +327,9 @@
     semantics=action
     action=doc.addItem
     doc="Adds one bullet, numbered or task item: to the list being written, or to a new list. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.addStructure core.operation
+    impl=addStructure
+    semantics=action
+    action=doc.addStructure
+    doc="Adds several empty structures in order from a list (a header, two chapters, a paragraph): headings with a placeholder, chapters numbered, empty paragraphs and lists. Brings the editor tab forward: ctx.request(\"ui.openTab\")."

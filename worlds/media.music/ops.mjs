@@ -309,7 +309,11 @@ export function playAny(ctx, { title, inst, bpm }) {
 export function random(ctx, { inst }) {
   const all = ordered(ctx);
   const s = ctx.state;
-  const song = all[s.songIndex % all.length];
+  // a random song, never the one that just played (RP3: "play a random song"); the index keeps a sequence for the tests' fixed seed
+  const playing = s.current?.songId;
+  const pool = all.filter((x) => x.id !== playing);
+  const pick = (pool.length ? pool : all);
+  const song = pick[Math.floor(Math.random() * pick.length)];
   s.songIndex = (s.songIndex + 1) % all.length;
   return playSongNow(ctx, song, { inst, flags: {} });
 }
@@ -735,7 +739,11 @@ export { scaleNotesOp as scaleNotes, chordNotesOp as chordNotes, frequencyOp as 
 export { LETTERS, keyField };
 
 /** "Play" alone: ask what to play; the dialog layer keeps the question pending for the next utterance (spec 11). */
-export function askWhat() {
+/** A bare "play" (RP3): on the Music tab it plays the last song again, or a random one when nothing played yet; elsewhere it asks what to play. */
+export function askWhat(ctx) {
+  let here = null;
+  try { const w = ctx?.request?.('ui.whichTab'); here = w?.status === 'supported' ? String(w.value) : null; } catch { here = null; }
+  if (ctx && here && /music/i.test(here)) return ctx.state.current ? replay(ctx, {}) : random(ctx, {});
   return { status: 'missing', note: 'What should I play? For example a note, a chord or a song.', pending: { key: 'what', type: 'music' } };
 }
 export const tempo = settingChange(_tempo);

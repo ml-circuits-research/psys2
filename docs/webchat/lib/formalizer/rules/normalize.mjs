@@ -154,11 +154,28 @@ export function tokenize(sentence, base = 0, { keepFillers = false } = {}) {
   }
   toks = convertNumbers(toks, sentence, base);
   toks = keepOperators(toks, sentence, base);
+  toks = gameNames(toks);
   markFillers(toks);
   if (!keepFillers) toks = toks.filter((t) => !t.filler);
   // punctuation before the first word means nothing
   const firstContent = toks.findIndex((t) => t.kind !== 'punct' && !t.filler);
   return firstContent < 0 ? toks : toks.filter((t, i) => i >= firstContent || t.kind !== 'punct');
+}
+
+/**
+ * "x and 0", "x and o", "x n zero" are the game of tic tac toe (RP3: the Romanian name "X si 0", and the way people type it): three tokens become the
+ * one word `tic_tac_toe`, spanning the same text, so every world and lexicon that knows the game by its usual name reads them.
+ */
+function gameNames(toks) {
+  if (toks.length > 6) return toks;   // a name for the game, not a list of letters inside a longer sentence
+  for (let i = 0; i + 2 < toks.length; i++) {
+    const a = toks[i], b = toks[i + 1], c = toks[i + 2];
+    if (a.kind === 'word' && a.lower === 'x' && b.kind === 'word' && (b.lower === 'and' || b.lower === 'n' || b.lower === 'si' || b.lower === 'și')
+      && ((c.kind === 'number' && c.lower === '0') || (c.kind === 'word' && (c.lower === 'o' || c.lower === 'zero')))) {
+      toks.splice(i, 3, { raw: `${a.raw} ${b.raw} ${c.raw}`, lower: 'tic_tac_toe', start: a.start, end: c.end, kind: 'word', alt: 'x and 0' });
+    }
+  }
+  return toks;
 }
 
 /** Mark fillers (section 1.5) in place. */

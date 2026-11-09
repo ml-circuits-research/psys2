@@ -1749,3 +1749,28 @@
     expect="Now I am a cartoon"
     expectState="character=cartoon"
     session=avm3
+
+@t.ui.avatar.rp3a core.test
+    input="Make a big smile."
+    expect="a big smile"
+    session=rp3av
+
+@t.ui.avatar.rp3b core.test
+    input="Big smile."
+    expect="a big smile"
+    session=rp3av
+
+@t.ui.avatar.rp3c core.test
+    input="Make the avatar to get a big smile."
+    expect="a big smile"
+    session=rp3av
+
+@t.ui.avatar.rp3d core.test
+    input="Small smile."
+    expect="a small smile"
+    session=rp3av
+
+@t.ui.avatar.rp3e core.test
+    input="Tongue out."
+    expectStatus=supported
+    session=rp3av

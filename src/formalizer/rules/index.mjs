@@ -230,7 +230,7 @@ export function makeEnv(text, set, form, lex) {
     }
     return form.candidateForName(t.raw, undefined);
   };
-  return { text, lex, resolveAgent, recentItem: (lexId, agentId) => form.recentItem(lexId, agentId) };
+  return { text, lex, resolveAgent, lastAgent: () => form.resolvePronoun('they'), recentItem: (lexId, agentId) => form.recentItem(lexId, agentId) };
 }
 
 /** Ranked full matches of every pattern against `tokens` (commas removed), ordered by the routing policy. */

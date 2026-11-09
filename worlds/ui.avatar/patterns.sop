@@ -237,6 +237,21 @@
     example="Make a sad face."
     example="Show me a surprised face."
 
+@pat.ui.avatar.expression core.pattern
+    canonical="Make a big smile."
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [make|let|have|get|give|show|do|pull|put_on|try|set|use]? [the|my|your|ur]? [avatar|yourself|robot|character|face|me]? [to]? [get|have|show|do|make|give|pull|put_on|try]? [a|an|the|your|ur]? {x:lex.ui.avatar.expressions} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.setMood arg.mood={x}"
+    kind=request
+    priority=11
+    example="Make a big smile."
+    example="Make the avatar get a big smile."
+    example="Big smile."
+    example="Open mouth."
+    example="Tongue out."
+    example="Make a small smile."
+    example="A frown."
+    doc="RP3: an expression named as loose words works on every character that can show it."
+
 @pat.ui.avatar.mood.smile core.pattern
     match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [smile|smile_for_me|say_cheese|cheer_up|grin] [$lang.tail.filler]?"
     emit="@{_} core.request action=avatar.setMood arg.mood=happy"

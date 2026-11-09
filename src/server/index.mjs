@@ -81,7 +81,7 @@ export function createServer({ engine, idleMs = 30 * 60 * 1000 } = {}) {
         if (req.method === 'POST' && c === 'messages') {
           const body = await readJson(req);
           if (typeof body.text !== 'string') return send(res, 400, { error: 'body must be { "text": string }' });
-          return send(res, 200, await entry.session.send(body.text));
+          return send(res, 200, await entry.session.send(body.text, body.mode === 'voice' ? { mode: 'voice' } : undefined));
         }
         if (req.method === 'GET' && c === 'memory') return send(res, 200, entry.session.memory(), 'text/plain');
       }

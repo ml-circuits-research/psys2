@@ -1507,3 +1507,28 @@
     priority=13
     skip=state,q
     example="Make it night."
+
+@pat.art.draw.x.move.state core.pattern
+    canonical="The sun is above the clouds."
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [the|my]? {m1:lex.art.draw.mods?} {k:lex.art.draw.things} [is|are|should_be|must_be|needs_to_be|has_to_be|goes|go|sits|stands|belongs|stays] [to_be|to_go|to_sit]? {pp:lex.art.draw.preps} {d:words(8)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=draw.move arg.phrase=\"the {k} {pp} {d}\" arg.m1={m1}"
+    kind=request
+    priority=12
+    example="The sun is above the clouds."
+    example="The cat should be under the tree."
+    doc="RP3: a position stated as a fact is a request to put the thing there."
+
+@pat.art.draw.x.move.notunder core.pattern
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [the|my]? {k:lex.art.draw.things} [is|are|should_be|must_be|goes|go|stays|stay]? [up|above|over|higher|on_top|on_top_of] [not|and_not|instead_of|rather_than|but_not] [under|below|beneath|underneath|behind|in_front_of] {d:words(8)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=draw.move arg.phrase=\"the {k} above {d}\""
+    kind=request
+    priority=13
+    example="The sun up, not under the clouds."
+    doc="RP3: 'up, not under X' is above X."
+
+@pat.art.draw.x.move.notabove core.pattern
+    match="[$lang.lead.filler|right|also|hi|pls|plz]? [the|my]? {k:lex.art.draw.things} [is|are|should_be|must_be|goes|go|stays|stay]? [down|below|under|beneath|underneath|lower] [not|and_not|instead_of|rather_than|but_not] [above|over|on_top_of|on_top] {d:words(8)} [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    emit="@{_} core.request action=draw.move arg.phrase=\"the {k} under {d}\""
+    kind=request
+    priority=13
+    example="The sun down, not above the clouds."

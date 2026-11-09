@@ -2927,7 +2927,7 @@
 
 @pat.docs.editor.ed.newline core.pattern
     canonical="Start a new line."
-    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u|$lang.doc.wish]? [$lang.doc.start]? [a|an|another|one_more]? [$lang.doc.fresh] {k:lex.docs.editor.blanks} [here|please|pls|plz]?"
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u|$lang.doc.wish]? [$lang.doc.start]? [a|an|another|one_more|the]? [$lang.doc.fresh] {k:lex.docs.editor.blanks} [here|please|pls|plz]?"
     emit="@{_} core.request action=doc.newBlank arg.kind={k}"
     kind=request
     priority=13
@@ -3109,3 +3109,47 @@
     priority=13
     example="Read out loud the second chapter."
     example="Read me the last chapter."
+
+@pat.docs.editor.struct.many core.pattern
+    canonical="Add two chapters."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [add|insert|create|make|put_in|give_me|i_want|i_need|id_like|start|set_up|include|put] {a:lex.docs.editor.structsmany}"
+    emit="@{_} core.request action=doc.addStructure arg.spec=\"{a}\""
+    kind=request
+    priority=14
+    example="Add two chapters."
+    example="Add 3 paragraphs."
+    doc="RP3: a counted part alone; never a heading called 'two chapters'."
+
+@pat.docs.editor.struct.two core.pattern
+    canonical="Add a heading and a paragraph."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [add|insert|create|make|put_in|give_me|i_want|i_need|id_like|start|set_up|include|put] {a:lex.docs.editor.structs} [and|plus|then|and_then|also]? {b:lex.docs.editor.structs}"
+    emit="@{_} core.request action=doc.addStructure arg.spec=\"{a},{b}\""
+    kind=request
+    priority=14
+    example="Add a heading and a paragraph."
+    example="Add a header and two chapters."
+    doc="RP3: several structures in one request, each created empty (a heading gets a placeholder text)."
+
+@pat.docs.editor.struct.three core.pattern
+    canonical="Add a header, two chapters and a paragraph."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [add|insert|create|make|put_in|give_me|i_want|i_need|id_like|start|set_up|include|put] {a:lex.docs.editor.structs} [and|plus|then|and_then|also]? {b:lex.docs.editor.structs} [and|plus|then|and_then|also]? {c:lex.docs.editor.structs}"
+    emit="@{_} core.request action=doc.addStructure arg.spec=\"{a},{b},{c}\""
+    kind=request
+    priority=14
+    example="Add a header, two chapters and a paragraph."
+
+@pat.docs.editor.struct.four core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [add|insert|create|make|put_in|give_me|i_want|i_need|id_like|start|set_up|include|put] {a:lex.docs.editor.structs} [and|plus|then|and_then|also]? {b:lex.docs.editor.structs} [and|plus|then|and_then|also]? {c:lex.docs.editor.structs} [and|plus|then|and_then|also]? {d:lex.docs.editor.structs}"
+    emit="@{_} core.request action=doc.addStructure arg.spec=\"{a},{b},{c},{d}\""
+    kind=request
+    priority=14
+    example="Add a heading, two chapters, a list and a paragraph."
+
+@pat.docs.editor.ask.text core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [add|insert|write|type|put_in|put|enter|append] [some|the|a|more|new|another]? [text|words]"
+    emit="@{_} core.request action=chat.ask arg.q=\"What text should I add?\" arg.template=\"write <x>\" arg.world=\"docs.editor\""
+    kind=request
+    priority=13
+    example="Add text."
+    doc="RP3: the text is missing; asks for it (the command words are never written into the document)."
+

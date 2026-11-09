@@ -1915,14 +1915,32 @@
 
 @t.media.music.d02 core.test
     input="Play."
-    expect="What should I play?"
-    expectStatus=missing
+    expect="Playing"
+    expectStatus=supported
+    session=disc_music
+
+@t.media.music.d02b core.test
+    input="Play."
+    expect="again"
+    expectStatus=supported
     session=disc_music
 
 @t.media.music.d03 core.test
-    input="A C major chord."
+    input="Play a C major chord."
     expect="C major chord"
     session=disc_music
+
+@t.media.music.rp3a core.test
+    input="play a random song"
+    expect="Playing"
+    expectStatus=supported
+    session=rp3m
+
+@t.media.music.rp3b core.test
+    input="surprise me"
+    expect="Playing"
+    expectStatus=supported
+    session=rp3m
 
 
 

@@ -12,7 +12,7 @@
  *   options: --jobs N  --family F  --group G  --tag T  --world W  --limit N  --set <file>  --model-dir --normalizer-dir --edit-tau --no-write --verbose --json
  *
  * Dialogue record: { id, world, group?, tab, init: { <world>: patch }, families: [], tags: [], turns: [ { message, expect, tab? } ] }, 3-8 turns
- * (a turn may carry `tab` to switch the active tab first; tag `rd` allows a longer real session).
+ * (a turn may carry `tab` to switch the active tab first; tag `rd` allows a longer real session; a turn may carry `mode: 'voice'` for a spoken message: stutter, send words and garble repair).
  * Writes training/results/dialogues/<mode>-<dispatcher sha8>-<date>.json.
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
@@ -118,7 +118,7 @@ export async function runDialogue(engine, settings, d) {
     const before = s.state();
     const t0 = performance.now();
     let reply, error = null;
-    try { reply = await s.send(t.message); } catch (e) { error = e.message; }
+    try { reply = await s.send(t.message, t.mode ? { mode: t.mode } : undefined); } catch (e) { error = e.message; }
     const ms = performance.now() - t0;
     if (!reply) { turns.push({ i, outcome: 'wrong', error, ms }); continue; }
     const after = s.state();

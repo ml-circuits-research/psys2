@@ -12,7 +12,7 @@ export const UNIT_TABLE = new Map(Object.entries({
   s: 's', sec: 's', min: 'min', h: 'h', n: 'N', j: 'J', w: 'W', pa: 'Pa', hz: 'Hz', k: 'K',
 }));
 
-export const BUILTIN_CLASSES = new Set(['number', 'ordinal', 'word', 'words', 'rest', 'noun', 'agent', 'unit', 'recent']);
+export const BUILTIN_CLASSES = new Set(['number', 'ordinal', 'word', 'words', 'rest', 'noun', 'agent', 'unit', 'recent', 'lastagent']);
 
 /** Default and maximum token count of a `words` slot (`{x:words}` = 12, `{x:words(20)}` = 20). */
 export const WORDS_DEFAULT_MAX = 12;
@@ -63,7 +63,7 @@ export function compilePattern(match, phrases = null) {
       if (cls === 'recent') {
         if (args.length !== 2) throw new PatternError(`recent(<lexicon>, <agent slot>) needs two arguments in '${part}'`);
         const ag = slots.get(args[1]);
-        if (!ag || ag.cls !== 'agent') throw new PatternError(`recent(...) refers to '${args[1]}', which is not an earlier agent slot in '${part}'`);
+        if (!ag || (ag.cls !== 'agent' && ag.cls !== 'lastagent')) throw new PatternError(`recent(...) refers to '${args[1]}', which is not an earlier agent slot in '${part}'`);
       } else if (args.length && cls !== 'words' && cls !== 'rest') throw new PatternError(`slot class '${cls}' takes no arguments in '${part}'`);
       slots.set(name, { cls, args, optional: !!opt });
       elements.push({ t: 'slot', name, cls, args, optional: !!opt });
@@ -117,6 +117,12 @@ function candidates(el, tokens, i, env, slotsSoFar) {
     const item = env.recentItem?.(lexId, who);
     const pos = i > 0 ? tokens[i - 1].end : (tokens[0]?.start ?? 0);
     return item ? [{ len: 0, value: item, text: '', span: [pos, pos] }] : [];
+  }
+  if (cls === 'lastagent') {
+    // zero-token slot: the agent mentioned most recently (RP3: "One flies away" after "Tom has 10 bees"); none -> no match
+    const a = env.lastAgent?.();
+    const pos = i > 0 ? tokens[i - 1].end : (tokens[0]?.start ?? 0);
+    return a ? [{ len: 0, value: '$' + a.id, text: '', span: [pos, pos], agent: a }] : [];
   }
   const t = tokens[i];
   if (!t || (t.filler && cls !== 'recent')) return [];
@@ -196,7 +202,7 @@ function candidates(el, tokens, i, env, slotsSoFar) {
       for (let len = LEXICON_MAX_WORDS; len >= 1; len--) {
         if (i + len > tokens.length) continue;
         const ws = tokens.slice(i, i + len);
-        if (!ws.every((x) => x.kind === 'word')) continue;
+        if (!ws.every((x, k) => x.kind === 'word' || (lexicon.class === 'counted' && x.kind === 'number' && k < len - 1 && /^\d+$/.test(x.lower)))) continue;   // class=counted: a count may open an entry ("2_chapter": "two chapters")
         const entry = [...ws.slice(0, -1).map((x) => x.lower), env.lex.lemma(ws[len - 1].lower)].join('_');
         if (lexicon.words.has(entry)) out.push({ len, value: entry, text: text(len), span: span(len) });
       }

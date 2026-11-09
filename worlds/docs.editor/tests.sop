@@ -1141,3 +1141,26 @@
     input="write \"We met, said the fox.\" and then there was silence"
     expect="wrote"
     session=ed4
+
+@t.docs.editor.rp3a core.test
+    input="Add a header, two chapters and a paragraph."
+    expect="a heading, 2 chapters and a paragraph"
+    expectState="blocks.length=4"
+    session=rp3ed
+
+@t.docs.editor.rp3b core.test
+    input="Add two chapters."
+    expect="2 chapters"
+    expectState="blocks.length=6"
+    session=rp3ed
+
+@t.docs.editor.rp3c core.test
+    input="Add text."
+    expect="What text should I add?"
+    expectState="blocks.length=6"
+    session=rp3ed
+
+@t.docs.editor.rp3d core.test
+    input="Add the new paragraph."
+    expectStatus=supported
+    session=rp3ed2

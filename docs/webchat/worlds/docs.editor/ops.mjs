@@ -1187,6 +1187,32 @@ function _holdings(ctx, { who }) {
 }
 
 // ---- exports (every operation rebuilds `doc` and `stats` after it) -------------------------------------------------------------
+/** "a header, two chapters and a paragraph" (RP3): every part is created in order, empty; the user fills them with "write ...". */
+function _addStructure(ctx, { spec } = {}) {
+  const NUM = { a: 1, an: 1, another: 1, new: 1, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };
+  const parts = String(spec ?? '').split(',').map((x) => x.trim().toLowerCase()).filter(Boolean).map((x) => {
+    const m = /^(?:(\d+|a new|a|an|another|new|one|two|three|four|five|six|seven|eight|nine|ten)\s+)?(.+?)$/.exec(x);
+    const n = m?.[1] ? (/^\d+$/.test(m[1]) ? Number(m[1]) : NUM[m[1]] ?? 1) : 1;
+    return { n, noun: (m?.[2] ?? x).replace(/^new\s+/, '').replace(/s$/, '').replace(/\s+/g, '_') };
+  });
+  const said = [];
+  for (const { n, noun } of parts) {
+    for (let k = 0; k < Math.min(n, 10); k++) {
+      let r;
+      if (noun === 'header' || noun === 'heading') r = _addHeading(ctx, { text: 'Heading', level: 2 });
+      else if (noun === 'chapter' || noun === 'section') r = _addHeading(ctx, { text: '', role: noun });
+      else if (noun === 'list') r = _addList(ctx, { text: '', empty: 'true' });
+      else if (noun === 'page_break') r = _pageBreak(ctx);
+      else r = _newBlank(ctx, { kind: noun === 'line' ? 'line' : 'paragraph' });
+      if (r.status !== 'supported') return r;
+    }
+    const word = noun === 'header' ? 'heading' : noun.replace(/_/g, ' ');
+    said.push(n === 1 ? `${/^[aeiou]/.test(word) ? 'an' : 'a'} ${word}` : `${n} ${word}s`);
+  }
+  if (!said.length) return no('unsupported', 'What should I add?');
+  return ok(`OK, I added ${joinAnd(said)}. Say "write ..." to fill them in.`);
+}
+export const addStructure = W(_addStructure);
 export const addHeading = W(_addHeading);
 export const addParagraph = W(_addParagraph);
 export const addList = W(_addList);

@@ -154,3 +154,71 @@
     alt=hold_on
     alt=one_moment
     alt=just_a_sec
+
+@lex.games.guess.food core.lexicon
+    class=noun
+    doc="RP3: what the animal eats (evidence); ops.mjs evidence maps each word to a diet."
+    word=meat
+    word=flesh
+    word=fish
+    word=insect
+    word=mouse
+    word=rat
+    word=bird
+    word=prey
+    word=plant
+    word=grass
+    word=leaf
+    word=vegetable
+    word=fruit
+    word=seed
+    word=nut
+    word=hay
+    word=herb
+    word=everything
+    word=anything
+
+@lex.games.guess.trait core.lexicon
+    class=noun
+    doc="RP3: what covers the animal (evidence)."
+    word=fur
+    word=feather
+    word=scale
+    word=shell
+    word=wool
+    word=spine
+    word=skin
+
+@lex.games.guess.ability core.lexicon
+    class=noun
+    doc="RP3: what the animal can do (evidence)."
+    word=fly
+    word=swim
+
+@lex.games.guess.habitat core.lexicon
+    class=noun
+    doc="RP3: where the animal lives (evidence); values are the habitats of kids.animals."
+    word=sea
+    word=farm
+    word=forest
+    word=river
+    word=jungle
+    word=desert
+    word=water
+    word=garden
+    word=savanna
+    word=home
+    word=mountain
+    word=ocean
+    word=lake
+
+@lex.games.guess.kind core.lexicon
+    class=noun
+    doc="RP3: the class of the animal (evidence)."
+    word=mammal
+    word=bird
+    word=fish
+    word=reptile
+    word=amphibian
+    word=insect
+    word=arachnid

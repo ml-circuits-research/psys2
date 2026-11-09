@@ -72,7 +72,7 @@ test('incomplete command: ask, then the next reply completes it (draw, map, musi
   assert.match((await m.send('Paris')).text, /Paris/);
 
   const u = engine.createSession({ language: 'en' });
-  await u.send('open the music tab');
+  await u.send('open the map tab');   // off the Music tab a bare play asks (on it, it plays: RP3)
   assert.match((await u.send('Play')).text, /What should I play/);
   assert.match((await u.send('a C major chord')).text, /C major chord/);
 });

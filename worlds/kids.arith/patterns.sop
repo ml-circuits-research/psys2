@@ -1778,3 +1778,34 @@
     priority=10
     skip=short
     example="How many apples does Tom have?"
+
+@pat.kids.arith.leave.n core.pattern
+    match="{who:lastagent} {n:number} [of_them|of_those|of_these|of_the_them]? [$kids.arith.leaves] [away|off|out|home|outside] {item:recent(lex.kids.arith.items,who)}"
+    emit="@{_} kids.arith.lose who={who} count={n} item={item}"
+    kind=statement
+    priority=10
+    example="One flies away."
+    example="Two of them flew away."
+    doc="RP3: the items that leave belong to the agent mentioned last; the item is the one most recently counted."
+
+@pat.kids.arith.leave.item core.pattern
+    match="{who:lastagent} {n:number} {item:lex.kids.arith.items} [$kids.arith.leaves] [away|off|out|home|outside]"
+    emit="@{_} kids.arith.lose who={who} count={n} item={item}"
+    kind=statement
+    priority=10
+    example="Three bees flew away."
+
+@pat.kids.arith.leave.a core.pattern
+    match="{who:lastagent} [a|an] {item:lex.kids.arith.items} [$kids.arith.leaves] [away|off|out|home|outside]"
+    emit="@{_} kids.arith.lose who={who} count=1 item={item}"
+    kind=statement
+    priority=10
+    example="A bee flew away."
+
+@pat.kids.arith.q.have.order core.pattern
+    match="how_many {item:lex.kids.arith.items} {who:agent} [has|have] [now|left]?"
+    emit="@{_} core.question type=kids.arith.holding seek=count where.owner={who} where.item={item}"
+    kind=question
+    priority=10
+    example="How many apples Tom has?"
+    doc="RP3: the question with the verb last (spoken or typed without 'does')."

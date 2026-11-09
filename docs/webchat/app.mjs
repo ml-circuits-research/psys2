@@ -459,7 +459,7 @@ export async function mountPsys2(element, options = {}) {
     const remaining = Math.max(1, limit - (performance.now() - tStart));
     let reply;
     try {
-      reply = await withDeadline(session.send(text, { language: settings.language, formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, fastPath: settings.fastPath === true,
+      reply = await withDeadline(session.send(text, { mode: mode === 'voice' ? 'voice' : undefined, language: settings.language, formalizer: settings.formalizer, spell: settings.spellcheck !== false, partial: settings.partialUnderstanding !== false, bestEffort: settings.bestEffort !== false, fastPath: settings.fastPath === true,
         signal: tn.ctl.signal, hardMs: remaining, softMs: remaining * TURN_LIMITS.softFraction, undo: tn.undo }), remaining + 300, { signal: tn.ctl.signal, label: 'turn' });
     } catch (e) {
       if (e instanceof TurnAborted || tn.ctl.signal.aborted) throw e;

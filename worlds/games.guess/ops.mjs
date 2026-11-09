@@ -32,7 +32,7 @@ const FALLBACK_KB = [
 ];
 
 export function initialState() {
-  return { phase: 'idle', candidates: [], asked: [], count: 0, max: 20, current: null, guess: null, rejected: [], solved: null, learned: [] };
+  return { phase: 'idle', candidates: [], asked: [], count: 0, max: 20, current: null, guess: null, rejected: [], solved: null, learned: [], evidence: [] };
 }
 
 const ok = (value) => ({ status: 'supported', value });
@@ -76,7 +76,7 @@ function truth(p, f, v) {
   const vals = p[f];
   if (f === 'fly' || f === 'swim') return vals.includes(true) ? true : vals.includes(false) ? false : undefined;
   if (!vals.length) return undefined;
-  return vals.includes(v);
+  return String(v).includes('|') ? String(v).split('|').some((x) => vals.includes(x)) : vals.includes(v);   // 'carnivore|omnivore': evidence "it eats meat"
 }
 
 function questionText(f, v) {
@@ -125,7 +125,7 @@ function next(ctx) {
   if (s.candidates.length === 0) { s.phase = 'learning'; s.current = null; return `I give up! None of the animals I know fits your answers. What animal were you thinking of? Teach me, for example: "it was a zebra".`; }
   if (s.candidates.length === 1 || s.count >= s.max) return makeGuess(ctx);
   const { cur } = profilesOf(ctx);
-  const q = pickQuestion(cur, s.asked);
+  const q = pickQuestion(cur, [...s.asked, ...(s.evidence ?? [])]);
   if (!q) return makeGuess(ctx);
   s.phase = 'asking';
   s.current = { feature: q.feature, value: q.value, text: q.text, yes: q.yes, no: q.no, of: q.of };
@@ -137,7 +137,7 @@ export function start(ctx) {
   ctx.request('ui.openTab', { tab: 'guess' });
   const all = readAnimals(ctx, s.learned);
   if (!all.length) return no('missing', 'I do not know any animals yet, so I cannot play.');
-  Object.assign(s, { phase: 'asking', candidates: all.map((p) => p.name), asked: [], count: 0, current: null, guess: null, rejected: [], solved: null });
+  Object.assign(s, { phase: 'asking', candidates: all.map((p) => p.name), asked: [], evidence: [], count: 0, current: null, guess: null, rejected: [], solved: null });
   const q = next(ctx);
   return ok(`Think of an animal and I will try to guess it. Answer with yes, no, I don't know or maybe. ${q}`);
 }
@@ -176,7 +176,7 @@ export function correct(ctx, { answer: a }) {
   last.answer = a;
   // the candidates are recomputed from every answer given so far, with the corrected one
   let cur = readAnimals(ctx, s.learned).filter((p) => !s.rejected.includes(p.name));
-  for (const e of s.asked) {
+  for (const e of [...s.asked, ...(s.evidence ?? [])]) {
     const keeps = (p) => truth(p, e.feature, e.feature === 'fly' || e.feature === 'swim' ? 'yes' : e.value);
     if (e.answer === 'yes') cur = cur.filter((p) => keeps(p) === true);
     else if (e.answer === 'no') cur = cur.filter((p) => keeps(p) !== true);
@@ -201,7 +201,7 @@ export function reveal(ctx, { animal }) {
   const known = readAnimals(ctx, s.learned).some((p) => p.name === name);
   const wasAsking = s.phase !== 'done' || s.solved === null;
   const traits = {}, not = [];
-  for (const a of s.asked) {
+  for (const a of [...s.asked, ...(s.evidence ?? []).filter((e) => !String(e.value).includes('|'))]) {
     const f = a.feature, v = f === 'fly' || f === 'swim' ? 'yes' : a.value;
     if (a.answer === 'yes') (traits[f] ??= []).push(v);
     else if (a.answer === 'no') not.push(`${f}=${v}`);
@@ -263,4 +263,45 @@ export function repeat(ctx) {
   if (s.phase === 'asking' && s.current) return ok(`Question ${s.count + 1}: ${s.current.text}`);
   if (s.phase === 'guessing') return ok(`I think it is ${an(s.guess)}. Am I right?`);
   return no('missing', 'There is no question to repeat.');
+}
+
+/** What a fact the player volunteers means: feature, the values that satisfy it ('a|b' = either), and how it is said. */
+const FOOD_MEAT = new Set(['meat', 'flesh', 'fish', 'insects', 'mice', 'rats', 'birds', 'animals', 'prey']);
+const FOOD_PLANT = new Set(['plants', 'plant', 'grass', 'leaves', 'vegetables', 'fruit', 'fruits', 'seeds', 'nuts', 'hay', 'herbs']);
+function factOf(kind, value) {
+  const v = String(value).toLowerCase().replace(/_/g, ' ').trim();
+  switch (kind) {
+    case 'eats':
+      if (FOOD_MEAT.has(v)) return { feature: 'diet', value: 'carnivore|omnivore', say: `it eats ${v}` };
+      if (FOOD_PLANT.has(v)) return { feature: 'diet', value: 'herbivore|omnivore', say: `it eats ${v}` };
+      if (v === 'everything' || v === 'both' || v === 'anything') return { feature: 'diet', value: 'omnivore', say: 'it eats everything' };
+      return null;
+    case 'can': return v === 'fly' || v === 'swim' ? { feature: v, value: 'yes', say: `it can ${v}` } : null;
+    case 'cannot': return v === 'fly' || v === 'swim' ? { feature: v, value: 'yes', no: true, say: `it cannot ${v}` } : null;
+    case 'has': {
+      const cover = { fur: 'fur', feathers: 'feather', feather: 'feather', scales: 'scale', scale: 'scale', shell: 'shell', wool: 'wool', spines: 'spine', spine: 'spine', skin: 'skin' }[v.replace(/^an? /, '')];
+      if (cover) return { feature: 'covering', value: cover, say: `it has ${v}` };
+      const legs = /^(\d+) legs?$/.exec(v);
+      return legs ? { feature: 'legs', value: legs[1], say: `it has ${v}` } : null;
+    }
+    case 'lives': return { feature: 'habitat', value: v.replace(/^the /, '').replace(/\s+/g, '_'), say: `it lives in the ${v.replace(/^the /, '')}` };
+    case 'is': return { feature: 'class', value: v.replace(/^an? /, ''), say: `it is ${/^[aeiou]/.test(v) ? 'an' : 'a'} ${v}` };
+    default: return null;
+  }
+}
+
+/** "it eats meat", "it can swim", "it has 4 legs" (RP3): a fact the player volunteers narrows the candidates like an answer, without counting as a question. */
+export function evidence(ctx, { kind, value }) {
+  const s = ctx.state;
+  if (s.phase !== 'asking') return no('missing', s.phase === 'idle' || s.phase === 'done' ? 'We are not playing twenty questions. Say "guess my animal" to start.' : 'That does not help right now.');
+  const f = factOf(kind, value);
+  if (!f) return no('unsupported', 'I do not know how to use that as a clue.');
+  const { cur } = profilesOf(ctx);
+  const holds = (p) => truth(p, f.feature, f.value);
+  let keep = cur.filter((p) => (f.no ? holds(p) !== true : holds(p) === true));
+  if (!keep.length) keep = cur.filter((p) => holds(p) === undefined);
+  if (!keep.length) return ok(`Hmm, none of the animals I know fits that, so I will not use "${f.say}".`);
+  s.candidates = keep.map((p) => p.name);
+  (s.evidence ??= []).push({ feature: f.feature, value: f.value, text: f.say, answer: f.no ? 'no' : 'yes' });
+  return ok(`Noted: ${f.say}. ${next(ctx)}`);
 }

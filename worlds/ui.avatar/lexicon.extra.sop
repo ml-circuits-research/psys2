@@ -59,6 +59,22 @@
     word=lip
     word=mouth
 
+@lex.ui.avatar.expressions core.lexicon
+    class=noun
+    doc="RP3: facial expressions as loose words (make a big smile, a frown, open mouth, tongue out); ops.mjs maps each to a mouth or an expression of every character that can show it (MOOD_OF)."
+    word=big_smile
+    word=wide_smile
+    word=broad_smile
+    word=huge_smile
+    word=small_smile
+    word=little_smile
+    word=tiny_smile
+    word=slight_smile
+    word=frown
+    word=open_mouth
+    word=wide_open_mouth
+    word=tongue_out
+
 @lex.ui.avatar.moods core.lexicon
     class=noun
     doc="Moods; ops.mjs maps each to an expression of every character (open-peeps expression, moods mouth and eyes, robot eyes and mouth)."

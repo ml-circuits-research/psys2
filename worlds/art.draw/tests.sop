@@ -3967,3 +3967,18 @@
     input="could you maybe make it into night"
     expect="It is night now"
     session=dsh3
+
+@t.art.draw.rp3a core.test
+    input="Draw 5 clouds and one sun."
+    expectStatus=supported
+    session=rp3dr
+
+@t.art.draw.rp3b core.test
+    input="The sun is above the clouds."
+    expect="above"
+    session=rp3dr
+
+@t.art.draw.rp3c core.test
+    input="The sun is up, not under the clouds."
+    expect="above"
+    session=rp3dr

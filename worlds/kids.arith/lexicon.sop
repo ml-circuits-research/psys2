@@ -59,6 +59,17 @@
     word=teddy_bear
     word=flag
     word=sheet
+    word=bee
+    word=bird
+    word=duck
+    word=butterfly
+    word=frog
+    word=fish
+    word=chicken
+    word=ladybug
+    word=snail
+    word=rabbit
+    word=sheep
 
 @lex.kids.arith.triggers core.lexicon
     class=trigger
@@ -1183,3 +1194,54 @@
     alt=handed
     alt=throws
     alt=threw
+
+@phrase.kids.arith.leaves core.phrase
+    frame=false
+    doc="RP3: verbs of leaving; the items that leave are taken away from the owner (flies away, ran off)."
+    alt=flies
+    alt=flew
+    alt=fly
+    alt=flyes
+    alt=runs
+    alt=ran
+    alt=run
+    alt=walks
+    alt=walked
+    alt=walk
+    alt=swims
+    alt=swam
+    alt=swim
+    alt=goes
+    alt=went
+    alt=go
+    alt=leaves
+    alt=left
+    alt=leave
+    alt=jumps
+    alt=jumped
+    alt=jump
+    alt=rolls
+    alt=rolled
+    alt=roll
+    alt=hops
+    alt=hopped
+    alt=hop
+    alt=escapes
+    alt=escaped
+    alt=escape
+    alt=disappears
+    alt=disappeared
+    alt=disappear
+    alt=floats
+    alt=floated
+    alt=float
+    alt=sails
+    alt=sailed
+    alt=drives
+    alt=drove
+    alt=crawls
+    alt=crawled
+    alt=crawl
+    alt=wanders
+    alt=wandered
+
