@@ -1,0 +1,648 @@
+{
+ "nx-a-seed1": {
+  "command": "python -m psys2_train.nx_heads train --mode A --out /home/salboaie/work/psys2/training/runs/nx-a-seed1 --seed 1",
+  "n": {
+   "train": 97700,
+   "dev": 15075,
+   "test": 9347
+  },
+  "dev": {
+   "n": 15075,
+   "op_acc": 0.8899,
+   "slot_p": 0.8103,
+   "slot_r": 0.8204,
+   "slot_f1": 0.8153,
+   "exact_complete": 0.652,
+   "n_complete": 11041,
+   "filler_ok": 0.9725,
+   "n_filler": 3014
+  },
+  "test": {
+   "overall": {
+    "n": 9347,
+    "op_acc": 0.7858,
+    "slot_p": 0.7407,
+    "slot_r": 0.7398,
+    "slot_f1": 0.7402,
+    "exact_complete": 0.4859,
+    "n_complete": 7425,
+    "filler_ok": 0.9431,
+    "n_filler": 1282
+   },
+   "worlds": {
+    "art.draw": {
+     "n": 325,
+     "op_acc": 0.6892,
+     "slot_p": 0.6548,
+     "slot_r": 0.5804,
+     "slot_f1": 0.6154,
+     "exact_complete": 0.4441,
+     "n_complete": 313,
+     "filler_ok": 0.0,
+     "n_filler": 1
+    },
+    "data.charts": {
+     "n": 285,
+     "op_acc": 0.6842,
+     "slot_p": 0.5602,
+     "slot_r": 0.4973,
+     "slot_f1": 0.5269,
+     "exact_complete": 0.3582,
+     "n_complete": 282,
+     "filler_ok": 0.0,
+     "n_filler": 1
+    },
+    "diagram.sketch": {
+     "n": 4306,
+     "op_acc": 0.8346,
+     "slot_p": 0.6932,
+     "slot_r": 0.7246,
+     "slot_f1": 0.7086,
+     "exact_complete": 0.4367,
+     "n_complete": 2892,
+     "filler_ok": 0.9654,
+     "n_filler": 983
+    },
+    "docs.editor": {
+     "n": 164,
+     "op_acc": 0.7134,
+     "slot_p": 0.5167,
+     "slot_r": 0.5187,
+     "slot_f1": 0.5177,
+     "exact_complete": 0.3514,
+     "n_complete": 148,
+     "filler_ok": 0.25,
+     "n_filler": 4
+    },
+    "docs.reader": {
+     "n": 254,
+     "op_acc": 0.5709,
+     "slot_p": 0.8992,
+     "slot_r": 0.6667,
+     "slot_f1": 0.7657,
+     "exact_complete": 0.5551,
+     "n_complete": 254,
+     "filler_ok": 0.0,
+     "n_filler": 0
+    },
+    "games.chess": {
+     "n": 336,
+     "op_acc": 0.8482,
+     "slot_p": 0.8835,
+     "slot_r": 0.8482,
+     "slot_f1": 0.8655,
+     "exact_complete": 0.4772,
+     "n_complete": 329,
+     "filler_ok": 0.0,
+     "n_filler": 5
+    },
+    "games.guess": {
+     "n": 151,
+     "op_acc": 0.8874,
+     "slot_p": 1.0,
+     "slot_r": 1.0,
+     "slot_f1": 1.0,
+     "exact_complete": 0.8462,
+     "n_complete": 91,
+     "filler_ok": 0.9032,
+     "n_filler": 31
+    },
+    "games.hangman": {
+     "n": 213,
+     "op_acc": 0.7934,
+     "slot_p": 0.9158,
+     "slot_r": 0.9158,
+     "slot_f1": 0.9158,
+     "exact_complete": 0.75,
+     "n_complete": 192,
+     "filler_ok": 1.0,
+     "n_filler": 17
+    },
+    "games.tictactoe": {
+     "n": 201,
+     "op_acc": 0.8856,
+     "slot_p": 0.8264,
+     "slot_r": 0.7301,
+     "slot_f1": 0.7752,
+     "exact_complete": 0.6839,
+     "n_complete": 193,
+     "filler_ok": 0.0,
+     "n_filler": 0
+    },
+    "geo.map": {
+     "n": 304,
+     "op_acc": 0.5493,
+     "slot_p": 0.7626,
+     "slot_r": 0.7408,
+     "slot_f1": 0.7516,
+     "exact_complete": 0.41,
+     "n_complete": 300,
+     "filler_ok": 0.0,
+     "n_filler": 0
+    },
+    "kids.animals": {
+     "n": 263,
+     "op_acc": 0.8669,
+     "slot_p": 0.8704,
+     "slot_r": 0.7989,
+     "slot_f1": 0.8331,
+     "exact_complete": 0.6298,
+     "n_complete": 262,
+     "filler_ok": 0.0,
+     "n_filler": 0
+    },
+    "kids.arith": {
+     "n": 275,
+     "op_acc": 0.7382,
+     "slot_p": 0.9398,
+     "slot_r": 0.9385,
+     "slot_f1": 0.9391,
+     "exact_complete": 0.5904,
+     "n_complete": 249,
+     "filler_ok": 0.9545,
+     "n_filler": 22
+    },
+    "kids.common": {
+     "n": 256,
+     "op_acc": 0.9297,
+     "slot_p": 0.7778,
+     "slot_r": 1.0,
+     "slot_f1": 0.875,
+     "exact_complete": 0.8235,
+     "n_complete": 85,
+     "filler_ok": 0.9591,
+     "n_filler": 171
+    },
+    "kids.shapes": {
+     "n": 276,
+     "op_acc": 0.8007,
+     "slot_p": 0.6651,
+     "slot_r": 0.7684,
+     "slot_f1": 0.713,
+     "exact_complete": 0.5878,
+     "n_complete": 262,
+     "filler_ok": 0.9231,
+     "n_filler": 13
+    },
+    "kids.shop": {
+     "n": 261,
+     "op_acc": 0.9195,
+     "slot_p": 0.86,
+     "slot_r": 0.8444,
+     "slot_f1": 0.8521,
+     "exact_complete": 0.7068,
+     "n_complete": 249,
+     "filler_ok": 0.0,
+     "n_filler": 4
+    },
+    "kids.tasks": {
+     "n": 266,
+     "op_acc": 0.6617,
+     "slot_p": 0.6489,
+     "slot_r": 0.7882,
+     "slot_f1": 0.7118,
+     "exact_complete": 0.3128,
+     "n_complete": 211,
+     "filler_ok": 0.0,
+     "n_filler": 0
+    },
+    "kids.time": {
+     "n": 251,
+     "op_acc": 0.7888,
+     "slot_p": 0.8875,
+     "slot_r": 0.8957,
+     "slot_f1": 0.8916,
+     "exact_complete": 0.6529,
+     "n_complete": 242,
+     "filler_ok": 0.0,
+     "n_filler": 1
+    },
+    "media.music": {
+     "n": 294,
+     "op_acc": 0.8061,
+     "slot_p": 0.8632,
+     "slot_r": 0.6642,
+     "slot_f1": 0.7507,
+     "exact_complete": 0.4473,
+     "n_complete": 275,
+     "filler_ok": 0.0,
+     "n_filler": 0
+    },
+    "ui.avatar": {
+     "n": 269,
+     "op_acc": 0.4796,
+     "slot_p": 0.7571,
+     "slot_r": 0.5616,
+     "slot_f1": 0.6448,
+     "exact_complete": 0.2447,
+     "n_complete": 237,
+     "filler_ok": 0.0,
+     "n_filler": 2
+    },
+    "ui.help": {
+     "n": 154,
+     "op_acc": 0.6753,
+     "slot_p": 0.5263,
+     "slot_r": 0.3614,
+     "slot_f1": 0.4286,
+     "exact_complete": 0.3636,
+     "n_complete": 154,
+     "filler_ok": 0.0,
+     "n_filler": 0
+    },
+    "ui.shell": {
+     "n": 243,
+     "op_acc": 0.6708,
+     "slot_p": 0.7606,
+     "slot_r": 0.6243,
+     "slot_f1": 0.6857,
+     "exact_complete": 0.5171,
+     "n_complete": 205,
+     "filler_ok": 0.6296,
+     "n_filler": 27
+    }
+   }
+  },
+  "dispatcher_before": {
+   "world_top1": 0.9648,
+   "world_agree_with_v4": 1.0,
+   "world_max_abs_logit_diff": 0.0,
+   "n_world": 6000,
+   "seg_token_agree_with_v4": 1.0,
+   "seg_boundary_f1": 0.865,
+   "n_seg": 2000
+  },
+  "dispatcher_after": {
+   "world_top1": 0.9648,
+   "world_agree_with_v4": 1.0,
+   "world_max_abs_logit_diff": 0.0,
+   "n_world": 6000,
+   "seg_token_agree_with_v4": 1.0,
+   "seg_boundary_f1": 0.865,
+   "n_seg": 2000
+  },
+  "export": {
+   "mode": "A",
+   "n_inputs": 400,
+   "fp32_vs_v4_fp32_max_abs": {
+    "seg_logits": 0.0,
+    "world_logits": 0.0,
+    "edit_logits": 0.0
+   },
+   "fp32_vs_v4_fp32": {
+    "world_top1_same": 1.0,
+    "seg_argmax_same": 1.0,
+    "edit_argmax_same": 1.0
+   },
+   "int8_vs_published_int8_max_abs": {
+    "seg_logits": 0.0,
+    "world_logits": 0.0,
+    "edit_logits": 0.0
+   },
+   "int8_vs_published_int8": {
+    "world_top1_same": 1.0,
+    "seg_argmax_same": 1.0,
+    "edit_argmax_same": 1.0
+   },
+   "size_mb": {
+    "fp32": 269.7,
+    "int8": 68.0,
+    "published_int8": 67.1
+   },
+   "outputs": [
+    "seg_logits",
+    "world_logits",
+    "edit_logits",
+    "op_logits",
+    "tag_logits"
+   ],
+   "n_ops": 496,
+   "n_tag_labels": 667,
+   "int8_pass_ms_p50_1thread": 13.0,
+   "int8_pass_ms_p50_4thread": 5.3
+  }
+ },
+ "nx-aplus-seed1": {
+  "command": "python -m psys2_train.nx_heads train --mode Aplus --epochs 10 --out /home/salboaie/work/psys2/training/runs/nx-aplus-seed1 --seed 1",
+  "n": {
+   "train": 97700,
+   "dev": 15075,
+   "test": 9347
+  },
+  "dev": {
+   "n": 15075,
+   "op_acc": 0.9494,
+   "slot_p": 0.8832,
+   "slot_r": 0.9009,
+   "slot_f1": 0.892,
+   "exact_complete": 0.7997,
+   "n_complete": 11041,
+   "filler_ok": 0.9837,
+   "n_filler": 3014
+  },
+  "test": {
+   "overall": {
+    "n": 9347,
+    "op_acc": 0.8698,
+    "slot_p": 0.8046,
+    "slot_r": 0.8078,
+    "slot_f1": 0.8062,
+    "exact_complete": 0.6183,
+    "n_complete": 7425,
+    "filler_ok": 0.9602,
+    "n_filler": 1282
+   },
+   "worlds": {
+    "art.draw": {
+     "n": 325,
+     "op_acc": 0.7662,
+     "slot_p": 0.6827,
+     "slot_r": 0.6719,
+     "slot_f1": 0.6773,
+     "exact_complete": 0.5431,
+     "n_complete": 313,
+     "filler_ok": 0.0,
+     "n_filler": 1
+    },
+    "data.charts": {
+     "n": 285,
+     "op_acc": 0.7684,
+     "slot_p": 0.6746,
+     "slot_r": 0.6043,
+     "slot_f1": 0.6375,
+     "exact_complete": 0.5248,
+     "n_complete": 282,
+     "filler_ok": 0.0,
+     "n_filler": 1
+    },
+    "diagram.sketch": {
+     "n": 4306,
+     "op_acc": 0.9419,
+     "slot_p": 0.7715,
+     "slot_r": 0.7992,
+     "slot_f1": 0.7851,
+     "exact_complete": 0.5972,
+     "n_complete": 2892,
+     "filler_ok": 0.9837,
+     "n_filler": 983
+    },
+    "docs.editor": {
+     "n": 164,
+     "op_acc": 0.7805,
+     "slot_p": 0.6364,
+     "slot_r": 0.6791,
+     "slot_f1": 0.657,
+     "exact_complete": 0.5068,
+     "n_complete": 148,
+     "filler_ok": 0.25,
+     "n_filler": 4
+    },
+    "docs.reader": {
+     "n": 254,
+     "op_acc": 0.6181,
+     "slot_p": 0.9553,
+     "slot_r": 0.7321,
+     "slot_f1": 0.8289,
+     "exact_complete": 0.5906,
+     "n_complete": 254,
+     "filler_ok": 0.0,
+     "n_filler": 0
+    },
+    "games.chess": {
+     "n": 336,
+     "op_acc": 0.9137,
+     "slot_p": 0.9182,
+     "slot_r": 0.8949,
+     "slot_f1": 0.9064,
+     "exact_complete": 0.6626,
+     "n_complete": 329,
+     "filler_ok": 0.0,
+     "n_filler": 5
+    },
+    "games.guess": {
+     "n": 151,
+     "op_acc": 0.894,
+     "slot_p": 1.0,
+     "slot_r": 1.0,
+     "slot_f1": 1.0,
+     "exact_complete": 0.8571,
+     "n_complete": 91,
+     "filler_ok": 0.9355,
+     "n_filler": 31
+    },
+    "games.hangman": {
+     "n": 213,
+     "op_acc": 0.9061,
+     "slot_p": 0.9263,
+     "slot_r": 0.9263,
+     "slot_f1": 0.9263,
+     "exact_complete": 0.8698,
+     "n_complete": 192,
+     "filler_ok": 1.0,
+     "n_filler": 17
+    },
+    "games.tictactoe": {
+     "n": 201,
+     "op_acc": 0.9254,
+     "slot_p": 0.8986,
+     "slot_r": 0.816,
+     "slot_f1": 0.8553,
+     "exact_complete": 0.772,
+     "n_complete": 193,
+     "filler_ok": 0.0,
+     "n_filler": 0
+    },
+    "geo.map": {
+     "n": 304,
+     "op_acc": 0.6842,
+     "slot_p": 0.7979,
+     "slot_r": 0.7735,
+     "slot_f1": 0.7855,
+     "exact_complete": 0.5467,
+     "n_complete": 300,
+     "filler_ok": 0.0,
+     "n_filler": 0
+    },
+    "kids.animals": {
+     "n": 263,
+     "op_acc": 0.8859,
+     "slot_p": 0.8707,
+     "slot_r": 0.8584,
+     "slot_f1": 0.8645,
+     "exact_complete": 0.7252,
+     "n_complete": 262,
+     "filler_ok": 0.0,
+     "n_filler": 0
+    },
+    "kids.arith": {
+     "n": 275,
+     "op_acc": 0.8655,
+     "slot_p": 0.9627,
+     "slot_r": 0.9734,
+     "slot_f1": 0.968,
+     "exact_complete": 0.7831,
+     "n_complete": 249,
+     "filler_ok": 0.9545,
+     "n_filler": 22
+    },
+    "kids.common": {
+     "n": 256,
+     "op_acc": 0.9258,
+     "slot_p": 0.875,
+     "slot_r": 1.0,
+     "slot_f1": 0.9333,
+     "exact_complete": 0.8235,
+     "n_complete": 85,
+     "filler_ok": 0.9532,
+     "n_filler": 171
+    },
+    "kids.shapes": {
+     "n": 276,
+     "op_acc": 0.8478,
+     "slot_p": 0.796,
+     "slot_r": 0.861,
+     "slot_f1": 0.8272,
+     "exact_complete": 0.7214,
+     "n_complete": 262,
+     "filler_ok": 1.0,
+     "n_filler": 13
+    },
+    "kids.shop": {
+     "n": 261,
+     "op_acc": 0.9425,
+     "slot_p": 0.8953,
+     "slot_r": 0.8924,
+     "slot_f1": 0.8939,
+     "exact_complete": 0.7992,
+     "n_complete": 249,
+     "filler_ok": 0.0,
+     "n_filler": 4
+    },
+    "kids.tasks": {
+     "n": 266,
+     "op_acc": 0.7707,
+     "slot_p": 0.7481,
+     "slot_r": 0.8471,
+     "slot_f1": 0.7945,
+     "exact_complete": 0.4929,
+     "n_complete": 211,
+     "filler_ok": 0.0,
+     "n_filler": 0
+    },
+    "kids.time": {
+     "n": 251,
+     "op_acc": 0.8127,
+     "slot_p": 0.8903,
+     "slot_r": 0.9069,
+     "slot_f1": 0.8985,
+     "exact_complete": 0.6694,
+     "n_complete": 242,
+     "filler_ok": 1.0,
+     "n_filler": 1
+    },
+    "media.music": {
+     "n": 294,
+     "op_acc": 0.8639,
+     "slot_p": 0.8797,
+     "slot_r": 0.7694,
+     "slot_f1": 0.8209,
+     "exact_complete": 0.6036,
+     "n_complete": 275,
+     "filler_ok": 0.0,
+     "n_filler": 0
+    },
+    "ui.avatar": {
+     "n": 269,
+     "op_acc": 0.5651,
+     "slot_p": 0.7663,
+     "slot_r": 0.6006,
+     "slot_f1": 0.6734,
+     "exact_complete": 0.3122,
+     "n_complete": 237,
+     "filler_ok": 0.0,
+     "n_filler": 2
+    },
+    "ui.help": {
+     "n": 154,
+     "op_acc": 0.7143,
+     "slot_p": 0.5915,
+     "slot_r": 0.506,
+     "slot_f1": 0.5455,
+     "exact_complete": 0.4481,
+     "n_complete": 154,
+     "filler_ok": 0.0,
+     "n_filler": 0
+    },
+    "ui.shell": {
+     "n": 243,
+     "op_acc": 0.7366,
+     "slot_p": 0.7922,
+     "slot_r": 0.7052,
+     "slot_f1": 0.7462,
+     "exact_complete": 0.6195,
+     "n_complete": 205,
+     "filler_ok": 0.7037,
+     "n_filler": 27
+    }
+   }
+  },
+  "dispatcher_before": {
+   "world_top1": 0.9648,
+   "world_agree_with_v4": 1.0,
+   "world_max_abs_logit_diff": 0.0,
+   "n_world": 6000,
+   "seg_token_agree_with_v4": 1.0,
+   "seg_boundary_f1": 0.865,
+   "n_seg": 2000
+  },
+  "dispatcher_after": {
+   "world_top1": 0.9656,
+   "world_agree_with_v4": 0.9738,
+   "world_max_abs_logit_diff": 2.45312,
+   "n_world": 6000,
+   "seg_token_agree_with_v4": 0.9982,
+   "seg_boundary_f1": 0.8682,
+   "n_seg": 2000
+  },
+  "export": {
+   "mode": "A+",
+   "n_inputs": 400,
+   "fp32_vs_v4_fp32_max_abs": {
+    "seg_logits": 1.3067641258239746,
+    "world_logits": 1.7010178565979004,
+    "edit_logits": 1.9638705253601074
+   },
+   "fp32_vs_v4_fp32": {
+    "world_top1_same": 0.96,
+    "seg_argmax_same": 0.76,
+    "edit_argmax_same": 0.64
+   },
+   "int8_vs_published_int8_max_abs": {
+    "seg_logits": 1.3663206100463867,
+    "world_logits": 1.957076072692871,
+    "edit_logits": 1.776024341583252
+   },
+   "int8_vs_published_int8": {
+    "world_top1_same": 0.9725,
+    "seg_argmax_same": 0.7725,
+    "edit_argmax_same": 0.635
+   },
+   "size_mb": {
+    "fp32": 269.7,
+    "int8": 68.0,
+    "published_int8": 67.1
+   },
+   "outputs": [
+    "seg_logits",
+    "world_logits",
+    "edit_logits",
+    "op_logits",
+    "tag_logits"
+   ],
+   "n_ops": 496,
+   "n_tag_labels": 667,
+   "int8_pass_ms_p50_1thread": 13.7,
+   "int8_pass_ms_p50_4thread": 5.2
+  }
+ }
+}

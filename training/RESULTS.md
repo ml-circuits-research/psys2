@@ -682,3 +682,58 @@ Cost is an estimate: tokens = characters / 4 (prompt + batch in, JSON out), list
 **Selection (rule applied, not reviewed):** labeler = **Claude Sonnet 5.5**: Haiku has op 95.3 % but slot F1 0.86 < 0.92; Qwen30 fails every threshold; Sonnet is the cheapest model with op >= 95 % (95.0), F1 >= 0.92 (0.922) and 0 invalid output. Both margins are thin (the gold is small: 300 items; one item is 0.33 points). Judge = **Sonnet, none qualifies** (no judge reaches 90 % recall at 80 % precision; Sonnet is the better of the two). Files: `training/results/nx2-pilot.json`, code `scripts/nx-pilot.mjs`, `scripts/build-nx-gold.mjs`, `scripts/build-nx-real50.mjs`, `training/nx/vllm_label.py`. Raw outputs are in `training/dataset/nx/pilot/` (outside git).
 
 vLLM notes: `python3 -m venv training/.venv-vllm && pip install vllm` works on the GB10 (vllm 0.33.0, torch 2.14 cu130, 9 GB). Two environment fixes were needed: Triton compiles a C stub, so Python.h must be on `C_INCLUDE_PATH` (no root: the headers of `libpython3.12-dev` were unpacked with `dpkg -x` into `training/dataset/nx/pydev`), and `ninja` must be on `PATH` (the venv `bin`). Loading 29 GB took 805 s while the disk was busy.
+
+## NX - encoder formalizer experiment (2026-11-10, Track 2 agent A)
+
+Experiment only: no change to docs/webchat, src/ or worlds/. Format: `training/nx/README.md`. Data and checkpoints are outside git
+(`training/dataset/nx`, `training/runs/nx-*`, `training/runs/export/nx-*`).
+
+### NX1 - label format and free labels
+Command: `node scripts/export-nx.mjs` (about 2.5 min, 6 workers; second pass learns surface forms for slots whose canonical value is not in the text).
+Report: `training/results/nx-data-report.json`. Tests: `node --test tests/nx-export.test.mjs` (7 pass).
+
+| item | value |
+| --- | --- |
+| segment records | 122,122 (complete 91,936, partial 9,919, filler 20,267) |
+| splits | train 97,700, dev 15,075, test 9,347 (inherited from training/dataset, by group) |
+| operations / slots | 498 operations, 192,561 slots, 168,862 with a span (87.7 %) |
+| span sources | rules slot 56,692, aligned 97,520, lexicon 14,650, dup 1,894, none 21,805 |
+| sources | training/dataset rows (rule-derived, generator-backed, paraphrase readings, relabelled, canonical-ok): 47,802; diagram source corpus (data/train only): 74,320 (including filler gaps) |
+| protected records dropped | 4,608 (normalized text equal to a text of real-phrases-2026-11-09*, expectations-*, operational*.jsonl, dialogues.jsonl; diagram data/test and data/bench are never read) |
+| phrase logs, feedback | none exist in the repo (training/phrase-logs has no .jsonl): counted 0 |
+
+`partial` records (a slot value that no surface form located) train the operation head only. Labels of generator-backed and rule-derived rows are the
+rules' own readings, so a model trained on them can at best reproduce the rules plus what the paraphrase and diagram labels add.
+
+### NX4-A - heads on the frozen dispatcher v4 encoder
+Base: `training/runs/dispatcher-distilbert-v4e/ckpt-step2448.pt` (the published v4, int8 export sha 6c41eb24). Code: `training/psys2_train/nx_heads.py`.
+Commands (cwd `training`, `.venv` python): `python -m psys2_train.nx_heads train --mode A --out <abs>/training/runs/nx-a-seed1 --seed 1`;
+`python -m psys2_train.nx_heads train --mode Aplus --epochs 10 --out <abs>/training/runs/nx-aplus-seed1 --seed 1`;
+`python -m psys2_train.nx_heads export --run <run> --out <abs>/training/runs/export/<name>`. bf16, batch 256, A 8 epochs (18 s each), A+ 10 epochs (130-330 s each on the shared GPU).
+Heads: operation (496 classes, [CLS], same input as the world head `tab: .. ; recent: .. ;; segment`) and BIO tag (667 labels over the tag families).
+Numbers are against the NX labels (not yet the rules vs the model comparison; that is NX5).
+
+| model | dev op acc | dev slot F1 | test op acc | test slot F1 | test exact (op + all slots, complete records) | trainable |
+| --- | --- | --- | --- | --- | --- | --- |
+| A (frozen encoder, heads only) | 0.8899 | 0.8153 | 0.7858 | 0.7402 | 0.4859 | heads only (0.4 M) |
+| A+ (top 2 layers unfrozen + distillation replay) | 0.9494 | 0.8920 | 0.8698 | 0.8062 | 0.6183 | 2 layers + heads (14 M) |
+
+Per world (test): `training/results/nx4-a.json` (`nx-a-seed1.test.worlds`, `nx-aplus-seed1.test.worlds`). A+ gains most in diagram.sketch (op .835 -> .942, slot F1 .709 -> .785),
+kids.tasks, kids.arith, art.draw; ui.avatar (op .48 / .57) and ui.help (slot F1 .43 / .55) stay weak in both.
+
+**Dispatcher outputs identical to v4 (A).** The exported ONNX has the dispatcher's three outputs in the same order plus `op_logits` and `tag_logits`.
+On 400 inputs (300 routing inputs, 100 multi-command messages) the fp32 `seg_logits`, `world_logits`, `edit_logits` equal v4's fp32 export with max abs diff 0.0, and the int8 file equals the published
+int8 (6c41eb24) with max abs diff 0.0 (all argmax the same). Size: int8 68.0 MB vs 67.1 MB published (+0.9 MB); one pass 13 ms at 1 thread and 5 ms at 4 threads on this host (CPU, onnxruntime).
+
+**Forgetting check (A+), dispatcher metrics before / after** (6,000 routing test rows, 2,000 multi-command test messages):
+
+| metric | v4 (before) | A+ (after) |
+| --- | --- | --- |
+| world top-1 | 0.9648 | 0.9656 |
+| world top-1 agreement with v4 | 1.0 | 0.9738 (max abs logit diff 2.45) |
+| segmentation boundary F1 | 0.8650 | 0.8682 |
+| segmentation per-token agreement with v4 | 1.0 | 0.9982 |
+
+The distillation replay (world, edit and segmentation logits against a frozen copy of v4) keeps accuracy: no forgetting in accuracy. But A+ is not a drop-in replacement: on the exported 400
+inputs only 96 % keep the same world top-1, 76 % the same whole-message segmentation argmax and 64 % the same edit tags, so the simplification head and `edit_threshold` would need re-evaluation
+through the operational set before A+ could replace v4. A leaves v4 untouched by construction.
