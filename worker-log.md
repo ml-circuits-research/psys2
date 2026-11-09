@@ -775,3 +775,7 @@ Per bucket, encoder+n1 (right / partly / wrong / nu): kids 100 / 0 / 0 / 0 -> 10
 - **migrate-macros**: `patterns.sop` 49,577 -> 43,330 bytes; hand patterns 67; match text 35,893 -> 29,646 bytes (-17 %: the world already used the L8 yes/no phrase groups); inline groups repeated verbatim 18 (41 occurrences) after. No shape, no `extends`.
 - **Gate findings**: `yes`, `sw.maybe2` and `sw.repeat4` keep their original lists (the lead-in macro widened `yes` with "perhaps": "perhaps yes" lost to a plain yes; "sorry, what did you ask" became one sentence).
 - **Gates**: operational 95.1% / 6 wrong unchanged; dialogues unchanged; eval-rules identical; long set identical. Tests: games.guess 115 (no new).
+
+## L7 ui.help (2026-11-09)
+- **migrate-macros**: `patterns.sop` 45,258 -> 35,193 bytes; patterns 56; match text 32,221 -> 22,156 bytes (-31 %); inline groups repeated verbatim 31 (88 occurrences) -> 15 (42). 12 world-local phrases. No shape, no `extends`.
+- **Gates**: operational 95.1% / 6 wrong unchanged; dialogues unchanged; eval-rules and long set identical; nothing put back. Tests: ui.help 69 (no new).

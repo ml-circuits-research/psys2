@@ -56,3 +56,5 @@ Chat surface noise handled by every pattern: fillers (`please`, `ok`, `um`, `hey
 | | polite | S | `could you tell me why you did not understand that` |
 
 Known limits: held-out records labelled `chess.hint` for `i am lost` (the label was produced with the chess tab claim) cannot be met by a rule world.
+
+**L7 (macros).** `patterns.sop` was migrated with `scripts/migrate-macros.mjs` (12 repeated lists are macros). No shape: help, what-can-you-do, how-do-I and about questions are fixed phrases with free-text or world-name captures, not an object/value family. Nothing needed to be put back.
