@@ -572,6 +572,8 @@ function _setColor(ctx, { c: name, shade, label }) {
   if (!hex) return no('unsupported', `I do not know the color ${sp(name)}. Try red, orange, yellow, green, blue, purple, pink, teal or gray.`);
   const c = r.c;
   const word = `${shade ? `${shade} ` : ''}${name}`;
+  // a structure word ("the bars", "the whole chart") named as the label: the whole chart, as when the charts world read the sentence itself
+  if (label && /^(?:the |my |all |all the )*(?:it|them|everything|all|bars?|columns?|lines?|chart|graph|pie|slices|points|dots)$/i.test(String(label).trim())) label = null;
   if (label) {
     const i = find(c, label);
     if (i < 0) return notThere(c, label);

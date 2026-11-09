@@ -54,6 +54,9 @@ export const DEFAULT_POLICY = {
   intersegmentContext: true,  // pieces after the first run in a session where the earlier chosen pieces were committed
 };
 
+/** Connectives that end a clause without belonging to it ("remove pears and also", "mark Rome, then"). */
+const TRAILING_CONNECTIVE = /[\s,;]+(?:and then|and also|and after that|and finally|then also|also then|after that|and|then|also|plus|afterwards|finally|but)[\s,;]*$/i;
+
 const clip = (s, n = 80) => (String(s).length > n ? String(s).slice(0, n - 1) + '…' : String(s));
 
 /** Score of a world candidate as a probability: values in [0,1] are probabilities, negative values are natural-log probabilities. */
@@ -79,9 +82,13 @@ export function normalizePrediction(pred) {
     return { world: String(w.world ?? w.id), score: toProb(w.score ?? w.p ?? w.prob ?? 0) };
   }).filter((w) => w.world && w.world !== 'undefined').sort((a, b) => b.score - a.score);
   const normSeg = (s) => {
-    const st = Number.isInteger(s.start) ? s.start : 0;
-    const en = Number.isInteger(s.end) ? s.end : text.length;
-    const piece = { start: st, end: en, text: typeof s.text === 'string' ? s.text : text.slice(st, en), worlds: normWorlds(s.worlds ?? s.candidates) };
+    let st = Number.isInteger(s.start) ? s.start : 0;
+    let en = Number.isInteger(s.end) ? s.end : text.length;
+    let ptext = typeof s.text === 'string' ? s.text : text.slice(st, en);
+    // a connective glued to the end of a piece ("remove pears and also") joins it to the next piece; it is never part of this piece's words
+    const tail = ptext.match(TRAILING_CONNECTIVE);
+    if (tail && ptext.slice(0, tail.index).trim()) { ptext = ptext.slice(0, tail.index); if (en - st >= ptext.length) en = st + ptext.length; }
+    const piece = { start: st, end: en, text: ptext, worlds: normWorlds(s.worlds ?? s.candidates) };
     if (typeof s.simplified === 'string' && s.simplified.trim() && s.simplified.trim() !== piece.text.trim()) piece.simplified = s.simplified.trim();
     return piece;
   };

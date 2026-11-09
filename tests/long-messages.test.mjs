@@ -33,6 +33,28 @@ test('answer lists: "no" between bare answers is an answer, not a correction', (
   assert.equal(splitAnswerList('no thanks'), 'no thanks');
 });
 
+test('dispatcher pieces lose a trailing connective ("remove pears and also")', async () => {
+  const { normalizePrediction } = await import('../src/dialog/dispatch-validate.mjs');
+  const text = 'remove pears and also how many days are in a week';
+  const pred = normalizePrediction({ text, segmentations: [{ score: 0, segments: [{ start: 0, end: 21, text: 'remove pears and also', worlds: ['data.charts'] }, { start: 22, end: text.length, text: 'how many days are in a week', worlds: ['kids.time'] }] }] });
+  const [a, b] = pred.segmentations[0].segments;
+  assert.equal(a.text, 'remove pears');
+  assert.equal(a.end, 12);
+  assert.equal(b.text, 'how many days are in a week');
+  const one = normalizePrediction({ text: 'add and', segmentations: [{ score: 0, segments: [{ start: 0, end: 7, text: 'add and', worlds: ['x'] }] }] });
+  assert.equal(one.segmentations[0].segments[0].text, 'add');
+  const only = normalizePrediction({ text: 'and', segmentations: [{ score: 0, segments: [{ start: 0, end: 3, text: 'and', worlds: ['x'] }] }] });
+  assert.equal(only.segmentations[0].segments[0].text, 'and');
+});
+
+test('charts: "make the bars green" colors the whole chart even when the labels are colors', async () => {
+  const s = session();
+  s.setWorldState('ui.shell', { activeTab: 'charts' });
+  await s.send('make a chart: red 4, green 6, blue 10');
+  const r = await s.send('make the bars green');
+  assert.match(r.text, /chart is green/);
+});
+
 test('guess: a list of answers is applied in order', async () => {
   for (const msg of ['yes, no, I don\'t know, and then maybe', 'yes no I don\'t know maybe']) {
     const s = session();
