@@ -828,3 +828,20 @@ Match text of the hand-written patterns (`pattern-stats --world W --hand`), befo
 - **Simulation** (shipped config encoder+n1, dispatcher v3 19dd054b, 2,621 fake log messages: held-out paraphrases 2,237 (needs_review excluded) + the 8 failures of operational-long + the 376 non-right Romanian cases of operational-ro; setup turns replayed): **self-labelled 1,992 messages (2,013 segment rows), queued 629**. By source: held-out 1,981 / 256; long failures 0 / 8; Romanian failures 11 / 365. Precision vs gold: world 1,968/1,971 (99.8 %, single-piece messages), circuit 1,946/1,981 (98.2 %, held-out `expected_circuit`, normalized SOP). Most circuit misses are disagreements with gold where the reading is plausible (start-guessing-game and "show my documents" phrasings, ui.help "I am lost"); real errors: "x goes first, that's me" (kids.common instead of games.tictactoe), "Delete the last list" (kids.tasks vs docs.editor gold). Queue by world candidate: ui.avatar 73, ui.shell 59, art.draw 49, kids.tasks 49, kids.animals 40, docs.reader 37, kids.shop 34, kids.common 30, games.tictactoe 29, games.chess 27, unknown 25, docs.editor 22, games.guess 22, kids.arith 22, media.music 20, kids.shapes 20, games.hangman 18, data.charts 16, geo.map 16, kids.time 11, ui.help 10. Top reasons: status_not_supported 540 (missing argument / refusal), not_dispatcher_reading 305, generated_or_invalid_reading 300, no_observable_effect 298, not_understood 284, untranslated_text 59. Full report: `training/results/learn-loop-simulation.json`. No retrain, so no before/after headline.
 - **Flow into build-dataset** checked with the simulated labelled files (temporary, removed): build-dataset on the main checkout's data gave 983 self-validated train rows and 1,282 routing rows (the rest deduped against existing rows); nothing from the simulation is committed under `training/phrase-logs/`.
 - Eval reports for long and Romanian were produced with `eval-operational.mjs --mode encoder+n1 --set <file> --jobs 12` (published.json restored afterwards: `--set` runs of the whole file count as a full run).
+
+## L9 frame literals in routing (2026-11-09, origin/main 6f041a1)
+Flag `PSYS_FRAME_RANK=1` makes `inTier` compare content literals (`literals - frameLiterals`), then frame literals; off = the old `literals`. Same code, only the env var differs; the encoder+n1 runs use onnxruntime-node (dispatcher v3 + normalizer in docs/webchat/models, scratch ort install).
+
+| measure | flag off | flag on |
+| --- | --- | --- |
+| operational, rules (1240) right / partly / wrong / not understood | 1183 / 22 / 6 / 29 | 1183 / 22 / 6 / 29 |
+| operational, encoder+n1 | 1220 / 0 / 7 / 13 | 1220 / 0 / 7 / 13 |
+| long set (154), rules | 90 / 14 / 32 / 18 | 90 / 14 / 32 / 18 |
+| long set, encoder+n1 | 145 / 5 / 3 / 1 | 145 / 5 / 3 / 1 |
+| dialogues rules (408): dialogues / turns right | 359 / 1890 | 359 / 1890 |
+| dialogues encoder+n1 | 352 / 1873 | 352 / 1873 |
+| eval-rules held-out positives, restricted / routed (of 2237) | 2165 / 2172 | 2164 / 2170 |
+| export-training --routing-context, mean agreement over 21 worlds | 0.98968 | 0.98939 |
+
+- eval-rules: only kids.arith (routed 107 -> 106) and kids.tasks (restricted 107 -> 106, routed 108 -> 107) differ. The `routing:` section of eval-rules is empty in this checkout (`training/dataset/routing.jsonl` is generated, not tracked), so "routing agreement" is the export-training agreement: kids.tasks 0.995 -> 0.9905, kids.shop 0.992 -> 0.9905, the other worlds equal.
+- Decision: rejected (agreement and held-out fall, nothing gains). The flag stays in the code, off by default. ADR-007 amended.
