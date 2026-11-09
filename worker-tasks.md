@@ -173,6 +173,96 @@ Tests (headless, 390×844 and 1280×800):
    - no double sends;
    - the language switches to `ro-RO` after Romanian input.
 
+### UI1 — one microphone, one "read aloud" button, tooltips everywhere (user, 15:07 local)
+
+The user finds the controls confusing:
+- "Why does the document editor have its own microphone? There should be one, the chat's: I dictate there and it does everything."
+- "The speaker and headphones icons next to Settings have no tooltip. What do they do?"
+- "Microphones and buttons everywhere: here it closes, there it opens."
+
+Today (06f1a59):
+- `micBtn` sits in the input bar;
+- `speakerBtn` ("Read answers aloud") and `handsBtn` ("Hands-free mode") sit in the header next to the gear, with an `aria-label` but no `title`;
+- the editor toolbar has its own "Dictate" button with a mic icon (`ui/tabs/editor/toolbar.mjs`, `dictation`).
+
+Fix:
+1. **The input bar holds the only voice controls**, at its left corner: **one mic button** and **one "read answers aloud" toggle** next to it.
+   - Hands-free (continuous listening) becomes a mode of the same mic: long-press, or a small "keep listening" switch in the mic's popover, plus Settings › Voice. It is not a separate header icon.
+   - Remove `speakerBtn` and `handsBtn` from the header. The header keeps the title, the language selector and the gear.
+2. **No microphone inside tabs.**
+   - Remove the editor toolbar's "Dictate" button. Dictation is a mode of the chat mic: say or type "start dictation" (as now), and while it is on, the mic and the input bar show a clear "Dictating into: <document>" state with a Stop control.
+   - Check every other tab for duplicated voice or send controls and remove them.
+3. **Every icon button has a tooltip** (`title`) and the same text as `aria-label`, saying what it does and what state it is in ("Read answers aloud: on"). Add a test that fails on any button without one.
+4. **One place opens and closes each thing.** Settings open only from the gear (and voice commands). Panels close with their own × (SET). No second toggle elsewhere.
+5. Screenshots at 390 and 1280 px of the header, the input bar, and the editor in dictation, for the reviewer.
+
+### ED — the document editor barely obeys text or voice (user, 15:09 local; reviewer probes in the CLI at 06f1a59)
+
+"Dictation or typing to command the editor does not really work, not even a new line to start a new chapter." The reviewer's probe:
+
+| message | result |
+| --- | --- |
+| "new line", "new paragraph" (not dictating) | not understood |
+| "add a new chapter called The Forest", "start a new chapter" | not understood (suggests "Create a new document …" or "Start a new melody") |
+| "write Once upon a time there was a fox" | not understood ("Did you mean: Where is the white queen?") |
+| "insert a new line after the title" | added a paragraph of 3 words: it wrote the words instead of a line break |
+| "write a title My Story", then "read the document" | reads only "Untitled document": the title heading and the document title disagree |
+| "new line" while dictating | empty reply |
+| works | "add a heading Chapter 2", "start dictation" / free text / "stop dictation", "undo" |
+
+Fix, as general editor capabilities with request shapes and tests:
+- **Structure:**
+  - new line, new paragraph, page break;
+  - new chapter / section / heading (with or without a title: "start a new chapter called X", "chapter 3: X", "add a subheading");
+  - list items ("add a bullet: milk", "numbered list");
+  - "under / after / before the title / chapter 2 / the second paragraph".
+- **Writing:**
+  - "write …", "type …", "add the text …", "continue with …";
+  - quotes and long free text without truncation;
+  - in dictation, "new line" / "new paragraph" / "new chapter" / "rând nou" / "paragraf nou" work as commands with a short confirmation.
+- **Editing:**
+  - bold, italic, underline on the last sentence, word, paragraph or selection;
+  - "change X to Y" only when X is in the document (RD10);
+  - delete the last word / sentence / paragraph; move a paragraph up or down;
+  - "rename the document to …"; the first heading sets the title when the document is untitled.
+- **Reading:** "read the document / chapter 2 / the last paragraph" reads the content, not just the title.
+- **Romanian:** the same commands in Romanian.
+- **Tests:**
+  - an editor dialogue set of at least 60 turns, covering a short story with chapters written by voice and by typing, plus edits;
+  - every probe above;
+  - the editor family in the operational set.
+
+### DOC — say what PSys2 really is: neurosymbolic, in the browser (user, 15:09 local)
+
+The greeting undersells the system and is now wrong. The user: "say it is a neurosymbolic model that works purely in the browser; let's be more impressive than 'explicit rules'; we do not only have explicit rules, it is more complicated."
+
+Today's texts:
+- greeting (`app.mjs:658`): "Hi, I am PSys2. I answer with explicit rules and small knowledge worlds, with no language model.";
+- header (`app.mjs:102`): "no LLM · runs in your browser";
+- `<title>` and meta description in `docs/webchat/index.html`.
+
+Rewrite them; proposed wording, keep it accurate:
+- **greeting:** "Hi, I am PSys2, a neurosymbolic assistant that runs entirely in your browser. Small neural models split what you say and propose meanings; symbolic worlds check every meaning against formal rules before anything happens, so I do what I understood and tell you what I did not. Talk to me or type. Try one of these:";
+- **header:** "neurosymbolic · runs in your browser";
+- **title / meta:** "PSys2: a neurosymbolic assistant that runs in your browser, with no server and no large language model".
+
+Then improve the documentation where users and visitors look:
+- **README top section.** What PSys2 is, in five lines. The architecture in one diagram:
+  - the dispatcher (DistilBERT) cuts messages and proposes worlds;
+  - the normalizer (FLAN-T5 small) rewrites only when it helps and is always validated;
+  - the SOP Lang formal layer and the rule formalizer, with spell checking, best effort and the discourse layer;
+  - the value checker;
+  - the interpreter;
+  - worlds and tabs.
+  Plus what runs where (all in the browser, about 64 MB of models, cached), the headline numbers from RESULTS.md, the licence and a demo link.
+- **An "About PSys2" page in the webchat** (Settings › About, SET): the same, plus what "neurosymbolic" means here, why the symbolic layer makes it safe (nothing runs unless a world validates it), the live model versions and the measured accuracy.
+- **Help** ("what are you?", "how do you work?", "are you an AI?", "do you use ChatGPT?" in ui.help): short, accurate answers in the same spirit.
+- **Wording rules:**
+  - say "neurosymbolic", "small neural models", "formal rules / symbolic worlds";
+  - never claim more than we have (no "understands everything");
+  - say clearly that there is no server and no large language model.
+- **specs/README.md and `docs/index.html`:** align the wording.
+
 ### DIAG — a Diagram world and tab, imported from diagram-vss-demo (user, 13:40 local)
 
 The user wants a world and a tab for drawing diagrams, built from everything reusable in
@@ -221,12 +311,13 @@ The reviewer copied what is reusable into **`imports/diagram-vss-demo/`** (stagi
 
 **Order from now on:**
 1. HANG + STOP (with LIC)
-2. SET (settings modal with tabs) and VOICE (end of turn)
-3. RD10 together with RD1b and RD2 (they share the mechanism)
-4. DIAG
-5. RD5, RD9
-6. PERF round 3
-7. SURPRISE, AV, ASTRA
+2. SET (settings modal with tabs) + UI1 (one mic, tooltips) + DOC (greeting and docs), then VOICE (end of turn)
+3. ED (document editor commands)
+4. RD10 together with RD1b and RD2 (they share the mechanism)
+5. DIAG
+6. RD5, RD9
+7. PERF round 3
+8. SURPRISE, AV, ASTRA
 
 ### Final review of "READY FOR REVIEW" (744c3d5) — reviewer, 2026-11-09 09:20 UTC.
 
@@ -1082,3 +1173,4 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
 - D5 learning loop (d203be9), L9 frame literals measured and rejected (a975872), L10 docs (d7fe3f0): 882 tests pass. **The L library is complete.**
 - R4 dispatcher v4 published (d667609; sha 6c41eb24, safe S1 edit head) + T9 RESULTS summary (64e259a): 882 tests pass. **Shipped config 98.6% right, 0.4% wrong, 1.0% not understood** (1,240); long set 94.2%; dialogues 86.3% (encoder+n1); Romanian 84.8% right / 2.7% wrong. Browser check: answers correct, 0 console errors. PERF unchanged: page 32 s, multi-command 4.2 s (PERF round 2 in progress per T9).
 - Final review of the batch (744c3d5, 09:20): 884/885 tests pass (1 skipped); rules operational 95.4 / 0.5 reproduced; rules dialogues 96.4 / 88.0 (claim 96.6 / 87.7, 4-turn gap to reconcile). **PERF round 2 (57b28bf) validated in part:** ready ≤ 5 s in all modes, p50 ≤ 300 ms, thinking timer and "answered in X ms" work, v4 loads in headless Chrome with 0 console errors; first answer, encoder+n1 p95 and long multi-command remain (PERF round 3). RD8 validated (game coordinates follow the active game). BEST-EFFORT validated in part ("square eyes robot pls" works; "red house big" misled → RD1b). Decisions (a)–(f) answered in §2. RD1b, RD2, RD5, RD9 open; SURPRISE, AV, ASTRA not started.
+- Review decisions c/d/e + dialogue recount (658acae): 890/891 tests pass (1 skipped); "where were we?" follows the one definition; sky label fixed; S1 edit head behind `editHead`, off by default; rules dialogues 96.4 / 88.0 reconciled with the reviewer.
