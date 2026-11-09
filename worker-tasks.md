@@ -145,6 +145,87 @@ Every section has **Copy** and **Export JSON** buttons, so the user can attach a
 - 0 console errors;
 - screenshots for the reviewer.
 
+### FB — thumbs up / down on every answer, with feedback the learning loop can use (user, 17:06 local)
+
+**Buttons.** Under every answer, next to "Trace" and "answered in": **▲ (good)** and **▼ (not what I wanted)**.
+- Small and subtle, with tooltips. One choice per answer, changeable.
+- Keyboard and screen reader accessible.
+
+**▼ opens a small inline form** under that answer. It must take a few seconds to fill:
+- quick reasons as chips: "wrong action", "wrong thing / object", "wrong place / value", "did too much", "did too little", "wrong tab / world", "misheard (voice)", "too slow", "other";
+- "What did you want?" (free text, optional, can also be dictated);
+- a **"Show me the right result"** option for the tabs that support undo: it undoes the turn, so the user can redo it by hand or say it differently. The next accepted phrasing is linked to the ▼ record as its correction.
+
+**Storage.** Each vote is stored in the phrase log record of that message: `feedback: { vote: 'up'|'down', reasons: [...], wanted: '...', correction: <id of the next accepted message or null>, time }`, plus:
+- the turn's readings;
+- the chosen SOP Lang wires;
+- the world and the state hash before and after, so a reviewer can replay it.
+
+It appears in the history list (a ▲ / ▼ mark), in the filters ("Not what I wanted"), in the Export JSON, and in DBG "Last turns".
+
+**Learning loop** (D5 / `scripts/learn-from-logs.mjs`):
+- ▼ records with a `wanted` text or a `correction` become review items with the highest priority;
+- ▲ records become self-validated examples (stronger than the margin rule);
+- report the counts.
+
+The spoken "that's wrong" / "nu asta am vrut" (spec 11 negative feedback) sets the same ▼ on the last answer and opens the same form.
+
+**Tests:**
+- vote, change the vote, ▼ form with reasons and text;
+- the record and the export contain it;
+- `learn-from-logs` picks it up;
+- 0 console errors.
+
+**Copy as text in the phrase log does not work (user): remove it.** Keep **Export JSON** with every detail: the record, readings, wires, timings, feedback and endType. Make sure the export is complete and opens with one click on a phone (share sheet when available, a download otherwise).
+
+### DIAG3 — Diagram: short ids, clear arrows, arrows as first-class objects, and parity with the source (user, 17:06 local)
+
+Data:
+- the user's diagram session: `training/eval/real-phrases-2026-11-09d.jsonl` (10 messages);
+- the expected behaviour: `training/eval/expectations-2026-11-09d.jsonl` (15 cases, each with today's result).
+
+CLI replay at f41aba5:
+- "create a diagram" → "Drew circle2";
+- "add to the diagram a tree liek shape" → "Drew circle3" (the source reader gives `template=tree`);
+- "label the previous link as label1" and "label link" → "Which shape should I label?";
+- "lable arraw between circle1 and rectangle1" → labels both *shapes* "and";
+- `label the arraw between circle1 and reactanle1 as "label1"` → labels circle1 "and" (the source reader reads `label the arrow between A and B as "uses"` as `{action: label, from: A, to: B, label: uses}`);
+- "make the arrow … thicker" → a vague "Changed the arrow …".
+
+The user is right that we lost function compared with the source.
+
+1. **Short automatic ids, shown subtly.**
+   - Every shape gets a short id by kind: c1, c2 (circle), r1 (rectangle / box), s1 (square), d1 (diamond), e1 (ellipse), t1 (triangle), h1 (hexagon), x1 (text). Every edge gets a1, a2.
+   - Ids are drawn small and grey at the shape's top-left and the arrow's midpoint, without clutter; a toggle in the tab hides them.
+   - A user-given name or label is shown normally, and the id stays as a subtle tag.
+   - Old long names (circle1, rectangle1) remain aliases, so data and tests keep working.
+   - Every reply uses the ids ("Connected c1 → r1 (a1)").
+2. **Arrows are first-class.** Refer to an edge by:
+   - its id ("a1");
+   - its ends ("the arrow between c1 and r1", "the link from A to B");
+   - recency ("the previous / last / that link / arrow / connection / line");
+   - its label.
+   Every edge operation works on edges: label, recolour, style (solid / dashed / dotted), arrowheads (forward / both / none), thickness (thicker / thinner, one step per "a bit"), reverse, delete, select. Typos in edge words ("arraw", "lable", "conection") are corrected.
+3. **Arrow rendering.**
+   - An arrowhead must not end flush against, or nearly parallel to, the border line it enters ("too close to the perpendicular line"). Attach edges to the nearest side with a clearance of ≥ 8 px. Enter at an angle of ≥ 30° to the border, or bend the last segment to enter perpendicular.
+   - Spread parallel and opposite edges between the same pair.
+   - Avoid running along another node's border; keep labels off the line, with a background halo.
+   - Test geometry: the minimum entry angle and clearance over all edges of the bench diagrams.
+4. **Sizes and layout by voice.**
+   - "make c1 a bit bigger / much bigger / the same size as r1";
+   - "make the arrows thicker";
+   - "change / switch the layout to a row / column / grid / circle / tree / layers / radial";
+   - "space them out", "tidy up / untangle".
+   Most of these exist in the engine (resize, arrange, respace, untangle, straighten, equalize, fit): make sure our patterns reach every one.
+5. **"Create a diagram" and templates.**
+   - "create / new diagram" starts a new diagram, asking whether to keep the current one, and offers the 24 templates.
+   - "a tree-like shape / an org chart / a flowchart / a cycle / a pyramid / a funnel" build the template, and ask for the items when none are given.
+6. **Parity with the source.**
+   - Run the source reader (`imports/diagram-vss-demo/engine/logic.js`, `createSystem().formalize`) and ours on every message of `data/test` and `data/bench`.
+   - List every act and legend key that the source reads right and we do not, by count. Fix them, the largest groups first, until ours is **≥ the source rules reader** on act and on args.
+   - Report the table in RESULTS.md (source rules vs ours: act right, args right, wrong, unread).
+7. **Tests:** the 15 expectations as dialogue tests (family `real`) on the Diagram tab, in the CLI and headless webchat with screenshots of the ids and arrows.
+
 ### HANG2 — the model worker stops answering; the watchdog hides it (reviewer at 1375718, 15:50 local) — P0, DO FIRST
 
 The HANG + STOP work is good: the Stop button, one message at a time, the 8 s watchdog and 918/921 tests passing (3 skipped). The chat no longer freezes forever. **But the turns that froze still do not get answered: they now end at 8 s with "That took too long, so I stopped."** That also happens **without throttling, on a fast machine**, and it repeats on every try. So the user will still see it all the time.
@@ -475,7 +556,7 @@ The reviewer copied what is reusable into **`imports/diagram-vss-demo/`** (stagi
 **Licence:** settled. The project is now AGPL-3.0-only, the same as the source (user decision 14:10); keep the copied files' provenance headers.
 
 **Order from now on:**
-1. HANG2 (model worker stops answering), MIC2 + EOT2 (always-open mic, queue, reliable button, end of turn), then DIAG2 (Diagram world in the webchat, dispatcher retrain), then RP3 (phrase-log failures), then DBG (debug view per tab)
+1. HANG2 (model worker stops answering), MIC2 + EOT2 (always-open mic, queue, reliable button, end of turn), then DIAG2 + DIAG3 (Diagram world in the webchat, retrain, short ids, edges, rendering, parity), FB (thumbs up / down + feedback, remove Copy as text), then RP3 (phrase-log failures), then DBG (debug view per tab)
 2. SET (settings modal with tabs) + UI1 (one mic, tooltips) + DOC (greeting and docs), then VOICE (end of turn)
 3. ED (document editor commands)
 4. RD10 together with RD1b and RD2 (they share the mechanism)

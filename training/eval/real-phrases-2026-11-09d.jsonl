@@ -1,0 +1,10 @@
+{"text":"draw a red circle","lang":"en","english":"draw a red circle","mode":"voice","tab":"diagram","worlds":["art.draw"],"status":"supported","time":"2026-11-09T15:56:33.809Z","endType":"final","waitMs":298}
+{"text":"create a diagram","lang":"en","english":"create a diagram","mode":"voice","tab":"diagram","worlds":["diagram.sketch"],"status":"supported","time":"2026-11-09T16:00:08.528Z","endType":"pause-plausible","waitMs":713}
+{"text":"add to the diagram a tree liek shape","lang":"en","english":"add to the diagram a tree liek shape","mode":"typed","tab":"diagram","worlds":["diagram.sketch"],"status":"supported","time":"2026-11-09T16:00:26.632Z"}
+{"text":"add a box","lang":"en","english":"add a box","mode":"typed","tab":"diagram","worlds":["diagram.sketch"],"status":"supported","time":"2026-11-09T16:00:32.063Z"}
+{"text":"connect all elements","lang":"en","english":"connect all elements","mode":"typed","tab":"diagram","worlds":["diagram.sketch"],"status":"supported","time":"2026-11-09T16:00:37.655Z"}
+{"text":"connect circle1 and rectangle1","lang":"en","english":"connect circle1 and rectangle1","mode":"typed","tab":"diagram","worlds":["diagram.sketch"],"status":"supported","time":"2026-11-09T16:00:49.511Z"}
+{"text":"label the previous link as label1","lang":"en","english":"label the previous link as label1","mode":"typed","tab":"diagram","worlds":["diagram.sketch"],"status":"unsupported","time":"2026-11-09T16:01:04.400Z"}
+{"text":"label link","lang":"en","english":"label link","mode":"typed","tab":"diagram","worlds":["diagram.sketch"],"status":"unsupported","time":"2026-11-09T16:01:10.008Z"}
+{"text":"lable arraw between circle1 and rectangle1","lang":"en","english":"lable arraw between circle1 and rectangle1","mode":"typed","tab":"diagram","worlds":["diagram.sketch"],"status":"supported","time":"2026-11-09T16:01:27.448Z"}
+{"text":"label the arraw between circle1 and reactanle1 as \"label1\"","lang":"en","english":"label the arraw between circle1 and reactanle1 as \"label1\"","mode":"typed","tab":"diagram","worlds":["diagram.sketch"],"status":"supported","time":"2026-11-09T16:01:57.233Z"}
