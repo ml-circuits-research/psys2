@@ -9,8 +9,10 @@ const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROO
 const dry = async (text, tab) => { const s = engine.createSession({ language: 'en' }); if (tab) s.setWorldState('ui.shell', { activeTab: tab }); return s.dryRead(text, { language: 'en', deadlineMs: 2000 }); };
 
 test('dryRead: a reading with a missing argument is not complete (phrase log rows 63-68)', async () => {
-  for (const t of ['play']) assert.equal((await dry(t, 'music')).complete, false, t);
-  assert.equal((await dry('play', 'music')).reason, 'missing');
+  // On the Music tab a bare "play" is a complete command since RP3 item 8 (it replays the last song); the
+  // voice end-of-turn still waits the long pause there because the utterance ends in a verb (EOT2 trailing-verb rule).
+  for (const t of ['play']) assert.equal((await dry(t, 'map')).complete, false, t);
+  assert.equal((await dry('play', 'map')).reason, 'missing');
 });
 
 test('dryRead: complete readings stay complete', async () => {
