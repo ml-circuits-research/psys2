@@ -48,9 +48,9 @@
     "lib/astra/session.mjs": "2d1dc2bce878b570",
     "lib/astra/where.mjs": "50abedb5f0101fef",
     "lib/dialog/discourse.mjs": "0f8b20a29e4f64bd",
-    "lib/dialog/dispatch-validate.mjs": "309ede744c469270",
+    "lib/dialog/dispatch-validate.mjs": "05047b2b2cb7003e",
     "lib/dialog/encoder-dispatch.mjs": "626a317618579564",
-    "lib/dialog/index.mjs": "331a82be9a75ccda",
+    "lib/dialog/index.mjs": "c259ece490a340bf",
     "lib/dialog/meta.mjs": "3f42a3f2e5d70d71",
     "lib/dialog/normalizer-runtime.mjs": "55aef6e847b477c6",
     "lib/dialog/runtime-config.mjs": "0f2c990dffd716e7",
@@ -134,7 +134,7 @@
     "worlds/games.tictactoe/ops.mjs": "1f598055dba19156",
     "worlds/geo.map/datagen.mjs": "7bdabe28b74dfa9e",
     "worlds/geo.map/ops.mjs": "551366a4f0a969fb",
-    "worlds/index.json": "4bae930a89166172",
+    "worlds/index.json": "b0c20dfbb59ebcc1",
     "worlds/kids.animals/datagen.mjs": "6ad9f00ea4316ed7",
     "worlds/kids.animals/ops.mjs": "644e845de473918a",
     "worlds/kids.arith/datagen.mjs": "eaddc6e69e6c0b20",
@@ -165,5 +165,5 @@
     "worlds/user.profile/ops.mjs": "8385add167932b48",
     "worlds/user.profile/understand.mjs": "5782a91a5bd8e949"
   },
-  "builtAt": "2026-11-09T18:15:11.173Z"
+  "builtAt": "2026-11-09T18:17:38.746Z"
 }
