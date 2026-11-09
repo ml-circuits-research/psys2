@@ -1,0 +1,226 @@
+{
+ "world": "diagram.sketch",
+ "records": {
+  "train": 59983,
+  "dev": 10031,
+  "test": 4306
+ },
+ "lora_params": 685144,
+ "A_dev": {
+  "n": 10031,
+  "op_acc": 0.9382,
+  "slot_p": 0.8122,
+  "slot_r": 0.8625,
+  "slot_f1": 0.8366,
+  "exact_complete": 0.7046,
+  "n_complete": 6811,
+  "filler_ok": 0.9923,
+  "n_filler": 2728
+ },
+ "A_test": {
+  "n": 4306,
+  "op_acc": 0.8346,
+  "slot_p": 0.693,
+  "slot_r": 0.7246,
+  "slot_f1": 0.7085,
+  "exact_complete": 0.4364,
+  "n_complete": 2892,
+  "filler_ok": 0.9654,
+  "n_filler": 983
+ },
+ "C_dev": {
+  "n": 10031,
+  "op_acc": 0.9956,
+  "slot_p": 0.9712,
+  "slot_r": 0.9848,
+  "slot_f1": 0.9779,
+  "exact_complete": 0.9593,
+  "n_complete": 6811,
+  "filler_ok": 1.0,
+  "n_filler": 2728
+ },
+ "C_test": {
+  "n": 4306,
+  "op_acc": 0.9561,
+  "slot_p": 0.8489,
+  "slot_r": 0.8505,
+  "slot_f1": 0.8497,
+  "exact_complete": 0.7175,
+  "n_complete": 2892,
+  "filler_ok": 0.9959,
+  "n_filler": 983
+ },
+ "log": [
+  {
+   "epoch": 1,
+   "loss": 0.2096,
+   "dev": {
+    "n": 10031,
+    "op_acc": 0.9925,
+    "slot_p": 0.9398,
+    "slot_r": 0.9572,
+    "slot_f1": 0.9484,
+    "exact_complete": 0.9025,
+    "n_complete": 6811,
+    "filler_ok": 0.9989,
+    "n_filler": 2728
+   },
+   "sec": 36
+  },
+  {
+   "epoch": 2,
+   "loss": 0.0789,
+   "dev": {
+    "n": 10031,
+    "op_acc": 0.993,
+    "slot_p": 0.9523,
+    "slot_r": 0.9744,
+    "slot_f1": 0.9632,
+    "exact_complete": 0.9306,
+    "n_complete": 6811,
+    "filler_ok": 0.9996,
+    "n_filler": 2728
+   },
+   "sec": 44
+  },
+  {
+   "epoch": 3,
+   "loss": 0.0422,
+   "dev": {
+    "n": 10031,
+    "op_acc": 0.9947,
+    "slot_p": 0.9618,
+    "slot_r": 0.9748,
+    "slot_f1": 0.9683,
+    "exact_complete": 0.9388,
+    "n_complete": 6811,
+    "filler_ok": 1.0,
+    "n_filler": 2728
+   },
+   "sec": 43
+  },
+  {
+   "epoch": 4,
+   "loss": 0.028,
+   "dev": {
+    "n": 10031,
+    "op_acc": 0.9908,
+    "slot_p": 0.9622,
+    "slot_r": 0.9733,
+    "slot_f1": 0.9677,
+    "exact_complete": 0.9394,
+    "n_complete": 6811,
+    "filler_ok": 1.0,
+    "n_filler": 2728
+   },
+   "sec": 36
+  },
+  {
+   "epoch": 5,
+   "loss": 0.0176,
+   "dev": {
+    "n": 10031,
+    "op_acc": 0.994,
+    "slot_p": 0.9671,
+    "slot_r": 0.9805,
+    "slot_f1": 0.9737,
+    "exact_complete": 0.947,
+    "n_complete": 6811,
+    "filler_ok": 1.0,
+    "n_filler": 2728
+   },
+   "sec": 37
+  },
+  {
+   "epoch": 6,
+   "loss": 0.0108,
+   "dev": {
+    "n": 10031,
+    "op_acc": 0.9944,
+    "slot_p": 0.9672,
+    "slot_r": 0.9821,
+    "slot_f1": 0.9746,
+    "exact_complete": 0.9527,
+    "n_complete": 6811,
+    "filler_ok": 1.0,
+    "n_filler": 2728
+   },
+   "sec": 36
+  },
+  {
+   "epoch": 7,
+   "loss": 0.0068,
+   "dev": {
+    "n": 10031,
+    "op_acc": 0.9947,
+    "slot_p": 0.9665,
+    "slot_r": 0.9841,
+    "slot_f1": 0.9752,
+    "exact_complete": 0.9533,
+    "n_complete": 6811,
+    "filler_ok": 1.0,
+    "n_filler": 2728
+   },
+   "sec": 36
+  },
+  {
+   "epoch": 8,
+   "loss": 0.0043,
+   "dev": {
+    "n": 10031,
+    "op_acc": 0.9943,
+    "slot_p": 0.9695,
+    "slot_r": 0.9829,
+    "slot_f1": 0.9762,
+    "exact_complete": 0.9558,
+    "n_complete": 6811,
+    "filler_ok": 1.0,
+    "n_filler": 2728
+   },
+   "sec": 36
+  },
+  {
+   "epoch": 9,
+   "loss": 0.0028,
+   "dev": {
+    "n": 10031,
+    "op_acc": 0.9956,
+    "slot_p": 0.9712,
+    "slot_r": 0.9848,
+    "slot_f1": 0.9779,
+    "exact_complete": 0.9593,
+    "n_complete": 6811,
+    "filler_ok": 1.0,
+    "n_filler": 2728
+   },
+   "sec": 39
+  },
+  {
+   "epoch": 10,
+   "loss": 0.002,
+   "dev": {
+    "n": 10031,
+    "op_acc": 0.9943,
+    "slot_p": 0.9705,
+    "slot_r": 0.9841,
+    "slot_f1": 0.9772,
+    "exact_complete": 0.9567,
+    "n_complete": 6811,
+    "filler_ok": 1.0,
+    "n_filler": 2728
+   },
+   "sec": 39
+  }
+ ],
+ "args": {
+  "cmd": "train",
+  "world": "diagram.sketch",
+  "out": "/home/salboaie/work/psys2/training/runs/nx-c-diagram.sketch",
+  "base_run": "nx-a-seed1",
+  "data": "/home/salboaie/work/psys2/.claude/worktrees/nx-a2/training/dataset/nx/free-*.jsonl",
+  "epochs": 10,
+  "batch": 128,
+  "lr": 0.001,
+  "seed": 1
+ }
+}

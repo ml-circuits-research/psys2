@@ -1,0 +1,226 @@
+{
+ "world": "media.music",
+ "records": {
+  "train": 2348,
+  "dev": 286,
+  "test": 294
+ },
+ "lora_params": 685144,
+ "A_dev": {
+  "n": 286,
+  "op_acc": 0.7238,
+  "slot_p": 0.8483,
+  "slot_r": 0.6244,
+  "slot_f1": 0.7193,
+  "exact_complete": 0.3915,
+  "n_complete": 281,
+  "filler_ok": 0.0,
+  "n_filler": 0
+ },
+ "A_test": {
+  "n": 294,
+  "op_acc": 0.8061,
+  "slot_p": 0.8632,
+  "slot_r": 0.6642,
+  "slot_f1": 0.7507,
+  "exact_complete": 0.4473,
+  "n_complete": 275,
+  "filler_ok": 0.0,
+  "n_filler": 0
+ },
+ "C_dev": {
+  "n": 286,
+  "op_acc": 0.8147,
+  "slot_p": 0.8688,
+  "slot_r": 0.7563,
+  "slot_f1": 0.8087,
+  "exact_complete": 0.6157,
+  "n_complete": 281,
+  "filler_ok": 0.0,
+  "n_filler": 0
+ },
+ "C_test": {
+  "n": 294,
+  "op_acc": 0.8776,
+  "slot_p": 0.8785,
+  "slot_r": 0.7794,
+  "slot_f1": 0.826,
+  "exact_complete": 0.6255,
+  "n_complete": 275,
+  "filler_ok": 0.0,
+  "n_filler": 0
+ },
+ "log": [
+  {
+   "epoch": 1,
+   "loss": 0.2115,
+   "dev": {
+    "n": 286,
+    "op_acc": 0.7483,
+    "slot_p": 0.8505,
+    "slot_r": 0.6497,
+    "slot_f1": 0.7367,
+    "exact_complete": 0.4377,
+    "n_complete": 281,
+    "filler_ok": 0.0,
+    "n_filler": 0
+   },
+   "sec": 1
+  },
+  {
+   "epoch": 2,
+   "loss": 0.1028,
+   "dev": {
+    "n": 286,
+    "op_acc": 0.7622,
+    "slot_p": 0.8558,
+    "slot_r": 0.6777,
+    "slot_f1": 0.7564,
+    "exact_complete": 0.4911,
+    "n_complete": 281,
+    "filler_ok": 0.0,
+    "n_filler": 0
+   },
+   "sec": 1
+  },
+  {
+   "epoch": 3,
+   "loss": 0.0533,
+   "dev": {
+    "n": 286,
+    "op_acc": 0.7552,
+    "slot_p": 0.8626,
+    "slot_r": 0.6853,
+    "slot_f1": 0.7638,
+    "exact_complete": 0.4911,
+    "n_complete": 281,
+    "filler_ok": 0.0,
+    "n_filler": 0
+   },
+   "sec": 1
+  },
+  {
+   "epoch": 4,
+   "loss": 0.0286,
+   "dev": {
+    "n": 286,
+    "op_acc": 0.8147,
+    "slot_p": 0.8727,
+    "slot_r": 0.731,
+    "slot_f1": 0.7956,
+    "exact_complete": 0.5516,
+    "n_complete": 281,
+    "filler_ok": 0.0,
+    "n_filler": 0
+   },
+   "sec": 1
+  },
+  {
+   "epoch": 5,
+   "loss": 0.0216,
+   "dev": {
+    "n": 286,
+    "op_acc": 0.7972,
+    "slot_p": 0.8871,
+    "slot_r": 0.698,
+    "slot_f1": 0.7812,
+    "exact_complete": 0.5409,
+    "n_complete": 281,
+    "filler_ok": 0.0,
+    "n_filler": 0
+   },
+   "sec": 1
+  },
+  {
+   "epoch": 6,
+   "loss": 0.0129,
+   "dev": {
+    "n": 286,
+    "op_acc": 0.7972,
+    "slot_p": 0.8731,
+    "slot_r": 0.7157,
+    "slot_f1": 0.7866,
+    "exact_complete": 0.5623,
+    "n_complete": 281,
+    "filler_ok": 0.0,
+    "n_filler": 0
+   },
+   "sec": 1
+  },
+  {
+   "epoch": 7,
+   "loss": 0.0089,
+   "dev": {
+    "n": 286,
+    "op_acc": 0.8077,
+    "slot_p": 0.8576,
+    "slot_r": 0.7487,
+    "slot_f1": 0.7995,
+    "exact_complete": 0.5943,
+    "n_complete": 281,
+    "filler_ok": 0.0,
+    "n_filler": 0
+   },
+   "sec": 1
+  },
+  {
+   "epoch": 8,
+   "loss": 0.0071,
+   "dev": {
+    "n": 286,
+    "op_acc": 0.8112,
+    "slot_p": 0.8669,
+    "slot_r": 0.7437,
+    "slot_f1": 0.8005,
+    "exact_complete": 0.5979,
+    "n_complete": 281,
+    "filler_ok": 0.0,
+    "n_filler": 0
+   },
+   "sec": 1
+  },
+  {
+   "epoch": 9,
+   "loss": 0.0064,
+   "dev": {
+    "n": 286,
+    "op_acc": 0.8147,
+    "slot_p": 0.8688,
+    "slot_r": 0.7563,
+    "slot_f1": 0.8087,
+    "exact_complete": 0.6157,
+    "n_complete": 281,
+    "filler_ok": 0.0,
+    "n_filler": 0
+   },
+   "sec": 1
+  },
+  {
+   "epoch": 10,
+   "loss": 0.0057,
+   "dev": {
+    "n": 286,
+    "op_acc": 0.8182,
+    "slot_p": 0.8567,
+    "slot_r": 0.7437,
+    "slot_f1": 0.7962,
+    "exact_complete": 0.6014,
+    "n_complete": 281,
+    "filler_ok": 0.0,
+    "n_filler": 0
+   },
+   "sec": 1
+  }
+ ],
+ "args": {
+  "cmd": "train",
+  "world": "media.music",
+  "out": "/home/salboaie/work/psys2/training/runs/nx-c-media.music",
+  "base_run": "nx-a-seed1",
+  "data": "/home/salboaie/work/psys2/.claude/worktrees/nx-a2/training/dataset/nx/free-*.jsonl",
+  "epochs": 10,
+  "batch": 128,
+  "lr": 0.001,
+  "seed": 1
+ }
+}

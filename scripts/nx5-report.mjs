@@ -37,7 +37,7 @@ const groups = [...new Set(sets.map(group))];
 md.push('Cells are `correct / wrong (partly counted as wrong) / abstain (correct %)`. n = items of the set.');
 md.push('');
 md.push(header(['set', 'n', ...SYSTEMS]));
-for (const g of groups.filter((x) => x !== 'dialogues')) {
+for (const g of groups.filter((x) => x !== 'dialogues' && x !== 'mobile')) {
   const row = [g];
   let n = 0;
   for (const s of SYSTEMS) {

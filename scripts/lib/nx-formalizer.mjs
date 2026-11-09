@@ -198,17 +198,20 @@ export function createNxFormalizer({ model, mode = 'first', rules, stats = {}, t
   let engine = null; let index = null; let setOf = null;
   const count = (k) => { stats[k] = (stats[k] ?? 0) + 1; };
 
-  const dryRun = (session, wires) => {
+  // The validator runs on a fork of the interpreter session that already holds the wires accepted for earlier segments of the same message
+  // (a later segment may refer to an entity an earlier one introduced): `acc.f` is that fork, extended after every accepted segment.
+  const dryRun = (acc, wires) => {
     try {
-      const f = session.clone();
+      const f = acc.f.clone();
       f.add(wires);
       for (const w of wires) { const r = engine.interp.resolve(f, w); if (r && r.status === 'error') return false; }
       return true;
     } catch { return false; }
   };
+  const accept = (acc, wires) => { try { acc.f.add(wires); } catch { /* the real engine will report it */ } };
 
   /** Read one segment text with the model; returns a rules-shaped segment (not unparsed) or null. `commit` runs on the real session. */
-  async function readSegment(piece, set, session, { source, context, ctx, router }) {
+  async function readSegment(piece, set, session, { source, context, ctx, router, acc }) {
     index ??= buildPatternIndex(set);
     const pass = await passOn(model, piece.text, ctx);
     const ranked = pass.opP.map((p, i) => [p, i]).sort((a, b) => b[0] - a[0]);
@@ -260,7 +263,7 @@ export function createNxFormalizer({ model, mode = 'first', rules, stats = {}, t
             let probe;
             try { probe = await trial(session.clone()); } catch { probe = null; }
             if (!probe) { tried.push(`${cand.r.p.id}:no-read`); continue; }
-            if (!dryRun(session, probe.wires)) { tried.push(`${cand.r.p.id}:refused`); continue; }
+            if (!dryRun(acc, probe.wires)) { tried.push(`${cand.r.p.id}:refused`); continue; }
             let real;
             try { real = await trial(session); } catch { real = null; }
             if (!real) { tried.push(`${cand.r.p.id}:no-read2`); continue; }
@@ -273,7 +276,7 @@ export function createNxFormalizer({ model, mode = 'first', rules, stats = {}, t
             done = { seg: real };
             break;
           }
-          if (done) return done;
+          if (done) { accept(acc, done.seg.wires); return done; }
         }
       }
     }
@@ -302,15 +305,15 @@ export function createNxFormalizer({ model, mode = 'first', rules, stats = {}, t
     async formalize(text, { worlds: set, session, source = 'input', context, router } = {}) {
       setOf = set;
       const ctx = { tab: context?.activeTab ?? null, recent_worlds: context?.recentWorlds ?? [] };
-      const pieces = [];
+      const acc = { f: session.clone() };
       if (mode === 'hybrid') {
         // D: the rules read first; the model only reads what the rules have no complete reading for
         const res = formalize(text, { worlds: set, session, source, context, router });
         const out = [];
         for (const seg of res.segments) {
-          if (!seg.unparsed && seg.wires.length && dryRun(session, seg.wires)) { count('hybrid_rules'); out.push({ ...seg, nxFrom: 'rules' }); continue; }
+          if (!seg.unparsed && seg.wires.length && dryRun(acc, seg.wires)) { count('hybrid_rules'); accept(acc, seg.wires); out.push({ ...seg, nxFrom: 'rules' }); continue; }
           const piece = { text: seg.text, start: seg.span[0], end: seg.span[1] };
-          const r = await readSegment(piece, set, session, { source, context, ctx, router });
+          const r = await readSegment(piece, set, session, { source, context, ctx, router, acc });
           if (r.seg) { count('hybrid_model'); out.push({ ...r.seg, nxFrom: 'model' }); } else { count('hybrid_abstain'); out.push(seg.unparsed ? seg : unparsedSeg(piece, r.why)); }
         }
         return { segments: out, wires: out.flatMap((s) => s.wires ?? []) };
@@ -321,7 +324,7 @@ export function createNxFormalizer({ model, mode = 'first', rules, stats = {}, t
       const out = [];
       for (const [a, b] of segs) {
         const piece = { text: text.slice(a, b), start: a, end: b };
-        const r = await readSegment(piece, set, session, { source, context, ctx, router });
+        const r = await readSegment(piece, set, session, { source, context, ctx, router, acc });
         out.push(r.seg ? { ...r.seg, nxFrom: 'model' } : unparsedSeg(piece, r.why));
       }
       return { segments: out, wires: out.flatMap((s) => s.wires ?? []) };

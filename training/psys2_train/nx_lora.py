@@ -35,7 +35,7 @@ class Lora(nn.Module):
 
     def forward(self, x):
         y = self.lin(x)
-        return y + (x @ self.A.to(x.dtype)) @ self.B.to(x.dtype) if self.enabled else y
+        return y + (x @ self.A) @ self.B if self.enabled else y   # under autocast the matmuls run in bf16; in the fp32 export the parameters stay named initializers
 
 
 def add_lora(model: NXHeads):
@@ -142,6 +142,9 @@ def export(a):
     base_run = TRAIN / "runs" / a.base_run
     model, vocab = load_base(torch.device("cpu"), base_run)
     wrapped = add_lora(model); model.eval()
+    # identical (all-zero) B matrices would be merged into one initializer by the exporter: give each its own tiny noise (1e-7, no effect on the outputs)
+    g = torch.Generator().manual_seed(0)
+    for _, w in wrapped: w.B.data = torch.randn(w.B.shape, generator=g) * 1e-7
     ids = torch.ones(2, 9, dtype=torch.long)
     fp32 = out / "model.onnx"
     with torch.no_grad():
@@ -149,7 +152,7 @@ def export(a):
                           output_names=["seg_logits", "world_logits", "edit_logits", "op_logits", "tag_logits"], opset_version=17, dynamo=False,
                           dynamic_axes={"input_ids": {0: "b", 1: "t"}, "attention_mask": {0: "b", 1: "t"}, "seg_logits": {0: "b", 1: "t"}, "world_logits": {0: "b"}, "edit_logits": {0: "b", 1: "t"}, "op_logits": {0: "b"}, "tag_logits": {0: "b", 1: "t"}})
     names = {}   # module name -> (A initializer, B initializer) as they appear in the state dict (= the exported initializer names)
-    sd_names = {id(p): k for k, p in model.named_parameters()}
+    sd_names = {id(p): k for k, p in ExportWrap(model).named_parameters()}   # the exported initializer names carry the wrapper's `m.` prefix
     for n, w in wrapped: names[n] = (sd_names[id(w.A)], sd_names[id(w.B)])
     m = onnx.load(str(fp32))
     init = {i.name: i for i in m.graph.initializer}
@@ -195,12 +198,15 @@ def export(a):
         ad = ort.LoraAdapter(); ad.Load(str(path)) if hasattr(ort, "LoraAdapter") else None
         ro = ort.RunOptions(); ro.add_active_adapter(ad)
         same_op = same_base = 0
+        check = []
         for e in enc:
             ii = np.array([e["input_ids"]], dtype=np.int64); feed = {"input_ids": ii, "attention_mask": np.ones_like(ii)}
-            o_ad = sess.run(None, feed, ro)[3][0].argmax(); o_zero = sess.run(None, feed)[3][0].argmax()
+            r_ad = sess.run(None, feed, ro); o_ad = r_ad[3][0].argmax(); o_zero = sess.run(None, feed)[3][0].argmax()
+            if len(check) < 12: check.append({"ids": e["input_ids"], "op": int(o_ad), "tags": r_ad[4][0].argmax(-1).tolist(), "op_base": int(o_zero)})
             with torch.no_grad():
                 t = ExportWrap(model)(torch.tensor(ii), torch.ones_like(torch.tensor(ii)))[3][0].argmax().item()
             same_op += int(o_ad == t); same_base += int(o_zero == t)
+        (out / f"lora-check-{world}.json").write_text(json.dumps(check))
         report["adapters"][world]["onnx_int8_adapter_vs_torch_op_agree"] = round(same_op / len(enc), 3)
         report["adapters"][world]["onnx_int8_no_adapter_vs_torch_op_agree"] = round(same_base / len(enc), 3)
         ex = True

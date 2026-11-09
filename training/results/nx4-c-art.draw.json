@@ -1,0 +1,226 @@
+{
+ "world": "art.draw",
+ "records": {
+  "train": 2447,
+  "dev": 316,
+  "test": 325
+ },
+ "lora_params": 685144,
+ "A_dev": {
+  "n": 316,
+  "op_acc": 0.6994,
+  "slot_p": 0.6073,
+  "slot_r": 0.5916,
+  "slot_f1": 0.5993,
+  "exact_complete": 0.4755,
+  "n_complete": 265,
+  "filler_ok": 0.8065,
+  "n_filler": 31
+ },
+ "A_test": {
+  "n": 325,
+  "op_acc": 0.6862,
+  "slot_p": 0.6548,
+  "slot_r": 0.5804,
+  "slot_f1": 0.6154,
+  "exact_complete": 0.4441,
+  "n_complete": 313,
+  "filler_ok": 0.0,
+  "n_filler": 1
+ },
+ "C_dev": {
+  "n": 316,
+  "op_acc": 0.693,
+  "slot_p": 0.8505,
+  "slot_r": 0.8232,
+  "slot_f1": 0.8366,
+  "exact_complete": 0.6604,
+  "n_complete": 265,
+  "filler_ok": 0.1935,
+  "n_filler": 31
+ },
+ "C_test": {
+  "n": 325,
+  "op_acc": 0.7938,
+  "slot_p": 0.7803,
+  "slot_r": 0.7508,
+  "slot_f1": 0.7653,
+  "exact_complete": 0.6166,
+  "n_complete": 313,
+  "filler_ok": 0.0,
+  "n_filler": 1
+ },
+ "log": [
+  {
+   "epoch": 1,
+   "loss": 0.1755,
+   "dev": {
+    "n": 316,
+    "op_acc": 0.6772,
+    "slot_p": 0.6812,
+    "slot_r": 0.6527,
+    "slot_f1": 0.6667,
+    "exact_complete": 0.5321,
+    "n_complete": 265,
+    "filler_ok": 0.2581,
+    "n_filler": 31
+   },
+   "sec": 1
+  },
+  {
+   "epoch": 2,
+   "loss": 0.0753,
+   "dev": {
+    "n": 316,
+    "op_acc": 0.6994,
+    "slot_p": 0.7532,
+    "slot_r": 0.7556,
+    "slot_f1": 0.7544,
+    "exact_complete": 0.6151,
+    "n_complete": 265,
+    "filler_ok": 0.1935,
+    "n_filler": 31
+   },
+   "sec": 1
+  },
+  {
+   "epoch": 3,
+   "loss": 0.0376,
+   "dev": {
+    "n": 316,
+    "op_acc": 0.6772,
+    "slot_p": 0.8,
+    "slot_r": 0.7846,
+    "slot_f1": 0.7922,
+    "exact_complete": 0.6264,
+    "n_complete": 265,
+    "filler_ok": 0.1613,
+    "n_filler": 31
+   },
+   "sec": 1
+  },
+  {
+   "epoch": 4,
+   "loss": 0.0238,
+   "dev": {
+    "n": 316,
+    "op_acc": 0.6899,
+    "slot_p": 0.8211,
+    "slot_r": 0.8264,
+    "slot_f1": 0.8237,
+    "exact_complete": 0.6604,
+    "n_complete": 265,
+    "filler_ok": 0.1613,
+    "n_filler": 31
+   },
+   "sec": 1
+  },
+  {
+   "epoch": 5,
+   "loss": 0.0134,
+   "dev": {
+    "n": 316,
+    "op_acc": 0.7025,
+    "slot_p": 0.8164,
+    "slot_r": 0.8006,
+    "slot_f1": 0.8084,
+    "exact_complete": 0.6566,
+    "n_complete": 265,
+    "filler_ok": 0.3226,
+    "n_filler": 31
+   },
+   "sec": 1
+  },
+  {
+   "epoch": 6,
+   "loss": 0.0069,
+   "dev": {
+    "n": 316,
+    "op_acc": 0.693,
+    "slot_p": 0.8488,
+    "slot_r": 0.7942,
+    "slot_f1": 0.8206,
+    "exact_complete": 0.6377,
+    "n_complete": 265,
+    "filler_ok": 0.2258,
+    "n_filler": 31
+   },
+   "sec": 1
+  },
+  {
+   "epoch": 7,
+   "loss": 0.0045,
+   "dev": {
+    "n": 316,
+    "op_acc": 0.6867,
+    "slot_p": 0.8464,
+    "slot_r": 0.8328,
+    "slot_f1": 0.8395,
+    "exact_complete": 0.6717,
+    "n_complete": 265,
+    "filler_ok": 0.1613,
+    "n_filler": 31
+   },
+   "sec": 1
+  },
+  {
+   "epoch": 8,
+   "loss": 0.0034,
+   "dev": {
+    "n": 316,
+    "op_acc": 0.693,
+    "slot_p": 0.8505,
+    "slot_r": 0.8232,
+    "slot_f1": 0.8366,
+    "exact_complete": 0.6604,
+    "n_complete": 265,
+    "filler_ok": 0.1935,
+    "n_filler": 31
+   },
+   "sec": 1
+  },
+  {
+   "epoch": 9,
+   "loss": 0.0029,
+   "dev": {
+    "n": 316,
+    "op_acc": 0.693,
+    "slot_p": 0.8505,
+    "slot_r": 0.8232,
+    "slot_f1": 0.8366,
+    "exact_complete": 0.6604,
+    "n_complete": 265,
+    "filler_ok": 0.1935,
+    "n_filler": 31
+   },
+   "sec": 1
+  },
+  {
+   "epoch": 10,
+   "loss": 0.0028,
+   "dev": {
+    "n": 316,
+    "op_acc": 0.693,
+    "slot_p": 0.8477,
+    "slot_r": 0.8232,
+    "slot_f1": 0.8352,
+    "exact_complete": 0.6604,
+    "n_complete": 265,
+    "filler_ok": 0.1935,
+    "n_filler": 31
+   },
+   "sec": 1
+  }
+ ],
+ "args": {
+  "cmd": "train",
+  "world": "art.draw",
+  "out": "/home/salboaie/work/psys2/training/runs/nx-c-art.draw",
+  "base_run": "nx-a-seed1",
+  "data": "/home/salboaie/work/psys2/.claude/worktrees/nx-a2/training/dataset/nx/free-*.jsonl",
+  "epochs": 10,
+  "batch": 128,
+  "lr": 0.001,
+  "seed": 1
+ }
+}

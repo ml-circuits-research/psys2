@@ -1,0 +1,129 @@
+{
+ "nx_dir": "/home/salboaie/work/psys2/training/runs/export/nx-a-seed1",
+ "size_mb": 68,
+ "dispatcher_v4_mb": 67.1,
+ "runs": [
+  {
+   "throttle": 1,
+   "loads": {
+    "nx": {
+     "fetchMs": 245,
+     "createMs": 379,
+     "MB": 68,
+     "outputs": [
+      "seg_logits",
+      "world_logits",
+      "edit_logits",
+      "op_logits",
+      "tag_logits"
+     ]
+    },
+    "disp": {
+     "fetchMs": 199,
+     "createMs": 77,
+     "MB": 67.1,
+     "outputs": [
+      "seg_logits",
+      "world_logits",
+      "edit_logits"
+     ]
+    }
+   },
+   "rows": [
+    {
+     "tokens": 16,
+     "nx": 28.1,
+     "dispatcherV4": 27.3
+    },
+    {
+     "tokens": 24,
+     "nx": 39,
+     "dispatcherV4": 38.6
+    },
+    {
+     "tokens": 32,
+     "nx": 50.2,
+     "dispatcherV4": 49.6
+    },
+    {
+     "tokens": 48,
+     "nx": 72.5,
+     "dispatcherV4": 71.7
+    },
+    {
+     "tokens": 64,
+     "nx": 95.2,
+     "dispatcherV4": 93.9
+    }
+   ],
+   "parity": {
+    "n": 10,
+    "opSame": 10,
+    "tagsSame": 7,
+    "medianMs": 28.1
+   },
+   "errs": []
+  },
+  {
+   "throttle": 4,
+   "loads": {
+    "nx": {
+     "fetchMs": 759,
+     "createMs": 2178,
+     "MB": 68,
+     "outputs": [
+      "seg_logits",
+      "world_logits",
+      "edit_logits",
+      "op_logits",
+      "tag_logits"
+     ]
+    },
+    "disp": {
+     "fetchMs": 742,
+     "createMs": 474,
+     "MB": 67.1,
+     "outputs": [
+      "seg_logits",
+      "world_logits",
+      "edit_logits"
+     ]
+    }
+   },
+   "rows": [
+    {
+     "tokens": 16,
+     "nx": 90.2,
+     "dispatcherV4": 102.4
+    },
+    {
+     "tokens": 24,
+     "nx": 150.6,
+     "dispatcherV4": 185.3
+    },
+    {
+     "tokens": 32,
+     "nx": 171.5,
+     "dispatcherV4": 176.9
+    },
+    {
+     "tokens": 48,
+     "nx": 300.5,
+     "dispatcherV4": 293.9
+    },
+    {
+     "tokens": 64,
+     "nx": 388.9,
+     "dispatcherV4": 384.1
+    }
+   ],
+   "parity": {
+    "n": 10,
+    "opSame": 10,
+    "tagsSame": 7,
+    "medianMs": 116.6
+   },
+   "errs": []
+  }
+ ]
+}

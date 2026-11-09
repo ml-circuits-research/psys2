@@ -1,0 +1,85 @@
+{
+ "export": "/home/salboaie/work/psys2/training/runs/export/nx-c",
+ "runs": [
+  {
+   "throttle": 1,
+   "baseMB": 70.6,
+   "baseFetchMs": 186,
+   "baseCreateMs": 455,
+   "worlds": {
+    "art.draw": {
+     "adapterMB": 2.75,
+     "createMs": 2.4,
+     "n": 12,
+     "opSameAsPythonAdapter": 12,
+     "tagsSameAsPythonAdapter": 11,
+     "baseNoAdapterOpSame": 12,
+     "ms32noAdapter": 51.5,
+     "ms32withAdapter": 51.5
+    },
+    "diagram.sketch": {
+     "adapterMB": 2.75,
+     "createMs": 0.5,
+     "n": 12,
+     "opSameAsPythonAdapter": 12,
+     "tagsSameAsPythonAdapter": 11,
+     "baseNoAdapterOpSame": 11,
+     "ms32noAdapter": 52.5,
+     "ms32withAdapter": 52
+    },
+    "media.music": {
+     "adapterMB": 2.75,
+     "createMs": 0.4,
+     "n": 12,
+     "opSameAsPythonAdapter": 12,
+     "tagsSameAsPythonAdapter": 10,
+     "baseNoAdapterOpSame": 12,
+     "ms32noAdapter": 51.4,
+     "ms32withAdapter": 51.5
+    }
+   },
+   "swapMs32": 51.5,
+   "errs": []
+  },
+  {
+   "throttle": 4,
+   "baseMB": 70.6,
+   "baseFetchMs": 321,
+   "baseCreateMs": 1520,
+   "worlds": {
+    "art.draw": {
+     "adapterMB": 2.75,
+     "createMs": 7.6,
+     "n": 12,
+     "opSameAsPythonAdapter": 12,
+     "tagsSameAsPythonAdapter": 11,
+     "baseNoAdapterOpSame": 12,
+     "ms32noAdapter": 213.4,
+     "ms32withAdapter": 210.1
+    },
+    "diagram.sketch": {
+     "adapterMB": 2.75,
+     "createMs": 1.4,
+     "n": 12,
+     "opSameAsPythonAdapter": 12,
+     "tagsSameAsPythonAdapter": 11,
+     "baseNoAdapterOpSame": 11,
+     "ms32noAdapter": 209.8,
+     "ms32withAdapter": 209.5
+    },
+    "media.music": {
+     "adapterMB": 2.75,
+     "createMs": 2.1,
+     "n": 12,
+     "opSameAsPythonAdapter": 12,
+     "tagsSameAsPythonAdapter": 10,
+     "baseNoAdapterOpSame": 12,
+     "ms32noAdapter": 209.3,
+     "ms32withAdapter": 210.1
+    }
+   },
+   "swapMs32": 209.5,
+   "errs": []
+  }
+ ]
+}

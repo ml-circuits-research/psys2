@@ -261,7 +261,7 @@ def train(a):
     torch.manual_seed(a.seed); random.seed(a.seed); np.random.seed(a.seed)
     out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
     (out / "command.txt").write_text("python -m psys2_train.nx_heads " + " ".join(sys.argv[1:]) + "\n")
-    files = [f for f in sorted(glob.glob(a.data)) if not Path(f).name.startswith("_")]
+    files = [f for pat in a.data.split(",") for f in sorted(glob.glob(pat)) if not Path(f).name.startswith("_")]   # --data accepts several comma-separated globs
     rows = load_records(files)
     train_rows = [r for r in rows if r["split"] == "train"]
     dev_rows = [r for r in rows if r["split"] == "dev"]
