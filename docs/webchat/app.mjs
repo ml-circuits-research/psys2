@@ -44,7 +44,7 @@ async function loadTabPlugins(base) {
 }
 const SHELL = 'ui.shell';
 /** Turn lifecycle (spec 06): one message at a time, a hard limit from Enter, every host effect bounded. */
-export const TURN_LIMITS = Object.freeze({ watchdogMs: TIME_LIMIT_DEFAULTS.watchdogMs, softFraction: 0.65, effectMs: 3000, backstopMs: 1500 });
+export const TURN_LIMITS = Object.freeze({ watchdogMs: TIME_LIMIT_DEFAULTS.watchdogMs, softFraction: 0.65, backstopMs: 1500, speakPerCharMs: 90 });   // effectMs, speakBaseMs, speakMaxMs live in LIMITS (Settings › Developer › Time limits)
 export const TOO_LONG = 'That took too long, so I stopped. Try a shorter request.';
 export const SOURCE_URL = 'https://github.com/ml-circuits-research/psys2';
 export const BUSY_HINT = 'Wait for the answer or press Stop.';
@@ -92,6 +92,10 @@ export async function mountPsys2(element, options = {}) {
   let engine = null, session = null, translator = null, speech = null;
   let view = tabDefs[0]?.id ?? null, lastShellTab = null, lastShell = {};
   const queue = [], micLog = [];   // MIC2: waiting messages { id, text, mode, voice, queuedAt }; the mic click log
+  // BUSY: one source of truth. The host is busy while a turn runs (`turn`; the queue of MIC2 only holds waiting messages), while its host effects run (`effectsPending`) and while the answer is spoken (`mic.speaking`).
+  // A speech that never ends must not hold the tabs forever: the veil is lifted after a cap that grows with the text (the speech itself goes on).
+  let effectsPending = 0, speakCapped = false, speakCapTimer = 0, lastAnswerLen = 0, veiled = false;
+  const busyListeners = new Set();
   let busy = 0, turn = null, flash = null, flashTimer = null, interim = '', mic = { listening: false, speaking: false, mode: null };
   let destroyed = false, shellSeen = false;
   const phrases = createStore(options.persist !== false ? globalThis.localStorage : null);
@@ -143,6 +147,7 @@ export async function mountPsys2(element, options = {}) {
   document.body.append(modalHost);
 
   const tabBtns = {};
+  const VIEW_TABS = new Set(['map', 'diagram', 'charts']);   // pan / zoom / scroll stay usable while the host is busy
   for (const t of tabDefs) {
     const btn = h('button', { class: 'p2-tab', role: 'tab', type: 'button', id: `p2-tab-${t.id}`, 'aria-controls': `p2-panel-${t.id}`, onclick: () => showTab(t.id) }, t.label);
     const panel = h('div', { class: 'p2-panel', role: 'tabpanel', id: `p2-panel-${t.id}`, 'aria-labelledby': `p2-tab-${t.id}`, tabindex: '0' });
@@ -190,8 +195,23 @@ export async function mountPsys2(element, options = {}) {
     if (!settingsEl.hidden) renderSettings();
   }
   /** The Send button is the Stop button while a turn runs (type 'button' then, so that Enter, which submits the form, never presses Stop). */
+  const isBusy = () => !!turn || effectsPending > 0 || (!!mic.speaking && !speakCapped);
+  /** Veils every tab while the host is busy (grey layer, aria-busy, inert, spinner in the header); notifies subscribers on a change. */
+  function updateBusy() {
+    const b = isBusy();
+    if (b === veiled) return;
+    veiled = b;
+    for (const [id, { btn, panel }] of Object.entries(tabBtns)) {
+      panel.classList.toggle('is-busy', b); btn.classList.toggle('is-busy', b);
+      if (b) panel.setAttribute('aria-busy', 'true'); else panel.removeAttribute('aria-busy');
+      // maps, diagrams and charts keep pan/zoom/scroll (view-only), so they are not inert: CSS disables their controls instead
+      panel.inert = b && !VIEW_TABS.has(id);
+    }
+    root.classList.toggle('is-busy', b);
+    for (const fn of [...busyListeners]) { try { fn(b); } catch (e) { console.warn('busy listener failed', e); } }
+  }
   function syncSendButton() {
-    const stop = !!turn;
+    const stop = !!turn || (isBusy() && !input.value.trim());
     sendBtn.type = stop ? 'button' : 'submit';
     sendBtn.classList.toggle('is-stop', stop);
     label(sendBtn, stop ? 'Stop' : 'Send');
@@ -217,6 +237,7 @@ export async function mountPsys2(element, options = {}) {
     statusEl.classList.toggle('is-active', parts.length > 0);
     syncSendButton();
     syncMic();
+    updateBusy();
   }
   /** The microphone's label, tooltip and look follow its state: idle, listening once, hands-free (keeps listening), dictating. */
   function syncMic() {
@@ -342,10 +363,14 @@ export async function mountPsys2(element, options = {}) {
     observe: (effect, { ok = true, detail = '', data = null } = {}, world = null) => observeAndFollow(
       typeof effect === 'object' ? { ok: true, detail: '', data: null, world: null, ...effect } : { effect, ok, detail, data, world }),
     get speaking() { return !!speech?.speaking; },
+    /** BUSY: true while a turn, its host effects or the spoken answer run. Tabs ignore input then (the host also veils them). */
+    isBusy,
+    /** Subscribe to busy changes: fn(busy). Returns the unsubscribe function. */
+    onBusy: (fn) => { busyListeners.add(fn); return () => busyListeners.delete(fn); },
   };
   // Effects declared by tab plugins: the tab's UI executes them (a chess engine, a synthesizer, a map...).
   for (const t of tabDefs) for (const [name, fn] of Object.entries(t.effects ?? {})) {
-    if (!Object.hasOwn(ALLOW, name)) ALLOW[name] = (args) => fn(args, { ui: panelUI[t.id]?.ui, host: hostApi });
+    if (!Object.hasOwn(ALLOW, name)) ALLOW[name] = (args, signal) => fn(args, { ui: panelUI[t.id]?.ui, host: hostApi, signal });
   }
   /** Report an observation to the engine and render the world's reaction (vision §8: action -> effect -> observation). */
   async function observeAndFollow(obs, depth = 0) {
@@ -371,7 +396,8 @@ export async function mountPsys2(element, options = {}) {
       if (!fn) rec.detail = 'not in the host allow-list';
       else {
         // every host effect is bounded: a promise that never settles (a map position, a model, a tab) must not hold the turn
-        try { const r = await withDeadline(Promise.resolve().then(() => fn(args)), TURN_LIMITS.effectMs, { signal: turn?.ctl.signal ?? null, label: `effect ${name}` }); rec.ok = r?.ok !== false; rec.detail = r?.detail ?? ''; data = r?.data ?? null; } catch (e) { if (e instanceof TurnAborted) throw e; rec.detail = e?.message ?? String(e); }
+        effectsPending++; updateBusy();
+        try { const r = await withDeadline(Promise.resolve().then(() => fn(args, turn?.ctl.signal ?? null)), LIMITS.effectMs, { signal: turn?.ctl.signal ?? null, label: `effect ${name}` }); rec.ok = r?.ok !== false; rec.detail = r?.detail ?? ''; data = r?.data ?? null; } catch (e) { if (e instanceof TurnAborted) throw e; rec.detail = e?.message ?? String(e); } finally { effectsPending = Math.max(0, effectsPending - 1); updateBusy(); }
       }
       out.push(rec);
       out.push(...await observeAndFollow({ effect: name, ok: rec.ok, detail: rec.detail || (rec.ok ? 'executed' : 'failed'), data, world: raw?.world ?? null }, depth));
@@ -428,6 +454,7 @@ export async function mountPsys2(element, options = {}) {
       clearTimeout(watchdog); clearTimeout(backstopTimer); clearInterval(ticker);
       if (typing.msg.isConnected) typing.msg.remove();
       if (turn === tn) { turn = null; lastTurnEnd = performance.now(); }
+      effectsPending = 0;
       busy = Math.max(0, busy - 1); setStatus(); scrollDown();
       queueMicrotask(() => { if (!turn && !destroyed) drainQueue(); });   // the next waiting message runs now
     }
@@ -476,6 +503,7 @@ export async function mountPsys2(element, options = {}) {
     const botMsg = addMessage('bot', answer);
     currentBot = botMsg;
     noteSessionLang(reply.lang);
+    if (reply.switchedLanguage && reply.switchedLanguage !== settings.language) setLanguage(reply.switchedLanguage);   // RD5: the English dropdown follows strong Romanian evidence
     if (reply.lang && reply.lang !== 'en') user.meta.prepend(h('span', { class: 'p2-lang' }, `${reply.lang.toUpperCase()} → EN`));
 
     const avatarChanged = !!reply.state?.['ui.avatar'];
@@ -485,6 +513,7 @@ export async function mountPsys2(element, options = {}) {
       if (expressions.includes('missing')) robotUI().express('surprised');
       else if (expressions.includes('supported')) robotUI().express('smile');
     }
+    lastAnswerLen = String(answer).length;
     if (settings.speaker && speech && speechSupport.synthesis) speech.speak(answer, { lang: speechLangTag() });
     const tEffects = performance.now();
     let effects;
@@ -589,7 +618,11 @@ export async function mountPsys2(element, options = {}) {
   };
   /** A spoken message (VOICE): logged with how it ended (final | pause-plausible | pause-timeout | mic-stop) and the wait in ms. */
   const sendVoice = (text, how, waitMs) => send(text, 'voice', { endType: how, waitMs: Math.round(waitMs ?? 0) });
-  const stopTurn = () => { if (turn && !turn.ctl.signal.aborted) { turn.reason = 'stopped'; turn.ctl.abort(new DOMException('stopped by the user', 'AbortError')); } };
+  /** Stop ends everything at once: the turn (the AbortSignal reaches the effects), the speech, the veil. */
+  const stopTurn = () => {
+    if (turn && !turn.ctl.signal.aborted) { turn.reason = 'stopped'; turn.ctl.abort(new DOMException('stopped by the user', 'AbortError')); }
+    speech?.stopSpeaking?.(); effectsPending = 0; endSpeakCap(); updateBusy();
+  };
   on(form, 'submit', (e) => {
     e.preventDefault();
     const t = input.value; input.value = ''; send(t);
@@ -605,11 +638,18 @@ export async function mountPsys2(element, options = {}) {
     if (!ex) { flashHint('No examples are available yet.'); return; }
     send(ex.text, 'chip', { example: true });
   });
-  on(sendBtn, 'click', (e) => { if (turn) { e.preventDefault(); stopTurn(); askDrop(); } });
+  on(sendBtn, 'click', (e) => { if (turn) { e.preventDefault(); stopTurn(); askDrop(); } else if (sendBtn.classList.contains('is-stop')) { e.preventDefault(); stopTurn(); } });
+  on(input, 'input', syncSendButton);
 
   // ---------- speech ----------
   // VOICE: "automatic" (default; the older 'follow' means the same) follows the session language: the language of the last reply (RD5 detection), else the language setting
   let sessionLang = null;
+  function startSpeakCap() {
+    clearTimeout(speakCapTimer); speakCapped = false;
+    const ms = Math.min(LIMITS.speakMaxMs, LIMITS.speakBaseMs + TURN_LIMITS.speakPerCharMs * (lastAnswerLen || 80));
+    speakCapTimer = setTimeout(() => { speakCapped = true; updateBusy(); }, options.speakCapMs ?? ms);
+  }
+  function endSpeakCap() { clearTimeout(speakCapTimer); speakCapped = false; }
   let shown = '';   // what the speech detector last wrote into the input field
   const speechLangTag = () => (!settings.speechLang || settings.speechLang === 'auto' || settings.speechLang === 'follow' ? LANG_TAGS[sessionLang ?? settings.language] ?? 'en-US' : settings.speechLang);
   const noteSessionLang = (l) => { if ((l === 'en' || l === 'ro') && l !== sessionLang) { sessionLang = l; speech?.refreshLang(); } };
@@ -643,7 +683,7 @@ export async function mountPsys2(element, options = {}) {
       const before = speech.snapshot(); setHandsFree(false); speech.stopListening(); logMic('voice-command', { action: 'off', before, after: speech.snapshot() }); flashHint(msg);
       if (settings.speaker && speechSupport.synthesis) speech.speak(msg, { lang: speechLangTag() });
     },
-    onState: (s) => { mic = s; robotUI()?.setSpeaking(s.speaking); setStatus(); },
+    onState: (s) => { const was = mic.speaking; mic = s; if (s.speaking && !was) startSpeakCap(); else if (!s.speaking) endSpeakCap(); robotUI()?.setSpeaking(s.speaking); setStatus(); },
     onError: (msg) => { note(msg); if (!speech.isListening() && !speech.isPaused()) { settings.handsFree = false; syncMic(); } },
   });
   if (!speechSupport.recognition) {
@@ -1088,7 +1128,7 @@ export async function mountPsys2(element, options = {}) {
     addMessage('bot', GREETING, { children: chips, className: 'is-hint' });
   }
   const handle = {
-    engine, session, settings, send, stop: stopTurn, applyState, showTab, get busy() { return !!turn; },
+    engine, session, settings, send, stop: stopTurn, applyState, showTab, get busy() { return !!turn; }, isBusy, get veiled() { return veiled; },
     /** The queue of waiting messages (MIC2) and the turn state flags, in one place for other features (BUSY veil): `turnState()` says what is running and what waits. */
     queue: { list: () => queue.map((q) => ({ id: q.id, text: q.text, mode: q.mode })), drop: dropQueued, clear: clearQueue, get length() { return queue.length; } },
     turnState: () => ({ running: !!turn, queued: queue.length, speaking: !!mic.speaking, mic: micBtn.dataset.mic }),

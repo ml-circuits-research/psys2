@@ -1214,3 +1214,22 @@ Result: NOT PUBLISHED. Four v5 runs (seeds 1-4, 8 exported checkpoints) all fail
 - Count: before 1041 tests; full after 1041; sorted test-name lists identical (only the 4+1 browser tests changed from SKIP to run).
 - Full run: 2 failures, both browser tests under load: webchat-voice passed alone; webchat-ui ("How many days has April?" -> missing in the random 50 clicks) failed twice in a row under load, then passed alone (flaky, random clicks, not related to this change).
 - Remaining duplication: full still runs per-world test files and `test-world all` (needed for count equality); fast runs only the per-world files.
+
+## BUSY-LOST (2026-11-09)
+Cause: the main session's merge took upstream for every conflict under docs/webchat/, dropping hand-written lines. Audited every entry of lost-lines-audit.txt (added lines of the original commit not found in the current file, then judged one by one).
+| Entry | Result | Why |
+| --- | --- | --- |
+| bec908c BUSY app.mjs (37 of 38) | RESTORED, re-landed on the MIC2 code | `isBusy()` = turn OR effectsPending OR (mic.speaking and not capped); `updateBusy()` toggles `.is-busy` / `aria-busy` / `inert` on every panel and a spinner in the tab header, `host.isBusy` / `host.onBusy`, `handle.isBusy` / `handle.veiled`, effects get the turn's AbortSignal (`ctx.signal`), Stop (`stopTurn`) cuts speech, clears effects, lifts the veil; Send button is Stop while busy and the input is empty. Turn state is the one `turn` of MIC2 (the queue only holds waiting messages, so it does not veil); `host.turnState()` is unchanged. |
+| BUSY caps | RESTORED, now configurable | `effectMs`, `speakBaseMs`, `speakMaxMs` added to `TIME_LIMIT_SPECS` (src/dialog/time-limits.mjs), so they appear in Settings > Developer > Time limits; only `speakPerCharMs` (90) stays in `TURN_LIMITS`. `TURN_LIMITS.effectMs` removed. |
+| 712ca16 HANG+STOP+LIC app.mjs (13) | superseded | `TURN_LIMITS` hard-coded watchdog (now `LIMITS.watchdogMs`, SET/HANG2), the no-queue rule and `BUSY_HINT` on Enter / voice `onFinal` (MIC2 queue), old send-button title (label()), form/footer/About lines (SET modal and about.mjs; footer and About links present), `turn = null` (now also sets lastTurnEnd). |
+| 712ca16 phrase-log.mjs (1) | superseded | the export row already has feedback / endType / outcome in the current version. |
+| 712ca16 translation.mjs (2) | superseded | HANG3 / PERF3 replaced the translator timeouts. |
+| a1ea21d RD5+RD9 app.mjs (1) | RESTORED | `reply.switchedLanguage` made the language dropdown follow strong Romanian evidence; now calls `setLanguage()` after `noteSessionLang`. |
+| 6c6f4b8 SET app.mjs (3), style.css (1), settings.mjs (1) | superseded | CREDITS import is now part of a wider import; About text and normalizer status moved into the modal; `.p2-modal-body` rule rewritten (box-sizing, overflow); settings defaults gained fields (showPerf, timeLimits). |
+| ee55808 UI1 app.mjs (14) | superseded | the single-mic long-press hands-free was replaced by VOICE2/MIC2 (conversation mode, `toggle()`), form/status-line rewrites. |
+| 6e18192 HANG2 dispatcher-host / normalizer-host (5) | superseded | proxy-ORT session code replaced by the own worker client (`ort-client`, spec 06). Verified the current files use `getOrtClient` lanes. |
+| 2dd0fda SURPRISE app.mjs (1) | superseded | the `recordPhrase` line was extended (queueMs) by MIC2. |
+| fbd7821 MIC2 app.mjs (1) | superseded | later version of the same lines (`example` flag); the Send click now also stops when `is-stop` (BUSY). |
+| 3336e0b VOICE2 wip app.mjs (9), speech.mjs (5) | superseded | replaced by the final VOICE2/MIC2/EOT2 code (paused state, STOP_VERBS list extended, VOICE_TIMING with restartMs etc.). |
+| b482a83 VOICE app.mjs (4), phrase-log (2), settings (1), speech (10) | superseded | `isBusy`/`onHold`/`turnEnded` hold-while-busy replaced by the MIC2 queue; `langSel` handler is now `setLanguage`; `buildRecord` gained fields; speech.mjs constructor and timing rewritten by VOICE2. |
+Verification (real headless Chrome, chromium): test-webchat-turns 31/31 (busy 7/7 and busyChess 3/3: veil, inert, aria-busy and spinner during a turn and during speech, the gallery click does nothing during speech and works after, Stop cuts the speech and lifts the veil at once, chess panel veiled), test-webchat-ui 150/150, test-webchat-diagram 0 page errors, tests/webchat-phrase-export pass, test-webchat-voice 64/64 (one run showed 63/64 under load, the next run passed 64/64 and was not reproduced). tests/time-limits pass.
