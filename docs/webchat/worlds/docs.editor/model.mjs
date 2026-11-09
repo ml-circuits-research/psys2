@@ -29,6 +29,8 @@ export function titleBlock(s) {
     get align() { return s.titleAlign; }, set align(v) { s.titleAlign = v; },
   };
 }
+/** The first heading of an untitled document sets the title and stays a block flagged `asTitle`; while its text equals the title it is not shown twice. */
+export const hiddenTitle = (s, b) => !!b.asTitle && b.kind === 'heading' && b.text === s.title;
 export const isTextKind = (k) => k === 'paragraph' || k === 'heading' || k === 'quote' || k === 'title';
 
 /** Text containers of a block: [{ at, text }]. */
@@ -179,7 +181,7 @@ export function allTexts(s, { title = true } = {}) {
 }
 export function documentWords(s) {
   const parts = [s.title === DEFAULT_TITLE ? '' : s.title];
-  for (const b of s.blocks) for (const c of containers(b)) parts.push(c.text);
+  for (const b of s.blocks) if (!hiddenTitle(s, b)) for (const c of containers(b)) parts.push(c.text);
   return wordsIn(parts.join(' '));
 }
 export function stats(s) {
@@ -187,6 +189,7 @@ export function stats(s) {
   let characters = s.title === DEFAULT_TITLE ? 0 : s.title.length, sentences = 0, tasks = 0, done = 0, links = 0;
   const count = {};
   for (const b of s.blocks) {
+    if (hiddenTitle(s, b)) continue;
     count[b.kind] = (count[b.kind] ?? 0) + 1;
     for (const c of containers(b)) characters += c.text.length;
     if (b.kind === 'paragraph' || b.kind === 'quote') sentences += sentencesOf(b.text).length;
@@ -253,7 +256,7 @@ export function toDoc(s) {
   const t = { type: 'heading', attrs: withAlign(s.titleAlign, { level: 1, blockId: 'title', title: true, size: s.titleSize ?? 0, untitled: s.title === DEFAULT_TITLE }) };
   const c = inline(s.title, s.titleMarks ?? []);
   if (c) t.content = c;
-  return { type: 'doc', content: [t, ...s.blocks.map(blockNode)] };
+  return { type: 'doc', content: [t, ...s.blocks.filter((b) => !hiddenTitle(s, b)).map(blockNode)] };
 }
 
 // ---- export --------------------------------------------------------------------------------------------
@@ -289,6 +292,7 @@ export function toText(s, markdown) {
   const titleTxt = markdown ? md(titleBlock(s), '0', s.title) : s.title;
   out.push(markdown ? `# ${titleTxt}` : titleTxt);
   for (const b of s.blocks) {
+    if (hiddenTitle(s, b)) continue;
     const t = (at, text) => (markdown ? md(b, at, text) : text);
     if (b.kind === 'heading') out.push(markdown ? `${'#'.repeat(Math.min(6, (b.level ?? 2) + 1))} ${t('0', b.text)}` : b.text);
     else if (b.kind === 'paragraph') out.push(t('0', b.text));
@@ -330,6 +334,7 @@ export function toHtml(s) {
   const al = (b) => (b.align && b.align !== 'left' ? ` style="text-align:${b.align}"` : '');
   const body = [`<h1${al({ align: s.titleAlign })}>${html(titleBlock(s), '0', s.title)}</h1>`];
   for (const b of s.blocks) {
+    if (hiddenTitle(s, b)) continue;
     if (b.kind === 'heading') body.push(`<h${(b.level ?? 2) + 1}${al(b)}>${html(b, '0', b.text)}</h${(b.level ?? 2) + 1}>`);
     else if (b.kind === 'paragraph') body.push(`<p${al(b)}>${html(b, '0', b.text)}</p>`);
     else if (b.kind === 'quote') body.push(`<blockquote${al(b)}><p>${html(b, '0', b.text)}</p></blockquote>`);

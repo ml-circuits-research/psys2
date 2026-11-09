@@ -59,7 +59,7 @@ export function compilePattern(match, phrases = null) {
       if (slots.has(name)) throw new PatternError(`duplicate slot name '${name}'`);
       const args = rawArgs === undefined ? [] : rawArgs.split(',').map((a) => a.trim());
       if (cls === 'words' && args.length && !(/^[1-9]\d*$/.test(args[0]) && (args.length === 1 || (args.length === 2 && args[1] === 'label')))) throw new PatternError(`words(...) needs a positive number, optionally followed by 'label', in '${part}'`);
-      if (cls === 'rest' && args.length && !(args.length === 1 && args[0] === 'notes')) throw new PatternError(`rest(...) takes only 'notes' in '${part}'`);
+      if (cls === 'rest' && args.length && !(args.length === 1 && (args[0] === 'notes' || args[0] === 'quotes'))) throw new PatternError(`rest(...) takes only 'notes' or 'quotes' in '${part}'`);
       if (cls === 'recent') {
         if (args.length !== 2) throw new PatternError(`recent(<lexicon>, <agent slot>) needs two arguments in '${part}'`);
         const ag = slots.get(args[1]);
@@ -155,7 +155,15 @@ function candidates(el, tokens, i, env, slotsSoFar) {
       if (end < 0) end = tokens.length;
       const len = end - i;
       if (el.args?.[0] === 'notes' && !tokens.slice(i, end).every(isNoteToken)) return [];
-      return len >= 1 && tokens.slice(i, end).every(isWordish) ? [{ len, value: text(len), text: text(len), span: span(len), loose: true }] : [];
+      if (!(len >= 1 && tokens.slice(i, end).every(isWordish))) return [];
+      if (el.args?.[0] !== 'quotes') return [{ len, value: text(len), text: text(len), span: span(len), loose: true }];
+      // rest(quotes): free text keeps the quotes and the closing punctuation around it ("Hello there." said the fox)
+      let a = t.start, b = tokens[end - 1].end;
+      while (a > 0 && /["\u201C\u2018(\[]/.test(env.text[a - 1])) a--;
+      const close = /^(?:[.!?\u2026]*["\u201D\u2019)\]])+/.exec(env.text.slice(b));   // closing quotes and brackets, with the punctuation before them
+      if (close) b += close[0].length;
+      const full = env.text.slice(a, b);
+      return [{ len, value: full, text: full, span: span(len), loose: true }];
     }
     case 'noun': {
       const out = [];

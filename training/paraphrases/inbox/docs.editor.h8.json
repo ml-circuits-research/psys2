@@ -1,0 +1,190 @@
+{
+ "world": "docs.editor",
+ "tab": "editor",
+ "author": "sonnet-ed",
+ "batch": "h8",
+ "tasks": [
+  {
+   "id": "docs.editor.h8.t1",
+   "goal": "Start a new empty line in the document",
+   "canonical": "Start a new line.",
+   "variants": [
+    "new line",
+    "new line please",
+    "can you add a blank line",
+    "add an empty line",
+    "insert a new line",
+    "start a new line pls",
+    "a new line here",
+    "put in a blank line",
+    "give me a fresh line",
+    "go to a new line"
+   ]
+  },
+  {
+   "id": "docs.editor.h8.t2",
+   "goal": "Start a new paragraph",
+   "canonical": "Start a new paragraph.",
+   "variants": [
+    "new paragraph",
+    "new paragraph please",
+    "can u start a new paragraph",
+    "add a blank paragraph",
+    "begin a new paragraph",
+    "next paragraph",
+    "i want a new paragraph",
+    "make a new paragraph",
+    "open a new paragraph pls",
+    "start another paragraph"
+   ]
+  },
+  {
+   "id": "docs.editor.h8.t3",
+   "goal": "Start a new chapter called The Forest",
+   "canonical": "Add a new chapter called The Forest.",
+   "variants": [
+    "start a new chapter called The Forest",
+    "new chapter The Forest",
+    "begin a new chapter named The Forest",
+    "add chapter The Forest",
+    "can you start a new chapter titled The Forest",
+    "next chapter The Forest",
+    "create a new chapter called The Forest pls",
+    "i want a new chapter called The Forest",
+    "make a new chapter about The Forest",
+    "new chapter: The Forest"
+   ]
+  },
+  {
+   "id": "docs.editor.h8.t4",
+   "goal": "Start a new chapter without a title",
+   "canonical": "Start a new chapter.",
+   "variants": [
+    "new chapter",
+    "next chapter",
+    "begin a new chapter",
+    "add a new chapter",
+    "can you start a new chapter",
+    "start another chapter",
+    "i want a new chapter",
+    "open a new chapter pls",
+    "make a new chapter",
+    "add a chapter"
+   ]
+  },
+  {
+   "id": "docs.editor.h8.t5",
+   "goal": "Write a sentence into the document",
+   "canonical": "Write once upon a time there was a fox.",
+   "variants": [
+    "type once upon a time there was a fox",
+    "write down once upon a time there was a fox",
+    "can you write once upon a time there was a fox",
+    "please type once upon a time there was a fox",
+    "add the text once upon a time there was a fox",
+    "jot down once upon a time there was a fox",
+    "write: once upon a time there was a fox",
+    "i want to write once upon a time there was a fox",
+    "enter once upon a time there was a fox",
+    "write this once upon a time there was a fox"
+   ]
+  },
+  {
+   "id": "docs.editor.h8.t6",
+   "goal": "Continue the last paragraph",
+   "setup": [
+    "Write the fox went out."
+   ],
+   "canonical": "Continue with and then it started to rain.",
+   "variants": [
+    "continue writing and then it started to rain",
+    "keep writing and then it started to rain",
+    "go on with and then it started to rain",
+    "carry on with and then it started to rain",
+    "can you continue with and then it started to rain",
+    "continue and then it started to rain",
+    "please continue with and then it started to rain",
+    "continue with: and then it started to rain",
+    "then write and then it started to rain",
+    "continue writing with and then it started to rain"
+   ]
+  },
+  {
+   "id": "docs.editor.h8.t7",
+   "goal": "Add one bullet to the list",
+   "canonical": "Add a bullet: milk.",
+   "variants": [
+    "add a bullet point milk",
+    "new bullet milk",
+    "bullet: milk",
+    "put a bullet milk",
+    "add a list item milk",
+    "can you add a bullet: milk",
+    "another bullet milk",
+    "add bullet milk pls",
+    "insert a bullet point: milk",
+    "make a bullet milk"
+   ]
+  },
+  {
+   "id": "docs.editor.h8.t8",
+   "goal": "Insert a page break",
+   "canonical": "Insert a page break.",
+   "variants": [
+    "page break",
+    "add a page break",
+    "put in a page break",
+    "can you insert a page break",
+    "start a new page",
+    "new page",
+    "make a page break here",
+    "insert a new page",
+    "add a page break pls",
+    "begin a new page"
+   ]
+  },
+  {
+   "id": "docs.editor.h8.t9",
+   "goal": "Insert a new line after the title",
+   "setup": [
+    "Add a title My Story."
+   ],
+   "canonical": "Insert a new line after the title.",
+   "variants": [
+    "add a blank line after the title",
+    "put a new line under the title",
+    "can you insert a new line below the title",
+    "insert an empty line after the title",
+    "new line after the title",
+    "add a new paragraph after the title",
+    "i want a blank line under the title",
+    "insert a blank paragraph under the title",
+    "add an empty paragraph below the title pls",
+    "put a new line right after the title"
+   ]
+  },
+  {
+   "id": "docs.editor.h8.t10",
+   "goal": "Read the second chapter aloud",
+   "setup": [
+    "Add a new chapter called A.",
+    "Add a paragraph Day broke.",
+    "Add a new chapter called B.",
+    "Add a paragraph Night fell."
+   ],
+   "canonical": "Read chapter 2.",
+   "variants": [
+    "read me chapter 2",
+    "read out chapter 2",
+    "can you read chapter 2",
+    "read the second chapter",
+    "read chapter two aloud",
+    "please read chapter 2",
+    "read aloud chapter 2",
+    "read chapter 2 to me",
+    "i want to hear chapter 2",
+    "read out loud the second chapter"
+   ]
+  }
+ ]
+}

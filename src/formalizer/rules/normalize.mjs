@@ -38,10 +38,12 @@ export function splitSentences(text) {
     while (e > s && /\s/.test(text[e - 1])) e--;
     if (e > s) out.push({ start: s, end: e, text: text.slice(s, e), terminator: term });
   };
+  const quoted = quotedRanges(text);
   for (let i = 0; i < text.length; i++) {
     const c = text[i];
     if (c !== '.' && c !== '!' && c !== '?') continue;
     if (c === '.' && /\d/.test(text[i - 1] ?? '') && /\d/.test(text[i + 1] ?? '')) continue;
+    if (quoted.some(([a, b]) => i > a && i < b)) continue;   // a terminator inside "double quotes" does not end the sentence
     let j = i;
     while (j + 1 < text.length && '.!?'.includes(text[j + 1])) j++;
     push(i, text.slice(i, j + 1));
@@ -49,6 +51,34 @@ export function splitSentences(text) {
     i = j;
   }
   push(text.length, '');
+  return glueTextRequests(text, out);
+}
+
+/** Ranges [open, close] of balanced "double quoted" text (straight or curly); an unclosed quote is ignored. */
+function quotedRanges(text) {
+  const out = [];
+  let open = -1;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (c === '\u201C') open = i;
+    else if (c === '\u201D') { if (open >= 0) out.push([open, i]); open = -1; }
+    else if (c === '"') { if (open >= 0) { out.push([open, i]); open = -1; } else open = i; }
+  }
+  return out;
+}
+
+/** A request that carries free text ("write ...", "type ...", "add a paragraph ...", "continue with ...") keeps the sentences after it
+ *  that do not start like a new request: the text is the user's, whatever its punctuation (docs.editor). */
+const TEXT_LEAD = /^(?:(?:please|pls|hey|ok|okay|now|and|then|so)\s+)*(?:(?:can|could|would) you\s+)?(?:(?:add|insert|put|write|type|append|enter)\s+(?:in\s+)?(?:a\s+|an\s+|the\s+|another\s+|one more\s+)?(?:new\s+)?(?:paragraph|text|sentence|line|note|quote|passage)\b|write\b|type\b|continue with\b|continue writing\b|dictate\b|write down\b|note down\b)/i;
+const REQUEST_START = /^(?:add|insert|delete|remove|erase|make|read|select|bold|italic|underline|undo|redo|move|go|new|start|stop|open|close|clear|copy|download|show|tell|turn|set|rename|replace|change|count|save|play|what|who|where|when|why|how|is|are|do|does|did|can|could|would|will|i|let|let's|you|please|pls|also|then|and|next|after|before|now|ok|okay|hey|thanks|thank|no|yes|center|centre|align|highlight|link|break|page|chapter|paragraph|heading|title|write|type|continue|call|put|give|create|mark|check|uncheck|finish|dictate|begin)\b/i;
+function glueTextRequests(text, sents) {
+  const out = [];
+  for (const s of sents) {
+    const prev = out[out.length - 1];
+    if (prev && TEXT_LEAD.test(prev.text) && !REQUEST_START.test(s.text)) {
+      out[out.length - 1] = { start: prev.start, end: s.end, text: text.slice(prev.start, s.end), terminator: s.terminator };
+    } else out.push(s);
+  }
   return out;
 }
 

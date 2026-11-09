@@ -6,6 +6,7 @@ export const ORD = { first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 
 const ORD_RE = '(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|last|\\d+(?:st|nd|rd|th))';
 const BLOCK_KINDS = { paragraph: 'paragraph', heading: 'heading', list: 'list', quote: 'quote', table: 'table', block: null, rule: 'rule', line: 'rule', divider: 'rule' };
 const KIND_LABEL = { paragraph: 'paragraph', heading: 'heading', list: 'list', quote: 'quote', table: 'table', block: 'block', rule: 'line' };
+const CHAPTER_RE = new RegExp(`^(?:the |my |a )?(?:${ORD_RE} )?(chapter|section)s?(?: (\\d+))?$`);
 const ordNum = (w) => (w in ORD ? ORD[w] : Number.parseInt(w, 10));
 const plural = (n, w) => (n === 1 ? w : `${w}s`);
 const fail = (error) => ({ ok: false, error });
@@ -48,6 +49,32 @@ function blockPick(s, kind, ord, n, scopeBlocks) {
   if (pos === -1) pos = idxs.length;
   if (!Number.isInteger(pos) || pos < 1 || pos > idxs.length) return fail(idxs.length === 1 ? `There is only one ${label}.` : `There are only ${idxs.length} ${plural(2, label)}.`);
   return ok({ kind: 'blocks', blocks: [idxs[pos - 1]], desc: ord !== undefined || n !== undefined ? `the ${ord === -1 ? 'last' : n !== undefined ? '' : Object.keys(ORD).find((k) => ORD[k] === pos) ?? `${pos}th`} ${label}`.replace('  ', ' ') : `the ${label}`, pos, total: idxs.length });
+}
+
+/** Headings that start chapters: level 1 and 2 (level 3 are subheadings), or all headings when there is no such heading. */
+const chapterHeads = (pool) => { const h = pool.filter((b) => b.kind === 'heading'); const c = h.filter((b) => (b.level ?? 2) <= 2); return c.length ? c : h; };
+/** The blocks of the section that starts at `head`: up to the next heading of the same or a higher level. */
+export function sectionBlocks(s, head) {
+  const i = s.blocks.indexOf(head);
+  if (i < 0) return [head];
+  const out = [head];
+  for (let k = i + 1; k < s.blocks.length; k++) { const b = s.blocks[k]; if (b.kind === 'heading' && (b.level ?? 2) <= (head.level ?? 2)) break; out.push(b); }
+  return out;
+}
+function chapterPick(s, word, ord, n, scope) {
+  const heads = chapterHeads(scope ?? s.blocks);
+  if (!heads.length) return fail(`There is no ${word} in the document.`);
+  let head;
+  if (n !== undefined) {
+    head = heads.find((b) => new RegExp(`^(?:chapter|section|part)\\s+${n}(?![\\d])`, 'i').test(b.text)) ?? heads[n - 1];
+    if (!head) return fail(heads.length === 1 ? `There is only one ${word}.` : `There are only ${heads.length} ${word}s.`);
+  } else {
+    const pos = ord === -1 ? heads.length : ord ?? 1;
+    head = heads[pos - 1];
+    if (!head) return fail(heads.length === 1 ? `There is only one ${word}.` : `There are only ${heads.length} ${word}s.`);
+  }
+  const num = n ?? (ord === undefined ? undefined : ord === -1 ? 'last' : heads.indexOf(head) + 1);
+  return ok({ kind: 'blocks', blocks: [head], desc: ord === -1 ? `the last ${word}` : `${word} ${num ?? heads.indexOf(head) + 1}`, section: true });
 }
 
 function itemsOf(s, onlyTasks, scopeBlocks) {
@@ -148,6 +175,8 @@ export function resolve(s, phrase, opts = {}) {
     if (at < 1 || at > lists.length) return fail(`There are only ${lists.length} such lists.`);
     return ok({ kind: 'blocks', blocks: [lists[at - 1]], desc: `the ${style === 'task' ? 'task' : style} list` });
   }
+  m = p.match(CHAPTER_RE);
+  if (m) return chapterPick(s, m[2], m[1] ? ordNum(m[1]) : undefined, m[3] ? Number(m[3]) : undefined, scope);
   // [ord] kind [n]
   m = p.match(new RegExp(`^(?:the |my |a |an )?(?:${ORD_RE} )?(paragraph|heading|list|quote|table|block|rule|line|divider|task|item|sentence|word)s?(?: (\\d+))?$`));
   if (m) {

@@ -12,9 +12,9 @@
 
 import {
   DEFAULT_TITLE, COLORS, colorName, TITLE_SIZE_MIN, TITLE_SIZE_MAX, titleBlock, containers, getText, blockText, addMark, cutMark, covered, anyMark,
-  sliceMarks, spliceText, remapMarks, normalizeMarks, sentencesOf, findAll, toDoc, toText, toHtml, stats as computeStats, documentWords, setText, wordsIn,
+  sliceMarks, spliceText, remapMarks, hiddenTitle, normalizeMarks, sentencesOf, findAll, toDoc, toText, toHtml, stats as computeStats, documentWords, setText, wordsIn,
 } from './model.mjs';
-import { resolve, rangesOf, blocksOf, blockById, ORD } from './target.mjs';
+import { resolve, rangesOf, blocksOf, blockById, sectionBlocks, ORD } from './target.mjs';
 
 const MAX_HISTORY = 50;
 
@@ -63,19 +63,40 @@ const KIND_ALIAS = { para: 'paragraph', paras: 'paragraph', graf: 'paragraph', h
 const W = (fn) => (ctx, args) => {
   args = args ?? {};
   if (args.kind && Object.hasOwn(KIND_ALIAS, args.kind)) args = { ...args, kind: KIND_ALIAS[args.kind] };
-  const r = fn(ctx, args); sync(ctx.state); return r;
+  const s = ctx.state;
+  if (args.pos && args.ref) { const at = insertIndex(s, args); if (at.error) return no('missing', at.error); s._ins = at.index; }
+  let r;
+  try { r = fn(ctx, args); } finally { delete s._ins; }
+  sync(s); return r;
 };
+/** Where a new block goes for "under / after / before <reference>": { index } or { error }. The title is above every block. */
+function insertIndex(s, { pos, ref }) {
+  const phrase = String(ref).trim().replace(/\s+(?:pls|plz|please|thanks|thx|now)$/i, '');
+  const res = resolve(s, phrase);
+  if (!res.ok) return { error: res.error };
+  if (res.kind !== 'blocks' || !res.blocks.length) return { error: 'I can only put something before or after a whole block, such as a heading or a paragraph.' };
+  if (res.blocks.some((b) => b.isTitle)) return { index: s.blocks[0] && hiddenTitle(s, s.blocks[0]) ? 1 : 0 };   // the title is above everything, also above the heading that is the title
+  const first = res.blocks[0];
+  const i = s.blocks.indexOf(first);
+  if (/^(?:before|above)$/.test(pos)) return { index: i };
+  if (pos === 'under' || res.section === undefined) return { index: i + 1 };
+  return { index: i + sectionBlocks(s, first).length };   // "after chapter 2" is after everything in it
+}
+const POS_REF = '(?:the\\s+title|(?:the\\s+)?(?:first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|last|\\d+(?:st|nd|rd|th))\\s+(?:paragraph|heading|chapter|section|list|quote|table)|(?:the\\s+)?(?:chapter|section|heading|paragraph|list|quote|table)\\s+\\d+|(?:the\\s+)?(?:last|first)\\s+(?:paragraph|heading|chapter|section|list|quote|table))';
+const POS_TAIL = new RegExp(`\\s+(?:right\\s+)?(under|below|after|before|above|beneath|underneath)\\s+(${POS_REF})$`, 'i');
 /** Politeness and position words that end a heading or paragraph text ("Plans pls", "Notes at the top"): { text, top }. */
 function trimTail(text, polite = true) {
-  let t = String(text).trim(), top = false;
+  let t = String(text).trim(), top = false, pos = null, ref = null;
   for (let again = true; again;) {
     again = false;
-    const pos = t.match(/\s+(?:at|on|to)\s+(?:the\s+)?(?:(top|start|beginning)|bottom|end)(?:\s+of\s+(?:the\s+)?(?:page|document|doc|text|file))?$/i);
-    if (pos) { if (pos[1]) top = true; t = t.slice(0, pos.index).trim(); again = true; }
+    const pm = pos ? null : t.match(POS_TAIL);
+    if (pm) { pos = /^(?:below|beneath|underneath)$/i.test(pm[1]) ? 'under' : pm[1].toLowerCase().replace('above', 'before'); ref = pm[2]; t = t.slice(0, pm.index).trim(); again = true; }
+    const at = t.match(/\s+(?:at|on|to)\s+(?:the\s+)?(?:(top|start|beginning)|bottom|end)(?:\s+of\s+(?:the\s+)?(?:page|document|doc|text|file))?$/i);
+    if (at) { if (at[1]) top = true; t = t.slice(0, at.index).trim(); again = true; }
     const pol = t.match(polite ? /\s+(?:pls|plz|plss|thx|thanks|thank you|ty|please|for me|now|right now|asap)$/i : /\s+(?:pls|plz|plss|thx|ty)$/i);
     if (pol && t.length > pol[0].length) { t = t.slice(0, pol.index).trim(); again = true; }
   }
-  return { text: t, top };
+  return { text: t, top, pos, ref };
 }
 
 // ---- history ---------------------------------------------------------------------------------------
@@ -109,7 +130,7 @@ function _redo(ctx) {
 
 // ---- helpers ---------------------------------------------------------------------------------------
 const newId = (s) => `b${s.nextId++}`;
-function addBlock(s, block, index = s.blocks.length) {
+function addBlock(s, block, index = s._ins ?? s.blocks.length) {
   const b = { id: newId(s), ...block };
   s.blocks.splice(index, 0, b);
   s.cursor = index;
@@ -123,11 +144,12 @@ function spokenBlock(b) {
   if (b.kind === 'table') return `A table with ${b.rows[0]?.length ?? 0} columns: ${joinAnd(b.rows[0] ?? [])}.` + b.rows.slice(1).map((r, i) => ` Row ${i + 1}: ${r.join(', ')}.`).join('');
   if (b.kind === 'quote') return `Quote: ${/[.!?:]$/.test(b.text) ? b.text : `${b.text}.`}`;
   if (b.kind === 'rule') return '';
+  if (!b.text) return '';
   return /[.!?:]$/.test(b.text) ? b.text : `${b.text}.`;
 }
 function spoken(s) {
   const parts = [s.title === DEFAULT_TITLE && s.blocks.length ? '' : `${s.title}.`];
-  for (const b of s.blocks) parts.push(spokenBlock(b));
+  for (const b of s.blocks) if (!hiddenTitle(s, b)) parts.push(spokenBlock(b));
   return parts.filter(Boolean).join(' ');
 }
 
@@ -147,24 +169,114 @@ const spokenOfRes = (res) => (res.kind === 'blocks' ? res.blocks.map((b) => (b.i
 const quoteText = (t) => (t.length > 40 ? `${t.slice(0, 37)}...` : t);
 
 // ---- adding ----------------------------------------------------------------------------------------
-function _addHeading(ctx, { text, level }) {
-  const s = ctx.state, { text: t, top } = trimTail(text);
-  if (!t) return no('unsupported', 'What should the heading say?');
-  commit(s); addBlock(s, { kind: 'heading', level: Math.min(3, Math.max(1, Number(level) || 2)), text: cap(t) }, top ? 0 : s.blocks.length); show(ctx);
-  return ok(`OK, I added the heading "${cap(t)}".`);
+/** Apply the position words found in a text ("... after the title"): sets s._ins, or returns a refusal. */
+function placeTail(s, tt) {
+  if (!tt.pos) return null;
+  const at = insertIndex(s, tt);
+  if (at.error) return no('missing', at.error);
+  s._ins = at.index;
+  return null;
+}
+const endsSentence = (t) => /[.!?]["”')]?$/.test(t);
+const HEAD_ROLES = { chapter: { level: 1, word: 'Chapter' }, section: { level: 2, word: 'Section' }, subheading: { level: 3, word: 'Subheading' }, subsection: { level: 3, word: 'Subsection' } };
+/** "chapter 3: The Forest", "Chapter 3 The Forest", "The Forest" -> { n, title } for a chapter-like heading text. */
+function chapterText(text, word) {
+  const m = String(text).trim().match(new RegExp(`^(?:${word}\\s+)?(\\d+)\\s*[:.\\-–—]?\\s*(.*)$`, 'i'));
+  return m ? { n: Number(m[1]), title: m[2].trim() } : { n: null, title: String(text).trim() };
+}
+function _addHeading(ctx, { text, level, role }) {
+  const s = ctx.state, tt = trimTail(text ?? ''), r = HEAD_ROLES[String(role ?? '').replace(/[\s_-]+/g, '').toLowerCase()];
+  const refused = placeTail(s, tt);
+  if (refused) return refused;
+  let t = tt.text;
+  const lvl = Math.min(3, Math.max(1, Number(level) || r?.level || 2));
+  let said = null;
+  if (r) {
+    const { n: given, title } = chapterText(t, r.word);
+    const same = s.blocks.filter((b) => b.kind === 'heading' && b.level === lvl);
+    const n = given ?? (same.filter((b) => new RegExp(`^${r.word}\\s+\\d+`, 'i').test(b.text)).length + 1);
+    if (r.level <= 2) { t = title ? `${r.word} ${n}: ${cap(title)}` : `${r.word} ${n}`; said = title ? `OK, I started ${r.word.toLowerCase()} ${n}, "${cap(title)}".` : `OK, I started ${r.word.toLowerCase()} ${n}.`; } else t = title ? cap(title) : r.word;
+  } else if (!t) return no('unsupported', 'What should the heading say?');
+  s._ins ??= tt.top ? 0 : undefined;
+  commit(s);
+  // the first heading of an untitled document is its title (the heading and the title never disagree)
+  const first = !r && !tt.pos && !tt.top && s.title === DEFAULT_TITLE && !s.blocks.length && Number(level) === 1;   // a level 1 heading ("write a title X", "heading 1 X") that opens an untitled document is its title
+  const b = addBlock(s, { kind: 'heading', level: lvl, text: cap(t), ...(first ? { asTitle: true } : {}) }); s.dictBlock = null;
+  if (first) { s.title = b.text; s.titleMarks = []; }
+  show(ctx);
+  return ok(first ? `OK, I added the heading "${b.text}"; it is the title of the document.` : said ?? `OK, I added the heading "${cap(t)}".`);
 }
 function _addParagraph(ctx, { text }) {
-  const s = ctx.state, { text: t, top } = trimTail(text, false);
+  const s = ctx.state, tt = trimTail(text, false), t = tt.text;
   if (!t) return no('unsupported', 'What should the paragraph say?');
-  commit(s); addBlock(s, { kind: 'paragraph', text: /[.!?]$/.test(t) ? cap(t) : `${cap(t)}.` }, top ? 0 : s.blocks.length); show(ctx);
+  const refused = placeTail(s, tt);
+  if (refused) return refused;
+  s._ins ??= tt.top ? 0 : undefined;
+  commit(s);
+  const body = endsSentence(t) ? cap(t) : `${cap(t)}.`;
+  const blank = s.blocks[s.cursor];
+  if (!tt.pos && !tt.top && blank?.kind === 'paragraph' && !blank.text) { blank.text = body; s.dictBlock = null; show(ctx); return ok(`OK, I wrote the paragraph (${words(t).length} words).`); }
+  addBlock(s, { kind: 'paragraph', text: body }); s.dictBlock = null; show(ctx);
   return ok(`OK, I added a paragraph (${words(t).length} words).`);
+}
+/** "write ...", "type ...", "add the text ...", "continue with ...": free text into the document, whole. */
+function _write(ctx, { text, mode } = {}) {
+  const s = ctx.state, tt = trimTail(String(text ?? '').replace(/^\s*[:,-]\s*/, ''), false);
+  const t = tt.text.replace(/^["“](.*)["”]$/s, '$1').trim();
+  if (!t) return no('unsupported', 'What should I write?');
+  const refused = placeTail(s, tt);
+  if (refused) return refused;
+  s._ins ??= tt.top ? 0 : undefined;
+  commit(s);
+  const cur = s.blocks[s.cursor];
+  if (!tt.pos && !tt.top && cur?.kind === 'paragraph' && (mode === 'continue' || !cur.text)) {   // continue the last paragraph, or fill the empty one a new line made
+    const punct = /^[,.;:!?]/.test(t);
+    if (!cur.text) cur.text = endsSentence(t) ? cap(t) : `${cap(t)}.`;
+    else { const piece = endsSentence(cur.text) && !punct ? cap(t) : t; cur.text = `${cur.text}${punct ? '' : ' '}${piece}${endsSentence(piece) || punct ? '' : '.'}`; }
+    s.dictBlock = null; show(ctx);
+    return ok(`OK, I ${mode === 'continue' ? 'continued the paragraph' : 'wrote it'} (${words(t).length} words).`);
+  }
+  addBlock(s, { kind: 'paragraph', text: endsSentence(t) ? cap(t) : `${cap(t)}.` }); s.dictBlock = null; show(ctx);
+  return ok(`OK, I wrote a new paragraph (${words(t).length} words).`);
+}
+/** "new line", "new paragraph": an empty paragraph, ready for the next "write ..." or dictated text. */
+function _newBlank(ctx, { kind } = {}) {
+  const s = ctx.state;
+  commit(s);
+  addBlock(s, { kind: 'paragraph', text: '' }); s.dictBlock = null; show(ctx);
+  return ok(kind === 'line' ? 'OK, new line. What goes on it?' : 'OK, new paragraph. What goes in it?');
+}
+/** One list item ("add a bullet: milk"): goes on the list being written, or starts one. */
+function _addItem(ctx, { text, style } = {}) {
+  const s = ctx.state, tt = trimTail(String(text ?? '').replace(/^\s*[:,-]\s*/, ''), false), t = tt.text;
+  if (!t) return no('unsupported', 'What should the item say?');
+  const asList = t.match(/^list\s+(?:of\s+|with\s+|containing\s+|including\s+)?(.+)$/i);   // "a bullet list of cats and dogs" is a list, not one item
+  if (asList) return _addList(ctx, { text: asList[1], style });
+  const refused = placeTail(s, tt);
+  if (refused) return refused;
+  const st = STYLE_OF[String(style ?? 'bullet').toLowerCase()] ?? 'bullet';
+  commit(s);
+  const cur = s.blocks[s.cursor];
+  if (!tt.pos && cur?.kind === 'list' && (cur.style ?? 'bullet') === st) {
+    cur.items.push(t); if (st === 'task') cur.checked = [...(cur.checked ?? []), false];
+    show(ctx); return ok(`OK, I added "${t}" to the list (${cur.items.length} items).`);
+  }
+  addBlock(s, { kind: 'list', style: st, items: [t], ...(st === 'task' ? { checked: [false] } : {}) }); show(ctx);
+  return ok(`OK, I started a ${st === 'task' ? 'task list' : st === 'numbered' ? 'numbered list' : 'list'} with "${t}".`);
+}
+function _pageBreak(ctx) {
+  const s = ctx.state;
+  commit(s); addBlock(s, { kind: 'rule', page: true }); s.dictBlock = null; show(ctx);
+  return ok('OK, I added a page break.');
 }
 const splitItems = (text) => String(text).split(/\s*,\s*(?:and\s+)?|\s+and\s+/i).map((x) => x.trim()).filter(Boolean);
 const STYLE_OF = { bullet: 'bullet', bulleted: 'bullet', numbered: 'numbered', ordered: 'numbered', number: 'numbered', task: 'task', checklist: 'task', todo: 'task', 'to-do': 'task', checkbox: 'task' };
 function _addList(ctx, { text, style, empty }) {
   const s = ctx.state;
-  const items = splitItems(trimTail(text ?? '', false).text);
+  const tt = trimTail(text ?? '', false), items = splitItems(tt.text);
   if (!items.length && String(empty) !== 'true') return no('unsupported', 'What should be on the list?');
+  const refused = placeTail(s, tt);
+  if (refused) return refused;
   const st = STYLE_OF[String(style ?? 'bullet').toLowerCase()] ?? 'bullet';
   commit(s); addBlock(s, { kind: 'list', style: st, items, ...(st === 'task' ? { checked: items.map(() => false) } : {}) }); show(ctx);
   const noun = st === 'task' ? 'task list' : st === 'numbered' ? 'numbered list' : 'list';
@@ -671,10 +783,12 @@ function deleteRes(ctx, res) {
       if (b.isTitle) { s.title = DEFAULT_TITLE; s.titleMarks = []; s.titleAlign = 'left'; s.titleSize = 0; didTitle = true; continue; }
       const i = s.blocks.findIndex((x) => x.id === b.id);
       if (i >= 0) s.blocks.splice(i, 1);
+      if (hiddenTitle(s, b)) { s.title = DEFAULT_TITLE; s.titleMarks = []; }
     }
     s.cursor = Math.min(s.cursor, s.blocks.length - 1);
     s.dictBlock = null; s.selection = null;
     show(ctx);
+    if (res.section) return ok(`OK, I deleted ${res.desc} with everything in it.`);
     return ok(res.blocks.length === 1 ? (didTitle ? 'OK, I cleared the title.' : `OK, I deleted ${res.desc}.`) : `OK, I deleted ${res.blocks.length} blocks.`);
   }
   if (res.kind === 'items') {
@@ -716,6 +830,7 @@ function _delete(ctx, args) {
   if (args.kind === 'column') return _deleteColumn(ctx, args);
   const res = refFromArgs(s, args);
   if (!res.ok) return no('missing', res.error);
+  if (res.section) res.blocks = sectionBlocks(s, res.blocks[0]);
   return deleteRes(ctx, res);
 }
 function _deleteSentence(ctx) {
@@ -795,7 +910,9 @@ function _move(ctx, { where, ...ref }) {
 function _setTitle(ctx, { text }) {
   const s = ctx.state, t = String(text).trim();
   if (!t) return no('unsupported', 'What should the title be?');
-  commit(s); s.title = cap(t); s.titleMarks = []; show(ctx);
+  commit(s);
+  for (const b of s.blocks) if (hiddenTitle(s, b)) delete b.asTitle;   // renamed: the first heading is an ordinary heading again
+  s.title = cap(t); s.titleMarks = []; show(ctx);
   return ok(`OK, the title is now "${s.title}".`);
 }
 
@@ -815,15 +932,16 @@ function _read(ctx, args = {}) {
   if (args.kind || args.t) {
     const res = refFromArgs(s, args);
     if (!res.ok) return no('missing', res.error);
-    const text = spokenOfRes(res);
+    const text = res.section ? sectionBlocks(s, res.blocks[0]).map(spokenBlock).filter(Boolean).join(' ') : spokenOfRes(res);
     if (!text) return no('missing', 'There is nothing to read there.');
     ctx.effect('speech.say', { text });
     const what = args.t ? res.desc : args.kind === 'block' ? `block ${res.pos ?? ''}`.trim() : res.desc.replace(/^the /, '');
-    return ok(text.length <= 160 ? `OK, reading ${what}: ${text}` : `OK, reading ${what}.`);
+    return ok(text.length <= 400 ? `OK, reading ${what}: ${text}` : `OK, reading ${what}.`);
   }
   if (!s.blocks.length) return no('missing', 'The document is empty, so there is nothing to read.');
-  ctx.effect('speech.say', { text: spoken(s) });
-  return ok(`OK, reading the document: ${s.title}.`);
+  const all = spoken(s);
+  ctx.effect('speech.say', { text: all });
+  return ok(all.length <= 400 ? `OK, reading the document: ${all}` : `OK, reading the document "${s.title}" (${wordCount(s)} words).`);
 }
 
 function _copy(ctx, args = {}) {
@@ -944,8 +1062,24 @@ function _interceptInput(ctx, text) {
   const s = ctx.state;
   if (s.inputMode !== 'dictation') return { handled: false };
   const n = norm(text);
-  if (STOP.test(n)) { s.inputMode = null; s.dictBlock = null; return { handled: true, reply: 'OK, dictation is off.' }; }
-  if (n === 'new paragraph' || n === 'next paragraph') { s.dictBlock = null; return { handled: true, reply: 'New paragraph.' }; }
+  const closeDict = () => { const b = s.blocks.find((x) => x.id === s.dictBlock); if (b?.text && !endsSentence(b.text)) b.text += '.'; s.dictBlock = null; };   // a dictated paragraph ends with a full stop
+  if (STOP.test(n)) { closeDict(); s.inputMode = null; return { handled: true, reply: 'OK, dictation is off.' }; }
+  if (/^(?:a |the )?(?:new|next) (?:paragraph|line)$|^(?:start|begin) (?:a |the )?(?:new|next) (?:paragraph|line)$|^line break$/.test(n)) { closeDict(); s.dictTitle = null; return { handled: true, reply: /line/.test(n) ? 'New line.' : 'New paragraph.' }; }
+  if (/^(?:insert |add )?(?:a |the )?page break$|^(?:a |the )?(?:new|next) page$/.test(n)) { closeDict(); _pageBreak(ctx); return { handled: true, reply: 'Page break.' }; }
+  const ch = String(text).trim().match(/^\W*(?:(?:start|begin|add) )?(?:a |the )?(?:new|next) (chapter|section|heading|subheading)\b[\s:,.\-]*(?:(?:called|named|titled|about|saying)\s+)?(.*?)[\s.!?]*$/i);
+  if (ch) {
+    closeDict();
+    const role = ch[1].toLowerCase() === 'heading' ? null : ch[1].toLowerCase(), title = ch[2].trim();
+    const r = _addHeading(ctx, { text: title, role, level: role ? undefined : 2 });
+    if (!title && s.blocks.at(-1)?.kind === 'heading') s.dictTitle = s.blocks.at(-1).id; else s.dictTitle = null;
+    return { handled: true, reply: r.value ? (title ? `New ${role ?? 'heading'}: ${s.blocks.at(-1)?.text ?? title}.` : `New ${role ?? 'heading'}. What is its title?`) : r.note };
+  }
+  if (s.dictTitle) {   // the words after "new chapter" are its title
+    const h = s.blocks.find((b) => b.id === s.dictTitle);
+    s.dictTitle = null;
+    const t = String(text).trim().replace(/[\s.!?]+$/, '').replace(/^(?:called|named|titled)\s+/i, '');
+    if (h && t) { commit(s); h.text = /^(?:chapter|section)\s+\d+$/i.test(h.text) ? `${h.text}: ${cap(t)}` : cap(t); return { handled: true, reply: `Title: ${h.text}.` }; }
+  }
   if (n === 'undo that' || n === 'undo' || n === 'scratch that') { const r = _undo(ctx); return { handled: true, reply: r.value ?? r.note }; }
   if (/^(delete|remove|erase) (the )?(last|previous) sentence$/.test(n)) { const r = _deleteSentence(ctx); return { handled: true, reply: r.value ?? r.note }; }
   let raw = String(text).trim(), stopAfter = false;
@@ -966,7 +1100,7 @@ function _interceptInput(ctx, text) {
       s.cursor = cur;
     }
   }
-  if (stopAfter) { s.inputMode = null; s.dictBlock = null; return { handled: true, reply: added ? 'Added. Dictation is off.' : 'OK, dictation is off.' }; }
+  if (stopAfter) { closeDict(); s.inputMode = null; return { handled: true, reply: added ? 'Added. Dictation is off.' : 'OK, dictation is off.' }; }
   return { handled: true, reply: added ? 'Added.' : '' };
 }
 
@@ -1056,6 +1190,10 @@ function _holdings(ctx, { who }) {
 export const addHeading = W(_addHeading);
 export const addParagraph = W(_addParagraph);
 export const addList = W(_addList);
+export const write = W(_write);
+export const newBlank = W(_newBlank);
+export const pageBreak = W(_pageBreak);
+export const addItem = W(_addItem);
 export const addQuote = W(_addQuote);
 export const addRule = W(_addRule);
 export const addTable = W(_addTable);

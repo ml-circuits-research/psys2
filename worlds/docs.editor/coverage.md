@@ -51,3 +51,19 @@ Noise: fillers, modal and wish prefixes (`can u`, `i want`, `i need`, `hey`), su
 Notes: the new patterns that capture free text use `words(N)` followed by an optional `pls|plz|thx`, so a chat suffix is not captured into the text. Several shapes of the held-out labels (table spec, list item punctuation) are canonical rewrites and cannot be met by rules.
 
 **L7 (macros, extends, shapes).** `patterns.sop` was migrated with `scripts/migrate-macros.mjs` (lead-ins, suffixes and 63 repeated lists are macros) and `lex.docs.editor.ordinals` extends `lex.lang.ordinal`. Twelve `do` shapes (48 generated patterns) cover the operations that act on "the ORDINAL KIND", "KIND N" or "the KIND" (ordinal slot as `objmod`): `docs.editor.delete.ord/.num/.bare` (`doc.delete`), `docs.editor.read.*` (`doc.read`), `docs.editor.copy.*` (`doc.copy`) and `docs.editor.goto.*` (`doc.goto`); each gets the wish, indirect and question forms ("I want to delete paragraph 1", "can I copy the first paragraph", "could you maybe read the first paragraph", "I want to go to the first paragraph"; tests sh01 to sh04). Eleven hand patterns whose examples a shape covered completely were deleted; the `ord.read.*` and `ord.go.*` abbreviation families (`read para 1`, `go to head 2`) stay because they read synonyms the shapes do not (test x2c5). Move, format, align, link, convert, add and count have more than one slot or free text and stay hand-written.
+
+**ED (2026-11-09): structure, writing, editing and reading by text or voice** (patterns `pat.docs.editor.ed.*`, ops `doc.newBlank`, `doc.pageBreak`, `doc.write`, `doc.addItem`, role chapter/section/subheading of `doc.addHeading`; tests `ed01` to `ed74`, `tests/editor-ed.test.mjs`, dialogues `dlg.ed#001` to `#013`, operational family `editor-ed`).
+
+| Operation | Request shape | Status | Example |
+| --- | --- | --- | --- |
+| `doc.newBlank` | bare / wish / article | S | `new line`, `start a new paragraph`, `add a blank line`, `i want a new paragraph`, `start another paragraph` |
+| | positional | S | `insert a new line after the title`, `new line after the title`, `add a new paragraph under chapter 2`, `put a blank line before the second paragraph` |
+| `doc.pageBreak` | imperative / positional | S | `insert a page break`, `start a new page`, `insert a page break after chapter 1` |
+| `doc.addHeading` role | chapter, section, subheading; with or without a title | S | `start a new chapter`, `add a new chapter called The Forest`, `new chapter The Return`, `chapter 3: The End`, `start chapter 4 The Return`, `add a subheading Details` |
+| | bare `chapter 3 too` / `section 1 too` | U | `section N` without a verb is only understood on the documents tab (reader); `chapter N: Title` needs a title |
+| `doc.write` | write / type / add the text / continue | S | `write once upon a time ...`, `type ...`, `add the text ...`, `continue with ...`, `continue writing ...`, `i want to write ...`; long text and "quotes" whole |
+| | `then write and then ...`, `continue writing with and then ...` | U | the clause splitter cuts at `and then` |
+| `doc.addItem` | bullet / numbered item | S | `add a bullet: milk`, `add a bullet point milk`, `add a numbered item: wash up` |
+| positions on add commands | under / after / before | S | `add a paragraph X under the title`, `insert a heading Y before the second paragraph` |
+| `doc.read` | document, chapter, last paragraph | S | `read chapter 2`, `read me chapter 2`, `i want to hear chapter 2`, `read out loud the second chapter` |
+| dictation | commands | S | `new line`, `new paragraph`, `new chapter`, `new chapter called X`, `page break` |

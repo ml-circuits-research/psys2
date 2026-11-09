@@ -58,6 +58,7 @@ const SLOTS = {
   mood: ['([a-z]+(?: [a-z]+)?)', (v) => MOOD_RO[v] ?? null],
   np: ['((?:an? |the |\\d+ )?[a-z][a-z \\-\']*?)', (v, sub) => sub(v)],
   t: ['(.+?)', (v, sub) => sub(v)],
+  q: ['(.+?)', (v) => v],   // the user's own words as stored, copied unchanged
 };
 
 // ---- avatar capability replies (worlds/ui.avatar/ops.mjs: CAPABILITY, EXPRESSION_SAY, MOODS, PERSON_PRESET) ----
@@ -185,6 +186,26 @@ const TABLE = [
   ['It is usually blue.', 'De obicei este albastru.'], ['It is usually green.', 'De obicei este verde.'], ['Grass is usually green.', 'Iarba este de obicei verde.'],
   ['A ball is a sphere.', 'O minge este o sferă.'],
   ['Penguins live in the polar regions.', 'Pinguinii trăiesc în regiunile polare.'],
+  // ---- document editor (docs.editor): structure and writing
+  ['OK, new line.', 'Bine, rând nou.'], ['What goes on it?', 'Ce scriu pe el?'], ['OK, new paragraph.', 'Bine, paragraf nou.'], ['What goes in it?', 'Ce scriu în el?'],
+  ['New line.', 'Rând nou.'], ['New paragraph.', 'Paragraf nou.'], ['Page break.', 'Pagină nouă.'], ['OK, I added a page break.', 'Bine, am adăugat o pagină nouă.'],
+  ['OK, I wrote a new paragraph ({n} words).', 'Bine, am scris un paragraf nou ({n} cuvinte).'], ['OK, I wrote it ({n} words).', 'Bine, am scris ({n} cuvinte).'],
+  ['OK, I continued the paragraph ({n} words).', 'Bine, am continuat paragraful ({n} cuvinte).'], ['OK, I wrote the paragraph ({n} words).', 'Bine, am scris paragraful ({n} cuvinte).'],
+  ['OK, I added a paragraph ({n} words).', 'Bine, am adăugat un paragraf ({n} cuvinte).'],
+  ['OK, I started chapter {n}.', 'Bine, am început capitolul {n}.'], ['OK, I started chapter {n}, "{q}".', 'Bine, am început capitolul {n}, "{q}".'],
+  ['OK, I started section {n}.', 'Bine, am început secțiunea {n}.'], ['OK, I started section {n}, "{q}".', 'Bine, am început secțiunea {n}, "{q}".'],
+  ['New chapter.', 'Capitol nou.'], ['New section.', 'Secțiune nouă.'], ['What is its title?', 'Care este titlul?'],
+  ['New chapter: {q}.', 'Capitol nou: {q}.'], ['New section: {q}.', 'Secțiune nouă: {q}.'], ['Title: {q}.', 'Titlu: {q}.'],
+  ['OK, I added the heading "{q}".', 'Bine, am adăugat titlul "{q}".'], ['OK, I added the heading "{q}"; it is the title of the document.', 'Bine, am adăugat titlul "{q}"; este titlul documentului.'],
+  ['OK, the title is now "{q}".', 'Bine, titlul este acum "{q}".'],
+  ['OK, dictation is off.', 'Bine, dictarea este oprită.'], ['Added.', 'Adăugat.'], ['Added. Dictation is off.', 'Adăugat. Dictarea este oprită.'],
+  ['OK, I deleted the last chapter with everything in it.', 'Bine, am șters ultimul capitol cu tot ce era în el.'],
+  ['OK, I moved the paragraph up.', 'Bine, am mutat paragraful mai sus.'], ['OK, I moved the paragraph down.', 'Bine, am mutat paragraful mai jos.'],
+  ['OK, I deleted the last paragraph.', 'Bine, am șters ultimul paragraf.'], ['OK, I deleted the last sentence.', 'Bine, am șters ultima propoziție.'], ['OK, I deleted the last word.', 'Bine, am șters ultimul cuvânt.'],
+  ['OK, the last sentence is now bold.', 'Bine, ultima propoziție este acum aldină.'], ['OK, the last sentence is now italic.', 'Bine, ultima propoziție este acum cursivă.'], ['OK, the last sentence is now underlined.', 'Bine, ultima propoziție este acum subliniată.'],
+  ['OK, the last word is now bold.', 'Bine, ultimul cuvânt este acum aldin.'], ['OK, the last word is now italic.', 'Bine, ultimul cuvânt este acum cursiv.'], ['OK, the last word is now underlined.', 'Bine, ultimul cuvânt este acum subliniat.'],
+  ['OK, the last paragraph is now bold.', 'Bine, ultimul paragraf este acum aldin.'], ['OK, the last paragraph is now italic.', 'Bine, ultimul paragraf este acum cursiv.'], ['OK, the last paragraph is now underlined.', 'Bine, ultimul paragraf este acum subliniat.'],
+  ['OK, the selection is now bold.', 'Bine, selecția este acum aldină.'], ['OK, the selection is now italic.', 'Bine, selecția este acum cursivă.'], ['OK, the selection is now underlined.', 'Bine, selecția este acum subliniată.'],
   // ---- lists
   ['Hello!', 'Bună!'],
 ];

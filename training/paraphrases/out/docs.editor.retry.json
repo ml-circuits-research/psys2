@@ -31,6 +31,19 @@
           "label": "canonical-failed"
         }
       ]
+    },
+    {
+      "batch": "h7",
+      "task": "docs.editor.h7.t3",
+      "goal": "Set the cell in row 1, column 2 to 15",
+      "tried": [
+        {
+          "attempt": 1,
+          "text": "Set row 1, column 2 to 15.",
+          "reply": "There is no chart yet. Say, for example: \"make a chart: apples 5, pears 3, plums 8\".",
+          "label": "needs_review"
+        }
+      ]
     }
   ]
 }

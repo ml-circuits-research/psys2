@@ -8,6 +8,14 @@ const F = (p, out, sub, q) => ({ p, out, full: true, ...(sub ? { sub } : {}), ..
 const Q = (p, out, sub) => F(p, out, sub, true);
 const S = (p, out, sub) => F(p, out, sub, false);
 
+const MARKS_RO = [['aldin', 'aldină', 'bold'], ['cursiv', 'cursivă', 'italic'], ['subliniat', 'subliniată', 'underlined']];
+const TARGETS_RO = [['ultima propoziție', 'the last sentence', 'f'], ['ultimul cuvânt', 'the last word', 'm'], ['ultimul paragraf', 'the last paragraph', 'm'], ['selecția', 'the selection', 'f']];
+/** "fă ultima propoziție aldină" -> "make the last sentence bold" (gender agreement of the Romanian adjective). */
+const EDIT_FRAMES = TARGETS_RO.flatMap(([ro, en, g]) => MARKS_RO.flatMap(([m, f, mark]) => [
+  F(`fă|pune ${ro} ${g === 'f' ? f : m}`, `make ${en} ${mark}`),
+  ...(mark === 'bold' ? [F(`pune ${ro} cu aldin`, `make ${en} bold`)] : []),
+]));
+
 export const COMMAND_FRAMES = [
   // ---- tasks and lists
   F('adaugă|pune {np:bare} pe lista mea de cumpărături', 'add {np} to my shopping list', { pune: 'put {np} on my shopping list' }),
@@ -143,6 +151,34 @@ export const COMMAND_FRAMES = [
   F('începe dictarea', 'start dictation'),
   F('lasă-mă să dictez', 'let me dictate'),
   F('oprește dictarea', 'stop dictation'),
+  F('pornește dictarea', 'start dictation'),
+  // ---- editor: structure, writing and editing (ED)
+  F('rând nou', 'new line'), F('linie nouă', 'new line'), F('rând nou aici', 'new line'),
+  F('paragraf nou', 'new paragraph'), F('alineat nou', 'new paragraph'), F('paragraful următor', 'new paragraph'),
+  F('adaugă un rând nou', 'add a new line'), F('adaugă o linie nouă', 'add a new line'), F('adaugă un paragraf nou', 'add a new paragraph'), F('începe un paragraf nou', 'start a new paragraph'),
+  F('inserează un rând nou după titlu', 'insert a new line after the title'), F('inserează un rând nou sub titlu', 'insert a new line under the title'),
+  F('adaugă un rând nou după titlu', 'insert a new line after the title'), F('adaugă un paragraf nou după titlu', 'insert a new paragraph after the title'),
+  F('pagină 9', 'new page'), F('adaugă o pagină 9', 'add a new page'), F('începe o pagină 9', 'start a new page'), F('inserează o pagină 9', 'insert a new page'),
+  F('inserează o întrerupere de pagină', 'insert a page break'), F('adaugă o întrerupere de pagină', 'insert a page break'), F('întrerupere de pagină', 'page break'),
+  F('capitol nou', 'new chapter'), F('capitolul următor', 'new chapter'), F('secțiune nouă', 'new section'),
+  F('capitol nou {rest:cont}', 'new chapter {rest:cont}'), F('secțiune nouă {rest:cont}', 'new section {rest:cont}'),
+  F('începe un capitol nou', 'start a new chapter'), F('adaugă un capitol nou', 'add a new chapter'), F('adaugă un capitol', 'add a chapter'),
+  F('începe o secțiune nouă', 'start a new section'), F('adaugă o secțiune nouă', 'add a new section'), F('adaugă un subtitlu', 'add a subheading'), F('adaugă un subtitlu {rest:cont}', 'add a subheading {rest:cont}'),
+  F('începe un capitol nou numit|intitulat {rest:cont}', 'start a new chapter called {rest:cont}'), F('adaugă un capitol nou numit|intitulat {rest:cont}', 'add a new chapter called {rest:cont}'),
+  F('începe o secțiune nouă numită|intitulată {rest:cont}', 'start a new section called {rest:cont}'), F('adaugă o secțiune nouă numită|intitulată {rest:cont}', 'add a new section called {rest:cont}'),
+  F('capitolul {num} : {rest:cont}', 'chapter {num}: {rest:cont}'), F('capitolul {num} {rest:cont}', 'chapter {num} {rest:cont}'),
+  F('scrie titlul {rest:cont}', 'write a title {rest:cont}'), F('scrie un titlu {rest:cont}', 'write a title {rest:cont}'),
+  F('scrie : {rest:raw}', 'write: {rest:raw}'), F('continuă cu {rest:raw}', 'continue with {rest:raw}'), F('adaugă textul {rest:raw}', 'add the text {rest:raw}'), F('adaugă textul : {rest:raw}', 'add the text: {rest:raw}'),
+  F('adaugă un punct : {rest:cont}', 'add a bullet: {rest:cont}'), F('adaugă o buletă : {rest:cont}', 'add a bullet: {rest:cont}'),
+  F('citește capitolul {num}', 'read chapter {num}'), F('citește ultimul capitol', 'read the last chapter'), F('citește primul capitol', 'read the first chapter'), F('citește al doilea capitol', 'read the second chapter'),
+  F('citește ultimul paragraf', 'read the last paragraph'), F('citește ultima propoziție', 'read the last sentence'),
+  F('șterge capitolul {num}', 'delete chapter {num}'), F('șterge ultimul capitol', 'delete the last chapter'),
+  F('șterge ultimul cuvânt', 'delete the last word'),
+  F('mută paragraful {num} mai sus', 'move paragraph {num} up'), F('mută paragraful {num} mai jos', 'move paragraph {num} down'),
+  F('mută al doilea paragraf mai sus', 'move the second paragraph up'), F('mută al doilea paragraf mai jos', 'move the second paragraph down'),
+  F('mută ultimul paragraf mai sus', 'move the last paragraph up'), F('mută ultimul paragraf mai jos', 'move the last paragraph down'),
+  F('redenumește documentul în|cu {rest:cont}', 'rename the document to {rest:cont}'), F('schimbă titlul în {rest:cont}', 'set the title to {rest:cont}'),
+  ...EDIT_FRAMES,
   F('transformă lista mea de cumpărături într-un document', 'turn my shopping list into a document'),
   F('fă un document despre {np:bare}', 'make a document about {np}'),
 

@@ -24,24 +24,25 @@
       "retry": []
     },
     "docs.editor": {
-      "tasks": 72,
-      "attempts": 795,
-      "canonical_success": 71,
-      "canonical_success_rate": 0.9861,
-      "variants": 720,
+      "tasks": 82,
+      "attempts": 905,
+      "canonical_success": 80,
+      "canonical_success_rate": 0.9756,
+      "variants": 820,
       "variant_labels": {
-        "rules-own": 308,
-        "rules-agree": 243,
-        "rules-fail": 116,
-        "needs_review": 42,
+        "rules-fail": 256,
+        "rules-agree": 340,
+        "relabelled": 17,
+        "rules-own": 94,
+        "needs_review": 102,
         "rules-differ": 11
       },
-      "variant_rules_coverage": 0.3375,
-      "variant_rules_parsed": 0.7653,
-      "variants_needing_review": 52,
-      "trainable_records": 739,
+      "variant_rules_coverage": 0.4146,
+      "variant_rules_parsed": 0.5293,
+      "variants_needing_review": 112,
+      "trainable_records": 788,
       "by_split": {
-        "train": 707,
+        "train": 817,
         "dev": 88
       },
       "retry": [
@@ -73,6 +74,19 @@
               "text": "Stop the dictation mode.",
               "reply": "OK, dictation is off.",
               "label": "canonical-failed"
+            }
+          ]
+        },
+        {
+          "batch": "h7",
+          "task": "docs.editor.h7.t3",
+          "goal": "Set the cell in row 1, column 2 to 15",
+          "tried": [
+            {
+              "attempt": 1,
+              "text": "Set row 1, column 2 to 15.",
+              "reply": "There is no chart yet. Say, for example: \"make a chart: apples 5, pears 3, plums 8\".",
+              "label": "needs_review"
             }
           ]
         }
@@ -509,12 +523,12 @@
     }
   },
   "totals": {
-    "tasks": 750,
-    "attempts": 8260,
-    "canonical_success": 747,
-    "variants": 7500,
-    "agree": 5412,
-    "canonical_success_rate": 0.996,
-    "variant_rules_coverage": 0.7216
+    "tasks": 760,
+    "attempts": 8370,
+    "canonical_success": 756,
+    "variants": 7600,
+    "agree": 5509,
+    "canonical_success_rate": 0.9947,
+    "variant_rules_coverage": 0.7249
   }
 }

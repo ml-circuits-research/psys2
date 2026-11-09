@@ -15,6 +15,8 @@
     word=column
     word=link
     word=character
+    word=chapter
+    word=section
 
 @lex.docs.editor.ordinals core.lexicon
     class=noun
@@ -31,8 +33,51 @@
     word=json
     word=web_page
 
+@lex.docs.editor.insertpos core.lexicon
+    class=noun
+    word=under
+    word=below
+    word=beneath
+    word=underneath
+    word=after
+    word=before
+    word=above
+
+@lex.docs.editor.headroles core.lexicon
+    class=noun
+    word=chapter
+    word=section
+    word=subheading
+    word=sub_heading
+    word=subsection
+    word=sub_section
+
+@lex.docs.editor.itemstyles core.lexicon
+    class=noun
+    word=numbered
+    word=ordered
+    word=task
+    word=todo
+    word=checklist
+
+@lex.docs.editor.chapterkinds core.lexicon
+    class=noun
+    word=chapter
+    word=section
+
+@lex.docs.editor.blanks core.lexicon
+    class=noun
+    word=line
+    word=paragraph
+    word=para
+    word=line_break
+    word=paragraph_break
+    word=blank_line
+    word=empty_line
+
 @lex.docs.editor.triggers core.lexicon
     class=trigger
+    word=chapter
     word=document
     word=paragraph
     word=heading

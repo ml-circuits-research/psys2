@@ -1541,3 +1541,111 @@
     alt=show_us
     alt=display
     alt=list
+
+@phrase.lang.doc.write core.phrase
+    doc="Verbs that put free text into a document (\"write\", \"type\", \"jot down\"); the text follows."
+    alt=write_down
+    alt=note_down
+    alt=jot_down
+    alt=put_down
+    alt=write
+    alt=type
+    alt=enter
+    alt=key_in
+
+@phrase.lang.doc.writetext core.phrase
+    doc="\"add the text\" forms that put free text into a document."
+    alt=add_the_following_text
+    alt=add_the_following
+    alt=add_the_text
+    alt=add_this_text
+    alt=add_text
+    alt=insert_the_text
+    alt=insert_text
+    alt=put_in_the_text
+    alt=append_the_text
+    alt=append_text
+
+@phrase.lang.doc.continue core.phrase
+    doc="\"Continue with ...\" forms: more text goes after what is already written."
+    alt=continue_writing_with
+    alt=continue_writing
+    alt=continue_with
+    alt=keep_writing
+    alt=go_on_with
+    alt=carry_on_with
+    alt=and_then
+    alt=then_write
+
+@phrase.lang.doc.start core.phrase
+    doc="Verbs that start a new part of a document (\"start\", \"begin\", \"add\", \"insert\")."
+    alt=go_to
+    alt=move_to
+    alt=jump_to
+    alt=start
+    alt=begin
+    alt=add
+    alt=insert
+    alt=create
+    alt=make
+    alt=open
+    alt=put_in
+    alt=put
+    alt=write
+    alt=give_me
+
+@phrase.lang.doc.fresh core.phrase
+    doc="Adjectives of a new part (\"new\", \"next\", \"fresh\", \"blank\")."
+    alt=new
+    alt=next
+    alt=fresh
+    alt=blank
+    alt=empty
+    alt=another_new
+
+@phrase.lang.doc.titled core.phrase
+    doc="Words that introduce the name of a chapter or heading (\"called\", \"titled\", \"about\")."
+    alt=with_the_title
+    alt=with_the_name
+    alt=that_is_called
+    alt=that_is_titled
+    alt=called
+    alt=named
+    alt=titled
+    alt=entitled
+    alt=saying
+    alt=about
+    alt=on
+    alt=for
+
+@phrase.lang.doc.wish core.phrase
+    doc="Wishes before a document command (\"i want\", \"i would like to\", \"can i have\", \"let me\")."
+    alt=i_would_like_to
+    alt=i_d_like_to
+    alt=i_want_to
+    alt=i_need_to
+    alt=i_would_like
+    alt=i_d_like
+    alt=id_like
+    alt=i_want
+    alt=i_need
+    alt=we_need
+    alt=can_i_have
+    alt=can_i_get
+    alt=let_me
+    alt=give_me
+    alt=gimme
+
+@phrase.lang.doc.hear core.phrase
+    doc="Verbs of having a document part read aloud (\"read\", \"read out\", \"i want to hear\", \"play\")."
+    alt=i_want_to_hear
+    alt=i_would_like_to_hear
+    alt=let_me_hear
+    alt=read_out_loud
+    alt=read_out
+    alt=read_aloud
+    alt=read_me
+    alt=listen_to
+    alt=speak
+    alt=narrate
+    alt=read

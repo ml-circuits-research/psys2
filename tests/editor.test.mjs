@@ -287,7 +287,7 @@ test('select: "it" without a selection falls back to the block just worked on; w
 });
 test('delete: a word, a sentence, an item, the title', async () => {
   const a = await run('Add a paragraph Cats purr. Dogs bark', 'Delete the word cats');
-  assert.equal(a.st.blocks[0].text, 'purr.');
+  assert.equal(a.st.blocks[0].text, 'purr. Dogs bark.');   // the whole text is kept (ED: free text is not cut at its full stops)
   const b = await run(...BASE, 'Delete the first item');
   assert.deepEqual(b.st.blocks[2].items, ['eggs', 'bread']);
   const c = await run('Make the title Our Trip', 'Delete the title');

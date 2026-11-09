@@ -303,3 +303,27 @@
     semantics=action
     action=doc.stats
     doc="Tells words, characters, sentences, paragraphs, tasks and reading time. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.write core.operation
+    impl=write
+    semantics=action
+    action=doc.write
+    doc="Writes free text into the document, whole: into the empty paragraph a new line made, or as a new paragraph; mode=continue adds to the last paragraph. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.newBlank core.operation
+    impl=newBlank
+    semantics=action
+    action=doc.newBlank
+    doc="Adds an empty paragraph (new line, new paragraph), optionally under, after or before a reference (the title, chapter 2, the second paragraph). Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.pageBreak core.operation
+    impl=pageBreak
+    semantics=action
+    action=doc.pageBreak
+    doc="Adds a page break. Brings the editor tab forward: ctx.request(\"ui.openTab\")."
+
+@op.docs.editor.addItem core.operation
+    impl=addItem
+    semantics=action
+    action=doc.addItem
+    doc="Adds one bullet, numbered or task item: to the list being written, or to a new list. Brings the editor tab forward: ctx.request(\"ui.openTab\")."

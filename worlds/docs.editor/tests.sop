@@ -452,7 +452,7 @@
 @t.docs.editor.z13 core.test
     input="more words here and stop the dictation"
     expectState="inputMode=null"
-    expectState="blocks.1.text=More words here"
+    expectState="blocks.1.text=More words here."
     session=dstop
 
 @t.docs.editor.r01 core.test
@@ -502,7 +502,7 @@
 
 @t.docs.editor.r10 core.test
     input="Add a heading Garden"
-    expectState="blocks.3.kind=heading"
+    expectState="blocks.2.kind=heading"
     session=re1
 
 @t.docs.editor.r11 core.test
@@ -787,3 +787,357 @@
     input="Type hello world. I want to go to the first paragraph."
     expect="I went to the first paragraph"
     session=esh4
+
+@t.docs.editor.ed01 core.test
+    input="new line"
+    expect="new line"
+    expectState="blocks.0.kind=paragraph"
+    expectState="blocks.0.text="
+    session=ed1
+
+@t.docs.editor.ed02 core.test
+    input="write Once upon a time there was a fox"
+    expect="wrote"
+    expectState="blocks.0.text=Once upon a time there was a fox."
+    expectState="blocks.length=1"
+    session=ed1
+
+@t.docs.editor.ed03 core.test
+    input="new paragraph"
+    expect="new paragraph"
+    expectState="blocks.1.text="
+    session=ed1
+
+@t.docs.editor.ed04 core.test
+    input="type It lived in a deep forest. It loved berries."
+    expect="wrote"
+    expectState="blocks.1.text=It lived in a deep forest. It loved berries."
+    session=ed1
+
+@t.docs.editor.ed05 core.test
+    input="add a new chapter called The Forest"
+    expect="chapter 1"
+    expectState="blocks.2.kind=heading"
+    expectState="blocks.2.text=Chapter 1: The Forest"
+    expectState="blocks.2.level=1"
+    session=ed1
+
+@t.docs.editor.ed06 core.test
+    input="write \"Where am I?\" said the fox. \"Lost,\" said the owl."
+    expect="wrote"
+    expectState="blocks.3.text=\"Where am I?\" said the fox. \"Lost,\" said the owl."
+    session=ed1
+
+@t.docs.editor.ed07 core.test
+    input="start a new chapter"
+    expect="chapter 2"
+    expectState="blocks.4.text=Chapter 2"
+    session=ed1
+
+@t.docs.editor.ed08 core.test
+    input="continue with the owl flew away"
+    expect="wrote"
+    session=ed1
+
+@t.docs.editor.ed08b core.test
+    input="continue with then it was quiet"
+    expect="continued"
+    session=ed1
+
+@t.docs.editor.ed09 core.test
+    input="insert a new line after the title"
+    expect="new line"
+    expectState="blocks.0.text="
+    session=ed1
+
+@t.docs.editor.ed10 core.test
+    input="add a paragraph Dedication under the title"
+    expect="added a paragraph"
+    expectState="blocks.0.text=Dedication."
+    session=ed1
+
+@t.docs.editor.ed11 core.test
+    input="insert a page break"
+    expect="page break"
+    session=ed1
+
+@t.docs.editor.ed12 core.test
+    input="add a bullet: milk"
+    expect="list"
+    session=ed1
+
+@t.docs.editor.ed13 core.test
+    input="add a bullet: eggs"
+    expect="2 items"
+    session=ed1
+
+@t.docs.editor.ed14 core.test
+    input="add a numbered item: wash up"
+    expect="numbered list"
+    session=ed1
+
+@t.docs.editor.ed15 core.test
+    input="add a subheading Details"
+    expect="Details"
+    session=ed1
+
+@t.docs.editor.ed16 core.test
+    input="start a new section called Plans"
+    expect="section 1"
+    session=ed1
+
+@t.docs.editor.ed17 core.test
+    input="chapter 3: The Return"
+    expect="chapter 3"
+    session=ed1
+
+@t.docs.editor.ed18 core.test
+    input="new chapter The End"
+    expect="The End"
+    session=ed1
+
+@t.docs.editor.ed19 core.test
+    input="read chapter 1"
+    expect="Chapter 1: The Forest"
+    session=ed1
+
+@t.docs.editor.ed20 core.test
+    input="read the last paragraph"
+    expect="reading"
+    session=ed1
+
+@t.docs.editor.ed21 core.test
+    input="read the document"
+    expect="Dedication"
+    session=ed1
+
+@t.docs.editor.ed22 core.test
+    input="add the text and they lived happily after"
+    expect="wrote"
+    session=ed1
+
+@t.docs.editor.ed30 core.test
+    input="write a title My Story"
+    expect="title"
+    expectState="title=My Story"
+    expectState="blocks.0.kind=heading"
+    session=ed2
+
+@t.docs.editor.ed31 core.test
+    input="read the document"
+    expect="My Story"
+    session=ed2
+
+@t.docs.editor.ed32 core.test
+    input="add a paragraph The fox ran. The dog slept. It was late."
+    expect="added a paragraph"
+    expectState="blocks.1.text=The fox ran. The dog slept. It was late."
+    session=ed2
+
+@t.docs.editor.ed33 core.test
+    input="make the last sentence bold"
+    expect="bold"
+    session=ed2
+
+@t.docs.editor.ed34 core.test
+    input="make the last word italic"
+    expect="italic"
+    session=ed2
+
+@t.docs.editor.ed35 core.test
+    input="underline the last paragraph"
+    expect="underlined"
+    session=ed2
+
+@t.docs.editor.ed36 core.test
+    input="add a paragraph Second one here."
+    expect="added a paragraph"
+    session=ed2
+
+@t.docs.editor.ed37 core.test
+    input="select the second paragraph"
+    expect="selected"
+    session=ed2
+
+@t.docs.editor.ed38 core.test
+    input="make the selection bold"
+    expect="bold"
+    session=ed2
+
+@t.docs.editor.ed38b core.test
+    input="move the second paragraph up"
+    expect="moved"
+    session=ed2
+
+@t.docs.editor.ed39 core.test
+    input="delete the last word"
+    expect="deleted the last word"
+    session=ed2
+
+@t.docs.editor.ed40 core.test
+    input="delete the last sentence"
+    expect="deleted the last sentence"
+    session=ed2
+
+@t.docs.editor.ed42 core.test
+    input="delete the last paragraph"
+    expect="deleted the last paragraph"
+    expectState="blocks.length=2"
+    session=ed2
+
+@t.docs.editor.ed43 core.test
+    input="rename the document to The Fox Tale"
+    expect="The Fox Tale"
+    expectState="title=The Fox Tale"
+    session=ed2
+
+@t.docs.editor.ed44 core.test
+    input="add a heading Chapter 2"
+    expect="Chapter 2"
+    session=ed2
+
+@t.docs.editor.ed45 core.test
+    input="add a paragraph Night fell."
+    expect="added a paragraph"
+    session=ed2
+
+@t.docs.editor.ed46 core.test
+    input="delete chapter 2"
+    expect="deleted chapter 2"
+    expectState="blocks.length=2"
+    session=ed2
+
+@t.docs.editor.ed50 core.test
+    input="start dictation"
+    expect="dictation is on"
+    expectState="inputMode=dictation"
+    session=ed3
+
+@t.docs.editor.ed51 core.test
+    input="the fox went out"
+    expect="Added"
+    expectState="blocks.0.text=The fox went out"
+    session=ed3
+
+@t.docs.editor.ed52 core.test
+    input="new line"
+    expect="New line"
+    session=ed3
+
+@t.docs.editor.ed53 core.test
+    input="it found a bush"
+    expect="Added"
+    expectState="blocks.1.text=It found a bush"
+    session=ed3
+
+@t.docs.editor.ed54 core.test
+    input="new paragraph"
+    expect="New paragraph"
+    session=ed3
+
+@t.docs.editor.ed55 core.test
+    input="new chapter"
+    expect="New chapter"
+    expectState="blocks.2.kind=heading"
+    session=ed3
+
+@t.docs.editor.ed56 core.test
+    input="the cave"
+    expect="Title"
+    expectState="blocks.2.text=Chapter 1: The cave"
+    session=ed3
+
+@t.docs.editor.ed57 core.test
+    input="page break"
+    expect="Page break"
+    session=ed3
+
+@t.docs.editor.ed58 core.test
+    input="new chapter called The Return"
+    expect="New chapter"
+    expectState="blocks.4.text=Chapter 2: The Return"
+    session=ed3
+
+@t.docs.editor.ed59 core.test
+    input="stop dictation"
+    expect="dictation is off"
+    expectState="inputMode=null"
+    session=ed3
+@t.docs.editor.ed60 core.test
+    input="write a title Long Tale"
+    expect="title"
+    expectState="title=Long Tale"
+    session=ed4
+
+@t.docs.editor.ed61 core.test
+    input="add a heading Intro"
+    expect="Intro"
+    session=ed4
+
+@t.docs.editor.ed62 core.test
+    input="add a paragraph First paragraph here."
+    expect="added"
+    session=ed4
+
+@t.docs.editor.ed63 core.test
+    input="add a heading Middle"
+    expect="Middle"
+    session=ed4
+
+@t.docs.editor.ed64 core.test
+    input="add a paragraph Second paragraph here."
+    expect="added"
+    session=ed4
+
+@t.docs.editor.ed65 core.test
+    input="insert a heading Prologue before the first paragraph"
+    expect="Prologue"
+    expectState="blocks.2.text=Prologue"
+    session=ed4
+
+@t.docs.editor.ed66 core.test
+    input="add a paragraph Heading text after the heading 2"
+    expect="added"
+    expectState="blocks.2.text=Heading text."
+    session=ed4
+
+@t.docs.editor.ed67 core.test
+    input="add a new line before the second heading"
+    expect="new line"
+    session=ed4
+
+@t.docs.editor.ed68 core.test
+    input="add a page break after chapter 2"
+    expect="page break"
+    session=ed4
+
+@t.docs.editor.ed69 core.test
+    input="write It was a bright cold day in April, and the clocks were striking thirteen. It was a bright cold day in April, and the clocks were striking thirteen. It was a bright cold day in April, and the clocks were striking thirteen. It was a bright cold day in April, and the clocks were striking thirteen. It was a bright cold day in April, and the clocks were striking thirteen. It was a bright cold day in April, and the clocks were striking thirteen. It was a bright cold day in April, and the clocks were striking thirteen. It was a bright cold day in April, and the clocks were striking thirteen."
+    expect="wrote"
+    session=ed4
+
+@t.docs.editor.ed70 core.test
+    input="read the last paragraph"
+    expect="reading last paragraph"
+    session=ed4
+
+@t.docs.editor.ed71 core.test
+    input="add a paragraph The end under the title"
+    expect="added"
+    expectState="blocks.1.text=The end."
+    session=ed4
+
+@t.docs.editor.ed72 core.test
+    input="undo"
+    expect="undid"
+    session=ed4
+
+@t.docs.editor.ed73 core.test
+    input="add a bullet list of cats and dogs"
+    expect="2 items"
+    session=ed4
+
+@t.docs.editor.ed74 core.test
+    input="write \"We met, said the fox.\" and then there was silence"
+    expect="wrote"
+    session=ed4

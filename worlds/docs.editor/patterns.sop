@@ -8,7 +8,7 @@
 
 @pat.docs.editor.paragraph core.pattern
     canonical="Add a paragraph The cat sat on the mat."
-    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [add|insert|type|write|put_in|append] [a|the|another|one_more|1_more]? [paragraph|line|sentence|note] [saying|that_says|reading|with_the_text|with]? {t:rest}"
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [add|insert|type|write|put_in|append] [a|the|another|one_more|1_more]? [paragraph|line|sentence|note] [saying|that_says|reading|with_the_text|with]? {t:rest(quotes)}"
     emit="@{_} core.request action=doc.addParagraph arg.text=\"{t}\""
     kind=request
     priority=11
@@ -22,7 +22,7 @@
     example="Add a list with milk, eggs and bread."
 
 @pat.docs.editor.bare core.pattern
-    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [type|write_down|note_down|put_down] {t:rest}"
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [type|write_down|note_down|put_down] {t:rest(quotes)}"
     emit="@{_} core.request action=doc.addParagraph arg.text=\"{t}\""
     kind=request
     priority=5
@@ -2656,7 +2656,7 @@
     example="A heading Shopping."
 
 @pat.docs.editor.s2.paragraph.bare core.pattern
-    match="[and|then|also|plus|next]? [a|another|one_more] [paragraph|sentence] [saying|that_says|reading|with_the_text|with|of]? {t:rest}"
+    match="[and|then|also|plus|next]? [a|another|one_more] [paragraph|sentence] [saying|that_says|reading|with_the_text|with|of]? {t:rest(quotes)}"
     emit="@{_} core.request action=doc.addParagraph arg.text=\"{t}\""
     kind=request
     priority=11
@@ -2924,3 +2924,188 @@
     sample="kind=paragraph"
     emit="@{_} core.request action=doc.goto arg.ord=first arg.kind={kind}"
     priority=11
+
+@pat.docs.editor.ed.newline core.pattern
+    canonical="Start a new line."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u|$lang.doc.wish]? [$lang.doc.start]? [a|an|another|one_more]? [$lang.doc.fresh] {k:lex.docs.editor.blanks} [here|please|pls|plz]?"
+    emit="@{_} core.request action=doc.newBlank arg.kind={k}"
+    kind=request
+    priority=13
+    example="New line."
+    example="Start a new paragraph."
+    example="Add a blank line."
+
+@pat.docs.editor.ed.newline.at core.pattern
+    canonical="Insert a new line after the title."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [$lang.doc.start] [a|an|another|one_more]? [$lang.doc.fresh]? {k:lex.docs.editor.blanks} [right]? {pos:lex.docs.editor.insertpos} {r:rest}"
+    emit="@{_} core.request action=doc.newBlank arg.kind={k} arg.pos={pos} arg.ref=\"{r}\""
+    kind=request
+    priority=14
+    example="Insert a new line after the title."
+    example="Add a new paragraph under chapter 2."
+    example="Put a blank line before the second paragraph."
+
+@pat.docs.editor.ed.pagebreak core.pattern
+    canonical="Insert a page break."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u|$lang.doc.wish]? [$lang.doc.start]? [a|another|one_more]? [new|next]? [page_break|page_split|page_divider] [here|please|pls|plz]?"
+    emit="@{_} core.request action=doc.pageBreak"
+    kind=request
+    priority=13
+    example="Insert a page break."
+
+@pat.docs.editor.ed.pagebreak.at core.pattern
+    canonical="Insert a page break after chapter 1."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [$lang.doc.start] [a|another|one_more]? [new|next]? [page_break|page_split|page_divider|new_page] [right]? {pos:lex.docs.editor.insertpos} {r:rest}"
+    emit="@{_} core.request action=doc.pageBreak arg.pos={pos} arg.ref=\"{r}\""
+    kind=request
+    priority=14
+    example="Insert a page break after chapter 1."
+    example="Add a page break before the second paragraph."
+
+@pat.docs.editor.ed.newpage core.pattern
+    canonical="Start a new page."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [$lang.doc.start]? [a|another|one_more]? new page [here|please|pls|plz]?"
+    emit="@{_} core.request action=doc.pageBreak"
+    kind=request
+    priority=13
+    example="Start a new page."
+    example="Insert a new page."
+
+@pat.docs.editor.ed.chapter.title core.pattern
+    canonical="Start a new chapter called The Forest."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u|$lang.doc.wish]? [$lang.doc.start] [a|another|one_more|the]? [$lang.doc.fresh]? {role:lex.docs.editor.headroles} [$lang.doc.titled]? {t:rest}"
+    emit="@{_} core.request action=doc.addHeading arg.role={role} arg.text=\"{t}\""
+    kind=request
+    priority=13
+    example="Start a new chapter called The Forest."
+    example="Add a new section named Plans."
+    example="Add a subheading Details."
+
+@pat.docs.editor.ed.chapter.new core.pattern
+    canonical="Add a new chapter called The Forest."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u|$lang.doc.wish]? [a|another|one_more]? [$lang.doc.fresh] {role:lex.docs.editor.headroles} [$lang.doc.titled]? {t:rest}"
+    emit="@{_} core.request action=doc.addHeading arg.role={role} arg.text=\"{t}\""
+    kind=request
+    priority=13
+    example="New chapter The Forest."
+    example="Next chapter: The Witch."
+
+@pat.docs.editor.ed.chapter.num core.pattern
+    canonical="Start chapter 3: The Forest."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u|$lang.doc.wish]? [start|begin|add|insert|create|make|write|open|put_in] [a|the]? {role:lex.docs.editor.headroles} {n:number} [$lang.doc.titled]? {t:rest}"
+    emit="@{_} core.request action=doc.addHeading arg.role={role} arg.text=\"{n} {t}\""
+    kind=request
+    priority=13
+    example="Start chapter 3: The Forest."
+    example="Start chapter 4 The Return."
+
+@pat.docs.editor.ed.chapter.num.bare core.pattern
+    match="[$docs.editor.g21_can_u|$lang.doc.wish]? chapter {n:number} [$lang.doc.titled]? {t:rest}"
+    emit="@{_} core.request action=doc.addHeading arg.role=chapter arg.text=\"{n} {t}\""
+    kind=request
+    priority=9
+    example="Chapter 3: The Return."
+
+@pat.docs.editor.ed.chapter.bare core.pattern
+    canonical="Start a new chapter."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u|$lang.doc.wish]? [$lang.doc.start] [a|another|one_more|the]? [$lang.doc.fresh]? {role:lex.docs.editor.headroles} [here|please|pls|plz]?"
+    emit="@{_} core.request action=doc.addHeading arg.role={role} arg.text=\"\""
+    kind=request
+    priority=13
+    example="Start a new chapter."
+    example="Add a subheading."
+
+@pat.docs.editor.ed.chapter.new.bare core.pattern
+    canonical="Add a new chapter."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u|$lang.doc.wish]? [a|another|one_more]? [$lang.doc.fresh] {role:lex.docs.editor.headroles} [here|please|pls|plz]?"
+    emit="@{_} core.request action=doc.addHeading arg.role={role} arg.text=\"\""
+    kind=request
+    priority=13
+    example="New chapter."
+    example="Next section."
+
+@pat.docs.editor.ed.write core.pattern
+    canonical="Write once upon a time there was a fox."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u|$lang.doc.wish]? [$lang.doc.write] [the_text|the_following|this|that|down]? {t:rest(quotes)}"
+    emit="@{_} core.request action=doc.write arg.text=\"{t}\""
+    kind=request
+    priority=7
+    example="Write once upon a time there was a fox."
+    example="Type the fox lived in a forest."
+
+@pat.docs.editor.ed.writetext core.pattern
+    canonical="Add the text the fox was hungry."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [$lang.doc.writetext] {t:rest(quotes)}"
+    emit="@{_} core.request action=doc.write arg.text=\"{t}\""
+    kind=request
+    priority=12
+    example="Add the text the fox was hungry."
+
+@pat.docs.editor.ed.continue core.pattern
+    canonical="Continue with and then it rained."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [$lang.doc.continue] {t:rest(quotes)}"
+    emit="@{_} core.request action=doc.write arg.mode=continue arg.text=\"{t}\""
+    kind=request
+    priority=12
+    example="Continue with it started to rain."
+
+@pat.docs.editor.ed.item core.pattern
+    canonical="Add a bullet: milk."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [$lang.doc.start]? [a|another|one_more]? [new]? [bullet|bullet_point|list_item|point] {t:rest(quotes)}"
+    emit="@{_} core.request action=doc.addItem arg.text=\"{t}\""
+    kind=request
+    priority=12
+    example="Add a bullet: milk."
+    example="New bullet point eggs."
+
+@pat.docs.editor.ed.item.num core.pattern
+    canonical="Add a numbered item: wash the dishes."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [$lang.doc.start]? [a|another|one_more]? [new]? {st:lex.docs.editor.itemstyles} [item|point|step|entry] {t:rest(quotes)}"
+    emit="@{_} core.request action=doc.addItem arg.style={st} arg.text=\"{t}\""
+    kind=request
+    priority=12
+    example="Add a numbered item: wash the dishes."
+
+@pat.docs.editor.ed.newline.another core.pattern
+    canonical="Start another paragraph."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u|$lang.doc.wish]? [$lang.doc.start] [another|one_more] {k:lex.docs.editor.blanks} [here|please|pls|plz]?"
+    emit="@{_} core.request action=doc.newBlank arg.kind={k}"
+    kind=request
+    priority=13
+    example="Start another paragraph."
+
+@pat.docs.editor.ed.newline.after core.pattern
+    canonical="Add a blank line after the title."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u|$lang.doc.wish]? [a|an|another|one_more]? [$lang.doc.fresh] {k:lex.docs.editor.blanks} [right]? {pos:lex.docs.editor.insertpos} {r:rest}"
+    emit="@{_} core.request action=doc.newBlank arg.kind={k} arg.pos={pos} arg.ref=\"{r}\""
+    kind=request
+    priority=14
+    example="Add a blank line after the title."
+    example="New line after the title."
+
+@pat.docs.editor.ed.continue.bare core.pattern
+    canonical="Continue and then it started to rain."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? continue {t:rest(quotes)}"
+    emit="@{_} core.request action=doc.write arg.mode=continue arg.text=\"{t}\""
+    kind=request
+    priority=8
+    example="Continue and then it started to rain."
+
+@pat.docs.editor.ed.read.chapter core.pattern
+    canonical="Read me chapter 2."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [$lang.doc.hear] [me|out|aloud|out_loud]? [the]? {kind:lex.docs.editor.chapterkinds} {n:number} [aloud|out_loud|to_me|out]?"
+    emit="@{_} core.request action=doc.read arg.kind={kind} arg.n={n}"
+    kind=request
+    priority=13
+    example="Read me chapter 2."
+    example="Read chapter 2 aloud."
+    example="I want to hear chapter 2."
+
+@pat.docs.editor.ed.read.chapter.ord core.pattern
+    canonical="Read out loud the second chapter."
+    match="[$lang.lead.filler|pls|plz]? [$docs.editor.g21_can_u]? [$lang.doc.hear] [me|out|aloud|out_loud]? [the]? {ord:lex.docs.editor.ordinals} {kind:lex.docs.editor.chapterkinds} [aloud|out_loud|to_me|out]?"
+    emit="@{_} core.request action=doc.read arg.kind={kind} arg.ord={ord}"
+    kind=request
+    priority=13
+    example="Read out loud the second chapter."
+    example="Read me the last chapter."
