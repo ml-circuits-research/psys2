@@ -107,6 +107,38 @@ Small task, do it with HANG + STOP:
 - Write `SPDX-License-Identifier: AGPL-3.0-only` in the header of the files you touch. Do not rewrite every file just for this.
 - From now on, vendored libraries must be compatible with AGPL-3.0 (AGENTS.md lists the accepted licences).
 
+### SET — Settings as a full-screen modal with one tab per topic (user, 14:53 local)
+
+Today the settings open as one long panel with everything mixed (app.mjs `renderSettings`). Make them a **full-screen modal dialog**:
+- a header with the title "Settings" and an **× close button on the right**;
+- **a row of tabs, one per topic**; horizontally scrollable on a phone;
+- closes with ×, Esc and the phone's back button (push a history state while open);
+- keeps focus inside while open and returns it to the gear button on close (`role="dialog"`, `aria-modal`, tabs with `role="tablist"`);
+- remembers the last tab;
+- supports deep links (`#settings/voice`);
+- changes apply at once, as now.
+
+Tabs (move every existing control; drop nothing):
+1. **Understanding** — formalizer; accept refused parses; spellcheck; fast path; partial understanding; best effort with loose words.
+2. **Language** — language; translation; language detection.
+3. **Voice** — speech language; voice; speech rate; hands-free mode; read answers aloud.
+4. **Phrase log** — keep a log; include button presses; filter; the list; export JSONL; copy as text; clear.
+5. **Models** — the status of the dispatcher and the normalizer (version, size, loaded / not loaded / loads when needed; see decision (f)); a button to load or remove them; the cache size.
+6. **Developer** — show the trace of every answer; the per-stage timing overlay; build info.
+7. **About** — version and build; licence AGPL-3.0 with the source link (task LIC); credits of the vendored libraries and models with their licences (from the vendor `LICENSES.md` files).
+
+Voice and text commands (ui.shell):
+- "open settings", "open the voice settings", "show the phrase log" open the modal on the right tab;
+- "close settings" closes it.
+
+Tests (headless, 390×844 and 1280×800):
+- open and close with ×, Esc and back;
+- every tab renders its controls;
+- every setting still saves and takes effect;
+- deep link;
+- 0 console errors;
+- screenshots of each tab for the reviewer.
+
 ### DIAG — a Diagram world and tab, imported from diagram-vss-demo (user, 13:40 local)
 
 The user wants a world and a tab for drawing diagrams, built from everything reusable in
@@ -154,12 +186,13 @@ The reviewer copied what is reusable into **`imports/diagram-vss-demo/`** (stagi
 **Licence:** settled. The project is now AGPL-3.0-only, the same as the source (user decision 14:10); keep the copied files' provenance headers.
 
 **Order from now on:**
-1. HANG + STOP
-2. RD10 together with RD1b and RD2 (they share the mechanism)
-3. DIAG
-4. RD5, RD9
-5. PERF round 3
-6. SURPRISE, AV, ASTRA
+1. HANG + STOP (with LIC)
+2. SET (settings modal with tabs)
+3. RD10 together with RD1b and RD2 (they share the mechanism)
+4. DIAG
+5. RD5, RD9
+6. PERF round 3
+7. SURPRISE, AV, ASTRA
 
 ### Final review of "READY FOR REVIEW" (744c3d5) — reviewer, 2026-11-09 09:20 UTC.
 
