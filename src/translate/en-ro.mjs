@@ -5,6 +5,8 @@ import * as M from './morphology.ro.mjs';
 import * as L from './lexicon.ro-en.mjs';
 import * as E from './inflect.en.mjs';
 import { placeRo, MULTIWORD_EN } from './places.ro-en.mjs';
+import { translateReplySentence } from './replies.en-ro.mjs';
+import { CANONICAL_RO } from './canonical.en-ro.mjs';
 
 // ------------------------------------------------------------------ reverse lexicon
 
@@ -818,7 +820,7 @@ function mergePlaces(toks) {
   return out;
 }
 
-export function translateEnRo(original) {
+function translateEnRoGrammar(original) {
   const source = String(original ?? '');
   const toks = mergePlaces(tokenize(source));
   const sents = splitSentences(toks);
@@ -882,4 +884,45 @@ function editDistLe(a, b, max) {
     prev = cur;
   }
   return prev[n] <= max;
+}
+
+/** Split a reply into sentences (quote aware: a full stop inside "..." does not end the sentence). */
+function splitReply(text) {
+  const out = [];
+  let cur = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    cur += ch;
+    if (ch === '"') q = !q;
+    if (!q && /[.!?]/.test(ch) && (i + 1 === text.length || /\s/.test(text[i + 1])) && !/^\d+\.$/.test(cur.trim())) { out.push(cur); cur = ''; }
+  }
+  if (cur) out.push(cur);
+  return out;
+}
+
+/**
+ * English -> Romanian: canonical examples (authored Romanian), then the reply phrase table sentence by sentence, then the grammar.
+ * Sentences the table does not know go to the grammar; the caller keeps the whole reply in English if any piece fails (RD5).
+ */
+export function translateEnRo(original) {
+  const source = String(original ?? '');
+  const t = source.trim();
+  if (CANONICAL_RO[t]) return { text: source.replace(t, CANONICAL_RO[t]), alignment: [], unknown: [], notes: ['canonical example'], confidence: 1 };
+  const sentences = splitReply(source);
+  if (sentences.length <= 1 && !sentences.some((x) => translateReplySentence(x, () => null))) return translateEnRoGrammar(source);
+  const sub = (x) => { const r = translateEnRoGrammar(x.replace(/^(.)/, (c, a) => (/[A-Z]/.test(a) ? a.toLowerCase() : a))); return r.text && !r.unknown.length && !r.untranslatable?.length ? r.text.replace(/[.!?]$/, '') : null; };
+  const unknown = [], notes = [];
+  let text = '';
+  for (const sen of sentences) {
+    const lead = /^\s*/.exec(sen)[0], trail = /\s*$/.exec(sen)[0];
+    const core = sen.trim();
+    let ro = core ? (CANONICAL_RO[core] ?? translateReplySentence(core, sub)) : '';
+    if (ro == null) {
+      const r = translateEnRoGrammar(core);
+      unknown.push(...r.unknown); notes.push(...r.notes);
+      ro = r.text;
+    }
+    text += lead + ro + trail;
+  }
+  return { text, alignment: [], unknown, notes, confidence: unknown.length ? 0.5 : 1 };
 }
