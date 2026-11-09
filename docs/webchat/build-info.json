@@ -124,7 +124,7 @@
     "worlds/games.tictactoe/ops.mjs": "1f598055dba19156",
     "worlds/geo.map/datagen.mjs": "7bdabe28b74dfa9e",
     "worlds/geo.map/ops.mjs": "551366a4f0a969fb",
-    "worlds/index.json": "6acc514352a9f8f3",
+    "worlds/index.json": "8f814acf86b678ae",
     "worlds/kids.animals/datagen.mjs": "6ad9f00ea4316ed7",
     "worlds/kids.animals/ops.mjs": "644e845de473918a",
     "worlds/kids.arith/datagen.mjs": "eaddc6e69e6c0b20",
@@ -147,13 +147,13 @@
     "worlds/ui.avatar/datagen.mjs": "7b6d8141609ea71b",
     "worlds/ui.avatar/ops.mjs": "f39c0b3c63b48852",
     "worlds/ui.help/datagen.mjs": "2a566dd11e1a621a",
-    "worlds/ui.help/ops.mjs": "539e8a954202f283",
+    "worlds/ui.help/ops.mjs": "c97a1215af75e1cf",
     "worlds/ui.shell/datagen.mjs": "ed03fcd2c4012de6",
-    "worlds/ui.shell/ops.mjs": "41fb8a42f31b821f",
+    "worlds/ui.shell/ops.mjs": "78ddc6f080baff88",
     "worlds/user.profile/cv.mjs": "a1aa32d0f33cffe1",
     "worlds/user.profile/datagen.mjs": "b5072a56e9ba2dd9",
     "worlds/user.profile/ops.mjs": "58e16e9e2fe9f5f2",
     "worlds/user.profile/understand.mjs": "a971dcc2294fd749"
   },
-  "builtAt": "2026-11-09T15:11:43.722Z"
+  "builtAt": "2026-11-09T15:13:38.552Z"
 }
