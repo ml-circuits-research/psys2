@@ -96,7 +96,7 @@ The safe S1 edit head (`scripts/build-edit-tags.mjs`: DELETE, normalizing R:, fu
 
 The S1 target "misled at most a quarter of recovered" is not met (7 misled against 3 recovered). The safe head halves the changed sentences and the rewrites that break the rules on the held-out set (147 to 77-88), but recovery stays at 3 because the rules now read almost everything. The head does not raise wrong answers; the value checker and the lexicographic preference stay the safety net, and the head ships inside the model (there is no separate switch in the exported model).
 
-## 5. Performance (PERF round 2 in progress)
+## 5. Performance
 
 PERF round 1 (worker-log "PERF", headless Chromium 390x844, 4x CPU throttle, median of 3 runs, `node scripts/perf-webchat.mjs --runs 3`, host loaded, single numbers vary about 2x). Fixes: seed once per context and fork the session instead of replaying six messages per candidate; fast path for single clauses read completely by the rules (model skipped); warm-up after first paint; sample document analysed once.
 
@@ -106,7 +106,17 @@ PERF round 1 (worker-log "PERF", headless Chromium 390x844, 4x CPU throttle, med
 | encoder | before / after | 5593 / 3751 | 5698 / 410 | 26858 / 2510 |
 | encoder+n1 | before / after | 4364 / 3124 | 3650 / 485 | 8472 / 1871 |
 
-Reviewer re-measure at d7fe3f0 (worker-tasks.md, PERF entry, commit 538fc52): page ready 33.6 s (worse), hello 504 ms, 3 plus 4 203 ms, multi-command 3.96 s (worse), eyes square 202 ms, paris 637 ms, hello 154 ms. The gap between the worker's measurement (page ready about 3-4 s) and the reviewer's (33.6 s) is not explained in the files; PERF round 2 is open, so these numbers are not final. Not done in round 1: build-time compiled patterns and multi-thread WASM. Node-side latency of the shipped pipeline is in section 1.
+Reviewer re-measure at d7fe3f0 (worker-tasks.md, PERF entry, commit 538fc52): page ready 33.6 s (worse), hello 504 ms, 3 plus 4 203 ms, multi-command 3.96 s (worse), eyes square 202 ms, paris 637 ms, hello 154 ms. The gap between the worker's measurement (page ready about 3-4 s) and the reviewer's (33.6 s) is not explained in the files; PERF round 2 (below) addresses it. Not done in round 1: build-time compiled patterns and multi-thread WASM. Node-side latency of the shipped pipeline is in section 1.
+
+PERF round 2 (worker-log "PERF round 2", commit 57b28bf; same script, now with `--net none|fast4g|slow4g`, `--cache cold|warm`, `--http h2|h1`; median of 3, 4x CPU, localhost, h2, cold cache). The reviewer's 33.6 s was not reproduced (quiet host: ready 1.8 s); the likely match is *model ready* (8.5 s quiet, ORT on the main thread, scales to about 30 s on a loaded host). Definitions printed by the script: `ready` = session exists and the hint is shown; `first answer` = "hello" sent at ready until answered; `model ready` = status line shows the dispatcher version; per message = Enter to answer, after model ready. Fixes: modulepreload + early fetch of worlds/index.json and model metas; ORT in its own worker (`proxy=true`); multi-clause fast path (accepted only when the model's cut, the per-piece top world and the rules agree and the interpreter accepts; 0 reading diffs); sliced pattern precompile.
+
+| mode | build | ready ms | first answer ms | model ready ms | p50 ms | p95 ms | multi-command ms |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| rules | before / after | 1828 / 1723 | 214 / 794 | n/a | 135 / 90 | 226 / 240 | 135 / 147 |
+| encoder | before / after | 1840 / 1722 | 206 / 740 | 8543 / 4758 | 82 / 97 | 1605 / 327 | 1605 / 327 |
+| encoder+n1 | before / after | 1830 / 1634 | 231 / 732 | 8562 / 4554 | 96 / 130 | 1676 / 789 | 1676 / 789 |
+
+Fast 4G, cold: rules usable 14.5 s -> 3.8 s; encoder model ready 94.5 s -> 81.2 s (64 MB dispatcher + about 95 MB normalizer download; rules answer meanwhile). Evals unchanged (operational encoder+n1 98.6 / 0.4, 0 diffs; long 94.2 / 1.9). Open: model download size on slow links.
 
 ## 6. Sizes
 

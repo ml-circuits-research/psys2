@@ -937,3 +937,18 @@ Localhost, warm cache (`--cache warm --http h1`): encoder model ready 7036 -> 39
 Fast 4G (9 Mbit/s, 170 ms), h2, cold: rules ready 12903 -> 3591, first answer 1638 -> 219 (usable 14.5 s -> 3.8 s). encoder model ready 94.5 s -> 81.2 s (single run; 64 MB at 9 Mbit/s is about 57 s, the normalizer another ~95 MB: a size limit, rules answer meanwhile; models are cached by sha256 afterwards).
 
 - **Targets.** Page usable <= 5 s: met (1.7 s localhost, 3.8 s on Fast 4G h2); models in the background: yes, and no longer blocking; first answer <= 1.5 s after ready: met (0.2-0.8 s); typical message p50 <= 300 ms, p95 <= 800 ms: met in every mode; multi-command <= 800 ms: met (0.3 s encoder, 0.8 s encoder+n1 right at the limit, while the normalizer starts). Not done: model download size (160 MB total) on slow links, precompiled patterns at build time (page ready is not limited by them any more), the host-load sensitivity of the model (a loaded machine still slows ORT proportionally).
+
+
+## READY FOR REVIEW (2026-11-09) — batch complete
+Full state with sources: `training/RESULTS.md`.
+
+| set | mode | v3 (19dd054b) | v4 shipped (6c41eb24) |
+| --- | --- | --- | --- |
+| main 1240 (right / wrong %) | encoder+n1 | 98.4 / 0.6 | 98.6 / 0.4 |
+| long 154 (right / wrong %) | encoder+n1 | 94.2 / 1.9 | 94.2 / 1.9 |
+| dialogues 408 (turns % / dialogues %) | encoder+n1 | 95.5 / 86.3 | 95.5 / 86.3 |
+| Romanian 2480 (right / wrong %) | encoder+n1 | 84.8 / 2.7 | 84.7 / 2.7 |
+
+Rules only (no model): main 95.4 / 0.5; dialogues 96.6 / 87.7. Long-bucket final .160 to .185, duplicates 192 to 118, omissions 37 to 58. S1 edit head: 3 recovered / 7 misled / 1 broken (target not met). Sizes: patterns.sop 2.99 MB (target 2 MB), webchat index.json 4.51 MB (target 2.5 MB), both missed. PERF round 2 (57b28bf): reviewer's 33.6 s not reproduced (likely model ready with ORT on the main thread); now ready 1.7 s, model ready 4.6 s, multi-command 0.33 s (encoder) / 0.79 s (encoder+n1) at 4x CPU; command `node scripts/perf-webchat.mjs --runs 3` (add `--net fast4g`).
+
+Tasks completed in the batch (from headings): R3 (dispatcher v3 trained, then published by user decision; N1 v3), R4 (dispatcher v4 published), L0-L4, L6, L7 (all 21 worlds), L8, L9 (measured and rejected), L10, D-FIX, dialogue audit, PERF rounds 1 and 2, BEST-EFFORT, G6b, G7 long messages, RD1-RD8, RO-1..RO-5 and L-RO (Romanian), D5 learning loop, S1 safe edit head.
