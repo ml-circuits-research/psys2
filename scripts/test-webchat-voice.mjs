@@ -110,7 +110,7 @@ export const SCENARIOS = {
       await idle(c);
       check('phrase log: final', (await lastPhrase(c))?.endType === 'final');
       // a hands-free timer send followed by the browser's own final: one message
-      await c.pg.evaluate(() => document.querySelector('button[aria-label="Hands-free mode"]').click());
+      await c.pg.evaluate(() => { document.querySelector('button[aria-label="Settings"]').click(); document.getElementById('p2-st-voice').click(); [...document.querySelectorAll('.p2-modal-body label')].find((l) => /Hands-free/.test(l.textContent)).querySelector('input').click(); document.querySelector('.p2-modal-close').click(); });
       await waitRec(c);
       const n2 = await users(c);
       await say(c, ['make a tree']);
@@ -161,7 +161,7 @@ export const SCENARIOS = {
   async lang(o) {
     const c = await open(o, { language: 'auto', speechLang: 'auto' });
     try {
-      await c.pg.evaluate(() => document.querySelector('button[aria-label="Hands-free mode"]').click());
+      await c.pg.evaluate(() => { document.querySelector('button[aria-label="Settings"]').click(); document.getElementById('p2-st-voice').click(); [...document.querySelectorAll('.p2-modal-body label')].find((l) => /Hands-free/.test(l.textContent)).querySelector('input').click(); document.querySelector('.p2-modal-close').click(); });
       await waitRec(c);
       check('speech language starts as en-US', (await c.pg.evaluate(() => window.__sr.live().lang)) === 'en-US');
       const n = await users(c);
