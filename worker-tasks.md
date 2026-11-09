@@ -1537,3 +1537,10 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
   - **Open:** HANG2 (still reproduced at c0c4cf8), DIAG2, and the ASTRA review (next check-in).
 
 - HANG2 (22bb758) + time limits (cbdca37): the ORT worker has its own deadlines, cancel and restart, and rules mode makes no model calls. Real Chrome at 1×: the user's session answers every line in 1–3 s ("get me to New Youk" → New York City), with no watchdog endings in rules mode. The remaining 8 s endings are stage `translate` → HANG3.
+- RP3 item 9, the profile interview (c94b8de, files match the log). CLI replay of the user's interview:
+  - "Axiologic" → organisation, and the field question is asked again;
+  - "R&D" → field research and development;
+  - "Reading" → hobby;
+  - after "stop", the misspelled "coming back to knowning me…" resumes with the next question;
+  - the summary is right.
+  Small open point: the bare "20" answering "How did you get into it?" is not taken as years; the next question asks for years again.
