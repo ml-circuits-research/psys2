@@ -54,6 +54,7 @@
     "lib/dialog/meta.mjs": "3f42a3f2e5d70d71",
     "lib/dialog/normalizer-runtime.mjs": "55aef6e847b477c6",
     "lib/dialog/runtime-config.mjs": "0f2c990dffd716e7",
+    "lib/dialog/surprise.mjs": "b858f1d88d2ccb7c",
     "lib/dialog/test-runner.mjs": "3338d6d08f4f428f",
     "lib/dialog/time-limits.mjs": "26196b34f7a8bd2f",
     "lib/dialog/value-check.mjs": "36dcb282b4e9c9f6",
@@ -66,7 +67,7 @@
     "lib/formalizer/ort-client.mjs": "fa2ed5802d83192c",
     "lib/formalizer/partial.mjs": "b3cf5c711de51d7f",
     "lib/formalizer/perf.mjs": "14cfd18d063073ef",
-    "lib/formalizer/routing.mjs": "fdde3d1b06657e13",
+    "lib/formalizer/routing.mjs": "fda6e7128bdbe21d",
     "lib/formalizer/rules/emit.mjs": "2064473c6009603c",
     "lib/formalizer/rules/expand.mjs": "2cc7d6d796f1d3cb",
     "lib/formalizer/rules/index.mjs": "60c27f3c2c2bb591",
@@ -99,7 +100,7 @@
     "lib/translate/places.ro-en.mjs": "94650384878ada19",
     "lib/translate/replies.en-ro.mjs": "c40a41d2150ba691",
     "lib/translate/ro-en.mjs": "28201057d5325184",
-    "lib/worlds/canonical.mjs": "af52a3eb9bd5d16b",
+    "lib/worlds/canonical.mjs": "331dd143a11d8880",
     "lib/worlds/index.mjs": "c975471e7f8cd8dc",
     "lib/worlds/lexicon.mjs": "6b1220d04c142850",
     "lib/worlds/validate.mjs": "225e7076c82410b5",
@@ -133,7 +134,7 @@
     "worlds/games.tictactoe/ops.mjs": "1f598055dba19156",
     "worlds/geo.map/datagen.mjs": "7bdabe28b74dfa9e",
     "worlds/geo.map/ops.mjs": "551366a4f0a969fb",
-    "worlds/index.json": "924b955a690ee9e8",
+    "worlds/index.json": "9537740644d7733a",
     "worlds/kids.animals/datagen.mjs": "6ad9f00ea4316ed7",
     "worlds/kids.animals/ops.mjs": "644e845de473918a",
     "worlds/kids.arith/datagen.mjs": "eaddc6e69e6c0b20",
@@ -156,7 +157,7 @@
     "worlds/ui.avatar/datagen.mjs": "7b6d8141609ea71b",
     "worlds/ui.avatar/ops.mjs": "f39c0b3c63b48852",
     "worlds/ui.help/datagen.mjs": "2a566dd11e1a621a",
-    "worlds/ui.help/ops.mjs": "c97a1215af75e1cf",
+    "worlds/ui.help/ops.mjs": "6958216627e3d23e",
     "worlds/ui.shell/datagen.mjs": "ed03fcd2c4012de6",
     "worlds/ui.shell/ops.mjs": "78ddc6f080baff88",
     "worlds/user.profile/cv.mjs": "a1aa32d0f33cffe1",
@@ -164,5 +165,5 @@
     "worlds/user.profile/ops.mjs": "8385add167932b48",
     "worlds/user.profile/understand.mjs": "5782a91a5bd8e949"
   },
-  "builtAt": "2026-11-09T17:23:17.840Z"
+  "builtAt": "2026-11-09T17:55:32.051Z"
 }
