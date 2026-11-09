@@ -1,0 +1,100 @@
+{"id": "th-0501", "names": ["Oven"], "text": "take a small red circle named Timer and put it above the Oven", "wire": {"type": "command", "args": {"action": "create", "shape": "circle", "color": "red", "size": "small", "name": "Timer", "position": "above", "anchor": "Oven"}}}
+{"id": "th-0502", "names": [], "text": "I wonder if you could add a huge yellow square labeled 'Preheat' at the top", "wire": {"type": "command", "args": {"action": "create", "shape": "square", "color": "yellow", "size": "huge", "label": "Preheat", "position": "top"}}}
+{"id": "th-0503", "names": ["Dough"], "text": "would you mind adding four gray stars around the Dough", "wire": {"type": "command", "args": {"action": "create", "shape": "star", "color": "gray", "count": "4", "position": "near", "anchor": "Dough"}}}
+{"id": "th-0504", "names": [], "text": "plop a navy box in the middle called Pan", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "color": "navy", "name": "Pan", "position": "center"}}}
+{"id": "th-0505", "names": ["Sauce"], "text": "a tiny orange diamond named Garlic right beside Sauce", "wire": {"type": "command", "args": {"action": "create", "shape": "diamond", "color": "orange", "size": "tiny", "name": "Garlic", "position": "near", "anchor": "Sauce"}}}
+{"id": "th-0506", "names": [], "text": "new white hexagon at the bottomLeft", "wire": {"type": "command", "args": {"action": "create", "shape": "hexagon", "color": "white", "position": "bottomLeft"}}}
+{"id": "th-0507", "names": ["Cool", "Serve"], "text": "shove a green oval between Cool and Serve", "wire": {"type": "command", "args": {"action": "create", "shape": "ellipse", "color": "green", "position": "between", "anchor": "Cool,Serve"}}}
+{"id": "th-0508", "names": [], "text": "add a box with the words 'Done!' in the top right", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "label": "Done!", "position": "topRight"}}}
+{"id": "th-0509", "names": ["Mix"], "text": "dash off 2 blue triangles below Mix", "wire": {"type": "command", "args": {"action": "create", "shape": "triangle", "color": "blue", "count": "2", "position": "below", "anchor": "Mix"}}}
+{"id": "th-0510", "names": [], "text": "a large magenta star called Fork somewhere on the left", "wire": {"type": "command", "args": {"action": "create", "shape": "star", "color": "magenta", "size": "large", "name": "Fork", "position": "left"}}}
+{"id": "th-0511", "names": ["Oven"], "text": "put a medium teal rectangle named Rack above Oven", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "color": "teal", "size": "medium", "name": "Rack", "position": "above", "anchor": "Oven"}}}
+{"id": "th-0512", "names": [], "text": "make a black circle at the bottom", "wire": {"type": "command", "args": {"action": "create", "shape": "circle", "color": "black", "position": "bottom"}}}
+{"id": "th-0513", "names": ["Dough"], "text": "make Dough brown", "wire": {"type": "command", "args": {"action": "set", "target": "Dough", "color": "brown"}}}
+{"id": "th-0514", "names": ["Oven"], "text": "Oven should be a square", "wire": {"type": "command", "args": {"action": "set", "target": "Oven", "shape": "square"}}}
+{"id": "th-0515", "names": ["Sauce"], "text": "turn Sauce green", "wire": {"type": "command", "args": {"action": "set", "target": "Sauce", "color": "green"}}}
+{"id": "th-0516", "names": ["Serve"], "text": "serve goes huge", "wire": {"type": "command", "args": {"action": "set", "target": "Serve", "size": "huge"}}}
+{"id": "th-0517", "names": ["Mix"], "text": "Mix can be a hexagon", "wire": {"type": "command", "args": {"action": "set", "target": "Mix", "shape": "hexagon"}}}
+{"id": "th-0518", "names": ["Cool"], "text": "cool is tiny now", "wire": {"type": "command", "args": {"action": "set", "target": "Cool", "size": "tiny"}}}
+{"id": "th-0519", "names": ["Timer"], "text": "color the Timer white", "wire": {"type": "command", "args": {"action": "set", "target": "Timer", "color": "white"}}}
+{"id": "th-0520", "names": ["Rack"], "text": "make it gray", "wire": {"type": "command", "args": {"action": "set", "target": "Rack", "color": "gray"}}}
+{"id": "th-0521", "names": [], "text": "make the circles that aren't black red", "wire": {"type": "command", "args": {"action": "set", "target": "mention(notcolor=black,quantifier=all,shape=circle)", "color": "red"}}}
+{"id": "th-0522", "names": ["Dough", "Oven", "Mix"], "text": "wire Dough, Oven and Mix together in a chain", "wire": {"type": "command", "args": {"action": "connect", "from": "Dough,Oven,Mix", "to": "Dough,Oven,Mix", "pairing": "chain"}}}
+{"id": "th-0523", "names": ["Oven", "Rack"], "text": "a dashed link from Oven to Rack", "wire": {"type": "command", "args": {"action": "connect", "from": "Oven", "to": "Rack", "style": "dashed"}}}
+{"id": "th-0524", "names": ["Mix", "Dough"], "text": "connect Mix and Dough both ways", "wire": {"type": "command", "args": {"action": "connect", "from": "Mix", "to": "Dough", "arrow": "both"}}}
+{"id": "th-0525", "names": ["Sauce", "Dough", "Oven"], "text": "string Sauce, Dough and Oven together in a chain", "wire": {"type": "command", "args": {"action": "connect", "from": "Sauce,Dough,Oven", "to": "Sauce,Dough,Oven", "pairing": "chain"}}}
+{"id": "th-0526", "names": ["Cool", "Serve", "Timer"], "text": "tie each of Cool, Serve and Timer to the next one", "wire": {"type": "command", "args": {"action": "connect", "from": "Cool,Serve,Timer", "to": "Cool,Serve,Timer", "pairing": "next"}}}
+{"id": "th-0527", "names": ["Timer"], "text": "move Timer 35 pixels right", "wire": {"type": "command", "args": {"action": "move", "target": "Timer", "direction": "right", "distance": "35"}}}
+{"id": "th-0528", "names": ["Pan", "Oven"], "text": "Pan goes left of Oven", "wire": {"type": "command", "args": {"action": "move", "target": "Pan", "position": "leftOf", "anchor": "Oven"}}}
+{"id": "th-0529", "names": ["Garlic"], "text": "drag Garlic down a bit", "wire": {"type": "command", "args": {"action": "move", "target": "Garlic", "direction": "down"}}}
+{"id": "th-0530", "names": ["Rack"], "text": "move Rack to the top", "wire": {"type": "command", "args": {"action": "move", "target": "Rack", "position": "top"}}}
+{"id": "th-0531", "names": ["Serve", "Cool"], "text": "put Serve right of Cool", "wire": {"type": "command", "args": {"action": "move", "target": "Serve", "position": "rightOf", "anchor": "Cool"}}}
+{"id": "th-0532", "names": ["Mix"], "text": "lift Mix 12 px up", "wire": {"type": "command", "args": {"action": "move", "target": "Mix", "direction": "up", "distance": "12"}}}
+{"id": "th-0533", "names": ["Sauce", "Dough", "Oven"], "text": "slot Sauce in between Dough and Oven", "wire": {"type": "command", "args": {"action": "move", "target": "Sauce", "position": "between", "anchor": "Dough,Oven"}}}
+{"id": "th-0534", "names": ["Timer"], "text": "take out Timer", "wire": {"type": "command", "args": {"action": "delete", "target": "Timer"}}}
+{"id": "th-0535", "names": [], "text": "delete the diamonds that aren't green", "wire": {"type": "command", "args": {"action": "delete", "target": "mention(notcolor=green,quantifier=all,shape=diamond)"}}}
+{"id": "th-0536", "names": ["Pan"], "text": "erase Pan", "wire": {"type": "command", "args": {"action": "delete", "target": "Pan"}}}
+{"id": "th-0537", "names": ["Dough"], "text": "can you make the Dough larger", "wire": {"type": "command", "args": {"action": "resize", "target": "Dough"}}}
+{"id": "th-0538", "names": ["Cool"], "text": "shrink Cool down", "wire": {"type": "command", "args": {"action": "resize", "target": "Cool"}}}
+{"id": "th-0539", "names": ["Mix"], "text": "rename Mix to Whisk", "wire": {"type": "command", "args": {"action": "rename", "target": "Mix", "name": "Whisk"}}}
+{"id": "th-0540", "names": ["Oven"], "text": "call Oven Stove instead", "wire": {"type": "command", "args": {"action": "rename", "target": "Oven", "name": "Stove"}}}
+{"id": "th-0541", "names": ["Sauce"], "text": "put the label 'Tomato base' on Sauce", "wire": {"type": "command", "args": {"action": "label", "target": "Sauce", "label": "Tomato base"}}}
+{"id": "th-0542", "names": ["Serve"], "text": "write 'Plate' on Serve", "wire": {"type": "command", "args": {"action": "label", "target": "Serve", "label": "Plate"}}}
+{"id": "th-0543", "names": ["Garlic"], "text": "copy Garlic", "wire": {"type": "command", "args": {"action": "duplicate", "target": "Garlic"}}}
+{"id": "th-0544", "names": ["Rack"], "text": "give me five copies of Rack", "wire": {"type": "command", "args": {"action": "duplicate", "target": "Rack", "count": "5"}}}
+{"id": "th-0545", "names": ["Timer", "Pan"], "text": "swap Timer and Pan", "wire": {"type": "command", "args": {"action": "swap", "target": "Timer,Pan"}}}
+{"id": "th-0546", "names": ["Dough", "Mix"], "text": "switch the spots of Dough and Mix", "wire": {"type": "command", "args": {"action": "swap", "target": "Dough,Mix"}}}
+{"id": "th-0547", "names": ["Oven", "Rack"], "text": "disconnect Oven from Rack", "wire": {"type": "command", "args": {"action": "disconnect", "from": "Oven", "to": "Rack"}}}
+{"id": "th-0548", "names": ["Dough", "Oven"], "text": "unplug Dough from Oven", "wire": {"type": "command", "args": {"action": "disconnect", "from": "Dough", "to": "Oven"}}}
+{"id": "th-0549", "names": ["Cool", "Serve"], "text": "align Cool and Serve vertically", "wire": {"type": "command", "args": {"action": "align", "target": "Cool,Serve", "axis": "vertical"}}}
+{"id": "th-0550", "names": [], "text": "align the teal shapes horizontally", "wire": {"type": "command", "args": {"action": "align", "target": "mention(color=teal,quantifier=all)", "axis": "horizontal"}}}
+{"id": "th-0551", "names": ["Timer", "Oven", "Pan"], "text": "arrange Timer, Oven and Pan in a circle", "wire": {"type": "command", "args": {"action": "arrange", "target": "Timer,Oven,Pan", "layout": "circle"}}}
+{"id": "th-0552", "names": [], "text": "rearrange everything in a grid", "wire": {"type": "command", "args": {"action": "arrange", "layout": "grid"}}}
+{"id": "th-0553", "names": ["Sauce", "Mix", "Dough"], "text": "distribute Sauce, Mix and Dough horizontally", "wire": {"type": "command", "args": {"action": "distribute", "target": "Sauce,Mix,Dough", "axis": "horizontal"}}}
+{"id": "th-0554", "names": [], "text": "spread the triangles out vertically", "wire": {"type": "command", "args": {"action": "distribute", "target": "mention(quantifier=all,shape=triangle)", "axis": "vertical"}}}
+{"id": "th-0555", "names": ["Garlic"], "text": "bring Garlic forward to the top", "wire": {"type": "command", "args": {"action": "toFront", "target": "Garlic"}}}
+{"id": "th-0556", "names": [], "text": "bring the newest hexagon to the front", "wire": {"type": "command", "args": {"action": "toFront", "target": "mention(recency=newest,shape=hexagon)"}}}
+{"id": "th-0557", "names": ["Pan"], "text": "send Pan to the back", "wire": {"type": "command", "args": {"action": "toBack", "target": "Pan"}}}
+{"id": "th-0558", "names": [], "text": "tuck the first circle behind everything", "wire": {"type": "command", "args": {"action": "toBack", "target": "mention(recency=oldest,shape=circle)"}}}
+{"id": "th-0559", "names": [], "text": "undo the last thing", "wire": {"type": "command", "args": {"action": "undo"}}}
+{"id": "th-0560", "names": [], "text": "rewind one step", "wire": {"type": "command", "args": {"action": "undo"}}}
+{"id": "th-0561", "names": [], "text": "redo!", "wire": {"type": "command", "args": {"action": "redo"}}}
+{"id": "th-0562", "names": [], "text": "re-do that", "wire": {"type": "command", "args": {"action": "redo"}}}
+{"id": "th-0563", "names": [], "text": "forget the defaults you picked up", "wire": {"type": "command", "args": {"action": "forget"}}}
+{"id": "th-0564", "names": [], "text": "discard all your stored rules", "wire": {"type": "command", "args": {"action": "forget"}}}
+{"id": "th-0565", "names": [], "text": "how many white things are there", "wire": {"type": "question", "args": {"ask": "count", "color": "white"}}}
+{"id": "th-0566", "names": [], "text": "how many things aren't orange", "wire": {"type": "question", "args": {"ask": "count", "notColor": "orange"}}}
+{"id": "th-0567", "names": ["Oven"], "text": "how many shapes are above Oven", "wire": {"type": "question", "args": {"ask": "count", "position": "above", "anchor": "Oven"}}}
+{"id": "th-0568", "names": [], "text": "is there a purple star", "wire": {"type": "question", "args": {"ask": "exists", "shape": "star", "color": "purple"}}}
+{"id": "th-0569", "names": [], "text": "do we have a circle that isn't black", "wire": {"type": "question", "args": {"ask": "exists", "shape": "circle", "notColor": "black"}}}
+{"id": "th-0570", "names": [], "text": "list the stars", "wire": {"type": "question", "args": {"ask": "list", "shape": "star"}}}
+{"id": "th-0571", "names": [], "text": "show me what's green", "wire": {"type": "question", "args": {"ask": "list", "color": "green"}}}
+{"id": "th-0572", "names": ["Oven"], "text": "what shape is Oven", "wire": {"type": "question", "args": {"ask": "property", "target": "Oven", "property": "shape"}}}
+{"id": "th-0573", "names": ["Sauce"], "text": "what's the color of Sauce", "wire": {"type": "question", "args": {"ask": "property", "target": "Sauce", "property": "color"}}}
+{"id": "th-0574", "names": [], "text": "how big is the newest square", "wire": {"type": "question", "args": {"ask": "property", "target": "mention(recency=newest,shape=square)", "property": "size"}}}
+{"id": "th-0575", "names": ["Dough"], "text": "tell me what Dough is", "wire": {"type": "question", "args": {"ask": "describe", "target": "Dough"}}}
+{"id": "th-0576", "names": [], "text": "give me the big picture of the diagram", "wire": {"type": "question", "args": {"ask": "describe"}}}
+{"id": "th-0577", "names": ["Oven"], "text": "what's touching Oven", "wire": {"type": "question", "args": {"ask": "neighbors", "target": "Oven"}}}
+{"id": "th-0578", "names": ["Serve"], "text": "who's connected to Serve", "wire": {"type": "question", "args": {"ask": "neighbors", "target": "Serve"}}}
+{"id": "th-0579", "names": ["Dough", "Mix"], "text": "are Dough and Mix directly connected", "wire": {"type": "question", "args": {"ask": "connected", "target": "Dough", "anchor": "Mix"}}}
+{"id": "th-0580", "names": ["Oven", "Pan"], "text": "is Oven joined to Pan", "wire": {"type": "question", "args": {"ask": "connected", "target": "Oven", "anchor": "Pan"}}}
+{"id": "th-0581", "names": ["Oven"], "text": "how many links does Oven have", "wire": {"type": "question", "args": {"ask": "degree", "target": "Oven"}}}
+{"id": "th-0582", "names": ["Dough"], "text": "how many arrows point at Dough", "wire": {"type": "question", "args": {"ask": "degree", "target": "Dough"}}}
+{"id": "th-0583", "names": ["Timer", "Serve"], "text": "any path from Timer to Serve", "wire": {"type": "question", "args": {"ask": "path", "from": "Timer", "to": "Serve"}}}
+{"id": "th-0584", "names": ["Mix", "Cool"], "text": "how would you get from Mix to Cool", "wire": {"type": "question", "args": {"ask": "path", "from": "Mix", "to": "Cool"}}}
+{"id": "th-0585", "names": ["Dough"], "text": "what's downstream of Dough", "wire": {"type": "question", "args": {"ask": "reachable", "from": "Dough"}}}
+{"id": "th-0586", "names": ["Sauce"], "text": "everything Sauce can reach", "wire": {"type": "question", "args": {"ask": "reachable", "from": "Sauce"}}}
+{"id": "th-0587", "names": [], "text": "is any of this circular", "wire": {"type": "question", "args": {"ask": "cycle"}}}
+{"id": "th-0588", "names": [], "text": "does the flow ever loop back", "wire": {"type": "question", "args": {"ask": "cycle"}}}
+{"id": "th-0589", "names": [], "text": "which defaults are set", "wire": {"type": "question", "args": {"ask": "rules"}}}
+{"id": "th-0590", "names": [], "text": "what did you set as the default", "wire": {"type": "question", "args": {"ask": "rules"}}}
+{"id": "th-0591", "names": ["Timer"], "text": "is Timer red", "wire": {"type": "question", "args": {"ask": "check", "target": "Timer", "color": "red"}}}
+{"id": "th-0592", "names": ["Pan"], "text": "is the Pan a box", "wire": {"type": "question", "args": {"ask": "check", "target": "Pan", "shape": "rectangle"}}}
+{"id": "th-0593", "names": ["Serve", "Cool"], "text": "is Serve bigger than Cool", "wire": {"type": "question", "args": {"ask": "check", "target": "Serve", "comparison": "bigger", "anchor": "Cool"}}}
+{"id": "th-0594", "names": [], "text": "which one is the biggest", "wire": {"type": "question", "args": {"ask": "extreme", "superlative": "biggest"}}}
+{"id": "th-0595", "names": [], "text": "what's the bottommost shape", "wire": {"type": "question", "args": {"ask": "extreme", "superlative": "bottommost"}}}
+{"id": "th-0596", "names": ["Oven"], "text": "closest shape to Oven?", "wire": {"type": "question", "args": {"ask": "nearest", "anchor": "Oven", "superlative": "closest"}}}
+{"id": "th-0597", "names": ["Pan"], "text": "what's the farthest green thing from Pan", "wire": {"type": "question", "args": {"ask": "nearest", "anchor": "Pan", "superlative": "farthest", "color": "green"}}}
+{"id": "th-0598", "names": ["Garlic"], "text": "Garlic is a diamond", "wire": {"type": "fact", "args": {"target": "Garlic", "shape": "diamond"}}}
+{"id": "th-0599", "names": ["Serve", "Cool"], "text": "Serve is right of Cool", "wire": {"type": "fact", "args": {"target": "Serve", "position": "rightOf", "anchor": "Cool"}}}
+{"id": "th-0600", "names": [], "text": "from here on, new squares are teal", "wire": {"type": "rule", "args": {"shape": "square", "color": "teal"}}}

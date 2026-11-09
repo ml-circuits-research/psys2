@@ -1,0 +1,638 @@
+{
+  "version": 1,
+  "provenance": "Fixed reference programs reviewed against the existing example texts. Rules output was used as an initial draft; this file is independent of reader predictions and is not training data.",
+  "scenarios": {
+    "star": [
+      {
+        "text": "Draw a huge gold star in the center.",
+        "sop": "@s1 command action=create shape=star size=huge color=gold position=center"
+      }
+    ],
+    "traffic": [
+      {
+        "text": "Draw a large red circle named Stop at the top.",
+        "sop": "@s1 command action=create shape=circle size=large color=red name=Stop position=top"
+      },
+      {
+        "text": "Put a large yellow circle named Wait below Stop, then put a large green circle named Go below Wait.",
+        "sop": "@s1 command action=create shape=circle size=large color=yellow name=Wait position=below anchor=Stop\n@s2 command action=create shape=circle size=large color=green name=Go position=below anchor=$s1"
+      },
+      {
+        "text": "Connect Stop to Wait with a plain line. Connect Wait to Go with a plain line.",
+        "sop": "@s1 command action=connect from=Stop to=Wait arrow=none\n@s2 command action=connect from=Wait to=Go arrow=none"
+      },
+      {
+        "text": "What color is Go?",
+        "sop": "@s1 question ask=property property=color target=Go"
+      }
+    ],
+    "zoo": [
+      {
+        "text": "Draw a red circle, an orange square, a yellow rectangle, a green triangle, a teal diamond, a blue ellipse, a purple hexagon and a pink star.",
+        "sop": "@s1 command action=create shape=circle color=red\n@s2 command action=create shape=square color=orange\n@s3 command action=create shape=rectangle color=yellow\n@s4 command action=create shape=triangle color=green\n@s5 command action=create shape=diamond color=teal\n@s6 command action=create shape=ellipse color=blue\n@s7 command action=create shape=hexagon color=purple\n@s8 command action=create shape=star color=pink"
+      },
+      {
+        "text": "Arrange everything in a row.",
+        "sop": "@m1 mention quantifier=all\n@s1 command action=arrange target=$m1 layout=row"
+      },
+      {
+        "text": "How many shapes are there?",
+        "sop": "@s1 question ask=count"
+      }
+    ],
+    "house": [
+      {
+        "text": "Draw a huge brown square named Walls at 400, 300.",
+        "sop": "@s1 command action=create shape=square size=huge color=brown name=Walls at=400,300"
+      },
+      {
+        "text": "Put a huge red triangle named Roof at 400, 182.",
+        "sop": "@s1 command action=create shape=triangle size=huge color=red name=Roof at=400,182"
+      },
+      {
+        "text": "Add a small navy rectangle named Door at 400, 337, labeled \"door\". Add a tiny cyan square named Window at 365, 280.",
+        "sop": "@s1 command action=create shape=rectangle size=small color=navy name=Door label=door at=400,337\n@s2 command action=create shape=square size=tiny color=cyan name=Window at=365,280"
+      },
+      {
+        "text": "Draw a large yellow circle in the top right. Add a white ellipse named Cloud in the top left.",
+        "sop": "@s1 command action=create shape=circle size=large color=yellow position=topRight\n@s2 command action=create shape=ellipse color=white name=Cloud position=topLeft"
+      },
+      {
+        "text": "Add a large green circle named Tree at 190, 300. Add a small brown rectangle named Trunk at 190, 365.",
+        "sop": "@s1 command action=create shape=circle size=large color=green name=Tree at=190,300\n@s2 command action=create shape=rectangle size=small color=brown name=Trunk at=190,365"
+      }
+    ],
+    "login": [
+      {
+        "text": "Draw a blue circle named Begin on the left, labeled \"start\".",
+        "sop": "@s1 command action=create shape=circle color=blue name=Begin label=start position=left"
+      },
+      {
+        "text": "Add a rectangle named Form to the right of Begin labeled \"Enter password\" and connect Begin to it.",
+        "sop": "@s1 command action=create shape=rectangle name=Form label=\"Enter password\" position=rightOf anchor=Begin\n@s2 command action=connect from=Begin to=$s1"
+      },
+      {
+        "text": "Add a yellow diamond named Valid right of Form labeled \"valid?\" and connect Form to it.",
+        "sop": "@s1 command action=create shape=diamond color=yellow name=Valid label=\"valid?\" position=rightOf anchor=Form\n@s2 command action=connect from=Form to=$s1"
+      },
+      {
+        "text": "Put a green rectangle named Home right of Valid labeled \"Dashboard\". Connect Valid to Home with an arrow labeled \"yes\".",
+        "sop": "@s1 command action=create shape=rectangle color=green name=Home label=Dashboard position=rightOf anchor=Valid\n@s2 command action=connect label=yes from=Valid to=$s1"
+      },
+      {
+        "text": "Put a red rectangle named Error below Valid labeled \"Show error\". Connect Valid to Error with a dashed arrow labeled \"no\".",
+        "sop": "@s1 command action=create shape=rectangle color=red name=Error label=\"Show error\" position=below anchor=Valid\n@s2 command action=connect label=no from=Valid to=$s1 style=dashed"
+      },
+      {
+        "text": "Connect Error to Form with a dotted arrow labeled \"retry\".",
+        "sop": "@s1 command action=connect label=retry from=Error to=Form style=dotted"
+      },
+      {
+        "text": "Is there a path from Begin to Home?",
+        "sop": "@s1 question ask=path from=Begin to=Home"
+      },
+      {
+        "text": "Are there any cycles?",
+        "sop": "@s1 question ask=cycle"
+      }
+    ],
+    "org": [
+      {
+        "text": "Draw a large navy rectangle named CEO at the top, labeled \"CEO\".",
+        "sop": "@s1 command action=create shape=rectangle size=large color=navy name=CEO label=CEO position=top"
+      },
+      {
+        "text": "Add a teal rectangle named CTO below CEO labeled \"CTO\". Add a teal rectangle named CFO left of CTO labeled \"CFO\". Add a teal rectangle named COO right of CTO labeled \"COO\".",
+        "sop": "@s1 command action=create shape=rectangle color=teal name=CTO label=CTO position=below anchor=CEO\n@s2 command action=create shape=rectangle color=teal name=CFO label=CFO position=leftOf anchor=$s1\n@s3 command action=create shape=rectangle color=teal name=COO label=COO position=rightOf anchor=$s1"
+      },
+      {
+        "text": "Connect CEO to CTO, CFO and COO with plain lines.",
+        "sop": "@s1 command action=connect from=CEO to=CTO,CFO,COO arrow=none"
+      },
+      {
+        "text": "Add a small gray rectangle named Dev below CTO labeled \"Dev\". Add a small gray rectangle named Ops right of Dev labeled \"Ops\".",
+        "sop": "@s1 command action=create shape=rectangle size=small color=gray name=Dev label=Dev position=below anchor=CTO\n@s2 command action=create shape=rectangle size=small color=gray name=Ops label=Ops position=rightOf anchor=$s1"
+      },
+      {
+        "text": "Connect CTO to Dev and Ops with plain lines.",
+        "sop": "@s1 command action=connect from=CTO to=Dev,Ops arrow=none"
+      },
+      {
+        "text": "What is connected to CTO?",
+        "sop": "@s1 question ask=neighbors target=CTO"
+      },
+      {
+        "text": "Which shape has the most connections?",
+        "sop": "@s1 question ask=extreme superlative=mostConnected"
+      }
+    ],
+    "solar": [
+      {
+        "text": "Draw a huge gold circle named Sun in the center.",
+        "sop": "@s1 command action=create shape=circle size=huge color=gold name=Sun position=center"
+      },
+      {
+        "text": "Add a tiny gray circle named Mercury right of Sun. Add a small orange circle named Venus left of Sun.",
+        "sop": "@s1 command action=create shape=circle size=tiny color=gray name=Mercury position=rightOf anchor=Sun\n@s2 command action=create shape=circle size=small color=orange name=Venus position=leftOf anchor=Sun"
+      },
+      {
+        "text": "Add a small blue circle named Earth above Sun. Add a small red circle named Mars below Sun.",
+        "sop": "@s1 command action=create shape=circle size=small color=blue name=Earth position=above anchor=Sun\n@s2 command action=create shape=circle size=small color=red name=Mars position=below anchor=Sun"
+      },
+      {
+        "text": "Add a large brown circle named Jupiter in the top right. Add a large yellow circle named Saturn in the bottom left with a gold outline.",
+        "sop": "@s1 command action=create shape=circle size=large color=brown name=Jupiter position=topRight\n@s2 command action=create shape=circle size=large color=yellow outline=gold name=Saturn position=bottomLeft"
+      },
+      {
+        "text": "Connect Sun to Mercury, Venus, Earth and Mars with dotted lines.",
+        "sop": "@s1 command action=connect from=Sun to=Mercury,Venus,Earth,Mars style=dotted arrow=none"
+      },
+      {
+        "text": "Which circle is closest to Jupiter?",
+        "sop": "@s1 question ask=nearest shape=circle superlative=closest anchor=Jupiter"
+      },
+      {
+        "text": "Which shape is the biggest?",
+        "sop": "@s1 question ask=extreme superlative=biggest"
+      },
+      {
+        "text": "Is Earth above Mars?",
+        "sop": "@s1 question ask=check target=Earth position=above anchor=Mars"
+      }
+    ],
+    "states": [
+      {
+        "text": "Draw a gray ellipse named Idle on the left, labeled \"idle\".",
+        "sop": "@s1 command action=create shape=ellipse color=gray name=Idle label=idle position=left"
+      },
+      {
+        "text": "Add a green ellipse named Playing right of Idle labeled \"playing\". Add a yellow ellipse named Paused below Playing labeled \"paused\". Add a red ellipse named Ended right of Playing labeled \"ended\".",
+        "sop": "@s1 command action=create shape=ellipse color=green name=Playing label=playing position=rightOf anchor=Idle\n@s2 command action=create shape=ellipse color=yellow name=Paused label=paused position=below anchor=$s1\n@s3 command action=create shape=ellipse color=red name=Ended label=ended position=rightOf anchor=$s1"
+      },
+      {
+        "text": "Connect Idle to Playing with an arrow labeled \"play\".",
+        "sop": "@s1 command action=connect label=play from=Idle to=Playing"
+      },
+      {
+        "text": "Connect Playing to Paused with an arrow labeled \"pause\". Connect Paused to Playing with a dashed arrow labeled \"resume\".",
+        "sop": "@s1 command action=connect label=pause from=Playing to=Paused\n@s2 command action=connect label=resume from=Paused to=Playing style=dashed"
+      },
+      {
+        "text": "Connect Playing to Ended with an arrow labeled \"finish\".",
+        "sop": "@s1 command action=connect label=finish from=Playing to=Ended"
+      },
+      {
+        "text": "What can be reached from Idle?",
+        "sop": "@s1 question ask=reachable from=Idle"
+      },
+      {
+        "text": "Are there any cycles?",
+        "sop": "@s1 question ask=cycle"
+      },
+      {
+        "text": "Is there a path from Ended to Idle?",
+        "sop": "@s1 question ask=path from=Ended to=Idle"
+      }
+    ],
+    "network": [
+      {
+        "text": "Draw a large white ellipse named Internet on the left, labeled \"Internet\".",
+        "sop": "@s1 command action=create shape=ellipse size=large color=white name=Internet label=Internet position=left"
+      },
+      {
+        "text": "Add a red hexagon named Firewall right of Internet labeled \"FW\" and connect Internet to it with a two-way arrow.",
+        "sop": "@s1 command action=create shape=hexagon color=red name=Firewall label=FW position=rightOf anchor=Internet\n@s2 command action=connect from=Internet to=$s1 arrow=both"
+      },
+      {
+        "text": "Add a purple hexagon named Router right of Firewall labeled \"core\" and connect Firewall to Router with a two-way arrow.",
+        "sop": "@s1 command action=create shape=hexagon color=purple name=Router label=core position=rightOf anchor=Firewall\n@s2 command action=connect from=Firewall to=$s1 arrow=both"
+      },
+      {
+        "text": "From now on, rectangles are teal.",
+        "sop": "@r1 rule shape=rectangle color=teal"
+      },
+      {
+        "text": "Add a rectangle named SwitchA at 520, 150 labeled \"switch A\". Add a rectangle named SwitchB at 520, 350 labeled \"switch B\".",
+        "sop": "@s1 command action=create shape=rectangle name=SwitchA label=\"switch A\" at=520,150\n@s2 command action=create shape=rectangle name=SwitchB label=\"switch B\" at=520,350"
+      },
+      {
+        "text": "Connect Router to SwitchA and SwitchB.",
+        "sop": "@s1 command action=connect from=Router to=SwitchA,SwitchB"
+      },
+      {
+        "text": "Add a small blue square named Laptop at 690, 90 labeled \"laptop\". Add a small blue square named Printer below Laptop labeled \"printer\".",
+        "sop": "@s1 command action=create shape=square size=small color=blue name=Laptop label=laptop at=690,90\n@s2 command action=create shape=square size=small color=blue name=Printer label=printer position=below anchor=$s1"
+      },
+      {
+        "text": "Add a small green square named Server at 690, 300 labeled \"db\". Add a small green square named Backup at 690, 440 labeled \"backup\".",
+        "sop": "@s1 command action=create shape=square size=small color=green name=Server label=db at=690,300\n@s2 command action=create shape=square size=small color=green name=Backup label=backup at=690,440"
+      },
+      {
+        "text": "Connect SwitchA to Laptop and Printer. Connect SwitchB to Server and Backup.",
+        "sop": "@s1 command action=connect from=SwitchA to=Laptop,Printer\n@s2 command action=connect from=SwitchB to=Server,Backup"
+      },
+      {
+        "text": "Connect Server to Backup with a dashed red arrow labeled \"nightly\".",
+        "sop": "@s1 command action=connect color=red label=nightly from=Server to=Backup style=dashed"
+      },
+      {
+        "text": "Make all squares a bit bigger.",
+        "sop": "@m1 mention quantifier=all shape=square\n@s1 command action=resize scale=1.5 target=$m1"
+      },
+      {
+        "text": "Printer is gray.",
+        "sop": "@s1 fact color=gray target=Printer"
+      },
+      {
+        "text": "Move Router up by 30.",
+        "sop": "@s1 command action=move target=Router direction=up distance=30"
+      },
+      {
+        "text": "Is there a path from Internet to Backup?",
+        "sop": "@s1 question ask=path from=Internet to=Backup"
+      },
+      {
+        "text": "Can I get from Laptop to Server?",
+        "sop": "@s1 question ask=path from=Laptop to=Server"
+      },
+      {
+        "text": "What can be reached from SwitchB?",
+        "sop": "@s1 question ask=reachable from=SwitchB"
+      },
+      {
+        "text": "Which shape has the most connections?",
+        "sop": "@s1 question ask=extreme superlative=mostConnected"
+      },
+      {
+        "text": "How many connections are there?",
+        "sop": "@s1 question ask=count kind=edge"
+      },
+      {
+        "text": "Describe Router.",
+        "sop": "@s1 question ask=describe target=Router"
+      }
+    ],
+    "cartoon": [
+      {
+        "text": "Add a title \"Sunny Meadow\" at 400, 48.",
+        "sop": "@s1 command action=create shape=text label=\"Sunny Meadow\" at=400,48"
+      },
+      {
+        "text": "Add a huge gold star named Rays at 728, 88. Add a large yellow circle named Sun at 728, 88.",
+        "sop": "@s1 command action=create shape=star size=huge color=gold name=Rays at=728,88\n@s2 command action=create shape=circle size=large color=yellow name=Sun at=728,88"
+      },
+      {
+        "text": "Add a white circle named Puff at 196, 68. Add a small white circle called Puff3 at 230, 86. Add a small white circle named Puff2 at 162, 86.",
+        "sop": "@s1 command action=create shape=circle color=white name=Puff at=196,68\n@s2 command action=create shape=circle size=small color=white name=Puff3 at=230,86\n@s3 command action=create shape=circle size=small color=white name=Puff2 at=162,86"
+      },
+      {
+        "text": "Place a medium white ellipse named Cloud at 198, 98.",
+        "sop": "@s1 command action=create shape=ellipse size=medium color=white name=Cloud at=198,98"
+      },
+      {
+        "text": "Add a white circle named Puff4 at 600, 62. Add a small white circle called Puff5 at 566, 80.",
+        "sop": "@s1 command action=create shape=circle color=white name=Puff4 at=600,62\n@s2 command action=create shape=circle size=small color=white name=Puff5 at=566,80"
+      },
+      {
+        "text": "Add a small white circle named Puff6 at 634, 80.",
+        "sop": "@s1 command action=create shape=circle size=small color=white name=Puff6 at=634,80"
+      },
+      {
+        "text": "Place a medium white ellipse named Cloud2 at 602, 92.",
+        "sop": "@s1 command action=create shape=ellipse size=medium color=white name=Cloud2 at=602,92"
+      },
+      {
+        "text": "Add a huge lime ellipse named Hill at 110, 433. Add a huge lime ellipse named Hill2 at 262, 433.",
+        "sop": "@s1 command action=create shape=ellipse size=huge color=lime name=Hill at=110,433\n@s2 command action=create shape=ellipse size=huge color=lime name=Hill2 at=262,433"
+      },
+      {
+        "text": "Add a large lime ellipse named Hill3 at 410, 446. Add a huge lime ellipse named Hill4 at 560, 431.",
+        "sop": "@s1 command action=create shape=ellipse size=large color=lime name=Hill3 at=410,446\n@s2 command action=create shape=ellipse size=huge color=lime name=Hill4 at=560,431"
+      },
+      {
+        "text": "Place a medium brown square named Trunk at 98, 342.",
+        "sop": "@s1 command action=create shape=square size=medium color=brown name=Trunk at=98,342"
+      },
+      {
+        "text": "Add a huge green circle named Leaves at 96, 253.",
+        "sop": "@s1 command action=create shape=circle size=huge color=green name=Leaves at=96,253"
+      },
+      {
+        "text": "Add a tiny red circle named Apple at 70, 272. Add a tiny red circle named Apple2 at 122, 288.",
+        "sop": "@s1 command action=create shape=circle size=tiny color=red name=Apple at=70,272\n@s2 command action=create shape=circle size=tiny color=red name=Apple2 at=122,288"
+      },
+      {
+        "text": "Add a small gold circle named MonkeyEar at 52, 132. Add a small gold circle named MonkeyEar2 at 140, 132.",
+        "sop": "@s1 command action=create shape=circle size=small color=gold name=MonkeyEar at=52,132\n@s2 command action=create shape=circle size=small color=gold name=MonkeyEar2 at=140,132"
+      },
+      {
+        "text": "Add a brown ellipse named MonkeyBody at 98, 196.",
+        "sop": "@s1 command action=create shape=ellipse color=brown name=MonkeyBody at=98,196"
+      },
+      {
+        "text": "Add a large brown circle named MonkeyHead at 96, 136.",
+        "sop": "@s1 command action=create shape=circle size=large color=brown name=MonkeyHead at=96,136"
+      },
+      {
+        "text": "Add a small gold ellipse named Face at 96, 152.",
+        "sop": "@s1 command action=create shape=ellipse size=small color=gold name=Face at=96,152"
+      },
+      {
+        "text": "Add a tiny black circle named MonkeyEye at 80, 124. Add a tiny black circle named MonkeyEye2 at 112, 124.",
+        "sop": "@s1 command action=create shape=circle size=tiny color=black name=MonkeyEye at=80,124\n@s2 command action=create shape=circle size=tiny color=black name=MonkeyEye2 at=112,124"
+      },
+      {
+        "text": "Add a tiny brown circle named MonkeyHand at 178, 182. Add a tiny brown circle named Tail at 22, 210.",
+        "sop": "@s1 command action=create shape=circle size=tiny color=brown name=MonkeyHand at=178,182\n@s2 command action=create shape=circle size=tiny color=brown name=Tail at=22,210"
+      },
+      {
+        "text": "Connect MonkeyBody to MonkeyHand with a line. Connect MonkeyBody to Tail with a line.",
+        "sop": "@s1 command action=connect from=MonkeyBody to=MonkeyHand arrow=none\n@s2 command action=connect from=MonkeyBody to=Tail arrow=none"
+      },
+      {
+        "text": "Add a large gray square named RoboHead at 250, 220.",
+        "sop": "@s1 command action=create shape=square size=large color=gray name=RoboHead at=250,220"
+      },
+      {
+        "text": "Add a tiny red circle named Bulb at 250, 160.",
+        "sop": "@s1 command action=create shape=circle size=tiny color=red name=Bulb at=250,160"
+      },
+      {
+        "text": "Add a tiny cyan circle named RoboEye at 230, 210. Add a tiny cyan circle named RoboEye2 at 270, 210.",
+        "sop": "@s1 command action=create shape=circle size=tiny color=cyan name=RoboEye at=230,210\n@s2 command action=create shape=circle size=tiny color=cyan name=RoboEye2 at=270,210"
+      },
+      {
+        "text": "Add a tiny black rectangle named Mouth at 250, 244.",
+        "sop": "@s1 command action=create shape=rectangle size=tiny color=black name=Mouth at=250,244"
+      },
+      {
+        "text": "Add a large blue square named RoboBody at 250, 315.",
+        "sop": "@s1 command action=create shape=square size=large color=blue name=RoboBody at=250,315"
+      },
+      {
+        "text": "Add a small gold star named Badge at 250, 314.",
+        "sop": "@s1 command action=create shape=star size=small color=gold name=Badge at=250,314"
+      },
+      {
+        "text": "Add a small gray square named RoboLeg at 230, 382. Add a small gray square named RoboLeg2 at 274, 382.",
+        "sop": "@s1 command action=create shape=square size=small color=gray name=RoboLeg at=230,382\n@s2 command action=create shape=square size=small color=gray name=RoboLeg2 at=274,382"
+      },
+      {
+        "text": "Add a tiny gray circle named RoboHand at 178, 262. Add a tiny gray circle named RoboHand2 at 330, 332.",
+        "sop": "@s1 command action=create shape=circle size=tiny color=gray name=RoboHand at=178,262\n@s2 command action=create shape=circle size=tiny color=gray name=RoboHand2 at=330,332"
+      },
+      {
+        "text": "Connect RoboBody to RoboHand with a line. Connect RoboBody to RoboHand2 with a line.",
+        "sop": "@s1 command action=connect from=RoboBody to=RoboHand arrow=none\n@s2 command action=connect from=RoboBody to=RoboHand2 arrow=none"
+      },
+      {
+        "text": "Add a brown ellipse named Hair at 410, 197.",
+        "sop": "@s1 command action=create shape=ellipse color=brown name=Hair at=410,197"
+      },
+      {
+        "text": "Add a large pink circle named Head at 410, 234.",
+        "sop": "@s1 command action=create shape=circle size=large color=pink name=Head at=410,234"
+      },
+      {
+        "text": "Add a tiny black circle at 393, 232 named Eye. Add a tiny black circle named Eye2 at 427, 232.",
+        "sop": "@s1 command action=create shape=circle size=tiny color=black name=Eye at=393,232\n@s2 command action=create shape=circle size=tiny color=black name=Eye2 at=427,232"
+      },
+      {
+        "text": "Add a large purple triangle named Dress at 410, 324.",
+        "sop": "@s1 command action=create shape=triangle size=large color=purple name=Dress at=410,324"
+      },
+      {
+        "text": "Add a tiny pink circle named Hand at 352, 328. Draw a tiny pink circle named Hand2 at 502, 260.",
+        "sop": "@s1 command action=create shape=circle size=tiny color=pink name=Hand at=352,328\n@s2 command action=create shape=circle size=tiny color=pink name=Hand2 at=502,260"
+      },
+      {
+        "text": "Connect Dress to Hand with a line. Connect Dress to Hand2 with a line.",
+        "sop": "@s1 command action=connect from=Dress to=Hand arrow=none\n@s2 command action=connect from=Dress to=Hand2 arrow=none"
+      },
+      {
+        "text": "Add a tiny black ellipse named Shoe at 392, 396. Add a tiny black ellipse named Shoe2 at 430, 396.",
+        "sop": "@s1 command action=create shape=ellipse size=tiny color=black name=Shoe at=392,396\n@s2 command action=create shape=ellipse size=tiny color=black name=Shoe2 at=430,396"
+      },
+      {
+        "text": "Connect Dress to Shoe with a line. Connect Dress to Shoe2 with a line.",
+        "sop": "@s1 command action=connect from=Dress to=Shoe arrow=none\n@s2 command action=connect from=Dress to=Shoe2 arrow=none"
+      },
+      {
+        "text": "Add a white diamond named BunnyEar at 540, 180. Add a white diamond named BunnyEar2 at 580, 180.",
+        "sop": "@s1 command action=create shape=diamond color=white name=BunnyEar at=540,180\n@s2 command action=create shape=diamond color=white name=BunnyEar2 at=580,180"
+      },
+      {
+        "text": "Put a small pink diamond at 540, 184 named InnerEar.",
+        "sop": "@s1 command action=create shape=diamond size=small color=pink name=InnerEar at=540,184"
+      },
+      {
+        "text": "Add a small pink diamond named InnerEar2 at 580, 184.",
+        "sop": "@s1 command action=create shape=diamond size=small color=pink name=InnerEar2 at=580,184"
+      },
+      {
+        "text": "Add a large white circle named BunnyHead at 560, 245.",
+        "sop": "@s1 command action=create shape=circle size=large color=white name=BunnyHead at=560,245"
+      },
+      {
+        "text": "Add a tiny black circle named BunnyEye at 545, 238. Add a tiny black circle named BunnyEye2 at 579, 238.",
+        "sop": "@s1 command action=create shape=circle size=tiny color=black name=BunnyEye at=545,238\n@s2 command action=create shape=circle size=tiny color=black name=BunnyEye2 at=579,238"
+      },
+      {
+        "text": "Add a tiny pink circle named Nose at 560, 272.",
+        "sop": "@s1 command action=create shape=circle size=tiny color=pink name=Nose at=560,272"
+      },
+      {
+        "text": "Add a large white ellipse named BunnyBody at 560, 330.",
+        "sop": "@s1 command action=create shape=ellipse size=large color=white name=BunnyBody at=560,330"
+      },
+      {
+        "text": "Add a small pink circle named Belly at 560, 334.",
+        "sop": "@s1 command action=create shape=circle size=small color=pink name=Belly at=560,334"
+      },
+      {
+        "text": "Add a tiny white ellipse named Foot at 530, 378. Add a tiny white ellipse named Foot2 at 592, 378.",
+        "sop": "@s1 command action=create shape=ellipse size=tiny color=white name=Foot at=530,378\n@s2 command action=create shape=ellipse size=tiny color=white name=Foot2 at=592,378"
+      },
+      {
+        "text": "Add a tiny purple circle named HippoEar at 670, 294. Add a tiny purple circle named HippoEar2 at 738, 294.",
+        "sop": "@s1 command action=create shape=circle size=tiny color=purple name=HippoEar at=670,294\n@s2 command action=create shape=circle size=tiny color=purple name=HippoEar2 at=738,294"
+      },
+      {
+        "text": "Add a large purple circle named HippoHead at 704, 330.",
+        "sop": "@s1 command action=create shape=circle size=large color=purple name=HippoHead at=704,330"
+      },
+      {
+        "text": "Add a tiny black circle named HippoEye at 688, 316. Add a tiny black circle named HippoEye2 at 720, 316.",
+        "sop": "@s1 command action=create shape=circle size=tiny color=black name=HippoEye at=688,316\n@s2 command action=create shape=circle size=tiny color=black name=HippoEye2 at=720,316"
+      },
+      {
+        "text": "Add a pink ellipse named Snout at 704, 366.",
+        "sop": "@s1 command action=create shape=ellipse color=pink name=Snout at=704,366"
+      },
+      {
+        "text": "Add a tiny purple circle named Nostril at 690, 358. Add a tiny purple circle named Nostril2 at 718, 358.",
+        "sop": "@s1 command action=create shape=circle size=tiny color=purple name=Nostril at=690,358\n@s2 command action=create shape=circle size=tiny color=purple name=Nostril2 at=718,358"
+      },
+      {
+        "text": "Add a huge cyan ellipse named Pond at 704, 431.",
+        "sop": "@s1 command action=create shape=ellipse size=huge color=cyan name=Pond at=704,431"
+      },
+      {
+        "text": "Add a pink star named Flower at 175, 445. Add a tiny yellow circle named Bud at 175, 447.",
+        "sop": "@s1 command action=create shape=star color=pink name=Flower at=175,445\n@s2 command action=create shape=circle size=tiny color=yellow name=Bud at=175,447"
+      },
+      {
+        "text": "Add a purple star named Flower2 at 330, 455. Add a tiny yellow circle named Bud2 at 330, 457.",
+        "sop": "@s1 command action=create shape=star color=purple name=Flower2 at=330,455\n@s2 command action=create shape=circle size=tiny color=yellow name=Bud2 at=330,457"
+      },
+      {
+        "text": "Add an orange star named Flower3 at 488, 450. Add a tiny yellow circle named Bud3 at 488, 452.",
+        "sop": "@s1 command action=create shape=star color=orange name=Flower3 at=488,450\n@s2 command action=create shape=circle size=tiny color=yellow name=Bud3 at=488,452"
+      },
+      {
+        "text": "Add a large white ellipse named Bubble at 470, 128. Label Bubble \"Hello, friends!\".",
+        "sop": "@s1 command action=create shape=ellipse size=large color=white name=Bubble at=470,128\n@s2 command action=label label=\"Hello, friends!\" target=$s1"
+      },
+      {
+        "text": "Add a tiny white circle named Dot at 472, 188.",
+        "sop": "@s1 command action=create shape=circle size=tiny color=white name=Dot at=472,188"
+      },
+      {
+        "text": "Group Bulb, RoboHead, RoboEye, RoboEye2, Mouth, RoboBody, Badge, RoboLeg, RoboLeg2, RoboHand and RoboHand2 as Robot.",
+        "sop": "@s1 command action=group name=Robot target=Bulb,RoboHead,RoboEye,RoboEye2,Mouth,RoboBody,Badge,RoboLeg,RoboLeg2,RoboHand,RoboHand2"
+      },
+      {
+        "text": "Group MonkeyEar, MonkeyEar2, MonkeyBody, MonkeyHead, Face, MonkeyEye, MonkeyEye2, MonkeyHand and Tail as Monkey.",
+        "sop": "@s1 command action=group name=Monkey target=MonkeyEar,MonkeyEar2,MonkeyBody,MonkeyHead,Face,MonkeyEye,MonkeyEye2,MonkeyHand,Tail"
+      },
+      {
+        "text": "Bundle Hair, Head, Eye, Eye2, Dress, Hand, Hand2, Shoe and Shoe2 as Kid.",
+        "sop": "@s1 command action=group name=Kid target=Hair,Head,Eye,Eye2,Dress,Hand,Hand2,Shoe,Shoe2"
+      },
+      {
+        "text": "Bundle BunnyEar, BunnyEar2, InnerEar, InnerEar2, BunnyHead, BunnyEye, BunnyEye2, Nose, BunnyBody, Belly, Foot and Foot2 together as Bunny.",
+        "sop": "@s1 command action=group name=Bunny target=BunnyEar,BunnyEar2,InnerEar,InnerEar2,BunnyHead,BunnyEye,BunnyEye2,Nose,BunnyBody,Belly,Foot,Foot2"
+      },
+      {
+        "text": "Bundle HippoEar, HippoEar2, HippoHead, HippoEye, HippoEye2, Snout, Nostril and Nostril2 as Hippo.",
+        "sop": "@s1 command action=group name=Hippo target=HippoEar,HippoEar2,HippoHead,HippoEye,HippoEye2,Snout,Nostril,Nostril2"
+      },
+      {
+        "text": "Bundle Trunk, Leaves, Apple and Apple2 as Tree.",
+        "sop": "@s1 command action=group name=Tree target=Trunk,Leaves,Apple,Apple2"
+      }
+    ],
+    "story": [
+      {
+        "text": "Draw a blue circle named A and a red square named B right of it.",
+        "sop": "@s1 command action=create shape=circle color=blue name=A\n@s2 command action=create shape=square color=red name=B position=rightOf anchor=$s1"
+      },
+      {
+        "text": "Add a green triangle named C below A and connect A to it.",
+        "sop": "@s1 command action=create shape=triangle color=green name=C position=below anchor=A\n@s2 command action=connect from=A to=$s1"
+      },
+      {
+        "text": "Connect B to C with a dashed line.",
+        "sop": "@s1 command action=connect from=B to=C style=dashed arrow=none"
+      },
+      {
+        "text": "Actually make A orange and give it a black border.",
+        "sop": "@s1 command action=set color=orange target=A\n@s2 command action=set outline=black target=A"
+      },
+      {
+        "text": "Rename C to Leaf.",
+        "sop": "@s1 command action=rename name=Leaf target=C"
+      },
+      {
+        "text": "Swap A and B.",
+        "sop": "@s1 command action=swap target=A,B"
+      },
+      {
+        "text": "Undo.",
+        "sop": "@s1 command action=undo"
+      },
+      {
+        "text": "Duplicate B.",
+        "sop": "@s1 command action=duplicate target=B"
+      },
+      {
+        "text": "What is connected to Leaf?",
+        "sop": "@s1 question ask=neighbors target=Leaf"
+      },
+      {
+        "text": "Is A left of B?",
+        "sop": "@s1 question ask=check target=A position=leftOf anchor=B"
+      },
+      {
+        "text": "Add two small pink stars above A.",
+        "sop": "@s1 command action=create count=2 shape=star size=small color=pink position=above anchor=A"
+      },
+      {
+        "text": "Delete the pink stars.",
+        "sop": "@m1 mention quantifier=all shape=star color=pink\n@s1 command action=delete target=$m1"
+      },
+      {
+        "text": "Arrange everything in a grid.",
+        "sop": "@m1 mention quantifier=all\n@s1 command action=arrange target=$m1 layout=grid"
+      },
+      {
+        "text": "Describe the diagram.",
+        "sop": "@s1 question ask=describe"
+      }
+    ]
+  },
+  "quick": [
+    {
+      "text": "Draw a small pink star next to Done",
+      "sop": "@s1 command action=create shape=star size=small color=pink position=near anchor=Done"
+    },
+    {
+      "text": "Make the green circle bigger",
+      "sop": "@m1 mention shape=circle color=green\n@s1 command action=resize scale=1.5 target=$m1"
+    },
+    {
+      "text": "Connect Done to Start with a dotted line",
+      "sop": "@s1 command action=connect from=Done to=Start style=dotted arrow=none"
+    },
+    {
+      "text": "Is there a path from Start to Done?",
+      "sop": "@s1 question ask=path from=Start to=Done"
+    },
+    {
+      "text": "What is connected to Check?",
+      "sop": "@s1 question ask=neighbors target=Check"
+    },
+    {
+      "text": "Add three tiny red circles in a row below Process",
+      "sop": "@s1 command action=create count=3 shape=circle size=tiny color=red position=below anchor=Process layout=row"
+    },
+    {
+      "text": "Which shape has the most connections?",
+      "sop": "@s1 question ask=extreme superlative=mostConnected"
+    },
+    {
+      "text": "From now on, circles are orange",
+      "sop": "@r1 rule shape=circle color=orange"
+    },
+    {
+      "text": "Check is above Process",
+      "sop": "@s1 fact target=Check position=above anchor=Process"
+    },
+    {
+      "text": "Rename Done to End",
+      "sop": "@s1 command action=rename name=End target=Done"
+    },
+    {
+      "text": "Arrange everything in a circle",
+      "sop": "@m1 mention quantifier=all\n@s1 command action=arrange target=$m1 layout=circle"
+    },
+    {
+      "text": "Describe the diagram",
+      "sop": "@s1 question ask=describe"
+    },
+    {
+      "text": "@g1 command action=create shape=star color=gold name=Gem position=center",
+      "sop": "@g1 command action=create shape=star color=gold name=Gem position=center"
+    }
+  ]
+}

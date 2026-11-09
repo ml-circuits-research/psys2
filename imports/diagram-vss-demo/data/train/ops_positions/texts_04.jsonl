@@ -1,0 +1,40 @@
+{"id":"op-0121","domain":"support desk","names":["Ticket","Queue","Agent"],"text":"Stick a lime hexagon called Triage just under Queue, a bit to the right of Agent. Then slide Ticket below Queue while staying left of Agent. Is Triage above Ticket?"}
+{"id":"op-0122","domain":"dorm","names":["Unit1","Unit2","Unit3"],"text":"Where does Unit1 stand? Is it left of Unit2 but below Unit3? And is Unit2 in the bottom right, next to Unit3?"}
+{"id":"op-0123","domain":"house","names":["Roof","Chimney"],"text":"On top of Roof and next to Chimney, put a small black star."}
+{"id":"op-0124","domain":"living room","names":["Lamp","Shelf","Rug"],"text":"I want Lamp beneath Shelf and over Rug. After that make Rug brown."}
+{"id":"op-0125","domain":"campus map","names":["Library","Gym","Cafe"],"text":"Make a tiny orange circle called Bike in the bottom left, left of Gym. And is Cafe above Library but right of Gym?"}
+{"id":"op-0126","domain":"robots","names":["R1","R2","R3"],"text":"R1 is to the left of R2 and under R3. R3 is on top of R2 as well."}
+{"id":"op-0127","domain":"hospital","names":["Ward","Lab","Lobby"],"text":"Could you move Lab next to Ward, up in the upper right corner? Also Lobby should go beneath Ward and left of Lab, thanks."}
+{"id":"op-0128","domain":"cloud","names":["Api","Db","Cache"],"text":"Draw a huge teal ellipse called Gateway between Api and Cache, and under Db. Connect Gateway to Db."}
+{"id":"op-0129","domain":"classroom","names":["Desk1","Desk2"],"text":"Which desks are right of Desk1 and in the top right? how many of them are below Desk2?"}
+{"id":"op-0130","domain":"alt","names":["Moon","Sun","Earth"],"text":"The Sun is over Earth, and left of Moon. The Moon is beside the Earth in the bottom right."}
+{"id":"op-0131","domain":"ux","names":["Button","Label","Icon"],"text":"Place Icon above Label but underneath Button, then check whether Label is right of Button in the top left."}
+{"id":"op-0132","domain":"studio","names":["Cam1","Cam2","Boom"],"text":"shift Boom to the right of Cam1, in the middle, and put Cam2 under Boom but over Cam1... no wait, put Cam2 under Boom but left of Cam1."}
+{"id":"op-0133","domain":"game","names":["Wizard","Troll","Orc"],"text":"Spawn two huge gray squares next to Troll in the bottom left corner. Then Orc goes above Wizard and right of Troll."}
+{"id":"op-0134","domain":"sports","names":["Cone1","Cone2","Cone3"],"text":"is Cone2 in between Cone1 and Cone3, and near the top? Cone3 should be in the top right corner by the way."}
+{"id":"op-0135","domain":"food chain","names":["Grass","Rabbit","Fox"],"text":"Is Fox right of Rabbit and above Grass? Hmm, and tell me which shapes are right of Rabbit and in the bottom right."}
+{"id":"op-0136","domain":"mobile app","names":["Tab1","Tab2","Tab3"],"text":"Put Tab2 between Tab1 and Tab3 but a bit below Tab3... I mean below Tab1. Then label Tab2 \"Home\"."}
+{"id":"op-0137","domain":"metro","names":["Central","North","South"],"text":"Add a blue circle called East right of Central, bottom right. Add a red one called West left of Central, bottom left."}
+{"id":"op-0138","domain":"dictation","names":["Hub","Spoke1","Spoke2"],"text":"okay so Spoke1 goes to the left of Hub and kinda under Spoke2, and Spoke2 stays where it is. Is Spoke2 above Hub?"}
+{"id":"op-0139","domain":"warehouse","names":["Rack1","Rack2","Dock"],"text":"Rack1 is right of Dock and above Rack2. Rack2 sits in the bottom left, next to Dock. Is Dock in the top left?"}
+{"id":"op-0140","domain":"artist","names":["Frame","Easel","Stool"],"text":"Put a large cyan diamond right of Easel in the top right. And put a small pink one near the bottom, under Frame."}
+{"id":"op-0141","domain":"timeline","names":["E1","E2","E3","E4"],"text":"ok E2 should be between E1 and E3 and also below E4. After that shift E4 into the upper right corner, next to E3. Does anything sit left of E1 in the top left?"}
+{"id":"op-0142","domain":"home network","names":["Pc1","Pc2","Nas","Pc3"],"text":"Pc1 and Pc2 should be left of Nas and under Pc3. Is Nas in the top right?"}
+{"id":"op-0143","domain":"recipe","names":["Egg","Pan","Plate"],"text":"Egg goes in the center but over Pan. Plate goes beneath Pan, next to Egg. Do you see anything left of Plate in the bottom?"}
+{"id":"op-0144","domain":"robot arm","names":["Joint1","Joint2","Claw"],"text":"Make Claw tiny. Put it right of Joint2 and above Joint1 please. Is Claw left of Joint2?"}
+{"id":"op-0145","domain":"airport","names":["Gate1","Gate2","Tower"],"text":"How many shapes sit below Tower and between Gate1 and Gate2? Also is anything in the bottom right, right of Gate2?"}
+{"id":"op-0146","domain":"sky","names":["Star1","Star2","Moon"],"text":"Star1 is under Star2 and right of the Moon, in the top right. Honestly I'm not sure that works. Move Moon next to Star2 though."}
+{"id":"op-0147","domain":"arts and crafts","names":["Paper","Glue"],"text":"Add a white square called Card above Glue and next to Paper, near the top."}
+{"id":"op-0148","domain":"finance","names":["Cash","Debt","Equity"],"text":"Equity should be right of Debt but over Cash. Is Debt below Equity and left of Cash?"}
+{"id":"op-0149","domain":"library","names":["Shelf1","Shelf2","Shelf3"],"text":"Move Shelf3 under Shelf1, left of Shelf2. Then Shelf2 into the bottom right corner, by Shelf1."}
+{"id":"op-0150","domain":"farm","names":["Barn","Silo","Pond"],"text":"Can you add a green triangle between Barn and Silo, under Pond? And another one below Barn, in the bottom left?"}
+{"id":"op-0151","domain":"physics","names":["Ball","Wall","Floor"],"text":"Is Ball right of Wall and above Floor? Is it also near the bottom?"}
+{"id":"op-0152","domain":"quest","names":["King","Queen","Knight"],"text":"The King is above Queen and left of Knight, the Queen is under Knight. Move Knight to the top right, near King."}
+{"id":"op-0153","domain":"bad english","names":["Pc","Printer"],"text":"Pc must go on the right of Printer, in bottom left corner. It is possible? You tell me please which shapes are on the left of Pc and under Printer."}
+{"id":"op-0154","domain":"subway","names":["Stn1","Stn2"],"text":"Place a red circle left of Stn1 and under Stn2, then a blue circle right of Stn1 and under Stn2. How many circles now?"}
+{"id":"op-0155","domain":"presentation","names":["Title","Body","Foot"],"text":"Title is at the top, and Body is right under it. Foot should go below Body but left of Title, can you do that?"}
+{"id":"op-0156","domain":"voice","names":["Dog","Cat","Bird"],"text":"uh put the Bird in the upper left corner above the Dog uh and then the Cat under the Dog and next to the Bird okay"}
+{"id":"op-0157","domain":"zoo","names":["Lion","Tiger","Bear"],"text":"Which animals are above Lion and left of Tiger? And what's below Bear in the bottom right?"}
+{"id":"op-0158","domain":"kitchen","names":["Sink","Stove","Counter"],"text":"Counter must be below Sink but left of Stove. Rename Counter to Island. Is Island in the middle?"}
+{"id":"op-0159","domain":"fantasy","names":["Elf","Dwarf","Wall"],"text":"Dwarf is on the right side of Wall and below Elf, close to the bottom. Elf is in the middle, above Wall."}
+{"id":"op-0160","domain":"design review","names":["Header","Hero","Cta"],"text":"I'd like Cta moved just under Hero, a bit to the left of Header, sorry, to the right of Header. Is Hero in the top left, above Cta?"}

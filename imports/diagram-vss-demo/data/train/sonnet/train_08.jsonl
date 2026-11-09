@@ -1,0 +1,100 @@
+{"id":"ts-0701","names":["Lobby","Elevator"],"text":"as the architect I'd like a yellow rectangle named Atrium placed above the Lobby","wire":{"type":"command","args":{"action":"create","shape":"rectangle","color":"yellow","name":"Atrium","position":"above","anchor":"Lobby"}}}
+{"id":"ts-0702","names":["Compiler","Linker"],"text":"does anything loop back between Compiler and Linker, like a cycle?","wire":{"type":"question","args":{"ask":"cycle"}}}
+{"id":"ts-0703","names":["Teacher"],"text":"paint the teacher purple","wire":{"type":"command","args":{"action":"set","target":"Teacher","color":"purple"}}}
+{"id":"ts-0704","names":["Hub"],"text":"which things can we get to from Hub following arrows","wire":{"type":"question","args":{"ask":"reachable","from":"Hub"}}}
+{"id":"ts-0705","names":["Barn","Silo"],"text":"link Barn and Silo","wire":{"type":"command","args":{"action":"connect","from":"Barn","to":"Silo"}}}
+{"id":"ts-0706","names":["Rules"],"text":"currently active rules?","wire":{"type":"question","args":{"ask":"rules"}}}
+{"id":"ts-0707","names":["Wolf","Sheep","Dog"],"text":"swap Wolf and Dog","wire":{"type":"command","args":{"action":"swap","target":"Wolf,Dog"}}}
+{"id":"ts-0708","names":["Core"],"text":"neighbors of Core","wire":{"type":"question","args":{"ask":"neighbors","target":"Core"}}}
+{"id":"ts-0709","names":["Bolt","Nut"],"text":"are Bolt and Nut joined by a line","wire":{"type":"question","args":{"ask":"connected","target":"Bolt","anchor":"Nut"}}}
+{"id":"ts-0710","names":["Mixer"],"text":"scoot Mixer 40 px to the left","wire":{"type":"command","args":{"action":"move","target":"Mixer","direction":"left","distance":"40"}}}
+{"id":"ts-0711","names":["Buyer","Seller"],"text":"is it possible to go from Buyer to Seller","wire":{"type":"question","args":{"ask":"path","from":"Buyer","to":"Seller"}}}
+{"id":"ts-0712","names":["Ledger"],"text":"how many edges does Ledger have","wire":{"type":"question","args":{"ask":"degree","target":"Ledger"}}}
+{"id":"ts-0713","names":["Grape"],"text":"show me a list of the red shapes","wire":{"type":"question","args":{"ask":"list","color":"red"}}}
+{"id":"ts-0714","names":["Dock","Pier"],"text":"disconnect Dock from Pier","wire":{"type":"command","args":{"action":"disconnect","from":"Dock","to":"Pier"}}}
+{"id":"ts-0715","names":["Basil"],"text":"number of navy shapes?","wire":{"type":"question","args":{"ask":"count","color":"navy"}}}
+{"id":"ts-0716","names":["Crow"],"text":"do we have any black diamonds","wire":{"type":"question","args":{"ask":"exists","shape":"diamond","color":"black"}}}
+{"id":"ts-0717","names":["Lamp1","Lamp2","Lamp3"],"text":"line up Lamp1, Lamp2 and Lamp3 horizontally","wire":{"type":"command","args":{"action":"align","target":"Lamp1,Lamp2,Lamp3","axis":"horizontal"}}}
+{"id":"ts-0718","names":["Stork"],"text":"tell me what the diagram looks like","wire":{"type":"question","args":{"ask":"describe"}}}
+{"id":"ts-0719","names":["Pole","Flag"],"text":"which shape is closest to the Flag","wire":{"type":"question","args":{"ask":"nearest","anchor":"Flag","superlative":"closest"}}}
+{"id":"ts-0720","names":["Grain"],"text":"push Grain to the back","wire":{"type":"command","args":{"action":"toBack","target":"Grain"}}}
+{"id":"ts-0721","names":["Ox","Cow"],"text":"is the Ox larger than the Cow?","wire":{"type":"question","args":{"ask":"check","target":"Ox","comparison":"bigger","anchor":"Cow"}}}
+{"id":"ts-0722","names":["Mole","Vole"],"text":"is Mole smaller than Vole","wire":{"type":"question","args":{"ask":"check","target":"Mole","comparison":"smaller","anchor":"Vole"}}}
+{"id":"ts-0723","names":["Plum"],"text":"redo that please","wire":{"type":"command","args":{"action":"redo"}}}
+{"id":"ts-0724","names":["Kite"],"text":"what's the highest shape","wire":{"type":"question","args":{"ask":"extreme","superlative":"topmost"}}}
+{"id":"ts-0725","names":["Pail"],"text":"what shape is the Pail","wire":{"type":"question","args":{"ask":"property","target":"Pail","property":"shape"}}}
+{"id":"ts-0726","names":["Rev"],"text":"I made a mistake, undo","wire":{"type":"command","args":{"action":"undo"}}}
+{"id":"ts-0727","names":["Tick","Tock"],"text":"Tick is not blue, correct?","wire":{"type":"question","args":{"ask":"check","target":"Tick","notColor":"blue"}}}
+{"id":"ts-0728","names":["Tab"],"text":"forget the standing rules","wire":{"type":"command","args":{"action":"forget"}}}
+{"id":"ts-0729","names":["Gnat"],"text":"get Gnat to the front","wire":{"type":"command","args":{"action":"toFront","target":"Gnat"}}}
+{"id":"ts-0730","names":["Bay"],"text":"add a hexagon labelled \"Harbor\" next to Bay","wire":{"type":"command","args":{"action":"create","shape":"hexagon","label":"Harbor","position":"near","anchor":"Bay"}}}
+{"id":"ts-0731","names":["Frame"],"text":"set Frame to medium","wire":{"type":"command","args":{"action":"set","target":"Frame","size":"medium"}}}
+{"id":"ts-0732","names":["Elk","Moose"],"text":"let Elk be linked to Moose with a dashed two-way line","wire":{"type":"command","args":{"action":"connect","from":"Elk","to":"Moose","style":"dashed","arrow":"both"}}}
+{"id":"ts-0733","names":["Tin"],"text":"put the Tin in the bottom left","wire":{"type":"command","args":{"action":"move","target":"Tin","position":"bottomLeft"}}}
+{"id":"ts-0734","names":["Hill","Vale"],"text":"Hill is above Vale","wire":{"type":"fact","args":{"target":"Hill","position":"above","anchor":"Vale"}}}
+{"id":"ts-0735","names":[],"text":"every new circle will be red from now on","wire":{"type":"rule","args":{"shape":"circle","color":"red"}}}
+{"id":"ts-0736","names":["Hall1","Hall2","Hall3"],"text":"equalize the spacing of Hall1, Hall2, Hall3 horizontally","wire":{"type":"command","args":{"action":"distribute","target":"Hall1,Hall2,Hall3","axis":"horizontal"}}}
+{"id":"ts-0737","names":["Kiln"],"text":"arrange everything in a circle","wire":{"type":"command","args":{"action":"arrange","layout":"circle"}}}
+{"id":"ts-0738","names":["Wrench"],"text":"enlarge the Wrench","wire":{"type":"command","args":{"action":"resize","target":"Wrench"}}}
+{"id":"ts-0739","names":["Hose"],"text":"delete Hose","wire":{"type":"command","args":{"action":"delete","target":"Hose"}}}
+{"id":"ts-0740","names":["Oven"],"text":"rename Oven to Kiln","wire":{"type":"command","args":{"action":"rename","target":"Oven","name":"Kiln"}}}
+{"id":"ts-0741","names":["Gate"],"text":"label the Gate North","wire":{"type":"command","args":{"action":"label","target":"Gate","label":"North"}}}
+{"id":"ts-0742","names":["Bee"],"text":"duplicate Bee twice","wire":{"type":"command","args":{"action":"duplicate","target":"Bee","count":"2"}}}
+{"id":"ts-0743","names":["Lime"],"text":"is there a loop in the graph","wire":{"type":"question","args":{"ask":"cycle"}}}
+{"id":"ts-0744","names":["Quad"],"text":"can I see everything reachable from Quad","wire":{"type":"question","args":{"ask":"reachable","from":"Quad"}}}
+{"id":"ts-0745","names":["Whip"],"text":"show me the rules in force","wire":{"type":"question","args":{"ask":"rules"}}}
+{"id":"ts-0746","names":["Pivot"],"text":"which shapes are connected to Pivot","wire":{"type":"question","args":{"ask":"neighbors","target":"Pivot"}}}
+{"id":"ts-0747","names":["Ink","Quill"],"text":"is Ink linked to Quill","wire":{"type":"question","args":{"ask":"connected","target":"Ink","anchor":"Quill"}}}
+{"id":"ts-0748","names":["Aleph","Beth"],"text":"is there a path Aleph to Beth","wire":{"type":"question","args":{"ask":"path","from":"Aleph","to":"Beth"}}}
+{"id":"ts-0749","names":["Gamma"],"text":"degree of Gamma","wire":{"type":"question","args":{"ask":"degree","target":"Gamma"}}}
+{"id":"ts-0750","names":["Fir"],"text":"which are the hexagons","wire":{"type":"question","args":{"ask":"list","shape":"hexagon"}}}
+{"id":"ts-0751","names":["Yam"],"text":"how many orange shapes","wire":{"type":"question","args":{"ask":"count","color":"orange"}}}
+{"id":"ts-0752","names":["Aster"],"text":"is there anything above Aster","wire":{"type":"question","args":{"ask":"exists","position":"above","anchor":"Aster"}}}
+{"id":"ts-0753","names":["Seat"],"text":"describe the Seat","wire":{"type":"question","args":{"ask":"describe","target":"Seat"}}}
+{"id":"ts-0754","names":["Hut","Cabin"],"text":"what's farthest from Hut","wire":{"type":"question","args":{"ask":"nearest","anchor":"Hut","superlative":"farthest"}}}
+{"id":"ts-0755","names":["Kern","Font"],"text":"is Kern bigger than Font","wire":{"type":"question","args":{"ask":"check","target":"Kern","comparison":"bigger","anchor":"Font"}}}
+{"id":"ts-0756","names":["Gap","Void"],"text":"Gap is smaller than Void?","wire":{"type":"question","args":{"ask":"check","target":"Gap","comparison":"smaller","anchor":"Void"}}}
+{"id":"ts-0757","names":["Spine"],"text":"which one is on the right edge","wire":{"type":"question","args":{"ask":"extreme","superlative":"rightmost"}}}
+{"id":"ts-0758","names":["Tusk"],"text":"what position is Tusk in","wire":{"type":"question","args":{"ask":"property","target":"Tusk","property":"position"}}}
+{"id":"ts-0759","names":["Ray"],"text":"is Ray small","wire":{"type":"question","args":{"ask":"check","target":"Ray","size":"small"}}}
+{"id":"ts-0760","names":["Moth"],"text":"Moth is a triangle","wire":{"type":"fact","args":{"target":"Moth","shape":"triangle"}}}
+{"id":"ts-0761","names":["Fox"],"text":"swap the Fox and the Hen, will you","wire":{"type":"command","args":{"action":"swap","target":"Fox,Hen"}}}
+{"id":"ts-0762","names":["Wick","Candle"],"text":"cut the Wick to Candle line","wire":{"type":"command","args":{"action":"disconnect","from":"Wick","to":"Candle"}}}
+{"id":"ts-0763","names":["Blob"],"text":"align the stars horizontally","wire":{"type":"command","args":{"action":"align","target":"mention(quantifier=all,shape=star)","axis":"horizontal"}}}
+{"id":"ts-0764","names":["Rod"],"text":"distribute the squares along the horizontal axis","wire":{"type":"command","args":{"action":"distribute","target":"mention(quantifier=all,shape=square)","axis":"horizontal"}}}
+{"id":"ts-0765","names":["Veil"],"text":"Veil goes in front","wire":{"type":"command","args":{"action":"toFront","target":"Veil"}}}
+{"id":"ts-0766","names":["Floor","Rug"],"text":"Rug should go behind Floor... just send Rug to the back","wire":{"type":"command","args":{"action":"toBack","target":"Rug"}}}
+{"id":"ts-0767","names":["Disc"],"text":"undo","wire":{"type":"command","args":{"action":"undo"}}}
+{"id":"ts-0768","names":["Disc2"],"text":"redo please","wire":{"type":"command","args":{"action":"redo"}}}
+{"id":"ts-0769","names":["Spud"],"text":"clear the default rules","wire":{"type":"command","args":{"action":"forget"}}}
+{"id":"ts-0770","names":["Sill"],"text":"arrange the red ones in a row","wire":{"type":"command","args":{"action":"arrange","target":"mention(color=red,quantifier=all)","layout":"row"}}}
+{"id":"ts-0771","names":["Cask"],"text":"rename Cask to Barrel","wire":{"type":"command","args":{"action":"rename","target":"Cask","name":"Barrel"}}}
+{"id":"ts-0772","names":["Bunk"],"text":"put \"Bed 4\" on Bunk","wire":{"type":"command","args":{"action":"label","target":"Bunk","label":"Bed 4"}}}
+{"id":"ts-0773","names":["Moss"],"text":"clone the Moss five times","wire":{"type":"command","args":{"action":"duplicate","target":"Moss","count":"5"}}}
+{"id":"ts-0774","names":["Pin"],"text":"shrink every circle","wire":{"type":"command","args":{"action":"resize","target":"mention(quantifier=all,shape=circle)"}}}
+{"id":"ts-0775","names":["Tide"],"text":"remove the newest hexagon","wire":{"type":"command","args":{"action":"delete","target":"mention(recency=newest,shape=hexagon)"}}}
+{"id":"ts-0776","names":["Dunes","Oasis"],"text":"put a tiny gold star between Dunes and Oasis","wire":{"type":"command","args":{"action":"create","shape":"star","color":"gold","size":"tiny","position":"between","anchor":"Dunes,Oasis"}}}
+{"id":"ts-0777","names":["Reactor"],"text":"add a green square","wire":{"type":"command","args":{"action":"create","shape":"square","color":"green"}}}
+{"id":"ts-0778","names":["Raven"],"text":"draw four orange circles at the top","wire":{"type":"command","args":{"action":"create","shape":"circle","color":"orange","count":"4","position":"top"}}}
+{"id":"ts-0779","names":["Quay"],"text":"make Quay a pink diamond","wire":{"type":"command","args":{"action":"set","target":"Quay","color":"pink","shape":"diamond"}}}
+{"id":"ts-0780","names":["Sump"],"text":"change all the purple things to teal","wire":{"type":"command","args":{"action":"set","target":"mention(color=purple,quantifier=all)","color":"teal"}}}
+{"id":"ts-0781","names":["Teen","Tween"],"text":"connect Teen to Tween, solid, in magenta","wire":{"type":"command","args":{"action":"connect","from":"Teen","to":"Tween","color":"magenta"}}}
+{"id":"ts-0782","names":["Fern","Moss","Lichen"],"text":"connect Fern and Moss in a chain with Lichen","wire":{"type":"command","args":{"action":"connect","from":"Fern,Moss,Lichen","pairing":"chain"}}}
+{"id":"ts-0783","names":["Core","Ring"],"text":"attach Core to Ring using a dotted arrow labelled link","wire":{"type":"command","args":{"action":"connect","from":"Core","to":"Ring","style":"dotted","label":"link"}}}
+{"id":"ts-0784","names":["Main"],"text":"connect Main to every square","wire":{"type":"command","args":{"action":"connect","from":"Main","to":"mention(quantifier=all,shape=square)","pairing":"all"}}}
+{"id":"ts-0785","names":["Anvil"],"text":"slide Anvil up 90","wire":{"type":"command","args":{"action":"move","target":"Anvil","direction":"up","distance":"90"}}}
+{"id":"ts-0786","names":["Pail","Well"],"text":"relocate Pail below Well","wire":{"type":"command","args":{"action":"move","target":"Pail","position":"below","anchor":"Well"}}}
+{"id":"ts-0787","names":["Cone"],"text":"shift the Cone to the right","wire":{"type":"command","args":{"action":"move","target":"Cone","position":"right"}}}
+{"id":"ts-0788","names":["Fable"],"text":"Fable is gold","wire":{"type":"fact","args":{"target":"Fable","color":"gold"}}}
+{"id":"ts-0789","names":[],"text":"whenever I add a box make it brown","wire":{"type":"rule","args":{"shape":"rectangle","color":"brown"}}}
+{"id":"ts-0790","names":["Hay"],"text":"anything cyclic?","wire":{"type":"question","args":{"ask":"cycle"}}}
+{"id":"ts-0791","names":["Rim"],"text":"what can be reached starting from Rim","wire":{"type":"question","args":{"ask":"reachable","from":"Rim"}}}
+{"id":"ts-0792","names":["Ploy"],"text":"what rules exist","wire":{"type":"question","args":{"ask":"rules"}}}
+{"id":"ts-0793","names":["Gem"],"text":"which neighbors does Gem have","wire":{"type":"question","args":{"ask":"neighbors","target":"Gem"}}}
+{"id":"ts-0794","names":["Hob","Nob"],"text":"is Hob adjacent to Nob","wire":{"type":"question","args":{"ask":"connected","target":"Hob","anchor":"Nob"}}}
+{"id":"ts-0795","names":["Eve","Adam"],"text":"is there a route from Eve to Adam?","wire":{"type":"question","args":{"ask":"path","from":"Eve","to":"Adam"}}}
+{"id":"ts-0796","names":["Pith"],"text":"what's Pith's degree","wire":{"type":"question","args":{"ask":"degree","target":"Pith"}}}
+{"id":"ts-0797","names":["Rye"],"text":"which shape is the smallest one","wire":{"type":"question","args":{"ask":"extreme","superlative":"smallest"}}}
+{"id":"ts-0798","names":["Elm","Ash"],"text":"is Elm above Ash","wire":{"type":"question","args":{"ask":"check","target":"Elm","position":"above","anchor":"Ash"}}}
+{"id":"ts-0799","names":["Emu"],"text":"what color is Emu","wire":{"type":"question","args":{"ask":"property","target":"Emu","property":"color"}}}
+{"id":"ts-0800","names":["Cod","Eel"],"text":"is Cod nearer to Eel... what is the closest shape to Cod","wire":{"type":"question","args":{"ask":"nearest","anchor":"Cod","superlative":"closest"}}}

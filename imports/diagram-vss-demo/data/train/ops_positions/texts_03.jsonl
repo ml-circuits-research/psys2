@@ -1,0 +1,40 @@
+{"id":"op-0081","domain":"flowchart","names":["Start","Input","Process","Output"],"text":"so I'm redoing my flowchart for the lab report. Put Input below Start and left of Process, then Output in the bottom right, right of Process. Is Process above Input and right of Start? No clue anymore. Also make Start green."}
+{"id":"op-0082","domain":"game design","names":["Base","Tower"],"text":"Build a huge gray square called Keep beneath Tower but over Base. Then a tiny red circle called Guard, upper left corner, left of Tower."}
+{"id":"op-0083","domain":"castle","names":["Gate"],"text":"Which shapes are in the top right corner above Gate?"}
+{"id":"op-0084","domain":"org chart","names":["Mgr","Dev1","Dev2","Qa"],"text":"Mgr should be in the center, above Dev1 and Dev2. Qa goes under Dev1 but right of Dev2. Is Qa beneath Mgr and next to Dev2?"}
+{"id":"op-0085","domain":"town map","names":["Bakery","Cafe","Park"],"text":"okay um add a yellow triangle called Kiosk, it goes right of Park and uh above the Cafe, yeah. Oh and the Bakery should be near the bottom, to the left of Cafe."}
+{"id":"op-0086","domain":"weather quiz","names":["Rain","Cloud","Ground","Sun"],"text":"Is Rain below Cloud but above Ground? Is Sun in the top left, right of Cloud? Tell me please."}
+{"id":"op-0087","domain":"network","names":["Fw1","Fw2","Lan","Dmz"],"text":"Slap a hexagon named Gw beneath Fw1 and to the right of Fw2, then link Gw to Lan with a dotted line. After that, how many hexagons are above Lan and left of Dmz?"}
+{"id":"op-0088","domain":"mind map","names":["Plan","Do","Check","Act"],"text":"Place Act in the middle but below Check, and Plan up in the upper right corner near Do."}
+{"id":"op-0089","domain":"layout","names":["Hub"],"text":"List the circles that are left of Hub and in the bottom left corner."}
+{"id":"op-0090","domain":"dictation","names":["Web","Db"],"text":"Plase put a blu diamand named Cache betwen Web and Db, near the top. then make Db big"}
+{"id":"op-0091","domain":"sports","names":["Ball","Net","Goalie","Striker"],"text":"Ball is under Net and right of Goalie. Striker is next to Ball in the bottom right. Quick check for me: is Goalie above Striker but left of Net?"}
+{"id":"op-0092","domain":"solar system","names":["Sun","Mercury","Venus"],"text":"Move Mercury underneath the Sun and next to Venus. Then send Venus to the top right corner, above Mercury."}
+{"id":"op-0093","domain":"family tree","names":["Gran","Mom","Aunt"],"text":"Aunt must be left of Mom and under Gran, I messed it up before. Also tell me, are there any shapes between Mom and Aunt and below Gran?"}
+{"id":"op-0094","domain":"storyboard","names":["Hero","Tower","Dragon"],"text":"scene three: the Hero stands in the middle below Tower. The Dragon is in the bottom right, right of Hero. I need a gold star called Treasure between Hero and Dragon, near the bottom, and then connect Hero to Treasure with a dashed arrow. Then make Dragon red, since it is angry. How many stars do we have?"}
+{"id":"op-0095","domain":"wireframe","names":["Logo","Search","Menu"],"text":"Logo goes at the top left. Search should be right of Logo but under Menu. Is Menu in the top right?"}
+{"id":"op-0096","domain":"cooking","names":["Pot","Pan","Bowl"],"text":"Pan sits over Pot, in the top left. And Bowl is under Pot, next to Pan."}
+{"id":"op-0097","domain":"canvas","names":["Hub","Gate"],"text":"Is there a red shape below Hub and right of Gate?"}
+{"id":"op-0098","domain":"garden","names":["Tree","Pond","Bench","Path"],"text":"Add two small lime circles near the top, right of Tree. Then place Bench next to Pond but below Path."}
+{"id":"op-0099","domain":"voice note","names":["Alpha","Beta","Gamma"],"text":"uh so Gamma goes below Alpha and uh over Beta okay and Alpha goes to the upper right corner, no, the upper left corner."}
+{"id":"op-0100","domain":"physics homework","names":["Mass1","Mass2","Table","Spring"],"text":"my physics diagram is a mess. Put Spring between Mass1 and Mass2 and above Table. Make Spring yellow."}
+{"id":"op-0101","domain":"logistics","names":["Truck","Depot","Dock"],"text":"Truck should be next to Depot, in the bottom left corner. Is anything right of Dock and in the bottom left? Wait, no, is anything right of Dock and in the bottom right?"}
+{"id":"op-0102","domain":"kanban","names":["Backlog","Todo","Done"],"text":"Make a navy rectangle called Review under Todo, left of Done. Another navy one, called Test, between Review and Done near the bottom."}
+{"id":"op-0103","domain":"lab floor plan","names":["Bench1","Bench2","Hood","Sink"],"text":"Hi! I'm sketching a bio-lab floor plan. Bench2 should be right of Bench1 and below Hood. Sink must sit near the top, left of Hood. Could you also color Hood teal and tell me which shapes are left of Sink? Finally put a small gray circle called Drain beneath Sink, in the bottom left."}
+{"id":"op-0104","domain":"space","names":["Moon","Sun"],"text":"Please place Moon in upper right corner, next to Sun."}
+{"id":"op-0105","domain":"networking","names":["Router","Switch","Modem","Pc"],"text":"Router is above Switch and right of Modem. Switch is in the center, above Pc."}
+{"id":"op-0106","domain":"friends","names":["Nina","Omar","Pia"],"text":"Is Nina right of Omar and below Pia? Is Omar in the top left, above Pia? Is Pia left of Nina and in the bottom?"}
+{"id":"op-0107","domain":"garden","names":["Seed","Soil","Sun"],"text":"Move Seed under Soil and left of Sun, then duplicate Seed."}
+{"id":"op-0108","domain":"house","names":["Roof"],"text":"Add a white circle in the middle but beneath Roof. That's all for now."}
+{"id":"op-0109","domain":"classroom","names":["Teacher","Pupil1","Pupil2","Desk"],"text":"Pupil1 and Pupil2 both go below Teacher but above Desk."}
+{"id":"op-0110","domain":"buildings","names":["Roof","Chimney"],"text":"How many squares are above Roof and left of Chimney? How many are above Roof and right of Chimney?"}
+{"id":"op-0111","domain":"game","names":["Boss1","Minion","Wall"],"text":"I think Boss1 should stay in the center, but put Minion beneath Boss1 and to the left of Wall."}
+{"id":"op-0112","domain":"planets","names":["Gate"],"text":"Create a green star right of Gate in the top right, then another red star right of Gate in the bottom right."}
+{"id":"op-0113","domain":"boxes","names":["Box1","Box2","Box3","Box4"],"text":"Wait, is Box1 under Box2 and between Box3 and Box4?"}
+{"id":"op-0114","domain":"camp site","names":["Cabin"],"text":"Which shapes sit near the bottom and left of Cabin? How many are near the top, right of Cabin?"}
+{"id":"op-0115","domain":"data pipeline","names":["Fetch","Parse","Store","Report"],"text":"okay big change for the pipeline: Fetch goes to the top left, Parse goes under Fetch but right of Store, and Store goes in the middle, above Report. Then connect Fetch, Parse and Store one after the other. Is Report in the bottom right? Rename Report to Output."}
+{"id":"op-0116","domain":"treasure map","names":["Chest","Door"],"text":"Put a pink diamond named Gem on top of Chest and to the left of Door."}
+{"id":"op-0117","domain":"friends","names":["Lea","Max","Ola"],"text":"is Lea beneath Max and next to Ola? I bet she's not."}
+{"id":"op-0118","domain":"plumbing","names":["Pump","Tank"],"text":"Shift Pump to the bottom right, right of Tank and shrink it."}
+{"id":"op-0119","domain":"sky","names":["Sun","Moon"],"text":"Everything red should go under Sun and left of Moon."}
+{"id":"op-0120","domain":"cleanup","names":["Old1","Old2","Old3","New1"],"text":"Delete Old1. Put New1 in the upper left corner, above Old2 and next to Old3, then tell me how many shapes remain."}

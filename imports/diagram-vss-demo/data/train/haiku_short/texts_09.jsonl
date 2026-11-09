@@ -1,0 +1,100 @@
+{"id": "th-0801", "names": ["User"], "text": "add a teal box named Session under User"}
+{"id": "th-0802", "names": [], "text": "place a huge purple box called Ledger at the top"}
+{"id": "th-0803", "names": ["Order"], "text": "three tiny yellow circles beside Order"}
+{"id": "th-0804", "names": [], "text": "a white hexagon labelled 'Admin' down in the bottomLeft"}
+{"id": "th-0805", "names": ["Cart", "Invoice"], "text": "put a gray oval named Tax between Cart and Invoice"}
+{"id": "th-0806", "names": ["Product"], "text": "a lime triangle called Sku left of Product"}
+{"id": "th-0807", "names": [], "text": "small navy star near the center"}
+{"id": "th-0808", "names": ["Invoice"], "text": "sketch a red box named Refund right under Invoice"}
+{"id": "th-0809", "names": [], "text": "pop a black diamond at the right edge"}
+{"id": "th-0810", "names": ["User", "Order"], "text": "2 orange squares between User and Order"}
+{"id": "th-0811", "names": [], "text": "make a medium cyan oval labeled 'Cache' at the top right"}
+{"id": "th-0812", "names": [], "text": "from now on rectangles come out magenta"}
+{"id": "th-0813", "names": ["User"], "text": "User should be purple"}
+{"id": "th-0814", "names": ["Cart"], "text": "make Cart a diamond"}
+{"id": "th-0815", "names": ["Order"], "text": "Order goes huge"}
+{"id": "th-0816", "names": ["Tax"], "text": "tax needs to be blue"}
+{"id": "th-0817", "names": ["Product"], "text": "turn Product into an ellipse"}
+{"id": "th-0818", "names": ["Session"], "text": "Session should be small"}
+{"id": "th-0819", "names": ["Invoice"], "text": "paint Invoice cyan"}
+{"id": "th-0820", "names": [], "text": "make the squares that aren't orange green"}
+{"id": "th-0821", "names": ["Ledger"], "text": "make Ledger white"}
+{"id": "th-0822", "names": ["User", "Session", "Token"], "text": "link User, Session and Token in a chain"}
+{"id": "th-0823", "names": ["Order", "Product"], "text": "a dashed link between Order and Product"}
+{"id": "th-0824", "names": ["Cart", "Order", "Invoice"], "text": "chain Cart, Order and Invoice in order"}
+{"id": "th-0825", "names": ["User", "Ledger"], "text": "draw a navy line from User to Ledger"}
+{"id": "th-0826", "names": ["Invoice", "Refund"], "text": "connect Invoice to Refund both ways"}
+{"id": "th-0827", "names": ["Ledger"], "text": "move Ledger 50 pixels to the left"}
+{"id": "th-0828", "names": ["Token"], "text": "drag Token down 30 px"}
+{"id": "th-0829", "names": ["Sku", "Product"], "text": "Sku moves to the left of Product"}
+{"id": "th-0830", "names": ["Tax"], "text": "slide Tax to the top"}
+{"id": "th-0831", "names": ["Admin"], "text": "nudge Admin up"}
+{"id": "th-0832", "names": ["Refund", "Invoice"], "text": "put Refund right of Invoice"}
+{"id": "th-0833", "names": ["Cart", "User", "Order"], "text": "move Cart between User and Order"}
+{"id": "th-0834", "names": ["Token"], "text": "delete Token"}
+{"id": "th-0835", "names": [], "text": "get rid of every oval that isn't cyan"}
+{"id": "th-0836", "names": ["Admin"], "text": "scrap Admin"}
+{"id": "th-0837", "names": ["Order"], "text": "make Order bigger"}
+{"id": "th-0838", "names": ["Product"], "text": "shrink Product"}
+{"id": "th-0839", "names": ["User"], "text": "rename User to Account"}
+{"id": "th-0840", "names": ["Cart"], "text": "Cart's name should be Basket"}
+{"id": "th-0841", "names": ["Session"], "text": "label Session 'Live'"}
+{"id": "th-0842", "names": ["Ledger"], "text": "put 'Double entry' on Ledger"}
+{"id": "th-0843", "names": ["Sku"], "text": "duplicate Sku"}
+{"id": "th-0844", "names": ["Refund"], "text": "make 3 copies of Refund"}
+{"id": "th-0845", "names": ["Order", "Cart"], "text": "swap Order and Cart"}
+{"id": "th-0846", "names": ["Product", "Invoice"], "text": "switch Product and Invoice"}
+{"id": "th-0847", "names": ["User", "Session"], "text": "unlink User from Session"}
+{"id": "th-0848", "names": ["Order", "Product"], "text": "remove the connection between Order and Product"}
+{"id": "th-0849", "names": ["User", "Order", "Cart"], "text": "align User, Order and Cart horizontally"}
+{"id": "th-0850", "names": [], "text": "align all the ovals vertically"}
+{"id": "th-0851", "names": ["Ledger", "Token"], "text": "arrange Ledger and Token in a row"}
+{"id": "th-0852", "names": [], "text": "tidy everything up into columns"}
+{"id": "th-0853", "names": ["User", "Order", "Product"], "text": "spread out User, Order and Product evenly horizontally"}
+{"id": "th-0854", "names": [], "text": "space out the gray shapes vertically"}
+{"id": "th-0855", "names": ["Tax"], "text": "bring Tax to the front"}
+{"id": "th-0856", "names": [], "text": "raise the newest square to the top layer"}
+{"id": "th-0857", "names": ["Ledger"], "text": "put Ledger at the back"}
+{"id": "th-0858", "names": [], "text": "send the oldest diamond to the back"}
+{"id": "th-0859", "names": [], "text": "roll that back"}
+{"id": "th-0860", "names": [], "text": "undo the last edit"}
+{"id": "th-0861", "names": [], "text": "redo the edit"}
+{"id": "th-0862", "names": [], "text": "put that change back on"}
+{"id": "th-0863", "names": [], "text": "forget the defaults"}
+{"id": "th-0864", "names": [], "text": "clear out your learned rules"}
+{"id": "th-0865", "names": [], "text": "how many classes are there"}
+{"id": "th-0866", "names": [], "text": "how many black things"}
+{"id": "th-0867", "names": ["User"], "text": "how many shapes are right of User"}
+{"id": "th-0868", "names": [], "text": "is there a white hexagon"}
+{"id": "th-0869", "names": [], "text": "any navy stars around?"}
+{"id": "th-0870", "names": [], "text": "show every square"}
+{"id": "th-0871", "names": [], "text": "which ones are not cyan"}
+{"id": "th-0872", "names": ["Product"], "text": "what shape is Product"}
+{"id": "th-0873", "names": ["Session"], "text": "what's the color of Session"}
+{"id": "th-0874", "names": [], "text": "how big is the newest diamond"}
+{"id": "th-0875", "names": ["Order"], "text": "describe the Order class"}
+{"id": "th-0876", "names": [], "text": "what's on this UML sheet overall"}
+{"id": "th-0877", "names": ["User"], "text": "what's wired to User"}
+{"id": "th-0878", "names": ["Invoice"], "text": "list the neighbours of Invoice"}
+{"id": "th-0879", "names": ["User", "Session"], "text": "are User and Session connected"}
+{"id": "th-0880", "names": ["Cart", "Order"], "text": "is Cart joined straight to Order"}
+{"id": "th-0881", "names": ["Order"], "text": "degree of Order?"}
+{"id": "th-0882", "names": ["Invoice"], "text": "how many edges touch Invoice"}
+{"id": "th-0883", "names": ["User", "Refund"], "text": "is there a path from User to Refund"}
+{"id": "th-0884", "names": ["Session", "Product"], "text": "how can I go from Session to Product"}
+{"id": "th-0885", "names": ["User"], "text": "reachable from User?"}
+{"id": "th-0886", "names": ["Cart"], "text": "what does Cart lead to"}
+{"id": "th-0887", "names": [], "text": "is there a cycle in these classes"}
+{"id": "th-0888", "names": [], "text": "any circular references?"}
+{"id": "th-0889", "names": [], "text": "what rules are defined"}
+{"id": "th-0890", "names": [], "text": "tell me the active defaults"}
+{"id": "th-0891", "names": ["Product"], "text": "is Product lime"}
+{"id": "th-0892", "names": ["Invoice"], "text": "is Invoice a box"}
+{"id": "th-0893", "names": ["Order", "Cart"], "text": "is Order bigger than Cart"}
+{"id": "th-0894", "names": [], "text": "what's the bottommost one"}
+{"id": "th-0895", "names": [], "text": "which is the leftmost class"}
+{"id": "th-0896", "names": ["User"], "text": "closest thing to User"}
+{"id": "th-0897", "names": ["Session"], "text": "which blue shape is the farthest from Session"}
+{"id": "th-0898", "names": ["Tax"], "text": "Tax is gray"}
+{"id": "th-0899", "names": ["Token", "Session"], "text": "Token sits right of Session"}
+{"id": "th-0900", "names": [], "text": "new ovals should be tiny"}

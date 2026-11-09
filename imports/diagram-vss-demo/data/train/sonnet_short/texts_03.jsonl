@@ -1,0 +1,100 @@
+{"id": "ts-0201", "names": ["Warehouse", "Truck"], "text": "um okay so add a brown rectangle called Depot to the right of the Warehouse"}
+{"id": "ts-0202", "names": ["Thermostat"], "text": "turn it red, the Thermostat I mean"}
+{"id": "ts-0203", "names": ["Orders", "Billing"], "text": "connect Orders with Billing"}
+{"id": "ts-0204", "names": ["Mirror"], "text": "move the Mirror to the top"}
+{"id": "ts-0205", "names": ["Beta"], "text": "how many hexagons are on the board?"}
+{"id": "ts-0206", "names": ["Coach"], "text": "Coach, begone"}
+{"id": "ts-0207", "names": [], "text": "create a gold star"}
+{"id": "ts-0208", "names": ["Pilot"], "text": "relabel Pilot as Captain"}
+{"id": "ts-0209", "names": ["Server", "Cache"], "text": "hey is the Server directly connected to the Cache"}
+{"id": "ts-0210", "names": ["Tent", "Camp"], "text": "go back one step"}
+{"id": "ts-0211", "names": ["Radar"], "text": "change the name of Radar to Sonar"}
+{"id": "ts-0212", "names": ["Cat", "Dog"], "text": "flip Cat and Dog"}
+{"id": "ts-0213", "names": ["Anchor"], "text": "who are the neighbours of Anchor"}
+{"id": "ts-0214", "names": ["Boiler"], "text": "I think the Boiler should be larger"}
+{"id": "ts-0215", "names": ["Gear1", "Gear2"], "text": "align the red circles horizontally"}
+{"id": "ts-0216", "names": ["Violin"], "text": "what shape does Violin have"}
+{"id": "ts-0217", "names": [], "text": "from now on, make every star yellow"}
+{"id": "ts-0218", "names": ["Engine"], "text": "Engine is green"}
+{"id": "ts-0219", "names": ["Sofa"], "text": "put a tiny cyan circle near the Sofa"}
+{"id": "ts-0220", "names": ["Cell"], "text": "clone Cell twice"}
+{"id": "ts-0221", "names": ["Lobby", "Vault"], "text": "route from Lobby to Vault exist?"}
+{"id": "ts-0222", "names": ["Stamp"], "text": "raise Stamp to the front"}
+{"id": "ts-0223", "names": ["Alice", "Bob", "Carol"], "text": "link them in order: Alice, Bob, Carol"}
+{"id": "ts-0224", "names": ["Abc"], "text": "arrange the whole diagram in a row"}
+{"id": "ts-0225", "names": ["Poppy"], "text": "let's recolor Poppy to orange"}
+{"id": "ts-0226", "names": ["Kiosk"], "text": "slide Kiosk 200 to the left"}
+{"id": "ts-0227", "names": ["Vein"], "text": "any loops in here"}
+{"id": "ts-0228", "names": ["Rocket"], "text": "the Rocket is a triangle"}
+{"id": "ts-0229", "names": ["Ox", "Hen"], "text": "is Ox bigger than Hen?"}
+{"id": "ts-0230", "names": ["Sign"], "text": "Sign should be at the very back"}
+{"id": "ts-0231", "names": ["Alpha", "Omega"], "text": "drop the connection from Alpha to Omega"}
+{"id": "ts-0232", "names": ["Pen"], "text": "redo please"}
+{"id": "ts-0233", "names": ["Tab"], "text": "lets have a medium magenta diamond at the bottom"}
+{"id": "ts-0234", "names": ["Pin1", "Pin2", "Pin3"], "text": "even out the spacing of Pin1, Pin2, Pin3 vertically"}
+{"id": "ts-0235", "names": ["Duct"], "text": "what's the bottommost one"}
+{"id": "ts-0236", "names": ["Crow", "Nest"], "text": "put Crow below Nest"}
+{"id": "ts-0237", "names": ["Zip"], "text": "wipe the defaults"}
+{"id": "ts-0238", "names": ["Zap"], "text": "which rules apply"}
+{"id": "ts-0239", "names": ["Link1", "Link2"], "text": "what is the degree of Link1?"}
+{"id": "ts-0240", "names": ["Ash"], "text": "get rid of all the white shapes"}
+{"id": "ts-0241", "names": ["Ranch"], "text": "add a teal square called Barn above the Ranch"}
+{"id": "ts-0242", "names": ["Spleen", "Liver"], "text": "connect Spleen to Liver using a thin dotted line"}
+{"id": "ts-0243", "names": ["Tide"], "text": "is there a navy ellipse"}
+{"id": "ts-0244", "names": ["Sprout"], "text": "make Sprout a lime hexagon"}
+{"id": "ts-0245", "names": ["Anna", "Ben"], "text": "is Anna on the left of Ben"}
+{"id": "ts-0246", "names": ["Spark"], "text": "scale Spark up"}
+{"id": "ts-0247", "names": ["Gong"], "text": "what are all the stars?"}
+{"id": "ts-0248", "names": ["Gate"], "text": "write Entrance on Gate"}
+{"id": "ts-0249", "names": ["Tuba"], "text": "call the first hexagon Anchor"}
+{"id": "ts-0250", "names": ["Sam"], "text": "going forward, circles are small"}
+{"id": "ts-0251", "names": ["Barrel"], "text": "where is Barrel"}
+{"id": "ts-0252", "names": ["Roof", "Wall"], "text": "insert a gray star in between the Roof and the Wall"}
+{"id": "ts-0253", "names": [], "text": "put all of them in a circle"}
+{"id": "ts-0254", "names": ["Dwarf", "Giant"], "text": "is Dwarf smaller than Giant"}
+{"id": "ts-0255", "names": ["Pod"], "text": "tell me about Pod"}
+{"id": "ts-0256", "names": ["Basket"], "text": "move the Basket to the right side"}
+{"id": "ts-0257", "names": ["Pond", "Dam"], "text": "Pond is right of Dam"}
+{"id": "ts-0258", "names": ["Notebook"], "text": "copy the Notebook"}
+{"id": "ts-0259", "names": ["Dome"], "text": "give me six white circles"}
+{"id": "ts-0260", "names": ["Pole", "Flag"], "text": "which shape is closest to Pole"}
+{"id": "ts-0261", "names": ["Finch"], "text": "is Finch navy"}
+{"id": "ts-0262", "names": ["Ned", "Meg"], "text": "sever Ned from Meg"}
+{"id": "ts-0263", "names": ["Spine"], "text": "what can I reach from Spine"}
+{"id": "ts-0264", "names": ["Chip"], "text": "colour Chip black"}
+{"id": "ts-0265", "names": ["Fan", "Vent"], "text": "hook Fan up to Vent with an undirected line"}
+{"id": "ts-0266", "names": ["Table"], "text": "shift the Table up 30 pixels"}
+{"id": "ts-0267", "names": ["Tom"], "text": "who is the least connected?"}
+{"id": "ts-0268", "names": ["Gum"], "text": "nuke Gum"}
+{"id": "ts-0269", "names": ["Hut1", "Hut2", "Hut3"], "text": "make Hut1, Hut2 and Hut3 level horizontally"}
+{"id": "ts-0270", "names": ["Lock"], "text": "nope, undo"}
+{"id": "ts-0271", "names": ["Beet"], "text": "how many edges are in the diagram"}
+{"id": "ts-0272", "names": ["Jam"], "text": "Jam is purple"}
+{"id": "ts-0273", "names": ["Desk", "Chair"], "text": "swap the positions of Desk and Chair"}
+{"id": "ts-0274", "names": ["Nebula"], "text": "please make the Nebula huge"}
+{"id": "ts-0275", "names": ["Boat"], "text": "which shape is the farthest from Boat"}
+{"id": "ts-0276", "names": ["Truss"], "text": "pop Truss on top of everything"}
+{"id": "ts-0277", "names": ["Rhino"], "text": "stop remembering the defaults"}
+{"id": "ts-0278", "names": ["Nova"], "text": "new box, color black, and call it Void"}
+{"id": "ts-0279", "names": ["Hose", "Tap"], "text": "are Hose and Tap linked?"}
+{"id": "ts-0280", "names": ["Gull"], "text": "line the stars up in a column"}
+{"id": "ts-0281", "names": ["Iris"], "text": "redo what I just undid"}
+{"id": "ts-0282", "names": ["Plum"], "text": "the plum is not blue, is that right?"}
+{"id": "ts-0283", "names": ["Elk"], "text": "send Elk to the bottom right"}
+{"id": "ts-0284", "names": ["Rod", "Reel"], "text": "connect Rod to Reel, red arrow, labelled cast"}
+{"id": "ts-0285", "names": ["Fig"], "text": "give me a list of everything that is not green"}
+{"id": "ts-0286", "names": ["Cork"], "text": "shrink the newest circle"}
+{"id": "ts-0287", "names": ["Harp", "Lyre"], "text": "even out Harp and Lyre vertically"}
+{"id": "ts-0288", "names": ["Pug"], "text": "the biggest one please"}
+{"id": "ts-0289", "names": ["Beam"], "text": "thr0w a huge orange star down"}
+{"id": "ts-0290", "names": ["Dice"], "text": "set Dice to medium"}
+{"id": "ts-0291", "names": ["Rye"], "text": "are there more than... how many blue boxes"}
+{"id": "ts-0292", "names": ["Barn", "Silo"], "text": "is there a way from Barn to Silo"}
+{"id": "ts-0293", "names": ["Cod"], "text": "describe everything"}
+{"id": "ts-0294", "names": ["Raven"], "text": "hide the Raven behind the others"}
+{"id": "ts-0295", "names": ["Wasp"], "text": "relocate Wasp 45 right"}
+{"id": "ts-0296", "names": ["Taxi"], "text": "copy Taxi four times"}
+{"id": "ts-0297", "names": ["Lynx", "Puma"], "text": "Lynx is large"}
+{"id": "ts-0298", "names": ["Drum"], "text": "how many connections does Drum have"}
+{"id": "ts-0299", "names": ["Shoe"], "text": "rename Shoe to Boot"}
+{"id": "ts-0300", "names": ["Pear", "Plum"], "text": "any triangle above Pear?"}

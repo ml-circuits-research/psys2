@@ -1,0 +1,40 @@
+{"id":"op-0041","domain":"startup org","names":["Ceo","Cto","Dev"],"text":"Hey, quick restructure of the team chart. Move Dev under Cto but still left of Ceo, then put Cto in the middle, above Dev. Who is the bottommost shape?"}
+{"id":"op-0042","domain":"UI layout","names":["Nav","Card","Footer"],"text":"Slide the Card to the upper left corner next to Nav, and move Footer near the bottom, below Card. The page feels top-heavy."}
+{"id":"op-0043","domain":"plumbing","names":["Pump","Tank","Valve"],"text":"Is Pump between Tank and Valve and also near the top?"}
+{"id":"op-0044","domain":"game level","names":["Spawn","Gate","Chest","Trap"],"text":"I'm laying out level two. Chest goes right of Gate in the bottom right, and Trap should be under Chest, left of Spawn. Do any shapes sit left of Trap in the bottom left?"}
+{"id":"op-0045","domain":"kitchen","names":["Oven","Sink","Fridge"],"text":"Add a gray rectangle called Table in the middle, under Oven. Add another one, white, beneath Sink and over Fridge, and tell me how many rectangles exist."}
+{"id":"op-0046","domain":"biology","names":["Heart","Lung","Liver"],"text":"Heart is above Liver and right of Lung, right? I labeled it that way. And Lung is in the top left."}
+{"id":"op-0047","domain":"data pipeline","names":["Source","Clean","Load","Report"],"text":"Place a purple hexagon named Join between Clean and Load, close to the bottom. Then draw lines from Source to Clean and from Clean to Join."}
+{"id":"op-0048","domain":"teacher","names":["Triangle","Square","Pupil"],"text":"could u tell me which things are above Square but below Triangle? ty"}
+{"id":"op-0049","domain":"network","names":["Core","Edge1","Edge2","Wifi"],"text":"Edge1 should sit to the left of Core and under Wifi, Edge2 to the right of Core and under Wifi. Is Wifi in the top right corner right now?"}
+{"id":"op-0050","domain":"storyboard","names":["Mom","Dad","Kid"],"text":"Mom is left of Dad and above Kid, but Kid is right of Dad. That doesn't add up, whatever."}
+{"id":"op-0051","domain":"dictation","names":["Bridge","Tower","River"],"text":"um so the Bridge, no actually the Tower, put it beside the River in the upper right corner, and uh then add a teal circle underneath the Bridge and left of the River."}
+{"id":"op-0052","domain":"voting","names":["A1","B1","C1"],"text":"Delete C1, it's a duplicate. A1 should now be on top of B1, in the top left."}
+{"id":"op-0053","domain":"chemistry","names":["Atom1","Atom2","Atom3"],"text":"Which atoms are left of Atom3 and in the bottom left? Also how many are above Atom1 and below Atom2?"}
+{"id":"op-0054","domain":"retail","names":["Shelf","Till","Door"],"text":"Make a small yellow star and put it next to Till, in the bottom right corner. Also a lime one beneath Shelf, above Door."}
+{"id":"op-0055","domain":"chat","names":["Anna","Bob"],"text":"Is Anna in the top left, left of Bob?"}
+{"id":"op-0056","domain":"architecture","names":["Web","App","Db","Cache"],"text":"Move Db under App, to the left of Cache. Then drop Web in the center above App."}
+{"id":"op-0057","domain":"film set","names":["Cam","Light","Actor"],"text":"Put Light on top of Cam and left of Actor, then tell me if Actor is next to Cam near the bottom."}
+{"id":"op-0058","domain":"math","names":["P","Q","R"],"text":"P is under Q, and above R, so draw a gray line from P to Q."}
+{"id":"op-0059","domain":"bad grammar","names":["Hub","Node1","Node2"],"text":"Please you make red circle at the left of Hub and over the Node1. Also Node2 move it in the top right and beside Hub."}
+{"id":"op-0060","domain":"restaurant floor plan","names":["Bar","Kitchen","Door","Table1","Table2"],"text":"ok here's the thing, I'm redoing the restaurant layout tonight. Table1 needs to go next to the Door but still below the Bar. Table2 should be in the bottom right, right of Table1, and make it big. Is the Kitchen left of the Bar and above Table1? I think so but not sure. If that's true, add a huge brown ellipse called Pantry between Kitchen and Bar, near the top. Thanks!"}
+{"id":"op-0061","domain":"terse","names":["Hub","Gate","Roof"],"text":"Place a red circle between Hub and Gate and under Roof."}
+{"id":"op-0062","domain":"kanban","names":["Todo","Doing","Done"],"text":"Todo, Doing and Done should be in a row. Then shift Done to the top right, right of Doing, and how many shapes are below Todo and left of Doing?"}
+{"id":"op-0063","domain":"geometry","names":["Pt1","Pt2","Pt3"],"text":"Make a tiny black circle called Mid between Pt1 and Pt2 and below Pt3. Then connect Mid to Pt3 with a dashed arrow."}
+{"id":"op-0064","domain":"infra","names":["Server","Disk","Router","Cable"],"text":"Server is in the middle but above Disk. Disk is under Router and right of Cable."}
+{"id":"op-0065","domain":"space","names":["Moon"],"text":"Drop three small gold stars near the top, right of Moon."}
+{"id":"op-0066","domain":"game","names":["Hero","Boss"],"text":"Boss goes in the bottom right corner next to Hero. Hero stays at the left edge by the way. Is Hero bigger than Boss?"}
+{"id":"op-0067","domain":"office","names":["Lamp","Desk","Chair"],"text":"Move Lamp below Desk and left of Chair, no wait, right of Chair."}
+{"id":"op-0068","domain":"shop","names":["Shelf","Door"],"text":"Is there anything beneath Shelf that is also right of Door? What about in the bottom left, next to Door?"}
+{"id":"op-0069","domain":"school timetable","names":["Mon","Tue","Wed","Thu"],"text":"I'm making a week board. Tue goes between Mon and Wed, near the top. Thu should be right of Wed in the same row, ugh, in the upper right corner I mean. Color Mon blue and Tue green. How many shapes are in the top right?"}
+{"id":"op-0070","domain":"park","names":["Lake","Tree","Bench"],"text":"Tree should go left of Lake and under Bench, please."}
+{"id":"op-0071","domain":"animals","names":["Cat","Dog","Bird"],"text":"Is Cat above Dog and left of Bird? Is Dog also below Bird?"}
+{"id":"op-0072","domain":"flow","names":["A","B","C"],"text":"Wire A, B and C each to the next one. Then B should be placed below A and above C."}
+{"id":"op-0073","domain":"canvas","names":["Core"],"text":"Anything in the center above Core? And anything in the top left but left of Core?"}
+{"id":"op-0074","domain":"planets","names":["Mars","Jupiter","Venus","Earth"],"text":"Mars sits beneath Jupiter and over Venus. Venus is next to Earth in the bottom right."}
+{"id":"op-0075","domain":"company","names":["Sales","Ops","Hr","Legal"],"text":"The reorg is final! Sales goes to the upper left corner, Ops to the upper right corner, and Hr in the center, below Sales and above Legal. Make Legal gray too."}
+{"id":"op-0076","domain":"quick","names":["Cat1","Dog1","Bird1"],"text":"Put Cat1 under Dog1 and a little right of Bird1."}
+{"id":"op-0077","domain":"design","names":["Left","Right"],"text":"Create a magenta diamond near the top, between Left and Right. Label it Center."}
+{"id":"op-0078","domain":"layout","names":["Base","Left","Right"],"text":"Which shapes are above Base and between Left and Right?"}
+{"id":"op-0079","domain":"ship","names":["Mast","Hull"],"text":"How many circles are in the bottom left, beneath Mast? And is anything left of Hull and also in the bottom left?"}
+{"id":"op-0080","domain":"machine","names":["Cog","Gear","Belt"],"text":"I'd like Cog moved near the bottom, right of Gear but under Belt."}

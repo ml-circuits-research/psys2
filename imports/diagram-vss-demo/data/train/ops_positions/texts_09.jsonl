@@ -1,0 +1,40 @@
+{"id":"op-0321","domain":"sales dashboard","names":["Q1","Q2","Q3","Q4"],"text":"Quick review of the board before the meeting. Is Q2 right of Q1 and below Q3? Is Q4 above Q3 and left of Q1? Also bring Q3 to the front, it's half hidden."}
+{"id":"op-0322","domain":"hospital","names":["Er","Lab","Ward","Pharmacy"],"text":"Is Lab beneath Er and next to Ward? Is Pharmacy in the bottom right, right of Ward? If the answer to either is no, I'll move it myself."}
+{"id":"op-0323","domain":"robot vacuum","names":["Dock","Couch","Table"],"text":"Where is the Dock exactly? Is it under Couch and left of Table? And does anything sit in the top left, left of Couch?"}
+{"id":"op-0324","domain":"theatre","names":["Stage","Pit","Foyer"],"text":"How many shapes are above Pit and right of Stage? How many are in the bottom right, right of Foyer?"}
+{"id":"op-0325","domain":"physics","names":["M1","M2","M3"],"text":"Tell me if M1 is over M2 but under M3. Then tell me if M3 is near the top, next to M2."}
+{"id":"op-0326","domain":"zoo","names":["Lion","Bear","Wolf"],"text":"which shapes are right of Lion and above Wolf? any circles in the top right, right of Bear?"}
+{"id":"op-0327","domain":"library","names":["Aisle1","Aisle2","Desk"],"text":"Does any shape lie between Aisle1 and Aisle2 and below Desk? And anything between them in the middle?"}
+{"id":"op-0328","domain":"gaming","names":["Mage","Rogue","Tank"],"text":"List the stars below Mage and left of Rogue. Then list everything in the top left, left of Tank."}
+{"id":"op-0329","domain":"pipeline","names":["Dev","Qa","Prod"],"text":"Is Qa left of Prod and above Dev? Qa is supposed to be in the middle, above Dev. Is it?"}
+{"id":"op-0330","domain":"college","names":["Math","Physics","Chem"],"text":"Is Chem under Physics and right of Math? Is Math in the top left, near Physics? Hmm, also: how many are below Math and left of Chem?"}
+{"id":"op-0331","domain":"art studio","names":["Easel","Stool","Lamp"],"text":"Is there a red shape under Lamp and next to Easel? Is there a blue one in the bottom right, right of Stool?"}
+{"id":"op-0332","domain":"airport","names":["Gate","Runway","Tower"],"text":"Does the Tower sit above Runway and left of Gate? And is Gate in the top right, beside Runway?"}
+{"id":"op-0333","domain":"weather map","names":["Sun","Cloud","Rain"],"text":"Is Cloud beneath Sun but above Rain? Is Rain near the bottom, below Cloud?"}
+{"id":"op-0334","domain":"cooking","names":["Pot","Pan","Plate"],"text":"Check whether Pan is on top of Plate and right of Pot. Check whether Plate is in the bottom left, left of Pot."}
+{"id":"op-0335","domain":"kids","names":["Cat","Dog","Rat"],"text":"My son asks: how many shapes are under Cat and left of Dog? And how many are in the bottom left, left of Rat?"}
+{"id":"op-0336","domain":"office","names":["Boss","Intern","Printer"],"text":"Is Intern left of Boss and below Printer? Is Printer in the top right corner, right of Boss? I need to know before I move anyone."}
+{"id":"op-0337","domain":"beach","names":["Palm","Umbrella","Towel"],"text":"List what is beneath Palm and over Towel. Then anything near the bottom, left of Umbrella?"}
+{"id":"op-0338","domain":"story","names":["Alice","Queen","Cat"],"text":"Is Alice above Cat and next to Queen? Is Queen in the middle, above Alice?"}
+{"id":"op-0339","domain":"network","names":["Hub","Pc1","Pc2"],"text":"Is Pc1 right of Hub and under Pc2? Is Pc2 in the top left, above Hub? If so, duplicate Pc2 twice."}
+{"id":"op-0340","domain":"puzzle","names":["P1","P2","P3"],"text":"Is P1 below P2 and above P3? Is P2 below P3 and above P1? These can't both be true, can they?"}
+{"id":"op-0341","domain":"arena","names":["Left","Right","Ball"],"text":"Which shapes are between Left and Right and below Ball? How many are there between them near the top?"}
+{"id":"op-0342","domain":"clinic","names":["Desk","Door","Chair"],"text":"Anything right of Door and above Desk? Anything in the bottom right, right of Door?"}
+{"id":"op-0343","domain":"studio","names":["Cam","Mic","Light"],"text":"Is the Mic above Cam and right of Light? Is Light in the top right, next to Cam?"}
+{"id":"op-0344","domain":"bakery","names":["Cake","Pie"],"text":"Is Pie beneath Cake? Is Pie left of Cake and in the bottom? Which shapes are left of Pie and beneath Cake?"}
+{"id":"op-0345","domain":"astronomy","names":["Mars","Venus","Earth"],"text":"Is Mars below Venus and right of Earth? And is Earth in the bottom left, left of Venus? Make Earth blue."}
+{"id":"op-0346","domain":"music","names":["Piano","Drum","Bass"],"text":"Is Drum under Piano and next to Bass? Is Bass in the upper right corner, above Drum?"}
+{"id":"op-0347","domain":"language","names":["Noun","Verb","Adj"],"text":"Which shapes are right of Noun and over Adj? Anything in the bottom left, left of Verb?"}
+{"id":"op-0348","domain":"travel","names":["Rome","Paris","Oslo"],"text":"How many shapes are above Rome and right of Oslo? And how many in the top right, right of Paris?"}
+{"id":"op-0349","domain":"game","names":["Fort","Hill","Road"],"text":"Is Fort on top of Hill and left of Road? Is Hill in the middle, below Fort? One of those must be wrong."}
+{"id":"op-0350","domain":"architecture","names":["Wall","Door","Window"],"text":"Is Door below Window and right of Wall? Is Window near the top, right of Wall?"}
+{"id":"op-0351","domain":"dictation","names":["Ant","Bee","Fly"],"text":"uh could you put the Ant under the Bee and uh left of the Fly, and then is the Fly in the upper right corner, right of the Bee?"}
+{"id":"op-0352","domain":"chemistry","names":["Na","Cl","K"],"text":"Make Cl large. Then put Cl between Na and K, near the top. After that draw a gold circle below Na and next to Cl."}
+{"id":"op-0353","domain":"beach","names":["Palm","Sand","Sea"],"text":"Delete Sand. Create a yellow rectangle called Dune under Palm and right of Sea. Is Dune beneath Palm?"}
+{"id":"op-0354","domain":"UI","names":["Tab1","Tab2","Tab3"],"text":"Move Tab3 to the upper left corner, next to Tab1, and Tab2 right of Tab1 but below Tab3. Align Tab1 and Tab2 vertically."}
+{"id":"op-0355","domain":"home","names":["Sofa","Tv","Lamp"],"text":"The Lamp is beside Sofa and over Tv. The Sofa is in the bottom left, left of Tv. By the way the Tv is huge."}
+{"id":"op-0356","domain":"baking","names":["Egg","Sugar","Bowl"],"text":"Make a white circle called Cream between Egg and Sugar, under Bowl. Make another, near the top, left of Bowl. Connect Egg to Bowl with an arrow."}
+{"id":"op-0357","domain":"campus","names":["Dorm","Lab"],"text":"Position a navy square under Dorm and to the right of Lab. Put a tiny teal circle in the upper right corner beside Lab."}
+{"id":"op-0358","domain":"farm","names":["Cow","Barn","Hen"],"text":"Send Cow below Barn but right of Hen, and Hen up to the top left, above Barn."}
+{"id":"op-0359","domain":"lab","names":["Tube","Rack","Timer"],"text":"Place Timer near the bottom, between Tube and Rack. Place a gray circle above Rack and right of Tube."}
+{"id":"op-0360","domain":"game","names":["Elf","Orc"],"text":"Spawn two tiny gold stars in the top right, next to Elf. Spawn a blue star beneath Elf and over Orc."}

@@ -1,0 +1,40 @@
+{"id":"op-0361","domain":"product roadmap","names":["Q1","Q2","Q3"],"text":"Planning the roadmap for next year. Add a navy diamond called Launch right of Q2 but above Q3. Add a lime circle called Beta just under Q1, a bit to the left of Q2. Then connect Beta to Launch."}
+{"id":"op-0362","domain":"cloud","names":["Vm1","Vm2","Lb"],"text":"Create a gray hexagon named Proxy between Vm1 and Vm2, below Lb. Create a gray hexagon named Cdn in the top right corner, right of Lb. Link Proxy to Cdn with a dotted line."}
+{"id":"op-0363","domain":"school lab","names":["Bunsen","Sink","Fridge"],"text":"Our lab layout is so messy! Put a white square called Hood left of Sink and over Bunsen. Put a white square called Shower near the bottom, right of Fridge."}
+{"id":"op-0364","domain":"game level","names":["Gate","Altar"],"text":"Add a huge purple star above Altar and left of Gate. Add a tiny purple star beneath Altar and right of Gate. Is the huge one bigger than Altar?"}
+{"id":"op-0365","domain":"dictation","names":["Tree","Rock"],"text":"okay uh create a green triangle under the Tree and right of the Rock and then uh a brown one next to the Rock in the bottom left"}
+{"id":"op-0366","domain":"kitchen","names":["Stove","Sink","Table"],"text":"I want a yellow rectangle named Cart, it goes below Stove while staying left of Sink. And move Table up near the top, beside Stove."}
+{"id":"op-0367","domain":"town","names":["Church","Bakery","Well"],"text":"Draw a gray circle left of Church and under Bakery. Draw a gray circle right of Church and over Well. Draw one more gray circle in the bottom left, left of Well."}
+{"id":"op-0368","domain":"org chart","names":["Cto","Dev","Qa"],"text":"Put a small teal rectangle called Intern above Dev and between Cto and Qa. Then rename Intern to Ops."}
+{"id":"op-0369","domain":"robots","names":["R2","D2","C3"],"text":"Place R2 beside D2 in the top right corner. Place C3 left of D2 and underneath R2."}
+{"id":"op-0370","domain":"planets","names":["Sun","Earth","Mars"],"text":"Create a tiny gold circle called Moon below Earth and right of Sun. Create a tiny gray circle called Phobos above Mars and left of Earth."}
+{"id":"op-0371","domain":"bad grammar","names":["Hub","Pc"],"text":"Please to put new red square under of the Hub and on right of Pc. Then other square blue in top right corner, near to Hub."}
+{"id":"op-0372","domain":"design","names":["Logo","Menu","Footer"],"text":"Hey, Logo into the top left corner, above Menu. Footer below Menu and right of Logo, please. And could you make Menu green?"}
+{"id":"op-0373","domain":"wireframe","names":["Nav","Main","Side"],"text":"Add a huge white rectangle named Hero under Nav and between Main and Side. Add a tiny gray circle called Dot in the bottom left corner, left of Main."}
+{"id":"op-0374","domain":"sports","names":["Ball","Net","Cone"],"text":"Move Ball below Net but above Cone. Move Cone near the bottom, right of Net."}
+{"id":"op-0375","domain":"family","names":["Gran","Mom","Kid"],"text":"Add a purple circle called Aunt left of Mom and under Gran, and a pink circle called Uncle right of Mom and under Gran. Connect Gran to Aunt, Mom and Uncle."}
+{"id":"op-0376","domain":"fantasy","names":["Wizard","Dragon"],"text":"summon a huge red hexagon in the upper left corner next to Wizard, and a small blue one under Dragon and left of Wizard"}
+{"id":"op-0377","domain":"pets","names":["Dog","Cat","Fish"],"text":"Dog goes under Cat while staying right of Fish. Fish goes in the bottom left corner, left of Cat. Cat stays."}
+{"id":"op-0378","domain":"storyboard","names":["Scene1","Scene2","Scene3"],"text":"Create a white rectangle called Intro between Scene1 and Scene2 and above Scene3. Create a white rectangle called Outro in the middle, right of Scene3."}
+{"id":"op-0379","domain":"network","names":["Core","Edge","Cloud"],"text":"Add a teal circle above Core and left of Cloud. Add an orange circle, near the top, right of Edge."}
+{"id":"op-0380","domain":"time","names":["T1","T2","T3"],"text":"Drop a black square beneath T1 and between T2 and T3. Drop a white one over T3 and right of T2."}
+{"id":"op-0381","domain":"house","names":["Door","Window","Roof"],"text":"Move Door below Window and left of Roof. Move Window to the top right, next to Roof."}
+{"id":"op-0382","domain":"beach","names":["Sea","Sand","Boat"],"text":"Create a blue ellipse called Wave in the bottom right corner, right of Sea. Create a yellow ellipse called Dune right of Sand and under Boat."}
+{"id":"op-0383","domain":"food","names":["Rice","Beans","Salsa"],"text":"Put Beans over Rice and left of Salsa. Put Rice in the bottom right, beside Salsa. Add a red star above Salsa."}
+{"id":"op-0384","domain":"chat","names":["Foo","Bar"],"text":"Add a circle called Baz under Foo and right of Bar, and a circle called Qux over Foo and left of Bar."}
+{"id":"op-0385","domain":"puzzle","names":["A","B","C","D"],"text":"Make a gold diamond beneath A, between B and C. Make a silver... no, gray diamond above D and right of C."}
+{"id":"op-0386","domain":"classroom","names":["Board","Desk1","Desk2"],"text":"Add a small circle named Kid1 in the bottom left corner, near Desk1. Add a small circle named Kid2 right of Desk2 and beneath Board."}
+{"id":"op-0387","domain":"sim","names":["Car","Bus","Bike"],"text":"Place Car above Bus and right of Bike. Place Bike in the bottom left, left of Bus."}
+{"id":"op-0388","domain":"voice","names":["Lamp","Desk","Chair"],"text":"um Chair goes beneath the Desk and uh to the right of the Lamp okay and the Lamp goes in the upper left corner"}
+{"id":"op-0389","domain":"solar","names":["Sun","Mercury","Venus"],"text":"Add a small orange circle named Comet between Mercury and Venus, above Sun. Add a small orange circle named Rock left of Sun, in the bottom left."}
+{"id":"op-0390","domain":"stage","names":["Piano","Mic","Amp"],"text":"Mic goes next to Piano in the top right corner. Amp goes under Mic, left of Piano."}
+{"id":"op-0391","domain":"tower defense","names":["Gate","Tower1","Tower2"],"text":"Build a huge gray square named Keep under Gate, between Tower1 and Tower2. Build a small red circle in the bottom right, right of Gate."}
+{"id":"op-0392","domain":"trains","names":["Loco","Wagon","Signal"],"text":"Move Signal right of Loco and below Wagon. Is Wagon in the top left, above Loco?"}
+{"id":"op-0393","domain":"library","names":["Shelf","Desk","Lamp"],"text":"Create a gray rectangle called Cart left of Desk and under Shelf, then a tiny gray circle near the top, between Shelf and Lamp."}
+{"id":"op-0394","domain":"hospital","names":["Bed1","Bed2","Nurse"],"text":"Nurse should stand between Bed1 and Bed2, near the bottom. Bed2 goes under Bed1 and to the right of Nurse."}
+{"id":"op-0395","domain":"space","names":["Ship","Moon","Mars"],"text":"Dock the Ship under Moon and left of Mars, then add a tiny white star in the top right corner next to Mars."}
+{"id":"op-0396","domain":"science fair","names":["Poster","Table","Chair"],"text":"Add two small red squares under Poster, left of Table. Add a blue circle called Mascot in the top left, right of Chair."}
+{"id":"op-0397","domain":"art","names":["Red","Blue","Yellow"],"text":"Create a magenta ellipse between Red and Blue, above Yellow. Create a teal ellipse between Blue and Yellow, near the bottom."}
+{"id":"op-0398","domain":"mixed","names":["Hub","Pc1","Pc2"],"text":"Hub is above Pc1 and left of Pc2. Delete Pc2. Create a navy circle called Spare right of Pc1, below Hub."}
+{"id":"op-0399","domain":"dictation","names":["Sun","Moon","Earth"],"text":"so uh the Sun goes top left okay and the Moon goes beneath the Sun, no, under the Earth and left of the Sun"}
+{"id":"op-0400","domain":"garden","names":["Pond","Bench","Tree"],"text":"Put a green circle between Pond and Tree, above Bench. Put a lime square near the top, left of Pond. Make Bench brown."}

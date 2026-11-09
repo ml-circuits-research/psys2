@@ -1,0 +1,100 @@
+{"id": "th-1001", "names": ["Kitchen"], "text": "put a brown box called Pantry right next to the Kitchen", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "color": "brown", "name": "Pantry", "position": "near", "anchor": "Kitchen"}}}
+{"id": "th-1002", "names": [], "text": "a huge white rectangle named Hall at the center", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "color": "white", "size": "huge", "name": "Hall", "position": "center"}}}
+{"id": "th-1003", "names": ["Den"], "text": "make three small gray squares around the Den", "wire": {"type": "command", "args": {"action": "create", "shape": "square", "color": "gray", "size": "small", "count": "3", "position": "near", "anchor": "Den"}}}
+{"id": "th-1004", "names": [], "text": "could you make a navy oval labeled 'Office' in the top right corner", "wire": {"type": "command", "args": {"action": "create", "shape": "ellipse", "color": "navy", "label": "Office", "position": "topRight"}}}
+{"id": "th-1005", "names": ["Garage", "Porch"], "text": "a teal diamond named Shed between the Garage and the Porch", "wire": {"type": "command", "args": {"action": "create", "shape": "diamond", "color": "teal", "name": "Shed", "position": "between", "anchor": "Garage,Porch"}}}
+{"id": "th-1006", "names": [], "text": "I need a medium red triangle at the bottom left named Closet", "wire": {"type": "command", "args": {"action": "create", "shape": "triangle", "color": "red", "size": "medium", "name": "Closet", "position": "bottomLeft"}}}
+{"id": "th-1007", "names": ["Attic"], "text": "slap a yellow star above the Attic", "wire": {"type": "command", "args": {"action": "create", "shape": "star", "color": "yellow", "position": "above", "anchor": "Attic"}}}
+{"id": "th-1008", "names": [], "text": "drop a black hexagon on the far left", "wire": {"type": "command", "args": {"action": "create", "shape": "hexagon", "color": "black", "position": "left"}}}
+{"id": "th-1009", "names": ["Bath"], "text": "a blue box named Shower right under Bath", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "color": "blue", "name": "Shower", "position": "below", "anchor": "Bath"}}}
+{"id": "th-1010", "names": [], "text": "add a lime circle in the middle named Atrium", "wire": {"type": "command", "args": {"action": "create", "shape": "circle", "color": "lime", "name": "Atrium", "position": "center"}}}
+{"id": "th-1011", "names": ["Bedroom"], "text": "two tiny pink ovals beside the Bedroom", "wire": {"type": "command", "args": {"action": "create", "shape": "ellipse", "color": "pink", "size": "tiny", "count": "2", "position": "near", "anchor": "Bedroom"}}}
+{"id": "th-1012", "names": ["Kitchen"], "text": "Kitchen should be yellow", "wire": {"type": "command", "args": {"action": "set", "target": "Kitchen", "color": "yellow"}}}
+{"id": "th-1013", "names": ["Bedroom"], "text": "make the Bedroom a diamond", "wire": {"type": "command", "args": {"action": "set", "target": "Bedroom", "shape": "diamond"}}}
+{"id": "th-1014", "names": ["Garage"], "text": "Garage goes huge", "wire": {"type": "command", "args": {"action": "set", "target": "Garage", "size": "huge"}}}
+{"id": "th-1015", "names": ["Porch"], "text": "paint Porch green", "wire": {"type": "command", "args": {"action": "set", "target": "Porch", "color": "green"}}}
+{"id": "th-1016", "names": ["Den"], "text": "Den becomes a hexagon", "wire": {"type": "command", "args": {"action": "set", "target": "Den", "shape": "hexagon"}}}
+{"id": "th-1017", "names": ["Attic"], "text": "make Attic tiny", "wire": {"type": "command", "args": {"action": "set", "target": "Attic", "size": "tiny"}}}
+{"id": "th-1018", "names": ["Bath"], "text": "bath should be teal", "wire": {"type": "command", "args": {"action": "set", "target": "Bath", "color": "teal"}}}
+{"id": "th-1019", "names": [], "text": "make the squares that aren't gray blue", "wire": {"type": "command", "args": {"action": "set", "target": "mention(notcolor=gray,quantifier=all,shape=square)", "color": "blue"}}}
+{"id": "th-1020", "names": ["Kitchen", "Bath", "Den"], "text": "connect Kitchen and Bath to Den, all of them", "wire": {"type": "command", "args": {"action": "connect", "from": "Kitchen,Bath", "to": "Den", "pairing": "all"}}}
+{"id": "th-1021", "names": ["Hall", "Bedroom"], "text": "run a dashed line from Hall to Bedroom", "wire": {"type": "command", "args": {"action": "connect", "from": "Hall", "to": "Bedroom", "style": "dashed"}}}
+{"id": "th-1022", "names": ["Garage", "Kitchen"], "text": "Garage connects both ways with Kitchen", "wire": {"type": "command", "args": {"action": "connect", "from": "Garage", "to": "Kitchen", "arrow": "both"}}}
+{"id": "th-1023", "names": ["Attic", "Bath", "Bedroom"], "text": "chain Attic, Bath and Bedroom", "wire": {"type": "command", "args": {"action": "connect", "from": "Attic,Bath,Bedroom", "to": "Attic,Bath,Bedroom", "pairing": "chain"}}}
+{"id": "th-1024", "names": ["Pantry", "Kitchen"], "text": "a green link from Pantry to Kitchen", "wire": {"type": "command", "args": {"action": "connect", "from": "Pantry", "to": "Kitchen", "color": "green"}}}
+{"id": "th-1025", "names": ["Hall"], "text": "move Hall 40 pixels up", "wire": {"type": "command", "args": {"action": "move", "target": "Hall", "direction": "up", "distance": "40"}}}
+{"id": "th-1026", "names": ["Shower"], "text": "shift Shower left 15 px", "wire": {"type": "command", "args": {"action": "move", "target": "Shower", "direction": "left", "distance": "15"}}}
+{"id": "th-1027", "names": ["Closet", "Bedroom"], "text": "put Closet right of Bedroom", "wire": {"type": "command", "args": {"action": "move", "target": "Closet", "position": "rightOf", "anchor": "Bedroom"}}}
+{"id": "th-1028", "names": ["Office"], "text": "Office goes to the bottom", "wire": {"type": "command", "args": {"action": "move", "target": "Office", "position": "bottom"}}}
+{"id": "th-1029", "names": ["Shed"], "text": "drag Shed down", "wire": {"type": "command", "args": {"action": "move", "target": "Shed", "direction": "down"}}}
+{"id": "th-1030", "names": ["Attic"], "text": "move Attic to the top", "wire": {"type": "command", "args": {"action": "move", "target": "Attic", "position": "top"}}}
+{"id": "th-1031", "names": ["Shed", "Garage", "Porch"], "text": "shove Shed between Garage and Porch", "wire": {"type": "command", "args": {"action": "move", "target": "Shed", "position": "between", "anchor": "Garage,Porch"}}}
+{"id": "th-1032", "names": ["Closet"], "text": "remove the Closet", "wire": {"type": "command", "args": {"action": "delete", "target": "Closet"}}}
+{"id": "th-1033", "names": [], "text": "get rid of every hexagon that isn't black", "wire": {"type": "command", "args": {"action": "delete", "target": "mention(notcolor=black,quantifier=all,shape=hexagon)"}}}
+{"id": "th-1034", "names": ["Atrium"], "text": "delete Atrium", "wire": {"type": "command", "args": {"action": "delete", "target": "Atrium"}}}
+{"id": "th-1035", "names": ["Den"], "text": "could you make the Den larger", "wire": {"type": "command", "args": {"action": "resize", "target": "Den"}}}
+{"id": "th-1036", "names": ["Kitchen"], "text": "shrink the Kitchen a bit", "wire": {"type": "command", "args": {"action": "resize", "target": "Kitchen"}}}
+{"id": "th-1037", "names": ["Bath"], "text": "rename Bath to Bathroom", "wire": {"type": "command", "args": {"action": "rename", "target": "Bath", "name": "Bathroom"}}}
+{"id": "th-1038", "names": ["Bedroom"], "text": "call the Bedroom 'Nursery'", "wire": {"type": "command", "args": {"action": "rename", "target": "Bedroom", "name": "Nursery"}}}
+{"id": "th-1039", "names": ["Kitchen"], "text": "label Kitchen 'Main'", "wire": {"type": "command", "args": {"action": "label", "target": "Kitchen", "label": "Main"}}}
+{"id": "th-1040", "names": ["Attic"], "text": "write 'Storage' on Attic", "wire": {"type": "command", "args": {"action": "label", "target": "Attic", "label": "Storage"}}}
+{"id": "th-1041", "names": ["Pantry"], "text": "copy Pantry", "wire": {"type": "command", "args": {"action": "duplicate", "target": "Pantry"}}}
+{"id": "th-1042", "names": ["Shower"], "text": "make 2 copies of Shower", "wire": {"type": "command", "args": {"action": "duplicate", "target": "Shower", "count": "2"}}}
+{"id": "th-1043", "names": ["Den", "Office"], "text": "swap Den and Office", "wire": {"type": "command", "args": {"action": "swap", "target": "Den,Office"}}}
+{"id": "th-1044", "names": ["Porch", "Garage"], "text": "trade places of Porch and Garage", "wire": {"type": "command", "args": {"action": "swap", "target": "Porch,Garage"}}}
+{"id": "th-1045", "names": ["Kitchen", "Den"], "text": "unlink Kitchen from Den", "wire": {"type": "command", "args": {"action": "disconnect", "from": "Kitchen", "to": "Den"}}}
+{"id": "th-1046", "names": ["Garage", "Kitchen"], "text": "remove the link between Garage and Kitchen", "wire": {"type": "command", "args": {"action": "disconnect", "from": "Garage", "to": "Kitchen"}}}
+{"id": "th-1047", "names": ["Kitchen", "Den", "Bath"], "text": "align Kitchen, Den and Bath vertically", "wire": {"type": "command", "args": {"action": "align", "target": "Kitchen,Den,Bath", "axis": "vertical"}}}
+{"id": "th-1048", "names": [], "text": "line up all the rectangles that aren't white horizontally", "wire": {"type": "command", "args": {"action": "align", "target": "mention(notcolor=white,quantifier=all,shape=rectangle)", "axis": "horizontal"}}}
+{"id": "th-1049", "names": ["Pantry", "Hall"], "text": "arrange Pantry and Hall in a row", "wire": {"type": "command", "args": {"action": "arrange", "target": "Pantry,Hall", "layout": "row"}}}
+{"id": "th-1050", "names": [], "text": "lay everything out in a circle", "wire": {"type": "command", "args": {"action": "arrange", "layout": "circle"}}}
+{"id": "th-1051", "names": ["Kitchen", "Den", "Bedroom"], "text": "spread Kitchen, Den and Bedroom out evenly horizontally", "wire": {"type": "command", "args": {"action": "distribute", "target": "Kitchen,Den,Bedroom", "axis": "horizontal"}}}
+{"id": "th-1052", "names": [], "text": "distribute the stars that aren't yellow vertically", "wire": {"type": "command", "args": {"action": "distribute", "target": "mention(notcolor=yellow,quantifier=all,shape=star)", "axis": "vertical"}}}
+{"id": "th-1053", "names": ["Hall"], "text": "bring Hall to the front", "wire": {"type": "command", "args": {"action": "toFront", "target": "Hall"}}}
+{"id": "th-1054", "names": [], "text": "pull the newest hexagon forward", "wire": {"type": "command", "args": {"action": "toFront", "target": "mention(recency=newest,shape=hexagon)"}}}
+{"id": "th-1055", "names": ["Attic"], "text": "send Attic to the back", "wire": {"type": "command", "args": {"action": "toBack", "target": "Attic"}}}
+{"id": "th-1056", "names": [], "text": "put the oldest square at the very back", "wire": {"type": "command", "args": {"action": "toBack", "target": "mention(recency=oldest,shape=square)"}}}
+{"id": "th-1057", "names": [], "text": "undo the last one", "wire": {"type": "command", "args": {"action": "undo"}}}
+{"id": "th-1058", "names": [], "text": "take back that last move", "wire": {"type": "command", "args": {"action": "undo"}}}
+{"id": "th-1059", "names": [], "text": "redo please", "wire": {"type": "command", "args": {"action": "redo"}}}
+{"id": "th-1060", "names": [], "text": "re-apply the change I undid", "wire": {"type": "command", "args": {"action": "redo"}}}
+{"id": "th-1061", "names": [], "text": "forget the defaults you learned from me", "wire": {"type": "command", "args": {"action": "forget"}}}
+{"id": "th-1062", "names": [], "text": "drop every default rule", "wire": {"type": "command", "args": {"action": "forget"}}}
+{"id": "th-1063", "names": [], "text": "how many brown things are there", "wire": {"type": "question", "args": {"ask": "count", "color": "brown"}}}
+{"id": "th-1064", "names": [], "text": "how many shapes aren't teal", "wire": {"type": "question", "args": {"ask": "count", "notColor": "teal"}}}
+{"id": "th-1065", "names": ["Kitchen"], "text": "how many shapes are left of Kitchen", "wire": {"type": "question", "args": {"ask": "count", "position": "leftOf", "anchor": "Kitchen"}}}
+{"id": "th-1066", "names": [], "text": "is there a navy oval", "wire": {"type": "question", "args": {"ask": "exists", "shape": "ellipse", "color": "navy"}}}
+{"id": "th-1067", "names": [], "text": "any yellow stars in the house?", "wire": {"type": "question", "args": {"ask": "exists", "shape": "star", "color": "yellow"}}}
+{"id": "th-1068", "names": [], "text": "list the rectangles", "wire": {"type": "question", "args": {"ask": "list", "shape": "rectangle"}}}
+{"id": "th-1069", "names": [], "text": "what's not green", "wire": {"type": "question", "args": {"ask": "list", "notColor": "green"}}}
+{"id": "th-1070", "names": ["Bath"], "text": "what color is Bath", "wire": {"type": "question", "args": {"ask": "property", "target": "Bath", "property": "color"}}}
+{"id": "th-1071", "names": ["Shed"], "text": "what label does Shed have", "wire": {"type": "question", "args": {"ask": "property", "target": "Shed", "property": "label"}}}
+{"id": "th-1072", "names": [], "text": "how big is the oldest diamond", "wire": {"type": "question", "args": {"ask": "property", "target": "mention(recency=oldest,shape=diamond)", "property": "size"}}}
+{"id": "th-1073", "names": ["Den"], "text": "tell me about the Den", "wire": {"type": "question", "args": {"ask": "describe", "target": "Den"}}}
+{"id": "th-1074", "names": [], "text": "describe the floor plan", "wire": {"type": "question", "args": {"ask": "describe"}}}
+{"id": "th-1075", "names": ["Kitchen"], "text": "what's next to the Kitchen", "wire": {"type": "question", "args": {"ask": "neighbors", "target": "Kitchen"}}}
+{"id": "th-1076", "names": ["Garage"], "text": "which rooms connect to Garage", "wire": {"type": "question", "args": {"ask": "neighbors", "target": "Garage"}}}
+{"id": "th-1077", "names": ["Kitchen", "Den"], "text": "is the Kitchen directly linked to the Den", "wire": {"type": "question", "args": {"ask": "connected", "target": "Kitchen", "anchor": "Den"}}}
+{"id": "th-1078", "names": ["Bedroom", "Bath"], "text": "are Bedroom and Bath connected", "wire": {"type": "question", "args": {"ask": "connected", "target": "Bedroom", "anchor": "Bath"}}}
+{"id": "th-1079", "names": ["Kitchen"], "text": "how many connections does the Kitchen have", "wire": {"type": "question", "args": {"ask": "degree", "target": "Kitchen"}}}
+{"id": "th-1080", "names": ["Hall"], "text": "how many lines attach to Hall", "wire": {"type": "question", "args": {"ask": "degree", "target": "Hall"}}}
+{"id": "th-1081", "names": ["Attic", "Office"], "text": "is there a way from Attic to Office", "wire": {"type": "question", "args": {"ask": "path", "from": "Attic", "to": "Office"}}}
+{"id": "th-1082", "names": ["Pantry", "Bedroom"], "text": "find a route from Pantry to Bedroom", "wire": {"type": "question", "args": {"ask": "path", "from": "Pantry", "to": "Bedroom"}}}
+{"id": "th-1083", "names": ["Hall"], "text": "where can you get to from Hall", "wire": {"type": "question", "args": {"ask": "reachable", "from": "Hall"}}}
+{"id": "th-1084", "names": ["Garage"], "text": "which rooms are reachable from Garage", "wire": {"type": "question", "args": {"ask": "reachable", "from": "Garage"}}}
+{"id": "th-1085", "names": [], "text": "is there a loop between rooms", "wire": {"type": "question", "args": {"ask": "cycle"}}}
+{"id": "th-1086", "names": [], "text": "do any rooms link back in a circle", "wire": {"type": "question", "args": {"ask": "cycle"}}}
+{"id": "th-1087", "names": [], "text": "what rules do you follow", "wire": {"type": "question", "args": {"ask": "rules"}}}
+{"id": "th-1088", "names": [], "text": "what are the current defaults", "wire": {"type": "question", "args": {"ask": "rules"}}}
+{"id": "th-1089", "names": ["Den"], "text": "is Den gray", "wire": {"type": "question", "args": {"ask": "check", "target": "Den", "color": "gray"}}}
+{"id": "th-1090", "names": ["Porch"], "text": "is Porch a circle", "wire": {"type": "question", "args": {"ask": "check", "target": "Porch", "shape": "circle"}}}
+{"id": "th-1091", "names": ["Garage", "Kitchen"], "text": "is Garage bigger than Kitchen", "wire": {"type": "question", "args": {"ask": "check", "target": "Garage", "comparison": "bigger", "anchor": "Kitchen"}}}
+{"id": "th-1092", "names": [], "text": "which room is the biggest", "wire": {"type": "question", "args": {"ask": "extreme", "superlative": "biggest"}}}
+{"id": "th-1093", "names": [], "text": "what's the topmost one", "wire": {"type": "question", "args": {"ask": "extreme", "superlative": "topmost"}}}
+{"id": "th-1094", "names": ["Kitchen"], "text": "what's nearest to the Kitchen", "wire": {"type": "question", "args": {"ask": "nearest", "anchor": "Kitchen", "superlative": "closest"}}}
+{"id": "th-1095", "names": ["Attic"], "text": "what purple shape is farthest from Attic", "wire": {"type": "question", "args": {"ask": "nearest", "anchor": "Attic", "superlative": "farthest", "color": "purple"}}}
+{"id": "th-1096", "names": ["Shed"], "text": "Shed is teal", "wire": {"type": "fact", "args": {"target": "Shed", "color": "teal"}}}
+{"id": "th-1097", "names": ["Atrium", "Hall"], "text": "Atrium is above Hall", "wire": {"type": "fact", "args": {"target": "Atrium", "position": "above", "anchor": "Hall"}}}
+{"id": "th-1098", "names": [], "text": "new squares should be small from now on", "wire": {"type": "rule", "args": {"shape": "square", "size": "small"}}}
+{"id": "th-1099", "names": [], "text": "every new box should come out brown", "wire": {"type": "rule", "args": {"shape": "rectangle", "color": "brown"}}}
+{"id": "th-1100", "names": [], "text": "new circles should be large", "wire": {"type": "rule", "args": {"shape": "circle", "size": "large"}}}

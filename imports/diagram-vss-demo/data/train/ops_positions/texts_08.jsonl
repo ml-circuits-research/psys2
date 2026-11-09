@@ -1,0 +1,40 @@
+{"id":"op-0281","domain":"flowchart","names":["Start","End","Check"],"text":"Let's finish the login flow. Add a green diamond called Retry under Check and left of End, and a red circle called Fail below Check, right of Start. Then connect Check to Retry. Is Fail beneath Retry?"}
+{"id":"op-0282","domain":"network","names":["Router","Switch"],"text":"Please create three small gray squares below Router and above Switch. Also a cyan hexagon, left of Switch in the bottom left."}
+{"id":"op-0283","domain":"aquarium","names":["Tank","Filter","Plant"],"text":"Drop a small pink circle between Filter and Plant, under Tank. Drop another, a lime one, beneath Filter and next to Plant. Which shapes are left of Plant and under Tank?"}
+{"id":"op-0284","domain":"farm map","names":["Barn","Field","Well"],"text":"I'd like a huge green rectangle named Pasture right of Barn, above Field. Then a tiny blue circle called Pond near the bottom, left of Well. Thanks!"}
+{"id":"op-0285","domain":"team board","names":["Alice","Bob","Carol"],"text":"Pop a yellow star above Alice and right of Bob, then a white star above Bob and left of Carol. How many stars are above Bob?"}
+{"id":"op-0286","domain":"dictation","names":["Home","Work"],"text":"uh create like a purple circle between Home and Work you know and uh below the Gym, no wait there's no Gym, just between Home and Work near the bottom"}
+{"id":"op-0287","domain":"space station","names":["Core","Lab","Dock"],"text":"Add a hexagon labeled Power above Core and right of Lab. Add one more hexagon, labeled Air, under Dock and left of Core."}
+{"id":"op-0288","domain":"software","names":["Api","Auth","Db"],"text":"Create a teal rectangle called Cache between Api and Db, below Auth. Is Cache above Db? And is Auth in the top left, left of Api?"}
+{"id":"op-0289","domain":"shop","names":["Till","Shelf","Door"],"text":"Could you add an orange diamond in the top right corner, next to Door? And a black one beneath Till, left of Shelf?"}
+{"id":"op-0290","domain":"school","names":["Class1","Class2","Hall"],"text":"Make two lime squares near the top, between Class1 and Class2. Make a gold circle below Hall, right of Class2."}
+{"id":"op-0291","domain":"bad grammar","names":["Hub","Pc"],"text":"Please create one navy star on the right of Hub and over Pc. Create other star but red in bottom left corner, near to Pc."}
+{"id":"op-0292","domain":"castle","names":["Keep","Wall","Moat"],"text":"Build a huge gray rectangle named Barracks right of Keep, below Wall. Build a small brown circle named Stable in the bottom left corner, left of Moat."}
+{"id":"op-0293","domain":"voice","names":["Cat","Dog"],"text":"okay uh add a black circle next to the Cat in the upper left corner and a white circle under the Dog and uh over the Cat"}
+{"id":"op-0294","domain":"mind map","names":["Root","Branch1","Branch2"],"text":"New leaf: a small green circle under Branch1, left of Branch2. New leaf: a small green circle under Branch2, right of Branch1. Also rename Root to Trunk."}
+{"id":"op-0295","domain":"city","names":["Mall","Park","School"],"text":"Is Park beneath Mall and left of School? Is School in the bottom right, next to Park? Draw a white square above Park and between Mall and School."}
+{"id":"op-0296","domain":"logic","names":["X","Y","Z"],"text":"Is X above Y and right of Z? Is Y below Z and left of X? Is Z in the top left, left of Y?"}
+{"id":"op-0297","domain":"dorm","names":["Bed","Desk","Lamp"],"text":"Tell me if Lamp is on top of Desk and next to Bed. Also is Bed near the bottom, left of Desk?"}
+{"id":"op-0298","domain":"chemistry","names":["H","O","C"],"text":"Make a tiny white circle called H2 above O and left of C. Make a small gray circle called Carbon below O, right of H. Connect H2 to O."}
+{"id":"op-0299","domain":"game","names":["Hero","Boss"],"text":"Create a huge red hexagon called Dragon above Boss and right of Hero. Draw a tiny gold star in the top left, next to Hero. How many shapes are above Boss?"}
+{"id":"op-0300","domain":"robot","names":["Wheel","Motor","Frame"],"text":"Which shapes are below Frame and right of Wheel? Are there any red ones in the bottom right, right of Motor?"}
+{"id":"op-0301","domain":"reading","names":["Page1","Page2"],"text":"How many shapes are left of Page2 and above Page1? How many are in the bottom left, left of Page1? Anything at all in the top right, right of Page2?"}
+{"id":"op-0302","domain":"canvas","names":["Dot1","Dot2"],"text":"List the circles above Dot1 and below Dot2. And the squares in the top left, left of Dot1."}
+{"id":"op-0303","domain":"retail","names":["Aisle1","Aisle2","Exit"],"text":"Is there anything between Aisle1 and Aisle2 and above Exit? Anything near the top, between Aisle1 and Aisle2?"}
+{"id":"op-0304","domain":"fact check","names":["A1","A2","A3"],"text":"A1 is below A2 and left of A3. A2 is in the middle, above A3. A3 is on the right side of A1, near the top."}
+{"id":"op-0305","domain":"sports","names":["Net","Ball","Post"],"text":"Ball is under Net and left of Post. Post is in the bottom right, right of Net."}
+{"id":"op-0306","domain":"kitchen","names":["Sink","Oven","Fridge"],"text":"The Sink is next to Oven and beneath Fridge. The Fridge is in the upper left corner, above Oven."}
+{"id":"op-0307","domain":"insects","names":["Ant","Bee","Fly"],"text":"Ant is left of Bee and above Fly. Fly is next to Bee and below Ant. Bee is near the bottom, right of Ant."}
+{"id":"op-0308","domain":"train","names":["Loco","Wagon1","Wagon2"],"text":"Add a gray rectangle called Wagon3 right of Wagon2 and under Loco. Connect Wagon2 to Wagon3. Is Wagon3 in the bottom right?"}
+{"id":"op-0309","domain":"exam","names":["Q1","Q2","Q3"],"text":"Question 1 says: is Q1 above Q2 and right of Q3? Question 2 says: draw a red circle between Q1 and Q3 and below Q2. Question 3: delete Q2."}
+{"id":"op-0310","domain":"workshop","names":["Saw","Drill","Vise"],"text":"Pop a tiny star on top of Saw and next to Drill, then another star on top of Drill and next to Vise. And one in the top left, near Saw."}
+{"id":"op-0311","domain":"paint","names":["Easel","Palette","Brush"],"text":"Slap a magenta triangle left of Easel and over Palette. Slap another, cyan, right of Easel and under Brush."}
+{"id":"op-0312","domain":"dictation","names":["Bridge","Road"],"text":"um a gold square at the bottom between the Bridge and the Road and um over the River, no, over the Road. okay"}
+{"id":"op-0313","domain":"art","names":["Frame","Wall","Floor"],"text":"Add a white square called Poster in the middle, above Floor. Add a black square called Rug in the bottom right, right of Wall."}
+{"id":"op-0314","domain":"tech support","names":["Modem","Router","Pc"],"text":"Create a hexagon named Ap between Modem and Router and above Pc. Rename it to Wifi. Is Wifi in the top right?"}
+{"id":"op-0315","domain":"sports","names":["Court","Net","Bench"],"text":"Draw a small blue circle near the bottom, between Court and Bench. Draw a small red circle near the top, between Net and Bench."}
+{"id":"op-0316","domain":"treasure","names":["Chest","Skull"],"text":"Put a gold diamond named Gem near the top, left of Chest, and another gold diamond beneath Skull and over Chest."}
+{"id":"op-0317","domain":"bio","names":["Cell1","Cell2"],"text":"Please create 4 tiny pink circles right of Cell1, below Cell2. Make them all purple afterwards."}
+{"id":"op-0318","domain":"family","names":["Mom","Dad","Kid"],"text":"Add a pink circle named Baby under Mom and next to Kid. Kid is left of Dad and below Mom, right? Move Baby to the bottom left corner."}
+{"id":"op-0319","domain":"zoo","names":["Lion","Zebra","Keeper"],"text":"Make a pink star beneath Lion and over Zebra, then another pink star in the top right, right of Keeper. Which shapes are right of Lion and above Zebra?"}
+{"id":"op-0320","domain":"campus","names":["Lab","Cafe","Gym"],"text":"Is Lab left of Cafe and above Gym? Add a lime circle called Bench between Lab and Cafe, near the bottom, and a lime one right of Gym."}

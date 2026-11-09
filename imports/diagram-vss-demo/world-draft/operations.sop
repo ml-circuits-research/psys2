@@ -1,0 +1,302 @@
+# Draft operations: one per legend action (command) and per ask (question) of diagram-vss-demo. impl= names the engine act the
+# adapter in ops.mjs must run (SOPKit node {type, args} executed by engine.execute). Not loaded (staging, see ../README.md).
+
+@op.diagram.sketch.undo core.operation
+    impl=undo
+    semantics=action
+    action=diagram.undo
+    doc="Diagram command action=undo; cue words: undo, revert"
+
+@op.diagram.sketch.redo core.operation
+    impl=redo
+    semantics=action
+    action=diagram.redo
+    doc="Diagram command action=redo; cue words: redo, reapply, re-apply"
+
+@op.diagram.sketch.create core.operation
+    impl=create
+    semantics=action
+    action=diagram.create
+    doc="Diagram command action=create; cue words: draw, create, add, make, put, place, insert, sketch, build, spawn, throw, slap"
+
+@op.diagram.sketch.delete core.operation
+    impl=delete
+    semantics=action
+    action=diagram.delete
+    doc="Diagram command action=delete; cue words: delete, remove, erase, drop, clear, wipe, reset, get rid of, kill, trash, axe, ditch"
+
+@op.diagram.sketch.move core.operation
+    impl=move
+    semantics=action
+    action=diagram.move
+    doc="Diagram command action=move; cue words: move, shift, drag, push, nudge, slide, reposition, relocate, scoot, shove, park, tuck"
+
+@op.diagram.sketch.set core.operation
+    impl=set
+    semantics=action
+    action=diagram.set
+    doc="Diagram command action=set; cue words: set, change, turn, color, colour, paint, fill, give, recolor, recolour, transform, convert"
+
+@op.diagram.sketch.resize core.operation
+    impl=resize
+    semantics=action
+    action=diagram.resize
+    doc="Diagram command action=resize; cue words: resize, grow, enlarge, shrink, scale"
+
+@op.diagram.sketch.rename core.operation
+    impl=rename
+    semantics=action
+    action=diagram.rename
+    doc="Diagram command action=rename; cue words: rename, call"
+
+@op.diagram.sketch.label core.operation
+    impl=label
+    semantics=action
+    action=diagram.label
+    doc="Diagram command action=label; cue words: label, title, caption, write, inscribe, stamp, tag"
+
+@op.diagram.sketch.duplicate core.operation
+    impl=duplicate
+    semantics=action
+    action=diagram.duplicate
+    doc="Diagram command action=duplicate; cue words: duplicate, copy, clone, replicate, dupe"
+
+@op.diagram.sketch.swap core.operation
+    impl=swap
+    semantics=action
+    action=diagram.swap
+    doc="Diagram command action=swap; cue words: swap, exchange, trade, switch places, trade places"
+
+@op.diagram.sketch.group core.operation
+    impl=group
+    semantics=action
+    action=diagram.group
+    doc="Diagram command action=group; cue words: group, put together, bundle"
+
+@op.diagram.sketch.ungroup core.operation
+    impl=ungroup
+    semantics=action
+    action=diagram.ungroup
+    doc="Diagram command action=ungroup; cue words: ungroup, split up, break up, dissolve"
+
+@op.diagram.sketch.connect core.operation
+    impl=connect
+    semantics=action
+    action=diagram.connect
+    doc="Diagram command action=connect; cue words: connect, link, join, wire, attach, hook, tie"
+
+@op.diagram.sketch.disconnect core.operation
+    impl=disconnect
+    semantics=action
+    action=diagram.disconnect
+    doc="Diagram command action=disconnect; cue words: disconnect, unlink, detach, separate, cut, unhook, sever, snip"
+
+@op.diagram.sketch.align core.operation
+    impl=align
+    semantics=action
+    action=diagram.align
+    doc="Diagram command action=align; cue words: align, line up"
+
+@op.diagram.sketch.arrange core.operation
+    impl=arrange
+    semantics=action
+    action=diagram.arrange
+    doc="Diagram command action=arrange; cue words: arrange, layout, lay out, organize, organise, rearrange, re-arrange, relayout, re-layout, reorganize, reorganise, reformat"
+
+@op.diagram.sketch.distribute core.operation
+    impl=distribute
+    semantics=action
+    action=diagram.distribute
+    doc="Diagram command action=distribute; cue words: distribute, space, spread"
+
+@op.diagram.sketch.toFront core.operation
+    impl=toFront
+    semantics=action
+    action=diagram.toFront
+    doc="Diagram command action=toFront; cue words: bring, raise"
+
+@op.diagram.sketch.toBack core.operation
+    impl=toBack
+    semantics=action
+    action=diagram.toBack
+    doc="Diagram command action=toBack; cue words: send"
+
+@op.diagram.sketch.forget core.operation
+    impl=forget
+    semantics=action
+    action=diagram.forget
+    doc="Diagram command action=forget; cue words: forget, discard, disregard"
+
+@op.diagram.sketch.improve core.operation
+    impl=improve
+    semantics=action
+    action=diagram.improve
+    doc="Diagram command action=improve; cue words: improve, tidy, tidy up, tidyup, neaten, declutter, unclutter, clean up, cleanup, beautify, prettify"
+
+@op.diagram.sketch.respace core.operation
+    impl=respace
+    semantics=action
+    action=diagram.respace
+    doc="Diagram command action=respace; cue words: compact, condense, squeeze, tighten"
+
+@op.diagram.sketch.snap core.operation
+    impl=snap
+    semantics=action
+    action=diagram.snap
+    doc="Diagram command action=snap; cue words: snap"
+
+@op.diagram.sketch.flip core.operation
+    impl=flip
+    semantics=action
+    action=diagram.flip
+    doc="Diagram command action=flip; cue words: flip, mirror"
+
+@op.diagram.sketch.reverse core.operation
+    impl=reverse
+    semantics=action
+    action=diagram.reverse
+    doc="Diagram command action=reverse; cue words: reverse, invert"
+
+@op.diagram.sketch.sort core.operation
+    impl=sort
+    semantics=action
+    action=diagram.sort
+    doc="Diagram command action=sort; cue words: sort, alphabetize, alphabetise"
+
+@op.diagram.sketch.groupBy core.operation
+    impl=groupBy
+    semantics=action
+    action=diagram.groupBy
+    doc="Diagram command action=groupBy; cue words: "
+
+@op.diagram.sketch.equalize core.operation
+    impl=equalize
+    semantics=action
+    action=diagram.equalize
+    doc="Diagram command action=equalize; cue words: equalize, equalise, unify"
+
+@op.diagram.sketch.straighten core.operation
+    impl=straighten
+    semantics=action
+    action=diagram.straighten
+    doc="Diagram command action=straighten; cue words: straighten"
+
+@op.diagram.sketch.untangle core.operation
+    impl=untangle
+    semantics=action
+    action=diagram.untangle
+    doc="Diagram command action=untangle; cue words: untangle, disentangle, uncross"
+
+@op.diagram.sketch.fit core.operation
+    impl=fit
+    semantics=action
+    action=diagram.fit
+    doc="Diagram command action=fit; cue words: fit, recenter, recentre, re-center, re-centre"
+
+@op.diagram.sketch.ask.members core.operation
+    impl=ask_members
+    semantics=query
+    action=diagram.ask.members
+    doc="Diagram question ask=members; cues: what is in, what does … contain, members of"
+
+@op.diagram.sketch.ask.groupOf core.operation
+    impl=ask_groupOf
+    semantics=query
+    action=diagram.ask.groupOf
+    doc="Diagram question ask=groupOf; cues: which group, what group, belongs to, part of"
+
+@op.diagram.sketch.ask.count core.operation
+    impl=ask_count
+    semantics=query
+    action=diagram.ask.count
+    doc="Diagram question ask=count; cues: how many"
+
+@op.diagram.sketch.ask.list core.operation
+    impl=ask_list
+    semantics=query
+    action=diagram.ask.list
+    doc="Diagram question ask=list; cues: list, which, show"
+
+@op.diagram.sketch.ask.exists core.operation
+    impl=ask_exists
+    semantics=query
+    action=diagram.ask.exists
+    doc="Diagram question ask=exists; cues: is there, are there"
+
+@op.diagram.sketch.ask.property core.operation
+    impl=ask_property
+    semantics=query
+    action=diagram.ask.property
+    doc="Diagram question ask=property; cues: what color, where is, how big"
+
+@op.diagram.sketch.ask.check core.operation
+    impl=ask_check
+    semantics=query
+    action=diagram.ask.check
+    doc="Diagram question ask=check; cues: is A …?"
+
+@op.diagram.sketch.ask.describe core.operation
+    impl=ask_describe
+    semantics=query
+    action=diagram.ask.describe
+    doc="Diagram question ask=describe; cues: describe, what is on"
+
+@op.diagram.sketch.ask.neighbors core.operation
+    impl=ask_neighbors
+    semantics=query
+    action=diagram.ask.neighbors
+    doc="Diagram question ask=neighbors; cues: what is connected to"
+
+@op.diagram.sketch.ask.connected core.operation
+    impl=ask_connected
+    semantics=query
+    action=diagram.ask.connected
+    doc="Diagram question ask=connected; cues: are A and B connected"
+
+@op.diagram.sketch.ask.degree core.operation
+    impl=ask_degree
+    semantics=query
+    action=diagram.ask.degree
+    doc="Diagram question ask=degree; cues: how many connections does"
+
+@op.diagram.sketch.ask.nearest core.operation
+    impl=ask_nearest
+    semantics=query
+    action=diagram.ask.nearest
+    doc="Diagram question ask=nearest; cues: closest, nearest, farthest"
+
+@op.diagram.sketch.ask.extreme core.operation
+    impl=ask_extreme
+    semantics=query
+    action=diagram.ask.extreme
+    doc="Diagram question ask=extreme; cues: biggest, leftmost, most connections"
+
+@op.diagram.sketch.ask.path core.operation
+    impl=ask_path
+    semantics=query
+    action=diagram.ask.path
+    doc="Diagram question ask=path; cues: is there a path, can I get from"
+
+@op.diagram.sketch.ask.reachable core.operation
+    impl=ask_reachable
+    semantics=query
+    action=diagram.ask.reachable
+    doc="Diagram question ask=reachable; cues: what can be reached from"
+
+@op.diagram.sketch.ask.cycle core.operation
+    impl=ask_cycle
+    semantics=query
+    action=diagram.ask.cycle
+    doc="Diagram question ask=cycle; cues: are there cycles"
+
+@op.diagram.sketch.ask.rules core.operation
+    impl=ask_rules
+    semantics=query
+    action=diagram.ask.rules
+    doc="Diagram question ask=rules; cues: what rules"
+
+@op.diagram.sketch.ask.help core.operation
+    impl=ask_help
+    semantics=query
+    action=diagram.ask.help
+    doc="Diagram question ask=help; cues: help, how do i, how can i, how to, what can you do, can i, is it possible, show me an example"

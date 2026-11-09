@@ -1,0 +1,100 @@
+{"id": "th-0001", "names": ["Router"], "text": "drop a gray hexagon called Switch right under Router", "wire": {"type": "command", "args": {"action": "create", "shape": "hexagon", "color": "gray", "name": "Switch", "position": "below", "anchor": "Router"}}}
+{"id": "th-0002", "names": [], "text": "a huge red circle named Edge in the top left corner", "wire": {"type": "command", "args": {"action": "create", "shape": "circle", "color": "red", "size": "huge", "name": "Edge", "position": "topLeft"}}}
+{"id": "th-0003", "names": ["Firewall"], "text": "throw in three tiny gray squares near Firewall", "wire": {"type": "command", "args": {"action": "create", "shape": "square", "color": "gray", "size": "tiny", "count": "3", "position": "near", "anchor": "Firewall"}}}
+{"id": "th-0004", "names": ["Firewall"], "text": "sketch a blue diamond labelled 'DMZ' above the Firewall", "wire": {"type": "command", "args": {"action": "create", "shape": "diamond", "color": "blue", "label": "DMZ", "position": "above", "anchor": "Firewall"}}}
+{"id": "th-0005", "names": ["Server"], "text": "I need a navy oval called Backup somewhere at the bottom", "wire": {"type": "command", "args": {"action": "create", "shape": "ellipse", "color": "navy", "name": "Backup", "position": "bottom"}}}
+{"id": "th-0006", "names": [], "text": "pop a new box in at the bottom right", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "position": "bottomRight"}}}
+{"id": "th-0007", "names": ["Laptop"], "text": "add a pink star named Vpn left of Laptop", "wire": {"type": "command", "args": {"action": "create", "shape": "star", "color": "pink", "name": "Vpn", "position": "leftOf", "anchor": "Laptop"}}}
+{"id": "th-0008", "names": ["Server"], "text": "uh add 2 gray triangles near Server", "wire": {"type": "command", "args": {"action": "create", "shape": "triangle", "color": "gray", "count": "2", "position": "near", "anchor": "Server"}}}
+{"id": "th-0009", "names": ["Switch"], "text": "a yellow ellipse named Ups, just below the Switch", "wire": {"type": "command", "args": {"action": "create", "shape": "ellipse", "color": "yellow", "name": "Ups", "position": "below", "anchor": "Switch"}}}
+{"id": "th-0010", "names": ["Router"], "text": "Add a black box called Modem right of Router", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "color": "black", "name": "Modem", "position": "rightOf", "anchor": "Router"}}}
+{"id": "th-0011", "names": [], "text": "can u draw a green circle in the center of the canvas", "wire": {"type": "command", "args": {"action": "create", "shape": "circle", "color": "green", "position": "center"}}}
+{"id": "th-0012", "names": ["Router", "Server"], "text": "make me a large teal diamond named Proxy between Router and Server", "wire": {"type": "command", "args": {"action": "create", "shape": "diamond", "color": "teal", "size": "large", "name": "Proxy", "position": "between", "anchor": "Router,Server"}}}
+{"id": "th-0013", "names": ["Laptop"], "text": "make Laptop purple", "wire": {"type": "command", "args": {"action": "set", "target": "Laptop", "color": "purple"}}}
+{"id": "th-0014", "names": ["Printer"], "text": "turn the Printer into a hexagon", "wire": {"type": "command", "args": {"action": "set", "target": "Printer", "shape": "hexagon"}}}
+{"id": "th-0015", "names": ["Server"], "text": "Server should be magenta, thanks", "wire": {"type": "command", "args": {"action": "set", "target": "Server", "color": "magenta"}}}
+{"id": "th-0016", "names": ["Switch"], "text": "recolour Switch orange", "wire": {"type": "command", "args": {"action": "set", "target": "Switch", "color": "orange"}}}
+{"id": "th-0017", "names": ["Firewall"], "text": "ok make Firewall huge", "wire": {"type": "command", "args": {"action": "set", "target": "Firewall", "size": "huge"}}}
+{"id": "th-0018", "names": ["Modem"], "text": "change the shape of Modem to a diamond", "wire": {"type": "command", "args": {"action": "set", "target": "Modem", "shape": "diamond"}}}
+{"id": "th-0019", "names": ["Proxy"], "text": "Proxy needs to go tiny", "wire": {"type": "command", "args": {"action": "set", "target": "Proxy", "size": "tiny"}}}
+{"id": "th-0020", "names": ["Backup"], "text": "make it white", "wire": {"type": "command", "args": {"action": "set", "target": "Backup", "color": "white"}}}
+{"id": "th-0021", "names": ["Router", "Firewall", "Switch"], "text": "tie Router, Firewall and Switch into a chain", "wire": {"type": "command", "args": {"action": "connect", "from": "Router,Firewall,Switch", "to": "Router,Firewall,Switch", "pairing": "chain"}}}
+{"id": "th-0022", "names": ["Switch", "Server"], "text": "hook up Switch and Server with a dashed line", "wire": {"type": "command", "args": {"action": "connect", "from": "Switch", "to": "Server", "style": "dashed"}}}
+{"id": "th-0023", "names": ["Laptop", "Router"], "text": "link Laptop to Router with a two-way arrow", "wire": {"type": "command", "args": {"action": "connect", "from": "Laptop", "to": "Router", "arrow": "both"}}}
+{"id": "th-0024", "names": ["Printer", "Switch", "Server"], "text": "connect Printer, Switch and Server in a chain", "wire": {"type": "command", "args": {"action": "connect", "from": "Printer,Switch,Server", "to": "Printer,Switch,Server", "pairing": "chain"}}}
+{"id": "th-0025", "names": ["Modem", "Proxy"], "text": "draw a red link from Modem to Proxy labelled 'uplink'", "wire": {"type": "command", "args": {"action": "connect", "from": "Modem", "to": "Proxy", "color": "red", "label": "uplink"}}}
+{"id": "th-0026", "names": ["Printer"], "text": "move Printer 40 pixels to the left", "wire": {"type": "command", "args": {"action": "move", "target": "Printer", "direction": "left", "distance": "40"}}}
+{"id": "th-0027", "names": ["Backup"], "text": "shift Backup up by 25 pixels", "wire": {"type": "command", "args": {"action": "move", "target": "Backup", "direction": "up", "distance": "25"}}}
+{"id": "th-0028", "names": ["Laptop", "Switch"], "text": "slide Laptop to the right of Switch", "wire": {"type": "command", "args": {"action": "move", "target": "Laptop", "position": "rightOf", "anchor": "Switch"}}}
+{"id": "th-0029", "names": ["Server"], "text": "nudge Server down a bit", "wire": {"type": "command", "args": {"action": "move", "target": "Server", "direction": "down"}}}
+{"id": "th-0030", "names": ["Proxy", "Router", "Firewall"], "text": "move Proxy between Router and Firewall", "wire": {"type": "command", "args": {"action": "move", "target": "Proxy", "position": "between", "anchor": "Router,Firewall"}}}
+{"id": "th-0031", "names": ["Modem"], "text": "scoot the Modem over to the top", "wire": {"type": "command", "args": {"action": "move", "target": "Modem", "position": "top"}}}
+{"id": "th-0032", "names": ["Firewall"], "text": "drag Firewall left 80 px", "wire": {"type": "command", "args": {"action": "move", "target": "Firewall", "direction": "left", "distance": "80"}}}
+{"id": "th-0033", "names": ["Printer"], "text": "delete the Printer", "wire": {"type": "command", "args": {"action": "delete", "target": "Printer"}}}
+{"id": "th-0034", "names": ["Backup"], "text": "get rid of Backup", "wire": {"type": "command", "args": {"action": "delete", "target": "Backup"}}}
+{"id": "th-0035", "names": ["Modem"], "text": "kill the Modem", "wire": {"type": "command", "args": {"action": "delete", "target": "Modem"}}}
+{"id": "th-0036", "names": ["Switch"], "text": "make Switch bigger", "wire": {"type": "command", "args": {"action": "resize", "target": "Switch"}}}
+{"id": "th-0037", "names": ["Router"], "text": "shrink Router a little", "wire": {"type": "command", "args": {"action": "resize", "target": "Router"}}}
+{"id": "th-0038", "names": ["Laptop"], "text": "rename Laptop to Notebook", "wire": {"type": "command", "args": {"action": "rename", "target": "Laptop", "name": "Notebook"}}}
+{"id": "th-0039", "names": ["Proxy"], "text": "can you rename the Proxy to Gateway", "wire": {"type": "command", "args": {"action": "rename", "target": "Proxy", "name": "Gateway"}}}
+{"id": "th-0040", "names": ["Firewall"], "text": "label Firewall 'Perimeter'", "wire": {"type": "command", "args": {"action": "label", "target": "Firewall", "label": "Perimeter"}}}
+{"id": "th-0041", "names": ["Modem"], "text": "put the words 'Edge zone' on Modem", "wire": {"type": "command", "args": {"action": "label", "target": "Modem", "label": "Edge zone"}}}
+{"id": "th-0042", "names": ["Switch"], "text": "duplicate Switch", "wire": {"type": "command", "args": {"action": "duplicate", "target": "Switch"}}}
+{"id": "th-0043", "names": ["Laptop"], "text": "make 4 copies of Laptop", "wire": {"type": "command", "args": {"action": "duplicate", "target": "Laptop", "count": "4"}}}
+{"id": "th-0044", "names": ["Router", "Firewall"], "text": "swap Router and Firewall", "wire": {"type": "command", "args": {"action": "swap", "target": "Router,Firewall"}}}
+{"id": "th-0045", "names": ["Server", "Printer"], "text": "trade places of Server and Printer", "wire": {"type": "command", "args": {"action": "swap", "target": "Server,Printer"}}}
+{"id": "th-0046", "names": ["Switch", "Server"], "text": "unlink Switch from Server", "wire": {"type": "command", "args": {"action": "disconnect", "from": "Switch", "to": "Server"}}}
+{"id": "th-0047", "names": ["Modem", "Proxy"], "text": "cut the connection between Modem and Proxy", "wire": {"type": "command", "args": {"action": "disconnect", "from": "Modem", "to": "Proxy"}}}
+{"id": "th-0048", "names": ["Switch", "Modem", "Proxy"], "text": "line up Switch, Modem and Proxy horizontally", "wire": {"type": "command", "args": {"action": "align", "target": "Switch,Modem,Proxy", "axis": "horizontal"}}}
+{"id": "th-0049", "names": [], "text": "align all the squares vertically", "wire": {"type": "command", "args": {"action": "align", "target": "mention(quantifier=all,shape=square)", "axis": "vertical"}}}
+{"id": "th-0050", "names": ["Laptop", "Printer"], "text": "arrange Laptop and Printer in a row", "wire": {"type": "command", "args": {"action": "arrange", "target": "Laptop,Printer", "layout": "row"}}}
+{"id": "th-0051", "names": [], "text": "arrange everything in a grid", "wire": {"type": "command", "args": {"action": "arrange", "layout": "grid"}}}
+{"id": "th-0052", "names": ["Router", "Switch", "Server"], "text": "spread Router, Switch and Server out evenly horizontally", "wire": {"type": "command", "args": {"action": "distribute", "target": "Router,Switch,Server", "axis": "horizontal"}}}
+{"id": "th-0053", "names": [], "text": "space the circles out vertically", "wire": {"type": "command", "args": {"action": "distribute", "target": "mention(quantifier=all,shape=circle)", "axis": "vertical"}}}
+{"id": "th-0054", "names": ["Firewall"], "text": "bring Firewall to the front", "wire": {"type": "command", "args": {"action": "toFront", "target": "Firewall"}}}
+{"id": "th-0055", "names": ["Proxy"], "text": "put Proxy on top of everything else", "wire": {"type": "command", "args": {"action": "toFront", "target": "Proxy"}}}
+{"id": "th-0056", "names": ["Modem"], "text": "send the Modem to the back", "wire": {"type": "command", "args": {"action": "toBack", "target": "Modem"}}}
+{"id": "th-0057", "names": ["Backup"], "text": "push Backup behind everything", "wire": {"type": "command", "args": {"action": "toBack", "target": "Backup"}}}
+{"id": "th-0058", "names": [], "text": "undo that", "wire": {"type": "command", "args": {"action": "undo"}}}
+{"id": "th-0059", "names": [], "text": "oops, go back one step", "wire": {"type": "command", "args": {"action": "undo"}}}
+{"id": "th-0060", "names": [], "text": "redo", "wire": {"type": "command", "args": {"action": "redo"}}}
+{"id": "th-0061", "names": [], "text": "bring back what you just undid", "wire": {"type": "command", "args": {"action": "redo"}}}
+{"id": "th-0062", "names": [], "text": "forget the default rules", "wire": {"type": "command", "args": {"action": "forget"}}}
+{"id": "th-0063", "names": [], "text": "clear all the default rules you set", "wire": {"type": "command", "args": {"action": "forget"}}}
+{"id": "th-0064", "names": [], "text": "how many red circles are on the board", "wire": {"type": "question", "args": {"ask": "count", "shape": "circle", "color": "red"}}}
+{"id": "th-0065", "names": [], "text": "how many connections are there", "wire": {"type": "question", "args": {"ask": "count", "kind": "edge"}}}
+{"id": "th-0066", "names": [], "text": "how many boxes are not black", "wire": {"type": "question", "args": {"ask": "count", "shape": "rectangle", "notColor": "black"}}}
+{"id": "th-0067", "names": [], "text": "is there a green star?", "wire": {"type": "question", "args": {"ask": "exists", "shape": "star", "color": "green"}}}
+{"id": "th-0068", "names": [], "text": "any gray hexagons around?", "wire": {"type": "question", "args": {"ask": "exists", "shape": "hexagon", "color": "gray"}}}
+{"id": "th-0069", "names": [], "text": "list the blue things", "wire": {"type": "question", "args": {"ask": "list", "color": "blue"}}}
+{"id": "th-0070", "names": [], "text": "which shapes are white", "wire": {"type": "question", "args": {"ask": "list", "color": "white"}}}
+{"id": "th-0071", "names": ["Firewall"], "text": "what color is Firewall", "wire": {"type": "question", "args": {"ask": "property", "target": "Firewall", "property": "color"}}}
+{"id": "th-0072", "names": ["Server"], "text": "how big is Server", "wire": {"type": "question", "args": {"ask": "property", "target": "Server", "property": "size"}}}
+{"id": "th-0073", "names": ["Proxy"], "text": "what shape is the Proxy", "wire": {"type": "question", "args": {"ask": "property", "target": "Proxy", "property": "shape"}}}
+{"id": "th-0074", "names": ["Router"], "text": "describe Router for me", "wire": {"type": "question", "args": {"ask": "describe", "target": "Router"}}}
+{"id": "th-0075", "names": [], "text": "give me an overview of the whole diagram", "wire": {"type": "question", "args": {"ask": "describe"}}}
+{"id": "th-0076", "names": ["Switch"], "text": "what's directly attached to Switch", "wire": {"type": "question", "args": {"ask": "neighbors", "target": "Switch"}}}
+{"id": "th-0077", "names": ["Firewall"], "text": "who's next to Firewall", "wire": {"type": "question", "args": {"ask": "neighbors", "target": "Firewall"}}}
+{"id": "th-0078", "names": ["Router", "Firewall"], "text": "are Router and Firewall directly linked", "wire": {"type": "question", "args": {"ask": "connected", "target": "Router", "anchor": "Firewall"}}}
+{"id": "th-0079", "names": ["Laptop", "Printer"], "text": "is Laptop wired straight to Printer?", "wire": {"type": "question", "args": {"ask": "connected", "target": "Laptop", "anchor": "Printer"}}}
+{"id": "th-0080", "names": ["Server"], "text": "how many links does Server have", "wire": {"type": "question", "args": {"ask": "degree", "target": "Server"}}}
+{"id": "th-0081", "names": ["Router"], "text": "how many wires come out of Router", "wire": {"type": "question", "args": {"ask": "degree", "target": "Router"}}}
+{"id": "th-0082", "names": ["Laptop", "Backup"], "text": "is there a way from Laptop to Backup", "wire": {"type": "question", "args": {"ask": "path", "from": "Laptop", "to": "Backup"}}}
+{"id": "th-0083", "names": ["Modem", "Printer"], "text": "find a route from Modem to Printer", "wire": {"type": "question", "args": {"ask": "path", "from": "Modem", "to": "Printer"}}}
+{"id": "th-0084", "names": ["Router"], "text": "what can you reach starting from Router", "wire": {"type": "question", "args": {"ask": "reachable", "from": "Router"}}}
+{"id": "th-0085", "names": ["Proxy"], "text": "which shapes are reachable from Proxy", "wire": {"type": "question", "args": {"ask": "reachable", "from": "Proxy"}}}
+{"id": "th-0086", "names": [], "text": "is there a loop anywhere in the diagram", "wire": {"type": "question", "args": {"ask": "cycle"}}}
+{"id": "th-0087", "names": [], "text": "does the network have any cycles", "wire": {"type": "question", "args": {"ask": "cycle"}}}
+{"id": "th-0088", "names": [], "text": "what rules are set right now", "wire": {"type": "question", "args": {"ask": "rules"}}}
+{"id": "th-0089", "names": [], "text": "which defaults do you remember", "wire": {"type": "question", "args": {"ask": "rules"}}}
+{"id": "th-0090", "names": ["Switch"], "text": "is Switch green?", "wire": {"type": "question", "args": {"ask": "check", "target": "Switch", "color": "green"}}}
+{"id": "th-0091", "names": ["Router"], "text": "is the Router a hexagon", "wire": {"type": "question", "args": {"ask": "check", "target": "Router", "shape": "hexagon"}}}
+{"id": "th-0092", "names": ["Backup", "Modem"], "text": "is Backup bigger than Modem", "wire": {"type": "question", "args": {"ask": "check", "target": "Backup", "comparison": "bigger", "anchor": "Modem"}}}
+{"id": "th-0093", "names": ["Printer", "Server"], "text": "is Printer left of Server", "wire": {"type": "question", "args": {"ask": "check", "target": "Printer", "position": "leftOf", "anchor": "Server"}}}
+{"id": "th-0094", "names": [], "text": "which shape is the biggest", "wire": {"type": "question", "args": {"ask": "extreme", "superlative": "biggest"}}}
+{"id": "th-0095", "names": [], "text": "what's the rightmost thing", "wire": {"type": "question", "args": {"ask": "extreme", "superlative": "rightmost"}}}
+{"id": "th-0096", "names": ["Router"], "text": "which red shape is closest to Router", "wire": {"type": "question", "args": {"ask": "nearest", "anchor": "Router", "superlative": "closest", "color": "red"}}}
+{"id": "th-0097", "names": ["Server"], "text": "what's the farthest circle from Server", "wire": {"type": "question", "args": {"ask": "nearest", "anchor": "Server", "superlative": "farthest", "shape": "circle"}}}
+{"id": "th-0098", "names": ["Firewall"], "text": "Firewall is red", "wire": {"type": "fact", "args": {"target": "Firewall", "color": "red"}}}
+{"id": "th-0099", "names": ["Proxy", "Laptop"], "text": "Proxy sits left of Laptop", "wire": {"type": "fact", "args": {"target": "Proxy", "position": "leftOf", "anchor": "Laptop"}}}
+{"id": "th-0100", "names": [], "text": "any new hexagon should come out teal from here on", "wire": {"type": "rule", "args": {"shape": "hexagon", "color": "teal"}}}

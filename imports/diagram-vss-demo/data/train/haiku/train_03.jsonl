@@ -1,0 +1,100 @@
+{"id": "th-0201", "names": ["Start"], "text": "add a green box labelled 'Read input' right after Start", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "color": "green", "label": "Read input", "position": "rightOf", "anchor": "Start"}}}
+{"id": "th-0202", "names": [], "text": "put a yellow diamond named Check in the center", "wire": {"type": "command", "args": {"action": "create", "shape": "diamond", "color": "yellow", "name": "Check", "position": "center"}}}
+{"id": "th-0203", "names": ["Check"], "text": "spawn two gray ovals below Check", "wire": {"type": "command", "args": {"action": "create", "shape": "ellipse", "color": "gray", "count": "2", "position": "below", "anchor": "Check"}}}
+{"id": "th-0204", "names": ["Done"], "text": "could u sketch a small purple rectangle near Done", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "color": "purple", "size": "small", "position": "near", "anchor": "Done"}}}
+{"id": "th-0205", "names": [], "text": "new red star called Fix at the top right", "wire": {"type": "command", "args": {"action": "create", "shape": "star", "color": "red", "name": "Fix", "position": "topRight"}}}
+{"id": "th-0206", "names": ["Check", "Fix"], "text": "a navy square called Retry between Check and Fix", "wire": {"type": "command", "args": {"action": "create", "shape": "square", "color": "navy", "name": "Retry", "position": "between", "anchor": "Check,Fix"}}}
+{"id": "th-0207", "names": [], "text": "make a large white circle labeled 'Hello' at the bottom", "wire": {"type": "command", "args": {"action": "create", "shape": "circle", "color": "white", "size": "large", "label": "Hello", "position": "bottom"}}}
+{"id": "th-0208", "names": ["Review"], "text": "I want a blue box that says 'Approved' above Review", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "color": "blue", "label": "Approved", "position": "above", "anchor": "Review"}}}
+{"id": "th-0209", "names": [], "text": "medium black triangle at the left edge", "wire": {"type": "command", "args": {"action": "create", "shape": "triangle", "color": "black", "size": "medium", "position": "left"}}}
+{"id": "th-0210", "names": ["Ship"], "text": "toss in 4 lime hexagons right of Ship", "wire": {"type": "command", "args": {"action": "create", "shape": "hexagon", "color": "lime", "count": "4", "position": "rightOf", "anchor": "Ship"}}}
+{"id": "th-0211", "names": ["Log"], "text": "make a cyan oval named Alert next to Log", "wire": {"type": "command", "args": {"action": "create", "shape": "ellipse", "color": "cyan", "name": "Alert", "position": "near", "anchor": "Log"}}}
+{"id": "th-0212", "names": [], "text": "add a huge pink rectangle at the top", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "color": "pink", "size": "huge", "position": "top"}}}
+{"id": "th-0213", "names": ["Check"], "text": "make Check teal", "wire": {"type": "command", "args": {"action": "set", "target": "Check", "color": "teal"}}}
+{"id": "th-0214", "names": ["Start"], "text": "Start should be a circle", "wire": {"type": "command", "args": {"action": "set", "target": "Start", "shape": "circle"}}}
+{"id": "th-0215", "names": ["Done"], "text": "paint Done gold", "wire": {"type": "command", "args": {"action": "set", "target": "Done", "color": "gold"}}}
+{"id": "th-0216", "names": ["Review"], "text": "make Review large", "wire": {"type": "command", "args": {"action": "set", "target": "Review", "size": "large"}}}
+{"id": "th-0217", "names": ["Fix"], "text": "turn Fix into a diamond", "wire": {"type": "command", "args": {"action": "set", "target": "Fix", "shape": "diamond"}}}
+{"id": "th-0218", "names": ["Ship"], "text": "make it lime", "wire": {"type": "command", "args": {"action": "set", "target": "Ship", "color": "lime"}}}
+{"id": "th-0219", "names": ["Log"], "text": "could Log be brown", "wire": {"type": "command", "args": {"action": "set", "target": "Log", "color": "brown"}}}
+{"id": "th-0220", "names": ["Retry"], "text": "please make the Retry box huge", "wire": {"type": "command", "args": {"action": "set", "target": "Retry", "size": "huge"}}}
+{"id": "th-0221", "names": [], "text": "make the red circle navy", "wire": {"type": "command", "args": {"action": "set", "target": "mention(color=red,shape=circle)", "color": "navy"}}}
+{"id": "th-0222", "names": ["Start", "Check"], "text": "link Start and Check, each one to the next", "wire": {"type": "command", "args": {"action": "connect", "from": "Start,Check", "to": "Start,Check", "pairing": "next"}}}
+{"id": "th-0223", "names": ["Check", "Fix"], "text": "draw a dashed arrow from Check to Fix", "wire": {"type": "command", "args": {"action": "connect", "from": "Check", "to": "Fix", "style": "dashed"}}}
+{"id": "th-0224", "names": ["Review", "Ship"], "text": "link Review and Ship with a plain line, no arrowhead", "wire": {"type": "command", "args": {"action": "connect", "from": "Review", "to": "Ship", "arrow": "none"}}}
+{"id": "th-0225", "names": ["Start", "Check", "Review", "Done"], "text": "chain Start, Check, Review and Done", "wire": {"type": "command", "args": {"action": "connect", "from": "Start,Check,Review,Done", "to": "Start,Check,Review,Done", "pairing": "chain"}}}
+{"id": "th-0226", "names": ["Start", "Check", "Done"], "text": "connect each of Start, Check and Done to the next one", "wire": {"type": "command", "args": {"action": "connect", "from": "Start,Check,Done", "to": "Start,Check,Done", "pairing": "next"}}}
+{"id": "th-0227", "names": ["Check"], "text": "move Check 30 px up", "wire": {"type": "command", "args": {"action": "move", "target": "Check", "direction": "up", "distance": "30"}}}
+{"id": "th-0228", "names": ["Fix", "Retry"], "text": "relocate Fix to the right of Retry", "wire": {"type": "command", "args": {"action": "move", "target": "Fix", "position": "rightOf", "anchor": "Retry"}}}
+{"id": "th-0229", "names": ["Start"], "text": "shove Start to the left by 100 pixels", "wire": {"type": "command", "args": {"action": "move", "target": "Start", "direction": "left", "distance": "100"}}}
+{"id": "th-0230", "names": ["Done"], "text": "Done goes to the bottomRight corner", "wire": {"type": "command", "args": {"action": "move", "target": "Done", "position": "bottomRight"}}}
+{"id": "th-0231", "names": ["Ship", "Review", "Done"], "text": "put Ship between Review and Done", "wire": {"type": "command", "args": {"action": "move", "target": "Ship", "position": "between", "anchor": "Review,Done"}}}
+{"id": "th-0232", "names": ["Log"], "text": "move Log up", "wire": {"type": "command", "args": {"action": "move", "target": "Log", "direction": "up"}}}
+{"id": "th-0233", "names": ["Alert", "Log"], "text": "park Alert near Log", "wire": {"type": "command", "args": {"action": "move", "target": "Alert", "position": "near", "anchor": "Log"}}}
+{"id": "th-0234", "names": ["Review"], "text": "delete Review", "wire": {"type": "command", "args": {"action": "delete", "target": "Review"}}}
+{"id": "th-0235", "names": [], "text": "delete all the diamonds that aren't blue", "wire": {"type": "command", "args": {"action": "delete", "target": "mention(notcolor=blue,quantifier=all,shape=diamond)"}}}
+{"id": "th-0236", "names": ["Retry", "Fix"], "text": "get rid of the newest diamond", "wire": {"type": "command", "args": {"action": "delete", "target": "mention(recency=newest,shape=diamond)"}}}
+{"id": "th-0237", "names": ["Start"], "text": "grow Start a bit", "wire": {"type": "command", "args": {"action": "resize", "target": "Start"}}}
+{"id": "th-0238", "names": ["Done"], "text": "could you shrink the Done shape", "wire": {"type": "command", "args": {"action": "resize", "target": "Done"}}}
+{"id": "th-0239", "names": ["Ship"], "text": "rename Ship to Deploy", "wire": {"type": "command", "args": {"action": "rename", "target": "Ship", "name": "Deploy"}}}
+{"id": "th-0240", "names": ["Check"], "text": "change the name of Check to Gate", "wire": {"type": "command", "args": {"action": "rename", "target": "Check", "name": "Gate"}}}
+{"id": "th-0241", "names": ["Fix"], "text": "write 'Retry later' on Fix", "wire": {"type": "command", "args": {"action": "label", "target": "Fix", "label": "Retry later"}}}
+{"id": "th-0242", "names": ["Start"], "text": "give Start the label 'Begin'", "wire": {"type": "command", "args": {"action": "label", "target": "Start", "label": "Begin"}}}
+{"id": "th-0243", "names": ["Log"], "text": "duplicate Log twice", "wire": {"type": "command", "args": {"action": "duplicate", "target": "Log", "count": "2"}}}
+{"id": "th-0244", "names": [], "text": "clone the newest diamond", "wire": {"type": "command", "args": {"action": "duplicate", "target": "mention(recency=newest,shape=diamond)"}}}
+{"id": "th-0245", "names": ["Check", "Review"], "text": "flip Check and Review", "wire": {"type": "command", "args": {"action": "swap", "target": "Check,Review"}}}
+{"id": "th-0246", "names": ["Done", "Ship"], "text": "swap the spots of Done and Ship", "wire": {"type": "command", "args": {"action": "swap", "target": "Done,Ship"}}}
+{"id": "th-0247", "names": ["Start", "Check"], "text": "disconnect Start from Check", "wire": {"type": "command", "args": {"action": "disconnect", "from": "Start", "to": "Check"}}}
+{"id": "th-0248", "names": ["Fix", "Retry"], "text": "remove the link between Fix and Retry", "wire": {"type": "command", "args": {"action": "disconnect", "from": "Fix", "to": "Retry"}}}
+{"id": "th-0249", "names": ["Start", "Check", "Review"], "text": "align Start, Check and Review horizontally", "wire": {"type": "command", "args": {"action": "align", "target": "Start,Check,Review", "axis": "horizontal"}}}
+{"id": "th-0250", "names": [], "text": "align the boxes that aren't green vertically", "wire": {"type": "command", "args": {"action": "align", "target": "mention(notcolor=green,quantifier=all,shape=rectangle)", "axis": "vertical"}}}
+{"id": "th-0251", "names": ["Fix", "Retry"], "text": "arrange Fix and Retry in a column", "wire": {"type": "command", "args": {"action": "arrange", "target": "Fix,Retry", "layout": "column"}}}
+{"id": "th-0252", "names": [], "text": "lay out everything in a row", "wire": {"type": "command", "args": {"action": "arrange", "layout": "row"}}}
+{"id": "th-0253", "names": ["Start", "Check", "Done"], "text": "even out the spacing of Start, Check and Done horizontally", "wire": {"type": "command", "args": {"action": "distribute", "target": "Start,Check,Done", "axis": "horizontal"}}}
+{"id": "th-0254", "names": [], "text": "spread out all the shapes that aren't blue vertically", "wire": {"type": "command", "args": {"action": "distribute", "target": "mention(notcolor=blue,quantifier=all)", "axis": "vertical"}}}
+{"id": "th-0255", "names": ["Ship"], "text": "make Ship the top-most layer", "wire": {"type": "command", "args": {"action": "toFront", "target": "Ship"}}}
+{"id": "th-0256", "names": [], "text": "bring the first star to the front", "wire": {"type": "command", "args": {"action": "toFront", "target": "mention(recency=oldest,shape=star)"}}}
+{"id": "th-0257", "names": ["Log"], "text": "send Log to the back", "wire": {"type": "command", "args": {"action": "toBack", "target": "Log"}}}
+{"id": "th-0258", "names": [], "text": "push the oldest circle to the back", "wire": {"type": "command", "args": {"action": "toBack", "target": "mention(recency=oldest,shape=circle)"}}}
+{"id": "th-0259", "names": [], "text": "take that last move back", "wire": {"type": "command", "args": {"action": "undo"}}}
+{"id": "th-0260", "names": [], "text": "undo, please", "wire": {"type": "command", "args": {"action": "undo"}}}
+{"id": "th-0261", "names": [], "text": "put back what I undid", "wire": {"type": "command", "args": {"action": "redo"}}}
+{"id": "th-0262", "names": [], "text": "redo that", "wire": {"type": "command", "args": {"action": "redo"}}}
+{"id": "th-0263", "names": [], "text": "drop the default rules you have", "wire": {"type": "command", "args": {"action": "forget"}}}
+{"id": "th-0264", "names": [], "text": "forget the defaults", "wire": {"type": "command", "args": {"action": "forget"}}}
+{"id": "th-0265", "names": [], "text": "how many green boxes are there", "wire": {"type": "question", "args": {"ask": "count", "shape": "rectangle", "color": "green"}}}
+{"id": "th-0266", "names": [], "text": "how many shapes are not yellow", "wire": {"type": "question", "args": {"ask": "count", "notColor": "yellow"}}}
+{"id": "th-0267", "names": ["Check"], "text": "how many shapes are right of Check", "wire": {"type": "question", "args": {"ask": "count", "position": "rightOf", "anchor": "Check"}}}
+{"id": "th-0268", "names": [], "text": "do we have any red stars", "wire": {"type": "question", "args": {"ask": "exists", "shape": "star", "color": "red"}}}
+{"id": "th-0269", "names": [], "text": "is there a navy circle", "wire": {"type": "question", "args": {"ask": "exists", "shape": "circle", "color": "navy"}}}
+{"id": "th-0270", "names": [], "text": "list the squares", "wire": {"type": "question", "args": {"ask": "list", "shape": "square"}}}
+{"id": "th-0271", "names": [], "text": "which shapes are not gray", "wire": {"type": "question", "args": {"ask": "list", "notColor": "gray"}}}
+{"id": "th-0272", "names": ["Done"], "text": "what color is Done", "wire": {"type": "question", "args": {"ask": "property", "target": "Done", "property": "color"}}}
+{"id": "th-0273", "names": ["Log"], "text": "what's the label on Log", "wire": {"type": "question", "args": {"ask": "property", "target": "Log", "property": "label"}}}
+{"id": "th-0274", "names": [], "text": "what shape is the newest diamond", "wire": {"type": "question", "args": {"ask": "property", "target": "mention(recency=newest,shape=diamond)", "property": "shape"}}}
+{"id": "th-0275", "names": ["Check"], "text": "give me a summary of Check", "wire": {"type": "question", "args": {"ask": "describe", "target": "Check"}}}
+{"id": "th-0276", "names": [], "text": "describe everything on the canvas", "wire": {"type": "question", "args": {"ask": "describe"}}}
+{"id": "th-0277", "names": ["Check"], "text": "what connects to Check", "wire": {"type": "question", "args": {"ask": "neighbors", "target": "Check"}}}
+{"id": "th-0278", "names": ["Ship"], "text": "which shapes touch Ship", "wire": {"type": "question", "args": {"ask": "neighbors", "target": "Ship"}}}
+{"id": "th-0279", "names": ["Start", "Check"], "text": "is Start joined to Check?", "wire": {"type": "question", "args": {"ask": "connected", "target": "Start", "anchor": "Check"}}}
+{"id": "th-0280", "names": ["Review", "Done"], "text": "does Review link directly to Done", "wire": {"type": "question", "args": {"ask": "connected", "target": "Review", "anchor": "Done"}}}
+{"id": "th-0281", "names": ["Check"], "text": "how many links come into Check", "wire": {"type": "question", "args": {"ask": "degree", "target": "Check"}}}
+{"id": "th-0282", "names": ["Done"], "text": "how connected is Done", "wire": {"type": "question", "args": {"ask": "degree", "target": "Done"}}}
+{"id": "th-0283", "names": ["Start", "Done"], "text": "can I get from Start to Done", "wire": {"type": "question", "args": {"ask": "path", "from": "Start", "to": "Done"}}}
+{"id": "th-0284", "names": ["Fix", "Ship"], "text": "is Fix linked to Ship through anything", "wire": {"type": "question", "args": {"ask": "path", "from": "Fix", "to": "Ship"}}}
+{"id": "th-0285", "names": ["Start"], "text": "what's reachable from Start", "wire": {"type": "question", "args": {"ask": "reachable", "from": "Start"}}}
+{"id": "th-0286", "names": ["Check"], "text": "starting at Check, where can you go", "wire": {"type": "question", "args": {"ask": "reachable", "from": "Check"}}}
+{"id": "th-0287", "names": [], "text": "are there any loops in this flowchart", "wire": {"type": "question", "args": {"ask": "cycle"}}}
+{"id": "th-0288", "names": [], "text": "does the chart loop back on itself", "wire": {"type": "question", "args": {"ask": "cycle"}}}
+{"id": "th-0289", "names": [], "text": "list the rules you're using", "wire": {"type": "question", "args": {"ask": "rules"}}}
+{"id": "th-0290", "names": [], "text": "what defaults are in effect", "wire": {"type": "question", "args": {"ask": "rules"}}}
+{"id": "th-0291", "names": ["Start"], "text": "is Start green", "wire": {"type": "question", "args": {"ask": "check", "target": "Start", "color": "green"}}}
+{"id": "th-0292", "names": [], "text": "is the newest diamond not blue", "wire": {"type": "question", "args": {"ask": "check", "target": "mention(recency=newest,shape=diamond)", "notColor": "blue"}}}
+{"id": "th-0293", "names": ["Check", "Done"], "text": "is Check to the left of Done", "wire": {"type": "question", "args": {"ask": "check", "target": "Check", "position": "leftOf", "anchor": "Done"}}}
+{"id": "th-0294", "names": [], "text": "which shape is the leftmost", "wire": {"type": "question", "args": {"ask": "extreme", "superlative": "leftmost"}}}
+{"id": "th-0295", "names": [], "text": "what is the bottommost thing", "wire": {"type": "question", "args": {"ask": "extreme", "superlative": "bottommost"}}}
+{"id": "th-0296", "names": ["Start"], "text": "what's the closest shape to Start", "wire": {"type": "question", "args": {"ask": "nearest", "anchor": "Start", "superlative": "closest"}}}
+{"id": "th-0297", "names": ["Done"], "text": "which green thing is farthest from Done", "wire": {"type": "question", "args": {"ask": "nearest", "anchor": "Done", "superlative": "farthest", "color": "green"}}}
+{"id": "th-0298", "names": ["Log"], "text": "Log is a hexagon", "wire": {"type": "fact", "args": {"target": "Log", "shape": "hexagon"}}}
+{"id": "th-0299", "names": ["Ship", "Done"], "text": "Ship sits above Done", "wire": {"type": "fact", "args": {"target": "Ship", "position": "above", "anchor": "Done"}}}
+{"id": "th-0300", "names": [], "text": "new stars should be huge from now on", "wire": {"type": "rule", "args": {"shape": "star", "size": "huge"}}}

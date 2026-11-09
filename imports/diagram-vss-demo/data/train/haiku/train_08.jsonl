@@ -1,0 +1,100 @@
+{"id": "th-0701", "names": ["Central"], "text": "toss a cyan circle called Junction right next to Central", "wire": {"type": "command", "args": {"action": "create", "shape": "circle", "color": "cyan", "name": "Junction", "position": "near", "anchor": "Central"}}}
+{"id": "th-0702", "names": [], "text": "hey, put a huge black rectangle in the bottom right named Depot", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "color": "black", "size": "huge", "name": "Depot", "position": "bottomRight"}}}
+{"id": "th-0703", "names": ["Harbor"], "text": "two green ellipses left of Harbor", "wire": {"type": "command", "args": {"action": "create", "shape": "ellipse", "color": "green", "count": "2", "position": "leftOf", "anchor": "Harbor"}}}
+{"id": "th-0704", "names": [], "text": "a yellow star labeled 'Stop 4' at the center", "wire": {"type": "command", "args": {"action": "create", "shape": "star", "color": "yellow", "label": "Stop 4", "position": "center"}}}
+{"id": "th-0705", "names": ["Museum", "Park"], "text": "make an orange triangle named Stop between Museum and Park", "wire": {"type": "command", "args": {"action": "create", "shape": "triangle", "color": "orange", "name": "Stop", "position": "between", "anchor": "Museum,Park"}}}
+{"id": "th-0706", "names": ["Airport"], "text": "small magenta square labeled 'Gate' above Airport", "wire": {"type": "command", "args": {"action": "create", "shape": "square", "color": "magenta", "size": "small", "label": "Gate", "position": "above", "anchor": "Airport"}}}
+{"id": "th-0707", "names": [], "text": "one more hexagon, medium size, in the top left", "wire": {"type": "command", "args": {"action": "create", "shape": "hexagon", "size": "medium", "position": "topLeft"}}}
+{"id": "th-0708", "names": ["Market"], "text": "pop a red diamond in right below Market named Kiosk", "wire": {"type": "command", "args": {"action": "create", "shape": "diamond", "color": "red", "name": "Kiosk", "position": "below", "anchor": "Market"}}}
+{"id": "th-0709", "names": [], "text": "could u place a tiny blue oval at the top", "wire": {"type": "command", "args": {"action": "create", "shape": "ellipse", "color": "blue", "size": "tiny", "position": "top"}}}
+{"id": "th-0710", "names": ["Stadium"], "text": "slap a navy box named Turnstile to the right of Stadium", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "color": "navy", "name": "Turnstile", "position": "rightOf", "anchor": "Stadium"}}}
+{"id": "th-0711", "names": [], "text": "a white circle called Loop in the middle", "wire": {"type": "command", "args": {"action": "create", "shape": "circle", "color": "white", "name": "Loop", "position": "center"}}}
+{"id": "th-0712", "names": ["Park"], "text": "5 gray diamonds beside Park", "wire": {"type": "command", "args": {"action": "create", "shape": "diamond", "color": "gray", "count": "5", "position": "near", "anchor": "Park"}}}
+{"id": "th-0713", "names": ["Central"], "text": "Central should be navy", "wire": {"type": "command", "args": {"action": "set", "target": "Central", "color": "navy"}}}
+{"id": "th-0714", "names": ["Harbor"], "text": "make Harbor a hexagon", "wire": {"type": "command", "args": {"action": "set", "target": "Harbor", "shape": "hexagon"}}}
+{"id": "th-0715", "names": ["Museum"], "text": "make Museum huge", "wire": {"type": "command", "args": {"action": "set", "target": "Museum", "size": "huge"}}}
+{"id": "th-0716", "names": ["Airport"], "text": "airport goes tiny", "wire": {"type": "command", "args": {"action": "set", "target": "Airport", "size": "tiny"}}}
+{"id": "th-0717", "names": ["Market"], "text": "color Market teal", "wire": {"type": "command", "args": {"action": "set", "target": "Market", "color": "teal"}}}
+{"id": "th-0718", "names": ["Stadium"], "text": "turn Stadium into a star", "wire": {"type": "command", "args": {"action": "set", "target": "Stadium", "shape": "star"}}}
+{"id": "th-0719", "names": ["Park"], "text": "park should be lime", "wire": {"type": "command", "args": {"action": "set", "target": "Park", "color": "lime"}}}
+{"id": "th-0720", "names": ["Stop"], "text": "make it red", "wire": {"type": "command", "args": {"action": "set", "target": "Stop", "color": "red"}}}
+{"id": "th-0721", "names": [], "text": "make the ellipses that aren't green purple", "wire": {"type": "command", "args": {"action": "set", "target": "mention(notcolor=green,quantifier=all,shape=ellipse)", "color": "purple"}}}
+{"id": "th-0722", "names": ["Central", "Harbor", "Park"], "text": "run lines from each of Central, Harbor and Park to the next one", "wire": {"type": "command", "args": {"action": "connect", "from": "Central,Harbor,Park", "to": "Central,Harbor,Park", "pairing": "next"}}}
+{"id": "th-0723", "names": ["Museum", "Park"], "text": "connect Museum and Park with a dashed line", "wire": {"type": "command", "args": {"action": "connect", "from": "Museum", "to": "Park", "style": "dashed"}}}
+{"id": "th-0724", "names": ["Airport", "Market"], "text": "link Airport and Market with a plain line, no arrowheads", "wire": {"type": "command", "args": {"action": "connect", "from": "Airport", "to": "Market", "arrow": "none"}}}
+{"id": "th-0725", "names": ["Central", "Stadium"], "text": "a blue connection from Central to Stadium", "wire": {"type": "command", "args": {"action": "connect", "from": "Central", "to": "Stadium", "color": "blue"}}}
+{"id": "th-0726", "names": ["Harbor", "Stop", "Museum"], "text": "string Harbor, Stop, Museum in a chain", "wire": {"type": "command", "args": {"action": "connect", "from": "Harbor,Stop,Museum", "to": "Harbor,Stop,Museum", "pairing": "chain"}}}
+{"id": "th-0727", "names": ["Park", "Market"], "text": "tie Park to Market both directions", "wire": {"type": "command", "args": {"action": "connect", "from": "Park", "to": "Market", "arrow": "both"}}}
+{"id": "th-0728", "names": ["Junction"], "text": "move Junction 15 pixels up", "wire": {"type": "command", "args": {"action": "move", "target": "Junction", "direction": "up", "distance": "15"}}}
+{"id": "th-0729", "names": ["Depot"], "text": "shove Depot 90 px to the left", "wire": {"type": "command", "args": {"action": "move", "target": "Depot", "direction": "left", "distance": "90"}}}
+{"id": "th-0730", "names": ["Kiosk", "Market"], "text": "move Kiosk to the right of Market", "wire": {"type": "command", "args": {"action": "move", "target": "Kiosk", "position": "rightOf", "anchor": "Market"}}}
+{"id": "th-0731", "names": ["Stop"], "text": "stop goes to the very top", "wire": {"type": "command", "args": {"action": "move", "target": "Stop", "position": "top"}}}
+{"id": "th-0732", "names": ["Loop"], "text": "nudge Loop right", "wire": {"type": "command", "args": {"action": "move", "target": "Loop", "direction": "right"}}}
+{"id": "th-0733", "names": ["Turnstile", "Stadium"], "text": "relocate Turnstile below Stadium", "wire": {"type": "command", "args": {"action": "move", "target": "Turnstile", "position": "below", "anchor": "Stadium"}}}
+{"id": "th-0734", "names": ["Museum", "Park", "Stop"], "text": "drag Museum between Park and Stop", "wire": {"type": "command", "args": {"action": "move", "target": "Museum", "position": "between", "anchor": "Park,Stop"}}}
+{"id": "th-0735", "names": ["Loop"], "text": "delete Loop", "wire": {"type": "command", "args": {"action": "delete", "target": "Loop"}}}
+{"id": "th-0736", "names": [], "text": "remove the diamonds that aren't red", "wire": {"type": "command", "args": {"action": "delete", "target": "mention(notcolor=red,quantifier=all,shape=diamond)"}}}
+{"id": "th-0737", "names": ["Junction"], "text": "cut out Junction", "wire": {"type": "command", "args": {"action": "delete", "target": "Junction"}}}
+{"id": "th-0738", "names": ["Harbor"], "text": "make Harbor bigger a little", "wire": {"type": "command", "args": {"action": "resize", "target": "Harbor"}}}
+{"id": "th-0739", "names": ["Central"], "text": "enlarge Central", "wire": {"type": "command", "args": {"action": "resize", "target": "Central"}}}
+{"id": "th-0740", "names": ["Market"], "text": "rename Market to Bazaar", "wire": {"type": "command", "args": {"action": "rename", "target": "Market", "name": "Bazaar"}}}
+{"id": "th-0741", "names": ["Airport"], "text": "call Airport Terminal instead", "wire": {"type": "command", "args": {"action": "rename", "target": "Airport", "name": "Terminal"}}}
+{"id": "th-0742", "names": ["Museum"], "text": "put 'Art wing' on Museum", "wire": {"type": "command", "args": {"action": "label", "target": "Museum", "label": "Art wing"}}}
+{"id": "th-0743", "names": ["Stadium"], "text": "stick 'Arena' onto the Stadium", "wire": {"type": "command", "args": {"action": "label", "target": "Stadium", "label": "Arena"}}}
+{"id": "th-0744", "names": ["Kiosk"], "text": "copy Kiosk four times", "wire": {"type": "command", "args": {"action": "duplicate", "target": "Kiosk", "count": "4"}}}
+{"id": "th-0745", "names": ["Stop"], "text": "clone Stop", "wire": {"type": "command", "args": {"action": "duplicate", "target": "Stop"}}}
+{"id": "th-0746", "names": ["Central", "Harbor"], "text": "exchange Central and Harbor", "wire": {"type": "command", "args": {"action": "swap", "target": "Central,Harbor"}}}
+{"id": "th-0747", "names": ["Park", "Museum"], "text": "switch Park with Museum", "wire": {"type": "command", "args": {"action": "swap", "target": "Park,Museum"}}}
+{"id": "th-0748", "names": ["Central", "Harbor"], "text": "remove the line between Central and Harbor", "wire": {"type": "command", "args": {"action": "disconnect", "from": "Central", "to": "Harbor"}}}
+{"id": "th-0749", "names": ["Park", "Market"], "text": "cut Park from Market", "wire": {"type": "command", "args": {"action": "disconnect", "from": "Park", "to": "Market"}}}
+{"id": "th-0750", "names": ["Museum", "Park", "Stadium"], "text": "align Museum, Park and Stadium vertically", "wire": {"type": "command", "args": {"action": "align", "target": "Museum,Park,Stadium", "axis": "vertical"}}}
+{"id": "th-0751", "names": [], "text": "line up the yellow shapes horizontally", "wire": {"type": "command", "args": {"action": "align", "target": "mention(color=yellow,quantifier=all)", "axis": "horizontal"}}}
+{"id": "th-0752", "names": ["Airport", "Market"], "text": "put Airport and Market in a row", "wire": {"type": "command", "args": {"action": "arrange", "target": "Airport,Market", "layout": "row"}}}
+{"id": "th-0753", "names": [], "text": "arrange the diagram in a circle", "wire": {"type": "command", "args": {"action": "arrange", "layout": "circle"}}}
+{"id": "th-0754", "names": ["Central", "Museum", "Harbor"], "text": "even out Central, Museum and Harbor horizontally", "wire": {"type": "command", "args": {"action": "distribute", "target": "Central,Museum,Harbor", "axis": "horizontal"}}}
+{"id": "th-0755", "names": [], "text": "distribute the diamonds that aren't gray vertically", "wire": {"type": "command", "args": {"action": "distribute", "target": "mention(notcolor=gray,quantifier=all,shape=diamond)", "axis": "vertical"}}}
+{"id": "th-0756", "names": ["Stop"], "text": "put Stop in front", "wire": {"type": "command", "args": {"action": "toFront", "target": "Stop"}}}
+{"id": "th-0757", "names": [], "text": "bring the newest circle to front", "wire": {"type": "command", "args": {"action": "toFront", "target": "mention(recency=newest,shape=circle)"}}}
+{"id": "th-0758", "names": ["Depot"], "text": "send Depot to the back", "wire": {"type": "command", "args": {"action": "toBack", "target": "Depot"}}}
+{"id": "th-0759", "names": [], "text": "push that old green triangle to the back", "wire": {"type": "command", "args": {"action": "toBack", "target": "mention(color=green,recency=oldest,shape=triangle)"}}}
+{"id": "th-0760", "names": [], "text": "undo that move", "wire": {"type": "command", "args": {"action": "undo"}}}
+{"id": "th-0761", "names": [], "text": "reverse that", "wire": {"type": "command", "args": {"action": "undo"}}}
+{"id": "th-0762", "names": [], "text": "redo that move", "wire": {"type": "command", "args": {"action": "redo"}}}
+{"id": "th-0763", "names": [], "text": "put the undone one back", "wire": {"type": "command", "args": {"action": "redo"}}}
+{"id": "th-0764", "names": [], "text": "forget every default", "wire": {"type": "command", "args": {"action": "forget"}}}
+{"id": "th-0765", "names": [], "text": "reset the defaults and forget them", "wire": {"type": "command", "args": {"action": "forget"}}}
+{"id": "th-0766", "names": [], "text": "how many stations are there", "wire": {"type": "question", "args": {"ask": "count"}}}
+{"id": "th-0767", "names": [], "text": "how many purple things are there", "wire": {"type": "question", "args": {"ask": "count", "color": "purple"}}}
+{"id": "th-0768", "names": [], "text": "how many shapes are not orange", "wire": {"type": "question", "args": {"ask": "count", "notColor": "orange"}}}
+{"id": "th-0769", "names": [], "text": "is there any teal square", "wire": {"type": "question", "args": {"ask": "exists", "shape": "square", "color": "teal"}}}
+{"id": "th-0770", "names": [], "text": "any ovals that aren't blue?", "wire": {"type": "question", "args": {"ask": "exists", "shape": "ellipse", "notColor": "blue"}}}
+{"id": "th-0771", "names": [], "text": "list the hexagons", "wire": {"type": "question", "args": {"ask": "list", "shape": "hexagon"}}}
+{"id": "th-0772", "names": [], "text": "which ones are not navy", "wire": {"type": "question", "args": {"ask": "list", "notColor": "navy"}}}
+{"id": "th-0773", "names": ["Central"], "text": "what color is Central", "wire": {"type": "question", "args": {"ask": "property", "target": "Central", "property": "color"}}}
+{"id": "th-0774", "names": ["Stop"], "text": "what's the label on Stop", "wire": {"type": "question", "args": {"ask": "property", "target": "Stop", "property": "label"}}}
+{"id": "th-0775", "names": [], "text": "what shape is the newest circle", "wire": {"type": "question", "args": {"ask": "property", "target": "mention(recency=newest,shape=circle)", "property": "shape"}}}
+{"id": "th-0776", "names": ["Market"], "text": "explain what Market is", "wire": {"type": "question", "args": {"ask": "describe", "target": "Market"}}}
+{"id": "th-0777", "names": [], "text": "describe the whole map", "wire": {"type": "question", "args": {"ask": "describe"}}}
+{"id": "th-0778", "names": ["Central"], "text": "which stops are next to Central", "wire": {"type": "question", "args": {"ask": "neighbors", "target": "Central"}}}
+{"id": "th-0779", "names": ["Stadium"], "text": "what links to Stadium", "wire": {"type": "question", "args": {"ask": "neighbors", "target": "Stadium"}}}
+{"id": "th-0780", "names": ["Central", "Stadium"], "text": "is Central directly connected to Stadium", "wire": {"type": "question", "args": {"ask": "connected", "target": "Central", "anchor": "Stadium"}}}
+{"id": "th-0781", "names": ["Park", "Museum"], "text": "are Park and Museum linked", "wire": {"type": "question", "args": {"ask": "connected", "target": "Park", "anchor": "Museum"}}}
+{"id": "th-0782", "names": ["Central"], "text": "how many lines run into Central", "wire": {"type": "question", "args": {"ask": "degree", "target": "Central"}}}
+{"id": "th-0783", "names": ["Harbor"], "text": "how many connections has Harbor", "wire": {"type": "question", "args": {"ask": "degree", "target": "Harbor"}}}
+{"id": "th-0784", "names": ["Airport", "Harbor"], "text": "how do I get from Airport to Harbor", "wire": {"type": "question", "args": {"ask": "path", "from": "Airport", "to": "Harbor"}}}
+{"id": "th-0785", "names": ["Market", "Park"], "text": "is there a way to go from Market to Park", "wire": {"type": "question", "args": {"ask": "path", "from": "Market", "to": "Park"}}}
+{"id": "th-0786", "names": ["Central"], "text": "what can I get to from Central", "wire": {"type": "question", "args": {"ask": "reachable", "from": "Central"}}}
+{"id": "th-0787", "names": ["Airport"], "text": "reachable stops from Airport?", "wire": {"type": "question", "args": {"ask": "reachable", "from": "Airport"}}}
+{"id": "th-0788", "names": [], "text": "is there a loop in the transit map", "wire": {"type": "question", "args": {"ask": "cycle"}}}
+{"id": "th-0789", "names": [], "text": "does any line loop back to where it started", "wire": {"type": "question", "args": {"ask": "cycle"}}}
+{"id": "th-0790", "names": [], "text": "which rules are on right now", "wire": {"type": "question", "args": {"ask": "rules"}}}
+{"id": "th-0791", "names": [], "text": "what defaults did I set earlier", "wire": {"type": "question", "args": {"ask": "rules"}}}
+{"id": "th-0792", "names": ["Depot"], "text": "is Depot black", "wire": {"type": "question", "args": {"ask": "check", "target": "Depot", "color": "black"}}}
+{"id": "th-0793", "names": ["Harbor"], "text": "is Harbor a hexagon", "wire": {"type": "question", "args": {"ask": "check", "target": "Harbor", "shape": "hexagon"}}}
+{"id": "th-0794", "names": ["Museum", "Park"], "text": "is Museum bigger than Park", "wire": {"type": "question", "args": {"ask": "check", "target": "Museum", "comparison": "bigger", "anchor": "Park"}}}
+{"id": "th-0795", "names": [], "text": "which is the rightmost one", "wire": {"type": "question", "args": {"ask": "extreme", "superlative": "rightmost"}}}
+{"id": "th-0796", "names": [], "text": "what's the bottommost thing", "wire": {"type": "question", "args": {"ask": "extreme", "superlative": "bottommost"}}}
+{"id": "th-0797", "names": ["Central"], "text": "which green shape is closest to Central", "wire": {"type": "question", "args": {"ask": "nearest", "anchor": "Central", "superlative": "closest", "color": "green"}}}
+{"id": "th-0798", "names": ["Market"], "text": "what's the farthest circle from Market", "wire": {"type": "question", "args": {"ask": "nearest", "anchor": "Market", "superlative": "farthest", "shape": "circle"}}}
+{"id": "th-0799", "names": ["Stop", "Museum", "Park"], "text": "Stop is between Museum and Park", "wire": {"type": "fact", "args": {"target": "Stop", "position": "between", "anchor": "Museum,Park"}}}
+{"id": "th-0800", "names": [], "text": "new hexagons should be navy from now on", "wire": {"type": "rule", "args": {"shape": "hexagon", "color": "navy"}}}

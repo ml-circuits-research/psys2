@@ -1,0 +1,100 @@
+{"id": "th-1301", "names": ["Board"], "text": "add a red hexagon named Pawn left of Board", "wire": {"type": "command", "args": {"action": "create", "shape": "hexagon", "color": "red", "name": "Pawn", "position": "leftOf", "anchor": "Board"}}}
+{"id": "th-1302", "names": [], "text": "a huge gold card labeled 'Start' at the top", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "color": "gold", "size": "huge", "label": "Start", "position": "top"}}}
+{"id": "th-1303", "names": ["Deck"], "text": "drop 6 tiny white circles near the Deck", "wire": {"type": "command", "args": {"action": "create", "shape": "circle", "color": "white", "size": "tiny", "count": "6", "position": "near", "anchor": "Deck"}}}
+{"id": "th-1304", "names": [], "text": "stick a teal star at the center named Prize", "wire": {"type": "command", "args": {"action": "create", "shape": "star", "color": "teal", "name": "Prize", "position": "center"}}}
+{"id": "th-1305", "names": ["Dice", "Pawn"], "text": "a black diamond named Tile between Dice and Pawn", "wire": {"type": "command", "args": {"action": "create", "shape": "diamond", "color": "black", "name": "Tile", "position": "between", "anchor": "Dice,Pawn"}}}
+{"id": "th-1306", "names": [], "text": "lol a small pink triangle in the top right", "wire": {"type": "command", "args": {"action": "create", "shape": "triangle", "color": "pink", "size": "small", "position": "topRight"}}}
+{"id": "th-1307", "names": ["Card"], "text": "put a navy oval right next to Card", "wire": {"type": "command", "args": {"action": "create", "shape": "ellipse", "color": "navy", "position": "near", "anchor": "Card"}}}
+{"id": "th-1308", "names": [], "text": "a large orange square named Jail at the bottomLeft", "wire": {"type": "command", "args": {"action": "create", "shape": "square", "color": "orange", "size": "large", "name": "Jail", "position": "bottomLeft"}}}
+{"id": "th-1309", "names": ["Token"], "text": "two lime hexagons right under Token", "wire": {"type": "command", "args": {"action": "create", "shape": "hexagon", "color": "lime", "count": "2", "position": "below", "anchor": "Token"}}}
+{"id": "th-1310", "names": [], "text": "tiny gray box at the bottom", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "color": "gray", "size": "tiny", "position": "bottom"}}}
+{"id": "th-1311", "names": ["Board"], "text": "toss in a magenta circle labeled 'Bonus' above Board", "wire": {"type": "command", "args": {"action": "create", "shape": "circle", "color": "magenta", "label": "Bonus", "position": "above", "anchor": "Board"}}}
+{"id": "th-1312", "names": ["Board"], "text": "Board should be blue", "wire": {"type": "command", "args": {"action": "set", "target": "Board", "color": "blue"}}}
+{"id": "th-1313", "names": ["Dice"], "text": "make Dice white", "wire": {"type": "command", "args": {"action": "set", "target": "Dice", "color": "white"}}}
+{"id": "th-1314", "names": ["Pawn"], "text": "turn Pawn into a star", "wire": {"type": "command", "args": {"action": "set", "target": "Pawn", "shape": "star"}}}
+{"id": "th-1315", "names": ["Deck"], "text": "make Deck huge", "wire": {"type": "command", "args": {"action": "set", "target": "Deck", "size": "huge"}}}
+{"id": "th-1316", "names": ["Card"], "text": "turn Card into a triangle", "wire": {"type": "command", "args": {"action": "set", "target": "Card", "shape": "triangle"}}}
+{"id": "th-1317", "names": ["Token"], "text": "Token should be tiny", "wire": {"type": "command", "args": {"action": "set", "target": "Token", "size": "tiny"}}}
+{"id": "th-1318", "names": ["Prize"], "text": "paint Prize gold", "wire": {"type": "command", "args": {"action": "set", "target": "Prize", "color": "gold"}}}
+{"id": "th-1319", "names": [], "text": "make the boxes that aren't gray yellow", "wire": {"type": "command", "args": {"action": "set", "target": "mention(notcolor=gray,quantifier=all,shape=rectangle)", "color": "yellow"}}}
+{"id": "th-1320", "names": ["Pawn", "Dice", "Board"], "text": "link Pawn and Dice to Board, all of them", "wire": {"type": "command", "args": {"action": "connect", "from": "Pawn,Dice", "to": "Board", "pairing": "all"}}}
+{"id": "th-1321", "names": ["Dice", "Card"], "text": "a dashed line from Dice to Card", "wire": {"type": "command", "args": {"action": "connect", "from": "Dice", "to": "Card", "style": "dashed"}}}
+{"id": "th-1322", "names": ["Token", "Deck"], "text": "two-way link between Token and Deck", "wire": {"type": "command", "args": {"action": "connect", "from": "Token", "to": "Deck", "arrow": "both"}}}
+{"id": "th-1323", "names": ["Board", "Prize", "Card"], "text": "chain Board, Prize and Card", "wire": {"type": "command", "args": {"action": "connect", "from": "Board,Prize,Card", "to": "Board,Prize,Card", "pairing": "chain"}}}
+{"id": "th-1324", "names": ["Tile", "Pawn"], "text": "a purple connection from Tile to Pawn", "wire": {"type": "command", "args": {"action": "connect", "from": "Tile", "to": "Pawn", "color": "purple"}}}
+{"id": "th-1325", "names": ["Prize"], "text": "move Prize 15 pixels up", "wire": {"type": "command", "args": {"action": "move", "target": "Prize", "direction": "up", "distance": "15"}}}
+{"id": "th-1326", "names": ["Tile"], "text": "shift Tile right by 22 px", "wire": {"type": "command", "args": {"action": "move", "target": "Tile", "direction": "right", "distance": "22"}}}
+{"id": "th-1327", "names": ["Card", "Deck"], "text": "put Card left of Deck", "wire": {"type": "command", "args": {"action": "move", "target": "Card", "position": "leftOf", "anchor": "Deck"}}}
+{"id": "th-1328", "names": ["Jail"], "text": "Jail goes to the bottom right", "wire": {"type": "command", "args": {"action": "move", "target": "Jail", "position": "bottomRight"}}}
+{"id": "th-1329", "names": ["Token"], "text": "drag Token left", "wire": {"type": "command", "args": {"action": "move", "target": "Token", "direction": "left"}}}
+{"id": "th-1330", "names": ["Bonus", "Board"], "text": "move Bonus above Board", "wire": {"type": "command", "args": {"action": "move", "target": "Bonus", "position": "above", "anchor": "Board"}}}
+{"id": "th-1331", "names": ["Pawn", "Dice", "Card"], "text": "slide Pawn between Dice and Card", "wire": {"type": "command", "args": {"action": "move", "target": "Pawn", "position": "between", "anchor": "Dice,Card"}}}
+{"id": "th-1332", "names": ["Bonus"], "text": "get rid of Bonus", "wire": {"type": "command", "args": {"action": "delete", "target": "Bonus"}}}
+{"id": "th-1333", "names": [], "text": "delete all the diamonds that aren't black", "wire": {"type": "command", "args": {"action": "delete", "target": "mention(notcolor=black,quantifier=all,shape=diamond)"}}}
+{"id": "th-1334", "names": ["Tile"], "text": "remove Tile", "wire": {"type": "command", "args": {"action": "delete", "target": "Tile"}}}
+{"id": "th-1335", "names": ["Board"], "text": "could you enlarge Board a bit", "wire": {"type": "command", "args": {"action": "resize", "target": "Board"}}}
+{"id": "th-1336", "names": ["Token"], "text": "shrink Token", "wire": {"type": "command", "args": {"action": "resize", "target": "Token"}}}
+{"id": "th-1337", "names": ["Pawn"], "text": "rename Pawn to Piece", "wire": {"type": "command", "args": {"action": "rename", "target": "Pawn", "name": "Piece"}}}
+{"id": "th-1338", "names": ["Card"], "text": "call Card Chance", "wire": {"type": "command", "args": {"action": "rename", "target": "Card", "name": "Chance"}}}
+{"id": "th-1339", "names": ["Deck"], "text": "label Deck 'Draw'", "wire": {"type": "command", "args": {"action": "label", "target": "Deck", "label": "Draw"}}}
+{"id": "th-1340", "names": ["Jail"], "text": "put 'Visit' on Jail", "wire": {"type": "command", "args": {"action": "label", "target": "Jail", "label": "Visit"}}}
+{"id": "th-1341", "names": ["Token"], "text": "copy Token", "wire": {"type": "command", "args": {"action": "duplicate", "target": "Token"}}}
+{"id": "th-1342", "names": ["Tile"], "text": "make 3 copies of Tile", "wire": {"type": "command", "args": {"action": "duplicate", "target": "Tile", "count": "3"}}}
+{"id": "th-1343", "names": ["Dice", "Pawn"], "text": "swap Dice and Pawn", "wire": {"type": "command", "args": {"action": "swap", "target": "Dice,Pawn"}}}
+{"id": "th-1344", "names": ["Card", "Deck"], "text": "trade Card with Deck", "wire": {"type": "command", "args": {"action": "swap", "target": "Card,Deck"}}}
+{"id": "th-1345", "names": ["Pawn", "Board"], "text": "unlink Pawn from Board", "wire": {"type": "command", "args": {"action": "disconnect", "from": "Pawn", "to": "Board"}}}
+{"id": "th-1346", "names": ["Dice", "Card"], "text": "cut the link between Dice and Card", "wire": {"type": "command", "args": {"action": "disconnect", "from": "Dice", "to": "Card"}}}
+{"id": "th-1347", "names": ["Board", "Dice", "Token"], "text": "align Board, Dice and Token vertically", "wire": {"type": "command", "args": {"action": "align", "target": "Board,Dice,Token", "axis": "vertical"}}}
+{"id": "th-1348", "names": [], "text": "align the teal stars horizontally", "wire": {"type": "command", "args": {"action": "align", "target": "mention(color=teal,quantifier=all,shape=star)", "axis": "horizontal"}}}
+{"id": "th-1349", "names": ["Deck", "Card"], "text": "arrange Deck and Card in a row", "wire": {"type": "command", "args": {"action": "arrange", "target": "Deck,Card", "layout": "row"}}}
+{"id": "th-1350", "names": [], "text": "put the whole board in a grid", "wire": {"type": "command", "args": {"action": "arrange", "layout": "grid"}}}
+{"id": "th-1351", "names": ["Board", "Deck", "Dice"], "text": "spread Board, Deck and Dice evenly vertically", "wire": {"type": "command", "args": {"action": "distribute", "target": "Board,Deck,Dice", "axis": "vertical"}}}
+{"id": "th-1352", "names": [], "text": "distribute the white circles horizontally", "wire": {"type": "command", "args": {"action": "distribute", "target": "mention(color=white,quantifier=all,shape=circle)", "axis": "horizontal"}}}
+{"id": "th-1353", "names": ["Prize"], "text": "bring Prize to the front", "wire": {"type": "command", "args": {"action": "toFront", "target": "Prize"}}}
+{"id": "th-1354", "names": [], "text": "pull the newest diamond to the front", "wire": {"type": "command", "args": {"action": "toFront", "target": "mention(recency=newest,shape=diamond)"}}}
+{"id": "th-1355", "names": ["Jail"], "text": "send Jail back", "wire": {"type": "command", "args": {"action": "toBack", "target": "Jail"}}}
+{"id": "th-1356", "names": [], "text": "the oldest triangle goes to the back", "wire": {"type": "command", "args": {"action": "toBack", "target": "mention(recency=oldest,shape=triangle)"}}}
+{"id": "th-1357", "names": [], "text": "scratch that", "wire": {"type": "command", "args": {"action": "undo"}}}
+{"id": "th-1358", "names": [], "text": "undo!", "wire": {"type": "command", "args": {"action": "undo"}}}
+{"id": "th-1359", "names": [], "text": "redo that change", "wire": {"type": "command", "args": {"action": "redo"}}}
+{"id": "th-1360", "names": [], "text": "reapply", "wire": {"type": "command", "args": {"action": "redo"}}}
+{"id": "th-1361", "names": [], "text": "forget everything you know about defaults", "wire": {"type": "command", "args": {"action": "forget"}}}
+{"id": "th-1362", "names": [], "text": "drop the defaults you set for me", "wire": {"type": "command", "args": {"action": "forget"}}}
+{"id": "th-1363", "names": [], "text": "how many white things are there", "wire": {"type": "question", "args": {"ask": "count", "color": "white"}}}
+{"id": "th-1364", "names": [], "text": "how many pieces aren't black", "wire": {"type": "question", "args": {"ask": "count", "notColor": "black"}}}
+{"id": "th-1365", "names": ["Board"], "text": "how many shapes are right of Board", "wire": {"type": "question", "args": {"ask": "count", "position": "rightOf", "anchor": "Board"}}}
+{"id": "th-1366", "names": [], "text": "is there a gold rectangle", "wire": {"type": "question", "args": {"ask": "exists", "shape": "rectangle", "color": "gold"}}}
+{"id": "th-1367", "names": [], "text": "any lime hexagons out there?", "wire": {"type": "question", "args": {"ask": "exists", "shape": "hexagon", "color": "lime"}}}
+{"id": "th-1368", "names": [], "text": "list the circles", "wire": {"type": "question", "args": {"ask": "list", "shape": "circle"}}}
+{"id": "th-1369", "names": [], "text": "what's not pink", "wire": {"type": "question", "args": {"ask": "list", "notColor": "pink"}}}
+{"id": "th-1370", "names": ["Pawn"], "text": "what shape is Pawn", "wire": {"type": "question", "args": {"ask": "property", "target": "Pawn", "property": "shape"}}}
+{"id": "th-1371", "names": ["Prize"], "text": "what color is Prize", "wire": {"type": "question", "args": {"ask": "property", "target": "Prize", "property": "color"}}}
+{"id": "th-1372", "names": [], "text": "what's the size of the oldest triangle", "wire": {"type": "question", "args": {"ask": "property", "target": "mention(recency=oldest,shape=triangle)", "property": "size"}}}
+{"id": "th-1373", "names": ["Deck"], "text": "tell me about Deck", "wire": {"type": "question", "args": {"ask": "describe", "target": "Deck"}}}
+{"id": "th-1374", "names": [], "text": "describe the board game as a whole", "wire": {"type": "question", "args": {"ask": "describe"}}}
+{"id": "th-1375", "names": ["Board"], "text": "which pieces are next to Board", "wire": {"type": "question", "args": {"ask": "neighbors", "target": "Board"}}}
+{"id": "th-1376", "names": ["Card"], "text": "who's connected to Card", "wire": {"type": "question", "args": {"ask": "neighbors", "target": "Card"}}}
+{"id": "th-1377", "names": ["Pawn", "Board"], "text": "is Pawn connected to Board", "wire": {"type": "question", "args": {"ask": "connected", "target": "Pawn", "anchor": "Board"}}}
+{"id": "th-1378", "names": ["Token", "Deck"], "text": "are Token and Deck directly joined", "wire": {"type": "question", "args": {"ask": "connected", "target": "Token", "anchor": "Deck"}}}
+{"id": "th-1379", "names": ["Board"], "text": "how many lines are on Board", "wire": {"type": "question", "args": {"ask": "degree", "target": "Board"}}}
+{"id": "th-1380", "names": ["Dice"], "text": "how many links does Dice have", "wire": {"type": "question", "args": {"ask": "degree", "target": "Dice"}}}
+{"id": "th-1381", "names": ["Tile", "Jail"], "text": "is there a path from Tile to Jail", "wire": {"type": "question", "args": {"ask": "path", "from": "Tile", "to": "Jail"}}}
+{"id": "th-1382", "names": ["Pawn", "Prize"], "text": "how can I reach Prize from Pawn", "wire": {"type": "question", "args": {"ask": "path", "from": "Pawn", "to": "Prize"}}}
+{"id": "th-1383", "names": ["Board"], "text": "reachable from Board?", "wire": {"type": "question", "args": {"ask": "reachable", "from": "Board"}}}
+{"id": "th-1384", "names": ["Deck"], "text": "where can Deck go", "wire": {"type": "question", "args": {"ask": "reachable", "from": "Deck"}}}
+{"id": "th-1385", "names": [], "text": "is there a loop in the board", "wire": {"type": "question", "args": {"ask": "cycle"}}}
+{"id": "th-1386", "names": [], "text": "any closed circuits?", "wire": {"type": "question", "args": {"ask": "cycle"}}}
+{"id": "th-1387", "names": [], "text": "what rules do we use", "wire": {"type": "question", "args": {"ask": "rules"}}}
+{"id": "th-1388", "names": [], "text": "show me your active defaults", "wire": {"type": "question", "args": {"ask": "rules"}}}
+{"id": "th-1389", "names": ["Dice"], "text": "is Dice white", "wire": {"type": "question", "args": {"ask": "check", "target": "Dice", "color": "white"}}}
+{"id": "th-1390", "names": ["Jail"], "text": "is Jail a rectangle", "wire": {"type": "question", "args": {"ask": "check", "target": "Jail", "shape": "rectangle"}}}
+{"id": "th-1391", "names": ["Token", "Deck"], "text": "is Token smaller than Deck", "wire": {"type": "question", "args": {"ask": "check", "target": "Token", "comparison": "smaller", "anchor": "Deck"}}}
+{"id": "th-1392", "names": [], "text": "which is the topmost piece", "wire": {"type": "question", "args": {"ask": "extreme", "superlative": "topmost"}}}
+{"id": "th-1393", "names": [], "text": "what's the smallest item", "wire": {"type": "question", "args": {"ask": "extreme", "superlative": "smallest"}}}
+{"id": "th-1394", "names": ["Board"], "text": "what's the closest thing to Board", "wire": {"type": "question", "args": {"ask": "nearest", "anchor": "Board", "superlative": "closest"}}}
+{"id": "th-1395", "names": ["Card"], "text": "which black shape is the farthest from Card", "wire": {"type": "question", "args": {"ask": "nearest", "anchor": "Card", "superlative": "farthest", "color": "black"}}}
+{"id": "th-1396", "names": ["Prize"], "text": "Prize is teal", "wire": {"type": "fact", "args": {"target": "Prize", "color": "teal"}}}
+{"id": "th-1397", "names": ["Bonus", "Board"], "text": "Bonus sits right of Board", "wire": {"type": "fact", "args": {"target": "Bonus", "position": "rightOf", "anchor": "Board"}}}
+{"id": "th-1398", "names": [], "text": "new ovals should be huge", "wire": {"type": "rule", "args": {"shape": "ellipse", "size": "huge"}}}
+{"id": "th-1399", "names": [], "text": "from now on new circles are navy", "wire": {"type": "rule", "args": {"shape": "circle", "color": "navy"}}}
+{"id": "th-1400", "names": [], "text": "every new square should be small from now on", "wire": {"type": "rule", "args": {"shape": "square", "size": "small"}}}

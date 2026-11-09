@@ -1,0 +1,100 @@
+{"id":"ts-1101","names":["Studio"],"text":"hey, could you sketch a pink square named Booth just under the Studio","wire":{"type":"command","args":{"action":"create","shape":"square","color":"pink","name":"Booth","position":"below","anchor":"Studio"}}}
+{"id":"ts-1102","names":["Scribe","Clerk"],"text":"is there any cyclic dependency left","wire":{"type":"question","args":{"ask":"cycle"}}}
+{"id":"ts-1103","names":["Intake"],"text":"from Intake, where can the flow go","wire":{"type":"question","args":{"ask":"reachable","from":"Intake"}}}
+{"id":"ts-1104","names":["Lathe"],"text":"tell me which rules are on","wire":{"type":"question","args":{"ask":"rules"}}}
+{"id":"ts-1105","names":["Press","Die"],"text":"please swap Press and Die","wire":{"type":"command","args":{"action":"swap","target":"Press,Die"}}}
+{"id":"ts-1106","names":["Bolt","Plate"],"text":"drop the link Bolt to Plate","wire":{"type":"command","args":{"action":"disconnect","from":"Bolt","to":"Plate"}}}
+{"id":"ts-1107","names":["Weld"],"text":"list the navy shapes","wire":{"type":"question","args":{"ask":"list","color":"navy"}}}
+{"id":"ts-1108","names":["Rivet"],"text":"which shapes hang off Rivet","wire":{"type":"question","args":{"ask":"neighbors","target":"Rivet"}}}
+{"id":"ts-1109","names":["Jig","Vise"],"text":"are Jig and Vise connected directly","wire":{"type":"question","args":{"ask":"connected","target":"Jig","anchor":"Vise"}}}
+{"id":"ts-1110","names":["Drill","Saw"],"text":"does a path run from Drill to Saw","wire":{"type":"question","args":{"ask":"path","from":"Drill","to":"Saw"}}}
+{"id":"ts-1111","names":["File"],"text":"how many lines connect to File","wire":{"type":"question","args":{"ask":"degree","target":"File"}}}
+{"id":"ts-1112","names":["Rasp"],"text":"are there any magenta shapes","wire":{"type":"question","args":{"ask":"exists","color":"magenta"}}}
+{"id":"ts-1113","names":["Awl"],"text":"how many triangles are there","wire":{"type":"question","args":{"ask":"count","shape":"triangle"}}}
+{"id":"ts-1114","names":["Chisel"],"text":"undo please","wire":{"type":"command","args":{"action":"undo"}}}
+{"id":"ts-1115","names":["Plane"],"text":"redo please","wire":{"type":"command","args":{"action":"redo"}}}
+{"id":"ts-1116","names":["Level"],"text":"Level should be on top","wire":{"type":"command","args":{"action":"toFront","target":"Level"}}}
+{"id":"ts-1117","names":["Square"],"text":"Square goes to the bottom of the stack","wire":{"type":"command","args":{"action":"toBack","target":"Square"}}}
+{"id":"ts-1118","names":["Vice"],"text":"forget those default rules","wire":{"type":"command","args":{"action":"forget"}}}
+{"id":"ts-1119","names":["Clamp1","Clamp2","Clamp3"],"text":"put Clamp1, Clamp2, Clamp3 in a horizontal line","wire":{"type":"command","args":{"action":"align","target":"Clamp1,Clamp2,Clamp3","axis":"horizontal"}}}
+{"id":"ts-1120","names":["Pin1","Pin2","Pin3"],"text":"distribute Pin1, Pin2 and Pin3 on the vertical axis","wire":{"type":"command","args":{"action":"distribute","target":"Pin1,Pin2,Pin3","axis":"vertical"}}}
+{"id":"ts-1121","names":[],"text":"hereafter, stars come out gold","wire":{"type":"rule","args":{"shape":"star","color":"gold"}}}
+{"id":"ts-1122","names":["Vessel"],"text":"describe what's in the diagram","wire":{"type":"question","args":{"ask":"describe"}}}
+{"id":"ts-1123","names":["Cask","Keg"],"text":"which shape is closest to the Keg","wire":{"type":"question","args":{"ask":"nearest","anchor":"Keg","superlative":"closest"}}}
+{"id":"ts-1124","names":["Bear","Cub"],"text":"is Bear larger than Cub","wire":{"type":"question","args":{"ask":"check","target":"Bear","comparison":"bigger","anchor":"Cub"}}}
+{"id":"ts-1125","names":["Pup","Dog"],"text":"is Pup smaller than Dog","wire":{"type":"question","args":{"ask":"check","target":"Pup","comparison":"smaller","anchor":"Dog"}}}
+{"id":"ts-1126","names":["Hare"],"text":"is the Hare cyan","wire":{"type":"question","args":{"ask":"check","target":"Hare","color":"cyan"}}}
+{"id":"ts-1127","names":["Stoat"],"text":"Stoat is not white, correct","wire":{"type":"question","args":{"ask":"check","target":"Stoat","notColor":"white"}}}
+{"id":"ts-1128","names":["Vole"],"text":"which shape is at the bottom","wire":{"type":"question","args":{"ask":"extreme","superlative":"bottommost"}}}
+{"id":"ts-1129","names":["Shrew"],"text":"what size is Shrew","wire":{"type":"question","args":{"ask":"property","target":"Shrew","property":"size"}}}
+{"id":"ts-1130","names":["Arena"],"text":"put a red circle labelled \"Ring\" in the middle","wire":{"type":"command","args":{"action":"create","shape":"circle","color":"red","label":"Ring","position":"center"}}}
+{"id":"ts-1131","names":["Forum","Senate"],"text":"add a small gold diamond between Forum and Senate","wire":{"type":"command","args":{"action":"create","shape":"diamond","color":"gold","size":"small","position":"between","anchor":"Forum,Senate"}}}
+{"id":"ts-1132","names":["Villa"],"text":"stick a large teal box called Pool to the left of Villa","wire":{"type":"command","args":{"action":"create","shape":"rectangle","color":"teal","size":"large","name":"Pool","position":"leftOf","anchor":"Villa"}}}
+{"id":"ts-1133","names":["Aqueduct"],"text":"2 white triangles please","wire":{"type":"command","args":{"action":"create","shape":"triangle","color":"white","count":"2"}}}
+{"id":"ts-1134","names":["Colosseum"],"text":"toss in a purple star at the bottom left","wire":{"type":"command","args":{"action":"create","shape":"star","color":"purple","position":"bottomLeft"}}}
+{"id":"ts-1135","names":["Temple"],"text":"new orange oval, name it Altar","wire":{"type":"command","args":{"action":"create","shape":"ellipse","color":"orange","name":"Altar"}}}
+{"id":"ts-1136","names":["Bath"],"text":"add a huge brown hexagon","wire":{"type":"command","args":{"action":"create","shape":"hexagon","color":"brown","size":"huge"}}}
+{"id":"ts-1137","names":["Road"],"text":"add a lime circle near Road","wire":{"type":"command","args":{"action":"create","shape":"circle","color":"lime","position":"near","anchor":"Road"}}}
+{"id":"ts-1138","names":["Wall"],"text":"change Wall to indigo","wire":{"type":"command","args":{"action":"set","target":"Wall","color":"indigo"}}}
+{"id":"ts-1139","names":["Gate"],"text":"make Gate a box","wire":{"type":"command","args":{"action":"set","target":"Gate","shape":"rectangle"}}}
+{"id":"ts-1140","names":["Tower"],"text":"Tower is to be huge","wire":{"type":"command","args":{"action":"set","target":"Tower","size":"huge"}}}
+{"id":"ts-1141","names":["Bridge"],"text":"colour the triangles red","wire":{"type":"command","args":{"action":"set","target":"mention(quantifier=all,shape=triangle)","color":"red"}}}
+{"id":"ts-1142","names":["Moat"],"text":"set the last diamond to black","wire":{"type":"command","args":{"action":"set","target":"mention(recency=newest,shape=diamond)","color":"black"}}}
+{"id":"ts-1143","names":["Rome","Capua"],"text":"connect Rome to Capua","wire":{"type":"command","args":{"action":"connect","from":"Rome","to":"Capua"}}}
+{"id":"ts-1144","names":["Ostia","Rome","Veii"],"text":"chain Ostia, Rome and Veii","wire":{"type":"command","args":{"action":"connect","from":"Ostia,Rome,Veii","pairing":"chain"}}}
+{"id":"ts-1145","names":["Pisa","Siena"],"text":"connect Pisa to Siena with a dotted gray line","wire":{"type":"command","args":{"action":"connect","from":"Pisa","to":"Siena","style":"dotted","color":"gray"}}}
+{"id":"ts-1146","names":["Genoa","Turin"],"text":"draw a bidirectional arrow between Genoa and Turin","wire":{"type":"command","args":{"action":"connect","from":"Genoa","to":"Turin","arrow":"both"}}}
+{"id":"ts-1147","names":["Milan","Bari"],"text":"connect Milan to Bari and call the line \"rail\"","wire":{"type":"command","args":{"action":"connect","from":"Milan","to":"Bari","label":"rail"}}}
+{"id":"ts-1148","names":["Hub"],"text":"hook Hub up to all the stars","wire":{"type":"command","args":{"action":"connect","from":"Hub","to":"mention(quantifier=all,shape=star)","pairing":"all"}}}
+{"id":"ts-1149","names":["P","Q","R","S"],"text":"connect P to Q and R to S","wire":{"type":"command","args":{"action":"connect","from":"P,R","to":"Q,S","pairing":"next"}}}
+{"id":"ts-1150","names":["Napoli","Parma"],"text":"make a plain undirected link from Napoli to Parma","wire":{"type":"command","args":{"action":"connect","from":"Napoli","to":"Parma","arrow":"none"}}}
+{"id":"ts-1151","names":["Lido"],"text":"push Lido 60 to the right","wire":{"type":"command","args":{"action":"move","target":"Lido","direction":"right","distance":"60"}}}
+{"id":"ts-1152","names":["Piazza","Duomo"],"text":"set the Piazza right of the Duomo","wire":{"type":"command","args":{"action":"move","target":"Piazza","position":"rightOf","anchor":"Duomo"}}}
+{"id":"ts-1153","names":["Canal"],"text":"drag Canal to the bottom left","wire":{"type":"command","args":{"action":"move","target":"Canal","position":"bottomLeft"}}}
+{"id":"ts-1154","names":["Gondola"],"text":"move the Gondola up a bit","wire":{"type":"command","args":{"action":"move","target":"Gondola","direction":"up"}}}
+{"id":"ts-1155","names":["Vespa","Lane"],"text":"park Vespa below the Lane","wire":{"type":"command","args":{"action":"move","target":"Vespa","position":"below","anchor":"Lane"}}}
+{"id":"ts-1156","names":["Tuk"],"text":"delete Tuk","wire":{"type":"command","args":{"action":"delete","target":"Tuk"}}}
+{"id":"ts-1157","names":["Rickshaw"],"text":"throw away all pink squares","wire":{"type":"command","args":{"action":"delete","target":"mention(color=pink,quantifier=all,shape=square)"}}}
+{"id":"ts-1158","names":["Sled"],"text":"kill the stars that aren't gold","wire":{"type":"command","args":{"action":"delete","target":"mention(notcolor=gold,quantifier=all,shape=star)"}}}
+{"id":"ts-1159","names":["Sleigh"],"text":"make Sleigh larger","wire":{"type":"command","args":{"action":"resize","target":"Sleigh"}}}
+{"id":"ts-1160","names":["Pram"],"text":"make the Pram tinier","wire":{"type":"command","args":{"action":"resize","target":"Pram"}}}
+{"id":"ts-1161","names":["Cart"],"text":"rename the Cart to Wagon","wire":{"type":"command","args":{"action":"rename","target":"Cart","name":"Wagon"}}}
+{"id":"ts-1162","names":["Dray"],"text":"the first box should be called Origin","wire":{"type":"command","args":{"action":"rename","target":"mention(recency=oldest,shape=rectangle)","name":"Origin"}}}
+{"id":"ts-1163","names":["Barrow"],"text":"label Barrow Dirt","wire":{"type":"command","args":{"action":"label","target":"Barrow","label":"Dirt"}}}
+{"id":"ts-1164","names":["Trolley"],"text":"write \"Line 7\" on Trolley","wire":{"type":"command","args":{"action":"label","target":"Trolley","label":"Line 7"}}}
+{"id":"ts-1165","names":["Tram"],"text":"copy Tram twice","wire":{"type":"command","args":{"action":"duplicate","target":"Tram","count":"2"}}}
+{"id":"ts-1166","names":["Bus"],"text":"duplicate the Bus","wire":{"type":"command","args":{"action":"duplicate","target":"Bus"}}}
+{"id":"ts-1167","names":["Metro"],"text":"arrange the squares in a column","wire":{"type":"command","args":{"action":"arrange","target":"mention(quantifier=all,shape=square)","layout":"column"}}}
+{"id":"ts-1168","names":["Subway"],"text":"lay out everything in a grid","wire":{"type":"command","args":{"action":"arrange","layout":"grid"}}}
+{"id":"ts-1169","names":["Ferry"],"text":"Ferry is red","wire":{"type":"fact","args":{"target":"Ferry","color":"red"}}}
+{"id":"ts-1170","names":["Taxi"],"text":"is there a cycle in here","wire":{"type":"question","args":{"ask":"cycle"}}}
+{"id":"ts-1171","names":["Coach"],"text":"what is reachable from Coach","wire":{"type":"question","args":{"ask":"reachable","from":"Coach"}}}
+{"id":"ts-1172","names":["Shuttle"],"text":"which things can the Shuttle reach","wire":{"type":"question","args":{"ask":"reachable","from":"Shuttle"}}}
+{"id":"ts-1173","names":["Jeep"],"text":"are there defaults active","wire":{"type":"question","args":{"ask":"rules"}}}
+{"id":"ts-1174","names":["Van"],"text":"which hexagons exist, list them","wire":{"type":"question","args":{"ask":"list","shape":"hexagon"}}}
+{"id":"ts-1175","names":["Lorry"],"text":"who is adjacent to Lorry","wire":{"type":"question","args":{"ask":"neighbors","target":"Lorry"}}}
+{"id":"ts-1176","names":["Cab","Limo"],"text":"is Cab connected to Limo","wire":{"type":"question","args":{"ask":"connected","target":"Cab","anchor":"Limo"}}}
+{"id":"ts-1177","names":["Moped","Scooter"],"text":"is there a path from Moped to Scooter","wire":{"type":"question","args":{"ask":"path","from":"Moped","to":"Scooter"}}}
+{"id":"ts-1178","names":["Bike"],"text":"what degree does Bike have","wire":{"type":"question","args":{"ask":"degree","target":"Bike"}}}
+{"id":"ts-1179","names":["Trike"],"text":"is there a diamond that is not red","wire":{"type":"question","args":{"ask":"exists","shape":"diamond","notColor":"red"}}}
+{"id":"ts-1180","names":["Quad"],"text":"count the yellow shapes","wire":{"type":"question","args":{"ask":"count","color":"yellow"}}}
+{"id":"ts-1181","names":["Unicycle"],"text":"give a description of Unicycle","wire":{"type":"question","args":{"ask":"describe","target":"Unicycle"}}}
+{"id":"ts-1182","names":["Hovercraft","Skiff"],"text":"which shape is closest to Skiff","wire":{"type":"question","args":{"ask":"nearest","anchor":"Skiff","superlative":"closest"}}}
+{"id":"ts-1183","names":["Rig","Platform"],"text":"is Rig bigger than Platform","wire":{"type":"question","args":{"ask":"check","target":"Rig","comparison":"bigger","anchor":"Platform"}}}
+{"id":"ts-1184","names":["Buoy","Float"],"text":"is Buoy smaller than Float","wire":{"type":"question","args":{"ask":"check","target":"Buoy","comparison":"smaller","anchor":"Float"}}}
+{"id":"ts-1185","names":["Mast"],"text":"which is the smallest shape","wire":{"type":"question","args":{"ask":"extreme","superlative":"smallest"}}}
+{"id":"ts-1186","names":["Sail"],"text":"is Sail white?","wire":{"type":"question","args":{"ask":"check","target":"Sail","color":"white"}}}
+{"id":"ts-1187","names":["Keel","Hull"],"text":"is Keel below Hull","wire":{"type":"question","args":{"ask":"check","target":"Keel","position":"below","anchor":"Hull"}}}
+{"id":"ts-1188","names":["Deck"],"text":"what shape does Deck have","wire":{"type":"question","args":{"ask":"property","target":"Deck","property":"shape"}}}
+{"id":"ts-1189","names":["Bow","Stern"],"text":"swap the Bow and the Stern","wire":{"type":"command","args":{"action":"swap","target":"Bow,Stern"}}}
+{"id":"ts-1190","names":["Helm","Wheel"],"text":"unlink Helm and Wheel","wire":{"type":"command","args":{"action":"disconnect","from":"Helm","to":"Wheel"}}}
+{"id":"ts-1191","names":["Galley"],"text":"align the circles horizontally","wire":{"type":"command","args":{"action":"align","target":"mention(quantifier=all,shape=circle)","axis":"horizontal"}}}
+{"id":"ts-1192","names":["Brig"],"text":"distribute the circles vertically","wire":{"type":"command","args":{"action":"distribute","target":"mention(quantifier=all,shape=circle)","axis":"vertical"}}}
+{"id":"ts-1193","names":["Cutter"],"text":"undo the last thing I did","wire":{"type":"command","args":{"action":"undo"}}}
+{"id":"ts-1194","names":["Sloop"],"text":"redo the thing","wire":{"type":"command","args":{"action":"redo"}}}
+{"id":"ts-1195","names":["Yacht"],"text":"bring Yacht to the front of the others","wire":{"type":"command","args":{"action":"toFront","target":"Yacht"}}}
+{"id":"ts-1196","names":["Junk"],"text":"put Junk at the back","wire":{"type":"command","args":{"action":"toBack","target":"Junk"}}}
+{"id":"ts-1197","names":["Dhow"],"text":"forget about the default rules","wire":{"type":"command","args":{"action":"forget"}}}
+{"id":"ts-1198","names":[],"text":"let all new hexagons be indigo","wire":{"type":"rule","args":{"shape":"hexagon","color":"indigo"}}}
+{"id":"ts-1199","names":["Punt"],"text":"where is Punt","wire":{"type":"question","args":{"ask":"property","target":"Punt","property":"position"}}}
+{"id":"ts-1200","names":["Barque"],"text":"how many links are there in total","wire":{"type":"question","args":{"ask":"count","kind":"edge"}}}

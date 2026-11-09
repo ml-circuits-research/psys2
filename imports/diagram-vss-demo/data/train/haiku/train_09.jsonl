@@ -1,0 +1,100 @@
+{"id": "th-0801", "names": ["User"], "text": "add a teal box named Session under User", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "color": "teal", "name": "Session", "position": "below", "anchor": "User"}}}
+{"id": "th-0802", "names": [], "text": "place a huge purple box called Ledger at the top", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "color": "purple", "size": "huge", "name": "Ledger", "position": "top"}}}
+{"id": "th-0803", "names": ["Order"], "text": "three tiny yellow circles beside Order", "wire": {"type": "command", "args": {"action": "create", "shape": "circle", "color": "yellow", "size": "tiny", "count": "3", "position": "near", "anchor": "Order"}}}
+{"id": "th-0804", "names": [], "text": "a white hexagon labelled 'Admin' down in the bottomLeft", "wire": {"type": "command", "args": {"action": "create", "shape": "hexagon", "color": "white", "label": "Admin", "position": "bottomLeft"}}}
+{"id": "th-0805", "names": ["Cart", "Invoice"], "text": "put a gray oval named Tax between Cart and Invoice", "wire": {"type": "command", "args": {"action": "create", "shape": "ellipse", "color": "gray", "name": "Tax", "position": "between", "anchor": "Cart,Invoice"}}}
+{"id": "th-0806", "names": ["Product"], "text": "a lime triangle called Sku left of Product", "wire": {"type": "command", "args": {"action": "create", "shape": "triangle", "color": "lime", "name": "Sku", "position": "leftOf", "anchor": "Product"}}}
+{"id": "th-0807", "names": [], "text": "small navy star near the center", "wire": {"type": "command", "args": {"action": "create", "shape": "star", "color": "navy", "size": "small", "position": "center"}}}
+{"id": "th-0808", "names": ["Invoice"], "text": "sketch a red box named Refund right under Invoice", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "color": "red", "name": "Refund", "position": "below", "anchor": "Invoice"}}}
+{"id": "th-0809", "names": [], "text": "pop a black diamond at the right edge", "wire": {"type": "command", "args": {"action": "create", "shape": "diamond", "color": "black", "position": "right"}}}
+{"id": "th-0810", "names": ["User", "Order"], "text": "2 orange squares between User and Order", "wire": {"type": "command", "args": {"action": "create", "shape": "square", "color": "orange", "count": "2", "position": "between", "anchor": "User,Order"}}}
+{"id": "th-0811", "names": [], "text": "make a medium cyan oval labeled 'Cache' at the top right", "wire": {"type": "command", "args": {"action": "create", "shape": "ellipse", "color": "cyan", "size": "medium", "label": "Cache", "position": "topRight"}}}
+{"id": "th-0812", "names": [], "text": "from now on rectangles come out magenta", "wire": {"type": "rule", "args": {"shape": "rectangle", "color": "magenta"}}}
+{"id": "th-0813", "names": ["User"], "text": "User should be purple", "wire": {"type": "command", "args": {"action": "set", "target": "User", "color": "purple"}}}
+{"id": "th-0814", "names": ["Cart"], "text": "make Cart a diamond", "wire": {"type": "command", "args": {"action": "set", "target": "Cart", "shape": "diamond"}}}
+{"id": "th-0815", "names": ["Order"], "text": "Order goes huge", "wire": {"type": "command", "args": {"action": "set", "target": "Order", "size": "huge"}}}
+{"id": "th-0816", "names": ["Tax"], "text": "tax needs to be blue", "wire": {"type": "command", "args": {"action": "set", "target": "Tax", "color": "blue"}}}
+{"id": "th-0817", "names": ["Product"], "text": "turn Product into an ellipse", "wire": {"type": "command", "args": {"action": "set", "target": "Product", "shape": "ellipse"}}}
+{"id": "th-0818", "names": ["Session"], "text": "Session should be small", "wire": {"type": "command", "args": {"action": "set", "target": "Session", "size": "small"}}}
+{"id": "th-0819", "names": ["Invoice"], "text": "paint Invoice cyan", "wire": {"type": "command", "args": {"action": "set", "target": "Invoice", "color": "cyan"}}}
+{"id": "th-0820", "names": [], "text": "make the squares that aren't orange green", "wire": {"type": "command", "args": {"action": "set", "target": "mention(notcolor=orange,quantifier=all,shape=square)", "color": "green"}}}
+{"id": "th-0821", "names": ["Ledger"], "text": "make Ledger white", "wire": {"type": "command", "args": {"action": "set", "target": "Ledger", "color": "white"}}}
+{"id": "th-0822", "names": ["User", "Session", "Token"], "text": "link User, Session and Token in a chain", "wire": {"type": "command", "args": {"action": "connect", "from": "User,Session,Token", "to": "User,Session,Token", "pairing": "chain"}}}
+{"id": "th-0823", "names": ["Order", "Product"], "text": "a dashed link between Order and Product", "wire": {"type": "command", "args": {"action": "connect", "from": "Order", "to": "Product", "style": "dashed"}}}
+{"id": "th-0824", "names": ["Cart", "Order", "Invoice"], "text": "chain Cart, Order and Invoice in order", "wire": {"type": "command", "args": {"action": "connect", "from": "Cart,Order,Invoice", "to": "Cart,Order,Invoice", "pairing": "chain"}}}
+{"id": "th-0825", "names": ["User", "Ledger"], "text": "draw a navy line from User to Ledger", "wire": {"type": "command", "args": {"action": "connect", "from": "User", "to": "Ledger", "color": "navy"}}}
+{"id": "th-0826", "names": ["Invoice", "Refund"], "text": "connect Invoice to Refund both ways", "wire": {"type": "command", "args": {"action": "connect", "from": "Invoice", "to": "Refund", "arrow": "both"}}}
+{"id": "th-0827", "names": ["Ledger"], "text": "move Ledger 50 pixels to the left", "wire": {"type": "command", "args": {"action": "move", "target": "Ledger", "direction": "left", "distance": "50"}}}
+{"id": "th-0828", "names": ["Token"], "text": "drag Token down 30 px", "wire": {"type": "command", "args": {"action": "move", "target": "Token", "direction": "down", "distance": "30"}}}
+{"id": "th-0829", "names": ["Sku", "Product"], "text": "Sku moves to the left of Product", "wire": {"type": "command", "args": {"action": "move", "target": "Sku", "position": "leftOf", "anchor": "Product"}}}
+{"id": "th-0830", "names": ["Tax"], "text": "slide Tax to the top", "wire": {"type": "command", "args": {"action": "move", "target": "Tax", "position": "top"}}}
+{"id": "th-0831", "names": ["Admin"], "text": "nudge Admin up", "wire": {"type": "command", "args": {"action": "move", "target": "Admin", "direction": "up"}}}
+{"id": "th-0832", "names": ["Refund", "Invoice"], "text": "put Refund right of Invoice", "wire": {"type": "command", "args": {"action": "move", "target": "Refund", "position": "rightOf", "anchor": "Invoice"}}}
+{"id": "th-0833", "names": ["Cart", "User", "Order"], "text": "move Cart between User and Order", "wire": {"type": "command", "args": {"action": "move", "target": "Cart", "position": "between", "anchor": "User,Order"}}}
+{"id": "th-0834", "names": ["Token"], "text": "delete Token", "wire": {"type": "command", "args": {"action": "delete", "target": "Token"}}}
+{"id": "th-0835", "names": [], "text": "get rid of every oval that isn't cyan", "wire": {"type": "command", "args": {"action": "delete", "target": "mention(notcolor=cyan,quantifier=all,shape=ellipse)"}}}
+{"id": "th-0836", "names": ["Admin"], "text": "scrap Admin", "wire": {"type": "command", "args": {"action": "delete", "target": "Admin"}}}
+{"id": "th-0837", "names": ["Order"], "text": "make Order bigger", "wire": {"type": "command", "args": {"action": "resize", "target": "Order"}}}
+{"id": "th-0838", "names": ["Product"], "text": "shrink Product", "wire": {"type": "command", "args": {"action": "resize", "target": "Product"}}}
+{"id": "th-0839", "names": ["User"], "text": "rename User to Account", "wire": {"type": "command", "args": {"action": "rename", "target": "User", "name": "Account"}}}
+{"id": "th-0840", "names": ["Cart"], "text": "Cart's name should be Basket", "wire": {"type": "command", "args": {"action": "rename", "target": "Cart", "name": "Basket"}}}
+{"id": "th-0841", "names": ["Session"], "text": "label Session 'Live'", "wire": {"type": "command", "args": {"action": "label", "target": "Session", "label": "Live"}}}
+{"id": "th-0842", "names": ["Ledger"], "text": "put 'Double entry' on Ledger", "wire": {"type": "command", "args": {"action": "label", "target": "Ledger", "label": "Double entry"}}}
+{"id": "th-0843", "names": ["Sku"], "text": "duplicate Sku", "wire": {"type": "command", "args": {"action": "duplicate", "target": "Sku"}}}
+{"id": "th-0844", "names": ["Refund"], "text": "make 3 copies of Refund", "wire": {"type": "command", "args": {"action": "duplicate", "target": "Refund", "count": "3"}}}
+{"id": "th-0845", "names": ["Order", "Cart"], "text": "swap Order and Cart", "wire": {"type": "command", "args": {"action": "swap", "target": "Order,Cart"}}}
+{"id": "th-0846", "names": ["Product", "Invoice"], "text": "switch Product and Invoice", "wire": {"type": "command", "args": {"action": "swap", "target": "Product,Invoice"}}}
+{"id": "th-0847", "names": ["User", "Session"], "text": "unlink User from Session", "wire": {"type": "command", "args": {"action": "disconnect", "from": "User", "to": "Session"}}}
+{"id": "th-0848", "names": ["Order", "Product"], "text": "remove the connection between Order and Product", "wire": {"type": "command", "args": {"action": "disconnect", "from": "Order", "to": "Product"}}}
+{"id": "th-0849", "names": ["User", "Order", "Cart"], "text": "align User, Order and Cart horizontally", "wire": {"type": "command", "args": {"action": "align", "target": "User,Order,Cart", "axis": "horizontal"}}}
+{"id": "th-0850", "names": [], "text": "align all the ovals vertically", "wire": {"type": "command", "args": {"action": "align", "target": "mention(quantifier=all,shape=ellipse)", "axis": "vertical"}}}
+{"id": "th-0851", "names": ["Ledger", "Token"], "text": "arrange Ledger and Token in a row", "wire": {"type": "command", "args": {"action": "arrange", "target": "Ledger,Token", "layout": "row"}}}
+{"id": "th-0852", "names": [], "text": "tidy everything up into columns", "wire": {"type": "command", "args": {"action": "arrange", "layout": "column"}}}
+{"id": "th-0853", "names": ["User", "Order", "Product"], "text": "spread out User, Order and Product evenly horizontally", "wire": {"type": "command", "args": {"action": "distribute", "target": "User,Order,Product", "axis": "horizontal"}}}
+{"id": "th-0854", "names": [], "text": "space out the gray shapes vertically", "wire": {"type": "command", "args": {"action": "distribute", "target": "mention(color=gray,quantifier=all)", "axis": "vertical"}}}
+{"id": "th-0855", "names": ["Tax"], "text": "bring Tax to the front", "wire": {"type": "command", "args": {"action": "toFront", "target": "Tax"}}}
+{"id": "th-0856", "names": [], "text": "raise the newest square to the top layer", "wire": {"type": "command", "args": {"action": "toFront", "target": "mention(recency=newest,shape=square)"}}}
+{"id": "th-0857", "names": ["Ledger"], "text": "put Ledger at the back", "wire": {"type": "command", "args": {"action": "toBack", "target": "Ledger"}}}
+{"id": "th-0858", "names": [], "text": "send the oldest diamond to the back", "wire": {"type": "command", "args": {"action": "toBack", "target": "mention(recency=oldest,shape=diamond)"}}}
+{"id": "th-0859", "names": [], "text": "roll that back", "wire": {"type": "command", "args": {"action": "undo"}}}
+{"id": "th-0860", "names": [], "text": "undo the last edit", "wire": {"type": "command", "args": {"action": "undo"}}}
+{"id": "th-0861", "names": [], "text": "redo the edit", "wire": {"type": "command", "args": {"action": "redo"}}}
+{"id": "th-0862", "names": [], "text": "put that change back on", "wire": {"type": "command", "args": {"action": "redo"}}}
+{"id": "th-0863", "names": [], "text": "forget the defaults", "wire": {"type": "command", "args": {"action": "forget"}}}
+{"id": "th-0864", "names": [], "text": "clear out your learned rules", "wire": {"type": "command", "args": {"action": "forget"}}}
+{"id": "th-0865", "names": [], "text": "how many classes are there", "wire": {"type": "question", "args": {"ask": "count"}}}
+{"id": "th-0866", "names": [], "text": "how many black things", "wire": {"type": "question", "args": {"ask": "count", "color": "black"}}}
+{"id": "th-0867", "names": ["User"], "text": "how many shapes are right of User", "wire": {"type": "question", "args": {"ask": "count", "position": "rightOf", "anchor": "User"}}}
+{"id": "th-0868", "names": [], "text": "is there a white hexagon", "wire": {"type": "question", "args": {"ask": "exists", "shape": "hexagon", "color": "white"}}}
+{"id": "th-0869", "names": [], "text": "any navy stars around?", "wire": {"type": "question", "args": {"ask": "exists", "shape": "star", "color": "navy"}}}
+{"id": "th-0870", "names": [], "text": "show every square", "wire": {"type": "question", "args": {"ask": "list", "shape": "square"}}}
+{"id": "th-0871", "names": [], "text": "which ones are not cyan", "wire": {"type": "question", "args": {"ask": "list", "notColor": "cyan"}}}
+{"id": "th-0872", "names": ["Product"], "text": "what shape is Product", "wire": {"type": "question", "args": {"ask": "property", "target": "Product", "property": "shape"}}}
+{"id": "th-0873", "names": ["Session"], "text": "what's the color of Session", "wire": {"type": "question", "args": {"ask": "property", "target": "Session", "property": "color"}}}
+{"id": "th-0874", "names": [], "text": "how big is the newest diamond", "wire": {"type": "question", "args": {"ask": "property", "target": "mention(recency=newest,shape=diamond)", "property": "size"}}}
+{"id": "th-0875", "names": ["Order"], "text": "describe the Order class", "wire": {"type": "question", "args": {"ask": "describe", "target": "Order"}}}
+{"id": "th-0876", "names": [], "text": "what's on this UML sheet overall", "wire": {"type": "question", "args": {"ask": "describe"}}}
+{"id": "th-0877", "names": ["User"], "text": "what's wired to User", "wire": {"type": "question", "args": {"ask": "neighbors", "target": "User"}}}
+{"id": "th-0878", "names": ["Invoice"], "text": "list the neighbours of Invoice", "wire": {"type": "question", "args": {"ask": "neighbors", "target": "Invoice"}}}
+{"id": "th-0879", "names": ["User", "Session"], "text": "are User and Session connected", "wire": {"type": "question", "args": {"ask": "connected", "target": "User", "anchor": "Session"}}}
+{"id": "th-0880", "names": ["Cart", "Order"], "text": "is Cart joined straight to Order", "wire": {"type": "question", "args": {"ask": "connected", "target": "Cart", "anchor": "Order"}}}
+{"id": "th-0881", "names": ["Order"], "text": "degree of Order?", "wire": {"type": "question", "args": {"ask": "degree", "target": "Order"}}}
+{"id": "th-0882", "names": ["Invoice"], "text": "how many edges touch Invoice", "wire": {"type": "question", "args": {"ask": "degree", "target": "Invoice"}}}
+{"id": "th-0883", "names": ["User", "Refund"], "text": "is there a path from User to Refund", "wire": {"type": "question", "args": {"ask": "path", "from": "User", "to": "Refund"}}}
+{"id": "th-0884", "names": ["Session", "Product"], "text": "how can I go from Session to Product", "wire": {"type": "question", "args": {"ask": "path", "from": "Session", "to": "Product"}}}
+{"id": "th-0885", "names": ["User"], "text": "reachable from User?", "wire": {"type": "question", "args": {"ask": "reachable", "from": "User"}}}
+{"id": "th-0886", "names": ["Cart"], "text": "what does Cart lead to", "wire": {"type": "question", "args": {"ask": "reachable", "from": "Cart"}}}
+{"id": "th-0887", "names": [], "text": "is there a cycle in these classes", "wire": {"type": "question", "args": {"ask": "cycle"}}}
+{"id": "th-0888", "names": [], "text": "any circular references?", "wire": {"type": "question", "args": {"ask": "cycle"}}}
+{"id": "th-0889", "names": [], "text": "what rules are defined", "wire": {"type": "question", "args": {"ask": "rules"}}}
+{"id": "th-0890", "names": [], "text": "tell me the active defaults", "wire": {"type": "question", "args": {"ask": "rules"}}}
+{"id": "th-0891", "names": ["Product"], "text": "is Product lime", "wire": {"type": "question", "args": {"ask": "check", "target": "Product", "color": "lime"}}}
+{"id": "th-0892", "names": ["Invoice"], "text": "is Invoice a box", "wire": {"type": "question", "args": {"ask": "check", "target": "Invoice", "shape": "rectangle"}}}
+{"id": "th-0893", "names": ["Order", "Cart"], "text": "is Order bigger than Cart", "wire": {"type": "question", "args": {"ask": "check", "target": "Order", "comparison": "bigger", "anchor": "Cart"}}}
+{"id": "th-0894", "names": [], "text": "what's the bottommost one", "wire": {"type": "question", "args": {"ask": "extreme", "superlative": "bottommost"}}}
+{"id": "th-0895", "names": [], "text": "which is the leftmost class", "wire": {"type": "question", "args": {"ask": "extreme", "superlative": "leftmost"}}}
+{"id": "th-0896", "names": ["User"], "text": "closest thing to User", "wire": {"type": "question", "args": {"ask": "nearest", "anchor": "User", "superlative": "closest"}}}
+{"id": "th-0897", "names": ["Session"], "text": "which blue shape is the farthest from Session", "wire": {"type": "question", "args": {"ask": "nearest", "anchor": "Session", "superlative": "farthest", "color": "blue"}}}
+{"id": "th-0898", "names": ["Tax"], "text": "Tax is gray", "wire": {"type": "fact", "args": {"target": "Tax", "color": "gray"}}}
+{"id": "th-0899", "names": ["Token", "Session"], "text": "Token sits right of Session", "wire": {"type": "fact", "args": {"target": "Token", "position": "rightOf", "anchor": "Session"}}}
+{"id": "th-0900", "names": [], "text": "new ovals should be tiny", "wire": {"type": "rule", "args": {"shape": "ellipse", "size": "tiny"}}}

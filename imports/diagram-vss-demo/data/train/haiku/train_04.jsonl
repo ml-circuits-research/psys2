@@ -1,0 +1,100 @@
+{"id": "th-0301", "names": ["Ceo"], "text": "real quick, add a navy box named Cfo right under Ceo", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "color": "navy", "name": "Cfo", "position": "below", "anchor": "Ceo"}}}
+{"id": "th-0302", "names": [], "text": "hmm can you throw a small teal oval called Hr in the bottom left", "wire": {"type": "command", "args": {"action": "create", "shape": "ellipse", "color": "teal", "size": "small", "name": "Hr", "position": "bottomLeft"}}}
+{"id": "th-0303", "names": ["Cto"], "text": "kinda want two orange diamonds beside the Cto", "wire": {"type": "command", "args": {"action": "create", "shape": "diamond", "color": "orange", "count": "2", "position": "near", "anchor": "Cto"}}}
+{"id": "th-0304", "names": [], "text": "a box labeled 'Board' at the top", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "label": "Board", "position": "top"}}}
+{"id": "th-0305", "names": ["Lead"], "text": "make a large gray triangle named Mentor left of Lead", "wire": {"type": "command", "args": {"action": "create", "shape": "triangle", "color": "gray", "size": "large", "name": "Mentor", "position": "leftOf", "anchor": "Lead"}}}
+{"id": "th-0306", "names": [], "text": "lol drop a purple star in the middle", "wire": {"type": "command", "args": {"action": "create", "shape": "star", "color": "purple", "position": "center"}}}
+{"id": "th-0307", "names": ["Dev"], "text": "3 medium pink circles above Dev", "wire": {"type": "command", "args": {"action": "create", "shape": "circle", "color": "pink", "size": "medium", "count": "3", "position": "above", "anchor": "Dev"}}}
+{"id": "th-0308", "names": ["Pm", "Dev"], "text": "stick a red hexagon between Pm and Dev", "wire": {"type": "command", "args": {"action": "create", "shape": "hexagon", "color": "red", "position": "between", "anchor": "Pm,Dev"}}}
+{"id": "th-0309", "names": [], "text": "make me a tiny black square on the right side", "wire": {"type": "command", "args": {"action": "create", "shape": "square", "color": "black", "size": "tiny", "position": "right"}}}
+{"id": "th-0310", "names": ["Ceo"], "text": "I'd love a gold oval titled 'Advisors' near Ceo", "wire": {"type": "command", "args": {"action": "create", "shape": "ellipse", "color": "gold", "label": "Advisors", "position": "near", "anchor": "Ceo"}}}
+{"id": "th-0311", "names": [], "text": "add a rectangle called Intern somewhere in the top right corner", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "name": "Intern", "position": "topRight"}}}
+{"id": "th-0312", "names": ["Hr"], "text": "put a magenta diamond named Vp next to Hr", "wire": {"type": "command", "args": {"action": "create", "shape": "diamond", "color": "magenta", "name": "Vp", "position": "near", "anchor": "Hr"}}}
+{"id": "th-0313", "names": ["Cfo"], "text": "Cfo should be blue", "wire": {"type": "command", "args": {"action": "set", "target": "Cfo", "color": "blue"}}}
+{"id": "th-0314", "names": ["Cto"], "text": "change Cto to a hexagon", "wire": {"type": "command", "args": {"action": "set", "target": "Cto", "shape": "hexagon"}}}
+{"id": "th-0315", "names": ["Lead"], "text": "make Lead huge", "wire": {"type": "command", "args": {"action": "set", "target": "Lead", "size": "huge"}}}
+{"id": "th-0316", "names": ["Dev"], "text": "go with green for Dev", "wire": {"type": "command", "args": {"action": "set", "target": "Dev", "color": "green"}}}
+{"id": "th-0317", "names": ["Hr"], "text": "make Hr purple", "wire": {"type": "command", "args": {"action": "set", "target": "Hr", "color": "purple"}}}
+{"id": "th-0318", "names": ["Pm"], "text": "Pm can be tiny", "wire": {"type": "command", "args": {"action": "set", "target": "Pm", "size": "tiny"}}}
+{"id": "th-0319", "names": ["Mentor"], "text": "please turn the Mentor into a star", "wire": {"type": "command", "args": {"action": "set", "target": "Mentor", "shape": "star"}}}
+{"id": "th-0320", "names": ["Board"], "text": "recolor it orange", "wire": {"type": "command", "args": {"action": "set", "target": "Board", "color": "orange"}}}
+{"id": "th-0321", "names": [], "text": "paint the stars that aren't purple navy", "wire": {"type": "command", "args": {"action": "set", "target": "mention(notcolor=purple,quantifier=all,shape=star)", "color": "navy"}}}
+{"id": "th-0322", "names": ["Cto", "Cfo", "Ceo"], "text": "Cto and Cfo both report to Ceo, draw all of those lines", "wire": {"type": "command", "args": {"action": "connect", "from": "Cto,Cfo", "to": "Ceo", "pairing": "all"}}}
+{"id": "th-0323", "names": ["Cfo", "Ceo"], "text": "a dotted connector from Cfo to Ceo", "wire": {"type": "command", "args": {"action": "connect", "from": "Cfo", "to": "Ceo", "style": "dotted"}}}
+{"id": "th-0324", "names": ["Lead", "Dev"], "text": "run a two-way link between Lead and Dev", "wire": {"type": "command", "args": {"action": "connect", "from": "Lead", "to": "Dev", "arrow": "both"}}}
+{"id": "th-0325", "names": ["Pm", "Dev", "Lead"], "text": "connect Pm, Dev, and Lead in a chain", "wire": {"type": "command", "args": {"action": "connect", "from": "Pm,Dev,Lead", "to": "Pm,Dev,Lead", "pairing": "chain"}}}
+{"id": "th-0326", "names": ["Ceo", "Board"], "text": "tie Board to Ceo in blue", "wire": {"type": "command", "args": {"action": "connect", "from": "Board", "to": "Ceo", "color": "blue"}}}
+{"id": "th-0327", "names": ["Hr"], "text": "bump Hr 20 pixels up", "wire": {"type": "command", "args": {"action": "move", "target": "Hr", "direction": "up", "distance": "20"}}}
+{"id": "th-0328", "names": ["Mentor", "Lead"], "text": "nudge Mentor to the left of Lead", "wire": {"type": "command", "args": {"action": "move", "target": "Mentor", "position": "leftOf", "anchor": "Lead"}}}
+{"id": "th-0329", "names": ["Intern"], "text": "Intern goes to the bottom", "wire": {"type": "command", "args": {"action": "move", "target": "Intern", "position": "bottom"}}}
+{"id": "th-0330", "names": ["Dev"], "text": "shift Dev right 50", "wire": {"type": "command", "args": {"action": "move", "target": "Dev", "direction": "right", "distance": "50"}}}
+{"id": "th-0331", "names": ["Vp", "Hr"], "text": "move Vp next to Hr", "wire": {"type": "command", "args": {"action": "move", "target": "Vp", "position": "near", "anchor": "Hr"}}}
+{"id": "th-0332", "names": ["Cfo"], "text": "move Cfo down", "wire": {"type": "command", "args": {"action": "move", "target": "Cfo", "direction": "down"}}}
+{"id": "th-0333", "names": ["Pm", "Dev", "Lead"], "text": "slide Pm between Dev and Lead", "wire": {"type": "command", "args": {"action": "move", "target": "Pm", "position": "between", "anchor": "Dev,Lead"}}}
+{"id": "th-0334", "names": ["Intern"], "text": "scratch Intern", "wire": {"type": "command", "args": {"action": "delete", "target": "Intern"}}}
+{"id": "th-0335", "names": [], "text": "kill every circle that isn't pink", "wire": {"type": "command", "args": {"action": "delete", "target": "mention(notcolor=pink,quantifier=all,shape=circle)"}}}
+{"id": "th-0336", "names": ["Board"], "text": "remove the board", "wire": {"type": "command", "args": {"action": "delete", "target": "Board"}}}
+{"id": "th-0337", "names": ["Ceo"], "text": "make Ceo bigger", "wire": {"type": "command", "args": {"action": "resize", "target": "Ceo"}}}
+{"id": "th-0338", "names": ["Vp"], "text": "make Vp smaller", "wire": {"type": "command", "args": {"action": "resize", "target": "Vp"}}}
+{"id": "th-0339", "names": ["Cto"], "text": "rename Cto to Tech", "wire": {"type": "command", "args": {"action": "rename", "target": "Cto", "name": "Tech"}}}
+{"id": "th-0340", "names": ["Pm"], "text": "Pm should be called Product", "wire": {"type": "command", "args": {"action": "rename", "target": "Pm", "name": "Product"}}}
+{"id": "th-0341", "names": ["Ceo"], "text": "label Ceo 'Top'", "wire": {"type": "command", "args": {"action": "label", "target": "Ceo", "label": "Top"}}}
+{"id": "th-0342", "names": ["Lead"], "text": "tag Lead with 'Team A'", "wire": {"type": "command", "args": {"action": "label", "target": "Lead", "label": "Team A"}}}
+{"id": "th-0343", "names": ["Dev"], "text": "copy Dev 5 times", "wire": {"type": "command", "args": {"action": "duplicate", "target": "Dev", "count": "5"}}}
+{"id": "th-0344", "names": ["Cfo"], "text": "duplicate Cfo", "wire": {"type": "command", "args": {"action": "duplicate", "target": "Cfo"}}}
+{"id": "th-0345", "names": ["Lead", "Mentor"], "text": "switch the Lead and the Mentor", "wire": {"type": "command", "args": {"action": "swap", "target": "Lead,Mentor"}}}
+{"id": "th-0346", "names": ["Hr", "Vp"], "text": "exchange Hr and Vp", "wire": {"type": "command", "args": {"action": "swap", "target": "Hr,Vp"}}}
+{"id": "th-0347", "names": ["Cfo", "Ceo"], "text": "unlink Cfo from Ceo", "wire": {"type": "command", "args": {"action": "disconnect", "from": "Cfo", "to": "Ceo"}}}
+{"id": "th-0348", "names": ["Lead", "Dev"], "text": "break the connection between Lead and Dev", "wire": {"type": "command", "args": {"action": "disconnect", "from": "Lead", "to": "Dev"}}}
+{"id": "th-0349", "names": ["Ceo", "Cto", "Cfo"], "text": "make Ceo, Cto and Cfo line up vertically", "wire": {"type": "command", "args": {"action": "align", "target": "Ceo,Cto,Cfo", "axis": "vertical"}}}
+{"id": "th-0350", "names": [], "text": "line up the blue shapes horizontally", "wire": {"type": "command", "args": {"action": "align", "target": "mention(color=blue,quantifier=all)", "axis": "horizontal"}}}
+{"id": "th-0351", "names": ["Dev", "Pm"], "text": "arrange Dev and Pm side by side", "wire": {"type": "command", "args": {"action": "arrange", "target": "Dev,Pm", "layout": "row"}}}
+{"id": "th-0352", "names": [], "text": "put everything in a circle", "wire": {"type": "command", "args": {"action": "arrange", "layout": "circle"}}}
+{"id": "th-0353", "names": ["Dev", "Lead", "Pm"], "text": "spread Dev, Lead and Pm evenly horizontally", "wire": {"type": "command", "args": {"action": "distribute", "target": "Dev,Lead,Pm", "axis": "horizontal"}}}
+{"id": "th-0354", "names": [], "text": "distribute the squares vertically", "wire": {"type": "command", "args": {"action": "distribute", "target": "mention(quantifier=all,shape=square)", "axis": "vertical"}}}
+{"id": "th-0355", "names": ["Intern"], "text": "put Intern on top", "wire": {"type": "command", "args": {"action": "toFront", "target": "Intern"}}}
+{"id": "th-0356", "names": [], "text": "bring the newest triangle to the front", "wire": {"type": "command", "args": {"action": "toFront", "target": "mention(recency=newest,shape=triangle)"}}}
+{"id": "th-0357", "names": ["Board"], "text": "send Board to the back", "wire": {"type": "command", "args": {"action": "toBack", "target": "Board"}}}
+{"id": "th-0358", "names": [], "text": "move the most recent circle to the back", "wire": {"type": "command", "args": {"action": "toBack", "target": "mention(recency=newest,shape=circle)"}}}
+{"id": "th-0359", "names": [], "text": "revert the last change", "wire": {"type": "command", "args": {"action": "undo"}}}
+{"id": "th-0360", "names": [], "text": "oops that was wrong, undo", "wire": {"type": "command", "args": {"action": "undo"}}}
+{"id": "th-0361", "names": [], "text": "redo, I changed my mind", "wire": {"type": "command", "args": {"action": "redo"}}}
+{"id": "th-0362", "names": [], "text": "restore the thing I just undid", "wire": {"type": "command", "args": {"action": "redo"}}}
+{"id": "th-0363", "names": [], "text": "clear the defaults, forget them all", "wire": {"type": "command", "args": {"action": "forget"}}}
+{"id": "th-0364", "names": [], "text": "drop all the rules", "wire": {"type": "command", "args": {"action": "forget"}}}
+{"id": "th-0365", "names": [], "text": "how many purple shapes are there", "wire": {"type": "question", "args": {"ask": "count", "color": "purple"}}}
+{"id": "th-0366", "names": [], "text": "how many shapes aren't white", "wire": {"type": "question", "args": {"ask": "count", "notColor": "white"}}}
+{"id": "th-0367", "names": ["Ceo"], "text": "how many shapes are below Ceo", "wire": {"type": "question", "args": {"ask": "count", "position": "below", "anchor": "Ceo"}}}
+{"id": "th-0368", "names": [], "text": "is there an orange diamond anywhere", "wire": {"type": "question", "args": {"ask": "exists", "shape": "diamond", "color": "orange"}}}
+{"id": "th-0369", "names": [], "text": "any teal ovals?", "wire": {"type": "question", "args": {"ask": "exists", "shape": "ellipse", "color": "teal"}}}
+{"id": "th-0370", "names": [], "text": "show me all the circles", "wire": {"type": "question", "args": {"ask": "list", "shape": "circle"}}}
+{"id": "th-0371", "names": [], "text": "which ones are not green", "wire": {"type": "question", "args": {"ask": "list", "notColor": "green"}}}
+{"id": "th-0372", "names": ["Mentor"], "text": "what's the size of Mentor", "wire": {"type": "question", "args": {"ask": "property", "target": "Mentor", "property": "size"}}}
+{"id": "th-0373", "names": ["Cfo"], "text": "what's the label of Cfo", "wire": {"type": "question", "args": {"ask": "property", "target": "Cfo", "property": "label"}}}
+{"id": "th-0374", "names": ["Board"], "text": "which color is Board", "wire": {"type": "question", "args": {"ask": "property", "target": "Board", "property": "color"}}}
+{"id": "th-0375", "names": ["Lead"], "text": "what's Lead like", "wire": {"type": "question", "args": {"ask": "describe", "target": "Lead"}}}
+{"id": "th-0376", "names": [], "text": "walk me through the whole chart", "wire": {"type": "question", "args": {"ask": "describe"}}}
+{"id": "th-0377", "names": ["Ceo"], "text": "who reports directly to Ceo", "wire": {"type": "question", "args": {"ask": "neighbors", "target": "Ceo"}}}
+{"id": "th-0378", "names": ["Dev"], "text": "list the things linked to Dev", "wire": {"type": "question", "args": {"ask": "neighbors", "target": "Dev"}}}
+{"id": "th-0379", "names": ["Ceo", "Board"], "text": "are Ceo and Board connected", "wire": {"type": "question", "args": {"ask": "connected", "target": "Ceo", "anchor": "Board"}}}
+{"id": "th-0380", "names": ["Mentor", "Lead"], "text": "is Mentor directly linked to Lead", "wire": {"type": "question", "args": {"ask": "connected", "target": "Mentor", "anchor": "Lead"}}}
+{"id": "th-0381", "names": ["Lead"], "text": "how many connections does Lead have", "wire": {"type": "question", "args": {"ask": "degree", "target": "Lead"}}}
+{"id": "th-0382", "names": ["Ceo"], "text": "what's the link count on Ceo", "wire": {"type": "question", "args": {"ask": "degree", "target": "Ceo"}}}
+{"id": "th-0383", "names": ["Intern", "Ceo"], "text": "is Intern linked to Ceo through anyone", "wire": {"type": "question", "args": {"ask": "path", "from": "Intern", "to": "Ceo"}}}
+{"id": "th-0384", "names": ["Dev", "Cfo"], "text": "find a chain from Dev to Cfo", "wire": {"type": "question", "args": {"ask": "path", "from": "Dev", "to": "Cfo"}}}
+{"id": "th-0385", "names": ["Ceo"], "text": "who can Ceo reach", "wire": {"type": "question", "args": {"ask": "reachable", "from": "Ceo"}}}
+{"id": "th-0386", "names": ["Lead"], "text": "from Lead, what's reachable", "wire": {"type": "question", "args": {"ask": "reachable", "from": "Lead"}}}
+{"id": "th-0387", "names": [], "text": "any reporting loops in the chart", "wire": {"type": "question", "args": {"ask": "cycle"}}}
+{"id": "th-0388", "names": [], "text": "is there a closed loop of links", "wire": {"type": "question", "args": {"ask": "cycle"}}}
+{"id": "th-0389", "names": [], "text": "what rules are active right now", "wire": {"type": "question", "args": {"ask": "rules"}}}
+{"id": "th-0390", "names": [], "text": "tell me your defaults", "wire": {"type": "question", "args": {"ask": "rules"}}}
+{"id": "th-0391", "names": ["Dev"], "text": "is Dev pink", "wire": {"type": "question", "args": {"ask": "check", "target": "Dev", "color": "pink"}}}
+{"id": "th-0392", "names": ["Cto"], "text": "is the Cto a hexagon", "wire": {"type": "question", "args": {"ask": "check", "target": "Cto", "shape": "hexagon"}}}
+{"id": "th-0393", "names": ["Lead", "Ceo"], "text": "is Lead smaller than Ceo", "wire": {"type": "question", "args": {"ask": "check", "target": "Lead", "comparison": "smaller", "anchor": "Ceo"}}}
+{"id": "th-0394", "names": [], "text": "which thing is the biggest", "wire": {"type": "question", "args": {"ask": "extreme", "superlative": "biggest"}}}
+{"id": "th-0395", "names": [], "text": "what's the topmost element", "wire": {"type": "question", "args": {"ask": "extreme", "superlative": "topmost"}}}
+{"id": "th-0396", "names": ["Ceo"], "text": "which shape is closest to Ceo", "wire": {"type": "question", "args": {"ask": "nearest", "anchor": "Ceo", "superlative": "closest"}}}
+{"id": "th-0397", "names": ["Dev"], "text": "what blue shape is the farthest from Dev", "wire": {"type": "question", "args": {"ask": "nearest", "anchor": "Dev", "superlative": "farthest", "color": "blue"}}}
+{"id": "th-0398", "names": ["Cfo"], "text": "Cfo is navy", "wire": {"type": "fact", "args": {"target": "Cfo", "color": "navy"}}}
+{"id": "th-0399", "names": ["Intern", "Hr"], "text": "Intern sits to the right of Hr", "wire": {"type": "fact", "args": {"target": "Intern", "position": "rightOf", "anchor": "Hr"}}}
+{"id": "th-0400", "names": [], "text": "every new triangle should be lime from here on", "wire": {"type": "rule", "args": {"shape": "triangle", "color": "lime"}}}

@@ -1,0 +1,40 @@
+{"id":"op-0201","domain":"bakery","names":["Oven","Counter","Shelf"],"text":"Add a brown circle called Loaf right of Oven and under Shelf. Also a yellow square called Tray beneath Oven, left of Counter. Then align Loaf and Tray horizontally."}
+{"id":"op-0202","domain":"lab","names":["Beaker","Burner"],"text":"Create a tiny cyan circle called Drop above Beaker and left of Burner, and a pink one near the bottom, right of Beaker."}
+{"id":"op-0203","domain":"transit","names":["Bus","Tram","Train"],"text":"Draw a purple rectangle between Bus and Tram, below Train. Draw a gold rectangle in the top right corner, next to Train. Connect Bus to Tram with a dashed line."}
+{"id":"op-0204","domain":"art class","names":["Sketch","Canvas"],"text":"Is Sketch under Canvas but still right of the door? There is no door. Skip that. Just tell me if Sketch is in the bottom left, left of Canvas."}
+{"id":"op-0205","domain":"sci-fi game","names":["Ship","Base","Moon"],"text":"Place a huge navy hexagon called Station between Ship and Base but over Moon. Then a lime star right of Station, in the upper right corner."}
+{"id":"op-0206","domain":"dictation","names":["Cat","Dog"],"text":"okay so a red triangle uh beneath Cat and then to the left of Dog please"}
+{"id":"op-0207","domain":"tech blog","names":["Server","Client","Proxy"],"text":"Put a green diamond named Cache under Proxy and over Client. Rename Server to Origin. Is Origin right of Proxy and above Client?"}
+{"id":"op-0208","domain":"travel","names":["Paris","Rome","Berlin"],"text":"Add a small star in the top left, left of Paris, and another one beneath Rome, next to Berlin. Label both of them stop."}
+{"id":"op-0209","domain":"calendar","names":["Mon","Tue"],"text":"short question: is Tue right of Mon and in the top left?"}
+{"id":"op-0210","domain":"chemistry","names":["Na","Cl","H2O"],"text":"Make a white circle called Salt between Na and Cl, under H2O. Make it large."}
+{"id":"op-0211","domain":"fashion","names":["Hat","Shoe","Bag"],"text":"I'm arranging the lookbook. Slap a blue ellipse beneath Hat and over Shoe, and a black rectangle in the middle, right of Bag. How many things are below Hat?"}
+{"id":"op-0212","domain":"farm","names":["Cow","Hen","Pig"],"text":"Which shapes are above Cow and left of Hen? How many are in the bottom right, right of Pig?"}
+{"id":"op-0213","domain":"restaurant","names":["Menu","Chef","Waiter"],"text":"Waiter is under Chef and right of Menu. Chef is in the top left corner, above Menu."}
+{"id":"op-0214","domain":"mobile","names":["Home","Search","Profile"],"text":"Add a circle called Back near the top, left of Home. Add a hexagon called Settings under Profile and right of Search."}
+{"id":"op-0215","domain":"robotics","names":["Arm","Sensor","Base"],"text":"Put a tiny red star on top of Arm, left of Sensor. And a tiny green star on top of Base, right of Sensor."}
+{"id":"op-0216","domain":"physics","names":["Ball","Ramp","Floor"],"text":"Please place Ball above Ramp and left of Floor, then Floor in the bottom right corner. Is Ramp beneath Ball?"}
+{"id":"op-0217","domain":"ocean","names":["Whale","Reef"],"text":"Create a huge blue ellipse called Sea in the center, beneath Whale. And a small white circle named Foam near the top, right of Reef."}
+{"id":"op-0218","domain":"courtroom","names":["Judge","Jury","Witness"],"text":"Jury is left of Judge and under Witness, I think. Is that right? Move Witness to the top right corner if so."}
+{"id":"op-0219","domain":"school","names":["Math","Art","Music"],"text":"Put a magenta square called Quiz between Math and Art, below Music. Then connect Quiz to Music."}
+{"id":"op-0220","domain":"garage","names":["Car","Bike","Tool"],"text":"Is Bike under Car and left of Tool? Is Tool in the top right, above Car?"}
+{"id":"op-0221","domain":"hotel","names":["Lobby","Pool","Gym"],"text":"Create two gray squares near the top, left of Lobby. Then a white diamond under Pool but above Gym."}
+{"id":"op-0222","domain":"band","names":["Drums","Bass","Keys"],"text":"Bass belongs beneath Drums but left of Keys. Keys should go in the middle, right of Bass. Wait, is Keys above Drums?"}
+{"id":"op-0223","domain":"news site","names":["Header","Footer","Sidebar"],"text":"Nothing is wrong, I just want a gold circle between Header and Footer, close to the right side, left of Sidebar."}
+{"id":"op-0224","domain":"dictation","names":["Sun"],"text":"uh draw a gray circle in the lower right corner next to the Sun okay"}
+{"id":"op-0225","domain":"pets","names":["Rex","Tom","Kiwi"],"text":"Put Rex below Tom and above Kiwi. Tom to the upper left corner, beside Kiwi. How many shapes are left of Rex?"}
+{"id":"op-0226","domain":"cinema","names":["Screen","Seat1","Seat2"],"text":"Add an orange rectangle called Row under Screen, between Seat1 and Seat2. Another one called Aisle between Seat1 and Seat2 near the bottom. Make Aisle gray."}
+{"id":"op-0227","domain":"math class","names":["A","B","C","D"],"text":"Is A above B and left of C? Is D below C and right of B? Is B in the top right, next to D?"}
+{"id":"op-0228","domain":"nature","names":["Pine","Oak","Lake"],"text":"which shapes are under Pine and left of Oak? Is anything on top of Lake in the top left?"}
+{"id":"op-0229","domain":"language lesson","names":["Ich","Du","Er","Wir"],"text":"Please put Du between Ich and Er, below Wir. Ich should go to the top left, above Er."}
+{"id":"op-0230","domain":"kids drawing","names":["Sun","House","Tree"],"text":"Draw a yellow star next to Sun in the top left, and a green triangle under House and left of Tree. Then tell me if Tree is bigger than House."}
+{"id":"op-0231","domain":"logistics","names":["Dock","Crane","Ship"],"text":"Crane is above Dock and left of Ship. Ship is in the bottom right, below Crane."}
+{"id":"op-0232","domain":"parks","names":["Slide","Swing","Sand"],"text":"Make a small red circle called Kid1 under Slide and next to Swing. Another small blue circle, Kid2, left of Sand in the bottom left. Connect Kid1 to Kid2."}
+{"id":"op-0233","domain":"UI kit","names":["Card","Badge","Icon"],"text":"Put Badge in the upper right corner next to Card and Icon under Card, left of Badge."}
+{"id":"op-0234","domain":"board game","names":["Pawn","Dice","Board"],"text":"Pawn is red. Is Dice on top of Board and right of Pawn? Make Pawn blue otherwise."}
+{"id":"op-0235","domain":"tidy up","names":["Nodes"],"text":"Select all the squares and move them left of Nodes, in the bottom left. Delete the red ones."}
+{"id":"op-0236","domain":"medicine","names":["Heart","Brain","Lung"],"text":"Add a large pink circle called Gland under Brain and next to Heart. Add a tiny gray circle called Cell in the middle, above Lung."}
+{"id":"op-0237","domain":"garden","names":["Fence","Shed"],"text":"Create a lime rectangle in the bottom left corner, left of Fence. Create a lime rectangle in the bottom right corner, right of Shed."}
+{"id":"op-0238","domain":"theater","names":["Stage","Wings","Pit"],"text":"Wings should go beneath Stage but over Pit. Pit in the bottom, left of Stage. Is anything above Stage in the top right?"}
+{"id":"op-0239","domain":"weather","names":["Sun","Cloud"],"text":"Is Sun above Cloud and in the top right? Is Cloud near Sun and below Sun?"}
+{"id":"op-0240","domain":"chat","names":["Orb","Cube"],"text":"Add a magenta hexagon right of Orb, in the middle, and a teal one left of Cube but below Orb."}

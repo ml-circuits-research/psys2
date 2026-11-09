@@ -1,0 +1,100 @@
+{"id": "ts-0301", "names": ["Library"], "text": "sketch a pink circle left of the Library"}
+{"id": "ts-0302", "names": ["Valve"], "text": "Valve ought to be yellow"}
+{"id": "ts-0303", "names": ["Mon", "Tue", "Wed", "Thu"], "text": "connect Mon to the next one, Tue, then Wed to Thu"}
+{"id": "ts-0304", "names": ["Carton"], "text": "bump the Carton down by 50"}
+{"id": "ts-0305", "names": ["Zeta"], "text": "count the circles"}
+{"id": "ts-0306", "names": ["Mop"], "text": "axe the Mop"}
+{"id": "ts-0307", "names": ["Fridge"], "text": "i want a gray box named Cooler under Fridge"}
+{"id": "ts-0308", "names": ["Foyer"], "text": "change Foyer's name to Lobby"}
+{"id": "ts-0309", "names": ["Dad", "Kid"], "text": "does Dad have a direct link to Kid"}
+{"id": "ts-0310", "names": ["Yarn"], "text": "cancel the last action"}
+{"id": "ts-0311", "names": ["Plate"], "text": "stamp Dinner on Plate"}
+{"id": "ts-0312", "names": ["Sun", "Moon"], "text": "trade places: Sun and Moon"}
+{"id": "ts-0313", "names": ["Junction"], "text": "which shapes does Junction touch"}
+{"id": "ts-0314", "names": ["Egg"], "text": "bigger Egg please"}
+{"id": "ts-0315", "names": ["Rook", "Bishop", "Knight"], "text": "get Rook, Bishop and Knight on the same vertical line"}
+{"id": "ts-0316", "names": ["Cobra"], "text": "is Cobra a star or what shape is it"}
+{"id": "ts-0317", "names": [], "text": "every new diamond must be teal"}
+{"id": "ts-0318", "names": ["Buoy"], "text": "Buoy is small"}
+{"id": "ts-0319", "names": ["Hub", "Core"], "text": "add a purple triangle on top of the Hub"}
+{"id": "ts-0320", "names": ["Frame"], "text": "make a duplicate of the red box"}
+{"id": "ts-0321", "names": ["Dispatch", "Depot"], "text": "can Dispatch reach Depot"}
+{"id": "ts-0322", "names": ["Menu"], "text": "Menu in front please"}
+{"id": "ts-0323", "names": ["Hen", "Fox", "Wolf"], "text": "attach Hen to all the stars"}
+{"id": "ts-0324", "names": ["Sphere"], "text": "arrange the diamonds in a circle"}
+{"id": "ts-0325", "names": ["Beacon"], "text": "make Beacon a star"}
+{"id": "ts-0326", "names": ["Jet"], "text": "slide the Jet over to the left 90px"}
+{"id": "ts-0327", "names": ["Kelp"], "text": "is this thing cyclic?"}
+{"id": "ts-0328", "names": ["Pasta"], "text": "Pasta is a rectangle"}
+{"id": "ts-0329", "names": ["Mars", "Venus"], "text": "is Mars huge"}
+{"id": "ts-0330", "names": ["Backdrop"], "text": "the Backdrop goes to the back"}
+{"id": "ts-0331", "names": ["Ferry", "Port"], "text": "take out the line between Ferry and Port"}
+{"id": "ts-0332", "names": ["Torch"], "text": "oops, bring it back, redo"}
+{"id": "ts-0333", "names": ["Hall"], "text": "make me a large green hexagon named Atrium on the left"}
+{"id": "ts-0334", "names": ["Cup", "Mug", "Jug"], "text": "distribute Cup, Mug and Jug along the horizontal axis"}
+{"id": "ts-0335", "names": ["Oak"], "text": "find the topmost shape"}
+{"id": "ts-0336", "names": ["Radio", "Antenna"], "text": "set Radio next to Antenna"}
+{"id": "ts-0337", "names": ["Bit"], "text": "drop all rules"}
+{"id": "ts-0338", "names": ["Byte"], "text": "are any defaults active?"}
+{"id": "ts-0339", "names": ["Kerb", "Road"], "text": "what's the degree of the Road"}
+{"id": "ts-0340", "names": ["Pond"], "text": "remove the newest circle"}
+{"id": "ts-0341", "names": ["Lair"], "text": "place an indigo oval at the bottom left"}
+{"id": "ts-0342", "names": ["Mixer", "Oven"], "text": "link Mixer to Oven with a dashed arrow in orange"}
+{"id": "ts-0343", "names": ["Pillar"], "text": "does anything exist below the Pillar"}
+{"id": "ts-0344", "names": ["Wasp"], "text": "change the color of Wasp to gold"}
+{"id": "ts-0345", "names": ["Pine", "Fir"], "text": "is Pine far from Fir, i mean is it above it"}
+{"id": "ts-0346", "names": ["Pad"], "text": "shrink Pad"}
+{"id": "ts-0347", "names": ["Cog"], "text": "give me the list of purple shapes"}
+{"id": "ts-0348", "names": ["Box"], "text": "set the label of Box to Parcels"}
+{"id": "ts-0349", "names": ["Wren"], "text": "name the last diamond Prism"}
+{"id": "ts-0350", "names": ["Zebra"], "text": "from this point on boxes are tiny"}
+{"id": "ts-0351", "names": ["Lotus"], "text": "how large is the Lotus"}
+{"id": "ts-0352", "names": ["Lamp", "Shade"], "text": "put a red diamond between Lamp and Shade"}
+{"id": "ts-0353", "names": [], "text": "neatly arrange the circles in a grid"}
+{"id": "ts-0354", "names": ["Atlas", "Globe"], "text": "is Atlas smaller than Globe or not"}
+{"id": "ts-0355", "names": ["Kit"], "text": "what does Kit look like"}
+{"id": "ts-0356", "names": ["Pail"], "text": "Pail goes to the center of the canvas"}
+{"id": "ts-0357", "names": ["Oven", "Stove"], "text": "Oven is below Stove"}
+{"id": "ts-0358", "names": ["Pigeon"], "text": "duplicate it"}
+{"id": "ts-0359", "names": ["Muffin"], "text": "add two small orange squares"}
+{"id": "ts-0360", "names": ["Dome", "Arch"], "text": "which is closest to Arch"}
+{"id": "ts-0361", "names": ["Mole"], "text": "is the Mole a hexagon?"}
+{"id": "ts-0362", "names": ["Tim", "Tom"], "text": "disconnect Tim from Tom"}
+{"id": "ts-0363", "names": ["Source"], "text": "show everything reachable starting at Source"}
+{"id": "ts-0364", "names": ["Brass"], "text": "recolor every circle blue"}
+{"id": "ts-0365", "names": ["Plug", "Socket"], "text": "join Plug and Socket with a double-headed arrow"}
+{"id": "ts-0366", "names": ["Gate"], "text": "bump Gate to the left a bit, like 35"}
+{"id": "ts-0367", "names": ["Rack"], "text": "which shape is on the far left"}
+{"id": "ts-0368", "names": ["Ghost"], "text": "banish the Ghost"}
+{"id": "ts-0369", "names": ["Left", "Mid", "Right"], "text": "center align Left, Mid and Right horizontally"}
+{"id": "ts-0370", "names": ["Crab"], "text": "take that back"}
+{"id": "ts-0371", "names": ["Fawn"], "text": "number of orange circles?"}
+{"id": "ts-0372", "names": ["Haze"], "text": "Haze is gray"}
+{"id": "ts-0373", "names": ["Wick", "Wax"], "text": "swap Wick and Wax please"}
+{"id": "ts-0374", "names": ["Rink"], "text": "turn the Rink into a huge diamond"}
+{"id": "ts-0375", "names": ["Spire", "Dome"], "text": "find the shape farthest from Spire"}
+{"id": "ts-0376", "names": ["Pump"], "text": "front and center for the Pump"}
+{"id": "ts-0377", "names": ["Rat"], "text": "disregard the standing rules"}
+{"id": "ts-0378", "names": ["Reel"], "text": "put a brown star named Ranger on the right"}
+{"id": "ts-0379", "names": ["Bud", "Stem"], "text": "are Bud and Stem connected?"}
+{"id": "ts-0380", "names": ["Clay"], "text": "arrange the whole thing in a column"}
+{"id": "ts-0381", "names": ["Dune"], "text": "redo"}
+{"id": "ts-0382", "names": ["Opus"], "text": "Opus is not orange, right?"}
+{"id": "ts-0383", "names": ["Wolf"], "text": "move the Wolf 150 down"}
+{"id": "ts-0384", "names": ["Dial", "Knob"], "text": "connect Dial to Knob, solid green line labelled \"turn\""}
+{"id": "ts-0385", "names": ["Hare"], "text": "list the shapes that aren't circles... sorry, list everything that isn't red"}
+{"id": "ts-0386", "names": ["Nail"], "text": "make Nail bigger"}
+{"id": "ts-0387", "names": ["A1", "A2", "A3"], "text": "space out A1, A2, A3 vertically"}
+{"id": "ts-0388", "names": ["Lynx"], "text": "who has the fewest connections"}
+{"id": "ts-0389", "names": ["Kayak"], "text": "yo throw in a lime circle"}
+{"id": "ts-0390", "names": ["Fin"], "text": "push Fin to the back"}
+{"id": "ts-0391", "names": ["Wall"], "text": "copy Wall three times"}
+{"id": "ts-0392", "names": ["Swan"], "text": "summarise the diagram for me"}
+{"id": "ts-0393", "names": ["Dew"], "text": "is Dew taller... I mean, is Dew above Fog"}
+{"id": "ts-0394", "names": ["Elm"], "text": "Elm is to the left of Oak"}
+{"id": "ts-0395", "names": ["Pixel"], "text": "label Pixel as Dot"}
+{"id": "ts-0396", "names": ["Brine"], "text": "what neighbours does Brine have"}
+{"id": "ts-0397", "names": ["Rune"], "text": "what are the active rules"}
+{"id": "ts-0398", "names": ["Mica"], "text": "how many links come out of Mica"}
+{"id": "ts-0399", "names": ["Tarn", "Fjord"], "text": "is there a route Tarn to Fjord"}
+{"id": "ts-0400", "names": ["Loom"], "text": "rename Loom to Weaver"}

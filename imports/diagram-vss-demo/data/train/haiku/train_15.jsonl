@@ -1,0 +1,100 @@
+{"id": "th-1401", "names": ["Kickoff"], "text": "could you put a teal diamond named Gate right after Kickoff", "wire": {"type": "command", "args": {"action": "create", "shape": "diamond", "color": "teal", "name": "Gate", "position": "rightOf", "anchor": "Kickoff"}}}
+{"id": "th-1402", "names": [], "text": "two medium navy stars at the top", "wire": {"type": "command", "args": {"action": "create", "shape": "star", "color": "navy", "size": "medium", "count": "2", "position": "top"}}}
+{"id": "th-1403", "names": ["Design"], "text": "a gray box labeled 'Review' under Design", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "color": "gray", "label": "Review", "position": "below", "anchor": "Design"}}}
+{"id": "th-1404", "names": [], "text": "make a small green oval named Sprint at the center", "wire": {"type": "command", "args": {"action": "create", "shape": "ellipse", "color": "green", "size": "small", "name": "Sprint", "position": "center"}}}
+{"id": "th-1405", "names": ["Beta", "Launch"], "text": "a huge red hexagon named Freeze between Beta and Launch", "wire": {"type": "command", "args": {"action": "create", "shape": "hexagon", "color": "red", "size": "huge", "name": "Freeze", "position": "between", "anchor": "Beta,Launch"}}}
+{"id": "th-1406", "names": [], "text": "pop in a yellow triangle labeled 'Hotfix' at the bottomRight", "wire": {"type": "command", "args": {"action": "create", "shape": "triangle", "color": "yellow", "label": "Hotfix", "position": "bottomRight"}}}
+{"id": "th-1407", "names": ["Retro"], "text": "put a purple square next to Retro", "wire": {"type": "command", "args": {"action": "create", "shape": "square", "color": "purple", "position": "near", "anchor": "Retro"}}}
+{"id": "th-1408", "names": [], "text": "an orange circle at the far left named Spike", "wire": {"type": "command", "args": {"action": "create", "shape": "circle", "color": "orange", "name": "Spike", "position": "left"}}}
+{"id": "th-1409", "names": ["Qa"], "text": "three tiny black diamonds beside Qa", "wire": {"type": "command", "args": {"action": "create", "shape": "diamond", "color": "black", "size": "tiny", "count": "3", "position": "near", "anchor": "Qa"}}}
+{"id": "th-1410", "names": [], "text": "a lime rectangle named Ship at the topRight", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "color": "lime", "name": "Ship", "position": "topRight"}}}
+{"id": "th-1411", "names": ["Launch"], "text": "add a cyan box labeled 'Live' just above Launch", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "color": "cyan", "label": "Live", "position": "above", "anchor": "Launch"}}}
+{"id": "th-1412", "names": ["Kickoff"], "text": "Kickoff should be green", "wire": {"type": "command", "args": {"action": "set", "target": "Kickoff", "color": "green"}}}
+{"id": "th-1413", "names": ["Design"], "text": "make Design a hexagon", "wire": {"type": "command", "args": {"action": "set", "target": "Design", "shape": "hexagon"}}}
+{"id": "th-1414", "names": ["Beta"], "text": "Beta goes huge", "wire": {"type": "command", "args": {"action": "set", "target": "Beta", "size": "huge"}}}
+{"id": "th-1415", "names": ["Launch"], "text": "launch should be gold", "wire": {"type": "command", "args": {"action": "set", "target": "Launch", "color": "gold"}}}
+{"id": "th-1416", "names": ["Retro"], "text": "turn Retro into a circle", "wire": {"type": "command", "args": {"action": "set", "target": "Retro", "shape": "circle"}}}
+{"id": "th-1417", "names": ["Qa"], "text": "Qa becomes small", "wire": {"type": "command", "args": {"action": "set", "target": "Qa", "size": "small"}}}
+{"id": "th-1418", "names": ["Ship"], "text": "color Ship navy", "wire": {"type": "command", "args": {"action": "set", "target": "Ship", "color": "navy"}}}
+{"id": "th-1419", "names": [], "text": "make all the black diamonds white", "wire": {"type": "command", "args": {"action": "set", "target": "mention(color=black,quantifier=all,shape=diamond)", "color": "white"}}}
+{"id": "th-1420", "names": ["Kickoff", "Design", "Launch"], "text": "connect Kickoff, Design and Launch in order", "wire": {"type": "command", "args": {"action": "connect", "from": "Kickoff,Design,Launch", "to": "Kickoff,Design,Launch", "pairing": "chain"}}}
+{"id": "th-1421", "names": ["Beta", "Launch"], "text": "a plain line from Beta to Launch, no arrowheads", "wire": {"type": "command", "args": {"action": "connect", "from": "Beta", "to": "Launch", "arrow": "none"}}}
+{"id": "th-1422", "names": ["Qa", "Retro"], "text": "two-way connection between Qa and Retro", "wire": {"type": "command", "args": {"action": "connect", "from": "Qa", "to": "Retro", "arrow": "both"}}}
+{"id": "th-1423", "names": ["Kickoff", "Design", "Beta", "Launch"], "text": "chain Kickoff, Design, Beta and Launch", "wire": {"type": "command", "args": {"action": "connect", "from": "Kickoff,Design,Beta,Launch", "to": "Kickoff,Design,Beta,Launch", "pairing": "chain"}}}
+{"id": "th-1424", "names": ["Freeze", "Ship"], "text": "a red line from Freeze to Ship", "wire": {"type": "command", "args": {"action": "connect", "from": "Freeze", "to": "Ship", "color": "red"}}}
+{"id": "th-1425", "names": ["Spike"], "text": "move Spike 18 pixels up", "wire": {"type": "command", "args": {"action": "move", "target": "Spike", "direction": "up", "distance": "18"}}}
+{"id": "th-1426", "names": ["Gate"], "text": "shift Gate left by 33", "wire": {"type": "command", "args": {"action": "move", "target": "Gate", "direction": "left", "distance": "33"}}}
+{"id": "th-1427", "names": ["Hotfix", "Qa"], "text": "put Hotfix right of Qa", "wire": {"type": "command", "args": {"action": "move", "target": "Hotfix", "position": "rightOf", "anchor": "Qa"}}}
+{"id": "th-1428", "names": ["Ship"], "text": "Ship goes to the top right", "wire": {"type": "command", "args": {"action": "move", "target": "Ship", "position": "topRight"}}}
+{"id": "th-1429", "names": ["Sprint"], "text": "drag Sprint down", "wire": {"type": "command", "args": {"action": "move", "target": "Sprint", "direction": "down"}}}
+{"id": "th-1430", "names": ["Freeze", "Design", "Qa"], "text": "move Freeze between Design and Qa", "wire": {"type": "command", "args": {"action": "move", "target": "Freeze", "position": "between", "anchor": "Design,Qa"}}}
+{"id": "th-1431", "names": ["Retro"], "text": "nudge Retro to the bottom", "wire": {"type": "command", "args": {"action": "move", "target": "Retro", "position": "bottom"}}}
+{"id": "th-1432", "names": ["Spike"], "text": "get rid of Spike", "wire": {"type": "command", "args": {"action": "delete", "target": "Spike"}}}
+{"id": "th-1433", "names": [], "text": "delete every orange circle", "wire": {"type": "command", "args": {"action": "delete", "target": "mention(color=orange,quantifier=all,shape=circle)"}}}
+{"id": "th-1434", "names": ["Gate"], "text": "remove Gate", "wire": {"type": "command", "args": {"action": "delete", "target": "Gate"}}}
+{"id": "th-1435", "names": ["Kickoff"], "text": "make Kickoff bigger", "wire": {"type": "command", "args": {"action": "resize", "target": "Kickoff"}}}
+{"id": "th-1436", "names": ["Qa"], "text": "make Qa smaller", "wire": {"type": "command", "args": {"action": "resize", "target": "Qa"}}}
+{"id": "th-1437", "names": ["Design"], "text": "rename Design to Spec", "wire": {"type": "command", "args": {"action": "rename", "target": "Design", "name": "Spec"}}}
+{"id": "th-1438", "names": ["Beta"], "text": "call Beta Preview", "wire": {"type": "command", "args": {"action": "rename", "target": "Beta", "name": "Preview"}}}
+{"id": "th-1439", "names": ["Retro"], "text": "label Retro 'Lessons'", "wire": {"type": "command", "args": {"action": "label", "target": "Retro", "label": "Lessons"}}}
+{"id": "th-1440", "names": ["Launch"], "text": "write 'Go live' on Launch", "wire": {"type": "command", "args": {"action": "label", "target": "Launch", "label": "Go live"}}}
+{"id": "th-1441", "names": ["Sprint"], "text": "copy Sprint", "wire": {"type": "command", "args": {"action": "duplicate", "target": "Sprint"}}}
+{"id": "th-1442", "names": ["Hotfix"], "text": "make 2 copies of Hotfix", "wire": {"type": "command", "args": {"action": "duplicate", "target": "Hotfix", "count": "2"}}}
+{"id": "th-1443", "names": ["Design", "Qa"], "text": "swap Design and Qa", "wire": {"type": "command", "args": {"action": "swap", "target": "Design,Qa"}}}
+{"id": "th-1444", "names": ["Retro", "Launch"], "text": "trade Retro and Launch", "wire": {"type": "command", "args": {"action": "swap", "target": "Retro,Launch"}}}
+{"id": "th-1445", "names": ["Kickoff", "Design"], "text": "unlink Kickoff from Design", "wire": {"type": "command", "args": {"action": "disconnect", "from": "Kickoff", "to": "Design"}}}
+{"id": "th-1446", "names": ["Beta", "Launch"], "text": "remove the link between Beta and Launch", "wire": {"type": "command", "args": {"action": "disconnect", "from": "Beta", "to": "Launch"}}}
+{"id": "th-1447", "names": ["Kickoff", "Beta", "Qa"], "text": "align Kickoff, Beta and Qa horizontally", "wire": {"type": "command", "args": {"action": "align", "target": "Kickoff,Beta,Qa", "axis": "horizontal"}}}
+{"id": "th-1448", "names": [], "text": "line up every green shape vertically", "wire": {"type": "command", "args": {"action": "align", "target": "mention(color=green,quantifier=all)", "axis": "vertical"}}}
+{"id": "th-1449", "names": ["Qa", "Retro"], "text": "arrange Qa and Retro in a column", "wire": {"type": "command", "args": {"action": "arrange", "target": "Qa,Retro", "layout": "column"}}}
+{"id": "th-1450", "names": [], "text": "tidy up the whole timeline into a circle", "wire": {"type": "command", "args": {"action": "arrange", "layout": "circle"}}}
+{"id": "th-1451", "names": ["Kickoff", "Launch", "Ship"], "text": "spread Kickoff, Launch and Ship evenly horizontally", "wire": {"type": "command", "args": {"action": "distribute", "target": "Kickoff,Launch,Ship", "axis": "horizontal"}}}
+{"id": "th-1452", "names": [], "text": "distribute the purple squares vertically", "wire": {"type": "command", "args": {"action": "distribute", "target": "mention(color=purple,quantifier=all,shape=square)", "axis": "vertical"}}}
+{"id": "th-1453", "names": ["Freeze"], "text": "bring Freeze to the front", "wire": {"type": "command", "args": {"action": "toFront", "target": "Freeze"}}}
+{"id": "th-1454", "names": [], "text": "raise the newest circle to the top layer", "wire": {"type": "command", "args": {"action": "toFront", "target": "mention(recency=newest,shape=circle)"}}}
+{"id": "th-1455", "names": ["Retro"], "text": "send Retro to the back", "wire": {"type": "command", "args": {"action": "toBack", "target": "Retro"}}}
+{"id": "th-1456", "names": [], "text": "push the oldest hexagon to the back", "wire": {"type": "command", "args": {"action": "toBack", "target": "mention(recency=oldest,shape=hexagon)"}}}
+{"id": "th-1457", "names": [], "text": "undo the change", "wire": {"type": "command", "args": {"action": "undo"}}}
+{"id": "th-1458", "names": [], "text": "roll that back please", "wire": {"type": "command", "args": {"action": "undo"}}}
+{"id": "th-1459", "names": [], "text": "redo the last one", "wire": {"type": "command", "args": {"action": "redo"}}}
+{"id": "th-1460", "names": [], "text": "bring back the step I undid", "wire": {"type": "command", "args": {"action": "redo"}}}
+{"id": "th-1461", "names": [], "text": "forget the defaults", "wire": {"type": "command", "args": {"action": "forget"}}}
+{"id": "th-1462", "names": [], "text": "remove all the stored defaults", "wire": {"type": "command", "args": {"action": "forget"}}}
+{"id": "th-1463", "names": [], "text": "how many green things are there", "wire": {"type": "question", "args": {"ask": "count", "color": "green"}}}
+{"id": "th-1464", "names": [], "text": "how many shapes aren't gold", "wire": {"type": "question", "args": {"ask": "count", "notColor": "gold"}}}
+{"id": "th-1465", "names": ["Launch"], "text": "how many shapes are below Launch", "wire": {"type": "question", "args": {"ask": "count", "position": "below", "anchor": "Launch"}}}
+{"id": "th-1466", "names": [], "text": "is there a purple square", "wire": {"type": "question", "args": {"ask": "exists", "shape": "square", "color": "purple"}}}
+{"id": "th-1467", "names": [], "text": "any red hexagons on the plan?", "wire": {"type": "question", "args": {"ask": "exists", "shape": "hexagon", "color": "red"}}}
+{"id": "th-1468", "names": [], "text": "list the triangles", "wire": {"type": "question", "args": {"ask": "list", "shape": "triangle"}}}
+{"id": "th-1469", "names": [], "text": "which ones aren't black", "wire": {"type": "question", "args": {"ask": "list", "notColor": "black"}}}
+{"id": "th-1470", "names": ["Beta"], "text": "what shape is Beta", "wire": {"type": "question", "args": {"ask": "property", "target": "Beta", "property": "shape"}}}
+{"id": "th-1471", "names": ["Ship"], "text": "what's the color of Ship", "wire": {"type": "question", "args": {"ask": "property", "target": "Ship", "property": "color"}}}
+{"id": "th-1472", "names": [], "text": "how big is the newest square", "wire": {"type": "question", "args": {"ask": "property", "target": "mention(recency=newest,shape=square)", "property": "size"}}}
+{"id": "th-1473", "names": ["Qa"], "text": "tell me what Qa covers", "wire": {"type": "question", "args": {"ask": "describe", "target": "Qa"}}}
+{"id": "th-1474", "names": [], "text": "describe the whole timeline", "wire": {"type": "question", "args": {"ask": "describe"}}}
+{"id": "th-1475", "names": ["Kickoff"], "text": "what's linked to Kickoff", "wire": {"type": "question", "args": {"ask": "neighbors", "target": "Kickoff"}}}
+{"id": "th-1476", "names": ["Retro"], "text": "who's next to Retro", "wire": {"type": "question", "args": {"ask": "neighbors", "target": "Retro"}}}
+{"id": "th-1477", "names": ["Beta", "Launch"], "text": "is Beta directly connected to Launch", "wire": {"type": "question", "args": {"ask": "connected", "target": "Beta", "anchor": "Launch"}}}
+{"id": "th-1478", "names": ["Freeze", "Ship"], "text": "are Freeze and Ship linked", "wire": {"type": "question", "args": {"ask": "connected", "target": "Freeze", "anchor": "Ship"}}}
+{"id": "th-1479", "names": ["Design"], "text": "how many links does Design have", "wire": {"type": "question", "args": {"ask": "degree", "target": "Design"}}}
+{"id": "th-1480", "names": ["Launch"], "text": "how many connections touch Launch", "wire": {"type": "question", "args": {"ask": "degree", "target": "Launch"}}}
+{"id": "th-1481", "names": ["Kickoff", "Ship"], "text": "is there a route from Kickoff to Ship", "wire": {"type": "question", "args": {"ask": "path", "from": "Kickoff", "to": "Ship"}}}
+{"id": "th-1482", "names": ["Spike", "Qa"], "text": "how do I get from Spike to Qa", "wire": {"type": "question", "args": {"ask": "path", "from": "Spike", "to": "Qa"}}}
+{"id": "th-1483", "names": ["Kickoff"], "text": "what's reachable from Kickoff", "wire": {"type": "question", "args": {"ask": "reachable", "from": "Kickoff"}}}
+{"id": "th-1484", "names": ["Beta"], "text": "from Beta, what can you reach", "wire": {"type": "question", "args": {"ask": "reachable", "from": "Beta"}}}
+{"id": "th-1485", "names": [], "text": "is there a loop in the release plan", "wire": {"type": "question", "args": {"ask": "cycle"}}}
+{"id": "th-1486", "names": [], "text": "do any milestones link back in a circle", "wire": {"type": "question", "args": {"ask": "cycle"}}}
+{"id": "th-1487", "names": [], "text": "which rules are in effect", "wire": {"type": "question", "args": {"ask": "rules"}}}
+{"id": "th-1488", "names": [], "text": "show me the defaults", "wire": {"type": "question", "args": {"ask": "rules"}}}
+{"id": "th-1489", "names": ["Kickoff"], "text": "is Kickoff green", "wire": {"type": "question", "args": {"ask": "check", "target": "Kickoff", "color": "green"}}}
+{"id": "th-1490", "names": ["Design"], "text": "is Design a hexagon", "wire": {"type": "question", "args": {"ask": "check", "target": "Design", "shape": "hexagon"}}}
+{"id": "th-1491", "names": ["Gate", "Qa"], "text": "is Gate bigger than Qa", "wire": {"type": "question", "args": {"ask": "check", "target": "Gate", "comparison": "bigger", "anchor": "Qa"}}}
+{"id": "th-1492", "names": [], "text": "what's the rightmost milestone", "wire": {"type": "question", "args": {"ask": "extreme", "superlative": "rightmost"}}}
+{"id": "th-1493", "names": [], "text": "which one is the largest", "wire": {"type": "question", "args": {"ask": "extreme", "superlative": "biggest"}}}
+{"id": "th-1494", "names": ["Launch"], "text": "what's nearest to Launch", "wire": {"type": "question", "args": {"ask": "nearest", "anchor": "Launch", "superlative": "closest"}}}
+{"id": "th-1495", "names": ["Spike"], "text": "which red shape is farthest from Spike", "wire": {"type": "question", "args": {"ask": "nearest", "anchor": "Spike", "superlative": "farthest", "color": "red"}}}
+{"id": "th-1496", "names": ["Hotfix"], "text": "Hotfix is yellow", "wire": {"type": "fact", "args": {"target": "Hotfix", "color": "yellow"}}}
+{"id": "th-1497", "names": ["Sprint", "Design"], "text": "Sprint sits below Design", "wire": {"type": "fact", "args": {"target": "Sprint", "position": "below", "anchor": "Design"}}}
+{"id": "th-1498", "names": [], "text": "new diamonds should be teal from now on", "wire": {"type": "rule", "args": {"shape": "diamond", "color": "teal"}}}
+{"id": "th-1499", "names": [], "text": "new hexagons should be large", "wire": {"type": "rule", "args": {"shape": "hexagon", "size": "large"}}}
+{"id": "th-1500", "names": [], "text": "from now on new things come out lime", "wire": {"type": "rule", "args": {"color": "lime"}}}

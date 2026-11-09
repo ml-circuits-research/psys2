@@ -1,0 +1,100 @@
+{"id": "th-1301", "names": ["Board"], "text": "add a red hexagon named Pawn left of Board"}
+{"id": "th-1302", "names": [], "text": "a huge gold card labeled 'Start' at the top"}
+{"id": "th-1303", "names": ["Deck"], "text": "drop 6 tiny white circles near the Deck"}
+{"id": "th-1304", "names": [], "text": "stick a teal star at the center named Prize"}
+{"id": "th-1305", "names": ["Dice", "Pawn"], "text": "a black diamond named Tile between Dice and Pawn"}
+{"id": "th-1306", "names": [], "text": "lol a small pink triangle in the top right"}
+{"id": "th-1307", "names": ["Card"], "text": "put a navy oval right next to Card"}
+{"id": "th-1308", "names": [], "text": "a large orange square named Jail at the bottomLeft"}
+{"id": "th-1309", "names": ["Token"], "text": "two lime hexagons right under Token"}
+{"id": "th-1310", "names": [], "text": "tiny gray box at the bottom"}
+{"id": "th-1311", "names": ["Board"], "text": "toss in a magenta circle labeled 'Bonus' above Board"}
+{"id": "th-1312", "names": ["Board"], "text": "Board should be blue"}
+{"id": "th-1313", "names": ["Dice"], "text": "make Dice white"}
+{"id": "th-1314", "names": ["Pawn"], "text": "turn Pawn into a star"}
+{"id": "th-1315", "names": ["Deck"], "text": "make Deck huge"}
+{"id": "th-1316", "names": ["Card"], "text": "turn Card into a triangle"}
+{"id": "th-1317", "names": ["Token"], "text": "Token should be tiny"}
+{"id": "th-1318", "names": ["Prize"], "text": "paint Prize gold"}
+{"id": "th-1319", "names": [], "text": "make the boxes that aren't gray yellow"}
+{"id": "th-1320", "names": ["Pawn", "Dice", "Board"], "text": "link Pawn and Dice to Board, all of them"}
+{"id": "th-1321", "names": ["Dice", "Card"], "text": "a dashed line from Dice to Card"}
+{"id": "th-1322", "names": ["Token", "Deck"], "text": "two-way link between Token and Deck"}
+{"id": "th-1323", "names": ["Board", "Prize", "Card"], "text": "chain Board, Prize and Card"}
+{"id": "th-1324", "names": ["Tile", "Pawn"], "text": "a purple connection from Tile to Pawn"}
+{"id": "th-1325", "names": ["Prize"], "text": "move Prize 15 pixels up"}
+{"id": "th-1326", "names": ["Tile"], "text": "shift Tile right by 22 px"}
+{"id": "th-1327", "names": ["Card", "Deck"], "text": "put Card left of Deck"}
+{"id": "th-1328", "names": ["Jail"], "text": "Jail goes to the bottom right"}
+{"id": "th-1329", "names": ["Token"], "text": "drag Token left"}
+{"id": "th-1330", "names": ["Bonus", "Board"], "text": "move Bonus above Board"}
+{"id": "th-1331", "names": ["Pawn", "Dice", "Card"], "text": "slide Pawn between Dice and Card"}
+{"id": "th-1332", "names": ["Bonus"], "text": "get rid of Bonus"}
+{"id": "th-1333", "names": [], "text": "delete all the diamonds that aren't black"}
+{"id": "th-1334", "names": ["Tile"], "text": "remove Tile"}
+{"id": "th-1335", "names": ["Board"], "text": "could you enlarge Board a bit"}
+{"id": "th-1336", "names": ["Token"], "text": "shrink Token"}
+{"id": "th-1337", "names": ["Pawn"], "text": "rename Pawn to Piece"}
+{"id": "th-1338", "names": ["Card"], "text": "call Card Chance"}
+{"id": "th-1339", "names": ["Deck"], "text": "label Deck 'Draw'"}
+{"id": "th-1340", "names": ["Jail"], "text": "put 'Visit' on Jail"}
+{"id": "th-1341", "names": ["Token"], "text": "copy Token"}
+{"id": "th-1342", "names": ["Tile"], "text": "make 3 copies of Tile"}
+{"id": "th-1343", "names": ["Dice", "Pawn"], "text": "swap Dice and Pawn"}
+{"id": "th-1344", "names": ["Card", "Deck"], "text": "trade Card with Deck"}
+{"id": "th-1345", "names": ["Pawn", "Board"], "text": "unlink Pawn from Board"}
+{"id": "th-1346", "names": ["Dice", "Card"], "text": "cut the link between Dice and Card"}
+{"id": "th-1347", "names": ["Board", "Dice", "Token"], "text": "align Board, Dice and Token vertically"}
+{"id": "th-1348", "names": [], "text": "align the teal stars horizontally"}
+{"id": "th-1349", "names": ["Deck", "Card"], "text": "arrange Deck and Card in a row"}
+{"id": "th-1350", "names": [], "text": "put the whole board in a grid"}
+{"id": "th-1351", "names": ["Board", "Deck", "Dice"], "text": "spread Board, Deck and Dice evenly vertically"}
+{"id": "th-1352", "names": [], "text": "distribute the white circles horizontally"}
+{"id": "th-1353", "names": ["Prize"], "text": "bring Prize to the front"}
+{"id": "th-1354", "names": [], "text": "pull the newest diamond to the front"}
+{"id": "th-1355", "names": ["Jail"], "text": "send Jail back"}
+{"id": "th-1356", "names": [], "text": "the oldest triangle goes to the back"}
+{"id": "th-1357", "names": [], "text": "scratch that"}
+{"id": "th-1358", "names": [], "text": "undo!"}
+{"id": "th-1359", "names": [], "text": "redo that change"}
+{"id": "th-1360", "names": [], "text": "reapply"}
+{"id": "th-1361", "names": [], "text": "forget everything you know about defaults"}
+{"id": "th-1362", "names": [], "text": "drop the defaults you set for me"}
+{"id": "th-1363", "names": [], "text": "how many white things are there"}
+{"id": "th-1364", "names": [], "text": "how many pieces aren't black"}
+{"id": "th-1365", "names": ["Board"], "text": "how many shapes are right of Board"}
+{"id": "th-1366", "names": [], "text": "is there a gold rectangle"}
+{"id": "th-1367", "names": [], "text": "any lime hexagons out there?"}
+{"id": "th-1368", "names": [], "text": "list the circles"}
+{"id": "th-1369", "names": [], "text": "what's not pink"}
+{"id": "th-1370", "names": ["Pawn"], "text": "what shape is Pawn"}
+{"id": "th-1371", "names": ["Prize"], "text": "what color is Prize"}
+{"id": "th-1372", "names": [], "text": "what's the size of the oldest triangle"}
+{"id": "th-1373", "names": ["Deck"], "text": "tell me about Deck"}
+{"id": "th-1374", "names": [], "text": "describe the board game as a whole"}
+{"id": "th-1375", "names": ["Board"], "text": "which pieces are next to Board"}
+{"id": "th-1376", "names": ["Card"], "text": "who's connected to Card"}
+{"id": "th-1377", "names": ["Pawn", "Board"], "text": "is Pawn connected to Board"}
+{"id": "th-1378", "names": ["Token", "Deck"], "text": "are Token and Deck directly joined"}
+{"id": "th-1379", "names": ["Board"], "text": "how many lines are on Board"}
+{"id": "th-1380", "names": ["Dice"], "text": "how many links does Dice have"}
+{"id": "th-1381", "names": ["Tile", "Jail"], "text": "is there a path from Tile to Jail"}
+{"id": "th-1382", "names": ["Pawn", "Prize"], "text": "how can I reach Prize from Pawn"}
+{"id": "th-1383", "names": ["Board"], "text": "reachable from Board?"}
+{"id": "th-1384", "names": ["Deck"], "text": "where can Deck go"}
+{"id": "th-1385", "names": [], "text": "is there a loop in the board"}
+{"id": "th-1386", "names": [], "text": "any closed circuits?"}
+{"id": "th-1387", "names": [], "text": "what rules do we use"}
+{"id": "th-1388", "names": [], "text": "show me your active defaults"}
+{"id": "th-1389", "names": ["Dice"], "text": "is Dice white"}
+{"id": "th-1390", "names": ["Jail"], "text": "is Jail a rectangle"}
+{"id": "th-1391", "names": ["Token", "Deck"], "text": "is Token smaller than Deck"}
+{"id": "th-1392", "names": [], "text": "which is the topmost piece"}
+{"id": "th-1393", "names": [], "text": "what's the smallest item"}
+{"id": "th-1394", "names": ["Board"], "text": "what's the closest thing to Board"}
+{"id": "th-1395", "names": ["Card"], "text": "which black shape is the farthest from Card"}
+{"id": "th-1396", "names": ["Prize"], "text": "Prize is teal"}
+{"id": "th-1397", "names": ["Bonus", "Board"], "text": "Bonus sits right of Board"}
+{"id": "th-1398", "names": [], "text": "new ovals should be huge"}
+{"id": "th-1399", "names": [], "text": "from now on new circles are navy"}
+{"id": "th-1400", "names": [], "text": "every new square should be small from now on"}

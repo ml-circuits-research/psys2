@@ -1,0 +1,40 @@
+{"id":"op-0161","domain":"aquarium","names":["Coral","Kelp"],"text":"Add a small orange ellipse called Nemo under Coral and left of Kelp. Then a gold star above Coral, near the top. Is anything right of Kelp in the bottom right?"}
+{"id":"op-0162","domain":"city map","names":["Park","Mall"],"text":"Create a red square next to Mall in the bottom right corner and a green circle under Park but above Mall."}
+{"id":"op-0163","domain":"pizza","names":["Dough","Sauce","Cheese"],"text":"Put a tiny white circle called Basil between Sauce and Cheese, near the top. Then a navy diamond called Olive beneath Dough and right of Sauce. How many shapes are there in total?"}
+{"id":"op-0164","domain":"factory","names":["Belt","Press","Bin"],"text":"Create an orange hexagon above Belt but beneath Press. Another hexagon, white, right of Bin and below Belt."}
+{"id":"op-0165","domain":"school","names":["Room1","Room2","Hall"],"text":"Make a lime rectangle called Lab in the upper left corner, right of Room1. Make a pink one called Gym left of Room2 in the bottom right."}
+{"id":"op-0166","domain":"org chart","names":["Boss","Dev"],"text":"Add a gold circle named Intern under Boss and next to Dev."}
+{"id":"op-0167","domain":"hiking map","names":["Camp","River","Hill"],"text":"Throw a green triangle in the top left corner, left of Hill, then another one in the top right, right of River."}
+{"id":"op-0168","domain":"UI","names":["Navbar","Content","Banner"],"text":"Slap a huge white rectangle between Navbar and Content, under Banner."}
+{"id":"op-0169","domain":"chat","names":["Sun","Cloud"],"text":"um make a yellow circle, no a gold circle, above Cloud and right of Sun, thanks"}
+{"id":"op-0170","domain":"night sky","names":["Moon"],"text":"Create a black star near the top, left of Moon."}
+{"id":"op-0171","domain":"devops","names":["Build","Test","Prod"],"text":"Add a diamond called Gate between Build and Test and above Prod, then a diamond called Approve between Test and Prod, near the bottom. Link Approve to Prod."}
+{"id":"op-0172","domain":"ecology homework","names":["Sun","Plant","Cow"],"text":"tonight's homework is the farm ecosystem. Add a brown ellipse called Soil under Plant and left of Cow. Add a gray rectangle called Barn in the bottom right corner next to Cow. Make Sun yellow, no, orange. How many shapes are below Sun and right of Plant? Last, put a small blue star called Rain between Sun and Plant near the top."}
+{"id":"op-0173","domain":"castle","names":["Gate","Wall","Moat"],"text":"Is Gate beneath Wall and over Moat?"}
+{"id":"op-0174","domain":"friends","names":["Bob","Amy","Cy"],"text":"Is Bob left of Amy and also near Cy? Is Cy in the top right corner, above Amy?"}
+{"id":"op-0175","domain":"friends","names":["Jo","Ann","Bea"],"text":"Does Jo sit right of Ann but under Bea? Does Bea sit near the top, left of Ann?"}
+{"id":"op-0176","domain":"house","names":["Hub","Floor"],"text":"are there any circles below Hub and above Floor?"}
+{"id":"op-0177","domain":"warehouse","names":["Wall","Floor"],"text":"How many red shapes are left of Wall and above Floor? And how many blue ones are in the top left, left of Wall?"}
+{"id":"op-0178","domain":"living room","names":["Lamp","Table"],"text":"Which shapes are beneath Lamp and on top of Table? Which are in the bottom left, left of Table?"}
+{"id":"op-0179","domain":"design","names":["Hub","Roof"],"text":"List all the squares that are next to Hub and below Roof."}
+{"id":"op-0180","domain":"castle","names":["Keep","Tower1","Tower2"],"text":"Tell me whether anything is above Keep and between Tower1 and Tower2."}
+{"id":"op-0181","domain":"logic","names":["Zed","Yan","Xi"],"text":"Zed is left of Yan and over Xi. Yan is in the top right, right of Xi."}
+{"id":"op-0182","domain":"farm","names":["Cow","Sky","Barn","Hen"],"text":"Cow is under Sky and beside Barn. Hen is next to Barn in the bottom left."}
+{"id":"op-0183","domain":"garden","names":["Rose","Tulip","Daisy","Sun"],"text":"Put the Rose between Tulip and Daisy but under Sun."}
+{"id":"op-0184","domain":"chess","names":["Rook","Pawn"],"text":"Slide Rook to the bottom left corner, under Pawn."}
+{"id":"op-0185","domain":"office","names":["Orb","Tray","Cup"],"text":"Move Orb above Tray and right of Cup. Then color Orb red."}
+{"id":"op-0186","domain":"camp site","names":["Tent","Fire","Lake","Canoe","Pier"],"text":"hey! trying to lay out a camp site. Tent goes in the top left, next to Fire and above Lake. Canoe goes beneath Lake but left of Pier. Also give Fire a red color, and what is in the bottom right, right of Pier? One more thing: add a brown rectangle called Hut between Tent and Fire, near the top."}
+{"id":"op-0187","domain":"typos","names":["Pump","Tank","Valve"],"text":"Moev Pump benath Tank and lft of Valve. Is Valve in the top right?"}
+{"id":"op-0188","domain":"house plan","names":["Door","Wall","Roof","Window"],"text":"Is possible to put Door at right of Wall and under Roof? And Window in top left corner near Roof?"}
+{"id":"op-0189","domain":"quick","names":["Alpha","Beta"],"text":"Draw a gold star between Alpha and Beta, near the bottom."}
+{"id":"op-0190","domain":"network","names":["Hub","Gate"],"text":"Please add two tiny red circles under Hub and right of Gate, and one huge blue circle in the top left, next to Hub."}
+{"id":"op-0191","domain":"office","names":["Orb","Tray"],"text":"Set Orb to green and put Orb above Tray, in the middle."}
+{"id":"op-0192","domain":"layout","names":["Left","Right","Roof"],"text":"Is there anything between Left and Right and below Roof? If not, create a gray hexagon between Left and Right, below Roof."}
+{"id":"op-0193","domain":"logic puzzle","names":["Mark","Nora"],"text":"Mark is left of Nora and right of Nora. Nora is above Mark and below Mark, which is silly."}
+{"id":"op-0194","domain":"board game","names":["Piece","Board"],"text":"Move Piece above Board and below Board."}
+{"id":"op-0195","domain":"forest","names":["Tree"],"text":"Which shapes are left of Tree and right of Tree?"}
+{"id":"op-0196","domain":"lan party","names":["Hub","Pc1","Pc2","Pc3","Pc4"],"text":"Connect Hub to Pc1, Pc2 and Pc3. Delete Pc4. Make a purple triangle below Hub, left of Pc1."}
+{"id":"op-0197","domain":"sandwich","names":["Bread","Ham","Cheese","Lettuce"],"text":"I need a diagram of a sandwich. Place Ham above Bread and below Cheese. Put Lettuce in the middle, right of Ham. Is Cheese the topmost?"}
+{"id":"op-0198","domain":"cleanup","names":["Hub"],"text":"Too crowded. Select every circle and move it to the top right, right of Hub, then make them all blue."}
+{"id":"op-0199","domain":"sunset","names":["Sun","Moon"],"text":"Add a purple star under Sun, on top of Moon, and give it the label Dusk."}
+{"id":"op-0200","domain":"banner","names":["Banner"],"text":"Create a cyan circle at the top left. Also a pink hexagon in the top right, below Banner."}

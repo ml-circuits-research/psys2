@@ -1,0 +1,40 @@
+{"id":"op-0001","domain":"network diagram","names":["Router","Lan","Printer"],"text":"ok so I'm cleaning up the office map. Put a gray hexagon called Switch below Router but above Lan, there's a gap there. Is Printer left of Router and also below Lan? I never remember where I left it."}
+{"id":"op-0002","domain":"flowchart","names":["Start","Check","Done"],"text":"Move Done under Start and to the right of Check please, it should read left to right. Then make Check teal."}
+{"id":"op-0003","domain":"wireframe","names":["Hub"],"text":"Draw a red star in the top left, right of Hub."}
+{"id":"op-0004","domain":"kitchen recipe","names":["Flour","Eggs","Milk","Batter"],"text":"Pancake day! Flour, Eggs and Milk should all feed into Batter, so wire them up. And uh, put a yellow circle named Butter between Flour and Eggs, near the top. How many circles are there then?"}
+{"id":"op-0005","domain":"org chart","names":["Ceo","Cto","Cfo","Cmo"],"text":"Cmo is sitting in the wrong spot. Slide it to the bottom left, left of Cfo, because the marketing team reports there. Who is the rightmost one now?"}
+{"id":"op-0006","domain":"game map","names":["Castle","Forest","River"],"text":"Add a green triangle called Camp right of Forest in the upper right corner. Then rename River to Creek, no, to Brook. Is Castle beneath Forest?"}
+{"id":"op-0007","domain":"biology","names":["Cell","Nucleus","Wall"],"text":"Nucleus belongs inside Cell obviously. Is the Wall underneath Nucleus and next to Cell? It looks like it to me."}
+{"id":"op-0008","domain":"UI wireframe","names":["Header","Menu","Footer"],"text":"For the wireframe I need a blue rectangle named Banner above Menu and below Header. Also delete Footer, nobody needs it."}
+{"id":"op-0009","domain":"school diagram","names":["Math","Art","Gym"],"text":"Which shapes are below Math but above Gym? And is there anything left of Art in the top left corner?"}
+{"id":"op-0010","domain":"sports play","names":["Ball","Goal","Keeper"],"text":"Ball is left of Goal and above Keeper right now. I want Keeper moved just under Goal, a bit to the right of Ball."}
+{"id":"op-0011","domain":"mind map","names":["Idea","Pro","Con"],"text":"thx for the last one. Add a purple diamond called Risk under Idea, left of Con. Make it large."}
+{"id":"op-0012","domain":"cloud architecture","names":["Api","Db","Cache","Queue"],"text":"Is Queue above Db and to the left of Api? If so I'll leave it. If not, place Queue between Api and Cache, below Db."}
+{"id":"op-0013","domain":"family tree","names":["Anna","Boris","Carl"],"text":"Is Carl below Anna but above Boris?"}
+{"id":"op-0014","domain":"floor plan","names":["Kitchen","Hall","Bath"],"text":"Put a small white square called Closet in the top right corner, next to Hall. Then how many squares are there?"}
+{"id":"op-0015","domain":"pipeline","names":["Build","Test","Deploy"],"text":"Build is above Test and left of Deploy. Draw an arrow from Deploy to Build, it loops back."}
+{"id":"op-0016","domain":"story board","names":["Hero","Villain","Tower"],"text":"Place Hero in the middle but above Tower. Send Villain to the bottom right, right of Tower. Quick question, are there any green shapes?"}
+{"id":"op-0017","domain":"solar system","names":["Sun","Earth","Mars"],"text":"The Earth should be beneath the Sun and a little left of Mars, can you do that? I think Mars is too close."}
+{"id":"op-0018","domain":"garden plan","names":["Pond","Shed","Bed"],"text":"Create a lime ellipse called Lawn near the bottom, left of Shed."}
+{"id":"op-0019","domain":"circuit","names":["Battery","Bulb","Switch"],"text":"which shapes sit on top of Battery and right of Switch? just curious about the layout"}
+{"id":"op-0020","domain":"library","names":["Desk","Shelf","Door"],"text":"Put a brown rectangle called Cart to the left of Desk and underneath Shelf. Then connect Cart to Door with a dotted line."}
+{"id":"op-0021","domain":"space game","names":["Sun","Moon","Star","Comet"],"text":"uh okay so Sun should be, no wait, Moon should go in the upper left corner next to Star. Then uh remove Comet."}
+{"id":"op-0022","domain":"network","names":["Hub","Gate"],"text":"Please make one orange triangle, place it above Hub and on the right side of Gate. After this tell me how many shapes are at left of Hub."}
+{"id":"op-0023","domain":"biology homework","names":["Cell","Nucleus","Membrane"],"text":"so for my bio homework I have Cell, Nucleus and Membrane on the page. First, move Nucleus below Cell and right of Membrane (ugh, my drawing is a mess). Then give Membrane a label \"outer layer\". Is Nucleus bigger than Cell? Also draw a blue oval named Vacuole between Cell and Membrane near the bottom. Thanks a lot!"}
+{"id":"op-0024","domain":"plumbing","names":["Pump","Tank","Valve"],"text":"Move Pump to the right of Tank and under Valve."}
+{"id":"op-0025","domain":"astronomy","names":["Moon","Earth","Mars"],"text":"Plese put a pink star beneth Moon and abov Earth. Is anything in the botom right corner left of Mars?"}
+{"id":"op-0026","domain":"servers","names":["Server1","Server2","Server3"],"text":"Three servers are drawn. Server1 stays in the top right, Server2 goes under Server1 and left of Server3, and then connect Server2 to Server3."}
+{"id":"op-0027","domain":"org chart","names":["Ceo","Cto","Cmo"],"text":"Is it true that Cmo is above Ceo and below Cto? Because if so I'll rename Cmo to Head."}
+{"id":"op-0028","domain":"bus map","names":["Bus"],"text":"how many circles are right of Bus and in the bottom right?"}
+{"id":"op-0029","domain":"game design","names":["Door"],"text":"Drop a huge red circle called Boss in the center, but above Door. And a tiny white star next to Boss, in the top left."}
+{"id":"op-0030","domain":"factory","names":["Sensor","Hub","Pump","Valve"],"text":"The Sensor is left of Hub, and above Pump too. And Pump is right of Valve in the bottom left."}
+{"id":"op-0031","domain":"living room","names":["Lamp","Fan","Sofa","Rug"],"text":"Put Lamp and Fan below Sofa but above Rug."}
+{"id":"op-0032","domain":"town map","names":["Gate","Tower","Well"],"text":"Could you shift every circle to the left of Gate but below Tower? It's cluttered."}
+{"id":"op-0033","domain":"friends","names":["Mia","Leo"],"text":"Is Mia in the top right corner, right of Leo? ok thanks!"}
+{"id":"op-0034","domain":"castle","names":["Wall1","Wall2","Road"],"text":"Add a navy diamond named Gate between Wall1 and Wall2 and also above Road, then color the Road gray."}
+{"id":"op-0035","domain":"layout","names":["Y","Star"],"text":"Hmm, I think Star should go right of Y in the top left."}
+{"id":"op-0036","domain":"harbor","names":["Dock","Pier"],"text":"List the shapes above Dock and left of Pier."}
+{"id":"op-0037","domain":"stage","names":["Tom"],"text":"Leave Tom alone for now. Create two red squares near the bottom, left of Tom."}
+{"id":"op-0038","domain":"logic","names":["Rb","Qb","Pb"],"text":"Rb is above Qb and below Pb; Qb is not below Rb obviously."}
+{"id":"op-0039","domain":"astronomy class","names":["Moon","Earth","Mars"],"text":"Can you check if Moon is under Earth but over Mars? Also swap Earth and Mars."}
+{"id":"op-0040","domain":"sci-fi","names":["Dome"],"text":"Pop a gold hexagon at the top right, near Dome. And a small cyan one beside it."}

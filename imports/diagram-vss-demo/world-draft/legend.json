@@ -1,0 +1,2554 @@
+[
+ {
+  "key": "target",
+  "plugins": [
+   "core"
+  ],
+  "ask": "Which shapes does it apply to?",
+  "kind": "names",
+  "values": null,
+  "cueNote": null
+ },
+ {
+  "key": "quantifier",
+  "plugins": [
+   "core"
+  ],
+  "ask": "One specific shape, or all that match?",
+  "kind": "enum",
+  "values": {
+   "all": [
+    "all",
+    "every",
+    "each",
+    "everything"
+   ]
+  },
+  "cueNote": null
+ },
+ {
+  "key": "count",
+  "plugins": [
+   "core"
+  ],
+  "ask": "How many?",
+  "kind": "number",
+  "values": null,
+  "cueNote": null
+ },
+ {
+  "key": "name",
+  "plugins": [
+   "core"
+  ],
+  "ask": "What is it called?",
+  "kind": "name",
+  "values": null,
+  "cueNote": null
+ },
+ {
+  "key": "notColor",
+  "plugins": [
+   "core"
+  ],
+  "ask": "Which colour must the shapes NOT have?",
+  "kind": "enum",
+  "values": {
+   "red": [
+    "not red"
+   ],
+   "orange": [
+    "not orange"
+   ],
+   "yellow": [
+    "not yellow"
+   ],
+   "gold": [
+    "not gold"
+   ],
+   "lime": [
+    "not lime"
+   ],
+   "green": [
+    "not green"
+   ],
+   "teal": [
+    "not teal"
+   ],
+   "cyan": [
+    "not cyan"
+   ],
+   "blue": [
+    "not blue"
+   ],
+   "navy": [
+    "not navy"
+   ],
+   "indigo": [
+    "not indigo"
+   ],
+   "purple": [
+    "not purple"
+   ],
+   "magenta": [
+    "not magenta"
+   ],
+   "pink": [
+    "not pink"
+   ],
+   "brown": [
+    "not brown"
+   ],
+   "gray": [
+    "not gray"
+   ],
+   "black": [
+    "not black"
+   ],
+   "white": [
+    "not white"
+   ]
+  },
+  "cueNote": null
+ },
+ {
+  "key": "recency",
+  "plugins": [
+   "core"
+  ],
+  "ask": "The most recently drawn one, or the first one?",
+  "kind": "enum",
+  "values": {
+   "newest": [
+    "new",
+    "newest",
+    "last",
+    "latest",
+    "most recent"
+   ],
+   "oldest": [
+    "first",
+    "oldest",
+    "earliest"
+   ]
+  },
+  "cueNote": null
+ },
+ {
+  "key": "action",
+  "plugins": [
+   "history",
+   "shapes",
+   "groups",
+   "connections",
+   "layout",
+   "rules",
+   "ops",
+   "core"
+  ],
+  "ask": "What should happen?",
+  "kind": "enum",
+  "values": {
+   "undo": [
+    "undo",
+    "revert"
+   ],
+   "redo": [
+    "redo",
+    "reapply",
+    "re-apply"
+   ],
+   "create": [
+    "draw",
+    "create",
+    "add",
+    "make",
+    "put",
+    "place",
+    "insert",
+    "sketch",
+    "build",
+    "spawn",
+    "throw",
+    "slap",
+    "pop",
+    "stick",
+    "plonk"
+   ],
+   "delete": [
+    "delete",
+    "remove",
+    "erase",
+    "drop",
+    "clear",
+    "wipe",
+    "reset",
+    "get rid of",
+    "kill",
+    "trash",
+    "axe",
+    "ditch",
+    "zap",
+    "banish",
+    "nuke"
+   ],
+   "move": [
+    "move",
+    "shift",
+    "drag",
+    "push",
+    "nudge",
+    "slide",
+    "reposition",
+    "relocate",
+    "scoot",
+    "shove",
+    "park",
+    "tuck"
+   ],
+   "set": [
+    "set",
+    "change",
+    "turn",
+    "color",
+    "colour",
+    "paint",
+    "fill",
+    "give",
+    "recolor",
+    "recolour",
+    "transform",
+    "convert",
+    "reshape",
+    "morph"
+   ],
+   "resize": [
+    "resize",
+    "grow",
+    "enlarge",
+    "shrink",
+    "scale"
+   ],
+   "rename": [
+    "rename",
+    "call"
+   ],
+   "label": [
+    "label",
+    "title",
+    "caption",
+    "write",
+    "inscribe",
+    "stamp",
+    "tag"
+   ],
+   "duplicate": [
+    "duplicate",
+    "copy",
+    "clone",
+    "replicate",
+    "dupe"
+   ],
+   "swap": [
+    "swap",
+    "exchange",
+    "trade",
+    "switch places",
+    "trade places"
+   ],
+   "group": [
+    "group",
+    "put together",
+    "bundle"
+   ],
+   "ungroup": [
+    "ungroup",
+    "split up",
+    "break up",
+    "dissolve"
+   ],
+   "connect": [
+    "connect",
+    "link",
+    "join",
+    "wire",
+    "attach",
+    "hook",
+    "tie"
+   ],
+   "disconnect": [
+    "disconnect",
+    "unlink",
+    "detach",
+    "separate",
+    "cut",
+    "unhook",
+    "sever",
+    "snip"
+   ],
+   "align": [
+    "align",
+    "line up"
+   ],
+   "arrange": [
+    "arrange",
+    "layout",
+    "lay out",
+    "organize",
+    "organise",
+    "rearrange",
+    "re-arrange",
+    "relayout",
+    "re-layout",
+    "reorganize",
+    "reorganise",
+    "reformat"
+   ],
+   "distribute": [
+    "distribute",
+    "space",
+    "spread"
+   ],
+   "toFront": [
+    "bring",
+    "raise"
+   ],
+   "toBack": [
+    "send"
+   ],
+   "forget": [
+    "forget",
+    "discard",
+    "disregard"
+   ],
+   "improve": [
+    "improve",
+    "tidy",
+    "tidy up",
+    "tidyup",
+    "neaten",
+    "declutter",
+    "unclutter",
+    "clean up",
+    "cleanup",
+    "beautify",
+    "prettify"
+   ],
+   "respace": [
+    "compact",
+    "condense",
+    "squeeze",
+    "tighten"
+   ],
+   "snap": [
+    "snap"
+   ],
+   "flip": [
+    "flip",
+    "mirror"
+   ],
+   "reverse": [
+    "reverse",
+    "invert"
+   ],
+   "sort": [
+    "sort",
+    "alphabetize",
+    "alphabetise"
+   ],
+   "groupBy": [],
+   "equalize": [
+    "equalize",
+    "equalise",
+    "unify"
+   ],
+   "straighten": [
+    "straighten"
+   ],
+   "untangle": [
+    "untangle",
+    "disentangle",
+    "uncross"
+   ],
+   "fit": [
+    "fit",
+    "recenter",
+    "recentre",
+    "re-center",
+    "re-centre"
+   ]
+  },
+  "cueNote": null
+ },
+ {
+  "key": "shape",
+  "plugins": [
+   "shapes"
+  ],
+  "ask": "What kind of shape?",
+  "kind": "enum",
+  "values": {
+   "any": [
+    "shape",
+    "shapes",
+    "node",
+    "nodes",
+    "object",
+    "objects",
+    "thing",
+    "things",
+    "element",
+    "elements",
+    "item",
+    "items",
+    "one",
+    "ones"
+   ],
+   "circle": [
+    "circles",
+    "dot",
+    "dots",
+    "ball",
+    "balls"
+   ],
+   "square": [
+    "squares"
+   ],
+   "rectangle": [
+    "rectangles",
+    "rect",
+    "rects",
+    "box",
+    "boxes",
+    "block",
+    "blocks"
+   ],
+   "triangle": [
+    "triangles"
+   ],
+   "diamond": [
+    "diamonds",
+    "rhombus"
+   ],
+   "ellipse": [
+    "ellipses",
+    "oval",
+    "ovals"
+   ],
+   "hexagon": [
+    "hexagons"
+   ],
+   "star": [
+    "stars"
+   ],
+   "text": [
+    "texts",
+    "title",
+    "heading",
+    "headline",
+    "caption",
+    "subtitle"
+   ]
+  },
+  "cueNote": null
+ },
+ {
+  "key": "color",
+  "plugins": [
+   "shapes"
+  ],
+  "ask": "What color is it?",
+  "kind": "enum",
+  "values": {
+   "red": [
+    "crimson",
+    "scarlet"
+   ],
+   "orange": [],
+   "yellow": [
+    "amber"
+   ],
+   "gold": [
+    "golden"
+   ],
+   "lime": [],
+   "green": [],
+   "teal": [
+    "turquoise"
+   ],
+   "cyan": [
+    "aqua"
+   ],
+   "blue": [],
+   "navy": [],
+   "indigo": [],
+   "purple": [
+    "violet",
+    "lilac"
+   ],
+   "magenta": [
+    "fuchsia"
+   ],
+   "pink": [
+    "rose"
+   ],
+   "brown": [],
+   "gray": [
+    "grey",
+    "silver"
+   ],
+   "black": [],
+   "white": []
+  },
+  "cueNote": null
+ },
+ {
+  "key": "outline",
+  "plugins": [
+   "shapes"
+  ],
+  "ask": "What color is its outline?",
+  "kind": "enum",
+  "values": {
+   "none": [
+    "no"
+   ],
+   "red": [
+    "crimson",
+    "scarlet"
+   ],
+   "orange": [],
+   "yellow": [
+    "amber"
+   ],
+   "gold": [
+    "golden"
+   ],
+   "lime": [],
+   "green": [],
+   "teal": [
+    "turquoise"
+   ],
+   "cyan": [
+    "aqua"
+   ],
+   "blue": [],
+   "navy": [],
+   "indigo": [],
+   "purple": [
+    "violet",
+    "lilac"
+   ],
+   "magenta": [
+    "fuchsia"
+   ],
+   "pink": [
+    "rose"
+   ],
+   "brown": [],
+   "gray": [
+    "grey",
+    "silver"
+   ],
+   "black": [],
+   "white": []
+  },
+  "cueNote": null
+ },
+ {
+  "key": "size",
+  "plugins": [
+   "shapes"
+  ],
+  "ask": "How big is it?",
+  "kind": "enum",
+  "values": {
+   "tiny": [
+    "minuscule"
+   ],
+   "small": [
+    "little"
+   ],
+   "medium": [
+    "normal",
+    "regular",
+    "average"
+   ],
+   "large": [
+    "big"
+   ],
+   "huge": [
+    "giant",
+    "enormous",
+    "massive"
+   ]
+  },
+  "cueNote": null
+ },
+ {
+  "key": "scale",
+  "plugins": [
+   "shapes"
+  ],
+  "ask": "By what factor does its size change?",
+  "kind": "number",
+  "values": null,
+  "cueNote": null
+ },
+ {
+  "key": "label",
+  "plugins": [
+   "shapes"
+  ],
+  "ask": "What text is written on it?",
+  "kind": "text",
+  "values": null,
+  "cueNote": null
+ },
+ {
+  "key": "position",
+  "plugins": [
+   "shapes"
+  ],
+  "ask": "Where is it, relative to the anchor or the canvas?",
+  "kind": "enum",
+  "values": {
+   "leftOf": [
+    "left of"
+   ],
+   "rightOf": [
+    "right of"
+   ],
+   "above": [
+    "above",
+    "over",
+    "on top of"
+   ],
+   "inside": [
+    "inside",
+    "within",
+    "into"
+   ],
+   "onTop": [
+    "onto"
+   ],
+   "below": [
+    "below",
+    "under",
+    "beneath"
+   ],
+   "near": [
+    "next to",
+    "near",
+    "beside"
+   ],
+   "between": [
+    "between"
+   ],
+   "center": [
+    "center",
+    "middle"
+   ],
+   "top": [
+    "at the top"
+   ],
+   "bottom": [
+    "at the bottom"
+   ],
+   "left": [
+    "on the left"
+   ],
+   "right": [
+    "on the right"
+   ],
+   "topLeft": [
+    "top left"
+   ],
+   "topRight": [
+    "top right"
+   ],
+   "bottomLeft": [
+    "bottom left"
+   ],
+   "bottomRight": [
+    "bottom right"
+   ]
+  },
+  "cueNote": null
+ },
+ {
+  "key": "anchor",
+  "plugins": [
+   "shapes"
+  ],
+  "ask": "Relative to which shape?",
+  "kind": "names",
+  "values": null,
+  "cueNote": null
+ },
+ {
+  "key": "object",
+  "plugins": [
+   "shapes"
+  ],
+  "ask": "What does the shape depict?",
+  "kind": "enum",
+  "values": {
+   "sun": [
+    "suns"
+   ],
+   "moon": [
+    "moons"
+   ],
+   "cloud": [
+    "clouds"
+   ],
+   "sky": [
+    "skys"
+   ],
+   "ground": [
+    "grounds"
+   ],
+   "grass": [],
+   "water": [
+    "waters"
+   ],
+   "sea": [
+    "seas"
+   ],
+   "lake": [
+    "lakes"
+   ],
+   "river": [
+    "rivers"
+   ],
+   "pond": [
+    "ponds"
+   ],
+   "tree": [
+    "trees"
+   ],
+   "trunk": [
+    "trunks"
+   ],
+   "leaf": [
+    "leaves"
+   ],
+   "roof": [
+    "roofs"
+   ],
+   "house": [
+    "houses"
+   ],
+   "wall": [
+    "walls"
+   ],
+   "walls": [],
+   "door": [
+    "doors"
+   ],
+   "window": [
+    "windows"
+   ],
+   "head": [
+    "heads"
+   ],
+   "face": [
+    "faces"
+   ],
+   "eye": [
+    "eyes"
+   ],
+   "nose": [
+    "noses"
+   ],
+   "mouth": [
+    "mouths"
+   ],
+   "flower": [
+    "flowers"
+   ],
+   "fire": [
+    "fires"
+   ],
+   "snow": [
+    "snows"
+   ],
+   "apple": [
+    "apples"
+   ]
+  },
+  "cueNote": null
+ },
+ {
+  "key": "at",
+  "plugins": [
+   "shapes"
+  ],
+  "ask": "At which x,y coordinates?",
+  "kind": "point",
+  "values": null,
+  "cueNote": null
+ },
+ {
+  "key": "direction",
+  "plugins": [
+   "shapes"
+  ],
+  "ask": "In which direction does it move?",
+  "kind": "enum",
+  "values": {
+   "left": [],
+   "right": [],
+   "up": [
+    "upwards"
+   ],
+   "down": [
+    "downwards"
+   ]
+  },
+  "cueNote": null
+ },
+ {
+  "key": "distance",
+  "plugins": [
+   "shapes"
+  ],
+  "ask": "How far, in pixels?",
+  "kind": "number",
+  "values": null,
+  "cueNote": null
+ },
+ {
+  "key": "linked",
+  "plugins": [
+   "shapes"
+  ],
+  "ask": "Which shapes is it connected to?",
+  "kind": "names",
+  "values": null,
+  "cueNote": null
+ },
+ {
+  "key": "width",
+  "plugins": [
+   "shapes"
+  ],
+  "ask": "How wide is it, in pixels?",
+  "kind": "number",
+  "values": null,
+  "cueNote": null
+ },
+ {
+  "key": "height",
+  "plugins": [
+   "shapes"
+  ],
+  "ask": "How tall is it, in pixels?",
+  "kind": "number",
+  "values": null,
+  "cueNote": null
+ },
+ {
+  "key": "fill",
+  "plugins": [
+   "shapes"
+  ],
+  "ask": "How solid is its fill?",
+  "kind": "enum",
+  "values": {
+   "solid": [
+    "opaque",
+    "filled"
+   ],
+   "light": [
+    "pale",
+    "light",
+    "pastel",
+    "see-through",
+    "translucent"
+   ],
+   "faint": [
+    "very light",
+    "faint",
+    "washed out"
+   ],
+   "none": [
+    "hollow",
+    "empty",
+    "unfilled",
+    "transparent",
+    "outline only"
+   ]
+  },
+  "cueNote": null
+ },
+ {
+  "key": "layer",
+  "plugins": [
+   "shapes"
+  ],
+  "ask": "Is it a background, a zone that holds items, or an item?",
+  "kind": "enum",
+  "values": {
+   "background": [
+    "background",
+    "backdrop"
+   ],
+   "zone": [
+    "zone",
+    "panel",
+    "container",
+    "area",
+    "lane",
+    "swimlane"
+   ],
+   "item": []
+  },
+  "cueNote": null
+ },
+ {
+  "key": "ask",
+  "plugins": [
+   "groups",
+   "queries",
+   "reasoning",
+   "rules",
+   "help"
+  ],
+  "kind": "text",
+  "values": {
+   "members": [
+    "what is in",
+    "what does … contain",
+    "members of"
+   ],
+   "groupOf": [
+    "which group",
+    "what group",
+    "belongs to",
+    "part of"
+   ],
+   "count": [
+    "how many"
+   ],
+   "list": [
+    "list",
+    "which",
+    "show"
+   ],
+   "exists": [
+    "is there",
+    "are there"
+   ],
+   "property": [
+    "what color",
+    "where is",
+    "how big"
+   ],
+   "check": [
+    "is A …?"
+   ],
+   "describe": [
+    "describe",
+    "what is on"
+   ],
+   "neighbors": [
+    "what is connected to"
+   ],
+   "connected": [
+    "are A and B connected"
+   ],
+   "degree": [
+    "how many connections does"
+   ],
+   "nearest": [
+    "closest",
+    "nearest",
+    "farthest"
+   ],
+   "extreme": [
+    "biggest",
+    "leftmost",
+    "most connections"
+   ],
+   "path": [
+    "is there a path",
+    "can I get from"
+   ],
+   "reachable": [
+    "what can be reached from"
+   ],
+   "cycle": [
+    "are there cycles"
+   ],
+   "rules": [
+    "what rules"
+   ],
+   "help": [
+    "help",
+    "how do i",
+    "how can i",
+    "how to",
+    "what can you do",
+    "can i",
+    "is it possible",
+    "show me an example"
+   ]
+  },
+  "cueNote": null
+ },
+ {
+  "key": "kind",
+  "plugins": [
+   "groups",
+   "queries"
+  ],
+  "kind": "text",
+  "values": {
+   "group": [
+    "groups"
+   ],
+   "shape": [],
+   "edge": [
+    "arrows",
+    "connections",
+    "links",
+    "edges",
+    "lines"
+   ]
+  },
+  "cueNote": null
+ },
+ {
+  "key": "members",
+  "plugins": [
+   "groups"
+  ],
+  "ask": "Which shapes does the group hold?",
+  "kind": "names",
+  "values": null,
+  "cueNote": null
+ },
+ {
+  "key": "from",
+  "plugins": [
+   "connections"
+  ],
+  "ask": "Where does the connection start?",
+  "kind": "names",
+  "values": null,
+  "cueNote": null
+ },
+ {
+  "key": "to",
+  "plugins": [
+   "connections"
+  ],
+  "ask": "Where does the connection end?",
+  "kind": "names",
+  "values": null,
+  "cueNote": null
+ },
+ {
+  "key": "style",
+  "plugins": [
+   "connections"
+  ],
+  "ask": "Is the line solid, dashed or dotted?",
+  "kind": "enum",
+  "values": {
+   "solid": [],
+   "dashed": [
+    "dash"
+   ],
+   "dotted": [
+    "dot"
+   ]
+  },
+  "cueNote": null
+ },
+ {
+  "key": "arrow",
+  "plugins": [
+   "connections"
+  ],
+  "ask": "Which way does it point?",
+  "kind": "enum",
+  "values": {
+   "forward": [
+    "arrow"
+   ],
+   "both": [
+    "two-way",
+    "two way",
+    "bidirectional",
+    "both ways",
+    "double-headed"
+   ],
+   "none": [
+    "line",
+    "plain",
+    "undirected"
+   ]
+  },
+  "cueNote": null
+ },
+ {
+  "key": "pairing",
+  "plugins": [
+   "connections"
+  ],
+  "ask": "Connected how, among themselves?",
+  "kind": "enum",
+  "values": {
+   "chain": [
+    "in a chain",
+    "one after the other",
+    "in sequence",
+    "in order"
+   ],
+   "next": [
+    "each to the next",
+    "to the next one"
+   ],
+   "all": [
+    "all to each other",
+    "every pair"
+   ]
+  },
+  "cueNote": null
+ },
+ {
+  "key": "axis",
+  "plugins": [
+   "layout"
+  ],
+  "ask": "Along which axis?",
+  "kind": "enum",
+  "values": {
+   "horizontal": [
+    "horizontally",
+    "in a row"
+   ],
+   "vertical": [
+    "vertically",
+    "in a column"
+   ]
+  },
+  "cueNote": null
+ },
+ {
+  "key": "layout",
+  "plugins": [
+   "layout",
+   "ops"
+  ],
+  "ask": "In what pattern?",
+  "kind": "enum",
+  "values": {
+   "row": [
+    "row",
+    "line"
+   ],
+   "column": [
+    "column",
+    "stack"
+   ],
+   "grid": [
+    "grid"
+   ],
+   "circle": [
+    "circle",
+    "ring"
+   ],
+   "tree": [
+    "tree",
+    "hierarchy",
+    "hierarchical",
+    "org chart",
+    "organization chart",
+    "organisation chart",
+    "organigram"
+   ],
+   "layers": [
+    "layers",
+    "layered",
+    "flow",
+    "flowchart",
+    "flow chart",
+    "tiers",
+    "levels"
+   ],
+   "radial": [
+    "radial",
+    "radially",
+    "sunburst",
+    "concentric",
+    "mind map",
+    "hub and spokes"
+   ],
+   "organic": [
+    "organic",
+    "force-directed",
+    "force directed",
+    "spring"
+   ]
+  },
+  "cueNote": null
+ },
+ {
+  "key": "property",
+  "plugins": [
+   "queries",
+   "ops"
+  ],
+  "ask": "Which property is asked about?",
+  "kind": "enum",
+  "values": {
+   "color": [
+    "colour"
+   ],
+   "size": [
+    "how big"
+   ],
+   "shape": [],
+   "label": [
+    "text"
+   ],
+   "position": [
+    "where",
+    "location"
+   ],
+   "outline": [
+    "border"
+   ],
+   "name": [
+    "alphabetical",
+    "alphabetically"
+   ]
+  },
+  "cueNote": null
+ },
+ {
+  "key": "comparison",
+  "plugins": [
+   "queries"
+  ],
+  "ask": "Compared how?",
+  "kind": "enum",
+  "values": {
+   "bigger": [
+    "larger"
+   ],
+   "smaller": []
+  },
+  "cueNote": null
+ },
+ {
+  "key": "superlative",
+  "plugins": [
+   "queries"
+  ],
+  "ask": "Which extreme?",
+  "kind": "enum",
+  "values": {
+   "biggest": [
+    "largest"
+   ],
+   "smallest": [
+    "tiniest"
+   ],
+   "leftmost": [],
+   "rightmost": [],
+   "topmost": [
+    "highest"
+   ],
+   "bottommost": [
+    "lowest"
+   ],
+   "closest": [
+    "nearest"
+   ],
+   "farthest": [
+    "furthest"
+   ],
+   "mostConnected": [
+    "most connections",
+    "most links"
+   ],
+   "leastConnected": [
+    "fewest connections",
+    "least connections",
+    "fewest links"
+   ]
+  },
+  "cueNote": null
+ },
+ {
+  "key": "template",
+  "plugins": [
+   "templates"
+  ],
+  "ask": "Which diagram form?",
+  "kind": "enum",
+  "values": {
+   "process": [
+    "flow",
+    "workflow",
+    "procedure",
+    "sequence of steps",
+    "pipeline"
+   ],
+   "cycle": [
+    "loop",
+    "circular process",
+    "lifecycle",
+    "life cycle",
+    "wheel"
+   ],
+   "hierarchy": [
+    "org chart",
+    "organization chart",
+    "organisation chart",
+    "organigram",
+    "org tree",
+    "family tree",
+    "tree chart",
+    "reporting structure",
+    "breakdown"
+   ],
+   "pyramid": [
+    "layered pyramid",
+    "levels",
+    "hierarchy of needs",
+    "maslow"
+   ],
+   "funnel": [
+    "sales funnel",
+    "narrowing"
+   ],
+   "timeline": [
+    "time line",
+    "roadmap",
+    "milestones",
+    "chronology",
+    "schedule"
+   ],
+   "list": [
+    "bullet list",
+    "checklist",
+    "titled list",
+    "agenda",
+    "key points"
+   ],
+   "matrix": [
+    "2x2",
+    "2 by 2",
+    "two by two",
+    "quadrant",
+    "quadrants",
+    "four boxes",
+    "swot"
+   ],
+   "target": [
+    "bullseye",
+    "bull's eye",
+    "concentric circles",
+    "concentric",
+    "rings"
+   ],
+   "venn": [
+    "venn diagram",
+    "overlapping circles",
+    "overlap",
+    "intersection"
+   ],
+   "hub": [
+    "hub and spoke",
+    "hub and spokes",
+    "spokes",
+    "radial",
+    "mind map",
+    "mindmap"
+   ],
+   "heart": [
+    "heart shape",
+    "love heart"
+   ],
+   "burst": [
+    "starburst",
+    "star burst",
+    "explosion",
+    "fireworks",
+    "sparks"
+   ],
+   "steps": [
+    "rising steps",
+    "staircase",
+    "stairs",
+    "steps up",
+    "growth steps",
+    "ladder",
+    "growth chart"
+   ],
+   "bridge": [
+    "bridging",
+    "bridge between"
+   ],
+   "mountain": [
+    "peak",
+    "summit",
+    "climb",
+    "hill"
+   ],
+   "spiral": [
+    "swirl",
+    "vortex",
+    "coil"
+   ],
+   "wave": [
+    "waves",
+    "ripple",
+    "ups and downs",
+    "highs and lows"
+   ],
+   "tree": [
+    "tree with roots",
+    "roots",
+    "growing tree"
+   ],
+   "road": [
+    "road to",
+    "journey",
+    "path to the goal",
+    "path to a goal",
+    "way to",
+    "winding road"
+   ],
+   "balance": [
+    "scales",
+    "balance scale",
+    "seesaw",
+    "pros and cons",
+    "trade-off",
+    "tradeoff",
+    "weigh"
+   ],
+   "hourglass": [
+    "sand timer",
+    "sandglass",
+    "egg timer"
+   ],
+   "sunrise": [
+    "rising sun",
+    "dawn",
+    "new dawn",
+    "horizon",
+    "sunset arc"
+   ],
+   "pillars": [
+    "temple",
+    "house of",
+    "columns of",
+    "foundation"
+   ]
+  },
+  "cueNote": null
+ },
+ {
+  "key": "items",
+  "plugins": [
+   "templates"
+  ],
+  "ask": "Which texts does it lay out, in order?",
+  "kind": "texts",
+  "values": null,
+  "cueNote": null
+ },
+ {
+  "key": "items2",
+  "plugins": [
+   "templates"
+  ],
+  "ask": "Which texts go on the other side (second list)?",
+  "kind": "texts",
+  "values": null,
+  "cueNote": null
+ },
+ {
+  "key": "title",
+  "plugins": [
+   "templates"
+  ],
+  "ask": "What is its title?",
+  "kind": "text",
+  "values": null,
+  "cueNote": null
+ },
+ {
+  "key": "parents",
+  "plugins": [
+   "templates"
+  ],
+  "ask": "Under which item does each item go (hierarchy)?",
+  "kind": "texts",
+  "values": null,
+  "cueNote": null
+ },
+ {
+  "key": "scheme",
+  "plugins": [
+   "templates"
+  ],
+  "ask": "Which colour scheme?",
+  "kind": "enum",
+  "values": {
+   "classic": [
+    "default colours",
+    "standard colours"
+   ],
+   "warm": [
+    "warm colours",
+    "fiery"
+   ],
+   "cool": [
+    "cool colours",
+    "cold"
+   ],
+   "ocean": [
+    "sea",
+    "marine",
+    "nautical"
+   ],
+   "forest": [
+    "nature",
+    "natural",
+    "leafy"
+   ],
+   "earth": [
+    "earthy",
+    "earth tones"
+   ],
+   "sunset": [
+    "dusk"
+   ],
+   "love": [
+    "romantic",
+    "valentine"
+   ],
+   "calm": [
+    "soft",
+    "pastel",
+    "soothing"
+   ],
+   "mono": [
+    "monochrome",
+    "grayscale",
+    "greyscale",
+    "black and white"
+   ],
+   "rainbow": [
+    "colourful",
+    "colorful",
+    "multicolour"
+   ],
+   "bold": [
+    "strong",
+    "high contrast"
+   ]
+  },
+  "cueNote": null
+ },
+ {
+  "key": "aspect",
+  "plugins": [
+   "help"
+  ],
+  "ask": "What does the help question want: an overview, how to do it, whether it can be done, the values, or an example?",
+  "kind": "enum",
+  "values": {
+   "overview": [
+    "help",
+    "what is",
+    "tell me about",
+    "what can you do"
+   ],
+   "how": [
+    "how do i",
+    "how can i",
+    "how to",
+    "how would i"
+   ],
+   "can": [
+    "can i",
+    "can you",
+    "is it possible",
+    "are you able",
+    "do you support"
+   ],
+   "values": [
+    "what kinds of",
+    "which",
+    "what options",
+    "available"
+   ],
+   "example": [
+    "example",
+    "examples",
+    "show me how",
+    "sample"
+   ]
+  },
+  "cueNote": null
+ },
+ {
+  "key": "about",
+  "plugins": [
+   "help"
+  ],
+  "ask": "What does the help question name that the editor does not know?",
+  "kind": "text",
+  "values": null,
+  "cueNote": null
+ },
+ {
+  "key": "topic",
+  "plugins": [
+   "help"
+  ],
+  "ask": "What is the help question about?",
+  "kind": "enum",
+  "values": {
+   "general": [],
+   "core": [],
+   "history": [],
+   "shapes": [],
+   "groups": [],
+   "connections": [],
+   "layout": [],
+   "queries": [],
+   "reasoning": [],
+   "logic": [],
+   "rules": [],
+   "facts": [],
+   "ops": [],
+   "templates": [],
+   "help": [],
+   "undo": [
+    "revert"
+   ],
+   "redo": [
+    "reapply",
+    "re-apply"
+   ],
+   "create": [
+    "draw",
+    "add",
+    "make",
+    "put",
+    "place",
+    "insert",
+    "sketch",
+    "build",
+    "spawn",
+    "throw",
+    "slap",
+    "pop",
+    "stick",
+    "plonk"
+   ],
+   "delete": [
+    "remove",
+    "erase",
+    "drop",
+    "clear",
+    "wipe",
+    "reset",
+    "get rid of",
+    "kill",
+    "trash",
+    "axe",
+    "ditch",
+    "zap",
+    "banish",
+    "nuke"
+   ],
+   "move": [
+    "shift",
+    "drag",
+    "push",
+    "nudge",
+    "slide",
+    "reposition",
+    "relocate",
+    "scoot",
+    "shove",
+    "park",
+    "tuck"
+   ],
+   "set": [
+    "change",
+    "turn",
+    "color",
+    "colour",
+    "paint",
+    "fill",
+    "give",
+    "recolor",
+    "recolour",
+    "transform",
+    "convert",
+    "reshape",
+    "morph"
+   ],
+   "resize": [
+    "grow",
+    "enlarge",
+    "shrink",
+    "scale"
+   ],
+   "rename": [
+    "call"
+   ],
+   "label": [
+    "title",
+    "caption",
+    "write",
+    "inscribe",
+    "stamp",
+    "tag",
+    "text"
+   ],
+   "duplicate": [
+    "copy",
+    "clone",
+    "replicate",
+    "dupe"
+   ],
+   "swap": [
+    "exchange",
+    "trade",
+    "switch places",
+    "trade places"
+   ],
+   "group": [
+    "put together",
+    "bundle"
+   ],
+   "ungroup": [
+    "split up",
+    "break up",
+    "dissolve"
+   ],
+   "connect": [
+    "link",
+    "join",
+    "wire",
+    "attach",
+    "hook",
+    "tie"
+   ],
+   "disconnect": [
+    "unlink",
+    "detach",
+    "separate",
+    "cut",
+    "unhook",
+    "sever",
+    "snip"
+   ],
+   "align": [
+    "line up"
+   ],
+   "arrange": [
+    "layout",
+    "lay out",
+    "organize",
+    "organise",
+    "rearrange",
+    "re-arrange",
+    "relayout",
+    "re-layout",
+    "reorganize",
+    "reorganise",
+    "reformat"
+   ],
+   "distribute": [
+    "space",
+    "spread"
+   ],
+   "toFront": [
+    "bring",
+    "raise"
+   ],
+   "toBack": [
+    "send"
+   ],
+   "forget": [
+    "discard",
+    "disregard"
+   ],
+   "improve": [
+    "tidy",
+    "tidy up",
+    "tidyup",
+    "neaten",
+    "declutter",
+    "unclutter",
+    "clean up",
+    "cleanup",
+    "beautify",
+    "prettify"
+   ],
+   "respace": [
+    "compact",
+    "condense",
+    "squeeze",
+    "tighten"
+   ],
+   "snap": [],
+   "flip": [
+    "mirror"
+   ],
+   "reverse": [
+    "invert"
+   ],
+   "sort": [
+    "alphabetize",
+    "alphabetise"
+   ],
+   "groupBy": [],
+   "equalize": [
+    "equalise",
+    "unify"
+   ],
+   "straighten": [],
+   "untangle": [
+    "disentangle",
+    "uncross"
+   ],
+   "fit": [
+    "recenter",
+    "recentre",
+    "re-center",
+    "re-centre"
+   ],
+   "members": [],
+   "groupOf": [],
+   "count": [],
+   "list": [
+    "bullet list",
+    "checklist",
+    "titled list",
+    "agenda",
+    "key points"
+   ],
+   "exists": [],
+   "property": [],
+   "check": [],
+   "describe": [],
+   "neighbors": [],
+   "connected": [],
+   "degree": [],
+   "nearest": [],
+   "extreme": [],
+   "path": [],
+   "reachable": [],
+   "cycle": [
+    "loop",
+    "circular process",
+    "lifecycle",
+    "life cycle",
+    "wheel"
+   ],
+   "target": [
+    "bullseye",
+    "bull's eye",
+    "concentric circles",
+    "concentric",
+    "rings"
+   ],
+   "quantifier": [],
+   "name": [
+    "alphabetical",
+    "alphabetically"
+   ],
+   "notColor": [],
+   "recency": [],
+   "shape": [],
+   "color": [
+    "colour"
+   ],
+   "outline": [
+    "border"
+   ],
+   "size": [
+    "how big"
+   ],
+   "scale": [],
+   "position": [
+    "where",
+    "location"
+   ],
+   "anchor": [],
+   "object": [],
+   "at": [],
+   "direction": [],
+   "distance": [],
+   "linked": [],
+   "width": [],
+   "height": [],
+   "fill": [],
+   "layer": [],
+   "kind": [],
+   "from": [],
+   "to": [],
+   "style": [],
+   "arrow": [],
+   "pairing": [],
+   "axis": [],
+   "comparison": [],
+   "superlative": [],
+   "template": [],
+   "items": [],
+   "items2": [],
+   "title": [],
+   "parents": [],
+   "scheme": [],
+   "all": [
+    "every",
+    "each",
+    "everything",
+    "all to each other",
+    "every pair"
+   ],
+   "red": [
+    "not red",
+    "crimson",
+    "scarlet"
+   ],
+   "orange": [
+    "not orange"
+   ],
+   "yellow": [
+    "not yellow",
+    "amber"
+   ],
+   "gold": [
+    "not gold",
+    "golden"
+   ],
+   "lime": [
+    "not lime"
+   ],
+   "green": [
+    "not green"
+   ],
+   "teal": [
+    "not teal",
+    "turquoise"
+   ],
+   "cyan": [
+    "not cyan",
+    "aqua"
+   ],
+   "blue": [
+    "not blue"
+   ],
+   "navy": [
+    "not navy"
+   ],
+   "indigo": [
+    "not indigo"
+   ],
+   "purple": [
+    "not purple",
+    "violet",
+    "lilac"
+   ],
+   "magenta": [
+    "not magenta",
+    "fuchsia"
+   ],
+   "pink": [
+    "not pink",
+    "rose"
+   ],
+   "brown": [
+    "not brown"
+   ],
+   "gray": [
+    "not gray",
+    "grey",
+    "silver"
+   ],
+   "black": [
+    "not black"
+   ],
+   "white": [
+    "not white"
+   ],
+   "newest": [
+    "new",
+    "last",
+    "latest",
+    "most recent"
+   ],
+   "oldest": [
+    "first",
+    "earliest"
+   ],
+   "any": [
+    "shape",
+    "shapes",
+    "node",
+    "nodes",
+    "object",
+    "objects",
+    "thing",
+    "things",
+    "element",
+    "elements",
+    "item",
+    "items",
+    "one",
+    "ones"
+   ],
+   "circle": [
+    "circles",
+    "dot",
+    "dots",
+    "ball",
+    "balls",
+    "ring"
+   ],
+   "square": [
+    "squares"
+   ],
+   "rectangle": [
+    "rectangles",
+    "rect",
+    "rects",
+    "box",
+    "boxes",
+    "block",
+    "blocks"
+   ],
+   "triangle": [
+    "triangles"
+   ],
+   "diamond": [
+    "diamonds",
+    "rhombus"
+   ],
+   "ellipse": [
+    "ellipses",
+    "oval",
+    "ovals"
+   ],
+   "hexagon": [
+    "hexagons"
+   ],
+   "star": [
+    "stars"
+   ],
+   "text": [
+    "texts",
+    "title",
+    "heading",
+    "headline",
+    "caption",
+    "subtitle"
+   ],
+   "none": [
+    "no",
+    "hollow",
+    "empty",
+    "unfilled",
+    "transparent",
+    "outline only",
+    "line",
+    "plain",
+    "undirected"
+   ],
+   "tiny": [
+    "minuscule"
+   ],
+   "small": [
+    "little"
+   ],
+   "medium": [
+    "normal",
+    "regular",
+    "average"
+   ],
+   "large": [
+    "big"
+   ],
+   "huge": [
+    "giant",
+    "enormous",
+    "massive"
+   ],
+   "leftOf": [
+    "left of"
+   ],
+   "rightOf": [
+    "right of"
+   ],
+   "above": [
+    "over",
+    "on top of"
+   ],
+   "inside": [
+    "within",
+    "into"
+   ],
+   "onTop": [
+    "onto"
+   ],
+   "below": [
+    "under",
+    "beneath"
+   ],
+   "near": [
+    "next to",
+    "beside"
+   ],
+   "between": [],
+   "center": [
+    "middle"
+   ],
+   "top": [
+    "at the top"
+   ],
+   "bottom": [
+    "at the bottom"
+   ],
+   "left": [
+    "on the left"
+   ],
+   "right": [
+    "on the right"
+   ],
+   "topLeft": [
+    "top left"
+   ],
+   "topRight": [
+    "top right"
+   ],
+   "bottomLeft": [
+    "bottom left"
+   ],
+   "bottomRight": [
+    "bottom right"
+   ],
+   "sun": [
+    "suns"
+   ],
+   "moon": [
+    "moons"
+   ],
+   "cloud": [
+    "clouds"
+   ],
+   "sky": [
+    "skys"
+   ],
+   "ground": [
+    "grounds"
+   ],
+   "grass": [],
+   "water": [
+    "waters"
+   ],
+   "sea": [
+    "seas"
+   ],
+   "lake": [
+    "lakes"
+   ],
+   "river": [
+    "rivers"
+   ],
+   "pond": [
+    "ponds"
+   ],
+   "tree": [
+    "trees",
+    "hierarchy",
+    "hierarchical",
+    "org chart",
+    "organization chart",
+    "organisation chart",
+    "organigram",
+    "tree with roots",
+    "roots",
+    "growing tree"
+   ],
+   "trunk": [
+    "trunks"
+   ],
+   "leaf": [
+    "leaves"
+   ],
+   "roof": [
+    "roofs"
+   ],
+   "house": [
+    "houses"
+   ],
+   "wall": [
+    "walls"
+   ],
+   "walls": [],
+   "door": [
+    "doors"
+   ],
+   "window": [
+    "windows"
+   ],
+   "head": [
+    "heads"
+   ],
+   "face": [
+    "faces"
+   ],
+   "eye": [
+    "eyes"
+   ],
+   "nose": [
+    "noses"
+   ],
+   "mouth": [
+    "mouths"
+   ],
+   "flower": [
+    "flowers"
+   ],
+   "fire": [
+    "fires"
+   ],
+   "snow": [
+    "snows"
+   ],
+   "apple": [
+    "apples"
+   ],
+   "up": [
+    "upwards"
+   ],
+   "down": [
+    "downwards"
+   ],
+   "solid": [
+    "opaque",
+    "filled"
+   ],
+   "light": [
+    "pale",
+    "pastel",
+    "see-through",
+    "translucent"
+   ],
+   "faint": [
+    "very light",
+    "washed out"
+   ],
+   "background": [
+    "backdrop"
+   ],
+   "zone": [
+    "panel",
+    "container",
+    "area",
+    "lane",
+    "swimlane"
+   ],
+   "item": [],
+   "dashed": [
+    "dash"
+   ],
+   "dotted": [
+    "dot"
+   ],
+   "forward": [
+    "arrow"
+   ],
+   "both": [
+    "two-way",
+    "two way",
+    "bidirectional",
+    "both ways",
+    "double-headed"
+   ],
+   "chain": [
+    "in a chain",
+    "one after the other",
+    "in sequence",
+    "in order"
+   ],
+   "next": [
+    "each to the next",
+    "to the next one"
+   ],
+   "horizontal": [
+    "horizontally",
+    "in a row"
+   ],
+   "vertical": [
+    "vertically",
+    "in a column"
+   ],
+   "row": [
+    "line"
+   ],
+   "column": [
+    "stack"
+   ],
+   "grid": [],
+   "layers": [
+    "layered",
+    "flow",
+    "flowchart",
+    "flow chart",
+    "tiers",
+    "levels"
+   ],
+   "radial": [
+    "radially",
+    "sunburst",
+    "concentric",
+    "mind map",
+    "hub and spokes"
+   ],
+   "organic": [
+    "force-directed",
+    "force directed",
+    "spring"
+   ],
+   "bigger": [
+    "larger"
+   ],
+   "smaller": [],
+   "biggest": [
+    "largest"
+   ],
+   "smallest": [
+    "tiniest"
+   ],
+   "leftmost": [],
+   "rightmost": [],
+   "topmost": [
+    "highest"
+   ],
+   "bottommost": [
+    "lowest"
+   ],
+   "closest": [
+    "nearest"
+   ],
+   "farthest": [
+    "furthest"
+   ],
+   "mostConnected": [
+    "most connections",
+    "most links"
+   ],
+   "leastConnected": [
+    "fewest connections",
+    "least connections",
+    "fewest links"
+   ],
+   "process": [
+    "flow",
+    "workflow",
+    "procedure",
+    "sequence of steps",
+    "pipeline"
+   ],
+   "hierarchy": [
+    "org chart",
+    "organization chart",
+    "organisation chart",
+    "organigram",
+    "org tree",
+    "family tree",
+    "tree chart",
+    "reporting structure",
+    "breakdown"
+   ],
+   "pyramid": [
+    "layered pyramid",
+    "levels",
+    "hierarchy of needs",
+    "maslow"
+   ],
+   "funnel": [
+    "sales funnel",
+    "narrowing"
+   ],
+   "timeline": [
+    "time line",
+    "roadmap",
+    "milestones",
+    "chronology",
+    "schedule"
+   ],
+   "matrix": [
+    "2x2",
+    "2 by 2",
+    "two by two",
+    "quadrant",
+    "quadrants",
+    "four boxes",
+    "swot"
+   ],
+   "venn": [
+    "venn diagram",
+    "overlapping circles",
+    "overlap",
+    "intersection"
+   ],
+   "hub": [
+    "hub and spoke",
+    "hub and spokes",
+    "spokes",
+    "radial",
+    "mind map",
+    "mindmap"
+   ],
+   "heart": [
+    "heart shape",
+    "love heart"
+   ],
+   "burst": [
+    "starburst",
+    "star burst",
+    "explosion",
+    "fireworks",
+    "sparks"
+   ],
+   "steps": [
+    "rising steps",
+    "staircase",
+    "stairs",
+    "steps up",
+    "growth steps",
+    "ladder",
+    "growth chart"
+   ],
+   "bridge": [
+    "bridging",
+    "bridge between"
+   ],
+   "mountain": [
+    "peak",
+    "summit",
+    "climb",
+    "hill"
+   ],
+   "spiral": [
+    "swirl",
+    "vortex",
+    "coil"
+   ],
+   "wave": [
+    "waves",
+    "ripple",
+    "ups and downs",
+    "highs and lows"
+   ],
+   "road": [
+    "road to",
+    "journey",
+    "path to the goal",
+    "path to a goal",
+    "way to",
+    "winding road"
+   ],
+   "balance": [
+    "scales",
+    "balance scale",
+    "seesaw",
+    "pros and cons",
+    "trade-off",
+    "tradeoff",
+    "weigh"
+   ],
+   "hourglass": [
+    "sand timer",
+    "sandglass",
+    "egg timer"
+   ],
+   "sunrise": [
+    "rising sun",
+    "dawn",
+    "new dawn",
+    "horizon",
+    "sunset arc"
+   ],
+   "pillars": [
+    "temple",
+    "house of",
+    "columns of",
+    "foundation"
+   ],
+   "classic": [
+    "default colours",
+    "standard colours"
+   ],
+   "warm": [
+    "warm colours",
+    "fiery"
+   ],
+   "cool": [
+    "cool colours",
+    "cold"
+   ],
+   "ocean": [
+    "sea",
+    "marine",
+    "nautical"
+   ],
+   "forest": [
+    "nature",
+    "natural",
+    "leafy"
+   ],
+   "earth": [
+    "earthy",
+    "earth tones"
+   ],
+   "sunset": [
+    "dusk"
+   ],
+   "love": [
+    "romantic",
+    "valentine"
+   ],
+   "calm": [
+    "soft",
+    "pastel",
+    "soothing"
+   ],
+   "mono": [
+    "monochrome",
+    "grayscale",
+    "greyscale",
+    "black and white"
+   ],
+   "rainbow": [
+    "colourful",
+    "colorful",
+    "multicolour"
+   ],
+   "bold": [
+    "strong",
+    "high contrast"
+   ]
+  },
+  "cueNote": null
+ }
+]

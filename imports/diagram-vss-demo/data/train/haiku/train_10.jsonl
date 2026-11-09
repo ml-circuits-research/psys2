@@ -1,0 +1,100 @@
+{"id": "th-0901", "names": ["Keeper"], "text": "stick a navy box named Wall just above the Keeper", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "color": "navy", "name": "Wall", "position": "above", "anchor": "Keeper"}}}
+{"id": "th-0902", "names": [], "text": "throw a huge green circle at the center named Ball", "wire": {"type": "command", "args": {"action": "create", "shape": "circle", "color": "green", "size": "huge", "name": "Ball", "position": "center"}}}
+{"id": "th-0903", "names": ["Striker"], "text": "two white triangles near the Striker", "wire": {"type": "command", "args": {"action": "create", "shape": "triangle", "color": "white", "count": "2", "position": "near", "anchor": "Striker"}}}
+{"id": "th-0904", "names": [], "text": "red star labeled 'Goal' at the top", "wire": {"type": "command", "args": {"action": "create", "shape": "star", "color": "red", "label": "Goal", "position": "top"}}}
+{"id": "th-0905", "names": ["Winger", "Defender"], "text": "a small gray oval named Pivot between the Winger and the Defender", "wire": {"type": "command", "args": {"action": "create", "shape": "ellipse", "color": "gray", "size": "small", "name": "Pivot", "position": "between", "anchor": "Winger,Defender"}}}
+{"id": "th-0906", "names": [], "text": "make a black square named Ref at the bottom left", "wire": {"type": "command", "args": {"action": "create", "shape": "square", "color": "black", "name": "Ref", "position": "bottomLeft"}}}
+{"id": "th-0907", "names": ["Coach"], "text": "add a yellow diamond named Bench just left of the Coach", "wire": {"type": "command", "args": {"action": "create", "shape": "diamond", "color": "yellow", "name": "Bench", "position": "leftOf", "anchor": "Coach"}}}
+{"id": "th-0908", "names": [], "text": "drop in a lime hexagon at the far right", "wire": {"type": "command", "args": {"action": "create", "shape": "hexagon", "color": "lime", "position": "right"}}}
+{"id": "th-0909", "names": ["Mid"], "text": "toss a blue box labelled 'Tempo' right under Mid", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "color": "blue", "label": "Tempo", "position": "below", "anchor": "Mid"}}}
+{"id": "th-0910", "names": [], "text": "a large teal star in the top right", "wire": {"type": "command", "args": {"action": "create", "shape": "star", "color": "teal", "size": "large", "position": "topRight"}}}
+{"id": "th-0911", "names": ["Keeper"], "text": "Keeper should be orange", "wire": {"type": "command", "args": {"action": "set", "target": "Keeper", "color": "orange"}}}
+{"id": "th-0912", "names": ["Striker"], "text": "make Striker a hexagon", "wire": {"type": "command", "args": {"action": "set", "target": "Striker", "shape": "hexagon"}}}
+{"id": "th-0913", "names": ["Winger"], "text": "Winger goes tiny", "wire": {"type": "command", "args": {"action": "set", "target": "Winger", "size": "tiny"}}}
+{"id": "th-0914", "names": ["Defender"], "text": "defender in purple please", "wire": {"type": "command", "args": {"action": "set", "target": "Defender", "color": "purple"}}}
+{"id": "th-0915", "names": ["Mid"], "text": "change Mid into a circle", "wire": {"type": "command", "args": {"action": "set", "target": "Mid", "shape": "circle"}}}
+{"id": "th-0916", "names": ["Coach"], "text": "recolor Coach gold", "wire": {"type": "command", "args": {"action": "set", "target": "Coach", "color": "gold"}}}
+{"id": "th-0917", "names": ["Ball"], "text": "make Ball white", "wire": {"type": "command", "args": {"action": "set", "target": "Ball", "color": "white"}}}
+{"id": "th-0918", "names": [], "text": "make the hexagons that aren't lime huge", "wire": {"type": "command", "args": {"action": "set", "target": "mention(notcolor=lime,quantifier=all,shape=hexagon)", "size": "huge"}}}
+{"id": "th-0919", "names": ["Keeper", "Striker", "Defender"], "text": "Keeper and Striker both link to Defender, every one of them", "wire": {"type": "command", "args": {"action": "connect", "from": "Keeper,Striker", "to": "Defender", "pairing": "all"}}}
+{"id": "th-0920", "names": ["Striker", "Winger"], "text": "a dotted line from Striker to Winger", "wire": {"type": "command", "args": {"action": "connect", "from": "Striker", "to": "Winger", "style": "dotted"}}}
+{"id": "th-0921", "names": ["Mid", "Coach"], "text": "two-way link between Mid and Coach", "wire": {"type": "command", "args": {"action": "connect", "from": "Mid", "to": "Coach", "arrow": "both"}}}
+{"id": "th-0922", "names": ["Keeper", "Defender", "Mid", "Striker"], "text": "connect Keeper, Defender and Mid in a chain", "wire": {"type": "command", "args": {"action": "connect", "from": "Keeper,Defender,Mid", "to": "Keeper,Defender,Mid", "pairing": "chain"}}}
+{"id": "th-0923", "names": ["Pivot", "Ball"], "text": "a red connection from Pivot to Ball labelled 'pass'", "wire": {"type": "command", "args": {"action": "connect", "from": "Pivot", "to": "Ball", "color": "red", "label": "pass"}}}
+{"id": "th-0924", "names": ["Ball"], "text": "move Ball 25 pixels right", "wire": {"type": "command", "args": {"action": "move", "target": "Ball", "direction": "right", "distance": "25"}}}
+{"id": "th-0925", "names": ["Striker"], "text": "shift Striker left 60", "wire": {"type": "command", "args": {"action": "move", "target": "Striker", "direction": "left", "distance": "60"}}}
+{"id": "th-0926", "names": ["Ref", "Keeper"], "text": "slide Ref to the right of the Keeper", "wire": {"type": "command", "args": {"action": "move", "target": "Ref", "position": "rightOf", "anchor": "Keeper"}}}
+{"id": "th-0927", "names": ["Bench"], "text": "drag Bench down", "wire": {"type": "command", "args": {"action": "move", "target": "Bench", "direction": "down"}}}
+{"id": "th-0928", "names": ["Coach"], "text": "put the Coach at the top", "wire": {"type": "command", "args": {"action": "move", "target": "Coach", "position": "top"}}}
+{"id": "th-0929", "names": ["Pivot", "Winger", "Defender"], "text": "move Pivot between Winger and Defender", "wire": {"type": "command", "args": {"action": "move", "target": "Pivot", "position": "between", "anchor": "Winger,Defender"}}}
+{"id": "th-0930", "names": ["Wall"], "text": "lift Wall up 10 px", "wire": {"type": "command", "args": {"action": "move", "target": "Wall", "direction": "up", "distance": "10"}}}
+{"id": "th-0931", "names": ["Tempo"], "text": "get rid of Tempo", "wire": {"type": "command", "args": {"action": "delete", "target": "Tempo"}}}
+{"id": "th-0932", "names": [], "text": "delete every triangle that isn't white", "wire": {"type": "command", "args": {"action": "delete", "target": "mention(notcolor=white,quantifier=all,shape=triangle)"}}}
+{"id": "th-0933", "names": ["Ref"], "text": "remove the Ref", "wire": {"type": "command", "args": {"action": "delete", "target": "Ref"}}}
+{"id": "th-0934", "names": ["Mid"], "text": "make Mid bigger", "wire": {"type": "command", "args": {"action": "resize", "target": "Mid"}}}
+{"id": "th-0935", "names": ["Keeper"], "text": "enlarge the Keeper a bit", "wire": {"type": "command", "args": {"action": "resize", "target": "Keeper"}}}
+{"id": "th-0936", "names": ["Striker"], "text": "rename Striker to Forward", "wire": {"type": "command", "args": {"action": "rename", "target": "Striker", "name": "Forward"}}}
+{"id": "th-0937", "names": ["Winger"], "text": "call the Winger 'Wing'", "wire": {"type": "command", "args": {"action": "rename", "target": "Winger", "name": "Wing"}}}
+{"id": "th-0938", "names": ["Coach"], "text": "label Coach 'Boss'", "wire": {"type": "command", "args": {"action": "label", "target": "Coach", "label": "Boss"}}}
+{"id": "th-0939", "names": ["Ball"], "text": "stick the text 'Match ball' on Ball", "wire": {"type": "command", "args": {"action": "label", "target": "Ball", "label": "Match ball"}}}
+{"id": "th-0940", "names": ["Striker"], "text": "copy Striker", "wire": {"type": "command", "args": {"action": "duplicate", "target": "Striker"}}}
+{"id": "th-0941", "names": ["Defender"], "text": "make 3 copies of Defender", "wire": {"type": "command", "args": {"action": "duplicate", "target": "Defender", "count": "3"}}}
+{"id": "th-0942", "names": ["Keeper", "Coach"], "text": "swap the Keeper and the Coach", "wire": {"type": "command", "args": {"action": "swap", "target": "Keeper,Coach"}}}
+{"id": "th-0943", "names": ["Winger", "Mid"], "text": "exchange Winger and Mid", "wire": {"type": "command", "args": {"action": "swap", "target": "Winger,Mid"}}}
+{"id": "th-0944", "names": ["Keeper", "Defender"], "text": "cut the link between Keeper and Defender", "wire": {"type": "command", "args": {"action": "disconnect", "from": "Keeper", "to": "Defender"}}}
+{"id": "th-0945", "names": ["Striker", "Winger"], "text": "disconnect Striker from Winger", "wire": {"type": "command", "args": {"action": "disconnect", "from": "Striker", "to": "Winger"}}}
+{"id": "th-0946", "names": ["Keeper", "Striker", "Mid"], "text": "align Keeper, Striker and Mid vertically", "wire": {"type": "command", "args": {"action": "align", "target": "Keeper,Striker,Mid", "axis": "vertical"}}}
+{"id": "th-0947", "names": [], "text": "line up the circles that aren't white horizontally", "wire": {"type": "command", "args": {"action": "align", "target": "mention(notcolor=white,quantifier=all,shape=circle)", "axis": "horizontal"}}}
+{"id": "th-0948", "names": ["Winger", "Striker"], "text": "arrange Winger and Striker in a column", "wire": {"type": "command", "args": {"action": "arrange", "target": "Winger,Striker", "layout": "column"}}}
+{"id": "th-0949", "names": [], "text": "make the whole board a grid", "wire": {"type": "command", "args": {"action": "arrange", "layout": "grid"}}}
+{"id": "th-0950", "names": ["Keeper", "Mid", "Striker"], "text": "even out Keeper, Mid and Striker vertically", "wire": {"type": "command", "args": {"action": "distribute", "target": "Keeper,Mid,Striker", "axis": "vertical"}}}
+{"id": "th-0951", "names": [], "text": "spread the triangles out horizontally", "wire": {"type": "command", "args": {"action": "distribute", "target": "mention(quantifier=all,shape=triangle)", "axis": "horizontal"}}}
+{"id": "th-0952", "names": ["Ball"], "text": "bring Ball to the front", "wire": {"type": "command", "args": {"action": "toFront", "target": "Ball"}}}
+{"id": "th-0953", "names": [], "text": "put the newest square on top", "wire": {"type": "command", "args": {"action": "toFront", "target": "mention(recency=newest,shape=square)"}}}
+{"id": "th-0954", "names": ["Coach"], "text": "send Coach to the back", "wire": {"type": "command", "args": {"action": "toBack", "target": "Coach"}}}
+{"id": "th-0955", "names": [], "text": "push the oldest star behind everything", "wire": {"type": "command", "args": {"action": "toBack", "target": "mention(recency=oldest,shape=star)"}}}
+{"id": "th-0956", "names": [], "text": "that was a mistake, undo", "wire": {"type": "command", "args": {"action": "undo"}}}
+{"id": "th-0957", "names": [], "text": "reverse the last step", "wire": {"type": "command", "args": {"action": "undo"}}}
+{"id": "th-0958", "names": [], "text": "redo", "wire": {"type": "command", "args": {"action": "redo"}}}
+{"id": "th-0959", "names": [], "text": "bring back the last thing I undid", "wire": {"type": "command", "args": {"action": "redo"}}}
+{"id": "th-0960", "names": [], "text": "forget the defaults I set", "wire": {"type": "command", "args": {"action": "forget"}}}
+{"id": "th-0961", "names": [], "text": "wipe every rule", "wire": {"type": "command", "args": {"action": "forget"}}}
+{"id": "th-0962", "names": [], "text": "how many gold things", "wire": {"type": "question", "args": {"ask": "count", "color": "gold"}}}
+{"id": "th-0963", "names": [], "text": "how many shapes are not purple", "wire": {"type": "question", "args": {"ask": "count", "notColor": "purple"}}}
+{"id": "th-0964", "names": ["Keeper"], "text": "how many shapes are below the Keeper", "wire": {"type": "question", "args": {"ask": "count", "position": "below", "anchor": "Keeper"}}}
+{"id": "th-0965", "names": [], "text": "any red stars on the board?", "wire": {"type": "question", "args": {"ask": "exists", "shape": "star", "color": "red"}}}
+{"id": "th-0966", "names": [], "text": "is there a lime circle", "wire": {"type": "question", "args": {"ask": "exists", "shape": "circle", "color": "lime"}}}
+{"id": "th-0967", "names": [], "text": "which triangles are there", "wire": {"type": "question", "args": {"ask": "list", "shape": "triangle"}}}
+{"id": "th-0968", "names": [], "text": "show me what isn't orange", "wire": {"type": "question", "args": {"ask": "list", "notColor": "orange"}}}
+{"id": "th-0969", "names": ["Striker"], "text": "what shape is Striker", "wire": {"type": "question", "args": {"ask": "property", "target": "Striker", "property": "shape"}}}
+{"id": "th-0970", "names": ["Ball"], "text": "what's the size of the Ball", "wire": {"type": "question", "args": {"ask": "property", "target": "Ball", "property": "size"}}}
+{"id": "th-0971", "names": [], "text": "what color is the newest triangle", "wire": {"type": "question", "args": {"ask": "property", "target": "mention(recency=newest,shape=triangle)", "property": "color"}}}
+{"id": "th-0972", "names": ["Mid"], "text": "give me the lowdown on Mid", "wire": {"type": "question", "args": {"ask": "describe", "target": "Mid"}}}
+{"id": "th-0973", "names": [], "text": "what does the board look like", "wire": {"type": "question", "args": {"ask": "describe"}}}
+{"id": "th-0974", "names": ["Keeper"], "text": "who's directly linked to the Keeper", "wire": {"type": "question", "args": {"ask": "neighbors", "target": "Keeper"}}}
+{"id": "th-0975", "names": ["Striker"], "text": "what touches Striker", "wire": {"type": "question", "args": {"ask": "neighbors", "target": "Striker"}}}
+{"id": "th-0976", "names": ["Keeper", "Defender"], "text": "is the Keeper straight-linked to the Defender", "wire": {"type": "question", "args": {"ask": "connected", "target": "Keeper", "anchor": "Defender"}}}
+{"id": "th-0977", "names": ["Mid", "Coach"], "text": "are Mid and Coach joined", "wire": {"type": "question", "args": {"ask": "connected", "target": "Mid", "anchor": "Coach"}}}
+{"id": "th-0978", "names": ["Mid"], "text": "how many lines does Mid have", "wire": {"type": "question", "args": {"ask": "degree", "target": "Mid"}}}
+{"id": "th-0979", "names": ["Keeper"], "text": "degree of the Keeper", "wire": {"type": "question", "args": {"ask": "degree", "target": "Keeper"}}}
+{"id": "th-0980", "names": ["Keeper", "Striker"], "text": "is there a route from Keeper to Striker", "wire": {"type": "question", "args": {"ask": "path", "from": "Keeper", "to": "Striker"}}}
+{"id": "th-0981", "names": ["Pivot", "Ref"], "text": "how do I get from Pivot to Ref", "wire": {"type": "question", "args": {"ask": "path", "from": "Pivot", "to": "Ref"}}}
+{"id": "th-0982", "names": ["Keeper"], "text": "what's reachable from the Keeper", "wire": {"type": "question", "args": {"ask": "reachable", "from": "Keeper"}}}
+{"id": "th-0983", "names": ["Coach"], "text": "where can the Coach get to", "wire": {"type": "question", "args": {"ask": "reachable", "from": "Coach"}}}
+{"id": "th-0984", "names": [], "text": "any loop in this play diagram", "wire": {"type": "question", "args": {"ask": "cycle"}}}
+{"id": "th-0985", "names": [], "text": "does the play form a cycle", "wire": {"type": "question", "args": {"ask": "cycle"}}}
+{"id": "th-0986", "names": [], "text": "what rules are active", "wire": {"type": "question", "args": {"ask": "rules"}}}
+{"id": "th-0987", "names": [], "text": "which defaults do you have stored", "wire": {"type": "question", "args": {"ask": "rules"}}}
+{"id": "th-0988", "names": ["Ball"], "text": "is Ball white", "wire": {"type": "question", "args": {"ask": "check", "target": "Ball", "color": "white"}}}
+{"id": "th-0989", "names": ["Winger"], "text": "is the Winger a square", "wire": {"type": "question", "args": {"ask": "check", "target": "Winger", "shape": "square"}}}
+{"id": "th-0990", "names": ["Defender", "Keeper"], "text": "is the Defender bigger than the Keeper", "wire": {"type": "question", "args": {"ask": "check", "target": "Defender", "comparison": "bigger", "anchor": "Keeper"}}}
+{"id": "th-0991", "names": [], "text": "what's the smallest", "wire": {"type": "question", "args": {"ask": "extreme", "superlative": "smallest"}}}
+{"id": "th-0992", "names": [], "text": "what's the rightmost thing on the pitch", "wire": {"type": "question", "args": {"ask": "extreme", "superlative": "rightmost"}}}
+{"id": "th-0993", "names": ["Keeper"], "text": "what's closest to the Keeper", "wire": {"type": "question", "args": {"ask": "nearest", "anchor": "Keeper", "superlative": "closest"}}}
+{"id": "th-0994", "names": ["Ball"], "text": "which red shape is farthest from Ball", "wire": {"type": "question", "args": {"ask": "nearest", "anchor": "Ball", "superlative": "farthest", "color": "red"}}}
+{"id": "th-0995", "names": ["Ref"], "text": "Ref is black", "wire": {"type": "fact", "args": {"target": "Ref", "color": "black"}}}
+{"id": "th-0996", "names": ["Bench", "Coach"], "text": "Bench is left of the Coach", "wire": {"type": "fact", "args": {"target": "Bench", "position": "leftOf", "anchor": "Coach"}}}
+{"id": "th-0997", "names": [], "text": "any new triangle should be yellow from now on", "wire": {"type": "rule", "args": {"shape": "triangle", "color": "yellow"}}}
+{"id": "th-0998", "names": [], "text": "new hexagons should be small", "wire": {"type": "rule", "args": {"shape": "hexagon", "size": "small"}}}
+{"id": "th-0999", "names": [], "text": "from here on new things come out gray", "wire": {"type": "rule", "args": {"color": "gray"}}}
+{"id": "th-1000", "names": [], "text": "circles should always be huge from now on", "wire": {"type": "rule", "args": {"shape": "circle", "size": "huge"}}}

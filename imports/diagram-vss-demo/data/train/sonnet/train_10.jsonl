@@ -1,0 +1,100 @@
+{"id":"ts-0901","names":["Truck","Depot"],"text":"yo slap a brown box named Crate onto the left of Truck","wire":{"type":"command","args":{"action":"create","shape":"rectangle","color":"brown","name":"Crate","position":"leftOf","anchor":"Truck"}}}
+{"id":"ts-0902","names":["Mailer","Queue"],"text":"does this flow ever end up back where it began","wire":{"type":"question","args":{"ask":"cycle"}}}
+{"id":"ts-0903","names":["Entry"],"text":"reachable set from Entry","wire":{"type":"question","args":{"ask":"reachable","from":"Entry"}}}
+{"id":"ts-0904","names":["Arch"],"text":"rules","wire":{"type":"question","args":{"ask":"rules"}}}
+{"id":"ts-0905","names":["Wedge","Slice"],"text":"exchange Wedge and Slice","wire":{"type":"command","args":{"action":"swap","target":"Wedge,Slice"}}}
+{"id":"ts-0906","names":["Chip","Board"],"text":"remove the connection between Chip and Board","wire":{"type":"command","args":{"action":"disconnect","from":"Chip","to":"Board"}}}
+{"id":"ts-0907","names":["Ridge"],"text":"which shapes are neighbours of Ridge","wire":{"type":"question","args":{"ask":"neighbors","target":"Ridge"}}}
+{"id":"ts-0908","names":["Penn","Dell"],"text":"is Penn directly joined to Dell","wire":{"type":"question","args":{"ask":"connected","target":"Penn","anchor":"Dell"}}}
+{"id":"ts-0909","names":["Lima","Quito"],"text":"can you get from Lima to Quito","wire":{"type":"question","args":{"ask":"path","from":"Lima","to":"Quito"}}}
+{"id":"ts-0910","names":["Stud"],"text":"how many edges touch Stud","wire":{"type":"question","args":{"ask":"degree","target":"Stud"}}}
+{"id":"ts-0911","names":["Reeve"],"text":"list the lime shapes","wire":{"type":"question","args":{"ask":"list","color":"lime"}}}
+{"id":"ts-0912","names":["Manor"],"text":"how many diamonds","wire":{"type":"question","args":{"ask":"count","shape":"diamond"}}}
+{"id":"ts-0913","names":["Keep"],"text":"is there a white square","wire":{"type":"question","args":{"ask":"exists","shape":"square","color":"white"}}}
+{"id":"ts-0914","names":["Hollow"],"text":"summarize what's drawn","wire":{"type":"question","args":{"ask":"describe"}}}
+{"id":"ts-0915","names":["Cord","Plug"],"text":"nearest shape to Cord","wire":{"type":"question","args":{"ask":"nearest","anchor":"Cord","superlative":"closest"}}}
+{"id":"ts-0916","names":["Elder","Youth"],"text":"is Elder bigger than Youth","wire":{"type":"question","args":{"ask":"check","target":"Elder","comparison":"bigger","anchor":"Youth"}}}
+{"id":"ts-0917","names":["Junior","Senior"],"text":"is Junior smaller than Senior","wire":{"type":"question","args":{"ask":"check","target":"Junior","comparison":"smaller","anchor":"Senior"}}}
+{"id":"ts-0918","names":["Foam"],"text":"the biggest shape, which one","wire":{"type":"question","args":{"ask":"extreme","superlative":"biggest"}}}
+{"id":"ts-0919","names":["Ruff"],"text":"what color does Ruff have","wire":{"type":"question","args":{"ask":"property","target":"Ruff","property":"color"}}}
+{"id":"ts-0920","names":["Wisp"],"text":"is Wisp tiny","wire":{"type":"question","args":{"ask":"check","target":"Wisp","size":"tiny"}}}
+{"id":"ts-0921","names":["Shale"],"text":"Shale is not green, is it?","wire":{"type":"question","args":{"ask":"check","target":"Shale","notColor":"green"}}}
+{"id":"ts-0922","names":["Pylon","Mast"],"text":"set a magenta circle under the Pylon","wire":{"type":"command","args":{"action":"create","shape":"circle","color":"magenta","position":"below","anchor":"Pylon"}}}
+{"id":"ts-0923","names":["Tavern"],"text":"for my fantasy map, add an indigo hexagon named Keep","wire":{"type":"command","args":{"action":"create","shape":"hexagon","color":"indigo","name":"Keep"}}}
+{"id":"ts-0924","names":["Dune"],"text":"add four tiny yellow stars","wire":{"type":"command","args":{"action":"create","shape":"star","color":"yellow","size":"tiny","count":"4"}}}
+{"id":"ts-0925","names":["Chapel","Abbey"],"text":"put a white ellipse between Chapel and Abbey","wire":{"type":"command","args":{"action":"create","shape":"ellipse","color":"white","position":"between","anchor":"Chapel,Abbey"}}}
+{"id":"ts-0926","names":["Harbor"],"text":"insert a black square in the top left corner","wire":{"type":"command","args":{"action":"create","shape":"square","color":"black","position":"topLeft"}}}
+{"id":"ts-0927","names":["Garden"],"text":"make a big teal triangle above Garden","wire":{"type":"command","args":{"action":"create","shape":"triangle","color":"teal","size":"large","position":"above","anchor":"Garden"}}}
+{"id":"ts-0928","names":["Plot"],"text":"new green circle labelled Seed","wire":{"type":"command","args":{"action":"create","shape":"circle","color":"green","label":"Seed"}}}
+{"id":"ts-0929","names":["Mortar"],"text":"turn Mortar gray","wire":{"type":"command","args":{"action":"set","target":"Mortar","color":"gray"}}}
+{"id":"ts-0930","names":["Pestle"],"text":"Pestle should be a diamond","wire":{"type":"command","args":{"action":"set","target":"Pestle","shape":"diamond"}}}
+{"id":"ts-0931","names":["Cairn"],"text":"set Cairn to huge","wire":{"type":"command","args":{"action":"set","target":"Cairn","size":"huge"}}}
+{"id":"ts-0932","names":["Spade"],"text":"color all the stars pink","wire":{"type":"command","args":{"action":"set","target":"mention(quantifier=all,shape=star)","color":"pink"}}}
+{"id":"ts-0933","names":["Hoe"],"text":"make the first square orange","wire":{"type":"command","args":{"action":"set","target":"mention(recency=oldest,shape=square)","color":"orange"}}}
+{"id":"ts-0934","names":["Fork","Knife"],"text":"connect Fork with Knife","wire":{"type":"command","args":{"action":"connect","from":"Fork","to":"Knife"}}}
+{"id":"ts-0935","names":["Lane","Road","Path"],"text":"join Lane, Road and Path in a chain","wire":{"type":"command","args":{"action":"connect","from":"Lane,Road,Path","pairing":"chain"}}}
+{"id":"ts-0936","names":["Sink","Drain"],"text":"I want a dotted line from Sink to Drain","wire":{"type":"command","args":{"action":"connect","from":"Sink","to":"Drain","style":"dotted"}}}
+{"id":"ts-0937","names":["Hub","Spoke"],"text":"connect Hub and Spoke with a two-way red arrow","wire":{"type":"command","args":{"action":"connect","from":"Hub","to":"Spoke","arrow":"both","color":"red"}}}
+{"id":"ts-0938","names":["Gate"],"text":"connect Gate to all the diamonds","wire":{"type":"command","args":{"action":"connect","from":"Gate","to":"mention(quantifier=all,shape=diamond)","pairing":"all"}}}
+{"id":"ts-0939","names":["Cat","Mouse"],"text":"wire Cat to Mouse, label chases","wire":{"type":"command","args":{"action":"connect","from":"Cat","to":"Mouse","label":"chases"}}}
+{"id":"ts-0940","names":["Sofa"],"text":"slide the Sofa 250 to the left","wire":{"type":"command","args":{"action":"move","target":"Sofa","direction":"left","distance":"250"}}}
+{"id":"ts-0941","names":["Lamp","Desk"],"text":"put the Lamp on the Desk, above it","wire":{"type":"command","args":{"action":"move","target":"Lamp","position":"above","anchor":"Desk"}}}
+{"id":"ts-0942","names":["Shelf"],"text":"move Shelf into the center","wire":{"type":"command","args":{"action":"move","target":"Shelf","position":"center"}}}
+{"id":"ts-0943","names":["Bush","Fence"],"text":"Bush goes between the Fence and Gate","wire":{"type":"command","args":{"action":"move","target":"Bush","position":"between","anchor":"Fence,Gate"}}}
+{"id":"ts-0944","names":["Rust"],"text":"bin the Rust","wire":{"type":"command","args":{"action":"delete","target":"Rust"}}}
+{"id":"ts-0945","names":["Mold"],"text":"clear out all the green diamonds","wire":{"type":"command","args":{"action":"delete","target":"mention(color=green,quantifier=all,shape=diamond)"}}}
+{"id":"ts-0946","names":["Dust"],"text":"delete the latest star","wire":{"type":"command","args":{"action":"delete","target":"mention(recency=newest,shape=star)"}}}
+{"id":"ts-0947","names":["Grit"],"text":"make Grit bigger please","wire":{"type":"command","args":{"action":"resize","target":"Grit"}}}
+{"id":"ts-0948","names":["Boulder"],"text":"Boulder is too large, make it smaller","wire":{"type":"command","args":{"action":"resize","target":"Boulder"}}}
+{"id":"ts-0949","names":["Bard"],"text":"call Bard Poet","wire":{"type":"command","args":{"action":"rename","target":"Bard","name":"Poet"}}}
+{"id":"ts-0950","names":["Pawn2"],"text":"rename Pawn2 to Knight2","wire":{"type":"command","args":{"action":"rename","target":"Pawn2","name":"Knight2"}}}
+{"id":"ts-0951","names":["Plaque"],"text":"engrave Founders on the Plaque","wire":{"type":"command","args":{"action":"label","target":"Plaque","label":"Founders"}}}
+{"id":"ts-0952","names":["Door"],"text":"relabel the Door \"Back exit\"","wire":{"type":"command","args":{"action":"label","target":"Door","label":"Back exit"}}}
+{"id":"ts-0953","names":["Seed"],"text":"clone Seed 8 times","wire":{"type":"command","args":{"action":"duplicate","target":"Seed","count":"8"}}}
+{"id":"ts-0954","names":["Leaf"],"text":"give me another Leaf","wire":{"type":"command","args":{"action":"duplicate","target":"Leaf"}}}
+{"id":"ts-0955","names":["Bough"],"text":"put all the squares in a grid","wire":{"type":"command","args":{"action":"arrange","target":"mention(quantifier=all,shape=square)","layout":"grid"}}}
+{"id":"ts-0956","names":["Twig"],"text":"arrange everything into a row","wire":{"type":"command","args":{"action":"arrange","layout":"row"}}}
+{"id":"ts-0957","names":["Align1","Align2","Align3"],"text":"align Align1, Align2 and Align3 on the horizontal","wire":{"type":"command","args":{"action":"align","target":"Align1,Align2,Align3","axis":"horizontal"}}}
+{"id":"ts-0958","names":["V1","V2","V3"],"text":"make V1, V2 and V3 line up vertically","wire":{"type":"command","args":{"action":"align","target":"V1,V2,V3","axis":"vertical"}}}
+{"id":"ts-0959","names":["D1","D2","D3","D4"],"text":"distribute D1, D2, D3, D4 horizontally","wire":{"type":"command","args":{"action":"distribute","target":"D1,D2,D3,D4","axis":"horizontal"}}}
+{"id":"ts-0960","names":["Even"],"text":"distribute the stars vertically","wire":{"type":"command","args":{"action":"distribute","target":"mention(quantifier=all,shape=star)","axis":"vertical"}}}
+{"id":"ts-0961","names":["Hat","Cap"],"text":"disconnect Hat and Cap","wire":{"type":"command","args":{"action":"disconnect","from":"Hat","to":"Cap"}}}
+{"id":"ts-0962","names":["Glove","Mitt"],"text":"swap Glove and Mitt","wire":{"type":"command","args":{"action":"swap","target":"Glove,Mitt"}}}
+{"id":"ts-0963","names":["Toad"],"text":"undo the last change","wire":{"type":"command","args":{"action":"undo"}}}
+{"id":"ts-0964","names":["Newt"],"text":"oh no, undo that","wire":{"type":"command","args":{"action":"undo"}}}
+{"id":"ts-0965","names":["Frog"],"text":"redo what was undone","wire":{"type":"command","args":{"action":"redo"}}}
+{"id":"ts-0966","names":["Gecko"],"text":"redo","wire":{"type":"command","args":{"action":"redo"}}}
+{"id":"ts-0967","names":["Skink"],"text":"bring Skink up front","wire":{"type":"command","args":{"action":"toFront","target":"Skink"}}}
+{"id":"ts-0968","names":["Adder"],"text":"put the white circles in front","wire":{"type":"command","args":{"action":"toFront","target":"mention(color=white,quantifier=all,shape=circle)"}}}
+{"id":"ts-0969","names":["Boa"],"text":"Boa goes behind everything","wire":{"type":"command","args":{"action":"toBack","target":"Boa"}}}
+{"id":"ts-0970","names":["Asp"],"text":"send the newest box to the back","wire":{"type":"command","args":{"action":"toBack","target":"mention(recency=newest,shape=rectangle)"}}}
+{"id":"ts-0971","names":["Mamba"],"text":"forget the rules I gave","wire":{"type":"command","args":{"action":"forget"}}}
+{"id":"ts-0972","names":["Viper"],"text":"stop applying the defaults","wire":{"type":"command","args":{"action":"forget"}}}
+{"id":"ts-0973","names":["Rattler"],"text":"Rattler is brown","wire":{"type":"fact","args":{"target":"Rattler","color":"brown"}}}
+{"id":"ts-0974","names":[],"text":"from now on squares are small","wire":{"type":"rule","args":{"shape":"square","size":"small"}}}
+{"id":"ts-0975","names":[],"text":"new things should come out cyan","wire":{"type":"rule","args":{"color":"cyan"}}}
+{"id":"ts-0976","names":["Pit"],"text":"is the graph cyclic","wire":{"type":"question","args":{"ask":"cycle"}}}
+{"id":"ts-0977","names":["Gorge"],"text":"cycle check please","wire":{"type":"question","args":{"ask":"cycle"}}}
+{"id":"ts-0978","names":["Canyon"],"text":"what's downstream of Canyon","wire":{"type":"question","args":{"ask":"reachable","from":"Canyon"}}}
+{"id":"ts-0979","names":["Ravine"],"text":"nodes reachable from Ravine?","wire":{"type":"question","args":{"ask":"reachable","from":"Ravine"}}}
+{"id":"ts-0980","names":["Chasm"],"text":"what rules are active","wire":{"type":"question","args":{"ask":"rules"}}}
+{"id":"ts-0981","names":["Abyss"],"text":"are any rules set","wire":{"type":"question","args":{"ask":"rules"}}}
+{"id":"ts-0982","names":["Mesa"],"text":"what's attached to Mesa","wire":{"type":"question","args":{"ask":"neighbors","target":"Mesa"}}}
+{"id":"ts-0983","names":["Butte","Knoll"],"text":"are Butte and Knoll linked directly","wire":{"type":"question","args":{"ask":"connected","target":"Butte","anchor":"Knoll"}}}
+{"id":"ts-0984","names":["Tor","Fell"],"text":"is there a way from Tor to Fell","wire":{"type":"question","args":{"ask":"path","from":"Tor","to":"Fell"}}}
+{"id":"ts-0985","names":["Crag"],"text":"how many connections does the Crag have","wire":{"type":"question","args":{"ask":"degree","target":"Crag"}}}
+{"id":"ts-0986","names":["Scar"],"text":"all the black ones, list them","wire":{"type":"question","args":{"ask":"list","color":"black"}}}
+{"id":"ts-0987","names":["Cleft"],"text":"how many ellipses","wire":{"type":"question","args":{"ask":"count","shape":"ellipse"}}}
+{"id":"ts-0988","names":["Gully"],"text":"any pink circles around","wire":{"type":"question","args":{"ask":"exists","shape":"circle","color":"pink"}}}
+{"id":"ts-0989","names":["Brae"],"text":"give me the full picture","wire":{"type":"question","args":{"ask":"describe"}}}
+{"id":"ts-0990","names":["Glade","Copse"],"text":"which is nearest to Glade","wire":{"type":"question","args":{"ask":"nearest","anchor":"Glade","superlative":"closest"}}}
+{"id":"ts-0991","names":["Heath","Moor"],"text":"is Heath larger than Moor","wire":{"type":"question","args":{"ask":"check","target":"Heath","comparison":"bigger","anchor":"Moor"}}}
+{"id":"ts-0992","names":["Fen","Bog"],"text":"is Fen smaller than Bog","wire":{"type":"question","args":{"ask":"check","target":"Fen","comparison":"smaller","anchor":"Bog"}}}
+{"id":"ts-0993","names":["Weald"],"text":"which shape is the most connected","wire":{"type":"question","args":{"ask":"extreme","superlative":"mostConnected"}}}
+{"id":"ts-0994","names":["Steppe"],"text":"where is the Steppe","wire":{"type":"question","args":{"ask":"property","target":"Steppe","property":"position"}}}
+{"id":"ts-0995","names":["Tundra"],"text":"how big is Tundra","wire":{"type":"question","args":{"ask":"property","target":"Tundra","property":"size"}}}
+{"id":"ts-0996","names":["Taiga"],"text":"is Taiga a triangle","wire":{"type":"question","args":{"ask":"check","target":"Taiga","shape":"triangle"}}}
+{"id":"ts-0997","names":["Veldt","Savanna"],"text":"is Veldt below Savanna","wire":{"type":"question","args":{"ask":"check","target":"Veldt","position":"below","anchor":"Savanna"}}}
+{"id":"ts-0998","names":["Pampas"],"text":"describe Pampas","wire":{"type":"question","args":{"ask":"describe","target":"Pampas"}}}
+{"id":"ts-0999","names":["Llano","Playa"],"text":"what is farthest from Llano","wire":{"type":"question","args":{"ask":"nearest","anchor":"Llano","superlative":"farthest"}}}
+{"id":"ts-1000","names":["Erg"],"text":"what's the leftmost thing on the canvas","wire":{"type":"question","args":{"ask":"extreme","superlative":"leftmost"}}}

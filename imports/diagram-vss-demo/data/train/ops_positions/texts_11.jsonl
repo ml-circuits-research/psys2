@@ -1,0 +1,40 @@
+{"id":"op-0401","domain":"product team","names":["Spec","Design","Code","Test"],"text":"We are mid-sprint and the board is a mess. Is Design above Code and left of Test? Is Spec in the top left, near Design? If not, put Spec next to Design in the top left, above Code."}
+{"id":"op-0402","domain":"hospital","names":["Triage","Ward","Lab"],"text":"Is Ward below Triage and right of Lab? Is Lab beneath Triage and in the bottom left? Tell me which shapes are right of Lab and below Triage."}
+{"id":"op-0403","domain":"garden","names":["Rose","Fern","Moss"],"text":"Moss should go left of Fern and under Rose. Is Fern near the top, right of Moss? Anything between Rose and Fern and above Moss?"}
+{"id":"op-0404","domain":"dictation","names":["Boss","Intern","Coffee"],"text":"uh is the Intern next to the Coffee and uh below the Boss okay and then uh move the Coffee to the lower right corner, right of the Boss"}
+{"id":"op-0405","domain":"exam prep","names":["Mercury","Venus","Earth"],"text":"Is Venus right of Mercury and above Earth? Is Earth in the bottom right, below Venus? Count the shapes left of Earth and above Mercury, please."}
+{"id":"op-0406","domain":"shop","names":["Door","Till","Shelf"],"text":"Put Till right of Door and above Shelf. Shelf goes in the bottom, left of Door. How many shapes are right of Door and above Shelf?"}
+{"id":"op-0407","domain":"robot","names":["Eye","Arm","Leg"],"text":"Arm needs to be below Eye but left of Leg. Is Leg in the bottom right, right of Eye? Is Eye above Arm?"}
+{"id":"op-0408","domain":"mind map","names":["Hub","Sub1","Sub2"],"text":"Move Sub1 under Hub and left of Sub2, and Sub2 next to Hub in the top right. Anything left of Sub2 and under Hub now?"}
+{"id":"op-0409","domain":"school","names":["Class","Yard","Gym"],"text":"Is Yard between Class and Gym and near the bottom? Is Gym in the top right, right of Class? Is there anything between Class and Gym and above Yard?"}
+{"id":"op-0410","domain":"lan","names":["Pc1","Pc2","Pc3"],"text":"Pc2 is right of Pc1 and below Pc3. Pc3 is in the top right, right of Pc1. Is Pc1 in the bottom left, left of Pc2?"}
+{"id":"op-0411","domain":"quick","names":["Sun","Moon"],"text":"Is the Sun above the Moon and in the top left?"}
+{"id":"op-0412","domain":"chemistry","names":["Fe","Cu","Zn"],"text":"Zn sits below Fe and right of Cu. Cu sits in the top left, above Fe. Which shapes are right of Cu and below Fe?"}
+{"id":"op-0413","domain":"fantasy","names":["King","Queen","Knight"],"text":"The Knight is under the King and next to the Queen. The Queen is near the bottom, left of the King. How many shapes are under the King and left of the Knight?"}
+{"id":"op-0414","domain":"camp","names":["Fire","Tent","Lake"],"text":"Tent goes between Fire and Lake, below Fire... no, above Fire. Is Lake in the bottom right, right of Fire? Where is the Tent now?"}
+{"id":"op-0415","domain":"puzzle","names":["Ace","Two","Three"],"text":"Ace is left of Two and above Three. Is Three right of Two? Is anything between Ace and Two and below Three?"}
+{"id":"op-0416","domain":"dictation","names":["Cow","Pig"],"text":"um is there like a red thing in the top right, right of the Cow and uh above the Pig"}
+{"id":"op-0417","domain":"storage","names":["Bin1","Bin2","Bin3"],"text":"Bin3 into the top right corner, next to Bin2, and Bin1 below Bin2 and left of Bin3. Delete Bin2 if it's empty. Is Bin1 below Bin3?"}
+{"id":"op-0418","domain":"UI","names":["Btn","Input","Label"],"text":"Label should be above Input and left of Btn. Is Input in the middle, right of Label? Is Btn near the bottom, below Input?"}
+{"id":"op-0419","domain":"farm","names":["Barn","Silo","Pond"],"text":"Is Pond left of Silo and beneath Barn? Is Pond in the bottom left, left of Barn? Is Silo near the top, right of Barn?"}
+{"id":"op-0420","domain":"cooking","names":["Egg","Milk","Flour"],"text":"which things are above Egg and right of Milk? is there a blue thing between Milk and Flour, near the top?"}
+{"id":"op-0421","domain":"film","names":["Lens","Light","Actor"],"text":"Is Light left of Lens and over Actor? Is Actor in the middle, below Lens? Make Light white."}
+{"id":"op-0422","domain":"game","names":["Rook","Bishop","Pawn"],"text":"Move Bishop above Rook and next to Pawn. Move Rook to the bottom left, left of Pawn. Count the shapes above Rook and left of Pawn."}
+{"id":"op-0423","domain":"sketchbook","names":["Dot","Line","Curve"],"text":"Dot belongs in the top right corner, above Line. Curve belongs left of Line and under Dot. Is Line in the middle?"}
+{"id":"op-0424","domain":"airport","names":["Gate","Bus","Plane"],"text":"Put Bus beneath Gate and right of Plane. Is Plane in the top left, above Gate? Any shape in the bottom left, left of Gate?"}
+{"id":"op-0425","domain":"bank","names":["Vault","Desk","Door"],"text":"Is Desk right of Vault and below Door? Is Door in the top left, above Vault?"}
+{"id":"op-0426","domain":"pond","names":["Frog","Lily","Fish"],"text":"Frog is on top of Lily and next to Fish. Fish is in the bottom right, right of Lily."}
+{"id":"op-0427","domain":"team","names":["Ann","Bob","Cy","Dee"],"text":"Ann is right of Bob and below Cy. Cy is next to Dee, in the top right."}
+{"id":"op-0428","domain":"office","names":["Desk","Lamp","Plant"],"text":"the Plant is under the Lamp and left of the Desk. The Lamp is at the top right, above the Desk. oh and the Desk is gray"}
+{"id":"op-0429","domain":"bio","names":["Gene","Cell","Virus"],"text":"Is the Virus below Cell and right of Gene? Are there any circles left of Gene and above Cell? Which are in the top left, left of Gene?"}
+{"id":"op-0430","domain":"tools","names":["Saw","Nail","Glue"],"text":"Is Nail beneath Saw and next to Glue? Is Glue near the bottom, left of Saw?"}
+{"id":"op-0431","domain":"city","names":["Mall","Park","Zoo"],"text":"Tell me how many shapes sit left of Zoo and beneath Mall. And how many shapes sit in the top left, left of Park?"}
+{"id":"op-0432","domain":"tournament","names":["Gold","Silver","Bronze"],"text":"Is Gold above Silver and between Bronze and Silver? Hmm, silly question. Is Bronze in the bottom right, below Silver?"}
+{"id":"op-0433","domain":"space","names":["Sun","Mars","Venus"],"text":"Sun is over Mars, and Mars is over Venus, and Venus is over Sun. Is that possible? Is Venus right of Sun and in the top left?"}
+{"id":"op-0434","domain":"dance floor","names":["Lead","Follow","Band"],"text":"Move Band to the bottom, below Lead and left of Follow. Does any shape sit between Lead and Follow and above Band?"}
+{"id":"op-0435","domain":"stage","names":["Piano","Drum","Bass"],"text":"Piano to the top left, above Drum. Drum under Piano and right of Bass. Bass in the bottom left, next to Drum."}
+{"id":"op-0436","domain":"hotel","names":["Lobby","Spa","Bar"],"text":"Spa should go beneath Lobby but left of Bar. Bar in the upper right corner, right of Lobby. Make Bar gold."}
+{"id":"op-0437","domain":"kitchen","names":["Oven","Pan","Lid"],"text":"Put Lid on top of Pan and right of Oven, and Pan in the bottom left, left of Oven."}
+{"id":"op-0438","domain":"forest facts","names":["Owl","Fox","Deer"],"text":"Owl is above Fox and left of Deer. Fox is near the bottom, right of Deer. Deer is huge."}
+{"id":"op-0439","domain":"garage","names":["Car","Truck","Bike"],"text":"Truck next to Car in the top right corner. Bike under Car and left of Truck. Is Bike bigger than Car?"}
+{"id":"op-0440","domain":"planning","names":["Alpha","Beta","Gamma"],"text":"Alpha goes between Beta and Gamma, near the top. Beta goes below Gamma and left of Alpha, and Gamma into the bottom right."}

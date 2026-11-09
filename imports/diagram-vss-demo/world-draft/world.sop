@@ -1,0 +1,21 @@
+@world.diagram.sketch core.world
+    namespace=diagram.sketch
+    version=0.1.0
+    legend=$legend.diagram.sketch
+    imports=world.core
+    imports=world.lang.common
+    formalization=rules
+    language=en
+    status=draft
+    title="Diagram editor (from diagram-vss-demo)"
+    summary="draw diagrams: shapes, arrows, layouts and questions about them"
+    tab=diagram
+    tabTitle="Diagram"
+    tabAlias=diagrams
+    tabAlias=diagram_editor
+    tabAlias=flowchart
+    tabAlias=sketchpad
+    tabOrder=85
+    tabKind=tool
+    tabNew=diagram.new
+    doc="A diagram editor controlled by text or voice, imported from diagram-vss-demo (commit 9900d34): named shapes (circle, square, rectangle, triangle, diamond, ellipse, hexagon, star, text) with colour, outline, fill, size, label and place; connections (solid, dashed, dotted; arrow forward, both, none; chains and fan-outs); groups, zones and backgrounds; align, arrange (row, column, grid, circle, tree, layers, radial), distribute, z-order; 24 diagram templates (process, cycle, hierarchy, pyramid, funnel ...) and colour schemes; questions about the drawing (count, list, exists, property, check, describe, neighbours, degree, nearest, extreme, path, reachable, cycle) answered by a Datalog reasoner; facts and rules; undo and redo. The state and the execution are the source engine (engine/logic.js), wrapped by ops.mjs; the Diagram tab renders the state as SVG (ported from engine/ui.js). Draft: not loaded until the worker completes it (imports/diagram-vss-demo/README.md)."

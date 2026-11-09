@@ -1,0 +1,100 @@
+{"id":"ts-1301","names":["Foyer","Annex"],"text":"for the museum floor plan, put a white box called Gallery to the left of the Foyer","wire":{"type":"command","args":{"action":"create","shape":"rectangle","color":"white","name":"Gallery","position":"leftOf","anchor":"Foyer"}}}
+{"id":"ts-1302","names":["Build","Deploy"],"text":"could this pipeline ever feed back into itself","wire":{"type":"question","args":{"ask":"cycle"}}}
+{"id":"ts-1303","names":["Trigger"],"text":"everything Trigger can reach","wire":{"type":"question","args":{"ask":"reachable","from":"Trigger"}}}
+{"id":"ts-1304","names":["Arc"],"text":"what is set as a default at the moment","wire":{"type":"question","args":{"ask":"rules"}}}
+{"id":"ts-1305","names":["Left1","Right1"],"text":"flip Left1 and Right1","wire":{"type":"command","args":{"action":"swap","target":"Left1,Right1"}}}
+{"id":"ts-1306","names":["Alpha","Beta"],"text":"break the connection between Alpha and Beta","wire":{"type":"command","args":{"action":"disconnect","from":"Alpha","to":"Beta"}}}
+{"id":"ts-1307","names":["Zeta"],"text":"show me the gold shapes","wire":{"type":"question","args":{"ask":"list","color":"gold"}}}
+{"id":"ts-1308","names":["Eta"],"text":"what is linked to Eta","wire":{"type":"question","args":{"ask":"neighbors","target":"Eta"}}}
+{"id":"ts-1309","names":["Theta","Iota"],"text":"is Theta joined directly with Iota","wire":{"type":"question","args":{"ask":"connected","target":"Theta","anchor":"Iota"}}}
+{"id":"ts-1310","names":["Kappa","Mu"],"text":"is Mu reachable from Kappa, is there a path","wire":{"type":"question","args":{"ask":"path","from":"Kappa","to":"Mu"}}}
+{"id":"ts-1311","names":["Nu"],"text":"Nu's degree?","wire":{"type":"question","args":{"ask":"degree","target":"Nu"}}}
+{"id":"ts-1312","names":["Xi"],"text":"undo","wire":{"type":"command","args":{"action":"undo"}}}
+{"id":"ts-1313","names":["Pi"],"text":"step back, undo it","wire":{"type":"command","args":{"action":"undo"}}}
+{"id":"ts-1314","names":["Rho"],"text":"undo what you just did","wire":{"type":"command","args":{"action":"undo"}}}
+{"id":"ts-1315","names":["Tau"],"text":"redo","wire":{"type":"command","args":{"action":"redo"}}}
+{"id":"ts-1316","names":["Phi"],"text":"put back what I undid, redo","wire":{"type":"command","args":{"action":"redo"}}}
+{"id":"ts-1317","names":["Chi"],"text":"redo the previous change","wire":{"type":"command","args":{"action":"redo"}}}
+{"id":"ts-1318","names":["Psi"],"text":"Psi in front","wire":{"type":"command","args":{"action":"toFront","target":"Psi"}}}
+{"id":"ts-1319","names":["Omega"],"text":"I want Omega drawn over the rest","wire":{"type":"command","args":{"action":"toFront","target":"Omega"}}}
+{"id":"ts-1320","names":["Title2"],"text":"raise all the circles to the front","wire":{"type":"command","args":{"action":"toFront","target":"mention(quantifier=all,shape=circle)"}}}
+{"id":"ts-1321","names":["Shadow"],"text":"Shadow should be behind the others","wire":{"type":"command","args":{"action":"toBack","target":"Shadow"}}}
+{"id":"ts-1322","names":["Backing"],"text":"lower Backing to the back","wire":{"type":"command","args":{"action":"toBack","target":"Backing"}}}
+{"id":"ts-1323","names":["Ground"],"text":"stick the oldest rectangle at the back","wire":{"type":"command","args":{"action":"toBack","target":"mention(recency=oldest,shape=rectangle)"}}}
+{"id":"ts-1324","names":["Ham","Jam"],"text":"swap the places of Ham and Jam","wire":{"type":"command","args":{"action":"swap","target":"Ham,Jam"}}}
+{"id":"ts-1325","names":["Salt1","Pepper1"],"text":"interchange Salt1 and Pepper1","wire":{"type":"command","args":{"action":"swap","target":"Salt1,Pepper1"}}}
+{"id":"ts-1326","names":["Rice","Beans"],"text":"swap Rice and Beans","wire":{"type":"command","args":{"action":"swap","target":"Rice,Beans"}}}
+{"id":"ts-1327","names":["Corn","Wheat"],"text":"detach Corn from Wheat","wire":{"type":"command","args":{"action":"disconnect","from":"Corn","to":"Wheat"}}}
+{"id":"ts-1328","names":["Oats","Barley"],"text":"remove the arrow between Oats and Barley","wire":{"type":"command","args":{"action":"disconnect","from":"Oats","to":"Barley"}}}
+{"id":"ts-1329","names":["Millet","Sorghum"],"text":"disconnect Millet and Sorghum","wire":{"type":"command","args":{"action":"disconnect","from":"Millet","to":"Sorghum"}}}
+{"id":"ts-1330","names":["T1","T2","T3"],"text":"align T1, T2, T3 horizontally","wire":{"type":"command","args":{"action":"align","target":"T1,T2,T3","axis":"horizontal"}}}
+{"id":"ts-1331","names":["U1","U2"],"text":"make U1 and U2 line up vertically","wire":{"type":"command","args":{"action":"align","target":"U1,U2","axis":"vertical"}}}
+{"id":"ts-1332","names":["Weft"],"text":"align every hexagon vertically","wire":{"type":"command","args":{"action":"align","target":"mention(quantifier=all,shape=hexagon)","axis":"vertical"}}}
+{"id":"ts-1333","names":["X1","X2","X3"],"text":"distribute X1, X2, X3 horizontally","wire":{"type":"command","args":{"action":"distribute","target":"X1,X2,X3","axis":"horizontal"}}}
+{"id":"ts-1334","names":["Warp"],"text":"evenly space all the red shapes vertically","wire":{"type":"command","args":{"action":"distribute","target":"mention(color=red,quantifier=all)","axis":"vertical"}}}
+{"id":"ts-1335","names":["Yarn"],"text":"drop all the rules","wire":{"type":"command","args":{"action":"forget"}}}
+{"id":"ts-1336","names":["Thread"],"text":"please forget the default rules","wire":{"type":"command","args":{"action":"forget"}}}
+{"id":"ts-1337","names":[],"text":"from now on every ellipse is purple","wire":{"type":"rule","args":{"shape":"ellipse","color":"purple"}}}
+{"id":"ts-1338","names":[],"text":"new squares should be huge","wire":{"type":"rule","args":{"shape":"square","size":"huge"}}}
+{"id":"ts-1339","names":["Needle"],"text":"Needle is a star","wire":{"type":"fact","args":{"target":"Needle","shape":"star"}}}
+{"id":"ts-1340","names":["Spool"],"text":"is there a loop","wire":{"type":"question","args":{"ask":"cycle"}}}
+{"id":"ts-1341","names":["Bobbin"],"text":"circular links in here?","wire":{"type":"question","args":{"ask":"cycle"}}}
+{"id":"ts-1342","names":["Button"],"text":"what can Button reach","wire":{"type":"question","args":{"ask":"reachable","from":"Button"}}}
+{"id":"ts-1343","names":["Zipper"],"text":"list nodes reachable from Zipper","wire":{"type":"question","args":{"ask":"reachable","from":"Zipper"}}}
+{"id":"ts-1344","names":["Hem"],"text":"which reachable shapes follow Hem","wire":{"type":"question","args":{"ask":"reachable","from":"Hem"}}}
+{"id":"ts-1345","names":["Seam"],"text":"what rules have been defined","wire":{"type":"question","args":{"ask":"rules"}}}
+{"id":"ts-1346","names":["Cuff"],"text":"do I have any rules set up","wire":{"type":"question","args":{"ask":"rules"}}}
+{"id":"ts-1347","names":["Collar"],"text":"list all the blue shapes","wire":{"type":"question","args":{"ask":"list","color":"blue"}}}
+{"id":"ts-1348","names":["Lapel"],"text":"list the diamonds","wire":{"type":"question","args":{"ask":"list","shape":"diamond"}}}
+{"id":"ts-1349","names":["Pocket"],"text":"give me all the shapes that are not gold","wire":{"type":"question","args":{"ask":"list","notColor":"gold"}}}
+{"id":"ts-1350","names":["Sleeve"],"text":"neighbors of Sleeve please","wire":{"type":"question","args":{"ask":"neighbors","target":"Sleeve"}}}
+{"id":"ts-1351","names":["Hood","Visor"],"text":"are Hood and Visor connected","wire":{"type":"question","args":{"ask":"connected","target":"Hood","anchor":"Visor"}}}
+{"id":"ts-1352","names":["Scarf","Glove"],"text":"is there a connection path from Scarf to Glove","wire":{"type":"question","args":{"ask":"path","from":"Scarf","to":"Glove"}}}
+{"id":"ts-1353","names":["Boot"],"text":"what's the degree of Boot","wire":{"type":"question","args":{"ask":"degree","target":"Boot"}}}
+{"id":"ts-1354","names":["Shoe"],"text":"how many connections does Shoe have","wire":{"type":"question","args":{"ask":"degree","target":"Shoe"}}}
+{"id":"ts-1355","names":["Sock"],"text":"how many squares","wire":{"type":"question","args":{"ask":"count","shape":"square"}}}
+{"id":"ts-1356","names":["Heel"],"text":"is there any ellipse","wire":{"type":"question","args":{"ask":"exists","shape":"ellipse"}}}
+{"id":"ts-1357","names":["Sole"],"text":"describe everything on the canvas","wire":{"type":"question","args":{"ask":"describe"}}}
+{"id":"ts-1358","names":["Lace","Tongue"],"text":"nearest shape to Lace?","wire":{"type":"question","args":{"ask":"nearest","anchor":"Lace","superlative":"closest"}}}
+{"id":"ts-1359","names":["Clog","Sandal"],"text":"is Clog bigger than Sandal","wire":{"type":"question","args":{"ask":"check","target":"Clog","comparison":"bigger","anchor":"Sandal"}}}
+{"id":"ts-1360","names":["Pump2"],"text":"which shape is the biggest","wire":{"type":"question","args":{"ask":"extreme","superlative":"biggest"}}}
+{"id":"ts-1361","names":["Mule2"],"text":"what shape is Mule2","wire":{"type":"question","args":{"ask":"property","target":"Mule2","property":"shape"}}}
+{"id":"ts-1362","names":["Flat"],"text":"is Flat purple","wire":{"type":"question","args":{"ask":"check","target":"Flat","color":"purple"}}}
+{"id":"ts-1363","names":["Bay2","Port2"],"text":"insert a cyan hexagon right of Bay2","wire":{"type":"command","args":{"action":"create","shape":"hexagon","color":"cyan","position":"rightOf","anchor":"Bay2"}}}
+{"id":"ts-1364","names":["Nave"],"text":"add a tiny gray circle named Pew","wire":{"type":"command","args":{"action":"create","shape":"circle","color":"gray","size":"tiny","name":"Pew"}}}
+{"id":"ts-1365","names":["Altar"],"text":"put a gold star above the Altar","wire":{"type":"command","args":{"action":"create","shape":"star","color":"gold","position":"above","anchor":"Altar"}}}
+{"id":"ts-1366","names":["Choir"],"text":"make 3 purple squares","wire":{"type":"command","args":{"action":"create","shape":"square","color":"purple","count":"3"}}}
+{"id":"ts-1367","names":["Nave2","Apse"],"text":"slide a pink diamond between Nave2 and Apse","wire":{"type":"command","args":{"action":"create","shape":"diamond","color":"pink","position":"between","anchor":"Nave2,Apse"}}}
+{"id":"ts-1368","names":["Spire2"],"text":"a large red triangle at the top, call it Peak","wire":{"type":"command","args":{"action":"create","shape":"triangle","color":"red","size":"large","name":"Peak","position":"top"}}}
+{"id":"ts-1369","names":["Crypt"],"text":"add a black box in the bottom right corner","wire":{"type":"command","args":{"action":"create","shape":"rectangle","color":"black","position":"bottomRight"}}}
+{"id":"ts-1370","names":["Cloister"],"text":"add an indigo oval with the label Garden","wire":{"type":"command","args":{"action":"create","shape":"ellipse","color":"indigo","label":"Garden"}}}
+{"id":"ts-1371","names":["Belfry"],"text":"throw a navy circle onto the board near the Belfry","wire":{"type":"command","args":{"action":"create","shape":"circle","color":"navy","position":"near","anchor":"Belfry"}}}
+{"id":"ts-1372","names":["Vault2"],"text":"add a medium lime star","wire":{"type":"command","args":{"action":"create","shape":"star","color":"lime","size":"medium"}}}
+{"id":"ts-1373","names":["Nook2"],"text":"add a magenta hexagon to the left","wire":{"type":"command","args":{"action":"create","shape":"hexagon","color":"magenta","position":"left"}}}
+{"id":"ts-1374","names":["Pier2"],"text":"a brown circle called Post, please","wire":{"type":"command","args":{"action":"create","shape":"circle","color":"brown","name":"Post"}}}
+{"id":"ts-1375","names":["Hatch2"],"text":"make Hatch2 orange","wire":{"type":"command","args":{"action":"set","target":"Hatch2","color":"orange"}}}
+{"id":"ts-1376","names":["Plank"],"text":"change the Plank to a triangle","wire":{"type":"command","args":{"action":"set","target":"Plank","shape":"triangle"}}}
+{"id":"ts-1377","names":["Beam2"],"text":"Beam2 is to be tiny","wire":{"type":"command","args":{"action":"set","target":"Beam2","size":"tiny"}}}
+{"id":"ts-1378","names":["Joist"],"text":"make all the boxes yellow","wire":{"type":"command","args":{"action":"set","target":"mention(quantifier=all,shape=rectangle)","color":"yellow"}}}
+{"id":"ts-1379","names":["Rafter"],"text":"make the first triangle teal","wire":{"type":"command","args":{"action":"set","target":"mention(recency=oldest,shape=triangle)","color":"teal"}}}
+{"id":"ts-1380","names":["Stud2"],"text":"set Stud2 to white and make it huge","wire":{"type":"command","args":{"action":"set","target":"Stud2","color":"white","size":"huge"}}}
+{"id":"ts-1381","names":["Pipe2","Valve2"],"text":"connect Pipe2 to Valve2","wire":{"type":"command","args":{"action":"connect","from":"Pipe2","to":"Valve2"}}}
+{"id":"ts-1382","names":["Tap2","Basin"],"text":"draw a dashed line from Tap2 to Basin","wire":{"type":"command","args":{"action":"connect","from":"Tap2","to":"Basin","style":"dashed"}}}
+{"id":"ts-1383","names":["Drain2","Sewer"],"text":"link Drain2 with Sewer using a dotted red arrow","wire":{"type":"command","args":{"action":"connect","from":"Drain2","to":"Sewer","style":"dotted","color":"red"}}}
+{"id":"ts-1384","names":["A1","A2","A3","A4"],"text":"chain A1, A2, A3 and A4 together","wire":{"type":"command","args":{"action":"connect","from":"A1,A2,A3,A4","pairing":"chain"}}}
+{"id":"ts-1385","names":["Sun2","Moon2"],"text":"connect Sun2 and Moon2 with a two-way line","wire":{"type":"command","args":{"action":"connect","from":"Sun2","to":"Moon2","arrow":"both"}}}
+{"id":"ts-1386","names":["Dam","Lake"],"text":"label the line from Dam to Lake \"holds\"","wire":{"type":"command","args":{"action":"connect","from":"Dam","to":"Lake","label":"holds"}}}
+{"id":"ts-1387","names":["Source2"],"text":"connect Source2 to all the triangles","wire":{"type":"command","args":{"action":"connect","from":"Source2","to":"mention(quantifier=all,shape=triangle)","pairing":"all"}}}
+{"id":"ts-1388","names":["Motor"],"text":"move the Motor 120 to the left","wire":{"type":"command","args":{"action":"move","target":"Motor","direction":"left","distance":"120"}}}
+{"id":"ts-1389","names":["Belt","Pulley2"],"text":"put Belt above the Pulley2","wire":{"type":"command","args":{"action":"move","target":"Belt","position":"above","anchor":"Pulley2"}}}
+{"id":"ts-1390","names":["Gear3"],"text":"move Gear3 to the top left","wire":{"type":"command","args":{"action":"move","target":"Gear3","position":"topLeft"}}}
+{"id":"ts-1391","names":["Rod2","Piston"],"text":"bring Rod2 next to the Piston","wire":{"type":"command","args":{"action":"move","target":"Rod2","position":"near","anchor":"Piston"}}}
+{"id":"ts-1392","names":["Cam"],"text":"nudge the Cam down","wire":{"type":"command","args":{"action":"move","target":"Cam","direction":"down"}}}
+{"id":"ts-1393","names":["Crank"],"text":"remove Crank","wire":{"type":"command","args":{"action":"delete","target":"Crank"}}}
+{"id":"ts-1394","names":["Bolt2"],"text":"get rid of all the white circles","wire":{"type":"command","args":{"action":"delete","target":"mention(color=white,quantifier=all,shape=circle)"}}}
+{"id":"ts-1395","names":["Nut2"],"text":"delete everything","wire":{"type":"command","args":{"action":"delete","target":"mention(quantifier=all)"}}}
+{"id":"ts-1396","names":["Cog2"],"text":"make Cog2 bigger","wire":{"type":"command","args":{"action":"resize","target":"Cog2"}}}
+{"id":"ts-1397","names":["Spring2"],"text":"shrink all the squares","wire":{"type":"command","args":{"action":"resize","target":"mention(quantifier=all,shape=square)"}}}
+{"id":"ts-1398","names":["Lever2"],"text":"rename Lever2 to Handle","wire":{"type":"command","args":{"action":"rename","target":"Lever2","name":"Handle"}}}
+{"id":"ts-1399","names":["Pawl"],"text":"name the last square Latch","wire":{"type":"command","args":{"action":"rename","target":"mention(recency=newest,shape=square)","name":"Latch"}}}
+{"id":"ts-1400","names":["Ratchet"],"text":"put the label Locked on Ratchet","wire":{"type":"command","args":{"action":"label","target":"Ratchet","label":"Locked"}}}

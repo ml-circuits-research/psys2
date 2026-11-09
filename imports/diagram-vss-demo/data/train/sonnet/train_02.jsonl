@@ -1,0 +1,100 @@
+{"id":"ts-0101","names":["Patient","Nurse"],"text":"add an orange triangle labeled \"Triage\" below the Patient","wire":{"type":"command","args":{"action":"create","shape":"triangle","color":"orange","label":"Triage","position":"below","anchor":"Patient"}}}
+{"id":"ts-0102","names":["Kitchen"],"text":"set Kitchen to large","wire":{"type":"command","args":{"action":"set","target":"Kitchen","size":"large"}}}
+{"id":"ts-0103","names":["Intake","Review","Publish"],"text":"chain Intake, Review and Publish together","wire":{"type":"command","args":{"action":"connect","from":"Intake,Review,Publish","pairing":"chain"}}}
+{"id":"ts-0104","names":["Ledger"],"text":"push Ledger 120 px down","wire":{"type":"command","args":{"action":"move","target":"Ledger","direction":"down","distance":"120"}}}
+{"id":"ts-0105","names":["Orders"],"text":"is there anything purple?","wire":{"type":"question","args":{"ask":"exists","color":"purple"}}}
+{"id":"ts-0106","names":["Temp"],"text":"remove every red square","wire":{"type":"command","args":{"action":"delete","target":"mention(color=red,quantifier=all,shape=square)"}}}
+{"id":"ts-0107","names":["Studio","Stage"],"text":"I want a star right of Stage, make it gold","wire":{"type":"command","args":{"action":"create","shape":"star","color":"gold","position":"rightOf","anchor":"Stage"}}}
+{"id":"ts-0108","names":["Draft"],"text":"call Draft Final instead","wire":{"type":"command","args":{"action":"rename","target":"Draft","name":"Final"}}}
+{"id":"ts-0109","names":["Tokyo","Osaka"],"text":"are Tokyo and Osaka joined","wire":{"type":"question","args":{"ask":"connected","target":"Tokyo","anchor":"Osaka"}}}
+{"id":"ts-0110","names":["Bakery"],"text":"scrap that","wire":{"type":"command","args":{"action":"undo"}}}
+{"id":"ts-0111","names":["Seed"],"text":"put \"v2\" on the label of Seed","wire":{"type":"command","args":{"action":"label","target":"Seed","label":"v2"}}}
+{"id":"ts-0112","names":["Left","Right"],"text":"exchange the places of Left and Right","wire":{"type":"command","args":{"action":"swap","target":"Left,Right"}}}
+{"id":"ts-0113","names":["Atom"],"text":"what is next to Atom?","wire":{"type":"question","args":{"ask":"neighbors","target":"Atom"}}}
+{"id":"ts-0114","names":["Beacon"],"text":"Beacon needs to be bigger","wire":{"type":"command","args":{"action":"resize","target":"Beacon"}}}
+{"id":"ts-0115","names":["Row1","Row2","Row3"],"text":"make Row1, Row2 and Row3 line up vertically","wire":{"type":"command","args":{"action":"align","target":"Row1,Row2,Row3","axis":"vertical"}}}
+{"id":"ts-0116","names":["Quartz"],"text":"tell me the position of Quartz","wire":{"type":"question","args":{"ask":"property","target":"Quartz","property":"position"}}}
+{"id":"ts-0117","names":[],"text":"new triangles should always be cyan from here on","wire":{"type":"rule","args":{"shape":"triangle","color":"cyan"}}}
+{"id":"ts-0118","names":["Cashier"],"text":"Cashier is a hexagon","wire":{"type":"fact","args":{"target":"Cashier","shape":"hexagon"}}}
+{"id":"ts-0119","names":["Mast","Sail"],"text":"slide a white oval on top of Mast","wire":{"type":"command","args":{"action":"create","shape":"ellipse","color":"white","position":"above","anchor":"Mast"}}}
+{"id":"ts-0120","names":["Tile"],"text":"make 5 copies of Tile","wire":{"type":"command","args":{"action":"duplicate","target":"Tile","count":"5"}}}
+{"id":"ts-0121","names":["Home","Work"],"text":"can you get from Home to Work?","wire":{"type":"question","args":{"ask":"path","from":"Home","to":"Work"}}}
+{"id":"ts-0122","names":["Title"],"text":"Title goes on top of the pile","wire":{"type":"command","args":{"action":"toFront","target":"Title"}}}
+{"id":"ts-0123","names":["Cloud","Edge"],"text":"link Cloud to Edge in blue","wire":{"type":"command","args":{"action":"connect","from":"Cloud","to":"Edge","color":"blue"}}}
+{"id":"ts-0124","names":[],"text":"lay everything out as a column","wire":{"type":"command","args":{"action":"arrange","layout":"column"}}}
+{"id":"ts-0125","names":["Logo"],"text":"switch Logo to magenta","wire":{"type":"command","args":{"action":"set","target":"Logo","color":"magenta"}}}
+{"id":"ts-0126","names":["Chair"],"text":"shove Chair left by 60","wire":{"type":"command","args":{"action":"move","target":"Chair","direction":"left","distance":"60"}}}
+{"id":"ts-0127","names":["Loop1"],"text":"is there a cycle in this graph","wire":{"type":"question","args":{"ask":"cycle"}}}
+{"id":"ts-0128","names":["Planet"],"text":"Planet is tiny","wire":{"type":"fact","args":{"target":"Planet","size":"tiny"}}}
+{"id":"ts-0129","names":["Whale","Shrimp"],"text":"is Whale larger than Shrimp","wire":{"type":"question","args":{"ask":"check","target":"Whale","comparison":"bigger","anchor":"Shrimp"}}}
+{"id":"ts-0130","names":["Banner"],"text":"push Banner behind the rest","wire":{"type":"command","args":{"action":"toBack","target":"Banner"}}}
+{"id":"ts-0131","names":["Mom","Dad"],"text":"remove the arrow from Mom to Dad","wire":{"type":"command","args":{"action":"disconnect","from":"Mom","to":"Dad"}}}
+{"id":"ts-0132","names":[],"text":"actually, redo it","wire":{"type":"command","args":{"action":"redo"}}}
+{"id":"ts-0133","names":["Scout"],"text":"whip up a huge red circle called Scout in the middle","wire":{"type":"command","args":{"action":"create","shape":"circle","color":"red","size":"huge","name":"Scout","position":"center"}}}
+{"id":"ts-0134","names":["Mon","Tue","Wed"],"text":"space Mon, Tue and Wed out evenly, horizontally","wire":{"type":"command","args":{"action":"distribute","target":"Mon,Tue,Wed","axis":"horizontal"}}}
+{"id":"ts-0135","names":["Crane"],"text":"which shape sits at the top?","wire":{"type":"question","args":{"ask":"extreme","superlative":"topmost"}}}
+{"id":"ts-0136","names":["Panel"],"text":"slide Panel to the right of Dial","wire":{"type":"command","args":{"action":"move","target":"Panel","position":"rightOf","anchor":"Dial"}}}
+{"id":"ts-0137","names":["Rule1"],"text":"clear out the default rules","wire":{"type":"command","args":{"action":"forget"}}}
+{"id":"ts-0138","names":[],"text":"show me the rules","wire":{"type":"question","args":{"ask":"rules"}}}
+{"id":"ts-0139","names":["Switch"],"text":"how many links does Switch have","wire":{"type":"question","args":{"ask":"degree","target":"Switch"}}}
+{"id":"ts-0140","names":["Bar"],"text":"ditch the stars that aren't yellow","wire":{"type":"command","args":{"action":"delete","target":"mention(notcolor=yellow,quantifier=all,shape=star)"}}}
+{"id":"ts-0141","names":["Cafe"],"text":"throw a lime square onto the canvas at the top right","wire":{"type":"command","args":{"action":"create","shape":"square","color":"lime","position":"topRight"}}}
+{"id":"ts-0142","names":["Tank","Pump"],"text":"connect Tank to Pump, dashed, with the label flow","wire":{"type":"command","args":{"action":"connect","from":"Tank","to":"Pump","style":"dashed","label":"flow"}}}
+{"id":"ts-0143","names":["Dawn"],"text":"are there any circles to the left of Dawn","wire":{"type":"question","args":{"ask":"exists","shape":"circle","position":"leftOf","anchor":"Dawn"}}}
+{"id":"ts-0144","names":["Sage"],"text":"recolour Sage pink please","wire":{"type":"command","args":{"action":"set","target":"Sage","color":"pink"}}}
+{"id":"ts-0145","names":["Lamp","Desk"],"text":"is Lamp near Desk","wire":{"type":"question","args":{"ask":"check","target":"Lamp","position":"near","anchor":"Desk"}}}
+{"id":"ts-0146","names":["Pearl"],"text":"make Pearl smaller","wire":{"type":"command","args":{"action":"resize","target":"Pearl"}}}
+{"id":"ts-0147","names":["Fern"],"text":"count the green stuff","wire":{"type":"question","args":{"ask":"count","color":"green"}}}
+{"id":"ts-0148","names":["Door"],"text":"caption the Door \"Exit\"","wire":{"type":"command","args":{"action":"label","target":"Door","label":"Exit"}}}
+{"id":"ts-0149","names":["Truck"],"text":"rename the latest star as Comet","wire":{"type":"command","args":{"action":"rename","target":"mention(recency=newest,shape=star)","name":"Comet"}}}
+{"id":"ts-0150","names":["Kid","Dog"],"text":"from now on, rectangles are brown","wire":{"type":"rule","args":{"shape":"rectangle","color":"brown"}}}
+{"id":"ts-0151","names":["Pawn"],"text":"what's the size of Pawn","wire":{"type":"question","args":{"ask":"property","target":"Pawn","property":"size"}}}
+{"id":"ts-0152","names":["Vane","Rudder"],"text":"drop an indigo box between Vane and Rudder","wire":{"type":"command","args":{"action":"create","shape":"rectangle","color":"indigo","position":"between","anchor":"Vane,Rudder"}}}
+{"id":"ts-0153","names":[],"text":"organize all the squares into a grid","wire":{"type":"command","args":{"action":"arrange","target":"mention(quantifier=all,shape=square)","layout":"grid"}}}
+{"id":"ts-0154","names":["Hotel","Motel"],"text":"is Hotel smaller than Motel","wire":{"type":"question","args":{"ask":"check","target":"Hotel","comparison":"smaller","anchor":"Motel"}}}
+{"id":"ts-0155","names":["Grid"],"text":"give me an overview of the whole thing","wire":{"type":"question","args":{"ask":"describe"}}}
+{"id":"ts-0156","names":["Cart"],"text":"park Cart in the bottom left","wire":{"type":"command","args":{"action":"move","target":"Cart","position":"bottomLeft"}}}
+{"id":"ts-0157","names":["Brook","Hill"],"text":"Brook is above Hill","wire":{"type":"fact","args":{"target":"Brook","position":"above","anchor":"Hill"}}}
+{"id":"ts-0158","names":["Cake"],"text":"I need two more of Cake","wire":{"type":"command","args":{"action":"duplicate","target":"Cake","count":"2"}}}
+{"id":"ts-0159","names":["Flag"],"text":"spawn 3 navy diamonds","wire":{"type":"command","args":{"action":"create","shape":"diamond","color":"navy","count":"3"}}}
+{"id":"ts-0160","names":["Tower"],"text":"what's closest to the Tower","wire":{"type":"question","args":{"ask":"nearest","anchor":"Tower","superlative":"closest"}}}
+{"id":"ts-0161","names":["Nest"],"text":"is Nest a circle","wire":{"type":"question","args":{"ask":"check","target":"Nest","shape":"circle"}}}
+{"id":"ts-0162","names":["Bob","Amy"],"text":"disconnect Bob and Amy","wire":{"type":"command","args":{"action":"disconnect","from":"Bob","to":"Amy"}}}
+{"id":"ts-0163","names":["Root"],"text":"everything reachable from Root?","wire":{"type":"question","args":{"ask":"reachable","from":"Root"}}}
+{"id":"ts-0164","names":["Eagle"],"text":"paint the eagle teal and make it a triangle","wire":{"type":"command","args":{"action":"set","target":"Eagle","color":"teal","shape":"triangle"}}}
+{"id":"ts-0165","names":["Input","Output"],"text":"draw an arrow from Input to Output","wire":{"type":"command","args":{"action":"connect","from":"Input","to":"Output"}}}
+{"id":"ts-0166","names":["Lens"],"text":"nudge the Lens up a little, say 15","wire":{"type":"command","args":{"action":"move","target":"Lens","direction":"up","distance":"15"}}}
+{"id":"ts-0167","names":["Mill"],"text":"which shape is smallest","wire":{"type":"question","args":{"ask":"extreme","superlative":"smallest"}}}
+{"id":"ts-0168","names":["Wind"],"text":"toss out Wind","wire":{"type":"command","args":{"action":"delete","target":"Wind"}}}
+{"id":"ts-0169","names":["T1","T2"],"text":"line T1 and T2 up horizontally","wire":{"type":"command","args":{"action":"align","target":"T1,T2","axis":"horizontal"}}}
+{"id":"ts-0170","names":["Raft"],"text":"undo please","wire":{"type":"command","args":{"action":"undo"}}}
+{"id":"ts-0171","names":["Fort"],"text":"is there a path from Fort to Camp","wire":{"type":"question","args":{"ask":"path","from":"Fort","to":"Camp"}}}
+{"id":"ts-0172","names":["Spoon","Fork"],"text":"switch Spoon and Fork around","wire":{"type":"command","args":{"action":"swap","target":"Spoon,Fork"}}}
+{"id":"ts-0173","names":["Vase"],"text":"list all the circles","wire":{"type":"question","args":{"ask":"list","shape":"circle"}}}
+{"id":"ts-0174","names":["Muse"],"text":"Muse is blue","wire":{"type":"fact","args":{"target":"Muse","color":"blue"}}}
+{"id":"ts-0175","names":["Shed"],"text":"from now on all shapes are medium","wire":{"type":"rule","args":{"size":"medium"}}}
+{"id":"ts-0176","names":["Hat"],"text":"bring the red circle to the front","wire":{"type":"command","args":{"action":"toFront","target":"mention(color=red,shape=circle)"}}}
+{"id":"ts-0177","names":["Bell"],"text":"what color is the Bell?","wire":{"type":"question","args":{"ask":"property","target":"Bell","property":"color"}}}
+{"id":"ts-0178","names":["Amp","Mic","Speaker"],"text":"wire Amp to Mic and Speaker as a chain","wire":{"type":"command","args":{"action":"connect","from":"Amp,Mic,Speaker","pairing":"chain"}}}
+{"id":"ts-0179","names":["Piano"],"text":"please duplicate the Piano","wire":{"type":"command","args":{"action":"duplicate","target":"Piano"}}}
+{"id":"ts-0180","names":["Stone"],"text":"distribute the circles horizontally","wire":{"type":"command","args":{"action":"distribute","target":"mention(quantifier=all,shape=circle)","axis":"horizontal"}}}
+{"id":"ts-0181","names":["Juno"],"text":"how many triangles do we have","wire":{"type":"question","args":{"ask":"count","shape":"triangle"}}}
+{"id":"ts-0182","names":["Guard"],"text":"stick a small black ellipse named Shadow near Guard","wire":{"type":"command","args":{"action":"create","shape":"ellipse","color":"black","size":"small","name":"Shadow","position":"near","anchor":"Guard"}}}
+{"id":"ts-0183","names":["Maple","Birch"],"text":"which one is more connected, i mean who has the most links","wire":{"type":"question","args":{"ask":"extreme","superlative":"mostConnected"}}}
+{"id":"ts-0184","names":["Brick"],"text":"redo the last undo","wire":{"type":"command","args":{"action":"redo"}}}
+{"id":"ts-0185","names":["Zone"],"text":"enlarge Zone","wire":{"type":"command","args":{"action":"resize","target":"Zone"}}}
+{"id":"ts-0186","names":["Sofa","Rug"],"text":"relocate Sofa to the left of Rug","wire":{"type":"command","args":{"action":"move","target":"Sofa","position":"leftOf","anchor":"Rug"}}}
+{"id":"ts-0187","names":["Wire"],"text":"rename Wire to Cable","wire":{"type":"command","args":{"action":"rename","target":"Wire","name":"Cable"}}}
+{"id":"ts-0188","names":["Echo","Delta"],"text":"which is the farthest shape from Echo","wire":{"type":"question","args":{"ask":"nearest","anchor":"Echo","superlative":"farthest"}}}
+{"id":"ts-0189","names":["Salt"],"text":"stop using the default rules","wire":{"type":"command","args":{"action":"forget"}}}
+{"id":"ts-0190","names":["Mesa"],"text":"does Mesa have any connections","wire":{"type":"question","args":{"ask":"degree","target":"Mesa"}}}
+{"id":"ts-0191","names":["Opal"],"text":"describe Opal","wire":{"type":"question","args":{"ask":"describe","target":"Opal"}}}
+{"id":"ts-0192","names":["Ink"],"text":"is Ink larger than Pen","wire":{"type":"question","args":{"ask":"check","target":"Ink","comparison":"bigger","anchor":"Pen"}}}
+{"id":"ts-0193","names":["Cove"],"text":"get the diamonds in a row","wire":{"type":"command","args":{"action":"arrange","target":"mention(quantifier=all,shape=diamond)","layout":"row"}}}
+{"id":"ts-0194","names":["Wave"],"text":"mark Wave with the words High tide","wire":{"type":"command","args":{"action":"label","target":"Wave","label":"High tide"}}}
+{"id":"ts-0195","names":["Yak"],"text":"all the boxes are orange","wire":{"type":"fact","args":{"target":"mention(quantifier=all,shape=rectangle)","color":"orange"}}}
+{"id":"ts-0196","names":["Hawk"],"text":"put Hawk behind Owl","wire":{"type":"command","args":{"action":"toBack","target":"Hawk"}}}
+{"id":"ts-0197","names":["Bridge","River"],"text":"tie Bridge to River with a dotted two-way line","wire":{"type":"command","args":{"action":"connect","from":"Bridge","to":"River","style":"dotted","arrow":"both"}}}
+{"id":"ts-0198","names":["Cliff"],"text":"find anything non-red","wire":{"type":"question","args":{"ask":"exists","notColor":"red"}}}
+{"id":"ts-0199","names":["Pier"],"text":"set Pier to small and gray","wire":{"type":"command","args":{"action":"set","target":"Pier","size":"small","color":"gray"}}}
+{"id":"ts-0200","names":["Elm","Fir"],"text":"which shape is rightmost","wire":{"type":"question","args":{"ask":"extreme","superlative":"rightmost"}}}

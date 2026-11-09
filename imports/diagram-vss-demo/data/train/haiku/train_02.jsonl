@@ -1,0 +1,100 @@
+{"id": "th-0101", "names": ["Api"], "text": "stick a rectangle called Cache to the right of Api", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "name": "Cache", "position": "rightOf", "anchor": "Api"}}}
+{"id": "th-0102", "names": [], "text": "new orange circle named Metrics, top right", "wire": {"type": "command", "args": {"action": "create", "shape": "circle", "color": "orange", "name": "Metrics", "position": "topRight"}}}
+{"id": "th-0103", "names": ["Db"], "text": "I'd like three small blue squares sitting above Db", "wire": {"type": "command", "args": {"action": "create", "shape": "square", "color": "blue", "size": "small", "count": "3", "position": "above", "anchor": "Db"}}}
+{"id": "th-0104", "names": ["Cache"], "text": "add a star labelled 'Hot path' near Cache", "wire": {"type": "command", "args": {"action": "create", "shape": "star", "label": "Hot path", "position": "near", "anchor": "Cache"}}}
+{"id": "th-0105", "names": [], "text": "drop a teal diamond named Lb at the bottom left", "wire": {"type": "command", "args": {"action": "create", "shape": "diamond", "color": "teal", "name": "Lb", "position": "bottomLeft"}}}
+{"id": "th-0106", "names": ["Web", "Auth"], "text": "throw a gray hexagon named Gateway between Web and Auth", "wire": {"type": "command", "args": {"action": "create", "shape": "hexagon", "color": "gray", "name": "Gateway", "position": "between", "anchor": "Web,Auth"}}}
+{"id": "th-0107", "names": [], "text": "a box that says 'Ship it' in the middle of the page", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "label": "Ship it", "position": "center"}}}
+{"id": "th-0108", "names": ["Worker"], "text": "make a red oval named Scheduler directly beneath Worker", "wire": {"type": "command", "args": {"action": "create", "shape": "ellipse", "color": "red", "name": "Scheduler", "position": "below", "anchor": "Worker"}}}
+{"id": "th-0109", "names": [], "text": "could you put a tiny gray triangle on the far left", "wire": {"type": "command", "args": {"action": "create", "shape": "triangle", "color": "gray", "size": "tiny", "position": "left"}}}
+{"id": "th-0110", "names": ["Logs"], "text": "add 2 magenta hexagons next to Logs", "wire": {"type": "command", "args": {"action": "create", "shape": "hexagon", "color": "magenta", "count": "2", "position": "near", "anchor": "Logs"}}}
+{"id": "th-0111", "names": ["Queue"], "text": "sketch a large white rectangle named Store just above Queue", "wire": {"type": "command", "args": {"action": "create", "shape": "rectangle", "color": "white", "size": "large", "name": "Store", "position": "above", "anchor": "Queue"}}}
+{"id": "th-0112", "names": [], "text": "pop in a navy star named Mirror on the top", "wire": {"type": "command", "args": {"action": "create", "shape": "star", "color": "navy", "name": "Mirror", "position": "top"}}}
+{"id": "th-0113", "names": ["Db"], "text": "make Db green", "wire": {"type": "command", "args": {"action": "set", "target": "Db", "color": "green"}}}
+{"id": "th-0114", "names": ["Cache"], "text": "turn Cache into a circle", "wire": {"type": "command", "args": {"action": "set", "target": "Cache", "shape": "circle"}}}
+{"id": "th-0115", "names": ["Api"], "text": "Api looks better in teal, do that", "wire": {"type": "command", "args": {"action": "set", "target": "Api", "color": "teal"}}}
+{"id": "th-0116", "names": ["Queue"], "text": "bump Queue up to huge", "wire": {"type": "command", "args": {"action": "set", "target": "Queue", "size": "huge"}}}
+{"id": "th-0117", "names": ["Logs"], "text": "make Logs tiny", "wire": {"type": "command", "args": {"action": "set", "target": "Logs", "size": "tiny"}}}
+{"id": "th-0118", "names": ["Worker"], "text": "change Worker to a star", "wire": {"type": "command", "args": {"action": "set", "target": "Worker", "shape": "star"}}}
+{"id": "th-0119", "names": ["Auth"], "text": "can you color Auth black", "wire": {"type": "command", "args": {"action": "set", "target": "Auth", "color": "black"}}}
+{"id": "th-0120", "names": ["Web"], "text": "make it navy", "wire": {"type": "command", "args": {"action": "set", "target": "Web", "color": "navy"}}}
+{"id": "th-0121", "names": ["Web", "Api", "Db"], "text": "tie Web, Api and Db into a chain", "wire": {"type": "command", "args": {"action": "connect", "from": "Web,Api,Db", "to": "Web,Api,Db", "pairing": "chain"}}}
+{"id": "th-0122", "names": ["Api", "Db"], "text": "connect Api to Db with a dotted line", "wire": {"type": "command", "args": {"action": "connect", "from": "Api", "to": "Db", "style": "dotted"}}}
+{"id": "th-0123", "names": ["Worker", "Queue"], "text": "run a red line from Worker to Queue", "wire": {"type": "command", "args": {"action": "connect", "from": "Worker", "to": "Queue", "color": "red"}}}
+{"id": "th-0124", "names": ["Cache", "Db"], "text": "wire Cache to Db both ways", "wire": {"type": "command", "args": {"action": "connect", "from": "Cache", "to": "Db", "arrow": "both"}}}
+{"id": "th-0125", "names": ["Auth", "Api", "Web"], "text": "chain Auth, Api and Web together", "wire": {"type": "command", "args": {"action": "connect", "from": "Auth,Api,Web", "to": "Auth,Api,Web", "pairing": "chain"}}}
+{"id": "th-0126", "names": ["Db", "Api"], "text": "move Db to the left of Api", "wire": {"type": "command", "args": {"action": "move", "target": "Db", "position": "leftOf", "anchor": "Api"}}}
+{"id": "th-0127", "names": ["Logs"], "text": "push Logs 60 px right", "wire": {"type": "command", "args": {"action": "move", "target": "Logs", "direction": "right", "distance": "60"}}}
+{"id": "th-0128", "names": ["Queue"], "text": "Queue goes down a little", "wire": {"type": "command", "args": {"action": "move", "target": "Queue", "direction": "down"}}}
+{"id": "th-0129", "names": ["Cache", "Web"], "text": "put Cache right of Web", "wire": {"type": "command", "args": {"action": "move", "target": "Cache", "position": "rightOf", "anchor": "Web"}}}
+{"id": "th-0130", "names": ["Gateway"], "text": "lift Gateway up 15 pixels", "wire": {"type": "command", "args": {"action": "move", "target": "Gateway", "direction": "up", "distance": "15"}}}
+{"id": "th-0131", "names": ["Auth"], "text": "move Auth to the bottom", "wire": {"type": "command", "args": {"action": "move", "target": "Auth", "position": "bottom"}}}
+{"id": "th-0132", "names": ["Worker", "Scheduler"], "text": "drop Worker beneath Scheduler", "wire": {"type": "command", "args": {"action": "move", "target": "Worker", "position": "below", "anchor": "Scheduler"}}}
+{"id": "th-0133", "names": ["Logs"], "text": "remove Logs", "wire": {"type": "command", "args": {"action": "delete", "target": "Logs"}}}
+{"id": "th-0134", "names": ["Metrics"], "text": "get rid of the Metrics circle", "wire": {"type": "command", "args": {"action": "delete", "target": "Metrics"}}}
+{"id": "th-0135", "names": ["Mirror"], "text": "axe Mirror", "wire": {"type": "command", "args": {"action": "delete", "target": "Mirror"}}}
+{"id": "th-0136", "names": ["Worker"], "text": "make Worker a bit bigger", "wire": {"type": "command", "args": {"action": "resize", "target": "Worker"}}}
+{"id": "th-0137", "names": ["Cache"], "text": "enlarge Cache", "wire": {"type": "command", "args": {"action": "resize", "target": "Cache"}}}
+{"id": "th-0138", "names": ["Db"], "text": "rename Db to Postgres", "wire": {"type": "command", "args": {"action": "rename", "target": "Db", "name": "Postgres"}}}
+{"id": "th-0139", "names": ["Queue"], "text": "call Queue Jobs instead", "wire": {"type": "command", "args": {"action": "rename", "target": "Queue", "name": "Jobs"}}}
+{"id": "th-0140", "names": ["Api"], "text": "label the Api 'Public edge'", "wire": {"type": "command", "args": {"action": "label", "target": "Api", "label": "Public edge"}}}
+{"id": "th-0141", "names": ["Gateway"], "text": "stick the text 'TLS' on Gateway", "wire": {"type": "command", "args": {"action": "label", "target": "Gateway", "label": "TLS"}}}
+{"id": "th-0142", "names": ["Web"], "text": "copy Web", "wire": {"type": "command", "args": {"action": "duplicate", "target": "Web"}}}
+{"id": "th-0143", "names": ["Worker"], "text": "give me 3 copies of Worker", "wire": {"type": "command", "args": {"action": "duplicate", "target": "Worker", "count": "3"}}}
+{"id": "th-0144", "names": ["Db", "Cache"], "text": "exchange Db and Cache", "wire": {"type": "command", "args": {"action": "swap", "target": "Db,Cache"}}}
+{"id": "th-0145", "names": ["Logs", "Metrics"], "text": "switch Logs with Metrics", "wire": {"type": "command", "args": {"action": "swap", "target": "Logs,Metrics"}}}
+{"id": "th-0146", "names": ["Web", "Api"], "text": "sever the link between Web and Api", "wire": {"type": "command", "args": {"action": "disconnect", "from": "Web", "to": "Api"}}}
+{"id": "th-0147", "names": ["Queue", "Worker"], "text": "unhook Queue from Worker", "wire": {"type": "command", "args": {"action": "disconnect", "from": "Queue", "to": "Worker"}}}
+{"id": "th-0148", "names": ["Api", "Web", "Auth"], "text": "align Api, Web and Auth vertically", "wire": {"type": "command", "args": {"action": "align", "target": "Api,Web,Auth", "axis": "vertical"}}}
+{"id": "th-0149", "names": [], "text": "make all the hexagons line up horizontally", "wire": {"type": "command", "args": {"action": "align", "target": "mention(quantifier=all,shape=hexagon)", "axis": "horizontal"}}}
+{"id": "th-0150", "names": ["Cache", "Db", "Queue"], "text": "put Cache, Db and Queue in a column", "wire": {"type": "command", "args": {"action": "arrange", "target": "Cache,Db,Queue", "layout": "column"}}}
+{"id": "th-0151", "names": [], "text": "arrange the whole diagram in a circle", "wire": {"type": "command", "args": {"action": "arrange", "layout": "circle"}}}
+{"id": "th-0152", "names": ["Api", "Db"], "text": "distribute Api and Db evenly along the horizontal", "wire": {"type": "command", "args": {"action": "distribute", "target": "Api,Db", "axis": "horizontal"}}}
+{"id": "th-0153", "names": [], "text": "spread out all the stars vertically", "wire": {"type": "command", "args": {"action": "distribute", "target": "mention(quantifier=all,shape=star)", "axis": "vertical"}}}
+{"id": "th-0154", "names": ["Gateway"], "text": "raise Gateway to the top layer", "wire": {"type": "command", "args": {"action": "toFront", "target": "Gateway"}}}
+{"id": "th-0155", "names": ["Logs"], "text": "bring Logs in front of everything", "wire": {"type": "command", "args": {"action": "toFront", "target": "Logs"}}}
+{"id": "th-0156", "names": ["Metrics"], "text": "send Metrics to the very back", "wire": {"type": "command", "args": {"action": "toBack", "target": "Metrics"}}}
+{"id": "th-0157", "names": ["Cache"], "text": "put Cache at the back of the stack", "wire": {"type": "command", "args": {"action": "toBack", "target": "Cache"}}}
+{"id": "th-0158", "names": [], "text": "undo", "wire": {"type": "command", "args": {"action": "undo"}}}
+{"id": "th-0159", "names": [], "text": "take that back", "wire": {"type": "command", "args": {"action": "undo"}}}
+{"id": "th-0160", "names": [], "text": "redo the last thing", "wire": {"type": "command", "args": {"action": "redo"}}}
+{"id": "th-0161", "names": [], "text": "reapply that change", "wire": {"type": "command", "args": {"action": "redo"}}}
+{"id": "th-0162", "names": [], "text": "wipe the defaults you learned", "wire": {"type": "command", "args": {"action": "forget"}}}
+{"id": "th-0163", "names": [], "text": "forget every rule we set up", "wire": {"type": "command", "args": {"action": "forget"}}}
+{"id": "th-0164", "names": [], "text": "how many services are there", "wire": {"type": "question", "args": {"ask": "count"}}}
+{"id": "th-0165", "names": [], "text": "how many blue squares are there", "wire": {"type": "question", "args": {"ask": "count", "shape": "square", "color": "blue"}}}
+{"id": "th-0166", "names": ["Db"], "text": "how many shapes sit left of Db", "wire": {"type": "question", "args": {"ask": "count", "position": "leftOf", "anchor": "Db"}}}
+{"id": "th-0167", "names": [], "text": "is there any teal diamond", "wire": {"type": "question", "args": {"ask": "exists", "shape": "diamond", "color": "teal"}}}
+{"id": "th-0168", "names": [], "text": "do we have a black triangle somewhere", "wire": {"type": "question", "args": {"ask": "exists", "shape": "triangle", "color": "black"}}}
+{"id": "th-0169", "names": [], "text": "list all the orange ones", "wire": {"type": "question", "args": {"ask": "list", "color": "orange"}}}
+{"id": "th-0170", "names": [], "text": "list the shapes that aren't red", "wire": {"type": "question", "args": {"ask": "list", "notColor": "red"}}}
+{"id": "th-0171", "names": ["Db"], "text": "what's the shape of Db", "wire": {"type": "question", "args": {"ask": "property", "target": "Db", "property": "shape"}}}
+{"id": "th-0172", "names": ["Cache"], "text": "how big is Cache right now", "wire": {"type": "question", "args": {"ask": "property", "target": "Cache", "property": "size"}}}
+{"id": "th-0173", "names": ["Web"], "text": "what's Web's label", "wire": {"type": "question", "args": {"ask": "property", "target": "Web", "property": "label"}}}
+{"id": "th-0174", "names": ["Api"], "text": "tell me about Api", "wire": {"type": "question", "args": {"ask": "describe", "target": "Api"}}}
+{"id": "th-0175", "names": [], "text": "describe the diagram", "wire": {"type": "question", "args": {"ask": "describe"}}}
+{"id": "th-0176", "names": ["Api"], "text": "which services talk to Api", "wire": {"type": "question", "args": {"ask": "neighbors", "target": "Api"}}}
+{"id": "th-0177", "names": ["Queue"], "text": "what hangs off Queue", "wire": {"type": "question", "args": {"ask": "neighbors", "target": "Queue"}}}
+{"id": "th-0178", "names": ["Cache", "Db"], "text": "is Cache linked directly to Db", "wire": {"type": "question", "args": {"ask": "connected", "target": "Cache", "anchor": "Db"}}}
+{"id": "th-0179", "names": ["Worker", "Scheduler"], "text": "are Worker and Scheduler connected directly", "wire": {"type": "question", "args": {"ask": "connected", "target": "Worker", "anchor": "Scheduler"}}}
+{"id": "th-0180", "names": ["Api"], "text": "how many connections does Api have", "wire": {"type": "question", "args": {"ask": "degree", "target": "Api"}}}
+{"id": "th-0181", "names": ["Db"], "text": "how many arrows touch Db", "wire": {"type": "question", "args": {"ask": "degree", "target": "Db"}}}
+{"id": "th-0182", "names": ["Web", "Db"], "text": "is there a path from Web to Db", "wire": {"type": "question", "args": {"ask": "path", "from": "Web", "to": "Db"}}}
+{"id": "th-0183", "names": ["Auth", "Logs"], "text": "how do I get from Auth to Logs", "wire": {"type": "question", "args": {"ask": "path", "from": "Auth", "to": "Logs"}}}
+{"id": "th-0184", "names": ["Web"], "text": "everything reachable from Web?", "wire": {"type": "question", "args": {"ask": "reachable", "from": "Web"}}}
+{"id": "th-0185", "names": ["Gateway"], "text": "which nodes can Gateway get to", "wire": {"type": "question", "args": {"ask": "reachable", "from": "Gateway"}}}
+{"id": "th-0186", "names": [], "text": "any circular dependencies in here?", "wire": {"type": "question", "args": {"ask": "cycle"}}}
+{"id": "th-0187", "names": [], "text": "is there a cycle", "wire": {"type": "question", "args": {"ask": "cycle"}}}
+{"id": "th-0188", "names": [], "text": "what rules do you have on file", "wire": {"type": "question", "args": {"ask": "rules"}}}
+{"id": "th-0189", "names": [], "text": "show me the defaults that are active", "wire": {"type": "question", "args": {"ask": "rules"}}}
+{"id": "th-0190", "names": ["Db"], "text": "is Db blue", "wire": {"type": "question", "args": {"ask": "check", "target": "Db", "color": "blue"}}}
+{"id": "th-0191", "names": ["Cache"], "text": "is Cache a star?", "wire": {"type": "question", "args": {"ask": "check", "target": "Cache", "shape": "star"}}}
+{"id": "th-0192", "names": ["Api", "Web"], "text": "is Api larger than Web", "wire": {"type": "question", "args": {"ask": "check", "target": "Api", "comparison": "bigger", "anchor": "Web"}}}
+{"id": "th-0193", "names": [], "text": "what's the topmost shape", "wire": {"type": "question", "args": {"ask": "extreme", "superlative": "topmost"}}}
+{"id": "th-0194", "names": [], "text": "which one is the smallest", "wire": {"type": "question", "args": {"ask": "extreme", "superlative": "smallest"}}}
+{"id": "th-0195", "names": ["Api"], "text": "what's closest to Api", "wire": {"type": "question", "args": {"ask": "nearest", "anchor": "Api", "superlative": "closest"}}}
+{"id": "th-0196", "names": ["Db"], "text": "which blue square is nearest to Db", "wire": {"type": "question", "args": {"ask": "nearest", "anchor": "Db", "superlative": "closest", "shape": "square", "color": "blue"}}}
+{"id": "th-0197", "names": ["Db"], "text": "Db is green, just so you know", "wire": {"type": "fact", "args": {"target": "Db", "color": "green"}}}
+{"id": "th-0198", "names": ["Cache", "Api"], "text": "Cache is to the left of Api", "wire": {"type": "fact", "args": {"target": "Cache", "position": "leftOf", "anchor": "Api"}}}
+{"id": "th-0199", "names": [], "text": "circles are gold from now on", "wire": {"type": "rule", "args": {"shape": "circle", "color": "gold"}}}
+{"id": "th-0200", "names": [], "text": "new boxes should come out tiny", "wire": {"type": "rule", "args": {"shape": "rectangle", "size": "tiny"}}}
