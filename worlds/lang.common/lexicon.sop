@@ -1211,3 +1211,16 @@
     alt=but
     alt=so
     alt=then
+    alt=now
+
+@phrase.lang.trailing core.phrase
+    frame=false
+    doc="Trailing softeners dropped by ctx.lang.stripTrailing when a command was not understood with them (open the music tab instead)."
+    alt=instead
+    alt=then
+    alt=now
+    alt=for_now
+    alt=anyway
+    alt=too
+    alt=as_well
+    alt=also

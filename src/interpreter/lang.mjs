@@ -2,7 +2,7 @@
  * Shared dialogue vocabulary: yes/no/unsure/cancel, ordinals, colours, sizes, positions, degree words. Browser-safe, no imports.
  *
  * The words live in `worlds/lang.common` (phrase groups `lang.yes`, `lang.assent`, `lang.no`, `lang.decline`, `lang.unsure`, `lang.cancel`,
- * `lang.degree.*`, `lang.comparative`, `lang.shade`, `lang.size.*`, `lang.position.*`, `lang.ordinal.last`, `lang.lead.ask`, `lang.filler`, `lang.connective`, and the
+ * `lang.degree.*`, `lang.comparative`, `lang.shade`, `lang.size.*`, `lang.position.*`, `lang.ordinal.last`, `lang.lead.ask`, `lang.filler`, `lang.connective`, `lang.trailing`, and the
  * lexicons `lex.lang.colour` and `lex.lang.ordinal`). `makeLang({ phrase, lexicon })` turns them into the function table that worlds
  * see as `ctx.lang` (spec 04) and that the discourse layer reads through `interp.lang` (spec 11). Nothing here holds a word list:
  * with an empty source every function answers "nothing".
@@ -45,6 +45,11 @@ export function makeLang(source) {
   const CONNECTIVE = connAlts.length ? new RegExp(`^(?:${connAlts.map(esc).join('|')})[\\s,]+(?=\\S)`, 'i') : null;
   /** Drop a leading connective ("and", "also", "but", "so") that joins nothing; the caller decides when the rest stands on its own. */
   const stripConnective = (text) => (CONNECTIVE ? String(text ?? '').replace(CONNECTIVE, '') : String(text ?? ''));
+
+  const trailAlts = [...new Set(phrase('lang.trailing'))].sort((a, b) => b.length - a.length);
+  const TRAILING = trailAlts.length ? new RegExp(`[\\s,]+(?:${trailAlts.map(esc).join('|')})[\\s.!?]*$`, 'i') : null;
+  /** Drop a trailing softener ("instead", "then", "now", "again") that a command does not need. */
+  const stripTrailing = (text) => (TRAILING ? String(text ?? '').replace(TRAILING, '') : String(text ?? ''));
 
   // ---- ordinals: the order of lex.lang.ordinal is the value (first = 1 ... tenth = 10); "last" and its synonyms are -1 ---------
   const ORDINAL_WORDS = ['', ...source.lexicon('lex.lang.ordinal').map((w) => String(w).toLowerCase()).filter((w) => w !== 'last')];
@@ -115,7 +120,7 @@ export function makeLang(source) {
     return null;
   };
 
-  return { yesNo, unsure, cancel, stripLead, stripFiller, stripConnective, ordinal, ordinalWord, colour, size, position, degree, splitAdverb, COLOURS, SHADES, COMPARATIVES, DEGREE_ADVERBS };
+  return { yesNo, unsure, cancel, stripLead, stripFiller, stripConnective, stripTrailing, ordinal, ordinalWord, colour, size, position, degree, splitAdverb, COLOURS, SHADES, COMPARATIVES, DEGREE_ADVERBS };
 }
 
 export default makeLang;

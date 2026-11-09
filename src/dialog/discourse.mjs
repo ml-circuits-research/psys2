@@ -15,12 +15,13 @@
  * Both return `{ res, info }`, where `res` has the shape of a formalizer result and `info` is the provenance for the trace.
  */
 import { restrictedSet } from '../formalizer/spell.mjs';
+import { SHORT_TYPOS } from '../formalizer/rules/normalize.mjs';
 import { classify, resolveReference, describeReferent, chooseOption, plain } from './meta.mjs';
 
 export const FRAME_LIMIT = 5;
 
 /** Worlds whose commands are never remembered as frames: navigation, help, games (own state machines), shared vocabulary. */
-const NO_FRAME = (w) => !w || w === 'ui.shell' || w === 'ui.help' || w === 'kids.common' || w === 'core' || w.startsWith('games.');
+const NO_FRAME = (w) => !w || w === 'ui.shell' || w === 'kids.common' || w === 'core' || w.startsWith('games.');
 
 /** Worlds that never count as a conversation topic and whose state changes are not "actions" (navigation, help, shared vocabulary). */
 const NO_TOPIC = new Set(['ui.shell', 'ui.help', 'kids.common', 'core']);
@@ -186,6 +187,8 @@ export class Discourse {
     if (!frag || (frag.kind === 'bare' && !bare) || frag.content.length > 4) return null;
     if (frag.kind === 'bare' && SENTENCE_STARTERS.has(frag.content[0].toLowerCase())) return null;   // a full question or sentence, not a fragment
     const opts = this._opts(sid);
+    // a fragment that is a complete sentence of ANOTHER world ("now lets draw a house" after "open the story") is not a filler for a free-text slot
+    const own = frag.kind !== 'repeat' && frag.content.length >= 3 ? await this._readSeg(frag.content.join(' '), sid) : null;
     for (const frame of this.frames) {
       if (frag.kind === 'repeat') {
         const hit = await this._try(frame.world, frame.text, opts);
@@ -193,6 +196,8 @@ export class Discourse {
         continue;
       }
       for (const cand of this._candidates(frame, frag.content)) {
+        if (cand.wild && frag.kind === 'bare') continue;   // gibberish with no marker is no text for a free slot ("asdf qwer zxcv")
+        if (cand.wild && ((own && own.match?.worldId !== frame.world) || META_SKIP.has(frag.content[0].toLowerCase()) || /^lets?$/i.test(frag.content[0]))) continue;   // a command of its own is no text for a free slot
         const hit = await this._try(frame.world, cand.text, opts);
         if (!hit) continue;
         const seg = hit.res.segments[0];
@@ -211,6 +216,7 @@ export class Discourse {
    */
   async pronoun(text, sid) {
     if (!this.frames.length) return null;
+    text = String(text).replace(/[A-Za-z]+/g, (w) => SHORT_TYPOS[w.toLowerCase()] ?? w);   // chat spellings of short words ("mke it a siren")
     const m = String(text).match(/\b(it|that one|this one|that animal|this animal|that shape|this shape|that thing|this thing|them|those|these|that|this)\b/i);
     if (!m) return null;
     const read = await this._readSeg(text, sid);
@@ -244,6 +250,17 @@ export class Discourse {
     const lead = content[0].toLowerCase();
     const fragPrep = PREPOSITIONS.has(lead) && content.length > 1 ? lead : null;
     const wild = (s) => s.class === 'words' || s.class === 'rest';
+    // "the G major one" after "play the C major scale": "one" stands for the last noun of the request; the last noun phrase is replaced
+    if (!fragPrep && content.length >= 2 && /^ones?$/i.test(content.at(-1))) {
+      const fw = wordsOf(frame.text), noun = fw.at(-1);
+      let d = -1;
+      for (let i = fw.length - 2; i >= 0; i--) if (DETERMINERS.has(fw[i].toLowerCase())) { d = i; break; }
+      if (d >= 0 && noun) {
+        const np = [...content.slice(0, -1), noun].join(' ');
+        const out = [...fw.slice(0, d), np].join(' ') + (/\?$/.test(frame.text) ? '?' : '');
+        yield { text: out, slot: '*', cls: 'one', start: 0, end: out.length, wild: false, whole: true, direct: false };
+      }
+    }
     // A fragment that already is a complete sentence of the frame's world ("and the one before that", "and 9 minus 2") is tried on its own first.
     if (!fragPrep && content.length > 2) yield { text: content.join(' '), slot: '*', cls: 'sentence', start: 0, end: content.join(' ').length, wild: false, whole: true, direct: true };
     // A fragment that is itself a whole expression ("and 9 minus 2", "I meant 7 times 5", "half of 14") replaces the whole run of arguments
@@ -461,7 +478,9 @@ export class Discourse {
       const bare = BARE_YES_NO[t];
       if (bare && !this._gameAsksYesNo()) return { reply: `${bare === 'yes' ? 'Yes' : 'No'} to what? You can ask me a question, give me a command, or say "help" to see what I can do.`, info: { kind: 'bare', answer: bare } };
     }
-    const c = classify(text, { lang: this.lang, hasAction: !!this._repairable(), listMode: !!this.list });
+    // chat spellings of short words ("bk to the doc", "nxt") are read as the word for the recognizers; the sentence itself is passed on unchanged
+    const spelled = String(text).replace(/[A-Za-z]+/g, (w) => SHORT_TYPOS[w.toLowerCase()] ?? w);
+    const c = classify(spelled, { lang: this.lang, hasAction: !!this._repairable(), listMode: !!this.list });
     // a lone "lol" / "hmm" / "ok" is not a command and not a list item: nothing happens (no world gets to read it as a name, an item or a word)
     if (c?.intent === 'backchannel' && !pend && !this._gameAsksYesNo()) return { reply: 'Mm-hm. Tell me what you would like to do, or say "help".', status: 'unparsed', info: { kind: 'backchannel' } };
     // 2. list-entry mode: every plain item is added to the list until "that's all"
@@ -488,7 +507,7 @@ export class Discourse {
           if (c.degree.type !== 'more' && c.degree.type !== 'less') { const w = await this._tryAny(text, sid); const here = [d.context().tabWorld, d.context().lastWorld]; if (w && here.includes(w)) return null; }
           return this._degree(c.degree, sid);
         }
-        case 'repair': { const r = await this._repair({ how: c.how, content: c.content }, sid); if (r) return r; break; }
+        case 'repair': { const r = await this._repair({ how: c.how, content: c.content, restate: c.restate }, sid); if (r) return r; break; }
         default: break;
       }
     }
@@ -750,7 +769,7 @@ export class Discourse {
    * redo its sentence with the corrected argument. `how`: 'replace' (content replaces the argument slot that fits) or 'retarget'
    * (content is a reference such as "the other one"). Everything is undone again when no correction is understood.
    */
-  async _repair({ how, content, action = null, frame = null, undone = false }, sid) {
+  async _repair({ how, content, action = null, frame = null, undone = false, restate = false }, sid) {
     const d = this.dialog;
     const act = action ?? this._repairable();
     if (!act) return null;
@@ -781,7 +800,18 @@ export class Discourse {
     }
     if (!words.length) return giveUp();
     const opts = this._opts(sid);
-    for (const cand of this._candidates(f, words)) {
+    // a correction that changes the kind of request ("no, I meant the outline"): the words are a request of their own; tried after the slots
+    const restated = async () => {
+      if (how !== 'replace' || !content) return null;
+      const alone = await this._readSeg(String(content), sid);
+      if (!alone || CLARIFY_PATTERN.test(alone.match?.patternId ?? '')) return null;
+      if (!undone) { this.actions = this.actions.filter((x) => x !== act); this.frames = this.frames.filter((x) => x.turn !== act.turn); }
+      return { rewrite: content, prefix: act.readOnly ? 'OK.' : 'OK, I took that back.', info: { kind: 'repair', how: 'restate', of: f.text, fragment: content, undone: act.text } };
+    };
+    if (restate) { const r = await restated(); return r ?? giveUp(); }
+    const slotCands = [...this._candidates(f, words)];
+    slotCands.sort((a, b) => (a.direct ? 1 : 0) - (b.direct ? 1 : 0));   // a fragment replaces a slot of the old request before it is read as a request of its own
+    for (const cand of slotCands) {
       const hit = await this._try(f.world, cand.text, opts);
       if (!hit) continue;
       const seg = hit.res.segments[0];
@@ -790,7 +820,8 @@ export class Discourse {
       if (!undone) { this.actions = this.actions.filter((x) => x !== act); this.frames = this.frames.filter((x) => x.turn !== act.turn); }
       return { pre: this._finish(hit, { kind: 'repair', how, slot: cand.slot, of: f.text, fragment: content, rewritten: cand.text, world: f.world, frameTurn: f.turn, undone: act.text }), prefix: act.readOnly ? 'OK.' : 'OK, I took that back.' };
     }
-    return giveUp();
+    const r = await restated();
+    return r ?? giveUp();
   }
 
   // ---- references and choice questions ---------------------------------------------------------------------------------------------------

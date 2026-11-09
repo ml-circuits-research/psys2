@@ -16,6 +16,8 @@ const FEEDBACK = [
   /^(?:no |oh no |nope |hmm |ugh )?(?:thats|that is|this is|it is|its|you are|youre) (?:wrong|not right|incorrect|not correct|a mistake|bad|rubbish|nonsense|not it|totally wrong|completely wrong|not what i (?:asked|wanted|meant|said)(?: for)?)$/,
   /^(?:no |oh no |nope |hmm |ugh )?(?:wrong|incorrect|not right|bad answer|wrong answer|thats not it|that is not it|not what i (?:asked|wanted|meant|said)(?: for)?|not what i asked for)$/,
   /^(?:no )?(?:you got (?:it|that) wrong|you misunderstood(?: me)?|you did it wrong|you made a mistake|you are wrong|you were wrong|thats not what i (?:asked|wanted|meant|said)(?: for)?|that is not what i (?:asked|wanted|meant|said)(?: for)?|that was not what i (?:asked|wanted|meant|said)(?: for)?|that was wrong|that was not right|that did not work|that didnt work)$/,
+  /^(?:no |oh no |nope |hmm |ugh )?(?:thats|that is|this is|it is|its|that was|you are|youre|you were) (?:not (?:helpful|useful|helping|good|ok|okay|what i need(?:ed)?|what i was (?:asking|looking) for)|useless|unhelpful|no help|no use)(?: at all| really| for me)?$/,
+  /^(?:that|this|it) (?:did not|didnt|does not|doesnt|is not|isnt) (?:help|work|answer (?:my|the) question)(?: at all)?$/,
 ];
 const BACKCHANNEL = /^(?:lol|lmao|rofl|haha+|hehe+|heh|hmm+|hm+|mm+|mhm|um+|uh+|uhh+|er+|eh|ah+|oh+|ooh|huh|meh|wow|ok|okay|k|kk|ugh|whoa|oops)$/;
 const TOPIC_RESUME = /^(?:where were we(?: again)?|where did we stop|where did we leave off|what were we (?:doing|talking about|working on)|continue|carry on|go on|resume|lets (?:continue|carry on|go on|resume)|keep going)$/;
@@ -56,7 +58,7 @@ export function classify(text, ctx = {}) {
   if (m) return { intent: 'topic', target: m[1].replace(/^(?:the |my )/, '') };
   m = t.match(LIST_START);
   if (m && m[1].split(" ").length <= 2 && !/\b(?:to|and|from|on|my|of|in|document|doc|the|with|for|me|us)\b/.test(m[1])) return { intent: 'list.start', list: m[1].trim() || 'to-do' };
-  const deg = degree(t);
+  const deg = degree(t) ?? degree(lang.stripConnective(t));   // "now bigger"
   if (deg) return { intent: 'degree', degree: deg };
   m = t.match(NOT_THAT);
   if (m) return { intent: 'repair', how: 'retarget', content: m[1] ? plain(m[1]) : null };
@@ -66,7 +68,11 @@ export function classify(text, ctx = {}) {
     if (!m) continue;
     const content = plain(m[1]);
     const ws = content.split(' ');
-    if (ws.length > 5 || SENTENCE_STARTERS.has(ws[0])) continue;
+    if (ws.length > 5 || SENTENCE_STARTERS.has(ws[0])) {
+      // "no, I meant how do I play chess": a whole new request after an explicit "I meant" (no slot of the old request is replaced)
+      if (re === REPAIR_CORRECT[0]) return { intent: 'repair', how: 'replace', content, restate: true };
+      continue;
+    }
     if (re === REPAIR_CORRECT[2] && !ctx.hasAction) continue;
     return { intent: 'repair', how: 'replace', content };
   }

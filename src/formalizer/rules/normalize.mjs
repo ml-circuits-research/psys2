@@ -322,6 +322,7 @@ export const SHORT_TYPOS = {
   mak: 'make', mke: 'make', amke: 'make', mkae: 'make', maek: 'make', ther: 'there', thre: 'there', wher: 'where', whre: 'where',
   wen: 'when', whn: 'when', hve: 'have', hav: 'have', giv: 'give', gve: 'give', thn: 'then', hlp: 'help', plya: 'play',
   whch: 'which', wich: 'which', hwmany: 'how many',
+  dw: 'draw', srch: 'search', nxt: 'next', bk: 'back', opn: 'open', mpa: 'map', fr: 'for', cn: 'can',
 };
 
 const QUOTE_RE = /"[^"]*"|\u201c[^\u201d]*\u201d/g;

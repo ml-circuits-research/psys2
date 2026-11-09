@@ -25,7 +25,7 @@ export const FUNCTION_WORDS = new Set((
 export const ABBREVIATIONS = {
   u: 'you', ur: 'your', r: 'are', pls: 'please', plz: 'please', plss: 'please', thx: 'thanks', ty: 'thank you', whats: 'what is', "what's": 'what is',
   hows: 'how is', "how's": 'how is', wheres: 'where is', "where's": 'where is', whos: 'who is', "who's": 'who is', wanna: 'want to', gonna: 'going to', gotta: 'got to',
-  lemme: 'let me', gimme: 'give me', dunno: 'do not know', cuz: 'because', coz: 'because', bc: 'because', abt: 'about', sth: 'something',
+  lemme: 'let me', gimme: 'give me', lets: 'let us', dunno: 'do not know', cuz: 'because', coz: 'because', bc: 'because', abt: 'about', sth: 'something',
   '1st': 'first', '2nd': 'second', '3rd': 'third', '4th': 'fourth', '5th': 'fifth', '6th': 'sixth', '7th': 'seventh', '8th': 'eighth', '9th': 'ninth', '10th': 'tenth',
   colour: 'color', colours: 'colors', grey: 'gray',
   ...SHORT_TYPOS,

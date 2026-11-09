@@ -373,6 +373,8 @@ export class DialogSession {
         if (!pre) pre = await disc.ellipsis(english, sid);
         if (!pre) pre = await disc.pronoun(english, sid);
         // "and how many days are in a week?" with nothing to continue: the connective joins nothing, the question stands on its own
+        // "and a heading Dairy too": a fragment nothing could continue loses its trailing "too" (it must not become part of the text)
+        if (!pre && english !== engine.interp.lang.stripConnective(english)) formalText = engine.interp.lang.stripTrailing(english);
         if (!pre) { const bare = engine.interp.lang.stripConnective(english); if (bare !== english && QUESTION_WORD.test(bare)) formalText = bare; }
       }
     }
@@ -381,6 +383,11 @@ export class DialogSession {
     if (!icpt && !pre && !meta && formal.segments.length === 1 && formal.segments[0].unparsed) {
       pre = await disc.ellipsis(english, sid, { bare: true });
       if (pre) formal = { ...pre.res, dispatch: null };
+    }
+    if (!icpt && !pre && !meta && formal.segments.length === 1 && formal.segments[0].unparsed) {
+      // "open the music tab instead": a trailing softener the command does not need
+      const bare = engine.interp.lang.stripTrailing(formalText);
+      if (bare && bare !== formalText) { const f2 = await this._formalize(bare, sid, formalizer ?? this.formalizer, { spell: spell ?? this.spell, partial: partial ?? this.partial }); if (f2.segments.length && f2.segments.every((x) => !x.unparsed)) formal = f2; }
     }
     const { segments, wires, dispatch, encoderError } = formal;
     this._noteWorlds(segments);
