@@ -187,7 +187,7 @@
     example="Castle my king."
 
 @pat.games.chess.can.piece core.pattern
-    match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [$games.chess.g7_can_i] [$games.chess.g12_move]? [the|my|our|that|this|a|an|your]? [white|black]? {p:lex.games.chess.pieces} [$games.chess.g3_to]? [square]? {tf:lex.games.chess.files} {tr:number} [$lang.tail.filler]?"
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|gg|um|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh|ok]? [can_i|could_i|may_i|can_we|am_i_allowed_to|am_i_able_to|am_i_permitted_to|is_it_possible_to|is_it_legal_to|would_it_be_legal_to|is_it_ok_to|is_it_okay_to|is_it_allowed_to|is_it_possible_for_me_to] [move|play|go|put|push|advance|bring|shift|slide|jump|send|run|place|develop|retreat|plays|moves|goes]? [the|my|our|that|this|a|an|your]? [white|black]? {p:lex.games.chess.pieces} [to|2|too|on|at|onto|into|towards|over_to|up_to|down_to|forward_to|back_to|goes_to|go_to|moves_to|move_to|should_go_to|for|in]? [square]? {tf:lex.games.chess.files} {tr:number} [pls|plz|thanks|thx|lol|rn|now|then|yeah|ok]?"
     emit="@{_} core.request action=chess.can arg.piece={p} arg.tf={tf} arg.tr={tr}"
     kind=request
     priority=14
@@ -196,7 +196,7 @@
     example="Can I play the bishop to b5?"
 
 @pat.games.chess.can.bare core.pattern
-    match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [$games.chess.g7_can_i] [$games.chess.g12_move]? [$games.chess.g3_to]? [square]? {tf:lex.games.chess.files} {tr:number} [$lang.tail.filler]?"
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|gg|um|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh|ok]? [can_i|could_i|may_i|can_we|am_i_allowed_to|am_i_able_to|am_i_permitted_to|is_it_possible_to|is_it_legal_to|would_it_be_legal_to|is_it_ok_to|is_it_okay_to|is_it_allowed_to|is_it_possible_for_me_to] [move|play|go|put|push|advance|bring|shift|slide|jump|send|run|place|develop|retreat|plays|moves|goes]? [to|2|too|on|at|onto|into|towards|over_to|up_to|down_to|forward_to|back_to|goes_to|go_to|moves_to|move_to|should_go_to|for|in]? [square]? {tf:lex.games.chess.files} {tr:number} [pls|plz|thanks|thx|lol|rn|now|then|yeah|ok]?"
     emit="@{_} core.request action=chess.can arg.tf={tf} arg.tr={tr}"
     kind=request
     priority=14
@@ -204,7 +204,7 @@
     example="Is it legal to move to d4?"
 
 @pat.games.chess.can.fromto core.pattern
-    match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [$games.chess.g7_can_i] [$games.chess.g12_move]? [the|my|our|that|this|a|an|your]? [white|black]? {p:lex.games.chess.pieces?} [$games.chess.g17_from]? [square]? {ff:lex.games.chess.files} {fr:number} [$games.chess.g29_to]? [square]? {tf:lex.games.chess.files} {tr:number} [$lang.tail.filler]?"
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|gg|um|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh|ok]? [can_i|could_i|may_i|can_we|am_i_allowed_to|am_i_able_to|am_i_permitted_to|is_it_possible_to|is_it_legal_to|would_it_be_legal_to|is_it_ok_to|is_it_okay_to|is_it_allowed_to|is_it_possible_for_me_to] [move|play|go|put|push|advance|bring|shift|slide|jump|send|run|place|develop|retreat|plays|moves|goes]? [the|my|our|that|this|a|an|your]? [white|black]? {p:lex.games.chess.pieces?} [from|on|at|in|standing_on|sitting_on|that_is_on|which_is_on]? [square]? {ff:lex.games.chess.files} {fr:number} [to|2|too|onto|towards|up_to|down_to|over_to|forward_to|back_to|goes_to|moves_to|move_to|go_to|then]? [square]? {tf:lex.games.chess.files} {tr:number} [pls|plz|thanks|thx|lol|rn|now|then|yeah|ok]?"
     emit="@{_} core.request action=chess.can arg.piece={p} arg.ff={ff} arg.fr={fr} arg.tf={tf} arg.tr={tr}"
     kind=request
     priority=14
@@ -213,7 +213,7 @@
 
 @pat.games.chess.can.cap core.pattern
     canonical="Can I capture on e5?"
-    match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [$games.chess.g7_can_i] [$games.chess.g5_takes] [$games.chess.g23_the]? [white|black]? {tp:lex.games.chess.pieces?} [$games.chess.g14_on]? [square]? {tf:lex.games.chess.files} {tr:number} [$lang.tail.filler]?"
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|gg|um|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh|ok]? [can_i|could_i|may_i|can_we|am_i_allowed_to|am_i_able_to|am_i_permitted_to|is_it_possible_to|is_it_legal_to|would_it_be_legal_to|is_it_ok_to|is_it_okay_to|is_it_allowed_to|is_it_possible_for_me_to] [takes|take|taking|captures|capture|capturing|eats|eat|kills|kill|beats|beat|snatches|grabs|grab|wins|x|trades_for|swaps_for|exchanges_for] [the|that|their|his|your|enemy|opposing|a|an]? [white|black]? {tp:lex.games.chess.pieces?} [on|at|in|standing_on|sitting_on|located_on|over_on|from|with_the_piece_on|the_piece_on|whatever_is_on|whatever_is_at|what_is_on|what_is_at|that_is_on|which_is_on]? [square]? {tf:lex.games.chess.files} {tr:number} [pls|plz|thanks|thx|lol|rn|now|then|yeah|ok]?"
     emit="@{_} core.request action=chess.can arg.cap=true arg.tp={tp} arg.tf={tf} arg.tr={tr}"
     kind=request
     priority=14
@@ -221,7 +221,7 @@
     example="Can I capture on e5?"
 
 @pat.games.chess.can.cap.with core.pattern
-    match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [$games.chess.g7_can_i] [$games.chess.g5_takes] [$games.chess.g23_the]? [white|black]? {tp:lex.games.chess.pieces} [with|using|by|via|through] [the|my|our|that|this|a|an|your]? [white|black]? {wp:lex.games.chess.pieces} [$lang.tail.filler]?"
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|gg|um|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh|ok]? [can_i|could_i|may_i|can_we|am_i_allowed_to|am_i_able_to|am_i_permitted_to|is_it_possible_to|is_it_legal_to|would_it_be_legal_to|is_it_ok_to|is_it_okay_to|is_it_allowed_to|is_it_possible_for_me_to] [takes|take|taking|captures|capture|capturing|eats|eat|kills|kill|beats|beat|snatches|grabs|grab|wins|x|trades_for|swaps_for|exchanges_for] [the|that|their|his|your|enemy|opposing|a|an]? [white|black]? {tp:lex.games.chess.pieces} [with|using|by|via|through] [the|my|our|that|this|a|an|your]? [white|black]? {wp:lex.games.chess.pieces} [pls|plz|thanks|thx|lol|rn|now|then|yeah|ok]?"
     emit="@{_} core.request action=chess.can arg.cap=true arg.tp={tp} arg.wp={wp}"
     kind=request
     priority=14
@@ -244,7 +244,7 @@
     example="Can the knight on g1 go to f3?"
 
 @pat.games.chess.can.legal core.pattern
-    match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [is|would_be|would] [it|that|this]? [a]? [legal|possible|allowed|valid|fine|permitted] [to|for_me_to]? [$games.chess.g12_move]? [the|my|our|that|this|a|an|your]? [white|black]? {p:lex.games.chess.pieces?} [$games.chess.g3_to]? [square]? {tf:lex.games.chess.files} {tr:number} [$lang.tail.filler]?"
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|gg|um|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh|ok]? [is|would_be|would] [it|that|this]? [a]? [legal|possible|allowed|ok|okay|valid|fine|permitted] [to|for_me_to]? [move|play|go|put|push|advance|bring|shift|slide|jump|send|run|place|develop|retreat|plays|moves|goes]? [the|my|our|that|this|a|an|your]? [white|black]? {p:lex.games.chess.pieces?} [to|2|too|on|at|onto|into|towards|over_to|up_to|down_to|forward_to|back_to|goes_to|go_to|moves_to|move_to|should_go_to|for|in]? [square]? {tf:lex.games.chess.files} {tr:number} [pls|plz|thanks|thx|lol|rn|now|then|yeah|ok]?"
     emit="@{_} core.request action=chess.can arg.piece={p} arg.tf={tf} arg.tr={tr}"
     kind=request
     priority=14
@@ -252,7 +252,7 @@
     example="Is it possible to move the knight to f3?"
 
 @pat.games.chess.can.legal.after core.pattern
-    match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [is|would_be] [the|my|our|that|this|a|an|your]? [white|black]? {p:lex.games.chess.pieces?} [$games.chess.g3_to]? [square]? {tf:lex.games.chess.files} {tr:number} [a|an|the]? [legal|possible|allowed|valid|fine|permitted|legal_move|valid_move|possible_move|a_legal_move|a_valid_move|a_possible_move] [move]? [$lang.tail.filler]?"
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|gg|um|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh|ok]? [is|would_be] [the|my|our|that|this|a|an|your]? [white|black]? {p:lex.games.chess.pieces?} [to|2|too|on|at|onto|into|towards|over_to|up_to|down_to|forward_to|back_to|goes_to|go_to|moves_to|move_to|should_go_to|for|in]? [square]? {tf:lex.games.chess.files} {tr:number} [a|an|the]? [legal|possible|allowed|ok|okay|valid|fine|permitted|legal_move|valid_move|possible_move|a_legal_move|a_valid_move|a_possible_move] [move]? [pls|plz|thanks|thx|lol|rn|now|then|yeah|ok]?"
     emit="@{_} core.request action=chess.can arg.piece={p} arg.tf={tf} arg.tr={tr}"
     kind=request
     priority=14
@@ -261,28 +261,28 @@
     example="Is pawn to e5 possible?"
 
 @pat.games.chess.can.castle.k core.pattern
-    match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [$games.chess.g25_can_i] [$games.chess.g11_castle] [$games.chess.g20_on]? [the]? [$games.chess.g18_kingside] [side|way|castle|castling|rook]? [$lang.tail.filler]?"
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|gg|um|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh|ok]? [can_i|could_i|may_i|am_i_allowed_to|am_i_able_to|is_it_possible_to|is_it_legal_to|is_it_ok_to] [castle|castles|castling|do_a_castle|do_castling|castle_my_king|castle_the_king|play_castle|make_a_castle|do_the_castle] [on|to|towards|at|with|using|by|in|in_the|on_the|to_the|at_the|towards_the|with_the|using_the]? [the]? [kingside|king_side|king_'s_side|short|short_side|shortside|short_way|king_s_side] [side|way|castle|castling|rook]? [pls|plz|thanks|thx|lol|rn|now|then|yeah|ok]?"
     emit="@{_} core.request action=chess.can arg.castle=k"
     kind=request
     priority=14
     example="Can I castle kingside?"
 
 @pat.games.chess.can.castle.k.adj core.pattern
-    match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [is|would_be] [it|that]? [$games.chess.g18_kingside] [castling|castle] [legal|possible|allowed|valid|available] [$lang.tail.filler]?"
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|gg|um|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh|ok]? [is|would_be] [it|that]? [kingside|king_side|king_'s_side|short|short_side|shortside|short_way|king_s_side] [castling|castle] [legal|possible|allowed|ok|okay|valid|available] [pls|plz|thanks|thx|lol|rn|now|then|yeah|ok]?"
     emit="@{_} core.request action=chess.can arg.castle=k"
     kind=request
     priority=14
     example="Is short castling possible?"
 
 @pat.games.chess.can.castle.q core.pattern
-    match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [$games.chess.g25_can_i] [$games.chess.g11_castle] [$games.chess.g20_on]? [the]? [$games.chess.g19_queenside] [side|way|castle|castling|rook]? [$lang.tail.filler]?"
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|gg|um|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh|ok]? [can_i|could_i|may_i|am_i_allowed_to|am_i_able_to|is_it_possible_to|is_it_legal_to|is_it_ok_to] [castle|castles|castling|do_a_castle|do_castling|castle_my_king|castle_the_king|play_castle|make_a_castle|do_the_castle] [on|to|towards|at|with|using|by|in|in_the|on_the|to_the|at_the|towards_the|with_the|using_the]? [the]? [queenside|queen_side|queen_'s_side|long|long_side|longside|long_way|queen_s_side] [side|way|castle|castling|rook]? [pls|plz|thanks|thx|lol|rn|now|then|yeah|ok]?"
     emit="@{_} core.request action=chess.can arg.castle=q"
     kind=request
     priority=14
     example="Can I castle queenside?"
 
 @pat.games.chess.can.castle.q.adj core.pattern
-    match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [is|would_be] [it|that]? [$games.chess.g19_queenside] [castling|castle] [legal|possible|allowed|valid|available] [$lang.tail.filler]?"
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|gg|um|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh|ok]? [is|would_be] [it|that]? [queenside|queen_side|queen_'s_side|long|long_side|longside|long_way|queen_s_side] [castling|castle] [legal|possible|allowed|ok|okay|valid|available] [pls|plz|thanks|thx|lol|rn|now|then|yeah|ok]?"
     emit="@{_} core.request action=chess.can arg.castle=q"
     kind=request
     priority=14
@@ -290,7 +290,7 @@
 
 @pat.games.chess.can.castle core.pattern
     canonical="Am I allowed to castle?"
-    match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [$games.chess.g25_can_i] [$games.chess.g11_castle] [$lang.tail.filler]?"
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|gg|um|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh|ok]? [can_i|could_i|may_i|am_i_allowed_to|am_i_able_to|is_it_possible_to|is_it_legal_to|is_it_ok_to] [castle|castles|castling|do_a_castle|do_castling|castle_my_king|castle_the_king|play_castle|make_a_castle|do_the_castle] [pls|plz|thanks|thx|lol|rn|now|then|yeah|ok]?"
     emit="@{_} core.request action=chess.can arg.castle=any"
     kind=request
     priority=14
@@ -298,7 +298,7 @@
     example="Am I allowed to castle?"
 
 @pat.games.chess.can.castle.is core.pattern
-    match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [is|would_be] [castling|castle] [legal|possible|allowed|valid|available] [now|here|for_me|for_us]? [$lang.tail.filler]?"
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|gg|um|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh|ok]? [is|would_be] [castling|castle] [legal|possible|allowed|ok|okay|valid|available] [now|here|for_me|for_us]? [pls|plz|thanks|thx|lol|rn|now|then|yeah|ok]?"
     emit="@{_} core.request action=chess.can arg.castle=any"
     kind=request
     priority=14
@@ -505,7 +505,7 @@
     example="Who is better?"
 
 @pat.games.chess.status.am core.pattern
-    match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [am_i|are_you|are_we|is_white|is_black] [winning|ahead|leading|better|losing|behind|doing_better|in_front|ahead_in_material|up_material|down_material|down] [now|right_now|at_the_moment|here|so_far|in_material]? [$lang.tail.filler]?"
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|gg|um|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh|ok]? [am_i|are_you|are_we|is_white|is_black] [winning|ahead|leading|better|losing|behind|doing_better|doing_well|in_front|ahead_in_material|up_material|down_material|down] [now|right_now|at_the_moment|here|so_far|in_material]? [pls|plz|thanks|thx|lol|rn|now|then|yeah|ok]?"
     emit="@{_} core.request action=chess.status"
     kind=request
     priority=13
@@ -1073,7 +1073,7 @@
     example="Can you take back that move?"
 
 @pat.games.chess.undo.n core.pattern
-    match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [undo|take_back|revert|retract|rewind|cancel|rollback|roll_back|unplay|withdraw|go_back|step_back|erase|delete] {n:number} [moves|turns|plies|half_moves|steps|moves_back|turns_back|of_my_moves|of_the_last_moves] [$lang.tail.filler]?"
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|gg|um|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh|ok]? [undo|take_back|revert|retract|rewind|cancel|rollback|roll_back|unplay|withdraw|go_back|step_back|erase|delete] {n:number} [moves|turns|plies|half_moves|steps|moves_back|turns_back|moves_please|of_my_moves|of_the_last_moves] [pls|plz|thanks|thx|lol|rn|now|then|yeah|ok]?"
     emit="@{_} core.request action=chess.undo arg.n={n}"
     kind=request
     priority=13
@@ -1089,7 +1089,7 @@
     example="Step back a move."
 
 @pat.games.chess.undo.bare core.pattern
-    match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [undo|undo_that|undo_it|revert|take_that_back|takeback|take_it_back|retract_that|go_back_a_move] [$lang.tail.filler]?"
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|gg|um|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh|ok]? [undo|undo_that|undo_it|revert|take_that_back|takeback|take_it_back|undo_please|retract_that|go_back_a_move] [pls|plz|thanks|thx|lol|rn|now|then|yeah|ok]?"
     emit="@{_} core.request action=chess.undo arg.n=1 arg.bare=true"
     kind=request
     priority=15
@@ -1155,7 +1155,7 @@
     example="I propose a draw."
 
 @pat.games.chess.draw.short core.pattern
-    match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [can_we_draw|could_we_draw|shall_we_draw|let_us_draw|lets_draw|want_a_draw|a_draw|draw|how_about_a_draw|what_about_a_draw|what_do_you_say_to_a_draw|would_you_take_a_draw|would_you_accept_a_draw|will_you_accept_a_draw|do_you_accept_a_draw|do_you_want_a_draw|are_you_up_for_a_draw|are_you_open_to_a_draw|is_a_draw_possible|is_a_draw_fine|will_you_draw|would_you_draw|agree_to_draw|agree_to_a_draw] [now|here|then]? [$lang.tail.filler]?"
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|gg|um|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh|ok]? [can_we_draw|could_we_draw|shall_we_draw|let_us_draw|lets_draw|want_a_draw|a_draw|draw|draw_please|how_about_a_draw|what_about_a_draw|what_do_you_say_to_a_draw|would_you_take_a_draw|would_you_accept_a_draw|will_you_accept_a_draw|do_you_accept_a_draw|do_you_want_a_draw|are_you_up_for_a_draw|are_you_open_to_a_draw|is_a_draw_ok|is_a_draw_okay|is_a_draw_possible|is_a_draw_fine|will_you_draw|would_you_draw|agree_to_draw|agree_to_a_draw] [please|now|here|then]? [pls|plz|thanks|thx|lol|rn|now|then|yeah|ok]?"
     emit="@{_} core.request action=chess.draw"
     kind=request
     priority=13
@@ -1265,7 +1265,7 @@
     example="Best move?"
 
 @pat.games.chess.hint.stuck core.pattern
-    match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [idk|i_dont_know|i_do_not_know|no_idea|im_stuck|i_am_stuck|i_m_stuck|i_have_no_idea|help_me|what_should_i_do|what_do_i_do] [what_to_do|what_to_play|what_to_move|what_now|what_move|what_move_to_make|what_to_play_here|what_to_do_here|here|now|pls|plz|rn|then|lol]"
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|gg|um|ok|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh]? [idk|i_dont_know|i_do_not_know|no_idea|im_stuck|i_am_stuck|i_m_stuck|i_have_no_idea|help_me|what_should_i_do|what_do_i_do] [what_to_do|what_to_play|what_to_move|what_now|what_move|what_move_to_make|what_to_play_here|what_to_do_here|here|now|pls|plz|please|rn|then|lol]"
     emit="@{_} core.request action=chess.hint"
     kind=request
     priority=11
@@ -1338,7 +1338,7 @@
     example="Castling kingside possible?"
 
 @pat.games.chess.can.castle.any core.pattern
-    match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [$games.chess.g21_can_i]? [castle|castling|castles|castle_legal|castling_legal|castle_possible|castling_possible] [$games.chess.g28_legal] [$lang.tail.filler|here]?"
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|gg|um|ok|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh]? [can_i|may_i|could_i|can_we|am_i_able_to|am_i_allowed_to|is_it_possible_to|is_it_legal_to|is_it_ok_to|is_it_allowed_to|do_i_have_the_right_to|is|can]? [castle|castling|castles|castle_legal|castling_legal|castle_possible|castling_possible] [legal|possible|allowed|ok|okay|fine|valid|doable|available|an_option|for_me|for_us|now|yet|here|rn|pls|plz|please|then] [for_me|for_us|now|yet|here|rn|pls|plz|please|then]?"
     emit="@{_} core.request action=chess.can arg.castle=any"
     kind=request
     priority=12
@@ -1489,7 +1489,7 @@
     example="Piece on e4?"
 
 @pat.games.chess.engine.q core.pattern
-    match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [your|ur|u|you|its_your|it_is_your|its_ur|engine|computer|bot|ai|machine|cpu|opponent|go|go_on|go_ahead|come_on|hurry_up|c_mon|cmon|now|so|then] [your|ur|the|its|it_is|its_your|it_is_your]? [turn|move|go|play|move_now|go_now|play_now|turn_to_move|turn_to_play|turn_to_go|to_move|to_play|to_go|move_already|play_already|go_already|hurry|do_it|engine_move|computer_move|bot_move|ai_move|machine_move|cpu_move|reply|respond|answer|think|moves|plays|your_move|ur_move] [now|already|pls|plz|then|asap|to_move|to_play|to_go|rn|engine|computer|bot|ai|machine|cpu]?"
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|gg|um|ok|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh]? [your|ur|u|you|its_your|it_is_your|its_ur|engine|computer|bot|ai|machine|cpu|opponent|go|go_on|go_ahead|come_on|hurry_up|c_mon|cmon|now|so|ok|then|well] [your|ur|the|its|it_is|its_your|it_is_your]? [turn|move|go|play|move_now|move_please|go_now|play_now|turn_to_move|turn_to_play|turn_to_go|to_move|to_play|to_go|move_already|play_already|go_already|hurry|do_it|engine_move|computer_move|bot_move|ai_move|machine_move|cpu_move|reply|respond|answer|think|moves|plays|your_move|ur_move] [now|already|please|pls|plz|then|asap|to_move|to_play|to_go|rn|ok|engine|computer|bot|ai|machine|cpu]?"
     emit="@{_} core.request action=chess.engineMove"
     kind=request
     priority=12
@@ -1498,7 +1498,7 @@
     example="Ok engine move now."
 
 @pat.games.chess.engine.bare core.pattern
-    match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [engine|computer|bot|ai|machine|cpu|opponent]? [move|go|play|reply|respond] [pls|plz|now|already|asap|then|rn]"
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|gg|um|ok|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh]? [engine|computer|bot|ai|machine|cpu|opponent]? [move|go|play|reply|respond] [pls|plz|now|already|please|asap|then|now_please|rn]"
     emit="@{_} core.request action=chess.engineMove"
     kind=request
     priority=12
@@ -1523,7 +1523,7 @@
     example="New chess game i am black."
 
 @pat.games.chess.side.q core.pattern
-    match="[$lang.lead.filler|wait|gg|umm|right|ooh]? [play|be|take|choose|pick|go|switch_to|use|give_me|i_want|i_want_to_be|i_want_to_play|i_wanna_be|i_wanna_play|let_me_be|let_me_play|let_me_have|can_i_be|can_i_play|can_i_have|i_ll_be|ill_be|ill_play|ill_take|i_will_be|i_will_play]? [the]? {c:lex.games.chess.colors} [side|pieces|pls|plz|now|then|yeah] [$lang.tail.filler]?"
+    match="[uh|hm|hmm|ah|oh|hey|wait|yeah|so|eh|er|gg|um|ok|umm|uhh|erm|mm|mhm|yep|okay|alright|right|well|ooh]? [play|be|take|choose|pick|go|switch_to|use|give_me|i_want|i_want_to_be|i_want_to_play|i_wanna_be|i_wanna_play|let_me_be|let_me_play|let_me_have|can_i_be|can_i_play|can_i_have|i_ll_be|ill_be|ill_play|ill_take|i_will_be|i_will_play]? [the]? {c:lex.games.chess.colors} [side|pieces|please|pls|plz|now|then|ok|yeah] [pls|plz|thanks|thx|lol|rn|now|then|yeah|ok]?"
     emit="@{_} core.request action=chess.side arg.color={c}"
     kind=request
     priority=11
@@ -1592,14 +1592,14 @@
     example="E pawn to e4."
 
 @pat.games.chess.sw.can_may core.pattern
-    match="[$lang.lead.filler|umm|ooh|wait|right]? [can_i|could_i|may_i|can_we|could_we|is_it_legal_to|am_i_allowed_to|is_it_possible_to|would_it_be_legal_to|am_i_able_to|am_i_permitted_to] [move|play|go|put|push|advance|bring|shift|slide|jump|send|run|place|develop|retreat]? [the|my|our]? {p:lex.games.chess.pieces} [to|on|at|onto|into]? [square]? {tf:lex.games.chess.files} {tr:number} [$lang.tail.filler|maybe|i_guess|i_think|probably]?"
+    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [can_i|could_i|may_i|can_we|could_we|is_it_ok_to|is_it_okay_to|is_it_legal_to|am_i_allowed_to|is_it_possible_to|would_it_be_legal_to|am_i_able_to|am_i_permitted_to] [move|play|go|put|push|advance|bring|shift|slide|jump|send|run|place|develop|retreat]? [the|my|our]? {p:lex.games.chess.pieces} [to|on|at|onto|into]? [square]? {tf:lex.games.chess.files} {tr:number} [pls|plz|please|thanks|thx|ty|then|now|lol|rn|yeah|maybe|i_guess|i_think|for_me|probably|ok|okay]?"
     emit="@{_} core.request action=chess.can arg.piece={p} arg.tf={tf} arg.tr={tr}"
     kind=request
     priority=14
     example="May I play queen h5?"
 
 @pat.games.chess.sw.can_ok core.pattern
-    match="[$lang.lead.filler|umm|ooh|wait|right]? [the|my|our]? {p:lex.games.chess.pieces} [to|on|at|onto|into]? [square]? {tf:lex.games.chess.files} {tr:number} [allowed|legal|possible|valid|permitted|fine|a_legal_move|allowed_to_play|alright|acceptable|doable|feasible|a_valid_move|a_possible_move|legit|a_legal_play|legal_to_play|legal_to_move|possible_to_play|possible_to_move]"
+    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [the|my|our]? {p:lex.games.chess.pieces} [to|on|at|onto|into]? [square]? {tf:lex.games.chess.files} {tr:number} [allowed|ok|okay|legal|possible|valid|permitted|fine|a_legal_move|ok_to_play|allowed_to_play|alright|acceptable|doable|feasible|a_valid_move|a_possible_move|legit|a_legal_play|legal_to_play|legal_to_move|possible_to_play|possible_to_move]"
     emit="@{_} core.request action=chess.can arg.piece={p} arg.tf={tf} arg.tr={tr}"
     kind=request
     priority=14
@@ -1607,14 +1607,14 @@
     example="Queen h5 ok?"
 
 @pat.games.chess.sw.can_forme core.pattern
-    match="[$lang.lead.filler|umm|ooh|wait|right]? [is|would|will|can|could|does] {tf:lex.games.chess.files} {tr:number} [possible|legal|allowed|valid|fine|permitted|good|alright|a_legal_move|a_valid_move|reachable|available|accessible|doable] [for|with|by|from] [the|my|our]? {p:lex.games.chess.pieces}"
+    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [is|would|will|can|could|does] {tf:lex.games.chess.files} {tr:number} [possible|legal|allowed|ok|okay|valid|fine|permitted|good|alright|a_legal_move|a_valid_move|reachable|available|accessible|doable] [for|with|by|from] [the|my|our]? {p:lex.games.chess.pieces}"
     emit="@{_} core.request action=chess.can arg.piece={p} arg.tf={tf} arg.tr={tr}"
     kind=request
     priority=14
     example="Is h5 possible for my queen?"
 
 @pat.games.chess.sw.can_would core.pattern
-    match="[$lang.lead.filler|umm|ooh|wait|right]? [would|will|could|can|should|is|does|do] [the|my|our]? {p:lex.games.chess.pieces} [to|on|at|onto|into]? [square]? {tf:lex.games.chess.files} {tr:number} [be|being]? [a|an]? [legal|possible|allowed|valid|fine|permitted|good|alright|acceptable|legit] [move|play|option]?"
+    match="[uh|um|umm|uhh|erm|hm|hmm|mm|mhm|ah|oh|ooh|hey|wait|yeah|yep|so|ok|okay|alright|right|well|eh|er]? [would|will|could|can|should|is|does|do] [the|my|our]? {p:lex.games.chess.pieces} [to|on|at|onto|into]? [square]? {tf:lex.games.chess.files} {tr:number} [be|being]? [a|an]? [legal|possible|allowed|ok|okay|valid|fine|permitted|good|alright|acceptable|legit] [move|play|option]?"
     emit="@{_} core.request action=chess.can arg.piece={p} arg.tf={tf} arg.tr={tr}"
     kind=request
     priority=14

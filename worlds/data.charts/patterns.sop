@@ -1117,7 +1117,7 @@
     example="I don't want a title on it."
 
 @pat.data.charts.x.untitle2 core.pattern
-    match="[title|heading|name|caption] [off|away|gone|removed|remove]"
+    match="[title|heading|name|caption] [off|away|gone|removed|please_remove|remove]"
     emit="@{_} core.request action=chart.removeTitle"
     kind=request
     priority=12
@@ -1224,7 +1224,7 @@
     example="Can you hide that legend thing?"
 
 @pat.data.charts.x.legend3 core.pattern
-    match="[the]? [legend|key|legend_box|legend_panel] [off|away|gone|out|hidden|removed|no|no_thanks]"
+    match="[the]? [legend|key|legend_box|legend_panel] [off|away|gone|out|hidden|removed|please_hide|please_remove|please_off|no|no_thanks]"
     emit="@{_} core.request action=chart.setLegend arg.on=false"
     kind=request
     priority=12
@@ -1315,7 +1315,7 @@
     example="Label the bars with their numbers."
 
 @pat.data.charts.x.values4 core.pattern
-    match="[numbers|figures|values|amounts|counts] [on|pls|plz|on_pls|visible|shown|showing]"
+    match="[numbers|figures|values|amounts|counts] [on|please|pls|plz|on_please|on_pls|visible|shown|showing]"
     emit="@{_} core.request action=chart.setValues arg.mode=on"
     kind=request
     priority=11
@@ -1702,7 +1702,7 @@
     example="Remove plums pls."
 
 @pat.data.charts.r2.rem.b core.pattern
-    match="[$lang.lead.polite|$data.charts.g1_hey]? [take|get|pull|kick|lift|throw|cut|pick|knock|leave|put|move|toss|chuck|drop|rub|wipe|scrub|delete] [the]? {l:words(3)} [out|off|away|out_of_it|out_of_there|off_it|from_it|out_of_the_chart|off_the_chart|off_the_graph|out_of_the_graph|out_of_here|off_there|gone] [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    match="[can_you|could_you|can_u|could_u|will_you|would_you|would_u|will_u|please_can_you|i_want_you_to|i_need_you_to|i_would_like_you_to|let_us|hey|yo|just|go_ahead_and|can_you_just|could_you_just|can_we|could_we|i_want_to|i_would_like_to|i_wanna|let_me|i_d_like_to|id_like_to|would_you_mind|do_you_mind|i_want|i_would_like|i_need|we_want_to|we_need_to|you_can|you_could|why_not|how_about|what_about|lets|now|u_can|u_could|could_you_maybe|can_you_maybe|could_u_maybe|can_u_maybe|maybe|perhaps|hmm|like|and_now|and_then|then|so_now|now_please]? [take|get|pull|kick|lift|throw|cut|pick|knock|leave|put|move|toss|chuck|drop|rub|wipe|scrub|delete] [the]? {l:words(3)} [out|off|away|out_of_it|out_of_there|off_it|from_it|out_of_the_chart|off_the_chart|off_the_graph|out_of_the_graph|out_of_here|off_there|gone|out_please] [pls|plz|plss|thx|thanks|thank_you|ty|for_me|now|asap|again|or_something|or_so|or_whatever|or_sth|real_quick|quickly|cheers|ta|thanks_a_lot|thanks_a_bunch|if_you_can|if_possible|for_now]?"
     emit="@{_} core.request action=chart.removePoint arg.l=\"{l}\""
     kind=request
     priority=8
@@ -1718,7 +1718,7 @@
     example="Plums off the chart."
 
 @pat.data.charts.r2.rem.d core.pattern
-    match="[$lang.lead.polite|$data.charts.g1_hey]? [no_more|without|i_do_not_need|i_do_not_want|we_do_not_need|we_do_not_want|do_not_need|do_not_want|i_do_not_need_the|forget|skip|leave_out|leave_off|exclude|ignore|we_dont_need|i_dont_need|i_dont_want|we_dont_want|dont_want|dont_need] [the|any|more|those|these|that]? {l:words(3,label)} [anymore|any_more|at_all|in_it|in_the_chart|in_the_graph|on_the_chart|on_the_graph|there|here|any_longer|pls|plz|thx|thanks|ty|now]"
+    match="[can_you|could_you|can_u|could_u|will_you|would_you|would_u|will_u|please_can_you|i_want_you_to|i_need_you_to|i_would_like_you_to|let_us|hey|yo|just|go_ahead_and|can_you_just|could_you_just|can_we|could_we|i_want_to|i_would_like_to|i_wanna|let_me|i_d_like_to|id_like_to|would_you_mind|do_you_mind|i_want|i_would_like|i_need|we_want_to|we_need_to|you_can|you_could|why_not|how_about|what_about|lets|now|u_can|u_could|could_you_maybe|can_you_maybe|could_u_maybe|can_u_maybe|maybe|perhaps|hmm|like|and_now|and_then|then|so_now|now_please]? [no_more|without|i_do_not_need|i_do_not_want|we_do_not_need|we_do_not_want|do_not_need|do_not_want|i_do_not_need_the|forget|skip|leave_out|leave_off|exclude|ignore|we_dont_need|i_dont_need|i_dont_want|we_dont_want|dont_want|dont_need] [the|any|more|those|these|that]? {l:words(3,label)} [anymore|any_more|at_all|in_it|in_the_chart|in_the_graph|on_the_chart|on_the_graph|there|here|any_longer|please|pls|plz|thx|thanks|ty|now]"
     emit="@{_} core.request action=chart.removePoint arg.l=\"{l}\""
     kind=request
     priority=8
@@ -1832,7 +1832,7 @@
     example="Sideways bars."
 
 @pat.data.charts.r2.stack.c core.pattern
-    match="[$lang.lead.polite|$data.charts.g1_hey]? [i_want|i_need|i_would_like|i_d_like|id_like|i_prefer|prefer|show|give|make|use|do|have|put|turn_on|switch_on|set|enable|activate|get|try|go_with|go_for|let_us_have|lets_have|keep]? [me]? [the|them|it|these|a|an|all_the]? [bars|bar|columns|series|lines|data|values|chart|graph]? [stacked|stacking|stack|piled|piled_up|on_top_of_each_other|1_on_top_of_the_other|stack_up|stacked_up|stacked_on_top|stacked_version|stacked_chart|stacked_mode|stacked_style|stacked_view|stacked_bars|stacked_columns] [bars|bar|columns|series|lines|data|values|version|style|view|mode|pls|plz|thx|ty|now|on|instead]? [on|up]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    match="[can_you|could_you|can_u|could_u|will_you|would_you|would_u|will_u|please_can_you|i_want_you_to|i_need_you_to|i_would_like_you_to|let_us|hey|yo|just|go_ahead_and|can_you_just|could_you_just|can_we|could_we|i_want_to|i_would_like_to|i_wanna|let_me|i_d_like_to|id_like_to|would_you_mind|do_you_mind|i_want|i_would_like|i_need|we_want_to|we_need_to|you_can|you_could|why_not|how_about|what_about|lets|now|u_can|u_could|could_you_maybe|can_you_maybe|could_u_maybe|can_u_maybe|maybe|perhaps|hmm|like|and_now|and_then|then|so_now|now_please]? [i_want|i_need|i_would_like|i_d_like|id_like|i_prefer|prefer|show|give|make|use|do|have|put|turn_on|switch_on|set|enable|activate|get|try|go_with|go_for|let_us_have|lets_have|please|keep]? [me]? [the|them|it|these|a|an|all_the]? [bars|bar|columns|series|lines|data|values|chart|graph]? [stacked|stacking|stack|piled|piled_up|on_top_of_each_other|1_on_top_of_the_other|stack_up|stacked_up|stacked_on_top|stacked_version|stacked_chart|stacked_mode|stacked_style|stacked_view|stacked_bars|stacked_columns|stacked_please] [bars|bar|columns|series|lines|data|values|version|style|view|mode|please|pls|plz|thx|ty|now|on|instead]? [on|up]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|now|asap|again|or_something|or_so|or_whatever|or_sth|real_quick|quickly|cheers|ta|thanks_a_lot|thanks_a_bunch|if_you_can|if_possible|for_now]?"
     emit="@{_} core.request action=chart.setStacked arg.on=true"
     kind=request
     priority=12
@@ -1913,7 +1913,7 @@
     example="Drop the title."
 
 @pat.data.charts.r2.title.rm2 core.pattern
-    match="[$lang.lead.polite|$data.charts.g1_hey]? [take|turn|switch|put|set|leave|wipe|move|get|knock|clear|strip|peel|rub|scrub|lift|kick|throw|toss|chuck|cut|pull|pick|delete] [the|this|its|that|my|our]? [chart|graph|plot]? [title|heading|header|caption|headline|name_on_top|name_at_the_top|top_name|text_on_top|top_text] [off|away|out|out_of_the_chart|away_from_the_chart|off_the_chart|off_the_graph|gone|down|off_it|away_from_it|to_off|to_none] [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    match="[can_you|could_you|can_u|could_u|will_you|would_you|would_u|will_u|please_can_you|i_want_you_to|i_need_you_to|i_would_like_you_to|let_us|hey|yo|just|go_ahead_and|can_you_just|could_you_just|can_we|could_we|i_want_to|i_would_like_to|i_wanna|let_me|i_d_like_to|id_like_to|would_you_mind|do_you_mind|i_want|i_would_like|i_need|we_want_to|we_need_to|you_can|you_could|why_not|how_about|what_about|lets|now|u_can|u_could|could_you_maybe|can_you_maybe|could_u_maybe|can_u_maybe|maybe|perhaps|hmm|like|and_now|and_then|then|so_now|now_please]? [take|turn|switch|put|set|leave|wipe|move|get|knock|clear|strip|peel|rub|scrub|lift|kick|throw|toss|chuck|cut|pull|pick|delete] [the|this|its|that|my|our]? [chart|graph|plot]? [title|heading|header|caption|headline|name_on_top|name_at_the_top|top_name|text_on_top|top_text] [off|away|out|out_of_the_chart|away_from_the_chart|off_the_chart|off_the_graph|gone|down|off_it|away_from_it|away_please|off_please|to_off|to_none] [pls|plz|plss|thx|thanks|thank_you|ty|for_me|now|asap|again|or_something|or_so|or_whatever|or_sth|real_quick|quickly|cheers|ta|thanks_a_lot|thanks_a_bunch|if_you_can|if_possible|for_now]?"
     emit="@{_} core.request action=chart.removeTitle"
     kind=request
     priority=9
@@ -2033,7 +2033,7 @@
     example="Show me how much each one is on the chart."
 
 @pat.data.charts.r2.val.b core.pattern
-    match="[$lang.lead.polite|$data.charts.g1_hey]? [values|numbers|figures|amounts|counts|labels|data_labels|value_labels|data|the_numbers|the_values|the_figures|the_amounts|the_counts] [on|pls|plz|thx|ty|on_pls|visible|shown|showing|on_it|on_them|on_the_bars|on_the_chart|on_the_graph|on_top|above_the_bars|next_to_the_bars|too|also|again|now|back|back_on]"
+    match="[can_you|could_you|can_u|could_u|will_you|would_you|would_u|will_u|please_can_you|i_want_you_to|i_need_you_to|i_would_like_you_to|let_us|hey|yo|just|go_ahead_and|can_you_just|could_you_just|can_we|could_we|i_want_to|i_would_like_to|i_wanna|let_me|i_d_like_to|id_like_to|would_you_mind|do_you_mind|i_want|i_would_like|i_need|we_want_to|we_need_to|you_can|you_could|why_not|how_about|what_about|lets|now|u_can|u_could|could_you_maybe|can_you_maybe|could_u_maybe|can_u_maybe|maybe|perhaps|hmm|like|and_now|and_then|then|so_now|now_please]? [values|numbers|figures|amounts|counts|labels|data_labels|value_labels|data|the_numbers|the_values|the_figures|the_amounts|the_counts] [on|please|pls|plz|thx|ty|on_please|on_pls|visible|shown|showing|on_it|on_them|on_the_bars|on_the_chart|on_the_graph|on_top|above_the_bars|next_to_the_bars|too|as_well|also|again|now|back|back_on|back_please]"
     emit="@{_} core.request action=chart.setValues arg.mode=on"
     kind=request
     priority=11
@@ -2073,7 +2073,7 @@
     example="Take the legend off."
 
 @pat.data.charts.r2.leg.c core.pattern
-    match="[the]? [legend|key|legend_box|legend_panel] [away|off|out|gone|hidden|removed|no|no_thanks|goes|can_go|should_go|must_go|has_to_go|needs_to_go|is_not_needed|is_not_wanted|is_unneeded|is_unwanted|is_useless|is_pointless|is_redundant|is_in_the_way] [away|off|out|pls|plz|thx|ty|now]?"
+    match="[the]? [legend|key|legend_box|legend_panel] [away|off|out|gone|hidden|removed|please_hide|please_remove|please_off|no|no_thanks|goes|can_go|should_go|must_go|has_to_go|needs_to_go|is_not_needed|is_not_wanted|is_unneeded|is_unwanted|is_useless|is_pointless|is_redundant|is_in_the_way] [away|off|out|please|pls|plz|thx|ty|now]?"
     emit="@{_} core.request action=chart.setLegend arg.on=false"
     kind=request
     priority=12
@@ -2081,7 +2081,7 @@
     example="Legend away pls."
 
 @pat.data.charts.r2.ext.a core.pattern
-    match="[$lang.lead.polite|$data.charts.g1_hey]? [$data.charts.g9_tell_me] [$data.charts.g11_1]? ['s]? [is|are|has|have|got|was|were]? [on|at|in|the|a]? [the]? {w:lex.data.charts.extent} [$data.charts.g11_1]? [is_it|are_they|in_the_chart|in_it|on_the_chart|in_the_graph|on_the_graph|here|of_all|of_them|of_the_bars|overall|then|there|is|are|has|have|got|wins|is_on_top|is_that|is_this|is_which|is_what|pls|plz|thx|ty|now|again|by_far|by_a_mile|of_all_of_them|of_all_of_it|of_everything|of_the_lot|in_total|in_all|at_all|in_here|in_there|on_there|on_here|on_it|on_them]? [$data.charts.g11_1]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    match="[can_you|could_you|can_u|could_u|will_you|would_you|would_u|will_u|please_can_you|i_want_you_to|i_need_you_to|i_would_like_you_to|let_us|hey|yo|just|go_ahead_and|can_you_just|could_you_just|can_we|could_we|i_want_to|i_would_like_to|i_wanna|let_me|i_d_like_to|id_like_to|would_you_mind|do_you_mind|i_want|i_would_like|i_need|we_want_to|we_need_to|you_can|you_could|why_not|how_about|what_about|lets|now|u_can|u_could|could_you_maybe|can_you_maybe|could_u_maybe|can_u_maybe|maybe|perhaps|hmm|like|and_now|and_then|then|so_now|now_please]? [tell_me|show_me|give_me|say|name|find|whats|what_is|which_is|which_1_is|which_are|which_ones_are|which|what|who|who_has|who_has_got|which_1_has|which_has|which_1|can_you_tell_me|do_you_know|let_me_know|i_want_to_know|i_wanna_know|what_has|what_s|find_me|what_are|and|so|ok|okay|now|hmm|hm|uh|um|well|and_now|so_what_is|so_which_is|so_which|so_what|so_who|so_whats] [1|bar|bars|item|items|slice|slices|value|number|label|thing|column|point|segment|fruit|category|entry|name|amount|count|result|data_point|element|winner|ones|of_them|of_all|here|bit|option|choice|score|animal|kid|person|child|toy|shape|colour|color|piece|part|pick|answer|figure|stat|row|series|line|dot|player|team|group|class|type|kind|sort|variety|brand|product|food|drink|snack|game]? ['s]? [is|are|has|have|got|was|were]? [on|at|in|the|a]? [the]? {w:lex.data.charts.extent} [1|bar|bars|item|items|slice|slices|value|number|label|thing|column|point|segment|fruit|category|entry|name|amount|count|result|data_point|element|winner|ones|of_them|of_all|here|bit|option|choice|score|animal|kid|person|child|toy|shape|colour|color|piece|part|pick|answer|figure|stat|row|series|line|dot|player|team|group|class|type|kind|sort|variety|brand|product|food|drink|snack|game]? [is_it|are_they|in_the_chart|in_it|on_the_chart|in_the_graph|on_the_graph|here|of_all|of_them|of_the_bars|overall|then|there|is|are|has|have|got|wins|is_on_top|is_that|is_this|is_which|is_what|please|pls|plz|thx|ty|now|again|by_far|by_a_mile|of_all_of_them|of_all_of_it|of_everything|of_the_lot|in_total|in_all|at_all|in_here|in_there|on_there|on_here|on_it|on_them|here_please|there_please|now_please|then_please|is_it_please|are_they_please]? [1|bar|bars|item|items|slice|slices|value|number|label|thing|column|point|segment|fruit|category|entry|name|amount|count|result|data_point|element|winner|ones|of_them|of_all|here|bit|option|choice|score|animal|kid|person|child|toy|shape|colour|color|piece|part|pick|answer|figure|stat|row|series|line|dot|player|team|group|class|type|kind|sort|variety|brand|product|food|drink|snack|game]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|now|asap|again|or_something|or_so|or_whatever|or_sth|real_quick|quickly|cheers|ta|thanks_a_lot|thanks_a_bunch|if_you_can|if_possible|for_now]?"
     emit="@{_} core.request action=chart.extreme arg.w={w}"
     kind=request
     priority=8
@@ -2145,7 +2145,7 @@
     example="Add them all up."
 
 @pat.data.charts.r2.tot.d2 core.pattern
-    match="[$lang.lead.polite|$data.charts.g1_hey]? [add|sum|total|count|tally|tot|calculate|combine|work_out|add_together|sum_up|count_up|tally_up|tot_up|add_up|total_up] [up|together|altogether|all_together|all_up|in_total|in_all|overall|combined] [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    match="[can_you|could_you|can_u|could_u|will_you|would_you|would_u|will_u|please_can_you|i_want_you_to|i_need_you_to|i_would_like_you_to|let_us|hey|yo|just|go_ahead_and|can_you_just|could_you_just|can_we|could_we|i_want_to|i_would_like_to|i_wanna|let_me|i_d_like_to|id_like_to|would_you_mind|do_you_mind|i_want|i_would_like|i_need|we_want_to|we_need_to|you_can|you_could|why_not|how_about|what_about|lets|now|u_can|u_could|could_you_maybe|can_you_maybe|could_u_maybe|can_u_maybe|maybe|perhaps|hmm|like|and_now|and_then|then|so_now|now_please]? [add|sum|total|count|tally|tot|calculate|combine|work_out|add_together|sum_up|count_up|tally_up|tot_up|add_up|total_up] [up|together|altogether|all_together|all_up|in_total|in_all|overall|combined|up_please] [pls|plz|plss|thx|thanks|thank_you|ty|for_me|now|asap|again|or_something|or_so|or_whatever|or_sth|real_quick|quickly|cheers|ta|thanks_a_lot|thanks_a_bunch|if_you_can|if_possible|for_now]?"
     emit="@{_} core.request action=chart.total"
     kind=request
     priority=8
@@ -2153,7 +2153,7 @@
     example="Sum up."
 
 @pat.data.charts.r2.tot.e core.pattern
-    match="[altogether|all_together|in_total|in_all|together|overall|combined|all_up|all_in_all|in_sum|in_summary] [how_many|how_much|what|the_total|total|pls|plz|thx|ty|now|how_many_is_that|how_much_is_that|what_is_that|whats_that|what_does_that_make|what_does_it_make|what_does_that_come_to|what_does_it_come_to|what_does_that_add_up_to|what_does_it_add_up_to|what_is_the_sum|whats_the_sum|what_is_the_total|whats_the_total]"
+    match="[altogether|all_together|in_total|in_all|together|overall|combined|all_up|all_in_all|in_sum|in_summary] [how_many|how_much|what|the_total|total|please|pls|plz|thx|ty|now|how_many_is_that|how_much_is_that|what_is_that|whats_that|what_does_that_make|what_does_it_make|what_does_that_come_to|what_does_it_come_to|what_does_that_add_up_to|what_does_it_add_up_to|what_is_the_sum|whats_the_sum|what_is_the_total|whats_the_total]"
     emit="@{_} core.request action=chart.total"
     kind=request
     priority=8
@@ -2426,7 +2426,7 @@
     example="Apples value."
 
 @pat.data.charts.r2.val.q2 core.pattern
-    match="[$lang.lead.polite|$data.charts.g1_hey]? [how_much_is|how_much_are|how_much|how_many|how_big_is|how_big_are|how_tall_is|how_high_is|show_me|tell_me|give_me|read_me|find|check|can_you_tell_me|do_you_know|let_me_know|read_out|read_me_out|tell_me_about|show_me_about|and|so|now|hmm|hm|uh|and_now|so_what_is|so_how_much_is|so_how_many] [is|are|the|me|of|does|do]? [the|number|value|amount|figure|count|size|height|score|quantity|number_of|value_of|amount_of|figure_for|figure_of|number_for|value_for|count_of|count_for|size_of|height_of|score_of|quantity_of|stat_for|stat_of|total_for|total_of|sum_for|sum_of|worth_of|worth_for|magnitude_of|magnitude_for|weight_of|weight_for|level_of|level_for|rating_of|rating_for|rank_of|rank_for|volume_of|volume_for|degree_of|degree_for|measure_of|measure_for|metric_of|metric_for]? [is|are|the|of|for]? {l:words(3)} [value|number|amount|figure|count|size|height|score|say|is|equal|bar|slice|show|read|have|hold|come_to|come_out_to|amount_to|stand_at|sit_at|look_like|total|sum|tally|worth|magnitude|weight|level|rating|rank|volume|degree|measure|metric|come_to_now|stand_at_now|sit_at_now]? [there_are|there_is|are_there|is_there|is|are|have|has|do|at|now|then|there|here|for_me|again|exactly|currently|at_the_moment|right_now|today|at_present|presently|for_now|so_far|as_of_now|as_it_stands|as_things_stand|pls|plz|thx|ty]? [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    match="[can_you|could_you|can_u|could_u|will_you|would_you|would_u|will_u|please_can_you|i_want_you_to|i_need_you_to|i_would_like_you_to|let_us|hey|yo|just|go_ahead_and|can_you_just|could_you_just|can_we|could_we|i_want_to|i_would_like_to|i_wanna|let_me|i_d_like_to|id_like_to|would_you_mind|do_you_mind|i_want|i_would_like|i_need|we_want_to|we_need_to|you_can|you_could|why_not|how_about|what_about|lets|now|u_can|u_could|could_you_maybe|can_you_maybe|could_u_maybe|can_u_maybe|maybe|perhaps|hmm|like|and_now|and_then|then|so_now|now_please]? [how_much_is|how_much_are|how_much|how_many|how_big_is|how_big_are|how_tall_is|how_high_is|show_me|tell_me|give_me|read_me|find|check|can_you_tell_me|do_you_know|let_me_know|read_out|read_me_out|tell_me_about|show_me_about|and|so|ok|okay|now|hmm|hm|uh|um|well|and_now|so_what_is|so_how_much_is|so_how_many] [is|are|the|me|of|does|do]? [the|number|value|amount|figure|count|size|height|score|quantity|number_of|value_of|amount_of|figure_for|figure_of|number_for|value_for|count_of|count_for|size_of|height_of|score_of|quantity_of|stat_for|stat_of|total_for|total_of|sum_for|sum_of|worth_of|worth_for|magnitude_of|magnitude_for|weight_of|weight_for|level_of|level_for|rating_of|rating_for|rank_of|rank_for|volume_of|volume_for|degree_of|degree_for|measure_of|measure_for|metric_of|metric_for]? [is|are|the|of|for]? {l:words(3)} [value|number|amount|figure|count|size|height|score|say|is|equal|bar|slice|show|read|have|hold|come_to|come_out_to|amount_to|stand_at|sit_at|look_like|total|sum|tally|worth|magnitude|weight|level|rating|rank|volume|degree|measure|metric|come_to_now|stand_at_now|sit_at_now]? [there_are|there_is|are_there|is_there|is|are|have|has|do|at|now|then|there|here|for_me|again|exactly|currently|at_the_moment|right_now|today|at_present|presently|for_now|so_far|as_of_now|as_it_stands|as_things_stand|please|pls|plz|thx|ty]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|now|asap|again|or_something|or_so|or_whatever|or_sth|real_quick|quickly|cheers|ta|thanks_a_lot|thanks_a_bunch|if_you_can|if_possible|for_now]?"
     emit="@{_} core.request action=chart.valueOf arg.l=\"{l}\""
     kind=request
     priority=8
@@ -2500,7 +2500,7 @@
     example="Say the numbers out loud."
 
 @pat.data.charts.r2.read.b core.pattern
-    match="[$lang.lead.polite|$data.charts.g1_hey]? [read|say|speak|tell_me|recite|narrate|voice|announce|pronounce|dictate|tell|vocalize|vocalise|utter|articulate|enunciate|proclaim|declaim|deliver|broadcast|express|state|read_it|say_it|speak_it|voice_it|narrate_it|recite_it|announce_it|read_that|say_that|speak_that|voice_that|narrate_that|recite_that|announce_that|read_this|say_this|speak_this|voice_this|narrate_this|recite_this|announce_this|read_them|say_them|speak_them|voice_them|narrate_them|recite_them|announce_them] [it|that|this|them|everything|all|me|it_all|us|them_all|all_of_it|all_of_them|all_of_that|all_of_this]? [out|aloud|out_loud|loudly|to_me|for_me|to_us|for_us|slowly|clearly|read_out|read_aloud|speak_out|say_out] [$lang.tail.filler|1_by_1|1_at_a_time|bit_by_bit|step_by_step|in_order]?"
+    match="[can_you|could_you|can_u|could_u|will_you|would_you|would_u|will_u|please_can_you|i_want_you_to|i_need_you_to|i_would_like_you_to|let_us|hey|yo|just|go_ahead_and|can_you_just|could_you_just|can_we|could_we|i_want_to|i_would_like_to|i_wanna|let_me|i_d_like_to|id_like_to|would_you_mind|do_you_mind|i_want|i_would_like|i_need|we_want_to|we_need_to|you_can|you_could|why_not|how_about|what_about|lets|now|u_can|u_could|could_you_maybe|can_you_maybe|could_u_maybe|can_u_maybe|maybe|perhaps|hmm|like|and_now|and_then|then|so_now|now_please]? [read|say|speak|tell_me|recite|narrate|voice|announce|pronounce|dictate|tell|vocalize|vocalise|utter|articulate|enunciate|proclaim|declaim|deliver|broadcast|express|state|read_it|say_it|speak_it|voice_it|narrate_it|recite_it|announce_it|read_that|say_that|speak_that|voice_that|narrate_that|recite_that|announce_that|read_this|say_this|speak_this|voice_this|narrate_this|recite_this|announce_this|read_them|say_them|speak_them|voice_them|narrate_them|recite_them|announce_them] [it|that|this|them|everything|all|me|it_all|us|them_all|all_of_it|all_of_them|all_of_that|all_of_this]? [out|aloud|out_loud|loudly|to_me|for_me|to_us|for_us|slowly|clearly|read_out|read_aloud|speak_out|say_out|out_loud_please|aloud_please|out_please|loudly_please|to_me_please|for_me_please|to_us_please|for_us_please|slowly_please|clearly_please] [please|pls|plz|thx|ty|now|again|1_by_1|1_at_a_time|bit_by_bit|step_by_step|in_order]?"
     emit="@{_} core.request action=chart.read"
     kind=request
     priority=13
@@ -2710,7 +2710,7 @@
     example="Drop the data table in the doc."
 
 @pat.data.charts.r2.col.c core.pattern
-    match="[$lang.lead.polite|$data.charts.g1_hey]? [the]? {s:lex.data.charts.shades?} {c:lex.data.charts.colors} [would_be|will_be|is|looks|might_be|could_be|seems|would_look|would_work|will_look|will_work|looks_so|looks_more] [nicer|better|good|great|cool|nice|prettier|fine|best|cooler|lovely|preferable|more_fun|the_best|my_favourite|my_favorite|perfect|right|ideal|neat|sweet|awesome|beautiful|just_right|what_i_want|the_1|my_choice|my_pick]"
+    match="[can_you|could_you|can_u|could_u|will_you|would_you|would_u|will_u|please_can_you|i_want_you_to|i_need_you_to|i_would_like_you_to|let_us|hey|yo|just|go_ahead_and|can_you_just|could_you_just|can_we|could_we|i_want_to|i_would_like_to|i_wanna|let_me|i_d_like_to|id_like_to|would_you_mind|do_you_mind|i_want|i_would_like|i_need|we_want_to|we_need_to|you_can|you_could|why_not|how_about|what_about|lets|now|u_can|u_could|could_you_maybe|can_you_maybe|could_u_maybe|can_u_maybe|maybe|perhaps|hmm|like|and_now|and_then|then|so_now|now_please]? [the]? {s:lex.data.charts.shades?} {c:lex.data.charts.colors} [would_be|will_be|is|looks|might_be|could_be|seems|would_look|would_work|will_look|will_work|looks_so|looks_more] [nicer|better|good|great|cool|nice|prettier|fine|ok|best|cooler|lovely|preferable|more_fun|the_best|my_favourite|my_favorite|perfect|right|ideal|neat|sweet|awesome|beautiful|just_right|what_i_want|the_1|my_choice|my_pick]"
     emit="@{_} core.request action=chart.setColor arg.c={c} arg.shade={s}"
     kind=request
     priority=12
@@ -2831,7 +2831,7 @@
     example="Take out the 2nd chart."
 
 @pat.data.charts.r2.leg.d core.pattern
-    match="[$lang.lead.polite|$data.charts.g1_hey]? [take|turn|switch|put|set|leave|wipe|get|knock|clear|strip|lift|kick|pull|send] [the|this|its|that|my|our]? [legend|key|legend_box|legend_panel] [off|away|out|gone|down|off_it] [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    match="[can_you|could_you|can_u|could_u|will_you|would_you|would_u|will_u|please_can_you|i_want_you_to|i_need_you_to|i_would_like_you_to|let_us|hey|yo|just|go_ahead_and|can_you_just|could_you_just|can_we|could_we|i_want_to|i_would_like_to|i_wanna|let_me|i_d_like_to|id_like_to|would_you_mind|do_you_mind|i_want|i_would_like|i_need|we_want_to|we_need_to|you_can|you_could|why_not|how_about|what_about|lets|now|u_can|u_could|could_you_maybe|can_you_maybe|could_u_maybe|can_u_maybe|maybe|perhaps|hmm|like|and_now|and_then|then|so_now|now_please]? [take|turn|switch|put|set|leave|wipe|get|knock|clear|strip|lift|kick|pull|send] [the|this|its|that|my|our]? [legend|key|legend_box|legend_panel] [off|away|out|gone|down|off_it|off_please|away_please] [pls|plz|plss|thx|thanks|thank_you|ty|for_me|now|asap|again|or_something|or_so|or_whatever|or_sth|real_quick|quickly|cheers|ta|thanks_a_lot|thanks_a_bunch|if_you_can|if_possible|for_now]?"
     emit="@{_} core.request action=chart.setLegend arg.on=false"
     kind=request
     priority=15
@@ -2910,7 +2910,7 @@
     example="Title: My fruit."
 
 @pat.data.charts.r2.leg.e core.pattern
-    match="[$lang.lead.polite|$data.charts.g1_hey]? [the]? [legend|key] [on|back|back_on|visible|shown|showing|again|needed|wanted|is_needed|is_wanted|should_be_on|should_be_visible|should_be_shown|should_show] [$lang.tail.filler|or_sth|ta|thanks_a_bunch]?"
+    match="[can_you|could_you|can_u|could_u|will_you|would_you|would_u|will_u|please_can_you|i_want_you_to|i_need_you_to|i_would_like_you_to|let_us|hey|yo|just|go_ahead_and|can_you_just|could_you_just|can_we|could_we|i_want_to|i_would_like_to|i_wanna|let_me|i_d_like_to|id_like_to|would_you_mind|do_you_mind|i_want|i_would_like|i_need|we_want_to|we_need_to|you_can|you_could|why_not|how_about|what_about|lets|now|u_can|u_could|could_you_maybe|can_you_maybe|could_u_maybe|can_u_maybe|maybe|perhaps|hmm|like|and_now|and_then|then|so_now|now_please]? [the]? [legend|key] [on|back|back_on|visible|shown|showing|again|please|needed|wanted|is_needed|is_wanted|should_be_on|should_be_visible|should_be_shown|should_show] [pls|plz|plss|thx|thanks|thank_you|ty|for_me|now|asap|again|or_something|or_so|or_whatever|or_sth|real_quick|quickly|cheers|ta|thanks_a_lot|thanks_a_bunch|if_you_can|if_possible|for_now]?"
     emit="@{_} core.request action=chart.setLegend arg.on=true"
     kind=request
     priority=12

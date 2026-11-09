@@ -1648,7 +1648,7 @@
     example="Go back one result."
 
 @pat.docs.reader.sw.step.next.bare core.pattern
-    match="[nxt|next_pls|next_plz|next_1|next_1_pls|next_1_plz|next_again|next_then|next_now|next_thanks|next_thx|nextt|nex|netx|next_hit|next_found|next_result|next_match|next_1_then|next_1_now|next_1_again|next_1_thanks|next_1_thx|next] [$docs.reader.g2_pls]?"
+    match="[nxt|next_please|next_pls|next_plz|next_1|next_1_please|next_1_pls|next_1_plz|next_again|next_then|next_now|next_thanks|next_thx|nextt|nex|netx|next_hit|next_found|next_result|next_match|next_1_then|next_1_now|next_1_again|next_1_thanks|next_1_thx|next]  [pls|plz|now|for_me|to_me|here|again|thanks|thx]?"
     emit="@{_} core.request action=docr.searchStep arg.dir=next"
     needsState=search
     kind=request
@@ -1657,7 +1657,7 @@
     example="Next one please"
 
 @pat.docs.reader.sw.step.prev.bare core.pattern
-    match="[prev|prev_pls|prev_1|previous_1|previous_pls|previous|back_1|go_back_1|1_back|step_back|prev_hit|prev_found|prev_result|prev_match|previous_found|previous_hit] [$docs.reader.g2_pls]?"
+    match="[prev|prev_please|prev_pls|prev_1|previous_1|previous_please|previous_pls|previous|back_1|go_back_1|1_back|step_back|prev_hit|prev_found|prev_result|prev_match|previous_found|previous_hit]  [pls|plz|now|for_me|to_me|here|again|thanks|thx]?"
     emit="@{_} core.request action=docr.searchStep arg.dir=prev"
     needsState=search
     kind=request

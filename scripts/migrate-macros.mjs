@@ -48,7 +48,9 @@ function mapGroup(part, role) {
   if (!g) return part;
   const existing = g.alts.filter((a) => a.startsWith('$')).map((a) => a.slice(1));
   const alts = g.alts.filter((a) => a !== '' && !a.startsWith('$'));
-  const reachable = alts.filter((a) => !isUnreachable(a));
+  // an alternative with a filler word (are_you_ok) can only match through the engine's last view (all tokens, patterns that list a filler word):
+  // dropping it from a REQUIRED group removes the phrasing (kids.common howru), so only optional groups lose their unreachable alternatives
+  const reachable = g.optional ? alts.filter((a) => !isUnreachable(a)) : alts;
   stats.groups++;
   stats.dropped += alts.length - reachable.length;
   if (!reachable.length && !existing.length) {

@@ -460,7 +460,7 @@
     example="It needs a sun."
 
 @pat.art.draw.x.add.added core.pattern
-    match="[i_want|i_d_like|i_need|we_need|give_me|get_me|i_wanna_have|i_would_like|we_want] [a|an|another|some|a_few]? {n:number?} {q:lex.art.draw.quantity?} {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {m3:lex.art.draw.mods?} {k:lex.art.draw.things} [added|drawn|made|there|too|in_it|in_the_picture|on_it|in_my_picture|for_me|here]"
+    match="[i_want|i_d_like|i_need|we_need|give_me|get_me|i_wanna_have|i_would_like|we_want] [a|an|another|some|a_few]? {n:number?} {q:lex.art.draw.quantity?} {m1:lex.art.draw.mods?} {m2:lex.art.draw.mods?} {m3:lex.art.draw.mods?} {k:lex.art.draw.things} [added|drawn|made|there|too|as_well|in_it|in_the_picture|on_it|in_my_picture|for_me|here]"
     emit="@{_} core.request action=draw.add arg.n={n} arg.q={q} arg.m1={m1} arg.m2={m2} arg.m3={m3} arg.kind={k} arg.kt=\"{k}\""
     kind=request
     priority=13
@@ -477,7 +477,7 @@
     example="I want sand under everything."
 
 @pat.art.draw.x.ground.some core.pattern
-    match="[$art.draw.g16_some] {g:lex.art.draw.ground} [would_be_nice|would_be_good|would_be_great|would_be_cool|would_be_fun|needed|too|also|now|here] [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    match="[some|a_bit_of|a_little|more|a_little_bit_of|a_few|lots_of] {g:lex.art.draw.ground} [would_be_nice|would_be_good|would_be_great|would_be_cool|would_be_fun|needed|too|also|as_well|now|here] [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
     emit="@{_} core.request action=draw.ground arg.g={g}"
     kind=request
     priority=13
@@ -491,7 +491,7 @@
     example="Some sand please."
 
 @pat.art.draw.x.ground.pls core.pattern
-    match="{g:lex.art.draw.ground} [pls|plz|plss|thx|thanks|ty|for_me|too|also|would_be_nice|would_be_good|would_be_great|would_be_cool|needed|now]"
+    match="{g:lex.art.draw.ground} [pls|plz|plss|thx|thanks|ty|for_me|too|also|as_well|would_be_nice|would_be_good|would_be_great|would_be_cool|needed|now]"
     emit="@{_} core.request action=draw.ground arg.g={g}"
     kind=request
     priority=13
@@ -844,7 +844,7 @@
     example="No more grass pls."
 
 @pat.art.draw.x.remove.dontwant core.pattern
-    match="[i_do_not_want|i_do_not_need|i_do_not_like|we_do_not_want|we_do_not_need|i_dont_want|i_no_longer_want|i_do_not_want_any|i_hate|i_am_tired_of|we_do_not_like|get_rid_of_the] [the|any|a|an|more|that|this|these|those|my]? {t:lex.art.draw.targets} [anymore|any_more|no_more|at_all|now|any_longer|here|in_it|in_the_picture|in_my_picture|there]? [$lang.tail.filler|i_guess|ish|yes|ya|k]? [$lang.tail.filler|i_guess|ish|yes|ya|k]?"
+    match="[i_do_not_want|i_do_not_need|i_do_not_like|we_do_not_want|we_do_not_need|i_dont_want|i_no_longer_want|i_do_not_want_any|i_hate|i_am_tired_of|we_do_not_like|get_rid_of_the|please_no] [the|any|a|an|more|that|this|these|those|my]? {t:lex.art.draw.targets} [anymore|any_more|no_more|at_all|now|any_longer|here|in_it|in_the_picture|in_my_picture|there]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]? [pls|plz|plss|thx|thanks|thank_you|ty|for_me|asap|real_quick|quickly|ok|okay|yeah|i_guess|ish|then|now|too|already|though|man|dude|mate|lol|haha|or_something|if_you_can|please_me|for_now|for_us|yes|ya|k]?"
     emit="@{_} core.request action=draw.remove arg.phrase=\"the {t}\""
     kind=request
     priority=13
@@ -1426,7 +1426,7 @@
     example="Give me a blank canvas."
 
 @pat.art.draw.x2.bare.plain core.pattern
-    match="[$lang.lead.filler|pls|plz]? [a|an|one|some|another] {n:number?} {m1:lex.art.draw.mods?} {k:lex.art.draw.things} [$lang.tail.filler|pls|plz|thanks]"
+    match="[$lang.lead.filler|pls|plz]? [a|an|one|some|another] {n:number?} {m1:lex.art.draw.mods?} {k:lex.art.draw.things} [$lang.tail.filler|please|pls|plz|thanks]"
     emit="@{_} core.request action=draw.add arg.n={n} arg.m1={m1} arg.kind={k} arg.kt=\"{k}\""
     kind=request
     priority=9
