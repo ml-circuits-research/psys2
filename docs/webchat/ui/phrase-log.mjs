@@ -10,6 +10,9 @@ const newId = (now) => `p${now.toString(36)}${Math.random().toString(36).slice(2
 
 /** Per-segment outcome from a reply: status, matched world and pattern, unparsed flag, strategy. */
 export function segmentOutcomes(reply) {
+  // a world's modal input (interceptInput: user.profile interview, docs.editor dictation, games) takes the whole message: no segments, but the world handled it
+  const icpt = reply?.trace?.intercepted;
+  if (icpt && !(reply?.segments ?? []).length) return [{ text: reply?.trace?.english ?? reply?.trace?.original ?? '', status: 'supported', world: icpt, pattern: null, unparsed: false, strategy: 'modal' }];
   const answers = reply?.answers ?? [];
   return (reply?.segments ?? []).map((s) => {
     const wireIds = new Set((s.wires ?? []).map((w) => w.id));

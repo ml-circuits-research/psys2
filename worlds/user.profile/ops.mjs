@@ -8,7 +8,7 @@
 // The plan (fields, priorities, sensitivity, phrasings, follow-ups) is read from the knowledge base (kb.sop); answers are read by understand.mjs.
 // Modal input: while `inputMode` is set, the engine offers every message to interceptInput(); clear commands for other worlds and this world's own
 // commands pass through (handled: false), everything else is read as the answer. Effects: file.download { filename, text, mime }.
-import { extract, clauseLike, echoable, norm, isSkip, isStop, isDecline, YES, NO, sensitive, fieldForRole, fieldForRoleText, pretty, sentenceCase, withArticle } from './understand.mjs';
+import { extract, clauseLike, echoable, norm, isSkip, isStop, isDecline, YES, NO, sensitive, fieldForRole, fieldForRoleText, pretty, sentenceCase, withArticle, _findEntries as findEntries } from './understand.mjs';
 import { toJson, toMarkdown, counts, PLAN_FALLBACK, SECTIONS_FALLBACK } from './cv.mjs';
 
 const TAB = 'profile';
@@ -150,6 +150,7 @@ function askField(s, plan, p, prefix = '') {
   s.asks[p.id] = (s.asks[p.id] ?? 0) + 1;
   s.pending = { kind: 'ask', key: p.id };
   s.lastKey = p.id; s.lastSection = p.section; s.lastFollow = false;
+  if (p.id === 'years') s.lastNumeric = { key: 'years', turn: s.turns };
   const text = `${prefix}${prefix && /[?!.]$/.test(q[idx]) ? q[idx] : q[idx]} ${meter(s, plan)}`;
   s.question = text;
   return text;
@@ -189,6 +190,13 @@ function looksOther(n, raw) {
 // ---- the interview turn -------------------------------------------------------------------------------------------------------
 function pauseReply(s, plan) { s.resumeKey = s.pending?.kind === 'ask' ? s.pending.key : null; s.active = false; s.pending = null; s.question = ''; return `No problem, we can pick this up whenever you say "interview me". ${meter(s, plan)}`; }
 
+const ex0Deny = (n) => NO.test(n) || isSkip(n);
+/** A short answer made of capitalised words that is not a common word (a company, a product, a name): "Axiologic", "Starship Navigation". */
+function properName(raw) {
+  const w = String(raw ?? '').trim().replace(/[.!]+$/, '').split(/\s+/);
+  return w.length >= 1 && w.length <= 4 && w.every((x) => /^[\p{Lu}][\p{L}0-9&'.-]*$/u.test(x)) && !/^(?:I|Yes|No|Ok|Okay|Sure|Hello|Hi|Hey|Nothing|None|Skip|Stop|Next)$/i.test(w[0]);
+}
+
 function interceptTurn(ctx, text) {
   const s = st(ctx);
   const plan = planOf(ctx);
@@ -220,6 +228,22 @@ function interceptTurn(ctx, text) {
       s.pending = null; s.focus = { key, n: ++s.n };
       return { handled: true, reply: s.active ? `Great, thanks. ${nextQuestion(s, plan, true)}` : 'Great, thanks, I noted that.' };
     }
+    // a non-yes/no answer answers what it fits: a proper name to "So you work in science, right?" is the organisation, not the field
+    if (key === 'field' && !ex0Deny(n)) {
+      const nm = properName(raw);
+      if (nm && !findEntries(n.split(' '), env.lex('fields') ?? []).length && !extract(raw, { ...env, pending: 'field' }).items.some((i) => i.how === 'field')) {
+        const org = extract(raw, { ...env, pending: 'org' });
+        const items = org.items.filter((i) => i.key === 'org');
+        if (items.length) {
+          const { changes } = applyItems(ctx, s, plan, env, items, false);
+          const again = !p.reasked && s.fields.field?.src === 'guessed';
+          s.pending = again ? { ...p, reasked: true } : null;
+          const ack = ackText(ctx, s, plan, changes, false, s.turns);
+          if (again) { s.question = `And is it right that you work in ${String(s.fields.field.v).toLowerCase()}?`; return { handled: true, reply: `${ack} ${s.question}` }; }
+          return { handled: true, reply: `${ack}${s.active ? ` ${nextQuestion(s, plan, true)}` : ''}` };
+        }
+      }
+    }
     const ex = extract(raw, { ...env, pending: key });
     if (ex.deny || ex.items.some((i) => i.key === key)) {
       if (s.fields[key]?.src === 'guessed') delete s.fields[key];
@@ -242,7 +266,13 @@ function interceptTurn(ctx, text) {
   const askKey = cur?.kind === 'ask' ? cur.key : cur?.kind === 'follow' ? (cur.retry ? cur.key : cur.followKey || null) : null;
   const sens = sensitive(raw, env.lex);
   if (sens) return { handled: true, reply: sensitiveReply(s, plan, sens, raw, cur) };
-  const ex = extract(raw, { ...env, pending: askKey });
+  let ex = extract(raw, { ...env, pending: askKey });
+  // a bare number answers the last numeric question (years of experience) when the current question is not numeric
+  const ln = s.lastNumeric;
+  if (/^\d{1,2}$/.test(n) && askKey !== ln?.key && ln && !s.fields[ln.key] && s.turns - ln.turn <= 4) {
+    const yrs = Number(n);
+    if (yrs >= 0 && yrs <= 60) { ex = { ...ex, items: [{ key: ln.key, value: String(yrs), how: 'years' }] }; delete s.skipped[ln.key]; }
+  }
   const field = cur?.key ? plan.find((x) => x.id === cur.key) : null;
 
   if (!ex.items.length && isSkip(n) && cur) {

@@ -251,6 +251,16 @@
     priority=14
     example="Let us play get to know me."
 
+@pat.user.profile.start.back core.pattern
+    canonical="Let us get back to the interview."
+    match="[coming_back|going_back|back|returning|getting_back|lets_get_back|let_us_get_back|lets_go_back|let_us_go_back] [to] [knowing|getting_to_know|get_to_know|the_interview|the_questions] [me]? [what_questions_do_you_have|what_else_do_you_want_to_know|what_else_would_you_like_to_ask|what_do_you_want_to_ask|what_else_do_you_want_to_ask|what_is_your_next_question|what_is_the_next_question]?"
+    emit="@{_} core.request action=prof.start"
+    kind=request
+    priority=14
+    example="Coming back to knowing me, what questions do you have?"
+    example="Let us get back to the interview."
+    example="Going back to getting to know me."
+
 @pat.user.profile.start.can core.pattern
     canonical="Can you interview me?"
     match="[can_you|could_you]? [interview|quiz] me [about_myself]?"

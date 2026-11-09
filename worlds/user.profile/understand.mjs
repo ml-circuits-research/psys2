@@ -296,6 +296,9 @@ export function extract(text, env) {
     }
   }
 
+  // "R&D", "R and D", "research and development": a department / field, never a hobby
+  if (/^(?:(?:the |our |in |it is |its |my )*)(?:r d|r and d|rnd|r n d|research and development)(?: department| team| dept)?$/.test(n)) put('field', 'Research and development', { how: 'field', id: 'rnd' });
+
   // ---- years of experience -----------------------------------------------------------------------------------------------
   if (years !== null && years >= 0 && years <= 60) {
     const isAge = /\b\d{1,3} years? old\b/.test(n);
@@ -349,7 +352,7 @@ export function extract(text, env) {
   const ab = findEntries(t, lex('abilities') ?? []);
   const toolHits = findEntries(t, lex('tools') ?? []);
   const skillHits = findEntries(t, lex('skills') ?? []);
-  const wantsList = pending && listKeys.has(pending);
+  const wantsList = pending && listKeys.has(pending) && !/^\d+$/.test(n);
   const alreadyRole = out.items.some((x) => x.key === 'role' || x.key === 'previous');
   if (!alreadyRole || wantsList) {
     // tools
