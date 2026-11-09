@@ -296,3 +296,18 @@
     session=sh2
     input="open the document tab"
     expectState="activeTab=editor"
+
+@t.ui.shell.sh01 core.test
+    input="could you maybe open the editor tab"
+    expectState="activeTab=editor"
+    session=ush1
+
+@t.ui.shell.sh02 core.test
+    input="i want to open the map tab"
+    expectState="activeTab=map"
+    session=ush2
+
+@t.ui.shell.sh03 core.test
+    input="can i play a hangman game"
+    expectState="activeTab=hangman"
+    session=ush3
