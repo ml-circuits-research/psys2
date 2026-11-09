@@ -2431,3 +2431,23 @@
     input="a cow"
     expect="moo"
     session=ask2
+
+@t.animals.sh01 core.test
+    input="i want to know what sound does a cow make"
+    expect="A cow goes moo."
+    session=nsh1
+
+@t.animals.sh02 core.test
+    input="can you tell me how many legs does a spider have"
+    expect="A spider has 8 legs."
+    session=nsh2
+
+@t.animals.sh03 core.test
+    input="do you know how many legs a dog has"
+    expect="A dog has 4 legs."
+    session=nsh3
+
+@t.animals.sh04 core.test
+    input="the sound of a duck"
+    expect="A duck goes quack."
+    session=nsh4

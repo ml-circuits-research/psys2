@@ -76,12 +76,12 @@ export const TEMPLATES = {
     short: [['', AND('<L>', '<D>', '<O><E>', '<V>', '<T>')]],
   },
   'ask.value': {
-    q: [['', AND('<L>', '[$lang.shape.what]', '<N>', '[are|r|is|was|were|do|does|did]?', '<R>', '<DO>', '<O>', NOW, '<T>')],
-      ['.2', AND('<L>', '[$lang.shape.whatis]', '<D>', '<N>', '<OFM>', '<DO>', '<O>', NOW, '<T>')]],
+    q: [['', AND('<L>', '[$lang.shape.what]', '<N>', '[are|r|is|was|were|do|does|did]?', '<R>', '<DO>', '<O>', '<NW>', '<T>')],
+      ['.2', AND('<L>', '[$lang.shape.whatis]', '<D>', '<N>', '<OFM>', '<DO>', '<O>', '<NW>', '<T>')]],
     imp: [['', AND('<L>', '[$lang.shape.tellme]', '[what|which]?', '<D>', '<N>', '<OFO>', '<DO>', '<O>', '[is|are]?', '<T>')]],
     wish: [['', AND('<L>', '[$lang.shape.know]', '[what|which]?', '<D>', '<N>', '<OFO>', '<DO>', '<O>', '[is|are]?', '<T>')]],
     ind: [['', AND('[$lang.shape.indask]', '[what|which]?', '<D>', '<N>', '<OFO>', '<DO>', '<O>', '[is|are]?', '<T>')]],
-    order: [['', AND('<L>', '<D>', '<N>', '<OFM>', '<DO>', '<O>', NOW, '<T>')],
+    order: [['', AND('<L>', '<D>', '<N>', '<OFM>', '<DO>', '<O>', '<NW>', '<T>')],
       ['.2', AND('<L>', '<DO>', '<O>', '[is|are]?', '[what|which|wat]', '<N>', '<T>')],
       ['.poss', AND('<L>', '[$lang.shape.whatis]?', '<O>', "'s", '<N>', '<T>')]],
     short: [['', AND('<L>', '<O>', '<N>', '<T>')]],
@@ -161,7 +161,7 @@ export function expandShape(shape, { phrases = null, lexicons = null } = {}) {
   const skip = new Set((shape.skip ?? '').split(',').map((s) => s.trim()).filter(Boolean));
   for (const f of [...want, ...skip]) if (!known.includes(f)) throw new Error(`shape '${shape.id}': form '${f}' does not exist in family '${family}' (${known.join(', ')})`);
   if (!shape.emit) throw new Error(`shape '${shape.id}': no emit`);
-  const noObj = !shape.obj && !!shape.noun && (family === 'set' || family === 'ask.value' || family === 'do');
+  const noObj = !shape.obj && !!shape.noun && (family === 'set' || family === 'ask.value' || family === 'do' || (family === 'ask.count' && !!shape.cont));
   const verbs = shape.verb ? group(shape.verb) : null;
   const nounAlts = shape.noun ?? null;
   const nounPlural = nounAlts ? [...new Set(nounAlts.split('|').flatMap((n) => [n, n + 's']))].join('|') : null;
@@ -178,6 +178,7 @@ export function expandShape(shape, { phrases = null, lexicons = null } = {}) {
     '<R>': shape.rel ? group(shape.rel) : '', '<OFM>': shape.rel ? group(shape.rel) : OF, '<OFO>': shape.rel ? group(shape.rel) : OF + '?',
     '<C>': slotText(shape.cont),
     '<CV>': group(shape.verb ?? 'have|has|got', true),
+    '<NW>': shape.verb && family === 'ask.value' ? group(shape.verb, true) : NOW,
     '<PR>': group(shape.pron ?? 'it|this|that|we|you|u|i', true),
     '<L>': LEAD, '<T>': TAIL,
   };

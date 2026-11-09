@@ -1483,8 +1483,6 @@
     alt=how_many_different
     alt=how_many_total
     alt=how_much
-    alt=hw_many
-    alt=how_mny
 
 @phrase.lang.shape.numberof core.phrase
     frame=false

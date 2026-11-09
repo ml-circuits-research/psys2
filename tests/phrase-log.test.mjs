@@ -11,7 +11,7 @@ const rec = async (text, extra = {}) => buildRecord({ text, tab: 'robot', reply:
 test('record from a real reply', async () => {
   const r = await rec('How many legs does a spider have?');
   assert.equal(r.segments[0].world, 'kids.animals');
-  assert.equal(r.segments[0].pattern, 'pat.kids.animals.legs1');
+  assert.match(r.segments[0].pattern, /^pat\.kids\.animals\.(x\.legs\.how|legs\.q)$/);   // a hand-written or a shape pattern reads it (legs1 was replaced by the legs shape)
   assert.equal(r.segments[0].status, 'supported');
   assert.equal(r.unparsed, false); assert.equal(r.source, 'human'); assert.equal(r.formalizer, 'rules');
   const bad = await rec('blah zorp quux', { mode: 'voice' });
