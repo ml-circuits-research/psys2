@@ -103,3 +103,5 @@ Every line is either supported (with the example that has a test in `tests.sop`,
 | Shape | Example | Status |
 | --- | --- | --- |
 | asking for a hint | give me a hint | unsupported: the system is the guesser: guess.hint only explains that it gives no hints (ui.shell hint control) |
+
+**L7 (macros).** `patterns.sop` was migrated with `scripts/migrate-macros.mjs`. No shape: the answers (yes, no, maybe, unsure, repeat, correct the last answer) are the `lang.yes/no/unsure` phrase groups of L8 and fixed phrases, and the animal questions are free-text. Three patterns keep their original lists because the macro lead-ins widened them: `yes` (the lead "perhaps" made "perhaps yes" a plain yes and beat `sw.maybe2`) and `sw.repeat4` ("sorry, what did you ask" read as one sentence instead of "sorry" plus the repeat request), `sw.maybe2`.

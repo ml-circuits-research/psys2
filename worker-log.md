@@ -770,3 +770,8 @@ Per bucket, encoder+n1 (right / partly / wrong / nu): kids 100 / 0 / 0 / 0 -> 10
 - **migrate-macros**: `patterns.sop` 62,162 -> 43,510 bytes; hand patterns 95 (+ 1 shape, 4 generated); match text 43,805 -> 24,822 bytes (-43 %); inline groups repeated verbatim 16 (82 occurrences) after. No lexicon for `extends`.
 - **Shape**: `games.hangman.letter` (do with `objmod=letter`); nothing deleted. **Gate finding**: `hint2` (lead `lang.lead.polite` has "i want to play") read "i want to play something" on a recent hangman world (routing paraphrase of ui.shell lost): it keeps its original match; dlg.gms#028 turns 3 and 4 improved.
 - **Tests**: games.hangman 135 -> 137 (sh01, sh02). **Gates**: operational 95.1% / 6 wrong unchanged; dialogues 96.6% / 87.7% (two fewer failing turns); eval-rules identical; long set identical.
+
+## L7 games.guess (2026-11-09)
+- **migrate-macros**: `patterns.sop` 49,577 -> 43,330 bytes; hand patterns 67; match text 35,893 -> 29,646 bytes (-17 %: the world already used the L8 yes/no phrase groups); inline groups repeated verbatim 18 (41 occurrences) after. No shape, no `extends`.
+- **Gate findings**: `yes`, `sw.maybe2` and `sw.repeat4` keep their original lists (the lead-in macro widened `yes` with "perhaps": "perhaps yes" lost to a plain yes; "sorry, what did you ask" became one sentence).
+- **Gates**: operational 95.1% / 6 wrong unchanged; dialogues unchanged; eval-rules identical; long set identical. Tests: games.guess 115 (no new).
