@@ -744,3 +744,8 @@ Per bucket, encoder+n1 (right / partly / wrong / nu): kids 100 / 0 / 0 / 0 -> 10
 - **migrate-lexicons + migrate-macros**: `patterns.sop` 217,627 -> 98,185 bytes; hand patterns 191 -> 187 (+ 2 shapes, 8 generated); match text 174,437 -> 55,004 bytes (-68 %); inline groups repeated verbatim 55 (700 occurrences) -> 35 (101). 18 world-local phrases. `lex.art.draw.mods` extends `lex.lang.size` (20 words removed, 65 own stay), `lex.art.draw.ordinals` extends `lex.lang.ordinal`.
 - **Shapes**: `art.draw.ground` (do), `art.draw.mood` (set, noun-only). 4 hand patterns deleted (`ground`, `x.mood.letit`, `x.mood.wish`, `x2.mood.want`). A `draw.colorOf` shape was tried and dropped (free-text object cannot require "my": "what color is a carrot" in kids.shapes lost 7 routed heldout rows); its hand patterns were restored. Engine: examples print `_` as a space for literal extras.
 - **Tests**: art.draw 552 -> 555 (sh01..sh03; the RD3/RD4 tests stay green). **Gates**: operational 95.0% / 7 wrong unchanged; dialogues unchanged; eval-rules identical in every row.
+
+## L7 kids.shapes (2026-11-09, on the art.draw commit)
+- **migrate-macros**: `patterns.sop` 158,642 -> 77,947 bytes; hand patterns 147 -> 144 (+ 1 shape, 8 generated); match text 124,178 -> 43,738 bytes (-65 %); inline groups repeated verbatim 53 (449 occurrences) -> 24 (155). 29 world-local phrases. No lexicon for `extends`.
+- **Shape**: `kids.shapes.thingcolor` (ask.value with `poss=true`, over `lex.kids.shapes.things`); 3 hand patterns deleted (`col1 col2 x.tcol.c`); `w.thingcolor.f2` restored (the trailing "usually", tests s239 and s348).
+- **Tests**: kids.shapes 472 -> 475 (sh01..sh03). **Gates**: operational 95.0% / 7 wrong unchanged; dialogues unchanged; eval-rules identical in every row.

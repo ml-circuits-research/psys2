@@ -2331,3 +2331,18 @@
     input="which shape does a ball look like"
     expect="sphere"
 
+
+@t.shapes.sh01 core.test
+    input="can you tell me the color of a banana"
+    expect="A banana is usually yellow."
+    session=ksh1
+
+@t.shapes.sh02 core.test
+    input="do you know the colour of a carrot"
+    expect="A carrot is usually orange."
+    session=ksh2
+
+@t.shapes.sh03 core.test
+    input="tell me the color of a lemon"
+    expect="A lemon is usually yellow."
+    session=ksh3

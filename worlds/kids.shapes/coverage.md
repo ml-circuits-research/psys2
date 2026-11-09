@@ -85,3 +85,5 @@ Shared shape rules: politeness and lead-ins (`can you tell me`, `can u say`, `wo
 | negation | "a banana is not red" is not a fact to teach (negative tests in `datagen.mjs`) |
 | coordination | "a banana is yellow and green" S (two facts) |
 | questions about the options | answered by `ui.help` |
+
+**L7 (macros, shapes).** `patterns.sop` was migrated with `scripts/migrate-macros.mjs` (lead-ins, suffixes and 29 repeated lists are macros). One shape, `kids.shapes.thingcolor` (ask.value with `poss=true`, 8 generated patterns), covers the colour of a thing ("can you tell me the color of a banana", "do you know the colour of a carrot", "banana's color"; tests sh01 to sh03) and replaced three hand patterns (`col1`, `col2`, `x.tcol.c`); `w.thingcolor.f2` ("tomatoes are what color usually") stays because it reads the trailing "usually". Mixes, families, side counts, shape summaries and the colour-kind questions combine two slots or lists and stay hand-written.
