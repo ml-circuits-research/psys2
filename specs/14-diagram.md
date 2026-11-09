@@ -18,6 +18,8 @@ An arrow is referred to by its id (`a1`), its ends (`the arrow between c1 and r1
 - Parallel and opposite arrows between the same two shapes are spread 14 px apart (SPREAD).
 - A segment keeps 8 px from every other shape (CLEAR); a detour bend is tried, with stubs when the angle needs them. A crowded diagram may leave a smaller gap.
 - Labels sit off the line, with a halo in the background colour; the id sits on the line.
+- DIAG3b: arrows that meet the same side of a shape (or the same stretch of an ellipse) are fanned out along it, ordered by where the other end lies, at least 10 px apart (APART; 20 px when the side is long enough); a template's trunk is widened to fit its attachment points. Ids drawn on the arrows are kept apart by the same spread.
+- DIAG3b: a shape the person just added that lies on an arrow moves to the nearest free spot (clear of other shapes and arrows); an explicit position that is free stays.
 - `tests/diagram-arrows.test.mjs` measures the minimum entry angle, the corner clearance and the clearance from other shapes over the 24 templates, the example sessions of the source and crafted fans.
 
 ## 4. Sizes and layout by voice
@@ -28,3 +30,12 @@ An arrow is referred to by its id (`a1`), its ends (`the arrow between c1 and r1
 
 ## 6. Parity with the source
 `node scripts/eval-diagram.mjs` also reads every row of `data/test` and `data/bench` with the source rules reader (`imports/diagram-vss-demo/engine/logic.js`, `createSystem().formalize`, loaded by `scripts/lib/diagram-source.mjs`) and prints the parity table (act right, args right, wrong, unread; the table is in `training/RESULTS.md`).
+
+## 7. DIAG3b: templates, ids, old names, selection
+- `a tree like shape`, `tree-like`, `tree shape / structure / diagram / chart` mean the **hierarchy** template (the source reader's `tree` is the picture of a tree with roots; a plain `make a tree` keeps it). The reply names the template (`Drew a hierarchy of ... as the group Hierarchy1.`).
+- Any command other than the answer to `Keep the current one or start empty?` answers it as keep: the reply starts with `Keeping the current diagram.` and a later `start empty` finds nothing to confirm.
+- Shapes made by a template get short ids like any shape (`r1`, `e1`); replies never show a part name (`Tree1-trunk`, `Branch1`).
+- `rectangle1`, `circle2` ... mean the Nth shape of that kind the person drew; shapes made by a template do not count (their ids follow the same numbering).
+- The state exposes `kind` (circle, rectangle ...) of every shape.
+- Only a selection marks shapes: `select ...`, or the answer of a question; a template or a command that makes shapes marks nothing.
+- Spelling: among equally close candidates the one made of the same letters wins (`lable` is `label`, not `able`).

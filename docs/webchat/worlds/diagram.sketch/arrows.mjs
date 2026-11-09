@@ -7,7 +7,7 @@
 //   - parallel and opposite arrows between the same two shapes are spread SPREAD px apart;
 //   - a segment keeps at least CLEAR px from every other shape (a detour bend is tried; a crowded diagram may leave a smaller gap);
 //   - the label sits off the line (halo drawn by the tab), the id tag on the middle of the line.
-export const CORNER = 8, MIN_ENTRY = 30, SPREAD = 14, CLEAR = 8, STUB = 14;
+export const CORNER = 8, MIN_ENTRY = 30, SPREAD = 14, CLEAR = 8, STUB = 14, APART = 10, FAN = 20;
 
 const unit = (x, y) => { const l = Math.hypot(x, y) || 1; return [x / l, y / l]; };
 const dot = (a, b) => a[0] * b[0] + a[1] * b[1];
@@ -39,7 +39,7 @@ function sidesOf(poly) {
  * Where an arrow leaves / enters a shape: the point, the outward unit normal. `toward` = the other end (centre), `shift` = the spread vector.
  * A polygon takes the side that faces the other end; an ellipse the point where the shifted centre line meets it.
  */
-function attach(s, d, toward, shift) {
+function attach(s, d, toward, shift, ov = null) {
   const o = outline(s, d), c = [s.x, s.y];
   if (o.ellipse) {
     // the line through the shifted centres, intersected with the ellipse on the side of the other end
@@ -49,22 +49,23 @@ function attach(s, d, toward, shift) {
     const A = (ux / o.rx) ** 2 + (uy / o.ry) ** 2, B = 2 * (px * ux / o.rx ** 2 + py * uy / o.ry ** 2), C = (px / o.rx) ** 2 + (py / o.ry) ** 2 - 1;
     const disc = B * B - 4 * A * C;
     const t = disc >= 0 ? (-B + Math.sqrt(disc)) / (2 * A) : Math.max(o.rx, o.ry);
-    const x = px + t * ux, y = py + t * uy;
+    let x = px + t * ux, y = py + t * uy;
+    if (ov && ov.ang != null) { x = o.rx * Math.cos(ov.ang); y = o.ry * Math.sin(ov.ang); }   // spread along the curve
     const nn = unit(x / o.rx ** 2, y / o.ry ** 2);
-    return { x: c[0] + x, y: c[1] + y, n: nn, kind: 'ellipse' };
+    return { x: c[0] + x, y: c[1] + y, n: nn, kind: 'ellipse', ang: Math.atan2(y / o.ry, x / o.rx), rx: o.rx, ry: o.ry, key: 'e' };
   }
   const sides = sidesOf(o.poly), u = unit(toward[0] - c[0], toward[1] - c[1]);
   // the side that faces the other end; for a rectangle by the dominant axis of the centre line in units of the box
   let best = null, bs = -9;
   for (const sd of sides) { const sc = dot(sd.n, u); if (sc > bs) { bs = sc; best = sd; } }
-  const slide = shift[0] * best.t[0] + shift[1] * best.t[1], room = Math.max(0, best.len / 2 - CORNER);
+  const slide = ov && ov.slide != null ? ov.slide : shift[0] * best.t[0] + shift[1] * best.t[1], room = Math.max(0, best.len / 2 - CORNER);
   const k = Math.max(-room, Math.min(room, slide));
-  return { x: c[0] + best.mid[0] + best.t[0] * k, y: c[1] + best.mid[1] + best.t[1] * k, n: best.n, kind: 'side', corner: Math.max(0, best.len / 2 - Math.abs(k)) };
+  return { x: c[0] + best.mid[0] + best.t[0] * k, y: c[1] + best.mid[1] + best.t[1] * k, n: best.n, kind: 'side', corner: Math.max(0, best.len / 2 - Math.abs(k)), key: `s${sides.indexOf(best)}`, slide: k, room, len: best.len, t: best.t };
 }
 
-const boxOf = (s, d, pad = 0) => ({ x1: s.x - d.w / 2 - pad, y1: s.y - d.h / 2 - pad, x2: s.x + d.w / 2 + pad, y2: s.y + d.h / 2 + pad });
+export const boxOf = (s, d, pad = 0) => ({ x1: s.x - d.w / 2 - pad, y1: s.y - d.h / 2 - pad, x2: s.x + d.w / 2 + pad, y2: s.y + d.h / 2 + pad });
 /** Distance from a segment to an axis-aligned box (0 when they touch or cross). */
-function segBoxDist(p, q, b) {
+export function segBoxDist(p, q, b) {
   // sample: segments are short and boxes small; exact enough at 1 px
   const n = Math.max(2, Math.ceil(Math.hypot(q[0] - p[0], q[1] - p[1]) / 2));
   let m = Infinity;
@@ -102,6 +103,7 @@ export function routeEdges(shapes, edges, dims, { tags = [] } = {}) {
   const groups = new Map();
   for (const e of edges) { const k = [e.from, e.to].sort().join('\u0000'); (groups.get(k) ?? groups.set(k, []).get(k)).push(e); }
   const taken = boxes.map((x) => x.b).concat(tags);
+  const jobs = [];
   for (const [, g] of groups) {
     g.forEach((e, i) => {
       const a = by.get(e.from), b = by.get(e.to);
@@ -113,6 +115,37 @@ export function routeEdges(shapes, edges, dims, { tags = [] } = {}) {
       const shift = [perp[0] * o, perp[1] * o];
       const A = attach(a, da, [b.x + shift[0], b.y + shift[1]], shift), B = attach(b, db, [a.x + shift[0], a.y + shift[1]], shift);
       if (Math.hypot(B.x - A.x, B.y - A.y) < 6 || dot(unit(B.x - A.x, B.y - A.y), unit(b.x - a.x, b.y - a.y)) < 0) return;   // touching or overlapping shapes: no arrow
+      jobs.push({ e, a, b, da, db, A, B, shift });
+    });
+  }
+  // spread the attachment points: arrows that meet the same side of a shape (or the same stretch of an ellipse) are fanned out along it,
+  // at least APART px apart (FAN when the side is long enough), ordered by where the other end lies so that they do not cross
+  const ends = new Map();
+  for (const j of jobs) for (const [who, P, other, sh, dm] of [['A', j.A, j.b, j.a, j.da], ['B', j.B, j.a, j.b, j.db]]) {
+    const k = `${sh.name}\u0000${P.key}`;
+    (ends.get(k) ?? ends.set(k, []).get(k)).push({ j, who, P, other, sh, dm });
+  }
+  for (const [, list] of ends) {
+    if (list.length < 2) continue;
+    const P0 = list[0].P;
+    if (P0.kind === 'side') {
+      const room = P0.room, along_ = (x) => (x.other.x - x.sh.x) * x.P.t[0] + (x.other.y - x.sh.y) * x.P.t[1];
+      const order = list.slice().sort((p, q) => (Math.abs(p.P.slide - q.P.slide) > 1e-6 ? p.P.slide - q.P.slide : along_(p) - along_(q)));
+      const n = order.length, step = n > 1 ? Math.min(FAN, (2 * room) / (n - 1)) : 0, mean = order.reduce((t, x) => t + x.P.slide, 0) / n;
+      const first = Math.max(-room, Math.min(room - step * (n - 1), mean - step * (n - 1) / 2));
+      order.forEach((x, i) => { const P = attach(x.sh, x.dm, [x.other.x, x.other.y], [0, 0], { slide: first + i * step }); x.j[x.who] = P; });
+    } else {
+      const rad = Math.max(P0.rx, P0.ry), step = Math.min(FAN, APART * 1.6) / rad;
+      const wrap = list.some((x) => x.P.ang > Math.PI / 2) && list.some((x) => x.P.ang < -Math.PI / 2), angOf = (x) => (wrap && x.P.ang < 0 ? x.P.ang + 2 * Math.PI : x.P.ang);
+      const order = list.slice().sort((p, q) => angOf(p) - angOf(q)), n = order.length, mean = order.reduce((t, x) => t + angOf(x), 0) / n;
+      // only a cluster closer than APART px needs spreading; a lone far one keeps its place
+      const sorted = order.map(angOf);
+      if (sorted.some((v, i) => i && (v - sorted[i - 1]) * rad < APART * 1.2)) order.forEach((x, i) => { const P = attach(x.sh, x.dm, [x.other.x, x.other.y], [0, 0], { ang: mean + (i - (n - 1) / 2) * step }); x.j[x.who] = P; });
+    }
+  }
+  for (const j of jobs) {
+    {
+      const { e, a, b, A, B } = j;
       let pts = [[A.x, A.y], [B.x, B.y]], stub = false;
       const angles = (p) => [entryAngle(unit(p[1][0] - p[0][0], p[1][1] - p[0][1]), A.n), entryAngle(unit(p.at(-1)[0] - p.at(-2)[0], p.at(-1)[1] - p.at(-2)[1]), B.n)];
       let [ea, eb] = angles(pts);
@@ -149,7 +182,7 @@ export function routeEdges(shapes, edges, dims, { tags = [] } = {}) {
       }
       const mid = labelled ? along(pts, 0.64) : lab;
       out.set(e.id, { pts, entryFrom: ea, entryTo: eb, corner: Math.min(A.corner ?? Infinity, B.corner ?? Infinity), clearance: cl, stub, label: lp, mid: { x: mid.x, y: mid.y }, headDir: unit(pts.at(-1)[0] - pts.at(-2)[0], pts.at(-1)[1] - pts.at(-2)[1]), tailDir: unit(pts[0][0] - pts[1][0], pts[0][1] - pts[1][1]) });
-    });
+    }
   }
   return out;
 }

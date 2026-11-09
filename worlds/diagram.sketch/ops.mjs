@@ -17,6 +17,7 @@
 // first needs it (the dialog layer awaits `prepare()` before the world's operations run; a call that still finds no engine answers "getting ready"); under Node it is loaded at once (top-level await).
 
 import { fixTypos, rewriteRefs, rewriteLayout, rewriteMisc } from './refs.mjs';
+import { routeEdges, segBoxDist, boxOf } from './arrows.mjs';
 
 const TAB = 'diagram';
 const MAX_HISTORY = 30;
@@ -66,7 +67,15 @@ export function shapeOf(state, token) {
   const exact = ss.find((x) => x.name.toLowerCase() === l) ?? ss.find((x) => x.id && x.id.toLowerCase() === l);
   if (exact) return exact;
   const m = LONG_RE.exec(l);
-  if (m) { const id = `${PREFIX[LONG_OF[m[1].toLowerCase()]]}${m[2]}`; return ss.find((x) => (x.id ?? '').toLowerCase() === id || x.name.toLowerCase() === id) ?? null; }
+  if (m) {
+    const kind = LONG_OF[m[1].toLowerCase()], id = `${PREFIX[kind]}${m[2]}`;
+    // "rectangle1" is the first rectangle the person drew: shapes a template made do not count (their ids follow the same numbering)
+    const own = ss.filter((x) => !x.template && !x.layer);
+    const byId = own.find((x) => (x.id ?? '').toLowerCase() === id || x.name.toLowerCase() === id);
+    if (byId) return byId;
+    if (ss.some((x) => x.template && x.shape === kind)) return own.filter((x) => x.shape === kind).sort((a, b) => (a.order ?? 0) - (b.order ?? 0))[Number(m[2]) - 1] ?? null;
+    return ss.find((x) => (x.id ?? '').toLowerCase() === id || x.name.toLowerCase() === id) ?? null;
+  }
   return null;
 }
 export const idOf = (x) => x.id ?? (ID_RE.test(x.name) ? x.name.toLowerCase() : x.name);
@@ -87,6 +96,7 @@ function patchWorld(w) {
 /** Gives every shape that has no id one (named shapes keep their names), and migrates old arrow ids (e1 -> a1). */
 function assignIds(s) {
   for (const x of s.shapes) {
+    x.kind = x.shape;   // the kind of the shape (circle, rectangle ...) under the name tests and the state readers use
     if (x.id) continue;
     const m = ID_RE.exec(x.name);
     x.id = m && KIND_OF_PREFIX[m[1].toLowerCase()] === x.shape ? x.name.toLowerCase() : nextId(s, x.shape);
@@ -299,6 +309,54 @@ function edgeWords(s, a) {
   return es.length || !(F.length && T.length) ? es : fit(T, F);
 }
 
+/** Replies name shapes by their short ids: the internal names of a template's parts (Tree1-trunk, Branch1) become their ids (r1, e1). */
+function shortNames(s, text) {
+  const subs = s.shapes.filter((x) => x.template && x.id && x.name !== x.id).sort((a, b) => b.name.length - a.name.length);
+  let out = String(text);
+  for (const x of subs) out = out.replace(new RegExp(`(?<![\\w-])${x.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?![\\w-])`, 'g'), x.id);
+  return out;
+}
+/** A template's trunk is wide enough for its attachment points (at least 10 px apart, 8 px from the corners). */
+function widenTrunks(s, names) {
+  for (const n of names) {
+    const x = s.shapes.find((q) => q.name === n);
+    if (!x || !x.template || !/-trunk$/.test(x.name)) continue;
+    const up = s.edges.filter((e) => (e.from === n || e.to === n)).map((e) => s.shapes.find((q) => q.name === (e.from === n ? e.to : e.from))).filter(Boolean);
+    const above = up.filter((q) => q.y < x.y).length, below = up.length - above;
+    const need = 2 * 10 + 14 * (Math.max(above, below, 1) - 1);
+    if ((x.w ?? 40) < need) x.w = need;
+  }
+}
+/** Moves a shape the engine just placed (no explicit position) off the arrows and the other shapes: the nearest free spot. */
+function placeFree(s, names) {
+  const dims = (x) => K.dims(x);
+  for (const n of names) {
+    const x = s.shapes.find((q) => q.name === n);
+    if (!x || x.template || x.layer || x.quiet || !Number.isFinite(x.x)) continue;
+    const others = s.shapes.filter((o) => o !== x && !o.layer && Number.isFinite(o.x));
+    const edges = s.edges.filter((e) => e.from !== n && e.to !== n);
+    const routes = routeEdges(others, edges, dims);
+    const lines = [...routes.values()].map((r) => r.pts);
+    const d = dims(x), PAD = 10;
+    const hit = (px, py, strict = true) => {
+      const b = { x1: px - d.w / 2 - PAD, y1: py - d.h / 2 - PAD, x2: px + d.w / 2 + PAD, y2: py + d.h / 2 + PAD };
+      if (strict) for (const o of others) { const q = boxOf(o, dims(o)); if (b.x1 < q.x2 && b.x2 > q.x1 && b.y1 < q.y2 && b.y2 > q.y1) return true; }
+      for (const pts of lines) for (let k = 1; k < pts.length; k++) if (segBoxDist(pts[k - 1], pts[k], b) <= 2) return true;
+      return false;
+    };
+    if (!hit(x.x, x.y, false)) continue;   // only a shape that lies on an arrow moves (an explicit place beside others stays)
+    const cand = [];
+    for (let gx = -12; gx <= 12; gx++) for (let gy = -12; gy <= 12; gy++) {
+      const px = x.x + gx * 30, py = x.y + gy * 30;
+      const inFrame = px >= d.w / 2 + 10 && py >= d.h / 2 + 10 && px <= 790 - d.w / 2 && py <= 490 - d.h / 2;
+      cand.push({ px, py, k: Math.hypot(gx, gy) + (inFrame ? 0 : 100) });
+    }
+    cand.sort((a, b) => a.k - b.k);
+    const spot = cand.find((c) => !hit(c.px, c.py));
+    if (spot) { x.x = Math.round(spot.px); x.y = Math.round(spot.py); }
+  }
+}
+
 /** Runs nodes on the state; returns the reply envelope. `changesPicture` brings the tab forward. */
 function execute(ctx, s, nodes) {
   const system = systemFor(s);
@@ -312,19 +370,23 @@ function execute(ctx, s, nodes) {
   for (const st of result.steps) { const v = st.value; if (v && st.node.type === 'mention') named.push(...[].concat(v).map(String)); }
   if (made.length) s.last = made; else if (named.length) s.last = [...new Set(named)];
   s.last = (s.last ?? []).filter((n) => s.shapes.some((x) => x.name === n));
-  const hl = [...result.steps].reverse().find((st) => st.highlight && !st.error)?.highlight;
+  widenTrunks(s, made);
+  if (made.length && made.length <= 4) placeFree(s, made);
+  if (made.length) { s.rev = (s.rev ?? 0) + 1; }
+  // only a selection or the answer of a question marks shapes: what a template or a command made is not highlighted
+  const hl = [...result.steps].reverse().find((st) => st.highlight && !st.error && !st.node?.args?.template)?.highlight;
   s.selected = hl && (hl.shapes?.length || hl.edges?.length) ? { shapes: [...new Set(hl.shapes ?? [])], edges: [...new Set(hl.edges ?? [])] } : null;
   if (result.changed || s.shapes.length !== before) open(ctx);
   if (!result.ok) {
     const err = result.error;
     const text = summarize({ steps: result.steps.filter((st) => !st.error) }, s);
-    const said = err?.message ?? 'I could not do that.';
+    const said = shortNames(s, err?.message ?? 'I could not do that.');
     const clarify = err && err.name === 'Clarify';
-    if (result.partial) return ok(`${text} But: ${said}`);
+    if (result.partial) return ok(`${shortNames(s, text)} But: ${said}`);
     return no(said, clarify ? 'missing' : 'unsupported');
   }
   open(ctx);
-  return ok(summarize(result, s));
+  return ok(`${s.keptNote ? `${s.keptNote} ` : ''}${shortNames(s, summarize(result, s))}`);
 }
 
 const NOT_READY = () => { loadEngine(); return no('The diagram engine is still loading. Please say that again in a moment.', 'missing'); };
@@ -333,6 +395,7 @@ const make = (kind) => (ctx, args = {}) => {
   if (!K) return NOT_READY();
   const s = ensure(ctx);
   const text = args.text != null ? String(args.text).trim() : '';
+  s.keptNote = s.pending === 'new' ? 'Keeping the current diagram.' : '';   // any other command answers the pending "keep or start empty?" as keep
   s.pending = null;
   if (text) {
     const prepared = prepareText(text, s);

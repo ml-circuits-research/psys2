@@ -105,6 +105,7 @@ export function rewriteLayout(text) {
 export function rewriteMisc(text, s = {}) {
   return mapUnquoted(text, (p) => {
     p = p.replace(/^(\s*(?:please\s+)?(?:add|draw|create|make|put|insert|build|place)\b.*?)\s+(?:to|into|in|on)\s+(?:the|this|my|our)\s+(?:diagram|drawing|canvas|sketch)\b/i, '$1');
+    p = p.replace(/\b(?:an?\s+)?tree[\s-]*(?:like|ish)(?:\s+(?:shape|structure|diagram|chart|layout|form))?\b|\b(?:an?\s+)?tree\s+(?:shape|structure|diagram|chart)\b/gi, 'a hierarchy');   // the hierarchy template; a plain "tree" stays the picture
     p = p.replace(/\bflow[\s-]?chart\b|\bflow\s+diagram\b/gi, 'process diagram');
     const items = (s.shapes ?? []).filter((x) => !x.layer && x.shape !== 'text' || (x.shape === 'text' && !x.layer)).slice().sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
     if (items.length >= 2) {

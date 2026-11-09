@@ -403,6 +403,11 @@ export function correctTokens(tokens, text, vocab, known = (w) => vocab.has(w), 
       const inPref = tied.filter((w) => pref.has(w));
       if (inPref.length) tied = inPref;
     }
+    // DIAG3b: still tied: the candidate made of the same letters (an adjacent swap: "lable" -> "label", not "able") is the better guess
+    if (tied.length > 1) {
+      const letters = [...t.lower].sort().join(''), same = tied.filter((w) => [...w].sort().join('') === letters);
+      if (same.length) tied = same;
+    }
     if (tied.length > 1 && freq) {
       const top = Math.max(...tied.map((w) => freq.get(w) ?? 0));
       tied = tied.filter((w) => (freq.get(w) ?? 0) === top);

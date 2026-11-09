@@ -66,3 +66,37 @@ test('parallel and opposite arrows between the same two shapes are spread apart'
     assert.ok(d >= SPREAD * 0.9, `arrows ${rows[i].id} and ${rows[j].id} only ${d.toFixed(1)} px apart`);
   }
 });
+
+// DIAG3b: the tree templates with the user's own shapes around them (the probe of the reviewer's browser check).
+const treeCases = [
+  ['tree picture + shapes', await session(['draw a red circle', 'make a tree', 'add a box', 'add a box', 'draw a circle', 'connect circle1 and rectangle1', 'connect c1 to r1'])],
+  ['hierarchy (tree like shape) + shapes', await session(['draw a red circle', 'create a diagram', 'add to the diagram a tree liek shape', 'add a box', 'add a box', 'draw a circle', 'connect circle1 and rectangle1', 'connect all elements'])],
+];
+for (const c of treeCases) diagrams.push(c);
+test('tree templates: no two attachment points of one shape closer than 10 px', () => {
+  for (const [name, st] of treeCases) {
+    const pts = new Map();
+    for (const r of measure(st)) for (const [who, p] of [[r.from, r.pts[0]], [r.to, r.pts.at(-1)]]) (pts.get(who) ?? pts.set(who, []).get(who)).push({ id: r.id, p });
+    for (const [who, list] of pts) for (let i = 0; i < list.length; i++) for (let j = i + 1; j < list.length; j++) {
+      const d = Math.hypot(list[i].p[0] - list[j].p[0], list[i].p[1] - list[j].p[1]);
+      assert.ok(d >= 10 - 0.01, `${name}: ${list[i].id} and ${list[j].id} meet ${who} only ${d.toFixed(1)} px apart`);
+    }
+  }
+});
+test('tree templates: entry angle, corner clearance, and no shape lies over an arrow', () => {
+  for (const [name, st] of treeCases) {
+    const rows = measure(st);
+    assert.ok(rows.length >= 8, `${name}: ${rows.length} arrows`);
+    for (const r of rows) {
+      assert.ok(Math.min(r.entryFrom, r.entryTo) >= MIN_ENTRY - 0.01, `${name} ${r.id}: entry ${Math.min(r.entryFrom, r.entryTo).toFixed(1)}`);
+      assert.ok(r.corner >= CORNER - 0.01, `${name} ${r.id}: corner ${r.corner.toFixed(1)}`);
+      assert.ok(r.clearance > 0, `${name} ${r.id} ${r.from}->${r.to}: a shape lies over the arrow`);
+    }
+  }
+});
+test('the state exposes the kind of every shape and shapes of a template have short ids', () => {
+  for (const [name, st] of treeCases) for (const x of st.shapes) {
+    assert.ok(x.kind, `${name}: ${x.name} has no kind`);
+    assert.match(x.id, /^[a-z]\d+$/, `${name}: ${x.name}`);
+  }
+});
