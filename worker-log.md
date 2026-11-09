@@ -612,3 +612,10 @@ User decision: long messages must be supported; a small drop on short messages i
 - **Shape** `kids.arith.holding` (`ask.count` with the agent as `cont`, new: the trailing verbs come from `verb`, an `order` form "Tom has how many apples", `objdet=none`); 4 hand patterns with 100 % coverage deleted (`q.count q.count.got q.count.own w.cnt.f1`). The other operations (statements with an agent, an item and a number; total, leader, gap, verdict; calc) are not one of the families and stay hand-written (coverage.md).
 - **Tests**: kids.arith 210 -> 213 (sh01..sh03).
 - **Gates** vs the baseline: operational 95.0% right / 7 wrong unchanged; dialogues 96.6% / 87.7% unchanged; eval-rules identical in every row. `npm test` 825 pass / 0 fail, `test-world all` 0 FAIL.
+
+## L7 kids.tasks (2026-11-09, on kids.arith commit 5345e31)
+- **migrate-macros**: `patterns.sop` 664,361 -> 111,079 bytes; hand patterns 219 (+ 2 shapes, 7 generated); match text 617,554 -> 63,594 bytes (-90 %); inline groups repeated verbatim 109 (1,086 occurrences) -> 36 (219). 68 world-local phrases.
+- **extends**: none qualifies.
+- **Shapes**: `kids.tasks.clear` (do family) and `kids.tasks.show` (list family) over `lex.kids.tasks.listnames` with the literal extra group `[list]?`; they add the wish, indirect and question forms. No hand pattern is deleted: the hand patterns take any list name (`{list:words}`), the shapes only the lexicon names, so every covered example is a narrower reading. The add / remove / done / remind / check / has / pending operations take free-text items and are not a family. Engine: `list` templates gained the `<E>` extra, the list wish form starts with the show phrases ("show me ...") and examples include the literal extra group.
+- **Tests**: kids.tasks 230 -> 232 (sh01, sh02).
+- **Gates** vs baseline: operational 95.0% right / 7 wrong unchanged; dialogues 96.6% / 87.7% unchanged; eval-rules identical in every row. `npm test` 825 pass / 0 fail, `test-world all` 0 FAIL.

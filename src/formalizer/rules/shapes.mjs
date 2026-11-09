@@ -102,10 +102,10 @@ export const TEMPLATES = {
     short: [['', AND('<L>', '[you|u|ya]?', '<V>', '[a|an|any|some]?', '<O>', '[or_not]', '<T>')]],
   },
   list: {
-    imp: [['', AND('<L>', '<V>', '[me|us]?', '[all|every|each]?', '[of_the|of_your|of_ur]?', '<D>', '<O>', '<T>')]],
+    imp: [['', AND('<L>', '<V>', '[me|us]?', '[all|every|each]?', '[of_the|of_your|of_ur]?', '<D>', '<O>', '<E>', '<T>')]],
     q: [['', AND('<L>', '[what|which|wat]', '<O>', '[do|does|are|is|can|could|may|might|did]', '[you|u|ya|there|i|we|they]?', '[have|got|offer|know|support|available|choose|pick|use|see|exist|here]?', '[for_me|here|now|available]?', '<T>')]],
-    wish: [['', AND('<L>', '[$lang.shape.know|$lang.shape.seeall]', '[all|every|each]?', '<D>', '<O>', '<T>')]],
-    ind: [['', AND('[$lang.shape.ind]', '<V>', '[me|us]?', '[all|every|each]?', '<D>', '<O>', '<T>')]],
+    wish: [['', AND('<L>', '[$lang.shape.seeall|$lang.shape.know]', '[all|every|each]?', '<D>', '<O>', '<E>', '<T>')]],
+    ind: [['', AND('[$lang.shape.ind]', '<V>', '[me|us]?', '[all|every|each]?', '<D>', '<O>', '<E>', '<T>')]],
     short: [['', AND('<L>', '[all|every|each]', '<O>', '<T>')], ['.2', AND('<L>', '<O>', '[list|options|choices|available|types|kinds]', '<T>')]],
     opts: [['', AND('<L>', '[what|which|wat]', '[kinds_of|kind_of|types_of|type_of|sorts_of|options_for|choices_for|options_of|choices_of|variants_of]', '<D>', '<O>', '[are_there|do_you_have|can_i_choose|can_i_pick|are_available|exist]?', '<T>')]],
   },
@@ -202,7 +202,7 @@ export function expandShape(shape, { phrases = null, lexicons = null } = {}) {
         priority: short ? basePriority - SHORT_PENALTY : basePriority,
         example: [],
       };
-      p.example = exampleSentences(match, { phrases, lexicons, sample, det: shape.obj || noObj ? (shape.det ?? DEFAULTS.det) : null, objdet: shape.objdet, noun: nounAlts, link: shape.link ?? DEFAULTS.link, cv: shape.cont ? (shape.verb ?? 'have|has|got') : null });
+      p.example = exampleSentences(match, { phrases, lexicons, sample, det: shape.obj || noObj ? (shape.det ?? DEFAULTS.det) : null, objdet: shape.objdet, noun: nounAlts, link: shape.link ?? DEFAULTS.link, extra: shape.extra?.startsWith('[') ? shape.extra.slice(1, -2) : null, cv: shape.cont ? (shape.verb ?? 'have|has|got') : null });
       out.push(p);
     }
   }
@@ -225,7 +225,7 @@ function sampleWord(cls, lexicons) {
  * Natural example sentences of a generated match string: first the sentence with the determiner before the object ("Make your eyes blue."),
  * (the shortest one, all optionals omitted, when the sentence has no determiner). Other optional words (links, nouns, lead-ins) are never added: they make unnatural sentences.
  */
-export function exampleSentences(match, { phrases = null, lexicons = null, sample = {}, det = null, noun = null, link = null, cv = null } = {}) {
+export function exampleSentences(match, { phrases = null, lexicons = null, sample = {}, det = null, noun = null, link = null, cv = null, extra = null } = {}) {
   const parts = match.split(/\s+/);
   const make = (withDet) => {
     const words = [];
@@ -246,6 +246,7 @@ export function exampleSentences(match, { phrases = null, lexicons = null, sampl
           else if (m[1] === OF_ALTS) words.push('of');
           else if (withDet && link && m[1] === link) words.push(alts[0]);
           else if (cv && m[1] === cv) words.push(alts[0]);
+          else if (extra && m[1] === extra) words.push(alts[0]);
           continue;
         }
         let first = alts[0];

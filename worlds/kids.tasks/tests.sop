@@ -1163,3 +1163,13 @@
     input="Never mind."
     expect="stopped the homework list"
     session=dm2
+
+@t.tasks.sh01 core.test
+    input="Add milk to my shopping list. Could you maybe show my shopping list?"
+    expect="On your shopping list: milk."
+    session=ksh1
+
+@t.tasks.sh02 core.test
+    input="Add milk to my shopping list. I want to clear my shopping list. Show me my shopping list."
+    expect="Your shopping list is empty."
+    session=ksh2

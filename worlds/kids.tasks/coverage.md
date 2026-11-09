@@ -35,3 +35,5 @@ Routing note: when the active tab belongs to another world (the docs editor, for
 | any | questions about options ("what can you do with lists?") | | U: `ui.help` |
 | any | undo of the last change ("undo that") | | U: no undo operation |
 | any | negated commands ("do not add milk") | | U on purpose: not claimed (negative training examples) |
+
+**L7 (macros, shapes).** `patterns.sop` was migrated with `scripts/migrate-macros.mjs` (lead-ins, suffixes and 68 repeated lists are macros). Two shapes add the polite, wish, indirect and question forms for the named lists: `kids.tasks.clear` (do family: "I want to clear my shopping list", "can I empty the homework list"; tests in sh02) and `kids.tasks.show` (list family: "could you maybe show my shopping list"; test sh01). Both read only the list names of `lex.kids.tasks.listnames`; the hand patterns with `{list:words}` stay because they take any list name. The add, remove, done, remind, check, has and pending operations take a free-text item (`{item:words}`) and are not shape families.
