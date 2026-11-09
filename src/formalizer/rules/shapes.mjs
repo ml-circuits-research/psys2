@@ -169,7 +169,7 @@ export function expandShape(shape, { phrases = null, lexicons = null } = {}) {
     '<V>': verbs, '<V?>': verbs ? group(shape.verb, true) : null,
     '<VL>': shape.verb ? shape.verb.split('|').join('|') : null,
     '<D>': shape.obj || shape.noun ? group(shape.det ?? DEFAULTS.det, true) : '',
-    '<O>': shape.obj ? (shape.objmod ? (shape.objmod.includes(':') ? slotText(shape.objmod) : group(shape.objmod, true)) + ' ' : '') + slotText(shape.obj) : (noObj ? group(shape.noun) : ''),
+    '<O>': shape.obj ? (shape.objmod ? (shape.objmod.includes(':') ? slotText(shape.objmod) : group(shape.objmod, true)) + ' ' : '') + slotText(shape.obj) : (noObj ? (shape.objmod?.includes(':') ? slotText(shape.objmod) + ' ' : '') + group(shape.noun) : ''),
     '<X>': shape.val ? (shape.mod ? (shape.mod.includes(':') ? slotText(shape.mod) : group(shape.mod, true)) + ' ' : '') + slotText(shape.val) : '',
     '<N>': nounAlts ? group(nounAlts) : null, '<N?>': nounAlts && !noObj ? group(nounAlts, true) : '',
     '<NP>': nounPlural ? group(nounPlural) : null,

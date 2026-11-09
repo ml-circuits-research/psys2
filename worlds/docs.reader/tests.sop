@@ -1082,3 +1082,33 @@
     input="Read a section aloud."
     expect="Which section"
     session=ctx2
+
+@t.docs.reader.sh00 core.test
+    input="Load the sample story."
+    expect="Hansel and Gretel"
+    session=rsh
+
+@t.docs.reader.sh01 core.test
+    input="i want to read the first paragraph"
+    expect="Reading paragraph 1"
+    session=rsh
+
+@t.docs.reader.sh02 core.test
+    input="can you tell me how many sentences are in the story"
+    expect="has 66 sentences."
+    session=rsh
+
+@t.docs.reader.sh03 core.test
+    input="could you maybe summarize the last section"
+    expect="Section 4"
+    session=rsh
+
+@t.docs.reader.sh04 core.test
+    input="i want to summarize section 2"
+    expect="Section 2"
+    session=rsh
+
+@t.docs.reader.sh05 core.test
+    input="i want to summarize the story"
+    expect="In short:"
+    session=rsh

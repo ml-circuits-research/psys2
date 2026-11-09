@@ -80,15 +80,23 @@ export function vocabularyOf(set) {
     const freq = new Map();   // how often each word occurs in the patterns and lexicons: the last tie-break of typo correction
     vocab.freq = freq;
     const add = (w) => { if (w) { const l = w.toLowerCase(); vocab.add(l); freq.set(l, (freq.get(l) ?? 0) + 1); } };
+    const lex = lexIndex(set);
+    const usedPhrases = new Set();
     for (const { p } of allPatterns(set)) {
       const c = compiled(p, set).compiled;
       if (!c) continue;
       for (const el of c.elements) {
         if (el.t === 'lit') el.words.forEach(add);
-        else if (el.t === 'alt') el.alts.forEach((alt) => alt.forEach(add));
+        else if (el.t === 'alt') {
+          // the words of a phrase macro count ONCE per phrase (below), not once per pattern that uses it: a 350-alternative lead-in used by 300
+          // patterns would otherwise make every word in it (try, sry ...) look 300 times as frequent as the world's own nouns (typo tie-breaks)
+          const inMacro = new Set();
+          for (const id of el.macros ?? []) { usedPhrases.add(id); for (const a of lex.phrases.get(id)?.alts ?? []) inMacro.add(a.join('_')); }
+          for (const alt of el.alts) if (!inMacro.has(alt.join('_'))) alt.forEach(add);
+        }
       }
     }
-    const lex = lexIndex(set);
+    for (const id of usedPhrases) for (const alt of lex.phrases.get(id)?.alts ?? []) alt.forEach(add);
     for (const l of lex.lexicons.values()) for (const w of l.words) for (const part of w.split('_')) add(part);
     for (const [s, pl] of lex.plurals) { add(s); add(pl); }
     return vocab;
