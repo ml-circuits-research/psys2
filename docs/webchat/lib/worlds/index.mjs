@@ -8,6 +8,9 @@
  */
 import { parse, get, getAll } from '../soplang/index.mjs';
 import { Legends } from '../legends/index.mjs';
+import { expandShape } from '../formalizer/rules/shapes.mjs';
+import { checkPattern } from '../formalizer/rules/index.mjs';
+import { lexIndex } from './lexicon.mjs';
 
 const FILES = ['world.sop', 'legend.sop', 'lexicon.sop', 'patterns.sop', 'operations.sop', 'kb.sop', 'templates.sop', 'tests.sop'];
 const worldIdOf = (s) => (s.startsWith('world.') ? s.slice(6) : s);
@@ -24,6 +27,7 @@ export class World {
     this.lexicons = [];
     this.phrases = [];   // core.phrase macros (spec 03 section 2.5)
     this.patterns = [];
+    this.shapes = [];    // core.shape declarations (spec 03 section 2b); their patterns are generated at load and appended to `patterns`
     this.operations = [];
     this.kbRaw = [];
     this.kb = [];        // kb wires with full keys (filled once legends are built)
@@ -155,6 +159,14 @@ function buildWorld(id, files, ops) {
     needsState: txt(x, 'needsState') ?? null,
     examples: getAll(x, 'example').map((v) => v.v),
   }));
+  w.shapes = wires['patterns.sop'].filter((x) => x.type === 'core.shape').map((x) => {
+    const t = (k) => txt(x, k);
+    return {
+      id: x.id.replace(/^shape\./, ''), wireId: x.id, wire: x, worldId: id, family: t('family'), verb: t('verb'), obj: t('obj'), val: t('val'), noun: t('noun'),
+      det: t('det'), link: t('link'), extra: t('extra'), emit: t('emit'), emitOpts: t('emitOpts'), forms: t('forms'), skip: t('skip'), sample: t('sample'), mod: t('mod'), objmod: t('objmod'), pron: t('pron'), rel: t('rel'), objdet: t('objdet'), cont: t('cont'),
+      priority: t('priority') == null ? undefined : Number(t('priority')), kind: t('kind'), example: getAll(x, 'example').map((v) => v.v),
+    };
+  });
   w.operations = wires['operations.sop'].filter((x) => x.type === 'core.operation').map((x) => ({
     id: x.id, wire: x, worldId: id, impl: txt(x, 'impl'), semantics: txt(x, 'semantics') ?? 'query',
     action: txt(x, 'action'), outputs: getAll(x, 'outputs').map((v) => v.v), inputs: getAll(x, 'inputs').map((v) => v.v),
@@ -209,6 +221,7 @@ export async function loadWorlds(loader) {
     set.legends.add(w.legendWires, { worldId: id });
   }
   resolveLexiconExtends(set);
+  expandShapes(set);
   for (const w of set.list()) {
     w.kb = [];
     for (const raw of w.kbRaw) {
@@ -249,4 +262,28 @@ function resolveLexiconExtends(set) {
     state.set(l, 2);
   };
   for (const l of byId.values()) resolve(l);
+}
+
+/**
+ * Request shapes (spec 03 section 2b): after the lexicons are resolved, every `core.shape` of a world is expanded into patterns that are
+ * appended to the world's own (hand-written first, so their order wins ties). Each generated pattern goes through `checkPattern`;
+ * problems are load errors of the world. A shape that cannot be expanded is an error and generates nothing.
+ */
+function expandShapes(set) {
+  if (!set.list().some((w) => w.shapes.length)) return;
+  const lex = lexIndex(set);
+  for (const w of set.list()) {
+    for (const shape of w.shapes) {
+      let list;
+      try { list = expandShape(shape, { phrases: lex.phrases, lexicons: lex.lexicons }); } catch (e) { w.errors.push({ file: 'patterns.sop', message: e.message }); continue; }
+      for (const g of list) {
+        const p = {
+          id: `pat.${g.id}`, wire: null, worldId: w.id, match: g.match, emit: g.emit, kind: g.kind, priority: g.priority,
+          tabOnly: false, tabPriority: null, yieldsTo: [], needsState: null, examples: g.example, form: g.form, shape: shape.wireId,
+        };
+        for (const problem of checkPattern(p, set)) w.errors.push({ file: 'patterns.sop', message: `shape ${shape.id}: ${problem}` });
+        w.patterns.push(p);
+      }
+    }
+  }
 }

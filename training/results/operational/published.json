@@ -1,5 +1,5 @@
 {
- "file": "training/results/operational/encoder+n1-7e8055fd-2026-11-09-r3g-shipped.json",
+ "file": "training/results/operational/encoder+n1-7e8055fd-2026-11-09-r3h-shipped.json",
  "mode": "encoder+n1",
  "date": "2026-11-09",
  "dispatcher_sha256": "7e8055fdcbb41a5e9ea2ef1f040d5d9256f90c58b413b4d0fc1d4f19e841b8ac",
@@ -9,7 +9,8 @@
   "encoderAcceptRefused": true,
   "partialUnderstanding": true,
   "normalizer": true,
-  "spellcheck": true
+  "spellcheck": true,
+  "fastPath": false
  },
  "headline": {
   "n": 1240,

@@ -168,6 +168,9 @@ export function createRouter({ id = 'policy', model = null } = {}) {
         else if (ctx.recentWorlds.includes(w)) { m.tier = 4; m.sub = 1 + ctx.recentWorlds.indexOf(w); reasons.set(m, w === ctx.lastWorld ? 'world that answered last' : 'recently used world'); }
         else { m.tier = 5; m.sub = -(learned[w] ?? 0); reasons.set(m, 'best pattern priority'); }
       }
+      // a `short` form of a request shape (spec 03 section 2b: "blue eyes", "sunglasses") is understood only inside a world the user is already in
+      // (tiers 3 and 4); among everything else (tier 5) it would steal sentences from the long forms of other worlds
+      for (let k = list.length - 1; k >= 0; k--) if (list[k].pattern.form === 'short' && list[k].tier === 5) list.splice(k, 1);
       list.sort((a, b) => a.tier - b.tier || a.sub - b.sub || inTier(wscore)(a, b));
       const win = list[0] ?? null;
       const runner = list.find((m) => m !== win && m.pattern.worldId !== win?.pattern.worldId) ?? list[1] ?? null;
