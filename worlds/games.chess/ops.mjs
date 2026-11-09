@@ -450,7 +450,7 @@ function playUser(ctx, s, c, m) {
 function settle(ctx, s) {
   if (!s.pendingEngine) return null;
   s.pendingTries = (s.pendingTries ?? 0) + 1;
-  if (s.pendingTries < 2) return { wait: 'I am still thinking about my move. One moment, please.' };
+  if (s.pendingTries < 2 && !(ctx.batch?.index > 0)) return { wait: 'I am still thinking about my move. One moment, please.' };
   const c = load(s);
   if (s.status !== 'playing' || c.turn() !== ecol(s)) { s.pendingEngine = false; refresh(s, c); return {}; }
   const mv = playEngine(s, c, null);

@@ -72,6 +72,7 @@ export function currentCount(ctx, args) {
 | `ctx.state` | a plain JSON object persisted with the session, namespaced per world |
 | `ctx.ask_text(key)` | the legend question of a key |
 | `ctx.name(id)` | display name of an entity |
+| `ctx.batch` | `{ index, count }` while a dialog message is executed (index = how many of its commands ran before this one, count = commands in the message), else `null`. An operation that waits for the host (the chess engine) must not wait when `index > 0`: the host cannot answer between two commands of one message, so it settles at once (spec 07, chess) |
 | `ctx.effect(name, args)` | queue a client-side effect (actions only); returned by `session.send()` as `effects` (spec 07) |
 | `ctx.request(action, args)` | call another world's action operation by action name or operation id (actions only); returns its envelope; its effects carry that world's id; depth-limited. Example: `ctx.request('ui.openTab', { tab: 'editor' })` |
 | `ctx.peek(worldId)` | read-only copy of another world's state (`null` when it has none), for help and status worlds |

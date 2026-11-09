@@ -508,6 +508,7 @@ export class DialogSession {
     const answerWires = [];
     let followTab = null;   // tab of the last world that gave a supported answer (tab follow, spec 07 section 6)
     const fillerOnly = (t) => { const w = t.toLowerCase().match(/[\p{L}']+/gu) ?? []; return w.length > 0 && w.every((x) => FUNCTION_WORDS.has(x)); };
+    let segNo = 0;
     for (const seg of segments) {
       // a leftover made only of filler words ("also", "and", "please") next to something that was understood is not worth an error
       if (seg.unparsed && (partial ?? this.partial) && fillerOnly(seg.text) && segments.some((x) => !x.unparsed)) continue;
@@ -553,6 +554,7 @@ export class DialogSession {
         continue;
       }
       this.isession.add(seg.wires);
+      this.isession.batch = { index: segNo++, count: segments.length };   // ops see their place in the message (a game's host cannot answer between two commands of one message)
       const statements = [];
       for (const w of seg.wires) {
         const r = interp.resolve(this.isession, w);
@@ -579,6 +581,7 @@ export class DialogSession {
         lines.push([T(`This could also be read in another way (${titles.join(', ')}); I used the `), { text: `"${used}"`, translate: false, quote: true }, T(' reading.')]);
       }
     }
+    this.isession.batch = null;
     for (const seg of segments) {
       if (!seg.corrections?.length || seg.unparsed) continue;
       const line = [T('(I read ')];

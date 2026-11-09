@@ -55,6 +55,22 @@ test('charts: "make the bars green" colors the whole chart even when the labels 
   assert.match(r.text, /chart is green/);
 });
 
+test('chess: several moves in one message are all played (the engine settles between segments, no host answer is awaited)', async () => {
+  const s = session();
+  await s.send("let's play chess, e2 to e4, then d2 to d4, and knight g1 to f3");
+  const h = s.state()['games.chess'].history;
+  assert.ok(h.includes('e4') && h.includes('d4') && h.includes('Nf3'), h.join(' '));
+  assert.equal(h.filter((m, i) => i % 2 === 0).join(' '), 'e4 d4 Nf3');
+});
+
+test('chess: a lone move right after another message still waits for the host (old behaviour)', async () => {
+  const s = session();
+  await s.send('play chess');
+  await s.send('e2 to e4');
+  const r = await s.send('d2 to d4');
+  assert.match(r.text, /still thinking/);
+});
+
 test('guess: a list of answers is applied in order', async () => {
   for (const msg of ['yes, no, I don\'t know, and then maybe', 'yes no I don\'t know maybe']) {
     const s = session();

@@ -313,6 +313,8 @@ export class Interpreter {
         return mem.retract(String(wireId).replace(/^\$/, ''), reason);
       },
       state: (session.state[op.worldId] ??= {}),
+      /** Where the command stands in its message: { index, count } (index = executed segments before it), or null outside a dialog message. Spec 04. */
+      batch: session.batch ?? null,
       /** Queue a client-side effect (spec 07). Actions only. Returned by session.send() as `effects`. */
       effect: (name, args = {}) => {
         if (op.semantics !== 'action') throw new Error(`operation ${op.id} is not an action and may not queue effects`);
