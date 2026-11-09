@@ -10,7 +10,7 @@ import { perf } from '../perf.mjs';
 import { lexIndex } from '../../worlds/lexicon.mjs';
 import { analyze, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs';
 import { compilePattern, matchTokens, wordBag, prefilterPasses, BUILTIN_CLASSES, PatternError } from './matcher.mjs';
-import { buildWires, substituteEmit, dummySlots } from './emit.mjs';
+import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs';
 import { routeScores } from './router.mjs';
 import { createRouter, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs';
 import { FormSession, STOP_WORDS, isPronoun } from './session.mjs';
@@ -54,11 +54,11 @@ export function checkPattern(p, set) {
     if (def.cls === 'recent' && !lex.lexicons.has(def.args[0])) problems.push(`${p.id}: slot '${name}' refers to unknown lexicon '${def.args[0]}'`);
   }
   for (const [, name] of p.emit.matchAll(/\{([A-Za-z_]\w*)(?:\|\w+)?\}/g)) {
-    if (!c.slots.has(name) && !/^_\d*$/.test(name)) problems.push(`${p.id}: emit uses '{${name}}' but the match has no such slot`);
+    if (!c.slots.has(name) && !/^_\d*$/.test(name) && name !== SEGMENT_SLOT) problems.push(`${p.id}: emit uses '{${name}}' but the match has no such slot`);
   }
   if (!['statement', 'question', 'request', 'chat'].includes(p.kind)) problems.push(`${p.id}: unknown kind '${p.kind}'`);
   try {
-    const slots = dummySlots(c.slots);
+    const slots = { ...dummySlots(c.slots), [SEGMENT_SLOT]: { value: 'x', text: 'x' } };
     let n = 0;
     const sop = substituteEmit(p.emit, slots, () => 'x' + ++n);
     const { errors } = parse(sop, { source: p.id });
@@ -319,7 +319,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     for (const m of matches) {
       try {
         const agents = Object.values(m.slots).filter((s) => s.agent).sort((a, b) => a.tokens[0] - b.tokens[0]);
-        const slotsForEmit = m.slots;
+        const slotsForEmit = { ...m.slots, [SEGMENT_SLOT]: { value: segText, text: segText } };   // {segment}: the sentence itself (spec 03 section 2)
         const emitted = buildWires(m.pattern, slotsForEmit, {
           fresh: () => form.freshId('w'), nextSeq: () => form.nextSeq(), sourceRef, worldId: m.pattern.worldId,
         });
