@@ -248,6 +248,16 @@ Clicks on the avatar (gallery, presets, parts) run late, after the spoken answer
   - the same for a chess move while the engine thinks;
   - 0 console errors.
 
+### BUSY-LOST — the BUSY code is not on main (reviewer at 79c5ba7, 18:30 local) — fix now
+
+Your worker-log "BUSY" describes changes in `docs/webchat/app.mjs` (`updateBusy()`, `host.isBusy()` / `host.onBusy`, the `.is-busy` / `aria-busy` / `inert` toggling, Stop cutting the speech, `TURN_LIMITS`). **Commit e19aaa6 contains only `style.css`, `scripts/test-webchat-turns.mjs`, the spec and the log.** On main, `app.mjs` has no `updateBusy` or `onBusy`.
+- In real Chrome at 4×, during a turn, no panel gets `.is-busy`, `aria-busy` or `inert`; the veil never shows.
+- The JS was probably lost in a merge or rebase from the agent worktree.
+
+Recover it from the worktree branch and land it. Also:
+- **Browser tests in the gates.** The browser tests (`webchat-turns`, `webchat-voice`, `webchat-ui`, `webchat-phrase-export`) are skipped in `npm test` without `PUPPETEER_CORE`, which is how this went unnoticed. Run them in your gate before every push (`PUPPETEER_CORE=... npm test`), and write the count in the log entry.
+- **Merge check.** After every merge from an agent worktree, `git diff --stat <agent-branch> main -- <files the log names>` must be empty for the files the log says were changed.
+
 ### HANG3 — the browser translator stalls Romanian turns (reviewer at cbdca37, 17:58 local) — small, do first
 
 HANG2 is fixed: the user's session ("get me to New Youk" after the drawings) now answers in 1–3 s, rules mode makes no ORT calls, and the detached-buffer root cause is gone.
@@ -596,7 +606,7 @@ The reviewer copied what is reusable into **`imports/diagram-vss-demo/`** (stagi
 **Licence:** settled. The project is now AGPL-3.0-only, the same as the source (user decision 14:10); keep the copied files' provenance headers.
 
 **Order from now on:**
-1. HANG3 (browser translator off the critical path), MIC2 + EOT2 + BUSY (always-open mic, queue, reliable button, end of turn, tabs grey while a turn runs), then DIAG2 + DIAG3 (Diagram world in the webchat, retrain, short ids, edges, rendering, parity), FB (thumbs up / down + feedback, remove Copy as text), then RP3 (phrase-log failures), then DBG (debug view per tab)
+1. BUSY-LOST (land the missing app.mjs part), HANG3 (browser translator off the critical path), MIC2 + EOT2 + BUSY (always-open mic, queue, reliable button, end of turn, tabs grey while a turn runs), then DIAG2 + DIAG3 (Diagram world in the webchat, retrain, short ids, edges, rendering, parity), FB (thumbs up / down + feedback, remove Copy as text), then RP3 (phrase-log failures), then DBG (debug view per tab)
 2. SET (settings modal with tabs) + UI1 (one mic, tooltips) + DOC (greeting and docs), then VOICE (end of turn)
 3. ED (document editor commands)
 4. RD10 together with RD1b and RD2 (they share the mechanism)
