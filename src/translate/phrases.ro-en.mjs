@@ -193,6 +193,46 @@ const BASE_FRAMES = [
   { p: 'aș vrea', out: 'I would like' },
   { p: 'ai vrea', out: 'would you like' },
   { p: 'ce zici de {np}', out: 'how about {np}' },
+  // ---- stories and shopping
+  { p: 'câte|câți {np:bare} îi|ii mai rămân lui {name}', out: 'how many {np} does {name} have left' },
+  { p: 'câte|câți {np:bare} îi|ii mai rămân {name:dat}', out: 'how many {np} does {name:dat} have left' },
+  { p: 'câți bani îmi rămân', out: 'how much money do I have left' },
+  { p: 'după ce cumpăr {np}', out: 'after I buy {np}' },
+  { p: 'cât mi a rămas după cumpărături', out: 'what is my money after shopping' },
+  { p: 'ce iese la {num} minus {num#2}', out: 'what do I get for {num} minus {num#2}' },
+  { p: 'ce iese la {num} plus {num#2}', out: 'what do I get for {num} plus {num#2}' },
+  { p: 'cât face|fac {num} la pătrat', out: 'what is {num} squared' },
+  { p: 'ce sunet scoate {np}', out: 'what sound does {np} make' },
+  { p: 'dă|dau {num} din ele', out: 'gives away {num}' },
+  // ---- time
+  { p: 'câte zile are {fw}', out: 'how many days are in {fw}' },
+  { p: 'ce zi era înaintea {fw}', out: 'what day was the day before {fw}' },
+  { p: 'ce oră era acum {num} ore', out: 'what time was it {num} hours ago' },
+  { p: 'și ziua de după aceea', out: 'and the day after that' },
+  { p: 'ce zi va fi poimâine dacă azi e|este {fw}', out: 'what is the day after tomorrow if today is {fw}' },
+  { p: 'este|e {col} {np}', out: 'is {col} {np}', q: true },
+  // ---- avatar
+  { p: 'scoate-ți {np:bare}', out: 'take off your {np}' },
+  { p: 'setează-ți {np:bare} să fie {np:bare#2}', out: 'set your {np} to {np#2}' },
+  { p: 'fă-ți|fă-mi {np:sbare#1} și {np:sbare#2} {adj}', out: 'make your {np#1} and {np#2} {adj}' },
+  { p: 'culoarea corpului ar trebui să fie {col}', out: 'body color should be {col}' },
+  // ---- chess and games
+  { p: '{np:bare} pe|la {sq}', out: '{np} to {sq}' },
+  { p: '{sq} la {sq#2}', out: '{sq} to {sq#2}' },
+  { p: 'ia {np} de pe {sq}', out: 'take {np} on {sq}' },
+  { p: 'mă predau', out: 'I give up' },
+  { p: 'mă dau bătut', out: 'I resign' },
+  { p: 'fă {np:short} mai ușor', out: 'make {np} easier' },
+  { p: 'fă {np:short} mai greu', out: 'make {np} harder' },
+  { p: 'joacă|începe spânzurătoarea cu cuvântul {w}', out: 'play hangman with the word {w}' },
+  { p: 'începe un joc de spânzurătoare cu cuvântul {w}', out: 'start a hangman game with the word {w}' },
+  { p: 'ce zici de litera {w}', out: 'how about the letter {w}' },
+  { p: 'este|e {w}', out: 'is it {w}', full: true, q: true },
+  { p: 'asta este|e corect', out: 'that is right' },
+  { p: 'cam așa', out: 'sort of', full: true },
+  { p: 'ce animale au mai rămas', out: 'which animals are left' },
+  { p: 'plec acum', out: 'I am leaving now' },
+  { p: 'ne vedem', out: 'see you' },
   // ---- lists
   { p: 'de pe', token: { fpos: 'prep', en: 'from' } },
   { p: 'de la', token: { fpos: 'prep', en: 'from' } },
@@ -231,6 +271,15 @@ const BASE_FRAMES = [
   { p: 'animalele de la fermă', token: { fpos: 'noun', en: 'farm animals', mass: true, def: true } },
 ];
 
-export const FRAMES = [...BASE_FRAMES, ...COMMAND_FRAMES];
+// board positions: "sus în stânga", "jos mijloc", "în centru" (tic-tac-toe, chess squares by position)
+const POS_FRAMES = [];
+for (const [rv, ev] of [['sus', 'top'], ['jos', 'bottom']]) {
+  for (const [rh, eh] of [['stânga', 'left'], ['dreapta', 'right'], ['mijloc', 'middle']]) {
+    POS_FRAMES.push({ p: `${rv} în ${rh}`, out: `${ev} ${eh}` }, { p: `${rv} ${rh}`, out: `${ev} ${eh}` }, { p: `${rv}-${rh}`, out: `${ev} ${eh}` });
+  }
+}
+POS_FRAMES.push({ p: 'în centru', out: 'center' }, { p: 'în colțul de sus din stânga', out: 'top left corner' });
+
+export const FRAMES = [...BASE_FRAMES, ...POS_FRAMES, ...COMMAND_FRAMES];
 
 export default FRAMES;

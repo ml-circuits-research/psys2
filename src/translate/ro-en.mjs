@@ -93,6 +93,8 @@ function prepareTokens(toksIn) {
   const keys = toks.map((t) => (t.kind === 'word' ? t.key : null));
   const out = [];
   const isNoteLetter = (t) => t && t.kind === 'word' && /^[A-G]$/.test(t.raw);
+  const wordToks = toks.filter((t) => t.kind === 'word');
+  const letterGuess = wordToks.length >= 2 && wordToks.some((t) => t.raw.length === 1) && wordToks.every((t) => t.raw.length === 1 || /^(nu|da|stai)$/.test(t.key)) && wordToks.filter((t) => t.raw.length === 1).length >= 2;
   for (let i = 0; i < toks.length; i++) {
     const t = toks[i];
     // a run of note letters ("C D E F G", "A4"): one fixed piece, never read as words ("E" is not "is")
@@ -103,6 +105,14 @@ function prepareTokens(toksIn) {
       i = j - 1;
       continue;
     }
+    // a chess square ("e4", "d2"): one name-like word, not "is" + 4
+    if (t.kind === 'word' && /^[a-hA-H]$/.test(t.raw) && toks[i + 1]?.kind === 'num' && toks[i + 1].start === t.end && /^[1-8]$/.test(toks[i + 1].raw)) {
+      out.push({ kind: 'word', raw: t.raw.toLowerCase() + toks[i + 1].raw, key: t.raw.toLowerCase() + toks[i + 1].raw, start: t.start, end: toks[i + 1].end, isCap: true, an: [] });
+      i++;
+      continue;
+    }
+    // a guess made of single letters ("e, nu, z"): the letters are letters, not "is" or "has"
+    if (t.kind === 'word' && t.raw.length === 1 && letterGuess) { out.push({ ...t, isCap: true, raw: t.raw.toUpperCase(), key: t.key, an: [] }); continue; }
     if (t.kind === 'word') {
       const r = M.parseNumberAt(keys, i);
       if (r && (t.key === 'una' || t.key === 'unul') && keys[i + 1] && M.analyze(keys[i + 1]).some((a) => a.pos === 'adj')) { out.push(t); continue; }   // "una roșie" = a red one, not 1 tomato
@@ -145,14 +155,14 @@ function matchFrame(f, toks, p, info) {
     if (el.slot === 'np') {
       if (!t) return -1;
       let r = null;
-      if (el.mod === 'short') {
+      if (el.mod === 'short' || el.mod === 'sbare') {
         for (let e = pos + 1; e <= toks.length && !r; e++) {
           const c = parseNP(toks.slice(0, e), pos, info, null);
           if (c && c.next === e && c.np.head) r = c;
         }
       } else r = parseNP(toks, pos, info, null);
       if (!r) return -1;
-      slots[el.tag] = { pieces: renderNP(r.np, el.mod === 'bare' ? { noArticle: true } : {}), tok0: toks[pos] };
+      slots[el.tag] = { pieces: renderNP(r.np, el.mod === 'bare' || el.mod === 'sbare' ? { noArticle: true } : {}), tok0: toks[pos] };
       return rec(k + 1, r.next);
     }
     if (el.slot === 'num') {
@@ -171,6 +181,11 @@ function matchFrame(f, toks, p, info) {
       const sn = a ? null : analysesOf(t).find((x) => x.pos === 'noun' && /^(winter|spring|summer|autumn)$/.test(x.entry.en));   // seasons are nouns
       if (!a && !sn) return -1;
       slots[el.tag] = { tok: t, en: (a || sn).entry.en };
+      return rec(k + 1, pos + 1);
+    }
+    if (el.slot === 'sq') {   // a chess square: e4
+      if (!t || t.kind !== 'word' || !/^[a-h][1-8]$/.test(t.key)) return -1;
+      slots[el.tag] = { tok: t };
       return rec(k + 1, pos + 1);
     }
     if (el.slot === 'col') {   // a colour word, with or without its article: roșu, roșul, galbenul, verdele
@@ -285,7 +300,7 @@ function makeFixed(f, m, first, last, info) {
       pieces.push(pc(txt, sl.tok));
     } else if (name === 'name') {
       flush();
-      pieces.push(pc(mod === 'cap' ? sl.tok.raw[0].toUpperCase() + sl.tok.raw.slice(1) : sl.tok.raw, sl.tok));
+      pieces.push(pc(mod === 'cap' ? sl.tok.raw[0].toUpperCase() + sl.tok.raw.slice(1) : mod === 'dat' ? dativeName(sl.tok.raw) : sl.tok.raw, sl.tok));
     } else if (name === 'np') { flush(); pieces.push(...sl.pieces); }
     else if (name === 'rest') {
       flush();
@@ -301,7 +316,8 @@ function makeFixed(f, m, first, last, info) {
         pieces.push(...after);
       }
       else pieces.push(...processTokens(sl.toks, { ...info, frag: true, q: false, excl: false }));
-    } else if (name === 'w') { flush(); pieces.push(pc(mod === 'cap' ? sl.tok.raw[0].toUpperCase() + sl.tok.raw.slice(1) : sl.tok.raw, sl.tok)); }
+    } else if (name === 'sq') { flush(); pieces.push(pc(sl.tok.raw, sl.tok)); }
+    else if (name === 'w') { flush(); pieces.push(pc(mod === 'cap' ? sl.tok.raw[0].toUpperCase() + sl.tok.raw.slice(1) : sl.tok.raw, sl.tok)); }
     else if (name === 'v' || name === 'adj' || name === 'fw' || name === 'col') { flush(); pieces.push(pc(sl.en, sl.tok)); }
   }
   flush();
@@ -1138,7 +1154,7 @@ function translateClause(items, info, c) {
   if (vg.clit.some((x) => x.enc) && !isQ && !c.sub) imperative = true;
   // a sentence-initial 3rd person present with no subject, said to the assistant, is an order ("Cântă Twinkle", "Vorbește mai repede")
   if (!imperative && !isQ && !c.sub && !c.emb && !vg.aux && !vg.neg && !whItem && !info.frag && !(c.reuse && c.prevSubj) && preNP.length === 0 && !isBe && !comp2
-    && !entry.flags.mod && !entry.flags.exp && !entry.flags.imps && !STATIVE_VERBS.has(entry.inf) && vgOpts.length && vgOpts.every((o) => (o.raw === 'pres' || o.raw === 'subj') && o.person === 3) && vgOpts.some((o) => o.raw === 'pres' && o.number === 'sg')
+    && !entry.flags.mod && !entry.flags.exp && !entry.flags.imps && !STATIVE_VERBS.has(entry.inf) && vgOpts.length && vgOpts.every((o) => (o.raw === 'pres' || o.raw === 'subj' || o.raw === 'inf') && (o.raw === 'inf' || o.person === 3)) && vgOpts.some((o) => o.raw === 'pres' && o.number === 'sg')
     && items.slice(0, vgIdx).every((x) => ['conj', 'interj', 'comma', 'adv', 'fixed'].includes(x.t))) imperative = true;
 
   // ---- who is the subject?
@@ -1302,7 +1318,7 @@ function translateClause(items, info, c) {
   if (!(entry.flags.exp && experiencerSubj)) {
     for (const { x, info: ci } of clitInfo) {
       if (ci.refl) continue;
-      if (x.enc && /^(ti|iti)$/.test(x.key) && !entry.flags.d && postNP.length && postNP[0].def && !postNP[0].poss && !postNP[0].possessor && !imperativeIsGive) { postNP[0].poss = { en: 'your', tok: x }; continue; }   // "Fă-ți corpul verde" = make your body green
+      if (x.enc && /^(ti|iti|mi|imi)$/.test(x.key) && !entry.flags.d && postNP.length && postNP[0].def && !postNP[0].poss && !postNP[0].possessor && !imperativeIsGive) { postNP[0].poss = { en: /^i?m/.test(x.key) ? 'my' : 'your', tok: x }; continue; }   // "Fă-ți corpul verde" = make your body green
       if (x.enc && x.key === 'te' && imperative) { doPronPieces.push(pspan('yourself', x.start, x.end)); continue; }   // "Resetează-te" = reset yourself
       if (x.enc && /^(i|ii)$/.test(x.key) && imperative && !entry.flags.d) { doPronPieces.push(pspan('them', x.start, x.end)); continue; }   // "Fă-i pătrați" = make them square
       const wantDat = ci.dat && (DAT_CLITICS.has(x.key) && (entry.flags.d || datNPs.length || x.enc || !ci.acc || imperative || /^(mi|ti|imi|iti|i)$/.test(x.key)));
@@ -1592,6 +1608,8 @@ function assemble(sentences) {
     }
     if (sent.addQ && !sent.end.length) { text += '?'; }
   }
+  text = text.replace(/,\s+then\b/g, ' and then');
+  if (/^(Can|Could) you /.test(text)) text = text.replace(/ and to (\w)/g, ', $1');   // "Poți să desenezi o stea și s-o faci galbenă" = can you draw a star, make it yellow   // the English side reads "A and then B", not "A, then B"
   return { text, alignment };
 }
 
@@ -1614,7 +1632,7 @@ function resolveDiaFree(toks) {
 function splitHyphens(text) {
   const L = '(?<![\\p{L}])', R = '(?![\\p{L}])';
   return text
-    .replace(new RegExp(`${L}(s[ăa]|nu)-(mi|ți|ti|l|o|i|ne|vă|va|le|se)${R}`, 'giu'), (m, a, b) => `${a} ${b}`)
+    .replace(new RegExp(`${L}(s[ăa]|s|nu)-(mi|ți|ti|l|o|i|ne|vă|va|le|se)${R}`, 'giu'), (m, a, b) => `${a} ${b}`)
     .replace(new RegExp(`${L}(mi)-(ai|ați)${R}`, 'giu'), (m, a, b) => `${a} ${b}`)
     .replace(new RegExp(`${L}([iî]ntr|dintr|printr)-(o|un|una|unul)${R}`, 'giu'), (m, a, b) => `${a.slice(0, -2)}${' '.repeat(m.length - b.length - (a.length - 2))}${b}`)
     .replace(new RegExp(`${L}(\\p{L}{3,})-(ul|a|le|lui)${R}`, 'giu'), (m, a, b) => `${a}${' '.repeat(b.length + 1)}`);

@@ -653,7 +653,7 @@ zbura|fly/flew/flown|zbor zbori zboară zburăm zburați zboară|zburat|i
 trăi|live|trăiesc trăiești trăiește trăim trăiți trăiesc|trăit|i
 locui|live|locuiesc locuiești locuiește locuim locuiți locuiesc|locuit|i
 sări|jump|sar sari sare sărim săriți sar|sărit|i
-cânta|sing/sang/sung|a:cânt|cântat|t
+cânta|sing/sang/sung|a:cânt|cântat|t imp
 dansa|dance|az:dans|dansat|i
 juca|play|joc joci joacă jucăm jucați joacă|jucat|t
 lucra|work|az:lucr|lucrat|i
@@ -986,6 +986,9 @@ acum|now|adv time
 azi,astăzi|today|adv time
 mâine|tomorrow|adv time
 ieri|yesterday|adv time
+stai|wait|interj lead
+posimâine|the day after tomorrow|adv time
+deasupra|on top|adv
 devreme|early|adv time
 târziu|late|adv time
 aici|here|adv
@@ -1028,7 +1031,7 @@ minus|minus|op
 ori|times|op
 egal|equals|op
 ce|what|wh
-să|-|sa
+să,s|-|sa
 cine|who|wh
 care|which|wh
 unde|where|wh
@@ -1071,7 +1074,7 @@ vostru,voastră,voștri,voastre|your|poss
 lor|their|poss
 luni|Monday|day
 marți|Tuesday|day
-miercuri|Wednesday|day
+miercuri,miercurii|Wednesday|day
 joi|Thursday|day
 vineri|Friday|day
 sâmbătă|Saturday|day

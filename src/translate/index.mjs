@@ -19,7 +19,7 @@ const RO_W = new Map();
 const addW = (w, words) => { for (const k of words.split(' ')) RO_W.set(k, w); };
 addW(2, 'sau este sunt pentru din vreau unde cand daca foarte cum multumesc buna deseneaza arata sterge adauga spune ziua seara dimineata esti poti vrei iti imi avem '
   + 'aceasta acest asta dupa intre fara catre despre mereu doar toate toti mele mea meu mei tale tau tai nostru noastra cate cati cata cine revedere unei sunteti');
-addW(1.5, 'si sa cu pe acum azi maine ieri');
+addW(1.5, 'si sa cu pe acum azi maine ieri cel cea cei cele');
 addW(1.2, 'nu mai');
 addW(1, 'ce da dar fa pune');
 addW(0.7, 'care');
@@ -106,7 +106,7 @@ function scoreLanguage(text) {
     const w = RO_W.get(key);
     if (w) { if (!(solfege && SOLFEGE.has(key))) ro += w; continue; }
     const pl = placeOf(key);
-    if (pl && key !== foldKey(pl.en) && !isEnglishWord(key)) { ro += 2; continue; }   // "Japoniei", "Egiptul", "Parisul": a Romanian form of a place name
+    if (pl && key !== foldKey(pl.en) && !isEnglishWord(key)) { ro += pl.gen || /(ul|ului)$/.test(key) ? 3 : 2; continue; }   // "Japoniei", "Egiptul", "Parisul": a Romanian form of a place name
     const roHit = analyze(key).length > 0;
     const enHit = EN_STOP.has(key) || isEnglishWord(key);
     if (roHit && enHit) continue;
