@@ -132,6 +132,10 @@ async function main() {
     samples.push({ t: Math.round((now - t0) / 1000), heapMB: heap / 1048576, busy, workers, ...info });
   };
 
+  const PROFILE = argv.includes('--profile');
+  if (PROFILE) { await cdp.send('Profiler.enable'); await cdp.send('Profiler.setSamplingInterval', { interval: 2000 }); await cdp.send('Profiler.start'); }
+  const TRACE = opt('trace', '');
+  if (TRACE) await pg.tracing.start({ path: TRACE, categories: ['-*', 'devtools.timeline', 'v8.execute', 'blink.user_timing'] });
   const t0 = Date.now();
   let second = null, secondInfo = null, next = 0, lastSample = 0, dropped = 0;
   while (true) {
@@ -165,6 +169,20 @@ async function main() {
     secondInfo.mic = await second.pg.evaluate(() => document.querySelector('button.p2-mic')?.dataset.mic ?? '');
     secondInfo.errors = second.errors.length;
     secondInfo.firstStillListening = await pg.evaluate(() => !!window.__sr.live());
+  }
+  if (TRACE) await pg.tracing.stop();
+  if (PROFILE) {
+    const { profile } = await cdp.send('Profiler.stop');
+    const byId = new Map(profile.nodes.map((n) => [n.id, n]));
+    const self = new Map(); const dt = profile.timeDeltas; let total = 0, idle = 0;
+    profile.samples.forEach((id, i) => { const n = byId.get(id); const d = dt[i] ?? 0; total += d; const f = n.callFrame; if (/^\((idle|program)\)$/.test(f.functionName)) { idle += d; return; } const k = `${f.functionName || '(anon)'} ${f.url.split('/').slice(-2).join('/')}:${f.lineNumber}`; self.set(k, (self.get(k) ?? 0) + d); });
+    // inclusive by named function (top-down): add sample time to every distinct function on the stack
+    const parent = new Map(); profile.nodes.forEach((n) => (n.children ?? []).forEach((c) => parent.set(c, n.id)));
+    const incl = new Map();
+    profile.samples.forEach((id, i) => { const seen = new Set(); for (let c = id; c; c = parent.get(c)) { const f = byId.get(c).callFrame; if (!f.url) continue; const k = `${f.functionName || '(anon)'} ${f.url.split('/').slice(-2).join('/')}:${f.lineNumber}`; if (!seen.has(k)) { seen.add(k); incl.set(k, (incl.get(k) ?? 0) + (dt[i] ?? 0)); } } });
+    const top = (m, n) => [...m].sort((a, b) => b[1] - a[1]).slice(0, n).map(([k, v]) => `${(v / 1000 / 1000).toFixed(1)}s ${(v / total * 100).toFixed(1)}%  ${k}`);
+    console.log(`\nprofile: total ${(total / 1e6).toFixed(0)}s, idle ${(idle / total * 100).toFixed(0)}%\n-- self\n${top(self, 25).join('\n')}\n-- inclusive\n${top(incl, 45).join('\n')}`);
+    await writeFile(opt('profile-out', '/tmp/soak.cpuprofile'), JSON.stringify(profile));
   }
   const usersAtEnd = samples.at(-1).users;
   const usersAtSecond = secondInfo ? (samples.filter((s) => s.t <= secondInfo.opened).at(-1)?.users ?? 0) : null;
