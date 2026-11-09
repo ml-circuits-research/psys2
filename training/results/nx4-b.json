@@ -1,0 +1,227 @@
+{
+ "seed": 1,
+ "command": "python -m psys2_train.nx_spans train --out /home/salboaie/work/psys2/training/runs/nx-b-seed1 --seed 1",
+ "holdout": [
+  "games.hangman",
+  "kids.shop",
+  "kids.time"
+ ],
+ "n_train_records": 91925,
+ "test_seen_worlds": {
+  "overall": {
+   "records": 6742,
+   "op_acc": 0.8845,
+   "span_p": 0.9347,
+   "span_r": 0.9068,
+   "span_f1": 0.9205,
+   "noanswer_ok": 0.5173,
+   "record_exact": 0.7348
+  },
+  "worlds": {
+   "art.draw": {
+    "records": 313,
+    "op_acc": 0.8083,
+    "span_p": 0.9564,
+    "span_r": 0.8991,
+    "span_f1": 0.9268,
+    "noanswer_ok": 0.0,
+    "record_exact": 0.7668
+   },
+   "data.charts": {
+    "records": 282,
+    "op_acc": 0.9078,
+    "span_p": 0.9802,
+    "span_r": 0.7941,
+    "span_f1": 0.8774,
+    "noanswer_ok": 0.0,
+    "record_exact": 0.7624
+   },
+   "diagram.sketch": {
+    "records": 2892,
+    "op_acc": 0.9447,
+    "span_p": 0.914,
+    "span_r": 0.9052,
+    "span_f1": 0.9096,
+    "noanswer_ok": 0.4411,
+    "record_exact": 0.6943
+   },
+   "docs.editor": {
+    "records": 148,
+    "op_acc": 0.8108,
+    "span_p": 0.9351,
+    "span_r": 0.9142,
+    "span_f1": 0.9245,
+    "noanswer_ok": 0.0,
+    "record_exact": 0.75
+   },
+   "docs.reader": {
+    "records": 254,
+    "op_acc": 0.5591,
+    "span_p": 0.9888,
+    "span_r": 0.5483,
+    "span_f1": 0.7054,
+    "noanswer_ok": 0.0,
+    "record_exact": 0.5315
+   },
+   "games.chess": {
+    "records": 329,
+    "op_acc": 0.9514,
+    "span_p": 0.999,
+    "span_r": 0.9971,
+    "span_f1": 0.9981,
+    "noanswer_ok": 0.0,
+    "record_exact": 0.9453
+   },
+   "games.guess": {
+    "records": 91,
+    "op_acc": 0.978,
+    "span_p": 1.0,
+    "span_r": 1.0,
+    "span_f1": 1.0,
+    "noanswer_ok": 0.0,
+    "record_exact": 0.978
+   },
+   "games.tictactoe": {
+    "records": 193,
+    "op_acc": 1.0,
+    "span_p": 0.9876,
+    "span_r": 0.9755,
+    "span_f1": 0.9815,
+    "noanswer_ok": 0.0,
+    "record_exact": 0.9845
+   },
+   "geo.map": {
+    "records": 300,
+    "op_acc": 0.8033,
+    "span_p": 1.0,
+    "span_r": 0.9612,
+    "span_f1": 0.9802,
+    "noanswer_ok": 0.0,
+    "record_exact": 0.7533
+   },
+   "kids.animals": {
+    "records": 262,
+    "op_acc": 0.9695,
+    "span_p": 0.9296,
+    "span_r": 0.9348,
+    "span_f1": 0.9322,
+    "noanswer_ok": 0.5926,
+    "record_exact": 0.8397
+   },
+   "kids.arith": {
+    "records": 249,
+    "op_acc": 0.8755,
+    "span_p": 1.0,
+    "span_r": 0.9986,
+    "span_f1": 0.9993,
+    "noanswer_ok": 0.0,
+    "record_exact": 0.8715
+   },
+   "kids.common": {
+    "records": 85,
+    "op_acc": 0.8824,
+    "span_p": 1.0,
+    "span_r": 1.0,
+    "span_f1": 1.0,
+    "noanswer_ok": 0.0,
+    "record_exact": 0.8824
+   },
+   "kids.shapes": {
+    "records": 262,
+    "op_acc": 0.5992,
+    "span_p": 1.0,
+    "span_r": 0.9782,
+    "span_f1": 0.989,
+    "noanswer_ok": 1.0,
+    "record_exact": 0.5725
+   },
+   "kids.tasks": {
+    "records": 211,
+    "op_acc": 0.782,
+    "span_p": 0.9377,
+    "span_r": 0.9294,
+    "span_f1": 0.9335,
+    "noanswer_ok": 0.0,
+    "record_exact": 0.6682
+   },
+   "media.music": {
+    "records": 275,
+    "op_acc": 0.8691,
+    "span_p": 0.9566,
+    "span_r": 0.8847,
+    "span_f1": 0.9193,
+    "noanswer_ok": 0.0,
+    "record_exact": 0.7636
+   },
+   "ui.avatar": {
+    "records": 237,
+    "op_acc": 0.8101,
+    "span_p": 0.7981,
+    "span_r": 0.7598,
+    "span_f1": 0.7785,
+    "noanswer_ok": 0.0,
+    "record_exact": 0.5232
+   },
+   "ui.help": {
+    "records": 154,
+    "op_acc": 0.8636,
+    "span_p": 0.8333,
+    "span_r": 0.7831,
+    "span_f1": 0.8075,
+    "noanswer_ok": 0.0,
+    "record_exact": 0.7468
+   },
+   "ui.shell": {
+    "records": 205,
+    "op_acc": 0.9317,
+    "span_p": 0.9222,
+    "span_r": 0.8902,
+    "span_f1": 0.9059,
+    "noanswer_ok": 0.0,
+    "record_exact": 0.8634
+   }
+  },
+  "passes_per_segment_avg": 40.3
+ },
+ "heldout_worlds": {
+  "overall": {
+   "records": 1189,
+   "op_acc": 0.3953,
+   "span_p": 0.6055,
+   "span_r": 0.3054,
+   "span_f1": 0.406,
+   "noanswer_ok": 1.0,
+   "record_exact": 0.1421
+  },
+  "worlds": {
+   "games.hangman": {
+    "records": 401,
+    "op_acc": 0.2918,
+    "span_p": 0.8142,
+    "span_r": 0.3217,
+    "span_f1": 0.4612,
+    "noanswer_ok": 0.0,
+    "record_exact": 0.2344
+   },
+   "kids.shop": {
+    "records": 422,
+    "op_acc": 0.4455,
+    "span_p": 0.7382,
+    "span_r": 0.2301,
+    "span_f1": 0.3508,
+    "noanswer_ok": 0.0,
+    "record_exact": 0.0261
+   },
+   "kids.time": {
+    "records": 366,
+    "op_acc": 0.4508,
+    "span_p": 0.4992,
+    "span_r": 0.3984,
+    "span_f1": 0.4432,
+    "noanswer_ok": 1.0,
+    "record_exact": 0.1749
+   }
+  },
+  "passes_per_segment_avg": 14.0
+ }
+}

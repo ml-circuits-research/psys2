@@ -754,3 +754,29 @@ Weak worlds (A+): ui.avatar 58 % (n 98; `setPart` vs `setPartUnknown` / `resetPa
 that the rules separate by arithmetic form (`calc` vs `double`, `receive` vs the leader question) are confused. Per world and 40 disagreements per model: `training/results/nx5-ops.json`.
 Reading: on the same segments the rules are right by construction, so the model alone is about 11 points behind in the operation; the hybrid D (rules first, model as fallback) and the span part
 are still to be measured.
+
+
+### NX4-B - span extraction from the legend questions (world-agnostic), A seeds
+Code `training/psys2_train/nx_spans.py`; operation docs `node scripts/export-nx-opdocs.mjs` (570 entries). Command (cwd `training`):
+`python -m psys2_train.nx_spans train --out <abs>/training/runs/nx-b-seed1 --seed 1` (distilbert-base-uncased, 3 epochs, batch 128, lr 5e-5, 160k span examples with 1:1 no-answer asks, 229k operation pairs with 2 hard negatives; bf16; GPU shared with vLLM, 8-15 min per epoch).
+Input `<ask> [SEP] <segment>` -> start/end or no answer; operation scored with `<operation doc + example> [SEP] <segment>`, the best of the world's candidate operations wins.
+Held out of training (all splits): kids.shop, games.hangman, kids.time. The span metrics use the gold operation's asks; slots without a span are no-answer asks. Metrics: `training/results/nx4-b.json`.
+
+| set | records | op acc | span P | span R | span F1 | record exact (op + all asks) |
+| --- | --- | --- | --- | --- | --- | --- |
+| test, seen worlds | 6742 | 0.8845 | 0.9347 | 0.9068 | 0.9205 | 0.7348 |
+| held-out worlds (dev + test) | 1189 | 0.3953 | 0.6055 | 0.3054 | 0.4060 | 0.1421 |
+
+Held-out per world: games.hangman op 0.292 / span F1 0.461; kids.shop 0.446 / 0.351; kids.time 0.451 / 0.443.
+Reading: on seen worlds the question-conditioned reader is decent for spans (F1 .92) but its operation choice (.88) is worse than the NX4-A head (A+ .87 on a harder, larger candidate set is comparable) and
+no-answer is weak (0.52: it fills slots that the label leaves empty). **On unseen worlds it does not generalise**: operation .40 (the operation docs of a new world are not enough), span F1 .41
+with recall .31 (the legend question alone often does not point at the words: asks such as "What is the item of the tasks.add request?" are synthesized for `core.request.arg.*`, and `kids.shop` / `hangman` slots are short numbers and
+letters). Browser cost: **40 encoder passes per segment on average on seen worlds** (14 on the held-out worlds), i.e. one per candidate operation plus one per ask, against one for A / A+
+(measured one pass: 5 ms at 4 threads, 13 ms at 1 thread on this CPU; the browser harness figure is 60 ms at 1x / 300 ms at 4x, so about 2.4 s to 12 s per segment for B). Not usable at the same browser cost unless the operation comes from the dispatcher
+or from head A and only the asks of that operation are run (about 3 passes).
+
+**Seeds for A** (test op acc / slot F1): seed 1 .7858 / .7402, seed 2 .7849 / .7418, seed 3 .7847 / .7418 (spread 0.1 point: the frozen-encoder result is stable; the gap to A+ is far larger than the seed noise).
+
+### Not done in this run
+- NX4-C (LoRA r=8 per world, `.onnx_adapter` export) and the full NX5 pipeline (spans -> deterministic canonicalisation -> wires -> validator -> interpreter, the hybrid D, the diagram bench scorer, the browser harness run with the exported A model) were not built; only the operation agreement above (NX5-lite) was measured.
+- Next steps for them: the exported ONNX of A is at `training/runs/export/nx-a-seed1` (model.int8.onnx + nx-meta.json with the 496 operations and 667 tag labels), ready for `training/experiments/browser-limits`.
