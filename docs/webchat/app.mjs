@@ -555,6 +555,7 @@ export async function mountPsys2(element, options = {}) {
   function applyEngineSettings() {
     if (!session) return;
     Object.assign(session, sessionOptions(settings));
+    session.fastPath = settings.fastPath === true;
     if (session.settings && typeof session.settings === 'object') session.settings.formalizer = settings.formalizer;
     session.setOption?.('formalizer', settings.formalizer);
     if (settings.formalizer === 'encoder' && dispatcherEnc && modelsAllowed) dispatcherEnc.prepare().catch(() => {});   // lazy: only now is the model fetched

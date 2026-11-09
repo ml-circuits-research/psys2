@@ -747,8 +747,6 @@ function _setPartColored(ctx, { part, value, color, n, text }) {
 }
 
 const REPLAY = { setPart: _setPart, step: _step, resetPart: _resetPart, removePart: _removePart, setColor: _setColor, shiftColor: _shiftColor, setPartColored: _setPartColored, resizePart: _resizePart };
-const YES = /^(yes|yeah|yep|yup|sure|ok|okay|please|yes please|sure thing|of course|why not|alright|do it|go ahead|yes do it|yes go ahead)[.!\s]*$/i;
-const NO = /^(no|nope|no thanks|no thank you|never ?mind|cancel|do not|don't|stay|stay as you are|leave it)[.!\s]*$/i;
 
 /** Modal input (spec 07 section 2): answers "yes" or "no" to an offer to become another character. */
 export function interceptInput(ctx, text) {
@@ -758,8 +756,10 @@ export function interceptInput(ctx, text) {
   s.pending = null; s.inputMode = null;
   const t = String(text).trim();
   if (!p) return { handled: false };
-  if (NO.test(t)) return { handled: true, reply: `OK, I stay ${spoken(s.character)}.` };
-  if (!YES.test(t)) return { handled: false };
+  // yes/no/cancel words are the shared ones of lang.common (ctx.lang.yesNo: "sure thing" yes; "nah", "stay", "never mind" no)
+  const yn = ctx.lang.yesNo(t);
+  if (yn === 'no') return { handled: true, reply: `OK, I stay ${spoken(s.character)}.` };
+  if (yn !== 'yes') return { handled: false };
   ensure(ctx);
   const pre = snap(s);
   s.character = p.character;

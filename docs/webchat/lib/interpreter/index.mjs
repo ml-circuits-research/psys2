@@ -16,6 +16,7 @@ import { parse, makeWire, atom, str, ref, get } from '../soplang/index.mjs';
 import { Memory, WireStore } from './memory.mjs';
 import { Renderer, fallbackText, listText } from './render.mjs';
 import { FormSession } from '../formalizer/rules/session.mjs';
+import { makeLang } from './lang.mjs';
 
 export { Memory, WireStore } from './memory.mjs';
 export { Renderer } from './render.mjs';
@@ -78,6 +79,20 @@ export class Interpreter {
     this.base = new WireStore();
     for (const w of set.list()) for (const k of w.kb) this.base.add(k);
     this.renderer = new Renderer(set);
+    this._lang = null;
+  }
+
+  /** Shared dialogue vocabulary (yes/no, ordinals, degree, colour ...) built from the phrase groups and lexicons of `lang.common` (spec 04). */
+  get lang() {
+    if (!this._lang) {
+      const phrases = new Map();
+      for (const w of this.set.list()) for (const ph of w.phrases ?? []) phrases.set(ph.id, ph.alts.map((a) => a.join(' ')));
+      this._lang = makeLang({
+        phrase: (id) => phrases.get(id),
+        lexicon: (id) => { const l = this.set.list().flatMap((w) => w.lexicons).find((x) => x.id === id); return l ? [...l.words] : []; },
+      });
+    }
+    return this._lang;
   }
 
   createSession() { return new Session(this); }
@@ -320,6 +335,8 @@ export class Interpreter {
       patterns: (worldId) => (this.set.get(worldId)?.patterns ?? []).map((p) => ({ id: p.id, kind: p.kind, priority: p.priority, examples: [...p.examples] })),
       /** Words of a lexicon (by lexicon id, e.g. 'lex.kids.animals.names'); [] when unknown. */
       lexicon: (id) => { const l = this.set.list().flatMap((w) => w.lexicons).find((x) => x.id === id); return l ? [...l.words] : []; },
+      /** Shared vocabulary of lang.common: yesNo, unsure, cancel, stripLead, ordinal, degree, colour, size, position ... */
+      lang: this.lang,
       ask_text: (key) => L.keyInfo(key)?.ask,
       name: (id) => this.renderer.nameOf(mem, String(id).replace(/^\$/, '')),
       /** List the loaded worlds: [{ id, title, summary, status, doc }]. Browser-safe, read-only. */

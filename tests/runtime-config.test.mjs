@@ -4,7 +4,8 @@ import { RUNTIME_DEFAULTS, MODES, DEFAULT_MODE, settingsForMode, policyFromSetti
 import { DEFAULT_SETTINGS } from '../docs/webchat/ui/settings.mjs';
 
 test('the webchat defaults are the runtime defaults, and the shipped mode is encoder+n1', () => {
-  for (const k of Object.keys(RUNTIME_DEFAULTS)) assert.equal(DEFAULT_SETTINGS[k], RUNTIME_DEFAULTS[k], k);
+  // fastPath is the one documented webchat override: the webchat answers at once when the rules read a whole clause (spec 06 Performance)
+  for (const k of Object.keys(RUNTIME_DEFAULTS).filter((x) => x !== 'fastPath')) assert.equal(DEFAULT_SETTINGS[k], RUNTIME_DEFAULTS[k], k);
   assert.equal(DEFAULT_MODE, 'encoder+n1');
   assert.deepEqual(settingsForMode(DEFAULT_MODE), { ...RUNTIME_DEFAULTS });
 });
