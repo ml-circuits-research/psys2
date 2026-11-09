@@ -91,6 +91,40 @@ test('editor: the same kind of command stays one text ("salt and a pinch of pepp
   assert.match(blocks[0].text, /pinch of pepper/);
 });
 
+// ---- validator repairs (G7) ----------------------------------------------------------------------------------------------------
+const { createDispatchValidator } = await import('../src/dialog/dispatch-validate.mjs');
+const validator = createDispatchValidator({ engine });
+const W = (...pairs) => pairs.map(([world, score]) => ({ world, score }));
+const piece = (text, worlds, start) => ({ start, end: start + text.length, text, worlds });
+const msg = (text, segments, context = {}) => ({ id: 't', text, context: { tab: 'hangman', recent_worlds: [], session: [], ...context }, segmentations: [{ score: -0.1, segments }] });
+
+test('validator merge repair: "play hangman word" | "lion" is read as one clause', async () => {
+  const t = 'play hangman word lion guess l';
+  const r = await validator.validate(msg(t, [piece('play hangman word', W(['games.hangman', 0.99]), 0), piece('lion', W(['games.hangman', 0.99]), 18), piece('guess l', W(['games.hangman', 0.99]), 23)]));
+  assert.equal(r.status, 'understood');
+  assert.deepEqual(r.produced.map((p) => p.text), ['play hangman word lion', 'guess l']);
+});
+
+test('validator split repair: "new game center top left" is cut into the commands the rules read, each in its own world', async () => {
+  const t = 'new game center top left';
+  const r = await validator.validate(msg(t, [piece(t, W(['games.tictactoe', 0.99], ['ui.shell', 0.005], ['docs.editor', 0.001]), 0)], { tab: 'tictactoe' }));
+  assert.equal(r.status, 'understood');
+  assert.deepEqual(r.produced.map((p) => p.text), ['new game', 'center', 'top left']);
+  assert.equal(r.produced[0].world, 'ui.shell');
+});
+
+test('validator: a valid reading of a less probable world beats an invalid reading of the more probable one', async () => {
+  const r = await validator.validate(msg('new game', [piece('new game', W(['games.tictactoe', 0.999], ['ui.shell', 0.0005]), 0)], { tab: 'tictactoe' }));
+  assert.equal(r.status, 'understood');
+  assert.equal(r.produced[0].world, 'ui.shell');
+});
+
+test('validator: repairs never turn an unread message into a reading', async () => {
+  const t = 'zork blorp flim';
+  const r = await validator.validate(msg(t, [piece(t, W(['games.hangman', 0.9]), 0)]));
+  assert.equal(r.status, 'not_understood');
+});
+
 test('guess: a list of answers is applied in order', async () => {
   for (const msg of ['yes, no, I don\'t know, and then maybe', 'yes no I don\'t know maybe']) {
     const s = session();

@@ -51,6 +51,9 @@ export const DEFAULT_POLICY = {
   normalizerMinScore: -0.3,   // rewrites whose provider score (length-normalized log-probability) is lower are not tried; null = no threshold (tuned on dev and the fresh batches, N1)
   valueLost: 'unknown',        // which unknown source words must survive a rewrite: 'unknown' (all words the world does not know: names, junk) or 'capitalized' (only capitalized ones)
   checkValues: true,          // a rewrite must also keep numbers, colours, negation, quoted text and the value words of the piece (src/dialog/value-check.mjs)
+  validFirst: true,           // G7: a piece's best reading is a valid one even when an invalid reading of a more probable world scores higher ("new game" read by the shell, not by the game the model named)
+  splitRepair: 3,             // G7: a piece nobody reads is cut into 2 (or 3, when 3) parts that the rules read, in one world; 0 = off
+  mergeRepair: 2,             // G7: how many merges of two pieces cut apart inside a clause (no punctuation or connective between) are tried as extra segmentations; 0 = off
   intersegmentContext: true,  // pieces after the first run in a session where the earlier chosen pieces were committed
 };
 
@@ -257,8 +260,10 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
     const clean = (x) => x.chosen.rank === 1 && x.chosen.variant === 'original';
     return !(clean(q) && clean(p));
   });
+  const o4 = 4;   // G7: a piece is not read at all: below a complete reading that only has a weak cut (3)
   const tierOf = (pieces, text = '') => {
-    if (!pieces.length || pieces.some((p) => !p.valid) || weakCut(pieces, text)) return 3;
+    if (!pieces.length || pieces.some((p) => !p.valid)) return o4;
+    if (weakCut(pieces, text)) return 3;
     if (pieces.some((p) => p.chosen.partial || p.chosen.variant === 'partial' || p.chosen.fallback)) return 2;
     if (pieces.some((p) => p.chosen.variant === 'simplified' || p.chosen.variant === 'normalized')) return 1;
     return 0;
@@ -375,7 +380,7 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
       }
       // best attempt: highest score; ties (within tieEps) between different worlds go to the routing policy
       let best = null;
-      const order = [...attempts].sort((a, b) => b.score - a.score || a.rank - b.rank || (a.variant === 'original' ? -1 : 1));
+      const order = [...attempts].sort((a, b) => (o.validFirst ? Number(!!b.valid) - Number(!!a.valid) : 0) || b.score - a.score || a.rank - b.rank || (a.variant === 'original' ? -1 : 1));
       best = order[0] ?? null;
       let tie = null;
       if (best?.valid) {
@@ -406,6 +411,64 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
     for (const seg of segs) evals.push(await evalSegmentation(pred, seg, o, false));
     if (normalizer && o.tryNormalizer && evals.every((e) => e.tier > 1)) {
       for (const [i, seg] of segs.entries()) if (seg.index < o.normalizerSegmentations) evals[i] = await evalSegmentation(pred, seg, o, true);
+    }
+    // merge repair (G7): two pieces cut apart inside a clause ("play hangman word" | "lion") are also tried as one piece; the tier and the score then decide
+    const lead = [...evals].sort((a, b) => a.tier - b.tier || b.score - a.score || a.index - b.index)[0];
+    if (o.mergeRepair && lead && segs[lead.index]) {
+      const top = segs[lead.index];
+      let tried = 0;
+      for (let i = 0; i + 1 < top.segments.length && tried < o.mergeRepair; i++) {
+        const a = top.segments[i], b = top.segments[i + 1];
+        const gap = pred.text.slice(a.end, b.start);
+        if (DELIMITED.test(gap) || DELIMITED.test(a.text.slice(-1)) || /^(and|then|also|but|or|next)\b/i.test(b.text)) continue;
+        if (b.text.trim().split(/\s+/).length > 2) continue;   // only a short fragment is an argument cut off its command; a longer piece is a command of its own ("add a paragraph hello world")
+        const seen = new Map();
+        for (const w of [...a.worlds, ...b.worlds]) if (!seen.has(w.world) || seen.get(w.world).score < w.score) seen.set(w.world, w);
+        const merged = { start: a.start, end: b.end, text: pred.text.slice(a.start, b.end), worlds: [...seen.values()].sort((x, y) => y.score - x.score) };
+        const variant = { index: evals.length, score: lead.dispatcherScore ?? top.score, segments: [...top.segments.slice(0, i), merged, ...top.segments.slice(i + 2)], merged: true };
+        const ev = await evalSegmentation(pred, variant, o, false);
+        if (ev.valid) evals.push(ev);   // a repair only counts when every piece is read
+        tried++;
+      }
+    }
+    // split repair (G7): a piece nobody reads that is a run of commands without separators ("new game center top left") is cut into the fewest parts
+    // that the rules read, all in the same candidate world; the result competes as one more segmentation
+    const lead2 = [...evals].sort((a, b) => a.tier - b.tier || b.score - a.score || a.index - b.index)[0];
+    if (o.splitRepair && lead2 && !lead2.valid && segs[lead2.index > segs.length - 1 ? 0 : lead2.index]) {
+      const baseSeg = lead2.index < segs.length ? segs[lead2.index] : { ...segs[0], segments: lead2.pieces.map((p) => ({ start: p.start, end: p.end, text: p.text, worlds: segs[0].segments.find((q) => q.start <= p.start && q.end >= p.end)?.worlds ?? [] })) };
+      const bad = lead2.pieces.findIndex((p) => !p.valid);
+      const piece = baseSeg.segments[bad];
+      const words = [...String(piece?.text ?? '').matchAll(/\S+/g)].map((m) => ({ s: m.index, e: m.index + m[0].length }));
+      if (piece && words.length >= 2 && words.length <= 9 && !/[,;]/.test(piece.text)) {
+        const okPart = async (w, text) => { const r = await check(pred.context, [], w, text, o); return r.valid || (o.acceptRefused && r.refused); };
+        const partText = (a, b) => piece.text.slice(words[a].s, words[b].e);
+        let found = null;
+        const cutSets = [];
+        for (let i = 1; i < words.length; i++) cutSets.push([i]);
+        if (o.splitRepair >= 3) for (let i = 1; i < words.length; i++) for (let j = i + 1; j < words.length; j++) cutSets.push([i, j]);
+        for (const cs of cutSets) {
+          const bounds = [0, ...cs, words.length];
+          const parts = bounds.slice(0, -1).map((b, k) => [b, bounds[k + 1] - 1]);
+          const withWorld = [];
+          for (const [a, b] of parts) {
+            let hit = null;
+            for (const w of piece.worlds.slice(0, 3)) if (await okPart(w.world, partText(a, b))) { hit = w; break; }
+            if (!hit) break;
+            withWorld.push([a, b, hit]);
+          }
+          if (withWorld.length === parts.length) {
+            // prefer the cut in which most parts are read by the world the model named for the piece (a fragment read by another world is the weaker reading)
+            const own = withWorld.filter(([, , h]) => h.world === piece.worlds[0].world).length;
+            if (!found || own > found.own) found = { parts: withWorld, own };
+          }
+        }
+        if (found) {
+          const pieces2 = found.parts.map(([a, b, hit]) => ({ start: piece.start + words[a].s, end: piece.start + words[b].e, text: partText(a, b), worlds: [hit, ...piece.worlds.filter((x) => x.world !== hit.world)] }));
+          const variant = { index: evals.length, score: lead2.dispatcherScore ?? baseSeg.score, segments: [...baseSeg.segments.slice(0, bad), ...pieces2, ...baseSeg.segments.slice(bad + 1)], split: true };
+          const ev = await evalSegmentation(pred, variant, o, false);
+          if (ev.valid) evals.push(ev);
+        }
+      }
     }
     // winner: lowest validity class first (complete before partial, original/spell before generated); within a class the best total score; ties keep the dispatcher's order
     const ranked = [...evals].sort((a, b) => a.tier - b.tier || b.score - a.score || a.index - b.index);

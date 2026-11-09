@@ -542,7 +542,7 @@ function _setType(ctx, args) {
 function _setTitle(ctx, { t }) {
   const r = needChart(ctx);
   if (r.env) return r.env;
-  const title = String(t ?? '').trim().replace(/^["'“”]+|["'“”]+$/g, '');
+  const title = String(t ?? '').trim().replace(/[\s,]+(?:pls|plz|please|thanks|thank you|thx|for me|and also|then|too)\W*$/i, '').replace(/^["'“”]+|["'“”]+$/g, '');   // "call it Fruit pls": politeness is no part of the title
   if (!title) return no('unsupported', 'What should the chart be called?');
   r.c.title = cap(title);
   return done(ctx, `OK, the chart is called "${r.c.title}".`);

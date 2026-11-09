@@ -106,6 +106,7 @@ export function selfCorrect(tokens, { whole = false } = {}) {
     const before = toks.slice(0, found.i);
     while (before.length && before[before.length - 1].lower === ',') before.pop();
     let after = toks.slice(found.i + found.len);
+    if (found.len === 1 && ['and', 'then'].includes(after[0]?.lower) && isBareAnswer(before.filter(isWord).slice(-1))) return null;   // "yes, no and what is 2 plus 2": "no" is an answer joined by "and"
     while (after.length && (after[0].lower === ',' || after[0].lower === 'and')) after = after.slice(1);
     // the correction runs up to the next separator
     const cut = after.findIndex((t) => t.lower === ',' || t.lower === 'then');

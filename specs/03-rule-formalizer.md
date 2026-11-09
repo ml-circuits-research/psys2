@@ -317,6 +317,13 @@ Selection used to compare segmentations by total score only, so an incomplete se
 - **Weak cuts**: a segmentation whose two adjacent pieces are separated inside a clause (no punctuation or connective between them) is class 3 unless both neighbours are read cleanly (top-ranked world, original text). A mid-clause split such as `what is 7 plus 5` + `minus 2` read by another world never counts as a complete reading and competes by score as before (kids.arith#053, ui.avatar#027).
 - Tests: `tests/dispatch-order.test.mjs` ("and" joining colours, operands, objects, cities).
 
+**Repairs of the dispatcher's cuts and choices (G7).** Policy options, all on by default, evaluated after the dispatcher's segmentations (and the normalizer) and added to the same pool, so the class and score of section 7.13 decide:
+- `validFirst`: within a piece, a valid reading always beats an invalid one, however probable the invalid world is (the score penalty alone let a world with 0.999 win over the shell that really reads "new game"). Among valid readings the score decides as before.
+- Tier 4 (new): some piece is not read at all. Tier 3 now means only "complete, but two pieces are cut apart inside a clause and a neighbour is not clean", so a complete reading with a weak cut beats a segmentation with an unread piece.
+- `mergeRepair` (2): for the leading segmentation, up to N pairs of adjacent pieces cut apart inside a clause (no punctuation or connective between them) whose second piece has at most two words ("play hangman word" | "lion") are also tried as one piece (worlds of both, best score first).
+- `splitRepair` (3): when the leading segmentation has an unread piece of 2 to 9 words without commas ("new game center top left"), it is cut into 2 parts (3 when the option is 3) such that every part is read by one of the piece's top 3 worlds. Parts may use different worlds ("new game" by the shell, "center" by the game); the cut with the most parts in the world the model named for the piece wins.
+A repair only enters the pool when every piece of it is read; it never turns an unread message into a worse one. Tests: `tests/long-messages.test.mjs`.
+
 ### 7.14 One runtime configuration for every host (G5)
 The webchat and the evaluators used to build the pipeline separately (the webchat enabled the normalizer, `eval-operational` did not), so a reported number did not describe the shipped product. `src/dialog/runtime-config.mjs` (no `node:*` imports, copied into `docs/webchat/lib/dialog/`) is now the only place that defines it.
 - **Settings**: `RUNTIME_DEFAULTS` = `{ formalizer: 'encoder', encoderAcceptRefused: true, partialUnderstanding: true, normalizer: true, spellcheck: true }`. `docs/webchat/ui/settings.mjs` spreads it into `DEFAULT_SETTINGS`.
