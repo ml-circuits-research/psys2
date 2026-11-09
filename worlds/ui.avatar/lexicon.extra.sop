@@ -23,6 +23,9 @@
     word=facial_hair
     word=mask
     word=cheek
+    word=eyebrow
+    word=brow
+    word=nose
 
 @lex.ui.avatar.colorparts core.lexicon
     class=noun
@@ -100,6 +103,7 @@
     word=bored
     word=blank
     word=smug
+    word=cool
     word=stressed
     word=in_love
     word=loving
@@ -292,6 +296,27 @@
     word=smiley:emoji
     word=emoticon:emoji
     word=smiley_face:emoji
+    word=drawing:portrait
+    word=sketch:portrait
+    word=illustration:portrait
+    word=line_art:portrait
+    word=toon:cartoon
+    word=comic:cartoon
+    word=cartoon_person:cartoon
+    word=cartoon_character:cartoon
+    word=child:kid
+    word=little_kid:kid
+    word=toddler:kid
+    word=youngster:kid
+    word=pixel:pixel_person
+    word=pixel_art:pixel_person
+    word=pixelated:pixel_person
+    word=retro:pixel_person
+    word=pixel_bot:pixel_robot
+    word=retro_robot:pixel_robot
+    word=funny_emoji:fun_emoji
+    word=funny_face:fun_emoji
+    word=party_emoji:fun_emoji
 
 @names.head core.lexicon
     class=names
@@ -445,6 +470,46 @@
     word=swirly_moustache:moustache8
     word=hair_colored_beard:full4
     word=hair_colored_moustache:moustache9
+
+@names.hair core.lexicon
+    class=names
+    doc="Spoken names of numbered or cryptic hairstyles of the portrait (lorelei), cartoon (micah), kid (big-smile) and pixel characters, chosen by looking at contact sheets of the drawings; word=<variant id>:<spoken name>. The rest of the portrait's hairstyles stay numbered (hair style 12)."
+    word=variant01:short_sleek_hair
+    word=variant02:short_swept_hair
+    word=variant04:spiky_hair
+    word=variant05:big_curly_hair
+    word=variant09:short_curly_hair
+    word=variant13:bob_hair
+    word=variant14:bun_with_bangs
+    word=variant21:long_straight_hair
+    word=variant25:balding_hair
+    word=variant26:twin_buns
+    word=variant27:mohawk
+    word=variant33:ponytail
+    word=variant35:long_wavy_hair
+    word=variant39:tight_curly_hair
+    word=dannyPhantom:side_swept_hair
+    word=dougFunny:wispy_hair
+    word=fonze:quiff
+    word=full:long_wavy_hair
+    word=mrClean:bald_head
+    word=mrT:mohawk
+    word=pixie:pixie_cut
+    word=bowlCutHair:bowl_cut
+    word=bunHair:top_bun
+    word=curlyBob:curly_bob
+    word=curlyShortHair:short_curly_hair
+    word=froBun:afro_bun
+    word=halfShavedHead:half_shaved_head
+    word=shavedHead:shaved_head
+    word=shortHair:short_hair
+    word=straightHair:long_straight_hair
+    word=wavyBob:wavy_bob
+
+@alias.glasses core.lexicon
+    class=alias
+    doc="The cartoon (micah) has round and square glasses; word=<alias>:<variant id> lets people say plain glasses."
+    word=glasses:round
 
 @names.expression core.lexicon
     class=names
@@ -766,6 +831,19 @@
     word=gal
     word=boy
     word=lad
+    word=little_girl
+    word=little_boy
+    word=small_girl
+    word=small_boy
+    word=old_man
+    word=old_woman
+    word=elderly_man
+    word=elderly_woman
+    word=grandfather
+    word=grandmother
+    word=grandpa
+    word=grandma
+    word=granny
 
 @lex.ui.avatar.self core.lexicon
     class=noun
@@ -861,3 +939,28 @@
     word=zigzag
     word=wavy
     word=tongue
+
+@lex.ui.avatar.gallery core.lexicon
+    class=noun
+    doc="What the gallery of the Avatar tab shows: the characters (show me the characters, show me other avatars)."
+    word=character
+    word=avatar
+    word=gallery
+    word=other_avatar
+    word=other_character
+    word=more_avatar
+    word=more_character
+    word=different_avatar
+    word=different_character
+    word=avatar_option
+    word=choice_of_avatar
+
+@lex.ui.avatar.charstep core.lexicon
+    class=modifier
+    doc="Words that step through the gallery of characters (next character, previous avatar, another one)."
+    word=next
+    word=previous
+    word=another
+    word=different
+    word=other
+    word=prior

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 // ui.avatar on DiceBear: generated legend and lexicon, ops data consistency, vendored files, host option mapping.
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -7,13 +8,23 @@ import { createEngine, runWorldTests } from '../src/dialog/index.mjs';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { generate, splitName, lemmaOf } from '../scripts/legend-from-dicebear.mjs';
 import * as ops from '../worlds/ui.avatar/ops.mjs';
-import { avatarOptions, normalizeState, partsCaption } from '../docs/webchat/ui/avatar.mjs';
+import { avatarOptions, normalizeState, partsCaption, CHARACTER_SAY, CHARACTER_LIST, CREDITS, KIND_SAY, loadStyle } from '../docs/webchat/ui/avatar.mjs';
+import { buildGallery } from '../scripts/build-avatar-gallery.mjs';
 
 const root = (p) => fileURLToPath(new URL(`../${p}`, import.meta.url));
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
 const world = engine.set.get('ui.avatar');
 const lex = (id) => world.lexicons.find((l) => l.id === id)?.words ?? [];
-const CHARS = ['robot', 'person', 'emoji'];
+const CORE = ['robot', 'person', 'emoji'];
+const CHARS = [...CORE, 'portrait', 'cartoon', 'kid', 'pixel', 'pixelbot', 'funemoji'];
+const FILES = { robot: 'voxel-bot', person: 'open-peeps', emoji: 'moods', portrait: 'lorelei', cartoon: 'micah', kid: 'big-smile', pixel: 'pixel-art', pixelbot: 'pixelbot', funemoji: 'fun-emoji' };
+/** The state of the world after becoming a character (its start look is filled from the generated data). */
+async function stateOf(ch, ...more) {
+  const s = engine.createSession();
+  await s.send(`Become ${CHARACTER_SAY[ch]}.`);
+  for (const m of more) await s.send(m);
+  return s.state('ui.avatar');
+}
 const variantIds = (ch, key) => [...new Set(lex(`lex.ui.avatar.data.${ch}.${key}`).map((w) => w.split(':')[1]))];
 
 test('legend.sop and lexicon.sop are exactly what the generator produces from the vendored style definitions', async () => {
@@ -60,7 +71,7 @@ test('every lexicon entry the formalizer can match has at most three words and a
 test('initial state and mood table only use variants and palette entries of the style definitions', () => {
   const s = ops.initialState();
   assert.equal(s.character, 'robot');
-  for (const ch of CHARS) {
+  for (const ch of CORE) {
     for (const key of lex(`lex.ui.avatar.data.${ch}.components`)) assert.ok([...variantIds(ch, key), 'none'].includes(s[ch][key]), `${ch}.${key}=${s[ch][key]}`);
     for (const key of lex(`lex.ui.avatar.data.${ch}.colors`)) assert.ok(lex(`lex.ui.avatar.palette.${ch}.${key}`).includes(s[ch].colors[key]), `${ch}.colors.${key}`);
   }
@@ -114,20 +125,33 @@ test('only another character can do it: the avatar offers to become that charact
   assert.match(amb.text, /no background color/);
 });
 
-test('vendored DiceBear: header, README with licences, styles are CC0', async () => {
+test('vendored DiceBear: header, README with licences, every style is CC0 or CC BY and credited', async () => {
   const head = (await readFile(root('docs/webchat/vendor/dicebear-core.mjs'), 'utf8')).slice(0, 400);
   assert.match(head, /@dicebear\/core 10\.7\.0 \| MIT \| https:\/\/github\.com\/dicebear\/dicebear/);
   const readme = await readFile(root('docs/webchat/vendor/README.md'), 'utf8');
-  for (const f of ['dicebear-core.mjs', 'voxel-bot.json', 'open-peeps.json', 'moods.json']) assert.ok(readme.includes(f), f);
-  for (const style of ['voxel-bot', 'open-peeps', 'moods']) {
+  const licenses = await readFile(root('docs/webchat/vendor/dicebear-styles/LICENSES.md'), 'utf8');
+  for (const f of ['dicebear-core.mjs', 'dicebear-styles/', 'gallery.json']) assert.ok(readme.includes(f), f);
+  assert.match(readme, /CC BY 4\.0/);
+  for (const ch of CHARS) {
+    const style = FILES[ch];
     const def = JSON.parse(await readFile(root(`docs/webchat/vendor/dicebear-styles/${style}.json`), 'utf8'));
-    assert.equal(def.meta.license.name, 'CC0 1.0', style);
+    // only licences compatible with AGPL-3.0 and shown properly: CC0 needs nothing, CC BY needs the credit the tab and LICENSES.md carry
+    assert.ok(['CC0 1.0', 'CC BY 4.0'].includes(def.meta.license.name), `${style}: ${def.meta.license.name}`);
+    assert.ok(licenses.includes(`dicebear-styles/${style}.json`) && licenses.includes(def.meta.creator.name), `${style} in LICENSES.md`);
+    assert.equal(CREDITS[ch].license, def.meta.license.name, `${ch} credit licence`);
+    assert.equal(CREDITS[ch].creator, def.meta.creator.name, `${ch} credit creator`);
+    assert.equal(CREDITS[ch].url, def.meta.license.url, `${ch} credit url`);
+    assert.equal(CREDITS[ch].by, def.meta.license.name !== 'CC0 1.0', `${ch} attribution flag`);
   }
+  assert.deepEqual(CHARACTER_LIST, CHARS);
+  const vendorScript = await readFile(root('scripts/vendor-dicebear.mjs'), 'utf8');
+  const list = vendorScript.match(/export const STYLES = \[([^\]]*)\]/)[1];
+  for (const dropped of ['avataaars', 'bottts', 'notionists', 'adventurer', 'croodles', 'personas']) assert.ok(!list.includes(`'${dropped}'`), `${dropped} must not be vendored`);
 });
 
 test('host: state maps to DiceBear options, and the vendored core draws every variant of every component', async () => {
   const { Avatar, Style } = await import(root('docs/webchat/vendor/dicebear-core.mjs'));
-  const files = { robot: 'voxel-bot', person: 'open-peeps', emoji: 'moods' };
+  const files = FILES;
   const base = ops.initialState();
   const o = avatarOptions(base);
   assert.deepEqual(o.eyesVariant, ['round']); assert.deepEqual(o.bodyColor, ['74c0fc']); assert.equal(o.topProbability, 100); assert.deepEqual(o.topVariant, ['antenna']);
@@ -140,9 +164,10 @@ test('host: state maps to DiceBear options, and the vendored core draws every va
   for (const ch of CHARS) {
     const style = new Style(JSON.parse(await readFile(root(`docs/webchat/vendor/dicebear-styles/${files[ch]}.json`), 'utf8')));
     const seen = new Set();
+    const start = await stateOf(ch);
     for (const key of lex(`lex.ui.avatar.data.${ch}.components`)) {
       for (const id of variantIds(ch, key)) {
-        const st = structuredClone(base); st.character = ch; st[ch][key] = id;
+        const st = structuredClone(start); st.character = ch; st[ch][key] = id;
         const svg = new Avatar(style, avatarOptions(st)).toString();
         assert.match(svg, /^<svg /);
         seen.add(svg);
@@ -150,4 +175,101 @@ test('host: state maps to DiceBear options, and the vendored core draws every va
     }
     assert.ok(seen.size > 10, `${ch} drew ${seen.size} different images`);
   }
+});
+
+test('every character draws every variant of every component and every palette color (AV)', async () => {
+  const { Avatar, Style } = await import(root('docs/webchat/vendor/dicebear-core.mjs'));
+  for (const ch of CHARS.slice(3)) {
+    const style = new Style(JSON.parse(await readFile(root(`docs/webchat/vendor/dicebear-styles/${FILES[ch]}.json`), 'utf8')));
+    const start = await stateOf(ch);
+    assert.equal(start.character, ch);
+    const seen = new Set();
+    for (const key of lex(`lex.ui.avatar.data.${ch}.components`)) {
+      for (const id of variantIds(ch, key)) {
+        const st = structuredClone(start); st[ch][key] = id;
+        const svg = new Avatar(style, avatarOptions(st)).toString();
+        assert.match(svg, /^<svg /, `${ch}.${key}=${id}`);
+        seen.add(svg);
+      }
+    }
+    for (const key of lex(`lex.ui.avatar.data.${ch}.colors`)) {
+      for (const hex of lex(`lex.ui.avatar.palette.${ch}.${key}`)) {
+        const st = structuredClone(start); st[ch].colors[key] = hex;
+        assert.match(new Avatar(style, avatarOptions(st)).toString(), /^<svg /, `${ch}.colors.${key}=${hex}`);
+      }
+    }
+    assert.ok(seen.size > 8, `${ch} drew ${seen.size} different images`);
+    for (const key of lex(`lex.ui.avatar.data.${ch}.components`)) assert.ok([...variantIds(ch, key), 'none'].includes(start[ch][key]), `${ch}.${key}=${start[ch][key]}`);
+  }
+});
+
+test('presets: every kind a character offers keeps that character, and a character without it turns into the person or the kid', async () => {
+  for (const ch of CHARS) {
+    const st = await stateOf(ch);
+    for (const kind of st.chips.kinds) {
+      const after = await stateOf(ch, KIND_SAY[kind]);
+      assert.equal(after.character, ch, `${ch}: ${kind}`);
+      assert.notDeepEqual(after[ch], st[ch], `${ch}: ${kind} changed nothing`);
+      for (const key of lex(`lex.ui.avatar.data.${ch}.components`)) assert.ok([...variantIds(ch, key), 'none'].includes(after[ch][key]), `${ch}.${key}=${after[ch][key]}`);
+    }
+  }
+  assert.equal((await stateOf('robot', 'Make the avatar a woman.')).character, 'person');
+  assert.equal((await stateOf('kid', 'Make the avatar a woman.')).character, 'person');
+  assert.equal((await stateOf('robot', 'Become a little girl.')).character, 'kid');
+  assert.equal((await stateOf('portrait', 'Make the avatar a woman.')).portrait.hair, 'variant35');
+  assert.equal((await stateOf('robot', 'Become a pixel woman.')).pixel.hair, 'long03');
+  const old = await stateOf('portrait', 'Become an old man.');
+  assert.notEqual(old.portrait.colors.hair, (await stateOf('portrait')).portrait.colors.hair);
+});
+
+test('moods: every mood a character offers is valid for its style and is read back', async () => {
+  for (const ch of CHARS) {
+    const st = await stateOf(ch);
+    for (const mood of st.chips.moods) {
+      const s = engine.createSession();
+      await s.send(`Become ${CHARACTER_SAY[ch]}.`);
+      await s.send(`Look ${mood}.`);
+      const now = s.state('ui.avatar')[ch];
+      for (const key of lex(`lex.ui.avatar.data.${ch}.components`)) assert.ok([...variantIds(ch, key), 'none'].includes(now[key]), `${ch} ${mood}: ${key}=${now[key]}`);
+      assert.match((await s.send('How do you feel?')).text, /I feel \w+\./, `${ch} ${mood}`);
+    }
+  }
+  assert.ok((await stateOf('funemoji')).chips.moods.length >= 5);
+});
+
+test('gallery thumbnails are exactly what the world draws (gallery.json is current)', async () => {
+  const text = await buildGallery();
+  assert.equal(await readFile(root('docs/webchat/vendor/dicebear-styles/gallery.json'), 'utf8'), text, 'run node scripts/build-avatar-gallery.mjs');
+  const g = JSON.parse(text);
+  for (const ch of CHARS) assert.match(g[ch], /^<svg /, ch);
+  assert.ok(Object.keys(g).length >= 25);
+});
+
+test('lazy loading: a style definition is fetched only when its character is first drawn, and only once', async () => {
+  const urls = [];
+  const real = globalThis.fetch;
+  globalThis.fetch = async (u) => { urls.push(String(u)); return { ok: true, json: async () => JSON.parse(await readFile(fileURLToPath(u), 'utf8')) }; };
+  try {
+    await loadStyle('portrait'); await loadStyle('portrait'); await loadStyle('pixelbot');
+  } finally { globalThis.fetch = real; }
+  assert.equal(urls.length, 2);
+  assert.match(urls[0], /lorelei\.json$/); assert.match(urls[1], /pixelbot\.json$/);
+  const src = await readFile(root('docs/webchat/ui/avatar.mjs'), 'utf8');
+  assert.doesNotMatch(src, /Object\.entries\(STYLE_FILES\)\.map\(async/, 'the host must not load every style at start');
+});
+
+test('part by number, gallery and nth-character commands (AV)', async () => {
+  const s = engine.createSession();
+  await s.send('Become a portrait.');
+  assert.equal(s.state('ui.avatar').portrait.hair, 'variant13');
+  assert.match((await s.send('Hair 12.')).text, /hair style 12/);
+  assert.equal(s.state('ui.avatar').portrait.hair, 'variant12');
+  assert.match((await s.send('Give yourself glasses 2.')).text, /glasses style 2/);
+  assert.equal(s.state('ui.avatar').portrait.glasses, 'variant02');
+  assert.equal(s.state('ui.avatar').character, 'portrait');
+  await s.send('Pick the fifth character.');
+  assert.equal(s.state('ui.avatar').character, 'cartoon');
+  await s.send('Next character.');
+  assert.equal(s.state('ui.avatar').character, 'kid');
+  assert.match((await s.send('Show me the characters.')).text, /I can be a robot, a person, an emoji, a portrait/);
 });

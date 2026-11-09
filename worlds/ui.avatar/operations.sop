@@ -92,7 +92,13 @@
     impl=setCharacter
     semantics=action
     action=avatar.setCharacter
-    doc="Becomes a robot, a person or an emoji. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+    doc="Becomes one of the characters (robot, person, emoji, portrait, cartoon, kid, pixel person, pixel robot, fun emoji), or a woman, man, girl, boy, old or little one with a fitting style and hair preset (kind=), optionally with a mood and with or without glasses or a beard. Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
+
+@op.ui.avatar.pickCharacter core.operation
+    impl=pickCharacter
+    semantics=action
+    action=avatar.pickCharacter
+    doc="Picks a character of the gallery by its number (the third one) or steps through the gallery (next, previous character). Every changing command also brings the avatar tab forward: ctx.request(\"ui.openTab\")."
 
 @op.ui.avatar.askCharacter core.operation
     impl=askCharacter

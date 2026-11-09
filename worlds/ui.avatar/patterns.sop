@@ -1346,3 +1346,78 @@
     priority=12
     skip=short
     example="Do you have glasses?"
+
+@shape.ui.avatar.gallery core.shape
+    family=list
+    verb="show|list|display|give|let_me_see|i_want_to_see|open"
+    obj="o:lex.ui.avatar.gallery"
+    det="the|your|ur|all_the|all|my"
+    forms=imp,wish,ind
+    sample="o=character"
+    emit="@{_} core.request action=avatar.listCharacters"
+    priority=12
+    canonical="Show me the characters."
+    example="Show me other avatars."
+    example="Show the gallery."
+
+@pat.ui.avatar.part.number core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [give_yourself|give_me|use|try|set|put|wear|i_want|i_would_like|pick|choose|select|show]? [your|the|my|ur]? {p:lex.ui.avatar.parts} [style|variant|version|type|number|no|option|nr]? {n:number} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.setPart arg.part={p} arg.n={n}"
+    kind=request
+    priority=11
+    example="Hair 13."
+    example="Give yourself eyes 5."
+    example="Choose hair style 7."
+
+@pat.ui.avatar.char.styled core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [become|be|turn_into|change_into|transform_into|look_like|i_want_to_be|i_wanna_be|show_me|i_want_to_see|make_me|make_yourself|make_the_avatar|give_me|i_want|i_wanna_see|let_me_see|make|turn_the_avatar_into|change_the_avatar_into] [a|an|the]? {m:lex.ui.avatar.moods?} {w:lex.ui.avatar.characters} {g:lex.ui.avatar.gender} [avatar|face|character|look|version]? [$lang.tail.filler|instead|again]?"
+    emit="@{_} core.request action=avatar.setCharacter arg.who={w} arg.kind={g} arg.mood={m}"
+    kind=request
+    priority=16
+    example="Become a pixel woman."
+    example="Make me a happy cartoon man."
+    example="Show me a portrait girl."
+
+@pat.ui.avatar.gender.with core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [become|be|turn_into|change_into|transform_into|look_like|i_want_to_be|i_wanna_be|show_me|i_want_to_see|make_me|make_yourself|make_the_avatar|give_me|i_want|i_wanna_see|let_me_see|make|turn_the_avatar_into|change_the_avatar_into] [a|an|the]? {m:lex.ui.avatar.moods?} {w:lex.ui.avatar.characters?} {g:lex.ui.avatar.gender} [with|and|wearing|that_has|who_has|who_wears] [a|an|some]? {x:lex.ui.avatar.options} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.setCharacter arg.who={w} arg.kind={g} arg.mood={m} arg.with={x}"
+    kind=request
+    priority=17
+    example="Make me a woman with glasses."
+    example="Become a man with a beard."
+
+@pat.ui.avatar.gender.without core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [become|be|turn_into|change_into|transform_into|look_like|i_want_to_be|i_wanna_be|show_me|i_want_to_see|make_me|make_yourself|make_the_avatar|give_me|i_want|i_wanna_see|let_me_see|make|turn_the_avatar_into|change_the_avatar_into] [a|an|the]? {m:lex.ui.avatar.moods?} {w:lex.ui.avatar.characters?} {g:lex.ui.avatar.gender} [without|with_no|but_without|and_no|no] [a|an|any]? {x:lex.ui.avatar.options} [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.setCharacter arg.who={w} arg.kind={g} arg.mood={m} arg.without={x}"
+    kind=request
+    priority=17
+    example="Become a man without a beard."
+    example="Make me a woman without glasses."
+
+@pat.ui.avatar.char.nth core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [show|pick|choose|take|use|select|i_want|i_would_like|give_me|go_to|switch_to|let_me_see|i_choose|i_pick|i_ll_take|i_will_take|try|i_want_to_see|show_me|select]? [me]? [the|my|number]? {o:ordinal} [character|avatar|picture|option|look|face] [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.pickCharacter arg.n={o}"
+    kind=request
+    priority=12
+    example="Show me the fifth avatar."
+    example="Pick the sixth character."
+    example="The second character."
+
+@pat.ui.avatar.char.nth.one core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [show|pick|choose|take|use|select|i_want|i_would_like|give_me|go_to|switch_to|let_me_see|i_choose|i_pick|i_ll_take|i_will_take|try|i_want_to_see|show_me|select]? [me]? [the|my|number]? {o:ordinal} [one|ones] [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.pickCharacter arg.n={o}"
+    kind=request
+    priority=20
+    tabOnly=true
+    canonical="The third one."
+    example="The third one."
+    example="Pick the fourth one."
+
+@pat.ui.avatar.char.step core.pattern
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.polite]? [show|pick|choose|take|use|select|give_me|go_to|switch_to|let_me_see|try|show_me|i_want|i_want_to_see|change_to|move_to]? [me]? [the|a|an|my]? {d:lex.ui.avatar.charstep} [character|avatar|look|one] [$lang.tail.filler]?"
+    emit="@{_} core.request action=avatar.pickCharacter arg.dir={d}"
+    kind=request
+    priority=12
+    example="Next character."
+    example="Show me another avatar."
+    example="Previous avatar."

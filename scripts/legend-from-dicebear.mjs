@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// SPDX-License-Identifier: AGPL-3.0-only
 // Builds the legend and the base lexicon of the world `ui.avatar` from the DiceBear style definitions.
 //
 // This is a small, runnable example of the C1 workflow (vision: C1 builds a legend from a tool's own documentation):
@@ -44,16 +45,29 @@ const CHARACTERS = [
   { id: 'robot', style: 'voxel-bot', noun: 'robot' },
   { id: 'person', style: 'open-peeps', noun: 'person' },
   { id: 'emoji', style: 'moods', noun: 'emoji' },
+  // AV: more characters (lazy-loaded by the host; reachable by becoming them, see ops.mjs CORE)
+  { id: 'portrait', style: 'lorelei', noun: 'portrait' },
+  { id: 'cartoon', style: 'micah', noun: 'cartoon' },
+  { id: 'kid', style: 'big-smile', noun: 'kid' },
+  { id: 'pixel', style: 'pixel-art', noun: 'pixel_person' },
+  { id: 'pixelbot', style: 'pixelbot', noun: 'pixel_robot' },
+  { id: 'funemoji', style: 'fun-emoji', noun: 'fun_emoji' },
 ];
+/** Styles whose skin and hair are one fixed colour in the definition: they borrow the palettes of open-peeps (the host passes any hex). */
+const BORROW_PALETTE = { lorelei: { skin: 'skin', hair: 'headContrast' } };
+/** Components whose variants are all `variantNN` get "<word> NN" display names; these wearable ones are also an option word ("glasses 2"). */
+const NUMBERED_WORD = { glasses: 'glass', earrings: 'earring', freckles: 'freckle', hat: 'hat', beard: 'beard', hairAccessories: 'hair_accessory' };
+const NUMBERED_ID = /^variant\d+$/;
 const SKIP_COMPONENTS = new Set(['animation']); // drawing detail used by the host, not something to talk about
 const OPTIONAL_NONE = 'none'; // components with `probability` can be hidden: the variant `none`
-const LABEL = { eyes: 'eyes', mouth: 'mouth', top: 'top piece', chest: 'chest', head: 'hairstyle', expression: 'expression', accessories: 'accessory', facialHair: 'facial hair', mask: 'mask', face: 'face shape', cheeks: 'cheeks' };
+const LABEL = { eyebrows: 'eyebrows', nose: 'nose', hair: 'hairstyle', beard: 'beard', glasses: 'glass', earrings: 'earrings', clothes: 'clothes', hat: 'hat', freckles: 'freckles', ears: 'ears', accessories: 'accessory', hairAccessories: 'hair accessory', details: 'details', sideburns: 'sideburns', shirt: 'shirt',
+  eyes: 'eyes', mouth: 'mouth', top: 'top piece', chest: 'chest', head: 'hairstyle', expression: 'expression', accessories: 'accessory', facialHair: 'facial hair', mask: 'mask', face: 'face shape', cheeks: 'cheeks' };
 const ASK = {
   eyes: 'Which eyes do you have?', mouth: 'Which mouth do you have?', top: 'What do you have on top?', chest: 'What do you have on your chest?',
   head: 'Which hairstyle do you have?', expression: 'Which expression do you have?', accessories: 'Which accessory do you wear?',
   facialHair: 'Which facial hair do you have?', mask: 'Which mask do you wear?', face: 'Which face shape do you have?', cheeks: 'Which cheeks do you have?',
 };
-const COLOR_LABEL = { body: 'body', accent: 'accent', screen: 'screen', glow: 'glow', background: 'background', skin: 'skin', clothing: 'clothing', headContrast: 'hair', face: 'face' };
+const COLOR_LABEL = { base: 'skin', hair: 'hair', shirt: 'shirt', earring: 'earring', eyeShadow: 'eye shadow', glasses: 'glasses', hat: 'hat', clothing: 'clothes', body: 'body', accent: 'accent', screen: 'screen', glow: 'glow', background: 'background', skin: 'skin', clothing: 'clothing', headContrast: 'hair', face: 'face' };
 
 // Named colours (base hues); `light_` and `dark_` variants of the main hues are derived.
 const BASE_COLORS = {
@@ -89,7 +103,7 @@ export function lemmaOf(words) {
   w[w.length - 1] = singularLemma(w[w.length - 1], new Map());
   return w.join('_');
 }
-const display = (words) => words.join('_');
+const display = (words) => words.map((w) => (/^\d+$/.test(w) ? String(Number(w)) : w)).join('_');
 const snake = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
 const lemmaOfPhrase = (s) => lemmaOf(snake(s).split('_'));
 /** Lexicon words for a spoken name: hyphens kept (one token) and split (several tokens); at most 3 tokens (the matcher's limit). */
@@ -121,18 +135,28 @@ async function versions() {
 /** Read the style definitions into a plain model. */
 async function loadModel() {
   const model = [];
+  const peeps = await readJson(path.join(VENDOR, 'dicebear-styles', 'open-peeps.json'));
   for (const c of CHARACTERS) {
     const def = await readJson(path.join(VENDOR, 'dicebear-styles', `${c.style}.json`));
     const components = [];
     for (const [key, comp] of Object.entries(def.components)) {
       if (SKIP_COMPONENTS.has(key)) continue;
       const optional = comp.probability != null;
-      const variants = Object.keys(comp.variants).map((id) => ({ id, words: splitName(id), lemma: lemmaOf(splitName(id)) }));
-      components.push({ key, optional, variants });
+      if (!comp.variants || (Object.keys(comp.variants).length < 2 && !optional)) continue; // a shared piece of the drawing, not a choice
+      const ids = Object.keys(comp.variants);
+      const numbered = ids.every((id) => NUMBERED_ID.test(id));
+      const variants = ids.map((id) => {
+        if (!numbered) return { id, words: splitName(id), lemma: lemmaOf(splitName(id)) };
+        const n = String(Number(id.match(/\d+/)[0]));
+        return { id, words: ['style', n], lemma: NUMBERED_WORD[key] ?? 'style', numbered: true };
+      });
+      components.push({ key, optional, variants, numbered });
     }
     const colors = [];
     for (const [key, col] of Object.entries(def.colors)) {
-      const values = col.values.map((v) => v.replace('#', '').toLowerCase());
+      let values = col.values.map((v) => v.replace('#', '').toLowerCase());
+      const borrow = BORROW_PALETTE[c.style]?.[key];
+      if (values.length < 2 && borrow && peeps.colors[borrow]) values = peeps.colors[borrow].values.map((v) => v.replace('#', '').toLowerCase());
       if (values.length < 2) continue; // a fixed colour (ink) cannot be chosen
       colors.push({ key, values, notEqualTo: col.notEqualTo ?? [] });
     }
@@ -228,8 +252,21 @@ export async function generate() {
     }
     if (!hit) throw new Error(`synonym ${s.logical}: ${s.alias} -> ${s.target}: no such word (words are the generated lemmas, e.g. 'medical_mask')`);
   }
+  // AV: a word of a new character that ends in a part word ("short_hair") must not hide the old reading "short" + hair of the
+  // original characters: when its first part is already an option word of one of them, the new character uses that word instead.
+  const CORE_IDS = new Set(['robot', 'person', 'emoji']);
+  const PART_WORD = new Set(['hair', 'hairstyle', 'haircut', 'mouth', 'eye', 'eyes', 'nose', 'beard', 'eyebrow', 'brow', 'head', 'face', 'mask', 'cheek', 'accessory']);
+  const coreWords = new Set();
+  for (const [k, list] of entries) if (k !== 'characters' && CORE_IDS.has(k.split('.')[0])) for (const e of list) coreWords.add(e.word);
+  for (const [k, list] of entries) {
+    if (k === 'characters' || CORE_IDS.has(k.split('.')[0])) continue;
+    for (const e of list) {
+      const parts = e.word.split('_');
+      if (parts.length > 1 && PART_WORD.has(parts.at(-1)) && coreWords.has(parts.slice(0, -1).join('_'))) e.word = parts.slice(0, -1).join('_');
+    }
+  }
   const options = new Set();
-  for (const [k, list] of entries) if (k !== 'characters') for (const e of list) if (e.word !== OPTIONAL_NONE) options.add(e.word);
+  for (const [k, list] of entries) if (k !== 'characters') for (const e of list) if (e.word !== OPTIONAL_NONE && e.word !== 'style') options.add(e.word);
 
   // ---- legend.sop ----
   const L = [];

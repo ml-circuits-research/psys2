@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// SPDX-License-Identifier: AGPL-3.0-only
 // Vendors DiceBear for the browser host UI (AGENTS.md "vendored-library rule", spec 07 section 5).
 //
 //   node scripts/vendor-dicebear.mjs
@@ -17,8 +18,13 @@ const REPO = fileURLToPath(new URL('..', import.meta.url));
 const VENDOR = path.join(REPO, 'docs/webchat/vendor');
 export const CORE_VERSION = '10.7.0';
 export const STYLES_VERSION = '10.6.0';
-// Only CC0 styles, so no attribution is needed; the licence of each is recorded from its definition meta.
-export const STYLES = ['voxel-bot', 'open-peeps', 'moods'];
+// CC0 and CC BY 4.0 styles only (both compatible with AGPL-3.0; CC BY needs the attribution that the Avatar tab and
+// LICENSES.md show). The licence of each is read from its own definition meta; the script refuses any other licence.
+// Left out on purpose: avataaars and bottts ("free for personal and commercial use", no standard licence), notionists
+// (454 KB, mostly numbered parts), adventurer (368 KB, numbered parts), personas, croodles (CC BY, but its hair variants are
+// indistinguishable at avatar size and its hair component is called `top`, which clashes with the robot's).
+export const STYLES = ['voxel-bot', 'open-peeps', 'moods', 'lorelei', 'micah', 'big-smile', 'pixel-art', 'pixelbot', 'fun-emoji'];
+const ALLOWED_LICENSES = new Set(['CC0 1.0', 'CC BY 4.0']);
 
 const run = (cmd, args, cwd) => execFileSync(cmd, args, { cwd, stdio: ['ignore', 'pipe', 'inherit'], encoding: 'utf8' });
 
@@ -52,7 +58,8 @@ try {
     const def = JSON.parse(await readFile(file, 'utf8'));
     await copyFile(file, path.join(VENDOR, 'dicebear-styles', `${style}.json`));
     const meta = def.meta ?? {};
-    rows.push({ style, name: meta.title ?? meta.name ?? style, license: meta.license?.name ?? meta.license ?? '?', url: meta.license?.url ?? '', creator: meta.creator?.name ?? meta.creator ?? '', source: meta.source?.url ?? meta.source ?? '' });
+    if (!ALLOWED_LICENSES.has(meta.license?.name)) throw new Error(`${style}: licence '${meta.license?.name}' is not CC0 1.0 or CC BY 4.0`);
+    rows.push({ style, name: meta.title ?? meta.name ?? style, license: meta.license?.name ?? meta.license ?? '?', url: meta.license?.url ?? '', creator: meta.creator?.name ?? meta.creator ?? '', source: meta.source?.url ?? meta.source ?? '', text: meta.license?.text ?? '' });
   }
 
   // 3. README
@@ -62,9 +69,11 @@ try {
     '| File | Library | Version | Source | Licence |', '| --- | --- | --- | --- | --- |',
     `| \`dicebear-core.mjs\` | @dicebear/core (one bundled ES module) | ${corePkg.version} | https://github.com/dicebear/dicebear | ${licence} |`, '',
     `## DiceBear style definitions (from @dicebear/styles ${stylesPkg.version})`, '',
-    'Each definition is copied unchanged to `dicebear-styles/<style>.json`. Only CC0 styles are used, so no attribution is required; the creator is credited anyway.', '',
-    '| File | Style | Creator | Licence |', '| --- | --- | --- | --- |',
-    ...rows.map((r) => `| \`dicebear-styles/${r.style}.json\` | ${r.name} | ${r.creator || 'n/a'} | ${r.license}${r.url ? ` (${r.url})` : ''} |`), '',
+    'Each definition is copied unchanged to `dicebear-styles/<style>.json` and loaded only when its character is first shown. Only CC0 1.0 and CC BY 4.0 styles are used (both compatible with AGPL-3.0). CC BY 4.0 requires attribution: the creator and licence are shown in the Avatar tab whenever such a character is on screen, and listed here.', '',
+    '| File | Style | Creator | Licence | Attribution needed |', '| --- | --- | --- | --- | --- |',
+    ...rows.map((r) => `| \`dicebear-styles/${r.style}.json\` | ${r.name} | ${r.creator || 'n/a'} | ${r.license}${r.url ? ` (${r.url})` : ''} | ${r.license === 'CC0 1.0' ? 'no (credited anyway)' : 'yes'} |`), '',
+    '### Attribution texts (from each definition, `meta.license.text`)', '',
+    ...rows.map((r) => `- **${r.style}**: ${r.text || `${r.name} by ${r.creator}, ${r.license}`}`), '',
     'The definitions are also the source of the `ui.avatar` legend and lexicon (`scripts/legend-from-dicebear.mjs`).', '',
   ];
   await writeFile(path.join(VENDOR, 'dicebear-styles/LICENSES.md'), lines.join('\n'));

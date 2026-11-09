@@ -39,3 +39,18 @@ Known gaps: the held-out labels of `show surprise`, `surprise face` and similar 
 **Request shapes (L6).** `ui.avatar` declares four shapes at the end of `patterns.sop` (`ui.avatar.colour`, `ui.avatar.colour.ask`, `ui.avatar.size`, `ui.avatar.part`; 32 generated patterns, `node scripts/expand-patterns.mjs ui.avatar`). Hand-written patterns whose examples a shape covers completely were deleted (`color.set`, `color.q`, `x.color.ask`, `x.color.ask2`, `x2.color.q`, `x2.color.q2`, `resize`, `resize.give`, `setpart.to`, `s2.color.whole`, `s2.could.be`, `x2.top2`). Kept because a shape cannot say them: optional lead verb or optional cop (`color.adj`, `color.should`, `resize.should`, `x.color.partfirst`, `x.color.ask3`, `setpart.noun_first`: they must keep their tier 5 reach, where the `short` forms of shapes are dropped), optional part (`setpart`, `x2.*`, `s2.*`), the verb-carries-direction verbs (`resize.grow`, `resize.shrink`) and whole-avatar colouring (`color.main*`, `color.who`).
 
 **L7 (second pass).** Two more shapes: `ui.avatar.reset` (do over the parts: "could you maybe reset your eyes", "i want to reset your mouth"; replaced `part.reset`) and `ui.avatar.has` (ask.exists with `pron="you|u|ya"`: "tell me if you have a beard", "i want to know if you have glasses"; replaced `q.has`; the pronoun group matters, "Do I have a cat?" is the kids.animals question, test t.animals.n67); tests sh14 to sh16. The patterns that had an alternative with an old filler word in a required group got their original match line back (5 patterns, see the kids.common log entry).
+
+## AV: more characters (portrait, cartoon, kid, pixel person, pixel robot, fun emoji)
+
+| Operation | Request shape | Status | Example |
+| --- | --- | --- | --- |
+| `setCharacter` | become one of nine | S | `become a portrait`, `i want a pixel robot`, `turn into a fun emoji` (synonyms: drawing, comic, child, retro) |
+| | kind of person | S | `make the avatar a woman`, `become a little girl`, `become an old man`, `become a girll` (typo corrected), `make the avatar a women` |
+| | style and kind | S | `become a pixel woman`, `make me a happy cartoon man` |
+| | with / without | S | `make me a woman with glasses`, `become a man without a beard` |
+| `pickCharacter` | by number, step | S | `the third one` (Avatar tab only), `show me the fifth avatar`, `next character`, `previous avatar` |
+| `listCharacters` | gallery | S | `show me the characters`, `show me other avatars`, `what can you become?` |
+| `setPart` | by number | S | `hair 12`, `give yourself eyes 5`, `glasses 2`, `hat 2` |
+| `setMood` | per character | S | `look cool`, `look sad` (a portrait can only look happy or sad: the answer lists what it can) |
+| numbered styles beyond the named ones | U | spoken as numbers only (`hair style 12`) |
+| `last character`, ordinals above `tenth` | U | the ordinal slot has no `last` |

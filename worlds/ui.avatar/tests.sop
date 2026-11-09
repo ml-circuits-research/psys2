@@ -375,7 +375,7 @@
 
 @t.ui.avatar.n72 core.test
     input="What can you become?"
-    expect="a robot, a person and an emoji"
+    expect="a robot, a person, an emoji, a portrait"
     session=f
 
 @t.ui.avatar.n73 core.test
@@ -1426,3 +1426,326 @@
     input="tell me if you have glasses"
     expect="I do not have a glass right now."
     session=sh16
+
+@t.ui.avatar.av01 core.test
+    input="Become a portrait."
+    expect="Now I am a portrait"
+    expectState="character=portrait"
+    expectState="portrait.hair=variant13"
+    session=avm1
+
+@t.ui.avatar.av02 core.test
+    input="Hair 12."
+    expect="hair style 12"
+    expectState="portrait.hair=variant12"
+    session=avm1
+
+@t.ui.avatar.av03 core.test
+    input="Give yourself bob hair."
+    expect="bob hair"
+    expectState="portrait.hair=variant13"
+    session=avm1
+
+@t.ui.avatar.av04 core.test
+    input="Give yourself glasses 2."
+    expect="glasses style 2"
+    expectState="portrait.glasses=variant02"
+    expectState="character=portrait"
+    session=avm1
+
+@t.ui.avatar.av05 core.test
+    input="Next hair."
+    expect="I have"
+    expectState="character=portrait"
+    session=avm1
+
+@t.ui.avatar.av06 core.test
+    input="Make the avatar a woman."
+    expect="long wavy hair"
+    expectState="portrait.hair=variant35"
+    expectState="character=portrait"
+    session=avm1
+
+@t.ui.avatar.av07 core.test
+    input="Make the avatar a man."
+    expect="short swept hair"
+    expectState="portrait.hair=variant02"
+    session=avm1
+
+@t.ui.avatar.av08 core.test
+    input="Become a man without a beard."
+    expect="no beard"
+    expectState="portrait.beard=none"
+    session=avm1
+
+@t.ui.avatar.av09 core.test
+    input="Look sad."
+    expect="Now I look sad"
+    expectState="portrait.mouth=sad01"
+    session=avm1
+
+@t.ui.avatar.av10 core.test
+    input="Look angry."
+    expect="A portrait cannot look angry"
+    expectState="portrait.mouth=sad01"
+    session=avm1
+
+@t.ui.avatar.av11 core.test
+    input="How do you feel?"
+    expect="I feel sad"
+    session=avm1
+
+@t.ui.avatar.av12 core.test
+    input="Become an old woman."
+    expect="Here is an old woman"
+    expectState="character=portrait"
+    session=avm1
+
+@t.ui.avatar.av13 core.test
+    input="What colors can your hair have?"
+    expect="My hair can be"
+    session=avm1
+
+@t.ui.avatar.av14 core.test
+    input="Make the avatar a woman."
+    expect="A person shows being a woman"
+    expectState="character=person"
+    expectState="person.head=long"
+    session=avm2
+
+@t.ui.avatar.av15 core.test
+    input="Become a little girl."
+    expect="Here is a little girl"
+    expectState="character=kid"
+    expectState="kid.hair=bunHair"
+    session=avm2
+
+@t.ui.avatar.av16 core.test
+    input="Make the avatar a boy."
+    expect="Here is a boy"
+    expectState="character=kid"
+    expectState="kid.hair=shortHair"
+    session=avm2
+
+@t.ui.avatar.av17 core.test
+    input="Make your skin color brown."
+    expect="My skin is brown now"
+    expectState="character=kid"
+    session=avm2
+
+@t.ui.avatar.av18 core.test
+    input="What are you wearing?"
+    expect="not wearing anything special"
+    session=avm2
+
+@t.ui.avatar.av19 core.test
+    input="Look cool."
+    expect="Now I look cool"
+    expectState="kid.eyes=normal"
+    session=avm2
+
+@t.ui.avatar.av20 core.test
+    input="Reset."
+    expect="back to my normal look as a kid"
+    expectState="kid.hair=bangs"
+    session=avm2
+
+@t.ui.avatar.av21 core.test
+    input="I want a pixel robot."
+    expect="Now I am a pixel robot"
+    expectState="character=pixelbot"
+    session=avm3
+
+@t.ui.avatar.av22 core.test
+    input="Next eyes."
+    expect="I have happy eyes now"
+    expectState="pixelbot.eyes=happy"
+    session=avm3
+
+@t.ui.avatar.av23 core.test
+    input="Make your background red."
+    expect="My background is dark red now"
+    expectState="character=pixelbot"
+    session=avm3
+
+@t.ui.avatar.av24 core.test
+    input="Show me other avatars."
+    expect="a portrait, a cartoon, a kid"
+    session=avm3
+
+@t.ui.avatar.av25 core.test
+    input="Show me the third avatar."
+    expect="Now I am an emoji"
+    expectState="character=emoji"
+    session=avm3
+
+@t.ui.avatar.av26 core.test
+    input="The fifth one."
+    expect="Now I am a cartoon"
+    expectState="character=cartoon"
+    session=avm3
+
+@t.ui.avatar.av27 core.test
+    input="Next character."
+    expect="Now I am a kid"
+    expectState="character=kid"
+    session=avm3
+
+@t.ui.avatar.av28 core.test
+    input="Previous avatar."
+    expect="Now I am a cartoon"
+    expectState="character=cartoon"
+    session=avm3
+
+@t.ui.avatar.av29 core.test
+    input="Show me the characters."
+    expect="a pixel person, a pixel robot and a fun emoji"
+    session=avm3
+
+@t.ui.avatar.av30 core.test
+    input="Become a pixel woman."
+    expect="Now I am a pixel person"
+    expectState="character=pixel"
+    expectState="pixel.hair=long03"
+    session=avm4
+
+@t.ui.avatar.av31 core.test
+    input="Make me a happy cartoon man."
+    expect="look happy"
+    expectState="character=cartoon"
+    expectState="cartoon.hair=dannyPhantom"
+    expectState="cartoon.mouth=smile"
+    session=avm4
+
+@t.ui.avatar.av32 core.test
+    input="Become a cartoon woman with glasses."
+    expect="round glasses"
+    expectState="cartoon.hair=full"
+    expectState="cartoon.glasses=round"
+    session=avm4
+
+@t.ui.avatar.av33 core.test
+    input="Take off your glasses."
+    expect="I took off round glasses"
+    expectState="cartoon.glasses=none"
+    session=avm4
+
+@t.ui.avatar.av34 core.test
+    input="Become a girll."
+    expect="Here is a girl"
+    expectState="cartoon.hair=pixie"
+    session=avm4
+
+@t.ui.avatar.av35 core.test
+    input="Make the avatar a women."
+    expect="Here is a woman"
+    expectState="cartoon.hair=full"
+    session=avm4
+
+@t.ui.avatar.av36 core.test
+    input="Become a fun emoji."
+    expect="Now I am a fun emoji"
+    expectState="character=funemoji"
+    session=avm4
+
+@t.ui.avatar.av37 core.test
+    input="Look cool."
+    expect="Now I look cool"
+    expectState="funemoji.eyes=shades"
+    session=avm4
+
+@t.ui.avatar.av38 core.test
+    input="Look in love."
+    expect="Now I look in love"
+    expectState="funemoji.mouth=kissHeart"
+    session=avm4
+
+@t.ui.avatar.av39 core.test
+    input="Become a pixel person."
+    expect="Now I am a pixel person"
+    expectState="character=pixel"
+    session=avm4
+
+@t.ui.avatar.av40 core.test
+    input="Wear a hat."
+    expect="hat style 1"
+    expectState="pixel.hat=variant01"
+    session=avm4
+
+@t.ui.avatar.av41 core.test
+    input="Make your hair red."
+    expect="My hair is dark red now"
+    session=avm4
+
+@t.ui.avatar.av42 core.test
+    input="Become a robot."
+    expect="I am a robot already"
+    expectState="character=robot"
+    session=avm5
+
+@t.ui.avatar.av43 core.test
+    input="Give yourself glasses."
+    expect="the person does"
+    expectState="character=robot"
+    session=avm5
+
+@t.ui.avatar.av44 core.test
+    input="Yes."
+    expect="Now I am a person"
+    expectState="character=person"
+    session=avm5
+
+@t.ui.avatar.av45 core.test
+    input="Become a kid."
+    expect="Now I am a kid"
+    expectState="character=kid"
+    session=avm5
+
+@t.ui.avatar.av46 core.test
+    input="Undo."
+    expect="I went back"
+    expectState="character=person"
+    session=avm5
+
+@t.ui.avatar.av47 core.test
+    input="Become a cartoon."
+    expect="Now I am a cartoon"
+    expectState="character=cartoon"
+    session=avm6
+
+@t.ui.avatar.av48 core.test
+    input="Give yourself glasses."
+    expect="I have round glasses now"
+    session=avm6
+
+@t.ui.avatar.av49 core.test
+    input="Become a kid."
+    expect="Now I am a kid"
+    session=avm6
+
+@t.ui.avatar.av50 core.test
+    input="What hair can you have?"
+    expect="bowl cut"
+    session=avm6
+
+@t.ui.avatar.av51 core.test
+    input="Become a fun emoji."
+    expect="Now I am a fun emoji"
+    session=avm6
+
+@t.ui.avatar.av52 core.test
+    input="Make your eyes bigger."
+    expect="I cannot change the size of my eyes"
+    session=avm6
+
+@t.ui.avatar.av54 core.test
+    input="The third one."
+    expect="Now I am an emoji"
+    expectState="character=emoji"
+    session=avm3
+
+@t.ui.avatar.av55 core.test
+    input="The fifth character."
+    expect="Now I am a cartoon"
+    expectState="character=cartoon"
+    session=avm3

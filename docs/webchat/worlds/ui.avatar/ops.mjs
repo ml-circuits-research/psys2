@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-only
 // Operations of ui.avatar: a DiceBear avatar changed by words (spec 07 section 3). Browser-safe: no imports.
 //
 // The world reasons about the avatar without the library: the variants, palettes and color names it needs are
@@ -8,11 +9,16 @@
 //     robot:  { eyes, mouth, top, chest, colors: { body, accent, screen, glow, background } },
 //     person: { head, expression, accessories, facialHair, mask, colors: { skin, clothing, headContrast } },
 //     emoji:  { face, eyes, mouth, cheeks, colors: { face, background } } }
+//   AV characters (generated, same shape): portrait (lorelei), cartoon (micah), kid (big-smile), pixel (pixel-art), pixelbot, funemoji (fun-emoji);
+//   their objects are filled by ensure() from the generated data lexicons (DEFAULT_LOOK below, else the first variant, `none` when optional).
 //   Component values are DiceBear variant ids (`none` = component hidden); colors are 6-digit hex entries of the style palette.
 // Effects: avatar.animate { name: wink|nod|dance|wave|spin|jump|bounce|wiggle|blink|shake } (a moment, not stored state).
 // Every command that changes the avatar brings its tab forward: ctx.request('ui.openTab', { tab: 'robot' }).
 
-const CHARACTERS = ['robot', 'person', 'emoji'];
+/** The three original characters: only they are reached from another character ("only the person has glasses: say yes to become one"). */
+const CORE = ['robot', 'person', 'emoji'];
+/** Every character, in the order of the gallery. The others (AV) are reached by becoming them and then answer for their own parts. */
+const CHARACTERS = [...CORE, 'portrait', 'cartoon', 'kid', 'pixel', 'pixelbot', 'funemoji'];
 const DATA = 'lex.ui.avatar.data.';
 
 export function initialState() {
@@ -21,16 +27,27 @@ export function initialState() {
     robot: { eyes: 'round', mouth: 'smile', top: 'antenna', chest: 'buttons', colors: { body: '74c0fc', accent: '343a40', screen: '161a21', glow: '3bc9db', background: 'b6e3f4' } },
     person: { head: 'short1', expression: 'smile', accessories: 'none', facialHair: 'none', mask: 'none', colors: { skin: 'edb98a', clothing: '8fa7df', headContrast: '2c1b18' } },
     emoji: { face: 'circle', eyes: 'pupils', mouth: 'smile', cheeks: 'blush', colors: { face: 'fcd34d', background: '1d4ed8' } },
+    chips: chips('robot'),
   };
 }
+
+/** Looks of the AV characters at the start (anything not listed: `none` when the component can be absent, else its first variant, and the first palette entry). */
+const DEFAULT_LOOK = {
+  portrait: { hair: 'variant13', mouth: 'happy01', colors: { skin: 'edb98a' } },
+  cartoon: { hair: 'fonze', mouth: 'smile', eyes: 'round', colors: { hair: '000000' } },
+  kid: { hair: 'bangs', eyes: 'cheery', mouth: 'teethSmile' },
+  pixel: { hair: 'short01', mouth: 'happy01', colors: { hair: '28150a' } },
+  pixelbot: { eyes: 'round', mouth: 'smile' },
+  funemoji: { eyes: 'cute', mouth: 'lilSmile' },
+};
 
 // ---- hand-written language knowledge ---------------------------------------------------------------------------
 /** Spoken part (lemma) -> component keys it can mean, in order of preference. */
 export const PART_KEYS = {
   eye: ['eyes'], mouth: ['mouth'], lip: ['mouth'], antenna: ['top'], top: ['top'], head_piece: ['top'], chest: ['chest'],
-  hair: ['head'], hairstyle: ['head'], hair_style: ['head'], haircut: ['head'], head: ['head', 'top'], expression: ['expression'],
-  face: ['expression', 'face'], face_shape: ['face'], accessory: ['accessories'], beard: ['facialHair'], facial_hair: ['facialHair'],
-  mask: ['mask'], cheek: ['cheeks'],
+  hair: ['hair', 'head'], hairstyle: ['hair', 'head'], hair_style: ['hair', 'head'], haircut: ['hair', 'head'], head: ['head', 'top'], expression: ['expression'],
+  face: ['expression', 'face'], face_shape: ['face'], accessory: ['accessories'], beard: ['facialHair', 'beard'], facial_hair: ['facialHair', 'beard'],
+  mask: ['mask'], cheek: ['cheeks'], eyebrow: ['eyebrows'], brow: ['eyebrows'], nose: ['nose'],
 };
 /** Spoken colored part (lemma) -> color key per character. */
 const COLOR_KEYS = {
@@ -45,21 +62,34 @@ const COLOR_KEYS = {
   lip: {}, mouth: {},   // no character has a lip or mouth color: the refusal says so (colorSlot)
   main: { robot: 'body', person: 'clothing', emoji: 'face' },
 };
-const COLOR_SAY = { body: ['body', 'is'], accent: ['accent color', 'is'], screen: ['screen', 'is'], glow: ['glow', 'is'], background: ['background', 'is'], skin: ['skin', 'is'], clothing: ['clothes', 'are'], headContrast: ['hair', 'is'], face: ['face', 'is'] };
+// AV characters: their own color keys (the DiceBear color names of each style)
+Object.assign(COLOR_KEYS.skin, { portrait: 'skin', cartoon: 'base', kid: 'skin', pixel: 'skin' });
+Object.assign(COLOR_KEYS.head, { portrait: 'skin', cartoon: 'base', kid: 'skin', pixel: 'skin' });
+Object.assign(COLOR_KEYS.face, { portrait: 'skin', cartoon: 'base', kid: 'skin', pixel: 'skin' });
+Object.assign(COLOR_KEYS.complexion, { portrait: 'skin', cartoon: 'base', kid: 'skin', pixel: 'skin' });
+Object.assign(COLOR_KEYS.hair, { portrait: 'hair', cartoon: 'hair', kid: 'hair', pixel: 'hair' });
+for (const k of ['clothing', 'clothe', 'shirt', 'sweater', 'jacket', 'body', 'main']) Object.assign(COLOR_KEYS[k], { cartoon: 'shirt', pixel: 'clothing' });
+for (const k of ['background', 'backdrop']) Object.assign(COLOR_KEYS[k], { pixelbot: 'background', funemoji: 'background' });
+for (const k of ['glow', 'light', 'eye']) Object.assign(COLOR_KEYS[k], { pixelbot: 'glow' });
+const COLOR_SAY = { base: ['skin', 'is'], hair: ['hair', 'is'], shirt: ['shirt', 'is'], earring: ['earrings', 'are'], eyeShadow: ['eye shadow', 'is'], glasses: ['glasses', 'are'], hat: ['hat', 'is'], body: ['body', 'is'], accent: ['accent color', 'is'], screen: ['screen', 'is'], glow: ['glow', 'is'], background: ['background', 'is'], skin: ['skin', 'is'], clothing: ['clothes', 'are'], headContrast: ['hair', 'is'], face: ['face', 'is'] };
 /** A glow must not equal the body color (style definition: notEqualTo). */
 const NOT_EQUAL = { glow: 'body', body: 'glow' };
-const LABEL = { eyes: 'eyes', mouth: 'mouth', top: 'top piece', chest: 'chest', head: 'hairstyle', expression: 'expression', accessories: 'accessories', facialHair: 'facial hair', mask: 'mask', face: 'face shape', cheeks: 'cheeks' };
+const LABEL = { hair: 'hairstyle', eyebrows: 'eyebrows', nose: 'nose', beard: 'beard', glasses: 'glasses', earrings: 'earrings', clothes: 'clothes', hat: 'hat', freckles: 'freckles', ears: 'ears', hairAccessories: 'hair accessory', details: 'details', sideburns: 'sideburns', eyes: 'eyes', mouth: 'mouth', top: 'top piece', chest: 'chest', head: 'hairstyle', expression: 'expression', accessories: 'accessories', facialHair: 'facial hair', mask: 'mask', face: 'face shape', cheeks: 'cheeks' };
 /** Hairstyle names that read without an article ("short curly hair", "twin buns", "cornrows in a ponytail"). */
 const NO_ARTICLE_HAIR = /^(?:.*\bhair(?: with .*)?|.*\b(?:knots|buns|braids|dreadlocks|twists)|cornrows.*|shoulder-length.*)$/;
 const EYES_PHRASE = { pupils: 'round eyes with pupils', 'big pupils': 'big pupils', 'tall pupils': 'tall pupils', sparkle: 'sparkling eyes', 'look side': 'eyes looking sideways', 'look down': 'eyes looking down', 'look up': 'eyes looking up', wink: 'a winking eye' };
+/** Numbered variants ("style 13") are spoken with the part: "hair style 13", "eyes style 5". */
+const STYLE_NOUN = { eyes: 'eyes', mouth: 'mouth', head: 'face shape', hair: 'hair', eyebrows: 'eyebrow', nose: 'nose', beard: 'beard', facialHair: 'beard', glasses: 'glasses', earrings: 'earring', freckles: 'freckles', hat: 'hat', clothes: 'clothes', accessories: 'accessory', hairAccessories: 'hair accessory', ears: 'ear', details: 'detail' };
+const hairPhrase = (d) => (NO_ARTICLE_HAIR.test(d) ? d : /^(?:long|short) \d+$/.test(d) ? `${d} hair` : `${/^[a-z]+s$/.test(d) && !/ss$/.test(d) ? '' : /^[aeiou]/i.test(d) ? 'an' : 'a'} ${d}`);
 const PHRASE = {
+  hair: hairPhrase, eyebrows: (d) => `${d} eyebrows`, nose: (d) => `${a(d)} ${d} nose`, beard: (d) => `${a(d)} ${d}`, hat: (d) => `${a(d)} ${d}`, glasses: (d) => `${d} glasses`, earrings: (d) => `${d} earrings`, freckles: (d) => `${d} freckles`, clothes: (d) => `${d} clothes`, hairAccessories: (d) => `${a(d)} ${d}`,
   eyes: (d) => EYES_PHRASE[d] ?? `${d} eyes`, mouth: (d) => `${a(d)} ${d} mouth`, top: (d) => `${a(d)} ${d} on top`, chest: (d) => `${a(d)} ${d} on my chest`,
-  head: (d) => (NO_ARTICLE_HAIR.test(d) ? d : `${/^[aeiou]/i.test(d) ? 'an' : 'a'} ${d}`), expression: (d) => `${a(d)} ${d} expression`, accessories: (d) => `${a(d)} ${d}`, facialHair: (d) => `${a(d)} ${d}`,
+  head: hairPhrase, expression: (d) => `${a(d)} ${d} expression`, accessories: (d) => `${a(d)} ${d}`, facialHair: (d) => `${a(d)} ${d}`,
   mask: (d) => `${a(d)} ${d}`, face: (d) => `${a(d)} ${d} face`, cheeks: (d) => `${d} cheeks`,
 };
-const NONE_PHRASE = { top: 'nothing on top', chest: 'nothing on my chest', accessories: 'no accessories', facialHair: 'no facial hair', mask: 'no mask', cheeks: 'no cheeks' };
+const NONE_PHRASE = { hair: 'no hair', beard: 'no beard', glasses: 'no glasses', earrings: 'no earrings', freckles: 'no freckles', hat: 'no hat', hairAccessories: 'no hair accessory', top: 'nothing on top', chest: 'nothing on my chest', accessories: 'no accessories', facialHair: 'no facial hair', mask: 'no mask', cheeks: 'no cheeks' };
 const NONE_PROBABILITY = { accessories: 0.6, facialHair: 0.6, mask: 0.8, top: 0.15, chest: 0.15, cheeks: 0.4 };
-const SPOKEN_CHARACTER = { robot: 'a robot', person: 'a person', emoji: 'an emoji' };
+const SPOKEN_CHARACTER = { robot: 'a robot', person: 'a person', emoji: 'an emoji', portrait: 'a portrait', cartoon: 'a cartoon', kid: 'a kid', pixel: 'a pixel person', pixelbot: 'a pixel robot', funemoji: 'a fun emoji' };
 /** mood -> expression of each character (ids of the style definitions). */
 export const MOODS = {
   happy: { person: 'smile', emoji: { eyes: 'happy', mouth: 'smile' }, robot: { eyes: 'happy', mouth: 'smile' } },
@@ -80,6 +110,7 @@ export const MOODS = {
   bored: { person: 'blank', emoji: { eyes: 'pupils', mouth: 'line' }, robot: { eyes: 'sleepy', mouth: 'line' } },
   smug: { person: 'contempt', emoji: { eyes: 'squint', mouth: 'smirk' }, robot: { eyes: 'happy', mouth: 'line' } },
   stressed: { person: 'hectic', emoji: { eyes: 'bigPupils', mouth: 'teeth' }, robot: { eyes: 'plus', mouth: 'zigzag' } },
+  cool: { person: 'smileTeethGap', emoji: { eyes: 'squint', mouth: 'smile' }, robot: { eyes: 'square', mouth: 'smile' } },
   loving: { person: 'lovingGrin1', emoji: { eyes: 'sparkle', mouth: 'bigSmile' }, robot: { eyes: 'happy', mouth: 'smile' } },
 };
 const MOOD_OF = {
@@ -87,7 +118,7 @@ const MOOD_OF = {
   sad: 'sad', unhappy: 'sad', upset: 'sad', worried: 'worried', concerned: 'worried', surprised: 'surprised', shocked: 'surprised', amazed: 'surprised', astonished: 'surprised',
   scared: 'scared', afraid: 'scared', frightened: 'scared', fear: 'scared', fearful: 'scared', terrified: 'scared', angry: 'angry', mad: 'angry', annoyed: 'angry', furious: 'furious', calm: 'calm', relaxed: 'calm', peaceful: 'calm',
   serious: 'serious', neutral: 'serious', cute: 'cute', sleepy: 'sleepy', tired: 'sleepy', suspicious: 'suspicious', cheeky: 'cheeky', bored: 'bored', blank: 'bored',
-  smug: 'smug', stressed: 'stressed', in_love: 'loving', loving: 'loving',
+  smug: 'smug', cool: 'cool', stressed: 'stressed', in_love: 'loving', loving: 'loving',
 };
 /** Mood words that are nouns in the lexicon, with the adjective that goes after "look" ("express fear" -> "look scared"). */
 const MOOD_ADJ = { fear: 'scared' };
@@ -108,16 +139,42 @@ const orList = (xs) => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(',
 const idsOf = (list) => [...new Set(list.map((e) => e.id))];
 // The host caption shows the spoken part names; `for` lets the host ignore it once the parts change elsewhere.
 const partsSig = (v) => JSON.stringify(Object.entries(v).filter(([k]) => k !== 'colors').sort());
+/** What the gallery of the host offers for a character: kinds of person it can be made into and moods it can show (the host turns them into chips). */
+const GALLERY_MOODS = ['happy', 'sad', 'cool', 'surprised', 'angry', 'cheerful'];
+function chips(ch) {
+  const kinds = Object.keys(PRESETS[ch] ?? {});
+  if (PRESETS[ch]?.man && HAIR_COLOR[ch]) kinds.push('old_man');
+  if (PRESETS[ch]?.woman && HAIR_COLOR[ch]) kinds.push('old_woman');
+  return { kinds, moods: GALLERY_MOODS.filter((m) => moodSpecOf(ch, m)) };
+}
 function caption(ctx) {
   const s = ctx.state, ch = s.character, v = s[ch];
+  s.chips = chips(ch);
   s.caption = { character: ch, for: partsSig(v), text: components(ctx, ch).filter((k) => v[k] !== 'none').map((k) => phraseOf(ctx, ch, k, v[k]).replace(/\bmy\b/g, 'its')).join(' · ') };
 }
 const done = (ctx, key, sentence) => { ensure(ctx); caption(ctx); ctx.request('ui.openTab', { tab: 'robot' }); return ok(`${opener(key)} ${sentence}`); };
 const clean = (s) => String(s ?? '').replace(/ {2,}/g, ' ').trim();
-const say = (key, display) => clean(PHRASE[key] ? PHRASE[key](display) : `${display} ${LABEL[key] ?? key}`);
+const say = (key, display) => (/^style \d+$/.test(display) ? `${STYLE_NOUN[key] ?? LABEL[key] ?? key} ${display}` : clean(PHRASE[key] ? PHRASE[key](display) : `${display} ${LABEL[key] ?? key}`));
+
+/** The start look of an AV character, from the generated data (DEFAULT_LOOK first). */
+function defaultLook(ctx, ch) {
+  const want = DEFAULT_LOOK[ch] ?? {}, v = { colors: {} };
+  for (const key of components(ctx, ch)) {
+    const ids = idsOf(entries(ctx, ch, key));
+    v[key] = ids.includes(want[key]) ? want[key] : optional(ctx, ch).includes(key) ? 'none' : ids[0];
+  }
+  for (const key of colorKeys(ctx, ch)) {
+    const pal = palette(ctx, ch, key);
+    v.colors[key] = pal.includes(want.colors?.[key]) ? want.colors[key] : pal[0];
+  }
+  return v;
+}
+/** What a component goes back to ("reset my hair"): the start look of the character. */
+const defaultOf = (ctx, ch, key) => initialState()[ch]?.[key] ?? defaultLook(ctx, ch)[key];
 
 function ensure(ctx) {
   const s = ctx.state, d = initialState();
+  for (const ch of CHARACTERS) if (!d[ch] && !s[ch]) s[ch] = defaultLook(ctx, ch);
   for (const k of Object.keys(d)) {
     if (s[k] === undefined) s[k] = d[k];
     else if (d[k] && typeof d[k] === 'object') {
@@ -133,8 +190,8 @@ const optional = (ctx, ch) => ctx.lexicon(`${DATA}${ch}.optional`);
 const colorKeys = (ctx, ch) => ctx.lexicon(`${DATA}${ch}.colors`);
 const palette = (ctx, ch, key) => ctx.lexicon(`lex.ui.avatar.palette.${ch}.${key}`);
 const displayOf = (ctx, ch, key, id) => (id === 'none' ? 'none' : entries(ctx, ch, key).find((e) => e.id === id)?.display ?? id);
-const order = (s) => [s.character, ...CHARACTERS.filter((c) => c !== s.character)];
-const suffix = (id) => id.match(/(\d+)$/)?.[1];
+const order = (s) => [s.character, ...CORE.filter((c) => c !== s.character)];
+const suffix = (id) => { const m = id.match(/(\d+)$/)?.[1]; return m === undefined ? undefined : String(Number(m)); };
 const phraseOf = (ctx, ch, key, id) => (id === 'none' ? NONE_PHRASE[key] ?? `no ${LABEL[key] ?? key}` : say(key, displayOf(ctx, ch, key, id)));
 
 // ---- colors -----------------------------------------------------------------------------------------------------
@@ -297,18 +354,49 @@ function viaCapability(ctx, s, part, value) {
   Object.assign(s[s.character], MOODS[what.mood][s.character]);
   return done(ctx, 'cap' + what.mood, `${rule.note}, so I set both to look ${what.mood}.`);
 }
-/** Gender words (with common misspellings) -> man | woman | girl | boy, and the hair and facial-hair presets of each. */
-const GENDER_OF = { man: 'man', men: 'man', mans: 'man', guy: 'man', gentleman: 'man', male: 'man', dude: 'man', woman: 'woman', women: 'woman', womans: 'woman', womens: 'woman', lady: 'woman', female: 'woman', wmoan: 'woman', girl: 'girl', girls: 'girl', gal: 'girl', boy: 'boy', boys: 'boy', lad: 'boy' };
-const PERSON_PRESET = {
-  man: { head: 'short2', facialHair: 'full', say: 'short neat hair and a short beard' },
-  woman: { head: 'long', facialHair: 'none', say: 'long hair and no beard' },
-  girl: { head: 'buns', facialHair: 'none', say: 'twin buns and no beard' },
-  boy: { head: 'short5', facialHair: 'none', say: 'short spiky hair and no beard' },
+/** Gender words (with common misspellings) -> man | woman | girl | boy, optionally old_ or little_ ("old man", "little girl"). */
+const GENDER_OF = { man: 'man', men: 'man', mans: 'man', guy: 'man', gentleman: 'man', male: 'man', dude: 'man', woman: 'woman', women: 'woman', womans: 'woman', womens: 'woman', lady: 'woman', female: 'woman', wmoan: 'woman', girl: 'girl', girls: 'girl', gal: 'girl', boy: 'boy', boys: 'boy', lad: 'boy',
+  little_girl: 'little_girl', small_girl: 'little_girl', little_boy: 'little_boy', small_boy: 'little_boy',
+  old_man: 'old_man', elderly_man: 'old_man', grandfather: 'old_man', grandpa: 'old_man', old_woman: 'old_woman', elderly_woman: 'old_woman', grandmother: 'old_woman', grandma: 'old_woman', granny: 'old_woman' };
+/** Presets per character: what hair and facial hair a man, woman, girl or boy gets (a character has no gender setting; the capability map). Ids are the style definitions'. */
+const PRESETS = {
+  person: {
+    man: { set: { head: 'short2', facialHair: 'full' }, say: 'short neat hair and a short beard' },
+    woman: { set: { head: 'long', facialHair: 'none' }, say: 'long hair and no beard' },
+    girl: { set: { head: 'buns', facialHair: 'none' }, say: 'twin buns and no beard' },
+    boy: { set: { head: 'short5', facialHair: 'none' }, say: 'short spiky hair and no beard' },
+  },
+  portrait: { man: { set: { hair: 'variant02', beard: 'none' } }, woman: { set: { hair: 'variant35', beard: 'none' } }, girl: { set: { hair: 'variant26', beard: 'none' } }, boy: { set: { hair: 'variant04', beard: 'none' } } },
+  cartoon: { man: { set: { hair: 'dannyPhantom', facialHair: 'none', earrings: 'none' } }, woman: { set: { hair: 'full', facialHair: 'none', earrings: 'hoop' } }, girl: { set: { hair: 'pixie', facialHair: 'none', earrings: 'none' } }, boy: { set: { hair: 'dougFunny', facialHair: 'none', earrings: 'none' } } },
+  kid: { girl: { set: { hair: 'bunHair' } }, boy: { set: { hair: 'shortHair' } } },
+  pixel: { man: { set: { hair: 'short03', beard: 'none' } }, woman: { set: { hair: 'long03', beard: 'none' } }, girl: { set: { hair: 'long14', beard: 'none' } }, boy: { set: { hair: 'short06', beard: 'none' } } },
 };
+/** Colour key of the hair, per character (for "old": grey hair). */
+const HAIR_COLOR = { person: 'headContrast', portrait: 'hair', cartoon: 'hair', kid: 'hair', pixel: 'hair' };
+/** Moods the AV characters can show, as { mood: { component: variant id } } (the named ids of the style definitions; the numbered styles only have happy and sad mouths). */
+const MOODS_X = {
+  portrait: { happy: { mouth: 'happy01' }, sad: { mouth: 'sad01' } },
+  cartoon: { happy: { eyes: 'smiling', mouth: 'smile' }, cheerful: { eyes: 'smiling', mouth: 'laughing' }, laughing: { eyes: 'smiling', mouth: 'laughing' }, sad: { eyes: 'round', mouth: 'sad' }, worried: { eyes: 'round', mouth: 'nervous' },
+    surprised: { eyes: 'round', mouth: 'surprised' }, angry: { eyes: 'round', mouth: 'frown' }, cute: { eyes: 'smiling', mouth: 'pucker' }, smug: { eyes: 'round', mouth: 'smirk' }, suspicious: { eyes: 'round', mouth: 'smirk' }, cool: { eyes: 'smiling', mouth: 'smirk' } },
+  kid: { happy: { eyes: 'cheery', mouth: 'teethSmile' }, cheerful: { eyes: 'starstruck', mouth: 'openedSmile' }, laughing: { eyes: 'cheery', mouth: 'openedSmile' }, sad: { eyes: 'sad', mouth: 'openSad' }, worried: { eyes: 'confused', mouth: 'awkwardSmile' },
+    surprised: { eyes: 'starstruck', mouth: 'openedSmile' }, angry: { eyes: 'angry', mouth: 'unimpressed' }, cute: { eyes: 'starstruck', mouth: 'kawaii' }, sleepy: { eyes: 'sleepy', mouth: 'unimpressed' }, cheeky: { eyes: 'winking', mouth: 'gapSmile' }, serious: { eyes: 'normal', mouth: 'unimpressed' }, cool: { eyes: 'normal', mouth: 'gapSmile' } },
+  pixel: { happy: { mouth: 'happy01' }, sad: { mouth: 'sad01' } },
+  pixelbot: { happy: { eyes: 'happy', mouth: 'smile' }, cheerful: { eyes: 'happy', mouth: 'bigSmile' }, laughing: { eyes: 'happy', mouth: 'open' }, sad: { eyes: 'soft', mouth: 'flat' }, surprised: { eyes: 'wide', mouth: 'open' }, calm: { eyes: 'soft', mouth: 'smile' },
+    serious: { eyes: 'slim', mouth: 'flat' }, sleepy: { eyes: 'slim', mouth: 'tiny' }, cool: { eyes: 'slim', mouth: 'smile' } },
+  funemoji: { happy: { eyes: 'cute', mouth: 'lilSmile' }, cheerful: { eyes: 'stars', mouth: 'wideSmile' }, laughing: { eyes: 'closed2', mouth: 'smileLol' }, sad: { eyes: 'sad', mouth: 'sad' }, worried: { eyes: 'tearDrop', mouth: 'sad' },
+    surprised: { eyes: 'plain', mouth: 'shout' }, scared: { eyes: 'crying', mouth: 'shout' }, angry: { eyes: 'pissed', mouth: 'pissed' }, furious: { eyes: 'pissed', mouth: 'shout' }, calm: { eyes: 'closed', mouth: 'lilSmile' }, serious: { eyes: 'plain', mouth: 'plain' },
+    cute: { eyes: 'cute', mouth: 'cute' }, sleepy: { eyes: 'sleepClose', mouth: 'plain' }, cheeky: { eyes: 'wink', mouth: 'tongueOut' }, bored: { eyes: 'plain', mouth: 'plain' }, smug: { eyes: 'shades', mouth: 'lilSmile' }, loving: { eyes: 'love', mouth: 'kissHeart' }, cool: { eyes: 'shades', mouth: 'lilSmile' } },
+};
+/** What a character shows for a mood: a person expression id (string) or { eyes, mouth } style ids; undefined when the character cannot show it. */
+const moodSpecOf = (ch, mood) => MOODS[mood]?.[ch] ?? MOODS_X[ch]?.[mood];
+const moodIs = (now, spec) => (typeof spec === 'string' ? now.expression === spec : !!spec && Object.entries(spec).every(([k, v]) => now[k] === v));
+const moodsOf = (s) => Object.keys(MOODS).filter((m) => moodIs(s[s.character], moodSpecOf(s.character, m)));
+const applyMood = (s, ch, spec) => (typeof spec === 'string' ? (s[ch].expression = spec) : Object.assign(s[ch], spec));
 
 // ---- operations: setting parts ----------------------------------------------------------------------------------
 function _setPart(ctx, { part, value, n, text }) {
   const s = ensure(ctx);
+  if (!value && part && n !== undefined && n !== '') return setPartByNumber(ctx, s, part, n);
   const lacks = PART_KEYS[part] && !PART_KEYS[part].some((k) => components(ctx, s.character).includes(k));
   if (lacks) { const via = viaCapability(ctx, s, part, value); if (via) return via; }
   const r = resolveVariant(ctx, s, { part, value, n, text });
@@ -321,6 +409,19 @@ function _setPart(ctx, { part, value, n, text }) {
   if (s[r.ch][r.key] === r.id && r.ch === s.character) return ok(`I already have ${phraseOf(ctx, r.ch, r.key, r.id)}.`);
   const note = apply(ctx, s, r);
   return done(ctx, r.key + r.id, `I have ${phraseOf(ctx, r.ch, r.key, r.id)} now.${note}`);
+}
+
+/** "Hair 13", "eyes 5": the variant of the part with that number (numbered styles) or at that place in the list. */
+function setPartByNumber(ctx, s, part, n) {
+  const { slot, error } = partSlot(ctx, s, part);
+  if (error) return no(error);
+  const ids = idsOf(entries(ctx, slot.ch, slot.key)).filter((x) => x !== 'none');
+  const k = String(Number(n));
+  const id = ids.find((x) => suffix(x) === k) ?? ids[Number(n) - 1];
+  if (!id) return no(`My ${LABEL[slot.key]} goes from 1 to ${ids.length}.`);
+  if (s[slot.ch][slot.key] === id) return ok(`I already have ${phraseOf(ctx, slot.ch, slot.key, id)}.`);
+  const note = apply(ctx, s, { ch: slot.ch, key: slot.key, id });
+  return done(ctx, slot.key + id, `I have ${phraseOf(ctx, slot.ch, slot.key, id)} now.${note}`);
 }
 
 /** A part named with words that are not a known variant: tell what is possible. */
@@ -411,7 +512,7 @@ function _resetPart(ctx, { part }) {
   const s = ensure(ctx);
   const { slot, error } = partSlot(ctx, s, part);
   if (error) return no(error);
-  const note = apply(ctx, s, { ch: slot.ch, key: slot.key, id: initialState()[slot.ch][slot.key] });
+  const note = apply(ctx, s, { ch: slot.ch, key: slot.key, id: defaultOf(ctx, slot.ch, slot.key) });
   return done(ctx, 'reset' + slot.key, `I have ${phraseOf(ctx, slot.ch, slot.key, s[slot.ch][slot.key])} again.${note}`);
 }
 
@@ -421,7 +522,7 @@ function takeOff(ctx, s, ch, key) {
   if (cur === 'none') return { already: true };
   if (optional(ctx, ch).includes(key)) { s[ch][key] = 'none'; return { taken: cur, result: 'none' }; }
   if (key === 'head' && entries(ctx, ch, key).some((e) => e.id === cur && e.word.startsWith('hat'))) {
-    const dflt = initialState()[ch][key];
+    const dflt = defaultOf(ctx, ch, key);
     s[ch][key] = dflt;
     return { taken: cur, result: dflt };
   }
@@ -465,7 +566,7 @@ function colorSlot(s, ctx, part) {
   const map = COLOR_KEYS[part];
   if (!map) return { error: `I do not know what my ${String(part).replace(/_/g, ' ')} color is.` };
   if (map[s.character]) return { ch: s.character, key: map[s.character] };
-  const chars = CHARACTERS.filter((c) => map[c]);
+  const chars = CORE.filter((c) => map[c]);
   if (chars.length === 1) {
     const what = part === 'eye' ? 'eye color' : `${String(part).replace(/_/g, ' ')} color`;
     return { error: offer(s, chars[0], what).replace(/ does\./, part === 'eye' ? ' does: its eyes glow in any color.' : ' does.') };
@@ -574,68 +675,116 @@ function _setSeed(ctx, { seed }) {
 function _askSeed(ctx) { return ok(`My seed is ${ensure(ctx).seed}.`); }
 
 // ---- characters, mood, name, reset, animation -------------------------------------------------------------------
-function _setCharacter(ctx, { who, kind, mood }) {
+const charOf = (ctx, who) => ctx.lexicon(`${DATA}characters`).map((w) => w.split(':')).find(([w]) => w === who)?.[1];
+const GALLERY = (s) => CHARACTERS.map((c, i) => `${i + 1} ${spoken(c).replace(/^an? /, '')}${c === s.character ? ' (now)' : ''}`);
+function _setCharacter(ctx, { who, kind, mood, with: add, without }) {
   const s = ensure(ctx);
   const gender = kind && GENDER_OF[String(kind)];
-  if (gender) return setPersonLook(ctx, s, gender, mood);
-  const hit = ctx.lexicon(`${DATA}characters`).map((w) => w.split(':')).find(([w]) => w === who);
-  if (!hit) return no(`I can become a robot, a person or an emoji, but not ${String(who).replace(/_/g, ' ')}.`);
-  const ch = hit[1];
+  const ch0 = who ? charOf(ctx, who) : null;
+  if (gender) return setLook(ctx, s, gender, mood, ch0 && ch0 !== 'person' ? ch0 : null, { add, without });
+  if (!ch0) return no(`I can be ${orList(CHARACTERS.map(spoken))}, but not ${String(who).replace(/_/g, ' ')}.`);
+  const ch = ch0;
   if (s.character === ch) return ok(`I am ${spoken(ch)} already.`);
   s.character = ch;
+  const m = mood && MOOD_OF[mood];
+  if (m && moodSpecOf(ch, m)) applyMood(s, ch, moodSpecOf(ch, m));
   return done(ctx, 'become' + ch, `Now I am ${spoken(ch)}. ${describeShort(ctx, s)}`);
 }
-/** "Make the avatar a woman": a person with the hair and facial hair of that kind of person, optionally with a mood. */
-function setPersonLook(ctx, s, gender, mood) {
-  const preset = PERSON_PRESET[gender];
+/** Set or take off the thing named by an option word ("with glasses", "without a beard") on the active character. */
+function accessory(ctx, s, word, on) {
+  const ch = s.character;
+  for (const key of components(ctx, ch)) {
+    const hit = entries(ctx, ch, key).filter((e) => e.word === word);
+    if (!hit.length) continue;
+    if (on) { s[ch][key] = hit.find((e) => !suffix(e.id))?.id ?? hit[0].id; return phraseOf(ctx, ch, key, s[ch][key]); }
+    if (optional(ctx, ch).includes(key)) { s[ch][key] = 'none'; return phraseOf(ctx, ch, key, 'none'); }
+  }
+  return null;
+}
+/** "Make the avatar a woman" / "become a little girl" / "a pixel woman": the hair and facial hair of that kind of person on a character that can show it, optionally with a mood. */
+function setLook(ctx, s, kind, mood, wanted, { add, without } = {}) {
+  const [, age, base] = /^(?:(old|little)_)?(.+)$/.exec(kind);
+  const has = (c) => !!PRESETS[c]?.[base];
+  const ch = wanted ?? (age === 'little' && has('kid') ? 'kid' : has(s.character) ? s.character : 'person');
+  const preset = PRESETS[ch]?.[base];
+  if (!preset) return no(`${cap(spoken(ch))} does not come as ${a(base)} ${base}. ${cap(orList(CHARACTERS.filter(has).map(spoken)))} can.`);
   const was = s.character;
-  s.character = 'person';
-  s.person.head = preset.head;
-  s.person.facialHair = preset.facialHair;
+  s.character = ch;
+  Object.assign(s[ch], preset.set);
   const m = mood && MOOD_OF[mood];
-  if (m) s.person.expression = MOODS[m].person;
-  const face = m ? ` and look ${moodWord(mood)}` : '';
-  const turned = was === 'person' ? '' : 'Now I am a person. ';
-  return done(ctx, 'look' + gender + (m ?? ''), `${turned}A person shows being ${a(gender)} ${gender} through hair, so I gave myself ${preset.say}${face}.`);
+  const spec = m && moodSpecOf(ch, m);
+  if (spec) applyMood(s, ch, spec);
+  const hairKey = HAIR_COLOR[ch];
+  if (age === 'old' && hairKey) s[ch].colors[hairKey] = nearest(ctx, ch, hairKey, hexOfName(ctx, 'gray'));
+  const extra = [];
+  const wantAdd = add && accessory(ctx, s, String(add), true);
+  if (wantAdd) extra.push(wantAdd);
+  const wantNot = without && accessory(ctx, s, String(without), false);
+  if (wantNot) extra.push(wantNot);
+  const missed = [add && !wantAdd && `give ${spoken(ch)} ${String(add).replace(/_/g, ' ')}`, without && !wantNot && `take ${String(without).replace(/_/g, ' ')} off ${the(ch)}`].filter(Boolean);
+  const face = spec ? ` and look ${moodWord(mood)}` : '';
+  const oldHair = age === 'old' && hairKey ? ' and gray hair' : '';
+  const turned = was === ch ? '' : `Now I am ${spoken(ch)}. `;
+  const look = preset.say ?? andList(Object.entries(preset.set).map(([k, v]) => phraseOf(ctx, ch, k, v)).filter((x) => !/^no /.test(x)));
+  const kindWord = age ? `${age === 'old' ? 'an old' : 'a little'} ${base}` : `${a(base)} ${base}`;
+  const more = extra.length ? ` and ${andList(extra)}` : '';
+  const spokenLook = `${look}${more}${oldHair}${face}${missed.length ? ` (I could not ${andList(missed)}.)` : ''}`;
+  if (ch === 'person' && !age) return done(ctx, 'look' + kind + (m ?? ''), `${turned}A person shows being ${kindWord} through hair, so I gave myself ${spokenLook}.`);
+  return done(ctx, 'look' + kind + ch + (m ?? ''), `${turned}Here is ${kindWord}: I have ${spokenLook}.`);
+}
+/** "The third one", "next character": pick a character of the gallery by its number (1 = robot ... see GALLERY) or step through it. */
+function _pickCharacter(ctx, { n, dir }) {
+  const s = ensure(ctx);
+  const i = CHARACTERS.indexOf(s.character);
+  let to;
+  if (dir) to = CHARACTERS[(i + (/^(prev|back|last|before)/.test(String(dir)) ? -1 : 1) + CHARACTERS.length) % CHARACTERS.length];
+  else {
+    const k = Number(n);
+    to = k < 0 ? CHARACTERS.at(k) : CHARACTERS[k - 1];
+    if (!to) return no(`I have ${CHARACTERS.length} characters: ${GALLERY(s).join(', ')}.`);
+  }
+  if (to === s.character) return ok(`I am ${spoken(to)} already.`);
+  s.character = to;
+  return done(ctx, 'pick' + to, `Now I am ${spoken(to)}. ${describeShort(ctx, s)}`);
 }
 function _askCharacter(ctx, { who } = {}) {
   const s = ensure(ctx);
   if (who) {
-    const hit = ctx.lexicon(`${DATA}characters`).map((w) => w.split(':')).find(([w]) => w === who);
-    if (hit) return ok(hit[1] === s.character ? `Yes, I am ${spoken(hit[1])}.` : `No, I am ${spoken(s.character)}; I can become ${spoken(hit[1])} if you like.`);
+    const hit = charOf(ctx, who);
+    if (hit) return ok(hit === s.character ? `Yes, I am ${spoken(hit)}.` : `No, I am ${spoken(s.character)}; I can become ${spoken(hit)} if you like.`);
   }
   const others = CHARACTERS.filter((c) => c !== s.character).map(spoken);
   return ok(`I am ${spoken(s.character)}, drawn by the DiceBear library. I can also become ${orList(others)}.`);
 }
 function _listCharacters(ctx) {
   const s = ensure(ctx);
-  return ok(`I can be ${andList(CHARACTERS.map(spoken))}. Right now I am ${spoken(s.character)}. Say "become a person" to change.`);
+  return ok(`I can be ${andList(CHARACTERS.map(spoken))}. Right now I am ${spoken(s.character)}. Pick one in the gallery, say "become a person" or "the third one", or ask for a woman, a man, a girl or a boy.`);
 }
-function moodSpec(s, mood) { return MOODS[MOOD_OF[mood]]?.[s.character]; }
 function _setMood(ctx, { mood }) {
   const s = ensure(ctx);
   const m = MOOD_OF[mood];
   if (!m) return no(`I do not know how to look ${String(mood).replace(/_/g, ' ')}.`);
-  const spec = MOODS[m][s.character], ch = s.character;
-  if (ch === 'person') s.person.expression = spec; else Object.assign(s[ch], spec);
+  const ch = s.character, spec = moodSpecOf(ch, m);
+  if (!spec) return no(`${cap(spoken(ch))} cannot look ${moodWord(mood)}. It can look ${orList(Object.keys(MOODS_X[ch] ?? {}))}.`);
+  applyMood(s, ch, spec);
   return done(ctx, 'mood' + m, `Now I look ${moodWord(mood)}.`);
 }
 function _checkMood(ctx, { mood }) {
   const s = ensure(ctx);
   const m = MOOD_OF[mood];
   if (!m) return no(`I do not know what ${String(mood).replace(/_/g, ' ')} looks like.`);
-  const spec = MOODS[m][s.character], now = s[s.character];
-  const same = s.character === 'person' ? now.expression === spec : now.eyes === spec.eyes && now.mouth === spec.mouth;
+  const spec = moodSpecOf(s.character, m), now = s[s.character];
   const word = moodWord(mood);
-  if (same) return ok(`Yes, I look ${word}.`);
-  const mine = Object.keys(MOODS).filter((k) => { const sp = MOODS[k][s.character]; return s.character === 'person' ? now.expression === sp : now.eyes === sp.eyes && now.mouth === sp.mouth; });
+  if (moodIs(now, spec)) return ok(`Yes, I look ${word}.`);
+  const mine = moodsOf(s);
   return ok(`No, I do not look ${word}${mine.length ? `; I look ${mine[0]}` : ''}.`);
 }
 function _askMood(ctx) {
-  const s = ensure(ctx), now = s[s.character];
-  const mine = Object.keys(MOODS).filter((k) => { const sp = MOODS[k][s.character]; return s.character === 'person' ? now.expression === sp : now.eyes === sp.eyes && now.mouth === sp.mouth; });
+  const s = ensure(ctx), ch = s.character;
+  const mine = moodsOf(s);
   if (mine.length) return ok(`I feel ${mine[0]}.`);
-  return ok(`I have ${s.character === 'person' ? phraseOf(ctx, 'person', 'expression', now.expression) : `${phraseOf(ctx, s.character, 'eyes', now.eyes)} and ${phraseOf(ctx, s.character, 'mouth', now.mouth)}`}.`);
+  const bits = ['expression', 'eyes', 'mouth'].filter((k) => components(ctx, ch).includes(k)).map((k) => phraseOf(ctx, ch, k, s[ch][k]));
+  return ok(`I have ${andList(bits)}.`);
 }
 function _setName(ctx, { name }) {
   const n = String(name ?? '').trim().replace(/[.!?]+$/, '');
@@ -659,7 +808,7 @@ function _reset(ctx, { scope }) {
     return done(ctx, 'resetall', 'I started over as the robot.');
   }
   const ch = s.character;
-  s[ch] = d[ch];
+  s[ch] = d[ch] ?? defaultLook(ctx, ch);
   s.seed = d.seed;
   return done(ctx, 'reset' + ch, `I am back to my normal look as ${spoken(ch)}.`);
 }
@@ -679,7 +828,7 @@ function _askParts(ctx) {
   return ok(`I am ${spoken(ch)}. You can change my ${andList(comps)}, and my colors: ${andList(cols)}. `
     + `Ask "what eyes can you have?" for the choices, say "next ${PART_EXAMPLE[ch]}" or "surprise me", or tell me to become ${orList(CHARACTERS.filter((c) => c !== ch).map(spoken))}.`);
 }
-const PART_EXAMPLE = { robot: 'eyes', person: 'hair', emoji: 'mouth' };
+const PART_EXAMPLE = { robot: 'eyes', person: 'hair', emoji: 'mouth', portrait: 'hair', cartoon: 'hair', kid: 'hair', pixel: 'hair', pixelbot: 'eyes', funemoji: 'mouth' };
 function _listOptions(ctx, { part }) {
   const s = ensure(ctx);
   const keys = PART_KEYS[part];
@@ -741,6 +890,10 @@ function _askWearing(ctx) {
     if (r.chest !== 'none') bits.push(phraseOf(ctx, ch, 'chest', r.chest));
     return ok(`I am a robot, so I do not wear clothes. ${bits.length ? `I have ${andList(bits)}.` : 'I have nothing extra on me.'}`);
   }
+  if (!CORE.includes(ch)) {
+    const bits = components(ctx, ch).filter((k) => optional(ctx, ch).includes(k) && s[ch][k] !== 'none').map((k) => phraseOf(ctx, ch, k, s[ch][k]));
+    return ok(bits.length ? `I am wearing ${andList(bits)}.` : 'I am not wearing anything special.');
+  }
   return ok('I am an emoji. I only have a face, eyes, a mouth and cheeks, so I do not wear anything.');
 }
 function describeShort(ctx, s) {
@@ -762,7 +915,7 @@ function _describe(ctx) {
 // Every operation below is wrapped: when it changes the avatar, the state before it is pushed on `undo` (max 20).
 // An operation that cannot do something for the active character but another character can does not switch silently:
 // it sets `pending` + inputMode 'confirm' and tells the user to say yes; interceptInput then switches (and repeats the command).
-const snap = (s) => structuredClone({ character: s.character, seed: s.seed, robot: s.robot, person: s.person, emoji: s.emoji });
+const snap = (s) => structuredClone(Object.fromEntries(['character', 'seed', ...CHARACTERS].filter((k) => s[k] !== undefined).map((k) => [k, s[k]])));
 const record = (s, pre) => {
   if (JSON.stringify(pre) === JSON.stringify(snap(s))) return;
   (s.undo ??= []).push(pre);
@@ -827,7 +980,7 @@ function _setPartColored(ctx, { part, value, color, n, text }) {
   return done(ctx, r.key + r.id + hex, `I have ${say(r.key, `${shown} ${displayOf(ctx, r.ch, r.key, r.id)}`)} now.${close}${note}`);
 }
 
-const REPLAY = { setCharacter: _setCharacter, setPart: _setPart, step: _step, resetPart: _resetPart, removePart: _removePart, setColor: _setColor, shiftColor: _shiftColor, setPartColored: _setPartColored, resizePart: _resizePart };
+const REPLAY = { setCharacter: _setCharacter, pickCharacter: _pickCharacter, setPart: _setPart, step: _step, resetPart: _resetPart, removePart: _removePart, setColor: _setColor, shiftColor: _shiftColor, setPartColored: _setPartColored, resizePart: _resizePart };
 
 /** Modal input (spec 07 section 2): answers "yes" or "no" to an offer to become another character. */
 export function interceptInput(ctx, text) {
@@ -866,6 +1019,7 @@ export const shiftColor = W(_shiftColor, 'shiftColor');
 export const surprise = W(_surprise, 'surprise');
 export const setSeed = W(_setSeed, 'setSeed');
 export const setCharacter = W(_setCharacter, 'setCharacter');
+export const pickCharacter = W(_pickCharacter, 'pickCharacter');
 export const setMood = W(_setMood, 'setMood');
 export const reset = W(_reset, 'reset');
 export const askColor = _askColor;

@@ -325,6 +325,93 @@
     word=wavy
     word=tongue
     word=teeth
+    word=earring
+    word=freckle
+    word=short_sleek_hair
+    word=short_swept_hair
+    word=spiky_hair
+    word=big_curly_hair
+    word=bun_with_bang
+    word=long_straight_hair
+    word=balding_hair
+    word=long_wavy_hair
+    word=tight_curly_hair
+    word=flower
+    word=sad
+    word=collared
+    word=crew
+    word=hoop
+    word=attached
+    word=detached
+    word=down
+    word=eyelashes_down
+    word=eyelashes_up
+    word=up
+    word=eye
+    word=eyes_shadow
+    word=smiling
+    word=smiling_shadow
+    word=scruff
+    word=danny_phantom
+    word=doug_funny
+    word=fonze
+    word=mr_clean
+    word=mr_t
+    word=pixie
+    word=wispy_hair
+    word=pixie_cut
+    word=nervous
+    word=pucker
+    word=surprised
+    word=curve
+    word=pointed
+    word=tound
+    word=cat_ear
+    word=clown_nose
+    word=sailormoon_crown
+    word=sleep_mask
+    word=cheery
+    word=confused
+    word=normal
+    word=starstruck
+    word=winking
+    word=bowl_cut_hair
+    word=curly_bob
+    word=curly_short_hair
+    word=fro_bun
+    word=half_shaved_head
+    word=wavy_bob
+    word=bowl_cut
+    word=top_bun
+    word=afro_bun
+    word=awkward_smile
+    word=brace
+    word=gap_smile
+    word=kawaii
+    word=open_sad
+    word=opened_smile
+    word=teeth_smile
+    word=dark
+    word=light
+    word=block
+    word=soft
+    word=slim
+    word=tiny
+    word=crying
+    word=pissed
+    word=plain
+    word=sleep_close
+    word=star
+    word=tear_drop
+    word=drip
+    word=kiss_heart
+    word=lil_smile
+    word=shout
+    word=shy
+    word=sick
+    word=smile_teeth
+    word=tongue_out
+    word=wide_smile
 
 @lex.ui.avatar.characters core.lexicon
     class=noun
@@ -332,6 +419,12 @@
     word=robot
     word=person
     word=emoji
+    word=portrait
+    word=cartoon
+    word=kid
+    word=pixel_person
+    word=pixel_robot
+    word=fun_emoji
     word=bot
     word=android
     word=machine
@@ -348,6 +441,27 @@
     word=smiley
     word=emoticon
     word=smiley_face
+    word=drawing
+    word=sketch
+    word=illustration
+    word=line_art
+    word=toon
+    word=comic
+    word=cartoon_person
+    word=cartoon_character
+    word=child
+    word=little_kid
+    word=toddler
+    word=youngster
+    word=pixel
+    word=pixel_art
+    word=pixelated
+    word=retro
+    word=pixel_bot
+    word=retro_robot
+    word=funny_emoji
+    word=funny_face
+    word=party_emoji
 
 @lex.ui.avatar.colors core.lexicon
     class=noun
@@ -498,6 +612,12 @@
     word=robot:robot:robot
     word=person:person:person
     word=emoji:emoji:emoji
+    word=portrait:portrait:portrait
+    word=cartoon:cartoon:cartoon
+    word=kid:kid:kid
+    word=pixel_person:pixel:pixel_person
+    word=pixel_robot:pixelbot:pixel_robot
+    word=fun_emoji:funemoji:fun_emoji
     word=bot:robot:robot
     word=android:robot:robot
     word=machine:robot:robot
@@ -514,6 +634,27 @@
     word=smiley:emoji:emoji
     word=emoticon:emoji:emoji
     word=smiley_face:emoji:emoji
+    word=drawing:portrait:portrait
+    word=sketch:portrait:portrait
+    word=illustration:portrait:portrait
+    word=line_art:portrait:portrait
+    word=toon:cartoon:cartoon
+    word=comic:cartoon:cartoon
+    word=cartoon_person:cartoon:cartoon
+    word=cartoon_character:cartoon:cartoon
+    word=child:kid:kid
+    word=little_kid:kid:kid
+    word=toddler:kid:kid
+    word=youngster:kid:kid
+    word=pixel:pixel:pixel_person
+    word=pixel_art:pixel:pixel_person
+    word=pixelated:pixel:pixel_person
+    word=retro:pixel:pixel_person
+    word=pixel_bot:pixelbot:pixel_robot
+    word=retro_robot:pixelbot:pixel_robot
+    word=funny_emoji:funemoji:fun_emoji
+    word=funny_face:funemoji:fun_emoji
+    word=party_emoji:funemoji:fun_emoji
 
 @lex.ui.avatar.data.robot.components core.lexicon
     class=data
@@ -1191,6 +1332,1004 @@
     word=5eead4
     word=e2e8f0
 
+@lex.ui.avatar.data.portrait.components core.lexicon
+    class=data
+    doc="ops data: the components of the portrait, in style order"
+    word=beard
+    word=earrings
+    word=eyebrows
+    word=eyes
+    word=freckles
+    word=glasses
+    word=hair
+    word=hairAccessories
+    word=head
+    word=mouth
+    word=nose
+
+@lex.ui.avatar.data.portrait.optional core.lexicon
+    class=data
+    doc="ops data: components of the portrait that can be absent (variant none)"
+    word=beard
+    word=earrings
+    word=freckles
+    word=glasses
+    word=hairAccessories
+
+@lex.ui.avatar.data.portrait.colors core.lexicon
+    class=data
+    doc="ops data: the colors of the portrait"
+    word=hair
+    word=skin
+
+@lex.ui.avatar.data.portrait.beard core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of portrait.beard, in style order"
+    word=none:none:none
+    word=beard:variant01:style_1
+    word=beard:variant02:style_2
+
+@lex.ui.avatar.data.portrait.earrings core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of portrait.earrings, in style order"
+    word=none:none:none
+    word=earring:variant01:style_1
+    word=earring:variant02:style_2
+    word=earring:variant03:style_3
+
+@lex.ui.avatar.data.portrait.eyebrows core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of portrait.eyebrows, in style order"
+    word=style:variant01:style_1
+    word=style:variant02:style_2
+    word=style:variant03:style_3
+    word=style:variant04:style_4
+    word=style:variant05:style_5
+    word=style:variant06:style_6
+    word=style:variant07:style_7
+    word=style:variant08:style_8
+    word=style:variant09:style_9
+    word=style:variant10:style_10
+    word=style:variant11:style_11
+    word=style:variant12:style_12
+    word=style:variant13:style_13
+
+@lex.ui.avatar.data.portrait.eyes core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of portrait.eyes, in style order"
+    word=style:variant01:style_1
+    word=style:variant02:style_2
+    word=style:variant03:style_3
+    word=style:variant04:style_4
+    word=style:variant05:style_5
+    word=style:variant06:style_6
+    word=style:variant07:style_7
+    word=style:variant08:style_8
+    word=style:variant09:style_9
+    word=style:variant10:style_10
+    word=style:variant11:style_11
+    word=style:variant12:style_12
+    word=style:variant13:style_13
+    word=style:variant14:style_14
+    word=style:variant15:style_15
+    word=style:variant16:style_16
+    word=style:variant17:style_17
+    word=style:variant18:style_18
+    word=style:variant19:style_19
+    word=style:variant20:style_20
+    word=style:variant21:style_21
+    word=style:variant22:style_22
+    word=style:variant23:style_23
+    word=style:variant24:style_24
+
+@lex.ui.avatar.data.portrait.freckles core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of portrait.freckles, in style order"
+    word=none:none:none
+    word=freckle:variant01:style_1
+
+@lex.ui.avatar.data.portrait.glasses core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of portrait.glasses, in style order"
+    word=none:none:none
+    word=glass:variant01:style_1
+    word=glass:variant02:style_2
+    word=glass:variant03:style_3
+    word=glass:variant04:style_4
+    word=glass:variant05:style_5
+
+@lex.ui.avatar.data.portrait.hair core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of portrait.hair, in style order"
+    word=style:variant01:short_sleek_hair
+    word=style:variant02:short_swept_hair
+    word=style:variant03:style_3
+    word=style:variant04:spiky_hair
+    word=style:variant05:big_curly_hair
+    word=style:variant06:style_6
+    word=style:variant07:style_7
+    word=style:variant08:style_8
+    word=style:variant09:short_curly_hair
+    word=style:variant10:style_10
+    word=style:variant11:style_11
+    word=style:variant12:style_12
+    word=style:variant13:bob_hair
+    word=style:variant14:bun_with_bangs
+    word=style:variant15:style_15
+    word=style:variant16:style_16
+    word=style:variant17:style_17
+    word=style:variant18:style_18
+    word=style:variant19:style_19
+    word=style:variant20:style_20
+    word=style:variant21:long_straight_hair
+    word=style:variant22:style_22
+    word=style:variant23:style_23
+    word=style:variant24:style_24
+    word=style:variant25:balding_hair
+    word=style:variant26:twin_buns
+    word=style:variant27:mohawk
+    word=style:variant28:style_28
+    word=style:variant29:style_29
+    word=style:variant30:style_30
+    word=style:variant31:style_31
+    word=style:variant32:style_32
+    word=style:variant33:ponytail
+    word=style:variant34:style_34
+    word=style:variant35:long_wavy_hair
+    word=style:variant36:style_36
+    word=style:variant37:style_37
+    word=style:variant38:style_38
+    word=style:variant39:tight_curly_hair
+    word=style:variant40:style_40
+    word=style:variant41:style_41
+    word=style:variant42:style_42
+    word=style:variant43:style_43
+    word=style:variant44:style_44
+    word=style:variant45:style_45
+    word=style:variant46:style_46
+    word=style:variant47:style_47
+    word=style:variant48:style_48
+    word=short_sleek_hair:variant01:short_sleek_hair
+    word=short_swept_hair:variant02:short_swept_hair
+    word=spiky_hair:variant04:spiky_hair
+    word=big_curly_hair:variant05:big_curly_hair
+    word=short_curly_hair:variant09:short_curly_hair
+    word=bob:variant13:bob_hair
+    word=bun_with_bang:variant14:bun_with_bangs
+    word=long_straight_hair:variant21:long_straight_hair
+    word=balding_hair:variant25:balding_hair
+    word=twin_bun:variant26:twin_buns
+    word=mohawk:variant27:mohawk
+    word=ponytail:variant33:ponytail
+    word=long_wavy_hair:variant35:long_wavy_hair
+    word=tight_curly_hair:variant39:tight_curly_hair
+
+@lex.ui.avatar.data.portrait.hairAccessories core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of portrait.hairAccessories, in style order"
+    word=none:none:none
+    word=flower:flowers:flowers
+
+@lex.ui.avatar.data.portrait.head core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of portrait.head, in style order"
+    word=style:variant01:style_1
+    word=style:variant02:style_2
+    word=style:variant03:style_3
+    word=style:variant04:style_4
+
+@lex.ui.avatar.data.portrait.mouth core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of portrait.mouth, in style order"
+    word=happy:happy01:happy_1
+    word=happy:happy02:happy_2
+    word=happy:happy03:happy_3
+    word=happy:happy04:happy_4
+    word=happy:happy05:happy_5
+    word=happy:happy06:happy_6
+    word=happy:happy07:happy_7
+    word=happy:happy08:happy_8
+    word=happy:happy09:happy_9
+    word=happy:happy10:happy_10
+    word=happy:happy11:happy_11
+    word=happy:happy12:happy_12
+    word=happy:happy13:happy_13
+    word=happy:happy14:happy_14
+    word=happy:happy15:happy_15
+    word=happy:happy16:happy_16
+    word=happy:happy17:happy_17
+    word=happy:happy18:happy_18
+    word=sad:sad01:sad_1
+    word=sad:sad02:sad_2
+    word=sad:sad03:sad_3
+    word=sad:sad04:sad_4
+    word=sad:sad05:sad_5
+    word=sad:sad06:sad_6
+    word=sad:sad07:sad_7
+    word=sad:sad08:sad_8
+    word=sad:sad09:sad_9
+
+@lex.ui.avatar.data.portrait.nose core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of portrait.nose, in style order"
+    word=style:variant01:style_1
+    word=style:variant02:style_2
+    word=style:variant03:style_3
+    word=style:variant04:style_4
+    word=style:variant05:style_5
+    word=style:variant06:style_6
+
+@lex.ui.avatar.palette.portrait.hair core.lexicon
+    class=data
+    doc="ops data: palette of portrait.hair"
+    word=2c1b18
+    word=e8e1e1
+    word=ecdcbf
+    word=d6b370
+    word=f59797
+    word=b58143
+    word=a55728
+    word=724133
+    word=4a312c
+    word=c93305
+
+@lex.ui.avatar.palette.portrait.skin core.lexicon
+    class=data
+    doc="ops data: palette of portrait.skin"
+    word=ffdbb4
+    word=edb98a
+    word=d08b5b
+    word=ae5d29
+    word=694d3d
+
+@lex.ui.avatar.data.cartoon.components core.lexicon
+    class=data
+    doc="ops data: the components of the cartoon, in style order"
+    word=clothes
+    word=earrings
+    word=ears
+    word=eyebrows
+    word=eyes
+    word=facialHair
+    word=glasses
+    word=hair
+    word=mouth
+    word=nose
+
+@lex.ui.avatar.data.cartoon.optional core.lexicon
+    class=data
+    doc="ops data: components of the cartoon that can be absent (variant none)"
+    word=earrings
+    word=facialHair
+    word=glasses
+    word=hair
+
+@lex.ui.avatar.data.cartoon.colors core.lexicon
+    class=data
+    doc="ops data: the colors of the cartoon"
+    word=base
+    word=earring
+    word=eyeShadow
+    word=glasses
+    word=hair
+    word=shirt
+
+@lex.ui.avatar.data.cartoon.clothes core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of cartoon.clothes, in style order"
+    word=collared:collared:collared
+    word=crew:crew:crew
+    word=open:open:open
+
+@lex.ui.avatar.data.cartoon.earrings core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of cartoon.earrings, in style order"
+    word=none:none:none
+    word=hoop:hoop:hoop
+    word=stud:stud:stud
+
+@lex.ui.avatar.data.cartoon.ears core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of cartoon.ears, in style order"
+    word=attached:attached:attached
+    word=detached:detached:detached
+
+@lex.ui.avatar.data.cartoon.eyebrows core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of cartoon.eyebrows, in style order"
+    word=down:down:down
+    word=eyelashes_down:eyelashesDown:eyelashes_down
+    word=eyelashes_up:eyelashesUp:eyelashes_up
+    word=up:up:up
+
+@lex.ui.avatar.data.cartoon.eyes core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of cartoon.eyes, in style order"
+    word=eye:eyes:eyes
+    word=eyes_shadow:eyesShadow:eyes_shadow
+    word=round:round:round
+    word=smiling:smiling:smiling
+    word=smiling_shadow:smilingShadow:smiling_shadow
+    word=circular:round:round
+
+@lex.ui.avatar.data.cartoon.facialHair core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of cartoon.facialHair, in style order"
+    word=none:none:none
+    word=beard:beard:beard
+    word=scruff:scruff:scruff
+
+@lex.ui.avatar.data.cartoon.glasses core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of cartoon.glasses, in style order"
+    word=none:none:none
+    word=round:round:round
+    word=square:square:square
+    word=glass:round:round
+
+@lex.ui.avatar.data.cartoon.hair core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of cartoon.hair, in style order"
+    word=none:none:none
+    word=danny_phantom:dannyPhantom:side_swept_hair
+    word=doug_funny:dougFunny:wispy_hair
+    word=fonze:fonze:quiff
+    word=full:full:long_wavy_hair
+    word=mr_clean:mrClean:bald_head
+    word=mr_t:mrT:mohawk
+    word=pixie:pixie:pixie_cut
+    word=turban:turban:turban
+    word=side_swept_hair:dannyPhantom:side_swept_hair
+    word=wispy_hair:dougFunny:wispy_hair
+    word=quiff:fonze:quiff
+    word=long_wavy_hair:full:long_wavy_hair
+    word=bald:mrClean:bald_head
+    word=mohawk:mrT:mohawk
+    word=pixie_cut:pixie:pixie_cut
+
+@lex.ui.avatar.data.cartoon.mouth core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of cartoon.mouth, in style order"
+    word=frown:frown:frown
+    word=laughing:laughing:laughing
+    word=nervous:nervous:nervous
+    word=pucker:pucker:pucker
+    word=sad:sad:sad
+    word=smile:smile:smile
+    word=smirk:smirk:smirk
+    word=surprised:surprised:surprised
+    word=happy:smile:smile
+
+@lex.ui.avatar.data.cartoon.nose core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of cartoon.nose, in style order"
+    word=curve:curve:curve
+    word=pointed:pointed:pointed
+    word=tound:tound:tound
+
+@lex.ui.avatar.palette.cartoon.base core.lexicon
+    class=data
+    doc="ops data: palette of cartoon.base"
+    word=f9c9b6
+    word=ac6651
+    word=77311d
+
+@lex.ui.avatar.palette.cartoon.earring core.lexicon
+    class=data
+    doc="ops data: palette of cartoon.earring"
+    word=f9c9b6
+    word=d2eff3
+    word=000000
+    word=e0ddff
+    word=f4d150
+    word=ac6651
+    word=9287ff
+    word=ffeba4
+    word=fc909f
+    word=ffedef
+    word=6bd9e9
+    word=77311d
+    word=ffffff
+
+@lex.ui.avatar.palette.cartoon.eyeShadow core.lexicon
+    class=data
+    doc="ops data: palette of cartoon.eyeShadow"
+    word=d2eff3
+    word=e0ddff
+    word=ffeba4
+    word=ffedef
+    word=ffffff
+
+@lex.ui.avatar.palette.cartoon.glasses core.lexicon
+    class=data
+    doc="ops data: palette of cartoon.glasses"
+    word=f9c9b6
+    word=d2eff3
+    word=000000
+    word=e0ddff
+    word=f4d150
+    word=ac6651
+    word=9287ff
+    word=ffeba4
+    word=fc909f
+    word=ffedef
+    word=6bd9e9
+    word=77311d
+    word=ffffff
+
+@lex.ui.avatar.palette.cartoon.hair core.lexicon
+    class=data
+    doc="ops data: palette of cartoon.hair"
+    word=f9c9b6
+    word=d2eff3
+    word=000000
+    word=e0ddff
+    word=f4d150
+    word=ac6651
+    word=9287ff
+    word=ffeba4
+    word=fc909f
+    word=ffedef
+    word=6bd9e9
+    word=77311d
+    word=ffffff
+
+@lex.ui.avatar.palette.cartoon.shirt core.lexicon
+    class=data
+    doc="ops data: palette of cartoon.shirt"
+    word=f9c9b6
+    word=d2eff3
+    word=000000
+    word=e0ddff
+    word=f4d150
+    word=ac6651
+    word=9287ff
+    word=ffeba4
+    word=fc909f
+    word=ffedef
+    word=6bd9e9
+    word=77311d
+    word=ffffff
+
+@lex.ui.avatar.data.kid.components core.lexicon
+    class=data
+    doc="ops data: the components of the kid, in style order"
+    word=accessories
+    word=eyes
+    word=hair
+    word=mouth
+
+@lex.ui.avatar.data.kid.optional core.lexicon
+    class=data
+    doc="ops data: components of the kid that can be absent (variant none)"
+    word=accessories
+
+@lex.ui.avatar.data.kid.colors core.lexicon
+    class=data
+    doc="ops data: the colors of the kid"
+    word=hair
+    word=skin
+
+@lex.ui.avatar.data.kid.accessories core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of kid.accessories, in style order"
+    word=none:none:none
+    word=cat_ear:catEars:cat_ears
+    word=clown_nose:clownNose:clown_nose
+    word=face_mask:faceMask:face_mask
+    word=glass:glasses:thin_square_glasses
+    word=mustache:mustache:mustache
+    word=sailormoon_crown:sailormoonCrown:sailormoon_crown
+    word=sleep_mask:sleepMask:sleep_mask
+    word=sunglass:sunglasses:round_sunglasses
+    word=thin_square_glass:glasses:thin_square_glasses
+    word=round_sunglass:sunglasses:round_sunglasses
+    word=square_glass:glasses:thin_square_glasses
+    word=reading_glass:glasses:thin_square_glasses
+    word=black_sunglass:sunglasses:round_sunglasses
+    word=big_sunglass:sunglasses:round_sunglasses
+    word=shade:sunglasses:round_sunglasses
+    word=spectacle:glasses:thin_square_glasses
+    word=spec:glasses:thin_square_glasses
+
+@lex.ui.avatar.data.kid.eyes core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of kid.eyes, in style order"
+    word=angry:angry:angry
+    word=cheery:cheery:cheery
+    word=confused:confused:confused
+    word=normal:normal:normal
+    word=sad:sad:sad
+    word=sleepy:sleepy:sleepy
+    word=starstruck:starstruck:starstruck
+    word=winking:winking:winking
+    word=drowsy:sleepy:sleepy
+
+@lex.ui.avatar.data.kid.hair core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of kid.hair, in style order"
+    word=bang:bangs:bangs
+    word=bowl_cut_hair:bowlCutHair:bowl_cut
+    word=braid:braids:braids
+    word=bun:bunHair:top_bun
+    word=curly_bob:curlyBob:curly_bob
+    word=curly_short_hair:curlyShortHair:short_curly_hair
+    word=fro_bun:froBun:afro_bun
+    word=half_shaved_head:halfShavedHead:half_shaved_head
+    word=mohawk:mohawk:mohawk
+    word=shaved:shavedHead:shaved_head
+    word=short:shortHair:short_hair
+    word=straight:straightHair:long_straight_hair
+    word=wavy_bob:wavyBob:wavy_bob
+    word=bowl_cut:bowlCutHair:bowl_cut
+    word=top_bun:bunHair:top_bun
+    word=short_curly_hair:curlyShortHair:short_curly_hair
+    word=afro_bun:froBun:afro_bun
+    word=long_straight_hair:straightHair:long_straight_hair
+
+@lex.ui.avatar.data.kid.mouth core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of kid.mouth, in style order"
+    word=awkward_smile:awkwardSmile:awkward_smile
+    word=brace:braces:braces
+    word=gap_smile:gapSmile:gap_smile
+    word=kawaii:kawaii:kawaii
+    word=open_sad:openSad:open_sad
+    word=opened_smile:openedSmile:opened_smile
+    word=teeth_smile:teethSmile:teeth_smile
+    word=unimpressed:unimpressed:unimpressed
+
+@lex.ui.avatar.palette.kid.hair core.lexicon
+    class=data
+    doc="ops data: palette of kid.hair"
+    word=220f00
+    word=3a1a00
+    word=71472d
+    word=e2ba87
+    word=605de4
+    word=238d80
+    word=d56c0c
+    word=e9b729
+
+@lex.ui.avatar.palette.kid.skin core.lexicon
+    class=data
+    doc="ops data: palette of kid.skin"
+    word=ffe4c0
+    word=f5d7b1
+    word=efcc9f
+    word=e2ba87
+    word=c99c62
+    word=a47539
+    word=8c5a2b
+    word=643d19
+
+@lex.ui.avatar.data.pixel.components core.lexicon
+    class=data
+    doc="ops data: the components of the pixel_person, in style order"
+    word=accessories
+    word=beard
+    word=clothes
+    word=eyes
+    word=glasses
+    word=hair
+    word=hat
+    word=mouth
+
+@lex.ui.avatar.data.pixel.optional core.lexicon
+    class=data
+    doc="ops data: components of the pixel_person that can be absent (variant none)"
+    word=accessories
+    word=beard
+    word=glasses
+    word=hat
+
+@lex.ui.avatar.data.pixel.colors core.lexicon
+    class=data
+    doc="ops data: the colors of the pixel_person"
+    word=accessories
+    word=clothing
+    word=eyes
+    word=glasses
+    word=hair
+    word=hat
+    word=mouth
+    word=skin
+
+@lex.ui.avatar.data.pixel.accessories core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of pixel_person.accessories, in style order"
+    word=none:none:none
+    word=style:variant01:style_1
+    word=style:variant02:style_2
+    word=style:variant03:style_3
+    word=style:variant04:style_4
+
+@lex.ui.avatar.data.pixel.beard core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of pixel_person.beard, in style order"
+    word=none:none:none
+    word=beard:variant01:style_1
+    word=beard:variant02:style_2
+    word=beard:variant03:style_3
+    word=beard:variant04:style_4
+    word=beard:variant05:style_5
+    word=beard:variant06:style_6
+    word=beard:variant07:style_7
+    word=beard:variant08:style_8
+
+@lex.ui.avatar.data.pixel.clothes core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of pixel_person.clothes, in style order"
+    word=style:variant01:style_1
+    word=style:variant02:style_2
+    word=style:variant03:style_3
+    word=style:variant04:style_4
+    word=style:variant05:style_5
+    word=style:variant06:style_6
+    word=style:variant07:style_7
+    word=style:variant08:style_8
+    word=style:variant09:style_9
+    word=style:variant10:style_10
+    word=style:variant11:style_11
+    word=style:variant12:style_12
+    word=style:variant13:style_13
+    word=style:variant14:style_14
+    word=style:variant15:style_15
+    word=style:variant16:style_16
+    word=style:variant17:style_17
+    word=style:variant18:style_18
+    word=style:variant19:style_19
+    word=style:variant20:style_20
+    word=style:variant21:style_21
+    word=style:variant22:style_22
+    word=style:variant23:style_23
+
+@lex.ui.avatar.data.pixel.eyes core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of pixel_person.eyes, in style order"
+    word=style:variant01:style_1
+    word=style:variant02:style_2
+    word=style:variant03:style_3
+    word=style:variant04:style_4
+    word=style:variant05:style_5
+    word=style:variant06:style_6
+    word=style:variant07:style_7
+    word=style:variant08:style_8
+    word=style:variant09:style_9
+    word=style:variant10:style_10
+    word=style:variant11:style_11
+    word=style:variant12:style_12
+
+@lex.ui.avatar.data.pixel.glasses core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of pixel_person.glasses, in style order"
+    word=none:none:none
+    word=dark:dark01:dark_1
+    word=dark:dark02:dark_2
+    word=dark:dark03:dark_3
+    word=dark:dark04:dark_4
+    word=dark:dark05:dark_5
+    word=dark:dark06:dark_6
+    word=dark:dark07:dark_7
+    word=light:light01:light_1
+    word=light:light02:light_2
+    word=light:light03:light_3
+    word=light:light04:light_4
+    word=light:light05:light_5
+    word=light:light06:light_6
+    word=light:light07:light_7
+
+@lex.ui.avatar.data.pixel.hair core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of pixel_person.hair, in style order"
+    word=long:long01:long_1
+    word=long:long02:long_2
+    word=long:long03:long_3
+    word=long:long04:long_4
+    word=long:long05:long_5
+    word=long:long06:long_6
+    word=long:long07:long_7
+    word=long:long08:long_8
+    word=long:long09:long_9
+    word=long:long10:long_10
+    word=long:long11:long_11
+    word=long:long12:long_12
+    word=long:long13:long_13
+    word=long:long14:long_14
+    word=long:long15:long_15
+    word=long:long16:long_16
+    word=long:long17:long_17
+    word=long:long18:long_18
+    word=long:long19:long_19
+    word=long:long20:long_20
+    word=long:long21:long_21
+    word=short:short01:short_1
+    word=short:short02:short_2
+    word=short:short03:short_3
+    word=short:short04:short_4
+    word=short:short05:short_5
+    word=short:short06:short_6
+    word=short:short07:short_7
+    word=short:short08:short_8
+    word=short:short09:short_9
+    word=short:short10:short_10
+    word=short:short11:short_11
+    word=short:short12:short_12
+    word=short:short13:short_13
+    word=short:short14:short_14
+    word=short:short15:short_15
+    word=short:short16:short_16
+    word=short:short17:short_17
+    word=short:short18:short_18
+    word=short:short19:short_19
+    word=short:short20:short_20
+    word=short:short21:short_21
+    word=short:short22:short_22
+    word=short:short23:short_23
+    word=short:short24:short_24
+
+@lex.ui.avatar.data.pixel.hat core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of pixel_person.hat, in style order"
+    word=none:none:none
+    word=hat:variant01:style_1
+    word=hat:variant02:style_2
+    word=hat:variant03:style_3
+    word=hat:variant04:style_4
+    word=hat:variant05:style_5
+    word=hat:variant06:style_6
+    word=hat:variant07:style_7
+    word=hat:variant08:style_8
+    word=hat:variant09:style_9
+    word=hat:variant10:style_10
+
+@lex.ui.avatar.data.pixel.mouth core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of pixel_person.mouth, in style order"
+    word=happy:happy01:happy_1
+    word=happy:happy02:happy_2
+    word=happy:happy03:happy_3
+    word=happy:happy04:happy_4
+    word=happy:happy05:happy_5
+    word=happy:happy06:happy_6
+    word=happy:happy07:happy_7
+    word=happy:happy08:happy_8
+    word=happy:happy09:happy_9
+    word=happy:happy10:happy_10
+    word=happy:happy11:happy_11
+    word=happy:happy12:happy_12
+    word=happy:happy13:happy_13
+    word=sad:sad01:sad_1
+    word=sad:sad02:sad_2
+    word=sad:sad03:sad_3
+    word=sad:sad04:sad_4
+    word=sad:sad05:sad_5
+    word=sad:sad06:sad_6
+    word=sad:sad07:sad_7
+    word=sad:sad08:sad_8
+    word=sad:sad09:sad_9
+    word=sad:sad10:sad_10
+
+@lex.ui.avatar.palette.pixel.accessories core.lexicon
+    class=data
+    doc="ops data: palette of pixel_person.accessories"
+    word=daa520
+    word=ffd700
+    word=fafad2
+    word=d3d3d3
+    word=a9a9a9
+
+@lex.ui.avatar.palette.pixel.clothing core.lexicon
+    class=data
+    doc="ops data: palette of pixel_person.clothing"
+    word=5bc0de
+    word=428bca
+    word=03396c
+    word=88d8b0
+    word=44c585
+    word=00b159
+    word=ff6f69
+    word=d11141
+    word=ae0001
+    word=ffeead
+    word=ffd969
+    word=ffc425
+
+@lex.ui.avatar.palette.pixel.eyes core.lexicon
+    class=data
+    doc="ops data: palette of pixel_person.eyes"
+    word=76778b
+    word=697b94
+    word=647b90
+    word=5b7c8b
+    word=588387
+    word=876658
+
+@lex.ui.avatar.palette.pixel.glasses core.lexicon
+    class=data
+    doc="ops data: palette of pixel_person.glasses"
+    word=4b4b4b
+    word=323232
+    word=191919
+    word=43677d
+    word=5f705c
+    word=a04b5d
+
+@lex.ui.avatar.palette.pixel.hair core.lexicon
+    class=data
+    doc="ops data: palette of pixel_person.hair"
+    word=cab188
+    word=603a14
+    word=83623b
+    word=a78961
+    word=611c17
+    word=603015
+    word=612616
+    word=28150a
+    word=009bbd
+    word=bd1700
+    word=91cb15
+
+@lex.ui.avatar.palette.pixel.hat core.lexicon
+    class=data
+    doc="ops data: palette of pixel_person.hat"
+    word=2e1e05
+    word=2663a3
+    word=989789
+    word=3d8a6b
+    word=cc6192
+    word=614f8a
+    word=a62116
+
+@lex.ui.avatar.palette.pixel.mouth core.lexicon
+    class=data
+    doc="ops data: palette of pixel_person.mouth"
+    word=d29985
+    word=c98276
+    word=e35d6a
+    word=de0f0d
+
+@lex.ui.avatar.palette.pixel.skin core.lexicon
+    class=data
+    doc="ops data: palette of pixel_person.skin"
+    word=ffdbac
+    word=f5cfa0
+    word=eac393
+    word=e0b687
+    word=cb9e6e
+    word=b68655
+    word=a26d3d
+    word=8d5524
+
+@lex.ui.avatar.data.pixelbot.components core.lexicon
+    class=data
+    doc="ops data: the components of the pixel_robot, in style order"
+    word=eyes
+    word=mouth
+
+@lex.ui.avatar.data.pixelbot.optional core.lexicon
+    class=data
+    doc="ops data: components of the pixel_robot that can be absent (variant none)"
+
+@lex.ui.avatar.data.pixelbot.colors core.lexicon
+    class=data
+    doc="ops data: the colors of the pixel_robot"
+    word=background
+    word=glow
+
+@lex.ui.avatar.data.pixelbot.eyes core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of pixel_robot.eyes, in style order"
+    word=round:round:round
+    word=happy:happy:happy
+    word=block:blocks:blocks
+    word=soft:soft:soft
+    word=tall:tall:tall
+    word=slim:slim:slim
+    word=wide:wide:wide
+    word=circular:round:round
+    word=joyful:happy:happy
+
+@lex.ui.avatar.data.pixelbot.mouth core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of pixel_robot.mouth, in style order"
+    word=smile:smile:smile
+    word=big_smile:bigSmile:big_smile
+    word=flat:flat:flat
+    word=tiny:tiny:tiny
+    word=open:open:open
+    word=happy:smile:smile
+
+@lex.ui.avatar.palette.pixelbot.background core.lexicon
+    class=data
+    doc="ops data: palette of pixel_robot.background"
+    word=0f172a
+    word=111827
+    word=172554
+    word=1e1b4b
+    word=2e1065
+    word=3b0764
+    word=500724
+    word=022c22
+    word=042f2e
+    word=083344
+
+@lex.ui.avatar.palette.pixelbot.glow core.lexicon
+    class=data
+    doc="ops data: palette of pixel_robot.glow"
+    word=7dd3fc
+    word=5eead4
+    word=86efac
+    word=bef264
+    word=fde68a
+    word=fdba74
+    word=f9a8d4
+    word=c4b5fd
+    word=ffffff
+
+@lex.ui.avatar.data.funemoji.components core.lexicon
+    class=data
+    doc="ops data: the components of the fun_emoji, in style order"
+    word=eyes
+    word=mouth
+
+@lex.ui.avatar.data.funemoji.optional core.lexicon
+    class=data
+    doc="ops data: components of the fun_emoji that can be absent (variant none)"
+
+@lex.ui.avatar.data.funemoji.colors core.lexicon
+    class=data
+    doc="ops data: the colors of the fun_emoji"
+    word=background
+
+@lex.ui.avatar.data.funemoji.eyes core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of fun_emoji.eyes, in style order"
+    word=closed:closed:closed
+    word=closed:closed2:closed_2
+    word=crying:crying:crying
+    word=cute:cute:cute
+    word=glass:glasses:glasses
+    word=love:love:love
+    word=pissed:pissed:pissed
+    word=plain:plain:plain
+    word=sad:sad:sad
+    word=shade:shades:shades
+    word=sleep_close:sleepClose:sleep_close
+    word=star:stars:stars
+    word=tear_drop:tearDrop:tear_drop
+    word=wink:wink:wink
+    word=wink:wink2:wink_2
+
+@lex.ui.avatar.data.funemoji.mouth core.lexicon
+    class=data
+    doc="ops data: <word>:<variant>:<display> of fun_emoji.mouth, in style order"
+    word=cute:cute:cute
+    word=drip:drip:drip
+    word=face_mask:faceMask:face_mask
+    word=kiss_heart:kissHeart:kiss_heart
+    word=lil_smile:lilSmile:lil_smile
+    word=pissed:pissed:pissed
+    word=plain:plain:plain
+    word=sad:sad:sad
+    word=shout:shout:shout
+    word=shy:shy:shy
+    word=sick:sick:sick
+    word=smile_lol:smileLol:smile_lol
+    word=smile_teeth:smileTeeth:smile_teeth
+    word=tongue_out:tongueOut:tongue_out
+    word=wide_smile:wideSmile:wide_smile
+
+@lex.ui.avatar.palette.funemoji.background core.lexicon
+    class=data
+    doc="ops data: palette of fun_emoji.background"
+    word=059ff2
+    word=d9915b
+    word=f6d594
+    word=71cf62
+    word=d84be5
+    word=fcbc34
+
 @lex.ui.avatar.parts core.lexicon
     class=noun
     plural=antenna:antennae
@@ -1216,6 +2355,9 @@
     word=facial_hair
     word=mask
     word=cheek
+    word=eyebrow
+    word=brow
+    word=nose
 
 @lex.ui.avatar.colorparts core.lexicon
     class=noun
@@ -1293,6 +2435,7 @@
     word=bored
     word=blank
     word=smug
+    word=cool
     word=stressed
     word=in_love
     word=loving
@@ -1649,6 +2792,19 @@
     word=gal
     word=boy
     word=lad
+    word=little_girl
+    word=little_boy
+    word=small_girl
+    word=small_boy
+    word=old_man
+    word=old_woman
+    word=elderly_man
+    word=elderly_woman
+    word=grandfather
+    word=grandmother
+    word=grandpa
+    word=grandma
+    word=granny
 
 @lex.ui.avatar.self core.lexicon
     class=noun
@@ -1744,3 +2900,28 @@
     word=zigzag
     word=wavy
     word=tongue
+
+@lex.ui.avatar.gallery core.lexicon
+    class=noun
+    doc="What the gallery of the Avatar tab shows: the characters (show me the characters, show me other avatars)."
+    word=character
+    word=avatar
+    word=gallery
+    word=other_avatar
+    word=other_character
+    word=more_avatar
+    word=more_character
+    word=different_avatar
+    word=different_character
+    word=avatar_option
+    word=choice_of_avatar
+
+@lex.ui.avatar.charstep core.lexicon
+    class=modifier
+    doc="Words that step through the gallery of characters (next character, previous avatar, another one)."
+    word=next
+    word=previous
+    word=another
+    word=different
+    word=other
+    word=prior
