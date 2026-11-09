@@ -65,6 +65,33 @@ Fix:
 4. **Rules mode makes zero ORT calls.** Assert it in a test.
 5. **No turn may end in the watchdog answer for any message in the operational, Romanian, real-dialogue and fuzz sets** (browser, models loaded, 1× and 4×). Report the count of watchdog endings; the target is 0.
 
+### DIAG2 — the Diagram world works in the CLI but not in the webchat (reviewer at c0c4cf8, 16:46 local)
+
+**CLI** (Diagram tab opened): every probe is right.
+- "draw a blue rectangle called Api and a green circle called Db" → "Drew Api and Db";
+- connect with a dashed arrow → right;
+- "what is connected to Db?" → "Api connects to Db";
+- "make a process diagram with Plan, Build, Test, Ship" → right.
+
+**Webchat, default settings, Diagram tab open, the same messages:**
+- the create went to art.draw: "I did not understand where to put it ("called api")";
+- connect → "A connection needs two ends" (no shapes exist);
+- "what is connected to Db?" → "Which shape should I inspect?";
+- the process diagram → the 8 s watchdog (HANG2).
+
+Cause: the dispatcher does not know `diagram.sketch` (your log says so). Its candidates win over the rules' complete reading in the active tab's world.
+
+Fix:
+1. **The active tab's world wins whenever the rules read the whole message completely in that world,** whatever the dispatcher proposes. Generalise it as an ADR-004 tier, with tests for every tab. This also protects the next new world.
+2. **Retrain and publish the dispatcher with `diagram.sketch`.**
+   - Use `training/diagram/train.jsonl` plus `segments-train.jsonl` and the full rebuilt dataset.
+   - The compute rule does not block this: the user asked for the world, and a world the shipped model cannot route is not shipped.
+   - Report the usual sets before / after; wrong must not rise elsewhere.
+3. **Raise the source test set** (`data/test`, act right 68.6%, unread 18.6%). Read the unread clauses: most have no cue word. Add patterns and shapes for the frequent forms, and report again.
+4. A webchat headless test of the five probes above on the Diagram tab, with a screenshot of the drawn diagram.
+
+**Also from the RD10 check (CLI):** after "lets play tic tac toe" and two avatar commands, "B1" answers "B1 looks like a game move. Do you want to play tic-tac-toe or chess?" although a tic-tac-toe game is running. A running game must take bare coordinates even when another world spoke last.
+
 ### HANG + STOP — the chat stays "thinking" forever (user report 10:14 local, reproduced by the reviewer at 4e75163) — P0, DO FIRST
 
 **User session** (webchat; save it as `training/eval/real-dialogue-2026-11-09b.txt` and add it to `dialogues.jsonl` with the right tabs):
@@ -339,7 +366,7 @@ The reviewer copied what is reusable into **`imports/diagram-vss-demo/`** (stagi
 **Licence:** settled. The project is now AGPL-3.0-only, the same as the source (user decision 14:10); keep the copied files' provenance headers.
 
 **Order from now on:**
-1. HANG2 (model worker stops answering)
+1. HANG2 (model worker stops answering), then DIAG2 (Diagram world in the webchat, dispatcher retrain)
 2. SET (settings modal with tabs) + UI1 (one mic, tooltips) + DOC (greeting and docs), then VOICE (end of turn)
 3. ED (document editor commands)
 4. RD10 together with RD1b and RD2 (they share the mechanism)
@@ -1209,3 +1236,12 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
   - RD9 works: "Now I look scared", "I drew 2 clouds".
   - ED works in the CLI: new line, new chapter, write, bold, read the document. Webchat check pending.
   - VOICE: validated by the worker's tests (fake recognizer); a real-microphone check needs the user.
+
+- Batch up to c0c4cf8 (SET e2bf431, UI1 c11350b, DOC c34fb27, RD10/RD1b/RD2 92162cc, AV a8c07d5, DIAG 6877c84..2cb0593, ASTRA 7b158ba..975848a): `npm test` 998 pass / 0 fail / 4 skipped.
+  - **SET:** the settings modal has 7 tabs, opens by voice on the right tab, closes with Esc.
+  - **UI1:** one mic and one read-aloud toggle in the input bar; no icon button without a tooltip; "Source code (AGPL-3.0)" link.
+  - **DOC:** neurosymbolic greeting and header.
+  - **RD10:** "show Pariss", "show New Youk", "show Bern city", "show the city of Bern", "change avatar to a man" on tic-tac-toe, "change vatar to a woman" and "B1" with no game are all right.
+  - **AV:** 9 characters listed.
+  - **ED:** works in the webchat (chapter, write).
+  - **Open:** HANG2 (still reproduced at c0c4cf8), DIAG2, and the ASTRA review (next check-in).
