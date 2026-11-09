@@ -1,7 +1,7 @@
 {
- "file": "training/results/operational/encoder+n1-7e8055fd-2026-11-08-r3-v2-n1v3.json",
+ "file": "training/results/operational/encoder+n1-7e8055fd-2026-11-09-r3f-shipped.json",
  "mode": "encoder+n1",
- "date": "2026-11-08",
+ "date": "2026-11-09",
  "dispatcher_sha256": "7e8055fdcbb41a5e9ea2ef1f040d5d9256f90c58b413b4d0fc1d4f19e841b8ac",
  "normalizer_sha256": "1171020a228ce078baccd4ca7038c6e3141ceca5377aebe5f59f1f3b0b06fda2",
  "policy": {
@@ -12,9 +12,9 @@
   "spellcheck": true
  },
  "headline": {
-  "n": 1234,
-  "right_pct": 97.9,
+  "n": 1240,
+  "right_pct": 98.1,
   "wrong_pct": 0.6,
-  "not_understood_pct": 1.3
+  "not_understood_pct": 1.2
  }
 }
