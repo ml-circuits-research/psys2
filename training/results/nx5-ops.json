@@ -1,0 +1,788 @@
+{
+ "n_cases_right_no_setup": 829,
+ "n_segments": 1097,
+ "runs": {
+  "nx-a-seed1": {
+   "overall": {
+    "n": 1097,
+    "op_agree": 0.8541,
+    "model_says_none": 0.0137
+   },
+   "worlds": {
+    "art.draw": {
+     "n": 43,
+     "op_agree": 0.9302,
+     "model_says_none": 0.0
+    },
+    "data.charts": {
+     "n": 13,
+     "op_agree": 0.9231,
+     "model_says_none": 0.0
+    },
+    "docs.editor": {
+     "n": 29,
+     "op_agree": 0.4828,
+     "model_says_none": 0.1034
+    },
+    "docs.reader": {
+     "n": 22,
+     "op_agree": 0.7727,
+     "model_says_none": 0.0
+    },
+    "games.chess": {
+     "n": 3,
+     "op_agree": 0.6667,
+     "model_says_none": 0.0
+    },
+    "games.guess": {
+     "n": 3,
+     "op_agree": 1.0,
+     "model_says_none": 0.0
+    },
+    "games.hangman": {
+     "n": 5,
+     "op_agree": 0.4,
+     "model_says_none": 0.0
+    },
+    "games.tictactoe": {
+     "n": 1,
+     "op_agree": 1.0,
+     "model_says_none": 0.0
+    },
+    "geo.map": {
+     "n": 102,
+     "op_agree": 0.8039,
+     "model_says_none": 0.0098
+    },
+    "kids.animals": {
+     "n": 89,
+     "op_agree": 0.9551,
+     "model_says_none": 0.0
+    },
+    "kids.arith": {
+     "n": 233,
+     "op_agree": 0.9485,
+     "model_says_none": 0.0043
+    },
+    "kids.common": {
+     "n": 36,
+     "op_agree": 0.8889,
+     "model_says_none": 0.0278
+    },
+    "kids.shapes": {
+     "n": 59,
+     "op_agree": 0.9492,
+     "model_says_none": 0.0
+    },
+    "kids.shop": {
+     "n": 94,
+     "op_agree": 0.9043,
+     "model_says_none": 0.0
+    },
+    "kids.tasks": {
+     "n": 17,
+     "op_agree": 1.0,
+     "model_says_none": 0.0
+    },
+    "kids.time": {
+     "n": 113,
+     "op_agree": 0.9204,
+     "model_says_none": 0.0
+    },
+    "media.music": {
+     "n": 72,
+     "op_agree": 0.8194,
+     "model_says_none": 0.0
+    },
+    "ui.avatar": {
+     "n": 98,
+     "op_agree": 0.4694,
+     "model_says_none": 0.0918
+    },
+    "ui.help": {
+     "n": 18,
+     "op_agree": 0.9444,
+     "model_says_none": 0.0
+    },
+    "ui.shell": {
+     "n": 47,
+     "op_agree": 0.8936,
+     "model_says_none": 0.0
+    }
+   },
+   "disagreement_sample": [
+    {
+     "id": "kids.arith#003",
+     "text": "can you tell me what is three times five pls",
+     "rules": "question:kids.arith.calc:result",
+     "model": "question:kids.arith.double:result",
+     "conf": 0.659
+    },
+    {
+     "id": "kids.arith#007",
+     "text": "so what do i get for ten x ten",
+     "rules": "question:kids.arith.calc:result",
+     "model": "none",
+     "conf": 0.686
+    },
+    {
+     "id": "kids.arith#030",
+     "text": "what's 15 - 9 pls thanks",
+     "rules": "question:kids.arith.calc:result",
+     "model": "kids.arith.holding",
+     "conf": 0.698
+    },
+    {
+     "id": "kids.arith#041",
+     "text": "hey could u tell me whats seven times six pls",
+     "rules": "question:kids.arith.calc:result",
+     "model": "question:kids.arith.double:result",
+     "conf": 0.456
+    },
+    {
+     "id": "kids.arith#060",
+     "text": "mia gets 4 more",
+     "rules": "kids.arith.receive",
+     "model": "question:kids.arith.leader:winner",
+     "conf": 0.628
+    },
+    {
+     "id": "kids.arith#065",
+     "text": "Ana gets 5 more",
+     "rules": "kids.arith.receive",
+     "model": "question:kids.arith.leader:winner",
+     "conf": 0.584
+    },
+    {
+     "id": "kids.arith#071",
+     "text": "Ben gives away 6",
+     "rules": "kids.arith.lose",
+     "model": "kids.arith.give",
+     "conf": 0.554
+    },
+    {
+     "id": "kids.arith#080",
+     "text": "Mia gets 7 more",
+     "rules": "kids.arith.receive",
+     "model": "question:kids.arith.leader:winner",
+     "conf": 0.677
+    },
+    {
+     "id": "ui.avatar#001",
+     "text": "Give yourself visor eyes",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.resizePart",
+     "conf": 0.273
+    },
+    {
+     "id": "ui.avatar#002",
+     "text": "make ur eyes square pls",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.setPartUnknown",
+     "conf": 0.618
+    },
+    {
+     "id": "ui.avatar#003",
+     "text": "Use the cyclops eye",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.resetPart",
+     "conf": 0.73
+    },
+    {
+     "id": "ui.avatar#004",
+     "text": "I would like sleepy eyes",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.step",
+     "conf": 0.456
+    },
+    {
+     "id": "ui.avatar#005",
+     "text": "happy eyes please",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.resizePart",
+     "conf": 0.383
+    },
+    {
+     "id": "ui.avatar#006",
+     "text": "give me plus shaped eyes",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.setName",
+     "conf": 0.416
+    },
+    {
+     "id": "ui.avatar#008",
+     "text": "change the mouth to a zigzag",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.resetPart",
+     "conf": 0.371
+    },
+    {
+     "id": "ui.avatar#009",
+     "text": "speaker mouth",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.resizePart",
+     "conf": 0.142
+    },
+    {
+     "id": "ui.avatar#010",
+     "text": "Set your mouth to a line",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.resizePart",
+     "conf": 0.731
+    },
+    {
+     "id": "ui.avatar#012",
+     "text": "Siren on top",
+     "rules": "request:avatar.setPart",
+     "model": "kids.animals.animal",
+     "conf": 0.605
+    },
+    {
+     "id": "ui.avatar#013",
+     "text": "take off your antenna",
+     "rules": "request:avatar.removePart",
+     "model": "none",
+     "conf": 0.758
+    },
+    {
+     "id": "ui.avatar#016",
+     "text": "twin antennas",
+     "rules": "request:draw.duplicate",
+     "model": "question:kids.animals.animal:can_fly",
+     "conf": 0.307
+    },
+    {
+     "id": "ui.avatar#017",
+     "text": "put a heart on your chest",
+     "rules": "request:avatar.setPart",
+     "model": "none",
+     "conf": 0.386
+    },
+    {
+     "id": "ui.avatar#018",
+     "text": "remove the thing on your chest",
+     "rules": "request:avatar.removePart",
+     "model": "none",
+     "conf": 0.224
+    },
+    {
+     "id": "ui.avatar#020",
+     "text": "chest screen",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.resizePart",
+     "conf": 0.407
+    },
+    {
+     "id": "ui.avatar#021",
+     "text": "give urself a dial on ur chest",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.resizePart",
+     "conf": 0.493
+    },
+    {
+     "id": "ui.avatar#022",
+     "text": "make your eyes squre",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.resizePart",
+     "conf": 0.714
+    },
+    {
+     "id": "ui.avatar#034",
+     "text": "your body should be a bit darker",
+     "rules": "request:avatar.shiftColor",
+     "model": "request:avatar.setColor",
+     "conf": 0.956
+    },
+    {
+     "id": "ui.avatar#043",
+     "text": "can you be a girl",
+     "rules": "request:avatar.setCharacter",
+     "model": "request:avatar.listCharacters",
+     "conf": 0.094
+    },
+    {
+     "id": "ui.avatar#057",
+     "text": "your name is Zed from now on",
+     "rules": "request:avatar.setName",
+     "model": "request:chat.name",
+     "conf": 0.924
+    },
+    {
+     "id": "ui.avatar#068",
+     "text": "what tops can you have",
+     "rules": "request:avatar.listOptions",
+     "model": "request:avatar.askWearing",
+     "conf": 0.663
+    },
+    {
+     "id": "ui.avatar#073",
+     "text": "give yourself visor eyes",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.resizePart",
+     "conf": 0.273
+    },
+    {
+     "id": "ui.avatar#075",
+     "text": "the eyes square",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.resizePart",
+     "conf": 0.42
+    },
+    {
+     "id": "ui.avatar#076",
+     "text": "eyes square",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.resizePart",
+     "conf": 0.427
+    },
+    {
+     "id": "ui.avatar#079",
+     "text": "eyes cyclops",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.listOptions",
+     "conf": 0.247
+    },
+    {
+     "id": "ui.avatar#081",
+     "text": "give yourself a heart on your chest",
+     "rules": "request:avatar.setPart",
+     "model": "none",
+     "conf": 0.631
+    },
+    {
+     "id": "ui.avatar#081",
+     "text": "undo that",
+     "rules": "request:draw.undo",
+     "model": "request:diagram.undo",
+     "conf": 0.678
+    },
+    {
+     "id": "ui.avatar#082",
+     "text": "change your eyes to visor then change them back",
+     "rules": "request:doc.replace",
+     "model": "none",
+     "conf": 0.475
+    },
+    {
+     "id": "ui.avatar#083",
+     "text": "wear a hat",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.removePart",
+     "conf": 0.44
+    },
+    {
+     "id": "ui.avatar#084",
+     "text": "call yourself Anna",
+     "rules": "request:avatar.setName",
+     "model": "request:chat.meet",
+     "conf": 0.918
+    },
+    {
+     "id": "ui.avatar#088",
+     "text": "make the mouth a grill",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.resizePart",
+     "conf": 0.939
+    },
+    {
+     "id": "kids.time#013",
+     "text": "how many days are in a week",
+     "rules": "question:kids.time.length:count",
+     "model": "question:kids.time.gap:count",
+     "conf": 0.683
+    }
+   ]
+  },
+  "nx-aplus-seed1": {
+   "overall": {
+    "n": 1097,
+    "op_agree": 0.8851,
+    "model_says_none": 0.0137
+   },
+   "worlds": {
+    "art.draw": {
+     "n": 43,
+     "op_agree": 0.9302,
+     "model_says_none": 0.0
+    },
+    "data.charts": {
+     "n": 13,
+     "op_agree": 0.9231,
+     "model_says_none": 0.0
+    },
+    "docs.editor": {
+     "n": 29,
+     "op_agree": 0.5862,
+     "model_says_none": 0.0345
+    },
+    "docs.reader": {
+     "n": 22,
+     "op_agree": 0.7727,
+     "model_says_none": 0.0
+    },
+    "games.chess": {
+     "n": 3,
+     "op_agree": 1.0,
+     "model_says_none": 0.0
+    },
+    "games.guess": {
+     "n": 3,
+     "op_agree": 1.0,
+     "model_says_none": 0.0
+    },
+    "games.hangman": {
+     "n": 5,
+     "op_agree": 0.4,
+     "model_says_none": 0.0
+    },
+    "games.tictactoe": {
+     "n": 1,
+     "op_agree": 1.0,
+     "model_says_none": 0.0
+    },
+    "geo.map": {
+     "n": 102,
+     "op_agree": 0.8627,
+     "model_says_none": 0.0098
+    },
+    "kids.animals": {
+     "n": 89,
+     "op_agree": 0.9663,
+     "model_says_none": 0.0
+    },
+    "kids.arith": {
+     "n": 233,
+     "op_agree": 0.9657,
+     "model_says_none": 0.0043
+    },
+    "kids.common": {
+     "n": 36,
+     "op_agree": 0.8611,
+     "model_says_none": 0.0556
+    },
+    "kids.shapes": {
+     "n": 59,
+     "op_agree": 0.9492,
+     "model_says_none": 0.0
+    },
+    "kids.shop": {
+     "n": 94,
+     "op_agree": 0.9043,
+     "model_says_none": 0.0
+    },
+    "kids.tasks": {
+     "n": 17,
+     "op_agree": 1.0,
+     "model_says_none": 0.0
+    },
+    "kids.time": {
+     "n": 113,
+     "op_agree": 0.9469,
+     "model_says_none": 0.0
+    },
+    "media.music": {
+     "n": 72,
+     "op_agree": 0.875,
+     "model_says_none": 0.0
+    },
+    "ui.avatar": {
+     "n": 98,
+     "op_agree": 0.5816,
+     "model_says_none": 0.102
+    },
+    "ui.help": {
+     "n": 18,
+     "op_agree": 0.9444,
+     "model_says_none": 0.0
+    },
+    "ui.shell": {
+     "n": 47,
+     "op_agree": 0.9362,
+     "model_says_none": 0.0
+    }
+   },
+   "disagreement_sample": [
+    {
+     "id": "kids.arith#007",
+     "text": "so what do i get for ten x ten",
+     "rules": "question:kids.arith.calc:result",
+     "model": "none",
+     "conf": 0.604
+    },
+    {
+     "id": "kids.arith#030",
+     "text": "what's 15 - 9 pls thanks",
+     "rules": "question:kids.arith.calc:result",
+     "model": "kids.arith.holding",
+     "conf": 0.58
+    },
+    {
+     "id": "kids.arith#060",
+     "text": "mia gets 4 more",
+     "rules": "kids.arith.receive",
+     "model": "question:kids.arith.leader:winner",
+     "conf": 0.527
+    },
+    {
+     "id": "kids.arith#071",
+     "text": "Ben gives away 6",
+     "rules": "kids.arith.lose",
+     "model": "kids.arith.give",
+     "conf": 0.735
+    },
+    {
+     "id": "kids.arith#080",
+     "text": "Mia gets 7 more",
+     "rules": "kids.arith.receive",
+     "model": "question:kids.arith.leader:winner",
+     "conf": 0.488
+    },
+    {
+     "id": "ui.avatar#002",
+     "text": "make ur eyes square pls",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.setPartUnknown",
+     "conf": 0.499
+    },
+    {
+     "id": "ui.avatar#003",
+     "text": "Use the cyclops eye",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.resetPart",
+     "conf": 0.859
+    },
+    {
+     "id": "ui.avatar#004",
+     "text": "I would like sleepy eyes",
+     "rules": "request:avatar.setPart",
+     "model": "none",
+     "conf": 0.475
+    },
+    {
+     "id": "ui.avatar#005",
+     "text": "happy eyes please",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.resetPart",
+     "conf": 0.233
+    },
+    {
+     "id": "ui.avatar#006",
+     "text": "give me plus shaped eyes",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.setName",
+     "conf": 0.425
+    },
+    {
+     "id": "ui.avatar#008",
+     "text": "change the mouth to a zigzag",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.resetPart",
+     "conf": 0.465
+    },
+    {
+     "id": "ui.avatar#010",
+     "text": "Set your mouth to a line",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.resizePart",
+     "conf": 0.613
+    },
+    {
+     "id": "ui.avatar#012",
+     "text": "Siren on top",
+     "rules": "request:avatar.setPart",
+     "model": "none",
+     "conf": 0.97
+    },
+    {
+     "id": "ui.avatar#013",
+     "text": "take off your antenna",
+     "rules": "request:avatar.removePart",
+     "model": "none",
+     "conf": 0.401
+    },
+    {
+     "id": "ui.avatar#016",
+     "text": "twin antennas",
+     "rules": "request:draw.duplicate",
+     "model": "request:avatar.setPart",
+     "conf": 0.538
+    },
+    {
+     "id": "ui.avatar#017",
+     "text": "put a heart on your chest",
+     "rules": "request:avatar.setPart",
+     "model": "none",
+     "conf": 0.772
+    },
+    {
+     "id": "ui.avatar#018",
+     "text": "remove the thing on your chest",
+     "rules": "request:avatar.removePart",
+     "model": "none",
+     "conf": 0.297
+    },
+    {
+     "id": "ui.avatar#019",
+     "text": "add vents to your chest",
+     "rules": "request:avatar.setPart",
+     "model": "none",
+     "conf": 0.592
+    },
+    {
+     "id": "ui.avatar#020",
+     "text": "chest screen",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.resizePart",
+     "conf": 0.468
+    },
+    {
+     "id": "ui.avatar#021",
+     "text": "give urself a dial on ur chest",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.resizePart",
+     "conf": 0.429
+    },
+    {
+     "id": "ui.avatar#022",
+     "text": "make your eyes squre",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.resizePart",
+     "conf": 0.707
+    },
+    {
+     "id": "ui.avatar#034",
+     "text": "your body should be a bit darker",
+     "rules": "request:avatar.shiftColor",
+     "model": "request:avatar.setColor",
+     "conf": 0.849
+    },
+    {
+     "id": "ui.avatar#057",
+     "text": "your name is Zed from now on",
+     "rules": "request:avatar.setName",
+     "model": "request:chat.name",
+     "conf": 0.917
+    },
+    {
+     "id": "ui.avatar#068",
+     "text": "what tops can you have",
+     "rules": "request:avatar.listOptions",
+     "model": "request:avatar.askWearing",
+     "conf": 0.613
+    },
+    {
+     "id": "ui.avatar#075",
+     "text": "the eyes square",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.listOptions",
+     "conf": 0.294
+    },
+    {
+     "id": "ui.avatar#079",
+     "text": "eyes cyclops",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.askPart",
+     "conf": 0.201
+    },
+    {
+     "id": "ui.avatar#081",
+     "text": "give yourself a heart on your chest",
+     "rules": "request:avatar.setPart",
+     "model": "none",
+     "conf": 0.863
+    },
+    {
+     "id": "ui.avatar#081",
+     "text": "undo that",
+     "rules": "request:draw.undo",
+     "model": "request:draw.redo",
+     "conf": 0.573
+    },
+    {
+     "id": "ui.avatar#082",
+     "text": "change your eyes to visor then change them back",
+     "rules": "request:doc.replace",
+     "model": "request:avatar.setPart",
+     "conf": 0.543
+    },
+    {
+     "id": "ui.avatar#083",
+     "text": "wear a hat",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.hasThing",
+     "conf": 0.526
+    },
+    {
+     "id": "ui.avatar#084",
+     "text": "call yourself Anna",
+     "rules": "request:avatar.setName",
+     "model": "request:chat.meet",
+     "conf": 0.986
+    },
+    {
+     "id": "ui.avatar#088",
+     "text": "make the mouth a grill",
+     "rules": "request:avatar.setPart",
+     "model": "request:avatar.resizePart",
+     "conf": 0.814
+    },
+    {
+     "id": "geo.map#006",
+     "text": "is Egypt in Africa",
+     "rules": "request:geo.isIn",
+     "model": "request:geo.continent",
+     "conf": 0.306
+    },
+    {
+     "id": "geo.map#008",
+     "text": "i want to know is Egypt in Africa",
+     "rules": "request:geo.isIn",
+     "model": "request:geo.where",
+     "conf": 0.365
+    },
+    {
+     "id": "geo.map#010",
+     "text": "i want to know is Egypt in Africa",
+     "rules": "request:geo.isIn",
+     "model": "request:geo.continent",
+     "conf": 0.323
+    },
+    {
+     "id": "geo.map#012",
+     "text": "is Egypt in Africa",
+     "rules": "request:geo.isIn",
+     "model": "request:geo.continent",
+     "conf": 0.306
+    },
+    {
+     "id": "kids.time#017",
+     "text": "is Egypt in Africa",
+     "rules": "request:geo.isIn",
+     "model": "request:geo.continent",
+     "conf": 0.306
+    },
+    {
+     "id": "geo.map#014",
+     "text": "is Egypt in Africa",
+     "rules": "request:geo.isIn",
+     "model": "request:geo.continent",
+     "conf": 0.306
+    },
+    {
+     "id": "kids.time#025",
+     "text": "how many days are in a week also what is 20 minus 8",
+     "rules": "request:diagram.ask.count",
+     "model": "question:kids.arith.calc:result",
+     "conf": 0.853
+    },
+    {
+     "id": "geo.map#016",
+     "text": "is Egypt in Africa",
+     "rules": "request:geo.isIn",
+     "model": "request:geo.continent",
+     "conf": 0.333
+    }
+   ]
+  }
+ }
+}

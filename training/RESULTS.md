@@ -737,3 +737,20 @@ int8 (6c41eb24) with max abs diff 0.0 (all argmax the same). Size: int8 68.0 MB 
 The distillation replay (world, edit and segmentation logits against a frozen copy of v4) keeps accuracy: no forgetting in accuracy. But A+ is not a drop-in replacement: on the exported 400
 inputs only 96 % keep the same world top-1, 76 % the same whole-message segmentation argmax and 64 % the same edit tags, so the simplification head and `edit_threshold` would need re-evaluation
 through the operational set before A+ could replace v4. A leaves v4 untouched by construction.
+
+### NX5-lite - operation agreement with the rules on the operational set
+Commands: `node scripts/nx-eval-inputs.mjs` (operational.jsonl + operational-long.jsonl, 1,450 cases, rules reading per segment, rules outcomes from `training/results/operational/rules-nomodel-*.json`);
+`python -m psys2_train.nx_eval_ops --runs nx-a-seed1,nx-aplus-seed1 --inputs training/results/nx5-inputs.jsonl --out training/results/nx5-ops.json`. Only cases whose rules outcome is `right` (verified
+against the expected answer) and that have no setup messages are used: 829 cases, 1,097 segments, each given alone with `recent: none`. This measures **agreement of the model's operation with a
+verified-correct rules reading**, not end-to-end correctness: no canonicalisation, wires, validator or interpreter run yet (full NX5 pipeline is not built). The operational set is protected: no
+record of it was used for training (exact normalized texts dropped); near paraphrases may remain in the data (the data principle accepts overlap).
+
+| model | op agreement | model answers `none` |
+| --- | --- | --- |
+| A (frozen) | 85.4 % | 1.4 % |
+| A+ | 88.5 % | 1.4 % |
+
+Weak worlds (A+): ui.avatar 58 % (n 98; `setPart` vs `setPartUnknown` / `resetPart`, 10 % `none`), docs.editor 59 % (n 29), games.hangman 40 % (n 5), geo.map 86 %. In kids.arith the operations
+that the rules separate by arithmetic form (`calc` vs `double`, `receive` vs the leader question) are confused. Per world and 40 disagreements per model: `training/results/nx5-ops.json`.
+Reading: on the same segments the rules are right by construction, so the model alone is about 11 points behind in the operation; the hybrid D (rules first, model as fallback) and the span part
+are still to be measured.
