@@ -26,7 +26,7 @@ const FAULTS = { op: 'what is 3 plus 4', matcher: 'make a green house', translat
 const open = (o, { voice = false } = {}) => openChat({ ...o, query: '?psys2test=1', ...(voice ? { init: fakeSpeech } : {}), settings: { formalizer: 'rules', normalizer: false, showTrace: false, language: 'en', timeLimits: { watchdogMs: WATCHDOG_MS } } });
 const arm = (c) => c.pg.evaluate((f) => { window.__psys2Fault = Object.fromEntries(Object.entries(f).map(([k, v]) => [v, k === 'stop' ? 'op' : k === 'voice' ? 'matcher' : k])); }, FAULTS);
 const stats = (c) => c.pg.evaluate(() => JSON.parse(JSON.stringify(window.psys2.engineClient.stats)));
-const lastBot = (c) => c.pg.evaluate(() => [...document.querySelectorAll('.p2-msg.is-bot')].at(-1)?.querySelector('.p2-bubble')?.innerText ?? '');
+const lastBot = (c) => c.pg.evaluate(() => [...document.querySelectorAll('.p2-msg.is-bot:not([data-runaway])')].at(-1)?.querySelector('.p2-bubble')?.innerText ?? '');
 /** Page-side probes: the time from Enter to the echo of the message, and the largest gap of a 25 ms heartbeat. */
 const probes = (c) => c.pg.evaluate(() => {
   const users = document.querySelectorAll('.p2-msg.is-user').length;
@@ -61,8 +61,10 @@ async function faultCase(o, kind) {
     await c.pg.waitForFunction((n) => window.psys2.engineClient.stats.kills.length > n, { timeout: 5000, polling: 20 }, s0.kills.length).catch(() => {});
     const s1 = await stats(c);
     check(`${kind}: the engine worker was replaced once`, s1.kills.length === s0.kills.length + 1 && s1.starts === s0.starts + 1, `kills ${s1.kills.length - s0.kills.length}, starts ${s1.starts - s0.starts}, stage ${s1.kills.at(-1)?.stage}`);
+    const notice = await c.pg.$eval('.p2-msg[data-runaway]', (e) => e.innerText).catch(() => '');
+    check(`${kind}: a visible notice names the stage and offers the details`, /Stopped a runaway computation in stage \S+ after/.test(notice) && /copy details/.test(notice), notice.slice(0, 90));
     const rec = await c.lastPhrase();
-    check(`${kind}: the phrase log records timeout and the stage`, rec?.outcome === 'timeout' && !!rec.stage, JSON.stringify({ outcome: rec?.outcome, stage: rec?.stage }));
+    check(`${kind}: the phrase log records timeout and the stage`, rec?.outcome === 'timeout' && !!rec.stage && rec.watchdog?.input === text, JSON.stringify({ outcome: rec?.outcome, stage: rec?.stage, watchdog: rec?.watchdog && Object.keys(rec.watchdog) }));
     const next = await c.say('hello again', { timeout: 30000 });
     check(`${kind}: the next message works (replacement worker)`, next.ok && /hello/i.test(next.reply), `${next.ms} ms ${next.reply.slice(0, 40)}`);
     const t1 = Date.now();
@@ -93,7 +95,7 @@ export const SCENARIOS = {
       await sleep(400);
       const t = Date.now();
       await c.pg.click('button.p2-send');
-      await c.pg.waitForFunction(() => !window.psys2.busy && [...document.querySelectorAll('.p2-msg.is-bot')].at(-1)?.innerText.startsWith('Stopped.'), { timeout: 4000 });
+      await c.pg.waitForFunction(() => !window.psys2.busy && [...document.querySelectorAll('.p2-msg.is-stopped')].at(-1)?.innerText.startsWith('Stopped.'), { timeout: 4000 });
       const ms = Date.now() - t;
       const pr = await probeResult(c);
       check('stop: Stop ends a turn stuck in a synchronous loop quickly', ms < 2000, `${ms} ms`);
@@ -138,10 +140,10 @@ export const SCENARIOS = {
     try {
       await arm(c);
       await c.say('make a house');
-      await c.pg.evaluate(() => { const end = performance.now() + 400; while (performance.now() < end) { /* a deliberate long task on the page thread */ } });
-      await c.pg.waitForFunction(() => window.psys2.longTasks.some((t) => t.ms >= 300), { timeout: 5000, polling: 50 }).catch(() => {});
+      await c.pg.evaluate(() => { const end = performance.now() + 900; while (performance.now() < end) { /* a deliberate long task on the page thread */ } });
+      await c.pg.waitForFunction(() => window.psys2.longTasks.some((t) => t.ms >= 200), { timeout: 5000, polling: 50 }).catch(() => {});
       const lt = await c.pg.evaluate(() => window.psys2.longTasks.map((t) => ({ ...t })));
-      check('evidence: a main-thread task over 200 ms is recorded with its stage', lt.some((t) => t.ms >= 300 && typeof t.stage === 'string'), JSON.stringify(lt.slice(-2)));
+      check('evidence: a main-thread task over 200 ms is recorded with its stage', lt.some((t) => t.ms >= 200 && typeof t.stage === 'string'), JSON.stringify(lt.slice(-2)));
       await c.say(FAULTS.op, { timeout: 15000 });
       await c.pg.waitForFunction(() => window.psys2.engineClient.stats.kills.length > 0, { timeout: 5000, polling: 20 });
       const exp = await c.pg.evaluate(async () => { const m = await import('./ui/phrase-log.mjs'); const app = window.psys2; return JSON.parse(m.toJSON(JSON.parse(localStorage.getItem('psys2.webchat.phrases') ?? '[]'), { diagnostics: { longTasks: app.longTasks, engine: { ...app.engineClient.stats } } })); });

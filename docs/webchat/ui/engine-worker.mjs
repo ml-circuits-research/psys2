@@ -52,7 +52,7 @@ function installFaults() {
 }
 
 // ---------- serialization helpers ----------
-const errOf = (e) => ({ name: e?.name ?? 'Error', message: String(e?.message ?? e), reason: e?.reason ?? null, stage: e?.stage ?? null, site: e?.site ?? null, ticks: e?.ticks ?? null });
+const errOf = (e) => ({ name: e?.name ?? 'Error', message: String(e?.message ?? e), reason: e?.reason ?? null, stage: e?.stage ?? null, site: e?.site ?? null, ticks: e?.ticks ?? null, bySite: e?.bySite ?? null });
 
 /** Wires get `sk`: their keys in short form (the page serializes them without the legends, which stay here). */
 function annotateWires(root) {
@@ -171,7 +171,7 @@ const handlers = {
       const translator = engine.translator; translator.resetUsage?.();
       let reply;
       try { reply = await session.send(m.text, { ...m.opts, signal: ctl.signal, undo: snap, ...(budget ? { budget } : {}) }); }
-      catch (e) { if (e?.name === 'TurnAborted' || e?.name === 'BudgetExceeded' || ctl.signal.aborted) { try { session.restore(snap); } catch { /* keep */ } } throw e; }
+      catch (e) { if (e?.name === 'TurnAborted' || e?.name === 'BudgetExceeded' || ctl.signal.aborted) { try { session.restore(snap); } catch { /* keep */ } } if (budget && e && typeof e === 'object') e.bySite = { ...budget.bySite }; throw e; }
       annotateWires(reply);
       return { reply, state: stateOf(), meta: metaOf(), usage: (translator.usage ?? []).map((u) => ({ ...u })), detection: (translator.detectUsage ?? []).map((u) => ({ ...u })),
         budget: budget ? { ticks: budget.ticks, bySite: { ...budget.bySite } } : null, ort: true };

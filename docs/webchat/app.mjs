@@ -48,6 +48,7 @@ async function loadTabPlugins(base) {
 const SHELL = 'ui.shell';
 /** Turn lifecycle (spec 06): one message at a time, a hard limit from Enter, every host effect bounded. */
 export const TURN_LIMITS = Object.freeze({ watchdogMs: TIME_LIMIT_DEFAULTS.watchdogMs, softFraction: 0.65, backstopMs: 1500, speakPerCharMs: 90 });   // effectMs, speakBaseMs, speakMaxMs live in LIMITS (Settings › Developer › Time limits)
+export const TOO_COMPLEX = 'That was too complex for me. Try a shorter sentence.';
 export const TOO_LONG = 'That took too long, I stopped it.';
 export const SOURCE_URL = 'https://github.com/ml-circuits-research/psys2';
 export const BUSY_HINT = 'Wait for the answer or press Stop.';
@@ -450,7 +451,7 @@ export async function mountPsys2(element, options = {}) {
   async function process(text, mode = 'typed', user = null, recId = null, tPress = performance.now()) {
     user ??= addMessage('user', text);
     const ctl = new AbortController();
-    const tn = turn = { ctl, t0: tPress, text, reason: null, undo: null, mode, recId };
+    const tn = turn = { ctl, t0: tPress, text, reason: null, undo: null, mode, recId, killsBefore: engineClient?.stats.kills.length ?? 0 };
     busy++; setStatus();
     const thinkingLabel = h('span', { class: 'p2-thinking-label' }, 'thinking… 0.0 s');
     const typing = addMessage('bot', h('span', { class: 'p2-thinking' }, h('span', { class: 'p2-dots', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')), thinkingLabel), { className: 'is-typing' });
@@ -470,7 +471,13 @@ export async function mountPsys2(element, options = {}) {
       reply = await Promise.race([runTurn(tn, text, mode, user, recId, typing, ticker, tStart, limit), backstop]);
     } catch (e) {
       if (e instanceof TurnAborted || ctl.signal.aborted) endAborted(tn, e, { text, mode, recId, typing, ticker, tStart });
-      else {
+      else if (e?.name === 'BudgetExceeded') {
+        typing.msg.remove();
+        recordPhrase(text, mode, null, recId);
+        addMessage('bot', TOO_COMPLEX, { className: 'is-stopped' });
+        const d = runawayNotice('budgetExceeded', { text, stage: engineClient?.stage ?? null, site: e.site, ticks: e.ticks, bySite: e.bySite ?? null, ms: Math.round(performance.now() - tStart), recId, tStart });
+        if (dbg) { try { dbg.record({ text, mode, tab: view, outcome: 'budgetExceeded', stage: engineClient?.stage ?? null, ms: Math.round(performance.now() - tStart), recId, runaway: d, endType: voiceEnd(recId) }); } catch { /* ignore */ } }
+      } else {
         console.error(e);
         recordPhrase(text, mode, null, recId);
         typing.msg.remove();
@@ -485,6 +492,23 @@ export async function mountPsys2(element, options = {}) {
       queueMicrotask(() => { if (!turn && !destroyed) drainQueue(); });   // the next waiting message runs now
     }
     return reply;
+  }
+  /**
+   * A runaway computation was stopped (the watchdog killed the engine worker, or the step budget ran out): a small developer-readable notice in the chat with
+   * the details copyable, and the full record in the phrase log (`watchdog` | `budgetExceeded`, in the export), the debug view and the console.
+   */
+  function runawayNotice(kind, { text, stage, site = null, ticks = null, bySite = null, ms, recId, tStart }) {
+    const st = engineClient?.stats;
+    const details = { kind, time: new Date().toISOString(), input: text, tab: view, stage, site, ticks, bySite, ms, workerStarts: st?.starts ?? null, workerKills: st?.kills?.length ?? 0, longTasks: longTasks.filter((t) => Date.parse(t.at) >= Date.now() - (performance.now() - tStart) - 50).slice(-10) };
+    console.warn('runaway computation stopped', details);
+    setTimeout(() => { const k = engineClient?.stats; if (recId && k) { try { phrases.update(recId, (r) => (r[kind] ? { [kind]: { ...r[kind], workerStarts: k.starts, workerKills: k.kills.length, killStage: k.kills.at(-1)?.stage ?? null } } : {})); } catch { /* ignore */ } } }, 800);   // the kill follows the grace period: complete the record afterwards
+    if (recId) { try { phrases.update(recId, () => ({ [kind]: details })); } catch { /* ignore */ } }
+    const where = kind === 'budgetExceeded' ? `site ${site ?? '?'}${ticks != null ? `, ${ticks} ticks` : ''}` : `stage ${stage ?? '?'}`;
+    const copy = h('button', { class: 'p2-linkbtn', type: 'button' }, 'copy details');
+    copy.addEventListener('click', () => { ALLOW['clipboard.copy']({ text: JSON.stringify(details, null, 1) }); toast('Details copied'); });
+    const note = addMessage('bot', h('span', {}, `Stopped a runaway computation in ${where} after ${fmtDur(ms)}. `, copy), { className: 'is-hint is-runaway' });
+    note.msg.dataset.runaway = kind;
+    return details;
   }
   /** The turn ended without an answer: Stop or the watchdog. Restores the session and tells the person. */
   function endAborted(tn, e, { text, mode, recId, typing, ticker, tStart }) {
@@ -505,6 +529,8 @@ export async function mountPsys2(element, options = {}) {
     const toggle = h('button', { class: 'p2-linkbtn', type: 'button', 'aria-expanded': String(!!settings.showTrace) }, 'Trace');
     toggle.addEventListener('click', () => { const open = info.hidden; info.hidden = !open; toggle.setAttribute('aria-expanded', String(open)); });
     msg.meta.append(toggle); msg.msg.append(info);
+    const killed = (engineClient?.stats.kills.length ?? 0) > (tn.killsBefore ?? 0);
+    if (reason === 'timeout' || killed) { const d = runawayNotice('watchdog', { text, stage, ms, recId, tStart }); if (dbg) { try { dbg.record({ text, mode, tab: view, outcome: 'watchdog', stage, ms, recId, runaway: d, endType: voiceEnd(recId) }); } catch { /* ignore */ } } }
     (globalThis.__psys2Perf ??= []).push({ text, stopped: reason, stage, totalMs: ms });
     options.onStopped?.({ text, reason, stage, ms });
   }

@@ -68,12 +68,12 @@ export function diffPaths(before, after, path = '', out = new Set()) {
   return out;
 }
 /** A ring entry from what the host knows after a turn. Compact: the reply is kept by reference, the state only as hashes. */
-export function makeEntry({ seq, text, mode, tab, tabWorld, reply = null, usage = [], detection = [], effects = [], outcome = null, stage = null, ms = null, recId = null, stateBefore = null, stateAfter = null, serialize = null, endType = null }) {
+export function makeEntry({ seq, text, mode, tab, tabWorld, reply = null, usage = [], detection = [], effects = [], outcome = null, stage = null, ms = null, recId = null, stateBefore = null, stateAfter = null, serialize = null, endType = null, runaway = null }) {
   const detail = reply ? buildDetail(reply, { serialize, tab }) : null;
   return {
     seq, id: recId, time: new Date().toISOString(), text: String(text ?? ''), mode, tab, tabWorld, endType,
     worlds: detail?.worlds ?? [], answer: reply?.text ?? null, reply, usage, detection, effects, outcome, stage, ms: ms ?? reply?.perf?.totalMs ?? null,
-    stateBefore, stateAfter, readings: detail?.readings ?? [], perf: reply?.perf ?? null,
+    stateBefore, stateAfter, readings: detail?.readings ?? [], perf: reply?.perf ?? null, runaway,
   };
 }
 
@@ -219,6 +219,7 @@ export function createDebug(host) {
       ['Voice or spelling corrections', (trace.segments ?? []).flatMap((s) => (s.corrections ?? []).map((c) => `${c.to} ← ${c.from}`)).join(', ') || undefined],
       ['Reply', t.answer ?? undefined], ['Outcome', t.outcome ? `${t.outcome} in stage ${t.stage ?? '?'}` : undefined],
       ['State', stateChanged == null ? undefined : stateChanged ? 'changed by this turn' : 'unchanged'],
+      ['Runaway computation', t.runaway ? JSON.stringify(t.runaway) : undefined],
       ['Step budget', r?.budget ? `${r.budget.ticks} ticks: ${Object.entries(r.budget.bySite ?? {}).map(([k, v]) => `${k} ${v}`).join(', ')}` : undefined],
       ['Timing', r?.perf ? `${r.perf.totalMs ?? r.perf.total} ms total, engine ${r.perf.engineMs ?? '?'} ms, render ${r.perf.render ?? '?'} ms, host effects ${r.perf.effects ?? '?'} ms` : t.ms != null ? `${Math.round(t.ms)} ms` : undefined],
     ])];
