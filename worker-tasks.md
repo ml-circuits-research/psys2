@@ -2005,3 +2005,4 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
   - Operational and long numbers are unchanged; 3 new dialogues pass.
   - Reviewer `gaps.mjs` in Chrome: all GAPS-1 answers unchanged.
   - The two heads cases read by the model once it is loaded (`heads2.mjs`: "Read by model … 0.996 / 0.998"). Before the model is ready, hybrid falls back to the rules, as designed.
+- VOICE-TIMEOUT (bd138c1), files match the log: accepted. Test infrastructure only: the replay now runs as its own test with a 420 s timeout and a 3.5 s gap cap; nothing in src changed.
