@@ -10,13 +10,21 @@
  */
 import { BUDGET_LIMITS } from './budget-limits.mjs';
 
+/** A short caller id: the first frames of the stack after the budget internals, `fn (file:line)`, at most 6. */
+export function shortStack(skip = 3, max = 6) {
+  const lines = String(new Error().stack ?? '').split('\n').slice(1 + skip, 1 + skip + max);
+  return lines.map((l) => l.trim().replace(/^at /, '').replace(/\(?(?:file:\/\/)?[^()]*\/([^/()]+\/[^/()]+:\d+):\d+\)?$/, '($1)')).filter(Boolean);
+}
+
 export class BudgetExceeded extends Error {
-  constructor(site, ticks, limit = 'site') {
+  constructor(site, ticks, limit = 'site', extra = {}) {
     super(`compute budget exceeded at ${site} (${ticks} ticks, ${limit} limit)`);
     this.name = 'BudgetExceeded';
     this.site = site;
     this.ticks = ticks;
     this.limit = limit;
+    this.bySite = extra.bySite ?? null;   // the per-site tick table at the moment of the excess
+    this.stack_ = extra.stack ?? null;     // short caller id (see shortStack)
   }
 }
 
@@ -33,8 +41,9 @@ export function createBudget(limits = {}) {
     tick(site, n = 1) {
       budget.ticks += n;
       const s = (bySite[site] = (bySite[site] ?? 0) + n);
-      if (s > (sites[site] ?? perSite)) throw (budget.exceeded = new BudgetExceeded(site, s, 'site'));
-      if (budget.ticks > perTurn) throw (budget.exceeded = new BudgetExceeded(site, budget.ticks, 'turn'));
+      if (budget.exceeded) throw budget.exceeded;   // sticky: the first excess is the record
+      if (s > (sites[site] ?? perSite)) throw (budget.exceeded = new BudgetExceeded(site, s, 'site', { bySite: { ...bySite }, stack: shortStack() }));
+      if (budget.ticks > perTurn) throw (budget.exceeded = new BudgetExceeded(site, budget.ticks, 'turn', { bySite: { ...bySite }, stack: shortStack() }));
     },
   };
   return budget;

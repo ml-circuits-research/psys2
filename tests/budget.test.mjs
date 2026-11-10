@@ -52,6 +52,12 @@ test('a turn that runs out of budget answers "too complex", undoes itself and re
   assert.equal(reply.text, TOO_COMPLEX);
   assert.ok(reply.budget.exceeded.site && reply.budget.exceeded.ticks > 0, 'site and ticks are reportable');
   assert.equal(reply.trace.budget.exceeded.site, reply.budget.exceeded.site);
+  const r = reply.budgetExceeded;   // the record for the phrase log: where the loop is
+  assert.equal(r.site, reply.budget.exceeded.site);
+  assert.equal(r.input, 'draw a green house and a red sun');
+  assert.ok(r.bySite[r.site] > 0 && Object.keys(r.bySite).length >= 1, 'per-site tick table');
+  assert.ok(Array.isArray(r.stack) && r.stack.length > 0 && 'tab' in r && 'stage' in r, 'caller id, tab and stage');
+  assert.deepEqual(reply.trace.budgetExceeded, r);
   assert.deepEqual(reply.effects, []);
   assert.equal(JSON.stringify(s.state()), before, 'nothing of the turn remains');
   assert.equal(budget.active, false, 'the budget is released');

@@ -164,15 +164,25 @@ export function budgetReport(b, e = b.exceeded) {
   return { ticks: b.ticks, top: Object.fromEntries(top), ...(e ? { exceeded: { site: e.site, ticks: e.ticks, limit: e.limit } } : {}) };
 }
 
+/**
+ * The record of a budget excess, for the trace, the debug view and the phrase log (field `budgetExceeded`): where the loop is.
+ * { site, ticks, limit: 'site' | 'turn', bySite: full per-site tick table, input, tab, stage (turn guard stage), stack: short caller id }.
+ */
+export function budgetRecord(e, b, { input = null, tab = null, stage = null } = {}) {
+  return { site: e.site, ticks: e.ticks, limit: e.limit, bySite: e.bySite ?? { ...b.bySite }, input, tab, stage, stack: e.stack_ ?? [] };
+}
+
 export const TOO_COMPLEX = 'That was too complex for me \u2014 try a shorter sentence.';
 
 /** The reply of a turn that ran out of compute budget (the session was restored by the caller). Same shape as a normal reply, nothing executed. */
 function tooComplexReply(session, text, e, b) {
   const rep = budgetReport(b, e);
+  const record = budgetRecord(e, b, { input: text, tab: session.isession?.state?.['ui.shell']?.activeTab ?? null, stage: guard.stage });
   return {
+    budgetExceeded: record,
     text: TOO_COMPLEX, parts: [{ text: TOO_COMPLEX }], lang: session._sessionLang ?? 'en', translation: null, segments: [], wires: [], answers: [], statuses: [], state: {}, effects: [],
     tooComplex: true, budget: rep,
-    trace: { intercepted: null, effects: [], formalizer: { preferred: session.formalizer, used: [] }, source: null, original: text, english: text, replyEnglish: TOO_COMPLEX, segments: [], router: [], routing: [], patterns: [], operations: [], statuses: [], wires: [], budget: rep },
+    trace: { intercepted: null, effects: [], formalizer: { preferred: session.formalizer, used: [] }, source: null, original: text, english: text, replyEnglish: TOO_COMPLEX, segments: [], router: [], routing: [], patterns: [], operations: [], statuses: [], wires: [], budget: rep, budgetExceeded: record },
   };
 }
 
@@ -277,7 +287,7 @@ export class DialogSession {
       }
       return { complete: true, segments: segs.length, reason: 'ok', ...det() };
     } catch (e) {
-      return { complete: false, segments: 0, reason: e instanceof TurnAborted ? (e.reason === 'stopped' ? 'cancelled' : 'deadline') : isBudgetExceeded(e) || db.exceeded ? 'budget' : 'error', ...(db.exceeded ? { budget: budgetReport(db) } : {}) };
+      return { complete: false, segments: 0, reason: e instanceof TurnAborted ? (e.reason === 'stopped' ? 'cancelled' : 'deadline') : isBudgetExceeded(e) || db.exceeded ? 'budget' : 'error', ...(db.exceeded ? { budget: budgetReport(db), budgetExceeded: budgetRecord(db.exceeded, db, { input: raw, tab: this.isession?.state?.['ui.shell']?.activeTab ?? null, stage: guard.stage }) } : {}) };
     } finally { guard.release(token); releaseBudget(bt); }
   }
 
