@@ -610,6 +610,29 @@ With the mic always on, room talk reached the chat and got "I did not understand
 - Optional, in Settings › Voice: "Only respond when I say 'PSys2' / 'robotule'".
 - Tests: the room-talk lines above → ignored; every real command in the session → executed.
 
+### URGENT-FREEZE — the user's real Chrome on GitHub Pages freezes on every command, typed or spoken (user, 11:54 local) — P0
+
+The user, on https://ml-circuits-research.github.io/psys2/webchat/ (build 2026-11-10T07:32Z, the same as main): any voice command, and the typed "fă o casă verde și una galbenă", spins the fan and blocks the tab. Clearing the phrase log did not help.
+
+**The reviewer cannot reproduce it** with headless Chrome on the same build:
+- fresh profile, app defaults (hybrid, encoder, normalizer on), 4× throttle, model loaded: 1.2–1.7 s per message, main thread 1.4–2.1 s per message;
+- with a 3.6 MB phrase log: 1.7–3.3 s;
+- no freeze, no errors.
+
+So the cause is something the tests do not have. Do now:
+1. **Run the real Pages URL** (not a local server) in a non-headless Chrome on the DGX if possible, or at least with HTTP caching and the Cache API as on Pages. Look for:
+   - a persisted model from an older sha (Cache API `psys2-dispatcher-model`) or `meta.json 'latest'` mismatched with the new NX outputs (`op_logits`, `tag_logits`, `fetch` option);
+   - an old `ui/ort-worker.mjs` from the HTTP cache with the new client (the worker URL has no version, and Pages sends max-age=600);
+   - ORT worker restart loops (each restart compiles a 68 MB model: fan);
+   - normalizer decoding with no deadline;
+   - any synchronous loop on the main thread.
+2. **Make every turn bounded on the main thread:** a long task > 500 ms must never repeat back to back. Add a CPU profile to `scripts/soak-webchat.mjs --profile` for typed commands too.
+3. **Cache busting:** version the module and worker URLs with the build hash (build-info already has per-file hashes). Version the model cache by sha and output names, and evict a mismatched cache.
+4. **A real-profile test:** a browser test that starts from a profile **populated by yesterday's build** (old Cache API model, old settings keys, a non-empty phrase log, profile, ASTRA state), then loads the new build and sends typed and voice commands. It must stay responsive (echo < 100 ms, no long task > 500 ms back to back).
+5. Report in `worker-log.md` what the cause was, with evidence (profile, ORT stats).
+
+Also seen: "fă o casă verde și una galbenă" → only "Gata! Am desenat o casă verde." The yellow one ("și una galbenă" = "and a yellow one") is lost. Fix the ellipsis in the translator and the formalizer.
+
 ### GAPS-1 — wrong answers seen in the reviewer's run of the 65 gold paraphrases (03:30 local, default hybrid)
 
 Probe: `/home/claude/shot/heads.mjs`, real Chrome. Each phrase was sent on its own tab, clicked first. The model read 3 phrases correctly (see the Validated note). These are rules answers that are **confidently wrong**, worse than "not understood":
