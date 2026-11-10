@@ -13,6 +13,7 @@ import { loadSet, formalizeIn, readSegments } from './lib/nx-read.mjs';
 import { makeGateContext, gateOne } from './lib/nx-gate.mjs';
 import { worldPrompt } from './lib/nx-prompt.mjs';
 import { GEN } from './nx-gen.mjs';
+import { toNx1 } from './lib/nx3-format.mjs';
 
 const REPO = new URL('..', import.meta.url).pathname;
 const MAIN = REPO.replace(/\.claude\/worktrees\/[^/]+\/$/, '');
@@ -82,14 +83,17 @@ Write each call's verdicts with the Write tool as a JSON array to OUT/<call_id>.
 
 function judgePrepare() {
   const audit = Number(arg('audit', 0.03)); const J = `${GEN}/judge`;
-  const calls = []; const key = {};
+  const calls = []; const key = existsSync(`${J}/key.json`) ? JSON.parse(readFileSync(`${J}/key.json`, 'utf8')) : {};
+  const judged = new Set();
+  for (const [call, rows] of Object.entries(key)) if (existsSync(`${J}/out/${call}.json`)) rows.forEach((r) => judged.add(r.id));
   for (const f of files(`${GEN}/disagreed`)) {
     const w = f.replace('.jsonl', '');
-    const pool = [...jl(`${GEN}/disagreed/${f}`).map((r) => ({ r, kind: 'disagreed' })), ...jl(`${GEN}/agreed/${f}`).filter((r) => hash01(r.id + 'audit') < audit).map((r) => ({ r, kind: 'audit' }))];
+    const pool0 = [...jl(`${GEN}/disagreed/${f}`).map((r) => ({ r, kind: 'disagreed' })), ...jl(`${GEN}/agreed/${f}`).filter((r) => hash01(r.id + 'audit') < audit).map((r) => ({ r, kind: 'audit' }))];
+    const pool = pool0.filter((x) => !judged.has(x.r.id));
     pool.sort((a, b) => hash01(a.r.id + 'o') - hash01(b.r.id + 'o'));
     const pf = `${GEN}/prompts/${w}.md`;
     for (let k = 0; k * 50 < pool.length; k++) {
-      const part = pool.slice(k * 50, k * 50 + 50); const id = `${w}.${String(k).padStart(3, '0')}`;
+      const part = pool.slice(k * 50, k * 50 + 50); const id = `${w}.${createHash('sha256').update(part.map((x) => x.r.id).join(',')).digest('hex').slice(0, 10)}`;
       if (existsSync(`${J}/out/${id}.json`)) { key[id] = part.map((x) => ({ id: x.r.id, kind: x.kind })); continue; }
       calls.push({ call_id: id, world: w, prompt_file: pf, items: part.map((x, j) => ({ k: j + 1, context: x.r.context, text: x.r.text, proposed: { op: x.r.op, slots: x.r.slots.map((s) => ({ key: s.key, text: s.text, value: s.value })) } })) });
       key[id] = part.map((x) => ({ id: x.r.id, kind: x.kind }));
@@ -104,7 +108,19 @@ function judgePrepare() {
   console.log(JSON.stringify({ calls_todo: calls.length, items: calls.reduce((a, c) => a + c.items.length, 0) }));
 }
 
+const normT = (t) => String(t ?? '').toLowerCase().replace(/[^\p{L}\p{N} ]+/gu, ' ').replace(/\s+/g, ' ').trim();
+/** Normalised texts of the protected evaluation sets (never in training). */
+function protectedSet() {
+  const prot = new Set(); const dir = REPO + 'training/eval/';
+  for (const f of readdirSync(dir).filter((x) => x.endsWith('.jsonl'))) for (const r of jl(dir + f)) {
+    for (const k of ['message', 'text', 'english']) if (r[k]) prot.add(normT(r[k]));
+    for (const t of r.turns ?? []) prot.add(normT(t.message));
+  }
+  return prot;
+}
+
 async function finalize() {
+  const PROT = protectedSet(); let protectedDropped = 0;
   const dev = Number(arg('dev', 0.05)); const test = Number(arg('test', 0.05));
   const key = existsSync(`${GEN}/judge/key.json`) ? JSON.parse(readFileSync(`${GEN}/judge/key.json`, 'utf8')) : {};
   const verdict = new Map(); // id -> { v, kind, fixed }
@@ -132,12 +148,18 @@ async function finalize() {
         if (g.ok) { st.judge_fixed++; out.push({ ...g.rec, label_source: 'judge-fixed', status: 'judge-fixed', judge: 'fix' }); } else st.judge_rejected++;
       } else st.judge_rejected++;
     }
-    const final = out.filter((x) => x.status !== 'agreed-audit-rejected').map((x) => ({ ...x, split: splitOf(x.world, x.group, dev, test) }));
-    wl(`${MAIN}training/dataset/nx/final/${w}.jsonl`, final);
-    rep.worlds[w] = { ...st, final: final.length, splits: final.reduce((a, x) => ((a[x.split] = (a[x.split] ?? 0) + 1), a), {}) };
+    const final = out.filter((x) => x.status !== 'agreed-audit-rejected').map((x) => {
+      const j = x.judge === 'audited' ? { model: 'claude-sonnet-5.5', verdict: 'accept', reason: 'audit' } : x.judge ? { model: 'claude-sonnet-5.5', verdict: x.judge, reason: x.status } : null;
+      return toNx1(set, x, { labeler: x.label_source === 'judge-fixed' ? 'claude-sonnet-5.5' : 'claude-sonnet-5.5+seed', judge: j, split: splitOf(x.world, x.group, dev, test) });
+    });
+    const badIds = new Set(final.filter((x) => x.problems.length).map((x) => x.id)); st.invalid_after_format = badIds.size;
+    const kept = final.filter((x) => !badIds.has(x.id) && !(PROT.has(normT(x.text)) && ++protectedDropped)); for (const x of kept) delete x.problems;
+    wl(`${MAIN}training/dataset/nx/final/${w}.jsonl`, kept);
+    rep.worlds[w] = { ...st, final: kept.length, splits: kept.reduce((a, x) => ((a[x.split] = (a[x.split] ?? 0) + 1), a), {}) };
   }
   const a = rep.judge.audit; rep.audit_error_rate = a.n ? Math.round(((a.reject ?? 0) / a.n) * 10000) / 10000 : null;
   const d = rep.judge.disagreed; rep.judge_accept_rate = d.n ? Math.round((((d.accept ?? 0) + (d.fix ?? 0)) / d.n) * 10000) / 10000 : null;
+  rep.protected_dropped = protectedDropped;
   rep.totals = { final: Object.values(rep.worlds).reduce((s, x) => s + x.final, 0) };
   wj(`${GEN}/finalize-report.json`, rep); console.log(JSON.stringify({ totals: rep.totals, judge: rep.judge, audit_error_rate: rep.audit_error_rate, judge_accept_rate: rep.judge_accept_rate }));
 }

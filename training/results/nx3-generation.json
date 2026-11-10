@@ -1,0 +1,759 @@
+{
+ "budget_usd_cap": 60,
+ "est_total_usd": 26.58,
+ "pricing_note": "estimated from subagent session tokens at a blended $5 per million tokens (Sonnet 5.5); the real bill is not visible without an API key",
+ "stages": {
+  "gen-test": {
+   "usd": 0.85,
+   "tokens": 102610,
+   "seconds": 304.607,
+   "items": 600,
+   "sessions": 1
+  },
+  "gen": {
+   "usd": 7.47,
+   "tokens": 1424440,
+   "seconds": 4804.630999999999,
+   "items": 32400,
+   "sessions": 7
+  },
+  "judge": {
+   "usd": 18.26,
+   "tokens": 3659930,
+   "seconds": 3739,
+   "items": 16667,
+   "sessions": 13
+  }
+ },
+ "gate_drops_by_reason": {
+  "value-not-in-lexicon": 855,
+  "unknown-op": 234,
+  "unknown-key": 120
+ },
+ "rules_agreement": {
+  "agreed": 13541,
+  "disagreed": 16381,
+  "why": {
+   "rules-multi-segment": 1565,
+   "rules-other-value": 1818,
+   "rules-unparsed": 7273,
+   "rules-other-op": 5718,
+   "rules-missing-slot": 7
+  }
+ },
+ "judge": {
+  "disagreed": {
+   "n": 16381,
+   "accept": 15605,
+   "fix": 368,
+   "reject": 408
+  },
+  "audit": {
+   "n": 392,
+   "accept": 384,
+   "fix": 3,
+   "reject": 5
+  }
+ },
+ "judge_accept_rate": 0.9751,
+ "audit_error_rate": 0.0128,
+ "totals": {
+  "final": 29111
+ },
+ "per_world": {
+  "art.draw": {
+   "final": 1384,
+   "splits": {
+    "train": 1270,
+    "test": 55,
+    "dev": 59
+   },
+   "gate": {
+    "input": 1438,
+    "accepted": 1438,
+    "dropped": {}
+   },
+   "agree": {
+    "agreed": 641,
+    "disagreed": 797
+   },
+   "judged": {
+    "agreed": 641,
+    "judge_accepted": 737,
+    "judge_fixed": 26,
+    "judge_rejected": 34,
+    "unjudged": 0,
+    "invalid_after_format": 0,
+    "final": 1384,
+    "splits": {
+     "train": 1270,
+     "test": 55,
+     "dev": 59
+    }
+   }
+  },
+  "data.charts": {
+   "final": 1388,
+   "splits": {
+    "train": 1261,
+    "dev": 68,
+    "test": 59
+   },
+   "gate": {
+    "input": 1416,
+    "accepted": 1416,
+    "dropped": {}
+   },
+   "agree": {
+    "agreed": 809,
+    "disagreed": 607
+   },
+   "judged": {
+    "agreed": 809,
+    "judge_accepted": 586,
+    "judge_fixed": 9,
+    "judge_rejected": 12,
+    "unjudged": 0,
+    "invalid_after_format": 0,
+    "final": 1388,
+    "splits": {
+     "train": 1261,
+     "dev": 68,
+     "test": 59
+    }
+   }
+  },
+  "diagram.sketch": {
+   "final": 1428,
+   "splits": {
+    "train": 1348,
+    "dev": 60,
+    "test": 20
+   },
+   "gate": {
+    "input": 1482,
+    "accepted": 1482,
+    "dropped": {}
+   },
+   "agree": {
+    "agreed": 60,
+    "disagreed": 1422
+   },
+   "judged": {
+    "agreed": 60,
+    "judge_accepted": 1245,
+    "judge_fixed": 124,
+    "judge_rejected": 53,
+    "unjudged": 0,
+    "invalid_after_format": 0,
+    "final": 1428,
+    "splits": {
+     "train": 1348,
+     "dev": 60,
+     "test": 20
+    }
+   }
+  },
+  "docs.editor": {
+   "final": 1242,
+   "splits": {
+    "train": 1140,
+    "test": 48,
+    "dev": 54
+   },
+   "gate": {
+    "input": 1389,
+    "accepted": 1294,
+    "dropped": {
+     "value-not-in-lexicon": 95
+    }
+   },
+   "agree": {
+    "agreed": 240,
+    "disagreed": 1054
+   },
+   "judged": {
+    "agreed": 240,
+    "judge_accepted": 978,
+    "judge_fixed": 43,
+    "judge_rejected": 33,
+    "unjudged": 0,
+    "invalid_after_format": 0,
+    "final": 1242,
+    "splits": {
+     "train": 1140,
+     "test": 48,
+     "dev": 54
+    }
+   }
+  },
+  "docs.reader": {
+   "final": 1340,
+   "splits": {
+    "dev": 58,
+    "train": 1223,
+    "test": 59
+   },
+   "gate": {
+    "input": 1374,
+    "accepted": 1374,
+    "dropped": {}
+   },
+   "agree": {
+    "agreed": 591,
+    "disagreed": 783
+   },
+   "judged": {
+    "agreed": 591,
+    "judge_accepted": 772,
+    "judge_fixed": 2,
+    "judge_rejected": 9,
+    "unjudged": 0,
+    "invalid_after_format": 0,
+    "final": 1340,
+    "splits": {
+     "dev": 58,
+     "train": 1223,
+     "test": 59
+    }
+   }
+  },
+  "games.chess": {
+   "final": 1399,
+   "splits": {
+    "train": 1222,
+    "test": 118,
+    "dev": 59
+   },
+   "gate": {
+    "input": 1423,
+    "accepted": 1423,
+    "dropped": {}
+   },
+   "agree": {
+    "agreed": 663,
+    "disagreed": 760
+   },
+   "judged": {
+    "agreed": 663,
+    "judge_accepted": 749,
+    "judge_fixed": 4,
+    "judge_rejected": 7,
+    "unjudged": 0,
+    "invalid_after_format": 0,
+    "final": 1399,
+    "splits": {
+     "train": 1222,
+     "test": 118,
+     "dev": 59
+    }
+   }
+  },
+  "games.guess": {
+   "final": 1096,
+   "splits": {
+    "train": 1057,
+    "test": 19,
+    "dev": 20
+   },
+   "gate": {
+    "input": 1381,
+    "accepted": 1147,
+    "dropped": {
+     "unknown-op": 234
+    }
+   },
+   "agree": {
+    "agreed": 521,
+    "disagreed": 626
+   },
+   "judged": {
+    "agreed": 521,
+    "judge_accepted": 617,
+    "judge_fixed": 0,
+    "judge_rejected": 9,
+    "unjudged": 0,
+    "invalid_after_format": 0,
+    "final": 1096,
+    "splits": {
+     "train": 1057,
+     "test": 19,
+     "dev": 20
+    }
+   }
+  },
+  "games.hangman": {
+   "final": 1401,
+   "splits": {
+    "test": 172,
+    "train": 1229
+   },
+   "gate": {
+    "input": 1453,
+    "accepted": 1453,
+    "dropped": {}
+   },
+   "agree": {
+    "agreed": 664,
+    "disagreed": 789
+   },
+   "judged": {
+    "agreed": 664,
+    "judge_accepted": 754,
+    "judge_fixed": 0,
+    "judge_rejected": 35,
+    "unjudged": 0,
+    "invalid_after_format": 0,
+    "final": 1401,
+    "splits": {
+     "test": 172,
+     "train": 1229
+    }
+   }
+  },
+  "games.tictactoe": {
+   "final": 1421,
+   "splits": {
+    "train": 1240,
+    "test": 83,
+    "dev": 98
+   },
+   "gate": {
+    "input": 1455,
+    "accepted": 1455,
+    "dropped": {}
+   },
+   "agree": {
+    "agreed": 736,
+    "disagreed": 719
+   },
+   "judged": {
+    "agreed": 736,
+    "judge_accepted": 688,
+    "judge_fixed": 16,
+    "judge_rejected": 15,
+    "unjudged": 0,
+    "invalid_after_format": 0,
+    "final": 1421,
+    "splits": {
+     "train": 1240,
+     "test": 83,
+     "dev": 98
+    }
+   }
+  },
+  "geo.map": {
+   "final": 1422,
+   "splits": {
+    "test": 75,
+    "train": 1288,
+    "dev": 59
+   },
+   "gate": {
+    "input": 1458,
+    "accepted": 1458,
+    "dropped": {}
+   },
+   "agree": {
+    "agreed": 851,
+    "disagreed": 607
+   },
+   "judged": {
+    "agreed": 851,
+    "judge_accepted": 569,
+    "judge_fixed": 18,
+    "judge_rejected": 20,
+    "unjudged": 0,
+    "invalid_after_format": 0,
+    "final": 1422,
+    "splits": {
+     "test": 75,
+     "train": 1288,
+     "dev": 59
+    }
+   }
+  },
+  "kids.animals": {
+   "final": 1302,
+   "splits": {
+    "train": 1172,
+    "test": 55,
+    "dev": 75
+   },
+   "gate": {
+    "input": 1431,
+    "accepted": 1351,
+    "dropped": {
+     "unknown-key": 40,
+     "value-not-in-lexicon": 40
+    }
+   },
+   "agree": {
+    "agreed": 726,
+    "disagreed": 625
+   },
+   "judged": {
+    "agreed": 726,
+    "judge_accepted": 593,
+    "judge_fixed": 1,
+    "judge_rejected": 31,
+    "unjudged": 0,
+    "invalid_after_format": 0,
+    "final": 1302,
+    "splits": {
+     "train": 1172,
+     "test": 55,
+     "dev": 75
+    }
+   }
+  },
+  "kids.arith": {
+   "final": 1409,
+   "splits": {
+    "train": 1218,
+    "test": 96,
+    "dev": 95
+   },
+   "gate": {
+    "input": 1424,
+    "accepted": 1424,
+    "dropped": {}
+   },
+   "agree": {
+    "agreed": 806,
+    "disagreed": 618
+   },
+   "judged": {
+    "agreed": 806,
+    "judge_accepted": 608,
+    "judge_fixed": 5,
+    "judge_rejected": 5,
+    "unjudged": 0,
+    "invalid_after_format": 0,
+    "final": 1409,
+    "splits": {
+     "train": 1218,
+     "test": 96,
+     "dev": 95
+    }
+   }
+  },
+  "kids.common": {
+   "final": 1276,
+   "splits": {
+    "train": 1139,
+    "test": 137
+   },
+   "gate": {
+    "input": 1322,
+    "accepted": 1322,
+    "dropped": {}
+   },
+   "agree": {
+    "agreed": 836,
+    "disagreed": 486
+   },
+   "judged": {
+    "agreed": 836,
+    "judge_accepted": 461,
+    "judge_fixed": 12,
+    "judge_rejected": 13,
+    "unjudged": 0,
+    "invalid_after_format": 0,
+    "final": 1276,
+    "splits": {
+     "train": 1139,
+     "test": 137
+    }
+   }
+  },
+  "kids.shapes": {
+   "final": 1140,
+   "splits": {
+    "train": 1086,
+    "dev": 16,
+    "test": 38
+   },
+   "gate": {
+    "input": 1434,
+    "accepted": 1170,
+    "dropped": {
+     "value-not-in-lexicon": 184,
+     "unknown-key": 80
+    }
+   },
+   "agree": {
+    "agreed": 760,
+    "disagreed": 410
+   },
+   "judged": {
+    "agreed": 760,
+    "judge_accepted": 387,
+    "judge_fixed": 15,
+    "judge_rejected": 8,
+    "unjudged": 0,
+    "invalid_after_format": 0,
+    "final": 1140,
+    "splits": {
+     "train": 1086,
+     "dev": 16,
+     "test": 38
+    }
+   }
+  },
+  "kids.shop": {
+   "final": 1447,
+   "splits": {
+    "train": 1237,
+    "test": 96,
+    "dev": 114
+   },
+   "gate": {
+    "input": 1467,
+    "accepted": 1467,
+    "dropped": {}
+   },
+   "agree": {
+    "agreed": 878,
+    "disagreed": 589
+   },
+   "judged": {
+    "agreed": 878,
+    "judge_accepted": 571,
+    "judge_fixed": 11,
+    "judge_rejected": 7,
+    "unjudged": 0,
+    "invalid_after_format": 0,
+    "final": 1447,
+    "splits": {
+     "train": 1237,
+     "test": 96,
+     "dev": 114
+    }
+   }
+  },
+  "kids.tasks": {
+   "final": 1087,
+   "splits": {
+    "train": 1008,
+    "test": 39,
+    "dev": 40
+   },
+   "gate": {
+    "input": 1436,
+    "accepted": 1117,
+    "dropped": {
+     "value-not-in-lexicon": 319
+    }
+   },
+   "agree": {
+    "agreed": 606,
+    "disagreed": 511
+   },
+   "judged": {
+    "agreed": 606,
+    "judge_accepted": 472,
+    "judge_fixed": 27,
+    "judge_rejected": 12,
+    "unjudged": 0,
+    "invalid_after_format": 0,
+    "final": 1087,
+    "splits": {
+     "train": 1008,
+     "test": 39,
+     "dev": 40
+    }
+   }
+  },
+  "kids.time": {
+   "final": 1292,
+   "splits": {
+    "train": 1198,
+    "dev": 56,
+    "test": 38
+   },
+   "gate": {
+    "input": 1461,
+    "accepted": 1343,
+    "dropped": {
+     "value-not-in-lexicon": 118
+    }
+   },
+   "agree": {
+    "agreed": 720,
+    "disagreed": 623
+   },
+   "judged": {
+    "agreed": 720,
+    "judge_accepted": 589,
+    "judge_fixed": 1,
+    "judge_rejected": 33,
+    "unjudged": 0,
+    "invalid_after_format": 0,
+    "final": 1292,
+    "splits": {
+     "train": 1198,
+     "dev": 56,
+     "test": 38
+    }
+   }
+  },
+  "media.music": {
+   "final": 1383,
+   "splits": {
+    "train": 1251,
+    "test": 76,
+    "dev": 56
+   },
+   "gate": {
+    "input": 1465,
+    "accepted": 1406,
+    "dropped": {
+     "value-not-in-lexicon": 59
+    }
+   },
+   "agree": {
+    "agreed": 726,
+    "disagreed": 680
+   },
+   "judged": {
+    "agreed": 726,
+    "judge_accepted": 643,
+    "judge_fixed": 25,
+    "judge_rejected": 12,
+    "unjudged": 0,
+    "invalid_after_format": 0,
+    "final": 1383,
+    "splits": {
+     "train": 1251,
+     "test": 76,
+     "dev": 56
+    }
+   }
+  },
+  "ui.avatar": {
+   "final": 1370,
+   "splits": {
+    "train": 1241,
+    "test": 55,
+    "dev": 74
+   },
+   "gate": {
+    "input": 1405,
+    "accepted": 1405,
+    "dropped": {}
+   },
+   "agree": {
+    "agreed": 370,
+    "disagreed": 1035
+   },
+   "judged": {
+    "agreed": 370,
+    "judge_accepted": 1007,
+    "judge_fixed": 5,
+    "judge_rejected": 23,
+    "unjudged": 0,
+    "invalid_after_format": 0,
+    "final": 1370,
+    "splits": {
+     "train": 1241,
+     "test": 55,
+     "dev": 74
+    }
+   }
+  },
+  "ui.help": {
+   "final": 1317,
+   "splits": {
+    "train": 1176,
+    "dev": 89,
+    "test": 52
+   },
+   "gate": {
+    "input": 1347,
+    "accepted": 1347,
+    "dropped": {}
+   },
+   "agree": {
+    "agreed": 579,
+    "disagreed": 768
+   },
+   "judged": {
+    "agreed": 579,
+    "judge_accepted": 749,
+    "judge_fixed": 6,
+    "judge_rejected": 13,
+    "unjudged": 0,
+    "invalid_after_format": 0,
+    "final": 1317,
+    "splits": {
+     "train": 1176,
+     "dev": 89,
+     "test": 52
+    }
+   }
+  },
+  "ui.shell": {
+   "final": 1325,
+   "splits": {
+    "train": 1233,
+    "test": 54,
+    "dev": 38
+   },
+   "gate": {
+    "input": 1371,
+    "accepted": 1371,
+    "dropped": {}
+   },
+   "agree": {
+    "agreed": 510,
+    "disagreed": 861
+   },
+   "judged": {
+    "agreed": 510,
+    "judge_accepted": 832,
+    "judge_fixed": 7,
+    "judge_rejected": 22,
+    "unjudged": 0,
+    "invalid_after_format": 0,
+    "final": 1325,
+    "splits": {
+     "train": 1233,
+     "test": 54,
+     "dev": 38
+    }
+   }
+  },
+  "user.profile": {
+   "final": 1242,
+   "splits": {
+    "train": 1183,
+    "dev": 59
+   },
+   "gate": {
+    "input": 1299,
+    "accepted": 1259,
+    "dropped": {
+     "value-not-in-lexicon": 40
+    }
+   },
+   "agree": {
+    "agreed": 248,
+    "disagreed": 1011
+   },
+   "judged": {
+    "agreed": 248,
+    "judge_accepted": 998,
+    "judge_fixed": 4,
+    "judge_rejected": 9,
+    "unjudged": 0,
+    "invalid_after_format": 0,
+    "final": 1242,
+    "splits": {
+     "train": 1183,
+     "dev": 59
+    }
+   }
+  }
+ }
+}

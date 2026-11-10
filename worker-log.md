@@ -1381,3 +1381,10 @@ Remaining top costs after: rules `formalize` 11% of wall (leniency `parse` 6%, v
 - Item 2: `art.draw` `openTab` now returns the shell's "You are already on the {tab} tab." reply, so "deschide tabul desen" on Drawing gives "Ești deja pe fila Desen." (world test r2open03 updated).
 - Item 3: the "not found" reply uses the plural noun phrase for "all the red circles" ("Nu găsesc cercuri roșii în desen.", new entry in `replies.en-ro.mjs`); "make a mouth bigger/smaller" on the robot and the emoji picks the widest/narrowest mouth instead of refusing (other characters keep the refusal; ui.avatar n119 updated). Spec 05 line updated.
 - Tests: tests/ro-rp5.test.mjs (+2), scripts/test-webchat-ro-rp5.mjs (+4 rows, 42/42 in Chrome), npm test 1135 pass, test-world ui.avatar and art.draw pass.
+
+## NX3 bulk generation (agent B, 2026-11-10)
+
+- Commands in order: `node scripts/nx-seeds.mjs`; `node scripts/nx-gen.mjs prepare --per-world 150` (214 shards of 15 seeds, k=20); Sonnet sessions over shard files (prompt: `training/dataset/nx/gen/INSTRUCTIONS.md`, ledger `gen/ledger.jsonl`); `node scripts/nx-gen.mjs collect`; `node scripts/nx-pipeline.mjs gate | agree | judge-prepare --shards 16`; Sonnet judge sessions over `gen/judge/shards/shard-N`; `node scripts/nx-pipeline.mjs finalize`; `node scripts/nx-report.mjs`. Gate unit tests: `node --test tests/nx-validate.test.mjs` (8 pass).
+- Result: 29,111 final records (NX1 format, `--check` clean), audit error 1.3 %, judge accept 97.5 % of disagreements (accept + fix), estimated $26.6. Details in RESULTS.md (NX3).
+- Bugs found and fixed on the way: `scripts/lib/nx-format.mjs` is agent A's file (I had overwritten it locally before noticing; restored, my converter is `nx3-format.mjs`); judge call ids must be content hashes and judged items must be excluded when preparing again (otherwise a growing pool re-sends judged items).
+- Not done: the 2,000 per world / 50k target (see RESULTS.md); 70-120B local model (disk); the diagram corpus is NX1's.
