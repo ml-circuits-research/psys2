@@ -1030,3 +1030,8 @@
     input="the season before winter"
     expect="The season before winter is autumn."
     session=tsh8
+
+@t.time.announce core.test
+    input="I should tell you, today is Friday. What day is tomorrow?"
+    expect="Tomorrow is Saturday."
+    doc="GAPS-1: an announcement before a statement is not a to-do item"

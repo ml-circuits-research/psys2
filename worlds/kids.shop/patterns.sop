@@ -3386,3 +3386,25 @@
     emit="@{_} core.question type=kids.shop.price seek=cost where.item={item}"
     priority=10
     example="What is the price of a pen?"
+
+@pat.kids.shop.q.change.want.a core.pattern
+    canonical="I want a puzzle and I pay 10 lei. What is the change?"
+    match="[$lang.shop.want] [a|an] {i1:lex.kids.shop.items} [$lang.shop.payment] {m:number} [lei|leu]? [$lang.q.change]"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1"
+    kind=question
+    priority=11
+    example="I want a puzzle and I pay 10 lei. What is the change?"
+
+@pat.kids.shop.q.change.want.b core.pattern
+    match="[$lang.shop.want] {n1:number} {i1:lex.kids.shop.items} [$lang.shop.payment] {m:number} [lei|leu]? [$lang.q.change]"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count={n1}"
+    kind=question
+    priority=11
+    example="I want 2 pencils and I pay 10 lei. How much change do I get?"
+
+@pat.kids.shop.q.change.want.c core.pattern
+    match="[$lang.shop.want] [a|an] {i1:lex.kids.shop.items} and [a|an] {i2:lex.kids.shop.items} [$lang.shop.payment] {m:number} [lei|leu]? [$lang.q.change]"
+    emit="@{_} core.question type=kids.shop.change seek=amount where.paid={m} where.item={i1} where.count=1 where.item2={i2} where.count2=1"
+    kind=question
+    priority=11
+    example="I want a ball and a pencil and I pay 20 lei. What is the change?"

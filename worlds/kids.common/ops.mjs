@@ -43,6 +43,9 @@ export function myName(ctx) {
 
 export function thanks() { return { status: 'supported', value: 'You are welcome' }; }
 
+/** "I should tell you, today is Friday": a statement, not a request. Nothing is done and nothing is stored (GAPS-1). */
+export function listen() { return { status: 'supported', value: 'Thanks for telling me. I cannot do anything with that yet. Tell me what you would like to do, or say help.' }; }
+
 export function bye() { return { status: 'supported', value: 'Goodbye' }; }
 
 const HOWRU = ['I am fine, thank you!', 'I am doing well, thanks for asking!', 'I am great! What shall we do?'];

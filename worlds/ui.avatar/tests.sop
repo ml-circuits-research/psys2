@@ -1774,3 +1774,13 @@
     input="Tongue out."
     expectStatus=supported
     session=rp3av
+
+@t.ui.avatar.gaps1 core.test
+    input="whats on u"
+    expect="do not wear clothes"
+    doc="GAPS-1"
+
+@t.ui.avatar.gaps2 core.test
+    input="would you say you are happy"
+    expect="happy"
+    doc="GAPS-1"

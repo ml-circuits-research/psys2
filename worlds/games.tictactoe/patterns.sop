@@ -781,3 +781,19 @@
     emit="@{_} core.request action=ttt.move arg.pos={pos}"
     priority=15
     example="Play the center."
+
+@pat.games.tictactoe.whofirst.us core.pattern
+    canonical="Which one of us goes first?"
+    match="[$lang.lead.filler|wait|umm|right|ooh]? [$lang.q.whofirst] [$lang.tail.filler]?"
+    emit="@{_} core.request action=ttt.whoFirst"
+    kind=request
+    priority=12
+    example="Which one of us goes first?"
+
+@pat.games.tictactoe.hint.suggest core.pattern
+    canonical="Can you suggest where I play?"
+    match="[$lang.lead.filler|wait|umm|right|ooh]? [$lang.q.suggest_move] [$lang.tail.filler]?"
+    emit="@{_} core.request action=ttt.hint"
+    kind=request
+    priority=12
+    example="Can you suggest where I play?"

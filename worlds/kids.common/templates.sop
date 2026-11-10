@@ -29,3 +29,7 @@
 @tpl.kids.common.howru core.template
     for=action.chat.howru
     text="{value}"
+
+@tpl.kids.common.listen core.template
+    for=action.chat.listen
+    text="{value}"

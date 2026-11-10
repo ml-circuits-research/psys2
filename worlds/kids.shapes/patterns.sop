@@ -1109,3 +1109,12 @@
     priority=10
     skip=short
     example="What color is a banana?"
+
+@pat.kids.shapes.desc.different core.pattern
+    canonical="How is a circle different from other shapes?"
+    match="[$lang.q.different] [a|an|the|every]? {s:lex.kids.shapes.shapes} [$lang.different.from] [from|than|to|compared_to]? [$lang.other.things]? [$lang.tail.filler]?"
+    emit="@{_} core.question type=kids.shapes.shape seek=summary where.name={s}"
+    kind=question
+    priority=10
+    example="How is a circle different from other shapes?"
+    example="What makes a square special?"

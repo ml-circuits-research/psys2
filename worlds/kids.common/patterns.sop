@@ -757,3 +757,20 @@
     priority=15
     example="My name is."
     doc="Clarification (spec 11 section 3): the name is missing; asks for it and completes the sentence with the next utterance."
+
+@pat.kids.common.announce core.pattern
+    canonical="I should tell you something."
+    match="[$lang.obligation.tell] {x:rest}"
+    emit="@{_} core.request action=chat.listen"
+    kind=chat
+    priority=14
+    example="I should tell you something."
+    example="I have to tell you something."
+
+@pat.kids.common.meet.tell core.pattern
+    canonical="I should tell you, my name is Mia."
+    match="[$lang.obligation.tell] [my_name_is|i_am_called|call_me|you_can_call_me] {n:words(3)}"
+    emit="@{_} core.request action=chat.meet arg.name=\"{n|cap}\""
+    kind=chat
+    priority=15
+    example="I should tell you, my name is Mia."

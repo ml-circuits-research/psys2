@@ -2613,3 +2613,11 @@
     emit="@{_} core.question type=kids.time.length seek=count where.whole={whole} where.part={part}"
     priority=12
     example="How many days are in a week?"
+
+@pat.kids.time.today.tell core.pattern
+    canonical="I should tell you, today is Friday."
+    match="[$lang.obligation.tell] [today|it|this_day] [is|was]? {d:lex.kids.time.days} [today|now]?"
+    emit="@{_} kids.time.today day={d}"
+    kind=statement
+    priority=15
+    example="I should tell you, today is Friday."

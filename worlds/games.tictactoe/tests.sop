@@ -801,3 +801,13 @@
     expect="You took the center."
     expectState="board.4=X"
     session=tsh
+
+@t.games.tictactoe.gaps1 core.test
+    input="which one of us goes first"
+    expect="X goes first"
+    doc="GAPS-1"
+
+@t.games.tictactoe.gaps2 core.test
+    input="can u suggest where i play"
+    expect="How about"
+    doc="GAPS-1"

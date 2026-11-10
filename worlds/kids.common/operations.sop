@@ -51,3 +51,9 @@
     semantics=action
     action=chat.ask
     doc="Clarification for a question without its subject (\"How many legs?\", \"What day is after?\"): asks arg.q and leaves the answer pending; arg.template (with <x>) completes the sentence in arg.world (spec 11 section 3)."
+
+@op.kids.common.listen core.operation
+    impl=listen
+    semantics=action
+    action=chat.listen
+    doc="The user announces something they want to tell (\"I should tell you ...\"): an acknowledgement, no action and no to-do item (GAPS-1)."

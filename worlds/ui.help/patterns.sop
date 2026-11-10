@@ -531,3 +531,27 @@
     example="Are you ChatGPT?"
     example="Is this an LLM?"
     example="Do you rely on a server?"
+
+@pat.ui.help.game7p.ttt core.pattern
+    canonical="What are tic tac toe's rules?"
+    match="[$ui.help.g9_what_are]? [the]? [$lang.game.poss.tictactoe] [$lang.game.rules]"
+    emit="@{_} core.request action=ui.helpGame arg.game=\"tic tac toe\""
+    kind=question
+    priority=13
+    example="What are tic tac toe's rules?"
+
+@pat.ui.help.game7p.chess core.pattern
+    canonical="What are chess's rules?"
+    match="[$ui.help.g9_what_are]? [the]? [$lang.game.poss.chess] [$lang.game.rules]"
+    emit="@{_} core.request action=ui.helpGame arg.game=chess"
+    kind=question
+    priority=13
+    example="What are chess's rules?"
+
+@pat.ui.help.game7p.hangman core.pattern
+    canonical="What are hangman's rules?"
+    match="[$ui.help.g9_what_are]? [the]? [$lang.game.poss.hangman] [$lang.game.rules]"
+    emit="@{_} core.request action=ui.helpGame arg.game=hangman"
+    kind=question
+    priority=13
+    example="What are hangman's rules?"

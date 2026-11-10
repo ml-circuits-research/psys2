@@ -38,3 +38,11 @@ test('junk words are not executed', async () => {
   const r = await ask(null, 'asdf qwer zxcv', true);
   assert.match(r.text, /did not understand/);
 });
+
+test('GAPS-1 word-coverage guard: a candidate that uses few of the input words is dropped for sentences of 5+ words', () => {
+  const set = engine.set;
+  const sentence = 'would you say you are happy';   // read as "happy say" (2 of 6 words) before the guard
+  for (const world of ['kids.animals', 'ui.avatar']) {
+    assert.ok(!looseCandidates(set, sentence, { worlds: [world], tabWorld: world }).some((c) => c.text === 'happy say'));
+  }
+});

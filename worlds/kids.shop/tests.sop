@@ -689,3 +689,13 @@
     input="the price of a puzzle"
     expect="A puzzle costs 18 lei"
     session=ssh4
+
+@t.kids.shop.gaps1 core.test
+    input="I want a puzzle and I pay 10 lei. What is the change?"
+    expect="10 lei is not enough"
+    doc="GAPS-1"
+
+@t.kids.shop.gaps2 core.test
+    input="I want 2 pencils and I give the cashier 10 lei. How much change do I get?"
+    expect="Your change from 10 lei"
+    doc="GAPS-1"

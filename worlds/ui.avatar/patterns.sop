@@ -582,7 +582,7 @@
 
 @pat.ui.avatar.q.wearing core.pattern
     canonical="What are you wearing?"
-    match="[$lang.lead.filler|pls|plz]? [what_are_you_wearing|what_do_you_wear|what_are_you_wearing_now|what_have_you_got_on|what_do_you_have_on|are_you_wearing_anything|what_accessories_do_you_have|do_you_wear_anything] [$lang.tail.filler]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.q.wearing|what_are_you_wearing|what_do_you_wear|what_are_you_wearing_now|what_have_you_got_on|what_do_you_have_on|are_you_wearing_anything|what_accessories_do_you_have|do_you_wear_anything] [$lang.tail.filler]?"
     emit="@{_} core.request action=avatar.askWearing"
     kind=request
     priority=12
@@ -911,13 +911,14 @@
 
 @pat.ui.avatar.x.mood.check core.pattern
     canonical="Is your face happy?"
-    match="[$lang.lead.filler|pls|plz]? [are|r|is|do|does|would_you_say|you|u|your|ur|this|does_this|do_you|do_u|are_you|r_u|are_u|you_look|u_look] [you|u|your_face|ur_face|this|it|look|looking|feel|feeling|seem|like]? [look|looking|feel|feeling|seem|like|a|an]? [like]? [a|an]? {m:lex.ui.avatar.moods} [face|expression|right_now|rn|now|or_nah|or_not|right|today]? [$lang.tail.filler|or_nah|right]?"
+    match="[$lang.lead.filler|pls|plz]? [$lang.lead.say_you|are|r|is|do|does|would_you_say|you|u|your|ur|this|does_this|do_you|do_u|are_you|r_u|are_u|you_look|u_look] [you|u|your_face|ur_face|this|it|look|looking|feel|feeling|seem|like]? [look|looking|feel|feeling|seem|like|a|an]? [like]? [a|an]? {m:lex.ui.avatar.moods} [face|expression|right_now|rn|now|or_nah|or_not|right|today]? [$lang.tail.filler|or_nah|right]?"
     emit="@{_} core.request action=avatar.checkMood arg.mood={m}"
     kind=question
     priority=6
     example="You happy?"
     example="Is your face happy?"
     example="Would you say you look happy?"
+    example="Would you say you are happy?"
     example="Does this look like a happy face?"
 
 @pat.ui.avatar.x.mood.check2 core.pattern

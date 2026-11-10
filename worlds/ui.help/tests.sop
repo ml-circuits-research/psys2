@@ -427,3 +427,13 @@
     input="how were you built"
     expect="dispatcher"
     session=hid9
+
+@t.ui.help.gaps1 core.test
+    input="what are tic tac toe's rules"
+    expect="Three in a row wins"
+    doc="GAPS-1"
+
+@t.ui.help.gaps2 core.test
+    input="what are hangman's rules"
+    expect="secret word"
+    doc="GAPS-1"

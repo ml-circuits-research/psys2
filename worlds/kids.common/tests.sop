@@ -1795,3 +1795,13 @@
     input="Ana"
     expect="Nice to meet you, Ana"
     session=ask1
+
+@t.kids.common.announce1 core.test
+    input="I need to tell you something"
+    expect="Thanks for telling me"
+    session=announce1
+
+@t.kids.common.announce2 core.test
+    input="I should tell you, my name is Mia"
+    expect="Nice to meet you, Mia"
+    session=announce2

@@ -352,7 +352,6 @@
     alt=i_want_to_know
     alt=id_like_to_know
     alt=just_so_u_know
-    alt=just_so_you_know
     alt=let_me_know_if
     alt=pls_tell_me_if
     alt=pls_tell_me_is
@@ -1762,3 +1761,263 @@
     alt=gata_cu_microfonul
     alt=stop_microfon
     alt=microfon_oprit
+
+@phrase.lang.obligation.tell core.phrase
+    doc="Announcing that the speaker has something to tell the assistant (\"I should tell you\", \"I have to say\", \"just so you know\"): a statement follows, never a to-do item (GAPS-1)."
+    alt=i_should_tell_you
+    alt=i_should_tell_u
+    alt=i_should_say
+    alt=i_should_mention
+    alt=i_should_let_you_know
+    alt=i_must_tell_you
+    alt=i_have_to_tell_you
+    alt=i_need_to_tell_you
+    alt=i_ought_to_tell_you
+    alt=i_got_to_tell_you
+    alt=i_gotta_tell_you
+    alt=i_have_to_say
+    alt=i_need_to_say
+    alt=i_have_to_admit
+    alt=i_must_admit
+    alt=i_should_admit
+    alt=i_should_warn_you
+    alt=i_have_to_warn_you
+    alt=i_better_tell_you
+    alt=i_should_inform_you
+    alt=i_wanted_to_tell_you
+    alt=i_want_to_tell_you
+    alt=i_wanna_tell_you
+    alt=i_just_wanted_to_say
+
+@phrase.lang.q.wearing core.phrase
+    doc="Questions about what someone has on (\"what is on you\", \"whats on u\", \"what have you got on\"): the avatar answers with what it wears (GAPS-1)."
+    alt=whats_on_you
+    alt=whats_on_u
+    alt=what_is_on_you
+    alt=what_is_on_u
+    alt=what_s_on_you
+    alt=what_s_on_u
+    alt=what_you_got_on
+    alt=what_u_got_on
+    alt=what_you_have_on
+    alt=what_u_have_on
+    alt=what_have_you_got_on_you
+    alt=what_are_you_wearing_today
+    alt=what_are_u_wearing
+    alt=what_r_u_wearing
+    alt=what_you_wearing
+    alt=what_u_wearing
+    alt=what_do_you_have_on_you
+    alt=whatcha_wearing
+
+@phrase.lang.lead.say_you core.phrase
+    doc="\"Would you say you are ...\" / \"do you think you are ...\": an opinion question about the other side's state, read like a plain \"are you ...\" (GAPS-1)."
+    alt=would_you_say_you_are
+    alt=would_you_say_you_re
+    alt=would_you_say_u_are
+    alt=would_you_say_u_r
+    alt=would_you_say_you
+    alt=would_you_say_u
+    alt=do_you_think_you_are
+    alt=do_you_think_you_re
+    alt=do_you_think_u_are
+    alt=do_you_think_u_r
+    alt=do_you_feel_like_you_are
+    alt=would_you_call_yourself
+    alt=would_you_call_urself
+
+@phrase.lang.q.change core.phrase
+    doc="Asking for the change after a payment (\"what is the change\", \"how much change do I get\") (GAPS-1)."
+    alt=what_is_the_change
+    alt=what_is_my_change
+    alt=whats_the_change
+    alt=whats_my_change
+    alt=how_much_is_the_change
+    alt=how_much_change_do_i_get
+    alt=how_much_change_will_i_get
+    alt=how_much_change_would_i_get
+    alt=how_much_change
+    alt=what_change_do_i_get
+    alt=what_change_will_i_get
+    alt=how_much_do_i_get_back
+    alt=how_much_will_i_get_back
+
+@phrase.lang.shop.want core.phrase
+    doc="Saying what one wants to buy, before a payment (\"I want\", \"I would like\", \"I am buying\") (GAPS-1)."
+    alt=i_want
+    alt=i_would_like
+    alt=i_d_like
+    alt=id_like
+    alt=i_wanna
+    alt=i_need
+    alt=i_am_buying
+    alt=i_m_buying
+    alt=i_will_buy
+    alt=i_buy
+    alt=i_want_to_buy
+    alt=i_would_like_to_buy
+    alt=i_wanna_buy
+    alt=i_am_going_to_buy
+    alt=i_bought
+    alt=i_got
+
+@phrase.lang.shop.payment core.phrase
+    doc="Saying that one pays, before the change is asked (\"and I pay\", \"I give the cashier\", \"I hand over\") (GAPS-1)."
+    alt=and_i_pay
+    alt=and_i_give
+    alt=and_i_give_the_cashier
+    alt=and_i_hand_over
+    alt=and_i_paid
+    alt=and_i_have
+    alt=and_i_use
+    alt=i_pay
+    alt=i_give
+    alt=i_give_the_cashier
+    alt=i_hand_over
+    alt=i_paid
+    alt=with
+    alt=and_pay_with
+    alt=and_i_pay_with
+    alt=paying_with
+    alt=paying
+    alt=and_i_give_him
+    alt=and_i_give_her
+
+@phrase.lang.game.poss.tictactoe core.phrase
+    doc="Possessive spellings of the tic-tac-toe game name (\"tic tac toe's\"), one token each, as in \"what are tic tac toe's rules\" (GAPS-1)."
+    alt=tic_tac_toe_'s
+    alt=tic_tac_toes
+    alt=tic-tac-toe_'s
+    alt=tictactoe_'s
+    alt=noughts_and_crosses_'s
+
+@phrase.lang.game.poss.chess core.phrase
+    doc="Possessive spellings of the chess game name (GAPS-1)."
+    alt=chess_'s
+    alt=chess_'
+
+@phrase.lang.game.poss.hangman core.phrase
+    doc="Possessive spellings of the hangman game name (GAPS-1)."
+    alt=hangman_'s
+
+@phrase.lang.game.rules core.phrase
+    doc="Nouns that ask for how a game works, after a possessive game name (GAPS-1)."
+    alt=rules
+    alt=goal
+    alt=instructions
+    alt=rule_set
+    alt=rulebook
+
+@phrase.lang.q.whofirst core.phrase
+    doc="Asking who starts a two-player game (\"which one of us goes first\", \"who gets to go first\") (GAPS-1)."
+    alt=which_one_of_us_goes_first
+    alt=which_of_us_goes_first
+    alt=who_of_us_goes_first
+    alt=which_one_goes_first
+    alt=which_player_goes_first
+    alt=which_one_of_us_starts
+    alt=which_of_us_starts
+    alt=who_gets_to_go_first
+    alt=who_gets_to_start
+    alt=who_is_to_go_first
+    alt=who_has_the_first_move
+    alt=who_makes_the_first_move
+    alt=who_makes_the_first_turn
+    alt=whose_turn_is_first
+    alt=whose_move_is_first
+    alt=who_will_go_first
+    alt=who_will_start
+    alt=who_is_starting
+    alt=who_goes_first_here
+    alt=who_goes_1st
+
+@phrase.lang.q.suggest_move core.phrase
+    doc="Asking the assistant to suggest where to play in a board game (\"can you suggest where I play\") (GAPS-1)."
+    alt=can_you_suggest_where_i_play
+    alt=can_u_suggest_where_i_play
+    alt=could_you_suggest_where_i_play
+    alt=can_you_suggest_where_i_should_play
+    alt=can_u_suggest_where_i_should_play
+    alt=can_you_suggest_where_to_play
+    alt=can_u_suggest_where_to_play
+    alt=can_you_suggest_a_move
+    alt=can_u_suggest_a_move
+    alt=could_you_suggest_a_move
+    alt=can_you_suggest_a_move_for_me
+    alt=can_you_suggest_a_square
+    alt=suggest_where_i_play
+    alt=suggest_where_i_should_play
+    alt=suggest_where_to_play
+    alt=suggest_where_i_could_play
+    alt=suggest_me_a_move
+    alt=suggest_my_move
+    alt=can_you_recommend_a_move
+    alt=can_you_recommend_where_i_play
+    alt=recommend_a_move
+    alt=where_would_you_suggest_i_play
+    alt=where_would_you_play
+    alt=where_would_you_put_it
+    alt=where_do_you_suggest_i_play
+    alt=where_do_you_suggest
+    alt=where_do_you_think_i_should_play
+    alt=where_can_i_play
+    alt=where_could_i_play
+    alt=where_do_i_play
+    alt=where_to_play
+
+@phrase.lang.q.different core.phrase
+    doc="Asking what sets one thing apart from the others (\"how is a circle different from other shapes\"), answered with the description of the thing (GAPS-1)."
+    alt=how_is
+    alt=how_are
+    alt=how_does
+    alt=what_makes
+    alt=what_is_it_that_makes
+    alt=in_what_way_is
+    alt=in_what_ways_is
+    alt=in_what_way_are
+    alt=what_way_is
+    alt=how_come
+
+@phrase.lang.different.from core.phrase
+    doc="\"different from\", \"special compared to\" and the words after them, before the other things (GAPS-1)."
+    alt=different
+    alt=different_from
+    alt=different_than
+    alt=different_to
+    alt=special
+    alt=unique
+    alt=unlike
+    alt=not_like
+    alt=differing_from
+    alt=different_from_the
+    alt=different_from_all
+    alt=special_compared_to
+    alt=special_from
+    alt=unlike_the
+    alt=different_compared_to
+    alt=different_in_comparison_to
+
+@phrase.lang.other.things core.phrase
+    doc="\"other shapes\", \"the others\", \"the rest\" (GAPS-1)."
+    alt=other
+    alt=others
+    alt=the_other
+    alt=the_others
+    alt=other_shapes
+    alt=the_other_shapes
+    alt=all_other_shapes
+    alt=all_the_other_shapes
+    alt=any_other_shape
+    alt=any_other_shapes
+    alt=every_other_shape
+    alt=the_rest
+    alt=the_rest_of_the_shapes
+    alt=the_rest_of_them
+    alt=all_the_rest
+    alt=other_figures
+    alt=other_things
+    alt=all_other_things
+    alt=everything_else
+    alt=the_other_ones
+    alt=other_ones
+    alt=the_rest_of_the_others

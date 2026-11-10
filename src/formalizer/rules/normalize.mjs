@@ -71,11 +71,14 @@ function quotedRanges(text) {
  *  that do not start like a new request: the text is the user's, whatever its punctuation (docs.editor). */
 const TEXT_LEAD = /^(?:(?:please|pls|hey|ok|okay|now|and|then|so)\s+)*(?:(?:can|could|would) you\s+)?(?:(?:add|insert|put|write|type|append|enter)\s+(?:in\s+)?(?:a\s+|an\s+|the\s+|another\s+|one more\s+)?(?:new\s+)?(?:paragraph|text|sentence|line|note|quote|passage)\b|write\b|type\b|continue with\b|continue writing\b|dictate\b|write down\b|note down\b)/i;
 const REQUEST_START = /^(?:add|insert|delete|remove|erase|make|read|select|bold|italic|underline|undo|redo|move|go|new|start|stop|open|close|clear|copy|download|show|tell|turn|set|rename|replace|change|count|save|play|what|who|where|when|why|how|is|are|do|does|did|can|could|would|will|i|let|let's|you|please|pls|also|then|and|next|after|before|now|ok|okay|hey|thanks|thank|no|yes|center|centre|align|highlight|link|break|page|chapter|paragraph|heading|title|write|type|continue|call|put|give|create|mark|check|uncheck|finish|dictate|begin)\b/i;
+/** GAPS-1: "I want a puzzle and I pay 10 lei. What is the change?" is ONE request: the sentence that says what was paid and the question about the change that follows it. */
+const PAYMENT_SENTENCE = /\b(?:pay|paid|paying|give|gave|hand|handed)\b.*\b\d+(?:[.,]\d+)?\s*(?:lei|leu)\b/i;
+const CHANGE_QUESTION = /^(?:(?:and|so|then|now|ok|okay)\s+)*(?:what(?:'s|\u2019s| is| would be| will be)|how much|what change)\b.*\bchange\b/i;
 function glueTextRequests(text, sents) {
   const out = [];
   for (const s of sents) {
     const prev = out[out.length - 1];
-    if (prev && TEXT_LEAD.test(prev.text) && !REQUEST_START.test(s.text)) {
+    if (prev && ((TEXT_LEAD.test(prev.text) && !REQUEST_START.test(s.text)) || (PAYMENT_SENTENCE.test(prev.text) && CHANGE_QUESTION.test(s.text)))) {
       out[out.length - 1] = { start: prev.start, end: s.end, text: text.slice(prev.start, s.end), terminator: s.terminator };
     } else out.push(s);
   }

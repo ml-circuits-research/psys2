@@ -32,6 +32,8 @@ export const BEST_EFFORT_POLICY = Object.freeze({
   maxVerify: 6,          // candidates run through the rules
   frameMissingPenalty: 0.8,
   worldBonus: 0.4,       // active tab world
+  minWordCoverage: 0.5,  // GAPS-1: from this many words on (minWordsForCoverage) the candidate must contain this share of ALL the input's words (stop words too): "would you say you are happy" is not "happy say"
+  minWordsForCoverage: 5,
 });
 
 /** Words of a text with their surface form and offsets; multi-word lexicon entries ("polar bear") are merged. */
@@ -159,6 +161,10 @@ export function looseCandidates(set, text, { worlds, tabWorld = null, policy = {
         if (lost.length) continue;   // a word the world knows is never dropped: ignoring it would change the meaning
         if (ignoredAny && sentenceish) continue;   // a sentence that merely contains an unknown word is not loose words: do not guess around it
         const candText = ex.toks.map((t, k) => (subst[k] ?? t.w).replace(/_/g, ' ')).join(' ');
+        if (input.length >= P.minWordsForCoverage) {   // GAPS-1 guard: a reading that ignores most of the sentence is worse than "not understood"
+          const candWords = new Set(candText.toLowerCase().split(/\s+/));
+          if (input.filter((t) => candWords.has(t.w)).length / input.length < P.minWordCoverage) continue;
+        }
         const ignored = input.filter((t, i) => !used.has(i) && !isStop(t.w)).map((t) => t.surface);
         const score = coverage * 10 + usedContent * 0.5 - missing * P.frameMissingPenalty + (worldId === tabWorld ? P.worldBonus : 0) - rank * 0.05 + (p.priority ?? 0) * 0.005;
         out.push({ world: worldId, patternId: p.id, kind: p.kind, example, text: candText, score, coverage, used: usedContent, ignored, missing });

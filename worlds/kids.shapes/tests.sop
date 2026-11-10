@@ -2346,3 +2346,8 @@
     input="tell me the color of a lemon"
     expect="A lemon is usually yellow."
     session=ksh3
+
+@t.kids.shapes.gaps1 core.test
+    input="how is a circle different from other shapes"
+    expect="round shape"
+    doc="GAPS-1"
