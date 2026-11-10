@@ -18,6 +18,8 @@ import { toNx1 } from './lib/nx3-format.mjs';
 const REPO = new URL('..', import.meta.url).pathname;
 const MAIN = REPO.replace(/\.claude\/worktrees\/[^/]+\/$/, '');
 const arg = (k, d) => { const i = process.argv.indexOf('--' + k); return i > 0 ? process.argv[i + 1] : d; };
+const FINAL = MAIN + 'training/dataset/nx/' + (process.env.NX_FINAL ?? 'final');
+const STRICT = process.env.NX_GEN === 'gen2'; // NX3b: every verdict must be explicit, with a reason; items without one are dropped
 const jl = (f) => (existsSync(f) ? readFileSync(f, 'utf8').split('\n').filter((l) => l.trim()).map((l) => JSON.parse(l)) : []);
 const wl = (f, a) => { mkdirSync(f.replace(/\/[^/]+$/, ''), { recursive: true }); writeFileSync(f, a.map((x) => JSON.stringify(x)).join('\n') + (a.length ? '\n' : '')); };
 const wj = (f, o) => { mkdirSync(f.replace(/\/[^/]+$/, ''), { recursive: true }); writeFileSync(f, JSON.stringify(o, null, 1)); };
@@ -77,9 +79,10 @@ async function agree() {
 
 const JUDGE_INSTR = `You are a judge in a data pipeline. Work ONLY with the files named here; do not read or search any other file in the repository.
 SHARD (in your task) holds batches.json: a list of judge calls {call_id, world, prompt_file, items: [{k, context, text, proposed: {op, slots}}]}.
-For EVERY call, in order: read the world prompt file once per world (it defines the operations and keys; ignore its generation task), then for each item decide whether the proposed label (op and slots) is a correct reading of the sentence for this world (the label is for the last sentence; context only resolves what it leaves out):
+For EVERY call, in order: read the world prompt file once per world (it defines the operations, keys, constants and lexicons; ignore its generation task), then look at EVERY item on its own and decide whether the proposed label (op and slots) is a correct reading of the sentence for this world (the label is for the last sentence; context only resolves what it leaves out):
 accept = op and all slot keys and values are right; reject = wrong op, wrong or missing value, or the sentence does not ask for this op; fix = nearly right (give "fixed": {"op":..., "slots":[{"key":..,"text":..,"value":..}]}).
-Write each call's verdicts with the Write tool as a JSON array to OUT/<call_id>.json: [{"k": <n>, "verdict": "accept"|"reject"|"fix", "reason": "ok" for accept, at most 8 words otherwise, "fixed": {...only for fix}}] one entry per item, nothing else. No scripts that generate verdicts. Never ask questions. Reply with one line: the number of calls written.`;
+Every item needs its OWN explicit verdict AND its own short reason, also for accept: name the evidence in 4 to 12 words (for example "owner tom, item apple, asks count: matches" or "asks to remove, label says add"). A reason that is just "ok", or the same reason copied on every item, is not accepted. Rejecting is normal when the sentence drifted from the label: do not accept to be nice.
+Write each call's verdicts with the Write tool as a JSON array to OUT/<call_id>.json: [{"k": <n>, "verdict": "accept"|"reject"|"fix", "reason": "<4-12 words>", "fixed": {...only for fix}}] one entry per item, nothing else. Write the verdicts yourself, item by item: no scripts, no loops, no defaults generate verdicts; an item without an explicit verdict is dropped from the dataset. Never ask questions. Reply with one line: the number of calls written.`;
 
 function judgePrepare() {
   const audit = Number(arg('audit', 0.03)); const J = `${GEN}/judge`;
@@ -101,7 +104,8 @@ function judgePrepare() {
   }
   // judge-style prompt files: the world prompt is the labeler prompt (operations + keys)
   wj(`${J}/key.json`, key);
-  const n = Number(arg('shards', 4)); const sh = Array.from({ length: n }, () => []);
+  const perShard = Number(arg('items-per-shard', 0));
+  const n = perShard ? Math.max(1, Math.ceil(calls.reduce((x, c) => x + c.items.length, 0) / perShard)) : Number(arg('shards', 4)); const sh = Array.from({ length: n }, () => []);
   calls.forEach((c, i) => sh[i % n].push(c));
   sh.forEach((s, i) => wj(`${J}/shards/shard-${i}/batches.json`, s));
   writeFileSync(`${J}/INSTRUCTIONS.md`, JUDGE_INSTR);
@@ -124,14 +128,28 @@ async function finalize() {
   const dev = Number(arg('dev', 0.05)); const test = Number(arg('test', 0.05));
   const key = existsSync(`${GEN}/judge/key.json`) ? JSON.parse(readFileSync(`${GEN}/judge/key.json`, 'utf8')) : {};
   const verdict = new Map(); // id -> { v, kind, fixed }
+  const invalid = { items: 0, copied_reason_calls: 0 };
   for (const [call, rows] of Object.entries(key)) {
     const f = `${GEN}/judge/out/${call}.json`; if (!existsSync(f)) continue;
     let arr; try { arr = JSON.parse(readFileSync(f, 'utf8')); } catch { continue; }
-    rows.forEach((r, i) => { const a = arr.find((x) => x.k === i + 1); if (a) verdict.set(r.id, { v: a.verdict, kind: r.kind, fixed: a.fixed }); });
+    if (!Array.isArray(arr)) continue;
+    const reasons = arr.map((x) => String(x?.reason ?? '').trim().toLowerCase());
+    const sameReason = arr.length >= 10 && new Set(reasons).size <= Math.ceil(arr.length * 0.1);
+    if (sameReason) invalid.copied_reason_calls++;
+    rows.forEach((r, i) => {
+      const a = arr.find((x) => x.k === i + 1);
+      if (!a) return;
+      if (STRICT) {
+        const reason = String(a.reason ?? '').trim();
+        const okV = ['accept', 'fix', 'reject'].includes(a.verdict) && reason.length >= 6 && reason.toLowerCase() !== 'ok' && (a.verdict !== 'fix' || a.fixed?.op);
+        if (!okV || sameReason) { invalid.items++; return; }
+      }
+      verdict.set(r.id, { v: a.verdict, kind: r.kind, fixed: a.fixed, reason: a.reason });
+    });
   }
   const set = await loadSet(); const gc = makeGateContext(set);
   const rep = { worlds: {}, judge: { disagreed: { n: 0, accept: 0, fix: 0, reject: 0 }, audit: { n: 0, accept: 0, fix: 0, reject: 0 } }, totals: {} };
-  mkdirSync(`${MAIN}training/dataset/nx/final`, { recursive: true });
+  mkdirSync(FINAL, { recursive: true });
   for (const f of files(`${GEN}/agreed`)) {
     const w = f.replace('.jsonl', ''); const out = []; const st = { agreed: 0, judge_accepted: 0, judge_fixed: 0, judge_rejected: 0, unjudged: 0 };
     for (const r of jl(`${GEN}/agreed/${f}`)) {
@@ -154,12 +172,12 @@ async function finalize() {
     });
     const badIds = new Set(final.filter((x) => x.problems.length).map((x) => x.id)); st.invalid_after_format = badIds.size;
     const kept = final.filter((x) => !badIds.has(x.id) && !(PROT.has(normT(x.text)) && ++protectedDropped)); for (const x of kept) delete x.problems;
-    wl(`${MAIN}training/dataset/nx/final/${w}.jsonl`, kept);
+    wl(`${FINAL}/${w}.jsonl`, kept);
     rep.worlds[w] = { ...st, final: kept.length, splits: kept.reduce((a, x) => ((a[x.split] = (a[x.split] ?? 0) + 1), a), {}) };
   }
   const a = rep.judge.audit; rep.audit_error_rate = a.n ? Math.round(((a.reject ?? 0) / a.n) * 10000) / 10000 : null;
   const d = rep.judge.disagreed; rep.judge_accept_rate = d.n ? Math.round((((d.accept ?? 0) + (d.fix ?? 0)) / d.n) * 10000) / 10000 : null;
-  rep.protected_dropped = protectedDropped;
+  rep.protected_dropped = protectedDropped; rep.invalid_verdicts = invalid;
   rep.totals = { final: Object.values(rep.worlds).reduce((s, x) => s + x.final, 0) };
   wj(`${GEN}/finalize-report.json`, rep); console.log(JSON.stringify({ totals: rep.totals, judge: rep.judge, audit_error_rate: rep.audit_error_rate, judge_accept_rate: rep.judge_accept_rate }));
 }

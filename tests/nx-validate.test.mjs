@@ -44,3 +44,10 @@ test('gateAll counts the drops by reason', () => {
   const r = gateAll(gc, [good, rec({ op: 'nope' }), rec({ op: 'nope' })]);
   assert.equal(r.accepted.length, 1); assert.deepEqual(r.dropped, { 'unknown-op': 2 });
 });
+
+test('NX3b: an implied value, a seek and a pattern constant skip the lexicon check', () => {
+  const q = rec({ world: 'kids.shapes', text: 'what is a hexagon', op: '?kids.shapes.shape', slots: [S('kids.shapes.shape.name', 'hexagon', 'hexagon'), S('seek', null, 'summary')] });
+  assert.equal(gateOne(gc, q).ok, true);
+  const t = rec({ world: 'kids.tasks', text: 'what do I have left to do?', op: 'tasks.pending', slots: [S('arg.list', null, 'to-do')] });
+  assert.equal(gateOne(gc, t).ok, true);
+});

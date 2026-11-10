@@ -1,0 +1,279 @@
+{
+ "final29-filtered": {
+  "in": 29111,
+  "out": 27619,
+  "protected": 18,
+  "eval_texts": 766,
+  "duplicate": 708,
+  "per_world": {
+   "art.draw": {
+    "n": 1286,
+    "train": 1181,
+    "test": 46,
+    "dev": 59
+   },
+   "data.charts": {
+    "n": 1319,
+    "train": 1196,
+    "dev": 64,
+    "test": 59
+   },
+   "diagram.sketch": {
+    "n": 1411,
+    "train": 1331,
+    "dev": 60,
+    "test": 20
+   },
+   "docs.editor": {
+    "n": 1177,
+    "train": 1084,
+    "test": 42,
+    "dev": 51
+   },
+   "docs.reader": {
+    "n": 1290,
+    "dev": 55,
+    "train": 1177,
+    "test": 58
+   },
+   "games.chess": {
+    "n": 1298,
+    "train": 1132,
+    "test": 112,
+    "dev": 54
+   },
+   "games.guess": {
+    "n": 998,
+    "train": 961,
+    "test": 17,
+    "dev": 20
+   },
+   "games.hangman": {
+    "n": 1294,
+    "test": 159,
+    "train": 1135
+   },
+   "games.tictactoe": {
+    "n": 1299,
+    "train": 1139,
+    "test": 73,
+    "dev": 87
+   },
+   "geo.map": {
+    "n": 1347,
+    "test": 72,
+    "train": 1218,
+    "dev": 57
+   },
+   "kids.animals": {
+    "n": 1237,
+    "train": 1115,
+    "test": 50,
+    "dev": 72
+   },
+   "kids.arith": {
+    "n": 1339,
+    "train": 1158,
+    "test": 88,
+    "dev": 93
+   },
+   "kids.common": {
+    "n": 1155,
+    "train": 1031,
+    "test": 124
+   },
+   "kids.shapes": {
+    "n": 1090,
+    "train": 1039,
+    "dev": 14,
+    "test": 37
+   },
+   "kids.shop": {
+    "n": 1409,
+    "train": 1205,
+    "test": 93,
+    "dev": 111
+   },
+   "kids.tasks": {
+    "n": 1054,
+    "train": 976,
+    "test": 38,
+    "dev": 40
+   },
+   "kids.time": {
+    "n": 1260,
+    "train": 1167,
+    "dev": 56,
+    "test": 37
+   },
+   "media.music": {
+    "n": 1347,
+    "train": 1218,
+    "test": 75,
+    "dev": 54
+   },
+   "ui.avatar": {
+    "n": 1305,
+    "train": 1179,
+    "test": 55,
+    "dev": 71
+   },
+   "ui.help": {
+    "n": 1243,
+    "train": 1107,
+    "dev": 85,
+    "test": 51
+   },
+   "ui.shell": {
+    "n": 1236,
+    "train": 1148,
+    "test": 52,
+    "dev": 36
+   },
+   "user.profile": {
+    "n": 1225,
+    "train": 1166,
+    "dev": 59
+   }
+  }
+ },
+ "final2-filtered": {
+  "in": 19548,
+  "out": 19212,
+  "protected": 0,
+  "eval_texts": 156,
+  "duplicate": 180,
+  "per_world": {
+   "art.draw": {
+    "n": 754,
+    "train": 688,
+    "dev": 34,
+    "test": 32
+   },
+   "data.charts": {
+    "n": 790,
+    "train": 667,
+    "dev": 66,
+    "test": 57
+   },
+   "diagram.sketch": {
+    "n": 701,
+    "train": 633,
+    "dev": 55,
+    "test": 13
+   },
+   "docs.editor": {
+    "n": 889,
+    "train": 860,
+    "test": 16,
+    "dev": 13
+   },
+   "docs.reader": {
+    "n": 879,
+    "test": 72,
+    "train": 747,
+    "dev": 60
+   },
+   "games.chess": {
+    "n": 795,
+    "train": 666,
+    "dev": 32,
+    "test": 97
+   },
+   "games.guess": {
+    "n": 1161,
+    "train": 1097,
+    "test": 31,
+    "dev": 33
+   },
+   "games.hangman": {
+    "n": 786,
+    "test": 104,
+    "train": 650,
+    "dev": 32
+   },
+   "games.tictactoe": {
+    "n": 723,
+    "train": 610,
+    "test": 85,
+    "dev": 28
+   },
+   "geo.map": {
+    "n": 749,
+    "train": 682,
+    "dev": 31,
+    "test": 36
+   },
+   "kids.animals": {
+    "n": 892,
+    "train": 794,
+    "dev": 49,
+    "test": 49
+   },
+   "kids.arith": {
+    "n": 753,
+    "train": 643,
+    "dev": 67,
+    "test": 43
+   },
+   "kids.common": {
+    "n": 910,
+    "train": 865,
+    "test": 45
+   },
+   "kids.shapes": {
+    "n": 1106,
+    "test": 57,
+    "train": 1034,
+    "dev": 15
+   },
+   "kids.shop": {
+    "n": 723,
+    "train": 604,
+    "dev": 37,
+    "test": 82
+   },
+   "kids.tasks": {
+    "n": 1244,
+    "train": 1157,
+    "dev": 34,
+    "test": 53
+   },
+   "kids.time": {
+    "n": 892,
+    "test": 52,
+    "train": 790,
+    "dev": 50
+   },
+   "media.music": {
+    "n": 821,
+    "test": 62,
+    "train": 741,
+    "dev": 18
+   },
+   "ui.avatar": {
+    "n": 879,
+    "train": 793,
+    "dev": 66,
+    "test": 20
+   },
+   "ui.help": {
+    "n": 851,
+    "train": 758,
+    "test": 38,
+    "dev": 55
+   },
+   "ui.shell": {
+    "n": 850,
+    "train": 769,
+    "dev": 51,
+    "test": 30
+   },
+   "user.profile": {
+    "n": 1064,
+    "train": 1008,
+    "dev": 56
+   }
+  }
+ }
+}

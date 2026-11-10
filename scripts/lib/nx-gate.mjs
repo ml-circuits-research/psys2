@@ -24,7 +24,7 @@ export function makeGateContext(set) {
     if (!w) { worlds.set(id, null); return null; }
     const d = describeWorld(set, id);
     const ops = new Map();
-    for (const o of d.ops) ops.set(o.op, { keys: new Set([...o.keys.map((k) => k.key), ...Object.keys(o.fixed)]), seek: o.op.startsWith('?') });
+    for (const o of d.ops) ops.set(o.op, { keys: new Set([...o.keys.map((k) => k.key), ...Object.keys(o.fixed)]), seek: o.op.startsWith('?'), fixed: Object.fromEntries(Object.entries(o.fixed).map(([k, v]) => [k, new Set(v.map((x) => String(x).toLowerCase()))])) });
     // key -> lexicon id, from patterns (match slot class lex.* and emit key={slot})
     const lexOf = new Map(); const lexWords = new Map();
     for (const l of set.list().flatMap((x) => x.lexicons)) lexWords.set(l.id, { cls: l.class, words: new Set(l.words.map((x) => String(x).toLowerCase().replace(/_/g, ' '))) });
@@ -76,7 +76,9 @@ export function gateOne(gc, rec) {
     if (w.numeric.has(key) && typeof value !== 'number') { const n = Number(value); if (value === '' || Number.isNaN(n)) return { ok: false, reason: 'value-type' }; value = n; }
     if (typeof value === 'object') return { ok: false, reason: 'value-type' };
     const lex = w.lexOf.get(rec.op + '|' + key);
-    if (lex && typeof value === 'string' && value !== '') {
+    // the lexicon check is for values the sentence states: an implied value (no text), the seek of a question and a constant fixed by a pattern are not lexicon words (NX3b)
+    const constant = key === 'seek' || s.text == null || op.fixed[key]?.has(String(value).toLowerCase());
+    if (lex && !constant && typeof value === 'string' && value !== '') {
       const v = value.toLowerCase().replace(/_/g, ' ');
       const surf = String(s.text ?? '').toLowerCase().replace(/_/g, ' ');
       const ok = [...lex].some((l) => { const lw = w.lexWords.get(l); return lw && (lw.words.has(v) || lw.words.has(stem(v)) || lw.cls === 'name' || (surf && (lw.words.has(surf) || lw.words.has(stem(surf))))); });
