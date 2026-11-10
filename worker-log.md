@@ -1388,3 +1388,9 @@ Remaining top costs after: rules `formalize` 11% of wall (leniency `parse` 6%, v
 - Result: 29,111 final records (NX1 format, `--check` clean), audit error 1.3 %, judge accept 97.5 % of disagreements (accept + fix), estimated $26.6. Details in RESULTS.md (NX3).
 - Bugs found and fixed on the way: `scripts/lib/nx-format.mjs` is agent A's file (I had overwritten it locally before noticing; restored, my converter is `nx3-format.mjs`); judge call ids must be content hashes and judged items must be excluded when preparing again (otherwise a growing pool re-sends judged items).
 - Not done: the 2,000 per world / 50k target (see RESULTS.md); 70-120B local model (disk); the diagram corpus is NX1's.
+
+## NX7 (2026-11-10, worker): gate for D over encoder+n1, Romanian, NX6 recheck
+- Built: gate features and gated wrapper (`scripts/lib/nx-formalizer.mjs`), systems `enc-n1`, `<model>-d`, `-dcov`, `-dng`, sets `nxdev` and `operational-ro` (`scripts/eval-nx.mjs`), `scripts/nx7-sweep.mjs`, `scripts/nx7-report.mjs`, 2 new unit tests (6 pass).
+- tau chosen on dev only (28 fail + 1,019 NX3 + 1,500 other + 286 fillers): A3 tau_op 0.999 / tau_frame 0 (dev gain 4, added wrong 0); A+3 tau_op 0.9995 / 0 (gain 11, 0). The dev fillers are negation traps the heads read at p about 0.99, so an extra negation guard was evaluated separately (A3 0.99 / 0.9, gain 10; A+3 same, gain 19).
+- Full-set results and the four conditions are in training/RESULTS.md (NX7). Model-first (A3-first, A+3-first) measured as asked: fails 2 and 3 by 15-20 points.
+- Not done: step 6 (more NX3 data); ready time in perf-webchat (condition 4 by construction only); per-item rows (training/results/nx5/*.json) are not in git.

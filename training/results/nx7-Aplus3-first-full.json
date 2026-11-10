@@ -1,0 +1,307 @@
+{
+ "conditions": {
+  "operational": {
+   "rules": {
+    "n": 1296,
+    "right": 1239,
+    "partly": 22,
+    "wrong": 6,
+    "nu": 29
+   },
+   "base": {
+    "n": 1296,
+    "right": 1278,
+    "partly": 1,
+    "wrong": 4,
+    "nu": 13
+   },
+   "D": {
+    "n": 1296,
+    "right": 960,
+    "partly": 54,
+    "wrong": 200,
+    "nu": 82
+   }
+  },
+  "operational-long": {
+   "rules": {
+    "n": 154,
+    "right": 87,
+    "partly": 14,
+    "wrong": 35,
+    "nu": 18
+   },
+   "base": {
+    "n": 154,
+    "right": 145,
+    "partly": 5,
+    "wrong": 3,
+    "nu": 1
+   },
+   "D": {
+    "n": 154,
+    "right": 75,
+    "partly": 39,
+    "wrong": 35,
+    "nu": 5
+   }
+  },
+  "operational + long": {
+   "rules": {
+    "n": 1450,
+    "right": 1326,
+    "partly": 36,
+    "wrong": 41,
+    "nu": 47
+   },
+   "base": {
+    "n": 1450,
+    "right": 1423,
+    "partly": 6,
+    "wrong": 7,
+    "nu": 14
+   },
+   "D": {
+    "n": 1450,
+    "right": 1035,
+    "partly": 93,
+    "wrong": 235,
+    "nu": 87
+   }
+  },
+  "operational-ro": {
+   "rules": {
+    "n": 2480,
+    "right": 2035,
+    "partly": 48,
+    "wrong": 61,
+    "nu": 336
+   },
+   "base": {
+    "n": 2480,
+    "right": 2112,
+    "partly": 22,
+    "wrong": 64,
+    "nu": 282
+   },
+   "D": {
+    "n": 2480,
+    "right": 1728,
+    "partly": 98,
+    "wrong": 445,
+    "nu": 209
+   }
+  },
+  "dialogues": {
+   "rules": {
+    "dialogues": 449,
+    "dialoguesRight": 402,
+    "turns": 2177,
+    "right": 2109,
+    "partly": 13,
+    "wrong": 20,
+    "nu": 35
+   },
+   "base": {
+    "dialogues": 449,
+    "dialoguesRight": 398,
+    "turns": 2177,
+    "right": 2105,
+    "partly": 8,
+    "wrong": 28,
+    "nu": 36
+   },
+   "D": {
+    "dialogues": 449,
+    "dialoguesRight": 212,
+    "turns": 2177,
+    "right": 1643,
+    "partly": 89,
+    "wrong": 313,
+    "nu": 132
+   }
+  },
+  "operational + long cases not right with the rules": {
+   "n": 124,
+   "rules": 0,
+   "base": 101,
+   "D": 60
+  },
+  "operational + long cases not right with the shipped mode": {
+   "n": 27,
+   "rules": 4,
+   "base": 0,
+   "D": 5
+  },
+  "operational-ro cases not right with the rules": {
+   "n": 445,
+   "rules": 0,
+   "base": 86,
+   "D": 168
+  },
+  "gold-para (rules-fail / rules-differ paraphrases)": {
+   "n": 100,
+   "rules": 22,
+   "base": 33,
+   "D": 80
+  },
+  "nxtest-rules-fail (dev + test)": {
+   "n": 44,
+   "rules": 8,
+   "base": 17,
+   "D": 29
+  },
+  "nxtest-rules-fail, test split only": {
+   "n": 16,
+   "rules": 5,
+   "base": 9,
+   "D": 9
+  },
+  "gold-para + nxtest-rules-fail (test split)": {
+   "n": 116,
+   "rules": 27,
+   "base": 42,
+   "D": 89
+  },
+  "real-09c, world judged (world-correct)": {
+   "n": 22,
+   "rules": 13,
+   "base": 13,
+   "D": 16
+  },
+  "real-09d, world judged (world-correct)": {
+   "n": 15,
+   "rules": 15,
+   "base": 15,
+   "D": 15
+  },
+  "real-09e, world judged (world-correct)": {
+   "n": 21,
+   "rules": 17,
+   "base": 18,
+   "D": 18
+  },
+  "mobile": {
+   "rules": {
+    "answered": 52,
+    "agree": 16,
+    "of": 18
+   },
+   "base": {
+    "answered": 67,
+    "agree": 15,
+    "of": 18
+   },
+   "D": {
+    "answered": 91,
+    "agree": 8,
+    "of": 18
+   }
+  }
+ },
+ "transitions": {
+  "operational-ro": {
+   "right->wrong": 296,
+   "nu->right": 90,
+   "nu->wrong": 110,
+   "right->partly": 82,
+   "right->nu": 124,
+   "wrong->nu": 6,
+   "wrong->right": 22,
+   "partly->wrong": 5,
+   "nu->partly": 4,
+   "partly->right": 6,
+   "partly->nu": 1,
+   "wrong->partly": 2
+  },
+  "operational": {
+   "right->wrong": 192,
+   "right->partly": 53,
+   "right->nu": 78,
+   "nu->right": 4,
+   "wrong->right": 1,
+   "nu->wrong": 5
+  },
+  "operational-long": {
+   "right->partly": 35,
+   "right->wrong": 30,
+   "right->nu": 5,
+   "partly->wrong": 1,
+   "nu->wrong": 1
+  },
+  "gold-rules": {
+   "right->wrong": 25,
+   "wrong->right": 1
+  },
+  "gold-para": {
+   "nu->right": 21,
+   "wrong->right": 27,
+   "nu->wrong": 2,
+   "right->wrong": 1,
+   "wrong->nu": 1
+  },
+  "gold-real": {
+   "right->wrong": 7,
+   "nu->wrong": 4,
+   "wrong->nu": 1,
+   "nu->right": 1
+  },
+  "nxtest-rules-fail": {
+   "nu->right": 6,
+   "wrong->right": 16,
+   "right->wrong": 8,
+   "nu->wrong": 2,
+   "right->nu": 2
+  },
+  "nxtest-gen-disagrees": {
+   "right->wrong": 37,
+   "wrong->right": 1
+  },
+  "nxtest-sample": {
+   "right->wrong": 149,
+   "wrong->right": 5
+  },
+  "real-09c": {
+   "nu->wrong": 1,
+   "nu->right": 3,
+   "wrong->right": 1,
+   "right->nu": 1
+  },
+  "diagram/hand": {
+   "wrong->right": 4,
+   "right->wrong": 1
+  },
+  "diagram/blind": {
+   "wrong->right": 7,
+   "wrong->nu": 1,
+   "right->wrong": 1
+  },
+  "diagram/broad": {
+   "wrong->right": 19,
+   "right->wrong": 3
+  },
+  "diagram/seen": {
+   "wrong->right": 58,
+   "right->wrong": 6
+  },
+  "diagram/new_identities": {
+   "wrong->right": 57,
+   "right->wrong": 1
+  },
+  "diagram/heldout_formulations": {
+   "wrong->right": 63,
+   "right->wrong": 4
+  }
+ },
+ "verdict": {
+  "c2WrongPoints": 15.724137931034482,
+  "c3Dialogues": {
+   "right": -21.221864951768488,
+   "wrong": 13.091410197519522
+  },
+  "c3Romanian": {
+   "right": -15.483870967741936,
+   "wrong": 15.362903225806452
+  }
+ }
+}

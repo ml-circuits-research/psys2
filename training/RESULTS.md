@@ -1080,3 +1080,34 @@ Chosen points (0 added wrong on dev, most gain; `spans` on, as the task's gate (
 | A+3 | as specified | 0.9995 | 0 | 11 | 0 | 12 |
 | A+3 | + negation guard | 0.99 | 0.9 | 19 | 0 | 22 |
 The `-dcov` variant picks the same points (the strictly-more-words replacement of a partial answer is rarely reachable on dev: 5 more model readings than none-only for A3, none of them gaining). Without the "spans inside the frame" condition the best A3 point is tau_op 0.999 with 6 gained; the frame score is not what separates right from wrong (tau_frame 0 is chosen unless the negation guard is on): the operation probability and the negation carry the gate. Dev is small (the shipped pipeline already reads most of it): the gain at the 0-added-wrong point is a few dozen records, so the full-set numbers below are what counts.
+
+### NX7 steps 3-5: gated D over encoder+n1, Romanian, the NX6 conditions (full sets, 16 jobs)
+Commands (through the heavy lock, from the worktree; per-item rows in `training/results/nx5/*.json`, not in git): `node scripts/eval-nx.mjs --system enc-n1|rules|A3-first|Aplus3-first --ort <ort> --sets operational,dialogues,gold,nxtest,real,mobile,diagram,operational-ro --jobs 16 --name full`; `node scripts/eval-nx.mjs --system A3-d --tau-op 0.999 --tau-frame 0 --name full` (A+3: `--tau-op 0.9995`), the guarded runs with `--tau-op 0.99 --tau-frame 0.9 --neg on --name neg-full`, `A3-dcov` with the tau of A3; tables: `node scripts/nx7-report.mjs --d <file> --json training/results/nx7-<file>.json`. The Romanian set goes through the translator inside the engine, so the model reads the English text like the rules.
+
+**D = shipped mode (encoder+n1) with the gated model reading only the segments left not understood.** Everything else is the shipped answer, so D can only differ where the shipped mode abstains.
+| set | rules | shipped (encoder+n1) | D A3, spec gate (0.999 / 0) | D A3 + negation guard (0.99 / 0.9) | D A+3 spec gate (0.9995 / 0) | D A+3 + guard |
+| --- | --- | --- | --- | --- | --- | --- |
+| operational 1,296 right / wrong | 1239 / 6 | 1278 / 4 | 1278 / 4 | 1278 / 4 | 1278 / 4 | 1277 / 5 |
+| operational-long 154 right / wrong | 87 / 35 | 145 / 3 | 145 / 3 | 145 / 3 | 145 / 3 | 145 / 3 |
+| operational + long wrong (of 1,450) | 41 incl. partly 36 | 7 | 7 | 7 | 7 | 8 |
+| dialogues, turns right / wrong (2,177) | 2109 / 20 | 2105 / 28 | 2105 / 28 | 2105 / 28 | 2105 / 28 | same |
+| operational-ro (2,480) right / wrong | 2035 / 61 | 2112 / 64 | 2117 / 64 | 2127 / 64 | 2122 / 64 | 2133 / 66 |
+| gold-para 100 right | 22 | 33 | 34 | 38 | 37 | 38 |
+| nxtest-rules-fail 44 right (test split 16) | 8 (5) | 17 (9) | 18 (9) | 19 (10) | 20 (10) | 19 (10) |
+| real 09c / 09e world-correct | 13 / 17 | 13 / 18 | 13 / 18 | 13 / 18 | 13 / 18 | 14 / 18 |
+| mobile answered of 108 | 52 | 67 | 67 | 67 | 67 | 67 |
+Dialogues: D equals the shipped mode in every turn (the gate never fired there). `-dcov` (replace a partial answer when the model covers strictly more words at the same operation, A3, spec gate) gave exactly the spec-gate result: it replaced nothing that passed the gate. D never changes an operational outcome except one right -> wrong for A+3 with the guard (0.1 point of the set).
+
+**The four NX6 conditions (D against the shipped mode; condition 1 against the rules as the task text says, and against the shipped mode).**
+| condition | limit | A3 spec gate | A3 + guard | A+3 spec gate | A+3 + guard |
+| --- | --- | --- | --- | --- | --- |
+| 1. rules-fail sets: right points over the rules (gold-para + nxtest-rules-fail test, 116 items) | at least +3 | +13.8 | +18.1 | +17.2 | +18.1 |
+| 1b. same, over the shipped mode (what D itself adds) | | +0.9 | +5.2 | +4.3 | +5.2 |
+| 2. operational + long, wrong points over the shipped mode | at most +0.2 | +0.00 | +0.00 | +0.00 | +0.07 |
+| 3a. dialogues turns, right / wrong points | right at least -0.5, wrong at most +0.2 | 0.00 / +0.00 | 0.00 / +0.00 | 0.00 / +0.00 | 0.00 / +0.00 |
+| 3b. Romanian, right / wrong points | same | +0.20 / +0.00 | +0.60 / +0.00 | +0.40 / +0.00 | +0.85 / +0.08 |
+| 4. browser cost | unchanged | holds by construction (A3 +0.9 MB, same pass); ready time not measured | same | A+3 is not integrated whatever the numbers | |
+Note on condition 1: the literal comparison (D against the rules alone) is met by every variant, but most of that comes from the shipped dispatcher and normalizer, not from the model heads. D's own contribution over the shipped mode is +0.9 points (A3, spec gate: 1 of 100 gold-para, 1 of 44) to +5.2 points (A3 with the guard: gold-para +5, nxtest-rules-fail +2; Romanian +15 cases; 09c none). The A+3 spec-gate figure is +17.2 over the rules and +4.3 over the shipped mode.
+**Verdict: all four conditions hold for A3, with the spec gate and with the guard (conditions 2 and 3 are met exactly: D adds no wrong answer anywhere). The price is that the gate is nearly closed: the real extra recovery over encoder+n1 is small (about +5 points on the rules-fail paraphrases, +0.6 points on Romanian, 0 on operational, dialogues and the real phrases).** The tuning is only as good as the dev set (small; 0 added wrong on 2,833 dev records), and the guard point passes 12 dev readings, so a slightly larger wrong rate on fresh data is possible; A+3 with the guard added 1 wrong on the operational set (+0.07, inside the limit). Nothing was integrated by this agent.
+
+**Model-first over the encoder strategy slot (A3-first / A+3-first: the model reads every segment, the validator always checks, the rules read what it could not; the normalizer is not part of this path, as in NX5).** Without the gate this fails condition 2 and 3 by a wide margin: operational right 72.8 % (A3) / 74.1 % (A+3) against 98.6 % shipped, wrong 16.2 % / 15.4 % against 0.3 %; operational + long wrong +17.0 / +15.7 points; dialogues turns right 76.4 % / 75.5 % (-20.3 / -21.2 points), wrong +13.1; Romanian right -19.3 / -15.5 points. It does recover more on the rules-fail sets (gold-para 75 / 80 % against 33 % shipped; nxtest-rules-fail 22 / 29 of 44; real 09c 17 / 16 of 22; mobile answered 94 / 91 of 108 but world agreement on the supported 18 falls to 11 / 8), at the cost of 333 / 296 Romanian and 201 / 192 operational right -> wrong. So model-first is not a safe default; as a user-chosen strategy it is a recall mode that trades about 25 points of right on the sets we care about for about 40 more recovered paraphrases of 100.
