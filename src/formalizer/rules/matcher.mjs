@@ -126,7 +126,7 @@ function candidates(el, tokens, i, env, slotsSoFar) {
   }
   const t = tokens[i];
   if (!t || (t.filler && cls !== 'recent')) return [];
-  const text = (len) => env.text.slice(t.start, tokens[i + len - 1].end);
+  const text = (len) => (len === 1 && t.textOverride != null ? t.textOverride : env.text.slice(t.start, tokens[i + len - 1].end));   // textOverride: a token the expansion changed (one-anaphora singular noun)
   const span = (len) => [t.start, tokens[i + len - 1].end];
   switch (cls) {
     case 'number': {

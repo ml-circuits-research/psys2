@@ -8,13 +8,13 @@
 import { guard } from '../guard.mjs';
 import { perf } from '../perf.mjs';
 import { lexIndex } from '../../worlds/lexicon.mjs';
-import { analyze, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs';
+import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs';
 import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs';
 import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs';
 import { routeScores } from './router.mjs';
 import { createRouter, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs';
 import { FormSession, STOP_WORDS, isPronoun } from './session.mjs';
-import { selfCorrect, sharedArgument, repetition, ellipsisPrefixes, joinText, MARKER_RE, SEP_RE } from './expand.mjs';
+import { selfCorrect, sharedArgument, repetition, ellipsisPrefixes, oneAnaphora, joinText, MARKER_RE, SEP_RE } from './expand.mjs';
 import { parse, serialize } from '../../soplang/index.mjs';
 
 export { FormSession } from './session.mjs';
@@ -435,6 +435,15 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     return base;
   };
 
+  /** The last coordinated piece of a swallowed text is an elliptic noun phrase ("and a yellow one"). */
+  const swallowsAnaphora = (txt) => {
+    const ana = oneAnaphoraEnv();
+    if (!ana) return false;
+    const last = txt.split(/\s*,\s*|\s+and\s+/i).pop();
+    const ts = tokenize(last).filter((t) => t.kind === 'word' || t.kind === 'number');
+    return ts.length >= 2 && !!oneAnaphora(ts, ts.length > 1 ? [{ kind: 'word', lower: 'x' }, { kind: 'word', lower: 'y' }] : [], ana.opts);
+  };
+
   /** A parsed segment whose free-text slot swallowed a separator, a correction marker or a repetition. */
   const isWeak = (seg) => {
     if (seg.unparsed || !seg.match) return false;
@@ -447,6 +456,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
       const txt = sl.text ?? '';
       if (MARKER_RE.test(txt)) return true;
       if (!SEP_RE.test(txt)) return false;
+      if (swallowsAnaphora(txt)) return true;   // "... and a yellow one" belongs to the one-anaphora expansion
       if (unknownArg) return true;
       const at = els.findIndex((e) => e.t === 'slot' && e.name === name);
       return at >= 0 && els.slice(at + 1).some((e) => e.t === 'slot' && !e.optional && e.cls.startsWith('lex.'));
@@ -499,6 +509,22 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
       && (ct[0].kind === 'number' || ['a', 'an', 'the', 'some', 'another', 'more'].includes(ct[0].lower));
   };
 
+  /** Phrase groups `lang.elide.lead` / `lang.elide.noun` of lang.common and the lexicon-class test of the one-anaphora expansion (null when the worlds do not import them). */
+  let anaEnv;
+  const oneAnaphoraEnv = () => {
+    if (anaEnv !== undefined) return anaEnv;
+    const words = (id) => (lex.phrases.get(id)?.alts ?? []).map((a) => a.join(' ').toLowerCase());
+    const leads = new Set(words('lang.elide.lead')), nouns = new Set(words('lang.elide.noun'));
+    if (!leads.size || !nouns.size) return (anaEnv = null);
+    // the class of a word is the smallest lexicon that holds it (a catch-all "mods" lexicon holds sizes and colours together)
+    const classes = new Map(), sizeOf = new Map();
+    for (const [id, l] of lex.lexicons) for (const w of l.words) if (!w.includes('_')) { const k = w.toLowerCase(); if (!classes.has(k) || l.words.size < sizeOf.get(k)) { classes.set(k, id); sizeOf.set(k, l.words.size); } }
+    const sameClass = (a, b) => classes.has(a) && classes.get(a) === classes.get(b);
+    const isModifier = (w) => classes.has(w);
+    const isElliptic = (c) => { const w = c.filter((t) => t.kind === 'word' || t.kind === 'number'); const l = w[w.length - 1]; return w.length >= 2 && nouns.has(l.alt ?? l.lower); };
+    return (anaEnv = { opts: { leads, nouns, sameClass, isModifier, singular: (w) => lex.lemma(w) }, isElliptic });
+  };
+
   const expandClauses = (s, tokens, base, whole = null, bar = null) => {
     const clauses = splitClauses(tokens);
     const parts = base?.done ?? (base?.fallback && clauses.length === 1 ? [base.fallback] : clauses.map((c, idx) => readGroup(c, QUESTION_WORDS.has(c[0].lower) || (s.isQuestion && idx === clauses.length - 1 && /\?/.test(text.slice(s.span[1], s.span[1] + 3))))));
@@ -507,6 +533,22 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     let changed = false;
     parts.forEach((part, i) => {
       const ct = clauses[i];
+      // one-anaphora (spec 03 section 1c): "and a yellow one" repeats the previous command with its noun and the new modifiers
+      const ana = oneAnaphoraEnv();
+      if (ana && i > 0) {
+        let ai = i - 1;
+        while (ai > 0 && ana.isElliptic(clauses[ai])) ai--;
+        if (!ana.isElliptic(clauses[ai]) && !parts[ai].unparsed && !isWeak(parts[ai])) {
+          const res = oneAnaphora(ct, clauses[ai], ana.opts);
+          if (res) {
+            const sp = [ct[0].start, ct[ct.length - 1].end];
+            for (const cand of res.candidates) {
+              const segs = tryClauses([{ tokens: cand, span: sp, guard: true, info: { kind: 'one-anaphora', source: sp, copied: [[clauses[ai][0].start, clauses[ai][clauses[ai].length - 1].end]] } }], parts[ai].match?.worldId ?? null, bar);
+              if (segs) { out.push(...segs); changed = true; return; }
+            }
+          }
+        }
+      }
       // distribution of the verb (spec 03 section 1c): a verbless noun phrase clause ("... and a beard") that another world read as a
       // command of its own ("a beard" as a hangman guess) is still tried as an elliptic clause of the first clause's world
       const stray = isStray(parts, clauses, i);

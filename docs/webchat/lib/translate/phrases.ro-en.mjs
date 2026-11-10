@@ -185,6 +185,12 @@ const BASE_FRAMES = [
   { p: 'fă|faceți {np:short#1} și {np:short#2} {adj}', out: 'make {np#1} and {np#2} {adj}' },
   { p: 'scapă de {np}', out: 'get rid of {np}' },
   { p: 'una|unul {col}', out: 'a {col} one' },
+  // elliptic noun after a command ("fă o casă verde și una galbenă"): the translation keeps the English ellipsis for the formalizer (spec 03 section 1c, "One-anaphora")
+  { p: 'una|unul {adj}', out: 'a {adj} one' },
+  { p: 'încă|inca una|unul|alta|altul {col}', out: 'another {col} one' },
+  { p: 'încă|inca una|unul|alta|altul {adj}', out: 'another {adj} one' },
+  { p: 'alta|altul {col}', out: 'another {col} one' },
+  { p: 'alta|altul {adj}', out: 'another {adj} one' },
   { p: '{col} închis|închisă', out: 'dark {col}' },
   { p: '{col} deschis|deschisă', out: 'light {col}' },
   { p: 'vreau {np:short} întoarsă|întors', out: 'I want {np} turned around' },

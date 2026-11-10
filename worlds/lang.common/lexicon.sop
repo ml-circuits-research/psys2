@@ -1224,6 +1224,20 @@
     alt=as_well
     alt=also
 
+@phrase.lang.elide.lead core.phrase
+    frame=false
+    doc="Leading words of an elliptic noun phrase after a command: draw a green house and A yellow one / ANOTHER yellow one / ONE yellow (spec 03 section 1c, one-anaphora)."
+    alt=a
+    alt=an
+    alt=another
+    alt=one
+
+@phrase.lang.elide.noun core.phrase
+    frame=false
+    doc="The pro-form noun of an elliptic noun phrase: a yellow ONE, two big ONES. It stands for the noun of the command before it."
+    alt=one
+    alt=ones
+
 @gen.lang.common.shapes core.note
     text="Phrase groups lang.shape.* are used by the patterns generated from core.shape wires (L6, spec 03 section 2b). Add new shape phrasing here."
 

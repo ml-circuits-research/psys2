@@ -3992,3 +3992,18 @@
     input="Draw a dash."
     expect="line"
     expectStatus=supported
+
+@t.art.draw.ellipsis1 core.test
+    input="Draw a green house and a yellow one."
+    expect="yellow house"
+    expectState="objects.length=2"
+    expectState="objects.0.color=green"
+    expectState="objects.1.kind=house"
+    expectState="objects.1.color=yellow"
+    session=ellipsis1
+
+@t.art.draw.ellipsis2 core.test
+    input="Draw two cats and a big one."
+    expect="big"
+    expectState="objects.length=3"
+    session=ellipsis2

@@ -241,3 +241,65 @@ export function* ellipsisPrefixes(anchorTokens) {
     yield pre;
   }
 }
+
+/**
+ * One-anaphora (spec 03 section 1c): an elliptic noun phrase after a command, "and a yellow one" / "and another yellow one" /
+ * "and one yellow" / "and two big ones", repeats the previous command with its noun and the new modifiers.
+ * `ct` is the elliptic clause, `anchor` the earlier clause it continues. Returns `null` when `ct` is not such a phrase, else
+ * `{ mods, candidates }`: candidate token lists for the new clause (verb and determiner of the anchor, the new modifiers, then
+ * the anchor's noun; anchor modifiers of another class than a new one are kept: "a big green house and a yellow one" -> big yellow).
+ * Phrasing comes from the caller (phrase groups `lang.elide.*` of lang.common): `leads` (a, an, another, one), `nouns` (one, ones),
+ * `sameClass(a, b)` (two words of one lexicon), `isModifier(w)` (a word of some lexicon), `singular(w)`.
+ */
+export function oneAnaphora(ct, anchor, { leads, nouns, sameClass = () => false, isModifier = () => false, singular = (w) => w }) {
+  const w = ct.filter(isWord).map((t) => (t.kind === 'number' && t.alt === 'one' ? { ...t, kind: 'word', lower: 'one' } : t));   // the tokenizer reads "one" as the number 1
+  const wa = anchor.filter(isWord);
+  if (w.length < 2 || w.length > 5 || wa.length < 2) return null;
+  const count = (t) => t.kind === 'number' || /^(two|three|four|five|six|seven|eight|nine|ten)$/.test(t.lower);
+  let lead = null, mods, plural = false, bare = false;
+  const last = w[w.length - 1].lower;
+  if (nouns.has(last)) {   // [lead]? mods* one|ones
+    plural = /s$/.test(last);
+    const first = w[0];
+    const hasLead = leads.has(first.lower) || (count(first) && plural);
+    if (hasLead) lead = first;
+    mods = w.slice(hasLead ? 1 : 0, -1);
+    if (!hasLead && !mods.length) return null;
+  } else if (w[0].lower === 'one' && w.length <= 3 && w.slice(1).every((t) => isModifier(t.lower))) {   // one mods+
+    lead = w[0]; mods = w.slice(1); bare = true;
+  } else return null;
+  if (mods.length > 3 || mods.some((t) => count(t) || nouns.has(t.lower) || DETERMINERS.has(t.lower))) return null;
+  // the anchor: verb words, then the noun phrase (determiner or number, modifiers, noun tail of 1 or 2 words)
+  const out = [];
+  const newDet = () => {
+    if (lead && count(lead)) return [lead];
+    const nxt = (mods[0] ?? wa[wa.length - 1]).lower;
+    const base = lead && /^an?$/.test(lead.lower) ? lead.lower : (/^[aeiou]/.test(nxt) ? 'an' : 'a');
+    return [{ kind: 'word', raw: base, lower: base, start: ct[0].start, end: ct[0].start, synth: true }];
+  };
+  for (let t = 1; t <= 2; t++) {
+    if (wa.length - t < 1) break;
+    const tail = wa.slice(wa.length - t);
+    const body = wa.slice(0, wa.length - t);
+    // noun phrase start: the last determiner or number of the body, else right after its first word (the verb)
+    let s = -1;
+    for (let i = body.length - 1; i >= 1; i--) if (DETERMINERS.has(body[i].lower) || count(body[i])) { s = i; break; }
+    const hasDet = s >= 0;
+    if (!hasDet) s = 1;
+    const det = hasDet ? body[s] : null;
+    const kept = body.slice(hasDet ? s + 1 : s).filter((m) => !mods.some((n) => sameClass(m.lower, n.lower)));
+    const variants = kept.length ? [kept, []] : [[]];
+    for (const k of variants) {
+      let nounTail = tail;
+      const singNP = !plural && (!lead || !count(lead));
+      if (singNP && tail.length) {
+        const lw = tail[tail.length - 1];
+        const sg = singular(lw.lower);
+        if (sg !== lw.lower) nounTail = [...tail.slice(0, -1), { ...lw, raw: sg, lower: sg, textOverride: sg }];
+      }
+      const dets = hasDet ? (DETERMINERS.has(det.lower) && !/^(a|an|the)$/.test(det.lower) ? [det] : newDet()) : (lead && count(lead) ? [lead] : []);
+      out.push([...body.slice(0, s), ...dets, ...k, ...mods, ...nounTail]);
+    }
+  }
+  return { mods, lead, bare, candidates: out };
+}
