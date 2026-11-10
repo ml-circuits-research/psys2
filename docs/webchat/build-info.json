@@ -50,7 +50,7 @@
     "lib/dialog/discourse.mjs": "2a2e265044dd2789",
     "lib/dialog/dispatch-validate.mjs": "45d667e131025e9b",
     "lib/dialog/encoder-dispatch.mjs": "626a317618579564",
-    "lib/dialog/index.mjs": "fbea7cfa202483fb",
+    "lib/dialog/index.mjs": "1e49bf152d0954e3",
     "lib/dialog/meta.mjs": "3f42a3f2e5d70d71",
     "lib/dialog/normalizer-runtime.mjs": "55aef6e847b477c6",
     "lib/dialog/runtime-config.mjs": "0f2c990dffd716e7",
@@ -73,7 +73,7 @@
     "lib/formalizer/rules/index.mjs": "126e89d8e71bb45c",
     "lib/formalizer/rules/lemma.mjs": "459e515e4394aead",
     "lib/formalizer/rules/matcher.mjs": "8f5ab41454a04dd2",
-    "lib/formalizer/rules/normalize.mjs": "84b40a02fe41d8ad",
+    "lib/formalizer/rules/normalize.mjs": "72a5687b62046c80",
     "lib/formalizer/rules/numbers.mjs": "9d8b00ef65eb3af8",
     "lib/formalizer/rules/router.mjs": "d9e1a4c0ecf3dd3e",
     "lib/formalizer/rules/session.mjs": "68ecf89edeaa15ef",
@@ -190,5 +190,5 @@
     "worlds/user.profile/ops.mjs": "8385add167932b48",
     "worlds/user.profile/understand.mjs": "5782a91a5bd8e949"
   },
-  "builtAt": "2026-11-09T23:11:38.883Z"
+  "builtAt": "2026-11-10T00:23:21.318Z"
 }
