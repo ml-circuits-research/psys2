@@ -18,6 +18,7 @@
 import { perf } from '../formalizer/perf.mjs';
 import { guard } from '../formalizer/guard.mjs';
 import { formalize, FormSession } from '../formalizer/index.mjs';
+import { youTarget } from '../formalizer/rules/index.mjs';
 import { serialize } from '../soplang/index.mjs';
 import { spellCorrect, spellAlternates, protectedWordsOf, worldVocabulary, spellVocabulary, ignorable } from '../formalizer/spell.mjs';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs';
@@ -223,7 +224,9 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
     rec.coverage = parsed.reduce((n, x) => n + len(x), 0) / all;
     rec.ignored = res.segments.filter((x) => x.unparsed).map((x) => ({ text: x.text, start: x.span[0], end: x.span[1] }));
     rec.valid = rec.parsedOk && !rec.refused && !rec.execError && !rec.unknownArg;
-    rec.reason = rec.valid ? 'parsed completely, interpreter ok'
+    // "your" addresses the avatar (spec 03, COMPUTE-BUDGET C): another world's reading of a "your ..." target is no valid candidate while ui.avatar exists
+    if (rec.valid && engine.set.get('ui.avatar') && parsed.some((x) => x.match?.worldId !== 'ui.avatar' && youTarget(x.match))) { rec.valid = false; rec.avatarTarget = true; }
+    rec.reason = rec.avatarTarget ? 'a "your ..." target belongs to the avatar' : rec.valid ? 'parsed completely, interpreter ok'
       : parsed.length === 0 ? 'no pattern of the world parses the text'
       : unparsed > 0 ? `${unparsed} of ${res.segments.length} segment(s) not parsed`
       : `interpreter (${rec.reasons[0] ?? 'unsupported'}): ${rec.notes[0] ?? 'unsupported'}`;
@@ -451,13 +454,32 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
     return { index: 0, score: 0, tabTier: true, segments: [{ start, end: start + text.length, text, worlds: [{ world: tw, score: 1 }] }] };
   };
 
+  /**
+   * `whole=true` patterns (COMPUTE-BUDGET C, spec 03 routing keys): when the dispatcher cuts the message into several pieces but the rules read the whole
+   * message as ONE segment with such a pattern ("I like chess, music and maps" is one statement, not "I like chess", "music", "maps"), that reading stands.
+   */
+  const wholeFirst = async (pred, o) => {
+    const text = pred.text.trim();
+    if (!text || (pred.segmentations[0]?.segments.length ?? 0) < 2) return null;
+    if (!engine.set.list().some((w) => w.patterns.some((p) => p.whole))) return null;
+    const s = await seed(pred.context);
+    const res = formalize(text, { worlds: engine.set, session: s.isession, source: 'whole', context: s.context(), router: engine.router });
+    if (res.segments.length !== 1 || res.segments[0].unparsed || !res.segments[0].match) return null;
+    const m = res.segments[0].match;
+    if (!engine.set.get(m.worldId)?.patterns.find((p) => p.id === m.patternId)?.whole) return null;
+    const r = await check(pred.context, [], m.worldId, text, o);
+    if (!r.valid) return null;
+    const start = pred.text.indexOf(text);
+    return { index: 0, score: 0, whole: true, segments: [{ start, end: start + text.length, text, worlds: [{ world: m.worldId, score: 1 }] }] };
+  };
+
   /** Validate one prediction. `override` replaces policy fields for this call only. */
   const validate = async (prediction, override = {}) => {
     const o = { ...base, ...override };
     const pred = normalizePrediction(prediction);
     let segs = pred.segmentations.slice(0, o.maxSegmentations);
     const evals = [];
-    const tabSeg = await tabFirst(pred, o);
+    const tabSeg = (await tabFirst(pred, o)) ?? (await wholeFirst(pred, o));
     if (tabSeg) {
       const ev = await evalSegmentation(pred, tabSeg, o, false);
       if (ev.valid && ev.tier === 0) { ev.tabTier = true; segs = [tabSeg]; evals.push(ev); }
