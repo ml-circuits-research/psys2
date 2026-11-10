@@ -3396,7 +3396,7 @@
 
 @t.art.draw.r2open03 core.test
     input="Take me to the canvas."
-    expect="OK, here is the drawing boar"
+    expect="You are already on the Drawi"
     expectStatus=supported
     session=r2open
 

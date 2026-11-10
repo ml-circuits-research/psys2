@@ -384,9 +384,10 @@ function describeWanted(np) {
   const bits = [];
   if (np.size) bits.push(np.size === 'big' ? 'big' : 'small');
   if (np.color) bits.push(np.color);
-  if (np.kind && np.kind !== '*') bits.push(np.kind); else if (np.part) bits.push(np.part.replace(/s$/, '')); else bits.push('thing');
+  const many = np.plural || np.all;
+  if (np.kind && np.kind !== '*') bits.push(many ? pluralOfKind(np.kind) : np.kind); else if (np.part) bits.push(np.part.replace(/s$/, '')); else bits.push('thing');
   const t = bits.join(' ');
-  return np.plural || np.all ? `any ${t}` : `${a_(t)} ${t}`;
+  return many ? t : `${a_(t)} ${t}`;   // RP5c: "red circles" (plural, no "any"), so the Romanian reply agrees
 }
 function pickExtreme(list, pos) {
   if (list.length < 2) return list;
@@ -1540,6 +1541,8 @@ export const scene = guard((ctx, args, s) => {
 
 export const openTab = guard((ctx) => {
   const r = ctx.request('ui.openTab', { tab: TAB });
+  const said = String(r?.value ?? r?.note ?? '');
+  if (/^You are already on /.test(said)) return ok(said);   // RP5c: already on Drawing -> the shared "already on the {tab} tab" phrase
   return r?.status === 'supported' ? ok('OK, here is the drawing board.') : ok('The drawing board is right here. What shall we draw?');
 });
 

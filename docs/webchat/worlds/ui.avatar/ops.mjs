@@ -521,6 +521,11 @@ function _resizePart(ctx, { part, dir, assumed }) {
     return ok(`My eyes come with my expression. For ${grow ? 'wider eyes try awe, hectic or fear' : 'narrower eyes try tired, contempt or eyes closed'}; say "make your expression ${grow ? 'awe' : 'tired'}".`);
   }
   const key = keys.find((k) => components(ctx, ch).includes(k));
+  const MOUTH_SIZE = { robot: ['line', 'speaker'], emoji: ['smile', 'bigSmile'] };   // RP5c: "make a big mouth" takes the widest mouth the character has
+  if (key === 'mouth' && MOUTH_SIZE[ch]) {
+    s[ch].mouth = MOUTH_SIZE[ch][grow ? 1 : 0];
+    return done(ctx, 'mouth' + word, `My mouth is ${word} now: ${phraseOf(ctx, ch, 'mouth', s[ch].mouth)}.`);
+  }
   if (!key) return no(`I am ${spoken(ch)}, so I have no ${String(part).replace(/_/g, ' ')} to resize.`);
   return ok(`I cannot change the size of my ${LABEL[key]}, but I can change its style. My ${LABEL[key]} can be ${orList(listOptionsText(ctx, ch, key, 12).split(', '))}.`);
 }

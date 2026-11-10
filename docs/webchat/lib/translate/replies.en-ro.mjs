@@ -187,6 +187,7 @@ const TABLE = [
   ['Here is a fresh sheet of paper!', 'Iată o foaie nouă de hârtie!'], ['Ta-da! It is night now: a dark sky, a moon and lots of stars.', 'Gata! Acum este noapte: un cer întunecat, o lună și o mulțime de stele.'],
   ['New game of tic-tac-toe.', 'Joc nou de x și 0.'], ['"{q}" has {n} words.', '"{q}" are {n} cuvinte.'],
   ['Where should it go?', 'Unde ar trebui să meargă?'], 
+  ['I can not find {np} in your picture.', 'Nu găsesc {np} în desen.'],
   ['I could not find numbers in "{q}".', 'Nu am găsit numere în "{q}".'],
   ['You took {pos}.', 'Ai luat {pos}.'], ['I took {pos}.', 'Am luat {pos}.'], ['Your move.', 'E rândul tău.'], ['It is your move again.', 'E din nou rândul tău.'],
   ['You play {piece} to {w}.', 'Joci cu {piece} la {w}.'],

@@ -630,7 +630,7 @@
 
 @t.ui.avatar.n119 core.test
     input="Make your mouth bigger."
-    expect="cannot change the size of my mouth"
+    expect="My mouth is bigger now"
     session=h
 
 @t.ui.avatar.n139 core.test

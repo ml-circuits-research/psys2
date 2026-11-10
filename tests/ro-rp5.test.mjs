@@ -119,7 +119,7 @@ test('RP5b: avatar become / describe / mouth-size refusal are Romanian', async (
     const { r } = await run('robot', [msg]);
     assert.match(r.text, re, msg); assert.ok(!english.test(r.text.replace(/\(.*\)/, '')), r.text);
   }
-  const mouth = await run('robot', ['Fă o gură mare']);
+  const mouth = await run('robot', ['fii un carton', 'Fă o gură mare']);   // a character without a size ladder keeps the refusal (RP5c: robot and emoji take the widest mouth)
   assert.match(mouth.r.text, /^Nu pot schimba mărimea gurii, dar îi pot schimba stilul\. Gura mea poate fi .+\.$/);
   assert.equal(mouth.r.lang, 'ro');
   const grill = await run('robot', ['un grătar gură']);
@@ -149,4 +149,17 @@ test('RP5b: moving a thing into the water says "în apă" and adds the water whe
   assert.doesNotMatch(again.r.text, /Nu era apă/);
   const en = await run('draw', ['draw a fish', 'move the fish into the water'], { lang: 'en' });
   assert.match(en.r.text, /I moved the fish into the water\. There was no water, so I added it to the ground\./);
+});
+
+test('RP5c: a tab opened by a command is the active tab for the next command', async () => {
+  const { r, s } = await run('robot', ['deschide tabul diagramă', 'desenează trei cercuri']);
+  assert.match(r.text, /c1.*c3/s);
+  assert.equal(s.state()['ui.shell'].activeTab, 'diagram');
+});
+
+test('RP5c: already on Drawing, plural "not found", the widest mouth', async () => {
+  assert.match((await run('draw', ['deschide tabul desen'])).r.text, /^Ești deja pe fila Desen/);
+  assert.match((await run('draw', ['șterge toate cercurile roșii'])).r.text, /^Nu găsesc cercuri roșii în desen/);
+  const mouth = await run('robot', ['Fă o gură mare']);
+  assert.deepEqual(mouth.status, ['supported']); assert.match(mouth.r.text, /^\S+! Gura mea este mare acum/);
 });

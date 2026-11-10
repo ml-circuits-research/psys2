@@ -39,6 +39,11 @@ const ROWS = [
     ['șah', 'chess'], ['spânzurătoarea', 'hangman'], ['x și zero', 'tictactoe'], ['ghicește animalul', 'guess'], ['documente', 'documents'], ['avatar', 'robot'], ['profil', 'profile']]
     .map(([n, id]) => [`tab-${id}-${n}`, 'robot', [], `deschide tabul ${n}`, /^(Bine, iată fila|Ești deja pe fila)/, (s) => s.tab === id && !/Am înțeles asta|open the/.test(s.reply)]),
   ['wording-avatar-already', 'robot', [], 'deschide tabul avatar', /^Ești deja pe fila Avatar/],
+  // RP5c: a tab opened by a command is the active tab for tier T; already-on-Drawing wording; plural wording; the widest mouth
+  ['rp5c-open-then-draw', 'robot', ['deschide tabul diagramă'], 'desenează trei cercuri', /c1.*c3/s, (s) => s.tab === 'diagram' && s.diagram.shapes.length === 3],
+  ['rp5c-draw-already', 'draw', [], 'deschide tabul desen', /^Ești deja pe fila Desen/],
+  ['rp5c-plural', 'draw', [], 'șterge toate cercurile roșii', /^Nu găsesc cercuri roșii în desen/],
+  ['rp5c-big-mouth', 'robot', [], 'Fă o gură mare', /^\S+! Gura mea este mare acum/],
   ['wording-grill', 'robot', [], 'un grătar gură', /o gură grătar/],
 ];
 
