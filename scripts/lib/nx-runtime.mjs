@@ -9,7 +9,7 @@ import { createFsLoader, DEFAULT_ROOT } from '../../src/loaders/fs-loader.mjs';
 import { createEngine } from '../../src/dialog/index.mjs';
 import { createTranslator } from '../../src/translate/index.mjs';
 import { settingsForMode } from '../../src/dialog/runtime-config.mjs';
-import { loadNxModel, createNxFormalizer } from './nx-formalizer.mjs';
+import { loadNxModel, createNxFormalizer, wrapSessionHybrid } from './nx-formalizer.mjs';
 
 export const EXPORTS = {
   A: '/home/salboaie/work/psys2/training/runs/export/nx-a-seed1',
@@ -27,9 +27,10 @@ export async function buildSystem({ system, ortPath, threads = 1 }) {
   const model = await loadNxModel({ ortPath, dir, threads });
   const stats = {};
   const rules = engine.formalizers.rules;
-  const nx = createNxFormalizer({ model, mode, rules, stats });
+  const nx = createNxFormalizer({ model, mode: mode === 'hybrid' ? 'first' : mode, rules, stats });
   nx.attach(engine);
   engine.formalizers.encoder = nx;
+  if (mode === 'hybrid') return { engine, settings: settingsForMode('rules'), stats, nx, wrap: (s) => wrapSessionHybrid(s, nx, stats) };
   let settings = { ...settingsForMode('encoder'), formalizer: 'encoder', normalizer: false };
   if (mode === 'only') {
     settings = { ...settings, spellcheck: false, partialUnderstanding: false, bestEffort: false };

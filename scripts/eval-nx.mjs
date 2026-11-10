@@ -99,6 +99,7 @@ function buildItems(sets, limit) {
 // ---- runners -----------------------------------------------------------------------------------------------------------------------
 const newSession = (env, c) => {
   const s = env.engine.createSession(sessionOptions(env.settings, { language: 'en' }));
+  env.wrap?.(s);
   if (c.tab) s.setWorldState('ui.shell', { activeTab: c.tab });
   for (const [w, patch] of Object.entries(c.init ?? {})) s.setWorldState(w, patch);
   return s;
@@ -195,6 +196,7 @@ async function runDiag(env, it) {
   const goldRow = row.wires ? { wires: row.wires, text: row.text } : { type: row.type, gold: row.gold };
   const s0 = score(nodes, goldRow);
   const sess = env.engine.createSession(sessionOptions(env.settings, { language: 'en' }));
+  env.wrap?.(sess);
   sess.setWorldState('ui.shell', { activeTab: 'diagram' });
   sess.setWorldState('diagram.sketch', stateOf(row));
   let r; try { r = await sess.send(row.text, { language: 'en' }); } catch (e) { return { id: row.id, outcome: 'wrong', error: String(e?.message ?? e) }; }

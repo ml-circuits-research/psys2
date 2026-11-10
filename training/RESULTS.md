@@ -777,6 +777,183 @@ or from head A and only the asks of that operation are run (about 3 passes).
 
 **Seeds for A** (test op acc / slot F1): seed 1 .7858 / .7402, seed 2 .7849 / .7418, seed 3 .7847 / .7418 (spread 0.1 point: the frozen-encoder result is stable; the gap to A+ is far larger than the seed noise).
 
-### Not done in this run
-- NX4-C (LoRA r=8 per world, `.onnx_adapter` export) and the full NX5 pipeline (spans -> deterministic canonicalisation -> wires -> validator -> interpreter, the hybrid D, the diagram bench scorer, the browser harness run with the exported A model) were not built; only the operation agreement above (NX5-lite) was measured.
-- Next steps for them: the exported ONNX of A is at `training/runs/export/nx-a-seed1` (model.int8.onnx + nx-meta.json with the 496 operations and 667 tag labels), ready for `training/experiments/browser-limits`.
+### NX5 - full evaluation: rules vs the model readings, through the whole pipeline (2026-11-10)
+Code: `scripts/lib/nx-formalizer.mjs` (the model reading as a formalizer strategy, outside `src/`), `scripts/lib/nx-runtime.mjs` (the systems), `scripts/eval-nx.mjs` (one system over every set), `scripts/nx5-report.mjs` (tables). Tests: `node --test tests/nx-formalizer.test.mjs` (4 pass; the engine test needs `NX_ORT` and `NX_EXPORT`).
+Commands (one system, all sets, 16 jobs, through the heavy lock): `node scripts/eval-nx.mjs --system <rules|A-only|Aplus-only|A-first|Aplus-first|A-hybrid|Aplus-hybrid|A3-...|Aplus3-...> --ort <onnxruntime-node entry> --jobs 16`; then `node scripts/nx5-report.mjs`. Per-item rows: `training/results/nx5/<system>.json` (not in git, 0.9 MB each; they hold every item's outcome); summaries: `training/results/nx5-summary.json`, `training/results/nx5-nx3-summary.json`.
+
+**Pipeline of the model systems (model output -> spans and operation -> deterministic canonicalisation through the lexicon -> SOP wires -> validator -> interpreter).**
+1. The NX ONNX (A: frozen v4 encoder + op head + BIO tag head; A+: top 2 layers unfrozen) gives, in the dispatcher's own pass, the segmentation (best of the beam), the operation distribution and the BIO tags of the segment.
+2. Candidate operations: the 3 best (not `none`) that some pattern of the loaded worlds can emit; candidate patterns: the patterns whose emit makes that operation (the legend/pattern bank says which keys the operation has). BIO decoding is restricted to the keys of the candidate operation (one span per key).
+3. Canonicalisation is the rules' own machinery, not a new one: a sentence is synthesized from the candidate pattern's match string with the predicted spans in the slots of those keys, the rule formalizer restricted to that operation reads it (number words, lexicon lemmas, agents and names, `{segment}`, constants of the emit), and the emit template builds the wires. A pattern whose emit has no value slot (the diagram.sketch family: operation only) is read on the real text, or on its own frame sentence. **The model never sees constants fixed by a pattern** (`where.op=plus`, `arg.list=to-do`): among patterns of one operation that use the same spans, the one whose frame words (its literal words and phrase alternatives, slots left out) best fit the segment wins. That is a pattern-bank choice made without a learned head; it is what made kids.arith work at all (operational 18 -> 30 right of the first 40 cases).
+4. Validator: the legend check inside the formalizer, then the interpreter dry run on a fork of the session that already holds the wires accepted for the earlier segments of the message (an error status drops the reading, the next candidate is tried). Nothing left -> the segment is not understood.
+The pre-processing of the engine (translator, filler stripping, meta/discourse layer, self-correction expansion) is shared by every system, since it is part of the pipeline the rules run in too.
+
+Systems: **rules** = the shipped rule pipeline (spelling, partial understanding, best effort; `--mode rules` settings). **X-only** = the model's reading alone: a segment it cannot read validly is not understood, and there is no rules retry and no rule-based leniency (spelling, partial, best effort off). **X-first** = model first, the rules read what it could not (the engine's own retry, leniency on). **X-hybrid = D** = the rules first, as shipped *including their leniency* (the engine's `_formalize` is wrapped at run time, no change in `src/`); the model reads only the segments that still have no complete reading (unparsed, partial, ignored words, best-effort guess), the validator checks every model reading, and a segment the model cannot read validly keeps the rules' answer. (A first version of D let the model act before the rules' own spelling leniency; it lost 16 correct operational cases to confident wrong model readings of typos, which is why the leniency now comes first.)
+
+Sets: operational (1,296) and operational-long (154): the expectation of the case holds. Dialogues (449): each turn's expectation. **gold** = `training/nx/gold/pilot-300.jsonl`, record level (the first reading's operation and every (key, value) equal the gold reading; `gold-rules` = 150 rules-verified, `gold-para` = 100 paraphrases where the rules fail or differ, `gold-real` = 50 real phrases). **nxtest** = NX1 records of the dev/test splits, record level: `rules-fail` (+ `rules-differ`), `generator-disagrees`, and a sample of 700 others. **real-09c/d/e**: the *world* named at the start of the expectation line reads the phrase (the lines are prose, so this is world level only; phrases whose line names no world are counted "unjudged" when answered). **mobile**: the 108 Romanian voice fragments of the phone export, English as logged: answered / abstained and world agreement with the logged rules reading when it was supported. **diagram bench** (imports/diagram-vss-demo/data/bench, 1,128 rows) with the source scorer `bench-canon.js`: the act must be the gold act (from the pattern the model's operation selects) and the args are read by the diagram world's reader exactly as in `scripts/eval-diagram.mjs` (so the model's part there is the act, not the args). Cells below: `correct / wrong (partly counted as wrong) / abstain (correct %)`.
+
+**Selection effect to keep in mind.** `gold-para`, `nxtest-rules-fail` and `nxtest-gen-disagrees` were chosen *because* the rules fail or differ there, so the rules' 22 / 18 / 13 % is by construction; the model readings are not comparable between those sets and the neutral ones (operational, `nxtest-sample`). `nxtest-gen-disagrees` is a set where the rules answer confidently and (judged by the generator) wrongly: D cannot change it because the rules do not abstain.
+
+Cells are `correct / wrong (partly counted as wrong) / abstain (correct %)`. n = items of the set.
+
+| set | n | rules | A-only | Aplus-only | A-first | Aplus-first | A-hybrid | Aplus-hybrid |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| operational | 1296 | 1239 / 28 / 29 (95.6%) | 825 / 256 / 215 (63.7%) | 850 / 229 / 217 (65.6%) | 982 / 226 / 88 (75.8%) | 995 / 214 / 87 (76.8%) | 1237 / 38 / 21 (95.4%) | 1239 / 36 / 21 (95.6%) |
+| operational-long | 154 | 87 / 49 / 18 (56.5%) | 49 / 92 / 13 (31.8%) | 55 / 81 / 18 (35.7%) | 62 / 85 / 7 (40.3%) | 73 / 72 / 9 (47.4%) | 89 / 54 / 11 (57.8%) | 89 / 53 / 12 (57.8%) |
+| gold-rules | 150 | 147 / 1 / 2 (98.0%) | 116 / 27 / 7 (77.3%) | 119 / 24 / 7 (79.3%) | 121 / 27 / 2 (80.7%) | 124 / 24 / 2 (82.7%) | 147 / 1 / 2 (98.0%) | 147 / 1 / 2 (98.0%) |
+| gold-para | 100 | 22 / 40 / 38 (22.0%) | 71 / 24 / 5 (71.0%) | 73 / 20 / 7 (73.0%) | 69 / 28 / 3 (69.0%) | 71 / 25 / 4 (71.0%) | 52 / 45 / 3 (52.0%) | 56 / 40 / 4 (56.0%) |
+| gold-real | 50 | 23 / 18 / 9 (46.0%) | 15 / 31 / 4 (30.0%) | 16 / 29 / 5 (32.0%) | 16 / 31 / 3 (32.0%) | 16 / 30 / 4 (32.0%) | 24 / 23 / 3 (48.0%) | 24 / 23 / 3 (48.0%) |
+| nxtest-rules-fail | 44 | 8 / 23 / 13 (18.2%) | 18 / 23 / 3 (40.9%) | 22 / 20 / 2 (50.0%) | 19 / 25 / 0 (43.2%) | 23 / 21 / 0 (52.3%) | 9 / 35 / 0 (20.5%) | 13 / 31 / 0 (29.5%) |
+| nxtest-gen-disagrees | 97 | 13 / 84 / 0 (13.4%) | 40 / 8 / 49 (41.2%) | 41 / 17 / 39 (42.3%) | 47 / 50 / 0 (48.5%) | 48 / 49 / 0 (49.5%) | 13 / 84 / 0 (13.4%) | 13 / 84 / 0 (13.4%) |
+| nxtest-sample | 700 | 679 / 18 / 3 (97.0%) | 454 / 191 / 55 (64.9%) | 490 / 179 / 31 (70.0%) | 498 / 199 / 3 (71.1%) | 515 / 182 / 3 (73.6%) | 680 / 17 / 3 (97.1%) | 680 / 17 / 3 (97.1%) |
+| real-09c | 24 | 13 / 1 / 8 (+2 unjudged) (54.2%) | 13 / 3 / 6 (+2 unjudged) (54.2%) | 14 / 3 / 5 (+2 unjudged) (58.3%) | 15 / 2 / 5 (+2 unjudged) (62.5%) | 15 / 3 / 4 (+2 unjudged) (62.5%) | 15 / 2 / 5 (+2 unjudged) (62.5%) | 16 / 1 / 5 (+2 unjudged) (66.7%) |
+| real-09d | 15 | 15 / 0 / 0 (100.0%) | 15 / 0 / 0 (100.0%) | 15 / 0 / 0 (100.0%) | 15 / 0 / 0 (100.0%) | 15 / 0 / 0 (100.0%) | 15 / 0 / 0 (100.0%) | 15 / 0 / 0 (100.0%) |
+| real-09e | 21 | 17 / 1 / 3 (81.0%) | 16 / 2 / 2 (+1 unjudged) (76.2%) | 15 / 3 / 2 (+1 unjudged) (71.4%) | 16 / 2 / 2 (+1 unjudged) (76.2%) | 16 / 3 / 1 (+1 unjudged) (76.2%) | 17 / 1 / 3 (81.0%) | 17 / 2 / 2 (81.0%) |
+| diagram bench | 1128 | 1106 / 22 / 0 (98.0%) | 784 / 128 / 216 (69.5%) | 900 / 35 / 193 (79.8%) | 1005 / 123 / 0 (89.1%) | 1096 / 32 / 0 (97.2%) | 1106 / 22 / 0 (98.0%) | 1106 / 22 / 0 (98.0%) |
+
+Operational sets: `partly` = the answer executed some but not all expected items (omission). Counted as wrong above; split here.
+
+| set | rules | A-only | Aplus-only | A-first | Aplus-first | A-hybrid | Aplus-hybrid |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| operational | R 1239 / P 22 / W 6 / NU 29 | R 825 / P 53 / W 203 / NU 215 | R 850 / P 47 / W 182 / NU 217 | R 982 / P 39 / W 187 / NU 88 | R 995 / P 40 / W 174 / NU 87 | R 1237 / P 22 / W 16 / NU 21 | R 1239 / P 22 / W 14 / NU 21 |
+| operational-long | R 87 / P 14 / W 35 / NU 18 | R 49 / P 59 / W 33 / NU 13 | R 55 / P 48 / W 33 / NU 18 | R 62 / P 46 / W 39 / NU 7 | R 73 / P 33 / W 39 / NU 9 | R 89 / P 18 / W 36 / NU 11 | R 89 / P 19 / W 34 / NU 12 |
+
+Dialogues (449 dialogues): turns right / turns wrong / turns not understood, dialogues right.
+
+|  | rules | A-only | Aplus-only | A-first | Aplus-first | A-hybrid | Aplus-hybrid |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| turns | 2109 / 33 / 35 (96.9%) | 1096 / 316 / 765 (50.3%) | 1123 / 381 / 673 (51.6%) | 1749 / 293 / 135 (80.3%) | 1682 / 364 / 131 (77.3%) | 2099 / 54 / 24 (96.4%) | 2101 / 54 / 22 (96.5%) |
+| dialogues right | 402/449 (89.5%) | 93/449 (20.7%) | 93/449 (20.7%) | 263/449 (58.6%) | 230/449 (51.2%) | 397/449 (88.4%) | 398/449 (88.6%) |
+
+Mobile export (108 Romanian voice fragments, English as logged): answered / abstained, and world agreement with the logged rules reading where that was supported (18).
+
+|  | rules | A-only | Aplus-only | A-first | Aplus-first | A-hybrid | Aplus-hybrid |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| answered / abstained | 52 / 56 | 76 / 32 | 72 / 36 | 92 / 16 | 87 / 21 | 87 / 21 | 90 / 18 |
+| world agrees on the 18 supported | 16/18 | 6/18 | 1/18 | 11/18 | 8/18 | 15/18 | 15/18 |
+
+Operational set (1,296) by world: right % (n).
+
+| world | n | rules | A-only | Aplus-only | A-first | Aplus-first | A-hybrid | Aplus-hybrid |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| art.draw | 99 | 88.9 | 14.1 | 14.1 | 65.7 | 59.6 | 88.9 | 88.9 |
+| data.charts | 57 | 93.0 | 78.9 | 43.9 | 80.7 | 45.6 | 93.0 | 93.0 |
+| docs.editor | 99 | 100.0 | 37.4 | 47.5 | 43.4 | 51.5 | 99.0 | 100.0 |
+| docs.reader | 24 | 91.7 | 79.2 | 70.8 | 83.3 | 70.8 | 95.8 | 95.8 |
+| games.chess | 41 | 95.1 | 82.9 | 82.9 | 92.7 | 92.7 | 95.1 | 95.1 |
+| games.guess | 32 | 100.0 | 87.5 | 87.5 | 87.5 | 87.5 | 96.9 | 100.0 |
+| games.hangman | 32 | 96.9 | 87.5 | 90.6 | 87.5 | 90.6 | 93.8 | 96.9 |
+| games.tictactoe | 43 | 93.0 | 88.4 | 95.3 | 90.7 | 95.3 | 93.0 | 93.0 |
+| geo.map | 94 | 94.7 | 56.4 | 60.6 | 71.3 | 78.7 | 94.7 | 94.7 |
+| kids.animals | 80 | 96.3 | 88.8 | 91.3 | 91.3 | 92.5 | 96.3 | 96.3 |
+| kids.arith | 145 | 98.6 | 52.4 | 57.9 | 71.7 | 73.1 | 97.9 | 97.9 |
+| kids.common | 36 | 100.0 | 94.4 | 91.7 | 94.4 | 91.7 | 100.0 | 100.0 |
+| kids.shapes | 62 | 90.3 | 87.1 | 91.9 | 98.4 | 96.8 | 91.9 | 91.9 |
+| kids.shop | 43 | 100.0 | 39.5 | 44.2 | 83.7 | 86.0 | 100.0 | 100.0 |
+| kids.tasks | 38 | 86.8 | 81.6 | 86.8 | 84.2 | 89.5 | 86.8 | 86.8 |
+| kids.time | 97 | 95.9 | 77.3 | 78.4 | 82.5 | 84.5 | 95.9 | 95.9 |
+| media.music | 82 | 95.1 | 70.7 | 73.2 | 72.0 | 79.3 | 95.1 | 93.9 |
+| ui.avatar | 127 | 96.1 | 45.7 | 52.0 | 56.7 | 64.6 | 96.1 | 96.1 |
+| ui.help | 20 | 100.0 | 95.0 | 95.0 | 95.0 | 95.0 | 100.0 | 100.0 |
+| ui.shell | 45 | 100.0 | 80.0 | 84.4 | 84.4 | 88.9 | 100.0 | 100.0 |
+
+All record-level sets together (gold-300, nxtest) by world: correct % (n).
+
+| world | n | rules | A-only | Aplus-only | A-first | Aplus-first | A-hybrid | Aplus-hybrid |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| art.draw | 107 | 91.6 | 29.9 | 31.8 | 53.3 | 50.5 | 92.5 | 92.5 |
+| data.charts | 31 | 67.7 | 58.1 | 67.7 | 61.3 | 67.7 | 74.2 | 74.2 |
+| diagram.sketch | 25 | 84.0 | 64.0 | 64.0 | 64.0 | 64.0 | 84.0 | 84.0 |
+| docs.editor | 65 | 78.5 | 36.9 | 47.7 | 52.3 | 58.5 | 73.8 | 78.5 |
+| docs.reader | 59 | 91.5 | 81.4 | 88.1 | 81.4 | 88.1 | 91.5 | 91.5 |
+| games.chess | 41 | 80.5 | 87.8 | 90.2 | 87.8 | 90.2 | 80.5 | 82.9 |
+| games.guess | 49 | 81.6 | 85.7 | 83.7 | 83.7 | 83.7 | 91.8 | 91.8 |
+| games.hangman | 35 | 85.7 | 85.7 | 85.7 | 88.6 | 85.7 | 91.4 | 91.4 |
+| games.tictactoe | 101 | 56.4 | 87.1 | 87.1 | 87.1 | 88.1 | 59.4 | 59.4 |
+| geo.map | 39 | 89.7 | 61.5 | 71.8 | 61.5 | 71.8 | 89.7 | 89.7 |
+| kids.animals | 50 | 88.0 | 92.0 | 94.0 | 92.0 | 94.0 | 94.0 | 96.0 |
+| kids.arith | 48 | 85.4 | 72.9 | 79.2 | 79.2 | 81.3 | 89.6 | 89.6 |
+| kids.common | 46 | 87.0 | 89.1 | 91.3 | 87.0 | 93.5 | 91.3 | 93.5 |
+| kids.shapes | 76 | 92.1 | 69.7 | 73.7 | 78.9 | 71.1 | 94.7 | 94.7 |
+| kids.shop | 19 | 57.9 | 78.9 | 84.2 | 78.9 | 84.2 | 68.4 | 68.4 |
+| kids.tasks | 24 | 87.5 | 70.8 | 79.2 | 70.8 | 79.2 | 91.7 | 91.7 |
+| kids.time | 64 | 90.6 | 35.9 | 34.4 | 34.4 | 34.4 | 90.6 | 90.6 |
+| media.music | 66 | 92.4 | 59.1 | 68.2 | 60.6 | 69.7 | 93.9 | 93.9 |
+| ui.avatar | 122 | 43.4 | 25.4 | 34.4 | 33.6 | 39.3 | 45.1 | 46.7 |
+| ui.help | 35 | 82.9 | 71.4 | 71.4 | 74.3 | 74.3 | 91.4 | 91.4 |
+| ui.shell | 39 | 61.5 | 79.5 | 79.5 | 79.5 | 79.5 | 74.4 | 74.4 |
+
+**How the systems differ (operational set + long, 1,450 cases, against the rules).** model-first with rules fallback (A+): right -> wrong 183, right -> not understood 85, right -> partly 48 against wrong/not-understood -> right 32: the model-first systems are not usable as a replacement. **D (A+)**: of the 1,450 operational + long cases it turns 9 wrong / partial / not-understood cases into right (not understood -> right 5, partly -> right 3, wrong -> right 1) and 7 right ones into wrong or partial (right -> wrong 5, right -> partly 2): a net of +2 (rules 1,326 right, D(A+) 1,328, D(A) 1,326). On the cases where the rules fail by construction the same D gains: `gold-para` 22 -> 56 / 100, `nxtest-rules-fail` 8 -> 13 / 44, `real-09c` +3, and on the mobile export it answers 90 of 108 fragments (rules 52) but the world of the 18 supported ones agrees only 15 / 18 (rules 16 / 18 with themselves); abstentions of the rules are still abstentions in most cases, since an abstention in `gold-para` is where the model has something to say.
+
+**Complementarity (model-first A+ against rules, per item).** Right in both / rules only / model only / neither: operational 1,010 / 316 / 58 / 66 (n 1,450); `gold-para` 20 / 2 / 51 / 27; `nxtest-rules-fail` 3 / 5 / 20 / 16; `nxtest-gen-disagrees` 13 / 0 / 35 / 49; `nxtest-sample` 513 / 166 / 2 / 19; `gold-real` 14 / 9 / 2 / 25. On paraphrases outside the rules' patterns the model is the better reader (71-73 % operation-and-slots exact on `gold-para` against the rules' 22 %), on the whole operational set the rules are right in 316 cases where it is not.
+
+**Per-system counters** (how many segments the model read, by which route, how many it declined) are in the `nxStatsMaxPerWorker` field of every `training/results/nx5/<system>.json` and in `nx5-summary.json`.
+
+### NX3 data in the models (retrain of A and A+ on NX1 + NX3)
+Data: agent B's NX3 output `training/dataset/nx/final/*.jsonl` (13,082 Sonnet-labelled items after the deterministic gate and the judge; train 11,736 / dev 564 / test 782), minus the 17 items whose normalized text equals a protected text (`final-filtered/`), plus NX1's `free-*.jsonl`. Commands (cwd `training`): `python -m psys2_train.nx_heads train --mode A --out <abs>/training/runs/nx-a-nx3 --seed 1 --data '<abs>/training/dataset/nx/free-*.jsonl,<abs>/training/dataset/nx/final-filtered/*.jsonl'`, the same with `--mode Aplus --epochs 10 --out .../nx-aplus-nx3`, then `export` for both (exports `training/runs/export/nx-a-nx3`, `nx-aplus-nx3`; `--data` now takes comma-separated globs).
+
+| model | test op acc | test slot F1 | test exact | test records | dispatcher outputs |
+| --- | --- | --- | --- | --- | --- |
+| A (NX1) | 0.7858 | 0.7402 | 0.4859 | 9,347 | identical to v4 |
+| A3 (NX1 + NX3) | 0.8010 | 0.7428 | 0.5119 | 10,129 | identical to v4 (int8 max abs diff 0.0) |
+| A+ (NX1) | 0.8698 | 0.8062 | 0.6183 | 9,347 | world top-1 0.9656, agreement with v4 0.9738 |
+| A+3 (NX1 + NX3) | 0.8801 | 0.8068 | 0.6379 | 10,129 | world top-1 0.9656, agreement 0.9715, boundary F1 0.8684 |
+
+(The two test columns are on different record sets: A3 / A+3 add the 782 NX3 test items.) End to end, NX5 with the retrained models (same commands, systems `A3-*`, `Aplus3-*`):
+
+Cells are `correct / wrong (partly counted as wrong) / abstain (correct %)`. n = items of the set.
+
+| set | n | rules | A-only | A3-only | Aplus-only | Aplus3-only | A-hybrid | A3-hybrid | Aplus-hybrid | Aplus3-hybrid |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| operational | 1296 | 1239 / 28 / 29 (95.6%) | 825 / 256 / 215 (63.7%) | 811 / 282 / 203 (62.6%) | 850 / 229 / 217 (65.6%) | 819 / 267 / 210 (63.2%) | 1237 / 38 / 21 (95.4%) | 1231 / 45 / 20 (95.0%) | 1239 / 36 / 21 (95.6%) | 1231 / 43 / 22 (95.0%) |
+| operational-long | 154 | 87 / 49 / 18 (56.5%) | 49 / 92 / 13 (31.8%) | 48 / 89 / 17 (31.2%) | 55 / 81 / 18 (35.7%) | 52 / 87 / 15 (33.8%) | 89 / 54 / 11 (57.8%) | 89 / 54 / 11 (57.8%) | 89 / 53 / 12 (57.8%) | 89 / 54 / 11 (57.8%) |
+| gold-rules | 150 | 147 / 1 / 2 (98.0%) | 116 / 27 / 7 (77.3%) | 113 / 31 / 6 (75.3%) | 119 / 24 / 7 (79.3%) | 118 / 25 / 7 (78.7%) | 147 / 1 / 2 (98.0%) | 147 / 1 / 2 (98.0%) | 147 / 1 / 2 (98.0%) | 147 / 1 / 2 (98.0%) |
+| gold-para | 100 | 22 / 40 / 38 (22.0%) | 71 / 24 / 5 (71.0%) | 75 / 22 / 3 (75.0%) | 73 / 20 / 7 (73.0%) | 82 / 15 / 3 (82.0%) | 52 / 45 / 3 (52.0%) | 59 / 39 / 2 (59.0%) | 56 / 40 / 4 (56.0%) | 63 / 34 / 3 (63.0%) |
+| gold-real | 50 | 23 / 18 / 9 (46.0%) | 15 / 31 / 4 (30.0%) | 15 / 29 / 6 (30.0%) | 16 / 29 / 5 (32.0%) | 18 / 27 / 5 (36.0%) | 24 / 23 / 3 (48.0%) | 24 / 23 / 3 (48.0%) | 24 / 23 / 3 (48.0%) | 24 / 23 / 3 (48.0%) |
+| nxtest-rules-fail | 44 | 8 / 23 / 13 (18.2%) | 18 / 23 / 3 (40.9%) | 22 / 21 / 1 (50.0%) | 22 / 20 / 2 (50.0%) | 29 / 13 / 2 (65.9%) | 9 / 35 / 0 (20.5%) | 12 / 32 / 0 (27.3%) | 13 / 31 / 0 (29.5%) | 15 / 28 / 1 (34.1%) |
+| nxtest-gen-disagrees | 97 | 13 / 84 / 0 (13.4%) | 40 / 8 / 49 (41.2%) | 44 / 9 / 44 (45.4%) | 41 / 17 / 39 (42.3%) | 39 / 19 / 39 (40.2%) | 13 / 84 / 0 (13.4%) | 13 / 84 / 0 (13.4%) | 13 / 84 / 0 (13.4%) | 13 / 84 / 0 (13.4%) |
+| nxtest-sample | 700 | 679 / 18 / 3 (97.0%) | 454 / 191 / 55 (64.9%) | 467 / 185 / 48 (66.7%) | 490 / 179 / 31 (70.0%) | 498 / 164 / 38 (71.1%) | 680 / 17 / 3 (97.1%) | 680 / 17 / 3 (97.1%) | 680 / 17 / 3 (97.1%) | 680 / 17 / 3 (97.1%) |
+| real-09c | 24 | 13 / 1 / 8 (+2 unjudged) (54.2%) | 13 / 3 / 6 (+2 unjudged) (54.2%) | 15 / 3 / 3 (+3 unjudged) (62.5%) | 14 / 3 / 5 (+2 unjudged) (58.3%) | 15 / 2 / 4 (+3 unjudged) (62.5%) | 15 / 2 / 5 (+2 unjudged) (62.5%) | 15 / 2 / 5 (+2 unjudged) (62.5%) | 16 / 1 / 5 (+2 unjudged) (66.7%) | 15 / 2 / 5 (+2 unjudged) (62.5%) |
+| real-09d | 15 | 15 / 0 / 0 (100.0%) | 15 / 0 / 0 (100.0%) | 15 / 0 / 0 (100.0%) | 15 / 0 / 0 (100.0%) | 15 / 0 / 0 (100.0%) | 15 / 0 / 0 (100.0%) | 15 / 0 / 0 (100.0%) | 15 / 0 / 0 (100.0%) | 15 / 0 / 0 (100.0%) |
+| real-09e | 21 | 17 / 1 / 3 (81.0%) | 16 / 2 / 2 (+1 unjudged) (76.2%) | 16 / 1 / 3 (+1 unjudged) (76.2%) | 15 / 3 / 2 (+1 unjudged) (71.4%) | 15 / 0 / 5 (+1 unjudged) (71.4%) | 17 / 1 / 3 (81.0%) | 17 / 1 / 3 (81.0%) | 17 / 2 / 2 (81.0%) | 17 / 1 / 3 (81.0%) |
+| diagram bench | 1128 | 1106 / 22 / 0 (98.0%) | 784 / 128 / 216 (69.5%) | 817 / 134 / 177 (72.4%) | 900 / 35 / 193 (79.8%) | 951 / 32 / 145 (84.3%) | 1106 / 22 / 0 (98.0%) | 1106 / 22 / 0 (98.0%) | 1106 / 22 / 0 (98.0%) | 1106 / 22 / 0 (98.0%) |
+
+Dialogues (449 dialogues): turns right / turns wrong / turns not understood, dialogues right.
+
+|  | rules | A-only | A3-only | Aplus-only | Aplus3-only | A-hybrid | A3-hybrid | Aplus-hybrid | Aplus3-hybrid |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| turns | 2109 / 33 / 35 (96.9%) | 1096 / 316 / 765 (50.3%) | 1153 / 423 / 601 (53.0%) | 1123 / 381 / 673 (51.6%) | 1168 / 442 / 567 (53.7%) | 2099 / 54 / 24 (96.4%) | 2100 / 54 / 23 (96.5%) | 2101 / 54 / 22 (96.5%) | 2098 / 60 / 19 (96.4%) |
+| dialogues right | 402/449 (89.5%) | 93/449 (20.7%) | 111/449 (24.7%) | 93/449 (20.7%) | 103/449 (22.9%) | 397/449 (88.4%) | 397/449 (88.4%) | 398/449 (88.6%) | 395/449 (88.0%) |
+
+Reading: the NX3 data helps where the data is aimed, the paraphrase sets (`gold-para` A+ 73 -> 82 %, `nxtest-rules-fail` 50 -> 66 %, the diagram bench act 79.8 -> 84.3 % for A+ alone, dialogues right 21 -> 25 % for A), and it costs a little on the sets of the rules' own phrasing (operational model-alone A 63.7 -> 62.6 %, A+ 65.6 -> 63.2 %): the LLM phrasings move the head toward paraphrase and away from the pattern-bank forms the operational set is made of. D barely moves (operational 95.4 -> 95.0 %, `gold-para` D(A+) 56 -> 63 %). A3 is still a drop-in for v4 (+0.9 MB); A+3 is not.
+
+### NX4-C - per-world LoRA r=8 plus heads (diagram.sketch, media.music, art.draw)
+Code `training/psys2_train/nx_lora.py`. Base: the frozen v4 encoder with the NX4-A heads (nx-a-seed1); trainable: LoRA r=8 on q, k, v, out, lin1, lin2 of the 6 layers **and on the two heads** (op head over 496 operations, BIO tag head over 667 labels), 0.685 M parameters, trained on the world's own NX1 records, 10 epochs, batch 128, lr 1e-3, bf16 (seconds to 7 minutes). Commands (cwd `training`): `python -m psys2_train.nx_lora train --world <world> --out <abs>/training/runs/nx-c-<world>`; `python -m psys2_train.nx_lora export --runs <run1>,<run2>,<run3> --out <abs>/training/runs/export/nx-c`. Metrics: `training/results/nx4-c-<world>.json`, export report `training/results/nx4-c-export.json`.
+
+| world | train records | test op acc A -> C | test slot F1 A -> C | test exact A -> C | adapter |
+| --- | --- | --- | --- | --- | --- |
+| diagram.sketch | 59,983 | 0.8346 -> 0.9561 | 0.7085 -> 0.8497 | 0.4364 -> 0.7175 | 2.75 MB |
+| media.music | 2,348 | 0.8061 -> 0.8776 | 0.7507 -> 0.8260 | 0.4473 -> 0.6255 | 2.75 MB |
+| art.draw | 2,447 | 0.6862 -> 0.7938 | 0.6154 -> 0.7653 | 0.4441 -> 0.6166 | 2.75 MB |
+
+(C also beats A+ on diagram.sketch: A+ test op .942 / slot F1 .785.) Export: one base graph `model.int8.onnx` (70.6 MB: int8 weights, the 76 LoRA matrices stay fp32 as overridable initializers, i.e. graph inputs that also have an initializer; the all-zero B matrices get a 1e-7 noise each because the exporter merges identical initializers) plus one `<world>.onnx_adapter` per world (`onnxruntime` `AdapterFormat`, the adapter carries the encoder deltas and the head deltas). **Browser check** (`training/experiments/browser-limits/nx-lora-run.mjs`, onnxruntime-web 1.31, `results-nx-lora.json`): `ort.LoraAdapter.create` takes 0.4-2.4 ms (1x) and the three adapters load in the same session; with `activeLoraAdapters` the browser's top-1 operation equals the Python onnxruntime result with the same adapter on 12 / 12 items of each world (the tag argmax is identical on 10-11 of 12; the others differ by an int8 tie), including the 1-2 items per world where the adapter changes the operation relative to the base; one pass of 32 tokens is 51-52 ms with or without an adapter at 1x and 210 ms at 4x, swapping adapters between runs costs nothing measurable (51.5 ms). Not done: NX5 end to end with the adapters (the per-world pass would be a second encoder pass after the dispatcher's world choice, and the pipeline of NX5 is the same as for A; the record-level numbers above are the C result).
+
+### NX5 - browser cost of the real exported A model
+`training/experiments/browser-limits/nx-run.mjs` (headless Chromium, onnxruntime-web 1.31, single thread like the webchat, host: this DGX, shared with other jobs): `PUPPETEER_CORE=<puppeteer-core> node nx-run.mjs --nx training/runs/export/nx-a-seed1 --disp docs/webchat/models/dispatcher/model.int8.onnx --ort docs/webchat/vendor/onnxruntime --ortnode <onnxruntime-node entry> --throttle 1,4`; results `results-nx-a.json`.
+
+| | size | outputs | median ms, 16 / 24 / 32 / 48 / 64 tokens, 1x | same, 4x CPU throttle |
+| --- | --- | --- | --- | --- |
+| NX model A (int8) | 68.0 MB | seg, world, edit, op (496), tag (667 labels) | 28 / 39 / 50 / 73 / 95 | 90 / 151 / 172 / 301 / 389 |
+| dispatcher v4 (published int8) | 67.1 MB | seg, world, edit | 27 / 39 / 50 / 72 / 94 | 102 / 185 / 177 / 294 / 384 |
+
+The heads cost +0.9 MB and no measurable time (model creation 379 ms against 77 ms at 1x, 2178 ms against 474 ms at 4x on this host, where a first creation also compiles the kernels). Parity in the browser: on 10 real inputs the browser's op argmax equals onnxruntime-node's on 10 / 10 (tag argmax identical per token on 7 / 10; the others differ by int8 ties). A message of one command costs the passes the dispatcher already runs (segmentation + one per distinct piece of the 4 best segmentations, about 8 at 4x, the same passes now also carry the op and tag outputs); the readings of NX5 use only the best segmentation and one pass per segment. B (span extraction from the legend questions) was not measured in the browser: 40 passes per segment on seen worlds (NX4-B) is 2.4-12 s per segment by the harness figures.
+
+### NX recommendation
+1. **Do not replace the rules.** Whatever the head (A, A+, with the NX3 data), the model reading alone is 62-66 % on the operational set against the rules' 95.6 %, and 20-24 % on whole dialogues against 89.5 %; model-first with the rules as a fallback is 76-77 % and 51-59 %. The model's errors are mostly confident wrong readings in the worlds with arithmetic forms and constants fixed by a pattern (art.draw 14 %, kids.shop 40 %, kids.arith 52 %, ui.avatar 46 % model-alone), where the operation carries a constant the heads cannot see.
+2. **The model is the better reader of what the rules do not know.** On paraphrases outside the patterns it is right on 71-82 % (A / A+, with and without NX3) where the rules are right on 22 %, and the diagram bench act is 84 % model-alone (A+3) against the rules' 98 % (the bench is the rules' own corpus). That is where it pays, not on the traffic the rules already read.
+3. **D (rules first with their leniency, the model only for segments with no complete reading, validator always) is safe but gains little today:** operational 95.6 -> 95.6 % (A+) / 95.4 % (A), dialogues 96.9 -> 96.5 %, +3 on the real phrases 09c, +34 points on `gold-para`, 90 / 108 answered on the mobile export (52 rules). It recovers 9 of the 1,450 operational cases and loses 7 to wrong re-readings of segments the rules had answered partially. It would need a confidence gate (the model's operation probability and agreement of op and spans with the legend; the logs already have both) before it is worth shipping; with a gate that passes only high-confidence readings and keeps the rules' partial answers the loss side should go to zero.
+4. **If one model goes to the browser, it is A3 (heads on the frozen encoder, +0.9 MB, same passes, dispatcher outputs identical to v4)**; A+ is 3 points better on the operation and slots but changes the dispatcher's own outputs (segmentation per-token agreement 0.998, world agreement 0.97), so it needs the operational re-evaluation of the simplifier thresholds first (NX4-A forgetting check) and is the only variant that gains on the operational model-alone number (+2 points). For the three worlds where the specialisation matters, **C (LoRA, 2.75 MB per world, +0 ms, one extra pass per message after the world is known)** gives diagram.sketch .956 op / .850 slot F1 (A .835 / .709), art.draw .794 / .765 (A .686 / .615), media.music .878 / .826 (A .806 / .751), and it works in onnxruntime-web 1.31.
+5. **B does not work at the browser cost** (40 passes) **and does not generalise to unseen worlds** (op 0.40): drop it.
+6. Next measurable step, if the user wants it: the confidence gate of D (recall of the 51 / 100 paraphrases the model reads and the rules do not, at a loss under 3 of 1,450), then the same with C adapters for the diagram world; and more NX3 data aimed at constants (arithmetic operator forms, `arg.list`, `arg.anim`), the weak worlds above.
+
+Caveats: the real-phrase check is at the world level (the expectation lines are prose); the mobile export has no gold (answered / abstained and agreement with the rules only); the diagram bench counts the act only for the model (the args of the diagram world are produced by its own reader); `gold-real` labels were produced by Sonnet and corrected by hand for 9 of 50 items (NX2), the `gold-real` numbers are therefore slightly flattering to a reading that follows Sonnet's; and the rules' leniency (spelling, partial understanding, best effort) is included in "rules" and in D, but not in X-only.

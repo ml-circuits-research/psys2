@@ -301,23 +301,12 @@ export function createNxFormalizer({ model, mode = 'first', rules, stats = {}, t
     available: () => true,
     supports: () => true,
     async quickSegmentation() { return null; },
+    readSegment, dryRun, accept, unparsedSeg,
 
     async formalize(text, { worlds: set, session, source = 'input', context, router } = {}) {
       setOf = set;
       const ctx = { tab: context?.activeTab ?? null, recent_worlds: context?.recentWorlds ?? [] };
       const acc = { f: session.clone() };
-      if (mode === 'hybrid') {
-        // D: the rules read first; the model only reads what the rules have no complete reading for
-        const res = formalize(text, { worlds: set, session, source, context, router });
-        const out = [];
-        for (const seg of res.segments) {
-          if (!seg.unparsed && seg.wires.length && dryRun(acc, seg.wires)) { count('hybrid_rules'); accept(acc, seg.wires); out.push({ ...seg, nxFrom: 'rules' }); continue; }
-          const piece = { text: seg.text, start: seg.span[0], end: seg.span[1] };
-          const r = await readSegment(piece, set, session, { source, context, ctx, router, acc });
-          if (r.seg) { count('hybrid_model'); out.push({ ...r.seg, nxFrom: 'model' }); } else { count('hybrid_abstain'); out.push(seg.unparsed ? seg : unparsedSeg(piece, r.why)); }
-        }
-        return { segments: out, wires: out.flatMap((s) => s.wires ?? []) };
-      }
       const { enc, probs } = await model.runtime.segment(text);
       const c = candidateSegmentations(text, enc.offsets, probs, 2, 6);
       const segs = c[0]?.segments ?? [[0, text.length]];
@@ -330,4 +319,33 @@ export function createNxFormalizer({ model, mode = 'first', rules, stats = {}, t
       return { segments: out, wires: out.flatMap((s) => s.wires ?? []) };
     },
   };
+}
+
+/**
+ * D (hybrid) inside the engine, without touching src/: the session's `_formalize` is wrapped so that the rules run FIRST as shipped (rule formalizer,
+ * then the engine's own leniency: spelling variants, partial understanding, best effort) and the model reads only the segments that still have no
+ * complete reading (unparsed, partial, ignored words, best-effort guess). Every model reading goes through the validator (legend check and an
+ * interpreter dry run on a fork that already holds the wires accepted for the earlier segments); a segment the model cannot read validly keeps the rules' answer.
+ */
+export function wrapSessionHybrid(session, nx, stats = {}) {
+  const orig = session._formalize.bind(session);
+  const count = (k) => { stats[k] = (stats[k] ?? 0) + 1; };
+  session._formalize = async function (english, sid, preferred, lenient) {
+    const res = await orig(english, sid, 'rules', lenient);
+    const set = session.engine.set;
+    const ctxo = session.context();
+    const ctx = { tab: ctxo?.activeTab ?? null, recent_worlds: ctxo?.recentWorlds ?? [] };
+    const acc = { f: session.isession.clone() };
+    const out = [];
+    let changed = false;
+    for (const seg of res.segments) {
+      const incomplete = seg.unparsed || seg.partial || seg.ignored?.length || seg.bestEffort;
+      if (!incomplete) { count('hybrid_rules'); nx.accept(acc, seg.wires ?? []); out.push(seg); continue; }
+      const piece = { text: seg.text, start: seg.span[0], end: seg.span[1] };
+      const r = await nx.readSegment(piece, set, session.isession, { source: sid, context: ctxo, ctx, router: session.engine.router, acc });
+      if (r.seg) { count('hybrid_model'); changed = true; out.push({ ...r.seg, strategy: 'encoder', nxFrom: 'model' }); } else { count('hybrid_rules_kept'); out.push(seg); }
+    }
+    return changed ? { ...res, segments: out, wires: out.flatMap((x) => x.wires ?? []) } : res;
+  };
+  return session;
 }
