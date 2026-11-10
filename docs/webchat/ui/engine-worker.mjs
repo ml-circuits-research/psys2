@@ -96,11 +96,11 @@ async function init(m) {
   testHooks = m.testHooks === true;
   settings = { ...(m.settings ?? {}) };
   const imp = (rel) => import(vurl(rel));
-  const [dialog, loaders, translate, soplang, rc, g, tl, hosts] = await Promise.all([imp('lib/dialog/index.mjs'), imp('lib/loaders/bundle-loader.mjs'), imp('lib/translate/index.mjs'), imp('lib/soplang/index.mjs'),
-    imp('lib/dialog/runtime-config.mjs'), imp('lib/formalizer/guard.mjs'), imp('lib/dialog/time-limits.mjs'), Promise.all([imp('ui/dispatcher-host.mjs'), imp('ui/normalizer-host.mjs'), imp('ui/translation.mjs')])]);
+  const [dialog, loaders, translate, soplang, rc, g, tl, hosts, lang] = await Promise.all([imp('lib/dialog/index.mjs'), imp('lib/loaders/bundle-loader.mjs'), imp('lib/translate/index.mjs'), imp('lib/soplang/index.mjs'),
+    imp('lib/dialog/runtime-config.mjs'), imp('lib/formalizer/guard.mjs'), imp('lib/dialog/time-limits.mjs'), Promise.all([imp('ui/dispatcher-host.mjs'), imp('ui/normalizer-host.mjs'), imp('ui/translation.mjs')]), imp('ui/language.mjs')]);
   const [dh, nh, tr] = hosts;
   try { const b = await imp('lib/dialog/budget.mjs'); budgetMod.createBudget = b.createBudget ?? null; } catch { budgetMod.createBudget = null; }   // agent B's step budget, when this build has it
-  mods = { tl, dialog, rc, guard: g.guard, TurnAborted: g.TurnAborted, soplang };
+  mods = { tl, dialog, rc, guard: g.guard, TurnAborted: g.TurnAborted, soplang, lang };
   // the guard reports its stage to the page at once (postMessage from synchronous code is delivered while the loop runs): a killed turn says where it was
   { let last = ''; const report = (stage) => { if (stage && stage !== last) { last = stage; evt('stage', stage); } };   // a few dozen changes per turn
     const gc = g.guard.check.bind(g.guard), gs = g.guard.setStage.bind(g.guard), ga = g.guard.abortable.bind(g.guard);
@@ -116,7 +116,7 @@ async function init(m) {
   }
   // The browser Translation API and language detector exist on the page only: the worker asks the page for them, with a deadline (then the rules answer)
   const backend = tr.createRemoteBackend({ kinds: m.browser ?? {}, call: (op, payload) => new Promise((resolve, reject) => { const id = ++btSeq; btPending.set(id, { resolve, reject }); post({ type: 'bt', id, op, ...payload }); }).finally(() => {}) });
-  const translator = tr.createSwitchTranslator({ rules: translate.createTranslator(), getStrategy: () => settings.translation, getDetectStrategy: () => settings.languageDetection, backend });
+  const translator = tr.createSwitchTranslator({ rules: translate.createTranslator(), getStrategy: () => settings.translation, getDetectStrategy: () => settings.languageDetection, backend, languages: lang.LANGS });
   engine = await dialog.createEngine({ loader: loaders.createBundleLoader(bundle), translator });
   if (testHooks) installFaults();
   const rules = (engine.precompile?.({ budgetMs: 8, yieldFn: async () => { await sleep(0); while (turnRunning()) await sleep(20); } }) ?? Promise.resolve()).catch(() => {}).then(() => evt('rules-compiled'));
@@ -144,7 +144,7 @@ async function init(m) {
       dispatcherEnc.onStatus((st) => evt('dispatcher-status', st));
     }
   } catch (e) { console.warn('Encoder formalizer unavailable', e); }
-  session = engine.createSession({ language: settings.language ?? 'en' });
+  session = engine.createSession({ language: lang.normalize(settings.language) });   // LANG-FIXED: always an explicit 'en' | 'ro', never 'auto'
   applySettings(null);
   if (m.restoreState) restoreStates(m.restoreState, m.restoreMeta);
   if (m.prepareModels && dispatcherEnc && settings.formalizer === 'encoder') dispatcherEnc.prepare().catch(() => {});
@@ -184,7 +184,7 @@ const handlers = {
     try {
       const translator = engine.translator; translator.resetUsage?.();
       let reply;
-      try { reply = await session.send(m.text, { ...m.opts, signal: ctl.signal, undo: snap, ...(budget ? { budget } : {}) }); }
+      try { reply = await session.send(m.text, { ...m.opts, language: mods.lang.normalize(m.opts?.language ?? m.settings?.language), signal: ctl.signal, undo: snap, ...(budget ? { budget } : {}) }); }
       catch (e) { if (e?.name === 'TurnAborted' || e?.name === 'BudgetExceeded' || ctl.signal.aborted) { try { session.restore(snap); } catch { /* keep */ } } if (budget && e && typeof e === 'object') e.bySite = { ...budget.bySite }; throw e; }
       annotateWires(reply);
       return { reply, state: stateOf(), meta: metaOf(), usage: (translator.usage ?? []).map((u) => ({ ...u })), detection: (translator.detectUsage ?? []).map((u) => ({ ...u })),
@@ -197,9 +197,14 @@ const handlers = {
     faultNow = testHooks ? (m.fault ?? null) : null;
     try {
       const budget = budgetMod.createBudget ? (() => { try { return budgetMod.createBudget(m.limits ?? undefined); } catch { return null; } })() : null;
-      const res = await session.dryRead(m.text, { ...m.opts, signal: ctl.signal, ...(budget ? { budget } : {}) });
+      const res = await session.dryRead(m.text, { ...m.opts, language: mods.lang.normalize(m.opts?.language ?? settings.language), signal: ctl.signal, ...(budget ? { budget } : {}) });
       return annotateWires(res);
     } finally { active.delete(m.id); faultNow = null; }
+  },
+  /** LANG-FIXED: the one use of the language detectors: is this typed message clearly the other language? (the page shows a one-line hint with a button, after the turn) */
+  async hint(m) {
+    const t = engine.translator;
+    return mods.lang.suggestSwitch(m.text, mods.lang.normalize(m.selected), { detect: (x) => t.detectLanguage(x), evidence: (x) => t.evidence(x) });
   },
   async observe(m) {
     const out = await session.observe(m.obs);

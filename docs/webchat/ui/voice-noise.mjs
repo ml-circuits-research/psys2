@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // NOISE: an always-open microphone hears room talk. A spoken message with no complete reading, no world word and no direct address is not for the assistant:
 // it is ignored silently (shown greyed, tap to send anyway). Typed messages are never classified. Pure: the dry run is passed in.
+import { normalize as normalizeLanguage } from './language.mjs';
 const fold = (t) => String(t ?? '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9\s'-]+/g, ' ').replace(/[-]+/g, ' ').replace(/\s+/g, ' ').trim();
 
 /** An incomplete reading of this many words or more is not a command lacking an argument. */
@@ -25,14 +26,9 @@ export async function classifyVoice(text, { dryRead, language, wake = false, wak
   if (wake) return { ignore: true, reason: 'wake word' };
   if (isAssistantQuestion(t)) return { ignore: false, reason: 'question' };
   if (slow || !dryRead) return cheap(t);
-  // the session language may still be the other one (the first Romanian sentence of an English session): the text is read in both and passes when either reads it
-  const langs = [language, language === 'ro' ? 'en' : 'ro'].filter((x, k, a) => x && a.indexOf(x) === k);
-  let verdict = { ignore: true, reason: 'no reading' };
-  for (const lang of langs.length ? langs : [undefined]) {
-    const v = await judge(t, dryRead, lang);
-    if (!v.ignore) return v;
-    verdict = v;
-  }
+  // LANG-FIXED: the text is read in the selected language only (never in the other one); English commands inside a Romanian sentence pass through the Romanian pipeline
+  const lang = normalizeLanguage(language);
+  const verdict = await judge(t, dryRead, lang);
   return verdict;
 }
 /** Cheap signals, no dry run (slow device, busy, late): a command verb or a domain word near the start, or a question word first, makes a command; anything else is room talk. */

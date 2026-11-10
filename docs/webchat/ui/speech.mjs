@@ -5,7 +5,7 @@ const Recognition = typeof window !== 'undefined' ? window.SpeechRecognition || 
 const synth = typeof window !== 'undefined' ? window.speechSynthesis : undefined;
 
 export const speechSupport = { recognition: !!Recognition, synthesis: !!synth && typeof SpeechSynthesisUtterance !== 'undefined' };
-export const LANG_TAGS = { en: 'en-US', ro: 'ro-RO' };
+import { LANG_TAGS } from './language.mjs';
 
 /** Words after which a sentence is clearly not finished (connectors and prepositions, English and Romanian). */
 const OPEN_ENDINGS = new Set(['and', 'then', 'to', 'with', 'or', 'but', 'a', 'an', 'the', 'of', 'in', 'on', 'at', 'for', 'from', 'by', 'next', 'also', 'plus', 'into', 'onto', 'near', 'behind', 'under', 'over', 'between', 'than', 'that', 'which', 'if', 'because', 'while', 'so',
@@ -165,6 +165,7 @@ const never = (ms) => new Promise((r) => setTimeout(() => r(false), ms));
  */
 export function createSpeech({ getLang, getVoiceName, getRate, onFinal, onSend, onInterim, onState, onError, onHold, onCancel, onPending, onStopCommand, onIgnored, onBlocked, onLost, allowShort, isBusy, plausible, timing, lock = null, pauseWhileWorking = false, cumulative = false, slow = false, now = () => Date.now() }) {
   const T = { ...VOICE_TIMING, ...(timing ?? {}) };
+  let usedLang = '';
   let rec = null, mode = null /* 'ptt' | 'once' | 'hands-free' */, handsFree = false, speaking = 0, wantRestart = false, restartTimer = 0;
   // conversation mode keeps the recognizer alive: failures since the last result drive the backoff; `paused` is the visible give-up state
   let failures = 0, startedAt = 0, gotResult = false, lastErr = '', paused = null;
@@ -356,7 +357,7 @@ export function createSpeech({ getLang, getVoiceName, getRate, onFinal, onSend, 
     starting = true; stopping = false; clearTimeout(startTimer);
     startTimer = setTimeout(() => { if (live() && starting) { starting = false; emit(); } }, T.startingMs);
     rec.onstart = () => { if (!live()) return; starting = false; clearTimeout(startTimer); emit(); };
-    rec.lang = getLang();
+    rec.lang = getLang(); usedLang = rec.lang;   // LANG-FIXED: the tag every recognizer start really used (kept in the phrase log as recLang)
     rec.continuous = newMode === 'hands-free';
     rec.interimResults = true;
     rec.maxAlternatives = 1;
@@ -483,7 +484,7 @@ export function createSpeech({ getLang, getVoiceName, getRate, onFinal, onSend, 
     else { api.setHandsFree(true, { barge: true }); action = 'on'; }
     return { action, before, after: snapshot() };
   }
-  /** The recognition language may have changed (session language, setting): an idle hands-free recognizer restarts with the new language. */
+  /** The recognition language may have changed (the selected language): an idle hands-free recognizer restarts with the new language. */
   function refreshLang() {
     if (!rec || rec.lang === getLang() || mode !== 'hands-free' || text) return false;
     wantRestart = true;
@@ -494,13 +495,17 @@ export function createSpeech({ getLang, getVoiceName, getRate, onFinal, onSend, 
   function pickVoice(lang) {
     const voices = synth?.getVoices?.() ?? [];
     const wanted = getVoiceName?.();
-    return (wanted && voices.find((v) => v.name === wanted)) || voices.find((v) => v.lang === lang) || voices.find((v) => v.lang?.startsWith(lang.slice(0, 2)));
+    const named = wanted && voices.find((v) => v.name === wanted);
+    // a saved voice of the other language must not read this language: it is used only when it speaks the language of the tag
+    return (named && named.lang?.startsWith(lang.slice(0, 2)) ? named : null) || voices.find((v) => v.lang === lang) || voices.find((v) => v.lang?.startsWith(lang.slice(0, 2)));
   }
+  /** The voice that would read `lang` (a BCP-47 tag), or null when the device has none: the caller says so in Settings (the default voice is used then). */
+  const voiceFor = (lang) => pickVoice(lang) ?? null;
   function speak(text, { lang } = {}) {
     if (!speechSupport.synthesis || !String(text).trim() || hidden) return Promise.resolve(false);
     // recognition must not hear the speaker
     if (rec) { wantRestart = handsFree; abortRec(); }
-    const tag = lang ?? getLang();
+    const tag = LANG_TAGS[lang] ?? lang ?? getLang();   // 'en' | 'ro' | a BCP-47 tag; the default is the tag of the selected language (ui/language.mjs)
     return new Promise((resolve) => {
       const parts = sentences(text);
       let left = parts.length;
@@ -526,6 +531,7 @@ export function createSpeech({ getLang, getVoiceName, getRate, onFinal, onSend, 
 
   const api = {
     supported: speechSupport,
+    recLang: () => usedLang, voiceFor,
     start, stopListening, toggle, snapshot, cancelPending, turnEnded, refreshLang, hasPending: () => !!(text || held || timer || stopTimer), held: () => held?.text ?? null,
     listenOnce: () => start('once'),
     pushToTalkStart: () => start('ptt'),

@@ -16,7 +16,7 @@ const MAX_RESTARTS_PER_TURN = 1;  // a turn is never re-sent by the client; the 
 
 export const badKeyOf = (text, tab) => `${String(text ?? '').toLowerCase().replace(/\s+/g, ' ').trim()}|${tab ?? ''}`;
 
-export function createEngineClient({ base, versions = {}, getSettings, getTab = () => null, onEvent = () => {}, browserCall = null, spawn = null, testHooks = false, limits = { watchdogMs: 8000 }, log = () => {} }) {
+export function createEngineClient({ base, versions = {}, getSettings, getLanguage = () => undefined, getTab = () => null, onEvent = () => {}, browserCall = null, spawn = null, testHooks = false, limits = { watchdogMs: 8000 }, log = () => {} }) {
   const stats = { starts: 0, kills: [], crashes: 0, sends: 0, dryRuns: 0, refused: 0, restartsThisTurn: 0, startTimeouts: 0 };
   const bad = new Map();            // badKeyOf -> { reason, stage, at, text, tab, site }
   const cache = { state: {}, meta: null };
@@ -211,6 +211,7 @@ export function createEngineClient({ base, versions = {}, getSettings, getTab = 
       if (known) { stats.refused++; return knownReply(known); }
       if (dryState.id != null) this.cancelDry();
       const { signal, hardMs, softMs, undo, ...rest } = opts;
+      rest.language ??= getLanguage();   // LANG-FIXED: a turn is read in the selected language (ui/language.mjs) unless the caller says which one (the app always passes the selected one)
       stats.sends++;
       const fault = testHooks ? globalThis.__psys2Fault?.[text] ?? null : null;
       const res = await guarded('send', 'send', { text, opts: { ...rest, hardMs, softMs }, undoId: undo?.id ?? null, settings: getSettings(), fault }, { signal, hardMs: hardMs ? hardMs + 600 : null, text, key, tab });
@@ -225,6 +226,7 @@ export function createEngineClient({ base, versions = {}, getSettings, getTab = 
       if (bad.has(key)) { stats.refused++; return { complete: false, segments: 0, reason: 'known-slow' }; }
       if (!worker && !booting) return { complete: false, segments: 0, reason: 'busy' };
       const { signal, ...rest } = opts;
+      rest.language ??= getLanguage();
       stats.dryRuns++;
       try {
         const r = await guarded('dry', 'dry', { text, opts: rest, fault: testHooks ? globalThis.__psys2Fault?.[text] ?? null : null }, { signal, hardMs: (rest.deadlineMs ?? 400) * 3 + 1500, text, key, tab });

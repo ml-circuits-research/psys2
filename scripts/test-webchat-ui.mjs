@@ -63,7 +63,7 @@ async function settingsFor(name, viewport, o) {
     check(`${tag}: seven tabs in order`, JSON.stringify(dlg.tabs) === JSON.stringify(SETTINGS_TABS), dlg.tabs.join(','));
     check(`${tag}: focus is inside, the page behind is inert`, dlg.focusIn && dlg.inertChat);
     // every tab renders its controls
-    const expect = { understanding: ['#p2-f-formalizer', 'input[type=checkbox]'], language: ['#p2-f-language', '#p2-f-translation', '#p2-f-language-detection'], voice: ['#p2-f-speech-language', '#p2-f-voice', '#p2-f-rate', 'input[type=checkbox]'], phrases: ['.p2-plog-list', '.p2-plog-actions', 'select[aria-label="Filter phrases"]', 'input[type=checkbox]'], models: ['.p2-model', '.p2-btn-text'], developer: ['input[type=checkbox]'], about: ['a[data-source-link=about]', '.p2-credits li'] };
+    const expect = { understanding: ['#p2-f-formalizer', 'input[type=checkbox]'], language: ['#p2-f-language', '#p2-f-translation', '#p2-f-language-hint'], voice: ['#p2-f-voice', '#p2-f-rate', 'input[type=checkbox]'], phrases: ['.p2-plog-list', '.p2-plog-actions', 'select[aria-label="Filter phrases"]', 'input[type=checkbox]'], models: ['.p2-model', '.p2-btn-text'], developer: ['input[type=checkbox]'], about: ['a[data-source-link=about]', '.p2-credits li'] };
     for (const t of SETTINGS_TABS) {
       await pg.click(`#p2-st-${t}`);
       await sleep(150);
@@ -349,8 +349,10 @@ async function feedbackFor(name, viewport, o) {
     const formsOpen = await pg.evaluate(() => { const bots = [...document.querySelectorAll('.p2-msg.is-bot:not(.is-typing)')]; const f = bots.at(-2).querySelector('.p2-fb-form'); return f && !f.hidden ? 1 : 0; });
     check(`${tag}: spoken "that's wrong" sets down on the previous answer and opens its form`, rated.feedback?.vote === 'down' && formsOpen === 1, JSON.stringify(rated.feedback));
     check(`${tag}: the complaint itself keeps its flag`, (await rec()).feedback === 'negative', JSON.stringify((await rec()).feedback));
+    await pg.select('select.p2-select', 'ro');   // LANG-FIXED: Romanian is read when Română is selected, never by a per-message detection
     await c.say('nu asta am vrut');
     check(`${tag}: Romanian "nu asta am vrut" is the same complaint`, (await rec()).feedback === 'negative', JSON.stringify((await rec()).feedback));
+    await pg.select('select.p2-select', 'en');
     await pg.click('button[aria-label="Settings"]'); await pg.click('#p2-st-phrases');
     await pg.waitForSelector('.p2-plog-item');
     await pg.evaluate(() => { const s = document.querySelector('select[aria-label="Filter phrases"]'); s.value = 'down'; s.dispatchEvent(new Event('change')); });

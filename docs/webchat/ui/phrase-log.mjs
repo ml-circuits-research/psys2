@@ -23,7 +23,7 @@ export function segmentOutcomes(reply) {
 }
 
 /** Builds one log record. `mode` is typed | voice | chip; `tab` the active tab id; `reply` may be null (failed send). */
-export function buildRecord({ text, mode = 'typed', language = 'en', tab = null, reply = null, now = Date.now(), id = null, endType = null, waitMs = null, example = false }) {
+export function buildRecord({ text, mode = 'typed', language = 'en', tab = null, reply = null, now = Date.now(), id = null, endType = null, waitMs = null, example = false, recLang = null }) {
   let segments = [];
   try { segments = segmentOutcomes(reply); } catch { segments = []; }   // a reply with an unexpected shape must never lose the phrase
   let formalizer = null;
@@ -34,6 +34,8 @@ export function buildRecord({ text, mode = 'typed', language = 'en', tab = null,
     source: mode === 'chip' ? 'chip' : 'human', lang: reply?.lang ?? language, english, tab, segments,
     unparsed: segments.some((s) => s.unparsed), formalizer,
     feedback: reply?.feedback ?? reply?.trace?.feedback ?? null,   // 'negative' when the person said the last answer was wrong (spec 11 section 13)
+    selectedLang: language,   // LANG-FIXED: the language selected in the interface when the phrase was sent
+    ...(mode === 'voice' ? { recLang: recLang ?? null } : {}),   // LANG-FIXED: the BCP-47 tag the speech recognizer actually used; a mismatch with selectedLang is visible at once in an export
     ...(example ? { example: true } : {}),   // SURPRISE: the text came from the die button (a canonical example), not from the person; source stays 'chip'
     ...(endType ? { endType, waitMs: waitMs ?? null } : {}),   // VOICE: how a spoken message ended: final | pause-plausible | pause-timeout | mic-stop, and how long the app waited (ms)
   };
@@ -94,7 +96,7 @@ export function nextFeedback(old, patch, now = Date.now()) {
 
 /** Fills a record written at send time with the outcome of the reply (the phrase is logged before it is answered). */
 export function completeRecord(rec, reply, { language = 'en' } = {}) {
-  const full = buildRecord({ text: rec.text, mode: rec.mode, language, tab: rec.tab, reply, now: Date.parse(rec.time) || Date.now(), id: rec.id, endType: rec.endType ?? null, waitMs: rec.waitMs ?? null, example: rec.example === true });
+  const full = buildRecord({ text: rec.text, mode: rec.mode, language, tab: rec.tab, reply, now: Date.parse(rec.time) || Date.now(), id: rec.id, endType: rec.endType ?? null, waitMs: rec.waitMs ?? null, example: rec.example === true, recLang: rec.recLang ?? null });
   if (rec.feedback && typeof rec.feedback === 'object') full.feedback = rec.feedback;   // a vote given before the record was completed survives
   if (rec.queueMs != null) full.queueMs = rec.queueMs;
   return full;

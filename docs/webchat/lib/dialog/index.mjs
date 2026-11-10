@@ -1021,23 +1021,23 @@ export class DialogSession {
     const sid = `msg${++this._msg}`;
     this._beNow = bestEffort ?? this.bestEffort;
     const wanted = language ?? this.language;
-    let lang = 'en', translation = null, english = text, switchedLanguage = null;
+    let lang = 'en', translation = null, english = text;
     if (translator) {
-      lang = wanted === 'auto' ? langOf(await perf.time('detect', () => guard.abortable(translator.detectLanguage(text), 'detect'))) : wanted;
-      // RD5: the language comes from strong evidence. English with a typo ("eys express fear") is never read as Romanian, and a weak Romanian reading
-      // (a browser guess, one ambiguous word) switches an automatic session only when it repeats; translators without `evidence` keep the plain rule.
-      const ev = typeof translator.evidence === 'function' ? await guard.abortable(translator.evidence(text), 'detect') : null;
-      if (ev?.strongEn && lang !== 'en') { lang = 'en'; if (wanted === 'auto') { this._sessionLang = 'en'; this._weakRo = 0; } }
-      else if (wanted === 'auto') {   // a short or ambiguous input ("e", "ok") keeps the language of the session (default English); a confident detection becomes the session language
-        if (lang === 'ro' && ev && !ev.strongRo && this._sessionLang !== 'ro') {
+      lang = wanted === 'auto' ? langOf(await perf.time('detect', () => guard.abortable(translator.detectLanguage(text), 'detect'))) : (wanted === 'ro' ? 'ro' : 'en');
+      // LANG-FIXED: an explicit language ('en' or 'ro', what the webchat always passes) is the language of every message: no detection, no override by evidence,
+      // no switch of the host's selector. English words in a Romanian message (names, "ok", "stop") go through the Romanian pipeline. Only the CLI/server mode
+      // 'auto' detects: RD5 there: the language comes from strong evidence. English with a typo ("eys express fear") is never read as Romanian, and a weak
+      // Romanian reading (a browser guess, one ambiguous word) switches an automatic session only when it repeats.
+      if (wanted === 'auto') {
+        const ev = typeof translator.evidence === 'function' ? await guard.abortable(translator.evidence(text), 'detect') : null;
+        if (ev?.strongEn && lang !== 'en') { lang = 'en'; this._sessionLang = 'en'; this._weakRo = 0; }
+        else if (lang === 'ro' && ev && !ev.strongRo && this._sessionLang !== 'ro') {   // a short or ambiguous input ("e", "ok") keeps the language of the session (default English)
           this._weakRo = (this._weakRo ?? 0) + 1;
           lang = this._weakRo >= 2 ? 'ro' : (this._sessionLang ?? 'en');
           if (lang === 'ro') { this._sessionLang = 'ro'; this._weakRo = 0; }
         } else if (lang === 'unknown') lang = this._sessionLang ?? 'en';
         else { this._sessionLang = lang; this._weakRo = 0; }
       }
-      // RD5: a host set to English still switches on strong Romanian evidence (clitics, diacritics, several Romanian content words); the host moves its dropdown
-      if (wanted === 'en' && lang === 'en' && ev?.strongRo && !ev.strongEn) { lang = 'ro'; switchedLanguage = 'ro'; }
       if (lang !== 'en' && lang !== 'unknown') {
         const heard = lang === 'ro' ? soundAlikes(text, this.context().tabWorld) : text;
         translation = await perf.time('translate', () => guard.abortable(translator.translate(heard, { from: lang, to: 'en' }), 'translate'));
@@ -1248,7 +1248,7 @@ export class DialogSession {
     const effects = this.isession.effects;
     this.isession.effects = [];
     return {
-      text: reply, parts, lang, ...(switchedLanguage ? { switchedLanguage } : {}), translation, segments, wires: [...wires, ...answerWires], answers, statuses, state, effects, ...(feedback ? { feedback } : {}),
+      text: reply, parts, lang, translation, segments, wires: [...wires, ...answerWires], answers, statuses, state, effects, ...(feedback ? { feedback } : {}),
       trace: {
         intercepted: icpt?.worldId ?? null, effects, formalizer: { preferred: formalizer ?? this.formalizer, used: [...new Set(segments.map((s) => s.strategy))], nx: formal.nx ?? null, ...(encoderError ? { error: encoderError } : {}) },
         dispatch: dispatch ?? null,

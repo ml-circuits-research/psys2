@@ -137,6 +137,7 @@ export async function runFreeze({ oldRoot, newRoot, liveUrl = null, htmlFresh = 
   await waitModel(a.pg);
   await sleep(4000);   // model load (cache / download, session create)
   out.newCaches = await cachesOf(a.pg);
+  await a.pg.select('select.p2-select', 'ro');   // LANG-FIXED: the Romanian lines below are read as Romanian only when Română is selected
   out.typed = [];
   for (const t of TYPED) {
     const r = await typed(a.pg, t);

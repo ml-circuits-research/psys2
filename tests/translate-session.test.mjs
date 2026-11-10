@@ -33,11 +33,13 @@ test('a weak Romanian reading switches the session only when it repeats; a stron
   assert.equal((await strong.send('make bigger eyes')).lang, 'en', 'a clearly English message goes back to English');
 });
 
-test('a session set to Romanian still reads an English message with a typo as English', async () => {
+test('LANG-FIXED: a session set to Romanian reads every message as Romanian, even an English one (no per-message detection)', async () => {
   const s = (await engineWith()).createSession({ language: 'ro' });
-  const r = await s.send('eys express fear');
-  assert.equal(r.lang, 'en');
-  assert.doesNotMatch(r.text, /Nu am înțeles/);
+  for (const text of ['eys express fear', 'ok', 'stop', 'play little star']) {
+    const r = await s.send(text);
+    assert.equal(r.lang, 'ro', text);
+    assert.equal(r.switchedLanguage, undefined, text);
+  }
 });
 
 test('avatar refusals are answered in Romanian, and "dreamy" eyes map to the closest robot eyes (sleepy)', async () => {

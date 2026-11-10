@@ -29,7 +29,7 @@ const RO_LINES = [
   ['fa ochi visatori', (s) => s.person.expression === 'calm', /ochi|visător|liniștit/],
 ];
 
-for (const [label, language] of [['CLI (language auto)', 'auto'], ['webchat with the dropdown on English', 'en']]) {
+for (const [label, language] of [['CLI (language auto)', 'auto'], ['webchat with the selector on Romanian', 'ro']]) {
   test(`RD5: the Romanian lines of the real dialogue act and answer in Romanian: ${label}`, async () => {
     const s = open(language);
     for (const [text, check, word] of RO_LINES) {
@@ -37,7 +37,7 @@ for (const [label, language] of [['CLI (language auto)', 'auto'], ['webchat with
       const avatar = s.state()['ui.avatar'];
       assert.ok(check(avatar), `${text}: wrong state ${JSON.stringify(avatar)}`);
       assert.equal(r.lang, 'ro', `${text}: language`);
-      if (language === 'en') assert.equal(r.switchedLanguage, 'ro', `${text}: the host is told to switch its dropdown`);
+      assert.equal(r.switchedLanguage, undefined, `${text}: a reply never switches the host's selector`);
       assert.ok(!/did not understand|Nu am înțeles/.test(r.text), `${text}: ${r.text}`);
       const q = checkReply({ shown: r.text, english: r.trace?.replyEnglish ?? r.text, lang: r.lang });
       assert.equal(q.kind, 'romanian', `${text}: ${r.text} (${q.problems.join('; ')})`);
@@ -47,16 +47,19 @@ for (const [label, language] of [['CLI (language auto)', 'auto'], ['webchat with
   });
 }
 
-test('RD5: strong Romanian evidence switches an English dropdown, one English typo word does not', async () => {
-  const s = open('en');
-  assert.equal((await send(s, 'eys express fear', 'en')).lang, 'en');
-  assert.equal((await send(s, 'make bigger eyes', 'en')).switchedLanguage, undefined);
-  assert.equal((await send(s, 'sqare eyes', 'en')).lang, 'en');
-  assert.equal((await send(s, 'fa ochi visatori', 'en')).switchedLanguage, 'ro');
-  // a diacritic alone is strong evidence; a single Romanian word that English also knows is not
-  assert.equal((await send(open('en'), 'desenează o casă', 'en')).switchedLanguage, 'ro');
-  assert.equal((await send(open('en'), 'ok', 'en')).switchedLanguage, undefined);
-  assert.equal((await send(open('en'), 'casa', 'en')).switchedLanguage, undefined);
+test('LANG-FIXED: no evidence switches a selected language: an English selector reads Romanian text as English, a Romanian one reads English as Romanian', async () => {
+  const en = open('en');
+  for (const text of ['fa ochi visatori', 'desenează o casă', 'ok', 'casa']) {
+    const r = await send(en, text, 'en');
+    assert.equal(r.lang, 'en', text);
+    assert.equal(r.switchedLanguage, undefined, text);
+  }
+  const ro = open('ro');
+  for (const text of ['make bigger eyes', 'eys express fear', 'ok']) {
+    const r = await send(ro, text, 'ro');
+    assert.equal(r.lang, 'ro', text);
+    assert.equal(r.switchedLanguage, undefined, text);
+  }
 });
 
 test('RD5: the quote bug: a drawing hint in Romanian has well formed quotes or stays in English', async () => {

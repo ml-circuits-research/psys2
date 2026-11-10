@@ -23,5 +23,5 @@ const run = (names) => async () => {
 };
 const skip = can ? false : 'set PUPPETEER_CORE (scratch puppeteer-core install) to run';
 
-test('webchat voice: pauses, final, mic stop, cancel, one at a time, language switch', { skip, timeout: 300000 }, run((all) => all.filter((n) => n !== 'replay')));
+test('webchat voice: pauses, final, mic stop, cancel, one at a time', { skip, timeout: 300000 }, run((all) => all.filter((n) => n !== 'replay')));
 test('webchat voice: replay of the phone export', { skip, timeout: 420000 }, run(() => ['replay']));

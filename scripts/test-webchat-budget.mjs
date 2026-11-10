@@ -23,7 +23,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const WATCHDOG_MS = 2000;
 const FAULTS = { op: 'what is 3 plus 4', matcher: 'make a green house', translator: 'make a red house', stop: 'what is 5 plus 6', voice: 'make a blue house' };
 
-const open = (o, { voice = false } = {}) => openChat({ ...o, query: '?psys2test=1', ...(voice ? { init: fakeSpeech } : {}), settings: { formalizer: 'rules', normalizer: false, showTrace: false, language: 'en', timeLimits: { watchdogMs: WATCHDOG_MS } } });
+const open = (o, { voice = false, language = 'en' } = {}) => openChat({ ...o, query: '?psys2test=1', ...(voice ? { init: fakeSpeech } : {}), settings: { formalizer: 'rules', normalizer: false, showTrace: false, language, timeLimits: { watchdogMs: WATCHDOG_MS } } });
 const arm = (c) => c.pg.evaluate((f) => { window.__psys2Fault = Object.fromEntries(Object.entries(f).map(([k, v]) => [v, k === 'stop' ? 'op' : k === 'voice' ? 'matcher' : k])); }, FAULTS);
 const stats = (c) => c.pg.evaluate(() => JSON.parse(JSON.stringify(window.psys2.engineClient.stats)));
 const lastBot = (c) => c.pg.evaluate(() => [...document.querySelectorAll('.p2-msg.is-bot:not([data-runaway])')].at(-1)?.querySelector('.p2-bubble')?.innerText ?? '');
@@ -41,12 +41,12 @@ const waitIdle = (c, ms) => c.pg.waitForFunction(() => !window.psys2.busy && !do
 const typeEnter = async (c, text) => { await c.pg.type('input.p2-text', text, { delay: 0 }); await c.pg.keyboard.press('Enter'); };
 
 async function faultCase(o, kind) {
-  const c = await open(o);
+  const c = await open(o, { language: kind === 'translator' ? 'ro' : 'en' });   // LANG-FIXED: an English session never calls the translator; the translator fault needs Română selected
   const text = FAULTS[kind];
   try {
     await arm(c);
     const warm = await c.say('hello');
-    check(`${kind}: the chat works before the fault`, warm.ok && /hello/i.test(warm.reply), warm.reply.slice(0, 40));
+    check(`${kind}: the chat works before the fault`, warm.ok && /hello|salut|bun[ăa]/i.test(warm.reply), warm.reply.slice(0, 40));
     const s0 = await stats(c);
     await probes(c);
     const t0 = Date.now();
@@ -66,7 +66,7 @@ async function faultCase(o, kind) {
     const rec = await c.lastPhrase();
     check(`${kind}: the phrase log records timeout and the stage`, rec?.outcome === 'timeout' && !!rec.stage && rec.watchdog?.input === text, JSON.stringify({ outcome: rec?.outcome, stage: rec?.stage, watchdog: rec?.watchdog && Object.keys(rec.watchdog) }));
     const next = await c.say('hello again', { timeout: 30000 });
-    check(`${kind}: the next message works (replacement worker)`, next.ok && /hello/i.test(next.reply), `${next.ms} ms ${next.reply.slice(0, 40)}`);
+    check(`${kind}: the next message works (replacement worker)`, next.ok && /hello|bun[ăa]|salut/i.test(next.reply), `${next.ms} ms ${next.reply.slice(0, 40)}`);
     const t1 = Date.now();
     const again = await c.say(text, { timeout: 8000 });
     const s2 = await stats(c);

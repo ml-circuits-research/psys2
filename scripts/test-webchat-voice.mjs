@@ -21,7 +21,7 @@ export function fakeSpeech() {
   window.__srCfg = { startMs: 20, stopMs: 20 };
   class FakeSR {
     constructor() { this.started = false; this.lang = ''; all.push(this); }
-    start() { this.nstarts = (this.nstarts || 0) + 1; this.started = true; this.dead = false; this.results = []; this.startedAt = performance.now(); const ms = window.__srCfg.startMs; setTimeout(() => { if (this.started && !this.dead) this.onstart?.(); }, ms); }
+    start() { (window.__srLangs ??= []).push(this.lang); this.nstarts = (this.nstarts || 0) + 1; this.started = true; this.dead = false; this.results = []; this.startedAt = performance.now(); const ms = window.__srCfg.startMs; setTimeout(() => { if (this.started && !this.dead) this.onstart?.(); }, ms); }
     stop() { setTimeout(() => this.end(), window.__srCfg.stopMs); }
     abort() { this.dead = true; setTimeout(() => this.end(), 0); }
     end() { if (this.started) { this.started = false; this.onend?.(); } }
@@ -323,25 +323,6 @@ export const SCENARIOS = {
       })());
     } finally { await c.close(); }
   },
-  async lang(o) {
-    const c = await open(o, { language: 'auto', speechLang: 'auto' });
-    try {
-      await c.pg.click('button.p2-mic');
-            await waitRec(c);
-      check('speech language starts as en-US', (await c.pg.evaluate(() => window.__sr.live().lang)) === 'en-US');
-      const n = await users(c);
-      await say(c, ['desenează o casă și un copac'], { final: true });
-      await waitUser(c, n, Date.now(), 4000); await idle(c);
-      await c.pg.waitForFunction(() => window.__sr.live()?.lang === 'ro-RO', { timeout: 4000, polling: 50 }).catch(() => {});
-      check('after Romanian input the recognizer restarts with ro-RO', (await c.pg.evaluate(() => window.__sr.live()?.lang)) === 'ro-RO', await c.pg.evaluate(() => window.__sr.live()?.lang));
-      const n2 = await users(c);
-      await sleep(2200);   // the rate guard
-      await say(c, ['make a house'], { final: true });
-      await waitUser(c, n2, Date.now(), 4000); await idle(c);
-      await c.pg.waitForFunction(() => window.__sr.live()?.lang === 'en-US', { timeout: 4000, polling: 50 }).catch(() => {});
-      check('and back to en-US after English input', (await c.pg.evaluate(() => window.__sr.live()?.lang)) === 'en-US');
-    } finally { await c.close(); }
-  },
   /** MOBILE-VOICE: Android cumulative finals ("draw", "draw a", "draw a heart" ...) are one message; fragments do nothing; the mic is paused during the turn; no queue. */
   async mobile(o) {
     const c = await open(o);
@@ -497,6 +478,11 @@ export const SCENARIOS = {
       const st = await c.pg.evaluate(() => JSON.stringify(window.psys2.session.state()));
       check('the heart is drawn', /heart|inim/i.test(st));
       check('the house is drawn', /house|cas/i.test(st));
+      // LANG-FIXED: Romanian selected: every recognizer start used ro-RO and every voice record says so (recLang) next to the selected language
+      const langs = await c.pg.evaluate(() => window.__srLangs ?? []);
+      check('replay: every SpeechRecognition start used ro-RO', langs.length > 0 && langs.every((l) => l === 'ro-RO'), JSON.stringify([...new Set(langs)]));
+      const recs = await c.pg.evaluate(() => JSON.parse(localStorage.getItem('psys2.webchat.phrases') ?? '[]').filter((r) => r.mode === 'voice'));
+      check('replay: every voice phrase record has recLang ro-RO and selectedLang ro', recs.length > 0 && recs.every((r) => r.recLang === 'ro-RO' && r.selectedLang === 'ro'), JSON.stringify(recs.filter((r) => r.recLang !== 'ro-RO' || r.selectedLang !== 'ro').slice(0, 2).map((r) => [r.text, r.recLang, r.selectedLang])));
       check('replay: no page errors', c.errors.length === 0, c.errors[0] ?? '');
     } finally { await c.close(); }
   },

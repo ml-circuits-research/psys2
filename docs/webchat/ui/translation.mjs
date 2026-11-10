@@ -94,8 +94,8 @@ export const MIN_LETTERS = 3;
 const AVAILABILITY_TIMEOUT_MS = 1000, DETECT_TIMEOUT_MS = 400, TRANSLATE_TIMEOUT_MS = 400;   // HANG3: an available browser API gets 400 ms per call, then the rules answer
 /** A browser translator that failed or timed out is not tried again for this long (the rules translator answers meanwhile). */
 const COOLDOWN_MS = 60000;
-/** Languages the session understands; any other detected language is 'unknown'. */
-const SUPPORTED = new Set(['en', 'ro']);
+/** Languages the session understands; any other detected language is 'unknown'. The list is LANGS of ui/language.mjs (the engine worker passes it: this file has no static imports, see the top). */
+const DEFAULT_LANGS = ['en', 'ro'];
 
 /**
  * The browser side of the translators: the on-device Translator and LanguageDetector of this window, with the HANG3 rules (never waited for beyond a
@@ -204,7 +204,12 @@ export function createRemoteBackend({ kinds, call, deadlineMs = REMOTE_DEADLINE_
   };
 }
 
-export function createSwitchTranslator({ rules, getStrategy, getDetectStrategy = () => 'auto', backend = createBrowserBackend() }) {
+/**
+ * LANG-FIXED: detectLanguage() is NOT part of a turn any more (the selected language is the language of every message). It is used only for the one-line
+ * "this looks like English, switch?" hint after a typed message (ui/language.mjs suggestSwitch), through the engine worker's `hint` request.
+ */
+export function createSwitchTranslator({ rules, getStrategy, getDetectStrategy = () => 'auto', backend = createBrowserBackend(), languages = DEFAULT_LANGS }) {
+  const SUPPORTED = new Set(languages);
   const usage = [];
   const detectUsage = [];
   const { prepare: prepareTranslator, state: translatorState } = backend;

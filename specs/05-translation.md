@@ -19,6 +19,9 @@ translate(text, { from: 'ro', to: 'en' }) -> {
 - Unknown content words are **not dropped**: they are passed through and reported in `unknown`; the dialog layer can tell the user which word it did not understand.
 - Negation, quantifiers, conditionals (`dacă` → `if`), question words and tense of events must always be translated; a sentence whose negation or question word cannot be mapped is reported as untranslatable rather than translated without it.
 
+## Language selection (LANG-FIXED)
+`detectLanguage` is **not** part of a turn in the interactive host. A host passes an explicit `language` (`'en'` | `'ro'`, the one the person selected) and the dialog engine reads every message in it: no detection, no evidence override, no switch of the host's selector (`switchedLanguage` was removed). English words in a Romanian message (names, "ok", "stop") are handled by the Romanian pipeline, not by switching language. Only the CLI and the server may pass `'auto'`, which keeps the RD5 behaviour (strong evidence, a weak Romanian reading must repeat). In the webchat the detectors (browser `LanguageDetector`, the rules detector and `evidence`) serve one purpose: the one-line, button-only hint after a typed message that is clearly in the other language (spec 06). The language changes only through the selector or an explicit switch command.
+
 ## Approach (rules, no model)
 1. **Normalization**: Unicode NFC; both comma-below and cedilla forms of ș/ț; diacritic-less input (`cate mere are Ion`) accepted through a diacritic-insensitive lexicon lookup.
 2. **Morphology**: strip Romanian definite articles and case endings to a lemma (`mărul`, `merele`, `merelor` → `măr`), detect plural, map verb forms to lemma + person + tense for the verbs in the lexicon (`are`, `au`, `avea`, `dă`, `a dat`, `primește`, `mănâncă`, `cumpără`).

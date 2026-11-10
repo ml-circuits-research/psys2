@@ -319,3 +319,4 @@
 
 /* COMPUTE-BUDGET E: the avatar's idle animations (inner SVG nodes, repainted on the main thread) rest while a turn runs and shortly after it */
 .p2.p2-rest .p2-avatar-layer svg * { animation: none !important; }
+.p2-lang-hint { font-size: 0.85em; font-style: italic; opacity: 0.85; margin-top: 2px; }
