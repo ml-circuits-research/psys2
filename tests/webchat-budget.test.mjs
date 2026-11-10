@@ -23,3 +23,15 @@ test('webchat compute budget: loops in an operation, the matcher and the transla
   const failed = logs.filter((l) => l.startsWith('FAIL'));
   assert.deepEqual(failed, [], logs.join('\n'));
 });
+
+// The scenarios added after the first six (worker restart, discourse memory, the on-device translator bridge and its fake modes) run in the gate too
+test('webchat compute budget: restart clock, memory across a restart, translator bridge, on-device fake modes', { skip: can ? false : 'set PUPPETEER_CORE (scratch puppeteer-core install) to run', timeout: 600000 }, async () => {
+  const { SCENARIOS } = await import('../scripts/test-webchat-budget.mjs');
+  const first = new Set(['op', 'matcher', 'translator', 'stop', 'voice', 'evidence']);
+  const logs = [];
+  const orig = console.log;
+  console.log = (...a) => { logs.push(a.join(' ')); };
+  try { for (const name of Object.keys(SCENARIOS)) if (!first.has(name)) await SCENARIOS[name]({ throttle: 4, chrome: CHROME }); } finally { console.log = orig; }
+  const failed = logs.filter((l) => l.startsWith('FAIL'));
+  assert.deepEqual(failed, [], logs.join('\n'));
+});
