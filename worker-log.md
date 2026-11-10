@@ -1404,3 +1404,10 @@ Remaining top costs after: rules `formalize` 11% of wall (leniency `parse` 6%, v
 - Tests: `tests/nx-strategy.test.mjs` (13), shared pass and `fetch` in `tests/dispatcher-runtime.test.mjs` and `tests/ort-client.test.mjs`, browser scenario `tests/webchat-nx.test.mjs` (default settings, setting persists, ORT paused -> rules; 12/12).
 - Not done: hybrid has not shown a gain on the operational sets (the model reads few segments); tuning the neural coverage rule; C adapters; A+.
 - Final gates: `npm test` 1154 tests, 1152 pass, 0 fail, 2 skipped. `npm run test:browser`: 4 of 5 files pass (including tests/webchat-nx.test.mjs); the voice file hit its 300 s runner timeout (as in SOAK-BUSY, under the shared lock), run alone `node scripts/test-webchat-voice.mjs` 101/101.
+
+## Track 1 status for the reviewer's 04:00 note (2026-11-10)
+The items listed as "no commit since 23:58" are on main; please validate from these entries:
+- MOBILE-VOICE / FREEZE 1-3 / NOISE review fixes at 6x: d1349b3, 80a87a2, b4aa31d, soak 50d7996 (log section "review fixes at 6x").
+- BUSY-LOST: bcd441a (isBusy/onBusy, veil, inert, aria-busy, Stop cuts speech; audit table in its log entry).
+- FREEZE-6: 17a58a9, e3a84b2, f82d80b (log section "SOAK-BUSY"): 10-minute soak 34% average / 57% worst minute (was 52 / 91).
+- Still open, started now: RP5c item 1 (tab opened by command after Drawing context) with GAPS-1 item 1 (active-game hint), and GAPS-1 items 2-6.
