@@ -2519,7 +2519,7 @@ function makeFormalizer(engine) {
       const TPL = lx('template'); if (!TPL.size) return null;
       const lc = t.toLowerCase(), cue = new RegExp(`\\b(${alt([...TPL.keys()])})\\b`, 'gi');
       let m, hit = null;
-      while ((m = cue.exec(t))) {
+      for (const m of t.matchAll(cue)) {   // matchAll: a regex loop with exec() can spin on an empty match (loop guard)
         const before = t.slice(0, m.index), word = t.slice(m.index, m.index + m[1].length);
         if (/^[A-Z]/.test(word) && nameIndex.has(word.toLowerCase())) continue;   // a shape named Timeline
         const pre = /^[\s\S]*(?:^|\s)((?:a|an|the|my|our|this|one|some)\s+|(?:draw|make|create|build|add|show|sketch|give\s+me|lay\s*out|arrange|rearrange|organi[sz]e|turn\s+.*?\s+into|put\s+.*?\s+(?:in|into|as)|as|into|in)\s+(?:(?:a|an|the)\s+)?)((?:[\w-]+\s+){0,3}?)$/i.exec(before);

@@ -1,5 +1,6 @@
 /** Number words to digits (spec 03 section 1.4). Browser-safe. */
 
+import { budget } from '../../dialog/budget.mjs?v=9f5360afbc';
 const UNITS = { zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9 };
 // common misspellings (fourty, ninty, fiveteen, ...) are read as the right number
 const TEENS = { fiveteen: 15, eightteen: 18, ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16, seventeen: 17, eighteen: 18, nineteen: 19 };
@@ -20,8 +21,8 @@ export function parseNumberRun(words, i) {
   let j = i, used = 0;
   let last = 'start'; // start | unit | teen | tens | tensunit | hundred | thousand
   const accept = (len) => { used = len; };
-  // bounded: j only moves forward over the words
   for (; j < words.length; j++) {
+    budget.tick('numbers.accept');
     const w = words[j];
     let next = null;
     if (w === 'and' && (last === 'hundred' || last === 'thousand') && j + 1 < words.length && isNumberWord(words[j + 1]) && words[j + 1] !== 'hundred' && words[j + 1] !== 'thousand') {

@@ -25,9 +25,7 @@ function names(s) {
   // Capitalised words that are not the first word of a sentence. (An earlier version had an alternative that matched the empty string at index 0: exec()
   // returned the same empty match for ever and froze the page on the first checked browser translation, which is every Romanian message.)
   const re = /\p{Lu}\p{L}+/gu;
-  let m;
-  // bounded: the regex cannot match the empty string (at least two letters), so every exec() moves lastIndex forward
-  while ((m = re.exec(s))) if (m.index > 0 && !/[.!?]\s+$/.test(s.slice(0, m.index))) out.push(m[0]);
+  for (const m of s.matchAll(re)) if (m.index > 0 && !/[.!?]\s+$/.test(s.slice(0, m.index))) out.push(m[0]);
   return out;
 }
 

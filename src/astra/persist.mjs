@@ -2,6 +2,7 @@
  * ASTRA snapshots and persistence (spec 13 section 6). Browser-safe: storage is a localStorage-like object passed in by the host.
  */
 import { EventLog } from './log.mjs';
+import { budget } from '../dialog/budget.mjs';
 
 export const SCHEMA = 1;
 /** `MIGRATIONS[n]` upgrades a record of schema n to schema n + 1. */
@@ -22,8 +23,8 @@ export function migrate(json) {
   if (!json || typeof json !== 'object' || !Number.isInteger(json.schema)) return null;
   let j = json;
   if (j.schema > SCHEMA) return null;
-  // bounded: each pass applies one migration and raises j.schema by one, or returns
   while (j.schema < SCHEMA) {
+    budget.tick('persist.migrate');
     const step = MIGRATIONS[j.schema];
     if (!step) return null;
     j = step(structuredClone(j)); j.schema = (j.schema ?? 0) + 1;

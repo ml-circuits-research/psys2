@@ -15,10 +15,10 @@
  */
 import { guard, TurnAborted } from '../formalizer/guard.mjs?v=ded769d6bc';
 import { budget, isBudgetExceeded } from '../dialog/budget.mjs?v=9f5360afbc';
-import { parse, makeWire, atom, str, ref, get } from '../soplang/index.mjs?v=30640a2956';
+import { parse, makeWire, atom, str, ref, get } from '../soplang/index.mjs?v=dd6ba0649b';
 import { Memory, WireStore } from './memory.mjs?v=8f815b84fc';
 import { Renderer, fallbackText, listText } from './render.mjs?v=237d079f93';
-import { FormSession } from '../formalizer/rules/session.mjs?v=b5c88cab10';
+import { FormSession } from '../formalizer/rules/session.mjs?v=0a048c7593';
 import { makeLang } from './lang.mjs?v=512d13f1bb';
 
 export { Memory, WireStore } from './memory.mjs?v=8f815b84fc';

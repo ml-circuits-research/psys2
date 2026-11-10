@@ -233,7 +233,6 @@ function make(holder, host) {
     empty.append(chips);
   }
 
-  // bounded: render() only appears as an event-handler callback; it does not call itself synchronously
   function render() {
     if (destroyed || !ops) return;
     const s = state;
@@ -302,10 +301,10 @@ function make(holder, host) {
 
     // side: outline, characters, places, keywords
     side.replaceChildren();
-    const box = (h, items, render) => {
+    const box = (h, items, renderItem) => {
       if (!items.length) return;
       const b = el('div', 'dr-card dr-box'); b.append(el('h4', '', h));
-      const ul = el('ul', 'dr-list'); for (const it of items) { const li = el('li'); li.append(render(it)); ul.append(li); }
+      const ul = el('ul', 'dr-list'); for (const it of items) { const li = el('li'); li.append(renderItem(it)); ul.append(li); }
       b.append(ul); side.append(b);
     };
     const li = (html, say, cls) => { const b = el('button', `dr-li${cls ? ` ${cls}` : ''}`, html); b.type = 'button'; b.title = `Say: ${say}`; b.addEventListener('click', () => send(say)); return b; };

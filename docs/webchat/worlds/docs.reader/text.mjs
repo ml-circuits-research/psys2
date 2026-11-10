@@ -1,6 +1,7 @@
 // Text layer of docs.reader: Markdown / plain-text blocks, sentence splitting, tokens, stemming, BM25 and TF-IDF.
 // Browser-safe, imports only ./lang.mjs.
 import { STOP, ABBREV } from './lang.mjs?v=afa9ef7a36';
+const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 
 // ---- blocks ----------------------------------------------------------------------------------------------------
 const stripInline = (s) => s
@@ -41,8 +42,8 @@ export function toBlocks(text, format = 'md') {
     buf = [];
   };
   const md = format === 'md';
-  // bounded: a pass over a finite token list or text: the index only moves in one direction
   for (let i = 0; i < lines.length; i++) {
+    budget.tick('text.flush');
     const line = lines[i];
     if (md && /^\s*(```|~~~)/.test(line)) { flush(); fence = !fence; continue; }
     if (fence) continue;
@@ -74,21 +75,17 @@ export function splitSentences(text) {
   const n = text.length;
   const push = (end) => {
     let s = start, e = end;
-    // bounded: s only increases up to e (whitespace trim)
-    while (s < e && /\s/.test(text[s])) s++;
-    // bounded: e only decreases down to s (whitespace trim)
-    while (e > s && /\s/.test(text[e - 1])) e--;
+    while (s < e && /\s/.test(text[s])) { budget.tick('text.push'); s++; }
+    while (e > s && /\s/.test(text[e - 1])) { budget.tick('text.push2'); e--; }
     if (e > s) out.push({ text: text.slice(s, e), start: s, end: e });
   };
-  // bounded: a pass over a finite token list or text: the index only moves in one direction
   for (let i = 0; i < n; i++) {
+    budget.tick('text.push3');
     const c = text[i];
     if (c !== '.' && c !== '!' && c !== '?' && c !== '…') continue;
     let j = i;
-    // bounded: j only increases up to the text length
-    while (j + 1 < n && /[.!?…]/.test(text[j + 1])) j++;
-    // bounded: j only increases up to the text length
-    while (j + 1 < n && CLOSE_Q.test(text[j + 1])) j++;
+    while (j + 1 < n && /[.!?…]/.test(text[j + 1])) { budget.tick('text.push4'); j++; }
+    while (j + 1 < n && CLOSE_Q.test(text[j + 1])) { budget.tick('text.push5'); j++; }
     const after = text.slice(j + 1);
     if (after && !/^\s/.test(after)) { i = j; continue; }                                  // "3.5", "example.com"
     const word = (text.slice(0, i).match(/([A-Za-z]+)$/) ?? [])[1] ?? '';

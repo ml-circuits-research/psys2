@@ -326,7 +326,6 @@ export function createSpeech({ getLang, getVoiceName, getRate, onFinal, onSend, 
     return recObj;
   }
 
-  // bounded: a restart goes through the recognizer events (asynchronous), never a nested synchronous call
   function start(newMode, { barge = false } = {}) {
     if (!Recognition) return false;
     if (hidden) { if (newMode === 'hands-free') hiddenResume = true; return true; }   // resumes when the tab is visible again

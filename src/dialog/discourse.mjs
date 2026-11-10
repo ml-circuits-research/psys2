@@ -66,8 +66,7 @@ export function splitFragment(text) {
   for (const lead of LEADS) if (startsWith(ws, lead)) { marker = lead; content = ws.slice(lead.length); break; }
   let trail = [];
   for (const tr of TRAILS) if (content.length > tr.length && tr.every((p, i) => content[content.length - tr.length + i].toLowerCase() === p)) { trail = tr; content = content.slice(0, content.length - tr.length); break; }
-  // bounded: shrinks the list each pass
-  while (content.length && content[0].toLowerCase() === ',') content = content.slice(1);
+  while (content.length && content[0].toLowerCase() === ',') { budget.tick('discourse.splitFragment'); content = content.slice(1); }
   if (!content.length) return null;
   const all = [...marker, ...trail];
   return { kind: all.length ? 'marker' : 'bare', content, marker: all.join(' ') || null };

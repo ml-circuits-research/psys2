@@ -127,10 +127,8 @@ function writeBack(s) {
   for (const k of WORLD_KEYS) { if (w.state[k] === undefined) delete s[k]; else s[k] = w.state[k]; }
   s.undo = w.undoStack; s.redo = w.redoStack;
   assignIds(s);
-  // bounded: shrinks the history each pass
-  while (s.undo.length > MAX_HISTORY) s.undo.shift();
-  // bounded: shrinks the history each pass
-  while (s.redo.length > MAX_HISTORY) s.redo.shift();
+  while (s.undo.length > MAX_HISTORY) { budget.tick('ops.writeBack'); s.undo.shift(); }
+  while (s.redo.length > MAX_HISTORY) { budget.tick('ops.writeBack2'); s.redo.shift(); }
   s.rev = (s.rev ?? 0) + 1; w.rev = s.rev;
   w.state = structuredClone(Object.fromEntries(WORLD_KEYS.filter((k) => s[k] !== undefined).map((k) => [k, s[k]])));   // the state of the context is never aliased by the engine
 }

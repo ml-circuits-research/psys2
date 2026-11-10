@@ -4,7 +4,7 @@
  * into the original text. Original casing is kept in `raw`.
  */
 import { budget } from '../../dialog/budget.mjs?v=9f5360afbc';
-import { isNumberWord, parseNumberRun, ordinalWordValue, digitWordValue } from './numbers.mjs?v=eb02877cbe';
+import { isNumberWord, parseNumberRun, ordinalWordValue, digitWordValue } from './numbers.mjs?v=63770707cb';
 
 export const QUESTION_WORDS = new Set(['how', 'what', 'who', 'where', 'when', 'which', 'why', 'is', 'are', 'does', 'do', 'can', 'did']);
 
@@ -35,22 +35,19 @@ export function splitSentences(text) {
   let start = 0;
   const push = (end, term) => {
     let s = start, e = end;
-    // bounded: the index only moves in one direction over a finite list or text
-    while (s < e && /\s/.test(text[s])) s++;
-    // bounded: the index only moves in one direction over a finite list or text
-    while (e > s && /\s/.test(text[e - 1])) e--;
+    while (s < e && /\s/.test(text[s])) { budget.tick('normalize.push'); s++; }
+    while (e > s && /\s/.test(text[e - 1])) { budget.tick('normalize.push2'); e--; }
     if (e > s) out.push({ start: s, end: e, text: text.slice(s, e), terminator: term });
   };
   const quoted = quotedRanges(text);
-  // bounded: i only moves forward (the body skips ahead with i = j) and is capped by the text length
   for (let i = 0; i < text.length; i++) {
+    budget.tick('normalize.push3');
     const c = text[i];
     if (c !== '.' && c !== '!' && c !== '?') continue;
     if (c === '.' && /\d/.test(text[i - 1] ?? '') && /\d/.test(text[i + 1] ?? '')) continue;
     if (quoted.some(([a, b]) => i > a && i < b)) continue;   // a terminator inside "double quotes" does not end the sentence
     let j = i;
-    // bounded: the index only moves in one direction over a finite list or text
-    while (j + 1 < text.length && '.!?'.includes(text[j + 1])) j++;
+    while (j + 1 < text.length && '.!?'.includes(text[j + 1])) { budget.tick('normalize.push4'); j++; }
     push(i, text.slice(i, j + 1));
     start = j + 1;
     i = j;
@@ -176,8 +173,8 @@ export function tokenize(sentence, base = 0, { keepFillers = false } = {}) {
  */
 function gameNames(toks) {
   if (toks.length > 6) return toks;   // a name for the game, not a list of letters inside a longer sentence
-  // bounded: i only moves forward over the tokens
   for (let i = 0; i + 2 < toks.length; i++) {
+    budget.tick('normalize.gameNames');
     const a = toks[i], b = toks[i + 1], c = toks[i + 2];
     if (a.kind === 'word' && a.lower === 'x' && b.kind === 'word' && (b.lower === 'and' || b.lower === 'n' || b.lower === 'si' || b.lower === 'și')
       && ((c.kind === 'number' && c.lower === '0') || (c.kind === 'word' && (c.lower === 'o' || c.lower === 'zero')))) {
@@ -216,8 +213,7 @@ function markFillers(toks) {
   let i = 0;
   for (;;) {
     budget.tick('normalize.fixpoint');
-    // bounded: the index only moves in one direction over a finite list or text
-    while (i < n && (toks[i].kind === 'punct' || toks[i].filler)) i++;
+    while (i < n && (toks[i].kind === 'punct' || toks[i].filler)) { budget.tick('normalize.markFillers'); i++; }
     if (i < n && toks[i].kind === 'word' && INITIAL_DROP.has(toks[i].lower)) { toks[i].filler = true; toks[i].lead = true; i++; continue; }
     if (i + 1 < n && toks[i].lower === 'after' && toks[i + 1].lower === 'that') { toks[i].filler = toks[i + 1].filler = true; toks[i].lead = toks[i + 1].lead = true; i += 2; continue; }
     const phrase = i < n ? leadPhraseAt(toks, i) : 0;
@@ -226,8 +222,7 @@ function markFillers(toks) {
   }
   // "real quick" / "quickly" closing a request: "what day is it real quick"
   let e = n;
-  // bounded: the index only moves in one direction over a finite list or text
-  while (e > 0 && (toks[e - 1].kind === 'punct' || toks[e - 1].kind === 'qmark')) e--;
+  while (e > 0 && (toks[e - 1].kind === 'punct' || toks[e - 1].kind === 'qmark')) { budget.tick('normalize.markFillers2'); e--; }
   for (const tail of TRAIL_PHRASES) {
     const s = e - tail.length;
     if (s > 0 && tail.every((w, k) => toks[s + k].kind === 'word' && toks[s + k].lower === w && !toks[s + k].filler)) { for (let k = s; k < e; k++) toks[k].filler = true; break; }
@@ -250,8 +245,7 @@ function leadPhraseAt(toks, i) {
     if (i + ph.length >= toks.length) continue;
     if (ph.every((w, k) => (toks[i + k].kind === 'word' || toks[i + k].kind === 'number') && String(toks[i + k].raw).toLowerCase() === w)) {
       let j = i + ph.length;
-      // bounded: the index only moves in one direction over a finite list or text
-      while (j < toks.length && (toks[j].kind === 'punct' || toks[j].filler)) j++;
+      while (j < toks.length && (toks[j].kind === 'punct' || toks[j].filler)) { budget.tick('normalize.leadPhraseAt'); j++; }
       if (j < toks.length) return ph.length;
     }
   }
@@ -284,8 +278,8 @@ function convertNumbers(toks, sentence, base) {
   const out = [];
   const lowers = toks.map((t) => (t.kind === 'word' ? t.lower : '\u0000'));
   const span = (a, b) => ({ start: toks[a].start, end: toks[b].end });
-  // bounded: i only moves forward over the tokens
   for (let i = 0; i < toks.length; i++) {
+    budget.tick('normalize.span');
     const t = toks[i];
     if (t.kind !== 'word') { out.push(t); continue; }
     if (t.lower === 'a' && lowers[i + 1] === 'dozen') {
@@ -302,8 +296,7 @@ function convertNumbers(toks, sentence, base) {
         else if (lowers[last + 1] === 'point' && digitWordValue(lowers[last + 2]) !== null) {
           // "one point five" -> 1.5, "three point one four" -> 3.14
           let j = last + 2, frac = '';
-          // bounded: the index only moves in one direction over a finite list or text
-          while (j < lowers.length && digitWordValue(lowers[j]) !== null) { frac += digitWordValue(lowers[j]); j++; }
+          while (j < lowers.length && digitWordValue(lowers[j]) !== null) { budget.tick('normalize.span2'); frac += digitWordValue(lowers[j]); j++; }
           value = `${value}.${frac}`; last = j - 1; single = false;
         } else if (lowers[last + 1] === 'and' && (lowers[last + 2] === 'half' || (lowers[last + 2] === 'a' && lowers[last + 3] === 'half'))) {
           // "one and a half" -> 1.5

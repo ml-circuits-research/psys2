@@ -133,7 +133,6 @@ export function createRobot(container) {
     const m = svg.querySelector('.mouth');
     if (m) m.innerHTML = mouthSvg(shownMouth());
   }
-  // bounded: reschedules itself through setTimeout (asynchronous, never nested synchronously)
   function scheduleBlink() {
     clearTimeout(blinkTimer);
     blinkTimer = setTimeout(() => {

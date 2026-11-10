@@ -7,9 +7,9 @@
 // hits and the outline. Every answer cites sentences ("(sentence 12)"); the cited sentence numbers are 1-based.
 // Facts are also written to the session as SOP Lang wires with core.source="<doc id>#s<n>" (toSop of analyze.mjs), once per document.
 // Effects: speech.say { text } (read aloud). Cross-world: ctx.request('ui.openTab', { tab: 'documents' }) after every answer.
-import { analyzeDocument, toSop, kinOfDoc } from './analyze.mjs?v=cdcf3faab4';
+import { analyzeDocument, toSop, kinOfDoc } from './analyze.mjs?v=147bbc5837';
 import { SAMPLE } from './sample.mjs?v=d43b59f35e';
-import { buildBm25, bm25Search, correctQuery, contentStems, stem, words, tfidfKeywords } from './text.mjs?v=b04ecf27e0';
+import { buildBm25, bm25Search, correctQuery, contentStems, stem, words, tfidfKeywords } from './text.mjs?v=9573de09c2';
 import { verbForm, ORDINALS, ROLES, KIN, KIN_INVERSE, singular, cap, plural, STOP, PRONOUNS } from './lang.mjs?v=afa9ef7a36';
 
 const TAB = 'documents';

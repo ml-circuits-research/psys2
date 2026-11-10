@@ -9,7 +9,7 @@
  * Safety rules:
  *   - a window that already is a value, or that has no word unknown to every world, is never moved (never move away from an existing value);
  *   - the result is only a candidate text: the caller keeps it when the rules read it completely;
- *   - the work is bounded: lookups are length-bucketed with a letter-count prefilter, and `maxWindows`, `maxPerWindow`, `maxTexts` and a
+ *   - the work is limited: lookups are length-bucketed with a letter-count prefilter, and `maxWindows`, `maxPerWindow`, `maxTexts` and a
  *     time budget (`budgetMs`, the best candidates found so far are returned) cap the effort whatever the message looks like.
  */
 import { lexIndex } from '../worlds/lexicon.mjs';

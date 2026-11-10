@@ -94,12 +94,11 @@ export async function translateParts(parts, translator, lang) {
   let complete = true;   // RD5: a reply is either fully translated or left in English, never mixed
   for (let i = 0; i < flat.length; i++) if (flat[i].join) flat[i].translate = !!(flat[i - 1]?.translate && flat[i + 1]?.translate);
   const out = [];
-  // bounded: each pass consumes at least one part (j > i)
   for (let i = 0; i < flat.length;) {
+    budget.tick('index.translateParts');
     if (!flat[i].translate) { const { join, fallback, incomplete, ...rest } = flat[i]; if (incomplete) complete = false; out.push(rest); i++; continue; }
     let j = i;
-    // bounded: the index only moves in one direction over a finite list or text
-    while (j < flat.length && flat[j].translate) j++;
+    while (j < flat.length && flat[j].translate) { budget.tick('index.translateParts2'); j++; }
     const run = flat.slice(i, j);
     i = j;
     const src = run.map((p) => p.text).join('');
@@ -452,7 +451,7 @@ export class DialogSession {
         const res = await parse(world, sp.text);
         if (res && crossTabOk(res, sp.corrections)) return wrap(res, { corrections: sp.corrections });
         // several typos in the open tab's world ("the un si up not udner clouds"): after the sure corrections, one more word (also a two-letter one) swapped for a close
-        // word of the tab's vocabulary; the rest of the sentence decides, the world must read all of it (bounded: 12 candidate texts, the stage's time budget)
+        // word of the tab's vocabulary; the rest of the sentence decides, the world must read all of it (at most 12 candidate texts, the stage's time budget)
         if (world === ctx.tabWorld) {
           for (const v of spellAlternates(sp.text, { vocab: vocabOf(world), protect, short: true, maxTexts: 12 })) {
             if (late()) return null;
@@ -1287,7 +1286,7 @@ export async function createEngine({ loader, translator = null, options = {}, fo
         const yieldFn = opts?.yieldFn ?? (() => new Promise((res) => setTimeout(res, 0)));
         spellVocabulary(set);
         let t = clock();
-        for (const w of set.list()) {   // bounded: one pass over the loaded worlds
+        for (const w of set.list()) {
           if (!w.patterns?.length) continue;
           worldVocabulary(set, w.id);
           if (clock() - t > (opts?.budgetMs ?? 10)) { await yieldFn(); t = clock(); }

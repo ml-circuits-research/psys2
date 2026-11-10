@@ -4,7 +4,7 @@
  * Syntax elements: word, [a|b|c], [a|b]?, {name:class}, {name:class?}, ...
  * Slot classes: number, ordinal, word, words, noun, <lexicon id>, agent, unit.
  */
-import { isFillerWord } from './normalize.mjs?v=4ab1c2d71f';
+import { isFillerWord } from './normalize.mjs?v=8a99155025';
 import { budget } from '../../dialog/budget.mjs?v=9f5360afbc';
 
 /** Quantity unit table: lowercase token -> canonical symbol. */
@@ -167,8 +167,7 @@ function candidates(el, tokens, i, env, slotsSoFar) {
       if (el.args?.[0] !== 'quotes') return [{ len, value: text(len), text: text(len), span: span(len), loose: true }];
       // rest(quotes): free text keeps the quotes and the closing punctuation around it ("Hello there." said the fox)
       let a = t.start, b = tokens[end - 1].end;
-      // bounded: a only decreases to 0 over the sentence text
-      while (a > 0 && /["\u201C\u2018(\[]/.test(env.text[a - 1])) a--;
+      while (a > 0 && /["\u201C\u2018(\[]/.test(env.text[a - 1])) { budget.tick('matcher.span'); a--; }
       const close = /^(?:[.!?\u2026]*["\u201D\u2019)\]])+/.exec(env.text.slice(b));   // closing quotes and brackets, with the punctuation before them
       if (close) b += close[0].length;
       const full = env.text.slice(a, b);
@@ -231,8 +230,9 @@ function matchTokensRaw(compiled, tokens, env) {
   /** Token index after matching the literal words at tokens[i], or -1. A token matches by `lower` or by `alt` (the original number word, `u`); operator symbols and their words are one literal. */
   const matchWords = (words, i) => {
     let k = 0, p = i;
-    // bounded: every pass either advances k and p or returns -1; the matcher call itself ticks matcher.attempt
-    while (k < words.length) {
+    // every pass that does not return advances k by at least 1 (the phrases of OP_WORDS are not empty), so a counting guard of words.length passes is exact and
+    // lets the loop guard see it is finite without a tick on this very hot path
+    for (let pass = 0; pass < words.length && k < words.length; pass++) {
       const w = words[k], t = p < n ? tokens[p] : null;
       if (t && (t.lower === w || t.alt === w)) { k++; p++; continue; }
       const phrases = OP_WORDS[w];

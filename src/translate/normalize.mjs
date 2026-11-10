@@ -19,8 +19,7 @@ export function normalizeWithMap(text) {
     budget.tick('translate.tokenize');
     const cp = text.codePointAt(pos);
     let end = pos + (cp > 0xffff ? 2 : 1);
-    // bounded: the index only moves in one direction over a finite list or text
-    while (end < text.length && MARK.test(text[end])) end++;
+    while (end < text.length && MARK.test(text[end])) { budget.tick('normalize.normalizeWithMap'); end++; }
     const cluster = text.slice(pos, end).normalize('NFC');
     for (let k = 0; k < cluster.length; k++) {
       const ch = cluster[k];
@@ -49,10 +48,7 @@ const TOKEN_RE = /\p{L}+(?:['\-]\p{L}+)*|(?<![\p{L}\d])-\d+(?:[.,]\d+)?|\d{1,2}:
 export function tokenize(original) {
   const nm = normalizeWithMap(String(original));
   const toks = [];
-  let m;
-  TOKEN_RE.lastIndex = 0;
-  // bounded: every alternative of TOKEN_RE matches at least one character (\S last), so every exec() moves lastIndex forward
-  while ((m = TOKEN_RE.exec(nm.text)) !== null) {
+  for (const m of nm.text.matchAll(TOKEN_RE)) {
     const s = m.index;
     const e = s + m[0].length;
     const raw = m[0];
@@ -78,12 +74,11 @@ export function splitSentences(toks) {
   const sentences = [];
   let cur = [];
   const isEnd = (t) => t.kind === 'punct' && (t.raw === '.' || t.raw === '!' || t.raw === '?');
-  // bounded: i only moves forward over the tokens
   for (let i = 0; i < toks.length; i++) {
+    budget.tick('normalize.isEnd');
     cur.push(toks[i]);
     if (isEnd(toks[i])) {
-      // bounded: the index only moves in one direction over a finite list or text
-      while (i + 1 < toks.length && isEnd(toks[i + 1])) cur.push(toks[++i]);
+      while (i + 1 < toks.length && isEnd(toks[i + 1])) { budget.tick('normalize.isEnd2'); cur.push(toks[++i]); }
       sentences.push(cur);
       cur = [];
     }

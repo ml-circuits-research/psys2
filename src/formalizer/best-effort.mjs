@@ -13,6 +13,7 @@
 import { lexIndex } from '../worlds/lexicon.mjs';
 import { isNumberWord } from './rules/numbers.mjs';
 import { FUNCTION_WORDS, ABBREVIATIONS, worldVocabulary } from './spell.mjs';
+import { budget } from '../dialog/budget.mjs';
 
 const WORD_RE = /[\p{L}\p{N}][\p{L}\p{N}'’-]*/gu;
 const SLOT_RE = /\{[A-Za-z_0-9]+:([A-Za-z_.0-9]+)\}/g;
@@ -40,8 +41,8 @@ export const BEST_EFFORT_POLICY = Object.freeze({
 function tokenize(text, multi) {
   const raw = [...String(text).matchAll(WORD_RE)].map((m) => ({ surface: m[0], w: m[0].toLowerCase().replace(/’/g, "'"), start: m.index }));
   const out = [];
-  // bounded: i only moves forward over the characters
   for (let i = 0; i < raw.length; i++) {
+    budget.tick('best-effort.tokenize');
     let merged = false;
     for (let n = 3; n >= 2 && !merged; n--) {
       if (i + n > raw.length || !multi) continue;

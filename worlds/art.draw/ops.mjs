@@ -617,14 +617,12 @@ function parseWith(kind, words) {
   if (at < 0) return { parts: {}, rest: words };
   const parts = {}, taken = [];
   let i = at + 1;
-  // bounded: i advances each pass or the loop breaks
   while (i < words.length) {
+    budget.tick('ops.parseWith');
     const start = i;
-    // bounded: the index only moves in one direction over a finite list or text
-    while (i < words.length && ['a', 'an', 'the', 'and', 'some', 'its', 'his', 'her', 'their'].includes(words[i])) i++;
+    while (i < words.length && ['a', 'an', 'the', 'and', 'some', 'its', 'his', 'her', 'their'].includes(words[i])) { budget.tick('ops.parseWith2'); i++; }
     const colorWords = [];
-    // bounded: the index only moves in one direction over a finite list or text
-    while (i < words.length && (isShade(words[i]) || isColorWord(words[i]))) colorWords.push(words[i++]);
+    while (i < words.length && (isShade(words[i]) || isColorWord(words[i]))) { budget.tick('ops.parseWith3'); colorWords.push(words[i++]); }
     const pw = words[i];
     const part = pw && kind ? partOfWord(kind, pw) ?? partOfWord(kind, pw.replace(/s$/, '')) : null;
     if (part && colorWords.length) { parts[part] = colorFrom(colorWords); taken.push([start, i + 1]); i += 1; continue; }
@@ -837,14 +835,12 @@ const describePlacing = (o, place, refs) => {
 function parseMoreSpec(words) {
   let i = 0;
   const args = {};
-  // bounded: i only moves forward and stops at the end of the words (undefined is not an article)
-  while (['a', 'an', 'another', 'some', 'the'].includes(words[i])) i++;
+  while (['a', 'an', 'another', 'some', 'the'].includes(words[i])) { budget.tick('ops.parseMoreSpec'); i++; }
   const n = numberOf(words[i] ?? '');
   if (n !== null) { args.n = String(n); i++; }
   else if (words[i] && QUANTITY[words[i]]) { args.q = words[i]; i++; }
   const mods = [];
-  // bounded: the index only moves in one direction over a finite list or text
-  while (i < words.length && (isShade(words[i]) || isColorWord(words[i]) || Object.hasOwn(SIZE_WORDS, words[i])) && mods.length < 3) mods.push(words[i++]);
+  while (i < words.length && (isShade(words[i]) || isColorWord(words[i]) || Object.hasOwn(SIZE_WORDS, words[i])) && mods.length < 3) { budget.tick('ops.parseMoreSpec2'); mods.push(words[i++]); }
   mods.forEach((m, j) => { args[`m${j + 1}`] = m; });
   if (!words[i] || !kindOfWord(words[i])) return null;
   args.kind = words[i]; args.kindText = words[i]; i++;
@@ -1158,8 +1154,8 @@ export const turn = guard((ctx, args, s) => {
   // find the action words, what is left is the target
   let action = null, dirWord = null, deg = null;
   const rest = [];
-  // bounded: i only moves forward over the words
   for (let i = 0; i < words.length; i++) {
+    budget.tick('ops.applyDest');
     const w = words[i];
     if (['around', 'over', 'round', 'back', 'backwards', 'backward', 'flipped', 'mirrored', 'reversed'].includes(w) && !action) { action = 'flip'; continue; }
     if ((w === 'other' || w === 'wrong') && words[i + 1] === 'way') { action = 'flip'; i += 2; continue; }

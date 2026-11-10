@@ -14,8 +14,8 @@
  *     formalizer, restricted to the frame's world. It is accepted only when the result is fully understood there.
  * Both return `{ res, info }`, where `res` has the shape of a formalizer result and `info` is the provenance for the trace.
  */
-import { restrictedSet } from '../formalizer/spell.mjs?v=366b7f0319';
-import { SHORT_TYPOS } from '../formalizer/rules/normalize.mjs?v=4ab1c2d71f';
+import { restrictedSet } from '../formalizer/spell.mjs?v=04c22749e7';
+import { SHORT_TYPOS } from '../formalizer/rules/normalize.mjs?v=8a99155025';
 import { lastUnfinished } from '../astra/where.mjs?v=72e99182f4';
 import { runDiscussionCommand } from '../astra/session.mjs?v=65217ad31a';
 import { classify, resolveReference, describeReferent, chooseOption, plain } from './meta.mjs?v=2f2d0408d3';
@@ -66,8 +66,7 @@ export function splitFragment(text) {
   for (const lead of LEADS) if (startsWith(ws, lead)) { marker = lead; content = ws.slice(lead.length); break; }
   let trail = [];
   for (const tr of TRAILS) if (content.length > tr.length && tr.every((p, i) => content[content.length - tr.length + i].toLowerCase() === p)) { trail = tr; content = content.slice(0, content.length - tr.length); break; }
-  // bounded: shrinks the list each pass
-  while (content.length && content[0].toLowerCase() === ',') content = content.slice(1);
+  while (content.length && content[0].toLowerCase() === ',') { budget.tick('discourse.splitFragment'); content = content.slice(1); }
   if (!content.length) return null;
   const all = [...marker, ...trail];
   return { kind: all.length ? 'marker' : 'bare', content, marker: all.join(' ') || null };

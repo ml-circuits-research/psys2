@@ -40,8 +40,7 @@ export function tokenInfo(text, offsets) {
   offsets.forEach(([a, b], i) => {
     if (b <= a) return;
     let s = a;
-    // bounded: the index only moves in one direction over a finite list or text
-    while (s < text.length && /\s/.test(text[s])) s++;
+    while (s < text.length && /\s/.test(text[s])) { budget.tick('dispatcher-runtime.tokenInfo'); s++; }
     out.push([i, s, b, s === 0 || !ALNUM.test(text[s - 1])]);
   });
   return out;
@@ -88,8 +87,7 @@ export function wordTokens(offsets, prefix, words) {
   const n = offsets.length;
   for (const { start, end } of words) {
     const s = start + prefix, e = end + prefix;
-    // bounded: the index only moves in one direction over a finite list or text
-    while (i < n && !(offsets[i][1] > offsets[i][0] && offsets[i][1] > s)) i++;
+    while (i < n && !(offsets[i][1] > offsets[i][0] && offsets[i][1] > s)) { budget.tick('dispatcher-runtime.wordTokens'); i++; }
     out.push(i < n && offsets[i][0] < e ? i : null);
   }
   return out;
@@ -135,6 +133,7 @@ export function windowSpans(n, size, stride = Math.max(1, size >> 1)) {
 const FULL = 1e9;   // maxLength meaning "do not truncate" for the tokenizer
 
 import { perf } from './perf.mjs?v=fd62b893eb';
+import { budget } from '../dialog/budget.mjs?v=9f5360afbc';
 
 export function createDispatcherRuntime({ ort, session, tokenizer, worlds, editTags = null, editTau = 0.5, useContext = true, segMaxLen = 192, worldMaxLen = 128, beam = 4, uncertain = 6, topK = 3 } = {}) {
   if (!ort?.Tensor || !session?.run || !tokenizer?.encode || !worlds?.length) throw new Error('createDispatcherRuntime needs { ort, session, tokenizer, worlds }');

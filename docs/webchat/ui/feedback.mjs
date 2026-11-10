@@ -23,7 +23,6 @@ export function createFeedback({ feedback = null, onChange, canUndo = () => fals
   const form = h('div', { class: 'p2-fb-form', role: 'group', 'aria-label': 'What went wrong?', hidden: true });
   const el = h('span', { class: 'p2-fb-wrap' }, bar);
 
-  // bounded: render() only appears as an event-handler callback that rebuilds the panel; it does not call itself synchronously
   function render() {
     const vote = fb?.vote ?? null;
     up.setAttribute('aria-pressed', String(vote === 'up')); down.setAttribute('aria-pressed', String(vote === 'down'));

@@ -40,7 +40,7 @@ let warming = null;                  // the warm-up turn that runs: a user turn 
 const one = async (s, text, opts) => { const p = s.send(text, opts).catch(() => {}); warming = p; try { await p; } finally { if (warming === p) warming = null; } };
 
 // ---------- test-only fault injection (inert unless the page started with ?psys2test=1) ----------
-function spin() { for (;;) { /* test hook: an infinite synchronous loop */ } }   // bounded: test-only fault injection, ended by the page watchdog
+function spin() { for (;;) { /* test hook: an infinite synchronous loop */ } }   // loop-guard-allow: deliberate fault injection (the page watchdog must end it)
 function installFaults() {
   for (const w of engine.set.list()) {
     if (!w.ops || typeof w.ops !== 'object') continue;
@@ -64,7 +64,7 @@ const errOf = (e) => ({ name: e?.name ?? 'Error', message: String(e?.message ?? 
 /** Wires get `sk`: their keys in short form (the page serializes them without the legends, which stay here). */
 function annotateWires(root) {
   const L = engine.set.legends, seen = new WeakSet();
-  const walk = (v, depth) => { // bounded: depth limit 7 and a visited set
+  const walk = (v, depth) => {   // depth limit 7 and a visited set
     if (!v || typeof v !== 'object' || depth > 7 || seen.has(v)) return;
     seen.add(v);
     if (Array.isArray(v)) { for (const x of v) walk(x, depth + 1); return; }
@@ -119,7 +119,7 @@ async function init(m) {
   const translator = tr.createSwitchTranslator({ rules: translate.createTranslator(), getStrategy: () => settings.translation, getDetectStrategy: () => settings.languageDetection, backend });
   engine = await dialog.createEngine({ loader: loaders.createBundleLoader(bundle), translator });
   if (testHooks) installFaults();
-  const rules = (engine.precompile?.({ budgetMs: 8, yieldFn: async () => { await sleep(0); while (turnRunning()) await sleep(20); /* bounded: ends with the running turn; the page terminates this worker when a turn does not */ } }) ?? Promise.resolve()).catch(() => {}).then(() => evt('rules-compiled'));
+  const rules = (engine.precompile?.({ budgetMs: 8, yieldFn: async () => { await sleep(0); while (turnRunning()) await sleep(20); } }) ?? Promise.resolve()).catch(() => {}).then(() => evt('rules-compiled'));
   rules.catch(() => {});
   // the ORT workers belong to the page: this worker asks for one through a MessagePort per lane
   globalThis.__psys2OrtSpawn = (lane) => {
@@ -227,7 +227,7 @@ const handlers = {
   },
   async warm(m) {
     const opts = { language: 'en', formalizer: 'rules', spell: true, partial: true, fastPath: false };
-    const idle = async () => { while (turnRunning() || performance.now() - lastTurnEnd < 500) await sleep(50); };   // bounded: waits for the running turn and 500 ms of quiet
+    const idle = async () => { while (turnRunning() || performance.now() - lastTurnEnd < 500) await sleep(50); };
     const s = engine.createSession({ language: 'en' });
     if (m.phase === 'model') { await idle(); await one(s, 'what is 3 plus 4', { ...opts, formalizer: 'encoder' }); evt('warm', 'dispatcher'); return null; }
     for (const x of ['hello', 'zzq flarb wug', 'spider legs and 3 plus 4']) { await idle(); await one(s, x, opts); await sleep(0); }

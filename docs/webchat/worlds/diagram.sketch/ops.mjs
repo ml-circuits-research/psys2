@@ -26,7 +26,7 @@ let K = null, loading = null, sys = null, sysOf = null;
 
 /** Starts loading the engine (once). Returns a promise of the engine kit. */
 export function loadEngine() {
-  loading ??= import('./engine/logic.mjs?v=8b436c1274').then((m) => { K = m.default; return K; });
+  loading ??= import('./engine/logic.mjs?v=66253b79e4').then((m) => { K = m.default; return K; });
   return loading;
 }
 export const engineReady = () => !!K;
@@ -127,10 +127,8 @@ function writeBack(s) {
   for (const k of WORLD_KEYS) { if (w.state[k] === undefined) delete s[k]; else s[k] = w.state[k]; }
   s.undo = w.undoStack; s.redo = w.redoStack;
   assignIds(s);
-  // bounded: shrinks the history each pass
-  while (s.undo.length > MAX_HISTORY) s.undo.shift();
-  // bounded: shrinks the history each pass
-  while (s.redo.length > MAX_HISTORY) s.redo.shift();
+  while (s.undo.length > MAX_HISTORY) { budget.tick('ops.writeBack'); s.undo.shift(); }
+  while (s.redo.length > MAX_HISTORY) { budget.tick('ops.writeBack2'); s.redo.shift(); }
   s.rev = (s.rev ?? 0) + 1; w.rev = s.rev;
   w.state = structuredClone(Object.fromEntries(WORLD_KEYS.filter((k) => s[k] !== undefined).map((k) => [k, s[k]])));   // the state of the context is never aliased by the engine
 }

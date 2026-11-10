@@ -43,8 +43,7 @@ export class UnigramTokenizer {
       }
     }
     const out = [];
-    // bounded: back-pointers of the beam always point to an earlier step, so i strictly decreases to 0
-    for (let i = n; i > 0; i = from[i]) out.push(id[i]);
+    for (let i = n; i > 0; i = from[i]) { budget.tick('normalizer-runtime.encode'); out.push(id[i]); }
     out.reverse();
     // sentencepiece merges consecutive unknowns into one
     const merged = out.filter((x, k) => !(x === this.unk && out[k - 1] === this.unk));
@@ -68,8 +67,7 @@ const logSoftmaxTop = (row, k) => {
     const v = row[i];
     if (top.length < k || v > top[top.length - 1][1]) {
       let p = top.length;
-      // bounded: p only decreases to 0 (insertion into a top-k list)
-      while (p > 0 && top[p - 1][1] < v) p--;
+      while (p > 0 && top[p - 1][1] < v) { budget.tick('normalizer-runtime.logSoftmaxTop'); p--; }
       top.splice(p, 0, [i, v]);
       if (top.length > k) top.pop();
     }
@@ -131,8 +129,7 @@ export function createNormalizerRuntime({ ort, encoder, decoder, tokenizer, conf
         if (next.length >= beam && finished.length >= beam) break;
       }
       if (finished.length >= beam || !next.length) break;
-      // bounded: pads the beam list up to its fixed width
-      while (next.length < beam) next.push({ from: next[0].from, tok: next[0].tok, score: -1e9 });
+      while (next.length < beam) { budget.tick('normalizer-runtime.generate'); next.push({ from: next[0].from, tok: next[0].tok, score: -1e9 }); }
       // gather the past of the surviving beams (new_self has length step + 1)
       const np = [];
       for (let k = 0; k < 2 * NL; k++) {

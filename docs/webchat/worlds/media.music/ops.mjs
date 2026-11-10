@@ -12,7 +12,7 @@
 // of playback ({ phase: 'ended' }), sets playing=false (a reply only when a loop ended).
 import { Note, pcFromLex, spoken, list, scaleNotes as tScale, chordNotes as tChord, detectChord, qualityKey, CHORD_TYPES, SCALE_TYPES, INTERVALS,
   intervalName, between, keyInfo, relativeOf, keysWith, frequency as tFreq, enharmonic as tEnh, LETTERS } from './theory.mjs?v=967bf62fb3';
-import { parseAbc, transposeAbc, buildAbc, parsePitchName, parseKeyField, shiftBetween, keyField } from './abc.mjs?v=821caf1237';
+import { parseAbc, transposeAbc, buildAbc, parsePitchName, parseKeyField, shiftBetween, keyField } from './abc.mjs?v=b1cc9b4f39';
 
 export const INSTRUMENTS = ['piano', 'organ', 'flute', 'strings', 'bells', 'bass', 'marimba'];
 const INST_OF = {
@@ -59,8 +59,8 @@ const SUFFIXES = [
 ];
 function stripSuffixes(text) {
   let t = plain(text); const flags = {};
-  // bounded: each pass that sets again strips a suffix, so the text shrinks
   for (let again = true; again;) {
+    budget.tick('ops.stripSuffixes');
     again = false;
     for (const [re, f] of SUFFIXES) { const m = t.match(re); if (m) { t = t.slice(0, m.index).trim(); Object.assign(flags, f); again = true; } }
   }
@@ -84,8 +84,7 @@ const DURATIONS = { whole: 4, half: 2, quarter: 1, eighth: 0.5, sixteenth: 0.25 
 const TRAILERS = /\s+(to my melody|to the melody|to my tune|to it|at the end|to the end|after that|next|please|now|and then|at the end of my melody|to my composition)\s*$/i;
 export function parseSeq(text, { octave = 4 } = {}) {
   let t = String(text ?? '').replace(/[♯]/g, '#').replace(/[♭]/g, 'b').replace(/[.!?]+$/g, '').trim();
-  // bounded: each pass removes a matched trailer, so t shrinks
-  while (TRAILERS.test(t)) t = t.replace(TRAILERS, '');
+  while (TRAILERS.test(t)) { budget.tick('ops.parseSeq'); t = t.replace(TRAILERS, ''); }
   const tokens = t.split(/[\s,;:]+/).filter(Boolean).map((x) => x.toLowerCase());
   const items = [], bad = [];
   let last = null, dotted = false, reg = 0;

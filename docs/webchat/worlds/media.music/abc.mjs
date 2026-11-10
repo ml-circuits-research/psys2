@@ -7,6 +7,7 @@
 //   buildAbc({ title, key, meter, tempo, items }) -> ABC text; items: [{ p: [{l,a,o}] | null, beats }]
 //   parsePitchName('F#4')     -> { l: 'F', a: 1, o: 4 }
 import { midiOf } from './theory.mjs?v=967bf62fb3';
+const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 
 const STEP = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
 const SHARP_ORDER = 'FCGDAEB', FLAT_ORDER = 'BEADGCF';
@@ -70,23 +71,22 @@ function tokenize(text) {
     if (/^\s*%/.test(line) || /^[A-Za-z]:/.test(line)) { tokens.push({ type: 'other', s: start, e: start + line.length }); continue; }
     let i = 0;
     const push = (t) => tokens.push({ ...t, s: start + t.i0, e: start + i });
-    // bounded: every branch advances i or leaves the loop
     while (i < line.length) {
+      budget.tick('abc.push');
       const c = line[i];
       const i0 = i;
       if (c === ' ' || c === '\t') { i++; continue; }
       if (c === '|' || c === ':' || (c === '[' && /[|\d]/.test(line[i + 1] ?? ''))) {
         i++;
-        // bounded: i only increases up to the line length
-        while (i < line.length && /[|\]:\d\[]/.test(line[i])) i++;
+        while (i < line.length && /[|\]:\d\[]/.test(line[i])) { budget.tick('abc.push2'); i++; }
         push({ type: 'bar', i0 });
         continue;
       }
       if (c === '[') { // chord
         i++;
         const notes = [];
-        // bounded: every branch advances i (a note by its length, else by one)
         while (i < line.length && line[i] !== ']') {
+          budget.tick('abc.push3');
           const n = line.slice(i).match(/^(\^\^|\^|__|_|=)?([A-Ga-g])([',]*)(\d*\/*\d*)/);
           if (!n) { i++; continue; }
           notes.push({ acc: n[1] ?? '', letter: n[2], marks: n[3], s: start + i, e: start + i + n[0].length - n[4].length });
@@ -225,8 +225,7 @@ export function transposeAbc(text, semis, toKey) {
 
 const lenToken = (beats, unitBeats) => {
   let n = Math.round((beats / unitBeats) * 64), d = 64;
-  // bounded: Euclid: the second argument strictly decreases to 0
-  const g = (a, b) => (b ? g(b, a % b) : a);
+  const g = (a, b) => { while (b) { budget.tick('abc.gcd'); [a, b] = [b, a % b]; } return a; };
   const k = g(n, d); n /= k; d /= k;
   return d === 1 ? (n === 1 ? '' : String(n)) : n === 1 ? `/${d}` : `${n}/${d}`;
 };

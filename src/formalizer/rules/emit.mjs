@@ -1,5 +1,6 @@
 /** Emit templates (spec 03 section 2): placeholders, fresh ids, auto-added core keys. Browser-safe. */
 import { parse, atom, ref, str } from '../../soplang/index.mjs';
+import { budget } from '../../dialog/budget.mjs';
 
 const OPT_ENTRY = /(\s)([A-Za-z_][\w.-]*)=("?)\{([A-Za-z_]\w*)(?:\|\w+)?\}\3(?=\s|$|@)/g;
 const FRESH = /^_\d*$/;
@@ -23,8 +24,8 @@ export function substituteEmit(template, slots, fresh) {
   const ids = new Map();
   let out = '';
   let inStr = false;
-  // bounded: i only moves forward over the template characters
   for (let i = 0; i < t.length; i++) {
+    budget.tick('emit.substituteEmit');
     const c = t[i];
     if (inStr) {
       if (c === '\\') { out += c + (t[i + 1] ?? ''); i++; continue; }

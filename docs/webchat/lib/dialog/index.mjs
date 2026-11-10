@@ -9,31 +9,31 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=5a7aa0c66e';
-import { loadWorlds } from '../worlds/index.mjs?v=ae7640fde4';
-import { validateWorldSet } from '../worlds/validate.mjs?v=45671a9d58';
+import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=5f0f2033de';
+import { loadWorlds } from '../worlds/index.mjs?v=7e0ad9aaa2';
+import { validateWorldSet } from '../worlds/validate.mjs?v=5e8568c139';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=91ded5d03a';
-import { createInterpreter } from '../interpreter/index.mjs?v=a7fff13d59';
-import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=879a167dec';
-import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=bfef5a2f57';
-import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=30640a2956';
-import { splitSentences } from '../formalizer/rules/normalize.mjs?v=4ab1c2d71f';
-import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=cc2c0f93be';
-import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=76f078766c';
-import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=366b7f0319';
+import { createInterpreter } from '../interpreter/index.mjs?v=4b8187cbad';
+import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=70b5953557';
+import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=4cd2a1f1c5';
+import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=dd6ba0649b';
+import { splitSentences } from '../formalizer/rules/normalize.mjs?v=8a99155025';
+import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=8276aa0fa9';
+import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=717a7f83d0';
+import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=04c22749e7';
 import { lexIndex } from '../worlds/lexicon.mjs?v=e3316469a7';
 import { perf } from '../formalizer/perf.mjs?v=fd62b893eb';
 import { guard, TurnAborted } from '../formalizer/guard.mjs?v=ded769d6bc';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=9f5360afbc';
-import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=8d7ae94bd3';
-import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=b25c79bad3';
-import { checkValues } from './value-check.mjs?v=5775e66423';
-import { Discourse } from './discourse.mjs?v=8a9606cf9f';
+import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=74fbf25c56';
+import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=89490ea306';
+import { checkValues } from './value-check.mjs?v=7155e5e154';
+import { Discourse } from './discourse.mjs?v=c8c199e4a1';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=72e99182f4';
-import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=55e9fc2037';
-import { correctMessage, splitAnswerList } from '../formalizer/rules/expand.mjs?v=ce5901f0da';
+import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=f22c241ce6';
+import { correctMessage, splitAnswerList } from '../formalizer/rules/expand.mjs?v=0fd3bad380';
 
 export { runWorldTests } from './test-runner.mjs?v=3d0b4339cc';
 
@@ -94,12 +94,11 @@ export async function translateParts(parts, translator, lang) {
   let complete = true;   // RD5: a reply is either fully translated or left in English, never mixed
   for (let i = 0; i < flat.length; i++) if (flat[i].join) flat[i].translate = !!(flat[i - 1]?.translate && flat[i + 1]?.translate);
   const out = [];
-  // bounded: each pass consumes at least one part (j > i)
   for (let i = 0; i < flat.length;) {
+    budget.tick('index.translateParts');
     if (!flat[i].translate) { const { join, fallback, incomplete, ...rest } = flat[i]; if (incomplete) complete = false; out.push(rest); i++; continue; }
     let j = i;
-    // bounded: the index only moves in one direction over a finite list or text
-    while (j < flat.length && flat[j].translate) j++;
+    while (j < flat.length && flat[j].translate) { budget.tick('index.translateParts2'); j++; }
     const run = flat.slice(i, j);
     i = j;
     const src = run.map((p) => p.text).join('');
@@ -452,7 +451,7 @@ export class DialogSession {
         const res = await parse(world, sp.text);
         if (res && crossTabOk(res, sp.corrections)) return wrap(res, { corrections: sp.corrections });
         // several typos in the open tab's world ("the un si up not udner clouds"): after the sure corrections, one more word (also a two-letter one) swapped for a close
-        // word of the tab's vocabulary; the rest of the sentence decides, the world must read all of it (bounded: 12 candidate texts, the stage's time budget)
+        // word of the tab's vocabulary; the rest of the sentence decides, the world must read all of it (at most 12 candidate texts, the stage's time budget)
         if (world === ctx.tabWorld) {
           for (const v of spellAlternates(sp.text, { vocab: vocabOf(world), protect, short: true, maxTexts: 12 })) {
             if (late()) return null;
@@ -1287,7 +1286,7 @@ export async function createEngine({ loader, translator = null, options = {}, fo
         const yieldFn = opts?.yieldFn ?? (() => new Promise((res) => setTimeout(res, 0)));
         spellVocabulary(set);
         let t = clock();
-        for (const w of set.list()) {   // bounded: one pass over the loaded worlds
+        for (const w of set.list()) {
           if (!w.patterns?.length) continue;
           worldVocabulary(set, w.id);
           if (clock() - t > (opts?.budgetMs ?? 10)) { await yieldFn(); t = clock(); }

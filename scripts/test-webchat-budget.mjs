@@ -79,13 +79,7 @@ async function faultCase(o, kind) {
   } finally { await c.close(); }
 }
 
-/** A page that has the on-device APIs (the engine worker has not): a Translator that answers `mode` ('ok' | 'hang') and a language detector that says Romanian. */
-const fakeBrowserApis = (mode) => `(() => {
-  const EN = { 'câte zile are iunie?': 'how many days does June have?' };
-  window.Translator = { availability: async () => 'available', create: async () => ({ translate: (t) => (${JSON.stringify(mode)} === 'hang' ? new Promise(() => {}) : Promise.resolve(EN[t] ?? t)) }) };
-  window.LanguageDetector = { availability: async () => 'available', create: async () => ({ detect: async () => [{ detectedLanguage: 'ro', confidence: 0.97 }] }) };
-})();`;
-const openRo = (o, mode) => openChat({ ...o, query: '?psys2test=1', init: fakeBrowserApis(mode), settings: { formalizer: 'rules', normalizer: false, showTrace: false, language: 'auto', translation: 'auto', languageDetection: 'auto', timeLimits: { watchdogMs: WATCHDOG_MS } } });
+const openRo = (o, browserApis = {}) => openChat({ ...o, query: '?psys2test=1', browserApis, settings: { formalizer: 'rules', normalizer: false, showTrace: false, language: 'auto', translation: 'auto', languageDetection: 'auto', timeLimits: { watchdogMs: WATCHDOG_MS } } });
 const usageOf = (c) => c.pg.evaluate(() => JSON.parse(JSON.stringify({ tr: window.psys2.engineClient.usage, det: window.psys2.engineClient.detection })));
 
 export const SCENARIOS = {
@@ -107,19 +101,83 @@ export const SCENARIOS = {
   },
   /** Romanian in the worker: the page's on-device translator and detector are used over a message; a page that does not answer falls back to the rules (item 3). */
   async bridge(o) {
-    for (const mode of ['ok', 'hang']) {
-      const c = await openRo(o, mode);
+    for (const mode of ['success', 'hang']) {
+      const c = await openRo(o, { mode });
       try {
         const t = Date.now();
         const r = await c.say('câte zile are iunie?', { timeout: 30000 });
         const u = await usageOf(c);
         check(`bridge ${mode}: the Romanian question is answered`, r.ok && /30|treizeci|iunie|June/i.test(r.reply), `${Date.now() - t} ms ${r.reply.slice(0, 60)}`);
         const tr = u.tr.find((x) => x.direction === 'ro->en');
-        if (mode === 'ok') check('bridge ok: the translation came from the page\'s browser API (checked in the worker)', tr?.strategy === 'browser-api' && u.det.some((d) => d.strategy === 'browser-api'), JSON.stringify({ tr, det: u.det[0] }));
+        if (mode === 'success') check('bridge success: the translation came from the page\'s browser API (checked in the worker)', tr?.strategy === 'browser-api' && u.det.some((d) => d.strategy === 'browser-api'), JSON.stringify({ tr, det: u.det[0] }));
         else check('bridge hang: no answer from the page within the deadline -> the rules translated, the turn did not stall', tr?.strategy === 'rules' && tr.fallback && /timed out/.test(tr.reason ?? '') && Date.now() - t < 12000, JSON.stringify(tr));
         check(`bridge ${mode}: no page errors, no worker kill`, c.errors.length === 0 && (await stats(c)).kills.length === 0, c.errors[0] ?? '');
       } finally { await c.close(); }
     }
+  },
+  /**
+   * The on-device Translator and LanguageDetector, faked (scripts/lib/fake-browser-apis.mjs), in every mode (COMPUTE-BUDGET F): the code behind them only ran in a real Chrome and
+   * froze the page there. Each turn: the echo of the typed message < 100 ms, no gap in the heartbeat, no worker kill, the turn answered. success: the checker ran and accepted
+   * (the old trigger "fă o casă verde și una galbenă" is the first row); slow: later than the 700 ms bridge deadline -> the rules; wrong output: the checker rejects it -> the rules.
+   */
+  async ondevice(o) {
+    const turn = async (c, label, text, { timeout = 40000 } = {}) => {
+      const s0 = await stats(c);
+      await probes(c);
+      const t = Date.now();
+      await typeEnter(c, text);
+      await waitIdle(c, timeout);
+      const ms = Date.now() - t;
+      const pr = await probeResult(c);
+      const reply = await lastBot(c);
+      const u = await usageOf(c);
+      const s1 = await stats(c);
+      check(`${label}: the echo of the typed message comes in < 100 ms`, pr.echo !== null && pr.echo < 100, `${pr.echo} ms`);
+      check(`${label}: no freeze (heartbeat gap < 500 ms) and no worker kill`, pr.maxGap < 500 && s1.kills.length === s0.kills.length, `${pr.maxGap} ms, kills ${s1.kills.length - s0.kills.length}`);
+      check(`${label}: the turn is answered (not "took too long")`, reply.length > 0 && !/took too long/.test(reply), `${ms} ms ${JSON.stringify(reply.slice(0, 60))}`);
+      return { reply, ms, tr: u.tr.filter((x) => x.direction === 'ro->en').at(-1), det: u.det.at(-1) };
+    };
+    const TRIGGER = 'fă o casă verde și una galbenă';
+    // success: the regression row first
+    let c = await openRo(o, { mode: 'success' });
+    try {
+      const r = await turn(c, 'on-device success, the old trigger', TRIGGER);
+      check('on-device success: the browser translation passed the checker (it ran, no loop)', r.tr?.strategy === 'browser-api' && !r.tr.fallback, JSON.stringify(r.tr));
+      check('on-device success: the language detector of the page was used', r.det?.strategy === 'browser-api' && r.det.detected === 'ro', JSON.stringify(r.det));
+      const st = await c.state();
+      check('on-device success: both houses were drawn (green and yellow)', /green/.test(st) && /yellow/.test(st), st.slice(0, 80));
+      const calls = await c.fake.calls();
+      check('on-device success: the page fake was called for the translation', calls.some((x) => x.op === 'translate' && x.text === TRIGGER), `${calls.length} calls`);
+      const WRONG = [
+        ['empty', 'câte zile are iunie?', /empty translation/],
+        ['garbage', 'câte zile are iunie?', /question form not preserved/],
+        ['numbers', 'desenează 3 cercuri', /numbers not preserved/],
+        ['names', 'mă cheamă Andrei', /names not preserved/],
+        ['negation', 'nu vreau o casă', /negation not preserved/],
+      ];
+      for (const [wrong, text, why] of WRONG) {
+        await c.fake.set({ mode: 'wrong', wrong });
+        const w = await turn(c, `on-device wrong output (${wrong})`, text);
+        check(`on-device wrong output (${wrong}): the checker rejected it and the rules translated`, w.tr?.strategy === 'rules' && w.tr.fallback && why.test(w.tr.reason ?? ''), JSON.stringify(w.tr));
+      }
+      await c.fake.set({ mode: 'wrong', wrong: 'punct' });
+      const p = await turn(c, 'on-device wrong output (starts with punctuation)', TRIGGER);
+      check('on-device wrong output (punctuation first): the checker ran to the end (accepted or rejected, never looped)', !!p.tr && (p.tr.strategy === 'browser-api' || p.tr.fallback), JSON.stringify(p.tr));
+      check('on-device modes: no page errors', c.errors.length === 0, c.errors[0] ?? '');
+    } finally { await c.close(); }
+    // slow: later than the bridge deadline
+    c = await openRo(o, { mode: 'slow' });
+    try {
+      const r = await turn(c, 'on-device slow', TRIGGER);
+      check('on-device slow: no answer within the 700 ms bridge deadline -> the rules translated', r.tr?.strategy === 'rules' && r.tr.fallback && /timed out/.test(r.tr.reason ?? ''), JSON.stringify(r.tr));
+      check('on-device slow: the turn took the deadline, not the delay of the fake', r.ms < 1500 + 4000, `${r.ms} ms`);
+    } finally { await c.close(); }
+    // the older window.ai shapes
+    c = await openRo(o, { mode: 'success', shape: 'ai' });
+    try {
+      const r = await turn(c, 'on-device older ai.translator shape', TRIGGER);
+      check('on-device older ai.* shape: the browser translation passed the checker', r.tr?.strategy === 'browser-api' && !r.tr.fallback, JSON.stringify(r.tr));
+    } finally { await c.close(); }
   },
   op: (o) => faultCase(o, 'op'),
   matcher: (o) => faultCase(o, 'matcher'),

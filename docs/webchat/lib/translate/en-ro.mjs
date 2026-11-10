@@ -1,11 +1,11 @@
 // English -> Romanian translation of short answers (rule based, browser-safe).
 // Reverse use of the bilingual lexicon plus a small clause generator and answer frames.
-import { tokenize, splitSentences, foldKey } from './normalize.mjs?v=8f5393b731';
-import * as M from './morphology.ro.mjs?v=cb06db873c';
+import { tokenize, splitSentences, foldKey } from './normalize.mjs?v=8504ecceb6';
+import * as M from './morphology.ro.mjs?v=ac2edf6dd3';
 import * as L from './lexicon.ro-en.mjs?v=0823d91a10';
 import * as E from './inflect.en.mjs?v=bb4799b9ff';
 import { placeRo, MULTIWORD_EN } from './places.ro-en.mjs?v=97dc087c2a';
-import { translateReplySentence } from './replies.en-ro.mjs?v=08f82c98ef';
+import { translateReplySentence } from './replies.en-ro.mjs?v=228dc82552';
 import { CANONICAL_RO } from './canonical.en-ro.mjs?v=2b71c7e520';
 import { budget } from '../dialog/budget.mjs?v=9f5360afbc';
 
@@ -126,8 +126,8 @@ function expandTokens(toks) {
 
 function mergeNumberWords(toks) {
   const out = [];
-  // bounded: i only moves forward over the tokens
   for (let i = 0; i < toks.length; i++) {
+    budget.tick('en-ro.mergeNumberWords');
     const t = toks[i];
     if (t.kind === 'word' && t.key in NUM_UNITS && !(t.key === 'one' && toks[i + 1] && /^(of|is)$/.test(toks[i + 1].key))) {
       let v = NUM_UNITS[t.key];
@@ -422,8 +422,7 @@ function realizeClause(items, ctx, c = {}) {
   const out = [];
   // leading interjections / conjunctions / commas
   const lead = [];
-  // bounded: the index only moves in one direction over a finite list or text
-  while (items.length && ['interj', 'conj', 'comma'].includes(items[0].t) && !(items[0].t === 'interj' && items.length === 1 && false)) lead.push(items.shift());
+  while (items.length && ['interj', 'conj', 'comma'].includes(items[0].t) && !(items[0].t === 'interj' && items.length === 1 && false)) { budget.tick('en-ro.realizeClause'); lead.push(items.shift()); }
   for (const l of lead) {
     if (l.t === 'comma') out.push(piece(',', l.tok, { punct: true }));
     else out.push(piece(l.ro, l.tok));
@@ -452,8 +451,8 @@ function realizeClause(items, ctx, c = {}) {
     let k = 1;
     // inverted subject between aux and verb: "does Ion have", "did Maria eat"
     const inv = [];
-    // bounded: the index only moves in one direction over a finite list or text
     while (rest[k] && (rest[k].t === 'np' || rest[k].t === 'pron') && ['do', 'does', 'did', 'can', 'could', 'will', 'would', 'must', 'should', 'is', 'are', 'was', 'were', 'am', 'has', 'have', 'had'].includes(aux) && (pre.length === 0 || whItem) && c.question !== false) {
+      budget.tick('en-ro.realizeClause2');
       // only treat as inversion when a verb follows later
       const later = rest.slice(k + 1).findIndex((x) => x.t === 'verb' || x.t === 'neg' || x.t === 'adj' || (x.t === 'aux' && (HAVE.has(x.key) || BE.has(x.key))));
       if (later < 0 && !(BE.has(aux))) break;
@@ -600,8 +599,8 @@ function realizeClause(items, ctx, c = {}) {
     else if (ioNP.head && ioNP.head.kind === 'noun') ioPieces.push(span(M.nounGenDat(ioNP.head.entry, ioNP.number), ioNP.start, ioNP.end));
     else ioPieces.push(...realizeNP(ioNP, ctx));
   }
-  // bounded: k only moves forward
   for (; k < after.length; k++) {
+    budget.tick('en-ro.realizeClause3');
     const it = after[k];
     if (skip.has(it)) continue;
     if (it === ioNP?.toPrep) continue;
@@ -759,8 +758,7 @@ function splitClausesEn(items) {
       starts.push(k);
       // skip the verb group and an inverted subject
       let m = k + 1;
-      // bounded: the index only moves in one direction over a finite list or text
-      while (m < items.length && (items[m].t === 'neg' || items[m].t === 'verb' || items[m].t === 'to' || (items[m].t === 'aux' && (items[m - 1].t === 'aux')))) m++;
+      while (m < items.length && (items[m].t === 'neg' || items[m].t === 'verb' || items[m].t === 'to' || (items[m].t === 'aux' && (items[m - 1].t === 'aux')))) { budget.tick('en-ro.splitClausesEn'); m++; }
       k = m;
     } else k++;
   }
@@ -812,8 +810,8 @@ function assembleRo(sentences) {
 /** Merge the words of a multi-word place name ("South America") into one capitalised name token. */
 function mergePlaces(toks) {
   const out = [];
-  // bounded: i only moves forward over the tokens
   for (let i = 0; i < toks.length; i++) {
+    budget.tick('en-ro.mergePlaces');
     let merged = false;
     if (toks[i].kind === 'word' && toks[i].isCap) {
       for (const name of MULTIWORD_EN) {
@@ -839,8 +837,7 @@ function translateEnRoGrammar(original) {
   for (const s of sents) {
     const end = [];
     const core = s.slice();
-    // bounded: the index only moves in one direction over a finite list or text
-    while (core.length && core[core.length - 1].kind === 'punct' && /^[.!?]$/.test(core[core.length - 1].raw)) end.unshift(core.pop());
+    while (core.length && core[core.length - 1].kind === 'punct' && /^[.!?]$/.test(core[core.length - 1].raw)) { budget.tick('en-ro.translateEnRoGrammar'); end.unshift(core.pop()); }
     if (!core.length) { results.push({ pieces: [], end }); continue; }
     const r = translateSentenceEnRo(core, end, ctx);
     results.push({ pieces: r.pieces, end });

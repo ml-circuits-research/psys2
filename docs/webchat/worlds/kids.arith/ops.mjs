@@ -1,5 +1,6 @@
 // Operations of kids.arith. Browser-safe: no imports.
 
+const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 const K = (suffix) => 'kids.arith.' + suffix;
 const round10 = (x) => Math.round(x * 1e10) / 1e10;
 const seqOf = (ctx, w) => ctx.val(w, 'core.seq') ?? -Infinity;
@@ -180,14 +181,11 @@ function terminates(a, b) {
   const scale = (x) => { const s = String(x); const i = s.indexOf('.'); return i < 0 ? 0 : s.length - i - 1; };
   const k = Math.max(scale(a), scale(b));
   let num = Math.round(Math.abs(a) * 10 ** k), den = Math.round(Math.abs(b) * 10 ** k);
-  // bounded: Euclid: the second argument strictly decreases to 0
-  const gcd = (x, y) => (y ? gcd(y, x % y) : x);
+  const gcd = (x, y) => { while (y) { budget.tick('ops.gcd'); [x, y] = [y, x % y]; } return x; };
   const g = gcd(num, den) || 1;
   den /= g;
-  // bounded: den halves each pass (den is a positive integer)
-  while (den % 2 === 0) den /= 2;
-  // bounded: den is divided by 5 each pass (den is a positive integer)
-  while (den % 5 === 0) den /= 5;
+  while (den % 2 === 0) { budget.tick('ops.gcd2'); den /= 2; }
+  while (den % 5 === 0) { budget.tick('ops.gcd3'); den /= 5; }
   return den === 1;
 }
 

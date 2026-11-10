@@ -48,7 +48,6 @@ async function fetchBytes(url, onProgress) {
   const reader = res.body.getReader();
   const chunks = [];
   let got = 0;
-  // bounded: reads a finite HTTP body to its end (reader.read returns done)
   for (;;) {
     const { done, value } = await reader.read();
     if (done) break;

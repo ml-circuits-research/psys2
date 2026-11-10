@@ -53,8 +53,8 @@ export function parse(text, { source } = {}) {
   for (let k = 0; k < n; k++) if (src[k] === '\n') lineStarts.push(k + 1);
   const pos = (offset) => {
     let lo = 0, hi = lineStarts.length - 1;
-    // bounded: the index only moves in one direction over a finite list or text
     while (lo < hi) {
+      budget.tick('index.pos');
       const mid = (lo + hi + 1) >> 1;
       if (lineStarts[mid] <= offset) lo = mid; else hi = mid - 1;
     }
@@ -66,26 +66,23 @@ export function parse(text, { source } = {}) {
   };
 
   let i = 0;
-  // bounded: i only moves forward up to n
-  const skipWs = () => { while (i < n && WS.test(src[i])) i++; };
+  const skipWs = () => { while (i < n && WS.test(src[i])) { budget.tick('index.skipWs'); i++; } };
   /** Read a run of characters that are not whitespace or delimiters. */
   const run = () => {
     const s = i;
-    // bounded: the index only moves in one direction over a finite list or text
-    while (i < n && !WS.test(src[i]) && !DELIM.has(src[i])) i++;
+    while (i < n && !WS.test(src[i]) && !DELIM.has(src[i])) { budget.tick('index.run'); i++; }
     return src.slice(s, i);
   };
   /** Skip to the next '@' (error recovery). */
-  // bounded: i only moves forward up to n
-  const resync = () => { while (i < n && src[i] !== '@') i++; };
+  const resync = () => { while (i < n && src[i] !== '@') { budget.tick('index.resync'); i++; } };
   const atBoundary = () => i >= n || WS.test(src[i]) || src[i] === '@';
 
   /** Scan a quoted string starting at src[i] === '"'. Returns the decoded value or null. */
   const readString = () => {
     const start = i;
     i++;
-    // bounded: the index only moves in one direction over a finite list or text
     while (i < n && src[i] !== '"') {
+      budget.tick('index.readString');
       const c = src[i];
       if (c === '\\') {
         const e = src[i + 1];

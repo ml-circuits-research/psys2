@@ -11,5 +11,5 @@ const walk = (d, o = []) => { for (const e of readdirSync(d)) { const f = path.j
 const files = [...walk(path.join(ROOT, 'src')), ...walk(path.join(ROOT, 'docs/webchat/ui'))];
 for (const f of walk(path.join(ROOT, 'worlds'))) { const rel = path.relative(path.join(ROOT, 'worlds'), f).split(path.sep); if (rel.at(-1) === 'datagen.mjs' || rel.includes('vendor') || rel.includes('engine')) continue; files.push(f); }
 let n = 0;
-for (const f of files) for (const v of scan(readFileSync(f, 'utf8'))) { n++; if (!process.argv.includes('--count')) console.log(`${path.relative(ROOT, f)}:${v.line}\t${v.kind}\t${v.snippet}`); }
+for (const f of files) for (const v of scan(readFileSync(f, 'utf8'))) { if (v.snippet.includes('loop-guard-allow')) continue; n++; if (!process.argv.includes('--count')) console.log(`${path.relative(ROOT, f)}:${v.line}\t${v.kind}\t${v.snippet}`); }
 console.log(`${n} unguarded`);

@@ -241,8 +241,8 @@ const isContent = (t) => t.kind !== 'punct' && t.kind !== 'qmark' && !t.filler;
 /** Split a token list into clauses at `,`, `and`, `then`, `but` (one level). Clauses with only fillers are dropped. */
 export function splitClauses(tokens) {
   const clauses = [[]];
-  // bounded: i only moves forward over the tokens
   for (let i = 0; i < tokens.length; i++) {
+    budget.tick('index.splitClauses');
     const t = tokens[i];
     const sep = t.lower === ',' || t.lower === 'and' || t.lower === 'then' || t.lower === 'but';
     if (!sep) { clauses[clauses.length - 1].push(t); continue; }
@@ -589,8 +589,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
       const ana = oneAnaphoraEnv();
       if (ana && i > 0) {
         let ai = i - 1;
-        // bounded: ai only decreases to 0
-        while (ai > 0 && ana.isElliptic(clauses[ai])) ai--;
+        while (ai > 0 && ana.isElliptic(clauses[ai])) { budget.tick('index.expandClauses'); ai--; }
         if (!ana.isElliptic(clauses[ai]) && !parts[ai].unparsed && !isWeak(parts[ai])) {
           const res = oneAnaphora(ct, clauses[ai], ana.opts);
           if (res) {
@@ -650,8 +649,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     const cuts = [];
     tokens.forEach((t, i) => { if ((t.lower === 'and' || t.lower === 'then') && i > 0 && i < tokens.length - 1 && inSlot(t) && !(i > 0 && tokens[i - 1].lower === 'and' && t.lower === 'then')) cuts.push(i); });
     if (!cuts.length) return null;
-    // bounded: both loops shrink the token list each pass
-    const trim = (ts) => { let a = ts; while (a.length > 1 && (a[0].lower === 'then' || a[0].lower === 'and' || a[0].lower === ',')) a = a.slice(1); while (a.length && a[a.length - 1].lower === ',') a = a.slice(0, -1); return a; };
+    const trim = (ts) => { let a = ts; while (a.length > 1 && (a[0].lower === 'then' || a[0].lower === 'and' || a[0].lower === ',')) { budget.tick('index.trim'); a = a.slice(1); } while (a.length && a[a.length - 1].lower === ',') { budget.tick('index.trim'); a = a.slice(0, -1); } return a; };
     const spanOf = (ts) => [ts[0].start, ts[ts.length - 1].end];
     // each command must be read by a pattern at least as specific as the one that swallowed the connective (a typed "between X and Y" reading is never cut)
     const read = (ts, copied) => {

@@ -16,9 +16,8 @@ export function colorSop(text) {
   const re = /(@[\w.$#-]+)|("(?:[^"\\]|\\.)*")|([\w.-]+)(=)|(\bcore\.[\w.]+)|(\b\d+(?:\.\d+)?\b)|(#[^\n]*)/g;
   const span = (cls, t) => { const e = document.createElement('span'); e.className = cls; e.textContent = t; return e; };
   const src = String(text ?? '');
-  let last = 0, m;
-  // bounded: every alternative of the regex matches at least one character, so every exec() moves lastIndex forward
-  while ((m = re.exec(src))) {
+  let last = 0;
+  for (const m of src.matchAll(re)) {
     if (m.index > last) frag.append(src.slice(last, m.index));
     if (m[1]) frag.append(span('sop-id', m[1]));
     else if (m[2]) frag.append(span('sop-str', m[2]));
@@ -26,7 +25,7 @@ export function colorSop(text) {
     else if (m[5]) frag.append(span('sop-type', m[5]));
     else if (m[6]) frag.append(span('sop-num', m[6]));
     else frag.append(span('sop-note', m[7]));
-    last = re.lastIndex;
+    last = m.index + m[0].length;
   }
   if (last < src.length) frag.append(src.slice(last));
   return frag;

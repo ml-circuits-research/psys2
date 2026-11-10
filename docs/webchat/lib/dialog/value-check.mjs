@@ -16,9 +16,10 @@
  *     of the candidate has a counterpart in the source. A word the world knows may be dropped or added (that is the point of simplifying).
  * `{ ok, reason }`; with `vocab` absent only the first four checks run.
  */
-import { isNumberWord, parseNumberRun } from '../formalizer/rules/numbers.mjs?v=eb02877cbe';
-import { editDistance } from '../formalizer/rules/normalize.mjs?v=4ab1c2d71f';
-import { FUNCTION_WORDS, ABBREVIATIONS, spellBudget } from '../formalizer/spell.mjs?v=366b7f0319';
+import { isNumberWord, parseNumberRun } from '../formalizer/rules/numbers.mjs?v=63770707cb';
+import { editDistance } from '../formalizer/rules/normalize.mjs?v=8a99155025';
+import { FUNCTION_WORDS, ABBREVIATIONS, spellBudget } from '../formalizer/spell.mjs?v=04c22749e7';
+import { budget } from './budget.mjs?v=9f5360afbc';
 
 export const COLORS = new Set('red orange yellow green blue purple violet pink brown black white gray grey gold golden silver cyan magenta turquoise beige navy teal maroon lime lilac indigo tan rose peach crimson scarlet azure'.split(' '));
 const NEG = new Set("not no never without nothing none nobody nowhere neither nor cannot cant dont doesnt didnt isnt arent wasnt werent wont wouldnt shouldnt couldnt hasnt havent hadnt aint don't doesn't didn't isn't aren't wasn't weren't won't wouldn't shouldn't couldn't hasn't haven't hadn't can't ain't".split(/\s+/));
@@ -76,8 +77,8 @@ export function streamOf(text) {
   raw.sort((a, b) => a.start - b.start);
   const out = [];
   const ws = raw.map((x) => (x.k === 'w' ? x.w : '\u0001'));
-  // bounded: i only moves forward over the tokens
   for (let i = 0; i < raw.length; i++) {
+    budget.tick('value-check.words');
     const x = raw[i];
     if (x.k !== 'w') { out.push({ ...x }); continue; }
     const w = x.w;
@@ -92,8 +93,8 @@ export function streamOf(text) {
   }
   // spoken sign: "minus 5" / "negative five" where the sign word is not an operator (no number right before it)
   const res = [];
-  // bounded: i only moves forward over the tokens
   for (let i = 0; i < out.length; i++) {
+    budget.tick('value-check.words2');
     const x = out[i], nx = out[i + 1];
     if (x.k === 'w' && NEGATIVE_WORDS.has(x.w) && nx && nx.k === 'n' && !nx.ord && !nx.mixed && !nx.v.startsWith('-') && (x.w === 'negative' || !(res.at(-1)?.k === 'n'))) {
       res.push({ ...nx, v: num(`-${nx.v}`), start: x.start }); i++; continue;
@@ -148,8 +149,7 @@ function entityBound(st, cue, h) {
   for (let i = 0; i < st.length; i++) {
     if (st[i].k !== 'w' || st[i].w !== cue) continue;
     let j = i + 1;
-    // bounded: the index only moves in one direction over a finite list or text
-    while (st[j]?.k === 'w' && (ARTICLES.has(st[j].w) || FILLERS.has(st[j].w) || st[j].w === 'please')) j++;
+    while (st[j]?.k === 'w' && (ARTICLES.has(st[j].w) || FILLERS.has(st[j].w) || st[j].w === 'please')) { budget.tick('value-check.entityBound'); j++; }
     if (st[j] && entity(st[j]) === h && (st[j].k !== 'w' || st[j].cap)) return true;
   }
   return false;
@@ -162,8 +162,7 @@ function cueBindings(st) {
     const x = st[i];
     if (x.k !== 'w' || !ROLE_CUES.has(x.w)) continue;
     let j = i + 1;
-    // bounded: the index only moves in one direction over a finite list or text
-    while (st[j]?.k === 'w' && (ARTICLES.has(st[j].w) || FILLERS.has(st[j].w) || st[j].w === 'please')) j++;
+    while (st[j]?.k === 'w' && (ARTICLES.has(st[j].w) || FILLERS.has(st[j].w) || st[j].w === 'please')) { budget.tick('value-check.cueBindings'); j++; }
     if (st[j]) out.push([x.w === 'toward' || x.w === 'towards' || x.w === 'into' || x.w === 'onto' ? 'to' : x.w, entity(st[j])]);
   }
   return out;
@@ -180,12 +179,11 @@ function unitBindings(st) {
 function colourBindings(st) {
   const out = [];
   const isNoun = (x) => x && x.k === 'w' && !FUNCTION_WORDS.has(x.w) && !COLORS.has(x.w) && !OP_WORDS.has(x.w);
-  // bounded: i only moves forward over the tokens
   for (let i = 0; i < st.length; i++) {
+    budget.tick('value-check.isNoun');
     if (!(st[i].k === 'w' && COLORS.has(st[i].w))) continue;
     let end = i;   // colour group: "red and blue", "red, blue"
-    // bounded: end moves forward by 2 per pass and stops at the end of the token list (undefined never matches)
-    while ((st[end + 1]?.w === 'and' || st[end + 1]?.w === 'or') && COLORS.has(st[end + 2]?.w)) end += 2;
+    while ((st[end + 1]?.w === 'and' || st[end + 1]?.w === 'or') && COLORS.has(st[end + 2]?.w)) { budget.tick('value-check.isNoun2'); end += 2; }
     let noun = isNoun(st[end + 1]) ? st[end + 1] : null;
     if (!noun) { for (let j = i - 1; j >= 0 && j >= i - 3; j--) { if (st[j].k !== 'w' || COLORS.has(st[j].w)) break; if (isNoun(st[j])) { noun = st[j]; break; } } }
     if (noun) for (let c = i; c <= end; c += 2) out.push([st[c].w, stemOf(noun.w)]);

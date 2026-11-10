@@ -11,7 +11,7 @@
  *
  * Every pass is capped (words, candidates, a time budget) and calls the turn guard, so no spoken message can hang the turn.
  */
-import { editDistance } from './rules/index.mjs?v=5a7aa0c66e';
+import { editDistance } from './rules/index.mjs?v=5f0f2033de';
 import { guard } from './guard.mjs?v=ded769d6bc';
 import { budget } from '../dialog/budget.mjs?v=9f5360afbc';
 
@@ -51,8 +51,8 @@ export function cleanVoice(text, { voice = false } = {}) {
   // a repetition is words next to each other: a comma, colon or full stop between them ("heading A, a heading B") means two things were said
   const tight = (i, j) => { for (let k = i; k < j; k++) if (!/^[ \t]+$/.test(out.slice(toks[k].index + toks[k][0].length, toks[k + 1].index))) return false; return true; };
   const drop = [];   // [fromTokenIndex, toTokenIndexExclusive] ranges to remove
-  // bounded: each pass consumes at least one token
   for (let i = 0; i < toks.length;) {
+    budget.tick('voice.tight');
     let hit = 0;
     if (voice) for (let k = Math.min(6, Math.floor((toks.length - i) / 2)); k >= 2; k--) {   // the longest repeated phrase first
       let same = true;

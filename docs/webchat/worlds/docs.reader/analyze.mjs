@@ -4,7 +4,7 @@
 // state; `toSop` turns it into SOP Lang wires whose core.source points at the sentence ("<doc id>#s12").
 import { ABBREV, STOP, STARTERS, DAYS_MONTHS, PRONOUNS, ROLES, PLURAL_ROLES, GENERIC, KIN, KIN_INVERSE, KIN_GENDER, PLACES, PLACE_ONLY_AFTER_PREP, PLACE_PREPS, PREPS, PART_NOUNS, THINGS, ADJ,
   SPEECH, SPEECH_LEMMA, ADVERBS, AUX, COPULA, GIVEN, TITLES, verbForm, AMBIG_BASE, PLACE_WORDS_IN_NAMES, PLACE_NAME_PREV, singular, cap } from './lang.mjs?v=afa9ef7a36';
-import { toBlocks, splitSentences, tfidfKeywords, contentStems, stem, words } from './text.mjs?v=b04ecf27e0';
+import { toBlocks, splitSentences, tfidfKeywords, contentStems, stem, words } from './text.mjs?v=9573de09c2';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 export const VERSION = 1;
@@ -72,8 +72,7 @@ function verbAt(tokens, k) {
   // an auxiliary ("did not know", "had had") is not the main verb
   if (AUX.has(t.l)) {
     let j = k + 1;
-    // bounded: a pass over a finite token list or text: the index only moves in one direction
-    while (tokens[j] && tokens[j].k === 'w' && (ADVERBS.has(tokens[j].l) || tokens[j].l === 'not' || tokens[j].n || /ly$/.test(tokens[j].l))) j++;
+    while (tokens[j] && tokens[j].k === 'w' && (ADVERBS.has(tokens[j].l) || tokens[j].l === 'not' || tokens[j].n || /ly$/.test(tokens[j].l))) { budget.tick('analyze.verbAt'); j++; }
     if (tokens[j] && tokens[j].k === 'w' && (j > k + 1 || verbForm(tokens[j].l)) && verbForm(tokens[j].l) && !DET.has(tokens[j].l)) return null;
   }
   return v;
@@ -219,13 +218,12 @@ export function analyzeDocument(text, opts = {}) {
     const sent = sentences[i];
     const ms = [];     // sentence mentions: { k0, k1, e, via, poss, q, pron? }
     // names
-    // bounded: a pass over a finite token list or text: the index only moves in one direction
     for (let k = 0; k < tk.length; k++) {
+      budget.tick('analyze.compat');
       const t = tk[k];
       if (!isName(t, k, tk)) continue;
       let k1 = k;
-      // bounded: a pass over a finite token list or text: the index only moves in one direction
-      while (k1 + 1 < tk.length && isName(tk[k1 + 1], k1 + 1, tk) && !tk[k1].poss) k1++;
+      while (k1 + 1 < tk.length && isName(tk[k1 + 1], k1 + 1, tk) && !tk[k1].poss) { budget.tick('analyze.compat2'); k1++; }
       let k0 = k;
       if (k0 > 0 && tk[k0 - 1].k === 'w' && tk[k0 - 1].cap && TITLES[tk[k0 - 1].l] !== undefined && !STOP.has(tk[k0 - 1].l)) k0--;
       const toks = tk.slice(k0, k1 + 1);
@@ -252,8 +250,7 @@ export function analyzeDocument(text, opts = {}) {
       }
       // determiner chain
       let d = k - 1, hops = 0;
-      // bounded: hops is capped at 4
-      while (d >= 0 && hops < 4 && tk[d].k === 'w' && !DET.has(tk[d].l) && !PREPS.has(tk[d].l) && !CONJ.has(tk[d].l) && !PRONOUNS[tk[d].l] && !(verbAt(tk, d) && !ADJ.has(tk[d].l)) && !tk[d].cap) { d--; hops++; }
+      while (d >= 0 && hops < 4 && tk[d].k === 'w' && !DET.has(tk[d].l) && !PREPS.has(tk[d].l) && !CONJ.has(tk[d].l) && !PRONOUNS[tk[d].l] && !(verbAt(tk, d) && !ADJ.has(tk[d].l)) && !tk[d].cap) { budget.tick('analyze.taken'); d--; hops++; }
       const det = d >= 0 && tk[d].k === 'w' && DET.has(tk[d].l) ? tk[d] : (d >= 0 && tk[d].k === 'n' ? tk[d] : null);
       if (!det) continue;
       if (minor && !['the', 'a', 'an'].includes(det.l)) continue;
@@ -535,12 +532,10 @@ export function analyzeDocument(text, opts = {}) {
       const nxt = tk[k + 1];
       const startsClause = (from) => {
         let j = from;
-        // bounded: a pass over a finite token list or text: the index only moves in one direction
-        while (tk[j] && tk[j].k === 'w' && (ADV(tk[j].l) || tk[j].l === 'then')) j++;
+        while (tk[j] && tk[j].k === 'w' && (ADV(tk[j].l) || tk[j].l === 'then')) { budget.tick('analyze.startsClause'); j++; }
         if (tk[j] && verbAt(tk, j) && (ENDS_OK(tk[j]))) return 'verb';
         const m = nm.find((x) => x.k0 === j);
-        // bounded: a pass over a finite token list or text: the index only moves in one direction
-        if (m) { let z = m.k1 + 1; while (tk[z] && tk[z].k === 'w' && (ADV(tk[z].l) || AUX.has(tk[z].l) || tk[z].n)) z++; if (tk[z] && (verbAt(tk, z) || COPULA.has(tk[z].l))) return 'agent'; }
+        if (m) { let z = m.k1 + 1; while (tk[z] && tk[z].k === 'w' && (ADV(tk[z].l) || AUX.has(tk[z].l) || tk[z].n)) { budget.tick('analyze.startsClause2'); z++; } if (tk[z] && (verbAt(tk, z) || COPULA.has(tk[z].l))) return 'agent'; }
         return null;
       };
       if (t.k === 'p' && (t.l === ',' || t.l === ';' || t.l === '—')) {
@@ -590,8 +585,7 @@ export function analyzeDocument(text, opts = {}) {
     let count = 0;
     for (;;) {
       budget.tick('reader.np');
-      // bounded: count is capped at 9 and j only increases
-      while (j < end && !stop(tk[j], j, count) && count < 9) { last = j; j++; count++; if (tk[j - 1].poss) { /* possessive: NP continues */ } }
+      while (j < end && !stop(tk[j], j, count) && count < 9) { budget.tick('analyze.stop'); last = j; j++; count++; if (tk[j - 1].poss) { /* possessive: NP continues */ } }
       // compound with "and"
       if (j < end && tk[j]?.l === 'and' && count > 0) {
         const n1 = tk[j + 1];
@@ -622,8 +616,8 @@ export function analyzeDocument(text, opts = {}) {
     // "the edge of a great forest": a part noun hands over to the "of" phrase
     let head = np.head;
     let toks = np.toks;
-    // bounded: each pass moves k1 forward over a finite token list (parseNP consumes at least one token or breaks)
     while (PART_NOUNS.has(head) && tk[k1 + 1]?.l === 'of') {
+      budget.tick('analyze.headOfPP');
       const n2 = parseNP(tk, nm, k1 + 2, end);
       if (!n2) break;
       np = { ...n2, k0: np.k0 }; head = n2.head; k1 = n2.k1; toks = n2.toks;
@@ -641,15 +635,14 @@ export function analyzeDocument(text, opts = {}) {
       if (v.kind === 'ing' && !nm.some((m) => m.k1 < k)) continue;
       // walk back over adverbs, aux and "not"
       let z = k - 1;
-      // bounded: z only decreases down to a
-      while (z >= a && tk[z].k === 'w' && (ADV(tk[z].l) || AUX.has(tk[z].l) || tk[z].n || tk[z].l === 'not' || tk[z].l === 'then' || (COPULA.has(tk[z].l) && false))) z--;
+      while (z >= a && tk[z].k === 'w' && (ADV(tk[z].l) || AUX.has(tk[z].l) || tk[z].n || tk[z].l === 'not' || tk[z].l === 'then' || (COPULA.has(tk[z].l) && false))) { budget.tick('analyze.parseClause'); z--; }
       const m = nm.find((x) => x.k1 === z);
       if (m) {
         // chain "A and B", "A, B and C"
         const chain = [m];
         let y = m.k0 - 1;
-        // bounded: y only decreases down to a
         while (y >= a && tk[y].k !== undefined && ((tk[y].k === 'w' && tk[y].l === 'and') || (tk[y].k === 'p' && tk[y].l === ','))) {
+          budget.tick('analyze.parseClause2');
           const prev = nm.find((x) => x.k1 === y - 1);
           if (!prev) break;
           chain.unshift(prev); y = prev.k0 - 1;
@@ -747,8 +740,7 @@ export function analyzeDocument(text, opts = {}) {
         if (asPlace && !ev.pl) ev.pl = { t: pp.np.text, ...(pp.np.es.length === 1 && ents.get(pp.np.es[0])?.kind === 'place' ? { e: pp.np.es[0] } : { h }), p: pp.p };
         else if (!ev.pl && PLACE_PREPS.has(pp.p) && ['to', 'into', 'at', 'in', 'from', 'through', 'across'].includes(pp.p) && pp.np.es.length === 1 && ents.get(pp.np.es[0])?.kind === 'place') ev.pl = { t: pp.np.text, e: pp.np.es[0], p: pp.p };
         p = pp.k1 + 1;
-        // bounded: dead branch (the condition ends in false)
-        while (p < b && tk[p].k === 'w' && tk[p].l === 'and' && false) p++;
+        while (p < b && tk[p].k === 'w' && tk[p].l === 'and' && false) { budget.tick('analyze.parseClause3'); p++; }
       }
       if (pps.length) ev.pp = pps;
     }

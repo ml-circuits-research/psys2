@@ -8,20 +8,20 @@
 import { guard } from '../guard.mjs?v=ded769d6bc';
 import { perf } from '../perf.mjs?v=fd62b893eb';
 import { lexIndex } from '../../worlds/lexicon.mjs?v=e3316469a7';
-import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs?v=4ab1c2d71f';
-import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=b4df8d4dc3';
-import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs?v=12352421fc';
+import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs?v=8a99155025';
+import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=e49e24cd84';
+import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs?v=66584585a4';
 import { routeScores } from './router.mjs?v=1627316289';
 import { createRouter, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=91ded5d03a';
-import { FormSession, STOP_WORDS, isPronoun } from './session.mjs?v=b5c88cab10';
-import { selfCorrect, sharedArgument, repetition, ellipsisPrefixes, oneAnaphora, joinText, MARKER_RE, SEP_RE } from './expand.mjs?v=ce5901f0da';
-import { parse, serialize } from '../../soplang/index.mjs?v=30640a2956';
+import { FormSession, STOP_WORDS, isPronoun } from './session.mjs?v=0a048c7593';
+import { selfCorrect, sharedArgument, repetition, ellipsisPrefixes, oneAnaphora, joinText, MARKER_RE, SEP_RE } from './expand.mjs?v=0fd3bad380';
+import { parse, serialize } from '../../soplang/index.mjs?v=dd6ba0649b';
 import { budget } from '../../dialog/budget.mjs?v=9f5360afbc';
 
-export { FormSession } from './session.mjs?v=b5c88cab10';
+export { FormSession } from './session.mjs?v=0a048c7593';
 export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=91ded5d03a';
-export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs?v=4ab1c2d71f';
-export { compilePattern, matchTokens } from './matcher.mjs?v=b4df8d4dc3';
+export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs?v=8a99155025';
+export { compilePattern, matchTokens } from './matcher.mjs?v=e49e24cd84';
 export { singularLemma, pluralize } from './lemma.mjs?v=3f5920ed63';
 
 const compiledCache = new WeakMap();
@@ -241,8 +241,8 @@ const isContent = (t) => t.kind !== 'punct' && t.kind !== 'qmark' && !t.filler;
 /** Split a token list into clauses at `,`, `and`, `then`, `but` (one level). Clauses with only fillers are dropped. */
 export function splitClauses(tokens) {
   const clauses = [[]];
-  // bounded: i only moves forward over the tokens
   for (let i = 0; i < tokens.length; i++) {
+    budget.tick('index.splitClauses');
     const t = tokens[i];
     const sep = t.lower === ',' || t.lower === 'and' || t.lower === 'then' || t.lower === 'but';
     if (!sep) { clauses[clauses.length - 1].push(t); continue; }
@@ -589,8 +589,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
       const ana = oneAnaphoraEnv();
       if (ana && i > 0) {
         let ai = i - 1;
-        // bounded: ai only decreases to 0
-        while (ai > 0 && ana.isElliptic(clauses[ai])) ai--;
+        while (ai > 0 && ana.isElliptic(clauses[ai])) { budget.tick('index.expandClauses'); ai--; }
         if (!ana.isElliptic(clauses[ai]) && !parts[ai].unparsed && !isWeak(parts[ai])) {
           const res = oneAnaphora(ct, clauses[ai], ana.opts);
           if (res) {
@@ -650,8 +649,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     const cuts = [];
     tokens.forEach((t, i) => { if ((t.lower === 'and' || t.lower === 'then') && i > 0 && i < tokens.length - 1 && inSlot(t) && !(i > 0 && tokens[i - 1].lower === 'and' && t.lower === 'then')) cuts.push(i); });
     if (!cuts.length) return null;
-    // bounded: both loops shrink the token list each pass
-    const trim = (ts) => { let a = ts; while (a.length > 1 && (a[0].lower === 'then' || a[0].lower === 'and' || a[0].lower === ',')) a = a.slice(1); while (a.length && a[a.length - 1].lower === ',') a = a.slice(0, -1); return a; };
+    const trim = (ts) => { let a = ts; while (a.length > 1 && (a[0].lower === 'then' || a[0].lower === 'and' || a[0].lower === ',')) { budget.tick('index.trim'); a = a.slice(1); } while (a.length && a[a.length - 1].lower === ',') { budget.tick('index.trim'); a = a.slice(0, -1); } return a; };
     const spanOf = (ts) => [ts[0].start, ts[ts.length - 1].end];
     // each command must be read by a pattern at least as specific as the one that swallowed the connective (a typed "between X and Y" reading is never cut)
     const read = (ts, copied) => {

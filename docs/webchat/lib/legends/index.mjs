@@ -8,7 +8,8 @@
  *  - `core.key` may carry `dynamic=true`: the key is a prefix; `<prefix>.<anything>` is accepted
  *    (used for where.* and arg.*). Its value kind is `any`.
  */
-import { get, getAll } from '../soplang/index.mjs?v=30640a2956';
+import { get, getAll } from '../soplang/index.mjs?v=dd6ba0649b';
+import { budget } from '../dialog/budget.mjs?v=9f5360afbc';
 
 const LITERAL_KINDS = new Set(['integer', 'number', 'string', 'atom', 'boolean', 'any']);
 const isLiteralKind = (k) => LITERAL_KINDS.has(k) || /^quantity\.[\w.-]+$/.test(k) || /^time\.[\w.-]+$/.test(k);
@@ -82,8 +83,8 @@ export class Legends {
     }
     for (const t of this.types.values()) { // cycles
       const seen = new Set([t.name]);
-      // bounded: a seen-set stops at the first repeated type (cycles are reported and cut)
       for (let p = t.extends; p; p = this.types.get(p)?.extends) {
+        budget.tick('index.inNs');
         if (seen.has(p)) { this.errors.push({ message: `type hierarchy cycle at '${t.name}'`, wireId: t.name }); t.extends = 'core.thing'; break; }
         seen.add(p);
       }
@@ -143,8 +144,7 @@ export class Legends {
   chain(type) {
     this._ensure();
     const out = [type];
-    // bounded: stops at the first type already in out, so a cycle cannot loop
-    for (let p = this.types.get(type)?.extends; p && !out.includes(p); p = this.types.get(p)?.extends) out.push(p);
+    for (let p = this.types.get(type)?.extends; p && !out.includes(p); p = this.types.get(p)?.extends) { budget.tick('index.chain'); out.push(p); }
     return out;
   }
   ancestors(type) { return this.chain(type).slice(1); }
@@ -154,8 +154,7 @@ export class Legends {
   descendants(type) {
     this._ensure();
     const out = [type];
-    // bounded: breadth-first walk of the type tree (cycles were cut at load), each type is added once
-    for (let i = 0; i < out.length; i++) for (const c of this._children.get(out[i]) ?? []) out.push(c);
+    for (let i = 0; i < out.length; i++) { budget.tick('index.descendants'); for (const c of this._children.get(out[i]) ?? []) out.push(c); }
     return out;
   }
 

@@ -9,12 +9,12 @@
  * Safety rules:
  *   - a window that already is a value, or that has no word unknown to every world, is never moved (never move away from an existing value);
  *   - the result is only a candidate text: the caller keeps it when the rules read it completely;
- *   - the work is bounded: lookups are length-bucketed with a letter-count prefilter, and `maxWindows`, `maxPerWindow`, `maxTexts` and a
+ *   - the work is limited: lookups are length-bucketed with a letter-count prefilter, and `maxWindows`, `maxPerWindow`, `maxTexts` and a
  *     time budget (`budgetMs`, the best candidates found so far are returned) cap the effort whatever the message looks like.
  */
 import { lexIndex } from '../worlds/lexicon.mjs?v=e3316469a7';
-import { editDistance } from './rules/index.mjs?v=5a7aa0c66e';
-import { isKnownWord, spellBudget, spellVocabulary } from './spell.mjs?v=366b7f0319';
+import { editDistance } from './rules/index.mjs?v=5f0f2033de';
+import { isKnownWord, spellBudget, spellVocabulary } from './spell.mjs?v=04c22749e7';
 
 const now = () => globalThis.performance?.now?.() ?? Date.now();
 const WORD = /[A-Za-zÀ-ɏ]+/g;

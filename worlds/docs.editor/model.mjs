@@ -8,6 +8,7 @@
 //   a paragraph/heading/quote, the item index for lists ('2'), 'row:col' for table cells ('1:0'). `from`/`to` are string offsets.
 // The title is a pseudo block (id 'title') kept in state.title, titleMarks, titleAlign, titleSize.
 
+const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 export const DEFAULT_TITLE = 'Untitled document';
 export const MARK_TYPES = ['link', 'bold', 'italic', 'underline', 'strike', 'code', 'highlight'];
 export const COLORS = {
@@ -153,10 +154,8 @@ export function sentenceRanges(text) {
   const re = /[^.!?]*[.!?]+|[^.!?]+$/g;
   for (const m of String(text).matchAll(re)) {
     let from = m.index, to = m.index + m[0].length;
-    // bounded: from only increases up to to (whitespace trim)
-    while (from < to && /\s/.test(text[from])) from++;
-    // bounded: to only decreases down to from (whitespace trim)
-    while (to > from && /\s/.test(text[to - 1])) to--;
+    while (from < to && /\s/.test(text[from])) { budget.tick('model.sentenceRanges'); from++; }
+    while (to > from && /\s/.test(text[to - 1])) { budget.tick('model.sentenceRanges2'); to--; }
     if (to > from) out.push([from, to]);
   }
   return out;

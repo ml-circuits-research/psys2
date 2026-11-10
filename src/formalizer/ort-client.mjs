@@ -21,6 +21,7 @@
  */
 
 import { guard } from './guard.mjs';
+import { budget } from '../dialog/budget.mjs';
 
 export class OrtTimeout extends Error {
   constructor(label, ms) { super(`${label} timed out after ${ms} ms`); this.name = 'OrtTimeout'; this.label = label; }
@@ -91,8 +92,7 @@ export function createOrtClient({ spawn, graceMs = 1500, defaultDeadlineMs = 300
   /** Terminates the worker of a lane, fails every call in flight on it and starts loading its sessions again in the background. */
   const restart = (lane, why) => {
     const t = now();
-    // bounded: drops expired restart timestamps: the list shrinks each pass
-    while (restartTimes.length && t - restartTimes[0] > restartBudget.windowMs) restartTimes.shift();
+    while (restartTimes.length && t - restartTimes[0] > restartBudget.windowMs) { budget.tick('ort-client.restart'); restartTimes.shift(); }
     const over = restartTimes.length >= restartBudget.max;   // FREEZE 5: a third restart inside the window is a restart spiral; stop reloading ~160 MB of sessions
     if (over) { paused = { reason: `${restartBudget.max} worker restarts within ${Math.round(restartBudget.windowMs / 60000)} minutes (${why})`, at: t }; stats.pauses++; emit('pause', lane.name, paused.reason); try { onPause?.(paused); } catch { /* a listener must not break recovery */ } }
     else { restartTimes.push(t); stats.restarts++; emit('restart', lane.name, why); }

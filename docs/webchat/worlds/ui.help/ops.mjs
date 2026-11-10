@@ -12,6 +12,7 @@
 // failed sentence: the pattern examples of all worlds closest to the text (word overlap with typo tolerance), the tab
 // world and recent worlds preferred.
 
+const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 const BUILTIN_TABS = {
   robot: { title: 'Avatar', world: 'ui.avatar' },
   avatar: { title: 'Avatar', world: 'ui.avatar' },
@@ -145,8 +146,7 @@ export function capabilities(ctx) {
   const parts = groups.map((g) => {
     if (g.items.length === 1) return g.items[0].join(' ');
     let n = 0; // longest common word prefix, leaving at least one word to each phrase
-    // bounded: n grows each pass and every item is at most that long
-    while (g.items.every((w) => w.length > n + 1 && w[n] === g.items[0][n])) n++;
+    while (g.items.every((w) => w.length > n + 1 && w[n] === g.items[0][n])) { budget.tick('ops.joinAnd'); n++; }
     return g.items[0].slice(0, n).join(' ') + ' ' + joinAnd(g.items.map((w) => w.slice(n).join(' ')));
   });
   const value = parts.length > 2 ? parts.slice(0, -1).join(', ') + ', and ' + parts.at(-1) : joinAnd(parts);

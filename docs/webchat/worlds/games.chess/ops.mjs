@@ -15,6 +15,7 @@
 // the engine and reports { ok, data: { bestmove, fen } } through the observation loop; onObservation() plays the move.
 // When the engine is unavailable (ok=false) a deterministic built-in chooser (captures > checks > centre, seeded) plays.
 import { Chess } from './vendor/chess.mjs?v=9a44601d41';
+const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 
 const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 const NAME = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -255,8 +256,7 @@ function between(a, b) {
   const sf = Math.sign(df), sr = Math.sign(dr);
   const out = [];
   let f = fi(a) + sf, r = ri(a) + sr;
-  // bounded: walks one square per pass along a rank, file or diagonal that ends at b (callers only pass aligned squares)
-  while (f !== fi(b) || r !== ri(b)) { out.push(sqName(f, r)); f += sf; r += sr; }
+  while (f !== fi(b) || r !== ri(b)) { budget.tick('ops.between'); out.push(sqName(f, r)); f += sf; r += sr; }
   return out;
 }
 function checkReason(c, s, from, to, pc) {
@@ -897,8 +897,7 @@ export function undo(ctx, { n, bare } = {}) {
   if (!hv.some((m) => m.color === u)) return no('There is nothing to take back yet.', 'missing');
   const want = Math.max(1, Number(n) || 1);
   let removed = 0, plies = 0;
-  // bounded: pops one move per pass
-  while (hv.length && removed < want) { const m = hv.pop(); plies++; if (m.color === u) removed++; }
+  while (hv.length && removed < want) { budget.tick('ops.undo'); const m = hv.pop(); plies++; if (m.color === u) removed++; }
   const c2 = new Chess();
   for (const m of hv) c2.move(m.san);
   s.status = 'playing'; s.reason = null; s.pendingEngine = false;

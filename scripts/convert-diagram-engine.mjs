@@ -43,6 +43,7 @@ const BUDGET_PATCHES = {
     ['while (W.find(n) || W.findGroup(n)) n = base.replace(', "while ((budget.tick('diagram.name'), W.find(n) || W.findGroup(n))) n = base.replace("],
     ['while (W.find(nm) || W.findGroup(nm)) nm = base + (++i);', "while ((budget.tick('diagram.name'), W.find(nm) || W.findGroup(nm))) nm = base + (++i);"],
     ['    for (;;) {\n      const rest = left.map(', "    for (;;) {\n      budget.tick('diagram.words');\n      const rest = left.map("],
+    ['      while ((m = cue.exec(t))) {', '      for (const m of t.matchAll(cue)) {   // matchAll: a regex loop with exec() can spin on an empty match (loop guard)'],
   ],
 };
 function budgeted(file, text) {

@@ -13,8 +13,9 @@
 import {
   DEFAULT_TITLE, COLORS, colorName, TITLE_SIZE_MIN, TITLE_SIZE_MAX, titleBlock, containers, getText, blockText, addMark, cutMark, covered, anyMark,
   sliceMarks, spliceText, remapMarks, hiddenTitle, normalizeMarks, sentencesOf, findAll, toDoc, toText, toHtml, stats as computeStats, documentWords, setText, wordsIn,
-} from './model.mjs?v=645b7e913d';
-import { resolve, rangesOf, blocksOf, blockById, sectionBlocks, ORD } from './target.mjs?v=8e7acff95c';
+} from './model.mjs?v=31a486fd35';
+import { resolve, rangesOf, blocksOf, blockById, sectionBlocks, ORD } from './target.mjs?v=a97fc3b6ec';
+const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 
 const MAX_HISTORY = 50;
 
@@ -40,8 +41,7 @@ const sentencesCount = (t) => sentencesOf(t).length;
 function sync(s) {
   s.titleMarks ??= []; s.titleAlign ??= 'left'; s.titleSize ??= 0; s.selection ??= null; s.focus ??= null;
   for (const b of s.blocks) {
-    // bounded: pads the checked list up to the item count
-    if (b.kind === 'list') { b.style ??= 'bullet'; if (b.style === 'task') { b.checked ??= []; while (b.checked.length < b.items.length) b.checked.push(false); b.checked.length = b.items.length; } else delete b.checked; }
+    if (b.kind === 'list') { b.style ??= 'bullet'; if (b.style === 'task') { b.checked ??= []; while (b.checked.length < b.items.length) { budget.tick('ops.sync'); b.checked.push(false); } b.checked.length = b.items.length; } else delete b.checked; }
     if (b.kind === 'heading') b.level ??= 2;
     if (b.kind !== 'rule') normalizeMarks(b);
   }
@@ -88,8 +88,8 @@ const POS_TAIL = new RegExp(`\\s+(?:right\\s+)?(under|below|after|before|above|b
 /** Politeness and position words that end a heading or paragraph text ("Plans pls", "Notes at the top"): { text, top }. */
 function trimTail(text, polite = true) {
   let t = String(text).trim(), top = false, pos = null, ref = null;
-  // bounded: each pass that sets again strips a suffix, so the text shrinks
   for (let again = true; again;) {
+    budget.tick('ops.trimTail');
     again = false;
     const pm = pos ? null : t.match(POS_TAIL);
     if (pm) { pos = /^(?:below|beneath|underneath)$/i.test(pm[1]) ? 'under' : pm[1].toLowerCase().replace('above', 'before'); ref = pm[2]; t = t.slice(0, pm.index).trim(); again = true; }
@@ -105,8 +105,7 @@ function trimTail(text, polite = true) {
 const snap = (s) => structuredClone({ title: s.title, titleMarks: s.titleMarks, titleAlign: s.titleAlign, titleSize: s.titleSize, blocks: s.blocks, cursor: s.cursor, nextId: s.nextId, selection: s.selection });
 function commit(s) {
   s.history.push(snap(s));
-  // bounded: shrinks the history each pass
-  while (s.history.length > MAX_HISTORY) s.history.shift();
+  while (s.history.length > MAX_HISTORY) { budget.tick('ops.commit'); s.history.shift(); }
   s.future = [];
 }
 function restore(s, sn) {
@@ -628,8 +627,7 @@ function _size(ctx, { t, how } = {}) {
     else { const v = Math.max(1, Math.min(3, (b.level ?? 2) - step)); if (v !== b.level) { b.level = v; changed++; } }
   }
   if (!changed) return ok(`${cap(res.desc)} is already as ${step > 0 ? 'big' : 'small'} as it gets.`);
-  // bounded: shrinks the history each pass
-  s.history.push(before); while (s.history.length > MAX_HISTORY) s.history.shift(); s.future = [];
+  s.history.push(before); while (s.history.length > MAX_HISTORY) { budget.tick('ops._size'); s.history.shift(); } s.future = [];
   show(ctx);
   return ok(`OK, I made ${res.desc} ${step > 0 ? 'bigger' : 'smaller'}.`);
 }
@@ -706,10 +704,8 @@ function sentencesRangesOf(text) {
   const out = [];
   for (const m of String(text).matchAll(/[^.!?]*[.!?]+|[^.!?]+$/g)) {
     let a = m.index, c = m.index + m[0].length;
-    // bounded: a only increases up to c
-    while (a < c && /\s/.test(text[a])) a++;
-    // bounded: c only decreases down to a
-    while (c > a && /\s/.test(text[c - 1])) c--;
+    while (a < c && /\s/.test(text[a])) { budget.tick('ops.sentencesRangesOf'); a++; }
+    while (c > a && /\s/.test(text[c - 1])) { budget.tick('ops.sentencesRangesOf2'); c--; }
     if (c > a) out.push([a, c]);
   }
   return out;
@@ -890,8 +886,7 @@ function _replace(ctx, { from, to }) {
     }
   }
   if (!n) { restore(s, before); return no('missing', `I could not find "${a}" in the document.`); }
-  // bounded: shrinks the history each pass
-  s.history.push(before); while (s.history.length > MAX_HISTORY) s.history.shift(); s.future = [];
+  s.history.push(before); while (s.history.length > MAX_HISTORY) { budget.tick('ops._replace'); s.history.shift(); } s.future = [];
   show(ctx);
   return ok(`OK, I replaced "${a}" with "${b}" ${n} ${n === 1 ? 'time' : 'times'}.`);
 }

@@ -2,8 +2,8 @@
 //
 // Pipeline per sentence:  tokens -> number words -> phrase frames -> items (NP, VG, wh, pp ...)
 //                         -> clause splitting -> clause grammar -> pieces with source spans.
-import { tokenize, splitSentences, foldKey } from './normalize.mjs?v=8f5393b731';
-import * as M from './morphology.ro.mjs?v=cb06db873c';
+import { tokenize, splitSentences, foldKey } from './normalize.mjs?v=8504ecceb6';
+import * as M from './morphology.ro.mjs?v=ac2edf6dd3';
 import * as E from './inflect.en.mjs?v=bb4799b9ff';
 import { FRAMES } from './phrases.ro-en.mjs?v=7d601e9aa7';
 import { budget } from '../dialog/budget.mjs?v=9f5360afbc';
@@ -96,14 +96,13 @@ function prepareTokens(toksIn) {
   const isNoteLetter = (t) => t && t.kind === 'word' && /^[A-G]$/.test(t.raw);
   const wordToks = toks.filter((t) => t.kind === 'word');
   const letterGuess = wordToks.length >= 2 && wordToks.some((t) => t.raw.length === 1) && wordToks.every((t) => t.raw.length === 1 || /^(nu|da|stai)$/.test(t.key)) && wordToks.filter((t) => t.raw.length === 1).length >= 2;
-  // bounded: i only moves forward over the tokens
   for (let i = 0; i < toks.length; i++) {
+    budget.tick('ro-en.isNoteLetter');
     const t = toks[i];
     // a run of note letters ("C D E F G", "A4"): one fixed piece, never read as words ("E" is not "is")
     if (isNoteLetter(t) && (isNoteLetter(toks[i + 1]) || (toks[i + 1]?.kind === 'num' && toks[i + 1].start === t.end))) {
       let j = i, txt = '';
-      // bounded: the index only moves in one direction over a finite list or text
-      while (j < toks.length && (isNoteLetter(toks[j]) || (toks[j].kind === 'num' && toks[j - 1] && toks[j].start === toks[j - 1].end && isNoteLetter(toks[j - 1])))) { txt += (isNoteLetter(toks[j]) && txt ? ' ' : '') + toks[j].raw; j++; }
+      while (j < toks.length && (isNoteLetter(toks[j]) || (toks[j].kind === 'num' && toks[j - 1] && toks[j].start === toks[j - 1].end && isNoteLetter(toks[j - 1])))) { budget.tick('ro-en.isNoteLetter2'); txt += (isNoteLetter(toks[j]) && txt ? ' ' : '') + toks[j].raw; j++; }
       out.push({ kind: 'fixed', raw: txt, start: t.start, end: toks[j - 1].end, pieces: [{ en: txt, src: [t.start, toks[j - 1].end] }] });
       i = j - 1;
       continue;
@@ -532,8 +531,8 @@ function parseNP(toks, i, info, prev) {
           if (x.key === 'noi' && nx && verbsOf(nx).length) break;
           np.adjs.push({ en: a.entry.en, tok: x, post: true }); j++; grow(x);
           // coordinated adjectives after the noun: "un pește mic și albastru" = a small blue fish
-          // bounded: the index only moves in one direction over a finite list or text
           while (toks[j] && toks[j].key === 'si' && toks[j + 1] && isWord(toks[j + 1]) && adjOf(toks[j + 1]) && (!nounsOf(toks[j + 1]).length || COLOURS.has(adjOf(toks[j + 1]).entry.en)) && !verbsOf(toks[j + 1]).length) {
+            budget.tick('ro-en.grow');
             np.adjs.push({ en: adjOf(toks[j + 1]).entry.en, tok: toks[j + 1], post: true }); j += 2; grow(toks[j - 1]);
           }
           continue;
@@ -694,9 +693,9 @@ function parseVG(toks, i, info, prev) {
     vg.sa = toks[j]; j++;
     if (isWord(toks[j]) && toks[j].key === 'nu') { vg.neg = toks[j]; j++; }
   }
-  // bounded: the index only moves in one direction over a finite list or text
   while (j < n && isWord(toks[j]) && CLITIC[toks[j].key] && !toks[j].synth && vg.clit.length < 2
     && !(toks[j].key === 'va' && toks[j].raw.toLowerCase() === 'va' && isWord(toks[j + 1]) && verbsOf(toks[j + 1]).length)) {
+    budget.tick('ro-en.parseVG');
     // a clitic must be followed (possibly through another clitic / aux) by a verb
     vg.clit.push(toks[j]); j++;
   }
@@ -756,8 +755,7 @@ function parseVG(toks, i, info, prev) {
     let cneg = null;
     if (isWord(toks[k]) && toks[k].key === 'nu') { cneg = toks[k]; k++; }
     const ccl = [];
-    // bounded: k only moves forward and stops at the end of the token list (isWord(undefined) is false)
-    while (isWord(toks[k]) && CLITIC[toks[k].key] && !toks[k].synth && isWord(toks[k + 1]) && (verbsOf(toks[k + 1]).length || CLITIC[toks[k + 1].key])) { ccl.push(toks[k]); k++; }
+    while (isWord(toks[k]) && CLITIC[toks[k].key] && !toks[k].synth && isWord(toks[k + 1]) && (verbsOf(toks[k + 1]).length || CLITIC[toks[k + 1].key])) { budget.tick('ro-en.parseVG2'); ccl.push(toks[k]); k++; }
     const ct = toks[k];
     if (isWord(ct) && verbsOf(ct).length && !(vg.entry.flags.comp === 'to' && !sa && nounsOf(ct).length)) {
       const cv = verbsOf(ct);
@@ -985,8 +983,8 @@ function buildItems(toks, info) {
 
 function foldPP(items) {
   const out = [];
-  // bounded: i only moves forward over the items
   for (let i = 0; i < items.length; i++) {
+    budget.tick('ro-en.foldPP');
     const it = items[i];
     const nx = items[i + 1];
     if (it.t === 'prep' && nx && nx.t === 'wh') { nx.prep = it; out.push(nx); i++; continue; }
@@ -1133,8 +1131,8 @@ function translateClause(items, info, c) {
   const ctx = info.ctx;
   // leading items (conjunctions, interjections, commas)
   const lead = [];
-  // bounded: the index only moves in one direction over a finite list or text
   while (items.length && (['conj', 'interj', 'comma', 'fixed'].includes(items[0].t) || (items[0].t === 'adv' && items[0].flags.has('lead')))) {
+    budget.tick('ro-en.translateClause');
     const x = items.shift();
     if (x.t === 'fixed' && items.length === 0 && lead.length === 0) { items.unshift(x); break; }
     if (x.t === 'conj') { c.leadConj = c.leadConj || x; if (x.sub) c.sub = true; }
@@ -1233,8 +1231,7 @@ function translateClause(items, info, c) {
     const at = post.indexOf(first);
     // coordinated subject: X și Y
     let k = at + 1;
-    // bounded: the index only moves in one direction over a finite list or text
-    while (post[k] && post[k].t === 'conj' && post[k].en === 'and' && isNPLike(post[k + 1])) { subjItems.push(post[k], post[k + 1]); k += 2; }
+    while (post[k] && post[k].t === 'conj' && post[k].en === 'and' && isNPLike(post[k + 1])) { budget.tick('ro-en.translateClause2'); subjItems.push(post[k], post[k + 1]); k += 2; }
   }
   const preNegSubj = !whItem && !imperative ? pre.find((x) => x.t === 'negword' && /^(nimeni|nimic)$/.test(x.key)) : null;
   const subjSet = new Set(subjItems);
@@ -1500,15 +1497,14 @@ function segmentIsQuestion(seg, info, last) {
 function segmentedPieces(toks, info0) {
   const info = { ...info0, noSeg: true };
   const cuts = [];   // [from, to) token ranges of separators
-  // bounded: i only moves forward over the tokens
   for (let i = 1; i < toks.length - 1; i++) {
+    budget.tick('ro-en.segmentedPieces');
     const t = toks[i];
     const isComma = t.kind === 'punct' && t.raw === ',';
     const isW = t.kind === 'word' && !t.synth && SEG_WORDS.has(t.key);
     if (!isComma && !isW) continue;
     let j = i + 1;
-    // bounded: the index only moves in one direction over a finite list or text
-    while (j < toks.length - 1 && toks[j].kind === 'word' && SEG_WORDS.has(toks[j].key) && !(isW && false)) j++;
+    while (j < toks.length - 1 && toks[j].kind === 'word' && SEG_WORDS.has(toks[j].key) && !(isW && false)) { budget.tick('ro-en.segmentedPieces2'); j++; }
     if (isComma || isW) { cuts.push([i, j]); i = j - 1; }
   }
   // politeness at either end ("te rog", "mulțumesc", "salut") is a segment of its own, so it never blocks a whole-segment frame
@@ -1696,8 +1692,7 @@ export function translateRoEn(original) {
   for (const s of sents) {
     let end = [];
     let core = s.slice();
-    // bounded: the index only moves in one direction over a finite list or text
-    while (core.length && core[core.length - 1].kind === 'punct' && /^[.!?]$/.test(core[core.length - 1].raw)) end.unshift(core.pop());
+    while (core.length && core[core.length - 1].kind === 'punct' && /^[.!?]$/.test(core[core.length - 1].raw)) { budget.tick('ro-en.translateRoEn'); end.unshift(core.pop()); }
     if (!core.length) { results.push({ pieces: [], end, addQ: false }); continue; }
     const info = { ctx, q: end.some((e) => e.raw === '?'), excl: end.some((e) => e.raw === '!'), frag: false };
     const before = { u: ctx.unknown.length, c: ctx.content, m: ctx.mapped, n: ctx.notes.length };

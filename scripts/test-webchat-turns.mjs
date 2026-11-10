@@ -18,6 +18,7 @@ import { readFile, access } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { collectMessages, addNoise, rng } from './fuzz-turns.mjs';
+import { installFakeBrowserApis } from './lib/fake-browser-apis.mjs';
 
 export const DOCS = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', 'docs');
 export const TYPES = { '.html': 'text/html', '.mjs': 'text/javascript', '.js': 'text/javascript', '.json': 'application/json', '.wasm': 'application/wasm', '.css': 'text/css', '.svg': 'image/svg+xml', '.txt': 'text/plain' };
@@ -35,7 +36,7 @@ export async function findChrome(given) {
   throw new Error('no Chrome/Chromium found');
 }
 
-export async function openChat({ throttle = 4, chrome, init = null, settings = { formalizer: 'rules', normalizer: false, showTrace: false }, viewport = { width: 390, height: 844, deviceScaleFactor: 2, isMobile: true, hasTouch: true }, hash = '', query = '' } = {}) {
+export async function openChat({ throttle = 4, chrome, init = null, settings = { formalizer: 'rules', normalizer: false, showTrace: false }, viewport = { width: 390, height: 844, deviceScaleFactor: 2, isMobile: true, hasTouch: true }, hash = '', query = '', browserApis = {} } = {}) {
   const puppeteer = await loadPuppeteer();
   const srv = http.createServer(async (q, r) => {
     try { const p = path.join(DOCS, decodeURIComponent(q.url.split('?')[0])); const f = p.endsWith('/') ? `${p}index.html` : p; r.setHeader('content-type', TYPES[path.extname(f)] ?? 'application/octet-stream'); r.end(await readFile(f)); } catch { r.statusCode = 404; r.end('nf'); }
@@ -45,6 +46,9 @@ export async function openChat({ throttle = 4, chrome, init = null, settings = {
   await pg.setViewport(viewport);
   if (throttle > 1) await (await pg.createCDPSession()).send('Emulation.setCPUThrottlingRate', { rate: throttle });
   await pg.evaluateOnNewDocument((s) => { try { localStorage.setItem('psys2.webchat.settings', JSON.stringify({ settingsVersion: 2, ...s })); } catch { /* ignore */ } }, settings);
+  // The on-device Translator and LanguageDetector are faked by default (success mode; `browserApis: false` leaves the page without them, `{ mode, wrong, shape }`
+  // picks another; `chat.fake.set({ mode })` flips it later): the code behind them only ever ran in a real Chrome (scripts/lib/fake-browser-apis.mjs).
+  const fake = browserApis === false ? null : await installFakeBrowserApis(pg, browserApis);
   if (init) await pg.evaluateOnNewDocument(init);
   const errors = [];
   const consoleErrors = [];
@@ -53,7 +57,7 @@ export async function openChat({ throttle = 4, chrome, init = null, settings = {
   await pg.goto(`http://localhost:${srv.address().port}/webchat/index.html${query}${hash}`, { waitUntil: 'domcontentloaded' });
   await pg.waitForFunction(() => document.querySelector('.p2-msg.is-hint'), { timeout: 120000, polling: 50 });
   const api = {
-    pg, errors, consoleErrors, srvPort: srv.address().port,
+    pg, errors, consoleErrors, fake, srvPort: srv.address().port,
     close: async () => { await browser.close(); srv.close(); },
     /** Types `text`, presses Enter, waits until the turn ended (no typing bubble, not busy); returns { ms, ok, reply }. */
     async say(text, { timeout = LIMIT_MS + 4000 } = {}) {

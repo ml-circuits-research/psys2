@@ -7,6 +7,7 @@
 // (the seed lives in the state, so games are reproducible). Level perfect: minimax.
 // Every command brings the tic-tac-toe tab forward: ctx.request('ui.openTab', { tab: 'tictactoe' }).
 
+const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 export function initialState() {
   return { board: Array(9).fill(''), user: 'X', turn: 'X', winner: null, level: 'easy', seed: 20240607, last: { user: null, system: null } };
 }
@@ -37,8 +38,8 @@ const moves = (b) => b.filter(Boolean).length;
 const show = (ctx) => ctx.request('ui.openTab', { tab: 'tictactoe' });
 
 /** Minimax value for `me` with `mark` to move: +1 win, 0 draw, -1 loss (shorter wins and longer losses preferred). */
-// bounded: game tree of at most 9 plies on a 3x3 board (every move fills a cell)
 function minimax(b, mark, me, depth = 0) {
+  budget.tick('ops.minimax');
   const w = winnerOf(b);
   if (w) return w === 'draw' ? 0 : w === me ? 10 - depth : depth - 10;
   let best = mark === me ? -Infinity : Infinity;

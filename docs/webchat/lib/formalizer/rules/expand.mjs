@@ -7,7 +7,8 @@
  * tokens were copied from elsewhere in the sentence and which were dropped.
  */
 
-import { splitSentences, tokenize } from './normalize.mjs?v=4ab1c2d71f';
+import { splitSentences, tokenize } from './normalize.mjs?v=8a99155025';
+import { budget } from '../../dialog/budget.mjs?v=9f5360afbc';
 
 const DETERMINERS = new Set(['a', 'an', 'the', 'your', 'my', 'his', 'her', 'its', 'their', 'our', 'this', 'that', 'these', 'those', 'some', 'ur']);
 const isWord = (t) => t.kind === 'word' || t.kind === 'number';
@@ -75,8 +76,8 @@ export function splitAnswerList(text) {
   const words = String(text).toLowerCase().replace(/'/g, '').replace(/[.!?]+$/g, '').trim().split(/\s+/).filter(Boolean);
   if (words.length < 2 || words.some((w) => /[,;]/.test(w))) return text;
   const out = [];
-  // bounded: each pass consumes at least one word, or returns
   for (let i = 0; i < words.length;) {
+    budget.tick('expand.splitAnswerList');
     const hit = ANSWER_WORDS.find((a) => { const n = a.split(' '); return n.every((x, k) => words[i + k] === x); });
     if (!hit) return text;
     out.push(hit); i += hit.split(' ').length;
@@ -105,12 +106,10 @@ export function selfCorrect(tokens, { whole = false } = {}) {
     }
     if (!found) break;
     const before = toks.slice(0, found.i);
-    // bounded: shrinks the list each pass
-    while (before.length && before[before.length - 1].lower === ',') before.pop();
+    while (before.length && before[before.length - 1].lower === ',') { budget.tick('expand.selfCorrect'); before.pop(); }
     let after = toks.slice(found.i + found.len);
     if (found.len === 1 && ['and', 'then'].includes(after[0]?.lower) && isBareAnswer(before.filter(isWord).slice(-1))) return null;   // "yes, no and what is 2 plus 2": "no" is an answer joined by "and"
-    // bounded: shrinks the list each pass
-    while (after.length && (after[0].lower === ',' || after[0].lower === 'and')) after = after.slice(1);
+    while (after.length && (after[0].lower === ',' || after[0].lower === 'and')) { budget.tick('expand.selfCorrect2'); after = after.slice(1); }
     // the correction runs up to the next separator
     const cut = after.findIndex((t) => t.lower === ',' || t.lower === 'then');
     const corr = cut < 0 ? after : after.slice(0, cut);

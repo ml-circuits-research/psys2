@@ -162,7 +162,7 @@ export function createEngineClient({ base, versions = {}, getSettings, getTab = 
   const dryState = { id: null, timer: 0 };
   /** A request with abort + kill semantics: resolves with the worker's value; rejects TurnAborted when the signal fires (after a cooperative answer or a kill). */
   async function guarded(kind, op, payload, { signal = null, hardMs = null, text = '', key = null, tab = null } = {}) {
-    for (let i = 0; i < 60 && (zombies.size || restorePending); i++) await new Promise((r) => setTimeout(r, 25));   // bounded: 60 x 25 ms; an abandoned request ends by itself or is killed within the abort grace
+    for (let i = 0; i < 60 && (zombies.size || restorePending); i++) await new Promise((r) => setTimeout(r, 25));   // 60 x 25 ms at most; an abandoned request ends by itself or is killed within the abort grace
     await ready();
     if (!worker) throw Object.assign(new Error('engine worker is not running'), { name: 'EngineRestarted' });
     const { id, promise } = rawCall(op, payload, { kind, text, key, tab });

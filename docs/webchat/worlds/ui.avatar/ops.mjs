@@ -16,6 +16,7 @@
 // Every command that changes the avatar brings its tab forward: ctx.request('ui.openTab', { tab: 'robot' }).
 
 /** The three original characters: only they are reached from another character ("only the person has glasses: say yes to become one"). */
+const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 const CORE = ['robot', 'person', 'emoji'];
 /** Every character, in the order of the gallery. The others (AV) are reached by becoming them and then answer for their own parts. */
 const CHARACTERS = [...CORE, 'portrait', 'cartoon', 'kid', 'pixel', 'pixelbot', 'funemoji'];
@@ -487,8 +488,8 @@ const BIGGER = new Set(['bigger', 'larger', 'wider', 'huger', 'rounder', 'big', 
 const EMOJI_EYE_SIZE = ['small', 'pupils', 'bigPupils'];
 /** Robot eyes: styles, not sizes. Square, visor and cyclops fill more of the screen than round and plus. */
 const ROBOT_EYES_BIGGER = ['square', 'visor', 'cyclops'], ROBOT_EYES_SMALLER = ['round', 'plus'];
-// bounded: calls itself once for the eye with a different part, which never recurses again
 function _resizePart(ctx, { part, dir, assumed }) {
+  budget.tick('ops._resizePart');
   const s = ensure(ctx);
   if (assumed) {
     const r = _resizePart(ctx, { part: 'eye', dir });

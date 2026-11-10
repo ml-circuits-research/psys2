@@ -11,6 +11,7 @@ import { Legends } from '../legends/index.mjs';
 import { expandShape } from '../formalizer/rules/shapes.mjs';
 import { checkPattern } from '../formalizer/rules/index.mjs';
 import { lexIndex } from './lexicon.mjs';
+import { budget } from '../dialog/budget.mjs';
 
 const FILES = ['world.sop', 'legend.sop', 'lexicon.sop', 'patterns.sop', 'operations.sop', 'kb.sop', 'templates.sop', 'tests.sop'];
 const worldIdOf = (s) => (s.startsWith('world.') ? s.slice(6) : s);
@@ -89,8 +90,8 @@ export class WorldSet {
   /** Transitive imports of a world (including itself), in dependency order. */
   available(id) {
     const out = [];
-    // bounded: visits each world at most once (out.includes) so import cycles end
     const visit = (i) => {
+      budget.tick('index.visit');
       if (out.includes(i)) return;
       const w = this.worlds.get(i);
       if (!w) return;
@@ -210,8 +211,8 @@ export async function loadWorlds(loader) {
   // dependency order
   const order = [];
   const state = new Map();
-  // bounded: depth-first search with a visiting/done state per world: each world is expanded once, cycles are reported
   const visit = (id, stack) => {
+    budget.tick('index.visit2');
     if (state.get(id) === 2) return;
     if (state.get(id) === 1) { set.errors.push({ message: `import cycle: ${[...stack, id].join(' -> ')}` }); return; }
     state.set(id, 1);
@@ -251,8 +252,8 @@ function resolveLexiconExtends(set) {
   const byId = new Map();
   for (const w of set.list()) for (const l of w.lexicons) byId.set(l.id, l);
   const state = new Map();
-  // bounded: depth-first with a visiting/done state per lexicon: each lexicon is expanded once, cycles are reported
   const resolve = (l) => {
+    budget.tick('index.resolve');
     if (!l.extends.length || state.get(l) === 2) return;
     const w = set.get(l.worldId);
     if (state.get(l) === 1) { w.errors.push({ file: 'lexicon.sop', message: `lexicon '${l.id}': extends cycle` }); return; }

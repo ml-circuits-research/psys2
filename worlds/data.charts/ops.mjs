@@ -18,6 +18,7 @@
 //   is probed by "put the chart in the document".
 // The pure helpers at the bottom (chartView, csv) are also imported by the tab, so the tab draws exactly what the state says.
 
+const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 const TAB = 'charts';
 const TYPES = ['bar', 'line', 'pie', 'doughnut', 'radar', 'polarArea', 'scatter'];
 const TYPE_WORD = { bar: 'bar', line: 'line', pie: 'pie', doughnut: 'doughnut', donut: 'doughnut', radar: 'radar', polar: 'polarArea', column: 'bar', slice: 'pie', polar_area: 'polarArea', polararea: 'polarArea', scatter: 'scatter' };
@@ -376,8 +377,8 @@ export const fromLegs = undoable((ctx, args) => createFrom(ctx, 'legs', args));
 /** Politeness and a chart type that end the data text: "plums 8 for me", "dogs 7 as a pie". Returns { text, type }. */
 function splitDataTail(text, type) {
   let t = String(text ?? '').trim(), ty = type;
-  // bounded: each pass that sets again strips a suffix, so the text shrinks
   for (let again = true; again;) {
+    budget.tick('ops.splitDataTail');
     again = false;
     const pol = t.match(/\s+(?:for me|for us|please|pls|plz|thanks|thank you|thx|now|asap|real quick|if you can|ok)$/i);
     if (pol) { t = t.slice(0, pol.index).trim(); again = true; }
