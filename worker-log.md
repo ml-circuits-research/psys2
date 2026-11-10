@@ -325,3 +325,6 @@ Everything is behind `reasoner=matrix`; the default (`ops`) is unchanged (`npm t
 - **Not a fake problem.** The fake's `slow` mode is an async `setTimeout` on the page and does no synchronous work (the rules run in node via `exposeFunction`).
 - **Residual.** Under `taskset -c 0,1` at throttle 6 the non-slow `wrong output (empty|names)` turns still sometimes show 300-800 ms (JS profile shows only ~100 ms; the rest is `(program)`/CPU starvation of the 2 cores shared by renderer, workers and GPU). Unpinned runs: max gap 261 ms at throttle 4, 409 ms at 6; `slow` 41/107/118 ms at throttle 1/4/6.
 - **Gates:** `ondevice` passes at throttle 1, 4, 6; `npm test` 1221 pass / 0 fail / 0 cancelled; `npm run test:browser` 11/11.
+
+## SESSION END (2026-11-10, evening)
+Stopped by the user: the demo on GitHub Pages is in order. Landed today after NX integration: GAPS-1/1b, RP5c, ELLIPSIS, NX3b (A3b not published), URGENT-FREEZE hardening, COMPUTE-BUDGET A-F (engine worker + watchdog, step budgets, loop guard, freeze cause: empty-match regex loop after on-device translation), LANG-FIXED, SOPWORLD-1 stage 1 (behind a setting), BUDGET-HEARTBEAT, full budget scenarios in the gate. Open: SOPWORLD-1 item 10 (one SOP Lang v1.1), waiting for sopworld 0.5.0; continues in the next days.
