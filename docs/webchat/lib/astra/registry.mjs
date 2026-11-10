@@ -6,8 +6,8 @@
  * Per world exactly one instance is live (`live[world]`). Activating a discussion swaps its instances in; worlds it has no instance of are
  * untouched, so the legacy cross-tab behaviour is unchanged.
  */
-import { EventLog } from './log.mjs';
-import { applyMove } from './moves.mjs';
+import { EventLog } from './log.mjs?v=5c1fe52efb';
+import { applyMove } from './moves.mjs?v=69784e24c4';
 
 /** Worlds whose state is the user scope (shared by every discussion, never instanced, never swapped). */
 export const USER_SCOPE = new Set(['ui.shell', 'ui.help', 'kids.common', 'core', 'lang.common', 'user.profile']);

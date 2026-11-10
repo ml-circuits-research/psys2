@@ -3,6 +3,7 @@
 // Converted to an ES module by scripts/convert-diagram-engine.mjs (mechanical wrap; see imports/diagram-vss-demo/PROVENANCE.md). Do not edit by hand.
 import AutoLayoutModule from './auto-layout.mjs';
 import TemplateKitModule from './templates.mjs';
+const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (no-op outside a turn)
 /*LOGIC-START*/
 const SOPKit = (function () {
 'use strict';
@@ -289,7 +290,7 @@ class DiagramWorld {
   find(name) { if (name == null) return null; const l = String(name).toLowerCase(); return this.state.shapes.find(s => s.name.toLowerCase() === l) || null; }
   findGroup(name) { if (name == null) return null; const l = String(name).toLowerCase(); return (this.state.groups || []).find(g => g.name.toLowerCase() === l) || null; }
   groupOf(shapeName) { return (this.state.groups || []).find(g => g.members.includes(shapeName)) || null; }
-  nextName(shape) { let n; do { this.state.seq[shape] = (this.state.seq[shape] || 0) + 1; n = shape + this.state.seq[shape]; } while (this.find(n)); return n; }
+  nextName(shape) { let n; do { budget.tick('diagram.name'); this.state.seq[shape] = (this.state.seq[shape] || 0) + 1; n = shape + this.state.seq[shape]; } while (this.find(n)); return n; }
   newEdge(from, to, o) { return Object.assign({ id: 'e' + (++this.state.edgeSeq), from, to, style: 'solid', arrow: 'forward', label: null, color: null }, o || {}); }
   apply(p) {
     const S = this.state;
@@ -629,6 +630,7 @@ function datalog(facts, rules) {
   const db = new Map();
   const add = f => { const k = JSON.stringify(f); if (!db.has(f[0])) db.set(f[0], new Map()); const m = db.get(f[0]); if (m.has(k)) return false; m.set(k, f); return true; };
   function* solve(body, i, bind) {
+    budget.tick('diagram.solve');
     if (i === body.length) { yield bind; return; }
     const [p, ...ts] = body[i]; const m = db.get(p); if (!m) return;
     for (const f of [...m.values()]) {
@@ -644,6 +646,7 @@ function datalog(facts, rules) {
   facts.forEach(add);
   let changed = true, iter = 0;
   while (changed && iter++ < 500) {
+    budget.tick('diagram.solve', 1 + db.size);
     changed = false;
     for (const r of rules) for (const b of [...solve(r.body, 0, {})]) if (add(r.head.map((t, i) => i === 0 ? t : isVar(t) ? b[t] : t))) changed = true;
   }
@@ -666,7 +669,7 @@ function edgeFacts(W, mode) {
 function bfs(W, from, to, mode) {
   const prev = new Map([[from, null]]); const q = [from];
   while (q.length) {
-    const n = q.shift(); if (n === to) break;
+    const n = q.shift(); budget.tick('diagram.path', 1 + W.state.edges.length); if (n === to) break;
     for (const e of W.state.edges) {
       const steps = [];
       if (e.from === n) steps.push(e.to);
@@ -737,7 +740,7 @@ function moveGroup(W, g, a, ctx) {
   for (const s of b.members) ctx.emit({ op: 'set', name: s.name, props: { x: s.x + dx, y: s.y + dy } });
   return answer;
 }
-function freeGroupName(W, base) { let k = 1, n = base; while (W.find(n) || W.findGroup(n)) n = base.replace(/\d+$/, '') + (++k); return n; }
+function freeGroupName(W, base) { let k = 1, n = base; while ((budget.tick('diagram.name'), W.find(n) || W.findGroup(n))) n = base.replace(/\d+$/, '') + (++k); return n; }
 /* a group is copied as one block: its shapes keep their layout, the links among them are copied too, and the copies form a new group */
 function dupGroup(W, g, a, ctx, i, after) {
   const b = groupBox(W.state, g), ab = groupBox(W.state, after) || b; if (!b) throw new SOPError(`The group ${g.name} is empty.`);
@@ -845,7 +848,7 @@ function commonSense(W, a, n, stated) {
       out.layer = 'background'; out.width = w; out.height = h; if (C.fill && !out.fill) out.fill = C.fill;
       out.at = [CANVAS.W / 2, C.panel === 'top' ? 10 + h / 2 : CANVAS.H - 10 - h / 2];
     } else if (C.spot && !placed) out.position = C.spot;
-    if (!a.name && a.object) { const base = k[0].toUpperCase() + k.slice(1); let nm = base, i = 1; while (W.find(nm) || W.findGroup(nm)) nm = base + (++i); out.name = nm; }
+    if (!a.name && a.object) { const base = k[0].toUpperCase() + k.slice(1); let nm = base, i = 1; while ((budget.tick('diagram.name'), W.find(nm) || W.findGroup(nm))) nm = base + (++i); out.name = nm; }
     notes.push(`common sense for a ${k}`);
   }
   const anc = names(a.anchor).length ? (() => { try { return needAnchor(W, names(a.anchor)[0]); } catch (e) { return null; } })() : null;
@@ -3096,6 +3099,7 @@ function rulesCut(formalize, input, ctx) {
     if (!take(a)) return null;
     let b = a, n = 1;
     for (;;) {
+      budget.tick('diagram.words');
       const rest = left.map((x, i) => x ? i : -1).filter(i => i >= 0);
       if (!rest.length || (rest.length === 1 && rest[0] === 0)) break;
       let next = -1;

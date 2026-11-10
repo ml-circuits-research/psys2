@@ -55,6 +55,7 @@ export function findEntries(tokens, entries) {
   entries = entries.filter((e) => !entries.includes(`${e}s`));   // lemma variants of words that end in s (physic, physics) are for the pattern slots only
   const parts = entries.map((e) => ({ e, p: e.split('_') })).sort((a, b) => b.p.length - a.p.length);
   const hits = [];
+  // bounded: a pass over a finite token list or text: the index only moves in one direction
   for (let i = 0; i < tokens.length; i++) {
     for (const { e, p } of parts) {
       if (i + p.length > tokens.length) continue;
@@ -212,6 +213,7 @@ function withinOne(a, b) {
   if (a === b) return true;
   if (a.length < 5 || b.length < 5 || Math.abs(a.length - b.length) > 1) return false;
   let i = 0;
+  // bounded: i only increases up to the shorter length
   while (i < a.length && i < b.length && a[i] === b[i]) i++;
   if (a.length === b.length) return a.slice(i + 1) === b.slice(i + 1) || (a[i] === b[i + 1] && a[i + 1] === b[i] && a.slice(i + 2) === b.slice(i + 2));
   return a.length > b.length ? a.slice(i + 1) === b.slice(i) : b.slice(i + 1) === a.slice(i);
@@ -273,6 +275,7 @@ export function extract(text, env) {
     else {
       // "senior software engineer": keep the words in front of the role that are modifiers
       const mods = [];
+      // bounded: i only decreases and the list of modifiers is capped at 2
       for (let i = marked.start - 1; i >= 0 && mods.length < 2; i--) if (/^(?:senior|junior|lead|principal|chief|head|staff|freelance|part-time|full-time|former|trainee)$/.test(t[i])) mods.unshift(t[i]); else break;
       put('role', [...mods, pretty(marked.entry)].join(' '), { how: 'role', entry: marked.entry });
     }

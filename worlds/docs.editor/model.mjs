@@ -153,7 +153,9 @@ export function sentenceRanges(text) {
   const re = /[^.!?]*[.!?]+|[^.!?]+$/g;
   for (const m of String(text).matchAll(re)) {
     let from = m.index, to = m.index + m[0].length;
+    // bounded: from only increases up to to (whitespace trim)
     while (from < to && /\s/.test(text[from])) from++;
+    // bounded: to only decreases down to from (whitespace trim)
     while (to > from && /\s/.test(text[to - 1])) to--;
     if (to > from) out.push([from, to]);
   }

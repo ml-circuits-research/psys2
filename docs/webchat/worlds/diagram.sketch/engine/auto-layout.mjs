@@ -2,6 +2,7 @@
 // Source: https://github.com/ml-circuits-research/diagram-vss-demo, commit 9900d34836bf3fc913a6549f3da4c444bfa11304, docs/js/auto-layout.js (AGPL-3.0).
 // Converted to an ES module by scripts/convert-diagram-engine.mjs (mechanical wrap; see imports/diagram-vss-demo/PROVENANCE.md). Do not edit by hand.
 const module = { exports: {} };
+const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (no-op outside a turn)
 /* auto-layout.js: whole-diagram and selection-level layout operations (re-layout of EXISTING shapes) and a measurable layout quality score.
    Design: training/sketch/ops/HIGH_LEVEL_OPS.md; integration into the engine: docs/js/ops-integration.md; tests: training/sketch/ops/test_auto_layout.mjs.
    (Creation templates, docs/js/templates.js, MAKE new shapes in a form; these functions MOVE shapes that already exist.)
@@ -115,6 +116,7 @@ function findCycle(G, order) {
     if (state[s]) continue;
     const stack = [[s, 0]]; state[s] = 1;
     while (stack.length) {
+      budget.tick('diagram.layout');
       const top = stack[stack.length - 1], [v, i] = top;
       if (i < G.out[v].length) {
         top[1]++;
@@ -244,6 +246,7 @@ function separateNodes(ns, movable, opts) {
   ns.forEach((_, i) => clamp(i));
   let pass = 0;
   for (; pass < 120; pass++) {
+    budget.tick('diagram.layout', 1 + ns.length * ns.length);
     const pairs = overlapPairs(ns, clear - 0.01); let moved = false;
     for (const [i, j] of pairs) {
       if (!mv(i) && !mv(j)) continue;
@@ -454,7 +457,7 @@ function treeLayout(ctx, dir) {
     if (r == null) r = comp.slice().sort((a, b) => list[a].rank - list[b].rank)[0];
     roots.push(r);
     const seen = new Set([r]), q = [r];
-    while (q.length) { const v = q.shift(); for (const w of G.und[v]) if (!seen.has(w)) { seen.add(w); parent[w] = v; kids[v].push(w); q.push(w); } }
+    while (q.length) { budget.tick('diagram.layout'); const v = q.shift(); for (const w of G.und[v]) if (!seen.has(w)) { seen.add(w); parent[w] = v; kids[v].push(w); q.push(w); } }
   }
   const crossCur = i => dir === 'left' || dir === 'right' ? list[i].y : list[i].x;
   kids.forEach(k => k.sort((a, b) => crossCur(a) - crossCur(b) || list[a].rank - list[b].rank));
@@ -509,7 +512,7 @@ function layersLayout(ctx, dir) {
     const indeg = new Map(comp.map(i => [i, 0])), outE = new Map(comp.map(i => [i, []]));
     for (const [a, b] of edges) { indeg.set(b, indeg.get(b) + 1); outE.get(a).push(b); }
     const layer = new Map(comp.map(i => [i, 0])), ready = comp.filter(i => !indeg.get(i)).sort((a, b) => rank(a) - rank(b));
-    while (ready.length) { const v = ready.shift(); for (const w of outE.get(v)) { layer.set(w, Math.max(layer.get(w), layer.get(v) + 1)); indeg.set(w, indeg.get(w) - 1); if (!indeg.get(w)) { ready.push(w); ready.sort((a, b) => rank(a) - rank(b)); } } }
+    while (ready.length) { budget.tick('diagram.layout'); const v = ready.shift(); for (const w of outE.get(v)) { layer.set(w, Math.max(layer.get(w), layer.get(v) + 1)); indeg.set(w, indeg.get(w) - 1); if (!indeg.get(w)) { ready.push(w); ready.sort((a, b) => rank(a) - rank(b)); } } }
     // dummy points on links longer than one layer
     const V = comp.map(i => ({ id: i, layer: layer.get(i), real: true, size: crossSize(list[i], dir) })), vid = new Map(comp.map((i, k) => [i, k])), segs = [];
     for (const [a, b] of edges) {
@@ -570,7 +573,7 @@ function radialLayout(ctx) {
     if (r == null) { const src = comp.filter(i => !G.inn[i].length && G.out[i].length); r = (src.length ? src : comp).slice().sort((a, b) => G.und[b].length - G.und[a].length || list[a].rank - list[b].rank)[0]; }
     centres.push(list[r].name);
     const kids = new Map(comp.map(i => [i, []])), depth = new Map([[r, 0]]), q = [r];
-    while (q.length) { const v = q.shift(); const nb = G.und[v].filter(w => !depth.has(w)).sort((a, b) => list[a].rank - list[b].rank); for (const w of nb) { depth.set(w, depth.get(v) + 1); kids.get(v).push(w); q.push(w); } }
+    while (q.length) { budget.tick('diagram.layout'); const v = q.shift(); const nb = G.und[v].filter(w => !depth.has(w)).sort((a, b) => list[a].rank - list[b].rank); for (const w of nb) { depth.set(w, depth.get(v) + 1); kids.get(v).push(w); q.push(w); } }
     const leaves = new Map(); const cnt = v => { if (leaves.has(v)) return leaves.get(v); const k = kids.get(v); const c = k.length ? k.reduce((s, w) => s + cnt(w), 0) : 1; leaves.set(v, c); return c; };
     cnt(r);
     const D = Math.max(...depth.values()), perRing = new Array(D + 1).fill(0); for (const d of depth.values()) perRing[d]++;
@@ -596,6 +599,7 @@ function organicLayout(ctx) {
   let temp = k * 2;
   const cx0 = mean(list.map(x => x.x)), cy0 = mean(list.map(x => x.y));
   for (let it = 0; it < iters; it++) {
+    budget.tick('diagram.layout', 1 + n * n);
     const fx = new Array(n).fill(0), fy = new Array(n).fill(0);
     for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) {
       let dx = list[i].x - list[j].x, dy = list[i].y - list[j].y, d = Math.hypot(dx, dy);
@@ -671,6 +675,7 @@ function layout(kind, shapes, links, opts) {
 /** the raw coordinates of layout k (in any frame) on ctx.work; the shapes without any link are left out of a tree / layers / radial /
  *  organic layout and packed as a compact grid beside the linked part (to the right or below, whichever fits the canvas better) */
 function rawLayout(ctx, k, dir, o) {
+  budget.tick('diagram.layout', 1 + ctx.work.length);
   const G = graphOf(ctx.work, ctx.wlinks), lone = LINKED_KINDS.includes(k) ? ctx.work.filter((_, i) => !G.und[i].length) : [];
   if (lone.length && lone.length < ctx.work.length) {
     const all = ctx.work; ctx.work = all.filter(n => !lone.includes(n));
@@ -975,6 +980,7 @@ function untangle(shapes, links, opts) {
   const indexOf = new Map(list.map((x, i) => [x, i]));
   let swaps = 0;
   for (let pass = 0; pass < passes; pass++) {
+    budget.tick('diagram.layout', 1 + list.length * K);
     let improved = false;
     for (const pn of ro) {
       const a = indexOf.get(pn);

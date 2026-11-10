@@ -4,7 +4,7 @@
  * Wire  = { id, type, entries: [{ key, value }], span: { start, end, line }, source }
  * value = { kind: 'atom' | 'string' | 'ref', v: string }
  */
-import { budget } from '../dialog/budget.mjs';
+import { budget } from '../dialog/budget.mjs?v=9f5360afbc';
 
 const IDENT = /^[A-Za-z_][A-Za-z0-9_-]*(?:\.[A-Za-z_][A-Za-z0-9_-]*)*$/;
 const WS = /\s/;

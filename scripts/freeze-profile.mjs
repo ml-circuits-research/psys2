@@ -21,7 +21,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 /** A static server with Pages-like caching whose document root can be switched while the port (= the browser origin) stays the same. */
 export async function pagesServer(initialRoot, opts = {}) {
-  let root = initialRoot; const etags = new Map(); const log = [];
+  let root = initialRoot; const etags = new Map(); const log = []; const urls = [];   // urls: every request with its query (module requests of the workers included)
   const srv = http.createServer(async (q, r) => {
     try {
       const rel = decodeURIComponent(q.url.split('?')[0]); const p = path.join(root, rel); const f = p.endsWith('/') ? `${p}index.html` : p;
@@ -30,13 +30,13 @@ export async function pagesServer(initialRoot, opts = {}) {
       let tag = etags.get(key); if (!tag) { tag = `"${createHash('md5').update(buf).digest('hex').slice(0, 16)}"`; etags.set(key, tag); }
       // `htmlFresh`: the ten minutes of the old index.html have passed (the user opens the page after a deploy) but every other file is still inside its max-age
       r.setHeader('content-type', TYPES[path.extname(f)] ?? 'application/octet-stream'); r.setHeader('cache-control', opts.htmlFresh && f.endsWith('.html') ? 'no-cache' : 'max-age=600'); r.setHeader('etag', tag);
-      log.push(rel);
+      log.push(rel); urls.push(q.url);
       if (q.headers['if-none-match'] === tag) { r.statusCode = 304; r.end(); return; }
       r.end(buf);
     } catch { r.statusCode = 404; r.end('nf'); }
   });
   await new Promise((ok) => srv.listen(0, ok));
-  return { port: srv.address().port, setRoot: (d) => { root = d; }, log, close: () => srv.close() };
+  return { port: srv.address().port, setRoot: (d) => { root = d; }, log, urls, close: () => srv.close() };
 }
 
 function fakeSpeech() {
@@ -129,7 +129,7 @@ export async function runFreeze({ oldRoot, newRoot, liveUrl = null, htmlFresh = 
   }
 
   // ---- phase 2: the NEW build on the same origin, same profile ----
-  srv.setRoot(newRoot); srv.log.length = 0;
+  srv.setRoot(newRoot); srv.log.length = 0; if (srv.urls) srv.urls.length = 0;
   if (!liveUrl) b = await launch();
   a = await open(b);
   const out = { readyMs: a.readyMs, oldCaches, oldKeys };
@@ -173,6 +173,8 @@ export async function runFreeze({ oldRoot, newRoot, liveUrl = null, htmlFresh = 
   out.modules = await a.pg.evaluate(() => { const m = performance.getEntriesByType('resource').map((e) => e.name).filter((n) => /\.mjs(\?|$)/.test(n) && !/\/vendor\//.test(n)); return { total: m.length, versioned: m.filter((n) => /\?v=/.test(n)).length }; });
   out.errors = a.errors;
   out.transcript = await a.pg.evaluate(() => [...document.querySelectorAll('.p2-msg')].slice(-14).map((e) => `${e.className.replace('p2-msg ', '')}: ${e.innerText.slice(0, 70)}`));
+  // every module request the page AND its workers made after the new build was served: lib/, worlds/ and the worker's ui/ files must all carry a version (workers have no import map)
+  out.unversionedModules = (srv.urls ?? []).filter((u) => /^\/webchat\/(lib|worlds|ui)\/.+\.mjs(\?|$)/.test(u) && !/\/vendor\//.test(u) && !/\/ui\/ort-worker\.mjs/.test(u) && !/\?v=/.test(u));
   out.refetched = srv.log.filter((x) => /ort-worker|app\.mjs|dispatcher|meta\.json|ort-client/.test(x));
   if (profileOut) { const { profile } = await a.cdp.send('Profiler.stop'); await writeFile(profileOut, JSON.stringify(profile)); }
   await b.close(); srv.close(); await rm(dir, { recursive: true, force: true }).catch(() => {});

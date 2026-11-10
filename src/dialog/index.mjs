@@ -32,6 +32,7 @@ import { Discourse } from './discourse.mjs';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs';
 import { recognize } from '../astra/moves.mjs';
 import { panel } from '../astra/where.mjs';
+import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs';
 import { correctMessage, splitAnswerList } from '../formalizer/rules/expand.mjs';
 
 export { runWorldTests } from './test-runner.mjs';
@@ -971,6 +972,27 @@ export class DialogSession {
       }
       throw e;
     } finally { if (own) perf.end(); guard.release(g); releaseBudget(bt); }
+  }
+
+  /**
+   * The conversation memory as plain JSON: discourse (frames, pending question, actions, topics ...), the ASTRA discussions and instances, the recent worlds
+   * and the last game. A host that has to replace the engine (the page restarts its worker after a runaway turn) keeps it next to the world states and gives
+   * it back with `restoreMemory`. It survives `JSON.stringify` and `structuredClone`.
+   */
+  memoryJSON() {
+    let astra = null;
+    try { astra = this.astra ? astraSnapshot(this.astra) : null; } catch { astra = null; }
+    return { v: 1, discourse: this.discourse.toJSON(), astra, recent: [...(this._recentWorlds ?? [])], lastGame: this._lastGame ?? null };
+  }
+
+  /** Puts a `memoryJSON()` record back (a bad record changes nothing it cannot read). Runs no effect. */
+  restoreMemory(mem) {
+    if (!mem || typeof mem !== 'object' || mem.v !== 1) return false;
+    this.discourse.load(mem.discourse);
+    if (mem.astra && this.astra) { try { astraRestore(this.astra, mem.astra); } catch { /* the discussions start empty */ } }
+    if (Array.isArray(mem.recent)) this._recentWorlds = [...mem.recent];
+    if (mem.lastGame !== undefined) this._lastGame = mem.lastGame;
+    return true;
   }
 
   /** Undo snapshot of everything a turn can change (interpreter session, discourse memory, recent worlds, message counter). */

@@ -1,5 +1,6 @@
 // Operations of kids.time. Browser-safe: no imports.
 
+const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 const K = (s) => 'kids.time.' + s;
 const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s);
 const word = (s) => String(s).replace(/_/g, ' ');
@@ -103,9 +104,9 @@ export function lengthOf(ctx, { whole, part, times }) {
   // breadth-first search for the shortest chain whole -> ... -> part
   const queue = [{ at: whole, c: 1, path: [] }];
   const seen = new Set([whole]);
-  // bounded: breadth-first walk over the facts; every fact enters the queue at most once (seen set)
   while (queue.length) {
     const cur = queue.shift();
+    budget.tick('time.chain', 1 + facts.length);
     for (const f of facts.filter((x) => x.w === cur.at)) {
       if (seen.has(f.p) || f.w === 'leap_year' && f.p === 'month') continue;
       const next = { at: f.p, c: cur.c * f.c, path: [...cur.path, f.id] };

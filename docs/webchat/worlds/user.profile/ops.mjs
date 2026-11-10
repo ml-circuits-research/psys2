@@ -8,8 +8,8 @@
 // The plan (fields, priorities, sensitivity, phrasings, follow-ups) is read from the knowledge base (kb.sop); answers are read by understand.mjs.
 // Modal input: while `inputMode` is set, the engine offers every message to interceptInput(); clear commands for other worlds and this world's own
 // commands pass through (handled: false), everything else is read as the answer. Effects: file.download { filename, text, mime }.
-import { extract, likesItems, clauseLike, echoable, norm, isSkip, isStop, isDecline, YES, NO, sensitive, fieldForRole, fieldForRoleText, pretty, sentenceCase, withArticle, _findEntries as findEntries } from './understand.mjs';
-import { toJson, toMarkdown, counts, PLAN_FALLBACK, SECTIONS_FALLBACK } from './cv.mjs';
+import { extract, likesItems, clauseLike, echoable, norm, isSkip, isStop, isDecline, YES, NO, sensitive, fieldForRole, fieldForRoleText, pretty, sentenceCase, withArticle, _findEntries as findEntries } from './understand.mjs?v=14c199815e';
+import { toJson, toMarkdown, counts, PLAN_FALLBACK, SECTIONS_FALLBACK } from './cv.mjs?v=28a6cad39b';
 
 const TAB = 'profile';
 const ok = (value, extra) => ({ status: 'supported', value, ...extra });

@@ -11,8 +11,8 @@
 // Observation: onObservation turns a failed play (sound blocked) into a spoken hint and, when the host reports the end
 // of playback ({ phase: 'ended' }), sets playing=false (a reply only when a loop ended).
 import { Note, pcFromLex, spoken, list, scaleNotes as tScale, chordNotes as tChord, detectChord, qualityKey, CHORD_TYPES, SCALE_TYPES, INTERVALS,
-  intervalName, between, keyInfo, relativeOf, keysWith, frequency as tFreq, enharmonic as tEnh, LETTERS } from './theory.mjs';
-import { parseAbc, transposeAbc, buildAbc, parsePitchName, parseKeyField, shiftBetween, keyField } from './abc.mjs';
+  intervalName, between, keyInfo, relativeOf, keysWith, frequency as tFreq, enharmonic as tEnh, LETTERS } from './theory.mjs?v=967bf62fb3';
+import { parseAbc, transposeAbc, buildAbc, parsePitchName, parseKeyField, shiftBetween, keyField } from './abc.mjs?v=821caf1237';
 
 export const INSTRUMENTS = ['piano', 'organ', 'flute', 'strings', 'bells', 'bass', 'marimba'];
 const INST_OF = {
@@ -211,13 +211,13 @@ export function playNote(ctx, { note, oct, reg, inst, explicit, beats, secs }) {
   return ok(`Playing ${pitchTitle(name)}${pitchTitle(name) === 'middle C' ? ' (C4)' : ''}${lasting}, ${Math.round(f * 10) / 10} Hz, ${onInst(s)}.`);
 }
 
+const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 function stackUp(names) {
   const out = []; let prev = -Infinity;
   for (const n of names) {
     const x = Note.get(n);
     let m = x.midi, o = x.oct;
-    // bounded: m grows by 12 each pass until it passes prev (a finite pitch)
-    while (m <= prev) { m += 12; o += 1; }
+    while (m <= prev) { budget.tick('music.stack'); m += 12; o += 1; }
     out.push(`${x.pc}${o}`); prev = m;
   }
   return out;

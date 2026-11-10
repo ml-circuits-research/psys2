@@ -3,7 +3,14 @@
 // The browser API output is generative, so every sentence passes a checker (numbers, names, negation, question form);
 // a failure falls back to the rules translator and is recorded in `usage` (shown in the trace).
 
-import { withDeadline } from '../lib/formalizer/guard.mjs';
+// Bounds a promise by a deadline. Its own copy (not lib/formalizer/guard.mjs): the engine worker, which has no import map, loads this file and must not pair it with a
+// possibly stale cached library file.
+function withDeadline(promise, ms, { label = 'operation' } = {}) {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error(`${label} timed out after ${ms} ms`)), ms);
+    Promise.resolve(promise).then((v) => { clearTimeout(timer); resolve(v); }, (e) => { clearTimeout(timer); reject(e); });
+  });
+}
 
 const NEG_SRC = /\b(nu|nici|niciun|nicio|fara|fără|nimic|niciodata|niciodată|not|no|never|n't)\b/i;
 const NEG_EN = /\b(not|no|never|none|nothing|nobody|without|neither|nor|cannot)\b|n't\b/i;
@@ -15,10 +22,12 @@ const fold = (s) => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCa
 const numbers = (s) => (String(s).match(/\d+(?:[.,]\d+)?/g) ?? []).map((n) => n.replace(',', '.'));
 function names(s) {
   const out = [];
-  const re = /(^|[.!?]\s+)|(\p{Lu}\p{L}+)/gu;
+  // Capitalised words that are not the first word of a sentence. (An earlier version had an alternative that matched the empty string at index 0: exec()
+  // returned the same empty match for ever and froze the page on the first checked browser translation, which is every Romanian message.)
+  const re = /\p{Lu}\p{L}+/gu;
   let m;
-  // bounded: regex exec with the g flag advances lastIndex each pass
-  while ((m = re.exec(s))) if (m[2] && m.index > 0 && !/[.!?]\s+$/.test(s.slice(0, m.index))) out.push(m[2]);
+  // bounded: the regex cannot match the empty string (at least two letters), so every exec() moves lastIndex forward
+  while ((m = re.exec(s))) if (m.index > 0 && !/[.!?]\s+$/.test(s.slice(0, m.index))) out.push(m[0]);
   return out;
 }
 
@@ -90,9 +99,13 @@ const COOLDOWN_MS = 60000;
 /** Languages the session understands; any other detected language is 'unknown'. */
 const SUPPORTED = new Set(['en', 'ro']);
 
-export function createSwitchTranslator({ rules, getStrategy, getDetectStrategy = () => 'auto' }) {
-  const usage = [];
-  const detectUsage = [];
+/**
+ * The browser side of the translators: the on-device Translator and LanguageDetector of this window, with the HANG3 rules (never waited for beyond a
+ * short deadline, `create()` once per pair, a cooldown after a failure, a background download). Only a window has these APIs. The engine worker (which
+ * runs the turn) has none: it gets a remote backend (`createRemoteBackend`) that asks the page, which owns this one, over a message with a deadline.
+ *   { translatorKind(), detectorKind(), translate(text, from, to) -> string, detect(text) -> [{ detectedLanguage, confidence }], prepare(from, to), state(from, to) }
+ */
+export function createBrowserBackend() {
   let detectorPromise = null, detectorInstance = null, detectorWait = false;
   /**
    * The detector instance when it is ready, else null. It NEVER waits for `create()`: while the on-device model downloads (which can take minutes, or
@@ -165,6 +178,38 @@ export function createSwitchTranslator({ rules, getStrategy, getDetectStrategy =
     if ((cooldown.get(key) ?? 0) > Date.now()) return 'not answering; the rules translator is used for now';
     return null;
   }
+  async function detect(text) {
+    const det = await browserDetector();
+    if (!det) throw new Error('still downloading');
+    return await withDeadline(det.detect(String(text)), DETECT_TIMEOUT_MS, { label: 'language detection' });
+  }
+  return { translatorKind: browserTranslatorKind, detectorKind: browserDetectorKind, translate: browserTranslate, detect, prepare: prepareTranslator, state: translatorState };
+}
+
+/** Deadline of a call from the engine worker to the page's browser API: the page itself waits at most 400 ms, this leaves room for the message round trip. */
+export const REMOTE_DEADLINE_MS = 700;
+
+/**
+ * The browser backend as seen from the engine worker: `kinds` = { translator, detector } (what the page reported at start), `call(op, payload)` posts a
+ * request to the page and resolves with its answer. A call that is not answered within REMOTE_DEADLINE_MS rejects, and the switch translator then
+ * uses the rules (as it does for a browser API that times out). The page thread is never needed for a turn to finish.
+ */
+export function createRemoteBackend({ kinds, call, deadlineMs = REMOTE_DEADLINE_MS }) {
+  const bounded = (op, payload, label) => withDeadline(call(op, payload), deadlineMs, { label });
+  return {
+    translatorKind: () => kinds.translator ?? null,
+    detectorKind: () => kinds.detector ?? null,
+    translate: async (text, from, to) => { if (!kinds.translator) throw new Error('no browser translator'); return bounded('translate', { text, from, to }, 'page translation'); },
+    detect: async (text) => { if (!kinds.detector) throw new Error('no browser language detector'); return bounded('detect', { text }, 'page language detection'); },
+    prepare: async () => {},
+    state: () => (kinds.translator ? kinds.state ?? 'in the page' : 'not supported by this browser'),
+  };
+}
+
+export function createSwitchTranslator({ rules, getStrategy, getDetectStrategy = () => 'auto', backend = createBrowserBackend() }) {
+  const usage = [];
+  const detectUsage = [];
+  const { prepare: prepareTranslator, state: translatorState } = backend;
   const translator = {
     prepareTranslator, translatorState,
     rules,   // the synchronous rules translator: used by the voice dry run, which must not wait for a browser translator
@@ -178,9 +223,7 @@ export function createSwitchTranslator({ rules, getStrategy, getDetectStrategy =
       if (pref !== 'rules') {
         try {
           if ((String(text ?? '').match(/\p{L}/gu) ?? []).length < MIN_LETTERS) throw Object.assign(new Error('too short for the browser detector'), { quiet: true });
-          const det = await browserDetector();
-          if (!det) throw new Error('still downloading');
-          const top = (await withDeadline(det.detect(String(text)), DETECT_TIMEOUT_MS, { label: 'language detection' }))?.[0];
+          const top = (await backend.detect(text))?.[0];
           if (!top?.detectedLanguage) throw new Error('empty detection result');
           const code = String(top.detectedLanguage).toLowerCase().split(/[-_]/)[0];
           const confidence = Number(top.confidence) || 0;
@@ -202,9 +245,9 @@ export function createSwitchTranslator({ rules, getStrategy, getDetectStrategy =
       const pref = getStrategy();
       const entry = { direction: `${from}->${to}`, requested: pref, strategy: 'rules', fallback: false, reason: null };
       usage.push(entry);
-      if (pref !== 'rules' && browserTranslatorKind()) {
+      if (pref !== 'rules' && backend.translatorKind()) {
         try {
-          const out = await browserTranslate(text, from, to);
+          const out = await backend.translate(text, from, to);
           const bad = checkTranslation(text, out, { from, to });
           if (!bad) {
             entry.strategy = 'browser-api';

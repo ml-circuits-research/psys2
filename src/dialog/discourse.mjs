@@ -93,6 +93,31 @@ export class Discourse {
     this.list = null;         // list-entry mode (spec 11 section 10): { list, world, n }; unlike `pending` it repeats until "that's all"
   }
 
+  // ---- serialisable memory (a restarted engine worker gets it back, spec 06 "Engine worker") ----------------------------
+
+  /** The memory as plain JSON (no class instances, no functions): `Discourse.fromJSON(dialog, json)` or `load(json)` puts it back. */
+  toJSON() {
+    return JSON.parse(JSON.stringify({ frames: this.frames, pending: this.pending, last: this.last, actions: this.actions, lastAnswer: this.lastAnswer,
+      lastByWorld: this.lastByWorld, topics: this.topics, icptTurn: this.icptTurn, list: this.list }));
+  }
+
+  /** Replaces the memory by a `toJSON()` record (an unusable record leaves it empty). Links a pending repair back to the very action and frame it names. */
+  load(json) {
+    const j = json && typeof json === 'object' ? JSON.parse(JSON.stringify(json)) : {};
+    this.frames = Array.isArray(j.frames) ? j.frames : [];
+    this.actions = Array.isArray(j.actions) ? j.actions : [];
+    this.pending = j.pending ?? null; this.last = j.last ?? null; this.lastAnswer = j.lastAnswer ?? null;
+    this.lastByWorld = j.lastByWorld && typeof j.lastByWorld === 'object' ? j.lastByWorld : {};
+    this.topics = Array.isArray(j.topics) ? j.topics : []; this.icptTurn = j.icptTurn ?? null; this.list = j.list ?? null;
+    const p = this.pending;
+    if (p?.action) p.action = this.actions.find((a) => a.turn === p.action.turn && a.text === p.action.text) ?? p.action;   // identity: the actions list is filtered by `!== act`
+    if (p?.frame) p.frame = this.frames.find((f) => f.turn === p.frame.turn && f.text === p.frame.text) ?? p.frame;
+    for (const a of this.actions) a.frames = (a.frames ?? []).map((af) => this.frames.find((f) => f.turn === af.turn && f.text === af.text) ?? af);
+    return this;
+  }
+
+  static fromJSON(dialog, json) { return new Discourse(dialog).load(json); }
+
   // ---- frames ------------------------------------------------------------------------------------------------------
 
   /** Remember a parsed request or question that the interpreter understood. `answer` is the interpreter result record. */

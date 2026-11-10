@@ -1,13 +1,13 @@
 // English -> Romanian translation of short answers (rule based, browser-safe).
 // Reverse use of the bilingual lexicon plus a small clause generator and answer frames.
-import { tokenize, splitSentences, foldKey } from './normalize.mjs';
-import * as M from './morphology.ro.mjs';
-import * as L from './lexicon.ro-en.mjs';
-import * as E from './inflect.en.mjs';
-import { placeRo, MULTIWORD_EN } from './places.ro-en.mjs';
-import { translateReplySentence } from './replies.en-ro.mjs';
-import { CANONICAL_RO } from './canonical.en-ro.mjs';
-import { budget } from '../dialog/budget.mjs';
+import { tokenize, splitSentences, foldKey } from './normalize.mjs?v=8f5393b731';
+import * as M from './morphology.ro.mjs?v=cb06db873c';
+import * as L from './lexicon.ro-en.mjs?v=0823d91a10';
+import * as E from './inflect.en.mjs?v=bb4799b9ff';
+import { placeRo, MULTIWORD_EN } from './places.ro-en.mjs?v=97dc087c2a';
+import { translateReplySentence } from './replies.en-ro.mjs?v=08f82c98ef';
+import { CANONICAL_RO } from './canonical.en-ro.mjs?v=2b71c7e520';
+import { budget } from '../dialog/budget.mjs?v=9f5360afbc';
 
 // ------------------------------------------------------------------ reverse lexicon
 

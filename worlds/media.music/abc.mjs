@@ -70,12 +70,14 @@ function tokenize(text) {
     if (/^\s*%/.test(line) || /^[A-Za-z]:/.test(line)) { tokens.push({ type: 'other', s: start, e: start + line.length }); continue; }
     let i = 0;
     const push = (t) => tokens.push({ ...t, s: start + t.i0, e: start + i });
+    // bounded: every branch advances i or leaves the loop
     while (i < line.length) {
       const c = line[i];
       const i0 = i;
       if (c === ' ' || c === '\t') { i++; continue; }
       if (c === '|' || c === ':' || (c === '[' && /[|\d]/.test(line[i + 1] ?? ''))) {
         i++;
+        // bounded: i only increases up to the line length
         while (i < line.length && /[|\]:\d\[]/.test(line[i])) i++;
         push({ type: 'bar', i0 });
         continue;
@@ -83,6 +85,7 @@ function tokenize(text) {
       if (c === '[') { // chord
         i++;
         const notes = [];
+        // bounded: every branch advances i (a note by its length, else by one)
         while (i < line.length && line[i] !== ']') {
           const n = line.slice(i).match(/^(\^\^|\^|__|_|=)?([A-Ga-g])([',]*)(\d*\/*\d*)/);
           if (!n) { i++; continue; }
@@ -222,6 +225,7 @@ export function transposeAbc(text, semis, toKey) {
 
 const lenToken = (beats, unitBeats) => {
   let n = Math.round((beats / unitBeats) * 64), d = 64;
+  // bounded: Euclid: the second argument strictly decreases to 0
   const g = (a, b) => (b ? g(b, a % b) : a);
   const k = g(n, d); n /= k; d /= k;
   return d === 1 ? (n === 1 ? '' : String(n)) : n === 1 ? `/${d}` : `${n}/${d}`;

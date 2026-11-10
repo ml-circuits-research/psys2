@@ -17,10 +17,12 @@
 import {
   W, H, HORIZON, GROUND_BASE, KINDS, KIND_ORDER, PLURALS, REGIONS, BASE_COLORS, SHADES, COLOR_ALIASES,
   canonColor, defaultColor, partOfWord, partNames, partLabel, bbox, placeInRegion, regionOf, starField, isKind,
-} from './scene.mjs';
+} from './scene.mjs?v=47a68c2e08';
 
-export { KINDS, REGIONS, canonColor, colorHex, partsOf, bbox, regionOf, W, H, HORIZON } from './scene.mjs';
+export { KINDS, REGIONS, canonColor, colorHex, partsOf, bbox, regionOf, W, H, HORIZON } from './scene.mjs?v=47a68c2e08';
 
+// The turn's step budget (a no-op outside a turn): placement and name resolution are searches whose cost grows with the picture.
+const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 const MAX_HISTORY = 50;
 const TAB = 'draw';
 
@@ -247,8 +249,8 @@ const DET_ALL = new Set(['all', 'every', 'each', 'both']);
 const DET_SKIP = new Set(['the', 'a', 'an', 'my', 'your', 'this', 'that', 'these', 'those', 'any', 'some', 'another', 'of', 'in', 'picture', 'drawing', 'painting']);
 
 /** Parses words like "the big red tree on the left" into a description of the thing meant. */
-// bounded: recurses on the words after "of": strictly fewer words each level
 export function parseNP(text) {
+  budget.tick('art.np');   // recurses on the words after "of"
   const all = toks(text);
   const np = { text: String(text ?? ''), pron: null, all: false, ordinal: null, size: null, superlative: false, color: null, kind: null, plural: false, part: null, partOf: null, loc: null, pos: null, special: null, one: false, known: true };
   if (!all.length) return { ...np, known: false };
@@ -317,8 +319,8 @@ const partColor = (o, part) => (part ? o.parts?.[part] ?? null : null);
  * Rules (no guessing without saying so): "it" is the selected thing or what was just drawn; several matches are
  * narrowed by ordinal, size, side, selection and recency, and the reply says which one was taken.
  */
-// bounded: recurses through np.partOf, a finite chain built by parseNP on fewer words
 export function resolveNP(s, np, { many = false } = {}) {
+  budget.tick('art.np', 1 + s.objects.length);   // recurses through np.partOf; each level scans the picture
   const out = { objs: [], special: np.special && np.special !== 'everything' ? np.special : null, np };
   if (np.special === 'everything') { out.objs = s.objects.slice(); out.everything = true; return out; }
   if (out.special) return out;
@@ -471,7 +473,7 @@ const sameLayer = (a, b) => {
   const g = (x) => (x === 'horizon' ? 'ground' : x);
   return g(la) === g(lb);
 };
-const crowd = (s, o, ignore) => s.objects.filter((x) => x !== o && x.id !== ignore && sameLayer(x, o)).reduce((m, x) => Math.max(m, overlapRatio(bbox(o), bbox(x))), 0);
+const crowd = (s, o, ignore) => (budget.tick('art.place', s.objects.length + 1), s.objects).filter((x) => x !== o && x.id !== ignore && sameLayer(x, o)).reduce((m, x) => Math.max(m, overlapRatio(bbox(o), bbox(x))), 0);
 
 function clampIn(o, margin = 4) {
   const b = bbox(o);

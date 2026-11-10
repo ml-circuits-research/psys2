@@ -11,7 +11,7 @@ import { createEditor } from './ui/editor.mjs';
 import { createTicTacToe, createGuess, createHangman } from './ui/games.mjs';
 import { createSpeech, createMicLock, measureSpeed, speechSupport, LANG_TAGS } from './ui/speech.mjs';
 import { classifyVoice } from './ui/voice-noise.mjs';
-import { createSwitchTranslator, browserTranslatorKind, browserTranslatorAvailability, browserDetectorKind, browserDetectorAvailability } from './ui/translation.mjs';
+import { createSwitchTranslator, createBrowserBackend, browserTranslatorKind, browserTranslatorAvailability, browserDetectorKind, browserDetectorAvailability } from './ui/translation.mjs';
 import { renderTrace } from './ui/trace.mjs';
 import { findDispatcherModel, versionLabel } from './ui/dispatcher-host.mjs';
 import { findNormalizerModel } from './ui/normalizer-host.mjs';
@@ -93,7 +93,7 @@ export async function mountPsys2(element, options = {}) {
   const tabDefs = allTabs.filter((t) => !options.tabs || options.tabs.includes(t.id));
   const states = {};           // world id -> latest state snapshot
   const panelUI = {};          // tab id -> { ui, present }
-  let engine = null, session = null, translator = null, speech = null, engineClient = null;
+  let engine = null, session = null, translator = null, speech = null, engineClient = null, browserBackend = null;
   const stageLog = [], longTasks = [];   // COMPUTE-BUDGET: host stage transitions and every main-thread task over 200 ms (PerformanceObserver 'longtask')
   const hostStage = (stage, recId = null) => { stageLog.push({ at: performance.now(), stage, recId }); if (stageLog.length > 400) stageLog.splice(0, 200); };
   let view = tabDefs[0]?.id ?? null, lastShellTab = null, lastShell = {};
@@ -1305,18 +1305,19 @@ export async function mountPsys2(element, options = {}) {
     try { [meta, nzMeta] = await Promise.all([findDispatcherModel(base), findNormalizerModel(base)]); } catch (e) { console.warn('Encoder formalizer unavailable', e); }
     encoderChecked = true;
     // Facades of the models that live in the engine worker (the page only needs their labels, status and a way to start loading them)
-    engineClient = createEngineClient({ base, versions: globalThis.__psys2Mod ?? {}, getSettings: engineSettings, getTab: () => view, onEvent: onEngineEvent, testHooks: testHooksOn, limits: LIMITS, log: (...a) => { if (testHooksOn) console.debug('ENGINE', ...a); } });
+    browserBackend = createBrowserBackend();
+    engineClient = createEngineClient({ base, versions: globalThis.__psys2Mod ?? {}, browserCall: (op, m) => (op === 'translate' ? browserBackend.translate(m.text, m.from, m.to) : browserBackend.detect(m.text)), getSettings: engineSettings, getTab: () => view, onEvent: onEngineEvent, testHooks: testHooksOn, limits: LIMITS, log: (...a) => { if (testHooksOn) console.debug('ENGINE', ...a); } });
     if (meta) {
       dispatcherEnc = { prepare: () => engineClient.call('prepare', { which: 'dispatcher' }) };
       dispatcherVersion = meta.version ?? null;
       dispatcherLabel = versionLabel(meta);
     }
     if (meta && nzMeta) normalizerHost = { meta: nzMeta, label: versionLabel(nzMeta), status: { state: 'idle', message: '' }, timings: [], prepare: () => engineClient.call('prepare', { which: 'normalizer' }) };
-    // The browser Translation API lives on the window, not in a worker: the engine reads other languages with the rules translator.
+    // The browser Translation API lives on the window, not in a worker: the page answers the worker's requests for it (deadline, then the rules).
     translator = { get usage() { return engineClient.usage; }, get detectUsage() { return engineClient.detection; }, resetUsage() { engineClient.resetUsage(); },
-      translatorState: () => 'the engine runs in a worker, which uses the rules translator', prepareTranslator: async () => {}, rules: null };
+      translatorState: (f, t) => browserBackend.state(f, t), prepareTranslator: (f, t) => browserBackend.prepare(f, t), rules: null };
     const worldsVer = globalThis.__psys2Mod?.['worlds/index.json'];
-    const info = await engineClient.boot({ worldsUrl: new URL('worlds/index.json', base).href + (worldsVer ? `?v=${worldsVer}` : ''), onlyWorlds: options.worlds ?? null, dispatcherMeta: meta, normalizerMeta: nzMeta, modelsWanted: () => modelsAllowed });
+    const info = await engineClient.boot({ browser: { translator: browserTranslatorKind(), detector: browserDetectorKind() }, worldsUrl: new URL('worlds/index.json', base).href + (worldsVer ? `?v=${worldsVer}` : ''), onlyWorlds: options.worlds ?? null, dispatcherMeta: meta, normalizerMeta: nzMeta, modelsWanted: () => modelsAllowed });
     engine = { worlds: () => info.worlds.map((id) => ({ id })), problems: () => info.problems ?? [], get set() { return introEngine?.set ?? { list: () => [] }; } };
     if (info.problems?.length) console.warn('PSys2 world problems:', info.problems);
     if (!settingsEl.hidden) renderSettings();

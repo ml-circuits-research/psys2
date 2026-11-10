@@ -2,6 +2,7 @@
 // Source: https://github.com/ml-circuits-research/diagram-vss-demo, commit 9900d34836bf3fc913a6549f3da4c444bfa11304, docs/js/templates.js (AGPL-3.0).
 // Converted to an ES module by scripts/convert-diagram-engine.mjs (mechanical wrap; see imports/diagram-vss-demo/PROVENANCE.md). Do not edit by hand.
 const module = { exports: {} };
+const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (no-op outside a turn)
 /* Layout templates (SmartArt-like): a list of texts -> the shapes, free texts and links of a diagram form, with positions.
    Pure functions, no dependency on the engine (docs/js/logic.js) or the page: the engine (a later phase, design in
    training/sketch/legend_ext/LEGEND_EXT.md) calls place() / layout(), names the elements (nameElements), emits them as one wire (one undo
@@ -456,6 +457,7 @@ def('hourglass', {
     const fill = (count, dir, put) => {
       let i = 0, y = dir < 0 ? B.y + 18 + h / 2 : B.y + B.h - 18 - h / 2;
       while (i < count) {
+        budget.tick('diagram.layout');
         const half = (HW - 12) * Math.abs(y - cy) / (B.h / 2) - 6, cap = Math.max(0, Math.floor((2 * half + g) / (w + g)));
         if (cap < 1 || Math.abs(y - cy) < h / 2 + 12) { i = count + 1; break; }
         const r = Math.min(cap, count - i), x0 = cx - (r * w + (r - 1) * g) / 2 + w / 2;
@@ -530,7 +532,7 @@ function layout(name, params, box) {
   const { P, notes } = normalize(T, params || {});
   let last = null;
   for (let k = 1; k >= 0.499; k = Math.round((k - 0.05) * 100) / 100) {
-    const c = new Build(T, P, k); T.build(c, c.heading(box));
+    budget.tick('diagram.layout'); const c = new Build(T, P, k); T.build(c, c.heading(box));
     const res = { template: name, box: Object.assign({}, box), elements: c.els.map(roundEl), links: c.links, notes: notes.slice(), overflow: !!c.overflow, k };
     const probs = check(res, box); last = Object.assign(res, { problems: probs });
     if (!probs.length) break;

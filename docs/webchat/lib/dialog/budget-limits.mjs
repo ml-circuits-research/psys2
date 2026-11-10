@@ -46,5 +46,22 @@ export const BUDGET_LIMITS = {
     'voice.rec': 20_000,
     'dispatch.segmentation': 20_000,
     'dispatch.rewrite': 20_000,
+    // world-operation helpers without a ctx (they reach the turn budget through the global handle, see budget.mjs); work scales with the picture,
+    // the diagram or the document, so the limits are generous (operational sets: art.place max 1.5 k, diagram.* max 42, others <= 21)
+    'art.place': 200_000,              // crowd checks: objects per candidate spot
+    'art.np': 20_000,
+    'diagram.layout': 400_000,         // n^2 per pass of the separation, force and crossing passes
+    'diagram.route': 200_000,
+    'diagram.place': 400_000,          // 625 grid spots x (shapes + arrow points)
+    'diagram.solve': 400_000,
+    'diagram.path': 100_000,
+    'diagram.name': 20_000,
+    'diagram.words': 20_000,
+    'reader.np': 2_000_000,            // document analysis: grows with the text (4000 sentences at most)
+    'reader.pp': 2_000_000,
+    'reader.merge': 200_000,
+    'reader.id': 20_000,
+    'time.chain': 20_000,
+    'music.stack': 20_000,
   },
 };

@@ -9,7 +9,7 @@ import { scan } from './lib/loop-scan.mjs';
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const walk = (d, o = []) => { for (const e of readdirSync(d)) { const f = path.join(d, e); if (statSync(f).isDirectory()) walk(f, o); else if (e.endsWith('.mjs')) o.push(f); } return o; };
 const files = [...walk(path.join(ROOT, 'src')), ...walk(path.join(ROOT, 'docs/webchat/ui'))];
-for (const w of readdirSync(path.join(ROOT, 'worlds'))) { const f = path.join(ROOT, 'worlds', w, 'ops.mjs'); try { statSync(f); files.push(f); } catch { /* none */ } }
+for (const f of walk(path.join(ROOT, 'worlds'))) { const rel = path.relative(path.join(ROOT, 'worlds'), f).split(path.sep); if (rel.at(-1) === 'datagen.mjs' || rel.includes('vendor') || rel.includes('engine')) continue; files.push(f); }
 let n = 0;
 for (const f of files) for (const v of scan(readFileSync(f, 'utf8'))) { n++; if (!process.argv.includes('--count')) console.log(`${path.relative(ROOT, f)}:${v.line}\t${v.kind}\t${v.snippet}`); }
 console.log(`${n} unguarded`);

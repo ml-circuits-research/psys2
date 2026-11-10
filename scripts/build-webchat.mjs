@@ -103,8 +103,62 @@ async function importGraph(outDir, roots) {
   }
   return [...seen].sort();
 }
+const DYNAMIC_RE = /\bimport\(\s*['"](\.{1,2}\/[^'"]+\.mjs)['"]\s*\)/g;
+/** The relative `.mjs` specifiers of a module text (static imports, re-exports, and literal `import('./x.mjs')`). */
+function specifiersOf(text) {
+  const out = [];
+  for (const m of text.matchAll(IMPORT_RE)) { const s = m[1] ?? m[2]; if (s.endsWith('.mjs')) out.push(s); }
+  for (const m of text.matchAll(DYNAMIC_RE)) out.push(m[1]);
+  return out;
+}
+/**
+ * Versions the module graph of lib/ and worlds/ for workers (COMPUTE-BUDGET D item 4). A worker has no import map, so its imports are plain URLs and could pair a
+ * fresh module with a stale cached one (Pages sends max-age=600). Every module gets a version that covers its own text and everything it imports (a Merkle hash;
+ * an import cycle is one unit), and every relative specifier in these generated files is rewritten to `<specifier>?v=<version of the target>`. A module therefore
+ * always loads exactly the dependencies it was built with, in a worker and in the page alike, and unchanged subgraphs stay cached across deploys.
+ * The page's import map maps the plain URLs to the same versioned URLs (one module instance). Returns { 'lib/x.mjs': version, ... }.
+ */
+export async function versionGraph(outDir) {
+  const nodes = new Map();   // rel -> { text, deps: Set<rel> }
+  for (const sub of ['lib', 'worlds']) {
+    if (!(await exists(path.join(outDir, sub)))) continue;
+    for (const f of await walk(path.join(outDir, sub))) if (f.endsWith('.mjs')) { const rel = `${sub}/${f}`; nodes.set(rel, { text: await readFile(path.join(outDir, rel), 'utf8'), deps: new Set() }); }
+  }
+  const resolveSpec = (rel, spec) => path.posix.normalize(path.posix.join(path.posix.dirname(rel), spec));
+  for (const [rel, n] of nodes) for (const s of specifiersOf(n.text)) { const d = resolveSpec(rel, s); if (nodes.has(d)) n.deps.add(d); }
+  // Tarjan: strongly connected components in dependency order (a component after everything it depends on)
+  const index = new Map(), low = new Map(), onStack = new Set(), stack = [], comps = [];
+  let counter = 0;
+  const visit = (v) => {   // bounded: depth-first over the finite module graph; each node is visited once (index map)
+    index.set(v, counter); low.set(v, counter); counter++; stack.push(v); onStack.add(v);
+    for (const w of nodes.get(v).deps) {
+      if (!index.has(w)) { visit(w); low.set(v, Math.min(low.get(v), low.get(w))); }
+      else if (onStack.has(w)) low.set(v, Math.min(low.get(v), index.get(w)));
+    }
+    if (low.get(v) === index.get(v)) { const c = []; let w; do { w = stack.pop(); onStack.delete(w); c.push(w); } while (w !== v); comps.push(c); }   // bounded: pops down to v, which is on the stack
+  };
+  for (const v of [...nodes.keys()].sort()) if (!index.has(v)) visit(v);
+  const ver = {};
+  for (const c of comps) {
+    const members = new Set(c);
+    const ext = new Set();
+    for (const m of c) for (const d of nodes.get(m).deps) if (!members.has(d)) ext.add(`${d}@${ver[d]}`);
+    const body = [...c].sort().map((m) => `${m}:${sha(nodes.get(m).text)}`).join('\n') + '\n' + [...ext].sort().join('\n');
+    const v = sha(body).slice(0, 10);
+    for (const m of c) ver[m] = v;
+  }
+  for (const [rel, n] of nodes) {
+    const rewrite = (s) => { const d = resolveSpec(rel, s); return nodes.has(d) ? `${s}?v=${ver[d]}` : s; };
+    const text = n.text
+      .replace(IMPORT_RE, (all, a, b) => { const s = a ?? b; return s.endsWith('.mjs') ? all.replace(s, rewrite(s)) : all; })
+      .replace(DYNAMIC_RE, (all, s) => all.replace(s, rewrite(s)));
+    if (text !== n.text) await writeFile(path.join(outDir, rel), text);
+  }
+  return ver;
+}
+
 /** Every module of the page (app, ui, lib, world ops; not vendor/) with a short content hash, plus worlds/index.json: { 'lib/dialog/index.mjs': '1a2b3c4d5e', ... }. */
-async function moduleVersions(outDir) {
+async function moduleVersions(outDir, graph = {}) {
   const out = {};
   const add = async (rel) => { out[rel] = sha(await readFile(path.join(outDir, rel))).slice(0, 10); };
   if (await exists(path.join(outDir, 'app.mjs'))) await add('app.mjs');
@@ -112,10 +166,11 @@ async function moduleVersions(outDir) {
     if (!(await exists(path.join(outDir, sub)))) continue;
     for (const f of await walk(path.join(outDir, sub))) if (f.endsWith('.mjs')) await add(`${sub}/${f}`);
   }
+  Object.assign(out, graph);   // lib and worlds: the graph version (the same string their own imports carry), so the page and the workers load one instance
   if (await exists(path.join(outDir, 'worlds/index.json'))) await add('worlds/index.json');
   return out;
 }
-async function writeEarlyLoad({ outDir, tabFiles, ids }) {
+async function writeEarlyLoad({ outDir, tabFiles, ids, graph }) {
   const file = path.join(outDir, 'index.html');
   if (!(await exists(file))) return;
   const html = await readFile(file, 'utf8');
@@ -125,7 +180,7 @@ async function writeEarlyLoad({ outDir, tabFiles, ids }) {
   // Cache busting (URGENT-FREEZE): GitHub Pages serves everything with max-age=600, so after a deploy a browser mixes old and new files for ten minutes
   // (and an unversioned worker URL can stay old). An import map sends every module URL to `<url>?v=<content hash>`: one index.html always names one
   // consistent set of files, unchanged files stay cached across deploys, and the ORT worker and worlds/index.json take their versions from window.__psys2Mod.
-  const ver = await moduleVersions(outDir);
+  const ver = await moduleVersions(outDir, graph);
   const imports = Object.fromEntries(Object.entries(ver).filter(([k]) => k.endsWith('.mjs')).map(([k, v]) => [`./${k}`, `./${k}?v=${v}`]));
   const block = [EARLY_BEGIN,
     `<script type="importmap">${JSON.stringify({ imports })}</script>`,
@@ -189,7 +244,8 @@ export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs
 
   // 3a. early loading (PERF round 2): index.html gets modulepreload links for the whole module graph (app, lib, tabs, world ops) so that a
   // high-latency link fetches them in parallel instead of one import round trip at a time, and an early fetch of worlds/index.json and the model meta file.
-  await writeEarlyLoad({ outDir, tabFiles, ids });
+  const graph = await versionGraph(outDir);   // rewrites the imports of lib/ and worlds/ to versioned URLs
+  await writeEarlyLoad({ outDir, tabFiles, ids, graph });
 
   // 3b. dispatcher model for the Encoder formalizer (optional)
   const modelFiles = models ? await copyDispatcherModel({ root, outDir, exportDir: typeof models === 'string' ? models : DEFAULT_MODEL_EXPORT, metaOnly, log }) : null;

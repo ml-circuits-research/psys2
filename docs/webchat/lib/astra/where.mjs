@@ -1,8 +1,8 @@
 /**
  * ASTRA discussion commands, "where were we?" and UI projections (spec 13 section 8, A11). Browser-safe, pure.
  */
-import { infoState } from './moves.mjs';
-import { USER_SCOPE } from './registry.mjs';
+import { infoState } from './moves.mjs?v=69784e24c4';
+import { USER_SCOPE } from './registry.mjs?v=a492721382';
 
 const plain = (t) => String(t ?? '').toLowerCase().replace(/[’']/g, '').replace(/[^a-z0-9\- ]+/g, ' ').replace(/\s+/g, ' ').trim();
 

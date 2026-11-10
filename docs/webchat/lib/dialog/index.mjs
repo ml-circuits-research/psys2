@@ -9,32 +9,33 @@
  * `translator` is optional: { detectLanguage(text), translate(text, { from, to }) } (spec 05).
  * Without it all input is treated as English.
  */
-import { precompile as precompileRules } from '../formalizer/rules/index.mjs';
-import { loadWorlds } from '../worlds/index.mjs';
-import { validateWorldSet } from '../worlds/validate.mjs';
-import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs';
-import { createInterpreter } from '../interpreter/index.mjs';
-import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs';
-import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs';
-import { serialize, makeWire, atom, str } from '../soplang/index.mjs';
-import { splitSentences } from '../formalizer/rules/normalize.mjs';
-import { nameCandidates, nameIndex } from '../formalizer/names.mjs';
-import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs';
-import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs';
-import { lexIndex } from '../worlds/lexicon.mjs';
-import { perf } from '../formalizer/perf.mjs';
-import { guard, TurnAborted } from '../formalizer/guard.mjs';
-import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs';
-import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs';
-import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs';
-import { checkValues } from './value-check.mjs';
-import { Discourse } from './discourse.mjs';
-import { createSessionAstra, mirrorFrames } from '../astra/session.mjs';
-import { recognize } from '../astra/moves.mjs';
-import { panel } from '../astra/where.mjs';
-import { correctMessage, splitAnswerList } from '../formalizer/rules/expand.mjs';
+import { precompile as precompileRules } from '../formalizer/rules/index.mjs?v=5a7aa0c66e';
+import { loadWorlds } from '../worlds/index.mjs?v=ae7640fde4';
+import { validateWorldSet } from '../worlds/validate.mjs?v=45671a9d58';
+import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs?v=91ded5d03a';
+import { createInterpreter } from '../interpreter/index.mjs?v=a7fff13d59';
+import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=879a167dec';
+import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=bfef5a2f57';
+import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=30640a2956';
+import { splitSentences } from '../formalizer/rules/normalize.mjs?v=4ab1c2d71f';
+import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=cc2c0f93be';
+import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=76f078766c';
+import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=366b7f0319';
+import { lexIndex } from '../worlds/lexicon.mjs?v=e3316469a7';
+import { perf } from '../formalizer/perf.mjs?v=fd62b893eb';
+import { guard, TurnAborted } from '../formalizer/guard.mjs?v=ded769d6bc';
+import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=9f5360afbc';
+import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=8d7ae94bd3';
+import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=b25c79bad3';
+import { checkValues } from './value-check.mjs?v=5775e66423';
+import { Discourse } from './discourse.mjs?v=8a9606cf9f';
+import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=65217ad31a';
+import { recognize } from '../astra/moves.mjs?v=69784e24c4';
+import { panel } from '../astra/where.mjs?v=72e99182f4';
+import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=55e9fc2037';
+import { correctMessage, splitAnswerList } from '../formalizer/rules/expand.mjs?v=ce5901f0da';
 
-export { runWorldTests } from './test-runner.mjs';
+export { runWorldTests } from './test-runner.mjs?v=3d0b4339cc';
 
 const plainSegment = (s) => ({
   text: s.text, span: s.span, isQuestion: s.isQuestion, worlds: s.worlds, routing: s.routing, match: s.match,
@@ -135,7 +136,7 @@ const textOf = (r) => (typeof r === 'string' ? r : r?.text);
 const QUESTION_WORD = /^(?:what|who|whom|whose|where|when|why|how|which)\b/i;
 
 /** Time budget of the leniency stage (spelling variants and partial windows) of one message, in ms; past it the best reading so far stands (turn guard, spec 06). */
-import { LIMITS } from './time-limits.mjs';
+import { LIMITS } from './time-limits.mjs?v=6cd5b372e1';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
@@ -971,6 +972,27 @@ export class DialogSession {
       }
       throw e;
     } finally { if (own) perf.end(); guard.release(g); releaseBudget(bt); }
+  }
+
+  /**
+   * The conversation memory as plain JSON: discourse (frames, pending question, actions, topics ...), the ASTRA discussions and instances, the recent worlds
+   * and the last game. A host that has to replace the engine (the page restarts its worker after a runaway turn) keeps it next to the world states and gives
+   * it back with `restoreMemory`. It survives `JSON.stringify` and `structuredClone`.
+   */
+  memoryJSON() {
+    let astra = null;
+    try { astra = this.astra ? astraSnapshot(this.astra) : null; } catch { astra = null; }
+    return { v: 1, discourse: this.discourse.toJSON(), astra, recent: [...(this._recentWorlds ?? [])], lastGame: this._lastGame ?? null };
+  }
+
+  /** Puts a `memoryJSON()` record back (a bad record changes nothing it cannot read). Runs no effect. */
+  restoreMemory(mem) {
+    if (!mem || typeof mem !== 'object' || mem.v !== 1) return false;
+    this.discourse.load(mem.discourse);
+    if (mem.astra && this.astra) { try { astraRestore(this.astra, mem.astra); } catch { /* the discussions start empty */ } }
+    if (Array.isArray(mem.recent)) this._recentWorlds = [...mem.recent];
+    if (mem.lastGame !== undefined) this._lastGame = mem.lastGame;
+    return true;
   }
 
   /** Undo snapshot of everything a turn can change (interpreter session, discourse memory, recent worlds, message counter). */

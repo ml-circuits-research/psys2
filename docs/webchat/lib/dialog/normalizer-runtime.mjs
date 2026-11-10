@@ -9,7 +9,7 @@
  * Graph contract (see export_normalizer.py): encoder(input_ids, attention_mask) -> cross_k.<l>, cross_v.<l>;
  * decoder(input_id [b,1], step, attention_mask, self_k.<l>, self_v.<l>, cross_k.<l>, cross_v.<l>) -> logits [b,vocab], new_self_k.<l>, new_self_v.<l>.
  */
-import { budget } from './budget.mjs';
+import { budget } from './budget.mjs?v=9f5360afbc';
 
 /** Unigram (sentencepiece) tokenizer from a HF `tokenizer.json`: NFKC, whitespace collapsed, `▁` for spaces, Viterbi over the vocabulary scores. */
 export class UnigramTokenizer {

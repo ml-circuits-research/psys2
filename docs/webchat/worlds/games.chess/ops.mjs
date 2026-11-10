@@ -14,7 +14,7 @@
 // Effects: chess.engine.bestmove { fen, level, movetime } and chess.engine.hint { fen, level, movetime }. The host runs
 // the engine and reports { ok, data: { bestmove, fen } } through the observation loop; onObservation() plays the move.
 // When the engine is unavailable (ok=false) a deterministic built-in chooser (captures > checks > centre, seeded) plays.
-import { Chess } from './vendor/chess.mjs';
+import { Chess } from './vendor/chess.mjs?v=9a44601d41';
 
 const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 const NAME = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };

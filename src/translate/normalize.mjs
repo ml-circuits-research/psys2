@@ -51,7 +51,7 @@ export function tokenize(original) {
   const toks = [];
   let m;
   TOKEN_RE.lastIndex = 0;
-  // bounded: regex exec with the g flag advances lastIndex each pass
+  // bounded: every alternative of TOKEN_RE matches at least one character (\S last), so every exec() moves lastIndex forward
   while ((m = TOKEN_RE.exec(nm.text)) !== null) {
     const s = m.index;
     const e = s + m[0].length;

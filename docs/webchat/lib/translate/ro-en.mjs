@@ -2,11 +2,11 @@
 //
 // Pipeline per sentence:  tokens -> number words -> phrase frames -> items (NP, VG, wh, pp ...)
 //                         -> clause splitting -> clause grammar -> pieces with source spans.
-import { tokenize, splitSentences, foldKey } from './normalize.mjs';
-import * as M from './morphology.ro.mjs';
-import * as E from './inflect.en.mjs';
-import { FRAMES } from './phrases.ro-en.mjs';
-import { budget } from '../dialog/budget.mjs';
+import { tokenize, splitSentences, foldKey } from './normalize.mjs?v=8f5393b731';
+import * as M from './morphology.ro.mjs?v=cb06db873c';
+import * as E from './inflect.en.mjs?v=bb4799b9ff';
+import { FRAMES } from './phrases.ro-en.mjs?v=7d601e9aa7';
+import { budget } from '../dialog/budget.mjs?v=9f5360afbc';
 
 // ------------------------------------------------------------------ static tables
 

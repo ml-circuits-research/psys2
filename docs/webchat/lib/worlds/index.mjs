@@ -6,11 +6,11 @@
  *   readFile(id, name)      -> Promise<string | null>   file text, null when absent
  *   loadOps(id)             -> Promise<object | null>   module namespace of ops.mjs
  */
-import { parse, get, getAll } from '../soplang/index.mjs';
-import { Legends } from '../legends/index.mjs';
-import { expandShape } from '../formalizer/rules/shapes.mjs';
-import { checkPattern } from '../formalizer/rules/index.mjs';
-import { lexIndex } from './lexicon.mjs';
+import { parse, get, getAll } from '../soplang/index.mjs?v=30640a2956';
+import { Legends } from '../legends/index.mjs?v=2cecf84221';
+import { expandShape } from '../formalizer/rules/shapes.mjs?v=5d5cc75c7e';
+import { checkPattern } from '../formalizer/rules/index.mjs?v=5a7aa0c66e';
+import { lexIndex } from './lexicon.mjs?v=e3316469a7';
 
 const FILES = ['world.sop', 'legend.sop', 'lexicon.sop', 'patterns.sop', 'operations.sop', 'kb.sop', 'templates.sop', 'tests.sop'];
 const worldIdOf = (s) => (s.startsWith('world.') ? s.slice(6) : s);

@@ -2,7 +2,8 @@
 // (vendor/onnxruntime, WASM backend, single thread, no COOP/COEP needed) lazily. The core (lib/) never imports onnxruntime; this module
 // hands the loaded pieces to `createDispatcherFormalizer({ load })` (lib/dialog/encoder-dispatch.mjs).
 
-import { getOrtClient } from './ort-host.mjs';
+// ort-host is loaded by URL, not by a static import: the engine worker has no import map, so it resolves versioned URLs itself (`globalThis.__psys2Url`, ui/engine-worker.mjs)
+const getOrtClient = async (base) => (await import(globalThis.__psys2Url ? globalThis.__psys2Url('ui/ort-host.mjs') : new URL('ui/ort-host.mjs', base).href)).getOrtClient(base);
 
 export const MODEL_DIR = 'models/dispatcher/';
 

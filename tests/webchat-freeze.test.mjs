@@ -37,6 +37,7 @@ test('webchat: a profile populated by an older build stays responsive on the cur
     assert.ok(!backToBackLong(r.longTasks, 500), `no two main-thread tasks over 500 ms back to back (${why})`);
     assert.ok(longRuns(r.longTasks).spanMs < 4000, `no long-task chain over 4 s (${why})`);
     assert.ok(r.modules.total > 20 && r.modules.versioned === r.modules.total, `every module URL carries the build hash (${JSON.stringify(r.modules)})`);
+    assert.deepEqual(r.unversionedModules, [], `no module request without a build version, in the page or in the workers (${why})`);
     assert.equal(r.ort.stats?.restarts ?? 0, 0, `no ORT worker restart (${why})`);
     assert.equal(r.ort.paused, false, 'the models were not paused');
     assert.deepEqual(r.errors, [], `no page errors (${why})`);

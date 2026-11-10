@@ -6,7 +6,8 @@
 //   const nz = createNormalizerHost({ base, meta, lib: { createNormalizerRuntime }, onStatus });
 //   nz.provider        -> { propose({ world, tab, text, beam }) }   (answers { status: 'not_ready' } while the model is not loaded, and starts loading)
 
-import { getOrtClient } from './ort-host.mjs';
+// ort-host is loaded by URL, not by a static import: the engine worker has no import map, so it resolves versioned URLs itself (`globalThis.__psys2Url`, ui/engine-worker.mjs)
+const getOrtClient = async (base) => (await import(globalThis.__psys2Url ? globalThis.__psys2Url('ui/ort-host.mjs') : new URL('ui/ort-host.mjs', base).href)).getOrtClient(base);
 
 export const MODEL_DIR = 'models/normalizer/';
 const CACHE_NAME = 'psys2-normalizer-model';

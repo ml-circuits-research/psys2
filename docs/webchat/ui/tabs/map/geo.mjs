@@ -37,10 +37,9 @@ export function greatCircle(a, b, n = 64) {
     const v = [s1 * A[0] + s2 * B[0], s1 * A[1] + s2 * B[1], s1 * A[2] + s2 * B[2]];
     const lat = Math.atan2(v[2], Math.hypot(v[0], v[1])) / RAD;
     let lon = Math.atan2(v[1], v[0]) / RAD;
-    // bounded: lon moves 360 per pass towards prev: at most a few passes for a finite longitude
-    while (lon - prev > 180) lon -= 360;
-    // bounded: lon moves 360 per pass towards prev: at most a few passes for a finite longitude
-    while (lon - prev < -180) lon += 360;
+    // no loop: the shift of whole turns is computed (a loop would never end for an infinite longitude)
+    const d = lon - prev;
+    if (Number.isFinite(d)) lon -= 360 * (d > 180 ? Math.ceil((d - 180) / 360) : d < -180 ? -Math.ceil((-d - 180) / 360) : 0);
     prev = lon;
     out.push([lat, lon]);
   }

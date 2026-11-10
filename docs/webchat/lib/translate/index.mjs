@@ -7,10 +7,10 @@
 //
 // A sentence whose negation or question word could not be mapped is not translated: it is omitted from
 // `text` and reported in the extra field `untranslatable: [{span, reason}]` (confidence 0).
-import { tokenize, foldKey } from './normalize.mjs';
-import { analyze, placeOf } from './morphology.ro.mjs';
-import { translateRoEn } from './ro-en.mjs';
-import { translateEnRo, isEnglishWord, englishLeftovers, nearEnglishWord } from './en-ro.mjs';
+import { tokenize, foldKey } from './normalize.mjs?v=8f5393b731';
+import { analyze, placeOf } from './morphology.ro.mjs?v=cb06db873c';
+import { translateRoEn } from './ro-en.mjs?v=3612ee6bdf';
+import { translateEnRo, isEnglishWord, englishLeftovers, nearEnglishWord } from './en-ro.mjs?v=e42dd3dbfe';
 
 // Romanian evidence, in points (a rough log-odds of "Romanian" against "English"), for words typed with OR without diacritics.
 // Words that are also English words ("cat", "care", "la", "fa", "pune", "do"...) carry only a small weight by themselves;
@@ -159,6 +159,6 @@ export function createTranslator() {
 }
 
 export { foldKey };
-export { normalizeText } from './normalize.mjs';
-export { lemmaOfNoun, analyzeVerbForm, stripAdjAgreement } from './morphology.ro.mjs';
+export { normalizeText } from './normalize.mjs?v=8f5393b731';
+export { lemmaOfNoun, analyzeVerbForm, stripAdjAgreement } from './morphology.ro.mjs?v=cb06db873c';
 export default { detectLanguage, translate, createTranslator };

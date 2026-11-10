@@ -13,8 +13,8 @@
 import {
   DEFAULT_TITLE, COLORS, colorName, TITLE_SIZE_MIN, TITLE_SIZE_MAX, titleBlock, containers, getText, blockText, addMark, cutMark, covered, anyMark,
   sliceMarks, spliceText, remapMarks, hiddenTitle, normalizeMarks, sentencesOf, findAll, toDoc, toText, toHtml, stats as computeStats, documentWords, setText, wordsIn,
-} from './model.mjs';
-import { resolve, rangesOf, blocksOf, blockById, sectionBlocks, ORD } from './target.mjs';
+} from './model.mjs?v=645b7e913d';
+import { resolve, rangesOf, blocksOf, blockById, sectionBlocks, ORD } from './target.mjs?v=8e7acff95c';
 
 const MAX_HISTORY = 50;
 

@@ -22,12 +22,12 @@
  * Worlds the model is not trained on (user.profile) are read by the rules only: no pattern of such a world is a candidate, and in `neural` a
  * message that an untrained world's rules read is left to the rules path.
  */
-import { lexIndex } from '../worlds/lexicon.mjs';
-import { compilePattern, formalize } from './rules/index.mjs';
-import { candidateSegmentations } from './dispatcher-runtime.mjs';
-import { atom } from '../soplang/index.mjs';
-import { perf } from './perf.mjs';
-import { guard, TurnAborted } from './guard.mjs';
+import { lexIndex } from '../worlds/lexicon.mjs?v=e3316469a7';
+import { compilePattern, formalize } from './rules/index.mjs?v=5a7aa0c66e';
+import { candidateSegmentations } from './dispatcher-runtime.mjs?v=85e3f2aa66';
+import { atom } from '../soplang/index.mjs?v=30640a2956';
+import { perf } from './perf.mjs?v=fd62b893eb';
+import { guard, TurnAborted } from './guard.mjs?v=ded769d6bc';
 
 /** The strategies and the one constant that picks the default. */
 export const NX_STRATEGIES = Object.freeze(['hybrid', 'neural', 'rules']);

@@ -7,10 +7,10 @@
 // hits and the outline. Every answer cites sentences ("(sentence 12)"); the cited sentence numbers are 1-based.
 // Facts are also written to the session as SOP Lang wires with core.source="<doc id>#s<n>" (toSop of analyze.mjs), once per document.
 // Effects: speech.say { text } (read aloud). Cross-world: ctx.request('ui.openTab', { tab: 'documents' }) after every answer.
-import { analyzeDocument, toSop, kinOfDoc } from './analyze.mjs';
-import { SAMPLE } from './sample.mjs';
-import { buildBm25, bm25Search, correctQuery, contentStems, stem, words, tfidfKeywords } from './text.mjs';
-import { verbForm, ORDINALS, ROLES, KIN, KIN_INVERSE, singular, cap, plural, STOP, PRONOUNS } from './lang.mjs';
+import { analyzeDocument, toSop, kinOfDoc } from './analyze.mjs?v=cdcf3faab4';
+import { SAMPLE } from './sample.mjs?v=d43b59f35e';
+import { buildBm25, bm25Search, correctQuery, contentStems, stem, words, tfidfKeywords } from './text.mjs?v=b04ecf27e0';
+import { verbForm, ORDINALS, ROLES, KIN, KIN_INVERSE, singular, cap, plural, STOP, PRONOUNS } from './lang.mjs?v=afa9ef7a36';
 
 const TAB = 'documents';
 const ok = (value, extra) => ({ status: 'supported', value, ...extra });
@@ -27,13 +27,13 @@ export function makeDocument(text, opts = {}) { return analyzeDocument(text, opt
 let sampleCache = null;   // PERF: every new session seeds this document; analysing it takes hundreds of ms on a phone, so analyse once and hand out copies
 export function sampleDocument() { sampleCache ??= analyzeDocument(SAMPLE.text, { name: SAMPLE.name, title: SAMPLE.title, format: SAMPLE.format, origin: SAMPLE.origin, tags: SAMPLE.tags, id: 'doc_hansel_and_gretel' }); return structuredClone(sampleCache); }
 /** State patch that adds (or replaces, same name) a document and makes it the active one; pure, used by the tab. */
+const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 export function withDocument(state, doc) {
   const docs = [...(state?.docs ?? [])];
   const same = docs.findIndex((d) => d.name && d.name === doc.name && d.origin === doc.origin);
   let id = doc.id, n = 2;
   if (same >= 0) id = docs[same].id;
-  // bounded: n grows each pass until the id is free (finitely many docs)
-  else while (docs.some((d) => d.id === id)) id = `${doc.id}_${n++}`;
+  else while (docs.some((d) => d.id === id)) { budget.tick('reader.id', docs.length); id = `${doc.id}_${n++}`; }
   const d = { ...doc, id };
   if (same >= 0) docs[same] = d; else docs.push(d);
   return { docs, active: id, search: null, focus: { doc: id, sentences: [], entities: [], terms: [], n: (state?.focus?.n ?? 0) + 1 }, last: null };

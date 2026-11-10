@@ -21,9 +21,12 @@ function walk(dir, out = []) {
 
 export function targets() {
   const files = [...walk(path.join(ROOT, 'src')), ...walk(path.join(ROOT, 'docs/webchat/ui'))];
-  for (const w of readdirSync(path.join(ROOT, 'worlds'))) {
-    const f = path.join(ROOT, 'worlds', w, 'ops.mjs');
-    try { statSync(f); files.push(f); } catch { /* no ops */ }
+  // every module of every world except generated test data (datagen), vendored code and the converted diagram engine (its loops get ticks from
+  // scripts/convert-diagram-engine.mjs; the last test below checks they are there)
+  for (const f of walk(path.join(ROOT, 'worlds'))) {
+    const rel = path.relative(path.join(ROOT, 'worlds'), f).split(path.sep);
+    if (rel.at(-1) === 'datagen.mjs' || rel.includes('vendor') || rel.includes('engine')) continue;
+    files.push(f);
   }
   return files;
 }
@@ -45,11 +48,18 @@ test('scanner: recognises guarded and unguarded loops', () => {
   assert.deepEqual(kinds('const s = "while (x) {}"; // while (y) {}'), []);
 });
 
-test('loop guard: no unguarded loop or recursion in src, worlds/*/ops.mjs, docs/webchat/ui', () => {
+test('loop guard: no unguarded loop or recursion in src, every world module, docs/webchat/ui', () => {
   const bad = [];
   for (const f of targets()) {
     for (const v of scan(readFileSync(f, 'utf8'))) bad.push(`${path.relative(ROOT, f)}:${v.line}  ${v.kind}  ${v.snippet}`);
   }
   if (bad.length) console.log(`loop-guard: ${bad.length} unguarded`);
   assert.equal(bad.length, 0, `unguarded loops (add budget.tick('site') or a "// bounded: <reason>" comment):\n${bad.join('\n')}`);
+});
+
+test('diagram engine: the layout, solver, path and name loops carry budget ticks (inserted by scripts/convert-diagram-engine.mjs)', () => {
+  const count = (f) => (readFileSync(path.join(ROOT, 'worlds/diagram.sketch/engine', f), 'utf8').match(/budget\.tick\('diagram\./g) ?? []).length;
+  assert.ok(count('auto-layout.mjs') >= 8, 'auto-layout.mjs ticks');
+  assert.ok(count('templates.mjs') >= 2, 'templates.mjs ticks');
+  assert.ok(count('logic.mjs') >= 7, 'logic.mjs ticks');
 });

@@ -1,6 +1,6 @@
 // Reference resolution of docs.editor: turns a phrase ("the second paragraph", "the word milk", "it") into blocks, text ranges
 // or list items of the current document. Browser-safe.
-import { titleBlock, containers, sentenceRanges, wordRanges, findAll, allTexts, DEFAULT_TITLE } from './model.mjs';
+import { titleBlock, containers, sentenceRanges, wordRanges, findAll, allTexts, DEFAULT_TITLE } from './model.mjs?v=645b7e913d';
 
 export const ORD = { first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6, seventh: 7, eighth: 8, ninth: 9, tenth: 10, last: -1 };
 const ORD_RE = '(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|last|\\d+(?:st|nd|rd|th))';
@@ -119,6 +119,7 @@ function nthWord(s, ord, scopeBlocks) {
  * Result: { ok: true, kind: 'blocks'|'ranges'|'items', blocks | ranges | items, desc } or { ok: false, error }.
  * opts.first: for a text search, only the first match. opts.scope: restrict to these blocks (internal).
  */
+// bounded: recurses on a strictly shorter phrase (the scope suffix is cut off) and at most two levels deep
 export function resolve(s, phrase, opts = {}) {
   const raw = String(phrase ?? '').trim().replace(/[.!?]+$/, '').replace(/\s+/g, ' ');
   let p = raw.toLowerCase();

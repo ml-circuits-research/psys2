@@ -16,7 +16,7 @@ const MAX_RESTARTS_PER_TURN = 1;  // a turn is never re-sent by the client; the 
 
 export const badKeyOf = (text, tab) => `${String(text ?? '').toLowerCase().replace(/\s+/g, ' ').trim()}|${tab ?? ''}`;
 
-export function createEngineClient({ base, versions = {}, getSettings, getTab = () => null, onEvent = () => {}, spawn = null, testHooks = false, limits = { watchdogMs: 8000 }, log = () => {} }) {
+export function createEngineClient({ base, versions = {}, getSettings, getTab = () => null, onEvent = () => {}, browserCall = null, spawn = null, testHooks = false, limits = { watchdogMs: 8000 }, log = () => {} }) {
   const stats = { starts: 0, kills: [], crashes: 0, sends: 0, dryRuns: 0, refused: 0, restartsThisTurn: 0 };
   const bad = new Map();            // badKeyOf -> { reason, stage, at, text, tab, site }
   const cache = { state: {}, meta: null };
@@ -72,6 +72,10 @@ export function createEngineClient({ base, versions = {}, getSettings, getTab = 
       if (m.name === 'stage') { stage = m.data; return; }
       try { onEvent(m.name, m.data); } catch (e) { log('event-handler', String(e?.message ?? e)); }
     } else if (m.type === 'spawn-ort') bridgeOrt(m);
+    else if (m.type === 'bt') {   // the worker asks for the page's on-device translator / language detector (windows only); it waits at most its own deadline for the answer
+      const reply = (ok, v) => { if (g === gen) post({ type: 'bt-res', id: m.id, ok, ...(ok ? { value: v } : { error: String(v?.message ?? v) }) }); };
+      if (!browserCall) reply(false, 'no browser API'); else Promise.resolve().then(() => browserCall(m.op, m)).then((v) => reply(true, v), (e) => reply(false, e));
+    }
   }
 
   function post(msg, transfer) { worker?.postMessage(msg, transfer ?? []); }

@@ -2,10 +2,10 @@
  * ASTRA <-> DialogSession glue (spec 13 sections 1, 2 and 8). Browser-safe: it only uses the dialog's own members.
  * The session never awaits anything here; everything is bookkeeping on the turn path.
  */
-import { Astra } from './registry.mjs';
-import { runCommand, parseCommand } from './where.mjs';
-import { Agenda, frameFromPending, frameFromModal } from './frames.mjs';
-import { USER_SCOPE } from './registry.mjs';
+import { Astra } from './registry.mjs?v=a492721382';
+import { runCommand, parseCommand } from './where.mjs?v=72e99182f4';
+import { Agenda, frameFromPending, frameFromModal } from './frames.mjs?v=7f08beebfe';
+import { USER_SCOPE } from './registry.mjs?v=a492721382';
 
 const BUILTIN_TAB = { 'ui.avatar': 'robot', 'docs.editor': 'editor', 'games.tictactoe': 'tictactoe', 'games.guess': 'guess', 'games.hangman': 'hangman' };
 

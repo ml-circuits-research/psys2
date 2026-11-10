@@ -11,9 +11,9 @@
  *
  * Every pass is capped (words, candidates, a time budget) and calls the turn guard, so no spoken message can hang the turn.
  */
-import { editDistance } from './rules/index.mjs';
-import { guard } from './guard.mjs';
-import { budget } from '../dialog/budget.mjs';
+import { editDistance } from './rules/index.mjs?v=5a7aa0c66e';
+import { guard } from './guard.mjs?v=ded769d6bc';
+import { budget } from '../dialog/budget.mjs?v=9f5360afbc';
 
 const WORD = /[\p{L}\p{N}][\p{L}\p{N}'’-]*/gu;
 /** Words that may legitimately be said twice in a row: never collapsed. */

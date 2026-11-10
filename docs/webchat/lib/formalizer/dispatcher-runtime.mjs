@@ -18,7 +18,7 @@
  *    piece (argmax of the first sub-token of the word), applied by `simplifiedText` -> `segment.simplified` (only when the rewrite
  *    differs from the piece text). Mirrors training/psys2_train/dispatcher.py `run_world(edit_tags=...)` and edit.py `word_tokens`.
  */
-import { wordsOf, simplifiedText } from './edit-tags.mjs';
+import { wordsOf, simplifiedText } from './edit-tags.mjs?v=8e12cb6e3e';
 
 const LEAD_RE = /^(?:[\s,;]+|(?:and|then)\b[\s,]*)+/i;
 const TRAIL_RE = /(?:[\s,;]+|\b(?:and|then)\b[\s,]*)+$/i;
@@ -134,7 +134,7 @@ export function windowSpans(n, size, stride = Math.max(1, size >> 1)) {
 
 const FULL = 1e9;   // maxLength meaning "do not truncate" for the tokenizer
 
-import { perf } from './perf.mjs';
+import { perf } from './perf.mjs?v=fd62b893eb';
 
 export function createDispatcherRuntime({ ort, session, tokenizer, worlds, editTags = null, editTau = 0.5, useContext = true, segMaxLen = 192, worldMaxLen = 128, beam = 4, uncertain = 6, topK = 3 } = {}) {
   if (!ort?.Tensor || !session?.run || !tokenizer?.encode || !worlds?.length) throw new Error('createDispatcherRuntime needs { ort, session, tokenizer, worlds }');

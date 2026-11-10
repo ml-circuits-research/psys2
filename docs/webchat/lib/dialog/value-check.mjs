@@ -16,9 +16,9 @@
  *     of the candidate has a counterpart in the source. A word the world knows may be dropped or added (that is the point of simplifying).
  * `{ ok, reason }`; with `vocab` absent only the first four checks run.
  */
-import { isNumberWord, parseNumberRun } from '../formalizer/rules/numbers.mjs';
-import { editDistance } from '../formalizer/rules/normalize.mjs';
-import { FUNCTION_WORDS, ABBREVIATIONS, spellBudget } from '../formalizer/spell.mjs';
+import { isNumberWord, parseNumberRun } from '../formalizer/rules/numbers.mjs?v=eb02877cbe';
+import { editDistance } from '../formalizer/rules/normalize.mjs?v=4ab1c2d71f';
+import { FUNCTION_WORDS, ABBREVIATIONS, spellBudget } from '../formalizer/spell.mjs?v=366b7f0319';
 
 export const COLORS = new Set('red orange yellow green blue purple violet pink brown black white gray grey gold golden silver cyan magenta turquoise beige navy teal maroon lime lilac indigo tan rose peach crimson scarlet azure'.split(' '));
 const NEG = new Set("not no never without nothing none nobody nowhere neither nor cannot cant dont doesnt didnt isnt arent wasnt werent wont wouldnt shouldnt couldnt hasnt havent hadnt aint don't doesn't didn't isn't aren't wasn't weren't won't wouldn't shouldn't couldn't hasn't haven't hadn't can't ain't".split(/\s+/));

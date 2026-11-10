@@ -5,24 +5,24 @@
  * formalize(text, { worlds, session, source }) -> { segments, wires }
  * `worlds` is a WorldSet; `session` is a FormSession or any object with a `.form` FormSession.
  */
-import { guard } from '../guard.mjs';
-import { perf } from '../perf.mjs';
-import { lexIndex } from '../../worlds/lexicon.mjs';
-import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs';
-import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs';
-import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs';
-import { routeScores } from './router.mjs';
-import { createRouter, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs';
-import { FormSession, STOP_WORDS, isPronoun } from './session.mjs';
-import { selfCorrect, sharedArgument, repetition, ellipsisPrefixes, oneAnaphora, joinText, MARKER_RE, SEP_RE } from './expand.mjs';
-import { parse, serialize } from '../../soplang/index.mjs';
-import { budget } from '../../dialog/budget.mjs';
+import { guard } from '../guard.mjs?v=ded769d6bc';
+import { perf } from '../perf.mjs?v=fd62b893eb';
+import { lexIndex } from '../../worlds/lexicon.mjs?v=e3316469a7';
+import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs?v=4ab1c2d71f';
+import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=b4df8d4dc3';
+import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs?v=12352421fc';
+import { routeScores } from './router.mjs?v=1627316289';
+import { createRouter, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=91ded5d03a';
+import { FormSession, STOP_WORDS, isPronoun } from './session.mjs?v=b5c88cab10';
+import { selfCorrect, sharedArgument, repetition, ellipsisPrefixes, oneAnaphora, joinText, MARKER_RE, SEP_RE } from './expand.mjs?v=ce5901f0da';
+import { parse, serialize } from '../../soplang/index.mjs?v=30640a2956';
+import { budget } from '../../dialog/budget.mjs?v=9f5360afbc';
 
-export { FormSession } from './session.mjs';
-export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs';
-export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs';
-export { compilePattern, matchTokens } from './matcher.mjs';
-export { singularLemma, pluralize } from './lemma.mjs';
+export { FormSession } from './session.mjs?v=b5c88cab10';
+export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=91ded5d03a';
+export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs?v=4ab1c2d71f';
+export { compilePattern, matchTokens } from './matcher.mjs?v=b4df8d4dc3';
+export { singularLemma, pluralize } from './lemma.mjs?v=3f5920ed63';
 
 const compiledCache = new WeakMap();
 /** Compile (memoized) a pattern object; returns { compiled } or { error }. */

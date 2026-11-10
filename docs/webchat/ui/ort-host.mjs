@@ -1,10 +1,12 @@
 // The one ORT client of the page (HANG2): a dedicated worker (ui/ort-worker.mjs) shared by the dispatcher and the normalizer, with per-call
 // deadlines, cancellation and restart (lib/formalizer/ort-client.mjs). Replaces onnxruntime-web's `proxy = true`.
 let client = null;
+// a worker has no import map: it resolves versioned URLs itself (`globalThis.__psys2Url`, ui/engine-worker.mjs); the page's import map versions the plain ones
+const urlOf = (rel, base) => (globalThis.__psys2Url ? globalThis.__psys2Url(rel) : new URL(rel, base).href);
 export async function getOrtClient(base) {
   if (client) return client;
-  const { createOrtClient, measureDeviceSpeed } = await import(new URL('lib/formalizer/ort-client.mjs', base).href);
-  const { LIMITS } = await import(new URL('lib/dialog/time-limits.mjs', base).href);
+  const { createOrtClient, measureDeviceSpeed } = await import(urlOf('lib/formalizer/ort-client.mjs', base));
+  const { LIMITS } = await import(urlOf('lib/dialog/time-limits.mjs', base));
   const wv = globalThis.__psys2Mod?.['ui/ort-worker.mjs'];   // build-hash version (scripts/build-webchat.mjs): a stale cached worker is never paired with a newer client
   const url = new URL('ui/ort-worker.mjs', base).href + (wv ? `?v=${wv}` : '');
   const debug = (() => { try { return globalThis.localStorage?.getItem('psys2.ortlog') === '1' || globalThis.__psys2OrtLog === true; } catch { return false; } })();

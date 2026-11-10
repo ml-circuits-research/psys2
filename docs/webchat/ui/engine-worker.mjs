@@ -9,13 +9,18 @@
 //                   { type: 'evt', name, data }              ready | stage | dispatcher-status | normalizer-status | model-source | progress | ort | ort-paused | rules-compiled
 //                   { type: 'spawn-ort', id, lane, port }    the page owns the ORT workers; this worker talks to them through a MessageChannel it asks for
 //
-// The worker never touches the DOM, localStorage or the Translation API of the window.
+// The worker never touches the DOM or localStorage. The Translation API and the language detector exist on the window only: it asks the page for them
+//   worker -> page: { type: 'bt', id, op: 'translate' | 'detect', text, from?, to? }    page -> worker: { type: 'bt-res', id, ok, value | error }   (deadline 700 ms, then the rules)
 
 const HERE = new URL('./', import.meta.url);
 const ROOT = new URL('../', HERE);
 const abs = (p) => new URL(p, ROOT).href;
-const ver = {};   // module versions from the page (build hashes). Only URLs nothing else imports can carry `?v=` (worlds' ops): a module imported with a query would be a second instance next to the one the other modules import relatively.
-const vurl = (rel) => abs(rel);
+// Module versions from the page (build hashes; `window.__psys2Mod`). A worker has no import map. lib/ and worlds/ files are versioned by the build itself: their own relative
+// imports carry `?v=<version of the target>` (scripts/build-webchat.mjs versionGraph), so importing one with the page's version for it loads one consistent graph, and the
+// same URL strings the page's import map produces. The few ui/ files this worker loads import nothing relative.
+const ver = {};
+const vurl = (rel) => abs(rel) + (ver[rel] ? `?v=${ver[rel]}` : '');
+globalThis.__psys2Url = vurl;   // for ui/ort-host.mjs and the hosts (they resolve lib/ and ui/ URLs through it)
 
 const post = (m, t) => postMessage(m, t ?? []);
 const evt = (name, data) => post({ type: 'evt', name, data });
@@ -29,6 +34,8 @@ const snaps = new Map();             // undo id -> engine snapshot (a ring: the 
 const SNAP_KEEP = 24;
 let lastTurnEnd = 0;
 const budgetMod = { createBudget: null };
+let btSeq = 0;
+const btPending = new Map();         // id -> { resolve, reject } of a call to the page's browser translator / detector
 let warming = null;                  // the warm-up turn that runs: a user turn waits for it (the turn guard is shared), at most one warm-up turn long
 const one = async (s, text, opts) => { const p = s.send(text, opts).catch(() => {}); warming = p; try { await p; } finally { if (warming === p) warming = null; } };
 
@@ -68,7 +75,9 @@ function annotateWires(root) {
   return root;
 }
 const stateOf = () => session.state();
-const metaOf = () => ({ msg: session._msg, lang: session._sessionLang, weakRo: session._weakRo, language: session.language });
+const metaOf = () => ({ msg: session._msg, lang: session._sessionLang, weakRo: session._weakRo, language: session.language, memory: memoryOf() });
+/** The discourse / ASTRA memory as JSON, so that a restarted worker gets it back (a failure here must never fail a turn). */
+function memoryOf() { try { return session.memoryJSON(); } catch { return null; } }
 
 function applySettings(s, extra) {
   if (s && typeof s === 'object') { for (const k of Object.keys(settings)) if (!(k in s)) delete settings[k]; Object.assign(settings, s); }
@@ -105,7 +114,9 @@ async function init(m) {
     if (m.onlyWorlds && id !== 'core' && !m.onlyWorlds.includes(id)) delete bundle.worlds[id];
     else if (w.opsUrl) w.opsUrl = new URL(w.opsUrl, ROOT).href + (ver[`worlds/${id}/ops.mjs`] ? `?v=${ver[`worlds/${id}/ops.mjs`]}` : '');
   }
-  const translator = tr.createSwitchTranslator({ rules: translate.createTranslator(), getStrategy: () => settings.translation, getDetectStrategy: () => settings.languageDetection });
+  // The browser Translation API and language detector exist on the page only: the worker asks the page for them, with a deadline (then the rules answer)
+  const backend = tr.createRemoteBackend({ kinds: m.browser ?? {}, call: (op, payload) => new Promise((resolve, reject) => { const id = ++btSeq; btPending.set(id, { resolve, reject }); post({ type: 'bt', id, op, ...payload }); }).finally(() => {}) });
+  const translator = tr.createSwitchTranslator({ rules: translate.createTranslator(), getStrategy: () => settings.translation, getDetectStrategy: () => settings.languageDetection, backend });
   engine = await dialog.createEngine({ loader: loaders.createBundleLoader(bundle), translator });
   if (testHooks) installFaults();
   const rules = (engine.precompile?.({ budgetMs: 8, yieldFn: async () => { await sleep(0); while (turnRunning()) await sleep(20); /* bounded: ends with the running turn; the page terminates this worker when a turn does not */ } }) ?? Promise.resolve()).catch(() => {}).then(() => evt('rules-compiled'));
@@ -143,7 +154,10 @@ async function init(m) {
 function restoreStates(state, meta) {
   if (state && typeof state === 'object') {
     session.isession.state = structuredClone(state);
-    if (meta) { session._msg = meta.msg ?? session._msg; session._sessionLang = meta.lang ?? session._sessionLang; session._weakRo = meta.weakRo ?? 0; }
+    if (meta) {
+      session._msg = meta.msg ?? session._msg; session._sessionLang = meta.lang ?? session._sessionLang; session._weakRo = meta.weakRo ?? 0;
+      if (meta.memory) { try { session.restoreMemory(meta.memory); } catch (e) { console.warn('memory not restored', e); } }
+    }
   }
 }
 
@@ -237,6 +251,7 @@ const handlers = {
 
 onmessage = async (ev) => {
   const m = ev.data;
+  if (m.type === 'bt-res') { const p = btPending.get(m.id); btPending.delete(m.id); if (p) { if (m.ok) p.resolve(m.value); else p.reject(new Error(m.error ?? 'browser API error')); } return; }
   if (m.op === 'abort') { for (const [id, ctl] of active) if (m.id == null || id === m.id) ctl.abort(new DOMException(m.reason === 'timeout' ? 'turn time limit' : 'stopped', m.reason === 'timeout' ? 'TimeoutError' : 'AbortError')); return; }
   const h = handlers[m.op];
   if (!h) { post({ type: 'res', id: m.id, ok: false, error: { name: 'Error', message: `unknown op ${m.op}` } }); return; }

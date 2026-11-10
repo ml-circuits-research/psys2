@@ -79,7 +79,48 @@ async function faultCase(o, kind) {
   } finally { await c.close(); }
 }
 
+/** A page that has the on-device APIs (the engine worker has not): a Translator that answers `mode` ('ok' | 'hang') and a language detector that says Romanian. */
+const fakeBrowserApis = (mode) => `(() => {
+  const EN = { 'câte zile are iunie?': 'how many days does June have?' };
+  window.Translator = { availability: async () => 'available', create: async () => ({ translate: (t) => (${JSON.stringify(mode)} === 'hang' ? new Promise(() => {}) : Promise.resolve(EN[t] ?? t)) }) };
+  window.LanguageDetector = { availability: async () => 'available', create: async () => ({ detect: async () => [{ detectedLanguage: 'ro', confidence: 0.97 }] }) };
+})();`;
+const openRo = (o, mode) => openChat({ ...o, query: '?psys2test=1', init: fakeBrowserApis(mode), settings: { formalizer: 'rules', normalizer: false, showTrace: false, language: 'auto', translation: 'auto', languageDetection: 'auto', timeLimits: { watchdogMs: WATCHDOG_MS } } });
+const usageOf = (c) => c.pg.evaluate(() => JSON.parse(JSON.stringify({ tr: window.psys2.engineClient.usage, det: window.psys2.engineClient.detection })));
+
 export const SCENARIOS = {
+  /** The discourse memory survives a watchdog restart (COMPUTE-BUDGET D item 2). */
+  async memory(o) {
+    const c = await open(o);
+    try {
+      await arm(c);
+      await c.say('How far is Paris from Rome?');
+      const s0 = await stats(c);
+      await typeEnter(c, FAULTS.op);
+      await waitIdle(c, WATCHDOG_MS + 15000);
+      await c.pg.waitForFunction((n) => window.psys2.engineClient.stats.kills.length > n, { timeout: 5000, polling: 20 }, s0.kills.length).catch(() => {});
+      const s1 = await stats(c);
+      check('memory: the worker was replaced', s1.starts === s0.starts + 1 && s1.kills.length === s0.kills.length + 1, `starts ${s1.starts - s0.starts}`);
+      const r = await c.say('And from Berlin?', { timeout: 30000 });
+      check('memory: an ellipsis still resolves against the question asked before the restart', /Paris and Berlin/.test(r.reply), r.reply.slice(0, 80));
+    } finally { await c.close(); }
+  },
+  /** Romanian in the worker: the page's on-device translator and detector are used over a message; a page that does not answer falls back to the rules (item 3). */
+  async bridge(o) {
+    for (const mode of ['ok', 'hang']) {
+      const c = await openRo(o, mode);
+      try {
+        const t = Date.now();
+        const r = await c.say('câte zile are iunie?', { timeout: 30000 });
+        const u = await usageOf(c);
+        check(`bridge ${mode}: the Romanian question is answered`, r.ok && /30|treizeci|iunie|June/i.test(r.reply), `${Date.now() - t} ms ${r.reply.slice(0, 60)}`);
+        const tr = u.tr.find((x) => x.direction === 'ro->en');
+        if (mode === 'ok') check('bridge ok: the translation came from the page\'s browser API (checked in the worker)', tr?.strategy === 'browser-api' && u.det.some((d) => d.strategy === 'browser-api'), JSON.stringify({ tr, det: u.det[0] }));
+        else check('bridge hang: no answer from the page within the deadline -> the rules translated, the turn did not stall', tr?.strategy === 'rules' && tr.fallback && /timed out/.test(tr.reason ?? '') && Date.now() - t < 12000, JSON.stringify(tr));
+        check(`bridge ${mode}: no page errors, no worker kill`, c.errors.length === 0 && (await stats(c)).kills.length === 0, c.errors[0] ?? '');
+      } finally { await c.close(); }
+    }
+  },
   op: (o) => faultCase(o, 'op'),
   matcher: (o) => faultCase(o, 'matcher'),
   translator: (o) => faultCase(o, 'translator'),

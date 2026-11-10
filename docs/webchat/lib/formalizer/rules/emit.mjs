@@ -1,5 +1,5 @@
 /** Emit templates (spec 03 section 2): placeholders, fresh ids, auto-added core keys. Browser-safe. */
-import { parse, atom, ref, str } from '../../soplang/index.mjs';
+import { parse, atom, ref, str } from '../../soplang/index.mjs?v=30640a2956';
 
 const OPT_ENTRY = /(\s)([A-Za-z_][\w.-]*)=("?)\{([A-Za-z_]\w*)(?:\|\w+)?\}\3(?=\s|$|@)/g;
 const FRESH = /^_\d*$/;

@@ -1,7 +1,7 @@
 // Music theory helpers of media.music, built on the vendored `tonal` library (vendor/tonal.mjs, MIT).
 // Browser-safe: relative imports only. Everything here is a pure function of its arguments, so C2 answers
 // ("what chord is C E G?", "how many sharps does D major have?") are deterministic and testable in Node.
-import { Note, Chord, Scale, Interval, Key } from './vendor/tonal.mjs';
+import { Note, Chord, Scale, Interval, Key } from './vendor/tonal.mjs?v=7e36dbfe54';
 
 export const LETTERS = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
 const STEP = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };

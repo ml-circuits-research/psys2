@@ -14,12 +14,12 @@
  *     formalizer, restricted to the frame's world. It is accepted only when the result is fully understood there.
  * Both return `{ res, info }`, where `res` has the shape of a formalizer result and `info` is the provenance for the trace.
  */
-import { restrictedSet } from '../formalizer/spell.mjs';
-import { SHORT_TYPOS } from '../formalizer/rules/normalize.mjs';
-import { lastUnfinished } from '../astra/where.mjs';
-import { runDiscussionCommand } from '../astra/session.mjs';
-import { classify, resolveReference, describeReferent, chooseOption, plain } from './meta.mjs';
-import { budget } from './budget.mjs';
+import { restrictedSet } from '../formalizer/spell.mjs?v=366b7f0319';
+import { SHORT_TYPOS } from '../formalizer/rules/normalize.mjs?v=4ab1c2d71f';
+import { lastUnfinished } from '../astra/where.mjs?v=72e99182f4';
+import { runDiscussionCommand } from '../astra/session.mjs?v=65217ad31a';
+import { classify, resolveReference, describeReferent, chooseOption, plain } from './meta.mjs?v=2f2d0408d3';
+import { budget } from './budget.mjs?v=9f5360afbc';
 
 export const FRAME_LIMIT = 5;
 
@@ -92,6 +92,31 @@ export class Discourse {
     this.icptTurn = null;     // the newest turn a modal interceptor answered: { turn, text, reply, world } (explain)
     this.list = null;         // list-entry mode (spec 11 section 10): { list, world, n }; unlike `pending` it repeats until "that's all"
   }
+
+  // ---- serialisable memory (a restarted engine worker gets it back, spec 06 "Engine worker") ----------------------------
+
+  /** The memory as plain JSON (no class instances, no functions): `Discourse.fromJSON(dialog, json)` or `load(json)` puts it back. */
+  toJSON() {
+    return JSON.parse(JSON.stringify({ frames: this.frames, pending: this.pending, last: this.last, actions: this.actions, lastAnswer: this.lastAnswer,
+      lastByWorld: this.lastByWorld, topics: this.topics, icptTurn: this.icptTurn, list: this.list }));
+  }
+
+  /** Replaces the memory by a `toJSON()` record (an unusable record leaves it empty). Links a pending repair back to the very action and frame it names. */
+  load(json) {
+    const j = json && typeof json === 'object' ? JSON.parse(JSON.stringify(json)) : {};
+    this.frames = Array.isArray(j.frames) ? j.frames : [];
+    this.actions = Array.isArray(j.actions) ? j.actions : [];
+    this.pending = j.pending ?? null; this.last = j.last ?? null; this.lastAnswer = j.lastAnswer ?? null;
+    this.lastByWorld = j.lastByWorld && typeof j.lastByWorld === 'object' ? j.lastByWorld : {};
+    this.topics = Array.isArray(j.topics) ? j.topics : []; this.icptTurn = j.icptTurn ?? null; this.list = j.list ?? null;
+    const p = this.pending;
+    if (p?.action) p.action = this.actions.find((a) => a.turn === p.action.turn && a.text === p.action.text) ?? p.action;   // identity: the actions list is filtered by `!== act`
+    if (p?.frame) p.frame = this.frames.find((f) => f.turn === p.frame.turn && f.text === p.frame.text) ?? p.frame;
+    for (const a of this.actions) a.frames = (a.frames ?? []).map((af) => this.frames.find((f) => f.turn === af.turn && f.text === af.text) ?? af);
+    return this;
+  }
+
+  static fromJSON(dialog, json) { return new Discourse(dialog).load(json); }
 
   // ---- frames ------------------------------------------------------------------------------------------------------
 

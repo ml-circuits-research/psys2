@@ -119,6 +119,7 @@ function nthWord(s, ord, scopeBlocks) {
  * Result: { ok: true, kind: 'blocks'|'ranges'|'items', blocks | ranges | items, desc } or { ok: false, error }.
  * opts.first: for a text search, only the first match. opts.scope: restrict to these blocks (internal).
  */
+// bounded: recurses on a strictly shorter phrase (the scope suffix is cut off) and at most two levels deep
 export function resolve(s, phrase, opts = {}) {
   const raw = String(phrase ?? '').trim().replace(/[.!?]+$/, '').replace(/\s+/g, ' ');
   let p = raw.toLowerCase();

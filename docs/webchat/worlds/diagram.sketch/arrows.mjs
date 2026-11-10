@@ -9,6 +9,7 @@
 //   - the label sits off the line (halo drawn by the tab), the id tag on the middle of the line.
 export const CORNER = 8, MIN_ENTRY = 30, SPREAD = 14, CLEAR = 8, STUB = 14, APART = 10, FAN = 20;
 
+const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 const unit = (x, y) => { const l = Math.hypot(x, y) || 1; return [x / l, y / l]; };
 const dot = (a, b) => a[0] * b[0] + a[1] * b[1];
 
@@ -153,7 +154,7 @@ export function routeEdges(shapes, edges, dims, { tags = [] } = {}) {
       if (Math.min(ea, eb) < MIN_ENTRY) { pts = stubbed(); stub = true; }
       // clearance from the other shapes: a detour bend around the first shape in the way
       const others = boxes.filter((x) => x.s !== a && x.s !== b);
-      const clear = (p) => { let m = Infinity; for (const x of others) for (let k = 1; k < p.length; k++) m = Math.min(m, segBoxDist(p[k - 1], p[k], x.b)); return m; };
+      const clear = (p) => { budget.tick('diagram.route', others.length * p.length + 1); let m = Infinity; for (const x of others) for (let k = 1; k < p.length; k++) m = Math.min(m, segBoxDist(p[k - 1], p[k], x.b)); return m; };
       let cl = clear(pts);
       if (cl < CLEAR) {
         const mid = along(pts, 0.5), n0 = [-mid.dir[1], mid.dir[0]];

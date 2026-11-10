@@ -16,8 +16,9 @@
 // Lazy loading (PERF): the engine is 470 KB of source. In a browser it is fetched when the Diagram tab is first shown or when an operation
 // first needs it (the dialog layer awaits `prepare()` before the world's operations run; a call that still finds no engine answers "getting ready"); under Node it is loaded at once (top-level await).
 
-import { fixTypos, rewriteRefs, rewriteLayout, rewriteMisc } from './refs.mjs';
-import { routeEdges, segBoxDist, boxOf } from './arrows.mjs';
+import { fixTypos, rewriteRefs, rewriteLayout, rewriteMisc } from './refs.mjs?v=18f06ec836';
+import { routeEdges, segBoxDist, boxOf } from './arrows.mjs?v=3346b422bb';
+const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 
 const TAB = 'diagram';
 const MAX_HISTORY = 30;
@@ -25,7 +26,7 @@ let K = null, loading = null, sys = null, sysOf = null;
 
 /** Starts loading the engine (once). Returns a promise of the engine kit. */
 export function loadEngine() {
-  loading ??= import('./engine/logic.mjs').then((m) => { K = m.default; return K; });
+  loading ??= import('./engine/logic.mjs?v=8b436c1274').then((m) => { K = m.default; return K; });
   return loading;
 }
 export const engineReady = () => !!K;
@@ -84,8 +85,7 @@ function nextId(state, kind) {
   const p = PREFIX[kind] ?? 'z';
   const used = new Set((state.shapes ?? []).flatMap((x) => [x.name.toLowerCase(), (x.id ?? '').toLowerCase()]));
   let id;
-  // bounded: the counter grows each pass until a name is free (finitely many ids are in use)
-  do { state.seq[kind] = (state.seq[kind] || 0) + 1; id = `${p}${state.seq[kind]}`; } while (used.has(id));
+  do { budget.tick('diagram.name'); state.seq[kind] = (state.seq[kind] || 0) + 1; id = `${p}${state.seq[kind]}`; } while (used.has(id));
   return id;
 }
 function patchWorld(w) {
@@ -103,8 +103,7 @@ function assignIds(s) {
     x.id = m && KIND_OF_PREFIX[m[1].toLowerCase()] === x.shape ? x.name.toLowerCase() : nextId(s, x.shape);
   }
   const taken = new Set(s.edges.map((e) => e.id));
-  // bounded: the counter grows each pass until an id is free (finitely many ids are in use)
-  for (const e of s.edges) if (/^e\d+$/.test(e.id)) { let n = 0, id; do { id = `a${++n}`; } while (taken.has(id)); taken.add(id); e.id = id; s.edgeSeq = Math.max(s.edgeSeq ?? 0, n); }
+  for (const e of s.edges) if (/^e\d+$/.test(e.id)) { let n = 0, id; do { budget.tick('diagram.name'); id = `a${++n}`; } while (taken.has(id)); taken.add(id); e.id = id; s.edgeSeq = Math.max(s.edgeSeq ?? 0, n); }
 }
 const edgeOf = (s, id) => s.edges.find((e) => e.id.toLowerCase() === String(id).toLowerCase()) ?? null;
 /** "c1 → r1": the ends of an arrow (a named shape shows its name and its id). */
@@ -343,6 +342,7 @@ function placeFree(s, names) {
     const lines = [...routes.values()].map((r) => r.pts);
     const d = dims(x), PAD = 10;
     const hit = (px, py, strict = true) => {
+      budget.tick('diagram.place', others.length + lines.length + 1);
       const b = { x1: px - d.w / 2 - PAD, y1: py - d.h / 2 - PAD, x2: px + d.w / 2 + PAD, y2: py + d.h / 2 + PAD };
       if (strict) for (const o of others) { const q = boxOf(o, dims(o)); if (b.x1 < q.x2 && b.x2 > q.x1 && b.y1 < q.y2 && b.y2 > q.y1) return true; }
       for (const pts of lines) for (let k = 1; k < pts.length; k++) if (segBoxDist(pts[k - 1], pts[k], b) <= 2) return true;
