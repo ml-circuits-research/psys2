@@ -6,14 +6,14 @@
   "gen-b": {
    "usd": 6.77,
    "tokens": 1354066,
-   "seconds": 4950,
+   "seconds": 4878.329,
    "items": 27000,
    "sessions": 12
   },
   "judge-b": {
    "usd": 12.99,
    "tokens": 2597141,
-   "seconds": 5700,
+   "seconds": 5293.33,
    "items": 12848,
    "sessions": 13
   }

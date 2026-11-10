@@ -17,6 +17,9 @@ export const EXPORTS = {
   Aplus: '/home/salboaie/work/psys2/training/runs/export/nx-aplus-seed1',
   A3: '/home/salboaie/work/psys2/training/runs/export/nx-a-nx3',
   Aplus3: '/home/salboaie/work/psys2/training/runs/export/nx-aplus-nx3',
+  // NX3b: A retrained on NX1 + all 27.6k NX3 records (A3all) and on NX1 + NX3 + NX3b (A3b)
+  A3all: '/home/salboaie/work/psys2/training/runs/export/nx-a-nx3all',
+  A3b: '/home/salboaie/work/psys2/training/runs/export/nx-a-nx3b',
 };
 
 // NX7: `enc-n1` is the shipped webchat mode (dispatcher + normalizer + rules, no NX model); `<model>-d` is the gated D over it (the model reads only a

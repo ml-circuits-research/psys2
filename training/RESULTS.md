@@ -1149,3 +1149,95 @@ The model download is the same size class (68.0 MB against 67.1 MB). Neural is s
 **Soak** (`node scripts/soak-webchat.mjs --minutes 3 --throttle 4 --nx <s>`, FREEZE-6 gate busy < 50 %): hybrid 10/10 checks (busy 17 % average, 21 % worst minute, heap 105 -> 109 MB, 0 ORT restarts, 0 watchdog endings, input echo 26 ms), neural 10/10 (busy 20 % / 25 %, heap 110 -> 114 MB, 0 restarts, echo 22 ms). The encoder pass runs in the ORT worker; the page thread only decodes the logits. The segmentation pass asks the worker for `seg_logits` only (no copy of the tag logits).
 
 Caveats: single runs on a shared machine (perf and soak vary a lot, SOAK-BUSY); the NX7 tau values were tuned on dev data and the full-set hybrid numbers above are their first measurement in the shipped configuration (the model reads few segments: it adds nothing wrong and little right on the operational sets, its gain is on paraphrases); `gold-real` labels come from Sonnet (NX2); the Romanian rows go through the translator first.
+
+
+## NX3b (2026-11-10): second generation round, retrain of A (A3b), NX7 evaluation again
+Code: `scripts/nx3b-seeds.mjs` (seeds, allocation), `scripts/lib/nx3b-prompt.mjs` (prompt with the exact op ids, keys, fixed constants and the full lexicons), `scripts/nx3b-filter.mjs` (training sets), `scripts/nx3b-report.mjs`; `scripts/nx-gen.mjs` and `scripts/nx-pipeline.mjs` take `NX_GEN=gen2 NX_SEEDS=seeds2 NX_FINAL=final2` (data dir `training/dataset/nx/gen2`, outside git). Gate: `scripts/lib/nx-gate.mjs` (+1 unit test, 9 pass). Reports: `training/results/nx3b-generation.json` (per world gate / agreement / judge / audit), `nx3b-filter.json`, `nx7-sweep-A3b.json`, `nx3b-eval-summary.json`, `nx3b-A3*-d-*.json`.
+
+**Why the NX3 gate dropped records, and the fix.** Every NX3 drop was a property of the seed, not of the generator: all 20 phrasings of a seed carry the seed's own op and values, so a seed that fails the gate loses 20 records (kids.tasks 319 `value-not-in-lexicon`, games.guess 234 `unknown-op`, kids.shapes 184 + 80, kids.animals, docs.editor). Two causes: (1) the gate applied the lexicon test to values the sentence does not state (a default such as `arg.list=to-do`, the `seek` of a question, a constant fixed by the pattern); that check now skips implied values, `seek` and fixed constants. (2) Seeds whose own label is outside the world (an item "do my homework" bound to a list lexicon, `kids.shapes.shape.corners`, "hen" not in the animal lexicon, `guess.hint`): every NX3b seed is **pre-gated** with the same gate before it can cost any token. The shard prompts also carry the exact operation ids, every key with its fixed values and the full lexicons (NX3 cut each lexicon at 10 words), and tell the generator to use only the seed's keys and lexicon words. Result: **0 gate drops in 19,842 candidates** (NX3: 1,209 of 32,400).
+
+**Seeds (1,186, K = 20).** Allocated in proportion to 2,000 minus the NX3 count (target +20,000, yield 0.85). Mix: 110 constants seeds (kids.arith operator forms `where.op/op2`, all 50 ui.avatar seeds covering the part operations incl. `arg.anim`, `arg.list` seeds of kids.tasks), 33 rules-failure seeds (rules-fail / rules-differ paraphrases of `training/paraphrases/out` and `heldout/out`, train split only), then 611 NX3 phrasings the rules did not read and a real judge accepted (hard phrasings), 231 unused NX3 seeds and 201 agreed phrasings (at most 2 per original group). **Deviation from the task text:** texts of the gold set (`gold-para`) and of the NX dev/test records are not seeds and are removed from the training sets (`nx3b-filter.json`: 766 NX3 and 156 NX3b records), because otherwise the A3 / A3b comparison on `gold-para` and `nxtest` would be contaminated by 20 paraphrases of each evaluation item. The operational not-right cases are protected eval texts: they are not seeds, only their worlds guided the allocation. Protected texts (real phrases, expectations, operational*, dialogues, loose words) are excluded by normalised text as before; 48 generated records equal to a protected text were dropped at finalize.
+
+**Generation and judging.** 90 shards, 12 Sonnet sessions (8 shards each, max 2 parallel); 27,000 phrasings written, 19,842 new and unique after the dedupe against NX3 (3,450 duplicates of NX3 texts). Rules agreement: 7,211 agreed, 12,631 disagreed. Judging: 269 calls of 50 in 26 shard files, 13 Sonnet sessions, **every item has its own verdict and reason**; no script filled verdicts (a verdict without a reason of 6+ characters, a reason "ok", or a call whose reasons are copied are rejected by finalize: 0 invalid, 0 copied-reason calls, 10,904 distinct reasons for 13,065 judged items). Items without an explicit verdict are dropped (0). 217 agreed items were re-judged (3 % audit): 1 reject (**audit error 0.5 %**, NX3: 1.3 %). Disagreed items: **accept 97.1 %, fix 1.0 %, reject 1.9 %** (12,260 / 126 / 245; NX3's 97.5 % accept had defaults in it). Per-world reject / fix rates are in the table; the judges write a reason per item, and rejected the same families as the audit shows (pan "a bit" without an amount, "cross off" read as remove, count questions read as lists, garbled romanian artifacts, statements read as questions).
+
+**Hand check (50 random judged items, mine, against the world legends).** 50 items from the disagreed pool (seed 20261110): 49 verdicts are right; the one doubtful accept is `have we met, do you know me` read as `chat.myname`. I also checked 14 random fix / reject items: 12 are right or defensible, 2 questionable (a rejected symmetric `geo.compare` "comparison of italy and spain" because the slots follow the other order; a fix of `doc.size` that changes "title" to "heading"). **Error count: 0 clear errors in 50 judged items, 1 doubtful accept; 0 clear and 2 doubtful of 14 fix / reject.** The sample is 96 % accepts by nature, so the rejects are under-sampled there (the 14-item check covers them).
+
+**Counts per world (final records, protected/eval texts removed in the last column).**
+
+| world | NX3 | NX3b | total | training after filter | judged | fix | reject |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| diagram.sketch | 1428 | +707 | 2135 | 2112 | 673 | 2.7 % | 3.1 % |
+| docs.editor | 1242 | +909 | 2151 | 2066 | 610 | 0.5 % | 3.8 % |
+| games.tictactoe | 1421 | +741 | 2162 | 2022 | 478 | 0.0 % | 0.0 % |
+| art.draw | 1384 | +783 | 2167 | 2040 | 454 | 0.2 % | 4.0 % |
+| ui.help | 1317 | +859 | 2176 | 2094 | 644 | 0.8 % | 0.2 % |
+| kids.shop | 1447 | +732 | 2179 | 2132 | 382 | 1.1 % | 1.1 % |
+| kids.arith | 1409 | +776 | 2185 | 2092 | 473 | 0.4 % | 0.9 % |
+| ui.shell | 1325 | +862 | 2187 | 2086 | 558 | 0.5 % | 1.2 % |
+| geo.map | 1422 | +769 | 2191 | 2096 | 436 | 4.8 % | 5.1 % |
+| data.charts | 1388 | +806 | 2194 | 2109 | 413 | 3.6 % | 0.7 % |
+| kids.time | 1292 | +903 | 2195 | 2152 | 485 | 0.0 % | 6.2 % |
+| kids.common | 1276 | +920 | 2196 | 2065 | 657 | 0.0 % | 3.2 % |
+| kids.animals | 1302 | +903 | 2205 | 2129 | 545 | 0.0 % | 4.0 % |
+| games.hangman | 1401 | +812 | 2213 | 2080 | 474 | 0.0 % | 2.5 % |
+| media.music | 1383 | +830 | 2213 | 2168 | 444 | 2.5 % | 0.2 % |
+| games.chess | 1399 | +815 | 2214 | 2093 | 441 | 0.0 % | 1.1 % |
+| docs.reader | 1340 | +901 | 2241 | 2169 | 516 | 0.8 % | 1.4 % |
+| ui.avatar | 1370 | +891 | 2261 | 2184 | 627 | 0.3 % | 0.5 % |
+| kids.shapes | 1140 | +1122 | 2262 | 2196 | 627 | 4.5 % | 2.4 % |
+| games.guess | 1096 | +1178 | 2274 | 2159 | 875 | 0.1 % | 0.2 % |
+| user.profile | 1242 | +1071 | 2313 | 2289 | 1000 | 0.2 % | 1.2 % |
+| kids.tasks | 1087 | +1258 | 2345 | 2298 | 819 | 0.7 % | 1.5 % |
+
+Total NX3b 19,548 records (train 17,563); NX3 + NX3b 48,659; every world is above 2,000 (lowest diagram.sketch 2,135). After the filters: NX3 27,619 + NX3b 19,212 training records.
+
+**Cost and speed (estimate at a blended $5 per million tokens; no API key, so not the real bill).** Generation 12 sessions, 1.35 M tokens, **$6.77**, 4,878 s of session time for 27,000 phrasings (19.9k phrasings per session hour, about 40k per hour with two in parallel). Judging 13 sessions, 2.60 M tokens, **$12.99**, 5,293 s for 12,848 items (8.7k items per session hour, about 17k per hour with two in parallel). Total **$19.76** (budget $17-20). Seeds, gate, agree, finalize, filter and the evaluation cost no tokens.
+
+### A3b: retrain of A on NX1 + NX3 + NX3b
+`python -m psys2_train.nx_heads train --mode A --seed 1 --out runs/nx-a-nx3b --data 'free-*.jsonl,final29-filtered/*.jsonl,final2-filtered/*.jsonl'` (cwd `training`, bf16, batch 256, 8 epochs, GPU), then `export`. A3all = the same without NX3b (the published A3 was trained on the first 13k NX3 records only, so A3all separates the effect of the other 14.5k NX3 records from NX3b). **Dispatcher outputs identical to v4:** fp32 and int8 `seg_logits`, `world_logits`, `edit_logits` max abs diff 0.0, argmax identical on 400 inputs; int8 68.1 MB (A3: 68.0), 515 operations, 715 tag labels, 5.3 ms per pass at 1 thread. Not published to `docs/webchat`.
+
+| model | dev op acc | dev slot F1 | test op acc | test slot F1 | test exact | filler ok (test) | test records |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| A3 (published, NX1 + 13k NX3) | 0.8927 | 0.8186 | 0.8010 | 0.7428 | 0.5119 | 0.934 | 10,129 |
+| A3all (NX1 + 27.6k NX3) | 0.8972 | 0.8186 | 0.8158 | 0.7507 | 0.5400 | 0.913 | 10,705 |
+| A3b (NX1 + NX3 + NX3b) | 0.8957 | 0.8168 | 0.8294 | 0.7500 | 0.5552 | 0.896 | 11,779 |
+
+(Test columns are on different record sets, each model's own test split: more NX3 / NX3b test items each time. The dev op accuracy is on 15.6k / 16.3k / 17.2k records.) More data raises operation accuracy and exact match on the generated test split and leaves slot F1 flat; **the filler rate falls steadily (0.934 -> 0.913 -> 0.896): the model reads more non-requests as requests**, which is the risk the negation guard covers.
+
+### NX7 evaluation again (full sets, same procedure, 16 jobs, `scripts/eval-nx.mjs`)
+Commands: `--system rules|enc-n1|A3-only|A3b-only|A3-first|A3b-first|A3-d|A3b-d --sets operational,dialogues,gold,nxtest,real,mobile,diagram,operational-ro --jobs 16 --name full|neg-full`; dev runs `--system enc-n1|A3b-dng|A3b-dcovng --sets nxdev --name dev`, then `node scripts/nx7-sweep.mjs --model A3b`. Tau tuned on dev only (28 fail + 1,019 NX3 + 1,500 other + 286 fillers). **A3b is more confident than A3**: with the spans on, the best point with 0 added wrong on dev is tau_op 0.9999 / tau_frame 0 (gain 3), against A3's 0.999; A3's guard point (0.99 / 0.9 / negation guard) adds 2 wrong fillers on A3b's dev set (gain 5, added 2), so A3b has no guarded point at 0.99; it uses 0.9999 for both the spec gate and the guarded run. Baseline note: the shipped mode (`enc-n1`) is better than at NX7 (`gold-para` 46 right, was 33; operational 1278 right, 98.6 %) because the rules and normalizer moved on since, so the model has less headroom than in NX7; the old per-item rows are not on disk, so rules, enc-n1 and A3 were run again here with the current code.
+
+**Model alone (`-only`: the model reading, nothing else). correct / wrong (partly as wrong) / abstain.**
+| set | n | rules | shipped (enc-n1) | A3-only | A3b-only |
+| --- | --- | --- | --- | --- | --- |
+| operational | 1,296 | 1239 / 28 / 29 (95.6 %) | 1278 / 5 / 13 (98.6 %) | 811 / 282 / 203 (62.6 %) | 829 / 281 / 186 (64.0 %) |
+| operational-long | 154 | 87 / 49 / 18 | 145 / 8 / 1 | 48 / 89 / 17 | 49 / 90 / 15 |
+| operational-ro | 2,480 | 2035 / 109 / 336 (82.1 %) | 2127 / 86 / 267 (85.8 %) | 1249 / 658 / 573 (50.4 %) | 1414 / 630 / 436 (57.0 %) |
+| dialogues, turns right | 2,222 | 2155 (97.0 %) | 2151 (96.8 %) | 1186 (53.4 %) | 1266 (57.0 %) |
+| dialogues right | 464 | 418 (90.1 %) | 415 (89.4 %) | 119 (25.6 %) | 126 (27.2 %) |
+| gold-para | 100 | 32 | 46 | 75 | 78 |
+| gold-real | 50 | 23 | 24 | 15 | 15 |
+| nxtest-rules-fail | 44 | 9 | 20 | 22 | 28 |
+| nxtest-sample | 700 | 679 | 676 | 467 (66.7 %) | 480 (68.6 %) |
+| diagram bench | 1,128 | 1106 | 905 | 817 (72.4 %) | 834 (73.9 %) |
+| mobile answered | 108 | 52 | 67 | 83 | 91 |
+
+Model-alone right % by constants world on the operational set (A3 -> A3b): art.draw 15.2 -> 16.2, kids.arith 50.3 -> 51.7, kids.shop 39.5 -> 53.5, ui.avatar 50.4 -> 51.2, kids.time 63.9 -> 59.8, geo.map 57.4 -> 57.4, docs.editor 29.3 -> 34.3. The constants data helps kids.shop (+14) and docs.editor (+5), and barely moves art.draw, kids.arith and ui.avatar: those worlds stay at 16 - 52 % alone, so the constants problem (the model never sees `where.op=plus`, `arg.list=to-do`, `arg.anim`) is not solved by more phrasings; the frame choice at read time stays the weak point.
+
+**Model first (`-first`, the rules read what the model could not).** operational 944 -> 937 right (72.8 -> 72.3 %), wrong 259 -> 272; operational-ro 1634 -> 1680; dialogues turns right 1698 -> 1670 (76.4 -> 75.2 %), dialogues right 225 -> 214; gold-para 75 -> 79; nxtest-rules-fail 22 -> 28; mobile answered 94 -> 99. Still far from the shipped mode on the sets of the rules' own phrasing: not a safe default.
+
+**D (gated model reading over the shipped mode) and the four NX6 conditions.** Gate: A3 0.999 / 0 (spec) and 0.99 / 0.9 + negation guard; A3b 0.9999 / 0, with and without the negation guard, and A3b at A3's guarded point as a check.
+| item | A3 spec | A3 + guard | A3b spec | A3b + guard (0.9999) | A3b at A3's guard point (0.99 / 0.9 / neg) |
+| --- | --- | --- | --- | --- | --- |
+| 1. gold-para + nxtest-rules-fail test (116) right points over the rules | +16.4 | +16.4 | +16.4 | +16.4 | +16.4 |
+| 1b. same, over the shipped mode (D's own gain) | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |
+| gold-para right (shipped 46) | 46 | 46 | 46 | 46 | 46 |
+| nxtest-rules-fail right, 44 (shipped 20) | 21 | 20 | 21 | 21 | 20 |
+| 2. operational + long wrong points over shipped (limit +0.2) | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 |
+| 3a. dialogues turns right / wrong points | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 |
+| 3b. operational-ro right / wrong points | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 | +0.20 / 0 |
+| 4. browser cost | same pass, +0.1 MB over A3 | | | | |
+
+All four conditions hold for A3 and A3b; D adds no wrong answer anywhere. **But D no longer adds anything measurable over the current shipped mode** (1b is 0.0 for both models: the shipped mode already reads what the gate lets through; the one nxtest case D recovers is the same for A3 and A3b). The model-alone and model-first numbers improve with the new data (the paraphrase sets, Romanian, the diagram bench), the gated hybrid number does not move. **A3b vs A3: a drop-in as A3 was (dispatcher identical), better model alone (+1.4 operational, +6.6 Romanian, +3.6 dialogue turns, `nxtest-rules-fail` 22 -> 28 of 44, `gold-para` 75 -> 78), model-first +0.5 .. +1.8 on paraphrase sets and -1.2 on dialogue turns, hybrid unchanged; lower filler rate and a higher required tau (0.9999). Recommendation: it is a small improvement of the model alone, no change for the shipped hybrid mode; the coordinator decides about publishing.**
+
+Caveats: single runs; the per-item rows (`training/results/nx5/*.json`) are not in git; the judge is one model (Sonnet) and its accepts were hand-checked on 50 items only; gold-para / nxtest texts are not in the training sets, but their near neighbours (the same canonical sentences, other phrasings) may be.
