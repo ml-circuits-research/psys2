@@ -2109,3 +2109,12 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
     - **Item 1 (worker + watchdog that terminates and restarts), item 3 (no repetition), item 5 (long tasks in the phrase-log export) and item 6 (fault-injection browser tests) are not delivered yet. They are the part that makes a freeze impossible; do them next.**
     - "make your eyes blue" still answers "turquoise … I do not have blue" on the robot (RD3 note from yesterday).
     - "my favourite color is green" is only partly understood.
+- COMPUTE-BUDGET A (628ff0c, 5b8a345, ca055e7, 0ea8ac4), files match the log: **accepted, with one defect to fix now.**
+  - Reviewer run of `scripts/test-webchat-budget.mjs` in real Chrome (2-vCPU host): **46/47**. The three injected infinite loops (operation, matcher, translator) are ended by the watchdog, the page stays responsive, the worker is replaced, and the same input is not run again.
+  - **Defect (reproduced twice, `--only stop` gives 3/4):** `stop: the chat works afterwards` fails. The first message after Stop killed a looping worker answers "That took too long, I stopped it." On a slow machine the new worker is still starting (loading and compiling the rules) when the next message arrives, and the watchdog counts that start-up time against the turn.
+    - The turn clock must start when the worker is **ready**. While it starts, show "restarting…" and queue the one message.
+    - A worker that fails to become ready within a start limit is a different, visible error ("the engine could not restart — reload"), never a silent chain of kills.
+    - Start the replacement worker immediately at kill time, and keep it warm.
+    - Test this at `--throttle 6`.
+  - **Main thread per turn**, in the reviewer's `prof.mjs` (4×, rules, total task time, rendering included): 0.4–2.4 s; it was 0.5–3.5 s. Your long-task numbers are lower because JS self time is ~40 ms and the rest is rendering. Look at what the page renders per turn: the whole message list, the phrase log, the tab canvases of hidden tabs. A plain text reply should not cost 1 s of main-thread tasks at 4×.
+  - **Stale library files:** the known limit "a stale library file from the HTTP cache can pair with a fresh worker" is exactly the kind of state the user's browser may be in. Version **every** module URL the worker imports (generate the import list with hashes at build time), so no mixed build can ever load.
