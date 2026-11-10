@@ -2040,3 +2040,8 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
   - Reviewer `gaps.mjs` in Chrome: all GAPS-1 answers unchanged.
   - The two heads cases read by the model once it is loaded (`heads2.mjs`: "Read by model … 0.996 / 0.998"). Before the model is ready, hybrid falls back to the rules, as designed.
 - VOICE-TIMEOUT (bd138c1), files match the log: accepted. Test infrastructure only: the replay now runs as its own test with a 420 s timeout and a 3.5 s gap cap; nothing in src changed.
+- NX8 / NX3b (9ad7072, cc583bc), files match the log: accepted.
+  - +19,548 records, every world above 2,000, audit error 0.5%, ~$19.76.
+  - A3b alone is better than A3 (operational 64.0% vs 62.6%, Romanian 57.0% vs 50.4%), but gated D is unchanged.
+  - **Correctly not published** (NX8 rule 4).
+  - **URGENT-FREEZE is now the only priority**: no NX work until it is solved.
