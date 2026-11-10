@@ -5,6 +5,7 @@
  * Slot classes: number, ordinal, word, words, noun, <lexicon id>, agent, unit.
  */
 import { isFillerWord } from './normalize.mjs';
+import { budget } from '../../dialog/budget.mjs';
 
 /** Quantity unit table: lowercase token -> canonical symbol. */
 export const UNIT_TABLE = new Map(Object.entries({
@@ -166,6 +167,7 @@ function candidates(el, tokens, i, env, slotsSoFar) {
       if (el.args?.[0] !== 'quotes') return [{ len, value: text(len), text: text(len), span: span(len), loose: true }];
       // rest(quotes): free text keeps the quotes and the closing punctuation around it ("Hello there." said the fox)
       let a = t.start, b = tokens[end - 1].end;
+      // bounded: a only decreases to 0 over the sentence text
       while (a > 0 && /["\u201C\u2018(\[]/.test(env.text[a - 1])) a--;
       const close = /^(?:[.!?\u2026]*["\u201D\u2019)\]])+/.exec(env.text.slice(b));   // closing quotes and brackets, with the punctuation before them
       if (close) b += close[0].length;
@@ -219,6 +221,7 @@ function candidates(el, tokens, i, env, slotsSoFar) {
  * @returns {{ slots: object, literals: number, skips: number, frameLiterals: number } | null}
  */
 function matchTokensRaw(compiled, tokens, env) {
+  budget.tick('matcher.attempt');
   const els = compiled.elements;
   // a trailing question mark is visible only to patterns that list `?`; the others behave as if it were not there
   const n = tokens.length - (!compiled.hasQ && tokens[tokens.length - 1]?.kind === 'qmark' ? 1 : 0);
@@ -228,6 +231,7 @@ function matchTokensRaw(compiled, tokens, env) {
   /** Token index after matching the literal words at tokens[i], or -1. A token matches by `lower` or by `alt` (the original number word, `u`); operator symbols and their words are one literal. */
   const matchWords = (words, i) => {
     let k = 0, p = i;
+    // bounded: every pass either advances k and p or returns -1; the matcher call itself ticks matcher.attempt
     while (k < words.length) {
       const w = words[k], t = p < n ? tokens[p] : null;
       if (t && (t.lower === w || t.alt === w)) { k++; p++; continue; }
@@ -249,6 +253,7 @@ function matchTokensRaw(compiled, tokens, env) {
   const matchWords0 = (el, i) => el.alts.some((alt) => { const e = matchWords(alt, i); return e > 0 && e === n; });
 
   function run(k, i) {
+    budget.tick('matcher.backtrack');
     if (k === els.length) return i === n;
     const el = els[k];
     if (el.t === 'lit') {
