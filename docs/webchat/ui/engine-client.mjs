@@ -290,6 +290,8 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
     get info() { return bootInfo; },
     get booting() { return booting; },
     get restarting() { return restarting(); },
+    /** Settings › Developer › Reasoner (spec 15) is read when the engine starts: a new worker is started from the last committed state (nothing is running when the page calls this). */
+    restart(why = 'settings') { if (down) return readyP; killWorker(why); return respawn(); },
     settled,
     get down() { return down; },
     get stage() { return stage; },

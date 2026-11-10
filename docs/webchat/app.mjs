@@ -707,7 +707,7 @@ export async function mountPsys2(element, options = {}) {
     try {
       const [dialog, loaders] = await Promise.all([import(new URL('lib/dialog/index.mjs', base).href), import(new URL('lib/loaders/bundle-loader.mjs', base).href)]);
       const bundle = await (await fetch(new URL('worlds/index.json', base))).json();
-      for (const [id, w] of Object.entries(bundle.worlds)) { if (options.worlds && id !== 'core' && !options.worlds.includes(id)) delete bundle.worlds[id]; else if (w.opsUrl) w.opsUrl = new URL(w.opsUrl, base).href; }
+      for (const [id, w] of Object.entries(bundle.worlds)) { if (options.worlds && id !== 'core' && !options.worlds.includes(id)) delete bundle.worlds[id]; else { if (w.opsUrl) w.opsUrl = new URL(w.opsUrl, base).href; if (w.fnsUrl) w.fnsUrl = new URL(w.fnsUrl, base).href; } }
       introEngine = await dialog.createEngine({ loader: loaders.createBundleLoader(bundle), translator: null });
     } catch (e) { console.warn('debug: worlds not available', e); }
     return introEngine;
@@ -1166,11 +1166,21 @@ export async function mountPsys2(element, options = {}) {
     const reset = textBtn('Reset time limits', () => { settings.timeLimits = { ...TIME_LIMIT_DEFAULTS }; applyTimeLimits(settings); save(); renderSettings(); });
     return h('div', { class: 'p2-field', 'data-group': 'time-limits' }, h('strong', {}, 'Time limits'), ...rows, reset);
   }
+  /** Settings › Developer › Reasoner (spec 15): which engine answers the worlds that ship a matrix. Read when the engine starts, so a change restarts it from the last state. */
+  function reasonerGroup() {
+    const current = settings.reasoner === 'matrix' ? 'matrix' : 'ops';
+    return field('Reasoner', select([['ops', 'Operations (default)'], ['matrix', 'Matrix where available (sopworld)']], current, (v) => {
+      settings.reasoner = v === 'matrix' ? 'matrix' : 'ops'; save();
+      Promise.resolve(engineClient?.restart?.('reasoner')).catch(() => {});
+      renderSettings();
+    }), 'Operations: every world answers through its own code, as always. Matrix: kids.shop, kids.arith and kids.tasks answer through the sopworld library (rules, states, aggregates, retract, explain) and gain a few things: a missing item is asked for, “three of them” revises a purchase, “undo that” takes it back, “why?” says what an answer rests on, “what did I pay?” is worked backwards. Changing it restarts the engine; what you said so far in the other worlds is kept, the shop, arithmetic and list facts are not.');
+  }
   function developerBody() {
     return [
       check('Show the trace of every answer (which part was read by which rule, model and validator)', settings.showTrace, (v) => { settings.showTrace = v; save(); }),
       check('Developer mode: a Debug button on every tab (commands, last turns with their SOP Lang wires, dry run, state, world, models); records the last 200 turns while on', settings.devMode === true, (v) => { setDevMode(v); }),
       check('Show the per-stage timing overlay of the last message (also with ?perf=1 in the page address)', settings.showPerf === true, (v) => { settings.showPerf = v; save(); if (!v) perfEl?.remove(); }),
+      reasonerGroup(),
       timeLimitsGroup(),
       h('div', { class: 'p2-field' }, h('strong', {}, 'Microphone clicks'), h('pre', { class: 'p2-miclog', tabindex: '0' }, micLog.length ? micLog.slice(-40).map((e) => `${e.t} ${e.via} ${e.action}: ${JSON.stringify(e.before)} -> ${JSON.stringify(e.after)}`).join('\n') : 'No clicks yet.')),
       h('div', { class: 'p2-field' }, h('strong', {}, 'Build'), buildInfoLines()),

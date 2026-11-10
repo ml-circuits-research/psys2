@@ -12,5 +12,9 @@ export function createBundleLoader(bundle) {
       const url = worlds[id]?.opsUrl;
       return url ? import(/* @vite-ignore */ url) : null;
     },
+    async loadFns(id) {
+      const url = worlds[id]?.fnsUrl;
+      return url ? import(/* @vite-ignore */ url) : null;
+    },
   };
 }

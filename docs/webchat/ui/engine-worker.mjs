@@ -112,12 +112,15 @@ async function init(m) {
   const bundle = await res.json();
   for (const [id, w] of Object.entries(bundle.worlds)) {
     if (m.onlyWorlds && id !== 'core' && !m.onlyWorlds.includes(id)) delete bundle.worlds[id];
-    else if (w.opsUrl) w.opsUrl = new URL(w.opsUrl, ROOT).href + (ver[`worlds/${id}/ops.mjs`] ? `?v=${ver[`worlds/${id}/ops.mjs`]}` : '');
+    else {
+      if (w.opsUrl) w.opsUrl = new URL(w.opsUrl, ROOT).href + (ver[`worlds/${id}/ops.mjs`] ? `?v=${ver[`worlds/${id}/ops.mjs`]}` : '');
+      if (w.fnsUrl) w.fnsUrl = new URL(w.fnsUrl, ROOT).href + (ver[`worlds/${id}/fns.mjs`] ? `?v=${ver[`worlds/${id}/fns.mjs`]}` : '');   // matrix worlds (spec 15)
+    }
   }
   // The browser Translation API and language detector exist on the page only: the worker asks the page for them, with a deadline (then the rules answer)
   const backend = tr.createRemoteBackend({ kinds: m.browser ?? {}, call: (op, payload) => new Promise((resolve, reject) => { const id = ++btSeq; btPending.set(id, { resolve, reject }); post({ type: 'bt', id, op, ...payload }); }).finally(() => {}) });
   const translator = tr.createSwitchTranslator({ rules: translate.createTranslator(), getStrategy: () => settings.translation, getDetectStrategy: () => settings.languageDetection, backend, languages: lang.LANGS });
-  engine = await dialog.createEngine({ loader: loaders.createBundleLoader(bundle), translator });
+  engine = await dialog.createEngine({ loader: loaders.createBundleLoader(bundle), translator, options: { reasoner: settings.reasoner === 'matrix' ? 'matrix' : 'ops' } });   // Settings › Developer › Reasoner (spec 15): read when the engine starts
   if (testHooks) installFaults();
   const rules = (engine.precompile?.({ budgetMs: 8, yieldFn: async () => { await sleep(0); while (turnRunning()) await sleep(20); } }) ?? Promise.resolve()).catch(() => {}).then(() => evt('rules-compiled'));
   rules.catch(() => {});

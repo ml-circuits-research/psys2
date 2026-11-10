@@ -12,7 +12,7 @@
  *
  * Tested against the Python tokenizer on a fixture (tests/wordpiece.test.mjs, tests/fixtures/wordpiece-distilbert.json).
  */
-import { budget } from '../dialog/budget.mjs?v=9f5360afbc';
+import { budget } from '../dialog/budget.mjs?v=123c3e1329';
 
 const CJK = [[0x4E00, 0x9FFF], [0x3400, 0x4DBF], [0x20000, 0x2A6DF], [0x2A700, 0x2B73F], [0x2B740, 0x2B81F], [0x2B820, 0x2CEAF], [0xF900, 0xFAFF], [0x2F800, 0x2FA1F]];
 const isCjk = (cp) => CJK.some(([a, b]) => cp >= a && cp <= b);

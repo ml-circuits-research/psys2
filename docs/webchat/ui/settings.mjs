@@ -14,6 +14,7 @@ export const DEFAULT_SETTINGS = {
   language: 'en',
   ...RUNTIME_DEFAULTS,            // formalizer, encoderAcceptRefused, partialUnderstanding, normalizer, spellcheck: one definition shared with the evaluators (src/dialog/runtime-config.mjs)
   timeLimits: { ...TIME_LIMIT_DEFAULTS },   // ms; clamped on use (src/dialog/time-limits.mjs)
+  reasoner: 'ops',                // Settings › Developer › Reasoner (spec 15): 'ops' (default) | 'matrix' (the worlds that ship a matrix answer through the sopworld library); read when the engine starts
   fastPath: true,                 // webchat: the rules answer at once when they read the whole message (PERF); the model is for the rest
   translation: 'auto', languageDetection: 'auto', englishVariant: 'en-US', voice: '', rate: 1, handsFree: false, keepListening: true, wakeWord: false, speaker: false, showTrace: false, showPerf: false, devMode: false, logPhrases: true, exportButtons: false,
 };
@@ -42,6 +43,7 @@ export function migrateSettings(saved, navLang = globalThis.navigator?.language)
   if ('speechLang' in s) { delete s.speechLang; migrated = true; }
   s.handsFree = false;   // FREEZE: the listening state is never persisted; every page load starts with the microphone off (an older saved `true` no longer starts it)
   if (s.formalizer !== 'rules' && s.formalizer !== 'encoder') s.formalizer = DEFAULT_SETTINGS.formalizer;
+  if (s.reasoner !== 'matrix') s.reasoner = 'ops';   // an unknown saved value is the default
   s.nxStrategy = normalizeNxStrategy(s.nxStrategy);   // ADR-009: an unknown saved value falls back to the default
   return { settings: s, migrated };
 }

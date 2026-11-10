@@ -1,6 +1,6 @@
 // Text normalization and tokenization for the translation module (browser-safe).
 // Normalization is offset-preserving: every token keeps its span in the ORIGINAL text.
-import { budget } from '../dialog/budget.mjs?v=9f5360afbc';
+import { budget } from '../dialog/budget.mjs?v=123c3e1329';
 
 const CHAR_MAP = {
   'ş': 'ș', 'Ş': 'Ș', 'ţ': 'ț', 'Ţ': 'Ț',
