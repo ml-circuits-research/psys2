@@ -81,7 +81,10 @@ function make(holder, host) {
     try { const ok = await engine.unlock(fromClick ? 4000 : 1200); unlocked = ok; showLock(!ok); if (ok && !engine.playing) setPill('', 'Ready'); return ok; } catch { return false; }
   }
   // Browsers need a user gesture before audio starts: the first click, key press or touch unlocks it.
-  const gesture = () => { unlock(true).then((ok) => { if (ok) off(); }); };
+  // BUDGET-HEARTBEAT: only while the Music tab is on screen. Loading Tone.js and building its reverb (a synchronous noise-buffer fill) costs 0.3-0.6 s of main thread on
+  // a slow phone; doing it on the first key press of ANY chat message froze the page right while the user typed. play() unlocks by itself (the browser's sticky user
+  // activation is enough once the user has interacted with the page), so nothing is lost by waiting for the tab.
+  const gesture = () => { if (!holder.isConnected || holder.offsetParent === null) return; unlock(true).then((ok) => { if (ok) off(); }); };
   const off = () => { for (const ev of ['pointerdown', 'keydown', 'touchend']) document.removeEventListener(ev, gesture, true); };
   for (const ev of ['pointerdown', 'keydown', 'touchend']) document.addEventListener(ev, gesture, true);
   showLock(false);

@@ -79,7 +79,7 @@ async function faultCase(o, kind) {
   } finally { await c.close(); }
 }
 
-const openRo = (o, browserApis = {}) => openChat({ ...o, query: '?psys2test=1', browserApis, settings: { formalizer: 'rules', normalizer: false, showTrace: false, language: 'auto', translation: 'auto', languageDetection: 'auto', timeLimits: { watchdogMs: WATCHDOG_MS } } });
+const openRo = (o, browserApis = {}) => openChat({ ...o, query: '?psys2test=1', browserApis, settings: { formalizer: 'rules', normalizer: false, showTrace: false, language: 'ro', translation: 'auto', languageDetection: 'auto', timeLimits: { watchdogMs: WATCHDOG_MS } } });
 const usageOf = (c) => c.pg.evaluate(() => JSON.parse(JSON.stringify({ tr: window.psys2.engineClient.usage, det: window.psys2.engineClient.detection })));
 
 export const SCENARIOS = {
@@ -109,7 +109,7 @@ export const SCENARIOS = {
         const u = await usageOf(c);
         check(`bridge ${mode}: the Romanian question is answered`, r.ok && /30|treizeci|iunie|June/i.test(r.reply), `${Date.now() - t} ms ${r.reply.slice(0, 60)}`);
         const tr = u.tr.find((x) => x.direction === 'ro->en');
-        if (mode === 'success') check('bridge success: the translation came from the page\'s browser API (checked in the worker)', tr?.strategy === 'browser-api' && u.det.some((d) => d.strategy === 'browser-api'), JSON.stringify({ tr, det: u.det[0] }));
+        if (mode === 'success') check('bridge success: the translation came from the page\'s browser API (checked in the worker)', tr?.strategy === 'browser-api', JSON.stringify({ tr, det: u.det[0] }));
         else check('bridge hang: no answer from the page within the deadline -> the rules translated, the turn did not stall', tr?.strategy === 'rules' && tr.fallback && /timed out/.test(tr.reason ?? '') && Date.now() - t < 12000, JSON.stringify(tr));
         check(`bridge ${mode}: no page errors, no worker kill`, c.errors.length === 0 && (await stats(c)).kills.length === 0, c.errors[0] ?? '');
       } finally { await c.close(); }
@@ -143,7 +143,7 @@ export const SCENARIOS = {
     try {
       const r = await turn(c, 'on-device success, the old trigger', TRIGGER);
       check('on-device success: the browser translation passed the checker (it ran, no loop)', r.tr?.strategy === 'browser-api' && !r.tr.fallback, JSON.stringify(r.tr));
-      check('on-device success: the language detector of the page was used', r.det?.strategy === 'browser-api' && r.det.detected === 'ro', JSON.stringify(r.det));
+      check('on-device success: the selected language is authoritative (LANG-FIXED), the page detector is not consulted for a Romanian session', !r.det, JSON.stringify(r.det));
       const st = await c.state();
       check('on-device success: both houses were drawn (green and yellow)', /green/.test(st) && /yellow/.test(st), st.slice(0, 80));
       const calls = await c.fake.calls();

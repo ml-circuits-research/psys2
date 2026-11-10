@@ -171,6 +171,7 @@ export const SCENARIOS = {
       const live = () => c.pg.evaluate(() => !!window.__sr.live());
       const waitNew = (n, ms = 3000) => c.pg.waitForFunction((n) => window.__sr.starts() > n && window.__sr.live(), { timeout: ms, polling: 20 }, n).then(() => true).catch(() => false);
       await c.pg.click('button.p2-mic'); await waitRec(c);
+      await c.pg.waitForFunction(() => document.querySelector('button.p2-mic')?.dataset.mic === 'listening', { timeout: 3000, polling: 20 }).catch(() => {});   // `starting` lasts until the recognizer's onstart (a timer in the fake), so wait for it instead of racing it
       let m = await mic();
       check('one click turns the microphone on (conversation mode) with a state tooltip', m.s === 'listening' && m.p === 'true' && m.t === m.l && /stop microphone/.test(m.t), JSON.stringify(m));
       let ok = true;
