@@ -2101,3 +2101,11 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
 - ELLIPSIS (b602889, a7df399), files match the log: validated in Chrome. "fă o casă verde și una galbenă" → green house + yellow house.
   - **But this 2-clause message costs 3.1–3.5 s and 3.7–4.3 s of main thread at 4×** (a single `desenează un soare` costs 1.4 s). Include it in URGENT-FREEZE item 2: profile it and break up the long tasks.
   - **URGENT-FREEZE items 1–5 are not started yet. Do them now.**
+- COMPUTE-BUDGET B and C (21e3c2d, 803e212, 23fcf02, c3909ca, 3027821), files match the log: accepted in part.
+  - Reviewer rerun: `tests/loop-guard.test.mjs` 2 pass. `prof.mjs` in Chrome (4×, rules only): turns now cost 0.2–0.8 s of wall time (they were 0.8–4.2 s).
+  - The wrong answers are fixed: "I have two kids" → "Noted: children, 2."; "I am 45 years old" → noted; "I like chess, music and maps" opens no tabs; the house command draws both houses in 0.77 s (it was 4.0 s).
+  - **Still open:**
+    - Main thread per turn is 0.5–3.5 s at 4× (first turn 3.5 s, "desenează un soare" 2.4 s, the avatar turn 1.8 s). The target is < 300 ms: that needs item 1 (the engine in a worker).
+    - **Item 1 (worker + watchdog that terminates and restarts), item 3 (no repetition), item 5 (long tasks in the phrase-log export) and item 6 (fault-injection browser tests) are not delivered yet. They are the part that makes a freeze impossible; do them next.**
+    - "make your eyes blue" still answers "turquoise … I do not have blue" on the robot (RD3 note from yesterday).
+    - "my favourite color is green" is only partly understood.
