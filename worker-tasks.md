@@ -2045,3 +2045,6 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
   - A3b alone is better than A3 (operational 64.0% vs 62.6%, Romanian 57.0% vs 50.4%), but gated D is unchanged.
   - **Correctly not published** (NX8 rule 4).
   - **URGENT-FREEZE is now the only priority**: no NX work until it is solved.
+- ELLIPSIS (b602889, a7df399), files match the log: validated in Chrome. "fă o casă verde și una galbenă" → green house + yellow house.
+  - **But this 2-clause message costs 3.1–3.5 s and 3.7–4.3 s of main thread at 4×** (a single `desenează un soare` costs 1.4 s). Include it in URGENT-FREEZE item 2: profile it and break up the long tasks.
+  - **URGENT-FREEZE items 1–5 are not started yet. Do them now.**
