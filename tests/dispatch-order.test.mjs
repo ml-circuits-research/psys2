@@ -81,3 +81,14 @@ test('a delimited split of clean top-ranked readings stays class 0', async () =>
   const r = await createDispatchValidator({ engine }).validate(msg(t, [{ score: -0.1, segments: [piece(a, W(['kids.arith', 0.9])), piece(b, W(['kids.animals', 0.8]), t.indexOf(b))] }]));
   assert.equal(r.trace.segmentations[0].tier, 0);
 });
+
+// RP5c item 1: the earlier turns of the context are replayed to seed the checking session; a drawing turn follows its tab and moves it to Drawing,
+// but the message is checked on the tab the user is on now (a tab opened by a command counts like a click, routing tier T).
+test('RP5c: replaying earlier drawing turns does not move the tab the message is checked on', async () => {
+  const t = 'draw 3 circles';
+  const context = { tab: 'diagram', recent_worlds: ['art.draw'], session: ['draw a small blue fish', 'delete the fish'] };
+  const r = await createDispatchValidator({ engine }).validate({ id: 't', text: t, context, segmentations: [{ score: 0, segments: [piece(t, W(['art.draw', 0.9], ['diagram.sketch', 0.5]))] }] });
+  assert.equal(r.status, 'understood');
+  assert.match(JSON.stringify(r.produced), /diagram\.sketch/);
+  assert.doesNotMatch(JSON.stringify(r.produced), /art\.draw/);
+});

@@ -41,6 +41,8 @@ const ROWS = [
   ['wording-avatar-already', 'robot', [], 'deschide tabul avatar', /^Ești deja pe fila Avatar/],
   // RP5c: a tab opened by a command is the active tab for tier T; already-on-Drawing wording; plural wording; the widest mouth
   ['rp5c-open-then-draw', 'robot', ['deschide tabul diagramă'], 'desenează trei cercuri', /c1.*c3/s, (s) => s.tab === 'diagram' && s.diagram.shapes.length === 3],
+  // RP5c item 1 with the reviewer's earlier turns (recent world art.draw): the command-opened Diagram tab is the active tab, the circles go there
+  ['rp5c-open-then-draw-after-drawing', 'robot', ['deschide tabul avatar', 'fii bucuros', 'fii nervos', 'deschide tabul x și zero', 'pornește x și zero', 'joc a unu', 'deschide tabul desen', 'desenează un sare', 'desenează o maimuță', 'desenează liniuță', 'desenează un pește mic și albastru', 'mută peștele în apă', 'mută peștele', 'șterge peștii', 'Șterge toate cercurile roșii', 'deschide tabul diagramă'], 'desenează trei cercuri', /c1.*c3/s, (s) => s.tab === 'diagram' && s.diagram.shapes.length === 3],
   ['rp5c-draw-already', 'draw', [], 'deschide tabul desen', /^Ești deja pe fila Desen/],
   ['rp5c-plural', 'draw', [], 'șterge toate cercurile roșii', /^Nu găsesc cercuri roșii în desen/],
   ['rp5c-big-mouth', 'robot', [], 'Fă o gură mare', /^\S+! Gura mea este mare acum/],

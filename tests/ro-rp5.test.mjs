@@ -163,3 +163,33 @@ test('RP5c: already on Drawing, plural "not found", the widest mouth', async () 
   const mouth = await run('robot', ['Fă o gură mare']);
   assert.deepEqual(mouth.status, ['supported']); assert.match(mouth.r.text, /^\S+! Gura mea este mare acum/);
 });
+
+// RP5c item 1: a command-opened tab is the active tab for tier T. The bug was in the dry run of the capability check: with a recent world other than the
+// tab's (art.draw), the diagram reading was dry-run on a fork before the diagram engine (loaded lazily in a browser) was ready, got "still loading"
+// (`missing`) and was thrown away for the art.draw reading. The dry runs now await the world's `prepare()` like the real run does.
+test('RP5c: open the Diagram tab by command after Drawing turns, then "desenează trei cercuri" draws in the Diagram', async () => {
+  const s = engine.createSession({ language: 'ro' });
+  s.setWorldState('ui.shell', { activeTab: 'robot' });
+  for (const m of ['deschide tabul desen', 'desenează un pește mic și albastru', 'șterge peștii', 'deschide tabul diagramă']) await s.send(m);
+  assert.equal(s.state('ui.shell').activeTab, 'diagram');
+  const r = await s.send('desenează trei cercuri');
+  assert.match(r.text, /c1.*c3/);
+  assert.equal(s.state('ui.shell').activeTab, 'diagram');
+  assert.equal(s.state('diagram.sketch').shapes.length, 3);
+});
+
+test('RP5c: the capability dry run awaits the lazy engine of the world it checks', async () => {
+  const s = engine.createSession({ language: 'en' });
+  s.setWorldState('ui.shell', { activeTab: 'diagram' });
+  s._recentWorlds = ['art.draw'];
+  const world = engine.set.get('diagram.sketch');
+  const origOps = world.ops; let calls = 0;
+  Object.defineProperty(world, 'ops', { value: { ...origOps, prepare: async () => { calls++; return origOps.prepare(); } }, configurable: true, writable: true });
+  try {
+    const { formalize } = await import('../src/formalizer/index.mjs');
+    const opts = { worlds: engine.set, session: s.isession, source: 'x', context: s.context(), router: engine.router };
+    const res = formalize('Draw 3 circles', opts);
+    await s._capabilityRead('Draw 3 circles', res, opts, { spell: true, partial: true, fastPath: true });
+    assert.ok(calls >= 1, 'prepare() was awaited before the dry run');
+  } finally { Object.defineProperty(world, 'ops', { value: origOps, configurable: true, writable: true }); }
+});
