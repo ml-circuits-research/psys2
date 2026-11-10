@@ -704,6 +704,15 @@ It also gives things we do not have: a missing argument asked as a question, a d
    - **(e) Cost:** ms per turn (p50, p95), bundle bytes (raw and gzip), lines of world code.
 9. **What sopworld can and cannot replace, as a table per world** (all 24, not only the three): for each `ops.mjs`, classify its functions as *state and rules* (replaceable by a matrix), *queries and aggregates* (replaceable), *text handling*, *engine / geometry / search*, *reply wording* — with line counts. One page in `docs/` and in the log. This is the map for stage 2.
 
+10. **One SOP Lang (user decision, 18:38).** Rule files and fact files must be the same language. The library is changing its syntax so that `?name` is only a variable and every declaration starts with `@` (its task L1; pattern wires become ordinary `@` wires that a rule names). When its 0.5.0 is tagged:
+    - re-vendor it;
+    - update `specs/01-soplang.md` to **SOP Lang v1.1** from the library's "The language" section: variables `?name` in value position (legal only in wires that a rule, deny, relation, action or query names), `#` comments, and everything else as v1;
+    - make `src/soplang/` parse v1.1 (variables as a fourth value kind `{ kind: 'var', v }`, comments skipped), with the same errors as before for facts that contain variables outside a rule file;
+    - `matrix.sop` files are then parsed by **our** parser and handed to the library as wires (the library accepts wires as well as text), so there is one parser in the product;
+    - the editor's SOP syntax colouring and the debug view show variables.
+
+    Do not write new matrices in the old `?id type …` form.
+
 **Not in stage 1:** removing any `ops.mjs`, changing the default, other worlds. Stage 2 (after the user sees stage 1): the session memory and question resolution of `src/interpreter/` on the library, then kids.time, kids.animals, kids.shapes, user.profile and the game rules; the engine-heavy worlds keep their engines and move only state and validation.
 
 ### COMPUTE-BUDGET — loops and freezes made impossible by construction (user decision, 13:44 local) — P0, before anything else
