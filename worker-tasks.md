@@ -2001,3 +2001,7 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
     - circle vs other shapes.
 
     The heads strategy still reads its cases ("Read by model": guess count, sea animals).
+- GAPS-1b (e5c026e) and the soak gate change (8c079e1), files match the log: accepted.
+  - Operational and long numbers are unchanged; 3 new dialogues pass.
+  - Reviewer `gaps.mjs` in Chrome: all GAPS-1 answers unchanged.
+  - The two heads cases read by the model once it is loaded (`heads2.mjs`: "Read by model … 0.996 / 0.998"). Before the model is ready, hybrid falls back to the rules, as designed.
