@@ -233,6 +233,7 @@ function make(holder, host) {
     empty.append(chips);
   }
 
+  // bounded: render() only appears as an event-handler callback; it does not call itself synchronously
   function render() {
     if (destroyed || !ops) return;
     const s = state;

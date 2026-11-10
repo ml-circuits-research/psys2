@@ -20,6 +20,7 @@ export function parseNumberRun(words, i) {
   let j = i, used = 0;
   let last = 'start'; // start | unit | teen | tens | tensunit | hundred | thousand
   const accept = (len) => { used = len; };
+  // bounded: j only moves forward over the words
   for (; j < words.length; j++) {
     const w = words[j];
     let next = null;

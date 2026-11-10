@@ -1,5 +1,6 @@
 // Text normalization and tokenization for the translation module (browser-safe).
 // Normalization is offset-preserving: every token keeps its span in the ORIGINAL text.
+import { budget } from '../dialog/budget.mjs';
 
 const CHAR_MAP = {
   'ş': 'ș', 'Ş': 'Ș', 'ţ': 'ț', 'Ţ': 'Ț',
@@ -15,8 +16,10 @@ export function normalizeWithMap(text) {
   const ends = [];
   let pos = 0;
   while (pos < text.length) {
+    budget.tick('translate.tokenize');
     const cp = text.codePointAt(pos);
     let end = pos + (cp > 0xffff ? 2 : 1);
+    // bounded: the index only moves in one direction over a finite list or text
     while (end < text.length && MARK.test(text[end])) end++;
     const cluster = text.slice(pos, end).normalize('NFC');
     for (let k = 0; k < cluster.length; k++) {
@@ -48,6 +51,7 @@ export function tokenize(original) {
   const toks = [];
   let m;
   TOKEN_RE.lastIndex = 0;
+  // bounded: regex exec with the g flag advances lastIndex each pass
   while ((m = TOKEN_RE.exec(nm.text)) !== null) {
     const s = m.index;
     const e = s + m[0].length;
@@ -74,9 +78,11 @@ export function splitSentences(toks) {
   const sentences = [];
   let cur = [];
   const isEnd = (t) => t.kind === 'punct' && (t.raw === '.' || t.raw === '!' || t.raw === '?');
+  // bounded: i only moves forward over the tokens
   for (let i = 0; i < toks.length; i++) {
     cur.push(toks[i]);
     if (isEnd(toks[i])) {
+      // bounded: the index only moves in one direction over a finite list or text
       while (i + 1 < toks.length && isEnd(toks[i + 1])) cur.push(toks[++i]);
       sentences.push(cur);
       cur = [];

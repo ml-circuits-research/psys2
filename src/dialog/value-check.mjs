@@ -76,6 +76,7 @@ export function streamOf(text) {
   raw.sort((a, b) => a.start - b.start);
   const out = [];
   const ws = raw.map((x) => (x.k === 'w' ? x.w : '\u0001'));
+  // bounded: i only moves forward over the tokens
   for (let i = 0; i < raw.length; i++) {
     const x = raw[i];
     if (x.k !== 'w') { out.push({ ...x }); continue; }
@@ -91,6 +92,7 @@ export function streamOf(text) {
   }
   // spoken sign: "minus 5" / "negative five" where the sign word is not an operator (no number right before it)
   const res = [];
+  // bounded: i only moves forward over the tokens
   for (let i = 0; i < out.length; i++) {
     const x = out[i], nx = out[i + 1];
     if (x.k === 'w' && NEGATIVE_WORDS.has(x.w) && nx && nx.k === 'n' && !nx.ord && !nx.mixed && !nx.v.startsWith('-') && (x.w === 'negative' || !(res.at(-1)?.k === 'n'))) {
@@ -146,6 +148,7 @@ function entityBound(st, cue, h) {
   for (let i = 0; i < st.length; i++) {
     if (st[i].k !== 'w' || st[i].w !== cue) continue;
     let j = i + 1;
+    // bounded: the index only moves in one direction over a finite list or text
     while (st[j]?.k === 'w' && (ARTICLES.has(st[j].w) || FILLERS.has(st[j].w) || st[j].w === 'please')) j++;
     if (st[j] && entity(st[j]) === h && (st[j].k !== 'w' || st[j].cap)) return true;
   }
@@ -159,6 +162,7 @@ function cueBindings(st) {
     const x = st[i];
     if (x.k !== 'w' || !ROLE_CUES.has(x.w)) continue;
     let j = i + 1;
+    // bounded: the index only moves in one direction over a finite list or text
     while (st[j]?.k === 'w' && (ARTICLES.has(st[j].w) || FILLERS.has(st[j].w) || st[j].w === 'please')) j++;
     if (st[j]) out.push([x.w === 'toward' || x.w === 'towards' || x.w === 'into' || x.w === 'onto' ? 'to' : x.w, entity(st[j])]);
   }
@@ -176,9 +180,11 @@ function unitBindings(st) {
 function colourBindings(st) {
   const out = [];
   const isNoun = (x) => x && x.k === 'w' && !FUNCTION_WORDS.has(x.w) && !COLORS.has(x.w) && !OP_WORDS.has(x.w);
+  // bounded: i only moves forward over the tokens
   for (let i = 0; i < st.length; i++) {
     if (!(st[i].k === 'w' && COLORS.has(st[i].w))) continue;
     let end = i;   // colour group: "red and blue", "red, blue"
+    // bounded: end moves forward by 2 per pass and stops at the end of the token list (undefined never matches)
     while ((st[end + 1]?.w === 'and' || st[end + 1]?.w === 'or') && COLORS.has(st[end + 2]?.w)) end += 2;
     let noun = isNoun(st[end + 1]) ? st[end + 1] : null;
     if (!noun) { for (let j = i - 1; j >= 0 && j >= i - 3; j--) { if (st[j].k !== 'w' || COLORS.has(st[j].w)) break; if (isNoun(st[j])) { noun = st[j]; break; } } }

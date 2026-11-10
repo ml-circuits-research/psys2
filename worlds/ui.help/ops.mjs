@@ -145,6 +145,7 @@ export function capabilities(ctx) {
   const parts = groups.map((g) => {
     if (g.items.length === 1) return g.items[0].join(' ');
     let n = 0; // longest common word prefix, leaving at least one word to each phrase
+    // bounded: n grows each pass and every item is at most that long
     while (g.items.every((w) => w.length > n + 1 && w[n] === g.items[0][n])) n++;
     return g.items[0].slice(0, n).join(' ') + ' ' + joinAnd(g.items.map((w) => w.slice(n).join(' ')));
   });

@@ -24,6 +24,7 @@ import { spellCorrect, spellAlternates, protectedWordsOf, worldVocabulary, spell
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs';
 import { checkValues } from './value-check.mjs';
 import { wildTokens } from '../formalizer/routing.mjs';
+import { budget } from './budget.mjs';
 
 /** Default policy; every weight is an option. */
 export const DEFAULT_POLICY = {
@@ -133,6 +134,7 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
    * Returns { status, rewrites }.
    */
   const proposeRewrites = async (world, tab, text, beam) => {
+    budget.tick('dispatch.rewrite');
     const stamp = typeof normalizer?.stamp === 'function' ? normalizer.stamp() : normalizer?.stamp;
     if (stamp !== normStamp) { normCache.clear(); normStamp = stamp; }
     const key = JSON.stringify([world, tab, text, beam]);
@@ -283,6 +285,7 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
 
   /** Evaluate every piece of one segmentation (all candidates, no early exit) and pick each piece's best candidate. */
   const evalSegmentation = async (pred, seg, o, useNormalizer = true) => {
+    budget.tick('dispatch.segmentation');
     const prefix = [];
     const pieces = [];
     let total = o.segWeight * seg.score;

@@ -32,6 +32,7 @@ export function withDocument(state, doc) {
   const same = docs.findIndex((d) => d.name && d.name === doc.name && d.origin === doc.origin);
   let id = doc.id, n = 2;
   if (same >= 0) id = docs[same].id;
+  // bounded: n grows each pass until the id is free (finitely many docs)
   else while (docs.some((d) => d.id === id)) id = `${doc.id}_${n++}`;
   const d = { ...doc, id };
   if (same >= 0) docs[same] = d; else docs.push(d);

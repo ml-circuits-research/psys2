@@ -169,6 +169,7 @@ function make(holder, host) {
     if (s.label) {
       const room = ['rectangle', 'square', 'ellipse', 'circle'].includes(s.shape) ? w * 0.84 : w * 0.56;
       let fs = s.w ? Math.max(10, Math.min(15, s.h / 2.8)) : Math.max(9, Math.min(14, s.size / 4.4)), txt = s.label;
+      // bounded: fs decreases by 0.5 each pass and stops at 9
       while (txt.length * fs * 0.56 > room && fs > 9) fs -= 0.5;
       const maxc = Math.max(3, Math.floor(room / (fs * 0.56)));
       if (txt.length > maxc) txt = `${txt.slice(0, maxc - 1)}…`;

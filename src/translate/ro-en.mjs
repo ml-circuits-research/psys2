@@ -6,6 +6,7 @@ import { tokenize, splitSentences, foldKey } from './normalize.mjs';
 import * as M from './morphology.ro.mjs';
 import * as E from './inflect.en.mjs';
 import { FRAMES } from './phrases.ro-en.mjs';
+import { budget } from '../dialog/budget.mjs';
 
 // ------------------------------------------------------------------ static tables
 
@@ -95,11 +96,13 @@ function prepareTokens(toksIn) {
   const isNoteLetter = (t) => t && t.kind === 'word' && /^[A-G]$/.test(t.raw);
   const wordToks = toks.filter((t) => t.kind === 'word');
   const letterGuess = wordToks.length >= 2 && wordToks.some((t) => t.raw.length === 1) && wordToks.every((t) => t.raw.length === 1 || /^(nu|da|stai)$/.test(t.key)) && wordToks.filter((t) => t.raw.length === 1).length >= 2;
+  // bounded: i only moves forward over the tokens
   for (let i = 0; i < toks.length; i++) {
     const t = toks[i];
     // a run of note letters ("C D E F G", "A4"): one fixed piece, never read as words ("E" is not "is")
     if (isNoteLetter(t) && (isNoteLetter(toks[i + 1]) || (toks[i + 1]?.kind === 'num' && toks[i + 1].start === t.end))) {
       let j = i, txt = '';
+      // bounded: the index only moves in one direction over a finite list or text
       while (j < toks.length && (isNoteLetter(toks[j]) || (toks[j].kind === 'num' && toks[j - 1] && toks[j].start === toks[j - 1].end && isNoteLetter(toks[j - 1])))) { txt += (isNoteLetter(toks[j]) && txt ? ' ' : '') + toks[j].raw; j++; }
       out.push({ kind: 'fixed', raw: txt, start: t.start, end: toks[j - 1].end, pieces: [{ en: txt, src: [t.start, toks[j - 1].end] }] });
       i = j - 1;
@@ -142,6 +145,7 @@ function matchFrame(f, toks, p, info) {
   const slots = {};
   let alt0 = null;
   const rec = (k, pos) => {
+    budget.tick('translate.frame');
     if (k === f.els.length) return pos;
     const el = f.els[k];
     // a comma between frame elements is skipped ("Da, are" ~ "da are"; "Între Tom și Ana, cine ...")
@@ -244,6 +248,7 @@ function applyFramePass(toks, info, tokenPass) {
   let out = toks.slice();
   let p = 0;
   while (p < out.length) {
+    budget.tick('translate.parse');
     if ((out[p].kind === 'word' || out[p].kind === 'num') && !out[p].synth) {
       for (const f of COMPILED) {
         const early = !!f.token && f.token.fpos === 'noun';
@@ -379,6 +384,7 @@ function looksFeminineDative(tok) {
  * Returns { np, next } or null.
  */
 function parseNP(toks, i, info, prev) {
+  budget.tick('translate.np');
   let j = i;
   const np = { t: 'np', det: null, num: null, quant: null, adjs: [], pre: [], head: null, number: null, def: false, poss: null, possessor: null, dat: false, forceDef: false };
   const spanOf = [toks[i].start, toks[i].end];
@@ -389,6 +395,7 @@ function parseNP(toks, i, info, prev) {
   if (isWord(toks[j]) && toks[j].key === 'lui' && startsNP(toks, j + 1)) { np.dat = true; np.luiTok = toks[j]; j++; }
 
   for (;;) {
+    budget.tick('translate.np');
     const t = toks[j];
     if (!t) break;
     if (t.kind === 'num') {
@@ -504,6 +511,7 @@ function parseNP(toks, i, info, prev) {
   // post-nominal material
   if (np.head && np.head.kind !== 'unknown') {
     for (;;) {
+      budget.tick('translate.np');
       const x = toks[j];
       if (!x || !isWord(x)) break;
       const nx = toks[j + 1];
@@ -524,6 +532,7 @@ function parseNP(toks, i, info, prev) {
           if (x.key === 'noi' && nx && verbsOf(nx).length) break;
           np.adjs.push({ en: a.entry.en, tok: x, post: true }); j++; grow(x);
           // coordinated adjectives after the noun: "un pește mic și albastru" = a small blue fish
+          // bounded: the index only moves in one direction over a finite list or text
           while (toks[j] && toks[j].key === 'si' && toks[j + 1] && isWord(toks[j + 1]) && adjOf(toks[j + 1]) && (!nounsOf(toks[j + 1]).length || COLOURS.has(adjOf(toks[j + 1]).entry.en)) && !verbsOf(toks[j + 1]).length) {
             np.adjs.push({ en: adjOf(toks[j + 1]).entry.en, tok: toks[j + 1], post: true }); j += 2; grow(toks[j - 1]);
           }
@@ -587,6 +596,7 @@ function parseNP(toks, i, info, prev) {
 
 /** Render a noun phrase to English pieces. */
 function renderNP(np, o = {}) {
+  budget.tick('translate.render');
   if (np.noArtForced) o = { ...o, noArticle: true };
   const out = [];
   const head = np.head;
@@ -684,6 +694,7 @@ function parseVG(toks, i, info, prev) {
     vg.sa = toks[j]; j++;
     if (isWord(toks[j]) && toks[j].key === 'nu') { vg.neg = toks[j]; j++; }
   }
+  // bounded: the index only moves in one direction over a finite list or text
   while (j < n && isWord(toks[j]) && CLITIC[toks[j].key] && !toks[j].synth && vg.clit.length < 2
     && !(toks[j].key === 'va' && toks[j].raw.toLowerCase() === 'va' && isWord(toks[j + 1]) && verbsOf(toks[j + 1]).length)) {
     // a clitic must be followed (possibly through another clitic / aux) by a verb
@@ -745,6 +756,7 @@ function parseVG(toks, i, info, prev) {
     let cneg = null;
     if (isWord(toks[k]) && toks[k].key === 'nu') { cneg = toks[k]; k++; }
     const ccl = [];
+    // bounded: k only moves forward and stops at the end of the token list (isWord(undefined) is false)
     while (isWord(toks[k]) && CLITIC[toks[k].key] && !toks[k].synth && isWord(toks[k + 1]) && (verbsOf(toks[k + 1]).length || CLITIC[toks[k + 1].key])) { ccl.push(toks[k]); k++; }
     const ct = toks[k];
     if (isWord(ct) && verbsOf(ct).length && !(vg.entry.flags.comp === 'to' && !sa && nounsOf(ct).length)) {
@@ -773,6 +785,7 @@ function buildItems(toks, info) {
   info.dativeContext = toks.some((t) => isWord(t) && DAT_CLITICS.has(t.key) && !t.synth);
 
   while (i < toks.length) {
+    budget.tick('translate.clause');
     const t = toks[i];
     if (t.kind === 'fixed') { items.push({ t: 'fixed', pieces: t.pieces, start: t.start, end: t.end, verbal: t.verbal }); i++; continue; }
     if (t.kind === 'punct') {
@@ -972,6 +985,7 @@ function buildItems(toks, info) {
 
 function foldPP(items) {
   const out = [];
+  // bounded: i only moves forward over the items
   for (let i = 0; i < items.length; i++) {
     const it = items[i];
     const nx = items[i + 1];
@@ -1119,6 +1133,7 @@ function translateClause(items, info, c) {
   const ctx = info.ctx;
   // leading items (conjunctions, interjections, commas)
   const lead = [];
+  // bounded: the index only moves in one direction over a finite list or text
   while (items.length && (['conj', 'interj', 'comma', 'fixed'].includes(items[0].t) || (items[0].t === 'adv' && items[0].flags.has('lead')))) {
     const x = items.shift();
     if (x.t === 'fixed' && items.length === 0 && lead.length === 0) { items.unshift(x); break; }
@@ -1218,6 +1233,7 @@ function translateClause(items, info, c) {
     const at = post.indexOf(first);
     // coordinated subject: X și Y
     let k = at + 1;
+    // bounded: the index only moves in one direction over a finite list or text
     while (post[k] && post[k].t === 'conj' && post[k].en === 'and' && isNPLike(post[k + 1])) { subjItems.push(post[k], post[k + 1]); k += 2; }
   }
   const preNegSubj = !whItem && !imperative ? pre.find((x) => x.t === 'negword' && /^(nimeni|nimic)$/.test(x.key)) : null;
@@ -1484,12 +1500,14 @@ function segmentIsQuestion(seg, info, last) {
 function segmentedPieces(toks, info0) {
   const info = { ...info0, noSeg: true };
   const cuts = [];   // [from, to) token ranges of separators
+  // bounded: i only moves forward over the tokens
   for (let i = 1; i < toks.length - 1; i++) {
     const t = toks[i];
     const isComma = t.kind === 'punct' && t.raw === ',';
     const isW = t.kind === 'word' && !t.synth && SEG_WORDS.has(t.key);
     if (!isComma && !isW) continue;
     let j = i + 1;
+    // bounded: the index only moves in one direction over a finite list or text
     while (j < toks.length - 1 && toks[j].kind === 'word' && SEG_WORDS.has(toks[j].key) && !(isW && false)) j++;
     if (isComma || isW) { cuts.push([i, j]); i = j - 1; }
   }
@@ -1507,6 +1525,7 @@ function segmentedPieces(toks, info0) {
   const score = (seg) => (frameMatchesAll(seg, info) ? 1 : 0);
   const memo = new Map();
   const solve = (a) => {   // best partition from segment start a
+    budget.tick('translate.segment');
     if (memo.has(a)) return memo.get(a);
     let bestRes = null;
     for (let b = a; b <= n; b++) {
@@ -1677,6 +1696,7 @@ export function translateRoEn(original) {
   for (const s of sents) {
     let end = [];
     let core = s.slice();
+    // bounded: the index only moves in one direction over a finite list or text
     while (core.length && core[core.length - 1].kind === 'punct' && /^[.!?]$/.test(core[core.length - 1].raw)) end.unshift(core.pop());
     if (!core.length) { results.push({ pieces: [], end, addQ: false }); continue; }
     const info = { ctx, q: end.some((e) => e.raw === '?'), excl: end.some((e) => e.raw === '!'), frag: false };

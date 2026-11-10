@@ -4,6 +4,7 @@
  * Wire  = { id, type, entries: [{ key, value }], span: { start, end, line }, source }
  * value = { kind: 'atom' | 'string' | 'ref', v: string }
  */
+import { budget } from '../dialog/budget.mjs';
 
 const IDENT = /^[A-Za-z_][A-Za-z0-9_-]*(?:\.[A-Za-z_][A-Za-z0-9_-]*)*$/;
 const WS = /\s/;
@@ -52,6 +53,7 @@ export function parse(text, { source } = {}) {
   for (let k = 0; k < n; k++) if (src[k] === '\n') lineStarts.push(k + 1);
   const pos = (offset) => {
     let lo = 0, hi = lineStarts.length - 1;
+    // bounded: the index only moves in one direction over a finite list or text
     while (lo < hi) {
       const mid = (lo + hi + 1) >> 1;
       if (lineStarts[mid] <= offset) lo = mid; else hi = mid - 1;
@@ -64,14 +66,17 @@ export function parse(text, { source } = {}) {
   };
 
   let i = 0;
+  // bounded: i only moves forward up to n
   const skipWs = () => { while (i < n && WS.test(src[i])) i++; };
   /** Read a run of characters that are not whitespace or delimiters. */
   const run = () => {
     const s = i;
+    // bounded: the index only moves in one direction over a finite list or text
     while (i < n && !WS.test(src[i]) && !DELIM.has(src[i])) i++;
     return src.slice(s, i);
   };
   /** Skip to the next '@' (error recovery). */
+  // bounded: i only moves forward up to n
   const resync = () => { while (i < n && src[i] !== '@') i++; };
   const atBoundary = () => i >= n || WS.test(src[i]) || src[i] === '@';
 
@@ -79,6 +84,7 @@ export function parse(text, { source } = {}) {
   const readString = () => {
     const start = i;
     i++;
+    // bounded: the index only moves in one direction over a finite list or text
     while (i < n && src[i] !== '"') {
       const c = src[i];
       if (c === '\\') {
@@ -144,6 +150,7 @@ export function parse(text, { source } = {}) {
 
     const entries = [];
     for (;;) {
+      budget.tick('soplang.entry');
       skipWs();
       if (i >= n || src[i] === '@') break;
       const kPos = i;
@@ -166,6 +173,7 @@ export function parse(text, { source } = {}) {
     resync();
   }
   while (i < n) {
+    budget.tick('soplang.wire');
     if (src[i] !== '@') { resync(); continue; }
     const w = readWire();
     if (w) wires.push(w); else resync();

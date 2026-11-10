@@ -40,6 +40,7 @@ export const BEST_EFFORT_POLICY = Object.freeze({
 function tokenize(text, multi) {
   const raw = [...String(text).matchAll(WORD_RE)].map((m) => ({ surface: m[0], w: m[0].toLowerCase().replace(/’/g, "'"), start: m.index }));
   const out = [];
+  // bounded: i only moves forward over the characters
   for (let i = 0; i < raw.length; i++) {
     let merged = false;
     for (let n = 3; n >= 2 && !merged; n--) {

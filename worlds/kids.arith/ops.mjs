@@ -180,10 +180,13 @@ function terminates(a, b) {
   const scale = (x) => { const s = String(x); const i = s.indexOf('.'); return i < 0 ? 0 : s.length - i - 1; };
   const k = Math.max(scale(a), scale(b));
   let num = Math.round(Math.abs(a) * 10 ** k), den = Math.round(Math.abs(b) * 10 ** k);
+  // bounded: Euclid: the second argument strictly decreases to 0
   const gcd = (x, y) => (y ? gcd(y, x % y) : x);
   const g = gcd(num, den) || 1;
   den /= g;
+  // bounded: den halves each pass (den is a positive integer)
   while (den % 2 === 0) den /= 2;
+  // bounded: den is divided by 5 each pass (den is a positive integer)
   while (den % 5 === 0) den /= 5;
   return den === 1;
 }

@@ -103,6 +103,7 @@ export function lengthOf(ctx, { whole, part, times }) {
   // breadth-first search for the shortest chain whole -> ... -> part
   const queue = [{ at: whole, c: 1, path: [] }];
   const seen = new Set([whole]);
+  // bounded: breadth-first walk over the facts; every fact enters the queue at most once (seen set)
   while (queue.length) {
     const cur = queue.shift();
     for (const f of facts.filter((x) => x.w === cur.at)) {

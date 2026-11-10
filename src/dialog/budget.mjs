@@ -43,7 +43,33 @@ export function createBudget(limits = {}) {
 /** No-op budget: counts nothing, never throws. The default wherever a budget is optional. */
 export const UNLIMITED = Object.freeze({ ticks: 0, bySite: Object.freeze({}), exceeded: null, tick() {} });
 
+/**
+ * The budget of the turn in progress. Loop sites call `budget.tick(site, n)` on this shared handle (like `guard` for deadlines), so deep code
+ * needs no extra parameter; world operations get it as `ctx.budget`. Outside a turn it is UNLIMITED (no-op).
+ * `DialogSession` installs the turn's budget with `installBudget` (the outermost turn wins; nested replays and dry runs join it).
+ */
+let current = UNLIMITED;
+let token = null;
+
+export const budget = {
+  tick(site, n = 1) { current.tick(site, n); },
+  get ticks() { return current.ticks; },
+  get bySite() { return current.bySite; },
+  get exceeded() { return current.exceeded; },
+  get active() { return token !== null; },
+};
+
+/** Installs `b` as the current budget unless one is installed (then returns null and joins it); `force` replaces it. The caller of a non-null token must `releaseBudget(token)`. */
+export function installBudget(b, { force = false } = {}) {
+  if (token && !force) return null;
+  current = orUnlimited(b); token = { b: current };
+  return token;
+}
+
+/** Releases the budget of `t` (a no-op when another budget replaced it meanwhile). */
+export function releaseBudget(t) { if (t && token === t) { current = UNLIMITED; token = null; } }
+
 /** `b` if it is a budget, else UNLIMITED. */
-export const orUnlimited = (b) => (b && typeof b.tick === 'function' ? b : UNLIMITED);
+export function orUnlimited(b) { return b && typeof b.tick === 'function' ? b : UNLIMITED; }
 
 export const isBudgetExceeded = (e) => e?.name === 'BudgetExceeded';

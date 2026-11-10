@@ -80,14 +80,14 @@ export function nameCandidates(text, { set, vocab = spellVocabulary(set), worldO
       if (exact) { found.push({ i, n, from: key, to: key, dist: 0, kinds: exact.kinds, rank: rank(exact) }); continue; }
       if (!win.some((t) => t.lower.length >= 3 && unknown(t.lower))) continue;   // every word is valid somewhere: nothing to fix
       if (++windows > L.maxWindows) break outer;
-      const budget = spellBudget(key);
-      if (!budget) continue;
+      const maxEdits = spellBudget(key);
+      if (!maxEdits) continue;
       const kb = bag(key), hits = [];
-      for (let len = key.length - budget; len <= key.length + budget; len++) {
+      for (let len = key.length - maxEdits; len <= key.length + maxEdits; len++) {
         for (const e of idx.byLen.get(len) ?? []) {
-          if (bagDiff(kb, e.bag) > 2 * budget) continue;
-          const d = editDistance(key, e.key, budget);
-          if (d <= budget) hits.push({ e, d });
+          if (bagDiff(kb, e.bag) > 2 * maxEdits) continue;
+          const d = editDistance(key, e.key, maxEdits);
+          if (d <= maxEdits) hits.push({ e, d });
         }
       }
       hits.sort((a, b) => a.d - b.d || rank(a.e) - rank(b.e) || a.e.key.localeCompare(b.e.key));

@@ -17,6 +17,7 @@ export function colorSop(text) {
   const span = (cls, t) => { const e = document.createElement('span'); e.className = cls; e.textContent = t; return e; };
   const src = String(text ?? '');
   let last = 0, m;
+  // bounded: regex exec with the g flag advances lastIndex each pass
   while ((m = re.exec(src))) {
     if (m.index > last) frag.append(src.slice(last, m.index));
     if (m[1]) frag.append(span('sop-id', m[1]));

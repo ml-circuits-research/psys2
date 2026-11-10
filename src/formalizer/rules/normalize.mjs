@@ -3,6 +3,7 @@
  * Token = { raw, lower, start, end, kind: 'word' | 'number' | 'punct' } with absolute offsets
  * into the original text. Original casing is kept in `raw`.
  */
+import { budget } from '../../dialog/budget.mjs';
 import { isNumberWord, parseNumberRun, ordinalWordValue, digitWordValue } from './numbers.mjs';
 
 export const QUESTION_WORDS = new Set(['how', 'what', 'who', 'where', 'when', 'which', 'why', 'is', 'are', 'does', 'do', 'can', 'did']);
@@ -34,17 +35,21 @@ export function splitSentences(text) {
   let start = 0;
   const push = (end, term) => {
     let s = start, e = end;
+    // bounded: the index only moves in one direction over a finite list or text
     while (s < e && /\s/.test(text[s])) s++;
+    // bounded: the index only moves in one direction over a finite list or text
     while (e > s && /\s/.test(text[e - 1])) e--;
     if (e > s) out.push({ start: s, end: e, text: text.slice(s, e), terminator: term });
   };
   const quoted = quotedRanges(text);
+  // bounded: i only moves forward (the body skips ahead with i = j) and is capped by the text length
   for (let i = 0; i < text.length; i++) {
     const c = text[i];
     if (c !== '.' && c !== '!' && c !== '?') continue;
     if (c === '.' && /\d/.test(text[i - 1] ?? '') && /\d/.test(text[i + 1] ?? '')) continue;
     if (quoted.some(([a, b]) => i > a && i < b)) continue;   // a terminator inside "double quotes" does not end the sentence
     let j = i;
+    // bounded: the index only moves in one direction over a finite list or text
     while (j + 1 < text.length && '.!?'.includes(text[j + 1])) j++;
     push(i, text.slice(i, j + 1));
     start = j + 1;
@@ -171,6 +176,7 @@ export function tokenize(sentence, base = 0, { keepFillers = false } = {}) {
  */
 function gameNames(toks) {
   if (toks.length > 6) return toks;   // a name for the game, not a list of letters inside a longer sentence
+  // bounded: i only moves forward over the tokens
   for (let i = 0; i + 2 < toks.length; i++) {
     const a = toks[i], b = toks[i + 1], c = toks[i + 2];
     if (a.kind === 'word' && a.lower === 'x' && b.kind === 'word' && (b.lower === 'and' || b.lower === 'n' || b.lower === 'si' || b.lower === 'și')
@@ -209,6 +215,8 @@ function markFillers(toks) {
   // sentence-initial and / so / then / after that: dropped for matching, kept for patterns that list them
   let i = 0;
   for (;;) {
+    budget.tick('normalize.fixpoint');
+    // bounded: the index only moves in one direction over a finite list or text
     while (i < n && (toks[i].kind === 'punct' || toks[i].filler)) i++;
     if (i < n && toks[i].kind === 'word' && INITIAL_DROP.has(toks[i].lower)) { toks[i].filler = true; toks[i].lead = true; i++; continue; }
     if (i + 1 < n && toks[i].lower === 'after' && toks[i + 1].lower === 'that') { toks[i].filler = toks[i + 1].filler = true; toks[i].lead = toks[i + 1].lead = true; i += 2; continue; }
@@ -218,6 +226,7 @@ function markFillers(toks) {
   }
   // "real quick" / "quickly" closing a request: "what day is it real quick"
   let e = n;
+  // bounded: the index only moves in one direction over a finite list or text
   while (e > 0 && (toks[e - 1].kind === 'punct' || toks[e - 1].kind === 'qmark')) e--;
   for (const tail of TRAIL_PHRASES) {
     const s = e - tail.length;
@@ -241,6 +250,7 @@ function leadPhraseAt(toks, i) {
     if (i + ph.length >= toks.length) continue;
     if (ph.every((w, k) => (toks[i + k].kind === 'word' || toks[i + k].kind === 'number') && String(toks[i + k].raw).toLowerCase() === w)) {
       let j = i + ph.length;
+      // bounded: the index only moves in one direction over a finite list or text
       while (j < toks.length && (toks[j].kind === 'punct' || toks[j].filler)) j++;
       if (j < toks.length) return ph.length;
     }
@@ -274,6 +284,7 @@ function convertNumbers(toks, sentence, base) {
   const out = [];
   const lowers = toks.map((t) => (t.kind === 'word' ? t.lower : '\u0000'));
   const span = (a, b) => ({ start: toks[a].start, end: toks[b].end });
+  // bounded: i only moves forward over the tokens
   for (let i = 0; i < toks.length; i++) {
     const t = toks[i];
     if (t.kind !== 'word') { out.push(t); continue; }
@@ -291,6 +302,7 @@ function convertNumbers(toks, sentence, base) {
         else if (lowers[last + 1] === 'point' && digitWordValue(lowers[last + 2]) !== null) {
           // "one point five" -> 1.5, "three point one four" -> 3.14
           let j = last + 2, frac = '';
+          // bounded: the index only moves in one direction over a finite list or text
           while (j < lowers.length && digitWordValue(lowers[j]) !== null) { frac += digitWordValue(lowers[j]); j++; }
           value = `${value}.${frac}`; last = j - 1; single = false;
         } else if (lowers[last + 1] === 'and' && (lowers[last + 2] === 'half' || (lowers[last + 2] === 'a' && lowers[last + 3] === 'half'))) {
@@ -339,6 +351,7 @@ export function analyze(text) {
 
 /** Damerau-Levenshtein distance (optimal string alignment: insert, delete, substitute, swap neighbours); `max` stops early. */
 export function editDistance(a, b, max = Infinity) {
+  budget.tick('spell.edit', 1 + (a.length >> 3));
   if (a === b) return 0;
   if (Math.abs(a.length - b.length) > max) return max + 1;
   const prev2 = new Array(b.length + 1).fill(0);
@@ -377,16 +390,16 @@ export const SHORT_TYPOS = {
 
 /** Closest words of `vocab` within `budget` edits (all ties). Memoized per vocabulary object and word (SOAK-BUSY: the same unknown words came back for every reading of room talk); the vocabularies are immutable once built, the size guards against growth. */
 const closestMemo = new WeakMap();
-function closest(vocab, word, budget) {
+function closest(vocab, word, maxEdits) {
   let m = closestMemo.get(vocab);
   if (!m || m.size !== vocab.size) { m = { size: vocab.size, map: new Map() }; closestMemo.set(vocab, m); }
   const hit = m.map.get(word);
   if (hit) return [...hit];
-  let bestD = budget + 1, tied = [];
+  let bestD = maxEdits + 1, tied = [];
   for (const w of vocab) {
-    if (w.length < 3 || Math.abs(w.length - word.length) > budget || !/^[a-z]+$/.test(w)) continue;
+    if (w.length < 3 || Math.abs(w.length - word.length) > maxEdits || !/^[a-z]+$/.test(w)) continue;
     const d = editDistance(word, w, bestD);
-    if (d > budget) continue;
+    if (d > maxEdits) continue;
     if (d < bestD) { tied = [w]; bestD = d; } else if (d === bestD) tied.push(w);
   }
   if (m.map.size > 5000) m.map.clear();
@@ -410,9 +423,9 @@ export function correctTokens(tokens, text, vocab, known = (w) => vocab.has(w), 
     if (corrections.length >= maxCorrections || t.kind !== 'word' || t.filler || !/^[a-z]+$/.test(t.lower)) return t;
     if (i !== firstWord && /^[A-ZÀ-Þ]/.test(t.raw)) return t;
     if (quoted.some(([a, b]) => t.start >= a && t.end <= b)) return t;
-    const budget = typoBudget(t.lower);
-    if (!budget || known(t.lower)) return t;
-    let tied = closest(vocab, t.lower, budget);
+    const maxEdits = typoBudget(t.lower);
+    if (!maxEdits || known(t.lower)) return t;
+    let tied = closest(vocab, t.lower, maxEdits);
     // equally close candidates: the preferred (candidate world's) vocabulary first, then the most frequent word; never an arbitrary pick
     if (tied.length > 1 && preferred) {
       const pref = typeof preferred === 'function' ? preferred() : preferred;

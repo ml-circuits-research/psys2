@@ -17,6 +17,7 @@ function names(s) {
   const out = [];
   const re = /(^|[.!?]\s+)|(\p{Lu}\p{L}+)/gu;
   let m;
+  // bounded: regex exec with the g flag advances lastIndex each pass
   while ((m = re.exec(s))) if (m[2] && m.index > 0 && !/[.!?]\s+$/.test(s.slice(0, m.index))) out.push(m[2]);
   return out;
 }

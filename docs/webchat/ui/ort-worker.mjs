@@ -34,6 +34,7 @@ async function exec(m) {
 async function drain() {
   if (draining) return;
   draining = true;
+  // bounded: takes one job per pass from a queue that only this worker fills
   while (queue.length) {
     const m = queue.shift();
     if (cancelled.delete(m.id)) { postMessage({ id: m.id, cancelled: true }); continue; }

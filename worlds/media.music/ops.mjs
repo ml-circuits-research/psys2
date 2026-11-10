@@ -59,6 +59,7 @@ const SUFFIXES = [
 ];
 function stripSuffixes(text) {
   let t = plain(text); const flags = {};
+  // bounded: each pass that sets again strips a suffix, so the text shrinks
   for (let again = true; again;) {
     again = false;
     for (const [re, f] of SUFFIXES) { const m = t.match(re); if (m) { t = t.slice(0, m.index).trim(); Object.assign(flags, f); again = true; } }
@@ -83,6 +84,7 @@ const DURATIONS = { whole: 4, half: 2, quarter: 1, eighth: 0.5, sixteenth: 0.25 
 const TRAILERS = /\s+(to my melody|to the melody|to my tune|to it|at the end|to the end|after that|next|please|now|and then|at the end of my melody|to my composition)\s*$/i;
 export function parseSeq(text, { octave = 4 } = {}) {
   let t = String(text ?? '').replace(/[♯]/g, '#').replace(/[♭]/g, 'b').replace(/[.!?]+$/g, '').trim();
+  // bounded: each pass removes a matched trailer, so t shrinks
   while (TRAILERS.test(t)) t = t.replace(TRAILERS, '');
   const tokens = t.split(/[\s,;:]+/).filter(Boolean).map((x) => x.toLowerCase());
   const items = [], bad = [];
@@ -214,6 +216,7 @@ function stackUp(names) {
   for (const n of names) {
     const x = Note.get(n);
     let m = x.midi, o = x.oct;
+    // bounded: m grows by 12 each pass until it passes prev (a finite pitch)
     while (m <= prev) { m += 12; o += 1; }
     out.push(`${x.pc}${o}`); prev = m;
   }

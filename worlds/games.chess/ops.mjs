@@ -255,6 +255,7 @@ function between(a, b) {
   const sf = Math.sign(df), sr = Math.sign(dr);
   const out = [];
   let f = fi(a) + sf, r = ri(a) + sr;
+  // bounded: walks one square per pass along a rank, file or diagonal that ends at b (callers only pass aligned squares)
   while (f !== fi(b) || r !== ri(b)) { out.push(sqName(f, r)); f += sf; r += sr; }
   return out;
 }
@@ -896,6 +897,7 @@ export function undo(ctx, { n, bare } = {}) {
   if (!hv.some((m) => m.color === u)) return no('There is nothing to take back yet.', 'missing');
   const want = Math.max(1, Number(n) || 1);
   let removed = 0, plies = 0;
+  // bounded: pops one move per pass
   while (hv.length && removed < want) { const m = hv.pop(); plies++; if (m.color === u) removed++; }
   const c2 = new Chess();
   for (const m of hv) c2.move(m.san);

@@ -59,6 +59,7 @@ export function turnsFor(ring, worldId, n = LAST_TURNS) {
   return ring.filter((t) => t.worlds.includes(worldId) || t.tabWorld === worldId).slice(-n).reverse();
 }
 /** Paths (`a.b.0`) whose value differs between two JSON values, plus the paths only one side has. */
+// bounded: structural recursion over a JSON snapshot (finite, acyclic by structuredClone)
 export function diffPaths(before, after, path = '', out = new Set()) {
   if (before === after) return out;
   const bo = before && typeof before === 'object', ao = after && typeof after === 'object';
@@ -82,6 +83,7 @@ const kv = (rows) => h('dl', { class: 'p2-kv' }, rows.filter(([, v]) => v !== un
 const sec = (title, ...body) => h('section', { class: 'p2-trace-sec' }, h('h4', {}, title), ...body);
 
 /** A collapsible JSON tree; paths in `changed` are highlighted (and their parents opened). */
+// bounded: structural recursion over a JSON snapshot with a depth cap
 export function jsonTree(value, changed = new Set(), path = '', depth = 0) {
   const isChanged = changed.has(path);
   if (value === null || typeof value !== 'object') {
@@ -112,6 +114,7 @@ export function createDebug(host) {
     const tabWorld = host.tabs.find((t) => t.id === info.tab)?.world ?? null;
     const entry = makeEntry({ ...info, seq: ++seq, tabWorld, serialize: host.serializeWires, stateBefore: info.stateBefore ?? null });
     ring.push(entry);
+    // bounded: shrinks the ring each pass
     while (ring.length > RING_MAX) ring.shift();
     if (isOpen() && section === 'turns') render();
     return entry;

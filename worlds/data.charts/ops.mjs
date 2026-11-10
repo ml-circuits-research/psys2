@@ -376,6 +376,7 @@ export const fromLegs = undoable((ctx, args) => createFrom(ctx, 'legs', args));
 /** Politeness and a chart type that end the data text: "plums 8 for me", "dogs 7 as a pie". Returns { text, type }. */
 function splitDataTail(text, type) {
   let t = String(text ?? '').trim(), ty = type;
+  // bounded: each pass that sets again strips a suffix, so the text shrinks
   for (let again = true; again;) {
     again = false;
     const pol = t.match(/\s+(?:for me|for us|please|pls|plz|thanks|thank you|thx|now|asap|real quick|if you can|ok)$/i);

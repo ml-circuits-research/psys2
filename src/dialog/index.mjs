@@ -24,6 +24,7 @@ import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, world
 import { lexIndex } from '../worlds/lexicon.mjs';
 import { perf } from '../formalizer/perf.mjs';
 import { guard, TurnAborted } from '../formalizer/guard.mjs';
+import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs';
 import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs';
 import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs';
 import { checkValues } from './value-check.mjs';
@@ -92,9 +93,11 @@ export async function translateParts(parts, translator, lang) {
   let complete = true;   // RD5: a reply is either fully translated or left in English, never mixed
   for (let i = 0; i < flat.length; i++) if (flat[i].join) flat[i].translate = !!(flat[i - 1]?.translate && flat[i + 1]?.translate);
   const out = [];
+  // bounded: each pass consumes at least one part (j > i)
   for (let i = 0; i < flat.length;) {
     if (!flat[i].translate) { const { join, fallback, incomplete, ...rest } = flat[i]; if (incomplete) complete = false; out.push(rest); i++; continue; }
     let j = i;
+    // bounded: the index only moves in one direction over a finite list or text
     while (j < flat.length && flat[j].translate) j++;
     const run = flat.slice(i, j);
     i = j;
@@ -153,6 +156,24 @@ function runningGame(st, last) {
     : last === 'games.chess' || last === 'games.hangman' ? g.status === 'playing'
     : last === 'games.guess' ? g.phase === 'asking' || g.phase === 'guessing' : false;
   return live ? last : null;
+}
+
+/** What the trace and the phrase log keep of a turn's compute budget: total ticks, the five busiest sites, and the site that ran out (if any). */
+export function budgetReport(b, e = b.exceeded) {
+  const top = Object.entries(b.bySite).sort((x, y) => y[1] - x[1]).slice(0, 5);
+  return { ticks: b.ticks, top: Object.fromEntries(top), ...(e ? { exceeded: { site: e.site, ticks: e.ticks, limit: e.limit } } : {}) };
+}
+
+export const TOO_COMPLEX = 'That was too complex for me \u2014 try a shorter sentence.';
+
+/** The reply of a turn that ran out of compute budget (the session was restored by the caller). Same shape as a normal reply, nothing executed. */
+function tooComplexReply(session, text, e, b) {
+  const rep = budgetReport(b, e);
+  return {
+    text: TOO_COMPLEX, parts: [{ text: TOO_COMPLEX }], lang: session._sessionLang ?? 'en', translation: null, segments: [], wires: [], answers: [], statuses: [], state: {}, effects: [],
+    tooComplex: true, budget: rep,
+    trace: { intercepted: null, effects: [], formalizer: { preferred: session.formalizer, used: [] }, source: null, original: text, english: text, replyEnglish: TOO_COMPLEX, segments: [], router: [], routing: [], patterns: [], operations: [], statuses: [], wires: [], budget: rep },
+  };
 }
 
 export class DialogSession {
@@ -229,6 +250,8 @@ export class DialogSession {
     if (raw.split(/\s+/).length > DRY_MAX_WORDS) return { complete: false, segments: 0, reason: 'too-long', ...(detail ? { detail: { english: raw, language: language ?? this.language, readings: [], skipped: 'more than ' + DRY_MAX_WORDS + ' words' } } : {}) };
     const token = guard.install({ signal, hardMs: deadlineMs, softMs: deadlineMs * 0.7 });
     if (!token) return { complete: false, segments: 0, reason: 'busy' };   // a real turn owns the guard
+    const db = createBudget();
+    const bt = installBudget(db);   // a dry run is a turn of its own: its own compute budget
     try {
       const f = this.forkForValidation();
       let english = raw;
@@ -241,6 +264,7 @@ export class DialogSession {
       if (!(english.toLowerCase().match(/[a-z']+/g) ?? []).some((w) => vocab.has(w) && !FUNCTION_WORDS.has(w))) return { complete: false, segments: 0, reason: 'no-vocabulary', ...(detail ? { detail: { english, language: lang, readings: [], skipped: 'no word of any world' } } : {}) };
       const res = await formalizers.rules.formalize(english, { worlds: set, session: f.isession, source: 'dry', context: f.context(), router: this.engine.router });
       guard.check('dry-read');
+      if (db.exceeded) throw db.exceeded;   // a stage that swallowed BudgetExceeded must not report a reading
       const segs = res.segments ?? [];
       // DBG: with `detail` the answer also says how the text was read (the readings, their wires, the candidate worlds), still without executing anything
       const det = () => (detail ? { detail: { english, language: lang, readings: segs.map((x) => ({ text: x.text ?? '', world: x.match?.worldId ?? null, pattern: x.match?.patternId ?? null, strategy: x.strategy ?? null, unparsed: !!x.unparsed, partial: !!x.partial, ignored: x.ignored ?? [], candidates: (x.worlds ?? []).slice(0, 4), wires: x.wires ?? [] })) } } : {});
@@ -253,8 +277,8 @@ export class DialogSession {
       }
       return { complete: true, segments: segs.length, reason: 'ok', ...det() };
     } catch (e) {
-      return { complete: false, segments: 0, reason: e instanceof TurnAborted ? (e.reason === 'stopped' ? 'cancelled' : 'deadline') : 'error' };
-    } finally { guard.release(token); }
+      return { complete: false, segments: 0, reason: e instanceof TurnAborted ? (e.reason === 'stopped' ? 'cancelled' : 'deadline') : isBudgetExceeded(e) || db.exceeded ? 'budget' : 'error', ...(db.exceeded ? { budget: budgetReport(db) } : {}) };
+    } finally { guard.release(token); releaseBudget(bt); }
   }
 
   /** Session wires as SOP Lang (short keys where unambiguous). */
@@ -316,6 +340,7 @@ export class DialogSession {
     const out = [];
     const run = (effects, depth) => {
       for (const e of effects ?? []) {
+        budget.tick('dialog.settle');
         const world = e.world;
         if (!world || typeof this.engine.set.get(world)?.ops?.onObservation !== 'function') continue;
         const f = this.observe({ effect: e.name, ok: false, detail: 'no host', world });
@@ -370,6 +395,7 @@ export class DialogSession {
   _lenient(seg, opts, o, depth = 0) { return perf.time('lenient', () => this._lenientRun(seg, opts, o, depth)); }
 
   async _lenientRun(seg, opts, o, depth = 0) {
+    budget.tick('dialog.lenient');
     const late = () => guard.soft() || (o.until != null && performance.now() > o.until);   // out of time: no further guessing
     if (late()) return null;
     const { spell, partial } = o;
@@ -498,6 +524,7 @@ export class DialogSession {
    * nothing numeric or coloured dropped). Returns { segments } (executed) or { suggestions } (Did you mean) or null.
    */
   async _bestEffortSeg(seg, opts) {
+    budget.tick('dialog.besteffort');
     const { set, formalizers, interp } = this.engine;
     const P = BEST_EFFORT_POLICY;
     const ctx = this.context();
@@ -597,6 +624,7 @@ export class DialogSession {
    * or the world refused it (unsupported). Returns the segments of the corrected reading, or null (keep the original).
    */
   async _activeSpell(english, res, opts, lenient) {
+    budget.tick('dialog.spell');
     if (!lenient.spell || !res.segments.length || res.segments.some((x) => x.unparsed)) return null;
     const { set, formalizers, interp } = this.engine;
     const ctx = opts.context ?? this.context();
@@ -702,6 +730,7 @@ export class DialogSession {
    * value; the new reading must be read completely and carried out (no `missing`, no refusal). Returns the segments, or null.
    */
   async _nameRepair(english, res, opts, lenient) {
+    budget.tick('dialog.names');
     if (!lenient.spell || !res.segments.length || res.segments.some((x) => x.unparsed)) return null;
     await this._prepareWorldsOf(res.segments);
     const { set, formalizers, interp } = this.engine;
@@ -745,6 +774,7 @@ export class DialogSession {
   }
 
   async _capabilityRead(english, res, opts, lenient) {
+    budget.tick('dialog.capability');
     if (!res.segments.length || res.segments.some((x) => x.unparsed)) return null;
     const { set, formalizers, interp } = this.engine;
     const ctx = opts.context ?? this.context();
@@ -803,6 +833,7 @@ export class DialogSession {
    * The model is only asked when the encoder formalizer is preferred, the model is ready and ORT is not paused; a model failure keeps the rules' answer.
    */
   async _formalize(english, sid, preferred = this.formalizer, lenient = { spell: this.spell, partial: this.partial, fastPath: this.fastPath }) {
+    budget.tick('dialog.formalize');
     const want = preferred === 'encoder' ? normalizeNxStrategy(lenient.nx ?? this.nx) : 'rules';
     const nx = want !== 'rules' ? this.engine.formalizers.nx : null;
     let on = false;
@@ -908,19 +939,28 @@ export class DialogSession {
     const own = perf.start();
     // Turn guard (spec 06 "Turn lifecycle"): the outermost send installs the abort signal and the deadlines; nested sends (validator replays) inherit them.
     const g = guard.install({ signal: opts.signal ?? null, hardMs: opts.hardMs ?? Infinity, softMs: opts.softMs ?? Infinity, force: !!opts.signal });
-    const snap = g ? (opts.undo ?? this.snapshot()) : null;   // a host that passes `undo` (its own snapshot) restores the session itself
+    // Compute budget (spec 06 "Compute budgets"): one per turn, passed down through the shared `budget` handle; nested sends join the outer turn's budget.
+    const tb = opts.budget ?? createBudget();
+    const bt = installBudget(tb, { force: !!opts.budget });
+    const snap = g || bt ? (opts.undo ?? this.snapshot()) : null;   // a host that passes `undo` (its own snapshot) restores the session itself
     try {
       const reply = await this._send(text, opts);
       if (g) guard.check('end');   // (checks the shared guard)   // a stage that swallowed the abort must not let a half-done turn through
+      if (bt && tb.exceeded) throw tb.exceeded;   // a stage that swallowed BudgetExceeded must not let a half-done turn through
       if (own && reply && typeof reply === 'object') reply.perf = perf.end();
+      if (bt && reply && typeof reply === 'object') reply.budget = budgetReport(tb);
       return reply;
     } catch (e) {
+      if (bt && isBudgetExceeded(e)) {   // out of budget: the session goes back to where it was, the turn answers "too complex" and says where
+        if (!opts.undo) this.restore(snap);
+        return tooComplexReply(this, text, e, tb);
+      }
       if (g && (e instanceof TurnAborted || guard.tripped)) {   // aborted: the session goes back to exactly where it was before the message
         if (!opts.undo) this.restore(snap);
         throw e instanceof TurnAborted ? e : new TurnAborted(guard.tripped, guard.trippedStage);
       }
       throw e;
-    } finally { if (own) perf.end(); guard.release(g); }
+    } finally { if (own) perf.end(); guard.release(g); releaseBudget(bt); }
   }
 
   /** Undo snapshot of everything a turn can change (interpreter session, discourse memory, recent worlds, message counter). */

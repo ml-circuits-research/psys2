@@ -119,6 +119,7 @@ function make(holder, host) {
   }
   function link(label, say, cls) { const b = el('button', `pf-link${cls ? ` ${cls}` : ''}`, esc(label)); b.type = 'button'; b.addEventListener('click', () => send(say)); return b; }
 
+  // bounded: render() only appears as an event-handler callback; it does not call itself synchronously
   function render() {
     if (destroyed || !cv) return;
     const s = state ?? { fields: {}, skipped: {}, sensitive: [] };

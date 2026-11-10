@@ -175,15 +175,15 @@ export function spellCorrect(text, { vocab, maxCorrections = 6, abbreviations = 
     if (abbreviations && Object.hasOwn(ABBREVIATIONS, lower)) { to = ABBREVIATIONS[lower]; kind = 'abbreviation'; }
     else if (spelling && /^[a-z]+$/.test(lower) && (isFirst || !/^[A-Z]/.test(raw)) && !isKnown(lower, keep) && !known(lower)) {
       // `short` (the open tab's world only, RP3): a two-letter word that nothing knows is one edit from a word of this world ("un" -> "sun") or a function word ("si" -> "is")
-      const budget = short && lower.length === 2 ? 1 : spellBudget(lower);
-      if (budget) {
+      const maxEdits = short && lower.length === 2 ? 1 : spellBudget(lower);
+      if (maxEdits) {
         // rank: smaller distance, then a word of the world's own vocabulary, then the same letters (a swap such as "eyse")
         const letters = [...lower].sort().join('');
         let best = null, bestRank = Infinity, tied = [];
         for (const w of cands) {
-          if (Math.abs(w.length - lower.length) > budget) continue;
-          const d = editDistance(lower, w, budget);
-          if (d > budget) continue;
+          if (Math.abs(w.length - lower.length) > maxEdits) continue;
+          const d = editDistance(lower, w, maxEdits);
+          if (d > maxEdits) continue;
           const rank = d * 4 + (vocab.has(w) ? 0 : 2) + ([...w].sort().join('') === letters ? 0 : 1);
           if (rank < bestRank) { best = w; bestRank = rank; tied = [w]; }
           else if (rank === bestRank && w !== best) tied.push(w);
@@ -224,14 +224,14 @@ export function spellCandidates(text, { vocab, protect = null, maxPerWord = 5 } 
     const isFirst = first; first = false;
     if (quoted.some(([a, b]) => start >= a && end <= b) || !/^[a-z]+$/.test(lower) || (!isFirst && /^[A-Z]/.test(raw))) continue;
     if (isKnown(lower, keep) || protect?.has(lower) || (lower.length >= 3 && vocab.global?.has(lower)) || (lower.length >= 4 && vocab.world && !vocab.has(lower) && vocab.nouns?.has(lower))) continue;
-    const budget = spellBudget(lower);
-    if (!budget) continue;
+    const maxEdits = spellBudget(lower);
+    if (!maxEdits) continue;
     const letters = [...lower].sort().join('');
     const ranked = [];
     for (const w of cands) {
-      if (Math.abs(w.length - lower.length) > budget) continue;
-      const d = editDistance(lower, w, budget);
-      if (d > budget) continue;
+      if (Math.abs(w.length - lower.length) > maxEdits) continue;
+      const d = editDistance(lower, w, maxEdits);
+      if (d > maxEdits) continue;
       ranked.push({ w, rank: d * 4 + (vocab.has(w) ? 0 : 2) + ([...w].sort().join('') === letters ? 0 : 1), f: vocab.freq?.get(w) ?? 0 });
     }
     ranked.sort((a, b) => a.rank - b.rank || b.f - a.f || a.w.localeCompare(b.w));

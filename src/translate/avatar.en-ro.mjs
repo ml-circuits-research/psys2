@@ -102,6 +102,7 @@ export function avatarBitRo(bit) {
 
 /** Romanian for an English list of part phrases ("a, b and c"), or null when any phrase is unknown (phrases may contain "and": try every split). */
 export function avatarListRo(list) {
+  // bounded: recurses on a strictly shorter suffix of t
   const split = (t) => {
     const whole = avatarBitRo(t);
     const seps = [...t.matchAll(/, and |, | and /g)];

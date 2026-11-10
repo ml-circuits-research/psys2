@@ -16,6 +16,7 @@ import { createRouter, contextFromFocus, normalizeContext, defaultRouter, isGame
 import { FormSession, STOP_WORDS, isPronoun } from './session.mjs';
 import { selfCorrect, sharedArgument, repetition, ellipsisPrefixes, oneAnaphora, joinText, MARKER_RE, SEP_RE } from './expand.mjs';
 import { parse, serialize } from '../../soplang/index.mjs';
+import { budget } from '../../dialog/budget.mjs';
 
 export { FormSession } from './session.mjs';
 export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs';
@@ -240,6 +241,7 @@ const isContent = (t) => t.kind !== 'punct' && t.kind !== 'qmark' && !t.filler;
 /** Split a token list into clauses at `,`, `and`, `then`, `but` (one level). Clauses with only fillers are dropped. */
 export function splitClauses(tokens) {
   const clauses = [[]];
+  // bounded: i only moves forward over the tokens
   for (let i = 0; i < tokens.length; i++) {
     const t = tokens[i];
     const sep = t.lower === ',' || t.lower === 'and' || t.lower === 'then' || t.lower === 'but';
@@ -329,6 +331,7 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
     const bag = wordBag(view), bagNoPct = noPct ? wordBag(noPct) : null;
     const index = patternIndex(set);
     for (const { p, order, c } of index.candidates(noPct ? new Set([...bag, ...bagNoPct]) : bag)) {
+      budget.tick('rules.pattern');
       if (isQuestion && p.kind === 'statement') continue;
       if (last && !c.usesFiller) continue;
       let m = prefilterPasses(c, bag) ? matchTokens(c, view, env) : null;
@@ -392,6 +395,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
   /** Try to turn one token group into a segment. */
   const readGroup = (tokens, isQuestion, expanded = null) => {
     guard.check('rules');
+    budget.tick('rules.readgroup');
     const body = tokens.filter(isContent);
     const ends = body.length ? body : tokens.filter((t) => t.kind !== 'qmark');
     const first = ends[0] ?? tokens[0], last = ends[ends.length - 1] ?? tokens[tokens.length - 1];
@@ -459,6 +463,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
 
   /** Read a sentence as a whole, else clause by clause; then try the conservative expansion (spec 03 section 1c). */
   const readSentence = (s, tokens) => {
+    budget.tick('rules.sentence');
     const before = form.snapshot();
     const base = readSentencePlain(s, tokens);
     const after = form.snapshot();
@@ -584,6 +589,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
       const ana = oneAnaphoraEnv();
       if (ana && i > 0) {
         let ai = i - 1;
+        // bounded: ai only decreases to 0
         while (ai > 0 && ana.isElliptic(clauses[ai])) ai--;
         if (!ana.isElliptic(clauses[ai]) && !parts[ai].unparsed && !isWeak(parts[ai])) {
           const res = oneAnaphora(ct, clauses[ai], ana.opts);
@@ -644,6 +650,7 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
     const cuts = [];
     tokens.forEach((t, i) => { if ((t.lower === 'and' || t.lower === 'then') && i > 0 && i < tokens.length - 1 && inSlot(t) && !(i > 0 && tokens[i - 1].lower === 'and' && t.lower === 'then')) cuts.push(i); });
     if (!cuts.length) return null;
+    // bounded: both loops shrink the token list each pass
     const trim = (ts) => { let a = ts; while (a.length > 1 && (a[0].lower === 'then' || a[0].lower === 'and' || a[0].lower === ',')) a = a.slice(1); while (a.length && a[a.length - 1].lower === ',') a = a.slice(0, -1); return a; };
     const spanOf = (ts) => [ts[0].start, ts[ts.length - 1].end];
     // each command must be read by a pattern at least as specific as the one that swallowed the connective (a typed "between X and Y" reading is never cut)

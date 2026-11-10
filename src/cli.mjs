@@ -31,6 +31,7 @@ async function loadTranslator() {
 function parseArgs(argv) {
   const roots = [];
   const rest = [];
+  // bounded: i only moves forward over the command-line arguments
   for (let i = 0; i < argv.length; i++) {
     if (argv[i] === '--root') roots.push(argv[++i]);
     else rest.push(argv[i]);
