@@ -15,6 +15,8 @@ export const PLAN_FALLBACK = [
   {"id":"name","section":"basics","label":"Preferred name","prio":10,"card":"one","want":"what to call you","example":"Andy"},
   {"id":"address","section":"basics","label":"How to address you","prio":5,"card":"one","want":"how formal to be when I address you","example":"first name","needs":"name"},
   {"id":"location","section":"basics","label":"City or country","prio":3,"card":"one","want":"where you are based (city or country, never an address)","example":"Cluj, Romania"},
+  {"id":"age","section":"basics","label":"Age","prio":2,"card":"one","want":"your age (only when you volunteer it)","example":"45","askable":false},
+  {"id":"children","section":"basics","label":"Children","prio":2,"card":"one","want":"how many children you have (only when you volunteer it)","example":"2","askable":false},
   {"id":"role","section":"professional","label":"Current role","prio":9,"card":"one","want":"what you do for work","example":"software engineer"},
   {"id":"field","section":"professional","label":"Field or industry","prio":8,"card":"one","want":"which field or industry you work in","example":"healthcare","needs":"role"},
   {"id":"org","section":"professional","label":"Organisation","prio":4,"card":"one","want":"where you work (optional)","example":"Acme","needs":"role"},

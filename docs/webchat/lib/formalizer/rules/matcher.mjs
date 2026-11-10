@@ -58,7 +58,7 @@ export function compilePattern(match, phrases = null) {
       const [, name, cls, rawArgs, opt] = m;
       if (slots.has(name)) throw new PatternError(`duplicate slot name '${name}'`);
       const args = rawArgs === undefined ? [] : rawArgs.split(',').map((a) => a.trim());
-      if (cls === 'words' && args.length && !(/^[1-9]\d*$/.test(args[0]) && (args.length === 1 || (args.length === 2 && args[1] === 'label')))) throw new PatternError(`words(...) needs a positive number, optionally followed by 'label', in '${part}'`);
+      if (cls === 'words' && args.length && !(/^[1-9]\d*$/.test(args[0]) && (args.length === 1 || (args.length === 2 && (args[1] === 'label' || args[1] === 'noun'))))) throw new PatternError(`words(...) needs a positive number, optionally followed by 'label' or 'noun', in '${part}'`);
       if (cls === 'rest' && args.length && !(args.length === 1 && (args[0] === 'notes' || args[0] === 'quotes'))) throw new PatternError(`rest(...) takes only 'notes' or 'quotes' in '${part}'`);
       if (cls === 'recent') {
         if (args.length !== 2) throw new PatternError(`recent(<lexicon>, <agent slot>) needs two arguments in '${part}'`);
@@ -148,7 +148,8 @@ function candidates(el, tokens, i, env, slotsSoFar) {
     case 'words': {
       const out = [];
       const max = el.args?.[0] ? Number(el.args[0]) : WORDS_DEFAULT_MAX;
-      const label = el.args?.[1] === 'label';
+      const label = el.args?.[1] === 'label' || el.args?.[1] === 'noun';
+      if (el.args?.[1] === 'noun' && (t.lower === 'to' || t.lower === 'very' || t.lower === 'much')) return [];   // words(N,noun): a noun phrase, never an infinitive ("to draw a cat")
       for (let len = 1; len <= max && i + len <= tokens.length && isWordish(tokens[i + len - 1]); len++) {
         if (label && SELF_WORDS.has(tokens[i + len - 1].lower)) break;
         out.push({ len, value: text(len), text: text(len), span: span(len), loose: true });
@@ -217,7 +218,7 @@ function candidates(el, tokens, i, env, slotsSoFar) {
  * `literals` counts every matched literal word; `frameLiterals` (<= literals) the ones that came from phrase macros.
  * @returns {{ slots: object, literals: number, skips: number, frameLiterals: number } | null}
  */
-export function matchTokens(compiled, tokens, env) {
+function matchTokensRaw(compiled, tokens, env) {
   const els = compiled.elements;
   // a trailing question mark is visible only to patterns that list `?`; the others behave as if it were not there
   const n = tokens.length - (!compiled.hasQ && tokens[tokens.length - 1]?.kind === 'qmark' ? 1 : 0);
@@ -311,6 +312,28 @@ export function matchTokens(compiled, tokens, env) {
   }
 
   return run(0, 0) ? { slots: { ...slots }, literals, skips, frameLiterals } : null;
+}
+
+/** The fields of a token that a match can depend on (positions index `env.text`). */
+const tokenKey = (t) => `${t.start},${t.end},${t.lower},${t.alt ?? ''},${t.kind},${t.raw},${t.ordinal ?? ''},${t.filler ? 1 : 0},${t.textOverride ?? ''}`;
+
+/**
+ * `matchTokensRaw` with a per-formalize memo (COMPUTE-BUDGET C): the same pattern is matched against the same token view many times in one
+ * turn (clause splitting, expansion, leniency and spelling variants re-read the same sentence). A result is reused only when the match did not
+ * consult the dialogue state (`env.touched` counts calls of resolveAgent / lastAgent / recentItem), so it is a pure function of pattern, tokens and text.
+ */
+export function matchTokens(compiled, tokens, env) {
+  const memo = env.matchMemo;
+  if (!memo) return matchTokensRaw(compiled, tokens, env);
+  let tk = memo.keys.get(tokens);
+  if (tk === undefined) { tk = tokens.map(tokenKey).join('|'); memo.keys.set(tokens, tk); }
+  let per = memo.byPattern.get(compiled);
+  if (!per) memo.byPattern.set(compiled, (per = new Map()));
+  if (per.has(tk)) { const r = per.get(tk); return r && { ...r, slots: Object.fromEntries(Object.entries(r.slots).map(([k, v]) => [k, { ...v }])) }; }
+  const before = env.touched;
+  const r = matchTokensRaw(compiled, tokens, env);
+  if (env.touched === before) per.set(tk, r && { ...r, slots: Object.fromEntries(Object.entries(r.slots).map(([k, v]) => [k, { ...v }])) });
+  return r;
 }
 
 // ---- prefilter (spec 03 section 2, "Prefilter") ------------------------------------------------------------------------

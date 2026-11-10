@@ -8,7 +8,7 @@
 // The plan (fields, priorities, sensitivity, phrasings, follow-ups) is read from the knowledge base (kb.sop); answers are read by understand.mjs.
 // Modal input: while `inputMode` is set, the engine offers every message to interceptInput(); clear commands for other worlds and this world's own
 // commands pass through (handled: false), everything else is read as the answer. Effects: file.download { filename, text, mime }.
-import { extract, clauseLike, echoable, norm, isSkip, isStop, isDecline, YES, NO, sensitive, fieldForRole, fieldForRoleText, pretty, sentenceCase, withArticle, _findEntries as findEntries } from './understand.mjs';
+import { extract, likesItems, clauseLike, echoable, norm, isSkip, isStop, isDecline, YES, NO, sensitive, fieldForRole, fieldForRoleText, pretty, sentenceCase, withArticle, _findEntries as findEntries } from './understand.mjs';
 import { toJson, toMarkdown, counts, PLAN_FALLBACK, SECTIONS_FALLBACK } from './cv.mjs';
 
 const TAB = 'profile';
@@ -25,7 +25,7 @@ export function initialState() {
 // ---- knowledge base: the plan -----------------------------------------------------------------------------------------
 function planOf(ctx) {
   const wires = ctx.find('user.profile.field');
-  if (!wires.length) return PLAN_FALLBACK.map((p) => ({ ...p, q: [], ack: [], follow: '', followKey: '', followMode: 'unclear', sens: 'none', askable: true }));
+  if (!wires.length) return PLAN_FALLBACK.map((p) => ({ ...p, q: [], ack: [], follow: '', followKey: '', followMode: 'unclear', sens: 'none', askable: p.askable !== false }));
   return wires.map((w) => ({
     id: String(w.id).replace(/^f\./, ''), section: ctx.val(w, 'section'), label: ctx.val(w, 'label'), prio: Number(ctx.val(w, 'prio') ?? 1), card: ctx.val(w, 'card') ?? 'one',
     sens: ctx.val(w, 'sens') ?? 'none', want: ctx.val(w, 'want') ?? '', example: ctx.val(w, 'example') ?? '', q: ctx.vals(w, 'q'), follow: ctx.val(w, 'follow') ?? '',
@@ -425,10 +425,22 @@ export const tell = W((ctx, a) => {
     pref: () => `I prefer ${sp(a.p)} answers`,
     lang: () => `I prefer answers in ${sp(a.l)}`,
     previous: () => `Before that I was ${withArticle(sp(a.role))}`,
+    age: () => `I am ${a.n} years old`,
+    children: () => `I have ${a.n} ${Number(a.n) === 1 ? 'child' : 'children'}`,
+    likes: () => `I like ${quoted(a.l)}`,
   }[a.kind]?.();
   if (!text) return no('unsupported', 'I did not catch what to note.');
   const ex = extract(text, env);
-  const items = ex.items.length ? ex.items : [];
+  let items = ex.items.length ? ex.items : [];
+  if (a.kind === 'likes') {   // "I like chess, music and maps": what the lexicon classified stays, every other item of the list is a hobby
+    const lc = (x) => String(x).toLowerCase();
+    const covered = new Set(items.flatMap((i) => list(i.value).map(lc)));
+    const rest = likesItems(String(a.l ?? ''), env.lex).filter((x) => !covered.has(lc(x)));
+    if (rest.length && rest.length <= 6) {
+      const h = items.find((i) => i.key === 'hobbies');
+      items = h ? items.map((i) => (i === h ? { ...h, value: [...list(h.value), ...rest] } : i)) : [...items, { key: 'hobbies', value: rest, how: 'interest' }];
+    }
+  }
   if (!items.length) return no('missing', 'I did not quite catch that. Could you say it another way?');
   const fix = a.fix === true || a.fix === 'true';
   const { changes, guess } = applyItems(ctx, s, plan, env, items, fix);

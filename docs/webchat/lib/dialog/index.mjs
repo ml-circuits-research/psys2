@@ -1206,7 +1206,23 @@ export async function createEngine({ loader, translator = null, options = {}, fo
     worlds: () => set.list().map((w) => w.summary()),
     createSession: (opts) => new DialogSession(engine, opts),
     /** Compiles every pattern and builds the vocabularies in slices that yield to the host (the webchat warm-up, PERF round 2). */
-    precompile: async (opts) => { const r = await precompileRules(set, opts); try { nameIndex(set); } catch { /* built lazily */ } return r; },
+    precompile: async (opts) => {
+      const r = await precompileRules(set, opts);
+      try { nameIndex(set); } catch { /* built lazily */ }
+      // the spelling vocabularies (global and one per world) are built here, in slices, not by the first message that needs a correction (COMPUTE-BUDGET C)
+      try {
+        const clock = () => globalThis.performance?.now?.() ?? Date.now();
+        const yieldFn = opts?.yieldFn ?? (() => new Promise((res) => setTimeout(res, 0)));
+        spellVocabulary(set);
+        let t = clock();
+        for (const w of set.list()) {   // bounded: one pass over the loaded worlds
+          if (!w.patterns?.length) continue;
+          worldVocabulary(set, w.id);
+          if (clock() - t > (opts?.budgetMs ?? 10)) { await yieldFn(); t = clock(); }
+        }
+      } catch { /* built lazily */ }
+      return r;
+    },
   };
   return engine;
 }

@@ -73,6 +73,40 @@ function allPatterns(set) {
 }
 
 /**
+ * Inverted index of the compiled patterns by the words of their smallest mandatory-literal set (COMPUTE-BUDGET C): a pattern can only match a
+ * sentence whose bag holds one of those words, so only the postings of the bag's words (plus the patterns without any mandatory literal) are
+ * candidates, in pattern order. The same result as running the prefilter on every pattern, without visiting thousands of them per sentence.
+ */
+function patternIndex(set) {
+  return set.memo('patternIndex', () => {
+    const always = [], byWord = new Map();
+    const recs = [];
+    const freq = new Map();   // in how many patterns' mandatory sets a word occurs: a pattern is indexed under its rarest set
+    for (const { p, order } of allPatterns(set)) {
+      const cc = compiled(p, set).compiled;
+      if (!cc) continue;
+      const needs = prefilterNeeds(cc);
+      recs.push({ p, order, c: cc, needs });
+      const seen = new Set();
+      for (const n of needs) for (const w of n) if (!seen.has(w)) { seen.add(w); freq.set(w, (freq.get(w) ?? 0) + 1); }
+    }
+    for (const rec of recs) {
+      if (!rec.needs.length) { always.push(rec); continue; }
+      let best = null, bestCost = Infinity;
+      for (const n of rec.needs) { let cost = 0; for (const w of n) cost += freq.get(w) ?? 0; if (cost < bestCost) { bestCost = cost; best = n; } }
+      for (const w of best) { let l = byWord.get(w); if (!l) byWord.set(w, (l = [])); l.push(rec); }
+    }
+    return {
+      candidates(bag) {
+        const seen = new Set(always), out = [...always];
+        for (const w of bag) { const l = byWord.get(w); if (l) for (const r of l) if (!seen.has(r)) { seen.add(r); out.push(r); } }
+        return out.sort((a, b) => a.order - b.order);
+      },
+    };
+  });
+}
+
+/**
  * Compiles every pattern and builds the typo vocabulary ahead of the first message, in slices: after `budgetMs` of work it awaits `yieldFn`
  * (default a macrotask), so a page stays responsive while this runs (PERF round 2). The same memoized state the first `formalize` would
  * build lazily, so readings do not change. Returns the number of patterns compiled.
@@ -85,6 +119,8 @@ export async function precompile(set, { budgetMs = 10, yieldFn = () => new Promi
     const c = compiled(p, set).compiled; if (c) prefilterNeeds(c); n++;   // the prefilter sets are built now too, not by the first message
     if (clock() - t > budgetMs) { await yieldFn(); t = clock(); }
   }
+  await yieldFn();
+  patternIndex(set);
   await yieldFn();
   vocabularyOf(set);
   return n;
@@ -217,7 +253,9 @@ export function splitClauses(tokens) {
 
 /** Build the match environment for one text. */
 export function makeEnv(text, set, form, lex) {
+  const env = { text, lex, touched: 0, matchMemo: { keys: new WeakMap(), byPattern: new Map() } };
   const resolveAgent = (tokens, i) => {
+    env.touched++;
     const t = tokens[i];
     if (t.kind !== 'word') return null;
     if (isPronoun(t.lower)) return form.resolvePronoun(t.lower);
@@ -230,7 +268,7 @@ export function makeEnv(text, set, form, lex) {
     }
     return form.candidateForName(t.raw, undefined);
   };
-  return { text, lex, resolveAgent, lastAgent: () => form.resolvePronoun('they'), recentItem: (lexId, agentId) => form.recentItem(lexId, agentId) };
+  return Object.assign(env, { resolveAgent, lastAgent: () => { env.touched++; return form.resolvePronoun('they'); }, recentItem: (lexId, agentId) => { env.touched++; return form.recentItem(lexId, agentId); } });
 }
 
 /**
@@ -262,6 +300,9 @@ export function applyCoveragePolicy(matches, total, policy = PATTERN_COVERAGE_PO
   return matches.filter((m) => !low.includes(m) || good.every((g) => g.pattern.worldId === m.pattern.worldId));
 }
 
+/** True when a match (a ranked match or a segment's `match`) has a free-text target that starts with your / yours / ur / yourself: it addresses the avatar. */
+export const youTarget = (m) => Object.values(m.slots ?? {}).some((s) => (s.class === 'words' || s.class === 'word') && /^(?:your|yours|ur|yourself)$/i.test(String(s.text).split(/\s+/)[0]) && !/\b(?:and|then|but|plus)\b|,/i.test(String(s.text)));   // a coordination ("your eyes and body") is left to the expansion
+
 /** Ranked full matches of every pattern against `tokens` (commas removed), ordered by the routing policy. */
 function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
   // Views of the tokens, tried in order until one of them is matched by some pattern (spec 03 section 1.5):
@@ -286,13 +327,21 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
     const noPct = view.some((t) => t.pct) ? view.filter((t) => !t.pct) : null;
     toks = view.filter((t) => t.kind !== 'qmark');
     const bag = wordBag(view), bagNoPct = noPct ? wordBag(noPct) : null;
-    for (const { p, order } of allPatterns(set)) {
+    const index = patternIndex(set);
+    for (const { p, order, c } of index.candidates(noPct ? new Set([...bag, ...bagNoPct]) : bag)) {
       if (isQuestion && p.kind === 'statement') continue;
-      const c = compiled(p, set);
-      if (!c.compiled || (last && !c.compiled.usesFiller)) continue;
-      let m = prefilterPasses(c.compiled, bag) ? matchTokens(c.compiled, view, env) : null;
-      if (!m && noPct && prefilterPasses(c.compiled, bagNoPct)) m = matchTokens(c.compiled, noPct, env);
+      if (last && !c.usesFiller) continue;
+      let m = prefilterPasses(c, bag) ? matchTokens(c, view, env) : null;
+      if (!m && noPct && prefilterPasses(c, bagNoPct)) m = matchTokens(c, noPct, env);
       if (m) matches.push({ pattern: p, order, ...m });
+    }
+  }
+  // "Your" addresses the avatar (COMPUTE-BUDGET C): a free-text target that starts with your / yours / ur / yourself ("make your eyes blue") is the avatar's, never a drawing
+  // object's, whenever ui.avatar reads the sentence too; the other worlds' readings of that target are dropped before routing.
+  if (matches.length > 1 && matches.some((m) => m.pattern.worldId === 'ui.avatar')) {
+    if (matches.some((m) => m.pattern.worldId !== 'ui.avatar' && youTarget(m))) {
+      const keep = matches.filter((m) => m.pattern.worldId === 'ui.avatar' || !youTarget(m));
+      matches.splice(0, matches.length, ...keep);
     }
   }
   const kept = applyCoveragePolicy(matches, toks.filter((t) => !t.filler).length);
@@ -510,20 +559,18 @@ export function formalize(text, { worlds, session, source = 'input', focus = nul
   };
 
   /** Phrase groups `lang.elide.lead` / `lang.elide.noun` of lang.common and the lexicon-class test of the one-anaphora expansion (null when the worlds do not import them). */
-  let anaEnv;
-  const oneAnaphoraEnv = () => {
-    if (anaEnv !== undefined) return anaEnv;
+  const oneAnaphoraEnv = () => set.memo('oneAnaphoraEnv', () => {   // COMPUTE-BUDGET C: built once per world set (it scanned every lexicon on each turn)
     const words = (id) => (lex.phrases.get(id)?.alts ?? []).map((a) => a.join(' ').toLowerCase());
     const leads = new Set(words('lang.elide.lead')), nouns = new Set(words('lang.elide.noun'));
-    if (!leads.size || !nouns.size) return (anaEnv = null);
+    if (!leads.size || !nouns.size) return null;
     // the class of a word is the smallest lexicon that holds it (a catch-all "mods" lexicon holds sizes and colours together)
     const classes = new Map(), sizeOf = new Map();
     for (const [id, l] of lex.lexicons) for (const w of l.words) if (!w.includes('_')) { const k = w.toLowerCase(); if (!classes.has(k) || l.words.size < sizeOf.get(k)) { classes.set(k, id); sizeOf.set(k, l.words.size); } }
     const sameClass = (a, b) => classes.has(a) && classes.get(a) === classes.get(b);
     const isModifier = (w) => classes.has(w);
     const isElliptic = (c) => { const w = c.filter((t) => t.kind === 'word' || t.kind === 'number'); const l = w[w.length - 1]; return w.length >= 2 && nouns.has(l.alt ?? l.lower); };
-    return (anaEnv = { opts: { leads, nouns, sameClass, isModifier, singular: (w) => lex.lemma(w) }, isElliptic });
-  };
+    return { opts: { leads, nouns, sameClass, isModifier, singular: (w) => lex.lemma(w) }, isElliptic };
+  });
 
   const expandClauses = (s, tokens, base, whole = null, bar = null) => {
     const clauses = splitClauses(tokens);
