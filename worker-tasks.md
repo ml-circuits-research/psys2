@@ -220,6 +220,29 @@ NX5 is accepted. It is careful and honest: the per-item transitions and the sele
 5. **Recheck the four NX6 conditions** with gated D on encoder+n1, with A3 (the drop-in), and report A+3 too. **If all four hold, do NX6** (integration as a parallel strategy, default only then). If not, write which condition fails and by how much, and stop NX there.
 6. More NX3 data aimed at the constants (arithmetic operator forms, `arg.list`, `arg.anim`, the ui.avatar part operations) is optional, only if time remains after 1–5.
 
+**NX6 GO (reviewer, 02:50 local, after e609df1): integrate A3 with the negation guard.**
+
+NX7 is accepted. **A3 + guard** (τ_op 0.99, τ_frame 0.9, negation guard on, spans in frame, only on segments the shipped mode leaves not understood) meets all four conditions, even condition 1 read strictly against the shipped mode, not the rules:
+- +5.2 points on the rules-fail sets over encoder+n1;
+- 0 added wrong on operational, long, dialogues and Romanian (Romanian +0.6 points right);
+- the same pass.
+
+The user approved integration on these terms (01:27), so do NX6 now with exactly this configuration:
+1. **Publish the A3 export** (`training/runs/export/nx-a-nx3`, int8, outputs identical to v4) as the webchat dispatcher model, with `nx-meta.json`. This is a deliberate model publication (one new model blob). Check the published sha's v4 parity in the browser harness.
+2. **The `heads` strategy in `src/formalizer/`**, ported from `scripts/lib/nx-formalizer.mjs`: gate, negation guard, pattern-frame choice, the same validator and interpreter dry run on a session fork.
+   - It runs only for segments that are still `unparsed` after the shipped pipeline (spelling, partial, best effort included).
+   - The trace and the phrase log record `strategy: heads`, `p_op`, the frame score and the accepted operation, so real use can be audited from exported logs.
+3. **Settings › Developer › Formalizer:** `rules`, `encoder` (today), `encoder + heads` (**default**). The τ values are in the config, not hard-coded.
+4. **Condition 4, measured:** `scripts/perf-webchat.mjs` ready time and first answer before and after (4×), and the size (+0.9 MB).
+5. **Tests:**
+   - unit tests for the gate and the selection, with `broken = 0` (a complete shipped reading is never replaced);
+   - a browser test with the default on: the 09c/d/e rows, a Romanian session, a diagram session, and one gold-para case the heads recover (for example from the NX7 per-item rows), shown with `strategy: heads` in the trace;
+   - `test:browser`; the fast suite.
+6. **Docs:** spec 03 (strategy order), spec 06 (formalizer setting), `docs/formalizer-encoder.html` (status: partially implemented, as heads on the dispatcher, gated fallback), RESULTS.
+7. **Rollback must be one setting.** If the reviewer finds a regression in Chrome, the default goes back to `encoder`.
+
+Track 1 keeps priority on its own agents. NX6 is Track 2's last task tonight; after it, if time remains, do step 6 of NX7 (data for the constants) and the DGX cleanup.
+
 **Cleanup (user, 23:05).**
 - **On the DGX, in `training/runs/`, which is not in git:**
   - Keep:
@@ -1940,3 +1963,4 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
   - DGX cleanup still not done (the worktree symlinks `training/runs`; careful).
 - RP5c (7f6f716): items 2 and 3 validated; item 1 still open (repro with context, see RP5c).
 - NX3 (6c4a253), files match the log: 29,111 records, audit error 1.3%, judge accepted 97.5% of disagreements, ~$26.6 estimated (under the $60 cap). Accepted; short of the 50k target.
+- NX7 (683d04a, e609df1), files match the log: accepted. The gate was tuned on dev only. Gated D over encoder+n1 adds 0 wrong anywhere; A3 + guard: +5.2 points on the rules-fail sets over the shipped mode, Romanian +0.6. Model-first is not safe (−20 points). NX6 GO with A3 + guard.
