@@ -679,6 +679,17 @@ export class DialogSession {
   }
 
   /**
+   * Make the lazily loaded engines (ops `prepare()`, spec 04) of the segments' worlds ready before a dry run: the real run awaits them
+   * (see _send), a dry run on a fork would otherwise get "the engine is still loading" (`missing`) and wrongly reject a good reading (RP5c).
+   */
+  async _prepareWorldsOf(segments) {
+    for (const w of new Set(segments.map((x) => x.match?.worldId).filter(Boolean))) {
+      const prep = this.engine.set.get(w)?.ops?.prepare;
+      if (typeof prep === 'function') { try { await prep(); } catch { /* the operation then says it is not ready */ } }
+    }
+  }
+
+  /**
    * Capability check (RD10, spec 03 section 7.9c): a world claims a sentence only if it can do it. A reading of a world other than the open
    * tab's (or, when the message names another world, of the tab's world too) whose dry run on a copy of the session is refused or finds nothing
    * to act on ("change avatar to a man" read by the editor when "avatar" is not in the document) drops, and the message is read again without
@@ -692,6 +703,7 @@ export class DialogSession {
    */
   async _nameRepair(english, res, opts, lenient) {
     if (!lenient.spell || !res.segments.length || res.segments.some((x) => x.unparsed)) return null;
+    await this._prepareWorldsOf(res.segments);
     const { set, formalizers, interp } = this.engine;
     const ctx = opts.context ?? this.context();
     const dry = (segments) => {
@@ -738,6 +750,7 @@ export class DialogSession {
     const ctx = opts.context ?? this.context();
     const named = namedWorlds((english.toLowerCase().match(/[a-z0-9]+/g) ?? []).map((w) => ({ kind: 'word', lower: w, raw: w })), namingTables(set).names);
     const SKIP = new Set(['ui.shell', 'ui.help', 'core', 'lang.common']);
+    await this._prepareWorldsOf(res.segments);
     const suspect = res.segments.filter((x) => { const w = x.match?.worldId; return w && !SKIP.has(w) && (w !== ctx.tabWorld || (named.size > 0 && !named.has(w)) || (!!ctx.lastWorld && ctx.lastWorld !== w && !SKIP.has(ctx.lastWorld))); });
     const crossBad = res.segments.filter((x) => x.corrections?.length && !this._crossTabOk([x], x.corrections, ctx, english)).map((x) => x.match.worldId);
     if (!suspect.length && !crossBad.length) return null;

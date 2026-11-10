@@ -201,7 +201,11 @@ export function createRouter({ id = 'policy', model = null } = {}) {
       const ctx = normalizeContext(context);
       const named = ctx.names ? namedWorlds(tokens, ctx.names) : new Set();
       // tabOnly patterns apply only while their world's tab is active
-      const list = matches.filter((m) => (!m.pattern.tabOnly || m.pattern.worldId === ctx.tabWorld) && populated(m.pattern, ctx));
+      // GAPS-1: advice about the move ("best move for me?", "give me a hint") belongs to the game on the active tab; another game's hint is read
+      // only when the message names that game ("a chess hint")
+      const foreignHint = (m) => !!ctx.tabWorld?.startsWith('games.') && m.pattern.worldId.startsWith('games.') && m.pattern.worldId !== ctx.tabWorld
+        && /action=[a-z]+\.hint\b/.test(m.pattern.emit ?? '') && !named.has(m.pattern.worldId);
+      const list = matches.filter((m) => (!m.pattern.tabOnly || m.pattern.worldId === ctx.tabWorld) && populated(m.pattern, ctx) && !foreignHint(m));
       for (const m of list) m.rank = effectivePriority(m, ctx);
       const prio = (m) => m.rank;
       const wscore = (w) => scores.find((s) => s.id === w)?.score ?? 0;

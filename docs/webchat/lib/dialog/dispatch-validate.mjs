@@ -178,6 +178,9 @@ export function createDispatchValidator({ engine, policy = {}, normalizer = null
     if (context.tab) s.setWorldState('ui.shell', { activeTab: context.tab });
     if (context.recent_worlds.length) s._recentWorlds = [...context.recent_worlds];
     for (const m of context.session) { perf.count('seed.replay'); await s.send(m); }
+    // RP5c: replaying earlier turns moves the tab (a drawing turn follows its tab, an open-tab command opens one); the message being
+    // validated is read on the tab the user is on NOW, exactly as a tab click or command left it (routing tier T)
+    if (context.tab && s.isession.state['ui.shell']?.activeTab !== context.tab) s.setWorldState('ui.shell', { activeTab: context.tab });
     return s;
   };
 

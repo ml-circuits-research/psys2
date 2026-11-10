@@ -325,6 +325,14 @@
     example="Help me pick a square."
     example="Where to play next?"
 
+@pat.games.tictactoe.hint.bare core.pattern
+    match="[$lang.lead.filler|wait|umm|right|ooh]? [best|good|better|top|winning|decent|safest|smartest] [move|moves|play|square|spot|place|idea] [$lang.tail.filler|here|next]?"
+    emit="@{_} core.request action=ttt.hint"
+    kind=request
+    priority=12
+    example="Best move for me?"
+    example="Best square?"
+
 @pat.games.tictactoe.hint3 core.pattern
     match="[where|what|which] [do|should|shall|can|could|would|will|to] [i|we|u|you]? [go|play|move|put|place|mark|take|pick|choose|start|begin]? [now|next|here|then|rn|pls|plz|first]?"
     emit="@{_} core.request action=ttt.hint"
