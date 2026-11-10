@@ -610,6 +610,44 @@ With the mic always on, room talk reached the chat and got "I did not understand
 - Optional, in Settings › Voice: "Only respond when I say 'PSys2' / 'robotule'".
 - Tests: the room-talk lines above → ignored; every real command in the session → executed.
 
+### SOPWORLD-1 review and SOPWORLD-1b (reviewer, 19:10) — after LANG-FIXED lands
+
+**SOPWORLD-1 (4af5167 … f249989) is accepted.** It is a careful, honest report: "no line is saved yet" and "matrix mode gains only where stage 1 built the feature" are exactly the kind of statement we need.
+
+Reviewer rerun: `test-world --reasoner matrix` kids.shop 147/147, kids.tasks 232/232, kids.arith with the listed failures; default strategy unchanged; `scripts/test-webchat-matrix.mjs` in real Chrome 18/18.
+
+**What the numbers say:**
+
+| Measure | ops | matrix |
+| --- | --- | --- |
+| Turns that leave the world in violation (per-turn audit) | 21 of 761 (2.8%) | 2 of 745 (0.3%) |
+| Coherence set (30 reviewer cases) | 17 | 19 |
+| Undo | 0/3 | 2/3 |
+| Default revision | 1/3 | 2/3 |
+| Abduction | 0/2 | 1/2 |
+| Explain | 0/3 | 0/3 |
+| Turn time, three worlds, p50 | 14.4 ms | 15.7 ms (+9%) |
+| Bundle | — | +196 kB raw / +55 kB gzip, loaded only in matrix mode |
+| Replaceable code across all worlds (the map) | — | 32% of 15,764 lines; above 50% in ten worlds |
+
+Your ten workarounds went to the library as its tasks W1–W8, together with soft constraints (G11) and the one-language change (L1); it will tag 0.6.0.
+
+**SOPWORLD-1b: make the comparison fair and close what stage 1 showed.** The default strategy stays `ops`.
+
+1. **Re-vendor** the library at its current `main` now (0.5.0: tiers, `describe`, `diff`, `check` / `applyPatch`, relations, declarative actions, ambiguous ties, calc failure reasons, precision, fluent delta, defaults on optional keys), and again at 0.6.0. Remove each workaround when its W-task lands (function prefixes, second queries in `voice`, rebuilding the wire for "three of them", the audit by re-telling).
+2. **Coherence failures that are ours, not the library's.** The set must be answerable in both strategies before it can compare them.
+   - **Sentences the formalizer does not read, in either strategy:** "Ana gives him some", "Tom had some apples", "He ate 2 and now has 3", "Why do I have nothing left?", "I buy something", "No, she gives him 4", "No, to my to-do list", "Which list did you put it on?". Add the patterns (general shapes: an unknown amount "some", a past-tense start, "why …?" about the last answer or a named fact, a correction "no, …" that revises the last event).
+   - **Explain 0/3:** "why?" must give the whole chain from `explain` (every told fact, in order), in both languages; in `ops` mode say what is known (the `from` list).
+   - **A refused or impossible statement must be said to the user**, not acknowledged with "OK": "That does not add up: Tom has 3 apples, he cannot eat 5." With G11 the statement is kept and flagged.
+   - **Ties:** "Who has more apples?" with equal counts → "They have the same" (the library now answers `ambiguous`).
+   - **Unknown start:** "Ana gives Tom 2. How many does Tom have?" → "I don't know how many Tom had; he got 2." (the library's `delta`).
+3. **One undo.** The dialogue layer's snapshots and the library must not diverge (3 dialogue turns fail). In matrix mode the dialogue layer's undo / "that's wrong" calls the library (`retract`; `undo` / `mark` / `rewind` when W8 lands) and the world state is derived from the library, for all three worlds (`toState` for shop and arith too).
+4. **Certainty in replies** (item (d) was 0 of 46 because nothing reported assumptions): in matrix mode, when an answer rests on a value of tier `default` or `guessed`, the reply says so once ("I assumed 1 ball.") and the phrase log records `assumptions`. Use `world.assumptions()` and the tiers; add this to the coherence runner's hint `assumption-visible` so it is checked mechanically.
+5. **A visible world for the user's eyes.** Stage 1's three worlds have no tab. Add **games.tictactoe** to matrix mode (27% replaceable: the rules of the game, whose turn it is, win / draw, legal moves as a matrix; the board UI stays). It shows consistency on something visible: an illegal move is refused with the reason, "undo" takes back a move, "why did you play there?" explains.
+6. **Rerun `eval-reasoner`** after 1–5 and report the table again, with the per-case transcripts of every coherence failure that remains.
+7. **The `games.guess#030.ro` difference** (a world that does not use the matrix changes outcome with the switch): find the cause; the switch must not touch other worlds.
+8. Item 10 (SOP Lang v1.1) waits for the library's L1.
+
 ### LANG-FIXED — the selected language is the language; no automatic switching (user, 17:01 local) — before SOPWORLD-1
 
 **The user's report.** The freeze is fixed on GitHub Pages. But with **Română selected**, speech recognition "goes to English by itself": sometimes Romanian is understood, sometimes not.
@@ -2233,3 +2271,4 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
 - **User confirmation (17:01):** the freeze on GitHub Pages is fixed. COMPUTE-BUDGET is closed except the three review items from D (exec-loop rule in the loop guard, audit of `// bounded:` comments, fake Translator in the harness).
 - COMPUTE-BUDGET F (e569b30), files match the log: accepted. The loop guard refuses unsafe regex loops, there are no `// bounded:` comments left, and the fake on-device Translator is in the harness by default. Reviewer rerun: loop-guard test and the fault-injection browser run (see the next line). **COMPUTE-BUDGET is closed.** Next in order: LANG-FIXED, then SOPWORLD-1.
   - Reviewer fault-injection run after F: 101/102. One marginal miss on the 2-vCPU host: `on-device slow: heartbeat gap < 500 ms` measured 550 ms (0 kills). Find what holds the page for half a second while the slow translator is awaited (it should be idle), or justify the threshold; not blocking.
+- SOPWORLD-1 (4af5167, 79d0cf7, 372a87c, f249989), files match the log: accepted. Reviewer rerun: matrix test-world 147/147, 232/232, arith with the listed failures; browser rows 18/18. Per-turn violations 2.8% (ops) vs 0.3% (matrix); coherence 17 vs 19 of 30. Follow-up: SOPWORLD-1b.
