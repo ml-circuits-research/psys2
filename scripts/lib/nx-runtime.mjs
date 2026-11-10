@@ -9,7 +9,8 @@ import { createFsLoader, DEFAULT_ROOT } from '../../src/loaders/fs-loader.mjs';
 import { createEngine } from '../../src/dialog/index.mjs';
 import { createTranslator } from '../../src/translate/index.mjs';
 import { settingsForMode } from '../../src/dialog/runtime-config.mjs';
-import { loadNxModel, createNxFormalizer, wrapSessionHybrid } from './nx-formalizer.mjs';
+import { loadNxModel, createNxFormalizer, wrapSessionHybrid, wrapSessionGated } from './nx-formalizer.mjs';
+import { openNodeRuntime } from './runtime-node.mjs';
 
 export const EXPORTS = {
   A: '/home/salboaie/work/psys2/training/runs/export/nx-a-seed1',
@@ -18,12 +19,28 @@ export const EXPORTS = {
   Aplus3: '/home/salboaie/work/psys2/training/runs/export/nx-aplus-nx3',
 };
 
-export async function buildSystem({ system, ortPath, threads = 1 }) {
+// NX7: `enc-n1` is the shipped webchat mode (dispatcher + normalizer + rules, no NX model); `<model>-d` is the gated D over it (the model reads only a
+// segment the shipped pipeline left not understood), `<model>-dcov` also lets it replace a partial / best-effort answer when it covers strictly more
+// words at the same operation, `<model>-dng` / `-dcovng` are the same with the gate off (record the features for the tau sweep). `gate` = { tauOp, tauFrame, spans }.
+export async function buildSystem({ system, ortPath, threads = 1, gate = null }) {
   const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT), translator: createTranslator() });
   if (system === 'rules') return { engine, settings: settingsForMode('rules'), stats: {} };
+  if (system === 'enc-n1') {
+    const rt = await openNodeRuntime({ engine, mode: 'encoder+n1', ortPath, ortThreads: threads });
+    return { engine, settings: rt.settings, stats: {} };
+  }
   const cut = system.lastIndexOf('-'); const which = system.slice(0, cut), mode = system.slice(cut + 1);
   const dir = EXPORTS[which] ?? which;
-  if (!['only', 'first', 'hybrid'].includes(mode)) throw new Error(`system ${system}: mode must be only|first|hybrid`);
+  if (['d', 'dcov', 'dng', 'dcovng'].includes(mode)) {
+    const rt = await openNodeRuntime({ engine, mode: 'encoder+n1', ortPath, ortThreads: threads });
+    const model = await loadNxModel({ ortPath, dir, threads });
+    const stats = {};
+    const nx = createNxFormalizer({ model, mode: 'first', rules: engine.formalizers.rules, stats });
+    nx.attach(engine);
+    const g = mode.endsWith('ng') ? { off: true } : gate ?? { tauOp: 0, tauFrame: 0, spans: true };
+    return { engine, settings: rt.settings, stats, nx, wrap: (s) => wrapSessionGated(s, nx, stats, { gate: g, replacePartial: mode.startsWith('dcov') }) };
+  }
+  if (!['only', 'first', 'hybrid'].includes(mode)) throw new Error(`system ${system}: mode must be only|first|hybrid|d|dcov|dng|dcovng`);
   const model = await loadNxModel({ ortPath, dir, threads });
   const stats = {};
   const rules = engine.formalizers.rules;

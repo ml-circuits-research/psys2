@@ -174,6 +174,66 @@ function synthesize(rec, spanText) {
   return parts.join(' ').replace(/\s+\?/g, '?').trim();
 }
 
+/** Negation in a segment (the model heads do not model it: "don't remind me about X" reads as a reminder). */
+const NEGATION = /\b(not|no|never|none|nothing|nobody|without|cannot)\b|n['’]t\b/i;
+/** Tokens of a text with their character positions (a symbol such as `+` expands to its word, at the symbol's position). */
+function tokensPos(text) {
+  const out = [];
+  for (const m of text.toLowerCase().matchAll(/[a-z0-9']+|[+\-*\/=]/g)) for (const w of (SYMBOLS[m[0]] ? SYMBOLS[m[0]].split(' ') : [m[0]])) out.push({ w, s: m.index, e: m.index + m[0].length });
+  return out;
+}
+/** Words of the segment that a reading covers (NX7), given token list and the covered character ranges. */
+const coverOf = (toks, ranges) => toks.filter((t) => ranges.some(([a, b]) => t.s >= a && t.e <= b)).length;
+
+/**
+ * NX7 gate features of a model reading: the operation probability, the frame score (share of the pattern's frame words in the segment), whether
+ * every predicted span belongs to the candidate pattern and lies where the pattern puts its slot (between the frame words around it, in
+ * the pattern's order), and how many of the segment's words the reading covers (spans of the pattern's slots and its matched frame words).
+ */
+export function gateFeatures(cand, text, spans, p) {
+  const toks = tokensPos(text);
+  const frameRanges = [];   // per element: [s, e] of the matched frame phrase or null
+  let cur = 0;
+  const slotEls = [];
+  const els = cand.r.comp.elements;
+  els.forEach((el, k) => {
+    if (el.t === 'slot') { frameRanges.push(null); slotEls.push(k); return; }
+    const phrases = el.t === 'lit' ? [el.words] : el.t === 'alt' && el.alts ? el.alts : [];
+    let hit = null;
+    for (let i = cur; i < toks.length && !hit; i++) for (const ph of phrases) if (ph.length && i + ph.length <= toks.length && ph.every((w, q) => toks[i + q].w === w)) { hit = [toks[i].s, toks[i + ph.length - 1].e]; cur = i + ph.length; break; }
+    frameRanges.push(hit);
+  });
+  let inFrame = cand.extra === 0;
+  const used = [];
+  for (const k of slotEls) {
+    const tag = cand.r.tagOfSlot.get(els[k].name);
+    const sp = tag ? spans.get(tag) : null;
+    if (!sp) continue;
+    used.push([sp.s, sp.e]);
+    let lo = 0, hi = Infinity;
+    for (let q = k - 1; q >= 0; q--) if (frameRanges[q]) { lo = frameRanges[q][1]; break; }
+    for (let q = k + 1; q < els.length; q++) if (frameRanges[q]) { hi = frameRanges[q][0]; break; }
+    if (sp.s < lo - 1 || sp.e > hi + 1) inFrame = false;
+  }
+  const ranges = [...used, ...frameRanges.filter(Boolean)];
+  return { op: p, frame: cand.fr, inFrame, cover: coverOf(toks, ranges), words: toks.length, neg: NEGATION.test(text) };
+}
+/** Words of the segment that the rules' reading covers: all words minus the ones it ignored (partial window or best-effort guess). */
+export function rulesCover(seg) {
+  const toks = tokensPos(seg.text ?? '');
+  const ign = [...(seg.ignored ?? []), ...(seg.bestEffort?.ignored ?? [])].map((x) => (typeof x === 'string' ? x : x?.text ?? '')).join(' ');
+  const bad = new Set(tokensPos(ign).map((t) => t.w));
+  return toks.filter((t) => !bad.has(t.w)).length;
+}
+/** NX operation of a rules wire list (same labels as the pattern index). */
+export function opOfWires(wires) {
+  const main = (wires ?? []).find((w) => w.type !== 'core.agent');
+  if (!main) return null;
+  const g = (k) => main.entries.find((e) => e.key === k)?.value.v;
+  return main.type === 'core.request' ? `request:${g('core.request.action')}` : main.type === 'core.question' ? `question:${g('core.question.type')}:${g('core.question.seek')}` : main.type;
+}
+const gatePasses = (g, f) => !g || g.off || (f.op >= g.tauOp && f.frame >= g.tauFrame && (g.spans === false || f.inFrame) && !(g.noNeg && f.neg));
+
 const restrictedViews = new WeakMap();
 /** A view of the world set where only the patterns `recs` of one world exist (the other worlds keep lexicons and phrases, no patterns). */
 function viewFor(set, world, recs) {
@@ -211,7 +271,7 @@ export function createNxFormalizer({ model, mode = 'first', rules, stats = {}, t
   const accept = (acc, wires) => { try { acc.f.add(wires); } catch { /* the real engine will report it */ } };
 
   /** Read one segment text with the model; returns a rules-shaped segment (not unparsed) or null. `commit` runs on the real session. */
-  async function readSegment(piece, set, session, { source, context, ctx, router, acc }) {
+  async function readSegment(piece, set, session, { source, context, ctx, router, acc, gate = null, onlyOp = null, minCover = null }) {
     index ??= buildPatternIndex(set);
     const pass = await passOn(model, piece.text, ctx);
     const ranked = pass.opP.map((p, i) => [p, i]).sort((a, b) => b[0] - a[0]);
@@ -220,7 +280,7 @@ export function createNxFormalizer({ model, mode = 'first', rules, stats = {}, t
     let nOps = 0;
     for (const [p, oi] of ranked) {
       const op = model.ops[oi];
-      if (op === 'none') continue;
+      if (op === 'none' || (onlyOp && op !== onlyOp)) continue;
       const recs = index.get(op);
       if (!recs?.length) continue;
       if (++nOps > topOps) break;
@@ -264,6 +324,8 @@ export function createNxFormalizer({ model, mode = 'first', rules, stats = {}, t
             try { probe = await trial(session.clone()); } catch { probe = null; }
             if (!probe) { tried.push(`${cand.r.p.id}:no-read`); continue; }
             if (!dryRun(acc, probe.wires)) { tried.push(`${cand.r.p.id}:refused`); continue; }
+            const feat = gateFeatures(cand, piece.text, spans, p);
+            if (!gatePasses(gate, feat) || (minCover != null && feat.cover <= minCover)) { count('gate_rejected'); return { seg: null, why: 'gate', feat }; }
             let real;
             try { real = await trial(session); } catch { real = null; }
             if (!real) { tried.push(`${cand.r.p.id}:no-read2`); continue; }
@@ -272,7 +334,7 @@ export function createNxFormalizer({ model, mode = 'first', rules, stats = {}, t
             count(opOnly ? (text === piece.text ? 'read_op_only' : 'read_op_frame') : 'read_spans');
             if (!opOnly && cand.extra > 0) count('read_with_unused_spans');
             real.text = piece.text; real.span = [piece.start, piece.end];
-            real.nx = { op, world, pattern: cand.r.p.id, rank: nOps, p, spans: Object.fromEntries([...spans].map(([t, sp]) => [t, piece.text.slice(sp.s, sp.e)])), synthesized: text === piece.text ? null : text };
+            real.nx = { op, world, pattern: cand.r.p.id, rank: nOps, p, feat, spans: Object.fromEntries([...spans].map(([t, sp]) => [t, piece.text.slice(sp.s, sp.e)])), synthesized: text === piece.text ? null : text };
             done = { seg: real };
             break;
           }
@@ -346,6 +408,41 @@ export function wrapSessionHybrid(session, nx, stats = {}) {
       if (r.seg) { count('hybrid_model'); changed = true; out.push({ ...r.seg, strategy: 'encoder', nxFrom: 'model' }); } else { count('hybrid_rules_kept'); out.push(seg); }
     }
     return changed ? { ...res, segments: out, wires: out.flatMap((x) => x.wires ?? []) } : res;
+  };
+  return session;
+}
+
+/**
+ * NX7 gated D over the shipped pipeline (`encoder+n1`: dispatcher, validator, normalizer, rules retry and leniency run as shipped through the
+ * session's own `_formalize`). The model reads only a segment the shipped pipeline left not understood (`unparsed`); a partial, spell-corrected
+ * or best-effort answer is kept. With `replacePartial` a partial / ignored-words / best-effort answer is replaced by a model reading only when the
+ * model reads the same operation and covers strictly more of the segment's words. Every model reading must pass the gate (`gate`:
+ * { tauOp, tauFrame, spans } or { off: true } to record only) and the validator (legend check, interpreter dry run on a fork).
+ * Each row keeps `nxFeat` (the features of the first valid model reading) for the offline tau sweep.
+ */
+export function wrapSessionGated(session, nx, stats = {}, { gate, replacePartial = false } = {}) {
+  const orig = session._formalize.bind(session);
+  const count = (k) => { stats[k] = (stats[k] ?? 0) + 1; };
+  session._formalize = async function (english, sid, preferred, lenient) {
+    const res = await orig(english, sid, preferred, lenient);
+    const set = session.engine.set;
+    const ctxo = session.context();
+    const ctx = { tab: ctxo?.activeTab ?? null, recent_worlds: ctxo?.recentWorlds ?? [] };
+    const acc = { f: session.isession.clone() };
+    const out = [];
+    let changed = false;
+    for (const seg of res.segments) {
+      const weak = !seg.unparsed && (seg.partial || seg.ignored?.length || seg.bestEffort);
+      if (!seg.unparsed && !(replacePartial && weak)) { count('d_kept_complete'); nx.accept(acc, seg.wires ?? []); out.push(seg); continue; }
+      if (!seg.unparsed && weak && !seg.wires?.length) { out.push(seg); continue; }
+      const piece = { text: seg.text, start: seg.span[0], end: seg.span[1] };
+      const opts = { source: sid, context: ctxo, ctx, router: session.engine.router, acc, gate };
+      if (!seg.unparsed) { opts.onlyOp = opOfWires(seg.wires); opts.minCover = rulesCover(seg); }
+      const r = await nx.readSegment(piece, set, session.isession, opts);
+      if (r.seg) { count(seg.unparsed ? 'd_model_unparsed' : 'd_model_replaced_partial'); changed = true; out.push({ ...r.seg, strategy: 'encoder', nxFrom: 'model', nxReplaced: seg.unparsed ? 'unparsed' : 'partial' }); }
+      else { count(r.why === 'gate' ? 'd_gate_kept' : 'd_nomodel_kept'); out.push(r.feat ? { ...seg, nxRejected: r.feat } : seg); if (!seg.unparsed) nx.accept(acc, seg.wires ?? []); }
+    }
+    return changed || out.some((x) => x.nxRejected) ? { ...res, segments: out, wires: out.flatMap((x) => x.wires ?? []) } : res;
   };
   return session;
 }

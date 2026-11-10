@@ -61,6 +61,22 @@ function buildItems(sets, limit) {
   const items = [];
   const push = (it) => items.push(it);
   const want = (s) => sets.includes(s);
+  if (want('operational-ro')) for (const c of jl(MAIN + 'training/eval/operational-ro.jsonl')) push({ kind: 'op', set: 'operational-ro', c });
+  if (want('nxdev')) {
+    // NX7 tuning data: records of the dev split only (never operational, dialogues, gold, real): rules-fail / rules-differ, the fillers (nothing to read) and a sample of the rest
+    const recs = jl(MAIN + 'training/dataset/nx/free-rules.jsonl').filter((r) => r.split === 'dev' && r.lang === 'en' && r.text === r.message);
+    const real = (r) => r.status !== 'filler' && r.op !== 'none' && r.slots.every((s) => s.value != null);
+    const fail = recs.filter((r) => real(r) && ['rules-fail', 'rules-differ'].includes(r.label_source));
+    const filler = recs.filter((r) => r.status === 'filler' || r.op === 'none');
+    let rest = recs.filter((r) => real(r) && ['generator-backed', 'rule-derived', 'rules-agree', 'canonical-ok', 'rules-own'].includes(r.label_source));
+    let h = 777; const rnd = () => ((h = (h * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff);
+    rest = rest.map((r) => [rnd(), r]).sort((a, b) => a[0] - b[0]).slice(0, 1500).map((x) => x[1]);
+    for (const [name, list] of [['nxdev-fail', fail], ['nxdev-other', rest]]) for (const r of list) push({ kind: 'rec', set: name, id: r.id, world: r.world, tab: r.context?.tab ?? null, setup: r.context?.prev ?? [], text: r.text, gold: nxToPilot(r), split: 'dev' });
+    // NX3 (LLM-written, judged) dev records: phrasings the rules often do not read
+    const nx3 = readdirSync(MAIN + 'training/dataset/nx/final').filter((f) => f.endsWith('.jsonl')).flatMap((f) => jl(MAIN + 'training/dataset/nx/final/' + f)).filter((r) => r.split === 'dev' && r.lang === 'en' && real(r));
+    for (const r of nx3) push({ kind: 'rec', set: 'nxdev-nx3', id: r.id, world: r.world, tab: r.context?.tab ?? null, setup: r.context?.prev ?? [], text: r.text, gold: nxToPilot(r), split: 'dev' });
+    for (const r of filler) push({ kind: 'rec', set: 'nxdev-filler', id: r.id, world: r.world, tab: r.context?.tab ?? null, setup: r.context?.prev ?? [], text: r.text, gold: { op: 'none', slots: [] }, split: 'dev' });
+  }
   if (want('operational')) for (const [f, set] of [['operational.jsonl', 'operational'], ['operational-long.jsonl', 'operational-long']]) for (const c of jl(MAIN + 'training/eval/' + f)) push({ kind: 'op', set, c });
   if (want('dialogues')) for (const d of jl(MAIN + 'training/eval/dialogues.jsonl')) push({ kind: 'dlg', set: 'dialogues', d });
   if (want('gold')) for (const g of jl(join(REPO, 'training/nx/gold/pilot-300.jsonl'))) push({ kind: 'rec', set: `gold-${g.subset}`, id: g.id, world: g.world, tab: g.tab, setup: g.context ?? [], text: g.text, gold: { op: g.op, slots: g.slots.map((s) => ({ key: s.key, value: s.value })) } });
@@ -72,7 +88,7 @@ function buildItems(sets, limit) {
     let rest = recs.filter((r) => ok(r) && ['generator-backed', 'rule-derived', 'rules-agree', 'canonical-ok'].includes(r.label_source) && r.split === 'test');
     let h = 12345; const rnd = () => ((h = (h * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff);
     rest = rest.map((r) => [rnd(), r]).sort((a, b) => a[0] - b[0]).slice(0, 700).map((x) => x[1]);
-    for (const [name, list] of [['nxtest-rules-fail', fail], ['nxtest-gen-disagrees', dis], ['nxtest-sample', rest]]) for (const r of list) push({ kind: 'rec', set: name, id: r.id, world: r.world, tab: r.context?.tab ?? null, setup: r.context?.prev ?? [], text: r.text, gold: nxToPilot(r) });
+    for (const [name, list] of [['nxtest-rules-fail', fail], ['nxtest-gen-disagrees', dis], ['nxtest-sample', rest]]) for (const r of list) push({ kind: 'rec', set: name, id: r.id, world: r.world, tab: r.context?.tab ?? null, setup: r.context?.prev ?? [], text: r.text, gold: nxToPilot(r), split: r.split });
   }
   if (want('real')) {
     const worlds = new Set(readdirSync(join(REPO, 'worlds')));
@@ -110,14 +126,15 @@ async function runOp(env, c) {
   for (const m of c.setup ?? []) await s.send(m);
   const before = s.state();
   let reply, error = null;
-  try { reply = await s.send(c.message); } catch (e) { error = e.message; }
+  try { reply = await s.send(c.message, c.lang === 'ro' ? { language: 'auto' } : undefined); } catch (e) { error = e.message; }
   if (!reply) return { id: c.id, world: c.world, outcome: 'wrong', error };
   const after = s.state();
   const last = reply.answers.at(-1); void last;
   const unparsedAll = reply.segments.length === 0 || reply.segments.every((x) => x.unparsed);
-  const items = evaluateCase(c, { before, after, replyText: reply.text, effects: reply.effects, statuses: reply.statuses, unparsedAll, values: reply.answers.map((a) => a.value) });
+  const ro = c.lang === 'ro';
+  const items = evaluateCase(c, { before, after, replyText: ro ? (reply.trace?.replyEnglish ?? reply.text) : reply.text, effects: reply.effects, statuses: reply.statuses, unparsedAll, values: reply.answers.map((a) => a.value) });
   const outcome = classify(c, items, { statuses: reply.statuses, unparsedAll, stateChanged: strip(before) !== strip(after), effects: reply.effects.filter((e) => e.name !== 'chat.suggest') });
-  return { id: c.id, world: c.world, outcome, reply: reply.text.slice(0, 120), failing: items.filter((x) => !x.ok).map((x) => `${x.kind}:${x.spec}`).slice(0, 3) };
+  return { id: c.id, world: c.world, outcome, fromModel: reply.segments.some((x) => x.nxFrom === 'model'), reply: reply.text.slice(0, 120), failing: items.filter((x) => !x.ok).map((x) => `${x.kind}:${x.spec}`).slice(0, 3) };
 }
 
 async function runDialogue(env, d) {
@@ -133,7 +150,7 @@ async function runDialogue(env, d) {
     const after = s.state();
     const unparsedAll = reply.segments.length === 0 || reply.segments.every((x) => x.unparsed);
     const items = evaluateCase(c, { before, after, replyText: reply.text, effects: reply.effects, statuses: reply.statuses, unparsedAll, values: reply.answers.map((a) => a.value) });
-    turns.push({ i, outcome: classify(c, items, { statuses: reply.statuses, unparsedAll, stateChanged: strip(before) !== strip(after), effects: reply.effects.filter((e) => e.name !== 'chat.suggest') }) });
+    turns.push({ i, fromModel: reply.segments.some((x) => x.nxFrom === 'model'), outcome: classify(c, items, { statuses: reply.statuses, unparsedAll, stateChanged: strip(before) !== strip(after), effects: reply.effects.filter((e) => e.name !== 'chat.suggest') }) });
   }
   return { id: d.id, world: d.world, turns, right: turns.every((t) => t.outcome === 'right') };
 }
@@ -146,7 +163,8 @@ async function runRec(env, it) {
   let reply, error = null;
   try { reply = await s.send(it.text); } catch (e) { error = e.message; }
   const segs = parsedSegs(reply);
-  const base = { id: it.id, world: it.world, goldOp: it.gold.op };
+  const base = { id: it.id, world: it.world, goldOp: it.gold.op, split: it.split ?? null };
+  if (it.gold.op === 'none') return { ...base, outcome: segs.length ? 'wrong' : 'correct', gotOp: segs.length ? 'read' : null, feat: segs[0]?.nx?.feat ?? null, from: segs[0]?.nxFrom ?? null, repl: segs[0]?.nxReplaced ?? null };
   if (!segs.length) return { ...base, outcome: 'abstain', error };
   const seg = segs[0];
   const main = seg.wires.find((w) => w.type !== 'core.agent');
@@ -157,7 +175,7 @@ async function runRec(env, it) {
   const opOk = got.op === it.gold.op;
   const slotsOk = g.size === a.size && [...g].every((x) => a.has(x));
   const goldHit = [...g].filter((x) => a.has(x)).length;
-  return { ...base, outcome: opOk && slotsOk ? 'correct' : 'wrong', opOk, gotOp: got.op, worldOk: seg.match?.worldId === it.world, goldSlots: g.size, gotSlots: a.size, slotHit: goldHit, from: seg.nxFrom ?? null };
+  return { ...base, outcome: opOk && slotsOk ? 'correct' : 'wrong', opOk, gotOp: got.op, worldOk: seg.match?.worldId === it.world, feat: seg.nx?.feat ?? null, repl: seg.nxReplaced ?? null, goldSlots: g.size, gotSlots: a.size, slotHit: goldHit, from: seg.nxFrom ?? null };
 }
 
 async function runReal(env, it) {
@@ -219,7 +237,7 @@ const RUN = { op: (e, it) => runOp(e, it.c), dlg: (e, it) => runDialogue(e, it.d
 
 if (!isMainThread) {
   serveShard(async (wd) => {
-    const env = await buildSystem({ system: wd.system, ortPath: wd.ort });
+    const env = await buildSystem({ system: wd.system, ortPath: wd.ort, gate: wd.gate });
     return async (it) => {
       const t0 = performance.now();
       let r;
@@ -234,7 +252,7 @@ if (!isMainThread) {
   const items = buildItems(sets, arg('limit') ? Number(arg('limit')) : 0);
   const jobs = Math.max(1, Math.min(parseJobs(), items.length));
   const t0 = Date.now();
-  const rows = await runSharded({ file: SELF, items, jobs, workerData: { system, ort: arg('ort') }, chunk: 6 });
+  const rows = await runSharded({ file: SELF, items, jobs, workerData: { system, ort: arg('ort'), gate: arg('tau-op') ? { tauOp: Number(arg('tau-op')), tauFrame: Number(arg('tau-frame', 0)), spans: arg('spans', 'on') !== 'off', noNeg: arg('neg', 'off') === 'on' } : null }, chunk: 6 });
   const bySet = {};
   for (const r of rows) { const b = (bySet[r.set] ??= { n: 0 }); b.n++; b[r.outcome ?? (r.right ? 'right' : 'wrong')] = (b[r.outcome ?? (r.right ? 'right' : 'wrong')] ?? 0) + 1; }
   const dir = join(REPO, 'training/results/nx5');

@@ -981,3 +981,102 @@ Pipeline (every stage resumable, files in `training/dataset/nx/{seeds,gen,final}
 | cost | **estimated $26.6** of the $60 cap (generation $8.3, judge $18.3): sessions' total tokens at a blended $5 per million tokens, a conservative bound; no API key, so no real bill is visible |
 
 Shortfall against the targets: 29k of about 50k, and about 1,300 instead of 2,000 per world, because generation stopped at shard index 4 (214 shards are prepared, so `node scripts/nx-gen.mjs prepare` already holds shards 005-008 and the pipeline continues by running them: about $4 of generation and $13 of judging for 20k more). The diagram has 1,428 generated items; the converted diagram corpus (about 49.7k messages) belongs to NX1 and is not counted here. The judge verdict files were mostly written by the judge agents through small helper scripts holding their per-item decisions (default accept, exceptions listed by hand); the 1.3 % audit error rate and the 2.5 % reject rate are the measure of that.
+
+
+## NX7 (2026-11-10): confidence gate for D over encoder+n1, Romanian, recheck of the NX6 conditions
+Code: `scripts/lib/nx-formalizer.mjs` (`gateFeatures`, `rulesCover`, `opOfWires`, `wrapSessionGated`), `scripts/lib/nx-runtime.mjs` (systems `enc-n1`, `<model>-d`, `<model>-dcov`, and `-dng` / `-dcovng` = gate off, features recorded), `scripts/eval-nx.mjs` (sets `nxdev`, `operational-ro`; `--tau-op --tau-frame --neg`), `scripts/nx7-sweep.mjs` (offline tau sweep). Unit tests: `node --test tests/nx-formalizer.test.mjs` (6 pass). Nothing in `src/`, `worlds/` or `docs/webchat` was touched.
+
+### 1. The gate (D over `encoder+n1`, as shipped)
+D is built over the shipped webchat mode: the session's own `_formalize` runs (dispatcher, validator, normalizer, rules retry, spelling, partial understanding, best effort); only then is the model asked, for the segments that came out `unparsed`.
+- (c) the shipped pipeline gave **no reading at all** (`unparsed`). A partial, spelling-corrected or best-effort answer is kept.
+- (a) the probability of the model's operation is at least `tau_op`.
+- (b) every predicted span belongs to the candidate pattern and lies where the pattern puts its slot (between the pattern's frame words, in its order), and the share of the pattern's frame words found in the segment is at least `tau_frame`.
+- The gate is applied to the first reading that passes the legend check and the interpreter dry run (not to later candidates); a reading that fails the gate leaves the segment as the shipped pipeline had it.
+- Variant `-dcov`: a partial / ignored-words / best-effort answer is also replaced, only by a model reading of the **same operation** that covers **strictly more of the segment's words** (words inside the used spans plus the matched frame words, against the words the rules did not ignore), and passing the same gate.
+- Extra guard (my addition, reported separately, `--neg on`): no model reading when the segment contains a negation (`not`, `no`, `never`, `without`, `n't`). The model heads do not model negation and the dev fillers show it ("Don't remind me about brush my teeth.", "It is not 7 o'clock." read at p = 0.99 as a reminder / a time statement).
+
+### 2. Tuning, on dev only
+Data (all `split = dev`; never operational, dialogues, gold or real): `nxdev-fail` 28 (NX1 rules-fail / rules-differ), `nxdev-nx3` 1,019 (NX3 LLM-written records), `nxdev-other` 1,500 (random sample of the other NX1 dev records), `nxdev-filler` 286 (negatives, nothing to read). Shipped mode on these: fail 8 / 28 right, nx3 576 / 1019, other 1448 / 1500, fillers 159 / 286 left unread (127 already read by the shipped pipeline).
+Method: D was run once per model with the gate off (`-dng`) and the features of every model reading recorded; for a gate, an item takes the model run's outcome when its reading passes, else the shipped outcome. Gain = items not right under the shipped mode and right under D (fail + nx3 records); added wrong = items that were not wrong under the shipped mode and are wrong under D (a wrong reading instead of an abstention, a filler read, or a right answer broken).
+Ungated (tau 0): A3 recovers 128 records and adds 183 wrong (115 of them fillers, 6 broken right answers); A+3 recovers 140 and adds 195. The wrong readings are confident: the curves below are gain / added wrong (spans-in-frame required).
+
+A3 (variant none-only, spans-in-frame required): gain / added wrong, rows tau_op, columns tau_frame
+
+| tau_op \ tau_frame | 0 | 0.34 | 0.5 | 0.67 | 0.8 | 0.9 | 1 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 0 | 95 / 160 | 87 / 144 | 86 / 142 | 65 / 88 | 57 / 82 | 46 / 68 | 46 / 68 |
+| 0.5 | 88 / 117 | 82 / 112 | 81 / 111 | 62 / 80 | 54 / 75 | 44 / 65 | 44 / 65 |
+| 0.7 | 76 / 90 | 71 / 87 | 70 / 86 | 54 / 67 | 46 / 63 | 36 / 54 | 36 / 54 |
+| 0.8 | 69 / 69 | 64 / 66 | 63 / 65 | 50 / 51 | 43 / 47 | 34 / 40 | 34 / 40 |
+| 0.9 | 51 / 52 | 48 / 50 | 47 / 49 | 38 / 43 | 33 / 39 | 25 / 32 | 25 / 32 |
+| 0.95 | 43 / 39 | 40 / 38 | 39 / 38 | 31 / 34 | 27 / 31 | 21 / 24 | 21 / 24 |
+| 0.98 | 30 / 19 | 28 / 18 | 27 / 18 | 20 / 16 | 18 / 15 | 14 / 11 | 14 / 11 |
+| 0.99 | 20 / 11 | 19 / 11 | 19 / 11 | 14 / 11 | 12 / 10 | 10 / 7 | 10 / 7 |
+| 0.995 | 13 / 4 | 12 / 4 | 12 / 4 | 9 / 4 | 7 / 3 | 5 / 2 | 5 / 2 |
+| 0.999 | 4 / 0 | 3 / 0 | 3 / 0 | 3 / 0 | 3 / 0 | 1 / 0 | 1 / 0 |
+| 0.9995 | 3 / 0 | 2 / 0 | 2 / 0 | 2 / 0 | 2 / 0 | 0 / 0 | 0 / 0 |
+| 0.9999 | 2 / 0 | 1 / 0 | 1 / 0 | 1 / 0 | 1 / 0 | 0 / 0 | 0 / 0 |
+| 0.99995 | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 |
+
+A3 (variant none-only, spans-in-frame required, negation guard): gain / added wrong, rows tau_op, columns tau_frame
+
+| tau_op \ tau_frame | 0 | 0.34 | 0.5 | 0.67 | 0.8 | 0.9 | 1 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 0 | 91 / 84 | 84 / 72 | 83 / 70 | 63 / 27 | 55 / 21 | 46 / 8 | 46 / 8 |
+| 0.5 | 86 / 55 | 80 / 51 | 79 / 50 | 61 / 22 | 53 / 17 | 44 / 7 | 44 / 7 |
+| 0.7 | 74 / 39 | 69 / 36 | 68 / 35 | 53 / 18 | 45 / 14 | 36 / 5 | 36 / 5 |
+| 0.8 | 68 / 31 | 63 / 28 | 62 / 27 | 49 / 15 | 42 / 11 | 34 / 4 | 34 / 4 |
+| 0.9 | 50 / 23 | 47 / 21 | 46 / 20 | 37 / 14 | 32 / 10 | 25 / 3 | 25 / 3 |
+| 0.95 | 42 / 17 | 39 / 16 | 38 / 16 | 30 / 12 | 26 / 9 | 21 / 2 | 21 / 2 |
+| 0.98 | 29 / 9 | 27 / 8 | 26 / 8 | 19 / 6 | 17 / 5 | 14 / 1 | 14 / 1 |
+| 0.99 | 19 / 4 | 18 / 4 | 18 / 4 | 13 / 4 | 11 / 3 | 10 / 0 | 10 / 0 |
+| 0.995 | 12 / 2 | 11 / 2 | 11 / 2 | 8 / 2 | 6 / 1 | 5 / 0 | 5 / 0 |
+| 0.999 | 3 / 0 | 2 / 0 | 2 / 0 | 2 / 0 | 2 / 0 | 1 / 0 | 1 / 0 |
+| 0.9995 | 2 / 0 | 1 / 0 | 1 / 0 | 1 / 0 | 1 / 0 | 0 / 0 | 0 / 0 |
+| 0.9999 | 2 / 0 | 1 / 0 | 1 / 0 | 1 / 0 | 1 / 0 | 0 / 0 | 0 / 0 |
+| 0.99995 | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 | 0 / 0 |
+
+Aplus3 (variant none-only, spans-in-frame required): gain / added wrong, rows tau_op, columns tau_frame
+
+| tau_op \ tau_frame | 0 | 0.34 | 0.5 | 0.67 | 0.8 | 0.9 | 1 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 0 | 103 / 169 | 95 / 152 | 94 / 148 | 70 / 100 | 62 / 95 | 50 / 78 | 50 / 78 |
+| 0.5 | 100 / 126 | 92 / 123 | 91 / 122 | 68 / 91 | 60 / 86 | 48 / 74 | 48 / 74 |
+| 0.7 | 91 / 107 | 84 / 105 | 83 / 104 | 63 / 83 | 56 / 80 | 45 / 69 | 45 / 69 |
+| 0.8 | 85 / 101 | 79 / 99 | 78 / 98 | 60 / 80 | 53 / 77 | 42 / 66 | 42 / 66 |
+| 0.9 | 72 / 76 | 67 / 74 | 66 / 74 | 50 / 65 | 45 / 62 | 35 / 52 | 35 / 52 |
+| 0.95 | 58 / 57 | 54 / 56 | 53 / 56 | 42 / 49 | 38 / 46 | 30 / 38 | 30 / 38 |
+| 0.98 | 51 / 42 | 47 / 41 | 46 / 41 | 36 / 36 | 32 / 34 | 24 / 28 | 24 / 28 |
+| 0.99 | 42 / 30 | 40 / 29 | 39 / 29 | 29 / 26 | 25 / 24 | 19 / 19 | 19 / 19 |
+| 0.995 | 35 / 19 | 33 / 19 | 32 / 19 | 23 / 16 | 19 / 14 | 15 / 10 | 15 / 10 |
+| 0.999 | 17 / 4 | 15 / 4 | 14 / 4 | 12 / 3 | 10 / 3 | 6 / 2 | 6 / 2 |
+| 0.9995 | 11 / 0 | 10 / 0 | 10 / 0 | 10 / 0 | 8 / 0 | 5 / 0 | 5 / 0 |
+| 0.9999 | 5 / 0 | 4 / 0 | 4 / 0 | 4 / 0 | 4 / 0 | 1 / 0 | 1 / 0 |
+| 0.99995 | 3 / 0 | 2 / 0 | 2 / 0 | 2 / 0 | 2 / 0 | 0 / 0 | 0 / 0 |
+
+Aplus3 (variant none-only, spans-in-frame required, negation guard): gain / added wrong, rows tau_op, columns tau_frame
+
+| tau_op \ tau_frame | 0 | 0.34 | 0.5 | 0.67 | 0.8 | 0.9 | 1 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 0 | 99 / 83 | 92 / 67 | 91 / 63 | 68 / 30 | 60 / 25 | 50 / 8 | 50 / 8 |
+| 0.5 | 96 / 52 | 89 / 49 | 88 / 48 | 66 / 24 | 58 / 19 | 48 / 7 | 48 / 7 |
+| 0.7 | 89 / 41 | 83 / 39 | 82 / 38 | 62 / 21 | 55 / 18 | 45 / 7 | 45 / 7 |
+| 0.8 | 84 / 37 | 78 / 35 | 77 / 34 | 59 / 20 | 52 / 17 | 42 / 6 | 42 / 6 |
+| 0.9 | 71 / 27 | 66 / 25 | 65 / 25 | 49 / 17 | 44 / 14 | 35 / 4 | 35 / 4 |
+| 0.95 | 57 / 22 | 53 / 21 | 52 / 21 | 41 / 14 | 37 / 11 | 30 / 3 | 30 / 3 |
+| 0.98 | 50 / 15 | 46 / 14 | 45 / 14 | 35 / 9 | 31 / 7 | 24 / 1 | 24 / 1 |
+| 0.99 | 41 / 11 | 39 / 10 | 38 / 10 | 28 / 7 | 24 / 5 | 19 / 0 | 19 / 0 |
+| 0.995 | 34 / 9 | 32 / 9 | 31 / 9 | 22 / 6 | 18 / 4 | 15 / 0 | 15 / 0 |
+| 0.999 | 16 / 2 | 14 / 2 | 13 / 2 | 11 / 1 | 9 / 1 | 6 / 0 | 6 / 0 |
+| 0.9995 | 10 / 0 | 9 / 0 | 9 / 0 | 9 / 0 | 7 / 0 | 5 / 0 | 5 / 0 |
+| 0.9999 | 4 / 0 | 3 / 0 | 3 / 0 | 3 / 0 | 3 / 0 | 1 / 0 | 1 / 0 |
+| 0.99995 | 3 / 0 | 2 / 0 | 2 / 0 | 2 / 0 | 2 / 0 | 0 / 0 | 0 / 0 |
+
+Chosen points (0 added wrong on dev, most gain; `spans` on, as the task's gate (b) requires), from `training/results/nx7-sweep-{A3,Aplus3}.json`:
+| model | gate | tau_op | tau_frame | dev gain | dev added wrong | model readings used on dev |
+| --- | --- | --- | --- | --- | --- | --- |
+| A3 | as specified (a, b, c) | 0.999 | 0 | 4 | 0 | 4 |
+| A3 | + negation guard | 0.99 | 0.9 | 10 | 0 | 12 |
+| A+3 | as specified | 0.9995 | 0 | 11 | 0 | 12 |
+| A+3 | + negation guard | 0.99 | 0.9 | 19 | 0 | 22 |
+The `-dcov` variant picks the same points (the strictly-more-words replacement of a partial answer is rarely reachable on dev: 5 more model readings than none-only for A3, none of them gaining). Without the "spans inside the frame" condition the best A3 point is tau_op 0.999 with 6 gained; the frame score is not what separates right from wrong (tau_frame 0 is chosen unless the negation guard is on): the operation probability and the negation carry the gate. Dev is small (the shipped pipeline already reads most of it): the gain at the 0-added-wrong point is a few dozen records, so the full-set numbers below are what counts.
