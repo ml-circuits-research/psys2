@@ -205,6 +205,21 @@ The working hypothesis: on small worlds, **rules plus a small learned front-end*
 - **If the numbers are not clear:** do not integrate. Write which condition failed and by how much, and leave D available only in `eval-nx`.
 - A+, B and C are not integrated, whatever their numbers. They stay as results.
 
+**NX7 — confidence gate for D, then recheck NX6 (reviewer, 02:05 local, after 9809b87 / 71177f8).**
+
+NX5 is accepted. It is careful and honest: the per-item transitions and the selection-effect caveat are exactly what was needed. The NX6 check is right too: **conditions 2 and 3 fail on the wrong rate** (operational +0.6 points wrong, dialogues +1.0), so there is **no integration as things stand**. The next step tonight:
+1. **The gate.**
+   - D uses a model reading only when all of these hold:
+     - (a) the operation probability is ≥ τ_op;
+     - (b) every predicted span lies inside the candidate pattern's frame and the pattern's frame words fit the segment, with a score ≥ τ_frame;
+     - (c) the rules gave **no reading at all**, i.e. unparsed or not understood. **A partial or best-effort rules answer is kept**: that alone removes the 7 right→wrong/partly losses you found.
+   - Also report the variant where (c) allows a partial rules answer to be replaced only when the model covers strictly more of the segment's words, at the same operation.
+2. **Tune τ only on data that is not reported:** the NX1/NX3 dev splits and `nxtest` dev. Never on operational, dialogues, gold or real. Report the τ curve (gain on `gold-para` + `nxtest-rules-fail` vs added wrongs on the dev operational-like records) and pick the point with **0 added wrong on dev**.
+3. **D on top of the webchat mode.** Build D over `encoder+n1` (dispatcher + normalizer + rules, as shipped), not over the `rules` mode. Condition 2 is measured against encoder+n1, so this is the comparison that counts.
+4. **Romanian.** Run `operational-ro.jsonl` through the translator into D (the model sees English, like the rules).
+5. **Recheck the four NX6 conditions** with gated D on encoder+n1, with A3 (the drop-in), and report A+3 too. **If all four hold, do NX6** (integration as a parallel strategy, default only then). If not, write which condition fails and by how much, and stop NX there.
+6. More NX3 data aimed at the constants (arithmetic operator forms, `arg.list`, `arg.anim`, the ui.avatar part operations) is optional, only if time remains after 1–5.
+
 **Cleanup (user, 23:05).**
 - **On the DGX, in `training/runs/`, which is not in git:**
   - Keep:
@@ -1908,3 +1923,10 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
 - NX2 (5214a55), NX4-A (28c5077) and NX5-lite (45a5d03), files match the log: pilot table and selection rule applied (labeler Sonnet; judge Sonnet, none qualifies); A exported with outputs identical to v4 (+0.9 MB); A+ shows no accuracy forgetting but is not a drop-in; operation agreement with verified rules readings 85.4 / 88.5%. Follow-ups are in the NX reviewer notes.
 - RP5b (6377c61, files match the log): validated in real Chrome. The root cause (a tab click never told the engine the active tab) is fixed. The three leftovers are in RP5c.
 - NX4-B (ebea7bd): accepted. Seen worlds: span F1 .92, operation .88. Unseen worlds do not generalise (operation .40, span F1 .41), at ~40 passes per segment. The A seeds are stable (±0.1). The reviewer confirms the real exported A model costs the same as dispatcher v4 in the browser harness (50.2 vs 49.6 ms at 32 tokens, `results-nx-a.json`).
+- NX5 full evaluation + NX4-C + NX3 retrain (9809b87, 71177f8), files match the log: accepted.
+  - Model alone: 62–66% on operational (rules 95.6%).
+  - On paraphrases outside the patterns: 71–82% (rules 22%).
+  - D: neutral on operational (+2 of 1,450), but +0.6 points wrong; NX6 conditions 2 and 3 fail, so not integrated.
+  - C LoRA: diagram op .835→.956.
+  - Next step: NX7 (gate, D over encoder+n1, Romanian, recheck NX6).
+  - DGX cleanup still not done (the worktree symlinks `training/runs`; careful).
