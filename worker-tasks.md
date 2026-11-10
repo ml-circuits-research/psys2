@@ -50,7 +50,7 @@ The working hypothesis: on small worlds, **rules plus a small learned front-end*
   2. BUSY-LOST;
   3. DIAG3b;
   4. RP5b.
-- **Track 1 status (reviewer, 04:00 local):** no commit for the MOBILE-VOICE review fixes, FREEZE-6, BUSY-LOST, RP5c item 1 or GAPS-1 since 23:58, except RP5b and RP5c. Track 2 is done with NX, so **move its agents to Track 1 now**, in this order: MOBILE-VOICE review fixes, BUSY-LOST, FREEZE-6, GAPS-1 (items 1–2), RP5c item 1. If something blocks, write it to `questions.md` and go on to the next item.
+- **Track 1 status (reviewer, 08:35 local): all Track 1 items are validated, see the end of the file.** (My 04:00 note missed commits that were already on main; sorry.) *Old note:* no commit for the MOBILE-VOICE review fixes, FREEZE-6, BUSY-LOST, RP5c item 1 or GAPS-1 since 23:58, except RP5b and RP5c. Track 2 is done with NX, so **move its agents to Track 1 now**, in this order: MOBILE-VOICE review fixes, BUSY-LOST, FREEZE-6, GAPS-1 (items 1–2), RP5c item 1. If something blocks, write it to `questions.md` and go on to the next item.
 - **Track 2, GPU and LLM APIs, 2 agents at most:** NX below.
   - Labelling by API batches or by vLLM on the GPU loads neither the CPU nor the agent count.
   - Do not run test suites from Track 2 agents, except the NX unit tests.
@@ -1986,3 +1986,18 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
     - "can u suggest where i play" → ttt.hint.
   - Regression probes unchanged: the Romanian session (`rp5.mjs`) and the diagram session (`diag3x.mjs`) give the same answers as before, 0 errors.
   - Rollback is one setting (Settings › Understanding › Reading strategy).
+- **Track 1 validated (reviewer, 08:35 local, real Chrome):**
+  - MOBILE-VOICE review fixes (d1349b3, 80a87a2): `test-webchat-voice.mjs --only mobile,persist,twotabs,noise --throttle 6` gives **28/28**. Lock theft stops the old owner, noise falls back to cheap signals, the phone export is replayed in the browser.
+  - BUSY-LOST (bcd441a): `busy.mjs` shows the veil during the turn (TV), with `is-busy` on the tabs and panels.
+  - FREEZE-6 (17a58a9, e3a84b2, f82d80b): 7-minute soak, main-thread busy **48% average / 66% worst minute** (was 57 / 78), inside the task gate (< 50 / < 70). Heap flat, 0 restarts, echo 28 ms. The soak script's own worst-minute check (< 50%) still fails.
+  - RP5c item 1 (d1fdad2 / eebfa22): the reviewer's full Romanian sequence now gives "desenează trei cercuri" → "Am desenat c1, c2 și c3." on the Diagram tab.
+  - GAPS-1 (21a8f1a, ca0bef5): all six items answer correctly in Chrome:
+    - the tic-tac-toe hint is "How about the center?";
+    - rules, who goes first;
+    - "OK, today is Friday.";
+    - "No, I do not look happy.";
+    - the robot does not wear clothes;
+    - the shop change;
+    - circle vs other shapes.
+
+    The heads strategy still reads its cases ("Read by model": guess count, sea animals).
