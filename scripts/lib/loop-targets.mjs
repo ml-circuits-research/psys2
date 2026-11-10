@@ -16,7 +16,8 @@ function walk(dir, out = []) {
 }
 
 export function targets() {
-  const files = [...walk(path.join(ROOT, 'src')), ...walk(path.join(ROOT, 'docs/webchat/ui'))];
+  // src/vendor is vendored code (the sopworld library): its own scanner runs on it in tests/reasoner.test.mjs
+  const files = [...walk(path.join(ROOT, 'src')).filter((f) => !path.relative(path.join(ROOT, 'src'), f).split(path.sep).includes('vendor')), ...walk(path.join(ROOT, 'docs/webchat/ui'))];
   // every module of every world except generated test data (datagen), vendored code and the converted diagram engine (its loops get ticks from
   // scripts/convert-diagram-engine.mjs; the last test below checks they are there)
   for (const f of walk(path.join(ROOT, 'worlds'))) {

@@ -1,0 +1,17 @@
+# How PSys2 legends map onto the library's schema (worker-tasks G2, G8.1).
+# Tell this before the legends; the legends are then loaded unchanged.
+
+# A key declaration: the id is <type>.<key>; value= holds literal kinds and $type references.
+@psys2.map.key core.schema.map from=core.key
+    owner=id.prefix key=id.suffix
+    value=value many=card:many required=required ask=ask default=default
+    prefix=dynamic          # dynamic=true: any key <key>.<anything> (where.owner, arg.count)
+
+# A type declaration: the id is the type name; a type that names no parent extends core.thing.
+@psys2.map.type core.schema.map from=core.type as=type
+    name=id extends=extends closed=closed root=core.thing
+    complete=closed        # in PSys2 closed=true also means: the world knows every instance
+
+# A legend is a module: namespace= names it, imports= names what it needs.
+@psys2.map.legend core.schema.map from=core.legend as=module
+    name=namespace imports=imports

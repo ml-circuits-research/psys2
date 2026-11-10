@@ -43,5 +43,14 @@ export function createFsLoader({ roots = [DEFAULT_ROOT] } = {}) {
       if (!(await exists(file))) return null;
       return import(pathToFileURL(file).href);
     },
+    /** fns.mjs of a world (the actions of its matrix, spec 15), or null. */
+    async loadFns(id) {
+      await scan();
+      const dir = dirs.get(id);
+      if (!dir) return null;
+      const file = path.join(dir, 'fns.mjs');
+      if (!(await exists(file))) return null;
+      return import(pathToFileURL(file).href);
+    },
   };
 }

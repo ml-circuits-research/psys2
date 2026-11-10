@@ -1,0 +1,17 @@
+@op.kids.shop.revise core.operation
+    impl=matrix
+    semantics=action
+    action=shop.revise
+    doc="Matrix mode: the count of the user's last purchase is changed (a default is withdrawn); the money follows."
+
+@op.kids.shop.gotBack core.operation
+    impl=matrix
+    semantics=action
+    action=shop.gotBack
+    doc="Matrix mode: the user got some lei back for an item; what was paid is not known yet."
+
+@op.kids.shop.whatPaid core.operation
+    impl=matrix
+    semantics=action
+    action=shop.whatPaid
+    doc="Matrix mode: what the user paid for the item they got change for, found by abduction."

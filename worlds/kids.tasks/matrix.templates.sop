@@ -1,0 +1,5 @@
+@tpl.kids.tasks.m.add.ask core.template
+    for=action.tasks.add
+    status=missing
+    when="ask!=none"
+    text="{ask}"

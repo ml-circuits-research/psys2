@@ -28,7 +28,7 @@ export function validateWorldSet(set) {
     for (const k of w.kbRaw) if (!k.entries.some((e) => e.key === 'core.source')) out.push(`${w.id}: kb wire '${k.id}' has no core.source`);
     for (const p of w.patterns) for (const m of checkPattern(p, set)) out.push(`${w.id}: ${m}`);
     for (const o of w.operations) {
-      if (typeof w.ops[o.impl] !== 'function') out.push(`${w.id}: operation ${o.id}: ops.mjs has no function '${o.impl}'`);
+      if (o.impl !== 'matrix' && typeof w.ops[o.impl] !== 'function') out.push(`${w.id}: operation ${o.id}: ops.mjs has no function '${o.impl}'`);
       if (!['query', 'compute', 'action'].includes(o.semantics)) out.push(`${w.id}: operation ${o.id}: unknown semantics '${o.semantics}'`);
       for (const k of [...o.outputs, ...o.inputs]) if (!L.keyInfo(k)) out.push(`${w.id}: operation ${o.id}: unknown key '${k}'`);
     }

@@ -1,0 +1,26 @@
+@tpl.kids.shop.m.revise core.template
+    for=action.shop.revise
+    text="OK, that makes {value} {item:plural}."
+
+@tpl.kids.shop.m.revise.conflicting core.template
+    for=action.shop.revise
+    status=conflicting
+    text="That does not work: {why}."
+
+@tpl.kids.shop.m.revise.missing core.template
+    for=action.shop.revise
+    status=missing
+    text="I have no purchase to change yet."
+
+@tpl.kids.shop.m.gotback core.template
+    for=action.shop.gotBack
+    text="OK, you got {value} lei back for {item:a}."
+
+@tpl.kids.shop.m.whatpaid core.template
+    for=action.shop.whatPaid
+    text="You paid {value} lei."
+
+@tpl.kids.shop.m.whatpaid.missing core.template
+    for=action.shop.whatPaid
+    status=missing
+    text="I cannot tell yet what you paid. Tell me what you got back and for what."

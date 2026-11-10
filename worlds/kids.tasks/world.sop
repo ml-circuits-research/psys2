@@ -5,6 +5,8 @@
     imports=world.core
     imports=world.kids.common
     formalization=rules
+    reasoner=matrix
+    mirror=kids.tasks.entry
     language=en
     status=fixture
     title="To-do lists and reminders (primary school)"

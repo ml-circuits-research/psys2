@@ -327,6 +327,18 @@
     card=one
     ask="rules or encoder?"
 
+@core.world.mirror core.key
+    value=atom
+    card=many
+    ask="which wire types?"
+    doc="Wire types that the world's matrix actions write and other worlds read from the session memory (for example kids.tasks.entry for charts and documents). With reasoner=matrix the host layer copies them from the library's World into the session memory after every action."
+
+@core.world.reasoner core.key
+    value=atom
+    card=one
+    ask="ops or matrix?"
+    doc="ops (default): the world answers through operations.sop and ops.mjs. matrix: it also ships matrix.sop (and fns.mjs) and answers through the sopworld library when the engine runs with the matrix reasoner (spec 15)."
+
 @core.world.language core.key
     value=atom
     card=one

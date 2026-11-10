@@ -1,0 +1,6 @@
+@pat.kids.tasks.m.add.bare core.pattern
+    match="[$lang.lead.polite|pls|hey|just|so]? [$kids.tasks.g46_add] [to|on|onto|into|in] [my|the|our|a] list [$lang.tail.filler]?"
+    emit="@{_} core.request action=tasks.add arg.list=to-do"
+    kind=request
+    priority=12
+    example="Add to my list."

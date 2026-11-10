@@ -5,6 +5,8 @@
     imports=world.core
     imports=world.kids.common
     formalization=rules
+    reasoner=matrix
+    mirror=kids.shop.purchase
     language=en
     status=fixture
     title="Little shop: prices and pocket money (lei)"

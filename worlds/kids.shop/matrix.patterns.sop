@@ -1,0 +1,20 @@
+@pat.kids.shop.m.revise core.pattern
+    match="{n:number} of them"
+    emit="@{_} core.request action=shop.revise arg.count={n}"
+    kind=request
+    priority=12
+    example="Three of them."
+
+@pat.kids.shop.m.gotback core.pattern
+    match="i got {n:number} lei back for [a|an|the|one]? {i1:lex.kids.shop.items}"
+    emit="@{_} core.request action=shop.gotBack arg.item={i1} arg.back={n}"
+    kind=request
+    priority=14
+    example="I got 5 lei back for a book."
+
+@pat.kids.shop.m.whatpaid core.pattern
+    match="what did i pay"
+    emit="@{_} core.request action=shop.whatPaid"
+    kind=request
+    priority=14
+    example="What did I pay?"

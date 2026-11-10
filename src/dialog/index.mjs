@@ -14,6 +14,7 @@ import { loadWorlds } from '../worlds/index.mjs';
 import { validateWorldSet } from '../worlds/validate.mjs';
 import { defaultRouter, namedWorlds, namingTables } from '../formalizer/routing.mjs';
 import { createInterpreter } from '../interpreter/index.mjs';
+import { createReasoner } from '../reasoner/index.mjs';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs';
@@ -1182,7 +1183,7 @@ export class DialogSession {
         if (r.status === 'supported') { const wid = seg.match?.worldId; const t = set.get(wid)?.tab?.id ?? BUILTIN_TAB[wid]; if (wid === 'ui.shell') followTab = null; else if (t) followTab = t; }   // an explicit navigation later in the message wins over the tab of an earlier segment
         ops.push(...r.ops);
         disc.noteTurn(seg, rendered, this._msg);
-        if (r.status === 'supported') { const fr = disc.recordFrame(seg, this._msg); if (fr) { fr.reply = rendered; fr.value = r.envelope?.value ?? null; fr.opId = r.ops[0]?.op ?? null; } }
+        if (r.status === 'supported') { const fr = disc.recordFrame(seg, this._msg); if (fr) { fr.reply = rendered; fr.value = r.envelope?.value ?? null; fr.opId = r.ops[0]?.op ?? null; if (r.envelope?.via === 'core.matrix') fr.from = r.envelope.from ?? []; } }
         else if (r.status === 'missing' && r.envelope?.pending) disc.openFill(seg, r.envelope, rendered, this._msg);
         answerWires.push(r.answer);
         answers.push({
@@ -1238,6 +1239,7 @@ export class DialogSession {
     }
     if (icpt?.reply) { disc.icptTurn = { turn: this._msg, text: english, reply: icpt.reply, world: icpt.worldId }; disc.noteWorld(icpt.worldId, english, icpt.reply, this._msg); }
     if (!disc.pending) disc.openConfirm(englishReply, this._msg);
+    this.isession.rs?.commitTurn(this._msg, english);   // what the turn told the library: what "undo that" takes back (spec 15)
     disc.commitTurn({ turn: this._msg, text: english, before: stateBefore });
     disc.noteNavigation({ text: english, tabBefore: tabBefore, tabAfter: this.isession.state['ui.shell']?.activeTab, turn: this._msg });
     if (meta?.info?.kind !== 'repeat' && meta?.info?.kind !== 'explain') disc.lastAnswer = { text: englishReply, turn: this._msg };
@@ -1266,10 +1268,13 @@ export class DialogSession {
 
 /** Create the dialog engine: loads and checks all worlds. */
 export async function createEngine({ loader, translator = null, options = {}, formalizers = {} }) {
-  const set = await loadWorlds(loader);
-  const interp = createInterpreter(set, options);
+  // Reasoner switch (spec 15): 'ops' (default) or 'matrix' (the worlds that say reasoner=matrix answer through the sopworld library). The option wins over PSYS2_REASONER.
+  const mode = (options.reasoner ?? globalThis.process?.env?.PSYS2_REASONER) === 'matrix' ? 'matrix' : 'ops';
+  const set = await loadWorlds(loader, { reasoner: mode });
+  const reasoner = mode === 'matrix' ? await createReasoner(set) : null;
+  const interp = createInterpreter(set, { ...options, reasoner });
   const engine = {
-    set, interp, translator, loader, router: options.router ?? defaultRouter,
+    set, interp, translator, loader, reasonerMode: mode, reasoner, router: options.router ?? defaultRouter,
     /** Formalizer strategies by id (spec 06); `formalizers` overrides them (tests, an encoder endpoint). */
     formalizers: { rules: createRulesFormalizer(), encoder: createEncoderFormalizer({ endpoint: options.encoderEndpoint ?? null }), ...formalizers },
     /** Problems found at load time and by static validation (empty when everything is consistent). */

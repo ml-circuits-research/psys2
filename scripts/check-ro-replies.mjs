@@ -15,6 +15,8 @@ import { createTranslator } from '../src/translate/index.mjs';
 import { sessionOptions, settingsForMode } from '../src/dialog/runtime-config.mjs';
 import { checkReply } from './lib/ro-reply-quality.mjs';
 
+import { applyReasonerFlag } from './lib/reasoner-flag.mjs';
+applyReasonerFlag();   // --reasoner ops|matrix (spec 15)
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 && !process.argv[i + 1]?.startsWith('--') ? process.argv[i + 1] : d; };
 const flag = (k) => process.argv.includes(`--${k}`);

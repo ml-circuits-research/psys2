@@ -16,6 +16,9 @@ import { isMainThread } from 'node:worker_threads';
 import { parseJobs, runSharded, serveShard } from '../scripts/lib/shard.mjs';
 import { budget } from './dialog/budget.mjs';
 
+import { applyReasonerFlag } from '../scripts/lib/reasoner-flag.mjs';
+applyReasonerFlag();   // --reasoner ops|matrix (spec 15)
+
 /** Load ../translate/index.mjs when it exists; returns a translator or null. */
 async function loadTranslator() {
   try {
@@ -35,6 +38,8 @@ function parseArgs(argv) {
   for (let i = 0; i < argv.length; i++) {
     budget.tick('cli.parseArgs');
     if (argv[i] === '--root') roots.push(argv[++i]);
+    else if (argv[i] === '--reasoner') i++;   // read by applyReasonerFlag
+    else if (argv[i].startsWith('--reasoner=')) continue;
     else rest.push(argv[i]);
   }
   return { roots: roots.length ? [...roots, DEFAULT_ROOT] : [DEFAULT_ROOT], rest };
@@ -129,7 +134,7 @@ async function main() {
 }
 
 function usage() {
-  console.error('usage: node src/cli.mjs chat | test-world <id|all> | parse <file.sop> | formalize "<text>"  [--root <dir>]');
+  console.error('usage: node src/cli.mjs chat | test-world <id|all> | parse <file.sop> | formalize "<text>"  [--root <dir>] [--reasoner ops|matrix]');
   return 2;
 }
 

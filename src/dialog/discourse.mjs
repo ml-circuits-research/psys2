@@ -31,6 +31,7 @@ const NO_TOPIC = new Set(['ui.shell', 'ui.help', 'kids.common', 'core']);
 /** Tabs of worlds that do not declare one in their manifest (the built-in tabs of the demo page). */
 const BUILTIN_TAB = { 'ui.avatar': 'robot', 'docs.editor': 'editor', 'games.tictactoe': 'tictactoe', 'games.guess': 'guess', 'games.hangman': 'hangman' };
 /** First words of an utterance that is a real command or question, not a list item. */
+const UNDO = /^(?:undo|undo that|undo it|take that back|take it back|revert that|cancel that purchase)$/;
 const META_SKIP = new Set(['add', 'remove', 'delete', 'show', 'open', 'what', 'who', 'where', 'when', 'why', 'how', 'undo', 'redo', 'draw', 'play', 'tell', 'is', 'are', 'can', 'do', 'does', 'please', 'make', 'go', 'clear', 'cross', 'check']);
 /** A modifying command that points at one thing by a bare noun ("make the house red", "delete the tree"). */
 const AMBIGUOUS_VERB = /^(?:please\s+|can you\s+|could you\s+|will you\s+)?(?:make|paint|colou?r|move|delete|remove|erase|resize|turn|flip|rotate|copy|duplicate|select|change|shrink|grow|enlarge)\s+(the|that|this)\s+([a-z]+)\b/i;
@@ -517,6 +518,11 @@ export class Discourse {
     }
     // discussion commands (spec 13 section 8): only "new discussion", "my discussions" and a reference that names an existing discussion
     if (!this.list) { const ac = runDiscussionCommand(d, text, d._msg); if (ac) return ac; }
+    // matrix reasoner (spec 15): "undo that" takes back what the turn before told the library (a purchase, a statement); the money and the counts follow
+    if (UNDO.test(t) && d.isession.rs?.canUndo(d._msg)) {
+      const said = d.isession.rs.undo(d.isession);
+      if (said) return { reply: `OK, I took that back: "${String(said).replace(/[.!?\s]+$/, '')}".`, info: { kind: 'undo', of: said, via: 'core.matrix' } };
+    }
     // chat spellings of short words ("bk to the doc", "nxt") are read as the word for the recognizers; the sentence itself is passed on unchanged
     const spelled = String(text).replace(/[A-Za-z]+/g, (w) => SHORT_TYPOS[w.toLowerCase()] ?? w);
     const c = classify(spelled, { lang: this.lang, hasAction: !!this._repairable(), listMode: !!this.list });
@@ -641,8 +647,25 @@ export class Discourse {
     const imperative = !isQuestion && IMPERATIVE_START.test(asked);
     const what = imperative ? `You asked me to ${asked.replace(/^please\s+/i, '').replace(/^(\w)/, (c) => c.toLowerCase())}` : `You said "${asked}"`;
     const said = f.reply ? ` What I answered: ${f.reply}` : '';
-    const reply = `${what}, so ${a ? 'I did it' : 'I answered it'}.${said}`;
+    const reply = `${what}, so ${a ? 'I did it' : 'I answered it'}.${said}${this._because(f)}`;
     return { reply, info: { kind: 'explain', of: f.text, world: f.world, pattern: f.patternId, op: f.opId, changed: a?.worlds ?? [] } };
+  }
+
+  /** Matrix reasoner (spec 15): the statements an answer rests on, from the library's `explain` ("I worked it out from ..."); '' for any other answer. */
+  _because(f) {
+    const d = this.dialog, rs = d.isession.rs;
+    if (!rs || !f.from?.length) return '';
+    const leaves = rs.leaves(f.from, d.isession);
+    const said = [], seen = new Set();
+    for (const l of leaves) {
+      const sid = String(l.source ?? '').replace(/^"|"$/g, '').split('#')[0];
+      const text = d.sources.get(sid)?.english;
+      if (text && !seen.has(sid)) { seen.add(sid); said.push(`"${String(text).trim().replace(/[.!?\s]+$/, '')}"`); }
+    }
+    const list = said.length > 1 ? `${said.slice(0, -1).join(', ')} and ${said.at(-1)}` : said[0];
+    const kb = leaves.some((l) => l.kb);
+    if (!list && !kb) return '';
+    return ` I worked that out from ${list ? `what you told me: ${list}` : 'the price list'}${list && kb ? ' and from the price list' : ''}.`;
   }
 
   // ---- topic return --------------------------------------------------------------------------------------------------------------

@@ -45,12 +45,14 @@ export function createBudget(limits = {}) {
       if (s > (sites[site] ?? perSite)) throw (budget.exceeded = new BudgetExceeded(site, s, 'site', { bySite: { ...bySite }, stack: shortStack() }));
       if (budget.ticks > perTurn) throw (budget.exceeded = new BudgetExceeded(site, budget.ticks, 'turn', { bySite: { ...bySite }, stack: shortStack() }));
     },
+    /** Ticks left before `tick(site)` would throw: the smaller of the turn's and the site's remainder (a host layer with its own step limit passes it on). */
+    remaining(site) { return Math.max(0, Math.min(perTurn - budget.ticks, (sites[site] ?? perSite) - (bySite[site] ?? 0))); },
   };
   return budget;
 }
 
 /** No-op budget: counts nothing, never throws. The default wherever a budget is optional. */
-export const UNLIMITED = Object.freeze({ ticks: 0, bySite: Object.freeze({}), exceeded: null, tick() {} });
+export const UNLIMITED = Object.freeze({ ticks: 0, bySite: Object.freeze({}), exceeded: null, tick() {}, remaining: () => Infinity });
 
 /**
  * The budget of the turn in progress. Loop sites call `budget.tick(site, n)` on this shared handle (like `guard` for deadlines), so deep code
@@ -62,6 +64,8 @@ let token = null;
 
 export const budget = {
   tick(site, n = 1) { current.tick(site, n); },
+  /** Ticks left at `site` in this turn (Infinity outside a turn or for a budget without limits). */
+  remaining(site) { return current.remaining ? current.remaining(site) : Infinity; },
   get ticks() { return current.ticks; },
   get bySite() { return current.bySite; },
   get exceeded() { return current.exceeded; },

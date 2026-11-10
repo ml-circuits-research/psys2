@@ -35,6 +35,8 @@ import { parseJobs, runSharded, serveShard } from './lib/shard.mjs';
 import { groupOf, GROUP_ORDER } from './lib/world-groups.mjs';
 import { evaluateCase, classify } from './lib/operational-check.mjs';
 
+import { applyReasonerFlag } from './lib/reasoner-flag.mjs';
+applyReasonerFlag();   // --reasoner ops|matrix (spec 15)
 const SELF = fileURLToPath(import.meta.url);
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 && !process.argv[i + 1]?.startsWith('--') ? process.argv[i + 1] : d; };
