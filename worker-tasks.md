@@ -188,6 +188,23 @@ The working hypothesis: on small worlds, **rules plus a small learned front-end*
 - **Browser:** run `training/experiments/browser-limits` with the real exported A model (and B with its pass count) at 1× and 4×; report the size.
 - Write everything to `training/RESULTS.md` (section NX) and `training/results/nx-*.json`, with the commands. End with a short recommendation. **No webchat change.**
 
+**NX6 — integration as a strategy parallel to the rules (user decision, 01:27 local): do it only if the NX5 numbers are clear.** This replaces "no webchat integration" for model A only, under these conditions.
+- **"Clear" means all four of these, measured with `scripts/eval-nx.mjs` and the operational runner, with the commands logged:**
+  1. on the sets where the rules fail (operational cases not `right`, the `rules-fail` / `rules-differ` heldout paraphrases, real phrases 09c, d and e and the mobile export), hybrid D gets **at least 3 points more right** than the rules alone;
+  2. on the 1296 operational set and the long set, D has **no more than +0.2 points wrong** than the current webchat mode (encoder+n1);
+  3. Romanian (`operational-ro.jsonl`) and `dialogues.jsonl` do not get worse (right −0.5 points at most, wrong +0.2 at most);
+  4. the browser cost is unchanged: one pass shared with the dispatcher, +≤ 1 MB, the same ready time in `scripts/perf-webchat.mjs`.
+- **How to integrate:**
+  - Ship the exported A file (v4 outputs identical, plus `op_logits` and `tag_logits`) in place of the dispatcher file, with `nx-meta.json`.
+  - Add a formalizer strategy `heads` (`src/formalizer/`, the same interface as the rules strategy, spec 06): spans → deterministic canonicalisation → wires → the same validator.
+  - Run it in parallel with the rules on every piece, at no extra pass.
+  - **Selection:** a complete valid rules reading wins. The heads reading is used only when the rules have no complete reading and it validates (D). `broken = 0` must hold by construction (spec 03, lexicographic preference). The trace shows which strategy produced the wires.
+  - Settings › Developer › Formalizer: `rules`, `encoder` (today), `encoder + heads` (D). Make D the default **only if** the four conditions hold.
+  - Tests: unit tests for the selection; a browser test with D on (the 09c/d/e rows, a Romanian session, a diagram session); `test:browser`; the operational eval in D mode.
+  - Update spec 03, spec 06 and `training/RESULTS.md`. The reviewer validates in Chrome before the user sees it.
+- **If the numbers are not clear:** do not integrate. Write which condition failed and by how much, and leave D available only in `eval-nx`.
+- A+, B and C are not integrated, whatever their numbers. They stay as results.
+
 **Cleanup (user, 23:05).**
 - **On the DGX, in `training/runs/`, which is not in git:**
   - Keep:
