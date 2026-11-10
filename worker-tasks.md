@@ -610,6 +610,59 @@ With the mic always on, room talk reached the chat and got "I did not understand
 - Optional, in Settings › Voice: "Only respond when I say 'PSys2' / 'robotule'".
 - Tests: the room-talk lines above → ignored; every real command in the session → executed.
 
+### COMPUTE-BUDGET — loops and freezes made impossible by construction (user decision, 13:44 local) — P0, before anything else
+
+**What the user decided.** Infinite loops must be prevented on principle, not one bug at a time. Every place where a loop or a repeated computation can happen gets a compute budget, and a computation that ran out of budget is not repeated. The user's tab still freezes on every command with **Reading strategy = Rules only**, so it is not the model. The reviewer cannot reproduce it headless.
+
+The reviewer's measurements (headless Chrome, 4× throttle, rules only) show the turns are far too heavy anyway, even when they finish:
+- "fă o casă verde și una galbenă": 6.3 s of main thread;
+- "I have two kids": 4.2 s;
+- "my favourite color is green": 3.9 s;
+- "desenează un soare": 1.6 s.
+
+1. **The engine moves off the main thread.**
+   - `DialogSession`, the formalizers, translation, the interpreter and the world operations run in a dedicated module worker, like ORT. The main thread keeps only the UI, speech, rendering of effects and storage.
+   - **A turn watchdog** on the main thread: if the worker has not answered within the turn limit (Settings › Developer, default 8 s), the main thread **terminates the worker** and starts a new one from the last committed state snapshot (the state before the turn). It answers "That took too long, I stopped it", and logs the stage and the input.
+   - This is the only way to stop synchronous JS. It makes any remaining infinite loop harmless: the page never freezes, and Stop always works.
+2. **A deterministic step budget** (ticks, not time), passed with every turn: `budget.tick(site, n = 1)`, throwing `BudgetExceeded { site, ticks }`.
+   - **Where:**
+     - matcher backtracking;
+     - segmentation and expansion enumeration;
+     - spelling candidates and corrections;
+     - fixpoint loops (normalize, discourse, self-correction);
+     - interpreter rule evaluation and inference chaining;
+     - planning and tool chains;
+     - world operations with searches (placement / free space, layout, arrow routing, untangle, chess search outside Stockfish, map lookups);
+     - translator frames;
+     - dry runs;
+     - the dispatcher's segmentation beam;
+     - the normalizer decoding loop.
+   - **Per-site and per-turn limits** live in one config, with generous defaults measured as 10× the p99 of the operational set.
+   - **Caught at the turn level:** the turn answers with what is complete, or with "That was too complex for me — try a shorter sentence". The site goes to the trace, the phrase log and the debug view.
+3. **No repetition.** An input (normalized text + tab + stage) that exceeded the budget, timed out, or crashed the worker is remembered for the session. It is **not** run again by retries, dry runs, the voice end-of-turn check, the normalizer fallback, a worker restart or the next identical message: the stored outcome is reused.
+   - Every retry path has a fixed maximum per turn (count the `_formalize` calls per turn, and assert it).
+   - There are no automatic re-sends.
+4. **Static enforcement.** A test (`tests/loop-guard.test.mjs`) scans `src/`, `worlds/*/ops.mjs`, `docs/webchat/ui/` and `docs/webchat/lib/`:
+   - every `while`, `do`, `for (;;)`, a `for` with a non-literal bound over a growing collection, and every self-recursive function must call `budget.tick` or carry a `// bounded: <reason>` comment;
+   - a new unguarded loop fails the suite.
+   - List the current violations first and fix them all.
+5. **Evidence from real browsers.**
+   - A `PerformanceObserver('longtask')` in the page records every main-thread task > 200 ms, with the current turn stage, into the phrase log.
+   - The worker records its ticks per site per turn.
+   - Both are in the phrase-log export, so the user's next export shows exactly where the time went.
+6. **Fault-injection tests (browser):**
+   - a test-only hook injects an infinite loop in a world operation, in the matcher and in the translator;
+   - for each: the UI stays responsive (echo < 100 ms), the turn ends by the watchdog or the budget, the next message works, and the same input is not run again;
+   - also with voice (hands-free) on.
+7. **Per-turn cost.** After the move, the main thread spends < 300 ms per turn at 4×, and the worker's turn p95 stays as today or better. Profile the 4 heavy turns above and fix the top causes. The repeated whole-state cloning / hashing per turn is a suspect.
+8. **Wrong answers seen in the same run** (rules only), to add as dialogues:
+   - "I like chess, music and maps" opened two tabs;
+   - "I have two kids" drew 2 blue people;
+   - "make your eyes blue" on the Drawing tab coloured the eyes of 3 suns;
+   - "I am 45 years old" is not remembered as the age.
+
+Done when items 1–6 pass in the browser, the reviewer's probes (`/home/claude/shot/prof.mjs`, `house.mjs`, `gaps.mjs`, `rp5.mjs`) pass with main thread < 300 ms per turn, and a fresh export from the user's browser shows no long task > 200 ms on ordinary commands.
+
 ### URGENT-FREEZE — the user's real Chrome on GitHub Pages freezes on every command, typed or spoken (user, 11:54 local) — P0
 
 The user, on https://ml-circuits-research.github.io/psys2/webchat/ (build 2026-11-10T07:32Z, the same as main): any voice command, and the typed "fă o casă verde și una galbenă", spins the fan and blocks the tab. Clearing the phrase log did not help.
