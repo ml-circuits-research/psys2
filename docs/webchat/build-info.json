@@ -71,7 +71,7 @@
     "lib/formalizer/routing.mjs": "1f25cd5e249c5666",
     "lib/formalizer/rules/emit.mjs": "2064473c6009603c",
     "lib/formalizer/rules/expand.mjs": "2cc7d6d796f1d3cb",
-    "lib/formalizer/rules/index.mjs": "126e89d8e71bb45c",
+    "lib/formalizer/rules/index.mjs": "8e4466da7d516d94",
     "lib/formalizer/rules/lemma.mjs": "459e515e4394aead",
     "lib/formalizer/rules/matcher.mjs": "8f5ab41454a04dd2",
     "lib/formalizer/rules/normalize.mjs": "d3a2a5dd0cd253e7",
@@ -157,7 +157,7 @@
     "worlds/kids.arith/ops.mjs": "431144018b7048bb",
     "worlds/kids.common/coverage.md": "ad87fcdd9165fea7",
     "worlds/kids.common/datagen.mjs": "d9dbe0460eb43452",
-    "worlds/kids.common/ops.mjs": "427d97e591267b33",
+    "worlds/kids.common/ops.mjs": "623e7e7b3f4d6d53",
     "worlds/kids.shapes/coverage.md": "a9e2752edf77f1a6",
     "worlds/kids.shapes/datagen.mjs": "6d59eb7efaf11354",
     "worlds/kids.shapes/ops.mjs": "680e38c07f4be6ef",
@@ -188,8 +188,8 @@
     "worlds/user.profile/coverage.md": "c59730c7d8060f2c",
     "worlds/user.profile/cv.mjs": "a1aa32d0f33cffe1",
     "worlds/user.profile/datagen.mjs": "b5072a56e9ba2dd9",
-    "worlds/user.profile/ops.mjs": "8385add167932b48",
+    "worlds/user.profile/ops.mjs": "867d76a4a6578efd",
     "worlds/user.profile/understand.mjs": "5782a91a5bd8e949"
   },
-  "builtAt": "2026-11-10T07:21:17.697Z"
+  "builtAt": "2026-11-10T07:32:28.920Z"
 }

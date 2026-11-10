@@ -193,8 +193,9 @@ function pauseReply(s, plan) { s.resumeKey = s.pending?.kind === 'ask' ? s.pendi
 const ex0Deny = (n) => NO.test(n) || isSkip(n);
 /** A short answer made of capitalised words that is not a common word (a company, a product, a name): "Axiologic", "Starship Navigation". */
 function properName(raw) {
+  if (/\?\s*$/.test(String(raw ?? ''))) return false;   // GAPS-1b: a question is not a name
   const w = String(raw ?? '').trim().replace(/[.!]+$/, '').split(/\s+/);
-  return w.length >= 1 && w.length <= 4 && w.every((x) => /^[\p{Lu}][\p{L}0-9&'.-]*$/u.test(x)) && !/^(?:I|Yes|No|Ok|Okay|Sure|Hello|Hi|Hey|Nothing|None|Skip|Stop|Next)$/i.test(w[0]);
+  return w.length >= 1 && w.length <= 4 && w.every((x) => /^[\p{Lu}][\p{L}0-9&'.-]*$/u.test(x)) && !/^(?:I|Yes|No|Ok|Okay|Sure|Hello|Hi|Hey|Nothing|None|Skip|Stop|Next|Which|Who|Whom|Whose|What|Where|When|Why|How|Do|Does|Did|Can|Could|Would|Should|Is|Are)$/i.test(w[0]);
 }
 
 function interceptTurn(ctx, text) {

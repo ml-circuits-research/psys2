@@ -233,6 +233,35 @@ export function makeEnv(text, set, form, lex) {
   return { text, lex, resolveAgent, lastAgent: () => form.resolvePronoun('they'), recentItem: (lexId, agentId) => form.recentItem(lexId, agentId) };
 }
 
+/**
+ * GAPS-1b: policy for a complete pattern read that covers only a small share of a long input. A free-text slot (`words`, `rest`)
+ * swallows what it does not understand: "I want a ball and a pencil and pay with 20 lei. What is the change" is a drawing request
+ * whose `{w:rest}` took the payment and the question. From `minWords` tokens on, a match whose fixed part (everything outside the
+ * free-text slots) is below `minCoverage` of the tokens loses to a match of ANOTHER world whose fixed part covers at least `betterCoverage` (a competitor that is itself mostly free text, as in "Move the balloon to the bottom left corner", never overrules the context); with
+ * `dropWhenAlone` it is dropped even when nothing else reads the input (default off: long legitimate drawing requests have a
+ * long `with a red roof and ...` tail).
+ */
+export const PATTERN_COVERAGE_POLICY = { minWords: 8, minCoverage: 0.35, betterCoverage: 0.6, dropWhenAlone: false };
+
+const fixedCoverage = (m, total) => {
+  if (!total) return 1;
+  let free = 0;
+  for (const sl of Object.values(m.slots)) if ((sl.class === 'words' || sl.class === 'rest') && sl.tokens) free += sl.tokens[1] - sl.tokens[0];
+  return Math.max(0, 1 - free / total);
+};
+
+/** Drop the low-coverage matches of a long input (see PATTERN_COVERAGE_POLICY); returns the kept matches. */
+export function applyCoveragePolicy(matches, total, policy = PATTERN_COVERAGE_POLICY) {
+  if (!policy || total < policy.minWords || !matches.length) return matches;
+  const cov = new Map(matches.map((m) => [m, fixedCoverage(m, total)]));
+  const low = matches.filter((m) => cov.get(m) < policy.minCoverage);
+  if (!low.length) return matches;
+  const good = matches.filter((m) => cov.get(m) >= (policy.betterCoverage ?? policy.minCoverage));
+  if (!good.length) return policy.dropWhenAlone ? [] : matches;
+  // the low readings lose only to a better-covering reading of another world
+  return matches.filter((m) => !low.includes(m) || good.every((g) => g.pattern.worldId === m.pattern.worldId));
+}
+
 /** Ranked full matches of every pattern against `tokens` (commas removed), ordered by the routing policy. */
 function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
   // Views of the tokens, tried in order until one of them is matched by some pattern (spec 03 section 1.5):
@@ -266,6 +295,8 @@ function rankMatches(tokens, isQuestion, set, env, lex, context, router) {
       if (m) matches.push({ pattern: p, order, ...m });
     }
   }
+  const kept = applyCoveragePolicy(matches, toks.filter((t) => !t.filler).length);
+  if (kept.length !== matches.length) matches.splice(0, matches.length, ...kept);
   const worlds = routeScores(toks, set, lex, new Set(matches.map((m) => m.pattern.worldId)));
   const score = (id) => worlds.find((w) => w.id === id)?.score ?? 0;
   for (const m of matches) { m.score = score(m.pattern.worldId); m.rank = m.pattern.priority; }

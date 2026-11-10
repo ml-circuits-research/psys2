@@ -699,3 +699,13 @@
     input="I want 2 pencils and I give the cashier 10 lei. How much change do I get?"
     expect="Your change from 10 lei"
     doc="GAPS-1"
+
+@t.kids.shop.gaps1b1 core.test
+    input="I would like a ball and a pencil and pay with 20 lei. what's the change"
+    expect="Your change from 20 lei"
+    doc="GAPS-1b: a complete drawing read that swallows the rest of a long sentence loses to the shop reading"
+
+@t.kids.shop.gaps1b2 core.test
+    input="I would like a ball and a pencil and pay with 20 lei what is the change"
+    expect="Your change from 20 lei"
+    doc="GAPS-1b: no punctuation"
