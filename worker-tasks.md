@@ -587,6 +587,14 @@ RP5b is validated: `/home/claude/shot/rp5.mjs` and `rp5b.mjs` in real Chrome, Ro
 - a click on the Diagram tab, then "desenează trei cercuri" → diagram c1..c3.
 
 Left:
+**Update 02:15 (after 7f6f716):** items 2 and 3 are validated. **Item 1 still reproduces in the reviewer's session, but not on a fresh page.** It needs the earlier Drawing turns as context (recent world art.draw). Exact repro, Romanian, default settings, one session, in this order:
+- deschide tabul avatar, fii bucuros, fii nervos, încearcă gura următoare, fii un carton, fiind copil, Fă o gură mare, fa ochi visatori;
+- deschide tabul x și zero, pornește x și zero, joc a unu;
+- deschide tabul desen, desenează un sare, desenează o maimuță, desenează liniuță, desenează un pește mic și albastru, mută peștele în apă, mută peștele, șterge peștii, Șterge toate cercurile roșii;
+- **deschide tabul diagramă** → "Bine, iată fila Diagramă.";
+- **desenează trei cercuri** → [Drawing] "Frumos! Am desenat 3 cercuri roșii."
+
+The script is `/home/claude/shot/rp5.mjs` (`openChat`, `settings: { language: 'ro' }`). The likely cause: with art.draw as the recent world, the dispatcher's reading wins over tier T, or `activeTab` is not updated when the tab changes through the open-tab operation after many turns. Add this whole sequence as a browser row.
 1. **A tab opened by a command does not count as the active tab for tier T.** In the same session: "deschide tabul diagramă" → "Bine, iată fila Diagramă." (the Diagram tab is shown), then "desenează trei cercuri" → art.draw "Am desenat 3 cercuri roșii" and the tab **switches to Drawing**. With a click instead of the command it works. The `ui.shell` open-tab operation must set `activeTab` exactly like `userTab`. Add this order to `scripts/test-webchat-ro-rp5.mjs` (open by command, then draw).
 2. "deschide tabul desen" while already on Drawing → "OK, aici este desenul tablă." It should be "Ești deja pe fila Desen." (the same phrase family as Avatar; the "already here" reply of art.draw is missing from the phrase table).
 3. Minor: "Nu pot găsi cerc roșu în tabloul tău." for "toate cercurile roșii" should use the plural ("Nu găsesc cercuri roșii în desen."). And "Fă o gură mare" could take the widest smile instead of refusing (you noted it).
@@ -1930,3 +1938,5 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
   - C LoRA: diagram op .835→.956.
   - Next step: NX7 (gate, D over encoder+n1, Romanian, recheck NX6).
   - DGX cleanup still not done (the worktree symlinks `training/runs`; careful).
+- RP5c (7f6f716): items 2 and 3 validated; item 1 still open (repro with context, see RP5c).
+- NX3 (6c4a253), files match the log: 29,111 records, audit error 1.3%, judge accepted 97.5% of disagreements, ~$26.6 estimated (under the $60 cap). Accepted; short of the 50k target.
