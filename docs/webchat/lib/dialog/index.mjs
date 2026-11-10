@@ -136,7 +136,7 @@ const textOf = (r) => (typeof r === 'string' ? r : r?.text);
 const QUESTION_WORD = /^(?:what|who|whom|whose|where|when|why|how|which)\b/i;
 
 /** Time budget of the leniency stage (spelling variants and partial windows) of one message, in ms; past it the best reading so far stands (turn guard, spec 06). */
-import { LIMITS } from './time-limits.mjs?v=6cd5b372e1';
+import { LIMITS } from './time-limits.mjs?v=0212bba139';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };

@@ -146,6 +146,51 @@ export const SCENARIOS = {
       check('stop: the chat works afterwards', r.ok && /hello/i.test(r.reply), r.reply.slice(0, 40));
     } finally { await c.close(); }
   },
+  /** Restart handling (COMPUTE-BUDGET E): the first message right after a kill waits for the new worker ("restarting…"), then gets a full turn clock; a worker that never starts is a distinct visible error. */
+  async restart(o) {
+    let c = await open(o);
+    try {
+      await arm(c);
+      await c.say('make a house');
+      const s0 = await stats(c);
+      await probes(c);
+      await typeEnter(c, FAULTS.stop);
+      await c.pg.waitForFunction(() => window.psys2.busy && document.querySelector('button.p2-send.is-stop'), { timeout: 5000 });
+      await sleep(300);
+      await c.pg.click('button.p2-send');
+      // the message right behind Stop, while the replacement worker is still starting
+      await c.pg.type('input.p2-text', 'hello right away', { delay: 0 });
+      await c.pg.keyboard.press('Enter');
+      let sawRestarting = false;
+      for (let i = 0; i < 400 && !sawRestarting; i++) { sawRestarting = await c.pg.evaluate(() => /restarting/.test(document.querySelector('.p2-thinking-label')?.innerText ?? '')); if (!sawRestarting) await sleep(15); }
+      await c.pg.waitForFunction(() => /hello right away/.test([...document.querySelectorAll('.p2-msg.is-user')].at(-1)?.innerText ?? '') && !window.psys2.busy && !document.querySelector('.p2-msg.is-typing'), { timeout: 45000, polling: 30 });
+      const reply = await lastBot(c);
+      const s1 = await stats(c);
+      check('restart: the message sent while the worker restarts is answered (not "took too long")', /hello/i.test(reply) && !/took too long/.test(reply), reply.slice(0, 50));
+      check('restart: the page showed "restarting…" meanwhile (or the worker was already warm)', sawRestarting || s1.starts === s0.starts + 1, `seen ${sawRestarting}`);
+      check('restart: exactly one replacement worker', s1.starts === s0.starts + 1 && s1.kills.length === s0.kills.length + 1, `starts ${s1.starts - s0.starts}`);
+    } finally { await c.close(); }
+    c = await openChat({ ...o, query: '?psys2test=1', settings: { formalizer: 'rules', normalizer: false, showTrace: false, language: 'en', timeLimits: { watchdogMs: WATCHDOG_MS, startMs: 10000 } } });
+    try {
+      await arm(c);
+      await c.say('hello');
+      await c.pg.evaluate(() => { window.__psys2StartHang = true; });
+      await typeEnter(c, FAULTS.op);
+      await c.pg.waitForFunction(() => window.psys2.engineClient.stats.kills.length > 0, { timeout: 15000, polling: 30 });
+      await waitIdle(c, 20000);
+      const s0 = await stats(c);
+      await c.pg.type('input.p2-text', 'hello there', { delay: 0 });
+      await c.pg.keyboard.press('Enter');
+      await c.pg.waitForFunction(() => document.querySelector('.p2-msg[data-engine-down]'), { timeout: 25000, polling: 50 });
+      await waitIdle(c, 5000);
+      const s1 = await stats(c);
+      const msg = await c.pg.$eval('.p2-msg[data-engine-down]', (e) => e.innerText);
+      check('restart: a worker that never starts gives a distinct visible error', /could not restart.*reload/i.test(msg) && !/took too long/.test(msg), msg.slice(0, 80));
+      check('restart: no chain of kills or starts (one start timeout)', s1.startTimeouts === 1 && s1.starts === s0.starts, JSON.stringify({ starts: s1.starts - s0.starts, to: s1.startTimeouts }));
+      const rec = await c.lastPhrase();
+      check('restart: the phrase log records the engine error', !!rec?.detail?.engineDown || !!rec?.engineDown, JSON.stringify(rec?.detail ?? null).slice(0, 100));
+    } finally { await c.close(); }
+  },
   async voice(o) {
     const c = await open(o, { voice: true });
     try {

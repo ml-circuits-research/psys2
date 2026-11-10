@@ -52,13 +52,13 @@
     "lib/dialog/discourse.mjs": "4f294ab6db4d50a6",
     "lib/dialog/dispatch-validate.mjs": "aa52e709e8535150",
     "lib/dialog/encoder-dispatch.mjs": "7efc533127095b9f",
-    "lib/dialog/index.mjs": "e6dec468979431c2",
+    "lib/dialog/index.mjs": "cc814b231d9f356e",
     "lib/dialog/meta.mjs": "3f42a3f2e5d70d71",
     "lib/dialog/normalizer-runtime.mjs": "7a67a6f72636ba9e",
     "lib/dialog/runtime-config.mjs": "da29543bf8ba1c36",
     "lib/dialog/surprise.mjs": "bd76e5f4d59d803e",
     "lib/dialog/test-runner.mjs": "3338d6d08f4f428f",
-    "lib/dialog/time-limits.mjs": "08cd77efb6cfee18",
+    "lib/dialog/time-limits.mjs": "b15ac0ef11c2093c",
     "lib/dialog/value-check.mjs": "c863ef1603a62250",
     "lib/formalizer/best-effort.mjs": "0ef4fac6442757c5",
     "lib/formalizer/dispatcher-runtime.mjs": "0b8a953cffc05bb7",
@@ -193,5 +193,5 @@
     "worlds/user.profile/ops.mjs": "5707f3d7c6d55e2b",
     "worlds/user.profile/understand.mjs": "fbe4a2844efa0744"
   },
-  "builtAt": "2026-11-10T14:52:31.776Z"
+  "builtAt": "2026-11-10T15:14:25.621Z"
 }

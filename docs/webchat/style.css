@@ -156,7 +156,7 @@
 
 /* robot */
 .p2-robot-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-.p2-robot { width: min(100%, 440px); max-height: 68vh; height: auto; animation: p2-float 5s ease-in-out infinite; }
+.p2-robot { width: min(100%, 440px); max-height: 68vh; height: auto; animation: p2-float 5s ease-in-out infinite; will-change: transform; contain: layout paint; }   /* contain: the float animation repaints only the robot, not the page (COMPUTE-BUDGET E: ~50 ms per second of idle main-thread time at 4x) */
 .p2-robot .stroke { stroke: rgba(0, 0, 0, .55); stroke-width: 3; }
 .p2-robot .eye { transform-box: fill-box; transform-origin: center; transition: transform .07s; }
 .p2-robot.blink .eye { transform: scaleY(.08); }
@@ -316,3 +316,6 @@
 .sop-id { color: #b04a8a; font-weight: 600; } .sop-type { color: #1c6ea4; } .sop-key { color: #8a5a00; } .sop-str { color: #2a7f4f; } .sop-num { color: #a0522d; } .sop-note { color: var(--muted); }
 :root[data-theme="dark"] .sop-id, .p2-dark .sop-id { color: #e58fc4; }
 @media (prefers-color-scheme: dark) { .sop-id { color: #e58fc4; } .sop-type { color: #6fb7ee; } .sop-key { color: #e0b457; } .sop-str { color: #7fd1a0; } .sop-num { color: #e0997a; } .p2-j-string { color: #7fd1a0; } .p2-j-number { color: #6fb7ee; } }
+
+/* COMPUTE-BUDGET E: the avatar's idle animations (inner SVG nodes, repainted on the main thread) rest while a turn runs and shortly after it */
+.p2.p2-rest .p2-avatar-layer svg * { animation: none !important; }

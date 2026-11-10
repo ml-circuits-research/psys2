@@ -150,9 +150,25 @@ function make(holder, host) {
     }
     for (const [id, s] of shown) if (!ids.has(id) && !s.dying) s.dying = now;
   }
+  // The backing store follows the displayed size (x device pixel ratio, at most 2000 px wide): a 2000x1400 canvas redrawn and committed every animation frame
+  // cost ~20 ms of main-thread time per frame on a phone. A hidden tab paints nothing; it paints again when it is shown (the resize observer fires).
+  let shownW = 0;   // displayed width, from the resize observer (no layout read per frame)
+  function fit() {
+    const w = shownW;
+    if (!w) return false;
+    const pw = Math.min(W * 2, Math.max(320, Math.round(w * Math.min(2, globalThis.devicePixelRatio || 1)))), ph = Math.round((pw * H) / W);
+    if (canvas.width === pw && canvas.height === ph) return true;
+    canvas.width = pw; canvas.height = ph;
+    return true;
+  }
+  const visible = () => canvas.isConnected && shownW > 0;
+  if (typeof ResizeObserver === 'function') new ResizeObserver((es) => { shownW = Math.round(es.at(-1)?.contentRect?.width ?? 0); if (!destroyed && visible()) { fit(); schedule(); } }).observe(canvas);
+  else shownW = 400;
   function frame(t) {
     raf = 0;
     if (destroyed || !renderer) return;
+    if (!visible()) { last = 0; return; }   // hidden tab: no painting; the resize observer schedules a frame when it is shown
+    fit();
     const dt = Math.min(0.05, (t - (last || t)) / 1000 || 0.016); last = t;
     const k = 1 - Math.exp(-dt * 11);
     let busy = false;

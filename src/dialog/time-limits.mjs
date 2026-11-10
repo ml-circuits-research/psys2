@@ -4,6 +4,7 @@
  */
 export const TIME_LIMIT_SPECS = Object.freeze({
   watchdogMs:   { def: 8000, min: 2000, max: 60000, label: 'Turn watchdog', note: 'hard limit from Enter to the answer' },
+  startMs:      { def: 60000, min: 10000, max: 300000, label: 'Engine start limit', note: 'how long a (re)started engine worker may take to become ready; the turn clock starts when it is ready' },
   dispatcherMs: { def: 2500, min: 500, max: 30000, label: 'Dispatcher call deadline', note: 'one model call of the dispatcher' },
   normalizerMs: { def: 3000, min: 500, max: 30000, label: 'Normalizer call deadline', note: 'one model call of the phrasing normalizer' },
   graceMs:      { def: 1500, min: 100, max: 10000, label: 'Worker cancel grace', note: 'how long a cancelled model call may keep running before its worker is restarted' },

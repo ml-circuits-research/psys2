@@ -17,7 +17,7 @@ const MAX_RESTARTS_PER_TURN = 1;  // a turn is never re-sent by the client; the 
 export const badKeyOf = (text, tab) => `${String(text ?? '').toLowerCase().replace(/\s+/g, ' ').trim()}|${tab ?? ''}`;
 
 export function createEngineClient({ base, versions = {}, getSettings, getTab = () => null, onEvent = () => {}, browserCall = null, spawn = null, testHooks = false, limits = { watchdogMs: 8000 }, log = () => {} }) {
-  const stats = { starts: 0, kills: [], crashes: 0, sends: 0, dryRuns: 0, refused: 0, restartsThisTurn: 0 };
+  const stats = { starts: 0, kills: [], crashes: 0, sends: 0, dryRuns: 0, refused: 0, restartsThisTurn: 0, startTimeouts: 0 };
   const bad = new Map();            // badKeyOf -> { reason, stage, at, text, tab, site }
   const cache = { state: {}, meta: null };
   let worker = null, gen = 0, seq = 0, undoSeq = 0, stage = null, bootFailures = 0, down = null;
@@ -81,7 +81,8 @@ export function createEngineClient({ base, versions = {}, getSettings, getTab = 
   function post(msg, transfer) { worker?.postMessage(msg, transfer ?? []); }
   function rawCall(op, payload = {}, extra = {}) {
     const id = ++seq;
-    return { id, promise: new Promise((resolve, reject) => { pending.set(id, { resolve, reject, op, id, ...extra }); try { post({ op, id, ...payload }); } catch (e) { pending.delete(id); reject(e); } }) };
+    const { skipPost, ...rest } = extra;
+    return { id, promise: new Promise((resolve, reject) => { pending.set(id, { resolve, reject, op, id, ...rest }); try { if (!skipPost) post({ op, id, ...payload }); } catch (e) { pending.delete(id); reject(e); } }) };
   }
 
   /** Starts a worker (the first one, or the replacement of a killed one) and resolves when it has loaded the worlds. */
@@ -97,9 +98,20 @@ export function createEngineClient({ base, versions = {}, getSettings, getTab = 
     const init = lastBoot ? { ...lastBoot } : null;
     const payload = { ...(init ?? {}), settings: getSettings(), restoreState: restore?.state ?? null, restoreMeta: restore?.meta ?? null, prepareModels: !!restore && !!lastBoot?.modelsWanted?.() };
     delete payload.modelsWanted;
-    const { promise } = rawCall('init', { ...payload, versions, testHooks });
-    return promise.then((info) => { booting = false; bootFailures = 0; bootInfo = info; cache.state = info.state ?? cache.state; return info; },
-      (e) => { booting = false; bootFailures++; if (bootFailures >= MAX_BOOT_FAILURES) down = Object.assign(new Error(`the engine could not start (${e?.message ?? e})`), { name: 'EngineDown' }); throw e; });
+    const hang = testHooks && !!restore && globalThis.__psys2StartHang === true;   // tests only: the replacement worker never becomes ready (start-limit test)
+    const { promise } = rawCall('init', { ...payload, versions, testHooks }, { skipPost: hang });
+    // start limit: a worker that is not ready in time is a distinct error (the engine stays down until the page is reloaded), never a chain of kills
+    const startMs = limits.startMs ?? 60000;
+    const startTimer = setTimeout(() => {
+      if (g !== gen || !booting) return;
+      stats.startTimeouts++;
+      down = Object.assign(new Error(`the engine could not restart in ${Math.round(startMs / 1000)} s`), { name: 'EngineDown', reason: 'start-timeout' });
+      log('engine-start-timeout', down.message);
+      try { onEvent('engine-down', { reason: 'start-timeout', message: down.message, startMs }); } catch { /* ignore */ }
+      killWorker('start-timeout');   // rejects the init request: booting is cleared below
+    }, startMs);
+    return promise.then((info) => { clearTimeout(startTimer); booting = false; bootFailures = 0; bootInfo = info; cache.state = info.state ?? cache.state; return info; },
+      (e) => { clearTimeout(startTimer); booting = false; bootFailures++; if (!down && bootFailures >= MAX_BOOT_FAILURES) down = Object.assign(new Error(`the engine could not start (${e?.message ?? e})`), { name: 'EngineDown' }); throw down ?? e; });
   }
   /** The worker crashed or died by itself: whatever ran is remembered as bad; the next request finds a new worker. */
   function crashed(reason, message) {
@@ -123,6 +135,22 @@ export function createEngineClient({ base, versions = {}, getSettings, getTab = 
     return readyP;
   }
   const ready = async () => { if (!readyP) throw new Error('engine not started'); await readyP; };
+  /** True while a request would have to wait: a replacement worker is starting, an abandoned request is still being ended, or no worker runs. */
+  const restarting = () => !down && (booting || zombies.size > 0 || !!restorePending || !worker);
+  /**
+   * Resolves when a worker is ready and nothing abandoned is left to end, so the turn clock can start (COMPUTE-BUDGET E). Rejects with EngineDown when the
+   * start limit passed (or the engine is down for good); a missing worker is started here. Bounded: the start limit applies to every start.
+   */
+  async function settled() {
+    for (let i = 0; i < 400 && restarting(); i++) {
+      if (!worker && !booting && !down) respawn();
+      if (booting && readyP) { try { await readyP; } catch { /* checked below */ } continue; }
+      await new Promise((r) => setTimeout(r, 25));
+    }
+    if (down) throw down;
+    if (!readyP) throw new Error('engine not started');
+    await readyP;
+  }
 
   async function boot(init) {
     lastBoot = { ...init };
@@ -259,6 +287,9 @@ export function createEngineClient({ base, versions = {}, getSettings, getTab = 
     session, boot, ready, stats,
     get info() { return bootInfo; },
     get booting() { return booting; },
+    get restarting() { return restarting(); },
+    settled,
+    get down() { return down; },
     get stage() { return stage; },
     get usage() { return lastUsage.usage; }, get detection() { return lastUsage.detection; },
     resetUsage() { lastUsage = { usage: [], detection: [] }; },

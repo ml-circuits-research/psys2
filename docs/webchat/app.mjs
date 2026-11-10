@@ -448,29 +448,46 @@ export async function mountPsys2(element, options = {}) {
    * button, AbortSignal through the whole pipeline) or the watchdog answer (hard limit from Enter). Stop and the watchdog put the session back to
    * the snapshot taken before the message, so the message leaves no trace in the worlds.
    */
+  /** The avatar's idle SVG animations (DiceBear styles animate inner SVG nodes: main-thread repaint every frame, ~60 ms/s at 4x CPU) rest while a turn runs and 3 s after it. */
+  let restTimer = 0;
+  function restAvatar(on) { clearTimeout(restTimer); if (on) root.classList.add('p2-rest'); else restTimer = setTimeout(() => root.classList.remove('p2-rest'), 3000); }
   async function process(text, mode = 'typed', user = null, recId = null, tPress = performance.now()) {
     user ??= addMessage('user', text);
     const ctl = new AbortController();
     const tn = turn = { ctl, t0: tPress, text, reason: null, undo: null, mode, recId, killsBefore: engineClient?.stats.kills.length ?? 0 };
     busy++; setStatus();
+    restAvatar(true);
     const thinkingLabel = h('span', { class: 'p2-thinking-label' }, 'thinking… 0.0 s');
     const typing = addMessage('bot', h('span', { class: 'p2-thinking' }, h('span', { class: 'p2-dots', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')), thinkingLabel), { className: 'is-typing' });
     typing.msg.removeAttribute('aria-live');
     translator.resetUsage();
     hostStage('thinking', recId);
-    if (engineClient?.booting) { try { await engineClient.ready(); } catch { /* the turn then reports the engine error */ } tPress = performance.now(); tn.t0 = tPress; }   // a replacement engine worker is still starting: the turn limit counts from when it is ready
+    let ticker = 0, watchdog = 0, backstopTimer = null, tStart = tPress;
     const limit = options.watchdogMs ?? LIMITS.watchdogMs;   // live: Settings › Developer › Time limits
-    const tStart = tPress;
-    const ticker = setInterval(() => { thinkingLabel.textContent = `thinking… ${((performance.now() - tStart) / 1000).toFixed(1)} s`; }, 100);
-    const watchdog = setTimeout(() => { tn.reason ??= 'timeout'; ctl.abort(new DOMException('turn time limit', 'TimeoutError')); }, Math.max(0, limit - (performance.now() - tPress)));
-    let backstopTimer = null;
-    const backstop = new Promise((_, rej) => { backstopTimer = setTimeout(() => rej(new TurnAborted('timeout', 'host')), Math.max(0, limit + TURN_LIMITS.backstopMs - (performance.now() - tPress))); });
-    backstop.catch(() => {});
     let reply = null;
     try {
+    if (engineClient?.restarting || engineClient?.down) {   // a replacement engine worker is starting: show "restarting…", this message waits (later ones queue behind the turn); the turn clock starts when the worker is ready
+      thinkingLabel.textContent = 'restarting…';
+      hostStage('restarting', recId);
+      const stopped = new Promise((_, rej) => ctl.signal.addEventListener('abort', () => rej(new TurnAborted(tn.reason ?? 'stopped', 'restart')), { once: true }));
+      stopped.catch(() => {});
+      try { await Promise.race([engineClient.settled(), stopped]); } catch (e) { if (e instanceof TurnAborted) throw e; throw Object.assign(new Error(e?.message ?? 'the engine is down'), { name: 'EngineDown', reason: e?.reason ?? 'down' }); }
+      hostStage('thinking', recId);
+      tPress = performance.now(); tn.t0 = tPress; tStart = tPress;
+    }
+    ticker = setInterval(() => { thinkingLabel.textContent = `thinking… ${((performance.now() - tStart) / 1000).toFixed(1)} s`; }, 100);
+    watchdog = setTimeout(() => { tn.reason ??= 'timeout'; ctl.abort(new DOMException('turn time limit', 'TimeoutError')); }, Math.max(0, limit - (performance.now() - tPress)));
+    const backstop = new Promise((_, rej) => { backstopTimer = setTimeout(() => rej(new TurnAborted('timeout', 'host')), Math.max(0, limit + TURN_LIMITS.backstopMs - (performance.now() - tPress))); });
+    backstop.catch(() => {});
       reply = await Promise.race([runTurn(tn, text, mode, user, recId, typing, ticker, tStart, limit), backstop]);
     } catch (e) {
-      if (e instanceof TurnAborted || ctl.signal.aborted) endAborted(tn, e, { text, mode, recId, typing, ticker, tStart });
+      if (e?.name === 'EngineDown') {   // the engine could not (re)start: a distinct, visible error (not "too long"), logged
+        typing.msg.remove();
+        recordPhrase(text, mode, null, recId, { engineDown: { reason: e.reason ?? 'down', message: e.message, at: new Date().toISOString(), starts: engineClient?.stats.starts ?? null, startTimeouts: engineClient?.stats.startTimeouts ?? null } });
+        console.warn('engine down', e.message);
+        addMessage('bot', 'The engine could not restart. Please reload the page.', { className: 'is-error' }).msg.dataset.engineDown = e.reason ?? 'down';
+        if (dbg) { try { dbg.record({ text, mode, tab: view, outcome: 'engineDown', stage: 'restart', ms: Math.round(performance.now() - tPress), recId, endType: voiceEnd(recId) }); } catch { /* ignore */ } }
+      } else if (e instanceof TurnAborted || ctl.signal.aborted) endAborted(tn, e, { text, mode, recId, typing, ticker, tStart });
       else if (e?.name === 'BudgetExceeded') {
         typing.msg.remove();
         recordPhrase(text, mode, null, recId);
@@ -486,7 +503,7 @@ export async function mountPsys2(element, options = {}) {
     } finally {
       clearTimeout(watchdog); clearTimeout(backstopTimer); clearInterval(ticker);
       if (typing.msg.isConnected) typing.msg.remove();
-      if (turn === tn) { turn = null; lastTurnEnd = performance.now(); hostStage('idle'); }
+      if (turn === tn) { turn = null; lastTurnEnd = performance.now(); hostStage('idle'); restAvatar(false); }
       effectsPending = 0;
       busy = Math.max(0, busy - 1); setStatus(); scrollDown();
       queueMicrotask(() => { if (!turn && !destroyed) drainQueue(); });   // the next waiting message runs now
