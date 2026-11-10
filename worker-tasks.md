@@ -610,6 +610,15 @@ With the mic always on, room talk reached the chat and got "I did not understand
 - Optional, in Settings › Voice: "Only respond when I say 'PSys2' / 'robotule'".
 - Tests: the room-talk lines above → ignored; every real command in the session → executed.
 
+### DO NOT WAIT FOR A TAG (user, 21:14; reviewer's mistake)
+
+The library will not make git tags: its session cannot push them, and the user sees no point in them. **Start SOPWORLD-1b now.**
+- Vendor the library from its `main` **at a commit hash** (today: `e387c51` or newer): copy `docs/sopworld.mjs`, and record in `src/vendor/LICENSES.md` the commit, the version and build hash from the library's `docs/version.md`, and the sha256.
+- Re-vendor whenever you need a newer feature; no release ceremony.
+- Wherever this file says "0.5.0 tag" or "0.6.0", read "the current main of the library".
+- That `main` already has everything SOPWORLD-1b needs: tiers and `assumptions()`, `describe` / `diff`, `check` / `applyPatch`, relations, declarative actions, soft constraints (`soft=true`, `core.issue`), `revise`, `told()`, `undo` / `mark` / `rewind`, abduction through `query`, the derived answer wire in query results, violations with bindings, separate function registries, ambiguous ties, calc failure reasons, precision, fluent `delta`, and the one-language syntax (`?` only a variable; the old `?id` declarations still load with a warning: convert our three matrices with its `tools/migrate-syntax.mjs`).
+- Its documentation is in `docs/language.md`, `reference.md`, `semantics.md`, `glossary.md`.
+
 ### SOPWORLD-1 review and SOPWORLD-1b (reviewer, 19:10) — after LANG-FIXED lands
 
 **SOPWORLD-1 (4af5167 … f249989) is accepted.** It is a careful, honest report: "no line is saved yet" and "matrix mode gains only where stage 1 built the feature" are exactly the kind of statement we need.
