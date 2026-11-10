@@ -244,6 +244,17 @@ The user approved integration on these terms (01:27), so do NX6 now with exactly
 
 Track 1 keeps priority on its own agents. NX6 is Track 2's last task tonight; after it, if time remains, do step 6 of NX7 (data for the constants) and the DGX cleanup.
 
+**NX8 — 20k more data and a retrain (the user told you directly, 10:32 local). Reviewer acceptance rules:**
+1. **Data.**
+   - Same NX3 pipeline: generate and label per shard, deterministic gate, rules agreement, judge on disagreements, 3% audit.
+   - Weak worlds and the constants first: ui.avatar, docs.editor, kids.arith operator forms, `arg.list`, `arg.anim`, art.draw.
+   - Log the items per hour, the $ (estimated) and the audit error. Keep the audit error ≤ 2%.
+   - Protected texts are dropped, as before.
+2. **Retrain** A (the drop-in, frozen v4 encoder) on NX1 + NX3 + NX8. Report the test op / slot F1 next to A3. The dispatcher outputs must stay identical to v4 (check int8 parity).
+3. **Re-tune the gate on dev only.** Rerun the NX7 full sets with the new model in `hybrid`. The four NX6 conditions must hold, and the new model must be **at least as good as the published A3** on the rules-fail sets, with **0 added wrong** on operational, long, dialogues and Romanian.
+4. **Publish only then** (a deliberate model publication). If it is not better, keep A3 and write the numbers.
+5. **Tell the reviewer in `worker-log.md`** (commit list, numbers, the published sha). The reviewer validates in Chrome before the user is told: `heads2.mjs`, `gaps.mjs`, `rp5.mjs`, `diag3x.mjs`, perf.
+
 **Cleanup (user, 23:05).**
 - **On the DGX, in `training/runs/`, which is not in git:**
   - Keep:
