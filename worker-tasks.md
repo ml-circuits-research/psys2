@@ -598,6 +598,18 @@ With the mic always on, room talk reached the chat and got "I did not understand
 - Optional, in Settings › Voice: "Only respond when I say 'PSys2' / 'robotule'".
 - Tests: the room-talk lines above → ignored; every real command in the session → executed.
 
+### GAPS-1 — wrong answers seen in the reviewer's run of the 65 gold paraphrases (03:30 local, default hybrid)
+
+Probe: `/home/claude/shot/heads.mjs`, real Chrome. Each phrase was sent on its own tab, clicked first. The model read 3 phrases correctly (see the Validated note). These are rules answers that are **confidently wrong**, worse than "not understood":
+1. Tic-tac-toe tab: "best move for me?" → "How about pawn to e4? I drew an arrow on the board." (a **chess** hint on the tic-tac-toe tab). Tic-tac-toe questions on its tab must stay in games.tictactoe; the hint must answer for the active game.
+2. Avatar tab: "I should tell you, today is Friday" → "Done! I added tell you and today is friday to your to-do list."
+3. Avatar tab: "would you say you are happy" → "I took that as: "happy say" I don't know what sound a happy makes."
+4. Avatar tab: "whats on u" → "I am playing "Happy Birthday to You" on the piano…" (the gold reading is what the avatar wears).
+5. Avatar tab: "I want a puzzle and I pay 10 lei. What is the change?" → "I did not understand "I want a puzzle"" (kids.shop change).
+6. Not understood although close to a known pattern: "what are tic tac toe's rules", "which one of us goes first", "can u suggest where i play" (on a fresh game), "how is a circle different from other shapes".
+
+Fix 1 and 2 first: they act wrongly. For 2–4, prefer "not understood" or a question back over a wrong action when the reading ignores most of the sentence. Add these as dialogue cases.
+
 ### RP5c — small leftovers after 6377c61 (reviewer probe, 01:10 local)
 
 RP5b is validated: `/home/claude/shot/rp5.mjs` and `rp5b.mjs` in real Chrome, Romanian session, default settings, 0 errors. All of these now give a Romanian reply:
@@ -1964,3 +1976,12 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
 - RP5c (7f6f716): items 2 and 3 validated; item 1 still open (repro with context, see RP5c).
 - NX3 (6c4a253), files match the log: 29,111 records, audit error 1.3%, judge accepted 97.5% of disagreements, ~$26.6 estimated (under the $60 cap). Accepted; short of the 50k target.
 - NX7 (683d04a, e609df1), files match the log: accepted. The gate was tuned on dev only. Gated D over encoder+n1 adds 0 wrong anywhere; A3 + guard: +5.2 points on the rules-fail sets over the shipped mode, Romanian +0.6. Model-first is not safe (−20 points). NX6 GO with A3 + guard.
+- NX-INTEGRATION (06a6d96, 7e356fe, eb5003a), files match the log: **validated in real Chrome.**
+  - Default strategy `hybrid` (A3 + guard).
+  - Perf at 4×, reviewer host: ready 4.6–6.0 s, first answer 1.1–1.6 s, p50 ≈ 270–310 ms. Same as before; host noise.
+  - On the 65 gold paraphrases, the model read 3 correctly, with the trace showing "Read by model (operation … at 0.999, pattern …)":
+    - "count the questions youve asked" → guess.count;
+    - "list animals that live in water in the sea" → the sea animals;
+    - "can u suggest where i play" → ttt.hint.
+  - Regression probes unchanged: the Romanian session (`rp5.mjs`) and the diagram session (`diag3x.mjs`) give the same answers as before, 0 errors.
+  - Rollback is one setting (Settings › Understanding › Reading strategy).
