@@ -1241,3 +1241,39 @@ Model-alone right % by constants world on the operational set (A3 -> A3b): art.d
 All four conditions hold for A3 and A3b; D adds no wrong answer anywhere. **But D no longer adds anything measurable over the current shipped mode** (1b is 0.0 for both models: the shipped mode already reads what the gate lets through; the one nxtest case D recovers is the same for A3 and A3b). The model-alone and model-first numbers improve with the new data (the paraphrase sets, Romanian, the diagram bench), the gated hybrid number does not move. **A3b vs A3: a drop-in as A3 was (dispatcher identical), better model alone (+1.4 operational, +6.6 Romanian, +3.6 dialogue turns, `nxtest-rules-fail` 22 -> 28 of 44, `gold-para` 75 -> 78), model-first +0.5 .. +1.8 on paraphrase sets and -1.2 on dialogue turns, hybrid unchanged; lower filler rate and a higher required tau (0.9999). Recommendation: it is a small improvement of the model alone, no change for the shipped hybrid mode; the coordinator decides about publishing.**
 
 Caveats: single runs; the per-item rows (`training/results/nx5/*.json`) are not in git; the judge is one model (Sonnet) and its accepts were hand-checked on 50 items only; gold-para / nxtest texts are not in the training sets, but their near neighbours (the same canonical sentences, other phrasings) may be.
+
+<!-- sopworld1:begin -->
+## SOPWORLD-1: the two reasoner strategies on the same sets
+
+Written by `node scripts/eval-reasoner.mjs --reasoner ops|matrix` (rules formalizer, no model). Latest run per strategy: ops 2026-11-10, matrix 2026-11-10. JSON: `training/results/sopworld1-<strategy>-<date>.json`.
+
+| | ops (default) | matrix |
+| --- | --- | --- |
+| (a) operational, three worlds | 219/226 right, 5 partly, 0 wrong, 2 not understood | 219/226 right, 5 partly, 0 wrong, 2 not understood |
+| (a) operational, all other worlds | 1020/1070 right, 17 partly, 6 wrong, 27 not understood | 1020/1070 right, 17 partly, 6 wrong, 27 not understood |
+| (a) operational-ro, three worlds | 397/452 right, 7 partly, 6 wrong, 42 not understood | 397/452 right, 7 partly, 6 wrong, 42 not understood |
+| (a) operational-ro, all other worlds | 1638/2028 right, 41 partly, 55 wrong, 294 not understood | 1638/2028 right, 41 partly, 54 wrong, 295 not understood |
+| (a) dialogues (turns), three worlds | 220/232 right, 0 partly, 4 wrong, 8 not understood | 217/232 right, 0 partly, 7 wrong, 8 not understood |
+| (a) dialogues (turns), all other worlds | 1954/2009 right, 13 partly, 16 wrong, 26 not understood | 1954/2009 right, 13 partly, 16 wrong, 26 not understood |
+| (a) cases whose outcome differs between the strategies | 4 | |
+| (b) turns audited (session holds facts of the three worlds) | 761 | 745 |
+| (b) turns that leave a violation (library check of the whole state) | 21 (2.8%) {"balance":2,"conflict":4,"domain":19} | 2 (0.3%) {"balance":2} |
+| (c) coherence set passed / 30 (mechanical hints) | 17/30 (+3 with a hint for the reviewer) | 19/30 (+3 with a hint for the reviewer) |
+| (c) kind contradiction | 6/7 | 5/7 |
+| (c) kind missing-arg | 2/3 | 2/3 |
+| (c) kind default-revision | 1/3 | 2/3 |
+| (c) kind undo | 0/3 | 2/3 |
+| (c) kind explain | 0/3 | 0/3 |
+| (c) kind abduce | 0/2 | 1/2 |
+| (c) kind stale | 3/3 | 3/3 |
+| (c) kind assumption-visible | 3/3 | 3/3 |
+| (c) kind deduce | 2/3 | 1/3 |
+| (d) answers that relied on a default or a guess / said so | 0 / 0 (of 46 answers) | 0 / 0 (of 46 answers) |
+| (e) ms per turn, three worlds p50 / p95 | 14.4 / 84.6 | 15.7 / 88 |
+| (e) ms per turn, everything p50 / p95 | 11.5 / 69.6 | 12 / 72 |
+| (e) lines of world code (three worlds: ops.mjs / matrix + fns + extras) | shop 148/243, arith 218/171, tasks 192/137 | shop 148/243, arith 218/171, tasks 192/151 |
+| (e) bytes added to the webchat: library raw / gzip, host layer raw | 195858 / 55381, 17254 | 195858 / 55381, 17254 |
+
+The audit tells the fact wires of the session (and its agents), in dialogue order, to a fresh library World and counts the wires it refuses (a deny, a conflict, a broken bound, a reference to an agent that is not there) and a refused balance. `ops`: every wire the operations replay. `matrix`: the wires the library holds; the ones it refused when told are not in its World and are counted apart (`audit.dropped_by_library` in the JSON, the largest number in one session). A purchase the library accepted that leaves the money negative is a violation of both columns: the matrix only says so when asked.
+
+<!-- sopworld1:end -->

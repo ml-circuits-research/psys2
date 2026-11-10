@@ -113,3 +113,18 @@ export const fns = {
     return { note: what ? `Okay, I did not tick off ${what}. Nothing changed on your lists. Tell me when you have done it.` : 'Okay, nothing changed on your lists.' };
   },
 };
+
+/**
+ * The session state the other hooks of the world read (`referents`, `summary`, the dialogue layer's undo snapshots) in the shape ops.mjs keeps it:
+ * { lists: { name: [{ id, text, done }] }, counter }. The host layer calls it after every action and puts the result in the session state.
+ */
+export function toState({ find }) {
+  const un = (v) => String(v ?? '').replace(/^"|"$/g, '');
+  const lists = {};
+  let counter = 0;
+  for (const w of find('kids.tasks.entry')) {
+    counter++;
+    (lists[un(w.attrs.list?.[0])] ??= []).push({ id: w.id, text: un(w.attrs.text?.[0]), done: un(w.attrs.progress?.[0]) === 'done' });
+  }
+  return { lists, counter };
+}

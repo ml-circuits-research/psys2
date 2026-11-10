@@ -56,12 +56,13 @@ export async function createReasoner(set, { lib = null } = {}) {
   const actionOwner = new Map();
   for (const w of worlds) for (const o of w.operations) if (o.semantics === 'action') { actionOwner.set(o.id, w.id); if (o.action) actionOwner.set(o.action, w.id); }
   const voices = new Map(worlds.filter((w) => typeof w.voice === 'function').map((w) => [w.id, w.voice]));
+  const stateOf = new Map(worlds.filter((w) => typeof w.toState === 'function').map((w) => [w.id, w.toState]));
   const mirrors = [...new Set(worlds.flatMap((w) => w.mirrors))];
   // the matrix's own declarations of its actions (`core.action name=... ask.<key>=... template.<key>=...`): what a missing argument asks and how the answer completes the sentence
   const actions = new Map();
   for (const m of base.matrix.values()) if (m.type === 'core.action') actions.set(unquote(first(m.attrs.name)), m.attrs);
   const reasoner = {
-    lib, base, voices, mirrors, actions, worlds: worlds.map((w) => w.id), problems, legends: set.legends,
+    lib, base, voices, mirrors, actions, stateOf, worlds: worlds.map((w) => w.id), problems, legends: set.legends,
     /** The matrix world that owns a question type (longest world id that prefixes it), or null. */
     ownerOfType: (type) => owners.find((id) => type === id || String(type).startsWith(id + '.')) ?? null,
     ownerOfAction: (action) => actionOwner.get(action) ?? null,
@@ -140,7 +141,8 @@ export class ReasonerSession {
   /** The dialogue wires an answer rests on, oldest first: [{ id, source, seq }] (the leaves of the library's explanation of each wire in `ids`). */
   leaves(ids, session) {
     const out = new Map();
-    const walk = (n, depth) => {   // bounded: a depth limit and a visited map
+    const walk = (n, depth) => {   // a depth limit and a visited map
+      turnBudget.tick('sopworld.explain');
       if (!n || depth > 40 || out.has(n.id)) return;
       if (!n.from?.length) {
         const w = session.memory.get(n.id) ?? session.memory.get(String(n.id));
@@ -278,6 +280,10 @@ export class ReasonerSession {
    */
   syncTo(session) {
     const L = this.reasoner.legends;
+    // the state ops.mjs would keep (spec 15): the hooks and the dialogue layer's snapshots of a world read it
+    for (const [id, toState] of this.reasoner.stateOf) {
+      try { const cur = (session.state[id] ??= {}); const next = toState({ find: (t) => this.world.ofType(t) }); for (const k of Object.keys(cur)) delete cur[k]; Object.assign(cur, next); } catch { /* the state stays as it was */ }
+    }
     for (const type of this.reasoner.mirrors) {
       const live = new Set();
       for (const w of this.world.ofType(type)) {
@@ -293,7 +299,8 @@ export class ReasonerSession {
         if (!has('core.seq')) wire.entries.push({ key: 'core.seq', value: atomValue(session.form.nextSeq()) });
         session.memory.add(wire);
       }
-      for (const [id, m] of [...this.mirrored]) {   // bounded: the wires copied so far
+      for (const [id, m] of [...this.mirrored]) {
+        turnBudget.tick('sopworld.mirror');
         if (m.type !== type || live.has(id)) continue;
         session.memory.retract(id, 'removed by the matrix reasoner');
         this.mirrored.delete(id);

@@ -132,7 +132,7 @@ test('the library\'s steps are ticks of the turn budget, sites prefixed sopworld
   const sites = Object.keys(b.bySite).filter((k) => k.startsWith('sopworld.'));
   assert.ok(sites.length > 0, `ticks at ${JSON.stringify(b.bySite)}`);
   // a budget that allows almost nothing: the library call stops, the host layer throws BudgetExceeded for the site
-  const tiny = createBudget({ perTurn: 3, perSite: 3 });
+  const tiny = createBudget({ sites: { 'sopworld.match': 1, 'sopworld.chase': 1, 'sopworld.validate': 1, 'sopworld.fluent': 1 } });
   const t2 = installBudget(tiny, { force: true });
   const r = s.isession.rs;
   try {

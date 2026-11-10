@@ -61,15 +61,16 @@ function newSession(engine, settings, c) {
   return s;
 }
 
-export async function runCase(engine, settings, c) {
+export async function runCase(engine, settings, c, { onTurn } = {}) {   // onTurn(session): called after every message (SOPWORLD-1 consistency audit)
   const s = newSession(engine, settings, c);
-  for (const m of c.setup ?? []) await s.send(m);
+  for (const m of c.setup ?? []) { await s.send(m); await onTurn?.(s); }
   const before = s.state();
   const t0 = performance.now();
   let reply, error = null;
   const ro = c.lang === 'ro';   // Romanian cases (training/eval/operational-ro.jsonl): language auto, the expectations are checked on the English reply
   try { reply = await s.send(c.message, ro ? { language: 'auto' } : undefined); } catch (e) { error = e.message; }
   const ms = performance.now() - t0;
+  await onTurn?.(s);
   if (!reply) return { id: c.id, world: c.world, outcome: 'wrong', error, ms };
   const after = s.state();
   const strip = (s) => { const { 'ui.help': _h, ...rest } = s; return JSON.stringify(rest); };   // ui.help only remembers the last unparsed text

@@ -111,7 +111,7 @@ function newSession(engine, settings, d) {
 
 const strip = (st) => { const { 'ui.help': _h, ...rest } = st; return JSON.stringify(rest); };
 
-export async function runDialogue(engine, settings, d) {
+export async function runDialogue(engine, settings, d, { onTurn } = {}) {   // onTurn(session): called after every turn (SOPWORLD-1 consistency audit)
   const s = newSession(engine, settings, d);
   const turns = [];
   for (const [i, t] of d.turns.entries()) {
@@ -122,6 +122,7 @@ export async function runDialogue(engine, settings, d) {
     let reply, error = null;
     try { reply = await s.send(t.message, t.mode ? { mode: t.mode } : undefined); } catch (e) { error = e.message; }
     const ms = performance.now() - t0;
+    await onTurn?.(s);
     if (!reply) { turns.push({ i, outcome: 'wrong', error, ms }); continue; }
     const after = s.state();
     const unparsedAll = reply.segments.length === 0 || reply.segments.every((x) => x.unparsed);

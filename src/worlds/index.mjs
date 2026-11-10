@@ -42,6 +42,7 @@ export class World {
     this.wires = [];     // every wire of every file, for validation lookups
     this.raw = {};       // reasoner data as text: { legend, kb, matrix, mapping } (only the files the world has)
     this.fns = null;     // functions of fns.mjs (actions and calc functions of the matrix), or null
+    this.toState = null; // `toState(ctx)` of fns.mjs (the session state ops.mjs would keep), or null
     this.voice = null;   // `voice(ctx)` of fns.mjs (reply facts for the templates), or null
   }
   get title() { return txt(this.manifest ?? { entries: [] }, 'title') ?? this.id; }
@@ -136,11 +137,12 @@ function readEntries(world, file, text) {
   return wires;
 }
 
-function buildWorld(id, files, ops, { fns = null, voice = null, matrix = false } = {}) {
+function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, matrix = false } = {}) {
   const w = new World(id);
   w.ops = ops ?? {};
   w.fns = fns;
   w.voice = voice;
+  w.toState = toState;
   for (const [k, f] of [['legend', 'legend.sop'], ['kb', 'kb.sop'], ['matrix', 'matrix.sop'], ['mapping', 'mapping.sop']]) if (files[f] != null) w.raw[k] = files[f];
   if (matrix && /\breasoner=matrix\b/.test(files['world.sop'] ?? '')) {
     // templates: the extras go first (the renderer tries the templates of a status in file order, so a matrix-mode wording wins); patterns and operations: order does not matter
@@ -221,10 +223,10 @@ export async function loadWorlds(loader, { reasoner = 'ops' } = {}) {
     const files = {};
     const matrix = reasoner === 'matrix';
     await Promise.all([...FILES, ...MATRIX_FILES, ...(matrix ? Object.values(MATRIX_EXTRAS) : [])].map(async (f) => { files[f] = await loader.readFile(id, f); }));
-    let ops = null, fns = null, voice = null;
-    if (files['matrix.sop'] != null && matrix) { try { const m = await loader.loadFns?.(id); fns = m?.fns ?? null; voice = m?.voice ?? null; } catch (e) { built.set(id + ':fnsError', e); } }
+    let ops = null, fns = null, voice = null, toState = null;
+    if (files['matrix.sop'] != null && matrix) { try { const m = await loader.loadFns?.(id); fns = m?.fns ?? null; voice = m?.voice ?? null; toState = m?.toState ?? null; } catch (e) { built.set(id + ':fnsError', e); } }
     try { ops = await loader.loadOps(id); } catch (e) { ops = null; built.set(id + ':opsError', e); }
-    const w = buildWorld(id, files, ops, { fns, voice, matrix });
+    const w = buildWorld(id, files, ops, { fns, voice, toState, matrix });
     if (built.has(id + ':fnsError')) w.errors.push({ message: `fns.mjs failed to load: ${built.get(id + ':fnsError').message}` });
     if (built.has(id + ':opsError')) w.errors.push({ message: `ops.mjs failed to load: ${built.get(id + ':opsError').message}` });
     built.set(id, w);

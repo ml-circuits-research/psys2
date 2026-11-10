@@ -15,18 +15,8 @@ const round10 = (x) => Math.round(x * 1e10) / 1e10;
 /** The count of one person, or undefined when it is not known. */
 const count = ({ query }, owner, item) => { const r = query({ type: K('holding'), seek: 'count', where: { owner: `$${owner}`, item } }); return r.status === 'supported' ? Number(r.value) : undefined; };
 
-/** a/b as an exact decimal when it terminates. */
-function terminates(a, b) {
-  const scale = (x) => { const s = String(x); const i = s.indexOf('.'); return i < 0 ? 0 : s.length - i - 1; };
-  const k = Math.max(scale(a), scale(b));
-  const num = Math.round(Math.abs(a) * 10 ** k);
-  let den = Math.round(Math.abs(b) * 10 ** k);
-  const gcd = (x, y) => (y ? gcd(y, x % y) : x); // bounded: Euclid: the second argument strictly decreases to 0
-  den /= gcd(num, den) || 1;
-  while (den % 2 === 0) den /= 2; // bounded: den halves each pass (a positive integer)
-  while (den % 5 === 0) den /= 5; // bounded: den is divided by 5 each pass (a positive integer)
-  return den === 1;
-}
+/** a/b as an exact decimal when it terminates: the quotient rounded to ten digits gives a back (no loop: the check is arithmetic). */
+const terminates = (a, b) => Math.abs(round10(a / b) * b - a) < 1e-12 * Math.max(1, Math.abs(a));
 
 export function voice(ctx) {
   const { type, where, env } = ctx;
