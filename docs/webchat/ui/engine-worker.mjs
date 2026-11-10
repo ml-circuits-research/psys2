@@ -57,7 +57,7 @@ const errOf = (e) => ({ name: e?.name ?? 'Error', message: String(e?.message ?? 
 /** Wires get `sk`: their keys in short form (the page serializes them without the legends, which stay here). */
 function annotateWires(root) {
   const L = engine.set.legends, seen = new WeakSet();
-  const walk = (v, depth) => {
+  const walk = (v, depth) => { // bounded: depth limit 7 and a visited set
     if (!v || typeof v !== 'object' || depth > 7 || seen.has(v)) return;
     seen.add(v);
     if (Array.isArray(v)) { for (const x of v) walk(x, depth + 1); return; }

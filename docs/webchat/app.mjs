@@ -502,7 +502,7 @@ export async function mountPsys2(element, options = {}) {
     const details = { kind, time: new Date().toISOString(), input: text, tab: view, stage, site, ticks, bySite, ms, workerStarts: st?.starts ?? null, workerKills: st?.kills?.length ?? 0, longTasks: longTasks.filter((t) => Date.parse(t.at) >= Date.now() - (performance.now() - tStart) - 50).slice(-10) };
     console.warn('runaway computation stopped', details);
     setTimeout(() => { const k = engineClient?.stats; if (recId && k) { try { phrases.update(recId, (r) => (r[kind] ? { [kind]: { ...r[kind], workerStarts: k.starts, workerKills: k.kills.length, killStage: k.kills.at(-1)?.stage ?? null } } : {})); } catch { /* ignore */ } } }, 800);   // the kill follows the grace period: complete the record afterwards
-    if (recId) { try { phrases.update(recId, () => ({ [kind]: details })); } catch { /* ignore */ } }
+    if (recId) { try { phrases.update(recId, (r) => ({ [kind]: { ...(r[kind] ?? {}), ...details } })); } catch { /* ignore */ } }   // merged with the engine's own record (site, limit, table, stack)
     const where = kind === 'budgetExceeded' ? `site ${site ?? '?'}${ticks != null ? `, ${ticks} ticks` : ''}` : `stage ${stage ?? '?'}`;
     const copy = h('button', { class: 'p2-linkbtn', type: 'button' }, 'copy details');
     copy.addEventListener('click', () => { ALLOW['clipboard.copy']({ text: JSON.stringify(details, null, 1) }); toast('Details copied'); });
@@ -589,6 +589,7 @@ export async function mountPsys2(element, options = {}) {
     try { stateAfter = hashState(session.state?.() ?? null); } catch { /* ignore */ }
     const detail = recId && settings.logPhrases ? buildDetail(reply, { serialize: serializeWires, tab: view, state: { before: tn.stateBefore ?? null, after: stateAfter } }) : null;
     recordPhrase(text, mode, reply, recId, detail);
+    if (reply.budgetExceeded && !reply.knownBad) runawayNotice('budgetExceeded', { text, stage: reply.budgetExceeded.stage ?? null, site: reply.budgetExceeded.site, ticks: reply.budgetExceeded.ticks, bySite: reply.budgetExceeded.bySite ?? null, ms: Math.round(performance.now() - tStart), recId, tStart });
     if (dbg) { try { dbg.record({ text, mode, tab: view, reply, usage, detection, effects, recId, stateBefore: tn.stateBefore ?? null, stateAfter, endType: voiceEnd(recId) }); } catch (e) { console.warn('debug record failed', e); } }
     // FB: the next accepted phrasing after a thumbs-down is its correction; a spoken complaint rates the previous answer
     if (reply.feedback === 'negative') {

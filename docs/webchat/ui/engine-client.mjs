@@ -184,7 +184,8 @@ export function createEngineClient({ base, versions = {}, getSettings, getTab = 
       const res = await guarded('send', 'send', { text, opts: { ...rest, hardMs, softMs }, undoId: undo?.id ?? null, settings: getSettings(), fault }, { signal, hardMs: hardMs ? hardMs + 600 : null, text, key, tab });
       applyStateInfo(res);
       lastUsage = { usage: res.usage ?? [], detection: res.detection ?? [] };
-      if (res.budget) res.reply.budget = res.budget;
+      if (res.budget && !res.reply.budget) res.reply.budget = res.budget;
+      if (res.reply.budgetExceeded) rememberBad({ key, text, tab, kind: 'send' }, 'budget', { site: res.reply.budgetExceeded.site, stage: res.reply.budgetExceeded.stage });   // a reply that says "too complex" is never recomputed
       return res.reply;
     },
     async dryRead(text, opts = {}) {
@@ -194,7 +195,9 @@ export function createEngineClient({ base, versions = {}, getSettings, getTab = 
       const { signal, ...rest } = opts;
       stats.dryRuns++;
       try {
-        return await guarded('dry', 'dry', { text, opts: rest, fault: testHooks ? globalThis.__psys2Fault?.[text] ?? null : null }, { signal, hardMs: (rest.deadlineMs ?? 400) * 3 + 1500, text, key, tab });
+        const r = await guarded('dry', 'dry', { text, opts: rest, fault: testHooks ? globalThis.__psys2Fault?.[text] ?? null : null }, { signal, hardMs: (rest.deadlineMs ?? 400) * 3 + 1500, text, key, tab });
+        if (r?.budgetExceeded) rememberBad({ key, text, tab, kind: 'dry' }, 'budget', { site: r.budgetExceeded.site, stage: r.budgetExceeded.stage });
+        return r;
       } catch (e) {
         if (e instanceof TurnAborted) return { complete: false, segments: 0, reason: e.reason === 'stopped' ? 'cancelled' : 'deadline' };
         if (e?.name === 'EngineRestarted' || e?.name === 'BudgetExceeded') return { complete: false, segments: 0, reason: e?.name === 'BudgetExceeded' ? 'budget' : 'busy' };

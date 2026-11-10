@@ -62,7 +62,7 @@ export async function openChat({ throttle = 4, chrome, init = null, settings = {
       const t = Date.now();
       await pg.keyboard.press('Enter');
       const ok = await pg.waitForFunction((n) => !window.psys2.busy && !document.querySelector('.p2-msg.is-typing') && document.querySelectorAll('.p2-msg.is-bot:not(.is-typing)').length > n, { timeout, polling: 20 }, n).then(() => true).catch(() => false);
-      return { ms: Date.now() - t, ok, reply: await pg.evaluate(() => [...document.querySelectorAll('.p2-msg.is-bot')].at(-1)?.querySelector('.p2-bubble')?.innerText ?? '') };
+      return { ms: Date.now() - t, ok, reply: await pg.evaluate(() => [...document.querySelectorAll('.p2-msg.is-bot:not([data-runaway])')].at(-1)?.querySelector('.p2-bubble')?.innerText ?? '') };
     },
     lastPhrase: () => pg.evaluate(() => { const a = JSON.parse(localStorage.getItem('psys2.webchat.phrases') ?? '[]'); return a.at(-1) ?? null; }),
     state: () => pg.evaluate(() => JSON.stringify(window.psys2.session.state())),
@@ -98,7 +98,7 @@ export const SCENARIOS = {
       await new Promise((r) => setTimeout(r, 600));
       const t = Date.now();
       await c.pg.click('button.p2-send');
-      await c.pg.waitForFunction(() => !window.psys2.busy && [...document.querySelectorAll('.p2-msg.is-bot')].at(-1)?.innerText.startsWith('Stopped.'), { timeout: 3000 });
+      await c.pg.waitForFunction(() => !window.psys2.busy && [...document.querySelectorAll('.p2-msg.is-stopped')].at(-1)?.innerText.startsWith('Stopped.'), { timeout: 3000 });
       check('stop: answers "Stopped." quickly', Date.now() - t < 2000, `${Date.now() - t} ms`);
       check('stop: the world state is as before the message', (await c.state()) === before);
       const rec = await c.lastPhrase();
