@@ -23,6 +23,7 @@ export function substituteEmit(template, slots, fresh) {
   const ids = new Map();
   let out = '';
   let inStr = false;
+  // bounded: i only moves forward over the template characters
   for (let i = 0; i < t.length; i++) {
     const c = t[i];
     if (inStr) {

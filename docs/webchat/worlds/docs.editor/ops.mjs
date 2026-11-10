@@ -40,6 +40,7 @@ const sentencesCount = (t) => sentencesOf(t).length;
 function sync(s) {
   s.titleMarks ??= []; s.titleAlign ??= 'left'; s.titleSize ??= 0; s.selection ??= null; s.focus ??= null;
   for (const b of s.blocks) {
+    // bounded: pads the checked list up to the item count
     if (b.kind === 'list') { b.style ??= 'bullet'; if (b.style === 'task') { b.checked ??= []; while (b.checked.length < b.items.length) b.checked.push(false); b.checked.length = b.items.length; } else delete b.checked; }
     if (b.kind === 'heading') b.level ??= 2;
     if (b.kind !== 'rule') normalizeMarks(b);
@@ -87,6 +88,7 @@ const POS_TAIL = new RegExp(`\\s+(?:right\\s+)?(under|below|after|before|above|b
 /** Politeness and position words that end a heading or paragraph text ("Plans pls", "Notes at the top"): { text, top }. */
 function trimTail(text, polite = true) {
   let t = String(text).trim(), top = false, pos = null, ref = null;
+  // bounded: each pass that sets again strips a suffix, so the text shrinks
   for (let again = true; again;) {
     again = false;
     const pm = pos ? null : t.match(POS_TAIL);
@@ -103,6 +105,7 @@ function trimTail(text, polite = true) {
 const snap = (s) => structuredClone({ title: s.title, titleMarks: s.titleMarks, titleAlign: s.titleAlign, titleSize: s.titleSize, blocks: s.blocks, cursor: s.cursor, nextId: s.nextId, selection: s.selection });
 function commit(s) {
   s.history.push(snap(s));
+  // bounded: shrinks the history each pass
   while (s.history.length > MAX_HISTORY) s.history.shift();
   s.future = [];
 }
@@ -625,6 +628,7 @@ function _size(ctx, { t, how } = {}) {
     else { const v = Math.max(1, Math.min(3, (b.level ?? 2) - step)); if (v !== b.level) { b.level = v; changed++; } }
   }
   if (!changed) return ok(`${cap(res.desc)} is already as ${step > 0 ? 'big' : 'small'} as it gets.`);
+  // bounded: shrinks the history each pass
   s.history.push(before); while (s.history.length > MAX_HISTORY) s.history.shift(); s.future = [];
   show(ctx);
   return ok(`OK, I made ${res.desc} ${step > 0 ? 'bigger' : 'smaller'}.`);
@@ -702,7 +706,9 @@ function sentencesRangesOf(text) {
   const out = [];
   for (const m of String(text).matchAll(/[^.!?]*[.!?]+|[^.!?]+$/g)) {
     let a = m.index, c = m.index + m[0].length;
+    // bounded: a only increases up to c
     while (a < c && /\s/.test(text[a])) a++;
+    // bounded: c only decreases down to a
     while (c > a && /\s/.test(text[c - 1])) c--;
     if (c > a) out.push([a, c]);
   }
@@ -884,6 +890,7 @@ function _replace(ctx, { from, to }) {
     }
   }
   if (!n) { restore(s, before); return no('missing', `I could not find "${a}" in the document.`); }
+  // bounded: shrinks the history each pass
   s.history.push(before); while (s.history.length > MAX_HISTORY) s.history.shift(); s.future = [];
   show(ctx);
   return ok(`OK, I replaced "${a}" with "${b}" ${n} ${n === 1 ? 'time' : 'times'}.`);

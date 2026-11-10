@@ -82,6 +82,7 @@ export class Legends {
     }
     for (const t of this.types.values()) { // cycles
       const seen = new Set([t.name]);
+      // bounded: a seen-set stops at the first repeated type (cycles are reported and cut)
       for (let p = t.extends; p; p = this.types.get(p)?.extends) {
         if (seen.has(p)) { this.errors.push({ message: `type hierarchy cycle at '${t.name}'`, wireId: t.name }); t.extends = 'core.thing'; break; }
         seen.add(p);
@@ -142,6 +143,7 @@ export class Legends {
   chain(type) {
     this._ensure();
     const out = [type];
+    // bounded: stops at the first type already in out, so a cycle cannot loop
     for (let p = this.types.get(type)?.extends; p && !out.includes(p); p = this.types.get(p)?.extends) out.push(p);
     return out;
   }
@@ -152,6 +154,7 @@ export class Legends {
   descendants(type) {
     this._ensure();
     const out = [type];
+    // bounded: breadth-first walk of the type tree (cycles were cut at load), each type is added once
     for (let i = 0; i < out.length; i++) for (const c of this._children.get(out[i]) ?? []) out.push(c);
     return out;
   }

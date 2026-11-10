@@ -14,6 +14,7 @@
  *  - `ctx.emit` accepts `{_}` / `{_1}` fresh-id placeholders like pattern emit templates.
  */
 import { guard, TurnAborted } from '../formalizer/guard.mjs';
+import { budget, isBudgetExceeded } from '../dialog/budget.mjs';
 import { parse, makeWire, atom, str, ref, get } from '../soplang/index.mjs';
 import { Memory, WireStore } from './memory.mjs';
 import { Renderer, fallbackText, listText } from './render.mjs';
@@ -228,6 +229,7 @@ export class Interpreter {
 
   _charge(st, n) {
     st.visited += n;
+    budget.tick('interpreter.visit', n);
     guard.check('interpreter');
     if (st.visited > this.maxVisited) throw new BudgetError(`visited more than ${this.maxVisited} wires`);
   }
@@ -254,14 +256,14 @@ export class Interpreter {
     for (const [k, v] of Object.entries(where)) args[keyName(k)] = v;
     args.question = spec.wire;
     rec.args = Object.fromEntries(Object.entries(args).filter(([k]) => k !== 'question' && k !== 'request'));
-    const budget = { deadline: t0 + this.opTimeoutMs };
-    const ctx = this._makeCtx(session, op, st, budget);
+    const limit = { deadline: t0 + this.opTimeoutMs };
+    const ctx = this._makeCtx(session, op, st, limit);
     let res;
     try {
       res = fn(ctx, args);
       if (res && typeof res.then === 'function') throw new Error('operations must be synchronous');
     } catch (e) {
-      if (e instanceof TurnAborted) throw e;
+      if (e instanceof TurnAborted || isBudgetExceeded(e)) throw e;
       if (e instanceof BudgetError) return finish({ status: 'budget', note: e.message });
       return finish({ status: 'error', note: `${op.id} threw: ${e?.message ?? e}` });
     }
@@ -272,10 +274,10 @@ export class Interpreter {
   }
 
   /** The ctx object handed to operations (spec 04 ctx API). */
-  _makeCtx(session, op, st, budget) {
+  _makeCtx(session, op, st, limit) {
     const L = this.legends;
     const mem = session.memory;
-    const check = () => { guard.check('interpreter'); if (performance.now() > budget.deadline) throw new BudgetError(`operation ${op.id} exceeded ${this.opTimeoutMs} ms`); };
+    const check = () => { budget.tick('ops.call'); guard.check('interpreter'); if (performance.now() > limit.deadline) throw new BudgetError(`operation ${op.id} exceeded ${this.opTimeoutMs} ms`); };
     const resolveWhere = (type, where = {}) => {
       const out = {};
       for (const [k, v] of Object.entries(where)) out[L.resolveKey(type, k)] = String(v).replace(/^\$/, '');
@@ -311,6 +313,8 @@ export class Interpreter {
         if (op.semantics !== 'action') throw new Error(`operation ${op.id} is not an action and may not emit wires`);
         return this._emit(session, op, sopText);
       },
+      /** The compute budget of the turn: operations with their own loops call `ctx.budget.tick('<world>.<site>', n)` (spec 06 "Compute budgets"). */
+      budget,
       /** Retract a session wire (actions only): core.status=retracted; excluded from find/lookup, kept for the trace. */
       retract: (wireId, reason = '') => {
         if (op.semantics !== 'action') throw new Error(`operation ${op.id} is not an action and may not retract wires`);

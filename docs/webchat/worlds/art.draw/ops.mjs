@@ -247,6 +247,7 @@ const DET_ALL = new Set(['all', 'every', 'each', 'both']);
 const DET_SKIP = new Set(['the', 'a', 'an', 'my', 'your', 'this', 'that', 'these', 'those', 'any', 'some', 'another', 'of', 'in', 'picture', 'drawing', 'painting']);
 
 /** Parses words like "the big red tree on the left" into a description of the thing meant. */
+// bounded: recurses on the words after "of": strictly fewer words each level
 export function parseNP(text) {
   const all = toks(text);
   const np = { text: String(text ?? ''), pron: null, all: false, ordinal: null, size: null, superlative: false, color: null, kind: null, plural: false, part: null, partOf: null, loc: null, pos: null, special: null, one: false, known: true };
@@ -316,6 +317,7 @@ const partColor = (o, part) => (part ? o.parts?.[part] ?? null : null);
  * Rules (no guessing without saying so): "it" is the selected thing or what was just drawn; several matches are
  * narrowed by ordinal, size, side, selection and recency, and the reply says which one was taken.
  */
+// bounded: recurses through np.partOf, a finite chain built by parseNP on fewer words
 export function resolveNP(s, np, { many = false } = {}) {
   const out = { objs: [], special: np.special && np.special !== 'everything' ? np.special : null, np };
   if (np.special === 'everything') { out.objs = s.objects.slice(); out.everything = true; return out; }
@@ -613,10 +615,13 @@ function parseWith(kind, words) {
   if (at < 0) return { parts: {}, rest: words };
   const parts = {}, taken = [];
   let i = at + 1;
+  // bounded: i advances each pass or the loop breaks
   while (i < words.length) {
     const start = i;
+    // bounded: the index only moves in one direction over a finite list or text
     while (i < words.length && ['a', 'an', 'the', 'and', 'some', 'its', 'his', 'her', 'their'].includes(words[i])) i++;
     const colorWords = [];
+    // bounded: the index only moves in one direction over a finite list or text
     while (i < words.length && (isShade(words[i]) || isColorWord(words[i]))) colorWords.push(words[i++]);
     const pw = words[i];
     const part = pw && kind ? partOfWord(kind, pw) ?? partOfWord(kind, pw.replace(/s$/, '')) : null;
@@ -830,11 +835,13 @@ const describePlacing = (o, place, refs) => {
 function parseMoreSpec(words) {
   let i = 0;
   const args = {};
+  // bounded: i only moves forward and stops at the end of the words (undefined is not an article)
   while (['a', 'an', 'another', 'some', 'the'].includes(words[i])) i++;
   const n = numberOf(words[i] ?? '');
   if (n !== null) { args.n = String(n); i++; }
   else if (words[i] && QUANTITY[words[i]]) { args.q = words[i]; i++; }
   const mods = [];
+  // bounded: the index only moves in one direction over a finite list or text
   while (i < words.length && (isShade(words[i]) || isColorWord(words[i]) || Object.hasOwn(SIZE_WORDS, words[i])) && mods.length < 3) mods.push(words[i++]);
   mods.forEach((m, j) => { args[`m${j + 1}`] = m; });
   if (!words[i] || !kindOfWord(words[i])) return null;
@@ -1149,6 +1156,7 @@ export const turn = guard((ctx, args, s) => {
   // find the action words, what is left is the target
   let action = null, dirWord = null, deg = null;
   const rest = [];
+  // bounded: i only moves forward over the words
   for (let i = 0; i < words.length; i++) {
     const w = words[i];
     if (['around', 'over', 'round', 'back', 'backwards', 'backward', 'flipped', 'mirrored', 'reversed'].includes(w) && !action) { action = 'flip'; continue; }

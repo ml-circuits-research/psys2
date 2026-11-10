@@ -13,6 +13,7 @@
  */
 import { editDistance } from './rules/index.mjs';
 import { guard } from './guard.mjs';
+import { budget } from '../dialog/budget.mjs';
 
 const WORD = /[\p{L}\p{N}][\p{L}\p{N}'’-]*/gu;
 /** Words that may legitimately be said twice in a row: never collapsed. */
@@ -50,6 +51,7 @@ export function cleanVoice(text, { voice = false } = {}) {
   // a repetition is words next to each other: a comma, colon or full stop between them ("heading A, a heading B") means two things were said
   const tight = (i, j) => { for (let k = i; k < j; k++) if (!/^[ \t]+$/.test(out.slice(toks[k].index + toks[k][0].length, toks[k + 1].index))) return false; return true; };
   const drop = [];   // [fromTokenIndex, toTokenIndexExclusive] ranges to remove
+  // bounded: each pass consumes at least one token
   for (let i = 0; i < toks.length;) {
     let hit = 0;
     if (voice) for (let k = Math.min(6, Math.floor((toks.length - i) / 2)); k >= 2; k--) {   // the longest repeated phrase first
@@ -125,6 +127,7 @@ export function garbleCandidates(text, { vocab, known = () => false, functionWor
       return best;
     };
     const rec = (i, pieces) => {   // min [cost, words[]] for word[i..]
+      budget.tick('voice.rec');
       if (i === n) return [0, []];
       const key = `${i}:${pieces}`;
       if (memo.has(key)) return memo.get(key);

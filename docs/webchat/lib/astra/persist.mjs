@@ -22,6 +22,7 @@ export function migrate(json) {
   if (!json || typeof json !== 'object' || !Number.isInteger(json.schema)) return null;
   let j = json;
   if (j.schema > SCHEMA) return null;
+  // bounded: each pass applies one migration and raises j.schema by one, or returns
   while (j.schema < SCHEMA) {
     const step = MIGRATIONS[j.schema];
     if (!step) return null;

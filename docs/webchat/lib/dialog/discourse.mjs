@@ -19,6 +19,7 @@ import { SHORT_TYPOS } from '../formalizer/rules/normalize.mjs';
 import { lastUnfinished } from '../astra/where.mjs';
 import { runDiscussionCommand } from '../astra/session.mjs';
 import { classify, resolveReference, describeReferent, chooseOption, plain } from './meta.mjs';
+import { budget } from './budget.mjs';
 
 export const FRAME_LIMIT = 5;
 
@@ -65,6 +66,7 @@ export function splitFragment(text) {
   for (const lead of LEADS) if (startsWith(ws, lead)) { marker = lead; content = ws.slice(lead.length); break; }
   let trail = [];
   for (const tr of TRAILS) if (content.length > tr.length && tr.every((p, i) => content[content.length - tr.length + i].toLowerCase() === p)) { trail = tr; content = content.slice(0, content.length - tr.length); break; }
+  // bounded: shrinks the list each pass
   while (content.length && content[0].toLowerCase() === ',') content = content.slice(1);
   if (!content.length) return null;
   const all = [...marker, ...trail];
@@ -168,6 +170,7 @@ export class Discourse {
 
   /** The reply completes the incomplete command of the pending expectation. */
   async fill(pending, text, sid) {
+    budget.tick('discourse.fill');
     if (pending?.type !== 'fill') return null;
     if (pending.tab && pending.tab !== this.dialog.isession?.state?.['ui.shell']?.activeTab) return null;   // RP3: the answer to a question on another tab is a new request, not the missing text
     const reply = String(text).trim().replace(/[?!.]+$/g, '');
@@ -185,6 +188,7 @@ export class Discourse {
 
   /** Resolve a fragment against the recent frames. `bare` allows fragments without a discourse marker. */
   async ellipsis(text, sid, { bare = false } = {}) {
+    budget.tick('discourse.ellipsis');
     if (!this.frames.length) return null;
     const frag = splitFragment(text);
     if (!frag || (frag.kind === 'bare' && !bare) || frag.content.length > 4) return null;
@@ -218,6 +222,7 @@ export class Discourse {
    * completely by that frame's world. Only lexicon nouns and agents of the frame are referents (no guessing).
    */
   async pronoun(text, sid) {
+    budget.tick('discourse.pronoun');
     if (!this.frames.length) return null;
     text = String(text).replace(/[A-Za-z]+/g, (w) => SHORT_TYPOS[w.toLowerCase()] ?? w);   // chat spellings of short words ("mke it a siren")
     const m = String(text).match(/\b(it|that one|this one|that animal|this animal|that shape|this shape|that thing|this thing|them|those|these|that|this)\b/i);
@@ -468,6 +473,7 @@ export class Discourse {
    *   { pre: { res, info }, prefix? }       an already formalized sentence (same shape as ellipsis).
    */
   async meta(text, pend, sid) {
+    budget.tick('discourse.meta');
     const d = this.dialog;
     const t = plain(text);
     if (!t) return null;

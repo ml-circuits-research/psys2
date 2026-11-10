@@ -487,6 +487,7 @@ const BIGGER = new Set(['bigger', 'larger', 'wider', 'huger', 'rounder', 'big', 
 const EMOJI_EYE_SIZE = ['small', 'pupils', 'bigPupils'];
 /** Robot eyes: styles, not sizes. Square, visor and cyclops fill more of the screen than round and plus. */
 const ROBOT_EYES_BIGGER = ['square', 'visor', 'cyclops'], ROBOT_EYES_SMALLER = ['round', 'plus'];
+// bounded: calls itself once for the eye with a different part, which never recurses again
 function _resizePart(ctx, { part, dir, assumed }) {
   const s = ensure(ctx);
   if (assumed) {

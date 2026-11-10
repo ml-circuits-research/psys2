@@ -40,6 +40,7 @@ export function tokenInfo(text, offsets) {
   offsets.forEach(([a, b], i) => {
     if (b <= a) return;
     let s = a;
+    // bounded: the index only moves in one direction over a finite list or text
     while (s < text.length && /\s/.test(text[s])) s++;
     out.push([i, s, b, s === 0 || !ALNUM.test(text[s - 1])]);
   });
@@ -87,6 +88,7 @@ export function wordTokens(offsets, prefix, words) {
   const n = offsets.length;
   for (const { start, end } of words) {
     const s = start + prefix, e = end + prefix;
+    // bounded: the index only moves in one direction over a finite list or text
     while (i < n && !(offsets[i][1] > offsets[i][0] && offsets[i][1] > s)) i++;
     out.push(i < n && offsets[i][0] < e ? i : null);
   }

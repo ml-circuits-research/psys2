@@ -84,6 +84,7 @@ function nextId(state, kind) {
   const p = PREFIX[kind] ?? 'z';
   const used = new Set((state.shapes ?? []).flatMap((x) => [x.name.toLowerCase(), (x.id ?? '').toLowerCase()]));
   let id;
+  // bounded: the counter grows each pass until a name is free (finitely many ids are in use)
   do { state.seq[kind] = (state.seq[kind] || 0) + 1; id = `${p}${state.seq[kind]}`; } while (used.has(id));
   return id;
 }
@@ -102,6 +103,7 @@ function assignIds(s) {
     x.id = m && KIND_OF_PREFIX[m[1].toLowerCase()] === x.shape ? x.name.toLowerCase() : nextId(s, x.shape);
   }
   const taken = new Set(s.edges.map((e) => e.id));
+  // bounded: the counter grows each pass until an id is free (finitely many ids are in use)
   for (const e of s.edges) if (/^e\d+$/.test(e.id)) { let n = 0, id; do { id = `a${++n}`; } while (taken.has(id)); taken.add(id); e.id = id; s.edgeSeq = Math.max(s.edgeSeq ?? 0, n); }
 }
 const edgeOf = (s, id) => s.edges.find((e) => e.id.toLowerCase() === String(id).toLowerCase()) ?? null;
@@ -126,7 +128,9 @@ function writeBack(s) {
   for (const k of WORLD_KEYS) { if (w.state[k] === undefined) delete s[k]; else s[k] = w.state[k]; }
   s.undo = w.undoStack; s.redo = w.redoStack;
   assignIds(s);
+  // bounded: shrinks the history each pass
   while (s.undo.length > MAX_HISTORY) s.undo.shift();
+  // bounded: shrinks the history each pass
   while (s.redo.length > MAX_HISTORY) s.redo.shift();
   s.rev = (s.rev ?? 0) + 1; w.rev = s.rev;
   w.state = structuredClone(Object.fromEntries(WORLD_KEYS.filter((k) => s[k] !== undefined).map((k) => [k, s[k]])));   // the state of the context is never aliased by the engine

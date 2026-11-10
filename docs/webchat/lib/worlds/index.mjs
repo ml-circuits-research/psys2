@@ -89,6 +89,7 @@ export class WorldSet {
   /** Transitive imports of a world (including itself), in dependency order. */
   available(id) {
     const out = [];
+    // bounded: visits each world at most once (out.includes) so import cycles end
     const visit = (i) => {
       if (out.includes(i)) return;
       const w = this.worlds.get(i);
@@ -209,6 +210,7 @@ export async function loadWorlds(loader) {
   // dependency order
   const order = [];
   const state = new Map();
+  // bounded: depth-first search with a visiting/done state per world: each world is expanded once, cycles are reported
   const visit = (id, stack) => {
     if (state.get(id) === 2) return;
     if (state.get(id) === 1) { set.errors.push({ message: `import cycle: ${[...stack, id].join(' -> ')}` }); return; }
@@ -249,6 +251,7 @@ function resolveLexiconExtends(set) {
   const byId = new Map();
   for (const w of set.list()) for (const l of w.lexicons) byId.set(l.id, l);
   const state = new Map();
+  // bounded: depth-first with a visiting/done state per lexicon: each lexicon is expanded once, cycles are reported
   const resolve = (l) => {
     if (!l.extends.length || state.get(l) === 2) return;
     const w = set.get(l.worldId);

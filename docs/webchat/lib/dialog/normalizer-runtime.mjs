@@ -9,6 +9,7 @@
  * Graph contract (see export_normalizer.py): encoder(input_ids, attention_mask) -> cross_k.<l>, cross_v.<l>;
  * decoder(input_id [b,1], step, attention_mask, self_k.<l>, self_v.<l>, cross_k.<l>, cross_v.<l>) -> logits [b,vocab], new_self_k.<l>, new_self_v.<l>.
  */
+import { budget } from './budget.mjs';
 
 /** Unigram (sentencepiece) tokenizer from a HF `tokenizer.json`: NFKC, whitespace collapsed, `▁` for spaces, Viterbi over the vocabulary scores. */
 export class UnigramTokenizer {
@@ -42,6 +43,7 @@ export class UnigramTokenizer {
       }
     }
     const out = [];
+    // bounded: back-pointers of the beam always point to an earlier step, so i strictly decreases to 0
     for (let i = n; i > 0; i = from[i]) out.push(id[i]);
     out.reverse();
     // sentencepiece merges consecutive unknowns into one
@@ -66,6 +68,7 @@ const logSoftmaxTop = (row, k) => {
     const v = row[i];
     if (top.length < k || v > top[top.length - 1][1]) {
       let p = top.length;
+      // bounded: p only decreases to 0 (insertion into a top-k list)
       while (p > 0 && top[p - 1][1] < v) p--;
       top.splice(p, 0, [i, v]);
       if (top.length > k) top.pop();
@@ -104,6 +107,7 @@ export function createNormalizerRuntime({ ort, encoder, decoder, tokenizer, conf
     for (let b = 1; b < beam; b++) alive.push({ toks: [], score: -1e9 });
     const finished = [];
     for (let step = 0; step < maxSteps; step++) {
+      budget.tick('normalizer.decode');
       if (now() > tEnd) throw new Error(`normalizer deadline of ${deadlineMs} ms passed after ${step} decode steps`);
       const feeds = { input_id: i64(alive.map((a) => (a.toks.length ? a.toks[a.toks.length - 1] : tok.pad)), [beam, 1]), step: new ort.Tensor('int64', BigInt64Array.from([BigInt(step)]), []), attention_mask: mask, ...cross };
       for (let i = 0; i < NL; i++) {
@@ -127,6 +131,7 @@ export function createNormalizerRuntime({ ort, encoder, decoder, tokenizer, conf
         if (next.length >= beam && finished.length >= beam) break;
       }
       if (finished.length >= beam || !next.length) break;
+      // bounded: pads the beam list up to its fixed width
       while (next.length < beam) next.push({ from: next[0].from, tok: next[0].tok, score: -1e9 });
       // gather the past of the surviving beams (new_self has length step + 1)
       const np = [];

@@ -12,6 +12,7 @@
  *
  * Tested against the Python tokenizer on a fixture (tests/wordpiece.test.mjs, tests/fixtures/wordpiece-distilbert.json).
  */
+import { budget } from '../dialog/budget.mjs';
 
 const CJK = [[0x4E00, 0x9FFF], [0x3400, 0x4DBF], [0x20000, 0x2A6DF], [0x2A700, 0x2B73F], [0x2B740, 0x2B81F], [0x2B820, 0x2CEAF], [0xF900, 0xFAFF], [0x2F800, 0x2FA1F]];
 const isCjk = (cp) => CJK.some(([a, b]) => cp >= a && cp <= b);
@@ -77,8 +78,10 @@ function createFromMap(vocab, { unk, cls, sep, pad, prefix, maxCharsPerWord }) {
     const out = [];
     let start = 0;
     while (start < word.length) {
+      budget.tick('wordpiece.start');
       let end = word.length, hit = null;
       while (start < end) {
+        budget.tick('wordpiece.end');
         let sub = word.slice(start, end).map((c) => c.ch).join('');
         if (start > 0) sub = prefix + sub;
         if (vocab.has(sub)) { hit = { tok: sub, s: word[start].s, e: word[end - 1].e }; break; }
