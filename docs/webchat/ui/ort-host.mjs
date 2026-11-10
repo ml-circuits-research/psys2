@@ -5,7 +5,8 @@ export async function getOrtClient(base) {
   if (client) return client;
   const { createOrtClient, measureDeviceSpeed } = await import(new URL('lib/formalizer/ort-client.mjs', base).href);
   const { LIMITS } = await import(new URL('lib/dialog/time-limits.mjs', base).href);
-  const url = new URL('ui/ort-worker.mjs', base).href;
+  const wv = globalThis.__psys2Mod?.['ui/ort-worker.mjs'];   // build-hash version (scripts/build-webchat.mjs): a stale cached worker is never paired with a newer client
+  const url = new URL('ui/ort-worker.mjs', base).href + (wv ? `?v=${wv}` : '');
   const debug = (() => { try { return globalThis.localStorage?.getItem('psys2.ortlog') === '1' || globalThis.__psys2OrtLog === true; } catch { return false; } })();
   // FREEZE 5: a quick calibration at load scales every model deadline by the measured device speed (a slow or throttled device is not a hung worker);
   // after 2 worker restarts in 5 minutes the models pause and the rules answer (Settings > Models shows why and offers "Resume models").

@@ -34,9 +34,9 @@ test('the webchat build writes a modulepreload block into index.html, idempotent
     await writeFile(path.join(out, 'ui/util.mjs'), 'export const h = 1;\n');
     await buildWebchat({ outDir: out });
     const first = await readFile(path.join(out, 'index.html'), 'utf8');
-    assert.match(first, /<link rel="modulepreload" href="app\.mjs">/);
-    assert.match(first, /<link rel="modulepreload" href="lib\/dialog\/index\.mjs">/);
-    assert.match(first, /<link rel="modulepreload" href="worlds\/kids\.arith\/ops\.mjs">/);
+    assert.match(first, /<link rel="modulepreload" href="app\.mjs\?v=[0-9a-f]+">/);
+    assert.match(first, /<link rel="modulepreload" href="lib\/dialog\/index\.mjs\?v=[0-9a-f]+">/);
+    assert.match(first, /<link rel="modulepreload" href="worlds\/kids\.arith\/ops\.mjs\?v=[0-9a-f]+">/);
     assert.match(first, /window\.__psys2Early = /);
     await buildWebchat({ outDir: out });
     assert.equal(await readFile(path.join(out, 'index.html'), 'utf8'), first, 'a second build changes nothing');

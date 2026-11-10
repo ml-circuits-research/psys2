@@ -103,6 +103,18 @@ async function importGraph(outDir, roots) {
   }
   return [...seen].sort();
 }
+/** Every module of the page (app, ui, lib, world ops; not vendor/) with a short content hash, plus worlds/index.json: { 'lib/dialog/index.mjs': '1a2b3c4d5e', ... }. */
+async function moduleVersions(outDir) {
+  const out = {};
+  const add = async (rel) => { out[rel] = sha(await readFile(path.join(outDir, rel))).slice(0, 10); };
+  if (await exists(path.join(outDir, 'app.mjs'))) await add('app.mjs');
+  for (const sub of ['ui', 'lib', 'worlds']) {
+    if (!(await exists(path.join(outDir, sub)))) continue;
+    for (const f of await walk(path.join(outDir, sub))) if (f.endsWith('.mjs')) await add(`${sub}/${f}`);
+  }
+  if (await exists(path.join(outDir, 'worlds/index.json'))) await add('worlds/index.json');
+  return out;
+}
 async function writeEarlyLoad({ outDir, tabFiles, ids }) {
   const file = path.join(outDir, 'index.html');
   if (!(await exists(file))) return;
@@ -110,9 +122,16 @@ async function writeEarlyLoad({ outDir, tabFiles, ids }) {
   const roots = ['app.mjs', 'lib/dialog/index.mjs', 'lib/loaders/bundle-loader.mjs', 'lib/translate/index.mjs', 'lib/soplang/index.mjs', 'lib/dialog/runtime-config.mjs', 'lib/formalizer/wordpiece.mjs',
     ...tabFiles.map((f) => `ui/tabs/${f}`), ...ids.map((id) => `worlds/${id}/ops.mjs`)];
   const mods = await importGraph(outDir, roots);
+  // Cache busting (URGENT-FREEZE): GitHub Pages serves everything with max-age=600, so after a deploy a browser mixes old and new files for ten minutes
+  // (and an unversioned worker URL can stay old). An import map sends every module URL to `<url>?v=<content hash>`: one index.html always names one
+  // consistent set of files, unchanged files stay cached across deploys, and the ORT worker and worlds/index.json take their versions from window.__psys2Mod.
+  const ver = await moduleVersions(outDir);
+  const imports = Object.fromEntries(Object.entries(ver).filter(([k]) => k.endsWith('.mjs')).map(([k, v]) => [`./${k}`, `./${k}?v=${v}`]));
   const block = [EARLY_BEGIN,
-    ...mods.map((m) => `<link rel="modulepreload" href="${m}">`),
-    `<script>window.__psys2Early = { worlds: fetch('worlds/index.json'), dispatcherMeta: fetch('models/dispatcher/meta.json', { cache: 'no-cache' }).catch(() => null) };</script>`,
+    `<script type="importmap">${JSON.stringify({ imports })}</script>`,
+    `<script>window.__psys2Mod = ${JSON.stringify(ver)};</script>`,
+    ...mods.filter((m) => ver[m]).map((m) => `<link rel="modulepreload" href="${m}?v=${ver[m]}">`),
+    `<script>window.__psys2Early = { worlds: fetch('worlds/index.json?v=${ver['worlds/index.json']}'), dispatcherMeta: fetch('models/dispatcher/meta.json', { cache: 'no-cache' }).catch(() => null) };</script>`,
     EARLY_END].join('\n  ');
   const a = html.indexOf(EARLY_BEGIN), b = html.indexOf(EARLY_END);
   const next = a >= 0 && b > a ? html.slice(0, a) + block + html.slice(b + EARLY_END.length) : html.replace('</head>', () => `  ${block}\n</head>`);

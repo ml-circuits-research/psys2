@@ -1223,7 +1223,7 @@ export async function mountPsys2(element, options = {}) {
       import(new URL('lib/translate/index.mjs', base).href), import(new URL('lib/soplang/index.mjs', base).href),
     ]);
     const early = globalThis.__psys2Early?.worlds; if (early) delete globalThis.__psys2Early.worlds;   // started by index.html before the module graph was loaded
-    const res = await (early ?? fetch(new URL('worlds/index.json', base))).catch(() => fetch(new URL('worlds/index.json', base)));
+    const res = await (early ?? fetch(new URL('worlds/index.json', base) + (globalThis.__psys2Mod?.['worlds/index.json'] ? `?v=${globalThis.__psys2Mod['worlds/index.json']}` : ''))).catch(() => fetch(new URL('worlds/index.json', base)));
     if (!res.ok) throw new Error(`worlds/index.json: HTTP ${res.status}`);
     const bundle = await res.json();
     for (const [id, w] of Object.entries(bundle.worlds)) {

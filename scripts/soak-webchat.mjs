@@ -7,7 +7,7 @@
  *   - random Romanian and English background talk every few seconds (room noise, not commands),
  * with the microphone switched on once and left on. A second tab is opened at the midpoint.
  *
- *   node scripts/soak-webchat.mjs [--minutes 30] [--throttle 4] [--chrome /usr/bin/chromium] [--rules] [--nx hybrid|neural|rules] [--json out.json] [--seed 1]
+ *   node scripts/soak-webchat.mjs [--minutes 30] [--throttle 4] [--chrome /usr/bin/chromium] [--rules] [--typed] [--nx hybrid|neural|rules] [--json out.json] [--seed 1]
  *
  * Assertions (exit code 1 when one fails):
  *   - heap flat: median JS heap of the last quarter <= 1.35 x the median of the second quarter + 25 MB (a forced GC before each sample);
@@ -32,6 +32,7 @@ const opt = (k, d) => { const i = argv.indexOf(`--${k}`); return i >= 0 ? argv[i
 const MINUTES = Number(opt('minutes', 30));
 const THROTTLE = Number(opt('throttle', 4));
 const RULES = argv.includes('--rules');
+const TYPED = argv.includes('--typed');   // the real messages are typed into the input box instead of spoken (noise utterances stay speech)
 let seed = Number(opt('seed', 1));
 const rnd = () => { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; };
 const pick = (a) => a[Math.floor(rnd() * a.length)];
@@ -152,6 +153,7 @@ async function main() {
     if (!e || e.at > el) { await sleep(Math.min(200, e ? e.at - el : 200)); continue; }
     next++;
     // speak: interim results word by word, then a final result (the always-on recogniser keeps the same text until the next event)
+    if (TYPED && e.kind === 'msg') { await pg.focus('input.p2-text').catch(() => {}); await pg.keyboard.type(e.text, { delay: 0 }).catch(() => {}); await pg.keyboard.press('Enter').catch(() => {}); continue; }   // URGENT-FREEZE: typed commands too (the profile and busy checks cover them)
     const words = e.text.split(' ');
     let ok = true;
     for (let i = 1; i <= words.length && ok; i++) { ok = await pg.evaluate((t) => window.__sr.say([t], false), words.slice(0, i).join(' ')).catch(() => false); await sleep(180); }

@@ -123,7 +123,7 @@ test('the engine is not imported statically by ops.mjs and is not preloaded by t
   assert.match(src, /import\('\.\/engine\/logic\.mjs'\)/);
   assert.match(src, /export const prepare = /);
   const html = readFileSync(new URL('../docs/webchat/index.html', import.meta.url), 'utf8');
-  assert.ok(!/engine\/logic/.test(html), 'the page must not preload the diagram engine');
+  assert.ok(!/engine\/logic/.test(html.replace(/<script type="importmap">.*<\/script>/, "").replace(/<script>window\.__psys2Mod.*<\/script>/, "")), "the page must not preload the diagram engine");   // the import map and version table name it (URL versioning), a preload would not
   assert.ok(existsSync(new URL('../docs/webchat/worlds/diagram.sketch/engine/logic.mjs', import.meta.url)));
 });
 

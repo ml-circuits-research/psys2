@@ -7,7 +7,9 @@ import { getOrtClient } from './ort-host.mjs';
 export const MODEL_DIR = 'models/dispatcher/';
 
 const CACHE_NAME = 'psys2-dispatcher-model';
-const keyOf = (base, name, sha) => new URL(`${MODEL_DIR}${name}?sha256=${sha}`, base).href;   // synthetic Cache API keys, one set per published sha256
+// synthetic Cache API keys, one set per published sha256 AND output signature (URGENT-FREEZE: a cached model whose outputs differ from what meta.json promises is never reused)
+let outSig = '';
+const keyOf = (base, name, sha) => new URL(`${MODEL_DIR}${name}?sha256=${sha}${sha === 'latest' || !outSig ? '' : `&out=${outSig}`}`, base).href;
 
 /** The model's meta.json fetched fresh (never from the HTTP cache), or the copy kept in the model cache when offline, or null when this build has no model. */
 export async function findDispatcherModel(base) {
@@ -64,13 +66,14 @@ async function fetchBytes(url, onProgress) {
  */
 export async function getModelFiles({ base, meta, onProgress = () => {} }) {
   const sha = meta?.version?.sha256 ?? null;
+  outSig = (meta?.onnx?.outputs ?? []).map((o) => String(o).replace(/_logits$/, '')).join('+');
   let cache = null;
   try { cache = sha && typeof caches === 'object' ? await caches.open(CACHE_NAME) : null; } catch { cache = null; }
   const mKey = sha && keyOf(base, 'model.int8.onnx', sha), vKey = sha && keyOf(base, 'vocab.txt', sha);
   if (cache) {
     try {
       const [m, v] = await Promise.all([cache.match(mKey), cache.match(vKey)]);
-      if (m && v) { onProgress('loading the model from the cache…'); return { bytes: new Uint8Array(await m.arrayBuffer()), vocab: await v.text(), source: 'cache' }; }
+      if (m && v) { evictStale(cache, mKey, vKey); onProgress('loading the model from the cache…'); return { bytes: new Uint8Array(await m.arrayBuffer()), vocab: await v.text(), source: 'cache' }; }
     } catch { /* unreadable cache entry: download again */ }
   }
   const vocab = await (await fetch(new URL(`${MODEL_DIR}vocab.txt`, base), { cache: 'no-cache' })).text();
@@ -86,10 +89,15 @@ export async function getModelFiles({ base, meta, onProgress = () => {} }) {
     try {
       await cache.put(mKey, new Response(bytes, { headers: { 'content-type': 'application/octet-stream' } }));
       await cache.put(vKey, new Response(vocab));
-      for (const req of await cache.keys()) if (req.url !== mKey && req.url !== vKey && !req.url.includes('meta.json')) await cache.delete(req);   // evict old versions
+      await evictStale(cache, mKey, vKey);   // evict old versions
     } catch { /* quota exceeded or private mode: the model still works, it is just downloaded next time */ }
   }
   return { bytes, vocab, source: 'network' };
+}
+
+/** Deletes every cached model file that is not the current (sha, outputs) pair; never throws. */
+async function evictStale(cache, mKey, vKey) {
+  try { for (const req of await cache.keys()) if (req.url !== mKey && req.url !== vKey && !req.url.includes('meta.json')) await cache.delete(req); } catch { /* best effort */ }
 }
 
 /**
