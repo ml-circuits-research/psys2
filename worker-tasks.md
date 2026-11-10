@@ -610,6 +610,39 @@ With the mic always on, room talk reached the chat and got "I did not understand
 - Optional, in Settings › Voice: "Only respond when I say 'PSys2' / 'robotule'".
 - Tests: the room-talk lines above → ignored; every real command in the session → executed.
 
+### LANG-FIXED — the selected language is the language; no automatic switching (user, 17:01 local) — before SOPWORLD-1
+
+**The user's report.** The freeze is fixed on GitHub Pages. But with **Română selected**, speech recognition "goes to English by itself": sometimes Romanian is understood, sometimes not.
+
+**The user's decision: we are too fancy with language detection. If the interface has a language selected, everything stays on it.**
+
+**What the reviewer found by reading `docs/webchat/app.mjs`:**
+- The recognizer and speech language is `speechLangTag()` = `LANG_TAGS[sessionLang ?? settings.language]`.
+- `sessionLang` is set by `noteSessionLang(l)` from the **detected language of a message**; it calls `speech.refreshLang()`, which restarts the recognizer in that language.
+- So one Romanian utterance that the recognizer hears as English-looking words (or a short word such as "ok", "stop", a name, an English command) flips `sessionLang` to `en`. From then on the microphone listens in **en-US** while the selector still shows Română. Romanian speech is then transcribed as English nonsense, until something flips it back. That is exactly "sometimes it understands, sometimes not".
+- The `ui.shell` language operation (line ~318) and the translator's detector are further paths that can change it.
+
+**Do:**
+1. **One source of truth:** `settings.language` (the selector).
+   - Remove `sessionLang` as an override for recognition, speech synthesis, reply language, the noise classifier, the dry run and the translator direction.
+   - A message is always read as the selected language. With Română selected, every message goes through ro→en and every reply comes back in Romanian, with no per-message detection.
+   - English words inside a Romanian sentence (names, "ok", "stop") are handled by the Romanian pipeline (pass-through of known English commands), not by switching language.
+2. **Only an explicit act changes the language:**
+   - the selector;
+   - a clear command in either language ("vorbește în engleză", "switch to Romanian", "speak Romanian"). The command changes the selector visibly and says so ("Am trecut pe engleză.").
+   - Nothing else: not detection, not the `ui.shell` state, not the translator.
+3. **Remove the `auto` language mode,** and "Automatic (follows the session language)" for speech; speech follows the selector. An existing saved `auto` migrates to the browser language on first load (`ro*` → ro, otherwise en) and is saved. The Voice setting keeps only the voice and the rate, plus a regional variant where it matters (en-US / en-GB).
+4. **The language detector goes off the turn path.** `LanguageDetector` and the rules detector are used for exactly one thing: a one-line hint when the selected language is Romanian and a typed message is clearly English (or the reverse): "Pare engleză — schimb limba?" with a button. Never automatic, never for voice.
+5. **Consolidate the code.** One module `ui/language.mjs` owns the language: `get()`, `set(lang, reason)`, an `onChange` event, and the BCP-47 tag for the recognizer and for speech. `app.mjs`, `speech.mjs`, `translation.mjs`, `voice-noise.mjs` and the engine client read it from there. Delete the parallel variables (`sessionLang`, `speechLang` follow modes, `noteSessionLang`, the language branches in `ui.shell` sync). Report the lines removed.
+6. **Evidence in the phrase log:** every voice record stores the recognizer language tag actually used (`recLang`) and the selected language, so a future export shows a mismatch at once.
+7. **Tests:**
+   - unit tests of `ui/language.mjs`;
+   - browser, with Română selected and the fake recognizer: the tag passed to every `SpeechRecognition` start is `ro-RO` across 30 turns that include English-looking finals ("ok", "stop", "play little star", a name), an English typed message, an English reply quoted in the answer, a tab switch, a worker restart and a page reload. Symmetric for English.
+   - the explicit switch command changes the selector and the tag;
+   - no `LanguageDetector` call during a voice turn (spy).
+   - Add to the user's regression sets: the Romanian voice session 09e replayed with `recLang` asserted.
+8. Also check that the **reply voice** uses a Romanian voice when one exists, and says so in Settings when the device has none (then it speaks with the default voice rather than staying silent).
+
 ### SOPWORLD-1 — sopworld as the reasoning core, stage 1: three pilot worlds behind a setting (user decision 14:11; pilot validated 17:05) — after the open COMPUTE-BUDGET review items
 
 **What it is.** `sopworld` (https://github.com/ml-circuits-research/soplang-words-lib, same owner, MIT) is a general library for self-consistent worlds of SOP Lang wires:
@@ -2180,3 +2213,4 @@ After each task the reviewer reruns the logged commands, where feasible on a sma
   - **Lesson for the loop guard:** the comment on that loop said "bounded: regex exec with the g flag advances lastIndex", which was false. The static test must **refuse** `while ((m = re.exec(s)))` unless the regex provably cannot match the empty string, or the loop bumps `lastIndex` on an empty match; prefer `matchAll`. Audit every `// bounded:` comment written today the same way: a comment is a claim, so each needs a unit test or a tick.
   - **Tests need a fake on-device Translator and LanguageDetector by default** in the browser harness (success path, slow path, wrong-output path), so the code that only runs in real Chrome is always exercised.
 - COMPUTE-BUDGET E (86772e8), files match the log: **accepted.** Reviewer run of `scripts/test-webchat-budget.mjs` in real Chrome: **61/61** (the stop-then-next-message defect is gone). COMPUTE-BUDGET items 1–7 are closed on the reviewer's side. Still open from D's review: the loop guard must refuse `exec` loops with possibly-empty matches, every `// bounded:` comment gets an audit, and a fake Translator runs in the harness by default. The user's confirmation on GitHub Pages is pending.
+- **User confirmation (17:01):** the freeze on GitHub Pages is fixed. COMPUTE-BUDGET is closed except the three review items from D (exec-loop rule in the loop guard, audit of `// bounded:` comments, fake Translator in the harness).
